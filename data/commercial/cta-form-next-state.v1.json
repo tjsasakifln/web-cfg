@@ -33,7 +33,7 @@
     "manual_route_allowlist": false,
     "authority": "data/organic/public-family-registry.json",
     "rule": "Derive every lead-bearing public HTML form, including declared noindex commercial configuration steps, then exclude mutation on the six routes held by the frozen unlock plan.",
-    "expected_active_capture_routes": 23,
+    "expected_active_capture_routes": 26,
     "expected_declared_ctas": 128
   },
   "invariants": [
@@ -92,6 +92,10 @@
     {
       "family_id": "live-intelligence-cnpj-result",
       "profile": "service_fit_review"
+    },
+    {
+      "family_id": "triagem-tecnica",
+      "profile": "adaptive_triage"
     }
   ],
   "profiles": {
@@ -159,6 +163,21 @@
       "pre_form_value": "Defina empresa, território, segmentos e acervo para registrar exatamente o Radar que será produzido antes de pedir a instrução de pagamento.",
       "field_purpose": "CNPJ identifica a contratante; recorte e segmentos delimitam a busca; cidade e raio são obrigatórios no recorte por cidade-base, e ao menos um segmento é obrigatório. Acervo orienta aderência; e-mail recebe a entrega; WhatsApp é opcional.",
       "boundary": "O pagamento direto pelo site permanece desligado. Sem registro válido, não há referência nem instrução de pagamento; nenhum arquivo é enviado neste formulário."
+    },
+    "adaptive_triage": {
+      "stage": "register_context",
+      "commitment": "medium",
+      "next_useful_state": "A triagem fica registrada somente após a persistência confirmada; o protocolo permite à equipe avaliar enquadramento e capacidade em canal posterior.",
+      "actual_receipt": "lead_id ou receipt_id opaco, exibido na confirmação inline apenas após a persistência.",
+      "pre_form_value": "Selecione classes fechadas para registrar a necessidade técnica; o envio permanece bloqueado enquanto o contrato de intake não estiver disponível.",
+      "field_purpose": "Nome e canal permitem retorno. Núcleo, classes de situação, urgência, documentos e conflito delimitam a triagem sem texto livre, documentos ou identificação de partes.",
+      "boundary": "Não há contratação, pagamento, aceite ou prazo prometido. Este passo não recebe CPF, processo, prontuário, planta, laudo, lista de empregados, partes em conflito, upload ou texto livre sensível; se necessário, o canal seguro é solicitado depois do protocolo.",
+      "event_semantics": [
+        "lead_form_start",
+        "lead_form_submit",
+        "lead_form_success",
+        "lead_persisted"
+      ]
     }
   },
   "runtime_profiles": {
@@ -190,6 +209,15 @@
       "error": "Sem persistência não existe referência e a etapa comercial permanece fechada.",
       "success": "Parâmetros persistidos; a referência abre somente a instrução comercial para o mesmo pedido.",
       "receipt": "external_reference opaca no formato cfg:offer_id:correlation_id."
+    },
+    "adaptive_intake_standalone_v1": {
+      "initial": "O envio inicia bloqueado até o endpoint de configuração confirmar contrato e núcleos disponíveis.",
+      "validation_error": "O navegador exige campos obrigatórios e um canal de retorno; o servidor aceita apenas classes fechadas e recusa texto livre ou campos sensíveis.",
+      "turnstile_error": "Sem validação Turnstile, o servidor não grava a triagem e nenhum protocolo é emitido.",
+      "loading": "Registrando triagem…",
+      "error": "Sem resposta persistida, o recebimento continua não confirmado e a mesma chave de tentativa é mantida.",
+      "success": "Após resposta persistida, o formulário é ocultado e a confirmação inline mostra somente o protocolo opaco.",
+      "receipt": "lead_id ou receipt_id opaco, exibido na confirmação inline após persistência."
     }
   },
   "whatsapp_relationship": {

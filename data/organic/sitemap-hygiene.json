@@ -1,8 +1,8 @@
 {
   "ok": true,
   "issues": [],
-  "url_count": 76,
-  "unique_paths": 76,
+  "url_count": 78,
+  "unique_paths": 78,
   "locs": [
     "https://confenge.com.br/",
     "https://confenge.com.br/acompanhamento-contratos-obras/",
@@ -62,6 +62,7 @@
     "https://confenge.com.br/ferramentas/diagnostico-defesa-margem/",
     "https://confenge.com.br/ferramentas/limite-acrescimos-supressoes/",
     "https://confenge.com.br/ferramentas/matriz-atraso-obra/",
+    "https://confenge.com.br/ferramentas/prontidao-tecnica-obra-privada/",
     "https://confenge.com.br/imprensa/",
     "https://confenge.com.br/medicoes-glosas-obras-publicas/",
     "https://confenge.com.br/metodologia-inteligencia/",
@@ -75,6 +76,7 @@
     "https://confenge.com.br/reequilibrio-obras-publicas/",
     "https://confenge.com.br/servicos-obras-publicas/",
     "https://confenge.com.br/termos-de-uso/",
+    "https://confenge.com.br/triagem-tecnica/",
     "https://confenge.com.br/uso-de-ia/",
     "https://confenge.com.br/guias-contratos-obras/",
     "https://confenge.com.br/guias-contratos-obras/checklist-pedido-aditivo/",
@@ -82,7 +84,7 @@
     "https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/"
   ],
   "families": {
-    "core": 72,
+    "core": 74,
     "editorial": 4
   },
   "member_sitemaps": [

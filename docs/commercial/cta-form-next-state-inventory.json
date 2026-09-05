@@ -34,7 +34,7 @@
   "coverage": {
     "authority": "data/organic/public-family-registry.json",
     "manual_route_allowlist": false,
-    "active_capture_routes": 25,
+    "active_capture_routes": 26,
     "declared_ctas": 128,
     "protected_routes_with_capture": [],
     "problems": []
@@ -100,7 +100,8 @@
           "contact_constraints_ready": true,
           "form_whatsapp_relationship": "parallel_talk_path",
           "shared_runtime_selectors_ready": true,
-          "shared_runtime_journey_ready": true
+          "shared_runtime_journey_ready": true,
+          "standalone_runtime_ready": true
         }
       ],
       "actions": [
@@ -230,7 +231,8 @@
           "contact_constraints_ready": true,
           "form_whatsapp_relationship": "parallel_talk_path",
           "shared_runtime_selectors_ready": true,
-          "shared_runtime_journey_ready": true
+          "shared_runtime_journey_ready": true,
+          "standalone_runtime_ready": true
         }
       ],
       "actions": [
@@ -387,7 +389,8 @@
           "contact_constraints_ready": true,
           "form_whatsapp_relationship": "parallel_talk_path",
           "shared_runtime_selectors_ready": true,
-          "shared_runtime_journey_ready": true
+          "shared_runtime_journey_ready": true,
+          "standalone_runtime_ready": true
         }
       ],
       "actions": [
@@ -514,7 +517,8 @@
           "contact_constraints_ready": true,
           "form_whatsapp_relationship": "form_only",
           "shared_runtime_selectors_ready": true,
-          "shared_runtime_journey_ready": true
+          "shared_runtime_journey_ready": true,
+          "standalone_runtime_ready": true
         }
       ],
       "actions": [
@@ -599,7 +603,8 @@
           "contact_constraints_ready": true,
           "form_whatsapp_relationship": "parallel_talk_path",
           "shared_runtime_selectors_ready": true,
-          "shared_runtime_journey_ready": true
+          "shared_runtime_journey_ready": true,
+          "standalone_runtime_ready": true
         }
       ],
       "actions": [
@@ -744,7 +749,8 @@
           "contact_constraints_ready": true,
           "form_whatsapp_relationship": "parallel_talk_path",
           "shared_runtime_selectors_ready": true,
-          "shared_runtime_journey_ready": true
+          "shared_runtime_journey_ready": true,
+          "standalone_runtime_ready": true
         }
       ],
       "actions": [
@@ -889,7 +895,8 @@
           "contact_constraints_ready": true,
           "form_whatsapp_relationship": "parallel_talk_path",
           "shared_runtime_selectors_ready": true,
-          "shared_runtime_journey_ready": true
+          "shared_runtime_journey_ready": true,
+          "standalone_runtime_ready": true
         }
       ],
       "actions": [
@@ -1034,7 +1041,8 @@
           "contact_constraints_ready": true,
           "form_whatsapp_relationship": "parallel_talk_path",
           "shared_runtime_selectors_ready": true,
-          "shared_runtime_journey_ready": true
+          "shared_runtime_journey_ready": true,
+          "standalone_runtime_ready": true
         }
       ],
       "actions": [
@@ -1179,7 +1187,8 @@
           "contact_constraints_ready": true,
           "form_whatsapp_relationship": "parallel_talk_path",
           "shared_runtime_selectors_ready": true,
-          "shared_runtime_journey_ready": true
+          "shared_runtime_journey_ready": true,
+          "standalone_runtime_ready": true
         }
       ],
       "actions": [
@@ -1324,7 +1333,8 @@
           "contact_constraints_ready": true,
           "form_whatsapp_relationship": "parallel_talk_path",
           "shared_runtime_selectors_ready": true,
-          "shared_runtime_journey_ready": true
+          "shared_runtime_journey_ready": true,
+          "standalone_runtime_ready": true
         }
       ],
       "actions": [
@@ -1469,7 +1479,8 @@
           "contact_constraints_ready": true,
           "form_whatsapp_relationship": "parallel_talk_path",
           "shared_runtime_selectors_ready": true,
-          "shared_runtime_journey_ready": true
+          "shared_runtime_journey_ready": true,
+          "standalone_runtime_ready": true
         }
       ],
       "actions": [
@@ -1614,7 +1625,8 @@
           "contact_constraints_ready": true,
           "form_whatsapp_relationship": "form_only",
           "shared_runtime_selectors_ready": true,
-          "shared_runtime_journey_ready": true
+          "shared_runtime_journey_ready": true,
+          "standalone_runtime_ready": true
         }
       ],
       "actions": [
@@ -1760,7 +1772,8 @@
           "contact_constraints_ready": true,
           "form_whatsapp_relationship": "parallel_talk_path",
           "shared_runtime_selectors_ready": true,
-          "shared_runtime_journey_ready": true
+          "shared_runtime_journey_ready": true,
+          "standalone_runtime_ready": true
         }
       ],
       "actions": [
@@ -1966,7 +1979,8 @@
           "contact_constraints_ready": true,
           "form_whatsapp_relationship": "parallel_talk_path",
           "shared_runtime_selectors_ready": true,
-          "shared_runtime_journey_ready": true
+          "shared_runtime_journey_ready": true,
+          "standalone_runtime_ready": true
         }
       ],
       "actions": [
@@ -2123,7 +2137,8 @@
           "contact_constraints_ready": true,
           "form_whatsapp_relationship": "parallel_talk_path",
           "shared_runtime_selectors_ready": true,
-          "shared_runtime_journey_ready": true
+          "shared_runtime_journey_ready": true,
+          "standalone_runtime_ready": true
         }
       ],
       "actions": [
@@ -2249,7 +2264,8 @@
           "contact_constraints_ready": true,
           "form_whatsapp_relationship": "parallel_talk_path",
           "shared_runtime_selectors_ready": true,
-          "shared_runtime_journey_ready": true
+          "shared_runtime_journey_ready": true,
+          "standalone_runtime_ready": true
         }
       ],
       "actions": [
@@ -2393,7 +2409,8 @@
           "contact_constraints_ready": true,
           "form_whatsapp_relationship": "form_only",
           "shared_runtime_selectors_ready": true,
-          "shared_runtime_journey_ready": true
+          "shared_runtime_journey_ready": true,
+          "standalone_runtime_ready": true
         }
       ],
       "actions": [
@@ -2878,7 +2895,8 @@
           "contact_constraints_ready": true,
           "form_whatsapp_relationship": "form_only",
           "shared_runtime_selectors_ready": true,
-          "shared_runtime_journey_ready": true
+          "shared_runtime_journey_ready": true,
+          "standalone_runtime_ready": true
         }
       ],
       "actions": []
@@ -2942,7 +2960,8 @@
           "contact_constraints_ready": true,
           "form_whatsapp_relationship": "form_only",
           "shared_runtime_selectors_ready": true,
-          "shared_runtime_journey_ready": true
+          "shared_runtime_journey_ready": true,
+          "standalone_runtime_ready": true
         }
       ],
       "actions": []
@@ -3008,7 +3027,8 @@
           "contact_constraints_ready": true,
           "form_whatsapp_relationship": "form_only",
           "shared_runtime_selectors_ready": true,
-          "shared_runtime_journey_ready": true
+          "shared_runtime_journey_ready": true,
+          "standalone_runtime_ready": true
         }
       ],
       "actions": []
@@ -3081,7 +3101,8 @@
           "contact_constraints_ready": true,
           "form_whatsapp_relationship": "parallel_talk_path",
           "shared_runtime_selectors_ready": true,
-          "shared_runtime_journey_ready": true
+          "shared_runtime_journey_ready": true,
+          "standalone_runtime_ready": true
         }
       ],
       "actions": [
@@ -3378,7 +3399,8 @@
           "contact_constraints_ready": true,
           "form_whatsapp_relationship": "form_only",
           "shared_runtime_selectors_ready": true,
-          "shared_runtime_journey_ready": true
+          "shared_runtime_journey_ready": true,
+          "standalone_runtime_ready": true
         }
       ],
       "actions": [
@@ -3460,6 +3482,97 @@
       ]
     },
     {
+      "route": "/triagem-tecnica/",
+      "file": "triagem-tecnica/index.html",
+      "family_id": "triagem-tecnica",
+      "family_profile": "commercial_content",
+      "terminal_action": "capture_form",
+      "forms": [
+        {
+          "action": "/.netlify/functions/lead",
+          "cta_id": "",
+          "form_contract": "next-state/v1",
+          "profile": "adaptive_triage",
+          "runtime_profile": "adaptive_intake_standalone_v1",
+          "stage": "register_context",
+          "commitment": "medium",
+          "submit_label": "Registrar triagem e obter protocolo",
+          "current_label": "Registrar triagem e obter protocolo",
+          "useful_next_state": "A triagem fica registrada somente após a persistência confirmada; o protocolo permite à equipe avaliar enquadramento e capacidade em canal posterior.",
+          "actual_receipt": "lead_id ou receipt_id opaco, exibido na confirmação inline apenas após a persistência.",
+          "pre_form_value": "Selecione classes fechadas para registrar a necessidade técnica; o envio permanece bloqueado enquanto o contrato de intake não estiver disponível.",
+          "pre_form_value_visible": true,
+          "field_purpose": {
+            "visible_text": "Nome e canal permitem retorno. Núcleo, classes de situação, urgência, documentos e conflito delimitam a triagem sem texto livre, documentos ou identificação de partes. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
+            "visible": true,
+            "required": [
+              "nome",
+              "canal_preferido",
+              "pessoa_tipo",
+              "decision_role",
+              "nucleus_id",
+              "city_class",
+              "site_class",
+              "urgency",
+              "why_now",
+              "desired_decision",
+              "document_availability_class",
+              "conflict_status",
+              "sensitive_docs_ack",
+              "consentimento",
+              "email_or_whatsapp"
+            ],
+            "optional": [
+              "telefone",
+              "email",
+              "claim_stage",
+              "valuation_purpose",
+              "inspection_window",
+              "property_class",
+              "work_type",
+              "work_stage",
+              "project_status",
+              "budget_class",
+              "bim_status",
+              "establishment_class",
+              "risk_class",
+              "sst_doc_class",
+              "certame_stage",
+              "contract_relation",
+              "entity_class"
+            ]
+          },
+          "boundary": "Não há contratação, pagamento, aceite ou prazo prometido. Este passo não recebe CPF, processo, prontuário, planta, laudo, lista de empregados, partes em conflito, upload ou texto livre sensível; se necessário, o canal seguro é solicitado depois do protocolo. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary_visible": true,
+          "privacy_link_visible": true,
+          "event_semantics": [
+            "lead_form_start",
+            "lead_form_submit",
+            "lead_form_success",
+            "lead_persisted"
+          ],
+          "runtime_states": {
+            "initial": "O envio inicia bloqueado até o endpoint de configuração confirmar contrato e núcleos disponíveis.",
+            "validation_error": "O navegador exige campos obrigatórios e um canal de retorno; o servidor aceita apenas classes fechadas e recusa texto livre ou campos sensíveis.",
+            "turnstile_error": "Sem validação Turnstile, o servidor não grava a triagem e nenhum protocolo é emitido.",
+            "loading": "Registrando triagem…",
+            "error": "Sem resposta persistida, o recebimento continua não confirmado e a mesma chave de tentativa é mantida.",
+            "success": "Após resposta persistida, o formulário é ocultado e a confirmação inline mostra somente o protocolo opaco.",
+            "receipt": "lead_id ou receipt_id opaco, exibido na confirmação inline após persistência."
+          },
+          "turnstile_ready": true,
+          "turnstile_token_forwarding": true,
+          "receipt_required": true,
+          "contact_constraints_ready": true,
+          "form_whatsapp_relationship": "form_only",
+          "shared_runtime_selectors_ready": true,
+          "shared_runtime_journey_ready": true,
+          "standalone_runtime_ready": true
+        }
+      ],
+      "actions": []
+    },
+    {
       "route": "/analise-cnpj/",
       "file": "analise-cnpj/index.html",
       "family_id": "live-intelligence-cnpj-tool",
@@ -3518,7 +3631,8 @@
           "contact_constraints_ready": true,
           "form_whatsapp_relationship": "form_only",
           "shared_runtime_selectors_ready": true,
-          "shared_runtime_journey_ready": true
+          "shared_runtime_journey_ready": true,
+          "standalone_runtime_ready": true
         }
       ],
       "actions": []
@@ -3582,7 +3696,8 @@
           "contact_constraints_ready": true,
           "form_whatsapp_relationship": "form_only",
           "shared_runtime_selectors_ready": true,
-          "shared_runtime_journey_ready": true
+          "shared_runtime_journey_ready": true,
+          "standalone_runtime_ready": true
         }
       ],
       "actions": []
@@ -3651,7 +3766,8 @@
           "contact_constraints_ready": true,
           "form_whatsapp_relationship": "parallel_talk_path",
           "shared_runtime_selectors_ready": true,
-          "shared_runtime_journey_ready": true
+          "shared_runtime_journey_ready": true,
+          "standalone_runtime_ready": true
         }
       ],
       "actions": [

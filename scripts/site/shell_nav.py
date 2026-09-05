@@ -51,6 +51,7 @@ from scripts.site.public_ia import (  # noqa: E402
 )
 
 BRAND_PATH = ROOT / "data" / "site" / "brand.json"
+PUBLIC_FAMILY_REGISTRY_PATH = ROOT / "data" / "organic" / "public-family-registry.json"
 
 # Directories that never ship a visitor shell.
 SKIP_DIR_PARTS = frozenset(
@@ -281,9 +282,59 @@ def _replace_nav(text: str, regex: re.Pattern[str], inner: str) -> str:
     return regex.sub(sub, text, count=1)
 
 
-def _header_cta(match: re.Match[str], brand: dict[str, Any]) -> str:
+def value_first_cta_contract(current: str | None) -> dict[str, str] | None:
+    """Read an exact-route value-first utility from the public family contract."""
+    if not current:
+        return None
+    registry = json.loads(PUBLIC_FAMILY_REGISTRY_PATH.read_text(encoding="utf-8"))
+    matches: list[dict[str, str]] = []
+    for family in registry.get("families") or []:
+        routes = ((family.get("match") or {}).get("routes") or [])
+        spec = family.get("value_first_header_cta")
+        if current in routes and spec is not None:
+            if not isinstance(spec, dict):
+                raise ValueError(f"{current}: invalid value_first_header_cta")
+            matches.append(spec)
+    if len(matches) > 1:
+        raise ValueError(f"{current}: multiple value_first_header_cta declarations")
+    return matches[0] if matches else None
+
+
+def declared_value_first_cta(
+    text: str,
+    current: str | None,
+    *,
+    mobile: bool,
+) -> str | None:
+    spec = value_first_cta_contract(current)
+    if spec is None:
+        return None
+    if spec.get("mode") != "local_fragment_before_contact":
+        raise ValueError(f"{current}: unsupported value-first CTA mode")
+    href = str(spec.get("href") or "")
+    label = str(spec.get("label") or "")
+    if not re.fullmatch(r"#[A-Za-z][\w:.-]*", href) or not label:
+        raise ValueError(f"{current}: invalid value-first CTA label or href")
+    target = re.escape(href[1:])
+    if not re.search(rf'\bid=["\']{target}["\']', text):
+        raise ValueError(f"{current}: value-first CTA target is absent")
+    classes = "button button-primary" + ("" if mobile else " header-cta")
+    return (
+        f'<a class="{classes}" data-value-first-cta="true" '
+        f'href="{html_lib.escape(href, quote=True)}">'
+        f"{html_lib.escape(label)}</a>"
+    )
+
+
+def _header_cta(
+    match: re.Match[str],
+    brand: dict[str, Any],
+    declared: str | None,
+) -> str:
     """Keep a versioned offer action; normalize only the generic shell CTA."""
     anchor = match.group(0)
+    if declared is not None:
+        return declared
     if (
         'data-cta-kind="offer"' in anchor
         and 'data-next-action-id="' in anchor
@@ -354,12 +405,16 @@ def sync_text(text: str, brand: dict[str, Any], current: str | None) -> str:
     if DESKTOP_NAV_RE.search(text):
         text = _replace_nav(text, DESKTOP_NAV_RE, desktop_links(brand, current))
 
+    declared_header = declared_value_first_cta(text, current, mobile=False)
     if HEADER_CTA_RE.search(text):
-        text = HEADER_CTA_RE.sub(lambda match: _header_cta(match, brand), text, count=1)
+        text = HEADER_CTA_RE.sub(
+            lambda match: _header_cta(match, brand, declared_header), text, count=1
+        )
 
     mobile = MOBILE_NAV_RE.search(text)
     if mobile:
-        inner = f"{mobile_links(brand, current)}\n{mobile_cta(brand)}"
+        utility = declared_value_first_cta(text, current, mobile=True) or mobile_cta(brand)
+        inner = f"{mobile_links(brand, current)}\n{utility}"
         text = _replace_nav(text, MOBILE_NAV_RE, inner)
 
     if FOOTER_TOP_RE.search(text):

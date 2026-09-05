@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Triagem técnica | CONFENGE</title>
+<link rel="canonical" href="https://confenge.com.br/triagem-tecnica/"/>
+<meta name="robots" content="index,follow"/>
+<meta name="description" content="Triagem técnica para encaminhar o seu caso à CONFENGE."/>
+
+<link href="/styles.css" rel="stylesheet"/>
+<link href="/triagem-tecnica/styles.css" rel="stylesheet"/>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Triagem técnica","url":"https://confenge.com.br/triagem-tecnica/","description":"Triagem inicial por opções para encaminhar uma necessidade técnica à CONFENGE.","dateModified":"2026-09-05"}</script>
+<script defer src="/script.js"></script>
+</head>
+<body data-content-cluster="triagem-tecnica">
+<a class="skip-link" href="#conteudo">Ir ao conteúdo</a>
+<main id="conteudo" class="container">
+  <header>
+    <p class="eyebrow">Triagem técnica</p>
+    <h1>Conte qual tipo de decisão técnica você precisa encaminhar</h1>
+    <p data-form-value>Selecione as opções e envie apenas os dados de contato necessários para retorno. Não há contratação, pagamento ou aceite nesta etapa.</p>
+  </header>
+  <p>Formulário revisto em <time datetime="2026-09-05">5 de setembro de 2026</time>.</p>
+  <noscript>
+    <p>Ative o JavaScript para verificar a disponibilidade do recebimento e selecionar as opções da triagem.</p>
+  </noscript>
+  <form id="triagem-tecnica-form"
+    action="/.netlify/functions/lead"
+    method="POST"
+    class="contact-form"
+    data-adaptive-intake="true"
+    data-ajax="true"
+    data-success-mode="inline"
+    data-form-multistep="false"
+    novalidate
+    data-form-contract="next-state/v1" data-next-state-profile="adaptive_triage" data-runtime-profile="adaptive_intake_standalone_v1" data-authority-config-endpoint="/.netlify/functions/adaptive-intake-config" data-receipt-required="true"><p class="form-hint" data-form-value>Selecione classes fechadas para registrar a necessidade técnica; o envio permanece bloqueado enquanto o contrato de intake não estiver disponível.</p>
+<p class="form-hint" data-field-purpose>Nome e canal permitem retorno. Núcleo, classes de situação, urgência, documentos e conflito delimitam a triagem sem texto livre, documentos ou identificação de partes. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.</p>
+<input type="hidden" name="form-name" value="triagem-tecnica"/>
+    <input type="hidden" name="adaptive_intake" value="true"/>
+    <input type="hidden" name="intake_contract_version" value=""/>
+    <input type="hidden" name="intake_pin_hash" id="intake_pin_hash" value=""/>
+    <input type="hidden" name="offer_candidate_id" value="private_project_technical_readiness_assessment"/>
+    <input type="hidden" name="source_asset_id" value="private_project_technical_readiness_v1"/>
+    <input type="hidden" name="landing_family" value="adaptive-intake"/>
+    <input type="hidden" name="origem" value="/triagem-tecnica/"/>
+    <input type="hidden" name="landing_page" value="/triagem-tecnica/"/>
+    <input type="hidden" name="route_family" value="adaptive-intake"/>
+    <input type="hidden" name="asset_id" value="private_project_technical_readiness_v1"/>
+    <input type="hidden" name="cta_id" value="triagem-tecnica"/>
+    <input type="hidden" id="jornada-hidden" name="jornada" value="outro"/>
+    <input type="hidden" id="estagio" name="estagio" value=""/>
+    <input type="hidden" name="document_intent" value="secure_channel_request"/>
+    <fieldset class="form-step is-active" data-form-step="1" id="form-step-1">
+      <legend class="form-step-legend" data-step-heading>Etapa 1 · Triagem mínima</legend>
+      <div class="field">
+        <label for="nome">Nome</label>
+        <input autocomplete="name" id="nome" name="nome" required type="text" maxlength="120"/>
+      </div>
+      <div class="form-row" role="group" aria-describedby="contato-hint">
+        <div class="field">
+          <label for="telefone">WhatsApp</label>
+          <input autocomplete="tel" aria-describedby="contato-hint" id="telefone" inputmode="tel" maxlength="20" name="telefone" type="tel" pattern="(\+?55[\s.\-]?)?\(?\d{2}\)?[\s.\-]?9?\d{4}[\s.\-]?\d{4}" title="Informe DDD e número, com 10 ou 11 dígitos."/>
+        </div>
+        <div class="field">
+          <label for="email">E-mail</label>
+          <input autocapitalize="off" autocomplete="email" aria-describedby="contato-hint" id="email" inputmode="email" maxlength="180" name="email" type="email" pattern="[^@\s]+@[^@\s]+\.[A-Za-z]{2,}" title="Informe um e-mail completo, como nome@empresa.com.br."/>
+        </div>
+      </div>
+      <p class="form-hint" id="contato-hint">Informe WhatsApp ou e-mail para retorno.</p>
+      <div class="field">
+        <label for="canal_preferido">Canal preferido</label>
+        <select id="canal_preferido" name="canal_preferido" required>
+          <option disabled selected value="">Selecione</option>
+          <option value="whatsapp">WhatsApp</option>
+          <option value="email">E-mail</option>
+          <option value="phone">Telefone</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="pessoa_tipo">Pessoa ou empresa</label>
+        <select id="pessoa_tipo" name="pessoa_tipo" required>
+          <option disabled selected value="">Selecione</option>
+          <option value="pessoa">Pessoa</option>
+          <option value="empresa">Empresa</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="decision_role">Papel na decisão</label>
+        <select id="decision_role" name="decision_role" required>
+          <option disabled selected value="">Selecione</option>
+          <option value="decisor">Decisor</option>
+          <option value="procurador">Procurador / advogado</option>
+          <option value="assessor">Assessor técnico</option>
+          <option value="OTHER_NEEDS_CONTEXT">Outro, continua em canal protegido</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="nucleus_id">Núcleo / problema</label>
+        <select id="nucleus_id" name="nucleus_id" required>
+          <option disabled selected value="">Selecione</option>
+          <option value="expert_evidence_assistance">Perícias e assistência técnica</option>
+          <option value="property_valuation">Avaliação de imóveis</option>
+          <option value="building_engineering_documentation">Engenharia de edificações e documentação</option>
+          <option value="occupational_safety">Segurança do trabalho</option>
+          <option value="public_works_b2g">Obras públicas e B2G</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="city_class">Cidade / região da inspeção</label>
+        <select id="city_class" name="city_class" required>
+          <option disabled selected value="">Selecione</option>
+          <option value="grande_florianopolis">Grande Florianópolis</option>
+          <option value="sc">Santa Catarina</option>
+          <option value="br">Outro estado no Brasil</option>
+          <option value="unknown">Ainda não sei</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="site_class">Tipo de local</label>
+        <select id="site_class" name="site_class" required>
+          <option disabled selected value="">Selecione</option>
+          <option value="residencia">Residência</option>
+          <option value="comercial">Comercial</option>
+          <option value="industrial">Industrial</option>
+          <option value="condominio">Condomínio</option>
+          <option value="obra">Obra</option>
+          <option value="estabelecimento">Estabelecimento</option>
+          <option value="certame">Certame / contrato público</option>
+          <option value="unknown">Ainda não sei</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="urgency">Prazo / urgência</label>
+        <select id="urgency" name="urgency" required>
+          <option disabled selected value="">Selecione</option>
+          <option value="ate_48h">Até 48 horas</option>
+          <option value="ate_7d">Até 7 dias</option>
+          <option value="ate_30d">Até 30 dias</option>
+          <option value="planejamento">Planejamento, sem prazo imediato</option>
+          <option value="unknown">Ainda não sei</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="why_now">Por que agora</label>
+        <select id="why_now" name="why_now" required>
+          <option disabled selected value="">Selecione</option>
+          <option value="audiencia">Audiência ou prazo processual</option>
+          <option value="prazo_legal">Prazo legal / administrativo</option>
+          <option value="transacao">Negociação ou transação</option>
+          <option value="sinistro">Sinistro ou dano</option>
+          <option value="licitacao">Licitação ou contrato público</option>
+          <option value="saude_ocupacional">Saúde e segurança ocupacional</option>
+          <option value="OTHER_NEEDS_CONTEXT">Outro, continua em canal protegido</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="desired_decision">Decisão ou entregável desejado</label>
+        <select id="desired_decision" name="desired_decision" required>
+          <option disabled selected value="">Selecione</option>
+          <option value="parecer">Parecer técnico</option>
+          <option value="laudo">Laudo</option>
+          <option value="assistencia">Assistência técnica</option>
+          <option value="orcamento">Orçamento / quantitativo</option>
+          <option value="documentacao">Documentação de edificação</option>
+          <option value="sst">Documentação de SST</option>
+          <option value="b2g_triage">Triagem de obras públicas</option>
+          <option value="unknown">Ainda não sei</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="document_availability_class">Disponibilidade documental</label>
+        <select id="document_availability_class" name="document_availability_class" required>
+          <option disabled selected value="">Selecione</option>
+          <option value="none">Ainda não tenho documentos</option>
+          <option value="partial">Parciais</option>
+          <option value="organized">Organizados</option>
+          <option value="unknown">Ainda não sei</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="conflict_status">Conflito de interesse (sem nomes de partes)</label>
+        <select id="conflict_status" name="conflict_status" required>
+          <option disabled selected value="">Selecione</option>
+          <option value="none">Não identifico conflito</option>
+          <option value="unknown">Não sei ainda</option>
+          <option value="check_required">Preciso de verificação protegida</option>
+        </select>
+      </div>
+      <input type="hidden" name="conflict_reference" value=""/>
+
+      <fieldset data-nucleus-branch="expert_evidence_assistance" hidden>
+        <legend>Perícia, estágio da pretensão</legend>
+        <div class="field">
+          <label for="claim_stage">Estágio do processo ou pretensão</label>
+          <select id="claim_stage" name="claim_stage" data-branch-required>
+            <option disabled selected value="">Selecione</option>
+            <option value="pre_processo">Antes do processo</option>
+            <option value="em_curso">Em curso</option>
+            <option value="sentenca">Após sentença</option>
+            <option value="unknown">Ainda não sei</option>
+            <option value="OTHER_NEEDS_CONTEXT">Outro, continua em canal protegido</option>
+          </select>
+        </div>
+      </fieldset>
+
+      <fieldset data-nucleus-branch="property_valuation" hidden>
+        <legend>Avaliação, finalidade e imóvel</legend>
+        <div class="field">
+          <label for="valuation_purpose">Finalidade</label>
+          <select id="valuation_purpose" name="valuation_purpose" data-branch-required>
+            <option disabled selected value="">Selecione</option>
+            <option value="disputa">Disputa</option>
+            <option value="garantia">Garantia</option>
+            <option value="negociacao">Negociação</option>
+            <option value="patrimonio">Patrimônio / investimento</option>
+            <option value="unknown">Ainda não sei</option>
+            <option value="OTHER_NEEDS_CONTEXT">Outro, continua em canal protegido</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="inspection_window">Janela de inspeção</label>
+          <select id="inspection_window" name="inspection_window" data-branch-required>
+            <option disabled selected value="">Selecione</option>
+            <option value="this_week">Esta semana</option>
+            <option value="this_month">Este mês</option>
+            <option value="later">Depois</option>
+            <option value="unknown">Ainda não sei</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="property_class">Classe do imóvel</label>
+          <select id="property_class" name="property_class" data-branch-required>
+            <option disabled selected value="">Selecione</option>
+            <option value="residencial">Residencial</option>
+            <option value="comercial">Comercial</option>
+            <option value="industrial">Industrial</option>
+            <option value="rural">Rural</option>
+            <option value="unknown">Ainda não sei</option>
+          </select>
+        </div>
+      </fieldset>
+
+      <fieldset data-nucleus-branch="building_engineering_documentation" hidden>
+        <legend>Edificações, obra e documentação</legend>
+        <div class="field">
+          <label for="work_type">Tipo de trabalho</label>
+          <select id="work_type" name="work_type" data-branch-required>
+            <option disabled selected value="">Selecione</option>
+            <option value="reforma">Reforma</option>
+            <option value="obra_nova">Obra nova</option>
+            <option value="regularizacao">Regularização</option>
+            <option value="inspecao">Inspeção / patologia</option>
+            <option value="unknown">Ainda não sei</option>
+            <option value="OTHER_NEEDS_CONTEXT">Outro, continua em canal protegido</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="work_stage">Estágio da obra</label>
+          <select id="work_stage" name="work_stage" data-branch-required>
+            <option disabled selected value="">Selecione</option>
+            <option value="estudo">Estudo</option>
+            <option value="projeto">Projeto</option>
+            <option value="execucao">Execução</option>
+            <option value="concluida">Concluída</option>
+            <option value="unknown">Ainda não sei</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="project_status">Projeto disponível</label>
+          <select id="project_status" name="project_status" data-branch-required>
+            <option disabled selected value="">Selecione</option>
+            <option value="inexistente">Inexistente</option>
+            <option value="parcial">Parcial</option>
+            <option value="completo">Completo</option>
+            <option value="unknown">Ainda não sei</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="budget_class">Orçamento</label>
+          <select id="budget_class" name="budget_class" data-branch-required>
+            <option disabled selected value="">Selecione</option>
+            <option value="sem_orcamento">Sem orçamento</option>
+            <option value="parcial">Parcial</option>
+            <option value="fechado">Fechado</option>
+            <option value="unknown">Ainda não sei</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="bim_status">BIM / documentação digital</label>
+          <select id="bim_status" name="bim_status" data-branch-required>
+            <option disabled selected value="">Selecione</option>
+            <option value="nao">Não</option>
+            <option value="parcial">Parcial</option>
+            <option value="sim">Sim</option>
+            <option value="unknown">Ainda não sei</option>
+          </select>
+        </div>
+      </fieldset>
+
+      <fieldset data-nucleus-branch="occupational_safety" hidden>
+        <legend>SST, estabelecimento e risco</legend>
+        <div class="field">
+          <label for="establishment_class">Estabelecimento</label>
+          <select id="establishment_class" name="establishment_class" data-branch-required>
+            <option disabled selected value="">Selecione</option>
+            <option value="industria">Indústria</option>
+            <option value="comercio">Comércio</option>
+            <option value="obra">Obra</option>
+            <option value="servico">Serviço</option>
+            <option value="unknown">Ainda não sei</option>
+            <option value="OTHER_NEEDS_CONTEXT">Outro, continua em canal protegido</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="risk_class">Classe de risco</label>
+          <select id="risk_class" name="risk_class" data-branch-required>
+            <option disabled selected value="">Selecione</option>
+            <option value="acidente">Acidente</option>
+            <option value="documentacao">Documentação</option>
+            <option value="litigio">Litígio trabalhista</option>
+            <option value="preventivo">Preventivo</option>
+            <option value="unknown">Ainda não sei</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="sst_doc_class">Documentação de SST</label>
+          <select id="sst_doc_class" name="sst_doc_class" data-branch-required>
+            <option disabled selected value="">Selecione</option>
+            <option value="none">Ausente</option>
+            <option value="partial">Parcial</option>
+            <option value="organized">Organizada</option>
+            <option value="unknown">Ainda não sei</option>
+          </select>
+        </div>
+      </fieldset>
+
+      <fieldset data-nucleus-branch="public_works_b2g" hidden>
+        <legend>B2G, certame e ente</legend>
+        <div class="field">
+          <label for="certame_stage">Estágio do certame ou contrato</label>
+          <select id="certame_stage" name="certame_stage" data-branch-required>
+            <option disabled selected value="">Selecione</option>
+            <option value="edital">Edital</option>
+            <option value="proposta">Proposta</option>
+            <option value="contrato">Contrato</option>
+            <option value="execucao">Execução</option>
+            <option value="unknown">Ainda não sei</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="contract_relation">Relação com o contrato</label>
+          <select id="contract_relation" name="contract_relation" data-branch-required>
+            <option disabled selected value="">Selecione</option>
+            <option value="licitante">Licitante</option>
+            <option value="contratada">Contratada</option>
+            <option value="subcontratada">Subcontratada</option>
+            <option value="assessoria">Assessoria</option>
+            <option value="unknown">Ainda não sei</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="entity_class">Ente</label>
+          <select id="entity_class" name="entity_class" data-branch-required>
+            <option disabled selected value="">Selecione</option>
+            <option value="municipal">Municipal</option>
+            <option value="estadual">Estadual</option>
+            <option value="federal">Federal</option>
+            <option value="autarquia">Autarquia / empresa pública</option>
+            <option value="unknown">Ainda não sei</option>
+          </select>
+        </div>
+      </fieldset>
+
+      <p class="form-note" data-sensitive-barrier>Este canal não recebe arquivo, CPF, número de processo, prontuário, lista de empregados, planta, laudo, relatório pericial nem documento financeiro. Se forem necessários, um canal seguro será pedido depois.</p>
+      <label class="check" for="sensitive_docs_ack">
+        <input id="sensitive_docs_ack" name="sensitive_docs_ack" required type="checkbox" value="1"/>
+        <span>Confirmo que não enviarei documentos sensíveis neste passo.</span>
+      </label>
+      <label class="check" for="consentimento">
+        <input id="consentimento" name="consentimento" required type="checkbox" value="1"/>
+        <span>Autorizo o uso destes dados para retorno sobre esta triagem, conforme a <a href="/privacidade/">Política de Privacidade</a>.</span>
+      </label>
+      <div class="field turnstile-slot" id="turnstile-slot" hidden data-turnstile-sitekey=""><div class="cf-turnstile" data-theme="light" data-size="compact"></div></div>
+      <p class="form-status" id="form-status" role="status" hidden></p>
+      <button class="button button-primary" type="submit" disabled>Registrar triagem e obter protocolo</button>
+    </fieldset>
+<p class="form-hint" data-form-boundary>Não há contratação, pagamento, aceite ou prazo prometido. Este passo não recebe CPF, processo, prontuário, planta, laudo, lista de empregados, partes em conflito, upload ou texto livre sensível; se necessário, o canal seguro é solicitado depois do protocolo. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da <a href="/privacidade/">Política de Privacidade</a>, com o protocolo.</p>
+</form>
+  <section data-adaptive-confirmation hidden role="status" tabindex="-1">
+      <h2>Pedido registrado</h2>
+      <p>Foi registrado um pedido de triagem técnica neste canal, com as opções que você selecionou. Não foram aceitos arquivos nem texto livre sensível.</p>
+      <p>Protocolo: <strong data-receipt-protocol></strong></p>
+      <p>Não houve contratação, pagamento nem aceite. Nenhum prazo de resposta foi prometido.</p>
+      <p>Próximo estado útil: a equipe comercial recebe este protocolo e avalia enquadramento e capacidade. Se documentos forem necessários, um canal seguro será solicitado depois, não reenvie arquivos por aqui.</p>
+  </section>
+</main>
+<script src="/assets/js/adaptive-intake.js"></script>
+</body>
+</html>
