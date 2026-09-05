@@ -232,7 +232,7 @@ try {
   responseDelayMs = 1300;
   await fillAndSubmit(mobile, "timeout");
   await mobile.waitForFunction(
-    () => document.querySelector("#lead-form .form-status")?.textContent.includes("protocolo só aparece"),
+    () => document.querySelector("#lead-form .form-status")?.textContent.includes("preservados neste aparelho"),
     { timeout: 5000 },
   );
   const fallback = await mobile.$eval("#lead-form .form-status", (node) => ({
