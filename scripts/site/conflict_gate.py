@@ -261,14 +261,8 @@ def screen_conflict(raw_facts: dict[str, Any] | None, contract: dict[str, Any] |
             return _decision("DECLINE", str(item["reason_class"]), facts, rec)
 
     relation = _tri_bool(facts.get("relevant_personal_or_financial_relation"))
-    if relation is True:
-        unmitigated = _tri_bool(facts.get("relation_cannot_be_mitigated"))
-        disclosure = _tri_bool(facts.get("mitigation_requires_disclosure"))
-        if unmitigated is True:
-            return _decision("DECLINE", "unmitigable_personal_or_financial_relation", facts, rec)
-        if disclosure is True and unmitigated is False:
-            return _decision("CLEAR_WITH_DISCLOSURE", "disclosure_mitigation", facts, rec)
-        return _decision("REVIEW_REQUIRED", "personal_or_financial_relation_review", facts, rec)
+    if relation is True and _tri_bool(facts.get("relation_cannot_be_mitigated")) is True:
+        return _decision("DECLINE", "unmitigable_personal_or_financial_relation", facts, rec)
 
     prior = facts.get("prior_status")
     if prior in CLEARANCE_STATUSES:
@@ -285,6 +279,13 @@ def screen_conflict(raw_facts: dict[str, Any] | None, contract: dict[str, Any] |
 
     if _material_unknown(facts, rec):
         return _decision("UNKNOWN", "insufficient_information", facts, rec)
+
+    if relation is True:
+        unmitigated = _tri_bool(facts.get("relation_cannot_be_mitigated"))
+        disclosure = _tri_bool(facts.get("mitigation_requires_disclosure"))
+        if disclosure is True and unmitigated is False:
+            return _decision("CLEAR_WITH_DISCLOSURE", "disclosure_mitigation", facts, rec)
+        return _decision("REVIEW_REQUIRED", "personal_or_financial_relation_review", facts, rec)
 
     if _tri_bool(facts.get("distinct_matter_no_signal")) is True and _all_risk_false(facts, rec):
         return _decision("CLEAR", "no_signal_distinct_matter", facts, rec)
@@ -593,12 +594,8 @@ function confengeScreenConflict(raw) {{
     item = c.decline_true_flags[i];
     if (confengeConflictTriBool(facts[item.field]) === true) return decision("DECLINE", item.reason_class);
   }}
-  if (confengeConflictTriBool(facts.relevant_personal_or_financial_relation) === true) {{
-    var unmit = confengeConflictTriBool(facts.relation_cannot_be_mitigated);
-    var disc = confengeConflictTriBool(facts.mitigation_requires_disclosure);
-    if (unmit === true) return decision("DECLINE", "unmitigable_personal_or_financial_relation");
-    if (disc === true && unmit === false) return decision("CLEAR_WITH_DISCLOSURE", "disclosure_mitigation");
-    return decision("REVIEW_REQUIRED", "personal_or_financial_relation_review");
+  if (confengeConflictTriBool(facts.relevant_personal_or_financial_relation) === true && confengeConflictTriBool(facts.relation_cannot_be_mitigated) === true) {{
+    return decision("DECLINE", "unmitigable_personal_or_financial_relation");
   }}
   if (facts.prior_status === "CLEAR" || facts.prior_status === "CLEAR_WITH_DISCLOSURE") {{
     if (!facts.prior_role_fingerprint || !facts.current_role_fingerprint || String(facts.prior_role_fingerprint) !== String(facts.current_role_fingerprint)) {{
@@ -606,6 +603,12 @@ function confengeScreenConflict(raw) {{
     }}
   }}
   if (confengeConflictMaterialUnknown(facts)) return decision("UNKNOWN", "insufficient_information");
+  if (confengeConflictTriBool(facts.relevant_personal_or_financial_relation) === true) {{
+    var unmit = confengeConflictTriBool(facts.relation_cannot_be_mitigated);
+    var disc = confengeConflictTriBool(facts.mitigation_requires_disclosure);
+    if (disc === true && unmit === false) return decision("CLEAR_WITH_DISCLOSURE", "disclosure_mitigation");
+    return decision("REVIEW_REQUIRED", "personal_or_financial_relation_review");
+  }}
   if (confengeConflictTriBool(facts.distinct_matter_no_signal) === true && confengeConflictAllRiskFalse(facts)) {{
     return decision("CLEAR", "no_signal_distinct_matter");
   }}

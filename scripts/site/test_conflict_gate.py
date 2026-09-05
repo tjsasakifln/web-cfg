@@ -77,6 +77,71 @@ def test_eight_named_cases_drive_shipped_screen():
         assert case["expect_status"] in public["next_step"] or public["status"] == case["expect_status"]
 
 
+def test_insufficient_plus_disclosure_flags_never_clears():
+    """Form-reachable combo: disclosure flags set, but first-step facts incomplete.
+
+    Case 5 omitted these flags, so clearance-before-unknown stayed green.
+    Drives shipped screen_conflict, evaluate_conflict and the JS interpreter.
+    """
+    rec = load_contract()
+    disclosure = {
+        "intended_role": "technical_assistant",
+        "same_public_duty_matter": False,
+        "nonpublic_office_information_risk": False,
+        "incompatible_expert_roles": False,
+        "relevant_personal_or_financial_relation": True,
+        "relation_cannot_be_mitigated": False,
+        "mitigation_requires_disclosure": True,
+        "client_requests_public_influence": False,
+        "distinct_matter_no_signal": False,
+        "protected_path_available": True,
+    }
+    combos = [
+        {**disclosure, "nucleus_id": "expert_evidence_assistance", "information_sufficient": False},
+        {**disclosure, "nucleus_id": "expert_evidence_assistance", "information_sufficient": None},
+        {**disclosure, "nucleus_id": "expert_evidence_assistance", "information_sufficient": "unsure"},
+        {**disclosure, "information_sufficient": True},
+    ]
+    for facts in combos:
+        inner = screen_conflict(facts, rec)
+        assert inner["status"] == "UNKNOWN", facts
+        assert inner["status"] not in {"CLEAR", "CLEAR_WITH_DISCLOSURE"}
+        pack = evaluate_conflict(facts, rec)
+        assert pack["public"]["status"] == "UNKNOWN"
+        assert pack["decision"]["status"] not in {"CLEAR", "CLEAR_WITH_DISCLOSURE"}
+        assert pack["inner"]["status"] == "UNKNOWN"
+
+    js = interpreter_source(rec)
+    script = (
+        js
+        + "\nconst combos = "
+        + json.dumps(combos, ensure_ascii=False)
+        + """;
+const out = combos.map(function (facts) {
+  const inner = confengeScreenConflict(facts);
+  const adapted = confengeAdaptProtectedPath(inner, facts);
+  const pub = confengePublicProjection(adapted);
+  return {inner: inner.status, adapted: adapted.status, public: pub.status};
+});
+process.stdout.write(JSON.stringify(out));
+"""
+    )
+    proc = subprocess.run(
+        ["node", "-e", script],
+        cwd=ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert proc.returncode == 0, proc.stderr
+    rows = json.loads(proc.stdout)
+    assert len(rows) == len(combos)
+    for row in rows:
+        assert row["inner"] == "UNKNOWN"
+        assert row["adapted"] == "UNKNOWN"
+        assert row["public"] == "UNKNOWN"
+
+
 def test_unknown_never_clear_and_missing_nucleus():
     rec = load_contract()
     decision = screen_conflict(

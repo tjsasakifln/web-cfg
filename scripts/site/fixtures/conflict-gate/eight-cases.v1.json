@@ -70,6 +70,7 @@
         "relevant_personal_or_financial_relation": true,
         "relation_cannot_be_mitigated": null,
         "mitigation_requires_disclosure": null,
+        "client_requests_public_influence": false,
         "distinct_matter_no_signal": false,
         "protected_path_available": true,
         "employee_name": "Funcionario Exemplo"
