@@ -147,12 +147,23 @@ def check_page(path: Path) -> list[str]:
     if 'id="conteudo"' not in html:
         errors.append("missing #conteudo")
     # Home contact form fields are only required on the site home page.
+    # Adaptive corporate triage ships nucleus_id; B2G-only fields stay branched.
+    # Hidden runtime fields (estagio) and the retired mensagem box are not labeled.
     if path == ROOT / "index.html":
-        for field in ("nome", "empresa", "email", "estagio", "urgencia", "mensagem"):
+        for field in ("nome", "empresa", "email", "urgencia", "nucleus_id"):
             if not has_accessible_label(html, field):
                 errors.append(f"form field labeling: {field}")
         if not has_accessible_label(html, "consentimento"):
             errors.append("form field labeling: consentimento")
+        for field in ("estagio", "mensagem"):
+            found = find_form_field(html, field)
+            if not found:
+                continue
+            hidden = re.search(r'\btype=["\']hidden["\']', found.group(0), re.I)
+            if hidden:
+                continue
+            if not has_accessible_label(html, field):
+                errors.append(f"form field labeling: {field}")
         if not re.search(r"<h1[\s>]", html):
             errors.append("missing h1")
         if "aria-label" not in html:

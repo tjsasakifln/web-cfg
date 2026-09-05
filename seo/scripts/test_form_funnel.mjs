@@ -28,19 +28,18 @@ for (const needle of ["validationCategory", "validation_category: 'rate_limited'
   }
 }
 
-// Structural: shipped home has multi-step form + journey CTAs
+// Structural: shipped home is multi-vertical triage; B2G fields stay branched.
 const home = fs.readFileSync(path.join(root, "index.html"), "utf8");
 for (const needle of [
   'data-form-multistep="true"',
-  'name="diagnostico-b2g"',
+  'name="diagnostico-confenge"',
+  'data-adaptive-intake="true"',
+  'name="nucleus_id"',
   "Solicitar canal seguro para envio",
-  "Solicitar triagem do edital",
-  'data-set-journey="contrato"',
-  'data-set-journey="edital"',
-  'data-set-journey="operacao"',
   'id="estagio"',
   'data-form-step="1"',
   'data-form-step="2"',
+  'data-nucleus-branch="public_works_b2g"',
   'id="faixa_contrato"',
   'id="risco_em_jogo"',
   'id="frequencia"',
@@ -54,9 +53,14 @@ for (const needle of [
     process.exit(1);
   }
 }
-// Journey operacao CTA uses the canonical visitor-facing label.
+// Conserved B2G diagnostic label remains reachable from home, not as the only CTA.
 if (!home.includes("Solicitar diagnóstico da operação")) {
   console.error("FAIL: home missing Solicitar diagnóstico da operação");
+  process.exit(1);
+}
+const b2gTool = fs.readFileSync(path.join(root, "ferramentas/diagnostico-defesa-margem/index.html"), "utf8");
+if (!b2gTool.includes('name="diagnostico-b2g"')) {
+  console.error("FAIL: B2G tool missing conserved form name diagnostico-b2g");
   process.exit(1);
 }
 const formMatch = home.match(/<form\b[^>]*id="formulario-contato"[\s\S]*?<\/form>/);
