@@ -52,6 +52,16 @@ SKIP_DIRS = (
     # excluded one line above. `test_audit_css_usage.py` pins this string to
     # `PROTOTYPE_SOURCE_DIR` so the two cannot drift.
     "docs/design-audit/prototypes",
+    # Integration-campaign sources. Every `docs/integration/<campaign>/<n>/`
+    # pack documents a canary or fragment set staged for a future PR to wire
+    # into the real public surface; each pack's README says so explicitly
+    # ("fora do artefato publico"). Nothing under `docs/` is a build source
+    # `scripts/pseo/build_site.py` reads from, so this content can never reach
+    # `_site` on its own. Counting its radius, shadow or class selectors
+    # against the visitor's public budget would charge for bytes the visitor
+    # never receives, and would make "used" mean "referenced by a staging doc"
+    # instead of "referenced by the shipped site".
+    "docs/integration",
 )
 # Bundles whose class inventory is tracked selector by selector.
 AUDITED_BUNDLES = ("styles.css", "entregas/styles.css")

@@ -26,6 +26,8 @@ WORKTREE=/home/tjsasakifln/code/confenge/.worktrees/web-cfg/c20260904-09-private
 - docs/integration/campaign-20260904/09/fragment-package-scripts.md
 - docs/integration/campaign-20260904/09/fragment-hub-listing.md
 - docs/integration/campaign-20260904/09/fragment-public-artifact-allowlist.md
+- scripts/site/audit_css_usage.py
+- scripts/site/test_audit_css_usage.py
 
 The committed delta must be a literal subset of this list.
 
