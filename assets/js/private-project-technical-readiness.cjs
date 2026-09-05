@@ -186,7 +186,7 @@
     technical_responsibility_art_inspections: Object.freeze({
       label: "Condições declaradas de ART e inspeções",
       present_evidence: "O usuário declarou uma condição de ART e de inspeções. Isso não verifica registro, atribuição nem validade.",
-      missing: "Declaração de condição de ART (emitida, não emitida ou não aplicável) e de inspeções registradas ou não.",
+      missing: "Documento de ART do recorte declarado e registros de inspeção. A declaração de ausência nesta autoavaliação não substitui esses documentos.",
       consequence: "A decisão de executar ou entregar continua dependente de conferência documental externa; esta leitura não emite conclusão de direito.",
       next: "Conferir os documentos de ART e os registros de inspeção fora desta autoavaliação, com o responsável técnico do caso.",
     }),
@@ -309,6 +309,35 @@
     return false;
   }
 
+  function executionKnownNotRequired(answers) {
+    if (executionRequired(answers)) return false;
+    var stage = answers.work_stage;
+    return stage === "planejamento" || stage === "projeto" || stage === "contratacao";
+  }
+
+  function handoverKnownNotRequired(answers) {
+    if (handoverRequired(answers)) return false;
+    var stage = answers.work_stage;
+    return stage === "planejamento" || stage === "projeto" || stage === "contratacao" || stage === "execucao";
+  }
+
+  function domain7GapMissing(answers) {
+    var parts = [];
+    if (answers.art_declared === "nao_emitida_declarada") {
+      parts.push("documento de ART do recorte declarado (ausência declarada nesta autoavaliação)");
+    }
+    if (answers.inspections_declared === "nao_registradas") {
+      parts.push("registros de inspeção do recorte declarado (ausência declarada nesta autoavaliação)");
+    }
+    if (answers.art_declared === UNKNOWN) {
+      parts.push("condição de ART ainda desconhecida");
+    }
+    if (answers.inspections_declared === UNKNOWN) {
+      parts.push("condição de inspeções ainda desconhecida");
+    }
+    return parts.join("; ");
+  }
+
   function classifyDomain(domainId, answers) {
     var flags;
     if (domainId === "decision_scope_stage") {
@@ -355,25 +384,31 @@
       return { status: rollup(flags), applicability: "required" };
     }
     if (domainId === "changes_execution_measurement") {
-      if (!executionRequired(answers)) {
+      if (executionRequired(answers)) {
+        flags = [
+          factStatus(answers.change_control, ["registro_escrito_com_impacto"], ["informal", "nenhum"]),
+          factStatus(answers.execution_records, ["diario_e_base_medicao"], ["parcial", "nenhum"]),
+          factStatus(answers.measurement_trace, ["ligada_orcamento_e_executado"], ["planilha_isolada", "nenhum"]),
+        ];
+        return { status: rollup(flags), applicability: "required" };
+      }
+      if (executionKnownNotRequired(answers)) {
         return { status: EVIDENCE_PRESENT, applicability: "not_required_at_declared_stage" };
       }
-      flags = [
-        factStatus(answers.change_control, ["registro_escrito_com_impacto"], ["informal", "nenhum"]),
-        factStatus(answers.execution_records, ["diario_e_base_medicao"], ["parcial", "nenhum"]),
-        factStatus(answers.measurement_trace, ["ligada_orcamento_e_executado"], ["planilha_isolada", "nenhum"]),
-      ];
-      return { status: rollup(flags), applicability: "required" };
+      return { status: UNKNOWN, applicability: "unknown_until_stage_or_decision_declared" };
     }
     if (domainId === "asbuilt_handover_operations") {
-      if (!handoverRequired(answers)) {
+      if (handoverRequired(answers)) {
+        flags = [
+          factStatus(answers.asbuilt, ["atual"], ["desatualizado", "nenhum"]),
+          factStatus(answers.handover_docs, ["manuais_garantias_ensaios"], ["parcial", "nenhum"]),
+        ];
+        return { status: rollup(flags), applicability: "required" };
+      }
+      if (handoverKnownNotRequired(answers)) {
         return { status: EVIDENCE_PRESENT, applicability: "not_required_at_declared_stage" };
       }
-      flags = [
-        factStatus(answers.asbuilt, ["atual"], ["desatualizado", "nenhum"]),
-        factStatus(answers.handover_docs, ["manuais_garantias_ensaios"], ["parcial", "nenhum"]),
-      ];
-      return { status: rollup(flags), applicability: "required" };
+      return { status: UNKNOWN, applicability: "unknown_until_stage_or_decision_declared" };
     }
     if (domainId === "technical_responsibility_art_inspections") {
       flags = [
@@ -405,12 +440,18 @@
       missing = "Não exigido no estágio e na decisão declarados.";
       consequence = "Este domínio não entra na decisão declarada neste estágio; a exigência muda se o estágio ou a decisão mudarem.";
       next = "Reavaliar este domínio quando a obra entrar em execução, medição, entrega, operação ou retomada.";
+    } else if (applicability === "unknown_until_stage_or_decision_declared") {
+      missing = "Estágio ou decisão não declarados; não dá para saber se evidência deste domínio se aplica.";
+      consequence = "Tratar o domínio como desconhecido, não como evidência presente, até o estágio ou a decisão serem declarados.";
+      next = "Declarar o estágio da obra e a decisão que está na mesa.";
     } else if (status === EVIDENCE_PRESENT) {
       missing = "Nenhuma lacuna declarada neste domínio.";
       consequence = "A autoavaliação não substitui conferência dos documentos originais.";
       next = "Manter os documentos deste domínio localizáveis na revisão citada.";
     } else if (status === GAP) {
-      missing = meta.missing;
+      missing = domainId === "technical_responsibility_art_inspections"
+        ? (domain7GapMissing(answers) || meta.missing)
+        : meta.missing;
       consequence = meta.consequence;
       next = meta.next;
       offer = OFFER_CANDIDATE;
@@ -613,6 +654,9 @@
     causalDomainsForQuestion: causalDomainsForQuestion,
     executionRequired: executionRequired,
     handoverRequired: handoverRequired,
+    executionKnownNotRequired: executionKnownNotRequired,
+    handoverKnownNotRequired: handoverKnownNotRequired,
+    domain7GapMissing: domain7GapMissing,
     fnv1aHex: fnv1aHex,
     stableStringify: stableStringify,
     emptyAnswers: emptyAnswers,
