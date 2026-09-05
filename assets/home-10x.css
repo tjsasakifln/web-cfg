@@ -163,10 +163,10 @@ body[data-content-cluster="home"] .section-lead{
 /* ── 2. Ritmo ──────────────────────────────────────────────────────────── */
 /* Quatro alturas de secao, nao oito. A regua entre secoes e sempre a mesma:
  * 1px --rule, largura do container. */
-body[data-content-cluster="home"] .section{padding:clamp(3.5rem,7vw,6rem) 0}
+body[data-content-cluster="home"] .section{padding:clamp(2.75rem,5.5vw,4.5rem) 0}
 body[data-content-cluster="home"] .section--tight{padding:0}
 body[data-content-cluster="home"] .section--loose{padding:clamp(4.25rem,8vw,7.5rem) 0}
-body[data-content-cluster="home"] .section-head{max-width:none;margin-bottom:clamp(2rem,4vw,3rem)}
+body[data-content-cluster="home"] .section-head{max-width:none;margin-bottom:clamp(1.25rem,2.6vw,2rem)}
 body[data-content-cluster="home"] .section-head h2{max-width:20ch}
 /* Cabecalho de secao em duas colunas: a tese a esquerda, a qualificacao a
  * direita, no lugar de uma coluna curta com 45% da largura vazia. So quando
@@ -339,7 +339,25 @@ body[data-content-cluster="home"] .journey-row-actions{
 body[data-content-cluster="home"] .journey-alt-link{color:var(--muted);font-size:.9rem;text-underline-offset:3px}
 body[data-content-cluster="home"] .journey-alt-link:hover{color:var(--accent)}
 body[data-content-cluster="home"] .nucleus-chooser .journey-row{
-  padding:clamp(.85rem,2vw,1.2rem) 0;
+  padding:clamp(.45rem,1.2vw,.7rem) 0;
+}
+body[data-content-cluster="home"] .home-method-limits{
+  margin-top:clamp(1.25rem,2.5vw,1.75rem);padding-top:clamp(1rem,2vw,1.4rem);
+  border-top:1px solid var(--rule);
+}
+body[data-content-cluster="home"] .home-method-limits .section-head{margin-bottom:1rem}
+body[data-content-cluster="home"] .home-method-facts{
+  margin:0;padding:0;list-style:none;
+}
+body[data-content-cluster="home"] .home-method-facts li{
+  margin:0 0 .55rem;color:var(--text);line-height:1.55;max-width:68ch;
+}
+body[data-content-cluster="home"] .home-method-facts strong{color:var(--ink);font-weight:650}
+body[data-content-cluster="home"] #inteligencia-privada{
+  margin:0 0 clamp(1.25rem,2.5vw,1.75rem);
+}
+body[data-content-cluster="home"] #inteligencia-privada code{
+  color:var(--ink);background:var(--soft);padding:.05em .3em;
 }
 body[data-content-cluster="home"] .nucleus-chooser .journey-row-body h3{
   max-width:32ch;font-size:clamp(1.05rem,1.8vw,1.3rem);margin:0 0 .35rem;
@@ -362,8 +380,8 @@ body[data-content-cluster="home"] .offer-dominant{
 body[data-content-cluster="home"] .offer-dominant .offer-label{color:var(--dark-accent)}
 body[data-content-cluster="home"] .offer-dominant h3{font-size:clamp(1.4rem,2.2vw,1.9rem)}
 body[data-content-cluster="home"] .offer-dominant .offer-headline{color:var(--dark-ink);font-size:1.05rem;font-weight:600}
-body[data-content-cluster="home"] .offer-facts li{color:var(--dark-muted)}
-body[data-content-cluster="home"] .offer-facts strong{color:var(--dark-ink);font-weight:650}
+body[data-content-cluster="home"] .offer-dominant .offer-facts li{color:var(--dark-muted)}
+body[data-content-cluster="home"] .offer-dominant .offer-facts strong{color:var(--dark-ink);font-weight:650}
 body[data-content-cluster="home"] .offer-dominant-link{color:var(--dark-ink)}
 body[data-content-cluster="home"] .offer-dominant-link .icon{color:var(--dark-accent)}
 body[data-content-cluster="home"] .offer-dominant{--focus-ring-halo:var(--dark);--focus-ring-core:var(--white)}
@@ -386,7 +404,7 @@ body[data-content-cluster="home"] .path-cta{margin-top:.35rem;color:var(--accent
 .home-deliverables{
   display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.8fr);
   gap:clamp(1.75rem,4vw,3.5rem);align-items:start;
-  margin-top:clamp(2.5rem,5vw,4rem);padding-top:clamp(1.75rem,3vw,2.5rem);border-top:1px solid var(--rule);
+  margin-top:clamp(1.25rem,2.5vw,2rem);padding-top:clamp(1.1rem,2vw,1.6rem);border-top:1px solid var(--rule);
 }
 .home-deliverables-copy h3{max-width:20ch;margin:.5rem 0 .75rem;font-size:clamp(1.35rem,2.2vw,1.9rem)}
 .home-deliverables-copy>p:not(.eyebrow){max-width:54ch;margin:0;color:var(--text);font-size:1rem;line-height:1.65}
@@ -421,7 +439,7 @@ body[data-content-cluster="home"] .home-deliverables-actions .button-light:hover
  * transportava informacao: os quatro verbos ja estao em ordem. */
 .home-method-strip{
   display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;
-  margin:clamp(2.5rem,5vw,4rem) 0 0;padding:0;list-style:none;border-top:2px solid var(--rule-strong);
+  margin:clamp(1.25rem,2.5vw,2rem) 0 0;padding:0;list-style:none;border-top:2px solid var(--rule-strong);
 }
 .home-method-strip .macro-phase{
   padding:1.4rem clamp(1rem,2vw,1.75rem) 0 0;background:none;border:0;border-radius:0;
