@@ -13,7 +13,7 @@ const pin = Object.freeze({
   policy_version: "1.0.0-draft.20260904",
   canonical_name: "NET_NEW_INBOUND_HANDRAISER/1.0.0-draft.20260904",
   policy_hash: "sha256:405ac86064a90641b843352d21cd21703744115de9592558e100671d92276df7",
-  governance_source_sha: "487ef4e061685387c072e2a2f84600dfb14cc6b4",
+  governance_source_sha: "990c6ae237c3f7188728e97283bc69c130f6028d",
   intake_version: "CONFENGE_WEB_INTAKE/2.1.0-mv03.20260905",
   source_asset_id: "technical_triage_v1",
   offer_candidate_id: "technical_triage_review",
@@ -22,6 +22,11 @@ const pin = Object.freeze({
 });
 const allNuclei = Object.keys(adaptive.NUCLEI).join(",");
 const pinHash = adaptive.pinHash(pin);
+const adaptiveEnv = () => ({
+  NODE_ENV: "test",
+  ADAPTIVE_INTAKE_PIN_JSON: JSON.stringify(pin),
+  ADAPTIVE_INTAKE_NUCLEI: allNuclei,
+});
 
 test("public route is low-friction, transparent and free of sensitive inputs", () => {
   const html = fs.readFileSync(path.resolve("triagem-tecnica/index.html"), "utf8");
@@ -45,7 +50,9 @@ test("public route is low-friction, transparent and free of sensitive inputs", (
     assert.equal(new RegExp(`name=["']${forbiddenName}["']`, "i").test(html), false);
   }
   assert.equal(/\b(?:1|2)\s+dias?\s+[úu]teis\b/i.test(html), false);
-  assert.match(html, /name="robots" content="noindex,follow"/);
+  assert.match(html, /name="robots" content="index,follow"/);
+  assert.match(html, /action="\/\.netlify\/functions\/lead"/);
+  assert.match(html, /data-config-endpoint="\/\.netlify\/functions\/adaptive-intake-config"/);
   assert.equal((html.match(/data-intake-step/g) || []).length, 2);
 });
 
@@ -61,8 +68,8 @@ function base(overrides = {}) {
     preferred_channel: "whatsapp",
     sensitive_docs_ack: "on",
     consentimento: "on",
-    landing_family: "technical-triage",
-    route_family: "technical-triage",
+    landing_family: "triagem-tecnica",
+    route_family: "triagem-tecnica",
     asset_id: "technical_triage_v1",
     cta_id: "technical-triage-submit",
     origem: "/triagem-tecnica/",
@@ -82,10 +89,7 @@ describe("MV-03 pure adaptive intake", () => {
 
   test("accepts one valid return channel and keeps the known B2G nucleus", () => {
     const result = adaptive.validateAdaptiveIntake(base(), {
-      env: {
-        ADAPTIVE_INTAKE_PIN_JSON: JSON.stringify(pin),
-        ADAPTIVE_INTAKE_NUCLEI: allNuclei,
-      },
+      env: adaptiveEnv(),
     });
     assert.equal(result.ok, true);
     assert.equal(result.fields.nucleus_id, "public_works_b2g");
@@ -102,10 +106,7 @@ describe("MV-03 pure adaptive intake", () => {
       email: "fixture@example.test",
       preferred_channel: "email",
     }), {
-      env: {
-        ADAPTIVE_INTAKE_PIN_JSON: JSON.stringify(pin),
-        ADAPTIVE_INTAKE_NUCLEI: allNuclei,
-      },
+      env: adaptiveEnv(),
     });
     assert.equal(result.ok, true);
     assert.equal(result.fields.nucleus_id, "other_technical_need");
@@ -113,10 +114,7 @@ describe("MV-03 pure adaptive intake", () => {
   });
 
   test("asks for minimized location only when inspection scope makes it material", () => {
-    const env = {
-      ADAPTIVE_INTAKE_PIN_JSON: JSON.stringify(pin),
-      ADAPTIVE_INTAKE_NUCLEI: allNuclei,
-    };
+    const env = adaptiveEnv();
     const missing = adaptive.validateAdaptiveIntake(base({
       need_code: "avaliacao_de_imovel",
     }), { env });
@@ -139,13 +137,11 @@ describe("MV-03 pure adaptive intake", () => {
   });
 
   test("rejects free text, sensitive fields and mismatched channels before persistence", () => {
-    const env = {
-      ADAPTIVE_INTAKE_PIN_JSON: JSON.stringify(pin),
-      ADAPTIVE_INTAKE_NUCLEI: allNuclei,
-    };
+    const env = adaptiveEnv();
     assert.equal(adaptive.validateAdaptiveIntake(base({ processo: "0000000" }), { env }).error, "sensitive_field_rejected");
     assert.equal(adaptive.validateAdaptiveIntake(base({ mensagem: "texto" }), { env }).error, "sensitive_field_rejected");
     assert.equal(adaptive.validateAdaptiveIntake(base({ preferred_channel: "email" }), { env }).error, "contact_channel_mismatch");
+    assert.equal(adaptive.validateAdaptiveIntake(base({ asset_id: "tampered_asset" }), { env }).error, "source_asset_unknown");
   });
 });
 
@@ -288,7 +284,7 @@ describe("MV-03 signed Warmbly handoff", () => {
     nucleus_id: "other_technical_need",
     offer_candidate_id: "technical_triage_review",
     source_asset_id: "technical_triage_v1",
-    route_family: "technical-triage",
+    route_family: "triagem-tecnica",
     canal_preferido: "whatsapp",
     pessoa_tipo: "COMPANY",
     decision_role: "UNKNOWN",
@@ -312,6 +308,7 @@ describe("MV-03 signed Warmbly handoff", () => {
   test("maps official policy fields and keeps contact only in the signed protected block", () => {
     const payload = handoff.mapAdaptiveLeadToNetNewInbound(record);
     assert.equal(payload.origin, "CONFENGE_WEB");
+    assert.equal(payload.source.system, "web-cfg");
     assert.equal(payload.acquisition_lane, "NET_NEW_INBOUND");
     assert.equal(payload.nucleus_id, "other_technical_need");
     assert.equal(payload.site_location.material, false);
