@@ -23,11 +23,18 @@ from scripts.site.authority import (  # noqa: E402
     load_governance,
     write_sealed_editorial_policy,
 )
+from scripts.site.conflict_gate import (  # noqa: E402
+    client_runtime_js,
+    first_step_form_html,
+    load_contract as load_conflict_contract,
+    public_policy_body,
+)
 from scripts.site.responsive_text import escape_prose_with_opaque_tokens  # noqa: E402
 
 UPDATED_BR = {
     "2026-08-15": "15 de agosto de 2026",
     "2026-08-16": "16 de agosto de 2026",
+    "2026-09-04": "4 de setembro de 2026",
 }
 
 
@@ -270,17 +277,39 @@ def render_all() -> list[Path]:
         if not slug:
             continue
         body = spec.get("body") or ""
+        title = spec.get("title") or slug
+        description = spec.get("description") or ""
+        h1 = spec.get("h1") or spec.get("title") or slug
+        eyebrow = spec.get("eyebrow") or "Governança"
+        crumb_label = h1
+        page_updated = updated
         if key == "corrections":
             body = body + _correction_form(version, owner_email)
+        if key == "conflicts":
+            conflict = load_conflict_contract()
+            copy = conflict.get("public_copy") or {}
+            title = str(copy.get("title") or title)
+            description = str(copy.get("description") or description)
+            h1 = str(copy.get("h1") or h1)
+            eyebrow = str(copy.get("eyebrow") or eyebrow)
+            crumb_label = h1
+            body = body.replace("Owner: Engº Tiago Sasaki", "Responsável: Engº Tiago Sasaki")
+            written.append(_write("conflitos/conflict-gate.js", client_runtime_js(conflict)))
+            body = (
+                body
+                + public_policy_body(conflict)
+                + first_step_form_html(conflict)
+                + '<script src="/conflitos/conflict-gate.js" defer=""></script>\n'
+            )
         html_doc = _page(
             path=f"/{slug}/",
-            title=spec.get("title") or slug,
-            description=spec.get("description") or "",
-            h1=spec.get("h1") or spec.get("title") or slug,
-            eyebrow=spec.get("eyebrow") or "Governança",
-            crumbs=[("Início", "/"), (spec.get("h1") or spec.get("title") or slug, None)],
+            title=title,
+            description=description,
+            h1=h1,
+            eyebrow=eyebrow,
+            crumbs=[("Início", "/"), (crumb_label, None)],
             body=body,
-            updated=updated,
+            updated=page_updated,
             version=version,
         )
         written.append(_write(f"{slug}/index.html", html_doc))

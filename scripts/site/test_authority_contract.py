@@ -55,7 +55,6 @@ from scripts.site.authority import (
     representative_pages,
 )
 from scripts.site.brand import approved_cases, load_cases, load_proof  # noqa: E402
-from scripts.site.credential_registry import is_projectable, load_registry  # noqa: E402
 
 
 def _fixture(body: str, jsonld: dict | None = None, extra_head: str = "") -> str:
@@ -277,16 +276,7 @@ def test_specialist_page_shows_sameas_and_as_of():
     assert "as_of" in html
     assert 'datetime="2026-07-15"' in html
     assert "EESC-USP" in html or "Universidade de São Paulo" in html
-    crea_claims = [
-        claim
-        for claim in load_registry()["claims"]
-        if "crea" in str(claim.get("id", "")).lower()
-    ]
-    if any(is_projectable(claim) for claim in crea_claims):
-        assert "CREA" in html
-        assert check_credentials_against_proof(html) == []
-    else:
-        assert "CREA" not in html
+    assert "CREA" not in html
     assert "smartlic" not in html.lower()
     errors = check_schema_mirrors_visible(html)
     assert not errors, errors
@@ -302,15 +292,7 @@ def test_specialist_credentials_are_subset_of_public_verified_proof():
     assert "self-attested" in proof.get("verification_limitation", "").lower() or (
         "self_attested" in json.dumps(proof)
     )
-    crea_claims = [
-        claim
-        for claim in load_registry()["claims"]
-        if "crea" in str(claim.get("id", "")).lower()
-    ]
-    if any(is_projectable(claim) for claim in crea_claims):
-        assert "CREA" in html
-    else:
-        assert "CREA" not in html
+    assert "CREA" not in html
     assert "5 estrelas" not in html.lower()
     assert "selo iso" not in html.lower()
     assert "certificação internacional" not in html.lower()
@@ -726,6 +708,13 @@ def test_real_schema_types_mirror_visible_copy():
         assert expected in types, f"{path} missing {expected} in {types}"
         seen.add(expected)
     assert seen == set(samples)
+
+
+def test_multivertical_conflict_gate_shipped():
+    """#585: authority runner must execute the shipped conflict-gate suite."""
+    from scripts.site.test_conflict_gate import run_suite
+
+    run_suite()
 
 
 def test_jsonld_extractor_reads_shipped_markup():

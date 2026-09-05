@@ -1,0 +1,234 @@
+{
+  "contract_id": "CONFENGE_PUBLIC_CONFLICT_GATE",
+  "contract_version": "1.0.0",
+  "effective_at": "2026-09-04",
+  "issue": 585,
+  "parent_issue": 577,
+  "interfaces": [
+    580,
+    581
+  ],
+  "governance_issue_note": "Governance #65 is the protected-register owner when that repository records it; web-cfg does not implement the store.",
+  "policy_kind": "operational_conservative_screening",
+  "not_a_legal_opinion": true,
+  "canonical_path": "/conflitos/",
+  "owner": {
+    "name": "Engº Tiago Sasaki",
+    "email": "tiago.sasaki@confenge.com.br",
+    "plane": "public_policy_and_screening_contract"
+  },
+  "source_lane": "CONFENGE_WEB",
+  "invariants": {
+    "outbound_eligible": false,
+    "auto_send": false,
+    "no_public_parties_store": true,
+    "no_corpus_before_cabivel_status": true,
+    "unknown_never_clear": true,
+    "unavailable_path_never_clear": true,
+    "rollback_never_clear": true
+  },
+  "statuses": [
+    "CLEAR",
+    "CLEAR_WITH_DISCLOSURE",
+    "REVIEW_REQUIRED",
+    "DECLINE",
+    "UNKNOWN"
+  ],
+  "nuclei": [
+    {
+      "id": "expert_evidence_assistance",
+      "public_label": "Perícias e assistência técnica"
+    },
+    {
+      "id": "property_valuation",
+      "public_label": "Avaliações de imóveis"
+    },
+    {
+      "id": "building_engineering_documentation",
+      "public_label": "Engenharia de edificações e documentação (cliente privado)"
+    },
+    {
+      "id": "occupational_safety",
+      "public_label": "Segurança do trabalho (SST)"
+    },
+    {
+      "id": "public_works_b2g",
+      "public_label": "Obras públicas e B2G"
+    }
+  ],
+  "intended_roles": [
+    {
+      "id": "consultant",
+      "public_label": "Consultor"
+    },
+    {
+      "id": "technical_responsible",
+      "public_label": "Responsável técnico"
+    },
+    {
+      "id": "valuer",
+      "public_label": "Avaliador"
+    },
+    {
+      "id": "technical_assistant",
+      "public_label": "Assistente técnico"
+    },
+    {
+      "id": "court_appointed_expert",
+      "public_label": "Perito nomeado pelo juízo"
+    }
+  ],
+  "fact_allowlist": [
+    "nucleus_id",
+    "intended_role",
+    "same_public_duty_matter",
+    "nonpublic_office_information_risk",
+    "incompatible_expert_roles",
+    "relevant_personal_or_financial_relation",
+    "relation_cannot_be_mitigated",
+    "mitigation_requires_disclosure",
+    "client_requests_public_influence",
+    "information_sufficient",
+    "distinct_matter_no_signal",
+    "prior_status",
+    "prior_role_fingerprint",
+    "current_role_fingerprint",
+    "protected_path_available",
+    "contract_id",
+    "contract_version",
+    "contract_hash",
+    "taxonomy_version",
+    "catalog_version",
+    "intake_version",
+    "rollback"
+  ],
+  "decline_true_flags": [
+    {
+      "field": "same_public_duty_matter",
+      "reason_class": "same_public_duty_matter"
+    },
+    {
+      "field": "nonpublic_office_information_risk",
+      "reason_class": "nonpublic_office_information_risk"
+    },
+    {
+      "field": "incompatible_expert_roles",
+      "reason_class": "incompatible_expert_roles"
+    },
+    {
+      "field": "client_requests_public_influence",
+      "reason_class": "public_influence_request"
+    }
+  ],
+  "reason_classes": [
+    {
+      "id": "contract_pin_mismatch",
+      "default_status": "UNKNOWN",
+      "public_label": "screening_pause"
+    },
+    {
+      "id": "insufficient_information",
+      "default_status": "UNKNOWN",
+      "public_label": "screening_pause"
+    },
+    {
+      "id": "same_public_duty_matter",
+      "default_status": "DECLINE",
+      "public_label": "screening_block"
+    },
+    {
+      "id": "nonpublic_office_information_risk",
+      "default_status": "DECLINE",
+      "public_label": "screening_block"
+    },
+    {
+      "id": "incompatible_expert_roles",
+      "default_status": "DECLINE",
+      "public_label": "screening_block"
+    },
+    {
+      "id": "public_influence_request",
+      "default_status": "DECLINE",
+      "public_label": "screening_block"
+    },
+    {
+      "id": "unmitigable_personal_or_financial_relation",
+      "default_status": "DECLINE",
+      "public_label": "screening_block"
+    },
+    {
+      "id": "personal_or_financial_relation_review",
+      "default_status": "REVIEW_REQUIRED",
+      "public_label": "screening_review"
+    },
+    {
+      "id": "disclosure_mitigation",
+      "default_status": "CLEAR_WITH_DISCLOSURE",
+      "public_label": "screening_disclosure"
+    },
+    {
+      "id": "role_change_recheck",
+      "default_status": "REVIEW_REQUIRED",
+      "public_label": "screening_review"
+    },
+    {
+      "id": "no_signal_distinct_matter",
+      "default_status": "CLEAR",
+      "public_label": "screening_clear"
+    },
+    {
+      "id": "protected_path_unavailable",
+      "default_status": "REVIEW_REQUIRED",
+      "public_label": "screening_pause"
+    },
+    {
+      "id": "rollback_fail_closed",
+      "default_status": "REVIEW_REQUIRED",
+      "public_label": "screening_pause"
+    }
+  ],
+  "public_projection_keys": [
+    "status",
+    "next_step",
+    "policy_version",
+    "corpus_suspended",
+    "public_readback"
+  ],
+  "protected_decision_keys": [
+    "owner",
+    "timestamp",
+    "reason_class",
+    "matter_ref_protected",
+    "identity_role",
+    "valid_until",
+    "recheck_on",
+    "disclosure",
+    "receipt",
+    "policy_version",
+    "policy_hash",
+    "prior_clearance_invalidated"
+  ],
+  "next_steps": {
+    "CLEAR": "A triagem operacional não encontrou sinal neste recorte. O envio do corpus só ocorre no canal protegido, quando esse canal estiver disponível.",
+    "CLEAR_WITH_DISCLOSURE": "A triagem operacional segue só com divulgação registrada no canal protegido. Não envie o corpus neste formulário público.",
+    "REVIEW_REQUIRED": "A triagem precisa de revisão humana. Não envie o corpus ainda. O próximo passo é pausar o envio de documentos.",
+    "DECLINE": "Não seguiremos com esta demanda neste canal. Nenhum detalhe adicional é necessário aqui.",
+    "UNKNOWN": "Não há informação suficiente para concluir a triagem. Não envie o corpus. O estado permanece em pausa."
+  },
+  "consumer_pins": {
+    "taxonomy": "CONFENGE_CORPORATE_TAXONOMY/1.0.0-draft.20260904",
+    "catalog": "CONFENGE_OFFER_CATALOG/2.0.0-draft.20260904",
+    "intake": "CONFENGE_WEB_INTAKE/2.0.0-draft.20260904",
+    "admission_policy": "NET_NEW_INBOUND_HANDRAISER/1.0.0-draft.20260904",
+    "handraiser_state": "CONFENGE_HANDRAISER_STATE/1.0.0-draft.20260904",
+    "meetcfg_context": "MEETCFG_HANDRAISER_CONTEXT/1.0.0-draft.20260904"
+  },
+  "consumer_pin_mode": "fail_closed_when_present_and_divergent_never_runtime_fallback",
+  "public_copy": {
+    "title": "Conflitos de interesse e triagem de independência",
+    "h1": "Conflitos de interesse e triagem de independência",
+    "eyebrow": "Conflitos",
+    "description": "A CONFENGE aplica triagem operacional conservadora e reabrível antes de receber corpus. A triagem protege o cliente e a independência técnica. Não é um parecer jurídico geral sobre cargo público."
+  },
+  "content_sha256": "96af7851e9f30ae566b71b4e770d69df4a6d6b593a10011ac4a620f05f2772bc"
+}
