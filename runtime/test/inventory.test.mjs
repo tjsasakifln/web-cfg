@@ -23,7 +23,7 @@ const INVENTORY = buildFunctionInventory();
 
 test("inventory discovers every current file and every top-level handler automatically", () => {
   const inventory = INVENTORY;
-  assert.equal(inventory.file_count, 42);
+  assert.equal(inventory.file_count, 43);
   assert.equal(inventory.function_count, 15);
   assert.equal(inventory.validation.ok, true);
   assert.equal(inventory.validation.loaded_handlers, 15);
@@ -33,7 +33,7 @@ test("inventory discovers every current file and every top-level handler automat
   );
   assert.equal(
     inventory.files.filter((entry) => entry.role === "support_library").length,
-    26,
+    27,
   );
   assert.ok(
     inventory.files.some((entry) =>
