@@ -164,6 +164,11 @@
         "reason": "heaviest canonical tool, with client-side scoring and persistent lead capture"
       },
       {
+        "family_id": "private-project-technical-readiness",
+        "route": "/ferramentas/prontidao-tecnica-obra-privada/",
+        "reason": "single-route private-nucleus canary with result-gated adaptive capture"
+      },
+      {
         "family_id": "live-intelligence-cnpj-tool",
         "route": "/analise-cnpj/",
         "reason": "CNPJ analysis tool landing; noindex until INSTANCE_INDEX_READY",

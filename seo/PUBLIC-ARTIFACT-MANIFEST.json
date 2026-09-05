@@ -74,7 +74,7 @@
     "styles-tools.css",
     "styles.css"
   ],
-  "html_route_count": 245,
+  "html_route_count": 246,
   "html_routes": [
     "/",
     "/acompanhamento-contratos-obras/",
@@ -246,6 +246,7 @@
     "/ferramentas/",
     "/ferramentas/limite-acrescimos-supressoes/",
     "/ferramentas/matriz-atraso-obra/",
+    "/ferramentas/prontidao-tecnica-obra-privada/",
     "/guias-contratos-obras/checklist-pedido-aditivo/",
     "/guias-contratos-obras/contestar-glosa-medicao/",
     "/guias-contratos-obras/documentos-pedido-reequilibrio/",

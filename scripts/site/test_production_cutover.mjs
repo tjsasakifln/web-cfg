@@ -237,16 +237,11 @@ ok(
   "full H1 phrase missing"
 );
 // Prefer exact h1 element text when present
-const h1Match = home.body.match(/<h1[^>]*id="hero-title"[^>]*>([\s\S]*?)<\/h1>/i);
-if (h1Match) {
-  const h1Text = h1Match[1].replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
-  ok(
-    "home_h1_element",
-    h1Text.includes("Decisão técnica documentada") &&
-      h1Text.includes("com responsável e data."),
-    `h1=${h1Text.slice(0, 80)}`
-  );
-}
+ok(
+  "home_h1_element",
+  /id="hero-title"[\s\S]{0,400}Decisão técnica documentada[\s\S]{0,120}com responsável e data\./i.test(home.body),
+  "hero-title does not carry the documented-decision phrase"
+);
 const macro = (home.body.match(/macro-phase/g) || []).length;
 ok("four_macrofases", macro >= 4, `macro-phase count=${macro}`);
 const blocks = (home.body.match(/data-section-archetype="/g) || []).length;

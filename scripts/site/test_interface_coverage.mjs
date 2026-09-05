@@ -65,8 +65,8 @@ assert(coverage.axe.routes.every((entry) =>
 // issue #61 reequilibrio checklist receipt are result-gated capture forms and
 // have to be included in the recaptured census.
 assert.equal(coverage.axe.price_route_count, 47);
-assert.equal(coverage.axe.capture_form_route_count, 27);
-assert.equal(coverage.axe.route_count, 56);
+assert.equal(coverage.axe.capture_form_route_count, 28);
+assert.equal(coverage.axe.route_count, 57);
 assert(selected.has("/conteudos/atraso-na-medicao-obra-publica/"));
 assert(selected.has("/conteudos/sinapi-desonerado-nao-desonerado/"));
 assert.deepEqual(
@@ -90,9 +90,9 @@ for (const [route, why] of [
 assert.equal(coverage.axe.page_loads, coverage.axe.route_count * 2);
 assert(coverage.axe.not_sampled.every((entry) => entry.reason), "every omitted axe route needs a reason");
 assert.equal(coverage.lighthouse.canonical_family_count, registry.families.length);
-assert.equal(coverage.lighthouse.canonical_family_count, 34);
+assert.equal(coverage.lighthouse.canonical_family_count, 35);
 assert.equal(coverage.lighthouse.supplemental_family_count, 1);
-assert.equal(coverage.lighthouse.pages.length, 38);
+assert.equal(coverage.lighthouse.pages.length, 39);
 assert(coverage.lighthouse.pages.includes("/conteudos/atraso-na-medicao-obra-publica/"));
 assert(coverage.lighthouse.pages.includes("/diretoria-b2g/"));
 assert(coverage.lighthouse.pages.includes("/diagnostico-b2g-expansao/"));
