@@ -257,8 +257,9 @@ def test_cadastral_address_is_not_storefront():
     assert "atendimento online ou no local do cliente" in text
     assert "escritório aberto ao público" not in text
     address = proj.schema_org.get("address") or {}
-    assert address.get("streetAddress") == "Avenida Prefeito Osmar Cunha, 416, sala 1108"
-    assert "openingHours" not in address
+    assert not address, address
+    assert "PostalAddress" not in json.dumps(proj.schema_nodes, ensure_ascii=False)
+    assert "openingHours" not in json.dumps(proj.schema_org, ensure_ascii=False)
     poisoned = copy.deepcopy(registry)
     for claim in poisoned["claims"]:
         if claim["id"] == "org-cadastral-address":
