@@ -8,7 +8,11 @@
     "priority": "P0",
     "stage": "EXECUTE_NOW",
     "front": "REVENUE NOW",
-    "leverage": ["trust", "revenue", "customer"],
+    "leverage": [
+      "trust",
+      "revenue",
+      "customer"
+    ],
     "time_to_evidence_days": 14
   },
   "state_note": "Cortes desta matriz são premissas derivadas de preços já publicados e da escada #341. Nenhum corte é willingness to pay observada, preço validado ou ICP ideal inventado. A política de preço permanece NOT_STARTED.",
@@ -103,10 +107,25 @@
       "required": false,
       "sensitive": false,
       "values": [
-        { "id": "ate_250k", "label": "Até R$ 250 mil", "source": "home PNCP local" },
-        { "id": "250k_1m", "label": "R$ 250 mil a R$ 1 milhão", "source": "home PNCP regional" },
-        { "id": "acima_1m", "label": "Acima de R$ 1 milhão", "source": "home PNCP strategic" },
-        { "id": "unknown", "label": "Ainda não sei" }
+        {
+          "id": "ate_250k",
+          "label": "Até R$ 250 mil",
+          "source": "home PNCP local"
+        },
+        {
+          "id": "250k_1m",
+          "label": "R$ 250 mil a R$ 1 milhão",
+          "source": "home PNCP regional"
+        },
+        {
+          "id": "acima_1m",
+          "label": "Acima de R$ 1 milhão",
+          "source": "home PNCP strategic"
+        },
+        {
+          "id": "unknown",
+          "label": "Ainda não sei"
+        }
       ]
     },
     "risk_band": {
@@ -114,12 +133,43 @@
       "required": false,
       "sensitive": false,
       "values": [
-        { "id": "abaixo_entrada", "label": "Abaixo de R$ 599", "max_cents_exclusive": 59900, "source": "entrada_factual.min_cents" },
-        { "id": "faixa_entrada", "label": "R$ 599 a R$ 2.400", "min_cents": 59900, "max_cents": 240000, "source": "entrada_factual" },
-        { "id": "faixa_diagnostico", "label": "R$ 2.900 a R$ 5.900", "min_cents": 290000, "max_cents": 590000, "source": "diagnostico_delimitado" },
-        { "id": "faixa_dossie", "label": "R$ 6.900 a R$ 7.900", "min_cents": 690000, "max_cents": 790000, "source": "dossie_critico" },
-        { "id": "acima_dossie", "label": "Acima de R$ 7.900", "min_cents_exclusive": 790000, "source": "dossie_critico.max_cents" },
-        { "id": "unknown", "label": "Ainda não sei" }
+        {
+          "id": "abaixo_entrada",
+          "label": "Abaixo de R$ 599",
+          "max_cents_exclusive": 59900,
+          "source": "entrada_factual.min_cents"
+        },
+        {
+          "id": "faixa_entrada",
+          "label": "R$ 599 a R$ 2.400",
+          "min_cents": 59900,
+          "max_cents": 240000,
+          "source": "entrada_factual"
+        },
+        {
+          "id": "faixa_diagnostico",
+          "label": "R$ 2.900 a R$ 5.900",
+          "min_cents": 290000,
+          "max_cents": 590000,
+          "source": "diagnostico_delimitado"
+        },
+        {
+          "id": "faixa_dossie",
+          "label": "R$ 6.900 a R$ 7.900",
+          "min_cents": 690000,
+          "max_cents": 790000,
+          "source": "dossie_critico"
+        },
+        {
+          "id": "acima_dossie",
+          "label": "Acima de R$ 7.900",
+          "min_cents_exclusive": 790000,
+          "source": "dossie_critico.max_cents"
+        },
+        {
+          "id": "unknown",
+          "label": "Ainda não sei"
+        }
       ]
     },
     "frequency": {
@@ -127,9 +177,18 @@
       "required": false,
       "sensitive": false,
       "values": [
-        { "id": "pontual", "label": "Pontual, um evento" },
-        { "id": "recorrente", "label": "Recorrente, rotina" },
-        { "id": "unknown", "label": "Ainda não sei" }
+        {
+          "id": "pontual",
+          "label": "Pontual, um evento"
+        },
+        {
+          "id": "recorrente",
+          "label": "Recorrente, rotina"
+        },
+        {
+          "id": "unknown",
+          "label": "Ainda não sei"
+        }
       ]
     },
     "urgency": {
@@ -137,11 +196,26 @@
       "required": false,
       "sensitive": false,
       "values": [
-        { "id": "ate_48h", "label": "até 48 horas" },
-        { "id": "ate_7d", "label": "até 7 dias" },
-        { "id": "ate_30d", "label": "até 30 dias" },
-        { "id": "planejamento", "label": "planejamento sem prazo imediato" },
-        { "id": "unknown", "label": "Ainda não sei" }
+        {
+          "id": "ate_48h",
+          "label": "até 48 horas"
+        },
+        {
+          "id": "ate_7d",
+          "label": "até 7 dias"
+        },
+        {
+          "id": "ate_30d",
+          "label": "até 30 dias"
+        },
+        {
+          "id": "planejamento",
+          "label": "planejamento sem prazo imediato"
+        },
+        {
+          "id": "unknown",
+          "label": "Ainda não sei"
+        }
       ]
     },
     "document_maturity": {
@@ -149,10 +223,22 @@
       "required": false,
       "sensitive": false,
       "values": [
-        { "id": "forte", "label": "Organizados" },
-        { "id": "parcial", "label": "Parciais" },
-        { "id": "fraca", "label": "Fracos ou ausentes" },
-        { "id": "unknown", "label": "Ainda não sei" }
+        {
+          "id": "forte",
+          "label": "Organizados"
+        },
+        {
+          "id": "parcial",
+          "label": "Parciais"
+        },
+        {
+          "id": "fraca",
+          "label": "Fracos ou ausentes"
+        },
+        {
+          "id": "unknown",
+          "label": "Ainda não sei"
+        }
       ]
     },
     "internal_capacity": {
@@ -160,10 +246,22 @@
       "required": false,
       "sensitive": false,
       "values": [
-        { "id": "suficiente", "label": "Equipe dá conta" },
-        { "id": "limitada", "label": "Equipe limitada" },
-        { "id": "inexistente", "label": "Sem equipe para isso" },
-        { "id": "unknown", "label": "Ainda não sei" }
+        {
+          "id": "suficiente",
+          "label": "Equipe dá conta"
+        },
+        {
+          "id": "limitada",
+          "label": "Equipe limitada"
+        },
+        {
+          "id": "inexistente",
+          "label": "Sem equipe para isso"
+        },
+        {
+          "id": "unknown",
+          "label": "Ainda não sei"
+        }
       ]
     }
   },
@@ -183,7 +281,11 @@
       "fit": "Risco abaixo do piso de entrada (R$ 599) ou contrato de porte menor sem caixa ou margem identificada. Dá para calcular limite de aditivo, atraso, reequilíbrio ou margem nas ferramentas públicas.",
       "not_fit": "Há risco identificado pelo menos no piso de diagnóstico (R$ 2.900), prazo correndo ou documentos que já pedem posição técnica.",
       "public_next": "Usar conteúdo ou ferramenta pública. Não contratar agora.",
-      "routes": ["/ferramentas/", "/conteudos/", "/problemas-que-resolvemos/"]
+      "routes": [
+        "/ferramentas/",
+        "/conteudos/",
+        "/problemas-que-resolvemos/"
+      ]
     },
     {
       "offer_id": "entrega_entrada",
@@ -192,7 +294,10 @@
       "fit": "Uma decisão pequena, risco na faixa de R$ 599 a R$ 2.400, pontual.",
       "not_fit": "Risco abaixo de R$ 599 (não indicado) ou já na faixa de diagnóstico ou dossiê.",
       "public_next": "Começar por uma entrega de entrada com preço publicado de R$ 599 a R$ 2.400.",
-      "routes": ["/entregas/", "/radar/"]
+      "routes": [
+        "/entregas/",
+        "/radar/"
+      ]
     },
     {
       "offer_id": "diagnostico",
@@ -201,7 +306,11 @@
       "fit": "Risco na faixa de R$ 2.900 a R$ 5.900, ou documentos fracos que impedem montar dossiê, ou rotina ainda sem método.",
       "not_fit": "Evento único já documentado na faixa de dossiê, ou carteira recorrente que pede diretoria.",
       "public_next": "Pedir um diagnóstico delimitado (R$ 2.900 a R$ 5.900) antes de um projeto crítico.",
-      "routes": ["/diagnostico-pre-licitacao/", "/diagnostico-b2g-360/", "/acompanhamento-contratos-obras/"]
+      "routes": [
+        "/diagnostico-pre-licitacao/",
+        "/diagnostico-b2g-360/",
+        "/acompanhamento-contratos-obras/"
+      ]
     },
     {
       "offer_id": "projeto_critico",
@@ -210,7 +319,11 @@
       "fit": "Caixa ou margem em risco na faixa de R$ 6.900 a R$ 7.900 ou acima, evento pontual, documentos ao menos parciais, urgência de dias.",
       "not_fit": "Risco abaixo do piso de dossiê, documentos fracos (volte ao diagnóstico), ou rotina mensal de carteira (diretoria).",
       "public_next": "Enquadrar um projeto crítico / dossiê (R$ 6.900 a R$ 7.900, pontual).",
-      "routes": ["/medicoes-glosas-obras-publicas/", "/reequilibrio-obras-publicas/", "/defesa-margem-contratos-publicos/"]
+      "routes": [
+        "/medicoes-glosas-obras-publicas/",
+        "/reequilibrio-obras-publicas/",
+        "/defesa-margem-contratos-publicos/"
+      ]
     },
     {
       "offer_id": "diretoria",
@@ -219,7 +332,10 @@
       "fit": "Frequência recorrente, carteira acima de R$ 1 milhão ou risco acima do teto de dossiê, capacidade interna limitada. Piso publicado: R$ 12.500 por mês.",
       "not_fit": "Um evento pontual, mesmo em contrato grande; ou risco mensal abaixo de R$ 4.900, piso da recorrência gerenciada.",
       "public_next": "Avaliar Diretoria Fracionada para o Mercado Público (R$ 12.500 a R$ 20.000 por mês).",
-      "routes": ["/diretoria-b2g/", "/acompanhamento-contratos-obras/"]
+      "routes": [
+        "/diretoria-b2g/",
+        "/acompanhamento-contratos-obras/"
+      ]
     },
     {
       "offer_id": "nao_indicado",
@@ -228,10 +344,13 @@
       "fit": "A CONFENGE não é economicamente indicada: risco abaixo de R$ 599, evento pontual, equipe interna suficiente e documentos já organizados.",
       "not_fit": "Há risco, prazo ou lacuna documental que o piso publicado ainda cobre.",
       "public_next": "Não contratar. Seguir com a equipe interna ou com conteúdo público.",
-      "routes": ["/conteudos/", "/ferramentas/"]
+      "routes": [
+        "/conteudos/",
+        "/ferramentas/"
+      ]
     }
   ],
-  "home_illustrations_note": "2026-09-06 (#620): reduzido de tres paineis para um. Os paineis 'regional' e 'strategic' repetiam literalmente a mesma faixa de honorario e a mesma ressalva do painel 'local', reancorando a home em consultoria de contrato publico. O painel 'local' permanece verbatim porque sozinho ja carrega o percentual, o valor derivado, a ressalva de conta ilustrativa, o custo publicado, a recorrencia da diretoria e a unica desqualificacao de contratacao publicada no site. cited_bands e pricing_policy_ref nao foram tocados: nenhum preco declarado deixa de existir em superficie publica.",
+  "home_illustrations_note": "2026-09-06 (#620): reduzido de tres paineis para um. Os paineis 'regional' e 'strategic' repetiam literalmente a mesma faixa de honorario e a mesma ressalva do painel 'local', reancorando a home em consultoria de contrato publico. O painel 'local' permanece verbatim porque sozinho ja carrega o percentual, o valor derivado, a ressalva de conta ilustrativa, o custo publicado, a recorrencia da diretoria e a unica desqualificacao de contratacao publicada no site. cited_bands e pricing_policy_ref nao foram tocados: nenhum preco declarado deixa de existir em superficie publica. 2026-09-06 (#620, campanha de retificacao): o painel ganha destino. A reavaliacao do bloco economico manteve o modelo de ilustracao, que ja carrega rotulo ilustrativo, ressalva, custo publicado, recorrencia, limite e a unica desqualificacao de contratacao publicada no site, e cujas invariantes sao verificadas em tests/commercial/test_offer_fit_matrix.mjs. O que faltava nao era menos profundidade e sim um destino: as faixas eram citadas na home sem levar a superficie onde estao publicadas com os termos. O paragrafo passa a apontar para /servicos-obras-publicas/. Nenhum preco, faixa, fonte, data ou ressalva foi alterado.",
   "home_illustrations": [
     {
       "panel": "local",
