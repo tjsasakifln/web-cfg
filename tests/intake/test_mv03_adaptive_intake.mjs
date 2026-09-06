@@ -85,6 +85,7 @@ test("MV-09 publishes one bounded private wedge with embedded triage and three s
   }
   assert.match(html, /<meta(?=[^>]*name="robots")(?=[^>]*content="index,follow[^\"]*")[^>]*>/);
   assert.match(html, /action="\/\.netlify\/functions\/lead"/);
+  assert.match(html, /data-authority-config-endpoint="\/\.netlify\/functions\/adaptive-intake-config\?intake_context=quantities_budget"/);
   assert.equal((html.match(/data-fallback-channel=/g) || []).length, 3);
   assert.equal((html.match(/name="location_(?:city|uf)"/g) || []).length, 2);
   assert.equal(/name="(?:mensagem|arquivo|upload|endereco|cpf|processo)"/i.test(html), false);
