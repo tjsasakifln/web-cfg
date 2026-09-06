@@ -51,9 +51,9 @@ function startStaticServer() {
       const ext = extname(filePath);
       res.writeHead(200, { "Content-Type": MIME[ext] || "application/octet-stream" });
       res.end(readFileSync(filePath));
-    } catch (e) {
+    } catch {
       res.writeHead(500);
-      res.end(String(e));
+      res.end("internal server error");
     }
   });
   return new Promise((resolvePromise) => {

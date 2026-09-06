@@ -90,8 +90,9 @@ const origin = createOriginClient({
   hostHeader: OPTIONS.host,
   resolveIp: OPTIONS.resolveIp,
 });
-/** Full corporate H1 as required by the canonical public shell. */
-const EXPECTED_H1_FULL = "Do problema técnico à decisão documentada.";
+/** Exact corporate H1 markup as required by the canonical public shell. */
+const EXPECTED_H1_MARKUP =
+  '<h1 id="hero-title">Do problema técnico <span class="type-serif">à decisão documentada.</span></h1>';
 const RETIRED = [
   "Oito momentos em que",
   "Todo o conteúdo permanece legível sem JavaScript",
@@ -231,11 +232,7 @@ if (OPTIONS.expectedRuntimeIdentity) {
 // Home architecture
 const home = await fetchText("/");
 ok("home_200", home.status === 200, `status=${home.status}`);
-const h1Match = home.body.match(/<h1[^>]*id="hero-title"[^>]*>([\s\S]*?)<\/h1>/i);
-const h1Text = h1Match
-  ? h1Match[1].replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim()
-  : "";
-ok("home_h1_full", h1Text === EXPECTED_H1_FULL, `h1=${h1Text.slice(0, 80)}`);
+ok("home_h1_full", home.body.includes(EXPECTED_H1_MARKUP), "exact corporate H1 missing");
 const situationRows = (home.body.match(/class="[^"]*\bsituation-row\b/g) || []).length;
 ok("five_situation_paths", situationRows === 5, `situation rows=${situationRows}`);
 const blocks = (home.body.match(/data-section-archetype="/g) || []).length;
