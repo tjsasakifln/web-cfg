@@ -1,9 +1,9 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "26614984ee0d480c05e706e1ca85885876e12eea",
+  "baseline_commit": "f1908f5e28eae59a27075a388b6b4756809fdafb",
   "recaptured_at": "2026-09-05",
-  "recapture_reason": "MV-09 activates the corporate /servicos/ canonical, keeps contract-analysis publication fail-closed after approval-material drift, and removes unused shared CSS after responsive/Lighthouse validation. All six frozen B2G pillar HTML byte hashes remain unchanged; no frozen offer or CTA content was edited. Evidence: docs/integration/campaign-20260905/09/integration-log.md and revenue-red-team.md.",
+  "recapture_reason": "MV-09 activates the corporate /servicos/ canonical and the bounded /quantitativos-orcamento-obras/ wedge, keeps contract-analysis publication fail-closed after approval-material drift, and preserves the reviewed corporate shell. Only sitemap.xml and sitemap.txt changed in this recapture to admit the canonical route. All six frozen B2G pillar HTML byte hashes remain unchanged; no frozen offer or CTA content was edited. Evidence: docs/integration/campaign-20260905/09/integration-log.md and revenue-red-team.md.",
   "html_mutation": false,
   "pillars": {
     "aditivos-obras-publicas": "a4be02dc6705bb15cbbec882412e3b383887e18800abdd85272d506c1c56c450",
@@ -25,8 +25,8 @@
     "styles-tokens.css": "15cc0770e76276b418c11493fa9e53827ae14bb8f854b0a63d8c6dd63afc02fc",
     "styles-tools.css": "8c42a4b5fadba13e4dae52bd7168c64b9f5548f3fd3f8d4f0707ce4e9463c7ba",
     "robots.txt": "132889da3782dff11ceec9b6588a6e7962f2ba28738da9133a7d5318f148dcaf",
-    "sitemap.xml": "014f4d6d15611e20b211078bc23220d81a69ede0cabef64e4ab5af2a252c9608",
-    "sitemap.txt": "c4f2dfe2566392ffb4dc154060e27c08205ab9be243c0720661fc9d694161d26",
+    "sitemap.xml": "59c127a5360de187181a394d36d8eb6e8b0b03326ca40c5d16817a3c1e66f4cf",
+    "sitemap.txt": "128078e3beff483ee6244f4c3fe9429aa4ae65f63eea94123724043447bd80de",
     "sitemap-index.xml": "9fe92fbdb18e83ab8ccda50b915a4bf1ea86c917f4ae1d7c9e83c3cf7016242f",
     "_redirects": "7bb3b3a5dc136aa08ccb526caad7d4eb014def1c347c3b34aad5a6ed8225fce8",
     "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
