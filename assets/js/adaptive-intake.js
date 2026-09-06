@@ -266,7 +266,11 @@
     .then(configure)
     .catch(unavailable);
 
-  form.addEventListener("focusin", markStart, { once: true });
+  // Programmatic focus (browser restore, accessibility tooling or navigation)
+  // is not a visitor interaction and must not inflate funnel starts.
+  ["pointerdown", "keydown", "input", "change"].forEach(function (eventName) {
+    form.addEventListener(eventName, markStart, { once: true });
+  });
   need.addEventListener("change", function () {
     updateLocation();
     updateFallbackChannels();
