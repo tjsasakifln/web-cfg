@@ -212,7 +212,7 @@ Matriz final de canonical: `docs/integration/campaign-20260905/09/intent-canonic
 
 ## Evidência final da candidata
 
-- Build público: `79` URLs no sitemap, `79` indexáveis, `0` erros e `0` warnings; hash do artefato `d0072738c24cce4db9a6302af40a3caa91145af68cacb29e548a40cc35390aed` e hash do manifesto `75649fd8b2ae4bd0436392714e7e35fee08cc52f4c632cfc962794ec10ca566f` no build de `a2e883498b48191724e44b019f378e81aaabb3d9`.
+- Build público: `79` URLs no sitemap, `79` indexáveis, `0` erros e `0` warnings; hash do artefato `cca1a19a633e0f9c682466e206c09b19cf3e70cdd04bc60e329fa5a42e143dc6` e hash do manifesto `e041b14c4296c470e94e9fcae18a9fcae045ab927c9b2734c81df089c60a253e` no build de `0518262b82e0aeb43115a801e804012d442fbc28`.
 - Cobertura: `254` rotas públicas, `58` rotas de risco em dois viewports, `29` rotas com captura, `39` famílias Lighthouse e `42` representantes; nenhum bloqueio axe na cunha em móvel ou desktop.
 - Lighthouse completo e isolado: `PASS`; home `3/3`, performance mínima `99`, TBT p75 `88 ms`, long task máximo `138 ms`, CLS máximo `0`. A cunha marcou performance `100`, acessibilidade `100`, best practices `96`, SEO `100`, LCP `1.359 s`, TBT `0` e CLS `0`.
 - B2G: `/diretoria-b2g/` e `/diagnostico-b2g-expansao/` marcaram `100/100/100/100` nas três repetições; `/servicos-obras-publicas/` marcou performance e SEO `100`.
