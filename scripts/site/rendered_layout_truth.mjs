@@ -163,12 +163,56 @@ export async function renderedLayoutFindings(page, options = {}) {
           if (!hiddenAncestors.length) return null;
           return () => hiddenAncestors.forEach((element) => element.setAttribute("hidden", ""));
         };
+        // Issue #616 criterion A1: while the external intake authority is
+        // WITHHELD the whole capture block is `hidden` + `inert` + `aria-hidden`
+        // so it contributes zero focusables. A visible form whose submit is
+        // merely disabled — the shape the older `isAuthorityGated` acceptance
+        // below assumes — is the "affordance morta" A1 explicitly rejects, so
+        // the withheld block can never satisfy that path.
+        //
+        // Accepting the hidden block is only sound if the visitor still has a
+        // real way through, so this acceptance is strictly stronger than the
+        // visible-form one: on top of the same three registry-contract
+        // attribute checks it demands that the three declared safe fallbacks
+        // are actually rendered and actionable, and that a non-empty intake
+        // status is visible outside the withheld block. The registry contract
+        // itself is authenticated upstream (`authorityGatedCaptureFor`), which
+        // throws unless the family declares exactly this mode, runtime profile,
+        // config endpoint, client script, WITHHELD manifest and the three
+        // fallback channels. Undeclared markup therefore reaches here with
+        // `authorityGatedCapture === null` and stays `broken_form`.
+        const withheldAuthorityCaptureIsUsable = (form) => {
+          if (!authorityGatedCapture) return false;
+          if (form.getAttribute("data-runtime-profile") !== authorityGatedCapture.runtimeProfile) return false;
+          if (form.getAttribute("data-authority-config-endpoint") !== authorityGatedCapture.configEndpoint) return false;
+          const hasClientScript = [...document.scripts].some(
+            (script) => script.getAttribute("src") === authorityGatedCapture.clientScript,
+          );
+          if (!hasClientScript) return false;
+
+          // The registry token is `telephone`; the shipped markup writes
+          // `phone`. Accept either so normalising one side cannot silently
+          // blind the gate.
+          const fallbackTokens = [["whatsapp"], ["email"], ["phone", "telephone"]];
+          const everyFallbackActionable = fallbackTokens.every((tokens) => {
+            const selector = tokens.map((token) => `[data-fallback-channel="${token}"]`).join(", ");
+            return [...document.querySelectorAll(selector)].some(actionable);
+          });
+          if (!everyFallbackActionable) return false;
+
+          const gatedBlock = form.closest("[hidden], [inert], [aria-hidden='true']") || form;
+          return [...document.querySelectorAll("[data-intake-status]")].some(
+            (element) => !gatedBlock.contains(element)
+              && visible(element)
+              && (element.textContent || "").trim() !== "",
+          );
+        };
         const usableCapture = captureForms.some((form) => {
           let restore = null;
           if (!visible(form)) restore = revealResultGatedCapture(form);
           if (!visible(form)) {
             if (restore) restore();
-            return false;
+            return withheldAuthorityCaptureIsUsable(form);
           }
 
           let usable = false;

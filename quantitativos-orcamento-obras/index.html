@@ -159,12 +159,23 @@
 <div class="container qty-triage-grid">
 <div>
 <p class="eyebrow">Próximo passo</p>
-<h2 id="qty-triage-title">Enquadre a base de quantitativos ou orçamento.</h2>
-<p data-form-value>Confirme a situação e informe nome mais um canal de retorno. Para este primeiro recorte documental, cidade e UF não são necessárias.</p>
+<h2 id="qty-triage-title">Como enquadrar a base de quantitativos ou orçamento.</h2>
+<p data-form-value>Pelo formulário, quando estiver disponível, basta confirmar a situação e informar nome mais um canal de retorno; nesta primeira leitura documental, cidade e UF não são necessárias. Pelos canais diretos, descreva a obra e o que precisa orçar.</p>
 <p>O protocolo só aparece depois que o pedido é gravado e o recebimento é confirmado. Se o formulário estiver indisponível, os três canais diretos continuam úteis.</p>
 </div>
 <div>
-<form action="/.netlify/functions/lead" class="technical-intake-form" data-adaptive-intake-form data-authority-config-endpoint="/.netlify/functions/adaptive-intake-config?intake_context=quantities_budget" data-config-endpoint="/.netlify/functions/adaptive-intake-config?intake_context=quantities_budget" data-cta-id="frame-quantities-budget" data-current-step="1" data-default-need="obra_edificacao_ou_documentacao" data-form-contract="next-state/v1" data-next-state-profile="adaptive_quantities_triage" data-page-path="/quantitativos-orcamento-obras/" data-receipt-required="true" data-runtime-profile="adaptive_intake_standalone_v1" id="triagem-tecnica-form" method="post" novalidate><p class="form-hint" data-form-value>Confirme a situação e informe nome mais um canal de retorno. Para este primeiro recorte documental, cidade e UF não são necessárias.</p>
+<aside aria-labelledby="qty-channels-title" class="channel-card qty-channels" data-intake-alternative>
+<h3 id="qty-channels-title">Três canais diretos</h3><p>Continuam disponíveis mesmo quando o formulário não puder registrar o pedido.</p>
+<div class="channel-actions">
+<a class="button button-primary" data-asset-id="private_quantities_budget_route_v1" data-cta-id="quantities-budget-alternative-whatsapp" data-fallback-channel="whatsapp" data-route-family="private-engineering-quantities-budget" href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20enquadrar%20quantitativos%20ou%20or%C3%A7amento%20de%20uma%20obra%20privada." rel="noopener" target="_blank">Conversar sobre os quantitativos</a>
+<a class="button button-secondary" data-asset-id="private_quantities_budget_route_v1" data-cta-id="quantities-budget-alternative-email" data-fallback-channel="email" data-route-family="private-engineering-quantities-budget" href="mailto:tiago.sasaki@confenge.com.br?subject=Quantitativos%20e%20or%C3%A7amento%20de%20obra">Enviar contexto por e-mail</a>
+<a class="text-link" data-asset-id="private_quantities_budget_route_v1" data-cta-id="quantities-budget-alternative-phone" data-fallback-channel="phone" data-route-family="private-engineering-quantities-budget" href="tel:+5548988344559">Ligar sobre o orçamento: (48) 98834-4559</a>
+</div>
+</aside>
+<p class="intake-status" data-intake-status role="status" aria-live="polite">Verificando a disponibilidade do formulário…</p>
+<p class="form-hint" data-intake-limit>Nenhum destes canais é contratação, pagamento, aceite ou prazo prometido. Não envie arquivo, planta, orçamento, endereço exato, CPF ou processo por aqui. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da <a href="/privacidade/">Política de Privacidade</a>.</p>
+<div class="intake-form-block" data-intake-form-block hidden inert aria-hidden="true">
+<form action="/.netlify/functions/lead" class="technical-intake-form" data-adaptive-intake-form data-authority-config-endpoint="/.netlify/functions/adaptive-intake-config?intake_context=quantities_budget" data-config-endpoint="/.netlify/functions/adaptive-intake-config?intake_context=quantities_budget" data-channel-intent="Olá, Tiago. Quero enquadrar quantitativos ou orçamento de uma obra privada." data-channel-subject="Quantitativos e orçamento de obra" data-cta-id="frame-quantities-budget" data-current-step="1" data-default-need="obra_edificacao_ou_documentacao" data-form-contract="next-state/v1" data-next-state-profile="adaptive_quantities_triage" data-page-path="/quantitativos-orcamento-obras/" data-receipt-required="true" data-runtime-profile="adaptive_intake_standalone_v1" id="triagem-tecnica-form" method="post" novalidate><p class="form-hint" data-form-value>Confirme a situação e informe nome mais um canal de retorno. Para este primeiro recorte documental, cidade e UF não são necessárias.</p>
 <p class="form-hint" id="contato-hint" data-field-purpose>A situação delimita o pedido; nome e um canal válido permitem o retorno. Não pedimos localização neste recorte documental. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.</p>
 <input name="form-name" type="hidden" value="triagem-tecnica"/>
 <input name="adaptive_intake" type="hidden" value="true"/>
@@ -186,7 +197,7 @@
 <fieldset data-intake-step>
 <legend>É esta a situação?</legend>
 <label for="need-code">Situação</label>
-<select id="need-code" name="need_code" required><option value="">Carregando opções…</option></select>
+<select id="need-code" name="need_code" required><option value="">Selecione a situação</option></select>
 <button class="button button-primary" data-intake-next disabled type="button">Informar contato</button>
 </fieldset>
 <fieldset data-intake-step hidden>
@@ -205,20 +216,12 @@
 <div class="field turnstile-slot" data-turnstile-sitekey="" hidden id="turnstile-slot"><div class="cf-turnstile" data-sitekey=""></div></div>
 <div class="form-actions"><button class="button button-secondary" data-intake-back type="button">Voltar</button><button class="button button-primary" disabled type="submit">Registrar pedido de triagem</button></div>
 </fieldset>
-<p class="intake-status" data-intake-status role="status" aria-live="polite">Verificando a disponibilidade do formulário…</p>
 <p class="form-hint" data-form-boundary>Não há contratação, pagamento, aceite ou prazo prometido. Este passo não recebe arquivo, planta, orçamento, endereço exato, CPF, processo ou texto livre. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da <a href="/privacidade/">Política de Privacidade</a>, com o protocolo.</p>
 </form>
+</div>
 <section aria-labelledby="qty-receipt-title" class="receipt-card" data-intake-receipt hidden>
 <p class="triage-eyebrow">Pedido registrado</p><h3 id="qty-receipt-title">Recebemos sua triagem</h3><p>Protocolo: <strong data-intake-protocol></strong></p><p>A CONFENGE verificará o enquadramento e usará o canal informado para combinar o próximo passo. Nenhum pagamento ou contratação foi realizado.</p>
 </section>
-<aside aria-labelledby="qty-channels-title" class="channel-card qty-channels">
-<h3 id="qty-channels-title">Três canais diretos</h3><p>Continuam disponíveis mesmo quando o formulário não puder registrar o pedido.</p>
-<div class="channel-actions">
-<a class="button button-primary" data-asset-id="private_quantities_budget_route_v1" data-cta-id="quantities-budget-alternative-whatsapp" data-fallback-channel="whatsapp" data-route-family="private-engineering-quantities-budget" href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20enquadrar%20quantitativos%20ou%20or%C3%A7amento%20de%20uma%20obra%20privada." rel="noopener" target="_blank">Conversar sobre os quantitativos</a>
-<a class="button button-secondary" data-asset-id="private_quantities_budget_route_v1" data-cta-id="quantities-budget-alternative-email" data-fallback-channel="email" data-route-family="private-engineering-quantities-budget" href="mailto:tiago.sasaki@confenge.com.br?subject=Quantitativos%20e%20or%C3%A7amento%20de%20obra">Enviar contexto por e-mail</a>
-<a class="text-link" data-asset-id="private_quantities_budget_route_v1" data-cta-id="quantities-budget-alternative-phone" data-fallback-channel="phone" data-route-family="private-engineering-quantities-budget" href="tel:+5548988344559">Ligar sobre o orçamento: (48) 98834-4559</a>
-</div>
-</aside>
 </div>
 </div>
 </section>

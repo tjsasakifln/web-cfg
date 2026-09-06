@@ -370,17 +370,25 @@
       contrato: '/obrigado-contrato',
       edital: '/obrigado-edital',
       operacao: '/obrigado-operacao',
+      // A need outside the public-works journeys confirms on the neutral
+      // /obrigado ("Recebemos seu contato."). Without this entry, every private
+      // nucleus fell through to 'operacao' and its requester was told, in
+      // writing, that they had asked for a B2G operation diagnosis.
+      outro: '/obrigado',
     };
     const stageToJourney = (stageVal) => {
       const s = (stageVal || '').toLowerCase();
       if (s.includes('edital') || s.includes('proposta')) return 'edital';
       if (s.includes('contrato') || s.includes('urgente') || s.includes('glosa') || s.includes('execução') || s.includes('execucao')) return 'contrato';
       if (s.includes('operação') || s.includes('operacao') || s.includes('oportunidade') || s.includes('estrutur')) return 'operacao';
-      return 'operacao';
+      // Default to the neutral journey, not to B2G operation. The five public
+      // stages above all match a keyword explicitly, so only the private nuclei
+      // and an undefined need reach this line.
+      return 'outro';
     };
     const applyJourneyToForm = (journeyId, forceStage = false) => {
       if (!form || !journeyId) return;
-      const j = JOURNEY_ACTIONS[journeyId] ? journeyId : 'operacao';
+      const j = JOURNEY_ACTIONS[journeyId] ? journeyId : 'outro';
       ensureHidden('jornada', j, true);
       if (form.getAttribute('data-receipt-required') === 'true') {
         form.setAttribute('data-success-destination', JOURNEY_ACTIONS[j] || '/obrigado');
@@ -389,7 +397,17 @@
       }
       const stage = form.querySelector('#estagio');
       if (stage && (forceStage || !stage.value)) {
-        const opt = [...stage.options].find((o) => o.getAttribute('data-journey') === j);
+        // Five options now share data-journey="outro", so a bare `find` returned
+      // the first of them and silently pre-filled a REQUIRED select with one
+      // specific private nucleus (engenharia-edificacoes) for any unknown or
+      // neutral journey. Because the value was then non-empty, the change
+      // handler never fired and the visitor got no prompt to correct it -- and
+      // since #616 derives nucleus_id from the stage, that shipped an
+      // authoritative wrong classification instead of the old null. Prefer the
+      // option explicitly marked as that journey's default; the three B2G
+      // journeys mark none, so they keep their existing first-match behaviour.
+      const candidates = [...stage.options].filter((o) => o.getAttribute('data-journey') === j);
+      const opt = candidates.find((o) => o.hasAttribute('data-journey-default')) || candidates[0];
         if (opt) stage.value = opt.value;
       }
     };

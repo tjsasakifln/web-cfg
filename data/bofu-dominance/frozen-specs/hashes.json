@@ -3,7 +3,7 @@
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
   "baseline_commit": "0518262b82e0aeb43115a801e804012d442fbc28",
   "recaptured_at": "2026-09-06",
-  "recapture_reason": "MV-09 activates the corporate /servicos/ canonical and the bounded /quantitativos-orcamento-obras/ wedge, keeps contract-analysis publication fail-closed, and preserves the reviewed corporate shell. Sitemap.xml and sitemap.txt admit the canonical route. The shared styles.css adds only user-preference guards: reduced motion and reduced data for .profile-mark img, a selector absent from all six frozen B2G pillar documents. All six frozen B2G pillar HTML byte hashes remain unchanged; no frozen offer or CTA content was edited. Evidence: docs/integration/campaign-20260905/09/integration-log.md and revenue-red-team.md.",
+  "recapture_reason": "#616 fixes the journey coercion in js/modules/nav.js, so the frozen shared bundle script.js is rebuilt. Required action is prove_no_frozen_rendering_change_or_revert, never a blind revert. Proof verified on this branch: the change adds outro:'/obrigado' to JOURNEY_ACTIONS, defaults stageToJourney to 'outro' instead of 'operacao', and defaults the applyJourneyToForm coercion to 'outro'. None of the six frozen B2G pillar documents contains an #estagio select (grep count 0 in all six), so stageToJourney is unreachable from them. The only data-journey values they carry are 'contrato' (aditivos, medicoes-glosas, reequilibrio) and 'operacao' (diagnostico-b2g-360); both were and remain keys of JOURNEY_ACTIONS, so the coercion takes the identical branch before and after. auditoria-orcamento-licitacao and diagnostico-pre-licitacao carry no data-journey at all and applyJourneyToForm returns early for them. All six frozen pillar HTML byte hashes are unchanged; no frozen offer or CTA content was edited.",
   "html_mutation": false,
   "pillars": {
     "aditivos-obras-publicas": "a4be02dc6705bb15cbbec882412e3b383887e18800abdd85272d506c1c56c450",
@@ -20,7 +20,7 @@
     "auditoria-orcamento-licitacao/index.html": "a00f9f49c758be22efd40dbb81e3b2d55b9bb8bad60bed22e0a6988b49639235",
     "diagnostico-b2g-360/index.html": "1ed2f5d815a11056c599d12ba6b7f844cb5225ef96b664f93df61ff929a1dc02",
     "diagnostico-pre-licitacao/index.html": "fbfb0ee348841ae3a01c437cee579832139cc7868e6dcb081534ff956bfae654",
-    "script.js": "412795711992bc7620347d34320c2007bef412a02b6bf1941eb0ff5c2fd30fe6",
+    "script.js": "1309bb8b22a98d1bb59859f3731c8e0608d169755149463d25aca0393b03b74a",
     "styles.css": "bf45831f0112aa2065f6ae25c80f4cc1387d124e088ca2baab29b07b153fd5cc",
     "styles-tokens.css": "15cc0770e76276b418c11493fa9e53827ae14bb8f854b0a63d8c6dd63afc02fc",
     "styles-tools.css": "8c42a4b5fadba13e4dae52bd7168c64b9f5548f3fd3f8d4f0707ce4e9463c7ba",

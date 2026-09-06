@@ -1736,6 +1736,100 @@ async function main() {
     fail("fixture_authority_gated_capture_passes_with_registry_contract", e.message || e);
   }
 
+  // Issue #616 A1 removes the withheld capture block from the accessible tree
+  // and the focus order (`hidden` + `inert` + `aria-hidden`), so it can never
+  // be the visible-form-with-disabled-submit the fixtures above describe. The
+  // hidden block is only acceptable when the declared alternative actually
+  // exists: three actionable fallback channels and a non-empty status line
+  // outside the block.
+  const withheldIntakeHtml = ({ fallbacks = true, declared = true, status = true } = {}) => `<!doctype html>
+    <html lang="pt-BR"><body><main>
+    ${fallbacks ? `<aside data-intake-alternative>
+      <a href="https://wa.me/5548988344559" data-fallback-channel="whatsapp">WhatsApp</a>
+      <a href="mailto:tiago.sasaki@confenge.com.br" data-fallback-channel="email">E-mail</a>
+      <a href="tel:+5548988344559" data-fallback-channel="phone">Telefone</a>
+    </aside>` : ""}
+    ${status ? `<p data-intake-status role="status">Formulário indisponível agora; use os canais acima.</p>` : ""}
+    <div data-intake-form-block hidden inert aria-hidden="true">
+      <form method="post" action="/.netlify/functions/lead"
+        data-runtime-profile="${declared ? "adaptive_intake_standalone_v1" : "other_profile"}"
+        data-authority-config-endpoint="/.netlify/functions/adaptive-intake-config">
+      <label>Nome <input name="nome"></label><button type="submit">Enviar</button>
+      </form>
+    </div>
+    <script src="/assets/js/adaptive-intake.js"></script>
+    <aside class="contact-float"><a href="https://wa.me/5548988344559">WhatsApp</a></aside>
+    </main></body></html>`;
+
+  try {
+    const withheld = await layoutFindingsFromHtml(
+      withheldIntakeHtml(),
+      { width: 390, height: 844 },
+      { authorityGatedCapture: authorityGatedContract },
+    );
+    if (withheld.includes("broken_form")) {
+      throw new Error(`withheld intake block with usable fallback remained broken: ${withheld.join(",")}`);
+    }
+    ok("fixture_withheld_intake_block_passes_with_usable_fallback");
+  } catch (e) {
+    fail("fixture_withheld_intake_block_passes_with_usable_fallback", e.message || e);
+  }
+
+  try {
+    const withoutFallback = await layoutFindingsFromHtml(
+      withheldIntakeHtml({ fallbacks: false }),
+      { width: 390, height: 844 },
+      { authorityGatedCapture: authorityGatedContract },
+    );
+    if (!withoutFallback.includes("broken_form")) {
+      throw new Error(`withheld intake block without fallback passed: ${withoutFallback.join(",")}`);
+    }
+    ok("fixture_withheld_intake_block_without_fallback_fails");
+  } catch (e) {
+    fail("fixture_withheld_intake_block_without_fallback_fails", e.message || e);
+  }
+
+  try {
+    const withoutStatus = await layoutFindingsFromHtml(
+      withheldIntakeHtml({ status: false }),
+      { width: 390, height: 844 },
+      { authorityGatedCapture: authorityGatedContract },
+    );
+    if (!withoutStatus.includes("broken_form")) {
+      throw new Error(`withheld intake block without visible status passed: ${withoutStatus.join(",")}`);
+    }
+    ok("fixture_withheld_intake_block_without_status_fails");
+  } catch (e) {
+    fail("fixture_withheld_intake_block_without_status_fails", e.message || e);
+  }
+
+  try {
+    const undeclared = await layoutFindingsFromHtml(
+      withheldIntakeHtml(),
+      { width: 390, height: 844 },
+    );
+    if (!undeclared.includes("broken_form")) {
+      throw new Error(`undeclared withheld intake block self-authorized: ${undeclared.join(",")}`);
+    }
+    ok("fixture_withheld_intake_block_requires_registry_contract");
+  } catch (e) {
+    fail("fixture_withheld_intake_block_requires_registry_contract", e.message || e);
+  }
+
+  try {
+    const mismatched = await layoutFindingsFromHtml(
+      withheldIntakeHtml({ declared: false }),
+      { width: 390, height: 844 },
+      { authorityGatedCapture: authorityGatedContract },
+    );
+    if (!mismatched.includes("broken_form")) {
+      throw new Error(`withheld intake block with a foreign runtime profile passed: ${mismatched.join(",")}`);
+    }
+    ok("fixture_withheld_intake_block_requires_matching_runtime_profile");
+  } catch (e) {
+    fail("fixture_withheld_intake_block_requires_matching_runtime_profile", e.message || e);
+  }
+
   try {
     const hiddenSticky = await layoutFindingsFromHtml(`<!doctype html>
       <html lang="pt-BR"><body><main>
