@@ -585,8 +585,9 @@ async function main() {
     fail("journeys_mobile_hierarchy", e.message || e);
   }
 
-  // 12c) Corporate situation links stay explicit and fail closed to triage,
-  // while the B2G situation keeps its own canonical hub.
+  // 12c) The promoted private wedge keeps its exact canonical; corporate
+  // situations without a money page fail closed to triage, while the B2G
+  // situation keeps its own canonical hub.
   try {
     await page.setViewport({ width: 1024, height: 900 });
     await page.goto(`${BASE}/`, { waitUntil: "networkidle0" });
@@ -597,8 +598,11 @@ async function main() {
       })),
     );
     if (routes.length !== 5) throw new Error(`expected five situation routes: ${JSON.stringify(routes)}`);
-    if (!routes.slice(0, 4).every((item) => item.href.startsWith("/triagem-tecnica/#"))) {
-      throw new Error(`non-B2G routes must fall back to triage: ${JSON.stringify(routes)}`);
+    if (routes[0].href !== "/quantitativos-orcamento-obras/") {
+      throw new Error(`promoted quantities route lost its canonical: ${JSON.stringify(routes[0])}`);
+    }
+    if (!routes.slice(1, 4).every((item) => item.href.startsWith("/triagem-tecnica/#"))) {
+      throw new Error(`unpublished non-B2G routes must fall back to triage: ${JSON.stringify(routes)}`);
     }
     if (routes[4].href !== "/servicos-obras-publicas/") {
       throw new Error(`B2G route lost its canonical hub: ${JSON.stringify(routes[4])}`);
