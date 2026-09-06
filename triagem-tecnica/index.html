@@ -59,8 +59,9 @@
       data-cta-id="triagem-tecnica"
       data-receipt-required="true"
       data-current-step="1"
-      novalidate>
-      <span id="projetos" aria-hidden="true"></span>
+      novalidate><p class="form-hint" data-form-value>Vamos registrar o tipo de problema, seu nome e um canal de retorno. Empresa é opcional. Cidade e UF aparecem somente quando ajudam a avaliar uma possível vistoria.</p>
+<p class="form-hint" id="contato-hint" data-field-purpose>A situação direciona a triagem; nome e um canal válido permitem o retorno. Empresa é opcional, e cidade e UF são pedidas apenas quando uma vistoria pode ser necessária. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.</p>
+<span id="projetos" aria-hidden="true"></span>
       <span id="obra-imovel" aria-hidden="true"></span>
       <span id="pericia-avaliacao" aria-hidden="true"></span>
       <span id="sst" aria-hidden="true"></span>
@@ -78,8 +79,6 @@
       <input type="hidden" name="document_intent" value="secure_channel_request">
 
       <p class="step-progress" aria-live="polite">Etapa <span data-current-step-label>1</span> de 2</p>
-      <p class="field-help" data-field-purpose>A situação direciona a triagem; nome e um canal válido permitem o retorno. Empresa é opcional, e cidade e UF são pedidas apenas quando uma vistoria pode ser necessária.</p>
-
       <fieldset data-intake-step>
         <legend>Qual situação você precisa resolver?</legend>
         <p class="field-help">Escolha a opção mais próxima. Você não precisa conhecer o nome técnico do serviço.</p>
@@ -153,10 +152,9 @@
         </div>
       </fieldset>
 
-      <p class="field-help" data-form-boundary>Não há contratação, pagamento, aceite ou prazo prometido. Este passo não recebe CPF, processo, prontuário, planta, laudo, lista de empregados, partes em conflito, upload ou texto livre sensível. Retenção de até 730 dias; a exclusão pode ser solicitada pelos canais da <a href="/privacidade/">Política de Privacidade</a> com o protocolo.</p>
-
       <p class="intake-status" data-intake-status role="status" aria-live="polite">Verificando a disponibilidade do formulário…</p>
-    </form>
+<p class="form-hint" data-form-boundary>Não há contratação, pagamento, aceite ou prazo prometido. Este passo não recebe CPF, processo, prontuário, planta, laudo, lista de empregados, partes em conflito, upload ou texto livre sensível. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da <a href="/privacidade/">Política de Privacidade</a>, com o protocolo.</p>
+</form>
 
     <section class="receipt-card" data-intake-receipt hidden aria-labelledby="receipt-title">
       <p class="triage-eyebrow">Pedido registrado</p>
@@ -170,9 +168,9 @@
       <h2 id="canais-titulo">Prefere falar por outro canal?</h2>
       <p>Esses canais continuam disponíveis mesmo quando o formulário não puder registrar o pedido.</p>
       <div class="channel-actions">
-        <a class="button button-primary" data-fallback-channel="whatsapp" data-asset-id="technical_triage_v1" data-route-family="triagem-tecnica" data-cta-id="technical-triage-alternative-whatsapp" href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20explicar%20uma%20demanda%20t%C3%A9cnica%20e%20entender%20o%20pr%C3%B3ximo%20passo." rel="noopener" target="_blank">Conversar pelo WhatsApp</a>
-        <a class="button button-secondary" data-fallback-channel="email" data-asset-id="technical_triage_v1" data-route-family="triagem-tecnica" data-cta-id="technical-triage-alternative-email" href="mailto:tiago.sasaki@confenge.com.br?subject=Triagem%20t%C3%A9cnica%20CONFENGE">Enviar e-mail</a>
-        <a class="text-link" data-fallback-channel="phone" data-asset-id="technical_triage_v1" data-route-family="triagem-tecnica" data-cta-id="technical-triage-alternative-phone" href="tel:+5548988344559">Ligar para (48) 98834-4559</a>
+        <a class="button button-primary" data-fallback-channel="whatsapp" data-asset-id="technical_triage_v1" data-route-family="triagem-tecnica" data-cta-id="technical-triage-alternative-whatsapp" href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20explicar%20uma%20demanda%20t%C3%A9cnica%20e%20entender%20o%20pr%C3%B3ximo%20passo." rel="noopener" target="_blank">Pedir revisão de encaixe pelo WhatsApp</a>
+        <a class="button button-secondary" data-fallback-channel="email" data-asset-id="technical_triage_v1" data-route-family="triagem-tecnica" data-cta-id="technical-triage-alternative-email" href="mailto:tiago.sasaki@confenge.com.br?subject=Triagem%20t%C3%A9cnica%20CONFENGE">Enviar o contexto por e-mail</a>
+        <a class="text-link" data-fallback-channel="phone" data-asset-id="technical_triage_v1" data-route-family="triagem-tecnica" data-cta-id="technical-triage-alternative-phone" href="tel:+5548988344559">Ligar para explicar a demanda: (48) 98834-4559</a>
       </div>
     </aside>
   </main>

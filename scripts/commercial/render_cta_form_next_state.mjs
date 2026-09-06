@@ -19,7 +19,7 @@ function escapeHtml(value) {
 }
 
 function attrValue(attrs, name) {
-  return String(attrs || "").match(new RegExp(`\\b${name}=["']([^"']*)["']`, "i"))?.[1] || "";
+  return String(attrs || "").match(new RegExp(`(?:^|\\s)${name}=["']([^"']*)["']`, "i"))?.[1] || "";
 }
 
 function setAttr(tag, name, value) {
