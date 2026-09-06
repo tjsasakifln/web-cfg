@@ -4510,13 +4510,13 @@
         "dates": [
           "2026-09-05"
         ],
-        "description": "Vamos registrar o tipo de problema, seu nome e um canal de retorno.",
-        "h1": "Explique sua situação em menos de um minuto",
+        "description": "Descreva o tipo de problema técnico pelo formulário, quando disponível, ou pelos canais diretos: WhatsApp, e-mail e telefone.",
+        "h1": "Explique sua situação técnica para a CONFENGE",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": null,
         "reviewers": [],
-        "title": "Triagem técnica | CONFENGE",
+        "title": "Triagem técnica e canais diretos | CONFENGE",
         "versions": []
       }
     },
