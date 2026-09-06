@@ -30,7 +30,9 @@ O redirecionamento exato foi removido e `/servicos/` ganhou uma página corporat
 O allowlist do artefato público também pertence à integração: o build producer
 valida a home e o shell, mas ainda não copia `/servicos/` para `_site`. MV-09
 deve incluir a rota e a remoção do redirect no mesmo merge publicável, conforme
-o fragmento versionado, para não expor uma rota sem destino.
+o fragmento versionado, para não expor uma rota sem destino. A entrada exata
+de `/servicos` no inventário orgânico também deve mudar de `keep_301` para
+`MIGRATE`; nenhuma outra URL legada entra nessa decisão.
 
 A home passa de 128 para 129 ações rastreáveis no contrato comercial. Ela
 preserva, dentro da vertical B2G, o Dossiê de Medição, Glosa e Pagamento, o
@@ -83,12 +85,13 @@ North Star: oportunidades comerciais qualificadas, conectadas à origem, à situ
 
 ## Qualidade e rollback
 
-Gates e resultados ficam na PR. A verificação de primeira dobra mede 390×844 e 1366×768, exige um único CTA primário visível, alvo mínimo de 44 px, contraste de pelo menos 4,5:1, ausência de overflow e presença das mensagens essenciais. A suíte limpa da producer sinaliza, de forma esperada, os três contratos derivados fora de escopo: inventário de CTA, baseline CSS e snapshot BOFU de `_redirects`.
+Gates e resultados ficam na PR. A verificação de primeira dobra mede 390×844 e 1366×768, exige um único CTA primário visível, alvo mínimo de 44 px, contraste de pelo menos 4,5:1, ausência de overflow e presença das mensagens essenciais. A suíte limpa da producer sinaliza, de forma esperada, quatro contratos derivados fora de escopo: inventário de CTA, inventário orgânico da URL `/servicos`, baseline CSS e snapshot BOFU de `_redirects`.
 
-Como prova de integração, `npm test` passou integralmente após reconciliar
-esses contratos de forma temporária. As quatro edições fora do `WRITE_SET`
-(contrato e inventário de CTA, baseline CSS e snapshot BOFU) foram restauradas
-antes do push.
+Como prova de integração anterior ao rebase final, `npm test` passou
+integralmente após reconciliar os contratos então presentes de forma
+temporária. A rodada remota no SHA final confirmou adicionalmente CSP e
+performance verdes e parou apenas nos inventários de CTA e da URL legada. As
+edições temporárias fora do `WRITE_SET` foram restauradas antes do push.
 
 Rollback: reverter o SHA da PR restaura home, contrato de shell e o redirecionamento exato anterior. Não há migração de dados, redirect em massa, merge ou deploy nesta campanha.
 

@@ -12,14 +12,22 @@ Hoje a página candidata usa canonical próprio e `noindex,follow`. Antes de rem
 4. incluir `servicos` no allowlist do artefato público em
    `scripts/pseo/public_artifact.py`; a MV-04 não tocou esse arquivo e o build
    isolado ainda não copia a página candidata para `_site`;
-5. adicionar a rota ao sitemap por meio do owner competente;
-6. executar `npm run build:site`, confirmar `_site/servicos/index.html` e rodar
+5. atualizar somente a entrada exata de `https://confenge.com.br/servicos` em
+   `data/organic/legacy-url-inventory.json`: a decisão deixa de ser `keep_301`
+   e passa a ser `MIGRATE` para a canonical própria `/servicos/`, sem alterar
+   ou redirecionar em bloco qualquer outra URL legada;
+6. adicionar a rota ao sitemap por meio do owner competente;
+7. executar `npm run build:site`, confirmar `_site/servicos/index.html` e rodar
    `npm run inbound:gates` mais os gates SEO/canonical aplicáveis;
-7. só então trocar `noindex,follow` por `index,follow`.
+8. só então trocar `noindex,follow` por `index,follow`.
 
 Não criar uma isenção permanente para contornar a declaração.
 O merge deve ser atômico com essa integração: a remoção do redirect exato não
 deve ser publicada sem a página presente no artefato.
+
+Enquanto essa decisão não for gravada pelo owner, `organic:test` falha de modo
+esperado com `missing redirect for /servicos`; não restaurar o 301 na producer
+para mascarar essa dependência.
 
 ## 1.1. Regenerar o inventário derivado de CTAs
 

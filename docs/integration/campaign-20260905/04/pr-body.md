@@ -47,6 +47,12 @@ token de raio; o gate BOFU sinaliza apenas o novo hash de `_redirects`. Os dois
 baselines estão fora do `WRITE_SET` e têm reconciliação restrita descrita no
 fragmento para MV-09.
 
+O inventário orgânico ainda declara a URL exata `/servicos` como `keep_301`.
+Como esse contrato está fora do `WRITE_SET`, MV-09 deve registrar a decisão
+`MIGRATE` para a canonical corporativa no mesmo commit que ativa a página. O
+`organic:test` da producer falha explicitamente em `missing redirect for
+/servicos` até essa composição; nenhuma outra URL legada deve ser alterada.
+
 ## Data owner, analytics e privacidade
 
 - contratos: `data/site/brand.json` e `data/site/public-ia-map.json`;
@@ -81,8 +87,10 @@ fragmento para MV-09.
 - `npm run test:bofu-dominance` sinaliza somente o hash esperado de `_redirects`
 - `npm run audit:css-usage` sinaliza somente o baseline derivado fora do owner
 - `npm run test:cta-form-next-state` sinaliza 129 CTAs contra o baseline 128
-- `npm test` passou integralmente no ensaio temporário com os quatro contratos
-  de integração reconciliados; todos foram restaurados antes do push
+- `organic:test` sinaliza somente que `/servicos` ainda está declarado como
+  redirect no inventário orgânico fora do owner
+- `npm test` passou integralmente no ensaio temporário anterior ao rebase final;
+  no SHA final, CSP e performance passam e o CI para nos dois inventários acima
 
 ## Rollback e integração
 
