@@ -151,7 +151,32 @@ test("MV-09 publishes one bounded private wedge with embedded triage and three s
   assert.equal((html.match(/name="location_(?:city|uf)"/g) || []).length, 2);
   assert.equal(/name="(?:mensagem|arquivo|upload|endereco|cpf|processo)"/i.test(html), false);
   assert.equal(/\b(?:1|2)\s+dias?\s+[úu]teis\b/i.test(html), false);
-  assert.equal(/R\$\s*\d/.test(html), false);
+  // 2026-09-06 (#619): this route must still show no price for anything CONFENGE
+  // sells. A synthetic demonstration block is not an offer: it may carry the
+  // priced INPUTS of a calculation. The guard is narrowed, never removed —
+  // every R$ outside a validated demonstration block still fails, and the block
+  // only qualifies when it is BOTH marked data-demonstration="synthetic" AND
+  // identifies itself as synthetic in its own visible text. Same rule as the
+  // carve-out in scripts/site/inbound_gates.py, applied to the same route.
+  const demonstrationBlocks = html.match(
+    /<(section|div|figure|table|aside)\b[^>]*\bdata-demonstration="synthetic"[^>]*>[\s\S]*?<\/\1>/gi,
+  ) || [];
+  const validatedBlocks = demonstrationBlocks.filter(
+    (block) => /sint[ée]tic|demonstrativ|hipot[ée]tic/i.test(block),
+  );
+  let outsideDemonstration = html;
+  for (const block of validatedBlocks) outsideDemonstration = outsideDemonstration.replace(block, " ");
+  assert.equal(/R\$\s*\d/.test(outsideDemonstration), false,
+    "a price appears outside a validated synthetic demonstration block");
+  // Negative case: a published CONFENGE fee may not hide inside the block.
+  for (const fee of ["R$ 6.900", "R$ 7.900", "R$ 12.500", "R$ 20.000", "R$ 2.900", "R$ 599"]) {
+    assert.equal(html.includes(fee), false, `published fee leaked onto the route: ${fee}`);
+  }
+  // Positive case: the demonstration exists and does carry its own numbers, so
+  // the assertion above is not passing vacuously on an empty set.
+  assert.equal(validatedBlocks.length, 1, "the synthetic demonstration block is missing");
+  assert.equal(/R\$\s*\d/.test(validatedBlocks[0]), true,
+    "the demonstration block carries no number, so the guard proves nothing");
   for (const withheldRoute of [
     "/pericias-avaliacoes/",
     "/seguranca-trabalho/",
