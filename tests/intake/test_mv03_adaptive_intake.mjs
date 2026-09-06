@@ -93,11 +93,24 @@ test("public route is low-friction, transparent and free of sensitive inputs", (
   assert.ok(html.indexOf("data-intake-status") < html.indexOf("data-intake-form-block"),
     "status line must sit outside the form block");
   assert.match(html, /data-intake-limit/, "standing limit notice missing outside the form block");
+  // The five entry anchors must exist and must resolve ABOVE the fail-closed form
+  // block, so a visitor arriving from /servicos/ never lands inside a form that
+  // cannot accept them. This used to be asserted against the literal
+  // `<span id="..." aria-hidden="true"></span>`, which froze the defect it was
+  // meant to guard: the anchors were five empty spans at the same position, so
+  // all five entry intents landed on identical generic copy and the visitor's
+  // declared situation was discarded. #618 turns each into a real section; the
+  // ordering intent is unchanged and is asserted directly.
   for (const anchorId of ["projetos", "obra-imovel", "pericia-avaliacao", "sst", "planejamento-publico"]) {
-    const span = new RegExp(`<span id="${anchorId}" aria-hidden="true"></span>`);
-    assert.match(html, span, `anchor missing: ${anchorId}`);
-    assert.ok(html.search(span) < html.indexOf("data-intake-form-block"),
+    const anchor = new RegExp(`id="${anchorId}"`);
+    assert.match(html, anchor, `anchor missing: ${anchorId}`);
+    assert.ok(html.search(anchor) < html.indexOf("data-intake-form-block"),
       `anchor ${anchorId} still resolves inside the form block`);
+    // Negative case: an anchor that renders nothing is the original defect.
+    assert.doesNotMatch(html, new RegExp(`<span id="${anchorId}"[^>]*></span>`),
+      `anchor ${anchorId} is an empty span again, so the situation it names has no content`);
+    assert.match(html, new RegExp(`data-triage-situation="${anchorId}"`),
+      `anchor ${anchorId} names no situation section`);
   }
   // Single attempt, explicit deadlines, no automatic retry.
   assert.match(browser, /CONFIG_TIMEOUT_MS = 5000/);
