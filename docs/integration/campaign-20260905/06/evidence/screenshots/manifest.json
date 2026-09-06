@@ -1,0 +1,143 @@
+{
+  "schema_version": "mv06-screenshot-evidence/v1",
+  "captured_at": "2026-09-05T23:15:53Z",
+  "base_sha": "470a5ffafeaf45a59649109742ce5885f9789328",
+  "tree_state": "provisional_uncommitted_candidate",
+  "browser": "Chrome/152.0.7977.76",
+  "motion": "reduced",
+  "full_page": false,
+  "source_files": [
+    {
+      "file": "../../public-candidates/candidate.css",
+      "sha256": "05406c7bbebffe94333b695961475c1dc4820c2f5bc6dd1bd41ef192f0b6760a"
+    },
+    {
+      "file": "../../public-candidates/avaliacoes-imoveis/index.html",
+      "sha256": "0e3a13b3343a41e129b5acef8e82a74b3b47d558a0531d14926550f5027b01dc"
+    },
+    {
+      "file": "../../public-candidates/pericias-assistencia-tecnica/index.html",
+      "sha256": "b5c1f6ad7433d75d362c1c195b4e0101fd0f1e0afe7c521e7fd82da81a676468"
+    },
+    {
+      "file": "../../public-candidates/seguranca-trabalho/index.html",
+      "sha256": "b7f2d6fe0d68b109448040a07d786a507a1afc10ec033b97aaff3068d26bc54a"
+    }
+  ],
+  "captures": [
+    {
+      "route": "/pericias-assistencia-tecnica/",
+      "kind": "viewport",
+      "viewport": "1440x1000",
+      "pixel_width": 1440,
+      "pixel_height": 1000,
+      "file": "pericias-assistencia-tecnica-desktop-1440x1000.png",
+      "sha256": "cb989a4f270d7442a516418fc84aa96e399cd3deca30e5993d46790550e3d610"
+    },
+    {
+      "route": "/pericias-assistencia-tecnica/",
+      "kind": "viewport",
+      "viewport": "390x844",
+      "pixel_width": 390,
+      "pixel_height": 844,
+      "file": "pericias-assistencia-tecnica-mobile-390x844.png",
+      "sha256": "669de7958e05835238be69096de249d28ebad5a2c9ae84c4481890045af3dea0"
+    },
+    {
+      "route": "/pericias-assistencia-tecnica/",
+      "kind": "component",
+      "selector": ".proof-panel",
+      "viewport": "1440x1000",
+      "pixel_width": 1180,
+      "pixel_height": 434,
+      "file": "pericias-assistencia-tecnica-proof-desktop.png",
+      "sha256": "2cf6e4c72f52a1332636d8647321b0b75f79dfd98cea87c09ceaa7e8f676fdba"
+    },
+    {
+      "route": "/pericias-assistencia-tecnica/",
+      "kind": "component",
+      "selector": ".contact-panel",
+      "viewport": "1440x1000",
+      "pixel_width": 1180,
+      "pixel_height": 380,
+      "file": "pericias-assistencia-tecnica-contact-desktop.png",
+      "sha256": "9e4b6992dfce6ccefbf4ee1c3478c7af7b63fd1bee0971308ee5288fe45a010d"
+    },
+    {
+      "route": "/avaliacoes-imoveis/",
+      "kind": "viewport",
+      "viewport": "1440x1000",
+      "pixel_width": 1440,
+      "pixel_height": 1000,
+      "file": "avaliacoes-imoveis-desktop-1440x1000.png",
+      "sha256": "bd64b62a0a51dc340ddd7b79c838edf925a4c12dc0dc39d74ff85d47bc36f931"
+    },
+    {
+      "route": "/avaliacoes-imoveis/",
+      "kind": "viewport",
+      "viewport": "390x844",
+      "pixel_width": 390,
+      "pixel_height": 844,
+      "file": "avaliacoes-imoveis-mobile-390x844.png",
+      "sha256": "989bf99dc2c86330d5380954ec70728b2aa3a9c8cc2c5bab4eecd4218eda1262"
+    },
+    {
+      "route": "/avaliacoes-imoveis/",
+      "kind": "component",
+      "selector": ".proof-panel",
+      "viewport": "1440x1000",
+      "pixel_width": 1180,
+      "pixel_height": 384,
+      "file": "avaliacoes-imoveis-proof-desktop.png",
+      "sha256": "65f3ece5d96f4424259f432b24afa63f7bceca4c9fa092afb57a42f3f6b7ff60"
+    },
+    {
+      "route": "/avaliacoes-imoveis/",
+      "kind": "component",
+      "selector": ".contact-panel",
+      "viewport": "1440x1000",
+      "pixel_width": 1180,
+      "pixel_height": 379,
+      "file": "avaliacoes-imoveis-contact-desktop.png",
+      "sha256": "aa896a02cb2849f8f7041d9dfe79be47b515d064766338cbf772f07242eb166c"
+    },
+    {
+      "route": "/seguranca-trabalho/",
+      "kind": "viewport",
+      "viewport": "1440x1000",
+      "pixel_width": 1440,
+      "pixel_height": 1000,
+      "file": "seguranca-trabalho-desktop-1440x1000.png",
+      "sha256": "4b02de7a3b563519377a94a364d3975f9b5dbe5cd45824965cc23de27386ece8"
+    },
+    {
+      "route": "/seguranca-trabalho/",
+      "kind": "viewport",
+      "viewport": "390x844",
+      "pixel_width": 390,
+      "pixel_height": 844,
+      "file": "seguranca-trabalho-mobile-390x844.png",
+      "sha256": "de1734977e72ffb7a335b8f66bc3855cd9c5f09a5b79ea3f2068a233faffae01"
+    },
+    {
+      "route": "/seguranca-trabalho/",
+      "kind": "component",
+      "selector": ".proof-panel",
+      "viewport": "1440x1000",
+      "pixel_width": 1180,
+      "pixel_height": 461,
+      "file": "seguranca-trabalho-proof-desktop.png",
+      "sha256": "24b99cc26cd017d4a7b3d403c8d53fa44d46ddba6cbb450278f3a1fb7be340bf"
+    },
+    {
+      "route": "/seguranca-trabalho/",
+      "kind": "component",
+      "selector": ".contact-panel",
+      "viewport": "1440x1000",
+      "pixel_width": 1180,
+      "pixel_height": 380,
+      "file": "seguranca-trabalho-contact-desktop.png",
+      "sha256": "e8cd11dbd3ab9a8d96c550629ae8fe80771a69f0be47f4ee5a8cfc64bb42ccd7"
+    }
+  ]
+}
