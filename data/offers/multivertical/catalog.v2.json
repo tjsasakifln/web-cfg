@@ -1,0 +1,1884 @@
+{
+  "contract": "CONFENGE_OFFER_CATALOG/2.0.0",
+  "taxonomy_contract": "CONFENGE_CORPORATE_TAXONOMY/1.0.0",
+  "issue": "#583",
+  "parent_issue": "#577",
+  "compatibility_issues": [
+    "#339",
+    "#341",
+    "#343",
+    "#587"
+  ],
+  "campaign_id": "01",
+  "publication": {
+    "catalog_public": false,
+    "prices_public": false,
+    "professional_claims_authorized": false,
+    "credential_authority_present": false,
+    "html_routes": [],
+    "issue_588_in_scope": false,
+    "modeling_is_not_publishing": true
+  },
+  "retained_b2g": {
+    "authority": {
+      "deliverables_registry": "data/commercial/deliverables-registry.v1.json",
+      "offer_naming": "data/commercial/offer-naming.v1.json",
+      "checkout_snapshot": "data/offers/catalog.snapshot.json"
+    },
+    "defaults": {
+      "revisions_included_rounds": 1,
+      "client_review_window_business_days": 5
+    },
+    "note": "IDs, nomes públicos e centavos das 54 entregas e do checkout congelado são referenciados, não reescritos. #587 entra como oferta nova modelada, sem virar CFG-D55 nesta campanha."
+  },
+  "offers": [
+    {
+      "offer_id": "pre_litigation_technical_screening",
+      "public_name": "Triagem Técnica Pré-Litígio",
+      "nucleus_id": "expert_evidence_assistance",
+      "buyer_job": "Decidir se existe caminho técnico antes de ajuizar ou de contratar assistência completa.",
+      "icp": [
+        "advogado",
+        "parte em disputa de edificação ou imóvel",
+        "empresa ré ou autora"
+      ],
+      "trigger_why_now": "Há peças, fotos ou relatos, mas ainda não se sabe se o objeto comporta evidência técnica útil.",
+      "supported_decision": "Seguir, recusar ou recortar a tese técnica antes de mobilizar laudo ou assistência.",
+      "unit_of_work": "um conflito, um objeto e um corpus documental congelado",
+      "deliverables": [
+        "nota de enquadramento técnico com tese possível, lacunas e próximo passo",
+        "lista de documentos e diligências ainda necessários",
+        "recomendação de oferta subsequente ou de desqualificação"
+      ],
+      "exclusions": [
+        "não é laudo",
+        "não é parecer conclusivo",
+        "não é advocacia nem estratégia processual",
+        "não é nomeação como perito do juízo",
+        "não inclui inspeção de campo por padrão"
+      ],
+      "minimum_documents": [
+        "petição ou relato da controvérsia",
+        "identificação do objeto",
+        "documentos técnicos já existentes"
+      ],
+      "inspection_field_rule": {
+        "included_by_default": false,
+        "when_required": "somente se a proposta da triagem exigir verificação pontual",
+        "output": "registro fotográfico limitado, se contratado"
+      },
+      "method_standard": {
+        "applicable": false,
+        "refs": [],
+        "note": "Triagem não aplica método de laudo; apenas delimita cabimento."
+      },
+      "technical_responsibility": {
+        "art_rule": "A aplicabilidade de ART na triagem depende do conteúdo efetivamente contratado, das atribuições profissionais e da orientação do Crea competente; não é inferida pelo nome da oferta.",
+        "responsible": "a confirmar antes da contratação: profissional legalmente habilitado e com atribuição comprovada para o recorte",
+        "not_promised_for": [
+          "triagem",
+          "encaminhamento",
+          "conversa de enquadramento"
+        ]
+      },
+      "invoice_nf": {
+        "issued": true,
+        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento"
+      },
+      "sla_window": {
+        "state": "UNKNOWN",
+        "public_days": null,
+        "reason": "nenhum SLA público autorizado até três casos pagos com horas reais"
+      },
+      "urgency_rule": "Pedido abaixo da janela normal depende de aceite técnico e de capacidade; acréscimo e viabilidade são definidos na proposta; urgência nunca é entrega automática.",
+      "revisions": {
+        "included_rounds": 1,
+        "client_window_business_days": 5,
+        "scope_change": "change_order"
+      },
+      "multidisciplinary_dependencies": [
+        "advogado da parte permanece dono da estratégia processual"
+      ],
+      "price_model": {
+        "publication": "NOT_PUBLIC",
+        "public_amount_cents": null,
+        "public_range": null,
+        "currency": "BRL",
+        "basis": "proposal_after_scope",
+        "policy": "CONFENGE_PRICE_GATE_PROJECTION/1.0.0",
+        "ticket_class": "remote_documental",
+        "primary_unit": "fixed_scope_unit_not_hourly"
+      },
+      "paid_triage_rule": "Triagem técnica é unidade paga e não é laudo. Conversa gratuita de enquadramento é não técnica, limitada a cabimento, conflito preliminar e próximo passo.",
+      "acceptance_criteria": [
+        "a nota distingue fatos, lacunas e inferências",
+        "o próximo passo aponta uma oferta do catálogo ou um GAP registrado",
+        "o texto afirma que a triagem não é laudo"
+      ],
+      "proof_classes": [
+        "method_structure"
+      ],
+      "conflict_gate": "Conflito de partes, objetos e certames é checado antes da proposta. Independência técnica é condição de aceite.",
+      "confidentiality_retention": "Insumos e entregas ficam no contrato da unidade; retenção conforme política CONFENGE; sem PII em analytics; sem custo, margem ou minuta de proposta neste catálogo.",
+      "legitimate_cross_sell": [
+        "civil_building_technical_assistance",
+        "labor_sst_technical_assistance"
+      ],
+      "disqualification": [
+        "pedido de êxito assegurado",
+        "representação jurídica",
+        "nomeação como perito do juízo vendida como produto",
+        "corpus insuficiente após a triagem paga"
+      ],
+      "readiness": "MODELED",
+      "wave_class": "MODEL_ONLY"
+    },
+    {
+      "offer_id": "civil_building_technical_assistance",
+      "public_name": "Assistência Técnica Cível em Edificações",
+      "nucleus_id": "expert_evidence_assistance",
+      "buyer_job": "Instruir a tese da parte com evidência técnica de edificação ou imóvel, sob direção do advogado.",
+      "icp": [
+        "advogado cível",
+        "condomínio em disputa",
+        "proprietário ou construtora parte"
+      ],
+      "trigger_why_now": "Já há ou haverá processo, perícia ou notificação em que a parte precisa de assistente técnico.",
+      "supported_decision": "Formular quesitos, criticar laudo, assistir inspeção e esclarecer pontos técnicos da parte.",
+      "unit_of_work": "um processo ou pré-processo, um objeto e um recorte de disciplinas",
+      "deliverables": [
+        "quesitos e pontos técnicos da parte",
+        "análise de peças e documentos do corpus congelado",
+        "crítica fundamentada de laudo de terceiro quando contratada",
+        "esclarecimentos técnicos à parte e ao advogado"
+      ],
+      "exclusions": [
+        "não é advocacia",
+        "não é nomeação como perito do juízo",
+        "não garante resultado judicial",
+        "não substitui avaliação formal NBR 14653 quando o pedido for valor",
+        "não cobre SST trabalhista nesta SKU"
+      ],
+      "minimum_documents": [
+        "procuração ou autorização da parte",
+        "peças processuais relevantes",
+        "documentos do objeto"
+      ],
+      "inspection_field_rule": {
+        "included_by_default": false,
+        "when_required": "assistência a inspeção judicial ou visita pontual só se a proposta incluir quantidade e local",
+        "output": "ata de acompanhamento e registro de limitações de acesso"
+      },
+      "method_standard": {
+        "applicable": true,
+        "refs": [
+          "método declarado na proposta conforme o objeto"
+        ],
+        "note": "A norma do laudo pericial, quando houver, é a do juízo ou do perito nomeado; o assistente documenta método próprio no recorte contratado."
+      },
+      "technical_responsibility": {
+        "art_rule": "ART quando o produto for opinião ou relatório técnico de atribuição; não há ART para reunião de alinhamento isolada.",
+        "responsible": "a confirmar antes da contratação: profissional legalmente habilitado e com atribuição comprovada para o recorte",
+        "not_promised_for": [
+          "advocacia",
+          "ato do perito do juízo"
+        ]
+      },
+      "invoice_nf": {
+        "issued": true,
+        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento"
+      },
+      "sla_window": {
+        "state": "UNKNOWN",
+        "public_days": null,
+        "reason": "nenhum SLA público autorizado até três casos pagos com horas reais"
+      },
+      "urgency_rule": "Pedido abaixo da janela normal depende de aceite técnico e de capacidade; acréscimo e viabilidade são definidos na proposta; urgência nunca é entrega automática.",
+      "revisions": {
+        "included_rounds": 1,
+        "client_window_business_days": 5,
+        "scope_change": "change_order"
+      },
+      "multidisciplinary_dependencies": [
+        "advogado da parte",
+        "avaliador se a decisão for valor de imóvel",
+        "especialista de disciplina fora da atribuição civil"
+      ],
+      "price_model": {
+        "publication": "NOT_PUBLIC",
+        "public_amount_cents": null,
+        "public_range": null,
+        "currency": "BRL",
+        "basis": "proposal_after_scope",
+        "policy": "CONFENGE_PRICE_GATE_PROJECTION/1.0.0",
+        "ticket_class": "field_inspection",
+        "primary_unit": "fixed_scope_unit_not_hourly"
+      },
+      "paid_triage_rule": "Triagem técnica é unidade paga e não é laudo. Conversa gratuita de enquadramento é não técnica, limitada a cabimento, conflito preliminar e próximo passo.",
+      "acceptance_criteria": [
+        "produtos distinguem fato, cálculo, inferência e UNKNOWN",
+        "limites de acesso e de corpus estão registrados",
+        "não há linguagem de êxito assegurado"
+      ],
+      "proof_classes": [
+        "method_structure"
+      ],
+      "conflict_gate": "Não atuar para partes opostas no mesmo objeto. Não confundir assistência com perito do juízo.",
+      "confidentiality_retention": "Insumos e entregas ficam no contrato da unidade; retenção conforme política CONFENGE; sem PII em analytics; sem custo, margem ou minuta de proposta neste catálogo.",
+      "legitimate_cross_sell": [
+        "urban_property_valuation",
+        "building_inspection_pathology",
+        "pre_litigation_technical_screening"
+      ],
+      "disqualification": [
+        "pedido de advocacia",
+        "conflito de partes",
+        "objeto fora de atribuição sem parceiro nominal"
+      ],
+      "readiness": "MODELED",
+      "wave_class": "MODEL_ONLY"
+    },
+    {
+      "offer_id": "labor_sst_technical_assistance",
+      "public_name": "Assistência Técnica Trabalhista em SST",
+      "nucleus_id": "expert_evidence_assistance",
+      "buyer_job": "Instruir a tese trabalhista com evidência de SST, sem assumir o processo nem o laudo do juízo.",
+      "icp": [
+        "advogado trabalhista",
+        "empregador réu ou autor",
+        "empregado parte com patrono"
+      ],
+      "trigger_why_now": "Há reclamação ou iminência de perícia de insalubridade, periculosidade ou nexo técnico.",
+      "supported_decision": "Preparar quesitos, criticar laudo, assistir diligência e delimitar o que a engenharia de SST pode afirmar.",
+      "unit_of_work": "um processo trabalhista, um estabelecimento ou função e um corpus de SST",
+      "deliverables": [
+        "quesitos e pontos técnicos da parte",
+        "análise de PGR, LTCAT, PPRA histórico, AET e laudos de terceiro no corpus",
+        "crítica fundamentada de laudo pericial quando contratada"
+      ],
+      "exclusions": [
+        "não é advocacia",
+        "não é nomeação como perito do juízo",
+        "não é ato de médico do trabalho",
+        "não emite PGR ou LTCAT nesta SKU",
+        "não garante adicional ou improcedência"
+      ],
+      "minimum_documents": [
+        "peças da reclamação",
+        "documentação de SST existente",
+        "descrição da função e do ambiente"
+      ],
+      "inspection_field_rule": {
+        "included_by_default": false,
+        "when_required": "acompanhamento de diligência pericial só se a proposta incluir data, local e output",
+        "output": "registro de condições de acesso e de medições de terceiro"
+      },
+      "method_standard": {
+        "applicable": true,
+        "refs": [
+          "NRs aplicáveis ao recorte",
+          "laudo de terceiro como objeto de crítica"
+        ],
+        "note": "Medições ambientais de higiene ocupacional exigem higienista ou método declarado; não são assumidas como internas se o profissional não estiver no escopo."
+      },
+      "technical_responsibility": {
+        "art_rule": "ART quando houver relatório técnico de SST na atribuição do engenheiro; não cobre ato médico.",
+        "responsible": "a confirmar antes da contratação: profissional legalmente habilitado e com atribuição comprovada para o recorte",
+        "not_promised_for": [
+          "ato médico",
+          "advocacia",
+          "perito do juízo"
+        ]
+      },
+      "invoice_nf": {
+        "issued": true,
+        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento"
+      },
+      "sla_window": {
+        "state": "UNKNOWN",
+        "public_days": null,
+        "reason": "nenhum SLA público autorizado até três casos pagos com horas reais"
+      },
+      "urgency_rule": "Pedido abaixo da janela normal depende de aceite técnico e de capacidade; acréscimo e viabilidade são definidos na proposta; urgência nunca é entrega automática.",
+      "revisions": {
+        "included_rounds": 1,
+        "client_window_business_days": 5,
+        "scope_change": "change_order"
+      },
+      "multidisciplinary_dependencies": [
+        "médico do trabalho quando o nexo for clínico",
+        "higienista ocupacional para medições ambientais",
+        "advogado da parte"
+      ],
+      "price_model": {
+        "publication": "NOT_PUBLIC",
+        "public_amount_cents": null,
+        "public_range": null,
+        "currency": "BRL",
+        "basis": "proposal_after_scope",
+        "policy": "CONFENGE_PRICE_GATE_PROJECTION/1.0.0",
+        "ticket_class": "field_inspection",
+        "primary_unit": "fixed_scope_unit_not_hourly"
+      },
+      "paid_triage_rule": "Triagem técnica é unidade paga e não é laudo. Conversa gratuita de enquadramento é não técnica, limitada a cabimento, conflito preliminar e próximo passo.",
+      "acceptance_criteria": [
+        "dependências de médico ou higienista estão nominais quando o recorte as exige",
+        "o produto não afirma adicional ou improcedência como resultado"
+      ],
+      "proof_classes": [
+        "method_structure"
+      ],
+      "conflict_gate": "Não atuar para empregado e empregador no mesmo conflito. Independência da evidência é condição.",
+      "confidentiality_retention": "Insumos e entregas ficam no contrato da unidade; retenção conforme política CONFENGE; sem PII em analytics; sem custo, margem ou minuta de proposta neste catálogo.",
+      "legitimate_cross_sell": [
+        "sst_insalubrity_perilousness_analysis",
+        "sst_risk_documentation_diagnosis"
+      ],
+      "disqualification": [
+        "pedido de advocacia",
+        "laudo médico como entrega interna da CONFENGE",
+        "conflito de partes"
+      ],
+      "readiness": "MODELED",
+      "wave_class": "MODEL_ONLY"
+    },
+    {
+      "offer_id": "urban_property_valuation",
+      "public_name": "Avaliação de Imóvel Urbano",
+      "nucleus_id": "property_valuation",
+      "buyer_job": "Obter valor de imóvel urbano para uma finalidade e data definidas, com método declarado.",
+      "icp": [
+        "parte em inventário ou dissolução",
+        "credor ou tomador em operação com imóvel",
+        "comprador ou vendedor",
+        "advogado da disputa patrimonial"
+      ],
+      "trigger_why_now": "A decisão exige valor fundamentado, não palpite nem parecer preliminar.",
+      "supported_decision": "Fixar valor para disputa, colateral, negociação, inventário, incorporação ou destinação patrimonial.",
+      "unit_of_work": "um imóvel urbano, uma finalidade, uma data de referência e um nível de fundamentação",
+      "deliverables": [
+        "laudo ou opinião de avaliação no recorte contratado",
+        "identificação do imóvel, finalidade e data de referência",
+        "método, premissas, limitações e grau de fundamentação"
+      ],
+      "exclusions": [
+        "imóvel rural",
+        "parecer preliminar vendido como avaliação formal",
+        "promessa de valor de mercado futuro",
+        "avaliação em massa sem unidade definida"
+      ],
+      "minimum_documents": [
+        "matrícula ou identificação registral",
+        "finalidade da avaliação",
+        "data de referência pretendida",
+        "acesso ao imóvel ou justificativa de não vistoria"
+      ],
+      "inspection_field_rule": {
+        "included_by_default": false,
+        "when_required": "vistoria entra somente quando a proposta declara quantidade, município e propósito; ausência de vistoria limita o grau de fundamentação",
+        "output": "registro de vistoria ou de restrição de acesso"
+      },
+      "method_standard": {
+        "applicable": true,
+        "refs": [
+          "ABNT NBR 14653 na parte aplicável ao tipo e à finalidade"
+        ],
+        "note": "O método é escolhido na proposta; não se inventa abordagem incompatível com a documentação e a vistoria disponíveis."
+      },
+      "technical_responsibility": {
+        "art_rule": "ART quando o produto for avaliação de engenharia de atribuição; não se emite ART de avaliação sem recorte e método.",
+        "responsible": "a confirmar antes da contratação: profissional legalmente habilitado e com atribuição comprovada para o recorte",
+        "not_promised_for": [
+          "promessa de preço de venda",
+          "parecer preliminar"
+        ]
+      },
+      "invoice_nf": {
+        "issued": true,
+        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento"
+      },
+      "sla_window": {
+        "state": "UNKNOWN",
+        "public_days": null,
+        "reason": "nenhum SLA público autorizado até três casos pagos com horas reais"
+      },
+      "urgency_rule": "Pedido abaixo da janela normal depende de aceite técnico e de capacidade; acréscimo e viabilidade são definidos na proposta; urgência nunca é entrega automática.",
+      "revisions": {
+        "included_rounds": 1,
+        "client_window_business_days": 5,
+        "scope_change": "change_order"
+      },
+      "multidisciplinary_dependencies": [
+        "arquiteto ou outro avaliador se a atribuição exigir",
+        "advogado quando a finalidade for judicial"
+      ],
+      "price_model": {
+        "publication": "NOT_PUBLIC",
+        "public_amount_cents": null,
+        "public_range": null,
+        "currency": "BRL",
+        "basis": "proposal_after_scope",
+        "policy": "CONFENGE_PRICE_GATE_PROJECTION/1.0.0",
+        "ticket_class": "field_inspection",
+        "primary_unit": "fixed_scope_unit_not_hourly"
+      },
+      "paid_triage_rule": "Triagem técnica é unidade paga e não é laudo. Conversa gratuita de enquadramento é não técnica, limitada a cabimento, conflito preliminar e próximo passo.",
+      "acceptance_criteria": [
+        "finalidade, data, imóvel e método estão no produto",
+        "limitações de vistoria e de dados estão explícitas",
+        "o produto não se apresenta como parecer preliminar"
+      ],
+      "proof_classes": [
+        "method_structure"
+      ],
+      "conflict_gate": "Não avaliar o mesmo imóvel para partes opostas no mesmo negócio sem disclosure e recusa.",
+      "confidentiality_retention": "Insumos e entregas ficam no contrato da unidade; retenção conforme política CONFENGE; sem PII em analytics; sem custo, margem ou minuta de proposta neste catálogo.",
+      "legitimate_cross_sell": [
+        "preliminary_property_opinion",
+        "civil_building_technical_assistance"
+      ],
+      "disqualification": [
+        "imóvel rural",
+        "finalidade indefinida",
+        "pedido de valor sem método"
+      ],
+      "readiness": "WITHHELD",
+      "wave_class": "WITHHELD_PROOF"
+    },
+    {
+      "offer_id": "preliminary_property_opinion",
+      "public_name": "Parecer Preliminar de Imóvel Urbano",
+      "nucleus_id": "property_valuation",
+      "buyer_job": "Obter ordem de grandeza ou cabimento técnico sem pretender avaliação formal.",
+      "icp": [
+        "interessado em compra ou venda",
+        "advogado em triagem patrimonial",
+        "família em inventário inicial"
+      ],
+      "trigger_why_now": "Ainda não há corpus, acesso ou finalidade suficientes para NBR 14653 formal, mas há decisão de seguir ou parar.",
+      "supported_decision": "Seguir para avaliação formal, negociar com ressalva ou recusar o esforço.",
+      "unit_of_work": "um imóvel urbano e uma pergunta preliminar delimitada",
+      "deliverables": [
+        "parecer preliminar com premissas, fontes e ressalvas",
+        "declaração explícita de que não equivale a avaliação formal NBR 14653",
+        "recomendação de evoluir ou não para avaliação formal"
+      ],
+      "exclusions": [
+        "não equivale a avaliação formal",
+        "não é laudo NBR 14653",
+        "não serve como colateral, dação ou prova pericial de valor sem evolução contratual",
+        "não cobre imóvel rural"
+      ],
+      "minimum_documents": [
+        "identificação do imóvel",
+        "pergunta preliminar",
+        "fontes públicas ou documentos já existentes"
+      ],
+      "inspection_field_rule": {
+        "included_by_default": false,
+        "when_required": "sem vistoria por padrão; vistoria transforma o recorte e exige nova unidade",
+        "output": "não aplicável por padrão"
+      },
+      "method_standard": {
+        "applicable": true,
+        "refs": [
+          "método simplificado declarado na proposta"
+        ],
+        "note": "Não usa o grau de fundamentação de avaliação formal; qualquer extrapolação é desqualificação."
+      },
+      "technical_responsibility": {
+        "art_rule": "ART só se o parecer for opinião técnica de atribuição com recorte explícito; não há ART de avaliação formal nesta unidade.",
+        "responsible": "a confirmar antes da contratação: profissional legalmente habilitado e com atribuição comprovada para o recorte",
+        "not_promised_for": [
+          "avaliação formal",
+          "promessa de valor"
+        ]
+      },
+      "invoice_nf": {
+        "issued": true,
+        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento"
+      },
+      "sla_window": {
+        "state": "UNKNOWN",
+        "public_days": null,
+        "reason": "nenhum SLA público autorizado até três casos pagos com horas reais"
+      },
+      "urgency_rule": "Pedido abaixo da janela normal depende de aceite técnico e de capacidade; acréscimo e viabilidade são definidos na proposta; urgência nunca é entrega automática.",
+      "revisions": {
+        "included_rounds": 1,
+        "client_window_business_days": 5,
+        "scope_change": "change_order"
+      },
+      "multidisciplinary_dependencies": [],
+      "price_model": {
+        "publication": "NOT_PUBLIC",
+        "public_amount_cents": null,
+        "public_range": null,
+        "currency": "BRL",
+        "basis": "proposal_after_scope",
+        "policy": "CONFENGE_PRICE_GATE_PROJECTION/1.0.0",
+        "ticket_class": "remote_documental",
+        "primary_unit": "fixed_scope_unit_not_hourly"
+      },
+      "paid_triage_rule": "Triagem técnica é unidade paga e não é laudo. Conversa gratuita de enquadramento é não técnica, limitada a cabimento, conflito preliminar e próximo passo.",
+      "acceptance_criteria": [
+        "o produto afirma que não equivale a avaliação formal",
+        "premissas e fontes estão visíveis",
+        "uso proibido como laudo está escrito"
+      ],
+      "proof_classes": [
+        "method_structure"
+      ],
+      "conflict_gate": "Mesma regra de conflito da avaliação formal; o parecer não contorna independência.",
+      "confidentiality_retention": "Insumos e entregas ficam no contrato da unidade; retenção conforme política CONFENGE; sem PII em analytics; sem custo, margem ou minuta de proposta neste catálogo.",
+      "legitimate_cross_sell": [
+        "urban_property_valuation"
+      ],
+      "disqualification": [
+        "pedido para usar o parecer como laudo",
+        "imóvel rural",
+        "finalidade judicial de valor sem avaliação formal"
+      ],
+      "readiness": "MODELED",
+      "wave_class": "MODEL_ONLY"
+    },
+    {
+      "offer_id": "quantity_takeoff_budgeting",
+      "public_name": "Levantamento Quantitativo e Orçamentação",
+      "nucleus_id": "building_engineering_documentation",
+      "buyer_job": "Transformar projeto ou recorte construtivo em quantitativos e orçamento rastreável.",
+      "icp": [
+        "incorporadora",
+        "construtora privada",
+        "proprietário de reforma de maior porte"
+      ],
+      "trigger_why_now": "Há projeto ou escopo a precificar antes de contratar obra, reforma ou aditivo privado.",
+      "supported_decision": "Aprovar, recortar ou recusar o investimento com base em quantitativos e premissas.",
+      "unit_of_work": "um recorte de projeto, uma data-base e uma composição declarada",
+      "deliverables": [
+        "planilha de quantitativos",
+        "orçamento com premissas, BDI quando aplicável e memória",
+        "lista de omissões e inconsistências do projeto de origem"
+      ],
+      "exclusions": [
+        "execução da obra",
+        "auditoria de orçamento de terceiro nesta SKU",
+        "projeto arquitetônico",
+        "orçamento de licitação pública para licitante (usar B2G retido)"
+      ],
+      "minimum_documents": [
+        "projeto ou memorial no recorte",
+        "premissas de preço e data-base",
+        "limites do recorte físico"
+      ],
+      "inspection_field_rule": {
+        "included_by_default": false,
+        "when_required": "campo só se o recorte não puder ser lido no projeto e a proposta incluir local",
+        "output": "croqui de conferência, se contratado"
+      },
+      "method_standard": {
+        "applicable": true,
+        "refs": [
+          "composições e referências declaradas na proposta"
+        ],
+        "note": "Referência de preço é premissa, não tabela pública inventada neste catálogo."
+      },
+      "technical_responsibility": {
+        "art_rule": "ART quando o orçamento for serviço de engenharia de atribuição; não há ART para simples conferência de planilha sem recorte técnico.",
+        "responsible": "a confirmar antes da contratação: profissional legalmente habilitado e com atribuição comprovada para o recorte",
+        "not_promised_for": [
+          "execução",
+          "aprovação de alvará"
+        ]
+      },
+      "invoice_nf": {
+        "issued": true,
+        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento"
+      },
+      "sla_window": {
+        "state": "UNKNOWN",
+        "public_days": null,
+        "reason": "nenhum SLA público autorizado até três casos pagos com horas reais"
+      },
+      "urgency_rule": "Pedido abaixo da janela normal depende de aceite técnico e de capacidade; acréscimo e viabilidade são definidos na proposta; urgência nunca é entrega automática.",
+      "revisions": {
+        "included_rounds": 1,
+        "client_window_business_days": 5,
+        "scope_change": "change_order"
+      },
+      "multidisciplinary_dependencies": [
+        "projetistas de origem para omissões",
+        "orçamentista parceiro se o volume exceder capacidade"
+      ],
+      "price_model": {
+        "publication": "NOT_PUBLIC",
+        "public_amount_cents": null,
+        "public_range": null,
+        "currency": "BRL",
+        "basis": "proposal_after_scope",
+        "policy": "CONFENGE_PRICE_GATE_PROJECTION/1.0.0",
+        "ticket_class": "remote_documental",
+        "primary_unit": "fixed_scope_unit_not_hourly"
+      },
+      "paid_triage_rule": "Triagem técnica é unidade paga e não é laudo. Conversa gratuita de enquadramento é não técnica, limitada a cabimento, conflito preliminar e próximo passo.",
+      "acceptance_criteria": [
+        "quantitativos rastreiam o recorte",
+        "omissões do projeto de origem estão listadas",
+        "não há promessa de preço de mercado"
+      ],
+      "proof_classes": [
+        "method_structure"
+      ],
+      "conflict_gate": "Não orçar para partes opostas no mesmo contrato privado sem disclosure.",
+      "confidentiality_retention": "Insumos e entregas ficam no contrato da unidade; retenção conforme política CONFENGE; sem PII em analytics; sem custo, margem ou minuta de proposta neste catálogo.",
+      "legitimate_cross_sell": [
+        "budget_audit_feasibility",
+        "bim_coordination_clash_register"
+      ],
+      "disqualification": [
+        "projeto ilegível sem reconstituição contratada",
+        "pedido de execução"
+      ],
+      "readiness": "MODELED",
+      "wave_class": "MODEL_ONLY"
+    },
+    {
+      "offer_id": "budget_audit_feasibility",
+      "public_name": "Auditoria de Orçamento e Viabilidade",
+      "nucleus_id": "building_engineering_documentation",
+      "buyer_job": "Testar se o orçamento ou a viabilidade apresentados sustentam a decisão de investir ou contratar.",
+      "icp": [
+        "incorporadora",
+        "investidor",
+        "condomínio diante de proposta de obra",
+        "construtora revisando preço de terceiro"
+      ],
+      "trigger_why_now": "Existe planilha ou estudo de terceiro cuja consistência precisa ser testada antes do desembolso.",
+      "supported_decision": "Aceitar, condicionar ou recusar o número apresentado.",
+      "unit_of_work": "uma planilha ou estudo, um recorte e uma pergunta de viabilidade",
+      "deliverables": [
+        "parecer de auditoria com achados, premissas e lacunas",
+        "memória dos testes realizados",
+        "recomendação de aceite, recorte ou nova orçamentação"
+      ],
+      "exclusions": [
+        "produção do orçamento original nesta SKU",
+        "viabilidade econômico-financeira completa de incorporação sem recorte",
+        "auditoria de orçamento de licitação pública para licitante (usar B2G retido CFG-D14)"
+      ],
+      "minimum_documents": [
+        "planilha ou estudo atacado",
+        "projeto ou memorial de referência",
+        "pergunta de decisão"
+      ],
+      "inspection_field_rule": {
+        "included_by_default": false,
+        "when_required": "campo só para conferir quantitativo não documental, se contratado",
+        "output": "nota de conferência"
+      },
+      "method_standard": {
+        "applicable": true,
+        "refs": [
+          "checagens declaradas na proposta"
+        ],
+        "note": "Não inventa preço de mercado; testa consistência do material apresentado."
+      },
+      "technical_responsibility": {
+        "art_rule": "ART quando a auditoria for relatório técnico de engenharia; não há ART para leitura comercial isolada.",
+        "responsible": "a confirmar antes da contratação: profissional legalmente habilitado e com atribuição comprovada para o recorte",
+        "not_promised_for": [
+          "aprovação de investimento financeiro como analista de valores mobiliários"
+        ]
+      },
+      "invoice_nf": {
+        "issued": true,
+        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento"
+      },
+      "sla_window": {
+        "state": "UNKNOWN",
+        "public_days": null,
+        "reason": "nenhum SLA público autorizado até três casos pagos com horas reais"
+      },
+      "urgency_rule": "Pedido abaixo da janela normal depende de aceite técnico e de capacidade; acréscimo e viabilidade são definidos na proposta; urgência nunca é entrega automática.",
+      "revisions": {
+        "included_rounds": 1,
+        "client_window_business_days": 5,
+        "scope_change": "change_order"
+      },
+      "multidisciplinary_dependencies": [
+        "contador ou economista se a viabilidade for econômico-financeira plena"
+      ],
+      "price_model": {
+        "publication": "NOT_PUBLIC",
+        "public_amount_cents": null,
+        "public_range": null,
+        "currency": "BRL",
+        "basis": "proposal_after_scope",
+        "policy": "CONFENGE_PRICE_GATE_PROJECTION/1.0.0",
+        "ticket_class": "remote_documental",
+        "primary_unit": "fixed_scope_unit_not_hourly"
+      },
+      "paid_triage_rule": "Triagem técnica é unidade paga e não é laudo. Conversa gratuita de enquadramento é não técnica, limitada a cabimento, conflito preliminar e próximo passo.",
+      "acceptance_criteria": [
+        "achados distinguem erro, omissão e inferência",
+        "a fronteira com orçamentação nova está explícita"
+      ],
+      "proof_classes": [
+        "method_structure"
+      ],
+      "conflict_gate": "Não auditar e produzir o mesmo orçamento para o mesmo cliente na mesma unidade sem recorte novo.",
+      "confidentiality_retention": "Insumos e entregas ficam no contrato da unidade; retenção conforme política CONFENGE; sem PII em analytics; sem custo, margem ou minuta de proposta neste catálogo.",
+      "legitimate_cross_sell": [
+        "quantity_takeoff_budgeting",
+        "private_project_technical_readiness_assessment"
+      ],
+      "disqualification": [
+        "planilha ausente",
+        "pedido para reescrever o orçamento disfarçado de auditoria"
+      ],
+      "readiness": "MODELED",
+      "wave_class": "MODEL_ONLY"
+    },
+    {
+      "offer_id": "complementary_engineering_project_review",
+      "public_name": "Engenharia Complementar, Revisão e Interfaces de Projeto",
+      "nucleus_id": "building_engineering_documentation",
+      "buyer_job": "Completar ou revisar uma disciplina de engenharia e organizar suas interfaces sem transferir autoria arquitetônica à CONFENGE.",
+      "icp": [
+        "construtora",
+        "incorporadora ou desenvolvedor imobiliário",
+        "escritório de engenharia",
+        "escritório de arquitetura como cliente de engenharia complementar",
+        "plataforma de arquitetura ou projetos como cliente de revisão técnica"
+      ],
+      "trigger_why_now": "O pacote de projeto tem disciplina de engenharia ausente, incompleta ou incompatível antes de orçamento, contratação ou obra.",
+      "supported_decision": "Definir o que pode ser completado ou revisado, por qual responsável e quais interfaces retornam aos autores de origem.",
+      "unit_of_work": "uma disciplina ou interface de engenharia, um pacote documental e um ciclo de revisão",
+      "deliverables": [
+        "matriz de escopo, autoria e interfaces",
+        "revisão ou complemento técnico da disciplina expressamente contratada",
+        "registro de pendências e devolutivas aos autores de origem"
+      ],
+      "exclusions": [
+        "autoria, assinatura ou atribuição arquitetônica",
+        "todas as disciplinas como pacote implícito",
+        "aprovação em órgão, condomínio ou concessionária",
+        "white-label que oculte autoria e responsabilidade técnica",
+        "execução de obra ou correção pelo autor de terceiro",
+        "disciplina sem atribuição comprovada e responsável definido"
+      ],
+      "minimum_documents": [
+        "pacote de projeto disponível",
+        "disciplina ou interface solicitada",
+        "autores e responsáveis conhecidos",
+        "finalidade e etapa da decisão"
+      ],
+      "inspection_field_rule": {
+        "included_by_default": false,
+        "when_required": "vistoria ou levantamento só entra se a disciplina e a proposta nomearem local, recorte e produto de campo",
+        "output": "registro de campo limitado ao recorte, quando contratado"
+      },
+      "method_standard": {
+        "applicable": true,
+        "refs": [
+          "normas da disciplina confirmadas na proposta",
+          "matriz de interfaces e autoria do pacote"
+        ],
+        "note": "BIM, plataforma e arquitetura são contexto ou método; não ampliam atribuição profissional."
+      },
+      "technical_responsibility": {
+        "art_rule": "ART somente para o serviço de engenharia efetivamente contratado, após confirmar profissional, atribuição, local, registro ou visto e disciplina.",
+        "responsible": "a confirmar antes da contratação: profissional legalmente habilitado e com atribuição comprovada para o recorte",
+        "not_promised_for": [
+          "arquitetura",
+          "disciplina de terceiro não contratada",
+          "aprovação",
+          "execução"
+        ]
+      },
+      "invoice_nf": {
+        "issued": true,
+        "when": "serviço técnico contratado; NF não prova atribuição nem aprovação e não incide na conversa gratuita de enquadramento"
+      },
+      "sla_window": {
+        "state": "UNKNOWN",
+        "public_days": null,
+        "reason": "prazo depende de disciplina, qualidade dos insumos, interfaces, campo e capacidade confirmada"
+      },
+      "urgency_rule": "Urgência depende de segurança técnica e capacidade confirmada; não cria prazo automático nem disciplina disponível.",
+      "revisions": {
+        "included_rounds": 1,
+        "client_window_business_days": 5,
+        "scope_change": "change_order"
+      },
+      "multidisciplinary_dependencies": [
+        "arquiteto autor quando houver interface arquitetônica",
+        "projetistas autores das demais disciplinas",
+        "profissional habilitado nominal quando a disciplina não estiver comprovada internamente"
+      ],
+      "price_model": {
+        "publication": "NOT_PUBLIC",
+        "public_amount_cents": null,
+        "public_range": null,
+        "currency": "BRL",
+        "basis": "proposal_after_scope",
+        "policy": "CONFENGE_PRICE_GATE_PROJECTION/1.0.0",
+        "ticket_class": "remote_documental_or_field",
+        "primary_unit": "fixed_scope_unit_not_hourly"
+      },
+      "paid_triage_rule": "A conversa gratuita confirma apenas situação, disciplina, conflito e próximo passo. Leitura técnica do pacote é triagem paga quando houver autorização material de preço.",
+      "acceptance_criteria": [
+        "disciplina, autoria, interfaces e entregáveis estão nomeados",
+        "atribuição e formalidades estão confirmadas antes da execução",
+        "a entrega não atribui arquitetura nem correção de terceiro à CONFENGE",
+        "pendências podem terminar em NEEDS_CONTEXT"
+      ],
+      "proof_classes": [
+        "method_structure",
+        "credential_required_before_sale"
+      ],
+      "conflict_gate": "Não revisar silenciosamente trabalho próprio como auditor independente nem atender lados opostos da mesma disputa; autoria e papéis são declarados.",
+      "confidentiality_retention": "Projetos, modelos, custos e dados de clientes não entram em analytics. Insumos sensíveis só são recebidos após escopo, conflito e canal adequado.",
+      "legitimate_cross_sell": [
+        "bim_coordination_clash_register",
+        "quantity_takeoff_budgeting",
+        "budget_audit_feasibility",
+        "private_project_technical_readiness_assessment"
+      ],
+      "disqualification": [
+        "pedido de autoria arquitetônica",
+        "disciplina sem atribuição ou responsável confirmável",
+        "promessa de aprovação",
+        "pacote irrestrito de todas as disciplinas"
+      ],
+      "readiness": "WITHHELD",
+      "wave_class": "WITHHELD_PROOF",
+      "source_issue": "#602"
+    },
+    {
+      "offer_id": "bim_coordination_clash_register",
+      "public_name": "Coordenação BIM e Registro de Interferências",
+      "nucleus_id": "building_engineering_documentation",
+      "buyer_job": "Registrar interferências entre disciplinas e decidir o que precisa ser resolvido antes da obra.",
+      "icp": [
+        "incorporadora",
+        "projetista líder",
+        "construtora privada com modelo federado"
+      ],
+      "trigger_why_now": "Há modelos BIM de disciplinas que precisam ser coordenados antes de executar.",
+      "supported_decision": "Aceitar, devolver ou recortar interferências com responsável e prazo interno do cliente.",
+      "unit_of_work": "um federado, um recorte espacial e um ciclo de coordenação",
+      "deliverables": [
+        "registro de interferências com ID, disciplinas, gravidade e responsável do cliente",
+        "premissas de LOD e formatos aceitos",
+        "ata do ciclo de coordenação contratado"
+      ],
+      "exclusions": [
+        "modelagem de disciplina como projeto interno se o profissional não estiver no escopo",
+        "resolução automática das interferências",
+        "obra sem interferências residuais",
+        "BIM de licitação pública sem recorte (usar B2G quando for o caso)"
+      ],
+      "minimum_documents": [
+        "modelos no formato aceito",
+        "matriz de disciplinas",
+        "LOD ou requisito de informação"
+      ],
+      "inspection_field_rule": {
+        "included_by_default": false,
+        "when_required": "campo não incluso; coordenação é sobre o modelo",
+        "output": "não aplicável"
+      },
+      "method_standard": {
+        "applicable": true,
+        "refs": [
+          "ISO 19650 como referência de informação quando contratada",
+          "formatos IFC ou nativos declarados"
+        ],
+        "note": "LOD e formatos são premissas da proposta; ausência deles desqualifica ou reduz o ciclo."
+      },
+      "technical_responsibility": {
+        "art_rule": "ART quando a coordenação for serviço técnico de engenharia sobre o recorte; não há ART de 'BIM' genérico.",
+        "responsible": "a confirmar antes da contratação: profissional legalmente habilitado e com atribuição comprovada para o recorte",
+        "not_promised_for": [
+          "projeto de disciplina não contratada",
+          "execução"
+        ]
+      },
+      "invoice_nf": {
+        "issued": true,
+        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento"
+      },
+      "sla_window": {
+        "state": "UNKNOWN",
+        "public_days": null,
+        "reason": "nenhum SLA público autorizado até três casos pagos com horas reais"
+      },
+      "urgency_rule": "Pedido abaixo da janela normal depende de aceite técnico e de capacidade; acréscimo e viabilidade são definidos na proposta; urgência nunca é entrega automática.",
+      "revisions": {
+        "included_rounds": 1,
+        "client_window_business_days": 5,
+        "scope_change": "change_order"
+      },
+      "multidisciplinary_dependencies": [
+        "projetistas de cada disciplina",
+        "arquiteto autor quando o recorte for arquitetônico"
+      ],
+      "price_model": {
+        "publication": "NOT_PUBLIC",
+        "public_amount_cents": null,
+        "public_range": null,
+        "currency": "BRL",
+        "basis": "proposal_after_scope",
+        "policy": "CONFENGE_PRICE_GATE_PROJECTION/1.0.0",
+        "ticket_class": "remote_documental",
+        "primary_unit": "fixed_scope_unit_not_hourly"
+      },
+      "paid_triage_rule": "Triagem técnica é unidade paga e não é laudo. Conversa gratuita de enquadramento é não técnica, limitada a cabimento, conflito preliminar e próximo passo.",
+      "acceptance_criteria": [
+        "formatos e LOD estão no contrato da unidade",
+        "o registro não atribui à CONFENGE a resolução que é do autor do projeto"
+      ],
+      "proof_classes": [
+        "method_structure"
+      ],
+      "conflict_gate": "Não coordenar e auditar em silêncio o mesmo federado para partes em disputa sem disclosure.",
+      "confidentiality_retention": "Insumos e entregas ficam no contrato da unidade; retenção conforme política CONFENGE; sem PII em analytics; sem custo, margem ou minuta de proposta neste catálogo.",
+      "legitimate_cross_sell": [
+        "asbuilt_document_reconciliation",
+        "private_project_technical_readiness_assessment"
+      ],
+      "disqualification": [
+        "modelos ilegíveis",
+        "pedido de modelar todas as disciplinas como se fossem internas"
+      ],
+      "readiness": "WITHHELD",
+      "wave_class": "WITHHELD_PROOF"
+    },
+    {
+      "offer_id": "building_inspection_pathology",
+      "public_name": "Inspeção, Patologia e Condição Predial",
+      "nucleus_id": "building_engineering_documentation",
+      "buyer_job": "Conhecer a condição da edificação e as manifestações patológicas relevantes para decidir intervenção ou recebimento.",
+      "icp": [
+        "síndico",
+        "proprietário",
+        "comprador de imóvel usado",
+        "construtora em entrega"
+      ],
+      "trigger_why_now": "Há sintomas, entrega de obra ou decisão de comprar/reformar que exige inspeção técnica.",
+      "supported_decision": "Intervir, monitorar, recusar recebimento ou aprofundar com ensaio.",
+      "unit_of_work": "uma edificação ou recorte, um objetivo de inspeção e um nível de invasividade",
+      "deliverables": [
+        "relatório de inspeção e condição",
+        "registro de manifestações, hipóteses e recomendações de aprofundamento",
+        "limites de acesso e de ensaios não realizados"
+      ],
+      "exclusions": [
+        "projeto executivo de recuperação nesta SKU",
+        "ensaios laboratoriais não contratados",
+        "laudo de avaliação de valor",
+        "perícia judicial vendida como inspeção privada sem recorte"
+      ],
+      "minimum_documents": [
+        "autorização de acesso",
+        "objetivo da inspeção",
+        "documentos prediais existentes"
+      ],
+      "inspection_field_rule": {
+        "included_by_default": true,
+        "when_required": "uma visita no município e recorte declarados na proposta; visitas extras são change order",
+        "output": "registro fotográfico, condições de acesso e pendências"
+      },
+      "method_standard": {
+        "applicable": true,
+        "refs": [
+          "ABNT NBR 16747 quando aplicável ao objetivo",
+          "outras NBR de patologia se o recorte as exigir"
+        ],
+        "note": "Ensaios destrutivos só existem se a proposta os listar."
+      },
+      "technical_responsibility": {
+        "art_rule": "ART do relatório de inspeção de engenharia no recorte; não cobre disciplinas de instalações se não contratadas.",
+        "responsible": "a confirmar antes da contratação: profissional legalmente habilitado e com atribuição comprovada para o recorte",
+        "not_promised_for": [
+          "projeto de recuperação completo",
+          "avaliação de valor"
+        ]
+      },
+      "invoice_nf": {
+        "issued": true,
+        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento"
+      },
+      "sla_window": {
+        "state": "UNKNOWN",
+        "public_days": null,
+        "reason": "nenhum SLA público autorizado até três casos pagos com horas reais"
+      },
+      "urgency_rule": "Pedido abaixo da janela normal depende de aceite técnico e de capacidade; acréscimo e viabilidade são definidos na proposta; urgência nunca é entrega automática.",
+      "revisions": {
+        "included_rounds": 1,
+        "client_window_business_days": 5,
+        "scope_change": "change_order"
+      },
+      "multidisciplinary_dependencies": [
+        "laboratório para ensaios",
+        "engenheiro eletricista ou outro se a manifestação sair da atribuição"
+      ],
+      "price_model": {
+        "publication": "NOT_PUBLIC",
+        "public_amount_cents": null,
+        "public_range": null,
+        "currency": "BRL",
+        "basis": "proposal_after_scope",
+        "policy": "CONFENGE_PRICE_GATE_PROJECTION/1.0.0",
+        "ticket_class": "field_inspection",
+        "primary_unit": "fixed_scope_unit_not_hourly"
+      },
+      "paid_triage_rule": "Triagem técnica é unidade paga e não é laudo. Conversa gratuita de enquadramento é não técnica, limitada a cabimento, conflito preliminar e próximo passo.",
+      "acceptance_criteria": [
+        "o relatório registra o que não foi visto",
+        "hipóteses não são apresentadas como causa única sem evidência"
+      ],
+      "proof_classes": [
+        "method_structure"
+      ],
+      "conflict_gate": "Não inspecionar para comprador e vendedor no mesmo negócio sem disclosure.",
+      "confidentiality_retention": "Insumos e entregas ficam no contrato da unidade; retenção conforme política CONFENGE; sem PII em analytics; sem custo, margem ou minuta de proposta neste catálogo.",
+      "legitimate_cross_sell": [
+        "renovation_plan_condo_review",
+        "civil_building_technical_assistance"
+      ],
+      "disqualification": [
+        "acesso negado",
+        "pedido de causa única sem inspeção"
+      ],
+      "readiness": "CAPACITY_UNKNOWN",
+      "wave_class": "WITHHELD_CAPACITY"
+    },
+    {
+      "offer_id": "renovation_plan_condo_review",
+      "public_name": "Plano de Reforma e Revisão Condominial",
+      "nucleus_id": "building_engineering_documentation",
+      "buyer_job": "Decidir o recorte de reforma ou a conformidade de uma intervenção em edifício, inclusive condomínio.",
+      "icp": [
+        "síndico",
+        "condômino",
+        "proprietário de unidade",
+        "administradora"
+      ],
+      "trigger_why_now": "Há assembleia, NBR de reforma, vizinhança ou obra interna que precisa de recorte técnico.",
+      "supported_decision": "Autorizar, condicionar ou recusar a intervenção no recorte contratado.",
+      "unit_of_work": "uma intervenção, uma unidade ou área comum e um conjunto de documentos da obra",
+      "deliverables": [
+        "parecer ou plano de reforma no recorte",
+        "lista de interferências e cuidados em áreas comuns",
+        "pendências documentais do autor da intervenção"
+      ],
+      "exclusions": [
+        "projeto arquitetônico completo",
+        "execução",
+        "aprovação de prefeitura como ato do órgão",
+        "inspeção predial ampla nesta SKU"
+      ],
+      "minimum_documents": [
+        "descrição da intervenção",
+        "documentos do condomínio ou da unidade",
+        "projeto do autor da reforma quando existir"
+      ],
+      "inspection_field_rule": {
+        "included_by_default": false,
+        "when_required": "visita pontual só se a proposta incluir local e propósito",
+        "output": "registro da visita, se houver"
+      },
+      "method_standard": {
+        "applicable": true,
+        "refs": [
+          "ABNT NBR 16280 quando aplicável"
+        ],
+        "note": "A norma condominial interna não substitui a NBR; ambas são premissas se existirem."
+      },
+      "technical_responsibility": {
+        "art_rule": "ART do parecer/plano de engenharia no recorte; não assume ART de projeto de terceiro.",
+        "responsible": "a confirmar antes da contratação: profissional legalmente habilitado e com atribuição comprovada para o recorte",
+        "not_promised_for": [
+          "alvará",
+          "execução"
+        ]
+      },
+      "invoice_nf": {
+        "issued": true,
+        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento"
+      },
+      "sla_window": {
+        "state": "UNKNOWN",
+        "public_days": null,
+        "reason": "nenhum SLA público autorizado até três casos pagos com horas reais"
+      },
+      "urgency_rule": "Pedido abaixo da janela normal depende de aceite técnico e de capacidade; acréscimo e viabilidade são definidos na proposta; urgência nunca é entrega automática.",
+      "revisions": {
+        "included_rounds": 1,
+        "client_window_business_days": 5,
+        "scope_change": "change_order"
+      },
+      "multidisciplinary_dependencies": [
+        "arquiteto autor da reforma",
+        "síndico e administradora para acesso e regras internas"
+      ],
+      "price_model": {
+        "publication": "NOT_PUBLIC",
+        "public_amount_cents": null,
+        "public_range": null,
+        "currency": "BRL",
+        "basis": "proposal_after_scope",
+        "policy": "CONFENGE_PRICE_GATE_PROJECTION/1.0.0",
+        "ticket_class": "field_inspection",
+        "primary_unit": "fixed_scope_unit_not_hourly"
+      },
+      "paid_triage_rule": "Triagem técnica é unidade paga e não é laudo. Conversa gratuita de enquadramento é não técnica, limitada a cabimento, conflito preliminar e próximo passo.",
+      "acceptance_criteria": [
+        "o recorte da intervenção está desenhado",
+        "o produto não aprova o que o órgão público deve aprovar"
+      ],
+      "proof_classes": [
+        "method_structure"
+      ],
+      "conflict_gate": "Não revisar a mesma intervenção para vizinhos opostos sem disclosure.",
+      "confidentiality_retention": "Insumos e entregas ficam no contrato da unidade; retenção conforme política CONFENGE; sem PII em analytics; sem custo, margem ou minuta de proposta neste catálogo.",
+      "legitimate_cross_sell": [
+        "building_inspection_pathology",
+        "asbuilt_document_reconciliation"
+      ],
+      "disqualification": [
+        "intervenção indefinida",
+        "pedido para burlar regra condominial"
+      ],
+      "readiness": "CAPACITY_UNKNOWN",
+      "wave_class": "WITHHELD_CAPACITY"
+    },
+    {
+      "offer_id": "asbuilt_document_reconciliation",
+      "public_name": "Reconciliação As-Built e Documental",
+      "nucleus_id": "building_engineering_documentation",
+      "buyer_job": "Saber o que foi de fato construído e o que os documentos ainda não sustentam.",
+      "icp": [
+        "incorporadora",
+        "proprietário de obra encerrada",
+        "condomínio em regularização"
+      ],
+      "trigger_why_now": "Há divergência entre projeto, execução e acervo, ou falta as-built para operação ou regularização.",
+      "supported_decision": "Regularizar, refazer documento, aceitar ressalva ou recortar o acervo.",
+      "unit_of_work": "um recorte construído e um pacote documental de origem",
+      "deliverables": [
+        "matriz de reconciliação projeto × construído × documento",
+        "lista de lacunas e evidências ainda necessárias",
+        "recomendação de as-built, regularização ou aceite com ressalva"
+      ],
+      "exclusions": [
+        "levantamento topográfico completo se não contratado",
+        "aprovação de regularização pelo órgão",
+        "projeto novo disfarçado de as-built"
+      ],
+      "minimum_documents": [
+        "projeto de origem",
+        "acesso ao recorte",
+        "acervo existente"
+      ],
+      "inspection_field_rule": {
+        "included_by_default": false,
+        "when_required": "conferência de campo no recorte só se a proposta incluir",
+        "output": "notas de conferência"
+      },
+      "method_standard": {
+        "applicable": true,
+        "refs": [
+          "método de reconciliação declarado na proposta"
+        ],
+        "note": "Sem evidência de campo, a reconciliação permanece documental e marcada como tal."
+      },
+      "technical_responsibility": {
+        "art_rule": "ART quando o produto for documento técnico de as-built ou reconciliação de engenharia.",
+        "responsible": "a confirmar antes da contratação: profissional legalmente habilitado e com atribuição comprovada para o recorte",
+        "not_promised_for": [
+          "alvará",
+          "habite-se como ato do órgão"
+        ]
+      },
+      "invoice_nf": {
+        "issued": true,
+        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento"
+      },
+      "sla_window": {
+        "state": "UNKNOWN",
+        "public_days": null,
+        "reason": "nenhum SLA público autorizado até três casos pagos com horas reais"
+      },
+      "urgency_rule": "Pedido abaixo da janela normal depende de aceite técnico e de capacidade; acréscimo e viabilidade são definidos na proposta; urgência nunca é entrega automática.",
+      "revisions": {
+        "included_rounds": 1,
+        "client_window_business_days": 5,
+        "scope_change": "change_order"
+      },
+      "multidisciplinary_dependencies": [
+        "topógrafo ou scanner se o recorte exigir",
+        "projetistas de origem"
+      ],
+      "price_model": {
+        "publication": "NOT_PUBLIC",
+        "public_amount_cents": null,
+        "public_range": null,
+        "currency": "BRL",
+        "basis": "proposal_after_scope",
+        "policy": "CONFENGE_PRICE_GATE_PROJECTION/1.0.0",
+        "ticket_class": "field_inspection",
+        "primary_unit": "fixed_scope_unit_not_hourly"
+      },
+      "paid_triage_rule": "Triagem técnica é unidade paga e não é laudo. Conversa gratuita de enquadramento é não técnica, limitada a cabimento, conflito preliminar e próximo passo.",
+      "acceptance_criteria": [
+        "cada lacuna tem evidência ou UNKNOWN",
+        "o produto não afirma regularização concluída no órgão"
+      ],
+      "proof_classes": [
+        "method_structure"
+      ],
+      "conflict_gate": "Não reconciliar o mesmo recorte para partes em disputa de entrega sem disclosure.",
+      "confidentiality_retention": "Insumos e entregas ficam no contrato da unidade; retenção conforme política CONFENGE; sem PII em analytics; sem custo, margem ou minuta de proposta neste catálogo.",
+      "legitimate_cross_sell": [
+        "private_project_technical_readiness_assessment",
+        "bim_coordination_clash_register"
+      ],
+      "disqualification": [
+        "acervo nulo e acesso negado",
+        "pedido de alvará como entrega"
+      ],
+      "readiness": "MODELED",
+      "wave_class": "MODEL_ONLY"
+    },
+    {
+      "offer_id": "private_project_technical_readiness_assessment",
+      "public_name": "Diagnóstico de Prontidão Técnica de Obra Privada",
+      "nucleus_id": "building_engineering_documentation",
+      "buyer_job": "Decidir se a obra privada pode começar ou continuar com o pacote técnico que existe hoje.",
+      "icp": [
+        "incorporadora",
+        "construtora privada",
+        "proprietário de obra",
+        "investidor da obra"
+      ],
+      "trigger_why_now": "Há projeto, orçamento, licença ou canteiro incompletos e a decisão de avançar precisa de diagnóstico.",
+      "supported_decision": "Avançar, condicionar ou recuar a obra privada em função de prontidão técnica.",
+      "unit_of_work": "um empreendimento privado, um recorte de disciplinas e um corte documental",
+      "deliverables": [
+        "diagnóstico de prontidão com eixos de projeto, quantitativo, interferência, documento e campo",
+        "matriz de lacunas e owners do cliente",
+        "recomendação AVANÇAR, CONDICIONAR ou RECUAR no recorte"
+      ],
+      "exclusions": [
+        "execução da obra",
+        "aprovação de licença como ato do órgão",
+        "orçamentação completa nesta SKU",
+        "coordenação BIM completa nesta SKU",
+        "planejamento de licitação pública (#587)"
+      ],
+      "minimum_documents": [
+        "identificação do empreendimento",
+        "pacote técnico existente",
+        "pergunta de prontidão"
+      ],
+      "inspection_field_rule": {
+        "included_by_default": false,
+        "when_required": "visita de prontidão só se a proposta incluir município e recorte; sem visita o diagnóstico permanece documental",
+        "output": "registro de campo limitado, se contratado"
+      },
+      "method_standard": {
+        "applicable": true,
+        "refs": [
+          "matriz de prontidão private_project_technical_readiness_v1"
+        ],
+        "note": "O ativo privado é a estrutura de eixos; não é página pública nem preço."
+      },
+      "technical_responsibility": {
+        "art_rule": "ART quando o diagnóstico for relatório técnico de engenharia; não há ART para enquadramento comercial.",
+        "responsible": "a confirmar antes da contratação: profissional legalmente habilitado e com atribuição comprovada para o recorte",
+        "not_promised_for": [
+          "alvará",
+          "execução",
+          "êxito comercial da incorporação"
+        ]
+      },
+      "invoice_nf": {
+        "issued": true,
+        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento"
+      },
+      "sla_window": {
+        "state": "UNKNOWN",
+        "public_days": null,
+        "reason": "nenhum SLA público autorizado até três casos pagos com horas reais"
+      },
+      "urgency_rule": "Pedido abaixo da janela normal depende de aceite técnico e de capacidade; acréscimo e viabilidade são definidos na proposta; urgência nunca é entrega automática.",
+      "revisions": {
+        "included_rounds": 1,
+        "client_window_business_days": 5,
+        "scope_change": "change_order"
+      },
+      "multidisciplinary_dependencies": [
+        "projetistas de origem",
+        "parceiro de disciplina ausente, declarado quando faltar atribuição"
+      ],
+      "price_model": {
+        "publication": "NOT_PUBLIC",
+        "public_amount_cents": null,
+        "public_range": null,
+        "currency": "BRL",
+        "basis": "proposal_after_scope",
+        "policy": "CONFENGE_PRICE_GATE_PROJECTION/1.0.0",
+        "ticket_class": "remote_documental",
+        "primary_unit": "fixed_scope_unit_not_hourly"
+      },
+      "paid_triage_rule": "Triagem técnica é unidade paga e não é laudo. Conversa gratuita de enquadramento é não técnica, limitada a cabimento, conflito preliminar e próximo passo.",
+      "acceptance_criteria": [
+        "cada eixo tem estado FACT, INFERENCE ou UNKNOWN",
+        "a recomendação não promete aprovação de órgão",
+        "o ID da oferta e o ativo privado permanecem estáveis"
+      ],
+      "proof_classes": [
+        "method_structure",
+        "private_asset"
+      ],
+      "conflict_gate": "Não diagnosticar a mesma obra para partes em disputa de contrato sem disclosure. Não atender licitante e ente no mesmo objeto público.",
+      "confidentiality_retention": "Insumos e entregas ficam no contrato da unidade; retenção conforme política CONFENGE; sem PII em analytics; sem custo, margem ou minuta de proposta neste catálogo.",
+      "legitimate_cross_sell": [
+        "quantity_takeoff_budgeting",
+        "bim_coordination_clash_register",
+        "asbuilt_document_reconciliation",
+        "building_inspection_pathology"
+      ],
+      "disqualification": [
+        "obra pública disfarçada de privada",
+        "pedido de execução",
+        "pacote nulo sem autorização para listar lacunas"
+      ],
+      "readiness": "MODELED",
+      "wave_class": "FIRST_WAVE_CANARY",
+      "private_asset_id": "private_project_technical_readiness_v1",
+      "publication": {
+        "catalog_public": false,
+        "html_route": null,
+        "issue_588": false
+      }
+    },
+    {
+      "offer_id": "sst_risk_documentation_diagnosis",
+      "public_name": "Diagnóstico de Riscos e Documentação de SST",
+      "nucleus_id": "occupational_safety",
+      "buyer_job": "Saber quais riscos e quais documentos de SST existem, faltam ou estão vencidos antes de produzir peças.",
+      "icp": [
+        "empregador",
+        "SESMT",
+        "RH de empresa com campo ou canteiro"
+      ],
+      "trigger_why_now": "Há fiscalização, onboarding, mudança de processo ou dúvida sobre o acervo de SST.",
+      "supported_decision": "Produzir, atualizar ou recusar documentos; chamar médico ou higienista quando faltar atribuição.",
+      "unit_of_work": "um estabelecimento ou frente e um acervo de SST",
+      "deliverables": [
+        "diagnóstico do acervo e dos riscos declarados",
+        "matriz de peças existentes, vencidas e ausentes",
+        "encaminhamento para PGR/LTCAT/AET ou para assistência técnica, sem misturar SKUs"
+      ],
+      "exclusions": [
+        "produção de PGR/LTCAT/AET nesta SKU",
+        "ato de médico do trabalho",
+        "assistência em reclamação trabalhista nesta SKU",
+        "certificação ISO como organismo"
+      ],
+      "minimum_documents": [
+        "CNPJ e estabelecimento",
+        "acervo de SST existente",
+        "descrição das atividades"
+      ],
+      "inspection_field_rule": {
+        "included_by_default": false,
+        "when_required": "walkthrough só se a proposta incluir local; sem campo o diagnóstico é documental",
+        "output": "registro de walkthrough"
+      },
+      "method_standard": {
+        "applicable": true,
+        "refs": [
+          "NRs aplicáveis ao recorte"
+        ],
+        "note": "O diagnóstico não substitui o PGR."
+      },
+      "technical_responsibility": {
+        "art_rule": "ART do diagnóstico de engenharia de SST quando houver relatório técnico; não cobre ato médico.",
+        "responsible": "a confirmar antes da contratação: profissional legalmente habilitado e com atribuição comprovada para o recorte",
+        "not_promised_for": [
+          "ato médico",
+          "eSocial como software"
+        ]
+      },
+      "invoice_nf": {
+        "issued": true,
+        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento"
+      },
+      "sla_window": {
+        "state": "UNKNOWN",
+        "public_days": null,
+        "reason": "nenhum SLA público autorizado até três casos pagos com horas reais"
+      },
+      "urgency_rule": "Pedido abaixo da janela normal depende de aceite técnico e de capacidade; acréscimo e viabilidade são definidos na proposta; urgência nunca é entrega automática.",
+      "revisions": {
+        "included_rounds": 1,
+        "client_window_business_days": 5,
+        "scope_change": "change_order"
+      },
+      "multidisciplinary_dependencies": [
+        "médico do trabalho",
+        "higienista ocupacional"
+      ],
+      "price_model": {
+        "publication": "NOT_PUBLIC",
+        "public_amount_cents": null,
+        "public_range": null,
+        "currency": "BRL",
+        "basis": "proposal_after_scope",
+        "policy": "CONFENGE_PRICE_GATE_PROJECTION/1.0.0",
+        "ticket_class": "remote_documental",
+        "primary_unit": "fixed_scope_unit_not_hourly"
+      },
+      "paid_triage_rule": "Triagem técnica é unidade paga e não é laudo. Conversa gratuita de enquadramento é não técnica, limitada a cabimento, conflito preliminar e próximo passo.",
+      "acceptance_criteria": [
+        "peças ausentes não são inventadas",
+        "dependências de médico e higienista estão explícitas"
+      ],
+      "proof_classes": [
+        "method_structure"
+      ],
+      "conflict_gate": "Não diagnosticar o mesmo estabelecimento para empregado e empregador em conflito sem disclosure.",
+      "confidentiality_retention": "Insumos e entregas ficam no contrato da unidade; retenção conforme política CONFENGE; sem PII em analytics; sem custo, margem ou minuta de proposta neste catálogo.",
+      "legitimate_cross_sell": [
+        "sst_pgr_ltcat_aet_inputs",
+        "sst_preventive_audit",
+        "labor_sst_technical_assistance"
+      ],
+      "disqualification": [
+        "pedido de PGR nesta unidade",
+        "pedido de laudo médico interno"
+      ],
+      "readiness": "MODELED",
+      "wave_class": "MODEL_ONLY"
+    },
+    {
+      "offer_id": "sst_pgr_ltcat_aet_inputs",
+      "public_name": "PGR, LTCAT, AET e Insumos Técnicos",
+      "nucleus_id": "occupational_safety",
+      "buyer_job": "Obter as peças de SST aplicáveis ao estabelecimento, com módulos nominados e matriz de aplicabilidade.",
+      "icp": [
+        "empregador",
+        "SESMT",
+        "empresa que precisa de eSocial/S-2240 com insumo técnico"
+      ],
+      "trigger_why_now": "Há obrigação de PGR, LTCAT, AET ou insumo técnico e o acervo não sustenta a peça.",
+      "supported_decision": "Quais módulos produzir, com que insumo e com quais parceiros de atribuição.",
+      "unit_of_work": "um estabelecimento e um conjunto de módulos nominados na proposta",
+      "deliverables": [
+        "módulos contratados de PGR, LTCAT, AET ou insumo técnico para S-2240",
+        "matriz de aplicabilidade por módulo",
+        "registro de premissas, medições de terceiro e limites"
+      ],
+      "exclusions": [
+        "módulos não nominados",
+        "ato médico como entrega interna se o médico não estiver no contrato",
+        "AET de fisioterapeuta como se fosse engenharia interna",
+        "assistência trabalhista nesta SKU",
+        "software de eSocial"
+      ],
+      "minimum_documents": [
+        "inventário de riscos ou diagnóstico prévio",
+        "layout e funções",
+        "histórico de LTCAT/PGR"
+      ],
+      "inspection_field_rule": {
+        "included_by_default": false,
+        "when_required": "campo e medições só nos módulos que a proposta listar",
+        "output": "registros de campo dos módulos contratados"
+      },
+      "method_standard": {
+        "applicable": true,
+        "refs": [
+          "NR-01 para PGR no recorte",
+          "legislação previdenciária aplicável ao LTCAT",
+          "NR da AET quando o módulo existir"
+        ],
+        "note": "IN e NR só se aplicam no âmbito próprio. Módulo ausente não é entregue."
+      },
+      "technical_responsibility": {
+        "art_rule": "ART por módulo de engenharia efetivamente produzido; LTCAT e PGR não autorizam ART de AET médica.",
+        "responsible": "a confirmar antes da contratação: profissional legalmente habilitado e com atribuição comprovada para o recorte",
+        "not_promised_for": [
+          "ato médico não contratado",
+          "certificação de sistema de gestão"
+        ]
+      },
+      "invoice_nf": {
+        "issued": true,
+        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento"
+      },
+      "sla_window": {
+        "state": "UNKNOWN",
+        "public_days": null,
+        "reason": "nenhum SLA público autorizado até três casos pagos com horas reais"
+      },
+      "urgency_rule": "Pedido abaixo da janela normal depende de aceite técnico e de capacidade; acréscimo e viabilidade são definidos na proposta; urgência nunca é entrega automática.",
+      "revisions": {
+        "included_rounds": 1,
+        "client_window_business_days": 5,
+        "scope_change": "change_order"
+      },
+      "multidisciplinary_dependencies": [
+        "médico do trabalho para módulos clínicos",
+        "higienista para medições ambientais",
+        "fisioterapeuta para AET quando a atribuição o exigir"
+      ],
+      "price_model": {
+        "publication": "NOT_PUBLIC",
+        "public_amount_cents": null,
+        "public_range": null,
+        "currency": "BRL",
+        "basis": "proposal_after_scope",
+        "policy": "CONFENGE_PRICE_GATE_PROJECTION/1.0.0",
+        "ticket_class": "field_inspection",
+        "primary_unit": "fixed_scope_unit_not_hourly"
+      },
+      "paid_triage_rule": "Triagem técnica é unidade paga e não é laudo. Conversa gratuita de enquadramento é não técnica, limitada a cabimento, conflito preliminar e próximo passo.",
+      "acceptance_criteria": [
+        "cada módulo está na matriz de aplicabilidade",
+        "parceiro de atribuição ausente impede o módulo, não o silencia"
+      ],
+      "proof_classes": [
+        "method_structure"
+      ],
+      "conflict_gate": "Não produzir peça de SST e assistir a parte contrária no mesmo estabelecimento sem recusa.",
+      "confidentiality_retention": "Insumos e entregas ficam no contrato da unidade; retenção conforme política CONFENGE; sem PII em analytics; sem custo, margem ou minuta de proposta neste catálogo.",
+      "legitimate_cross_sell": [
+        "sst_risk_documentation_diagnosis",
+        "sst_insalubrity_perilousness_analysis"
+      ],
+      "disqualification": [
+        "pedido de pacote ilimitado",
+        "módulo médico sem profissional disponível"
+      ],
+      "readiness": "CAPACITY_UNKNOWN",
+      "wave_class": "WITHHELD_CAPACITY"
+    },
+    {
+      "offer_id": "sst_insalubrity_perilousness_analysis",
+      "public_name": "Análise de Insalubridade e Periculosidade",
+      "nucleus_id": "occupational_safety",
+      "buyer_job": "Delimitar, na atribuição da engenharia, se as condições analisadas sustentam adicional ou sua recusa técnica.",
+      "icp": [
+        "empregador",
+        "SESMT",
+        "advogado em fase prévia que ainda não contratou assistência"
+      ],
+      "trigger_why_now": "Há função, área ou equipamento cuja caracterização de insalubridade ou periculosidade está em dúvida.",
+      "supported_decision": "Caracterizar, não caracterizar ou declarar UNKNOWN com o método e as medições disponíveis.",
+      "unit_of_work": "uma função ou área, um agente ou perigo e um corpus de medições",
+      "deliverables": [
+        "análise técnica no recorte",
+        "premissas, normas e medições usadas",
+        "limites do que a engenharia não pode afirmar sem médico ou higienista"
+      ],
+      "exclusions": [
+        "assistência em audiência nesta SKU",
+        "laudo judicial do perito do juízo",
+        "ato médico de nexo",
+        "PGR completo"
+      ],
+      "minimum_documents": [
+        "descrição da função",
+        "LTCAT/PGR existentes",
+        "medições ambientais quando o agente exigir"
+      ],
+      "inspection_field_rule": {
+        "included_by_default": false,
+        "when_required": "campo e medição só se a proposta os incluir; sem medição o agente pode permanecer UNKNOWN",
+        "output": "registro de campo/medição"
+      },
+      "method_standard": {
+        "applicable": true,
+        "refs": [
+          "NR-15 e NR-16 no recorte aplicável",
+          "laudos de medição de terceiro quando usados"
+        ],
+        "note": "Sem medição válida, o resultado não pode ser afirmado como caracterização."
+      },
+      "technical_responsibility": {
+        "art_rule": "ART da análise de engenharia no recorte; não substitui perícia judicial nem ato médico.",
+        "responsible": "a confirmar antes da contratação: profissional legalmente habilitado e com atribuição comprovada para o recorte",
+        "not_promised_for": [
+          "perito do juízo",
+          "ato médico"
+        ]
+      },
+      "invoice_nf": {
+        "issued": true,
+        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento"
+      },
+      "sla_window": {
+        "state": "UNKNOWN",
+        "public_days": null,
+        "reason": "nenhum SLA público autorizado até três casos pagos com horas reais"
+      },
+      "urgency_rule": "Pedido abaixo da janela normal depende de aceite técnico e de capacidade; acréscimo e viabilidade são definidos na proposta; urgência nunca é entrega automática.",
+      "revisions": {
+        "included_rounds": 1,
+        "client_window_business_days": 5,
+        "scope_change": "change_order"
+      },
+      "multidisciplinary_dependencies": [
+        "higienista ocupacional",
+        "médico do trabalho se o nexo for clínico"
+      ],
+      "price_model": {
+        "publication": "NOT_PUBLIC",
+        "public_amount_cents": null,
+        "public_range": null,
+        "currency": "BRL",
+        "basis": "proposal_after_scope",
+        "policy": "CONFENGE_PRICE_GATE_PROJECTION/1.0.0",
+        "ticket_class": "field_inspection",
+        "primary_unit": "fixed_scope_unit_not_hourly"
+      },
+      "paid_triage_rule": "Triagem técnica é unidade paga e não é laudo. Conversa gratuita de enquadramento é não técnica, limitada a cabimento, conflito preliminar e próximo passo.",
+      "acceptance_criteria": [
+        "UNKNOWN é estado válido quando falta medição",
+        "a análise não é vendida como assistência de audiência"
+      ],
+      "proof_classes": [
+        "method_structure"
+      ],
+      "conflict_gate": "Não analisar o mesmo agente para partes opostas no mesmo conflito.",
+      "confidentiality_retention": "Insumos e entregas ficam no contrato da unidade; retenção conforme política CONFENGE; sem PII em analytics; sem custo, margem ou minuta de proposta neste catálogo.",
+      "legitimate_cross_sell": [
+        "labor_sst_technical_assistance",
+        "sst_pgr_ltcat_aet_inputs"
+      ],
+      "disqualification": [
+        "pedido de adicional assegurado",
+        "ausência total de descrição da função"
+      ],
+      "readiness": "CAPACITY_UNKNOWN",
+      "wave_class": "WITHHELD_CAPACITY"
+    },
+    {
+      "offer_id": "sst_preventive_audit",
+      "public_name": "Auditoria Preventiva de Segurança do Trabalho",
+      "nucleus_id": "occupational_safety",
+      "buyer_job": "Testar se o sistema de SST declarado está implantado no recorte, antes de um evento ou fiscalização.",
+      "icp": [
+        "empregador",
+        "diretoria operacional",
+        "SESMT"
+      ],
+      "trigger_why_now": "Há mudança de processo, acidente evitado, fiscalização iminente ou dúvida sobre implantação real.",
+      "supported_decision": "Corrigir, aprofundar ou aceitar o sistema no recorte auditado.",
+      "unit_of_work": "um estabelecimento ou frente e um recorte de requisitos",
+      "deliverables": [
+        "relatório de auditoria preventiva",
+        "achados, evidências e lacunas",
+        "encaminhamento para diagnóstico, peças ou assistência, sem misturar unidades"
+      ],
+      "exclusions": [
+        "certificação de terceira parte",
+        "produção de PGR nesta SKU",
+        "assistência trabalhista",
+        "treinamento de brigada como produto interno se não contratado"
+      ],
+      "minimum_documents": [
+        "política ou PGR vigente",
+        "recortes a auditar",
+        "autorização de acesso"
+      ],
+      "inspection_field_rule": {
+        "included_by_default": true,
+        "when_required": "walkthrough no recorte declarado; áreas extras são change order",
+        "output": "registro de campo da auditoria"
+      },
+      "method_standard": {
+        "applicable": true,
+        "refs": [
+          "requisitos NR do recorte contratado"
+        ],
+        "note": "Auditoria preventiva não é certificação."
+      },
+      "technical_responsibility": {
+        "art_rule": "ART do relatório de auditoria de engenharia de SST; não é selo ISO.",
+        "responsible": "a confirmar antes da contratação: profissional legalmente habilitado e com atribuição comprovada para o recorte",
+        "not_promised_for": [
+          "certificação",
+          "ato médico"
+        ]
+      },
+      "invoice_nf": {
+        "issued": true,
+        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento"
+      },
+      "sla_window": {
+        "state": "UNKNOWN",
+        "public_days": null,
+        "reason": "nenhum SLA público autorizado até três casos pagos com horas reais"
+      },
+      "urgency_rule": "Pedido abaixo da janela normal depende de aceite técnico e de capacidade; acréscimo e viabilidade são definidos na proposta; urgência nunca é entrega automática.",
+      "revisions": {
+        "included_rounds": 1,
+        "client_window_business_days": 5,
+        "scope_change": "change_order"
+      },
+      "multidisciplinary_dependencies": [
+        "SESMT do cliente",
+        "médico do trabalho para achados clínicos"
+      ],
+      "price_model": {
+        "publication": "NOT_PUBLIC",
+        "public_amount_cents": null,
+        "public_range": null,
+        "currency": "BRL",
+        "basis": "proposal_after_scope",
+        "policy": "CONFENGE_PRICE_GATE_PROJECTION/1.0.0",
+        "ticket_class": "field_inspection",
+        "primary_unit": "fixed_scope_unit_not_hourly"
+      },
+      "paid_triage_rule": "Triagem técnica é unidade paga e não é laudo. Conversa gratuita de enquadramento é não técnica, limitada a cabimento, conflito preliminar e próximo passo.",
+      "acceptance_criteria": [
+        "achados têm evidência ou UNKNOWN",
+        "o produto não se apresenta como certificado"
+      ],
+      "proof_classes": [
+        "method_structure"
+      ],
+      "conflict_gate": "Não auditar e defender o mesmo estabelecimento em reclamação simultânea sem recorte e disclosure.",
+      "confidentiality_retention": "Insumos e entregas ficam no contrato da unidade; retenção conforme política CONFENGE; sem PII em analytics; sem custo, margem ou minuta de proposta neste catálogo.",
+      "legitimate_cross_sell": [
+        "sst_risk_documentation_diagnosis",
+        "sst_pgr_ltcat_aet_inputs"
+      ],
+      "disqualification": [
+        "pedido de certificado",
+        "acesso negado ao recorte"
+      ],
+      "readiness": "MODELED",
+      "wave_class": "MODEL_ONLY"
+    },
+    {
+      "offer_id": "public_works_technical_procurement_planning",
+      "public_name": "Planejamento Técnico de Licitações de Obras Públicas",
+      "nucleus_id": "public_works_b2g",
+      "buyer_job": "Transformar necessidade do ente em pacote técnico rastreável antes de publicar a licitação.",
+      "icp": [
+        "prefeitura",
+        "autarquia",
+        "estatal",
+        "equipe de planejamento de ente público"
+      ],
+      "trigger_why_now": "O ente prepara licitação de obra ou serviço de engenharia e o pacote técnico ainda não está coerente.",
+      "supported_decision": "Quais peças produzir, em que ordem e com quais responsabilidades, sem decidir pelo agente público.",
+      "unit_of_work": "um objeto público, um regulamento aplicável e um conjunto de módulos nominados",
+      "deliverables": [
+        "matriz de aplicabilidade DOD/DFD, ETP, TR/projeto, quantitativos, orçamento, cronograma, medição e riscos",
+        "módulos técnicos contratados, sem peça implícita",
+        "registro de premissas, campo e limites"
+      ],
+      "exclusions": [
+        "assessoria a licitante no mesmo certame",
+        "parecer jurídico e ato administrativo",
+        "aprovação, assinatura ou decisão de autoridade",
+        "peças não nominadas na matriz",
+        "página pública #588 nesta onda",
+        "revisão de edital para construtora (ofertas B2G retidas)"
+      ],
+      "minimum_documents": [
+        "identificação do ente e do objeto",
+        "estágio do planejamento",
+        "regulamento ou origem do recurso quando conhecida"
+      ],
+      "inspection_field_rule": {
+        "included_by_default": false,
+        "when_required": "levantamentos de campo só nos módulos nominados",
+        "output": "produtos de campo dos módulos contratados"
+      },
+      "method_standard": {
+        "applicable": true,
+        "refs": [
+          "Lei nº 14.133/2021 na fase preparatória",
+          "IN SEGES 58/2022 e 81/2022 apenas no âmbito aplicável"
+        ],
+        "note": "DOD e DFD são nomenclaturas dependentes do ente, não equivalência universal."
+      },
+      "technical_responsibility": {
+        "art_rule": "ART por módulo de engenharia efetivamente produzido; não há ART de ato administrativo.",
+        "responsible": "a confirmar antes da contratação: profissional legalmente habilitado e com atribuição comprovada para o recorte",
+        "not_promised_for": [
+          "ato da Administração",
+          "parecer jurídico",
+          "êxito do certame"
+        ]
+      },
+      "invoice_nf": {
+        "issued": true,
+        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento"
+      },
+      "sla_window": {
+        "state": "UNKNOWN",
+        "public_days": null,
+        "reason": "nenhum SLA público autorizado até três casos pagos com horas reais"
+      },
+      "urgency_rule": "Pedido abaixo da janela normal depende de aceite técnico e de capacidade; acréscimo e viabilidade são definidos na proposta; urgência nunca é entrega automática.",
+      "revisions": {
+        "included_rounds": 1,
+        "client_window_business_days": 5,
+        "scope_change": "change_order"
+      },
+      "multidisciplinary_dependencies": [
+        "jurídico do ente",
+        "controle interno do ente",
+        "projetistas de disciplina não interna"
+      ],
+      "price_model": {
+        "publication": "NOT_PUBLIC",
+        "public_amount_cents": null,
+        "public_range": null,
+        "currency": "BRL",
+        "basis": "proposal_after_scope",
+        "policy": "CONFENGE_PRICE_GATE_PROJECTION/1.0.0",
+        "ticket_class": "remote_documental",
+        "primary_unit": "fixed_scope_unit_not_hourly"
+      },
+      "paid_triage_rule": "Triagem técnica é unidade paga e não é laudo. Conversa gratuita de enquadramento é não técnica, limitada a cabimento, conflito preliminar e próximo passo.",
+      "acceptance_criteria": [
+        "cada peça está na matriz de aplicabilidade",
+        "DOD e DFD não são tratados como equivalentes universais",
+        "não há promessa de certame sem impugnação"
+      ],
+      "proof_classes": [
+        "method_structure"
+      ],
+      "conflict_gate": "Não atender ente e licitante no mesmo certame. Conflito é checado antes da proposta e antes da publicação do edital.",
+      "confidentiality_retention": "Insumos e entregas ficam no contrato da unidade; retenção conforme política CONFENGE; sem PII em analytics; sem custo, margem ou minuta de proposta neste catálogo.",
+      "legitimate_cross_sell": [],
+      "disqualification": [
+        "licitante pedindo apoio ao edital nesta SKU",
+        "pedido de ato administrativo",
+        "peças não nominadas na matriz",
+        "publicação da money page #588 nesta campanha"
+      ],
+      "readiness": "WITHHELD",
+      "wave_class": "MODEL_ONLY",
+      "source_issue": "#587",
+      "publication": {
+        "catalog_public": false,
+        "html_route": null,
+        "issue_588": false
+      }
+    }
+  ]
+}

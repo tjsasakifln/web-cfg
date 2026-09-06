@@ -1,18 +1,18 @@
 {
   "schema": "confenge.adaptive-intake-authority/v1",
   "status": "WITHHELD",
-  "observed_at": "2026-09-05",
+  "observed_at": "2026-09-06",
   "governance_repository": "tjsasakifln/Governance",
-  "governance_main_sha": "22ad810a8c1d46d9a787efcfac825d6ba0336bff",
-  "reason": "Governance main lists five coordination IDs as test-only. No final six-contract intake pin exists; Warmbly still consumes the draft admission policy.",
+  "governance_main_sha": "0074722ce66f16af06dd4799ee88064ea8a12fc1",
+  "reason": "Governance #172 and Warmbly #266 are merged, and the consumer runtime plus public POST are proven at the exact merge SHA. Producer activation remains fail-closed because the canonical public edge returns 404 for the correlated HMAC readback route that succeeds on loopback.",
   "evidence_paths": [
-    "commercial/inbound/consumer-conformance.1.0.0-draft.20260904.json",
-    "commercial/inbound/consumer-matrix.v1.json",
-    "commercial/inbound/admit.py"
+    "tjsasakifln/Governance#172@0074722ce66f16af06dd4799ee88064ea8a12fc1",
+    "tjsasakifln/warmbly#266@fafa8bda803c5245368dc4261fe8eb223c5c4dba",
+    "docs/integration/campaign-20260905/09/evidence/warmbly-adaptive-consumer-live-proof.json"
   ],
   "observed_canonical_admission": {
-    "canonical_name": "NET_NEW_INBOUND_HANDRAISER-v1",
-    "policy_hash": "sha256:5f8c03b6a11af3527b202d08c74de1d59d420f181807f094e62b337f055ec4ac"
+    "canonical_name": "NET_NEW_INBOUND_HANDRAISER/1.0.0-draft.20260904",
+    "policy_hash": "sha256:405ac86064a90641b843352d21cd21703744115de9592558e100671d92276df7"
   },
   "pin": null,
   "contract_hashes": null

@@ -34,7 +34,8 @@ LEGACY_NAV = [
     "Ferramentas",
     "Especialista",
 ]
-EXPECTED_CTA = "Analisar meu caso"
+EXPECTED_CTA = "Iniciar triagem"
+LEGACY_CTA = "Analisar meu caso"
 BANNED_ZERO = (
     "0 guias",
     "1 guias",
@@ -446,18 +447,19 @@ def test_public_taxonomy_jargon_absent():
 # ---------------------------------------------------------------------------
 
 
-def test_global_shell_nav_contracts_are_explicit_during_frozen_window():
+def test_global_shell_nav_contracts_are_explicit_after_mv09_activation():
     brand = load_brand()
     brand_labels = [n["label"] for n in (brand.get("navigation") or {}).get("desktop") or []]
     assert brand_labels == EXPECTED_NAV
     cta_meta = (brand.get("navigation") or {}).get("cta") or {}
     assert cta_meta.get("label") == EXPECTED_CTA
-    assert "#formulario-contato" in (cta_meta.get("href") or ""), (
-        f"brand CTA must target the form, got {cta_meta.get('href')!r}"
+    assert cta_meta.get("href") == "/triagem-tecnica/", (
+        f"brand CTA must target corporate triage, got {cta_meta.get('href')!r}"
     )
 
     surfaces = [
         ROOT / "index.html",
+        ROOT / "servicos" / "index.html",
         ROOT / "entregas" / "index.html",
         ROOT / "conteudos" / "index.html",
         ROOT / "medicoes-glosas-obras-publicas" / "index.html",
@@ -486,10 +488,6 @@ def test_global_shell_nav_contracts_are_explicit_during_frozen_window():
     nav_runtime = (ROOT / "js" / "modules" / "nav.js").read_text(encoding="utf-8")
     if "toolsLink.textContent = 'Entregas'" in nav_runtime:
         failures.append("global runtime must not mutate frozen navigation")
-    direct_deliverables = {
-        ROOT / "index.html",
-        ROOT / "entregas" / "index.html",
-    }
     for path in surfaces:
         if not path.exists():
             failures.append(f"missing {path.relative_to(ROOT)}")
@@ -501,15 +499,13 @@ def test_global_shell_nav_contracts_are_explicit_during_frozen_window():
         relative_path = path.relative_to(ROOT).as_posix()
         if relative_path in FROZEN_NAV_HTML_PATHS:
             expected = LEGACY_NAV
-        elif path in direct_deliverables:
-            expected = EXPECTED_NAV
         else:
-            expected = None
+            expected = EXPECTED_NAV
         if expected is not None and labels != expected:
             failures.append(
                 f"{path.relative_to(ROOT)}: expected source nav {expected}, got {labels}"
             )
-        if cta and cta != EXPECTED_CTA:
+        if relative_path not in FROZEN_NAV_HTML_PATHS and cta and cta != EXPECTED_CTA:
             failures.append(f"{path.relative_to(ROOT)}: cta {cta!r}")
         html = path.read_text(encoding="utf-8", errors="replace")
         header_cta = re.search(
@@ -519,9 +515,10 @@ def test_global_shell_nav_contracts_are_explicit_during_frozen_window():
         )
         if header_cta:
             href = header_cta.group(1) or header_cta.group(2)
-            if "#formulario-contato" not in href:
+            expected_href = "/triagem-tecnica/"
+            if relative_path not in FROZEN_NAV_HTML_PATHS and href != expected_href:
                 failures.append(
-                    f"{path.relative_to(ROOT)}: header-cta href {href!r} not form"
+                    f"{path.relative_to(ROOT)}: header-cta href {href!r} not {expected_href}"
                 )
         mobile = re.search(
             r'<nav\b[^>]*\bmobile-nav\b[^>]*>(.*?)</nav>', html, re.S | re.I
@@ -714,29 +711,25 @@ def test_hub_problem_first_structure():
 
 def test_home_nav_and_hierarchy():
     home = (ROOT / "index.html").read_text(encoding="utf-8")
-    assert "Analisar meu caso" in home
+    assert "Iniciar triagem" in home
+    assert "Serviços e problemas" in home
+    assert "Obras públicas" in home
+    assert "Biblioteca" in home
     assert "Edital e proposta" in home
     assert "Contrato sob pressão" in home
     assert "Operação recorrente" in home
-    assert "Conteúdos" in home
-    assert "Ferramentas" in home
     assert "Conteúdos e ferramentas" not in home
     labels, _ = _nav_from(ROOT / "index.html")
     assert labels == EXPECTED_NAV
     assert 'href="/entregas/"' in home
-    assert "Comparar entregas e artefatos" in home
-    assert home.count("button-primary") <= 4
+    assert "Entregas" in home
+    assert home.count("button-primary") <= 5
     hero = re.search(r'class="hero[\s\S]*?</section>', home)
     assert hero and hero.group(0).count("button-primary") == 1
-    assert 'class="journey-row' in home
-    # 2026-08-30: os rotulos canonicos das tres jornadas ja sao verificados
-    # acima (linhas do bloco de nav). Aqui basta garantir que as portas usam a
-    # mesma taxonomia do menu e do rodape, via .journey-kind, em vez do rotulo
-    # antigo "Edital ou proposta critica", que so existia na home.
-    assert 'class="journey-kind"' in home
-    assert home.count('class="journey-kind"') == 3
-    assert "data-evidence-selector" in home
-    assert "data-evidence-selector" not in hero.group(0)
+    assert 'class="situation-row' in home
+    assert home.count('class="situation-row') == 5
+    assert "54.055" in home and "4,48 mi" in home
+    assert "54.055" not in hero.group(0) and "4,48 mi" not in hero.group(0)
 
 
 # ---------------------------------------------------------------------------
@@ -1047,7 +1040,7 @@ def test_organic_tool_block_waits_for_outer_section_close():
 
 
 def test_home_form_anchor_reveals_fields():
-    """Hero next-state action must land on the form, not the long contact copy."""
+    """Corporate entry lands on situations; B2G capture remains intact."""
     html = (ROOT / "index.html").read_text(encoding="utf-8")
     css = (ROOT / "styles.css").read_text(encoding="utf-8")
     form = re.search(
@@ -1068,21 +1061,16 @@ def test_home_form_anchor_reveals_fields():
             "first field must be a descendant of #formulario-contato"
         )
         assert re.search(r"<h2\b", form_html, re.I), "form card must include its title"
+    hero_section = re.search(r'<section\b[^>]*class="[^"]*\bhero\b[^"]*"[\s\S]*?</section>', html, re.I)
+    assert hero_section, "home hero section missing"
     hero = re.search(
-        r'<a\b[^>]*data-cta-position="hero"[^>]*href="([^"]+)"[^>]*>[\s\S]*?Registrar situação para triagem',
-        html,
+        r'<a\b[^>]*class="[^"]*\bbutton-primary\b[^"]*"[^>]*href="([^"]+)"[^>]*>[\s\S]*?Escolher minha situação',
+        hero_section.group(0),
         re.I,
     )
-    if not hero:
-        hero = re.search(
-            r'<a\b[^>]*class="[^"]*\bbutton-primary\b[^"]*button-lg[^"]*"[^>]*href="([^"]+)"[^>]*>[\s\S]*?Registrar situação para triagem',
-            html,
-            re.I,
-        )
-    assert hero, "hero/primary Registrar situação para triagem CTA missing"
-    assert "#formulario-contato" in hero.group(1), (
-        f"hero/primary CTA must target #formulario-contato, got {hero.group(1)!r}"
-    )
+    assert hero, "hero/primary Escolher minha situação CTA missing"
+    assert hero.group(1) == "#situacoes", hero.group(1)
+    assert 'id="situacoes"' in html
     header_cta = re.search(
         r'<a\b[^>]*\bheader-cta\b[^>]*href="([^"]+)"|'
         r'<a\b[^>]*href="([^"]+)"[^>]*\bheader-cta\b',
@@ -1090,63 +1078,57 @@ def test_home_form_anchor_reveals_fields():
     )
     assert header_cta, "home header-cta missing"
     header_href = header_cta.group(1) or header_cta.group(2)
-    assert "#formulario-contato" in header_href, (
-        f"home header-cta must target #formulario-contato, got {header_href!r}"
+    assert header_href == "/triagem-tecnica/", (
+        f"home header-cta must target corporate triage, got {header_href!r}"
     )
     mobile = re.search(r'<nav\b[^>]*\bmobile-nav\b[^>]*>(.*?)</nav>', html, re.S | re.I)
     assert mobile, "home mobile-nav missing"
     mobile_cta = re.search(
-        r'<a\b[^>]*href="([^"]+)"[^>]*>\s*Analisar meu caso\s*</a>',
+        r'<a\b[^>]*href="([^"]+)"[^>]*>\s*Iniciar triagem\s*</a>',
         mobile.group(1),
     )
-    assert mobile_cta, "home mobile Analisar meu caso missing"
-    assert "#formulario-contato" in mobile_cta.group(1), (
-        f"home mobile CTA must target #formulario-contato, got {mobile_cta.group(1)!r}"
+    assert mobile_cta, "home mobile Iniciar triagem missing"
+    assert mobile_cta.group(1) == "/triagem-tecnica/", (
+        f"home mobile CTA must target corporate triage, got {mobile_cta.group(1)!r}"
     )
     assert 'id="contato"' in html, "keep #contato section id for back-compat"
     assert re.search(r"#formulario-contato\s*\{[^}]*scroll-margin-top", css), (
         "CSS must set scroll-margin-top on #formulario-contato"
     )
     assert re.search(
-        r"#formulario-contato\{order:\s*-1\}|\.contact-form\{order:\s*-1",
+        r"(?:^|[{},])[^{}]*#formulario-contato\{[^}]*order:\s*-1|"
+        r"(?:^|[{},])[^{}]*\.contact-form\{[^}]*order:\s*-1",
         css.replace(" ", ""),
     ), "mobile rule must set form order so title + first field lead the 390px viewport"
-    # Edital/operacao land on the form. Contrato stays the single commercial
-    # transfer to Medicoes/Glosas (#390) — no second destination in that row.
-    for match in re.finditer(
-        r'<a\b[^>]*data-cta-position="(journey_[abc])"[^>]*>', html
-    ):
-        tag = match.group(0)
-        href = re.search(r'href="([^"]+)"', tag)
-        if match.group(1) == "journey_a":
-            assert href and href.group(1) == "/medicoes-glosas-obras-publicas/", (
-                f"journey_a CTA must target the canonical commercial route, got {href and href.group(1)!r}"
-            )
-            assert 'data-cta-id="home-medicoes-glosas-dossie"' in tag
-        else:
-            assert href and "#formulario-contato" in href.group(1), (
-                f'{match.group(1)} CTA must target #formulario-contato, got {href and href.group(1)!r}'
-            )
+    situation_hrefs = re.findall(
+        r'<a\b[^>]*class="[^"]*\bsituation-action\b[^"]*"[^>]*href="([^"]+)"',
+        html,
+        re.I,
+    )
+    assert situation_hrefs == [
+        "/quantitativos-orcamento-obras/",
+        "/triagem-tecnica/#obra-imovel",
+        "/triagem-tecnica/#pericia-avaliacao",
+        "/triagem-tecnica/#sst",
+        "/servicos-obras-publicas/",
+    ]
     # The shipped script must realign the landing: deferred section sizes (#185)
     # move the target while the jump runs.
     nav_js = (ROOT / "js" / "modules" / "nav.js").read_text(encoding="utf-8")
     assert "scrollMarginTop" in nav_js and "requestAnimationFrame" in nav_js, (
         "nav module must re-align fragment landings against the sticky header"
     )
-    assert "cta_view" in nav_js, (
-        "arrival at the form must emit its own event, distinct from the CTA click"
-    )
+    assert "cta_view" in nav_js
 
 
 def test_analisar_meu_caso_shell_targets_form():
-    """Current-shell pages must not dump Analisar meu caso on #contato copy."""
+    """Corporate and staged legacy shell CTAs each retain their exact target."""
     shell_src = (ROOT / "scripts" / "pseo" / "html_shell.py").read_text(encoding="utf-8")
     remediator = (ROOT / "scripts" / "site" / "inbound_first_remediate.py").read_text(
         encoding="utf-8"
     )
-    assert 'href": "/#formulario-contato"' in shell_src or (
-        '"/#formulario-contato"' in shell_src and "Analisar meu caso" in shell_src
-    )
+    assert '"label": "Iniciar triagem"' in shell_src
+    assert '"href": "/triagem-tecnica/"' in shell_src
     assert 'href": "/#formulario-contato"' in remediator
     failures = []
     for path in _public_html_files():
@@ -1165,20 +1147,36 @@ def test_analisar_meu_caso_shell_targets_form():
             label = re.sub(r"\s+", " ", label).strip()
             href_m = re.search(r'\bhref="([^"]+)"', attrs)
             href = href_m.group(1) if href_m else ""
-            if label == EXPECTED_CTA and "#formulario-contato" not in href:
-                failures.append(f"{path.relative_to(ROOT)}: header-cta {href!r}")
+            if label == EXPECTED_CTA and href != "/triagem-tecnica/":
+                failures.append(f"{path.relative_to(ROOT)}: corporate header-cta {href!r}")
+            if label == LEGACY_CTA and "#formulario-contato" not in href:
+                failures.append(f"{path.relative_to(ROOT)}: legacy header-cta {href!r}")
         mobile = re.search(
             r'<nav\b[^>]*\bmobile-nav\b[^>]*>(.*?)</nav>', html, re.S | re.I
         )
         if mobile:
-            mcta = re.search(
-                r'<a\b[^>]*href="([^"]+)"[^>]*>\s*Analisar meu caso\s*</a>',
-                mobile.group(1),
-            )
-            if mcta and "#formulario-contato" not in mcta.group(1):
-                failures.append(
-                    f"{path.relative_to(ROOT)}: mobile {mcta.group(1)!r}"
+            for label, expected_fragment in (
+                (EXPECTED_CTA, "/triagem-tecnica/"),
+                (LEGACY_CTA, "#formulario-contato"),
+            ):
+                mcta = re.search(
+                    rf'<a\b[^>]*href="([^"]+)"[^>]*>\s*{re.escape(label)}\s*</a>',
+                    mobile.group(1),
                 )
+                wrong_target = (
+                    expected_fragment.startswith("/")
+                    and not expected_fragment.startswith("/#")
+                    and mcta
+                    and mcta.group(1) != expected_fragment
+                ) or (
+                    expected_fragment.startswith("#")
+                    and mcta
+                    and expected_fragment not in mcta.group(1)
+                )
+                if wrong_target:
+                    failures.append(
+                        f"{path.relative_to(ROOT)}: mobile {label} {mcta.group(1)!r}"
+                    )
     assert not failures, failures[:20]
 
 
@@ -1189,6 +1187,7 @@ def test_form_no_contingency_copy():
 
 def test_css_visitor_tokens():
     css = (ROOT / "styles.css").read_text(encoding="utf-8")
+    home_css = (ROOT / "assets" / "home-10x.css").read_text(encoding="utf-8")
     tokens = (ROOT / "styles-tokens.css").read_text(encoding="utf-8")
     tools = (ROOT / "styles-tools.css").read_text(encoding="utf-8")
     assert "--read-measure" in css or "--read-measure" in tokens
@@ -1196,14 +1195,14 @@ def test_css_visitor_tokens():
     # defined in the shipped CSS. A one-sided check would let dead CSS stay.
     home = (ROOT / "index.html").read_text(encoding="utf-8")
     hub = (ROOT / "conteudos" / "index.html").read_text(encoding="utf-8")
-    for cls, markup in (
-        ("journey-row", home),
-        ("problem-stages", hub),
-        ("problem-stage-head", hub),
-        ("featured-lead", hub),
+    for cls, markup, stylesheet in (
+        ("situation-row", home, home_css),
+        ("problem-stages", hub, css),
+        ("problem-stage-head", hub, css),
+        ("featured-lead", hub, css),
     ):
         assert re.search(rf'class="[^"]*(?<![\w-]){cls}(?![\w-])', markup), cls
-        assert re.search(rf"\.{cls}(?![\w-])", css), cls
+        assert re.search(rf"\.{cls}(?![\w-])", stylesheet), cls
     assert "tool-workflow" in tools
     assert "tool-req-option" in tools
     assert "tool-sticky-bar" in tools
@@ -1221,6 +1220,8 @@ def test_css_visitor_tokens():
 
 NON_INTERACTIVE_CONTAINERS = (
     "problem-stage-head",
+)
+RETIRED_NON_INTERACTIVE_CONTAINERS = (
     "macro-phase",
     "offer-dominant",
 )
@@ -1228,6 +1229,11 @@ NON_INTERACTIVE_CONTAINERS = (
 
 def test_non_interactive_containers_carry_no_click_affordance():
     css = (ROOT / "styles.css").read_text(encoding="utf-8")
+    public_html = "\n".join(path.read_text(encoding="utf-8") for path in _public_html_files())
+    for cls in RETIRED_NON_INTERACTIVE_CONTAINERS:
+        assert not re.search(rf'class="[^"]*\b{re.escape(cls)}\b', public_html), (
+            f"retired .{cls} markup returned without restoring its dead-affordance guard"
+        )
     for cls in NON_INTERACTIVE_CONTAINERS:
         rules = re.findall(rf"\.{re.escape(cls)}(?:\s+h\d)?[^{{]*\{{[^}}]*\}}", css)
         assert rules, f"expected at least one CSS rule for .{cls}"

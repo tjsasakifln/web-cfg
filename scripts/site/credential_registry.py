@@ -210,6 +210,9 @@ def is_projectable(claim: dict[str, Any], now: date | datetime | str | None = No
     expires = _parse_day(claim.get("expires_at"))
     if expires and _today(now) > expires:
         return False
+    recheck = _parse_day(claim.get("recheck_after"))
+    if recheck and _today(now) > recheck:
+        return False
     return True
 
 
@@ -419,7 +422,7 @@ def _visible_rows(surface: str, claims: list[dict[str, Any]]) -> list[tuple[str,
             "org-cadastral-address": "Endereço cadastral e fiscal",
             "org-cnae-servicos-engenharia": "CNAE principal",
             "org-crea-pj": "Registro CREA-SC da pessoa jurídica",
-            "person-legal-name": "Responsável",
+            "person-legal-name": "Sócio e condutor dos trabalhos",
             "person-civil-eesc-usp": "Formação",
             "person-github": "Perfil público",
             "person-crea-sc": "Registro CREA-SC",

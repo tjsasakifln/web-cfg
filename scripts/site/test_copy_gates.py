@@ -71,7 +71,8 @@ def test_brand_forbidden_phrases_still_enforced():
 def test_microcopy_preferences():
     home = (ROOT / "index.html").read_text(encoding="utf-8")
     assert "responsáveis" in home.lower() or "responsável" in home.lower()
-    assert "aprend" in home.lower() or "recalibr" in home.lower()
+    assert "critério técnico definido" in home.lower()
+    assert "entrega e limite combinados" in home.lower()
     bid = (ROOT / "bid-room-licitacoes-obras" / "index.html").read_text(encoding="utf-8")
     assert "revisão crítica independente" in bid.lower()
     assert not re.search(r"\bowners\b", home, re.I)
@@ -97,17 +98,18 @@ def test_microcopy_preferences():
         "funil",
     ):
         assert phrase not in lower, f"public leak: {phrase}"
-    # Client-facing journey section (not briefing metalinguage)
-    assert "como podemos ajudar" in lower
-    assert "qual decisão precisa sair agora" in lower
+    # Client-facing situation chooser (not briefing metalinguage).
+    assert "qual destas situações se parece com a sua" in lower
+    assert "projetar, revisar, orçar ou compatibilizar" in lower
+    assert "inspecionar, diagnosticar ou documentar obra e imóvel" in lower
+    assert "perícia, assistência técnica ou avaliação" in lower
+    assert "segurança do trabalho" in lower
+    assert "licitação ou contrato de obra pública" in lower
+    # B2G retains descriptive, canonical paths lower on the page.
     assert "contrato sob pressão" in lower
-    # Rotulo canonico da jornada, identico ao menu e ao rodape (#527 taxonomia).
     assert "edital e proposta" in lower
     assert "operação recorrente" in lower
-    assert "analisar meu caso" in lower
     assert "solicitar canal seguro para envio" in lower
-    assert "solicitar triagem do edital" in lower
-    assert "solicitar diagnóstico da operação" in lower
     # Visible labels "Jornada A/B/C" must not appear (data-journey attrs OK)
     assert not re.search(r">\s*Jornada\s+[ABC]\s*<", home), "visible Jornada A/B/C label"
     assert "risco de não agir" not in lower
@@ -314,8 +316,9 @@ def test_public_surfaces_have_no_prose_em_dashes():
     assert "perfil da empresa (capacidade, acervo" in radar
     assert "calibrar o recorte, não assinar" in radar
     home = (ROOT / "index.html").read_text(encoding="utf-8")
-    assert "Cada decisão registra o motivo, a prova e o responsável" in home
-    assert "o resultado volta para a mesa e melhora a próxima escolha" in home
+    assert "situação compreendida" in home
+    assert "critério técnico definido" in home
+    assert "entrega e limite combinados" in home
     # Journey confirmations exist
     for name in ("obrigado-contrato.html", "obrigado-edital.html", "obrigado-operacao.html"):
         p = ROOT / name
@@ -324,7 +327,7 @@ def test_public_surfaces_have_no_prose_em_dashes():
         assert "data-lead-success" in t
         assert "Prazo" in t or "prazo" in t
         assert "wa.me" in t
-    assert "Solicitar diagnóstico da operação" in home
+    assert "Entrar em obras públicas" in home
     assert "Solicitar canal seguro para envio" in home
     assert "enviar documentos para análise" not in home.lower()
     # Thank-you pages must not expose journey letter labels to visitors

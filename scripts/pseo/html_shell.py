@@ -56,13 +56,12 @@ SITE = "https://confenge.com.br"
 WA_BASE = "https://wa.me/5548988344559"
 
 _ORG_DESC_FALLBACK = (
-    "Diretoria Fracionada para o Mercado Público para construtoras e empresas de engenharia: "
-    "inteligência de mercado, decisão de participação, proposta, proteção de "
-    "margem e riscos em contratos públicos."
+    "Engenharia, perícias e inteligência técnica para decisões sobre projetos, "
+    "edificações, imóveis, segurança do trabalho e obras públicas."
 )
 _FOOTER_FALLBACK = (
-    "Diretoria Fracionada para o Mercado Público para construtoras: decisão de participação, "
-    "proposta, proteção de margem e gestão de riscos em contratos públicos."
+    "Engenharia, perícias e inteligência técnica para transformar situações "
+    "complexas em decisões documentadas."
 )
 
 
@@ -97,7 +96,7 @@ ORG_JSONLD = {
     "@type": "Organization",
     "@id": f"{SITE}/#organization",
     "name": "CONFENGE",
-    "legalName": "CONFENGE",
+    "legalName": "Confenge Serviços de Desenhos Técnicos Ltda",
     "url": f"{SITE}/",
     "logo": f"{SITE}/assets/logo-confenge.png",
     "image": f"{SITE}/assets/og-confenge.jpg",
@@ -112,7 +111,7 @@ PERSON_JSONLD = {
     "name": "Engº Tiago Sasaki",
     "image": f"{SITE}/assets/tiago-sasaki-foto-v11-sem-fundo.png",
     "url": f"{SITE}/especialista/tiago-jun-sasaki/",
-    "jobTitle": "Engenheiro Civil e consultor B2G",
+    "jobTitle": "Engenheiro Civil",
     "worksFor": {"@id": f"{SITE}/#organization"},
 }
 
@@ -131,16 +130,15 @@ SVG_SPRITE = """<svg aria-hidden="true" class="svg-sprite" height="0" width="0">
 
 def _build_header() -> str:
     brand = _brand_safe()
-    # Approved visitor redesign shell (fallback matches data/site/brand.json).
+    # Corporate situation-first shell (fallback matches data/site/brand.json).
     nav = (brand.get("navigation") or {}).get("desktop") or [
-        {"label": "Edital e proposta", "href": "/bid-room-licitacoes-obras/"},
-        {"label": "Contrato sob pressão", "href": "/problemas-que-resolvemos/"},
-        {"label": "Operação recorrente", "href": "/diretoria-b2g/"},
+        {"label": "Serviços e problemas", "href": "/#situacoes"},
+        {"label": "Obras públicas", "href": "/servicos-obras-publicas/"},
         {"label": "Biblioteca", "href": "/conteudos/"},
     ]
     cta = (brand.get("navigation") or {}).get("cta") or {
-        "label": "Analisar meu caso",
-        "href": "/#formulario-contato",
+        "label": "Iniciar triagem",
+        "href": "/triagem-tecnica/",
     }
     links = "\n".join(
         f'<a data-cta-position="header_nav" href="{html.escape(n["href"], quote=True)}" style="min-height:44px">{html.escape(n["label"])}</a>'
@@ -180,22 +178,19 @@ def _build_footer() -> str:
     if not columns:
         columns = (
             '<div class="footer-links"><strong>Situações</strong>'
-            '<a href="/bid-room-licitacoes-obras/">Edital e proposta</a>'
-            '<a href="/problemas-que-resolvemos/">Contrato sob pressão</a>'
-            '<a href="/diretoria-b2g/">Operação recorrente</a></div>'
-            '<div class="footer-links"><strong>Biblioteca</strong>'
+            '<a href="/#situacao-projeto">Projetos e edificações</a>'
+            '<a href="/#situacao-pericia">Perícias e avaliações</a>'
+            '<a href="/#situacao-sst">Segurança do trabalho</a>'
+            '<a href="/servicos-obras-publicas/">Obras públicas</a></div>'
+            '<div class="footer-links"><strong>Biblioteca e provas</strong>'
             '<a href="/conteudos/">Conteúdos</a>'
             '<a href="/ferramentas/">Ferramentas</a>'
             '<a href="/entregas/">Entregas</a>'
-            '<a href="/casos/">Casos</a>'
-            '<a href="/aditivos-obras-publicas/">Aditivos</a>'
-            '<a href="/atrasos-prorrogacao-obras-publicas/">Atrasos</a>'
-            '<a href="/defesa-tecnica-contratos-publicos/">Defesa técnica</a>'
-            '<a href="/reequilibrio-obras-publicas/">Reequilíbrio</a></div>'
+            '<a href="/casos/">Casos demonstrativos</a></div>'
             '<div class="footer-links"><strong>Empresa</strong>'
-            '<a href="/servicos-obras-publicas/">Serviços</a>'
-            '<a href="/especialista/tiago-jun-sasaki/">Especialista</a>'
-            '<a href="/imprensa/">Imprensa</a>'
+            '<a href="/especialista/tiago-jun-sasaki/">Quem responde</a>'
+            '<a href="/confianca/">Como verificamos</a>'
+            '<a href="/triagem-tecnica/">Contato e triagem</a>'
             '<a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a>'
             '<a href="tel:+5548988344559">(48) 98834-4559</a>'
             "<span>Atendimento nacional</span></div>"

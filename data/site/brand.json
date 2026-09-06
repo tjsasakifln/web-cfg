@@ -1,18 +1,18 @@
 {
   "schema_version": "1.1.0",
-  "campaign": "CONFENGE-FORTUNE-CONVERSION-SEO-01",
-  "updated_at": "2026-08-02",
+  "campaign": "CONFENGE-MV-04-CORPORATE-SHELL-20260905",
+  "updated_at": "2026-09-05",
   "person": {
-    "jobTitle": "Engenheiro Civil e consultor B2G",
+    "jobTitle": "Engenheiro Civil",
     "name": "Engº Tiago Sasaki"
   },
   "positioning": {
-    "short": "Consultoria para licitações e contratos de obras públicas que ajuda construtoras a selecionar melhor, precificar com disciplina e proteger a margem na execução.",
-    "long": "A CONFENGE presta consultoria técnica a construtoras e empresas de engenharia em licitações e contratos de obras públicas: análise de edital, orçamento, decisão de participar, preparação de proposta e defesa de margem na execução (aditivos, reequilíbrio, medições, glosas e atrasos). O modelo proprietário de rotina contínua chama-se Diretoria Fracionada para o Mercado Público.",
-    "tagline": "Licitação vencida não paga a conta. Contrato rentável, sim.",
-    "label": "Consultoria para licitações e contratos de obras públicas",
-    "org_description": "Consultoria para licitações e contratos de obras públicas: análise de edital, orçamento, proposta e proteção de margem na execução para construtoras.",
-    "footer_blurb": "Consultoria para licitações e contratos de obras públicas. Modelo de rotina contínua: Diretoria Fracionada para o Mercado Público."
+    "short": "Engenharia, perícias e inteligência técnica para transformar uma situação complexa em decisão documentada.",
+    "long": "A CONFENGE organiza diagnóstico, cálculo e evidências para decisões sobre projetos, edificações, imóveis, perícias, segurança do trabalho e obras públicas. O escopo e o entregável são confirmados na triagem; cada trabalho aplicável termina em documento técnico com responsável identificado.",
+    "tagline": "Do problema técnico à decisão documentada.",
+    "label": "Engenharia, Perícias e Inteligência Técnica",
+    "org_description": "Engenharia, perícias e inteligência técnica para decisões sobre projetos, edificações, imóveis, segurança do trabalho e obras públicas.",
+    "footer_blurb": "Engenharia, perícias e inteligência técnica para transformar situações complexas em decisões documentadas."
   },
   "contact": {
     "email": "tiago.sasaki@confenge.com.br",
@@ -24,18 +24,18 @@
     "site": "https://confenge.com.br"
   },
   "hero": {
-    "eyebrow": "Consultoria para licitações e contratos de obras públicas",
-    "h1": "Licitação vencida não paga a conta. Contrato rentável, sim.",
-    "h1_html": "Licitação vencida não paga a conta. <span class=\"type-serif\">Contrato rentável, sim.</span>",
-    "subheadline": "Para construtoras: decidir se o edital merece o capital, precificar o risco e proteger a margem na obra.",
-    "cta_primary": "Analisar meu caso",
-    "cta_secondary": "Ver edital, contrato ou operação",
-    "cta_secondary_wa": "Olá, Tiago. Tenho um problema urgente em contrato público (glosa, medição, aditivo, reequilíbrio ou atraso) e preciso de análise inicial.",
-    "microcopy": "Para construtoras e empresas de engenharia com licitações ou contratos públicos ativos.",
-    "meta_title": "CONFENGE | Consultoria para licitações e contratos de obras públicas",
-    "meta_description": "Consultoria para licitações e contratos de obras públicas: análise de edital, orçamento, proposta e defesa de margem na execução. Para construtoras.",
-    "og_title": "Licitação vencida não paga a conta. Contrato rentável, sim.",
-    "og_description": "Consultoria para licitações e contratos de obras públicas. Construtoras: selecionar melhor, precificar com disciplina e proteger a margem na execução."
+    "eyebrow": "Engenharia, Perícias e Inteligência Técnica",
+    "h1": "Do problema técnico à decisão documentada.",
+    "h1_html": "Do problema técnico <span class=\"type-serif\">à decisão documentada.</span>",
+    "subheadline": "Diagnóstico, cálculo e evidências para você decidir o próximo passo em projetos, imóveis, obras, perícias, segurança do trabalho ou contratos públicos.",
+    "cta_primary": "Escolher minha situação",
+    "cta_secondary": "Ver o escopo de serviços",
+    "cta_secondary_wa": "Olá, Tiago. Quero explicar uma situação técnica e saber se ela se encaixa na atuação da CONFENGE.",
+    "microcopy": "Triagem inicial para confirmar aderência, limites e próximo passo.",
+    "meta_title": "CONFENGE | Engenharia, Perícias e Inteligência Técnica",
+    "meta_description": "Engenharia, perícias e inteligência técnica: diagnóstico, cálculo e evidências para decisões em projetos, imóveis, obras, SST e contratos públicos.",
+    "og_title": "Do problema técnico à decisão documentada.",
+    "og_description": "Engenharia, perícias e inteligência técnica para escolher o próximo passo com diagnóstico, cálculo e evidências."
   },
   "journeys": [
     {
@@ -86,19 +86,57 @@
       "next_step": "Conversamos com quem decide a frente pública. Você recebe o enquadramento do formato (diagnóstico pontual ou rotina contínua)."
     }
   ],
+  "service_situations": [
+    {
+      "id": "project_delivery",
+      "label": "Projetar, revisar, orçar ou compatibilizar",
+      "summary": "Quando um projeto precisa ganhar definição, coerência entre disciplinas ou base quantitativa para avançar.",
+      "deliverables": "Projeto ou revisão técnica, compatibilização, orçamento e memória de cálculo, conforme o escopo.",
+      "href": "/triagem-tecnica/#projetos",
+      "index_state": "triage_fallback"
+    },
+    {
+      "id": "building_diagnosis",
+      "label": "Inspecionar, diagnosticar ou documentar obra e imóvel",
+      "summary": "Quando há anomalia, dúvida sobre condição, necessidade de vistoria ou registro técnico da situação existente.",
+      "deliverables": "Inspeção, diagnóstico, laudo, relatório ou documentação técnica, conforme o escopo.",
+      "href": "/triagem-tecnica/#obra-imovel",
+      "index_state": "triage_fallback"
+    },
+    {
+      "id": "expert_evidence_valuation",
+      "label": "Perícia, assistência técnica ou avaliação",
+      "summary": "Quando um processo, negociação ou decisão patrimonial depende de prova, análise ou valor tecnicamente fundamentado.",
+      "deliverables": "Parecer, laudo, quesitos, análise crítica ou avaliação, conforme o papel e o escopo.",
+      "href": "/triagem-tecnica/#pericia-avaliacao",
+      "index_state": "triage_fallback"
+    },
+    {
+      "id": "occupational_safety",
+      "label": "Segurança do trabalho",
+      "summary": "Quando a empresa precisa reconhecer, documentar ou tratar uma situação de risco ocupacional.",
+      "deliverables": "Diagnóstico, documentação ou apoio técnico, após confirmação de aderência e atribuição.",
+      "href": "/triagem-tecnica/#sst",
+      "index_state": "triage_fallback"
+    },
+    {
+      "id": "public_works_b2g",
+      "label": "Licitação ou contrato de obra pública",
+      "summary": "Quando edital, proposta, medição, glosa, aditivo, atraso ou margem exigem decisão técnica e registro contemporâneo.",
+      "deliverables": "Análise, cálculo, matriz de risco, relatório ou rotina de decisão para a frente pública.",
+      "href": "/servicos-obras-publicas/",
+      "index_state": "index"
+    }
+  ],
   "navigation": {
     "desktop": [
       {
-        "label": "Edital e proposta",
-        "href": "/bid-room-licitacoes-obras/"
+        "label": "Serviços e problemas",
+        "href": "/servicos/"
       },
       {
-        "label": "Contrato sob pressão",
-        "href": "/problemas-que-resolvemos/"
-      },
-      {
-        "label": "Operação recorrente",
-        "href": "/diretoria-b2g/"
+        "label": "Obras públicas",
+        "href": "/servicos-obras-publicas/"
       },
       {
         "label": "Biblioteca",
@@ -106,10 +144,20 @@
       }
     ],
     "cta": {
-      "label": "Analisar meu caso",
-      "href": "/#formulario-contato"
+      "label": "Iniciar triagem",
+      "href": "/triagem-tecnica/"
     },
     "hubs": {
+      "corporate_services": {
+        "label": "Serviços",
+        "url": "/servicos/",
+        "title": "Serviços de engenharia, perícias e inteligência técnica",
+        "description": "Encontre o caminho para projetos, edificações, imóveis, perícias, segurança do trabalho ou obras públicas sem percorrer um catálogo extenso.",
+        "h1": "Encontre o caminho técnico para a sua situação",
+        "lead": "Comece pelo problema que precisa ser resolvido. A triagem confirma aderência, limites e o entregável aplicável.",
+        "eyebrow": "Serviços organizados por situação",
+      "index_state": "index"
+      },
       "services": {
         "label": "Serviços",
         "url": "/servicos-obras-publicas/",

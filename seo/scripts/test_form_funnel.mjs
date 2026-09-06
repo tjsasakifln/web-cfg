@@ -34,10 +34,10 @@ for (const needle of [
   'data-form-multistep="true"',
   'name="diagnostico-b2g"',
   "Solicitar canal seguro para envio",
-  "Solicitar triagem do edital",
+  "Registrar situação para triagem",
   'data-set-journey="contrato"',
-  'data-set-journey="edital"',
-  'data-set-journey="operacao"',
+  'data-journey="edital"',
+  'data-journey="operacao"',
   'id="estagio"',
   'data-form-step="1"',
   'data-form-step="2"',
@@ -54,9 +54,10 @@ for (const needle of [
     process.exit(1);
   }
 }
-// Journey operacao CTA uses the canonical visitor-facing label.
-if (!home.includes("Solicitar diagnóstico da operação")) {
-  console.error("FAIL: home missing Solicitar diagnóstico da operação");
+// The corporate shell keeps the existing B2G form explicitly scoped to the
+// protected public-works vertical instead of presenting it as a generic form.
+if (!home.includes("Triagem para obras públicas")) {
+  console.error("FAIL: home missing protected B2G form scope");
   process.exit(1);
 }
 const formMatch = home.match(/<form\b[^>]*id="formulario-contato"[\s\S]*?<\/form>/);

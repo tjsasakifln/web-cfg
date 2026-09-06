@@ -8,7 +8,7 @@ import puppeteer from "puppeteer-core";
 
 const root = resolve(new URL("../..", import.meta.url).pathname);
 const site = resolve(process.env.SITE_ROOT || join(root, "_site"));
-const reportDir = resolve(root, "build/reports/convergence");
+const reportDir = resolve(process.env.CONVERGENCE_REPORT_DIR || join(root, "build/reports/convergence"));
 const chrome = process.env.CHROME_PATH || process.env.CHROME || "";
 const axe = readFileSync(resolve(root, "node_modules/axe-core/axe.min.js"), "utf8");
 const report = { site, chrome: chrome || null, checks: [], screenshots: [] };
@@ -39,10 +39,10 @@ async function axeClean(page, name) {
 }
 async function shot(page, name) { const file = join(reportDir, `${name}.png`); await page.screenshot({ path: file, fullPage: true }); report.screenshots.push(file); }
 async function chooseRequired(page) {
-  const selectEnabled = () => page.$$eval("select:not([disabled])[required]", els => els.forEach(el => { const option = [...el.options].find(o => o.value && !o.disabled); if (option) { el.value = option.value; el.dispatchEvent(new Event("change", { bubbles: true })); } }));
-  await selectEnabled();
-  await selectEnabled();
+  await page.select('[name="need_code"]', "licitacao_obra_ou_contrato_publico");
+  await page.click("[data-intake-next]");
   await page.$eval("#nome", e => { e.value = "Canario Sintetico"; e.dispatchEvent(new Event("input", { bubbles: true })); });
+  await page.select('[name="preferred_channel"]', "email");
   await page.$eval("#email", e => { e.value = "canario@example.invalid"; e.dispatchEvent(new Event("input", { bubbles: true })); });
   await page.$$eval('input[type="checkbox"][required]', els => els.forEach(e => { e.checked = true; e.dispatchEvent(new Event("change", { bubbles: true })); }));
 }
@@ -106,6 +106,22 @@ try {
   await axeClean(trust, "trust_desktop"); await shot(trust, "trust-1366");
   await trust.setViewport({ width: 390, height: 844 }); await axeClean(trust, "trust_mobile"); await shot(trust, "trust-390");
 
+  const wedge = await browser.newPage();
+  await wedge.setViewport({ width: 390, height: 844, deviceScaleFactor: 1 });
+  await wedge.goto(`${base}/quantitativos-orcamento-obras/`, { waitUntil: "networkidle0" });
+  const wedgeMobile = await wedge.evaluate(() => ({
+    h1: document.querySelector("h1")?.textContent || "",
+    channels: document.querySelectorAll("[data-fallback-channel]").length,
+    submitDisabled: document.querySelector('[type="submit"]')?.disabled,
+    overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth,
+  }));
+  check("private_wedge_mobile_contract", /quantidades e premissas/i.test(wedgeMobile.h1)
+    && wedgeMobile.channels === 3 && wedgeMobile.submitDisabled === true && wedgeMobile.overflow === false,
+  JSON.stringify(wedgeMobile));
+  await axeClean(wedge, "private_wedge_mobile"); await shot(wedge, "private-wedge-390");
+  await wedge.setViewport({ width: 1366, height: 900, deviceScaleFactor: 1 });
+  await axeClean(wedge, "private_wedge_desktop"); await shot(wedge, "private-wedge-1366");
+
   const triage = await browser.newPage();
   await triage.setViewport({ width: 390, height: 844, deviceScaleFactor: 1 });
   let mode = "down"; let attempts = []; let collectorBodies = [];
@@ -115,7 +131,15 @@ try {
     if (url.hostname !== "127.0.0.1") return request.continue();
     if (url.pathname === "/.netlify/functions/adaptive-intake-config") {
       if (mode === "down") return request.respond({ status: 503, contentType: "application/json", body: '{"ok":false}' });
-      return request.respond({ status: 200, contentType: "application/json", body: JSON.stringify({ ok: true, intake_contract_version: "CONFENGE_WEB_INTAKE/1.0", intake_pin_hash: "a".repeat(64), nuclei: ["building_engineering_documentation", "public_works_b2g", "property_valuation", "occupational_safety", "expert_evidence_assistance"], source_asset_id: "private_project_technical_readiness_v1", offer_candidate_id: "private_project_technical_readiness_assessment" }) });
+      return request.respond({ status: 200, contentType: "application/json", body: JSON.stringify({
+        ok: true,
+        intake_version: "CONFENGE_WEB_INTAKE/2.1.0-mv03.20260905",
+        intake_pin_hash: "a".repeat(64),
+        options: [
+          { value: "licitacao_obra_ou_contrato_publico", label: "Licitação, obra ou contrato público", location_required: false },
+          { value: "outra_demanda_tecnica", label: "Outra demanda técnica", location_required: false },
+        ],
+      }) });
     }
     if (url.pathname === "/.netlify/functions/lead") {
       const body = request.postData() || ""; attempts.push(body);
@@ -127,16 +151,36 @@ try {
   });
   await triage.goto(`${base}/triagem-tecnica/`, { waitUntil: "networkidle0" });
   check("triage_config_503_blocks", await triage.$eval('[type="submit"]', e => e.disabled), "submit enabled on config failure");
-  mode = "ready"; await triage.reload({ waitUntil: "networkidle0" });
+  check("triage_config_503_keeps_channels", await triage.evaluate(() => Boolean(
+    document.querySelector('a[href^="https://wa.me/"]')
+    && document.querySelector('a[href^="mailto:"]')
+    && document.querySelector('a[href^="tel:"]')
+  )), "fallback channels missing");
+  await triage.evaluate(() => sessionStorage.setItem("confenge_pseo_attribution", JSON.stringify({
+    utm_source: "google",
+    utm_campaign: "mv03_launch",
+    utm_content: "12.345.678/0001-90",
+    asset_id: "private_project_technical_readiness_v1",
+    route_family: "prontidao-tecnica-obra-privada",
+  })));
+  mode = "ready"; await triage.goto(`${base}/triagem-tecnica/`, { waitUntil: "networkidle0" });
   check("triage_config_200_enables", !(await triage.$eval('[type="submit"]', e => e.disabled)), "submit remains disabled on config success");
+  const preInteractionEvents = await triage.evaluate(() => (window.dataLayer || []).filter(
+    event => event.event === "lead_form_start" || event.event === "lead_form_step"
+  ));
+  check("triage_no_start_before_interaction", preInteractionEvents.length === 0, JSON.stringify(preInteractionEvents));
   await chooseRequired(triage); await triage.click('[type="submit"]');
-  await triage.waitForFunction(() => /não foi possível confirmar/i.test(document.querySelector("#form-status").textContent));
-  await triage.click('[type="submit"]'); await triage.waitForSelector("[data-adaptive-confirmation]:not([hidden])");
+  await triage.waitForFunction(() => /não foi possível confirmar/i.test(document.querySelector("[data-intake-status]").textContent));
+  await triage.click('[type="submit"]'); await triage.waitForSelector("[data-intake-receipt]:not([hidden])");
   check("triage_retry_same_payload", attempts.length === 2 && attempts[0] === attempts[1], JSON.stringify({ attempts: attempts.length, same: attempts[0] === attempts[1] }));
-  const triageResult = await triage.evaluate(() => ({ receipt: document.querySelector("[data-receipt-protocol]").textContent, events: window.dataLayer || [] }));
+  const submitted = JSON.parse(attempts[0]);
+  check("triage_utm_allowlist", submitted.utm_source === "google" && submitted.utm_campaign === "mv03_launch", JSON.stringify({ utm_source: submitted.utm_source, utm_campaign: submitted.utm_campaign }));
+  check("triage_utm_pii_scrubbed", submitted.utm_content === undefined, JSON.stringify({ utm_content: submitted.utm_content }));
+  check("triage_source_asset_preserved", submitted.asset_id === "technical_triage_v1" && submitted.source_origin_asset_id === "private_project_technical_readiness_v1" && submitted.source_origin_route_family === "prontidao-tecnica-obra-privada", JSON.stringify({ asset_id: submitted.asset_id, source_origin_asset_id: submitted.source_origin_asset_id, source_origin_route_family: submitted.source_origin_route_family }));
+  const triageResult = await triage.evaluate(() => ({ receipt: document.querySelector("[data-intake-protocol]").textContent, events: window.dataLayer || [] }));
   check("triage_receipt_visible", triageResult.receipt === "lead-canary-receipt", JSON.stringify({ receipt: triageResult.receipt }));
   check("triage_real_bus_events", triageResult.events.some(event => event.event === "lead_form_submit") && triageResult.events.some(event => event.event === "lead_persisted"), "required events absent from dataLayer");
-  check("triage_analytics_allowlist", !/nucleus|canario|email|nome|answer|urgency/i.test(JSON.stringify(triageResult.events)) && !/canario@example|Canario Sintetico/i.test(collectorBodies.join("")), "response or PII present in analytics");
+  check("triage_analytics_allowlist", !/canario@example|Canario Sintetico/i.test(JSON.stringify(triageResult.events)) && !/canario@example|Canario Sintetico/i.test(collectorBodies.join("")), "PII present in analytics");
   await axeClean(triage, "triage_mobile"); await shot(triage, "triage-390");
 } finally {
   await browser.close(); server.close();

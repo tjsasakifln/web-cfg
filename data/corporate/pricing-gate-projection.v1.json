@@ -1,0 +1,84 @@
+{
+  "schema": "confenge.price-gate-projection/1.0",
+  "contract": "CONFENGE_PRICE_GATE_PROJECTION/1.0.0",
+  "effective_at": "2026-09-05",
+  "issues": ["#341", "#577", "#583"],
+  "role": "NON_AUTHORITATIVE_FAIL_CLOSED_PROJECTION",
+  "authority_owner": "governance",
+  "authority_pin": null,
+  "authority_status": "UNAVAILABLE",
+  "local_decision_default": "DENY",
+  "principle": "Preço que o fundador autorizou testar, evidência de margem e autorização de receber dinheiro são decisões diferentes.",
+  "state_semantics": [
+    {
+      "state": "UNPRICED",
+      "meaning": "Nenhum valor materialmente autorizado para a unidade delimitada.",
+      "capabilities_if_authoritatively_granted": [],
+      "means_margin_validated": false
+    },
+    {
+      "state": "FOUNDER_AUTHORIZED_EXPERIMENT",
+      "meaning": "O fundador autorizou materialmente testar um preço ou piso em proposta real para uma unidade delimitada.",
+      "capabilities_if_authoritatively_granted": ["manual_proposal"],
+      "means_margin_validated": false
+    },
+    {
+      "state": "MARGIN_VALIDATED",
+      "meaning": "Entregas comparáveis reconciliadas sustentam a margem de contribuição definida na #341.",
+      "capabilities_if_authoritatively_granted": ["manual_proposal"],
+      "means_margin_validated": true
+    },
+    {
+      "state": "PUBLICATION_AUTHORIZED",
+      "meaning": "Preço específico recebeu decisão material para exibição na superfície pública com escopo e captura compatíveis.",
+      "capabilities_if_authoritatively_granted": ["manual_proposal", "public_display"],
+      "means_margin_validated": false
+    },
+    {
+      "state": "CHECKOUT_AUTHORIZED",
+      "meaning": "Oferta, terms, capacidade, cobrança e entrega passaram pelos gates financeiros próprios.",
+      "capabilities_if_authoritatively_granted": ["manual_proposal", "public_display", "checkout"],
+      "means_margin_validated": false
+    }
+  ],
+  "observed_authorization_evidence": [
+    {
+      "authorization_id": "MV-PRICE-AUTH-20260904-01",
+      "evidence": "comentário do fundador na issue #577",
+      "scope_class": "triagem técnica paga",
+      "remote_document_floor_cents": 290000,
+      "currency": "BRL",
+      "state": "FOUNDER_AUTHORIZED_EXPERIMENT",
+      "binding_offer_ids": [],
+      "proposal_only_if_confirmed_by_governance": true,
+      "public_display_authorized": false,
+      "checkout_authorized": false,
+      "note": "É um piso comercial interno para teste no recorte remoto/documental, não tabela pública nem autorização automática para qualquer SKU. Campo não tem preço autorizado neste contrato. Uma proposta ainda precisa delimitar unidade, escopo, formalidades, despesas, revisão e capacidade."
+    }
+  ],
+  "margin_validation": {
+    "state": "NOT_OBSERVED",
+    "required_comparable_paid_deliveries_per_family": 3,
+    "minimum_direct_contribution_margin_pct": 55,
+    "source": "#341",
+    "does_not_block_founder_authorized_experiment": true,
+    "does_block_claims_of_validated_margin_or_repeatable_scale": true
+  },
+  "checkout_gate": {
+    "default": "DENY",
+    "authority_owner": "governance",
+    "authority_reference": "#88 e contratos financeiros vigentes",
+    "founder_authorized_experiment_is_sufficient": false,
+    "margin_validated_is_sufficient": false,
+    "requires_separate_material_authorization": true,
+    "campaign_01_changes_checkout": false
+  },
+  "publication_rule": "Sem pin material da governança, nenhuma autorização de proposta, preço público ou checkout é inferida nesta projeção. Oferta ainda não precificada informa o que será delimitado antes da proposta e conduz a REQUEST_SCOPE_REVIEW; não exibe zero, faixa inventada, 'sob consulta' como se fosse preço nem CTA de compra.",
+  "prohibitions": [
+    "inventar preço, faixa, desconto, margem ou capacidade",
+    "tratar FOUNDER_AUTHORIZED_EXPERIMENT como MARGIN_VALIDATED",
+    "ligar checkout por inferência de preço, entrevista, clique ou proposta",
+    "publicar preço sem captura fail-closed e família pública declarada",
+    "prometer resultado ou cobrar comissão de êxito"
+  ]
+}

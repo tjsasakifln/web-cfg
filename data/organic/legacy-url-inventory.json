@@ -1,6 +1,6 @@
 {
   "schema_version": "legacy-url-inventory-v1",
-  "as_of": "2026-08-29",
+  "as_of": "2026-09-05",
   "rule": "301 only to true semantic equivalent; 404/410 when permanently gone; never soft-home topical content just to preserve SEO.",
   "notes": [
     "GSC may still show residual impressions for redirected or gone URLs; residual ≠ indexation failure.",
@@ -94,12 +94,15 @@
     },
     {
       "legacy_url": "https://confenge.com.br/servicos",
-      "status": "301_redirect",
-      "current_action": "301",
-      "destination": "/servicos-obras-publicas/",
-      "canonical": "https://confenge.com.br/servicos-obras-publicas/",
-      "sitemap_membership": false,
-      "action": "keep_301"
+      "status": "live_indexable",
+      "current_action": "KEEP",
+      "destination": "/servicos/",
+      "canonical": "https://confenge.com.br/servicos/",
+      "sitemap_membership": true,
+      "internal_backlinks": "corporate shell and demand-path cards",
+      "external_backlinks_known": "possible residual from old CMS",
+      "action": "migrate_legacy_slug_to_corporate_services_owner",
+      "rationale": "MV-09 promotes the same public path to the corporate services canonical. The B2G-specific intent remains owned by /servicos-obras-publicas/."
     },
     {
       "legacy_url": "https://confenge.com.br/sobre",

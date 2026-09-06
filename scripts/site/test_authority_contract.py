@@ -274,8 +274,8 @@ def test_specialist_page_shows_sameas_and_as_of():
     assert path.is_file()
     assert "sameAs" in html
     assert "https://github.com/tjsasakifln" in html
-    assert "as_of" in html
-    assert 'datetime="2026-07-15"' in html
+    assert 'data-credential-as-of="2026-09-04"' in html
+    assert 'datetime="2026-09-05"' in html
     assert "EESC-USP" in html or "Universidade de São Paulo" in html
     crea_claims = [
         claim
@@ -702,6 +702,12 @@ def test_family_audit_fails_closed_on_unclassified_and_covers_matrix():
         match = [p for p in rec["pages"] if p["path"].rstrip("/") == "/" + str(path.parent.relative_to(ROOT)).replace("\\", "/")]
         assert match, f"representative {kind} missing from audit"
         assert match[0]["status"] == "pass", match[0]
+
+
+def test_multivertical_conflict_gate_shipped():
+    from scripts.site.test_conflict_gate import run_suite
+
+    run_suite()
 
 
 def test_real_schema_types_mirror_visible_copy():

@@ -26,32 +26,17 @@
 .deliverables-next-grid{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:64px;align-items:center}
 .deliverables-next h2{margin:0 0 14px;color:#fff;font-size:clamp(2.15rem,3.8vw,3.8rem)}
 .deliverables-next p:not(.eyebrow){max-width:680px;margin:0;color:#c1ccd6;line-height:1.7}
-.home-deliverables{display:grid;grid-template-columns:minmax(0,.95fr) minmax(310px,.65fr);gap:clamp(34px,6vw,82px);align-items:center;margin-top:52px;padding:clamp(30px,4.3vw,54px);color:#dce5ed;background:linear-gradient(135deg,#071b34,#041426);border:1px solid #123452;border-radius:4px}
-.home-deliverables .eyebrow{color:var(--lime)}
-.home-deliverables h3{max-width:15ch;margin:0 0 16px;color:#fff;font-size:clamp(2rem,3.3vw,3.35rem);letter-spacing:-.045em}
-.home-deliverables-copy>p:not(.eyebrow){max-width:670px;margin:0;color:#bdc9d4;font-size:.93rem;line-height:1.7}
-.home-deliverables-result{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:0 0 20px;border-top:1px solid rgba(255,255,255,.15);border-bottom:1px solid rgba(255,255,255,.15)}
-.home-deliverables-result>div{padding:16px 8px 16px 0}
-.home-deliverables-result>div+div{padding-left:12px;border-left:1px solid rgba(255,255,255,.15)}
-.home-deliverables-result dt{color:#91a3b3;font-size:.62rem;font-weight:760;text-transform:uppercase}
-.home-deliverables-result dd{margin:3px 0 0;color:#fff;font-size:1.35rem;font-weight:780}
-.home-deliverables-example>span{display:block;margin-bottom:6px;color:var(--lime);font-family:var(--mono);font-size:.65rem;font-weight:800;letter-spacing:.08em}
-.home-deliverables-example>strong{display:block;margin-bottom:18px;color:#fff;font-size:1rem;line-height:1.4}
-.home-deliverables-actions{display:flex;align-items:center;flex-wrap:wrap;gap:10px 18px}
-.home-deliverables .button-light{min-height:48px}
-.home-deliverables .text-link{color:#fff}
 .deliverables-hero-actions{display:flex;align-items:center;flex-wrap:wrap;gap:14px 22px}
 .deliverables-page .pillar-capture-grid,.deliverables-page .pillar-capture-form,.deliverables-page .pillar-capture-form label{min-width:0}
 .deliverables-page .pillar-capture-form select{box-sizing:border-box;display:block;width:100%;max-width:100%;min-width:0;padding:12px 14px;color:var(--text);background:#fff;border:1px solid #a9b6b0;border-radius:8px;font:inherit}
 .deliverables-page .pillar-capture-form select:focus{outline:2px solid transparent;outline-offset:2px;box-shadow:var(--focus-ring);border-color:var(--green)}
 @media(max-width:900px){
-  .deliverables-hero-grid,.deliverables-next-grid,.home-deliverables{grid-template-columns:1fr}
+  .deliverables-hero-grid,.deliverables-next-grid{grid-template-columns:1fr}
   .deliverables-hero{padding:52px 0 72px}
   .deliverables-hero-copy h1{max-width:14ch}
   .deliverables-status{max-width:680px}
   .deliverables-next-grid{gap:30px}
   .deliverables-next-grid .button{justify-self:start}
-  .home-deliverables{gap:32px}
 }
 @media(max-width:620px){
   .deliverables-page .breadcrumbs{padding-top:18px}
@@ -65,11 +50,6 @@
   .compare-ladder-figures>div+div{padding-left:0;border-left:0;border-top:1px solid #cbd4dc}
   .deliverables-next{padding:58px 0}
   .deliverables-next-grid .button{width:100%}
-  .home-deliverables{margin-top:38px;padding:28px 22px}
-  .home-deliverables h3{font-size:2.2rem}
-  .home-deliverables-actions{display:grid;align-items:stretch}
-  .home-deliverables-actions .button{width:100%}
-  .home-deliverables-actions .text-link{justify-content:center}
   .deliverables-hero-actions{display:grid;align-items:stretch}
   .deliverables-hero-actions .text-link{justify-content:center}
 }
@@ -163,9 +143,9 @@
   .deliverables-hero-copy h1{font-size:clamp(1.85rem,9vw,2.4rem);margin-bottom:12px}
   .deliverables-status{padding:14px 14px}
   .deliverables-status>strong{font-size:1.15rem;margin-bottom:8px}
-  /* A linha de prova da primeira dobra (#327) custa altura no mobile, e o teto
+  /* A linha de prova da primeira dobra (#327) custa altura no mobile,e o teto
      de 12.500px por documento da #468 e um limite real. Estes quatro ajustes
-     devolvem a altura no espaco entre blocos, sem tirar nenhum fato da pagina. */
+     devolvem a altura no espaco entre blocos,sem tirar nenhum fato da pagina. */
   .deliverables-lead{margin-bottom:18px}
   .deliverables-hero-copy .offer-proof-line{margin-top:10px;margin-bottom:14px}
   .deliverables-status ul{gap:8px;margin-bottom:12px;padding:12px 0}
@@ -211,11 +191,11 @@
 @media(max-width:620px){
   /* Two-up must actually fit its labels: trim the number column and the
      horizontal padding so words like "concorrentes?" have room. Height stays
-     at four rows instead of eight, and the 44px touch target is preserved. */
+     at four rows instead of eight,and the 44px touch target is preserved. */
   .offer-decision-nav a{grid-template-columns:18px minmax(0,1fr);gap:4px;min-height:44px;padding:8px 6px;font-size:max(var(--text-micro),12.8px)}
 }
 @media(max-width:340px){
-  /* At the narrowest supported viewport, give the decision itself the full
+  /* At the narrowest supported viewport,give the decision itself the full
      track. The target and its descriptive aria-label retain the destination. */
   .offer-decision-nav{padding:10px}
   .offer-decision-nav ol{gap:4px}
@@ -223,10 +203,10 @@
   .offer-decision-nav a span{display:none}
 }
 
-/* Primeira dobra da vitrine, medida no laptop do contrato (first-fold #327).
-   A 1366x768 o h1 ocupava 444px sozinho e empurrava lead, prova e acao para
+/* Primeira dobra da vitrine,medida no laptop do contrato (first-fold #327).
+   A 1366x768 o h1 ocupava 444px sozinho e empurrava lead,prova e acao para
    fora da dobra: a acao dominante terminava em y=925. A regra so vale em tela
-   baixa e larga, entao o desenho de monitor alto continua igual. */
+   baixa e larga,entao o desenho de monitor alto continua igual. */
 @media (min-width:901px) and (max-height:960px){
   .deliverables-hero{padding:26px 0 26px}
   .deliverables-hero-grid{gap:clamp(32px,4vw,64px)}

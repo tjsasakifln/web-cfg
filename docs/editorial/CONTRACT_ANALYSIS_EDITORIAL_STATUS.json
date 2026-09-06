@@ -1,14 +1,14 @@
 {
   "report": "CONTRACT_ANALYSIS_CANARY_STATUS",
   "gate_version": "contract-analysis-publication-gate/1.0",
-  "generated_at": "2026-08-24T14:33:04Z",
+  "generated_at": "2026-09-06T01:29:00Z",
   "evaluated": 1,
   "evaluated_cap": 10,
   "source_kind": "official_live",
   "catalog_mode": "official_live",
   "claimed_live": false,
   "test_only": false,
-  "source_path": "scripts/contract_analysis/fixtures/official-live-01",
+  "source_path": "$CONFENGE_HANDOFF_DIR/contract-analysis/official-live-01",
   "schema": "public-read-contract-analysis/1.0",
   "export_kind": "extra_cli_public_read",
   "live_absent": false,
@@ -61,10 +61,10 @@
   "factual_handoff_pending": false,
   "handoff": {
     "status": "HANDOFF_READY",
-    "path": "scripts/contract_analysis/fixtures/official-live-01",
+    "path": "$CONFENGE_HANDOFF_DIR/contract-analysis/official-live-01",
     "checked": [
       {
-        "path": "scripts/contract_analysis/fixtures/official-live-01",
+        "path": "$CONFENGE_HANDOFF_DIR/contract-analysis/official-live-01",
         "exists": true,
         "layout": "dossiers",
         "schema_ok": true,

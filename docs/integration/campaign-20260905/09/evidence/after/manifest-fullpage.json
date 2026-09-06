@@ -1,0 +1,483 @@
+{
+  "schema_version": "2.1.0",
+  "captured_at": "2026-09-06T00:36:53.624Z",
+  "commit_sha": "988e3752aa52d59ab16ab8c2b5dd3113bb7dd876",
+  "tree_dirty": true,
+  "base_url": "http://127.0.0.1:8765",
+  "output_dir": "docs/integration/campaign-20260905/09/evidence/after",
+  "state": {
+    "id": "fullpage",
+    "fullpage": true,
+    "javascript": "on",
+    "motion": "system"
+  },
+  "capture_runtime": {
+    "browser_version": "Chrome/152.0.7977.42",
+    "fullpage_preparation": {
+      "strategy": "content-visibility-visible/v1",
+      "stable_samples": 3,
+      "sample_interval_ms": 50,
+      "max_wait_ms": 5000
+    }
+  },
+  "routes": [
+    "/",
+    "/servicos/",
+    "/confianca/",
+    "/especialista/tiago-jun-sasaki/",
+    "/triagem-tecnica/",
+    "/servicos-obras-publicas/"
+  ],
+  "viewports": [
+    "390x844",
+    "1440x1000"
+  ],
+  "files": [
+    "home-390x844--fullpage.png",
+    "home-1440x1000--fullpage.png",
+    "servicos-390x844--fullpage.png",
+    "servicos-1440x1000--fullpage.png",
+    "confianca-390x844--fullpage.png",
+    "confianca-1440x1000--fullpage.png",
+    "especialistatiago-jun-sasaki-390x844--fullpage.png",
+    "especialistatiago-jun-sasaki-1440x1000--fullpage.png",
+    "triagem-tecnica-390x844--fullpage.png",
+    "triagem-tecnica-1440x1000--fullpage.png",
+    "servicos-obras-publicas-390x844--fullpage.png",
+    "servicos-obras-publicas-1440x1000--fullpage.png"
+  ],
+  "captures": [
+    {
+      "file": "home-390x844--fullpage.png",
+      "route": "/",
+      "slug": "home",
+      "viewport": "390x844",
+      "width": 390,
+      "height": 844,
+      "kind": "page",
+      "state": "fullpage",
+      "fullpage": true,
+      "javascript": "on",
+      "motion": "system",
+      "bytes": 799516,
+      "sha256": "b07d0bdb7ff3593398ed8bdc8f2cdbdfef014b931471181dba4dbbf6ca3065f3",
+      "layout": {
+        "strategy": "content-visibility-visible/v1",
+        "materialized_elements": 7,
+        "initial_scroll_height": 9757,
+        "scroll_height": 10172,
+        "scroll_height_samples": [
+          10172,
+          10172,
+          10172
+        ],
+        "observed_scroll_heights": [
+          10172,
+          10172,
+          10172
+        ],
+        "post_screenshot_scroll_height_samples": [
+          10172,
+          10172,
+          10172
+        ]
+      }
+    },
+    {
+      "file": "home-1440x1000--fullpage.png",
+      "route": "/",
+      "slug": "home",
+      "viewport": "1440x1000",
+      "width": 1440,
+      "height": 1000,
+      "kind": "page",
+      "state": "fullpage",
+      "fullpage": true,
+      "javascript": "on",
+      "motion": "system",
+      "bytes": 946345,
+      "sha256": "bba7f2c8c357db6cedef2a068ca4dfe8a61582ce290a11bb28eec39344306693",
+      "layout": {
+        "strategy": "content-visibility-visible/v1",
+        "materialized_elements": 7,
+        "initial_scroll_height": 7953,
+        "scroll_height": 6552,
+        "scroll_height_samples": [
+          6552,
+          6552,
+          6552
+        ],
+        "observed_scroll_heights": [
+          6552,
+          6552,
+          6552
+        ],
+        "post_screenshot_scroll_height_samples": [
+          6552,
+          6552,
+          6552
+        ]
+      }
+    },
+    {
+      "file": "servicos-390x844--fullpage.png",
+      "route": "/servicos/",
+      "slug": "servicos",
+      "viewport": "390x844",
+      "width": 390,
+      "height": 844,
+      "kind": "page",
+      "state": "fullpage",
+      "fullpage": true,
+      "javascript": "on",
+      "motion": "system",
+      "bytes": 374578,
+      "sha256": "b1e53f445b5ce00b1ed253507493323bda2d9f76023ba83ac849f2f42f8bfcf8",
+      "layout": {
+        "strategy": "content-visibility-visible/v1",
+        "materialized_elements": 0,
+        "initial_scroll_height": 4808,
+        "scroll_height": 4808,
+        "scroll_height_samples": [
+          4808,
+          4808,
+          4808
+        ],
+        "observed_scroll_heights": [
+          4808,
+          4808,
+          4808
+        ],
+        "post_screenshot_scroll_height_samples": [
+          4808,
+          4808,
+          4808
+        ]
+      }
+    },
+    {
+      "file": "servicos-1440x1000--fullpage.png",
+      "route": "/servicos/",
+      "slug": "servicos",
+      "viewport": "1440x1000",
+      "width": 1440,
+      "height": 1000,
+      "kind": "page",
+      "state": "fullpage",
+      "fullpage": true,
+      "javascript": "on",
+      "motion": "system",
+      "bytes": 497640,
+      "sha256": "6b08e036d74d3bf84d4ee769cf8c55f8cf967ddd100c79973747dac269585edc",
+      "layout": {
+        "strategy": "content-visibility-visible/v1",
+        "materialized_elements": 0,
+        "initial_scroll_height": 3787,
+        "scroll_height": 3787,
+        "scroll_height_samples": [
+          3787,
+          3787,
+          3787
+        ],
+        "observed_scroll_heights": [
+          3787,
+          3787,
+          3787
+        ],
+        "post_screenshot_scroll_height_samples": [
+          3787,
+          3787,
+          3787
+        ]
+      }
+    },
+    {
+      "file": "confianca-390x844--fullpage.png",
+      "route": "/confianca/",
+      "slug": "confianca",
+      "viewport": "390x844",
+      "width": 390,
+      "height": 844,
+      "kind": "page",
+      "state": "fullpage",
+      "fullpage": true,
+      "javascript": "on",
+      "motion": "system",
+      "bytes": 730805,
+      "sha256": "84814d47c55c53f9b9da0065c4609252510e48b9e6da1940462d0755dcff3e1e",
+      "layout": {
+        "strategy": "content-visibility-visible/v1",
+        "materialized_elements": 0,
+        "initial_scroll_height": 6866,
+        "scroll_height": 6866,
+        "scroll_height_samples": [
+          6866,
+          6866,
+          6866
+        ],
+        "observed_scroll_heights": [
+          6866,
+          6866,
+          6866
+        ],
+        "post_screenshot_scroll_height_samples": [
+          6866,
+          6866,
+          6866
+        ]
+      }
+    },
+    {
+      "file": "confianca-1440x1000--fullpage.png",
+      "route": "/confianca/",
+      "slug": "confianca",
+      "viewport": "1440x1000",
+      "width": 1440,
+      "height": 1000,
+      "kind": "page",
+      "state": "fullpage",
+      "fullpage": true,
+      "javascript": "on",
+      "motion": "system",
+      "bytes": 788374,
+      "sha256": "6ebcff999e82fde2b8d0baf89e0478721b23dcab1351d009e88f9ad156ea5462",
+      "layout": {
+        "strategy": "content-visibility-visible/v1",
+        "materialized_elements": 0,
+        "initial_scroll_height": 4909,
+        "scroll_height": 4909,
+        "scroll_height_samples": [
+          4909,
+          4909,
+          4909
+        ],
+        "observed_scroll_heights": [
+          4909,
+          4909,
+          4909
+        ],
+        "post_screenshot_scroll_height_samples": [
+          4909,
+          4909,
+          4909
+        ]
+      }
+    },
+    {
+      "file": "especialistatiago-jun-sasaki-390x844--fullpage.png",
+      "route": "/especialista/tiago-jun-sasaki/",
+      "slug": "especialistatiago-jun-sasaki",
+      "viewport": "390x844",
+      "width": 390,
+      "height": 844,
+      "kind": "page",
+      "state": "fullpage",
+      "fullpage": true,
+      "javascript": "on",
+      "motion": "system",
+      "bytes": 771232,
+      "sha256": "b5e5770bc567cafb91eb3d87a1fd866f1e5a5b6a7f9597157ecebb075550f2eb",
+      "layout": {
+        "strategy": "content-visibility-visible/v1",
+        "materialized_elements": 0,
+        "initial_scroll_height": 7724,
+        "scroll_height": 7724,
+        "scroll_height_samples": [
+          7724,
+          7724,
+          7724
+        ],
+        "observed_scroll_heights": [
+          7724,
+          7724,
+          7724
+        ],
+        "post_screenshot_scroll_height_samples": [
+          7724,
+          7724,
+          7724
+        ]
+      }
+    },
+    {
+      "file": "especialistatiago-jun-sasaki-1440x1000--fullpage.png",
+      "route": "/especialista/tiago-jun-sasaki/",
+      "slug": "especialistatiago-jun-sasaki",
+      "viewport": "1440x1000",
+      "width": 1440,
+      "height": 1000,
+      "kind": "page",
+      "state": "fullpage",
+      "fullpage": true,
+      "javascript": "on",
+      "motion": "system",
+      "bytes": 908850,
+      "sha256": "2453047ca12fe73cde505df0e1e23a57e0347b101d0d8de563ebfe9b8a920dbb",
+      "layout": {
+        "strategy": "content-visibility-visible/v1",
+        "materialized_elements": 0,
+        "initial_scroll_height": 5288,
+        "scroll_height": 5288,
+        "scroll_height_samples": [
+          5288,
+          5288,
+          5288
+        ],
+        "observed_scroll_heights": [
+          5288,
+          5288,
+          5288
+        ],
+        "post_screenshot_scroll_height_samples": [
+          5288,
+          5288,
+          5288
+        ]
+      }
+    },
+    {
+      "file": "triagem-tecnica-390x844--fullpage.png",
+      "route": "/triagem-tecnica/",
+      "slug": "triagem-tecnica",
+      "viewport": "390x844",
+      "width": 390,
+      "height": 844,
+      "kind": "page",
+      "state": "fullpage",
+      "fullpage": true,
+      "javascript": "on",
+      "motion": "system",
+      "bytes": 217544,
+      "sha256": "3f1901208fb557083eb353ea8abc14af0b44d11a291b145995642ab9bc1301fb",
+      "layout": {
+        "strategy": "content-visibility-visible/v1",
+        "materialized_elements": 0,
+        "initial_scroll_height": 2385,
+        "scroll_height": 2385,
+        "scroll_height_samples": [
+          2385,
+          2385,
+          2385
+        ],
+        "observed_scroll_heights": [
+          2385,
+          2385,
+          2385
+        ],
+        "post_screenshot_scroll_height_samples": [
+          2385,
+          2385,
+          2385
+        ]
+      }
+    },
+    {
+      "file": "triagem-tecnica-1440x1000--fullpage.png",
+      "route": "/triagem-tecnica/",
+      "slug": "triagem-tecnica",
+      "viewport": "1440x1000",
+      "width": 1440,
+      "height": 1000,
+      "kind": "page",
+      "state": "fullpage",
+      "fullpage": true,
+      "javascript": "on",
+      "motion": "system",
+      "bytes": 260513,
+      "sha256": "f4ea50347e733ee6a8d53ffe5737fc607a8c70ad2f4042f3ba369969265015ba",
+      "layout": {
+        "strategy": "content-visibility-visible/v1",
+        "materialized_elements": 0,
+        "initial_scroll_height": 2050,
+        "scroll_height": 2050,
+        "scroll_height_samples": [
+          2050,
+          2050,
+          2050
+        ],
+        "observed_scroll_heights": [
+          2050,
+          2050,
+          2050
+        ],
+        "post_screenshot_scroll_height_samples": [
+          2050,
+          2050,
+          2050
+        ]
+      }
+    },
+    {
+      "file": "servicos-obras-publicas-390x844--fullpage.png",
+      "route": "/servicos-obras-publicas/",
+      "slug": "servicos-obras-publicas",
+      "viewport": "390x844",
+      "width": 390,
+      "height": 844,
+      "kind": "page",
+      "state": "fullpage",
+      "fullpage": true,
+      "javascript": "on",
+      "motion": "system",
+      "bytes": 611914,
+      "sha256": "2e3eb68791f2e155824f3ed83e26a6a84034a6e4ea7589cf4de20cdf27ad32b6",
+      "layout": {
+        "strategy": "content-visibility-visible/v1",
+        "materialized_elements": 0,
+        "initial_scroll_height": 7650,
+        "scroll_height": 7650,
+        "scroll_height_samples": [
+          7650,
+          7650,
+          7650
+        ],
+        "observed_scroll_heights": [
+          7650,
+          7650,
+          7650
+        ],
+        "post_screenshot_scroll_height_samples": [
+          7650,
+          7650,
+          7650
+        ]
+      }
+    },
+    {
+      "file": "servicos-obras-publicas-1440x1000--fullpage.png",
+      "route": "/servicos-obras-publicas/",
+      "slug": "servicos-obras-publicas",
+      "viewport": "1440x1000",
+      "width": 1440,
+      "height": 1000,
+      "kind": "page",
+      "state": "fullpage",
+      "fullpage": true,
+      "javascript": "on",
+      "motion": "system",
+      "bytes": 714678,
+      "sha256": "6d784f27b625349d29b684fcd506a33a3c58518bd57403874dbaf529ca156372",
+      "layout": {
+        "strategy": "content-visibility-visible/v1",
+        "materialized_elements": 0,
+        "initial_scroll_height": 5270,
+        "scroll_height": 5270,
+        "scroll_height_samples": [
+          5270,
+          5270,
+          5270
+        ],
+        "observed_scroll_heights": [
+          5270,
+          5270,
+          5270
+        ],
+        "post_screenshot_scroll_height_samples": [
+          5270,
+          5270,
+          5270
+        ]
+      }
+    }
+  ]
+}

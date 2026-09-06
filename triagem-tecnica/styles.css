@@ -1,5 +1,170 @@
-#conteudo { max-width: 48rem; padding-top: 1.5rem; padding-bottom: 2rem; }
-#conteudo h1 { font-size: clamp(1.65rem, 3vw, 2.3rem); line-height: 1.2; }
-#conteudo fieldset { margin: 1.25rem 0; }
-#conteudo [data-nucleus-branch] { padding: 1rem; }
-.form-step-legend { color: #425265; }
+.triage-shell {
+  width: min(100% - 2rem, 52rem);
+  margin: 0 auto;
+  padding: 1.25rem 0 4rem;
+}
+.brand-link {
+  display: inline-block;
+  margin-bottom: 2.5rem;
+  color: inherit;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-decoration: none;
+}
+.triage-intro,
+.next-state,
+.technical-intake-form,
+.receipt-card,
+.channel-card {
+  margin-bottom: 1.5rem;
+}
+.triage-intro h1 {
+  max-width: 18ch;
+  margin: .35rem 0 .75rem;
+  font-size: clamp(2rem, 7vw, 3.6rem);
+  line-height: 1.05;
+}
+.triage-lead {
+  max-width: 62ch;
+  font-size: 1.08rem;
+}
+.triage-eyebrow,
+.step-progress {
+  color: #31556f;
+  font-size: .82rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.next-state,
+.technical-intake-form,
+.receipt-card,
+.channel-card {
+  border: 1px solid #cbd5df;
+  border-radius: 1rem;
+  background: #fff;
+  padding: clamp(1.1rem, 4vw, 2rem);
+  box-shadow: 0 .5rem 1.5rem rgb(25 48 65 / 7%);
+}
+.next-state h2,
+.channel-card h2,
+.receipt-card h2 {
+  margin-top: 0;
+}
+.next-state ol {
+  padding-left: 1.35rem;
+}
+.next-state li + li {
+  margin-top: .55rem;
+}
+.technical-intake-form fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.technical-intake-form legend {
+  margin-bottom: .45rem;
+  font-size: clamp(1.35rem, 4vw, 1.8rem);
+  font-weight: 750;
+}
+.technical-intake-form label,
+.field-heading {
+  display: block;
+  margin: 1rem 0 .35rem;
+  font-weight: 700;
+}
+.technical-intake-form label span,
+.field-help {
+  color: #526575;
+  font-size: .92rem;
+  font-weight: 400;
+}
+.technical-intake-form input[type="text"],
+.technical-intake-form input[type="tel"],
+.technical-intake-form input[type="email"],
+.technical-intake-form select {
+  width: 100%;
+  min-height: 3rem;
+  border: 1px solid #8799a8;
+  border-radius: .55rem;
+  background: #fff;
+  padding: .65rem .75rem;
+  color: #172a38;
+  font: inherit;
+}
+.technical-intake-form input:focus,
+.technical-intake-form select:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  box-shadow: var(--focus-ring);
+  border-color: #1e71a6;
+}
+.check-row {
+  display: grid !important;
+  grid-template-columns: 1.35rem 1fr;
+  gap: .65rem;
+  align-items: start;
+  font-weight: 400 !important;
+}
+.check-row input {
+  width: 1.2rem;
+  height: 1.2rem;
+  margin-top: .15rem;
+}
+.location-fields {
+  margin-top: 1.25rem;
+  border-left: .25rem solid #7aa6c2;
+  padding: .1rem 0 .5rem 1rem;
+}
+.form-actions,
+.channel-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .75rem;
+  align-items: center;
+  margin-top: 1.5rem;
+}
+.intake-status {
+  margin: 1rem 0 0;
+}
+.intake-status.is-error {
+  border-left: .25rem solid #b42318;
+  background: #fff2f0;
+  padding: .8rem 1rem;
+  color: #7a271a;
+}
+.intake-status.is-ok {
+  color: #176b45;
+}
+.receipt-card {
+  border-color: #58a27d;
+  background: #f3fbf7;
+}
+.channel-card {
+  background: #f6f8fa;
+}
+.text-link {
+  min-height: 2.75rem;
+  display: inline-flex;
+  align-items: center;
+  font-weight: 700;
+}
+button:disabled {
+  cursor: not-allowed;
+  opacity: .6;
+}
+[hidden] {
+  display: none !important;
+}
+@media (max-width: 36rem) {
+  .triage-shell { width: min(100% - 1rem, 52rem); }
+  .brand-link { margin-left: .5rem; }
+  .form-actions .button,
+  .channel-actions .button,
+  .channel-actions .text-link {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+}

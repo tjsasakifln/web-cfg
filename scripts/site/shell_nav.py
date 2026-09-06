@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Task-first shell navigation: one source of truth, applied to every page.
+"""Situation-first shell navigation with an explicit staged rollout.
 
 The header is replicated on ~200 shipped HTML files. `data/site/public-ia-map.json`
-(three purchase situations, ≤5 destinations + CTA) is the IA contract;
+(corporate situations, protected B2G vertical, ≤5 destinations + CTA) is the IA contract;
 `data/site/brand.json` (`navigation.desktop` + `navigation.cta`) mirrors the
 header so existing generators keep a single write path. This module renders the
 desktop nav, the mobile nav and the footer discovery columns and can rewrite
@@ -12,9 +12,9 @@ Usage:
     python3 scripts/site/shell_nav.py --check    # CI: shipped HTML == source
     python3 scripts/site/shell_nav.py --write    # regenerate shipped HTML
 
-Design notes (CFG10X-11 / issue #183):
-  * Header names the three purchase situations in visitor language, plus one
-    essential Biblioteca. Destinations are real pages, never home anchors.
+Design notes (MV-04 / issue #582):
+  * Header names services/problems, the B2G vertical and the evidence library.
+    During the producer window, /#situacoes is the fail-closed corporate hub.
   * `aria-current="page"` marks the active branch on internal pages.
   * Desktop and mobile carry the same links in the same order; the footer is a
     short discovery set derived from the IA map, not a taxonomy dump.
@@ -37,6 +37,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from scripts.pseo.html_shell import breadcrumbs_html  # noqa: E402
+from scripts.site.brand import footer_blurb  # noqa: E402
 from scripts.site.public_ia import (  # noqa: E402
     active_header_href as ia_active_header_href,
     align_breadcrumb_trail,
@@ -45,6 +46,7 @@ from scripts.site.public_ia import (  # noqa: E402
     footer_columns_html,
     header_cta as ia_header_cta,
     header_items as ia_header_items,
+    load_ia_map,
     parse_jsonld_breadcrumb_trail,
     parse_visible_breadcrumb_trail,
     rewrite_breadcrumb_list_jsonld,
@@ -129,6 +131,10 @@ FOOTER_TOP_RE = re.compile(
     r'(\s*</div>\s*<div class="container footer-bottom">)',
     re.S,
 )
+FOOTER_BRAND_BLURB_RE = re.compile(
+    r'(<div class="footer-brand">.*?<p>).*?(</p>\s*</div>)',
+    re.S,
+)
 LEGACY_ANCHOR_HREFS = {
     "/#ofertas": "/servicos-obras-publicas/",
     "/#jornadas": "/problemas-que-resolvemos/",
@@ -152,8 +158,8 @@ def nav_cta(brand: dict[str, Any] | None = None) -> dict[str, str]:
     if cta.get("label") and cta.get("href"):
         return cta
     return ((brand or load_brand()).get("navigation") or {}).get("cta") or {
-        "label": "Analisar meu caso",
-        "href": "/#formulario-contato",
+        "label": "Iniciar triagem",
+        "href": "/triagem-tecnica/",
     }
 
 
@@ -402,6 +408,16 @@ def sync_text(text: str, brand: dict[str, Any], current: str | None) -> str:
     if 'class="desktop-nav"' not in text and 'class="mobile-nav"' not in text:
         return text
 
+    # MV-04 owns the source contract but not hundreds of generated HTML files.
+    # Until MV-09 integrates the family registry and shared-shell outputs, keep
+    # untouched routes byte-stable. Removing this rollout scope and running
+    # ``--write`` is the explicit, reversible activation step.
+    rollout = load_ia_map().get("rollout") or {}
+    if rollout.get("shell_scope") == "campaign_routes_only":
+        campaign_routes = set(rollout.get("campaign_routes") or [])
+        if current and current not in campaign_routes:
+            return text
+
     if DESKTOP_NAV_RE.search(text):
         text = _replace_nav(text, DESKTOP_NAV_RE, desktop_links(brand, current))
 
@@ -418,6 +434,10 @@ def sync_text(text: str, brand: dict[str, Any], current: str | None) -> str:
         text = _replace_nav(text, MOBILE_NAV_RE, inner)
 
     if FOOTER_TOP_RE.search(text):
+        blurb = html_lib.escape(footer_blurb(brand))
+        text = FOOTER_BRAND_BLURB_RE.sub(
+            lambda m: f"{m.group(1)}{blurb}{m.group(2)}", text, count=1
+        )
         columns = footer_nav_links(brand)
         text = FOOTER_TOP_RE.sub(
             lambda m: f"{m.group(1)}\n{columns}{m.group(3)}", text, count=1

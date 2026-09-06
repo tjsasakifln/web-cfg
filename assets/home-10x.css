@@ -1,15 +1,14 @@
 /* CONFENGE · camada da home
  * ---------------------------------------------------------------------------
- * Revisao 2026-08-30 (direcao "parecer"), com a paleta revertida em
+ * Revisao 2026-08-30 (direcao "parecer"),com a paleta revertida em
  * 2026-08-31 a pedido do dono da marca. Registro em
  * docs/design-audit/issues/13-home-commercial-direction.md.
  *
  * LEIA ISTO ANTES DA SECAO 0. O campo escuro descrito abaixo como decisao 1
  * NAO esta mais em producao. O dono da marca inspecionou a versao escura e
- * preferiu a paleta institucional, e so as CORES foram revertidas: a dobra
- * voltou a ser folha, o escuro voltou para a oferta dominante, a captura e o
- * rodape em navy #071a31, e o acento voltou a --green-700. Composicao,
- * hierarquia, faixa de escala, terna, copy, Archivo e o eixo wdth continuam
+ * preferiu a paleta institucional,e so as CORES foram revertidas: a dobra
+ * voltou a ser folha,o escuro voltou para a oferta dominante,a captura e o
+ * rodape em navy #071a31,e o acento voltou a --green-700. Composicao,* hierarquia,faixa de escala,terna,copy,Archivo e o eixo wdth continuam
  * exatamente como esta camada os instalou. As decisoes 2 e 3 seguem valendo
  * na integra; a decisao 1 fica no texto como historico do que foi tentado.
  *
@@ -17,42 +16,40 @@
  * como motor de layout (regua ITEM/DESCRICAO/UNIDADE/QUANT/FONTE, cinco
  * trilhos por secao). #538 mediu o custo e a revisao seguinte a removeu — mas
  * o que sobrou foi a folha global de volta: caixa cinza com fio de acento no
- * topo, tres familias tipograficas na mesma pagina e nenhuma tese visual.
+ * topo,tres familias tipograficas na mesma pagina e nenhuma tese visual.
  * Sair da planilha para o generico nao e a terceira direcao; e a segunda de
  * novo.
  *
  * A tese desta camada. A CONFENGE vende julgamento tecnico e economico. O
- * artefato do julgamento neste mercado e o parecer, e o parecer termina em uma
- * palavra: participar, condicionar ou recusar. Essa terna e o unico elemento
- * que nenhum concorrente copia sem mudar de negocio, entao ela — e nao a
+ * artefato do julgamento neste mercado e o parecer,e o parecer termina em uma
+ * palavra: participar,condicionar ou recusar. Essa terna e o unico elemento
+ * que nenhum concorrente copia sem mudar de negocio,entao ela — e nao a
  * mobilia de tabela — carrega a identidade da primeira dobra.
  *
  * As tres decisoes que produzem a identidade:
  *
- *   1. UM CAMPO ESCURO, no topo. A dobra e um campo continuo em tinta
- *      #08130e, nao mais uma folha branca com caixas. O cabecalho permanece
+ *   1. UM CAMPO ESCURO,no topo. A dobra e um campo continuo em tinta
+ *      #08130e,nao mais uma folha branca com caixas. O cabecalho permanece
  *      claro (contrato de logo em test_design_gates.py:768) e a aresta entre
  *      os dois e deliberada.
- *   2. UMA FAMILIA, TRES LARGURAS. Archivo variavel ja estava carregada e
- *      tem eixo wdth 66-110 que quase ninguem usa. Display em 96% (--wide),
- *      rotulo em 78% (--narrow), texto em 100%. Serifa de sistema e
+ *   2. UMA FAMILIA,TRES LARGURAS. Archivo variavel ja estava carregada e
+ *      tem eixo wdth 66-110 que quase ninguem usa. Display em 96% (--wide),*      rotulo em 78% (--narrow),texto em 100%. Serifa de sistema e
  *      monoespacada saem da home:
- *      eram Georgia e Menlo, isto e, o default de qualquer pagina.
+ *      eram Georgia e Menlo,isto e,o default de qualquer pagina.
  *   3. REGUA NO LUGAR DE CAIXA. Um unico estilo de fio (1px --rule). Nenhuma
- *      barra de acento de 2px/3px, nenhum painel cinza. Raio sobrevive so
+ *      barra de acento de 2px/3px,nenhum painel cinza. Raio sobrevive so
  *      onde significa "clicavel": botao e campo de formulario.
  *
- * O que esta camada NAO faz: nao redesenha as outras ~260 rotas, nao inventa
- * paleta global (uma superficie nova, --field, ver secao 0), nao adiciona
- * arquivo de fonte,
- * nao toca styles.css / styles-tokens.css / script.js — congelados por janela
- * de medicao ate 2026-09-13, ver docs/decisions/DEFERRED-BY-MEASUREMENT-FREEZE-2026-08-30.md.
+ * O que esta camada NAO faz: nao redesenha as outras ~260 rotas,nao inventa
+ * paleta global (uma superficie nova, --field, ver secao 0),nao adiciona
+ * arquivo de fonte,* nao toca styles.css / styles-tokens.css / script.js — congelados por janela
+ * de medicao ate 2026-09-13,ver docs/decisions/DEFERRED-BY-MEASUREMENT-FREEZE-2026-08-30.md.
  * Nao carregar em outra rota.
  * ------------------------------------------------------------------------- */
 
 /* Archivo v2.001 · Omnibus-Type · SIL OFL 1.1 · assets/archivo-OFL.txt
- * Subconjunto latino pt-BR, dois eixos (wght 100-900, wdth 66-110), tnum e
- * zero cortado: uma familia cobre display, texto e numero tabular. */
+ * Subconjunto latino pt-BR,dois eixos (wght 100-900, wdth 66-110),tnum e
+ * zero cortado: uma familia cobre display,texto e numero tabular. */
 @font-face{
   font-family:"Archivo Var";
   src:url("/assets/archivo-var-latin-bf6e041e.woff2") format("woff2-variations");
@@ -63,12 +60,12 @@
 }
 
 /* ── 0. Tokens da home ─────────────────────────────────────────────────── */
-/* Uma superficie nova, --field: o preto-verde da marca, nao o navy corporativo
- * generico. Deriva do --green-700 existente escurecido ate virar tinta, o que
+/* Uma superficie nova,--field: o preto-verde da marca,nao o navy corporativo
+ * generico. Deriva do --green-700 existente escurecido ate virar tinta,o que
  * faz o campo escuro pertencer a CONFENGE em vez de pertencer a categoria.
  *
  * Honestidade sobre a contagem: --field e a unica DECISAO de cor nova. As
- * outras custom properties abaixo nao sao paleta, sao o conjunto legivel sobre
+ * outras custom properties abaixo nao sao paleta,sao o conjunto legivel sobre
  * ela (tinta, texto de apoio, acento vivo) e as duas reguas. Nenhuma entra em
  * styles-tokens.css; todas morrem no escopo da home. Promover qualquer uma a
  * token global exige issue propria.
@@ -117,41 +114,30 @@ body[data-content-cluster="home"]{
 }
 body[data-content-cluster="home"] main{overflow-x:clip}
 
-/* ── 1. Sistema tipografico: uma familia, tres larguras ────────────────── */
+/* ── 1. Sistema tipografico: uma familia,tres larguras ────────────────── */
 /* A serifa de sistema (--serif resolve para Georgia/Palatino) e a monoespacada
  * (--mono resolve para Menlo/Consolas) eram o unico "acabamento" tipografico
  * da pagina e ambas sao o default de qualquer navegador. Saem. O eixo de
  * largura do Archivo faz o mesmo trabalho e pertence a marca. */
-body[data-content-cluster="home"] .type-serif,
-body[data-content-cluster="home"] .type-mono{
+body[data-content-cluster="home"] .type-serif,body[data-content-cluster="home"] .type-mono{
   font-family:"Archivo Var",ui-sans-serif,system-ui,sans-serif;
 }
 body[data-content-cluster="home"] .type-serif{font-stretch:var(--wide);font-weight:700;letter-spacing:-.03em}
 
-body[data-content-cluster="home"] h1,
-body[data-content-cluster="home"] h2{
+body[data-content-cluster="home"] h1,body[data-content-cluster="home"] h2{
   font-stretch:var(--wide);font-weight:760;letter-spacing:-.032em;line-height:1.04;
 }
 body[data-content-cluster="home"] h3{font-stretch:var(--wide);font-weight:720;letter-spacing:-.02em;line-height:1.15}
 
-/* O rotulo estreito e a assinatura tipografica da home: 78% de largura,
- * peso 750, versalete. Aparece em eyebrow, rotulo de porta e legenda de dado —
- * sempre nomeando, nunca decorando. */
-body[data-content-cluster="home"] .eyebrow,
-body[data-content-cluster="home"] .journey-kind,
-body[data-content-cluster="home"] .offer-label,
-body[data-content-cluster="home"] .icp-label,
-body[data-content-cluster="home"] .type-mono{
+/* O rotulo estreito e a assinatura tipografica da home: 78% de largura,* peso 750,versalete. Aparece em eyebrow,rotulo de porta e legenda de dado —
+ * sempre nomeando,nunca decorando. */
+body[data-content-cluster="home"] .eyebrow,body[data-content-cluster="home"] .journey-kind,body[data-content-cluster="home"] .icp-label,body[data-content-cluster="home"] .type-mono{
   font-stretch:var(--narrow);font-weight:750;letter-spacing:.11em;text-transform:uppercase;
   font-size:var(--text-small);line-height:1.4;
 }
-/* O grupo inteiro fica em --text-small (14px), nao em --text-micro (12,8px).
- * test_ui_geometry mede .contact-copy p, .offer-label, .icp-label e outros
- * contra um piso funcional de 14px, e o eyebrow da secao de captura cai
- * dentro de .contact-copy p. A largura estreita ja diferencia o rotulo do
- * texto; nao e o tamanho que precisa fazer esse trabalho. */
-body[data-content-cluster="home"] .offer-label,
-body[data-content-cluster="home"] .icp-label{letter-spacing:.09em}
+/* O grupo inteiro fica em --text-small (14px),nao em --text-micro (12,8px).
+ * test_ui_geometry mede .contact-copy p,.icp-label e outros
+ * contra um piso funcional de 14px,body[data-content-cluster="home"] .icp-label{letter-spacing:.09em}
 body[data-content-cluster="home"] .eyebrow{margin:0 0 .85rem;color:var(--accent)}
 /* O ponto lime do eyebrow era a ultima ocorrencia de --lime na home. */
 body[data-content-cluster="home"] .eyebrow-dot{display:none}
@@ -161,16 +147,16 @@ body[data-content-cluster="home"] .section-lead{
 }
 
 /* ── 2. Ritmo ──────────────────────────────────────────────────────────── */
-/* Quatro alturas de secao, nao oito. A regua entre secoes e sempre a mesma:
- * 1px --rule, largura do container. */
+/* Quatro alturas de secao,nao oito. A regua entre secoes e sempre a mesma:
+ * 1px --rule,largura do container. */
 body[data-content-cluster="home"] .section{padding:clamp(3.5rem,7vw,6rem) 0}
 body[data-content-cluster="home"] .section--tight{padding:0}
 body[data-content-cluster="home"] .section--loose{padding:clamp(4.25rem,8vw,7.5rem) 0}
 body[data-content-cluster="home"] .section-head{max-width:none;margin-bottom:clamp(2rem,4vw,3rem)}
 body[data-content-cluster="home"] .section-head h2{max-width:20ch}
-/* Cabecalho de secao em duas colunas: a tese a esquerda, a qualificacao a
- * direita, no lugar de uma coluna curta com 45% da largura vazia. So quando
- * existe lead; sem :has() a secao volta a empilhar, que continua legivel. */
+/* Cabecalho de secao em duas colunas: a tese a esquerda,a qualificacao a
+ * direita,no lugar de uma coluna curta com 45% da largura vazia. So quando
+ * existe lead; sem :has() a secao volta a empilhar,que continua legivel. */
 @media (min-width:1000px){
   body[data-content-cluster="home"] .section-head:has(.section-lead){
     display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);
@@ -190,9 +176,9 @@ body[data-content-cluster="home"] .hero h1{
   max-width:22ch;margin:0 0 1.15rem;color:var(--field-ink);
   font-size:clamp(2.15rem,4.1vw,3.3rem);text-wrap:balance;
 }
-/* A tese tem dois tempos: o que nao paga a conta, e o que paga. O contraste
+/* A tese tem dois tempos: o que nao paga a conta,e o que paga. O contraste
  * era carregado por uma serifa de sistema em verde escuro; agora e a mesma
- * familia numa linha propria, no verde que o campo escuro deixa respirar. */
+ * familia numa linha propria,no verde que o campo escuro deixa respirar. */
 body[data-content-cluster="home"] .hero h1 .type-serif{display:block;color:var(--accent-live)}
 body[data-content-cluster="home"] .hero-eyebrow{color:var(--accent-live)}
 body[data-content-cluster="home"] .hero-lead{
@@ -207,12 +193,12 @@ body[data-content-cluster="home"] .hero-actions{gap:1rem 1.75rem;margin-bottom:1
 
 /* Sobre folha o anel de foco global (halo branco + nucleo tinta) ja e o
  * correto; a inversao que o campo escuro exigia deixou de fazer sentido. */
-/* Sobre folha a acao primaria volta a ser o verde institucional, que e a cor
- * de acao do resto do site. Uma acao dominante, sem competidor do mesmo peso.
- * Branco sobre --green-700 mede 6,13:1, acima do piso de 4,5:1 do gate. */
-/* .button-lg pede 58px, mas um contrato de layout em styles.css derruba a
+/* Sobre folha a acao primaria volta a ser o verde institucional,que e a cor
+ * de acao do resto do site. Uma acao dominante,sem competidor do mesmo peso.
+ * Branco sobre --green-700 mede 6,13:1,acima do piso de 4,5:1 do gate. */
+/* .button-lg pede 58px,mas um contrato de layout em styles.css derruba a
  * altura para o piso de toque de 44px. Ao lado de um display de 3,3rem isso
- * le como um botao secundario, entao a acao dominante recupera a escala. */
+ * le como um botao secundario,entao a acao dominante recupera a escala. */
 body[data-content-cluster="home"] .hero .button-primary{
   min-height:56px;padding-inline:26px;
   color:var(--white);background:var(--green-700);
@@ -238,8 +224,8 @@ body[data-content-cluster="home"] .home-hero-grid{
 
 /* A assinatura: o conjunto de vereditos.
  * Nao e ornamento nem card. E o unico enunciado da pagina que um concorrente
- * nao copia sem mudar de negocio — a CONFENGE devolve uma palavra, inclusive
- * "recusar". Tres linhas, regua entre elas, nada dentro de caixa. */
+ * nao copia sem mudar de negocio — a CONFENGE devolve uma palavra,inclusive
+ * "recusar". Tres linhas,regua entre elas,nada dentro de caixa. */
 .hero-verdict{margin:.2rem 0 0;padding:0}
 .hero-verdict-label{
   margin:0 0 1rem;color:var(--field-muted);
@@ -259,22 +245,21 @@ body[data-content-cluster="home"] .home-hero-grid{
 .hero-verdict-foot strong{color:var(--field-ink);font-weight:650}
 
 /* -- 3b. Faixa de escala: a primeira coisa depois do campo -------------- */
-/* Os numeros sairam da dobra. Nao por serem fracos, mas por disputarem a
- * mensagem com ela: um visitante em 390x844 recebia categoria, tese, promessa,
- * entregavel, acao, credencial, veredito E escala antes de rolar. Aqui eles
+/* Os numeros sairam da dobra. Nao por serem fracos,mas por disputarem a
+ * mensagem com ela: um visitante em 390x844 recebia categoria,tese,promessa,* entregavel,acao,credencial,veredito E escala antes de rolar. Aqui eles
  * ficam a um passo do olho e nao dentro do argumento.
  *
- * A aresta e deliberada: o campo escuro termina, a folha comeca. Essa troca de
- * superficie e o sinal de que a dobra acabou, e e o que uma faixa dentro do
+ * A aresta e deliberada: o campo escuro termina,a folha comeca. Essa troca de
+ * superficie e o sinal de que a dobra acabou,e e o que uma faixa dentro do
  * proprio hero nao conseguia dar.
  *
- * Nao e um oitavo bloco narrativo. Nao tem titulo, nao tem acao e nao e uma
- * <section>: e um <div> no nivel do <main>, que e exatamente como o gate de
+ * Nao e um oitavo bloco narrativo. Nao tem titulo,nao tem acao e nao e uma
+ * <section>: e um <div> no nivel do <main>,que e exatamente como o gate de
  * arquetipos de test_design_gates.py enxerga o que nao e secao. Rotular esta
  * faixa de "secao" para caber no gate seria o inverso do que ela e.
  *
- * Dois numeros, nesta ordem: primeiro o recorte que interessa a uma
- * construtora, depois o universo de onde ele sai. Magnitude sozinha nao e
+ * Dois numeros,nesta ordem: primeiro o recorte que interessa a uma
+ * construtora,depois o universo de onde ele sai. Magnitude sozinha nao e
  * argumento; 4,48 milhoes sem os 54.055 ao lado convida a leitura errada de
  * que ha 4,48 milhoes de contratos de engenharia. */
 .home-proof-strip{background:var(--soft);border-bottom:1px solid var(--rule)}
@@ -304,123 +289,29 @@ body[data-content-cluster="home"] .home-hero-grid{
 .home-proof-strip-base a{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
 .home-proof-strip-base a:hover{color:var(--accent)}
 
-/* ── 4. Tres portas: linha editorial, nao card ─────────────────────────── */
-body[data-content-cluster="home"] .journeys-section{border-bottom:0}
-body[data-content-cluster="home"] .journey-list{margin:0;padding:0;list-style:none;border-top:1px solid var(--rule)}
-body[data-content-cluster="home"] .journey-row{
-  display:grid;grid-template-columns:minmax(0,13rem) minmax(0,1fr);
-  gap:.6rem clamp(1.5rem,4vw,3.5rem);align-items:start;
-  margin:0;padding:clamp(1.6rem,3vw,2.25rem) 0;border-bottom:1px solid var(--rule);border-top:0;
-}
+/* ── 4. Tres portas: linha editorial{border-bottom:0}
 body[data-content-cluster="home"] .journey-kind{margin:.35rem 0 0;color:var(--accent)}
-body[data-content-cluster="home"] .journey-row-body{min-width:0}
-@media (min-width:1000px){
-  body[data-content-cluster="home"] .journey-row-body{
-    display:grid;grid-template-columns:minmax(0,1fr) minmax(0,17rem);
-    column-gap:clamp(1.5rem,3.5vw,3.5rem);
-  }
-  body[data-content-cluster="home"] .journey-row-body>h3,
-  body[data-content-cluster="home"] .journey-row-body>p:not(.journey-row-actions){grid-column:1}
-  body[data-content-cluster="home"] .journey-row-actions{
-    grid-column:2;grid-row:1/span 5;align-self:start;
-    display:grid;justify-items:start;gap:.75rem;margin:0;
-  }
-  body[data-content-cluster="home"] .journey-row-actions .button{width:100%}
-}
-body[data-content-cluster="home"] .journey-row-body h3{
-  margin:0 0 .5rem;max-width:24ch;font-size:clamp(1.25rem,2.1vw,1.6rem);
-}
-body[data-content-cluster="home"] .journey-row-body>p{max-width:60ch;margin:0 0 .75rem;color:var(--text);line-height:1.6}
 body[data-content-cluster="home"] #contrato-canal-seguro{max-width:58ch;color:var(--muted);font-size:.9rem;line-height:1.55}
-body[data-content-cluster="home"] .journey-row-actions{
-  display:flex;align-items:center;flex-wrap:wrap;gap:.6rem 1.5rem;margin:.9rem 0 0;
-}
 body[data-content-cluster="home"] .journey-alt-link{color:var(--muted);font-size:.9rem;text-underline-offset:3px}
 body[data-content-cluster="home"] .journey-alt-link:hover{color:var(--accent)}
 
-/* ── 5. Ofertas: uma tese dominante, apoios subordinados por formato ───── */
-body[data-content-cluster="home"] .offer-layout{
+/* ── 5. Ofertas: uma tese dominante{
   display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);
   gap:clamp(1.75rem,4vw,3.5rem);align-items:start;
 }
-body[data-content-cluster="home"] .offer-dominant{
-  gap:.85rem;padding:clamp(1.9rem,3.5vw,2.75rem);
-  color:var(--dark-ink);background:var(--dark);border:0;
-}
-body[data-content-cluster="home"] .offer-dominant .offer-label{color:var(--dark-accent)}
-body[data-content-cluster="home"] .offer-dominant h3{font-size:clamp(1.4rem,2.2vw,1.9rem)}
-body[data-content-cluster="home"] .offer-dominant .offer-headline{color:var(--dark-ink);font-size:1.05rem;font-weight:600}
-body[data-content-cluster="home"] .offer-facts li{color:var(--dark-muted)}
-body[data-content-cluster="home"] .offer-facts strong{color:var(--dark-ink);font-weight:650}
-body[data-content-cluster="home"] .offer-dominant-link{color:var(--dark-ink)}
-body[data-content-cluster="home"] .offer-dominant-link .icon{color:var(--dark-accent)}
-body[data-content-cluster="home"] .offer-dominant{--focus-ring-halo:var(--dark);--focus-ring-core:var(--white)}
-
-/* Os apoios deixam de ser tres cards iguais ao lado de um card maior: viram
- * uma lista com regua. Formato diferente = subordinacao legivel. */
-body[data-content-cluster="home"] .offer-paths{display:block;border-top:1px solid var(--rule)}
-body[data-content-cluster="home"] .offer-path{
-  display:grid;gap:.3rem;padding:1.15rem 0;background:none;border:0;border-bottom:1px solid var(--rule);
-  border-radius:0;transition:none;
-}
-body[data-content-cluster="home"] .offer-path:hover{border-color:var(--rule)}
-body[data-content-cluster="home"] .offer-path:hover strong{color:var(--accent)}
-body[data-content-cluster="home"] .offer-path .type-mono{color:var(--accent);font-size:var(--text-micro)}
-body[data-content-cluster="home"] .offer-path strong{font-size:1.05rem;font-weight:720;letter-spacing:-.015em}
-body[data-content-cluster="home"] .offer-path p{max-width:46ch}
-body[data-content-cluster="home"] .path-cta{margin-top:.35rem;color:var(--accent)}
-
-/* ── 6. Entregas: o artefato tem formato proprio ───────────────────────── */
-.home-deliverables{
-  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.8fr);
-  gap:clamp(1.75rem,4vw,3.5rem);align-items:start;
-  margin-top:clamp(2.5rem,5vw,4rem);padding-top:clamp(1.75rem,3vw,2.5rem);border-top:1px solid var(--rule);
-}
-.home-deliverables-copy h3{max-width:20ch;margin:.5rem 0 .75rem;font-size:clamp(1.35rem,2.2vw,1.9rem)}
-.home-deliverables-copy>p:not(.eyebrow){max-width:54ch;margin:0;color:var(--text);font-size:1rem;line-height:1.65}
-.home-deliverables-example{padding:0;background:none;border:0;border-top:2px solid var(--rule-strong);border-radius:0}
-.home-deliverables-example>span{
-  display:block;margin:.85rem 0 .35rem;color:var(--muted);
-  font-stretch:var(--narrow);font-weight:750;letter-spacing:.1em;text-transform:uppercase;font-size:var(--text-micro);
-}
-.home-deliverables-example>strong{
-  display:block;margin-bottom:1rem;color:var(--ink);font-size:1.1rem;font-weight:720;
-  letter-spacing:-.02em;line-height:1.25;
-}
-.home-deliverables-result{
-  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;
-  margin:0 0 1.15rem;padding:.9rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
-}
-.home-deliverables-result dt{
-  color:var(--muted);font-stretch:var(--narrow);font-weight:750;letter-spacing:.09em;
-  text-transform:uppercase;font-size:var(--text-micro);
-}
-.home-deliverables-result dd{margin:.25rem 0 0;color:var(--ink);font-size:1.75rem;font-weight:760;line-height:1;letter-spacing:-.03em}
-.home-deliverables-actions{display:flex;align-items:center;flex-wrap:wrap;gap:.7rem 1.25rem}
-.home-deliverables-actions .button{min-height:48px}
-body[data-content-cluster="home"] .home-deliverables-actions .button-light{
-  color:var(--white);background:var(--accent);box-shadow:none;
-}
-body[data-content-cluster="home"] .home-deliverables-actions .button-light:hover{background:var(--green-600);box-shadow:none}
 
 /* ── 7. Metodo: o verbo carrega a sequencia ────────────────────────────── */
 /* A numeracao 01/02/03/04 saiu. O DESIGN_DIRECTION_BRIEF classifica numeracao
- * ordinal ornamental como cluster 3 de design generico, e aqui ela nao
+ * ordinal ornamental como cluster 3 de design generico,e aqui ela nao
  * transportava informacao: os quatro verbos ja estao em ordem. */
 .home-method-strip{
   display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;
   margin:clamp(2.5rem,5vw,4rem) 0 0;padding:0;list-style:none;border-top:2px solid var(--rule-strong);
 }
-.home-method-strip .macro-phase{
-  padding:1.4rem clamp(1rem,2vw,1.75rem) 0 0;background:none;border:0;border-radius:0;
-}
-.home-method-strip .macro-phase+.macro-phase{padding-left:clamp(1rem,2vw,1.75rem);border-left:1px solid var(--rule)}
 .home-method-strip .phase-verb{
   display:block;margin-bottom:.6rem;color:var(--accent);
   font-stretch:var(--narrow);font-weight:750;letter-spacing:.11em;text-transform:uppercase;font-size:var(--text-micro);
 }
-.home-method-strip .macro-phase h3{margin:0 0 .5rem;font-size:1.02rem;line-height:1.25}
-.home-method-strip .macro-phase>p{margin:0;color:var(--muted);font-size:.92rem;line-height:1.6}
 
 /* ── 8. Evidencia de mercado: procedencia colada ao numero ─────────────── */
 .market-context{background:var(--soft);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
@@ -432,7 +323,7 @@ body[data-content-cluster="home"] .home-deliverables-actions .button-light:hover
 .evidence-title{margin:.4rem 0 .5rem;font-size:1.1rem;font-weight:720;letter-spacing:-.015em;line-height:1.3}
 /* O cabecalho da evidencia e flex com `white-space:nowrap` no rotulo de fonte:
  * abaixo de ~900px o rotulo nao cabe ao lado do titulo e os dois se sobrepoem.
- * A procedencia desce para linha propria, que e onde ela pertence. */
+ * A procedencia desce para linha propria,que e onde ela pertence. */
 @media (max-width:900px){
   body[data-content-cluster="home"] .evidence-heading{display:grid;justify-items:start;gap:.3rem}
   body[data-content-cluster="home"] .evidence-heading>span{white-space:normal}
@@ -442,54 +333,16 @@ body[data-content-cluster="home"] .evidence-illustration{
   color:var(--muted);font-size:var(--text-small);line-height:1.55;
 }
 
-/* .evidence-selector nasceu para pousar num painel navy: styles.css ainda
- * carrega branco, cinza-azulado claro e lime pensados para esse fundo escuro.
- * Aqui ele mora sobre fundo claro, entao cada cor herdada volta para tinta —
- * sem isso, ficam textos brancos e lime quase invisiveis (medido abaixo de
+cinza-azulado claro e lime pensados para esse fundo escuro.
+ * Aqui ele mora sobre fundo claro,entao cada cor herdada volta para tinta —
+ * sem isso,ficam textos brancos e lime quase invisiveis (medido abaixo de
  * 1.5:1 de contraste). */
-.evidence-kicker,
-.evidence-tier,
-.evidence-heading>span,
-.evidence-facts dt,
-.evidence-source p{color:var(--muted)}
-.evidence-context{color:var(--muted)}
-.evidence-title,
-.evidence-case-title,
-.evidence-facts dd{color:var(--ink)}
-.evidence-facts{border-color:var(--rule)}
-.evidence-facts>div+div{border-left-color:var(--rule)}
-.evidence-tabs{background:var(--white);border-color:var(--rule)}
-.evidence-tab{color:var(--muted)}
-.evidence-tab:hover{color:var(--ink);background:var(--rule)}
-.evidence-panel{background:var(--white);border-color:var(--rule)}
-.evidence-exposure{background:rgba(45,111,45,.07);border-left-color:var(--accent)}
-.evidence-exposure>span{color:var(--muted)}
-.evidence-exposure strong{color:var(--ink)}
-.evidence-exposure p{color:var(--text)}
-.evidence-method li>span{color:var(--accent);font-family:inherit}
-.evidence-method p{color:var(--text)}
-.evidence-method strong{color:var(--ink)}
-.evidence-source{border-top-color:var(--rule)}
-.evidence-source a,
-.evidence-source-link{color:var(--ink)}
-.evidence-source a:hover,
-.evidence-source-link:hover{color:var(--accent)}
-.evidence-whatsapp{color:var(--ink)}
-.evidence-whatsapp:hover{color:var(--accent)}
-.evidence-tab.is-active,
-.evidence-tab[aria-selected="true"]{color:var(--white);background:var(--rule-strong);border-color:var(--rule-strong)}
-/* Uma acao dominante por pagina: a acao do painel de evidencia e secundaria,
- * em contorno, para nao disputar peso com o CTA da dobra. */
-.evidence-cta,
-.evidence-cta:hover{color:var(--ink);background:transparent;border:1px solid var(--rule-strong)}
-.evidence-cta:hover{color:var(--white);background:var(--rule-strong)}
-/* Sem o "01/02/03", styles.css ainda reservava a coluna que os numeros
- * ocupavam e o texto do metodo caia em uma palavra por linha. */
-.evidence-selector .evidence-method li,
-.evidence-method li{grid-template-columns:1fr;gap:.15rem}
-.evidence-method p{margin:0}
+.evidence-kicker{color:var(--muted)}
+.evidence-title{color:var(--ink)}
+/* Uma acao dominante por pagina: a acao do painel de evidencia e secundaria,* em contorno{color:var(--ink);background:transparent;border:1px solid var(--rule-strong)}
+/* Sem o "01/02/03"{grid-template-columns:1fr;gap:.15rem}
 
-/* Vantagem proprietaria: beneficio primeiro, numero com procedencia depois. */
+/* Vantagem proprietaria: beneficio primeiro,numero com procedencia depois. */
 .market-advantages{margin:1.5rem 0 0;padding-top:1.35rem;border-top:1px solid var(--rule)}
 .market-advantages ul{margin:.7rem 0 0;padding:0;list-style:none;display:grid;gap:.85rem}
 .market-advantages li{padding-left:1rem;border-left:1px solid var(--accent);color:var(--text);font-size:.95rem;line-height:1.6;max-width:56ch}
@@ -497,38 +350,22 @@ body[data-content-cluster="home"] .evidence-illustration{
 .market-advantages-base{margin:1.1rem 0 0;color:var(--muted);font-size:.85rem;line-height:1.55;max-width:56ch}
 .market-advantages-base a{color:var(--ink);text-underline-offset:3px}
 
-/* ── 9. Autoridade e adequacao: sai o card, fica a regua ───────────────── */
-body[data-content-cluster="home"] .authority-photo{
+/* ── 9. Autoridade e adequacao: sai o card{
   max-width:380px;padding:0;background:none;border:0;overflow:hidden;
 }
 /* O recorte precisa de chao: sobre a secao clara ele flutuava sem base. A
- * placa usa a propria regua da home, um degrau acima do fundo da secao. */
-body[data-content-cluster="home"] .authority-photo img{
+ * placa usa a propria regua da home{
   width:100%;max-width:340px;background:var(--rule);
 }
-body[data-content-cluster="home"] .authority-photo figcaption{padding:.75rem 0 0;color:var(--muted);font-size:.85rem}
-body[data-content-cluster="home"] .authority-copy blockquote{
-  margin:1.25rem 0;padding-left:1.15rem;border-left:2px solid var(--accent);
-  font-stretch:var(--wide);font-size:1.25rem;font-weight:600;letter-spacing:-.02em;line-height:1.4;
-}
-body[data-content-cluster="home"] .authority-fields{gap:0;margin:1.5rem 0;border-top:1px solid var(--rule)}
-body[data-content-cluster="home"] .authority-fields li{
-  padding:.85rem 0;background:none;border:0;border-bottom:1px solid var(--rule);border-radius:0;
-}
-body[data-content-cluster="home"] .authority-fields li:nth-child(odd){padding-right:1.25rem}
-body[data-content-cluster="home"] .authority-fields li:nth-child(even){padding-left:1.25rem;border-left:1px solid var(--rule)}
-body[data-content-cluster="home"] .authority-fields .type-mono{color:var(--accent);font-size:var(--text-micro)}
 
 body[data-content-cluster="home"] .icp-contrast{border:0;border-top:2px solid var(--rule-strong);border-radius:0}
-body[data-content-cluster="home"] .icp-yes,
-body[data-content-cluster="home"] .icp-no{padding:1.5rem 0 0}
+body[data-content-cluster="home"] .icp-yes,body[data-content-cluster="home"] .icp-no{padding:1.5rem 0 0}
 body[data-content-cluster="home"] .icp-no{background:none;border-left:1px solid var(--rule);padding-left:clamp(1.25rem,3vw,2.5rem)}
 body[data-content-cluster="home"] .icp-yes{padding-right:clamp(1.25rem,3vw,2.5rem)}
 body[data-content-cluster="home"] .icp-contrast li{border-bottom:1px solid var(--rule)}
-body[data-content-cluster="home"] .fit-faq summary{font-weight:720;letter-spacing:-.01em}
 
 /* Toda acao secundaria da home usa o mesmo contorno. Antes conviviam a pilula
- * do styles.css nas portas, outra no painel de evidencia e uma terceira no
+ * do styles.css nas portas,outra no painel de evidencia e uma terceira no
  * formulario. */
 body[data-content-cluster="home"] .button-secondary{
   color:var(--ink);background:transparent;border:1px solid var(--rule-strong);box-shadow:none;
@@ -546,10 +383,10 @@ body[data-content-cluster="home"] .contact-section{--focus-ring-halo:var(--dark)
 body[data-content-cluster="home"] .contact-form{
   border:0;border-radius:0;box-shadow:none;--focus-ring-halo:var(--white);--focus-ring-core:var(--ink);
 }
-/* A legenda de etapa vinha em rgba(6,26,51,.55) sobre o cartao branco, medido
+/* A legenda de etapa vinha em rgba(6,26,51,.55) sobre o cartao branco,medido
  * em 3,6:1 e reprovado pelo axe em serious. Tinta solida em 4,8:1. */
 body[data-content-cluster="home"] .form-step-legend{color:var(--muted)}
-/* Etapa 2 e opcional inteira: subordinada por peso, nao escondida. O visitante
+/* Etapa 2 e opcional inteira: subordinada por peso,nao escondida. O visitante
  * precisa ver que pode enviar sem preencher nada disso. */
 body[data-content-cluster="home"] .form-step[data-step="2"] .field label{color:var(--muted);font-weight:600}
 body[data-content-cluster="home"] .form-legal{
@@ -561,14 +398,14 @@ body[data-content-cluster="home"] .form-legal p:last-child{margin:0}
 .turnstile-slot{margin:.75rem 0}
 .turnstile-slot[hidden]{display:none!important}
 
-/* O rodape volta a --navy-950 da folha global, que e o que a home tinha antes
+/* O rodape volta a --navy-950 da folha global,que e o que a home tinha antes
  * do campo escuro. Ele fica um degrau mais escuro que a captura #071a31 logo
- * acima: e a mesma aresta que a folha global sempre teve, e o dono da marca a
+ * acima: e a mesma aresta que a folha global sempre teve,e o dono da marca a
  * prefere ao campo unico. */
 body[data-content-cluster="home"] .site-footer{background:var(--navy-950)}
 /* .footer-top e uma grade de tres colunas (1.3fr .65fr 1fr) para quatro
- * blocos: marca, Situacoes, Biblioteca e Empresa, com Empresa caindo sozinha
- * na segunda linha e meia largura vazia ao lado. Quatro blocos, quatro
+ * blocos: marca,Situacoes,Biblioteca e Empresa,com Empresa caindo sozinha
+ * na segunda linha e meia largura vazia ao lado. Quatro blocos,quatro
  * colunas. Escopado na home porque styles.css esta congelado. */
 @media (min-width:1000px){
   body[data-content-cluster="home"] .footer-top{
@@ -581,18 +418,10 @@ body[data-content-cluster="home"] .site-footer{background:var(--navy-950)}
   body[data-content-cluster="home"] .home-hero-grid{grid-template-columns:minmax(0,1fr);gap:1.25rem}
 }
 @media (max-width:1100px){
-  body[data-content-cluster="home"] .offer-layout{grid-template-columns:minmax(0,1fr)}
   .market-context-grid{grid-template-columns:minmax(0,1fr);gap:1.75rem}
   .home-method-strip{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .home-method-strip .macro-phase:nth-child(odd){padding-left:0;border-left:0}
-  .home-method-strip .macro-phase:nth-child(even){padding-left:clamp(1rem,2vw,1.75rem);border-left:1px solid var(--rule)}
-  .home-method-strip .macro-phase:nth-child(n+3){margin-top:1.4rem;border-top:1px solid var(--rule)}
-}
-@media (max-width:1000px){
-  .home-deliverables{grid-template-columns:minmax(0,1fr);gap:1.75rem}
 }
 @media (max-width:820px){
-  body[data-content-cluster="home"] .journey-row{grid-template-columns:minmax(0,1fr);gap:.5rem}
   body[data-content-cluster="home"] .journey-kind{margin:0}
 }
 @media (max-width:700px){
@@ -609,32 +438,20 @@ body[data-content-cluster="home"] .site-footer{background:var(--navy-950)}
   .hero-verdict-set li{font-size:1.25rem;padding:.34rem 0}
   .hero-verdict-foot{margin-top:.6rem;font-size:var(--text-small)}
   /* A dobra movel encostava em heroCap 1.25 do test_ui_geometry sem folga
-   * nenhuma. Aqui esta a margem de seguranca, tirada do respiro e nao do
+   * nenhuma. Aqui esta a margem de seguranca,tirada do respiro e nao do
    * conteudo: nenhuma linha some. */
   .home-proof-strip-inner{grid-template-columns:repeat(2,minmax(0,1fr));gap:1.1rem 1.5rem}
   .home-proof-strip-claim{grid-column:1 / -1;max-width:none;font-size:1.02rem}
   .home-proof-strip-figures dd{font-size:1.45rem}
   .home-proof-strip-base{margin-top:.55rem;padding-top:.75rem}
-  .home-deliverables{margin-top:2rem}
-  .home-deliverables-copy h3{font-size:1.3rem}
-  .home-deliverables-result dd{font-size:1.4rem}
-  .home-deliverables-actions{display:grid;align-items:stretch}
-  .home-deliverables-actions .button{width:100%}
-  .home-deliverables-actions .text-link{justify-content:center}
   .home-method-strip{grid-template-columns:minmax(0,1fr);margin-top:2rem}
-  .home-method-strip .macro-phase{padding:1.15rem 0 0!important;border-left:0!important}
-  .home-method-strip .macro-phase+.macro-phase{margin-top:0;border-top:1px solid var(--rule)}
   body[data-content-cluster="home"] .market-advantages li{font-size:.92rem}
-  body[data-content-cluster="home"] .icp-no,
-  body[data-content-cluster="home"] .icp-yes{padding-left:0;padding-right:0;border-left:0}
+  body[data-content-cluster="home"] .icp-no,body[data-content-cluster="home"] .icp-yes{padding-left:0;padding-right:0;border-left:0}
   body[data-content-cluster="home"] .icp-no{border-top:1px solid var(--rule);margin-top:1.25rem;padding-top:1.25rem}
-  body[data-content-cluster="home"] .authority-fields li:nth-child(even){padding-left:0;border-left:0}
-  body[data-content-cluster="home"] .authority-fields li:nth-child(odd){padding-right:0}
 }
 
 /* Abaixo de 400px (360px ainda e um terco do trafego movel brasileiro) a
- * dobra passava de 1,3 viewport. A folga sai de tamanho de tipo e respiro,
- * nunca de conteudo: nenhuma linha e escondida, porque esconder no telefone
+ * dobra passava de 1,3 viewport. A folga sai de tamanho de tipo e respiro,* nunca de conteudo: nenhuma linha e escondida,porque esconder no telefone
  * o que o desktop mostra e o oposto do que a pagina esta tentando provar. */
 @media (max-width:400px){
   body[data-content-cluster="home"] .hero h1{font-size:1.85rem}
@@ -645,4 +462,153 @@ body[data-content-cluster="home"] .site-footer{background:var(--navy-950)}
   .hero-verdict-set li{font-size:1.12rem;padding:.32rem 0}
   .hero-verdict-foot{margin-top:.6rem}
   .home-proof-strip-figures dd{font-size:1.3rem}
+}
+
+/* MV-04 · corporate shell -------------------------------------------------
+ * Situation-first layout for the umbrella brand. The visual language stays
+ * technical: ruled rows,numbered steps and one dark B2G field,without a
+ * generic stock image or decorative animation. */
+.anchor-alias{display:block;position:relative;top:-88px;visibility:hidden}
+
+body[data-content-cluster="home"] .corporate-hero-note{
+  align-self:stretch;display:flex;flex-direction:column;justify-content:flex-end;
+  padding:clamp(1.35rem,3vw,2.25rem);color:#fff;background:var(--dark);
+  border:1px solid #0a294b;border-radius:2px;
+}
+body[data-content-cluster="home"] .corporate-hero-note .eyebrow{color:var(--dark-accent)}
+body[data-content-cluster="home"] .corporate-hero-note-lead{
+  max-width:22ch;margin:0 0 1.4rem;color:#fff;font-size:clamp(1.2rem,2.2vw,1.65rem);
+  font-weight:720;letter-spacing:-.025em;line-height:1.2;
+}
+body[data-content-cluster="home"] .corporate-hero-note ol{margin:0;padding:0;list-style:none}
+body[data-content-cluster="home"] .corporate-hero-note li{
+  display:grid;grid-template-columns:2.25rem 1fr;gap:.8rem;align-items:center;
+  min-height:44px;padding:.65rem 0;border-top:1px solid rgba(255,255,255,.2);
+  color:var(--dark-muted);font-size:.92rem;
+}
+body[data-content-cluster="home"] .corporate-hero-note li span{
+  color:var(--dark-accent);font-size:.75rem;font-weight:800;letter-spacing:.08em;
+}
+body[data-content-cluster="home"] .hero-proof{grid-template-columns:repeat(3,minmax(0,1fr));gap:.5rem 1rem}
+body[data-content-cluster="home"] .hero-proof li{padding:0;border:0}
+body[data-content-cluster="home"] .hero-proof a{text-decoration:underline;text-underline-offset:3px}
+
+.corporate-section-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(16rem,.55fr);gap:1rem 4rem;align-items:end}
+.corporate-section-head .eyebrow{grid-column:1 / -1}
+.corporate-section-head h2,.corporate-section-head .section-lead{margin-bottom:0}
+.situation-list{margin:clamp(2rem,4vw,3.5rem) 0 0;padding:0;border-top:1px solid var(--rule-strong);list-style:none}
+.situation-row{
+  display:grid;grid-template-columns:3.5rem minmax(0,1fr) minmax(11rem,.34fr);
+  gap:clamp(1rem,3vw,2.5rem);align-items:center;padding:1.35rem 0;
+  border-bottom:1px solid var(--rule);
+}
+.situation-row h3{margin:0 0 .4rem;font-size:clamp(1.05rem,1.7vw,1.3rem)}
+.situation-row p{max-width:62ch;margin:0;color:var(--muted);font-size:.94rem;line-height:1.55}
+.situation-index{align-self:start;padding-top:.15rem;color:var(--green-700);font-size:.78rem;font-weight:800;letter-spacing:.08em}
+.situation-action{display:inline-flex;align-items:center;justify-content:space-between;gap:.75rem;min-height:48px;color:var(--ink);font-size:.9rem;font-weight:760}
+.situation-action .icon{color:var(--green-700)}
+.situation-row--b2g{margin-top:-1px;padding-inline:1.15rem;color:#fff;background:var(--dark);border-color:var(--dark)}
+.situation-row--b2g h3,.situation-row--b2g .situation-action{color:#fff}
+.situation-row--b2g p{color:var(--dark-muted)}
+.situation-row--b2g .situation-index,.situation-row--b2g .situation-action .icon,.situation-kicker{color:var(--dark-accent)}
+.situation-row .situation-kicker{margin-bottom:.32rem;font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.chooser-more{margin:1.35rem 0 0;text-align:right}
+
+.corporate-deliverables{background:#fff}
+.home-deliverables{background:#fff}
+.deliverable-ledger{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin-top:2.5rem;border-top:1px solid var(--rule-strong);border-bottom:1px solid var(--rule)}
+.deliverable-ledger article{padding:1.5rem 1.35rem 1.6rem 0}
+.deliverable-ledger article+article{padding-left:1.35rem;border-left:1px solid var(--rule)}
+.deliverable-ledger span{display:block;margin-bottom:1.2rem;color:var(--green-700);font-size:.75rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
+.deliverable-ledger h3{margin:0 0 .7rem;font-size:1.08rem}
+.deliverable-ledger p{margin:0;color:var(--muted);font-size:.91rem;line-height:1.6}
+
+.trust-process-grid,.b2g-vertical-grid,.corporate-triage-grid,.corporate-boundary{
+  display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:clamp(2.5rem,7vw,7rem);align-items:start;
+}
+.trust-process-grid>div+div{padding-left:clamp(1.5rem,4vw,3.5rem);border-left:1px solid var(--rule)}
+.trust-links{display:grid;gap:.25rem;margin:1.6rem 0 0;padding:0;border-top:1px solid var(--rule);list-style:none}
+.trust-links a{display:flex;align-items:center;min-height:46px;border-bottom:1px solid var(--rule);font-weight:700}
+.process-list{margin:0;padding:0;border-top:1px solid var(--rule-strong);list-style:none}
+.process-list li{display:grid;grid-template-columns:2rem 1fr;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--rule)}
+.process-list li>span{color:var(--green-700);font-size:.8rem;font-weight:800}
+.process-list strong{color:var(--ink)}
+.process-list p{margin:.25rem 0 0;color:var(--muted);font-size:.92rem}
+
+.corporate-audience{padding-block:clamp(3.5rem,7vw,6.5rem);color:#fff;background:var(--dark)}
+.audience-layout{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(2rem,6vw,6rem)}
+body[data-content-cluster="home"] .audience-layout .eyebrow{color:var(--dark-accent)}
+.audience-layout h2{max-width:17ch;color:#fff}
+.audience-layout ul{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin:0;padding:0;border-top:1px solid rgba(255,255,255,.25);list-style:none}
+.audience-layout li{display:flex;align-items:center;min-height:58px;padding:.7rem 1rem .7rem 0;border-bottom:1px solid rgba(255,255,255,.18);color:var(--dark-muted);font-size:.93rem}
+.audience-layout li:nth-child(even){padding-left:1rem;border-left:1px solid rgba(255,255,255,.18)}
+
+.b2g-vertical-grid{align-items:center}
+.b2g-shortcuts{display:flex;flex-wrap:wrap;gap:.45rem 1.25rem;margin:1.35rem 0;padding:0;list-style:none}
+.b2g-shortcuts a{display:inline-flex;align-items:center;min-height:44px;border-bottom:1px solid var(--rule);font-size:.88rem;font-weight:700}
+.b2g-proof{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin:0;border-top:1px solid var(--rule-strong)}
+.b2g-proof div{padding:1.2rem 0;border-bottom:1px solid var(--rule)}
+.b2g-proof div:nth-child(even){padding-left:1.2rem;border-left:1px solid var(--rule)}
+.b2g-proof dt{color:var(--muted);font-size:.78rem;font-weight:750;letter-spacing:.04em;text-transform:uppercase}
+.b2g-proof dd{margin:.45rem 0 0;color:var(--ink);font-size:clamp(1.6rem,3vw,2.35rem);font-weight:780;letter-spacing:-.04em}
+.b2g-proof .b2g-proof-source{grid-column:1 / -1}
+.b2g-proof .b2g-proof-source dd{font-size:1rem;letter-spacing:0}
+
+.corporate-triage{padding-block:clamp(3.5rem,7vw,6rem);background:#eef3ef;border-top:1px solid #d5dfd6}
+.corporate-triage h2{max-width:18ch}
+.triage-actions{display:grid;gap:.8rem;justify-items:start;padding-top:.25rem}
+.triage-actions .button{min-width:min(100%,23rem)}
+.triage-actions p{max-width:52ch;margin:.5rem 0 0;color:var(--muted);font-size:.88rem}
+
+body[data-content-cluster="corporate-services"]{font-family:"Archivo Var",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+.corporate-services-hero{padding-block:clamp(3.5rem,8vw,7rem);background:#fff;border-bottom:1px solid var(--line)}
+.corporate-services-hero h1{max-width:18ch;font-size:clamp(2.35rem,5vw,4.4rem)}
+.corporate-service-list{max-width:70rem}
+.corporate-service-row{display:grid;grid-template-columns:minmax(15rem,.7fr) minmax(0,1.3fr);gap:clamp(2rem,6vw,6rem);padding:2rem 0;border-top:1px solid var(--line)}
+.corporate-service-row>div:first-child{display:grid;grid-template-columns:2.5rem 1fr;gap:.75rem}
+.corporate-service-row h3{margin:0;font-size:clamp(1.15rem,2vw,1.55rem)}
+.corporate-service-row p{max-width:62ch;color:var(--muted)}
+.service-number{padding-top:.15rem;color:var(--green-700);font-size:.78rem;font-weight:800;letter-spacing:.08em}
+.service-output{padding-top:.85rem;border-top:1px solid var(--line);font-size:.92rem}
+.service-output strong{color:var(--ink)}
+.corporate-service-row--b2g{margin-inline:-1.5rem;padding-inline:1.5rem;color:#fff;background:#071a31;border-color:#071a31}
+.corporate-service-row--b2g h3,.corporate-service-row--b2g .service-output strong{color:#fff}
+.corporate-service-row--b2g p{color:#c1ccd6}
+.corporate-service-row--b2g .service-number{color:var(--lime)}
+.corporate-boundary{padding-block:1rem}
+
+@media (max-width:900px){
+  .corporate-section-head,.trust-process-grid,.b2g-vertical-grid,.corporate-triage-grid,.audience-layout,.corporate-boundary{grid-template-columns:1fr;gap:1.75rem}
+  .deliverable-ledger{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .deliverable-ledger article:nth-child(3){padding-left:0;border-left:0;border-top:1px solid var(--rule)}
+  .deliverable-ledger article:nth-child(4){border-top:1px solid var(--rule)}
+  .trust-process-grid>div+div{padding-left:0;border-left:0}
+}
+
+@media (max-width:700px){
+  body[data-content-cluster="home"] .hero{padding:1.35rem 0 1.2rem}
+  body[data-content-cluster="home"] .hero h1{max-width:14ch;font-size:clamp(2rem,8.8vw,2.55rem)}
+  body[data-content-cluster="home"] .hero-lead{margin-bottom:.85rem}
+  body[data-content-cluster="home"] .hero-deliverable{margin-bottom:.9rem;padding-top:.72rem;font-size:.94rem}
+  body[data-content-cluster="home"] .hero-actions{gap:.45rem;margin-bottom:.65rem}
+  body[data-content-cluster="home"] .hero-actions .button{min-height:50px}
+  body[data-content-cluster="home"] .hero-secondary{min-height:44px;justify-content:flex-start}
+  body[data-content-cluster="home"] .hero-proof{grid-template-columns:1fr;gap:.28rem;padding-top:.7rem}
+  body[data-content-cluster="home"] .hero-proof li{min-height:0;font-size:.8rem}
+  body[data-content-cluster="home"] .corporate-hero-note{margin-top:.25rem}
+  .situation-row{grid-template-columns:2rem minmax(0,1fr);gap:.7rem 1rem;padding:1.15rem 0}
+  .situation-row p{font-size:1rem}
+  .situation-row .situation-action{grid-column:2;justify-content:flex-start}
+  .situation-row--b2g{padding-inline:.9rem}
+  .chooser-more{text-align:left}
+  .deliverable-ledger{grid-template-columns:1fr}
+  .deliverable-ledger article,.deliverable-ledger article+article{padding:1.2rem 0;border-left:0;border-top:1px solid var(--rule)}
+  .deliverable-ledger article:first-child{border-top:0}
+  .audience-layout ul{grid-template-columns:1fr}
+  .audience-layout li:nth-child(even){padding-left:0;border-left:0}
+  .b2g-proof{grid-template-columns:1fr}
+  .b2g-proof div:nth-child(even){padding-left:0;border-left:0}
+  .corporate-service-row{grid-template-columns:1fr;gap:1rem;padding:1.5rem 0}
+  .corporate-service-row--b2g{margin-inline:-1rem;padding-inline:1rem}
+  .triage-actions,.triage-actions .button{width:100%}
 }

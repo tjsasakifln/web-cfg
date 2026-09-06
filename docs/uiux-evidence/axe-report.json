@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-08-31T03:28:35.488Z",
+  "generated_at": "2026-09-06T02:02:50.850Z",
   "issue": 293,
   "base": "http://127.0.0.1:8793",
   "site_root": "_site",
   "policy_path": "data/quality/interface-coverage-policy.json",
   "coverage": {
-    "public_route_count": 262,
-    "audited_route_count": 69,
+    "public_route_count": 254,
+    "audited_route_count": 58,
     "viewports": [
       {
         "id": "mobile",
@@ -25,9 +25,9 @@
         "has_touch": false
       }
     ],
-    "page_loads": 138,
-    "price_route_count": 62,
-    "capture_form_route_count": 25,
+    "page_loads": 116,
+    "price_route_count": 47,
+    "capture_form_route_count": 29,
     "sampling": {
       "enabled": false,
       "reason": "full price+capture coverage fits inside the 45-minute site-ci budget; no current risk route is sampled away",
@@ -226,6 +226,13 @@
         ]
       },
       {
+        "route": "/ferramentas/checklist-reequilibrio/",
+        "family": "ferramentas",
+        "reasons": [
+          "capture_form"
+        ]
+      },
+      {
         "route": "/ferramentas/diagnostico-defesa-margem/",
         "family": "ferramentas",
         "reasons": [
@@ -233,85 +240,15 @@
         ]
       },
       {
-        "route": "/inteligencia/concorrencia/manutencao-predial-engenharia-rs/",
-        "family": "intelligence-drafts-noindex",
+        "route": "/ferramentas/limite-acrescimos-supressoes/",
+        "family": "ferramentas",
         "reasons": [
-          "price"
-        ]
-      },
-      {
-        "route": "/inteligencia/mercados/edificacoes-publicas-mg/",
-        "family": "intelligence-drafts-noindex",
-        "reasons": [
-          "price"
-        ]
-      },
-      {
-        "route": "/inteligencia/mercados/edificacoes-publicas-rs/",
-        "family": "intelligence-drafts-noindex",
-        "reasons": [
-          "price"
-        ]
-      },
-      {
-        "route": "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pi/",
-        "family": "intelligence-drafts-noindex",
-        "reasons": [
-          "price"
-        ]
-      },
-      {
-        "route": "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/",
-        "family": "intelligence-drafts-noindex",
-        "reasons": [
-          "price"
-        ]
-      },
-      {
-        "route": "/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
-        "family": "intelligence-drafts-noindex",
-        "reasons": [
-          "price"
-        ]
-      },
-      {
-        "route": "/inteligencia/precos/edificacoes-publicas-mg/",
-        "family": "intelligence-drafts-noindex",
-        "reasons": [
-          "price"
-        ]
-      },
-      {
-        "route": "/inteligencia/precos/edificacoes-publicas-rs/",
-        "family": "intelligence-drafts-noindex",
-        "reasons": [
-          "price"
-        ]
-      },
-      {
-        "route": "/inteligencia/precos/manutencao-predial-engenharia-rs/",
-        "family": "intelligence-drafts-noindex",
-        "reasons": [
-          "price"
-        ]
-      },
-      {
-        "route": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pi/",
-        "family": "intelligence-drafts-noindex",
-        "reasons": [
-          "price"
-        ]
-      },
-      {
-        "route": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sc/",
-        "family": "intelligence-drafts-noindex",
-        "reasons": [
-          "price"
+          "capture_form"
         ]
       },
       {
         "route": "/inteligencia/valor-tipico-contratos-pavimentacao/",
-        "family": "intelligence-drafts-noindex",
+        "family": "market-answer-canary",
         "reasons": [
           "price"
         ]
@@ -331,15 +268,36 @@
         ]
       },
       {
+        "route": "/oportunidades/pe-2026-000188-reforma-ubs-londrina-pr/",
+        "family": "live-intelligence-opportunity",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/oportunidades/pe-2026-000412-pav-urbana-chapeco-sc/",
+        "family": "live-intelligence-opportunity",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/oportunidades/pe-2026-000903-sinalizacao-viaria-caxias-rs/",
+        "family": "live-intelligence-opportunity",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
         "route": "/panorama-mercado-obras-publicas/obras-publicas-sc-2026-08/",
-        "family": "market-panorama-noindex",
+        "family": "panorama-mercado-obras-publicas",
         "reasons": [
           "price"
         ]
       },
       {
         "route": "/piloto/conversao-xray/",
-        "family": "pilot-noindex",
+        "family": "piloto-preview",
         "reasons": [
           "price",
           "capture_form"
@@ -347,167 +305,132 @@
       },
       {
         "route": "/piloto/mercados/edificacoes-publicas-rs/",
-        "family": "pilot-noindex",
+        "family": "piloto-preview",
         "reasons": [
           "price"
         ]
       },
       {
         "route": "/piloto/mercados/pavimentacao-infraestrutura-viaria-pr/",
-        "family": "pilot-noindex",
+        "family": "piloto-preview",
         "reasons": [
           "price"
         ]
       },
       {
         "route": "/piloto/mercados/pavimentacao-infraestrutura-viaria-rs/",
-        "family": "pilot-noindex",
+        "family": "piloto-preview",
         "reasons": [
           "price"
         ]
       },
       {
         "route": "/piloto/mercados/pavimentacao-infraestrutura-viaria-sc/",
-        "family": "pilot-noindex",
+        "family": "piloto-preview",
         "reasons": [
           "price"
         ]
       },
       {
         "route": "/piloto/mercados/pavimentacao-infraestrutura-viaria-sp/",
-        "family": "pilot-noindex",
+        "family": "piloto-preview",
         "reasons": [
           "price"
         ]
       },
       {
         "route": "/piloto/ofertas/",
-        "family": "pilot-noindex",
+        "family": "piloto-ofertas",
         "reasons": [
           "price"
         ]
       },
       {
         "route": "/piloto/ofertas/contratar/",
-        "family": "pilot-noindex",
+        "family": "piloto-ofertas",
         "reasons": [
           "capture_form"
         ]
       },
       {
         "route": "/piloto/ofertas/diagnostico-expansao/",
-        "family": "pilot-noindex",
+        "family": "piloto-ofertas",
         "reasons": [
           "price"
         ]
       },
       {
         "route": "/piloto/ofertas/diretoria-180/",
-        "family": "pilot-noindex",
+        "family": "piloto-ofertas",
         "reasons": [
           "price"
         ]
       },
       {
         "route": "/piloto/ofertas/diretoria-365/",
-        "family": "pilot-noindex",
+        "family": "piloto-ofertas",
         "reasons": [
           "price"
         ]
       },
       {
         "route": "/piloto/ofertas/diretoria-flex/",
-        "family": "pilot-noindex",
+        "family": "piloto-ofertas",
         "reasons": [
           "price"
         ]
       },
       {
         "route": "/piloto/ofertas/faq/",
-        "family": "pilot-noindex",
+        "family": "piloto-ofertas",
         "reasons": [
           "price"
         ]
       },
       {
         "route": "/piloto/orgaos/base-administrativa-do-curado-pe-pe/engenharia/",
-        "family": "pilot-noindex",
+        "family": "piloto-preview",
         "reasons": [
           "price"
         ]
       },
       {
         "route": "/piloto/orgaos/base-aerea-de-anapolis-go/engenharia/",
-        "family": "pilot-noindex",
+        "family": "piloto-preview",
         "reasons": [
           "price"
         ]
       },
       {
         "route": "/piloto/orgaos/eem-euclides-pinheiro-de-andrade-ce/engenharia/",
-        "family": "pilot-noindex",
+        "family": "piloto-preview",
         "reasons": [
           "price"
         ]
       },
       {
         "route": "/piloto/orgaos/esp-prestacao-de-servicos-fde-see-sp/engenharia/",
-        "family": "pilot-noindex",
+        "family": "piloto-preview",
         "reasons": [
           "price"
         ]
       },
       {
         "route": "/piloto/orgaos/superintendencia-reg-pol-rodv-federal-go-go/engenharia/",
-        "family": "pilot-noindex",
+        "family": "piloto-preview",
         "reasons": [
           "price"
         ]
       },
       {
-        "route": "/radar/edificacoes-publicas-pr/",
-        "family": "radar",
+        "route": "/quantitativos-orcamento-obras/",
+        "family": "private-engineering-quantities-budget",
         "reasons": [
-          "price"
-        ]
-      },
-      {
-        "route": "/radar/edificacoes-publicas-rs/",
-        "family": "radar",
-        "reasons": [
-          "price"
-        ]
-      },
-      {
-        "route": "/radar/edificacoes-publicas-sc/",
-        "family": "radar",
-        "reasons": [
-          "price"
+          "capture_form"
         ]
       },
       {
         "route": "/radar/nacional-obras-publicas/",
-        "family": "radar",
-        "reasons": [
-          "price"
-        ]
-      },
-      {
-        "route": "/radar/pavimentacao-infraestrutura-viaria-pr/",
-        "family": "radar",
-        "reasons": [
-          "price"
-        ]
-      },
-      {
-        "route": "/radar/pavimentacao-infraestrutura-viaria-rs/",
-        "family": "radar",
-        "reasons": [
-          "price"
-        ]
-      },
-      {
-        "route": "/radar/pavimentacao-infraestrutura-viaria-sc/",
         "family": "radar",
         "reasons": [
           "price"
@@ -521,32 +444,44 @@
         ]
       },
       {
-        "route": "/radar/saneamento-hidraulica-sc/",
-        "family": "radar",
-        "reasons": [
-          "price"
-        ]
-      },
-      {
         "route": "/servicos-obras-publicas/",
         "family": "servicos-obras-publicas",
         "reasons": [
           "price",
           "capture_form"
         ]
+      },
+      {
+        "route": "/triagem-tecnica/",
+        "family": "triagem-tecnica",
+        "reasons": [
+          "capture_form"
+        ]
       }
     ],
-    "not_audited_count": 193,
+    "not_audited_count": 196,
     "not_audited": [
       {
         "route": "/404.html",
-        "family": "transaction-utilities-noindex",
+        "family": "pagina-nao-encontrada",
         "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
         "matched_by": []
       },
       {
         "route": "/aditivos-obras-publicas/",
         "family": "service-pillars",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/analise-cnpj/",
+        "family": "live-intelligence-cnpj-tool",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/analise-cnpj/r/",
+        "family": "live-intelligence-cnpj-result",
         "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
         "matched_by": []
       },
@@ -594,7 +529,7 @@
       },
       {
         "route": "/assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/",
-        "family": "intelligence-drafts-noindex",
+        "family": "data-desk-citation-kit",
         "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
         "matched_by": []
       },
@@ -1344,19 +1279,19 @@
       },
       {
         "route": "/diagnostico-b2g-expansao/cancelado/",
-        "family": "diagnostic-outcomes-noindex",
+        "family": "diagnostico-b2g-expansao-estados",
         "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
         "matched_by": []
       },
       {
         "route": "/diagnostico-b2g-expansao/expirado/",
-        "family": "diagnostic-outcomes-noindex",
+        "family": "diagnostico-b2g-expansao-estados",
         "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
         "matched_by": []
       },
       {
         "route": "/diagnostico-b2g-expansao/obrigado/",
-        "family": "diagnostic-outcomes-noindex",
+        "family": "diagnostico-b2g-expansao-estados",
         "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
         "matched_by": []
       },
@@ -1379,20 +1314,14 @@
         "matched_by": []
       },
       {
-        "route": "/ferramentas/checklist-reequilibrio/",
-        "family": "ferramentas",
-        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
-        "matched_by": []
-      },
-      {
-        "route": "/ferramentas/limite-acrescimos-supressoes/",
-        "family": "ferramentas",
-        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
-        "matched_by": []
-      },
-      {
         "route": "/ferramentas/matriz-atraso-obra/",
         "family": "ferramentas",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/ferramentas/prontidao-tecnica-obra-privada/",
+        "family": "prontidao-tecnica-obra-privada",
         "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
         "matched_by": []
       },
@@ -1434,79 +1363,79 @@
       },
       {
         "route": "/inteligencia/",
-        "family": "intelligence-drafts-noindex",
+        "family": "inteligencia-pseo",
         "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
         "matched_by": []
       },
       {
         "route": "/inteligencia/cenarios/",
-        "family": "intelligence-drafts-noindex",
+        "family": "inteligencia-pseo",
         "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
         "matched_by": []
       },
       {
         "route": "/inteligencia/cenarios/aditivos-e-risco-de-margem/",
-        "family": "intelligence-drafts-noindex",
+        "family": "inteligencia-pseo",
         "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
         "matched_by": []
       },
       {
         "route": "/inteligencia/cenarios/inconsistencia-orcamento-edital/",
-        "family": "intelligence-drafts-noindex",
+        "family": "inteligencia-pseo",
         "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
         "matched_by": []
       },
       {
         "route": "/inteligencia/cenarios/medicao-glosa-contratos-recorrentes/",
-        "family": "intelligence-drafts-noindex",
+        "family": "inteligencia-pseo",
         "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
         "matched_by": []
       },
       {
         "route": "/inteligencia/cenarios/reequilibrio-e-dispersao-de-precos/",
-        "family": "intelligence-drafts-noindex",
+        "family": "inteligencia-pseo",
         "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
         "matched_by": []
       },
       {
         "route": "/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
-        "family": "intelligence-drafts-noindex",
+        "family": "inteligencia-pseo",
         "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
         "matched_by": []
       },
       {
         "route": "/inteligencia/concorrencia/",
-        "family": "intelligence-drafts-noindex",
+        "family": "inteligencia-pseo",
         "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
         "matched_by": []
       },
       {
         "route": "/inteligencia/mercados/",
-        "family": "intelligence-drafts-noindex",
+        "family": "inteligencia-pseo",
         "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
         "matched_by": []
       },
       {
         "route": "/inteligencia/orgaos/",
-        "family": "intelligence-drafts-noindex",
+        "family": "inteligencia-pseo",
         "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
         "matched_by": []
       },
       {
         "route": "/inteligencia/precos/",
-        "family": "intelligence-drafts-noindex",
+        "family": "inteligencia-pseo",
         "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
         "matched_by": []
       },
       {
         "route": "/jurisprudencia-contratos-obras/",
-        "family": "jurisprudence-drafts-noindex",
+        "family": "jurisprudencia-contratos-obras",
         "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
         "matched_by": []
       },
       {
         "route": "/jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/",
-        "family": "jurisprudence-drafts-noindex",
+        "family": "jurisprudencia-contratos-obras",
         "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
         "matched_by": []
       },
@@ -1572,25 +1501,31 @@
       },
       {
         "route": "/obrigado-contrato.html",
-        "family": "transaction-utilities-noindex",
+        "family": "obrigado-transacional",
         "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
         "matched_by": []
       },
       {
         "route": "/obrigado-edital.html",
-        "family": "transaction-utilities-noindex",
+        "family": "obrigado-transacional",
         "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
         "matched_by": []
       },
       {
         "route": "/obrigado-operacao.html",
-        "family": "transaction-utilities-noindex",
+        "family": "obrigado-transacional",
         "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
         "matched_by": []
       },
       {
         "route": "/obrigado.html",
-        "family": "transaction-utilities-noindex",
+        "family": "obrigado-transacional",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/oportunidades/cc-2026-000047-ponte-rio-do-sul-sc/",
+        "family": "live-intelligence-opportunity",
         "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
         "matched_by": []
       },
@@ -1602,43 +1537,43 @@
       },
       {
         "route": "/panorama-mercado-obras-publicas/",
-        "family": "market-panorama-noindex",
+        "family": "panorama-mercado-obras-publicas",
         "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
         "matched_by": []
       },
       {
         "route": "/piloto/",
-        "family": "pilot-noindex",
+        "family": "piloto-preview",
         "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
         "matched_by": []
       },
       {
         "route": "/piloto/concorrencia/edificacoes-publicas-rs/",
-        "family": "pilot-noindex",
+        "family": "piloto-preview",
         "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
         "matched_by": []
       },
       {
         "route": "/piloto/concorrencia/pavimentacao-infraestrutura-viaria-pr/",
-        "family": "pilot-noindex",
+        "family": "piloto-preview",
         "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
         "matched_by": []
       },
       {
         "route": "/piloto/concorrencia/pavimentacao-infraestrutura-viaria-rs/",
-        "family": "pilot-noindex",
+        "family": "piloto-preview",
         "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
         "matched_by": []
       },
       {
         "route": "/piloto/concorrencia/pavimentacao-infraestrutura-viaria-sc/",
-        "family": "pilot-noindex",
+        "family": "piloto-preview",
         "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
         "matched_by": []
       },
       {
         "route": "/piloto/concorrencia/pavimentacao-infraestrutura-viaria-sp/",
-        "family": "pilot-noindex",
+        "family": "piloto-preview",
         "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
         "matched_by": []
       },
@@ -1681,6 +1616,12 @@
       {
         "route": "/reequilibrio-obras-publicas/",
         "family": "service-pillars",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/servicos/",
+        "family": "servicos-corporativos",
         "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
         "matched_by": []
       },
@@ -2116,6 +2057,34 @@
       "violations": []
     },
     {
+      "path": "/ferramentas/checklist-reequilibrio/",
+      "viewport": "mobile",
+      "family": "ferramentas",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 1,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": [
+        {
+          "id": "region",
+          "impact": "moderate",
+          "description": "Ensure all page content is contained by landmarks",
+          "nodes": 1,
+          "targets": [
+            [
+              "#metodo"
+            ]
+          ]
+        }
+      ]
+    },
+    {
       "path": "/ferramentas/diagnostico-defesa-margem/",
       "viewport": "mobile",
       "family": "ferramentas",
@@ -2132,171 +2101,11 @@
       "violations": []
     },
     {
-      "path": "/inteligencia/concorrencia/manutencao-predial-engenharia-rs/",
+      "path": "/ferramentas/limite-acrescimos-supressoes/",
       "viewport": "mobile",
-      "family": "intelligence-drafts-noindex",
+      "family": "ferramentas",
       "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/inteligencia/mercados/edificacoes-publicas-mg/",
-      "viewport": "mobile",
-      "family": "intelligence-drafts-noindex",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/inteligencia/mercados/edificacoes-publicas-rs/",
-      "viewport": "mobile",
-      "family": "intelligence-drafts-noindex",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pi/",
-      "viewport": "mobile",
-      "family": "intelligence-drafts-noindex",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/",
-      "viewport": "mobile",
-      "family": "intelligence-drafts-noindex",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
-      "viewport": "mobile",
-      "family": "intelligence-drafts-noindex",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/inteligencia/precos/edificacoes-publicas-mg/",
-      "viewport": "mobile",
-      "family": "intelligence-drafts-noindex",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/inteligencia/precos/edificacoes-publicas-rs/",
-      "viewport": "mobile",
-      "family": "intelligence-drafts-noindex",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/inteligencia/precos/manutencao-predial-engenharia-rs/",
-      "viewport": "mobile",
-      "family": "intelligence-drafts-noindex",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pi/",
-      "viewport": "mobile",
-      "family": "intelligence-drafts-noindex",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sc/",
-      "viewport": "mobile",
-      "family": "intelligence-drafts-noindex",
-      "selected_by": [
-        "price"
+        "capture_form"
       ],
       "counts": {
         "critical": 0,
@@ -2310,7 +2119,7 @@
     {
       "path": "/inteligencia/valor-tipico-contratos-pavimentacao/",
       "viewport": "mobile",
-      "family": "intelligence-drafts-noindex",
+      "family": "market-answer-canary",
       "selected_by": [
         "price"
       ],
@@ -2356,9 +2165,57 @@
       "violations": []
     },
     {
+      "path": "/oportunidades/pe-2026-000188-reforma-ubs-londrina-pr/",
+      "viewport": "mobile",
+      "family": "live-intelligence-opportunity",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/oportunidades/pe-2026-000412-pav-urbana-chapeco-sc/",
+      "viewport": "mobile",
+      "family": "live-intelligence-opportunity",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/oportunidades/pe-2026-000903-sinalizacao-viaria-caxias-rs/",
+      "viewport": "mobile",
+      "family": "live-intelligence-opportunity",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
       "path": "/panorama-mercado-obras-publicas/obras-publicas-sc-2026-08/",
       "viewport": "mobile",
-      "family": "market-panorama-noindex",
+      "family": "panorama-mercado-obras-publicas",
       "selected_by": [
         "price"
       ],
@@ -2374,7 +2231,7 @@
     {
       "path": "/piloto/conversao-xray/",
       "viewport": "mobile",
-      "family": "pilot-noindex",
+      "family": "piloto-preview",
       "selected_by": [
         "price",
         "capture_form"
@@ -2391,7 +2248,7 @@
     {
       "path": "/piloto/mercados/edificacoes-publicas-rs/",
       "viewport": "mobile",
-      "family": "pilot-noindex",
+      "family": "piloto-preview",
       "selected_by": [
         "price"
       ],
@@ -2407,7 +2264,7 @@
     {
       "path": "/piloto/mercados/pavimentacao-infraestrutura-viaria-pr/",
       "viewport": "mobile",
-      "family": "pilot-noindex",
+      "family": "piloto-preview",
       "selected_by": [
         "price"
       ],
@@ -2423,7 +2280,7 @@
     {
       "path": "/piloto/mercados/pavimentacao-infraestrutura-viaria-rs/",
       "viewport": "mobile",
-      "family": "pilot-noindex",
+      "family": "piloto-preview",
       "selected_by": [
         "price"
       ],
@@ -2439,7 +2296,7 @@
     {
       "path": "/piloto/mercados/pavimentacao-infraestrutura-viaria-sc/",
       "viewport": "mobile",
-      "family": "pilot-noindex",
+      "family": "piloto-preview",
       "selected_by": [
         "price"
       ],
@@ -2455,7 +2312,7 @@
     {
       "path": "/piloto/mercados/pavimentacao-infraestrutura-viaria-sp/",
       "viewport": "mobile",
-      "family": "pilot-noindex",
+      "family": "piloto-preview",
       "selected_by": [
         "price"
       ],
@@ -2471,7 +2328,7 @@
     {
       "path": "/piloto/ofertas/",
       "viewport": "mobile",
-      "family": "pilot-noindex",
+      "family": "piloto-ofertas",
       "selected_by": [
         "price"
       ],
@@ -2487,7 +2344,7 @@
     {
       "path": "/piloto/ofertas/contratar/",
       "viewport": "mobile",
-      "family": "pilot-noindex",
+      "family": "piloto-ofertas",
       "selected_by": [
         "capture_form"
       ],
@@ -2503,7 +2360,7 @@
     {
       "path": "/piloto/ofertas/diagnostico-expansao/",
       "viewport": "mobile",
-      "family": "pilot-noindex",
+      "family": "piloto-ofertas",
       "selected_by": [
         "price"
       ],
@@ -2519,7 +2376,7 @@
     {
       "path": "/piloto/ofertas/diretoria-180/",
       "viewport": "mobile",
-      "family": "pilot-noindex",
+      "family": "piloto-ofertas",
       "selected_by": [
         "price"
       ],
@@ -2535,7 +2392,7 @@
     {
       "path": "/piloto/ofertas/diretoria-365/",
       "viewport": "mobile",
-      "family": "pilot-noindex",
+      "family": "piloto-ofertas",
       "selected_by": [
         "price"
       ],
@@ -2551,7 +2408,7 @@
     {
       "path": "/piloto/ofertas/diretoria-flex/",
       "viewport": "mobile",
-      "family": "pilot-noindex",
+      "family": "piloto-ofertas",
       "selected_by": [
         "price"
       ],
@@ -2567,7 +2424,7 @@
     {
       "path": "/piloto/ofertas/faq/",
       "viewport": "mobile",
-      "family": "pilot-noindex",
+      "family": "piloto-ofertas",
       "selected_by": [
         "price"
       ],
@@ -2583,7 +2440,7 @@
     {
       "path": "/piloto/orgaos/base-administrativa-do-curado-pe-pe/engenharia/",
       "viewport": "mobile",
-      "family": "pilot-noindex",
+      "family": "piloto-preview",
       "selected_by": [
         "price"
       ],
@@ -2599,7 +2456,7 @@
     {
       "path": "/piloto/orgaos/base-aerea-de-anapolis-go/engenharia/",
       "viewport": "mobile",
-      "family": "pilot-noindex",
+      "family": "piloto-preview",
       "selected_by": [
         "price"
       ],
@@ -2615,7 +2472,7 @@
     {
       "path": "/piloto/orgaos/eem-euclides-pinheiro-de-andrade-ce/engenharia/",
       "viewport": "mobile",
-      "family": "pilot-noindex",
+      "family": "piloto-preview",
       "selected_by": [
         "price"
       ],
@@ -2631,7 +2488,7 @@
     {
       "path": "/piloto/orgaos/esp-prestacao-de-servicos-fde-see-sp/engenharia/",
       "viewport": "mobile",
-      "family": "pilot-noindex",
+      "family": "piloto-preview",
       "selected_by": [
         "price"
       ],
@@ -2647,7 +2504,7 @@
     {
       "path": "/piloto/orgaos/superintendencia-reg-pol-rodv-federal-go-go/engenharia/",
       "viewport": "mobile",
-      "family": "pilot-noindex",
+      "family": "piloto-preview",
       "selected_by": [
         "price"
       ],
@@ -2661,43 +2518,11 @@
       "violations": []
     },
     {
-      "path": "/radar/edificacoes-publicas-pr/",
+      "path": "/quantitativos-orcamento-obras/",
       "viewport": "mobile",
-      "family": "radar",
+      "family": "private-engineering-quantities-budget",
       "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/radar/edificacoes-publicas-rs/",
-      "viewport": "mobile",
-      "family": "radar",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/radar/edificacoes-publicas-sc/",
-      "viewport": "mobile",
-      "family": "radar",
-      "selected_by": [
-        "price"
+        "capture_form"
       ],
       "counts": {
         "critical": 0,
@@ -2710,54 +2535,6 @@
     },
     {
       "path": "/radar/nacional-obras-publicas/",
-      "viewport": "mobile",
-      "family": "radar",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/radar/pavimentacao-infraestrutura-viaria-pr/",
-      "viewport": "mobile",
-      "family": "radar",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/radar/pavimentacao-infraestrutura-viaria-rs/",
-      "viewport": "mobile",
-      "family": "radar",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/radar/pavimentacao-infraestrutura-viaria-sc/",
       "viewport": "mobile",
       "family": "radar",
       "selected_by": [
@@ -2789,11 +2566,12 @@
       "violations": []
     },
     {
-      "path": "/radar/saneamento-hidraulica-sc/",
+      "path": "/servicos-obras-publicas/",
       "viewport": "mobile",
-      "family": "radar",
+      "family": "servicos-obras-publicas",
       "selected_by": [
-        "price"
+        "price",
+        "capture_form"
       ],
       "counts": {
         "critical": 0,
@@ -2805,11 +2583,10 @@
       "violations": []
     },
     {
-      "path": "/servicos-obras-publicas/",
+      "path": "/triagem-tecnica/",
       "viewport": "mobile",
-      "family": "servicos-obras-publicas",
+      "family": "triagem-tecnica",
       "selected_by": [
-        "price",
         "capture_form"
       ],
       "counts": {
@@ -3238,6 +3015,34 @@
       "violations": []
     },
     {
+      "path": "/ferramentas/checklist-reequilibrio/",
+      "viewport": "desktop",
+      "family": "ferramentas",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 1,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": [
+        {
+          "id": "region",
+          "impact": "moderate",
+          "description": "Ensure all page content is contained by landmarks",
+          "nodes": 1,
+          "targets": [
+            [
+              "#metodo"
+            ]
+          ]
+        }
+      ]
+    },
+    {
       "path": "/ferramentas/diagnostico-defesa-margem/",
       "viewport": "desktop",
       "family": "ferramentas",
@@ -3254,171 +3059,11 @@
       "violations": []
     },
     {
-      "path": "/inteligencia/concorrencia/manutencao-predial-engenharia-rs/",
+      "path": "/ferramentas/limite-acrescimos-supressoes/",
       "viewport": "desktop",
-      "family": "intelligence-drafts-noindex",
+      "family": "ferramentas",
       "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/inteligencia/mercados/edificacoes-publicas-mg/",
-      "viewport": "desktop",
-      "family": "intelligence-drafts-noindex",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/inteligencia/mercados/edificacoes-publicas-rs/",
-      "viewport": "desktop",
-      "family": "intelligence-drafts-noindex",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pi/",
-      "viewport": "desktop",
-      "family": "intelligence-drafts-noindex",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/",
-      "viewport": "desktop",
-      "family": "intelligence-drafts-noindex",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
-      "viewport": "desktop",
-      "family": "intelligence-drafts-noindex",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/inteligencia/precos/edificacoes-publicas-mg/",
-      "viewport": "desktop",
-      "family": "intelligence-drafts-noindex",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/inteligencia/precos/edificacoes-publicas-rs/",
-      "viewport": "desktop",
-      "family": "intelligence-drafts-noindex",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/inteligencia/precos/manutencao-predial-engenharia-rs/",
-      "viewport": "desktop",
-      "family": "intelligence-drafts-noindex",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pi/",
-      "viewport": "desktop",
-      "family": "intelligence-drafts-noindex",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sc/",
-      "viewport": "desktop",
-      "family": "intelligence-drafts-noindex",
-      "selected_by": [
-        "price"
+        "capture_form"
       ],
       "counts": {
         "critical": 0,
@@ -3432,7 +3077,7 @@
     {
       "path": "/inteligencia/valor-tipico-contratos-pavimentacao/",
       "viewport": "desktop",
-      "family": "intelligence-drafts-noindex",
+      "family": "market-answer-canary",
       "selected_by": [
         "price"
       ],
@@ -3478,9 +3123,57 @@
       "violations": []
     },
     {
+      "path": "/oportunidades/pe-2026-000188-reforma-ubs-londrina-pr/",
+      "viewport": "desktop",
+      "family": "live-intelligence-opportunity",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/oportunidades/pe-2026-000412-pav-urbana-chapeco-sc/",
+      "viewport": "desktop",
+      "family": "live-intelligence-opportunity",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/oportunidades/pe-2026-000903-sinalizacao-viaria-caxias-rs/",
+      "viewport": "desktop",
+      "family": "live-intelligence-opportunity",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
       "path": "/panorama-mercado-obras-publicas/obras-publicas-sc-2026-08/",
       "viewport": "desktop",
-      "family": "market-panorama-noindex",
+      "family": "panorama-mercado-obras-publicas",
       "selected_by": [
         "price"
       ],
@@ -3496,7 +3189,7 @@
     {
       "path": "/piloto/conversao-xray/",
       "viewport": "desktop",
-      "family": "pilot-noindex",
+      "family": "piloto-preview",
       "selected_by": [
         "price",
         "capture_form"
@@ -3513,7 +3206,7 @@
     {
       "path": "/piloto/mercados/edificacoes-publicas-rs/",
       "viewport": "desktop",
-      "family": "pilot-noindex",
+      "family": "piloto-preview",
       "selected_by": [
         "price"
       ],
@@ -3529,7 +3222,7 @@
     {
       "path": "/piloto/mercados/pavimentacao-infraestrutura-viaria-pr/",
       "viewport": "desktop",
-      "family": "pilot-noindex",
+      "family": "piloto-preview",
       "selected_by": [
         "price"
       ],
@@ -3545,7 +3238,7 @@
     {
       "path": "/piloto/mercados/pavimentacao-infraestrutura-viaria-rs/",
       "viewport": "desktop",
-      "family": "pilot-noindex",
+      "family": "piloto-preview",
       "selected_by": [
         "price"
       ],
@@ -3561,7 +3254,7 @@
     {
       "path": "/piloto/mercados/pavimentacao-infraestrutura-viaria-sc/",
       "viewport": "desktop",
-      "family": "pilot-noindex",
+      "family": "piloto-preview",
       "selected_by": [
         "price"
       ],
@@ -3577,7 +3270,7 @@
     {
       "path": "/piloto/mercados/pavimentacao-infraestrutura-viaria-sp/",
       "viewport": "desktop",
-      "family": "pilot-noindex",
+      "family": "piloto-preview",
       "selected_by": [
         "price"
       ],
@@ -3593,7 +3286,7 @@
     {
       "path": "/piloto/ofertas/",
       "viewport": "desktop",
-      "family": "pilot-noindex",
+      "family": "piloto-ofertas",
       "selected_by": [
         "price"
       ],
@@ -3609,7 +3302,7 @@
     {
       "path": "/piloto/ofertas/contratar/",
       "viewport": "desktop",
-      "family": "pilot-noindex",
+      "family": "piloto-ofertas",
       "selected_by": [
         "capture_form"
       ],
@@ -3625,7 +3318,7 @@
     {
       "path": "/piloto/ofertas/diagnostico-expansao/",
       "viewport": "desktop",
-      "family": "pilot-noindex",
+      "family": "piloto-ofertas",
       "selected_by": [
         "price"
       ],
@@ -3641,7 +3334,7 @@
     {
       "path": "/piloto/ofertas/diretoria-180/",
       "viewport": "desktop",
-      "family": "pilot-noindex",
+      "family": "piloto-ofertas",
       "selected_by": [
         "price"
       ],
@@ -3657,7 +3350,7 @@
     {
       "path": "/piloto/ofertas/diretoria-365/",
       "viewport": "desktop",
-      "family": "pilot-noindex",
+      "family": "piloto-ofertas",
       "selected_by": [
         "price"
       ],
@@ -3673,7 +3366,7 @@
     {
       "path": "/piloto/ofertas/diretoria-flex/",
       "viewport": "desktop",
-      "family": "pilot-noindex",
+      "family": "piloto-ofertas",
       "selected_by": [
         "price"
       ],
@@ -3689,7 +3382,7 @@
     {
       "path": "/piloto/ofertas/faq/",
       "viewport": "desktop",
-      "family": "pilot-noindex",
+      "family": "piloto-ofertas",
       "selected_by": [
         "price"
       ],
@@ -3705,7 +3398,7 @@
     {
       "path": "/piloto/orgaos/base-administrativa-do-curado-pe-pe/engenharia/",
       "viewport": "desktop",
-      "family": "pilot-noindex",
+      "family": "piloto-preview",
       "selected_by": [
         "price"
       ],
@@ -3721,7 +3414,7 @@
     {
       "path": "/piloto/orgaos/base-aerea-de-anapolis-go/engenharia/",
       "viewport": "desktop",
-      "family": "pilot-noindex",
+      "family": "piloto-preview",
       "selected_by": [
         "price"
       ],
@@ -3737,7 +3430,7 @@
     {
       "path": "/piloto/orgaos/eem-euclides-pinheiro-de-andrade-ce/engenharia/",
       "viewport": "desktop",
-      "family": "pilot-noindex",
+      "family": "piloto-preview",
       "selected_by": [
         "price"
       ],
@@ -3753,7 +3446,7 @@
     {
       "path": "/piloto/orgaos/esp-prestacao-de-servicos-fde-see-sp/engenharia/",
       "viewport": "desktop",
-      "family": "pilot-noindex",
+      "family": "piloto-preview",
       "selected_by": [
         "price"
       ],
@@ -3769,7 +3462,7 @@
     {
       "path": "/piloto/orgaos/superintendencia-reg-pol-rodv-federal-go-go/engenharia/",
       "viewport": "desktop",
-      "family": "pilot-noindex",
+      "family": "piloto-preview",
       "selected_by": [
         "price"
       ],
@@ -3783,43 +3476,11 @@
       "violations": []
     },
     {
-      "path": "/radar/edificacoes-publicas-pr/",
+      "path": "/quantitativos-orcamento-obras/",
       "viewport": "desktop",
-      "family": "radar",
+      "family": "private-engineering-quantities-budget",
       "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/radar/edificacoes-publicas-rs/",
-      "viewport": "desktop",
-      "family": "radar",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/radar/edificacoes-publicas-sc/",
-      "viewport": "desktop",
-      "family": "radar",
-      "selected_by": [
-        "price"
+        "capture_form"
       ],
       "counts": {
         "critical": 0,
@@ -3832,54 +3493,6 @@
     },
     {
       "path": "/radar/nacional-obras-publicas/",
-      "viewport": "desktop",
-      "family": "radar",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/radar/pavimentacao-infraestrutura-viaria-pr/",
-      "viewport": "desktop",
-      "family": "radar",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/radar/pavimentacao-infraestrutura-viaria-rs/",
-      "viewport": "desktop",
-      "family": "radar",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/radar/pavimentacao-infraestrutura-viaria-sc/",
       "viewport": "desktop",
       "family": "radar",
       "selected_by": [
@@ -3911,22 +3524,6 @@
       "violations": []
     },
     {
-      "path": "/radar/saneamento-hidraulica-sc/",
-      "viewport": "desktop",
-      "family": "radar",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
       "path": "/servicos-obras-publicas/",
       "viewport": "desktop",
       "family": "servicos-obras-publicas",
@@ -3942,11 +3539,27 @@
       },
       "blocking": 0,
       "violations": []
+    },
+    {
+      "path": "/triagem-tecnica/",
+      "viewport": "desktop",
+      "family": "triagem-tecnica",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
     }
   ],
   "critical": 0,
   "serious": 0,
-  "moderate": 0,
+  "moderate": 2,
   "minor": 0,
-  "duration_seconds": 161
+  "duration_seconds": 245
 }

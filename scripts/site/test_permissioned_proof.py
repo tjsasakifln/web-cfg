@@ -570,16 +570,17 @@ def test_trust_surface_states_executor_correction_evidence_and_method_split():
     html = path.read_text(encoding="utf-8")
     assert path.is_file()
     for needle in (
-        "Quem executa",
-        "Como corrigir",
-        "Política de evidência",
-        "Método e resultado",
-        "Exemplos de entrega",
-        "Resultados de clientes",
+        "Quem responde pela CONFENGE",
+        "Pedir correção",
+        "Prova que acompanha a afirmação",
+        "Veja o trabalho antes de conversar",
+        "exemplos de entrega",
+        "Prova de cliente",
         "52.407.089/0001-09",
-        "https://github.com/tjsasakifln",
+        "Tiago Jun Sasaki",
     ):
         assert needle in html, needle
+    assert "https://github.com/tjsasakifln" not in html
     crea_claims = [
         claim
         for claim in load_credential_registry()["claims"]

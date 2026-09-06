@@ -432,6 +432,11 @@ def test_existing_153_attributes_preserved_and_primary_cta_complete():
             href.endswith("#formulario-contato") for href in after_hrefs
         ):
             missing.discard("/#contato")
+        # MV-09 replaces the generic home-form handoff in the shared shell
+        # with the corporate triage route. The B2G offer remains unchanged;
+        # only its first-contact destination becomes explicit and functional.
+        if "/#formulario-contato" in missing and "/triagem-tecnica/" in after_hrefs:
+            missing.discard("/#formulario-contato")
         # Issue #236 intentionally replaces generic/superseded WhatsApp
         # prefills on the three editable pillars with a catalog message.
         if slug in {

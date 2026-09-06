@@ -50,36 +50,30 @@ def test_home_has_canonical_copy():
     brand = load_brand()
     hero = brand["hero"]
     html = (ROOT / "index.html").read_text(encoding="utf-8")
-    assert hero["h1"] in html or "Contrato rentável, sim" in html
+    assert hero["h1"] in html
     assert "Diretoria Fracionada para o Mercado Público" in html
-    # Conventional category language first (not only proprietary label)
-    assert "Consultoria para licitações e contratos de obras públicas" in html
+    assert "Engenharia, Perícias e Inteligência Técnica" in html
+    assert brand["positioning"]["org_description"] in html
+    assert "Obras públicas e B2G" in html
     assert 'name="diagnostico-b2g"' in html
     assert 'id="estagio"' in html
     assert 'id="urgencia"' in html
     assert 'data-form-multistep="true"' in html
-    # Three differentiated journey CTAs (client-facing; no Jornada A/B/C labels)
-    assert "Solicitar canal seguro para envio" in html
-    assert "Solicitar triagem do edital" in html
-    assert "Solicitar diagnóstico da operação" in html
-    assert "Como podemos ajudar" in html
-    assert "Analisar meu caso" in html
+    # Corporate chooser uses customer situations and keeps the B2G intake intact.
+    assert "Projetar, revisar, orçar ou compatibilizar" in html
+    assert "Perícia, assistência técnica ou avaliação" in html
+    assert "Segurança do trabalho" in html
+    assert "Escolher minha situação" in html
     assert "Contrato sob pressão" in html
-    # 2026-08-30: rotulo canonico da jornada, identico ao menu, ao rodape e ao
-    # formulario. O rotulo antigo so existia na home e criava vocabulario
-    # concorrente com a propria navegacao.
     assert "Edital e proposta" in html
     assert "Operação recorrente" in html
     assert "enviar documentos para análise" not in html.lower()
     assert "Sem CTA genérico" not in html
-    for j in brand.get("journeys") or []:
-        assert j["label"] in html, j["label"]
-        assert j["cta"] in html, j["cta"]
+    for situation in brand.get("service_situations") or []:
+        assert situation["label"] in html, situation["label"]
     for o in brand["offers"]:
         assert o["url"] in html, o["url"]
-    # FAQ sync
-    for f in brand["faq"]:
-        assert f["q"] in html
+    assert 'id="triagem-tecnica"' in html
 
 
 def test_offer_pages_exist_with_canonical():
@@ -215,16 +209,20 @@ def test_content_not_overwhelmed_by_sales_copy():
         assert sales_markers <= 3, f"{g} over-commercialized"
 
 
-def test_faq_jsonld_matches_visible():
+def test_home_jsonld_matches_corporate_positioning_and_preserves_b2g_services():
     html = (ROOT / "index.html").read_text(encoding="utf-8")
     m = re.search(r'<script type="application/ld\+json">(\{.*?\})</script>', html, re.S)
     assert m, "jsonld missing"
     data = json.loads(m.group(1))
-    faq = next((n for n in data.get("@graph", []) if n.get("@type") == "FAQPage"), None)
-    assert faq
-    questions = [q["name"] for q in faq["mainEntity"]]
-    for q in questions:
-        assert f"<summary>{q}</summary>" in html or q in html
+    graph = data.get("@graph", [])
+    org = next(n for n in graph if n.get("@type") == "Organization")
+    person = next(n for n in graph if n.get("@type") == "Person")
+    assert org["description"] == load_brand()["positioning"]["org_description"]
+    assert person["jobTitle"] == "Engenheiro Civil"
+    assert "consultor B2G" not in person["jobTitle"]
+    service_urls = {n.get("url") for n in graph if n.get("@type") == "Service"}
+    assert "https://confenge.com.br/diretoria-b2g/" in service_urls
+    assert "https://confenge.com.br/bid-room-licitacoes-obras/" in service_urls
 
 
 if __name__ == "__main__":

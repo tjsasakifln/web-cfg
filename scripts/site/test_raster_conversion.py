@@ -56,23 +56,20 @@ def test_converted_dimensions_match_png_aspect() -> None:
         assert width * 5 == height * 4 or width == height, (png_rel, width, height)
 
 
-def test_home_and_specialist_ship_picture_markup() -> None:
+def test_specialist_ships_picture_while_corporate_home_keeps_identity_metadata() -> None:
     home = (ROOT / "index.html").read_text(encoding="utf-8")
     specialist = (ROOT / "especialista" / "tiago-jun-sasaki" / "index.html").read_text(
         encoding="utf-8"
     )
-    assert HOME_PICTURE in home
-    assert picture_has_sources(home, PORTRAIT_560_PNG)
-    assert 'width="560"' in home and 'height="700"' in home
-    assert 560 * 5 == 700 * 4
+    # MV-04 removes the B2G portrait panel from the corporate first fold. The
+    # specialist remains identifiable in structured data and the dedicated
+    # profile remains the visual authority surface.
+    assert HOME_PICTURE not in home
     assert SPECIALIST_PICTURE in specialist
     assert picture_has_sources(specialist, PORTRAIT_560_PNG)
     assert picture_has_sources(specialist, PORTRAIT_PNG)
     assert 'width="1080"' in specialist and 'height="1350"' in specialist
     assert 1080 * 5 == 1350 * 4
-    picture = home[home.index("<picture>") : home.index("</picture>") + len("</picture>")]
-    assert f'src="{PORTRAIT_560_PNG}"' in picture
-    assert f'src="{PORTRAIT_PNG}"' not in picture
     assert PORTRAIT_PNG.lstrip("/") in home  # JSON-LD / social keep the master PNG
 
 

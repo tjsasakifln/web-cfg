@@ -307,8 +307,179 @@ function mapLeadToInboundV1(record) {
   return body;
 }
 
+/**
+ * Persisted adaptive lead to the pinned Governance admission envelope.
+ * PII travels only in the signed body under protected_contact. It is excluded
+ * from policy decisions, receipts, logs, analytics and URL parameters.
+ */
+function mapAdaptiveLeadToNetNewInbound(record) {
+  if (!record || record.adaptive_intake !== true) return {};
+  const logicalId = clampText(record.lead_id || record.receipt_id, 160);
+  if (!logicalId) return {};
+  const policyVersion = clampText(record.admission_policy_version, 160);
+  const policyId = clampText(record.admission_policy_id, 80);
+  const policyHash = clampText(record.admission_policy_hash, 80);
+  if (!policyVersion || !policyId || !policyHash) return {};
+
+  const location = { material: record.location_material === true };
+  if (location.material) {
+    location.city = clampText(record.city, 80);
+    location.uf = clampText(record.uf, 2).toUpperCase();
+  }
+  const channel = clampText(record.canal_preferido, 20).toLowerCase();
+  const occurredAt = clampText(record.received_at || record.created_at, 40);
+  const sourceAsset = clampText(record.source_asset_id || record.asset_id, 120);
+  const offerCandidate = clampText(record.offer_candidate_id, 120);
+  const body = {
+    schema: policyVersion,
+    schema_version: "net-new-inbound-handraiser-request.1.0.0-draft.20260904",
+    contract_id: policyId,
+    policy_id: policyId,
+    version: policyVersion.split("/").pop(),
+    policy_version: policyVersion,
+    canonical_name: policyVersion,
+    content_hash: policyHash,
+    hash: policyHash,
+    policy_hash: policyHash,
+    governance_source_sha: clampText(record.governance_source_sha, 40),
+    logical_id: logicalId,
+    idempotency_key: logicalId,
+    correlation_id: clampText(record.correlation_id || logicalId, 160),
+    receipt_id: clampText(record.receipt_id || logicalId, 160),
+    origin: SOURCE_WARMBLY,
+    source: {
+      system: "web-cfg",
+      issue_ref: "tjsasakifln/web-cfg#580",
+    },
+    acquisition_lane: "NET_NEW_INBOUND",
+    lane: "CONFENGE_WEB",
+    intake_source: SOURCE_WARMBLY,
+    intake_schema: clampText(record.intake_contract_version, 160),
+    intent_kind: "REQUEST_HUMAN_REVIEW",
+    landing_asset: { id: sourceAsset, kind: "TRIAGE" },
+    nucleus_id: clampText(record.nucleus_id, 80),
+    nucleus: clampText(record.nucleus_id, 80),
+    offer_candidate_id: offerCandidate,
+    offer_candidate: offerCandidate,
+    source_asset: sourceAsset,
+    party_kind: clampText(record.pessoa_tipo, 20) || "PERSON",
+    decision_role: clampText(record.decision_role, 40) || "UNKNOWN",
+    site_location: location,
+    city_class: location.material ? `${location.city}/${location.uf}` : "NOT_MATERIAL",
+    urgency: clampText(record.urgencia || record.urgency, 40) || "UNKNOWN",
+    why_now_class: clampText(record.why_now, 40) || "UNKNOWN",
+    why_now: clampText(record.why_now, 40) || "UNKNOWN",
+    desired_decision_or_deliverable: clampText(record.desired_decision, 80) || "UNKNOWN",
+    document_availability_class: clampText(record.document_availability_class, 40) || "UNKNOWN",
+    qualification_state: clampText(record.qualification_state, 40) || "NEEDS_CONTEXT",
+    contact_evidence: {
+      present: true,
+      channel: channel.toUpperCase(),
+      evidence_ref: logicalId,
+      identity_match_method: "EXPLICIT_CONTACT",
+    },
+    consent_evidence: {
+      captured: record.consentimento === true,
+      basis: "EXPLICIT_FORM_SUBMIT",
+      evidence_ref: logicalId,
+    },
+    consent: {
+      granted: record.consentimento === true,
+      source: "CONFENGE_WEB_FORM",
+      at: occurredAt,
+    },
+    sensitive_data: { present: false, class: "NONE", protected_ref: null },
+    conflict_screening: {
+      status: clampText(record.conflict_status, 40) || "NOT_SCREENED",
+      protected_ref: record.conflict_reference ? clampText(record.conflict_reference, 120) : null,
+    },
+    conflict: {
+      status: clampText(record.conflict_status, 40) || "NOT_SCREENED",
+      ref: record.conflict_reference ? clampText(record.conflict_reference, 120) : "",
+    },
+    protected_contact: {
+      name: clampText(record.nome, 160),
+      email: clampText(record.email, 180).toLowerCase(),
+      phone: clampText(record.telefone, 40),
+      preferred_channel: channel.toUpperCase(),
+      organization: clampText(record.empresa, 200),
+    },
+    attribution: {
+      route_family: clampText(record.route_family || record.landing_family, 80),
+      source_asset: sourceAsset,
+      source_origin_asset: clampText(record.source_origin_asset_id, 80),
+      source_origin_family: clampText(record.source_origin_route_family, 80),
+      campaign: clampText(record.utm_campaign, 80),
+      utm_source: clampText(record.utm_source, 80),
+      utm_medium: clampText(record.utm_medium, 80),
+      utm_content: clampText(record.utm_content, 80),
+      city: location.material ? location.city : "",
+      uf: location.material ? location.uf : "",
+      channel,
+    },
+    outbound_eligible: false,
+    auto_send: false,
+    occurred_at: occurredAt,
+  };
+  for (const key of Object.keys(body.protected_contact)) {
+    if (!body.protected_contact[key]) delete body.protected_contact[key];
+  }
+  for (const key of Object.keys(body.attribution)) {
+    if (!body.attribution[key]) delete body.attribution[key];
+  }
+  return body;
+}
+
 function stableBody(payload) {
   return JSON.stringify(payload);
+}
+
+function netNewTerminalSnapshot(inner, payload, expectedReceipt) {
+  if (!inner || !payload) return null;
+  const outcome = String(inner.outcome || "");
+  if (outcome !== "ACCEPTED" && outcome !== "REJECTED_WITH_REASON") return null;
+  const receipt = inner.receipt_id || inner.receipt;
+  if (
+    inner.logical_id !== payload.logical_id ||
+    !receipt ||
+    (expectedReceipt && String(receipt) !== String(expectedReceipt)) ||
+    inner.inbound_only !== true ||
+    inner.outbound_eligible !== false ||
+    inner.auto_send !== false ||
+    inner.dispatch_attempted !== false
+  ) {
+    return null;
+  }
+  return {
+    outcome,
+    reason: inner.reason ? String(inner.reason).slice(0, 80) : undefined,
+    receipt: String(receipt).slice(0, 80),
+    logical_id: String(inner.logical_id).slice(0, 160),
+  };
+}
+
+async function readNetNewInbound(cfg, payload, expected, { unix, signal, fetchFn }) {
+  const target = new URL(cfg.url);
+  target.search = "";
+  target.hash = "";
+  target.pathname = `${target.pathname.replace(/\/$/, "")}/handraisers/${encodeURIComponent(payload.logical_id)}`;
+  const signedMaterial = `GET\n/api/v1/webhooks/confenge/inbound/handraisers/${payload.logical_id}`;
+  const signature = signWarmblyInbound(cfg.secret, signedMaterial, unix);
+  const response = await fetchFn(target.toString(), {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "User-Agent": "confenge-inbound/1.0",
+      "X-Warmbly-Signature": signature,
+    },
+    signal,
+  });
+  if (response.status !== 200) return null;
+  const data = await response.json().catch(() => ({}));
+  const inner = data && data.data ? data.data : data;
+  const verified = netNewTerminalSnapshot(inner, payload, expected.receipt);
+  if (!verified || verified.outcome !== expected.outcome) return null;
+  return { inner, verified };
 }
 
 function signWarmblyInbound(secret, rawBody, unixSeconds) {
@@ -859,9 +1030,11 @@ async function postSignedInbound(payload, { now = new Date(), env = process.env 
     if (classified === STATUS.DELIVERED) {
       const data = await res.json().catch(() => ({}));
       const inner = data && data.data ? data.data : data;
+      const isNetNew = payload.contract_id === "NET_NEW_INBOUND_HANDRAISER";
       const actionId = inner && inner.action && (inner.action.id || inner.action.ID);
       const receipt = inner && (
         inner.receipt_id ||
+        inner.receipt ||
         (inner.lead && (inner.lead.receipt_id || inner.lead.lead_id)) ||
         inner.id
       );
@@ -870,13 +1043,43 @@ async function postSignedInbound(payload, { now = new Date(), env = process.env 
         duplicate: Boolean(inner && inner.duplicate),
         action_id: actionId ? String(actionId).slice(0, 80) : undefined,
         downstream_receipt: receipt ? String(receipt).slice(0, 80) : undefined,
+        logical_id: inner && inner.logical_id ? String(inner.logical_id).slice(0, 160) : undefined,
+        outcome: inner && inner.outcome ? String(inner.outcome).slice(0, 40) : undefined,
+        reason: inner && inner.reason ? String(inner.reason).slice(0, 80) : undefined,
       };
+      if (isNetNew) {
+        const posted = netNewTerminalSnapshot(inner, payload);
+        if (!posted) {
+          classified = STATUS.RETRYABLE;
+          downstream = null;
+        } else {
+          const readback = await readNetNewInbound(cfg, payload, posted, {
+            unix,
+            signal: controller ? controller.signal : undefined,
+            fetchFn,
+          });
+          if (!readback) {
+            classified = STATUS.RETRYABLE;
+            downstream = null;
+          } else {
+            classified = posted.outcome === "ACCEPTED" ? STATUS.DELIVERED : STATUS.BLOCKED;
+            downstream = {
+              ...downstream,
+              downstream_receipt: readback.verified.receipt,
+              logical_id: readback.verified.logical_id,
+              outcome: readback.verified.outcome,
+              reason: readback.verified.reason,
+              readback_verified: true,
+            };
+          }
+        }
+      }
       // Lead payloads (lead_id/receipt_id present) keep the original fail-closed
       // contract: a missing or mismatched downstream receipt is retryable, not
       // silently accepted. Web-intent envelopes (schema-identified, no lead_id)
       // have no receipt concept on this endpoint, so they are exempt rather than
       // held to a key they were never given.
-      const isLeadPayload = Boolean(payload.lead_id || payload.receipt_id);
+      const isLeadPayload = !isNetNew && Boolean(payload.lead_id || payload.receipt_id);
       if (isLeadPayload) {
         const expectedReceipt = String(payload.receipt_id || payload.lead_id || "");
         if (!receipt || String(receipt) !== expectedReceipt) {
@@ -891,6 +1094,8 @@ async function postSignedInbound(payload, { now = new Date(), env = process.env 
       latency_ms,
       last_error: classified === STATUS.DELIVERED
         ? null
+        : classified === STATUS.BLOCKED && downstream && downstream.reason
+          ? `admission_rejected:${downstream.reason}`
         : res.status === 200 || res.status === 201
           ? "downstream_receipt_invalid"
           : `webhook_http_${res.status}`,
@@ -930,7 +1135,16 @@ async function postInbound(record, { now = new Date(), env = process.env } = {})
     }
   }
 
-  const payload = mapLeadToInboundV1(recordWithIdentity);
+  let payload;
+  if (recordWithIdentity.adaptive_intake === true) {
+    const authority = require("./adaptive-intake.cjs").loadPin(env);
+    if (!authority.ok || recordWithIdentity.admission_policy_hash !== authority.pin.policy_hash) {
+      return { status: STATUS.BLOCKED, reason: "governance_authority_mismatch", attemptsDelta: 0 };
+    }
+    payload = mapAdaptiveLeadToNetNewInbound(recordWithIdentity);
+  } else {
+    payload = mapLeadToInboundV1(recordWithIdentity);
+  }
   if (!payload.lead_id && !payload.receipt_id) {
     return { status: STATUS.DEAD, reason: "missing_lead_id", last_error: "missing_lead_id", attemptsDelta: 0 };
   }
@@ -1234,6 +1448,7 @@ module.exports = {
   REQUEUE_CLASS,
   PII_QUERY_KEYS,
   mapLeadToInboundV1,
+  mapAdaptiveLeadToNetNewInbound,
   isAuthenticatedSyntheticProbe,
   isHandoffTransportableRecord,
   signWarmblyInbound,

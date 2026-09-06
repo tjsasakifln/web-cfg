@@ -1,0 +1,131 @@
+{
+  "site": "/home/tjsasakifln/code/confenge/.worktrees/web-cfg/mv-09-commercial-production-20260905/_site",
+  "chrome": "/home/tjsasakifln/.cache/ms-playwright/chromium-1243/chrome-linux64/chrome",
+  "checks": [
+    {
+      "name": "tool_full_result_before_contact",
+      "pass": true,
+      "detail": "{\"domains\":7,\"cta\":true}"
+    },
+    {
+      "name": "tool_unknown_neutral",
+      "pass": true,
+      "detail": "Hash da leitura: a041d69a. Sem percentual. Prioridade segue regra explícita por domínio.Autoavaliação de classes fechadas. Cada resposta é fato informado pelo usuário. O estado do domínio é cálculo de"
+    },
+    {
+      "name": "tool_complete_real_bus",
+      "pass": true,
+      "detail": "tool_complete absent from dataLayer"
+    },
+    {
+      "name": "tool_analytics_no_answers",
+      "pass": true,
+      "detail": "response field present in dataLayer"
+    },
+    {
+      "name": "axe_private_tool_mobile",
+      "pass": true,
+      "detail": "[]"
+    },
+    {
+      "name": "trust_visible_schema_parity",
+      "pass": true,
+      "detail": "{\"valid\":true}"
+    },
+    {
+      "name": "axe_trust_desktop",
+      "pass": true,
+      "detail": "[]"
+    },
+    {
+      "name": "axe_trust_mobile",
+      "pass": true,
+      "detail": "[]"
+    },
+    {
+      "name": "private_wedge_mobile_contract",
+      "pass": true,
+      "detail": "{\"h1\":\"Orçamento só orienta a decisão quando quantidades e premissas aparecem.\",\"channels\":3,\"submitDisabled\":true,\"overflow\":false}"
+    },
+    {
+      "name": "axe_private_wedge_mobile",
+      "pass": true,
+      "detail": "[]"
+    },
+    {
+      "name": "axe_private_wedge_desktop",
+      "pass": true,
+      "detail": "[]"
+    },
+    {
+      "name": "triage_config_503_blocks",
+      "pass": true,
+      "detail": "submit enabled on config failure"
+    },
+    {
+      "name": "triage_config_503_keeps_channels",
+      "pass": true,
+      "detail": "fallback channels missing"
+    },
+    {
+      "name": "triage_config_200_enables",
+      "pass": true,
+      "detail": "submit remains disabled on config success"
+    },
+    {
+      "name": "triage_no_start_before_interaction",
+      "pass": true,
+      "detail": "[]"
+    },
+    {
+      "name": "triage_retry_same_payload",
+      "pass": true,
+      "detail": "{\"attempts\":2,\"same\":true}"
+    },
+    {
+      "name": "triage_utm_allowlist",
+      "pass": true,
+      "detail": "{\"utm_source\":\"google\",\"utm_campaign\":\"mv03_launch\"}"
+    },
+    {
+      "name": "triage_utm_pii_scrubbed",
+      "pass": true,
+      "detail": "{}"
+    },
+    {
+      "name": "triage_source_asset_preserved",
+      "pass": true,
+      "detail": "{\"asset_id\":\"technical_triage_v1\",\"source_origin_asset_id\":\"private_project_technical_readiness_v1\",\"source_origin_route_family\":\"prontidao-tecnica-obra-privada\"}"
+    },
+    {
+      "name": "triage_receipt_visible",
+      "pass": true,
+      "detail": "{\"receipt\":\"lead-canary-receipt\"}"
+    },
+    {
+      "name": "triage_real_bus_events",
+      "pass": true,
+      "detail": "required events absent from dataLayer"
+    },
+    {
+      "name": "triage_analytics_allowlist",
+      "pass": true,
+      "detail": "PII present in analytics"
+    },
+    {
+      "name": "axe_triage_mobile",
+      "pass": true,
+      "detail": "[]"
+    }
+  ],
+  "screenshots": [
+    "/home/tjsasakifln/code/confenge/.worktrees/web-cfg/mv-09-commercial-production-20260905/docs/integration/campaign-20260905/09/evidence/after/private-tool-390.png",
+    "/home/tjsasakifln/code/confenge/.worktrees/web-cfg/mv-09-commercial-production-20260905/docs/integration/campaign-20260905/09/evidence/after/private-tool-1366.png",
+    "/home/tjsasakifln/code/confenge/.worktrees/web-cfg/mv-09-commercial-production-20260905/docs/integration/campaign-20260905/09/evidence/after/trust-1366.png",
+    "/home/tjsasakifln/code/confenge/.worktrees/web-cfg/mv-09-commercial-production-20260905/docs/integration/campaign-20260905/09/evidence/after/trust-390.png",
+    "/home/tjsasakifln/code/confenge/.worktrees/web-cfg/mv-09-commercial-production-20260905/docs/integration/campaign-20260905/09/evidence/after/private-wedge-390.png",
+    "/home/tjsasakifln/code/confenge/.worktrees/web-cfg/mv-09-commercial-production-20260905/docs/integration/campaign-20260905/09/evidence/after/private-wedge-1366.png",
+    "/home/tjsasakifln/code/confenge/.worktrees/web-cfg/mv-09-commercial-production-20260905/docs/integration/campaign-20260905/09/evidence/after/triage-390.png"
+  ],
+  "ok": true
+}

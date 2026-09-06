@@ -202,6 +202,15 @@ def test_expired_claim_fails_closed_even_if_wording_remains_in_record():
         assert "88015-100" not in proj.visible_text
 
 
+def test_missed_recheck_fails_closed_without_waiting_for_expiry():
+    registry = load_registry()
+    claim = copy.deepcopy(next(c for c in registry["claims"] if c["id"] == "org-cnpj"))
+    claim["expires_at"] = None
+    claim["recheck_after"] = "2026-09-04"
+    assert is_projectable(claim, now="2026-09-04")
+    assert not is_projectable(claim, now="2026-09-05")
+
+
 def test_registry_backed_crea_has_visible_schema_parity_and_unbacked_crea_fails():
     registry = load_registry()
     live = CONFIANCA.read_text(encoding="utf-8")
@@ -358,7 +367,10 @@ def test_owned_pages_match_projection_and_sanitizer_keeps_registry_fields():
         assert org.get("taxID") == "52.407.089/0001-09"
         person = next(n for n in nodes if "Person" in (n.get("@type") if isinstance(n.get("@type"), list) else [n.get("@type")]))
         assert person.get("jobTitle") == "Engenheiro Civil"
-        assert "https://github.com/tjsasakifln" in json.dumps(person.get("sameAs") or [])
+        if surface == "/especialista/tiago-jun-sasaki/":
+            assert "https://github.com/tjsasakifln" in json.dumps(person.get("sameAs") or [])
+        else:
+            assert "sameAs" not in person
         service = next(
             n
             for n in nodes

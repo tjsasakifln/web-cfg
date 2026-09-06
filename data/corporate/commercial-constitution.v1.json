@@ -1,0 +1,92 @@
+{
+  "schema": "confenge.commercial-constitution/1.0",
+  "contract": "CONFENGE_COMMERCIAL_CONSTITUTION/1.0.0",
+  "effective_at": "2026-09-05",
+  "campaign": "CONFENGE_MV_CAMPAIGN=01",
+  "decision_state": {
+    "priority": "P0",
+    "state": "EXECUTE_NOW",
+    "executive_front": "REVENUE_NOW",
+    "time_to_evidence_days": 30,
+    "leverage": [
+      "revenue",
+      "trust",
+      "customer",
+      "automation"
+    ]
+  },
+  "brand": {
+    "name": "CONFENGE",
+    "domain": "confenge.com.br",
+    "category_pt_br": "Engenharia, Perícias e Inteligência Técnica",
+    "single_public_identity": true,
+    "subbrands_allowed": false
+  },
+  "commercial_thesis_pt_br": "A CONFENGE transforma situações de engenharia que exigem decisão, prova ou coordenação em entregas técnicas delimitadas. Obras públicas e B2G permanecem uma vertical forte; não definem sozinhas a categoria corporativa.",
+  "clarity_rules": [
+    "A entrada pública começa pela situação que o comprador reconhece, não pelo organograma interno.",
+    "Uma demanda só vira oferta quando existe unidade de trabalho, entrega, método, fronteira material e próximo estado úteis.",
+    "Capacidade modelada não prova atribuição profissional, disponibilidade, experiência, preço, prazo ou resultado.",
+    "Demanda plausível sem enquadramento seguro termina em NEEDS_CONTEXT ou GAP; nunca cria SKU automaticamente.",
+    "Persona é exemplo de audiência, não fonte de verdade da rota nem da oferta.",
+    "Uma oferta não promete aprovação, êxito, regularização, adjudicação, valor futuro ou ausência de problemas.",
+    "Atendimento inbound não autoriza prospecção, cadência, SMTP ou qualquer ação outbound."
+  ],
+  "finite_system": {
+    "operational_taxonomy": "CONFENGE_CORPORATE_TAXONOMY/1.0.0",
+    "public_intent_matrix": "CONFENGE_PUBLIC_INTENT_MATRIX/1.0.0",
+    "offer_catalog": "CONFENGE_OFFER_CATALOG/2.0.0",
+    "public_page_contract": "CONFENGE_PUBLIC_SERVICE_PAGE/1.0.0",
+    "pricing_gate_projection": "CONFENGE_PRICE_GATE_PROJECTION/1.0.0",
+    "b2g_authority_by_reference": "data/commercial/deliverables-registry.v1.json",
+    "five_nuclei_role": "internal_operational_grouping_only",
+    "public_route_truth": "intent_family",
+    "fallback": "NEEDS_CONTEXT"
+  },
+  "owner_planes": {
+    "web-cfg": [
+      "public explanation",
+      "inbound capture",
+      "public analytics without PII",
+      "contract validation"
+    ],
+    "extra-cli": [
+      "public-data acquisition",
+      "canonical facts",
+      "identity",
+      "provenance",
+      "versioned SELECT-only contracts"
+    ],
+    "warmbly": [
+      "commercial action",
+      "proposal",
+      "cadence",
+      "dispatch",
+      "billing and outcomes"
+    ],
+    "governance": [
+      "policy",
+      "approval",
+      "exception",
+      "kill switch"
+    ]
+  },
+  "national_service": {
+    "canonical_wording_pt_br": "Atendimento em todo o Brasil. Antes de assumir responsabilidade técnica, confirmamos o escopo, o local da atividade, as atribuições profissionais e as formalidades aplicáveis — incluindo registro ou visto no Crea e ART, quando cabíveis.",
+    "commercial_availability_is_technical_authorization": false,
+    "required_before_technical_acceptance": [
+      "UF e município do objeto",
+      "locais de atividade, vistoria e campo",
+      "disciplina e entregável",
+      "duração e recorrência",
+      "regularidade e formalidade da pessoa jurídica",
+      "profissional responsável e atribuições comprovadas",
+      "registro ou visto no Crea competente",
+      "ART aplicável ao ato"
+    ],
+    "official_research": "docs/strategy/research/confea-crea-national-practice-20260905.md",
+    "on_unconfirmed_formality": "NEEDS_CONTEXT"
+  },
+  "repetition_test": "Cem demandas enriquecem o mesmo catálogo, o mesmo registro de GAPs e a mesma matriz de intenção; não criam cem páginas, cem SKUs ou cem filas manuais.",
+  "rollback": "Reverter os contratos e validadores desta campanha restaura a tese anterior sem alterar HTML, rotas, captura, checkout ou produção."
+}

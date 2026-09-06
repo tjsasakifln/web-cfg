@@ -32,7 +32,6 @@ https://confenge.netlify.app/*  https://confenge.com.br/:splat  301!
 /terms-and-conditions      /termos-de-uso/   301
 /blog                      /conteudos/       301
 /contato                   /#contato         301
-/servicos                  /servicos-obras-publicas/    301
 /trabalhe-conosco          /404.html         410
 
 # --- Abandoned products (410 Gone + custom body; never soft-404 to home) ---
@@ -44,7 +43,7 @@ https://confenge.netlify.app/*  https://confenge.com.br/:splat  301!
 # Do not add a catch-all rewrite to index.html (SPA-style status 200).
 
 # --- Extended legacy disposition (entity cleanup) ---
-/servicos.html  /servicos-obras-publicas/  301
+/servicos.html  /servicos/  301
 /contato.html  /#contato  301
 /blog.html  /conteudos/  301
 /avaliacoes  /404.html  410

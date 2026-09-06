@@ -53,9 +53,18 @@ SKIP_DIR_PARTS = frozenset(
     }
 )
 JOURNEY_PHRASES = (
-    "edital e proposta",
-    "contrato sob pressão",
-    "operação recorrente",
+    "serviços e problemas",
+    "obras públicas",
+    "biblioteca",
+)
+SERVICE_SITUATION_IDS = frozenset(
+    {
+        "project_delivery",
+        "building_diagnosis",
+        "expert_evidence_valuation",
+        "occupational_safety",
+        "public_works_b2g",
+    }
 )
 CONTACT = {
     "email_href": "mailto:tiago.sasaki@confenge.com.br",
@@ -409,6 +418,8 @@ def _label_index(ia: dict[str, Any]) -> dict[str, str]:
         href = _path_with_slash(str(journey.get("href") or ""))
         if href:
             out.setdefault(href, str(journey.get("label") or href))
+    for route, label in (ia.get("breadcrumb_labels") or {}).items():
+        out[_path_with_slash(str(route))] = str(label)
     return out
 
 
@@ -555,7 +566,7 @@ def materialize_route_map(
             if parent_hub:
                 job = str(parent_hub.get("label") or "")
         if not job:
-            job = "Encontrar a próxima ação em licitação ou contrato de obra pública."
+            job = "Encontrar a próxima ação para uma situação técnica."
         record = {
             "route": route,
             "job": job,
@@ -619,7 +630,7 @@ def validate_contract(ia: dict[str, Any] | None = None) -> list[str]:
             f"header has {len(destinations)} destinations; max is {MAX_HEADER_DESTINATIONS}"
         )
     if len(destinations) < 3:
-        errors.append("header must name the three purchase situations")
+        errors.append("header must expose services, public works, and evidence")
     hrefs = [item["href"] for item in destinations]
     if len(set(hrefs)) != len(hrefs):
         errors.append("header has duplicate hrefs")
@@ -627,7 +638,7 @@ def validate_contract(ia: dict[str, Any] | None = None) -> list[str]:
     found_journeys = [phrase for phrase in JOURNEY_PHRASES if phrase in labels]
     if len(found_journeys) != len(JOURNEY_PHRASES):
         missing = sorted(set(JOURNEY_PHRASES) - set(found_journeys))
-        errors.append(f"header misses purchase situations in visitor language: {missing}")
+        errors.append(f"header misses corporate destinations in visitor language: {missing}")
     if "b2g" in labels:
         errors.append("header requires the term B2G")
     cta = header_cta(data)
@@ -647,6 +658,24 @@ def validate_contract(ia: dict[str, Any] | None = None) -> list[str]:
     journeys = journey_items(data)
     if {j.get("id") for j in journeys} != {"edital", "contrato", "operacao"}:
         errors.append("journeys must be edital, contrato, operacao")
+    situations = list(data.get("service_situations") or [])
+    situation_ids = {str(row.get("id") or "") for row in situations}
+    if situation_ids != SERVICE_SITUATION_IDS:
+        errors.append(
+            "service_situations must cover project, building, expert evidence, "
+            "occupational safety, and public works"
+        )
+    for row in situations:
+        if not row.get("label") or not row.get("visitor_language") or not row.get("href"):
+            errors.append(f"incomplete service situation: {row.get('id')!r}")
+        if row.get("id") == "public_works_b2g":
+            if row.get("href") != "/servicos-obras-publicas/":
+                errors.append("public works situation must preserve its canonical hub")
+        elif row.get("id") == "project_delivery" and row.get("index_state") == "private_wedge_index":
+            if row.get("href") != "/quantitativos-orcamento-obras/" or not row.get("scope"):
+                errors.append("private project wedge must be route-exact and scope-bounded")
+        elif _path_with_slash(_normalize_route(str(row.get("href") or ""))) != "/triagem-tecnica/":
+            errors.append(f"unpublished situation must fail closed to triage: {row.get('id')}")
     footer_count = 0
     for column in (data.get("footer") or {}).get("columns") or []:
         footer_count += len(column.get("links") or [])
@@ -762,6 +791,4 @@ def first_viewport_names_journey(html: str, ia: dict[str, Any] | None = None) ->
         r'<header class="site-header".*?</header>', html, re.S | re.I
     )
     blob = (header.group(0) if header else html[:4000]).lower()
-    if "b2g" in blob and not any(p in blob for p in JOURNEY_PHRASES):
-        return False
-    return any(phrase in blob for phrase in JOURNEY_PHRASES)
+    return all(phrase in blob for phrase in JOURNEY_PHRASES)

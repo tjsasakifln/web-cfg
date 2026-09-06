@@ -8,7 +8,7 @@ const report = buildInventory();
 
 assert.equal(report.schema, "confenge.cta-form-next-state-inventory/1.0");
 assert.equal(report.coverage.manual_route_allowlist, false);
-assert.equal(report.coverage.active_capture_routes, 26);
+assert.equal(report.coverage.active_capture_routes, 27);
 assert.equal(report.coverage.declared_ctas, report.contract.expected_declared_ctas, `declared CTAs: ${report.coverage.declared_ctas}`);
 assert.equal(report.coverage.problems.length, 0, JSON.stringify(report.coverage.problems));
 assert.deepEqual(report.coverage.protected_routes_with_capture, []);
@@ -25,7 +25,7 @@ const forms = report.surfaces.flatMap((surface) => surface.forms.map((form) => (
   route: surface.route,
   ...form,
 })));
-assert.equal(forms.length, 26);
+assert.equal(forms.length, 27);
 for (const form of forms) {
   assert.equal(form.form_contract, "next-state/v1", `${form.route}: form contract`);
   assert.ok(report.contract.allowed_stages.includes(form.stage), `${form.route}: ${form.stage}`);
@@ -72,7 +72,7 @@ const adaptiveRuntime = fs.readFileSync("assets/js/adaptive-intake.js", "utf8");
 assert.match(adaptivePage, /data-next-state-profile=["']adaptive_triage["']/);
 assert.match(adaptivePage, /data-runtime-profile=["']adaptive_intake_standalone_v1["']/);
 assert.match(adaptivePage, /data-form-boundary/);
-assert.match(adaptiveRuntime, /track\(["']lead_form_submit["']\)/);
+assert.match(adaptiveRuntime, /track\(["']lead_form_submit["'](?:\s*,|\s*\))/);
 assert.match(adaptiveRuntime, /track\(["']lead_form_start["']\)/);
 assert.match(adaptiveRuntime, /track\(["']lead_form_success["']\)/);
 assert.match(adaptiveRuntime, /track\(["']lead_persisted["']\)/);

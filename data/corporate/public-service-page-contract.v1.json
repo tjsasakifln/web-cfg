@@ -1,0 +1,65 @@
+{
+  "schema": "confenge.public-service-page/1.0",
+  "contract": "CONFENGE_PUBLIC_SERVICE_PAGE/1.0.0",
+  "effective_at": "2026-09-05",
+  "required_sequence": [
+    "situation",
+    "consequence_or_decision",
+    "deliverable",
+    "method",
+    "proof",
+    "material_boundary",
+    "next_useful_state"
+  ],
+  "semantics": {
+    "situation": "Situação concreta que o comprador reconhece, sem persona como fonte de verdade.",
+    "consequence_or_decision": "O que precisa ser decidido ou protegido e o custo de continuar sem clareza, sem alarmismo inventado.",
+    "deliverable": "Objeto técnico finito, distinguido de processo, promessa ou lista ilimitada.",
+    "method": "Etapas, premissas, fontes, norma aplicável, revisão e tratamento de UNKNOWN.",
+    "proof": "Evidência autorizada da competência, do método ou de resultado; ausência permanece explícita.",
+    "material_boundary": "O que não está incluído, atribuições, campo, local, dependências, conflito, sigilo, prazo e preço.",
+    "next_useful_state": "Estado concreto alcançável pelo visitante, com captura quando houver intenção comercial."
+  },
+  "document_types": [
+    {"type": "laudo", "definition": "Peça técnica conclusiva dentro de objeto, método, evidências, limitações e responsabilidade definidos; não é sinônimo de qualquer relatório.", "must_not_claim": "aprovação, incontestabilidade ou êxito"},
+    {"type": "parecer", "definition": "Opinião técnica fundamentada para uma questão delimitada; não substitui laudo formal quando a finalidade exigir outro produto.", "must_not_claim": "certeza fora das premissas ou decisão de autoridade"},
+    {"type": "projeto", "definition": "Solução técnica de engenharia com disciplina, autoria, interfaces, nível de desenvolvimento e responsabilidade definidos.", "must_not_claim": "autoria arquitetônica ou de disciplina não contratada"},
+    {"type": "revisao", "definition": "Verificação de material de terceiro contra critérios declarados, com achados e devolutivas; o autor original decide e corrige quando aplicável.", "must_not_claim": "assunção silenciosa da autoria original"},
+    {"type": "diagnostico", "definition": "Enquadramento de condição, risco ou prontidão para decidir o próximo passo; pode terminar em UNKNOWN.", "must_not_claim": "laudo, projeto, aprovação ou solução completa"}
+  ],
+  "claim_classes": [
+    {"class": "identity", "minimum_proof": "registro institucional vigente", "examples": ["razão social", "CNPJ"]},
+    {"class": "credential", "minimum_proof": "fonte oficial ou documento verificável, atual e autorizado", "examples": ["registro profissional", "especialização", "atribuição"]},
+    {"class": "professional_scope", "minimum_proof": "atribuição comprovada, objeto e jurisdição confirmados antes da contratação", "examples": ["responsabilidade técnica", "disciplina", "ART"]},
+    {"class": "method", "minimum_proof": "estrutura de método, norma aplicável e limitações; demonstração identificada como demonstrativa", "examples": ["NBR", "NR", "matriz de análise"]},
+    {"class": "case_or_outcome", "minimum_proof": "caso real com evidência, consentimento, redação e aprovação editorial", "examples": ["resultado", "cliente", "economia", "prazo observado"]},
+    {"class": "price", "minimum_proof": "estado PUBLICATION_AUTHORIZED ou CHECKOUT_AUTHORIZED e gate de captura", "examples": ["preço", "faixa", "condição"]},
+    {"class": "national_availability", "minimum_proof": "policy nacional vigente e qualificação de local/escopo", "examples": ["atendimento em todo o Brasil"]}
+  ],
+  "art_nf": {
+    "art_public_rule": "Dizer 'ART quando cabível ao escopo' somente depois de explicar que atribuição, local, registro ou visto e ato técnico são confirmados antes da execução. Não dizer 'ART garantida', 'ART automática' ou usar ART como selo genérico.",
+    "nf_public_rule": "NF é documento fiscal da contratação e não prova habilitação, método ou resultado. Informar emissão apenas quando a condição comercial for verdadeira para a contratação.",
+    "field_rule": "Declarar se vistoria ou campo é indispensável, incluído, opcional ou excluído; nomear local, deslocamento, logística e produto de campo na proposta. Atendimento nacional não inclui viagem nem disponibilidade imediata.",
+    "official_basis": "docs/strategy/research/confea-crea-national-practice-20260905.md"
+  },
+  "unpriced_offer": {
+    "public_state": "SCOPE_REQUIRED",
+    "allowed_copy": "O escopo, o local, as disciplinas, a vistoria e as formalidades precisam ser confirmados antes da proposta.",
+    "terminal_action": "REQUEST_SCOPE_REVIEW",
+    "forbidden": ["preço inventado", "faixa sem autorização", "checkout", "sob consulta apresentado como preço"]
+  },
+  "other_technical_demand": {
+    "public_state": "NEEDS_CONTEXT",
+    "allowed_copy": "Descreva a situação, o local e a decisão que precisa tomar. Confirmaremos se há enquadramento técnico seguro ou registraremos a lacuna.",
+    "terminal_action": "NEEDS_CONTEXT",
+    "forbidden": ["SKU automático", "competência ilimitada", "parceiro presumido", "prazo ou preço inferido"]
+  },
+  "success_boundary": "Nunca prometer aprovação, deferimento, regularização, vitória, adjudicação, pagamento, êxito judicial, ausência de interferências ou resultado econômico.",
+  "conversion": {
+    "source": "CONFENGE_WEB",
+    "analytics_pii_allowed": false,
+    "inbound_authorizes_outbound": false,
+    "priced_route_requires_lead_capture": true,
+    "terminal_actions": ["REQUEST_SCOPE_REVIEW", "REQUEST_TECHNICAL_TRIAGE", "REQUEST_CONFLICT_CHECK", "REQUEST_FORMAL_VALUATION_SCOPE", "REQUEST_SST_SCOPE", "REQUEST_PUBLIC_ENTITY_PLANNING_SCOPE", "REQUEST_B2G_FIT", "NEEDS_CONTEXT"]
+  }
+}

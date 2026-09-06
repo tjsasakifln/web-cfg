@@ -177,15 +177,25 @@ export async function runRedirectGates({ root = ROOT, base = BASE, log = console
   const byFrom = Object.fromEntries(rules.map((r) => [r.from, r]));
   ok(
     failures,
-    "servicos_rule",
-    byFrom["/servicos"]?.to === "/servicos-obras-publicas/" || byFrom["/servicos"]?.to === "/servicos-obras-publicas",
+    "servicos_redirect_removed",
+    !byFrom["/servicos"],
     JSON.stringify(byFrom["/servicos"])
   );
-  ok(failures, "servicos_301", byFrom["/servicos"]?.status === "301", byFrom["/servicos"]?.status);
+  const corporateServicesPath = resolve(root, "servicos/index.html");
+  ok(failures, "servicos_page_exists", existsSync(corporateServicesPath), corporateServicesPath);
+  if (existsSync(corporateServicesPath)) {
+    const corporateServices = readFileSync(corporateServicesPath, "utf8");
+    ok(
+      failures,
+      "servicos_indexable_after_mv09",
+      /content=["']index,follow["'][^>]*name=["']robots["']/i.test(corporateServices),
+      "MV-09 must publish the registered corporate services family"
+    );
+  }
   ok(
     failures,
     "servicos_html_rule",
-    byFrom["/servicos.html"]?.to === "/servicos-obras-publicas/" || byFrom["/servicos.html"]?.to === "/servicos-obras-publicas",
+    byFrom["/servicos.html"]?.to === "/servicos/" || byFrom["/servicos.html"]?.to === "/servicos",
     JSON.stringify(byFrom["/servicos.html"])
   );
   ok(failures, "servicos_html_301", byFrom["/servicos.html"]?.status === "301", byFrom["/servicos.html"]?.status);
@@ -371,7 +381,7 @@ export async function runRedirectGates({ root = ROOT, base = BASE, log = console
     log.log("SKIP live probes (no base URL)");
   } else {
     const probes = [
-      { path: "/servicos", expectStatus: [301, 302, 308], locIncludes: "servicos-obras-publicas" },
+      { path: "/servicos", expectStatus: [200] },
       { path: "/vision", expectStatus: [410] },
       { path: "/nexgen", expectStatus: [410] },
       { path: "/avcbclcb", expectStatus: [410] },

@@ -19,7 +19,7 @@ function escapeHtml(value) {
 }
 
 function attrValue(attrs, name) {
-  return String(attrs || "").match(new RegExp(`\\b${name}=["']([^"']*)["']`, "i"))?.[1] || "";
+  return String(attrs || "").match(new RegExp(`(?:^|\\s)${name}=["']([^"']*)["']`, "i"))?.[1] || "";
 }
 
 function setAttr(tag, name, value) {
@@ -73,13 +73,14 @@ function runtimeProfile(open) {
   return "shared_lead_form_v1";
 }
 
-function replaceMarker(body, marker, text, className) {
+function replaceMarker(body, marker, text, className, extraAttrs = "") {
   const pattern = new RegExp(
     `<([a-z][a-z0-9:-]*)\\b(?=[^>]*\\b${marker}(?:\\s|=|>))[^>]*>[\\s\\S]*?<\\/\\1>\\s*`,
     "gi",
   );
   const cleaned = body.replace(pattern, "");
-  return `<p class="${className}" ${marker}>${escapeHtml(text)}</p>\n${cleaned}`;
+  const attrs = extraAttrs ? ` ${extraAttrs}` : "";
+  return `<p class="${className}"${attrs} ${marker}>${escapeHtml(text)}</p>\n${cleaned}`;
 }
 
 function removeMarker(body, marker) {
@@ -234,7 +235,13 @@ function renderForm(full, open, body, surface) {
       : hasStandardPhone
         ? " O WhatsApp aceita DDD e 10 ou 11 dígitos."
         : "");
-  nextBody = replaceMarker(nextBody, "data-field-purpose", `${profile.field_purpose}${formatHint}`, "form-hint");
+  nextBody = replaceMarker(
+    nextBody,
+    "data-field-purpose",
+    `${profile.field_purpose}${formatHint}`,
+    "form-hint",
+    runtime === "adaptive_intake_standalone_v1" ? 'id="contato-hint"' : "",
+  );
   nextBody = replaceMarker(nextBody, "data-form-value", profile.pre_form_value, "form-hint");
   nextBody = updateSubmit(nextBody, profileId);
   nextBody = appendBoundary(nextBody, profile.boundary);

@@ -71,11 +71,11 @@
  </url>
  <url>
  <loc>https://confenge.com.br/confianca/</loc>
- <lastmod>2026-09-04</lastmod>
+ <lastmod>2026-09-05</lastmod>
  </url>
  <url>
  <loc>https://confenge.com.br/conflitos/</loc>
- <lastmod>2026-08-16</lastmod>
+ <lastmod>2026-09-05</lastmod>
  </url>
  <url>
  <loc>https://confenge.com.br/conteudos/</loc>
@@ -198,7 +198,7 @@
  </url>
  <url>
  <loc>https://confenge.com.br/especialista/tiago-jun-sasaki/</loc>
- <lastmod>2026-09-04</lastmod>
+ <lastmod>2026-09-05</lastmod>
  </url>
  <url>
  <loc>https://confenge.com.br/ferramentas/</loc>
@@ -218,10 +218,6 @@
  <url>
  <loc>https://confenge.com.br/ferramentas/matriz-atraso-obra/</loc>
  <lastmod>2026-08-15</lastmod>
- </url>
- <url>
- <loc>https://confenge.com.br/ferramentas/prontidao-tecnica-obra-privada/</loc>
- <lastmod>2026-09-05</lastmod>
  </url>
  <url>
  <loc>https://confenge.com.br/imprensa/</loc>
@@ -255,11 +251,17 @@
  <loc>https://confenge.com.br/problemas-que-resolvemos/</loc>
  </url>
  <url>
+ <loc>https://confenge.com.br/quantitativos-orcamento-obras/</loc>
+ </url>
+ <url>
  <loc>https://confenge.com.br/radar/nacional-obras-publicas/</loc>
  <lastmod>2026-08-03</lastmod>
  </url>
  <url>
  <loc>https://confenge.com.br/reequilibrio-obras-publicas/</loc>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/servicos/</loc>
  </url>
  <url>
  <loc>https://confenge.com.br/servicos-obras-publicas/</loc>

@@ -58,7 +58,7 @@ for (const route of ROUTES) {
     // sai, e a verificacao passa a ser escopada na secao onde a propriedade
     // vive, para que ela tambem nao passe por ausencia de conteudo.
     const CLIENT_FRAMING = /clientes? da CONFENGE|nossos clientes|clientes? atendidos?|carteira de clientes|resultados? (?:da|de|obtidos? pela) CONFENGE|cases? de cliente/i;
-    const marketSection = html.match(/<section\b[^>]*id="mercado-pncp"[\s\S]*?<\/section>/);
+    const marketSection = html.match(/<div\b[^>]*id="mercado-pncp"[\s\S]*?<\/div>\s*<\/div>/);
     assert("home_market_section_present", Boolean(marketSection), "market section");
     assert(
       "home_not_client_proof",

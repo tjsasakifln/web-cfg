@@ -253,7 +253,6 @@ def main() -> int:
         errors.append(f"indexable not in sitemap: {sorted(indexable - sm_paths)}")
 
     legacy = [
-        "/servicos",
         "/contato",
         "/vision",
         "/nexgen",

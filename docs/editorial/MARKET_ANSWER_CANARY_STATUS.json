@@ -1,10 +1,10 @@
 {
   "report": "MARKET_ANSWER_CANARY_STATUS",
-  "as_of_report": "2026-08-20",
-  "generated_at": "2026-08-20T01:25:45.404827Z",
+  "as_of_report": "2026-09-06",
+  "generated_at": "2026-09-06T01:29:16.840292Z",
   "freshness_class": "STALE",
-  "evaluated_at": "2026-08-20T01:25:45.404827Z",
-  "age_seconds": 230182,
+  "evaluated_at": "2026-09-06T01:29:16.840292Z",
+  "age_seconds": 1699193,
   "expires_at": "2026-08-19T11:29:23.193694+02:00",
   "candidate_decision": {
     "question": "Qual é o valor típico dos contratos públicos de pavimentação em Santa Catarina?",
@@ -157,8 +157,8 @@
       "freshness_expired"
     ],
     "freshness_class": "STALE",
-    "evaluated_at": "2026-08-20T01:25:45.404827Z",
-    "age_seconds": 230182,
+    "evaluated_at": "2026-09-06T01:29:16.840292Z",
+    "age_seconds": 1699193,
     "expires_at": "2026-08-19T11:29:23.193694+02:00"
   },
   "page_index_state": {
@@ -167,13 +167,13 @@
     "sitemap": false,
     "canonical": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
     "rendered": [
-      "/home/tjsasakifln/code/confenge/web-cfg/inteligencia/valor-tipico-contratos-pavimentacao/index.html"
+      "/home/tjsasakifln/code/confenge/.worktrees/web-cfg/mv-09-commercial-production-20260905/inteligencia/valor-tipico-contratos-pavimentacao/index.html"
     ],
     "fixture_marked": false,
     "indexable": false,
     "freshness_class": "STALE",
-    "evaluated_at": "2026-08-20T01:25:45.404827Z",
-    "age_seconds": 230182,
+    "evaluated_at": "2026-09-06T01:29:16.840292Z",
+    "age_seconds": 1699193,
     "expires_at": "2026-08-19T11:29:23.193694+02:00"
   },
   "engagement_events_available": {
@@ -234,13 +234,6 @@
         "is_page_view": false
       },
       {
-        "name": "lead_receipt_correlated",
-        "layer": "lead",
-        "pii": false,
-        "is_lead": true,
-        "is_page_view": false
-      },
-      {
         "name": "correction_open",
         "layer": "engagement",
         "pii": false,
@@ -251,7 +244,7 @@
     "notes": {
       "page_view_is_not_lead": true,
       "answer_view_is_impression_only": true,
-      "lead_join": "correlation_id on lead receipt; never PII in analytics"
+      "lead_join": "UNAVAILABLE_ON_CANARY; downstream capture owns receipt analytics"
     }
   },
   "blockers": [

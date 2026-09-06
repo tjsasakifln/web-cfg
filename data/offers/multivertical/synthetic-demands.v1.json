@@ -1,0 +1,958 @@
+{
+  "schema": "confenge.offer-synthetic-demands/1.0",
+  "contract": "CONFENGE_OFFER_CATALOG/2.0.0",
+  "count": 120,
+  "note": "Corpus de enquadramento com oráculo explícito revisável por demanda. O mapper usa regras de fronteira, não este arquivo como tabela de respostas.",
+  "demands": [
+    {
+      "demand_id": "D001",
+      "decision": "screen_before_suit",
+      "buyer_role": "lawyer",
+      "object": "building",
+      "litigation": true,
+      "expected_primary_offer_id": "pre_litigation_technical_screening"
+    },
+    {
+      "demand_id": "D002",
+      "decision": "assist_civil_case",
+      "buyer_role": "lawyer",
+      "object": "building",
+      "litigation": true,
+      "expected_primary_offer_id": "civil_building_technical_assistance"
+    },
+    {
+      "demand_id": "D003",
+      "decision": "assist_labor_case",
+      "buyer_role": "lawyer",
+      "object": "labor_environment",
+      "litigation": true,
+      "expected_primary_offer_id": "labor_sst_technical_assistance"
+    },
+    {
+      "demand_id": "D004",
+      "decision": "formal_valuation",
+      "buyer_role": "heir",
+      "object": "urban_property",
+      "litigation": false,
+      "expected_primary_offer_id": "urban_property_valuation"
+    },
+    {
+      "demand_id": "D005",
+      "decision": "preliminary_opinion",
+      "buyer_role": "buyer",
+      "object": "urban_property",
+      "litigation": false,
+      "expected_primary_offer_id": "preliminary_property_opinion"
+    },
+    {
+      "demand_id": "D006",
+      "decision": "takeoff",
+      "buyer_role": "developer",
+      "object": "private_work",
+      "litigation": false,
+      "expected_primary_offer_id": "quantity_takeoff_budgeting"
+    },
+    {
+      "demand_id": "D007",
+      "decision": "audit_budget",
+      "buyer_role": "investor",
+      "object": "budget",
+      "litigation": false,
+      "expected_primary_offer_id": "budget_audit_feasibility"
+    },
+    {
+      "demand_id": "D008",
+      "decision": "bim_clash",
+      "buyer_role": "developer",
+      "object": "bim_model",
+      "litigation": false,
+      "expected_primary_offer_id": "bim_coordination_clash_register"
+    },
+    {
+      "demand_id": "D009",
+      "decision": "inspect_pathology",
+      "buyer_role": "condo",
+      "object": "building",
+      "litigation": false,
+      "expected_primary_offer_id": "building_inspection_pathology"
+    },
+    {
+      "demand_id": "D010",
+      "decision": "renovation_plan",
+      "buyer_role": "condo",
+      "object": "building",
+      "litigation": false,
+      "condition_unknown": false,
+      "expected_primary_offer_id": "renovation_plan_condo_review"
+    },
+    {
+      "demand_id": "D011",
+      "decision": "asbuilt",
+      "buyer_role": "developer",
+      "object": "private_work",
+      "litigation": false,
+      "expected_primary_offer_id": "asbuilt_document_reconciliation"
+    },
+    {
+      "demand_id": "D012",
+      "decision": "private_readiness",
+      "buyer_role": "developer",
+      "object": "private_work",
+      "litigation": false,
+      "expected_primary_offer_id": "private_project_technical_readiness_assessment"
+    },
+    {
+      "demand_id": "D013",
+      "decision": "sst_diagnosis",
+      "buyer_role": "employer",
+      "object": "labor_environment",
+      "litigation": false,
+      "expected_primary_offer_id": "sst_risk_documentation_diagnosis"
+    },
+    {
+      "demand_id": "D014",
+      "decision": "sst_docs",
+      "buyer_role": "employer",
+      "object": "labor_environment",
+      "litigation": false,
+      "expected_primary_offer_id": "sst_pgr_ltcat_aet_inputs"
+    },
+    {
+      "demand_id": "D015",
+      "decision": "insalubrity",
+      "buyer_role": "employer",
+      "object": "labor_environment",
+      "litigation": false,
+      "expected_primary_offer_id": "sst_insalubrity_perilousness_analysis"
+    },
+    {
+      "demand_id": "D016",
+      "decision": "sst_audit",
+      "buyer_role": "employer",
+      "object": "labor_environment",
+      "litigation": false,
+      "expected_primary_offer_id": "sst_preventive_audit"
+    },
+    {
+      "demand_id": "D017",
+      "decision": "public_procurement_planning",
+      "buyer_role": "public_entity",
+      "object": "public_work",
+      "public_entity": true,
+      "expected_primary_offer_id": "public_works_technical_procurement_planning"
+    },
+    {
+      "demand_id": "D018",
+      "decision": "screen_before_suit",
+      "buyer_role": "company",
+      "object": "building",
+      "litigation": false,
+      "expected_primary_offer_id": "pre_litigation_technical_screening"
+    },
+    {
+      "demand_id": "D019",
+      "decision": "assist_civil_case",
+      "buyer_role": "condo",
+      "object": "building",
+      "litigation": true,
+      "expected_primary_offer_id": "civil_building_technical_assistance"
+    },
+    {
+      "demand_id": "D020",
+      "decision": "assist_labor_case",
+      "buyer_role": "employer",
+      "object": "labor_environment",
+      "litigation": true,
+      "expected_primary_offer_id": "labor_sst_technical_assistance"
+    },
+    {
+      "demand_id": "D021",
+      "decision": "formal_valuation",
+      "buyer_role": "bank",
+      "object": "urban_property",
+      "litigation": false,
+      "expected_primary_offer_id": "urban_property_valuation"
+    },
+    {
+      "demand_id": "D022",
+      "decision": "preliminary_opinion",
+      "buyer_role": "lawyer",
+      "object": "urban_property",
+      "litigation": false,
+      "expected_primary_offer_id": "preliminary_property_opinion"
+    },
+    {
+      "demand_id": "D023",
+      "decision": "takeoff",
+      "buyer_role": "owner",
+      "object": "building",
+      "litigation": false,
+      "expected_primary_offer_id": "quantity_takeoff_budgeting"
+    },
+    {
+      "demand_id": "D024",
+      "decision": "audit_budget",
+      "buyer_role": "condo",
+      "object": "budget",
+      "litigation": false,
+      "expected_primary_offer_id": "budget_audit_feasibility"
+    },
+    {
+      "demand_id": "D025",
+      "decision": "bim_clash",
+      "buyer_role": "contractor",
+      "object": "bim_model",
+      "litigation": false,
+      "expected_primary_offer_id": "bim_coordination_clash_register"
+    },
+    {
+      "demand_id": "D026",
+      "decision": "inspect_pathology",
+      "buyer_role": "buyer",
+      "object": "building",
+      "litigation": false,
+      "expected_primary_offer_id": "building_inspection_pathology"
+    },
+    {
+      "demand_id": "D027",
+      "decision": "renovation_plan",
+      "buyer_role": "owner",
+      "object": "building",
+      "litigation": false,
+      "condition_unknown": false,
+      "expected_primary_offer_id": "renovation_plan_condo_review"
+    },
+    {
+      "demand_id": "D028",
+      "decision": "asbuilt",
+      "buyer_role": "condo",
+      "object": "building",
+      "litigation": false,
+      "expected_primary_offer_id": "asbuilt_document_reconciliation"
+    },
+    {
+      "demand_id": "D029",
+      "decision": "private_readiness",
+      "buyer_role": "investor",
+      "object": "private_work",
+      "litigation": false,
+      "expected_primary_offer_id": "private_project_technical_readiness_assessment"
+    },
+    {
+      "demand_id": "D030",
+      "decision": "sst_diagnosis",
+      "buyer_role": "sesmt",
+      "object": "labor_environment",
+      "litigation": false,
+      "expected_primary_offer_id": "sst_risk_documentation_diagnosis"
+    },
+    {
+      "demand_id": "D031",
+      "decision": "sst_docs",
+      "buyer_role": "sesmt",
+      "object": "labor_environment",
+      "litigation": false,
+      "expected_primary_offer_id": "sst_pgr_ltcat_aet_inputs"
+    },
+    {
+      "demand_id": "D032",
+      "decision": "insalubrity",
+      "buyer_role": "sesmt",
+      "object": "labor_environment",
+      "litigation": false,
+      "expected_primary_offer_id": "sst_insalubrity_perilousness_analysis"
+    },
+    {
+      "demand_id": "D033",
+      "decision": "sst_audit",
+      "buyer_role": "director",
+      "object": "labor_environment",
+      "litigation": false,
+      "expected_primary_offer_id": "sst_preventive_audit"
+    },
+    {
+      "demand_id": "D034",
+      "decision": "public_procurement_planning",
+      "buyer_role": "autarchy",
+      "object": "public_work",
+      "public_entity": true,
+      "expected_primary_offer_id": "public_works_technical_procurement_planning"
+    },
+    {
+      "demand_id": "D035",
+      "decision": "screen_before_suit",
+      "buyer_role": "party",
+      "object": "urban_property",
+      "litigation": true,
+      "expected_primary_offer_id": "pre_litigation_technical_screening"
+    },
+    {
+      "demand_id": "D036",
+      "decision": "assist_civil_case",
+      "buyer_role": "contractor",
+      "object": "building",
+      "litigation": true,
+      "expected_primary_offer_id": "civil_building_technical_assistance"
+    },
+    {
+      "demand_id": "D037",
+      "decision": "assist_labor_case",
+      "buyer_role": "employee_with_counsel",
+      "object": "labor_environment",
+      "litigation": true,
+      "expected_primary_offer_id": "labor_sst_technical_assistance"
+    },
+    {
+      "demand_id": "D038",
+      "decision": "formal_valuation",
+      "buyer_role": "spouse",
+      "object": "urban_property",
+      "litigation": false,
+      "expected_primary_offer_id": "urban_property_valuation"
+    },
+    {
+      "demand_id": "D039",
+      "decision": "preliminary_opinion",
+      "buyer_role": "family",
+      "object": "urban_property",
+      "litigation": false,
+      "expected_primary_offer_id": "preliminary_property_opinion"
+    },
+    {
+      "demand_id": "D040",
+      "decision": "takeoff",
+      "buyer_role": "contractor",
+      "object": "private_work",
+      "litigation": false,
+      "expected_primary_offer_id": "quantity_takeoff_budgeting"
+    },
+    {
+      "demand_id": "D041",
+      "decision": "audit_budget",
+      "buyer_role": "developer",
+      "object": "budget",
+      "litigation": false,
+      "expected_primary_offer_id": "budget_audit_feasibility"
+    },
+    {
+      "demand_id": "D042",
+      "decision": "bim_clash",
+      "buyer_role": "design_lead",
+      "object": "bim_model",
+      "litigation": false,
+      "expected_primary_offer_id": "bim_coordination_clash_register"
+    },
+    {
+      "demand_id": "D043",
+      "decision": "inspect_pathology",
+      "buyer_role": "contractor",
+      "object": "building",
+      "litigation": false,
+      "expected_primary_offer_id": "building_inspection_pathology"
+    },
+    {
+      "demand_id": "D044",
+      "decision": "renovation_plan",
+      "buyer_role": "administrator",
+      "object": "building",
+      "litigation": false,
+      "condition_unknown": false,
+      "expected_primary_offer_id": "renovation_plan_condo_review"
+    },
+    {
+      "demand_id": "D045",
+      "decision": "asbuilt",
+      "buyer_role": "owner",
+      "object": "private_work",
+      "litigation": false,
+      "expected_primary_offer_id": "asbuilt_document_reconciliation"
+    },
+    {
+      "demand_id": "D046",
+      "decision": "private_readiness",
+      "buyer_role": "owner",
+      "object": "private_work",
+      "litigation": false,
+      "expected_primary_offer_id": "private_project_technical_readiness_assessment"
+    },
+    {
+      "demand_id": "D047",
+      "decision": "sst_diagnosis",
+      "buyer_role": "hr",
+      "object": "labor_environment",
+      "litigation": false,
+      "expected_primary_offer_id": "sst_risk_documentation_diagnosis"
+    },
+    {
+      "demand_id": "D048",
+      "decision": "sst_docs",
+      "buyer_role": "employer",
+      "object": "labor_environment",
+      "litigation": false,
+      "expected_primary_offer_id": "sst_pgr_ltcat_aet_inputs"
+    },
+    {
+      "demand_id": "D049",
+      "decision": "sst_audit",
+      "buyer_role": "employer",
+      "object": "labor_environment",
+      "litigation": false,
+      "expected_primary_offer_id": "sst_preventive_audit"
+    },
+    {
+      "demand_id": "D050",
+      "decision": "public_procurement_planning",
+      "buyer_role": "state_company",
+      "object": "public_work",
+      "public_entity": true,
+      "expected_primary_offer_id": "public_works_technical_procurement_planning"
+    },
+    {
+      "demand_id": "D051",
+      "decision": "insalubrity",
+      "buyer_role": "employer",
+      "object": "labor_environment",
+      "litigation": false,
+      "expected_primary_offer_id": "sst_insalubrity_perilousness_analysis"
+    },
+    {
+      "demand_id": "D052",
+      "decision": "formal_valuation",
+      "buyer_role": "lawyer",
+      "object": "urban_property",
+      "litigation": true,
+      "expected_primary_offer_id": "urban_property_valuation"
+    },
+    {
+      "demand_id": "D053",
+      "decision": "renovation_plan",
+      "buyer_role": "condo",
+      "object": "building",
+      "litigation": false,
+      "condition_unknown": true,
+      "expected_primary_offer_id": "building_inspection_pathology"
+    },
+    {
+      "demand_id": "D054",
+      "decision": "private_readiness",
+      "buyer_role": "developer",
+      "object": "private_work",
+      "litigation": false,
+      "built_divergence": true,
+      "expected_primary_offer_id": "private_project_technical_readiness_assessment"
+    },
+    {
+      "demand_id": "D055",
+      "decision": "audit_budget",
+      "buyer_role": "developer",
+      "object": "budget",
+      "litigation": false,
+      "produces_new_budget": true,
+      "expected_primary_offer_id": "quantity_takeoff_budgeting"
+    },
+    {
+      "demand_id": "D056",
+      "decision": "assist_civil_case",
+      "buyer_role": "lawyer",
+      "object": "building",
+      "litigation": true,
+      "corpus_unknown": true,
+      "expected_primary_offer_id": "pre_litigation_technical_screening"
+    },
+    {
+      "demand_id": "D057",
+      "decision": "insalubrity",
+      "buyer_role": "lawyer",
+      "object": "labor_environment",
+      "litigation": true,
+      "expected_primary_offer_id": "labor_sst_technical_assistance"
+    },
+    {
+      "demand_id": "D058",
+      "decision": "public_procurement_planning",
+      "buyer_role": "contractor",
+      "object": "public_work",
+      "public_entity": false,
+      "expected_gap_id": "GAP_UNMAPPED"
+    },
+    {
+      "demand_id": "D059",
+      "decision": "preliminary_opinion",
+      "buyer_role": "buyer",
+      "object": "urban_property",
+      "litigation": false,
+      "expected_primary_offer_id": "preliminary_property_opinion"
+    },
+    {
+      "demand_id": "D060",
+      "decision": "sst_docs",
+      "buyer_role": "employer",
+      "object": "labor_environment",
+      "litigation": false,
+      "expected_primary_offer_id": "sst_pgr_ltcat_aet_inputs"
+    },
+    {
+      "demand_id": "D061",
+      "decision": "inspect_pathology",
+      "buyer_role": "lawyer",
+      "object": "building",
+      "litigation": false,
+      "expected_primary_offer_id": "building_inspection_pathology"
+    },
+    {
+      "demand_id": "D062",
+      "decision": "prioritize_open_bids",
+      "buyer_role": "contractor",
+      "object": "public_work",
+      "public_entity": false,
+      "expected_primary_offer_id": "CFG-D01"
+    },
+    {
+      "demand_id": "D063",
+      "decision": "bid_go_nogo",
+      "buyer_role": "contractor",
+      "object": "public_work",
+      "public_entity": false,
+      "expected_primary_offer_id": "CFG-D12"
+    },
+    {
+      "demand_id": "D064",
+      "decision": "bid_budget_audit",
+      "buyer_role": "contractor",
+      "object": "public_work",
+      "public_entity": false,
+      "expected_primary_offer_id": "CFG-D14"
+    },
+    {
+      "demand_id": "D065",
+      "decision": "measurement_glosa",
+      "buyer_role": "contractor",
+      "object": "public_work",
+      "public_entity": false,
+      "expected_primary_offer_id": "CFG-D18"
+    },
+    {
+      "demand_id": "D066",
+      "decision": "contract_dispute_b2g",
+      "buyer_role": "contractor",
+      "object": "public_work",
+      "public_entity": false,
+      "expected_primary_offer_id": "CFG-D42"
+    },
+    {
+      "demand_id": "D067",
+      "decision": "expansion_package",
+      "buyer_role": "contractor",
+      "object": "public_work",
+      "public_entity": false,
+      "expected_primary_offer_id": "CFG-DIAG-EXP-v1"
+    },
+    {
+      "demand_id": "D068",
+      "decision": "b2g_retainer_monthly",
+      "buyer_role": "contractor",
+      "object": "public_work",
+      "public_entity": false,
+      "expected_primary_offer_id": "CFG-DIRB2G-FLEX-v1"
+    },
+    {
+      "demand_id": "D069",
+      "decision": "retained_b2g",
+      "buyer_role": "contractor",
+      "object": "public_work",
+      "retained_offer_id": "CFG-D08",
+      "expected_primary_offer_id": "CFG-D08"
+    },
+    {
+      "demand_id": "D070",
+      "decision": "retained_b2g",
+      "buyer_role": "contractor",
+      "object": "public_work",
+      "retained_offer_id": "CFG-D24",
+      "expected_primary_offer_id": "CFG-D24"
+    },
+    {
+      "demand_id": "D071",
+      "decision": "retained_b2g",
+      "buyer_role": "contractor",
+      "object": "public_work",
+      "retained_offer_id": "CFG-D44",
+      "expected_primary_offer_id": "CFG-D44"
+    },
+    {
+      "demand_id": "D072",
+      "decision": "retained_b2g",
+      "buyer_role": "contractor",
+      "object": "public_work",
+      "retained_offer_id": "CFG-DIRB2G-180-v1",
+      "expected_primary_offer_id": "CFG-DIRB2G-180-v1"
+    },
+    {
+      "demand_id": "D073",
+      "decision": "retained_b2g",
+      "buyer_role": "contractor",
+      "object": "public_work",
+      "retained_offer_id": "CFG-DIRB2G-365-v1",
+      "expected_primary_offer_id": "CFG-DIRB2G-365-v1"
+    },
+    {
+      "demand_id": "D074",
+      "decision": "retained_b2g",
+      "buyer_role": "contractor",
+      "object": "public_work",
+      "retained_offer_id": "CFG-D33",
+      "expected_primary_offer_id": "CFG-D33"
+    },
+    {
+      "demand_id": "D075",
+      "decision": "publish_money_page",
+      "buyer_role": "public_entity",
+      "object": "public_work",
+      "public_entity": true,
+      "expected_gap_id": "GAP_ISSUE_588_PUBLICATION"
+    },
+    {
+      "demand_id": "D076",
+      "decision": "formal_valuation",
+      "buyer_role": "farmer",
+      "object": "rural_property",
+      "litigation": false,
+      "expected_gap_id": "GAP_RURAL_VALUATION"
+    },
+    {
+      "demand_id": "D077",
+      "decision": "court_appointed_expert",
+      "buyer_role": "court",
+      "object": "building",
+      "expected_gap_id": "GAP_COURT_APPOINTED_EXPERT"
+    },
+    {
+      "demand_id": "D078",
+      "decision": "legal_representation",
+      "buyer_role": "party",
+      "object": "building",
+      "expected_gap_id": "GAP_LEGAL_REPRESENTATION"
+    },
+    {
+      "demand_id": "D079",
+      "decision": "occupational_physician",
+      "buyer_role": "employer",
+      "object": "labor_environment",
+      "expected_gap_id": "GAP_OCCUPATIONAL_PHYSICIAN_AS_INTERNAL"
+    },
+    {
+      "demand_id": "D080",
+      "decision": "architecture_design",
+      "buyer_role": "owner",
+      "object": "building",
+      "expected_gap_id": "GAP_ARCHITECTURE_DESIGN"
+    },
+    {
+      "demand_id": "D081",
+      "decision": "criminal_forensics",
+      "buyer_role": "lawyer",
+      "object": "building",
+      "expected_gap_id": "GAP_CRIMINAL_FORENSICS"
+    },
+    {
+      "demand_id": "D082",
+      "decision": "environmental_licensing",
+      "buyer_role": "developer",
+      "object": "private_work",
+      "expected_gap_id": "GAP_ENVIRONMENTAL_LICENSING"
+    },
+    {
+      "demand_id": "D083",
+      "decision": "nr12_machine",
+      "buyer_role": "employer",
+      "object": "labor_environment",
+      "expected_gap_id": "GAP_NR12_MACHINE_SAFETY_SPECIALIST"
+    },
+    {
+      "demand_id": "D084",
+      "decision": "software_saas",
+      "buyer_role": "employer",
+      "object": "software",
+      "expected_gap_id": "GAP_SOFTWARE_SAAS"
+    },
+    {
+      "demand_id": "D085",
+      "decision": "hourly_staff",
+      "buyer_role": "developer",
+      "object": "private_work",
+      "expected_gap_id": "GAP_HOURLY_STAFF_AUGMENTATION"
+    },
+    {
+      "demand_id": "D086",
+      "decision": "open_ended_retainer",
+      "buyer_role": "developer",
+      "object": "private_work",
+      "expected_gap_id": "GAP_OPEN_ENDED_RETAINER"
+    },
+    {
+      "demand_id": "D087",
+      "decision": "formal_valuation",
+      "buyer_role": "expat",
+      "object": "foreign_property",
+      "expected_gap_id": "GAP_INTERNATIONAL_VALUATION"
+    },
+    {
+      "demand_id": "D088",
+      "decision": "mining",
+      "buyer_role": "company",
+      "object": "mine",
+      "expected_gap_id": "GAP_MINING"
+    },
+    {
+      "demand_id": "D089",
+      "decision": "naval",
+      "buyer_role": "shipyard",
+      "object": "vessel",
+      "expected_gap_id": "GAP_NAVAL"
+    },
+    {
+      "demand_id": "D090",
+      "decision": "electrical_design",
+      "buyer_role": "owner",
+      "object": "building",
+      "expected_gap_id": "GAP_ELECTRICAL_DESIGN_PRIMARY"
+    },
+    {
+      "demand_id": "D091",
+      "decision": "fire_brigade_training",
+      "buyer_role": "employer",
+      "object": "labor_environment",
+      "expected_gap_id": "GAP_FIRE_BRIGADE_TRAINING"
+    },
+    {
+      "demand_id": "D092",
+      "decision": "iso_certification",
+      "buyer_role": "employer",
+      "object": "labor_environment",
+      "expected_gap_id": "GAP_ISO_CERTIFICATION_BODY"
+    },
+    {
+      "demand_id": "D093",
+      "decision": "airport_pavement",
+      "buyer_role": "developer",
+      "object": "airfield",
+      "expected_gap_id": "GAP_AIRPORT_PAVEMENT_SPECIALTY"
+    },
+    {
+      "demand_id": "D094",
+      "decision": "court_appointed_expert",
+      "buyer_role": "lawyer",
+      "object": "urban_property",
+      "expected_gap_id": "GAP_COURT_APPOINTED_EXPERT"
+    },
+    {
+      "demand_id": "D095",
+      "decision": "legal_representation",
+      "buyer_role": "employer",
+      "object": "labor_environment",
+      "expected_gap_id": "GAP_LEGAL_REPRESENTATION"
+    },
+    {
+      "demand_id": "D096",
+      "decision": "occupational_physician",
+      "buyer_role": "sesmt",
+      "object": "labor_environment",
+      "expected_gap_id": "GAP_OCCUPATIONAL_PHYSICIAN_AS_INTERNAL"
+    },
+    {
+      "demand_id": "D097",
+      "decision": "architecture_design",
+      "buyer_role": "condo",
+      "object": "building",
+      "expected_gap_id": "GAP_ARCHITECTURE_DESIGN"
+    },
+    {
+      "demand_id": "D098",
+      "decision": "software_saas",
+      "buyer_role": "public_entity",
+      "object": "software",
+      "expected_gap_id": "GAP_SOFTWARE_SAAS"
+    },
+    {
+      "demand_id": "D099",
+      "decision": "hourly_staff",
+      "buyer_role": "public_entity",
+      "object": "public_work",
+      "expected_gap_id": "GAP_HOURLY_STAFF_AUGMENTATION"
+    },
+    {
+      "demand_id": "D100",
+      "decision": "open_ended_retainer",
+      "buyer_role": "contractor",
+      "object": "public_work",
+      "expected_gap_id": "GAP_OPEN_ENDED_RETAINER"
+    },
+    {
+      "demand_id": "D101",
+      "decision": "complementary_project_review",
+      "buyer_role": "engineering_office",
+      "object": "structural_project",
+      "client_context": "engineering_complement",
+      "expected_primary_offer_id": "complementary_engineering_project_review"
+    },
+    {
+      "demand_id": "D102",
+      "decision": "complementary_project_review",
+      "buyer_role": "engineering_office",
+      "object": "budget_and_quantities",
+      "client_context": "review_and_audit",
+      "expected_primary_offer_id": "complementary_engineering_project_review"
+    },
+    {
+      "demand_id": "D103",
+      "decision": "complementary_project_review",
+      "buyer_role": "architecture_office",
+      "object": "bim_model",
+      "client_context": "engineering_complement",
+      "architecture_authorship": false,
+      "expected_primary_offer_id": "complementary_engineering_project_review"
+    },
+    {
+      "demand_id": "D104",
+      "decision": "complementary_project_review",
+      "buyer_role": "architecture_platform",
+      "object": "multidisciplinary_project",
+      "client_context": "compatibilization",
+      "architecture_authorship": false,
+      "expected_primary_offer_id": "complementary_engineering_project_review"
+    },
+    {
+      "demand_id": "D105",
+      "decision": "complementary_project_review",
+      "buyer_role": "incorporator",
+      "object": "project_interfaces",
+      "client_context": "engineering_complement",
+      "expected_primary_offer_id": "complementary_engineering_project_review"
+    },
+    {
+      "demand_id": "D106",
+      "decision": "complementary_project_review",
+      "buyer_role": "developer",
+      "object": "bim_coordination",
+      "client_context": "compatibilization",
+      "expected_primary_offer_id": "complementary_engineering_project_review"
+    },
+    {
+      "demand_id": "D107",
+      "decision": "complementary_project_review",
+      "buyer_role": "contractor",
+      "object": "asbuilt_documentation",
+      "client_context": "review_and_revision",
+      "expected_primary_offer_id": "complementary_engineering_project_review"
+    },
+    {
+      "demand_id": "D108",
+      "decision": "land_development_infrastructure",
+      "buyer_role": "land_developer",
+      "object": "urban_subdivision",
+      "civil_interface": "confirmed",
+      "coverage": "civil_scope_confirmed",
+      "expected_primary_offer_id": "complementary_engineering_project_review"
+    },
+    {
+      "demand_id": "D109",
+      "decision": "land_development_infrastructure",
+      "buyer_role": "land_developer",
+      "object": "regional_infrastructure",
+      "civil_interface": "unknown",
+      "coverage": "NEEDS_CONTEXT/GAP",
+      "expected_gap_id": "GAP_ATTRIBUTION_OR_DISCIPLINE_UNCONFIRMED"
+    },
+    {
+      "demand_id": "D110",
+      "decision": "complementary_project_review",
+      "buyer_role": "architecture_office",
+      "object": "structural_interface",
+      "client_context": "engineering_complement",
+      "architecture_authorship": false,
+      "expected_primary_offer_id": "complementary_engineering_project_review"
+    },
+    {
+      "demand_id": "D111",
+      "decision": "complementary_project_review",
+      "buyer_role": "architecture_platform",
+      "object": "quantities_and_budget",
+      "client_context": "engineering_review",
+      "architecture_authorship": false,
+      "expected_primary_offer_id": "complementary_engineering_project_review"
+    },
+    {
+      "demand_id": "D112",
+      "decision": "complementary_project_review",
+      "buyer_role": "engineering_office",
+      "object": "discipline_interface",
+      "client_context": "technical_documentation",
+      "expected_primary_offer_id": "complementary_engineering_project_review"
+    },
+    {
+      "demand_id": "D113",
+      "decision": "complementary_project_review",
+      "buyer_role": "incorporator",
+      "object": "construction_documentation",
+      "client_context": "engineering_complement",
+      "expected_primary_offer_id": "complementary_engineering_project_review"
+    },
+    {
+      "demand_id": "D114",
+      "decision": "property_condition_inspection",
+      "buyer_role": "condominium_admin",
+      "object": "building",
+      "client_context": "inspection_and_reception",
+      "expected_primary_offer_id": "building_inspection_pathology"
+    },
+    {
+      "demand_id": "D115",
+      "decision": "technical_evidence_assistance",
+      "buyer_role": "lawyer",
+      "object": "civil_dispute",
+      "client_context": "technical_assistance",
+      "expected_primary_offer_id": "civil_building_technical_assistance"
+    },
+    {
+      "demand_id": "D116",
+      "decision": "formal_property_valuation",
+      "buyer_role": "property_owner",
+      "object": "urban_property",
+      "client_context": "valuation",
+      "expected_primary_offer_id": "urban_property_valuation"
+    },
+    {
+      "demand_id": "D117",
+      "decision": "sst_program_and_documentation",
+      "buyer_role": "employer",
+      "object": "workplace",
+      "client_context": "PGR_LTCAT_AET",
+      "expected_primary_offer_id": "sst_pgr_ltcat_aet_inputs"
+    },
+    {
+      "demand_id": "D118",
+      "decision": "public_procurement_planning",
+      "buyer_role": "public_entity",
+      "object": "public_work",
+      "public_entity": true,
+      "client_context": "technical_preparation",
+      "expected_primary_offer_id": "public_works_technical_procurement_planning"
+    },
+    {
+      "demand_id": "D119",
+      "decision": "public_contract_execution_support",
+      "buyer_role": "public_bidder",
+      "object": "public_work",
+      "client_context": "contract_execution",
+      "expected_primary_offer_id": "CFG-D25"
+    },
+    {
+      "demand_id": "D120",
+      "decision": "technical_demand_needs_context",
+      "buyer_role": "industrial_company",
+      "object": "unclassified_technical_request",
+      "coverage": "NEEDS_CONTEXT/GAP",
+      "expected_gap_id": "GAP_UNMAPPED"
+    }
+  ]
+}

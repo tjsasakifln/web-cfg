@@ -14,6 +14,7 @@ const authority = require("../../netlify/functions/data/adaptive-intake-authorit
 const family = registry.families.find((entry) => entry.id === "triagem-tecnica");
 assert.deepEqual(family.capture_availability, {
   mode: "external_authority_fail_closed",
+  withheld_fallback: ["whatsapp", "email", "telephone"],
   runtime_profile: "adaptive_intake_standalone_v1",
   config_endpoint: "/.netlify/functions/adaptive-intake-config",
   client_script: "/assets/js/adaptive-intake.js",
@@ -40,6 +41,16 @@ assert.equal(config.statusCode, 503);
 assert.deepEqual(JSON.parse(config.body), { ok: false, error: "intake_unavailable" });
 assert.equal(config.headers["Cache-Control"], "no-store");
 assert.equal((await handler({ httpMethod: "POST" })).statusCode, 405);
-assert.deepEqual(adaptive.redactedAnalyticsProps({ nucleus_id: "occupational_safety", urgency: "ate_48h" }),
-  { source: "CONFENGE_WEB" }, "no intake answers belong in analytics");
-console.log("PASS adaptive authority: deployed draft/missing authority rejected; config fail closed; analytics has no answers");
+assert.deepEqual(adaptive.redactedAnalyticsProps({
+  nucleus_id: "occupational_safety",
+  landing_family: "triagem-tecnica",
+  qualification_state: "CONFLICT_CHECK_REQUIRED",
+  location_material: true,
+}), {
+  nucleus_id: "occupational_safety",
+  landing_family: "triagem-tecnica",
+  qualification_state: "CONFLICT_CHECK_REQUIRED",
+  location_required: true,
+  source: "CONFENGE_WEB",
+}, "analytics may carry only allowlisted categorical attribution, never contact data");
+console.log("PASS adaptive authority: deployed missing authority rejected; config fail closed; analytics is categorical and PII-free");

@@ -175,10 +175,11 @@ for (const rel of [...modelPages, ...config.synthetic_surfaces.demonstrative_pag
   assert.ok(html && !/data-proof-id=/i.test(html), `synthetic surface mixed with real proof: ${rel}`);
 }
 
-const unlabelledInlineCard = new Map(pages);
-unlabelledInlineCard.set("index.html", pages.get("index.html").replace("Exemplo demonstrativo · estrutura real, números hipotéticos", "PRIMEIRO EXEMPLO PUBLICADO"));
-assert.ok(
-  evaluateProofGate({ config, registry, pages: unlabelledInlineCard }).includes("inline_synthetic_card_unlabelled:index.html"),
+assert.deepEqual(config.synthetic_surfaces.inline_cards, []);
+assert.equal(
+  /data-synthetic-example-card/i.test(pages.get("index.html")),
+  false,
+  "corporate home must not carry the retired synthetic example card",
 );
 
 const publicBlob = [...pages.values()].join("\n");

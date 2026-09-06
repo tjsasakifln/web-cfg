@@ -33,6 +33,39 @@ const resultStore = require("./lib/live-intelligence-result-store.cjs");
 
 // Allow tests to inject store
 let _storeOverride = null;
+
+function adaptiveIdempotencyMaterialHash(lead) {
+  if (!lead || lead.adaptive_intake !== true) return null;
+  const material = {
+    intake_contract_version: lead.intake_contract_version || null,
+    intake_pin_hash: lead.intake_pin_hash || null,
+    admission_policy_hash: lead.admission_policy_hash || null,
+    need_code: lead.need_code || null,
+    nucleus_id: lead.nucleus_id || null,
+    offer_candidate_id: lead.offer_candidate_id || null,
+    source_asset_id: lead.source_asset_id || lead.asset_id || null,
+    source_origin_asset_id: lead.source_origin_asset_id || null,
+    source_origin_route_family: lead.source_origin_route_family || null,
+    nome: lead.nome || null,
+    telefone: lead.telefone || null,
+    email: lead.email || null,
+    empresa: lead.empresa || null,
+    canal_preferido: lead.canal_preferido || null,
+    location_material: lead.location_material === true,
+    city: lead.city || null,
+    uf: lead.uf || null,
+    route_family: lead.route_family || lead.landing_family || null,
+    cta_id: lead.cta_id || null,
+    utm_source: lead.utm_source || null,
+    utm_medium: lead.utm_medium || null,
+    utm_campaign: lead.utm_campaign || null,
+    utm_content: lead.utm_content || null,
+    utm_term: lead.utm_term || null,
+    consentimento: lead.consentimento === true,
+  };
+  return crypto.createHash("sha256").update(JSON.stringify(material)).digest("hex");
+}
+
 function setStoreForTests(store) {
   _storeOverride = store;
 }
@@ -233,6 +266,7 @@ exports.handler = async (event) => {
     lead.idempotency_key;
   const idemKey = idempotencyKeyFor(lead, headerIdem || null);
   lead.idempotency_key = idemKey;
+  const idempotencyMaterialHash = adaptiveIdempotencyMaterialHash(lead);
 
   // Paid parameter orders (Radar Decisório): mint the payment correlation from
   // the idempotency key so a retry reconciles against the same payment, and
@@ -284,11 +318,28 @@ exports.handler = async (event) => {
   const lead_id = generateLeadId(`idem|${idemKey}`, { deterministic: true });
 
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-  const idempotentOk = (rec) => ({
-    statusCode: 200,
-    headers,
-    body: JSON.stringify(
-      publicSuccessBody({
+  const idempotentOk = (rec) => {
+    if (
+      idempotencyMaterialHash &&
+      rec &&
+      (rec.adaptive_intake !== true ||
+        !rec.idempotency_material_hash ||
+        rec.idempotency_material_hash !== idempotencyMaterialHash)
+    ) {
+      return {
+        statusCode: 409,
+        headers,
+        body: JSON.stringify(publicErrorBody({
+          error: "idempotency_conflict",
+          message: "Esta tentativa pertence a outro pedido. Recarregue a página para iniciar um novo registro.",
+        })),
+      };
+    }
+    return {
+      statusCode: 200,
+      headers,
+      body: JSON.stringify(
+        publicSuccessBody({
         lead_id: rec.lead_id,
         received_at: rec.received_at,
         journey: rec.jornada,
@@ -307,9 +358,10 @@ exports.handler = async (event) => {
         delivery_business_days: rec.radar_params
           ? rec.radar_params.delivery_clock && rec.radar_params.delivery_clock.business_days
           : undefined,
-      }),
-    ),
-  });
+        }),
+      ),
+    };
+  };
 
   // Brief read-retry: Blobs eventual consistency can miss a just-written key on the
   // immediate second POST. Must return 200 + idempotent:true without re-delivery.
@@ -354,6 +406,7 @@ exports.handler = async (event) => {
     status: "persisted",
     headers: event.headers || {},
   });
+  if (idempotencyMaterialHash) record.idempotency_material_hash = idempotencyMaterialHash;
   // Probe identity is established by the constant-time server credential, not
   // by user-controlled names, emails or record_kind fields. Force the durable
   // classification so even a human-looking probe payload can never enter the
