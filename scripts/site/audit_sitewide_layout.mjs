@@ -100,18 +100,29 @@ function publicRoutes() {
 function authorityGatedCaptureFor(family) {
   const spec = family?.capture_availability;
   if (!spec) return null;
+  const configEndpoints = {
+    "triagem-tecnica": "/.netlify/functions/adaptive-intake-config",
+    "private-engineering-quantities-budget":
+      "/.netlify/functions/adaptive-intake-config?intake_context=quantities_budget",
+  };
   const expected = {
     mode: "external_authority_fail_closed",
     runtime_profile: "adaptive_intake_standalone_v1",
-    config_endpoint: "/.netlify/functions/adaptive-intake-config",
+    config_endpoint: configEndpoints[family.id],
     client_script: "/assets/js/adaptive-intake.js",
     authority_manifest: "netlify/functions/data/adaptive-intake-authority.json",
   };
+  if (!expected.config_endpoint) {
+    throw new Error(`capture availability is not declared for ${family.id}`);
+  }
   for (const [key, value] of Object.entries(expected)) {
     if (spec[key] !== value) throw new Error(`capture availability ${key} is not authoritative for ${family.id}`);
   }
-  if (family.terminal_action !== "capture_form") {
-    throw new Error(`authority-gated capture requires capture_form for ${family.id}`);
+  if (family.terminal_action !== "capture_form_or_whatsapp") {
+    throw new Error(`authority-gated capture requires capture_form_or_whatsapp for ${family.id}`);
+  }
+  if (JSON.stringify(spec.withheld_fallback) !== JSON.stringify(["whatsapp", "email", "telephone"])) {
+    throw new Error(`authority-gated capture requires all three safe fallbacks for ${family.id}`);
   }
   const manifest = JSON.parse(readFileSync(join(ROOT, spec.authority_manifest), "utf8"));
   if (manifest.status !== "WITHHELD" || manifest.pin !== null || manifest.contract_hashes !== null) {
