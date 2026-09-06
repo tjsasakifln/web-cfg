@@ -530,3 +530,7 @@ if (failed.length) {
   console.error(JSON.stringify(failed, null, 2));
   process.exit(1);
 }
+
+// Route-local outbound anchors are part of the licitacao contract and must run
+// in the existing merge suite without changing package.json during MV-09.
+await import("./test_b2g_outbound_landing_prep.mjs");
