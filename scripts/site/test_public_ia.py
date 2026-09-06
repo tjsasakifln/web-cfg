@@ -51,10 +51,13 @@ def test_ia_contract_is_valid_without_html():
     situations = ia["service_situations"]
     assert len(situations) == 5
     assert sum(row["href"] == "/servicos-obras-publicas/" for row in situations) == 1
+    by_id = {row["id"]: row for row in situations}
+    assert by_id["project_delivery"]["href"] == "/quantitativos-orcamento-obras/"
+    assert by_id["project_delivery"]["index_state"] == "private_wedge_index"
+    assert by_id["project_delivery"]["scope"]
     assert all(
-        row["href"].startswith("/triagem-tecnica/#")
-        for row in situations
-        if row["id"] != "public_works_b2g"
+        by_id[item]["href"].startswith("/triagem-tecnica/#")
+        for item in ("building_diagnosis", "expert_evidence_valuation", "occupational_safety")
     )
 
 
