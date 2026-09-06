@@ -420,7 +420,16 @@ def test_primary_cta_not_spam():
     # gate separately proves that only one is visible in the first fold.
     assert primary <= 5, f"too many primary CTAs on home: {primary}"
     assert "Escolher minha situação" in html
-    assert "Iniciar triagem por e-mail" in html
+    # 2026-09-06 (#618): the home carried three near-homonym verbs with two
+    # different consequences. "Iniciar triagem por e-mail" and "Iniciar triagem
+    # pelo WhatsApp" only open a draft or a conversation — nothing is registered
+    # — while the submit below really does record. The channel labels moved to
+    # the "contact opened" form; the submit label is pinned by the renderer and
+    # is deliberately unchanged, so the collision is resolved on the channel side.
+    assert "Escrever um e-mail para a CONFENGE" in html
+    assert "Abrir conversa no WhatsApp" in html
+    assert "Iniciar triagem por e-mail" not in html
+    assert "Iniciar triagem pelo WhatsApp" not in html
     assert "Registrar situação para triagem" in html
     # Secondary path must not share primary button class in hero
     hero = re.search(r'class="hero[\s\S]*?</section>', html)
