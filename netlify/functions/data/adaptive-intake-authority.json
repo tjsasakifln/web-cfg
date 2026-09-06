@@ -3,16 +3,15 @@
   "status": "WITHHELD",
   "observed_at": "2026-09-05",
   "governance_repository": "tjsasakifln/Governance",
-  "governance_main_sha": "22ad810a8c1d46d9a787efcfac825d6ba0336bff",
-  "reason": "Governance main lists five coordination IDs as test-only. No final six-contract intake pin exists; Warmbly still consumes the draft admission policy.",
+  "governance_main_sha": "0074722ce66f16af06dd4799ee88064ea8a12fc1",
+  "reason": "Governance #172 is merged with the final admission hash, but Warmbly #266 is not merged or proven live. Producer activation remains fail-closed until the consumer runtime accepts the same contract and returns correlated receipt/readback.",
   "evidence_paths": [
-    "commercial/inbound/consumer-conformance.1.0.0-draft.20260904.json",
-    "commercial/inbound/consumer-matrix.v1.json",
-    "commercial/inbound/admit.py"
+    "tjsasakifln/Governance#172@0074722ce66f16af06dd4799ee88064ea8a12fc1",
+    "tjsasakifln/warmbly#266@b78e3d8cf820c7e594aad9f15f587299fdaf6004"
   ],
   "observed_canonical_admission": {
-    "canonical_name": "NET_NEW_INBOUND_HANDRAISER-v1",
-    "policy_hash": "sha256:5f8c03b6a11af3527b202d08c74de1d59d420f181807f094e62b337f055ec4ac"
+    "canonical_name": "NET_NEW_INBOUND_HANDRAISER/1.0.0-draft.20260904",
+    "policy_hash": "sha256:405ac86064a90641b843352d21cd21703744115de9592558e100671d92276df7"
   },
   "pin": null,
   "contract_hashes": null
