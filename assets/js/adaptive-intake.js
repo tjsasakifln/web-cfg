@@ -240,8 +240,12 @@
     });
     var sourceAsset = safeAttribution(stored.asset_id);
     var sourceFamily = safeAttribution(stored.route_family);
-    if (sourceAsset && sourceAsset !== "technical_triage_v1") body.source_origin_asset_id = sourceAsset;
-    if (sourceFamily && sourceFamily !== "triagem-tecnica") body.source_origin_route_family = sourceFamily;
+    if (sourceAsset && sourceAsset !== "technical_triage_v1" && !body.source_origin_asset_id) {
+      body.source_origin_asset_id = sourceAsset;
+    }
+    if (sourceFamily && sourceFamily !== "triagem-tecnica" && !body.source_origin_route_family) {
+      body.source_origin_route_family = sourceFamily;
+    }
     var token = form.querySelector("[name=cf-turnstile-response]");
     if (token && token.value) {
       body.turnstile_token = token.value;
@@ -268,7 +272,7 @@
 
   // Programmatic focus (browser restore, accessibility tooling or navigation)
   // is not a visitor interaction and must not inflate funnel starts.
-  ["pointerdown", "keydown", "input", "change"].forEach(function (eventName) {
+  ["pointerdown", "keydown"].forEach(function (eventName) {
     form.addEventListener(eventName, markStart, { once: true });
   });
   need.addEventListener("change", function () {

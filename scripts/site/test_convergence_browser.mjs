@@ -149,7 +149,10 @@ try {
   })));
   mode = "ready"; await triage.goto(`${base}/triagem-tecnica/`, { waitUntil: "networkidle0" });
   check("triage_config_200_enables", !(await triage.$eval('[type="submit"]', e => e.disabled)), "submit remains disabled on config success");
-  check("triage_no_start_before_interaction", await triage.evaluate(() => !(window.dataLayer || []).some(event => event.event === "lead_form_start" || event.event === "lead_form_step")), "page load emitted form interaction");
+  const preInteractionEvents = await triage.evaluate(() => (window.dataLayer || []).filter(
+    event => event.event === "lead_form_start" || event.event === "lead_form_step"
+  ));
+  check("triage_no_start_before_interaction", preInteractionEvents.length === 0, JSON.stringify(preInteractionEvents));
   await chooseRequired(triage); await triage.click('[type="submit"]');
   await triage.waitForFunction(() => /não foi possível confirmar/i.test(document.querySelector("[data-intake-status]").textContent));
   await triage.click('[type="submit"]'); await triage.waitForSelector("[data-intake-receipt]:not([hidden])");
