@@ -1103,6 +1103,50 @@ DEMONSTRATION_BLOCK_RE = re.compile(
 )
 SYNTHETIC_SELF_LABEL_RE = re.compile(r"sint[ée]tic|demonstrativ|hipot[ée]tic", re.IGNORECASE)
 
+# A block that also asks for the sale is an offer, whatever it calls itself.
+# Only INTERACTIVE elements count: prose inside a demonstration may legitimately
+# describe a purchase decision ("Comprar o bloco em duas entregas" is a row in
+# the trace matrix, not a CTA), so matching bare text produced false positives on
+# the real pilot route.
+_SALE_HREF_RE = re.compile(
+    r'href=["\'][^"\']*(?:/checkout|/pagar|/assinar|/contratar|asaas)', re.IGNORECASE
+)
+_SALE_ATTR_RE = re.compile(r"data-(?:checkout|offer-checkout|purchase|buy)\b", re.IGNORECASE)
+_SALE_LABEL_RE = re.compile(
+    r"^\s*(?:contratar|comprar\s+agora|assinar|pagar|adquirir|finalizar\s+compra|"
+    r"ir\s+para\s+o\s+checkout)\b",
+    re.IGNORECASE,
+)
+_INTERACTIVE_RE = re.compile(
+    r"<(?P<tag>a|button)\b(?P<attrs>[^>]*)>(?P<label>.*?)</(?P=tag)>", re.IGNORECASE | re.DOTALL
+)
+
+
+def _asks_for_the_sale(block: str) -> bool:
+    """True when the block carries a control that transacts, not prose about one."""
+    for match in _INTERACTIVE_RE.finditer(block):
+        attrs = match.group("attrs")
+        if _SALE_HREF_RE.search(attrs) or _SALE_ATTR_RE.search(attrs):
+            return True
+        if _SALE_LABEL_RE.search(strip_html(match.group("label"))):
+            return True
+    return False
+
+
+# Markup that is not shown to a reader. A label nobody can see does not label
+# anything, so the self-identification must survive this removal.
+HIDDEN_MARKUP_RE = re.compile(
+    r"<(?P<tag>[a-z0-9]+)\b[^>]*(?:"
+    r"\bhidden\b"
+    r'|aria-hidden=["\']true["\']'
+    r"|style=[\"\'][^\"\']*(?:display\s*:\s*none|visibility\s*:\s*hidden)"
+    r'|class=["\'][^"\']*(?:sr-only|visually-hidden|screen-reader)'
+    r")[^>]*>.*?</(?P=tag)>",
+    re.IGNORECASE | re.DOTALL,
+)
+
+
+
 
 def published_fee_amounts() -> set[str]:
     """Amounts CONFENGE publishes as its own fee, normalized to `R$ 1.234`."""
@@ -1118,17 +1162,50 @@ def published_fee_amounts() -> set[str]:
 
 
 def _validated_demonstration_spans(main: str) -> list[tuple[int, int]]:
+    """Spans that genuinely qualify as a synthetic demonstration.
+
+    The exemption is deliberately hard to obtain. An attribute plus the word
+    "sintético" must not buy commercial immunity: the marking, the visible
+    self-identification and the ABSENCE of a sale are all required, and the
+    block must be a passage rather than the document. Every rejection below
+    corresponds to an evasion that was reproducible before it was added.
+    """
     spans: list[tuple[int, int]] = []
     fees = published_fee_amounts()
-    for match in DEMONSTRATION_BLOCK_RE.finditer(main):
-        text = strip_html(match.group(0))
-        if not SYNTHETIC_SELF_LABEL_RE.search(text):
+    matches = list(DEMONSTRATION_BLOCK_RE.finditer(main))
+    for match in matches:
+        block = match.group(0)
+        start, end = match.span()
+
+        # Nesting: an outer marked block cannot launder an inner one, and an
+        # inner one cannot re-exempt what the outer already covers.
+        if any(
+            other is not match and other.start() <= start and end <= other.end()
+            for other in matches
+        ):
             continue
+        # A second marker inside the same block: marking piled on marking.
+        if block.count('data-demonstration="synthetic"') > 1:
+            continue
+
+        # The self-identification must be VISIBLE. A caption hidden from the
+        # reader labels nothing, so strip hidden markup before looking for it.
+        visible = strip_html(HIDDEN_MARKUP_RE.sub(" ", block))
+        if not SYNTHETIC_SELF_LABEL_RE.search(visible):
+            continue
+
         # A published CONFENGE fee inside a demonstration block is an offer
         # wearing an example's clothes. Do not exempt it.
+        text = strip_html(block)
         if any(fee in text for fee in fees):
             continue
-        spans.append(match.span())
+
+        # A block that also asks for the sale is an offer regardless of the
+        # amount it shows, which is what let an unpublished figure through.
+        if _asks_for_the_sale(block):
+            continue
+
+        spans.append((start, end))
     return spans
 
 

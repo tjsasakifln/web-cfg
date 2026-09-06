@@ -1313,3 +1313,65 @@ if __name__ == "__main__":
                 failed += 1
                 print("FAIL", name, exc)
     raise SystemExit(1 if failed else 0)
+
+
+def test_synthetic_marking_cannot_buy_commercial_immunity() -> None:
+    """#619: the demonstration carve-out must resist evasion, not spelling.
+
+    The exemption previously required only the attribute plus one of the words
+    "sintético/demonstrativo/hipotético" anywhere in the block, and rejected only
+    amounts that appear literally in cited_bands. So a real offer carrying an
+    unpublished amount and a contracting CTA was exempted by adding one word.
+    Every case below was reproducible before the classification was tightened.
+    """
+    filler = "<p>Texto explicativo do metodo, sem numero.</p>" * 60
+    price = "<p>Investimento: R$ 8.900 por relatorio.</p>"  # not in cited_bands
+    fee = "<p>Investimento: R$ 6.900 por relatorio.</p>"  # a published fee
+    label = '<p class="case-badge">DEMONSTRATIVO, NUMEROS HIPOTETICOS</p>'
+
+    # Control: the gate fires on an unmarked offer, so the cases below are not
+    # passing because the price is invisible to the detector.
+    assert inbound_gates._displays_price(price + filler) is True
+
+    evasions = {
+        "marker + label + unpublished amount + a contracting CTA":
+            f'<section data-demonstration="synthetic">{label}{price}'
+            '<a href="/checkout">Contratar</a></section>' + filler,
+        "nested marking":
+            '<section data-demonstration="synthetic">'
+            f'<div data-demonstration="synthetic">{label}{price}</div></section>' + filler,
+        "self-label hidden from the reader":
+            '<section data-demonstration="synthetic"><p hidden>exemplo sintetico</p>'
+            f'{price}</section>' + filler,
+        "self-label only as an attribute value":
+            f'<section data-demonstration="synthetic" title="sintetico">{price}</section>' + filler,
+        "price outside the marked block":
+            f'<section data-demonstration="synthetic">{label}'
+            '<p>Insumo: R$ 198,00 o m3.</p></section>' + price + filler,
+        "published fee inside the block":
+            f'<section data-demonstration="synthetic">{label}{fee}</section>' + filler,
+        "sale asked through a data attribute rather than an href":
+            f'<section data-demonstration="synthetic">{label}{price}'
+            '<button data-checkout="dossie">Seguir</button></section>' + filler,
+    }
+    for name, block in evasions.items():
+        assert inbound_gates._displays_price(block) is True, f"evasion accepted: {name}"
+
+    # The legitimate case survives: a demonstration may carry the priced INPUTS
+    # of a calculation, provided it says so visibly and asks for no sale.
+    legitimate = (
+        f'<section data-demonstration="synthetic">{label}'
+        "<table><tr><td>Concreto</td><td>Investimento: R$ 198,00 por unidade</td></tr></table>"
+        "</section>" + filler
+    )
+    assert inbound_gates._displays_price(legitimate) is False
+
+    # And prose describing a decision is not a CTA: this row appears verbatim in
+    # the real /quantitativos-orcamento-obras/ trace matrix.
+    prose_decision = (
+        f'<section data-demonstration="synthetic">{label}'
+        "<table><tr><td>Investimento: R$ 198,00 por unidade</td>"
+        "<td>Comprar o bloco em duas entregas e revisar o saldo</td></tr></table>"
+        "</section>" + filler
+    )
+    assert inbound_gates._displays_price(prose_decision) is False

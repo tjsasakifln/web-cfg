@@ -161,6 +161,14 @@ test("MV-09 publishes one bounded private wedge with embedded triage and three s
   const demonstrationBlocks = html.match(
     /<(section|div|figure|table|aside)\b[^>]*\bdata-demonstration="synthetic"[^>]*>[\s\S]*?<\/\1>/gi,
   ) || [];
+  // Whether a marked block QUALIFIES as a demonstration is decided in one place:
+  // _validated_demonstration_spans in scripts/site/inbound_gates.py, which also
+  // rejects nested marking, a self-label hidden from the reader, a published fee
+  // inside the block and a block that carries a control which transacts. This
+  // test deliberately does NOT re-implement that judgement -- it did, more
+  // loosely, and two copies of one rule drift apart. What it owns is narrower
+  // and route-specific: this route publishes no CONFENGE fee, and its
+  // demonstration is not empty.
   const validatedBlocks = demonstrationBlocks.filter(
     (block) => /sint[ée]tic|demonstrativ|hipot[ée]tic/i.test(block),
   );
