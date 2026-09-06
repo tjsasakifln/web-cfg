@@ -1,3 +1,4 @@
+import json
 import re
 from pathlib import Path
 
@@ -35,9 +36,13 @@ def test_home_replaces_generic_matrix_with_real_public_contract():
     # longer has an object, so the heading is pinned to its truthful successor.
     assert "Contratos reais, diferentes portes" not in html
     assert "Contrato público real, no menor porte" in html
-    # The surviving contract, its derived percentage and its PNCP record stay.
+    # The observed contract and its PNCP record stay on the home: that is the
+    # public fact this block evidences. The derived 1% value belongs to the full
+    # illustration, which #620 moved to /servicos-obras-publicas/ (decision in
+    # issue #611), so it is required here only if the arithmetic is still shown.
     assert "R$ 179.737,67" in html
-    assert "R$ 1.797,38" in html
+    if "1% deste valor contratado" in html:
+        assert "R$ 1.797,38" in html, "the simulation is stated but its derived value is missing"
     # The two withdrawn panels leave no orphan value behind.
     for withdrawn in ("R$ 719.177,48", "R$ 18.293.629,80", "R$ 7.191,77", "R$ 182.936,30"):
         assert withdrawn not in html, withdrawn
@@ -54,15 +59,14 @@ def test_home_replaces_generic_matrix_with_real_public_contract():
     # triplication back in and a revert of the HTML alone would pass silently.
     for needle in (
         "data-economics-illustration",
-        "Conta ilustrativa, não é economia observada",
+        "não é economia observada",
         "Limite:",
         "Fonte: PNCP",
     ):
         assert text.count(needle) == 1, (needle, text.count(needle))
 
-    # (b) AT MOST ONCE, and only reachable at zero under the C11 destination
-    # register. Both bands are declared in cited_bands, so both must survive
-    # somewhere public: here they survive on the home, exactly once.
+    # (b) AT MOST ONCE on the home. The aggregated fee comparison moved to
+    # /servicos-obras-publicas/, so these must not reappear here.
     for needle in (
         "Custo publicado",
         "Recorrência da diretoria",
@@ -70,8 +74,31 @@ def test_home_replaces_generic_matrix_with_real_public_contract():
         "R$ 12.500 a R$ 20.000",
     ):
         assert text.count(needle) <= 1, (needle, text.count(needle))
-    for band in ("R$ 6.900 a R$ 7.900", "R$ 12.500 a R$ 20.000"):
-        assert text.count(band) == 1, f"cited_bands value vanished from every public surface: {band}"
+
+    # A band the home stops stating must not thereby vanish from the site. Both
+    # of these ARE declared cited_bands displays -- an earlier revision of this
+    # file claimed "R$ 12.500 a R$ 20.000 por mês" was not one, which was read
+    # off a truncated dump; it is lideranca_fracionada. They are now published on
+    # the depth route together with their terms.
+    matrix = json.loads(
+        (ROOT / "data/commercial/offer-fit-matrix.v1.json").read_text(encoding="utf-8")
+    )
+    surfaces = "\n".join(
+        path.read_text(encoding="utf-8")
+        for path in ROOT.glob("*/index.html")
+        if not str(path.relative_to(ROOT)).startswith(("docs/", "_site/"))
+    ) + "\n" + html
+    for tier in ("dossie_critico", "lideranca_fracionada"):
+        display = matrix["cited_bands"][tier]["display"]
+        assert display in surfaces, (
+            f"cited_bands value vanished from every public surface: {tier} = {display}"
+        )
+    # Known pre-existing gap, deliberately not asserted and not closed here:
+    # cited_bands.recorrencia_gerenciada ("R$ 4.900 ou R$ 6.900 por mês") appears
+    # on no public surface. Publishing it would be activating a retained offer.
+    assert matrix["cited_bands"]["recorrencia_gerenciada"]["display"] not in surfaces, (
+        "recorrencia_gerenciada is now published; close this carve-out and assert it like the others"
+    )
 
     # The material limit survives with its subject.
     assert "risco de caixa ou margem" in html
@@ -88,28 +115,48 @@ def test_home_illustration_caveat_is_contained_and_exclusive():
     html = HOME.read_text(encoding="utf-8")
     text = prose(html)
 
-    has_arithmetic = "1% deste valor contratado" in text or "resulta em R$" in text
-    assert has_arithmetic, "the illustrative arithmetic disappeared; C5 floor cannot be checked"
+    # C5 is a CONTAINMENT rule, not a mandate to keep the simulation on the home.
+    # It used to hard-require the arithmetic here, which forced the home to carry
+    # an aggregation of three distinct offers. #620 moves the full illustration to
+    # /servicos-obras-publicas/ and keeps the market fact and the disqualification
+    # on the home; the decision is registered in issue #611.
     assert text.count("data-economics-illustration") == 1
-
     marked = re.findall(
         r"<p[^>]*data-economics-illustration=\"1\"[^>]*>(.*?)</p>", html, re.DOTALL
     )
     assert len(marked) == 1
     element = marked[0]
-    # Containment: percentage, derived value, caveat and the published fee
-    # comparison all live in the same element, so the adjacency survives the
-    # card collapsing on mobile and any CSS reordering.
-    assert "1% deste valor contratado" in element
-    assert "resulta em R$" in element
+    # Never optional, whichever branch applies: the caveat and the honest
+    # disqualification stay attached to the observed contract value.
     assert "não é economia observada" in element
-    assert "Custo publicado" in element
+    assert "não é economicamente indicada" in element
 
-    # Exclusivity: the full phrases, never the bare "1%", which would collide
-    # with the percent-encoded WhatsApp hrefs already on the page.
-    for phrase in ("1% deste valor contratado", "resulta em R$"):
-        assert text.count(phrase) == 1, (phrase, text.count(phrase))
-        assert phrase in element, phrase
+    has_arithmetic = "1% deste valor contratado" in text or "resulta em R$" in text
+    if has_arithmetic:
+        # Containment: percentage, derived value, caveat and the published fee
+        # comparison all live in the same element, so the adjacency survives the
+        # card collapsing on mobile and any CSS reordering.
+        assert "1% deste valor contratado" in element
+        assert "resulta em R$" in element
+        assert "Custo publicado" in element
+        for phrase in ("1% deste valor contratado", "resulta em R$"):
+            assert text.count(phrase) == 1, (phrase, text.count(phrase))
+            assert phrase in element, phrase
+    else:
+        # Without the simulation the home states no CONFENGE fee at all, which is
+        # stricter than adjacency: confusing a public contract value with a
+        # CONFENGE fee becomes impossible rather than merely caveated.
+        market = re.search(r'<div[^>]+id="mercado-pncp"[\s\S]*?</div>\s*</div>', html)
+        assert market, "the market-context block disappeared entirely"
+        for fee in ("R$ 6.900", "R$ 7.900", "R$ 12.500", "R$ 20.000", "R$ 2.900", "R$ 599"):
+            assert fee not in market.group(0), (
+                f"a published CONFENGE fee is back in the market-context block: {fee}"
+            )
+        assert "Custo publicado" not in text
+        # And the depth must have somewhere substantive to go.
+        assert "/servicos-obras-publicas/" in market.group(0), (
+            "the home dropped the fee comparison without pointing anywhere it is published"
+        )
 
 
 def test_home_distinguishes_public_contract_from_confenge_fee():
