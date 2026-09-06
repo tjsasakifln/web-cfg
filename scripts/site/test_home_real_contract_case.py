@@ -1,3 +1,4 @@
+import json
 import re
 from pathlib import Path
 
@@ -5,28 +6,203 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 HOME = ROOT / "index.html"
 
+OPTION_RE = re.compile(r"<option\b[^>]*>.*?</option>", re.IGNORECASE | re.DOTALL)
+
+
+def prose(html):
+    """Published prose only.
+
+    2026-09-06 (#620): the C8 ceilings count published claims, not the values a
+    visitor can pick for themselves. `index.html` carries a risk-bracket
+    `<select>` in the `diagnostico-b2g` form whose options include the band
+    "R$ 6.900 a R$ 7.900". That option states the visitor's own exposure
+    bracket; it is not the CONFENGE published cost and removing it would change
+    the capture form that C9 requires preserved. So the ceilings are measured
+    over the document with `<option>` elements stripped, and the positive and
+    negative cases below pin exactly that boundary.
+    """
+    return OPTION_RE.sub(" ", html)
+
 
 def test_home_replaces_generic_matrix_with_real_public_contract():
     html = HOME.read_text(encoding="utf-8")
+    text = prose(html)
 
     assert "Exemplo ilustrativo" not in html
     assert "Ordem de serviço altera escopo sem termo" not in html
-    assert "Contratos reais, diferentes portes" in html
+    # 2026-09-06 (#620): the heading said "Contratos reais, diferentes portes".
+    # With a single contract left, that literal would be false. The protection
+    # is against publishing a fake case, not against dropping a plural that no
+    # longer has an object, so the heading is pinned to its truthful successor.
+    assert "Contratos reais, diferentes portes" not in html
+    assert "Contrato público real, no menor porte" in html
+    # The observed contract and its PNCP record stay on the home: that is the
+    # public fact this block evidences. The derived 1% value belongs to the full
+    # illustration, which #620 moved to /servicos-obras-publicas/ (decision in
+    # issue #611), so it is required here only if the arithmetic is still shown.
     assert "R$ 179.737,67" in html
-    assert "R$ 719.177,48" in html
-    assert "R$ 18.293.629,80" in html
-    assert "R$ 1.797,38" in html
-    assert "R$ 7.191,77" in html
-    assert "R$ 182.936,30" in html
+    if "1% deste valor contratado" in html:
+        assert "R$ 1.797,38" in html, "the simulation is stated but its derived value is missing"
+    # The two withdrawn panels leave no orphan value behind.
+    for withdrawn in ("R$ 719.177,48", "R$ 18.293.629,80", "R$ 7.191,77", "R$ 182.936,30"):
+        assert withdrawn not in html, withdrawn
+    for withdrawn_link in (
+        "pncp.gov.br/app/contratos/14862788000150/2026/69",
+        "pncp.gov.br/app/contratos/81648859000103/2026/45",
+    ):
+        assert withdrawn_link not in html, withdrawn_link
     assert "contexto de mercado" in html.lower()
     assert "Qual deles se parece mais com o seu?" not in html
     assert "<dt>1% do valor</dt>" not in html
-    assert html.count("data-economics-illustration") == 3
-    assert html.count("Conta ilustrativa, não é economia observada") == 3
-    for needle in ("Custo publicado", "Recorrência da diretoria", "Limite:"):
-        assert html.count(needle) == 3, needle
+
+    # (a) EXACTLY ONCE. A written value, never a ceiling: `<= 3` would let the
+    # triplication back in and a revert of the HTML alone would pass silently.
+    for needle in (
+        "data-economics-illustration",
+        "não é economia observada",
+        "Limite:",
+        "Fonte: PNCP",
+    ):
+        assert text.count(needle) == 1, (needle, text.count(needle))
+
+    # (b) AT MOST ONCE on the home. The aggregated fee comparison moved to
+    # /servicos-obras-publicas/, so these must not reappear here.
+    for needle in (
+        "Custo publicado",
+        "Recorrência da diretoria",
+        "R$ 6.900 a R$ 7.900",
+        "R$ 12.500 a R$ 20.000",
+    ):
+        assert text.count(needle) <= 1, (needle, text.count(needle))
+
+    # A band the home stops stating must not thereby vanish from the site. Both
+    # of these ARE declared cited_bands displays -- an earlier revision of this
+    # file claimed "R$ 12.500 a R$ 20.000 por mês" was not one, which was read
+    # off a truncated dump; it is lideranca_fracionada. They are now published on
+    # the depth route together with their terms.
+    matrix = json.loads(
+        (ROOT / "data/commercial/offer-fit-matrix.v1.json").read_text(encoding="utf-8")
+    )
+    surfaces = "\n".join(
+        path.read_text(encoding="utf-8")
+        for path in ROOT.glob("*/index.html")
+        if not str(path.relative_to(ROOT)).startswith(("docs/", "_site/"))
+    ) + "\n" + html
+    for tier in ("dossie_critico", "lideranca_fracionada"):
+        display = matrix["cited_bands"][tier]["display"]
+        assert display in surfaces, (
+            f"cited_bands value vanished from every public surface: {tier} = {display}"
+        )
+    # Known pre-existing gap, deliberately not asserted and not closed here:
+    # cited_bands.recorrencia_gerenciada ("R$ 4.900 ou R$ 6.900 por mês") appears
+    # on no public surface. Publishing it would be activating a retained offer.
+    assert matrix["cited_bands"]["recorrencia_gerenciada"]["display"] not in surfaces, (
+        "recorrencia_gerenciada is now published; close this carve-out and assert it like the others"
+    )
+
+    # The material limit survives with its subject.
     assert "risco de caixa ou margem" in html
     assert "não é economicamente indicada" in html
+
+
+def test_home_illustration_caveat_is_contained_and_exclusive():
+    """C5: floor, containment and exclusivity, measured per element.
+
+    A universal assertion over an empty set is vacuously true, so the floor
+    exists to stop the attribute being deleted and the caveat demoted to a
+    section footer.
+    """
+    html = HOME.read_text(encoding="utf-8")
+    text = prose(html)
+
+    # C5 is a CONTAINMENT rule, not a mandate to keep the simulation on the home.
+    # It used to hard-require the arithmetic here, which forced the home to carry
+    # an aggregation of three distinct offers. #620 moves the full illustration to
+    # /servicos-obras-publicas/ and keeps the market fact and the disqualification
+    # on the home; the decision is registered in issue #611.
+    assert text.count("data-economics-illustration") == 1
+    marked = re.findall(
+        r"<p[^>]*data-economics-illustration=\"1\"[^>]*>(.*?)</p>", html, re.DOTALL
+    )
+    assert len(marked) == 1
+    element = marked[0]
+    # Never optional, whichever branch applies: the caveat and the honest
+    # disqualification stay attached to the observed contract value.
+    assert "não é economia observada" in element
+    assert "não é economicamente indicada" in element
+
+    has_arithmetic = "1% deste valor contratado" in text or "resulta em R$" in text
+    if has_arithmetic:
+        # Containment: percentage, derived value, caveat and the published fee
+        # comparison all live in the same element, so the adjacency survives the
+        # card collapsing on mobile and any CSS reordering.
+        assert "1% deste valor contratado" in element
+        assert "resulta em R$" in element
+        assert "Custo publicado" in element
+        for phrase in ("1% deste valor contratado", "resulta em R$"):
+            assert text.count(phrase) == 1, (phrase, text.count(phrase))
+            assert phrase in element, phrase
+    else:
+        # Without the simulation the home states no CONFENGE fee at all, which is
+        # stricter than adjacency: confusing a public contract value with a
+        # CONFENGE fee becomes impossible rather than merely caveated.
+        market = re.search(r'<div[^>]+id="mercado-pncp"[\s\S]*?</div>\s*</div>', html)
+        assert market, "the market-context block disappeared entirely"
+        for fee in ("R$ 6.900", "R$ 7.900", "R$ 12.500", "R$ 20.000", "R$ 2.900", "R$ 599"):
+            assert fee not in market.group(0), (
+                f"a published CONFENGE fee is back in the market-context block: {fee}"
+            )
+        assert "Custo publicado" not in text
+        # And the depth must have somewhere substantive to go.
+        assert "/servicos-obras-publicas/" in market.group(0), (
+            "the home dropped the fee comparison without pointing anywhere it is published"
+        )
+
+
+def test_home_distinguishes_public_contract_from_confenge_fee():
+    """C6: a public contract value is never presented as CONFENGE work."""
+    html = HOME.read_text(encoding="utf-8")
+
+    for match in re.finditer(r"<(p|li|article)\b[^>]*>(.*?)</\1>", html, re.DOTALL):
+        element = match.group(0)
+        if "Contrato observado" not in element:
+            continue
+        assert "não é economia observada" in element, (
+            "an element states a public contract value without the market-context label"
+        )
+
+    for section_id in ("triagem-tecnica", "contato"):
+        block = re.search(
+            rf'<(section|div)\b[^>]*id="{section_id}"[\s\S]*?</\1>', html
+        )
+        if block:
+            assert "Contrato observado" not in block.group(0), section_id
+
+
+def test_home_conserves_b2g_structure():
+    """C9: URL, anchor, shortcut and attribution conservation.
+
+    No existing npm gate checks these, so cutting the B2G shortcuts or dropping
+    a declared CTA would otherwise pass every suite.
+    """
+    html = HOME.read_text(encoding="utf-8")
+
+    shortcuts = re.search(r'<ul[^>]*class="[^"]*b2g-shortcuts[^"]*"[\s\S]*?</ul>', html)
+    assert shortcuts, "ul.b2g-shortcuts disappeared"
+    assert shortcuts.group(0).count("<li") == 7
+
+    assert 'id="jornada-contrato"' in html
+    assert 'data-cta-id="home-medicoes-glosas-dossie"' in html
+    assert 'data-cta-id="home-private-quantities-budget"' in html
+
+    proof = re.search(r'<dl[^>]*class="[^"]*b2g-proof[^"]*"[\s\S]*?</dl>', html)
+    assert proof, "dl.b2g-proof disappeared"
+    assert "PNCP · 01/08/2026" in proof.group(0)
+
+    for route in ("/servicos-obras-publicas/", "/metodologia-inteligencia/",
+                  "/triagem-tecnica/#planejamento-publico"):
+        assert route in html, route
+    assert 'name="diagnostico-b2g"' in html
 
 
 def test_home_contract_profiles_are_manual_and_accessible():
@@ -35,9 +211,17 @@ def test_home_contract_profiles_are_manual_and_accessible():
 
     assert selector_match
     selector = selector_match.group(0)
-    assert selector.count('class="service-card"') == 3
-    assert selector.count('data-economics-illustration="1"') == 3
-    assert selector.count('rel="noopener"') == 3
+    # C2 content floor: the anchor does not survive as an empty shell. One card
+    # remains, and with it a PNCP link, the observed value it evidences, the
+    # caveat element and the source caption.
+    assert selector.count('class="service-card"') == 1
+    assert selector.count('data-economics-illustration="1"') == 1
+    assert selector.count('rel="noopener"') == 1
+    assert "pncp.gov.br/app/contratos/" in selector
+    assert "Contrato observado" in selector
+    assert "R$ 179.737,67" in selector
+    assert "Fonte: PNCP" in selector
+    assert "21/08/2026" in selector
     assert 'role="tab"' not in selector
     assert 'role="tabpanel"' not in selector
     assert 'data-event-name="proof_expand"' not in selector
@@ -51,8 +235,6 @@ def test_home_contract_case_has_provenance_and_no_client_claim():
     html = HOME.read_text(encoding="utf-8")
 
     assert "pncp.gov.br/app/contratos/01258036000132/2026/7" in html
-    assert "pncp.gov.br/app/contratos/14862788000150/2026/69" in html
-    assert "pncp.gov.br/app/contratos/81648859000103/2026/45" in html
     assert "pncp.gov.br/api/pncp/" not in html
     # 2026-08-30 (overhaul value-first). Este gate exigia que a home escrevesse
     # "nao sao clientes da CONFENGE" e "nao indicam falha nos contratos", isto
@@ -86,3 +268,31 @@ def test_home_contract_case_keeps_one_primary_hero_cta():
     assert "Prefiro WhatsApp" not in hero
     assert "Analisar meu contrato" not in hero
     assert "Escolher minha situação" in hero
+
+
+def test_prose_boundary_counts_claims_and_ignores_visitor_choices():
+    """Positive and negative cases for the `<option>` carve-out of C8.
+
+    The carve-out is narrow on purpose: it excludes form option values, which
+    state what the visitor picks, and nothing else. A band published twice as
+    prose must still fail.
+    """
+    band = "R$ 6.900 a R$ 7.900"
+
+    # POSITIVE: published once as a claim, once as a bracket the visitor picks.
+    positive = (
+        f"<p>Custo publicado de um dossiê crítico: {band}, pontual.</p>"
+        f'<select name="risco_em_jogo"><option value="faixa_dossie">{band}</option></select>'
+    )
+    assert prose(positive).count(band) == 1
+
+    # NEGATIVE: published twice as prose. The ceiling must catch this.
+    negative = (
+        f"<p>Custo publicado de um dossiê crítico: {band}, pontual.</p>"
+        f"<p>Reforçando: o dossiê custa {band}.</p>"
+    )
+    assert prose(negative).count(band) == 2
+
+    # The carve-out must not swallow a claim that merely sits near a select.
+    adjacent = f'<select><option value="x">Outro</option></select><p>Custo publicado: {band}.</p>'
+    assert prose(adjacent).count(band) == 1

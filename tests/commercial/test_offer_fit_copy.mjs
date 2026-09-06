@@ -26,6 +26,16 @@ function assert(name, cond, detail) {
   if (!cond) console.error("FAIL", name, typeof detail === "string" ? detail : JSON.stringify(detail));
 }
 
+// The full illustration must exist somewhere public, or moving it off the home
+// would have deleted the fee bands it cites rather than relocated them.
+for (const panel of matrix.home_illustrations) {
+  const depth = panel.depth_route.split("#")[0].replace(/^\//, "").replace(/\/$/, "");
+  const depthHtml = fs.readFileSync(path.join(root, depth, "index.html"), "utf8");
+  assert(`depth_has_${panel.panel}_copy`, depthHtml.includes(panel.copy), panel.depth_route);
+  assert(`depth_has_${panel.panel}_contract`, depthHtml.includes(panel.contract_display), panel.contract_display);
+  assert(`depth_has_${panel.panel}_pncp`, depthHtml.includes(panel.pncp_path), panel.pncp_path);
+}
+
 for (const route of ROUTES) {
   const html = fs.readFileSync(path.join(root, route.rel), "utf8");
   assert(`${route.rel}_no_dt_one_percent`, !html.includes("<dt>1% do valor</dt>"), route.rel);
@@ -39,7 +49,27 @@ for (const route of ROUTES) {
     for (const panel of matrix.home_illustrations) {
       assert(`home_has_${panel.panel}_contract`, html.includes(panel.contract_display), panel.contract_display);
       assert(`home_has_${panel.panel}_pncp`, html.includes(panel.pncp_path), panel.pncp_path);
-      assert(`home_has_${panel.panel}_copy`, html.includes(panel.copy), panel.panel);
+      // The home renders home_copy: the market fact plus the honest
+      // disqualification. The full illustration (copy) is rendered on
+      // depth_route, where the fee bands it cites are published with their
+      // terms. Position separated from model on purpose -- see
+      // home_illustrations_note and issue #611.
+      assert(`home_has_${panel.panel}_copy`, html.includes(panel.home_copy), panel.panel);
+      assert(
+        `home_${panel.panel}_points_at_depth`,
+        html.includes(panel.depth_route.split("#")[0]),
+        panel.depth_route,
+      );
+      assert(
+        `home_${panel.panel}_keeps_the_disqualification`,
+        /n[ãa]o [ée] economicamente indicada/i.test(panel.home_copy),
+        panel.home_copy,
+      );
+      assert(
+        `home_${panel.panel}_sheds_the_aggregated_fees`,
+        !/Custo publicado|Recorr[êe]ncia da diretoria/i.test(html),
+        panel.panel,
+      );
       assert(`home_${panel.panel}_not_fictional`, !/exemplo fictício|contrato fictício/i.test(html), panel.panel);
     }
     // 2026-08-30 (overhaul value-first). Antes daqui a home era obrigada a
