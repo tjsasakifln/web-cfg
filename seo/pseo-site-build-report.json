@@ -1,10 +1,10 @@
 {
   "ok": true,
-  "web_cfg_sha": "988e3752aa52d59ab16ab8c2b5dd3113bb7dd876",
+  "web_cfg_sha": "6e70354990cde7d21d09c0eb728b691b6adfaa3f",
   "manifest_public": ".well-known/pseo-build.json",
   "public_directory": "_site",
-  "public_artifact_hash": "305e302ab63c7e06e82d926f59abdf042e76e5177fedf78e2a87cb8b70fec686",
-  "manifest_hash": "0a69eba6f9386f91f71835bc6fad3a6d308b77daa812f338faa71e8434664c89",
+  "public_artifact_hash": "3593438086315a800155d365daf0135c312071549ef355251d9787cd3b641bc1",
+  "manifest_hash": "61406baec48645ed3c015403db02a91231128195f92c822346fcfaa385b1c6be",
   "reproducible_manifest": ".well-known/build-manifest.json",
   "build_summary": {
     "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
@@ -34,7 +34,7 @@
   },
   "visible_parity": {
     "ok": true,
-    "page_count": 78,
+    "page_count": 79,
     "defect_count": 0
   },
   "prototype_isolation": {
@@ -47,19 +47,19 @@
     "configured": false,
     "context": "local",
     "target": "index.html",
-    "capture_files": 27,
+    "capture_files": 28,
     "injected_files": 0
   },
   "responsive_html": {
-    "files": 254,
+    "files": 255,
     "currency_files": 46,
-    "opaque_token_files": 228,
+    "opaque_token_files": 229,
     "marker_files": 62
   },
   "public_artifact": {
     "assembled": true,
     "audit_ok": true,
-    "file_count": 515,
+    "file_count": 516,
     "finding_count": 0
   },
   "errors": []

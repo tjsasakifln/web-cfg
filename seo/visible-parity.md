@@ -1,7 +1,7 @@
 # Visible parity
 
 - ok: `True`
-- pages: `78`
+- pages: `79`
 - defects: `0`
 - site_root: `/home/tjsasakifln/code/confenge/.worktrees/web-cfg/mv-09-commercial-production-20260905/_site`
 
@@ -78,6 +78,7 @@
 | https://confenge.com.br/politica-editorial/v/1.0.0/ | True | — | Organization,Person,BreadcrumbList | Política editorial 1.0.0 |
 | https://confenge.com.br/privacidade/ | True | — |  | Política de Privacidade |
 | https://confenge.com.br/problemas-que-resolvemos/ | True | — | BreadcrumbList | Problemas que resolvemos em licitações e contratos de obras |
+| https://confenge.com.br/quantitativos-orcamento-obras/ | True | — | BreadcrumbList | Orçamento só orienta a decisão quando quantidades e premissas aparecem. |
 | https://confenge.com.br/radar/nacional-obras-publicas/ | True | — | Dataset,Organization,BreadcrumbList; Radar Nacional de Obras Públicas e Margem Contratual: recorte aberto | Radar Nacional de Obras Públicas e Margem Contratual |
 | https://confenge.com.br/reequilibrio-obras-publicas/ | True | — | Organization,Person,BreadcrumbList | Reequilíbrio econômico-financeiro de obra pública |
 | https://confenge.com.br/servicos-obras-publicas/ | True | — | BreadcrumbList | Serviços para licitações e contratos de obras públicas |

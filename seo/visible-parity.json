@@ -1,7 +1,7 @@
 {
   "defect_count": 0,
   "ok": true,
-  "page_count": 78,
+  "page_count": 79,
   "pages": [
     {
       "claimed": {
@@ -4168,6 +4168,54 @@
         "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Problemas que resolvemos em licitações e contratos de obras | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Serviços e problemas",
+          "Quantitativos e orçamento"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/quantitativos-orcamento-obras/",
+      "visible": {
+        "authors": [],
+        "breadcrumb_names": [
+          "Início",
+          "Serviços e problemas",
+          "Quantitativos e orçamento"
+        ],
+        "canonical": "https://confenge.com.br/quantitativos-orcamento-obras/",
+        "dates": [],
+        "description": "Organize quantitativos, memória, premissas e lacunas antes de comparar propostas, contratar ou alterar o escopo de uma obra privada.",
+        "h1": "Orçamento só orienta a decisão quando quantidades e premissas aparecem.",
+        "has_dataset_surface": false,
+        "licenses": [],
+        "permission_class": "demonstrativo",
+        "reviewers": [],
+        "title": "Quantitativos e orçamento de obras | CONFENGE",
         "versions": []
       }
     },
