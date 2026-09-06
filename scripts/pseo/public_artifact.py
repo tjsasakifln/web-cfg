@@ -539,7 +539,7 @@ def audit_public_artifact(
             }
         )
 
-    # netlify.toml publish alignment is checked by caller / CI
+    # Legacy netlify.toml preview alignment is checked by caller / CI.
     for p in sorted(dest.rglob("*")):
         rel = p.relative_to(dest).as_posix()
         if p.is_dir():

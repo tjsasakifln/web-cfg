@@ -1,12 +1,14 @@
 # Single deterministic build: validate snapshot → generate pSEO pages/hubs/sitemaps
 # → public manifest → assemble isolated _site → SEO/attribution gates.
-# Netlify must not call the private DB. Publish ONLY the public artifact.
+# Legacy Netlify previews must not call the private DB. Publish ONLY the public
+# artifact; canonical production is the Netcup runtime declared in
+# docs/architecture/RUNTIME-AUTHORITY.md.
 # Redirect rules live in `_redirects` (copied into _site).
 [build]
   command = "npm run build:site"
   publish = "_site"
-  # Override Netlify's default change detector: every canonical main revision
-  # must receive a production build identity, even when content is deduplicated.
+  # Keep legacy previews deterministic by disabling Netlify's default skip
+  # detector. This is not the canonical production deploy trigger.
   ignore = "exit 1"
   functions = "netlify/functions"
 

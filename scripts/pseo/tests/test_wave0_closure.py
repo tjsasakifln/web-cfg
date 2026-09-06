@@ -179,7 +179,7 @@ class TestAuditIdentity(unittest.TestCase):
         )
         currency = evaluate_audit_currency(
             identity,
-            netlify_deployed_sha="bbb",
+            production_release_sha="bbb",
             live_snapshot_hash="snap1",
             current_seed_set_hash=identity["seed_set_hash"],
         )
@@ -208,7 +208,7 @@ class TestAuditIdentity(unittest.TestCase):
         )
         currency = evaluate_audit_currency(
             identity,
-            netlify_deployed_sha=sha,
+            production_release_sha=sha,
             live_snapshot_hash="snapfull",
             current_seed_set_hash=seed_set_hash(seeds),
         )
@@ -232,7 +232,7 @@ class TestAuditIdentity(unittest.TestCase):
         )
         currency = evaluate_audit_currency(
             identity,
-            netlify_deployed_sha="deadbeef",
+            production_release_sha="deadbeef",
             live_snapshot_hash="snap",
             current_seed_set_hash=identity["seed_set_hash"],
         )
@@ -272,7 +272,7 @@ class TestAuditIdentity(unittest.TestCase):
         )
         currency = evaluate_audit_currency(
             identity,
-            netlify_deployed_sha=live,
+            production_release_sha=live,
             live_snapshot_hash="0a67cf804cb0a26a",
             current_seed_set_hash=seed_set_hash(seeds),
         )
@@ -337,7 +337,7 @@ class TestEvidenceKindAndPublicCopy(unittest.TestCase):
             ):
                 self.assertNotIn(bad, html, f"{c.page_id} leaked {bad}")
 
-    def test_netlify_publish_is_site(self):
+    def test_legacy_netlify_preview_publish_is_site(self):
         text = (ROOT / "netlify.toml").read_text(encoding="utf-8")
         self.assertIn('publish = "_site"', text)
         self.assertIn("npm run build:site", text)

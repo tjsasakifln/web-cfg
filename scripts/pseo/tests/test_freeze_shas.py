@@ -12,7 +12,8 @@ class TestApplyFreeze(unittest.TestCase):
         live = {"web_cfg_sha": "abc123", "published_page_count": 4}
         out = apply_freeze({}, live, head="abc123", now="2026-07-31T00:00:00Z")
         self.assertEqual(out["web_cfg_sha"], "abc123")
-        self.assertEqual(out["netlify_deployed_sha"], "abc123")
+        self.assertEqual(out["production_release_sha"], "abc123")
+        self.assertNotIn("netlify" + "_deployed_sha", out)
         self.assertEqual(out["public_manifest"], live)
         self.assertTrue(out["sha_alignment"]["all_match"])
         self.assertFalse(out["sha_alignment"]["report_commit_may_lag"])
@@ -26,7 +27,7 @@ class TestApplyFreeze(unittest.TestCase):
             now="t",
         )
         self.assertEqual(out["web_cfg_sha"], "live-sha")
-        self.assertEqual(out["netlify_deployed_sha"], "live-sha")
+        self.assertEqual(out["production_release_sha"], "live-sha")
         self.assertFalse(out["sha_alignment"]["all_match"])
         self.assertTrue(out["sha_alignment"]["report_commit_may_lag"])
         # never invent equality

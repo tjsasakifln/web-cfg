@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Single site build entry for Netlify / CI.
+"""Single site build entry for CI, the Netcup release, and legacy previews.
 
 Order (fail-closed on critical):
   1. validate snapshot schema + checksums + provenance
@@ -50,7 +50,7 @@ from scripts.site.responsive_text import mark_opaque_tokens_in_html_text  # noqa
 def _deploy_commit() -> str:
     """Commit identity from deploy/CI env first; git HEAD only as local fallback.
 
-    Prefer Netlify COMMIT_REF / CACHED_COMMIT_REF, then GITHUB_SHA, then git.
+    Prefer legacy preview COMMIT_REF / CACHED_COMMIT_REF, then GITHUB_SHA, then git.
     Never mutates the working tree or requires git clean/smudge filters.
     """
     for key in ("COMMIT_REF", "CACHED_COMMIT_REF", "GITHUB_SHA", "CF_PAGES_COMMIT_SHA"):
