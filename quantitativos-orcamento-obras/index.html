@@ -52,7 +52,8 @@
 .evidence-module thead th{color:var(--ink);font-size:.875rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase}
 .evidence-module tbody th{font-weight:700}
 @media(max-width:760px){
-.evidence-module thead{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+/* clip-path:inset(50%) always clips to zero area, so width:1px;height:1px was redundant and harmful: it forced the display:block th/td below to inherit a 1px containing-block width, squeezing header cells to 1px (column starvation). Dropping the fixed size lets each th shrink-to-fit its own text. This keeps the header text in the a11y tree, same as before, unlike display:none which would remove it -- display:block already dropped native table/header role association at this width, so data-label::before is what labels each stacked cell, not this rule. visibility:hidden was rejected: it removes text from the a11y tree too. */
+.evidence-module thead{position:absolute;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 .evidence-module tr{display:block;padding:.5rem 0;border-top:1px solid var(--line)}
 .evidence-module th,.evidence-module td{display:block;padding:.35rem 0;border-top:0}
 .evidence-module th[data-label]::before,.evidence-module td[data-label]::before{content:attr(data-label);display:block;margin-bottom:.15rem;color:var(--green-700);font-size:.8rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
