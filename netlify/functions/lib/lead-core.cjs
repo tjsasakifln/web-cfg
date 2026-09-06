@@ -409,8 +409,8 @@ function looksLikePii(value, key) {
   if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s)) return false;
   if (s.startsWith("c-")) return false;
   if (/^(sess|lead|opp|prop|sale|evt)-/.test(s)) return false;
-  const compact = s.replace(/[\s()-]/g, "");
-  return /^\+?\d{10,15}$/.test(compact);
+  const compactDigits = s.replace(/[\s()./+\-]/g, "");
+  return /^\d{10,15}$/.test(compactDigits);
 }
 
 function sanitizeAttributionValue(val, maxLen, key) {
@@ -1001,12 +1001,18 @@ function validateAndNormalize(data) {
 
   if (adaptiveFields) {
     lead.adaptive_intake = true;
+    lead.need_code = adaptiveFields.need_code;
     lead.nucleus_id = adaptiveFields.nucleus_id;
     lead.offer_candidate_id = adaptiveFields.offer_candidate_id;
     lead.source_asset_id = adaptiveFields.source_asset_id;
+    lead.source_origin_asset_id = adaptiveFields.source_origin_asset_id || null;
+    lead.source_origin_route_family = adaptiveFields.source_origin_route_family || null;
     lead.landing_family = adaptiveFields.landing_family;
     lead.city_class = adaptiveFields.city_class;
     lead.site_class = adaptiveFields.site_class;
+    lead.location_material = adaptiveFields.location_material;
+    lead.city = adaptiveFields.city;
+    lead.uf = adaptiveFields.uf;
     lead.decision_role = adaptiveFields.decision_role;
     lead.pessoa_tipo = adaptiveFields.pessoa_tipo;
     lead.canal_preferido = adaptiveFields.canal_preferido;
@@ -1021,8 +1027,9 @@ function validateAndNormalize(data) {
     lead.taxonomy_version = adaptiveFields.taxonomy_version;
     lead.offer_catalog_version = adaptiveFields.offer_catalog_version;
     lead.admission_policy_version = adaptiveFields.admission_policy_version;
-    lead.handraiser_state_version = adaptiveFields.handraiser_state_version;
-    lead.meetcfg_context_version = adaptiveFields.meetcfg_context_version;
+    lead.admission_policy_id = adaptiveFields.admission_policy_id;
+    lead.admission_policy_hash = adaptiveFields.admission_policy_hash;
+    lead.governance_source_sha = adaptiveFields.governance_source_sha;
     lead.outbound_eligible = false;
     lead.auto_send = false;
     lead.sensitive_docs_ack = true;
@@ -1117,10 +1124,15 @@ function idempotencyKeyFor(lead, explicit) {
     : "";
   const adaptiveMaterial = lead?.nucleus_id
     ? JSON.stringify({
+        need_code: lead.need_code || "",
         nucleus_id: lead.nucleus_id,
         offer_candidate_id: lead.offer_candidate_id || "",
         qualification_state: lead.qualification_state || "",
         conflict_status: lead.conflict_status || "",
+        location_material: Boolean(lead.location_material),
+        city: lead.city || "",
+        uf: lead.uf || "",
+        admission_policy_hash: lead.admission_policy_hash || "",
       })
     : "";
   const material = [
