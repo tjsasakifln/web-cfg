@@ -80,6 +80,17 @@
   // alternative and returns it to the accessible tree; "alternative" removes the
   // whole form block from both the accessible tree and the focus order, while
   // the status line and the standing limit notice stay outside it and visible.
+  // Marks where the form block sits in the served HTML, so returning to the
+  // alternative presentation restores that exact slot. Moving the channel card
+  // instead would drag it past the status line and the limit notice, which sit
+  // between the card and the form block, and the limit would end up ABOVE the
+  // action instead of below it.
+  var formBlockSlot = null;
+  if (formBlock && formBlock.parentNode) {
+    formBlockSlot = document.createComment("intake-form-block-slot");
+    formBlock.parentNode.insertBefore(formBlockSlot, formBlock);
+  }
+
   function setPresentation(mode) {
     if (!formBlock) return;
     var showForm = mode === "form";
@@ -93,8 +104,9 @@
     } else {
       formBlock.setAttribute("inert", "");
       formBlock.setAttribute("aria-hidden", "true");
-      if (alternative && alternative.parentNode && formBlock.parentNode === alternative.parentNode) {
-        alternative.parentNode.insertBefore(alternative, formBlock);
+      // Back to the served slot: alternative, status, limit, then the form block.
+      if (formBlockSlot && formBlockSlot.parentNode && formBlock.previousSibling !== formBlockSlot) {
+        formBlockSlot.parentNode.insertBefore(formBlock, formBlockSlot.nextSibling);
       }
     }
   }
