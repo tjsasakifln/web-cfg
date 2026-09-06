@@ -144,6 +144,54 @@
       }
     },
     {
+      "id": "private-engineering-quantities-budget",
+      "visitor_job": "Enquadrar uma base documental de quantitativos ou orçamento de obra privada, entender artefatos, método e limites e solicitar retorno com dados mínimos.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {
+        "routes": [
+          "/quantitativos-orcamento-obras/"
+        ]
+      },
+      "value_first_header_cta": {
+        "mode": "local_fragment_before_contact",
+        "label": "Enquadrar quantitativos",
+        "href": "#triagem-quantitativos"
+      },
+      "capture_availability": {
+        "mode": "external_authority_fail_closed",
+        "withheld_fallback": ["whatsapp", "email", "telephone"],
+        "runtime_profile": "adaptive_intake_standalone_v1",
+        "config_endpoint": "/.netlify/functions/adaptive-intake-config?intake_context=quantities_budget",
+        "client_script": "/assets/js/adaptive-intake.js",
+        "authority_manifest": "netlify/functions/data/adaptive-intake-authority.json"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-09-05",
+      "owner_issue": 611,
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "official_live",
+          "citable_source"
+        ],
+        "reason": "Página comercial de primeira parte sobre uma jornada privada da própria CONFENGE; não representa registro externo, preço, prazo, capacidade, caso ou habilitação profissional.",
+        "authority": [
+          "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md",
+          "data/corporate/commercial-constitution.v1.json",
+          "data/corporate/service-taxonomy.v1.json",
+          "docs/integration/campaign-20260905/09/integration-log.md"
+        ],
+        "declared_at": "2026-09-05",
+        "owner_issue": 611
+      }
+    },
+    {
       "id": "service-pillars",
       "visitor_job": "Resolver um evento contratual específico (aditivo, glosa, reequilíbrio, atraso) com a CONFENGE.",
       "profile": "service_pillar",

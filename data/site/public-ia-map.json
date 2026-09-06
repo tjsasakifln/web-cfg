@@ -15,8 +15,9 @@
       "id": "project_delivery",
       "label": "Projetar, revisar, orçar ou compatibilizar",
       "visitor_language": "Preciso tirar um projeto do impasse ou conferir se ele pode avançar",
-      "href": "/triagem-tecnica/#projetos",
-      "index_state": "triage_fallback"
+      "href": "/quantitativos-orcamento-obras/",
+      "index_state": "private_wedge_index",
+      "scope": "Somente quantitativos e orçamento de obra privada; revisão, projeto e compatibilização permanecem na triagem."
     },
     {
       "id": "building_diagnosis",
@@ -48,6 +49,7 @@
     }
   ],
   "breadcrumb_labels": {
+    "/quantitativos-orcamento-obras/": "Quantitativos e orçamento",
     "/servicos-obras-publicas/": "Serviços",
     "/problemas-que-resolvemos/": "Contrato sob pressão",
     "/conteudos/": "Biblioteca"
@@ -273,6 +275,7 @@
     { "prefix": "/ferramentas/", "parent": "/", "exact": true },
     { "prefix": "/ferramentas/", "parent": "/ferramentas/" },
     { "prefix": "/servicos/", "parent": "/", "exact": true },
+    { "prefix": "/quantitativos-orcamento-obras/", "parent": "/servicos/", "exact": true },
     { "prefix": "/servicos-obras-publicas/", "parent": "/", "exact": true },
     { "prefix": "/problemas-que-resolvemos/", "parent": "/", "exact": true },
     { "prefix": "/entregas/", "parent": "/", "exact": true },
@@ -322,6 +325,7 @@
   ],
   "active_header": [
     { "prefix": "/servicos/", "href": "/servicos/" },
+    { "prefix": "/quantitativos-orcamento-obras/", "href": "/servicos/" },
     { "prefix": "/servicos-obras-publicas/", "href": "/servicos-obras-publicas/" },
     { "prefix": "/bid-room-licitacoes-obras/", "href": "/servicos-obras-publicas/" },
     { "prefix": "/diagnostico-pre-licitacao/", "href": "/servicos-obras-publicas/" },
