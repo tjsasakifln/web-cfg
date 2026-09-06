@@ -1443,3 +1443,146 @@ def run_all() -> int:
 
 if __name__ == "__main__":
     sys.exit(run_all())
+
+
+# --- #617: first fold of /servicos/ -----------------------------------------
+# These assertions read the <style data-corporate-services-critical=""> block of
+# servicos/index.html, which is the CSS this route ACTUALLY loads. The route does
+# not link assets/home-10x.css; the copy of these rules living there (around
+# lines 563-575) is inert for /servicos/, so writing a gate against that sheet
+# would be writing against a file that changes nothing on the page.
+
+SERVICOS = ROOT / "servicos" / "index.html"
+
+
+def _servicos_critical_css():
+    html = SERVICOS.read_text(encoding="utf-8")
+    match = re.search(
+        r'<style data-corporate-services-critical=""\s*>(.*?)</style>', html, re.DOTALL
+    )
+    assert match, "servicos/index.html lost its critical style block"
+    return match.group(1)
+
+
+def test_servicos_fold_css_reaches_the_route():
+    """R9: the tokens are pinned in the sheet the route loads, not in the inert copy."""
+    html = SERVICOS.read_text(encoding="utf-8")
+    assert "home-10x.css" not in html, (
+        "servicos/index.html must not start linking the inert sheet; "
+        "the fold tokens belong to its own critical block"
+    )
+    assert html.count('rel="stylesheet"') == 1
+
+    css = _servicos_critical_css()
+    for selector in (
+        ".services-fold-preview",
+        ".services-fold-output",
+        ".services-fold-actions",
+        ".services-fold-alt",
+    ):
+        assert selector in css, f"fold token missing from the loaded CSS: {selector}"
+
+
+def test_servicos_fold_typography_stays_above_the_approved_floor():
+    """R8/R10: no shrinking below the approved tokens to buy height.
+
+    css_type_floor.py does not cover this route (it neither reads inline <style>
+    blocks nor matches .section-lead/.eyebrow/.service-output), so the declared
+    values are pinned literally here. The COMPUTED floor still has to be measured
+    in a browser; this gate is the source-side half of that pair.
+    """
+    css = _servicos_critical_css()
+    sizes = [float(v) for v in re.findall(r"font-size:\s*\.?(\d*\.?\d+)rem", css)]
+    assert sizes, "no literal font-size found in the fold CSS"
+    # 0.875rem == 14px is the approved floor; 12.8px (0.8rem) is the hard floor.
+    assert min(sizes) >= 0.875, f"fold typography dropped below .875rem: {min(sizes)}"
+
+    assert "font-size:.9375rem" in css.replace(" ", "")
+    assert re.search(r"\.services-fold-preview a\{[^}]*min-height:44px", css), (
+        "the preview targets lost their 44px touch height"
+    )
+
+
+def test_servicos_fold_does_not_reorder_content_with_css():
+    """R14: DOM order stays the reading order; nothing is reordered visually."""
+    css = _servicos_critical_css()
+    for banned in ("order:", "flex-direction:row-reverse", "flex-direction:column-reverse"):
+        assert banned not in css.replace(" ", ""), f"visual reordering introduced: {banned}"
+    assert not re.search(r"grid-row:\s*\d", css), "explicit grid-row reordering introduced"
+
+
+def test_servicos_fold_has_one_dominant_action_and_a_declared_alternative():
+    """R2/R5: one dominant action, a recognizable choice, one alternative path.
+
+    The count of primary actions inside the fold rectangle is a MEASUREMENT and
+    is not claimed here. What is checked structurally: the hero carries exactly
+    one primary action, the five situations are previewed as plain internal
+    navigation, and the alternative path is the wa.me text-link that already
+    existed in <main>.
+    """
+    html = SERVICOS.read_text(encoding="utf-8")
+    hero = re.search(
+        r'<section[^>]*class="section corporate-services-hero"[\s\S]*?</section>', html
+    )
+    assert hero, "corporate-services-hero missing"
+    fold = hero.group(0)
+
+    assert fold.count("button-primary") == 1, "the fold must carry exactly one primary action"
+    assert 'data-cta-id="services-private-quantities-budget"' in fold, (
+        "the dominant action must be the already declared one, repositioned"
+    )
+    assert 'href="/quantitativos-orcamento-obras/"' in fold
+
+    for anchor in (
+        "#servico-projeto",
+        "#servico-diagnostico",
+        "#servico-pericia",
+        "#servico-sst",
+        "#servico-obras-publicas",
+    ):
+        assert f'href="{anchor}"' in fold, f"situation preview missing: {anchor}"
+        assert f'id="{anchor[1:]}"' in html, f"preview points at a missing anchor: {anchor}"
+
+    # The preview is recognition navigation: it must not create declared CTAs.
+    preview = re.search(r'<ul class="services-fold-preview">[\s\S]*?</ul>', fold).group(0)
+    for attribute in ("data-cta-id", "data-next-action-id", "data-cta-position", "button-primary"):
+        assert attribute not in preview, f"the preview created a declared CTA: {attribute}"
+    assert "wa.me" not in preview and "mailto:" not in preview
+
+    # Alternative path, and the terminal action the family declares.
+    assert "wa.me/5548988344559" in fold, "the alternative channel is not in the fold"
+    main = re.search(r"<main\b[\s\S]*?</main>", html).group(0)
+    assert main.count("wa.me") == 1, "the WhatsApp anchor was duplicated or left <main>"
+
+
+def test_servicos_fold_names_a_published_delivery_before_any_limit_copy():
+    """R6: a concrete, already published deliverable precedes limit copy.
+
+    The sweep starts at the first element of the fold inside <main>; the
+    header's "Iniciar triagem" CTA sits before all of <main> and would make the
+    criterion unsatisfiable.
+    """
+    html = SERVICOS.read_text(encoding="utf-8")
+    main = re.search(r"<main\b[\s\S]*?</main>", html).group(0)
+
+    delivery = main.find("orçamento de obra com quantitativos")
+    assert delivery > 0, "no concrete published deliverable named in the fold"
+
+    for limit_word in ("aderência", "limites", "triagem"):
+        position = main.lower().find(limit_word.lower())
+        if position != -1:
+            assert delivery < position, (
+                f"limit copy '{limit_word}' precedes the named deliverable"
+            )
+
+    # Only PUBLISHED offers may be named as a deliverable. Compatibilização,
+    # inspeção, laudo, parecer and quesitos are DEFERRED/WITHHELD in #611 and
+    # must not appear as available deliveries inside the fold.
+    fold = re.search(
+        r'<section[^>]*class="section corporate-services-hero"[\s\S]*?</section>', html
+    ).group(0)
+    output = re.search(r'<p class="services-fold-output">[\s\S]*?</p>', fold).group(0)
+    for withheld in ("laudo", "parecer", "quesitos", "inspeção", "compatibilização"):
+        assert withheld not in output.lower(), (
+            f"the fold offers a DEFERRED/WITHHELD deliverable as available: {withheld}"
+        )
