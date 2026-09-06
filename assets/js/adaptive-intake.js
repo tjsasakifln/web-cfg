@@ -378,7 +378,15 @@
         if (settled) return;
         settled = true;
         window.clearTimeout(timer);
-        configure(data);
+        // configure() throws on an invalid contract. Because `settled` is
+        // already true, the .catch below would swallow it and the page would
+        // sit on "Verificando a disponibilidade…" forever — the exact defect
+        // this issue exists to remove. Handle it here instead.
+        try {
+          configure(data);
+        } catch (error) {
+          unavailable(error);
+        }
       })
       .catch(function (error) {
         if (settled) return;
