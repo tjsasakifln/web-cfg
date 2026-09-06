@@ -9,6 +9,31 @@
 - `ROLLBACK_SHA` inicial: `89b081a8676d8a0b30747dfcb1477f21d9ac4dfb`
 - North Star: oportunidades comerciais qualificadas, não volume de páginas ou commits
 
+## Pre-flight retomado em 2026-09-05
+
+- Worktree único: `/home/tjsasakifln/code/confenge/.worktrees/web-cfg/mv-09-commercial-production-20260905`.
+- Branch única: `integrate/mv-09-commercial-production-20260905`.
+- Base contemporânea consumida: `origin/main@3552cf228424ebb8f34266f671fd80df43d0615c`, que contém a PR #612 mergeada e a autoridade Netcup.
+- Issue owner: web-cfg #611, `P0 / EXECUTE_NOW`; frente `INBOUND ENGINE + REVENUE NOW`; evidência esperada na PR e, após o contrato externo, no release Netcup.
+- Governance #172: merge `0074722ce66f16af06dd4799ee88064ea8a12fc1`, `policy_hash=sha256:405ac86064a90641b843352d21cd21703744115de9592558e100671d92276df7`.
+- Warmbly #266: ainda aberto no HEAD observado `b78e3d8cf820c7e594aad9f15f587299fdaf6004`; sem prova de runtime live. Producer e publicação permanecem fail-closed.
+
+### WRITE_SET desta retomada
+
+- `/quantitativos-orcamento-obras/**` e assets route-local estritamente necessários;
+- `triagem-tecnica/**`, `assets/js/adaptive-intake.js` e producer/adapter em `netlify/functions/**` necessários ao contrato MV-03;
+- registros derivados de rota, sitemap, navegação, CTA, pSEO, interface coverage e baselines/hash recapturados pelos geradores canônicos;
+- testes route-exact de jornada privada, intake/readback, privacidade, acessibilidade, canonical/sitemap e conservação B2G;
+- `docs/integration/campaign-20260905/09/**`, `package.json` apenas se necessário para expor gates da integração.
+
+### DO_NOT_TOUCH_SET
+
+- `/compatibilizacao-revisao-projetos/`, `/inspecao-documentacao-edificacoes/`, money pages de perícias, avaliações e SST;
+- `CFG-D55`, crawler, DataLake, identidade paralela, CRM, SMTP, outbound, preço, checkout ou SLA;
+- contratos, preços, URLs, indexação e conteúdo substantivo B2G, salvo chrome compartilhado e hashes derivados sem mudança semântica;
+- Netlify como autoridade de produção, DNS, secrets e configuração live de Warmbly/Governance;
+- claims CREA/RNP, CPTEC, SST, case, capacidade de campo, ART automática, prazo, preço ou resultado sem prova.
+
 ## Baseline revalidada em 2026-09-05
 
 - `origin/main`, build-info e runtime-info live apontavam para o mesmo SHA inicial.
