@@ -142,6 +142,8 @@ def evaluate_signal(
             codes.append("browser_evidence_missing")
         if observation.get("evidence_stale"):
             codes.append("axe_evidence_stale")
+        if observation.get("artifact_mismatch"):
+            codes.append("axe_evidence_foreign_artifact")
         if int(observation.get("critical") or 0) > 0:
             codes.append("axe_critical")
         if int(observation.get("serious") or 0) > 0:
@@ -395,6 +397,9 @@ def measure_accessibility_report(
     *,
     live_evidence_missing: bool = False,
     evidence_stale: bool = False,
+    artifact_mismatch: bool = False,
+    expected_artifact: str | None = None,
+    reported_artifact: str | None = None,
 ) -> dict[str, Any]:
     """Verify axe results and prove that its risk census was not truncated."""
     axe = json.loads(axe_path.read_text(encoding="utf-8")) if axe_path.is_file() else {}
@@ -449,6 +454,7 @@ def measure_accessibility_report(
             "coverage_complete": coverage_complete,
             "live_evidence_missing": live_evidence_missing,
             "evidence_stale": evidence_stale,
+            "artifact_mismatch": artifact_mismatch,
         },
     )
     blocking_routes = [
@@ -466,6 +472,8 @@ def measure_accessibility_report(
         "page_loads": len(pages),
         "live_evidence": not live_evidence_missing,
         "evidence_stale": evidence_stale,
+        "measured_artifact": reported_artifact,
+        "expected_artifact": expected_artifact,
     }
     return result
 
@@ -877,13 +885,34 @@ def collect_site_metrics(
     # pass on its own.
     current_axe_path = reports_dir / "axe-report.json"
     committed_axe_path = root / "docs" / "uiux-evidence" / "axe-report.json"
+    manifest_path = root / "seo" / "PUBLIC-ARTIFACT-MANIFEST.json"
     live_axe = current_axe_path.is_file()
     axe_path = current_axe_path if live_axe else committed_axe_path
+
+    # A file sitting in the reports directory does not prove a measurement of
+    # THIS tree. The report records the artifact hash it measured; if that does
+    # not match the artifact assembled here, the evidence belongs to another tree
+    # and is stale wherever it happens to be filed.
+    expected_artifact = None
+    if manifest_path.is_file():
+        expected_artifact = json.loads(manifest_path.read_text(encoding="utf-8")).get(
+            "public_artifact_hash"
+        )
+    reported_artifact = None
+    if axe_path.is_file():
+        reported_artifact = json.loads(axe_path.read_text(encoding="utf-8")).get("artifact_hash")
+    artifact_mismatch = bool(
+        expected_artifact and reported_artifact != expected_artifact
+    )
+
     results["accessibility-audit"] = measure_accessibility_report(
         axe_path,
-        root / "seo" / "PUBLIC-ARTIFACT-MANIFEST.json",
+        manifest_path,
         live_evidence_missing=not live_axe,
-        evidence_stale=not live_axe and committed_axe_path.is_file(),
+        evidence_stale=(not live_axe and committed_axe_path.is_file()) or artifact_mismatch,
+        artifact_mismatch=artifact_mismatch,
+        expected_artifact=expected_artifact,
+        reported_artifact=reported_artifact,
     )
 
     security_codes: list[str] = []

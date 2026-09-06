@@ -86,9 +86,19 @@ const browser = await puppeteer.launch({
 });
 
 const startedAt = Date.now();
+// Bind the report to the artifact it measured. Without this, a report captured
+// on another tree is indistinguishable from one captured here: `base` is a
+// localhost URL and `site_root` a relative path, so dropping a foreign file into
+// build/reports/ silently satisfied the accessibility dimension.
+const artifactManifestPath = new URL("../../seo/PUBLIC-ARTIFACT-MANIFEST.json", import.meta.url);
+const artifactHash = existsSync(artifactManifestPath)
+  ? (JSON.parse(readFileSync(artifactManifestPath, "utf8")).public_artifact_hash || null)
+  : null;
+
 const report = {
   generated_at: new Date().toISOString(),
   issue: 293,
+  artifact_hash: artifactHash,
   base: BASE,
   site_root: coverage.site_root,
   policy_path: coverage.policy_path,
