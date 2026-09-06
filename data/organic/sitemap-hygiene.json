@@ -1,8 +1,8 @@
 {
   "ok": true,
   "issues": [],
-  "url_count": 78,
-  "unique_paths": 78,
+  "url_count": 79,
+  "unique_paths": 79,
   "locs": [
     "https://confenge.com.br/",
     "https://confenge.com.br/acompanhamento-contratos-obras/",
@@ -71,6 +71,7 @@
     "https://confenge.com.br/politica-editorial/v/1.0.0/",
     "https://confenge.com.br/privacidade/",
     "https://confenge.com.br/problemas-que-resolvemos/",
+    "https://confenge.com.br/quantitativos-orcamento-obras/",
     "https://confenge.com.br/radar/nacional-obras-publicas/",
     "https://confenge.com.br/reequilibrio-obras-publicas/",
     "https://confenge.com.br/servicos/",
@@ -84,7 +85,7 @@
     "https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/"
   ],
   "families": {
-    "core": 74,
+    "core": 75,
     "editorial": 4
   },
   "member_sitemaps": [
