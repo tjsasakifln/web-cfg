@@ -33,7 +33,8 @@ test("public route is low-friction, transparent and free of sensitive inputs", (
   const html = fs.readFileSync(path.resolve("triagem-tecnica/index.html"), "utf8");
   const publicConfig = fs.readFileSync(path.resolve("netlify/functions/adaptive-intake-config.cjs"), "utf8");
   for (const expected of [
-    "menos de um minuto",
+    // "menos de um minuto" was removed by #616: the temporal promise cannot be
+    // true while the intake authority is WITHHELD and the form never submits.
     "não é contratação nem pagamento",
     "canal seguro",
     "Escopo, responsabilidade técnica",
@@ -66,6 +67,53 @@ test("public route is low-friction, transparent and free of sensitive inputs", (
     assert.equal(browser.includes(`"${eventName}"`), true, `non-canonical alternative event: ${eventName}`);
   }
   assert.match(browser, /setStep\(0, false\)/);
+
+  // #616 Resultado A — structural guards for the two main presentations.
+  assert.doesNotMatch(html, /menos de um minuto/i, "temporal promise survived in /triagem-tecnica/");
+  assert.doesNotMatch(html, /Você recebe um protocolo assim que o pedido é gravado/i, "unconditional protocol promise survived");
+  assert.doesNotMatch(html, /Carregando opções…/, "loading placeholder survived in the served HTML");
+  for (const metadata of [
+    /<title>[^<]*<\/title>/i,
+    /<meta(?=[^>]*name="description")[^>]*content="([^"]*)"/i,
+  ]) {
+    const found = html.match(metadata);
+    assert.ok(found, `metadata block missing: ${metadata}`);
+    assert.doesNotMatch(found[0], /menos de um minuto|Vamos registrar o tipo de problema/i,
+      `state-dependent promise survived in metadata: ${found[0]}`);
+  }
+  // meta description and the JSON-LD description stay identical to each other.
+  const metaDescription = html.match(/<meta(?=[^>]*name="description")[^>]*content="([^"]*)"/i)[1];
+  const jsonLdDescription = html.match(/"description":\s*"([^"]*)"/)[1];
+  assert.equal(metaDescription, jsonLdDescription, "meta and JSON-LD descriptions diverged");
+  // The form block is inert in the served HTML; the contact alternative and the
+  // standing limit notice live outside it and stay visible in both states.
+  assert.match(html, /<div class="intake-form-block" data-intake-form-block hidden inert aria-hidden="true">/);
+  assert.ok(html.indexOf("data-intake-alternative") < html.indexOf("data-intake-form-block"),
+    "contact alternative must precede the form block in the served HTML");
+  assert.ok(html.indexOf("data-intake-status") < html.indexOf("data-intake-form-block"),
+    "status line must sit outside the form block");
+  assert.match(html, /data-intake-limit/, "standing limit notice missing outside the form block");
+  for (const anchorId of ["projetos", "obra-imovel", "pericia-avaliacao", "sst", "planejamento-publico"]) {
+    const span = new RegExp(`<span id="${anchorId}" aria-hidden="true"></span>`);
+    assert.match(html, span, `anchor missing: ${anchorId}`);
+    assert.ok(html.search(span) < html.indexOf("data-intake-form-block"),
+      `anchor ${anchorId} still resolves inside the form block`);
+  }
+  // Single attempt, explicit deadlines, no automatic retry.
+  assert.match(browser, /CONFIG_TIMEOUT_MS = 5000/);
+  assert.match(browser, /SUBMIT_TIMEOUT_MS = 15000/);
+  assert.match(browser, /new AbortController\(\)/);
+  assert.doesNotMatch(browser, /setInterval\(/, "polling loop introduced");
+  // The option loop must be able to reach index 0.
+  assert.doesNotMatch(browser, /while \(need\.options\.length > 1\)/,
+    "the placeholder-preserving option loop survived");
+  assert.match(browser, /while \(need\.options\.length\) need\.remove\(0\)/);
+  // "not sent" and "receipt not confirmed" are distinct outcomes.
+  assert.match(browser, /não foi possível confirmar o recebimento/);
+  assert.match(browser, /O pedido não foi enviado/);
+  assert.match(browser, /attemptStarted/);
+  // No directional word in the unavailability message: reading order varies.
+  assert.doesNotMatch(browser, /telefone abaixo para falar com a CONFENGE/);
   for (const key of ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"]) {
     assert.equal(browser.includes(`"${key}"`), true, `missing attribution allowlist: ${key}`);
   }

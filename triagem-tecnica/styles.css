@@ -168,3 +168,10 @@ button:disabled {
     text-align: center;
   }
 }
+
+/* Two main presentations. Unavailability is structural: the form block leaves
+   the accessible tree and the focus order via [hidden] + [inert]. It is never
+   signalled by opacity alone, which would leave dead controls tabbable. */
+[data-intake-form-block][hidden] { display: none !important; }
+.intake-form-block { display: block; }
+[data-intake-limit] { margin-top: 1rem; }

@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Triagem técnica | CONFENGE</title>
-  <meta name="description" content="Vamos registrar o tipo de problema, seu nome e um canal de retorno.">
+  <title>Triagem técnica e canais diretos | CONFENGE</title>
+  <meta name="description" content="Descreva o tipo de problema técnico pelo formulário, quando disponível, ou pelos canais diretos: WhatsApp, e-mail e telefone.">
   <meta name="robots" content="index,follow">
   <link rel="canonical" href="https://confenge.com.br/triagem-tecnica/">
   <script type="application/ld+json">
@@ -13,7 +13,7 @@
       "@type": "WebPage",
       "name": "Triagem técnica",
       "url": "https://confenge.com.br/triagem-tecnica/",
-      "description": "Vamos registrar o tipo de problema, seu nome e um canal de retorno.",
+      "description": "Descreva o tipo de problema técnico pelo formulário, quando disponível, ou pelos canais diretos: WhatsApp, e-mail e telefone.",
       "dateModified": "2026-09-05"
     }
   </script>
@@ -29,21 +29,41 @@
 
     <header class="triage-intro">
       <p class="triage-eyebrow">Triagem técnica inicial</p>
-      <h1>Explique sua situação em menos de um minuto</h1>
-      <p class="triage-lead" data-form-value>Vamos registrar o tipo de problema, seu nome e um canal de retorno. Empresa é opcional. Cidade e UF aparecem somente quando ajudam a avaliar uma possível vistoria.</p>
+      <h1>Explique sua situação técnica para a CONFENGE</h1>
+      <p class="triage-lead" data-form-value>Descreva o tipo de problema, seu nome e um canal de retorno. Empresa é opcional. Cidade e UF são pedidas somente quando ajudam a avaliar uma possível vistoria. Se o formulário não estiver disponível, WhatsApp, e-mail e telefone continuam valendo.</p>
       <p>Formulário revisto em <time datetime="2026-09-05">5 de setembro de 2026</time>.</p>
     </header>
 
     <section class="next-state" aria-labelledby="depois-titulo">
       <h2 id="depois-titulo">O que acontece depois</h2>
       <ol>
-        <li>Você recebe um protocolo assim que o pedido é gravado.</li>
-        <li>A CONFENGE enquadra a situação e identifica quais informações ainda são necessárias.</li>
+        <li>Se o pedido for gravado pelo formulário, um protocolo aparece na tela; por WhatsApp, e-mail ou telefone a conversa começa direto com a CONFENGE.</li>
+        <li>A CONFENGE lê a situação e identifica quais informações ainda são necessárias.</li>
         <li>Documentos e dados sensíveis, se necessários, são combinados depois em canal seguro.</li>
       </ol>
-      <p><strong>Este envio não é contratação nem pagamento.</strong> Escopo, responsabilidade técnica, necessidade de campo, prazo e preço são definidos somente após o enquadramento.</p>
+      <p><strong>Falar com a CONFENGE não é contratação nem pagamento.</strong> Escopo, responsabilidade técnica, necessidade de campo, prazo e preço são definidos somente depois de a situação ser lida.</p>
     </section>
 
+    <span id="projetos" aria-hidden="true"></span>
+    <span id="obra-imovel" aria-hidden="true"></span>
+    <span id="pericia-avaliacao" aria-hidden="true"></span>
+    <span id="sst" aria-hidden="true"></span>
+    <span id="planejamento-publico" aria-hidden="true"></span>
+
+    <aside class="channel-card" data-intake-alternative aria-labelledby="canais-titulo">
+      <h2 id="canais-titulo">Prefere falar por outro canal?</h2>
+      <p>Esses canais continuam disponíveis mesmo quando o formulário não puder registrar o pedido.</p>
+      <div class="channel-actions">
+        <a class="button button-primary" data-fallback-channel="whatsapp" data-asset-id="technical_triage_v1" data-route-family="triagem-tecnica" data-cta-id="technical-triage-alternative-whatsapp" href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20explicar%20uma%20demanda%20t%C3%A9cnica%20e%20entender%20o%20pr%C3%B3ximo%20passo." rel="noopener" target="_blank">Pedir revisão de encaixe pelo WhatsApp</a>
+        <a class="button button-secondary" data-fallback-channel="email" data-asset-id="technical_triage_v1" data-route-family="triagem-tecnica" data-cta-id="technical-triage-alternative-email" href="mailto:tiago.sasaki@confenge.com.br?subject=Triagem%20t%C3%A9cnica%20CONFENGE">Enviar o contexto por e-mail</a>
+        <a class="text-link" data-fallback-channel="phone" data-asset-id="technical_triage_v1" data-route-family="triagem-tecnica" data-cta-id="technical-triage-alternative-phone" href="tel:+5548988344559">Ligar para explicar a demanda: (48) 98834-4559</a>
+      </div>
+    </aside>
+
+    <p class="intake-status" data-intake-status role="status" aria-live="polite">Verificando a disponibilidade do formulário…</p>
+    <p class="form-hint" data-intake-limit>Nenhum destes canais é contratação, pagamento, aceite ou prazo prometido. Não envie CPF, número de processo, prontuário, planta, laudo, lista de empregados ou partes em conflito por aqui. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da <a href="/privacidade/">Política de Privacidade</a>.</p>
+
+    <div class="intake-form-block" data-intake-form-block hidden inert aria-hidden="true">
     <form
       id="triagem-tecnica-form"
       class="technical-intake-form"
@@ -57,16 +77,13 @@
       data-next-state-profile="adaptive_triage"
       data-runtime-profile="adaptive_intake_standalone_v1"
       data-cta-id="triagem-tecnica"
+      data-channel-intent="Olá, Tiago. Quero explicar uma demanda técnica e entender o próximo passo."
+      data-channel-subject="Triagem técnica CONFENGE"
       data-receipt-required="true"
       data-current-step="1"
       novalidate><p class="form-hint" data-form-value>Vamos registrar o tipo de problema, seu nome e um canal de retorno. Empresa é opcional. Cidade e UF aparecem somente quando ajudam a avaliar uma possível vistoria.</p>
 <p class="form-hint" id="contato-hint" data-field-purpose>A situação direciona a triagem; nome e um canal válido permitem o retorno. Empresa é opcional, e cidade e UF são pedidas apenas quando uma vistoria pode ser necessária. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.</p>
-<span id="projetos" aria-hidden="true"></span>
-      <span id="obra-imovel" aria-hidden="true"></span>
-      <span id="pericia-avaliacao" aria-hidden="true"></span>
-      <span id="sst" aria-hidden="true"></span>
-      <span id="planejamento-publico" aria-hidden="true"></span>
-      <input type="hidden" name="form-name" value="triagem-tecnica">
+<input type="hidden" name="form-name" value="triagem-tecnica">
       <input type="hidden" name="adaptive_intake" value="true">
       <input type="hidden" name="intake_version" value="">
       <input type="hidden" name="intake_pin_hash" value="">
@@ -84,7 +101,7 @@
         <p class="field-help">Escolha a opção mais próxima. Você não precisa conhecer o nome técnico do serviço.</p>
         <label for="need-code">Situação</label>
         <select id="need-code" name="need_code" required>
-          <option value="">Carregando opções…</option>
+          <option value="">Selecione a situação</option>
         </select>
         <button class="button button-primary" type="button" data-intake-next disabled>Informar contato</button>
       </fieldset>
@@ -151,10 +168,9 @@
           <button class="button button-primary" type="submit" disabled>Registrar pedido de triagem</button>
         </div>
       </fieldset>
-
-      <p class="intake-status" data-intake-status role="status" aria-live="polite">Verificando a disponibilidade do formulário…</p>
 <p class="form-hint" data-form-boundary>Não há contratação, pagamento, aceite ou prazo prometido. Este passo não recebe CPF, processo, prontuário, planta, laudo, lista de empregados, partes em conflito, upload ou texto livre sensível. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da <a href="/privacidade/">Política de Privacidade</a>, com o protocolo.</p>
 </form>
+    </div>
 
     <section class="receipt-card" data-intake-receipt hidden aria-labelledby="receipt-title">
       <p class="triage-eyebrow">Pedido registrado</p>
@@ -163,16 +179,6 @@
       <p>A CONFENGE verificará o enquadramento e usará o canal informado para combinar o próximo passo. Nenhum pagamento ou contratação foi realizado.</p>
       <p>Não envie documentos sensíveis por resposta automática. Se forem necessários, o canal seguro será combinado depois.</p>
     </section>
-
-    <aside class="channel-card" aria-labelledby="canais-titulo">
-      <h2 id="canais-titulo">Prefere falar por outro canal?</h2>
-      <p>Esses canais continuam disponíveis mesmo quando o formulário não puder registrar o pedido.</p>
-      <div class="channel-actions">
-        <a class="button button-primary" data-fallback-channel="whatsapp" data-asset-id="technical_triage_v1" data-route-family="triagem-tecnica" data-cta-id="technical-triage-alternative-whatsapp" href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20explicar%20uma%20demanda%20t%C3%A9cnica%20e%20entender%20o%20pr%C3%B3ximo%20passo." rel="noopener" target="_blank">Pedir revisão de encaixe pelo WhatsApp</a>
-        <a class="button button-secondary" data-fallback-channel="email" data-asset-id="technical_triage_v1" data-route-family="triagem-tecnica" data-cta-id="technical-triage-alternative-email" href="mailto:tiago.sasaki@confenge.com.br?subject=Triagem%20t%C3%A9cnica%20CONFENGE">Enviar o contexto por e-mail</a>
-        <a class="text-link" data-fallback-channel="phone" data-asset-id="technical_triage_v1" data-route-family="triagem-tecnica" data-cta-id="technical-triage-alternative-phone" href="tel:+5548988344559">Ligar para explicar a demanda: (48) 98834-4559</a>
-      </div>
-    </aside>
   </main>
 </body>
 </html>
