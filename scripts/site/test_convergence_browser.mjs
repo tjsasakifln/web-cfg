@@ -375,6 +375,89 @@ function collectorEventNames(bodies) {
   });
 }
 
+/* The vocabulary is read from the event registry rather than retyped here, so a
+ * legitimate funnel event cannot be reported as "unknown" merely because this
+ * file did not list it, and a genuinely unregistered name still fails. The first
+ * run against real traffic rejected lead_form_submit and lead_form_backend_error
+ * on exactly that mistake. */
+const EVENT_REGISTRY = JSON.parse(readFileSync(new URL("../../netlify/functions/lib/event-registry.json", import.meta.url), "utf8"));
+const KNOWN_EVENTS = new Set([
+  ...Object.keys(EVENT_REGISTRY.events || {}),
+  ...Object.keys(EVENT_REGISTRY.aliases || {}),
+]);
+/* A conversion is an event the registry counts in the lead denominator. Anything
+ * else in the batch, web_vital included, is not a conversion however it looks. */
+const CONVERSION_EVENTS = new Set(
+  Object.entries(EVENT_REGISTRY.events || {})
+    .filter(([, spec]) => spec && (spec.layer === "lead" || spec.layer === "qualified_lead"))
+    .map(([name]) => name),
+);
+const PII_RE = /canario@example|Canario Sintetico|\b\d{3}\.\d{3}\.\d{3}-\d{2}\b/i;
+
+/* Validate the WHOLE batch before separating events by purpose: an unknown name,
+ * a duplicate, PII anywhere, or a conversion that no submit produced must fail
+ * regardless of how many contact events were counted. */
+function inspectCollectorBatch(bodies, { allowedContact, expectConversion = false } = {}) {
+  const problems = [];
+  const events = [];
+  if (bodies.length === 0) problems.push("collector received nothing");
+  for (const body of bodies) {
+    if (!body || !String(body).trim()) { problems.push("empty body"); continue; }
+    let parsed;
+    try { parsed = JSON.parse(body); } catch (_) { problems.push("unparseable body"); continue; }
+    if (!Array.isArray(parsed.events) || parsed.events.length === 0) { problems.push("body carries no events"); continue; }
+    for (const item of parsed.events) {
+      if (!item || typeof item.event !== "string" || !item.event) { problems.push("event without a name"); continue; }
+      events.push(item);
+    }
+    if (PII_RE.test(body)) problems.push("PII in the collector payload");
+  }
+  const names = events.map(e => e.event);
+  for (const name of names) {
+    if (!allowedContact.has(name) && !KNOWN_EVENTS.has(name)) problems.push(`unknown event: ${name}`);
+  }
+  const contact = names.filter(name => allowedContact.has(name));
+  if (contact.length !== 1) problems.push(`expected exactly one contact event, got ${contact.length} (${contact.join(",")})`);
+  const conversions = names.filter(name => CONVERSION_EVENTS.has(name) && !allowedContact.has(name));
+  if (!expectConversion && conversions.length > 0) problems.push(`false conversion in the batch: ${conversions.join(",")}`);
+  const seen = new Set();
+  for (const name of names) {
+    if (!allowedContact.has(name)) continue;
+    if (seen.has(name)) problems.push(`duplicated contact event: ${name}`);
+    seen.add(name);
+  }
+  return { problems, names, contact, vitals: names.filter(n => n === "web_vital") };
+}
+
+/* The validator is exercised directly on real batch shapes, deterministically:
+ * web_vital comes from a PerformanceObserver on real field metrics and cannot be
+ * faked honestly in-page, but its COEXISTENCE rule is proven here and then
+ * observed on live traffic by the browser matrix. */
+function selfCheckBatchValidator() {
+  const contact = new Set(["whatsapp_click", "email_click", "outbound_click"]);
+  const body = events => [JSON.stringify({ events })];
+  const cases = [
+    ["one contact event alone", body([{ event: "whatsapp_click" }]), 0],
+    ["contact event with a valid web_vital in the SAME batch",
+      body([{ event: "whatsapp_click" }, { event: "web_vital", metric: "lcp", value: 1801 }]), 0],
+    ["web_vital must not count as the contact event", body([{ event: "web_vital", metric: "cls", value: 0 }]), 1],
+    ["two contact events for one interaction", body([{ event: "whatsapp_click" }, { event: "email_click" }]), 1],
+    ["the same contact event twice", body([{ event: "whatsapp_click" }, { event: "whatsapp_click" }]), 1],
+    ["a conversion no submit produced", body([{ event: "whatsapp_click" }, { event: "lead_persisted" }]), 1],
+    ["an unknown event name", body([{ event: "whatsapp_click" }, { event: "totally_unknown" }]), 1],
+    ["PII in the payload", [JSON.stringify({ events: [{ event: "whatsapp_click", who: "canario@example.invalid" }] })], 1],
+    ["collector received nothing", [], 1],
+    ["empty body", [""], 1],
+    ["unparseable body", ["{not json"], 1],
+  ];
+  for (const [name, bodies, minProblems] of cases) {
+    const result = inspectCollectorBatch(bodies, { allowedContact: contact });
+    const ok = minProblems === 0 ? result.problems.length === 0 : result.problems.length >= 1;
+    check(`batch_validator_${name.replace(/[^a-z0-9]+/gi, "_").toLowerCase()}`, ok,
+      JSON.stringify({ problems: result.problems, names: result.names }));
+  }
+}
+
 async function axeClean(page, name) {
   await page.evaluate(axeBundle());
   const violations = await page.evaluate(() => window.axe.run(document, { runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21aa"] } }).then(r => r.violations.map(v => ({ id: v.id, nodes: v.nodes.length }))));
@@ -453,6 +536,9 @@ async function runLive() {
  * 1. Source preflight — always runs, browser or not.
  * ======================================================================= */
 runSourcePreflight();
+/* Proven with the source preflight so the batch rules hold even without Chrome,
+ * and so a failure here stops the run like any other invariant. */
+selfCheckBatchValidator();
 for (const item of report.checks) console.log(item.pass ? "PASS" : "FAIL", item.name, item.detail);
 if (!report.checks.every(item => item.pass)) {
   writeReport();
@@ -621,13 +707,17 @@ try {
       for (let waited = 0; waited < 3000 && state.collectorBodies.length === 0; waited += 50) await wait(50);
       await wait(200);
       const bus = await page.evaluate(() => (window.dataLayer || []).map(event => event && event.event).filter(Boolean));
-      const collected = collectorEventNames(state.collectorBodies);
-      const bodies = state.collectorBodies.map(body => String(body).slice(0, 160));
-      const busOk = bus.length === 1 && CHANNEL_EVENTS.has(bus[0]);
-      const collectorOk = collected.length === 1 && CHANNEL_EVENTS.has(collected[0]);
+      const bodies = state.collectorBodies.map(body => String(body).slice(0, 200));
+      /* The whole batch is validated, then the contact events are counted within
+       * it. "Exactly one event in the batch" was the old rule and it was wrong
+       * twice: a coexisting web_vital would have failed it, and it said nothing
+       * about whatever else rode along. */
+      const batch = inspectCollectorBatch(state.collectorBodies, { allowedContact: CHANNEL_EVENTS });
+      const busContact = bus.filter(name => CHANNEL_EVENTS.has(name));
+      const busOk = busContact.length === 1 && bus.every(name => CHANNEL_EVENTS.has(name) || KNOWN_EVENTS.has(name));
       check(`${key}_a13_channel_click_is_not_receipt_${down.channelKinds[index] || index}`,
-        busOk && collectorOk,
-        JSON.stringify({ dataLayer: bus, collector: collected, allowed: [...CHANNEL_EVENTS], bodies }));
+        busOk && batch.problems.length === 0,
+        JSON.stringify({ dataLayer: bus, collector: batch.names, problems: batch.problems, allowed: [...CHANNEL_EVENTS], bodies }));
     }
     await shot(page, `${key}-unavailable-390`);
     await axeClean(page, `${key}_unavailable_mobile`);
@@ -901,6 +991,24 @@ try {
     check("triage_receipt_visible", triageResult.receipt === "lead-canary-receipt", JSON.stringify({ receipt: triageResult.receipt }));
     check("triage_real_bus_events", triageResult.events.some(event => event.event === "lead_form_submit") && triageResult.events.some(event => event.event === "lead_persisted"), "required events absent from dataLayer");
     check("triage_analytics_allowlist", !/canario@example|Canario Sintetico/i.test(JSON.stringify(triageResult.events)) && !/canario@example|Canario Sintetico/i.test(state.collectorBodies.join("")), "PII present in analytics");
+
+    /* The submit path must be observed on the WIRE, not only on the in-page bus.
+     * The PII assertion above passes vacuously against an empty collectorBodies,
+     * so a submit that never flushed would have looked clean. Force the flush,
+     * wait for the body with a deadline, and require a non-empty, parseable
+     * payload that actually carries the persist. */
+    state.collectorBodies.length = 0;
+    await triage.evaluate(() => window.dispatchEvent(new Event("pagehide")));
+    for (let waited = 0; waited < 4000 && state.collectorBodies.length === 0; waited += 50) await wait(50);
+    await wait(200);
+    const submitBatch = inspectCollectorBatch(state.collectorBodies, {
+      allowedContact: new Set(["lead_persisted"]),
+      expectConversion: true,
+    });
+    check("triage_submit_flush_reaches_the_collector",
+      state.collectorBodies.length > 0 && submitBatch.problems.length === 0,
+      JSON.stringify({ bodies: state.collectorBodies.length, events: submitBatch.names, problems: submitBatch.problems,
+        preview: state.collectorBodies.map(b => String(b).slice(0, 200)) }));
     await axeClean(triage, "triage_mobile"); await shot(triage, "triage-390");
     await triage.close();
   }
