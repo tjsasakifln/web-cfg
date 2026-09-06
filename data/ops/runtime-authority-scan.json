@@ -286,41 +286,6 @@
       "sha256": "30524c396504d3070bfee8124b5932729c5615e59dc1291cdc5573e685a0046b"
     },
     {
-      "path": "seo/pseo-operational-result.json",
-      "kind": "historical_record",
-      "reason": "Frozen pre-cutover operational result preserving the production identity vocabulary used on 2026-07-31.",
-      "owner": "tjsasakifln",
-      "sha256": "953d4928dc4d8f90af6d1ecd7e54f8c363c8f482e2fb815a1ccd283d1e4a495d"
-    },
-    {
-      "path": "seo/pseo-production-audit.json",
-      "kind": "historical_record",
-      "reason": "Frozen pre-cutover production audit; new generator output uses production_release_sha.",
-      "owner": "tjsasakifln",
-      "sha256": "9a84c56b779476583d624e8f8795be391355d27e3088b985025e64bbfa4bb743"
-    },
-    {
-      "path": "seo/pseo-verify-release.json",
-      "kind": "historical_record",
-      "reason": "Frozen pre-cutover release verification whose historical identity label must remain unchanged.",
-      "owner": "tjsasakifln",
-      "sha256": "98f6412a7a1f9559483f1d05c3276808e12e260cafb20e4ce9d23bf8b502a3dd"
-    },
-    {
-      "path": "seo/pseo-wave0-closure-result.json",
-      "kind": "historical_record",
-      "reason": "Frozen Wave 0 closure output from before the 2026-08-29 runtime cutover.",
-      "owner": "tjsasakifln",
-      "sha256": "93cf8a25b848ebf85c8e31b0cceeeb13652c6716af4cb2f5c131eaafc186c00b"
-    },
-    {
-      "path": "seo/pseo-wave0-final-activation-result.json",
-      "kind": "historical_record",
-      "reason": "Frozen Wave 0 activation output from the legacy hosting era.",
-      "owner": "tjsasakifln",
-      "sha256": "9a85a707fbea7f0efc25331d5fe7f84333eb75241f64f30c27c2a84eb8a32444"
-    },
-    {
       "path": "seo/PSEO-WAVE0-FINAL-ACTIVATION-03.md",
       "kind": "historical_record",
       "reason": "Dated wave-0 activation record listing the publish action that activated it.",
