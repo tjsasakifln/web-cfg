@@ -29,13 +29,13 @@
       "commercial_configuration"
     ],
     "baseline_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
-    "expected_declared_ctas": 131
+    "expected_declared_ctas": 141
   },
   "coverage": {
     "authority": "data/organic/public-family-registry.json",
     "manual_route_allowlist": false,
     "active_capture_routes": 27,
-    "declared_ctas": 131,
+    "declared_ctas": 141,
     "protected_routes_with_capture": [],
     "problems": []
   },
@@ -3616,6 +3616,156 @@
         }
       ],
       "actions": [
+        {
+          "cta_id": "triage-situation-projetos-whatsapp",
+          "position": "",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20%C3%89%20sobre%20projeto%3A%20preciso%20projetar%2C%20revisar%2C%20or%C3%A7ar%20ou%20compatibilizar.%20Vou%20explicar%20a%20situa%C3%A7%C3%A3o.",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Explicar esta situação pelo WhatsApp",
+          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
+          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
+          "field_purpose": "not_applicable",
+          "boundary": "Não há contratação, pagamento, aceite ou prazo prometido. Este passo não recebe CPF, processo, prontuário, planta, laudo, lista de empregados, partes em conflito, upload ou texto livre sensível.",
+          "event_semantics": [
+            "whatsapp_click"
+          ]
+        },
+        {
+          "cta_id": "triage-situation-projetos-email",
+          "position": "",
+          "href": "mailto:tiago.sasaki@confenge.com.br?subject=Triagem%20t%C3%A9cnica%20CONFENGE%3A%20projeto%2C%20revis%C3%A3o%2C%20or%C3%A7amento%20ou%20compatibiliza%C3%A7%C3%A3o&body=Ol%C3%A1%2C%20Tiago.%0A%0ASitua%C3%A7%C3%A3o%3A%20Projetar%2C%20revisar%2C%20or%C3%A7ar%20ou%20compatibilizar%0ACidade%20e%20UF%3A%0APrazo%3A%0A%0ADescri%C3%A7%C3%A3o%3A%0A",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Explicar por e-mail",
+          "useful_next_state": "Abre o cliente de e-mail com assunto e contexto para continuar o enquadramento.",
+          "actual_receipt": "Rascunho local de e-mail; não existe receipt do servidor antes do envio.",
+          "field_purpose": "not_applicable",
+          "boundary": "Não há contratação, pagamento, aceite ou prazo prometido. Este passo não recebe CPF, processo, prontuário, planta, laudo, lista de empregados, partes em conflito, upload ou texto livre sensível.",
+          "event_semantics": [
+            "email_click"
+          ]
+        },
+        {
+          "cta_id": "triage-situation-obra-imovel-whatsapp",
+          "position": "",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20%C3%89%20sobre%20obra%20ou%20im%C3%B3vel%3A%20preciso%20inspecionar%2C%20diagnosticar%20ou%20documentar%20uma%20situa%C3%A7%C3%A3o.%20Vou%20explicar.",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Explicar esta situação pelo WhatsApp",
+          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
+          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
+          "field_purpose": "not_applicable",
+          "boundary": "Não há contratação, pagamento, aceite ou prazo prometido. Este passo não recebe CPF, processo, prontuário, planta, laudo, lista de empregados, partes em conflito, upload ou texto livre sensível.",
+          "event_semantics": [
+            "whatsapp_click"
+          ]
+        },
+        {
+          "cta_id": "triage-situation-obra-imovel-email",
+          "position": "",
+          "href": "mailto:tiago.sasaki@confenge.com.br?subject=Triagem%20t%C3%A9cnica%20CONFENGE%3A%20obra%20ou%20im%C3%B3vel&body=Ol%C3%A1%2C%20Tiago.%0A%0ASitua%C3%A7%C3%A3o%3A%20Inspecionar%2C%20diagnosticar%20ou%20documentar%20obra%20e%20im%C3%B3vel%0ACidade%20e%20UF%3A%0APrazo%3A%0A%0ADescri%C3%A7%C3%A3o%3A%0A",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Explicar por e-mail",
+          "useful_next_state": "Abre o cliente de e-mail com assunto e contexto para continuar o enquadramento.",
+          "actual_receipt": "Rascunho local de e-mail; não existe receipt do servidor antes do envio.",
+          "field_purpose": "not_applicable",
+          "boundary": "Não há contratação, pagamento, aceite ou prazo prometido. Este passo não recebe CPF, processo, prontuário, planta, laudo, lista de empregados, partes em conflito, upload ou texto livre sensível.",
+          "event_semantics": [
+            "email_click"
+          ]
+        },
+        {
+          "cta_id": "triage-situation-pericia-avaliacao-whatsapp",
+          "position": "",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20%C3%89%20sobre%20per%C3%ADcia%2C%20assist%C3%AAncia%20t%C3%A9cnica%20ou%20avalia%C3%A7%C3%A3o.%20Vou%20explicar%20o%20papel%20esperado%20e%20o%20prazo.",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Explicar esta situação pelo WhatsApp",
+          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
+          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
+          "field_purpose": "not_applicable",
+          "boundary": "Não há contratação, pagamento, aceite ou prazo prometido. Este passo não recebe CPF, processo, prontuário, planta, laudo, lista de empregados, partes em conflito, upload ou texto livre sensível.",
+          "event_semantics": [
+            "whatsapp_click"
+          ]
+        },
+        {
+          "cta_id": "triage-situation-pericia-avaliacao-email",
+          "position": "",
+          "href": "mailto:tiago.sasaki@confenge.com.br?subject=Triagem%20t%C3%A9cnica%20CONFENGE%3A%20per%C3%ADcia%2C%20assist%C3%AAncia%20t%C3%A9cnica%20ou%20avalia%C3%A7%C3%A3o&body=Ol%C3%A1%2C%20Tiago.%0A%0ASitua%C3%A7%C3%A3o%3A%20Per%C3%ADcia%2C%20assist%C3%AAncia%20t%C3%A9cnica%20ou%20avalia%C3%A7%C3%A3o%0ACidade%20e%20UF%3A%0APrazo%3A%0A%0ADescri%C3%A7%C3%A3o%3A%0A",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Explicar por e-mail",
+          "useful_next_state": "Abre o cliente de e-mail com assunto e contexto para continuar o enquadramento.",
+          "actual_receipt": "Rascunho local de e-mail; não existe receipt do servidor antes do envio.",
+          "field_purpose": "not_applicable",
+          "boundary": "Não há contratação, pagamento, aceite ou prazo prometido. Este passo não recebe CPF, processo, prontuário, planta, laudo, lista de empregados, partes em conflito, upload ou texto livre sensível.",
+          "event_semantics": [
+            "email_click"
+          ]
+        },
+        {
+          "cta_id": "triage-situation-sst-whatsapp",
+          "position": "",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20%C3%89%20sobre%20seguran%C3%A7a%20do%20trabalho.%20Vou%20explicar%20a%20atividade%20e%20o%20que%20motivou%20o%20contato.",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Explicar esta situação pelo WhatsApp",
+          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
+          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
+          "field_purpose": "not_applicable",
+          "boundary": "Não há contratação, pagamento, aceite ou prazo prometido. Este passo não recebe CPF, processo, prontuário, planta, laudo, lista de empregados, partes em conflito, upload ou texto livre sensível.",
+          "event_semantics": [
+            "whatsapp_click"
+          ]
+        },
+        {
+          "cta_id": "triage-situation-sst-email",
+          "position": "",
+          "href": "mailto:tiago.sasaki@confenge.com.br?subject=Triagem%20t%C3%A9cnica%20CONFENGE%3A%20seguran%C3%A7a%20do%20trabalho&body=Ol%C3%A1%2C%20Tiago.%0A%0ASitua%C3%A7%C3%A3o%3A%20Seguran%C3%A7a%20do%20trabalho%0ACidade%20e%20UF%3A%0APrazo%3A%0A%0ADescri%C3%A7%C3%A3o%3A%0A",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Explicar por e-mail",
+          "useful_next_state": "Abre o cliente de e-mail com assunto e contexto para continuar o enquadramento.",
+          "actual_receipt": "Rascunho local de e-mail; não existe receipt do servidor antes do envio.",
+          "field_purpose": "not_applicable",
+          "boundary": "Não há contratação, pagamento, aceite ou prazo prometido. Este passo não recebe CPF, processo, prontuário, planta, laudo, lista de empregados, partes em conflito, upload ou texto livre sensível.",
+          "event_semantics": [
+            "email_click"
+          ]
+        },
+        {
+          "cta_id": "triage-situation-planejamento-publico-whatsapp",
+          "position": "",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20%C3%89%20sobre%20licita%C3%A7%C3%A3o%20ou%20contrato%20de%20obra%20p%C3%BAblica.%20Vou%20explicar%20o%20evento%20e%20o%20prazo.",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Explicar esta situação pelo WhatsApp",
+          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
+          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
+          "field_purpose": "not_applicable",
+          "boundary": "Não há contratação, pagamento, aceite ou prazo prometido. Este passo não recebe CPF, processo, prontuário, planta, laudo, lista de empregados, partes em conflito, upload ou texto livre sensível.",
+          "event_semantics": [
+            "whatsapp_click"
+          ]
+        },
+        {
+          "cta_id": "triage-situation-planejamento-publico-email",
+          "position": "",
+          "href": "mailto:tiago.sasaki@confenge.com.br?subject=Triagem%20t%C3%A9cnica%20CONFENGE%3A%20licita%C3%A7%C3%A3o%20ou%20contrato%20de%20obra%20p%C3%BAblica&body=Ol%C3%A1%2C%20Tiago.%0A%0ASitua%C3%A7%C3%A3o%3A%20Licita%C3%A7%C3%A3o%20ou%20contrato%20de%20obra%20p%C3%BAblica%0ACidade%20e%20UF%3A%0APrazo%3A%0A%0ADescri%C3%A7%C3%A3o%3A%0A",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Explicar por e-mail",
+          "useful_next_state": "Abre o cliente de e-mail com assunto e contexto para continuar o enquadramento.",
+          "actual_receipt": "Rascunho local de e-mail; não existe receipt do servidor antes do envio.",
+          "field_purpose": "not_applicable",
+          "boundary": "Não há contratação, pagamento, aceite ou prazo prometido. Este passo não recebe CPF, processo, prontuário, planta, laudo, lista de empregados, partes em conflito, upload ou texto livre sensível.",
+          "event_semantics": [
+            "email_click"
+          ]
+        },
         {
           "cta_id": "technical-triage-alternative-whatsapp",
           "position": "",
