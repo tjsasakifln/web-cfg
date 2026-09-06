@@ -34,6 +34,11 @@ function servedHeaders() {
 const CONFIG_PATHNAME = "/.netlify/functions/adaptive-intake-config";
 const LEAD_PATHNAME = "/.netlify/functions/lead";
 const COLLECTOR_PATHNAMES = new Set(["/collect", "/.netlify/functions/collect", "/api/web/collect"]);
+/* Analytics leaves the page through navigator.sendBeacon(url, Blob). Chrome
+ * reports a blob-backed body with no readable bytes, so request.postData() is
+ * empty at the interceptor: the payload is read from the loopback server, and
+ * this header attributes each beacon to the page state that produced it. */
+const COLLECTOR_SINK_HEADER = "x-canary-collector-sink";
 const CONFIG_TIMEOUT_MS = 5000;
 const SUBMIT_TIMEOUT_MS = 15000;
 const SINGLE_ATTEMPT_WINDOW_MS = 30000;
@@ -102,9 +107,24 @@ function chromePath() {
   if (chromeAvailable()) return chrome;
   throw new Error("Chrome unavailable: set CHROME_PATH to the downloaded browser binary");
 }
+/* Registry of live page states, keyed by the sink id carried on each beacon.
+ * Untagged collector posts (pages opened without interception) are answered but
+ * never recorded, so one page's telemetry can never be read as another's. */
+const collectorSinks = new Map();
+let collectorSinkSeq = 0;
 function serve() {
   return createServer((req, res) => {
     const target = new URL(req.url, "http://loopback").pathname;
+    if (COLLECTOR_PATHNAMES.has(target)) {
+      const sink = collectorSinks.get(String(req.headers[COLLECTOR_SINK_HEADER] || ""));
+      const chunks = [];
+      req.on("data", chunk => chunks.push(chunk));
+      req.on("end", () => {
+        if (sink) sink.collectorBodies.push(Buffer.concat(chunks).toString("utf8"));
+        res.writeHead(204); res.end();
+      });
+      return;
+    }
     const relative = target === "/" ? "index.html" : target.replace(/^\/+/, "");
     let file = normalize(join(site, relative));
     if (file.startsWith(site) && existsSync(file) && statSync(file).isDirectory()) file = join(file, "index.html");
@@ -226,7 +246,9 @@ function leadResponse(state) {
 }
 
 function newState(configMode = "down", leadMode = "receipt") {
-  return { configMode, leadMode, configRequests: [], configFailures: [], heldConfig: [], heldLead: [], leadBodies: [], leadKeys: [], collectorBodies: [], blockBundle: false };
+  const state = { configMode, leadMode, sinkId: `sink-${++collectorSinkSeq}`, configRequests: [], configFailures: [], heldConfig: [], heldLead: [], leadBodies: [], leadKeys: [], collectorBodies: [], blockBundle: false };
+  collectorSinks.set(state.sinkId, state);
+  return state;
 }
 function attachIntercept(page, state) {
   page.on("request", request => {
@@ -247,8 +269,10 @@ function attachIntercept(page, state) {
       return request.respond(leadResponse(state)).catch(() => {});
     }
     if (COLLECTOR_PATHNAMES.has(url.pathname)) {
-      state.collectorBodies.push(request.postData() || "");
-      return request.respond({ status: 204, body: "" }).catch(() => {});
+      /* Do not read the body here: a sendBeacon Blob has no postData() bytes and
+       * would be recorded as an empty string. Tag it and let the loopback server
+       * read the real payload off the wire; it answers 204 like this branch did. */
+      return request.continue({ headers: { ...request.headers(), [COLLECTOR_SINK_HEADER]: state.sinkId } }).catch(() => {});
     }
     return request.continue().catch(() => {});
   });
@@ -339,8 +363,11 @@ function flattenAx(node, out = []) {
   (node.children || []).forEach(child => flattenAx(child, out));
   return out;
 }
+/* Fail closed: a body that cannot be read or decoded yields a marker that is not
+ * in CHANNEL_EVENTS, so an unclassifiable payload fails the assertion. */
 function collectorEventNames(bodies) {
   return bodies.flatMap(body => {
+    if (!body) return ["<empty-body>"];
     try { return (JSON.parse(body).events || []).map(item => item && item.event).filter(Boolean); } catch (_) { return ["<unparseable>"]; }
   });
 }
@@ -585,11 +612,12 @@ try {
       await wait(300);
       const bus = await page.evaluate(() => (window.dataLayer || []).map(event => event && event.event).filter(Boolean));
       const collected = collectorEventNames(state.collectorBodies);
+      const bodies = state.collectorBodies.map(body => String(body).slice(0, 160));
       const busOk = bus.length === 1 && CHANNEL_EVENTS.has(bus[0]);
       const collectorOk = collected.length === 1 && CHANNEL_EVENTS.has(collected[0]);
       check(`${key}_a13_channel_click_is_not_receipt_${down.channelKinds[index] || index}`,
         busOk && collectorOk,
-        JSON.stringify({ dataLayer: bus, collector: collected, allowed: [...CHANNEL_EVENTS] }));
+        JSON.stringify({ dataLayer: bus, collector: collected, allowed: [...CHANNEL_EVENTS], bodies }));
     }
     await shot(page, `${key}-unavailable-390`);
     await axeClean(page, `${key}_unavailable_mobile`);
