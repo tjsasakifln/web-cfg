@@ -52,7 +52,7 @@
 
 O censo canônico de ações parte das `128` CTAs declaradas em `origin/main@3552cf2` e fecha em `131`, com `27` rotas de captura e zero problemas derivados. A repetição melhora o sistema: novas superfícies herdam família pública, perfil de próxima ação, privacidade, persistência e gate, sem inventário manual por página.
 
-Estado máximo permitido neste fixed point: `READY_TO_PUBLISH_BLOCKED_BY_CROSS_REPO_CONTRACT`. A PR web pode abrir e validar; merge, release Netcup e afirmação de jornada live ficam proibidos até Warmbly #266 estar mergeada e o mesmo contrato estar provado no runtime consumidor.
+Estado máximo permitido neste fixed point: `READY_TO_PUBLISH_WITH_ADAPTIVE_SUBMIT_WITHHELD`. A shell corporativa, os canais diretos e a rota privada podem ser publicados. O endpoint de configuração adaptativa deve responder fail-closed e o botão de submit deve permanecer bloqueado até Warmbly #266 estar mergeada e o contrato ser provado no runtime consumidor. Esse bloqueio não impede o critical path corporativo porque WhatsApp, e-mail e telefone continuam funcionais e contextualizados.
 
 ## Baseline revalidada em 2026-09-05
 
@@ -116,8 +116,8 @@ Durante a execução, #604 foi mergeada por outra sessão e `origin/main` avanç
 | Campanha | PR / HEAD observado | Disposição MV-09 | Motivo / arquivos usados |
 |---|---|---|---|
 | MV-01 | #607 / `895005bb52de6c70817b98357b0bbc685efccde5` | PARTIAL / ADOPT corrigido | Adotadas ADR-STRAT-002/004, constituição, taxonomia, matriz de intenção, contrato de página, catálogo modelado, validadores e testes. A projeção de preço foi tornada não autoritativa e fail-closed; CNPJ duplicado foi removido do catálogo; regra absoluta de ART na triagem foi condicionada. Nenhuma rota ou oferta modelada ganhou autorização de publicação. |
-| MV-03 | #608 / `7575323b86122b84ccd23b5fcc3713726eaba52f` | PARTIAL | Adotados HTML/CSS/JS de dois passos, mensagem de próximo estado e fallback real por WhatsApp/e-mail/telefone; backend, pins e ativação foram rejeitados. A autoridade continua `WITHHELD`; a família usa `capture_form_or_whatsapp`. |
-| MV-05 | #605 / `32fa6390f803493722ad34c5089b93c1331e9f6b` | PARTIAL | Pesquisa, copy por trabalho e matriz de intenção são donors. Nenhuma das quatro rotas candidatas tem aprovação de oferta/capacidade suficiente; o fragmento de captura conflita com o contrato ativo. A primeira execução de pSEO também revelou impacto global de CSS, corrigido no commit final do producer. Não promover páginas sem nova evidência. |
+| MV-03 | #608 / `9afe028895800228e20b11eed86abd02ee1ffa85` | PARTIAL / ADOPT corrigido | Adotados HTML/CSS/JS de dois passos, producer, persistência, idempotência, receipt sem PII, readback e fallback real por WhatsApp/e-mail/telefone. O pin usa Governance #172 mergeada, mas a autoridade de produção continua `WITHHELD` por Warmbly #266; configuração e submit falham fechados. |
+| MV-05 | #605 / `32fa6390f803493722ad34c5089b93c1331e9f6b` | PARTIAL | Pesquisa, copy por trabalho e matriz de intenção são donors. A MV-09 promoveu somente `/quantitativos-orcamento-obras/`, com escopo documental estreito, sem preço/SLA/case e com captura contextual. As outras rotas candidatas continuam retidas por oferta, capacidade ou credencial insuficiente. |
 | MV-06 | #609 / `5a1e632744045ced0902547fc39218d7746c87fe` | PARTIAL / DEFER rotas | Pacote de pesquisa, limites e copy é donor. Perícia, avaliação e SST não foram promovidas: `offer_id` nulo, capacidades/credenciais WITHHELD, conflito/captura incompletos; SST ainda exige título e atribuição específicos. |
 | MV-07 | #606 / `8066046cba697c598745070a50ef602db0390bc0` | PARTIAL / DEFER rota | Pesquisa legal, separação ente/licitante, matriz de aplicabilidade e contrato de conservação B2G são donors. Não criar `CFG-D55`: MV-01 canonizou `public_works_technical_procurement_planning`. Não promover a rota opcional, pois capacidade multidisciplinar/ART/RRT e captura compatível não estão provadas. |
 | MV-02 | #610 / `870500fcea63ad73e95bcd0145c286c2fe6cb378` | PARTIAL | Adotar copy de confiança, caveat nacional e regras puras de conflito somente após retirar exposição de `reason_class`, impedir POST sem JavaScript e preservar o registry factual atual. O producer não provou pin SELECT-only de `extra-cli`; a PR também delegou a recaptura do sitemap à MV-09. |
@@ -168,7 +168,7 @@ Durante a execução, #604 foi mergeada por outra sessão e `origin/main` avanç
 - P1: o envelope web acrescenta campos não aceitos pelo schema fechado da Governance; falta um wrapper protegido versionado.
 - P1: replay da mesma idempotency key com payload diferente pode retornar sucesso do registro anterior antes do consumer.
 - P2: `other_technical_need` foi tratado como sexto núcleo, contrariando a taxonomia de cinco; deve ser intenção `NEEDS_CONTEXT`.
-- Resultado: Governance #172 e Warmbly #266 permanecem dependências abertas; nenhum merge/ativação. O código backend do producer não foi portado. Os canais alternativos são a ação real e não autorizam outbound/SMTP.
+- Resultado após correção semântica: Governance #172 foi mergeada e pinada; o producer web foi portado com envelope protegido, minimização, idempotência vinculada ao payload, receipt opaco e readback correlacionado. Warmbly #266 continua aberta, portanto a configuração pública e o submit permanecem `WITHHELD`. Os canais alternativos são a ação real desta release e não autorizam outbound/SMTP.
 
 ### Revisão independente de MV-06 / #609
 
@@ -206,5 +206,6 @@ O teste de cem repetições exige que taxonomia, roteamento, gates e artefatos s
 - A citação religiosa antes injetada em todo artefato foi removida. Ela não cumpria trabalho de aquisição, confiança técnica ou conversão para um público nacional heterogêneo e criava conteúdo público ausente das fontes das páginas.
 - GitHub não ocupa posição de prova no primeiro percurso. Uso de IA permanece transparente na política própria, sem dominar hero, navegação ou confiança.
 - A integração de MV-04 é `PARTIAL / ADOPT corrigido`: o commit fixo foi usado como donor, mas ativação, `/servicos/`, schema, triagem, wording nacional, footer e gates foram corrigidos na MV-09. O producer não publicou uma PR terminal apta à integração integral.
+- A integração de MV-05 é `PARTIAL`: somente o recorte de quantitativos e orçamento foi promovido. O conteúdo foi preservado em intenção, mas ligado ao registry, sitemap, IA, artefato público e contrato central de próxima ação; os rótulos genéricos de canal foram especializados após o red-team.
 
 Matriz final de canonical: `docs/integration/campaign-20260905/09/intent-canonical-matrix.md`. Simulação dos doze visitantes: `docs/integration/campaign-20260905/09/revenue-red-team.md`.
