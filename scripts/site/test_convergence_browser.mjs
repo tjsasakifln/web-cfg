@@ -160,7 +160,10 @@ function sourceChannelHrefs(html) {
 function sourceNeedOptionTexts(html) {
   const select = html.match(/<select[^>]*\bname="need_code"[^>]*>([\s\S]*?)<\/select>/i);
   if (!select) return [];
-  return [...select[1].matchAll(/<option[^>]*>([\s\S]*?)<\/option>/gi)].map(item => item[1].replace(/<[^>]*>/g, "").trim());
+  /* Replace with a space, never with "": an empty replacement can reconstitute
+   * the sequence it removes (`<scr<x>ipt` -> `<script`). Both routes' options are
+   * plain text, so this is a no-op on the real markup. */
+  return [...select[1].matchAll(/<option[^>]*>([\s\S]*?)<\/option>/gi)].map(item => item[1].replace(/<[^>]*>/g, " ").trim());
 }
 function sourceConfigEndpoint(html) {
   return (html.match(/data-config-endpoint="([^"]*)"/i) || ["", ""])[1];
