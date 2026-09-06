@@ -33,6 +33,34 @@ const FILE_FIELD_KEYS = new Set([
   "octet",
 ]);
 const DOCUMENT_INTENT_ALLOWED = new Set(["secure_channel_request"]);
+
+// Stage -> canonical nucleus. The four private stages are published with the
+// canonical estagio slug from adaptiveIntake.NUCLEI, so they resolve by lookup.
+// The five public-works stages are prose values kept for payload compatibility
+// with the existing lead corpus; they are listed explicitly rather than matched
+// by substring, so a new stage never silently inherits a nucleus.
+const PUBLIC_WORKS_STAGES = new Set([
+  "problema urgente em contrato",
+  "edital ou proposta em análise",
+  "estruturando a operação no mercado público",
+  "escolhendo oportunidades",
+  "contrato em execução",
+]);
+
+const STAGE_TO_NUCLEUS = (() => {
+  const map = new Map();
+  for (const [nucleusId, spec] of Object.entries(adaptiveIntake.NUCLEI || {})) {
+    if (spec && spec.estagio) map.set(spec.estagio, nucleusId);
+  }
+  for (const stage of PUBLIC_WORKS_STAGES) map.set(stage, "public_works_b2g");
+  return map;
+})();
+
+function deriveNucleusFromStage(stage) {
+  if (typeof stage !== "string" || !stage) return null;
+  return STAGE_TO_NUCLEUS.get(stage.trim()) || null;
+}
+
 // Live-intelligence next-action kinds. Server-side allowlist, not free text: an
 // unknown value is dropped to null rather than forwarded, so a tampered form
 // cannot invent a commercial intent for warmbly to act on.
@@ -998,6 +1026,17 @@ function validateAndNormalize(data) {
       data.canal_seguro === "sim" ||
       clamp(data.document_intent, MAX_FIELD.document_intent) === "secure_channel_request",
   };
+
+  // The canonical nucleus was only ever assigned on the adaptive branch, which
+  // is WITHHELD, so every lead that actually persisted carried nucleus_id=null
+  // and no downstream system could tell a perícia from a B2G operation. Derive
+  // it server-side from the submitted stage instead: the mapping is read from
+  // the canonical NUCLEI table, it survives a JS-off submission, and an
+  // unrecognised stage yields null rather than a guess.
+  if (!adaptiveFields) {
+    const derived = deriveNucleusFromStage(lead.estagio);
+    if (derived) lead.nucleus_id = derived;
+  }
 
   if (adaptiveFields) {
     lead.adaptive_intake = true;
