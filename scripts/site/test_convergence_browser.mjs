@@ -8,7 +8,7 @@ import puppeteer from "puppeteer-core";
 
 const root = resolve(new URL("../..", import.meta.url).pathname);
 const site = resolve(process.env.SITE_ROOT || join(root, "_site"));
-const reportDir = resolve(root, "build/reports/convergence");
+const reportDir = resolve(process.env.CONVERGENCE_REPORT_DIR || join(root, "build/reports/convergence"));
 const chrome = process.env.CHROME_PATH || process.env.CHROME || "";
 const axe = readFileSync(resolve(root, "node_modules/axe-core/axe.min.js"), "utf8");
 const report = { site, chrome: chrome || null, checks: [], screenshots: [] };
@@ -105,6 +105,22 @@ try {
   check("trust_visible_schema_parity", parity.valid, JSON.stringify(parity));
   await axeClean(trust, "trust_desktop"); await shot(trust, "trust-1366");
   await trust.setViewport({ width: 390, height: 844 }); await axeClean(trust, "trust_mobile"); await shot(trust, "trust-390");
+
+  const wedge = await browser.newPage();
+  await wedge.setViewport({ width: 390, height: 844, deviceScaleFactor: 1 });
+  await wedge.goto(`${base}/quantitativos-orcamento-obras/`, { waitUntil: "networkidle0" });
+  const wedgeMobile = await wedge.evaluate(() => ({
+    h1: document.querySelector("h1")?.textContent || "",
+    channels: document.querySelectorAll("[data-fallback-channel]").length,
+    submitDisabled: document.querySelector('[type="submit"]')?.disabled,
+    overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth,
+  }));
+  check("private_wedge_mobile_contract", /quantidades e premissas/i.test(wedgeMobile.h1)
+    && wedgeMobile.channels === 3 && wedgeMobile.submitDisabled === true && wedgeMobile.overflow === false,
+  JSON.stringify(wedgeMobile));
+  await axeClean(wedge, "private_wedge_mobile"); await shot(wedge, "private-wedge-390");
+  await wedge.setViewport({ width: 1366, height: 900, deviceScaleFactor: 1 });
+  await axeClean(wedge, "private_wedge_desktop"); await shot(wedge, "private-wedge-1366");
 
   const triage = await browser.newPage();
   await triage.setViewport({ width: 390, height: 844, deviceScaleFactor: 1 });

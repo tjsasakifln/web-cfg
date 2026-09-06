@@ -615,6 +615,14 @@ def test_public_artifact_navigation_promotion_is_ordered_and_fail_closed(
     with pytest.raises(ValueError, match="unsupported content"):
         promote_public_navigation(unsupported, relative_path="mutable/index.html")
 
+    value_first = promote_public_navigation(
+        legacy, relative_path="quantitativos-orcamento-obras/index.html"
+    )
+    assert value_first.count("Enquadrar quantitativos") == 2
+    assert value_first.count('href="#triagem-quantitativos"') == 2
+    assert value_first.count('data-value-first-cta="true"') == 2
+    assert CANONICAL_CTA[0] not in value_first
+
 
 def test_report_returns_to_deliverables_without_changing_offer_contract() -> None:
     html = _html(REPORT)

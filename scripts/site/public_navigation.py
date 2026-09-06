@@ -15,6 +15,7 @@ from pathlib import Path
 
 from scripts.bofu_dominance.frozen_specs.constants import PILLARS
 from scripts.site.public_ia import active_header_href
+from scripts.site.shell_nav import value_first_cta_contract
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -159,6 +160,36 @@ def _canonical_cta_anchor(*, kind: str) -> str:
     )
 
 
+def _public_path(relative_path: str) -> str:
+    normalized = Path(relative_path).as_posix().lstrip("/")
+    if normalized == "index.html":
+        return "/"
+    if normalized.endswith("index.html"):
+        return f"/{normalized[:-len('index.html')]}"
+    return f"/{normalized}"
+
+
+def _value_first_cta_anchor(relative_path: str, *, kind: str) -> str | None:
+    spec = value_first_cta_contract(_public_path(relative_path))
+    if spec is None:
+        return None
+    label = str(spec.get("label") or "")
+    href = str(spec.get("href") or "")
+    if spec.get("mode") != "local_fragment_before_contact" or not re.fullmatch(
+        r"#[A-Za-z][\w:.-]*", href
+    ) or not label:
+        raise ValueError(f"{relative_path}: invalid value-first CTA contract")
+    classes = (
+        "button button-primary header-cta"
+        if kind == "desktop"
+        else "button button-primary"
+    )
+    return (
+        f'<a class="{classes}" data-value-first-cta="true" '
+        f'href="{escape(href, quote=True)}">{escape(label)}</a>'
+    )
+
+
 def _canonicalize_nav_block(
     inner: str,
     *,
@@ -200,7 +231,10 @@ def _canonicalize_nav_block(
         for label, href in CANONICAL_NAV_ITEMS
     ]
     if kind == "mobile":
-        rendered.append(_canonical_cta_anchor(kind="mobile"))
+        rendered.append(
+            _value_first_cta_anchor(relative_path, kind="mobile")
+            or _canonical_cta_anchor(kind="mobile")
+        )
     return "\n" + "\n".join(rendered) + "\n"
 
 
@@ -226,7 +260,12 @@ def _validate_canonical_block(
         )
     utility = [anchor for anchor in anchors if _is_button(anchor)]
     if _nav_kind(opening) == "mobile":
-        expected = CANONICAL_CTA
+        value_first = _value_first_cta_anchor(relative_path, kind="mobile")
+        expected = (
+            (_anchor_text(value_first), _attribute(value_first, "href"))
+            if value_first
+            else CANONICAL_CTA
+        )
         actual = tuple(
             (_anchor_text(anchor), _attribute(anchor, "href"))
             for anchor in utility
@@ -240,9 +279,12 @@ def _validate_canonical_block(
         raise ValueError(f"{relative_path}: desktop nav contains a utility CTA")
 
 
-def _canonicalize_header_cta(anchor: str) -> str:
+def _canonicalize_header_cta(anchor: str, *, relative_path: str) -> str:
     """Preserve versioned offer actions; normalize the generic shell CTA."""
 
+    value_first = _value_first_cta_anchor(relative_path, kind="desktop")
+    if value_first:
+        return value_first
     if (
         _attribute(anchor, "data-cta-kind") == "offer"
         and _attribute(anchor, "data-next-action-id")
@@ -303,7 +345,9 @@ def promote_public_navigation(html: str, *, relative_path: str) -> str:
         )
     if header_ctas:
         result = _HEADER_CTA_RE.sub(
-            lambda match: _canonicalize_header_cta(match.group(0)),
+            lambda match: _canonicalize_header_cta(
+                match.group(0), relative_path=normalized_path
+            ),
             result,
             count=1,
         )
