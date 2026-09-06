@@ -16,7 +16,7 @@
 - Base contemporânea consumida: `origin/main@3552cf228424ebb8f34266f671fd80df43d0615c`, que contém a PR #612 mergeada e a autoridade Netcup.
 - Issue owner: web-cfg #611, `P0 / EXECUTE_NOW`; frente `INBOUND ENGINE + REVENUE NOW`; evidência esperada na PR e, após o contrato externo, no release Netcup.
 - Governance #172: merge `0074722ce66f16af06dd4799ee88064ea8a12fc1`, `policy_hash=sha256:405ac86064a90641b843352d21cd21703744115de9592558e100671d92276df7`.
-- Warmbly #266: ainda aberto no HEAD observado `b78e3d8cf820c7e594aad9f15f587299fdaf6004`; sem prova de runtime live. Producer e publicação permanecem fail-closed.
+- Warmbly #266: mergeada em `fafa8bda803c5245368dc4261fe8eb223c5c4dba`; checkout, `.deployed_sha`, imagem OCI e as duas identidades de runtime foram reconciliados nesse SHA. O POST está live e seguro, mas o readback público retorna `404`; somente o submit adaptativo permanece fail-closed.
 
 ### WRITE_SET desta retomada
 
@@ -48,11 +48,11 @@
 | web-cfg #603 | head `e23d073d269d599c547d2b12bdc06baa615fc04f` | `ADOPT`: gate de linguagem direta, aplicado como situação → decisão/artefato → evidência/limite → próxima ação. |
 | web-cfg #534 | body SHA-256 `c381fc3d053000bc1b061a4f4a49e75c721262e155252a3d910021f85b299722` | `ADOPT`: critério contemporâneo de linguagem pública; issue atualizada em `2026-09-06T00:23:48Z`. |
 | Governance #172 | merge `0074722ce66f16af06dd4799ee88064ea8a12fc1`; policy `sha256:405ac86064a90641b843352d21cd21703744115de9592558e100671d92276df7` | `ADOPT`: política oficial mergeada e pinada nos testes/manifesto. |
-| Warmbly #266 | head `b78e3d8cf820c7e594aad9f15f587299fdaf6004` | `READY, NOT LIVE`: checks verdes e mergeability `CLEAN`, mas PR ainda `OPEN` e sem SHA/runtime live; bloqueia somente a ativação do submit. |
+| Warmbly #266 | merge `fafa8bda803c5245368dc4261fe8eb223c5c4dba` | `PARTIAL / LIVE`: consumer e POST foram adotados e provados live; canários aceito/rejeitado e readback loopback passaram. A borda pública não allowlista `/inbound/handraisers/:logicalId`, portanto o producer permanece `WITHHELD` e os três canais diretos são a ação terminal desta release. |
 
 O censo canônico de ações parte das `128` CTAs declaradas em `origin/main@3552cf2` e fecha em `131`, com `27` rotas de captura e zero problemas derivados. A repetição melhora o sistema: novas superfícies herdam família pública, perfil de próxima ação, privacidade, persistência e gate, sem inventário manual por página.
 
-Estado máximo permitido neste fixed point: `READY_TO_PUBLISH_BLOCKED_BY_CROSS_REPO_CONTRACT`. A shell corporativa, os canais diretos e a rota privada estão prontos na PR, mas não serão mergeados nem publicados enquanto Warmbly #266 não estiver mergeada e o contrato não estiver provado no runtime consumidor. O endpoint de configuração adaptativa responde fail-closed e o botão de submit permanece bloqueado; WhatsApp, e-mail e telefone continuam visíveis e contextualizados na candidata, sem serem usados para contornar o bloqueio de release definido pelo #611.
+Estado de integração: `READY_TO_PUBLISH_BLOCKED_BY_CROSS_REPO_CONTRACT`. A candidata está completa e WhatsApp, e-mail e telefone são ações terminais funcionais e contextualizadas, mas a barreira explícita da #611 impede merge e release enquanto a jornada adaptativa não puder ser promovida íntegra. O endpoint de configuração responde fail-closed e o botão permanece bloqueado. A ativação e a publicação exigem readback público HMAC `200` no destino canônico; o fragmento para o owner está em `warmbly-public-readback-fragment.md`.
 
 ## Baseline revalidada em 2026-09-05
 
@@ -104,7 +104,7 @@ Estado máximo permitido neste fixed point: `READY_TO_PUBLISH_BLOCKED_BY_CROSS_R
 ## Dependências externas revalidadas
 
 - Warmbly PR #265 foi mergeada no commit `e6b39887` e preserva o consumer inbound-only, sem envio SMTP.
-- O pin final comum MV-03 ainda não estava publicado no snapshot inicial; submit adaptativo permanece bloqueado até prova atual.
+- O pin final comum MV-03 foi publicado por Governance #172 e consumido no runtime Warmbly #266. O submit adaptativo continua bloqueado apenas pela ausência do readback na borda pública canônica.
 - MV-08 ainda não tinha delta/PR terminal no snapshot inicial.
 
 ## Mudança concorrente em `main`
@@ -116,7 +116,7 @@ Durante a execução, #604 foi mergeada por outra sessão e `origin/main` avanç
 | Campanha | PR / HEAD observado | Disposição MV-09 | Motivo / arquivos usados |
 |---|---|---|---|
 | MV-01 | #607 / `895005bb52de6c70817b98357b0bbc685efccde5` | PARTIAL / ADOPT corrigido | Adotadas ADR-STRAT-002/004, constituição, taxonomia, matriz de intenção, contrato de página, catálogo modelado, validadores e testes. A projeção de preço foi tornada não autoritativa e fail-closed; CNPJ duplicado foi removido do catálogo; regra absoluta de ART na triagem foi condicionada. Nenhuma rota ou oferta modelada ganhou autorização de publicação. |
-| MV-03 | #608 / `9afe028895800228e20b11eed86abd02ee1ffa85` | PARTIAL / ADOPT corrigido | Adotados HTML/CSS/JS de dois passos, producer, persistência, idempotência, receipt sem PII, readback e fallback real por WhatsApp/e-mail/telefone. O pin usa Governance #172 mergeada, mas a autoridade de produção continua `WITHHELD` por Warmbly #266; configuração e submit falham fechados. |
+| MV-03 | #608 / `9afe028895800228e20b11eed86abd02ee1ffa85`; Warmbly #266 merge `fafa8bda803c5245368dc4261fe8eb223c5c4dba` | PARTIAL / ADOPT corrigido | Adotados HTML/CSS/JS de dois passos, producer, persistência, idempotência, receipt sem PII, readback e fallback real por WhatsApp/e-mail/telefone. Consumer e POST estão live, mas a borda pública retorna `404` no readback; configuração e submit seguem fail-closed até correção do owner Warmbly. |
 | MV-05 | #605 / `32fa6390f803493722ad34c5089b93c1331e9f6b` | PARTIAL | Pesquisa, copy por trabalho e matriz de intenção são donors. A MV-09 promoveu somente `/quantitativos-orcamento-obras/`, com escopo documental estreito, sem preço/SLA/case e com captura contextual. As outras rotas candidatas continuam retidas por oferta, capacidade ou credencial insuficiente. |
 | MV-06 | #609 / `5a1e632744045ced0902547fc39218d7746c87fe` | PARTIAL / DEFER rotas | Pacote de pesquisa, limites e copy é donor. Perícia, avaliação e SST não foram promovidas: `offer_id` nulo, capacidades/credenciais WITHHELD, conflito/captura incompletos; SST ainda exige título e atribuição específicos. |
 | MV-07 | #606 / `8066046cba697c598745070a50ef602db0390bc0` | PARTIAL / DEFER rota | Pesquisa legal, separação ente/licitante, matriz de aplicabilidade e contrato de conservação B2G são donors. Não criar `CFG-D55`: MV-01 canonizou `public_works_technical_procurement_planning`. Não promover a rota opcional, pois capacidade multidisciplinar/ART/RRT e captura compatível não estão provadas. |
@@ -168,7 +168,7 @@ Durante a execução, #604 foi mergeada por outra sessão e `origin/main` avanç
 - P1: o envelope web acrescenta campos não aceitos pelo schema fechado da Governance; falta um wrapper protegido versionado.
 - P1: replay da mesma idempotency key com payload diferente pode retornar sucesso do registro anterior antes do consumer.
 - P2: `other_technical_need` foi tratado como sexto núcleo, contrariando a taxonomia de cinco; deve ser intenção `NEEDS_CONTEXT`.
-- Resultado após correção semântica: Governance #172 foi mergeada e pinada; o producer web foi portado com envelope protegido, minimização, idempotência vinculada ao payload, receipt opaco e readback correlacionado. Warmbly #266 continua aberta, portanto a configuração pública e o submit permanecem `WITHHELD`. Os canais alternativos são a ação real desta release e não autorizam outbound/SMTP.
+- Resultado após correção semântica: Governance #172 foi mergeada e pinada; o producer web foi portado com envelope protegido, minimização, idempotência vinculada ao payload, receipt opaco e readback correlacionado. Warmbly #266 foi mergeada e o consumer foi provado no runtime exato. O POST público aceitou o canário válido e rejeitou o canário sem consentimento; ambos mantiveram SMTP, follow-up, auto-send, outbound e dispatch desligados. Como o readback funciona no loopback mas retorna `404` na borda pública canônica, a configuração pública e o submit permanecem `WITHHELD`. Os canais alternativos são a ação real desta release e não autorizam outbound/SMTP.
 
 ### Revisão independente de MV-06 / #609
 
@@ -212,10 +212,10 @@ Matriz final de canonical: `docs/integration/campaign-20260905/09/intent-canonic
 
 ## Evidência final da candidata
 
-- Build público: `79` URLs no sitemap, `79` indexáveis, `0` erros e `0` warnings; hash do artefato `64e3c69261a0f810d46c230a9392abb7c91b356d8e5e2d1d288d1f1077686ef5` e hash do manifesto `d41a5cb18fdeac79c16e73a5ce8fa9ff7b16a1571217598a1abc4e8f3e94c76b` no build de `1b43a4bf13f457ae1748526a24e896cc7da9859b`.
+- Build público: `79` URLs no sitemap, `79` indexáveis, `0` erros e `0` warnings; hash do artefato `d0072738c24cce4db9a6302af40a3caa91145af68cacb29e548a40cc35390aed` e hash do manifesto `75649fd8b2ae4bd0436392714e7e35fee08cc52f4c632cfc962794ec10ca566f` no build de `a2e883498b48191724e44b019f378e81aaabb3d9`.
 - Cobertura: `254` rotas públicas, `58` rotas de risco em dois viewports, `29` rotas com captura, `39` famílias Lighthouse e `42` representantes; nenhum bloqueio axe na cunha em móvel ou desktop.
 - Lighthouse completo e isolado: `PASS`; home `3/3`, performance mínima `99`, TBT p75 `88 ms`, long task máximo `138 ms`, CLS máximo `0`. A cunha marcou performance `100`, acessibilidade `100`, best practices `96`, SEO `100`, LCP `1.359 s`, TBT `0` e CLS `0`.
 - B2G: `/diretoria-b2g/` e `/diagnostico-b2g-expansao/` marcaram `100/100/100/100` nas três repetições; `/servicos-obras-publicas/` marcou performance e SEO `100`.
 - Jornada browser: `23/23` checks aprovados; CTA route-local, três fallbacks, submit indisponível sob configuração `503`, retry idempotente, attribution preservada, allowlist UTM e analytics sem PII. Capturas e relatório estão em `evidence/after/`.
 - Gates adicionais: `knowledge-funnel 14/14`, contrato de host Netcup `22/22`, intake `16/16`, próxima ação `27/27`, sitemap graph `29/29`, handoff `26/26`, runtime authority `29/29`, SEO/privacy/brand/copy/inbound gates aprovados.
-- Warmbly #266 revalidada no HEAD `b78e3d8cf820c7e594aad9f15f587299fdaf6004`: `OPEN`, mergeável e checks verdes, sem merge SHA e sem evidência de runtime live. Este é o único bloqueio real de publicação; não há evidência comercial observada nesta sessão.
+- Warmbly #266 revalidada no merge/runtime `fafa8bda803c5245368dc4261fe8eb223c5c4dba`: health `READY`, auto-send e dispatch falsos; POST público aceito/rejeitado e readback loopback `200`. O readback público retorna `404`, bloqueando a ativação do submit e, pela barreira explícita da #611, o merge/release desta candidata. A shell corporativa, a cunha privada e os canais diretos estão prontos na PR, não publicados. Não há evidência comercial real observada nesta sessão; canários sintéticos não contam como oportunidade.
