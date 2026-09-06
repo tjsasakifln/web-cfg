@@ -154,13 +154,6 @@
           "reason": "missing_on_page_form",
           "excerpt": "profile=service_pillar route=/reequilibrio-obras-publicas/",
           "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "triagem-tecnica/index.html",
-          "reason": "missing_journey_signal",
-          "excerpt": "",
-          "severity": "warn"
         }
       ],
       "stats": {
@@ -343,7 +336,7 @@
           "warn_before_date": true
         },
         "errors": 0,
-        "warnings": 19
+        "warnings": 18
       }
     },
     "legacy_entity": {
@@ -468,7 +461,7 @@
           "gate": "archetype_editorial_ready",
           "path": "triagem-tecnica/index.html",
           "reason": "archetype_cta_subordinate_failed",
-          "excerpt": "family=triagem-tecnica 1/1 sampled pages fail: /triagem-tecnica/: 4 CTAs in <main> for 533 words (max 3)",
+          "excerpt": "family=triagem-tecnica 1/1 sampled pages fail: /triagem-tecnica/: 14 CTAs in <main> for 1028 words (max 3)",
           "severity": "warn"
         },
         {
@@ -488,6 +481,13 @@
         {
           "gate": "archetype_editorial_ready",
           "path": "servicos/index.html",
+          "reason": "archetype_answer_first_failed",
+          "excerpt": "family=servicos-corporativos 1/1 sampled pages fail: /servicos/: first 3 paragraphs are shorter than 120 chars or open with a CTA",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "servicos/index.html",
           "reason": "archetype_specific_value_failed",
           "excerpt": "family=servicos-corporativos 1/1 sampled pages fail: /servicos/: 0 concrete specifics (min 3)",
           "severity": "warn"
@@ -495,15 +495,8 @@
         {
           "gate": "archetype_editorial_ready",
           "path": "quantitativos-orcamento-obras/index.html",
-          "reason": "archetype_specific_value_failed",
-          "excerpt": "family=private-engineering-quantities-budget 1/1 sampled pages fail: /quantitativos-orcamento-obras/: 1 concrete specifics (min 3)",
-          "severity": "warn"
-        },
-        {
-          "gate": "archetype_editorial_ready",
-          "path": "quantitativos-orcamento-obras/index.html",
           "reason": "archetype_cta_subordinate_failed",
-          "excerpt": "family=private-engineering-quantities-budget 1/1 sampled pages fail: /quantitativos-orcamento-obras/: 7 CTAs in <main> for 742 words (max 3)",
+          "excerpt": "family=private-engineering-quantities-budget 1/1 sampled pages fail: /quantitativos-orcamento-obras/: 7 CTAs in <main> for 1022 words (max 3)",
           "severity": "warn"
         },
         {
@@ -735,6 +728,13 @@
           "path": "casos/index.html",
           "reason": "archetype_specific_value_failed",
           "excerpt": "family=casos 1/3 sampled pages fail: /casos/medicao-glosa-demonstrativo/: 1 concrete specifics (min 3)",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "casos/index.html",
+          "reason": "archetype_caveats_preserved_failed",
+          "excerpt": "family=casos 1/3 sampled pages fail: /casos/: shows a figure or epistemic label with no limitation disclosed — removing raw jargon must not remove the uncertainty it carried",
           "severity": "warn"
         },
         {
@@ -1000,6 +1000,7 @@
               "/servicos/"
             ],
             "blocking": [
+              "answer_first",
               "specific_value"
             ],
             "material": []
@@ -1010,7 +1011,6 @@
               "/quantitativos-orcamento-obras/"
             ],
             "blocking": [
-              "specific_value",
               "cta_subordinate"
             ],
             "material": []
@@ -1206,7 +1206,8 @@
             ],
             "blocking": [
               "substantive",
-              "specific_value"
+              "specific_value",
+              "caveats_preserved"
             ],
             "material": []
           },

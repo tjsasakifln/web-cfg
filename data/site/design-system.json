@@ -148,6 +148,43 @@
     "max_identical_cards_in_row": 3,
     "icons": "Only for specific actions/concepts; never decorate every heading; never icon-in-circle on every section"
   },
+  "visual_roles": {
+    "note": "2026-09-06 (#619). Papel visual e classe de evidencia sao coisas distintas. Proveniencia e POR REFERENCIA a um id ja existente em proof.json, credential-registry.json ou permissioned-proof-registry.json; nenhuma segunda autoridade de proveniencia e criada. schema_version nao e alterado: nenhum gate consome esse campo e um bump criaria um passo manual de rollback sem comprar verificacao.",
+    "roles": ["person", "artifact", "method", "data", "source", "decorative"],
+    "forbidden_inferences": {
+      "person": "Habilitacao profissional, acervo tecnico, capacidade de execucao ou resultado de cliente",
+      "artifact": "Que a estrutura veio de trabalho de cliente ou que houve entrega contratada",
+      "method": "Resultado, economia, prazo ou desempenho",
+      "data": "Que o numero foi auditado por terceiro",
+      "source": "Que a CONFENGE foi contratada, participou ou tem relacao com aquele contrato",
+      "decorative": "Qualquer afirmacao"
+    },
+    "composition_rule": "Um ativo de papel person nunca compartilha o mesmo bloco narrativo com um bloco de papel source, e todo bloco source carrega dentro de si, visivel sem interacao, o rotulo de contexto de mercado com fonte e data de consulta.",
+    "assets": [
+      {
+        "id": "qty_trace_matrix_v1",
+        "role": "method",
+        "route": "/quantitativos-orcamento-obras/",
+        "origin": "Autoral, escrito para esta rota. Nenhum ativo rasterizado.",
+        "usage_right": "Obra propria da CONFENGE; nenhum direito de terceiro envolvido.",
+        "claim_supported": "proof-metodo-limites-publicados",
+        "forbidden_inference": "Nao sustenta resultado, economia, prazo, desempenho, nem que a cadeia mostrada veio de obra, contrato ou cliente real.",
+        "label_text": "Exemplo sintetico e demonstrativo. Os numeros desta tabela sao hipoteticos e servem para mostrar a estrutura do raciocinio: nao descrevem obra, contrato, orgao ou cliente real, e nao sao preco da CONFENGE.",
+        "withdrawal": "Remover o bloco data-visual-asset-id=\"qty_trace_matrix_v1\" da rota E esta entrada, na mesma PR. O piloto nao gera arquivo de ativo, entao nao ha variante derivada a alcancar."
+      },
+      {
+        "id": "cases_field_dictionary_v1",
+        "role": "artifact",
+        "route": "/casos/",
+        "origin": "Autoral, recorte estrutural do demonstrativo ja listado na rota. Nenhum ativo rasterizado.",
+        "usage_right": "Obra propria da CONFENGE; nenhum direito de terceiro envolvido.",
+        "claim_supported": "proof-metodo-limites-publicados",
+        "forbidden_inference": "Nao sustenta que a estrutura veio de trabalho de cliente, nem que houve entrega contratada, nem validacao por terceiro.",
+        "label_text": "Recorte sintetico e demonstrativo do dicionario de campos citado acima. A estrutura e real; os valores sao hipoteticos e nao vieram de trabalho, contrato ou orgao real.",
+        "withdrawal": "Remover o bloco data-visual-asset-id=\"cases_field_dictionary_v1\" da rota E esta entrada, na mesma PR."
+      }
+    ]
+  },
   "forbidden_patterns": [
     "more_than_two_consecutive_card_grid_sections",
     "four_identical_cards_without_hierarchy",

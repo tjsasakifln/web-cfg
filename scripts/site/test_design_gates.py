@@ -1586,3 +1586,152 @@ def test_servicos_fold_names_a_published_delivery_before_any_limit_copy():
         assert withheld not in output.lower(), (
             f"the fold offers a DEFERRED/WITHHELD deliverable as available: {withheld}"
         )
+
+
+# --- #619: evidence module pilots -------------------------------------------
+# Route-exact. These are added AFTER #617's fold assertions and do not rewrite
+# or weaken them. Neither pilot route is in archetype_gated_surfaces, so neither
+# module carries data-section-archetype: annotating without gating would produce
+# an inert label.
+
+QTY_ROUTE = ROOT / "quantitativos-orcamento-obras" / "index.html"
+CASOS_ROUTE = ROOT / "casos" / "index.html"
+PILOTS = (
+    ("qty_trace_matrix_v1", QTY_ROUTE, "method"),
+    ("cases_field_dictionary_v1", CASOS_ROUTE, "artifact"),
+)
+
+
+def _module_block(path, asset_id):
+    html = path.read_text(encoding="utf-8")
+    match = re.search(
+        r'<div class="evidence-module[^"]*"[^>]*data-visual-asset-id="'
+        + re.escape(asset_id)
+        + r'"[^>]*>.*?\n</div>',
+        html,
+        re.DOTALL,
+    )
+    assert match, f"evidence module not found: {asset_id}"
+    return match.group(0)
+
+
+def test_evidence_modules_are_declared_with_role_and_provenance():
+    system = json.loads((ROOT / "data" / "site" / "design-system.json").read_text(encoding="utf-8"))
+    assert system["schema_version"] == "1.0.0", "schema_version must not be bumped"
+    roles = system["visual_roles"]
+    proof_ids = {c["id"] for c in json.loads(
+        (ROOT / "data" / "site" / "proof.json").read_text(encoding="utf-8")
+    )["claims"]}
+
+    declared = {asset["id"]: asset for asset in roles["assets"]}
+    for asset_id, _path, role in PILOTS:
+        asset = declared[asset_id]
+        assert asset["role"] == role
+        for field in ("origin", "usage_right", "claim_supported", "forbidden_inference",
+                      "label_text", "withdrawal"):
+            assert asset.get(field), f"{asset_id} missing {field}"
+        # Provenance BY REFERENCE to an id that already exists.
+        assert asset["claim_supported"] in proof_ids, asset["claim_supported"]
+
+    # No key consumed by another gate may be disturbed by the new block.
+    for key in ("performance_budget", "colors", "public_copy_leaks", "archetype_gated_surfaces"):
+        assert key in system, key
+
+
+def test_evidence_modules_carry_the_synthetic_caveat_before_the_first_number():
+    """The caveat renders without interaction and precedes the first number."""
+    for asset_id, path, _role in PILOTS:
+        block = _module_block(path, asset_id)
+        assert 'data-demonstration="synthetic"' in block, asset_id
+
+        caveat = re.search(r'<p class="evidence-module__caveat">(.*?)</p>', block, re.DOTALL)
+        assert caveat, f"{asset_id} lost its caveat"
+        assert re.search(r"sint[ée]tic", caveat.group(1), re.IGNORECASE), asset_id
+
+        # Not behind a click or a hover.
+        for interactive in ("<details", "<summary", 'role="tab"', "tooltip", "accordion"):
+            assert interactive not in block.lower(), f"{asset_id} hid the caveat behind {interactive}"
+
+        # Position: the caveat precedes the first digit-bearing cell of the table.
+        caveat_end = block.index("</p>", block.index("evidence-module__caveat"))
+        table_at = block.index("<table")
+        assert caveat_end < table_at, f"{asset_id} caveat does not precede the table"
+
+
+def test_evidence_modules_reflow_instead_of_scrolling_sideways():
+    """C4: readable at 390px with no horizontal scroll of page OR container."""
+    for _asset_id, path, _role in PILOTS:
+        html = path.read_text(encoding="utf-8")
+        css = re.search(
+            r'<style data-evidence-module-critical=""\s*>(.*?)</style>', html, re.DOTALL
+        )
+        assert css, f"{path.name} lost the evidence module CSS"
+        # Strip CSS comments first: the rationale comment names the very
+        # properties being banned, and matching it would be matching prose.
+        rules = re.sub(r"/\*.*?\*/", " ", css.group(1), flags=re.DOTALL)
+        compact = rules.replace(" ", "")
+        assert "overflow-x:auto" not in compact
+        assert "overflow-y:auto" not in compact
+        # nowrap is allowed only for the visually hidden <thead>, never for cells.
+        assert "white-space:nowrap" not in compact.replace(
+            "clip-path:inset(50%);white-space:nowrap", ""
+        )
+        assert "min-width" not in compact
+        # The reflow itself: cells become blocks and carry their own label.
+        assert "display:block" in compact
+        assert "content:attr(data-label)" in compact
+
+
+def test_evidence_modules_expose_every_field_on_every_row():
+    """Row 2 of aceite: no empty cell, no placeholder, no column-label echo."""
+    for asset_id, path, _role in PILOTS:
+        block = _module_block(path, asset_id)
+        headers = re.findall(r'<th scope="col">(.*?)</th>', block)
+        assert len(headers) >= 4, asset_id
+        rows = re.findall(r"<tr>\s*<th data-label.*?</tr>", block, re.DOTALL)
+        assert rows, f"{asset_id} has no data row"
+        for row in rows:
+            cells = re.findall(r'<(?:th|td) data-label="([^"]+)"[^>]*>(.*?)</(?:th|td)>',
+                               row, re.DOTALL)
+            assert len(cells) == len(headers), f"{asset_id}: row does not fill every column"
+            for label, value in cells:
+                text = re.sub(r"<[^>]+>", "", value).strip()
+                assert text, f"{asset_id}: empty cell under {label}"
+                assert text.lower() not in {label.lower(), "a definir", "conforme escopo"}, (
+                    f"{asset_id}: placeholder or column-label echo under {label}"
+                )
+
+
+def test_evidence_modules_claim_no_client_proof_and_no_validation():
+    """Nothing in the module says the structure was validated in real work."""
+    for asset_id, path, _role in PILOTS:
+        block = _module_block(path, asset_id)
+        # The caveat is the disclaimer: it legitimately uses words like "cliente"
+        # inside a negation ("nao descrevem obra, contrato, orgao ou cliente
+        # real"). Scanning it for those words would fail the module for denying
+        # exactly what it must deny, so the assertion runs on the rest.
+        body = re.sub(
+            r'<p class="evidence-module__caveat">.*?</p>', " ", block, flags=re.DOTALL
+        ).lower()
+        for forbidden in (
+            "validad", "conferido em contrato", "aplicado em obra",
+            "utilizado em contrato", "estrutura comprovada", "metodo comprovado",
+            "depoimento", "economia de",
+        ):
+            assert forbidden not in body, f"{asset_id} claims {forbidden}"
+        # A client claim needs the noun in an affirmative sentence. The caveat is
+        # already excluded, so any remaining occurrence is an actual claim.
+        for client_noun in ("cliente", "contratante", "contratada"):
+            assert client_noun not in body, f"{asset_id} claims a client: {client_noun}"
+        # Synthetic numbers must not collide with published CONFENGE bands.
+        for band in ("r$ 6.900", "r$ 7.900", "r$ 12.500", "r$ 20.000", "r$ 2.900", "r$ 599"):
+            assert band not in block, f"{asset_id} reuses a published fee value: {band}"
+
+
+def test_evidence_modules_introduce_no_person_or_source_asset():
+    """Row 4 of aceite: no photo becomes a credential, no PNCP record a client."""
+    for _asset_id, path, _role in PILOTS:
+        html = path.read_text(encoding="utf-8")
+        assert 'data-visual-role="person"' not in html, path.name
+        assert 'data-visual-role="source"' not in html, path.name
+        assert "pncp.gov.br" not in html, path.name

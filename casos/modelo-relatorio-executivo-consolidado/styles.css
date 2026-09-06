@@ -3,7 +3,10 @@
  * componentes exclusivos do relatório consolidado e os ajustes exigidos por eles.
  */
 
-.case-badge { background: #fef3c7; border-radius: 4px; color: #92400e; display: inline-block; font-size: .8rem; font-weight: 700; margin: 12px 0 0; padding: .2rem .5rem; }
+.case-badge {border-radius: 4px;
+  margin: 12px 0 0;
+  padding: .2rem .5rem;
+}
 
 /* Rótulos epistêmicos */
 .rec-tag { border-radius: 3px; display: inline-block; font-family: var(--r-mono); font-size: .8rem; font-style: normal; font-weight: 850; letter-spacing: .09em; margin-right: 7px; padding: 2px 6px; vertical-align: baseline; }

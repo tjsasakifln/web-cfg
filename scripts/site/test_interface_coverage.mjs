@@ -66,7 +66,20 @@ assert(coverage.axe.routes.every((entry) =>
 // have to be included in the recaptured census. Direct convergence adds one
 // fail-closed capture route, and MV-09 adds the bounded private quantities
 // journey, so the current census is 29 forms across 58 routes.
-assert.equal(coverage.axe.price_route_count, 47);
+// Issue #619 adds a synthetic demonstration module to
+// /quantitativos-orcamento-obras/, which renders a visible BRL amount for the
+// first time on that route. The amount is a labelled demonstration and not an
+// offer, so the conversion gate treats it separately, but axe coverage is
+// derived from what a visitor can SEE, so the route gains the "price" reason
+// and the price census moves 47 -> 48. The route was already selected for its
+// capture form, so the form and route counts are unchanged.
+assert.equal(coverage.axe.price_route_count, 48);
+assert(
+  coverage.axe.routes
+    .find((entry) => entry.route === "/quantitativos-orcamento-obras/")
+    .reasons.includes("price"),
+  "the #619 synthetic demonstration must keep its route under axe price coverage",
+);
 assert.equal(coverage.axe.capture_form_route_count, 29);
 assert.equal(coverage.axe.route_count, 58);
 assert(selected.has("/conteudos/atraso-na-medicao-obra-publica/"));

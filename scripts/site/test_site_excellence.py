@@ -392,3 +392,115 @@ def test_ci_markdown_stays_legible_while_json_keeps_full_route_evidence() -> Non
         row for row in report["score"]["dimensions"] if row["id"] == "accessibility"
     )
     assert accessibility["metrics"][0]["evidence"]["routes"] == routes
+
+
+def test_accessibility_never_passes_on_a_stale_committed_axe_report() -> None:
+    """A skipped axe step must not become MEASURED_PASS.
+
+    Before #619, site_excellence fell back to the committed
+    docs/uiux-evidence/axe-report.json whenever build/reports/axe-report.json was
+    absent. Because the browser steps are skipped as soon as an earlier CI step
+    fails, that turned "we did not measure this tree" into "accessibility passes"
+    -- using a report captured on an earlier commit that never loaded the changed
+    pages. The other three browser-backed dimensions already fail closed with
+    browser_evidence_missing; accessibility now behaves the same way.
+    """
+    with tempfile.TemporaryDirectory() as tmp:
+        base = Path(tmp)
+        manifest = base / "manifest.json"
+        axe = base / "axe.json"
+        manifest.write_text(
+            json.dumps({"html_routes": ["/", "/captura/"], "root_files": ["index.html", "404.html"]}),
+            encoding="utf-8",
+        )
+        clean = {
+            "critical": 0,
+            "serious": 0,
+            "coverage": {
+                "public_route_count": 3,
+                "audited_route_count": 1,
+                "audited_routes": [{"route": "/captura/"}],
+                "viewports": [{"id": "mobile"}, {"id": "desktop"}],
+                "page_loads": 2,
+                "sampling": {"enabled": False, "dropped": []},
+            },
+            "pages": [
+                {"path": "/captura/", "viewport": "mobile", "blocking": 0},
+                {"path": "/captura/", "viewport": "desktop", "blocking": 0},
+            ],
+        }
+        axe.write_text(json.dumps(clean), encoding="utf-8")
+
+        live = measure_accessibility_report(axe, manifest)
+        stale = measure_accessibility_report(
+            axe, manifest, live_evidence_missing=True, evidence_stale=True
+        )
+
+    # The very same clean, zero-violation report: the only difference is whether
+    # it was measured on this tree. Provenance alone must decide the verdict.
+    assert live["status"] == "MEASURED_PASS"
+    assert live["evidence"]["live_evidence"] is True
+
+    assert stale["status"] == "MEASURED_FAIL"
+    assert "browser_evidence_missing" in stale["codes"]
+    assert "axe_evidence_stale" in stale["codes"]
+    assert stale["evidence"]["live_evidence"] is False
+
+
+def test_accessibility_rejects_a_report_measured_on_another_tree() -> None:
+    """A file in the reports folder is not proof of a measurement of THIS tree.
+
+    Failing closed on an ABSENT report was not enough: `base` is a localhost URL
+    and `site_root` a relative path, so an axe report captured on any other tree
+    was byte-plausible here and, dropped into build/reports/, satisfied the
+    accessibility dimension. audit_axe.mjs now records the artifact hash it
+    measured and the scorecard rejects a report that names a different artifact,
+    wherever the file happens to be filed.
+    """
+    with tempfile.TemporaryDirectory() as tmp:
+        base = Path(tmp)
+        manifest = base / "manifest.json"
+        axe = base / "axe.json"
+        manifest.write_text(
+            json.dumps({"html_routes": ["/", "/captura/"], "root_files": ["index.html", "404.html"]}),
+            encoding="utf-8",
+        )
+        clean = {
+            "critical": 0,
+            "serious": 0,
+            "coverage": {
+                "public_route_count": 3,
+                "audited_route_count": 1,
+                "audited_routes": [{"route": "/captura/"}],
+                "viewports": [{"id": "mobile"}, {"id": "desktop"}],
+                "page_loads": 2,
+                "sampling": {"enabled": False, "dropped": []},
+            },
+            "pages": [
+                {"path": "/captura/", "viewport": "mobile", "blocking": 0},
+                {"path": "/captura/", "viewport": "desktop", "blocking": 0},
+            ],
+        }
+        axe.write_text(json.dumps(clean), encoding="utf-8")
+
+        ours = measure_accessibility_report(
+            axe, manifest, expected_artifact="abc123", reported_artifact="abc123"
+        )
+        foreign = measure_accessibility_report(
+            axe,
+            manifest,
+            evidence_stale=True,
+            artifact_mismatch=True,
+            expected_artifact="abc123",
+            reported_artifact="deadbeef",
+        )
+
+    # Identical zero-violation content both times. Only the artifact it names
+    # differs, and that alone decides the verdict.
+    assert ours["status"] == "MEASURED_PASS"
+    assert ours["evidence"]["measured_artifact"] == "abc123"
+
+    assert foreign["status"] == "MEASURED_FAIL"
+    assert "axe_evidence_foreign_artifact" in foreign["codes"]
+    assert foreign["evidence"]["measured_artifact"] == "deadbeef"
+    assert foreign["evidence"]["expected_artifact"] == "abc123"
