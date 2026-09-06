@@ -6,7 +6,13 @@ import { fileURLToPath } from "node:url";
 import path from "node:path";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
-const WARMbly_PR_267_HEAD = "a4201f2ff3396f3e08030997563ec397b9627df2";
+// Byte-identical to /problemas-que-resolvemos/ on main dbf931d7b. The route is a
+// generator output owned by the #611/#632 integration stream; this pin only proves
+// this branch did not touch it.
+const FALLBACK_HUB_SHA256 = "cdfb0bddea7a315f3f0dab4834041fde32b97888e0ee0ab0bfc290395e6db542";
+// Warmbly successor head that separates INTELIGENCIA_PNCP from EDITAL_OU_PROPOSTA.
+// This branch consumes the pinned registry audit only; it emits no new URL.
+const WARMbly_PR_267_HEAD = "12c6463e6c919f40a95e1057584979c5f170a41d";
 
 const destinations = [
   { route: "/aditivos-obras-publicas/", anchor: "metodo", state: "FROZEN_MEASUREMENT" },
@@ -19,7 +25,7 @@ const destinations = [
     claim: "EDITAL_OU_PROPOSTA",
     serviceCodes: [
       { code: "APOIO_LICITACAO", messageMatch: "SUPPORTED" },
-      { code: "INTELIGENCIA_PNCP", messageMatch: "UPSTREAM_BLOCKED" },
+      { code: "INTELIGENCIA_PNCP", messageMatch: "ROUTED_ELSEWHERE" },
     ],
     state: "MUTABLE_NOW",
   },
@@ -73,7 +79,7 @@ test("Warmbly #267 audit stays finite and records all ACTIVE B2G destinations", 
   const tender = destinations.find(({ route }) => route === "/bid-room-licitacoes-obras/");
   assert.deepEqual(tender.serviceCodes, [
     { code: "APOIO_LICITACAO", messageMatch: "SUPPORTED" },
-    { code: "INTELIGENCIA_PNCP", messageMatch: "UPSTREAM_BLOCKED" },
+    { code: "INTELIGENCIA_PNCP", messageMatch: "ROUTED_ELSEWHERE" },
   ]);
 });
 
@@ -103,6 +109,26 @@ test("mutable outbound anchors answer the email in the required decision sequenc
   }
 });
 
+test("bid-room keeps the outbound decision anchor and the not-hire exclusions on separate, addressable elements", () => {
+  const html = readFileSync(routeFile("/bid-room-licitacoes-obras/"), "utf8");
+  const openTag = (attr) => {
+    const tags = html.match(new RegExp(`<[a-zA-Z][a-zA-Z0-9]*\\b[^>]*\\b${attr}[^>]*>`, "g")) || [];
+    assert.equal(tags.length, 1, `${attr} must appear on exactly one element`);
+    return tags[0];
+  };
+  // The outbound fragment must resolve to the visible decision section, not to the
+  // supplier-scope grid that sits inside the collapsed offer disclosure.
+  const anchorTag = openTag('id="quando-nao-contratar"');
+  assert.match(anchorTag, /data-outbound-match="EDITAL_OU_PROPOSTA"/);
+  assert.doesNotMatch(anchorTag, /data-when-not-hire/);
+  // The not-hire exclusions must still exist and must still be addressable on their
+  // own element. Without this, deleting the whole block leaves every id-OR-attribute
+  // gate in the repo green.
+  const notHireTag = openTag('data-when-not-hire="1"');
+  assert.match(notHireTag, /id="escopo-limites"/);
+  assert.notEqual(anchorTag, notHireTag);
+});
+
 test("route-local next steps enter the existing PII-free click contract", () => {
   const nav = readFileSync(path.join(ROOT, "js/modules/nav.js"), "utf8");
   assert.match(nav, /document\.querySelectorAll\('\[data-event-name\]'\)/);
@@ -126,14 +152,20 @@ test("measurement-frozen ACTIVE destinations remain byte-identical to the curren
 test("fallback hub remains untouched pending its generator/integration owner", () => {
   assert.equal(
     sha256(routeFile("/problemas-que-resolvemos/")),
-    "116af5b91d7878c9d131e079a93c6b945309cc8e9fb49e2a0f09be59094fe20d",
+    FALLBACK_HUB_SHA256,
   );
 });
 
 test("before/after evidence covers only changed routes at the required viewports", () => {
-  const evidenceRoot = path.join(ROOT, "docs/qa/b2g-outbound-landing-prep-2026-09-05/screenshots");
+  // 2026-09-05 evidence pinned base_sha 3552cf228 (retired). MV-09 (#615)
+  // changed the shared header/footer shell of every route after that, so the
+  // 09-05 PNGs no longer reflect the current before-state; 09-06 re-captures
+  // both sides against the current base dbf931d7b with the same writer
+  // primitives (puppeteer-core + resolveChromePath + networkidle0 navigation
+  // at the exact fragment). The 09-05 directory is kept as history.
+  const evidenceRoot = path.join(ROOT, "docs/qa/b2g-outbound-landing-prep-2026-09-06/screenshots");
   const manifest = JSON.parse(readFileSync(path.join(evidenceRoot, "manifest.json"), "utf8"));
-  assert.equal(manifest.base_sha, "3552cf228424ebb8f34266f671fd80df43d0615c");
+  assert.equal(manifest.base_sha, "dbf931d7b4a1a9fc2aecd6ef84b3a2b7b1706f55");
   assert.equal(manifest.warmbly_pr_267_head, WARMbly_PR_267_HEAD);
   assert.deepEqual(manifest.viewports, [{ width: 390, height: 844 }, { width: 1366, height: 768 }]);
   assert.deepEqual(
