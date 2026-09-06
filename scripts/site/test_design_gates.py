@@ -428,7 +428,6 @@ def test_primary_cta_not_spam():
     hero_html = hero.group(0)
     assert hero_html.count("button-primary") == 1, "hero must have exactly one primary CTA"
     assert 'href="#situacoes"' in hero_html
-    assert 'href="/servicos/"' in hero_html
     assert "EESC-USP" in html
 
 
@@ -452,8 +451,8 @@ def test_home_five_second_clarity():
     # Comprehensible next actions.
     assert "escolher minha situação" in fold_lower
     assert 'href="#situacoes"' in fold
-    assert "ver o escopo de serviços" in fold_lower
-    assert 'href="/servicos/"' in fold
+    assert "escolher pela minha situação" in fold_lower
+    assert 'href="#situacoes"' in fold
     assert "obras públicas e b2g" in lower
     assert "#contato" in html or 'id="contato"' in html
 

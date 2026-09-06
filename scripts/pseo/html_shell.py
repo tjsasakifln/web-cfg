@@ -25,8 +25,10 @@ except Exception:  # noqa: BLE001 ,  keep pSEO build resilient
 
 try:
     from scripts.site.public_ia import footer_columns_html as _footer_columns_html
+    from scripts.site.public_ia import load_ia_map as _load_ia_map
 except Exception:  # noqa: BLE001
     _footer_columns_html = None  # type: ignore[assignment]
+    _load_ia_map = None  # type: ignore[assignment]
 
 try:
     from scripts.site.authority import footer_authority_nav as _footer_authority_nav
@@ -74,7 +76,24 @@ def _brand_safe() -> dict[str, Any]:
         return {}
 
 
+def _rollout_safe() -> dict[str, Any]:
+    if _load_ia_map is None:
+        return {}
+    try:
+        return (_load_ia_map().get("rollout") or {})
+    except Exception:  # noqa: BLE001
+        return {}
+
+
+def _legacy_shell_rollout() -> bool:
+    return _rollout_safe().get("shell_scope") == "campaign_routes_only"
+
+
 def _org_desc() -> str:
+    if _legacy_shell_rollout():
+        legacy = (_rollout_safe().get("legacy_positioning") or {}).get("org_description")
+        if legacy:
+            return str(legacy)
     if _org_description is None:
         return _ORG_DESC_FALLBACK
     try:
@@ -84,12 +103,26 @@ def _org_desc() -> str:
 
 
 def _footer_text() -> str:
+    if _legacy_shell_rollout():
+        legacy = (_rollout_safe().get("legacy_positioning") or {}).get("footer_blurb")
+        if legacy:
+            return str(legacy)
     if _footer_blurb is None:
         return _FOOTER_FALLBACK
     try:
         return _footer_blurb() or _FOOTER_FALLBACK
     except Exception:  # noqa: BLE001
         return _FOOTER_FALLBACK
+
+
+def _person_job_title() -> str:
+    if _legacy_shell_rollout():
+        legacy = (_rollout_safe().get("legacy_positioning") or {}).get(
+            "person_job_title"
+        )
+        if legacy:
+            return str(legacy)
+    return "Engenheiro Civil"
 
 
 ORG_JSONLD = {
@@ -111,7 +144,7 @@ PERSON_JSONLD = {
     "name": "Engº Tiago Sasaki",
     "image": f"{SITE}/assets/tiago-sasaki-foto-v11-sem-fundo.png",
     "url": f"{SITE}/especialista/tiago-jun-sasaki/",
-    "jobTitle": "Engenheiro Civil",
+    "jobTitle": _person_job_title(),
     "worksFor": {"@id": f"{SITE}/#organization"},
 }
 
@@ -130,13 +163,15 @@ SVG_SPRITE = """<svg aria-hidden="true" class="svg-sprite" height="0" width="0">
 
 def _build_header() -> str:
     brand = _brand_safe()
-    # Corporate situation-first shell (fallback matches data/site/brand.json).
-    nav = (brand.get("navigation") or {}).get("desktop") or [
+    rollout = _rollout_safe()
+    # Generated source pages keep the reviewed B2G shell during the producer
+    # window. The public artifact promotes mutable pages separately.
+    nav = (rollout.get("legacy_header") if _legacy_shell_rollout() else None) or (brand.get("navigation") or {}).get("desktop") or [
         {"label": "Serviços e problemas", "href": "/#situacoes"},
         {"label": "Obras públicas", "href": "/servicos-obras-publicas/"},
         {"label": "Biblioteca", "href": "/conteudos/"},
     ]
-    cta = (brand.get("navigation") or {}).get("cta") or {
+    cta = (rollout.get("legacy_cta") if _legacy_shell_rollout() else None) or (brand.get("navigation") or {}).get("cta") or {
         "label": "Iniciar triagem",
         "href": "/#triagem-tecnica",
     }
@@ -168,7 +203,26 @@ def _build_header() -> str:
 
 def _build_footer() -> str:
     blurb = _footer_text()
-    if _footer_columns_html is not None:
+    rollout = _rollout_safe()
+    legacy_columns = rollout.get("legacy_footer") if _legacy_shell_rollout() else None
+    if legacy_columns:
+        rendered = []
+        for column in legacy_columns:
+            links = "".join(
+                f'<a href="{html.escape(str(item["href"]), quote=True)}">{html.escape(str(item["label"]))}</a>'
+                for item in column.get("links") or []
+            )
+            if column.get("contact"):
+                links += (
+                    '<a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a>'
+                    '<a href="tel:+5548988344559">(48) 98834-4559</a>'
+                    '<span>Atendimento nacional</span>'
+                )
+            rendered.append(
+                f'<div class="footer-links"><strong>{html.escape(str(column.get("heading") or ""))}</strong>{links}</div>'
+            )
+        columns = "".join(rendered)
+    elif _footer_columns_html is not None:
         try:
             columns = _footer_columns_html()
         except Exception:  # noqa: BLE001
@@ -380,9 +434,22 @@ def page_shell(
 </html>
 """
     try:
-        from scripts.site.shell_nav import load_brand, sync_text  # noqa: PLC0415
+        from scripts.site.shell_nav import (  # noqa: PLC0415
+            load_brand,
+            sync_breadcrumbs,
+            sync_text,
+        )
 
-        return sync_text(document, load_brand(), canonical_path)
+        synced = sync_text(document, load_brand(), canonical_path)
+        rollout = _rollout_safe()
+        if (
+            rollout.get("shell_scope") == "campaign_routes_only"
+            and canonical_path not in set(rollout.get("campaign_routes") or [])
+        ):
+            # Source chrome remains legacy, while the route-to-parent contract
+            # still governs newly rendered breadcrumbs.
+            synced = sync_breadcrumbs(synced, canonical_path)
+        return synced
     except Exception:  # noqa: BLE001
         return document
 

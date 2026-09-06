@@ -42,7 +42,10 @@ def test_home_contract_profiles_are_manual_and_accessible():
     assert selector.count('role="tabpanel"') == 3
     assert selector.count('data-event-name="evidence_drilldown"') == 3
     assert 'data-event-name="proof_expand"' not in selector
-    assert selector.count('data-cta-position="market_context"') == 6
+    # Os três painéis são prova, não seis atalhos concorrentes. A transferência
+    # única para a triagem B2G fica na cópia da seção, fora do seletor.
+    assert selector.count('data-cta-position="market_context"') == 0
+    assert html.count('data-cta-position="market_context"') == 1
     assert 'data-cta-position="hero_proof"' not in selector
     assert selector.count('aria-selected="true"') == 1
     assert selector.count('aria-selected="false"') == 2
@@ -89,4 +92,4 @@ def test_home_contract_case_keeps_one_primary_hero_cta():
     assert "data-evidence-selector" not in hero
     assert "Prefiro WhatsApp" not in hero
     assert "Analisar meu contrato" not in hero
-    assert "Registrar situação para triagem" in hero
+    assert "Escolher minha situação" in hero

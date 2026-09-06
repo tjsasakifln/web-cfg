@@ -322,8 +322,9 @@ def test_home_credentials_are_subset_of_public_verified_proof():
     extract_credential_claim_texts ancorava em `<ul class="`, e a home escreve
     `<ul aria-label="..." class="hero-proof">`: a lista voltava vazia e o gate
     passava por ausencia de entrada, nao por lastro. Com o padrao corrigido a
-    home entra no mesmo contrato do perfil do especialista, e as quatro
-    afirmacoes da primeira dobra precisam existir em data/site/proof.json.
+    home entra no mesmo contrato do perfil do especialista, e as credenciais
+    da primeira dobra precisam existir em data/site/proof.json. Links de metodo
+    ficam fora da lista para nao serem classificados como credenciais.
     """
     html = (ROOT / "index.html").read_text(encoding="utf-8")
     claims = extract_credential_claim_texts(html)

@@ -17,4 +17,3 @@
 3. O que a CONFENGE ajuda a produzir/decidir: projeto, revisão, compatibilização, orçamento, memória de cálculo, laudo, parecer, relatório, diagnóstico ou plano de ação — sempre conforme escopo.
 4. Evidência e limite: Engenharia Civil pela EESC-USP, CNPJ publicado, método/limites acessíveis e prova PNCP confinada ao B2G; não há credencial, cliente, case, preço, SLA, ART, capacidade ou resultado inventado.
 5. Próximo passo: escolher a situação e iniciar uma triagem em canal escolhido pelo próprio visitante, sem envio inicial de documentos sensíveis.
-

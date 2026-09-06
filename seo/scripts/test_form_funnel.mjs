@@ -28,16 +28,17 @@ for (const needle of ["validationCategory", "validation_category: 'rate_limited'
   }
 }
 
-// Structural: shipped home has multi-step form + journey CTAs
+// Structural: the corporate home preserves the B2G multi-step form and its
+// explicit journey mapping without requiring B2G CTAs in the corporate chooser.
 const home = fs.readFileSync(path.join(root, "index.html"), "utf8");
 for (const needle of [
   'data-form-multistep="true"',
   'name="diagnostico-b2g"',
+  "Triagem para obras públicas",
   "Solicitar canal seguro para envio",
-  "Solicitar triagem do edital",
-  'data-set-journey="contrato"',
-  'data-set-journey="edital"',
-  'data-set-journey="operacao"',
+  'data-journey="contrato"',
+  'data-journey="edital"',
+  'data-journey="operacao"',
   'id="estagio"',
   'data-form-step="1"',
   'data-form-step="2"',
@@ -53,11 +54,6 @@ for (const needle of [
     console.error("FAIL: home missing", needle);
     process.exit(1);
   }
-}
-// Journey operacao CTA uses the canonical visitor-facing label.
-if (!home.includes("Solicitar diagnóstico da operação")) {
-  console.error("FAIL: home missing Solicitar diagnóstico da operação");
-  process.exit(1);
 }
 const formMatch = home.match(/<form\b[^>]*id="formulario-contato"[\s\S]*?<\/form>/);
 if (!formMatch) {

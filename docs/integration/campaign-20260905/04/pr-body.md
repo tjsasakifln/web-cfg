@@ -1,6 +1,6 @@
 CONFENGE_MV_CAMPAIGN=04
 
-READY_FOR_INTEGRATION=YES
+READY_FOR_INTEGRATION=BLOCKED:MV-09 deve ativar /servicos/ atomicamente e reconciliar inventários derivados/BOFU
 
 ## Resultado
 
@@ -12,7 +12,7 @@ Fecha #582 como implementação producer; contribui para #577 sem absorver os ow
 
 - Visitor job: entender em cinco segundos o que a CONFENGE é, reconhecer a situação e escolher um próximo passo seguro.
 - Hipótese: categoria + benefício + chooser por situação reduz saída de tráfego frio multi-vertical e aumenta triagem aplicável sem regredir o patrimônio B2G.
-- Base: `89b081a8676d8a0b30747dfcb1477f21d9ac4dfb`; produção usava esse SHA durante a auditoria.
+- Base final: `3552cf228424ebb8f34266f671fd80df43d0615c`, após rebase nos merges das PRs #604 e #612. A auditoria começou em `89b081a8676d8a0b30747dfcb1477f21d9ac4dfb`.
 - Estado anterior: home exclusivamente B2G e `/servicos/` com 301 para `/servicos-obras-publicas/`.
 - Decisão: `EXECUTE_NOW`; frente `INBOUND ENGINE`; alavancas receita, conversão, confiança, distribuição e cliente.
 - Tempo para evidência: primeira sessão de produção e janela inicial de 14 dias.
@@ -35,6 +35,18 @@ Dependência de integração: MV-09 deve incluir `servicos` no allowlist do
 artefato e compor essa ativação com a remoção do redirect no mesmo merge. Esta
 PR producer, isoladamente, não é publicável.
 
+A home passa de 128 para 129 ações rastreáveis e preserva, no contexto B2G,
+os caminhos protegidos de entrega demonstrativa e diagnóstico. O contrato de
+contagem e o inventário derivado em `data/commercial/` e `docs/commercial/`
+estão fora do `WRITE_SET`: MV-09 deve revisar os 129 destinos, atualizar a
+expectativa e regenerar o inventário conforme o fragmento. O pretest da
+producer fica deliberadamente vermelho por esse drift até a composição.
+
+O gate CSS também sinaliza classes da home anterior agora sem uso e um novo
+token de raio; o gate BOFU sinaliza apenas o novo hash de `_redirects`. Os dois
+baselines estão fora do `WRITE_SET` e têm reconciliação restrita descrita no
+fragmento para MV-09.
+
 ## Data owner, analytics e privacidade
 
 - contratos: `data/site/brand.json` e `data/site/public-ia-map.json`;
@@ -42,6 +54,8 @@ PR producer, isoladamente, não é publicável.
 - `warmbly` continua autoridade de ação comercial; origem do runtime permanece `CONFENGE_WEB`;
 - eventos existentes e sem PII: `cta_click`, `email_click`, `whatsapp_click`;
 - inbound continua iniciado pelo visitante e não autoriza outbound/SMTP.
+- `/triagem-tecnica/` já existe, mas seu recebimento externo está fail-closed;
+  o CTA mantém o fallback local de e-mail/WhatsApp até autoridade final comum.
 
 ## Qualidade
 
@@ -59,6 +73,16 @@ PR producer, isoladamente, não é publicável.
 - `npm run inbound:gates` (`ok: true`; candidato `/servicos/` reportado como aviso fail-closed)
 - `npm run test:first-fold-contract` (1740/1740 checks)
 - `npm run test:copy-contract` (424/424 checks)
+- `npm run test:contract-analysis` (212 passed)
+- `npm run test:knowledge-funnel` (14 passed)
+- `npm run test:real-proof-registry` (zero problemas)
+- `npm run test:integrity-promotion-gate` (3944/3944 checks)
+- `npm run validate:seo` (zero erros e avisos)
+- `npm run test:bofu-dominance` sinaliza somente o hash esperado de `_redirects`
+- `npm run audit:css-usage` sinaliza somente o baseline derivado fora do owner
+- `npm run test:cta-form-next-state` sinaliza 129 CTAs contra o baseline 128
+- `npm test` passou integralmente no ensaio temporário com os quatro contratos
+  de integração reconciliados; todos foram restaurados antes do push
 
 ## Rollback e integração
 

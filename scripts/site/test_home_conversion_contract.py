@@ -55,7 +55,7 @@ def test_situation_chooser_has_five_paths_without_catalog_wall() -> None:
     for label in expected:
         assert label in chooser
     assert chooser.count('class="situation-row') == 5
-    assert chooser.count('href="#triagem-tecnica"') == 4
+    assert chooser.count('href="#triagem-tecnica"') == 5
     assert 'href="/servicos-obras-publicas/"' in chooser
     assert "ICP" not in chooser
     assert "CTA" not in chooser
@@ -64,7 +64,7 @@ def test_situation_chooser_has_five_paths_without_catalog_wall() -> None:
 def test_pncp_proof_is_confined_to_the_b2g_vertical() -> None:
     html = _home()
     hero = _section(html, r'class="hero')
-    b2g = _section(html, r'id="obras-publicas"')
+    b2g = _section(html, r'id="mercado-pncp"')
 
     assert "PNCP" not in hero
     assert "54.055" not in hero
@@ -73,7 +73,8 @@ def test_pncp_proof_is_confined_to_the_b2g_vertical() -> None:
     assert "54.055" in b2g
     assert "4,48 mi" in b2g
     assert 'href="/servicos-obras-publicas/"' in b2g
-    assert html.index('id="situacoes"') < html.index('id="obras-publicas"')
+    assert 'id="obras-publicas"' in b2g
+    assert html.index('id="situacoes"') < html.index('id="mercado-pncp"')
 
 
 def test_corporate_triage_is_safe_and_b2g_form_is_unchanged() -> None:

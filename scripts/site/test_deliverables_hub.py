@@ -495,7 +495,8 @@ def test_home_keeps_deliverables_concrete_inside_the_corporate_journey() -> None
     # entrega, metodo, evidencia, autoridade, adequacao e captura, e a previa
     # de entregas caiu para a terceira secao, bem abaixo da dobra. Quem precisa
     # do CSS inline passou a ser o hero e a coluna do artefato. O gate segue a
-    # propriedade, nao o seletor antigo.
+    # propriedade, nao o seletor antigo. A prova PNCP permanece dentro da
+    # propria secao da vertical B2G, sem criar uma narrativa concorrente.
     crit = re.search(r'<style data-home-deliverables-critical=""[^>]*>([\s\S]*?)</style>', home)
     assert crit, "bloco critico inline ausente"
     critical_css = crit.group(1)
@@ -509,7 +510,8 @@ def test_home_keeps_deliverables_concrete_inside_the_corporate_journey() -> None
     assert "Orçamento ou memória de cálculo" in home
     assert "Laudo, parecer ou relatório" in home
     assert "Diagnóstico ou plano de ação" in home
-    assert 'href="/servicos/"' in home
+    assert 'href="#situacoes"' in home
+    assert 'href="#triagem-tecnica"' in home
     archetypes = re.findall(r'data-section-archetype="([^"]+)"', home)
     assert len(archetypes) == 8
     offers = re.search(

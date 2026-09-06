@@ -432,7 +432,7 @@ for (const { route, expectedNav } of [
     const nav = [...document.querySelectorAll(".desktop-nav a")].map((a) => ({
       text: a.textContent?.trim(), href: a.getAttribute("href"),
     }));
-    const preview = document.querySelector(".home-deliverables")?.getBoundingClientRect();
+    const preview = document.querySelector(".corporate-deliverables")?.getBoundingClientRect();
     return {
       route: currentRoute,
       overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
@@ -456,9 +456,9 @@ for (const { route, expectedNav } of [
     if (metrics.nav.some(({ text }) => text === "Entregas")) errors.push("frozen_nav_mutated");
     if (metrics.nav.filter(({ href }) => href === "/ferramentas/").length !== 1) errors.push("frozen_tools_missing");
   }
-  if (route === "/" && (!metrics.previewVisible || metrics.sections > 7)) errors.push("home_preview_contract");
+  if (route === "/" && (!metrics.previewVisible || metrics.sections > 8)) errors.push("home_preview_contract");
   if (route === "/" && screenshotDir) {
-    const preview = await page.$(".home-deliverables");
+    const preview = await page.$(".corporate-deliverables");
     if (preview) await preview.screenshot({ path: path.join(screenshotDir, "home-deliverables.png") });
   }
   findings.push({ ...metrics, errors });

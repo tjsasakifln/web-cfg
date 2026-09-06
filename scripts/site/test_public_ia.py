@@ -233,6 +233,7 @@ def test_page_shell_output_is_idempotent_with_shell_nav():
         wa_message="Olá",
     )
     assert 'class="desktop-nav"' in html
-    assert "Serviços e problemas" in html
-    assert "Obras públicas" in html
+    assert "Edital e proposta" in html
+    assert "Operação recorrente" in html
+    assert "Serviços e problemas" not in html
     assert sync_text(html, load_brand(), "/guias-contratos-obras/") == html

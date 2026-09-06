@@ -44,4 +44,3 @@ A home reprova se a amplitude aparecer sem critério. Por isso:
 - uso de IA: mantido apenas no rodapé de política/autoridade, sem destaque de venda;
 - PNCP: removido da prova corporativa e mantido com recorte/data na seção B2G;
 - jargão interno (`ICP`, `lead`, `CTA`, `handoff`, `pipeline`, `QCO`, `fail-closed`): ausente da superfície pública.
-

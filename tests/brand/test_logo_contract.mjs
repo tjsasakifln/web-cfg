@@ -76,6 +76,7 @@ function elementsWithClass(html, tagName, className) {
 assert("contract_exists", fs.existsSync(contractPath), contractPath);
 const raw = fs.readFileSync(contractPath, "utf8");
 const contract = JSON.parse(raw);
+const publicIa = JSON.parse(fs.readFileSync(path.join(root, "data/site/public-ia-map.json"), "utf8"));
 assert("schema", contract.schema === "confenge-logo-contract-v1", contract.schema);
 assert("version", contract.contract_version === "v1", contract.contract_version);
 assert("issue", contract.source_issue === "#326", contract.source_issue);
@@ -220,6 +221,16 @@ assert("acceptance_scope_enforced", acceptance.get("lockup_only_scope")?.state =
 const htmlFiles = visitorHtmlFiles();
 assert("html_inventory", htmlFiles.length >= 200, htmlFiles.length);
 const htmlRelpaths = htmlFiles.map((file) => path.relative(root, file));
+const stagedCandidateRelpaths = new Set((publicIa.hubs ?? [])
+  .filter((hub) => String(hub.index_state ?? "").startsWith("candidate_noindex"))
+  .map((hub) => hub.route === "/"
+    ? "index.html"
+    : `${String(hub.route).replace(/^\/+|\/+$/g, "")}/index.html`));
+for (const relative of stagedCandidateRelpaths) {
+  const absolute = path.join(root, relative);
+  assert(`staged_candidate_${relative}_exists`, htmlRelpaths.includes(relative), relative);
+  assert(`staged_candidate_${relative}_noindex`, /<meta\b(?=[^>]*name=["']robots["'])(?=[^>]*content=["'][^"']*noindex)[^>]*>/i.test(fs.readFileSync(absolute, "utf8")), relative);
+}
 const nonPublicHtmlRoots = new Set([
   "data",
   "docs",
@@ -239,14 +250,20 @@ let headerPrimary = 0;
 let footerPrimary = 0;
 let headerBrandBlocks = 0;
 let footerBrandBlocks = 0;
+let stagedLogoImages = 0;
+let stagedHeaderBrandBlocks = 0;
+let stagedFooterBrandBlocks = 0;
 const logoOccurrencesBySrc = new Map();
+const stagedLogoOccurrencesBySrc = new Map();
 const allowedHeaderSources = new Set(legacy.filter((asset) => asset.role.startsWith("header_")).map((asset) => `/${asset.path}`));
 const allowedFooterSources = new Set(legacy.filter((asset) => asset.role.startsWith("footer_")).map((asset) => `/${asset.path}`));
 for (const file of htmlFiles) {
   const html = fs.readFileSync(file, "utf8");
   const relative = path.relative(root, file);
+  const stagedCandidate = stagedCandidateRelpaths.has(relative);
   for (const block of elementsWithClass(html, "a", "brand")) {
     headerBrandBlocks += 1;
+    if (stagedCandidate) stagedHeaderBrandBlocks += 1;
     const images = [...block.matchAll(/<img\b[^>]*>/gi)].map((match) => match[0]);
     assert(`html_${relative}_brand_one_image_${headerBrandBlocks}`, images.length === 1, block);
     const parsed = attrs(images[0] ?? "");
@@ -255,6 +272,7 @@ for (const file of htmlFiles) {
   }
   for (const block of elementsWithClass(html, "div", "footer-brand")) {
     footerBrandBlocks += 1;
+    if (stagedCandidate) stagedFooterBrandBlocks += 1;
     const images = [...block.matchAll(/<img\b[^>]*>/gi)].map((match) => match[0]);
     assert(`html_${relative}_footer_brand_one_image_${footerBrandBlocks}`, images.length === 1, block);
     const parsed = attrs(images[0] ?? "");
@@ -266,6 +284,10 @@ for (const file of htmlFiles) {
     const tag = match[0];
     const parsed = attrs(tag);
     logoOccurrencesBySrc.set(parsed.src, (logoOccurrencesBySrc.get(parsed.src) ?? 0) + 1);
+    if (stagedCandidate) {
+      stagedLogoImages += 1;
+      stagedLogoOccurrencesBySrc.set(parsed.src, (stagedLogoOccurrencesBySrc.get(parsed.src) ?? 0) + 1);
+    }
     assert(`html_${relative}_logo_src_known_${logoImages}`, intrinsicByUrl.has(parsed.src), parsed.src);
     assert(`html_${relative}_logo_alt_${logoImages}`, filled(parsed.alt), tag);
     assert(`html_${relative}_logo_width_${logoImages}`, /^\d+$/.test(parsed.width ?? ""), tag);
@@ -283,12 +305,17 @@ for (const file of htmlFiles) {
 // source_html_files_scanned is immutable evidence captured by the earlier gate,
 // whose collector included internal trees. The live gate now uses the public
 // census above; a tooling-only scope correction must not recapture that evidence.
-assert("logo_inventory_matches_observation", logoImages === observation.logo_image_occurrences, logoImages);
+assert(
+  "logo_inventory_matches_observation_plus_staged_candidates",
+  logoImages === observation.logo_image_occurrences + stagedLogoImages,
+  [logoImages, observation.logo_image_occurrences, stagedLogoImages],
+);
 for (const [src, expected] of Object.entries(observation.legacy_asset_occurrences ?? {})) {
-  assert(`asset_occurrence_${path.basename(src)}`, logoOccurrencesBySrc.get(src) === expected, [logoOccurrencesBySrc.get(src), expected]);
+  const staged = stagedLogoOccurrencesBySrc.get(src) ?? 0;
+  assert(`asset_occurrence_${path.basename(src)}`, logoOccurrencesBySrc.get(src) === expected + staged, [logoOccurrencesBySrc.get(src), expected, staged]);
 }
-assert("header_lockup_inventory_matches_observation", headerBrandBlocks === observation.header_lockup_occurrences, headerBrandBlocks);
-assert("footer_lockup_inventory_matches_observation", footerBrandBlocks === observation.footer_lockup_occurrences, footerBrandBlocks);
+assert("header_lockup_inventory_matches_observation", headerBrandBlocks === observation.header_lockup_occurrences + stagedHeaderBrandBlocks, [headerBrandBlocks, observation.header_lockup_occurrences, stagedHeaderBrandBlocks]);
+assert("footer_lockup_inventory_matches_observation", footerBrandBlocks === observation.footer_lockup_occurrences + stagedFooterBrandBlocks, [footerBrandBlocks, observation.footer_lockup_occurrences, stagedFooterBrandBlocks]);
 assert("every_logo_occurrence_is_accounted_for", [...logoOccurrencesBySrc.values()].reduce((sum, count) => sum + count, 0) === logoImages, logoOccurrencesBySrc);
 
 const cssFile = path.join(root, "styles.css");

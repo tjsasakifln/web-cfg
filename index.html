@@ -92,13 +92,13 @@ body[data-content-cluster="home"] .hero-deliverable{max-width:58ch;margin:0 0 1.
 <p class="hero-deliverable">Conforme a situação, o trabalho pode resultar em projeto, revisão, orçamento, laudo, parecer, relatório ou plano de ação. A triagem confirma o escopo aplicável.</p>
 <div class="hero-actions">
 <a class="button button-primary button-lg" data-cta-position="hero" data-event-name="cta_click" href="#situacoes">Escolher minha situação <svg class="icon"><use href="#i-arrow"></use></svg></a>
-<a class="text-link hero-secondary" data-cta-position="hero" data-event-name="cta_click" href="/servicos/">Ver o escopo de serviços <svg class="icon"><use href="#i-arrow"></use></svg></a>
+<a class="text-link hero-secondary" data-cta-position="hero" data-event-name="cta_click" href="#situacoes">Escolher pela minha situação <svg class="icon"><use href="#i-arrow"></use></svg></a>
 </div>
 <ul aria-label="Sinais de confiança" class="hero-proof">
 <li><span class="proof-mark" aria-hidden="true">·</span><span>Engenharia Civil pela EESC-USP</span></li>
 <li><span class="proof-mark" aria-hidden="true">·</span><span>CNPJ 52.407.089/0001-09</span></li>
-<li><span class="proof-mark" aria-hidden="true">·</span><span><a href="/confianca/">Método e limites publicados</a></span></li>
 </ul>
+<p class="hero-proof-line"><a href="/confianca/">Método e limites publicados</a></p>
 </div>
 <aside class="corporate-hero-note" aria-labelledby="hero-note-title">
 <p class="eyebrow" id="hero-note-title">O ponto em comum</p>
@@ -125,30 +125,30 @@ body[data-content-cluster="home"] .hero-deliverable{max-width:58ch;margin:0 0 1.
 <li class="situation-row" id="situacao-projeto">
 <span class="situation-index">01</span>
 <div><h3>Projetar, revisar, orçar ou compatibilizar</h3><p>Projeto sem definição, disciplinas que não conversam, quantitativos ou orçamento que precisam de base técnica.</p></div>
-<a class="situation-action" href="#triagem-tecnica">Descrever a situação <svg class="icon"><use href="#i-arrow"></use></svg></a>
+<a class="situation-action" data-cta-id="home-situation-project" data-cta-position="situation_project" data-event-name="cta_click" href="#triagem-tecnica">Descrever a situação <svg class="icon"><use href="#i-arrow"></use></svg></a>
 </li>
 <li class="situation-row" id="situacao-obra-imovel">
 <span class="situation-index">02</span>
 <div><h3>Inspecionar, diagnosticar ou documentar obra e imóvel</h3><p>Anomalia, dúvida sobre condição, vistoria ou necessidade de registrar tecnicamente o que existe.</p></div>
-<a class="situation-action" href="#triagem-tecnica">Descrever a situação <svg class="icon"><use href="#i-arrow"></use></svg></a>
+<a class="situation-action" data-cta-id="home-situation-building" data-cta-position="situation_building" data-event-name="cta_click" href="#triagem-tecnica">Descrever a situação <svg class="icon"><use href="#i-arrow"></use></svg></a>
 </li>
 <li class="situation-row" id="situacao-pericia">
 <span class="situation-index">03</span>
 <div><h3>Perícia, assistência técnica ou avaliação</h3><p>Processo, negociação ou decisão patrimonial que depende de prova, análise crítica ou valor tecnicamente fundamentado.</p></div>
-<a class="situation-action" href="#triagem-tecnica">Descrever a situação <svg class="icon"><use href="#i-arrow"></use></svg></a>
+<a class="situation-action" data-cta-id="home-situation-expert-evidence" data-cta-position="situation_expert_evidence" data-event-name="cta_click" href="#triagem-tecnica">Descrever a situação <svg class="icon"><use href="#i-arrow"></use></svg></a>
 </li>
 <li class="situation-row" id="situacao-sst">
 <span class="situation-index">04</span>
 <div><h3>Segurança do trabalho</h3><p>Situação de risco ocupacional que precisa ser reconhecida, documentada ou tratada com apoio técnico.</p></div>
-<a class="situation-action" href="#triagem-tecnica">Descrever a situação <svg class="icon"><use href="#i-arrow"></use></svg></a>
+<a class="situation-action" data-cta-id="home-situation-safety" data-cta-position="situation_safety" data-event-name="cta_click" href="#triagem-tecnica">Descrever a situação <svg class="icon"><use href="#i-arrow"></use></svg></a>
 </li>
 <li class="situation-row situation-row--b2g" id="situacao-obras-publicas">
 <span class="situation-index">05</span>
 <div><p class="situation-kicker">Vertical com acervo próprio</p><h3>Licitação ou contrato de obra pública</h3><p>Edital, proposta, medição, glosa, aditivo, atraso, reequilíbrio ou margem exigem decisão e registro contemporâneo.</p></div>
-<a class="situation-action" href="/servicos-obras-publicas/">Entrar em obras públicas <svg class="icon"><use href="#i-arrow"></use></svg></a>
+<a class="situation-action" data-cta-id="home-situation-public-works" data-cta-position="situation_public_works" data-event-name="cta_click" href="/servicos-obras-publicas/">Entrar em obras públicas <svg class="icon"><use href="#i-arrow"></use></svg></a>
 </li>
 </ol>
-<p class="chooser-more"><a class="text-link" href="/servicos/">Ver entregas possíveis e limites de cada situação <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
+<p class="chooser-more"><a class="text-link" data-cta-id="home-services-scope" data-cta-position="situation_scope" data-event-name="cta_click" href="#triagem-tecnica">Não sei qual caminho escolher: iniciar triagem <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
 </div>
 </section>
 
@@ -178,7 +178,7 @@ body[data-content-cluster="home"] .hero-deliverable{max-width:58ch;margin:0 0 1.
 <h2 id="trust-title">Responsabilidade visível, sem mural de credenciais.</h2>
 <p>Tiago Sasaki é Engenheiro Civil pela EESC-USP e responde pela apresentação técnica da CONFENGE. O CNPJ publicado é 52.407.089/0001-09.</p>
 <ul class="trust-links">
-<li><a href="/especialista/tiago-jun-sasaki/">Conhecer quem responde</a></li>
+<li><a data-cta-id="home-trust-specialist" data-cta-position="trust" data-event-name="cta_click" href="/especialista/tiago-jun-sasaki/">Conhecer quem responde</a></li>
 <li><a href="/confianca/">Conferir evidências e limites</a></li>
 <li><a href="/correcoes/">Consultar o histórico de correções</a></li>
 </ul>
@@ -212,7 +212,8 @@ body[data-content-cluster="home"] .hero-deliverable{max-width:58ch;margin:0 0 1.
 </section>
 
 <!-- 6. VERTICAL B2G COM PROVA PROPRIA -->
-<section aria-labelledby="b2g-title" class="section section--default b2g-vertical" data-section-archetype="market_context" id="obras-publicas">
+<section aria-labelledby="b2g-title" class="section section--default b2g-vertical market-context" data-section-archetype="market_context" id="mercado-pncp">
+<span class="anchor-alias" id="obras-publicas" aria-hidden="true"></span>
 <div class="container b2g-vertical-grid">
 <div>
 <p class="eyebrow">Obras públicas e B2G</p>
@@ -221,11 +222,18 @@ body[data-content-cluster="home"] .hero-deliverable{max-width:58ch;margin:0 0 1.
 <ul class="b2g-shortcuts" aria-label="Atalhos para obras públicas">
 <li><a href="/bid-room-licitacoes-obras/">Edital e proposta</a></li>
 <li><a href="/problemas-que-resolvemos/">Contrato sob pressão</a></li>
+<li id="jornada-contrato"><a class="text-link" data-asset-family="home" data-asset-id="home-medicoes-glosas" data-cta-id="home-medicoes-glosas-dossie" data-cta-position="journey_a" data-event-name="service_cta_click" data-journey="contrato" data-route-family="medicoes-glosas" href="/medicoes-glosas-obras-publicas/">Dossiê de Medição, Glosa e Pagamento</a></li>
 <li><a href="/reequilibrio-obras-publicas/">Reequilíbrio contratual</a></li>
 <li><a href="/defesa-margem-contratos-publicos/">Defesa técnica e margem</a></li>
+<li><a href="/diagnostico-b2g-expansao/">Diagnóstico de expansão B2G</a></li>
 <li><a href="/diretoria-b2g/">Operação recorrente</a></li>
 <li><a href="/guias-contratos-obras/">Guias técnicos</a></li>
 </ul>
+<div class="home-deliverables-example" data-synthetic-example-card="">
+<span>Exemplo demonstrativo · estrutura real, números hipotéticos</span>
+<strong>Relatório Executivo de Priorização de Licitações</strong>
+</div>
+<a class="text-link" data-asset-id="home-deliverables-preview" data-cta-id="home-open-first-deliverable" data-event-name="cta_click" href="/casos/modelo-relatorio-inteligencia-licitacoes/">Consultar o demonstrativo</a>
 <div class="hero-actions">
 <a class="button button-secondary" href="/servicos-obras-publicas/">Ver serviços para obras públicas <svg class="icon"><use href="#i-arrow"></use></svg></a>
 <a class="text-link" href="/metodologia-inteligencia/">Conferir método e limites <svg class="icon"><use href="#i-arrow"></use></svg></a>
@@ -238,9 +246,54 @@ body[data-content-cluster="home"] .hero-deliverable{max-width:58ch;margin:0 0 1.
 <div class="b2g-proof-source"><dt>Fonte e corte</dt><dd>PNCP · 01/08/2026</dd></div>
 </dl>
 </div>
+
+<!-- 7. PROVA EXCLUSIVA DA VERTICAL B2G -->
+<div class="container market-context-grid">
+<div class="market-context-copy">
+<p class="eyebrow">Contexto de mercado da vertical B2G · PNCP</p>
+<h2 id="market-title">Em obras públicas, porte, prazo e registro mudam o peso da decisão.</h2>
+<p>Os três contratos públicos abaixo mostram escalas diferentes de exposição. São registros de mercado, não histórico de atendimento. A conta compara ordem de grandeza; não promete economia.</p>
+<a class="button button-secondary" data-cta-id="home-market-context-form" data-cta-position="market_context" data-event-name="cta_click" data-journey="contrato" data-set-journey="contrato" href="#formulario-contato">Registrar contrato para triagem <svg class="icon"><use href="#i-arrow"></use></svg></a>
+</div>
+<aside aria-labelledby="evidence-selector-title" class="market-evidence evidence-selector" data-evidence-selector>
+<div class="evidence-heading">
+<p class="evidence-kicker">Contratos reais, diferentes portes</p>
+<span>Fonte · PNCP</span>
+</div>
+<p class="evidence-title" id="evidence-selector-title">Compare o contexto antes de escolher uma entrega.</p>
+<p class="evidence-context evidence-intro">A prova abaixo pertence à vertical de obras públicas.</p>
+<div aria-label="Faixa de valor do contrato" class="evidence-tabs" role="tablist">
+<button aria-controls="evidence-panel-local" aria-selected="true" class="evidence-tab is-active" data-asset-id="home-contract-local" data-evidence-tab="local" data-event-name="evidence_drilldown" id="evidence-tab-local" role="tab" tabindex="0" type="button">Até R$ 250 mil</button>
+<button aria-controls="evidence-panel-regional" aria-selected="false" class="evidence-tab" data-asset-id="home-contract-regional" data-evidence-tab="regional" data-event-name="evidence_drilldown" id="evidence-tab-regional" role="tab" tabindex="-1" type="button">R$ 250 mil a R$ 1 mi</button>
+<button aria-controls="evidence-panel-strategic" aria-selected="false" class="evidence-tab" data-asset-id="home-contract-strategic" data-evidence-tab="strategic" data-event-name="evidence_drilldown" id="evidence-tab-strategic" role="tab" tabindex="-1" type="button">Acima de R$ 1 mi</button>
+</div>
+<div aria-labelledby="evidence-tab-local" class="evidence-panel is-active" data-evidence-panel="local" id="evidence-panel-local" role="tabpanel" tabindex="0">
+<p class="evidence-tier">Porte menor · Atalanta/SC</p>
+<p class="evidence-case-title">Ampliação e pavimentação de dependências públicas</p>
+<dl class="evidence-facts"><div><dt>Valor contratado</dt><dd>R$ 179.737,67</dd></div><div><dt>Vigência</dt><dd>180 dias</dd></div></dl>
+<p class="evidence-illustration" data-economics-illustration="1">Conta ilustrativa, não é economia observada. 1% deste valor contratado resulta em R$ 1.797,38. Custo publicado de um dossiê crítico: R$ 6.900 a R$ 7.900, pontual. Recorrência da diretoria: R$ 12.500 a R$ 20.000 por mês. Limite: sem risco de caixa ou margem pelo menos no piso de diagnóstico (R$ 2.900), a CONFENGE não é economicamente indicada neste porte.</p>
+<a class="evidence-source-link" href="https://pncp.gov.br/app/contratos/01258036000132/2026/7" rel="noopener" target="_blank">Ver contrato no PNCP <span aria-hidden="true">↗</span></a>
+</div>
+<div aria-labelledby="evidence-tab-regional" class="evidence-panel" data-evidence-panel="regional" id="evidence-panel-regional" role="tabpanel" tabindex="0">
+<p class="evidence-tier">Porte intermediário · São Gonçalo do Piauí/PI</p>
+<p class="evidence-case-title">Pavimentação de 4.710 m² de vias</p>
+<dl class="evidence-facts"><div><dt>Valor contratado</dt><dd>R$ 719.177,48</dd></div><div><dt>Vigência</dt><dd>365 dias</dd></div></dl>
+<p class="evidence-illustration" data-economics-illustration="1">Conta ilustrativa, não é economia observada. 1% deste valor contratado resulta em R$ 7.191,77, na altura do teto de um dossiê crítico. Custo publicado do dossiê: R$ 6.900 a R$ 7.900, pontual. Recorrência da diretoria: R$ 12.500 a R$ 20.000 por mês. Limite: o percentual não é economia observada; só indica projeto crítico se o risco identificado cobrir esse custo e os documentos existirem.</p>
+<a class="evidence-source-link" href="https://pncp.gov.br/app/contratos/14862788000150/2026/69" rel="noopener" target="_blank">Ver contrato no PNCP <span aria-hidden="true">↗</span></a>
+</div>
+<div aria-labelledby="evidence-tab-strategic" class="evidence-panel" data-evidence-panel="strategic" id="evidence-panel-strategic" role="tabpanel" tabindex="0">
+<p class="evidence-tier">Porte elevado · Paraná</p>
+<p class="evidence-case-title">Estrutura e instalações de hospital público</p>
+<dl class="evidence-facts"><div><dt>Valor contratado</dt><dd>R$ 18.293.629,80</dd></div><div><dt>Vigência</dt><dd>900 dias</dd></div></dl>
+<p class="evidence-illustration" data-economics-illustration="1">Conta ilustrativa, não é economia observada. 1% deste valor contratado resulta em R$ 182.936,30. Custo publicado de um dossiê crítico: R$ 6.900 a R$ 7.900, pontual. Recorrência da diretoria: R$ 12.500 a R$ 20.000 por mês. Limite: contrato grande não autoriza percentual como economia; o enquadramento depende de risco identificado, documentos e se a necessidade é pontual ou recorrente.</p>
+<a class="evidence-source-link" href="https://pncp.gov.br/app/contratos/81648859000103/2026/45" rel="noopener" target="_blank">Ver contrato no PNCP <span aria-hidden="true">↗</span></a>
+</div>
+<div class="evidence-source"><p>Fonte: PNCP, consulta pública. Os três contratos exibidos foram consultados em 21/08/2026. Contexto de mercado.</p></div>
+</aside>
+</div>
 </section>
 
-<!-- 7. PROXIMO PASSO CORPORATIVO -->
+<!-- 8. PROXIMO PASSO CORPORATIVO -->
 <section aria-labelledby="triage-title" class="section corporate-triage" data-section-archetype="cta_formal" id="triagem-tecnica">
 <div class="container corporate-triage-grid">
 <div>
@@ -257,7 +310,7 @@ body[data-content-cluster="home"] .hero-deliverable{max-width:58ch;margin:0 0 1.
 </section>
 
 
-<!-- 8. CAPTURA B2G PRESERVADA -->
+<!-- 9. CAPTURA B2G PRESERVADA -->
 <section aria-labelledby="contact-title" class="section section--default contact-section" data-section-archetype="cta_formal" id="contato">
 
 <div class="container contact-grid">

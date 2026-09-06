@@ -15,6 +15,44 @@
       { "label": "Contrato sob pressão", "href": "/problemas-que-resolvemos/" },
       { "label": "Operação recorrente", "href": "/diretoria-b2g/" },
       { "label": "Biblioteca", "href": "/conteudos/" }
+    ],
+    "legacy_cta": { "label": "Analisar meu caso", "href": "/#formulario-contato" },
+    "legacy_positioning": {
+      "org_description": "Consultoria para licitações e contratos de obras públicas: análise de edital, orçamento, proposta e proteção de margem na execução para construtoras.",
+      "footer_blurb": "Consultoria para licitações e contratos de obras públicas. Modelo de rotina contínua: Diretoria Fracionada para o Mercado Público.",
+      "person_job_title": "Engenheiro Civil e consultor B2G"
+    },
+    "legacy_footer": [
+      {
+        "heading": "Situações",
+        "links": [
+          { "label": "Edital e proposta", "href": "/bid-room-licitacoes-obras/" },
+          { "label": "Contrato sob pressão", "href": "/problemas-que-resolvemos/" },
+          { "label": "Operação recorrente", "href": "/diretoria-b2g/" }
+        ]
+      },
+      {
+        "heading": "Biblioteca",
+        "links": [
+          { "label": "Conteúdos", "href": "/conteudos/" },
+          { "label": "Ferramentas", "href": "/ferramentas/" },
+          { "label": "Entregas", "href": "/entregas/" },
+          { "label": "Casos", "href": "/casos/" },
+          { "label": "Aditivos", "href": "/aditivos-obras-publicas/" },
+          { "label": "Atrasos", "href": "/atrasos-prorrogacao-obras-publicas/" },
+          { "label": "Defesa técnica", "href": "/defesa-tecnica-contratos-publicos/" },
+          { "label": "Reequilíbrio", "href": "/reequilibrio-obras-publicas/" }
+        ]
+      },
+      {
+        "heading": "Empresa",
+        "links": [
+          { "label": "Serviços", "href": "/servicos-obras-publicas/" },
+          { "label": "Especialista", "href": "/especialista/tiago-jun-sasaki/" },
+          { "label": "Imprensa", "href": "/imprensa/" }
+        ],
+        "contact": true
+      }
     ]
   },
   "service_situations": [
