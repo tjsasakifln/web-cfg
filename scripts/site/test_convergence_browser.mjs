@@ -571,12 +571,14 @@ const browser = await puppeteer.launch({ executablePath: chromePath(), headless:
 report.browser_matrix_ran = true;
 
 async function openRoute(route, state, options = {}) {
-  const { waitUntil = "networkidle0", settle = 500, javaScript = true } = options;
+  const { waitUntil = "networkidle0", settle = 500, javaScript = true, beforeLoad = null } = options;
   const page = await browser.newPage();
   await page.setViewport({ width: 390, height: 844, deviceScaleFactor: 1 });
   if (!javaScript) await page.setJavaScriptEnabled(false);
   await page.setRequestInterception(true);
   attachIntercept(page, state);
+  // Hook for seeding page state that must exist before the bundle evaluates.
+  if (beforeLoad) await beforeLoad(page);
   await page.goto(`${base}${route.path}`, { waitUntil });
   if (settle) await wait(settle);
   return page;
@@ -1011,6 +1013,63 @@ try {
         preview: state.collectorBodies.map(b => String(b).slice(0, 200)) }));
     await axeClean(triage, "triage_mobile"); await shot(triage, "triage-390");
     await triage.close();
+  }
+
+  /* ---- Phase L: a failure BEFORE the request must not strand the visitor.
+   *
+   * The submit handler disables the control and shows "Registrando seu pedido…"
+   * before it assembles the payload, and the only re-enable used to live in the
+   * fetch chain's .finally. So anything that threw in between left a dead button
+   * under a message promising work in progress, with no request ever sent and no
+   * way for the visitor to retry -- the one state worse than an honest error.
+   * Seeded here by making the analytics bus throw on access. ---- */
+  {
+    const route = ROUTES[0];
+    const state = newState("ready", "receipt");
+    const page = await openRoute(route, state, {
+      beforeLoad: async (target) => {
+        // Seed the exact call the pre-flight region makes. An earlier attempt
+        // poisoned window.dataLayer, which this module never touches: it broke
+        // the shared bundle at load instead of throwing where intended, and the
+        // resulting stall looked like the bug while proving nothing.
+        await target.evaluateOnNewDocument(() => {
+          let real = null;
+          Object.defineProperty(window, "confengeTrack", {
+            configurable: true,
+            get() {
+              return function seeded(name) {
+                if (name === "lead_form_submit") throw new Error("seeded pre-flight failure");
+                if (typeof real === "function") return real.apply(window, arguments);
+              };
+            },
+            set(fn) { real = fn; },
+          });
+        });
+      },
+    });
+    await chooseRequired(page, route.needValue);
+    await page.click('[type="submit"]');
+    await wait(1200);
+    const stranded = await page.evaluate(() => {
+      const form = document.querySelector("[data-intake-form-block] form");
+      const submit = form ? form.querySelector('[type="submit"]') : null;
+      const status = document.querySelector("[data-intake-status]");
+      return {
+        disabled: submit ? submit.disabled === true : null,
+        ariaBusy: form ? form.getAttribute("aria-busy") : null,
+        status: (status ? status.textContent : "").trim(),
+      };
+    });
+    check("preflight_failure_returns_the_control",
+      stranded.disabled === false && stranded.ariaBusy === null,
+      JSON.stringify(stranded));
+    check("preflight_failure_is_reported_as_not_sent",
+      /n[ãa]o foi enviado/i.test(stranded.status),
+      JSON.stringify({ status: stranded.status.slice(0, 160) }));
+    check("preflight_failure_sent_nothing",
+      state.leadBodies.length === 0,
+      JSON.stringify({ attempts: state.leadBodies.length }));
+    await page.close();
   }
 } finally {
   await browser.close(); server.close();

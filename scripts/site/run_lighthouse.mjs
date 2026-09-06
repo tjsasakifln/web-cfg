@@ -239,6 +239,15 @@ try {
           seo: Math.round((cats.seo?.score || 0) * 100),
           lcp_ms: audits["largest-contentful-paint"]?.numericValue,
           cls: audits["cumulative-layout-shift"]?.numericValue,
+          // A CLS breach is only actionable if the summary says what moved. The
+          // raw report is written next to this file, but it does not survive a
+          // job rerun, so the shifted nodes are carried in the row itself.
+          layout_shift_elements: ((audits["layout-shifts"] || audits["layout-shift-elements"])?.details?.items || [])
+            .slice(0, 5)
+            .map((item) => ({
+              node: String(item.node?.selector || item.node?.snippet || "").slice(0, 200),
+              score: Number(item.score) || 0,
+            })),
           tbt_ms: audits["total-blocking-time"]?.numericValue,
           longest_own_task_ms: Math.max(0, ...ownLongTasks),
           fcp_ms: audits["first-contentful-paint"]?.numericValue,

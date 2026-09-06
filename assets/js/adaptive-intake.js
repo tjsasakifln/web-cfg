@@ -474,13 +474,34 @@
     submit.disabled = true;
     form.setAttribute("aria-busy", "true");
     showStatus("Registrando seu pedido…");
-    body.idempotency_key = await idempotencyKeyFor(currentFingerprint);
-    track("lead_form_submit", {
-      form_step: 2,
-      need_category: need.value,
-      channel: channel.value,
-      location_required: locationRequired()
-    });
+    // Everything from here to the fetch used to be a one-way door: the control
+    // is disabled, but the ONLY re-enable lives in the fetch chain's .finally.
+    // Anything that threw in between -- payload assembly, the analytics call --
+    // left the visitor on a permanently dead button with "Registrando seu
+    // pedido…" frozen and no request ever sent, which is the worst of both
+    // states: it looks like something is happening and nothing is. Nothing
+    // observed has thrown here; the point is that the failure mode must not
+    // exist, because the visitor cannot recover from it.
+    try {
+      body.idempotency_key = await idempotencyKeyFor(currentFingerprint);
+      track("lead_form_submit", {
+        form_step: 2,
+        need_category: need.value,
+        channel: channel.value,
+        location_required: locationRequired()
+      });
+    } catch (setupError) {
+      // No request left the page, so "not sent" is the truthful message and the
+      // direct channels stay the way forward.
+      form.removeAttribute("aria-busy");
+      if (!form.hidden) submit.disabled = false;
+      showStatus(
+        "O pedido não foi enviado. Verifique a conexão e tente novamente com os mesmos dados, ou use um dos canais diretos.",
+        "error"
+      );
+      track("lead_form_backend_error", { error_code: "not_sent" });
+      return;
+    }
 
     // Once the POST has left, the request may already have been persisted. From
     // this point a 503, a timeout, unreadable JSON or an unexpected shape mean

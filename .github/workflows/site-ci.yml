@@ -274,7 +274,11 @@ jobs:
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
-          name: site-ci-reports
+          # Attempt-scoped: re-running a failed job used to replace this artifact
+          # with the next attempt's, deleting the raw Lighthouse report and the
+          # browser evidence for the failure being diagnosed. A CLS outlier was
+          # lost exactly that way.
+          name: site-ci-reports-attempt-${{ github.run_attempt }}
           path: |
             docs/lighthouse-runs/
             docs/uiux-tools-remediation/evidence/

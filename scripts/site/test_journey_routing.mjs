@@ -31,6 +31,22 @@ const MIME = {
   ".webmanifest": "application/manifest+json",
 };
 
+/**
+ * Close helpers used by every block below. A resource created before its
+ * try/finally is a resource that leaks when the NEXT line throws: a failed
+ * puppeteer.launch used to leave the static server bound to its port for the
+ * rest of the CI job. Closing must also never mask the original failure, so
+ * both helpers swallow their own errors.
+ */
+const closeBrowser = async (browser) => {
+  if (!browser) return;
+  try { await browser.close(); } catch { /* keep the original failure */ }
+};
+const closeServer = (server) => new Promise((done) => {
+  if (!server) return done();
+  try { server.close(() => done()); } catch { done(); }
+});
+
 const server = await new Promise((done) => {
   const s = createServer((req, res) => {
     try {
@@ -47,15 +63,15 @@ const server = await new Promise((done) => {
   s.listen(PORT, "127.0.0.1", () => done(s));
 });
 
-const browser = await puppeteer.launch({
-  executablePath: resolveChromePath(),
-  headless: true,
-  args: ["--no-sandbox", "--disable-gpu"],
-});
-
 const B2G_CONFIRMATIONS = new Set(["/obrigado-contrato", "/obrigado-edital", "/obrigado-operacao"]);
 const results = [];
+let browser = null;
 try {
+  browser = await puppeteer.launch({
+    executablePath: resolveChromePath(),
+    headless: true,
+    args: ["--no-sandbox", "--disable-gpu"],
+  });
   const page = await browser.newPage();
   await page.goto(`http://127.0.0.1:${PORT}/`, { waitUntil: "networkidle0" });
 
@@ -82,8 +98,8 @@ try {
     results.push({ ...option, ...observed });
   }
 } finally {
-  await browser.close();
-  server.close();
+  await closeBrowser(browser);
+  await closeServer(server);
 }
 
 // other_technical_need is the undefined-need escape hatch. It is a real nucleus
@@ -133,12 +149,15 @@ for (const row of b2g) {
 // private nucleus -- and, because the field was then non-empty, the change
 // handler never fired to correct it.
 {
-  const browser2 = await puppeteer.launch({
+  let browser2 = null;
+  let server2 = null;
+  try {
+  browser2 = await puppeteer.launch({
     executablePath: resolveChromePath(),
     headless: true,
     args: ["--no-sandbox", "--disable-gpu"],
   });
-  const server2 = await new Promise((done) => {
+  server2 = await new Promise((done) => {
     const s = createServer((req, res) => {
       try {
         let p = decodeURIComponent((req.url || "/").split("?")[0]);
@@ -153,7 +172,6 @@ for (const row of b2g) {
     });
     s.listen(PORT + 1, "127.0.0.1", () => done(s));
   });
-  try {
     const page = await browser2.newPage();
     for (const journey of ["outro", "zzz", "obras"]) {
       await page.goto(`http://127.0.0.1:${PORT + 1}/?jornada=${journey}`, { waitUntil: "networkidle0" });
@@ -180,8 +198,8 @@ for (const row of b2g) {
       }
     }
   } finally {
-    await browser2.close();
-    server2.close();
+    await closeBrowser(browser2);
+    await closeServer(server2);
   }
 }
 
@@ -232,12 +250,15 @@ for (const row of b2g) {
     s.listen(port, "127.0.0.1", () => done(s));
   });
 
-  const server3 = await serve(PORT3);
-  const browser3 = await puppeteer.launch({
-    executablePath: resolveChromePath(), headless: true, args: ["--no-sandbox", "--disable-gpu"],
-  });
   const beacons = [];
+  let server3 = null;
+  let browser3 = null;
   try {
+    server3 = await serve(PORT3);
+    browser3 = await puppeteer.launch({
+      executablePath: resolveChromePath(), headless: true, args: ["--no-sandbox", "--disable-gpu"],
+    });
+
     const page = await browser3.newPage();
     await page.setRequestInterception(true);
     page.on("request", (r) => {
@@ -344,8 +365,8 @@ for (const row of b2g) {
       assert.equal(wire.next_step_category, "diretoria", "the restored classification was not transmitted");
     }
   } finally {
-    await browser3.close();
-    server3.close();
+    await closeBrowser(browser3);
+    await closeServer(server3);
   }
 }
 
