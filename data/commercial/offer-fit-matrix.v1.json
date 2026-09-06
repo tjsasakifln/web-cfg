@@ -1,6 +1,6 @@
 {
   "schema": "confenge.offer-fit-matrix/1.0",
-  "matrix_version": "CFG-OFFER-FIT-2026-08-28-v1",
+  "matrix_version": "CFG-OFFER-FIT-2026-09-06-v2",
   "issue": "CFG10X-17",
   "parent_issue": "#341",
   "state": "PREMISES_ONLY",
@@ -231,6 +231,7 @@
       "routes": ["/conteudos/", "/ferramentas/"]
     }
   ],
+  "home_illustrations_note": "2026-09-06 (#620): reduzido de tres paineis para um. Os paineis 'regional' e 'strategic' repetiam literalmente a mesma faixa de honorario e a mesma ressalva do painel 'local', reancorando a home em consultoria de contrato publico. O painel 'local' permanece verbatim porque sozinho ja carrega o percentual, o valor derivado, a ressalva de conta ilustrativa, o custo publicado, a recorrencia da diretoria e a unica desqualificacao de contratacao publicada no site. cited_bands e pricing_policy_ref nao foram tocados: nenhum preco declarado deixa de existir em superficie publica.",
   "home_illustrations": [
     {
       "panel": "local",
@@ -241,26 +242,6 @@
       "one_percent_cents": 179738,
       "kind": "illustration",
       "copy": "Conta ilustrativa, não é economia observada. 1% deste valor contratado resulta em R$ 1.797,38. Custo publicado de um dossiê crítico: R$ 6.900 a R$ 7.900, pontual. Recorrência da diretoria: R$ 12.500 a R$ 20.000 por mês. Limite: sem risco de caixa ou margem pelo menos no piso de diagnóstico (R$ 2.900), a CONFENGE não é economicamente indicada neste porte."
-    },
-    {
-      "panel": "regional",
-      "contract_display": "R$ 719.177,48",
-      "contract_cents": 71917748,
-      "pncp_path": "pncp.gov.br/app/contratos/14862788000150/2026/69",
-      "one_percent_display": "R$ 7.191,77",
-      "one_percent_cents": 719177,
-      "kind": "illustration",
-      "copy": "Conta ilustrativa, não é economia observada. 1% deste valor contratado resulta em R$ 7.191,77, na altura do teto de um dossiê crítico. Custo publicado do dossiê: R$ 6.900 a R$ 7.900, pontual. Recorrência da diretoria: R$ 12.500 a R$ 20.000 por mês. Limite: o percentual não é economia observada; só indica projeto crítico se o risco identificado cobrir esse custo e os documentos existirem."
-    },
-    {
-      "panel": "strategic",
-      "contract_display": "R$ 18.293.629,80",
-      "contract_cents": 1829362980,
-      "pncp_path": "pncp.gov.br/app/contratos/81648859000103/2026/45",
-      "one_percent_display": "R$ 182.936,30",
-      "one_percent_cents": 18293630,
-      "kind": "illustration",
-      "copy": "Conta ilustrativa, não é economia observada. 1% deste valor contratado resulta em R$ 182.936,30. Custo publicado de um dossiê crítico: R$ 6.900 a R$ 7.900, pontual. Recorrência da diretoria: R$ 12.500 a R$ 20.000 por mês. Limite: contrato grande não autoriza percentual como economia; o enquadramento depende de risco identificado, documentos e se a necessidade é pontual ou recorrente."
     }
   ],
   "route_copy": {
