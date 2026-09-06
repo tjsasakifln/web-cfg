@@ -190,7 +190,7 @@ def _tracked_capture_html() -> list[tuple[str, str]]:
     rows = []
     # Reuse the shipped visitor census. Tooling fixtures may deliberately carry
     # realistic lead forms, but they are not public routes and must never alter
-    # the exact 21-route production contract. The market-answer canary links to
+    # the derived public production contract. The market-answer canary links to
     # a real capture surface; its former hidden metadata-only form was not a
     # usable lead path and must not inflate this census.
     for rel in visitor_facing_relpaths(ROOT):
@@ -227,6 +227,7 @@ ISSUE_440_CAPTURE_ROUTES = {
     "ferramentas/limite-acrescimos-supressoes/index.html",
     "index.html",
     "piloto/conversao-xray/index.html",
+    "quantitativos-orcamento-obras/index.html",
     "servicos-obras-publicas/index.html",
 }
 
