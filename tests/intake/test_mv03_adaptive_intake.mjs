@@ -75,7 +75,7 @@ test("MV-09 publishes one bounded private wedge with embedded triage and three s
   const html = fs.readFileSync(path.resolve("quantitativos-orcamento-obras/index.html"), "utf8");
   for (const expected of [
     "Orçamento só orienta a decisão quando quantidades e premissas aparecem",
-    "CONFENGE — Engenharia, Perícias e Inteligência Técnica",
+    "CONFENGE, Engenharia, Perícias e Inteligência Técnica",
     "data-default-need=\"obra_edificacao_ou_documentacao\"",
     "intake_context=quantities_budget",
     "data-location hidden",
