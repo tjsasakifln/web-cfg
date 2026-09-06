@@ -34,6 +34,26 @@
 - Netlify como autoridade de produção, DNS, secrets e configuração live de Warmbly/Governance;
 - claims CREA/RNP, CPTEC, SST, case, capacidade de campo, ART automática, prazo, preço ou resultado sem prova.
 
+## Fixed points finais consumidos pela MV-09
+
+| Autoridade / donor | SHA ou hash consumido | Uso e disposição |
+|---|---|---|
+| web-cfg #612 | merge `3552cf228424ebb8f34266f671fd80df43d0615c` | `ADOPT`: base Netcup/runtime de produção; Netlify segue apenas preview. |
+| web-cfg #607 | head `895005bb52de6c70817b98357b0bbc685efccde5` | `PARTIAL`: constituição, taxonomia, intent e gates; nenhuma oferta modelada foi promovida por inferência. |
+| web-cfg #597 | head `830c222277b3a52fdfadf2a0bc95e91d24f8ac80` | `PARTIAL`: shell corporativa e hub; B2G preservada como vertical com acervo próprio. |
+| web-cfg #605 | head `32fa6390f803493722ad34c5089b93c1331e9f6b` | `PARTIAL`: linguagem por trabalho e recorte de quantitativos/orçamento; as demais rotas candidatas continuam fechadas. |
+| web-cfg #608 | head `9afe028895800228e20b11eed86abd02ee1ffa85` | `PARTIAL / ADOPT corrigido`: producer adaptativo, persistência, idempotência, readback e fallbacks; pin de produção permanece fail-closed. |
+| web-cfg #610 | head `870500fcea63ad73e95bcd0145c286c2fe6cb378` | `PARTIAL`: copy de confiança e conflito sem expor motivo protegido ou criar nova autoridade factual. |
+| web-cfg #606 | head `8066046cba697c598745070a50ef602db0390bc0` | `PARTIAL / WITHHELD`: conservação B2G adotada; `CFG-D55` e capacidade sem prova não foram publicados. |
+| web-cfg #603 | head `e23d073d269d599c547d2b12bdc06baa615fc04f` | `ADOPT`: gate de linguagem direta, aplicado como situação → decisão/artefato → evidência/limite → próxima ação. |
+| web-cfg #534 | body SHA-256 `c381fc3d053000bc1b061a4f4a49e75c721262e155252a3d910021f85b299722` | `ADOPT`: critério contemporâneo de linguagem pública; issue atualizada em `2026-09-06T00:23:48Z`. |
+| Governance #172 | merge `0074722ce66f16af06dd4799ee88064ea8a12fc1`; policy `sha256:405ac86064a90641b843352d21cd21703744115de9592558e100671d92276df7` | `ADOPT`: política oficial mergeada e pinada nos testes/manifesto. |
+| Warmbly #266 | head `b78e3d8cf820c7e594aad9f15f587299fdaf6004` | `READY, NOT LIVE`: checks verdes e mergeability `CLEAN`, mas PR ainda `OPEN` e sem SHA/runtime live; bloqueia somente a ativação do submit. |
+
+O censo canônico de ações parte das `128` CTAs declaradas em `origin/main@3552cf2` e fecha em `131`, com `27` rotas de captura e zero problemas derivados. A repetição melhora o sistema: novas superfícies herdam família pública, perfil de próxima ação, privacidade, persistência e gate, sem inventário manual por página.
+
+Estado máximo permitido neste fixed point: `READY_TO_PUBLISH_BLOCKED_BY_CROSS_REPO_CONTRACT`. A PR web pode abrir e validar; merge, release Netcup e afirmação de jornada live ficam proibidos até Warmbly #266 estar mergeada e o mesmo contrato estar provado no runtime consumidor.
+
 ## Baseline revalidada em 2026-09-05
 
 - `origin/main`, build-info e runtime-info live apontavam para o mesmo SHA inicial.
