@@ -138,6 +138,10 @@ def evaluate_signal(
         codes.extend(str(row).split(" ", 1)[0] for row in observation.get("evaluation_errors") or [])
 
     elif metric_id == "accessibility-audit":
+        if observation.get("live_evidence_missing"):
+            codes.append("browser_evidence_missing")
+        if observation.get("evidence_stale"):
+            codes.append("axe_evidence_stale")
         if int(observation.get("critical") or 0) > 0:
             codes.append("axe_critical")
         if int(observation.get("serious") or 0) > 0:
@@ -385,7 +389,13 @@ def measure_deliverables_report(path: Path) -> dict[str, dict[str, Any]]:
     return adapted
 
 
-def measure_accessibility_report(axe_path: Path, manifest_path: Path) -> dict[str, Any]:
+def measure_accessibility_report(
+    axe_path: Path,
+    manifest_path: Path,
+    *,
+    live_evidence_missing: bool = False,
+    evidence_stale: bool = False,
+) -> dict[str, Any]:
     """Verify axe results and prove that its risk census was not truncated."""
     axe = json.loads(axe_path.read_text(encoding="utf-8")) if axe_path.is_file() else {}
     manifest = (
@@ -437,6 +447,8 @@ def measure_accessibility_report(axe_path: Path, manifest_path: Path) -> dict[st
             "critical": axe.get("critical"),
             "serious": axe.get("serious"),
             "coverage_complete": coverage_complete,
+            "live_evidence_missing": live_evidence_missing,
+            "evidence_stale": evidence_stale,
         },
     )
     blocking_routes = [
@@ -452,6 +464,8 @@ def measure_accessibility_report(axe_path: Path, manifest_path: Path) -> dict[st
         "public_route_count": coverage.get("public_route_count"),
         "expected_public_route_count": len(expected_public_routes),
         "page_loads": len(pages),
+        "live_evidence": not live_evidence_missing,
+        "evidence_stale": evidence_stale,
     }
     return result
 
@@ -852,14 +866,24 @@ def collect_site_metrics(
         performance["codes"] = sorted(set([*performance["codes"], "asset_budget_exceeded"]))
     results["performance-budget"] = performance
 
+    # Accessibility must be measured on THIS tree, exactly like the other three
+    # browser-backed dimensions (responsive-geometry, price-geometry,
+    # conversion-capture), which already report browser_evidence_missing when the
+    # Chrome steps did not run. Falling back to the committed
+    # docs/uiux-evidence/axe-report.json turned a skipped axe step into
+    # "accessibility: MEASURED_PASS" using a report captured on an earlier commit
+    # that never saw the changed pages -- approval by absence. The committed
+    # report is still read, but only as a stale reference: it can never produce a
+    # pass on its own.
     current_axe_path = reports_dir / "axe-report.json"
-    axe_path = (
-        current_axe_path
-        if current_axe_path.is_file()
-        else root / "docs" / "uiux-evidence" / "axe-report.json"
-    )
+    committed_axe_path = root / "docs" / "uiux-evidence" / "axe-report.json"
+    live_axe = current_axe_path.is_file()
+    axe_path = current_axe_path if live_axe else committed_axe_path
     results["accessibility-audit"] = measure_accessibility_report(
-        axe_path, root / "seo" / "PUBLIC-ARTIFACT-MANIFEST.json"
+        axe_path,
+        root / "seo" / "PUBLIC-ARTIFACT-MANIFEST.json",
+        live_evidence_missing=not live_axe,
+        evidence_stale=not live_axe and committed_axe_path.is_file(),
     )
 
     security_codes: list[str] = []
