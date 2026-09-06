@@ -287,14 +287,12 @@ def test_pseo_shape():
     assert not errors, "pseo shape failures:\n- " + "\n- ".join(errors)
 
 
-def test_node_pin_is_single_source():
-    """Every Node pin in the repo must agree with netlify.toml.
+def test_node_pins_match_runtime_baseline():
+    """Every Node pin in the repo must agree with the portable runtime baseline.
 
-    Netlify is the production runtime, so netlify.toml NODE_VERSION is the
-    authority. The migration note calls a split between Netlify and GitHub
-    Actions "high" production risk, but nothing gated it: only site-ci and pseo
-    were checked for node-version, never netlify.toml, revops-scheduled.yml,
-    package.json engines or .nvmrc. This closes that drift.
+    ``.nvmrc`` pins the Node major used by the Netcup portable runtime. GitHub
+    Actions, package metadata and the legacy Netlify preview must stay aligned
+    so the exact gated artifact is reproducible on every plane.
 
     Lift all of these together as one coordinated change (issue #149), never
     one file at a time.
@@ -303,11 +301,18 @@ def test_node_pin_is_single_source():
 
     errors: list[str] = []
 
+    expected = _read(NVMRC).strip()
+    if not re.fullmatch(r"\d+", expected):
+        raise AssertionError(f".nvmrc must pin one Node major, got {expected!r}")
+
     toml_text = _read(NETLIFY_TOML)
     m = re.search(r'NODE_VERSION\s*=\s*"(\d+)', toml_text)
     if not m:
-        raise AssertionError("netlify.toml must pin [build.environment] NODE_VERSION")
-    expected = m.group(1)
+        raise AssertionError("legacy netlify.toml must pin [build.environment] NODE_VERSION")
+    if m.group(1) != expected:
+        errors.append(
+            f"legacy netlify.toml NODE_VERSION must match .nvmrc={expected}, got {m.group(1)}"
+        )
 
     # package.json engines must bound the same major, e.g. ">=22 <23".
     # A minor/patch floor is allowed on the lower bound (">=22.19 <23") because
@@ -332,7 +337,7 @@ def test_node_pin_is_single_source():
     ):
         errors.append(
             f"package.json engines.node must bound Node {expected} to match "
-            f"netlify.toml NODE_VERSION={expected}, got {engines!r}"
+            f".nvmrc={expected}, got {engines!r}"
         )
 
     lock = _json.loads(_read(PACKAGE_LOCK))
@@ -371,9 +376,9 @@ def test_node_pin_is_single_source():
                 f"Lighthouse requirement {required_floor}"
             )
 
-    # .nvmrc keeps local dev on the same major as CI and Netlify
+    # .nvmrc is the portable runtime baseline for local dev, CI and previews.
     if not NVMRC.is_file():
-        errors.append(".nvmrc must exist so local dev matches CI and Netlify")
+        errors.append(".nvmrc must exist as the portable runtime Node baseline")
     else:
         nvmrc = NVMRC.read_text(encoding="utf-8").strip().lstrip("v")
         if nvmrc.split(".")[0] != expected:
@@ -385,8 +390,8 @@ def test_node_pin_is_single_source():
         for pin in re.findall(r"node-version:\s*[\"']?(\d+)", text):
             if pin != expected:
                 errors.append(
-                    f"{wf.name} pins node-version {pin}, but netlify.toml pins {expected} "
-                    "(split-brain between CI and the production runtime)"
+                    f"{wf.name} pins node-version {pin}, but .nvmrc pins {expected} "
+                    "(split-brain between CI and the portable production runtime)"
                 )
 
     assert not errors, "node pin drift:\n- " + "\n- ".join(errors)
@@ -477,21 +482,18 @@ def test_merge_workflows_have_no_path_skip():
             )
 
 
-def test_netlify_production_cannot_skip_main_commits():
-    """Every push to main must reach the canonical production build.
+def test_legacy_netlify_preview_cannot_skip_main_commits():
+    """Every push to main must keep the legacy preview artifact reproducible.
 
-    A path-based ``build.ignore`` let production remain hundreds of commits
-    behind main while required GitHub gates stayed green.  Omitting ``ignore``
-    re-enables Netlify's default change detector, which can also skip a release.
-    The only allowed override is fail-closed ``exit 1`` (always build); Netlify's
-    content deduplication is the safe optimization, and rollback remains a
-    previous known-good deploy.
+    This compatibility gate prevents Netlify's default change detector from
+    serving a misleading stale preview. It does not prove or trigger canonical
+    production; ``netcup-release.yml`` owns that path.
     """
     text = _read(NETLIFY_TOML)
     commands = re.findall(r'(?m)^\s*ignore\s*=\s*["\']([^"\']+)["\']\s*$', text)
     if commands != ["exit 1"]:
         raise AssertionError(
-            "netlify.toml must override default skip detection with exactly ignore = \"exit 1\""
+            "legacy netlify.toml must override preview skip detection with exactly ignore = \"exit 1\""
         )
     if NETLIFY_IGNORE_SCRIPT.exists():
         raise AssertionError("obsolete Netlify ignore script must not remain available")
@@ -670,11 +672,11 @@ def main() -> int:
     tests = [
         test_site_ci_shape,
         test_pseo_shape,
-        test_node_pin_is_single_source,
+        test_node_pins_match_runtime_baseline,
         test_revops_scheduled_install_keeps_the_runtime_floor_fail_closed,
         test_ci_supply_chain_is_pinned,
         test_merge_workflows_have_no_path_skip,
-        test_netlify_production_cannot_skip_main_commits,
+        test_legacy_netlify_preview_cannot_skip_main_commits,
         test_merge_workflows_cover_every_pr_base,
         test_pseo_still_requires_full_npm_test,
         test_post_build_browser_gates_use_public_artifact,

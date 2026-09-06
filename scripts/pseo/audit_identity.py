@@ -104,7 +104,7 @@ def identity_block(
 def evaluate_audit_currency(
     identity: dict[str, Any],
     *,
-    netlify_deployed_sha: str | None,
+    production_release_sha: str | None,
     live_snapshot_hash: str | None,
     current_seed_set_hash: str | None,
 ) -> dict[str, Any]:
@@ -119,13 +119,13 @@ def evaluate_audit_currency(
     if not artifact:
         mismatches.append("public_artifact_hash_missing")
 
-    if not netlify_deployed_sha:
-        mismatches.append("netlify_deployed_sha_missing")
+    if not production_release_sha:
+        mismatches.append("production_release_sha_missing")
     else:
-        if target != netlify_deployed_sha:
-            mismatches.append("audit_target_sha!=netlify_deployed_sha")
-        if live_man != netlify_deployed_sha:
-            mismatches.append("live_manifest_sha!=netlify_deployed_sha")
+        if target != production_release_sha:
+            mismatches.append("audit_target_sha!=production_release_sha")
+        if live_man != production_release_sha:
+            mismatches.append("live_manifest_sha!=production_release_sha")
 
     if live_snapshot_hash and snap and snap != live_snapshot_hash:
         # allow short vs full hash compare
@@ -143,7 +143,7 @@ def evaluate_audit_currency(
         "production_audit_is_current": is_current,
         "stale_code": None if is_current else STALE_CODE,
         "mismatches": mismatches,
-        "netlify_deployed_sha": netlify_deployed_sha,
+        "production_release_sha": production_release_sha,
     }
 
 

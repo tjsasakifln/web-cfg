@@ -80,7 +80,7 @@ def test_write_build_info_schema():
 
 
 def test_public_build_info_path_documented():
-    # Source of truth path used by Netlify publish root after assemble
+    # Source of truth written into the artifact promoted by netcup-release.yml.
     assert (ROOT / "scripts" / "pseo" / "build_site.py").exists()
     src = (ROOT / "scripts" / "pseo" / "build_site.py").read_text(encoding="utf-8")
     assert "build-info.json" in src

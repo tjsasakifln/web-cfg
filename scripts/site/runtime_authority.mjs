@@ -105,7 +105,6 @@ export function findForbiddenProductionInstructions(text, file = "<text>", polic
   }
   for (const unit of units) {
     if (!/netlify/i.test(unit.content) && !/PROD_TRAFFIC_UNCHANGED/.test(unit.content)) continue;
-    const excused = benign.find((ctx) => ctx.re.test(unit.content));
     for (const rule of rules) {
       // Only label-style rules ("WHERE_TO_SET:" then the value) need the
       // two-line window. Running every rule on it would report each single-line
@@ -113,6 +112,25 @@ export function findForbiddenProductionInstructions(text, file = "<text>", polic
       if (unit.window !== Boolean(rule.window)) continue;
       const match = unit.content.match(rule.re);
       if (!match) continue;
+      const matchStart = match.index ?? 0;
+      const matchEnd = matchStart + match[0].length;
+      const excused = rule.allow_benign_context !== false && benign.some((ctx) => {
+        const flags = ctx.re.flags.includes("g") ? ctx.re.flags : `${ctx.re.flags}g`;
+        for (const benignMatch of unit.content.matchAll(new RegExp(ctx.re.source, flags))) {
+          const benignStart = benignMatch.index ?? 0;
+          const benignEnd = benignStart + benignMatch[0].length;
+          const overlaps = benignStart < matchEnd && benignEnd > matchStart;
+          if (ctx.scope !== "clause") return overlaps;
+          if (benignEnd < matchStart) {
+            if (!/[.;\n]/.test(unit.content.slice(benignEnd, matchStart))) return true;
+          } else if (benignStart > matchEnd) {
+            if (!/[.;\n]/.test(unit.content.slice(matchEnd, benignStart))) return true;
+          } else {
+            return true;
+          }
+        }
+        return false;
+      });
       if (excused) continue;
       if (negation) {
         // A prohibition often wraps: "... nem republicar um\ndeploy Netlify ...".

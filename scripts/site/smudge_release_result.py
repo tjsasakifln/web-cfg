@@ -38,7 +38,7 @@ def main() -> None:
             data["git_head"] = head
         data["final_sha_note"] = (
             "Injected at checkout via smudge filter to match git HEAD; "
-            "public authority: /.well-known/release-result.json after Netlify build"
+            "public authority: Netcup /.well-known/build-info.json after atomic promotion"
         )
 
     out = json.dumps(data, ensure_ascii=False, indent=2) + "\n"
