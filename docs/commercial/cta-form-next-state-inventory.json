@@ -3215,7 +3215,7 @@
         {
           "cta_id": "",
           "position": "contact",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20problema%20urgente%20em%20contrato%20p%C3%BAblico%20e%20quero%20solicitar%20um%20canal%20seguro%20para%20envio.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20explicar%20uma%20situa%C3%A7%C3%A3o%20t%C3%A9cnica%20e%20combinar%20o%20pr%C3%B3ximo%20passo.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "WhatsApp (48) 98834-4559",
@@ -3224,7 +3224,6 @@
           "field_purpose": "not_applicable",
           "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem apenas por canal seguro combinado depois do protocolo.",
           "event_semantics": [
-            "cta_click",
             "whatsapp_click"
           ]
         },
