@@ -1,13 +1,7 @@
 /* Acentos da página /casos/modelo-painel-precos-obras-publicas/.
    O kit base vem de /assets/report-model.css e não é alterado aqui. */
 
-.case-badge {
-  background: #fef3c7;
-  border-radius: 4px;
-  color: #92400e;
-  display: inline-block;
-  font-size: .8rem;
-  font-weight: 800;
+.case-badge {border-radius: 4px;
   letter-spacing: .04em;
   margin: 12px 0 0;
   padding: .25rem .55rem;

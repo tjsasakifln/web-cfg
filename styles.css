@@ -979,9 +979,13 @@ html.no-js body[data-content-cluster="home"] .site-header{position:static}
 .lead-inline{min-width:0;grid-template-columns:minmax(0,1fr)}
 .lead-inline-copy,.lead-inline-actions{min-width:0;overflow-wrap:break-word}
 .case-badge,.eyebrow{overflow-wrap:normal;word-break:normal;max-width:100%;min-width:0}
+
+.case-badge{display:inline-block;background:#fef3c7;color:#92400e;font-size:.8rem;font-weight:700;padding:.2rem .5rem;border-radius:4px}
 .report-disclaimer .container{flex-wrap:wrap;min-width:0}
 .report-disclaimer p{min-width:0;flex:1 1 16rem}
 .report-disclaimer .case-badge{flex:1 1 100%}
+
+.report-disclaimer p.case-badge{color:#92400e;font-size:.8rem;font-weight:700}
 .report-section-grid,.report-section-content,.report-hero-grid,.report-hero-copy,.report-wide-head{min-width:0}
 h1,h2,h3{overflow-wrap:break-word}
 @media (min-width:761px){.lead-inline:has(>.lead-inline-copy):has(>.lead-inline-actions){grid-template-columns:minmax(0,1.2fr) minmax(220px,auto)}}

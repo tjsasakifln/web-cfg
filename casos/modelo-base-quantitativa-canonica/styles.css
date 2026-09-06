@@ -5,14 +5,7 @@
    e empurrar links de texto para fora do alcance do teclado no mobile. */
 .report-section-content { min-width: 0; }
 
-.case-badge {
-  background: #fef3c7;
-  border-radius: 4px;
-  color: #92400e;
-  display: inline-block;
-  font-family: var(--r-mono);
-  font-size: .8rem;
-  font-weight: 800;
+.case-badge {border-radius: 4px;
   letter-spacing: .04em;
   margin: 16px 0 0;
   padding: 6px 9px;
@@ -225,5 +218,4 @@
   .bq-qa { grid-template-columns: 1fr; }
   .bq-qa dd { font-size: 2.4rem; }
   .bq-caveat { margin-left: -16px; margin-right: -16px; padding: 22px 16px; }
-  .case-badge { font-size: .8rem; }
 }
