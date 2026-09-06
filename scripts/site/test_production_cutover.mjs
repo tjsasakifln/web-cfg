@@ -90,8 +90,8 @@ const origin = createOriginClient({
   hostHeader: OPTIONS.host,
   resolveIp: OPTIONS.resolveIp,
 });
-/** Full H1 as required by production gate (exact phrase family). */
-const EXPECTED_H1_FULL = "Licitação vencida não paga a conta. Contrato rentável, sim.";
+/** Full corporate H1 as required by the canonical public shell. */
+const EXPECTED_H1_FULL = "Do problema técnico à decisão documentada.";
 const RETIRED = [
   "Oito momentos em que",
   "Todo o conteúdo permanece legível sem JavaScript",
@@ -231,28 +231,15 @@ if (OPTIONS.expectedRuntimeIdentity) {
 // Home architecture
 const home = await fetchText("/");
 ok("home_200", home.status === 200, `status=${home.status}`);
-ok(
-  "home_h1_full",
-  home.body.includes(EXPECTED_H1_FULL) ||
-    (home.body.includes("Licitação vencida não paga a conta.") &&
-      home.body.includes("Contrato rentável, sim.")),
-  "full H1 phrase missing"
-);
-// Prefer exact h1 element text when present
 const h1Match = home.body.match(/<h1[^>]*id="hero-title"[^>]*>([\s\S]*?)<\/h1>/i);
-if (h1Match) {
-  const h1Text = h1Match[1].replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
-  ok(
-    "home_h1_element",
-    h1Text.includes("Licitação vencida não paga a conta.") &&
-      h1Text.includes("Contrato rentável, sim."),
-    `h1=${h1Text.slice(0, 80)}`
-  );
-}
-const macro = (home.body.match(/macro-phase/g) || []).length;
-ok("four_macrofases", macro >= 4, `macro-phase count=${macro}`);
+const h1Text = h1Match
+  ? h1Match[1].replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim()
+  : "";
+ok("home_h1_full", h1Text === EXPECTED_H1_FULL, `h1=${h1Text.slice(0, 80)}`);
+const situationRows = (home.body.match(/class="[^"]*\bsituation-row\b/g) || []).length;
+ok("five_situation_paths", situationRows === 5, `situation rows=${situationRows}`);
 const blocks = (home.body.match(/data-section-archetype="/g) || []).length;
-ok("seven_narrative_blocks", blocks === 7, `archetypes=${blocks}`);
+ok("eight_narrative_blocks", blocks === 8, `archetypes=${blocks}`);
 for (const phrase of RETIRED) {
   ok(`retired_absent:${phrase.slice(0, 24)}`, !home.body.includes(phrase), "found retired string");
 }
@@ -298,7 +285,11 @@ if (localCss) {
     liveHash === localHash,
     `live=${liveHash.slice(0, 16)} local=${localHash.slice(0, 16)} liveLen=${css.body.length} localLen=${localCss.length}`
   );
-  ok("css_contains_macro_phases", css.body.includes("macro-phase") || css.body.includes("macro-phases"), "macro-phase CSS missing");
+  ok(
+    "css_reduced_data_targets_published_profile",
+    css.body.includes("@media (prefers-reduced-data:reduce){.profile-mark img{display:none}"),
+    "reduced-data profile fallback missing"
+  );
 } else {
   console.log("SKIP css_sha256_matches_artifact (no local styles.css)");
 }
@@ -324,10 +315,10 @@ ok(
 );
 ok(
   "servicos_target_hub",
-  /servicos-obras-publicas/.test(loc),
+  loc === "/servicos/",
   `loc=${loc}`
 );
-ok("fragment_como_atuamos", home.body.includes('id="como-atuamos"'), "missing id");
+ok("fragment_situacoes", home.body.includes('id="situacoes"'), "missing id");
 
 // 410
 for (const path of ["/vision", "/nexgen", "/avcbclcb"]) {
