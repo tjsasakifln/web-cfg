@@ -1096,7 +1096,8 @@ def test_home_form_anchor_reveals_fields():
         "CSS must set scroll-margin-top on #formulario-contato"
     )
     assert re.search(
-        r"#formulario-contato\{order:\s*-1\}|\.contact-form\{order:\s*-1",
+        r"(?:^|[{},])[^{}]*#formulario-contato\{[^}]*order:\s*-1|"
+        r"(?:^|[{},])[^{}]*\.contact-form\{[^}]*order:\s*-1",
         css.replace(" ", ""),
     ), "mobile rule must set form order so title + first field lead the 390px viewport"
     situation_hrefs = re.findall(
@@ -1105,7 +1106,7 @@ def test_home_form_anchor_reveals_fields():
         re.I,
     )
     assert situation_hrefs == [
-        "/triagem-tecnica/#projetos",
+        "/quantitativos-orcamento-obras/",
         "/triagem-tecnica/#obra-imovel",
         "/triagem-tecnica/#pericia-avaliacao",
         "/triagem-tecnica/#sst",
@@ -1219,6 +1220,8 @@ def test_css_visitor_tokens():
 
 NON_INTERACTIVE_CONTAINERS = (
     "problem-stage-head",
+)
+RETIRED_NON_INTERACTIVE_CONTAINERS = (
     "macro-phase",
     "offer-dominant",
 )
@@ -1226,6 +1229,11 @@ NON_INTERACTIVE_CONTAINERS = (
 
 def test_non_interactive_containers_carry_no_click_affordance():
     css = (ROOT / "styles.css").read_text(encoding="utf-8")
+    public_html = "\n".join(path.read_text(encoding="utf-8") for path in _public_html_files())
+    for cls in RETIRED_NON_INTERACTIVE_CONTAINERS:
+        assert not re.search(rf'class="[^"]*\b{re.escape(cls)}\b', public_html), (
+            f"retired .{cls} markup returned without restoring its dead-affordance guard"
+        )
     for cls in NON_INTERACTIVE_CONTAINERS:
         rules = re.findall(rf"\.{re.escape(cls)}(?:\s+h\d)?[^{{]*\{{[^}}]*\}}", css)
         assert rules, f"expected at least one CSS rule for .{cls}"

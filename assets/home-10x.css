@@ -515,6 +515,7 @@ body[data-content-cluster="home"] .hero-proof a{text-decoration:underline;text-u
 .chooser-more{margin:1.35rem 0 0;text-align:right}
 
 .corporate-deliverables{background:#fff}
+.home-deliverables{background:#fff}
 .deliverable-ledger{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin-top:2.5rem;border-top:1px solid var(--rule-strong);border-bottom:1px solid var(--rule)}
 .deliverable-ledger article{padding:1.5rem 1.35rem 1.6rem 0}
 .deliverable-ledger article+article{padding-left:1.35rem;border-left:1px solid var(--rule)}

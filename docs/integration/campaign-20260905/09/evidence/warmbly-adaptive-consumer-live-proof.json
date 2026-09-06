@@ -1,0 +1,60 @@
+{
+  "schema": "confenge.mv09.warmbly-adaptive-consumer-live-proof/v1",
+  "observed_at": "2026-09-06T03:10:59-03:00",
+  "warmbly_merge_sha": "fafa8bda803c5245368dc4261fe8eb223c5c4dba",
+  "runtime_identity": {
+    "repository_head": "fafa8bda803c5245368dc4261fe8eb223c5c4dba",
+    "deployed_sha_file": "fafa8bda803c5245368dc4261fe8eb223c5c4dba",
+    "image_revision_label": "fafa8bda803c5245368dc4261fe8eb223c5c4dba",
+    "release_environment_sha": "fafa8bda803c5245368dc4261fe8eb223c5c4dba",
+    "decision_audit_sha": "fafa8bda803c5245368dc4261fe8eb223c5c4dba",
+    "verified": true
+  },
+  "health": {
+    "http": 200,
+    "status": "READY",
+    "auto_send_enabled": false,
+    "dispatch_attempted": false
+  },
+  "accepted_canary": {
+    "record_kind": "synthetic",
+    "http": 201,
+    "logical_id": "nihr:web:mv09-accepted-1788664259",
+    "receipt_id": "rcpt-accepted-1788664259",
+    "outcome": "ACCEPTED",
+    "qualification_state": "CONFLICT_CHECK_REQUIRED",
+    "public_readback_http": 404,
+    "loopback_readback_http": 200
+  },
+  "rejected_canary": {
+    "record_kind": "synthetic",
+    "http": 201,
+    "logical_id": "nihr:web:mv09-rejected-1788664259",
+    "receipt_id": "rcpt-rejected-1788664259",
+    "outcome": "REJECTED_WITH_REASON",
+    "reason": "consent_missing",
+    "public_readback_http": 404,
+    "loopback_readback_http": 200
+  },
+  "safety": {
+    "real_contact_created": false,
+    "commercial_opportunity_claimed": false,
+    "outbound_eligible": false,
+    "auto_send": false,
+    "smtp_authorized": false,
+    "followup_authorized": false,
+    "dispatch_attempted": false,
+    "secret_recorded": false,
+    "contact_pii_recorded": false
+  },
+  "producer_decision": {
+    "adaptive_submit": "WITHHELD",
+    "config_http": 503,
+    "fallback_channels": [
+      "whatsapp",
+      "email",
+      "telephone"
+    ],
+    "reason": "The canonical public Warmbly destination does not expose the HMAC readback route required for durable producer confirmation."
+  }
+}
