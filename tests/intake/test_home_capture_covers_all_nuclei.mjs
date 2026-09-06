@@ -38,9 +38,18 @@ for (const nucleus of NUCLEI) {
   );
 }
 // The undefined-need escape hatch must exist, so nobody is forced to misfile.
+// It is other_technical_need, a real NUCLEI key -- not OTHER_NEEDS_CONTEXT,
+// which is the admission decision state (adaptive-intake.cjs OTHER). Publishing
+// the decision state here produced an option whose stage derived no nucleus at
+// all, recreating the null the rest of #616 removes.
 assert.ok(
-  declared.has("OTHER_NEEDS_CONTEXT"),
+  declared.has("other_technical_need"),
   "the home capture has no option for a need the visitor cannot yet classify",
+);
+assert.equal(
+  declared.has("OTHER_NEEDS_CONTEXT"),
+  false,
+  "the admission decision state is published as if it were a nucleus",
 );
 
 // Every option carries a journey, so nothing reaches the lead function unlabelled.
@@ -73,5 +82,13 @@ assert.equal(
   hint,
   "the rendered pre-form value and the next-state contract disagree",
 );
+
+// Exactly one option may be a journey's default, and it must be the neutral one:
+// five options share data-journey="outro", so without this the first of them
+// wins any journey-driven pre-selection.
+const defaults = [...select.matchAll(/<option\b[^>]*data-journey-default[^>]*>/g)].map((m) => m[0]);
+assert.equal(defaults.length, 1, `expected one journey-default option, found ${defaults.length}`);
+assert.match(defaults[0], /data-nucleus="other_technical_need"/,
+  "the journey-default option is not the undefined-need option");
 
 console.log("HOME_CAPTURE_NUCLEI_OK", { nuclei: declared.size, options: options.length });

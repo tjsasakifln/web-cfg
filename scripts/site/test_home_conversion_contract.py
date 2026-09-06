@@ -117,9 +117,55 @@ def test_corporate_triage_is_safe_and_b2g_form_is_unchanged() -> None:
     assert stage_select, "the situation select is missing from the corporate capture"
     options = re.findall(r'<option\b[^>]*value="[^"]+"[^>]*>', stage_select.group(0))
     assert len(options) >= 10, f"situation options collapsed to {len(options)}"
+    # Values, not just attribute presence: asserting that data-journey= appears
+    # would pass with every option set to the same journey, or with a nucleus
+    # that is not a nucleus at all.
+    canonical_journeys = {"edital", "contrato", "operacao", "outro"}
+    canonical_nuclei = {
+        "public_works_b2g",
+        "building_engineering_documentation",
+        "expert_evidence_assistance",
+        "property_valuation",
+        "occupational_safety",
+        "other_technical_need",
+    }
+    seen_nuclei = set()
     for option in options:
-        assert "data-journey=" in option, option
-        assert "data-nucleus=" in option, option
+        journey = re.search(r'data-journey="([^"]*)"', option)
+        nucleus = re.search(r'data-nucleus="([^"]*)"', option)
+        assert journey and journey.group(1) in canonical_journeys, option
+        assert nucleus and nucleus.group(1) in canonical_nuclei, option
+        seen_nuclei.add(nucleus.group(1))
+        # The journey must match the nucleus, or the set could be flattened to a
+        # single journey and still satisfy a membership check. A public-works
+        # option filed as "outro" loses its confirmation page; a private option
+        # filed as a B2G journey is the original defect.
+        if nucleus.group(1) == "public_works_b2g":
+            assert journey.group(1) in {"edital", "contrato", "operacao"}, option
+        else:
+            assert journey.group(1) == "outro", option
+    assert seen_nuclei == canonical_nuclei, sorted(canonical_nuclei - seen_nuclei)
+
+    # The sha256 freeze also pinned the form's transport. Those attributes decide
+    # where a submission goes and whether it is acknowledged, so they are named
+    # here rather than left to the removed hash.
+    for attribute in (
+        'action="/obrigado"',
+        'method="POST"',
+        'data-ajax="true"',
+        'data-runtime-profile="shared_lead_form_v1"',
+        'data-next-state-profile="general_triage"',
+    ):
+        assert attribute in body, attribute
+    # The stage values lead-core.cjs keys its nucleus map on must not drift.
+    for stage_value in (
+        "problema urgente em contrato",
+        "edital ou proposta em análise",
+        "estruturando a operação no mercado público",
+        "escolhendo oportunidades",
+        "contrato em execução",
+    ):
+        assert f'value="{stage_value}"' in body, stage_value
 
 
 def test_services_hub_is_corporate_indexable_and_price_free() -> None:

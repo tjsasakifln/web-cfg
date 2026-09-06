@@ -397,7 +397,17 @@
       }
       const stage = form.querySelector('#estagio');
       if (stage && (forceStage || !stage.value)) {
-        const opt = [...stage.options].find((o) => o.getAttribute('data-journey') === j);
+        // Five options now share data-journey="outro", so a bare `find` returned
+      // the first of them and silently pre-filled a REQUIRED select with one
+      // specific private nucleus (engenharia-edificacoes) for any unknown or
+      // neutral journey. Because the value was then non-empty, the change
+      // handler never fired and the visitor got no prompt to correct it -- and
+      // since #616 derives nucleus_id from the stage, that shipped an
+      // authoritative wrong classification instead of the old null. Prefer the
+      // option explicitly marked as that journey's default; the three B2G
+      // journeys mark none, so they keep their existing first-match behaviour.
+      const candidates = [...stage.options].filter((o) => o.getAttribute('data-journey') === j);
+      const opt = candidates.find((o) => o.hasAttribute('data-journey-default')) || candidates[0];
         if (opt) stage.value = opt.value;
       }
     };
