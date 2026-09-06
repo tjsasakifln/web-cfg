@@ -25,6 +25,13 @@
         // shipped it, explained by its own hint.
         return !nucleus || nucleus === 'public_works_b2g';
       };
+      // The same decision, applied to reading the answers -- not only to showing
+      // the fields. While a non-public nucleus is selected the preserved DOM
+      // values are not answers about THIS need: they are what the visitor said
+      // about a different one, kept only so switching back restores them.
+      // Reading them anyway is what reported a perícia lead with public-contract
+      // bands and classified it 'diretoria'.
+      const b2gAnswer = (el) => (b2gFieldsApply() ? (el?.value || '') : '');
       const urgencyToBand = (raw) => {
         const v = (raw || '').trim();
         if (v === 'até 48 horas') return 'ate_48h';
@@ -34,12 +41,14 @@
         return 'unknown';
       };
       const readOfferFitInput = () => ({
-        ticket_band: (faixaContratoEl?.value || '').trim() || 'unknown',
-        risk_band: (riscoEmJogoEl?.value || '').trim() || 'unknown',
-        frequency: (frequenciaEl?.value || '').trim() || 'unknown',
+        ticket_band: b2gAnswer(faixaContratoEl).trim() || 'unknown',
+        risk_band: b2gAnswer(riscoEmJogoEl).trim() || 'unknown',
+        frequency: b2gAnswer(frequenciaEl).trim() || 'unknown',
+        // Urgency is a general field, outside the public-works group: it applies
+        // to any need and is read unconditionally.
         urgency: urgencyToBand(urgenciaEl?.value),
-        document_maturity: (maturidadeEl?.value || '').trim() || 'unknown',
-        internal_capacity: (capacidadeEl?.value || '').trim() || 'unknown',
+        document_maturity: b2gAnswer(maturidadeEl).trim() || 'unknown',
+        internal_capacity: b2gAnswer(capacidadeEl).trim() || 'unknown',
       });
       const updateOfferFitHint = () => {
         if (!offerFitHintEl || typeof window.confengeRouteOfferFit !== 'function') return;
@@ -412,7 +421,14 @@
         const routeFamily = (form.querySelector('[name="route_family"]')?.value || '').slice(0, 80);
         const publicSlug = (form.querySelector('[name="public_id_slug"]')?.value || '').slice(0, 80);
         const ctaId = (form.querySelector('[name="cta_id"]')?.value || '').slice(0, 80);
-        const routed = typeof window.confengeRouteOfferFit === 'function'
+        // Outside public_works_b2g the matrix has nothing to say, so it is not
+        // consulted. All-unknown input is NOT the way to express that: the
+        // router answers 'diagnostico' to it. null is the contract this code
+        // already uses for "no routing" (see updateOfferFitHint), and it lands
+        // as the empty next_step_category an unanswered form already emits --
+        // absence of classification, never 'nao_indicado', which would claim an
+        // economic disqualification nobody assessed.
+        const routed = b2gFieldsApply() && typeof window.confengeRouteOfferFit === 'function'
           ? window.confengeRouteOfferFit(readOfferFitInput())
           : null;
         track('lead_form_submit', {
@@ -427,11 +443,11 @@
           route_family: routeFamily,
           asset_id: assetId,
           cta_id: ctaId,
-          ticket_band_category: (faixaContratoEl?.value || '').slice(0, 40),
-          risk_band_category: (riscoEmJogoEl?.value || '').slice(0, 40),
-          frequency_category: (frequenciaEl?.value || '').slice(0, 40),
-          docs_category: (maturidadeEl?.value || '').slice(0, 40),
-          capacity_category: (capacidadeEl?.value || '').slice(0, 40),
+          ticket_band_category: b2gAnswer(faixaContratoEl).slice(0, 40),
+          risk_band_category: b2gAnswer(riscoEmJogoEl).slice(0, 40),
+          frequency_category: b2gAnswer(frequenciaEl).slice(0, 40),
+          docs_category: b2gAnswer(maturidadeEl).slice(0, 40),
+          capacity_category: b2gAnswer(capacidadeEl).slice(0, 40),
           next_step_category: (routed?.next_step || '').slice(0, 40),
         });
         if (assetId) {
