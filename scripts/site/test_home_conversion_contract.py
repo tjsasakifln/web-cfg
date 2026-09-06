@@ -55,7 +55,8 @@ def test_situation_chooser_has_five_paths_without_catalog_wall() -> None:
     for label in expected:
         assert label in chooser
     assert chooser.count('class="situation-row') == 5
-    assert chooser.count('href="/triagem-tecnica/#') == 4
+    assert 'href="/quantitativos-orcamento-obras/"' in chooser
+    assert chooser.count('href="/triagem-tecnica/#') == 3
     assert 'href="/servicos-obras-publicas/"' in chooser
     assert "ICP" not in chooser
     assert "CTA" not in chooser
