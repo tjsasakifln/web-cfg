@@ -17,7 +17,7 @@ iniconfig==2.3.0
 packaging==26.3
 pluggy==1.6.0
 proto-plus==1.28.4
-protobuf==7.36.0
+protobuf==7.36.1
 pyasn1==0.6.4
 pyasn1_modules==0.4.2
 pycparser==3.0
