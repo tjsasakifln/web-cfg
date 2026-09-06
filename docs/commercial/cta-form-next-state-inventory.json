@@ -3068,7 +3068,7 @@
           "current_label": "Registrar situação para triagem",
           "useful_next_state": "A situação fica registrada para triagem; o protocolo confirma a gravação e a confirmação indica qual decisão vem depois.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da página de confirmação",
-          "pre_form_value": "Registre o contexto para a CONFENGE separar edital, contrato e operação e indicar o próximo enquadramento.",
+          "pre_form_value": "Descreva a necessidade em uma frase. A CONFENGE enquadra o tipo de trabalho, de obra privada a contrato público, e responde com o próximo passo. Se não for caso de contratar, a resposta diz isso.",
           "pre_form_value_visible": true,
           "field_purpose": {
             "visible_text": "Nome identifica o responsável; o contato permite retorno; a necessidade direciona a triagem. Empresa, urgência e contexto são opcionais. WhatsApp: DDD e 10/11 dígitos; e-mail completo.",
@@ -3231,7 +3231,7 @@
         {
           "cta_id": "",
           "position": "contact",
-          "href": "mailto:tiago.sasaki@confenge.com.br?subject=Contato%20CONFENGE%20-%20licitacao%20ou%20contrato&body=Ol%C3%A1%2C%20Tiago.%0A%0AEmpresa%3A%0ASitua%C3%A7%C3%A3o%20(contrato%2Fedital%2Fopera%C3%A7%C3%A3o)%3A%0AUrg%C3%AAncia%3A%0A",
+          "href": "mailto:tiago.sasaki@confenge.com.br?subject=Contato%20CONFENGE&body=Ol%C3%A1%2C%20Tiago.%0A%0ANecessidade%20(obra%20privada%2C%20per%C3%ADcia%2C%20avalia%C3%A7%C3%A3o%2C%20seguran%C3%A7a%20do%20trabalho%20ou%20obra%20p%C3%BAblica)%3A%0ALocal%3A%0AUrg%C3%AAncia%3A%0A",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "E-mail tiago.sasaki@confenge.com.br",

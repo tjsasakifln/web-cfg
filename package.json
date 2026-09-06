@@ -284,7 +284,7 @@
     "scrub:em-dashes:check": "python3 scripts/site/scrub_em_dashes.py --check",
     "test:public-offer-truth": "node tests/commercial/test_public_offer_truth.mjs",
     "test:offer-fit": "node tests/commercial/test_offer_fit_matrix.mjs && node tests/commercial/test_offer_fit_copy.mjs && python3 -m pytest scripts/site/test_home_real_contract_case.py -q",
-    "test:adaptive-intake": "node scripts/site/test_adaptive_authority.mjs && node scripts/site/test_adaptive_intake.mjs",
+    "test:adaptive-intake": "node scripts/site/test_adaptive_authority.mjs && node scripts/site/test_adaptive_intake.mjs && node tests/intake/test_home_capture_covers_all_nuclei.mjs",
     "test:private-readiness": "node scripts/site/test_private_project_technical_readiness.mjs",
     "test:convergence-browser": "node scripts/site/test_convergence_browser.mjs"
   },

@@ -108,7 +108,7 @@
       "commitment": "medium",
       "next_useful_state": "A situação fica registrada para triagem; o protocolo confirma a gravação e a confirmação indica qual decisão vem depois.",
       "actual_receipt": "lead_id ou receipt_id persistido antes da página de confirmação",
-      "pre_form_value": "Registre o contexto para a CONFENGE separar edital, contrato e operação e indicar o próximo enquadramento.",
+      "pre_form_value": "Descreva a necessidade em uma frase. A CONFENGE enquadra o tipo de trabalho, de obra privada a contrato público, e responde com o próximo passo. Se não for caso de contratar, a resposta diz isso.",
       "field_purpose": "Nome identifica o responsável; o contato permite retorno; a necessidade direciona a triagem. Empresa, urgência e contexto são opcionais.",
       "format_hint": " WhatsApp: DDD e 10/11 dígitos; e-mail completo.",
       "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem apenas por canal seguro combinado depois do protocolo."
