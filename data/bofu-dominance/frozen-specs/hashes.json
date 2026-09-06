@@ -1,9 +1,9 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "f1908f5e28eae59a27075a388b6b4756809fdafb",
-  "recaptured_at": "2026-09-05",
-  "recapture_reason": "MV-09 activates the corporate /servicos/ canonical and the bounded /quantitativos-orcamento-obras/ wedge, keeps contract-analysis publication fail-closed after approval-material drift, and preserves the reviewed corporate shell. Only sitemap.xml and sitemap.txt changed in this recapture to admit the canonical route. All six frozen B2G pillar HTML byte hashes remain unchanged; no frozen offer or CTA content was edited. Evidence: docs/integration/campaign-20260905/09/integration-log.md and revenue-red-team.md.",
+  "baseline_commit": "0518262b82e0aeb43115a801e804012d442fbc28",
+  "recaptured_at": "2026-09-06",
+  "recapture_reason": "MV-09 activates the corporate /servicos/ canonical and the bounded /quantitativos-orcamento-obras/ wedge, keeps contract-analysis publication fail-closed, and preserves the reviewed corporate shell. Sitemap.xml and sitemap.txt admit the canonical route. The shared styles.css adds only user-preference guards: reduced motion and reduced data for .profile-mark img, a selector absent from all six frozen B2G pillar documents. All six frozen B2G pillar HTML byte hashes remain unchanged; no frozen offer or CTA content was edited. Evidence: docs/integration/campaign-20260905/09/integration-log.md and revenue-red-team.md.",
   "html_mutation": false,
   "pillars": {
     "aditivos-obras-publicas": "a4be02dc6705bb15cbbec882412e3b383887e18800abdd85272d506c1c56c450",
@@ -21,7 +21,7 @@
     "diagnostico-b2g-360/index.html": "1ed2f5d815a11056c599d12ba6b7f844cb5225ef96b664f93df61ff929a1dc02",
     "diagnostico-pre-licitacao/index.html": "fbfb0ee348841ae3a01c437cee579832139cc7868e6dcb081534ff956bfae654",
     "script.js": "412795711992bc7620347d34320c2007bef412a02b6bf1941eb0ff5c2fd30fe6",
-    "styles.css": "ca488c9e60cc29fcc280c8c7559f8a2ec4b3eb26c5c135438f2c160f89b4cf17",
+    "styles.css": "bf45831f0112aa2065f6ae25c80f4cc1387d124e088ca2baab29b07b153fd5cc",
     "styles-tokens.css": "15cc0770e76276b418c11493fa9e53827ae14bb8f854b0a63d8c6dd63afc02fc",
     "styles-tools.css": "8c42a4b5fadba13e4dae52bd7168c64b9f5548f3fd3f8d4f0707ce4e9463c7ba",
     "robots.txt": "132889da3782dff11ceec9b6588a6e7962f2ba28738da9133a7d5318f148dcaf",
