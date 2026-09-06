@@ -170,6 +170,19 @@ describe("MV-03 pure adaptive intake", () => {
       location_uf: "SC",
     }), { env });
     assert.equal(irrelevant.error, "irrelevant_location_rejected");
+
+    const documentaryBudget = adaptive.validateAdaptiveIntake(base({
+      need_code: "obra_edificacao_ou_documentacao",
+      intake_context: "quantities_budget",
+    }), { env });
+    assert.equal(documentaryBudget.ok, true);
+    assert.equal(documentaryBudget.fields.location_material, false);
+    assert.equal(documentaryBudget.fields.city, null);
+    assert.equal(documentaryBudget.fields.uf, null);
+    assert.equal(adaptive.validateAdaptiveIntake(base({
+      need_code: "avaliacao_de_imovel",
+      intake_context: "quantities_budget",
+    }), { env }).error, "intake_context_mismatch");
   });
 
   test("rejects free text, sensitive fields and mismatched channels before persistence", () => {

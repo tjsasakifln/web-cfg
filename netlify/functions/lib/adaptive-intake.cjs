@@ -56,6 +56,13 @@ const NEEDS = Object.freeze({
   outra_demanda_tecnica: OTHER_NUCLEUS,
 });
 
+const INTAKE_CONTEXTS = Object.freeze({
+  quantities_budget: {
+    need_code: "obra_edificacao_ou_documentacao",
+    location_material: false,
+  },
+});
+
 const PIN_KEYS = Object.freeze([
   "policy_id",
   "policy_version",
@@ -101,6 +108,7 @@ const ALLOWED_KEYS = new Set([
   "intake_pin_hash",
   "contract_pin_hash",
   "need_code",
+  "intake_context",
   "source_asset_id",
   "offer_candidate_id",
   "nome",
@@ -364,6 +372,11 @@ function validateAdaptiveIntake(data, options = {}) {
   if (!enabledNuclei(env).has(nucleusId)) {
     return fail("nucleus_not_enabled", "Esta opção ainda não está disponível no formulário.", 503);
   }
+  const intakeContext = clamp(data.intake_context, 80);
+  const contextRule = intakeContext ? INTAKE_CONTEXTS[intakeContext] : null;
+  if (intakeContext && (!contextRule || contextRule.need_code !== needCode)) {
+    return fail("intake_context_mismatch", "O contexto desta triagem não corresponde à situação selecionada.", 422);
+  }
 
   const channel = contactChannel(data);
   if (!channel) {
@@ -382,7 +395,10 @@ function validateAdaptiveIntake(data, options = {}) {
   const ufRaw = clamp(data.location_uf, 2).toUpperCase();
   let city = null;
   let uf = null;
-  if (meta.location_material) {
+  const locationMaterial = contextRule
+    ? contextRule.location_material
+    : meta.location_material;
+  if (locationMaterial) {
     city = normalizeCity(cityRaw);
     uf = UF.has(ufRaw) ? ufRaw : null;
     if (!city || !uf) {
@@ -413,10 +429,10 @@ function validateAdaptiveIntake(data, options = {}) {
     pessoa_tipo: organization ? "COMPANY" : "PERSON",
     decision_role: "UNKNOWN",
     canal_preferido: channel,
-    location_material: meta.location_material,
+    location_material: locationMaterial,
     city,
     uf,
-    city_class: meta.location_material ? `${city}/${uf}` : "NOT_MATERIAL",
+    city_class: locationMaterial ? `${city}/${uf}` : "NOT_MATERIAL",
     site_class: "UNKNOWN",
     urgency: "UNKNOWN",
     why_now: "UNKNOWN",
@@ -462,6 +478,7 @@ module.exports = {
   OTHER_NUCLEUS,
   NUCLEI,
   NEEDS,
+  INTAKE_CONTEXTS,
   PIN_KEYS,
   FORBIDDEN_KEYS,
   isAdaptivePayload,

@@ -3,6 +3,7 @@ const {
   enabledNuclei,
   NUCLEI,
   NEEDS,
+  INTAKE_CONTEXTS,
   pinHash,
 } = require("./lib/adaptive-intake.cjs");
 
@@ -39,12 +40,20 @@ exports.handler = async (event) => {
     return response(503, { ok: false, error: "intake_unavailable" });
   }
 
+  const intakeContext = String(event.queryStringParameters?.intake_context || "");
+  const contextRule = intakeContext ? INTAKE_CONTEXTS[intakeContext] : null;
+  if (intakeContext && !contextRule) {
+    return response(422, { ok: false, error: "intake_context_unknown" });
+  }
+
   const options = PUBLIC_OPTIONS.filter((option) => {
     const nucleusId = NEEDS[option.value];
     return enabled.has(nucleusId) && Object.hasOwn(NUCLEI, nucleusId);
   }).map((option) => ({
     ...option,
-    location_required: NUCLEI[NEEDS[option.value]].location_material === true,
+    location_required: contextRule?.need_code === option.value
+      ? contextRule.location_material
+      : NUCLEI[NEEDS[option.value]].location_material === true,
   }));
 
   if (!options.length) {
