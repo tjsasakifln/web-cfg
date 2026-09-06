@@ -14,7 +14,7 @@ const pin = Object.freeze({
   policy_version: "1.0.0-draft.20260904",
   canonical_name: "NET_NEW_INBOUND_HANDRAISER/1.0.0-draft.20260904",
   policy_hash: "sha256:405ac86064a90641b843352d21cd21703744115de9592558e100671d92276df7",
-  governance_source_sha: "990c6ae237c3f7188728e97283bc69c130f6028d",
+  governance_source_sha: "0074722ce66f16af06dd4799ee88064ea8a12fc1",
   intake_version: "CONFENGE_WEB_INTAKE/2.1.0-mv03.20260905",
   source_asset_id: "technical_triage_v1",
   offer_candidate_id: "technical_triage_review",
@@ -51,7 +51,7 @@ test("public route is low-friction, transparent and free of sensitive inputs", (
     assert.equal(new RegExp(`name=["']${forbiddenName}["']`, "i").test(html), false);
   }
   assert.equal(/\b(?:1|2)\s+dias?\s+[úu]teis\b/i.test(html), false);
-  assert.match(html, /name="robots" content="index,follow"/);
+  assert.match(html, /<meta(?=[^>]*name="robots")(?=[^>]*content="index,follow[^\"]*")[^>]*>/);
   assert.match(html, /action="\/\.netlify\/functions\/lead"/);
   assert.match(html, /data-config-endpoint="\/\.netlify\/functions\/adaptive-intake-config"/);
   assert.equal((html.match(/data-intake-step/g) || []).length, 2);
@@ -68,6 +68,35 @@ test("public route is low-friction, transparent and free of sensitive inputs", (
   assert.match(browser, /setStep\(0, false\)/);
   for (const key of ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"]) {
     assert.equal(browser.includes(`"${key}"`), true, `missing attribution allowlist: ${key}`);
+  }
+});
+
+test("MV-09 publishes one bounded private wedge with embedded triage and three safe channels", () => {
+  const html = fs.readFileSync(path.resolve("quantitativos-orcamento-obras/index.html"), "utf8");
+  for (const expected of [
+    "Orçamento só orienta a decisão quando quantidades e premissas aparecem",
+    "CONFENGE — Engenharia, Perícias e Inteligência Técnica",
+    "data-default-need=\"obra_edificacao_ou_documentacao\"",
+    "intake_context=quantities_budget",
+    "data-location hidden",
+    "não recebe arquivo, planta, orçamento, endereço exato, CPF, processo ou texto livre",
+  ]) {
+    assert.equal(html.includes(expected), true, `missing bounded wedge contract: ${expected}`);
+  }
+  assert.match(html, /<meta(?=[^>]*name="robots")(?=[^>]*content="index,follow[^\"]*")[^>]*>/);
+  assert.match(html, /action="\/\.netlify\/functions\/lead"/);
+  assert.equal((html.match(/data-fallback-channel=/g) || []).length, 3);
+  assert.equal((html.match(/name="location_(?:city|uf)"/g) || []).length, 2);
+  assert.equal(/name="(?:mensagem|arquivo|upload|endereco|cpf|processo)"/i.test(html), false);
+  assert.equal(/\b(?:1|2)\s+dias?\s+[úu]teis\b/i.test(html), false);
+  assert.equal(/R\$\s*\d/.test(html), false);
+  for (const withheldRoute of [
+    "/pericias-avaliacoes/",
+    "/seguranca-trabalho/",
+    "/compatibilizacao-revisao/",
+    "/inspecao-documentacao/",
+  ]) {
+    assert.equal(html.includes(withheldRoute), false, `unapproved journey leaked: ${withheldRoute}`);
   }
 });
 
