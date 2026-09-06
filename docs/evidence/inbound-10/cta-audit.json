@@ -2,9 +2,9 @@
   "ok": true,
   "found": 42,
   "service_pages": 13,
-  "html_scanned": 304,
+  "html_scanned": 305,
   "svg_files_scanned": 4,
-  "svg_paths_checked": 3382,
+  "svg_paths_checked": 3385,
   "svg_path_fixtures": [
     {
       "id": "corrupt-whatsapp-glyph",

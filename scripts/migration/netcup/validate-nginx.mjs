@@ -394,7 +394,7 @@ ${normalizeWrapper("confenge-web-public.conf")}
   assertProbe("servicos_hub_301", servicos.status === 301, `status=${servicos.status}`);
   assertProbe(
     "servicos_hub_target",
-    /servicos-obras-publicas/.test(servicos.headers.location || ""),
+    servicos.headers.location === "/servicos/",
     `location=${servicos.headers.location}`
   );
 
