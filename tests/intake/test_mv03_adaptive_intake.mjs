@@ -37,9 +37,9 @@ test("public route is low-friction, transparent and free of sensitive inputs", (
     "não é contratação nem pagamento",
     "canal seguro",
     "Escopo, responsabilidade técnica",
-    "Conversar pelo WhatsApp",
-    "Enviar e-mail",
-    "Ligar para",
+    "Pedir revisão de encaixe pelo WhatsApp",
+    "Enviar o contexto por e-mail",
+    "Ligar para explicar a demanda",
   ]) {
     assert.equal(html.includes(expected), true, `missing public promise: ${expected}`);
   }
