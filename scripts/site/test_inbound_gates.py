@@ -1301,20 +1301,6 @@ def test_structured_price_markup_is_never_exempt():
     assert inbound_gates._displays_price(block) is True
 
 
-if __name__ == "__main__":
-    # simple runner
-    failed = 0
-    for name, fn in list(globals().items()):
-        if name.startswith("test_") and callable(fn):
-            try:
-                fn()
-                print("OK", name)
-            except Exception as exc:  # noqa: BLE001
-                failed += 1
-                print("FAIL", name, exc)
-    raise SystemExit(1 if failed else 0)
-
-
 def test_synthetic_marking_cannot_buy_commercial_immunity() -> None:
     """#619: the demonstration carve-out must resist evasion, not spelling.
 
@@ -1375,3 +1361,19 @@ def test_synthetic_marking_cannot_buy_commercial_immunity() -> None:
         "</section>" + filler
     )
     assert inbound_gates._displays_price(prose_decision) is False
+
+if __name__ == "__main__":
+    # Simple runner. It must stay the LAST statement in this module: it walks
+    # globals(), so any test defined after it is silently never executed. #619
+    # added test_synthetic_marking_cannot_buy_commercial_immunity below the
+    # runner and `npm run test:inbound-gates` skipped it without failing.
+    failed = 0
+    for name, fn in list(globals().items()):
+        if name.startswith("test_") and callable(fn):
+            try:
+                fn()
+                print("OK", name)
+            except Exception as exc:  # noqa: BLE001
+                failed += 1
+                print("FAIL", name, exc)
+    raise SystemExit(1 if failed else 0)
