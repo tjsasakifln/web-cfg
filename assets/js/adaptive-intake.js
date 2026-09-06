@@ -1,7 +1,8 @@
 (function () {
   "use strict";
 
-  var form = document.getElementById("triagem-tecnica-form");
+  var form = document.querySelector("[data-adaptive-intake-form]") ||
+    document.getElementById("triagem-tecnica-form");
   if (!form) return;
 
   var endpoint = form.getAttribute("data-config-endpoint");
@@ -22,6 +23,18 @@
   var receipt = document.querySelector("[data-intake-receipt]");
   var protocol = document.querySelector("[data-intake-protocol]");
   var fallbackLinks = Array.prototype.slice.call(document.querySelectorAll("[data-fallback-channel]"));
+  var pagePath = form.getAttribute("data-page-path") || "/triagem-tecnica/";
+  var routeFamily = form.querySelector("[name=route_family]")?.value || "triagem-tecnica";
+  var assetId = form.querySelector("[name=asset_id]")?.value || "technical_triage_v1";
+  var ctaId = form.getAttribute("data-cta-id") || "technical-triage-submit";
+  var defaultNeed = form.getAttribute("data-default-need") || "";
+  var hashNeeds = {
+    projetos: "obra_edificacao_ou_documentacao",
+    "obra-imovel": "obra_edificacao_ou_documentacao",
+    "pericia-avaliacao": "pericia_ou_disputa_tecnica",
+    sst: "seguranca_do_trabalho",
+    "planejamento-publico": "licitacao_obra_ou_contrato_publico"
+  };
   var configured = false;
   var started = false;
   var pendingFingerprint = "";
@@ -33,10 +46,10 @@
   function track(eventName, props) {
     if (typeof window.confengeTrack !== "function") return;
     window.confengeTrack(eventName, Object.assign({
-      page_path: "/triagem-tecnica/",
-      route_family: "triagem-tecnica",
-      asset_id: "technical_triage_v1",
-      cta_id: "technical-triage-submit",
+      page_path: pagePath,
+      route_family: routeFamily,
+      asset_id: assetId,
+      cta_id: ctaId,
       source: "CONFENGE_WEB"
     }, props || {}));
   }
@@ -82,11 +95,20 @@
       item.setAttribute("data-location-required", option.location_required ? "true" : "false");
       need.appendChild(item);
     });
+    var hashNeed = hashNeeds[decodeURIComponent((window.location.hash || "").slice(1))] || "";
+    var requestedNeed = defaultNeed || hashNeed;
+    if (requestedNeed && Array.prototype.some.call(need.options, function (option) {
+      return option.value === requestedNeed;
+    })) {
+      need.value = requestedNeed;
+    }
     setHidden("intake_version", data.intake_version);
     setHidden("intake_pin_hash", data.intake_pin_hash);
     configured = data.options.length > 0;
     next.disabled = !configured;
     submit.disabled = !configured;
+    updateLocation();
+    updateFallbackChannels();
     showStatus(configured ? "" : "O formulário não está disponível agora.", configured ? "" : "error");
   }
 
@@ -209,7 +231,7 @@
     new FormData(form).forEach(function (value, key) {
       if (typeof value === "string") body[key] = value;
     });
-    body.landing_page = "/triagem-tecnica/";
+    body.landing_page = body.landing_page || pagePath;
     var query = new URLSearchParams(window.location.search);
     var stored = storedAttribution();
     attributionKeys.forEach(function (key) {

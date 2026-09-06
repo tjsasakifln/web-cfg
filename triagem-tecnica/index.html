@@ -47,6 +47,8 @@
     <form
       id="triagem-tecnica-form"
       class="technical-intake-form"
+      data-adaptive-intake-form
+      data-page-path="/triagem-tecnica/"
       action="/.netlify/functions/lead"
       method="post"
       data-config-endpoint="/.netlify/functions/adaptive-intake-config"
@@ -58,6 +60,11 @@
       data-receipt-required="true"
       data-current-step="1"
       novalidate>
+      <span id="projetos" aria-hidden="true"></span>
+      <span id="obra-imovel" aria-hidden="true"></span>
+      <span id="pericia-avaliacao" aria-hidden="true"></span>
+      <span id="sst" aria-hidden="true"></span>
+      <span id="planejamento-publico" aria-hidden="true"></span>
       <input type="hidden" name="form-name" value="triagem-tecnica">
       <input type="hidden" name="adaptive_intake" value="true">
       <input type="hidden" name="intake_version" value="">
