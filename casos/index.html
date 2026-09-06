@@ -20,6 +20,27 @@
 .n-status{margin-top:.75rem;font-size:.95rem}
 .case-badge{display:inline-block;background:#fef3c7;color:#92400e;font-size:.75rem;font-weight:700;padding:.2rem .5rem;border-radius:4px}
 </style>
+<style data-evidence-module-critical="">
+/* #619 evidence modules. Extends existing tokens; redefines none.
+   C4: the detail must be readable at 390 CSS px WITHOUT horizontal scrolling of
+   the page or of any container, so the table REFLOWS vertically instead of
+   living inside overflow-x:auto. No white-space:nowrap, no min-width wider than
+   the viewport. Floors: body >= 16px, critical microcopy >= 12.8px. */
+.evidence-module{margin-top:2rem;padding:1.25rem;border:1px solid var(--line);border-radius:12px;background:#fff}
+.evidence-module__caveat{margin:0 0 1rem;color:var(--muted);font-size:.875rem;line-height:1.55}
+.evidence-module__note{margin:1rem 0 0;color:var(--muted);font-size:.9375rem;line-height:1.6}
+.evidence-module table{width:100%;border-collapse:collapse;font-size:1rem}
+.evidence-module caption{margin-bottom:.75rem;color:var(--muted);font-size:.9375rem;line-height:1.55;text-align:left}
+.evidence-module th,.evidence-module td{padding:.6rem .5rem;border-top:1px solid var(--line);text-align:left;vertical-align:top;line-height:1.5}
+.evidence-module thead th{color:var(--ink);font-size:.875rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase}
+.evidence-module tbody th{font-weight:700}
+@media(max-width:760px){
+.evidence-module thead{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.evidence-module tr{display:block;padding:.5rem 0;border-top:1px solid var(--line)}
+.evidence-module th,.evidence-module td{display:block;padding:.35rem 0;border-top:0}
+.evidence-module th[data-label]::before,.evidence-module td[data-label]::before{content:attr(data-label);display:block;margin-bottom:.15rem;color:var(--green-700);font-size:.8rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+}
+</style>
 </head>
 <body>
 <a class="skip-link" href="#conteudo">Ir ao conteúdo</a>
@@ -61,6 +82,42 @@
 <ul>
 <li><a href="/casos/modelo-relatorio-inteligencia-licitacoes/"><strong>Demonstrativo: relatório de inteligência de licitações</strong></a>, carteira priorizada, fichas decisórias, exposição financeira e plano de 72 horas em consulta direta.</li>
 <li><a href="/casos/modelo-base-quantitativa-canonica/"><strong>Demonstrativo: base quantitativa canônica</strong></a>, dicionário de campos, memória de cálculo e controles de qualidade que tornam cada número re-derivável.</li>
+<li class="evidence-module-host">
+<div class="evidence-module field-dictionary" data-demonstration="synthetic" data-visual-role="artifact" data-visual-asset-id="cases_field_dictionary_v1">
+<p class="evidence-module__caveat">Recorte sintético e demonstrativo do dicionário de campos citado acima. A estrutura é real; os valores são hipotéticos e não vieram de trabalho, contrato ou órgão real.</p>
+<table class="field-dictionary__table">
+<caption>Quatro campos da base quantitativa canônica, com a regra que torna cada número re-derivável e o controle de qualidade que o reprova.</caption>
+<thead><tr><th scope="col">Campo</th><th scope="col">Tipo</th><th scope="col">Regra de derivação</th><th scope="col">Controle de qualidade</th></tr></thead>
+<tbody>
+<tr>
+<th data-label="Campo" scope="row">item_id</th>
+<td data-label="Tipo">texto</td>
+<td data-label="Regra de derivação">Código da composição referencial, copiado da fonte sem renumeração local</td>
+<td data-label="Controle de qualidade">Reprova se o código não existir na versão da tabela declarada no cabeçalho</td>
+</tr>
+<tr>
+<th data-label="Campo" scope="row">quantidade</th>
+<td data-label="Tipo">decimal</td>
+<td data-label="Regra de derivação">Soma das medições do levantamento, com a prancha e a revisão registradas na mesma linha</td>
+<td data-label="Controle de qualidade">Reprova se a soma das parcelas divergir do total em mais de 0,5%</td>
+</tr>
+<tr>
+<th data-label="Campo" scope="row">fonte_ref</th>
+<td data-label="Tipo">texto</td>
+<td data-label="Regra de derivação">Documento, item e revisão que sustentam a quantidade</td>
+<td data-label="Controle de qualidade">Reprova se estiver vazio: quantidade sem fonte não entra na base</td>
+</tr>
+<tr>
+<th data-label="Campo" scope="row">status_premissa</th>
+<td data-label="Tipo">enumerado</td>
+<td data-label="Regra de derivação">confirmada, assumida ou pendente, conforme o documento que existe</td>
+<td data-label="Controle de qualidade">Reprova se "confirmada" aparecer sem fonte_ref preenchido</td>
+</tr>
+</tbody>
+</table>
+<p class="evidence-module__note">O dicionário existe para que outra pessoa refaça o número sem perguntar nada a quem o produziu. Um campo sem regra de derivação e sem controle é um número que ninguém consegue conferir.</p>
+</div>
+</li>
 <li><a href="/casos/modelo-apresentacao-executiva-resultados/"><strong>Demonstrativo: apresentação executiva de resultados</strong></a>, a narrativa de diretoria que termina em decisões assináveis, sem criar número novo.</li>
 <li><a href="/casos/modelo-mapa-compradores-publicos/"><strong>Demonstrativo: mapa de compradores públicos</strong></a>, ranking por frequência, score auditável, concentração e calendário comercial por órgão.</li>
 <li><a href="/casos/modelo-contratos-vincendos-relicitacao/"><strong>Demonstrativo: contratos vincendos e recontratação</strong></a>, janela de 90 a 180 dias com índice explicável e cadeia probatória por caso.</li>

@@ -14,6 +14,7 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from scripts.site import inbound_gates  # noqa: E402
 from scripts.site.inbound_gates import (  # noqa: E402
     gate_brand_shell,
     gate_conversion,
@@ -1252,6 +1253,52 @@ def test_parameterized_internal_hrefs_only_documented_exceptions():
         "hash_bound_render",
         "hash_pinned_html",
     }
+
+
+# --- #619: a technical demonstration is not an offer -------------------------
+
+_DEMO_BLOCK = (
+    '<section data-demonstration="synthetic">'
+    "<p>Exemplo sintetico, numeros hipoteticos.</p>%s</section>"
+)
+
+
+def test_synthetic_demonstration_may_carry_a_reference_unit_price():
+    """A priced INPUT of a calculation is not something CONFENGE sells."""
+    block = _DEMO_BLOCK % "<p>Premissa: preco unitario de referencia R$ 1.240,00 por m2</p>"
+    assert inbound_gates._displays_price(block) is False
+
+
+def test_quantities_alone_were_never_an_offer():
+    assert inbound_gates._displays_price("<p>Quantidade: 1.248 m2 de alvenaria</p>") is False
+
+
+def test_confenge_fee_hidden_inside_a_demonstration_still_fails():
+    """The exact evasion the carve-out must not enable."""
+    block = _DEMO_BLOCK % "<p>Nosso dossie: preco de R$ 6.900 a R$ 7.900 pontual</p>"
+    assert inbound_gates._displays_price(block) is True
+
+
+def test_marking_a_block_without_saying_it_is_synthetic_does_not_exempt_it():
+    """The attribute alone cannot be sprinkled onto a real offer."""
+    block = (
+        '<section data-demonstration="synthetic">'
+        "<p>Premissa: preco unitario de referencia R$ 1.240,00 por m2</p></section>"
+    )
+    assert inbound_gates._displays_price(block) is True
+
+
+def test_a_real_offer_elsewhere_on_the_page_still_fails():
+    page = (
+        _DEMO_BLOCK % "<p>Premissa: preco unitario de referencia R$ 1.240,00 por m2</p>"
+        + "<p>Preco do diagnostico: R$ 2.900 pontual</p>"
+    )
+    assert inbound_gates._displays_price(page) is True
+
+
+def test_structured_price_markup_is_never_exempt():
+    block = _DEMO_BLOCK % '<p>"price": "1240.00"</p>'
+    assert inbound_gates._displays_price(block) is True
 
 
 if __name__ == "__main__":

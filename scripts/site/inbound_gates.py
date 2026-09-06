@@ -1084,11 +1084,62 @@ def _is_safe_family_prefix(value: Any) -> bool:
     return _is_safe_public_path(value) and value != "/"
 
 
+# A technical demonstration is not an offer. A synthetic budget chain has to be
+# able to say "preço unitário de referência R$ 1.240,00" — that is the priced
+# input of a calculation, not something CONFENGE sells — without the route being
+# reclassified as `displayed_price` and failing capture fail-closed.
+#
+# The carve-out is deliberately narrow. A block only qualifies when BOTH hold:
+#   1. it is explicitly marked `data-demonstration="synthetic"`, and
+#   2. its own visible text identifies itself as synthetic/demonstrative.
+# Marking alone is not enough, so the attribute cannot be sprinkled on a real
+# offer to silence the gate. And a CONFENGE published fee appearing inside such a
+# block is treated as a displayed price anyway: that is an offer disguised as an
+# example, which must keep failing.
+DEMONSTRATION_BLOCK_RE = re.compile(
+    r'<(?P<tag>section|div|figure|table|aside)\b[^>]*\bdata-demonstration="synthetic"'
+    r"[^>]*>.*?</(?P=tag)>",
+    re.IGNORECASE | re.DOTALL,
+)
+SYNTHETIC_SELF_LABEL_RE = re.compile(r"sint[ée]tic|demonstrativ|hipot[ée]tic", re.IGNORECASE)
+
+
+def published_fee_amounts() -> set[str]:
+    """Amounts CONFENGE publishes as its own fee, normalized to `R$ 1.234`."""
+    path = ROOT / "data/commercial/offer-fit-matrix.v1.json"
+    if not path.is_file():
+        return set()
+    bands = json.loads(path.read_text(encoding="utf-8")).get("cited_bands", {})
+    amounts: set[str] = set()
+    for band in bands.values():
+        for found in re.findall(_PRICE_AMOUNT, str(band.get("display", ""))):
+            amounts.add(re.sub(r"\s+", " ", found).strip())
+    return amounts
+
+
+def _validated_demonstration_spans(main: str) -> list[tuple[int, int]]:
+    spans: list[tuple[int, int]] = []
+    fees = published_fee_amounts()
+    for match in DEMONSTRATION_BLOCK_RE.finditer(main):
+        text = strip_html(match.group(0))
+        if not SYNTHETIC_SELF_LABEL_RE.search(text):
+            continue
+        # A published CONFENGE fee inside a demonstration block is an offer
+        # wearing an example's clothes. Do not exempt it.
+        if any(fee in text for fee in fees):
+            continue
+        spans.append(match.span())
+    return spans
+
+
 def _displays_price(main: str) -> bool:
     """True when ``<main>`` shows a price for something CONFENGE sells."""
     if PRICE_MARKUP_RE.search(main):
         return True
-    return bool(PRICE_NEAR_RE.search(strip_html(main)))
+    scannable = main
+    for start, end in reversed(_validated_demonstration_spans(main)):
+        scannable = scannable[:start] + " " + scannable[end:]
+    return bool(PRICE_NEAR_RE.search(strip_html(scannable)))
 
 
 def priced_action_registry() -> tuple[set[str], set[str]]:
