@@ -47,12 +47,7 @@
       "casos/aditivo-art125-demonstrativo/index.html",
       "casos/medicao-glosa-demonstrativo/index.html"
     ],
-    "inline_cards": [
-      {
-        "path": "index.html",
-        "marker": "data-synthetic-example-card"
-      }
-    ],
+    "inline_cards": [],
     "required_positions": ["title", "h1", "card", "schema", "relevant_cta"],
     "synthetic_label_pt_br": "DADOS SINTÉTICOS",
     "demonstrative_label_pt_br": "DEMONSTRATIVO"

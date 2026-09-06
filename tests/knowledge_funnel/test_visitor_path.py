@@ -13,8 +13,8 @@ ARTICLE = ROOT / "conteudos/resposta-notificacao-atraso-obra-publica/index.html"
 PILLAR = ROOT / "defesa-tecnica-contratos-publicos/index.html"
 OFFER = ROOT / "defesa-margem-contratos-publicos/index.html"
 EXPANSION_OFFER_HREF = "/diagnostico-b2g-expansao/"
+VERTICAL_HUB_HREF = "/servicos-obras-publicas/"
 EXPANSION_ENTRY_PAGES = (
-    ROOT / "index.html",
     ROOT / "diretoria-b2g/index.html",
     ROOT / "bid-room-licitacoes-obras/index.html",
 )
@@ -45,9 +45,15 @@ def test_visitor_path_article_to_pillar_to_offer_cta() -> None:
 
 
 def test_paid_expansion_diagnostic_has_contextual_internal_entries() -> None:
-    """The paid offer must be reachable from home and compatible services."""
+    """The paid offer stays reachable without dominating the corporate home."""
+
+    home = (ROOT / "index.html").read_text(encoding="utf-8")
+    hub = (ROOT / "servicos-obras-publicas/index.html").read_text(encoding="utf-8")
+    assert VERTICAL_HUB_HREF in home
 
     for page in EXPANSION_ENTRY_PAGES:
         html = page.read_text(encoding="utf-8")
+        route = f"/{page.parent.name}/"
+        assert route in hub, page.relative_to(ROOT)
         assert EXPANSION_OFFER_HREF in html, page.relative_to(ROOT)
         assert "expans" in html.lower(), page.relative_to(ROOT)
