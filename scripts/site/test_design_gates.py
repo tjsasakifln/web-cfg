@@ -379,7 +379,7 @@ def test_journey_accessible_without_js():
         assert f'id="{stage}"' in html
     assert '<ol class="situation-list">' in html
     assert html.count('class="situation-action"') == 5
-    assert html.count('href="#triagem-tecnica"') >= 4
+    assert html.count('href="/triagem-tecnica/#') >= 4
     assert 'href="/servicos-obras-publicas/"' in html
 
 

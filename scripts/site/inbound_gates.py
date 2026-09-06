@@ -711,6 +711,7 @@ def gate_brand_shell() -> GateReport:
     """Public commercial + indexable content must use brand navigation and footer blurb."""
     from scripts.site.brand import footer_blurb, load_brand, org_description
     from scripts.site.public_ia import load_ia_map
+    from scripts.site.shell_nav import FROZEN_SHELL_FILES
 
     brand = load_brand()
     ia = load_ia_map()
@@ -805,7 +806,11 @@ def gate_brand_shell() -> GateReport:
                 )
             )
         # Require at least one brand nav label present
-        if expected_nav_labels and not any(lab in html for lab in expected_nav_labels[:3]):
+        if (
+            rel.as_posix() not in FROZEN_SHELL_FILES
+            and expected_nav_labels
+            and not any(lab in html for lab in expected_nav_labels[:3])
+        ):
             findings.append(
                 Finding(
                     gate="brand_shell",

@@ -187,11 +187,11 @@ def _canonicalize_nav_block(
     if utility:
         utility_href = _attribute(utility[0], "href")
         if (
-            not utility_href.startswith(("#", "/#"))
+            not utility_href.startswith(("#", "/"))
             or _attribute(utility[0], "aria-current")
         ):
             raise ValueError(
-                f"{relative_path}: mobile utility must be a local, non-current CTA"
+                f"{relative_path}: mobile utility must be a same-site, non-current CTA"
             )
 
     current = _current_hrefs(anchors, relative_path)

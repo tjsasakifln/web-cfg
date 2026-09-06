@@ -92,7 +92,7 @@
       "label": "Projetar, revisar, orçar ou compatibilizar",
       "summary": "Quando um projeto precisa ganhar definição, coerência entre disciplinas ou base quantitativa para avançar.",
       "deliverables": "Projeto ou revisão técnica, compatibilização, orçamento e memória de cálculo, conforme o escopo.",
-      "href": "/#triagem-tecnica",
+      "href": "/triagem-tecnica/#projetos",
       "index_state": "triage_fallback"
     },
     {
@@ -100,7 +100,7 @@
       "label": "Inspecionar, diagnosticar ou documentar obra e imóvel",
       "summary": "Quando há anomalia, dúvida sobre condição, necessidade de vistoria ou registro técnico da situação existente.",
       "deliverables": "Inspeção, diagnóstico, laudo, relatório ou documentação técnica, conforme o escopo.",
-      "href": "/#triagem-tecnica",
+      "href": "/triagem-tecnica/#obra-imovel",
       "index_state": "triage_fallback"
     },
     {
@@ -108,7 +108,7 @@
       "label": "Perícia, assistência técnica ou avaliação",
       "summary": "Quando um processo, negociação ou decisão patrimonial depende de prova, análise ou valor tecnicamente fundamentado.",
       "deliverables": "Parecer, laudo, quesitos, análise crítica ou avaliação, conforme o papel e o escopo.",
-      "href": "/#triagem-tecnica",
+      "href": "/triagem-tecnica/#pericia-avaliacao",
       "index_state": "triage_fallback"
     },
     {
@@ -116,7 +116,7 @@
       "label": "Segurança do trabalho",
       "summary": "Quando a empresa precisa reconhecer, documentar ou tratar uma situação de risco ocupacional.",
       "deliverables": "Diagnóstico, documentação ou apoio técnico, após confirmação de aderência e atribuição.",
-      "href": "/#triagem-tecnica",
+      "href": "/triagem-tecnica/#sst",
       "index_state": "triage_fallback"
     },
     {
@@ -132,7 +132,7 @@
     "desktop": [
       {
         "label": "Serviços e problemas",
-        "href": "/#situacoes"
+        "href": "/servicos/"
       },
       {
         "label": "Obras públicas",
@@ -145,7 +145,7 @@
     ],
     "cta": {
       "label": "Iniciar triagem",
-      "href": "/#triagem-tecnica"
+      "href": "/triagem-tecnica/"
     },
     "hubs": {
       "corporate_services": {
@@ -156,7 +156,7 @@
         "h1": "Encontre o caminho técnico para a sua situação",
         "lead": "Comece pelo problema que precisa ser resolvido. A triagem confirma aderência, limites e o entregável aplicável.",
         "eyebrow": "Serviços organizados por situação",
-        "index_state": "candidate_noindex_until_mv09_registry"
+      "index_state": "index"
       },
       "services": {
         "label": "Serviços",

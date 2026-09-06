@@ -26,6 +26,35 @@
   var pendingFingerprint = "";
   var volatileKey = "";
   var retryStorageKey = "confenge_triagem_retry_v2";
+  var landingContext = {
+    projetos: "projetos, revisão, orçamento ou compatibilização",
+    "obra-imovel": "inspeção, diagnóstico ou documentação de obra e imóvel",
+    "pericia-avaliacao": "perícia, assistência técnica ou avaliação",
+    sst: "segurança do trabalho ou disputa trabalhista técnica",
+    "planejamento-publico": "planejamento de obra por órgão público"
+  };
+
+  function applyLandingContext() {
+    var key = decodeURIComponent((window.location.hash || "").slice(1));
+    var label = landingContext[key];
+    if (!label) return;
+    var context = document.querySelector("[data-intake-context]");
+    if (context) {
+      context.hidden = false;
+      context.textContent = "Situação escolhida: " + label + ". Confirme abaixo a opção mais próxima ou use um dos canais diretos.";
+    }
+    var message = "Olá, Tiago. Quero explicar uma necessidade de " + label + " e entender o próximo passo com a CONFENGE.";
+    var whatsapp = document.querySelector("[data-intake-whatsapp]");
+    var emailLink = document.querySelector("[data-intake-email]");
+    if (whatsapp) whatsapp.href = "https://wa.me/5548988344559?text=" + encodeURIComponent(message);
+    if (emailLink) {
+      emailLink.href = "mailto:tiago.sasaki@confenge.com.br?subject=" +
+        encodeURIComponent("Triagem técnica CONFENGE — " + label) +
+        "&body=" + encodeURIComponent(message);
+    }
+  }
+
+  applyLandingContext();
 
   function track(eventName, props) {
     if (typeof window.confengeTrack !== "function") return;

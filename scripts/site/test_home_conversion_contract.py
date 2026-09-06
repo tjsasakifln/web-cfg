@@ -55,7 +55,7 @@ def test_situation_chooser_has_five_paths_without_catalog_wall() -> None:
     for label in expected:
         assert label in chooser
     assert chooser.count('class="situation-row') == 5
-    assert chooser.count('href="#triagem-tecnica"') == 4
+    assert chooser.count('href="/triagem-tecnica/#') == 4
     assert 'href="/servicos-obras-publicas/"' in chooser
     assert "ICP" not in chooser
     assert "CTA" not in chooser
@@ -92,9 +92,9 @@ def test_corporate_triage_is_safe_and_b2g_form_is_unchanged() -> None:
     assert 'name="document_intent" type="hidden" value="secure_channel_request"' in form.group(0)
 
 
-def test_services_candidate_is_corporate_noindex_and_price_free() -> None:
+def test_services_hub_is_corporate_indexable_and_price_free() -> None:
     html = SERVICES.read_text(encoding="utf-8")
-    assert 'content="noindex,follow" name="robots"' in html
+    assert 'content="index,follow" name="robots"' in html
     assert 'href="https://confenge.com.br/servicos/" rel="canonical"' in html
     assert "Serviços organizados por situação" in html
     assert html.count('class="corporate-service-row') == 5

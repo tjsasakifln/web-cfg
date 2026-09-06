@@ -671,7 +671,7 @@ def validate_contract(ia: dict[str, Any] | None = None) -> list[str]:
         if row.get("id") == "public_works_b2g":
             if row.get("href") != "/servicos-obras-publicas/":
                 errors.append("public works situation must preserve its canonical hub")
-        elif row.get("href") != "/#triagem-tecnica":
+        elif _path_with_slash(_normalize_route(str(row.get("href") or ""))) != "/triagem-tecnica/":
             errors.append(f"unpublished situation must fail closed to triage: {row.get('id')}")
     footer_count = 0
     for column in (data.get("footer") or {}).get("columns") or []:

@@ -42,6 +42,7 @@
     "problemas-que-resolvemos/",
     "radar/",
     "reequilibrio-obras-publicas/",
+    "servicos/",
     "servicos-obras-publicas/",
     "termos-de-uso/",
     "triagem-tecnica/",
@@ -75,7 +76,7 @@
     "styles-tools.css",
     "styles.css"
   ],
-  "html_route_count": 247,
+  "html_route_count": 248,
   "html_routes": [
     "/",
     "/acompanhamento-contratos-obras/",
@@ -320,13 +321,14 @@
     "/radar/nacional-obras-publicas/",
     "/radar/pesquisa/edicao-zero-4uf/",
     "/reequilibrio-obras-publicas/",
+    "/servicos/",
     "/servicos-obras-publicas/",
     "/termos-de-uso/",
     "/triagem-tecnica/",
     "/uso-de-ia/"
   ],
-  "generated_at": "2026-09-05T21:31:05Z",
-  "public_artifact_hash": "658f183e2820778f28b3ce8bdb7c5ca0213e164028b0b71951b32203f0c23530",
+  "generated_at": "2026-09-06T00:18:15Z",
+  "public_artifact_hash": "c4200e36b1c2d2cdcc56e16fef86e215b706901976cc99906f09b5b53c1ddc6b",
   "copied_dirs": [
     ".well-known/",
     "acompanhamento-contratos-obras/",
@@ -369,6 +371,7 @@
     "problemas-que-resolvemos/",
     "radar/",
     "reequilibrio-obras-publicas/",
+    "servicos/",
     "servicos-obras-publicas/",
     "termos-de-uso/",
     "triagem-tecnica/",
@@ -402,15 +405,15 @@
     "styles-tools.css",
     "styles.css"
   ],
-  "promoted_navigation_files": 0,
+  "promoted_navigation_files": 214,
   "navigation_audit": {
-    "audited_files": 213,
-    "audited_blocks": 424,
+    "audited_files": 214,
+    "audited_blocks": 426,
     "frozen_files": 6
   },
   "structured_identity": {
-    "html_scanned": 253,
-    "html_rewritten": 193,
-    "fields_removed": 817
+    "html_scanned": 254,
+    "html_rewritten": 192,
+    "fields_removed": 812
   }
 }

@@ -127,6 +127,7 @@ def internal_hrefs(html: str) -> set[str]:
 
 def public_target_exists(href: str) -> bool:
     path, _, fragment = href.partition("#")
+    path = path.split("?", 1)[0]
     target = ROOT / "index.html" if path in ("", "/") else ROOT / path.strip("/") / "index.html"
     if not target.is_file():
         return False
@@ -305,10 +306,10 @@ def main() -> int:
 
     # --- 3. Active state is visible and inherited by descendant/task routes -
     active_cases = {
-        problems["url"]: problems["url"],
-        "/bid-room-licitacoes-obras/": "/bid-room-licitacoes-obras/",
-        "/diretoria-b2g/": "/diretoria-b2g/",
-        "/defesa-tecnica-contratos-publicos/": problems["url"],
+        problems["url"]: services["url"],
+        "/bid-room-licitacoes-obras/": services["url"],
+        "/diretoria-b2g/": services["url"],
+        "/defesa-tecnica-contratos-publicos/": services["url"],
         "/conteudos/ata-reuniao-ordem-servico-obra-publica/": "/conteudos/",
         "/ferramentas/limite-acrescimos-supressoes/": "/conteudos/",
     }
@@ -461,16 +462,16 @@ def main() -> int:
     services_candidate = (ROOT / "servicos" / "index.html").read_text(
         encoding="utf-8"
     )
-    if 'content="noindex,follow" name="robots"' not in services_candidate:
-        failures.append("/servicos/ must remain noindex until MV-09 integration")
+    if 'content="index,follow" name="robots"' not in services_candidate:
+        failures.append("/servicos/ must be indexable after MV-09 integration")
     corporate_hub = next(
         (row for row in hubs() if row.get("route") == "/servicos/"),
         None,
     )
-    if not corporate_hub or corporate_hub.get("chrome") != "hidden":
-        failures.append("/servicos/ must remain hidden from global chrome")
-    if "/servicos/" in {href for href, _ in expected}:
-        failures.append("header must use the chooser until /servicos/ is registered")
+    if not corporate_hub or corporate_hub.get("index_state") != "index":
+        failures.append("/servicos/ must be an active indexed corporate hub")
+    if "/servicos/" not in {item["href"] for item in nav_items(brand)}:
+        failures.append("header must expose the registered corporate services hub")
 
     situations = ia.get("service_situations") or []
     if len(situations) != 5:

@@ -187,15 +187,15 @@ export async function runRedirectGates({ root = ROOT, base = BASE, log = console
     const corporateServices = readFileSync(corporateServicesPath, "utf8");
     ok(
       failures,
-      "servicos_candidate_noindex",
-      /content=["']noindex,follow["'][^>]*name=["']robots["']/i.test(corporateServices),
-      "candidate must remain noindex until MV-09 registers the public family"
+      "servicos_indexable_after_mv09",
+      /content=["']index,follow["'][^>]*name=["']robots["']/i.test(corporateServices),
+      "MV-09 must publish the registered corporate services family"
     );
   }
   ok(
     failures,
     "servicos_html_rule",
-    byFrom["/servicos.html"]?.to === "/servicos-obras-publicas/" || byFrom["/servicos.html"]?.to === "/servicos-obras-publicas",
+    byFrom["/servicos.html"]?.to === "/servicos/" || byFrom["/servicos.html"]?.to === "/servicos",
     JSON.stringify(byFrom["/servicos.html"])
   );
   ok(failures, "servicos_html_301", byFrom["/servicos.html"]?.status === "301", byFrom["/servicos.html"]?.status);

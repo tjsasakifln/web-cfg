@@ -38,7 +38,7 @@ def test_ia_contract_is_valid_without_html():
     items = header_items()
     assert len(items) == 3
     assert len(items) <= MAX_HEADER_DESTINATIONS
-    assert header_cta()["href"].endswith("#triagem-tecnica")
+    assert header_cta()["href"] == "/triagem-tecnica/"
     labels = " ".join(item["label"].lower() for item in items)
     assert "b2g" not in labels
     assert all(
@@ -52,7 +52,7 @@ def test_ia_contract_is_valid_without_html():
     assert len(situations) == 5
     assert sum(row["href"] == "/servicos-obras-publicas/" for row in situations) == 1
     assert all(
-        row["href"] == "/#triagem-tecnica"
+        row["href"].startswith("/triagem-tecnica/#")
         for row in situations
         if row["id"] != "public_works_b2g"
     )
@@ -151,7 +151,7 @@ def test_all_mutable_indexable_breadcrumbs_equal_visible_ia_and_jsonld():
     assert checked >= 60
 
 
-def test_sync_text_keeps_non_campaign_route_byte_stable_during_mv04_rollout():
+def test_sync_text_applies_global_corporate_shell_after_mv09_activation():
     brand = load_brand()
     route = "/defesa-margem-contratos-publicos/"
     html = """<!DOCTYPE html><html><head>
@@ -162,8 +162,10 @@ def test_sync_text_keeps_non_campaign_route_byte_stable_during_mv04_rollout():
 <nav aria-label="Navegação estrutural" class="breadcrumbs container"><ol><li><a href="/">Início</a><span aria-hidden="true">/</span></li><li aria-current="page">Defesa de margem</li></ol></nav>
 </main></body></html>"""
     updated = sync_text(html, brand, route)
-    assert updated == html
-    assert load_ia_map()["rollout"]["shell_scope"] == "campaign_routes_only"
+    assert updated != html
+    assert "Serviços e problemas" in updated
+    assert "/servicos-obras-publicas/" in updated
+    assert load_ia_map()["rollout"]["shell_scope"] == "global"
 
 
 def test_shipped_home_header_names_a_journey():

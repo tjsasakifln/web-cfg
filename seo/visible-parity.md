@@ -1,13 +1,13 @@
 # Visible parity
 
 - ok: `True`
-- pages: `76`
+- pages: `78`
 - defects: `0`
-- site_root: `/tmp/wt-ferramentas-cta/_site`
+- site_root: `/home/tjsasakifln/code/confenge/.worktrees/web-cfg/mv-09-commercial-production-20260905/_site`
 
 | url | ok | defects | claimed | visible |
 | --- | --- | --- | --- | --- |
-| https://confenge.com.br/ | True | — | Organization,Person | Licitação vencida não paga a conta. Contrato rentável, sim. |
+| https://confenge.com.br/ | True | — | Organization,Person | Do problema técnico à decisão documentada. |
 | https://confenge.com.br/acompanhamento-contratos-obras/ | True | — | Organization,Person,BreadcrumbList | Acompanhamento de contratos de obras públicas: rotina preventiva e recorrente |
 | https://confenge.com.br/aditivos-obras-publicas/ | True | — | Organization,Person,BreadcrumbList | Aditivos e serviços extras em obras públicas: documentar, precificar e decidir |
 | https://confenge.com.br/atrasos-prorrogacao-obras-publicas/ | True | — | Organization,Person,BreadcrumbList | Atrasos e prorrogações: causa, responsabilidade, caminho crítico e registro contemporâneo |
@@ -27,7 +27,7 @@
 | https://confenge.com.br/comercial/privacidade-leads/ | True | — |  | Aviso de privacidade - leads e contratação |
 | https://confenge.com.br/comercial/termos-diagnostico-b2g/ | True | — |  | Termos B2B - Diagnóstico de Expansão no Mercado Público |
 | https://confenge.com.br/confianca/ | True | — | Organization,Person,BreadcrumbList | Quem responde pela CONFENGE |
-| https://confenge.com.br/conflitos/ | True | — | Organization,Person,BreadcrumbList | Conflitos e interesses comerciais |
+| https://confenge.com.br/conflitos/ | True | — | Organization,Person,BreadcrumbList | Como a CONFENGE protege a independência técnica |
 | https://confenge.com.br/conteudos/ | True | — | Organization,Person,BreadcrumbList | Qual problema de licitação ou contrato você precisa resolver? |
 | https://confenge.com.br/conteudos/aditivo-empreitada-por-preco-global/ | True | — | Organization,Person,Article,BreadcrumbList; Aditivo em empreitada global: o que o risco de quantitativo não cobre | Aditivo em empreitada global: o que o risco de quantitativo não cobre |
 | https://confenge.com.br/conteudos/administracao-local-orcamento-obra-publica/ | True | — | Organization,Person,Article,BreadcrumbList; Administração local: item, BDI ou planilha? | Administração local no orçamento: direto, BDI ou planilha? |
@@ -81,5 +81,7 @@
 | https://confenge.com.br/radar/nacional-obras-publicas/ | True | — | Dataset,Organization,BreadcrumbList; Radar Nacional de Obras Públicas e Margem Contratual: recorte aberto | Radar Nacional de Obras Públicas e Margem Contratual |
 | https://confenge.com.br/reequilibrio-obras-publicas/ | True | — | Organization,Person,BreadcrumbList | Reequilíbrio econômico-financeiro de obra pública |
 | https://confenge.com.br/servicos-obras-publicas/ | True | — | BreadcrumbList | Serviços para licitações e contratos de obras públicas |
+| https://confenge.com.br/servicos/ | True | — | BreadcrumbList | Encontre o caminho técnico para a sua situação |
 | https://confenge.com.br/termos-de-uso/ | True | — |  | Termos de Uso |
+| https://confenge.com.br/triagem-tecnica/ | True | — |  | Explique sua situação em menos de um minuto |
 | https://confenge.com.br/uso-de-ia/ | True | — | Organization,Person,BreadcrumbList | Uso material de inteligência artificial |

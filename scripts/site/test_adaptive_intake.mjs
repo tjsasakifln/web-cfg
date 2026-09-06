@@ -604,11 +604,14 @@ for (const nucleus of Object.keys(NUCLEI)) {
     "Não há contratação, pagamento, aceite ou prazo prometido",
     "canal seguro",
     "Protocolo",
+    "data-intake-context",
+    "data-intake-whatsapp",
+    "data-intake-email",
   ]) {
     if (!page.includes(needle)) fail("page_missing", needle);
   }
   if (/data-other-free-text|textarea/.test(page)) fail("page_textarea");
-  for (const needle of ["config_unavailable", "intake_version", "intake_pin_hash", "receipt_unconfirmed", "idempotency_key", "confenge_triagem_retry_v2"]) {
+  for (const needle of ["config_unavailable", "intake_version", "intake_pin_hash", "receipt_unconfirmed", "idempotency_key", "confenge_triagem_retry_v2", "applyLandingContext", "planejamento-publico"]) {
     if (!client.includes(needle)) fail("triage_client_missing", needle);
   }
   if (/sessionStorage\.setItem\([^\n]+(?:nome|email|telefone)/.test(client)) fail("triage_client_pii_session");

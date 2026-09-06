@@ -154,7 +154,7 @@ def nav_cta(brand: dict[str, Any] | None = None) -> dict[str, str]:
         return cta
     return ((brand or load_brand()).get("navigation") or {}).get("cta") or {
         "label": "Iniciar triagem",
-        "href": "/#triagem-tecnica",
+        "href": "/triagem-tecnica/",
     }
 
 

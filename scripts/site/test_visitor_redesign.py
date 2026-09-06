@@ -447,13 +447,13 @@ def test_public_taxonomy_jargon_absent():
 # ---------------------------------------------------------------------------
 
 
-def test_global_shell_nav_contracts_are_explicit_during_frozen_window():
+def test_global_shell_nav_contracts_are_explicit_after_mv09_activation():
     brand = load_brand()
     brand_labels = [n["label"] for n in (brand.get("navigation") or {}).get("desktop") or []]
     assert brand_labels == EXPECTED_NAV
     cta_meta = (brand.get("navigation") or {}).get("cta") or {}
     assert cta_meta.get("label") == EXPECTED_CTA
-    assert "#triagem-tecnica" in (cta_meta.get("href") or ""), (
+    assert cta_meta.get("href") == "/triagem-tecnica/", (
         f"brand CTA must target corporate triage, got {cta_meta.get('href')!r}"
     )
 
@@ -488,10 +488,6 @@ def test_global_shell_nav_contracts_are_explicit_during_frozen_window():
     nav_runtime = (ROOT / "js" / "modules" / "nav.js").read_text(encoding="utf-8")
     if "toolsLink.textContent = 'Entregas'" in nav_runtime:
         failures.append("global runtime must not mutate frozen navigation")
-    campaign_routes = {
-        ROOT / "index.html",
-        ROOT / "servicos" / "index.html",
-    }
     for path in surfaces:
         if not path.exists():
             failures.append(f"missing {path.relative_to(ROOT)}")
@@ -503,15 +499,13 @@ def test_global_shell_nav_contracts_are_explicit_during_frozen_window():
         relative_path = path.relative_to(ROOT).as_posix()
         if relative_path in FROZEN_NAV_HTML_PATHS:
             expected = LEGACY_NAV
-        elif path in campaign_routes:
-            expected = EXPECTED_NAV
         else:
-            expected = None
+            expected = EXPECTED_NAV
         if expected is not None and labels != expected:
             failures.append(
                 f"{path.relative_to(ROOT)}: expected source nav {expected}, got {labels}"
             )
-        if path in campaign_routes and cta and cta != EXPECTED_CTA:
+        if relative_path not in FROZEN_NAV_HTML_PATHS and cta and cta != EXPECTED_CTA:
             failures.append(f"{path.relative_to(ROOT)}: cta {cta!r}")
         html = path.read_text(encoding="utf-8", errors="replace")
         header_cta = re.search(
@@ -521,10 +515,10 @@ def test_global_shell_nav_contracts_are_explicit_during_frozen_window():
         )
         if header_cta:
             href = header_cta.group(1) or header_cta.group(2)
-            expected_fragment = "#triagem-tecnica" if path in campaign_routes else "#formulario-contato"
-            if expected_fragment not in href:
+            expected_href = "/triagem-tecnica/"
+            if relative_path not in FROZEN_NAV_HTML_PATHS and href != expected_href:
                 failures.append(
-                    f"{path.relative_to(ROOT)}: header-cta href {href!r} not {expected_fragment}"
+                    f"{path.relative_to(ROOT)}: header-cta href {href!r} not {expected_href}"
                 )
         mobile = re.search(
             r'<nav\b[^>]*\bmobile-nav\b[^>]*>(.*?)</nav>', html, re.S | re.I
@@ -1084,7 +1078,7 @@ def test_home_form_anchor_reveals_fields():
     )
     assert header_cta, "home header-cta missing"
     header_href = header_cta.group(1) or header_cta.group(2)
-    assert "#triagem-tecnica" in header_href, (
+    assert header_href == "/triagem-tecnica/", (
         f"home header-cta must target corporate triage, got {header_href!r}"
     )
     mobile = re.search(r'<nav\b[^>]*\bmobile-nav\b[^>]*>(.*?)</nav>', html, re.S | re.I)
@@ -1094,7 +1088,7 @@ def test_home_form_anchor_reveals_fields():
         mobile.group(1),
     )
     assert mobile_cta, "home mobile Iniciar triagem missing"
-    assert "#triagem-tecnica" in mobile_cta.group(1), (
+    assert mobile_cta.group(1) == "/triagem-tecnica/", (
         f"home mobile CTA must target corporate triage, got {mobile_cta.group(1)!r}"
     )
     assert 'id="contato"' in html, "keep #contato section id for back-compat"
@@ -1111,10 +1105,10 @@ def test_home_form_anchor_reveals_fields():
         re.I,
     )
     assert situation_hrefs == [
-        "#triagem-tecnica",
-        "#triagem-tecnica",
-        "#triagem-tecnica",
-        "#triagem-tecnica",
+        "/triagem-tecnica/#projetos",
+        "/triagem-tecnica/#obra-imovel",
+        "/triagem-tecnica/#pericia-avaliacao",
+        "/triagem-tecnica/#sst",
         "/servicos-obras-publicas/",
     ]
     # The shipped script must realign the landing: deferred section sizes (#185)
@@ -1133,7 +1127,7 @@ def test_analisar_meu_caso_shell_targets_form():
         encoding="utf-8"
     )
     assert '"label": "Iniciar triagem"' in shell_src
-    assert '"href": "/#triagem-tecnica"' in shell_src
+    assert '"href": "/triagem-tecnica/"' in shell_src
     assert 'href": "/#formulario-contato"' in remediator
     failures = []
     for path in _public_html_files():
@@ -1152,7 +1146,7 @@ def test_analisar_meu_caso_shell_targets_form():
             label = re.sub(r"\s+", " ", label).strip()
             href_m = re.search(r'\bhref="([^"]+)"', attrs)
             href = href_m.group(1) if href_m else ""
-            if label == EXPECTED_CTA and "#triagem-tecnica" not in href:
+            if label == EXPECTED_CTA and href != "/triagem-tecnica/":
                 failures.append(f"{path.relative_to(ROOT)}: corporate header-cta {href!r}")
             if label == LEGACY_CTA and "#formulario-contato" not in href:
                 failures.append(f"{path.relative_to(ROOT)}: legacy header-cta {href!r}")
@@ -1161,14 +1155,24 @@ def test_analisar_meu_caso_shell_targets_form():
         )
         if mobile:
             for label, expected_fragment in (
-                (EXPECTED_CTA, "#triagem-tecnica"),
+                (EXPECTED_CTA, "/triagem-tecnica/"),
                 (LEGACY_CTA, "#formulario-contato"),
             ):
                 mcta = re.search(
                     rf'<a\b[^>]*href="([^"]+)"[^>]*>\s*{re.escape(label)}\s*</a>',
                     mobile.group(1),
                 )
-                if mcta and expected_fragment not in mcta.group(1):
+                wrong_target = (
+                    expected_fragment.startswith("/")
+                    and not expected_fragment.startswith("/#")
+                    and mcta
+                    and mcta.group(1) != expected_fragment
+                ) or (
+                    expected_fragment.startswith("#")
+                    and mcta
+                    and expected_fragment not in mcta.group(1)
+                )
+                if wrong_target:
                     failures.append(
                         f"{path.relative_to(ROOT)}: mobile {label} {mcta.group(1)!r}"
                     )

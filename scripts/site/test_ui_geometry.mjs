@@ -597,7 +597,7 @@ async function main() {
       })),
     );
     if (routes.length !== 5) throw new Error(`expected five situation routes: ${JSON.stringify(routes)}`);
-    if (!routes.slice(0, 4).every((item) => item.href === "#triagem-tecnica")) {
+    if (!routes.slice(0, 4).every((item) => item.href.startsWith("/triagem-tecnica/#"))) {
       throw new Error(`non-B2G routes must fall back to triage: ${JSON.stringify(routes)}`);
     }
     if (routes[4].href !== "/servicos-obras-publicas/") {
@@ -729,7 +729,7 @@ async function main() {
       window.scrollTo(0, 0);
       document.querySelector('.hero a[href="#situacoes"]').click();
       await new Promise((resolveFrame) => requestAnimationFrame(() => requestAnimationFrame(resolveFrame)));
-      document.querySelector('.situation-action[href="#triagem-tecnica"]').click();
+      window.location.hash = "#triagem-tecnica";
     });
     await new Promise((r) => setTimeout(r, 2600));
     const competing = await page.evaluate(() => {

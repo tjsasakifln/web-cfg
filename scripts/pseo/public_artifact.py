@@ -40,6 +40,7 @@ PUBLIC_TOP_DIRS = frozenset(
         "uso-de-ia",
         "conflitos",
         "confianca",
+        "servicos",
         "triagem-tecnica",
         "acompanhamento-contratos-obras",
         "aditivos-obras-publicas",

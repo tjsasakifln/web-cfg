@@ -96,7 +96,7 @@ ORG_JSONLD = {
     "@type": "Organization",
     "@id": f"{SITE}/#organization",
     "name": "CONFENGE",
-    "legalName": "CONFENGE",
+    "legalName": "Confenge Serviços de Desenhos Técnicos Ltda",
     "url": f"{SITE}/",
     "logo": f"{SITE}/assets/logo-confenge.png",
     "image": f"{SITE}/assets/og-confenge.jpg",
@@ -138,7 +138,7 @@ def _build_header() -> str:
     ]
     cta = (brand.get("navigation") or {}).get("cta") or {
         "label": "Iniciar triagem",
-        "href": "/#triagem-tecnica",
+        "href": "/triagem-tecnica/",
     }
     links = "\n".join(
         f'<a data-cta-position="header_nav" href="{html.escape(n["href"], quote=True)}" style="min-height:44px">{html.escape(n["label"])}</a>'
@@ -190,7 +190,7 @@ def _build_footer() -> str:
             '<div class="footer-links"><strong>Empresa</strong>'
             '<a href="/especialista/tiago-jun-sasaki/">Quem responde</a>'
             '<a href="/confianca/">Como verificamos</a>'
-            '<a href="/#triagem-tecnica">Contato e triagem</a>'
+            '<a href="/triagem-tecnica/">Contato e triagem</a>'
             '<a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a>'
             '<a href="tel:+5548988344559">(48) 98834-4559</a>'
             "<span>Atendimento nacional</span></div>"

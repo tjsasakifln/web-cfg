@@ -92,7 +92,7 @@
     },
     {
       "id": "home",
-      "visitor_job": "Entender em 10 segundos o que a CONFENGE resolve em contrato de obra pública e escolher a próxima ação.",
+      "visitor_job": "Entender em 5 segundos como a CONFENGE transforma problemas de engenharia, perícias, segurança do trabalho e obras públicas em decisões documentadas, reconhecer a própria situação e escolher a próxima ação.",
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
       "match": {
@@ -105,9 +105,43 @@
         "copy": "full",
         "accessibility": "full"
       },
-      "declared_at": "2026-08-23",
-      "owner_issue": 300,
+      "declared_at": "2026-09-05",
+      "owner_issue": 577,
       "debt": []
+    },
+    {
+      "id": "servicos-corporativos",
+      "visitor_job": "Reconhecer a situação técnica, entender entregas e limites possíveis e seguir para uma triagem funcional sem precisar conhecer a estrutura interna da CONFENGE.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {
+        "routes": [
+          "/servicos/"
+        ]
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-09-05",
+      "owner_issue": 582,
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "official_live",
+          "citable_source"
+        ],
+        "reason": "Página comercial de primeira parte que descreve situações, entregas possíveis e limites da própria CONFENGE; ela não representa um registro externo.",
+        "authority": [
+          "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md",
+          "data/site/brand.json",
+          "data/site/public-ia-map.json"
+        ],
+        "declared_at": "2026-09-05",
+        "owner_issue": 582
+      }
     },
     {
       "id": "service-pillars",

@@ -1,7 +1,7 @@
 {
   "defect_count": 0,
   "ok": true,
-  "page_count": 76,
+  "page_count": 78,
   "pages": [
     {
       "claimed": {
@@ -38,13 +38,13 @@
         "breadcrumb_names": [],
         "canonical": "https://confenge.com.br/",
         "dates": [],
-        "description": "Consultoria para licitações e contratos de obras públicas: análise de edital, orçamento, proposta e defesa de margem na execução. Para construtoras.",
-        "h1": "Licitação vencida não paga a conta. Contrato rentável, sim.",
+        "description": "Engenharia, perícias e inteligência técnica: diagnóstico, cálculo e evidências para decisões em projetos, imóveis, obras, SST e contratos públicos.",
+        "h1": "Do problema técnico à decisão documentada.",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": "demonstrativo",
         "reviewers": [],
-        "title": "CONFENGE | Consultoria para licitações e contratos de obras públicas",
+        "title": "CONFENGE | Engenharia, Perícias e Inteligência Técnica",
         "versions": []
       }
     },
@@ -100,7 +100,7 @@
         "h1": "Acompanhamento de contratos de obras públicas: rotina preventiva e recorrente",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Acompanhamento de contratos de obras públicas: rotina preventiva e recorrente | CONFENGE",
         "versions": []
@@ -332,7 +332,7 @@
         "h1": "Operação de Proposta para Licitação Crítica",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Operação de Proposta para Licitação Crítica | CONFENGE",
         "versions": []
@@ -1059,7 +1059,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Tiago Sasaki"
+          "Tiago Jun Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -1076,7 +1076,7 @@
       "url": "https://confenge.com.br/confianca/",
       "visible": {
         "authors": [
-          "Engº Tiago Sasaki"
+          "Tiago Jun Sasaki"
         ],
         "breadcrumb_names": [
           "Início",
@@ -1084,15 +1084,16 @@
         ],
         "canonical": "https://confenge.com.br/confianca/",
         "dates": [
-          "2026-08-30"
+          "2026-09-04",
+          "2026-09-05"
         ],
-        "description": "A CONFENGE atua sob o CNPJ 52.407.089/0001-09, conduzida pelo engenheiro civil Tiago Sasaki. Consulte o cadastro oficial, os critérios técnicos e a política de evidência.",
+        "description": "Confira quem é a CONFENGE, quem conduz os trabalhos, como a responsabilidade profissional é definida e quais evidências sustentam cada afirmação.",
         "h1": "Quem responde pela CONFENGE",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
-        "title": "Quem responde pela CONFENGE | CNPJ, responsável e critérios",
+        "title": "CONFENGE: empresa, responsável e critérios técnicos",
         "versions": []
       }
     },
@@ -1101,7 +1102,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Conflitos e interesses comerciais"
+          "Como a CONFENGE protege a independência técnica"
         ],
         "dataset_names": [],
         "dates": [],
@@ -1115,7 +1116,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Tiago Sasaki"
+          "Tiago Jun Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -1132,23 +1133,23 @@
       "url": "https://confenge.com.br/conflitos/",
       "visible": {
         "authors": [
-          "Engº Tiago Sasaki"
+          "Tiago Jun Sasaki"
         ],
         "breadcrumb_names": [
           "Início",
-          "Conflitos e interesses comerciais"
+          "Como a CONFENGE protege a independência técnica"
         ],
         "canonical": "https://confenge.com.br/conflitos/",
         "dates": [
-          "2026-08-16"
+          "2026-09-05"
         ],
-        "description": "A CONFENGE é consultoria comercial. Conteúdo técnico pode apoiar ofertas; conflito não declarado pode ser contestado.",
-        "h1": "Conflitos e interesses comerciais",
+        "description": "Antes de receber documentos, a CONFENGE verifica se pode atuar com independência. A análise cobre trabalhos públicos, privados, periciais, avaliações e segurança do trabalho.",
+        "h1": "Como a CONFENGE protege a independência técnica",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": "demonstrativo",
         "reviewers": [],
-        "title": "Conflitos de interesse | CONFENGE",
+        "title": "Conflitos de interesse e independência técnica | CONFENGE",
         "versions": []
       }
     },
@@ -1198,7 +1199,7 @@
         "h1": "Qual problema de licitação ou contrato você precisa resolver?",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Conteúdos sobre licitações, contratos e obras públicas | CONFENGE",
         "versions": []
@@ -1266,7 +1267,7 @@
         "h1": "Aditivo em empreitada global: o que o risco de quantitativo não cobre",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Aditivo em empreitada por preço global: quando o regime não cobre | CONFENGE",
         "versions": []
@@ -1334,7 +1335,7 @@
         "h1": "Administração local no orçamento: direto, BDI ou planilha?",
         "has_dataset_surface": true,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Administração local no orçamento: direto, BDI ou planilha? | CONFENGE",
         "versions": []
@@ -1472,7 +1473,7 @@
         "licenses": [
           "license-token-visible"
         ],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Prova de culpa da Administração no atraso da obra | CONFENGE",
         "versions": []
@@ -1540,7 +1541,7 @@
         "h1": "Atraso de pagamento: pode suspender a obra pública?",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Atraso de pagamento: pode suspender a obra pública? | CONFENGE",
         "versions": []
@@ -1609,7 +1610,7 @@
         "h1": "BDI diferenciado em materiais e equipamentos: quando usar",
         "has_dataset_surface": true,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "BDI diferenciado em materiais e equipamentos: quando usar | CONFENGE",
         "versions": []
@@ -1674,7 +1675,7 @@
         "h1": "Chuva na obra pública: quando o prazo é tecnicamente impactado",
         "has_dataset_surface": true,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Chuva e prorrogação de obra pública: quando há impacto | CONFENGE",
         "versions": []
@@ -1744,7 +1745,7 @@
         "licenses": [
           "license-token-visible"
         ],
-        "permission_class": "confidential",
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Exequibilidade da proposta: o que comprovar | CONFENGE",
         "versions": []
@@ -1812,7 +1813,7 @@
         "h1": "Data-base e reajuste: meses sem cobertura",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Data-base e reajuste: meses sem cobertura | CONFENGE",
         "versions": []
@@ -1880,7 +1881,7 @@
         "h1": "Demolição fora da planilha: como documentar antes de executar",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Demolição não prevista em obra pública: prova e medição | CONFENGE",
         "versions": []
@@ -1948,7 +1949,7 @@
         "h1": "Preço global ou unitário: o risco de quantidade",
         "has_dataset_surface": true,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Preço global ou unitário: o risco de quantidade | CONFENGE",
         "versions": []
@@ -2016,7 +2017,7 @@
         "h1": "Fiscal não assina medição: o que fazer nas primeiras 48h",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Fiscal não assina medição: o que fazer nas primeiras 48h | CONFENGE",
         "versions": []
@@ -2084,7 +2085,7 @@
         "h1": "Glosa por qualidade: pode glosar a medição inteira?",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Glosa por qualidade: pode glosar a medição inteira? | CONFENGE",
         "versions": []
@@ -2153,7 +2154,7 @@
         "h1": "Limite de aditivo 25% e 50% em obra pública: o que conta",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Limite de aditivo 25% e 50% em obra pública: o que conta | CONFENGE",
         "versions": []
@@ -2221,7 +2222,7 @@
         "h1": "Matriz de riscos pode impedir o reequilíbrio econômico-financeiro?",
         "has_dataset_surface": true,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Matriz de riscos pode impedir o reequilíbrio econômico-financeiro? | CONFENGE",
         "versions": []
@@ -2289,7 +2290,7 @@
         "h1": "Medição por evento ou quantitativo: o que muda",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Medição por evento ou quantitativo: o que muda | CONFENGE",
         "versions": []
@@ -2357,7 +2358,7 @@
         "h1": "Mobilização e desmobilização na planilha",
         "has_dataset_surface": true,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Mobilização e desmobilização na planilha | CONFENGE",
         "versions": []
@@ -2425,7 +2426,7 @@
         "h1": "Pagamento parcial em empreitada global: quando vale",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Pagamento parcial em empreitada global: quando vale | CONFENGE",
         "versions": []
@@ -2493,7 +2494,7 @@
         "h1": "Dossiê do pedido de prorrogação de prazo",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Dossiê do pedido de prorrogação de prazo | CONFENGE",
         "versions": []
@@ -2561,7 +2562,7 @@
         "h1": "Resposta à notificação de atraso em obra pública",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Resposta à notificação de atraso em obra pública | CONFENGE",
         "versions": []
@@ -2631,7 +2632,7 @@
         "h1": "SINAPI desonerado ou não desonerado: qual usar?",
         "has_dataset_surface": true,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Desonerado e não desonerado no SINAPI: o que o edital fixa | CONFENGE",
         "versions": []
@@ -2699,7 +2700,7 @@
         "h1": "SINAPI ou SICRO: a referência de cada serviço",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "SINAPI ou SICRO: a referência de cada serviço | CONFENGE",
         "versions": []
@@ -2984,7 +2985,7 @@
         "h1": "Diagnóstico de Expansão no Mercado Público",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Diagnóstico de Expansão no Mercado Público - R$ 8.000 | CONFENGE",
         "versions": []
@@ -3099,7 +3100,7 @@
         "h1": "Diretoria Fracionada para o Mercado Público",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Diretoria Fracionada para o Mercado Público | Rotina de licitações e contratos | CONFENGE",
         "versions": []
@@ -3153,7 +3154,7 @@
         "licenses": [
           "license-token-visible"
         ],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "8 ofertas publicadas e 54 capacidades, exemplos sintéticos | CONFENGE",
         "versions": []
@@ -3178,7 +3179,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Tiago Sasaki"
+          "Tiago Jun Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -3194,25 +3195,23 @@
       "ok": true,
       "url": "https://confenge.com.br/especialista/tiago-jun-sasaki/",
       "visible": {
-        "authors": [
-          "Engº Tiago Sasaki. Atualizado em"
-        ],
+        "authors": [],
         "breadcrumb_names": [
           "Início",
           "Especialista"
         ],
         "canonical": "https://confenge.com.br/especialista/tiago-jun-sasaki/",
         "dates": [
-          "2026-07-15",
-          "2026-08-30"
+          "2026-09-04",
+          "2026-09-05"
         ],
-        "description": "Conheça a experiência de Engº Tiago Sasaki, engenheiro civil pela EESC-USP e fundador da CONFENGE, em contratos, obras públicas, orçamento e tecnologia.",
+        "description": "Conheça Tiago Jun Sasaki, engenheiro civil formado pela EESC-USP e fundador da CONFENGE, com experiência na iniciativa privada e na Administração Pública.",
         "h1": "Engº Tiago Sasaki",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
-        "title": "Engº Tiago Sasaki | Engenheiro Civil e consultor B2G | CONFENGE",
+        "title": "Tiago Jun Sasaki | Engenheiro Civil | CONFENGE",
         "versions": []
       }
     },
@@ -3260,7 +3259,7 @@
         "h1": "O que você precisa resolver agora?",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Ferramentas para contratos e licitações de obras | CONFENGE",
         "versions": []
@@ -3315,7 +3314,7 @@
         "h1": "Checklist de documentação para reequilíbrio",
         "has_dataset_surface": true,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Checklist de documentação para reequilíbrio | CONFENGE",
         "versions": []
@@ -3373,7 +3372,7 @@
         "h1": "Diagnóstico de Defesa de Margem em Contratos Públicos",
         "has_dataset_surface": true,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Diagnóstico de Defesa de Margem em Contratos Públicos | CONFENGE",
         "versions": []
@@ -3428,7 +3427,7 @@
         "h1": "Verificador de limite de acréscimos e supressões",
         "has_dataset_surface": true,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Verificador de limite de acréscimos e supressões | CONFENGE",
         "versions": [
@@ -3485,7 +3484,7 @@
         "h1": "Matriz de atraso de obra",
         "has_dataset_surface": true,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Matriz de atraso de obra | CONFENGE",
         "versions": []
@@ -3536,7 +3535,7 @@
         "h1": "Guias e checklists para contratos de obras públicas",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Guias e checklists para contratos de obras públicas | CONFENGE",
         "versions": []
@@ -3603,7 +3602,7 @@
         "h1": "Checklist de pedido de aditivo em obra pública",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Checklist de pedido de aditivo em obra pública | CONFENGE",
         "versions": []
@@ -3692,7 +3691,7 @@
         "h1": "Lei nº 14.133/2021 aplicada a obras e serviços de engenharia",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Lei nº 14.133/2021 aplicada a obras e serviços de engenharia | CONFENGE",
         "versions": []
@@ -3759,7 +3758,7 @@
         "h1": "Item novo no aditivo: preço e relação proposta/orçamento-base",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Item novo no aditivo: preço e relação proposta/orçamento-base | CONFENGE",
         "versions": []
@@ -3873,7 +3872,7 @@
         "h1": "Como lemos o mercado público sem transformar histórico em profecia.",
         "has_dataset_surface": true,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Metodologia de inteligência | CONFENGE",
         "versions": []
@@ -3911,7 +3910,7 @@
         "h1": "Cinco e-mails úteis, não newsletter genérica",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Sequências técnicas por e-mail | CONFENGE",
         "versions": []
@@ -3967,7 +3966,7 @@
         "h1": "Política editorial",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Política editorial | CONFENGE",
         "versions": []
@@ -4024,7 +4023,7 @@
         "h1": "Histórico da política editorial",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Histórico da política editorial | CONFENGE",
         "versions": []
@@ -4080,7 +4079,7 @@
         "h1": "Política editorial 1.0.0",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Política editorial 1.0.0 (histórica) | CONFENGE",
         "versions": []
@@ -4118,7 +4117,7 @@
         "h1": "Política de Privacidade",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Política de Privacidade | CONFENGE",
         "versions": []
@@ -4166,7 +4165,7 @@
         "h1": "Problemas que resolvemos em licitações e contratos de obras",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Problemas que resolvemos em licitações e contratos de obras | CONFENGE",
         "versions": []
@@ -4234,7 +4233,7 @@
           "https://confenge.com.br/termos-de-uso/",
           "license-token-visible"
         ],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Radar Nacional de Obras Públicas e Margem Contratual | CONFENGE",
         "versions": []
@@ -4340,9 +4339,55 @@
         "h1": "Serviços para licitações e contratos de obras públicas",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Serviços para licitações e contratos de obras públicas | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Serviços"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/servicos/",
+      "visible": {
+        "authors": [],
+        "breadcrumb_names": [
+          "Início",
+          "Serviços"
+        ],
+        "canonical": "https://confenge.com.br/servicos/",
+        "dates": [],
+        "description": "Encontre o caminho para projetos, edificações, imóveis, perícias, segurança do trabalho ou obras públicas sem percorrer um catálogo extenso.",
+        "h1": "Encontre o caminho técnico para a sua situação",
+        "has_dataset_surface": false,
+        "licenses": [],
+        "permission_class": "demonstrativo",
+        "reviewers": [],
+        "title": "Serviços de engenharia, perícias e inteligência técnica | CONFENGE",
         "versions": []
       }
     },
@@ -4381,9 +4426,49 @@
           "https://confenge.com.br/termos-de-uso/",
           "license-token-visible"
         ],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Termos de Uso | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [],
+        "people": [],
+        "reviewers": [],
+        "types": [],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/triagem-tecnica/",
+      "visible": {
+        "authors": [],
+        "breadcrumb_names": [],
+        "canonical": "https://confenge.com.br/triagem-tecnica/",
+        "dates": [
+          "2026-09-05"
+        ],
+        "description": "Vamos registrar o tipo de problema, seu nome e um canal de retorno.",
+        "h1": "Explique sua situação em menos de um minuto",
+        "has_dataset_surface": false,
+        "licenses": [],
+        "permission_class": null,
+        "reviewers": [],
+        "title": "Triagem técnica | CONFENGE",
         "versions": []
       }
     },
@@ -4437,12 +4522,12 @@
         "h1": "Uso material de inteligência artificial",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Uso material de IA | CONFENGE",
         "versions": []
       }
     }
   ],
-  "site_root": "/tmp/wt-ferramentas-cta/_site"
+  "site_root": "/home/tjsasakifln/code/confenge/.worktrees/web-cfg/mv-09-commercial-production-20260905/_site"
 }
