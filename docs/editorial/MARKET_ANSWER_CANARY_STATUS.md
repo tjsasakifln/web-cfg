@@ -17,8 +17,8 @@
 - robots: `noindex,nofollow`
 - sitemap: `False`
 - freshness_class: `STALE`
-- evaluated_at: `2026-08-20T01:25:45.404827Z`
-- age_seconds: `230182`
+- evaluated_at: `2026-09-06T01:29:16.840292Z`
+- age_seconds: `1699193`
 - expires_at: `2026-08-19T11:29:23.193694+02:00`
 
 - `official_live`: `True`
@@ -53,7 +53,7 @@ Score `MARKET_ANSWER_VALUE_SCORE/1.0` total=`0.6708` · unknown components: dema
 - path: `/inteligencia/valor-tipico-contratos-pavimentacao/`
 - canonical: `https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/`
 - fixture marked: `False`
-- rendered: /home/tjsasakifln/code/confenge/web-cfg/inteligencia/valor-tipico-contratos-pavimentacao/index.html
+- rendered: /home/tjsasakifln/code/confenge/.worktrees/web-cfg/mv-09-commercial-production-20260905/inteligencia/valor-tipico-contratos-pavimentacao/index.html
 
 ## Engagement events available
 
@@ -64,7 +64,6 @@ Score `MARKET_ANSWER_VALUE_SCORE/1.0` total=`0.6708` · unknown components: dema
 - `xray_start` (engagement)
 - `cta_view` (engagement)
 - `cta_click` (engagement)
-- `lead_receipt_correlated` (lead)
 - `correction_open` (engagement)
 
 Page view is not a lead. Impression, engagement, lead and pipeline stay separate.

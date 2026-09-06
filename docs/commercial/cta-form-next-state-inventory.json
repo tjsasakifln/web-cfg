@@ -29,13 +29,13 @@
       "commercial_configuration"
     ],
     "baseline_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
-    "expected_declared_ctas": 130
+    "expected_declared_ctas": 123
   },
   "coverage": {
     "authority": "data/organic/public-family-registry.json",
     "manual_route_allowlist": false,
     "active_capture_routes": 26,
-    "declared_ctas": 130,
+    "declared_ctas": 123,
     "protected_routes_with_capture": [],
     "problems": []
   },
@@ -3031,7 +3031,23 @@
           "standalone_runtime_ready": true
         }
       ],
-      "actions": []
+      "actions": [
+        {
+          "cta_id": "limite-aditivos-servico",
+          "position": "after_method",
+          "href": "/aditivos-obras-publicas/",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Veja a análise técnica para aditivos de obras públicas.",
+          "useful_next_state": "Abre o destino declarado por “Veja a análise técnica para aditivos de obras públicas.” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "A leitura não é conclusão jurídica, não transforma UNKNOWN em fato e não recebe arquivo; documentos seguem apenas por canal seguro posterior.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        }
+      ]
     },
     {
       "route": "/",
@@ -3109,27 +3125,11 @@
         {
           "cta_id": "",
           "position": "hero",
-          "href": "#formulario-contato",
-          "stage": "register_context",
-          "commitment": "medium",
-          "current_label": "Registrar situação para triagem",
-          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
-          "actual_receipt": "lead_id ou receipt_id persistido antes da página de confirmação",
-          "field_purpose": "not_applicable",
-          "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem apenas por canal seguro combinado depois do protocolo.",
-          "event_semantics": [
-            "cta_click",
-            "cta_view"
-          ]
-        },
-        {
-          "cta_id": "",
-          "position": "hero",
-          "href": "#jornadas",
+          "href": "#situacoes",
           "stage": "compare",
           "commitment": "low",
-          "current_label": "Ver edital, contrato ou operação",
-          "useful_next_state": "Abre o destino declarado por “Ver edital, contrato ou operação” para continuar a decisão.",
+          "current_label": "Escolher minha situação",
+          "useful_next_state": "Abre o destino declarado por “Escolher minha situação” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
           "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem apenas por canal seguro combinado depois do protocolo.",
@@ -3139,163 +3139,56 @@
         },
         {
           "cta_id": "",
-          "position": "journey_b",
-          "href": "#formulario-contato",
-          "stage": "register_context",
-          "commitment": "medium",
-          "current_label": "Solicitar triagem do edital",
-          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
-          "actual_receipt": "lead_id ou receipt_id persistido antes da página de confirmação",
+          "position": "hero",
+          "href": "/servicos/",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Ver o escopo de serviços",
+          "useful_next_state": "Abre o destino declarado por “Ver o escopo de serviços” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
           "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem apenas por canal seguro combinado depois do protocolo.",
           "event_semantics": [
-            "cta_click",
-            "cta_view"
+            "cta_click"
           ]
         },
         {
           "cta_id": "home-medicoes-glosas-dossie",
-          "position": "journey_a",
+          "position": "b2g_shortcuts",
           "href": "/medicoes-glosas-obras-publicas/",
           "stage": "compare",
           "commitment": "low",
-          "current_label": "Avaliar o Dossiê de Medição, Glosa e Pagamento",
-          "useful_next_state": "Abre o destino declarado por “Avaliar o Dossiê de Medição, Glosa e Pagamento” para continuar a decisão.",
+          "current_label": "Dossiê de Medição, Glosa e Pagamento",
+          "useful_next_state": "Abre o destino declarado por “Dossiê de Medição, Glosa e Pagamento” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
           "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem apenas por canal seguro combinado depois do protocolo.",
           "event_semantics": [
-            "cta_click"
+            "no_direct_event_declared"
           ]
         },
         {
           "cta_id": "",
-          "position": "journey_c",
-          "href": "#formulario-contato",
-          "stage": "register_context",
-          "commitment": "medium",
-          "current_label": "Solicitar diagnóstico da operação",
-          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
-          "actual_receipt": "lead_id ou receipt_id persistido antes da página de confirmação",
-          "field_purpose": "not_applicable",
-          "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem apenas por canal seguro combinado depois do protocolo.",
-          "event_semantics": [
-            "cta_click",
-            "cta_view"
-          ]
-        },
-        {
-          "cta_id": "home-know-deliverables",
-          "position": "",
-          "href": "/entregas/",
-          "stage": "compare",
-          "commitment": "low",
-          "current_label": "Comparar entregas e artefatos",
-          "useful_next_state": "Abre o destino declarado por “Comparar entregas e artefatos” para continuar a decisão.",
-          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
-          "field_purpose": "not_applicable",
-          "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem apenas por canal seguro combinado depois do protocolo.",
-          "event_semantics": [
-            "cta_click"
-          ]
-        },
-        {
-          "cta_id": "home-open-first-deliverable",
-          "position": "",
-          "href": "/casos/modelo-relatorio-inteligencia-licitacoes/",
-          "stage": "inspect",
-          "commitment": "low",
-          "current_label": "Consultar este demonstrativo",
-          "useful_next_state": "Abre o demonstrativo sintético para inspecionar formato, método e limites.",
-          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
-          "field_purpose": "not_applicable",
-          "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem apenas por canal seguro combinado depois do protocolo.",
-          "event_semantics": [
-            "cta_click"
-          ]
-        },
-        {
-          "cta_id": "home-market-context-local-form",
-          "position": "market_context",
-          "href": "#formulario-contato",
-          "stage": "register_context",
-          "commitment": "medium",
-          "current_label": "Registrar contrato para triagem",
-          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
-          "actual_receipt": "lead_id ou receipt_id persistido antes da página de confirmação",
-          "field_purpose": "not_applicable",
-          "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem apenas por canal seguro combinado depois do protocolo.",
-          "event_semantics": [
-            "cta_view"
-          ]
-        },
-        {
-          "cta_id": "home-market-context-local-whatsapp",
-          "position": "market_context",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20contrato%20p%C3%BAblico%20de%20at%C3%A9%20R%24%20250%20mil%20e%20quero%20entender%20como%20a%20CONFENGE%20pode%20ajudar.",
+          "position": "corporate_triage",
+          "href": "mailto:tiago.sasaki@confenge.com.br?subject=Triagem%20t%C3%A9cnica%20CONFENGE&amp;body=Ol%C3%A1%2C%20Tiago.%0A%0ASitua%C3%A7%C3%A3o%20t%C3%A9cnica%3A%0AO%20que%20precisa%20ser%20decidido%20ou%20produzido%3A%0AUrg%C3%AAncia%3A%0A",
           "stage": "talk",
           "commitment": "medium",
-          "current_label": "Pedir triagem pelo WhatsApp",
-          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
-          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
+          "current_label": "Iniciar triagem por e-mail",
+          "useful_next_state": "Abre o cliente de e-mail com assunto e contexto para continuar o enquadramento.",
+          "actual_receipt": "Rascunho local de e-mail; não existe receipt do servidor antes do envio.",
           "field_purpose": "not_applicable",
           "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem apenas por canal seguro combinado depois do protocolo.",
           "event_semantics": [
-            "whatsapp_click"
+            "email_click"
           ]
         },
         {
-          "cta_id": "home-market-context-regional-form",
-          "position": "market_context",
-          "href": "#formulario-contato",
-          "stage": "register_context",
-          "commitment": "medium",
-          "current_label": "Registrar contrato para triagem",
-          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
-          "actual_receipt": "lead_id ou receipt_id persistido antes da página de confirmação",
-          "field_purpose": "not_applicable",
-          "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem apenas por canal seguro combinado depois do protocolo.",
-          "event_semantics": [
-            "cta_view"
-          ]
-        },
-        {
-          "cta_id": "home-market-context-regional-whatsapp",
-          "position": "market_context",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20contrato%20p%C3%BAblico%20entre%20R%24%20250%20mil%20e%20R%24%201%20milh%C3%A3o%20e%20quero%20entender%20como%20a%20CONFENGE%20pode%20ajudar.",
+          "cta_id": "",
+          "position": "corporate_triage",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20explicar%20uma%20situa%C3%A7%C3%A3o%20t%C3%A9cnica%20e%20saber%20se%20ela%20se%20encaixa%20na%20atua%C3%A7%C3%A3o%20da%20CONFENGE.",
           "stage": "talk",
           "commitment": "medium",
-          "current_label": "Pedir triagem pelo WhatsApp",
-          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
-          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
-          "field_purpose": "not_applicable",
-          "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem apenas por canal seguro combinado depois do protocolo.",
-          "event_semantics": [
-            "whatsapp_click"
-          ]
-        },
-        {
-          "cta_id": "home-market-context-strategic-form",
-          "position": "market_context",
-          "href": "#formulario-contato",
-          "stage": "register_context",
-          "commitment": "medium",
-          "current_label": "Registrar contrato para triagem",
-          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
-          "actual_receipt": "lead_id ou receipt_id persistido antes da página de confirmação",
-          "field_purpose": "not_applicable",
-          "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem apenas por canal seguro combinado depois do protocolo.",
-          "event_semantics": [
-            "cta_view"
-          ]
-        },
-        {
-          "cta_id": "home-market-context-strategic-whatsapp",
-          "position": "market_context",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20contrato%20p%C3%BAblico%20acima%20de%20R%24%201%20milh%C3%A3o%20e%20quero%20entender%20como%20a%20CONFENGE%20pode%20ajudar.",
-          "stage": "talk",
-          "commitment": "medium",
-          "current_label": "Pedir triagem pelo WhatsApp",
+          "current_label": "Iniciar triagem pelo WhatsApp",
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
@@ -3503,7 +3396,7 @@
           "pre_form_value": "Selecione classes fechadas para registrar a necessidade técnica; o envio permanece bloqueado enquanto o contrato de intake não estiver disponível.",
           "pre_form_value_visible": true,
           "field_purpose": {
-            "visible_text": "Nome e canal permitem retorno. Núcleo, classes de situação, urgência, documentos e conflito delimitam a triagem sem texto livre, documentos ou identificação de partes. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
+            "visible_text": "Nome e canal permitem retorno. A situação escolhida delimita a triagem sem texto livre, documentos ou identificação de partes. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
             "visible": true,
             "required": [
               "need_code",

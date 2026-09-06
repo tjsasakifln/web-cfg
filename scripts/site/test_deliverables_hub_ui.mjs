@@ -432,13 +432,14 @@ for (const { route, expectedNav } of [
     const nav = [...document.querySelectorAll(".desktop-nav a")].map((a) => ({
       text: a.textContent?.trim(), href: a.getAttribute("href"),
     }));
-    const preview = document.querySelector(".home-deliverables")?.getBoundingClientRect();
     return {
       route: currentRoute,
       overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
       nav,
       navLabels: nav.map(({ text }) => text),
-      previewVisible: currentRoute === "/" ? Boolean(preview && preview.height > 0) : null,
+      corporateServicesPath: currentRoute === "/"
+        ? Boolean(document.querySelector('main a[href="/servicos/"]'))
+        : null,
       sections: currentRoute === "/" ? document.querySelectorAll("main > section").length : null,
     };
   }, route);
@@ -456,10 +457,12 @@ for (const { route, expectedNav } of [
     if (metrics.nav.some(({ text }) => text === "Entregas")) errors.push("frozen_nav_mutated");
     if (metrics.nav.filter(({ href }) => href === "/ferramentas/").length !== 1) errors.push("frozen_tools_missing");
   }
-  if (route === "/" && (!metrics.previewVisible || metrics.sections > 7)) errors.push("home_preview_contract");
+  if (route === "/" && (!metrics.corporateServicesPath || metrics.sections !== 8)) {
+    errors.push("home_corporate_path_contract");
+  }
   if (route === "/" && screenshotDir) {
-    const preview = await page.$(".home-deliverables");
-    if (preview) await preview.screenshot({ path: path.join(screenshotDir, "home-deliverables.png") });
+    const situations = await page.$('#situacoes');
+    if (situations) await situations.screenshot({ path: path.join(screenshotDir, "home-situations.png") });
   }
   findings.push({ ...metrics, errors });
   if (errors.length) failed += 1;

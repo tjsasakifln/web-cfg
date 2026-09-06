@@ -91,14 +91,15 @@ for (const [route, why] of [
 assert.equal(coverage.axe.page_loads, coverage.axe.route_count * 2);
 assert(coverage.axe.not_sampled.every((entry) => entry.reason), "every omitted axe route needs a reason");
 assert.equal(coverage.lighthouse.canonical_family_count, registry.families.length);
-assert.equal(coverage.lighthouse.canonical_family_count, 36);
+assert.equal(coverage.lighthouse.canonical_family_count, 37);
 assert.equal(coverage.lighthouse.supplemental_family_count, 1);
-assert.equal(coverage.lighthouse.pages.length, 40);
+assert.equal(coverage.lighthouse.pages.length, 41);
 assert(coverage.lighthouse.pages.includes("/conteudos/atraso-na-medicao-obra-publica/"));
 assert(coverage.lighthouse.pages.includes("/diretoria-b2g/"));
 assert(coverage.lighthouse.pages.includes("/diagnostico-b2g-expansao/"));
 assert(coverage.lighthouse.pages.includes("/ferramentas/prontidao-tecnica-obra-privada/"));
 assert(coverage.lighthouse.pages.includes("/triagem-tecnica/"));
+assert(coverage.lighthouse.pages.includes("/servicos/"));
 assert.equal(new Set(coverage.lighthouse.pages).size, coverage.lighthouse.pages.length);
 assert.deepEqual(
   new Set(coverage.lighthouse.families.filter((family) => family.kind === "canonical").map((family) => family.id)),

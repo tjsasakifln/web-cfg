@@ -34,7 +34,7 @@
     "authority": "data/organic/public-family-registry.json",
     "rule": "Derive every lead-bearing public HTML form, including declared noindex commercial configuration steps, then exclude mutation on the six routes held by the frozen unlock plan.",
     "expected_active_capture_routes": 26,
-    "expected_declared_ctas": 130
+    "expected_declared_ctas": 123
   },
   "invariants": [
     "Turnstile is injected fail-closed into every production lead form.",
@@ -170,7 +170,7 @@
       "next_useful_state": "A triagem fica registrada somente após a persistência confirmada; o protocolo permite à equipe avaliar enquadramento e capacidade em canal posterior.",
       "actual_receipt": "lead_id ou receipt_id opaco, exibido na confirmação inline apenas após a persistência.",
       "pre_form_value": "Selecione classes fechadas para registrar a necessidade técnica; o envio permanece bloqueado enquanto o contrato de intake não estiver disponível.",
-      "field_purpose": "Nome e canal permitem retorno. Núcleo, classes de situação, urgência, documentos e conflito delimitam a triagem sem texto livre, documentos ou identificação de partes.",
+      "field_purpose": "Nome e canal permitem retorno. A situação escolhida delimita a triagem sem texto livre, documentos ou identificação de partes.",
       "boundary": "Não há contratação, pagamento, aceite ou prazo prometido. Este passo não recebe CPF, processo, prontuário, planta, laudo, lista de empregados, partes em conflito, upload ou texto livre sensível; se necessário, o canal seguro é solicitado depois do protocolo.",
       "event_semantics": [
         "lead_form_start",

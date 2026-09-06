@@ -62,6 +62,11 @@
         "reason": "single-route canonical family"
       },
       {
+        "family_id": "servicos-corporativos",
+        "route": "/servicos/",
+        "reason": "single-route corporate services hub and primary multivertical decision path"
+      },
+      {
         "family_id": "service-pillars",
         "route": "/acompanhamento-contratos-obras/",
         "reason": "service-pillar template carrying the #253 responsive-image regression gate",
@@ -244,7 +249,8 @@
       {
         "family_id": "prontidao-tecnica-obra-privada",
         "route": "/ferramentas/prontidao-tecnica-obra-privada/",
-        "reason": "single-route anonymous private-project readiness tool; complete result before contact"
+        "reason": "single-route anonymous private-project readiness tool; complete result before contact",
+        "seo_exempt_reason": "tool remains noindex during the corporate launch so it cannot outrank or distract from the consulting path before promotion evidence"
       },
       {
         "family_id": "triagem-tecnica",

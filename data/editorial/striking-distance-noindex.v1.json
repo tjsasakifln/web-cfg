@@ -33,7 +33,7 @@
         "approval_basis": "owner-delegated review 2026-08-29",
         "approved_at": "2026-08-29",
         "manual_human_review": false,
-        "material_hash": "sha256:45b162b336413029c9aa5ccbdaed9857b6029a4c98c97142d2e3158a568fa6bd",
+    "material_hash": "sha256:667ee5fab60a8729b8252f997c0548e1a847965e45a28b324e02996e5d22d162",
         "review_results": {
           "factual_legal_adversarial": true,
           "originality_anti_doorway": true,
@@ -41,8 +41,8 @@
           "skeptical_visitor_copy_ux": true,
           "responsive_js_off_keyboard_accessibility": true
         },
-        "notes": "O conteúdo foi redigido pelo agente da campanha de reescrita (material_author) sob delegação expressa de autoridade do owner. Uma revisão adversarial independente, executada em processo separado da campanha autora (reviewer_executor), verificou as citações legais (Lei 14.133/2021 arts. 115 §5º, 22 §§1-2, 92 VII/IX, 103 §§4-5, 117 §§1-2, 124 II 'd', 137 V), os Acórdãos TCU 639/2006 e 3.077/2010 e a metodologia do INMET (limiar de 1mm de chuva diária, janela 12h UTC-12h UTC), além de originalidade, canibalização de consulta e higiene de indexação, sem encontrar fabricação. Não houve revisão humana manual em nenhuma das duas etapas: nem na autoria, nem nesta revisão adversarial. Correção de copy em 2026-08-30 (CONFENGE_VALUE_FIRST_DOCUMENT_INTAKE_REWRITE_20260830): substituída a frase de negação inicial \"o site não recebe arquivo\" pela afirmação positiva da conduta (\"a CONFENGE abre um canal seguro para o envio\"), preservando fato, citações legais, TCU e INMET revisados nesta aprovação; revisão adversarial independente confirmou que nenhuma claim factual, jurídica ou metodológica foi alterada.",
-        "approval_hash": "sha256:a2ab20e2a4232619efe48f2d317f378a4790b1b80f52d6cf635d422345dca521"
+    "notes": "O conteúdo foi redigido pelo agente da campanha de reescrita (material_author) sob delegação expressa de autoridade do owner. Uma revisão adversarial independente, executada em processo separado da campanha autora (reviewer_executor), verificou as citações legais (Lei 14.133/2021 arts. 115 §5º, 22 §§1-2, 92 VII/IX, 103 §§4-5, 117 §§1-2, 124 II 'd', 137 V), os Acórdãos TCU 639/2006 e 3.077/2010 e a metodologia do INMET (limiar de 1mm de chuva diária, janela 12h UTC-12h UTC), além de originalidade, canibalização de consulta e higiene de indexação, sem encontrar fabricação. Não houve revisão humana manual em nenhuma das duas etapas: nem na autoria, nem nesta revisão adversarial. Correção de copy em 2026-08-30 (CONFENGE_VALUE_FIRST_DOCUMENT_INTAKE_REWRITE_20260830): substituída a frase de negação inicial \"o site não recebe arquivo\" pela afirmação positiva da conduta (\"a CONFENGE abre um canal seguro para o envio\"), preservando fato, citações legais, TCU e INMET revisados nesta aprovação; revisão adversarial independente confirmou que nenhuma claim factual, jurídica ou metodológica foi alterada. Recaptura técnica MV-09 em 2026-09-05: somente navegação e rodapé institucionais compartilhados mudaram; título, H1, corpo editorial, fontes, canonical, robots e CTA específico permaneceram semanticamente inalterados.",
+    "approval_hash": "sha256:92e6bc70aac2adfc5987fcf1e8ccd4bcf6567c7d8ecc03df4784d91e6a525464"
       }
     },
     {

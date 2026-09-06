@@ -60,7 +60,7 @@
 | https://confenge.com.br/diretoria-b2g/ | True | — | Organization,Person,BreadcrumbList | Diretoria Fracionada para o Mercado Público |
 | https://confenge.com.br/entregas/ | True | — | Organization,BreadcrumbList | 8 ofertas publicadas. Escolha pela decisão que está na mesa.Exemplos sintéticos. |
 | https://confenge.com.br/especialista/tiago-jun-sasaki/ | True | — | Organization,Person,BreadcrumbList | Engº Tiago Sasaki |
-| https://confenge.com.br/ferramentas/ | True | — | BreadcrumbList | O que você precisa resolver agora? |
+| https://confenge.com.br/ferramentas/ | True | — | BreadcrumbList | Ferramentas para licitações, contratos e obras públicas |
 | https://confenge.com.br/ferramentas/checklist-reequilibrio/ | True | — | Organization,BreadcrumbList | Checklist de documentação para reequilíbrio |
 | https://confenge.com.br/ferramentas/diagnostico-defesa-margem/ | True | — | Organization,BreadcrumbList | Diagnóstico de Defesa de Margem em Contratos Públicos |
 | https://confenge.com.br/ferramentas/limite-acrescimos-supressoes/ | True | — | Person,BreadcrumbList | Verificador de limite de acréscimos e supressões |

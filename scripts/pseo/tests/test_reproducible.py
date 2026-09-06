@@ -16,8 +16,6 @@ if str(ROOT) not in sys.path:
 
 from scripts.pseo.build_site import write_build_info
 from scripts.pseo.public_artifact import (
-    FOOTER_SCRIPTURE_HTML,
-    add_footer_scripture,
     assemble_public_artifact,
     audit_public_artifact,
 )
@@ -217,31 +215,6 @@ class TestPublicPayloadHygiene(unittest.TestCase):
 
 
 class TestAssembleWipesStale(unittest.TestCase):
-    def test_footer_scripture_is_centered_and_idempotent(self):
-        with tempfile.TemporaryDirectory() as td:
-            dest = Path(td)
-            page = dest / "index.html"
-            page_without_footer = dest / "sem-rodape" / "index.html"
-            _write(
-                page,
-                '<html><body><footer class="site-footer"><p>Rodapé</p></footer></body></html>',
-            )
-            _write(page_without_footer, "<html><body><main>Página</main></body></html>")
-
-            first = add_footer_scripture(dest)
-            second = add_footer_scripture(dest)
-            html = page.read_text(encoding="utf-8")
-            html_without_footer = page_without_footer.read_text(encoding="utf-8")
-
-            self.assertEqual(first["html_rewritten"], 2)
-            self.assertEqual(first["footers_created"], 1)
-            self.assertEqual(second["html_rewritten"], 0)
-            self.assertEqual(html.count(FOOTER_SCRIPTURE_HTML), 1)
-            self.assertEqual(html_without_footer.count(FOOTER_SCRIPTURE_HTML), 1)
-            self.assertIn("footer-scripture-only", html_without_footer)
-            self.assertIn(f"{FOOTER_SCRIPTURE_HTML}\n</footer>", html)
-            self.assertIn('style="margin:18px auto 0;text-align:center"', html)
-
     def test_assemble_wipes_planted_junk_and_audit_forbids_internal(self):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
@@ -270,6 +243,9 @@ class TestAssembleWipesStale(unittest.TestCase):
             self.assertFalse((site / ".env").exists())
             self.assertTrue((site / "index.html").exists())
             self.assertTrue((site / ".well-known" / "pseo-build.json").exists())
+            published_home = (site / "index.html").read_text(encoding="utf-8")
+            self.assertIn("home", published_home)
+            self.assertNotIn("Se o Senhor não edificar", published_home)
 
             audit = audit_public_artifact(root)
             self.assertTrue(audit.get("ok"), audit)
@@ -392,7 +368,7 @@ class TestCliAuditEntrypoint(unittest.TestCase):
             site = Path(td) / "_site"
             _write(
                 site / "index.html",
-                f"<html><footer>{FOOTER_SCRIPTURE_HTML}</footer></html>\n",
+                "<html><footer><p>Rodapé institucional</p></footer></html>\n",
             )
             _write(site / "robots.txt", "User-agent: *\nDisallow:\n")
             _write(site / "_redirects", "/old /new 301\n")

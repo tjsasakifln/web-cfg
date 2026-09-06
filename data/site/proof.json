@@ -194,6 +194,20 @@
     "obras públicas analisados pessoalmente"
    ],
    "notes": "Volume acumulado de obra pública sob análise técnica do titular ao longo da trajetória profissional, somando iniciativa privada e Administração Pública. Declarado pelo próprio em 2026-08-30. É volume analisado, não é valor recuperado, economizado nem resultado assegurado a cliente. Sem lastro documental neste repositório: é declaração do titular, e é por isso que a verification_class é self_attested_owner e não uma classe verificada por terceiro."
+  },
+  {
+   "id": "proof-metodo-limites-publicados",
+   "claim": "Método e limites de atuação publicados pela CONFENGE",
+   "status": "VERIFIED",
+   "verification_class": "content_published",
+   "evidence_ref": "confianca/index.html#metodo-e-resultado",
+   "source": "conteudo-institucional-publicado",
+   "public_allowed": true,
+   "last_verified_at": "2026-09-05",
+   "allowed_public_phrases": [
+    "Método e limites publicados"
+   ],
+   "notes": "Fato observável na superfície própria: /confianca/ identifica método, critérios de prova, limites e exemplos de entrega. Não constitui credencial externa nem resultado de cliente."
   }
  ]
 }

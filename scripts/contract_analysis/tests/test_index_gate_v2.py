@@ -133,6 +133,22 @@ def _approve_v2(record, tmp_path, html):
     )
 
 
+def _inject_public_shell_drift(monkeypatch):
+    """Alter deployed chrome without reviving the retired scripture injection."""
+    import scripts.site.public_navigation as navigation
+
+    original = navigation.promote_public_navigation_tree
+
+    def promote_with_drift(site_root):
+        changed = original(site_root)
+        for page in Path(site_root).rglob("*.html"):
+            html = page.read_text(encoding="utf-8")
+            page.write_text(html.replace("</body>", "<!-- shell drift --></body>"), encoding="utf-8")
+        return changed
+
+    monkeypatch.setattr(navigation, "promote_public_navigation_tree", promote_with_drift)
+
+
 def test_stale_tokens_refused_on_shipped_approve(tmp_path, monkeypatch):
     rec = _stage_official(tmp_path, monkeypatch)["records"][0]
     decision = evaluate_publication(rec, cohort=[rec])
@@ -293,13 +309,7 @@ def test_public_shell_drift_refuses_index(tmp_path, monkeypatch):
     after = evaluate_publication(rec, cohort=[rec])
     live_html = render_analysis_html(rec, after)
 
-    import scripts.pseo.public_artifact as artifact
-
-    monkeypatch.setattr(
-        artifact,
-        "FOOTER_SCRIPTURE_HTML",
-        artifact.FOOTER_SCRIPTURE_HTML.replace("Sl 127:1 (ARC)", "shell drift"),
-    )
+    _inject_public_shell_drift(monkeypatch)
     downgraded, _ = apply_rendered_hash_gate(rec, after, live_html)
     assert downgraded.state == "PUBLISHABLE_NOINDEX"
     assert "approval_rendered_hash_mismatch" in downgraded.reason_codes
@@ -314,14 +324,9 @@ def test_build_report_uses_post_shell_hash_decision(tmp_path, monkeypatch, capsy
     _approve_v2(rec, tmp_path, html)
     assert evaluate_publication(rec, cohort=[rec]).state == "PUBLISHABLE_INDEX"
 
-    import scripts.pseo.public_artifact as artifact
     from scripts.contract_analysis.__main__ import cmd_build
 
-    monkeypatch.setattr(
-        artifact,
-        "FOOTER_SCRIPTURE_HTML",
-        artifact.FOOTER_SCRIPTURE_HTML.replace("Sl 127:1 (ARC)", "shell drift"),
-    )
+    _inject_public_shell_drift(monkeypatch)
     rc = cmd_build(
         SimpleNamespace(
             live=str(tmp_path / "contract-analysis" / "official-live-01"),

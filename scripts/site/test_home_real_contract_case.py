@@ -18,9 +18,6 @@ def test_home_replaces_generic_matrix_with_real_public_contract():
     assert "R$ 1.797,38" in html
     assert "R$ 7.191,77" in html
     assert "R$ 182.936,30" in html
-    assert "180 dias" in html
-    assert "365 dias" in html
-    assert "900 dias" in html
     assert "contexto de mercado" in html.lower()
     assert "Qual deles se parece mais com o seu?" not in html
     assert "<dt>1% do valor</dt>" not in html
@@ -34,18 +31,17 @@ def test_home_replaces_generic_matrix_with_real_public_contract():
 
 def test_home_contract_profiles_are_manual_and_accessible():
     html = HOME.read_text(encoding="utf-8")
-    selector_match = re.search(r'<aside[^>]+data-evidence-selector[\s\S]*?</aside>', html)
+    selector_match = re.search(r'<div[^>]+id="mercado-pncp"[\s\S]*?</div>\s*</div>', html)
 
     assert selector_match
     selector = selector_match.group(0)
-    assert selector.count('role="tab"') == 3
-    assert selector.count('role="tabpanel"') == 3
-    assert selector.count('data-event-name="evidence_drilldown"') == 3
+    assert selector.count('class="service-card"') == 3
+    assert selector.count('data-economics-illustration="1"') == 3
+    assert selector.count('rel="noopener"') == 3
+    assert 'role="tab"' not in selector
+    assert 'role="tabpanel"' not in selector
     assert 'data-event-name="proof_expand"' not in selector
-    assert selector.count('data-cta-position="market_context"') == 6
     assert 'data-cta-position="hero_proof"' not in selector
-    assert selector.count('aria-selected="true"') == 1
-    assert selector.count('aria-selected="false"') == 2
     assert ' hidden' not in selector
     assert "autoplay" not in selector.lower()
     assert "aria-live" not in selector.lower()
@@ -69,7 +65,7 @@ def test_home_contract_case_has_provenance_and_no_client_claim():
     assert "contexto de mercado" in html.lower()
     assert "Contexto de mercado." in html
     offers_at = html.find('data-section-archetype="offer_dominant"')
-    pncp_at = html.find("data-evidence-selector")
+    pncp_at = html.find('id="mercado-pncp"')
     assert 0 < offers_at < pncp_at
 
 
@@ -89,4 +85,4 @@ def test_home_contract_case_keeps_one_primary_hero_cta():
     assert "data-evidence-selector" not in hero
     assert "Prefiro WhatsApp" not in hero
     assert "Analisar meu contrato" not in hero
-    assert "Registrar situação para triagem" in hero
+    assert "Escolher minha situação" in hero

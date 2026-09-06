@@ -153,3 +153,13 @@ Durante a execução, #604 foi mergeada por outra sessão e `origin/main` avanç
 Cada campanha MV-01..08 será registrada como `ADOPT | PARTIAL | SUPERSEDE | REJECT`, com SHA, arquivos portados, testes e justificativa. Candidatos só serão promovidos preservando conteúdo/hash/intenção; qualquer alteração material será descrita neste arquivo.
 
 O teste de cem repetições exige que taxonomia, roteamento, gates e artefatos sejam reutilizáveis. Uma expansão que apenas crie cem páginas ou cem operações manuais não será promovida.
+
+## Decisões do red-team de receita
+
+- A ferramenta de prontidão privada de #604 permanece acessível e útil antes do contato, mas foi retirada do sitemap, marcada `noindex,follow` e não ocupa home/nav. Disposição: `PARTIAL`, pois não antecede money pages nem se apresenta como SaaS substituto.
+- O shell compartilhado agora sincroniza também a descrição institucional do rodapé. Copy B2G permanece apenas em rotas/conteúdo B2G; páginas corporativas usam a tese guarda-chuva.
+- A citação religiosa antes injetada em todo artefato foi removida. Ela não cumpria trabalho de aquisição, confiança técnica ou conversão para um público nacional heterogêneo e criava conteúdo público ausente das fontes das páginas.
+- GitHub não ocupa posição de prova no primeiro percurso. Uso de IA permanece transparente na política própria, sem dominar hero, navegação ou confiança.
+- A integração de MV-04 é `PARTIAL / ADOPT corrigido`: o commit fixo foi usado como donor, mas ativação, `/servicos/`, schema, triagem, wording nacional, footer e gates foram corrigidos na MV-09. O producer não publicou uma PR terminal apta à integração integral.
+
+Matriz final de canonical: `docs/integration/campaign-20260905/09/intent-canonical-matrix.md`. Simulação dos doze visitantes: `docs/integration/campaign-20260905/09/revenue-red-team.md`.

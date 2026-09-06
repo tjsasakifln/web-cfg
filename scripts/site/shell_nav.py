@@ -37,6 +37,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from scripts.pseo.html_shell import breadcrumbs_html  # noqa: E402
+from scripts.site.brand import footer_blurb  # noqa: E402
 from scripts.site.public_ia import (  # noqa: E402
     active_header_href as ia_active_header_href,
     align_breadcrumb_trail,
@@ -128,6 +129,10 @@ FOOTER_TOP_RE = re.compile(
     r'(<div class="container footer-top">\s*<div class="footer-brand">.*?</div>)'
     r'(.*?)'
     r'(\s*</div>\s*<div class="container footer-bottom">)',
+    re.S,
+)
+FOOTER_BRAND_BLURB_RE = re.compile(
+    r'(<div class="footer-brand">.*?<p>).*?(</p>\s*</div>)',
     re.S,
 )
 LEGACY_ANCHOR_HREFS = {
@@ -429,6 +434,10 @@ def sync_text(text: str, brand: dict[str, Any], current: str | None) -> str:
         text = _replace_nav(text, MOBILE_NAV_RE, inner)
 
     if FOOTER_TOP_RE.search(text):
+        blurb = html_lib.escape(footer_blurb(brand))
+        text = FOOTER_BRAND_BLURB_RE.sub(
+            lambda m: f"{m.group(1)}{blurb}{m.group(2)}", text, count=1
+        )
         columns = footer_nav_links(brand)
         text = FOOTER_TOP_RE.sub(
             lambda m: f"{m.group(1)}\n{columns}{m.group(3)}", text, count=1
