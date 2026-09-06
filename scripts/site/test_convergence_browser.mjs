@@ -607,12 +607,19 @@ try {
     await page.evaluate(() => { document.addEventListener("click", event => event.preventDefault(), true); });
     for (let index = 0; index < down.channelHrefs.length; index += 1) {
       await page.evaluate(() => window.dispatchEvent(new Event("pagehide")));
-      await wait(200);
+      /* The flushed batch travels page -> CDP -> loopback server, so the queue is
+       * cleared only after that round trip could have completed; a pre-click
+       * beacon landing after the clear would read as a second event. */
+      await wait(400);
       state.collectorBodies.length = 0;
       await page.evaluate(() => { (window.dataLayer || []).length = 0; });
       await page.evaluate(position => document.querySelectorAll("[data-fallback-channel]")[position].click(), index);
       await page.evaluate(() => window.dispatchEvent(new Event("pagehide")));
-      await wait(300);
+      /* Wait for the body to arrive rather than for a fixed slice of time, then
+       * settle briefly so a second batch, if any, is counted too. Nothing is
+       * weakened: no body at all leaves the array empty and still fails. */
+      for (let waited = 0; waited < 3000 && state.collectorBodies.length === 0; waited += 50) await wait(50);
+      await wait(200);
       const bus = await page.evaluate(() => (window.dataLayer || []).map(event => event && event.event).filter(Boolean));
       const collected = collectorEventNames(state.collectorBodies);
       const bodies = state.collectorBodies.map(body => String(body).slice(0, 160));
