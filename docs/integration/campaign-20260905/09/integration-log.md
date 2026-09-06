@@ -52,7 +52,7 @@
 
 O censo canônico de ações parte das `128` CTAs declaradas em `origin/main@3552cf2` e fecha em `131`, com `27` rotas de captura e zero problemas derivados. A repetição melhora o sistema: novas superfícies herdam família pública, perfil de próxima ação, privacidade, persistência e gate, sem inventário manual por página.
 
-Estado máximo permitido neste fixed point: `READY_TO_PUBLISH_WITH_ADAPTIVE_SUBMIT_WITHHELD`. A shell corporativa, os canais diretos e a rota privada podem ser publicados. O endpoint de configuração adaptativa deve responder fail-closed e o botão de submit deve permanecer bloqueado até Warmbly #266 estar mergeada e o contrato ser provado no runtime consumidor. Esse bloqueio não impede o critical path corporativo porque WhatsApp, e-mail e telefone continuam funcionais e contextualizados.
+Estado máximo permitido neste fixed point: `READY_TO_PUBLISH_BLOCKED_BY_CROSS_REPO_CONTRACT`. A shell corporativa, os canais diretos e a rota privada estão prontos na PR, mas não serão mergeados nem publicados enquanto Warmbly #266 não estiver mergeada e o contrato não estiver provado no runtime consumidor. O endpoint de configuração adaptativa responde fail-closed e o botão de submit permanece bloqueado; WhatsApp, e-mail e telefone continuam visíveis e contextualizados na candidata, sem serem usados para contornar o bloqueio de release definido pelo #611.
 
 ## Baseline revalidada em 2026-09-05
 
@@ -209,3 +209,13 @@ O teste de cem repetições exige que taxonomia, roteamento, gates e artefatos s
 - A integração de MV-05 é `PARTIAL`: somente o recorte de quantitativos e orçamento foi promovido. O conteúdo foi preservado em intenção, mas ligado ao registry, sitemap, IA, artefato público e contrato central de próxima ação; os rótulos genéricos de canal foram especializados após o red-team.
 
 Matriz final de canonical: `docs/integration/campaign-20260905/09/intent-canonical-matrix.md`. Simulação dos doze visitantes: `docs/integration/campaign-20260905/09/revenue-red-team.md`.
+
+## Evidência final da candidata
+
+- Build público: `79` URLs no sitemap, `79` indexáveis, `0` erros e `0` warnings; hash do artefato `64e3c69261a0f810d46c230a9392abb7c91b356d8e5e2d1d288d1f1077686ef5` e hash do manifesto `d41a5cb18fdeac79c16e73a5ce8fa9ff7b16a1571217598a1abc4e8f3e94c76b` no build de `1b43a4bf13f457ae1748526a24e896cc7da9859b`.
+- Cobertura: `254` rotas públicas, `58` rotas de risco em dois viewports, `29` rotas com captura, `39` famílias Lighthouse e `42` representantes; nenhum bloqueio axe na cunha em móvel ou desktop.
+- Lighthouse completo e isolado: `PASS`; home `3/3`, performance mínima `99`, TBT p75 `88 ms`, long task máximo `138 ms`, CLS máximo `0`. A cunha marcou performance `100`, acessibilidade `100`, best practices `96`, SEO `100`, LCP `1.359 s`, TBT `0` e CLS `0`.
+- B2G: `/diretoria-b2g/` e `/diagnostico-b2g-expansao/` marcaram `100/100/100/100` nas três repetições; `/servicos-obras-publicas/` marcou performance e SEO `100`.
+- Jornada browser: `23/23` checks aprovados; CTA route-local, três fallbacks, submit indisponível sob configuração `503`, retry idempotente, attribution preservada, allowlist UTM e analytics sem PII. Capturas e relatório estão em `evidence/after/`.
+- Gates adicionais: `knowledge-funnel 14/14`, contrato de host Netcup `22/22`, intake `16/16`, próxima ação `27/27`, sitemap graph `29/29`, handoff `26/26`, runtime authority `29/29`, SEO/privacy/brand/copy/inbound gates aprovados.
+- Warmbly #266 revalidada no HEAD `b78e3d8cf820c7e594aad9f15f587299fdaf6004`: `OPEN`, mergeável e checks verdes, sem merge SHA e sem evidência de runtime live. Este é o único bloqueio real de publicação; não há evidência comercial observada nesta sessão.

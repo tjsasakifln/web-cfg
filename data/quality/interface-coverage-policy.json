@@ -67,6 +67,11 @@
         "reason": "single-route corporate services hub and primary multivertical decision path"
       },
       {
+        "family_id": "private-engineering-quantities-budget",
+        "route": "/quantitativos-orcamento-obras/",
+        "reason": "single-route private quantities and budgeting journey with adaptive capture and direct fallback channels"
+      },
+      {
         "family_id": "service-pillars",
         "route": "/acompanhamento-contratos-obras/",
         "reason": "service-pillar template carrying the #253 responsive-image regression gate",

@@ -154,6 +154,11 @@ async function launchIsolatedChrome() {
   try {
     const chrome = await launchChrome({
       chromePath: process.env.CHROME_PATH || "/usr/bin/google-chrome",
+      // Keep chrome-launcher's logs and pid file in the same exact temporary
+      // profile that we own. Under WSL its platform detection otherwise makes
+      // a Windows-looking relative directory inside the checkout before the
+      // final Linux --user-data-dir flag below takes precedence.
+      userDataDir: profileDir,
       chromeFlags: [
         "--headless=new",
         "--no-sandbox",
