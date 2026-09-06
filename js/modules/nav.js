@@ -370,17 +370,25 @@
       contrato: '/obrigado-contrato',
       edital: '/obrigado-edital',
       operacao: '/obrigado-operacao',
+      // A need outside the public-works journeys confirms on the neutral
+      // /obrigado ("Recebemos seu contato."). Without this entry, every private
+      // nucleus fell through to 'operacao' and its requester was told, in
+      // writing, that they had asked for a B2G operation diagnosis.
+      outro: '/obrigado',
     };
     const stageToJourney = (stageVal) => {
       const s = (stageVal || '').toLowerCase();
       if (s.includes('edital') || s.includes('proposta')) return 'edital';
       if (s.includes('contrato') || s.includes('urgente') || s.includes('glosa') || s.includes('execução') || s.includes('execucao')) return 'contrato';
       if (s.includes('operação') || s.includes('operacao') || s.includes('oportunidade') || s.includes('estrutur')) return 'operacao';
-      return 'operacao';
+      // Default to the neutral journey, not to B2G operation. The five public
+      // stages above all match a keyword explicitly, so only the private nuclei
+      // and an undefined need reach this line.
+      return 'outro';
     };
     const applyJourneyToForm = (journeyId, forceStage = false) => {
       if (!form || !journeyId) return;
-      const j = JOURNEY_ACTIONS[journeyId] ? journeyId : 'operacao';
+      const j = JOURNEY_ACTIONS[journeyId] ? journeyId : 'outro';
       ensureHidden('jornada', j, true);
       if (form.getAttribute('data-receipt-required') === 'true') {
         form.setAttribute('data-success-destination', JOURNEY_ACTIONS[j] || '/obrigado');
