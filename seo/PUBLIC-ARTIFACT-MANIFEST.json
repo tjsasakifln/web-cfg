@@ -76,7 +76,7 @@
     "styles-tools.css",
     "styles.css"
   ],
-  "html_route_count": 248,
+  "html_route_count": 249,
   "html_routes": [
     "/",
     "/acompanhamento-contratos-obras/",
@@ -281,6 +281,7 @@
     "/nurture/",
     "/nurture/sair/",
     "/oportunidades/cc-2026-000047-ponte-rio-do-sul-sc/",
+    "/oportunidades/",
     "/oportunidades/pe-2026-000188-reforma-ubs-londrina-pr/",
     "/oportunidades/pe-2026-000412-pav-urbana-chapeco-sc/",
     "/oportunidades/pe-2026-000903-sinalizacao-viaria-caxias-rs/",
@@ -327,8 +328,8 @@
     "/triagem-tecnica/",
     "/uso-de-ia/"
   ],
-  "generated_at": "2026-09-07T08:17:54Z",
-  "public_artifact_hash": "68b42238ba9d96c71961433b7aa0df73c1b4f2fe2062b10b64a24a3c7f0862bd",
+  "generated_at": "2026-09-07T20:17:22Z",
+  "public_artifact_hash": "3e7aa805f4689ef0083eee91d9ab9e136568a285dea61ddbc076330eb8366ff9",
   "copied_dirs": [
     ".well-known/",
     "acompanhamento-contratos-obras/",
@@ -405,14 +406,14 @@
     "styles-tools.css",
     "styles.css"
   ],
-  "promoted_navigation_files": 212,
+  "promoted_navigation_files": 213,
   "navigation_audit": {
-    "audited_files": 214,
-    "audited_blocks": 426,
+    "audited_files": 215,
+    "audited_blocks": 428,
     "frozen_files": 6
   },
   "structured_identity": {
-    "html_scanned": 254,
+    "html_scanned": 255,
     "html_rewritten": 191,
     "fields_removed": 808
   }
