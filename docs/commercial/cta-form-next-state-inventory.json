@@ -29,13 +29,13 @@
       "commercial_configuration"
     ],
     "baseline_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
-    "expected_declared_ctas": 133
+    "expected_declared_ctas": 135
   },
   "coverage": {
     "authority": "data/organic/public-family-registry.json",
     "manual_route_allowlist": false,
     "active_capture_routes": 27,
-    "declared_ctas": 133,
+    "declared_ctas": 135,
     "protected_routes_with_capture": [],
     "problems": []
   },
@@ -3235,6 +3235,36 @@
           "stage": "talk",
           "commitment": "medium",
           "current_label": "E-mail tiago.sasaki@confenge.com.br",
+          "useful_next_state": "Abre o cliente de e-mail com assunto e contexto para continuar o enquadramento.",
+          "actual_receipt": "Rascunho local de e-mail; não existe receipt do servidor antes do envio.",
+          "field_purpose": "not_applicable",
+          "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem apenas por canal seguro combinado depois do protocolo.",
+          "event_semantics": [
+            "email_click"
+          ]
+        },
+        {
+          "cta_id": "home-situation-whatsapp",
+          "position": "",
+          "href": "https://wa.me/5548988344559",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Falar pelo WhatsApp",
+          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
+          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
+          "field_purpose": "not_applicable",
+          "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem apenas por canal seguro combinado depois do protocolo.",
+          "event_semantics": [
+            "whatsapp_click"
+          ]
+        },
+        {
+          "cta_id": "home-situation-email",
+          "position": "",
+          "href": "mailto:tiago.sasaki@confenge.com.br",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Escrever por e-mail",
           "useful_next_state": "Abre o cliente de e-mail com assunto e contexto para continuar o enquadramento.",
           "actual_receipt": "Rascunho local de e-mail; não existe receipt do servidor antes do envio.",
           "field_purpose": "not_applicable",
