@@ -37,7 +37,7 @@ test("public route is low-friction, transparent and free of sensitive inputs", (
     "não é contratação nem pagamento",
     "canal seguro",
     "Escopo, responsabilidade técnica",
-    "Pedir revisão de encaixe pelo WhatsApp",
+    "Falar pelo WhatsApp",
     "Enviar o contexto por e-mail",
     "Ligar para explicar a demanda",
   ]) {

@@ -2,8 +2,8 @@
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
   "baseline_commit": "0518262b82e0aeb43115a801e804012d442fbc28",
-  "recaptured_at": "2026-09-06",
-  "recapture_reason": "Revogacao da desqualificacao por porte (direcao do fundador, 2026-09-06). Dois dos seis pilares congelados publicavam a recusa comercial revogada: diagnostico-pre-licitacao e reequilibrio-obras-publicas. A copy passou a dizer qual formato serve em vez de afirmar que a CONFENGE nao e economicamente indicada; os limites tecnicos de merito (ruptura documentavel da equacao original, divergencia ja esclarecida com o fiscal) foram preservados integralmente. script.js drifta porque a frase vive em data/commercial/offer-fit-matrix.v1.json e e compilada para js/modules/offer-fit.js e dai para o bundle. Executa os itens 3 e 4 de docs/decisions/DEFERRED-BY-MEASUREMENT-FREEZE-2026-08-30.md, cuja data de 2026-09-13 e superada pela decisao do fundador; a sequencia tecnica registrada naquele documento foi seguida a risca. Mesma operacao mergeada em cf33385d4 e 2f26ac0ba: edicao revisada com recaptura de baseline no mesmo commit, com html_mutation_authorized: false e earliest_safe_action_at: 2026-09-16 em vigor. html_mutation continua false, nenhuma precondicao do unlock-plan foi marcada READY, e render_licitacao_products.mjs --check segue imprimindo LICITACAO_PRODUCTS_HELD com o hash novo. auditoria-orcamento-licitacao tambem entra: o bloco Quando NAO contratar ancorava a recusa na comparacao entre o valor em jogo e o custo da analise, exatamente a comparacao revogada. As duas condicoes reais (edital trivial, memoria de calculo auditavel) foram preservadas. Os outros tres pilares congelados permanecem byte-identicos.",
+  "recaptured_at": "2026-09-07",
+  "recapture_reason": "Retificacao da experiencia publica (2026-09-07). NENHUM HTML de pilar congelado foi alterado: patch_authority_footers.py havia tocado diagnostico-b2g-360/index.html durante a regeneracao e o arquivo foi revertido para ac4c169cc; o patcher agora pula os seis pilares por construcao. A deriva recapturada aqui e colateral. RENDERING COLLATERAL (styles.css, script.js), com a prova exigida por 'prove_no_frozen_rendering_change_or_revert': styles.css ganhou (a) guarda de tipo em '.contact-form input' para o checkbox nao renderizar 251x50px, e (b) remocao do prefixo '.js' em '.mobile-nav.is-open', que impedia o menu de abrir em 26 paginas. Nenhum dos seis pilares tem checkbox, radio ou .contact-form (contagem 0 nos seis), e os seis carregam a troca no-js->js, entao as duas regras sao no-op neles. Verificado empiricamente, nao presumido: os seis pilares foram renderizados a 390x844 antes e depois e comparados por impressao digital de geometria mais estilos computados de cada elemento -- IDENTICOS nos seis, mesma altura de documento e mesma contagem de elementos. script.js mudou em exatamente 14 caracteres, a delecao de '/correcoes/' do array de prefixos de chrome do analytics, sem efeito de renderizacao. NON-RENDERING COLLATERAL: sitemap.xml, sitemap.txt, sitemap-index.xml, _redirects e js/modules/analytics.js acompanham a retirada da rota /correcoes/, que passou a redirecionar URL-exata para o canal na pagina de contato. A trava de edicao de HTML ate 2026-09-16 permanece intacta e nao foi afrouxada.",
   "html_mutation": false,
   "pillars": {
     "aditivos-obras-publicas": "a4be02dc6705bb15cbbec882412e3b383887e18800abdd85272d506c1c56c450",
@@ -20,16 +20,16 @@
     "auditoria-orcamento-licitacao/index.html": "d559eb321876ce77f377b43e0a8e9fe7c588aa9bace221e644fc3bd5a014cd56",
     "diagnostico-b2g-360/index.html": "1ed2f5d815a11056c599d12ba6b7f844cb5225ef96b664f93df61ff929a1dc02",
     "diagnostico-pre-licitacao/index.html": "8caec38dd9ca82db75f2389c3a0cfe727141dcc50222fc36fc83205f14a4a2ef",
-    "script.js": "1c243f8a8205a5d649d9247e1567bc638e072542417bd9138370e662cfb02711",
-    "styles.css": "bf45831f0112aa2065f6ae25c80f4cc1387d124e088ca2baab29b07b153fd5cc",
+    "script.js": "900a7931040aa2e97130ae9084cb957394aea5d0eb5789c02f0f493daf7e72f4",
+    "styles.css": "c77eaad3c8ad61fad43dc751f6e556f63ad1612f235e405435b96f01adfc0882",
     "styles-tokens.css": "15cc0770e76276b418c11493fa9e53827ae14bb8f854b0a63d8c6dd63afc02fc",
     "styles-tools.css": "8c42a4b5fadba13e4dae52bd7168c64b9f5548f3fd3f8d4f0707ce4e9463c7ba",
     "robots.txt": "132889da3782dff11ceec9b6588a6e7962f2ba28738da9133a7d5318f148dcaf",
-    "sitemap.xml": "59c127a5360de187181a394d36d8eb6e8b0b03326ca40c5d16817a3c1e66f4cf",
-    "sitemap.txt": "128078e3beff483ee6244f4c3fe9429aa4ae65f63eea94123724043447bd80de",
-    "sitemap-index.xml": "9fe92fbdb18e83ab8ccda50b915a4bf1ea86c917f4ae1d7c9e83c3cf7016242f",
-    "_redirects": "7bb3b3a5dc136aa08ccb526caad7d4eb014def1c347c3b34aad5a6ed8225fce8",
+    "sitemap.xml": "ec91c203756569fb6fe36b828761a86026cd1eece5d571160652cfc07fedb1dc",
+    "sitemap.txt": "a43ee48357392a12fe77a584407b9682788edd5f6aa07bc3ce404eb695eb9c1f",
+    "sitemap-index.xml": "878a414bc509c90abd5bea02ce2c7e616dd68e0e9aee29ca4e116905cf4eb2eb",
+    "_redirects": "a47b3e0cf8932818606d8e301a5c85d7eee8102ca287a2075d7e38565cf26933",
     "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
-    "js/modules/analytics.js": "e5e40f52630f6b014150765a3fadad0068513b97144785a0262170e8658ffda5"
+    "js/modules/analytics.js": "bf5a0898d4c5b142165ea35ffc58c9c88f7d3746989a50ece7343f2b2e6b2e92"
   }
 }
