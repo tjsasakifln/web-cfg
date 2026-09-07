@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import copy
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -20,6 +21,7 @@ if str(ROOT) not in sys.path:
 from scripts.site.authority import check_credentials_against_proof  # noqa: E402
 from scripts.site.credential_registry import (  # noqa: E402
     OWNED_SURFACES,
+    SOURCE_LABELS,
     allowed_schema_values,
     apply_to_html,
     client_proof_approved_count,
@@ -31,6 +33,7 @@ from scripts.site.credential_registry import (  # noqa: E402
     project,
     projection_defects,
     revoke_claim,
+    self_deprecation_defects,
     set_claim_status,
     validate_registry,
     visible_text_of,
@@ -38,6 +41,11 @@ from scripts.site.credential_registry import (  # noqa: E402
 )
 from scripts.site.structured_identity import audit_html, sanitize_html  # noqa: E402
 
+
+# A registration NUMBER beside CREA is what stays withheld: "CREA-SC 166954-1",
+# "CREA nº 999999-D", "CREA 205402". The bare word, in the owner-attested
+# sentence "Registro profissional ativo no CREA", is authorised copy.
+CREA_NUMBER_RE = r"CREA\s*(?:[-/]\s*[A-Z]{2})?\s*(?:n[\u00ba\u00b0o.]{0,2}\s*)?\d"
 
 CONFIANCA = ROOT / "confianca" / "index.html"
 ESPECIALISTA = ROOT / "especialista" / "tiago-jun-sasaki" / "index.html"
@@ -98,7 +106,10 @@ def test_withheld_unknown_expired_revoked_do_not_project():
         for cid in withheld_ids:
             assert cid not in proj.claim_ids
         blob = proj.visible_text + json.dumps(proj.schema_nodes, ensure_ascii=False)
-        assert "CREA" not in blob
+        # The owner-attested "Registro profissional ativo no CREA" projects; a
+        # registration NUMBER, which no reproducible public source backs, does not.
+        assert not re.search(CREA_NUMBER_RE, blob)
+        assert "CREA-SC" not in blob
         assert "166954-1" not in blob
         assert "205402-8" not in blob
         assert "2613212632" not in blob
@@ -359,8 +370,12 @@ def test_owned_pages_match_projection_and_sanitizer_keeps_registry_fields():
         proj = project(registry, surface)
         assert "credential-registry:start" in html
         assert proj.visible_html in html
-        assert "Verificado em fonte pública" in html
-        assert "Declaração do titular" in html
+        # Provenance still ships on every projected row. What changed in #638 is
+        # the FRAMING: both labels are source attribution in the same shape, so
+        # the engineer's own statement is a source, not a caveat against him.
+        assert html.count('class="credential-source"') == len(proj.claim_ids)
+        assert "Fonte: registro público" in html
+        assert "Fonte: Tiago Jun Sasaki" in html
         nodes = extract_jsonld_nodes(html)
         org = next(n for n in nodes if "Organization" in (n.get("@type") if isinstance(n.get("@type"), list) else [n.get("@type")]))
         assert org.get("legalName") == "Confenge Serviços de Desenhos Técnicos Ltda"
@@ -376,13 +391,80 @@ def test_owned_pages_match_projection_and_sanitizer_keeps_registry_fields():
             for n in nodes
             if "ProfessionalService" in (n.get("@type") if isinstance(n.get("@type"), list) else [n.get("@type")])
         )
-        assert "ART e NF" in (service.get("description") or "")
+        description = service.get("description") or ""
+        assert "ART" in description and "nota fiscal" in description
+        # The affirmative fact leads; the scope note is a note, never the lead.
+        assert description.startswith("Serviços técnicos emitidos com ART e nota fiscal")
         sanitized, _removed = sanitize_html(html, relative_path=path.relative_to(ROOT).as_posix())
         assert audit_html(sanitized, relative_path=path.relative_to(ROOT).as_posix()) == []
         assert '"legalName":"Confenge Serviços de Desenhos Técnicos Ltda"' in sanitized
         assert '"taxID":"52.407.089/0001-09"' in sanitized
-        assert "CREA" not in sanitized
+        # The owner-attested registration ships; the WITHHELD *number* does not.
+        assert "Registro profissional ativo no CREA" in visible_text_of(html)
+        assert not re.search(CREA_NUMBER_RE, sanitized)
+        assert "166954-1" not in sanitized and "205402-8" not in sanitized
         assert check_credentials_against_proof(html) == []
+
+
+def test_owner_attested_claims_ship_without_leaking_the_withheld_number():
+    """The owner is the source for facts about himself; the number stays withheld."""
+    registry = load_registry()
+    for cid in ("person-crea-active", "person-analyzed-volume"):
+        claim = next(c for c in registry["claims"] if c["id"] == cid)
+        assert claim["status"] == "SELF_ATTESTED"
+        assert is_projectable(claim)
+        assert claim["as_of"] == "2026-09-07"
+        # No fabricated document: the source is the named owner, not a file.
+        assert "Tiago Jun Sasaki" in claim["source_reference"]["label"]
+    # The numbered rows stay withheld as audit trail.
+    for cid in ("person-crea-sc", "org-crea-pj", "person-rnp"):
+        assert not is_projectable(next(c for c in registry["claims"] if c["id"] == cid))
+    for surface in OWNED_SURFACES:
+        proj = project(registry, surface)
+        assert "person-crea-active" in proj.claim_ids
+        assert "person-analyzed-volume" in proj.claim_ids
+        assert "Registro profissional ativo no CREA" in proj.visible_text
+        assert "Mais de R$ 700 milhões em obras e projetos analisados" in proj.visible_text
+        assert "166954-1" not in proj.visible_text
+        assert "205402-8" not in proj.visible_text
+        # "analisados" must never be promoted into a savings or a result claim.
+        low = proj.visible_text.lower()
+        for forbidden in ("economizad", "recuperad", "obras entregues", "obras executadas"):
+            assert forbidden not in low
+
+
+def test_self_deprecating_framing_fails_the_projection():
+    """Counter-case: a generator or registry edit cannot bring the shape back."""
+    registry = load_registry()
+    for phrase in (
+        "Registro no CREA e obras anteriores não estão afirmados aqui",
+        "Declaração do titular, sem comprovação",
+        "Classe de permissão: demonstrativo",
+    ):
+        poisoned = copy.deepcopy(registry)
+        for claim in poisoned["claims"]:
+            if claim["id"] == "service-art-nf":
+                claim["allowed_wording"] = [phrase]
+        try:
+            project(poisoned, "/confianca/")
+        except ValueError as exc:
+            assert "self_deprecation" in str(exc), phrase
+        else:
+            raise AssertionError(f"self-deprecating phrase projected: {phrase}")
+    # The literal registry key must never reach the visitor as a word.
+    assert self_deprecation_defects("as_of 4 de setembro de 2026")
+    # An honest method sentence about the work is NOT swept.
+    assert self_deprecation_defects(
+        "Fatos, cálculos e pontos ainda sem prova são separados na entrega."
+    ) == []
+
+
+def test_source_labels_are_attribution_not_a_verdict():
+    """Both labels name a source in the same shape. Neither ranks the other."""
+    for status, label in SOURCE_LABELS.items():
+        assert label.startswith("Fonte: "), (status, label)
+        assert self_deprecation_defects(label) == [], (status, label)
+    assert len(set(SOURCE_LABELS.values())) == len(SOURCE_LABELS)
 
 
 def test_unbacked_identity_fields_still_stripped_off_owned_surfaces():

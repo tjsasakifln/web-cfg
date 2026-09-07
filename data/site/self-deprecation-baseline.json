@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0.0",
+  "purpose": "Dívida aberta de comunicação autodepreciativa na superfície pública. Não é aprovação: é a contagem do que falta corrigir. Só pode diminuir.",
+  "owner_issue": 638,
+  "owner_decision": "Tiago Jun Sasaki, 2026-09-07: toda comunicação de autossabotagem deve ser varrida do site.",
+  "recorded_at": "2026-09-07",
+  "rules": [
+    "deficit_sobre_nos",
+    "taxonomia_interna",
+    "manchete_de_ausencia"
+  ],
+  "enforced_routes": [
+    "index.html",
+    "confianca/index.html",
+    "especialista/tiago-jun-sasaki/index.html",
+    "quantitativos-orcamento-obras/index.html",
+    "casos/index.html",
+    "casos/aditivo-art125-demonstrativo/index.html",
+    "casos/medicao-glosa-demonstrativo/index.html",
+    "casos/modelo-apresentacao-executiva-resultados/index.html",
+    "casos/modelo-base-quantitativa-canonica/index.html",
+    "casos/modelo-contratos-vincendos-relicitacao/index.html",
+    "casos/modelo-mapa-compradores-publicos/index.html",
+    "casos/modelo-mapeamento-concorrentes-publicos/index.html",
+    "casos/modelo-painel-precos-obras-publicas/index.html",
+    "casos/modelo-relatorio-executivo-consolidado/index.html",
+    "casos/modelo-relatorio-inteligencia-licitacoes/index.html"
+  ],
+  "open_debt": {
+    "defesa-margem-contratos-publicos/index.html": {
+      "taxonomia_interna": 1
+    },
+    "ferramentas/diagnostico-defesa-margem/index.html": {
+      "taxonomia_interna": 3
+    }
+  }
+}

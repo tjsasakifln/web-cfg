@@ -398,12 +398,20 @@ def test_policy_version_consistency_and_visible_disclosure():
     assert version
     assert policy["prazo"] == "UNKNOWN"
     assert "epistemic_classes" not in policy, "as etiquetas inglesas saíram do contrato público"
-    assert policy["claim_kinds"] == [
-        "dado observado",
-        "cálculo",
-        "leitura técnica",
-        "o que ainda não sabemos",
-    ]
+    # #638. A taxonomia de afirmação é um vocabulário DISPONÍVEL, não uma
+    # obrigação por página: nenhum gate exige que uma página exiba uma classe.
+    # O que o contrato tem de garantir é que as três classes positivas -- dado,
+    # cálculo e leitura -- continuem distinguíveis, e que dizer "não sabemos"
+    # continue POSSÍVEL, porque lacuna nunca vira zero nem certeza. Congelar a
+    # lista numa igualdade transformava o vocabulário em obrigação e travava a
+    # única classe negativa como item permanente do contrato.
+    kinds = policy["claim_kinds"]
+    assert isinstance(kinds, list) and len(kinds) == len(set(kinds))
+    for required in ("dado observado", "cálculo", "leitura técnica"):
+        assert required in kinds, required
+    assert any("não sabemos" in kind or "nao sabemos" in kind for kind in kinds), (
+        "a possibilidade de declarar incerteza honesta não pode ser removida"
+    )
     errors = check_policy_version_consistency(policy, policy_pages())
     assert not errors, errors
     combined = combined_policy_html()

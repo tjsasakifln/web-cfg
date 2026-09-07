@@ -32,6 +32,7 @@ from scripts.site.visible_parity import compare_visible_parity  # noqa: E402
 from scripts.site.credential_registry import (  # noqa: E402
     is_projectable,
     load_registry as load_credential_registry,
+    visible_text_of,
 )
 
 
@@ -594,7 +595,30 @@ def test_trust_surface_states_executor_correction_evidence_and_method_split():
         assert "CREA" not in html
     assert '"Review"' not in html
     assert '"AggregateRating"' not in html
-    assert "R$" not in html
+    # #638: money on the trust page is allowed only as a registry-backed fact
+    # about the engineer's own track record. A price, a saving or a client
+    # result still fails closed — that is what the old blanket ban protected.
+    backed_money = {
+        phrase.casefold()
+        for claim in load_credential_registry()["claims"]
+        if is_projectable(claim)
+        for phrase in [str(claim.get("claim") or ""), *(claim.get("allowed_wording") or [])]
+        if "R$" in phrase
+    }
+    assert backed_money, "no projectable claim carries a money figure"
+    money_sentences = [
+        sentence
+        for sentence in re.split(r"(?<=[.!?])\s+", visible_text_of(html))
+        if "R$" in sentence
+    ]
+    assert money_sentences, "the owner-attested analysed volume must be visible"
+    for sentence in money_sentences:
+        low = sentence.casefold()
+        assert any(phrase in low for phrase in backed_money), sentence
+        assert not re.search(
+            r"economiz|recuper|de desconto|a partir de r\$|por apenas|por r\$",
+            low,
+        ), sentence
     family = json.loads((ROOT / "data" / "organic" / "public-family-registry.json").read_text(encoding="utf-8"))
     legal = next(fam for fam in family["families"] if fam["id"] == "legal-and-trust")
     assert "/confianca/" in legal["match"]["routes"]

@@ -9,6 +9,40 @@ const adaptive = require("../../netlify/functions/lib/adaptive-intake.cjs");
 const handoff = require("../../netlify/functions/lib/inbound-handoff.cjs");
 const leadCore = require("../../netlify/functions/lib/lead-core.cjs");
 
+/** Money wordings the credential registry currently projects (#638). */
+function backedMoneyWordings() {
+  const registry = JSON.parse(
+    fs.readFileSync(path.resolve("data/site/credential-registry.json"), "utf8"),
+  );
+  return registry.claims
+    .filter((claim) => claim.status === "VERIFIED" || claim.status === "SELF_ATTESTED")
+    .flatMap((claim) => [claim.claim, ...(claim.allowed_wording ?? [])])
+    .filter((wording) => typeof wording === "string" && wording.includes("R$"))
+    .map((wording) => wording.toLowerCase());
+}
+
+const PRICE_LANGUAGE =
+  /(a partir de|por apenas|investimento de|valor do servi|pre[çc]o|honor[áa]rio|mensalidade|desconto|or[çc]amento a partir)/i;
+const MONEY_RESULT_LANGUAGE = /(economiz|recuper|gerou|poupou|retorno de)/i;
+
+/** Every money figure on the page must be a registry-backed credential, never an offer. */
+function unbackedMoneyProblems(html) {
+  const backed = backedMoneyWordings();
+  const text = String(html).replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
+  const problems = [];
+  for (const match of text.matchAll(/R\$\s*\d/g)) {
+    const window = text.slice(Math.max(0, match.index - 200), match.index + 200);
+    const low = window.toLowerCase();
+    if (!backed.some((wording) => low.includes(wording))) {
+      problems.push(`unbacked_money:${window.trim().slice(0, 120)}`);
+    }
+    if (PRICE_LANGUAGE.test(low) || MONEY_RESULT_LANGUAGE.test(low)) {
+      problems.push(`price_or_result_money:${window.trim().slice(0, 120)}`);
+    }
+  }
+  return problems;
+}
+
 const pin = Object.freeze({
   policy_id: "NET_NEW_INBOUND_HANDRAISER",
   policy_version: "1.0.0-draft.20260904",
@@ -90,7 +124,26 @@ test("MV-09 publishes one bounded private wedge with embedded triage and three s
   assert.equal((html.match(/name="location_(?:city|uf)"/g) || []).length, 2);
   assert.equal(/name="(?:mensagem|arquivo|upload|endereco|cpf|processo)"/i.test(html), false);
   assert.equal(/\b(?:1|2)\s+dias?\s+[úu]teis\b/i.test(html), false);
-  assert.equal(/R\$\s*\d/.test(html), false);
+  // #638. The rule this line protects is "the private wedge publishes no
+  // PRICE" -- the same reason `2 dias úteis` is banned above. It used to be
+  // written as "no money at all", which also banned the responsible engineer's
+  // registry-backed track record ("mais de R$ 700 milhões em obras e projetos
+  // analisados"). That is a credential, not an offer. The property below is the
+  // real one: every money figure must be a projectable credential-registry
+  // wording, and none of them may sit next to price language.
+  assert.deepEqual(unbackedMoneyProblems(html), []);
+  assert.notEqual(
+    unbackedMoneyProblems(
+      html.replace("</ul>", "<li>Orçamento a partir de R$ 2.500 por relatório.</li></ul>"),
+    ).length,
+    0,
+    "a price on the private wedge must still fail",
+  );
+  assert.notEqual(
+    unbackedMoneyProblems(html.replace("</ul>", "<li>Recuperamos R$ 4 milhões.</li></ul>")).length,
+    0,
+    "an unbacked money claim on the private wedge must still fail",
+  );
   for (const withheldRoute of [
     "/pericias-avaliacoes/",
     "/seguranca-trabalho/",
