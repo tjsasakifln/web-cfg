@@ -419,6 +419,18 @@ def write_page(
     directory = root / PAGE_DIR
     directory.mkdir(parents=True, exist_ok=True)
     html = render_html(record, payload, decision, site_root=root)
+    # A navegacao canonica vive em data/site/brand.json e e aplicada por
+    # scripts/site/shell_nav.py. O cabecalho neste modulo e um literal, entao
+    # sem esta passagem cada `market-answers:build` devolvia a pagina ao menu
+    # antigo de seis itens e reprovava `npm run test:nav` -- que foi exatamente
+    # o que aconteceu. Sincronizar aqui torna a saida canonica POR CONSTRUCAO,
+    # em vez de depender de alguem lembrar de rodar --write depois.
+    try:
+        from scripts.site.shell_nav import load_brand, sync_text
+
+        html = sync_text(html, load_brand(), f"/{PAGE_DIR}/")
+    except Exception:  # noqa: BLE001 - nunca impedir a geracao por causa do shell
+        pass
     path = directory / "index.html"
     path.write_text(html, encoding="utf-8")
     as_of = parse_instant(payload.get("as_of"))

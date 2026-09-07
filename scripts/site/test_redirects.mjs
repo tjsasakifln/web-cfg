@@ -224,13 +224,23 @@ export async function runRedirectGates({ root = ROOT, base = BASE, log = console
     ? resolve(root, "_site/index.html")
     : resolve(root, "index.html");
   const home = readFileSync(homePath, "utf8");
-  const fragmentTargets = new Set();
+  // O fragmento tem de existir NA PAGINA DE DESTINO, nao necessariamente na
+  // home. Antes daqui a verificacao presumia home para todo destino com "#", o
+  // que so vale para /#contato e reprovava, por procurar no lugar errado,
+  // qualquer redirecionamento para ancora de outra pagina.
+  const fragmentTargets = new Map();
   for (const r of rules) {
-    const m = r.to.match(/#([A-Za-z0-9_-]+)/);
-    if (m) fragmentTargets.add(m[1]);
+    const m = r.to.match(/^([^#]*)#([A-Za-z0-9_-]+)$/);
+    if (m) fragmentTargets.set(m[2], m[1] || "/");
   }
-  for (const frag of fragmentTargets) {
-    ok(failures, `fragment_exists:#${frag}`, home.includes(`id="${frag}"`), `id=${frag} missing in home`);
+  for (const [frag, destPath] of fragmentTargets) {
+    const rel = destPath === "/" ? "index.html" : `${destPath.replace(/^\/|\/$/g, "")}/index.html`;
+    const built = resolve(root, "_site", rel);
+    const src = resolve(root, rel);
+    const page = existsSync(built) ? built : src;
+    const html = existsSync(page) ? readFileSync(page, "utf8") : "";
+    ok(failures, `fragment_exists:#${frag}`, html.includes(`id="${frag}"`),
+       `id=${frag} missing in ${destPath}`);
   }
 
   for (const r of rules) {
