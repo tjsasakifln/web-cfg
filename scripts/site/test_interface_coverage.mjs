@@ -65,10 +65,17 @@ assert(coverage.axe.routes.every((entry) =>
 // issue #61 reequilibrio checklist receipt are result-gated capture forms and
 // have to be included in the recaptured census. Direct convergence adds one
 // fail-closed capture route, and MV-09 adds the bounded private quantities
-// journey, so the current census is 29 forms across 58 routes.
+// journey, so the census was 29 forms across 58 routes.
+// 2026-09-07: a pagina autonoma /correcoes/ foi descontinuada. Ela carregava um
+// formulario de captura (<form id="correction-form"> para
+// /.netlify/functions/correction) com quatro campos obrigatorios, incluindo
+// "correcao proposta". A funcao util -- avisar um erro no site -- passou para a
+// pagina de contato como canal direto, sem formulario e sem exigir solucao
+// proposta. Uma rota a menos e um formulario a menos: consolidacao deliberada,
+// nao perda de canal. O endpoint continua servido para os protocolos antigos.
 assert.equal(coverage.axe.price_route_count, 47);
-assert.equal(coverage.axe.capture_form_route_count, 29);
-assert.equal(coverage.axe.route_count, 58);
+assert.equal(coverage.axe.capture_form_route_count, 28);
+assert.equal(coverage.axe.route_count, 57);
 assert(selected.has("/conteudos/atraso-na-medicao-obra-publica/"));
 assert(selected.has("/conteudos/sinapi-desonerado-nao-desonerado/"));
 assert.deepEqual(

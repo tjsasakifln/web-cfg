@@ -421,7 +421,7 @@ def test_primary_cta_not_spam():
     assert primary <= 5, f"too many primary CTAs on home: {primary}"
     assert "Escolher minha situação" in html
     assert "Iniciar triagem por e-mail" in html
-    assert "Registrar situação para triagem" in html
+    assert "Descrever minha situação" in html
     # Secondary path must not share primary button class in hero
     hero = re.search(r'class="hero[\s\S]*?</section>', html)
     assert hero, "hero missing"

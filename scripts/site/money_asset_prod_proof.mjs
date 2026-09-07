@@ -58,7 +58,7 @@ const report = {
 try {
   const page = await fetchText(`${base}${PAGE_PATH}`);
   const noindex = /noindex/i.test(page.text) || /noindex/i.test(page.res.headers.get("x-robots-tag") || "");
-  const cta = page.text.includes("Registrar pedido de segunda leitura deste contrato");
+  const cta = page.text.includes("Pedir uma segunda leitura do contrato");
   const utilityBeforeCta =
     page.text.indexOf("id=\"identificacao\"") > -1 &&
     page.text.indexOf("id=\"identificacao\"") < page.text.indexOf("id=\"segunda-leitura\"");

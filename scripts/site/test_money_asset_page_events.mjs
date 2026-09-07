@@ -179,7 +179,7 @@ const hidden = [
 const submitBtn = makeEl({
   type: "submit",
   tagName: "BUTTON",
-  textContent: "Registrar pedido de segunda leitura deste contrato",
+  textContent: "Pedir uma segunda leitura do contrato",
   attrs: {
     "data-event-name": "cta_click",
     "data-asset-id": "diagnostico-defesa-margem",

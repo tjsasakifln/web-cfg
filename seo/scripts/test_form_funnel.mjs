@@ -34,7 +34,7 @@ for (const needle of [
   'data-form-multistep="true"',
   'name="diagnostico-b2g"',
   "Solicitar canal seguro para envio",
-  "Registrar situação para triagem",
+  "Descrever minha situação",
   'data-set-journey="contrato"',
   'data-journey="edital"',
   'data-journey="operacao"',
@@ -56,7 +56,7 @@ for (const needle of [
 }
 // The corporate shell keeps the existing B2G form explicitly scoped to the
 // protected public-works vertical instead of presenting it as a generic form.
-if (!home.includes("Triagem para obras públicas")) {
+if (!home.includes("Falar sobre obras públicas")) {
   console.error("FAIL: home missing protected B2G form scope");
   process.exit(1);
 }

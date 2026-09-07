@@ -24,7 +24,7 @@
         "required_fields": ["nome", "consentimento"]
       },
       "cta_contract": {
-        "copy": "Registrar pedido de segunda leitura deste contrato",
+        "copy": "Pedir uma segunda leitura do contrato",
         "cta_id": "segunda-leitura-contrato",
         "cta_position": "money-asset"
       },
@@ -56,7 +56,7 @@
         "required_fields": ["nome", "consentimento"]
       },
       "cta_contract": {
-        "copy": "Registrar contexto para revisão de encaixe",
+        "copy": "Descrever meu caso",
         "cta_id": "defesa-tecnica-contratos-publicos-handraise",
         "cta_position": "pillar_capture"
       },

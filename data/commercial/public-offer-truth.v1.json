@@ -4,7 +4,10 @@
   "issue": "CFG10X-04",
   "decision_state": "EXECUTE_NOW",
   "front": "REVENUE NOW",
-  "leverage": ["revenue", "trust"],
+  "leverage": [
+    "revenue",
+    "trust"
+  ],
   "note": "Projection over catalog.snapshot.json (#88) and deliverables-registry.v1.json (#329/#343). This file does not mint prices, checkout IDs or capacity. Amounts are always read from those sources.",
   "sources": {
     "checkout_catalog": "data/offers/catalog.snapshot.json",
@@ -38,11 +41,11 @@
       "destination_type": "form"
     },
     {
-      "label": "Pedir triagem pelo WhatsApp",
+      "label": "Falar pelo WhatsApp",
       "destination_type": "whatsapp"
     },
     {
-      "label": "Pedir revisão de encaixe da operação",
+      "label": "Falar sobre a operação",
       "destination_type": "whatsapp"
     },
     {
@@ -50,11 +53,11 @@
       "destination_type": "form"
     },
     {
-      "label": "Registrar operação para revisão de encaixe",
+      "label": "Enviar pelo formulário",
       "destination_type": "form"
     },
     {
-      "label": "Registrar contexto para revisão de encaixe",
+      "label": "Descrever meu caso",
       "destination_type": "form"
     },
     {
@@ -62,7 +65,7 @@
       "destination_type": "form"
     },
     {
-      "label": "Registrar pedido para revisão de enquadramento",
+      "label": "Pedir retorno da CONFENGE",
       "destination_type": "form"
     }
   ],
@@ -79,7 +82,7 @@
   "hub": {
     "route": "/servicos-obras-publicas/",
     "page_file": "servicos-obras-publicas/index.html",
-    "proof": "Onde o trabalho já tem preço e prazo publicados, eles aparecem na página. Onde a triagem ainda decide o enquadramento, a página diz o que a triagem fecha. Exemplos completos você consulta sem cadastro.",
+    "proof": "Onde o trabalho já tem preço e prazo publicados, eles aparecem na página. Onde o preço depende do caso, a página diz o que a conversa inicial resolve. Exemplos completos você consulta sem cadastro.",
     "cited_offer_ids": [
       "CFG-D24",
       "diretoria_fracionada",
@@ -93,7 +96,9 @@
       "source": "checkout_catalog",
       "route": "/diagnostico-b2g-expansao/",
       "page_file": "diagnostico-b2g-expansao/index.html",
-      "slug_aliases": ["diagnostico-b2g-expansao"],
+      "slug_aliases": [
+        "diagnostico-b2g-expansao"
+      ],
       "frozen": false,
       "commercial_mode": "PUBLISHED_FIRM",
       "public_state": "PUBLISHED",
@@ -104,7 +109,10 @@
       "cta_label": "Solicitar o diagnóstico",
       "cta_href": "#pedido-diagnostico",
       "cta_destination_type": "form",
-      "visible_aliases_forbidden": ["Diagnóstico B2G de Expansão", "Bid Room"]
+      "visible_aliases_forbidden": [
+        "Diagnóstico B2G de Expansão",
+        "Bid Room"
+      ]
     },
     {
       "offer_id": "diretoria_fracionada",
@@ -116,7 +124,9 @@
       ],
       "route": "/diretoria-b2g/",
       "page_file": "diretoria-b2g/index.html",
-      "slug_aliases": ["diretoria-b2g"],
+      "slug_aliases": [
+        "diretoria-b2g"
+      ],
       "frozen": false,
       "commercial_mode": "PUBLISHED_FIRM",
       "public_state": "PUBLISHED",
@@ -124,17 +134,23 @@
       "buyable_note": "Faixa publicada; a contratação depende de capacidade confirmada e não fecha no site.",
       "page_publishes_price": true,
       "jsonld_offer_price": true,
-      "cta_label": "Pedir revisão de encaixe da operação",
+      "cta_label": "Falar sobre a operação",
       "cta_href_type": "whatsapp",
       "cta_destination_type": "whatsapp",
-      "visible_aliases_forbidden": ["Diretoria B2G", "Flex", "Bid Room"]
+      "visible_aliases_forbidden": [
+        "Diretoria B2G",
+        "Flex",
+        "Bid Room"
+      ]
     },
     {
       "offer_id": "CFG-D24",
       "source": "deliverables",
       "route": "/diagnostico-b2g-360/",
       "page_file": "diagnostico-b2g-360/index.html",
-      "slug_aliases": ["diagnostico-b2g-360"],
+      "slug_aliases": [
+        "diagnostico-b2g-360"
+      ],
       "frozen": true,
       "frozen_until": "2026-09-16",
       "commercial_mode": "PILOT_NOT_BUYABLE",
@@ -146,14 +162,20 @@
       "cta_label": "Solicitar diagnóstico da operação",
       "cta_destination_type": "form",
       "cta_residual_until_unlock": true,
-      "visible_aliases_forbidden": ["Diagnóstico B2G 360°", "Bid Room"]
+      "visible_aliases_forbidden": [
+        "Diagnóstico B2G 360°",
+        "Bid Room"
+      ]
     },
     {
       "offer_id": "CFG-D16",
       "source": "deliverables",
       "route": "/bid-room-licitacoes-obras/",
       "page_file": "bid-room-licitacoes-obras/index.html",
-      "slug_aliases": ["bid-room", "bid-room-licitacoes-obras"],
+      "slug_aliases": [
+        "bid-room",
+        "bid-room-licitacoes-obras"
+      ],
       "frozen": false,
       "commercial_mode": "QUOTE_AFTER_SCREENING",
       "public_state": "VALIDATE",
@@ -165,14 +187,20 @@
       "cta_label": "Enviar edital para triagem",
       "cta_href": "#captura-pilar",
       "cta_destination_type": "form",
-      "visible_aliases_forbidden": ["Bid Room", "Go/No-Go"]
+      "visible_aliases_forbidden": [
+        "Bid Room",
+        "Go/No-Go"
+      ]
     },
     {
       "offer_id": "CFG-D17",
       "source": "deliverables",
       "route": "/defesa-margem-contratos-publicos/",
       "page_file": "defesa-margem-contratos-publicos/index.html",
-      "slug_aliases": ["contract-defense", "defesa-margem-contratos-publicos"],
+      "slug_aliases": [
+        "contract-defense",
+        "defesa-margem-contratos-publicos"
+      ],
       "frozen": false,
       "commercial_mode": "PILOT_NOT_BUYABLE",
       "public_state": "VALIDATE",
@@ -184,7 +212,9 @@
       "cta_label": "Solicitar canal seguro",
       "cta_href": "#captura-pilar",
       "cta_destination_type": "form",
-      "visible_aliases_forbidden": ["Bid Room"]
+      "visible_aliases_forbidden": [
+        "Bid Room"
+      ]
     }
   ]
 }
