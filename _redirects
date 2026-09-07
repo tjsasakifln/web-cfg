@@ -9,6 +9,13 @@ https://confenge.netlify.app/*  https://confenge.com.br/:splat  301!
 # --- File extension / legacy HTML ---
 /privacidade.html  /privacidade/  301!
 
+# --- Retired 2026-09-07: the standalone corrections page was bureaucracy, not a
+# service. The function it carried -- "found an error on the site?" -- lives on
+# the contact page. The protocol endpoint /.netlify/functions/correction is
+# UNCHANGED, so existing receipts still resolve. Navigation only: POST is not
+# redirected.
+/correcoes  /triagem-tecnica/#corrigir-o-site  301!
+
 # --- Form success rewrites (pretty URLs, noindex pages) ---
 /obrigado  /obrigado.html  200
 /obrigado-contrato  /obrigado-contrato.html  200

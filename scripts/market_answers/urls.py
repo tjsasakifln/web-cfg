@@ -108,7 +108,7 @@ CTA_ANCHOR = "#cta"
 METHOD_ANCHOR = "#metodologia"
 SOURCES_ANCHOR = "#fontes"
 EVIDENCE_ANCHOR = "#evidencias"
-CORRECTION_PATH = "/correcoes/"
+CORRECTION_PATH = "/triagem-tecnica/#corrigir-o-site"
 
 
 def canonical_url() -> str:

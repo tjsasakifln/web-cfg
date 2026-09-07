@@ -376,8 +376,8 @@ def render_panorama_html(payload: dict[str, Any], decision: PublicationDecision)
         '<section class="section" id="proveniencia"><h2>Proveniência</h2>'
         f"{_provenance_block(payload, decision)}</section>",
         '<section class="section" id="correcao"><h2>Correção e contestação</h2>'
-        "<p>Erro material ou contestação de fato público segue a "
-        '<a href="/correcoes/">política pública de correções</a> e a '
+        "<p>Encontrou um erro ou quer contestar um dado desta página? "
+        '<a href="/triagem-tecnica/#corrigir-o-site">Fale com a gente</a>, seguindo a '
         '<a href="/politica-editorial/">política editorial</a>.</p></section>',
         author_box(),
     ]

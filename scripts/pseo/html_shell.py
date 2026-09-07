@@ -36,7 +36,6 @@ except Exception:  # noqa: BLE001
 _FOOTER_AUTHORITY_FALLBACK = (
     '<nav class="footer-authority" aria-label="Autoridade e políticas">'
     '<a href="/politica-editorial/">Política editorial</a>'
-    '<a href="/correcoes/">Correções</a>'
     '<a href="/uso-de-ia/">Uso de IA</a>'
     '<a href="/conflitos/">Conflitos</a>'
     '<a href="/privacidade/">Privacidade</a>'

@@ -24,11 +24,13 @@
     "prazo_note": "Nenhum prazo de acuse, revisão ou publicação foi medido. UNKNOWN permanece UNKNOWN até existir série observada de pedidos reais.",
     "channel": "/.netlify/functions/correction",
     "mailto": "mailto:tiago.sasaki@confenge.com.br?subject=Correcao%20editorial%20CONFENGE",
-    "public_path": "/correcoes/"
+    "public_path": "/triagem-tecnica/#corrigir-o-site",
+    "retired_public_path": "/correcoes/",
+    "retired_at": "2026-09-07"
   },
   "policy": {
     "record": "data/site/editorial-policy.json",
-    "current_version": "1.1.0",
+    "current_version": "1.2.0",
     "public_path": "/politica-editorial/",
     "historico_path": "/politica-editorial/historico/"
   },
@@ -79,7 +81,6 @@
   ],
   "footer_authority_paths": [
     "/politica-editorial/",
-    "/correcoes/",
     "/uso-de-ia/",
     "/conflitos/",
     "/privacidade/"

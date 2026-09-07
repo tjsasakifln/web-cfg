@@ -133,7 +133,6 @@ PUBLIC_FAMILY_ROOTS = (
 
 CHROME_EXEMPT_PREFIXES = (
     "/politica-editorial/",
-    "/correcoes/",
     "/uso-de-ia/",
     "/conflitos/",
     "/privacidade/",
@@ -146,10 +145,17 @@ CHROME_EXEMPT_PREFIXES = (
     "/obrigado",
 )
 
+# Onde o visitante pede correção de um erro no site. A página autônoma de
+# burocracia foi descontinuada (a obrigação de conservar o registro e a decisão
+# de publicá-lo são propriedades distintas); o canal continua existindo, discreto,
+# na página de contato. O endpoint de protocolo permanece inalterado.
+CORRECTION_CHANNEL_PATH = "/triagem-tecnica/"
+CORRECTION_CHANNEL_ANCHOR = "corrigir-o-site"
+CORRECTION_CHANNEL_HREF = f"{CORRECTION_CHANNEL_PATH}#{CORRECTION_CHANNEL_ANCHOR}"
+
 FOOTER_AUTHORITY_NAV = (
     '<nav class="footer-authority" aria-label="Autoridade e políticas">'
     '<a href="/politica-editorial/">Política editorial</a>'
-    '<a href="/correcoes/">Correções</a>'
     '<a href="/uso-de-ia/">Uso de IA</a>'
     '<a href="/conflitos/">Conflitos</a>'
     '<a href="/privacidade/">Privacidade</a>'
@@ -508,7 +514,14 @@ def has_update_history(html: str) -> bool:
 
 
 def has_correction_link(html: str) -> bool:
-    return "/correcoes/" in (html or "")
+    """A superfície oferece um caminho real para pedir correção de um erro.
+
+    O que a matriz de autoridade exige é o CANAL, não um caminho literal
+    herdado. Aceita o canal canônico ou o e-mail do dono da correção, que é
+    o mesmo destino registrado em authority-governance.json.
+    """
+    raw = html or ""
+    return CORRECTION_CHANNEL_HREF in raw or "tiago.sasaki@confenge.com.br" in raw
 
 
 def visible_permission_class(html: str) -> str | None:
@@ -1174,7 +1187,6 @@ def chrome_pages() -> list[Path]:
         ROOT / "especialista" / "tiago-jun-sasaki" / "index.html",
         ROOT / "metodologia-inteligencia" / "index.html",
         ROOT / "politica-editorial" / "index.html",
-        ROOT / "correcoes" / "index.html",
         ROOT / "uso-de-ia" / "index.html",
         ROOT / "conflitos" / "index.html",
         ROOT / "casos" / "index.html",
@@ -1186,7 +1198,6 @@ def chrome_pages() -> list[Path]:
 def policy_pages() -> dict[str, Path]:
     return {
         "editorial": ROOT / "politica-editorial" / "index.html",
-        "corrections": ROOT / "correcoes" / "index.html",
         "ai_use": ROOT / "uso-de-ia" / "index.html",
         "conflicts": ROOT / "conflitos" / "index.html",
     }
@@ -1220,7 +1231,7 @@ def policy_version_disclosure(policy: dict[str, Any] | None = None) -> str:
         f'<p class="policy-version-disclosure" data-policy-version="{version}">'
         f'Texto e dados desta página seguem a '
         f'<a href="/politica-editorial/">política editorial {version}</a>. '
-        f'<a href="/correcoes/">Contestar ou pedir correção</a>.'
+        f'<a href="{CORRECTION_CHANNEL_HREF}">Encontrou um erro? Fale com a gente</a>.'
         "</p>"
     )
 
@@ -1303,10 +1314,25 @@ def check_policy_version_consistency(
         if entry.get("entry_sha256") != entry_sha256_for(entry):
             errors.append(f"changelog_entry_rewritten:{ver}")
         if ver != current:
+            # Conservar o registro e publicar o registro são obrigações
+            # distintas. O que não pode acontecer é a versão anterior ser
+            # apagada, esvaziada ou reescrita em silêncio -- e isso é uma
+            # propriedade do REGISTRO, verificada aqui contra o próprio
+            # record e seus hashes, não contra a existência de um portal
+            # público de versões antigas.
+            history_pages = body.get("pages") or {}
+            if not history_pages:
+                errors.append(f"history_body_emptied:{ver}")
+            for key, page in sorted(history_pages.items()):
+                if not str((page or {}).get("body") or "").strip():
+                    errors.append(f"history_page_emptied:{ver}:{key}")
+            if not str(entry.get("summary") or "").strip():
+                errors.append(f"history_summary_emptied:{ver}")
+            # Se a versão anterior CONTINUA publicada, ela precisa continuar
+            # legível e honesta. Retirá-la da web é uma decisão editorial
+            # permitida; servi-la corrompida não é.
             archive = ROOT / "politica-editorial" / "v" / ver / "index.html"
-            if not archive.exists():
-                errors.append(f"archived_version_unreadable:{ver}")
-            else:
+            if archive.exists():
                 html = archive.read_text(encoding="utf-8")
                 if ver not in html:
                     errors.append(f"archived_version_not_visible:{ver}")
@@ -1348,8 +1374,21 @@ def check_policy_visible_disclosure(
     for token in rec.get("forbidden_current_tokens") or []:
         if _norm(token) in blob:
             errors.append(f"forbidden_promise:{token}")
-    if rec.get("prazo") == "UNKNOWN" and "unknown" not in blob:
-        errors.append("disclosure_missing:UNKNOWN")
+    # A propriedade preservada é: prazo não medido continua não inventado.
+    # Isso é verdade sobre o REGISTRO interno, e é verificado onde o registro
+    # mora (check_policy_version_consistency / authority-governance.json).
+    # Obrigar a palavra "UNKNOWN" na página apenas exportava o vocabulário
+    # interno para o visitante; o que a página não pode fazer é prometer um
+    # prazo que ninguém mediu — e isso é o que se verifica aqui.
+    if rec.get("prazo") == "UNKNOWN":
+        for promise in rec.get("forbidden_deadline_claims") or []:
+            if _norm(promise) in blob:
+                errors.append(f"invented_deadline_visible:{promise}")
+    # O vocabulário interno não pode reaparecer na superfície humana.
+    # Palavra inteira: "fato" não é "FACT", e "delegate" não é "gate".
+    for token in rec.get("forbidden_public_tokens") or []:
+        if re.search(rf"(?<![0-9a-zà-ÿ]){re.escape(_norm(token))}(?![0-9a-zà-ÿ])", blob):
+            errors.append(f"internal_vocabulary_visible:{token}")
     return errors
 
 
@@ -1360,8 +1399,12 @@ def check_policy_links(html: str, policy: dict[str, Any] | None = None) -> list[
     version = current_policy_version(rec)
     if "/politica-editorial/" not in raw:
         errors.append("policy_link_absent")
-    if "/correcoes/" not in raw:
-        errors.append("correction_link_absent")
+    # O canal de correção precisa existir e ser alcançável. O que importa é o
+    # canal funcionar, não um caminho literal /correcoes/ sobreviver.
+    if CORRECTION_CHANNEL_HREF not in raw:
+        errors.append("correction_channel_absent")
+    if "/correcoes/" in raw:
+        errors.append("retired_correction_route_linked")
     if version and version not in raw:
         errors.append("policy_version_absent")
     if version and f'data-policy-version="{version}"' not in raw:
