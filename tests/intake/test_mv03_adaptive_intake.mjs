@@ -33,7 +33,8 @@ test("public route is low-friction, transparent and free of sensitive inputs", (
   const html = fs.readFileSync(path.resolve("triagem-tecnica/index.html"), "utf8");
   const publicConfig = fs.readFileSync(path.resolve("netlify/functions/adaptive-intake-config.cjs"), "utf8");
   for (const expected of [
-    "menos de um minuto",
+    // "menos de um minuto" was removed by #616: the temporal promise cannot be
+    // true while the intake authority is WITHHELD and the form never submits.
     "não é contratação nem pagamento",
     "canal seguro",
     "Escopo, responsabilidade técnica",
@@ -66,6 +67,66 @@ test("public route is low-friction, transparent and free of sensitive inputs", (
     assert.equal(browser.includes(`"${eventName}"`), true, `non-canonical alternative event: ${eventName}`);
   }
   assert.match(browser, /setStep\(0, false\)/);
+
+  // #616 Resultado A — structural guards for the two main presentations.
+  assert.doesNotMatch(html, /menos de um minuto/i, "temporal promise survived in /triagem-tecnica/");
+  assert.doesNotMatch(html, /Você recebe um protocolo assim que o pedido é gravado/i, "unconditional protocol promise survived");
+  assert.doesNotMatch(html, /Carregando opções…/, "loading placeholder survived in the served HTML");
+  for (const metadata of [
+    /<title>[^<]*<\/title>/i,
+    /<meta(?=[^>]*name="description")[^>]*content="([^"]*)"/i,
+  ]) {
+    const found = html.match(metadata);
+    assert.ok(found, `metadata block missing: ${metadata}`);
+    assert.doesNotMatch(found[0], /menos de um minuto|Vamos registrar o tipo de problema/i,
+      `state-dependent promise survived in metadata: ${found[0]}`);
+  }
+  // meta description and the JSON-LD description stay identical to each other.
+  const metaDescription = html.match(/<meta(?=[^>]*name="description")[^>]*content="([^"]*)"/i)[1];
+  const jsonLdDescription = html.match(/"description":\s*"([^"]*)"/)[1];
+  assert.equal(metaDescription, jsonLdDescription, "meta and JSON-LD descriptions diverged");
+  // The form block is inert in the served HTML; the contact alternative and the
+  // standing limit notice live outside it and stay visible in both states.
+  assert.match(html, /<div class="intake-form-block" data-intake-form-block hidden inert aria-hidden="true">/);
+  assert.ok(html.indexOf("data-intake-alternative") < html.indexOf("data-intake-form-block"),
+    "contact alternative must precede the form block in the served HTML");
+  assert.ok(html.indexOf("data-intake-status") < html.indexOf("data-intake-form-block"),
+    "status line must sit outside the form block");
+  assert.match(html, /data-intake-limit/, "standing limit notice missing outside the form block");
+  // The five entry anchors must exist and must resolve ABOVE the fail-closed form
+  // block, so a visitor arriving from /servicos/ never lands inside a form that
+  // cannot accept them. This used to be asserted against the literal
+  // `<span id="..." aria-hidden="true"></span>`, which froze the defect it was
+  // meant to guard: the anchors were five empty spans at the same position, so
+  // all five entry intents landed on identical generic copy and the visitor's
+  // declared situation was discarded. #618 turns each into a real section; the
+  // ordering intent is unchanged and is asserted directly.
+  for (const anchorId of ["projetos", "obra-imovel", "pericia-avaliacao", "sst", "planejamento-publico"]) {
+    const anchor = new RegExp(`id="${anchorId}"`);
+    assert.match(html, anchor, `anchor missing: ${anchorId}`);
+    assert.ok(html.search(anchor) < html.indexOf("data-intake-form-block"),
+      `anchor ${anchorId} still resolves inside the form block`);
+    // Negative case: an anchor that renders nothing is the original defect.
+    assert.doesNotMatch(html, new RegExp(`<span id="${anchorId}"[^>]*></span>`),
+      `anchor ${anchorId} is an empty span again, so the situation it names has no content`);
+    assert.match(html, new RegExp(`data-triage-situation="${anchorId}"`),
+      `anchor ${anchorId} names no situation section`);
+  }
+  // Single attempt, explicit deadlines, no automatic retry.
+  assert.match(browser, /CONFIG_TIMEOUT_MS = 5000/);
+  assert.match(browser, /SUBMIT_TIMEOUT_MS = 15000/);
+  assert.match(browser, /new AbortController\(\)/);
+  assert.doesNotMatch(browser, /setInterval\(/, "polling loop introduced");
+  // The option loop must be able to reach index 0.
+  assert.doesNotMatch(browser, /while \(need\.options\.length > 1\)/,
+    "the placeholder-preserving option loop survived");
+  assert.match(browser, /while \(need\.options\.length\) need\.remove\(0\)/);
+  // "not sent" and "receipt not confirmed" are distinct outcomes.
+  assert.match(browser, /não foi possível confirmar o recebimento/);
+  assert.match(browser, /O pedido não foi enviado/);
+  assert.match(browser, /attemptStarted/);
+  // No directional word in the unavailability message: reading order varies.
+  assert.doesNotMatch(browser, /telefone abaixo para falar com a CONFENGE/);
   for (const key of ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"]) {
     assert.equal(browser.includes(`"${key}"`), true, `missing attribution allowlist: ${key}`);
   }
@@ -90,7 +151,40 @@ test("MV-09 publishes one bounded private wedge with embedded triage and three s
   assert.equal((html.match(/name="location_(?:city|uf)"/g) || []).length, 2);
   assert.equal(/name="(?:mensagem|arquivo|upload|endereco|cpf|processo)"/i.test(html), false);
   assert.equal(/\b(?:1|2)\s+dias?\s+[úu]teis\b/i.test(html), false);
-  assert.equal(/R\$\s*\d/.test(html), false);
+  // 2026-09-06 (#619): this route must still show no price for anything CONFENGE
+  // sells. A synthetic demonstration block is not an offer: it may carry the
+  // priced INPUTS of a calculation. The guard is narrowed, never removed —
+  // every R$ outside a validated demonstration block still fails, and the block
+  // only qualifies when it is BOTH marked data-demonstration="synthetic" AND
+  // identifies itself as synthetic in its own visible text. Same rule as the
+  // carve-out in scripts/site/inbound_gates.py, applied to the same route.
+  const demonstrationBlocks = html.match(
+    /<(section|div|figure|table|aside)\b[^>]*\bdata-demonstration="synthetic"[^>]*>[\s\S]*?<\/\1>/gi,
+  ) || [];
+  // Whether a marked block QUALIFIES as a demonstration is decided in one place:
+  // _validated_demonstration_spans in scripts/site/inbound_gates.py, which also
+  // rejects nested marking, a self-label hidden from the reader, a published fee
+  // inside the block and a block that carries a control which transacts. This
+  // test deliberately does NOT re-implement that judgement -- it did, more
+  // loosely, and two copies of one rule drift apart. What it owns is narrower
+  // and route-specific: this route publishes no CONFENGE fee, and its
+  // demonstration is not empty.
+  const validatedBlocks = demonstrationBlocks.filter(
+    (block) => /sint[ée]tic|demonstrativ|hipot[ée]tic/i.test(block),
+  );
+  let outsideDemonstration = html;
+  for (const block of validatedBlocks) outsideDemonstration = outsideDemonstration.replace(block, " ");
+  assert.equal(/R\$\s*\d/.test(outsideDemonstration), false,
+    "a price appears outside a validated synthetic demonstration block");
+  // Negative case: a published CONFENGE fee may not hide inside the block.
+  for (const fee of ["R$ 6.900", "R$ 7.900", "R$ 12.500", "R$ 20.000", "R$ 2.900", "R$ 599"]) {
+    assert.equal(html.includes(fee), false, `published fee leaked onto the route: ${fee}`);
+  }
+  // Positive case: the demonstration exists and does carry its own numbers, so
+  // the assertion above is not passing vacuously on an empty set.
+  assert.equal(validatedBlocks.length, 1, "the synthetic demonstration block is missing");
+  assert.equal(/R\$\s*\d/.test(validatedBlocks[0]), true,
+    "the demonstration block carries no number, so the guard proves nothing");
   for (const withheldRoute of [
     "/pericias-avaliacoes/",
     "/seguranca-trabalho/",

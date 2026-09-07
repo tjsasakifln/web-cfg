@@ -37,6 +37,28 @@
 .qty-channels .text-link{padding-inline:.25rem}
 @media(max-width:800px){.qty-hero-grid,.qty-grid,.qty-flow,.qty-proof,.qty-triage-grid{grid-template-columns:1fr}.qty-hero{padding-block:2.5rem}.qty-hero h1{max-width:none}}
 </style>
+<style data-evidence-module-critical="">
+/* #619 evidence modules. Extends existing tokens; redefines none.
+   C4: the detail must be readable at 390 CSS px WITHOUT horizontal scrolling of
+   the page or of any container, so the table REFLOWS vertically instead of
+   living inside overflow-x:auto. No white-space:nowrap, no min-width wider than
+   the viewport. Floors: body >= 16px, critical microcopy >= 12.8px. */
+.evidence-module{margin-top:2rem;padding:1.25rem;border:1px solid var(--line);border-radius:12px;background:#fff}
+.evidence-module__caveat{margin:0 0 1rem;color:var(--muted);font-size:.875rem;line-height:1.55}
+.evidence-module__note{margin:1rem 0 0;color:var(--muted);font-size:.9375rem;line-height:1.6}
+.evidence-module table{width:100%;border-collapse:collapse;font-size:1rem}
+.evidence-module caption{margin-bottom:.75rem;color:var(--muted);font-size:.9375rem;line-height:1.55;text-align:left}
+.evidence-module th,.evidence-module td{padding:.6rem .5rem;border-top:1px solid var(--line);text-align:left;vertical-align:top;line-height:1.5}
+.evidence-module thead th{color:var(--ink);font-size:.875rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase}
+.evidence-module tbody th{font-weight:700}
+@media(max-width:760px){
+/* clip-path:inset(50%) always clips to zero area, so width:1px;height:1px was redundant and harmful: it forced the display:block th/td below to inherit a 1px containing-block width, squeezing header cells to 1px (column starvation). Dropping the fixed size lets each th shrink-to-fit its own text. This keeps the header text in the a11y tree, same as before, unlike display:none which would remove it -- display:block already dropped native table/header role association at this width, so data-label::before is what labels each stacked cell, not this rule. visibility:hidden was rejected: it removes text from the a11y tree too. */
+.evidence-module thead{position:absolute;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.evidence-module tr{display:block;padding:.5rem 0;border-top:1px solid var(--line)}
+.evidence-module th,.evidence-module td{display:block;padding:.35rem 0;border-top:0}
+.evidence-module th[data-label]::before,.evidence-module td[data-label]::before{content:attr(data-label);display:block;margin-bottom:.15rem;color:var(--green-700);font-size:.8rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+}
+</style>
 <script defer="" src="/script.js?v=mv09"></script>
 <script defer="" src="/assets/js/adaptive-intake.js"></script>
 <meta content="website" property="og:type"/>
@@ -124,12 +146,43 @@
 <article class="qty-step"><h3>Rastrear a quantidade</h3><p>Relacionar cada leitura às fontes e registrar divergências, omissões e premissas.</p></article>
 <article class="qty-step"><h3>Organizar a comparação</h3><p>Separar quantidade, referência de custo e decisão para que ajustes não se confundam.</p></article>
 </div>
+<div class="evidence-module trace-matrix" data-demonstration="synthetic" data-visual-role="method" data-visual-asset-id="qty_trace_matrix_v1">
+<p class="evidence-module__caveat">Exemplo sintético e demonstrativo. Os números desta tabela são hipotéticos e servem para mostrar a estrutura do raciocínio: não descrevem obra, contrato, órgão ou cliente real, e não são preço da CONFENGE.</p>
+<table class="trace-matrix__table">
+<caption>Como uma quantidade vira decisão: a mesma linha mostra a fonte que a sustenta, a premissa assumida, a quantidade, o orçamento derivado e a decisão que ela habilita.</caption>
+<thead><tr><th scope="col">Fonte</th><th scope="col">Premissa</th><th scope="col">Quantidade</th><th scope="col">Orçamento</th><th scope="col">Decisão</th></tr></thead>
+<tbody>
+<tr>
+<th data-label="Fonte" scope="row">Projeto arquitetônico PA-03, prancha 04/12, revisão B</th>
+<td data-label="Premissa">Alvenaria de vedação em bloco cerâmico de 14 cm; vãos menores que 2,00 m² não são descontados</td>
+<td data-label="Quantidade">1.248 m² de alvenaria</td>
+<td data-label="Orçamento">Composição referencial 87.489: preço unitário de referência R$ 118,80 por m², total R$ 148.262,40</td>
+<td data-label="Decisão">Comprar o bloco em duas entregas e reter a segunda até a medição da laje 2</td>
+</tr>
+<tr>
+<th data-label="Fonte" scope="row">Memorial descritivo, item 5.2, conferido em visita técnica</th>
+<td data-label="Premissa">Revestimento cerâmico apenas em áreas molhadas; demais áreas recebem pintura</td>
+<td data-label="Quantidade">312 m² de revestimento cerâmico</td>
+<td data-label="Orçamento">Composição referencial 87.263: preço unitário de referência R$ 96,40 por m², total R$ 30.076,80</td>
+<td data-label="Decisão">Confirmar a especificação antes da compra: trocar por porcelanato move o total desta parcela em cerca de 18%</td>
+</tr>
+<tr>
+<th data-label="Fonte" scope="row">Não existe projeto de instalações hidrossanitárias na revisão B</th>
+<td data-label="Premissa">Sem projeto, só cabe estimativa por indicador de área, declarada como tal</td>
+<td data-label="Quantidade">Não quantificado</td>
+<td data-label="Orçamento">Não orçado. Nenhum valor é comprometido enquanto a fonte não existir</td>
+<td data-label="Decisão">Não fechar valor desta parcela: pedir o projeto ou contratar por administração</td>
+</tr>
+</tbody>
+</table>
+<p class="evidence-module__note">A terceira linha é a razão de a tabela existir: quando a fonte não existe, a quantidade e o orçamento ficam explicitamente em aberto, em vez de receberem um número que ninguém consegue re-derivar.</p>
+</div>
 </div>
 </section>
 
 <section aria-labelledby="qty-proof-title" class="section section--tight">
 <div class="container qty-proof">
-<div><p class="eyebrow">Prova disponível</p><h2 id="qty-proof-title">Método e responsabilidade visíveis.</h2></div>
+<div><p class="eyebrow">Como conferir o cálculo</p><h2 id="qty-proof-title">Método e responsabilidade visíveis.</h2></div>
 <div>
 <ul class="qty-list">
 <li>A formação publicada do responsável é Engenharia Civil pela EESC-USP; CREA, acervo, case e capacidade irrestrita não são presumidos.</li>
@@ -143,7 +196,7 @@
 
 <section aria-labelledby="qty-limits-title" class="section section--tight">
 <div class="container qty-proof">
-<div><p class="eyebrow">Limites materiais</p><h2 id="qty-limits-title">O enquadramento vem antes da proposta.</h2></div>
+<div><p class="eyebrow">O que não está incluído</p><h2 id="qty-limits-title">O escopo é definido antes de falar em preço.</h2></div>
 <div>
 <ul class="qty-list">
 <li>Não há preço, prazo, capacidade, visita, disciplina ou resultado garantido nesta página.</li>
@@ -159,12 +212,23 @@
 <div class="container qty-triage-grid">
 <div>
 <p class="eyebrow">Próximo passo</p>
-<h2 id="qty-triage-title">Enquadre a base de quantitativos ou orçamento.</h2>
-<p data-form-value>Confirme a situação e informe nome mais um canal de retorno. Para este primeiro recorte documental, cidade e UF não são necessárias.</p>
+<h2 id="qty-triage-title">Como enquadrar a base de quantitativos ou orçamento.</h2>
+<p data-form-value>Pelo formulário, quando estiver disponível, basta confirmar a situação e informar nome mais um canal de retorno; nesta primeira leitura documental, cidade e UF não são necessárias. Pelos canais diretos, descreva a obra e o que precisa orçar.</p>
 <p>O protocolo só aparece depois que o pedido é gravado e o recebimento é confirmado. Se o formulário estiver indisponível, os três canais diretos continuam úteis.</p>
 </div>
 <div>
-<form action="/.netlify/functions/lead" class="technical-intake-form" data-adaptive-intake-form data-authority-config-endpoint="/.netlify/functions/adaptive-intake-config?intake_context=quantities_budget" data-config-endpoint="/.netlify/functions/adaptive-intake-config?intake_context=quantities_budget" data-cta-id="frame-quantities-budget" data-current-step="1" data-default-need="obra_edificacao_ou_documentacao" data-form-contract="next-state/v1" data-next-state-profile="adaptive_quantities_triage" data-page-path="/quantitativos-orcamento-obras/" data-receipt-required="true" data-runtime-profile="adaptive_intake_standalone_v1" id="triagem-tecnica-form" method="post" novalidate><p class="form-hint" data-form-value>Confirme a situação e informe nome mais um canal de retorno. Para este primeiro recorte documental, cidade e UF não são necessárias.</p>
+<aside aria-labelledby="qty-channels-title" class="channel-card qty-channels" data-intake-alternative>
+<h3 id="qty-channels-title">Três canais diretos</h3><p>Continuam disponíveis mesmo quando o formulário não puder registrar o pedido.</p>
+<div class="channel-actions">
+<a class="button button-primary" data-asset-id="private_quantities_budget_route_v1" data-cta-id="quantities-budget-alternative-whatsapp" data-fallback-channel="whatsapp" data-route-family="private-engineering-quantities-budget" href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20enquadrar%20quantitativos%20ou%20or%C3%A7amento%20de%20uma%20obra%20privada." rel="noopener" target="_blank">Conversar sobre os quantitativos</a>
+<a class="button button-secondary" data-asset-id="private_quantities_budget_route_v1" data-cta-id="quantities-budget-alternative-email" data-fallback-channel="email" data-route-family="private-engineering-quantities-budget" href="mailto:tiago.sasaki@confenge.com.br?subject=Quantitativos%20e%20or%C3%A7amento%20de%20obra">Enviar contexto por e-mail</a>
+<a class="text-link" data-asset-id="private_quantities_budget_route_v1" data-cta-id="quantities-budget-alternative-phone" data-fallback-channel="phone" data-route-family="private-engineering-quantities-budget" href="tel:+5548988344559">Ligar sobre o orçamento: (48) 98834-4559</a>
+</div>
+</aside>
+<p class="intake-status" data-intake-status role="status" aria-live="polite">Verificando a disponibilidade do formulário…</p>
+<p class="form-hint" data-intake-limit>Nenhum destes canais é contratação, pagamento, aceite ou prazo prometido. Não envie arquivo, planta, orçamento, endereço exato, CPF ou processo por aqui. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da <a href="/privacidade/">Política de Privacidade</a>.</p>
+<div class="intake-form-block" data-intake-form-block hidden inert aria-hidden="true">
+<form action="/.netlify/functions/lead" class="technical-intake-form" data-adaptive-intake-form data-authority-config-endpoint="/.netlify/functions/adaptive-intake-config?intake_context=quantities_budget" data-config-endpoint="/.netlify/functions/adaptive-intake-config?intake_context=quantities_budget" data-channel-intent="Olá, Tiago. Quero enquadrar quantitativos ou orçamento de uma obra privada." data-channel-subject="Quantitativos e orçamento de obra" data-cta-id="frame-quantities-budget" data-current-step="1" data-default-need="obra_edificacao_ou_documentacao" data-form-contract="next-state/v1" data-next-state-profile="adaptive_quantities_triage" data-page-path="/quantitativos-orcamento-obras/" data-receipt-required="true" data-runtime-profile="adaptive_intake_standalone_v1" id="triagem-tecnica-form" method="post" novalidate><p class="form-hint" data-form-value>Confirme a situação e informe nome mais um canal de retorno. Para este primeiro recorte documental, cidade e UF não são necessárias.</p>
 <p class="form-hint" id="contato-hint" data-field-purpose>A situação delimita o pedido; nome e um canal válido permitem o retorno. Não pedimos localização neste recorte documental. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.</p>
 <input name="form-name" type="hidden" value="triagem-tecnica"/>
 <input name="adaptive_intake" type="hidden" value="true"/>
@@ -186,7 +250,7 @@
 <fieldset data-intake-step>
 <legend>É esta a situação?</legend>
 <label for="need-code">Situação</label>
-<select id="need-code" name="need_code" required><option value="">Carregando opções…</option></select>
+<select id="need-code" name="need_code" required><option value="">Selecione a situação</option></select>
 <button class="button button-primary" data-intake-next disabled type="button">Informar contato</button>
 </fieldset>
 <fieldset data-intake-step hidden>
@@ -205,20 +269,12 @@
 <div class="field turnstile-slot" data-turnstile-sitekey="" hidden id="turnstile-slot"><div class="cf-turnstile" data-sitekey=""></div></div>
 <div class="form-actions"><button class="button button-secondary" data-intake-back type="button">Voltar</button><button class="button button-primary" disabled type="submit">Registrar pedido de triagem</button></div>
 </fieldset>
-<p class="intake-status" data-intake-status role="status" aria-live="polite">Verificando a disponibilidade do formulário…</p>
 <p class="form-hint" data-form-boundary>Não há contratação, pagamento, aceite ou prazo prometido. Este passo não recebe arquivo, planta, orçamento, endereço exato, CPF, processo ou texto livre. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da <a href="/privacidade/">Política de Privacidade</a>, com o protocolo.</p>
 </form>
+</div>
 <section aria-labelledby="qty-receipt-title" class="receipt-card" data-intake-receipt hidden>
 <p class="triage-eyebrow">Pedido registrado</p><h3 id="qty-receipt-title">Recebemos sua triagem</h3><p>Protocolo: <strong data-intake-protocol></strong></p><p>A CONFENGE verificará o enquadramento e usará o canal informado para combinar o próximo passo. Nenhum pagamento ou contratação foi realizado.</p>
 </section>
-<aside aria-labelledby="qty-channels-title" class="channel-card qty-channels">
-<h3 id="qty-channels-title">Três canais diretos</h3><p>Continuam disponíveis mesmo quando o formulário não puder registrar o pedido.</p>
-<div class="channel-actions">
-<a class="button button-primary" data-asset-id="private_quantities_budget_route_v1" data-cta-id="quantities-budget-alternative-whatsapp" data-fallback-channel="whatsapp" data-route-family="private-engineering-quantities-budget" href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20enquadrar%20quantitativos%20ou%20or%C3%A7amento%20de%20uma%20obra%20privada." rel="noopener" target="_blank">Conversar sobre os quantitativos</a>
-<a class="button button-secondary" data-asset-id="private_quantities_budget_route_v1" data-cta-id="quantities-budget-alternative-email" data-fallback-channel="email" data-route-family="private-engineering-quantities-budget" href="mailto:tiago.sasaki@confenge.com.br?subject=Quantitativos%20e%20or%C3%A7amento%20de%20obra">Enviar contexto por e-mail</a>
-<a class="text-link" data-asset-id="private_quantities_budget_route_v1" data-cta-id="quantities-budget-alternative-phone" data-fallback-channel="phone" data-route-family="private-engineering-quantities-budget" href="tel:+5548988344559">Ligar sobre o orçamento: (48) 98834-4559</a>
-</div>
-</aside>
 </div>
 </div>
 </section>

@@ -17,12 +17,27 @@ on:
 permissions:
   contents: read
 
+# The browser suites used to run as ten steps in one job, sharing one runner's
+# processes, memory, ports and browser profiles, where the first step to trip
+# aborted the job and masked the other nine. They now run on isolated runners.
+# This is a mitigation to validate, not a proven cure: the serial design was
+# never demonstrated to be the cause, only to be an amplifier that made any one
+# failure fatal to the whole check and hid the rest.
 jobs:
-  gates:
-    # Stable GitHub check context — require this name in branch protection
-    name: site-ci
+  build:
+    name: build and non-browser gates
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 30
+    outputs:
+      suites: ${{ steps.manifest.outputs.suites }}
+      candidate_sha256: ${{ steps.package.outputs.sha256 }}
+      # "Re-run failed jobs" bumps run_attempt but does NOT re-run a job that
+      # already succeeded, so the consumers must ask for the name build really
+      # published, not the one this attempt would have produced. The name is
+      # therefore captured by the packaging step, frozen at the moment the
+      # upload happens, rather than re-derived from github.run_attempt in a
+      # later context that may no longer be the publishing attempt.
+      candidate_artifact: ${{ steps.package.outputs.artifact }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
@@ -40,11 +55,8 @@ jobs:
           python-version: "3.12"
       - name: Install dependencies (two clean installs)
         # Hard fail on lock desync — never soft-fallback to npm install.
-        # Keep two clean installs here to make lockfile determinism explicit.
         # --engine-strict turns npm's EBADENGINE warning into a hard failure, so a
-        # dependency that declares a Node floor above this runner cannot install
-        # green. Without it, Dependabot #264 (lighthouse 13, needs >=22.19) and
-        # #265 (@netlify/blobs 11, needs >=22.12) both passed required checks.
+        # dependency that declares a Node floor above this runner cannot install green.
         run: |
           rm -rf node_modules
           npm ci --engine-strict
@@ -53,8 +65,15 @@ jobs:
           python -m pip install --disable-pip-version-check -r requirements-ci.txt
       - name: Workflow gate shape
         run: npm run test:workflow-gates
+      - name: Record the effective checkout
+        # The PR checkout is a merge ref, not the branch head. Naming it here
+        # keeps every downstream report attributable to the tree that produced it.
+        run: |
+          echo "SITE_CI_CHECKOUT=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+          echo "checkout=$(git rev-parse HEAD) ref=${{ github.ref }} sha=${{ github.sha }} attempt=${{ github.run_attempt }}"
       - name: Unit and brand/copy/design gates
         run: |
+          python3 scripts/site/test_site_ci_aggregate.py
           npm run discovery:test
           npm run editorial:test
           npm run editorial:build
@@ -150,45 +169,6 @@ jobs:
         run: |
           python3 scripts/site/test_fingerprint_css.py
           python3 scripts/site/test_cache_contract.py
-      - name: Setup Chrome
-        uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2
-        id: setup-chrome
-      - name: Enforced CSP browser canary
-        env:
-          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
-          CSP_BROWSER_REQUIRED: "1"
-        run: |
-          npm run test:csp-browser
-          npm run test:convergence-browser
-      - name: Money asset canary browser e2e
-        env:
-          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
-        run: npm run test:money-asset-canary-e2e
-      - name: Headless capture states (full-page, JS-off, reduced-motion)
-        env:
-          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
-          CAPTURE_BROWSER_REQUIRED: "1"
-        run: |
-          npm run test:capture-states
-          npm run test:deliverables-live-audit
-      - name: UI geometry, narrow breakpoints and computed cascade
-        env:
-          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
-          UI_GEOMETRY_REQUIRED: "1"
-          PUBLIC_ARTIFACT_REQUIRED: "1"
-        run: npm run test:ui
-      - name: Sitewide layout geometry
-        env:
-          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
-          UI_GEOMETRY_REQUIRED: "1"
-        run: npm run audit:layout-sitewide
-      - name: "Perceptual commercial regressions from #468"
-        env:
-          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
-          UI_GEOMETRY_REQUIRED: "1"
-          PUBLIC_ARTIFACT_REQUIRED: "1"
-          DELIVERABLES_HUB_REPORT: build/reports/deliverables-hub-ui.json
-        run: npm run test:deliverables-hub-ui
       - name: pSEO validate and audit
         run: |
           npm run pseo:validate
@@ -201,55 +181,351 @@ jobs:
         run: npm run audit:css-usage
       - name: Redirect and 410 gates
         run: npm run test:redirects
-      - name: axe accessibility
-        env:
-          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
-          AXE_REPORT_PATH: build/reports/axe-report.json
-        run: npm run audit:axe
-      - name: Lighthouse local (_site)
-        env:
-          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
-          LH_HOME_RUNS: "3"
+      - name: Declare the browser suite matrix
+        id: manifest
+        run: echo "suites=$(python3 -c "import json;print(json.dumps(json.load(open('data/quality/site-ci-suites.json'))['suites']))")" >> "$GITHUB_OUTPUT"
+      - name: Package the prepared candidate tree
+        id: package
+        # _site alone does not reproduce this tree: build:site also writes
+        # in-source projections (manifests, editorial registries, parity
+        # reports) that the browser suites read, and some harnesses serve the
+        # repository root rather than _site. The whole prepared tree travels.
+        # The archive is written OUTSIDE the checkout. Creating it inside "."
+        # mutates the directory tar is reading, and tar reports "file changed as
+        # we read it" against "." itself and exits 1 -- an --exclude keeps the
+        # file out of the archive but cannot stop that stat comparison. The
+        # answer is to not write into the tree, never to demote the warning:
+        # tar must still fail if the tree really does mutate under it.
         run: |
-          npm run test:lighthouse
-          LH_REQUIRE_RAW_EVIDENCE=1 npm run test:lighthouse-gates
-        continue-on-error: false
-      - name: Tools UI/UX E2E
-        env:
-          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
-          PUBLIC_ARTIFACT_REQUIRED: "1"
-        run: npm run test:tools-uiux-e2e
-      - name: Install Playwright Chromium
-        run: |
-          npm install --no-save playwright
-          npx playwright install --with-deps chromium
-      - name: Playwright checklist on _site
-        env:
-          CONFENGE_BASE: http://127.0.0.1:8765
-        run: |
-          python3 -m http.server 8765 --directory _site &
-          echo $! > /tmp/site-http.pid
-          for i in 1 2 3 4 5 6 7 8 9 10; do
-            curl -fsS http://127.0.0.1:8765/ >/dev/null && break
-            sleep 1
-          done
-          node scripts/site/playwright_local_checklist.mjs
-          kill "$(cat /tmp/site-http.pid)" || true
-      - name: Executable site-excellence scorecard
+          set -euo pipefail
+          tar --exclude=./.git --exclude=./node_modules \
+              -czf "$RUNNER_TEMP/candidate.tgz" .
+          sha256=$(sha256sum "$RUNNER_TEMP/candidate.tgz" | cut -d' ' -f1)
+          echo "sha256=$sha256" >> "$GITHUB_OUTPUT"
+          artifact="site-ci-candidate-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          echo "artifact=$artifact" >> "$GITHUB_OUTPUT"
+          echo "CANDIDATE_PACKAGED sha256=$sha256 bytes=$(stat -c%s "$RUNNER_TEMP/candidate.tgz") artifact=$artifact"
+      - name: Upload the prepared candidate
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          # steps.package, not needs.build: inside build itself the needs
+          # context is empty, which resolved this name to the empty string and
+          # made upload-artifact refuse with "artifact name input during
+          # validation is empty". Producer and consumer now read the one value
+          # the packaging step published.
+          name: ${{ steps.package.outputs.artifact }}
+          # A single explicit file uploads at the archive root, so every
+          # consumer still restores it as candidate/candidate.tgz.
+          path: ${{ runner.temp }}/candidate.tgz
+          if-no-files-found: error
+          retention-days: 3
+      - name: Upload build reports
         if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: site-ci-reports-build-attempt-${{ github.run_attempt }}
+          path: |
+            seo/pseo-*.json
+            build/reports/
+          if-no-files-found: ignore
+
+  browser:
+    name: browser ${{ matrix.suite }}
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      # One suite failing must not cancel the others: the whole point of the
+      # split is to observe every suite's outcome in a single run instead of
+      # learning about the first one only. This is NOT continue-on-error --
+      # every suite result is still required by the aggregator.
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        suite: ${{ fromJSON(needs.build.outputs.suites) }}
+    env:
+      CSP_BROWSER_REQUIRED: "1"
+      CAPTURE_BROWSER_REQUIRED: "1"
+      UI_GEOMETRY_REQUIRED: "1"
+      PUBLIC_ARTIFACT_REQUIRED: "1"
+      DELIVERABLES_HUB_REPORT: build/reports/deliverables-hub-ui.json
+      AXE_REPORT_PATH: build/reports/axe-report.json
+      LH_HOME_RUNS: "3"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "22"
+          cache: npm
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: "3.12"
+      - name: Install dependencies (two clean installs)
+        # Hard fail on lock desync — never soft-fallback to npm install.
+        # --engine-strict turns npm's EBADENGINE warning into a hard failure, so a
+        # dependency that declares a Node floor above this runner cannot install green.
+        run: |
+          rm -rf node_modules
+          npm ci --engine-strict
+          rm -rf node_modules
+          npm ci --engine-strict
+          python -m pip install --disable-pip-version-check -r requirements-ci.txt
+      - name: Download the prepared candidate
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          name: ${{ needs.build.outputs.candidate_artifact }}
+          path: candidate
+      - name: Verify candidate integrity and restore the prepared tree
+        # One build per workflow run. Consumers restore the exact tree the build
+        # job prepared -- _site AND the in-source projections the generators
+        # write, because a clean checkout plus _site does not reproduce it. A
+        # digest mismatch or a missing package fails the consumer; it is never a
+        # warning, and the tree is never rebuilt here.
+        run: |
+          set -euo pipefail
+          test -f candidate/candidate.tgz || { echo "CANDIDATE_MISSING" >&2; exit 1; }
+          echo "${{ needs.build.outputs.candidate_sha256 }}  candidate/candidate.tgz" | sha256sum -c -
+          tar -xzf candidate/candidate.tgz
+          test -f _site/index.html || { echo "CANDIDATE_INCOMPLETE: _site/index.html absent" >&2; exit 1; }
+          test -f _site/.well-known/build-info.json || { echo "CANDIDATE_INCOMPLETE: build-info absent" >&2; exit 1; }
+          echo "CANDIDATE_RESTORED sha256=${{ needs.build.outputs.candidate_sha256 }}"
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2
+        id: setup-chrome
+      - name: Run the browser suite
+        env:
+          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+          # Through the environment, never through ${{ }} textual substitution:
+          # a suite name is data, and data must not be able to become shell
+          # syntax. The manifest also constrains the alphabet (see
+          # verify_site_ci_aggregate.declared_suites).
+          SUITE: ${{ matrix.suite }}
+        run: |
+          set -euo pipefail
+          case "$SUITE" in
+            csp-convergence)
+              npm run test:csp-browser
+              npm run test:convergence-browser
+              ;;
+            money-canary)
+              npm run test:money-asset-canary-e2e
+              ;;
+            capture-states)
+              npm run test:capture-states
+              npm run test:deliverables-live-audit
+              ;;
+            ui-geometry)
+              npm run test:ui
+              ;;
+            layout-sitewide)
+              npm run audit:layout-sitewide
+              ;;
+            deliverables-hub-ui)
+              npm run test:deliverables-hub-ui
+              ;;
+            axe)
+              npm run audit:axe
+              ;;
+            lighthouse)
+              npm run test:lighthouse
+              LH_REQUIRE_RAW_EVIDENCE=1 npm run test:lighthouse-gates
+              ;;
+            tools-uiux)
+              npm run test:tools-uiux-e2e
+              ;;
+            playwright-checklist)
+              npm install --no-save playwright
+              npx playwright install --with-deps chromium
+              python3 -m http.server 8765 --directory _site &
+              echo $! > /tmp/site-http.pid
+              for i in 1 2 3 4 5 6 7 8 9 10; do
+                curl -fsS http://127.0.0.1:8765/ >/dev/null && break
+                sleep 1
+              done
+              CONFENGE_BASE=http://127.0.0.1:8765 node scripts/site/playwright_local_checklist.mjs
+              kill "$(cat /tmp/site-http.pid)" || true
+              ;;
+            *)
+              echo "UNMAPPED_SUITE: $SUITE is declared in the manifest but has no command" >&2
+              exit 1
+              ;;
+          esac
+      - name: Record the suite result
+        if: always()
+        env:
+          SUITE: ${{ matrix.suite }}
+          SUITE_RESULT: ${{ job.status }}
+          ATTEMPT: ${{ github.run_attempt }}
+        # The aggregator reconstructs "everything ran" from these markers, so a
+        # suite that never started leaves no marker and cannot be waved through.
+        run: |
+          mkdir -p build/suite-status
+          printf '{"suite":"%s","result":"%s","checkout":"%s","attempt":"%s"}\n' \
+            "$SUITE" "$SUITE_RESULT" "$(git rev-parse HEAD)" "$ATTEMPT" \
+            > "build/suite-status/$SUITE-$ATTEMPT.json"
+          cat "build/suite-status/$SUITE-$ATTEMPT.json"
+      - name: Upload suite evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          # Per run, per attempt, per suite: evidence is never overwritten and
+          # results from different commits never mix.
+          name: site-ci-suite-${{ matrix.suite }}-attempt-${{ github.run_attempt }}
+          path: |
+            build/suite-status/
+            build/reports/
+            docs/lighthouse-runs/
+            docs/uiux-tools-remediation/evidence/
+          if-no-files-found: ignore
+          include-hidden-files: true
+          retention-days: 7
+
+  scorecard:
+    name: site excellence scorecard
+    needs: [build, browser]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "22"
+          cache: npm
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: "3.12"
+      - name: Install dependencies (two clean installs)
+        # Hard fail on lock desync — never soft-fallback to npm install.
+        # --engine-strict turns npm's EBADENGINE warning into a hard failure, so a
+        # dependency that declares a Node floor above this runner cannot install green.
+        run: |
+          rm -rf node_modules
+          npm ci --engine-strict
+          rm -rf node_modules
+          npm ci --engine-strict
+          python -m pip install --disable-pip-version-check -r requirements-ci.txt
+      - name: Download the prepared candidate
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          name: ${{ needs.build.outputs.candidate_artifact }}
+          path: candidate
+      - name: Verify candidate integrity and restore the prepared tree
+        # One build per workflow run. Consumers restore the exact tree the build
+        # job prepared -- _site AND the in-source projections the generators
+        # write, because a clean checkout plus _site does not reproduce it. A
+        # digest mismatch or a missing package fails the consumer; it is never a
+        # warning, and the tree is never rebuilt here.
+        run: |
+          set -euo pipefail
+          test -f candidate/candidate.tgz || { echo "CANDIDATE_MISSING" >&2; exit 1; }
+          echo "${{ needs.build.outputs.candidate_sha256 }}  candidate/candidate.tgz" | sha256sum -c -
+          tar -xzf candidate/candidate.tgz
+          test -f _site/index.html || { echo "CANDIDATE_INCOMPLETE: _site/index.html absent" >&2; exit 1; }
+          test -f _site/.well-known/build-info.json || { echo "CANDIDATE_INCOMPLETE: build-info absent" >&2; exit 1; }
+          echo "CANDIDATE_RESTORED sha256=${{ needs.build.outputs.candidate_sha256 }}"
+      - name: Gather every suite's evidence
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          pattern: site-ci-suite-*
+          merge-multiple: true
+          path: suite-evidence
+      - name: Place the gathered evidence where the scorecard reads it
+        run: |
+          set -euo pipefail
+          for dir in build docs; do
+            if [ -d "suite-evidence/$dir" ]; then
+              cp -r "suite-evidence/$dir/." "$dir/"
+            fi
+          done
+          for marker in build/suite-status/*.json; do
+            [ -e "$marker" ] && echo "gathered $marker: $(cat "$marker")"
+          done
+      - name: Executable site-excellence scorecard
         run: >-
           npm run quality:site-excellence --
           --expected-environment
           ${{ inputs.export_public_artifact && 'production' || 'local' }}
+      - name: Upload scorecard and gathered evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: site-ci-reports-attempt-${{ github.run_attempt }}
+          path: |
+            docs/lighthouse-runs/
+            docs/uiux-tools-remediation/evidence/
+            seo/pseo-*.json
+            build/reports/deliverables-hub-ui.json
+            build/reports/axe-report.json
+            build/reports/convergence/
+            build/reports/site-excellence.json
+            build/reports/site-excellence.md
+            build/suite-status/
+          if-no-files-found: ignore
+          include-hidden-files: true
+
+  gates:
+    # Stable GitHub check context — require this name in branch protection
+    name: site-ci
+    needs: [build, browser, scorecard]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: "3.12"
+      - name: Gather suite status markers
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          # Every attempt, not just this one: on a partial re-run the suites
+          # that already passed do not run again, and their coverage still counts.
+          # The verifier resolves each suite by its highest attempt.
+          pattern: site-ci-suite-*
+          merge-multiple: true
+          path: aggregate
+        continue-on-error: false
+      - name: Every required job succeeded and every declared suite ran
+        env:
+          # toJSON(needs) carries job OUTPUTS too, including the suite manifest
+          # string. Inlined into a quoted shell argument, a crafted value could
+          # close the quote and neutralise this very check. It travels as an
+          # environment variable instead.
+          NEEDS_JSON: ${{ toJSON(needs) }}
+        # Refuses on failure, cancellation, an improperly skipped job, a suite
+        # missing from the matrix, an unreadable marker, or a suite reporting a
+        # status it was never declared to produce.
+        run: |
+          python3 scripts/site/verify_site_ci_aggregate.py \
+            --results "$NEEDS_JSON" \
+            --markers aggregate/build/suite-status
+      - name: Download the approved candidate
+        if: inputs.export_public_artifact
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          name: ${{ needs.build.outputs.candidate_artifact }}
+          path: candidate
+      - name: Restore the approved candidate without rebuilding it
+        if: inputs.export_public_artifact
+        run: |
+          set -euo pipefail
+          test -f candidate/candidate.tgz || { echo "CANDIDATE_MISSING" >&2; exit 1; }
+          echo "${{ needs.build.outputs.candidate_sha256 }}  candidate/candidate.tgz" | sha256sum -c -
+          tar -xzf candidate/candidate.tgz ./_site
+          test -f _site/index.html || { echo "CANDIDATE_INCOMPLETE" >&2; exit 1; }
+          echo "APPROVED_CANDIDATE_RESTORED sha256=${{ needs.build.outputs.candidate_sha256 }}"
       - name: Release artifact carries a usable anti-abuse widget
         if: inputs.export_public_artifact
         run: |
           set -euo pipefail
           # The production lead endpoint refuses every submission when Turnstile
           # is unconfigured, so an artifact whose form has no site key is a page
-          # that cannot convert. This was silent: the key existed as a repository
-          # variable and simply was not wired into the build, so the release
-          # shipped `data-turnstile-sitekey=""` and `environment: local`.
+          # that cannot convert.
           if grep -q 'data-turnstile-sitekey=""' _site/index.html; then
             echo "RELEASE_BLOCKED: the exported artifact has an empty Turnstile site key" >&2
             exit 1
@@ -260,8 +536,10 @@ jobs:
             exit 1
           fi
           echo "RELEASE_ARTIFACT_IDENTITY_OK environment=$environment turnstile=configured"
-
       - name: Export exact gated public artifact
+        # Only reachable once the aggregate check above has passed, so the name
+        # the release consumes never names an unapproved tree. The bytes are the
+        # ones the build job produced: nothing is rebuilt or edited here.
         if: inputs.export_public_artifact
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
@@ -270,18 +548,3 @@ jobs:
           if-no-files-found: error
           include-hidden-files: true
           retention-days: 7
-      - name: Upload reports
-        if: always()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
-        with:
-          name: site-ci-reports
-          path: |
-            docs/lighthouse-runs/
-            docs/uiux-tools-remediation/evidence/
-            seo/pseo-*.json
-            build/reports/deliverables-hub-ui.json
-            build/reports/axe-report.json
-            build/reports/convergence/
-            build/reports/site-excellence.json
-            build/reports/site-excellence.md
-          if-no-files-found: ignore

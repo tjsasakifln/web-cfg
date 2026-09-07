@@ -54,11 +54,38 @@ for (const needle of [
     process.exit(1);
   }
 }
-// The corporate shell keeps the existing B2G form explicitly scoped to the
-// protected public-works vertical instead of presenting it as a generic form.
-if (!home.includes("Triagem para obras públicas")) {
-  console.error("FAIL: home missing protected B2G form scope");
-  process.exit(1);
+// The home capture must describe itself truthfully. MV-09 scoped this form to
+// the public-works vertical and pinned the literal phrase "Triagem para obras
+// públicas"; #616 broadened the same form to the five canonical nuclei, so that
+// phrase became a contradiction printed next to a select offering perícia,
+// avaliação, SST and obra privada. The decision to supersede it is registered in
+// issue #611. What is asserted now is the intent behind the original rule: the
+// copy may not claim a scope narrower than what the form accepts, and the B2G
+// path must remain explicitly available rather than diluted away.
+{
+  const stageSelect = (home.match(/<select id="estagio"[\s\S]*?<\/select>/) || [""])[0];
+  const nuclei = [...stageSelect.matchAll(/data-nucleus="([^"]+)"/g)].map((m) => m[1]);
+  const servesPrivateNeeds = nuclei.some((n) => n !== "public_works_b2g");
+  const contactCopy = (home.match(/<div class="contact-copy">[\s\S]*?<\/div>/) || [""])[0];
+  const claimsPublicWorksOnly = /formul[áa]rio preservado desta vertical|Triagem para obras p[úu]blicas/i
+    .test(contactCopy);
+  if (servesPrivateNeeds && claimsPublicWorksOnly) {
+    console.error("FAIL: the capture serves private nuclei but its copy scopes it to public works only");
+    process.exit(1);
+  }
+  // The B2G path is preserved, not removed: the five public-works situations and
+  // their journeys must still be offered.
+  const b2gOptions = (stageSelect.match(/data-nucleus="public_works_b2g"/g) || []).length;
+  if (b2gOptions < 5) {
+    console.error(`FAIL: the public-works path lost options (${b2gOptions} of 5)`);
+    process.exit(1);
+  }
+  for (const journey of ['data-journey="edital"', 'data-journey="contrato"', 'data-journey="operacao"']) {
+    if (!stageSelect.includes(journey)) {
+      console.error(`FAIL: the public-works path lost ${journey}`);
+      process.exit(1);
+    }
+  }
 }
 const formMatch = home.match(/<form\b[^>]*id="formulario-contato"[\s\S]*?<\/form>/);
 if (!formMatch) {

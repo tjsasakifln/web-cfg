@@ -17,6 +17,15 @@
 .corporate-services-hero{padding-block:clamp(3.5rem,8vw,7rem);background:#fff;border-bottom:1px solid var(--line)}
 .corporate-services-hero h1{max-width:18ch;font-size:clamp(2.35rem,5vw,4.4rem)}
 .corporate-service-list{max-width:70rem}
+.services-fold-preview{display:grid;gap:.35rem;max-width:44rem;margin:1.25rem 0 0;padding:0;list-style:none}
+.services-fold-preview li{border-top:1px solid var(--line)}
+.services-fold-preview a{display:block;padding:.6rem 0;min-height:44px;color:var(--ink);font-size:1rem;font-weight:700;line-height:1.35}
+.services-fold-preview a:hover{color:var(--green-700)}
+.services-fold-output{max-width:44rem;margin:1.25rem 0 0;font-size:.9375rem;line-height:1.6}
+.services-fold-output strong{color:var(--ink)}
+.services-fold-actions{margin:1.25rem 0 0}
+.services-fold-alt{margin:.75rem 0 0;color:var(--muted);font-size:.9375rem}
+@media(max-width:700px){.services-fold-preview a{font-size:.9375rem}}
 .corporate-service-row{display:grid;grid-template-columns:minmax(15rem,.7fr) minmax(0,1.3fr);gap:clamp(2rem,6vw,6rem);padding:2rem 0;border-top:1px solid var(--line)}
 .corporate-service-row>div:first-child{display:grid;grid-template-columns:2.5rem 1fr;gap:.75rem}
 .corporate-service-row h3{margin:0;font-size:clamp(1.15rem,2vw,1.55rem)}
@@ -75,35 +84,45 @@
 <div class="container narrow">
 <p class="eyebrow">Serviços organizados por situação</p>
 <h1 id="services-title">Encontre o caminho técnico para a sua situação</h1>
-<p class="section-lead">Comece pelo problema que precisa ser resolvido. A triagem confirma aderência, limites e o entregável aplicável antes de qualquer contratação.</p>
+<p class="section-lead">Comece pelo problema que precisa ser resolvido.</p>
+<ul class="services-fold-preview">
+<li><a href="#servico-projeto">Projetar, revisar, orçar ou compatibilizar</a></li>
+<li><a href="#servico-diagnostico">Inspecionar, diagnosticar ou documentar obra e imóvel</a></li>
+<li><a href="#servico-pericia">Perícia, assistência técnica ou avaliação</a></li>
+<li><a href="#servico-sst">Segurança do trabalho</a></li>
+<li><a href="#servico-obras-publicas">Licitação ou contrato de obra pública</a></li>
+</ul>
+<p class="services-fold-output"><strong>Já publicado:</strong> orçamento de obra com quantitativos, premissas e memória de cálculo.</p>
+<p class="services-fold-actions"><a class="button button-primary" data-asset-id="corporate_services_hub_v1" data-cta-id="services-private-quantities-budget" data-route-family="servicos-corporativos" href="/quantitativos-orcamento-obras/">Ver quantitativos e orçamento de obra <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
+<p class="services-fold-alt">Outra necessidade, ou prefere conversar antes? <a class="text-link" href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20explicar%20uma%20situa%C3%A7%C3%A3o%20t%C3%A9cnica%20e%20entender%20o%20pr%C3%B3ximo%20passo." rel="noopener" target="_blank">Falar pelo WhatsApp</a></p>
 </div>
 </section>
 
 <section aria-labelledby="services-list-title" class="section section--default">
 <div class="container corporate-service-list">
 <header class="section-head">
-<p class="eyebrow">Cinco situações, sem catálogo infinito</p>
+<p class="eyebrow">Cinco situações, do projeto à obra pública</p>
 <h2 id="services-list-title">O que precisa avançar?</h2>
 </header>
 
 <article class="corporate-service-row" id="servico-projeto">
 <div><span class="service-number">01</span><h3>Projetar, revisar, orçar ou compatibilizar</h3></div>
-<div><p>Para empresas de engenharia, incorporadoras, construtoras, loteadores, desenvolvedores, arquitetos e escritórios que precisam dar definição técnica a um projeto ou conferir sua coerência.</p><p class="service-output"><strong>Possíveis entregas:</strong> projeto ou revisão técnica, compatibilização, orçamento e memória de cálculo, conforme o escopo.</p><a class="button button-primary" data-asset-id="corporate_services_hub_v1" data-cta-id="services-private-quantities-budget" data-route-family="servicos-corporativos" href="/quantitativos-orcamento-obras/">Ver quantitativos e orçamento de obra <svg class="icon"><use href="#i-arrow"></use></svg></a> <a class="text-link" href="/triagem-tecnica/#projetos">Outra necessidade de projeto</a></div>
+<div><p>Para empresas de engenharia, incorporadoras, construtoras, loteadores, desenvolvedores, arquitetos e escritórios que precisam dar definição técnica a um projeto ou conferir sua coerência.</p><p class="service-output"><strong>Possíveis entregas:</strong> projeto ou revisão técnica, compatibilização, orçamento e memória de cálculo, conforme o escopo.</p><a class="text-link" href="/triagem-tecnica/#projetos">Outra necessidade de projeto</a></div>
 </article>
 
 <article class="corporate-service-row" id="servico-diagnostico">
 <div><span class="service-number">02</span><h3>Inspecionar, diagnosticar ou documentar obra e imóvel</h3></div>
-<div><p>Para condomínios, proprietários e equipes técnicas diante de anomalia, dúvida sobre condição, vistoria ou necessidade de registrar o que existe.</p><p class="service-output"><strong>Possíveis entregas:</strong> inspeção, diagnóstico, laudo, relatório ou documentação técnica, conforme o escopo.</p><a class="text-link" href="/triagem-tecnica/#obra-imovel">Descrever a situação para triagem <svg class="icon"><use href="#i-arrow"></use></svg></a></div>
+<div><p>Para condomínios, proprietários e equipes técnicas diante de anomalia, dúvida sobre condição, vistoria ou necessidade de registrar o que existe.</p><p class="service-output"><strong>Possíveis entregas:</strong> inspeção, diagnóstico, laudo, relatório ou documentação técnica, conforme o escopo.</p><a class="text-link" href="/triagem-tecnica/#obra-imovel">Falar com a CONFENGE sobre obra ou imóvel <svg class="icon"><use href="#i-arrow"></use></svg></a></div>
 </article>
 
 <article class="corporate-service-row" id="servico-pericia">
 <div><span class="service-number">03</span><h3>Perícia, assistência técnica ou avaliação</h3></div>
-<div><p>Para advogados, empresas, condomínios e compradores de avaliação quando um processo, uma disputa trabalhista técnica, uma negociação ou decisão patrimonial depende de prova ou valor técnico.</p><p class="service-output"><strong>Possíveis entregas:</strong> parecer, laudo, quesitos, análise crítica ou avaliação, conforme o papel e o escopo. Assistência técnica não é advocacia nem promessa de resultado.</p><a class="text-link" href="/triagem-tecnica/#pericia-avaliacao">Descrever a situação para triagem <svg class="icon"><use href="#i-arrow"></use></svg></a></div>
+<div><p>Para advogados, empresas, condomínios e compradores de avaliação quando um processo, uma disputa trabalhista técnica, uma negociação ou decisão patrimonial depende de prova ou valor técnico.</p><p class="service-output"><strong>Possíveis entregas:</strong> parecer, laudo, quesitos, análise crítica ou avaliação, conforme o papel e o escopo. Assistência técnica não é advocacia nem promessa de resultado.</p><a class="text-link" href="/triagem-tecnica/#pericia-avaliacao">Falar com a CONFENGE sobre perícia ou avaliação <svg class="icon"><use href="#i-arrow"></use></svg></a></div>
 </article>
 
 <article class="corporate-service-row" id="servico-sst">
 <div><span class="service-number">04</span><h3>Segurança do trabalho</h3></div>
-<div><p>Para empresas que precisam reconhecer, documentar ou tratar uma situação de risco ocupacional, inclusive quando existe uma disputa trabalhista técnica em curso.</p><p class="service-output"><strong>Possíveis entregas:</strong> diagnóstico, documentação ou apoio técnico, após confirmação de aderência e atribuição.</p><a class="text-link" href="/triagem-tecnica/#sst">Descrever a situação para triagem <svg class="icon"><use href="#i-arrow"></use></svg></a></div>
+<div><p>Para empresas que precisam reconhecer, documentar ou tratar uma situação de risco ocupacional, inclusive quando existe uma disputa trabalhista técnica em curso.</p><p class="service-output"><strong>Possíveis entregas:</strong> diagnóstico, documentação ou apoio técnico, após confirmação de aderência e atribuição.</p><a class="text-link" href="/triagem-tecnica/#sst">Falar com a CONFENGE sobre segurança do trabalho <svg class="icon"><use href="#i-arrow"></use></svg></a></div>
 </article>
 
 <article class="corporate-service-row corporate-service-row--b2g" id="servico-obras-publicas">
@@ -116,7 +135,7 @@
 <section aria-labelledby="services-boundary-title" class="section section--tight">
 <div class="container corporate-boundary">
 <div><p class="eyebrow">Antes de definir a entrega</p><h2 id="services-boundary-title">A triagem separa demanda, escopo e responsabilidade.</h2></div>
-<div><p>Nem toda situação exige o mesmo documento, e nem todo serviço cabe no mesmo papel profissional. A primeira conversa serve para entender o problema, verificar aderência e indicar as informações necessárias. Nenhum resultado técnico, administrativo ou judicial é garantido.</p><p>Atendemos clientes em todo o Brasil. Para serviços que demandem atividade técnica regulada, a definição de responsável técnico, ART e eventuais registros ou vistos é feita conforme o escopo contratado, as atribuições profissionais e a jurisdição aplicável.</p><a class="button button-primary" href="/triagem-tecnica/">Iniciar triagem técnica <svg class="icon"><use href="#i-arrow"></use></svg></a> <a class="text-link" href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20explicar%20uma%20situa%C3%A7%C3%A3o%20t%C3%A9cnica%20e%20entender%20o%20pr%C3%B3ximo%20passo." rel="noopener" target="_blank">Falar pelo WhatsApp</a></div>
+<div><p>A triagem confirma aderência, limites e o entregável aplicável antes de qualquer contratação. Nem toda situação exige o mesmo documento, e nem todo serviço cabe no mesmo papel profissional. A primeira conversa serve para entender o problema, verificar aderência e indicar as informações necessárias. Nenhum resultado técnico, administrativo ou judicial é garantido.</p><p>Atendemos clientes em todo o Brasil. Para serviços que demandem atividade técnica regulada, a definição de responsável técnico, ART e eventuais registros ou vistos é feita conforme o escopo contratado, as atribuições profissionais e a jurisdição aplicável.</p><a class="button button-primary" href="/triagem-tecnica/">Iniciar triagem técnica <svg class="icon"><use href="#i-arrow"></use></svg></a></div>
 </div>
 </section>
 </main>

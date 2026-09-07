@@ -5,7 +5,7 @@
       "ok": true,
       "findings": [],
       "stats": {
-        "scanned": 76,
+        "scanned": 79,
         "pages_with_hits": 0,
         "error_count": 0
       }
@@ -14,7 +14,7 @@
       "ok": true,
       "findings": [],
       "stats": {
-        "sitemap_locs": 76
+        "sitemap_locs": 79
       }
     },
     "brand_shell": {
@@ -22,8 +22,8 @@
       "findings": [],
       "stats": {
         "scanned": 29,
-        "org_description": "Consultoria para licitações e contratos de obras públicas: análise de edital, or",
-        "footer": "Consultoria para licitações e contratos de obras públicas. Modelo de rotina cont"
+        "org_description": "Engenharia, perícias e inteligência técnica para decisões sobre projetos, edific",
+        "footer": "Engenharia, perícias e inteligência técnica para transformar situações complexas"
       }
     },
     "conversion": {
@@ -143,6 +143,13 @@
         },
         {
           "gate": "conversion",
+          "path": "quantitativos-orcamento-obras/index.html",
+          "reason": "missing_journey_signal",
+          "excerpt": "",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
           "path": "reequilibrio-obras-publicas/index.html",
           "reason": "missing_on_page_form",
           "excerpt": "profile=service_pillar route=/reequilibrio-obras-publicas/",
@@ -150,7 +157,7 @@
         }
       ],
       "stats": {
-        "scanned": 76,
+        "scanned": 79,
         "onpage_capture_scanned": 5,
         "journeys": [
           "contrato",
@@ -160,15 +167,15 @@
         "profiles": {
           "service_pillar": 13,
           "priced_offer": 10,
-          "commercial_content": 43,
+          "commercial_content": 46,
           "trust_or_legal": 10
         },
         "main_cta": {
-          "covered": 66,
-          "total": 66,
+          "covered": 69,
+          "total": 69,
           "coverage": 1.0,
           "exempt": 10,
-          "public_scanned": 76
+          "public_scanned": 79
         },
         "on_page_capture": {
           "covered": 7,
@@ -183,14 +190,14 @@
         "family_registry": {
           "path": "data/organic/public-family-registry.json",
           "schema_version": "public-family-registry-v1",
-          "families": 34,
+          "families": 38,
           "fail_closed": true,
           "undeclared_routes": 0
         },
         "terminal_action": {
-          "covered": 56,
-          "total": 66,
-          "coverage": 0.8485,
+          "covered": 59,
+          "total": 69,
+          "coverage": 0.8551,
           "exempt_trust_or_legal": 10,
           "registered_debt": 4
         },
@@ -329,14 +336,15 @@
           "warn_before_date": true
         },
         "errors": 0,
-        "warnings": 17
+        "warnings": 18
       }
     },
     "legacy_entity": {
       "ok": true,
       "findings": [],
       "stats": {
-        "rules_checked": 8
+        "rules_checked": 7,
+        "corporate_services_page": true
       }
     },
     "similarity": {
@@ -444,9 +452,23 @@
       "findings": [
         {
           "gate": "archetype_editorial_ready",
-          "path": "index.html",
-          "reason": "archetype_answer_first_failed",
-          "excerpt": "family=home 1/1 sampled pages fail: /: first 3 paragraphs are shorter than 120 chars or open with a CTA",
+          "path": "triagem-tecnica/index.html",
+          "reason": "archetype_specific_value_failed",
+          "excerpt": "family=triagem-tecnica 1/1 sampled pages fail: /triagem-tecnica/: 2 concrete specifics (min 3)",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "triagem-tecnica/index.html",
+          "reason": "archetype_cta_subordinate_failed",
+          "excerpt": "family=triagem-tecnica 1/1 sampled pages fail: /triagem-tecnica/: 14 CTAs in <main> for 1028 words (max 3)",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "ferramentas/prontidao-tecnica-obra-privada/index.html",
+          "reason": "archetype_specific_value_failed",
+          "excerpt": "family=prontidao-tecnica-obra-privada 1/1 sampled pages fail: /ferramentas/prontidao-tecnica-obra-privada/: 1 concrete specifics (min 3)",
           "severity": "warn"
         },
         {
@@ -458,9 +480,23 @@
         },
         {
           "gate": "archetype_editorial_ready",
-          "path": "index.html",
+          "path": "servicos/index.html",
+          "reason": "archetype_answer_first_failed",
+          "excerpt": "family=servicos-corporativos 1/1 sampled pages fail: /servicos/: first 3 paragraphs are shorter than 120 chars or open with a CTA",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "servicos/index.html",
+          "reason": "archetype_specific_value_failed",
+          "excerpt": "family=servicos-corporativos 1/1 sampled pages fail: /servicos/: 0 concrete specifics (min 3)",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "quantitativos-orcamento-obras/index.html",
           "reason": "archetype_cta_subordinate_failed",
-          "excerpt": "family=home 1/1 sampled pages fail: /: 9 CTAs in <main> for 2152 words (max 5)",
+          "excerpt": "family=private-engineering-quantities-budget 1/1 sampled pages fail: /quantitativos-orcamento-obras/: 7 CTAs in <main> for 1022 words (max 3)",
           "severity": "warn"
         },
         {
@@ -488,14 +524,14 @@
           "gate": "archetype_editorial_ready",
           "path": "confianca/index.html",
           "reason": "archetype_answer_first_failed",
-          "excerpt": "family=legal-and-trust 2/6 sampled pages fail: /conflitos/: first 3 paragraphs are shorter than 120 chars or open with a CTA; /correcoes/: first 3 paragraphs are shorter than 120 chars or open with a CTA",
+          "excerpt": "family=legal-and-trust 1/6 sampled pages fail: /correcoes/: first 3 paragraphs are shorter than 120 chars or open with a CTA",
           "severity": "warn"
         },
         {
           "gate": "archetype_editorial_ready",
           "path": "confianca/index.html",
           "reason": "archetype_substantive_failed",
-          "excerpt": "family=legal-and-trust 2/6 sampled pages fail: /conflitos/: 195 words; /imprensa/: 139 words",
+          "excerpt": "family=legal-and-trust 1/6 sampled pages fail: /imprensa/: 139 words",
           "severity": "warn"
         },
         {
@@ -605,13 +641,6 @@
         },
         {
           "gate": "archetype_editorial_ready",
-          "path": "especialista/tiago-jun-sasaki/index.html",
-          "reason": "archetype_caveats_preserved_failed",
-          "excerpt": "family=especialista 1/1 sampled pages fail: /especialista/tiago-jun-sasaki/: shows a figure or epistemic label with no limitation disclosed — removing raw jargon must not remove the uncertainty it carried",
-          "severity": "warn"
-        },
-        {
-          "gate": "archetype_editorial_ready",
           "path": "nurture/index.html",
           "reason": "archetype_substantive_failed",
           "excerpt": "family=nurture 1/2 sampled pages fail: /nurture/sair/: 91 words",
@@ -703,6 +732,13 @@
         },
         {
           "gate": "archetype_editorial_ready",
+          "path": "casos/index.html",
+          "reason": "archetype_caveats_preserved_failed",
+          "excerpt": "family=casos 1/3 sampled pages fail: /casos/: shows a figure or epistemic label with no limitation disclosed — removing raw jargon must not remove the uncertainty it carried",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
           "path": "entregas/index.html",
           "reason": "archetype_cta_subordinate_failed",
           "excerpt": "family=entregas 1/1 sampled pages fail: /entregas/: 29 CTAs in <main> for 4316 words (max 10)",
@@ -760,50 +796,8 @@
         {
           "gate": "archetype_editorial_ready",
           "path": "analise-cnpj/index.html",
-          "reason": "archetype_jargon_free_failed",
-          "excerpt": "family=live-intelligence-cnpj-tool 1/1 sampled pages fail: /analise-cnpj/: raw internal tokens in visible copy: ['UNKNOWN']",
-          "severity": "warn"
-        },
-        {
-          "gate": "archetype_editorial_ready",
-          "path": "analise-cnpj/index.html",
           "reason": "archetype_specific_value_failed",
           "excerpt": "family=live-intelligence-cnpj-tool 1/1 sampled pages fail: /analise-cnpj/: 1 concrete specifics (min 3)",
-          "severity": "warn"
-        },
-        {
-          "gate": "archetype_editorial_ready",
-          "path": "analise-cnpj/index.html",
-          "reason": "archetype_regression_fixtures_failed",
-          "excerpt": "family=live-intelligence-cnpj-tool 1/1 captured pages still reproduce their recorded jargon findings: ['analise-cnpj/index.html']",
-          "severity": "warn"
-        },
-        {
-          "gate": "archetype_editorial_ready",
-          "path": "analise-cnpj/r/index.html",
-          "reason": "archetype_jargon_free_failed",
-          "excerpt": "family=live-intelligence-cnpj-result 1/1 sampled pages fail: /analise-cnpj/r/: raw internal tokens in visible copy: ['UNKNOWN']",
-          "severity": "warn"
-        },
-        {
-          "gate": "archetype_editorial_ready",
-          "path": "analise-cnpj/r/index.html",
-          "reason": "archetype_regression_fixtures_failed",
-          "excerpt": "family=live-intelligence-cnpj-result 1/1 captured pages still reproduce their recorded jargon findings: ['analise-cnpj/r/index.html']",
-          "severity": "warn"
-        },
-        {
-          "gate": "archetype_editorial_ready",
-          "path": "oportunidades/cc-2026-000047-ponte-rio-do-sul-sc/index.html",
-          "reason": "archetype_jargon_free_failed",
-          "excerpt": "family=live-intelligence-opportunity 4/4 sampled pages fail: /oportunidades/cc-2026-000047-ponte-rio-do-sul-sc/: raw internal tokens in visible copy: ['Classe epistêmica', 'UNKNOWN', 'as_of', 'content_hash', 'generated_at']; /oportunidades/pe-2026-000188-reforma-ubs-londrina-pr/: raw internal tokens in visible copy: ['Classe epistêmica', 'UNKNOWN', 'as_of', 'content_hash', 'generated_at']",
-          "severity": "warn"
-        },
-        {
-          "gate": "archetype_editorial_ready",
-          "path": "oportunidades/cc-2026-000047-ponte-rio-do-sul-sc/index.html",
-          "reason": "archetype_substantive_failed",
-          "excerpt": "family=live-intelligence-opportunity 2/4 sampled pages fail: /oportunidades/pe-2026-000188-reforma-ubs-londrina-pr/: 290 words; /oportunidades/pe-2026-000903-sinalizacao-viaria-caxias-rs/: 296 words",
           "severity": "warn"
         },
         {
@@ -811,13 +805,6 @@
           "path": "oportunidades/cc-2026-000047-ponte-rio-do-sul-sc/index.html",
           "reason": "archetype_specific_value_failed",
           "excerpt": "family=live-intelligence-opportunity 4/4 sampled pages fail: /oportunidades/cc-2026-000047-ponte-rio-do-sul-sc/: 1 concrete specifics (min 3); /oportunidades/pe-2026-000188-reforma-ubs-londrina-pr/: 2 concrete specifics (min 3)",
-          "severity": "warn"
-        },
-        {
-          "gate": "archetype_editorial_ready",
-          "path": "oportunidades/cc-2026-000047-ponte-rio-do-sul-sc/index.html",
-          "reason": "archetype_regression_fixtures_failed",
-          "excerpt": "family=live-intelligence-opportunity 1/1 captured pages still reproduce their recorded jargon findings: ['oportunidades/pe-2026-000188-reforma-ubs-londrina-pr/index.html']",
           "severity": "warn"
         },
         {
@@ -963,9 +950,9 @@
       ],
       "stats": {
         "schema": "indexation-evidence-v1",
-        "families": 34,
-        "archetype_ready": 3,
-        "archetype_not_ready": 31,
+        "families": 38,
+        "archetype_ready": 5,
+        "archetype_not_ready": 33,
         "materially_rejected": [
           "jurisprudencia-contratos-obras",
           "piloto-preview"
@@ -976,14 +963,54 @@
           "piloto-preview"
         ],
         "verdicts": {
+          "triagem-tecnica": {
+            "ready": false,
+            "sample": [
+              "/triagem-tecnica/"
+            ],
+            "blocking": [
+              "specific_value",
+              "cta_subordinate"
+            ],
+            "material": []
+          },
+          "prontidao-tecnica-obra-privada": {
+            "ready": false,
+            "sample": [
+              "/ferramentas/prontidao-tecnica-obra-privada/"
+            ],
+            "blocking": [
+              "specific_value"
+            ],
+            "material": []
+          },
           "home": {
             "ready": false,
             "sample": [
               "/"
             ],
             "blocking": [
+              "caveats_preserved"
+            ],
+            "material": []
+          },
+          "servicos-corporativos": {
+            "ready": false,
+            "sample": [
+              "/servicos/"
+            ],
+            "blocking": [
               "answer_first",
-              "caveats_preserved",
+              "specific_value"
+            ],
+            "material": []
+          },
+          "private-engineering-quantities-budget": {
+            "ready": false,
+            "sample": [
+              "/quantitativos-orcamento-obras/"
+            ],
+            "blocking": [
               "cta_subordinate"
             ],
             "material": []
@@ -1108,13 +1135,11 @@
             "material": []
           },
           "especialista": {
-            "ready": false,
+            "ready": true,
             "sample": [
               "/especialista/tiago-jun-sasaki/"
             ],
-            "blocking": [
-              "caveats_preserved"
-            ],
+            "blocking": [],
             "material": []
           },
           "nurture": {
@@ -1181,7 +1206,8 @@
             ],
             "blocking": [
               "substantive",
-              "specific_value"
+              "specific_value",
+              "caveats_preserved"
             ],
             "material": []
           },
@@ -1260,21 +1286,16 @@
               "/analise-cnpj/"
             ],
             "blocking": [
-              "jargon_free",
-              "specific_value",
-              "regression_fixtures"
+              "specific_value"
             ],
             "material": []
           },
           "live-intelligence-cnpj-result": {
-            "ready": false,
+            "ready": true,
             "sample": [
               "/analise-cnpj/r/"
             ],
-            "blocking": [
-              "jargon_free",
-              "regression_fixtures"
-            ],
+            "blocking": [],
             "material": []
           },
           "live-intelligence-opportunity": {
@@ -1286,10 +1307,7 @@
               "/oportunidades/pe-2026-000903-sinalizacao-viaria-caxias-rs/"
             ],
             "blocking": [
-              "jargon_free",
-              "substantive",
-              "specific_value",
-              "regression_fixtures"
+              "specific_value"
             ],
             "material": []
           },
@@ -1464,13 +1482,6 @@
         },
         {
           "gate": "instance_index_ready",
-          "path": "conflitos/index.html",
-          "reason": "indexable_without_evidence",
-          "excerpt": "/conflitos/ blocking=archetype_completeness",
-          "severity": "warn"
-        },
-        {
-          "gate": "instance_index_ready",
           "path": "conteudos/index.html",
           "reason": "indexable_without_evidence",
           "excerpt": "/conteudos/ blocking=freshness",
@@ -1487,7 +1498,7 @@
           "gate": "instance_index_ready",
           "path": "ferramentas/index.html",
           "reason": "indexable_without_evidence",
-          "excerpt": "/ferramentas/ blocking=official_live,archetype_completeness",
+          "excerpt": "/ferramentas/ blocking=archetype_completeness",
           "severity": "warn"
         },
         {
@@ -1548,9 +1559,30 @@
         },
         {
           "gate": "instance_index_ready",
+          "path": "quantitativos-orcamento-obras/index.html",
+          "reason": "indexable_without_evidence",
+          "excerpt": "/quantitativos-orcamento-obras/ blocking=freshness",
+          "severity": "warn"
+        },
+        {
+          "gate": "instance_index_ready",
           "path": "servicos-obras-publicas/index.html",
           "reason": "indexable_without_evidence",
           "excerpt": "/servicos-obras-publicas/ blocking=freshness",
+          "severity": "warn"
+        },
+        {
+          "gate": "instance_index_ready",
+          "path": "servicos/index.html",
+          "reason": "indexable_without_evidence",
+          "excerpt": "/servicos/ blocking=freshness",
+          "severity": "warn"
+        },
+        {
+          "gate": "instance_index_ready",
+          "path": "triagem-tecnica/index.html",
+          "reason": "indexable_without_evidence",
+          "excerpt": "/triagem-tecnica/ blocking=citable_source",
           "severity": "warn"
         },
         {
@@ -1563,21 +1595,22 @@
       ],
       "stats": {
         "schema": "indexation-evidence-v1",
-        "scanned": 249,
-        "noindex": 173,
-        "instance_index_ready": 58,
+        "scanned": 253,
+        "noindex": 174,
+        "instance_index_ready": 59,
         "index_ready_but_noindex": [],
-        "indexable_without_evidence": 18,
+        "indexable_without_evidence": 20,
         "noindex_without_reason": [],
+        "candidate_noindex_pending_family_activation": [],
         "blocking_subgates": {
           "named_gate_verdict": 114,
           "public_safe": 98,
-          "citable_source": 47,
-          "freshness": 46,
-          "archetype_completeness": 45,
+          "citable_source": 49,
+          "freshness": 48,
+          "archetype_completeness": 42,
           "self_canonical": 16,
-          "official_live": 14,
           "record_specific_content": 12,
+          "official_live": 11,
           "no_cannibalization": 11,
           "materially_distinct_grain": 5,
           "not_redirect_source": 2

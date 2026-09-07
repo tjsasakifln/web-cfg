@@ -25,6 +25,16 @@ PR #6 (`lighthouse` 13.4.1) left `pSEO quality gates` red while `site-ci` could 
 | Required | Workflow file | Job id | Check context name |
 |----------|---------------|--------|--------------------|
 | **Yes** | `.github/workflows/site-ci.yml` | `gates` | **`site-ci`** |
+
+`site-ci` now runs as four jobs — `build`, a `browser` matrix of ten isolated
+suites, `scorecard`, and `gates`. Only `gates` carries the required context name
+**`site-ci`**; the other eleven job contexts appear on every PR and are not
+required individually. `gates` approves only when every job result is exactly
+`success` **and** every suite declared in `data/quality/site-ci-suites.json`
+left a passing marker, so a suite dropped from the matrix blocks the merge
+instead of vanishing quietly. That decision lives in
+`scripts/site/verify_site_ci_aggregate.py` and is tested, refusal by refusal, in
+`scripts/site/test_site_ci_aggregate.py`.
 | **Yes** | `.github/workflows/pseo.yml` | `pseo` | **`pSEO quality gates`** |
 | No (fail-closed advisory) | `.github/workflows/codeql.yml` | `analyze` | `Analyze` (matrix) |
 
@@ -37,7 +47,12 @@ and repository setting are verified together.
 
 - Both workflows run on **pull_request** → `main` and **push** → `main`
 - Install is hard **`npm ci`** (no `|| npm install`)
-- No `continue-on-error: true` on site-ci, pSEO, or CodeQL central fail paths
+- No `continue-on-error: true` anywhere in site-ci (asserted over the whole
+  workflow, not just the aggregator job: on the browser job or its run step it
+  would forge a green `job.status` into a suite's status marker), nor on pSEO or
+  CodeQL central fail paths. `fail-fast: false` on the browser matrix is not an
+  exemption — it stops one suite from cancelling the others, and every suite
+  result is still required.
 - Shape asserted by `python3 scripts/site/test_workflow_gates.py` / `npm run test:workflow-gates`
 
 ## Controlled red/green proof (local)

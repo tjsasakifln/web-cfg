@@ -36,7 +36,7 @@
     ],
     "sampling": {
       "enabled": false,
-      "reason": "full price+capture coverage fits inside the 45-minute site-ci budget; no current risk route is sampled away",
+      "reason": "full price+capture coverage fits inside the per-job site-ci budget (the single 45-minute job was split into build/browser-matrix/scorecard/gates); no current risk route is sampled away",
       "max_routes_per_family": null,
       "seed_source": "iso_week"
     }

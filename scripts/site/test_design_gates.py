@@ -420,7 +420,16 @@ def test_primary_cta_not_spam():
     # gate separately proves that only one is visible in the first fold.
     assert primary <= 5, f"too many primary CTAs on home: {primary}"
     assert "Escolher minha situação" in html
-    assert "Iniciar triagem por e-mail" in html
+    # 2026-09-06 (#618): the home carried three near-homonym verbs with two
+    # different consequences. "Iniciar triagem por e-mail" and "Iniciar triagem
+    # pelo WhatsApp" only open a draft or a conversation — nothing is registered
+    # — while the submit below really does record. The channel labels moved to
+    # the "contact opened" form; the submit label is pinned by the renderer and
+    # is deliberately unchanged, so the collision is resolved on the channel side.
+    assert "Escrever um e-mail para a CONFENGE" in html
+    assert "Abrir conversa no WhatsApp" in html
+    assert "Iniciar triagem por e-mail" not in html
+    assert "Iniciar triagem pelo WhatsApp" not in html
     assert "Registrar situação para triagem" in html
     # Secondary path must not share primary button class in hero
     hero = re.search(r'class="hero[\s\S]*?</section>', html)
@@ -1434,3 +1443,295 @@ def run_all() -> int:
 
 if __name__ == "__main__":
     sys.exit(run_all())
+
+
+# --- #617: first fold of /servicos/ -----------------------------------------
+# These assertions read the <style data-corporate-services-critical=""> block of
+# servicos/index.html, which is the CSS this route ACTUALLY loads. The route does
+# not link assets/home-10x.css; the copy of these rules living there (around
+# lines 563-575) is inert for /servicos/, so writing a gate against that sheet
+# would be writing against a file that changes nothing on the page.
+
+SERVICOS = ROOT / "servicos" / "index.html"
+
+
+def _servicos_critical_css():
+    html = SERVICOS.read_text(encoding="utf-8")
+    match = re.search(
+        r'<style data-corporate-services-critical=""\s*>(.*?)</style>', html, re.DOTALL
+    )
+    assert match, "servicos/index.html lost its critical style block"
+    return match.group(1)
+
+
+def test_servicos_fold_css_reaches_the_route():
+    """R9: the tokens are pinned in the sheet the route loads, not in the inert copy."""
+    html = SERVICOS.read_text(encoding="utf-8")
+    assert "home-10x.css" not in html, (
+        "servicos/index.html must not start linking the inert sheet; "
+        "the fold tokens belong to its own critical block"
+    )
+    assert html.count('rel="stylesheet"') == 1
+
+    css = _servicos_critical_css()
+    for selector in (
+        ".services-fold-preview",
+        ".services-fold-output",
+        ".services-fold-actions",
+        ".services-fold-alt",
+    ):
+        assert selector in css, f"fold token missing from the loaded CSS: {selector}"
+
+
+def test_servicos_fold_typography_stays_above_the_approved_floor():
+    """R8/R10: no shrinking below the approved tokens to buy height.
+
+    css_type_floor.py does not cover this route (it neither reads inline <style>
+    blocks nor matches .section-lead/.eyebrow/.service-output), so the declared
+    values are pinned literally here. The COMPUTED floor still has to be measured
+    in a browser; this gate is the source-side half of that pair.
+    """
+    css = _servicos_critical_css()
+    sizes = [float(v) for v in re.findall(r"font-size:\s*\.?(\d*\.?\d+)rem", css)]
+    assert sizes, "no literal font-size found in the fold CSS"
+    # 0.875rem == 14px is the approved floor; 12.8px (0.8rem) is the hard floor.
+    assert min(sizes) >= 0.875, f"fold typography dropped below .875rem: {min(sizes)}"
+
+    assert "font-size:.9375rem" in css.replace(" ", "")
+    assert re.search(r"\.services-fold-preview a\{[^}]*min-height:44px", css), (
+        "the preview targets lost their 44px touch height"
+    )
+
+
+def test_servicos_fold_does_not_reorder_content_with_css():
+    """R14: DOM order stays the reading order; nothing is reordered visually."""
+    css = _servicos_critical_css()
+    for banned in ("order:", "flex-direction:row-reverse", "flex-direction:column-reverse"):
+        assert banned not in css.replace(" ", ""), f"visual reordering introduced: {banned}"
+    assert not re.search(r"grid-row:\s*\d", css), "explicit grid-row reordering introduced"
+
+
+def test_servicos_fold_has_one_dominant_action_and_a_declared_alternative():
+    """R2/R5: one dominant action, a recognizable choice, one alternative path.
+
+    The count of primary actions inside the fold rectangle is a MEASUREMENT and
+    is not claimed here. What is checked structurally: the hero carries exactly
+    one primary action, the five situations are previewed as plain internal
+    navigation, and the alternative path is the wa.me text-link that already
+    existed in <main>.
+    """
+    html = SERVICOS.read_text(encoding="utf-8")
+    hero = re.search(
+        r'<section[^>]*class="section corporate-services-hero"[\s\S]*?</section>', html
+    )
+    assert hero, "corporate-services-hero missing"
+    fold = hero.group(0)
+
+    assert fold.count("button-primary") == 1, "the fold must carry exactly one primary action"
+    assert 'data-cta-id="services-private-quantities-budget"' in fold, (
+        "the dominant action must be the already declared one, repositioned"
+    )
+    assert 'href="/quantitativos-orcamento-obras/"' in fold
+
+    for anchor in (
+        "#servico-projeto",
+        "#servico-diagnostico",
+        "#servico-pericia",
+        "#servico-sst",
+        "#servico-obras-publicas",
+    ):
+        assert f'href="{anchor}"' in fold, f"situation preview missing: {anchor}"
+        assert f'id="{anchor[1:]}"' in html, f"preview points at a missing anchor: {anchor}"
+
+    # The preview is recognition navigation: it must not create declared CTAs.
+    preview = re.search(r'<ul class="services-fold-preview">[\s\S]*?</ul>', fold).group(0)
+    for attribute in ("data-cta-id", "data-next-action-id", "data-cta-position", "button-primary"):
+        assert attribute not in preview, f"the preview created a declared CTA: {attribute}"
+    assert "wa.me" not in preview and "mailto:" not in preview
+
+    # Alternative path, and the terminal action the family declares.
+    assert "wa.me/5548988344559" in fold, "the alternative channel is not in the fold"
+    main = re.search(r"<main\b[\s\S]*?</main>", html).group(0)
+    assert main.count("wa.me") == 1, "the WhatsApp anchor was duplicated or left <main>"
+
+
+def test_servicos_fold_names_a_published_delivery_before_any_limit_copy():
+    """R6: a concrete, already published deliverable precedes limit copy.
+
+    The sweep starts at the first element of the fold inside <main>; the
+    header's "Iniciar triagem" CTA sits before all of <main> and would make the
+    criterion unsatisfiable.
+    """
+    html = SERVICOS.read_text(encoding="utf-8")
+    main = re.search(r"<main\b[\s\S]*?</main>", html).group(0)
+
+    delivery = main.find("orçamento de obra com quantitativos")
+    assert delivery > 0, "no concrete published deliverable named in the fold"
+
+    for limit_word in ("aderência", "limites", "triagem"):
+        position = main.lower().find(limit_word.lower())
+        if position != -1:
+            assert delivery < position, (
+                f"limit copy '{limit_word}' precedes the named deliverable"
+            )
+
+    # Only PUBLISHED offers may be named as a deliverable. Compatibilização,
+    # inspeção, laudo, parecer and quesitos are DEFERRED/WITHHELD in #611 and
+    # must not appear as available deliveries inside the fold.
+    fold = re.search(
+        r'<section[^>]*class="section corporate-services-hero"[\s\S]*?</section>', html
+    ).group(0)
+    output = re.search(r'<p class="services-fold-output">[\s\S]*?</p>', fold).group(0)
+    for withheld in ("laudo", "parecer", "quesitos", "inspeção", "compatibilização"):
+        assert withheld not in output.lower(), (
+            f"the fold offers a DEFERRED/WITHHELD deliverable as available: {withheld}"
+        )
+
+
+# --- #619: evidence module pilots -------------------------------------------
+# Route-exact. These are added AFTER #617's fold assertions and do not rewrite
+# or weaken them. Neither pilot route is in archetype_gated_surfaces, so neither
+# module carries data-section-archetype: annotating without gating would produce
+# an inert label.
+
+QTY_ROUTE = ROOT / "quantitativos-orcamento-obras" / "index.html"
+CASOS_ROUTE = ROOT / "casos" / "index.html"
+PILOTS = (
+    ("qty_trace_matrix_v1", QTY_ROUTE, "method"),
+    ("cases_field_dictionary_v1", CASOS_ROUTE, "artifact"),
+)
+
+
+def _module_block(path, asset_id):
+    html = path.read_text(encoding="utf-8")
+    match = re.search(
+        r'<div class="evidence-module[^"]*"[^>]*data-visual-asset-id="'
+        + re.escape(asset_id)
+        + r'"[^>]*>.*?\n</div>',
+        html,
+        re.DOTALL,
+    )
+    assert match, f"evidence module not found: {asset_id}"
+    return match.group(0)
+
+
+def test_evidence_modules_are_declared_with_role_and_provenance():
+    system = json.loads((ROOT / "data" / "site" / "design-system.json").read_text(encoding="utf-8"))
+    assert system["schema_version"] == "1.0.0", "schema_version must not be bumped"
+    roles = system["visual_roles"]
+    proof_ids = {c["id"] for c in json.loads(
+        (ROOT / "data" / "site" / "proof.json").read_text(encoding="utf-8")
+    )["claims"]}
+
+    declared = {asset["id"]: asset for asset in roles["assets"]}
+    for asset_id, _path, role in PILOTS:
+        asset = declared[asset_id]
+        assert asset["role"] == role
+        for field in ("origin", "usage_right", "claim_supported", "forbidden_inference",
+                      "label_text", "withdrawal"):
+            assert asset.get(field), f"{asset_id} missing {field}"
+        # Provenance BY REFERENCE to an id that already exists.
+        assert asset["claim_supported"] in proof_ids, asset["claim_supported"]
+
+    # No key consumed by another gate may be disturbed by the new block.
+    for key in ("performance_budget", "colors", "public_copy_leaks", "archetype_gated_surfaces"):
+        assert key in system, key
+
+
+def test_evidence_modules_carry_the_synthetic_caveat_before_the_first_number():
+    """The caveat renders without interaction and precedes the first number."""
+    for asset_id, path, _role in PILOTS:
+        block = _module_block(path, asset_id)
+        assert 'data-demonstration="synthetic"' in block, asset_id
+
+        caveat = re.search(r'<p class="evidence-module__caveat">(.*?)</p>', block, re.DOTALL)
+        assert caveat, f"{asset_id} lost its caveat"
+        assert re.search(r"sint[ée]tic", caveat.group(1), re.IGNORECASE), asset_id
+
+        # Not behind a click or a hover.
+        for interactive in ("<details", "<summary", 'role="tab"', "tooltip", "accordion"):
+            assert interactive not in block.lower(), f"{asset_id} hid the caveat behind {interactive}"
+
+        # Position: the caveat precedes the first digit-bearing cell of the table.
+        caveat_end = block.index("</p>", block.index("evidence-module__caveat"))
+        table_at = block.index("<table")
+        assert caveat_end < table_at, f"{asset_id} caveat does not precede the table"
+
+
+def test_evidence_modules_reflow_instead_of_scrolling_sideways():
+    """C4: readable at 390px with no horizontal scroll of page OR container."""
+    for _asset_id, path, _role in PILOTS:
+        html = path.read_text(encoding="utf-8")
+        css = re.search(
+            r'<style data-evidence-module-critical=""\s*>(.*?)</style>', html, re.DOTALL
+        )
+        assert css, f"{path.name} lost the evidence module CSS"
+        # Strip CSS comments first: the rationale comment names the very
+        # properties being banned, and matching it would be matching prose.
+        rules = re.sub(r"/\*.*?\*/", " ", css.group(1), flags=re.DOTALL)
+        compact = rules.replace(" ", "")
+        assert "overflow-x:auto" not in compact
+        assert "overflow-y:auto" not in compact
+        # nowrap is allowed only for the visually hidden <thead>, never for cells.
+        assert "white-space:nowrap" not in compact.replace(
+            "clip-path:inset(50%);white-space:nowrap", ""
+        )
+        assert "min-width" not in compact
+        # The reflow itself: cells become blocks and carry their own label.
+        assert "display:block" in compact
+        assert "content:attr(data-label)" in compact
+
+
+def test_evidence_modules_expose_every_field_on_every_row():
+    """Row 2 of aceite: no empty cell, no placeholder, no column-label echo."""
+    for asset_id, path, _role in PILOTS:
+        block = _module_block(path, asset_id)
+        headers = re.findall(r'<th scope="col">(.*?)</th>', block)
+        assert len(headers) >= 4, asset_id
+        rows = re.findall(r"<tr>\s*<th data-label.*?</tr>", block, re.DOTALL)
+        assert rows, f"{asset_id} has no data row"
+        for row in rows:
+            cells = re.findall(r'<(?:th|td) data-label="([^"]+)"[^>]*>(.*?)</(?:th|td)>',
+                               row, re.DOTALL)
+            assert len(cells) == len(headers), f"{asset_id}: row does not fill every column"
+            for label, value in cells:
+                text = re.sub(r"<[^>]+>", "", value).strip()
+                assert text, f"{asset_id}: empty cell under {label}"
+                assert text.lower() not in {label.lower(), "a definir", "conforme escopo"}, (
+                    f"{asset_id}: placeholder or column-label echo under {label}"
+                )
+
+
+def test_evidence_modules_claim_no_client_proof_and_no_validation():
+    """Nothing in the module says the structure was validated in real work."""
+    for asset_id, path, _role in PILOTS:
+        block = _module_block(path, asset_id)
+        # The caveat is the disclaimer: it legitimately uses words like "cliente"
+        # inside a negation ("nao descrevem obra, contrato, orgao ou cliente
+        # real"). Scanning it for those words would fail the module for denying
+        # exactly what it must deny, so the assertion runs on the rest.
+        body = re.sub(
+            r'<p class="evidence-module__caveat">.*?</p>', " ", block, flags=re.DOTALL
+        ).lower()
+        for forbidden in (
+            "validad", "conferido em contrato", "aplicado em obra",
+            "utilizado em contrato", "estrutura comprovada", "metodo comprovado",
+            "depoimento", "economia de",
+        ):
+            assert forbidden not in body, f"{asset_id} claims {forbidden}"
+        # A client claim needs the noun in an affirmative sentence. The caveat is
+        # already excluded, so any remaining occurrence is an actual claim.
+        for client_noun in ("cliente", "contratante", "contratada"):
+            assert client_noun not in body, f"{asset_id} claims a client: {client_noun}"
+        # Synthetic numbers must not collide with published CONFENGE bands.
+        for band in ("r$ 6.900", "r$ 7.900", "r$ 12.500", "r$ 20.000", "r$ 2.900", "r$ 599"):
+            assert band not in block, f"{asset_id} reuses a published fee value: {band}"
+
+
+def test_evidence_modules_introduce_no_person_or_source_asset():
+    """Row 4 of aceite: no photo becomes a credential, no PNCP record a client."""
+    for _asset_id, path, _role in PILOTS:
+        html = path.read_text(encoding="utf-8")
+        assert 'data-visual-role="person"' not in html, path.name
+        assert 'data-visual-role="source"' not in html, path.name
+        assert "pncp.gov.br" not in html, path.name

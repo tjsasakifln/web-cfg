@@ -3,7 +3,7 @@
 - ok: `True`
 - pages: `79`
 - defects: `0`
-- site_root: `/home/tjsasakifln/code/confenge/.worktrees/web-cfg/mv-09-commercial-production-20260905/_site`
+- site_root: `/home/tjsasakifln/code/confenge/.worktrees/web-cfg/c618/_site`
 
 | url | ok | defects | claimed | visible |
 | --- | --- | --- | --- | --- |
@@ -84,5 +84,5 @@
 | https://confenge.com.br/servicos-obras-publicas/ | True | — | BreadcrumbList | Serviços para licitações e contratos de obras públicas |
 | https://confenge.com.br/servicos/ | True | — | BreadcrumbList | Encontre o caminho técnico para a sua situação |
 | https://confenge.com.br/termos-de-uso/ | True | — |  | Termos de Uso |
-| https://confenge.com.br/triagem-tecnica/ | True | — |  | Explique sua situação em menos de um minuto |
+| https://confenge.com.br/triagem-tecnica/ | True | — |  | Explique sua situação técnica para a CONFENGE |
 | https://confenge.com.br/uso-de-ia/ | True | — | Organization,Person,BreadcrumbList | Uso material de inteligência artificial |

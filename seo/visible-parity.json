@@ -4508,15 +4508,15 @@
         "breadcrumb_names": [],
         "canonical": "https://confenge.com.br/triagem-tecnica/",
         "dates": [
-          "2026-09-05"
+          "2026-09-06"
         ],
-        "description": "Vamos registrar o tipo de problema, seu nome e um canal de retorno.",
-        "h1": "Explique sua situação em menos de um minuto",
+        "description": "Descreva o tipo de problema técnico pelo formulário, quando disponível, ou pelos canais diretos: WhatsApp, e-mail e telefone.",
+        "h1": "Explique sua situação técnica para a CONFENGE",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": null,
         "reviewers": [],
-        "title": "Triagem técnica | CONFENGE",
+        "title": "Triagem técnica e canais diretos | CONFENGE",
         "versions": []
       }
     },
@@ -4577,5 +4577,5 @@
       }
     }
   ],
-  "site_root": "/home/tjsasakifln/code/confenge/.worktrees/web-cfg/mv-09-commercial-production-20260905/_site"
+  "site_root": "/home/tjsasakifln/code/confenge/.worktrees/web-cfg/c618/_site"
 }

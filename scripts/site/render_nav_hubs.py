@@ -88,6 +88,56 @@ def _offer_fit_copy(route_key: str) -> dict[str, str]:
     return {"headline": str(headline), "body": str(body)}
 
 
+def _market_context_html(hub_url: str) -> str:
+    """Render the PNCP market-context depth block owned by this hub.
+
+    #620 moved the full illustration off the home and into the hub named by
+    `home_illustrations[].depth_route`, but wrote it straight into the
+    generated document. `--check` then reported drift and `--write` deleted the
+    migrated block. The panel is data, so it is rendered here from the matrix:
+    `copy`, `contract_display` and `pncp_path` are the values
+    `tests/commercial/test_offer_fit_copy.mjs` reads back off the shipped HTML.
+    The framing prose stays a template literal, like every other block in this
+    generator.
+    """
+    payload = json.loads(OFFER_FIT_MATRIX.read_text(encoding="utf-8"))
+    panels = [
+        panel
+        for panel in (payload.get("home_illustrations") or [])
+        if str(panel.get("depth_route") or "").split("#")[0] == hub_url
+    ]
+    if not panels:
+        return ""
+    cards = []
+    for panel in panels:
+        for field in ("contract_display", "pncp_path", "copy"):
+            if not panel.get(field):
+                raise ValueError(f"home_illustrations panel missing {field}: {panel.get('panel')}")
+        cards.append(
+            '<article class="service-card">\n'
+            f'<h3>Até R$ 250 mil</h3>\n'
+            f'<p><strong>Contrato observado:</strong> {e(panel["contract_display"])}.</p>\n'
+            f'<p data-economics-illustration="1">{e(panel["copy"])}</p>\n'
+            f'<p><a href="https://{e(panel["pncp_path"])}" rel="noopener" target="_blank">'
+            "Conferir o contrato no PNCP</a></p>\n"
+            "</article>"
+        )
+    return (
+        '<section aria-labelledby="mercado-referencia-title" '
+        'class="section section--tight market-context" id="mercado-referencia">\n'
+        '<div class="container">\n'
+        '<p class="eyebrow">Contexto de mercado · PNCP</p>\n'
+        '<h2 id="mercado-referencia-title">Quando a análise se paga, e quando não se paga</h2>\n'
+        "<p>Um contrato público de menor porte mostra a faixa usada na triagem. "
+        "É referência de mercado, não cliente, case ou economia atribuída à CONFENGE.</p>\n"
+        + "\n".join(cards)
+        + "\n<p><strong>Fonte: PNCP, consulta pública.</strong> Contrato conferido em "
+        "21/08/2026. Contexto de mercado. Números não representam resultados de clientes.</p>\n"
+        "</div>\n"
+        "</section>"
+    )
+
+
 def _breadcrumbs(url: str, current: str) -> str:
     return breadcrumbs_html(breadcrumb_trail(url, current_label=current))
 
@@ -206,6 +256,21 @@ def _preserve_managed_extensions(rendered: str, current: str | None) -> str:
                 raise ValueError("managed extension stylesheet insertion point missing: </head>")
             next_document = next_document.replace("</head>", f"{stylesheet}\n</head>", 1)
     return next_document
+
+
+def _append_market_context(rendered: str, url: str) -> str:
+    """Put the PNCP depth block last in <main>, after the managed extension.
+
+    It runs after `_preserve_managed_extensions` so the shipped reading order
+    survives regeneration: the services grid, then the contract-defense hub
+    with its capture form, then the market context.
+    """
+    block = _market_context_html(url)
+    if not block:
+        return rendered
+    if "</main>" not in rendered:
+        raise ValueError("market context insertion point missing: </main>")
+    return rendered.replace("</main>", f"{block}\n</main>", 1)
 
 
 def _preserve_staged_shell(rendered: str, current: str | None, url: str) -> str:
@@ -389,6 +454,7 @@ def run(write: bool) -> int:
         current = path.read_text(encoding="utf-8") if path.exists() else None
         text = _preserve_staged_shell(text, current, url)
         text = _preserve_managed_extensions(text, current)
+        text = _append_market_context(text, url)
         if current == text:
             continue
         drift.append(url)

@@ -156,7 +156,7 @@
         "h1": "Encontre o caminho técnico para a sua situação",
         "lead": "Comece pelo problema que precisa ser resolvido. A triagem confirma aderência, limites e o entregável aplicável.",
         "eyebrow": "Serviços organizados por situação",
-      "index_state": "index"
+        "index_state": "index"
       },
       "services": {
         "label": "Serviços",
@@ -283,10 +283,14 @@
     "legacy_name": "diagnostico-confenge",
     "stages": [
       "problema urgente em contrato",
-      "edital ou proposta em preparação",
-      "estruturando a operação B2G",
+      "edital ou proposta em análise",
+      "estruturando a operação no mercado público",
       "escolhendo oportunidades",
       "contrato em execução",
+      "engenharia-edificacoes",
+      "pericia-assistencia-tecnica",
+      "avaliacao-imoveis",
+      "seguranca-do-trabalho",
       "outro"
     ],
     "urgency": [

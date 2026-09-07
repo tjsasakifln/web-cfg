@@ -124,15 +124,33 @@ def test_org_description_consistent():
 
 
 def test_whatsapp_contextual_on_home():
+    """Every home WhatsApp link must open with context, not a bare number.
+
+    This used to be satisfied by one of four B2G phrases ("problema urgente",
+    "decisão crítica", ...). #616 neutralised the contact channel because it was
+    announcing an urgent public-contract problem on a form that now serves five
+    nuclei, and forcing a B2G phrase back would recreate exactly that. The
+    property worth protecting is that the visitor arrives in the conversation
+    with their situation already stated, whatever the situation is.
+    """
+    import urllib.parse
+
     html = (ROOT / "index.html").read_text(encoding="utf-8")
     assert "wa.me/5548988344559" in html
-    # Contextual prefill for urgent contract / critical decision path
-    assert (
-        "decis%C3%A3o%20cr%C3%ADtica" in html
-        or "cr%C3%ADtica" in html
-        or "an%C3%A1lise%20inicial" in html
-        or "problema%20urgente" in html
-    )
+
+    links = re.findall(r'href="(https://wa\.me/5548988344559[^"]*)"', html)
+    assert links, "the home has no WhatsApp link"
+    for link in links:
+        query = urllib.parse.urlparse(link).query
+        text = urllib.parse.parse_qs(query).get("text", [""])[0]
+        assert len(text) >= 40, f"WhatsApp link opens with no usable context: {link}"
+        # It must name a situation, not merely greet.
+        assert re.search(
+            r"situa[çc][ãa]o|demanda|problema|contrato|obra|per[íi]cia|avalia[çc][ãa]o|"
+            r"seguran[çc]a do trabalho|quantitativos|or[çc]amento",
+            text,
+            re.IGNORECASE,
+        ), f"WhatsApp prefill states no situation: {text}"
 
 
 def test_radar_not_empty_wave_message():

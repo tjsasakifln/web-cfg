@@ -1,0 +1,16 @@
+{
+  "schema": "confenge.site-ci-suites/1.0",
+  "note": "The browser suites site-ci runs in isolated runners. This file is the single source of truth for the matrix AND for the aggregator's coverage check, so a suite cannot be dropped from the matrix without the required check noticing. Adding a suite here without wiring its command in the workflow's dispatch fails the workflow-shape test.",
+  "suites": [
+    "csp-convergence",
+    "money-canary",
+    "capture-states",
+    "ui-geometry",
+    "layout-sitewide",
+    "deliverables-hub-ui",
+    "axe",
+    "lighthouse",
+    "tools-uiux",
+    "playwright-checklist"
+  ]
+}
