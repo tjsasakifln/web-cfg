@@ -171,3 +171,22 @@ button:disabled {
     text-align: center;
   }
 }
+
+/* O canal de correção carrega e-mail e URL: tokens longos que não quebram
+   sozinhos. A 200% de zoom eles estouravam a viewport. */
+.site-correction-channels {
+  list-style: none;
+  padding: 0;
+  margin: .75rem 0 0;
+  display: grid;
+  gap: .5rem;
+}
+.site-correction-channels a,
+.site-correction a {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+.site-correction-note {
+  margin-top: .75rem;
+  color: #4a5b6b;
+}
