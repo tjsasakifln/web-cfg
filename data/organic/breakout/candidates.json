@@ -44,7 +44,7 @@
       "author": "Engº Tiago Sasaki",
       "reviewer": "CONFENGE / editorial",
       "refresh_owner": "CONFENGE / organic-breakout",
-      "correction_route": "/correcoes/",
+      "correction_route": "/triagem-tecnica/#corrigir-o-site",
       "cta": {
         "id": "conferir-base-sinapi",
         "label": "Ver auditoria de orçamento e edital",
@@ -54,9 +54,18 @@
         "source": "CONFENGE_WEB"
       },
       "internal_links": [
-        {"href": "/auditoria-orcamento-licitacao/", "label": "Hub de orçamento e BDI"},
-        {"href": "/conteudos/bdi-diferenciado-obra-publica/", "label": "BDI diferenciado em materiais e equipamentos"},
-        {"href": "/ferramentas/diagnostico-defesa-margem/", "label": "Diagnóstico de defesa de margem"}
+        {
+          "href": "/auditoria-orcamento-licitacao/",
+          "label": "Hub de orçamento e BDI"
+        },
+        {
+          "href": "/conteudos/bdi-diferenciado-obra-publica/",
+          "label": "BDI diferenciado em materiais e equipamentos"
+        },
+        {
+          "href": "/ferramentas/diagnostico-defesa-margem/",
+          "label": "Diagnóstico de defesa de margem"
+        }
       ],
       "demand_claim": "historical_labeled",
       "publication_requires_live_demand": false,
@@ -102,7 +111,7 @@
       "author": "Engº Tiago Sasaki",
       "reviewer": "CONFENGE / editorial",
       "refresh_owner": "CONFENGE / organic-breakout",
-      "correction_route": "/correcoes/",
+      "correction_route": "/triagem-tecnica/#corrigir-o-site",
       "cta": {
         "id": "auditar-bdi",
         "label": "Ver auditoria de orçamento e edital",
@@ -112,9 +121,18 @@
         "source": "CONFENGE_WEB"
       },
       "internal_links": [
-        {"href": "/auditoria-orcamento-licitacao/", "label": "Hub de orçamento e BDI"},
-        {"href": "/conteudos/sinapi-desonerado-nao-desonerado/", "label": "SINAPI desonerado ou não desonerado"},
-        {"href": "/ferramentas/diagnostico-defesa-margem/", "label": "Diagnóstico de defesa de margem"}
+        {
+          "href": "/auditoria-orcamento-licitacao/",
+          "label": "Hub de orçamento e BDI"
+        },
+        {
+          "href": "/conteudos/sinapi-desonerado-nao-desonerado/",
+          "label": "SINAPI desonerado ou não desonerado"
+        },
+        {
+          "href": "/ferramentas/diagnostico-defesa-margem/",
+          "label": "Diagnóstico de defesa de margem"
+        }
       ],
       "demand_claim": "historical_labeled",
       "publication_requires_live_demand": false,
@@ -160,7 +178,7 @@
       "author": "Engº Tiago Sasaki",
       "reviewer": "CONFENGE / editorial",
       "refresh_owner": "CONFENGE / organic-breakout",
-      "correction_route": "/correcoes/",
+      "correction_route": "/triagem-tecnica/#corrigir-o-site",
       "cta": {
         "id": "verificar-saldo-aditivo",
         "label": "Abrir o verificador de limite de acréscimos e supressões",
@@ -170,10 +188,22 @@
         "source": "CONFENGE_WEB"
       },
       "internal_links": [
-        {"href": "/aditivos-obras-publicas/", "label": "Hub de aditivos e serviços extras"},
-        {"href": "/ferramentas/limite-acrescimos-supressoes/", "label": "Verificador de acréscimos e supressões"},
-        {"href": "/ferramentas/diagnostico-defesa-margem/", "label": "Diagnóstico de defesa de margem"},
-        {"href": "/lei-14133-obras/art-124-alteracao-contratual-obra/", "label": "Art. 124: alteração unilateral ou acordo"}
+        {
+          "href": "/aditivos-obras-publicas/",
+          "label": "Hub de aditivos e serviços extras"
+        },
+        {
+          "href": "/ferramentas/limite-acrescimos-supressoes/",
+          "label": "Verificador de acréscimos e supressões"
+        },
+        {
+          "href": "/ferramentas/diagnostico-defesa-margem/",
+          "label": "Diagnóstico de defesa de margem"
+        },
+        {
+          "href": "/lei-14133-obras/art-124-alteracao-contratual-obra/",
+          "label": "Art. 124: alteração unilateral ou acordo"
+        }
       ],
       "demand_claim": "historical_labeled",
       "publication_requires_live_demand": false,

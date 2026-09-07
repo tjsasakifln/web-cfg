@@ -10,7 +10,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 HOME = ROOT / "index.html"
 SERVICES = ROOT / "servicos" / "index.html"
-B2G_FORM_SHA256 = "0f49d7f5f23da5ecc2e58c282d0a57a3bd0d56aabdad678c53165ed85b5883a4"
+B2G_FORM_SHA256 = "85631a4c47428e945e79c58ec7a4783b52e22a93956192687b0920265b09000b"
 
 
 def _home() -> str:
@@ -87,7 +87,18 @@ def test_corporate_triage_is_safe_and_b2g_form_is_unchanged() -> None:
     assert "wa.me/5548988344559" in triage
     assert "Não envie documentos sensíveis" in triage
     assert 'type="file"' not in html.lower()
-    digest = hashlib.sha256(form.group(0).encode("utf-8")).hexdigest()
+    body = form.group(0)
+    # Invariantes estruturais primeiro: elas dizem o que a trava existe para
+    # proteger. O hash vem depois, como deteccao de qualquer mudanca nao
+    # revisada -- inclusive de copy.
+    assert re.findall(r'<form[^>]*action="([^"]*)"', body) == ["/obrigado"]
+    assert 'method="POST"' in body and 'name="diagnostico-b2g"' in body
+    controls = sorted(re.findall(r'<(?:input|select|textarea)\b[^>]*name="([^"]+)"', body))
+    assert len(controls) == 23, controls
+    required = sorted(re.findall(r'<(?:input|select|textarea)\b[^>]*name="([^"]+)"[^>]*required', body))
+    assert len(required) == 3, required
+    assert 'type="file"' not in body.lower()
+    digest = hashlib.sha256(body.encode("utf-8")).hexdigest()
     assert digest == B2G_FORM_SHA256
     assert 'name="diagnostico-b2g"' in form.group(0)
     assert 'name="document_intent" type="hidden" value="secure_channel_request"' in form.group(0)
