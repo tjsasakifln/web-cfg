@@ -192,15 +192,15 @@
             "visible_text": "Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
             "visible": true,
             "required": [
-              "public_contract_id",
               "contract_event",
-              "opportunity_deadline",
-              "contract_stage",
               "nome",
               "consentimento",
               "email_or_whatsapp"
             ],
             "optional": [
+              "public_contract_id",
+              "opportunity_deadline",
+              "contract_stage",
               "empresa",
               "email",
               "telefone",
@@ -1732,15 +1732,15 @@
             "visible_text": "Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
             "visible": true,
             "required": [
-              "public_contract_id",
               "contract_event",
-              "opportunity_deadline",
-              "contract_stage",
               "nome",
               "consentimento",
               "email_or_whatsapp"
             ],
             "optional": [
+              "public_contract_id",
+              "opportunity_deadline",
+              "contract_stage",
               "empresa",
               "email",
               "telefone",
@@ -1940,15 +1940,15 @@
             "visible_text": "Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
             "visible": true,
             "required": [
-              "public_contract_id",
               "contract_event",
-              "opportunity_deadline",
-              "contract_stage",
               "nome",
               "consentimento",
               "email_or_whatsapp"
             ],
             "optional": [
+              "public_contract_id",
+              "opportunity_deadline",
+              "contract_stage",
               "empresa",
               "email",
               "telefone",
@@ -3430,15 +3430,15 @@
             "visible": true,
             "required": [
               "deliverable_id",
-              "public_contract_id",
               "contract_event",
-              "opportunity_deadline",
-              "contract_stage",
               "nome",
               "email",
               "consentimento"
             ],
             "optional": [
+              "public_contract_id",
+              "opportunity_deadline",
+              "contract_stage",
               "mensagem"
             ]
           },
