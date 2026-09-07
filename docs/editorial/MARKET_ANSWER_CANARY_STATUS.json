@@ -1,10 +1,10 @@
 {
   "report": "MARKET_ANSWER_CANARY_STATUS",
   "as_of_report": "2026-09-07",
-  "generated_at": "2026-09-07T07:47:31.746930Z",
+  "generated_at": "2026-09-07T08:00:06.325758Z",
   "freshness_class": "STALE",
-  "evaluated_at": "2026-09-07T07:47:31.746930Z",
-  "age_seconds": 1808288,
+  "evaluated_at": "2026-09-07T08:00:06.325758Z",
+  "age_seconds": 1809043,
   "expires_at": "2026-08-19T11:29:23.193694+02:00",
   "candidate_decision": {
     "question": "Qual é o valor típico dos contratos públicos de pavimentação em Santa Catarina?",
@@ -157,8 +157,8 @@
       "freshness_expired"
     ],
     "freshness_class": "STALE",
-    "evaluated_at": "2026-09-07T07:47:31.746930Z",
-    "age_seconds": 1808288,
+    "evaluated_at": "2026-09-07T08:00:06.325758Z",
+    "age_seconds": 1809043,
     "expires_at": "2026-08-19T11:29:23.193694+02:00"
   },
   "page_index_state": {
@@ -172,8 +172,8 @@
     "fixture_marked": false,
     "indexable": false,
     "freshness_class": "STALE",
-    "evaluated_at": "2026-09-07T07:47:31.746930Z",
-    "age_seconds": 1808288,
+    "evaluated_at": "2026-09-07T08:00:06.325758Z",
+    "age_seconds": 1809043,
     "expires_at": "2026-08-19T11:29:23.193694+02:00"
   },
   "engagement_events_available": {
