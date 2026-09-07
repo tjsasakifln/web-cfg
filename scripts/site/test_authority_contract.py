@@ -27,6 +27,9 @@ from scripts.site.authority import (
     check_consent_slot,
     check_credentials_against_proof,
     check_matrix_slot_coverage,
+    CORRECTION_CHANNEL_HREF,
+    _norm,
+    _strip_tags,
     check_policy_links,
     check_policy_version_consistency,
     check_policy_visible_disclosure,
@@ -38,6 +41,7 @@ from scripts.site.authority import (
     chrome_pages,
     classify_surface,
     combined_policy_html,
+    content_sha256_for_version,
     current_policy_version,
     data_analysis_policy_pages,
     extract_jsonld_blocks,
@@ -350,23 +354,24 @@ def test_public_policies_state_owner_sla_and_are_linked_from_chrome():
     gov = load_governance()
     pages = policy_pages()
     assert pages["editorial"].exists()
-    assert pages["corrections"].exists()
+    assert "corrections" not in pages, "a página autônoma de correções foi descontinuada"
     assert pages["ai_use"].exists()
     assert pages["conflicts"].exists()
     editorial = pages["editorial"].read_text(encoding="utf-8")
-    corrections = pages["corrections"].read_text(encoding="utf-8")
     ai = pages["ai_use"].read_text(encoding="utf-8")
     conflicts = pages["conflicts"].read_text(encoding="utf-8")
     assert "Engº Tiago Sasaki" in editorial
-    assert gov["correction"]["owner_email"] in corrections
+    # O dono da correção continua nomeado, agora no canal real.
+    channel_page = ROOT / CORRECTION_CHANNEL_HREF.partition("#")[0].strip("/") / "index.html"
+    assert gov["correction"]["owner_email"] in channel_page.read_text(encoding="utf-8")
+    # O registro interno continua sem prazo inventado.
     assert gov["correction"]["prazo"] == "UNKNOWN"
     assert gov["correction"]["acknowledge_sla"] == "UNKNOWN"
     assert gov["correction"]["publish_sla"] == "UNKNOWN"
-    assert "2 dias úteis" not in corrections
-    assert "10 dias úteis" not in corrections
     assert "2 dias úteis" not in editorial
     assert "10 dias úteis" not in editorial
-    assert "UNKNOWN" in corrections
+    # A página pública NÃO precisa mais estampar o rótulo interno.
+    assert "UNKNOWN" not in editorial
     assert "inteligência artificial" in ai.lower() or "uso de ia" in ai.lower()
     assert "conflito" in conflicts.lower()
     nav = footer_authority_nav()
@@ -376,13 +381,14 @@ def test_public_policies_state_owner_sla_and_are_linked_from_chrome():
     from scripts.pseo import html_shell
 
     assert "/politica-editorial/" in html_shell.FOOTER
-    assert "/correcoes/" in html_shell.FOOTER
+    assert "/correcoes/" not in html_shell.FOOTER
     assert "/uso-de-ia/" in html_shell.FOOTER
     assert "/conflitos/" in html_shell.FOOTER
     for path in chrome_pages():
         html = path.read_text(encoding="utf-8")
         assert "/politica-editorial/" in html, path
-        assert "/correcoes/" in html, path
+        assert "/correcoes/" not in html, path
+        assert CORRECTION_CHANNEL_HREF in html, path
 
 
 def test_policy_version_consistency_and_visible_disclosure():
@@ -390,7 +396,13 @@ def test_policy_version_consistency_and_visible_disclosure():
     version = current_policy_version(policy)
     assert version
     assert policy["prazo"] == "UNKNOWN"
-    assert set(policy["epistemic_classes"]) == {"FACT", "CALCULATION", "INFERENCE", "UNKNOWN"}
+    assert "epistemic_classes" not in policy, "as etiquetas inglesas saíram do contrato público"
+    assert policy["claim_kinds"] == [
+        "dado observado",
+        "cálculo",
+        "leitura técnica",
+        "o que ainda não sabemos",
+    ]
     errors = check_policy_version_consistency(policy, policy_pages())
     assert not errors, errors
     combined = combined_policy_html()
@@ -399,6 +411,7 @@ def test_policy_version_consistency_and_visible_disclosure():
     assert "2 dias úteis" not in combined
     assert "10 dias úteis" not in combined
     assert "IA que vence" not in combined
+    # O histórico continua legível e continua dizendo o que dizia.
     archives = archived_policy_pages()
     assert archives["historico"].exists()
     assert archives["v1.0.0"].exists()
@@ -742,6 +755,121 @@ def test_jsonld_extractor_reads_shipped_markup():
     assert "CONFENGE" in blob
     assert "Review" not in blob
     assert "AggregateRating" not in blob
+
+
+# --- Retificação da experiência pública (2026-09-07) -------------------------
+# Estes testes existem para provar que a exigência revogada foi SUBSTITUÍDA por
+# uma propriedade, não desligada. Cada um semeia a regressão e exige a reprovação.
+
+
+def test_public_pages_do_not_export_the_internal_vocabulary():
+    """A superfície humana não repete o vocabulário de controle interno."""
+    policy = load_editorial_policy()
+    combined = combined_policy_html()
+
+    # Estado atual: limpo.
+    assert check_policy_visible_disclosure(combined, policy) == []
+
+    # Contracaso: cada termo interno reintroduzido precisa reprovar.
+    for token in ("FACT", "CALCULATION", "INFERENCE", "UNKNOWN", "PII", "handoff", "gates"):
+        seeded = combined + f"<p>Classificação: {token}.</p>"
+        errors = check_policy_visible_disclosure(seeded, policy)
+        assert f"internal_vocabulary_visible:{token}" in errors, (token, errors)
+
+    # E não pode reprovar palavra portuguesa que apenas contém o termo.
+    innocent = combined + "<p>Um fato satisfatório sobre a fatura e o fatorial.</p>"
+    assert check_policy_visible_disclosure(innocent, policy) == []
+
+
+def test_unmeasured_deadline_stays_uninvented_without_forcing_the_token():
+    """A verdade preservada é o prazo não inventado, não a palavra UNKNOWN."""
+    policy = load_editorial_policy()
+
+    # O registro interno continua sem prazo medido...
+    assert policy["prazo"] == "UNKNOWN"
+    gov = load_governance()
+    for key in ("acknowledge_sla", "publish_sla", "prazo"):
+        assert gov["correction"][key] == "UNKNOWN"
+
+    # ...e a página pública NÃO é mais obrigada a estampar o rótulo.
+    assert "unknown" not in _norm(_strip_tags(combined_policy_html()))
+    assert check_policy_visible_disclosure(combined_policy_html(), policy) == []
+
+    # Mas prometer prazo que ninguém mediu continua reprovando.
+    for promise in ("2 dias úteis", "10 dias úteis"):
+        seeded = combined_policy_html() + f"<p>Respondemos em {promise}.</p>"
+        errors = check_policy_visible_disclosure(seeded, policy)
+        assert any(e.startswith("invented_deadline_visible") or e.startswith("forbidden_promise")
+                   for e in errors), (promise, errors)
+
+
+def test_correction_channel_exists_and_the_retired_route_is_gone():
+    """Conservar o canal é a obrigação; conservar /correcoes/ não era."""
+    policy = load_editorial_policy()
+
+    # A rota antiga não é mais servida...
+    assert not (ROOT / "correcoes" / "index.html").exists()
+    # ...e não é mais uma página de política nem de chrome.
+    assert "corrections" not in policy_pages()
+    assert all("correcoes" not in str(p) for p in chrome_pages())
+
+    # O canal existe, tem destino real e o alvo da âncora existe de fato.
+    path, _, anchor = CORRECTION_CHANNEL_HREF.partition("#")
+    target = ROOT / path.strip("/") / "index.html"
+    assert target.exists(), target
+    html = target.read_text(encoding="utf-8")
+    assert f'id="{anchor}"' in html, "a âncora do canal precisa existir na página de contato"
+    assert "tiago.sasaki@confenge.com.br" in html, "o canal precisa ter destino real"
+
+    # A redireção da URL antiga existe, é URL-exata e não aponta para a home.
+    redirects = (ROOT / "_redirects").read_text(encoding="utf-8")
+    rule = [l for l in redirects.splitlines() if l.strip().startswith("/correcoes")]
+    assert len(rule) == 1, rule
+    assert CORRECTION_CHANNEL_HREF in rule[0], rule
+    assert not rule[0].split()[1].strip().startswith("/ "), "nunca redirecionar para a home"
+
+    # O endpoint de protocolo continua existindo: recibo antigo ainda resolve.
+    assert (ROOT / "netlify" / "functions" / "correction.cjs").exists()
+    gov = load_governance()
+    assert gov["correction"]["channel"] == "/.netlify/functions/correction"
+
+    # Contracaso: uma página que volte a linkar a rota morta reprova.
+    assert "retired_correction_route_linked" in check_policy_links(
+        html + '<a href="/correcoes/">Correções</a>', policy)
+    # Contracaso: uma página sem o canal reprova.
+    assert "correction_channel_absent" in check_policy_links(
+        '<a href="/politica-editorial/">política</a>', policy)
+
+
+def test_history_is_preserved_in_the_record_not_by_a_public_portal():
+    """Retirar a página é permitido; apagar ou reescrever o registro não."""
+    policy = load_editorial_policy()
+    assert check_policy_version_consistency(policy, policy_pages()) == []
+
+    # A 1.1.0 continua íntegra no registro, com o texto original.
+    v11 = policy["versions"]["1.1.0"]["pages"]
+    assert "PII mínima" in v11["corrections"]["body"]
+    assert "FACT no lugar de INFERENCE" in v11["corrections"]["body"]
+
+    # Contracaso: esvaziar uma versão histórica reprova.
+    emptied = json.loads(json.dumps(policy))
+    emptied["versions"]["1.1.0"]["pages"]["corrections"]["body"] = ""
+    errors = check_policy_version_consistency(emptied, policy_pages())
+    assert any(e.startswith("history_page_emptied") or e.startswith("changelog_hash_mismatch")
+               for e in errors), errors
+
+    # Contracaso: reescrever o resumo histórico em silêncio reprova.
+    rewritten = json.loads(json.dumps(policy))
+    rewritten["changelog"][1]["summary"] = "história reescrita em silêncio"
+    assert any(e.startswith("changelog_entry_rewritten")
+               for e in check_policy_version_consistency(rewritten, policy_pages()))
+
+    # Os hashes das versões anteriores não foram recalculados para disfarçar.
+    for entry in policy["changelog"]:
+        if entry["version"] == current_policy_version(policy):
+            continue
+        body = policy["versions"][entry["version"]]
+        assert entry["content_sha256"] == content_sha256_for_version(body)
 
 
 if __name__ == "__main__":
