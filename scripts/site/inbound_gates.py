@@ -732,6 +732,21 @@ def _shell_gaps(html: str) -> list[tuple[str, str]]:
     footer_at = html.find('class="site-footer"')
     if footer_at < 0 or (main_close >= 0 and footer_at < main_close):
         gaps.append(("shell_footer_missing", 'no <footer class="site-footer"> after </main>'))
+    # A nav that is present but can never open is still a dead end, and no
+    # amount of markup checking finds it. styles.css shows the mobile drawer
+    # only through `.js .mobile-nav.is-open` and the JS-off fallback only
+    # through `.no-js .mobile-nav`; both are descendant selectors on the root
+    # element. A page whose <html> carries neither class has BOTH paths dead:
+    # the hamburger flips aria-expanded and nothing appears. Caught in a real
+    # browser on /triagem-tecnica/, not by any static assertion.
+    if 'class="mobile-nav"' in html:
+        head = html.split("</head>", 1)[0]
+        root_ok = re.search(r"<html[^>]*\bclass=\"[^\"]*\bno-js\b", html) is not None
+        swap_ok = "classList.replace('no-js','js')" in head or 'classList.replace("no-js","js")' in head
+        if not root_ok or not swap_ok:
+            gaps.append(("shell_nav_inert",
+                         "mobile-nav present but <html class=\"no-js\"> and/or the no-js->js swap is missing, "
+                         "so neither the JS drawer nor the JS-off fallback can ever display it"))
     return gaps
 
 
