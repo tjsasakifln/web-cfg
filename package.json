@@ -121,7 +121,7 @@
     "test:csp-browser:live": "node scripts/site/test_csp_browser.mjs https://confenge.com.br",
     "csp:refresh": "python3 scripts/site/csp_contract.py --write _headers --root _site",
     "test:copy:core": "python3 scripts/site/test_copy_gates.py && python3 scripts/site/test_truthful_gates.py && python3 -m pytest scripts/site/test_audit_performance.py -q && python3 scripts/site/commercial_surface_truth.py && python3 scripts/site/test_document_intake_honesty.py",
-    "test:copy:language": "python3 scripts/site/test_public_internal_marketing_labels.py && python3 scripts/site/test_public_plain_language.py",
+    "test:copy:language": "python3 scripts/site/test_public_internal_marketing_labels.py && python3 scripts/site/test_public_plain_language.py && python3 scripts/site/test_public_control_vocabulary.py",
     "test:copy:lint": "python3 scripts/site/lint_editorial_copy.py --report docs/editorial/COPY-LINT-REPORT.json",
     "test:copy:dash": "python3 scripts/site/test_scrub_em_dashes.py && python3 scripts/site/scrub_em_dashes.py --check && python3 scripts/site/test_copy_ci_hermetic.py",
     "test:copy": "npm run test:copy:core && npm run test:copy:language && npm run test:copy:lint && npm run test:copy:dash",

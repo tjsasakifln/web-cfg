@@ -442,7 +442,8 @@ def test_data_analysis_surfaces_link_policy_version():
         assert version in html
         assert f'data-policy-version="{version}"' in html
         assert "/politica-editorial/" in html
-        assert "/correcoes/" in html
+        assert "/correcoes/" not in html
+        assert CORRECTION_CHANNEL_HREF in html
 
 
 def test_inteligencia_hub_rebuild_keeps_policy_version():
