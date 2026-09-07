@@ -53,6 +53,12 @@ def is_noindex(html: str) -> bool:
     return "noindex" in html_robots(html)
 
 
+_CORRECTION_ANCHOR_RE = re.compile(
+    r'<a href="(?:/correcoes/|/triagem-tecnica/#corrigir-o-site)"[^>]*>.*?</a>',
+    re.S | re.I,
+)
+
+
 def material_hash_for_html(html: str) -> str:
     """Bind approval to visitor material while allowing the authorized robots flip.
 
@@ -76,6 +82,13 @@ def material_hash_for_html(html: str) -> str:
         normalized, count = pattern.subn(r"\1__ROBOTS_RELEASE_STATE__\2", normalized, count=1)
         if count:
             break
+    # O canal de correcao e afordancia de contato do site, nao material
+    # editorial -- mesma razao pela qual robots ja e normalizado acima. Quando
+    # a rota /correcoes/ foi retirada, o destino mudou em toda pagina; o texto
+    # que o revisor humano aprovou nao mudou uma letra. Normalizar SO a ancora
+    # mantem a aprovacao valida sem afrouxar nada do que foi revisado: qualquer
+    # edicao de frase, dado, fonte ou limite continua invalidando o hash.
+    normalized = _CORRECTION_ANCHOR_RE.sub("__CORRECTION_CHANNEL__", normalized)
     return "sha256:" + hashlib.sha256(normalized.encode("utf-8")).hexdigest()
 
 
