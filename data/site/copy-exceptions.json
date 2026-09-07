@@ -60,26 +60,8 @@
     {
       "rule": "plain_language",
       "match": "\\bfact\\b",
-      "path": "correcoes/index.html",
-      "reason": "FACT, CALCULATION, INFERENCE e UNKNOWN sao as quatro classes epistemicas definidas e publicadas em /politica-editorial/ (versao 1.1.0). scripts/site/test_authority_contract.py exige literalmente o conjunto {FACT, CALCULATION, INFERENCE, UNKNOWN} na politica e a string UNKNOWN no HTML de /correcoes/: o nome da classe e contrato editorial publicado, nao microcopy. Renomear esse vocabulario para o visitante e escopo da issue #188, nao deste gate."
-    },
-    {
-      "rule": "plain_language",
-      "match": "\\bfact\\b",
-      "path": "politica-editorial/index.html",
-      "reason": "FACT, CALCULATION, INFERENCE e UNKNOWN sao as quatro classes epistemicas definidas e publicadas em /politica-editorial/ (versao 1.1.0). scripts/site/test_authority_contract.py exige literalmente o conjunto {FACT, CALCULATION, INFERENCE, UNKNOWN} na politica e a string UNKNOWN no HTML de /correcoes/: o nome da classe e contrato editorial publicado, nao microcopy. Renomear esse vocabulario para o visitante e escopo da issue #188, nao deste gate."
-    },
-    {
-      "rule": "plain_language",
-      "match": "\\bfact\\b",
       "path": "politica-editorial/historico/index.html",
-      "reason": "FACT, CALCULATION, INFERENCE e UNKNOWN sao as quatro classes epistemicas definidas e publicadas em /politica-editorial/ (versao 1.1.0). scripts/site/test_authority_contract.py exige literalmente o conjunto {FACT, CALCULATION, INFERENCE, UNKNOWN} na politica e a string UNKNOWN no HTML de /correcoes/: o nome da classe e contrato editorial publicado, nao microcopy. Renomear esse vocabulario para o visitante e escopo da issue #188, nao deste gate."
-    },
-    {
-      "rule": "plain_language",
-      "match": "\\bfact\\b",
-      "path": "uso-de-ia/index.html",
-      "reason": "FACT, CALCULATION, INFERENCE e UNKNOWN sao as quatro classes epistemicas definidas e publicadas em /politica-editorial/ (versao 1.1.0). scripts/site/test_authority_contract.py exige literalmente o conjunto {FACT, CALCULATION, INFERENCE, UNKNOWN} na politica e a string UNKNOWN no HTML de /correcoes/: o nome da classe e contrato editorial publicado, nao microcopy. Renomear esse vocabulario para o visitante e escopo da issue #188, nao deste gate."
+      "reason": "Arquivo historico congelado da politica anterior. O texto e preservado byte a byte porque e o registro do que a politica realmente dizia; reescreve-lo seria falsificar o historico. A obrigacao de conservar o registro e distinta da decisao de publica-lo, e a versao vigente (1.2.0) nao usa este vocabulario. Retirada da web permanece possivel sem tocar no registro."
     },
     {
       "rule": "plain_language",
@@ -96,14 +78,8 @@
     {
       "rule": "plain_language",
       "match": "\\bcalculation\\b",
-      "path": "politica-editorial/index.html",
-      "reason": "FACT, CALCULATION, INFERENCE e UNKNOWN sao as quatro classes epistemicas definidas e publicadas em /politica-editorial/ (versao 1.1.0). scripts/site/test_authority_contract.py exige literalmente o conjunto {FACT, CALCULATION, INFERENCE, UNKNOWN} na politica e a string UNKNOWN no HTML de /correcoes/: o nome da classe e contrato editorial publicado, nao microcopy. Renomear esse vocabulario para o visitante e escopo da issue #188, nao deste gate."
-    },
-    {
-      "rule": "plain_language",
-      "match": "\\bcalculation\\b",
       "path": "politica-editorial/historico/index.html",
-      "reason": "FACT, CALCULATION, INFERENCE e UNKNOWN sao as quatro classes epistemicas definidas e publicadas em /politica-editorial/ (versao 1.1.0). scripts/site/test_authority_contract.py exige literalmente o conjunto {FACT, CALCULATION, INFERENCE, UNKNOWN} na politica e a string UNKNOWN no HTML de /correcoes/: o nome da classe e contrato editorial publicado, nao microcopy. Renomear esse vocabulario para o visitante e escopo da issue #188, nao deste gate."
+      "reason": "Arquivo historico congelado da politica anterior. O texto e preservado byte a byte porque e o registro do que a politica realmente dizia; reescreve-lo seria falsificar o historico. A obrigacao de conservar o registro e distinta da decisao de publica-lo, e a versao vigente (1.2.0) nao usa este vocabulario. Retirada da web permanece possivel sem tocar no registro."
     },
     {
       "rule": "plain_language",
@@ -120,26 +96,8 @@
     {
       "rule": "plain_language",
       "match": "\\binference\\b",
-      "path": "correcoes/index.html",
-      "reason": "FACT, CALCULATION, INFERENCE e UNKNOWN sao as quatro classes epistemicas definidas e publicadas em /politica-editorial/ (versao 1.1.0). scripts/site/test_authority_contract.py exige literalmente o conjunto {FACT, CALCULATION, INFERENCE, UNKNOWN} na politica e a string UNKNOWN no HTML de /correcoes/: o nome da classe e contrato editorial publicado, nao microcopy. Renomear esse vocabulario para o visitante e escopo da issue #188, nao deste gate."
-    },
-    {
-      "rule": "plain_language",
-      "match": "\\binference\\b",
-      "path": "politica-editorial/index.html",
-      "reason": "FACT, CALCULATION, INFERENCE e UNKNOWN sao as quatro classes epistemicas definidas e publicadas em /politica-editorial/ (versao 1.1.0). scripts/site/test_authority_contract.py exige literalmente o conjunto {FACT, CALCULATION, INFERENCE, UNKNOWN} na politica e a string UNKNOWN no HTML de /correcoes/: o nome da classe e contrato editorial publicado, nao microcopy. Renomear esse vocabulario para o visitante e escopo da issue #188, nao deste gate."
-    },
-    {
-      "rule": "plain_language",
-      "match": "\\binference\\b",
       "path": "politica-editorial/historico/index.html",
-      "reason": "FACT, CALCULATION, INFERENCE e UNKNOWN sao as quatro classes epistemicas definidas e publicadas em /politica-editorial/ (versao 1.1.0). scripts/site/test_authority_contract.py exige literalmente o conjunto {FACT, CALCULATION, INFERENCE, UNKNOWN} na politica e a string UNKNOWN no HTML de /correcoes/: o nome da classe e contrato editorial publicado, nao microcopy. Renomear esse vocabulario para o visitante e escopo da issue #188, nao deste gate."
-    },
-    {
-      "rule": "plain_language",
-      "match": "\\binference\\b",
-      "path": "uso-de-ia/index.html",
-      "reason": "FACT, CALCULATION, INFERENCE e UNKNOWN sao as quatro classes epistemicas definidas e publicadas em /politica-editorial/ (versao 1.1.0). scripts/site/test_authority_contract.py exige literalmente o conjunto {FACT, CALCULATION, INFERENCE, UNKNOWN} na politica e a string UNKNOWN no HTML de /correcoes/: o nome da classe e contrato editorial publicado, nao microcopy. Renomear esse vocabulario para o visitante e escopo da issue #188, nao deste gate."
+      "reason": "Arquivo historico congelado da politica anterior. O texto e preservado byte a byte porque e o registro do que a politica realmente dizia; reescreve-lo seria falsificar o historico. A obrigacao de conservar o registro e distinta da decisao de publica-lo, e a versao vigente (1.2.0) nao usa este vocabulario. Retirada da web permanece possivel sem tocar no registro."
     },
     {
       "rule": "plain_language",
@@ -204,26 +162,8 @@
     {
       "rule": "plain_language",
       "match": "\\bunknown\\b",
-      "path": "correcoes/index.html",
-      "reason": "FACT, CALCULATION, INFERENCE e UNKNOWN sao as quatro classes epistemicas definidas e publicadas em /politica-editorial/ (versao 1.1.0). scripts/site/test_authority_contract.py exige literalmente o conjunto {FACT, CALCULATION, INFERENCE, UNKNOWN} na politica e a string UNKNOWN no HTML de /correcoes/: o nome da classe e contrato editorial publicado, nao microcopy. Renomear esse vocabulario para o visitante e escopo da issue #188, nao deste gate."
-    },
-    {
-      "rule": "plain_language",
-      "match": "\\bunknown\\b",
-      "path": "politica-editorial/index.html",
-      "reason": "FACT, CALCULATION, INFERENCE e UNKNOWN sao as quatro classes epistemicas definidas e publicadas em /politica-editorial/ (versao 1.1.0). scripts/site/test_authority_contract.py exige literalmente o conjunto {FACT, CALCULATION, INFERENCE, UNKNOWN} na politica e a string UNKNOWN no HTML de /correcoes/: o nome da classe e contrato editorial publicado, nao microcopy. Renomear esse vocabulario para o visitante e escopo da issue #188, nao deste gate."
-    },
-    {
-      "rule": "plain_language",
-      "match": "\\bunknown\\b",
       "path": "politica-editorial/historico/index.html",
-      "reason": "FACT, CALCULATION, INFERENCE e UNKNOWN sao as quatro classes epistemicas definidas e publicadas em /politica-editorial/ (versao 1.1.0). scripts/site/test_authority_contract.py exige literalmente o conjunto {FACT, CALCULATION, INFERENCE, UNKNOWN} na politica e a string UNKNOWN no HTML de /correcoes/: o nome da classe e contrato editorial publicado, nao microcopy. Renomear esse vocabulario para o visitante e escopo da issue #188, nao deste gate."
-    },
-    {
-      "rule": "plain_language",
-      "match": "\\bunknown\\b",
-      "path": "uso-de-ia/index.html",
-      "reason": "FACT, CALCULATION, INFERENCE e UNKNOWN sao as quatro classes epistemicas definidas e publicadas em /politica-editorial/ (versao 1.1.0). scripts/site/test_authority_contract.py exige literalmente o conjunto {FACT, CALCULATION, INFERENCE, UNKNOWN} na politica e a string UNKNOWN no HTML de /correcoes/: o nome da classe e contrato editorial publicado, nao microcopy. Renomear esse vocabulario para o visitante e escopo da issue #188, nao deste gate."
+      "reason": "Arquivo historico congelado da politica anterior. O texto e preservado byte a byte porque e o registro do que a politica realmente dizia; reescreve-lo seria falsificar o historico. A obrigacao de conservar o registro e distinta da decisao de publica-lo, e a versao vigente (1.2.0) nao usa este vocabulario. Retirada da web permanece possivel sem tocar no registro."
     },
     {
       "rule": "plain_language",
@@ -253,13 +193,13 @@
       "rule": "plain_language",
       "match": "\\bunknown\\b",
       "path": "politica-editorial/v/1.0.0/index.html",
-      "reason": "/politica-editorial/v/1.0.0/ e o arquivo imutavel da versao 1.0.0 da politica editorial, renderizado de data/site/editorial-policy.json em versions/1.0.0. O corpo tem que continuar sendo o que foi publicado sob aquela versao; reescreve-lo falsificaria o historico de versoes. A versao vigente (1.1.0) foi corrigida neste PR."
+      "reason": "Arquivo historico congelado da politica anterior. O texto e preservado byte a byte porque e o registro do que a politica realmente dizia; reescreve-lo seria falsificar o historico. A obrigacao de conservar o registro e distinta da decisao de publica-lo, e a versao vigente (1.2.0) nao usa este vocabulario. Retirada da web permanece possivel sem tocar no registro."
     },
     {
       "rule": "plain_language",
       "match": "\\bowner\\b",
       "path": "politica-editorial/v/1.0.0/index.html",
-      "reason": "/politica-editorial/v/1.0.0/ e o arquivo imutavel da versao 1.0.0 da politica editorial, renderizado de data/site/editorial-policy.json em versions/1.0.0. O corpo tem que continuar sendo o que foi publicado sob aquela versao; reescreve-lo falsificaria o historico de versoes. A versao vigente (1.1.0) foi corrigida neste PR."
+      "reason": "Arquivo historico congelado da politica anterior. O texto e preservado byte a byte porque e o registro do que a politica realmente dizia; reescreve-lo seria falsificar o historico. A obrigacao de conservar o registro e distinta da decisao de publica-lo, e a versao vigente (1.2.0) nao usa este vocabulario. Retirada da web permanece possivel sem tocar no registro."
     },
     {
       "rule": "plain_language",

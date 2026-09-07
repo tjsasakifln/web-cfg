@@ -37,7 +37,7 @@ test("public route is low-friction, transparent and free of sensitive inputs", (
     "não é contratação nem pagamento",
     "canal seguro",
     "Escopo, responsabilidade técnica",
-    "Pedir revisão de encaixe pelo WhatsApp",
+    "Falar pelo WhatsApp",
     "Enviar o contexto por e-mail",
     "Ligar para explicar a demanda",
   ]) {
@@ -74,8 +74,8 @@ test("public route is low-friction, transparent and free of sensitive inputs", (
 test("MV-09 publishes one bounded private wedge with embedded triage and three safe channels", () => {
   const html = fs.readFileSync(path.resolve("quantitativos-orcamento-obras/index.html"), "utf8");
   for (const expected of [
-    "Orçamento só orienta a decisão quando quantidades e premissas aparecem",
-    "CONFENGE, Engenharia, Perícias e Inteligência Técnica",
+    "Quantitativos e orçamento de obras",
+    "Serve para obra privada",
     "data-default-need=\"obra_edificacao_ou_documentacao\"",
     "intake_context=quantities_budget",
     "data-location hidden",

@@ -19,6 +19,7 @@ from scripts.organic.service_map import (
     load_service_map,
     map_content_to_service,
 )
+from scripts.site.authority import CORRECTION_CHANNEL_HREF
 
 ROOT = Path(__file__).resolve().parents[2]
 MATRIX_PATH = ROOT / "data" / "organic" / "bofu-intent-matrix.json"
@@ -443,13 +444,13 @@ def audit_service_page(
         'id="metodo"' in html
         or "authority-method" in html
         or "authority-byline" in html
-    ) and ("/correcoes/" in html or "/politica-editorial/" in html)
+    ) and (CORRECTION_CHANNEL_HREF in html or "/politica-editorial/" in html)
     if not owner:
         findings.append(
             _finding(
                 "ROUTE_MISSING_OWNER_UPDATE_POLICY",
                 path,
-                "missing authority-method/byline with correcoes or politica-editorial",
+                "missing authority-method/byline with correction channel or politica-editorial",
             )
         )
 

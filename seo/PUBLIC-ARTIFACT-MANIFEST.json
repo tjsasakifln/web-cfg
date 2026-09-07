@@ -15,7 +15,6 @@
     "confianca/",
     "conflitos/",
     "conteudos/",
-    "correcoes/",
     "defesa-margem-contratos-publicos/",
     "defesa-tecnica-contratos-publicos/",
     "diagnostico-b2g-360/",
@@ -77,7 +76,7 @@
     "styles-tools.css",
     "styles.css"
   ],
-  "html_route_count": 249,
+  "html_route_count": 248,
   "html_routes": [
     "/",
     "/acompanhamento-contratos-obras/",
@@ -232,7 +231,6 @@
     "/conteudos/tributos-bdi-obra-publica/",
     "/conteudos/troca-responsavel-tecnico-contrato-publico/",
     "/conteudos/visita-tecnica-licitacao-obra-publica/",
-    "/correcoes/",
     "/defesa-margem-contratos-publicos/",
     "/defesa-tecnica-contratos-publicos/",
     "/diagnostico-b2g-360/",
@@ -329,8 +327,8 @@
     "/triagem-tecnica/",
     "/uso-de-ia/"
   ],
-  "generated_at": "2026-09-06T04:06:02Z",
-  "public_artifact_hash": "f3c40d13030a66d284e6704e49ac85230cec5616e2e207ec082ae23113d976ac",
+  "generated_at": "2026-09-07T08:17:54Z",
+  "public_artifact_hash": "68b42238ba9d96c71961433b7aa0df73c1b4f2fe2062b10b64a24a3c7f0862bd",
   "copied_dirs": [
     ".well-known/",
     "acompanhamento-contratos-obras/",
@@ -346,7 +344,6 @@
     "confianca/",
     "conflitos/",
     "conteudos/",
-    "correcoes/",
     "defesa-margem-contratos-publicos/",
     "defesa-tecnica-contratos-publicos/",
     "diagnostico-b2g-360/",
@@ -408,15 +405,15 @@
     "styles-tools.css",
     "styles.css"
   ],
-  "promoted_navigation_files": 213,
+  "promoted_navigation_files": 212,
   "navigation_audit": {
-    "audited_files": 215,
-    "audited_blocks": 428,
+    "audited_files": 214,
+    "audited_blocks": 426,
     "frozen_files": 6
   },
   "structured_identity": {
-    "html_scanned": 255,
-    "html_rewritten": 192,
-    "fields_removed": 812
+    "html_scanned": 254,
+    "html_rewritten": 191,
+    "fields_removed": 808
   }
 }

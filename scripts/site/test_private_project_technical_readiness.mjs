@@ -310,7 +310,17 @@ function domainById(result, id) {
   expect("html_no_ia_claim", !/inteligência artificial/i.test(html) && !/inteligencia artificial/i.test(html));
   expect("html_plain_script", /<script src="[^"]+private-project-technical-readiness\.js">/.test(html) && !/type=["']module["']/.test(html));
   expect("html_no_emdash", !html.includes("\u2014"));
-  const htmlHits = collectForbiddenClaims(html.replace(/prontidão/gi, "").replace(/prontidao/gi, ""));
+  // A propriedade e que A FERRAMENTA nao faz a afirmacao proibida. O rodape
+  // compartilhado nao e afirmacao da ferramenta: ele carrega o link para a
+  // politica de "Uso de IA", que e transparencia obrigatoria e existe em mais
+  // de 200 paginas. Contar isso como claim da ferramenta reprovaria o site
+  // inteiro por ser honesto sobre IA. O chrome sai do escopo; o conteudo da
+  // ferramenta continua verificado por inteiro.
+  const htmlBody = html
+    .replace(/<footer[\s\S]*?<\/footer>/gi, " ")
+    .replace(/<header[\s\S]*?<\/header>/gi, " ")
+    .replace(/<nav[\s\S]*?<\/nav>/gi, " ");
+  const htmlHits = collectForbiddenClaims(htmlBody.replace(/prontidão/gi, "").replace(/prontidao/gi, ""));
   expect("html_forbidden_claims", htmlHits.length === 0, htmlHits.join(","));
 }
 

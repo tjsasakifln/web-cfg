@@ -147,7 +147,8 @@ def test_rendered_preview_is_noindex_and_absent_from_sitemaps():
     assert hub.is_file()
     html = hub.read_text(encoding="utf-8")
     assert 'content="noindex' in html
-    assert "/correcoes/" in html
+    assert "/correcoes/" not in html
+    assert "/triagem-tecnica/#corrigir-o-site" in html
     canary_slug = AUTHORIZED_CANONICAL_PATH.strip("/").split("/")[-1]
     official = load_canary(
         live_path=ROOT / "scripts/contract_analysis/fixtures/official-live-01"

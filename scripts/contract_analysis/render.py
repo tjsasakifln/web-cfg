@@ -23,6 +23,7 @@ from scripts.contract_analysis.attribution import attribution_payload
 from scripts.contract_analysis.gate import PublicationDecision
 from scripts.contract_analysis.graph import related_assets
 from scripts.contract_analysis.taxonomy import ANALYSIS_LABEL_PT, DISCLAIMER_PT
+from scripts.site.authority import CORRECTION_CHANNEL_HREF
 from scripts.pseo.html_shell import (
     ORG_JSONLD,
     PERSON_JSONLD,
@@ -556,7 +557,7 @@ def render_analysis_html(record: dict[str, Any], decision: PublicationDecision) 
         f' · Publicado em <time datetime="{e(published)}">{e(published)}</time>'
         f' · Atualizado em <time datetime="{e(modified)}">{e(modified)}</time>'
         f' · as_of <time datetime="{e(_iso(record.get("as_of")))}">{e(_iso(record.get("as_of")))}</time>'
-        ' · <a href="/correcoes/">Como corrigir ou contestar</a></p>'
+        f' · <a href="{CORRECTION_CHANNEL_HREF}">Encontrou um erro nesta página?</a></p>'
     )
     sections.append(f'<div class="container">{byline}{AI_DISCLOSURE_HTML}</div>')
 
@@ -639,8 +640,8 @@ def render_analysis_html(record: dict[str, Any], decision: PublicationDecision) 
         )
     sections.append(
         f'<section class="section" id="correcao"{archetype_attr("correcao")}><h2>Correção e contestação</h2>'
-        "<p>Erro material, contestação de fato público ou pedido de correção "
-        'segue a <a href="/correcoes/">política pública de correções</a> e a '
+        "<p>Encontrou um erro ou quer contestar um fato público desta análise? "
+        f'<a href="{CORRECTION_CHANNEL_HREF}">Fale com a gente</a>, seguindo a '
         '<a href="/politica-editorial/">política editorial</a>.</p></section>'
     )
     sections.append(author_box(archetype=ARCHETYPE_BY_SECTION_ID["author-box"]))
@@ -720,7 +721,7 @@ def render_hub_html(items: list[tuple[dict[str, Any], PublicationDecision]], *, 
         '<p class="authority-byline">Autoria: <a rel="author" href="/especialista/tiago-jun-sasaki/">Engº Tiago Sasaki</a>'
         ' · Responsável técnico sem revisão independente: não há segundo revisor nomeado'
         ' · Atualizado em <time datetime="2026-08-16">2026-08-16</time>'
-        ' · <a href="/correcoes/">Como corrigir ou contestar</a></p>'
+        f' · <a href="{CORRECTION_CHANNEL_HREF}">Encontrou um erro nesta página?</a></p>'
         "<p>Família editorial seletiva. Página não é um diretório combinatório "
         "nem um case de cliente. Indexação só ocorre quando o gate "
         f"{e(GATE_VERSION)} concede <code>PUBLISHABLE_INDEX</code>.</p>"

@@ -462,7 +462,8 @@ def test_authority_slots_are_present_for_the_casos_family() -> None:
     for slug, *_ in MODELS:
         html = _html(slug)
         assert 'data-permission-class="demonstrativo"' in html, slug
-        assert 'href="/correcoes/"' in html, slug
+        assert 'href="/correcoes/"' not in html, slug
+        assert 'href="/triagem-tecnica/#corrigir-o-site"' in html, slug
         assert 'href="/especialista/tiago-jun-sasaki/"' in html, slug
         assert '<time datetime="2026-08-23">' in html, slug
         assert "Atualizado em" in html, slug

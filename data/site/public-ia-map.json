@@ -121,27 +121,60 @@
       {
         "heading": "Situações",
         "links": [
-          { "label": "Projetos e edificações", "href": "/#situacao-projeto" },
-          { "label": "Perícias e avaliações", "href": "/#situacao-pericia" },
-          { "label": "Segurança do trabalho", "href": "/#situacao-sst" },
-          { "label": "Obras públicas", "href": "/servicos-obras-publicas/" }
+          {
+            "label": "Projetos e edificações",
+            "href": "/#situacao-projeto"
+          },
+          {
+            "label": "Perícias e avaliações",
+            "href": "/#situacao-pericia"
+          },
+          {
+            "label": "Segurança do trabalho",
+            "href": "/#situacao-sst"
+          },
+          {
+            "label": "Obras públicas",
+            "href": "/servicos-obras-publicas/"
+          }
         ]
       },
       {
         "heading": "Biblioteca e provas",
         "links": [
-          { "label": "Conteúdos", "href": "/conteudos/" },
-          { "label": "Ferramentas", "href": "/ferramentas/" },
-          { "label": "Entregas", "href": "/entregas/" },
-          { "label": "Casos demonstrativos", "href": "/casos/" }
+          {
+            "label": "Conteúdos",
+            "href": "/conteudos/"
+          },
+          {
+            "label": "Ferramentas",
+            "href": "/ferramentas/"
+          },
+          {
+            "label": "Entregas",
+            "href": "/entregas/"
+          },
+          {
+            "label": "Casos demonstrativos",
+            "href": "/casos/"
+          }
         ]
       },
       {
         "heading": "Empresa",
         "links": [
-          { "label": "Quem responde", "href": "/especialista/tiago-jun-sasaki/" },
-          { "label": "Como verificamos", "href": "/confianca/" },
-          { "label": "Contato e triagem", "href": "/triagem-tecnica/" }
+          {
+            "label": "Quem responde",
+            "href": "/especialista/tiago-jun-sasaki/"
+          },
+          {
+            "label": "Como verificamos",
+            "href": "/confianca/"
+          },
+          {
+            "label": "Contato e triagem",
+            "href": "/triagem-tecnica/"
+          }
         ],
         "contact": true
       }
@@ -269,83 +302,321 @@
     }
   ],
   "parents": [
-    { "prefix": "/", "parent": null, "exact": true },
-    { "prefix": "/conteudos/", "parent": "/", "exact": true },
-    { "prefix": "/conteudos/", "parent": "/conteudos/" },
-    { "prefix": "/ferramentas/", "parent": "/", "exact": true },
-    { "prefix": "/ferramentas/", "parent": "/ferramentas/" },
-    { "prefix": "/servicos/", "parent": "/", "exact": true },
-    { "prefix": "/quantitativos-orcamento-obras/", "parent": "/servicos/", "exact": true },
-    { "prefix": "/servicos-obras-publicas/", "parent": "/", "exact": true },
-    { "prefix": "/problemas-que-resolvemos/", "parent": "/", "exact": true },
-    { "prefix": "/entregas/", "parent": "/", "exact": true },
-    { "prefix": "/casos/modelo-", "parent": "/entregas/" },
-    { "prefix": "/casos/", "parent": "/", "exact": true },
-    { "prefix": "/casos/", "parent": "/casos/" },
-    { "prefix": "/especialista/", "parent": "/" },
-    { "prefix": "/bid-room-licitacoes-obras/", "parent": "/" },
-    { "prefix": "/diretoria-b2g/", "parent": "/" },
-    { "prefix": "/defesa-margem-contratos-publicos/", "parent": "/problemas-que-resolvemos/" },
-    { "prefix": "/diagnostico-b2g-360/", "parent": "/servicos-obras-publicas/" },
-    { "prefix": "/diagnostico-b2g-expansao/", "parent": "/servicos-obras-publicas/" },
-    { "prefix": "/diagnostico-pre-licitacao/", "parent": "/bid-room-licitacoes-obras/" },
-    { "prefix": "/auditoria-orcamento-licitacao/", "parent": "/problemas-que-resolvemos/" },
-    { "prefix": "/acompanhamento-contratos-obras/", "parent": "/problemas-que-resolvemos/" },
-    { "prefix": "/medicoes-glosas-obras-publicas/", "parent": "/problemas-que-resolvemos/" },
-    { "prefix": "/aditivos-obras-publicas/", "parent": "/problemas-que-resolvemos/" },
-    { "prefix": "/atrasos-prorrogacao-obras-publicas/", "parent": "/problemas-que-resolvemos/" },
-    { "prefix": "/reequilibrio-obras-publicas/", "parent": "/problemas-que-resolvemos/" },
-    { "prefix": "/defesa-tecnica-contratos-publicos/", "parent": "/problemas-que-resolvemos/" },
-    { "prefix": "/guias-contratos-obras/", "parent": "/", "exact": true },
-    { "prefix": "/guias-contratos-obras/", "parent": "/guias-contratos-obras/" },
-    { "prefix": "/lei-14133-obras/", "parent": "/", "exact": true },
-    { "prefix": "/lei-14133-obras/", "parent": "/lei-14133-obras/" },
-    { "prefix": "/jurisprudencia-contratos-obras/", "parent": "/", "exact": true },
-    { "prefix": "/jurisprudencia-contratos-obras/", "parent": "/jurisprudencia-contratos-obras/" },
-    { "prefix": "/radar/", "parent": "/", "exact": true },
-    { "prefix": "/radar/", "parent": "/radar/" },
-    { "prefix": "/analises-contratos-publicos/", "parent": "/", "exact": true },
-    { "prefix": "/analises-contratos-publicos/", "parent": "/analises-contratos-publicos/" },
-    { "prefix": "/panorama-mercado-obras-publicas/", "parent": "/", "exact": true },
-    { "prefix": "/panorama-mercado-obras-publicas/", "parent": "/panorama-mercado-obras-publicas/" },
-    { "prefix": "/inteligencia/", "parent": "/", "exact": true },
-    { "prefix": "/inteligencia/", "parent": "/inteligencia/" },
-    { "prefix": "/metodologia-inteligencia/", "parent": "/" },
-    { "prefix": "/privacidade/", "parent": "/" },
-    { "prefix": "/termos-de-uso/", "parent": "/" },
-    { "prefix": "/conflitos/", "parent": "/" },
-    { "prefix": "/uso-de-ia/", "parent": "/" },
-    { "prefix": "/imprensa/", "parent": "/" },
-    { "prefix": "/correcoes/", "parent": "/" },
-    { "prefix": "/politica-editorial/", "parent": "/", "exact": true },
-    { "prefix": "/politica-editorial/", "parent": "/politica-editorial/" },
-    { "prefix": "/comercial/", "parent": "/" },
-    { "prefix": "/nurture/", "parent": "/" },
-    { "prefix": "/piloto/", "parent": "/" }
+    {
+      "prefix": "/",
+      "parent": null,
+      "exact": true
+    },
+    {
+      "prefix": "/conteudos/",
+      "parent": "/",
+      "exact": true
+    },
+    {
+      "prefix": "/conteudos/",
+      "parent": "/conteudos/"
+    },
+    {
+      "prefix": "/ferramentas/",
+      "parent": "/",
+      "exact": true
+    },
+    {
+      "prefix": "/ferramentas/",
+      "parent": "/ferramentas/"
+    },
+    {
+      "prefix": "/servicos/",
+      "parent": "/",
+      "exact": true
+    },
+    {
+      "prefix": "/quantitativos-orcamento-obras/",
+      "parent": "/servicos/",
+      "exact": true
+    },
+    {
+      "prefix": "/servicos-obras-publicas/",
+      "parent": "/",
+      "exact": true
+    },
+    {
+      "prefix": "/problemas-que-resolvemos/",
+      "parent": "/",
+      "exact": true
+    },
+    {
+      "prefix": "/entregas/",
+      "parent": "/",
+      "exact": true
+    },
+    {
+      "prefix": "/casos/modelo-",
+      "parent": "/entregas/"
+    },
+    {
+      "prefix": "/casos/",
+      "parent": "/",
+      "exact": true
+    },
+    {
+      "prefix": "/casos/",
+      "parent": "/casos/"
+    },
+    {
+      "prefix": "/especialista/",
+      "parent": "/"
+    },
+    {
+      "prefix": "/bid-room-licitacoes-obras/",
+      "parent": "/"
+    },
+    {
+      "prefix": "/diretoria-b2g/",
+      "parent": "/"
+    },
+    {
+      "prefix": "/defesa-margem-contratos-publicos/",
+      "parent": "/problemas-que-resolvemos/"
+    },
+    {
+      "prefix": "/diagnostico-b2g-360/",
+      "parent": "/servicos-obras-publicas/"
+    },
+    {
+      "prefix": "/diagnostico-b2g-expansao/",
+      "parent": "/servicos-obras-publicas/"
+    },
+    {
+      "prefix": "/diagnostico-pre-licitacao/",
+      "parent": "/bid-room-licitacoes-obras/"
+    },
+    {
+      "prefix": "/auditoria-orcamento-licitacao/",
+      "parent": "/problemas-que-resolvemos/"
+    },
+    {
+      "prefix": "/acompanhamento-contratos-obras/",
+      "parent": "/problemas-que-resolvemos/"
+    },
+    {
+      "prefix": "/medicoes-glosas-obras-publicas/",
+      "parent": "/problemas-que-resolvemos/"
+    },
+    {
+      "prefix": "/aditivos-obras-publicas/",
+      "parent": "/problemas-que-resolvemos/"
+    },
+    {
+      "prefix": "/atrasos-prorrogacao-obras-publicas/",
+      "parent": "/problemas-que-resolvemos/"
+    },
+    {
+      "prefix": "/reequilibrio-obras-publicas/",
+      "parent": "/problemas-que-resolvemos/"
+    },
+    {
+      "prefix": "/defesa-tecnica-contratos-publicos/",
+      "parent": "/problemas-que-resolvemos/"
+    },
+    {
+      "prefix": "/guias-contratos-obras/",
+      "parent": "/",
+      "exact": true
+    },
+    {
+      "prefix": "/guias-contratos-obras/",
+      "parent": "/guias-contratos-obras/"
+    },
+    {
+      "prefix": "/lei-14133-obras/",
+      "parent": "/",
+      "exact": true
+    },
+    {
+      "prefix": "/lei-14133-obras/",
+      "parent": "/lei-14133-obras/"
+    },
+    {
+      "prefix": "/jurisprudencia-contratos-obras/",
+      "parent": "/",
+      "exact": true
+    },
+    {
+      "prefix": "/jurisprudencia-contratos-obras/",
+      "parent": "/jurisprudencia-contratos-obras/"
+    },
+    {
+      "prefix": "/radar/",
+      "parent": "/",
+      "exact": true
+    },
+    {
+      "prefix": "/radar/",
+      "parent": "/radar/"
+    },
+    {
+      "prefix": "/analises-contratos-publicos/",
+      "parent": "/",
+      "exact": true
+    },
+    {
+      "prefix": "/analises-contratos-publicos/",
+      "parent": "/analises-contratos-publicos/"
+    },
+    {
+      "prefix": "/panorama-mercado-obras-publicas/",
+      "parent": "/",
+      "exact": true
+    },
+    {
+      "prefix": "/panorama-mercado-obras-publicas/",
+      "parent": "/panorama-mercado-obras-publicas/"
+    },
+    {
+      "prefix": "/inteligencia/",
+      "parent": "/",
+      "exact": true
+    },
+    {
+      "prefix": "/inteligencia/",
+      "parent": "/inteligencia/"
+    },
+    {
+      "prefix": "/metodologia-inteligencia/",
+      "parent": "/"
+    },
+    {
+      "prefix": "/privacidade/",
+      "parent": "/"
+    },
+    {
+      "prefix": "/termos-de-uso/",
+      "parent": "/"
+    },
+    {
+      "prefix": "/conflitos/",
+      "parent": "/"
+    },
+    {
+      "prefix": "/uso-de-ia/",
+      "parent": "/"
+    },
+    {
+      "prefix": "/imprensa/",
+      "parent": "/"
+    },
+    {
+      "prefix": "/politica-editorial/",
+      "parent": "/",
+      "exact": true
+    },
+    {
+      "prefix": "/politica-editorial/",
+      "parent": "/politica-editorial/"
+    },
+    {
+      "prefix": "/comercial/",
+      "parent": "/"
+    },
+    {
+      "prefix": "/nurture/",
+      "parent": "/"
+    },
+    {
+      "prefix": "/piloto/",
+      "parent": "/"
+    }
   ],
   "active_header": [
-    { "prefix": "/servicos/", "href": "/servicos/" },
-    { "prefix": "/quantitativos-orcamento-obras/", "href": "/servicos/" },
-    { "prefix": "/servicos-obras-publicas/", "href": "/servicos-obras-publicas/" },
-    { "prefix": "/bid-room-licitacoes-obras/", "href": "/servicos-obras-publicas/" },
-    { "prefix": "/diagnostico-pre-licitacao/", "href": "/servicos-obras-publicas/" },
-    { "prefix": "/auditoria-orcamento-licitacao/", "href": "/servicos-obras-publicas/" },
-    { "prefix": "/problemas-que-resolvemos/", "href": "/servicos-obras-publicas/" },
-    { "prefix": "/defesa-margem-contratos-publicos/", "href": "/servicos-obras-publicas/" },
-    { "prefix": "/defesa-tecnica-contratos-publicos/", "href": "/servicos-obras-publicas/" },
-    { "prefix": "/medicoes-glosas-obras-publicas/", "href": "/servicos-obras-publicas/" },
-    { "prefix": "/aditivos-obras-publicas/", "href": "/servicos-obras-publicas/" },
-    { "prefix": "/atrasos-prorrogacao-obras-publicas/", "href": "/servicos-obras-publicas/" },
-    { "prefix": "/reequilibrio-obras-publicas/", "href": "/servicos-obras-publicas/" },
-    { "prefix": "/acompanhamento-contratos-obras/", "href": "/servicos-obras-publicas/" },
-    { "prefix": "/diretoria-b2g/", "href": "/servicos-obras-publicas/" },
-    { "prefix": "/diagnostico-b2g-360/", "href": "/servicos-obras-publicas/" },
-    { "prefix": "/diagnostico-b2g-expansao/", "href": "/servicos-obras-publicas/" },
-    { "prefix": "/conteudos/", "href": "/conteudos/" },
-    { "prefix": "/guias-contratos-obras/", "href": "/conteudos/" },
-    { "prefix": "/lei-14133-obras/", "href": "/conteudos/" },
-    { "prefix": "/jurisprudencia-contratos-obras/", "href": "/conteudos/" },
-    { "prefix": "/ferramentas/", "href": "/conteudos/" }
+    {
+      "prefix": "/servicos/",
+      "href": "/servicos/"
+    },
+    {
+      "prefix": "/quantitativos-orcamento-obras/",
+      "href": "/servicos/"
+    },
+    {
+      "prefix": "/servicos-obras-publicas/",
+      "href": "/servicos-obras-publicas/"
+    },
+    {
+      "prefix": "/bid-room-licitacoes-obras/",
+      "href": "/servicos-obras-publicas/"
+    },
+    {
+      "prefix": "/diagnostico-pre-licitacao/",
+      "href": "/servicos-obras-publicas/"
+    },
+    {
+      "prefix": "/auditoria-orcamento-licitacao/",
+      "href": "/servicos-obras-publicas/"
+    },
+    {
+      "prefix": "/problemas-que-resolvemos/",
+      "href": "/servicos-obras-publicas/"
+    },
+    {
+      "prefix": "/defesa-margem-contratos-publicos/",
+      "href": "/servicos-obras-publicas/"
+    },
+    {
+      "prefix": "/defesa-tecnica-contratos-publicos/",
+      "href": "/servicos-obras-publicas/"
+    },
+    {
+      "prefix": "/medicoes-glosas-obras-publicas/",
+      "href": "/servicos-obras-publicas/"
+    },
+    {
+      "prefix": "/aditivos-obras-publicas/",
+      "href": "/servicos-obras-publicas/"
+    },
+    {
+      "prefix": "/atrasos-prorrogacao-obras-publicas/",
+      "href": "/servicos-obras-publicas/"
+    },
+    {
+      "prefix": "/reequilibrio-obras-publicas/",
+      "href": "/servicos-obras-publicas/"
+    },
+    {
+      "prefix": "/acompanhamento-contratos-obras/",
+      "href": "/servicos-obras-publicas/"
+    },
+    {
+      "prefix": "/diretoria-b2g/",
+      "href": "/servicos-obras-publicas/"
+    },
+    {
+      "prefix": "/diagnostico-b2g-360/",
+      "href": "/servicos-obras-publicas/"
+    },
+    {
+      "prefix": "/diagnostico-b2g-expansao/",
+      "href": "/servicos-obras-publicas/"
+    },
+    {
+      "prefix": "/conteudos/",
+      "href": "/conteudos/"
+    },
+    {
+      "prefix": "/guias-contratos-obras/",
+      "href": "/conteudos/"
+    },
+    {
+      "prefix": "/lei-14133-obras/",
+      "href": "/conteudos/"
+    },
+    {
+      "prefix": "/jurisprudencia-contratos-obras/",
+      "href": "/conteudos/"
+    },
+    {
+      "prefix": "/ferramentas/",
+      "href": "/conteudos/"
+    }
   ],
   "removed_from_primary_nav": [
     {

@@ -8,6 +8,7 @@ import json
 from typing import Any
 
 from scripts.data_desk.bind import CANONICAL_SOURCE
+from scripts.site.authority import CORRECTION_CHANNEL_HREF
 
 
 def json_number(value: Any) -> str:
@@ -167,7 +168,8 @@ def build_quartile_svg(asset: dict[str, Any]) -> str:
         '  <text x="24" y="228" font-family="system-ui,sans-serif" font-size="12" fill="#334155">'
         f"Fonte canônica: {source}</text>\n"
         '  <text x="24" y="252" font-family="system-ui,sans-serif" font-size="11" fill="#64748b">'
-        "Unidade: BRL, grain integral_nominal_instrument. Correção: https://confenge.com.br/correcoes/</text>\n"
+        "Valores em reais (BRL). Encontrou um erro? "
+        f"https://confenge.com.br{CORRECTION_CHANNEL_HREF}</text>\n"
         "</svg>\n"
     )
 

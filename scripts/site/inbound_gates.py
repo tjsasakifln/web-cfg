@@ -1652,7 +1652,7 @@ def _conversion_profile(
     # No declaration: legacy legal allowlist stays only so that a registry
     # failure still classifies legal pages sanely. The missing declaration is
     # reported as an error by gate_conversion itself.
-    if route in {"/privacidade/", "/termos-de-uso/", "/conflitos/", "/uso-de-ia/", "/imprensa/", "/correcoes/"}:
+    if route in {"/privacidade/", "/termos-de-uso/", "/conflitos/", "/uso-de-ia/", "/imprensa/"}:
         return "trust_or_legal"
     if route.startswith("/politica-editorial/"):
         return "trust_or_legal"

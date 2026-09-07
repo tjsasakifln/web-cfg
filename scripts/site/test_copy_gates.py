@@ -200,7 +200,6 @@ def test_copy_gate_scope_has_no_handwritten_route_allowlist():
         "panorama-mercado-obras-publicas",
         "politica-editorial",
         "comercial",
-        "correcoes",
         "conflitos",
         "uso-de-ia",
     ):

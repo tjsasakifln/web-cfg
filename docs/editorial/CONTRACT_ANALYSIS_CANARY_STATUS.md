@@ -1,7 +1,7 @@
 # CONTRACT_ANALYSIS_CANARY_STATUS
 
 - Gate: `contract-analysis-publication-gate/1.0`
-- Generated: `2026-09-06T01:29:00Z`
+- Generated: `2026-09-07T05:12:56Z`
 - Evaluated: **1** (cap 10)
 - Source: `official_live` (`$CONFENGE_HANDOFF_DIR/contract-analysis/official-live-01`)
 - catalog_mode: `official_live` claimed_live=`False`

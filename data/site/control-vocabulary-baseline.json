@@ -1,0 +1,563 @@
+{
+  "schema_version": "1.0.0",
+  "purpose": "Dívida aberta de vocabulário de controle na superfície pública. Não é aprovação: é a contagem do que falta corrigir. Só pode diminuir.",
+  "owner_issue": 611,
+  "recorded_at": "2026-09-07",
+  "enforced_routes": [
+    "index.html",
+    "politica-editorial/index.html",
+    "uso-de-ia/index.html",
+    "conflitos/index.html",
+    "quantitativos-orcamento-obras/index.html",
+    "triagem-tecnica/index.html",
+    "servicos/index.html",
+    "servicos-obras-publicas/index.html"
+  ],
+  "open_debt": {
+    "acompanhamento-contratos-obras/index.html": {
+      "enquadramento": 1,
+      "enquadrar": 1,
+      "aderencia": 2,
+      "artefato": 1
+    },
+    "aditivos-obras-publicas/index.html": {
+      "enquadramento": 2,
+      "enquadrar": 2
+    },
+    "analise-cnpj/index.html": {
+      "aderencia": 1
+    },
+    "analise-cnpj/r/index.html": {
+      "aderencia": 1
+    },
+    "analises-contratos-publicos/aditivo-saldo-art125-item-novo/index.html": {
+      "enquadramento": 1,
+      "gate": 2
+    },
+    "analises-contratos-publicos/atraso-eventos-sem-comunicacao-contemporanea/index.html": {
+      "gate": 2
+    },
+    "analises-contratos-publicos/bdi-composicao-vs-referencia-sc/index.html": {
+      "gate": 2
+    },
+    "analises-contratos-publicos/comparaveis-rejeitados-regime-distinto/index.html": {
+      "gate": 2
+    },
+    "analises-contratos-publicos/index.html": {
+      "gate": 2
+    },
+    "analises-contratos-publicos/reajuste-aniversario-serie-indice/index.html": {
+      "vertical": 2,
+      "gate": 2
+    },
+    "analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/index.html": {
+      "gate": 2
+    },
+    "atrasos-prorrogacao-obras-publicas/index.html": {
+      "enquadramento": 1,
+      "enquadrar": 1,
+      "artefato": 3
+    },
+    "auditoria-orcamento-licitacao/index.html": {
+      "enquadramento": 2
+    },
+    "bid-room-licitacoes-obras/index.html": {
+      "enquadramento": 4,
+      "enquadrar": 1,
+      "aderencia": 1,
+      "artefato": 2,
+      "acervo": 7
+    },
+    "casos/aditivo-art125-demonstrativo/index.html": {
+      "enquadramento": 1
+    },
+    "casos/index.html": {
+      "enquadrar": 1
+    },
+    "casos/modelo-apresentacao-executiva-resultados/index.html": {
+      "enquadramento": 4,
+      "aderencia": 3,
+      "artefato": 3,
+      "acervo": 7,
+      "gate": 12
+    },
+    "casos/modelo-base-quantitativa-canonica/index.html": {
+      "aderencia": 4,
+      "artefato": 3,
+      "acervo": 1
+    },
+    "casos/modelo-contratos-vincendos-relicitacao/index.html": {
+      "aderencia": 1,
+      "artefato": 3,
+      "acervo": 6,
+      "gate": 5
+    },
+    "casos/modelo-mapa-compradores-publicos/index.html": {
+      "aderencia": 6,
+      "artefato": 3,
+      "acervo": 5,
+      "gate": 1
+    },
+    "casos/modelo-mapeamento-concorrentes-publicos/index.html": {
+      "aderencia": 3,
+      "artefato": 3,
+      "acervo": 6,
+      "gate": 9
+    },
+    "casos/modelo-painel-precos-obras-publicas/index.html": {
+      "aderencia": 1,
+      "artefato": 3,
+      "acervo": 1
+    },
+    "casos/modelo-relatorio-executivo-consolidado/index.html": {
+      "aderencia": 4,
+      "artefato": 3,
+      "acervo": 13
+    },
+    "casos/modelo-relatorio-inteligencia-licitacoes/index.html": {
+      "aderencia": 5,
+      "artefato": 3,
+      "acervo": 11,
+      "gate": 10
+    },
+    "comercial/radar-decisorio/index.html": {
+      "aderencia": 1,
+      "acervo": 7
+    },
+    "conteudos/aditivo-empreitada-por-preco-global/index.html": {
+      "enquadramento": 8
+    },
+    "conteudos/aditivo-qualitativo-quantitativo/index.html": {
+      "enquadramento": 4,
+      "enquadrar": 3
+    },
+    "conteudos/administracao-local-prolongada-obra-publica/index.html": {
+      "enquadrar": 1
+    },
+    "conteudos/atraso-na-medicao-obra-publica/index.html": {
+      "enquadramento": 1
+    },
+    "conteudos/atraso-obra-culpa-administracao/index.html": {
+      "enquadrar": 1
+    },
+    "conteudos/atraso-pagamento-contrato-publico-suspender/index.html": {
+      "enquadramento": 2,
+      "enquadrar": 2
+    },
+    "conteudos/atraso-projeto-executivo-obra-publica/index.html": {
+      "enquadrar": 1
+    },
+    "conteudos/aumento-material-reequilibrio-contrato-publico/index.html": {
+      "enquadramento": 1,
+      "enquadrar": 1
+    },
+    "conteudos/calculo-reequilibrio-economico-financeiro/index.html": {
+      "enquadramento": 1,
+      "enquadrar": 1
+    },
+    "conteudos/capacidade-tecnica-operacional-profissional-licitacao/index.html": {
+      "acervo": 1
+    },
+    "conteudos/chuva-prorrogacao-prazo-obra-publica/index.html": {
+      "enquadramento": 1,
+      "enquadrar": 1,
+      "artefato": 1
+    },
+    "conteudos/clausula-matriz-risco-abusiva-edital/index.html": {
+      "enquadramento": 1
+    },
+    "conteudos/compensacao-acrescimo-supressao-aditivo/index.html": {
+      "enquadrar": 1
+    },
+    "conteudos/comunicacao-fiscal-contrato-obra-publica/index.html": {
+      "enquadramento": 1
+    },
+    "conteudos/cotacao-mercado-orcamento-obra-publica/index.html": {
+      "enquadramento": 1
+    },
+    "conteudos/criterio-de-medicao-nao-previsto-contrato/index.html": {
+      "enquadramento": 1,
+      "enquadrar": 1
+    },
+    "conteudos/cronologia-contrato-obra-publica/index.html": {
+      "enquadramento": 1
+    },
+    "conteudos/curva-abc-reequilibrio-contrato/index.html": {
+      "enquadrar": 1
+    },
+    "conteudos/custos-indiretos-atraso-administracao-obra/index.html": {
+      "enquadrar": 1
+    },
+    "conteudos/data-base-orcamento-reajuste-obra-publica/index.html": {
+      "enquadrar": 1
+    },
+    "conteudos/demora-decisao-administracao-contrato-obra/index.html": {
+      "enquadramento": 2
+    },
+    "conteudos/desconto-da-proposta-em-item-novo-aditivo/index.html": {
+      "enquadrar": 2
+    },
+    "conteudos/diario-de-obra-pleito-contrato-publico/index.html": {
+      "enquadrar": 1
+    },
+    "conteudos/empreitada-preco-global-preco-unitario/index.html": {
+      "enquadramento": 1
+    },
+    "conteudos/erro-de-projeto-gera-aditivo-obra-publica/index.html": {
+      "enquadrar": 1
+    },
+    "conteudos/extincao-contrato-culpa-administracao/index.html": {
+      "enquadramento": 1,
+      "enquadrar": 2
+    },
+    "conteudos/extincao-contrato-obra-publica-pelo-contratado/index.html": {
+      "enquadramento": 1
+    },
+    "conteudos/fiscal-mandou-executar-sem-aditivo/index.html": {
+      "enquadramento": 1,
+      "enquadrar": 2
+    },
+    "conteudos/fiscal-nao-assina-medicao-obra-publica/index.html": {
+      "enquadramento": 1
+    },
+    "conteudos/frente-de-servico-nao-liberada-obra/index.html": {
+      "enquadramento": 2
+    },
+    "conteudos/garantia-proposta-licitacao-obra/index.html": {
+      "enquadramento": 3,
+      "enquadrar": 1
+    },
+    "conteudos/gestao-contrato-obra-publica-indicadores/index.html": {
+      "enquadrar": 1
+    },
+    "conteudos/glosa-de-medicao-obra-publica/index.html": {
+      "enquadramento": 1
+    },
+    "conteudos/indenizacao-servico-extracontratual-obra-publica/index.html": {
+      "enquadrar": 3
+    },
+    "conteudos/index.html": {
+      "enquadramento": 1,
+      "nucleo": 1
+    },
+    "conteudos/interferencia-concessionaria-obra-publica-atraso/index.html": {
+      "enquadramento": 1
+    },
+    "conteudos/jogo-de-planilha-aditivo-obra-publica/index.html": {
+      "enquadrar": 1
+    },
+    "conteudos/limite-aditivo-25-50-obra-publica/index.html": {
+      "enquadramento": 2,
+      "enquadrar": 2
+    },
+    "conteudos/manutencao-habilitacao-contrato-publico/index.html": {
+      "enquadrar": 1
+    },
+    "conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/index.html": {
+      "enquadramento": 1
+    },
+    "conteudos/medicao-de-obra-publica-rejeitada/index.html": {
+      "enquadramento": 1
+    },
+    "conteudos/mudanca-metodo-construtivo-obra-publica-aditivo/index.html": {
+      "enquadrar": 1
+    },
+    "conteudos/notas-fiscais-reequilibrio-contrato/index.html": {
+      "enquadramento": 1
+    },
+    "conteudos/notificacao-impacto-prazo-custo-obra/index.html": {
+      "enquadrar": 1
+    },
+    "conteudos/ordem-paralisacao-obra-publica-custos/index.html": {
+      "enquadramento": 1
+    },
+    "conteudos/pagamento-contrato-publico-certidao-vencida/index.html": {
+      "enquadrar": 1
+    },
+    "conteudos/pagamento-parcial-etapa-empreitada-global/index.html": {
+      "enquadramento": 2
+    },
+    "conteudos/parcela-incontroversa-medicao-contrato-publico/index.html": {
+      "enquadrar": 1
+    },
+    "conteudos/pedido-prorrogacao-prazo-antes-vencimento/index.html": {
+      "enquadrar": 1
+    },
+    "conteudos/pleito-tecnico-obra-publica/index.html": {
+      "enquadramento": 1
+    },
+    "conteudos/prazo-vigencia-prazo-execucao-contrato-obra/index.html": {
+      "enquadramento": 1,
+      "enquadrar": 1
+    },
+    "conteudos/preco-de-item-novo-aditivo-obra-publica/index.html": {
+      "enquadrar": 3
+    },
+    "conteudos/preco-unitario-acima-referencia-proposta-global/index.html": {
+      "enquadrar": 2
+    },
+    "conteudos/produtividade-sinapi-obra-publica/index.html": {
+      "enquadrar": 1
+    },
+    "conteudos/proposta-inexequivel-obra-publica-lei-14133/index.html": {
+      "enquadramento": 1,
+      "enquadrar": 1
+    },
+    "conteudos/prorrogacao-prazo-obra-publica-documentos/index.html": {
+      "enquadrar": 1
+    },
+    "conteudos/prova-de-medicao-diario-de-obra-fotos/index.html": {
+      "enquadramento": 1
+    },
+    "conteudos/quantitativo-insuficiente-planilha-obra-publica/index.html": {
+      "enquadrar": 1
+    },
+    "conteudos/recuperar-contrato-obra-publica-problematico/index.html": {
+      "enquadrar": 1
+    },
+    "conteudos/reequilibrio-apos-fim-do-contrato/index.html": {
+      "enquadrar": 1
+    },
+    "conteudos/reequilibrio-economico-financeiro-obra-publica/index.html": {
+      "enquadrar": 1
+    },
+    "conteudos/reequilibrio-empreitada-preco-global/index.html": {
+      "enquadramento": 1,
+      "enquadrar": 1
+    },
+    "conteudos/rescisao-unilateral-contrato-obra-publica/index.html": {
+      "enquadramento": 1
+    },
+    "conteudos/resposta-notificacao-atraso-obra-publica/index.html": {
+      "enquadramento": 1
+    },
+    "conteudos/seguro-garantia-execucao-contrato-publico/index.html": {
+      "enquadrar": 1
+    },
+    "conteudos/servico-executado-sem-termo-aditivo/index.html": {
+      "enquadrar": 1
+    },
+    "conteudos/servico-nao-previsto-na-planilha-obra-publica/index.html": {
+      "enquadrar": 1
+    },
+    "conteudos/sinapi-desonerado-nao-desonerado/index.html": {
+      "enquadramento": 7
+    },
+    "conteudos/suspensao-execucao-contrato-publico-contratado/index.html": {
+      "enquadrar": 1
+    },
+    "conteudos/tributos-bdi-obra-publica/index.html": {
+      "enquadrar": 1
+    },
+    "conteudos/troca-responsavel-tecnico-contrato-publico/index.html": {
+      "enquadrar": 1
+    },
+    "conteudos/visita-tecnica-licitacao-obra-publica/index.html": {
+      "enquadrar": 1
+    },
+    "defesa-margem-contratos-publicos/index.html": {
+      "enquadrar": 1,
+      "artefato": 2,
+      "vertical": 1
+    },
+    "defesa-tecnica-contratos-publicos/index.html": {
+      "enquadramento": 1,
+      "artefato": 2
+    },
+    "diagnostico-b2g-360/index.html": {
+      "enquadramento": 3,
+      "acervo": 5
+    },
+    "diagnostico-b2g-expansao/index.html": {
+      "enquadramento": 2,
+      "artefato": 1
+    },
+    "diagnostico-pre-licitacao/index.html": {
+      "enquadramento": 1
+    },
+    "diretoria-b2g/index.html": {
+      "enquadramento": 4,
+      "enquadrar": 1,
+      "aderencia": 1
+    },
+    "entregas/index.html": {
+      "aderencia": 2,
+      "artefato": 8,
+      "acervo": 13,
+      "gate": 3
+    },
+    "ferramentas/matriz-atraso-obra/index.html": {
+      "enquadrar": 1
+    },
+    "guias-contratos-obras/checklist-pedido-aditivo/index.html": {
+      "enquadramento": 4
+    },
+    "guias-contratos-obras/contestar-glosa-medicao/index.html": {
+      "enquadramento": 1
+    },
+    "guias-contratos-obras/documentos-pedido-reequilibrio/index.html": {
+      "enquadramento": 2
+    },
+    "guias-contratos-obras/index.html": {
+      "enquadramento": 1
+    },
+    "guias-contratos-obras/responder-notificacao-atraso/index.html": {
+      "enquadramento": 1
+    },
+    "inteligencia/cenarios/aditivos-e-risco-de-margem/index.html": {
+      "enquadramento": 1
+    },
+    "inteligencia/cenarios/inconsistencia-orcamento-edital/index.html": {
+      "enquadramento": 3
+    },
+    "inteligencia/cenarios/medicao-glosa-contratos-recorrentes/index.html": {
+      "enquadramento": 1
+    },
+    "inteligencia/cenarios/reequilibrio-e-dispersao-de-precos/index.html": {
+      "enquadramento": 1
+    },
+    "inteligencia/cenarios/referencia-sinapi-sicro-margem/index.html": {
+      "enquadramento": 1
+    },
+    "inteligencia/index.html": {
+      "enquadramento": 1
+    },
+    "inteligencia/orgaos/index.html": {
+      "aderencia": 1
+    },
+    "inteligencia/valor-tipico-contratos-pavimentacao/index.html": {
+      "gate": 1
+    },
+    "jurisprudencia-contratos-obras/index.html": {
+      "enquadramento": 1
+    },
+    "jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/index.html": {
+      "enquadramento": 1
+    },
+    "lei-14133-obras/art-124-alteracao-contratual-obra/index.html": {
+      "enquadramento": 4
+    },
+    "lei-14133-obras/atraso-imputavel-administracao/index.html": {
+      "enquadramento": 10,
+      "enquadrar": 2
+    },
+    "lei-14133-obras/index.html": {
+      "enquadramento": 1
+    },
+    "lei-14133-obras/limite-25-50-aditivo-obra/index.html": {
+      "enquadramento": 5,
+      "enquadrar": 1
+    },
+    "lei-14133-obras/parcela-incontroversa-medicao-pagamento/index.html": {
+      "enquadramento": 1
+    },
+    "lei-14133-obras/preco-item-novo-desconto-proposta/index.html": {
+      "enquadramento": 2
+    },
+    "lei-14133-obras/reequilibrio-reajuste-repactuacao/index.html": {
+      "enquadramento": 4,
+      "enquadrar": 2
+    },
+    "lei-14133-obras/servico-executado-sem-termo-aditivo/index.html": {
+      "enquadramento": 7
+    },
+    "medicoes-glosas-obras-publicas/index.html": {
+      "enquadramento": 1,
+      "enquadrar": 1
+    },
+    "metodologia-inteligencia/index.html": {
+      "enquadramento": 1
+    },
+    "obrigado-contrato.html": {
+      "enquadramento": 1,
+      "enquadrar": 2
+    },
+    "obrigado-edital.html": {
+      "enquadramento": 2
+    },
+    "obrigado-operacao.html": {
+      "enquadramento": 1
+    },
+    "obrigado.html": {
+      "enquadrar": 2
+    },
+    "oportunidades/cc-2026-000047-ponte-rio-do-sul-sc/index.html": {
+      "aderencia": 1
+    },
+    "oportunidades/pe-2026-000188-reforma-ubs-londrina-pr/index.html": {
+      "aderencia": 1
+    },
+    "oportunidades/pe-2026-000412-pav-urbana-chapeco-sc/index.html": {
+      "aderencia": 1
+    },
+    "oportunidades/pe-2026-000903-sinalizacao-viaria-caxias-rs/index.html": {
+      "aderencia": 1,
+      "vertical": 4
+    },
+    "piloto/concorrencia/edificacoes-publicas-rs/index.html": {
+      "acervo": 1
+    },
+    "piloto/concorrencia/pavimentacao-infraestrutura-viaria-pr/index.html": {
+      "acervo": 1
+    },
+    "piloto/concorrencia/pavimentacao-infraestrutura-viaria-rs/index.html": {
+      "acervo": 1
+    },
+    "piloto/concorrencia/pavimentacao-infraestrutura-viaria-sc/index.html": {
+      "acervo": 1
+    },
+    "piloto/concorrencia/pavimentacao-infraestrutura-viaria-sp/index.html": {
+      "acervo": 1
+    },
+    "piloto/mercados/edificacoes-publicas-rs/index.html": {
+      "acervo": 1
+    },
+    "piloto/mercados/pavimentacao-infraestrutura-viaria-pr/index.html": {
+      "acervo": 1
+    },
+    "piloto/mercados/pavimentacao-infraestrutura-viaria-rs/index.html": {
+      "acervo": 1
+    },
+    "piloto/mercados/pavimentacao-infraestrutura-viaria-sc/index.html": {
+      "acervo": 1
+    },
+    "piloto/mercados/pavimentacao-infraestrutura-viaria-sp/index.html": {
+      "acervo": 1
+    },
+    "piloto/orgaos/base-administrativa-do-curado-pe-pe/engenharia/index.html": {
+      "acervo": 3
+    },
+    "piloto/orgaos/base-aerea-de-anapolis-go/engenharia/index.html": {
+      "acervo": 3
+    },
+    "piloto/orgaos/eem-euclides-pinheiro-de-andrade-ce/engenharia/index.html": {
+      "acervo": 3
+    },
+    "piloto/orgaos/esp-prestacao-de-servicos-fde-see-sp/engenharia/index.html": {
+      "acervo": 3
+    },
+    "piloto/orgaos/superintendencia-reg-pol-rodv-federal-go-go/engenharia/index.html": {
+      "acervo": 3
+    },
+    "privacidade/index.html": {
+      "pii": 3
+    },
+    "problemas-que-resolvemos/index.html": {
+      "acervo": 1
+    },
+    "radar/index.html": {
+      "acervo": 1
+    },
+    "radar/nacional-obras-publicas/index.html": {
+      "acervo": 1,
+      "pii": 1
+    },
+    "radar/pesquisa/edicao-zero-4uf/index.html": {
+      "gate": 1
+    },
+    "reequilibrio-obras-publicas/index.html": {
+      "enquadramento": 2,
+      "enquadrar": 1
+    }
+  }
+}

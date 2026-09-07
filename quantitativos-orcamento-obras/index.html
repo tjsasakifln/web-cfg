@@ -35,7 +35,7 @@
 .qty-channels{margin-top:1.25rem}
 .qty-channels .channel-actions{align-items:stretch}
 .qty-channels .text-link{padding-inline:.25rem}
-@media(max-width:800px){.qty-hero-grid,.qty-grid,.qty-flow,.qty-proof,.qty-triage-grid{grid-template-columns:1fr}.qty-hero{padding-block:2.5rem}.qty-hero h1{max-width:none}}
+@media(max-width:800px){.qty-hero-grid,.qty-grid,.qty-flow,.qty-proof,.qty-triage-grid{grid-template-columns:1fr}.qty-hero-grid>*,.qty-grid>*,.qty-flow>*,.qty-proof>*,.qty-triage-grid>*{min-width:0}.qty-hero-grid h1,.qty-hero-grid p,.qty-proof h2,.qty-proof p,.qty-proof li{overflow-wrap:break-word}.qty-hero{padding-block:2.5rem}.qty-hero h1{max-width:none}}
 </style>
 <script defer="" src="/script.js?v=mv09"></script>
 <script defer="" src="/assets/js/adaptive-intake.js"></script>
@@ -63,7 +63,7 @@
 <a data-cta-position="header_nav" href="/servicos-obras-publicas/" style="min-height:44px">Obras públicas</a>
 <a data-cta-position="header_nav" href="/conteudos/" style="min-height:44px">Biblioteca</a>
 </nav>
-<a class="button button-primary header-cta" data-value-first-cta="true" href="#triagem-quantitativos">Enquadrar quantitativos</a>
+<a class="button button-primary header-cta" data-value-first-cta="true" href="#triagem-quantitativos">Conversar sobre minha obra</a>
 <button aria-controls="mobile-menu" aria-expanded="false" aria-label="Abrir menu" class="menu-toggle" type="button">
 <svg class="icon menu-open"><use href="#i-menu"></use></svg><svg class="icon menu-close"><use href="#i-close"></use></svg>
 </button>
@@ -72,7 +72,7 @@
 <a data-cta-position="mobile_nav" aria-current="page" href="/servicos/" style="min-height:44px">Serviços e problemas</a>
 <a data-cta-position="mobile_nav" href="/servicos-obras-publicas/" style="min-height:44px">Obras públicas</a>
 <a data-cta-position="mobile_nav" href="/conteudos/" style="min-height:44px">Biblioteca</a>
-<a class="button button-primary" data-value-first-cta="true" href="#triagem-quantitativos">Enquadrar quantitativos</a>
+<a class="button button-primary" data-value-first-cta="true" href="#triagem-quantitativos">Conversar sobre minha obra</a>
 </nav>
 </header>
 
@@ -82,18 +82,17 @@
 <section aria-labelledby="qty-title" class="qty-hero">
 <div class="container qty-hero-grid">
 <div>
-<p class="eyebrow">CONFENGE, Engenharia, Perícias e Inteligência Técnica</p>
 <p class="eyebrow">Antes de comparar, contratar ou alterar o escopo</p>
-<h1 id="qty-title">Orçamento só orienta a decisão quando quantidades e premissas aparecem.</h1>
-<p class="qty-lead">A CONFENGE ajuda a produzir ou revisar uma base de quantidades e custos para obra privada, deixando visíveis a origem, os critérios e as lacunas que mudam a comparação.</p>
+<h1 id="qty-title">Quantitativos e orçamento de obras</h1>
+<p class="qty-lead">Levantamos ou revisamos as quantidades e os custos da sua obra para você comparar propostas e planejar a execução. Você recebe de onde veio cada quantidade, qual critério foi usado e o que ficou faltando nos documentos.</p>
 <div class="hero-actions">
-<a class="button button-primary button-lg" data-cta-id="frame-quantities-budget-hero" data-cta-position="hero" href="#triagem-quantitativos">Enquadrar quantitativos ou orçamento <svg class="icon"><use href="#i-arrow"></use></svg></a>
-<a class="text-link" data-cta-id="understand-quantities-method" href="#metodo-quantitativos">Entender como a base é montada</a>
+<a class="button button-primary button-lg" data-cta-id="frame-quantities-budget-hero" data-cta-position="hero" href="#triagem-quantitativos">Conversar sobre minha obra <svg class="icon"><use href="#i-arrow"></use></svg></a>
+<a class="text-link" data-cta-id="understand-quantities-method" href="#metodo-quantitativos">Ver como fazemos o levantamento</a>
 </div>
 </div>
 <aside class="qty-signal">
-<strong>Um trabalho principal</strong>
-<p>Organizar ou conferir quantitativos e orçamento de uma obra privada. Auditoria de licitação e defesa de margem em contrato público continuam na vertical de <a href="/servicos-obras-publicas/">obras públicas</a>.</p>
+<strong>Serve para obra privada</strong>
+<p>Se o seu caso é licitação ou contrato com órgão público, veja <a href="/servicos-obras-publicas/">obras públicas</a>, lá o trabalho é outro.</p>
 </aside>
 </div>
 </section>
@@ -101,9 +100,9 @@
 <section aria-labelledby="qty-output-title" class="section section--default">
 <div class="container">
 <header class="section-head">
-<p class="eyebrow">Decisão e artefato</p>
-<h2 id="qty-output-title">Uma base que pode ser conferida antes do investimento.</h2>
-<p class="section-lead">O recorte final depende dos documentos e da pergunta. A entrega proposta pode combinar os três artefatos abaixo.</p>
+<p class="eyebrow">O que você recebe</p>
+<h2 id="qty-output-title">Números que você consegue conferir antes de gastar.</h2>
+<p class="section-lead">O que entra na entrega depende dos documentos que você tiver e da pergunta que precisa responder. Combinamos, no todo ou em parte, estes três itens.</p>
 </header>
 <div class="qty-grid">
 <article class="qty-card"><h3>Planilha de quantitativos</h3><p>Itens, unidades e recorte de leitura ligados aos documentos que deram origem à quantidade.</p></article>
@@ -132,7 +131,7 @@
 <div><p class="eyebrow">Prova disponível</p><h2 id="qty-proof-title">Método e responsabilidade visíveis.</h2></div>
 <div>
 <ul class="qty-list">
-<li>A formação publicada do responsável é Engenharia Civil pela EESC-USP; CREA, acervo, case e capacidade irrestrita não são presumidos.</li>
+<li>O responsável é Engenheiro Civil formado pela EESC-USP. Registro no CREA, obras anteriores e disponibilidade para qualquer disciplina não estão afirmados aqui.</li>
 <li>Quantitativos, premissas e lacunas ficam vinculados ao recorte documental definido na proposta.</li>
 <li>Exemplo sintético: duas propostas usam o mesmo nome de serviço, mas incluem quantidades diferentes. Uma memória rastreável permite comparar o que cada uma considerou; isso não representa cliente, obra, prazo, preço ou resultado da CONFENGE.</li>
 </ul>
@@ -143,7 +142,7 @@
 
 <section aria-labelledby="qty-limits-title" class="section section--tight">
 <div class="container qty-proof">
-<div><p class="eyebrow">Limites materiais</p><h2 id="qty-limits-title">O enquadramento vem antes da proposta.</h2></div>
+<div><p class="eyebrow">Limites materiais</p><h2 id="qty-limits-title">Primeiro entendemos o caso; a proposta vem depois.</h2></div>
 <div>
 <ul class="qty-list">
 <li>Não há preço, prazo, capacidade, visita, disciplina ou resultado garantido nesta página.</li>
@@ -209,7 +208,7 @@
 <p class="form-hint" data-form-boundary>Não há contratação, pagamento, aceite ou prazo prometido. Este passo não recebe arquivo, planta, orçamento, endereço exato, CPF, processo ou texto livre. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da <a href="/privacidade/">Política de Privacidade</a>, com o protocolo.</p>
 </form>
 <section aria-labelledby="qty-receipt-title" class="receipt-card" data-intake-receipt hidden>
-<p class="triage-eyebrow">Pedido registrado</p><h3 id="qty-receipt-title">Recebemos sua triagem</h3><p>Protocolo: <strong data-intake-protocol></strong></p><p>A CONFENGE verificará o enquadramento e usará o canal informado para combinar o próximo passo. Nenhum pagamento ou contratação foi realizado.</p>
+<p class="triage-eyebrow">Pedido registrado</p><h3 id="qty-receipt-title">Recebemos sua triagem</h3><p>Protocolo: <strong data-intake-protocol></strong></p><p>A CONFENGE vai analisar o seu caso e usar o canal que você informou para combinar o próximo passo. Nenhum pagamento ou contratação foi realizado.</p>
 </section>
 <aside aria-labelledby="qty-channels-title" class="channel-card qty-channels">
 <h3 id="qty-channels-title">Três canais diretos</h3><p>Continuam disponíveis mesmo quando o formulário não puder registrar o pedido.</p>
@@ -229,7 +228,7 @@
 <div class="footer-brand"><img alt="CONFENGE" decoding="async" height="58" loading="lazy" src="/assets/logo-confenge-white-500-1677038e.png" width="224"/><p>Engenharia, perícias e inteligência técnica para transformar situações complexas em decisões documentadas.</p></div>
 <div class="footer-links"><strong>Situações</strong><a href="/#situacao-projeto">Projetos e edificações</a><a href="/#situacao-pericia">Perícias e avaliações</a><a href="/#situacao-sst">Segurança do trabalho</a><a href="/servicos-obras-publicas/">Obras públicas</a></div><div class="footer-links"><strong>Biblioteca e provas</strong><a href="/conteudos/">Conteúdos</a><a href="/ferramentas/">Ferramentas</a><a href="/entregas/">Entregas</a><a href="/casos/">Casos demonstrativos</a></div><div class="footer-links"><strong>Empresa</strong><a href="/especialista/tiago-jun-sasaki/">Quem responde</a><a href="/confianca/">Como verificamos</a><a href="/triagem-tecnica/">Contato e triagem</a><a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a><a href="tel:+5548988344559">(48) 98834-4559</a><span>Atendimento nacional</span></div>
 </div>
-<div class="container footer-bottom"><span>© <span id="year">2026</span> CONFENGE. CNPJ 52.407.089/0001-09.</span><nav class="footer-authority" aria-label="Autoridade e políticas"><a href="/politica-editorial/">Política editorial</a><a href="/correcoes/">Correções</a><a href="/uso-de-ia/">Uso de IA</a><a href="/conflitos/">Conflitos</a><a href="/privacidade/">Privacidade</a></nav></div>
+<div class="container footer-bottom"><span>© <span id="year">2026</span> CONFENGE. CNPJ 52.407.089/0001-09.</span><nav class="footer-authority" aria-label="Autoridade e políticas"><a href="/politica-editorial/">Política editorial</a><a href="/triagem-tecnica/#corrigir-o-site">Encontrou um erro?</a><a href="/uso-de-ia/">Uso de IA</a><a href="/conflitos/">Conflitos</a><a href="/privacidade/">Privacidade</a></nav></div>
 </footer>
 </body>
 </html>

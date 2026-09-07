@@ -8,7 +8,7 @@
       "value_first_outcome": "compare events and artifacts 17-23 before credit, urgency and limits",
       "form_profile": "service_fit_review",
       "runtime_profile": "shared_lead_form_v1",
-      "submit_state": "Registrar contexto para revisão de encaixe"
+      "submit_state": "Descrever meu caso"
     },
     {
       "route": "/diagnostico-b2g-expansao/",
@@ -16,7 +16,7 @@
       "value_first_outcome": "use the map, panel and recommendations as a direction-level decision artifact",
       "form_profile": "service_fit_review",
       "runtime_profile": "inline_receipt_v1",
-      "submit_state": "Registrar pedido para revisão de enquadramento"
+      "submit_state": "Pedir retorno da CONFENGE"
     },
     {
       "route": "/bid-room-licitacoes-obras/",
@@ -40,7 +40,7 @@
       "value_first_outcome": "use the causal record to request, mitigate, absorb or route to legal",
       "form_profile": "service_fit_review",
       "runtime_profile": "shared_lead_form_v1",
-      "submit_state": "Registrar contexto para revisão de encaixe"
+      "submit_state": "Descrever meu caso"
     },
     {
       "route": "/defesa-tecnica-contratos-publicos/",
@@ -48,7 +48,7 @@
       "value_first_outcome": "use an allegation-to-evidence matrix without presenting the work as legal representation",
       "form_profile": "service_fit_review",
       "runtime_profile": "shared_lead_form_v1",
-      "submit_state": "Registrar contexto para revisão de encaixe"
+      "submit_state": "Descrever meu caso"
     },
     {
       "route": "/acompanhamento-contratos-obras/",
@@ -56,7 +56,7 @@
       "value_first_outcome": "use obligations matrix, panel, queue, agenda and minutes during execution",
       "form_profile": "service_fit_review",
       "runtime_profile": "shared_lead_form_v1",
-      "submit_state": "Registrar contexto para revisão de encaixe"
+      "submit_state": "Descrever meu caso"
     },
     {
       "route": "/diretoria-b2g/",

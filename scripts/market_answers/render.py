@@ -28,7 +28,7 @@ from scripts.market_answers.copy import first_fold_copy, geography_label, visito
 from scripts.market_answers.events import catalog
 from scripts.market_answers.gate import GateDecision, write_lkg
 from scripts.market_answers.sitemap import apply_market_answer_sitemap, robots_for_url
-from scripts.market_answers.urls import drilldown_model
+from scripts.market_answers.urls import CORRECTION_PATH, drilldown_model
 
 
 def _root() -> Path:
@@ -277,6 +277,12 @@ def render_html(
 <header class="site-header" id="inicio">
 <div class="container header-inner">
 <a aria-label="CONFENGE, página inicial" class="brand" href="/"><img alt="CONFENGE Inteligência Técnica" height="58" src="/assets/logo-confenge-500-f8a83f6d.png" width="224"/></a>
+<!-- ATENCAO: este nav e um literal e NAO e a autoridade. A navegacao
+     canonica vem de data/site/brand.json via scripts/site/shell_nav.py.
+     Depois de rodar market-answers:build, rode tambem
+     `python3 scripts/site/shell_nav.py --write`, senao esta pagina volta
+     ao menu antigo de seis itens. `npm run test:nav` reprova se isso
+     acontecer, entao a divergencia nao passa silenciosa. -->
 <nav aria-label="Navegação principal" class="desktop-nav">
 <a data-cta-position="header_nav" href="/servicos-obras-publicas/">Serviços</a>
 <a data-cta-position="header_nav" href="/problemas-que-resolvemos/">Problemas que resolvemos</a>
@@ -374,7 +380,7 @@ def render_html(
 <a class="button button-primary" data-ma-event="cta_click" data-cta-id="veja-sua-empresa" href="#xray">Veja sua empresa neste mercado</a>
 <a class="button" data-ma-event="cta_click" data-cta-id="analise-contrato" href="/ferramentas/diagnostico-defesa-margem/">Analise um contrato / peça segunda leitura</a>
 </p>
-<p class="ma-note">Atribuição: source <code>CONFENGE_WEB</code>, asset <code>{ASSET_ID}</code>, família <code>{ASSET_FAMILY}</code>. Correção: <a data-ma-event="correction_open" href="/correcoes/">pedir correção</a>.</p>
+<p class="ma-note">Atribuição: source <code>CONFENGE_WEB</code>, asset <code>{ASSET_ID}</code>, família <code>{ASSET_FAMILY}</code>. <a data-ma-event="correction_open" href="{CORRECTION_PATH}">Encontrou um erro nesta página?</a></p>
 </section>
 
 <section id="dataset" data-dataset="valor-tipico-contratos-pavimentacao-sc" aria-labelledby="fontes-titulo">
@@ -413,6 +419,18 @@ def write_page(
     directory = root / PAGE_DIR
     directory.mkdir(parents=True, exist_ok=True)
     html = render_html(record, payload, decision, site_root=root)
+    # A navegacao canonica vive em data/site/brand.json e e aplicada por
+    # scripts/site/shell_nav.py. O cabecalho neste modulo e um literal, entao
+    # sem esta passagem cada `market-answers:build` devolvia a pagina ao menu
+    # antigo de seis itens e reprovava `npm run test:nav` -- que foi exatamente
+    # o que aconteceu. Sincronizar aqui torna a saida canonica POR CONSTRUCAO,
+    # em vez de depender de alguem lembrar de rodar --write depois.
+    try:
+        from scripts.site.shell_nav import load_brand, sync_text
+
+        html = sync_text(html, load_brand(), f"/{PAGE_DIR}/")
+    except Exception:  # noqa: BLE001 - nunca impedir a geracao por causa do shell
+        pass
     path = directory / "index.html"
     path.write_text(html, encoding="utf-8")
     as_of = parse_instant(payload.get("as_of"))

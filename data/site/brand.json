@@ -115,7 +115,7 @@
       "id": "occupational_safety",
       "label": "Segurança do trabalho",
       "summary": "Quando a empresa precisa reconhecer, documentar ou tratar uma situação de risco ocupacional.",
-      "deliverables": "Diagnóstico, documentação ou apoio técnico, após confirmação de aderência e atribuição.",
+      "deliverables": "Diagnóstico, documentação ou apoio técnico, depois de confirmarmos que podemos assumir o caso.",
       "href": "/triagem-tecnica/#sst",
       "index_state": "triage_fallback"
     },
@@ -154,7 +154,7 @@
         "title": "Serviços de engenharia, perícias e inteligência técnica",
         "description": "Encontre o caminho para projetos, edificações, imóveis, perícias, segurança do trabalho ou obras públicas sem percorrer um catálogo extenso.",
         "h1": "Encontre o caminho técnico para a sua situação",
-        "lead": "Comece pelo problema que precisa ser resolvido. A triagem confirma aderência, limites e o entregável aplicável.",
+        "lead": "Comece pelo problema que precisa ser resolvido. A gente confirma se pode ajudar, o que consegue entregar e o que fica de fora.",
         "eyebrow": "Serviços organizados por situação",
       "index_state": "index"
       },
@@ -165,7 +165,7 @@
         "description": "Serviços da CONFENGE para construtoras: Diagnóstico da Operação em Obras Públicas, Diretoria Fracionada para o Mercado Público, Operação de Proposta para Licitação Crítica e defesa de margem.",
         "h1": "Serviços para licitações e contratos de obras públicas",
         "lead": "Escolha pelo uso: definir onde crescer, coordenar uma proposta crítica, organizar um evento contratual ou instalar uma rotina de decisão.",
-        "proof": "Onde o trabalho já tem preço e prazo publicados, eles aparecem na página. Onde a triagem ainda decide o enquadramento, a página diz o que a triagem fecha. Exemplos completos você consulta sem cadastro.",
+        "proof": "Onde o trabalho já tem preço e prazo publicados, eles aparecem na página. Onde o preço depende do caso, a página diz o que a conversa inicial resolve. Exemplos completos você consulta sem cadastro.",
         "eyebrow": "Comece pela decisão que não pode esperar",
         "proof_link": {
           "text": "Exemplos completos",

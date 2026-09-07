@@ -115,7 +115,10 @@ try {
     submitDisabled: document.querySelector('[type="submit"]')?.disabled,
     overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth,
   }));
-  check("private_wedge_mobile_contract", /quantidades e premissas/i.test(wedgeMobile.h1)
+  // A propriedade e que o H1 da cunha privada nomeie o assunto -- quantitativos
+  // e orcamento. O H1 antigo dizia isso por rodeio ("Orcamento so orienta a
+  // decisao quando quantidades e premissas aparecem"); o novo diz direto.
+  check("private_wedge_mobile_contract", /quantitativos e or[çc]amento/i.test(wedgeMobile.h1)
     && wedgeMobile.channels === 3 && wedgeMobile.submitDisabled === true && wedgeMobile.overflow === false,
   JSON.stringify(wedgeMobile));
   await axeClean(wedge, "private_wedge_mobile"); await shot(wedge, "private-wedge-390");

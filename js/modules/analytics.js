@@ -44,7 +44,7 @@
   };
   const CHROME_PREFIXES = [
     '/especialista/', '/politica-editorial/', '/privacidade/', '/termos-de-uso/',
-    '/correcoes/', '/uso-de-ia/', '/conflitos/', '/imprensa/',
+    '/uso-de-ia/', '/conflitos/', '/imprensa/',
     '/nurture/', '/ops/', '/comercial/', '/obrigado',
   ];
   const EVENT_ALIASES = {

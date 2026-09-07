@@ -1,7 +1,7 @@
 {
   "defect_count": 0,
   "ok": true,
-  "page_count": 79,
+  "page_count": 78,
   "pages": [
     {
       "claimed": {
@@ -2711,62 +2711,6 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Como contestar e corrigir"
-        ],
-        "dataset_names": [],
-        "dates": [],
-        "descriptions": [],
-        "downloads": [],
-        "has_dataset_type": false,
-        "has_false_case_type": false,
-        "headlines": [],
-        "licenses": [],
-        "organizations": [
-          "CONFENGE"
-        ],
-        "people": [
-          "Tiago Sasaki"
-        ],
-        "reviewers": [],
-        "types": [
-          "Organization",
-          "Person",
-          "BreadcrumbList"
-        ],
-        "versions": []
-      },
-      "defects": [],
-      "fixture_only": false,
-      "index_intent": true,
-      "ok": true,
-      "url": "https://confenge.com.br/correcoes/",
-      "visible": {
-        "authors": [
-          "Engº Tiago Sasaki"
-        ],
-        "breadcrumb_names": [
-          "Início",
-          "Como contestar e corrigir"
-        ],
-        "canonical": "https://confenge.com.br/correcoes/",
-        "dates": [
-          "2026-08-16"
-        ],
-        "description": "Canal de contestação com recibo, PII mínima e prazo UNKNOWN até existir série medida.",
-        "h1": "Como contestar e corrigir",
-        "has_dataset_surface": false,
-        "licenses": [],
-        "permission_class": "demonstrativo",
-        "reviewers": [],
-        "title": "Correções e contestação | CONFENGE",
-        "versions": []
-      }
-    },
-    {
-      "claimed": {
-        "authors": [],
-        "breadcrumbs": [
-          "Início",
           "Contrato sob pressão",
           "Defesa de margem"
         ],
@@ -3952,7 +3896,8 @@
       "url": "https://confenge.com.br/politica-editorial/",
       "visible": {
         "authors": [
-          "Engº Tiago Sasaki"
+          "Engº Tiago Sasaki",
+          "Tiago Jun Sasaki"
         ],
         "breadcrumb_names": [
           "Início",
@@ -3960,9 +3905,9 @@
         ],
         "canonical": "https://confenge.com.br/politica-editorial/",
         "dates": [
-          "2026-08-16"
+          "2026-09-07"
         ],
-        "description": "Como a CONFENGE classifica fontes e afirmações, revisa, atualiza, contesta, corrige e retira o que publica em confenge.com.br.",
+        "description": "Como a CONFENGE decide o que publica: fontes, autoria, revisão, atualização, correção e retirada.",
         "h1": "Política editorial",
         "has_dataset_surface": false,
         "licenses": [],
@@ -4008,7 +3953,8 @@
       "url": "https://confenge.com.br/politica-editorial/historico/",
       "visible": {
         "authors": [
-          "Engº Tiago Sasaki"
+          "Engº Tiago Sasaki",
+          "Tiago Jun Sasaki"
         ],
         "breadcrumb_names": [
           "Início",
@@ -4017,7 +3963,8 @@
         "canonical": "https://confenge.com.br/politica-editorial/historico/",
         "dates": [
           "2026-08-15",
-          "2026-08-16"
+          "2026-08-16",
+          "2026-09-07"
         ],
         "description": "Changelog das políticas públicas da CONFENGE. Versões anteriores permanecem legíveis.",
         "h1": "Histórico da política editorial",
@@ -4065,7 +4012,8 @@
       "url": "https://confenge.com.br/politica-editorial/v/1.0.0/",
       "visible": {
         "authors": [
-          "Engº Tiago Sasaki"
+          "Engº Tiago Sasaki",
+          "Tiago Jun Sasaki"
         ],
         "breadcrumb_names": [
           "Início",
@@ -4210,7 +4158,7 @@
         "canonical": "https://confenge.com.br/quantitativos-orcamento-obras/",
         "dates": [],
         "description": "Organize quantitativos, memória, premissas e lacunas antes de comparar propostas, contratar ou alterar o escopo de uma obra privada.",
-        "h1": "Orçamento só orienta a decisão quando quantidades e premissas aparecem.",
+        "h1": "Quantitativos e orçamento de obras",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": "demonstrativo",
@@ -4525,7 +4473,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Uso material de inteligência artificial"
+          "Uso de inteligência artificial"
         ],
         "dataset_names": [],
         "dates": [],
@@ -4556,26 +4504,27 @@
       "url": "https://confenge.com.br/uso-de-ia/",
       "visible": {
         "authors": [
-          "Engº Tiago Sasaki"
+          "Engº Tiago Sasaki",
+          "Tiago Jun Sasaki"
         ],
         "breadcrumb_names": [
           "Início",
-          "Uso material de inteligência artificial"
+          "Uso de inteligência artificial"
         ],
         "canonical": "https://confenge.com.br/uso-de-ia/",
         "dates": [
-          "2026-08-16"
+          "2026-09-07"
         ],
-        "description": "Onde a IA entra na produção pública da CONFENGE, o que ela não faz e quem responde pelo texto publicado.",
-        "h1": "Uso material de inteligência artificial",
+        "description": "Onde a IA entra na produção pública da CONFENGE, o que ela não faz e quem responde pelo texto.",
+        "h1": "Uso de inteligência artificial",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": "demonstrativo",
         "reviewers": [],
-        "title": "Uso material de IA | CONFENGE",
+        "title": "Uso de IA | CONFENGE",
         "versions": []
       }
     }
   ],
-  "site_root": "/home/tjsasakifln/code/confenge/.worktrees/web-cfg/mv-09-commercial-production-20260905/_site"
+  "site_root": "/tmp/claude-1000/-home-tjsasakifln-code-confenge-web-cfg/00c05faa-bef8-4907-a4f3-a23173631031/scratchpad/wt-main/_site"
 }

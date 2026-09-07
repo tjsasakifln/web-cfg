@@ -37,6 +37,7 @@ UPDATED_BR = {
     "2026-08-16": "16 de agosto de 2026",
     "2026-09-04": "4 de setembro de 2026",
     "2026-09-05": "5 de setembro de 2026",
+    "2026-09-07": "7 de setembro de 2026",
 }
 
 
@@ -51,7 +52,7 @@ def _byline(updated: str, version: str, role_label: str = "Responsável técnico
         f'{_esc(role_label)}: <a href="/especialista/tiago-jun-sasaki/">Tiago Jun Sasaki</a>'
         f' · Política <span data-policy-version="{_esc(version)}">{_esc(version)}</span>'
         f' · Atualizado em <time datetime="{_esc(updated)}">{_esc(br)}</time>'
-        ' · <a href="/correcoes/">Como corrigir</a>'
+        ' · <a href="/triagem-tecnica/#corrigir-o-site">Encontrou um erro?</a>'
         "</p>"
     )
 
@@ -60,7 +61,6 @@ def _nav() -> str:
     return (
         '<nav class="authority-policy-nav" aria-label="Políticas de autoridade">'
         '<a href="/politica-editorial/">Editorial</a>'
-        '<a href="/correcoes/">Correções</a>'
         '<a href="/uso-de-ia/">Uso de IA</a>'
         '<a href="/conflitos/">Conflitos</a>'
         '<a href="/metodologia-inteligencia/">Metodologia</a>'
@@ -84,66 +84,6 @@ def _version_banner(version: str, *, historical: bool) -> str:
         "</p>"
     )
 
-
-def _correction_form(version: str, owner_email: str) -> str:
-    mailto = (
-        f"mailto:{_esc(owner_email)}?subject=Correcao%20editorial%20CONFENGE"
-    )
-    return f"""
-<h2 id="formulario">Pedido com recibo</h2>
-<form class="contact-form" id="correction-form" method="post" action="/.netlify/functions/correction" novalidate>
-<input name="policy_version" type="hidden" value="{_esc(version)}"/>
-<p class="honeypot"><label for="empresa-site">Não preencha este campo</label>
-<input autocomplete="off" id="empresa-site" name="empresa-site" tabindex="-1"/></p>
-<div class="field"><label for="page_url">URL da página</label>
-<input id="page_url" name="page_url" required="" type="url" inputmode="url" placeholder="https://confenge.com.br/..."/></div>
-<div class="field"><label for="contested_excerpt">Trecho contestado</label>
-<textarea id="contested_excerpt" maxlength="2000" name="contested_excerpt" required="" rows="4"></textarea></div>
-<div class="field"><label for="proposed_correction">Correção proposta</label>
-<textarea id="proposed_correction" maxlength="2000" name="proposed_correction" required="" rows="4"></textarea></div>
-<div class="field"><label for="contact">E-mail ou WhatsApp para resposta</label>
-<input id="contact" name="contact" required="" type="text" autocomplete="email"/>
-<p class="form-hint">Só o necessário para responder. Não envie CPF, RG, data de nascimento nem endereço residencial.</p></div>
-<div class="field"><label for="contact_name">Como podemos nos dirigir a você <span class="optional-mark">opcional</span></label>
-<input id="contact_name" maxlength="80" name="contact_name" type="text" autocomplete="nickname"/></div>
-<label class="check"><input name="consentimento" required="" type="checkbox"/> Autorizo o uso destes dados apenas para avaliar e responder ao pedido de correção.</label>
-<button class="button button-primary" type="submit">Enviar pedido e receber recibo</button>
-<p class="form-note">O prazo é UNKNOWN até existir série medida. O recibo confirma o recebimento, não um SLA.</p>
-<div id="correction-result" role="status" aria-live="polite"></div>
-</form>
-<p>Se o envio automático falhar, escreva para <a href="{mailto}">{_esc(owner_email)}</a> com os mesmos quatro campos. Não há prazo inventado.</p>
-<script>
-(function () {{
-  var form = document.getElementById("correction-form");
-  var out = document.getElementById("correction-result");
-  if (!form || !out) return;
-  form.addEventListener("submit", function (ev) {{
-    ev.preventDefault();
-    out.textContent = "A enviar…";
-    var data = {{}};
-    new FormData(form).forEach(function (value, key) {{ data[key] = value; }});
-    data.consentimento = form.consentimento && form.consentimento.checked;
-    fetch("/.netlify/functions/correction", {{
-      method: "POST",
-      headers: {{ "content-type": "application/json", accept: "application/json" }},
-      body: JSON.stringify(data)
-    }}).then(function (res) {{ return res.json().then(function (body) {{ return {{ res: res, body: body }}; }}); }})
-      .then(function (pack) {{
-        var body = pack.body || {{}};
-        if (body.ok && body.receipt_id) {{
-          out.innerHTML = "Recibo <code>" + String(body.receipt_id) + "</code>. Prazo: " + String(body.prazo || "UNKNOWN") + ".";
-          form.reset();
-          return;
-        }}
-        out.textContent = body.message || "Não foi possível registrar o pedido.";
-      }})
-      .catch(function () {{
-        out.textContent = "Falha de rede. Use o e-mail indicado nesta página.";
-      }});
-  }});
-}})();
-</script>
-"""
 
 
 def _page(
@@ -239,7 +179,7 @@ def _historico_body(policy: dict) -> str:
         "<p>Mudança de política gera versão nova. O histórico abaixo não é reescrito em silêncio.</p>"
         f"<ol>{''.join(rows)}</ol>"
         f"<p>Versão vigente: <strong>{_esc(current_policy_version(policy))}</strong>. "
-        "Prazo de correção: UNKNOWN.</p>"
+        "Não prometemos prazo em dias para publicar uma correção porque nunca medimos um.</p>"
     )
 
 
@@ -294,8 +234,6 @@ def render_all() -> list[Path]:
         show_version_banner = True
         author_name = "Engº Tiago Sasaki"
         wa_message = "Olá, Tiago. Quero pedir uma correção ou esclarecer a governança editorial da CONFENGE."
-        if key == "corrections":
-            body = body + _correction_form(version, owner_email)
         if key == "conflicts":
             conflict = load_conflict_contract()
             copy = conflict.get("public_copy") or {}
@@ -311,9 +249,16 @@ def render_all() -> list[Path]:
             author_name = "Tiago Jun Sasaki"
             wa_message = "Olá, Tiago. Quero verificar se a CONFENGE pode analisar minha demanda com independência."
             written.append(_write("conflitos/conflict-gate.js", client_runtime_js(conflict)))
+            from scripts.site.authority import policy_version_disclosure
+
             body = (
                 public_policy_body(conflict)
                 + first_step_form_html(conflict)
+                # Esta página é governada pelo contrato de conflitos e carrega a
+                # versão dele. O leitor ainda precisa saber qual política
+                # editorial vigora sobre o texto, então a declaração canônica
+                # entra explicitamente.
+                + policy_version_disclosure()
                 + '<script src="/conflitos/conflict-gate.js" defer=""></script>\n'
             )
         html_doc = _page(
@@ -360,9 +305,13 @@ def render_all() -> list[Path]:
     )
     written.append(_write("politica-editorial/historico/index.html", historico))
 
+    published_archives = set(policy.get("published_archives") or [])
     for entry in policy.get("changelog") or []:
         ver = str(entry.get("version") or "")
         if not ver or ver == version:
+            continue
+        # Conservar o registro é obrigatório; publicá-lo é decisão editorial.
+        if ver not in published_archives:
             continue
         version_rec = (policy.get("versions") or {}).get(ver) or {}
         archive = _page(

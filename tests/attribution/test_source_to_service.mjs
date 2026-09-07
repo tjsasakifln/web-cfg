@@ -510,7 +510,7 @@ for (const target of [
   const html = htmlOf(target.html);
   const attrs = findAnchor(html, (a) => a["data-cta-id"] === "pillar_hero" && a.href === "#captura-pilar");
   if (!attrs || attrs["data-event-name"] !== "cta_click") fail("hash_primary_cta_missing_event", { target, attrs });
-  const el = makeEl(attrs, "Registrar contexto para revisão");
+  const el = makeEl(attrs, "Enviar meus dados");
   const driven = driveScript({
     pathname: target.pathname,
     body: bodyAttrs(html),

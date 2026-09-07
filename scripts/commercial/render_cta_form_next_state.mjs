@@ -144,15 +144,23 @@ function constrainSharedSelectors(body, runtime) {
 }
 
 function usefulSubmitLabel(profileId, current) {
-  if (/^Enviar pedido de enquadramento$/i.test(current)) return "Registrar pedido para revisão de enquadramento";
-  if (/^Registrar parâmetros e abrir o pagamento$/i.test(current)) return "Registrar parâmetros e pedir instrução de pagamento";
-  if (/^Quero uma segunda leitura deste contrato$/i.test(current)) return "Registrar pedido de segunda leitura deste contrato";
-  if (!/^(?:Enviar solicitação|Enviar para análise)$/i.test(current)) return current;
+  // O rótulo do botão diz o que o clique faz. Ele não promete contratação, nem
+  // resposta em prazo, nem parecer -- e também não descreve o processamento
+  // interno para o visitante.
+  if (/^(?:Enviar pedido de enquadramento|Enviar meu pedido)$/i.test(current)) return "Pedir retorno da CONFENGE";
+  if (/^(?:Registrar parâmetros e abrir o pagamento|Enviar e pedir instruções de pagamento)$/i.test(current)) return "Confirmar e pedir instruções de pagamento";
+  if (/^Quero uma segunda leitura deste contrato$/i.test(current)) return "Pedir uma segunda leitura do contrato";
+  // Aceitar tambem os rotulos que este gerador escreveu antes, senao eles
+  // ficam presos no HTML e nenhuma passagem futura os alcanca.
+  if (/^Registrar pedido para revisão de enquadramento$/i.test(current)) return "Pedir retorno da CONFENGE";
+  if (/^Registrar parâmetros e pedir instrução de pagamento$/i.test(current)) return "Confirmar e pedir instruções de pagamento";
+  if (/^Registrar pedido de segunda leitura deste contrato$/i.test(current)) return "Pedir uma segunda leitura do contrato";
+  if (!/^(?:Enviar solicitação|Enviar para análise|Registrar situação para triagem|Registrar contexto para revisão de encaixe|Registrar evento e identificar a prova faltante|Registrar decisão para indicar a entrega|Enviar minha situação|Enviar meu contexto|Enviar o que aconteceu|Enviar e ver a entrega indicada)$/i.test(current)) return current;
   const labels = {
-    general_triage: "Registrar situação para triagem",
-    service_fit_review: "Registrar contexto para revisão de encaixe",
-    case_evidence_review: "Registrar evento e identificar a prova faltante",
-    delivery_selection: "Registrar decisão para indicar a entrega",
+    general_triage: "Descrever minha situação",
+    service_fit_review: "Descrever meu caso",
+    case_evidence_review: "Contar o que aconteceu",
+    delivery_selection: "Ver a entrega indicada para o meu caso",
   };
   return labels[profileId] || current;
 }
@@ -171,22 +179,33 @@ function updateSubmit(body, profileId) {
     },
   ).replace(
     /<button\b([^>]*\bdata-form-next=["'][^"']+["'][^>]*)>[\s\S]*?<\/button>/i,
-    (full, attrs) => `<button${attrs}>Adicionar contexto opcional</button>`,
+    (full, attrs) => `<button${attrs}>Adicionar mais detalhes</button>`,
   );
 }
 
 function updateMainActions(html) {
   const replacements = new Map([
-    ["enviar dados para análise", "Registrar contexto para revisão"],
-    ["falar sobre minha operação", "Pedir revisão de encaixe da operação"],
-    ["falar com tiago", "Pedir revisão de encaixe pelo WhatsApp"],
-    ["prefiro whatsapp", "Pedir triagem pelo WhatsApp"],
-    ["conversar pelo whatsapp", "Pedir revisão de encaixe pelo WhatsApp"],
-    ["analisar meu caso", "Registrar situação para triagem"],
-    ["análise inicial", "Registrar evento para identificar a prova faltante"],
-    ["enviar dados pelo formulário", "Registrar operação para revisão de encaixe"],
-    ["conheça nossas entregas", "Comparar entregas e artefatos"],
-    ["analisar meu contrato", "Registrar contrato para triagem"],
+    ["enviar dados para análise", "Enviar meus dados"],
+    ["falar sobre minha operação", "Falar sobre a operação"],
+    ["falar com tiago", "Falar pelo WhatsApp"],
+    ["prefiro whatsapp", "Falar pelo WhatsApp"],
+    ["conversar pelo whatsapp", "Falar pelo WhatsApp"],
+    ["analisar meu caso", "Contar minha situação"],
+    ["análise inicial", "Contar minha situação"],
+    ["enviar dados pelo formulário", "Enviar pelo formulário"],
+    ["conheça nossas entregas", "Ver o que a CONFENGE entrega"],
+    ["analisar meu contrato", "Enviar meu contrato"],
+    // Normalizacao dos rotulos que uma passagem anterior deste mesmo gerador
+    // gravou nas paginas. Sem estas linhas o jargao nao tem caminho de volta.
+    ["pedir revisão de encaixe pelo whatsapp", "Falar pelo WhatsApp"],
+    ["pedir revisão de encaixe da operação", "Falar sobre a operação"],
+    ["pedir triagem pelo whatsapp", "Falar pelo WhatsApp"],
+    ["registrar situação para triagem", "Contar minha situação"],
+    ["registrar contexto para revisão", "Enviar meus dados"],
+    ["registrar operação para revisão de encaixe", "Enviar pelo formulário"],
+    ["registrar contrato para triagem", "Enviar meu contrato"],
+    ["registrar evento para identificar a prova faltante", "Contar o que aconteceu"],
+    ["comparar entregas e artefatos", "Ver o que a CONFENGE entrega"],
   ]);
   return html.replace(/<main\b([\s\S]*?)<\/main>/i, (main) => main.replace(
     /<a\b([^>]*)>([\s\S]*?)<\/a>/gi,

@@ -29,6 +29,7 @@ from scripts.contract_analysis import (
     SOURCE_OFFICIAL_LIVE,
     TEMPORAL_FIELDS,
 )
+from scripts.site.authority import CORRECTION_CHANNEL_HREF
 
 LIVE_SCHEMA = PUBLIC_READ_SCHEMA
 FIXTURE_SCHEMA = "confenge-contract-analysis-fixture/1.0"
@@ -1233,7 +1234,7 @@ def project_extra_cli_record(bundle: dict[str, Any], *, manifest: dict[str, Any]
     return rec
 
 
-CORRECTION_ROUTE = "/correcoes/"
+CORRECTION_ROUTE = CORRECTION_CHANNEL_HREF
 
 
 def finalize_editorial_projection(record: dict[str, Any]) -> dict[str, Any]:

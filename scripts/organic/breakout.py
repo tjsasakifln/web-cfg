@@ -23,6 +23,7 @@ from scripts.revops.search_demand_observatory import (
     label_historical_export,
     pull_api,
 )
+from scripts.site.authority import CORRECTION_CHANNEL_HREF
 
 CAMPAIGN = "CONFENGE-ORGANIC-BREAKOUT-01"
 MAX_ASSETS = 3
@@ -265,7 +266,7 @@ def evaluate_index_gate(
     visible_job = "data-visitor-job" in html_text or _text(record.get("visitor_job"))[:24] in html_text
     visible_visual = f'data-visual-id="{record.get("visual_id")}"' in html_text
     visible_owner = "data-refresh-owner" in html_text
-    visible_correction = "/correcoes/" in html_text
+    visible_correction = CORRECTION_CHANNEL_HREF in html_text
     visible_cta = 'data-source="CONFENGE_WEB"' in html_text and "data-cta-id=" in html_text
     visible_hash = digest in html_text
     schema_ok = "application/ld+json" in html_text
@@ -591,9 +592,9 @@ def chassis_html(record: dict[str, Any]) -> str:
         f'{visual}\n'
         f'<div class="breakout-limits" data-breakout-limitations="true">\n'
         f"<h2>O que esta página não pode concluir</h2>\n<ul>{limits}</ul>\n</div>\n"
-        f'<p class="breakout-correction">Encontrou erro de fato? Use a '
+        f'<p class="breakout-correction">Encontrou erro de fato? '
         f'<a href="{_esc(record.get("correction_route"))}" '
-        f'data-asset-id="{_esc(record.get("asset_id"))}">rota de correção</a>.</p>\n'
+        f'data-asset-id="{_esc(record.get("asset_id"))}">Fale com a gente</a>.</p>\n'
         f'<p><a class="button button-primary" href="{_esc(cta.get("path"))}" '
         f'data-cta-id="{_esc(cta.get("id"))}" data-asset-id="{_esc(cta.get("asset_id"))}" '
         f'data-route-family="{_esc(cta.get("route_family"))}" data-source="{SOURCE}">'
@@ -764,7 +765,7 @@ def inspect_html(html_text: str) -> dict[str, Any]:
         "visual": bool(re.search(r"data-visual-id=", html_text)),
         "visitor_job": bool(re.search(r"data-visitor-job=", html_text)),
         "refresh_owner": bool(re.search(r"data-refresh-owner=", html_text)),
-        "correction": "/correcoes/" in html_text,
+        "correction": CORRECTION_CHANNEL_HREF in html_text,
         "cta_attribution": 'data-source="CONFENGE_WEB"' in html_text and "data-cta-id=" in html_text,
         "content_hash": bool(re.search(r"data-content-hash=", html_text)),
         "jsonld": "application/ld+json" in html_text,

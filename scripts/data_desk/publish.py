@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Any
 
 from scripts.data_desk.bind import CANONICAL_SOURCE
+from scripts.site.authority import CORRECTION_CHANNEL_HREF
 
 PUBLIC_REL = Path("assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1")
 PUBLIC_BASENAMES = (
@@ -59,7 +60,7 @@ def kit_landing_html(package: dict[str, Any], *, files: list[str]) -> str:
         f"<ul>\n{links}\n</ul>\n"
         f"<p>Permalink do kit: {permalink}</p>\n"
         "<p>Licença: NEEDS_REVIEW. Ver usage guidance no manifesto. "
-        "Correção: <a href=\"https://confenge.com.br/correcoes/\">https://confenge.com.br/correcoes/</a></p>\n"
+        f'Encontrou um erro? <a href="https://confenge.com.br{CORRECTION_CHANNEL_HREF}">Fale com a gente</a>.</p>\n'
         "</body>\n"
         "</html>\n"
     )
