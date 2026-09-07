@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt-BR">
+<html class="no-js" lang="pt-BR">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -21,11 +21,36 @@
   <link rel="stylesheet" href="/triagem-tecnica/styles.css">
   <script defer src="/script.js"></script>
   <script defer src="/assets/js/adaptive-intake.js"></script>
+<script>document.documentElement.classList.replace('no-js','js');</script>
 </head>
 <body data-content-cluster="triagem-tecnica">
   <a class="skip-link" href="#conteudo">Ir ao conteúdo</a>
+<svg aria-hidden="true" class="svg-sprite" height="0" width="0">
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></symbol>
+<symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"></path></symbol>
+<symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"></path></symbol>
+</svg>
+<header class="site-header" id="inicio">
+<div class="container header-inner">
+<a aria-label="CONFENGE, página inicial" class="brand" href="/"><img alt="CONFENGE Inteligência Técnica" height="58" src="/assets/logo-confenge-500-f8a83f6d.png" width="224"/></a>
+<nav aria-label="Navegação principal" class="desktop-nav">
+<a data-cta-position="header_nav" href="/servicos/" style="min-height:44px">Serviços e problemas</a>
+<a data-cta-position="header_nav" href="/servicos-obras-publicas/" style="min-height:44px">Obras públicas</a>
+<a data-cta-position="header_nav" href="/conteudos/" style="min-height:44px">Biblioteca</a>
+</nav>
+<a class="button button-primary header-cta" href="/triagem-tecnica/">Iniciar triagem</a>
+<button aria-controls="mobile-menu" aria-expanded="false" aria-label="Abrir menu" class="menu-toggle" type="button">
+<svg class="icon menu-open"><use href="#i-menu"></use></svg><svg class="icon menu-close"><use href="#i-close"></use></svg>
+</button>
+</div>
+<nav aria-label="Navegação móvel" class="mobile-nav" id="mobile-menu">
+<a data-cta-position="mobile_nav" href="/servicos/" style="min-height:44px">Serviços e problemas</a>
+<a data-cta-position="mobile_nav" href="/servicos-obras-publicas/" style="min-height:44px">Obras públicas</a>
+<a data-cta-position="mobile_nav" href="/conteudos/" style="min-height:44px">Biblioteca</a>
+<a class="button button-primary" href="/triagem-tecnica/">Iniciar triagem</a>
+</nav>
+</header>
   <main id="conteudo" class="triage-shell">
-    <a class="brand-link" href="/" aria-label="Voltar para a página inicial da CONFENGE">CONFENGE</a>
 
     <header class="triage-intro">
       <p class="triage-eyebrow">Triagem técnica inicial</p>
@@ -174,5 +199,12 @@
       </div>
     </aside>
   </main>
+<footer class="site-footer">
+<div class="container footer-top">
+<div class="footer-brand"><img alt="CONFENGE" decoding="async" height="58" loading="lazy" src="/assets/logo-confenge-white-500-1677038e.png" width="224"/><p>Engenharia, perícias e inteligência técnica para transformar situações complexas em decisões documentadas.</p></div>
+<div class="footer-links"><strong>Situações</strong><a href="/#situacao-projeto">Projetos e edificações</a><a href="/#situacao-pericia">Perícias e avaliações</a><a href="/#situacao-sst">Segurança do trabalho</a><a href="/servicos-obras-publicas/">Obras públicas</a></div><div class="footer-links"><strong>Biblioteca e provas</strong><a href="/conteudos/">Conteúdos</a><a href="/ferramentas/">Ferramentas</a><a href="/entregas/">Entregas</a><a href="/casos/">Casos demonstrativos</a></div><div class="footer-links"><strong>Empresa</strong><a href="/especialista/tiago-jun-sasaki/">Quem responde</a><a href="/confianca/">Como verificamos</a><a href="/triagem-tecnica/">Contato e triagem</a><a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a><a href="tel:+5548988344559">(48) 98834-4559</a><span>Atendimento nacional</span></div>
+</div>
+<div class="container footer-bottom"><span>© <span id="year">2026</span> CONFENGE. CNPJ 52.407.089/0001-09.</span><nav class="footer-authority" aria-label="Autoridade e políticas"><a href="/politica-editorial/">Política editorial</a><a href="/correcoes/">Correções</a><a href="/uso-de-ia/">Uso de IA</a><a href="/conflitos/">Conflitos</a><a href="/privacidade/">Privacidade</a></nav></div>
+</footer>
 </body>
 </html>

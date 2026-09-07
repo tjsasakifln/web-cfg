@@ -3,14 +3,6 @@
   margin: 0 auto;
   padding: 1.25rem 0 4rem;
 }
-.brand-link {
-  display: inline-block;
-  margin-bottom: 2.5rem;
-  color: inherit;
-  font-weight: 800;
-  letter-spacing: .08em;
-  text-decoration: none;
-}
 .triage-intro,
 .next-state,
 .technical-intake-form,
@@ -159,7 +151,6 @@ button:disabled {
 }
 @media (max-width: 36rem) {
   .triage-shell { width: min(100% - 1rem, 52rem); }
-  .brand-link { margin-left: .5rem; }
   .form-actions .button,
   .channel-actions .button,
   .channel-actions .text-link {
