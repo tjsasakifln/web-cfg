@@ -3,7 +3,7 @@
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
   "baseline_commit": "0518262b82e0aeb43115a801e804012d442fbc28",
   "recaptured_at": "2026-09-06",
-  "recapture_reason": "MV-09 activates the corporate /servicos/ canonical and the bounded /quantitativos-orcamento-obras/ wedge, keeps contract-analysis publication fail-closed, and preserves the reviewed corporate shell. Sitemap.xml and sitemap.txt admit the canonical route. The shared styles.css adds only user-preference guards: reduced motion and reduced data for .profile-mark img, a selector absent from all six frozen B2G pillar documents. All six frozen B2G pillar HTML byte hashes remain unchanged; no frozen offer or CTA content was edited. Evidence: docs/integration/campaign-20260905/09/integration-log.md and revenue-red-team.md.",
+  "recapture_reason": "Revogacao da desqualificacao por porte (direcao do fundador, 2026-09-06). Dois dos seis pilares congelados publicavam a recusa comercial revogada: diagnostico-pre-licitacao e reequilibrio-obras-publicas. A copy passou a dizer qual formato serve em vez de afirmar que a CONFENGE nao e economicamente indicada; os limites tecnicos de merito (ruptura documentavel da equacao original, divergencia ja esclarecida com o fiscal) foram preservados integralmente. script.js drifta porque a frase vive em data/commercial/offer-fit-matrix.v1.json e e compilada para js/modules/offer-fit.js e dai para o bundle. Executa os itens 3 e 4 de docs/decisions/DEFERRED-BY-MEASUREMENT-FREEZE-2026-08-30.md, cuja data de 2026-09-13 e superada pela decisao do fundador; a sequencia tecnica registrada naquele documento foi seguida a risca. Mesma operacao mergeada em cf33385d4 e 2f26ac0ba: edicao revisada com recaptura de baseline no mesmo commit, com html_mutation_authorized: false e earliest_safe_action_at: 2026-09-16 em vigor. html_mutation continua false, nenhuma precondicao do unlock-plan foi marcada READY, e render_licitacao_products.mjs --check segue imprimindo LICITACAO_PRODUCTS_HELD com o hash novo. Os outros quatro pilares congelados permanecem byte-identicos.",
   "html_mutation": false,
   "pillars": {
     "aditivos-obras-publicas": "a4be02dc6705bb15cbbec882412e3b383887e18800abdd85272d506c1c56c450",
@@ -16,11 +16,11 @@
   "forbidden": {
     "aditivos-obras-publicas/index.html": "a4be02dc6705bb15cbbec882412e3b383887e18800abdd85272d506c1c56c450",
     "medicoes-glosas-obras-publicas/index.html": "9872c48c11cbf4b62d63d37c81593eeae59afcd52775edcc19ec80aebe58ddc2",
-    "reequilibrio-obras-publicas/index.html": "d7bcec301f3dafc38c01168dffd9af507823f91f0da648a4cef380af802149a3",
+    "reequilibrio-obras-publicas/index.html": "bfa4c5a3c295c55368bd1a7550968b8e9a4796b2258156c6488a6fdd52132682",
     "auditoria-orcamento-licitacao/index.html": "a00f9f49c758be22efd40dbb81e3b2d55b9bb8bad60bed22e0a6988b49639235",
     "diagnostico-b2g-360/index.html": "1ed2f5d815a11056c599d12ba6b7f844cb5225ef96b664f93df61ff929a1dc02",
-    "diagnostico-pre-licitacao/index.html": "fbfb0ee348841ae3a01c437cee579832139cc7868e6dcb081534ff956bfae654",
-    "script.js": "412795711992bc7620347d34320c2007bef412a02b6bf1941eb0ff5c2fd30fe6",
+    "diagnostico-pre-licitacao/index.html": "8caec38dd9ca82db75f2389c3a0cfe727141dcc50222fc36fc83205f14a4a2ef",
+    "script.js": "1c243f8a8205a5d649d9247e1567bc638e072542417bd9138370e662cfb02711",
     "styles.css": "bf45831f0112aa2065f6ae25c80f4cc1387d124e088ca2baab29b07b153fd5cc",
     "styles-tokens.css": "15cc0770e76276b418c11493fa9e53827ae14bb8f854b0a63d8c6dd63afc02fc",
     "styles-tools.css": "8c42a4b5fadba13e4dae52bd7168c64b9f5548f3fd3f8d4f0707ce4e9463c7ba",

@@ -18,7 +18,6 @@ export const NEXT_STEPS = Object.freeze([
   "diagnostico",
   "projeto_critico",
   "diretoria",
-  "nao_indicado",
 ]);
 
 export function loadOfferFitMatrix(base = root) {
@@ -81,7 +80,7 @@ export function riskBandCeilingCents(risk, matrix) {
 }
 
 export function paidStepFloorCents(nextStep, matrix) {
-  if (nextStep === "nao_indicado" || nextStep === "conteudo_ferramenta") return 0;
+  if (nextStep === "conteudo_ferramenta") return 0;
   const offer = offerByStep(matrix, nextStep);
   if (!offer || !offer.ladder_tier_id) return 0;
   const band = Object.values(matrix.cited_bands || {}).find((item) => item.tier_id === offer.ladder_tier_id);
@@ -157,7 +156,6 @@ export function routeSituation(input = {}, matrix) {
       public_next: offer ? offer.public_next : "",
       premises,
       cited_price_bands: cited,
-      economically_indicated: affordable !== "nao_indicado" && affordable !== "conteudo_ferramenta",
     };
   };
 
@@ -173,15 +171,18 @@ export function routeSituation(input = {}, matrix) {
     (capacity === "suficiente" || capacity === "unknown") &&
     urgencyRank(urgency) <= 1;
 
+  // Nenhum estado terminal e uma recusa. Documentos organizados e equipe
+  // interna capaz mudam QUAL passo e util, nunca se o visitante e atendido:
+  // o menor passo util continua sendo um passo.
   if (lowRisk && oneOff && selfSufficient && ticket !== "acima_1m") {
-    mark("honest_non_fit", "entrada_factual");
+    mark("smallest_useful_step", "entrada_factual");
     mark("cost_coverage", "entrada_factual");
-    if (docs === "forte" && capacity === "suficiente") return finish("nao_indicado");
     return finish("conteudo_ferramenta");
   }
 
-  if (lowRisk || (ticket === "ate_250k" && risk === "unknown" && frequency !== "recorrente")) {
-    mark("honest_non_fit", "entrada_factual");
+  // Porte sozinho nao roteia: orcamento desconhecido nao e orcamento pequeno.
+  if (lowRisk) {
+    mark("smallest_useful_step", "entrada_factual");
     mark("cost_coverage", "diagnostico_delimitado");
     return finish("conteudo_ferramenta");
   }
@@ -294,10 +295,9 @@ export function illustrationEconomics(contractCents, matrix) {
     limit: {
       label: "limite",
       statement:
-        "Sem risco de caixa ou margem pelo menos no piso de diagnóstico, a CONFENGE não é economicamente indicada.",
+        "O percentual não é economia observada. Abaixo do piso de diagnóstico, o formato indicado é uma entrega de entrada ou a ferramenta pública.",
     },
     dossie_covers_one_percent: onePercent >= dossie.min_cents,
-    economically_indicated_for_dossie: onePercent >= dossie.min_cents,
     copy: panel ? panel.copy : "",
     premises: ["percent_is_illustration", "cost_coverage", "recurrence_separate_from_one_off", "not_validated_price"],
   };
@@ -371,7 +371,6 @@ function browserSource(matrix) {
             fit: offer ? offer.fit : "",
             not_fit: offer ? offer.not_fit : "",
             public_next: offer ? offer.public_next : "",
-            economically_indicated: affordable !== "nao_indicado" && affordable !== "conteudo_ferramenta",
           };
         };
         const lowRisk = risk === "abaixo_entrada";
@@ -381,10 +380,9 @@ function browserSource(matrix) {
           (capacity === "suficiente" || capacity === "unknown") &&
           urg(urgency) <= 1;
         if (lowRisk && oneOff && selfSufficient && ticket !== "acima_1m") {
-          if (docs === "forte" && capacity === "suficiente") return finish("nao_indicado");
           return finish("conteudo_ferramenta");
         }
-        if (lowRisk || (ticket === "ate_250k" && risk === "unknown" && frequency !== "recorrente")) {
+        if (lowRisk) {
           return finish("conteudo_ferramenta");
         }
         if (
