@@ -1505,8 +1505,15 @@ def render_hub(
     eyebrow: str = "Inteligência aplicada à decisão",
     wa_message: str | None = None,
     empty_cta: dict[str, str] | None = None,
+    extra_html: str = "",
 ) -> str:
-    """Render a pSEO hub. Never ship pipeline empty-wave messages to the public."""
+    """Render a pSEO hub. Never ship pipeline empty-wave messages to the public.
+
+    ``extra_html`` is raw, caller-owned markup for children this hub must point at
+    that are NOT pSEO publications -- a hand-authored page cannot appear in
+    ``items``, and ``intro`` is escaped, so without this slot the hub could never
+    link down to one and a rebuild silently dropped any hand-edit.
+    """
     cards = ""
     for it in items or []:
         url, kind, label = it[0], it[1], it[2]
@@ -1563,6 +1570,7 @@ def render_hub(
 <h1>{e(h1)}</h1><p class="content-lead">{e(intro)}</p>
 {disclosure}</div></header>
 <div class="container" style="padding-bottom:3rem">{grid}
+{extra_html}
 {back}</div>
 """
     graph = [
