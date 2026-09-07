@@ -11,6 +11,7 @@ from typing import Any
 from urllib.parse import urlencode
 
 from scripts.market_answers import CANONICAL, FAMILY_PATH, SITE
+from scripts.site.authority import CORRECTION_CHANNEL_HREF
 
 
 UF_DISPLAY = {
@@ -108,7 +109,7 @@ CTA_ANCHOR = "#cta"
 METHOD_ANCHOR = "#metodologia"
 SOURCES_ANCHOR = "#fontes"
 EVIDENCE_ANCHOR = "#evidencias"
-CORRECTION_PATH = "/triagem-tecnica/#corrigir-o-site"
+CORRECTION_PATH = CORRECTION_CHANNEL_HREF
 
 
 def canonical_url() -> str:

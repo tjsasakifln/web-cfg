@@ -14,6 +14,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from scripts.site.authority import CORRECTION_CHANNEL_HREF
+
 ROOT = Path(__file__).resolve().parents[2]
 CONTRACT_PATH = ROOT / "data/site/conflict-gate-contract.json"
 
@@ -447,7 +449,7 @@ def public_policy_body(contract: dict[str, Any] | None = None) -> str:
 <h2 id="dados-minimos">Privacidade desde a primeira etapa</h2>
 <p>Esta página pede somente a área da demanda, o papel solicitado e respostas de sim, não ou “não sei informar”. Nomes, números de processo ou contrato, órgãos, partes, profissionais, motivos e documentos ficam fora da página e da medição pública.</p>
 <p>Uma resposta preliminar não substitui a confirmação final. Mudança de função, dever, regra aplicável ou informação relevante exige nova análise. Se o canal protegido estiver indisponível, a página nunca libera o envio de documentos.</p>
-<p>Esta é uma política operacional da CONFENGE, não um parecer jurídico geral. Encontrou um possível conflito ou uma informação incorreta? <a href="/triagem-tecnica/#corrigir-o-site">Fale com a gente</a>.</p>
+<p>Esta é uma política operacional da CONFENGE, não um parecer jurídico geral. Encontrou um possível conflito ou uma informação incorreta? <a href="{CORRECTION_CHANNEL_HREF}">Fale com a gente</a>.</p>
 """
 
 

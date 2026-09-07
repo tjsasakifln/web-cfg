@@ -1,8 +1,14 @@
 {
-  "ok": true,
-  "issues": [],
-  "url_count": 79,
-  "unique_paths": 79,
+  "ok": false,
+  "issues": [
+    {
+      "severity": "high",
+      "code": "indexable_missing_from_sitemap",
+      "url": "/politica-editorial/v/1.1.0/"
+    }
+  ],
+  "url_count": 78,
+  "unique_paths": 78,
   "locs": [
     "https://confenge.com.br/",
     "https://confenge.com.br/acompanhamento-contratos-obras/",
@@ -48,7 +54,6 @@
     "https://confenge.com.br/conteudos/resposta-notificacao-atraso-obra-publica/",
     "https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/",
     "https://confenge.com.br/conteudos/sinapi-ou-sicro-obra-publica/",
-    "https://confenge.com.br/correcoes/",
     "https://confenge.com.br/defesa-margem-contratos-publicos/",
     "https://confenge.com.br/defesa-tecnica-contratos-publicos/",
     "https://confenge.com.br/diagnostico-b2g-360/",
@@ -85,7 +90,7 @@
     "https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/"
   ],
   "families": {
-    "core": 75,
+    "core": 74,
     "editorial": 4
   },
   "member_sitemaps": [
@@ -100,7 +105,7 @@
     "https://confenge.com.br/sitemap-index.xml"
   ],
   "broken": 0,
-  "orphan_indexable": 0,
+  "orphan_indexable": 1,
   "noindex_in_sitemap": 0,
   "market_answer_indexable": false,
   "market_answer_in_graph": false

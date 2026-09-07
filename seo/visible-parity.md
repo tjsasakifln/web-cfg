@@ -1,9 +1,9 @@
 # Visible parity
 
 - ok: `True`
-- pages: `79`
+- pages: `78`
 - defects: `0`
-- site_root: `/home/tjsasakifln/code/confenge/.worktrees/web-cfg/mv-09-commercial-production-20260905/_site`
+- site_root: `/tmp/claude-1000/-home-tjsasakifln-code-confenge-web-cfg/00c05faa-bef8-4907-a4f3-a23173631031/scratchpad/wt-main/_site`
 
 | url | ok | defects | claimed | visible |
 | --- | --- | --- | --- | --- |
@@ -51,7 +51,6 @@
 | https://confenge.com.br/conteudos/resposta-notificacao-atraso-obra-publica/ | True | — | Organization,Person,Article,BreadcrumbList; Resposta à notificação de atraso em obra pública | Resposta à notificação de atraso em obra pública |
 | https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/ | True | — | Organization,Person,Article,BreadcrumbList; SINAPI desonerado ou não desonerado: qual usar? | SINAPI desonerado ou não desonerado: qual usar? |
 | https://confenge.com.br/conteudos/sinapi-ou-sicro-obra-publica/ | True | — | Organization,Person,Article,BreadcrumbList; SINAPI ou SICRO: a referência de cada serviço | SINAPI ou SICRO: a referência de cada serviço |
-| https://confenge.com.br/correcoes/ | True | — | Organization,Person,BreadcrumbList | Como contestar e corrigir |
 | https://confenge.com.br/defesa-margem-contratos-publicos/ | True | — | Organization,BreadcrumbList,Person | Defesa de margem em contratos públicos: detecção, documentação, cálculo e decisão |
 | https://confenge.com.br/defesa-tecnica-contratos-publicos/ | True | — | Organization,Person,BreadcrumbList | Defesa técnica em contratos públicos: fatos e provas como subsídio técnico, não advocacia |
 | https://confenge.com.br/diagnostico-b2g-360/ | True | — | Organization,BreadcrumbList | Diagnóstico da Operação em Obras Públicas |
@@ -78,11 +77,11 @@
 | https://confenge.com.br/politica-editorial/v/1.0.0/ | True | — | Organization,Person,BreadcrumbList | Política editorial 1.0.0 |
 | https://confenge.com.br/privacidade/ | True | — |  | Política de Privacidade |
 | https://confenge.com.br/problemas-que-resolvemos/ | True | — | BreadcrumbList | Problemas que resolvemos em licitações e contratos de obras |
-| https://confenge.com.br/quantitativos-orcamento-obras/ | True | — | BreadcrumbList | Orçamento só orienta a decisão quando quantidades e premissas aparecem. |
+| https://confenge.com.br/quantitativos-orcamento-obras/ | True | — | BreadcrumbList | Quantitativos e orçamento de obras |
 | https://confenge.com.br/radar/nacional-obras-publicas/ | True | — | Dataset,Organization,BreadcrumbList; Radar Nacional de Obras Públicas e Margem Contratual: recorte aberto | Radar Nacional de Obras Públicas e Margem Contratual |
 | https://confenge.com.br/reequilibrio-obras-publicas/ | True | — | Organization,Person,BreadcrumbList | Reequilíbrio econômico-financeiro de obra pública |
 | https://confenge.com.br/servicos-obras-publicas/ | True | — | BreadcrumbList | Serviços para licitações e contratos de obras públicas |
 | https://confenge.com.br/servicos/ | True | — | BreadcrumbList | Encontre o caminho técnico para a sua situação |
 | https://confenge.com.br/termos-de-uso/ | True | — |  | Termos de Uso |
 | https://confenge.com.br/triagem-tecnica/ | True | — |  | Explique sua situação em menos de um minuto |
-| https://confenge.com.br/uso-de-ia/ | True | — | Organization,Person,BreadcrumbList | Uso material de inteligência artificial |
+| https://confenge.com.br/uso-de-ia/ | True | — | Organization,Person,BreadcrumbList | Uso de inteligência artificial |

@@ -28,7 +28,7 @@ from scripts.market_answers.copy import first_fold_copy, geography_label, visito
 from scripts.market_answers.events import catalog
 from scripts.market_answers.gate import GateDecision, write_lkg
 from scripts.market_answers.sitemap import apply_market_answer_sitemap, robots_for_url
-from scripts.market_answers.urls import drilldown_model
+from scripts.market_answers.urls import CORRECTION_PATH, drilldown_model
 
 
 def _root() -> Path:
@@ -374,7 +374,7 @@ def render_html(
 <a class="button button-primary" data-ma-event="cta_click" data-cta-id="veja-sua-empresa" href="#xray">Veja sua empresa neste mercado</a>
 <a class="button" data-ma-event="cta_click" data-cta-id="analise-contrato" href="/ferramentas/diagnostico-defesa-margem/">Analise um contrato / peça segunda leitura</a>
 </p>
-<p class="ma-note">Atribuição: source <code>CONFENGE_WEB</code>, asset <code>{ASSET_ID}</code>, família <code>{ASSET_FAMILY}</code>. <a data-ma-event="correction_open" href="/triagem-tecnica/#corrigir-o-site">Encontrou um erro nesta página?</a></p>
+<p class="ma-note">Atribuição: source <code>CONFENGE_WEB</code>, asset <code>{ASSET_ID}</code>, família <code>{ASSET_FAMILY}</code>. <a data-ma-event="correction_open" href="{CORRECTION_PATH}">Encontrou um erro nesta página?</a></p>
 </section>
 
 <section id="dataset" data-dataset="valor-tipico-contratos-pavimentacao-sc" aria-labelledby="fontes-titulo">

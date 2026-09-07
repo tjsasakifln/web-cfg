@@ -373,7 +373,7 @@ def masterpiece_record(**overrides: Any) -> dict[str, Any]:
         "coverage": {"status": "DECLARED", "record_count": 4, "as_of": "2026-08-01"},
         "producer_status": "official_live",
         "citation_text": "CONFENGE. Saldo residual e âncora de preço. 2026-08-01.",
-        "correction_route": "/correcoes/",
+        "correction_route": "/triagem-tecnica/#corrigir-o-site",
         "comparability_authorized": False,
         "date_published": "2026-08-16",
         "date_modified": "2026-08-16",

@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import Any
 
 from scripts.contract_analysis import FAMILY_PATH
+from scripts.site.authority import CORRECTION_CHANNEL_HREF
 
 # Topic → existing useful surfaces. Paths must already exist as public pages.
 TOPIC_ASSETS: tuple[tuple[tuple[str, ...], str, str], ...] = (
@@ -27,7 +28,7 @@ TOPIC_ASSETS: tuple[tuple[tuple[str, ...], str, str], ...] = (
 )
 
 HUB = (FAMILY_PATH, "Análises técnicas de contratos públicos")
-CORRECTION = ("/triagem-tecnica/#corrigir-o-site", "Encontrou um erro? Fale com a gente")
+CORRECTION = (CORRECTION_CHANNEL_HREF, "Encontrou um erro? Fale com a gente")
 
 
 def _root() -> Path:

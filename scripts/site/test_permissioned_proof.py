@@ -571,7 +571,9 @@ def test_trust_surface_states_executor_correction_evidence_and_method_split():
     assert path.is_file()
     for needle in (
         "Quem responde pela CONFENGE",
-        "Pedir correção",
+        # A superfície de confiança precisa oferecer um caminho de correção. O
+        # que importa é o CANAL alcançável, não o rótulo antigo "Pedir correção".
+        "/triagem-tecnica/#corrigir-o-site",
         "Prova que acompanha a afirmação",
         "Veja o trabalho antes de conversar",
         "exemplos de entrega",

@@ -32,6 +32,7 @@ from scripts.data_desk.schema import (
 )
 from scripts.data_desk.syndication import build_manifest
 from scripts.discovery.registry import repo_root
+from scripts.site.authority import CORRECTION_CHANNEL_HREF
 
 DEFAULT_ASSET_ID = "valor-tipico-contratos-pavimentacao-sc-citation-kit"
 DEFAULT_ASSET_REL = Path("data/data-desk/valor-tipico-contratos-pavimentacao-sc/asset.v1.json")
@@ -181,7 +182,7 @@ def build_package(
         else asset.get("coverage"),
         "limitations": asset.get("limitations"),
         "correction_link": asset.get("correction_link")
-        or "https://confenge.com.br/triagem-tecnica/#corrigir-o-site",
+        or f"https://confenge.com.br{CORRECTION_CHANNEL_HREF}",
         "correction_owner": asset.get("correction_owner") or asset.get("owner"),
         "creator": asset.get("creator") or "CONFENGE",
         "publisher": asset.get("publisher") or "CONFENGE",

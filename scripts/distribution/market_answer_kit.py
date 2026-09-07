@@ -14,6 +14,7 @@ from typing import Any
 from scripts.discovery.campaign_overlay import CAMPAIGN_DIR_REL, CAMPAIGN_ID
 from scripts.discovery.registry import repo_root
 from scripts.distribution.schema import ALLOWED_TARGET_CLASSES, validate_outcome
+from scripts.site.authority import CORRECTION_CHANNEL_HREF
 
 CANONICAL = "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/"
 AUTO_SEND = False
@@ -37,7 +38,7 @@ PUBLISHED_FACTS = {
     "method": "mediana e quartis do valor integral nominal; tipologia keyword de pavimentação; recorte SC",
     "as_of": "2026-08-17T11:29:23.193694+02:00",
     "source": "payload official_live, leitura SELECT-only",
-    "correction": "https://confenge.com.br/triagem-tecnica/#corrigir-o-site",
+    "correction": f"https://confenge.com.br{CORRECTION_CHANNEL_HREF}",
     "method_page": "https://confenge.com.br/metodologia-inteligencia/",
     "limitations": [
         "O número é o valor integral nominal do instrumento, não custo por km, m² ou unidade física.",

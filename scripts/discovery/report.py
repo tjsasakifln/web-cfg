@@ -25,6 +25,7 @@ from scripts.discovery.schema import (
 )
 from scripts.discovery.states import STATE_NAMES
 from scripts.discovery.store import default_store_path, load_observations
+from scripts.site.authority import CORRECTION_CHANNEL_HREF
 
 MAINTENANCE_COST_DEFAULT = "UNKNOWN"
 
@@ -188,7 +189,7 @@ def build_asset_record(
             "freshness": inspected.get("freshness"),
             "correction_owner": inspected.get("correction_owner"),
             "correction_link": asset.get("correction_link")
-            or "https://confenge.com.br/triagem-tecnica/#corrigir-o-site",
+            or f"https://confenge.com.br{CORRECTION_CHANNEL_HREF}",
         },
         "external_targets_prepared": external_targets_prepared if is_fixture(asset) else 0,
         "maintenance_cost": asset.get("maintenance_cost") or MAINTENANCE_COST_DEFAULT,

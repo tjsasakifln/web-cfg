@@ -18,6 +18,7 @@ from scripts.market_panorama import (
     STATE_NOINDEX,
 )
 from scripts.market_panorama.gate import PublicationDecision
+from scripts.site.authority import CORRECTION_CHANNEL_HREF
 from scripts.pseo.html_shell import (
     ORG_JSONLD,
     PERSON_JSONLD,
@@ -377,7 +378,7 @@ def render_panorama_html(payload: dict[str, Any], decision: PublicationDecision)
         f"{_provenance_block(payload, decision)}</section>",
         '<section class="section" id="correcao"><h2>Correção e contestação</h2>'
         "<p>Encontrou um erro ou quer contestar um dado desta página? "
-        '<a href="/triagem-tecnica/#corrigir-o-site">Fale com a gente</a>, seguindo a '
+        f'<a href="{CORRECTION_CHANNEL_HREF}">Fale com a gente</a>, seguindo a '
         '<a href="/politica-editorial/">política editorial</a>.</p></section>',
         author_box(),
     ]

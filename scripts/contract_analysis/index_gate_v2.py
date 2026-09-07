@@ -24,6 +24,7 @@ from scripts.contract_analysis.approval import (
     material_hash,
 )
 from scripts.contract_analysis.consume import (
+    CORRECTION_ROUTE,
     claim_has_locator,
     iter_material_claims,
     official_live_declared,
@@ -138,7 +139,7 @@ def evaluate_index_items_v2(
         and len(str(record.get("methodology") or "")) >= 40
         and len(str(record.get("limitations") or "")) >= 40
         and bool(str(record.get("as_of") or (record.get("freshness") or {}).get("as_of") or ""))
-        and "/triagem-tecnica/#corrigir-o-site" in html
+        and CORRECTION_ROUTE in html
         and "rascunho editorial" not in lowered
     )
 
