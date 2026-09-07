@@ -35,6 +35,17 @@
     sst: "seguranca_do_trabalho",
     "planejamento-publico": "licitacao_obra_ou_contrato_publico"
   };
+  // Deadlines. Configuration is a page-load read: 5s, after which the visitor is
+  // sent to the static channels instead of staring at a placeholder. Submission is
+  // 15s and covers READING the body, not just the arrival of the headers — a
+  // response whose body never ends is exactly the case that used to hang forever.
+  var CONFIG_TIMEOUT_MS = 5000;
+  var SUBMIT_TIMEOUT_MS = 15000;
+  // Once the visitor has been handed to the alternative contact, the attempt is
+  // over. A late response must not move focus, change a selection, overwrite what
+  // was typed, or rewrite a channel link under the visitor's hands.
+  var handedOver = false;
+  var submitGeneration = 0;
   var configured = false;
   var started = false;
   var pendingFingerprint = "";
@@ -42,6 +53,44 @@
   var retryStorageKey = "confenge_triagem_retry_v3";
   var attributionStorageKey = "confenge_pseo_attribution";
   var attributionKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"];
+
+  // One deadline for the whole exchange, including the body read. There is no
+  // automatic retry and no polling here by design: a retry is the visitor's
+  // explicit act, and it reuses the same idempotency key.
+  function fetchWithDeadline(input, init, ms) {
+    var controller = new AbortController();
+    var timedOut = false;
+    var timer = setTimeout(function () {
+      timedOut = true;
+      controller.abort();
+    }, ms);
+    var options = Object.assign({}, init || {}, { signal: controller.signal });
+    return fetch(input, options)
+      .then(function (response) {
+        // Read the body under the SAME deadline; only then stand the timer down.
+        return response.text().then(function (text) {
+          clearTimeout(timer);
+          return { response: response, text: text };
+        });
+      })
+      .catch(function (error) {
+        clearTimeout(timer);
+        if (timedOut) {
+          var deadline = new Error("deadline_exceeded");
+          deadline.deadlineExceeded = true;
+          throw deadline;
+        }
+        throw error;
+      });
+  }
+
+  function parseJson(text) {
+    try {
+      return JSON.parse(text);
+    } catch (_) {
+      return {};
+    }
+  }
 
   function track(eventName, props) {
     if (typeof window.confengeTrack !== "function") return;
@@ -105,6 +154,7 @@
     setHidden("intake_version", data.intake_version);
     setHidden("intake_pin_hash", data.intake_pin_hash);
     configured = data.options.length > 0;
+    if (configured) available();
     next.disabled = !configured;
     submit.disabled = !configured;
     updateLocation();
@@ -114,12 +164,34 @@
 
   function unavailable() {
     configured = false;
+    handedOver = true;
+    submitGeneration += 1;
     next.disabled = true;
     submit.disabled = true;
+    // Take the dead controls out of the accessible tree AND out of the focus
+    // order, so a keyboard or screen-reader visitor is not walked through a
+    // form that cannot accept anything. `inert` does both. The status message
+    // and the WhatsApp/e-mail/telephone links live outside these containers and
+    // stay readable and focusable — the explanation must survive, only the dead
+    // controls go away.
+    steps.forEach(function (step) {
+      step.setAttribute("inert", "");
+      step.setAttribute("aria-hidden", "true");
+    });
     showStatus(
       "O formulário não está disponível agora. Use WhatsApp, e-mail ou telefone abaixo para falar com a CONFENGE.",
       "error"
     );
+  }
+
+  // Reaching a valid configuration must clear the loading placeholder and let the
+  // visitor progress for real.
+  function available() {
+    handedOver = false;
+    steps.forEach(function (step) {
+      step.removeAttribute("inert");
+      step.removeAttribute("aria-hidden");
+    });
   }
 
   function locationRequired() {
@@ -262,10 +334,14 @@
     return JSON.stringify(copy);
   }
 
-  fetch(endpoint, { headers: { Accept: "application/json" }, credentials: "same-origin" })
-    .then(function (response) {
-      if (!response.ok) throw new Error("config_unavailable");
-      return response.json();
+  fetchWithDeadline(
+    endpoint,
+    { headers: { Accept: "application/json" }, credentials: "same-origin" },
+    CONFIG_TIMEOUT_MS
+  )
+    .then(function (reply) {
+      if (!reply.response.ok) throw new Error("config_unavailable");
+      return parseJson(reply.text);
     })
     .then(configure)
     .catch(unavailable);
@@ -342,22 +418,33 @@
       location_required: locationRequired()
     });
 
-    fetch(form.action, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        "Idempotency-Key": body.idempotency_key
+    // Identity of THIS attempt. A response that arrives after the visitor has been
+    // handed to the alternative contact, or after a newer attempt started, is
+    // discarded: it must not steal focus or overwrite the page underneath them.
+    var generation = ++submitGeneration;
+    function stale() {
+      return handedOver || generation !== submitGeneration;
+    }
+
+    fetchWithDeadline(
+      form.action,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          "Idempotency-Key": body.idempotency_key
+        },
+        body: JSON.stringify(body),
+        credentials: "same-origin"
       },
-      body: JSON.stringify(body),
-      credentials: "same-origin"
-    })
-      .then(function (response) {
-        return response.json().catch(function () { return {}; }).then(function (data) {
-          return { response: response, data: data };
-        });
+      SUBMIT_TIMEOUT_MS
+    )
+      .then(function (raw) {
+        return { response: raw.response, data: parseJson(raw.text) };
       })
       .then(function (reply) {
+        if (stale()) return;
         var receiptId = reply.data && (reply.data.receipt_id || reply.data.lead_id);
         if (![200, 201].includes(reply.response.status) || reply.data.ok !== true || !receiptId) {
           var error = new Error(reply.data.error || "receipt_unconfirmed");
@@ -376,16 +463,27 @@
         track("lead_persisted");
       })
       .catch(function (error) {
+        if (stale()) return;
         var rateLimited = error && error.status === 429;
+        var timedOut = Boolean(error && error.deadlineExceeded);
+        // The request left this browser. A deadline, an unreadable body or a proxy
+        // error do NOT prove the record was not written, so the wording stays
+        // uncertain and the typed fields are preserved. Trying again with the same
+        // data reuses the same idempotency key and converges on ONE logical record.
         showStatus(
           rateLimited
             ? "Muitas tentativas em sequência. Aguarde um pouco ou use um dos canais abaixo."
-            : "Ainda não foi possível confirmar o registro. Tente novamente com os mesmos dados ou use um dos canais abaixo.",
+            : timedOut
+              ? "Não recebemos a confirmação a tempo. O seu pedido pode ter sido registrado — não reescreva os dados: tente enviar de novo, ou fale pelos canais abaixo."
+              : "Ainda não foi possível confirmar o registro. Tente novamente com os mesmos dados ou use um dos canais abaixo.",
           "error"
         );
-        track("lead_form_backend_error", { error_code: rateLimited ? "rate_limited" : "receipt_unconfirmed" });
+        track("lead_form_backend_error", {
+          error_code: rateLimited ? "rate_limited" : timedOut ? "deadline_exceeded" : "receipt_unconfirmed"
+        });
       })
       .finally(function () {
+        if (stale()) return;
         form.removeAttribute("aria-busy");
         if (!form.hidden) submit.disabled = false;
       });
