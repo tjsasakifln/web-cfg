@@ -707,6 +707,84 @@ def gate_index_surface() -> GateReport:
     )
 
 
+SHELL_PRICE_RE = re.compile(r"R\$\s*\d")
+
+
+def _shell_gaps(html: str) -> list[tuple[str, str]]:
+    """Positional, not substring. A page can carry "<header" inside <main>
+    (triagem-tecnica did) or use <header class="section-head"> for a section
+    (index.html does, three times), so `"<header" in html` passes on the real
+    defect. Likewise every page that loads /styles.css contains the STRING
+    "desktop-nav" in its CSS, so the element is required, not the text."""
+    gaps: list[tuple[str, str]] = []
+    main_at = html.find("<main")
+    header_close = html.find("</header>")
+    header_open = html.find('class="site-header"')
+    if header_open < 0 or header_close < 0 or (main_at >= 0 and header_close > main_at):
+        return [("shell_header_missing", 'no <header class="site-header"> closing before <main>')]
+    head_block = html[:header_close]
+    for cls in ("desktop-nav", "mobile-nav"):
+        if f'class="{cls}"' not in head_block:
+            gaps.append((f"shell_nav_missing_{cls.split('-')[0]}", f'no <nav class="{cls}"> inside the site header'))
+        elif not re.search(r'class="' + cls + r'"[^>]*>(?:(?!</nav>).)*?<a\s[^>]*href="/', head_block, re.S):
+            gaps.append(("shell_nav_empty", f"{cls} carries no site anchor"))
+    main_close = html.find("</main>")
+    footer_at = html.find('class="site-footer"')
+    if footer_at < 0 or (main_close >= 0 and footer_at < main_close):
+        gaps.append(("shell_footer_missing", 'no <footer class="site-footer"> after </main>'))
+    return gaps
+
+
+def gate_shared_shell() -> GateReport:
+    """Every indexable route renders the shared shell -- header, nav and footer.
+
+    gate_brand_shell below checks that a shell, where one exists, is not the
+    LEGACY shell. It cannot see a page with no shell at all, because its page
+    list is written by hand. That is exactly how /triagem-tecnica/ reached
+    production indexable with zero header, zero nav and zero footer, showing a
+    bare text wordmark instead of the brand, and no way out of the page.
+    shell_nav.py could not catch it either: sync_text() returns early when a
+    page has neither desktop-nav nor mobile-nav, so the tool that keeps shells
+    consistent skips precisely the pages that are missing one.
+
+    This gate sweeps rather than lists, so a new route is covered the day its
+    HTML lands. Exemption is derived from the page itself -- a noindex page is
+    out of scope -- with no route allowlist, because an allowlist is how the
+    previous gate went blind.
+    """
+    findings: list[Finding] = []
+    pages = indexable_public_pages()
+    scanned = 0
+    for p in pages:
+        html = p.read_text(encoding="utf-8", errors="replace")
+        rel = p.relative_to(ROOT).as_posix()
+        scanned += 1
+        for reason, excerpt in _shell_gaps(html):
+            findings.append(Finding("shared_shell", rel, reason, excerpt))
+
+    # A noindex page that publishes a price is reported, never silently
+    # excused: going noindex must not become the exit door for a commercial
+    # surface. It warns rather than blocks, because the noindex pilots that
+    # trip it today predate this gate and are a separate editorial decision.
+    warned = 0
+    indexed = {p.resolve() for p in pages}
+    for p in public_html_files():
+        if p.resolve() in indexed:
+            continue
+        html = p.read_text(encoding="utf-8", errors="replace")
+        if not SHELL_PRICE_RE.search(html):
+            continue
+        gaps = _shell_gaps(html)
+        if gaps:
+            warned += 1
+            findings.append(Finding("shared_shell", p.relative_to(ROOT).as_posix(),
+                                    "shell_missing_on_noindex_priced_page",
+                                    gaps[0][1], severity="warn"))
+    blocking = [f for f in findings if f.severity != "warn"]
+    return GateReport(ok=not blocking, findings=findings,
+                      stats={"scanned": scanned, "violations": len(blocking), "warnings": warned})
+
+
 def gate_brand_shell() -> GateReport:
     """Public commercial + indexable content must use brand navigation and footer blurb."""
     from scripts.site.brand import footer_blurb, load_brand, org_description
@@ -4018,6 +4096,7 @@ def run_all_gates() -> dict[str, Any]:
         "naturalness": gate_naturalness(only_indexable=True),
         "index_surface": gate_index_surface(),
         "brand_shell": gate_brand_shell(),
+        "shared_shell": gate_shared_shell(),
         "conversion": gate_conversion(),
         "legacy_entity": gate_legacy_entity_matrix(),
         "similarity": gate_similarity_indexable(),
