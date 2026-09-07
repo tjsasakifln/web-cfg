@@ -1736,6 +1736,58 @@ async function main() {
     fail("fixture_authority_gated_capture_passes_with_registry_contract", e.message || e);
   }
 
+  // Counter-case: being a DECLARED authority-gated capture is not a licence to be a
+  // dead end. When the external authority is withheld, the visitor must still have a
+  // reachable channel; a gated form with no way out is broken, whatever it declares.
+  try {
+    const gatedNoChannel = await layoutFindingsFromHtml(
+      `<!doctype html>
+        <html lang="pt-BR"><body><main>
+        <form method="post" action="/.netlify/functions/lead"
+          data-runtime-profile="adaptive_intake_standalone_v1"
+          data-authority-config-endpoint="/.netlify/functions/adaptive-intake-config">
+        <label>Nome <input name="nome"></label><button type="submit" disabled>Enviar</button>
+        </form>
+        <script src="/assets/js/adaptive-intake.js"></script>
+        </main></body></html>`,
+      { width: 390, height: 844 },
+      { authorityGatedCapture: authorityGatedContract },
+    );
+    if (!gatedNoChannel.includes("broken_form")) {
+      throw new Error(`gated capture without any reachable channel passed: ${gatedNoChannel.join(",")}`);
+    }
+    ok("fixture_authority_gated_capture_without_channel_fails");
+  } catch (e) {
+    fail("fixture_authority_gated_capture_without_channel_fails", e.message || e);
+  }
+
+  // Counter-case: withdrawing the dead controls from the focus/accessibility tree
+  // (`inert`, which is what the intake client does when configuration fails) must NOT
+  // be read as a broken form, as long as a channel remains reachable.
+  try {
+    const gatedInert = await layoutFindingsFromHtml(
+      `<!doctype html>
+        <html lang="pt-BR"><body><main>
+        <form method="post" action="/.netlify/functions/lead"
+          data-runtime-profile="adaptive_intake_standalone_v1"
+          data-authority-config-endpoint="/.netlify/functions/adaptive-intake-config">
+        <fieldset inert aria-hidden="true"><label>Nome <input name="nome"></label></fieldset>
+        <button type="submit" disabled>Enviar</button>
+        </form>
+        <script src="/assets/js/adaptive-intake.js"></script>
+        <p><a data-fallback-channel="whatsapp" href="https://wa.me/5548988344559">WhatsApp</a></p>
+        </main></body></html>`,
+      { width: 390, height: 844 },
+      { authorityGatedCapture: authorityGatedContract },
+    );
+    if (gatedInert.includes("broken_form")) {
+      throw new Error(`inert gated capture with a live channel was called broken: ${gatedInert.join(",")}`);
+    }
+    ok("fixture_authority_gated_inert_capture_with_channel_passes");
+  } catch (e) {
+    fail("fixture_authority_gated_inert_capture_with_channel_passes", e.message || e);
+  }
+
   try {
     const hiddenSticky = await layoutFindingsFromHtml(`<!doctype html>
       <html lang="pt-BR"><body><main>
