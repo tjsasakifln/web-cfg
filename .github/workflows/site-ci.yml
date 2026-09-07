@@ -33,8 +33,11 @@ jobs:
       candidate_sha256: ${{ steps.package.outputs.sha256 }}
       # "Re-run failed jobs" bumps run_attempt but does NOT re-run a job that
       # already succeeded, so the consumers must ask for the name build really
-      # published, not the one this attempt would have produced.
-      candidate_artifact: site-ci-candidate-${{ github.run_id }}-${{ github.run_attempt }}
+      # published, not the one this attempt would have produced. The name is
+      # therefore captured by the packaging step, frozen at the moment the
+      # upload happens, rather than re-derived from github.run_attempt in a
+      # later context that may no longer be the publishing attempt.
+      candidate_artifact: ${{ steps.package.outputs.artifact }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
@@ -199,11 +202,18 @@ jobs:
               -czf "$RUNNER_TEMP/candidate.tgz" .
           sha256=$(sha256sum "$RUNNER_TEMP/candidate.tgz" | cut -d' ' -f1)
           echo "sha256=$sha256" >> "$GITHUB_OUTPUT"
-          echo "CANDIDATE_PACKAGED sha256=$sha256 bytes=$(stat -c%s "$RUNNER_TEMP/candidate.tgz")"
+          artifact="site-ci-candidate-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          echo "artifact=$artifact" >> "$GITHUB_OUTPUT"
+          echo "CANDIDATE_PACKAGED sha256=$sha256 bytes=$(stat -c%s "$RUNNER_TEMP/candidate.tgz") artifact=$artifact"
       - name: Upload the prepared candidate
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
-          name: ${{ needs.build.outputs.candidate_artifact }}
+          # steps.package, not needs.build: inside build itself the needs
+          # context is empty, which resolved this name to the empty string and
+          # made upload-artifact refuse with "artifact name input during
+          # validation is empty". Producer and consumer now read the one value
+          # the packaging step published.
+          name: ${{ steps.package.outputs.artifact }}
           # A single explicit file uploads at the archive root, so every
           # consumer still restores it as candidate/candidate.tgz.
           path: ${{ runner.temp }}/candidate.tgz
