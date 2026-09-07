@@ -30,6 +30,7 @@ NETLIFY_IGNORE_SCRIPT = ROOT / "scripts" / "pseo" / "ignore_evidence_build.sh"
 PACKAGE_JSON = ROOT / "package.json"
 PACKAGE_LOCK = ROOT / "package-lock.json"
 NVMRC = ROOT / ".nvmrc"
+SITE_CI_SUITES = ROOT / "data" / "quality" / "site-ci-suites.json"
 REVOPS_SCHEDULED = WORKFLOWS_DIR / "revops-scheduled.yml"
 PYTHON_REQUIREMENTS = ROOT / "requirements-ci.txt"
 UI_GEOMETRY = ROOT / "scripts" / "site" / "test_ui_geometry.mjs"
@@ -659,6 +660,76 @@ def test_site_excellence_precedes_the_netcup_release_artifact():
         raise AssertionError("Netcup package must wait for site-ci and pSEO on the exact SHA")
 
 
+def test_browser_matrix_covers_every_declared_suite():
+    """The split moved "everything ran" out of the runner and into a manifest.
+
+    site-ci is a single required context whose browser suites are chosen by
+    data/quality/site-ci-suites.json. That file feeds BOTH the matrix and the
+    aggregator's coverage set, so shrinking it would stop suites from running
+    while the aggregator, asking only about what remains declared, still
+    approved — and the commands would still be present in the workflow text, so
+    every substring assertion above would keep passing. The manifest is
+    therefore frozen here, and pinned to the dispatch in both directions.
+    """
+    import json as _json
+
+    workflow = _read(SITE_CI)
+    errors: list[str] = []
+
+    # Frozen on purpose: adding or removing a browser suite is a deliberate act
+    # that must edit this list, not a silent data-file diff.
+    expected = {
+        "csp-convergence",
+        "money-canary",
+        "capture-states",
+        "ui-geometry",
+        "layout-sitewide",
+        "deliverables-hub-ui",
+        "axe",
+        "lighthouse",
+        "tools-uiux",
+        "playwright-checklist",
+    }
+    assert SITE_CI_SUITES.is_file(), f"missing suite manifest: {SITE_CI_SUITES}"
+    declared = _json.loads(SITE_CI_SUITES.read_text(encoding="utf-8")).get("suites") or []
+    if set(declared) != expected:
+        errors.append(
+            "site-ci browser suite manifest drifted from the frozen set; "
+            f"missing={sorted(expected - set(declared))} unexpected={sorted(set(declared) - expected)}"
+        )
+    if len(declared) != len(set(declared)):
+        errors.append("site-ci suite manifest contains duplicates")
+
+    # Suite names reach a shell dispatch and an artifact name.
+    for suite in declared:
+        if not re.fullmatch(r"[a-z0-9][a-z0-9-]{0,63}", str(suite)):
+            errors.append(f"suite name is not a safe identifier: {suite!r}")
+
+    # Both directions: declared implies dispatched, dispatched implies declared.
+    arms = set(re.findall(r"(?m)^\s{12}([a-z0-9][a-z0-9-]*)\)\s*$", workflow))
+    for suite in declared:
+        if suite not in arms:
+            errors.append(f"suite {suite!r} is declared but has no dispatch arm in site-ci")
+    for arm in sorted(arms - set(declared)):
+        errors.append(f"dispatch arm {arm!r} runs a suite that is not declared in the manifest")
+
+    if "fromJSON(needs.build.outputs.suites)" not in workflow:
+        errors.append("the browser matrix must be built from the declared manifest")
+    if "fail-fast: false" not in workflow:
+        errors.append("browser matrix must set fail-fast: false so one suite cannot cancel the rest")
+    if "verify_site_ci_aggregate.py" not in workflow:
+        errors.append("site-ci must decide approval with the aggregate verifier")
+
+    # continue-on-error must be absent from the WHOLE workflow, not just the
+    # aggregator block: on the browser job or its run step it would forge a
+    # green job.status into the suite marker.
+    for match in re.finditer(r"(?m)^\s+continue-on-error:\s*true\s*$", workflow):
+        errors.append("site-ci must not use continue-on-error: true anywhere")
+        break
+
+    assert not errors, "site-ci matrix coverage failures:\n- " + "\n- ".join(errors)
+
+
 def test_deliberate_force_fail_env():
     """Controlled negative path: env forces red so CI can prove the test blocks."""
     if os.environ.get("WORKFLOW_GATE_FORCE_FAIL") == "1":
@@ -671,6 +742,7 @@ def test_deliberate_force_fail_env():
 def main() -> int:
     tests = [
         test_site_ci_shape,
+        test_browser_matrix_covers_every_declared_suite,
         test_pseo_shape,
         test_node_pins_match_runtime_baseline,
         test_revops_scheduled_install_keeps_the_runtime_floor_fail_closed,
