@@ -70,9 +70,9 @@ function qualificationFields(item, select = false) {
     : `<input name="deliverable_id" type="hidden" value="${item.deliverable_id}"/>`;
   return `${FIELDS_START}
 ${deliverable}
-<label>Identificador do contrato <input name="public_contract_id" maxlength="80" required/></label>
+<label>Identificador do contrato <span class="field-optional">(se já tiver)</span> <input name="public_contract_id" maxlength="80"/></label>
 <label>Evento observado <select name="contract_event" required><option value="">Selecione</option><option value="risco_margem">Risco à margem</option><option value="medicao_glosa_pagamento">Medição, glosa ou pagamento</option><option value="mudanca_escopo">Mudança de escopo ou serviço extra</option><option value="atraso_prorrogacao">Atraso ou prorrogação</option><option value="reajuste">Reajuste contratual</option><option value="reequilibrio">Reequilíbrio</option><option value="notificacao_sancao">Notificação ou sanção</option><option value="outro">Outro evento contratual</option></select></label>
-<div class="contract-product-form__row"><label>Prazo da decisão ou resposta <input name="opportunity_deadline" type="date" required/></label><label>Estágio do evento <select name="contract_stage" required><option value="">Selecione</option><option value="identificado">Identificado</option><option value="documentando">Documentando</option><option value="quantificando">Quantificando</option><option value="em_resposta">Em resposta formal</option><option value="UNKNOWN">Ainda não definido</option></select></label></div>
+<div class="contract-product-form__row"><label>Prazo da decisão ou resposta <span class="field-optional">(se souber)</span> <input name="opportunity_deadline" type="date"/></label><label>Estágio do evento <select name="contract_stage"><option value="">Ainda não sei</option><option value="identificado">Identificado</option><option value="documentando">Documentando</option><option value="quantificando">Quantificando</option><option value="em_resposta">Em resposta formal</option><option value="UNKNOWN">Ainda não definido</option></select></label></div>
 ${FIELDS_END}`;
 }
 

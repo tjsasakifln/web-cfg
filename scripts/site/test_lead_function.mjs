@@ -590,8 +590,11 @@ _reset();
     const before = mem.map.size;
     const res = await handler(event({ ...base, ...invalid }, "POST", { ip: "192.0.2.92" }));
     const data = JSON.parse(res.body);
-    if (res.statusCode !== 422 || data.error !== "licitacao_qualification_invalid" || mem.map.size !== before) {
-      fail("licitacao_qualification_fail_closed", { invalid, status: res.statusCode, data });
+    if (res.statusCode >= 400 || mem.map.size < before) {
+      fail("licitacao_qualification_gap_is_received", { invalid, status: res.statusCode, data });
+    }
+    if (data.qualification_state !== "NEEDS_CONTEXT") {
+      fail("licitacao_qualification_gap_is_recorded", { invalid, data });
     }
   }
 
@@ -601,11 +604,12 @@ _reset();
       deliverable_id: deliverableId,
       opportunity_deadline: new Date().toISOString().slice(0, 10),
     }, "POST", { ip: `192.0.2.${94 + index}` }));
-    if (
-      unsafeDeadline.statusCode !== 422 ||
-      JSON.parse(unsafeDeadline.body).error !== "licitacao_qualification_invalid"
-    ) {
-      fail("licitacao_safe_deadline_fail_closed", { deliverableId, response: unsafeDeadline });
+    // O caso que mais importa: prazo hoje. O piso material continua publicado
+    // na rota; quem chega fora dele passa a ser RECEBIDO e marcado, em vez de
+    // descartado e informado de que o servidor falhou.
+    const unsafeBody = JSON.parse(unsafeDeadline.body);
+    if (unsafeDeadline.statusCode >= 400 || unsafeBody.qualification_state !== "NEEDS_CONTEXT") {
+      fail("licitacao_urgent_deadline_is_received", { deliverableId, response: unsafeDeadline });
     }
   }
 
@@ -755,11 +759,17 @@ _reset();
     { opportunity_deadline: analysisCutoff },
     { decision_intent: "decisao_livre" },
   ]) {
+    // Propriedade da decisão vigente: uma lacuna de qualificação é REGISTRADA,
+    // não usada para descartar o contato. O piso material continua publicado na
+    // rota; o que acabou foi perder a pessoa que chega fora dele.
     const before = mem.map.size;
     const res = await handler(event({ ...invalidBase, ...invalid }, "POST", { ip: "203.0.113.99" }));
     const data = JSON.parse(res.body);
-    if (res.statusCode !== 422 || data.error !== "expansion_qualification_invalid" || mem.map.size !== before) {
-      fail("priced_model_qualification_fail_closed", { invalid, status: res.statusCode, data });
+    if (res.statusCode >= 400 || mem.map.size < before) {
+      fail("priced_model_qualification_gap_is_received", { invalid, status: res.statusCode, data });
+    }
+    if (data.qualification_state !== "NEEDS_CONTEXT") {
+      fail("priced_model_qualification_gap_is_recorded", { invalid, data });
     }
   }
   pass("priced_model_forms_persisted_attribution", { routes: modelSlugs });
@@ -800,8 +810,11 @@ _reset();
     const before = mem.map.size;
     const res = await handler(event({ ...base, deliverable_id: "CFG-D18", ...invalid }, "POST", { ip: "203.0.113.98" }));
     const data = JSON.parse(res.body);
-    if (res.statusCode !== 422 || data.error !== "contract_qualification_invalid" || mem.map.size !== before) {
-      fail("contract_product_qualification_fail_closed", { invalid, status: res.statusCode, data });
+    if (res.statusCode >= 400 || mem.map.size < before) {
+      fail("contract_product_qualification_gap_is_received", { invalid, status: res.statusCode, data });
+    }
+    if (data.qualification_state !== "NEEDS_CONTEXT") {
+      fail("contract_product_qualification_gap_is_recorded", { invalid, data });
     }
   }
   const res = await handler(event({
