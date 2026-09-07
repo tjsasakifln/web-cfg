@@ -28,7 +28,7 @@ from scripts.site.fingerprint_css import (  # noqa: E402
 
 HEADERS = ROOT / "_headers"
 SITE = ROOT / "_site"
-DOWNLOADABLE = {"/radar/nacional-obras-publicas/radar-nacional.pdf"}
+DOWNLOADABLE = {"/radar/nacional-obras-publicas/gsc-demand-sample.json"}
 
 
 def hashed_source_assets() -> set[str]:

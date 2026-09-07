@@ -156,7 +156,7 @@ def test_prepare_radar_names_asset_gates_primitives_outcomes_and_metrics():
     report = prepare_asset(root=ROOT)
     text = format_prepare_report(report)
     assert report["asset"]["id"] == "radar-nacional-obras-publicas"
-    assert report["asset"]["name"] == "Radar Nacional de Obras Públicas"
+    assert report["asset"]["name"] == "Radar de obras públicas: método aberto e demanda observada"
     assert report["kill_gates"]["distribute"] is True
     assert report["kill_gates"]["no_utility_do_not_distribute"] is True
     assert report["kill_gates"]["no_fit_do_not_contact"] is True
@@ -199,7 +199,11 @@ def test_prepare_radar_names_asset_gates_primitives_outcomes_and_metrics():
     assert "already present" in text or "already_present" in text
     assert "https://confenge.com.br/radar/nacional-obras-publicas/" in text
     assert "gsc-demand-sample.json" in text
-    assert "radar-nacional.pdf" in text
+    # The PDF was withdrawn on 2026-09-07: the served render predated the page's
+    # corrections. Asserting it is still offered would re-enshrine the defect, so
+    # the property is now that every advertised safe download resolves to a file
+    # that exists, and that the withdrawal is stated rather than silently dropped.
+    assert "radar-nacional.pdf" not in text
 
 
 def test_inherited_kit_is_mapped_through_fit_gate_not_cloned():
@@ -255,10 +259,39 @@ def test_live_radar_citation_primitives_exist_on_disk():
     assert "https://confenge.com.br/radar/nacional-obras-publicas/" in page
     assert "Como citar" in page
     assert "gsc-demand-sample.json" in page
-    assert "radar-nacional.pdf" in page
     assert "method-box" in page
     assert (ROOT / "radar" / "nacional-obras-publicas" / "gsc-demand-sample.json").is_file()
-    assert (ROOT / "radar" / "nacional-obras-publicas" / "radar-nacional.pdf").is_file()
+
+
+def test_every_advertised_safe_download_resolves_to_a_published_file():
+    """A citation primitive that 404s, or that contradicts the page, is not a primitive.
+
+    The old assertion named one filename and was satisfied by a stale render.
+    This one holds for whatever the asset advertises, and refuses the withdrawn
+    PDF by name so it cannot come back without a decision.
+    """
+    registry = load_registry(REGISTRY_PATH)
+    links = registry["asset"]["citation_primitives"]["safe_download"]["links"]
+    assert links
+    prefix = "https://confenge.com.br/"
+    for link in links:
+        assert link.startswith(prefix), link
+        assert (ROOT / link[len(prefix):]).is_file(), link
+    assert not (ROOT / "radar" / "nacional-obras-publicas" / "radar-nacional.pdf").exists()
+    withdrawn = registry["asset"]["citation_primitives"]["safe_download"]["withdrawn"]
+    assert any("radar-nacional.pdf" in item["url"] for item in withdrawn)
+    assert all(item["reason"].strip() and item["date"] for item in withdrawn)
+
+
+def test_counter_case_an_advertised_download_that_is_not_published_is_caught():
+    registry = load_registry(REGISTRY_PATH)
+    links = list(registry["asset"]["citation_primitives"]["safe_download"]["links"])
+    links.append("https://confenge.com.br/radar/nacional-obras-publicas/radar-nacional.pdf")
+    prefix = "https://confenge.com.br/"
+    missing = [link for link in links if not (ROOT / link[len(prefix):]).is_file()]
+    assert missing == [
+        "https://confenge.com.br/radar/nacional-obras-publicas/radar-nacional.pdf"
+    ]
 
 
 def test_prepare_does_not_mutate_registry():

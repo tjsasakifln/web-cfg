@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import Any
 
 from scripts.demand_radar.engine import build_ledger
+from scripts.demand_radar.public_sample import check as check_public_sample
 from scripts.demand_radar.report import render_markdown
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -109,6 +110,17 @@ def main() -> int:
     if args.command == "check":
         _check(args.ledger, ledger_text)
         _check(args.report, report_text)
+        # The published radar sample is a public artifact derived from the same
+        # first-party GSC export this ledger reads. Checking it here means the
+        # window, the denominator and the row grain cannot drift away from the
+        # export without a red check, which is exactly how the withdrawn PDF
+        # stayed stale.
+        problems = check_public_sample(ROOT)
+        if problems:
+            for problem in problems:
+                print(f"public_gsc_sample_problem: {problem}")
+            raise ValueError(f"public_gsc_sample_stale:{len(problems)}")
+        print("public_gsc_sample_current")
         print("demand_radar_outputs_current")
         return 0
     args.ledger.parent.mkdir(parents=True, exist_ok=True)

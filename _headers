@@ -92,9 +92,14 @@
   X-Robots-Tag: noindex, nofollow, noarchive
 
 # Market-panorama family — end
-/radar/nacional-obras-publicas/radar-nacional.pdf
-  Content-Type: application/pdf
-  Content-Disposition: attachment; filename="radar-nacional.pdf"
+# The PDF that used to live here was withdrawn: it was a pre-correction render
+# whose text the page had already replaced and whose internal links were dead
+# file:/// URLs. The PII-free JSON sample is the download that remains, and it
+# is the artifact scripts/demand_radar/public_sample.py re-derives from the
+# authorized Search Console export on every `npm run demand-radar:check`.
+/radar/nacional-obras-publicas/gsc-demand-sample.json
+  Content-Type: application/json
+  Content-Disposition: attachment; filename="gsc-demand-sample.json"
 
 /assets/tiago-sasaki-foto-v11-sem-fundo-560.avif
   Content-Type: image/avif

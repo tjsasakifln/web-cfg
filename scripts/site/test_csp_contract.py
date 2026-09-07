@@ -29,7 +29,7 @@ HEADERS = ROOT / "_headers"
 SITE = ROOT / "_site"
 PACKAGE = ROOT / "package.json"
 SITE_CI = ROOT / ".github" / "workflows" / "site-ci.yml"
-DOWNLOADABLE = "/radar/nacional-obras-publicas/radar-nacional.pdf"
+DOWNLOADABLE = "/radar/nacional-obras-publicas/gsc-demand-sample.json"
 
 
 def _headers_with_script_src(
