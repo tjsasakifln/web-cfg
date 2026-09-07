@@ -528,10 +528,16 @@
           const finishFallback = (reason) => {
             const stage = (estagioEl?.value || '').slice(0, 80);
             const msg = encodeURIComponent(
-              `Olá, Tiago. Tentei enviar pelo formulário do site (${stage || journey || 'contato'}) e preciso de retorno. Protocolo local indisponível.`,
+              `Olá, Tiago. Tentei enviar pelo formulário do site (${stage || journey || 'contato'}) e não recebi confirmação. Preciso de retorno.`,
             );
+            // The POST already left this browser. A deadline, an unreadable body or a
+            // proxy error do NOT prove nothing was written, so the wording must not
+            // assert it. Only a refusal that never reached the server may say that.
+            const leftTheBrowser = reason === 'timeout' || reason === 'receipt_unconfirmed';
             showFormStatus(
-              'Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.',
+              leftTheBrowser
+                ? 'Não recebemos a confirmação a tempo. O seu pedido pode ter sido registrado — não reescreva os dados: tente enviar de novo, ou use o WhatsApp abaixo. O protocolo só aparece depois da gravação confirmada.'
+                : 'Não foi possível enviar ao servidor. Use o WhatsApp abaixo para não perder o contato — o protocolo só aparece depois da gravação confirmada.',
               'error',
             );
             track('lead_form_backend_error', {

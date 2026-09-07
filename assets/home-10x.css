@@ -575,6 +575,11 @@ body[data-content-cluster="corporate-services"]{font-family:"Archivo Var",ui-san
 .corporate-service-row--b2g h3,.corporate-service-row--b2g .service-output strong{color:#fff}
 .corporate-service-row--b2g p{color:#c1ccd6}
 .corporate-service-row--b2g .service-number{color:var(--lime)}
+/* The dark B2G variant recolours h3, p and the number but not links. `.text-link`
+   inherits color:var(--ink) = #071a31, which is this row background, so the
+   secondary CTA rendered at contrast 1.00 -- invisible, yet still focusable. */
+.corporate-service-row--b2g .text-link{color:#fff}
+.corporate-service-row--b2g .text-link:hover{color:var(--lime)}
 .corporate-boundary{padding-block:1rem}
 
 @media (max-width:900px){
