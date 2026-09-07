@@ -15,6 +15,10 @@
 </head>
 <body>
 <a class="skip-link" href="#conteudo">Ir ao conteúdo</a>
+<svg aria-hidden="true" class="svg-sprite" height="0" width="0">
+<symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"></path></symbol>
+<symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"></path></symbol>
+</svg>
 <header class="site-header" id="inicio">
 <div class="container header-inner">
 <a aria-label="CONFENGE, página inicial" class="brand" href="/"><img alt="CONFENGE Inteligência Técnica" height="58" src="/assets/logo-confenge-500-f8a83f6d.png" width="224"/></a>
@@ -172,7 +176,7 @@
 <div class="field"><label for="public_contract_id">Referência pública do contrato ou processo</label><input id="public_contract_id" name="public_contract_id" required maxlength="80" autocomplete="off" aria-describedby="cfg-d19-contract-hint"/><p class="form-hint" id="cfg-d19-contract-hint">Use somente a referência necessária para localizar o caso; não cole o contrato nem dados pessoais.</p></div>
 <div class="form-row">
 <div class="field"><label for="opportunity_deadline">Data da próxima decisão</label><input id="opportunity_deadline" name="opportunity_deadline" required type="date"/></div>
-<div class="field"><label for="contract_stage">Estágio do caso</label><select id="contract_stage" name="contract_stage" required><option value="" selected disabled>Selecione</option><option value="identificado">Identificado</option><option value="documentando">Documentando</option><option value="quantificando">Quantificando</option><option value="em_resposta">Em resposta</option><option value="UNKNOWN">UNKNOWN</option></select></div>
+<div class="field"><label for="contract_stage">Estágio do caso</label><select id="contract_stage" name="contract_stage" required><option value="" selected disabled>Selecione</option><option value="identificado">Identificado</option><option value="documentando">Documentando</option><option value="quantificando">Quantificando</option><option value="em_resposta">Em resposta</option><option value="UNKNOWN">Ainda não definido</option></select></div>
 </div>
 <div class="field"><label for="nome">Nome</label><input autocomplete="name" id="nome" name="nome" required type="text" maxlength="120"/></div>
 <div class="form-row" role="group" aria-describedby="contato-hint">
@@ -189,6 +193,15 @@
 </section>
 </div>
 
+<section class="authority-method container" id="metodo" data-surface-type="ferramenta" aria-label="Método, fonte e limitações">
+<p>Responsável técnico: <a href="/especialista/tiago-jun-sasaki/">Engº Tiago Sasaki</a> · Referência da página (as of): <time datetime="2026-08-15">15 de agosto de 2026</time> · Fonte legal reconfirmada em 31 de agosto de 2026.</p>
+<p>Método: triagem numérica <code>art125-numeric-triage/1.0.0</code>, com saldos independentes de acréscimo e supressão em centavos e estados explícitos de premissa.</p>
+<p>Fonte: Lei nº 14.133/2021, arts. 124, I, 125 e 126. Não consulta processo, edital ou aditivos reais.</p>
+<p>Limitação: não é parecer jurídico; não avalia alteração consensual, transfiguração do objeto nem o regime excepcional da Lei nº 14.981/2024. Sem revisão independente: não há segundo revisor nomeado.</p>
+<p><strong>Precisa ir além do cálculo?</strong> <a data-asset-family="tool" data-asset-id="limite-acrescimos-supressoes" data-cta-id="limite-aditivos-servico" data-cta-position="after_method" data-route-family="aditivos" href="/aditivos-obras-publicas/">Veja a análise técnica para aditivos de obras públicas.</a></p>
+<p>Como citar: CONFENGE. Verificador de limite de acréscimos e supressões. https://confenge.com.br/ferramentas/limite-acrescimos-supressoes/ (as of 2026-08-15; fonte legal reconfirmada em 31 de agosto de 2026).</p>
+<p class="policy-version-disclosure" data-policy-version="1.2.0">Texto e dados desta página seguem a <a href="/politica-editorial/">política editorial 1.2.0</a>. <a href="/triagem-tecnica/#corrigir-o-site">Encontrou um erro? Fale com a gente</a>.</p>
+</section>
 </main>
 <script src="/assets/js/tool-persist.js"></script>
 <script src="/assets/js/tools-common.js"></script>
@@ -601,15 +614,6 @@
 })();
 </script>
 
-<section class="authority-method container" id="metodo" data-surface-type="ferramenta" aria-label="Método, fonte e limitações">
-<p>Responsável técnico: <a href="/especialista/tiago-jun-sasaki/">Engº Tiago Sasaki</a> · Referência da página (as of): <time datetime="2026-08-15">15 de agosto de 2026</time> · Fonte legal reconfirmada em 31 de agosto de 2026.</p>
-<p>Método: triagem numérica <code>art125-numeric-triage/1.0.0</code>, com saldos independentes de acréscimo e supressão em centavos e estados explícitos de premissa.</p>
-<p>Fonte: Lei nº 14.133/2021, arts. 124, I, 125 e 126. Não consulta processo, edital ou aditivos reais.</p>
-<p>Limitação: não é parecer jurídico; não avalia alteração consensual, transfiguração do objeto nem o regime excepcional da Lei nº 14.981/2024. Sem revisão independente: não há segundo revisor nomeado.</p>
-<p><strong>Precisa ir além do cálculo?</strong> <a data-asset-family="tool" data-asset-id="limite-acrescimos-supressoes" data-cta-id="limite-aditivos-servico" data-cta-position="after_method" data-route-family="aditivos" href="/aditivos-obras-publicas/">Veja a análise técnica para aditivos de obras públicas.</a></p>
-<p>Como citar: CONFENGE. Verificador de limite de acréscimos e supressões. https://confenge.com.br/ferramentas/limite-acrescimos-supressoes/ (as of 2026-08-15; fonte legal reconfirmada em 31 de agosto de 2026).</p>
-<p class="policy-version-disclosure" data-policy-version="1.2.0">Texto e dados desta página seguem a <a href="/politica-editorial/">política editorial 1.2.0</a>. <a href="/triagem-tecnica/#corrigir-o-site">Encontrou um erro? Fale com a gente</a>.</p>
-</section>
 <footer class="site-footer">
 <div class="container footer-top">
 <div class="footer-brand"><img alt="CONFENGE" decoding="async" height="58" loading="lazy" src="/assets/logo-confenge-white-500-1677038e.png" width="224"/><p>Engenharia, perícias e inteligência técnica para transformar situações complexas em decisões documentadas.</p></div>

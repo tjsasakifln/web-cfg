@@ -242,7 +242,15 @@ def test_each_published_offer_has_one_primary_representation_with_essential_term
             "pacote e crédito",
         ):
             assert label in visible, label
-        assert "oferta publicada · published" in visible
+        # The card must say, in Portuguese, that the offer is published. It must NOT
+        # export the internal state-machine token that used to be appended here
+        # ("oferta publicada · PUBLISHED"): the visitor is not a consumer of our
+        # state machine. Both halves are asserted, so neither dropping the label nor
+        # reintroducing the token can pass.
+        assert "oferta publicada" in visible
+        assert "published" not in visible.lower(), (
+            "internal state token PUBLISHED is visible on a public offer card"
+        )
         assert 'aria-label="Ver o demonstrativo sintético de ' in card
         assert 'aria-label="Pedir análise de ' in card
 

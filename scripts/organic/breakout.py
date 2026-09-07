@@ -576,7 +576,7 @@ def chassis_html(record: dict[str, Any]) -> str:
         f'data-route-family="{_esc((cta.get("route_family")))}" '
         f'data-source="{SOURCE}" data-campaign="{CAMPAIGN}">\n'
         f'<p class="breakout-job" data-visitor-job="{_esc(record.get("visitor_job"))}">'
-        f'<strong>Job do visitante.</strong> {_esc(record.get("visitor_job"))}</p>\n'
+        f'<strong>Quem chega a esta página.</strong> {_esc(record.get("visitor_job"))}</p>\n'
         f'<p class="breakout-answer" data-breakout-answer="true"><strong>Resposta factual.</strong> {_esc(record.get("answer"))}</p>\n'
         f'<dl class="breakout-meta">\n'
         f'<div><dt>Pergunta</dt><dd data-breakout-question="true">{_esc(record.get("question"))}</dd></div>\n'

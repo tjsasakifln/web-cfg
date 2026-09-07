@@ -24,6 +24,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from scripts.pseo.public_artifact import PUBLIC_ROOT_FILES, PUBLIC_TOP_DIRS  # noqa: E402
+from scripts.site.svg_sprite import missing_symbols  # noqa: E402
 
 JSON_LD_RE = re.compile(
     r'<script\b(?=[^>]*\btype=["\']application/ld\+json["\'])[^>]*>'
@@ -169,6 +170,12 @@ def audit_html(path: Path, *, display_path: str | None = None) -> tuple[list[Fin
     if counts["main_close"] == 1 and counts["body_close"] == 1:
         if raw.lower().rfind("</main") > raw.lower().rfind("</body"):
             findings.append(Finding(rel, "main_closes_after_body"))
+
+    # An icon drawn as <use href="#id"> resolves only inside the same document.
+    # Without <symbol id="id"> the browser renders nothing and reports nothing,
+    # so the control disappears with every other gate still green.
+    for symbol_id in missing_symbols(raw):
+        findings.append(Finding(rel, "svg_symbol_undefined", f"#{symbol_id}"))
 
     faq_pages: list[dict[str, Any]] = []
     for index, script in enumerate(JSON_LD_RE.findall(raw)):

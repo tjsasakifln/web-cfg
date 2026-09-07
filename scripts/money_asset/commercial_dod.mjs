@@ -120,6 +120,10 @@ export function canonicalHostIsConfenge(href) {
   }
 }
 
+// A visitor-readable reference date: the Portuguese label and the date itself,
+// close enough together to be one statement rather than two coincidences.
+export const REFERENCE_DATE = /data de refer[eê]ncia[^<]{0,80}\d{4}-\d{2}-\d{2}/i;
+
 export function extractDiagnosticoSignals(html, loop = {}) {
   const text = String(html);
   const canonical = parseCanonicalHref(text);
@@ -132,7 +136,13 @@ export function extractDiagnosticoSignals(html, loop = {}) {
     utility_before_cta: ident > -1 && cta > -1 && ident < cta,
     cta_segunda_leitura: text.includes(loop.cta_contract?.copy || ""),
     visible_fonte: /fonte/i.test(text),
-    visible_as_of: /as_of/i.test(text),
+    // The DoD is "the visitor can see which date the reading refers to", not
+    // "the file contains the string as_of". The old regex was satisfied by the
+    // page's own machine field name (`diagnosis.as_of` inside its script), so a
+    // page that showed a visitor nothing at all still passed -- and it forced the
+    // internal token into visitor copy to keep passing. The property that has to
+    // hold is a Portuguese label next to a readable date.
+    visible_reference_date: REFERENCE_DATE.test(text),
     visible_unknown: text.includes("UNKNOWN"),
     visible_reajuste: /reajuste/i.test(text),
     visible_reequilibrio: /reequil[ií]brio/i.test(text),

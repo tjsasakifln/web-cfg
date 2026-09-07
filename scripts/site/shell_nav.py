@@ -38,6 +38,7 @@ if str(ROOT) not in sys.path:
 
 from scripts.pseo.html_shell import breadcrumbs_html  # noqa: E402
 from scripts.site.brand import footer_blurb  # noqa: E402
+from scripts.site.svg_sprite import ensure_sprite  # noqa: E402
 from scripts.site.public_ia import (  # noqa: E402
     active_header_href as ia_active_header_href,
     align_breadcrumb_trail,
@@ -405,6 +406,13 @@ def sync_breadcrumbs(text: str, current: str | None) -> str:
 
 def sync_text(text: str, brand: dict[str, Any], current: str | None) -> str:
     """Idempotently align one page's header/footer/breadcrumbs with the IA map."""
+    # The header this module writes draws the menu button from the inline SVG
+    # sprite. A page that carries the button without the sprite renders an empty
+    # control and no error, so the sprite belongs to the same writer as the
+    # header -- and it runs before every scope guard below, because a missing
+    # icon definition is a defect on any route, campaign or not.
+    text = ensure_sprite(text)
+
     if 'class="desktop-nav"' not in text and 'class="mobile-nav"' not in text:
         return text
 

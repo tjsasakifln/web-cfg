@@ -13,6 +13,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from scripts.site.html_integrity import audit_html, audit_surface, source_html_files  # noqa: E402
+from scripts.site.svg_sprite import ensure_sprite  # noqa: E402
 
 
 def document(body: str, *, schema: dict | None = None) -> str:
@@ -150,6 +151,57 @@ def test_source_census_is_derived(tmp: Path) -> None:
     assert report["html_files"] == 1
 
 
+MENU_BUTTON = (
+    '<button aria-controls="mobile-menu" aria-expanded="false" aria-label="Abrir menu" '
+    'class="menu-toggle" type="button">'
+    '<svg class="icon menu-open"><use href="#i-menu"></use></svg>'
+    '<svg class="icon menu-close"><use href="#i-close"></use></svg>'
+    "</button>"
+)
+
+
+def test_use_without_symbol_fails_closed(tmp: Path) -> None:
+    """An icon referenced but never defined renders empty and reports nothing.
+
+    Counter-case for the 14 pages that shipped an invisible hamburger button.
+    """
+    path = tmp / "icon-without-symbol.html"
+    path.write_text(document(MENU_BUTTON), encoding="utf-8")
+    observed = codes(path)
+    assert "svg_symbol_undefined" in observed, observed
+    findings, _, _ = audit_html(path)
+    assert {finding.detail for finding in findings if finding.code == "svg_symbol_undefined"} == {
+        "#i-menu",
+        "#i-close",
+    }, findings
+
+
+def test_symbol_defined_in_the_same_document_passes(tmp: Path) -> None:
+    path = tmp / "icon-with-symbol.html"
+    path.write_text(ensure_sprite(document(MENU_BUTTON)), encoding="utf-8")
+    assert "svg_symbol_undefined" not in codes(path)
+
+
+def test_sprite_writer_is_idempotent_and_adds_only_what_is_used(tmp: Path) -> None:
+    once = ensure_sprite(document(MENU_BUTTON))
+    assert once.count('id="i-menu"') == 1, once
+    assert once.count('id="i-close"') == 1, once
+    # A page that never draws the arrow must not carry the arrow symbol.
+    assert 'id="i-arrow"' not in once, once
+    assert ensure_sprite(once) == once
+
+
+def test_sprite_writer_refuses_an_unknown_reference(tmp: Path) -> None:
+    """A typo in <use> is a defect to report, never a glyph to invent."""
+    try:
+        ensure_sprite(document('<svg class="icon"><use href="#i-nao-existe"></use></svg>'))
+    except KeyError as exc:
+        assert "i-nao-existe" in str(exc), exc
+    else:
+        raise AssertionError("ensure_sprite accepted an unknown symbol id")
+
+
+
 def main() -> int:
     with tempfile.TemporaryDirectory(prefix="confenge-html-integrity-") as directory:
         tmp = Path(directory)
@@ -160,6 +212,10 @@ def main() -> int:
         test_noindex_disclosure_debt_does_not_block_publication(tmp)
         test_direct_answer_dom_is_supported(tmp)
         test_source_census_is_derived(tmp)
+        test_use_without_symbol_fails_closed(tmp)
+        test_symbol_defined_in_the_same_document_passes(tmp)
+        test_sprite_writer_is_idempotent_and_adds_only_what_is_used(tmp)
+        test_sprite_writer_refuses_an_unknown_reference(tmp)
     print("HTML_INTEGRITY_TESTS_OK")
     return 0
 

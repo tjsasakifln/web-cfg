@@ -60,7 +60,7 @@ const [primaryLoop, secondLoop] = loopRegistry.loops.filter((loop) => loop.enabl
   assert.equal(page.utility_before_cta, true);
   assert.equal(page.cta_segunda_leitura, true);
   assert.equal(page.visible_fonte, true);
-  assert.equal(page.visible_as_of, true);
+  assert.equal(page.visible_reference_date, true);
   assert.equal(page.visible_unknown, true);
   assert.equal(page.visible_reajuste, true);
   assert.equal(page.visible_reequilibrio, true);
@@ -76,6 +76,36 @@ const [primaryLoop, secondLoop] = loopRegistry.loops.filter((loop) => loop.enabl
     utility_before_cta: page.utility_before_cta,
     cta: page.cta_segunda_leitura,
   }, primaryLoop);
+}
+
+// Counter-case for the provenance signal (issue #611 vocabulary lane).
+//
+// The signal used to be `/as_of/i.test(html)`. That is satisfied by the page's
+// own machine field name and by any leftover internal token, so it graded a page
+// green for showing the visitor nothing, and it pressured the internal token
+// into visitor copy. The property is: a Portuguese label plus a readable date.
+{
+  const onlyInternalToken = extractDiagnosticoSignals(
+    '<p>Fonte: PNCP \u00b7 as_of 2026-08-14</p><script>x = diagnosis.as_of.value;</script>',
+  );
+  assert.equal(
+    onlyInternalToken.visible_reference_date,
+    false,
+    "the raw as_of token is not a visitor-readable reference date",
+  );
+  const labelWithoutDate = extractDiagnosticoSignals(
+    "<p>Data de refer\u00eancia: n\u00e3o informada.</p>",
+  );
+  assert.equal(
+    labelWithoutDate.visible_reference_date,
+    false,
+    "a label with no date states no reference date",
+  );
+  const readable = extractDiagnosticoSignals(
+    "<li>Data de refer\u00eancia dos dados p\u00fablicos: 2026-08-14.</li>",
+  );
+  assert.equal(readable.visible_reference_date, true);
+  pass("reference_date_counter_case");
 }
 
 {

@@ -578,16 +578,46 @@ def test_rendered_pages_carry_no_price_markup():
         assert not _displays_price(_main_html(html)), path
 
 
-def test_render_writes_no_hub_or_crawler_sync():
-    """No hub page. Sitemap is INDEX-only, never a pointer at a noindex route."""
+def test_family_index_exists_and_stays_out_of_the_index_surface():
+    """The parent route answers with a branded page that claims no indexation.
+
+    This assertion used to read ``assert not (ROOT / "oportunidades" /
+    "index.html").exists()``. That demanded the wrong thing: with no index and
+    nginx ``autoindex off``, https://confenge.com.br/oportunidades/ answered a
+    raw ``403 Forbidden`` — an unbranded server error at the parent of four
+    published pages. What actually has to hold is the property the old
+    assertion was reaching for: the family must never mint an *indexable*
+    pointer at noindex routes, and the sitemap stays INDEX-only. A noindex
+    index page satisfies both while the route still answers.
+    """
+    import re
+
     from scripts.live_intelligence import render as R
+    from scripts.site.inbound_gates import is_noindex
 
     source = (ROOT / "scripts/live_intelligence/render.py").read_text(encoding="utf-8")
+    # Both original forbidden writers stay forbidden. Publishing a *noindex* parent
+    # so the route stops answering 403 is not a licence to mint a crawlable hub or
+    # to sync crawler rules from this family; the index page below is written by
+    # render_opportunities_index_html and asserted noindex.
     for forbidden in ("render_hub_html", "sync_family_crawler_rules"):
         assert forbidden not in source, forbidden
-    assert not (ROOT / "oportunidades" / "index.html").exists()
     assert R.FAMILY_SLUG == "oportunidades"
     assert R.SITEMAP_NAME == "sitemap-oportunidades.xml"
+
+    index_page = ROOT / "oportunidades" / "index.html"
+    assert index_page.is_file(), "the family parent route must not 403"
+    html = index_page.read_text(encoding="utf-8")
+    assert is_noindex(html), "the index must not enter the index surface"
+
+    # Sitemap membership is still derived from indexable records only, so a
+    # noindex index page never appears in it.
+    sitemap = (ROOT / R.SITEMAP_NAME).read_text(encoding="utf-8")
+    assert "/oportunidades/</loc>" not in sitemap
+
+    # Every child the index links to exists, and none of them is a redirect.
+    for route in re.findall(r'href="(/oportunidades/[^"]+)"', html):
+        assert (ROOT / route.strip("/") / "index.html").is_file(), route
 
 
 def test_renderable_refuses_an_index_eligible_fixture_projection():

@@ -162,6 +162,58 @@ class _PublicCopy(HTMLParser):
             self.markup_parts.append(data)
 
 
+class _SelectOptions(HTMLParser):
+    """Collect `(value, label)` for every `<option>` in a document.
+
+    Option labels reach the copy gates as ordinary text, but the *pairing*
+    between the wire value and the label does not, and that pairing is where a
+    control token hides best: `<option value="UNKNOWN">UNKNOWN</option>` reads
+    as a legitimate epistemic label to any gate scanning words, and a single
+    path-level copy exception granted for a different, legitimate occurrence of
+    the same word silences it everywhere on the page.
+    """
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.options: list[tuple[str, str]] = []
+        self._value: str | None = None
+        self._label: list[str] = []
+
+    def handle_starttag(self, tag: str, attrs) -> None:  # noqa: ANN001
+        if tag.lower() != "option":
+            return
+        self._flush()
+        self._value = str(dict((str(k).lower(), v) for k, v in attrs).get("value") or "")
+        self._label = []
+
+    def handle_data(self, data: str) -> None:
+        if self._value is not None:
+            self._label.append(data)
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag.lower() == "option":
+            self._flush()
+
+    def _flush(self) -> None:
+        if self._value is None:
+            return
+        self.options.append((self._value, " ".join("".join(self._label).split())))
+        self._value = None
+        self._label = []
+
+    def close(self) -> None:  # noqa: D102
+        super().close()
+        self._flush()
+
+
+def select_options(html: str) -> list[tuple[str, str]]:
+    """Every `(value, label)` pair a `<select>` offers the visitor."""
+    parser = _SelectOptions()
+    parser.feed(html)
+    parser.close()
+    return parser.options
+
+
 def visible_text(html: str) -> str:
     """Visitor-visible text of an HTML document, whitespace-collapsed."""
     parser = _PublicCopy()

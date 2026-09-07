@@ -36,6 +36,8 @@ from scripts.live_intelligence import (
     SOURCE_OFFICIAL_LIVE,
 )
 
+from scripts.site.svg_sprite import ensure_sprite
+
 SITE = "https://confenge.com.br"
 SITEMAP_NAME = "sitemap-oportunidades.xml"
 
@@ -136,6 +138,38 @@ PUBLICATION_STATE_LABEL = {
     "HOLD_FOR_DATA": "retida à espera de dados da fonte",
     "REJECT": "não publicável",
 }
+
+
+# The visitor shell is identical on every live-intelligence page, so the
+# opportunity page and the family index render from one copy of it.
+SHELL_HEADER = '''<header class="site-header" id="inicio">
+<div class="container header-inner">
+<a aria-label="CONFENGE, página inicial" class="brand" href="/"><img alt="CONFENGE Inteligência Técnica" height="58" src="/assets/logo-confenge-500-f8a83f6d.png" width="224"/></a>
+<nav aria-label="Navegação principal" class="desktop-nav">
+<a data-cta-position="header_nav" href="/bid-room-licitacoes-obras/" style="min-height:44px">Edital e proposta</a>
+<a data-cta-position="header_nav" href="/problemas-que-resolvemos/" style="min-height:44px">Contrato sob pressão</a>
+<a data-cta-position="header_nav" href="/diretoria-b2g/" style="min-height:44px">Operação recorrente</a>
+<a data-cta-position="header_nav" href="/conteudos/" style="min-height:44px">Biblioteca</a>
+</nav>
+<a class="button button-primary header-cta" href="/#formulario-contato">Analisar meu caso</a>
+<button aria-controls="mobile-menu" aria-expanded="false" aria-label="Abrir menu" class="menu-toggle" type="button">
+<svg class="icon menu-open"><use href="#i-menu"></use></svg><svg class="icon menu-close"><use href="#i-close"></use></svg>
+</button>
+</div>
+<nav aria-label="Navegação móvel" class="mobile-nav" id="mobile-menu">
+<a data-cta-position="mobile_nav" href="/bid-room-licitacoes-obras/" style="min-height:44px">Edital e proposta</a>
+<a data-cta-position="mobile_nav" href="/problemas-que-resolvemos/" style="min-height:44px">Contrato sob pressão</a>
+<a data-cta-position="mobile_nav" href="/diretoria-b2g/" style="min-height:44px">Operação recorrente</a>
+<a data-cta-position="mobile_nav" href="/conteudos/" style="min-height:44px">Biblioteca</a>
+<a class="button button-primary" href="/#formulario-contato">Analisar meu caso</a>
+</nav>
+</header>
+'''
+
+SHELL_FOOTER = '''<footer class="site-footer">
+<div class="container footer-bottom"><span>© <span id="year">2026</span> CONFENGE. CNPJ 52.407.089/0001-09.</span><a href="/privacidade/">Política de Privacidade</a></div>
+</footer>
+'''
 
 
 def _root() -> Path:
@@ -369,7 +403,11 @@ def render_opportunity_html(record: dict[str, Any]) -> str:
         json_ld_doc["dateModified"] = iso_as_of[:10]
     json_ld = json.dumps(json_ld_doc, ensure_ascii=False, separators=(",", ":"))
     json_ld = json_ld.replace("</", "<\\/")
-    return f"""<!DOCTYPE html>
+    # ensure_sprite adds the <symbol> definitions this markup draws with
+    # <use href="#...">. Without them the menu button renders empty and the
+    # browser reports nothing at all (see scripts/site/svg_sprite.py).
+    return ensure_sprite(
+        f"""<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8"/>
@@ -394,29 +432,7 @@ def render_opportunity_html(record: dict[str, Any]) -> str:
 </head>
 <body class="simple-page" data-asset-id="{e(opportunity_id)}" data-asset-family="{e(ASSET_FAMILY)}" data-route-family="{e(ROUTE_FAMILY)}" data-intel-surface="opportunity" data-opportunity-id="{e(opportunity_id)}" data-index-state="{index_state}">
 <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
-<header class="site-header" id="inicio">
-<div class="container header-inner">
-<a aria-label="CONFENGE, página inicial" class="brand" href="/"><img alt="CONFENGE Inteligência Técnica" height="58" src="/assets/logo-confenge-500-f8a83f6d.png" width="224"/></a>
-<nav aria-label="Navegação principal" class="desktop-nav">
-<a data-cta-position="header_nav" href="/bid-room-licitacoes-obras/" style="min-height:44px">Edital e proposta</a>
-<a data-cta-position="header_nav" href="/problemas-que-resolvemos/" style="min-height:44px">Contrato sob pressão</a>
-<a data-cta-position="header_nav" href="/diretoria-b2g/" style="min-height:44px">Operação recorrente</a>
-<a data-cta-position="header_nav" href="/conteudos/" style="min-height:44px">Biblioteca</a>
-</nav>
-<a class="button button-primary header-cta" href="/#formulario-contato">Analisar meu caso</a>
-<button aria-controls="mobile-menu" aria-expanded="false" aria-label="Abrir menu" class="menu-toggle" type="button">
-<svg class="icon menu-open"><use href="#i-menu"></use></svg><svg class="icon menu-close"><use href="#i-close"></use></svg>
-</button>
-</div>
-<nav aria-label="Navegação móvel" class="mobile-nav" id="mobile-menu">
-<a data-cta-position="mobile_nav" href="/bid-room-licitacoes-obras/" style="min-height:44px">Edital e proposta</a>
-<a data-cta-position="mobile_nav" href="/problemas-que-resolvemos/" style="min-height:44px">Contrato sob pressão</a>
-<a data-cta-position="mobile_nav" href="/diretoria-b2g/" style="min-height:44px">Operação recorrente</a>
-<a data-cta-position="mobile_nav" href="/conteudos/" style="min-height:44px">Biblioteca</a>
-<a class="button button-primary" href="/#formulario-contato">Analisar meu caso</a>
-</nav>
-</header>
-<main class="simple-main" id="conteudo">
+{SHELL_HEADER}<main class="simple-main" id="conteudo">
 <article class="simple-card">
 <section class="section" id="masthead"{archetype_attr("masthead")}>
 <p class="eyebrow">Oportunidade pública · dados declarados na fonte</p>
@@ -484,12 +500,155 @@ def render_opportunity_html(record: dict[str, Any]) -> str:
 </section>
 </article>
 </main>
-<footer class="site-footer">
-<div class="container footer-bottom"><span>© <span id="year">2026</span> CONFENGE. CNPJ 52.407.089/0001-09.</span><a href="/privacidade/">Política de Privacidade</a></div>
-</footer>
+{SHELL_FOOTER}</body>
+</html>
+"""
+    )
+
+
+# --- family index ------------------------------------------------------------
+#
+# ``/oportunidades/`` is the parent of every opportunity page. With no
+# ``index.html`` and ``autoindex off``, nginx answered that route with a raw
+# ``403 Forbidden`` — an unbranded server error at the front door of four
+# published pages. The disposition is a real index rather than a 404/410
+# because the children exist and are useful: a gone-status on a parent whose
+# children are published would be a false statement about the family.
+#
+# The index is ``noindex, follow``. It adds no content of its own beyond the
+# list, and ``follow`` keeps the crawl path to the children open so each
+# child's own robots directive — never the parent's — decides whether it is
+# indexed. Withdrawal stays URL-exact: this page redirects nowhere.
+INDEX_TITLE = "Oportunidades públicas acompanhadas | CONFENGE"
+INDEX_DESCRIPTION = (
+    "Índice das oportunidades públicas com página própria: objeto, órgão, local, "
+    "status da sessão e origem dos dados, com a fonte declarada em cada página."
+)
+INDEX_EMPTY_PT = (
+    "Nenhuma oportunidade está publicada neste momento. A ausência de itens "
+    "significa que nenhuma oportunidade passou pelos critérios de publicação "
+    "nesta execução, não que não existam licitações abertas."
+)
+
+
+def _index_item_html(record: dict[str, Any], *, projection_kind: str | None) -> str:
+    """One row of the index, using only fields the record actually declares.
+
+    The row identifies the opportunity by buyer, place, session status and the
+    public identifier — the fields a bidder scans to choose which page to open.
+    The object of the contract is not repeated here: it is the child page's
+    declared job, and quoting it on the parent would duplicate source text with
+    no added utility.
+    """
+    opportunity_id = str(record.get("opportunity_id") or "")
+    orgao = _pt((record.get("orgao") or {}).get("nome"))
+    local = _local_label(record.get("local") or {})
+    status = _mapped(
+        (record.get("prazo") or {}).get("status"),
+        PRAZO_MASTHEAD,
+        "sessão sem status informado pela fonte",
+    )
+    origem = _mapped(
+        record.get("source_kind") or projection_kind,
+        SOURCE_KIND_LABEL,
+        "origem não classificada",
+    )
+    route = opportunity_route(opportunity_id)
+    return (
+        '<li class="card">'
+        '<h3><a data-cta-position="opportunity_index" data-cta-id="intel_open_opportunity" '
+        f'href="{e(route)}">{e(orgao)} · {e(local)}</a></h3>'
+        f"<p>{e(status)} · Identificador público: {e(opportunity_id)}</p>"
+        f'<p class="form-hint">Origem dos dados: {e(origem)}.</p>'
+        "</li>"
+    )
+
+
+def render_opportunities_index_html(
+    records: list[dict[str, Any]],
+    *,
+    projection_kind: str | None = None,
+) -> str:
+    """Render the branded family index served at ``/oportunidades/``."""
+    canonical = f"{SITE}{FAMILY_PATH}"
+    if records:
+        items = "\n".join(
+            _index_item_html(record, projection_kind=projection_kind) for record in records
+        )
+        listing = f'<ul class="card-grid" id="lista-oportunidades">\n{items}\n</ul>'
+    else:
+        listing = f'<p id="lista-oportunidades">{e(INDEX_EMPTY_PT)}</p>'
+    json_ld = json.dumps(
+        {
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            "name": INDEX_TITLE,
+            "description": INDEX_DESCRIPTION,
+            "url": canonical,
+            "inLanguage": "pt-BR",
+        },
+        ensure_ascii=False,
+        separators=(",", ":"),
+    ).replace("</", "<\\/")
+    return ensure_sprite(
+        f"""<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="noindex, follow" name="robots"/>
+<meta content="#061a33" name="theme-color"/>
+<title>{e(INDEX_TITLE)}</title>
+<link href="/assets/favicon-32.png" rel="icon" sizes="32x32" type="image/png"/>
+<link href="/styles.css" rel="stylesheet"/>
+<link href="{e(canonical)}" rel="canonical"/>
+<script defer="" src="/script.js?v=fortune02"></script>
+<meta content="{e(INDEX_DESCRIPTION)}" name="description"/>
+<meta content="{e(INDEX_TITLE)}" property="og:title"/>
+<meta content="{e(INDEX_DESCRIPTION)}" property="og:description"/>
+<meta content="{e(canonical)}" property="og:url"/>
+<meta content="website" property="og:type"/>
+<meta content="summary" name="twitter:card"/>
+<script type="application/ld+json">{json_ld}</script>
+</head>
+<body class="simple-page" data-asset-family="{e(ASSET_FAMILY)}" data-route-family="{e(ROUTE_FAMILY)}" data-intel-surface="opportunity-index" data-index-state="NOINDEX">
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+{SHELL_HEADER}
+<main class="simple-main" id="conteudo">
+<article class="simple-card">
+<nav aria-label="Navegação estrutural" class="breadcrumbs container"><ol><li><a href="/">Início</a><span aria-hidden="true">/</span></li><li aria-current="page">Oportunidades públicas</li></ol></nav>
+<section class="section" id="masthead">
+<p class="eyebrow">Oportunidades públicas · dados declarados na fonte</p>
+<h1>Oportunidades públicas acompanhadas</h1>
+<p>Cada item abaixo abre uma página com o objeto, o órgão, o local, o prazo, a fonte pública citada e a data de referência declarada. Esta lista não é o conjunto das licitações abertas no país: é o conjunto das oportunidades que têm página publicada aqui.</p>
+</section>
+
+<section class="section" id="lista">
+<h2>Oportunidades com página publicada</h2>
+{listing}
+</section>
+
+<section class="section" id="nao-concluir">
+<h2>O que esta página não afirma</h2>
+<p>Esta página apenas lista documentos públicos descritos em outras páginas. Não é parecer jurídico, não julga irregularidade, não afirma quem pode participar e não recomenda participar.</p>
+</section>
+
+<section class="section" id="proximo-passo">
+<h2>Próximo passo</h2>
+<p>Duas ações possíveis a partir desta lista:</p>
+<div class="journey-next">
+<a class="button button-primary" data-intel-cta="analyze" data-cta-id="intel_analyze_company" data-cta-position="opportunity_index_next_action" href="{e(COMPANY_ROUTE_PREFIX)}">Analisar para minha empresa</a>
+<a class="button button-secondary" data-cta-id="intel_talk_to_engineer" data-cta-position="opportunity_index_next_action" href="/#formulario-contato">Falar sobre uma destas oportunidades</a>
+</div>
+<p><a href="/ferramentas/">Ver outras ferramentas públicas</a></p>
+</section>
+</article>
+</main>
+{SHELL_FOOTER}
 </body>
 </html>
 """
+    )
 
 
 def load_projection(path: Path | None = None) -> dict[str, Any]:
@@ -534,7 +693,10 @@ def write_pages(projection: dict[str, Any], root: Path | None = None) -> list[Pa
     """
     base = (root or _root()) / FAMILY_SLUG
     written: list[Path] = []
-    live_dirs: set[Path] = set()
+    # The family index lives directly in ``base``. Seeding it here keeps the
+    # prune below from treating the index as an orphan and deleting the whole
+    # family directory with it.
+    live_dirs: set[Path] = {base.resolve()}
     for record in renderable(projection):
         opportunity_id = record["opportunity_id"]
         page_dir = _page_dir(base, opportunity_id)
@@ -543,6 +705,18 @@ def write_pages(projection: dict[str, Any], root: Path | None = None) -> list[Pa
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(render_opportunity_html(record), encoding="utf-8")
         written.append(target)
+    # Written even with zero renderable records: the parent route must answer
+    # with a branded page, never with the server's raw 403.
+    base.mkdir(parents=True, exist_ok=True)
+    index_page = base / "index.html"
+    index_page.write_text(
+        render_opportunities_index_html(
+            renderable(projection), projection_kind=projection.get("source_kind")
+        ),
+        encoding="utf-8",
+    )
+    written.append(index_page)
+
     if base.is_dir():
         for html in sorted(base.rglob("index.html")):
             if html.parent.resolve() not in live_dirs:
