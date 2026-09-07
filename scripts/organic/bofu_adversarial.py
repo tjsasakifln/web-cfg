@@ -443,13 +443,13 @@ def audit_service_page(
         'id="metodo"' in html
         or "authority-method" in html
         or "authority-byline" in html
-    ) and ("/correcoes/" in html or "/politica-editorial/" in html)
+    ) and ("/triagem-tecnica/#corrigir-o-site" in html or "/politica-editorial/" in html)
     if not owner:
         findings.append(
             _finding(
                 "ROUTE_MISSING_OWNER_UPDATE_POLICY",
                 path,
-                "missing authority-method/byline with correcoes or politica-editorial",
+                "missing authority-method/byline with correction channel or politica-editorial",
             )
         )
 

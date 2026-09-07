@@ -187,7 +187,8 @@ def build_asset_record(
             "as_of": inspected.get("as_of"),
             "freshness": inspected.get("freshness"),
             "correction_owner": inspected.get("correction_owner"),
-            "correction_link": asset.get("correction_link") or "https://confenge.com.br/correcoes/",
+            "correction_link": asset.get("correction_link")
+            or "https://confenge.com.br/triagem-tecnica/#corrigir-o-site",
         },
         "external_targets_prepared": external_targets_prepared if is_fixture(asset) else 0,
         "maintenance_cost": asset.get("maintenance_cost") or MAINTENANCE_COST_DEFAULT,

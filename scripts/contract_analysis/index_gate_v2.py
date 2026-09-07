@@ -138,7 +138,7 @@ def evaluate_index_items_v2(
         and len(str(record.get("methodology") or "")) >= 40
         and len(str(record.get("limitations") or "")) >= 40
         and bool(str(record.get("as_of") or (record.get("freshness") or {}).get("as_of") or ""))
-        and "/correcoes/" in html
+        and "/triagem-tecnica/#corrigir-o-site" in html
         and "rascunho editorial" not in lowered
     )
 

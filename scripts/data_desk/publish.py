@@ -59,7 +59,7 @@ def kit_landing_html(package: dict[str, Any], *, files: list[str]) -> str:
         f"<ul>\n{links}\n</ul>\n"
         f"<p>Permalink do kit: {permalink}</p>\n"
         "<p>Licença: NEEDS_REVIEW. Ver usage guidance no manifesto. "
-        "Correção: <a href=\"https://confenge.com.br/correcoes/\">https://confenge.com.br/correcoes/</a></p>\n"
+        "Encontrou um erro? <a href=\"https://confenge.com.br/triagem-tecnica/#corrigir-o-site\">Fale com a gente</a>.</p>\n"
         "</body>\n"
         "</html>\n"
     )

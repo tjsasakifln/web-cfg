@@ -37,7 +37,7 @@ PUBLISHED_FACTS = {
     "method": "mediana e quartis do valor integral nominal; tipologia keyword de pavimentação; recorte SC",
     "as_of": "2026-08-17T11:29:23.193694+02:00",
     "source": "payload official_live, leitura SELECT-only",
-    "correction": "https://confenge.com.br/correcoes/",
+    "correction": "https://confenge.com.br/triagem-tecnica/#corrigir-o-site",
     "method_page": "https://confenge.com.br/metodologia-inteligencia/",
     "limitations": [
         "O número é o valor integral nominal do instrumento, não custo por km, m² ou unidade física.",

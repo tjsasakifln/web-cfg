@@ -1233,7 +1233,7 @@ def project_extra_cli_record(bundle: dict[str, Any], *, manifest: dict[str, Any]
     return rec
 
 
-CORRECTION_ROUTE = "/correcoes/"
+CORRECTION_ROUTE = "/triagem-tecnica/#corrigir-o-site"
 
 
 def finalize_editorial_projection(record: dict[str, Any]) -> dict[str, Any]:

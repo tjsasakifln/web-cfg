@@ -167,7 +167,8 @@ def build_quartile_svg(asset: dict[str, Any]) -> str:
         '  <text x="24" y="228" font-family="system-ui,sans-serif" font-size="12" fill="#334155">'
         f"Fonte canônica: {source}</text>\n"
         '  <text x="24" y="252" font-family="system-ui,sans-serif" font-size="11" fill="#64748b">'
-        "Unidade: BRL, grain integral_nominal_instrument. Correção: https://confenge.com.br/correcoes/</text>\n"
+        "Valores em reais (BRL). Encontrou um erro? "
+        "https://confenge.com.br/triagem-tecnica/#corrigir-o-site</text>\n"
         "</svg>\n"
     )
 

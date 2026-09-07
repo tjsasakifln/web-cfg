@@ -180,7 +180,8 @@ def build_package(
         if isinstance(asset.get("coverage"), dict)
         else asset.get("coverage"),
         "limitations": asset.get("limitations"),
-        "correction_link": asset.get("correction_link") or "https://confenge.com.br/correcoes/",
+        "correction_link": asset.get("correction_link")
+        or "https://confenge.com.br/triagem-tecnica/#corrigir-o-site",
         "correction_owner": asset.get("correction_owner") or asset.get("owner"),
         "creator": asset.get("creator") or "CONFENGE",
         "publisher": asset.get("publisher") or "CONFENGE",

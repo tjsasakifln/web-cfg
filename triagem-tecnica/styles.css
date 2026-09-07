@@ -110,7 +110,10 @@
 .check-row input {
   width: 1.2rem;
   height: 1.2rem;
-  margin-top: .15rem;
+  /* O UA aplica margem lateral propria; sem zera-la o controle (1.2rem + ~7px)
+     estoura a trilha de 1.35rem e colide com o rotulo. */
+  margin: .15rem 0 0;
+  flex: none;
 }
 .location-fields {
   margin-top: 1.25rem;

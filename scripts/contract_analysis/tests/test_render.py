@@ -36,7 +36,7 @@ def test_required_chrome_and_correction_link():
     assert 'lang="pt-BR"' in html
     assert 'name="viewport"' in html
     assert "skip-link" in html
-    assert "/correcoes/" in html
+    assert "/triagem-tecnica/#corrigir-o-site" in html
     assert 'rel="canonical"' in html
     assert rec["title"] in html
     assert "name=\"description\"" in html
@@ -137,7 +137,7 @@ def test_hub_and_analysis_expose_residual_authority_slots():
     assert 'id="ai-disclosure"' in analysis_html
     assert 'data-ai-disclosure="assistive"' in analysis_html
     assert "as_of" in analysis_html
-    assert "/correcoes/" in analysis_html
+    assert "/triagem-tecnica/#corrigir-o-site" in analysis_html
     assert rec["title"] in analysis_html
     assert "CaseStudy" not in analysis_html
     assert '"@type":"Review"' not in analysis_html
@@ -150,7 +150,7 @@ def test_hub_and_analysis_expose_residual_authority_slots():
     assert 'id="metodo"' in hub
     assert "ANÁLISE TÉCNICA DE CONTRATO PÚBLICO" in hub
     assert "NÃO É CASO CONFENGE" in hub
-    assert "/correcoes/" in hub
+    assert "/triagem-tecnica/#corrigir-o-site" in hub
     assert '"@type":"CollectionPage"' in hub or '"@type": "CollectionPage"' in hub
     assert "CaseStudy" not in hub
     assert '"@type":"Review"' not in hub

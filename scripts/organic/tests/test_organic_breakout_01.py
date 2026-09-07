@@ -153,7 +153,7 @@ def test_render_has_required_visible_fields_and_parity():
         assert fields["visitor_job"]
         assert fields["refresh_owner"]
         assert fields["correction"]
-        assert 'href="/correcoes/"' in html
+        assert 'href="/triagem-tecnica/#corrigir-o-site"' in html
         assert f'data-asset-id="{record["asset_id"]}"' in html
         assert fields["cta_attribution"]
         assert fields["content_hash"]

@@ -265,7 +265,7 @@ def evaluate_index_gate(
     visible_job = "data-visitor-job" in html_text or _text(record.get("visitor_job"))[:24] in html_text
     visible_visual = f'data-visual-id="{record.get("visual_id")}"' in html_text
     visible_owner = "data-refresh-owner" in html_text
-    visible_correction = "/correcoes/" in html_text
+    visible_correction = "/triagem-tecnica/#corrigir-o-site" in html_text
     visible_cta = 'data-source="CONFENGE_WEB"' in html_text and "data-cta-id=" in html_text
     visible_hash = digest in html_text
     schema_ok = "application/ld+json" in html_text
@@ -764,7 +764,7 @@ def inspect_html(html_text: str) -> dict[str, Any]:
         "visual": bool(re.search(r"data-visual-id=", html_text)),
         "visitor_job": bool(re.search(r"data-visitor-job=", html_text)),
         "refresh_owner": bool(re.search(r"data-refresh-owner=", html_text)),
-        "correction": "/correcoes/" in html_text,
+        "correction": "/triagem-tecnica/#corrigir-o-site" in html_text,
         "cta_attribution": 'data-source="CONFENGE_WEB"' in html_text and "data-cta-id=" in html_text,
         "content_hash": bool(re.search(r"data-content-hash=", html_text)),
         "jsonld": "application/ld+json" in html_text,
