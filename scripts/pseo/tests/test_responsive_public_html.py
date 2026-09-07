@@ -25,7 +25,10 @@ def test_currency_is_atomic_only_in_visible_text() -> None:
 
 
 def test_progressive_marker_is_idempotent() -> None:
-    html = "<!doctype html><html lang=\"pt-BR\"><head><title>x</title></head><body></body></html>"
+    html = (
+        "<!doctype html><html lang=\"pt-BR\"><head><title>x</title>"
+        '<script defer src="/script.js"></script></head><body></body></html>'
+    )
 
     once = ensure_progressive_enhancement_marker(html)
     twice = ensure_progressive_enhancement_marker(once)
@@ -33,6 +36,36 @@ def test_progressive_marker_is_idempotent() -> None:
     assert '<html lang="pt-BR" class="no-js">' in once
     assert "document.documentElement.classList.replace('no-js','js')" in once
     assert twice == once
+
+
+def test_marker_is_withheld_when_the_page_ships_no_behaviour_script() -> None:
+    """A page with no /script.js must keep class="no-js".
+
+    Counter-case for a live defect: the swap used to run unconditionally, so
+    /privacidade/, /termos-de-uso/ and 404.html -- which ship no <script src> at
+    all -- still ended up class="js". `.no-js .menu-toggle{display:none}` then
+    never applied, so the hamburger rendered at 44x44, was tappable, had nothing
+    bound to it, and the static `.no-js` navigation that exists for exactly this
+    case stayed hidden. Claiming "js" without the behaviour script is a lie the
+    stylesheet believes.
+    """
+    html = "<!doctype html><html lang=\"pt-BR\"><head><title>x</title></head><body></body></html>"
+
+    once = ensure_progressive_enhancement_marker(html)
+
+    assert '<html lang="pt-BR" class="no-js">' in once
+    assert "classList.replace('no-js','js')" not in once
+    assert ensure_progressive_enhancement_marker(once) == once
+
+
+def test_marker_follows_the_script_even_with_a_cache_busting_query() -> None:
+    """The shipped tag is `/script.js?v=...`; matching must not be exact-path only."""
+    html = (
+        "<!doctype html><html lang=\"pt-BR\"><head><title>x</title>"
+        '<script defer="" src="/script.js?v=fortune04"></script></head><body></body></html>'
+    )
+
+    assert "classList.replace('no-js','js')" in ensure_progressive_enhancement_marker(html)
 
 
 def test_opaque_tokens_are_marked_only_in_visible_text() -> None:

@@ -290,6 +290,11 @@ _CURRENCY_BREAKABLE_GAP_RE = re.compile(r"R\$[\t\r\n ]+(?=\d)")
 _NO_JS_BOOTSTRAP = "<script>document.documentElement.classList.replace('no-js','js');</script>"
 
 
+def _has_behaviour_script(html: str) -> bool:
+    """True when the page loads /script.js, which is what binds the menu toggle."""
+    return re.search(r'(?is)<script\b[^>]*\bsrc=["\']/script\.js(?:\?[^"\']*)?["\']', html) is not None
+
+
 def _html_tag_end(html: str, start: int) -> int:
     """Return the byte-preserving end of one HTML tag, respecting quotes."""
     quote = ""
@@ -412,7 +417,14 @@ def ensure_progressive_enhancement_marker(html: str) -> str:
     else:
         replacement = html_tag[:-1] + ' class="no-js">'
         html = html[:html_match.start()] + replacement + html[html_match.end():]
-    if _NO_JS_BOOTSTRAP not in html:
+    # Only claim "js" when the behaviour script is actually on the page. The swap
+    # used to run unconditionally, so three pages that ship no <script src> at all
+    # (/privacidade/, /termos-de-uso/, 404.html) still ended up with class="js":
+    # `.no-js .menu-toggle{display:none}` never applied, the hamburger rendered at
+    # 44x44 and was tappable, and nothing was bound to it -- a dead control, and the
+    # static `.no-js` navigation that exists precisely for this case stayed hidden.
+    # Leaving the class honest lets the existing fallback CSS do its job.
+    if _NO_JS_BOOTSTRAP not in html and _has_behaviour_script(html):
         head_match = re.search(r"(?is)<head\b[^>]*>", html)
         if head_match is None:
             raise RuntimeError("responsive_html_missing_head_element")
