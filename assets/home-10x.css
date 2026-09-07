@@ -617,3 +617,15 @@ body[data-content-cluster="corporate-services"]{font-family:"Archivo Var",ui-san
   .corporate-service-row--b2g{margin-inline:-1rem;padding-inline:1rem}
   .triage-actions,.triage-actions .button{width:100%}
 }
+/* No-JS honesty on the home capture form.
+   The form posts natively to /obrigado, a static page: with JavaScript off the
+   visitor used to see a thank-you while the lead was silently lost. Showing a
+   dead control as the primary action is worse than showing none, so the form is
+   withdrawn from the page (and therefore from the focus order and the
+   accessibility tree) and the note below points at the WhatsApp, e-mail and
+   telephone links that are already in this same section and work without JS.
+   Restoring capture without JavaScript needs a redirect branch in the lead
+   function; until then this is honest instead of functional. */
+.form-nojs-note{display:none}
+.no-js .form-nojs-note{display:block;margin:0 0 1.25rem;padding:16px 18px;color:#fff;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.28);border-radius:14px;font-size:.95rem;line-height:1.65}
+.no-js #formulario-contato{display:none}
