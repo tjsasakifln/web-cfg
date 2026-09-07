@@ -789,13 +789,23 @@ function validateAndNormalize(data) {
   let licitacaoCheck = { ok: true, qualification: null };
   let eightCheck = { ok: true, qualification: null };
   let contractCheck = { ok: true, qualification: null };
+  // A qualificação descreve a necessidade; ela NÃO decide se o contato é
+  // recebido. Documentação incompleta, contrato ainda sem número e prazo mais
+  // curto que o piso publicado passaram a ser LACUNA REGISTRADA, nunca veto de
+  // recebimento: antes devolviam 422 sem gravar nada, e o cliente apresentava
+  // isso ao visitante como pane de servidor. O piso material continua publicado
+  // na própria rota; o que acabou foi descartar a pessoa que chega fora dele.
+  // Isto vale SOMENTE para as três qualificações de produto. Rejeições
+  // estruturais e de segurança (payload, origem, honeypot, mídia) continuam
+  // fail-closed e inalteradas.
+  const qualificationGaps = [];
   if (!adaptiveFields) {
     licitacaoCheck = assertLicitacaoQualification(data, qualificationDeliverableId);
-    if (!licitacaoCheck.ok) return licitacaoCheck;
+    if (!licitacaoCheck.ok) qualificationGaps.push(licitacaoCheck.error);
     eightCheck = assertEightProductQualification(data, qualificationDeliverableId);
-    if (!eightCheck.ok) return eightCheck;
+    if (!eightCheck.ok) qualificationGaps.push(eightCheck.error);
     contractCheck = assertContractDefenseQualification(data, qualificationDeliverableId);
-    if (!contractCheck.ok) return contractCheck;
+    if (!contractCheck.ok) qualificationGaps.push(contractCheck.error);
   }
   const productQualification = licitacaoCheck.qualification || eightCheck.qualification || contractCheck.qualification;
 
@@ -961,9 +971,17 @@ function validateAndNormalize(data) {
     query_class: sanitizeAttributionValue(data.query_class, MAX_FIELD.query_class, "query_class") || null,
     deliverable_id: deliverableCheck.deliverable_id,
     analysis_cutoff: productQualification?.analysis_cutoff || null,
-    opportunity_deadline: productQualification?.opportunity_deadline || null,
-    contract_event: productQualification?.contract_event || null,
-    contract_stage: productQualification?.contract_stage || null,
+    // Fallback ao valor bruto: numa lacuna, productQualification é null e um
+    // prazo curto -- exatamente o caso que mais precisa de resposta rápida --
+    // desapareceria do registro.
+    opportunity_deadline:
+      productQualification?.opportunity_deadline
+      || clamp(data.opportunity_deadline, MAX_FIELD.opportunity_deadline)
+      || null,
+    contract_event:
+      productQualification?.contract_event || clamp(data.contract_event, MAX_FIELD.contract_event) || null,
+    contract_stage:
+      productQualification?.contract_stage || clamp(data.contract_stage, MAX_FIELD.contract_stage) || null,
     contract_value_band: productQualification?.contract_value_band || null,
     lot_count: productQualification?.lot_count || null,
     execution_regime: productQualification?.execution_regime || null,
@@ -1048,6 +1066,13 @@ function validateAndNormalize(data) {
     lead.certame_stage = adaptiveFields.certame_stage || null;
     lead.contract_relation = adaptiveFields.contract_relation || null;
     lead.entity_class = adaptiveFields.entity_class || null;
+  }
+
+  // Uma lacuna de qualificação marca o registro para leitura humana; ela não
+  // impede o recebimento. NEEDS_CONTEXT já existe no contrato (ver
+  // deriveQualification em adaptive-intake): nenhum enum novo é criado aqui.
+  if (!lead.qualification_state && qualificationGaps.length) {
+    lead.qualification_state = "NEEDS_CONTEXT";
   }
 
   return { ok: true, honeypot: false, lead };
