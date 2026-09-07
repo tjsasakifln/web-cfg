@@ -25,8 +25,11 @@ def test_home_replaces_generic_matrix_with_real_public_contract():
     assert html.count("Conta ilustrativa, não é economia observada") == 3
     for needle in ("Custo publicado", "Recorrência da diretoria", "Limite:"):
         assert html.count(needle) == 3, needle
-    assert "risco de caixa ou margem" in html
-    assert "não é economicamente indicada" in html
+    # A desqualificação por porte foi revogada em 2026-09-06. A home pode dizer
+    # QUAL formato serve; não pode dizer que o visitante não merece atendimento.
+    # Asserção negativa: o defeito não pode voltar por edição de copy.
+    assert "não é economicamente indicada" not in html
+    assert "neste porte" not in html
 
 
 def test_home_contract_profiles_are_manual_and_accessible():

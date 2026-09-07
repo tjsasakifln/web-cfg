@@ -154,9 +154,14 @@ const VALID = "11222333000181";
     { risk_band: "abaixo_entrada", frequency: "pontual", document_maturity: "forte", internal_capacity: "suficiente" },
     fitMatrix,
   );
+  // Propriedade da decisão vigente, não veredito congelado: a situação mais
+  // "auto-suficiente" que existe (risco abaixo do piso, pontual, documentos
+  // fortes, equipe suficiente) ainda tem de receber um próximo passo utilizável.
   if (!NEXT_STEPS.includes(routed.next_step)) fail("offer_fit_next_step_enum", routed.next_step);
-  else if (routed.next_step !== "nao_indicado") fail("offer_fit_honest_non_fit", routed);
-  else pass("offer_fit_honest_non_fit", routed.next_step);
+  else if (!routed.public_next || !routed.public_next.trim()) fail("offer_fit_has_next_step", routed);
+  else if (/n[ãa]o (contratar|é economicamente indicada)|não indicado/i.test(routed.public_next))
+    fail("offer_fit_next_step_is_not_a_refusal", routed);
+  else pass("offer_fit_smallest_useful_step", routed.next_step);
 }
 
 // --- copy / trust ---

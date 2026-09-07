@@ -53,10 +53,30 @@ sozinha, não autoriza: o dono da janela precisa liberar explicitamente.
    **Ação em 2026-09-13:** marcar `data-journey="edital"` no `<body>` e no CTA,
    e reconciliar o breadcrumb visível, que hoje aponta para `/conteudos/`.
 
-3. **Copy value-first das seis rotas congeladas.** O inventário de linguagem
-   defensiva foi levantado, mas nenhuma das seis foi reescrita.
-   **Ação em 2026-09-13:** aplicar a mesma lei editorial já aplicada ao resto
-   da superfície comercial.
+3. **Copy value-first das seis rotas congeladas.** ~~Adiado até 2026-09-13~~ —
+   **PARCIALMENTE EXECUTADO em 2026-09-06**, nas duas rotas que publicavam a
+   desqualificação por porte.
+
+   **Decisão que supera o adiamento.** Direção comercial do fundador,
+   2026-09-06: a desqualificação por porte, orçamento desconhecido,
+   documentação organizada e a comparação entre perda hipotética e honorário
+   estão **revogadas**. A data de 2026-09-13 deste documento não é mais o
+   critério: uma regra de janela de medição não pode manter publicada
+   exatamente a recusa que a direção revoga. O critério revogado é a espera;
+   a **sequência técnica** registrada no item 4 continua obrigatória e foi
+   seguida à risca.
+
+   **Executado:** `/diagnostico-pre-licitacao/` e `/reequilibrio-obras-publicas/`.
+   A copy passou a dizer qual formato serve, em vez de afirmar que a CONFENGE
+   não é economicamente indicada. Os limites técnicos de mérito foram
+   preservados na íntegra — sem ruptura documentável da equação original o
+   pleito não se sustenta, e divergência já esclarecida com o fiscal não pede
+   dossiê. Isso é limite sobre o mérito de um pleito, não sobre o porte de um
+   cliente.
+
+   **Ainda adiado:** as outras quatro rotas congeladas não foram reescritas.
+   Elas não publicavam a recusa revogada, então continuam sob a janela e sob a
+   liberação do dono (#128 e #387).
 
 4. **As três ilustrações de ordem de grandeza da seção de mercado da home.**
    Os parágrafos `.evidence-illustration` abrem com "Conta ilustrativa, não é
@@ -74,7 +94,15 @@ sozinha, não autoriza: o dono da janela precisa liberar explicitamente.
    navegador seja gerado a partir dela. Mudar a frase obriga a reconstruir
    `script.js` e quebra a baseline dos frozen specs.
 
-   **Ação em 2026-09-13:** trocar `home_illustrations[].copy` na matriz,
+   **EXECUTADO em 2026-09-06**, pela mesma decisão registrada no item 3. A
+   sequência abaixo foi cumprida na ordem exata, e a recaptura da baseline
+   acompanha o commit da edição, como em `cf33385d4` e `2f26ac0ba`. O painel
+   `local` deixou de fechar com a auto-recusa e passou a indicar o formato que
+   serve abaixo do piso de diagnóstico; a âncora "Limite:" foi preservada,
+   porque `test_offer_fit_matrix.mjs` exige os quatro âncoras da ilustração e
+   ela declara um limite real — o percentual não é economia observada.
+
+   **Ação original, cumprida:** trocar `home_illustrations[].copy` na matriz,
    rodar `node scripts/commercial/render_offer_fit_browser.mjs` (ou o gerador
    equivalente apontado por `expectedBrowserModule`), rodar
    `node scripts/site/build_script_modules.mjs --write`, recapturar a baseline

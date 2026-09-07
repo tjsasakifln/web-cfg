@@ -19,16 +19,14 @@
     "entrega_entrada",
     "diagnostico",
     "projeto_critico",
-    "diretoria",
-    "nao_indicado"
+    "diretoria"
   ],
   "next_step_labels": {
     "conteudo_ferramenta": "conteúdo ou ferramenta pública",
     "entrega_entrada": "entrega de entrada",
     "diagnostico": "diagnóstico",
     "projeto_critico": "projeto crítico",
-    "diretoria": "diretoria",
-    "nao_indicado": "não indicado"
+    "diretoria": "diretoria"
   },
   "cited_bands": {
     "entrada_factual": {
@@ -70,7 +68,7 @@
   "premises": [
     {
       "id": "cost_coverage",
-      "statement": "Uma entrega paga só é economicamente indicada quando a caixa ou margem em risco é pelo menos o piso publicado da faixa correspondente. Isso cobre custo, não afirma ROI."
+      "statement": "O piso publicado de cada faixa é a referência interna de custo daquele formato de entrega, não um critério de elegibilidade do cliente. Quando o risco identificado fica abaixo do piso, o que muda é o formato indicado, nunca o direito de ser atendido."
     },
     {
       "id": "percent_is_illustration",
@@ -93,8 +91,8 @@
       "statement": "Documentos fracos pedem diagnóstico (piso R$ 2.900), não projeto crítico. O dossiê exige insumo; a lacuna documental é o primeiro problema."
     },
     {
-      "id": "honest_non_fit",
-      "statement": "Quando o risco identificado fica abaixo do piso de entrada (R$ 599) e o evento é pontual, a CONFENGE não é economicamente indicada como contratação. O próximo passo é conteúdo ou ferramenta pública, ou a desqualificação honesta."
+      "id": "smallest_useful_step",
+      "statement": "Quando o risco identificado fica abaixo do piso de entrada (R$ 599) e o evento é pontual, o próximo passo indicado é o menor que resolve hoje: a ferramenta pública que calcula o caso. Escopo e proposta se ajustam à necessidade, e o canal de contato permanece aberto em qualquer situação."
     }
   ],
   "dimensions": {
@@ -182,7 +180,7 @@
       "ladder_tier_id": null,
       "fit": "Risco abaixo do piso de entrada (R$ 599) ou contrato de porte menor sem caixa ou margem identificada. Dá para calcular limite de aditivo, atraso, reequilíbrio ou margem nas ferramentas públicas.",
       "not_fit": "Há risco identificado pelo menos no piso de diagnóstico (R$ 2.900), prazo correndo ou documentos que já pedem posição técnica.",
-      "public_next": "Usar conteúdo ou ferramenta pública. Não contratar agora.",
+      "public_next": "Começar pela ferramenta pública que calcula o seu caso. Para revisar o resultado com um engenheiro, é só falar com a gente.",
       "routes": ["/ferramentas/", "/conteudos/", "/problemas-que-resolvemos/"]
     },
     {
@@ -190,7 +188,7 @@
       "next_step": "entrega_entrada",
       "ladder_tier_id": "entrada_factual",
       "fit": "Uma decisão pequena, risco na faixa de R$ 599 a R$ 2.400, pontual.",
-      "not_fit": "Risco abaixo de R$ 599 (não indicado) ou já na faixa de diagnóstico ou dossiê.",
+      "not_fit": "Risco abaixo de R$ 599, que a ferramenta pública já resolve, ou risco já na faixa de diagnóstico ou dossiê.",
       "public_next": "Começar por uma entrega de entrada com preço publicado de R$ 599 a R$ 2.400.",
       "routes": ["/entregas/", "/radar/"]
     },
@@ -220,15 +218,6 @@
       "not_fit": "Um evento pontual, mesmo em contrato grande; ou risco mensal abaixo de R$ 4.900, piso da recorrência gerenciada.",
       "public_next": "Avaliar Diretoria Fracionada para o Mercado Público (R$ 12.500 a R$ 20.000 por mês).",
       "routes": ["/diretoria-b2g/", "/acompanhamento-contratos-obras/"]
-    },
-    {
-      "offer_id": "nao_indicado",
-      "next_step": "nao_indicado",
-      "ladder_tier_id": null,
-      "fit": "A CONFENGE não é economicamente indicada: risco abaixo de R$ 599, evento pontual, equipe interna suficiente e documentos já organizados.",
-      "not_fit": "Há risco, prazo ou lacuna documental que o piso publicado ainda cobre.",
-      "public_next": "Não contratar. Seguir com a equipe interna ou com conteúdo público.",
-      "routes": ["/conteudos/", "/ferramentas/"]
     }
   ],
   "home_illustrations": [
@@ -240,7 +229,7 @@
       "one_percent_display": "R$ 1.797,38",
       "one_percent_cents": 179738,
       "kind": "illustration",
-      "copy": "Conta ilustrativa, não é economia observada. 1% deste valor contratado resulta em R$ 1.797,38. Custo publicado de um dossiê crítico: R$ 6.900 a R$ 7.900, pontual. Recorrência da diretoria: R$ 12.500 a R$ 20.000 por mês. Limite: sem risco de caixa ou margem pelo menos no piso de diagnóstico (R$ 2.900), a CONFENGE não é economicamente indicada neste porte."
+      "copy": "Conta ilustrativa, não é economia observada. 1% deste valor contratado resulta em R$ 1.797,38. Custo publicado de um dossiê crítico: R$ 6.900 a R$ 7.900, pontual. Recorrência da diretoria: R$ 12.500 a R$ 20.000 por mês. Limite: o percentual não é economia observada e o formato indicado segue o risco identificado; abaixo do piso de diagnóstico (R$ 2.900), o caminho é uma entrega de entrada ou a ferramenta pública. O escopo se ajusta à necessidade."
     },
     {
       "panel": "regional",
@@ -266,23 +255,23 @@
   "route_copy": {
     "problemas-que-resolvemos": {
       "headline": "O formato segue o risco, não o percentual do contrato",
-      "body": "Custo, risco, recorrência e limite cabem na mesma conta. Ferramenta pública quando o risco fica abaixo do piso de entrada. Diagnóstico quando a lacuna ainda é o problema. Projeto crítico pontual quando o evento já pressiona caixa. Diretoria quando a carteira é recorrente. Se o risco não cobre o piso publicado, a CONFENGE não é economicamente indicada. As faixas estão em Entregas."
+      "body": "Custo, risco, recorrência e limite cabem na mesma conta. Ferramenta pública quando o risco fica abaixo do piso de entrada. Diagnóstico quando a lacuna ainda é o problema. Projeto crítico pontual quando o evento já pressiona caixa. Diretoria quando a carteira é recorrente. Se o risco fica abaixo do piso publicado, o formato indicado é a entrega de entrada ou a ferramenta pública. As faixas estão em Entregas."
     },
     "diagnostico-pre-licitacao": {
       "headline": "Quando o diagnóstico cabe, e quando não",
-      "body": "Custo do diagnóstico delimitado segue o piso publicado dessa faixa, pontual. Risco em jogo precisa cobrir esse piso. Recorrência de carteira pede diretoria, não um diagnóstico isolado. Limite: edital simples, risco abaixo do piso de entrada e equipe já confiante segue em conteúdo ou ferramenta; a CONFENGE não é economicamente indicada nesse caso."
+      "body": "Custo do diagnóstico delimitado segue o piso publicado dessa faixa, pontual. Risco em jogo precisa cobrir esse piso. Recorrência de carteira pede diretoria, não um diagnóstico isolado. Limite: edital simples, risco abaixo do piso de entrada e equipe já confiante costumam se resolver na ferramenta pública. Para conferir essa leitura antes de decidir, fale com a gente."
     },
     "medicoes-glosas-obras-publicas": {
       "headline": "Quando o dossiê de medição cabe, e quando não",
-      "body": "Custo de um dossiê crítico segue o piso pontual publicado dessa faixa. Risco de caixa retido precisa cobrir esse piso. Recorrência de glosas na carteira pede rotina ou diretoria, não um único dossiê. Limite: divergência pontual já esclarecida com o fiscal e risco abaixo do piso não justifica a contratação."
+      "body": "Custo de um dossiê crítico segue o piso pontual publicado dessa faixa. Risco de caixa retido precisa cobrir esse piso. Recorrência de glosas na carteira pede rotina ou diretoria, não um único dossiê. Limite: divergência pontual já esclarecida com o fiscal e risco abaixo do piso não pedem um dossiê; o próximo passo é mais simples."
     },
     "reequilibrio-obras-publicas": {
       "headline": "Quando o dossiê de reequilíbrio cabe, e quando não",
-      "body": "Custo de um dossiê crítico segue o piso pontual publicado dessa faixa. Risco de margem desequilibrada precisa cobrir esse piso. Recorrência de eventos na carteira pede diretoria. Limite: sem ruptura documentável da equação original, o próximo passo é registro interno ou diagnóstico, não o pleito; a CONFENGE não é economicamente indicada só para narrar aumento de custo."
+      "body": "Custo de um dossiê crítico segue o piso pontual publicado dessa faixa. Risco de margem desequilibrada precisa cobrir esse piso. Recorrência de eventos na carteira pede diretoria. Limite: sem ruptura documentável da equação original, o pleito não se sustenta: narrar aumento de custo não é fato novo. O próximo passo é registro interno ou diagnóstico."
     },
     "acompanhamento-contratos-obras": {
       "headline": "Quando a rotina cabe, e quando não",
-      "body": "Custo da rotina é o piso mensal publicado da recorrência gerenciada, não um percentual do contrato. Risco e carteira precisam cobrir esse piso. Recorrência é a premissa: um evento pontual de glosa ou reequilíbrio pede projeto crítico, não cadência. Limite: equipe interna já suficiente e risco abaixo do piso mensal tornam a CONFENGE não economicamente indicada nesta frente. As faixas estão em Entregas."
+      "body": "Custo da rotina é o piso mensal publicado da recorrência gerenciada, não um percentual do contrato. Risco e carteira precisam cobrir esse piso. Recorrência é a premissa: um evento pontual de glosa ou reequilíbrio pede projeto crítico, não cadência. Limite: equipe interna já suficiente e risco abaixo do piso mensal pedem um evento pontual, não cadência mensal. As faixas estão em Entregas."
     }
   },
   "analytics": {

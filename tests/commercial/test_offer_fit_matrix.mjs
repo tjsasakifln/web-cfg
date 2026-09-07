@@ -74,7 +74,7 @@ assert(
 );
 
 const offers = matrix.offers || [];
-assert("six_offers", offers.length === 6, offers.length);
+assert("five_offers", offers.length === 5, offers.length);
 for (const offer of offers) {
   assert(`offer_next_step_${offer.offer_id}`, NEXT_STEPS.includes(offer.next_step), offer.next_step);
   assert(`offer_fit_${offer.offer_id}`, typeof offer.fit === "string" && offer.fit.length > 20, offer.fit);
@@ -102,7 +102,11 @@ const belowDossier = checkRoute(
   { ticket_band: "ate_250k", risk_band: "unknown", frequency: "pontual" },
   "conteudo_ferramenta",
 );
-assert("ticket_below_dossie_not_paid", belowDossier.economically_indicated === false, belowDossier);
+assert(
+  "ticket_below_dossie_still_has_a_next_step",
+  Boolean(belowDossier.public_next && belowDossier.public_next.trim()),
+  belowDossier,
+);
 
 checkRoute(
   "entrada_band",
@@ -168,7 +172,11 @@ const recorrenteAbaixo = checkRoute(
   },
   "conteudo_ferramenta",
 );
-assert("recorrente_abaixo_entrada_not_indicated", recorrenteAbaixo.economically_indicated === false, recorrenteAbaixo);
+assert(
+  "recorrente_abaixo_entrada_still_has_a_next_step",
+  Boolean(recorrenteAbaixo.public_next && recorrenteAbaixo.public_next.trim()),
+  recorrenteAbaixo,
+);
 
 const recFloor = matrix.cited_bands.recorrencia_gerenciada.min_cents;
 const leadFloor = matrix.cited_bands.lideranca_fracionada.min_cents;
@@ -253,7 +261,7 @@ checkRoute(
     internal_capacity: "suficiente",
     urgency: "planejamento",
   },
-  "nao_indicado",
+  "conteudo_ferramenta",
 );
 
 const unknown = checkRoute("unknown_defaults_diagnostico", {}, "diagnostico");
@@ -276,7 +284,7 @@ assert(
   localEcon.one_percent_cents < matrix.cited_bands.dossie_critico.min_cents,
   { one: localEcon.one_percent_cents, dossie: matrix.cited_bands.dossie_critico.min_cents },
 );
-assert("local_not_indicated_for_dossie", localEcon.economically_indicated_for_dossie === false, localEcon);
+assert("local_one_percent_does_not_cover_dossie", localEcon.dossie_covers_one_percent === false, localEcon);
 assert("illustration_has_cost", localEcon.cost.label === "custo" && /R\$/.test(localEcon.cost.display), localEcon.cost);
 assert("illustration_has_risk", localEcon.risk.label === "risco", localEcon.risk);
 assert("illustration_has_recurrence", localEcon.recurrence.label === "recorrência", localEcon.recurrence);
@@ -313,6 +321,35 @@ const matrixRaw = fs.readFileSync(path.join(root, "data/commercial/offer-fit-mat
 assert("matrix_has_no_em_dash", !DASH_RE.test(matrixRaw), "travessao proibido");
 assert("module_has_no_em_dash", !DASH_RE.test(moduleRaw), "travessao proibido");
 assert("test_has_no_em_dash", !DASH_RE.test(selfRaw), "travessao proibido");
+
+// --- contracaso da direcao de 2026-09-06 -------------------------------------
+// Variar SOMENTE o porte informado, entre pequeno, grande e desconhecido, nao
+// pode remover o caminho de contato nem produzir uma recusa. O formato indicado
+// PODE mudar: escopo e proposta se ajustam a necessidade. O atendimento nao.
+const REFUSAL_RE = /n[\u00e3a]o (contratar|[\u00e9e] economicamente indicada)|n[\u00e3a]o indicad[oa]|desqualific/i;
+const sizeOnly = ["ate_250k", "250k_1m", "acima_1m", "unknown"].map((band) => ({
+  band,
+  routed: routeSituation({ ticket_band: band }, matrix),
+}));
+for (const { band, routed } of sizeOnly) {
+  assert(`size_${band}_has_next_step`, NEXT_STEPS.includes(routed.next_step), routed);
+  assert(`size_${band}_has_public_next`, Boolean(routed.public_next && routed.public_next.trim()), routed);
+  assert(`size_${band}_is_not_a_refusal`, !REFUSAL_RE.test(routed.public_next), routed.public_next);
+  assert(`size_${band}_offer_exists`, Boolean(routed.offer_id), routed);
+}
+// Orcamento desconhecido nao pode ser tratado como orcamento pequeno.
+const unknownBand = sizeOnly.find((x) => x.band === "unknown").routed;
+assert(
+  "unknown_budget_is_not_demoted_to_the_smallest_step",
+  unknownBand.next_step !== "conteudo_ferramenta",
+  unknownBand,
+);
+// Nenhum passo terminal do roteador pode ser uma recusa, em nenhuma combinacao.
+for (const step of NEXT_STEPS) {
+  const offer = matrix.offers.find((o) => o.next_step === step);
+  assert(`offer_${step}_exists`, Boolean(offer), step);
+  assert(`offer_${step}_public_next_is_not_a_refusal`, !REFUSAL_RE.test(offer.public_next), offer.public_next);
+}
 
 const failed = results.filter((r) => !r.ok);
 console.log(`offer-fit-matrix: ${results.length - failed.length}/${results.length} checks passed`);
