@@ -517,3 +517,51 @@ describe("MV-03 signed Warmbly handoff", () => {
     assert.equal(call, 2);
   });
 });
+
+test("the intake never leaves the visitor on a dead or hanging form", () => {
+  const browser = fs.readFileSync(path.resolve("assets/js/adaptive-intake.js"), "utf8");
+
+  // Deadlines exist and cover the BODY read, not just the headers. Before this,
+  // both fetches could hang forever behind a proxy that never closed the body,
+  // leaving "Registrando seu pedido…" on screen with no way forward.
+  assert.match(browser, /CONFIG_TIMEOUT_MS\s*=\s*5000/);
+  assert.match(browser, /SUBMIT_TIMEOUT_MS\s*=\s*15000/);
+  assert.match(browser, /new AbortController\(\)/);
+  assert.match(browser, /signal:\s*controller\.signal/);
+  // The deadline is stood down only after the body has been read.
+  assert.match(browser, /response\.text\(\)\.then\(function \(text\) \{\s*\n\s*clearTimeout\(timer\);/);
+
+  // Both call sites go through the deadline helper; no bare fetch survives.
+  const bareFetch = browser.match(/(?<!fetchWithDeadline\()\bfetch\(/g) || [];
+  assert.equal(
+    bareFetch.length,
+    1,
+    "only the fetch inside fetchWithDeadline may call fetch directly",
+  );
+
+  // No polling and no automatic retry: a retry is the visitor's explicit act.
+  assert.doesNotMatch(browser, /setInterval\(/);
+  assert.doesNotMatch(browser, /setTimeout\([^)]*(?:submit|retry|poll)/i);
+
+  // A late response must not steal focus or rewrite the page after the visitor
+  // has been handed to WhatsApp/e-mail/telephone.
+  assert.match(browser, /function stale\(\)/);
+  assert.match(browser, /handedOver \|\| generation !== submitGeneration/);
+  assert.equal(
+    (browser.match(/if \(stale\(\)\) return;/g) || []).length,
+    3,
+    "success, failure and cleanup paths must all drop a stale response",
+  );
+
+  // The dead controls leave the accessible tree AND the focus order, while the
+  // explanation and the channel links stay reachable.
+  assert.match(browser, /step\.setAttribute\("inert", ""\)/);
+  assert.match(browser, /step\.setAttribute\("aria-hidden", "true"\)/);
+  assert.match(browser, /step\.removeAttribute\("inert"\)/);
+
+  // A timeout after the POST left the browser does NOT assert the record was lost.
+  const timeoutCopy = browser.match(/"Não recebemos a confirmação a tempo\.[^"]*"/);
+  assert.ok(timeoutCopy, "a deadline needs its own honest message");
+  assert.match(timeoutCopy[0], /pode ter sido registrado/);
+  assert.doesNotMatch(timeoutCopy[0], /não foi registrado|nada foi registrado/i);
+});

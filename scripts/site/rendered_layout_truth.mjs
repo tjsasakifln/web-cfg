@@ -173,6 +173,43 @@ export async function renderedLayoutFindings(page, options = {}) {
 
           let usable = false;
           try {
+            const submitControls = [...form.querySelectorAll(
+              "button:not([type]), button[type='submit'], input[type='submit'], input[type='image']",
+            )];
+            const enabledSubmitControls = submitControls.filter(enabled);
+
+            // A capture whose external authority is withheld is NOT a broken form —
+            // provided it stops pretending. The old shape asked for live data controls
+            // first and only then considered the gated case, so it could never see a
+            // capture that had correctly withdrawn its dead controls from the focus and
+            // accessibility trees (`inert`), and reported it as broken_form.
+            //
+            // The property that actually matters to the visitor is stricter than the one
+            // it replaces: the form must be the declared authority-gated capture, no
+            // submit may be live, AND a real alternative channel must be reachable.
+            // A gated capture with no way out is still broken.
+            const isDeclaredAuthorityCapture = Boolean(authorityGatedCapture)
+              && form.getAttribute("data-runtime-profile") === authorityGatedCapture.runtimeProfile
+              && form.getAttribute("data-authority-config-endpoint") === authorityGatedCapture.configEndpoint
+              && [...document.scripts].some(
+                (script) => script.getAttribute("src") === authorityGatedCapture.clientScript,
+              )
+              && submitControls.length > 0
+              && enabledSubmitControls.length === 0;
+            if (isDeclaredAuthorityCapture) {
+              // A real way out: either the intake's declared fallback channels
+              // (WhatsApp / e-mail / telephone, the ones the family registry names as
+              // `withheld_fallback`) or the persistent contact float.
+              const channelRoots = [...document.querySelectorAll(
+                "[data-fallback-channel], .contact-float, .whatsapp-float",
+              )];
+              const hasReachableFallbackChannel = channelRoots.some((element) => {
+                if (element.matches("a, button, input")) return actionable(element);
+                return [...element.querySelectorAll("a, button, input")].some(actionable);
+              });
+              return hasReachableFallbackChannel;
+            }
+
             const dataControls = [...form.querySelectorAll(
               "input:not([type='hidden']):not([type='button']):not([type='submit']):not([type='image']), select, textarea",
             )];
@@ -182,22 +219,10 @@ export async function renderedLayoutFindings(page, options = {}) {
             );
             if (!hasUsableDataControl) return false;
 
-            const submitControls = [...form.querySelectorAll(
-              "button:not([type]), button[type='submit'], input[type='submit'], input[type='image']",
-            )];
-            const enabledSubmitControls = submitControls.filter(enabled);
             const hasVisibleSubmit = enabledSubmitControls.some(actionable);
             const hasReachableMultistepSubmit = enabledSubmitControls.length > 0
               && [...form.querySelectorAll("[data-form-next]")].some(actionable);
-            const isAuthorityGated = authorityGatedCapture
-              && form.getAttribute("data-runtime-profile") === authorityGatedCapture.runtimeProfile
-              && form.getAttribute("data-authority-config-endpoint") === authorityGatedCapture.configEndpoint
-              && [...document.scripts].some(
-                (script) => script.getAttribute("src") === authorityGatedCapture.clientScript,
-              )
-              && submitControls.length > 0
-              && enabledSubmitControls.length === 0;
-            usable = hasVisibleSubmit || hasReachableMultistepSubmit || isAuthorityGated;
+            usable = hasVisibleSubmit || hasReachableMultistepSubmit;
           } finally {
             if (restore) restore();
           }
