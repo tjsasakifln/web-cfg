@@ -1,6 +1,100 @@
 /* MODULE nav — header / mobile navigation (SYS-03)
  * Runtime: assembled into /script.js. Do not load alone.
  */
+    // #611 (A02) — a situacao escolhida na home decide o proximo passo.
+    // Obra publica do lado da empresa contratada continua na escada publicada
+    // (offer-fit). Nenhuma outra situacao entra nessa escada por omissao: sem
+    // esta tabela, stageToJourney devolvia 'operacao' e uma pericia, uma
+    // demanda de SST ou um projeto viravam, em silencio, jornada B2G.
+    const HOME_SITUATIONS = {
+      'projeto, revisão ou compatibilização': {
+        journey: 'projeto',
+        ladder: false,
+        next_step: 'Conte a finalidade, o que já existe de projeto e o que precisa ficar definido. A resposta diz o que dá para projetar, revisar ou compatibilizar com esse material e o que ainda falta levantar.',
+        detail: 'Nesta etapa basta o contexto. Não envie pranchas, arquivos nem documentos.',
+        route: '/servicos/#servico-projeto',
+        route_label: 'Ver projeto, revisão e compatibilização',
+        whatsapp: 'Olá, Tiago. Preciso de projeto, revisão ou compatibilização e quero explicar a situação.',
+        placeholder: 'Finalidade, o que já existe de projeto e o que precisa ficar definido.',
+      },
+      'quantitativos ou orçamento': {
+        journey: 'orcamento',
+        ladder: false,
+        next_step: 'Conte o que precisa ser quantificado ou orçado e em que fase o projeto está. A resposta diz de que base o quantitativo pode sair e o que falta para ele fechar.',
+        detail: 'Nesta etapa basta o contexto. Não envie planilhas, arquivos nem documentos.',
+        route: '/quantitativos-orcamento-obras/',
+        route_label: 'Ver quantitativos e orçamento de obra',
+        whatsapp: 'Olá, Tiago. Preciso de quantitativos ou orçamento e quero explicar em que fase o projeto está.',
+        placeholder: 'O que precisa ser quantificado ou orçado e em que fase o projeto está.',
+      },
+      'obra ou imóvel para inspecionar ou documentar': {
+        journey: 'obra',
+        ladder: false,
+        next_step: 'Conte o que aparece na obra ou no imóvel e para que o registro vai servir. A resposta diz se cabe inspeção, diagnóstico ou documentação técnica e o que precisa ser visto no local.',
+        detail: 'Nesta etapa basta o contexto. Não envie fotos, arquivos nem endereço completo.',
+        route: '/servicos/#servico-diagnostico',
+        route_label: 'Ver inspeção, diagnóstico e documentação',
+        whatsapp: 'Olá, Tiago. Tenho uma obra ou imóvel para inspecionar, diagnosticar ou documentar e quero explicar a situação.',
+        placeholder: 'O que aparece na obra ou no imóvel e para que o registro vai servir.',
+      },
+      'perícia, assistência técnica ou avaliação': {
+        journey: 'pericia',
+        ladder: false,
+        next_step: 'Conte o que precisa ser provado ou avaliado e em que papel técnico você precisa de apoio. A resposta diz se a CONFENGE pode atuar nesse papel e o que seria necessário.',
+        detail: 'Nesta etapa não envie documentos, número de processo, dados médicos nem nomes das partes.',
+        route: '/servicos/#servico-pericia',
+        route_label: 'Ver perícia, assistência técnica e avaliação',
+        whatsapp: 'Olá, Tiago. Preciso de perícia, assistência técnica ou avaliação e quero explicar a situação.',
+        placeholder: 'O que precisa ser provado ou avaliado e em que papel técnico você precisa de apoio.',
+      },
+      'segurança do trabalho': {
+        journey: 'sst',
+        ladder: false,
+        next_step: 'Conte a situação de risco e o que já existe de documentação interna. A resposta diz se cabe diagnóstico, documentação ou apoio técnico.',
+        detail: 'Nesta etapa não envie documentos, dados médicos nem nomes de trabalhadores.',
+        route: '/servicos/#servico-sst',
+        route_label: 'Ver segurança do trabalho',
+        whatsapp: 'Olá, Tiago. Tenho uma situação de segurança do trabalho e quero explicar o que está acontecendo.',
+        placeholder: 'A situação de risco e o que já existe de documentação interna.',
+      },
+      'planejamento de órgão público': {
+        journey: 'orgao',
+        ladder: false,
+        next_step: 'Conte o que o órgão precisa preparar e em que etapa está. A resposta diz em que formato a CONFENGE pode ajudar nessa etapa.',
+        detail: 'Nesta etapa basta o contexto da etapa de planejamento. Não envie documentos nem arquivos.',
+        route: '/servicos/#servico-obras-publicas',
+        route_label: 'Ver a frente de obras públicas',
+        whatsapp: 'Olá, Tiago. Sou de um órgão público e quero explicar em que etapa está o planejamento da obra.',
+        placeholder: 'O que o órgão precisa preparar e em que etapa está.',
+      },
+      'outro': {
+        journey: 'outro',
+        ladder: false,
+        next_step: 'Conte a situação em poucas linhas. A resposta diz se ela se encaixa na atuação da CONFENGE e qual seria o próximo passo.',
+        detail: 'Nesta etapa basta o contexto. Não envie documentos nem arquivos.',
+        route: '/servicos/',
+        route_label: 'Ver as situações que a CONFENGE atende',
+        whatsapp: 'Olá, Tiago. Quero explicar uma situação técnica e saber se ela se encaixa na atuação da CONFENGE.',
+        placeholder: 'A situação em poucas linhas.',
+      },
+      'problema urgente em contrato': { journey: 'contrato', ladder: true },
+      'edital ou proposta em análise': { journey: 'edital', ladder: true },
+      'estruturando a operação no mercado público': { journey: 'operacao', ladder: true },
+      'escolhendo oportunidades': { journey: 'operacao', ladder: true },
+      'contrato em execução': { journey: 'contrato', ladder: true },
+    };
+    const homeSituation = (stageValue) => {
+      const key = String(stageValue == null ? '' : stageValue).trim().toLowerCase();
+      if (!key) return null;
+      const found = HOME_SITUATIONS[key];
+      if (!found) return null;
+      return Object.assign({ stage: key }, found);
+    };
+    if (typeof window !== 'undefined') {
+      window.confengeHomeSituation = homeSituation;
+      window.CONFENGE_HOME_SITUATIONS = HOME_SITUATIONS;
+    }
+
     const toggle = document.querySelector('.menu-toggle');
     const menu = document.querySelector('.mobile-nav');
     const closeMenu = (returnFocus = false) => {
@@ -370,14 +464,36 @@
       contrato: '/obrigado-contrato',
       edital: '/obrigado-edital',
       operacao: '/obrigado-operacao',
+      // Situacoes fora da escada B2G confirmam na pagina generica: ela existe,
+      // carrega o protocolo e nao promete um prazo de obra publica.
+      projeto: '/obrigado',
+      orcamento: '/obrigado',
+      obra: '/obrigado',
+      pericia: '/obrigado',
+      sst: '/obrigado',
+      orgao: '/obrigado',
+      outro: '/obrigado',
     };
     const stageToJourney = (stageVal) => {
+      // A tabela de situacoes vem primeiro: as regras por substring abaixo sao
+      // do vocabulario de obra publica e classificariam uma pericia ou um
+      // orcamento privado como jornada B2G.
+      const declared = homeSituation(stageVal);
+      if (declared) return declared.journey;
       const s = (stageVal || '').toLowerCase();
       if (s.includes('edital') || s.includes('proposta')) return 'edital';
       if (s.includes('contrato') || s.includes('urgente') || s.includes('glosa') || s.includes('execução') || s.includes('execucao')) return 'contrato';
       if (s.includes('operação') || s.includes('operacao') || s.includes('oportunidade') || s.includes('estrutur')) return 'operacao';
       return 'operacao';
     };
+    // Exportadas para que o gate execute exatamente a funcao que o formulario
+    // usa, e nao uma copia. Sem isto, apagar a consulta a HOME_SITUATIONS
+    // dentro de stageToJourney passaria despercebido: as regras por substring
+    // voltariam a devolver 'operacao' para pericia, SST, projeto e orgao.
+    if (typeof window !== 'undefined') {
+      window.confengeStageToJourney = stageToJourney;
+      window.CONFENGE_JOURNEY_ACTIONS = JOURNEY_ACTIONS;
+    }
     const applyJourneyToForm = (journeyId, forceStage = false) => {
       if (!form || !journeyId) return;
       const j = JOURNEY_ACTIONS[journeyId] ? journeyId : 'operacao';
