@@ -266,36 +266,6 @@
       "match": "inovação",
       "path": "conteudos/contratacao-integrada-semi-integrada-obra/index.html",
       "reason": "A pagina trata do regime de contratacao integrada, em que 'inovacao' nomeia o criterio contratual de solucao inovadora e sua alocacao na matriz de riscos (Lei 14.133/2021). E vocabulario do regime discutido, nao a promessa de marketing que a politica de marca proibe."
-    },
-    {
-      "rule": "plain_language",
-      "match": "\\bfact\\b",
-      "path": "politica-editorial/v/1.1.0/index.html",
-      "reason": "Arquivo historico congelado da politica 1.1.0. O texto e preservado byte a byte porque e o registro do que a politica realmente dizia; reescreve-lo seria falsificar o historico. A obrigacao de conservar o registro e distinta da decisao de publica-lo, e a versao vigente (1.2.0) nao usa este vocabulario. Retirada da web permanece possivel sem tocar no registro."
-    },
-    {
-      "rule": "plain_language",
-      "match": "\\bcalculation\\b",
-      "path": "politica-editorial/v/1.1.0/index.html",
-      "reason": "Arquivo historico congelado da politica 1.1.0. O texto e preservado byte a byte porque e o registro do que a politica realmente dizia; reescreve-lo seria falsificar o historico. A obrigacao de conservar o registro e distinta da decisao de publica-lo, e a versao vigente (1.2.0) nao usa este vocabulario. Retirada da web permanece possivel sem tocar no registro."
-    },
-    {
-      "rule": "plain_language",
-      "match": "\\binference\\b",
-      "path": "politica-editorial/v/1.1.0/index.html",
-      "reason": "Arquivo historico congelado da politica 1.1.0. O texto e preservado byte a byte porque e o registro do que a politica realmente dizia; reescreve-lo seria falsificar o historico. A obrigacao de conservar o registro e distinta da decisao de publica-lo, e a versao vigente (1.2.0) nao usa este vocabulario. Retirada da web permanece possivel sem tocar no registro."
-    },
-    {
-      "rule": "plain_language",
-      "match": "\\bunknown\\b",
-      "path": "politica-editorial/v/1.1.0/index.html",
-      "reason": "Arquivo historico congelado da politica 1.1.0. O texto e preservado byte a byte porque e o registro do que a politica realmente dizia; reescreve-lo seria falsificar o historico. A obrigacao de conservar o registro e distinta da decisao de publica-lo, e a versao vigente (1.2.0) nao usa este vocabulario. Retirada da web permanece possivel sem tocar no registro."
-    },
-    {
-      "rule": "plain_language",
-      "match": "\\bowner\\b",
-      "path": "politica-editorial/v/1.1.0/index.html",
-      "reason": "Arquivo historico congelado da politica 1.1.0. O texto e preservado byte a byte porque e o registro do que a politica realmente dizia; reescreve-lo seria falsificar o historico. A obrigacao de conservar o registro e distinta da decisao de publica-lo, e a versao vigente (1.2.0) nao usa este vocabulario. Retirada da web permanece possivel sem tocar no registro."
     }
   ]
 }

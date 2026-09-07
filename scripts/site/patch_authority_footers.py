@@ -56,7 +56,10 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from scripts.site.authority import CORRECTION_CHANNEL_HREF  # noqa: E402
+from scripts.site.authority import (  # noqa: E402
+    CORRECTION_CHANNEL_HREF,
+    FOOTER_AUTHORITY_NAV,
+)
 from scripts.site.shell_nav import shipped_html_files  # noqa: E402
 
 DEAD_ROUTE = "/correcoes/"
@@ -165,10 +168,22 @@ def is_data_desk_asset(rel: str) -> bool:
     return rel.startswith(DATA_DESK_ASSET_PREFIX)
 
 
+_FOOTER_NAV_RE = re.compile(
+    r'<nav class="footer-authority"[^>]*>.*?</nav>', re.S
+)
+
+
 def sync_text(text: str) -> str:
-    """Idempotently retire /correcoes/ from one page's chrome and prose."""
+    """Idempotently sync one page's chrome to the canonical authority footer.
+
+    Retirar a rota morta nao basta: quando a entrada de correcao saiu do rodape
+    e nada entrou no lugar, 38 paginas ficaram SEM caminho de correcao nenhum e
+    o gate nao viu, porque so verificava ausencia. Aqui o rodape inteiro passa a
+    ser reescrito a partir de FOOTER_AUTHORITY_NAV, que e a fonte unica.
+    """
     for pattern, replacement in _RULES:
         text = pattern.sub(replacement, text)
+    text = _FOOTER_NAV_RE.sub(lambda _m: FOOTER_AUTHORITY_NAV, text)
     return text
 
 
@@ -196,9 +211,9 @@ def run(write: bool) -> int:
     for path in candidate_files():
         rel = path.relative_to(ROOT).as_posix()
         original = path.read_text(encoding="utf-8")
-        if DEAD_ROUTE not in original:
-            continue
         updated = sync_text(original)
+        if updated == original:
+            continue
         if DEAD_ROUTE in updated:
             misses.append(rel)
             print("MISS", rel, "(retired route survives every rule)")
@@ -226,7 +241,34 @@ def run(write: bool) -> int:
         print("  run: python3 scripts/site/patch_authority_footers.py --write")
         return 1
 
-    print("PASS no shipped chrome links the retired /correcoes/ route")
+    # Verificacao POSITIVA: toda pagina cujo contrato exige caminho de correcao
+    # precisa oferecer o canal. Sem isto, apagar a entrada do rodape "passa".
+    from scripts.site.authority import (
+        classify_surface,
+        has_correction_link,
+        load_matrix,
+        CORRECTION_CHANNEL_HREF,
+    )
+
+    matrix = load_matrix()
+    missing: list[str] = []
+    for path in candidate_files():
+        rel = path.relative_to(ROOT).as_posix()
+        html = path.read_text(encoding="utf-8")
+        kind = classify_surface("/" + rel, html)
+        spec = (matrix.get("types") or {}).get(kind) or {}
+        if str(spec.get("correction_link") or "").lower() != "required":
+            continue
+        if not has_correction_link(html):
+            missing.append(f"{rel} ({kind})")
+    if missing:
+        print(f"FAIL {len(missing)} page(s) require a correction path and offer none:")
+        for rel in missing:
+            print("  ", rel)
+        print(f"  every one must carry {CORRECTION_CHANNEL_HREF}")
+        return 1
+
+    print("PASS retired route gone, and every page that must offer a correction path does")
     return 0
 
 

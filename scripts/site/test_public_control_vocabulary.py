@@ -47,6 +47,9 @@ BASELINE_PATH = ROOT / "data" / "site" / "control-vocabulary-baseline.json"
 # acento de "aderência" não pode ser a forma de escapar da regra.
 FORBIDDEN = {
     "enquadramento": r"\benquadramentos?\b",
+    "enquadrar": r"\benquadr(?:ar|a|amos|ada|ado)\b",
+    "registrar-para-triagem": r"\bregistrar\b[^.]{0,40}\b(?:triagem|revis[ãa]o de encaixe|enquadramento)\b",
+    "revisao-de-encaixe": r"\brevis[ãa]o de encaixe\b",
     "aderencia": r"\bader[êe]ncias?\b",
     "artefato": r"\bartefatos?\b",
     "acervo": r"\bacervos?\b",
@@ -67,12 +70,30 @@ ENFORCED = (
     "conflitos/index.html",
     "quantitativos-orcamento-obras/index.html",
     "triagem-tecnica/index.html",
+    "servicos/index.html",
+    "servicos-obras-publicas/index.html",
 )
 
 # O registro histórico é preservado como foi publicado. Reescrevê-lo para
 # satisfazer um gate de linguagem seria falsificar o passado -- e a política
 # vigente não usa esse vocabulário.
-ARCHIVE_PREFIXES = ("politica-editorial/v/", "politica-editorial/historico/")
+# Rotas exatas, nao prefixo de pasta: uma isencao por pasta cobriria qualquer
+# arquivo futuro sob v/ sem ninguem decidir nada. Estas duas sao o registro
+# historico, preservado como foi publicado.
+ARCHIVE_ROUTES = (
+    "politica-editorial/v/1.0.0/index.html",
+    "politica-editorial/historico/index.html",
+)
+
+# Teto da divida, medido em 2026-09-07 com o detector JA ALARGADO (formas
+# verbais incluidas). O salto de 420 para o numero abaixo NAO e divida nova:
+# e cobertura nova. "Enquadrar" sempre esteve nas paginas; o que faltava era
+# uma regra que o enxergasse.
+# A catraca so pode descer: se alguem rodar --record depois de
+# piorar uma pagina, o total sobe e ESTE numero reprova. Baixar o teto exige
+# ter corrigido paginas de verdade.
+MAX_OPEN_DEBT_OCCURRENCES = 491
+MAX_OPEN_DEBT_ROUTES = 159
 
 
 class _HumanNames(HTMLParser):
@@ -124,7 +145,7 @@ def scan() -> dict[str, dict[str, int]]:
     found: dict[str, dict[str, int]] = {}
     for path in visitor_facing_html_files(ROOT):
         rel = relpath(path, ROOT)
-        if rel.startswith(ARCHIVE_PREFIXES):
+        if rel in ARCHIVE_ROUTES:
             continue
         surface = human_surface(path.read_text(encoding="utf-8"))
         counts = {}
@@ -173,9 +194,13 @@ def failures() -> list[str]:
             was = (base.get(rel) or {}).get(term, 0)
             if n > was:
                 out.append(f"{rel}: '{term}' x{n} (linha de base {was}) — piorou")
-    for rel, counts in sorted(base.items()):
-        if rel not in found and any(counts.values()):
-            continue
+    total = sum(sum(c.values()) for c in found.values())
+    if total > MAX_OPEN_DEBT_OCCURRENCES:
+        out.append(f"divida aberta subiu para {total} ocorrencias; o teto e "
+                   f"{MAX_OPEN_DEBT_OCCURRENCES} e so pode descer")
+    if len(found) > MAX_OPEN_DEBT_ROUTES:
+        out.append(f"divida aberta subiu para {len(found)} rotas; o teto e "
+                   f"{MAX_OPEN_DEBT_ROUTES} e so pode descer")
     return out
 
 

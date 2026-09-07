@@ -1,7 +1,7 @@
 format: frozen_patch_v1
 slug: aditivos-obras-publicas
 path: aditivos-obras-publicas/index.html
-content_sha256: a4be02dc6705bb15cbbec882412e3b383887e18800abdd85272d506c1c56c450
+content_sha256: 9fc3bd1e48dbeb4596a579628681e15c7954b249b929ca41cfe3c9effce5c6b1
 earliest_safe_action_at: 2026-09-16
 corresponding_issue: 128
 html_mutation_authorized: false

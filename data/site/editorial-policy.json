@@ -39,7 +39,7 @@
       "version": "1.1.0",
       "effective_at": "2026-08-16",
       "summary": "Classes epistêmicas FACT/CALCULATION/INFERENCE/UNKNOWN; prazo UNKNOWN; canal de contestação com recibo e PII mínima; política de retirada; uso material de IA. Substitui prazos não medidos da 1.0.0 sem apagá-los do histórico.",
-      "archive_path": "/politica-editorial/v/1.1.0/",
+      "archive_path": "/politica-editorial/historico/",
       "content_sha256": "45808bb6b22ffa2f362c32a0d832662175d094dd2d4fccdcdd740b72423ba39f",
       "entry_sha256": "51cf6846b459699bc9935a775c04996c56553bdd28ee39945b5a544c7c5638ec"
     },
@@ -172,5 +172,9 @@
   "forbidden_deadline_claims": [
     "2 dias úteis",
     "10 dias úteis"
-  ]
+  ],
+  "published_archives": [
+    "1.0.0"
+  ],
+  "published_archives_note": "O registro de toda versão anterior é conservado integralmente em versions[] e conferido por hash. Publicar uma versão antiga na web é decisão editorial separada: só a 1.0.0 permanece publicada, porque já estava e é referenciada."
 }

@@ -76,7 +76,7 @@
     "styles-tools.css",
     "styles.css"
   ],
-  "html_route_count": 249,
+  "html_route_count": 248,
   "html_routes": [
     "/",
     "/acompanhamento-contratos-obras/",
@@ -314,7 +314,6 @@
     "/politica-editorial/historico/",
     "/politica-editorial/",
     "/politica-editorial/v/1.0.0/",
-    "/politica-editorial/v/1.1.0/",
     "/privacidade/",
     "/problemas-que-resolvemos/",
     "/quantitativos-orcamento-obras/",
@@ -328,8 +327,8 @@
     "/triagem-tecnica/",
     "/uso-de-ia/"
   ],
-  "generated_at": "2026-09-07T05:14:44Z",
-  "public_artifact_hash": "2fbee06645633235979aede5168894ff7a2346e0e11048c50e46e036160d308d",
+  "generated_at": "2026-09-07T06:24:02Z",
+  "public_artifact_hash": "b2bab9523af55e4e43b06bfc8216ea702daecf965b79b85bf55a7993fc57fb61",
   "copied_dirs": [
     ".well-known/",
     "acompanhamento-contratos-obras/",
@@ -406,15 +405,15 @@
     "styles-tools.css",
     "styles.css"
   ],
-  "promoted_navigation_files": 213,
+  "promoted_navigation_files": 212,
   "navigation_audit": {
-    "audited_files": 215,
-    "audited_blocks": 428,
+    "audited_files": 214,
+    "audited_blocks": 426,
     "frozen_files": 6
   },
   "structured_identity": {
-    "html_scanned": 255,
-    "html_rewritten": 192,
-    "fields_removed": 812
+    "html_scanned": 254,
+    "html_rewritten": 191,
+    "fields_removed": 808
   }
 }

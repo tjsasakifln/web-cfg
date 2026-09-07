@@ -21,7 +21,10 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-EM = "\u2014"  # —
+EM = "\u2014"
+# A entidade escapa do caractere literal; um travessao escrito como &mdash;
+# rende o mesmo travessao na tela e passava despercebido.
+EM_ENTITIES = ("&mdash;", "&#8212;", "&#x2014;")  # —
 MIDDOT = "\u00b7"  # ·
 
 # Source-title prefixes we never rewrite (external citations).
@@ -339,6 +342,10 @@ def residual_em_dashes(html: str) -> list[str]:
 
     Ignores script/style blocks (not visitor prose). Official citation labels may keep —.
     """
+    # A entidade rende o mesmo travessao na tela. Normalizar ANTES de decidir
+    # que a pagina esta limpa, senao "&mdash;" atravessa o gate inteiro.
+    for entity in EM_ENTITIES:
+        html = html.replace(entity, EM)
     if EM not in html:
         return []
     work = re.sub(r"<script\b[^>]*>[\s\S]*?</script>", " ", html, flags=re.I)

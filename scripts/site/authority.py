@@ -156,6 +156,7 @@ CORRECTION_CHANNEL_HREF = f"{CORRECTION_CHANNEL_PATH}#{CORRECTION_CHANNEL_ANCHOR
 FOOTER_AUTHORITY_NAV = (
     '<nav class="footer-authority" aria-label="Autoridade e políticas">'
     '<a href="/politica-editorial/">Política editorial</a>'
+    f'<a href="{CORRECTION_CHANNEL_HREF}">Encontrou um erro?</a>'
     '<a href="/uso-de-ia/">Uso de IA</a>'
     '<a href="/conflitos/">Conflitos</a>'
     '<a href="/privacidade/">Privacidade</a>'
@@ -520,8 +521,10 @@ def has_correction_link(html: str) -> bool:
     herdado. Aceita o canal canônico ou o e-mail do dono da correção, que é
     o mesmo destino registrado em authority-governance.json.
     """
-    raw = html or ""
-    return CORRECTION_CHANNEL_HREF in raw or "tiago.sasaki@confenge.com.br" in raw
+    # NÃO aceitar o e-mail solto do rodapé: ele aparece em 215 páginas e faria
+    # um contrato exigido passar em página que não oferece caminho de correção
+    # nenhum. O que satisfaz o contrato é o canal.
+    return CORRECTION_CHANNEL_HREF in (html or "")
 
 
 def visible_permission_class(html: str) -> str | None:

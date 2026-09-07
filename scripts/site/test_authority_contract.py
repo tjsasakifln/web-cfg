@@ -771,8 +771,17 @@ def test_public_pages_do_not_export_the_internal_vocabulary():
     # Estado atual: limpo.
     assert check_policy_visible_disclosure(combined, policy) == []
 
-    # Contracaso: cada termo interno reintroduzido precisa reprovar.
-    for token in ("FACT", "CALCULATION", "INFERENCE", "UNKNOWN", "PII", "handoff", "gates"):
+    # O conjunto minimo nao pode ser esvaziado pela porta dos fundos: apagar um
+    # termo do JSON desligaria a regra em silencio. Exigimos o piso aqui.
+    declared = set(policy.get("forbidden_public_tokens") or [])
+    required = {"FACT", "CALCULATION", "INFERENCE", "UNKNOWN", "PII",
+                "receipt", "readback", "handoff", "gate", "gates",
+                "enquadramento", "aderência"}
+    assert required <= declared, sorted(required - declared)
+
+    # Contracaso: TODO termo declarado precisa reprovar quando reintroduzido --
+    # nao uma amostra escolhida a mao.
+    for token in sorted(declared):
         seeded = combined + f"<p>Classificação: {token}.</p>"
         errors = check_policy_visible_disclosure(seeded, policy)
         assert f"internal_vocabulary_visible:{token}" in errors, (token, errors)

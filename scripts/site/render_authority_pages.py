@@ -305,9 +305,13 @@ def render_all() -> list[Path]:
     )
     written.append(_write("politica-editorial/historico/index.html", historico))
 
+    published_archives = set(policy.get("published_archives") or [])
     for entry in policy.get("changelog") or []:
         ver = str(entry.get("version") or "")
         if not ver or ver == version:
+            continue
+        # Conservar o registro é obrigatório; publicá-lo é decisão editorial.
+        if ver not in published_archives:
             continue
         version_rec = (policy.get("versions") or {}).get(ver) or {}
         archive = _page(
