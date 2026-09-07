@@ -353,8 +353,11 @@ const PII_SCAN = /@|\+\d{10,15}|mensagem|message_body|"(?:nome|name|full_name|cn
 
   const visible = (html) =>
     html
-      .replace(/<script[\s\S]*?<\/script>/gi, " ")
-      .replace(/<style[\s\S]*?<\/style>/gi, " ")
+      // HTML allows whitespace before the ">" of an end tag (`</script >`), so the
+      // naive `<\/script>` misses it and the block's CODE would then survive into
+      // what this gate treats as visible text -- CodeQL alert 59. Same for <style>.
+      .replace(/<script\b[\s\S]*?<\/script\s*>/gi, " ")
+      .replace(/<style\b[\s\S]*?<\/style\s*>/gi, " ")
       .replace(/<[^>]+>/g, " ")
       .replace(/&nbsp;/g, " ")
       .replace(/\s+/g, " ");
