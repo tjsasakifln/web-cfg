@@ -1,0 +1,55 @@
+{
+  "schema": "confenge_b2g_outbound_anchor_capture/v1",
+  "captured_at": "2026-09-06",
+  "base_sha": "dbf931d7b4a1a9fc2aecd6ef84b3a2b7b1706f55",
+  "warmbly_pr_267_head": "12c6463e6c919f40a95e1057584979c5f170a41d",
+  "capture_kind": "exact_fragment_viewport",
+  "viewports": [
+    {
+      "width": 390,
+      "height": 844
+    },
+    {
+      "width": 1366,
+      "height": 768
+    }
+  ],
+  "routes": [
+    {
+      "route": "/bid-room-licitacoes-obras/#quando-nao-contratar",
+      "source_sha256_after": "37dc077c3a8545a2a175058ba12c95ced4c44193fe1fa648af5c759986bcf314",
+      "before": {
+        "390x844": "2cb81aa829f6ba0b713e1a822947e1eac128b7b93feebb27602124015da81559",
+        "1366x768": "1a5aa2e2c7d63bc337aacd9c7d31b5bd20eb0e281a09e76ac6bfbc274b97c377"
+      },
+      "after": {
+        "390x844": "51927d72e24ba7a2a392d67a5b95a34d37a19d12b42e23ad2df2433c3753500d",
+        "1366x768": "8525f8cd02a28bb0db872483e9bcfb995c86dafad78735d6c1f1d2a471394d66"
+      }
+    },
+    {
+      "route": "/atrasos-prorrogacao-obras-publicas/#metodo",
+      "source_sha256_after": "9956114d1f68b46e03122e03322b627122744c9c2eb986090d8aeea4b3f90797",
+      "before": {
+        "390x844": "359dde1b5547126958f28a837682567554685c2c4279db8dcae0a3d196600e62",
+        "1366x768": "3208e87413e1fbeeefe65058a2d5b623f66276d4d5d679ac38d25dfaa5cdf003"
+      },
+      "after": {
+        "390x844": "74896988a03fe55b9e928e23386c99e4bae72e4305ce3f52f0a2bf429b182bd4",
+        "1366x768": "37c1aebd3358fb8af4043fae1beab3665a011efee29ebc6901cd4d84d6729744"
+      }
+    },
+    {
+      "route": "/acompanhamento-contratos-obras/#metodo",
+      "source_sha256_after": "883bb3431ed7e841356b12b214d73c0368dc1d424500b001e95bd7f07c5849d2",
+      "before": {
+        "390x844": "65bb4b51909bef95dba5a749c012dbafc88ea0eeb640d457edec4313fd10c473",
+        "1366x768": "86c0338f1c373b94e194d574aa35797c50c32c3d1e5e8834cafee7e815dd473a"
+      },
+      "after": {
+        "390x844": "b27e00b96b7e2e095276289459d51b14d5e0f7c1ccdfd8312360d62d7dcf1ef8",
+        "1366x768": "f37b8963f4dab942722c4c4b0c230577b0b07a6c7175b3fc628ddc8ee7a7f6d9"
+      }
+    }
+  ]
+}

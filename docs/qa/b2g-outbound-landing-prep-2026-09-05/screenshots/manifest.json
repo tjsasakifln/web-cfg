@@ -1,0 +1,49 @@
+{
+  "schema": "confenge_b2g_outbound_anchor_capture/v1",
+  "captured_at": "2026-09-05",
+  "base_sha": "3552cf228424ebb8f34266f671fd80df43d0615c",
+  "warmbly_pr_267_head": "a4201f2ff3396f3e08030997563ec397b9627df2",
+  "capture_kind": "exact_fragment_viewport",
+  "viewports": [
+    { "width": 390, "height": 844 },
+    { "width": 1366, "height": 768 }
+  ],
+  "routes": [
+    {
+      "route": "/bid-room-licitacoes-obras/#quando-nao-contratar",
+      "source_sha256_after": "4fd6f17507827dc958f62f5af5ca0bc05ee8a99c6b4047f956fc754568f4cabe",
+      "before": {
+        "390x844": "2cb81aa829f6ba0b713e1a822947e1eac128b7b93feebb27602124015da81559",
+        "1366x768": "749ea4c29f91edce42cf670460080542db9bd7d5928bdd8b7e6db7507cbf0e1d"
+      },
+      "after": {
+        "390x844": "51927d72e24ba7a2a392d67a5b95a34d37a19d12b42e23ad2df2433c3753500d",
+        "1366x768": "5e3b5545b091c0d224607a4175a199fba94dca5f91b6bd928b6dbdb1a8a04bfd"
+      }
+    },
+    {
+      "route": "/atrasos-prorrogacao-obras-publicas/#metodo",
+      "source_sha256_after": "0b53b1765e31cbe7d3924062e1020abd429888cb5b1aad935dfdca6800e5ec21",
+      "before": {
+        "390x844": "07340e4629b0e56d13dd6b226ca68e8d6d9e3dc3de63e108f4aef6305a8791e1",
+        "1366x768": "3329afd6a24a41621e33cbba7ba8eb962c9690438616a7071beda4a89de0acb0"
+      },
+      "after": {
+        "390x844": "74896988a03fe55b9e928e23386c99e4bae72e4305ce3f52f0a2bf429b182bd4",
+        "1366x768": "57990b6129835ab488cd9c038ec9c16b8dd7e3bbd550cd76b8305a7c5f8c6452"
+      }
+    },
+    {
+      "route": "/acompanhamento-contratos-obras/#metodo",
+      "source_sha256_after": "b96545107b77345e8b53637e04dac2a4d930182e5de2b2c05e691ec74f3b7672",
+      "before": {
+        "390x844": "133d639334c3d9ef543fa7df42de8f9e2cc980b0d30504bdfe44f4c61eff605c",
+        "1366x768": "2610aeae0f803c4f853bd67a6323b91171c7af759d39035a9c62acc347308626"
+      },
+      "after": {
+        "390x844": "f69811c465a7951566af52af218effcd551e812feb57ae76042844fb6bba6bac",
+        "1366x768": "8ed4d6330db9e94787297431ae5722c8f3af00d19b6c22ed5f58ff84111a061e"
+      }
+    }
+  ]
+}
