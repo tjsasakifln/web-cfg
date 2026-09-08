@@ -63,7 +63,20 @@ LIVE_INTEL_OVERLAY_FILES = frozenset({"_site/sitemap-oportunidades.xml"})
 # sitemap-index is hashed in the package. Stage overlay may add the
 # oportunidades child after official consume; checksum may then differ.
 LIVE_INTEL_OVERLAY_REWRITES = frozenset(
-    {"_site/sitemap-index.xml", "_site/ferramentas/index.html"}
+    {
+        "_site/sitemap-index.xml",
+        "_site/ferramentas/index.html",
+        # The family parent is now a committed page, so it IS hashed in the
+        # package -- and the overlay still rewrites it at stage time to list the
+        # opportunities actually consumed from the official snapshot. Both facts
+        # are intended: the route must answer with a branded page instead of the
+        # server's raw 403 even with zero renderable records, and it must reflect
+        # real records when they exist. The packaged bytes carry the build's
+        # transforms (no-js class, bootstrap, fingerprinted CSS) while the
+        # stage-time render does not, so the digests legitimately differ.
+        # The file-set check above still applies; only this one digest may move.
+        "_site/oportunidades/index.html",
+    }
 )
 HOST_OFFICIAL_DIR = Path("/var/lib/confenge-web/live_intelligence/official")
 
