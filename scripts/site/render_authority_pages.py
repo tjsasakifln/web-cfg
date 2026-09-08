@@ -278,7 +278,7 @@ def render_all() -> list[Path]:
         )
         if key == "conflicts":
             html_doc = html_doc.replace(
-                "Consultoria para licitações e contratos de obras públicas: análise de edital, orçamento, proposta e proteção de margem na execução para construtoras.",
+                "Engenharia, perícias e inteligência técnica: projeto, revisão, compatibilização, orçamento, inspeção, laudo, perícia, avaliação e segurança do trabalho, para clientes privados e públicos, com especialidade em licitações e contratos de obras públicas.",
                 "Serviços de engenharia, perícias e inteligência técnica para empresas, profissionais e órgãos públicos.",
             )
             html_doc, _removed = sanitize_html(
