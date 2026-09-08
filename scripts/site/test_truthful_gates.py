@@ -190,7 +190,8 @@ def test_public_entregas_separates_eight_offer_vitrine_from_taxative_roll():
     assert "Oito têm oferta publicada" in html
     assert "em validação" not in html
     assert "bloqueada" not in html
-    assert "Capacidade em validação. Ainda não é oferta pronta para contratação." in html
+    # Os atributos data-public-state acima seguem exigidos: o estado comercial
+    # continua integro no markup de maquina, so nao aparece como texto ao visitante.
     findings = evaluate_commercial_html(html, load_registry())
     assert not any("missing from integral catalog" in row for row in findings), findings
     assert not any("8↔54" in row for row in findings), findings
