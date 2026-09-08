@@ -110,7 +110,16 @@ def test_bid_room_denies_vitoria_habilitacao_protocolo():
     assert "decisão do certame é do órgão" in text or "não promete vitória" in text or "sem promessa de vitória" in text
     assert "não habilita a empresa" in text
     assert "não protocola" in text
-    assert "revisão crítica independente" in text
+    # 2026-09-08. A trava exigia a frase literal "revisão crítica independente"
+    # na sala de proposta. Era o defeito: a CONFENGE é prática individual e não
+    # tem segundo revisor nomeado, então a página anunciava uma independência
+    # que não pode comprovar. A propriedade protegida -- a etapa de revisão
+    # crítica continua nomeada na página -- passa a ser verificada de forma
+    # afirmativa, e a proteção aumenta: nenhuma alegação de revisor
+    # independente ou de segundo revisor pode voltar sem revisor nomeado.
+    assert "revisão crítica" in text
+    for _claim in ("revisão crítica independente", "revisor independente", "segundo revisor"):
+        assert _claim not in text, _claim
     assert "para o edital que exige coordenação da proposta, não improviso." in html.lower()
 
 

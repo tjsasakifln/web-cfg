@@ -35,10 +35,7 @@
       "geography": "Brasil, referência federal de composição. A aplicação é a do órgão licitante.",
       "grain": "Regime de encargos sociais da composição SINAPI (desonerado ou não desonerado)",
       "limitations": [
-        "Esta página não publica custo por km nem um fator único de conversão entre as duas tabelas.",
-        "O alinhador é um verificador de coerência. Não decide o enquadramento tributário da empresa.",
-        "A conferência vale para a data-base e a regra do edital analisado; nova data-base ou mudança na regra de desoneração pede nova checagem.",
-        "Silêncio ou contradição no edital exige leitura do caso, não um default nacional."
+        "O alinhador confere a coerência entre a base do edital, a base da planilha em montagem e o regime de encargos da empresa, para a data-base e a regra do edital analisado. Nova data-base ou mudança na regra de desoneração pede nova checagem, e edital silente ou contraditório pede leitura do caso concreto."
       ],
       "visual_id": "sinapi-aligner",
       "author": "Engº Tiago Sasaki",
@@ -51,7 +48,10 @@
         "path": "/auditoria-orcamento-licitacao/",
         "asset_id": "sinapi-desonerado-nao-desonerado",
         "route_family": "orcamento-bdi",
-        "source": "CONFENGE_WEB"
+        "source": "CONFENGE_WEB",
+        "limitations": [
+          "O alinhador confere a coerência entre a base do edital, a base da planilha em montagem e o regime de encargos da empresa, para a data-base e a regra do edital analisado. Nova data-base ou mudança na regra de desoneração pede nova checagem, e edital silente ou contraditório pede leitura do caso concreto."
+        ]
       },
       "internal_links": [
         {
@@ -100,12 +100,9 @@
       },
       "period": "Leitura operacional em 2026-08-18. O modelo de BDI que vale é o do edital.",
       "geography": "Brasil — prática de análise de preço em obras públicas. O teto e a fórmula são os do órgão.",
-      "grain": "incidencia_de_componentes_de_bdi_por_familia_de_item",
+      "grain": "Incidência de cada componente do BDI por família de item: mão de obra, material e equipamento.",
       "limitations": [
-        "O mapa de incidência não é tabela oficial de BDI e não publica percentuais nacionais.",
-        "Não autoriza jogo de planilha nem desconto seletivo sem memória.",
-        "A evidência GSC citada é histórica e não prova demanda atual.",
-        "Regulamento do ente e o modelo anexado ao edital prevalecem."
+        "O mapa serve para conferir se a taxa proposta em cada família tem memória de cálculo e não duplica componente já embutido no unitário. O percentual que vale é o do modelo de BDI anexado ao edital e o do regulamento do ente; cada linha da planilha continua exigindo memória própria."
       ],
       "visual_id": "bdi-incidence-map",
       "author": "Engº Tiago Sasaki",
@@ -118,7 +115,11 @@
         "path": "/auditoria-orcamento-licitacao/",
         "asset_id": "bdi-diferenciado-obra-publica",
         "route_family": "orcamento-bdi",
-        "source": "CONFENGE_WEB"
+        "source": "CONFENGE_WEB",
+        "grain": "Incidência de cada componente do BDI por família de item: mão de obra, material e equipamento.",
+        "limitations": [
+          "O mapa serve para conferir se a taxa proposta em cada família tem memória de cálculo e não duplica componente já embutido no unitário. O percentual que vale é o do modelo de BDI anexado ao edital e o do regulamento do ente; cada linha da planilha continua exigindo memória própria."
+        ]
       },
       "internal_links": [
         {

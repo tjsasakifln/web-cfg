@@ -363,7 +363,16 @@ def test_offer_depth_and_distinct_layouts():
     # at least 3 distinct section-order signatures
     assert len(set(structures)) >= 3, f"offer layouts too similar: {structures}"
     bid = (ROOT / "bid-room-licitacoes-obras" / "index.html").read_text(encoding="utf-8")
-    assert "revisão crítica independente" in bid.lower()
+    # 2026-09-08. A trava exigia a frase literal "revisão crítica independente"
+    # na sala de proposta. Era o defeito: a CONFENGE é prática individual e não
+    # tem segundo revisor nomeado, então a página anunciava uma independência
+    # que não pode comprovar. A propriedade protegida -- a etapa de revisão
+    # crítica continua nomeada na página -- passa a ser verificada de forma
+    # afirmativa, e a proteção aumenta: nenhuma alegação de revisor
+    # independente ou de segundo revisor pode voltar sem revisor nomeado.
+    assert "revisão crítica" in bid.lower()
+    for _claim in ("revisão crítica independente", "revisor independente", "segundo revisor"):
+        assert _claim not in bid.lower(), _claim
     assert "red team" not in bid.lower()
     defesa = (ROOT / "defesa-margem-contratos-publicos" / "index.html").read_text(encoding="utf-8")
     assert "Defesa de margem" in defesa

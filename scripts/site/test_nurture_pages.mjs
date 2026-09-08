@@ -90,7 +90,14 @@ const valueMarkers = [
   ["Operação de Proposta para Licitação Crítica", "track_edital_offer"],
   ["Decisão de participar", "track_edital_decidir"],
   ["Diretoria Fracionada para o Mercado Público", "track_operacao_diretoria"],
-  ["double opt-in", "double_opt_in"],
+  // 2026-09-08: a trava exigia o literal "double opt-in" na landing. O termo
+  // é jargão de operação de e-mail marketing em inglês e estava no olho da
+  // página, então a asserção obrigava o próprio defeito de redação. A
+  // propriedade protegida era outra: a página precisa declarar que o
+  // cadastro só vale depois de o visitante confirmar o e-mail. É isso que
+  // passa a ser verificado, em português e com a confirmação explícita.
+  ["Confirme o e-mail", "confirmacao_de_email"],
+  ["link de confirmação", "confirmacao_explicita"],
   ["nurture-form", "subscribe_form"],
 ];
 for (const [needle, name] of valueMarkers) {

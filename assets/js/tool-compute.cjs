@@ -697,7 +697,7 @@
 
   function explainMatriz(r) {
     var job = "Registrar eventos de atraso e ver hipóteses preliminares e lacunas de prova.";
-    var decision = "Completar prova e período, ou enquadrar cronograma e nexo antes de pedir prazo ou custo.";
+    var decision = "Completar prova e período, ou vincular o evento ao cronograma e ao caminho crítico antes de pedir prazo ou custo.";
     if (!r || !r.ok) {
       var invalidEvents = r && Array.isArray(r.invalid) ? r.invalid : [];
       var errorLabels = {
@@ -720,7 +720,7 @@
           inferencia: "Sem hipótese.",
           unknown: "Não há diário de obra nem processo nesta leitura."
         },
-        cta: { branch: "vazio", href: "/atrasos-prorrogacao-obras-publicas/", label: "Enquadrar cronograma e prova", offer: "atrasos-prorrogacao-obras-publicas" },
+        cta: { branch: "vazio", href: "/atrasos-prorrogacao-obras-publicas/", label: "Documentar cronograma e prova", offer: "atrasos-prorrogacao-obras-publicas" },
         legalDisclaimer: "Resultado orientativo. Não constitui laudo pericial nem conclusão de culpa."
       };
     }
@@ -732,7 +732,7 @@
     var unknown = "Não lemos o diário de obra, o caminho crítico real nem a matriz de riscos assinada, salvo o que você marcou.";
     var needs = (s.semProvaContemporanea || 0) + (s.semPeriodoDefinido || 0);
     var cta = needs
-      ? { branch: "lacunas", href: "/atrasos-prorrogacao-obras-publicas/", label: "Enquadrar cronograma e prova", offer: "atrasos-prorrogacao-obras-publicas" }
+      ? { branch: "lacunas", href: "/atrasos-prorrogacao-obras-publicas/", label: "Documentar cronograma e prova", offer: "atrasos-prorrogacao-obras-publicas" }
       : { branch: "completa", href: "/atrasos-prorrogacao-obras-publicas/", label: "Validar causa e caminho crítico", offer: "atrasos-prorrogacao-obras-publicas" };
     return {
       job: job, decision: decision,

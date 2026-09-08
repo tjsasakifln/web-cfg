@@ -158,7 +158,7 @@
       "actual_receipt": "lead_id ou receipt_id persistido e correlacionado ao identificador público do contrato",
       "pre_form_value": "Vincule a leitura pública a um pedido de conferência humana sem repetir os dados do contrato nem enviar documentos pelo site.",
       "field_purpose": "O identificador público já vem da ferramenta; nome e um canal válido permitem retorno; o contexto adicional é opcional.",
-      "boundary": "A leitura não é conclusão jurídica, não transforma UNKNOWN em fato e não recebe arquivo; documentos seguem apenas por canal seguro posterior."
+      "boundary": "A leitura não é conclusão jurídica, não converte item pendente de conferência em fato e não recebe arquivo; documentos seguem apenas por canal seguro posterior."
     },
     "paid_offer_parameters": {
       "stage": "configure_scope",

@@ -19,7 +19,16 @@ def test_money_asset_consumes_select_only_export_with_unknown():
         encoding="utf-8"
     )
     assert "CONFENGE" in page
-    assert "UNKNOWN" in page
+    # 2026-09-08: a asserção literal era `assert "UNKNOWN" in page`. Ela exigia
+    # que um rótulo de estado interno em inglês permanecesse no texto público da
+    # ferramenta -- o defeito que esta campanha corrige. A propriedade que ela
+    # protegia (a página não esconde o que a fonte pública não publica) passa a
+    # ser verificada pelo que o visitante lê: a seção de limites e as famílias
+    # de evento que ficam a conferir.
+    assert 'id="limites-unknown"' in page
+    assert "a conferir" in page
+    for familia in ("Aditivos", "reajuste", "medições", "pagamentos"):
+        assert familia in page
     assert "smartlic.tech" not in page.lower()
 
 

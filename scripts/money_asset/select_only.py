@@ -53,7 +53,17 @@ def evaluate_select_only(root: Path | None = None) -> dict[str, Any]:
             fails.append("smartlic_on_money_asset")
     if "CONFENGE" not in html:
         fails.append("missing_confenge_brand")
-    if "UNKNOWN" not in html:
+    # 2026-09-08: a trava exigia o literal "UNKNOWN" no HTML da página pública.
+    # Isso obrigava um enum interno do contrato de dados a aparecer como
+    # vocabulário do visitante -- era o próprio defeito de redação, e ainda por
+    # cima passava só porque o token sobrevivia dentro do JavaScript. A
+    # propriedade protegida é outra: a página precisa declarar VISIVELMENTE o
+    # que a exportação SELECT-only não traz, em vez de preencher a lacuna.
+    # Passa a ser verificado isso, com proteção maior (seção de limites presente
+    # e famílias de evento pendentes nomeadas), e não a palavra em inglês.
+    if 'id="limites-unknown"' not in html or "a conferir" not in html:
+        fails.append("missing_unknown_honesty")
+    elif any(familia not in html for familia in ("Aditivos", "reajuste", "medições", "pagamentos")):
         fails.append("missing_unknown_honesty")
     return {
         "schema_version": "margin-defense-select-only-v1",

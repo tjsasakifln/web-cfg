@@ -24,9 +24,9 @@
     "commercial_destination": "/medicoes-glosas-obras-publicas/",
     "offer": "Dossiê de Medição, Glosa e Pagamento",
     "before_sha256": "455200070af5d118d3f564a9cf74de643d24a1511f058b61c30c070dfc708f8a",
-    "after_sha256": "b1e01bd4a33068979cc2f68445634a88604c97fccc2e17b45e3739f06e0801dc",
+    "after_sha256": "6ccb45f566c0d78e4a6f4cad8a84b922005717cf8eee8d5b28b5b8a667a6df12",
     "after_sha256_recaptured_at": "2026-09-08",
-    "after_sha256_recapture_reason": "Campanha de comunicacao publica (PR #644). Mudou apenas cromo institucional compartilhado por todo o site nesta pagina: a descricao Organization no JSON-LD e a frase de rodape. Titulo, H1, corpo editorial, canonical, robots, destino comercial e o unico UNKNOWN visivel seguem identicos, e continuam verificados pelas assercoes seguintes deste mesmo teste."
+    "after_sha256_recapture_reason": "Campanha de comunicacao publica (PR #644), recaptura final. Alem do cromo institucional compartilhado, esta pagina teve os quatro rotulos epistemicos em ingles (FACT, CALCULATION, INFERENCE, UNKNOWN) substituidos por rotulos em portugues no exemplo demonstrativo: Premissa do exemplo, Calculo, Leitura tecnica e O que falta confirmar no caso real. Eram vocabulario de controle interno impresso para o comprador de engenharia. A classificacao linha a linha -- que era a propriedade protegida -- continua exigida, agora em portugues, e os termos em ingles passaram a ser proibidos na superficie visivel. Nenhum fato, calculo, citacao legal, canonical, robots ou destino comercial mudou."
   },
   "selection_evidence": {
     "source": "seo/gsc-2026-08-09/Paginas.csv",
@@ -132,7 +132,7 @@
     },
     {
       "path": "medicoes-glosas-obras-publicas/index.html",
-      "sha256": "0a6bf8a0636dbd8ac59e59933973a5ab8a4313ba3905b8643807490ffe50d04d"
+      "sha256": "7cff440c571ebff52297d1be6503fd35ca8fea2b19b3af4c79c6b39b3935c4de"
     }
   ],
   "second_wave": {

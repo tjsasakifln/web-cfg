@@ -355,11 +355,42 @@ def build(*, actor: str = "editorial-build") -> dict[str, Any]:
             "url": "/lei-14133-obras/",
             "title": "Lei nº 14.133/2021 aplicada a obras e serviços de engenharia",
             "description": (
-                "Aplicações cotidianas da nova lei de licitações em aditivos, prazos, medições, "
-                "pagamentos e reequilíbrio, com foco na decisão da construtora."
+                "A Lei 14.133/2021 traduzida em decisão de obra: como formar e defender o preço "
+                "de um item novo no aditivo e como a proposta se relaciona com o orçamento-base."
 ),
             "topic": "lei-14133",
             "journey": "execucao",
+            "related_title": "O que a lei muda no dia a dia do contrato",
+            "related_lead": (
+                "Análises da biblioteca sobre os limites de alteração, o pagamento e o "
+                "reequilíbrio do contrato de obra pública."
+),
+            "related": [
+                {
+                    "url": "/conteudos/limite-aditivo-25-50-obra-publica/",
+                    "title": "Limite de aditivo 25% e 50%: o que entra na conta",
+                    "blurb": (
+                        "Base de cálculo, histórico de acréscimos e supressões e natureza da "
+                        "alteração, com a documentação que sustenta cada parcela."
+),
+                },
+                {
+                    "url": "/conteudos/atraso-pagamento-contrato-publico-suspender/",
+                    "title": "Atraso de pagamento: pode suspender a obra pública?",
+                    "blurb": (
+                        "Condições, prova e forma de preservar caixa e posição contratual "
+                        "antes de interromper a execução."
+),
+                },
+                {
+                    "url": "/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/",
+                    "title": "Matriz de riscos pode impedir o reequilíbrio?",
+                    "blurb": (
+                        "Como ler a alocação de risco do contrato antes de montar um pedido "
+                        "de reequilíbrio econômico-financeiro."
+),
+                },
+            ],
         },
         {
             "id": "hub-jur",
@@ -377,11 +408,42 @@ def build(*, actor: str = "editorial-build") -> dict[str, Any]:
             "url": "/guias-contratos-obras/",
             "title": "Guias e checklists para contratos de obras públicas",
             "description": (
-                "Roteiros utilizáveis na obra e no escritório: documentos para aditivo, glosa, "
-                "reequilíbrio, notificação e defesa de margem."
+                "Roteiros de uso direto na obra e no escritório: o que reunir, o que conferir "
+                "e o que protocolar antes de levar um pedido de aditivo à Administração."
 ),
             "topic": "guias",
             "journey": "operacao",
+            "related_title": "Outros documentos que a obra costuma precisar",
+            "related_lead": (
+                "Análises da biblioteca sobre prorrogação de prazo, glosa de medição e "
+                "resposta a notificação, com os documentos de cada situação."
+),
+            "related": [
+                {
+                    "url": "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
+                    "title": "Prorrogação de prazo: documentos que não podem faltar",
+                    "blurb": (
+                        "Causa, cronologia, impacto no caminho crítico e comunicação "
+                        "contemporânea que sustentam o pedido."
+),
+                },
+                {
+                    "url": "/conteudos/glosa-por-qualidade-obra-publica/",
+                    "title": "Glosa por qualidade: pode glosar a medição inteira?",
+                    "blurb": (
+                        "Critério, localização e quantitativo exigidos da glosa, e como "
+                        "responder a apontamento genérico com prova e memorial."
+),
+                },
+                {
+                    "url": "/conteudos/resposta-notificacao-atraso-obra-publica/",
+                    "title": "Notificação por atraso: como montar a resposta",
+                    "blurb": (
+                        "Fatos, anexos e prazo de resposta que compõem a defesa técnica "
+                        "antes de qualquer sanção."
+),
+                },
+            ],
         },
     ]
     for hub in hubs:

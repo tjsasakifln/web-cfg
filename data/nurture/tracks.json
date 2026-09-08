@@ -38,7 +38,7 @@
         },
         {
           "day_offset": 14,
-          "subject": "Quando a CONFENGE agrega (e quando não)",
+          "subject": "Posição técnica: onde a engenharia decide o caso",
           "preheader": "Complementar ao jurídico. Sem promessa de recuperação.",
           "body_md": "A CONFENGE entra quando o problema é posição técnica: cronologia, causalidade, cálculos, aditivos, reequilíbrio, glosa, atraso.\n\nNão substitui o jurídico da empresa. Não promete vitória ou recuperação de valor.\n\nSe ainda há um caso vivo no contrato, envie o contexto (sem documentos sensíveis no primeiro contato):\nhttps://confenge.com.br/#contato?jornada=contrato\n\nOu leia a oferta Contract Defense:\n{{cta_url}}\n\nPara sair desta sequência a qualquer momento: {{unsubscribe_url}}"
         }
@@ -87,16 +87,16 @@
     },
     "operacao": {
       "id": "operacao",
-      "label": "Estruturação da operação B2G",
+      "label": "Estruturação da operação em obras públicas",
       "intent": "rotina_b2g_continua",
       "offer": "diretoria-b2g",
       "cta_default": "https://confenge.com.br/diretoria-b2g/",
       "tool": "https://confenge.com.br/radar/nacional-obras-publicas/",
-      "consent_label": "Quero receber 5 e-mails sobre rotina B2G e priorização de oportunidades (posso sair a qualquer momento).",
+      "consent_label": "Quero receber 5 e-mails sobre rotina de obras públicas e priorização de oportunidades (posso sair a qualquer momento).",
       "messages": [
         {
           "day_offset": 0,
-          "subject": "Operação B2G: volume de editais não é estratégia",
+          "subject": "Operação em obras públicas: volume de editais não é estratégia",
           "preheader": "Filtro de oportunidades com critérios da empresa.",
           "body_md": "Plataforma de editais encontra oportunidade. Estratégia decide se ela merece capital e equipe.\n\nComece por: capacidade, acervo, órgãos-alvo, faixas de valor, apetite de risco.\n\nDiagnóstico da Operação em Obras Públicas: https://confenge.com.br/diagnostico-b2g-360/\nDiretoria Fracionada para o Mercado Público: {{cta_url}}"
         },

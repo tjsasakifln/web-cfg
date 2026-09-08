@@ -42,12 +42,12 @@
 <h1>Matriz de atraso de obra</h1>
 <p class="content-lead">Adicione eventos com período, prova, duração e possível concorrência. A ferramenta devolve hipóteses preliminares, nunca um veredito por contagem.</p>
 <p class="tool-job" data-tool-job>O que esta ferramenta resolve: registrar eventos de atraso e ver hipóteses preliminares e lacunas de prova.</p>
-<p class="tool-decision" data-tool-decision>Decisão apoiada: completar prova e período, ou enquadrar cronograma e nexo antes de pedir prazo ou custo.</p>
+<p class="tool-decision" data-tool-decision>Decisão apoiada: completar prova e período, ou vincular o evento ao cronograma e ao caminho crítico antes de pedir prazo ou custo.</p>
 </div></header>
 <div class="container tool-shell">
 <details class="tool-premises"><summary>Premissas</summary>
 <div class="tool-premises-body">
-<p>Matriz orientativa. Força maior e fato da Administração não se presumem: demonstram-se. A ferramenta não soma dias automaticamente nem emite laudo pericial. O resultado separa <strong>fato</strong>, <strong>cálculo</strong> (sem soma de dias), <strong>inferência</strong> (hipótese) e o que permanece <strong>desconhecido</strong>.</p>
+<p>Matriz orientativa. Força maior e fato da Administração se demonstram, evento a evento, com registro contemporâneo. A ferramenta organiza os eventos e aponta o que falta provar; a contagem de dias vem depois, do cronograma analisado. O resultado separa <strong>fato</strong> (o que você registrou), <strong>cálculo</strong> (período e sobreposição entre eventos), <strong>inferência</strong> (hipótese de responsabilidade) e o que permanece <strong>desconhecido</strong>.</p>
 </div></details>
 <p class="tool-runtime-status" id="matriz-runtime-status" data-tool-runtime-status role="status" style="border-inline-start:4px solid var(--green-600, #3d8238);margin-block:1rem;padding:.75rem 1rem">Ative o JavaScript para montar hipóteses no navegador. O formulário está bloqueado para não enviar eventos pela URL ou ao servidor.</p>
 <form id="f" class="tool-form" method="post" action="/ferramentas/matriz-atraso-obra/">
@@ -73,12 +73,39 @@
 </div>
 <div class="tool-cta-contextual" id="cta" hidden></div>
 </div>
+<section class="tool-guide container" id="como-classificar" aria-labelledby="como-classificar-titulo">
+<h2 id="como-classificar-titulo">Como classificar o evento antes de registrar</h2>
+<p>Cada linha da matriz precisa responder a quatro perguntas na ordem: qual foi o evento, quem suporta esse risco no contrato, qual atividade ele parou e se essa atividade estava no caminho crítico. É essa cadeia (evento, alocação, atividade, caminho crítico) que sustenta um pedido de prorrogação ou de custo; a quantidade de eventos registrados, não.</p>
+
+<h3 id="tipologia">Tipologia dos eventos e a prova que cada um exige</h3>
+<dl class="tool-guide-list">
+<dt>Fato da Administração ou do contratante</dt>
+<dd>Ordem de paralisação, atraso na liberação de área ou de frente de serviço, projeto alterado durante a execução, aprovação ou pagamento pendente. Prova: ofício, ordem de serviço, ata de reunião, notificação protocolada e o registro do dia no diário de obra.</dd>
+<dt>Fato imprevisível, caso fortuito ou força maior</dt>
+<dd>Evento climático fora do padrão da região, interdição por autoridade, sinistro. Prova: registro diário do impedimento, documento da autoridade ou da fonte oficial que qualifica o evento e comunicação enviada na época.</dd>
+<dt>Interferência de terceiro</dt>
+<dd>Rede de concessionária, licença ou anuência de órgão externo, fornecimento sob monopólio. Prova: protocolo do pedido, data da resposta e o intervalo entre as duas.</dd>
+<dt>Causa do próprio contratado</dt>
+<dd>Mobilização, produtividade, suprimento ou subcontratado. Registrar mesmo assim: é o que impede que um pedido caia inteiro quando a outra parte demonstrar a sobreposição.</dd>
+</dl>
+
+<h3 id="concorrencia">Critério de concorrência entre eventos</h3>
+<p>Dois eventos que ocupam o mesmo período não somam prazo. O trecho aproveitável do pedido é aquele em que a causa alheia ao contratado é a única que impede a atividade do caminho crítico. Onde há sobreposição com causa própria, o período concorrente é reduzido ou não se sustenta, e é por isso que o campo <em>Concorrência com outro evento</em> muda a hipótese de cada linha.</p>
+
+<h3 id="matriz-de-riscos">Como ler a matriz de riscos do contrato</h3>
+<p>A matriz de alocação de riscos do contrato diz, antes da discussão, quem suporta cada evento. Ao consultá-la, procure: o evento está descrito (chuva acima de um limite, atraso de licença, interferência de rede, variação de insumo)? A quem foi alocado? Há gatilho declarado de prorrogação, reequilíbrio ou revisão de cronograma, e qual a unidade de prazo, dias corridos, dias úteis, dias efetivamente impedidos?</p>
+<p>Quando o contrato não tem matriz, ou a alocação é ambígua, isso não cria nem elimina o direito: desloca a discussão para o nexo e a prova contemporânea, que é exatamente o que esta ferramenta organiza.</p>
+
+<h3 id="base-normativa">Base normativa e contratual</h3>
+<p>A prorrogação do cronograma por impedimento, ordem de paralisação ou suspensão está tratada na <a href="https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm" rel="external noopener" target="_blank">Lei nº 14.133/2021</a>, art. 115, § 5º. O que cada evento concreto produz (prazo, custo, reequilíbrio ou nenhum dos três) depende da alocação de riscos do contrato e da prova reunida, não do dispositivo isolado.</p>
+</section>
+
 <section class="authority-method container" id="metodo" data-surface-type="ferramenta" aria-labelledby="metodo-titulo">
 <h2 id="metodo-titulo">Método, fonte e limites</h2>
 <p>Responsável técnico: <a href="/especialista/tiago-jun-sasaki/">Engº Tiago Sasaki</a> · Referência (as of): <time datetime="2026-08-15">15 de agosto de 2026</time></p>
 <p>Método: organização preliminar de eventos de atraso e lacunas de prova a partir do que o usuário registra no navegador.</p>
-<p>Fonte: premissas informadas no formulário. Não consulta diário de obra nem processo real.</p>
-<p>Limitação: hipótese preliminar, não é parecer jurídico.</p>
+<p>Fonte: premissas informadas no formulário, conferidas depois contra diário de obra, comunicações protocoladas e cronograma do contrato.</p>
+<p>Limitação: hipótese preliminar de organização de prova; a contagem de dias e a conclusão sobre responsabilidade dependem da análise do cronograma e dos documentos originais.</p>
 <p>Como citar: CONFENGE. Matriz de atraso de obra. https://confenge.com.br/ferramentas/matriz-atraso-obra/ (as of 2026-08-15).</p>
 </section>
 </main>
@@ -294,7 +321,7 @@
     cta.hidden=false;
     var needs=(s.semProvaContemporanea||0)+(s.semPeriodoDefinido||0);
     cta.innerHTML=needs
-      ? '<p>Há eventos sem prova contemporânea ou período definido. Enquadre cronograma, causa e comunicações.</p><div class="tool-actions"><a class="button button-primary" data-cta-id="matriz-atraso-lacunas" data-route-family="atrasos" data-asset-id="matriz-atraso-obra" data-tool-to-offer="atrasos-prorrogacao-obras-publicas" href="/atrasos-prorrogacao-obras-publicas/">Enquadrar cronograma e prova</a></div>'
+      ? '<p>Há eventos sem prova contemporânea ou período definido. Reúna cronograma, causa e comunicações da época.</p><div class="tool-actions"><a class="button button-primary" data-cta-id="matriz-atraso-lacunas" data-route-family="atrasos" data-asset-id="matriz-atraso-obra" data-tool-to-offer="atrasos-prorrogacao-obras-publicas" href="/atrasos-prorrogacao-obras-publicas/">Documentar cronograma e prova</a></div>'
       : '<p>A matriz está mais consistente; valide o nexo antes de pedir prazo ou custo.</p><div class="tool-actions"><a class="button button-primary" data-cta-id="matriz-atraso-completa" data-route-family="atrasos" data-asset-id="matriz-atraso-obra" data-tool-to-offer="atrasos-prorrogacao-obras-publicas" href="/atrasos-prorrogacao-obras-publicas/">Validar causa e caminho crítico</a><a class="button button-secondary" data-tool-to-content href="/conteudos/como-provar-atraso-obra-publica/">Como provar atraso</a></div>';
     T.track("tool_complete",{tool:TOOL,events:s.totalEventos,sem_prova:s.semProvaContemporanea,level:"hypothesis",cta_branch:expl.cta.branch});
     persist();

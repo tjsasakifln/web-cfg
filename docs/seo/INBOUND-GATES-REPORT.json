@@ -1,5 +1,5 @@
 {
-  "ok": true,
+  "ok": false,
   "gates": {
     "naturalness": {
       "ok": true,
@@ -11,8 +11,16 @@
       }
     },
     "index_surface": {
-      "ok": true,
-      "findings": [],
+      "ok": false,
+      "findings": [
+        {
+          "gate": "index_surface",
+          "path": "conteudos/atraso-na-medicao-obra-publica/index.html",
+          "reason": "visible_parity_overclaim",
+          "excerpt": "https://confenge.com.br/conteudos/atraso-na-medicao-obra-publica/ meta_description_diverges",
+          "severity": "error"
+        }
+      ],
       "stats": {
         "sitemap_locs": 78
       }
@@ -22,8 +30,8 @@
       "findings": [],
       "stats": {
         "scanned": 29,
-        "org_description": "Engenharia, perícias e inteligência técnica para decisões sobre projetos, edific",
-        "footer": "Engenharia, perícias e inteligência técnica para transformar situações complexas"
+        "org_description": "Engenharia, perícias e inteligência técnica: projeto, revisão, compatibilização,",
+        "footer": "Projeto, revisão, compatibilização, orçamento, inspeção, laudo, perícia, avaliaç"
       }
     },
     "conversion": {
@@ -55,13 +63,6 @@
           "path": "casos/medicao-glosa-demonstrativo/index.html",
           "reason": "terminal_action_debt",
           "excerpt": "/casos/medicao-glosa-demonstrativo/ required=capture_form_or_whatsapp issue=#61 expires_at=2026-09-30",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "casos/medicao-glosa-demonstrativo/index.html",
-          "reason": "missing_journey_signal",
-          "excerpt": "",
           "severity": "warn"
         },
         {
@@ -250,14 +251,6 @@
             "expired": false
           },
           {
-            "route": "/comercial/termos-diagnostico-b2g/",
-            "family": "comercial-condicoes",
-            "kind": "priced_reference",
-            "reason": "O preço aparece como referência contratual do Diagnóstico B2G dentro das condições, não como oferta. A superfície de oferta é /diagnostico-b2g-expansao/, que já captura com formulário persistido no <main>.",
-            "owner_issue": 88,
-            "expires_at": null
-          },
-          {
             "route": "/confianca/",
             "family": "legal-and-trust",
             "kind": "trust_or_legal",
@@ -335,7 +328,7 @@
           "warn_before_date": true
         },
         "errors": 0,
-        "warnings": 19
+        "warnings": 18
       }
     },
     "legacy_entity": {
@@ -453,14 +446,7 @@
           "gate": "archetype_editorial_ready",
           "path": "triagem-tecnica/index.html",
           "reason": "archetype_specific_value_failed",
-          "excerpt": "family=triagem-tecnica 1/1 sampled pages fail: /triagem-tecnica/: 2 concrete specifics (min 3)",
-          "severity": "warn"
-        },
-        {
-          "gate": "archetype_editorial_ready",
-          "path": "triagem-tecnica/index.html",
-          "reason": "archetype_cta_subordinate_failed",
-          "excerpt": "family=triagem-tecnica 1/1 sampled pages fail: /triagem-tecnica/: 4 CTAs in <main> for 527 words (max 3)",
+          "excerpt": "family=triagem-tecnica 1/1 sampled pages fail: /triagem-tecnica/: 1 concrete specifics (min 3)",
           "severity": "warn"
         },
         {
@@ -495,7 +481,7 @@
           "gate": "archetype_editorial_ready",
           "path": "quantitativos-orcamento-obras/index.html",
           "reason": "archetype_cta_subordinate_failed",
-          "excerpt": "family=private-engineering-quantities-budget 1/1 sampled pages fail: /quantitativos-orcamento-obras/: 7 CTAs in <main> for 713 words (max 3)",
+          "excerpt": "family=private-engineering-quantities-budget 1/1 sampled pages fail: /quantitativos-orcamento-obras/: 6 CTAs in <main> for 584 words (max 3)",
           "severity": "warn"
         },
         {
@@ -516,7 +502,7 @@
           "gate": "archetype_editorial_ready",
           "path": "acompanhamento-contratos-obras/index.html",
           "reason": "archetype_cta_subordinate_failed",
-          "excerpt": "family=service-pillars 1/6 sampled pages fail: /atrasos-prorrogacao-obras-publicas/: 4 CTAs in <main> for 1335 words (max 3)",
+          "excerpt": "family=service-pillars 1/6 sampled pages fail: /atrasos-prorrogacao-obras-publicas/: 4 CTAs in <main> for 1367 words (max 3)",
           "severity": "warn"
         },
         {
@@ -530,7 +516,7 @@
           "gate": "archetype_editorial_ready",
           "path": "confianca/index.html",
           "reason": "archetype_substantive_failed",
-          "excerpt": "family=legal-and-trust 2/6 sampled pages fail: /imprensa/: 139 words; /uso-de-ia/: 224 words",
+          "excerpt": "family=legal-and-trust 1/6 sampled pages fail: /uso-de-ia/: 224 words",
           "severity": "warn"
         },
         {
@@ -600,7 +586,7 @@
           "gate": "archetype_editorial_ready",
           "path": "guias-contratos-obras/index.html",
           "reason": "archetype_substantive_failed",
-          "excerpt": "family=guias-contratos-obras 1/5 sampled pages fail: /guias-contratos-obras/: 93 words",
+          "excerpt": "family=guias-contratos-obras 1/5 sampled pages fail: /guias-contratos-obras/: 218 words",
           "severity": "warn"
         },
         {
@@ -628,7 +614,14 @@
           "gate": "archetype_editorial_ready",
           "path": "lei-14133-obras/index.html",
           "reason": "archetype_substantive_failed",
-          "excerpt": "family=lei-14133-obras 1/6 sampled pages fail: /lei-14133-obras/: 116 words",
+          "excerpt": "family=lei-14133-obras 1/6 sampled pages fail: /lei-14133-obras/: 255 words",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "lei-14133-obras/index.html",
+          "reason": "archetype_caveats_preserved_failed",
+          "excerpt": "family=lei-14133-obras 1/6 sampled pages fail: /lei-14133-obras/: shows a figure or epistemic label with no limitation disclosed — removing raw jargon must not remove the uncertainty it carried",
           "severity": "warn"
         },
         {
@@ -649,7 +642,7 @@
           "gate": "archetype_editorial_ready",
           "path": "nurture/index.html",
           "reason": "archetype_substantive_failed",
-          "excerpt": "family=nurture 1/2 sampled pages fail: /nurture/sair/: 91 words",
+          "excerpt": "family=nurture 1/2 sampled pages fail: /nurture/sair/: 93 words",
           "severity": "warn"
         },
         {
@@ -657,13 +650,6 @@
           "path": "nurture/index.html",
           "reason": "archetype_specific_value_failed",
           "excerpt": "family=nurture 1/2 sampled pages fail: /nurture/sair/: 0 concrete specifics (min 3)",
-          "severity": "warn"
-        },
-        {
-          "gate": "archetype_editorial_ready",
-          "path": "metodologia-inteligencia/index.html",
-          "reason": "archetype_substantive_failed",
-          "excerpt": "family=metodologia-inteligencia 1/1 sampled pages fail: /metodologia-inteligencia/: 251 words",
           "severity": "warn"
         },
         {
@@ -691,7 +677,7 @@
           "gate": "archetype_editorial_ready",
           "path": "radar/index.html",
           "reason": "archetype_substantive_failed",
-          "excerpt": "family=radar 1/3 sampled pages fail: /radar/: 222 words",
+          "excerpt": "family=radar 1/3 sampled pages fail: /radar/: 196 words",
           "severity": "warn"
         },
         {
@@ -724,23 +710,9 @@
         },
         {
           "gate": "archetype_editorial_ready",
-          "path": "casos/index.html",
-          "reason": "archetype_substantive_failed",
-          "excerpt": "family=casos 2/3 sampled pages fail: /casos/aditivo-art125-demonstrativo/: 173 words; /casos/medicao-glosa-demonstrativo/: 113 words",
-          "severity": "warn"
-        },
-        {
-          "gate": "archetype_editorial_ready",
-          "path": "casos/index.html",
-          "reason": "archetype_specific_value_failed",
-          "excerpt": "family=casos 1/3 sampled pages fail: /casos/medicao-glosa-demonstrativo/: 1 concrete specifics (min 3)",
-          "severity": "warn"
-        },
-        {
-          "gate": "archetype_editorial_ready",
           "path": "entregas/index.html",
           "reason": "archetype_cta_subordinate_failed",
-          "excerpt": "family=entregas 1/1 sampled pages fail: /entregas/: 29 CTAs in <main> for 4310 words (max 10)",
+          "excerpt": "family=entregas 1/1 sampled pages fail: /entregas/: 29 CTAs in <main> for 4249 words (max 10)",
           "severity": "warn"
         },
         {
@@ -762,20 +734,6 @@
           "path": "ferramentas/index.html",
           "reason": "archetype_specific_value_failed",
           "excerpt": "family=ferramentas-hub 1/1 sampled pages fail: /ferramentas/: 2 concrete specifics (min 3)",
-          "severity": "warn"
-        },
-        {
-          "gate": "archetype_editorial_ready",
-          "path": "ferramentas/checklist-reequilibrio/index.html",
-          "reason": "archetype_substantive_failed",
-          "excerpt": "family=ferramentas 1/4 sampled pages fail: /ferramentas/matriz-atraso-obra/: 245 words",
-          "severity": "warn"
-        },
-        {
-          "gate": "archetype_editorial_ready",
-          "path": "ferramentas/checklist-reequilibrio/index.html",
-          "reason": "archetype_specific_value_failed",
-          "excerpt": "family=ferramentas 1/4 sampled pages fail: /ferramentas/matriz-atraso-obra/: 1 concrete specifics (min 3)",
           "severity": "warn"
         },
         {
@@ -894,7 +852,7 @@
           "gate": "archetype_editorial_ready",
           "path": "inteligencia/index.html",
           "reason": "archetype_substantive_failed",
-          "excerpt": "family=inteligencia-pseo 4/6 sampled pages fail: /inteligencia/: 126 words; /inteligencia/cenarios/: 101 words",
+          "excerpt": "family=inteligencia-pseo 4/6 sampled pages fail: /inteligencia/: 126 words; /inteligencia/cenarios/: 106 words",
           "severity": "warn"
         },
         {
@@ -915,7 +873,7 @@
           "gate": "archetype_editorial_ready",
           "path": "jurisprudencia-contratos-obras/index.html",
           "reason": "archetype_substantive_failed",
-          "excerpt": "family=jurisprudencia-contratos-obras 1/2 sampled pages fail: /jurisprudencia-contratos-obras/: 66 words [debt_tracked owner_issue=245 expires_at=2026-10-15: EDITORIAL-REGISTRY.json already carries status REJECTED with publication_hold for this slug (source verification failed) -- the editorial authority made the withdrawal call. Actually deleting the file from the tree is a distinct, irreversible action this campaign is not authorized to take unilaterally; tracked here as owned debt until #245 executes or reverses the removal.]",
+          "excerpt": "family=jurisprudencia-contratos-obras 1/2 sampled pages fail: /jurisprudencia-contratos-obras/: 83 words [debt_tracked owner_issue=245 expires_at=2026-10-15: EDITORIAL-REGISTRY.json already carries status REJECTED with publication_hold for this slug (source verification failed) -- the editorial authority made the withdrawal call. Actually deleting the file from the tree is a distinct, irreversible action this campaign is not authorized to take unilaterally; tracked here as owned debt until #245 executes or reverses the removal.]",
           "severity": "warn"
         },
         {
@@ -950,8 +908,8 @@
       "stats": {
         "schema": "indexation-evidence-v1",
         "families": 38,
-        "archetype_ready": 5,
-        "archetype_not_ready": 33,
+        "archetype_ready": 7,
+        "archetype_not_ready": 31,
         "materially_rejected": [
           "jurisprudencia-contratos-obras",
           "piloto-preview"
@@ -968,8 +926,7 @@
               "/triagem-tecnica/"
             ],
             "blocking": [
-              "specific_value",
-              "cta_subordinate"
+              "specific_value"
             ],
             "material": []
           },
@@ -1129,6 +1086,7 @@
             "blocking": [
               "answer_first",
               "substantive",
+              "caveats_preserved",
               "named_gate_verdict"
             ],
             "material": []
@@ -1161,7 +1119,6 @@
               "/metodologia-inteligencia/"
             ],
             "blocking": [
-              "substantive",
               "specific_value"
             ],
             "material": []
@@ -1199,16 +1156,13 @@
             "material": []
           },
           "casos": {
-            "ready": false,
+            "ready": true,
             "sample": [
               "/casos/",
               "/casos/aditivo-art125-demonstrativo/",
               "/casos/medicao-glosa-demonstrativo/"
             ],
-            "blocking": [
-              "substantive",
-              "specific_value"
-            ],
+            "blocking": [],
             "material": []
           },
           "casos-modelos-precificados": {
@@ -1264,17 +1218,14 @@
             "material": []
           },
           "ferramentas": {
-            "ready": false,
+            "ready": true,
             "sample": [
               "/ferramentas/checklist-reequilibrio/",
               "/ferramentas/diagnostico-defesa-margem/",
               "/ferramentas/limite-acrescimos-supressoes/",
               "/ferramentas/matriz-atraso-obra/"
             ],
-            "blocking": [
-              "substantive",
-              "specific_value"
-            ],
+            "blocking": [],
             "material": []
           },
           "live-intelligence-cnpj-tool": {
@@ -1454,20 +1405,6 @@
       "findings": [
         {
           "gate": "instance_index_ready",
-          "path": "casos/aditivo-art125-demonstrativo/index.html",
-          "reason": "indexable_without_evidence",
-          "excerpt": "/casos/aditivo-art125-demonstrativo/ blocking=archetype_completeness",
-          "severity": "warn"
-        },
-        {
-          "gate": "instance_index_ready",
-          "path": "casos/medicao-glosa-demonstrativo/index.html",
-          "reason": "indexable_without_evidence",
-          "excerpt": "/casos/medicao-glosa-demonstrativo/ blocking=archetype_completeness",
-          "severity": "warn"
-        },
-        {
-          "gate": "instance_index_ready",
           "path": "comercial/termos-diagnostico-b2g/index.html",
           "reason": "indexable_without_evidence",
           "excerpt": "/comercial/termos-diagnostico-b2g/ blocking=freshness",
@@ -1489,13 +1426,6 @@
         },
         {
           "gate": "instance_index_ready",
-          "path": "ferramentas/matriz-atraso-obra/index.html",
-          "reason": "indexable_without_evidence",
-          "excerpt": "/ferramentas/matriz-atraso-obra/ blocking=archetype_completeness",
-          "severity": "warn"
-        },
-        {
-          "gate": "instance_index_ready",
           "path": "guias-contratos-obras/index.html",
           "reason": "indexable_without_evidence",
           "excerpt": "/guias-contratos-obras/ blocking=freshness,archetype_completeness",
@@ -1505,7 +1435,7 @@
           "gate": "instance_index_ready",
           "path": "imprensa/index.html",
           "reason": "indexable_without_evidence",
-          "excerpt": "/imprensa/ blocking=freshness,archetype_completeness",
+          "excerpt": "/imprensa/ blocking=freshness",
           "severity": "warn"
         },
         {
@@ -1513,13 +1443,6 @@
           "path": "lei-14133-obras/index.html",
           "reason": "indexable_without_evidence",
           "excerpt": "/lei-14133-obras/ blocking=freshness,archetype_completeness",
-          "severity": "warn"
-        },
-        {
-          "gate": "instance_index_ready",
-          "path": "metodologia-inteligencia/index.html",
-          "reason": "indexable_without_evidence",
-          "excerpt": "/metodologia-inteligencia/ blocking=archetype_completeness",
           "severity": "warn"
         },
         {
@@ -1583,9 +1506,9 @@
         "schema": "indexation-evidence-v1",
         "scanned": 253,
         "noindex": 175,
-        "instance_index_ready": 60,
+        "instance_index_ready": 64,
         "index_ready_but_noindex": [],
-        "indexable_without_evidence": 18,
+        "indexable_without_evidence": 14,
         "noindex_without_reason": [],
         "candidate_noindex_pending_family_activation": [],
         "blocking_subgates": {
@@ -1593,11 +1516,11 @@
           "public_safe": 98,
           "citable_source": 50,
           "freshness": 47,
-          "archetype_completeness": 42,
+          "archetype_completeness": 37,
           "self_canonical": 16,
           "official_live": 12,
-          "record_specific_content": 12,
           "no_cannibalization": 11,
+          "record_specific_content": 11,
           "materially_distinct_grain": 5,
           "not_redirect_source": 2
         }

@@ -1,7 +1,7 @@
 format: frozen_patch_v1
 slug: diagnostico-b2g-360
 path: diagnostico-b2g-360/index.html
-content_sha256: 1777149b5468a5c64ea99c0e4e582f23cb4f2dd3c130140eb4943f321b6040c9
+content_sha256: ef5a74fc8a63f35f521caca6ee14afd7aad68bf2015de9d2185d24608ca27681
 earliest_safe_action_at: 2026-09-16
 corresponding_issue: 128
 html_mutation_authorized: false

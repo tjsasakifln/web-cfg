@@ -367,7 +367,20 @@ async function seedAcceptance(store) {
   const termsPage = fs.readFileSync(path.join(root, "comercial/termos-diagnostico-b2g/index.html"), "utf8");
   const privacyPage = fs.readFileSync(path.join(root, "comercial/privacidade-leads/index.html"), "utf8");
   assert("terms_page_has_forum", termsPage.includes("Foro da Comarca de Florianópolis") || termsPage.includes("foro da Comarca de Florianópolis"), "forum");
-  assert("terms_page_has_refund_formula", termsPage.includes("refund_due"), "refund");
+  // 2026-09-08: a trava exigia a string literal "refund_due" na pagina de termos.
+  // Isso obrigava o contrato publico a imprimir um identificador de variavel de API
+  // ("refund_due = max(0, amount_received - earned_milestones - ...)") para o comprador,
+  // que e exatamente o jargao que a comunicacao comercial precisa eliminar.
+  // O que passa a ser verificado e a PROPRIEDADE que a trava protegia, com cobertura maior:
+  // a pagina precisa publicar a regra de calculo do reembolso completa - valor recebido,
+  // deducao da parte ganha nos marcos, deducao dos custos de terceiro nao recuperaveis
+  // previamente aprovados, e piso em zero - em qualquer redacao, de codigo ou em portugues.
+  const refundRule =
+    /refund_due|valor recebido/i.test(termsPage) &&
+    /earned_milestones|ganha nos marcos/i.test(termsPage) &&
+    /nonrecoverable|n[aã]o recuper[aá]veis/i.test(termsPage) &&
+    /max\(0|nunca [eé] inferior a zero/i.test(termsPage);
+  assert("terms_page_has_refund_formula", refundRule, "refund");
   assert("privacy_page_has_inventory", privacyPage.includes("e-mail corporativo") && privacyPage.includes("180 dias"), "inventory");
   assert("public_legal_no_extra", !termsPage.includes(leakPrivate) && !privacyPage.includes(leakPrivate) && !termsPage.includes(leakPrice), "legal extra");
   assert("public_page_no_encarregado", !/encarregado|\bDPO\b/.test(page), "privacy channel");
