@@ -442,7 +442,7 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
             # 2026-09-08: o rótulo de estado editorial "preview (revisão)" era copy
             # de pipeline exposta ao visitante. Trocado por um descritor de leitura.
             # O sentinel "publicada" permanece: o filtro do hub /radar/ depende dele.
-            badge = "publicada" if c.status == "publish" else "Enquadramento aplicado"
+            badge = "publicada" if c.status == "publish" else "leitura de caso"
             # Never expose pipeline page_type as visitor copy
             meta = badge
             out.append((c.url, kind, c.h1[:90], meta))
