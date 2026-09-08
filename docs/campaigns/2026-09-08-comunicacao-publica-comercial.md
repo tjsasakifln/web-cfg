@@ -68,9 +68,14 @@ cria nem remove rota, esses artefatos ficam na versão da `main`.
   `/triagem-tecnica/` opera com três canais diretos contextualizados, que é o
   caminho sancionado. **Destino do e-mail comprovado**: `confenge.com.br` tem
   MX vivo (`mx1/mx2.hostinger.com`) e SPF `include:_spf.mail.hostinger.com`.
-  **Destino do WhatsApp não comprovado**: `wa.me/5548988344559` resolve para o
-  endpoint de envio (HTTP 200), o que não prova recebimento. Abrir o app não é
-  prova de entrega.
+  **Destino do WhatsApp comprovado como endereço válido**: carregado em
+  navegador (Playwright, 2026-09-08), `wa.me/5548988344559` redireciona para
+  `api.whatsapp.com/send/?phone=5548988344559` e renderiza "Chat on WhatsApp
+  with +55 48 98834-4559" com os links de conversa ativos, **sem** a tela de
+  número inválido que o WhatsApp exibe para número não registrado. Isso prova
+  que o número é um destino de conversa válido, sem enviar mensagem. **Não
+  prova recebimento nem leitura**: nenhuma mensagem foi enviada, e abrir o app
+  nunca seria prova de entrega.
 - Achados remanescentes da auditoria por rota (blocos genéricos sem entrega em
   `/aditivos-obras-publicas/` e `/auditoria-orcamento-licitacao/`,
   "remunera método e artefato, não resultado" em
