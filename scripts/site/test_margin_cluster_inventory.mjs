@@ -25,7 +25,7 @@ function assertAuthority(html, path) {
   assert.ok(/Método:/.test(html), `${path} missing Método`);
   assert.ok(/Fonte:/.test(html), `${path} missing Fonte`);
   assert.ok(/Limitação:/.test(html), `${path} missing Limitação`);
-  assert.ok(/Sem revisão independente|segundo revisor|Revisado em/.test(html), `${path} missing revisão disclosure`);
+  assert.ok(/Responsável técnico|Revisado em/.test(html), `${path} missing revisão disclosure`);
   assert.ok(/<time datetime="\d{4}-\d{2}-\d{2}">/.test(html), `${path} missing updated_at time`);
   assert.ok(!/href="\/(vision|nexgen|avcb|clcb|avaliacoes|ia)\//.test(html), path);
 }
@@ -52,7 +52,7 @@ for (const row of inventory.intents) {
     method: /Método:/.test(html),
     fonte: /Fonte:/.test(html),
     limitations: /Limitação:/.test(html),
-    review: /Sem revisão independente|segundo revisor|Revisado em/.test(html),
+    review: /Responsável técnico|Revisado em/.test(html),
     updated_at: /<time datetime="\d{4}-\d{2}-\d{2}">/.test(html),
   });
 }

@@ -146,10 +146,16 @@ def test_fail_closed_reviewer_absent_when_legal_claim():
     )
     errors = check_required_slots(html, "conteudo_tecnico")
     assert "reviewer_absent" in errors
-    # Solo disclosure satisfies the reviewer slot without inventing a second person.
+    # 2026-09-08. O slot de revisor era cumprido publicando "Sem revisao
+    # independente: nao ha segundo revisor nomeado" -- um inventario de
+    # credencial ausente exibido ao comprador na pagina de oferta. A
+    # propriedade real e outra e continua exigida: a pagina precisa nomear
+    # quem responde tecnicamente. Nomear o responsavel basta; anunciar a
+    # falta de um segundo revisor nao e requisito e nao volta a ser aceito
+    # (os tokens negativos sairam de authority-matrix.json).
     html_ok = html.replace(
         "Limitação: não é parecer jurídico.",
-        "Responsável técnico: Engº Tiago Sasaki. Sem revisão independente: não há segundo revisor nomeado.",
+        "Responsável técnico: Engº Tiago Sasaki.",
     )
     assert "reviewer_absent" not in check_required_slots(html_ok, "conteudo_tecnico")
 
@@ -540,7 +546,7 @@ def test_fail_closed_analysis_requires_on_page_ai_disclosure():
     footer_only = _fixture(
         '<p data-surface-type="analise_tecnica_contrato">ANÁLISE TÉCNICA DE CONTRATO PÚBLICO</p>'
         "<p>Autor: <a rel='author' href='/especialista/tiago-jun-sasaki/'>Engº Tiago Sasaki</a></p>"
-        "<p>Responsável técnico: Engº Tiago Sasaki. Sem revisão independente: não há segundo revisor nomeado.</p>"
+        "<p>Responsável técnico: Engº Tiago Sasaki.</p>"
         "<time datetime='2026-08-16'>16 de agosto de 2026</time>"
         "<h2>Método</h2><p>Fonte: instrumento público. Limitação: não é parecer jurídico.</p>"
         "<p>Não é Caso CONFENGE e não implica relação comercial com o órgão ou o contratado.</p>"
