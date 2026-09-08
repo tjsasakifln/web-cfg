@@ -66,9 +66,14 @@ def test_home_replaces_generic_matrix_with_real_public_contract():
         assert parafrase not in market_text.lower(), parafrase
     # E precisa dizer o contrario, explicitamente.
     assert "qualquer porte" in market_text.lower()
-    # Os precos publicados continuam visiveis, uma vez, fora da comparacao.
-    assert "R$ 6.900 a R$ 7.900" in market_text
-    assert "R$ 12.500 a R$ 20.000 por mês" in market_text
+    # 2026-09-08. Reprintar as faixas de honorario aqui colocava a home no censo
+    # de rotas que publicam preco, e o gate de conversao e fail-closed: rota que
+    # exibe preco tem de capturar o lead. A home nao vende essas ofertas -- ela
+    # diz que o porte nao decide o formato. Entao o preco nao e escondido: ele
+    # segue publicado por inteiro na pagina de cada oferta, e a home leva ate la
+    # a um clique. O que se exige aqui e o caminho, nao a repeticao do valor.
+    assert "preço de cada oferta está publicado na página dela" in market_text
+    assert 'href="/entregas/"' in market.group(0)
 
 
 def test_home_contract_profiles_are_manual_and_accessible():

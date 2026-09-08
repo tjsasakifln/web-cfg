@@ -494,7 +494,7 @@ function renderCapabilityRoll(registry, taskDoors) {
   }
   return `<section class="capability-roll" id="rol-taxativo" data-section-archetype="reading_method" aria-labelledby="capability-roll-title">
 <div class="container">
-<header class="capability-roll__intro"><p class="eyebrow">Todo o trabalho</p><h2 id="capability-roll-title">As 54 frentes de trabalho, organizadas pela pergunta que está na mesa.</h2><p><strong>Oito têm oferta publicada acima</strong>, com preço, escopo e prazo consultáveis. As outras se contratam sob consulta: descreva a situação e dizemos qual documento resolve, que informação é necessária e em que condições. Abra uma situação para ver os nomes e as perguntas que cada frente responde.</p></header>
+<header class="capability-roll__intro"><p class="eyebrow">Todo o trabalho</p><h2 id="capability-roll-title">As 54 frentes de trabalho, organizadas pela pergunta que está na mesa.</h2><p><strong>Oito têm oferta publicada acima</strong>, com preço, escopo e prazo consultáveis. As outras se contratam sob consulta: descreva a situação e dizemos qual documento resolve, que informação é necessária e em que condições. Abra uma situação para conhecer os nomes e as perguntas que cada frente responde.</p></header>
 <div class="capability-groups">${groups}</div>
 </div>
 </section>`;

@@ -176,7 +176,10 @@ def test_public_ia_separates_published_offers_from_taxative_capabilities() -> No
 
     h1 = _visible_text(re.search(r"<h1[^>]*>.*?</h1>", html, re.DOTALL).group(0))
     assert "8 ofertas publicadas" in h1
-    assert "54 capacidades do rol taxativo" in _visible_text(html)
+    # 2026-09-08. A vitrine deixou de publicar o estado comercial interno das
+    # capacidades nao vendaveis; o rol continua exigido, com o texto novo.
+    assert "54 frentes de trabalho" in _visible_text(html)
+    assert "oito têm oferta publicada" in _visible_text(html)
 
     title = re.search(r"<title>([^<]+)</title>", html).group(1)
     description = re.search(r'<meta content="([^"]+)" name="description"/>', html).group(1)

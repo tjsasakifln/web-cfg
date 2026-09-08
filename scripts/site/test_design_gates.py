@@ -459,7 +459,13 @@ def test_home_five_second_clarity():
     assert 'href="#situacoes"' in fold
     assert "ver o escopo de serviços" in fold_lower
     assert 'href="/servicos/"' in fold
-    assert "obras públicas e b2g" in lower
+    # 2026-09-08. Estas linhas exigiam o rotulo publico "Obras publicas e B2G".
+    # B2G e sigla interna: nenhum comprador de obra procura por ela, e a
+    # diretriz manda tirar a sigla de todo texto lido pelo visitante. A
+    # propriedade protegida -- a especialidade em obras publicas tem secao
+    # propria na home, depois do seletor de situacoes -- continua verificada.
+    assert "especialidade em obras públicas" in lower
+    assert "obras públicas: edital, proposta e contrato em execução." in lower
     assert "#contato" in html or 'id="contato"' in html
 
 
@@ -480,7 +486,12 @@ def test_home_decision_fold_hierarchy():
     pncp_at = html.find("54.055")
     assert 0 < chooser_at < pncp_at, "PNCP must come after the corporate chooser"
     market = html[pncp_at:]
-    assert "Obras públicas e B2G" in html
+    # 2026-09-08. Estas linhas exigiam o rotulo publico "Obras publicas e B2G".
+    # B2G e sigla interna: nenhum comprador de obra procura por ela, e a
+    # diretriz manda tirar a sigla de todo texto lido pelo visitante. A
+    # propriedade protegida -- a especialidade em obras publicas tem secao
+    # propria na home, depois do seletor de situacoes -- continua verificada.
+    assert "Especialidade em obras públicas" in html
     assert "PNCP · 01/08/2026" in market
     assert "4,48 mi" in market
     assert "Números de mercado, não resultados de clientes" in market
