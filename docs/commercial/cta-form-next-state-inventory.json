@@ -29,13 +29,13 @@
       "commercial_configuration"
     ],
     "baseline_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
-    "expected_declared_ctas": 124
+    "expected_declared_ctas": 125
   },
   "coverage": {
     "authority": "data/organic/public-family-registry.json",
     "manual_route_allowlist": false,
     "active_capture_routes": 25,
-    "declared_ctas": 124,
+    "declared_ctas": 125,
     "protected_routes_with_capture": [],
     "problems": []
   },
@@ -1813,7 +1813,7 @@
           "href": "/ferramentas/diagnostico-defesa-margem/",
           "stage": "calculate",
           "commitment": "low",
-          "current_label": "Fazer uma primeira leitura do contrato",
+          "current_label": "Usar a ferramenta gratuita de diagnóstico de margem",
           "useful_next_state": "Abre a ferramenta pública para calcular ou inspecionar a situação antes do contato.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
@@ -1828,7 +1828,7 @@
           "href": "/ferramentas/diagnostico-defesa-margem/",
           "stage": "calculate",
           "commitment": "low",
-          "current_label": "Ainda estou verificando: fazer a primeira leitura",
+          "current_label": "Ainda estou verificando: usar a ferramenta gratuita",
           "useful_next_state": "Abre a ferramenta pública para calcular ou inspecionar a situação antes do contato.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
@@ -2833,6 +2833,21 @@
           "event_semantics": [
             "cta_click"
           ]
+        },
+        {
+          "cta_id": "",
+          "position": "",
+          "href": "/triagem-tecnica/",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Descrever a situação",
+          "useful_next_state": "Abre o destino declarado por “Descrever a situação” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Sem cobrança; preço e escopo exigem aceite.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
         }
       ]
     },
@@ -3155,11 +3170,11 @@
         {
           "cta_id": "home-private-quantities-budget",
           "position": "",
-          "href": "/quantitativos-orcamento-obras/",
+          "href": "/servicos/#servico-projeto",
           "stage": "compare",
           "commitment": "low",
-          "current_label": "Ver quantitativos e orçamento",
-          "useful_next_state": "Abre o destino declarado por “Ver quantitativos e orçamento” para continuar a decisão.",
+          "current_label": "Ver o que entregamos em projeto",
+          "useful_next_state": "Abre o destino declarado por “Ver o que entregamos em projeto” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
           "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem apenas por canal seguro combinado depois do protocolo.",

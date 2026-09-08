@@ -283,6 +283,7 @@ def _services_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
 def _problems_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
     meta = hub(brand, "problems")
     services = hub(brand, "services")
+    corporate = hub(brand, "corporate_services")
     clusters = problem_clusters(brand)
     stages = problem_stages(brand)
     fit = _offer_fit_copy("problemas-que-resolvemos")
@@ -344,7 +345,8 @@ def _problems_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
 <h2 class="hub-section-title" id="hub-next">Ainda não sabe em qual frente o seu caso entra?</h2>
 <p class="section-lead">A escolha muda conforme o contrato já esteja assinado, a obra em andamento ou o prazo de resposta correndo. Os serviços mostram como cada frente é conduzida.</p>
 </header>
-<p><a class="text-link" href="{e(services["url"])}">Conhecer os serviços <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
+<p><a class="text-link" href="{e(services["url"])}">Conhecer os serviços para obras públicas <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
+<p><a class="text-link" href="{e(corporate["url"])}">Outra situação: projeto, imóvel, perícia ou segurança do trabalho <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
 <p><a class="text-link" href="/ferramentas/">Calcular o seu caso nas ferramentas públicas <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
 </div>
 </section>""",

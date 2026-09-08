@@ -1193,7 +1193,13 @@ def test_thankyou_specialist_cta_family():
         assert "wa.me" in text
         assert "Prazo" in text or "prazo" in text
     specialist = (ROOT / "especialista" / "tiago-jun-sasaki" / "index.html").read_text(encoding="utf-8")
-    assert "Solicitar diagnóstico" in specialist
+    # 2026-09-08. Esta linha exigia o rotulo "Solicitar diagnostico tecnico"
+    # no CTA principal, cujo href e /triagem-tecnica/. O rotulo prometia um
+    # diagnostico e o destino entregava uma triagem: rotulo e destino tem de
+    # coincidir. A propriedade preservada -- a pagina de quem assina leva a
+    # um caminho de atendimento nomeado -- passa a ser verificada assim.
+    assert "Descrever a situação para o Engº Tiago" in specialist
+    assert 'href="/triagem-tecnica/"' in specialist
     lower = specialist.lower()
     assert "analisar meu cenário" not in lower
     assert "apresentar uma demanda" not in lower

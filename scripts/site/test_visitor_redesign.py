@@ -1105,13 +1105,30 @@ def test_home_form_anchor_reveals_fields():
         html,
         re.I,
     )
-    assert situation_hrefs == [
-        "/quantitativos-orcamento-obras/",
-        "/triagem-tecnica/#obra-imovel",
-        "/triagem-tecnica/#pericia-avaliacao",
-        "/triagem-tecnica/#sst",
-        "/servicos-obras-publicas/",
-    ]
+    # 2026-09-08. A lista fixa exigia que o cartao 01 -- "Projetar, revisar,
+    # orcar ou compatibilizar" -- apontasse para /quantitativos-orcamento-obras/,
+    # ou seja, uma chamada que promete quatro servicos levando ao unico que e
+    # orcamento. Quem chegou para projeto executivo ou compatibilizacao era
+    # conduzido a outra coisa. A trava congelava justamente o defeito.
+    #
+    # A propriedade correta, verificada abaixo: as cinco situacoes existem, cada
+    # uma tem destino proprio, nenhum destino se repete, e todos resolvem no
+    # site. O destino de cada cartao pode mudar quando a rota certa mudar; o que
+    # nao pode e sumir, repetir ou apontar para fora.
+    assert len(situation_hrefs) == 5, situation_hrefs
+    assert len(set(situation_hrefs)) == 5, situation_hrefs
+    for href in situation_hrefs:
+        assert href.startswith("/"), href
+        target = href.split("#", 1)[0]
+        assert (ROOT / target.strip("/") / "index.html").is_file(), href
+    # As tres situacoes sem pagina de oferta propria continuam levando ao
+    # atendimento, na ancora da propria situacao.
+    triage = [h for h in situation_hrefs if h.startswith("/triagem-tecnica/#")]
+    assert len(triage) == 3, situation_hrefs
+    for href in triage:
+        anchor = href.split("#", 1)[1]
+        page = (ROOT / "triagem-tecnica" / "index.html").read_text(encoding="utf-8")
+        assert f'id="{anchor}"' in page, href
     # The shipped script must realign the landing: deferred section sizes (#185)
     # move the target while the jump runs.
     nav_js = (ROOT / "js" / "modules" / "nav.js").read_text(encoding="utf-8")
