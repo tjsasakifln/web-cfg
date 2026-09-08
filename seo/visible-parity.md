@@ -3,7 +3,7 @@
 - ok: `True`
 - pages: `78`
 - defects: `0`
-- site_root: `/home/tjsasakifln/code/confenge/web-cfg/_site`
+- site_root: `/tmp/claude-1000/-home-tjsasakifln-code-confenge-web-cfg/00c05faa-bef8-4907-a4f3-a23173631031/scratchpad/wt-main/_site`
 
 | url | ok | defects | claimed | visible |
 | --- | --- | --- | --- | --- |
@@ -78,7 +78,7 @@
 | https://confenge.com.br/privacidade/ | True | — |  | Política de Privacidade |
 | https://confenge.com.br/problemas-que-resolvemos/ | True | — | BreadcrumbList | Problemas que resolvemos em licitações e contratos de obras |
 | https://confenge.com.br/quantitativos-orcamento-obras/ | True | — | BreadcrumbList | Quantitativos e orçamento de obras |
-| https://confenge.com.br/radar/nacional-obras-publicas/ | True | — | Dataset,Organization,BreadcrumbList; Radar de obras públicas: método aberto e demanda observada | Radar de obras públicas: método aberto e demanda observada |
+| https://confenge.com.br/radar/nacional-obras-publicas/ | True | — | Dataset,Organization,BreadcrumbList; Radar Nacional de Obras Públicas e Margem Contratual: recorte aberto | Radar Nacional de Obras Públicas e Margem Contratual |
 | https://confenge.com.br/reequilibrio-obras-publicas/ | True | — | Organization,Person,BreadcrumbList | Reequilíbrio econômico-financeiro de obra pública |
 | https://confenge.com.br/servicos-obras-publicas/ | True | — | BreadcrumbList | Serviços para licitações e contratos de obras públicas |
 | https://confenge.com.br/servicos/ | True | — | BreadcrumbList | Encontre o caminho técnico para a sua situação |

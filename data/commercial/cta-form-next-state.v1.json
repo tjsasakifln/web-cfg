@@ -119,7 +119,7 @@
       "commitment": "medium",
       "next_useful_state": "O contexto fica registrado para revisão de aderência, documentos mínimos e capacidade; o protocolo confirma que a análise pode ser enquadrada.",
       "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
-      "pre_form_value": "Registre a demanda e a decisão que está na mesa para a CONFENGE definir a entrega, a prova necessária e se temos capacidade de atender.",
+      "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
       "field_purpose": "Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados.",
       "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo."
     },
