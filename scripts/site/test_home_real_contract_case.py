@@ -15,33 +15,60 @@ def test_home_replaces_generic_matrix_with_real_public_contract():
     assert "R$ 179.737,67" in html
     assert "R$ 719.177,48" in html
     assert "R$ 18.293.629,80" in html
-    assert "R$ 1.797,38" in html
-    assert "R$ 7.191,77" in html
-    assert "R$ 182.936,30" in html
     assert "contexto de mercado" in html.lower()
     assert "Qual deles se parece mais com o seu?" not in html
     assert "<dt>1% do valor</dt>" not in html
     assert html.count("data-economics-illustration") == 3
-    # 2026-09-08. Este bloco exigia as frases literais "Conta ilustrativa, nao
-    # e economia observada", "Custo publicado", "Recorrencia da diretoria" e
-    # "Limite:" tres vezes cada. Nao eram propriedades: eram travas de redacao,
-    # e eram elas que mantinham no ar um paragrafo ilegivel. A propriedade real
-    # e outra e continua verificada abaixo: cada paragrafo de ilustracao diz
-    # que a conta nao e economia medida e cita as faixas de preco publicadas.
+    # 2026-09-08 (segunda revisao). A versao anterior desta funcao obrigava cada
+    # paragrafo de ilustracao a conter "1% deste contrato e R$ X" seguido das
+    # faixas de honorario. Essa juxtaposicao ERA o defeito: comparar um
+    # percentual de contrato pequeno com o preco do servico convida o visitante
+    # de contrato menor a se descartar sozinho. A trava literal
+    # `"neste porte" not in html` nao pegava a parafrase que estava no ar
+    # ("em contratos assim o comeco costuma ser ... a ferramenta publica
+    # gratuita"), que preservava a exclusao com outras palavras.
+    #
+    # As propriedades corretas, verificadas abaixo, sao mais fortes que as
+    # travas que substituem: cada cartao diz o que o contrato coloca em jogo
+    # tecnicamente, e nenhum cartao usa o porte do contrato para dizer ao
+    # visitante qual formato ele merece.
     illustrations = re.findall(
         r'<p[^>]*data-economics-illustration="1"[^>]*>(.*?)</p>', html, re.S
     )
     assert len(illustrations) == 3
     for text in illustrations:
-        assert re.search(r"ilustrativ", text, re.I), text
-        assert re.search(r"n[ãa]o é economia medida", text, re.I), text
-        assert "R$ 6.900 a R$ 7.900" in text, text
-        assert "R$ 12.500 a R$ 20.000 por mês" in text, text
-    # A desqualificação por porte foi revogada em 2026-09-06. A home pode dizer
-    # QUAL formato serve; não pode dizer que o visitante não merece atendimento.
-    # Asserção negativa: o defeito não pode voltar por edição de copy.
+        # Substancia: o cartao explica o que o contrato mostra tecnicamente.
+        assert len(re.sub(r"<[^>]+>", "", text).strip()) >= 120, text
+        # Nenhum percentual de valor de contrato pareado com honorario.
+        assert not re.search(r"\b1\s*%|\bum por cento\b", text, re.I), text
+        assert "R$ 6.900" not in text, text
+        assert "R$ 12.500" not in text, text
+
+    # A desqualificacao por porte foi revogada em 2026-09-06 e a parafrase foi
+    # removida em 2026-09-08. Asserção de classe, não de frase: a home pode
+    # dizer QUAL documento resolve; nao pode usar o tamanho do contrato para
+    # empurrar o visitante para fora, nem para a ferramenta gratuita.
     assert "não é economicamente indicada" not in html
     assert "neste porte" not in html
+    market = re.search(
+        r'<div[^>]+id="mercado-pncp"[\s\S]*?</div>\s*</div>', html
+    )
+    assert market
+    market_text = re.sub(r"<[^>]+>", " ", market.group(0))
+    for parafrase in (
+        "ferramenta pública gratuita",
+        "entrega de entrada",
+        "não compensa",
+        "fica abaixo do custo",
+        "prefira nossa ferramenta",
+        "contratos assim",
+    ):
+        assert parafrase not in market_text.lower(), parafrase
+    # E precisa dizer o contrario, explicitamente.
+    assert "qualquer porte" in market_text.lower()
+    # Os precos publicados continuam visiveis, uma vez, fora da comparacao.
+    assert "R$ 6.900 a R$ 7.900" in market_text
+    assert "R$ 12.500 a R$ 20.000 por mês" in market_text
 
 
 def test_home_contract_profiles_are_manual_and_accessible():

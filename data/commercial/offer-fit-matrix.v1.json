@@ -342,30 +342,24 @@
       "contract_display": "R$ 179.737,67",
       "contract_cents": 17973767,
       "pncp_path": "pncp.gov.br/app/contratos/01258036000132/2026/7",
-      "one_percent_display": "R$ 1.797,38",
-      "one_percent_cents": 179738,
       "kind": "illustration",
-      "copy": "Conta ilustrativa: 1% deste contrato é R$ 1.797,38. Não é economia medida, serve para dar escala. Um dossiê crítico custa de R$ 6.900 a R$ 7.900, uma vez, e acompanhar a operação custa de R$ 12.500 a R$ 20.000 por mês. Como 1% fica abaixo do custo do dossiê, em contratos assim o começo costuma ser uma entrega de entrada ou a ferramenta pública gratuita."
+      "copy": "O que este contrato mostra: obra de porte local, medição simples e pouca margem para absorver imprevisto. A pergunta técnica costuma ser se o que foi executado está documentado no ritmo em que a medição é apresentada."
     },
     {
       "panel": "regional",
       "contract_display": "R$ 719.177,48",
       "contract_cents": 71917748,
       "pncp_path": "pncp.gov.br/app/contratos/14862788000150/2026/69",
-      "one_percent_display": "R$ 7.191,77",
-      "one_percent_cents": 719177,
       "kind": "illustration",
-      "copy": "Conta ilustrativa: 1% deste contrato é R$ 7.191,77. Não é economia medida, serve para dar escala. É quase o custo de um dossiê crítico, de R$ 6.900 a R$ 7.900, uma vez; acompanhar a operação custa de R$ 12.500 a R$ 20.000 por mês. O dossiê se justifica quando o risco é concreto e os documentos existem."
+      "copy": "O que este contrato mostra: prazo longo o bastante para acumular alteração de escopo, reajuste e evento não previsto. A pergunta técnica costuma ser se o pedido de aditivo ou de reequilíbrio está sustentado por registro contemporâneo."
     },
     {
       "panel": "strategic",
       "contract_display": "R$ 18.293.629,80",
       "contract_cents": 1829362980,
       "pncp_path": "pncp.gov.br/app/contratos/81648859000103/2026/45",
-      "one_percent_display": "R$ 182.936,30",
-      "one_percent_cents": 18293630,
       "kind": "illustration",
-      "copy": "Conta ilustrativa: 1% deste contrato é R$ 182.936,30. Não é economia medida, serve para dar escala. Um dossiê crítico custa de R$ 6.900 a R$ 7.900, uma vez, e acompanhar a operação custa de R$ 12.500 a R$ 20.000 por mês. Contrato grande não define o formato sozinho: ele depende do risco, dos documentos e de a necessidade ser pontual ou recorrente."
+      "copy": "O que este contrato mostra: várias frentes, medições sobrepostas e cadeia de subcontratação. A pergunta técnica costuma ser onde a glosa, o atraso e o desequilíbrio nascem, e quem tem o documento que prova cada um."
     }
   ],
   "route_copy": {
