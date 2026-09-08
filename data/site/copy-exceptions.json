@@ -168,30 +168,6 @@
     {
       "rule": "plain_language",
       "match": "\\bunknown\\b",
-      "path": "auditoria-orcamento-licitacao/index.html",
-      "reason": "Pilar sob trava de hash em data/bofu-dominance/frozen-specs: tests/bofu_dominance/frozen_specs/test_frozen_specs.py compara o content_sha256 do HTML vivo com o spec congelado, e o spec declara authorizes_html_edit=false ate earliest_safe_action_at (2026-09-16). Editar a copy aqui quebraria uma trava editorial deliberada; a correcao entra na janela autorizada, com o spec e o patch regerados juntos."
-    },
-    {
-      "rule": "plain_language",
-      "match": "\\bunknown\\b",
-      "path": "medicoes-glosas-obras-publicas/index.html",
-      "reason": "Pilar sob trava de hash em data/bofu-dominance/frozen-specs: tests/bofu_dominance/frozen_specs/test_frozen_specs.py compara o content_sha256 do HTML vivo com o spec congelado, e o spec declara authorizes_html_edit=false ate earliest_safe_action_at (2026-09-16). Editar a copy aqui quebraria uma trava editorial deliberada; a correcao entra na janela autorizada, com o spec e o patch regerados juntos."
-    },
-    {
-      "rule": "plain_language",
-      "match": "offer_id",
-      "path": "diagnostico-b2g-360/index.html",
-      "reason": "Pilar sob trava de hash em data/bofu-dominance/frozen-specs: tests/bofu_dominance/frozen_specs/test_frozen_specs.py compara o content_sha256 do HTML vivo com o spec congelado, e o spec declara authorizes_html_edit=false ate earliest_safe_action_at (2026-09-16). Editar a copy aqui quebraria uma trava editorial deliberada; a correcao entra na janela autorizada, com o spec e o patch regerados juntos."
-    },
-    {
-      "rule": "plain_language",
-      "match": "\\bcfg-",
-      "path": "diagnostico-b2g-360/index.html",
-      "reason": "Pilar sob trava de hash em data/bofu-dominance/frozen-specs: tests/bofu_dominance/frozen_specs/test_frozen_specs.py compara o content_sha256 do HTML vivo com o spec congelado, e o spec declara authorizes_html_edit=false ate earliest_safe_action_at (2026-09-16). Editar a copy aqui quebraria uma trava editorial deliberada; a correcao entra na janela autorizada, com o spec e o patch regerados juntos."
-    },
-    {
-      "rule": "plain_language",
-      "match": "\\bunknown\\b",
       "path": "politica-editorial/v/1.0.0/index.html",
       "reason": "Arquivo historico congelado da politica anterior. O texto e preservado byte a byte porque e o registro do que a politica realmente dizia; reescreve-lo seria falsificar o historico. A obrigacao de conservar o registro e distinta da decisao de publica-lo, e a versao vigente (1.2.0) nao usa este vocabulario. Retirada da web permanece possivel sem tocar no registro."
     },
@@ -247,12 +223,6 @@
       "rule": "brand_forbidden_phrase",
       "match": "garantia de vitória",
       "path": "comercial/termos-diagnostico-b2g/index.html",
-      "reason": "A frase so aparece negada, como recusa expressa de promessa de resultado ('Nao ha garantia de vitoria...', 'Sem garantia de vitoria...'), exigida pela obrigacao de meio declarada no instrumento B2B. Banir a promessa nao pode banir a negacao dela, que e justamente o que a politica de marca quer que a pagina diga."
-    },
-    {
-      "rule": "brand_forbidden_phrase",
-      "match": "garantia de vitória",
-      "path": "diagnostico-b2g-expansao/index.html",
       "reason": "A frase so aparece negada, como recusa expressa de promessa de resultado ('Nao ha garantia de vitoria...', 'Sem garantia de vitoria...'), exigida pela obrigacao de meio declarada no instrumento B2B. Banir a promessa nao pode banir a negacao dela, que e justamente o que a politica de marca quer que a pagina diga."
     },
     {

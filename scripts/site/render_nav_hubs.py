@@ -335,6 +335,7 @@ def _problems_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
 <p class="eyebrow">Fit econômico</p>
 <h2>{e(fit["headline"])}</h2>
 <p>{e(fit["body"])}</p>
+<p><a class="text-link" href="/entregas/">Ver as entregas publicadas e o que cada uma responde <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
 </div>
 </section>
 <section aria-labelledby="hub-next" class="section section--default">

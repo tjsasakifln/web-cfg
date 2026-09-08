@@ -868,7 +868,7 @@
   },
   "money_page_scan": {
     "state": "MEASURED_PASS",
-    "measured_at": "2026-08-29",
+    "measured_at": "2026-09-08",
     "measured_against": "goal/10x10-entregas-commercial-ia-20260829",
     "primary_runner": "scripts/commercial/copy_contract_audit.mjs",
     "route_discovery": "registry_and_public_family_derived",
@@ -877,7 +877,7 @@
     "gate_rule": "O runner deriva todas as rotas a cada execução, expõe cada ocorrência viva no relatório e reprova qualquer violação. Não existe exceção nominal ou de rota para apresentar nome público aposentado. pages e boundaries abaixo preservam apenas a medição histórica inicial e não limitam nem autorizam a varredura viva.",
     "live_measurement": {
       "routes_derived": 30,
-      "language_boundaries": 79,
+      "language_boundaries": 78,
       "language_observations": 0,
       "language_violations": 0,
       "structured_social_proof_hits": 0,
@@ -986,7 +986,8 @@
       "count_only": "Ocorrência sem exceção documentada de um termo que a issue só proíbe em excesso ou como único significado. Vira observação registrada em observations, não violação."
     },
     "observations": [],
-    "observations_note": "Nenhuma ocorrência de poderá nem de saiba mais nas 23 rotas derivadas em 2026-08-25."
+    "observations_note": "Nenhuma ocorrência de poderá nem de saiba mais nas 23 rotas derivadas em 2026-08-25.",
+    "live_measurement_note": "78 desde 2026-09-08. Era 79. A frase de limite da secao de captura de /servicos-obras-publicas/ fechava a conversao com duas negativas seguidas (\"Nao conclui contratacao nem substitui revisao juridica\") e foi reescrita de forma afirmativa: o retorno diz qual entrega resolve o caso, em qual prazo e por qual preco, e a decisao de contratar continua sendo do visitante. A substancia do limite permanece; o que saiu foi a formulacao autodepreciativa."
   },
   "not_delivered_by_this_pr": [
     "As 15 cláusulas são publicadas para 54/54 no catálogo, mas não são declaradas compreendidas por pessoas reais.",

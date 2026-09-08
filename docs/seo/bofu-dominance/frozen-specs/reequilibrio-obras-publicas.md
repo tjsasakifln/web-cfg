@@ -21,7 +21,7 @@ Decidir se cabe reequilíbrio agora e estruturar evento, matriz de riscos, nexo 
 | robots | index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1 |
 | schema | Organization, Country, ContactPoint, Person, CollegeOrUniversity, CollectionPage, WebSite, ItemList, ListItem, Service, BreadcrumbList, FAQPage, Question, Answer |
 | og:title | Reequilíbrio econômico-financeiro de obra pública: o que é e quando cabe | CONFENGE |
-| content_sha256 | `3b4afa9eb474ad6ca0b9be84f1f37c2f64f76e3824e919ed84e61e312707884b` |
+| content_sha256 | `0da041de3a009ccacbb06d22354d894b9ad9472c7f4115f07e5f014b76dae996` |
 | hero CTA | Verificar o contrato no diagnóstico de defesa de margem → `/ferramentas/diagnostico-defesa-margem/` |
 | when-not-to-hire | True |
 

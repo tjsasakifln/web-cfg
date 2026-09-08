@@ -439,7 +439,10 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
         for c in sorted(pubs, key=lambda x: -x.score):
             if c.page_type != ptype:
                 continue
-            badge = "publicada" if c.status == "publish" else "preview (revisão)"
+            # 2026-09-08: o rótulo de estado editorial "preview (revisão)" era copy
+            # de pipeline exposta ao visitante. Trocado por um descritor de leitura.
+            # O sentinel "publicada" permanece: o filtro do hub /radar/ depende dele.
+            badge = "publicada" if c.status == "publish" else "Enquadramento aplicado"
             # Never expose pipeline page_type as visitor copy
             meta = badge
             out.append((c.url, kind, c.h1[:90], meta))
@@ -530,10 +533,9 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
             "Radar de oportunidades B2G | CONFENGE",
             "Radar de oportunidades para a sua operação, não para o mercado inteiro.",
             "Monitoramento estruturado do mercado público calibrado ao perfil da construtora.",
-            "O radar da CONFENGE não é um feed genérico de editais. Ele precisa do perfil da empresa "
-            "(capacidade, acervo, órgãos-alvo, faixas de valor e apetite de risco) para filtrar o que "
-            "merece atenção. Sem cobertura integral prometida. Sem fingir disponibilidade quando o "
-            "recorte ainda não está publicado para o visitante.",
+            "O radar da CONFENGE não é um feed genérico de editais. Ele parte do perfil da empresa "
+            "(capacidade, acervo, órgãos-alvo, faixas de valor e apetite de risco) para separar o que "
+            "merece a atenção da sua operação.",
             # Only list publish radar children publicly; noindex previews stay out of hub promo
             [it for it in items_for("radar") if it[3] == "publicada"],
             [("Início", "/"), ("Radar", None)],

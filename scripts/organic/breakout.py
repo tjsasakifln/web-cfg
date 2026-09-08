@@ -99,6 +99,21 @@ def find_frontier(root: Path | None = None) -> dict[str, Any] | None:
     return None
 
 
+def _grain_cell(value: Any) -> str:
+    """Render the grain field.
+
+    A grain still written as a machine token (no whitespace) keeps the opaque-token
+    frame; a grain written in the visitor's language is plain prose and must not be
+    displayed as if it were a system identifier.
+    """
+    text = _esc(_text(value))
+    if not text:
+        return text
+    if re.search(r"\s", text):
+        return text
+    return f"<code data-opaque-token>{text}</code>"
+
+
 def content_hash(record: dict[str, Any]) -> str:
     payload = {
         "asset_id": record.get("asset_id"),
@@ -584,7 +599,7 @@ def chassis_html(record: dict[str, Any]) -> str:
         f'<div><dt>Fonte</dt><dd>{_esc(method.get("source"))}</dd></div>\n'
         f'<div><dt>Período</dt><dd>{_esc(record.get("period"))}</dd></div>\n'
         f'<div><dt>Geografia</dt><dd>{_esc(record.get("geography"))}</dd></div>\n'
-        f'<div><dt>Grão</dt><dd><code data-opaque-token>{_esc(record.get("grain"))}</code></dd></div>\n'
+        f'<div><dt>Grão</dt><dd>{_grain_cell(record.get("grain"))}</dd></div>\n'
         f'<div><dt>Autoria / revisão</dt><dd>{_esc(record.get("author"))} · {_esc(record.get("reviewer"))}</dd></div>\n'
         f'<div><dt>Refresh</dt><dd>{_esc(record.get("refresh_owner"))}</dd></div>\n'
         f'<div><dt>Hash</dt><dd><code data-opaque-token>{digest}</code></dd></div>\n'

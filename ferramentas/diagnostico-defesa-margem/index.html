@@ -58,7 +58,7 @@
 <p>O diagnóstico consome um recorte público versionado de contratos oficiais (contrato public-read-margin-defense/1.0). Cada campo leva fonte, data de revisão e classificação. Campo ausente permanece UNKNOWN. Ausência não é prova de que o evento não ocorreu. A leitura separa <strong>fato</strong> oficial, <strong>cálculo</strong> (esta página não calcula valor a receber), <strong>inferência</strong> derivada e o que permanece <strong>desconhecido</strong>.</p>
 <ul class="tool-evidence-list">
 <li><strong>Fonte oficial consultada no recorte:</strong> PNCP (contratos de fornecedor publicados no portal nacional).</li>
-<li><strong>Método:</strong> projeção SELECT-only; fatos oficiais não se misturam com derivados. Aniversário contratual é o único derivado: mês-dia da data de assinatura oficial.</li>
+<li><strong>Método:</strong> projeção somente de leitura do recorte oficial, sem alterar a fonte; fato oficial e dado derivado ficam sempre separados. Aniversário contratual é o único derivado: mês-dia da data de assinatura oficial.</li>
 <li><strong>Revisão:</strong> recorte com <time datetime="2026-08-14">14 de agosto de 2026</time>; página revista em <time datetime="2026-08-15">15 de agosto de 2026</time>.</li>
 <li><strong>Identidade:</strong> CONFENGE, consultoria de engenharia para contratos de obras públicas. Esta página não é parecer jurídico.</li>
 </ul>
@@ -93,6 +93,7 @@
 </div>
 <section id="identificacao" aria-labelledby="h-identificacao" data-layer="fato">
 <h2 id="h-identificacao">Identificação do contrato</h2>
+<p>Confira estes campos contra o contrato que a sua empresa tem em mãos. Divergência de órgão, contratado, objeto ou vigência é o primeiro ponto a documentar antes de pedir aditivo, reajuste ou reequilíbrio.</p>
 <dl class="stage-meta" id="out-identificacao">
 <dt>Identificador público</dt><dd>83102277000152-2-000626/2026</dd>
 <dt>Órgão</dt><dd>PREFEITURA MUNICIPAL DE ITAJAÍ - SC</dd>
@@ -118,13 +119,13 @@
 </section> <section id="eventos-defesa-margem" aria-labelledby="h-eventos">
 <h2 id="h-eventos">Eventos de defesa de margem</h2>
 <ul id="out-eventos">
-<li>Aditivo: UNKNOWN (<code data-opaque-token>no_amendment_signal</code>)</li>
-<li>Apostilamento: UNKNOWN (<code data-opaque-token>no_amendment_signal</code>)</li>
-<li>Prorrogação: UNKNOWN (<code data-opaque-token>no_amendment_signal</code>)</li>
-<li>Reajuste: UNKNOWN (<code data-opaque-token>no_explicit_adjustment_document</code>)</li>
-<li>Reequilíbrio: UNKNOWN (<code data-opaque-token>no_explicit_adjustment_rule</code>)</li>
-<li>Medição: UNKNOWN (<code data-opaque-token>source_does_not_offer_measurements</code>)</li>
-<li>Pagamento: UNKNOWN (<code data-opaque-token>source_does_not_offer_payments</code>)</li>
+<li>Aditivo: a conferir na fonte oficial (nenhum aditivo publicado até a data de referência).</li>
+<li>Apostilamento: a conferir na fonte oficial (nenhum apostilamento publicado até a data de referência).</li>
+<li>Prorrogação: a conferir na fonte oficial (nenhuma prorrogação publicada até a data de referência).</li>
+<li>Reajuste: a conferir na fonte oficial (nenhum documento de reajuste publicado até a data de referência).</li>
+<li>Reequilíbrio: a conferir na fonte oficial (nenhuma regra de reequilíbrio publicada até a data de referência).</li>
+<li>Medição: a conferir com o órgão (a fonte pública consultada não publica medições).</li>
+<li>Pagamento: a conferir com o órgão (a fonte pública consultada não publica pagamentos).</li>
 </ul>
 </section> <section id="evidencias-fontes" aria-labelledby="h-fontes">
 <h2 id="h-fontes">Evidências e fontes</h2>
@@ -136,11 +137,11 @@
 <h2 id="h-conferencia">O que merece conferência</h2>
 <ul id="out-conferencia">
 <li>Conferir no PNCP e no diário oficial se existem aditivos, reajustes, medições ou pagamentos. A ausência neste recorte não prova que o evento não ocorreu.</li>
-<li>O recorte marca incerteza nas famílias de evento. Tratar cada UNKNOWN como pendência de prova, não como fato negativo.</li>
+<li>Tratar cada item a conferir como pendência de prova a levantar, não como fato negativo. É esse levantamento que sustenta um pedido de aditivo, reajuste ou reequilíbrio.</li>
 </ul>
 </section> <section id="limites-unknown" aria-labelledby="h-unknown">
 <h2 id="h-unknown">Limites e UNKNOWN</h2>
-<p id="out-unknown">Identidade, objeto, órgão, contratado, valor nominal assinado e vigência estão no recorte oficial. Aditivos, reajuste, medições e pagamentos permanecem UNKNOWN com reason_code do produtor. Esta página não fabrica direito nem trata silêncio da fonte como evidência.</p>
+<p id="out-unknown">Identidade, objeto, órgão, contratado, valor nominal assinado e vigência estão no recorte oficial. Aditivos, reajuste, medições e pagamentos ficam marcados como a conferir (UNKNOWN no recorte de dados), com o motivo declarado pela fonte. Silêncio da fonte não vira fato: cada item a conferir é uma pendência de prova que a segunda leitura humana levanta.</p>
 </section> <section id="segunda-leitura" class="tool-cta-contextual" aria-labelledby="h-cta" data-cta-id="segunda-leitura-contrato">
 <h2 id="h-cta">Segunda leitura deste contrato</h2>
 <p>A leitura acima permanece útil sem enviar nada. Se quiser uma conferência humana da CONFENGE sobre <strong>este</strong> contrato, use o pedido abaixo.</p>
@@ -221,8 +222,38 @@
       return (url.protocol === "https:" || url.protocol === "http:") ? url.href : "";
     } catch (_) { return ""; }
   }
+  var REASON_PT = {
+    no_amendment_signal: "nenhum aditivo, apostilamento ou prorrogação publicado até a data de referência",
+    no_explicit_adjustment_document: "nenhum documento de reajuste publicado até a data de referência",
+    no_explicit_adjustment_rule: "nenhuma regra de reequilíbrio publicada até a data de referência",
+    source_does_not_offer_measurements: "a fonte pública consultada não publica medições",
+    source_does_not_offer_payments: "a fonte pública consultada não publica pagamentos",
+    unsupported_or_missing_family: "a fonte pública consultada não publica este tipo de evento",
+    event_missing_source_provenance_or_as_of: "o registro veio sem fonte ou sem data de referência",
+    not_observed: "sem registro neste recorte público"
+  };
+  var FAMILY_PT = {
+    aditivo: "Aditivo",
+    apostilamento: "Apostilamento",
+    prorrogacao: "Prorrogação",
+    suspensao: "Suspensão",
+    rescisao: "Rescisão",
+    cancelamento: "Cancelamento",
+    reajuste: "Reajuste",
+    reequilibrio: "Reequilíbrio",
+    medicao: "Medição",
+    pagamento: "Pagamento"
+  };
+  var PENDING_LABEL = "a conferir na fonte oficial";
+  function familyPt(family){
+    return FAMILY_PT[family] || String(family || "Evento");
+  }
+  function reasonPt(code){
+    if (!code) return "";
+    return REASON_PT[code] || "sem registro neste recorte público";
+  }
   function fmt(fact){
-    if (!fact || fact.classification === "UNKNOWN") return "UNKNOWN";
+    if (!fact || fact.classification === "UNKNOWN") return PENDING_LABEL;
     var label = fact.classification === "OFFICIAL" ? "" : " [" + fact.classification + "]";
     return esc(String(fact.value) + label);
   }
@@ -241,10 +272,12 @@
     if (diagnosis.as_of.classification === "OFFICIAL") timeline.push("<li class=\"journey-stage\"><span class=\"type-mono\">data de referência</span><h3>" + esc(diagnosis.as_of.value) + "</h3><p>Revisão do recorte público.</p></li>");
     if (diagnosis.vigencia_inicio.classification !== "UNKNOWN") timeline.push("<li class=\"journey-stage\"><span class=\"type-mono\">início</span><h3>" + fmt(diagnosis.vigencia_inicio) + "</h3></li>");
     if (diagnosis.vigencia_fim.classification !== "UNKNOWN") timeline.push("<li class=\"journey-stage\"><span class=\"type-mono\">fim</span><h3>" + fmt(diagnosis.vigencia_fim) + "</h3></li>");
-    if (!timeline.length) timeline.push("<li class=\"journey-stage\"><span class=\"type-mono\">UNKNOWN</span><h3>Sem datas oficiais de vigência neste recorte</h3></li>");
+    if (!timeline.length) timeline.push("<li class=\"journey-stage\"><span class=\"type-mono\">a conferir</span><h3>Vigência a conferir na fonte oficial</h3></li>");
     document.getElementById("out-timeline").innerHTML = timeline.join("");
     document.getElementById("out-eventos").innerHTML = diagnosis.eventos_defesa_margem.map(function(e){
-      return "<li>" + esc(e.family) + ": " + esc(e.classification) + (e.reason ? " (<code data-opaque-token>" + esc(e.reason) + "</code>)" : "") + "</li>";
+      var state = e.classification === "UNKNOWN" ? PENDING_LABEL : String(e.classification === "OFFICIAL" ? "registrado no recorte oficial" : e.classification);
+      var why = e.classification === "UNKNOWN" ? reasonPt(e.reason) : "";
+      return "<li>" + esc(familyPt(e.family)) + ": " + esc(state) + (why ? " (" + esc(why) + ")" : "") + ".</li>";
     }).join("");
     var fontes = [];
     var officialUrl = diagnosis.fontes.classification === "OFFICIAL" ? safeExternalUrl(diagnosis.fontes.value) : "";
@@ -255,7 +288,7 @@
     }
     document.getElementById("out-fontes").innerHTML = fontes.join("");
     document.getElementById("out-conferencia").innerHTML = diagnosis.o_que_merece_conferencia.map(function(l){ return "<li>" + esc(l) + "</li>"; }).join("");
-    document.getElementById("out-unknown").textContent = "UNKNOWN preservado em " + diagnosis.unknown_count + " campos ou famílias. Completeness: " + diagnosis.completeness + ". Esta página não fabrica direito nem trata silêncio da fonte como evidência.";
+    document.getElementById("out-unknown").textContent = "Confirmados no recorte oficial: " + diagnosis.official_count + " campos. Ficam a conferir na fonte oficial: " + diagnosis.unknown_count + " campos ou famílias de evento. Cada item a conferir é uma pendência de prova para levantar no PNCP, no diário oficial ou com o órgão, e é exatamente o que a segunda leitura da CONFENGE faz por você.";
     var layers = diagnosis.layers || (D.explainDiagnosis ? D.explainDiagnosis(diagnosis).layers : null);
     if (layers) {
       var box = document.getElementById("camadas-diagnostico");
@@ -302,7 +335,7 @@
     if (!hit.ok) {
       clearDiagnosisUi();
       showStatus(hit.reason === "not_in_snapshot"
-        ? "Este identificador não está no recorte público atual. UNKNOWN — não inventamos o contrato."
+        ? "Não foi possível localizar este identificador no recorte público atual. Confira o número no PNCP ou peça a leitura deste contrato à CONFENGE."
         : "Não foi possível escolher um único contrato neste recorte.", "error");
       return;
     }

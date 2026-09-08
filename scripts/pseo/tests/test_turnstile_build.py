@@ -200,8 +200,15 @@ def _tracked_capture_html() -> list[tuple[str, str]]:
     return rows
 
 
+# 2026-09-08. "triagem-tecnica/index.html" e "quantitativos-orcamento-obras/index.html"
+# sairam desta lista porque as duas rotas deixaram de publicar formulario: a
+# autoridade de Governanca em netlify/functions/data/adaptive-intake-authority.json
+# esta WITHHELD e /.netlify/functions/adaptive-intake-config responde 503, entao o
+# formulario aparecia morto para o visitante. Nao ha captura nelas para proteger
+# com Turnstile; quando a autoridade voltar a FINAL e o formulario voltar, as duas
+# rotas voltam para esta lista. A propriedade verificada continua a mesma: toda
+# rota que publica captura recebe widget e sitekey.
 ISSUE_440_CAPTURE_ROUTES = {
-    "triagem-tecnica/index.html",
     "acompanhamento-contratos-obras/index.html",
     "analise-cnpj/index.html",
     "analise-cnpj/r/index.html",
@@ -227,7 +234,6 @@ ISSUE_440_CAPTURE_ROUTES = {
     "ferramentas/limite-acrescimos-supressoes/index.html",
     "index.html",
     "piloto/conversao-xray/index.html",
-    "quantitativos-orcamento-obras/index.html",
     "servicos-obras-publicas/index.html",
 }
 

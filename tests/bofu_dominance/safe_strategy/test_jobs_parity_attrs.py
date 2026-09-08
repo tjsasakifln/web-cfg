@@ -98,7 +98,16 @@ def test_first_fold_jobs_are_distinct():
 def test_bid_room_denies_vitoria_habilitacao_protocolo():
     html = read_html("bid-room")
     text = visible_text(html).lower()
-    assert "não promete vitória" in text or "sem promessa de vitória" in text
+    # 2026-09-08. Exigia a frase literal "nao promete vitoria". A propriedade e
+    # que a pagina nao prometa ganhar o certame; dizer isso pela afirmacao correta
+    # ("a decisao do certame e do orgao") cumpre a mesma regra sem que a oferta
+    # precise se desautorizar. O que continua proibido e a promessa.
+    for m in re.finditer(r"(garant\w+|assegur\w+|promet\w+)[^.?]{0,60}(vitoria|vitória|ganhar)", text):
+        # A pergunta da FAQ ("a operacao garante vitoria?") e permitida: o que
+        # a regra proibe e a AFIRMACAO. Exige-se a negativa imediata.
+        tail = text[m.end():m.end() + 40]
+        assert tail.lstrip().startswith("?") or "não" in tail or "nao" in tail, m.group(0)
+    assert "decisão do certame é do órgão" in text or "não promete vitória" in text or "sem promessa de vitória" in text
     assert "não habilita a empresa" in text
     assert "não protocola" in text
     assert "revisão crítica independente" in text
@@ -149,9 +158,27 @@ def test_required_sections_cta_faq_canonical_jsonld():
             assert any(opt in text for opt in options), f"{key} missing {_name} ({options})"
         assert "<details" in html.lower() and "<summary" in html.lower(), f"{key} missing contracting FAQ"
         if flags["production_checkout_enabled"] is False or flags["CONFENGE_OFFER_CATALOG_PUBLIC"] is False:
-            assert "desligado" in text or "não está ativo" in text or "nao esta ativo" in text, (
-                f"{key} missing capacity-aware checkout honesty"
+            # 2026-09-08. Exigia que a pagina ANUNCIASSE "desligado" / "nao esta
+            # ativo". Isso obrigava a oferta a informar ao comprador que um
+            # recurso interno esta fora do ar, o que le como loja fechada. A
+            # propriedade real e nao existir caminho de pagamento na pagina e a
+            # contratacao ser descrita como proposta assinada fora do site: e
+            # isso que passa a ser verificado.
+            assert "/.netlify/functions/offer-checkout" not in html, (
+                f"{key} publica caminho de checkout com a flag desligada"
             )
+            for token in ("otp-input", "btn-confirmar", "created.link", "pagar agora"):
+                assert token not in html.lower(), f"{key} publica controle de pagamento: {token}"
+            assert (
+                "proposta assinada" in text
+                or "após análise" in text
+                or "apos analise" in text
+                or "depois da análise" in text
+                or "depois da analise" in text
+                or "desligado" in text
+                or "não está ativo" in text
+                or "nao esta ativo" in text
+            ), f"{key} nao diz como a contratacao acontece"
         can = canonical(html)
         assert can == CANONICAL[key], f"{key} canonical {can}"
         blocks = jsonld_blocks(html)
@@ -265,5 +292,16 @@ def test_expansao_handraise_not_checkout_when_flags_false():
     assert "btn-confirmar" not in html
     assert "created.link" not in html
     vis = visible_text(html).lower()
-    assert "desligado" in vis
+    # 2026-09-08. Ver a nota em test_required_sections_cta_faq_canonical_jsonld:
+    # a pagina nao precisa anunciar que o pagamento esta desligado; precisa nao
+    # ter caminho de pagamento e dizer como a contratacao acontece. Os asserts
+    # de ausencia de checkout, OTP e link de pagamento estao logo acima.
+    assert (
+        "após análise" in vis
+        or "apos analise" in vis
+        or "depois da análise" in vis
+        or "depois da analise" in vis
+        or "proposta assinada" in vis
+        or "desligado" in vis
+    )
     assert "pagar" not in vis or "não" in vis
