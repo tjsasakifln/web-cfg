@@ -813,3 +813,47 @@ def test_a_wrong_runtime_identity_is_never_masked_by_waiting(monkeypatch):
     with pytest.raises(control.ReleaseError, match="runtime identity mismatch"):
         control.smoke_runtime(manifest)
     assert calls["n"] == 1, "a reachable runtime with wrong identity must fail once"
+
+
+def test_only_the_declared_overlay_files_may_move_their_digest() -> None:
+    """The opportunities parent is packaged AND rewritten by the stage overlay.
+
+    Regression this pins: the family parent became a committed page, so it is
+    hashed in the release package, while `write_pages` still rewrites it at stage
+    time -- deliberately, because the route must answer with a branded page
+    instead of the server's raw 403 even with zero renderable records. The
+    packaged bytes carry the build's transforms (no-js class, bootstrap,
+    fingerprinted CSS) and the stage-time render does not, so the digests differ
+    and staging failed with `release file checksum mismatch:
+    _site/oportunidades/index.html`.
+
+    The allowance must stay narrow: this asserts the entry exists AND that the
+    set has not been widened into a blanket escape hatch.
+    """
+    from deploy.netcup.lib.release_control import (
+        LIVE_INTEL_OVERLAY_REWRITES,
+        is_live_intel_overlay,
+    )
+
+    assert "_site/oportunidades/index.html" in LIVE_INTEL_OVERLAY_REWRITES
+
+    # Counter-case: an ordinary packaged page must NEVER be allowed to drift.
+    for guarded in (
+        "_site/index.html",
+        "_site/privacidade/index.html",
+        "_site/casos/index.html",
+        "_site/script.js",
+        "_headers",
+    ):
+        assert guarded not in LIVE_INTEL_OVERLAY_REWRITES, guarded
+
+    # The allowance is an explicit list, not a prefix: adding a sibling under
+    # the same directory must still require a deliberate decision.
+    assert "_site/oportunidades/pe-2026-000188-reforma-ubs-londrina-pr/index.html" \
+        not in LIVE_INTEL_OVERLAY_REWRITES
+    assert len(LIVE_INTEL_OVERLAY_REWRITES) == 3
+
+    # The directory itself remains overlay territory, which is what lets the
+    # host-owned child pages appear as extras without failing the file-set check.
+    assert is_live_intel_overlay("_site/oportunidades/whatever/index.html")
+    assert not is_live_intel_overlay("_site/casos/index.html")
