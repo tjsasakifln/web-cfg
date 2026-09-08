@@ -340,10 +340,9 @@ body[data-content-cluster="home"] .journey-alt-link:hover{color:var(--accent)}
 .market-context .service-card p{margin:0;font-size:.95rem;line-height:1.6}
 .market-context .service-card p[data-economics-illustration]{color:var(--muted);font-size:.9rem}
 .market-context .service-card a{
-  display:inline-block;align-self:start;margin-top:auto;padding-block:.6rem;
+  display:inline-flex;align-items:center;gap:.35rem;align-self:start;margin-top:auto;padding-block:.6rem;
   color:var(--accent);font-weight:650;text-decoration:underline;text-underline-offset:3px;
 }
-.market-context .service-card a::after{content:"\00a0\2197"}
 .market-context .service-card a:hover{color:var(--green-600)}
 .market-context .service-card a:focus-visible{outline:none;border-radius:var(--radius-sm);box-shadow:var(--focus-ring)}
 .market-context .market-context-base{
