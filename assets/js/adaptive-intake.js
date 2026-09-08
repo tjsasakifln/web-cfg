@@ -178,6 +178,13 @@
       step.setAttribute("inert", "");
       step.setAttribute("aria-hidden", "true");
     });
+    // The placeholder still said "Carregando opções…" after loading had
+    // definitively failed. Leaving it there tells the visitor to keep waiting for
+    // something that is never going to arrive, and it is the one part of the dead
+    // form that still looks alive. Say what is true instead.
+    if (need.options.length) {
+      need.options[0].textContent = "Situações indisponíveis no momento";
+    }
     showStatus(
       "O formulário não está disponível agora. Use WhatsApp, e-mail ou telefone abaixo para falar com a CONFENGE.",
       "error"

@@ -612,6 +612,19 @@ test("the intake never leaves the visitor on a dead or hanging form", () => {
   assert.match(browser, /step\.setAttribute\("aria-hidden", "true"\)/);
   assert.match(browser, /step\.removeAttribute\("inert"\)/);
 
+  // The placeholder must stop claiming to be loading once loading has failed for
+  // good. It was the last part of the dead form that still looked alive, and it
+  // told the visitor to keep waiting for something that never arrives.
+  assert.match(browser, /need\.options\[0\]\.textContent = "Situações indisponíveis no momento"/);
+  const unavailableBody = browser.slice(
+    browser.indexOf("function unavailable()"),
+    browser.indexOf("function locationRequired()"),
+  );
+  assert.ok(
+    unavailableBody.includes("Situações indisponíveis no momento"),
+    "the honest label must be set on the failure path, not somewhere else",
+  );
+
   // A timeout after the POST left the browser does NOT assert the record was lost.
   const timeoutCopy = browser.match(/"Não recebemos a confirmação a tempo\.[^"]*"/);
   assert.ok(timeoutCopy, "a deadline needs its own honest message");
