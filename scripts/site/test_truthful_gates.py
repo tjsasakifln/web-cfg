@@ -183,7 +183,13 @@ def test_public_entregas_separates_eight_offer_vitrine_from_taxative_roll():
     assert sum(state == "PUBLISHED" for _, state in capability_rows) == 8
     assert sum(state == "VALIDATE" for _, state in capability_rows) == 44
     assert sum(state == "BLOCKED" for _, state in capability_rows) == 2
-    assert "não afirma que existem 54 ofertas prontas" in html
+    # 2026-09-08. Ver test_deliverables_registry.mjs: /entregas/ deixou de
+    # publicar o inventario de capacidades nao vendaveis. A propriedade
+    # verificada passa a ser positiva, e o estado interno nao pode vazar.
+    assert "54 frentes de trabalho" in html
+    assert "Oito têm oferta publicada" in html
+    assert "em validação" not in html
+    assert "bloqueada" not in html
     assert "Capacidade em validação. Ainda não é oferta pronta para contratação." in html
     findings = evaluate_commercial_html(html, load_registry())
     assert not any("missing from integral catalog" in row for row in findings), findings

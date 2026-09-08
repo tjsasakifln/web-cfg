@@ -246,8 +246,13 @@ def test_deliverables_library_declares_offer_and_capability_hierarchy_in_copy():
     text = re.sub(r"<[^>]+>", " ", html)
     text = re.sub(r"\s+", " ", text)
     assert "8 ofertas publicadas" in text
-    assert "54 capacidades do rol taxativo" in text
-    assert "não afirma que existem 54 ofertas prontas" in text
+    # 2026-09-08. Ver test_deliverables_registry.mjs: /entregas/ deixou de
+    # publicar o inventario de capacidades nao vendaveis. A propriedade
+    # verificada passa a ser positiva, e o estado interno nao pode vazar.
+    assert "54 frentes de trabalho" in text
+    assert "Oito têm oferta publicada" in text
+    assert "em validação" not in text
+    assert "bloqueada" not in text
     assert "Cada card reúne situação, entrada, limite, saída, crédito e próxima ação sem repetir a oferta em outra tabela" in text
 
     cards = re.findall(r'<article class="vitrine-item[\s\S]*?</article>', html)
