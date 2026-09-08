@@ -1,178 +1,86 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="no-js">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Triagem técnica | CONFENGE</title>
-  <meta name="description" content="Vamos registrar o tipo de problema, seu nome e um canal de retorno.">
+  <meta name="description" content="Explique a situação técnica por WhatsApp, e-mail ou telefone e receba o próximo passo.">
   <meta name="robots" content="index,follow">
   <link rel="canonical" href="https://confenge.com.br/triagem-tecnica/">
+  <script>document.documentElement.classList.replace('no-js','js');</script>
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "WebPage",
       "name": "Triagem técnica",
       "url": "https://confenge.com.br/triagem-tecnica/",
-      "description": "Vamos registrar o tipo de problema, seu nome e um canal de retorno.",
-      "dateModified": "2026-09-05"
+      "description": "Explique a situação técnica por WhatsApp, e-mail ou telefone e receba o próximo passo.",
+      "dateModified": "2026-09-08"
     }
   </script>
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/triagem-tecnica/styles.css">
   <script defer src="/script.js"></script>
-  <script defer src="/assets/js/adaptive-intake.js"></script>
 </head>
 <body data-content-cluster="triagem-tecnica">
-  <a class="skip-link" href="#conteudo">Ir ao conteúdo</a>
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+<svg aria-hidden="true" class="svg-sprite" height="0" width="0">
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></symbol>
+<symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"></path></symbol>
+<symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"></path></symbol>
+</svg>
+
+<header class="site-header" id="inicio">
+<div class="container header-inner">
+<a aria-label="CONFENGE, página inicial" class="brand" href="/"><img alt="CONFENGE Inteligência Técnica" height="58" src="/assets/logo-confenge-500-f8a83f6d.png" width="224"/></a>
+<nav aria-label="Navegação principal" class="desktop-nav">
+<a data-cta-position="header_nav" href="/servicos/" style="min-height:44px">Serviços e problemas</a>
+<a data-cta-position="header_nav" href="/servicos-obras-publicas/" style="min-height:44px">Obras públicas</a>
+<a data-cta-position="header_nav" href="/conteudos/" style="min-height:44px">Biblioteca</a>
+</nav>
+<a class="button button-primary header-cta" aria-current="page" href="/triagem-tecnica/">Iniciar triagem</a>
+<button aria-controls="mobile-menu" aria-expanded="false" aria-label="Abrir menu" class="menu-toggle" type="button">
+<svg class="icon menu-open"><use href="#i-menu"></use></svg><svg class="icon menu-close"><use href="#i-close"></use></svg>
+</button>
+</div>
+<nav aria-label="Navegação móvel" class="mobile-nav" id="mobile-menu">
+<a data-cta-position="mobile_nav" href="/servicos/" style="min-height:44px">Serviços e problemas</a>
+<a data-cta-position="mobile_nav" href="/servicos-obras-publicas/" style="min-height:44px">Obras públicas</a>
+<a data-cta-position="mobile_nav" href="/conteudos/" style="min-height:44px">Biblioteca</a>
+<a class="button button-primary" href="/triagem-tecnica/">Iniciar triagem</a>
+</nav>
+</header>
+
   <main id="conteudo" class="triage-shell">
-    <a class="brand-link" href="/" aria-label="Voltar para a página inicial da CONFENGE">CONFENGE</a>
 
     <header class="triage-intro">
       <p class="triage-eyebrow">Triagem técnica inicial</p>
       <h1>Explique sua situação em menos de um minuto</h1>
-      <p class="triage-lead" data-form-value>Vamos registrar o tipo de problema, seu nome e um canal de retorno. Empresa é opcional. Cidade e UF aparecem somente quando ajudam a avaliar uma possível vistoria.</p>
-      <p>Formulário revisto em <time datetime="2026-09-05">5 de setembro de 2026</time>.</p>
+      <p class="triage-lead" data-form-value>Conte o tipo de problema e o que precisa ser decidido, produzido, revisado ou documentado. A CONFENGE responde dizendo se pode ajudar e quais informações ainda faltam.</p>
+      <p>Página revista em <time datetime="2026-09-08">8 de setembro de 2026</time>.</p>
     </header>
 
-    <section class="next-state" aria-labelledby="depois-titulo">
-      <h2 id="depois-titulo">O que acontece depois</h2>
-      <ol>
-        <li>Você recebe um protocolo assim que o pedido é gravado.</li>
-        <li>A CONFENGE analisa o caso e diz quais informações ainda faltam.</li>
-        <li>Documentos e dados sensíveis, se necessários, são combinados depois em canal seguro.</li>
-      </ol>
-      <p><strong>Este envio não é contratação nem pagamento.</strong> Escopo, responsabilidade técnica, necessidade de ir a campo, prazo e preço só são definidos depois de entendermos o caso.</p>
-    </section>
-
-    <form
-      id="triagem-tecnica-form"
-      class="technical-intake-form"
-      data-adaptive-intake-form
-      data-page-path="/triagem-tecnica/"
-      action="/.netlify/functions/lead"
-      method="post"
-      data-config-endpoint="/.netlify/functions/adaptive-intake-config"
-      data-authority-config-endpoint="/.netlify/functions/adaptive-intake-config"
-      data-form-contract="next-state/v1"
-      data-next-state-profile="adaptive_triage"
-      data-runtime-profile="adaptive_intake_standalone_v1"
-      data-cta-id="triagem-tecnica"
-      data-receipt-required="true"
-      data-current-step="1"
-      novalidate><p class="form-hint" data-form-value>Vamos registrar o tipo de problema, seu nome e um canal de retorno. Empresa é opcional. Cidade e UF aparecem somente quando ajudam a avaliar uma possível vistoria.</p>
-<p class="form-hint" id="contato-hint" data-field-purpose>A situação direciona a triagem; nome e um canal válido permitem o retorno. Empresa é opcional, e cidade e UF são pedidas apenas quando uma vistoria pode ser necessária. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.</p>
-<span id="projetos" aria-hidden="true"></span>
-      <span id="obra-imovel" aria-hidden="true"></span>
-      <span id="pericia-avaliacao" aria-hidden="true"></span>
-      <span id="sst" aria-hidden="true"></span>
-      <span id="planejamento-publico" aria-hidden="true"></span>
-      <input type="hidden" name="form-name" value="triagem-tecnica">
-      <input type="hidden" name="adaptive_intake" value="true">
-      <input type="hidden" name="intake_version" value="">
-      <input type="hidden" name="intake_pin_hash" value="">
-      <input type="hidden" name="landing_family" value="triagem-tecnica">
-      <input type="hidden" name="route_family" value="triagem-tecnica">
-      <input type="hidden" name="asset_id" value="technical_triage_v1">
-      <input type="hidden" name="cta_id" value="technical-triage-submit">
-      <input type="hidden" name="origem" value="/triagem-tecnica/">
-      <input type="hidden" name="landing_page" value="/triagem-tecnica/">
-      <input type="hidden" name="document_intent" value="secure_channel_request">
-
-      <p class="step-progress" aria-live="polite">Etapa <span data-current-step-label>1</span> de 2</p>
-      <fieldset data-intake-step>
-        <legend>Qual situação você precisa resolver?</legend>
-        <p class="field-help">Escolha a opção mais próxima. Você não precisa conhecer o nome técnico do serviço.</p>
-        <label for="need-code">Situação</label>
-        <select id="need-code" name="need_code" required>
-          <option value="">Carregando opções…</option>
-        </select>
-        <button class="button button-primary" type="button" data-intake-next disabled>Informar contato</button>
-      </fieldset>
-
-      <fieldset data-intake-step hidden>
-        <legend>Como podemos retornar?</legend>
-
-        <label for="nome">Nome</label>
-        <input id="nome" name="nome" type="text" autocomplete="name" maxlength="120" required>
-
-        <label for="preferred-channel">Canal de retorno</label>
-        <select id="preferred-channel" name="preferred_channel" required>
-          <option value="whatsapp">WhatsApp</option>
-          <option value="email">E-mail</option>
-          <option value="phone">Telefone</option>
-        </select>
-
-        <div data-contact="phone">
-          <label for="telefone">Número com DDD</label>
-          <input id="telefone" name="telefone" type="tel" autocomplete="tel" inputmode="tel" maxlength="20" pattern="(\+?55[\s.\-]?)?\(?\d{2}\)?[\s.\-]?9?\d{4}[\s.\-]?\d{4}" title="Informe DDD e número, com 10 ou 11 dígitos.">
-        </div>
-
-        <div data-contact="email" hidden>
-          <label for="email">E-mail</label>
-          <input id="email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="180" pattern="[^@\s]+@[^@\s]+\.[A-Za-z]{2,}" title="Informe um e-mail completo, como nome@empresa.com.br.">
-        </div>
-
-        <label for="empresa">Empresa ou organização <span>(opcional)</span></label>
-        <input id="empresa" name="empresa" type="text" autocomplete="organization" maxlength="180">
-
-        <div class="location-fields" data-location hidden>
-          <p class="field-heading">Onde pode haver vistoria?</p>
-          <p class="field-help">Pedimos somente município e UF. Não informe endereço.</p>
-          <label for="location-city">Cidade</label>
-          <input id="location-city" name="location_city" type="text" autocomplete="address-level2" maxlength="80" disabled>
-          <label for="location-uf">UF</label>
-          <select id="location-uf" name="location_uf" autocomplete="address-level1" disabled>
-            <option value="">Selecione</option>
-            <option>AC</option><option>AL</option><option>AP</option><option>AM</option>
-            <option>BA</option><option>CE</option><option>DF</option><option>ES</option>
-            <option>GO</option><option>MA</option><option>MT</option><option>MS</option>
-            <option>MG</option><option>PA</option><option>PB</option><option>PR</option>
-            <option>PE</option><option>PI</option><option>RJ</option><option>RN</option>
-            <option>RS</option><option>RO</option><option>RR</option><option>SC</option>
-            <option>SP</option><option>SE</option><option>TO</option>
-          </select>
-        </div>
-
-        <label class="check-row">
-          <input type="checkbox" name="sensitive_docs_ack" required>
-          <span>Entendi que não devo enviar documentos, número de processo, dados médicos, CPF ou nomes de partes neste formulário.</span>
-        </label>
-        <label class="check-row">
-          <input type="checkbox" name="consentimento" required>
-          <span>Autorizo o uso destes dados para a CONFENGE responder a este pedido, conforme a <a href="/privacidade/">Política de Privacidade</a>.</span>
-        </label>
-
-        <div class="field turnstile-slot" id="turnstile-slot" hidden data-turnstile-sitekey="">
-          <div class="cf-turnstile" data-sitekey=""></div>
-        </div>
-
-        <div class="form-actions">
-          <button class="button button-secondary" type="button" data-intake-back>Voltar</button>
-          <button class="button button-primary" type="submit" disabled>Registrar pedido de triagem</button>
-        </div>
-      </fieldset>
-
-      <p class="intake-status" data-intake-status role="status" aria-live="polite">Verificando a disponibilidade do formulário…</p>
-<p class="form-hint" data-form-boundary>Não há contratação, pagamento, aceite ou prazo prometido. Este passo não recebe CPF, processo, prontuário, planta, laudo, lista de empregados, partes em conflito, upload ou texto livre sensível. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da <a href="/privacidade/">Política de Privacidade</a>, com o protocolo.</p>
-</form>
-
-    <section class="receipt-card" data-intake-receipt hidden aria-labelledby="receipt-title">
-      <p class="triage-eyebrow">Pedido registrado</p>
-      <h2 id="receipt-title">Recebemos sua triagem</h2>
-      <p>Protocolo: <strong data-intake-protocol></strong></p>
-      <p>A CONFENGE vai analisar o seu caso e usar o canal que você informou para combinar o próximo passo. Nenhum pagamento ou contratação foi realizado.</p>
-      <p>Não envie documentos sensíveis por resposta automática. Se forem necessários, o canal seguro será combinado depois.</p>
-    </section>
-
     <aside class="channel-card" aria-labelledby="canais-titulo">
-      <h2 id="canais-titulo">Prefere falar por outro canal?</h2>
-      <p>Esses canais continuam disponíveis mesmo quando o formulário não puder registrar o pedido.</p>
+      <h2 id="canais-titulo">Comece por onde for mais rápido para você</h2>
+      <p>O primeiro contato é direto com o Engº Tiago Sasaki. Não é preciso preencher formulário.</p>
       <div class="channel-actions">
-        <a class="button button-primary" data-fallback-channel="whatsapp" data-asset-id="technical_triage_v1" data-route-family="triagem-tecnica" data-cta-id="technical-triage-alternative-whatsapp" href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20explicar%20uma%20demanda%20t%C3%A9cnica%20e%20entender%20o%20pr%C3%B3ximo%20passo." rel="noopener" target="_blank">Falar pelo WhatsApp</a>
-        <a class="button button-secondary" data-fallback-channel="email" data-asset-id="technical_triage_v1" data-route-family="triagem-tecnica" data-cta-id="technical-triage-alternative-email" href="mailto:tiago.sasaki@confenge.com.br?subject=Triagem%20t%C3%A9cnica%20CONFENGE">Enviar o contexto por e-mail</a>
-        <a class="text-link" data-fallback-channel="phone" data-asset-id="technical_triage_v1" data-route-family="triagem-tecnica" data-cta-id="technical-triage-alternative-phone" href="tel:+5548988344559">Ligar para explicar a demanda: (48) 98834-4559</a>
+        <a class="button button-primary" data-fallback-channel="whatsapp" data-asset-id="technical_triage_v1" data-route-family="triagem-tecnica" data-cta-id="technical-triage-alternative-whatsapp" data-cta-position="triage_primary" data-event-name="whatsapp_click" href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20explicar%20uma%20demanda%20t%C3%A9cnica%20e%20entender%20o%20pr%C3%B3ximo%20passo." rel="noopener" target="_blank">Falar pelo WhatsApp</a>
+        <a class="button button-secondary" data-fallback-channel="email" data-asset-id="technical_triage_v1" data-route-family="triagem-tecnica" data-cta-id="technical-triage-alternative-email" data-cta-position="triage_primary" data-event-name="email_click" href="mailto:tiago.sasaki@confenge.com.br?subject=Triagem%20t%C3%A9cnica%20CONFENGE&amp;body=Situa%C3%A7%C3%A3o%20t%C3%A9cnica%3A%0AO%20que%20precisa%20ser%20decidido%20ou%20produzido%3A%0AUrg%C3%AAncia%3A%0ACidade%20e%20UF%2C%20se%20houver%20vistoria%3A%0A">Enviar o contexto por e-mail</a>
+        <a class="text-link" data-fallback-channel="phone" data-asset-id="technical_triage_v1" data-route-family="triagem-tecnica" data-cta-id="technical-triage-alternative-phone" data-cta-position="triage_primary" href="tel:+5548988344559">Ligar para explicar a demanda: (48) 98834-4559</a>
       </div>
     </aside>
+
+    <section class="next-state" aria-labelledby="depois-titulo">
+      <h2 id="depois-titulo">O que dizer no primeiro contato</h2>
+      <ol>
+        <li>Qual é a situação: projeto, obra, imóvel, perícia, segurança do trabalho ou contrato público.</li>
+        <li>O que precisa ser decidido, produzido, revisado ou documentado, e para quando.</li>
+        <li>Cidade e UF, apenas se houver possibilidade de vistoria.</li>
+      </ol>
+      <p><strong>Este contato não é contratação nem pagamento.</strong> Escopo, responsabilidade técnica, necessidade de ir a campo, prazo e preço só são definidos depois de entendermos o caso.</p>
+      <p>Não envie documentos, CPF, número de processo, laudo, planta ou dados de partes em conflito neste primeiro contato. Se forem necessários, o canal seguro é combinado depois.</p>
+    </section>
+
     <section class="section section--muted" aria-labelledby="corrigir-o-site-titulo" id="corrigir-o-site">
       <div class="container site-correction">
         <h2 id="corrigir-o-site-titulo">Encontrou um erro no site?</h2>
@@ -185,5 +93,13 @@
       </div>
     </section>
   </main>
+
+<footer class="site-footer">
+<div class="container footer-top">
+<div class="footer-brand"><img alt="CONFENGE" decoding="async" height="58" loading="lazy" src="/assets/logo-confenge-white-500-1677038e.png" width="224"/><p>Engenharia, perícias e inteligência técnica para transformar situações complexas em decisões documentadas.</p></div>
+<div class="footer-links"><strong>Situações</strong><a href="/#situacao-projeto">Projetos e edificações</a><a href="/#situacao-pericia">Perícias e avaliações</a><a href="/#situacao-sst">Segurança do trabalho</a><a href="/servicos-obras-publicas/">Obras públicas</a></div><div class="footer-links"><strong>Biblioteca e provas</strong><a href="/conteudos/">Conteúdos</a><a href="/ferramentas/">Ferramentas</a><a href="/entregas/">Entregas</a><a href="/casos/">Casos demonstrativos</a></div><div class="footer-links"><strong>Empresa</strong><a href="/especialista/tiago-jun-sasaki/">Quem responde</a><a href="/confianca/">Como verificamos</a><a href="/triagem-tecnica/">Contato e triagem</a><a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a><a href="tel:+5548988344559">(48) 98834-4559</a><span>Atendimento nacional</span></div>
+</div>
+<div class="container footer-bottom"><span>© <span id="year">2026</span> CONFENGE. CNPJ 52.407.089/0001-09.</span><nav class="footer-authority" aria-label="Autoridade e políticas"><a href="/politica-editorial/">Política editorial</a><a href="/triagem-tecnica/#corrigir-o-site">Encontrou um erro?</a><a href="/uso-de-ia/">Uso de IA</a><a href="/conflitos/">Conflitos</a><a href="/privacidade/">Privacidade</a></nav></div>
+</footer>
 </body>
 </html>
