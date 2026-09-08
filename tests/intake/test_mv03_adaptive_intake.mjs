@@ -43,6 +43,10 @@ function unbackedMoneyProblems(html) {
   return problems;
 }
 
+const authorityStatusOf = () => JSON.parse(
+  fs.readFileSync(path.resolve("netlify/functions/data/adaptive-intake-authority.json"), "utf8"),
+).status;
+
 const pin = Object.freeze({
   policy_id: "NET_NEW_INBOUND_HANDRAISER",
   policy_version: "1.0.0-draft.20260904",
@@ -86,9 +90,31 @@ test("public route is low-friction, transparent and free of sensitive inputs", (
   }
   assert.equal(/\b(?:1|2)\s+dias?\s+[úu]teis\b/i.test(html), false);
   assert.match(html, /<meta(?=[^>]*name="robots")(?=[^>]*content="index,follow[^\"]*")[^>]*>/);
-  assert.match(html, /action="\/\.netlify\/functions\/lead"/);
-  assert.match(html, /data-config-endpoint="\/\.netlify\/functions\/adaptive-intake-config"/);
-  assert.equal((html.match(/data-intake-step/g) || []).length, 2);
+  // 2026-09-08. Estas tres linhas exigiam o formulario adaptativo no HTML:
+  // action da funcao lead, data-config-endpoint e dois data-intake-step. Nao
+  // eram propriedades, eram a forma do markup, e com a autoridade de Governanca
+  // em WITHHELD elas obrigavam a rota publica a exibir um formulario que o
+  // endpoint recusa (503 intake_unavailable), com o select preso em
+  // "Carregando opcoes..." e um aviso de erro. A propriedade correta e a
+  // condicional: enquanto a autoridade nao for FINAL, a rota nao publica
+  // formulario de captura e entrega os tres canais diretos.
+  if (authorityStatusOf() === "FINAL") {
+    // Enquanto a autoridade estiver FINAL, o recorte da cunha privada continua
+    // preso ao need padrao, ao contexto de intake e a localizacao oculta.
+    for (const expected of [
+      "data-default-need=\"obra_edificacao_ou_documentacao\"",
+      "intake_context=quantities_budget",
+      "data-location hidden",
+    ]) {
+      assert.equal(html.includes(expected), true, `missing bounded wedge contract: ${expected}`);
+    }
+    assert.match(html, /action="\/\.netlify\/functions\/lead"/);
+    assert.match(html, /data-config-endpoint="\/\.netlify\/functions\/adaptive-intake-config"/);
+    assert.equal((html.match(/data-intake-step/g) || []).length, 2);
+  } else {
+    assert.equal(/data-adaptive-intake-form/.test(html), false, "withheld authority must not ship a dead form");
+    assert.equal(/<form\b/.test(html), false, "withheld authority must not ship a capture form");
+  }
   assert.equal((html.match(/data-fallback-channel=/g) || []).length, 3);
   const browser = fs.readFileSync(path.resolve("assets/js/adaptive-intake.js"), "utf8");
   assert.match(browser, /crypto\.subtle\.digest\("SHA-256"/);
@@ -110,18 +136,31 @@ test("MV-09 publishes one bounded private wedge with embedded triage and three s
   for (const expected of [
     "Quantitativos e orçamento de obras",
     "Serve para obra privada",
-    "data-default-need=\"obra_edificacao_ou_documentacao\"",
-    "intake_context=quantities_budget",
-    "data-location hidden",
     "não recebe arquivo, planta, orçamento, endereço exato, CPF, processo ou texto livre",
   ]) {
     assert.equal(html.includes(expected), true, `missing bounded wedge contract: ${expected}`);
   }
   assert.match(html, /<meta(?=[^>]*name="robots")(?=[^>]*content="index,follow[^\"]*")[^>]*>/);
-  assert.match(html, /action="\/\.netlify\/functions\/lead"/);
-  assert.match(html, /data-authority-config-endpoint="\/\.netlify\/functions\/adaptive-intake-config\?intake_context=quantities_budget"/);
+  // 2026-09-08. Mesma correcao da rota /triagem-tecnica/: com a autoridade em
+  // WITHHELD o formulario adaptativo desta rota tambem e recusado em producao,
+  // entao a forma do markup deixa de ser exigida incondicionalmente.
+  if (authorityStatusOf() === "FINAL") {
+    // Enquanto a autoridade estiver FINAL, o recorte da cunha privada continua
+    // preso ao need padrao, ao contexto de intake e a localizacao oculta.
+    for (const expected of [
+      "data-default-need=\"obra_edificacao_ou_documentacao\"",
+      "intake_context=quantities_budget",
+      "data-location hidden",
+    ]) {
+      assert.equal(html.includes(expected), true, `missing bounded wedge contract: ${expected}`);
+    }
+    assert.match(html, /action="\/\.netlify\/functions\/lead"/);
+    assert.match(html, /data-authority-config-endpoint="\/\.netlify\/functions\/adaptive-intake-config\?intake_context=quantities_budget"/);
+    assert.equal((html.match(/name="location_(?:city|uf)"/g) || []).length, 2);
+  } else {
+    assert.equal(/data-adaptive-intake-form/.test(html), false, "withheld authority must not ship a dead form");
+  }
   assert.equal((html.match(/data-fallback-channel=/g) || []).length, 3);
-  assert.equal((html.match(/name="location_(?:city|uf)"/g) || []).length, 2);
   assert.equal(/name="(?:mensagem|arquivo|upload|endereco|cpf|processo)"/i.test(html), false);
   assert.equal(/\b(?:1|2)\s+dias?\s+[úu]teis\b/i.test(html), false);
   // #638. The rule this line protects is "the private wedge publishes no

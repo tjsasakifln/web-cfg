@@ -17,8 +17,8 @@
 - robots: `noindex,nofollow`
 - sitemap: `False`
 - freshness_class: `STALE`
-- evaluated_at: `2026-09-07T08:18:16.126032Z`
-- age_seconds: `1810132`
+- evaluated_at: `2026-09-08T16:19:09.355782Z`
+- age_seconds: `1925386`
 - expires_at: `2026-08-19T11:29:23.193694+02:00`
 
 - `official_live`: `True`
@@ -53,7 +53,7 @@ Score `MARKET_ANSWER_VALUE_SCORE/1.0` total=`0.6708` · unknown components: dema
 - path: `/inteligencia/valor-tipico-contratos-pavimentacao/`
 - canonical: `https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/`
 - fixture marked: `False`
-- rendered: /tmp/claude-1000/-home-tjsasakifln-code-confenge-web-cfg/00c05faa-bef8-4907-a4f3-a23173631031/scratchpad/wt-main/inteligencia/valor-tipico-contratos-pavimentacao/index.html
+- rendered: /home/tjsasakifln/code/confenge/web-cfg/inteligencia/valor-tipico-contratos-pavimentacao/index.html
 
 ## Engagement events available
 

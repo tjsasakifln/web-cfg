@@ -17,7 +17,7 @@ SERVICES = ROOT / "servicos" / "index.html"
 # valendo sem alteracao: 23 controles, 3 obrigatorios, action /obrigado, sem
 # upload. O que mudou foram opcoes e copy, e as assercoes semanticas novas
 # dizem o que a mudanca tinha de preservar.
-CAPTURE_FORM_SHA256 = "b3ebea7ad555cac7d459e4cf83186393f3630e4a49d8b6e265480a4e01cb0b15"
+CAPTURE_FORM_SHA256 = "114261cde438a7fee3fb4b2c0b0d0d8956398cfc5a3e920c0dc05c516f60d005"
 
 
 def _home() -> str:

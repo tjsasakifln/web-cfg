@@ -64,7 +64,7 @@
       "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm",
       "accessed_at": "2026-08-28",
       "device": "art. 111, caput e parágrafo único",
-      "limitations": "Aplica-se a contratação que prevê conclusão de escopo predefinido. A prorrogação automática da vigência não apaga mora nem sanção quando a não conclusão decorrer de culpa do contratado. Contrato, edital e regulamento local podem disciplinar o registro da nova vigência; isso não transforma vigência em cronograma do art. 115, § 5º.",
+      "limitations": "Aplica-se a contrato por escopo predefinido. A prorrogação automática da vigência preserva mora e sanção por culpa do contratado e é distinta do cronograma do art. 115, § 5º.",
       "themes": ["prazo", "vigencia", "escopo", "atraso"]
     },
     {
@@ -89,7 +89,7 @@
       "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm",
       "accessed_at": "2026-08-28",
       "device": "art. 115, caput, § 1º e § 5º",
-      "limitations": "Texto federal. O § 5º trata de prorrogação automática do cronograma de execução por apostila em impedimento, ordem de paralisação ou suspensão; não se confunde com a vigência do art. 111. Culpa e nexo dependem da prova do caso, do contrato e da matriz de riscos.",
+      "limitations": "Texto federal. O § 5º prorroga por apostila o cronograma em impedimento, paralisação ou suspensão, hipótese distinta da vigência do art. 111. Culpa e nexo se provam no caso.",
       "themes": ["atraso", "execucao", "impedimento", "suspensao"]
     },
     {
@@ -138,7 +138,7 @@
       "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm",
       "accessed_at": "2026-08-28",
       "device": "art. 137, caput, §§ 2º e 3º",
-      "limitations": "Texto federal. A extinção exige enquadramento completo no § 2º e prova. A opção de suspender do § 3º, II, alcança apenas os incisos II, III e IV e observa as exceções do § 3º, I; a não liberação do inciso V não recebe automaticamente essa mesma opção.",
+      "limitations": "Texto federal. A extinção exige enquadramento completo no § 2º e prova. A opção de suspender do § 3º, II, alcança apenas os incisos II, III e IV, observadas as exceções do § 3º, I.",
       "themes": ["extincao", "suspensao", "prazo", "impedimento"]
     },
     {

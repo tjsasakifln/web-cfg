@@ -12,8 +12,16 @@
   "public_implementation": {
     "renderer": "scripts/commercial/render_contract_defense_products.mjs",
     "route_pages": 3,
-    "active_route_items": [17, 20, 23],
-    "held_protected_route_items": [18, 19, 22],
+    "active_route_items": [
+      17,
+      20,
+      23
+    ],
+    "held_protected_route_items": [
+      18,
+      19,
+      22
+    ],
     "held_state": "DEFER_UNTIL_DATE",
     "held_by_contract": "data/bofu-dominance/frozen-specs/unlock-plan.v1.json",
     "earliest_safe_action_at": "2026-09-16",
@@ -29,7 +37,13 @@
     ],
     "analytics_contains_qualification": false,
     "checkout_enabled": false,
-    "first_sale_fields": ["hours", "input_quality", "rework", "margin", "outcome"],
+    "first_sale_fields": [
+      "hours",
+      "input_quality",
+      "rework",
+      "margin",
+      "outcome"
+    ],
     "first_sale_evidence": "NOT_STARTED"
   },
   "public_proof_ownership": {
@@ -42,7 +56,14 @@
       "source_item": 17,
       "cap_cents": 290000,
       "window_days": 30,
-      "eligible_items": [18, 19, 20, 21, 22, 23],
+      "eligible_items": [
+        18,
+        19,
+        20,
+        21,
+        22,
+        23
+      ],
       "max_credited_items": 1,
       "cumulative": false,
       "statement_pt_br": "O Diagnóstico de Riscos à Margem gera crédito de até R$ 2.900 para um único dossiê entre os itens 18 e 23 contratado em 30 dias, sem acúmulo com outro crédito."
@@ -52,7 +73,7 @@
       "requires_confirmed_capacity": true,
       "surcharge_percent": 50,
       "surcharge_prepaid": true,
-      "statement_pt_br": "Urgência abaixo do SLA só entra com capacidade confirmada e adicional de 50 por cento sobre o preço-piloto ou preço publicado daquela entrega, pago antes da cobrança. Exemplo: Diagnóstico de Riscos à Margem a R$ 2.900 em 5 dias úteis; se a capacidade aceitar 2 dias úteis, o adicional é R$ 1.450 e o total fica R$ 4.350. A capacidade pode recusar a urgência."
+      "statement_pt_br": "Prazo mais curto que o SLA é possível com capacidade confirmada na agenda: a entrega acelerada tem adicional de 50 por cento sobre o preço-piloto ou o preço publicado daquela entrega, combinado e pago antes do início. Exemplo: o Diagnóstico de Riscos à Margem custa R$ 2.900 em 5 dias úteis; em 2 dias úteis, o adicional é R$ 1.450 e o total fica R$ 4.350. A data possível é confirmada no retorno."
     },
     "public_sources_rule": {
       "complements": true,
@@ -64,7 +85,12 @@
       "includes_legal_representation": false,
       "statement_pt_br": "O resultado é obrigação de meio e não inclui representação jurídica."
     },
-    "evidence_grades": ["FACT", "CALCULATION", "INFERENCE", "UNKNOWN"],
+    "evidence_grades": [
+      "FACT",
+      "CALCULATION",
+      "INFERENCE",
+      "UNKNOWN"
+    ],
     "missing_data_rule_pt_br": "Ausência de dado vira UNKNOWN declarado, nunca estimativa apresentada como fato.",
     "legal_boundary_required_negatives": [
       "no_legal_practice",
@@ -150,7 +176,9 @@
       },
       "missing_data_rule_pt_br": "Ausência de dado vira UNKNOWN declarado, nunca estimativa apresentada como fato.",
       "promises_public_case_publication": false,
-      "public_source_urls": ["https://licitacoesecontratos.tcu.gov.br/6-1-7-pagamento/"]
+      "public_source_urls": [
+        "https://licitacoesecontratos.tcu.gov.br/6-1-7-pagamento/"
+      ]
     },
     {
       "item": 19,
@@ -261,7 +289,9 @@
       },
       "missing_data_rule_pt_br": "Ausência de dado vira UNKNOWN declarado, nunca estimativa apresentada como fato.",
       "promises_public_case_publication": false,
-      "public_source_urls": ["https://licitacoesecontratos.tcu.gov.br/6-2-2-1-2-reajuste-em-sentido-estrito/"]
+      "public_source_urls": [
+        "https://licitacoesecontratos.tcu.gov.br/6-2-2-1-2-reajuste-em-sentido-estrito/"
+      ]
     },
     {
       "item": 22,
@@ -298,7 +328,9 @@
       },
       "missing_data_rule_pt_br": "Ausência de dado vira UNKNOWN declarado, nunca estimativa apresentada como fato.",
       "promises_public_case_publication": false,
-      "public_source_urls": ["https://licitacoesecontratos.tcu.gov.br/6-2-2-1-1-reequilibrio-economico-financeiro-recomposicao-ou-revisao-2/"]
+      "public_source_urls": [
+        "https://licitacoesecontratos.tcu.gov.br/6-2-2-1-1-reequilibrio-economico-financeiro-recomposicao-ou-revisao-2/"
+      ]
     },
     {
       "item": 23,
@@ -339,7 +371,9 @@
       },
       "missing_data_rule_pt_br": "Ausência de dado vira UNKNOWN declarado, nunca estimativa apresentada como fato.",
       "promises_public_case_publication": false,
-      "public_source_urls": ["https://licitacoesecontratos.tcu.gov.br/6-1-8-infracoes-e-sancoes-administrativas-contratado/"]
+      "public_source_urls": [
+        "https://licitacoesecontratos.tcu.gov.br/6-1-8-infracoes-e-sancoes-administrativas-contratado/"
+      ]
     }
   ]
 }

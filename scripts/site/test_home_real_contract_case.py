@@ -22,9 +22,21 @@ def test_home_replaces_generic_matrix_with_real_public_contract():
     assert "Qual deles se parece mais com o seu?" not in html
     assert "<dt>1% do valor</dt>" not in html
     assert html.count("data-economics-illustration") == 3
-    assert html.count("Conta ilustrativa, não é economia observada") == 3
-    for needle in ("Custo publicado", "Recorrência da diretoria", "Limite:"):
-        assert html.count(needle) == 3, needle
+    # 2026-09-08. Este bloco exigia as frases literais "Conta ilustrativa, nao
+    # e economia observada", "Custo publicado", "Recorrencia da diretoria" e
+    # "Limite:" tres vezes cada. Nao eram propriedades: eram travas de redacao,
+    # e eram elas que mantinham no ar um paragrafo ilegivel. A propriedade real
+    # e outra e continua verificada abaixo: cada paragrafo de ilustracao diz
+    # que a conta nao e economia medida e cita as faixas de preco publicadas.
+    illustrations = re.findall(
+        r'<p[^>]*data-economics-illustration="1"[^>]*>(.*?)</p>', html, re.S
+    )
+    assert len(illustrations) == 3
+    for text in illustrations:
+        assert re.search(r"ilustrativ", text, re.I), text
+        assert re.search(r"n[ãa]o é economia medida", text, re.I), text
+        assert "R$ 6.900 a R$ 7.900" in text, text
+        assert "R$ 12.500 a R$ 20.000 por mês" in text, text
     # A desqualificação por porte foi revogada em 2026-09-06. A home pode dizer
     # QUAL formato serve; não pode dizer que o visitante não merece atendimento.
     # Asserção negativa: o defeito não pode voltar por edição de copy.

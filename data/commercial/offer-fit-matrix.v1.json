@@ -345,7 +345,7 @@
       "one_percent_display": "R$ 1.797,38",
       "one_percent_cents": 179738,
       "kind": "illustration",
-      "copy": "Conta ilustrativa, não é economia observada. 1% deste valor contratado resulta em R$ 1.797,38. Custo publicado de um dossiê crítico: R$ 6.900 a R$ 7.900, pontual. Recorrência da diretoria: R$ 12.500 a R$ 20.000 por mês. Limite: o percentual não é economia observada e o formato indicado segue o risco identificado; abaixo do piso de diagnóstico (R$ 2.900), o caminho é uma entrega de entrada ou a ferramenta pública. O escopo se ajusta à necessidade."
+      "copy": "Conta ilustrativa: 1% deste contrato é R$ 1.797,38. Não é economia medida, serve para dar escala. Um dossiê crítico custa de R$ 6.900 a R$ 7.900, uma vez, e acompanhar a operação custa de R$ 12.500 a R$ 20.000 por mês. Como 1% fica abaixo do custo do dossiê, em contratos assim o começo costuma ser uma entrega de entrada ou a ferramenta pública gratuita."
     },
     {
       "panel": "regional",
@@ -355,7 +355,7 @@
       "one_percent_display": "R$ 7.191,77",
       "one_percent_cents": 719177,
       "kind": "illustration",
-      "copy": "Conta ilustrativa, não é economia observada. 1% deste valor contratado resulta em R$ 7.191,77, na altura do teto de um dossiê crítico. Custo publicado do dossiê: R$ 6.900 a R$ 7.900, pontual. Recorrência da diretoria: R$ 12.500 a R$ 20.000 por mês. Limite: o percentual não é economia observada; só indica projeto crítico se o risco identificado cobrir esse custo e os documentos existirem."
+      "copy": "Conta ilustrativa: 1% deste contrato é R$ 7.191,77. Não é economia medida, serve para dar escala. É quase o custo de um dossiê crítico, de R$ 6.900 a R$ 7.900, uma vez; acompanhar a operação custa de R$ 12.500 a R$ 20.000 por mês. O dossiê se justifica quando o risco é concreto e os documentos existem."
     },
     {
       "panel": "strategic",
@@ -365,17 +365,17 @@
       "one_percent_display": "R$ 182.936,30",
       "one_percent_cents": 18293630,
       "kind": "illustration",
-      "copy": "Conta ilustrativa, não é economia observada. 1% deste valor contratado resulta em R$ 182.936,30. Custo publicado de um dossiê crítico: R$ 6.900 a R$ 7.900, pontual. Recorrência da diretoria: R$ 12.500 a R$ 20.000 por mês. Limite: contrato grande não autoriza percentual como economia; o formato de trabalho depende do risco identificado, dos documentos e de a necessidade ser pontual ou recorrente."
+      "copy": "Conta ilustrativa: 1% deste contrato é R$ 182.936,30. Não é economia medida, serve para dar escala. Um dossiê crítico custa de R$ 6.900 a R$ 7.900, uma vez, e acompanhar a operação custa de R$ 12.500 a R$ 20.000 por mês. Contrato grande não define o formato sozinho: ele depende do risco, dos documentos e de a necessidade ser pontual ou recorrente."
     }
   ],
   "route_copy": {
     "problemas-que-resolvemos": {
       "headline": "O formato segue o risco, não o percentual do contrato",
-      "body": "Custo, risco, recorrência e limite cabem na mesma conta. Ferramenta pública quando o risco fica abaixo do piso de entrada. Diagnóstico quando a lacuna ainda é o problema. Projeto crítico pontual quando o evento já pressiona caixa. Diretoria quando a carteira é recorrente. Se o risco fica abaixo do piso publicado, o formato indicado é a entrega de entrada ou a ferramenta pública. As faixas estão em Entregas."
+      "body": "Custo da obra em jogo, risco de perder margem, recorrência dos casos na carteira e limite do que a equipe interna consegue absorver: são esses quatro pontos que definem o formato de trabalho, não o tamanho do contrato. Caso pontual e de baixo impacto se resolve nas ferramentas públicas, sem cadastro. Quando falta clareza antes de decidir, o diagnóstico é o caminho. Quando o evento já pressiona o caixa, entra um projeto crítico pontual. Quando a carteira gera casos o ano inteiro, entra o acompanhamento de diretoria."
     },
     "diagnostico-pre-licitacao": {
       "headline": "Quando o diagnóstico cabe, e quando não",
-      "body": "Custo do diagnóstico delimitado segue o piso publicado dessa faixa, pontual. Risco em jogo precisa cobrir esse piso. Recorrência de carteira pede diretoria, não um diagnóstico isolado. Limite: edital simples, risco abaixo do piso de entrada e equipe já confiante costumam se resolver na ferramenta pública. Para conferir essa leitura antes de decidir, fale com a gente."
+      "body": "O custo do diagnóstico é pontual e delimitado, e se justifica pelo risco que o edital coloca em jogo: proposta mal formada em obra pública custa margem por todo o contrato. Se a sua empresa analisa edital toda semana, a recorrência pede rotina de operação, não um diagnóstico isolado. Limite: edital simples, risco pequeno e equipe já confiante se resolvem na ferramenta pública gratuita. Para conferir essa leitura antes de decidir, fale com a gente."
     },
     "medicoes-glosas-obras-publicas": {
       "headline": "Quando o dossiê de medição cabe, e quando não",
@@ -383,11 +383,11 @@
     },
     "reequilibrio-obras-publicas": {
       "headline": "Quando o dossiê de reequilíbrio cabe, e quando não",
-      "body": "Custo de um dossiê crítico segue o piso pontual publicado dessa faixa. Risco de margem desequilibrada precisa cobrir esse piso. Recorrência de eventos na carteira pede diretoria. Limite: sem ruptura documentável da equação original, o pleito não se sustenta: narrar aumento de custo não é fato novo. O próximo passo é registro interno ou diagnóstico."
+      "body": "O custo do dossiê é pontual e a conta fecha quando o desequilíbrio já morde a margem do contrato: o risco que você tem em jogo precisa ser maior que o trabalho de sustentar o pleito. Se eventos assim se repetem na carteira, a recorrência pede acompanhamento contínuo em vez de um dossiê por caso. Limite: sem ruptura documentável da equação original, o pleito não se sustenta, porque narrar aumento de custo não é fato novo. Nesse caso o próximo passo é organizar o registro interno ou fazer um diagnóstico antes de pleitear."
     },
     "acompanhamento-contratos-obras": {
       "headline": "Quando a rotina cabe, e quando não",
-      "body": "Custo da rotina é o piso mensal publicado da recorrência gerenciada, não um percentual do contrato. Risco e carteira precisam cobrir esse piso. Recorrência é a premissa: um evento pontual de glosa ou reequilíbrio pede projeto crítico, não cadência. Limite: equipe interna já suficiente e risco abaixo do piso mensal pedem um evento pontual, não cadência mensal. As faixas estão em Entregas."
+      "body": "Custo da rotina é uma mensalidade fixa, e não um percentual do contrato: o valor aplicável é confirmado na primeira conversa, junto com a nossa agenda e o encaixe com o seu contrato. Risco e carteira precisam justificar essa mensalidade. Recorrência é a premissa: um evento pontual de glosa ou reequilíbrio pede projeto crítico, não cadência. Limite: equipe interna já suficiente e risco mensal pequeno pedem um evento pontual, não cadência mensal."
     }
   },
   "analytics": {

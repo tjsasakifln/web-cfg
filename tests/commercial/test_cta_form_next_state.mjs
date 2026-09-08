@@ -8,7 +8,14 @@ const report = buildInventory();
 
 assert.equal(report.schema, "confenge.cta-form-next-state-inventory/1.0");
 assert.equal(report.coverage.manual_route_allowlist, false);
-assert.equal(report.coverage.active_capture_routes, 27);
+// 2026-09-08. Eram 27. As rotas /triagem-tecnica/ e /quantitativos-orcamento-obras/
+// deixaram de publicar formulario porque a autoridade de Governanca em
+// netlify/functions/data/adaptive-intake-authority.json esta WITHHELD e o
+// endpoint de configuracao responde 503: o formulario aparecia morto para o
+// visitante. A contagem e escrituracao; a propriedade protegida por este
+// arquivo e cada formulario publicado cumprir o contrato next-state/v1, e essa
+// verificacao continua inteira abaixo.
+assert.equal(report.coverage.active_capture_routes, 25);
 assert.equal(report.coverage.declared_ctas, report.contract.expected_declared_ctas, `declared CTAs: ${report.coverage.declared_ctas}`);
 assert.equal(report.coverage.problems.length, 0, JSON.stringify(report.coverage.problems));
 assert.deepEqual(report.coverage.protected_routes_with_capture, []);
@@ -25,7 +32,7 @@ const forms = report.surfaces.flatMap((surface) => surface.forms.map((form) => (
   route: surface.route,
   ...form,
 })));
-assert.equal(forms.length, 27);
+assert.equal(forms.length, 25);
 for (const form of forms) {
   assert.equal(form.form_contract, "next-state/v1", `${form.route}: form contract`);
   assert.ok(report.contract.allowed_stages.includes(form.stage), `${form.route}: ${form.stage}`);
@@ -69,9 +76,23 @@ for (const form of forms) {
 
 const adaptivePage = fs.readFileSync("triagem-tecnica/index.html", "utf8");
 const adaptiveRuntime = fs.readFileSync("assets/js/adaptive-intake.js", "utf8");
-assert.match(adaptivePage, /data-next-state-profile=["']adaptive_triage["']/);
-assert.match(adaptivePage, /data-runtime-profile=["']adaptive_intake_standalone_v1["']/);
-assert.match(adaptivePage, /data-form-boundary/);
+// 2026-09-08. Estas tres assercoes exigiam os atributos do formulario
+// adaptativo no HTML de /triagem-tecnica/. Com a autoridade de Governanca em
+// WITHHELD o endpoint de configuracao responde 503 e o formulario ficava morto
+// na pagina, entao a rota passou a entregar os tres canais diretos. As
+// assercoes valem quando a autoridade voltar a FINAL; enquanto isso, o que se
+// verifica e que a rota nao publica formulario e mantem canal de retorno.
+const adaptiveAuthorityFinal = JSON.parse(
+  fs.readFileSync("netlify/functions/data/adaptive-intake-authority.json", "utf8"),
+).status === "FINAL";
+if (adaptiveAuthorityFinal) {
+  assert.match(adaptivePage, /data-next-state-profile=["']adaptive_triage["']/);
+  assert.match(adaptivePage, /data-runtime-profile=["']adaptive_intake_standalone_v1["']/);
+  assert.match(adaptivePage, /data-form-boundary/);
+} else {
+  assert.doesNotMatch(adaptivePage, /<form\b/);
+  assert.equal((adaptivePage.match(/data-fallback-channel=/g) || []).length, 3);
+}
 assert.match(adaptiveRuntime, /track\(["']lead_form_submit["'](?:\s*,|\s*\))/);
 assert.match(adaptiveRuntime, /track\(["']lead_form_start["']\)/);
 assert.match(adaptiveRuntime, /track\(["']lead_form_success["']\)/);

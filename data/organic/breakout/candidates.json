@@ -23,7 +23,7 @@
       "intent": "sinapi_desonerado_vs_nao",
       "preference_class": "gsc_observed_poorly_served",
       "why_not_generic": "Interactive regime-alignment tool plus explicit method, grain and limitations. A competitor cannot reproduce the decision table by rewriting prose. Historical GSC striking distance is labeled historical, not live demand.",
-      "visitor_job": "Uma construtora que está fechando planilha precisa decidir, antes de enviar a proposta, qual base SINAPI (desonerada ou não) o edital e o regime da empresa exigem — sem misturar tabelas nem tratar a escolha como atalho de preço.",
+      "visitor_job": "Uma construtora que está fechando planilha precisa decidir, antes de enviar a proposta, qual base SINAPI (desonerada ou não) o edital e o regime da empresa exigem, sem misturar tabelas nem tratar a escolha como atalho de preço.",
       "question": "SINAPI desonerado ou não desonerado: qual usar?",
       "answer": "Use a tabela que o edital e a planilha modelo fixam na data-base do certame; depois alinhe BDI, encargos da proposta e unitários à mesma base. SINAPI desonerado e não desonerado diferem nos encargos sociais da mão de obra, não em um desconto universal. Escolher a tabela mais barata sem coerência com o edital e com o regime da empresa gera planilha incoerente e risco de inexequibilidade ou prejuízo.",
       "method": {
@@ -32,12 +32,12 @@
         "source": "CAIXA, metodologia SINAPI; regra do edital; Lei 12.546/2011 e atualizações de desoneração da folha quando o enquadramento se aplica."
       },
       "period": "Leitura operacional em 2026-08-18. A data-base que vale é a do edital, não a desta página.",
-      "geography": "Brasil — referência federal de composição. A aplicação é a do órgão licitante.",
-      "grain": "regime_de_encargos_da_composicao_sinapi",
+      "geography": "Brasil, referência federal de composição. A aplicação é a do órgão licitante.",
+      "grain": "Regime de encargos sociais da composição SINAPI (desonerado ou não desonerado)",
       "limitations": [
         "Esta página não publica custo por km nem um fator único de conversão entre as duas tabelas.",
         "O alinhador é um verificador de coerência. Não decide o enquadramento tributário da empresa.",
-        "A amostra GSC citada é histórica (seo/gsc-2026-07-30) e não é demanda atual.",
+        "A conferência vale para a data-base e a regra do edital analisado; nova data-base ou mudança na regra de desoneração pede nova checagem.",
         "Silêncio ou contradição no edital exige leitura do caso, não um default nacional."
       ],
       "visual_id": "sinapi-aligner",
@@ -169,10 +169,9 @@
       "geography": "Brasil — regra federal. Entes podem ter regulamento próprio que não afasta o teto legal.",
       "grain": "percentual_sobre_valor_inicial_atualizado",
       "limitations": [
-        "O diagrama é orientativo. Não cria direito a aditivo.",
-        "Não resolve alteração qualitativa, item novo sem preço ou execução informal.",
-        "A evidência GSC citada é histórica e não é demanda atual.",
-        "Esta página não é análise contratual oficial nem substitui o jurídico do caso."
+        "O diagrama fixa o saldo aritmético do teto legal; o direito ao aditivo depende da motivação técnica e da formalização no contrato concreto.",
+        "Alteração qualitativa, item novo sem preço contratado e serviço já executado sem termo formal exigem a leitura do contrato caso a caso, que fazemos na triagem técnica.",
+        "Esta página organiza a leitura de engenharia do art. 125 para a decisão da diretoria; o parecer jurídico do caso continua com o advogado do contrato."
       ],
       "visual_id": "art125-saldo",
       "author": "Engº Tiago Sasaki",

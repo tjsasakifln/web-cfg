@@ -98,7 +98,11 @@ for (const route of ROUTES) {
     } else {
       assert(`${route.key}_headline`, html.includes(copy.headline), copy.headline);
       assert(`${route.key}_body`, html.includes(copy.body), copy.body);
-      assert(`${route.key}_custo`, /custo/i.test(copy.body) && html.includes("Custo"), route.key);
+      // 2026-09-08. Exigia o literal "Custo" com C maiusculo no HTML, o que so
+      // acontecia quando a copy comecava com o rotulo "Custo de ...". Era uma
+      // trava de redacao e mantinha os paragrafos em formato de ficha interna.
+      // A propriedade e que a rota fale do custo; a caixa da letra nao importa.
+      assert(`${route.key}_custo`, /custo/i.test(copy.body) && /custo/i.test(html), route.key);
       assert(`${route.key}_risco`, /risco/i.test(copy.body), route.key);
       assert(`${route.key}_recorrencia`, /recorrência/i.test(copy.body), route.key);
       assert(`${route.key}_limite`, /limite/i.test(copy.body), route.key);

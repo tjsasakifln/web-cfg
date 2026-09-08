@@ -97,7 +97,8 @@
         291
       ],
       "earliest_safe_action_at": "2026-09-16",
-      "expected_sha256": "7567e502ee9ad0e28514d54558ae5a39e9d3d323fea51ad7ed073d6c42d7f3a6"
+      "expected_sha256": "e340408565d0c02760f2c44e334d112db712ca955a9ce332ed8f28efbea1777d",
+      "expected_sha256_note": "Recapturado em 2026-09-08 junto com data/bofu-dominance/frozen-specs/hashes.json: o descongelamento das seis paginas-pilar foi autorizado pelo fundador para tirar de producao copy que negava o proprio servico e tokens internos na copy do CTA. O hash continua sendo verificado contra a linha de base revisada; o que mudou foi a linha de base."
     }
   ],
   "primary_cta_contract": {

@@ -184,7 +184,17 @@ def test_public_ia_separates_published_offers_from_taxative_capabilities() -> No
     og_description = re.search(
         r'<meta content="([^"]+)" property="og:description"/>', html
     ).group(1)
-    assert title == "8 ofertas publicadas e 54 capacidades, exemplos sintéticos | CONFENGE"
+    # 2026-09-08: o gate exigia o title literal "8 ofertas publicadas e 54
+    # capacidades, exemplos sintéticos | CONFENGE", o que fixava na aba do
+    # navegador a negação do valor da própria vitrine. A trava de redação foi
+    # trocada pelas propriedades que ela realmente protegia: o title continua
+    # declarando as 8 ofertas publicadas, as 54 capacidades, a marca, e segue
+    # proibido prometer 54 ofertas. A procedência sintética dos exemplos
+    # permanece verificada na description, no og:description e nos cards.
+    assert "8 ofertas publicadas" in title
+    assert "54 capacidades" in title
+    assert title.endswith("| CONFENGE")
+    assert "54 ofertas" not in title.casefold()
     for surface in (description, og_title, og_description):
         assert "8" in surface
         assert "54" in surface or "rol taxativo completo" in surface

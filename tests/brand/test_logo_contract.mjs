@@ -180,14 +180,21 @@ assert("observed_html_count", observation.source_html_files_scanned === 276, obs
 // logo de cabecalho e NENHUM de rodape, e os tres numeros abaixo sobem por ela e so
 // por ela: 438->439, 229->230, 223->224. Rodape (209) e asset branco (203) ficam
 // parados, o que e a prova de que nenhum outro logo entrou ou saiu.
-assert("observed_logo_count", observation.logo_image_occurrences === 439, observation.logo_image_occurrences);
-assert("observed_header_count", observation.header_lockup_occurrences === 230, observation.header_lockup_occurrences);
-assert("observed_footer_count", observation.footer_lockup_occurrences === 209, observation.footer_lockup_occurrences);
+// 2026-09-08: /triagem-tecnica/ recebeu o cabecalho e o rodape do site, que ela
+// nunca teve: a rota publicava um link de texto "CONFENGE", sem nav e sem
+// rodape, fora do design system. Ela e a UNICA pagina alterada no lote e passa a
+// carregar um lockup de cabecalho (mais o do menu movel) e um de rodape, e os
+// numeros sobem por ela e so por ela: 439->442, 230->232, 209->210, 224->226,
+// 203->204. Nenhum logo saiu de pagina servida, que e o que esta contagem existe
+// para impedir.
+assert("observed_logo_count", observation.logo_image_occurrences === 442, observation.logo_image_occurrences);
+assert("observed_header_count", observation.header_lockup_occurrences === 232, observation.header_lockup_occurrences);
+assert("observed_footer_count", observation.footer_lockup_occurrences === 210, observation.footer_lockup_occurrences);
 assert("observed_asset_counts", JSON.stringify(observation.legacy_asset_occurrences) === JSON.stringify({
   "/assets/logo-confenge.png": 6,
-  "/assets/logo-confenge-500-f8a83f6d.png": 224,
+  "/assets/logo-confenge-500-f8a83f6d.png": 226,
   "/assets/logo-confenge-white.png": 6,
-  "/assets/logo-confenge-white-500-1677038e.png": 203,
+  "/assets/logo-confenge-white-500-1677038e.png": 204,
 }), observation.legacy_asset_occurrences);
 assert("current_noncompliance_honest", observation.header_black_on_white === "NON_COMPLIANT" && observation.master_svg === "MISSING", observation);
 assert("unexecuted_visual_proof", observation.sharpness_viewport_matrix === "NOT_EXECUTED" && observation.tagline_minimum_legibility === "NOT_APPROVED" && observation.screenshot_regression === "MISSING", observation);

@@ -90,8 +90,18 @@ assert(coverage.axe.routes.every((entry) =>
 // em /especialista/. Se algum dia exigir, a correcao e ensinar o detector a diferenca,
 // NUNCA remover o numero nem plantar um formulario numa pagina de confianca.
 assert.equal(coverage.axe.price_route_count, 50);
-assert.equal(coverage.axe.capture_form_route_count, 28);
-assert.equal(coverage.axe.route_count, 59);
+// 2026-09-08: 28 -> 26. /triagem-tecnica/ e /quantitativos-orcamento-obras/
+// deixaram de publicar formulario de captura porque a autoridade de Governanca em
+// netlify/functions/data/adaptive-intake-authority.json esta WITHHELD e o endpoint
+// de configuracao responde 503: o formulario aparecia morto na pagina. As duas rotas
+// continuam no censo de axe por outros motivos; o que caiu foi a contagem de
+// formularios, nao a cobertura de auditoria.
+assert.equal(coverage.axe.capture_form_route_count, 26);
+// 2026-09-08: 59 -> 58. /triagem-tecnica/ entrava no censo de axe pelo formulario
+// de captura; sem formulario, e sem preco na pagina, ela sai do recorte. A rota
+// continua auditada por audit:accessibility e pelo audit de layout, e as outras 58
+// rotas do censo nao se movem.
+assert.equal(coverage.axe.route_count, 58);
 assert(selected.has("/conteudos/atraso-na-medicao-obra-publica/"));
 assert(selected.has("/conteudos/sinapi-desonerado-nao-desonerado/"));
 assert.deepEqual(
