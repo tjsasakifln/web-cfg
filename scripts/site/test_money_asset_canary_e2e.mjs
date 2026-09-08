@@ -175,6 +175,38 @@ async function openCanary(page) {
   await page.waitForSelector('#lead-form[data-form-ready="true"]');
 }
 
+// Waiting for the thank-you page by polling `location.pathname` races the
+// navigation itself: the execution context that evaluates the predicate is torn
+// down and rebuilt while the redirect happens, so the poll can miss the window
+// and die on a raw TimeoutError with no assertion attached. `waitForSelector` is
+// rebound across navigations by puppeteer, so it observes the destination
+// directly. `data-lead-success="1"` exists only on the thank-you page.
+//
+// The budget is asymmetric on purpose. The success and timeout paths answer
+// immediately, but with the downstream deliberately unavailable the server first
+// schedules the retry (handoff RETRYABLE with next_attempt_at) before replying,
+// so the redirect legitimately lands later. The 5s copied onto that path was a
+// stopwatch on work nobody had measured, and it flaked in three separate release
+// attempts. This is not a product SLA -- there is no assertion here that the
+// visitor must be redirected within N seconds -- it is only how long the test
+// waits before giving up.
+async function waitForThanks(page, { timeout = 5000, label = "" } = {}) {
+  try {
+    await page.waitForSelector('[data-lead-success="1"]', { timeout });
+  } catch (error) {
+    fail("thank_you_page_not_reached", {
+      label,
+      timeout_ms: timeout,
+      url: page.url(),
+      cause: String((error && error.message) || error),
+    });
+  }
+  const pathname = await page.evaluate(() => location.pathname);
+  if (pathname !== "/obrigado-contrato") {
+    fail("thank_you_page_wrong_route", { label, pathname });
+  }
+}
+
 async function fillAndSubmit(page, suffix) {
   await page.type("#nome", `Canario Automatizado ${suffix}`);
   await page.type("#email", `canary-${suffix}@naoexiste.test.br`);
@@ -243,7 +275,7 @@ try {
   await new Promise((resolve) => setTimeout(resolve, 500));
   responseDelayMs = 0;
   await mobile.click('#lead-form [type="submit"]');
-  await mobile.waitForFunction(() => location.pathname === "/obrigado-contrato", { timeout: 5000 });
+  await waitForThanks(mobile, { label: "timeout" });
   const timeoutRecords = await fixtureStore.list();
   if (timeoutRecords.length !== 1) fail("timeout_resend_duplicate_record", timeoutRecords.map((r) => r.lead_id));
   pass("timeout_resend_same_receipt", { records: timeoutRecords.length });
@@ -253,7 +285,7 @@ try {
   await openCanary(success);
   const beforePosts = requests.length;
   await fillAndSubmit(success, "success");
-  await success.waitForFunction(() => location.pathname === "/obrigado-contrato", { timeout: 5000 });
+  await waitForThanks(success, { label: "success" });
   const firstPayload = requests.at(-1)?.body;
   const submittedPayload = leadRequests.at(-1);
   if (!firstPayload?.lead_id || !submittedPayload?.idempotency_key || requests.length !== beforePosts + 1) {
@@ -293,7 +325,7 @@ try {
   const unavailable = await browser.newPage();
   await openCanary(unavailable);
   await fillAndSubmit(unavailable, "unavailable");
-  await unavailable.waitForFunction(() => location.pathname === "/obrigado-contrato", { timeout: 5000 });
+  await waitForThanks(unavailable, { timeout: 15000, label: "downstream_unavailable" });
   const records = await fixtureStore.list();
   const retryable = records.find((record) => record.email === "canary-unavailable@naoexiste.test.br");
   if (retryable?.handoff?.status !== "RETRYABLE" || !retryable.handoff.next_attempt_at) {
