@@ -17,6 +17,10 @@
 </head>
 <body data-route-family="defesa-margem-diagnostico" data-asset-id="diagnostico-defesa-margem" data-journey="contrato">
 <a class="skip-link" href="#conteudo">Ir ao conteúdo</a>
+<svg aria-hidden="true" class="svg-sprite" height="0" width="0">
+<symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"></path></symbol>
+<symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"></path></symbol>
+</svg>
 <header class="site-header" id="inicio">
 <div class="container header-inner">
 <a aria-label="CONFENGE, página inicial" class="brand" href="/"><img alt="CONFENGE Inteligência Técnica" height="58" src="/assets/logo-confenge-500-f8a83f6d.png" width="224"/></a>
@@ -102,12 +106,12 @@
 <li>Órgão: PREFEITURA MUNICIPAL DE ITAJAÍ - SC.</li>
 <li>Valor contratual (oficial): 740874.59 BRL nominais do instrumento.</li>
 <li>Vigência: 2026-08-13 → 2027-01-10. Aniversário (derivado da assinatura): 08-13.</li>
-<li>Freshness as_of: 2026-08-14.</li>
+<li>Data de referência dos dados públicos: 2026-08-14.</li>
 </ul>
 </section> <section id="timeline" aria-labelledby="h-timeline">
-<h2 id="h-timeline">Timeline</h2>
+<h2 id="h-timeline">Linha do tempo do contrato</h2>
 <ol class="journey-stages" id="out-timeline">
-<li class="journey-stage"><span class="type-mono">as_of</span><h3>2026-08-14</h3><p>Data de revisão do recorte público versionado.</p></li>
+<li class="journey-stage"><span class="type-mono">data de referência</span><h3>2026-08-14</h3><p>Data de revisão do recorte público versionado.</p></li>
 <li class="journey-stage"><span class="type-mono">assinatura / início</span><h3>2026-08-13</h3><p>Data oficial de assinatura e início de vigência neste recorte.</p></li>
 <li class="journey-stage"><span class="type-mono">fim</span><h3>2027-01-10</h3><p>Data oficial de fim de vigência neste recorte.</p></li>
 </ol>
@@ -125,7 +129,7 @@
 </section> <section id="evidencias-fontes" aria-labelledby="h-fontes">
 <h2 id="h-fontes">Evidências e fontes</h2>
 <ul id="out-fontes">
-<li>Fonte: PNCP 83102277000152-2-000626/2026 · as_of 2026-08-14</li>
+<li>Fonte: PNCP 83102277000152-2-000626/2026 · data de referência 2026-08-14</li>
 <li>Exportação pública versionada public-read-margin-defense/1.0 (content hash b46ec394df0da1a269d6b6aee180779dac60c89e880cea32b9200a0574e0e113).</li>
 </ul>
 </section> <section id="o-que-merece-conferencia" aria-labelledby="h-conferencia">
@@ -178,6 +182,13 @@
 </ul>
 </section>
 </div>
+<section class="authority-method container" id="metodo" data-surface-type="ferramenta" aria-label="Método e limitações">
+<p>Autor institucional: CONFENGE · Responsável técnico: <a href="/especialista/tiago-jun-sasaki/">Engº Tiago Sasaki</a> · Referência (as of): <time datetime="2026-08-14">14 de agosto de 2026</time> · Página revista em <time datetime="2026-08-15">15 de agosto de 2026</time></p>
+<p>Método: leitura factual a partir de exportação pública versionada public-read-margin-defense/1.0, com fontes, data de revisão e UNKNOWN explícito quando o fato não está no contrato de dados. Sem revisão independente: não há segundo revisor nomeado.</p>
+<p>Fonte: PNCP (contratos de fornecedor). Responsável pela atualização: CONFENGE editorial + recorte versionado. Não inventa cobertura.</p>
+<p>Limitação: não é parecer jurídico e não estima margem contábil de terceiros. Aditivos, reajuste, medições e pagamentos ficam UNKNOWN até o produtor emitir o fato.</p>
+<p>Como citar: CONFENGE. Diagnóstico de Defesa de Margem em Contratos Públicos. https://confenge.com.br/ferramentas/diagnostico-defesa-margem/ (as of 2026-08-14).</p>
+</section>
 </main>
 <script src="/assets/js/tool-persist.js"></script>
 <script src="/assets/js/tools-common.js"></script>
@@ -227,7 +238,7 @@
       "<dt>Fornecedor</dt><dd>" + fmt(diagnosis.fornecedor) + "</dd>";
     document.getElementById("out-resumo").innerHTML = diagnosis.resumo_executivo.map(function(l){ return "<li>" + esc(l) + "</li>"; }).join("");
     var timeline = [];
-    if (diagnosis.as_of.classification === "OFFICIAL") timeline.push("<li class=\"journey-stage\"><span class=\"type-mono\">as_of</span><h3>" + esc(diagnosis.as_of.value) + "</h3><p>Revisão do recorte público.</p></li>");
+    if (diagnosis.as_of.classification === "OFFICIAL") timeline.push("<li class=\"journey-stage\"><span class=\"type-mono\">data de referência</span><h3>" + esc(diagnosis.as_of.value) + "</h3><p>Revisão do recorte público.</p></li>");
     if (diagnosis.vigencia_inicio.classification !== "UNKNOWN") timeline.push("<li class=\"journey-stage\"><span class=\"type-mono\">início</span><h3>" + fmt(diagnosis.vigencia_inicio) + "</h3></li>");
     if (diagnosis.vigencia_fim.classification !== "UNKNOWN") timeline.push("<li class=\"journey-stage\"><span class=\"type-mono\">fim</span><h3>" + fmt(diagnosis.vigencia_fim) + "</h3></li>");
     if (!timeline.length) timeline.push("<li class=\"journey-stage\"><span class=\"type-mono\">UNKNOWN</span><h3>Sem datas oficiais de vigência neste recorte</h3></li>");
@@ -238,7 +249,7 @@
     var fontes = [];
     var officialUrl = diagnosis.fontes.classification === "OFFICIAL" ? safeExternalUrl(diagnosis.fontes.value) : "";
     if (officialUrl) {
-      fontes.push("<li><a href=\"" + esc(officialUrl) + "\" rel=\"external noopener\" target=\"_blank\">Fonte oficial</a> · as_of " + esc(diagnosis.freshness || "UNKNOWN") + "</li>");
+      fontes.push("<li><a href=\"" + esc(officialUrl) + "\" rel=\"external noopener\" target=\"_blank\">Fonte oficial</a> · data de referência " + esc(diagnosis.freshness || "UNKNOWN") + "</li>");
     } else {
       fontes.push("<li>Fonte: " + fmt(diagnosis.fontes) + "</li>");
     }
@@ -375,13 +386,6 @@
   });
 })();
 </script>
-<section class="authority-method container" id="metodo" data-surface-type="ferramenta" aria-label="Método e limitações">
-<p>Autor institucional: CONFENGE · Responsável técnico: <a href="/especialista/tiago-jun-sasaki/">Engº Tiago Sasaki</a> · Referência (as of): <time datetime="2026-08-14">14 de agosto de 2026</time> · Página revista em <time datetime="2026-08-15">15 de agosto de 2026</time></p>
-<p>Método: leitura factual a partir de exportação pública versionada public-read-margin-defense/1.0, com fontes, data de revisão e UNKNOWN explícito quando o fato não está no contrato de dados. Sem revisão independente: não há segundo revisor nomeado.</p>
-<p>Fonte: PNCP (contratos de fornecedor). Responsável pela atualização: CONFENGE editorial + recorte versionado. Não inventa cobertura.</p>
-<p>Limitação: não é parecer jurídico e não estima margem contábil de terceiros. Aditivos, reajuste, medições e pagamentos ficam UNKNOWN até o produtor emitir o fato.</p>
-<p>Como citar: CONFENGE. Diagnóstico de Defesa de Margem em Contratos Públicos. https://confenge.com.br/ferramentas/diagnostico-defesa-margem/ (as of 2026-08-14).</p>
-</section>
 <footer class="site-footer">
 <div class="container footer-top">
 <div class="footer-brand"><img alt="CONFENGE" decoding="async" height="58" loading="lazy" src="/assets/logo-confenge-white-500-1677038e.png" width="224"/><p>Engenharia, perícias e inteligência técnica para transformar situações complexas em decisões documentadas.</p></div>

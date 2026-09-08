@@ -336,6 +336,172 @@ const PII_SCAN = /@|\+\d{10,15}|mensagem|message_body|"(?:nome|name|full_name|cn
   else pass("dsar_exclusao_applied");
 }
 
+// --- published privacy documents describe the runtime that actually runs ---
+// The two visitor documents are shipped verbatim (scripts/pseo/public_artifact.py
+// copies `privacidade/` and `comercial/` into _site), so the source HTML is the
+// writer. Every check below derives its expectation from the code or the
+// authority record, never from a hand-copied constant.
+{
+  const read = (rel) => fs.readFileSync(path.join(root, rel), "utf8");
+  const privacyHtml = read("privacidade/index.html");
+  const leadsHtml = read("comercial/privacidade-leads/index.html");
+  const operatorsDoc = read("docs/security/lgpd-operators.md");
+  const authority = read("docs/architecture/RUNTIME-AUTHORITY.md");
+  const shippedScript = read("script.js");
+  const collectSource = read("netlify/functions/collect.cjs");
+  const acceptanceSource = read("netlify/functions/offer-terms-accept.cjs");
+
+  const visible = (html) =>
+    html
+      // An HTML end tag may carry whitespace AND junk before its ">" -- the parser
+      // accepts `</script >` and even `</script\t\n bar>` as closing the block and
+      // discards the extra. A naive `<\/script>` misses both, so the block's CODE
+      // would survive into what this gate treats as visible text (CodeQL alert 59).
+      // `[^>]*` covers the whole tail; `\b` keeps it from matching `</scriptfoo>`.
+      .replace(/<script\b[\s\S]*?<\/script\b[^>]*>/gi, " ")
+      .replace(/<style\b[\s\S]*?<\/style\b[^>]*>/gi, " ")
+      .replace(/<[^>]+>/g, " ")
+      .replace(/&nbsp;/g, " ")
+      .replace(/\s+/g, " ");
+  const privacyText = visible(privacyHtml);
+  const leadsText = visible(leadsHtml);
+
+  // 1. The collector path cited by the policy is the path the shipped script posts to.
+  const shippedCollectPaths = new Set(
+    [...shippedScript.matchAll(/["'`](\/[A-Za-z0-9/._-]*collect)["'`]/g)].map((m) => m[1]),
+  );
+  const citedCollectPaths = new Set(
+    [...privacyHtml.matchAll(/(\/[A-Za-z0-9/._-]*collect)\b/g)].map((m) => m[1]),
+  );
+  if (!shippedCollectPaths.size) fail("collect_path_not_found_in_script");
+  else if (!citedCollectPaths.size) fail("policy_cites_no_collect_path");
+  else {
+    const wrong = [...citedCollectPaths].filter((p) => !shippedCollectPaths.has(p));
+    const cited = [...shippedCollectPaths].filter((p) => citedCollectPaths.has(p));
+    if (wrong.length) fail("policy_collect_path_not_shipped", { wrong, shipped: [...shippedCollectPaths] });
+    else if (!cited.length) fail("policy_collect_path_missing", [...shippedCollectPaths].join(","));
+    else pass("policy_cites_shipped_collect_path", cited.join(","));
+  }
+
+  // 2. Durable store and host operator follow the authority record, not Netlify.
+  const storageBackend = (authority.match(/storage:\s*\n\s*backend:\s*(\S+)/) || [])[1];
+  const dnsProxy = (authority.match(/dns:\s*\n\s*proxy:\s*(\S+)/) || [])[1];
+  // An affirmative sentence about a thing that is not true is the defect. A
+  // sentence that denies it is the correction, so the check is "claimed", not
+  // "mentioned". The negation has to come BEFORE the term in the same sentence:
+  // "não usamos X" is a denial, "não fazemos Y e guardamos em X" is not.
+  const claimedSentences = (text, term) =>
+    text
+      .split(/(?<=[.;])\s+/)
+      .filter((s) => term.test(s) && !/\bn[ãa]o\b|\bnem\b/i.test(s.split(term)[0]));
+  if (storageBackend !== "filesystem") fail("authority_storage_backend_unexpected", storageBackend);
+  else {
+    const claimed = claimedSentences(privacyText, /blobs/i);
+    if (claimed.length) fail("policy_still_names_blobs_as_store", claimed[0].trim().slice(0, 120));
+    else pass("policy_matches_filesystem_store");
+  }
+  for (const [name, text] of [["privacidade", privacyText], ["privacidade-leads", leadsText]]) {
+    if (!/netcup/i.test(text)) fail("host_operator_undisclosed", name);
+    else pass("host_operator_disclosed", name);
+  }
+
+  // 3. Cloudflare proxies every visitor request, so it cannot be disclosed only
+  //    as the anti-abuse challenge.
+  if (dnsProxy !== "cloudflare") fail("authority_dns_proxy_unexpected", dnsProxy);
+  else {
+    const sentences = privacyText.split(/(?<=[.;])\s+/);
+    const edge = sentences.filter((s) => /cloudflare/i.test(s) && !/turnstile/i.test(s));
+    if (!edge.length) fail("cloudflare_edge_undisclosed");
+    else pass("cloudflare_edge_disclosed", edge[0].trim().slice(0, 60));
+  }
+
+  // 4. Resend is configured in production (docs/ops/CONFENGE-INBOUND-RELEASE-
+  //    CONVERGENCE-01.md records four notify emails sent "with RESEND_API_KEY
+  //    set in production"), so it may not be shown as merely optional.
+  for (const [name, html] of [["privacidade", privacyHtml], ["privacidade-leads", leadsHtml]]) {
+    // The whole list item or paragraph that names the operator, so a
+    // conditional qualifier cannot hide in a neighbouring clause.
+    const items = [...html.matchAll(/<(li|p)\b[^>]*>([\s\S]*?)<\/\1>/g)]
+      .map((m) => visible(m[2]))
+      .filter((b) => /resend/i.test(b));
+    if (!items.length) fail("resend_undisclosed", name);
+    else {
+      const conditional = items.filter((b) => /quando ativad|se ativad|caso ativad|quando configurad/i.test(b));
+      if (conditional.length) fail("resend_presented_as_conditional", conditional[0].trim().slice(0, 120));
+      else pass("resend_disclosed_as_active", name);
+    }
+  }
+
+  // 5. Telemetry: the collector writes one durable record per event carrying an
+  //    IP hash and a session id, so the policy may not call it aggregate samples.
+  const perEventRecord = /store\.put\(key,\s*\{\s*events:\s*\[event\]\s*\}/.test(collectSource);
+  const persistsIpHash = /\n\s*ip_hash,/.test(collectSource);
+  const persistsSid = /sid:\s*admitted\.event\.sid/.test(collectSource);
+  if (!perEventRecord || !persistsIpHash || !persistsSid) {
+    fail("collector_shape_changed", { perEventRecord, persistsIpHash, persistsSid });
+  } else {
+    const aggregateClaims = claimedSentences(privacyText, /amostras? agregad/i);
+    if (aggregateClaims.length) {
+      fail("telemetry_described_as_aggregate", aggregateClaims[0].trim().slice(0, 120));
+    } else pass("telemetry_not_described_as_aggregate");
+    if (!/hash de IP/i.test(privacyText) || !/identificador (?:técnico )?de sessão/i.test(privacyText)) {
+      fail("telemetry_fields_undisclosed");
+    } else pass("telemetry_fields_disclosed");
+  }
+
+  // 5b. The page tells the visitor the origin access log is minimized. That
+  //     promise has to match the log format the host actually installs.
+  if (/registro de acesso <strong>minimizado<\/strong>|acesso minimizado/i.test(privacyHtml)) {
+    const httpConf = read("deploy/netcup/nginx/confenge-web-http.conf");
+    const format = (httpConf.split("log_format confenge_minimized")[1] || "").split(";")[0];
+    const leaking = ["$remote_addr", "$http_user_agent", "$http_referer", "$http_cookie", "$http_x_forwarded_for"]
+      .filter((variable) => format.includes(variable));
+    if (!format) fail("minimized_log_format_not_found");
+    else if (leaking.length) fail("origin_log_contradicts_policy", leaking.join(","));
+    else pass("origin_log_matches_minimized_promise");
+  } else fail("minimized_log_promise_removed_from_policy");
+
+  // 6. Visible parentheses must close. The operator list shipped a stray pair.
+  const blocks = [...privacyHtml.matchAll(/<(li|p)\b[^>]*>([\s\S]*?)<\/\1>/g)].map((m) => visible(m[2]));
+  const unbalanced = blocks.filter((b) => (b.match(/\(/g) || []).length !== (b.match(/\)/g) || []).length);
+  if (unbalanced.length) fail("unbalanced_parentheses", unbalanced.map((b) => b.trim().slice(0, 70)));
+  else pass("parentheses_balanced", String(blocks.length));
+
+  // 7. The e-mail-sequence and offer/payment flows point at these documents, so
+  //    the documents have to cover them.
+  const nurtureHtml = read("nurture/index.html");
+  const nurtureUsesPolicy = /href="\/privacidade\/"/.test(nurtureHtml) && /type="email"/.test(nurtureHtml);
+  if (!nurtureUsesPolicy) fail("nurture_page_shape_changed");
+  else if (!/href="\/nurture\/"/.test(privacyHtml)) fail("nurture_flow_uncovered");
+  else pass("nurture_flow_covered");
+  const acceptanceStoresRawIp =
+    /user_agent:\s*\(event\.headers/.test(acceptanceSource) &&
+    /ip:\s*clientIp\(event\.headers/.test(acceptanceSource);
+  if (!acceptanceStoresRawIp) fail("acceptance_shape_changed");
+  else if (!/href="\/comercial\/privacidade-leads\/"/.test(privacyHtml) || !/asaas/i.test(privacyText)) {
+    fail("offer_flow_uncovered_by_sitewide_policy");
+  } else pass("offer_flow_covered_by_sitewide_policy");
+
+  // 8. The leads notice may not deny a subprocessor list while real operators run.
+  if (/lista inventada de subprocessadores|não há .{0,60}subprocessador/i.test(leadsText)) {
+    fail("leads_notice_denies_operator_list", leadsText.match(/.{0,90}subprocessador.{0,60}/i)?.[0]);
+  } else pass("leads_notice_keeps_operator_list");
+  for (const operator of ["Netcup", "Cloudflare", "Resend", "Asaas"]) {
+    if (!new RegExp(operator, "i").test(leadsText)) fail("leads_operator_missing", operator);
+    else pass("leads_operator_disclosed", operator);
+  }
+
+  // 9. The internal register the public page points at carries the same operators.
+  const usesAsaas = /asaas-production\.cjs/.test(read("netlify/functions/offer-checkout.cjs"));
+  for (const [needed, why] of [
+    [/\|\s*Cloudflare\s*\(borda[^|]*\|/i, "cloudflare_edge_row"],
+    [usesAsaas ? /\|\s*Asaas[^|]*\|/i : /^/, "asaas_row"],
+  ]) {
+    if (!needed.test(operatorsDoc)) fail("lgpd_register_row_missing", why);
+    else pass("lgpd_register_row_present", why);
+  }
+}
+
 if (failed) {
   console.error(`\n${failed} failure(s)`);
   process.exit(1);

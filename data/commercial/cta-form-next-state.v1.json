@@ -34,8 +34,8 @@
     "authority": "data/organic/public-family-registry.json",
     "rule": "Derive every lead-bearing public HTML form, including declared noindex commercial configuration steps, then exclude mutation on the six routes held by the frozen unlock plan.",
     "expected_active_capture_routes": 27,
-    "expected_declared_ctas": 133,
-    "expected_declared_ctas_note": "133 desde 2026-09-07. Os dois a mais sao o canal de correcao na pagina de contato (/triagem-tecnica/#corrigir-o-site): um mailto e um WhatsApp, ambos destinos reais e visiveis. Nao sao controles ocultos para satisfazer contador: substituem a pagina autonoma /correcoes/, que foi retirada. O censo foi regerado pelo escritor canonico."
+    "expected_declared_ctas": 135,
+    "expected_declared_ctas_note": "135 desde 2026-09-07 (#611/A02). Os dois a mais sao os canais contextuais do formulario da home, que aparecem quando o visitante escolhe uma situacao fora de obra publica: um WhatsApp e um mailto, ambos destinos reais, visiveis e ja usados na mesma pagina. Nao sao controles ocultos para satisfazer contador: sao a saida para quem prefere nao preencher o formulario, e sem eles uma pericia, um caso de SST ou um projeto ficavam sem canal proprio. O censo foi regerado pelo escritor canonico."
   },
   "invariants": [
     "Turnstile is injected fail-closed into every production lead form.",

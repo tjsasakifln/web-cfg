@@ -112,6 +112,19 @@ def _section_state(payload: dict[str, Any], section_id: str) -> str:
     return ((payload.get("sections") or {}).get(section_id) or {}).get("state") or UNKNOWN
 
 
+def _known(value: Any) -> bool:
+    """A value the producer actually reported.
+
+    `UNKNOWN` is the producer's token for "not observed". It is neither zero nor
+    a certainty, and it is not Portuguese: printing it in a meta description
+    ships internal vocabulary to search results ("a partir de UNKNOWN contratos
+    publicados por UNKNOWN órgãos"). A missing count is therefore dropped from
+    the sentence -- the description then claims no number at all, which is the
+    only honest rendering of an absent one.
+    """
+    return value not in (None, "", UNKNOWN) and str(value).strip() not in ("", UNKNOWN)
+
+
 def description_for(payload: dict[str, Any]) -> str:
     """Per-page meta description. Must not repeat the hub's, or SEO dedup fails."""
     profile = payload.get("subject_profile") or {}
@@ -120,10 +133,18 @@ def description_for(payload: dict[str, Any]) -> str:
     buyers = profile.get("buyer_count", UNKNOWN)
     contracts = profile.get("contract_count", UNKNOWN)
     as_of = payload.get("as_of", UNKNOWN)
+    if _known(contracts) and _known(buyers):
+        scope = f"a partir de {contracts} contratos publicados por {buyers} órgãos"
+    elif _known(contracts):
+        scope = f"a partir de {contracts} contratos publicados"
+    elif _known(buyers):
+        scope = f"a partir de contratos publicados por {buyers} órgãos"
+    else:
+        scope = "a partir de contratos publicados"
+    when = f"observados em {as_of}" if _known(as_of) else "sem data de observação informada"
     text = (
         f"Faixas de valor por categoria, estrutura de concorrência e editais abertos "
-        f"{where}, a partir de {contracts} contratos publicados por {buyers} órgãos, "
-        f"observados em {as_of}."
+        f"{where}, {scope}, {when}."
     )
     return text if len(text) <= 160 else text[:157].rstrip() + "…"
 

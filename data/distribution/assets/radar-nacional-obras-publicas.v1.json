@@ -8,7 +8,7 @@
   "lane": "A",
   "asset": {
     "id": "radar-nacional-obras-publicas",
-    "name": "Radar Nacional de Obras Públicas",
+    "name": "Radar de obras públicas: método aberto e demanda observada",
     "canonical_url": "https://confenge.com.br/radar/nacional-obras-publicas/",
     "indexable": true,
     "do_not_index": false,
@@ -20,7 +20,7 @@
     "date": "2026-08-15",
     "utility": {
       "distinct_user_utility": true,
-      "utility_note": "Metodologia reproduzível, amostra GSC rastreável, downloads sem PII. Séries nacionais de contratos permanecem em preparação — não são o gancho de distribuição.",
+      "utility_note": "Método reproduzível, amostra GSC rastreável com janela observada (2026-07-14 a 2026-07-28, 15 dias) e denominador do domínio (10 cliques / 325 impressões), download sem PII. Séries nacionais de contratos permanecem em preparação — não são o gancho de distribuição.",
       "invented_national_contract_stats": false
     },
     "citation_primitives": {
@@ -32,7 +32,16 @@
         "status": "already_present",
         "as_of": "2026-07-30",
         "source": "seo/gsc-2026-07-30",
-        "text": "Na amostra GSC de referência seo/gsc-2026-07-30, /conteudos/sinapi-desonerado-nao-desonerado/ teve 88 impressões e 0 cliques; a consulta «desonerado e não desonerado» teve 10 impressões e posição média 9,2. Não é censo de contratos nacionais."
+        "text": "Na janela observada do export seo/gsc-2026-07-30 (2026-07-14 a 2026-07-28, 15 dias), confenge.com.br inteiro somou 10 cliques e 325 impressões. Dentro desse total, /conteudos/sinapi-desonerado-nao-desonerado/ teve 88 impressões e 0 cliques, e a consulta «desonerado e não desonerado» teve 10 impressões e posição média 9,2. É demanda de busca do próprio domínio, não censo de contratos nacionais.",
+        "observed_period": {
+          "start": "2026-07-14",
+          "end": "2026-07-28",
+          "days_with_data": 15
+        },
+        "property_totals_in_period": {
+          "clicks": 10,
+          "impressions": 325
+        }
       },
       "chart_card_metadata": {
         "status": "already_present",
@@ -48,11 +57,18 @@
         "status": "already_present",
         "pii": false,
         "links": [
-          "https://confenge.com.br/radar/nacional-obras-publicas/gsc-demand-sample.json",
-          "https://confenge.com.br/radar/nacional-obras-publicas/radar-nacional.pdf"
+          "https://confenge.com.br/radar/nacional-obras-publicas/gsc-demand-sample.json"
+        ],
+        "withdrawn": [
+          {
+            "url": "https://confenge.com.br/radar/nacional-obras-publicas/radar-nacional.pdf",
+            "date": "2026-09-07",
+            "reason": "Render anterior às correções da página: repetia texto já substituído (pending_lineage, extra-cli, data/revops/gsc/latest_import.json) e todos os links internos eram file:/// mortos. Retirado em vez de reservido. Não há leitor de PDF em requirements-ci.txt, então nenhum portão deste repositório conseguiria provar que um novo render continua verdadeiro; a página HTML é a versão citável."
+          }
         ]
       }
-    }
+    },
+    "name_note": "Renomeado em 2026-09-07. O nome anterior — «Radar Nacional de Obras Públicas» — prometia uma série nacional de contratos que a página não publica: os seis recortes nacionais seguem em preparação. A URL e a canonical não mudaram. Os templates herdados em data/distribution/radar-outreach-kit.json (PR #25) ainda carregam o nome antigo; são human-send e devem ser reescritos antes de qualquer disparo."
   },
   "inherited_packs": [
     {

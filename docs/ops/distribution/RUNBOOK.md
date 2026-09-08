@@ -52,10 +52,11 @@ Not metrics: contact-list size, “backlink target count”, messages sent, page
 Do not restyle the site. Point at what already exists:
 
 - stable citation link: `/radar/nacional-obras-publicas/`
-- quotable stat: amostra GSC `seo/gsc-2026-07-30` (ex.: 88 impressões / 0 cliques em SINAPI desonerado) — **não** volume nacional de contratos
+- quotable stat: amostra GSC `seo/gsc-2026-07-30`, janela observada 2026-07-14 a 2026-07-28 (15 dias; 10 cliques e 325 impressões no domínio inteiro; ex.: 88 impressões / 0 cliques em SINAPI desonerado dentro desse total) — **não** volume nacional de contratos
 - chart card: tabelas HTML da seção 2
 - source/method block: seção 1
-- safe downloads: `gsc-demand-sample.json` e `radar-nacional.pdf` (sem PII)
+- safe download: `gsc-demand-sample.json` (sem PII). O `radar-nacional.pdf` foi **retirado em 2026-09-07**: era um render anterior às correções da página, com texto já substituído e links internos `file:///` mortos. Não reofereça o PDF sem um render novo e um gate que consiga lê-lo de volta.
+- nome público do ativo mudou em 2026-09-07 para «Radar de obras públicas: método aberto e demanda observada». A URL não mudou. Os templates de `radar-outreach-kit.json` ainda dizem «Radar Nacional de Obras Públicas»: reescreva antes de qualquer disparo humano.
 
 ## Inherited packs
 

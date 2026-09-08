@@ -175,12 +175,17 @@ assert("observed_html_count", observation.source_html_files_scanned === 276, obs
 // cinco numeros abaixo caem por ela e so por ela: 440->438, 230->229, 210->209,
 // 224->223, 204->203. Nenhum logo saiu de pagina que continua servida -- o que
 // esta contagem existe para impedir.
-assert("observed_logo_count", observation.logo_image_occurrences === 438, observation.logo_image_occurrences);
-assert("observed_header_count", observation.header_lockup_occurrences === 229, observation.header_lockup_occurrences);
+// 2026-09-07 (2): /oportunidades/index.html foi publicada -- a rota respondia 403
+// cru do nginx por nao ter indice. E o UNICO HTML novo do lote e tem exatamente UM
+// logo de cabecalho e NENHUM de rodape, e os tres numeros abaixo sobem por ela e so
+// por ela: 438->439, 229->230, 223->224. Rodape (209) e asset branco (203) ficam
+// parados, o que e a prova de que nenhum outro logo entrou ou saiu.
+assert("observed_logo_count", observation.logo_image_occurrences === 439, observation.logo_image_occurrences);
+assert("observed_header_count", observation.header_lockup_occurrences === 230, observation.header_lockup_occurrences);
 assert("observed_footer_count", observation.footer_lockup_occurrences === 209, observation.footer_lockup_occurrences);
 assert("observed_asset_counts", JSON.stringify(observation.legacy_asset_occurrences) === JSON.stringify({
   "/assets/logo-confenge.png": 6,
-  "/assets/logo-confenge-500-f8a83f6d.png": 223,
+  "/assets/logo-confenge-500-f8a83f6d.png": 224,
   "/assets/logo-confenge-white.png": 6,
   "/assets/logo-confenge-white-500-1677038e.png": 203,
 }), observation.legacy_asset_occurrences);

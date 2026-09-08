@@ -567,6 +567,27 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
                     "secondary_label": "Começar pelo diagnóstico B2G",
                     "secondary_href": "/diagnostico-b2g-360/",
                 }
+        extra_html = ""
+        if path == "/radar/":
+            # /radar/ is the declared breadcrumb parent of the hand-authored
+            # /radar/nacional-obras-publicas/, which is not a pSEO publication and so
+            # can never appear in `items`. Without this the hub never linked down to
+            # its own child, and editing the built HTML did not survive a rebuild.
+            extra_html = (
+                '<section aria-labelledby="radar-publicado" style="margin:2.5rem 0">'
+                '<h2 id="radar-publicado">O que já está publicado neste radar</h2>'
+                '<p><a class="text-link" href="/radar/nacional-obras-publicas/">'
+                "Radar de obras públicas: método aberto e demanda observada</a> publica o "
+                "método reproduzível de leitura de contratos públicos e a demanda orgânica "
+                "medida no próprio domínio pelo Google Search Console, na janela de "
+                "2026-07-14 a 2026-07-28 (15 dias, 10 cliques e 325 impressões em "
+                "confenge.com.br inteiro).</p>"
+                "<p>Os recortes nacionais de contratos seguem <strong>em preparação</strong>: "
+                "segmento de obra, região, concentração de compradores, tickets, frequência "
+                "de aditivos e padrões de prazo. Nenhum deles está publicado, e a página não "
+                "estima volume nacional de contratos.</p>"
+                "</section>"
+)
         html = render_hub(
             title=title,
             h1=h1,
@@ -579,6 +600,7 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
             eyebrow=eyebrow,
             wa_message=wa,
             empty_cta=empty_cta,
+            extra_html=extra_html,
 )
         out = url_to_path(path)
         out.parent.mkdir(parents=True, exist_ok=True)

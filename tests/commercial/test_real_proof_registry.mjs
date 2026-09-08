@@ -159,6 +159,65 @@ assert.ok(
   ),
 );
 
+// #638. The empty proof block is no longer required to ANNOUNCE its emptiness.
+// It is required to state the condition under which a real client result gets
+// published, and to carry no client proof while it has none. Three counter-cases.
+const statePath = config.public_state_surface.path;
+const stateBlock = /<section\b[^>]*\bdata-proof-state=["'][^"']+["'][^>]*>[\s\S]*?<\/section>/i;
+const replaceStateBlock = (body) => {
+  const source = pages.get(statePath);
+  const next = new Map(pages);
+  next.set(statePath, source.replace(stateBlock, body));
+  return next;
+};
+assert.ok(
+  evaluateProofGate({
+    config,
+    registry,
+    pages: replaceStateBlock(
+      '<section data-proof-state="none"><h2>Resultados de clientes</h2>' +
+        "<p>Ainda estamos organizando esta seção.</p></section>",
+    ),
+  }).includes(`proof_publication_condition_absent:${statePath}`),
+  "an empty proof block that never says how a real result gets published must fail",
+);
+assert.ok(
+  evaluateProofGate({
+    config,
+    registry,
+    pages: replaceStateBlock(
+      '<section data-proof-state="none"><h2>Resultados de clientes</h2>' +
+        "<p>Publicamos com autorização do contratante. Veja o depoimento do nosso cliente.</p></section>",
+    ),
+  }).includes(`empty_proof_state_claims_proof:${statePath}`),
+  "an empty proof block that presents a testimonial must fail",
+);
+assert.ok(
+  evaluateProofGate({
+    config,
+    registry,
+    pages: replaceStateBlock(
+      '<section data-proof-state="none"><h2>Resultados de clientes</h2>' +
+        '<p data-proof-id="inventado">Publicamos com autorização do contratante.</p></section>',
+    ),
+  }).includes(`empty_proof_state_carries_marker:${statePath}`),
+  "an empty proof block carrying a proof marker must fail",
+);
+// And the shipped block, which no longer headlines the absence, still passes.
+assert.ok(
+  !evaluateProofGate({ config, registry, pages }).some((code) =>
+    code.startsWith("proof_publication_condition_absent") ||
+    code.startsWith("empty_proof_state_claims_proof") ||
+    code.startsWith("empty_proof_state_carries_marker"),
+  ),
+);
+assert.ok(
+  !/\bnenhum publicado at[ée] agora\b|\bZero resultados de clientes publicados\b/i.test(
+    pages.get(statePath),
+  ),
+  "the proof block must not go back to headlining what we do not have",
+);
+
 const forbiddenSchema = new Map(pages);
 forbiddenSchema.set(
   "index.html",

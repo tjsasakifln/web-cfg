@@ -17,6 +17,24 @@
       const maturidadeEl = form.querySelector('#maturidade_documental');
       const capacidadeEl = form.querySelector('#capacidade_interna');
       const offerFitHintEl = form.querySelector('[data-offer-fit-hint]');
+      // #611 (A02) — superficies que mudam com a situacao escolhida.
+      const situationNextEl = form.querySelector('[data-situation-next]');
+      const situationDetailEl = form.querySelector('[data-situation-detail]');
+      const situationChannelsEl = form.querySelector('[data-situation-channels]');
+      const situationRouteEl = form.querySelector('[data-situation-route]');
+      const situationWhatsappEl = form.querySelector('[data-situation-whatsapp]');
+      const b2gQualificationEl = form.querySelector('[data-b2g-qualification]');
+      const mensagemEl = form.querySelector('#mensagem');
+      const defaultMensagemPlaceholder = mensagemEl ? (mensagemEl.getAttribute('placeholder') || '') : '';
+      const B2G_MENSAGEM_PLACEHOLDER = 'Edital, contrato, glosa, notificação ou o que precisa ser decidido. Não cole dados sensíveis desnecessários.';
+      const WHATSAPP_BASE = 'https://wa.me/5548988344559';
+      const currentSituation = () => (typeof window.confengeHomeSituation === 'function'
+        ? window.confengeHomeSituation(estagioEl && estagioEl.value)
+        : null);
+      const usesPublicWorksLadder = () => {
+        const fit = currentSituation();
+        return !fit || fit.ladder !== false;
+      };
       const urgencyToBand = (raw) => {
         const v = (raw || '').trim();
         if (v === 'até 48 horas') return 'ate_48h';
@@ -34,10 +52,54 @@
         internal_capacity: (capacidadeEl?.value || '').trim() || 'unknown',
       });
       const updateOfferFitHint = () => {
+        // A escada de obra publica so fala com quem escolheu obra publica.
+        // Sem esta guarda, mexer em "Urgencia" reescrevia a dica com uma faixa
+        // de preco B2G para quem pediu pericia, SST ou projeto.
+        if (!usesPublicWorksLadder()) return;
         if (!offerFitHintEl || typeof window.confengeRouteOfferFit !== 'function') return;
         const routed = window.confengeRouteOfferFit(readOfferFitInput());
         if (!routed || !routed.public_next) return;
         offerFitHintEl.textContent = routed.public_next;
+      };
+      const showEl = (el, visible) => { if (el) el.hidden = !visible; };
+      const applySituation = () => {
+        const fit = currentSituation();
+        const ladder = !fit || fit.ladder !== false;
+        if (b2gQualificationEl) {
+          b2gQualificationEl.hidden = !ladder;
+          if (ladder) b2gQualificationEl.removeAttribute('inert');
+          else b2gQualificationEl.setAttribute('inert', '');
+        }
+        if (!ladder) {
+          // Sem limpar, uma faixa de contrato marcada antes de trocar de
+          // situacao seguiria no POST e no evento como se fosse do caso novo.
+          [faixaContratoEl, riscoEmJogoEl, frequenciaEl, maturidadeEl, capacidadeEl]
+            .forEach((el) => { if (el) el.value = ''; });
+        }
+        showEl(situationNextEl, Boolean(fit && fit.next_step));
+        if (situationNextEl) situationNextEl.textContent = (fit && fit.next_step) || '';
+        showEl(situationDetailEl, Boolean(fit && fit.detail));
+        if (situationDetailEl) situationDetailEl.textContent = (fit && fit.detail) || '';
+        showEl(situationChannelsEl, Boolean(fit && fit.route));
+        if (situationRouteEl && fit && fit.route) {
+          situationRouteEl.setAttribute('href', fit.route);
+          if (fit.route_label) situationRouteEl.textContent = fit.route_label;
+        }
+        if (situationWhatsappEl && fit && fit.whatsapp) {
+          situationWhatsappEl.setAttribute(
+            'href',
+            `${WHATSAPP_BASE}?text=${encodeURIComponent(fit.whatsapp)}`,
+          );
+        }
+        if (mensagemEl) {
+          const placeholder = (fit && fit.placeholder)
+            || (ladder ? B2G_MENSAGEM_PLACEHOLDER : defaultMensagemPlaceholder);
+          mensagemEl.setAttribute('placeholder', placeholder || defaultMensagemPlaceholder);
+        }
+        // A dica da escada continua sendo escrita apenas quando o visitante
+        // mexe nas faixas ou na urgencia, como antes. Reescreve-la aqui faria
+        // a home abrir ja pedindo um diagnostico com preco, sem ninguem ter
+        // escolhido nada.
       };
       const receiptRequired = form.getAttribute('data-receipt-required') === 'true';
 
@@ -285,14 +347,17 @@
         showFormStatus('', '');
         const j = stageToJourney(estagioEl?.value);
         applyJourneyToForm(j);
+        applySituation();
         return true;
       };
+      applySituation();
 
       estagioEl?.addEventListener('change', () => {
         const v = (estagioEl.value || '').slice(0, 80);
         if (!v) return;
         const j = stageToJourney(v);
         applyJourneyToForm(j);
+        applySituation();
         track('qualification_stage_select', {
           page_path: pagePath,
           content_cluster: defaultCluster,
@@ -398,7 +463,7 @@
           frequency_category: (frequenciaEl?.value || '').slice(0, 40),
           docs_category: (maturidadeEl?.value || '').slice(0, 40),
           capacity_category: (capacidadeEl?.value || '').slice(0, 40),
-          next_step_category: (routed?.next_step || '').slice(0, 40),
+          next_step_category: usesPublicWorksLadder() ? (routed?.next_step || '').slice(0, 40) : '',
         });
         if (assetId) {
           track('cta_click', {
@@ -463,10 +528,16 @@
           const finishFallback = (reason) => {
             const stage = (estagioEl?.value || '').slice(0, 80);
             const msg = encodeURIComponent(
-              `Olá, Tiago. Tentei enviar pelo formulário do site (${stage || journey || 'contato'}) e preciso de retorno. Protocolo local indisponível.`,
+              `Olá, Tiago. Tentei enviar pelo formulário do site (${stage || journey || 'contato'}) e não recebi confirmação. Preciso de retorno.`,
             );
+            // The POST already left this browser. A deadline, an unreadable body or a
+            // proxy error do NOT prove nothing was written, so the wording must not
+            // assert it. Only a refusal that never reached the server may say that.
+            const leftTheBrowser = reason === 'timeout' || reason === 'receipt_unconfirmed';
             showFormStatus(
-              'Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.',
+              leftTheBrowser
+                ? 'Não recebemos a confirmação a tempo. O seu pedido pode ter sido registrado — não reescreva os dados: tente enviar de novo, ou use o WhatsApp abaixo. O protocolo só aparece depois da gravação confirmada.'
+                : 'Não foi possível enviar ao servidor. Use o WhatsApp abaixo para não perder o contato — o protocolo só aparece depois da gravação confirmada.',
               'error',
             );
             track('lead_form_backend_error', {

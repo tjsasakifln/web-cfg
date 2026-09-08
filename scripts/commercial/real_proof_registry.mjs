@@ -24,6 +24,11 @@ const RESULT_QUANTITY_OR_COMPARISON = /R\$\s*\d[\d.,]*|\d[\d.,]*\s*(?:%|(?:reais
 const CLIENT_SUBJECT = /\b(cliente|construtora|empresa)\b|\b(?:a|uma)\s+contratada\b|\b(?:o|um)\s+contratante\b/i;
 const TESTIMONIAL_CLAIM = /\b(depoimento de cliente|segundo (?:o|a) cliente|review de cliente|cliente afirmou)\b/i;
 const HONEST_NEGATION = /\b(n[aã]o (?:[ée]|h[aá]|representa|promete|existe|foi)|nenhum[ao]?|zero|sem cliente|hipot[eé]tic|sint[eé]tic|demonstrativ)\b/i;
+// The empty proof block must say HOW a real client result gets published:
+// authorization from the contracting party, an identified source and a date.
+const PUBLICATION_CONDITION_RE = /autoriza[cç][aã]o/i;
+// ...and it must not, while empty, present anything as client proof.
+const SOCIAL_PROOF_CLAIM_RE = /\b(depoimento|review|avalia[cç][aã]o de cliente|caso de sucesso|nota agregada|logotipo de cliente)\b/i;
 
 export function loadAuditConfig(root = DEFAULT_ROOT) {
   return JSON.parse(fs.readFileSync(path.join(root, AUDIT_REL), "utf8"));
@@ -207,7 +212,19 @@ export function evaluateProofGate({
   if (!stateMatch) problems.push(`proof_state_block_missing:${statePath}`);
   else {
     if (stateMatch[1] !== expectedState) problems.push(`proof_state_mismatch:${statePath}`);
-    if (!published.length && !/\b(zero|nenhum[ao]?)\b/i.test(stripMarkup(stateMatch[2]))) problems.push(`zero_proof_state_not_rendered:${statePath}`);
+    // #638. The empty state used to be forced to *announce its emptiness*
+    // ("zero", "nenhum"). Volunteering a deficit is not what protects the
+    // reader: what protects the reader is that the block carries no client
+    // proof it does not have, and states the condition under which a real one
+    // gets published. `data-proof-state` stays as machine state, and every
+    // fabrication rule below (forbidden schema types, social-proof markers,
+    // orphan markers/fields, unregistered client claims) is untouched.
+    const stateText = stripMarkup(stateMatch[2]);
+    if (!published.length) {
+      if (!PUBLICATION_CONDITION_RE.test(stateText)) problems.push(`proof_publication_condition_absent:${statePath}`);
+      if (SOCIAL_PROOF_CLAIM_RE.test(stateText)) problems.push(`empty_proof_state_claims_proof:${statePath}`);
+      if (matchPositions(PROOF_ID_RE, stateMatch[0]).length) problems.push(`empty_proof_state_carries_marker:${statePath}`);
+    }
   }
 
   const surfaceByProof = new Map();

@@ -10,7 +10,14 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 HOME = ROOT / "index.html"
 SERVICES = ROOT / "servicos" / "index.html"
-B2G_FORM_SHA256 = "85631a4c47428e945e79c58ec7a4783b52e22a93956192687b0920265b09000b"
+# 2026-09-07 (#611/A02). O hash e detector de mudanca nao revisada, nao
+# proibicao de mudar: a revisao desta vez abriu o formulario para as situacoes
+# que ele recusava (projeto, quantitativos, obra e imovel, pericia, seguranca
+# do trabalho, orgao publico). As invariantes estruturais abaixo continuam
+# valendo sem alteracao: 23 controles, 3 obrigatorios, action /obrigado, sem
+# upload. O que mudou foram opcoes e copy, e as assercoes semanticas novas
+# dizem o que a mudanca tinha de preservar.
+CAPTURE_FORM_SHA256 = "b3ebea7ad555cac7d459e4cf83186393f3630e4a49d8b6e265480a4e01cb0b15"
 
 
 def _home() -> str:
@@ -77,7 +84,7 @@ def test_pncp_proof_is_confined_to_the_b2g_vertical() -> None:
     assert html.index('id="situacoes"') < html.index('id="obras-publicas"')
 
 
-def test_corporate_triage_is_safe_and_b2g_form_is_unchanged() -> None:
+def test_corporate_triage_is_safe_and_capture_form_is_reviewed() -> None:
     html = _home()
     triage = _section(html, r'id="triagem-tecnica"')
     form = re.search(r'<form\b[^>]*id="formulario-contato"[\s\S]*?</form>', html)
@@ -99,9 +106,65 @@ def test_corporate_triage_is_safe_and_b2g_form_is_unchanged() -> None:
     assert len(required) == 3, required
     assert 'type="file"' not in body.lower()
     digest = hashlib.sha256(body.encode("utf-8")).hexdigest()
-    assert digest == B2G_FORM_SHA256
+    assert digest == CAPTURE_FORM_SHA256
     assert 'name="diagnostico-b2g"' in form.group(0)
     assert 'name="document_intent" type="hidden" value="secure_channel_request"' in form.group(0)
+
+
+def test_capture_form_expresses_every_situation_without_a_b2g_default() -> None:
+    """#611 (A02). O select so aceitava contrato publico; quem chegava com
+    projeto, quantitativos, obra, imovel, pericia, seguranca do trabalho ou do
+    lado do orgao publico tinha apenas "Outro" -- e "Outro" caia na jornada
+    B2G. As oito situacoes precisam estar dizíveis, e nenhuma situacao fora de
+    obra publica pode carregar uma jornada de obra publica."""
+    html = _home()
+    select = re.search(r'<select\b[^>]*id="estagio"[\s\S]*?</select>', html)
+    assert select, "estagio select missing"
+    block = select.group(0)
+
+    eight_situations = (
+        "projeto, revisão ou compatibilização",
+        "quantitativos ou orçamento",
+        "obra ou imóvel para inspecionar ou documentar",
+        "perícia, assistência técnica ou avaliação",
+        "segurança do trabalho",
+        "problema urgente em contrato",
+        "planejamento de órgão público",
+        "outro",
+    )
+    for value in eight_situations:
+        assert f'value="{value}"' in block, value
+
+    public_works = {
+        "problema urgente em contrato": "contrato",
+        "edital ou proposta em análise": "edital",
+        "estruturando a operação no mercado público": "operacao",
+        "escolhendo oportunidades": "operacao",
+        "contrato em execução": "contrato",
+    }
+    options = re.findall(r'<option\b[^>]*value="([^"]*)"[^>]*data-journey="([^"]*)"', block)
+    assert len(options) >= 12, options
+    journeys = dict(options)
+    for value, journey in public_works.items():
+        assert journeys[value] == journey, (value, journeys.get(value))
+    for value, journey in journeys.items():
+        if value in public_works:
+            continue
+        assert journey not in {"contrato", "edital", "operacao"}, (value, journey)
+    assert journeys["projeto, revisão ou compatibilização"] != journeys["quantitativos ou orçamento"]
+
+    # A qualificacao de preco de obra publica tem de ser um bloco separavel,
+    # senao nao ha como esconde-la de quem nao escolheu obra publica.
+    form = re.search(r'<form\b[^>]*id="formulario-contato"[\s\S]*?</form>', html)
+    ladder = re.search(
+        r'<div\b[^>]*data-b2g-qualification[^>]*>[\s\S]*?data-offer-fit-hint[\s\S]*?</p>',
+        form.group(0),
+    )
+    assert ladder, "public-works qualification block is not delimited"
+    for field in ("faixa_contrato", "risco_em_jogo", "frequencia", "maturidade_documental", "capacidade_interna"):
+        assert f'name="{field}"' in ladder.group(0), field
+    for hook in ("data-situation-next", "data-situation-channels", "data-situation-route", "data-situation-whatsapp"):
+        assert hook in form.group(0), hook
 
 
 def test_services_hub_is_corporate_indexable_and_price_free() -> None:

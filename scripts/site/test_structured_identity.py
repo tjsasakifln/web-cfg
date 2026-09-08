@@ -45,15 +45,29 @@ def test_live_source_contains_no_structured_credential_object() -> None:
     specialist = (root / "especialista" / "tiago-jun-sasaki" / "index.html").read_text(encoding="utf-8")
     sanitized, _removed = sanitize_html(specialist)
     assert audit_html(sanitized) == []
-    crea_projectable = any(
-        is_projectable(claim) and "crea" in str(claim.get("id", "")).lower()
-        for claim in load_registry()["claims"]
+    # A structured credential object exists only when a projectable claim
+    # actually CARRIES one. #638 publishes "Registro profissional ativo no CREA"
+    # as owner-attested visible copy with `schema: {}` on purpose: we do not have
+    # a reproducible public source for the registration number, so no
+    # EducationalOccupationalCredential node may be synthesised for it.
+    registry = load_registry()
+    credential_schema_projectable = any(
+        is_projectable(claim)
+        and "hasCredential" in json.dumps(claim.get("schema") or {}, ensure_ascii=False)
+        for claim in registry["claims"]
     )
-    if crea_projectable:
+    if credential_schema_projectable:
         assert "hasCredential" in sanitized
-        assert "CREA" in sanitized
     else:
         assert "hasCredential" not in sanitized
+    crea_copy_projectable = any(
+        is_projectable(claim) and claim.get("id") == "person-crea-active"
+        for claim in registry["claims"]
+    )
+    assert ("Registro profissional ativo no CREA" in sanitized) == crea_copy_projectable
+    # The withheld registration numbers never ship, projectable copy or not.
+    assert "166954-1" not in sanitized
+    assert "205402-8" not in sanitized
 
 
 def test_owned_surface_keeps_registry_backed_identity_fields() -> None:

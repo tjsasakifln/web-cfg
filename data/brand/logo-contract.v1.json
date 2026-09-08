@@ -132,12 +132,12 @@
     "header_primary": "/assets/logo-confenge-500-f8a83f6d.png",
     "footer_primary": "/assets/logo-confenge-white-500-1677038e.png",
     "source_html_files_scanned": 276,
-    "logo_image_occurrences": 438,
-    "header_lockup_occurrences": 229,
+    "logo_image_occurrences": 439,
+    "header_lockup_occurrences": 230,
     "footer_lockup_occurrences": 209,
     "legacy_asset_occurrences": {
       "/assets/logo-confenge.png": 6,
-      "/assets/logo-confenge-500-f8a83f6d.png": 223,
+      "/assets/logo-confenge-500-f8a83f6d.png": 224,
       "/assets/logo-confenge-white.png": 6,
       "/assets/logo-confenge-white-500-1677038e.png": 203
     },
@@ -148,7 +148,7 @@
     "tagline_minimum_legibility": "NOT_APPROVED",
     "screenshot_regression": "MISSING",
     "production_svg_delivery": "BLOCKED_AWAITING_FOUNDER_ARTWORK",
-    "observation_note": "Recontado em 2026-09-07 apos a retirada da pagina autonoma /correcoes/. A pagina tinha exatamente um logo de cabecalho e um de rodape (verificado em ac4c169cc), e os cinco deltas fecham com ela e so com ela: 440->438 imagens, 230->229 lockups de cabecalho, 210->209 de rodape, 224->223 e 204->203 por asset. Nenhum logo foi removido de pagina que continua servida."
+    "observation_note": "Recontado em 2026-09-07 apos a retirada da pagina autonoma /correcoes/. A pagina tinha exatamente um logo de cabecalho e um de rodape (verificado em ac4c169cc), e os cinco deltas fecham com ela e so com ela: 440->438 imagens, 230->229 lockups de cabecalho, 210->209 de rodape, 224->223 e 204->203 por asset. Nenhum logo foi removido de pagina que continua servida. Recontado novamente em 2026-09-07 apos a publicacao de /oportunidades/index.html, que respondia 403 cru do nginx por nao ter indice. E o UNICO HTML novo do lote (git diff --name-status --diff-filter=A) e carrega exatamente um logo de cabecalho e nenhum de rodape (conferido no arquivo), e os tres deltas fecham com ela e so com ela: 438->439 imagens, 229->230 lockups de cabecalho, 223->224 no asset de cabecalho. Rodape (209) e asset branco (203) nao se movem, o que confirma a leitura. source_html_files_scanned permanece 276 por decisao explicita do gate: e evidencia imutavel de um coletor antigo que incluia arvores internas, e nao foi recapturada."
   },
   "promotion": {
     "current": "BLOCKED_AWAITING_FOUNDER_ARTWORK",

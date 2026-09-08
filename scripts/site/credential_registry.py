@@ -93,6 +93,33 @@ STOREFRONT_PATTERNS = (
     r"hor[aá]rio de atendimento presencial",
 )
 
+# Each projected row names WHERE the fact comes from. Both labels are source
+# attribution in the same grammatical shape, so neither reads as a caveat
+# against the engineer who signs the work: a public registry and the named
+# professional are two sources, not a strong claim and a weak one. Issue #638.
+SOURCE_LABELS = {
+    "VERIFIED": "Fonte: registro público",
+    "SELF_ATTESTED": "Fonte: Tiago Jun Sasaki",
+}
+
+# Copy that volunteers a deficit about our own credentials, track record or
+# proof inventory. The registry is the machine that stamps every owned surface,
+# so the ban lives here and not only in a page-level linter: a wording edit in
+# the JSON contract cannot reintroduce the shape through the back door.
+SELF_DEPRECATION_PATTERNS = (
+    r"n[ãa]o est[ãa]o? afirmad",
+    r"n[ãa]o afirmamos",
+    r"n[ãa]o est[áa] comprovad",
+    r"n[ãa]o comprovad[oa]",
+    r"n[ãa]o verificad[oa]",
+    r"declara[cç][ãa]o do titular",
+    r"apenas (?:uma )?declara[cç][ãa]o",
+    r"mera declara[cç][ãa]o",
+    r"sem comprova[cç][ãa]o",
+    r"classe de permiss[ãa]o",
+    r"\bas_of\b",
+)
+
 
 @dataclass
 class Projection:
@@ -374,12 +401,16 @@ def _visible_rows(surface: str, claims: list[dict[str, Any]]) -> list[tuple[str,
         "org-cnae-servicos-engenharia",
         "person-legal-name",
         "person-civil-eesc-usp",
+        "person-crea-active",
+        "person-analyzed-volume",
         "person-github",
         "service-art-nf",
     )
     order_especialista = (
         "person-legal-name",
         "person-civil-eesc-usp",
+        "person-crea-active",
+        "person-analyzed-volume",
         "person-github",
         "org-legal-name",
         "org-cnpj",
@@ -424,6 +455,8 @@ def _visible_rows(surface: str, claims: list[dict[str, Any]]) -> list[tuple[str,
             "org-crea-pj": "Registro CREA-SC da pessoa jurídica",
             "person-legal-name": "Sócio e condutor dos trabalhos",
             "person-civil-eesc-usp": "Formação",
+            "person-crea-active": "Registro profissional",
+            "person-analyzed-volume": "Histórico profissional",
             "person-github": "Perfil público",
             "person-crea-sc": "Registro CREA-SC",
             "person-rnp": "RNP",
@@ -439,12 +472,9 @@ def _visible_rows(surface: str, claims: list[dict[str, Any]]) -> list[tuple[str,
             f"{escape(wording)}</span>"
             f"{extra}"
         )
-        status_label = {
-            "VERIFIED": "Verificado em fonte pública",
-            "SELF_ATTESTED": "Declaração do titular",
-        }.get(str(claim.get("status") or ""))
+        status_label = SOURCE_LABELS.get(str(claim.get("status") or ""))
         if status_label:
-            desc += f' <small class="credential-status">{escape(status_label)}</small>'
+            desc += f' <small class="credential-source">{escape(status_label)}</small>'
         rows.append((term, desc, claim))
     return rows
 
@@ -463,7 +493,7 @@ def render_visible_html(surface: str, claims: list[dict[str, Any]], as_of: str) 
     lead = (
         "O que dá para conferir agora, com fonte e data ao lado."
         if "especialista" in surface
-        else "Quem responde, com o que a consulta pública da Receita Federal reproduz nesta data."
+        else "Quem responde pelo trabalho, com a fonte de cada informação ao lado."
     )
     limits: list[str] = []
     if any(c["id"] == "org-cadastral-address" for c in claims):
@@ -472,7 +502,7 @@ def render_visible_html(surface: str, claims: list[dict[str, Any]], as_of: str) 
         )
     if any(c["id"] == "service-art-nf" for c in claims):
         limits.append(
-            "ART e NF acompanham o serviço quando o escopo e a atribuição profissional as exigem; não são um selo genérico."
+            "A ART registra o serviço técnico dentro do escopo e da atribuição profissional contratados."
         )
     limit_html = "".join(f"<p class=\"credential-limit\">{escape(item)}</p>" for item in limits)
     return (
@@ -481,9 +511,11 @@ def render_visible_html(surface: str, claims: list[dict[str, Any]], as_of: str) 
         f"<p>{escape(lead)}</p>"
         f'<dl class="credential-list">{items}</dl>'
         f"{limit_html}"
-        f'<p class="credential-as-of">as_of <time datetime="{escape(as_of)}">{escape(_format_br_date(as_of))}</time>. '
-        "Fonte oficial da pessoa jurídica: consulta pública de CNPJ da Receita Federal. "
-        "Formação em engenharia civil: declaração do titular.</p>"
+        f'<p class="credential-as-of">Consulta pública conferida em '
+        f'<time datetime="{escape(as_of)}">{escape(_format_br_date(as_of))}</time>. '
+        "Os dados da pessoa jurídica vêm da consulta pública de CNPJ da Receita Federal. "
+        "Formação, registro profissional e histórico de obras e projetos analisados são "
+        "informados por Tiago Jun Sasaki, que assina os trabalhos.</p>"
         "</section>"
     )
 
@@ -595,9 +627,25 @@ def _asserted_match(blob: str, pat: str) -> bool:
     return False
 
 
+def self_deprecation_defects(text: str) -> list[str]:
+    """Copy that volunteers a deficit about our own credentials or track record.
+
+    Unlike the forbidden-copy rules this is a direct match, not an asserted
+    match: `_asserted_match` deliberately forgives a pattern preceded by a
+    negation, and every phrase swept here already *is* a negation about us.
+    """
+    blob = _norm(text)
+    return [
+        f"self_deprecation:{pat}"
+        for pat in SELF_DEPRECATION_PATTERNS
+        if re.search(pat, blob, flags=re.I)
+    ]
+
+
 def projection_defects(proj: Projection) -> list[str]:
     blob = _norm(proj.visible_text + " " + json.dumps(proj.schema_nodes, ensure_ascii=False))
     errors: list[str] = []
+    errors.extend(self_deprecation_defects(blob))
     for pat in FORBIDDEN_COPY_PATTERNS:
         if _asserted_match(blob, pat):
             errors.append(f"forbidden_copy:{pat}")

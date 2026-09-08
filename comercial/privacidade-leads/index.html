@@ -26,6 +26,7 @@
 <p>Controlador: CONFENGE SERVICOS DE DESENHOS TECNICOS LTDA, CNPJ 52.407.089/0001-09, Avenida Prefeito Osmar Cunha, 416, Sala 1108, Centro, Florianópolis/SC, CEP 88015-100. Marca pública: CONFENGE.</p>
 <p>Canal de privacidade: <a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a>. WhatsApp comercial: <a href="https://wa.me/5548988344559">+55 48 98834-4559</a>. Não há cargo formal de privacidade além deste canal.</p>
 <p>Autoridade pinada: <code>sha256:5fd69a314d6b6aab74ba2ab87ae5e90d12ade6360193a18275c9c3377e1fd778</code>. Versão <code>CFG-LEGAL-PRIVACY-LEADS-FOUNDER-v1</code>.</p>
+<p>Atualizado em 7 de setembro de 2026: inclusão da lista real de operadores de infraestrutura. Inventário, bases legais, prazos de retenção e direitos permanecem os da versão acima.</p>
 
 <h2>1. Inventário mínimo</h2>
 <p><strong>Lead / pré-contrato:</strong> nome profissional, e-mail corporativo, telefone profissional voluntário, cargo, empresa, CNPJ, recorte de interesse, origem/asset/CTA sem conteúdo sensível.</p>
@@ -44,7 +45,17 @@
 <li>Segurança e integridade do aceite: legítimo interesse B2B quando cabível (art. 7º, IX), com minimização</li>
 <li>Consentimento separado somente se uma finalidade futura realmente exigir</li>
 </ul>
-<p>Papel: controlador independente. Não há tratamento em nome do cliente nesta prestação pontual. Por isso não há DPA lite nem lista inventada de subprocessadores.</p>
+<p>Papel: controlador independente. Não há tratamento em nome do cliente nesta prestação pontual, e por isso não há acordo de tratamento em nome do cliente.</p>
+
+<h2>2.1 Operadores de infraestrutura</h2>
+<p>Fornecedores de infraestrutura deste fluxo:</p>
+<ul>
+<li><strong>Netcup</strong>, servidor onde o site, as funções de servidor e o armazenamento durável dos registros ficam hospedados. O armazenamento é um diretório privado do próprio servidor.</li>
+<li><strong>Cloudflare</strong>, borda e DNS de todo o tráfego, processando endereço IP e dados técnicos de requisição; provê também o desafio antiabuso Turnstile.</li>
+<li><strong>Resend</strong>, e-mail transacional em uso na operação, para confirmação de aceite e notificação interna.</li>
+<li><strong>Asaas</strong>, meio de pagamento, aplicável apenas se e quando a contratação paga for ativada. Hoje o fluxo de pagamento não está em operação e nenhum dado seu é enviado a ele.</li>
+</ul>
+<p>Parte desses fornecedores pode processar dados fora do Brasil, com as salvaguardas cabíveis na LGPD. A lista técnica interna, sem segredos, fica em <code>docs/security/lgpd-operators.md</code> no repositório operacional.</p>
 
 <h2>3. Retenção</h2>
 <ul>

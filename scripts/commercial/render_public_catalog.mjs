@@ -370,7 +370,7 @@ function vitrineCard(entry, contractItem) {
   const open = `<article class="vitrine-item${anchorClass}" data-primary-offer="true" data-deliverable-id="${entry.deliverable_id}" data-public-state="${entry.public_state}" data-search-aliases="${searchAliases(entry)}" id="entrega-${entry.catalog_number}">`;
   const close = "</article>";
   return `${open}
-<header class="vitrine-item__head"><div class="vitrine-item__identity"><span>${entry.catalog_number}</span><span class="offer-state">Oferta publicada · PUBLISHED</span></div><h2 id="${headingId}">${escapeHtml(entry.public_name_pt_br)}</h2><p class="vitrine-item__price"><span>Preço</span><strong>${escapeHtml(priceLabel(entry))}</strong></p></header>
+<header class="vitrine-item__head"><div class="vitrine-item__identity"><span>${entry.catalog_number}</span><span class="offer-state">Oferta publicada</span></div><h2 id="${headingId}">${escapeHtml(entry.public_name_pt_br)}</h2><p class="vitrine-item__price"><span>Preço</span><strong>${escapeHtml(priceLabel(entry))}</strong></p></header>
 <dl class="vitrine-item__facts">
 <div data-copy-role="value_outcome"><dt>Decisão</dt><dd>${escapeHtml(value.actual_contract_value)}</dd></div>
 <div data-copy-role="value_created"><dt>Trabalho que a entrega comprime</dt><dd>${escapeHtml(value.work_removed)}</dd></div>

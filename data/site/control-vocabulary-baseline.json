@@ -357,8 +357,7 @@
     },
     "defesa-margem-contratos-publicos/index.html": {
       "enquadrar": 1,
-      "artefato": 2,
-      "vertical": 1
+      "artefato": 2
     },
     "defesa-tecnica-contratos-publicos/index.html": {
       "enquadramento": 1,
@@ -538,9 +537,6 @@
     },
     "piloto/orgaos/superintendencia-reg-pol-rodv-federal-go-go/engenharia/index.html": {
       "acervo": 3
-    },
-    "privacidade/index.html": {
-      "pii": 3
     },
     "problemas-que-resolvemos/index.html": {
       "acervo": 1

@@ -73,9 +73,25 @@ assert(coverage.axe.routes.every((entry) =>
 // pagina de contato como canal direto, sem formulario e sem exigir solucao
 // proposta. Uma rota a menos e um formulario a menos: consolidacao deliberada,
 // nao perda de canal. O endpoint continua servido para os protocolos antigos.
-assert.equal(coverage.axe.price_route_count, 47);
+// 2026-09-07 (#611): o fundador autorizou publicar o proprio historico -- "mais de
+// R$ 700 milhoes em obras e projetos analisados" -- em /quantitativos-orcamento-obras/,
+// /confianca/ e /especialista/tiago-jun-sasaki/. O detector de preco enxerga qualquer
+// valor em BRL visivel, entao essas TRES rotas passam a contar como price_route
+// (47 -> 50) e DUAS delas entram novas no censo de axe (57 -> 59); a terceira ja
+// estava incluida pelo formulario de captura, e por isso capture_form_route_count
+// nao se move (28).
+//
+// A cobertura SOBE: sao duas rotas a mais auditadas por axe, nenhuma a menos.
+//
+// Ressalva registrada de proposito, e nao resolvida aqui: "R$ 700 milhoes analisados"
+// NAO e um preco, e um numero de trajetoria. O detector nao distingue as duas coisas.
+// Hoje isso e inofensivo -- `npm run inbound:gates` passa e a regra fail-closed de
+// "rota com preco precisa capturar lead" nao esta exigindo captura em /confianca/ nem
+// em /especialista/. Se algum dia exigir, a correcao e ensinar o detector a diferenca,
+// NUNCA remover o numero nem plantar um formulario numa pagina de confianca.
+assert.equal(coverage.axe.price_route_count, 50);
 assert.equal(coverage.axe.capture_form_route_count, 28);
-assert.equal(coverage.axe.route_count, 57);
+assert.equal(coverage.axe.route_count, 59);
 assert(selected.has("/conteudos/atraso-na-medicao-obra-publica/"));
 assert(selected.has("/conteudos/sinapi-desonerado-nao-desonerado/"));
 assert.deepEqual(

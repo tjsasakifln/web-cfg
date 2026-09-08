@@ -8,6 +8,7 @@ forbidden state.
 from __future__ import annotations
 
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -397,12 +398,20 @@ def test_policy_version_consistency_and_visible_disclosure():
     assert version
     assert policy["prazo"] == "UNKNOWN"
     assert "epistemic_classes" not in policy, "as etiquetas inglesas saíram do contrato público"
-    assert policy["claim_kinds"] == [
-        "dado observado",
-        "cálculo",
-        "leitura técnica",
-        "o que ainda não sabemos",
-    ]
+    # #638. A taxonomia de afirmação é um vocabulário DISPONÍVEL, não uma
+    # obrigação por página: nenhum gate exige que uma página exiba uma classe.
+    # O que o contrato tem de garantir é que as três classes positivas -- dado,
+    # cálculo e leitura -- continuem distinguíveis, e que dizer "não sabemos"
+    # continue POSSÍVEL, porque lacuna nunca vira zero nem certeza. Congelar a
+    # lista numa igualdade transformava o vocabulário em obrigação e travava a
+    # única classe negativa como item permanente do contrato.
+    kinds = policy["claim_kinds"]
+    assert isinstance(kinds, list) and len(kinds) == len(set(kinds))
+    for required in ("dado observado", "cálculo", "leitura técnica"):
+        assert required in kinds, required
+    assert any("não sabemos" in kind or "nao sabemos" in kind for kind in kinds), (
+        "a possibilidade de declarar incerteza honesta não pode ser removida"
+    )
     errors = check_policy_version_consistency(policy, policy_pages())
     assert not errors, errors
     combined = combined_policy_html()
@@ -679,19 +688,86 @@ def test_fail_closed_breadcrumb_and_dataset_must_match_visible():
     assert check_schema_mirrors_visible(honest) == []
 
 
-def test_margin_defense_pillar_shows_source_as_of_limitation():
-    """#60 VALIDATE canary: the public pillar keeps visible provenance tokens."""
+PROVENANCE_PROPERTIES = {
+    # What the visitor must be told, and the Portuguese wording that tells it.
+    "origem": re.compile(r"\bfonte\b", re.I),
+    "data_de_referencia": re.compile(r"data de refer[eê]ncia[^<]{0,80}\d{4}-\d{2}-\d{2}", re.I),
+    "limite": re.compile(r"\blimite\b|\blimita[cç][aã]o\b", re.I),
+    "ausencia_permanece_ausencia": re.compile(
+        r"(?:continua|permanece|segue)\s+sem\s+informa[cç][aã]o", re.I
+    ),
+}
+
+# The same statement written as internal tokens. A provenance paragraph that
+# leans on these is control vocabulary, not an explanation (issue #611).
+PROVENANCE_CONTROL_TOKENS = re.compile(r"\bas_of\b|\blimitation\b|\bprovenance\b|\bUNKNOWN\b")
+
+
+def margin_defense_provenance_failures(paragraph: str) -> list[str]:
+    """Grade one provenance paragraph on what it says, not on which tokens it carries."""
+    out = [name for name, rx in PROVENANCE_PROPERTIES.items() if not rx.search(paragraph)]
+    if PROVENANCE_CONTROL_TOKENS.search(paragraph):
+        out.append("vocabulario_de_controle")
+    return out
+
+
+def _pillar_provenance_paragraph(html: str) -> str:
+    match = re.search(
+        r'<p[^>]*id="proveniencia-vertical"[^>]*>(.*?)</p>', html, re.I | re.S
+    )
+    assert match, "the pillar lost its visible provenance paragraph"
+    return match.group(1)
+
+
+def test_margin_defense_pillar_states_source_reference_date_and_limit():
+    """#60 VALIDATE canary, rewritten for #611.
+
+    The old assertion required the literal strings `source`, `as_of`,
+    `limitation` and `UNKNOWN` in the pillar's HTML. That is the wrong property
+    twice over: it was satisfied by any occurrence anywhere in the file
+    (including script identifiers), and it actively *forced* internal tokens
+    into copy a visitor reads. What has to hold is that the visitor is told the
+    origin, the reference date, the limit of the work, and that a gap in the
+    public record stays a gap.
+    """
     path = ROOT / "defesa-margem-contratos-publicos" / "index.html"
     html = path.read_text(encoding="utf-8")
     assert path.is_file()
     assert "authority-method" in html
     assert 'id="proveniencia-vertical"' in html
-    lower = html.lower()
-    assert "source" in lower
-    assert "as_of" in lower
-    assert "limitation" in lower
-    assert "unknown" in lower
-    assert "smartlic" not in lower
+    paragraph = _pillar_provenance_paragraph(html)
+    assert margin_defense_provenance_failures(paragraph) == [], paragraph
+    assert "smartlic" not in html.lower()
+
+
+def test_provenance_grader_rejects_the_token_dump_it_replaced():
+    """Counter-case: the exact paragraph this page used to ship must now fail."""
+    token_dump = (
+        "Provenance visível da vertical: source contratos públicos e extratos "
+        "oficiais · as_of 2026-08-15 · limitation complementar ao jurídico, sem "
+        "garantia de êxito. Recorte público ausente permanece UNKNOWN."
+    )
+    failures = margin_defense_provenance_failures(token_dump)
+    assert "vocabulario_de_controle" in failures
+    assert "data_de_referencia" in failures
+    assert "ausencia_permanece_ausencia" in failures
+
+    # And a paragraph that merely drops the tokens without saying anything is
+    # not a pass either: each property is checked on its own.
+    assert margin_defense_provenance_failures("Fonte: contratos públicos.") == [
+        "data_de_referencia",
+        "limite",
+        "ausencia_permanece_ausencia",
+    ]
+
+    honest = (
+        "De onde vem o que esta página afirma. Fonte: contratos públicos e "
+        "extratos oficiais. Data de referência: 2026-08-15. Limite: este "
+        "trabalho é complementar ao jurídico, sem garantia de êxito. O que o "
+        "recorte público não informa continua sem informação: não vira zero "
+        "nem vira certeza."
+    )
+    assert margin_defense_provenance_failures(honest) == []
 
 
 def test_family_audit_fails_closed_on_unclassified_and_covers_matrix():

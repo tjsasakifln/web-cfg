@@ -355,6 +355,14 @@ def build_release(
         for relative in (
             "scripts/storage/lib.cjs",
             "scripts/storage/retention.mjs",
+            # scripts/live_intelligence/render.py imports scripts.site.svg_sprite so
+            # every packaged opportunity page ships the sprite its menu button uses.
+            # The release inserts the payload on sys.path and imports that chain, so
+            # without these two files the official overlay raises ImportError at
+            # release time. Both are self-contained (svg_sprite imports only `re`),
+            # so this ships the one module needed, not the whole scripts/site tree.
+            "scripts/site/__init__.py",
+            "scripts/site/svg_sprite.py",
         ):
             source = repo_root / relative
             destination = payload / relative
@@ -423,6 +431,8 @@ def build_release(
                 "scripts/__init__.py",
                 "scripts/storage/lib.cjs",
                 "scripts/storage/retention.mjs",
+                "scripts/site/__init__.py",
+                "scripts/site/svg_sprite.py",
                 "data/commercial/",
                 "data/conversion/",
                 "data/nurture/tracks.json",

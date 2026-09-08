@@ -15,6 +15,11 @@ def _tmp_root():
     return Path(tempfile.mkdtemp())
 
 
+def _opportunity_pages(written, base):
+    """The per-opportunity pages, without the family index that lives in ``base``."""
+    return [path for path in written if path.parent.resolve() != base.resolve()]
+
+
 def test_write_pages_removes_orphaned_directories():
     tmp = _tmp_root()
     try:
@@ -29,10 +34,14 @@ def test_write_pages_removes_orphaned_directories():
         assert live_ids, "fixture projection must have at least one READY record"
 
         written = R.write_pages(projection, root=tmp)
-        assert len(written) == len(live_ids)
+        assert len(_opportunity_pages(written, base)) == len(live_ids)
         assert not orphan.exists(), "orphaned opportunity directory must be pruned"
         for opportunity_id in live_ids:
             assert (base / opportunity_id / "index.html").exists()
+        # The prune walks every index.html under base. The family index lives
+        # directly in base, so a prune that does not protect it deletes the
+        # whole family directory: children and index together.
+        assert (base / "index.html").is_file(), "the family index must survive the prune"
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
@@ -69,7 +78,8 @@ def test_write_pages_keeps_pncp_ids_with_slash_and_prunes_others():
         orphan.mkdir(parents=True)
         (orphan / "index.html").write_text("stale", encoding="utf-8")
         written = R.write_pages(projection, root=tmp)
-        assert len(written) == 1
+        assert len(_opportunity_pages(written, base)) == 1
+        assert (base / "index.html").is_file()
         page = base / "12345678000190-1" / "2026" / "index.html"
         assert page.exists()
         html = page.read_text(encoding="utf-8")
@@ -202,8 +212,9 @@ def test_one_hundred_rebuilds_do_not_mint_duplicate_urls_or_canonicals():
         canonicals = set()
         for _ in range(100):
             written = R.write_pages(projection, root=tmp)
-            assert len(written) == 100
-            for path in written:
+            opportunity_pages = _opportunity_pages(written, tmp / R.FAMILY_SLUG)
+            assert len(opportunity_pages) == 100
+            for path in opportunity_pages:
                 html = path.read_text(encoding="utf-8")
                 assert 'content="index,follow" name="robots"' in html
                 marker = 'rel="canonical" href="'
@@ -245,3 +256,56 @@ def test_write_pages_reruns_are_idempotent_and_still_prune():
             assert (base / opportunity_id / "index.html").exists()
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
+
+
+def test_family_index_survives_the_prune_and_lists_every_renderable_record():
+    """Counter-case for the prune that used to delete the whole family.
+
+    ``write_pages`` prunes every ``index.html`` under the family directory whose
+    parent it did not just write. The family index lives directly in that
+    directory, so without an explicit protection the prune removes it — and,
+    with it, the four opportunity pages inside.
+    """
+    tmp = _tmp_root()
+    try:
+        base = tmp / R.FAMILY_SLUG
+        projection = R.load_projection()
+        records = R.renderable(projection)
+        assert records, "fixture projection must have at least one READY record"
+
+        R.write_pages(projection, root=tmp)
+        index_page = base / "index.html"
+        assert index_page.is_file()
+        html = index_page.read_text(encoding="utf-8")
+        for record in records:
+            assert R.opportunity_route(record["opportunity_id"]) in html
+            assert (base / record["opportunity_id"] / "index.html").is_file()
+
+        # Rerunning must not delete what the previous run wrote.
+        R.write_pages(projection, root=tmp)
+        assert index_page.is_file()
+        for record in records:
+            assert (base / record["opportunity_id"] / "index.html").is_file()
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def test_family_index_never_claims_indexation_its_children_do_not_have():
+    """The parent must not become an indexable pointer at noindex children."""
+    html = R.render_opportunities_index_html([], projection_kind="test_only_fixture")
+    assert 'content="noindex, follow" name="robots"' in html
+    assert "<h1>" in html
+    # An empty family still answers with a page, and says plainly that an empty
+    # list is not a claim that no public tender exists.
+    assert "Nenhuma oportunidade está publicada neste momento" in html
+    assert "não que não existam licitações abertas" in html
+
+
+def test_family_index_reports_fixture_provenance_in_plain_words():
+    projection = R.load_projection()
+    html = R.render_opportunities_index_html(
+        R.renderable(projection), projection_kind=projection.get("source_kind")
+    )
+    assert "dado de teste, não corresponde a uma licitação real" in html
+    for token in ("PUBLISHABLE_", "test_only_fixture", "UNKNOWN"):
+        assert token not in html, token

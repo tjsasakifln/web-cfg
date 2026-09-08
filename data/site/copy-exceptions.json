@@ -244,12 +244,6 @@
       "reason": "'checkout' aqui nomeia o objeto da API do provedor de pagamento (Asaas) inventariado no aviso de privacidade e o fluxo hospedado descrito na clausula financeira dos termos B2B. E identificacao tecnica dentro de instrumento juridico, nao microcopy comercial: trocar a palavra tornaria o inventario de dados e a clausula imprecisos."
     },
     {
-      "rule": "plain_language",
-      "match": "\\bunknown\\b",
-      "path": "defesa-margem-contratos-publicos/index.html",
-      "reason": "scripts/site/test_authority_contract.py::test_margin_defense_pillar_shows_source_as_of_limitation exige que este pilar mostre os quatro tokens de proveniencia visiveis (source, as_of, limitation, unknown). O token UNKNOWN e a prova de que o recorte publico declara o que nao sabe; remove-lo apagaria a declaracao de limite, nao so a palavra. Traduzir o vocabulario de proveniencia e escopo da issue #188."
-    },
-    {
       "rule": "brand_forbidden_phrase",
       "match": "garantia de vitória",
       "path": "comercial/termos-diagnostico-b2g/index.html",

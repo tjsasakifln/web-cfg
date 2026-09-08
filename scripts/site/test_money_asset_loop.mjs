@@ -17,6 +17,7 @@ import {
   MONEY_ASSET_LOC_SPOOFS,
   sitemapHasMoneyAssetLoc,
 } from "./money_asset_loc.mjs";
+import { REFERENCE_DATE } from "../money_asset/commercial_dod.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "../..");
@@ -97,7 +98,7 @@ const indexability = JSON.parse(
     fail("canonical");
   }
   if (!pageHtml.includes("application/ld+json")) fail("schema");
-  if (!pageHtml.includes("as_of") || !pageHtml.includes("UNKNOWN")) fail("provenance_unknown");
+  if (!REFERENCE_DATE.test(pageHtml) || !pageHtml.includes("UNKNOWN")) fail("provenance_unknown");
   if (/pode ter direito|\btem direito\b/i.test(pageHtml)) fail("legal_conclusion");
   if (!pageHtml.includes('lang="pt-BR"') || !pageHtml.includes("skip-link") || !pageHtml.includes('id="conteudo"')) {
     fail("a11y_landmarks");

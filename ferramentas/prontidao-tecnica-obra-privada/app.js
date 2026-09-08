@@ -75,7 +75,12 @@
       add(wrap, "p", "", "Consequência decisória possível: " + domain.decision_consequence);
       add(wrap, "p", "", "Próxima verificação: " + domain.next_verification);
       if (domain.limits) add(wrap, "p", "", domain.limits);
-      if (domain.candidate_offer) add(wrap, "p", "", "Oferta candidata: " + domain.candidate_offer);
+      // `candidate_offer` is an internal offer code (private_project_...), kept in the
+      // payload for analytics. Printing it told the visitor nothing; the sentence below
+      // says what this domain means for them and where to take it.
+      if (domain.candidate_offer) {
+        add(wrap, "p", "", "Este ponto é o que costuma justificar uma leitura técnica antes da decisão.");
+      }
       lines.push(domain.label);
       lines.push(statusLabel(domain.status));
       lines.push("Falta: " + domain.missing_evidence);

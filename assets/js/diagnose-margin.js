@@ -520,7 +520,7 @@ function diagnoseMargin(record, snapshot) {
     diagnosis.vigencia_inicio.classification === OFFICIAL || diagnosis.vigencia_fim.classification === OFFICIAL
       ? `Vigência: ${diagnosis.vigencia_inicio.value || "UNKNOWN"} → ${diagnosis.vigencia_fim.value || "UNKNOWN"}`
       : "Vigência: UNKNOWN",
-    `Freshness as_of: ${diagnosis.freshness || "UNKNOWN"}`,
+    `Data de referência dos dados públicos: ${diagnosis.freshness || "UNKNOWN"}`,
     `${diagnosis.unknown_count} campo(s) ou família(s) de evento permanecem UNKNOWN.`,
   ];
   const explained = explainDiagnosis(diagnosis);

@@ -65,7 +65,47 @@ if (/style=["']grid-column\s*:\s*1\s*\/\s*-1/i.test(matriz)
   console.error("FAIL matriz_dynamic_inline_grid_style"); fail++;
 } else console.log("PASS matriz_dynamic_grid_class");
 const money=readFileSync(resolve(ROOT,"ferramentas/diagnostico-defesa-margem/index.html"),"utf8");
-if(!money.includes("Identificação do contrato")||!money.includes("Resumo executivo factual")||!money.includes("Timeline")||!money.includes("Eventos de defesa de margem")||!money.includes("Evidências e fontes")||!money.includes("O que merece conferência")||!money.includes("Limites e UNKNOWN")||!money.includes("Pedir uma segunda leitura do contrato")){console.error("FAIL money_asset_sections");fail++;}else console.log("PASS money_asset_sections");
+// The section list is what the visitor must be offered, so it is written in the
+// language the visitor reads. It used to require the literal English heading
+// "Timeline"; that made an English heading on a Portuguese tool page a passing
+// condition instead of a defect (#611). The section is still required -- by its
+// stable id AND by a Portuguese heading -- so it cannot be dropped either.
+const MONEY_ASSET_SECTIONS = [
+  "Identificação do contrato",
+  "Resumo executivo factual",
+  "Linha do tempo",
+  "Eventos de defesa de margem",
+  "Evidências e fontes",
+  "O que merece conferência",
+  "Limites e UNKNOWN",
+  "Pedir uma segunda leitura do contrato",
+];
+function moneyAssetSectionsMissing(html) {
+  const missing = MONEY_ASSET_SECTIONS.filter((section) => !html.includes(section));
+  if (!/id="h-timeline"/.test(html)) missing.push("id=h-timeline");
+  if (/>\s*Timeline\s*</.test(html)) missing.push("heading-em-ingles");
+  return missing;
+}
+{
+  const missing = moneyAssetSectionsMissing(money);
+  if (missing.length) {
+    console.error("FAIL money_asset_sections", missing.join(","));
+    fail++;
+  } else console.log("PASS money_asset_sections");
+  // Counter-case: the English heading this check used to demand must now fail,
+  // and so must a page that simply drops the section.
+  const english = money.replace(
+    '<h2 id="h-timeline">Linha do tempo do contrato</h2>',
+    '<h2 id="h-timeline">Timeline</h2>',
+  );
+  const dropped = money.replace(/<h2 id="h-timeline">[^<]*<\/h2>/, "");
+  if (moneyAssetSectionsMissing(english).length && moneyAssetSectionsMissing(dropped).length) {
+    console.log("PASS money_asset_sections_counter_case");
+  } else {
+    console.error("FAIL money_asset_sections_counter_case");
+    fail++;
+  }
+}
 if(money.includes("pode ter direito")||/\btem direito\b/i.test(money)){console.error("FAIL money_asset_claims");fail++;}else console.log("PASS money_asset_claims");
 if(money.toLowerCase().includes("extra-cli")){console.error("FAIL money_asset_brand");fail++;}else console.log("PASS money_asset_brand");
 if(!money.includes("btn-copy")||!money.includes("btn-dl")||!money.includes("btn-print")||!money.includes("btn-reset")){
@@ -149,6 +189,36 @@ function cadastroGatesResult(rel, html) {
 for (const rel of pages) {
   if (rel === "ferramentas/index.html") continue;
   cadastroGatesResult(rel, readFileSync(resolve(ROOT, rel), "utf8"));
+}
+
+
+// Every authority-method block must be a *named region inside a landmark*.
+//
+// On two tool pages `</main>` closed before this section, so the block sat in no
+// landmark at all, and a bare <section> takes no accessible name from a child
+// heading: assistive technology announced an unnamed region outside the page's
+// content. The two properties are checked separately because either one alone
+// still leaves the block unreachable by landmark navigation.
+function methodRegionIsNamedAndInsideMain(rel, html) {
+  const open = html.search(/<section[^>]*\bid="metodo"/i);
+  if (open < 0) return; // not every tool page ships an authority-method block
+  const mainClose = html.indexOf("</main>");
+  if (mainClose >= 0 && open > mainClose) {
+    console.error("FAIL metodo_outside_landmark", rel, { open, mainClose });
+    fail++;
+  } else console.log("PASS metodo_inside_landmark", rel);
+  const tag = html.slice(open, html.indexOf(">", open) + 1);
+  const labelledby = /\baria-labelledby="([^"]+)"/i.exec(tag);
+  const named =
+    /\baria-label="[^"]+"/i.test(tag) ||
+    (labelledby && new RegExp(`\\bid="${labelledby[1]}"`, "i").test(html));
+  if (!named) {
+    console.error("FAIL metodo_region_unnamed", rel, tag);
+    fail++;
+  } else console.log("PASS metodo_region_named", rel);
+}
+for (const rel of pages) {
+  methodRegionIsNamedAndInsideMain(rel, readFileSync(resolve(ROOT, rel), "utf8"));
 }
 
 const ci = readFileSync(resolve(ROOT, ".github/workflows/site-ci.yml"), "utf8");
