@@ -345,7 +345,7 @@
       "one_percent_display": "R$ 1.797,38",
       "one_percent_cents": 179738,
       "kind": "illustration",
-      "copy": "Conta ilustrativa, não é economia observada. 1% deste valor contratado resulta em R$ 1.797,38. Custo publicado de um dossiê crítico: R$ 6.900 a R$ 7.900, pontual. Recorrência da diretoria: R$ 12.500 a R$ 20.000 por mês. Limite: o percentual não é economia observada e o formato indicado segue o risco identificado; abaixo do piso de diagnóstico (R$ 2.900), o caminho é uma entrega de entrada ou a ferramenta pública. O escopo se ajusta à necessidade."
+      "copy": "Conta ilustrativa: 1% deste contrato é R$ 1.797,38. Não é economia medida, serve para dar escala. Um dossiê crítico custa de R$ 6.900 a R$ 7.900, uma vez, e acompanhar a operação custa de R$ 12.500 a R$ 20.000 por mês. Como 1% fica abaixo do custo do dossiê, em contratos assim o começo costuma ser uma entrega de entrada ou a ferramenta pública gratuita."
     },
     {
       "panel": "regional",
@@ -355,7 +355,7 @@
       "one_percent_display": "R$ 7.191,77",
       "one_percent_cents": 719177,
       "kind": "illustration",
-      "copy": "Conta ilustrativa, não é economia observada. 1% deste valor contratado resulta em R$ 7.191,77, na altura do teto de um dossiê crítico. Custo publicado do dossiê: R$ 6.900 a R$ 7.900, pontual. Recorrência da diretoria: R$ 12.500 a R$ 20.000 por mês. Limite: o percentual não é economia observada; só indica projeto crítico se o risco identificado cobrir esse custo e os documentos existirem."
+      "copy": "Conta ilustrativa: 1% deste contrato é R$ 7.191,77. Não é economia medida, serve para dar escala. É quase o custo de um dossiê crítico, de R$ 6.900 a R$ 7.900, uma vez; acompanhar a operação custa de R$ 12.500 a R$ 20.000 por mês. O dossiê se justifica quando o risco é concreto e os documentos existem."
     },
     {
       "panel": "strategic",
@@ -365,7 +365,7 @@
       "one_percent_display": "R$ 182.936,30",
       "one_percent_cents": 18293630,
       "kind": "illustration",
-      "copy": "Conta ilustrativa, não é economia observada. 1% deste valor contratado resulta em R$ 182.936,30. Custo publicado de um dossiê crítico: R$ 6.900 a R$ 7.900, pontual. Recorrência da diretoria: R$ 12.500 a R$ 20.000 por mês. Limite: contrato grande não autoriza percentual como economia; o formato de trabalho depende do risco identificado, dos documentos e de a necessidade ser pontual ou recorrente."
+      "copy": "Conta ilustrativa: 1% deste contrato é R$ 182.936,30. Não é economia medida, serve para dar escala. Um dossiê crítico custa de R$ 6.900 a R$ 7.900, uma vez, e acompanhar a operação custa de R$ 12.500 a R$ 20.000 por mês. Contrato grande não define o formato sozinho: ele depende do risco, dos documentos e de a necessidade ser pontual ou recorrente."
     }
   ],
   "route_copy": {

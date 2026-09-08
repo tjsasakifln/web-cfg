@@ -318,6 +318,41 @@ body[data-content-cluster="home"] .journey-alt-link:hover{color:var(--accent)}
 .market-context-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(1.75rem,4vw,3.5rem);align-items:start}
 .market-context-copy h2{max-width:18ch;margin:0 0 .85rem}
 .market-context-copy>p{max-width:52ch;color:var(--text);font-size:1rem;line-height:1.7}
+/* Cartoes de contrato do bloco PNCP. O bloco foi publicado sem estilo nenhum:
+ * .service-grid e .service-card nao existiam em CSS,entao os tres contratos
+ * chegavam como paragrafos empilhados e o link do PNCP tinha a mesma cor e o
+ * mesmo peso do texto ao redor,sem sublinhado. Nao havia como saber o que era
+ * clicavel. Cada contrato vira um cartao com superficie propria e o link ganha
+ * affordance explicita: acento,sublinhado,seta e alvo de toque. */
+.market-context .service-grid{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:clamp(1rem,2vw,1.5rem);margin-top:clamp(1.5rem,3vw,2.25rem);
+}
+.market-context .service-card{
+  display:flex;flex-direction:column;gap:.6rem;min-width:0;
+  padding:clamp(1.1rem,2vw,1.5rem);
+  background:var(--field);border:1px solid var(--rule);border-radius:var(--radius-md);
+}
+.market-context .service-card h3{
+  margin:0 0 .2rem;padding-bottom:.6rem;border-bottom:1px solid var(--rule);
+  font-size:1.05rem;font-weight:720;letter-spacing:-.01em;line-height:1.25;
+}
+.market-context .service-card p{margin:0;font-size:.95rem;line-height:1.6}
+.market-context .service-card p[data-economics-illustration]{color:var(--muted);font-size:.9rem}
+.market-context .service-card a{
+  display:inline-block;align-self:start;margin-top:auto;padding-block:.6rem;
+  color:var(--accent);font-weight:650;text-decoration:underline;text-underline-offset:3px;
+}
+.market-context .service-card a::after{content:"\00a0\2197"}
+.market-context .service-card a:hover{color:var(--green-600)}
+.market-context .service-card a:focus-visible{outline:none;border-radius:var(--radius-sm);box-shadow:var(--focus-ring)}
+.market-context .market-context-base{
+  margin:clamp(1.25rem,2.5vw,1.75rem) 0 0;max-width:76ch;
+  color:var(--muted);font-size:var(--text-small);line-height:var(--lh-micro);
+}
+@media (max-width:900px){
+  .market-context .service-grid{grid-template-columns:minmax(0,1fr)}
+}
 .market-evidence{min-width:0}
 .evidence-kicker{margin:0;font-stretch:var(--narrow);font-weight:750;letter-spacing:.1em;text-transform:uppercase;font-size:var(--text-micro)}
 .evidence-title{margin:.4rem 0 .5rem;font-size:1.1rem;font-weight:720;letter-spacing:-.015em;line-height:1.3}

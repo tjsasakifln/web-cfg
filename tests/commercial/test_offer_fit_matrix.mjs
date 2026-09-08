@@ -289,9 +289,20 @@ assert("illustration_has_cost", localEcon.cost.label === "custo" && /R\$/.test(l
 assert("illustration_has_risk", localEcon.risk.label === "risco", localEcon.risk);
 assert("illustration_has_recurrence", localEcon.recurrence.label === "recorrência", localEcon.recurrence);
 assert("illustration_has_limit", localEcon.limit.label === "limite", localEcon.limit);
+// 2026-09-08. A versao anterior exigia as quatro palavras literais "custo",
+// "risco", "recorrencia" e "limite" dentro da copy. Isso travava a redacao no
+// formato de rotulos e mantinha no ar um paragrafo ilegivel. O que importa nao
+// e a palavra: e que a copy declare que a conta nao e economia medida e cite as
+// faixas de preco publicadas na matriz. E isso que passa a ser verificado.
 assert(
-  "illustration_copy_has_four_anchors",
-  /custo/i.test(local.copy) && /risco/i.test(local.copy) && /recorrência/i.test(local.copy) && /limite/i.test(local.copy),
+  "illustration_copy_states_not_measured_saving",
+  /n[\u00e3a]o [\u00e9e] economia medida/i.test(local.copy),
+  local.copy,
+);
+assert(
+  "illustration_copy_cites_published_bands",
+  local.copy.includes(matrix.cited_bands.dossie_critico.display) &&
+    local.copy.includes(matrix.cited_bands.lideranca_fracionada.display),
   local.copy,
 );
 assert("format_local_contract", formatBrlFromCents(17973767) === "R$ 179.737,67", formatBrlFromCents(17973767));
@@ -302,6 +313,17 @@ for (const panel of matrix.home_illustrations) {
   assert(`panel_${panel.panel}_kind`, econ.kind === "illustration" && econ.is_roi_claim === false, panel.panel);
   assert(`panel_${panel.panel}_math`, econ.one_percent_cents === panel.one_percent_cents, panel);
   assert(`panel_${panel.panel}_copy_ilustr`, /ilustrativ/i.test(panel.copy), panel.copy);
+  assert(
+    `panel_${panel.panel}_copy_not_measured_saving`,
+    /n[\u00e3a]o [\u00e9e] economia medida/i.test(panel.copy),
+    panel.copy,
+  );
+  assert(
+    `panel_${panel.panel}_copy_cites_bands`,
+    panel.copy.includes(matrix.cited_bands.dossie_critico.display) &&
+      panel.copy.includes(matrix.cited_bands.lideranca_fracionada.display),
+    panel.copy,
+  );
   assert(`panel_${panel.panel}_not_exemplo_ilustrativo`, !/exemplo ilustrativo/i.test(panel.copy), panel.copy);
 }
 
