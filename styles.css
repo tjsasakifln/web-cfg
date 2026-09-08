@@ -1025,6 +1025,9 @@ code,pre,kbd,samp,[data-opaque-token],.opaque-token{overflow-wrap:anywhere;word-
   .pilot-wrap>h1{font-size:clamp(1.65rem,8vw,1.9rem)}
 }
 
+body[data-asset-family="oportunidade-publica"] .simple-card{overflow-wrap:anywhere}
+body[data-asset-family="oportunidade-publica"] .simple-card h1{font-size:clamp(1.35rem,4.2vw,2.1rem);line-height:1.25;overflow-wrap:anywhere;hyphens:auto}
+
 
 .article-cover figcaption,.article-meta,.content-badge,.item-meta,.author-box span,.aside-card>span,.aside-compact strong,.library-rank,.criterion-card>span,.action-list>li>span,.answer-box span,.lead-inline-copy span,.directory-search label,.results-count,.content-directory-item p,.technical-note,.breakout-meta dt,.operating-marker,.featured-support-theme,.profile-mark small{font-size:max(var(--text-micro),12.8px);line-height:var(--lh-micro)}
 @media (max-width:700px){.hero-proof strong{font-size:max(var(--text-small),14px)}}

@@ -421,6 +421,10 @@ body[data-content-cluster="home"] .contact-form{
 /* A legenda de etapa vinha em rgba(6,26,51,.55) sobre o cartao branco,medido
  * em 3,6:1 e reprovado pelo axe em serious. Tinta solida em 4,8:1. */
 body[data-content-cluster="home"] .form-step-legend{color:var(--muted)}
+/* O botao "Adicionar mais detalhes" fecha o fieldset da etapa 1 sem margem
+ * inferior, entao ele sobrepunha em 6px o paragrafo de limites logo abaixo:
+ * a primeira linha do texto passava por tras do botao. Espaco explicito. */
+body[data-content-cluster="home"] .contact-form .form-next{margin:.35rem 0 1.35rem}
 /* Etapa 2 e opcional inteira: subordinada por peso,nao escondida. O visitante
  * precisa ver que pode enviar sem preencher nada disso. */
 body[data-content-cluster="home"] .form-step[data-step="2"] .field label{color:var(--muted);font-weight:600}

@@ -52,3 +52,9 @@ code,pre,kbd,samp,[data-opaque-token],.opaque-token{overflow-wrap:anywhere;word-
   .n-wrap>h1{font-size:clamp(1.75rem,8.4vw,2.25rem)}
   .pilot-wrap>h1{font-size:clamp(1.65rem,8vw,1.9rem)}
 }
+/* Oportunidade publica: o h1 e o objeto declarado do PNCP, em caixa alta e com
+ * centenas de caracteres. Na escala de titulo padrao ele estourava a largura em
+ * 360px (audit de layout: 435>360). O texto e fonte publica e nao pode ser
+ * reescrito, entao o ajuste e tipografico. */
+body[data-asset-family="oportunidade-publica"] .simple-card{overflow-wrap:anywhere}
+body[data-asset-family="oportunidade-publica"] .simple-card h1{font-size:clamp(1.35rem,4.2vw,2.1rem);line-height:1.25;overflow-wrap:anywhere;hyphens:auto}
