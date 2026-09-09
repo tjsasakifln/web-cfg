@@ -426,11 +426,11 @@ function renderDecisionNav(published) {
   const decisions = published.map((entry) =>
     `<li><a aria-label="${escapeHtml(entry.decision_question)}" href="#entrega-${entry.catalog_number}"><span>${entry.catalog_number}</span>${escapeHtml(VITRINE_DECISION_NAV[entry.catalog_number])}</a></li>`,
   ).join("");
-  return `<section class="deliverables-example-nav" aria-labelledby="examples-nav-title">
+  return `<div class="deliverables-example-nav">
 <div class="container">
 <nav class="offer-decision-nav" aria-label="Escolher análise para obra pública pela decisão"><p id="examples-nav-title">Ofertas de análises para obras públicas</p><ol>${decisions}</ol></nav>
 </div>
-</section>`;
+</div>`;
 }
 
 function renderOfferShowcase(published, eightContract) {
