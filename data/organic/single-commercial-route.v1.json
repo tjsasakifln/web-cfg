@@ -84,14 +84,26 @@
       "UNKNOWN"
     ],
     "public_price_exposure": {
-      "state": "WITHHELD_NO_PUBLICATION_AUTHORITY",
-      "authority_contract": "data/corporate/pricing-gate-projection.v1.json",
-      "required_state": "PUBLICATION_AUTHORIZED",
+      "state": "AUTHORIZED_EXISTING_PILOT_PRICE",
+      "authority_contract": "data/commercial/page-contract-contratos.v1.json#items[item=18]",
+      "authority_issue": 333,
+      "authority_issue_url": "https://github.com/tjsasakifln/web-cfg/issues/333",
+      "implementation_pr": 398,
+      "implementation_pr_url": "https://github.com/tjsasakifln/web-cfg/pull/398",
+      "implementation_commit": "9fe19a24b732d4b3233e0fd8b9f2491271750a8b",
+      "authority_trace_pt_br": "A issue #333 do fundador definiu “Preço-piloto: R$ 4.900. SLA: 5 dias úteis”, preservou expressamente preço e escopo e foi encerrada como implementada pelo PR #398, cujo gerador publicou esses termos no hub.",
       "observed_state": "PILOT_HYPOTHESIS",
-      "public_display_authorized": false,
+      "published_price_cents": 490000,
+      "currency": "BRL",
+      "display_surfaces": [
+        "services_hub"
+      ],
+      "public_display_authorized": true,
+      "buyable": false,
       "checkout_authorized": false,
       "depends_on_form_presence": false,
-      "reason_pt_br": "R$ 4.900 permanece hipótese comercial interna de CFG-D18: não há pin material que autorize sua exibição pública nem checkout. O contato contextual continua funcional e não depende de formulário obrigatório."
+      "proposal_condition_pt_br": "A contratação depende da conferência do escopo, dos documentos mínimos e da agenda; o envio da demanda não inicia cobrança.",
+      "reason_pt_br": "R$ 4.900 é o preço-piloto público existente de CFG-D18 no hub de serviços. O estado VALIDATE não o torna compra imediata, margem validada ou checkout autorizado, e a presença de formulário não cria nem revoga o preço."
     }
   },
   "surfaces": [

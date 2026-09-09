@@ -45,7 +45,9 @@ const CRITICAL_ROUTES = [
   "/conteudos/",
   "/inteligencia/",
   "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
-  "/panorama-mercado-obras-publicas/obras-publicas-sc-2026-08/",
+  // The unapproved panorama fixture is retired from publication. Exercise the
+  // approved historical market answer as the public data-analysis composition.
+  "/inteligencia/valor-tipico-contratos-pavimentacao/",
   "/entregas/",
   "/casos/",
   "/especialista/tiago-jun-sasaki/",

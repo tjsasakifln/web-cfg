@@ -100,6 +100,31 @@ def test_measurement_delay_canary_389_is_single_url_and_fail_closed():
     # proprio contrato, como esta feito em after_sha256_recapture_reason, e nao
     # afrouxar a assercao.
     assert _sha256(page) == canary["after_sha256"]
+    recapture = contract["metadata_only_recapture"]
+    assert recapture == {
+        "compared_from": "a36d34beb",
+        "compared_to": "0d3606c697c62d994517cf4d0a975c486f706648",
+        "paths": [
+            "conteudos/atraso-na-medicao-obra-publica/index.html",
+            "conteudos/glosa-de-medicao-obra-publica/index.html",
+            "conteudos/medicao-de-obra-publica-rejeitada/index.html",
+            "conteudos/fiscal-nao-assina-medicao-obra-publica/index.html",
+            "medicoes-glosas-obras-publicas/index.html",
+        ],
+        "only_change": (
+            "JSON-LD Person.jobTitle: Engenheiro Civil e consultor B2G -> "
+            "Engenheiro Civil"
+        ),
+        "visible_body_unchanged": True,
+        "author_identity_unchanged": True,
+        "dates_facts_calculations_sources_actions_unchanged": True,
+    }
+    graph = json.loads(
+        re.search(r'<script type="application/ld\+json">(.*?)</script>', html, re.S).group(1)
+    )["@graph"]
+    person = next(node for node in graph if node.get("@type") == "Person")
+    assert person["name"] == "Engº Tiago Sasaki"
+    assert person["jobTitle"] == "Engenheiro Civil"
     assert not re.search(r"\bowner\b", visible_html, re.I)
 
     assert (

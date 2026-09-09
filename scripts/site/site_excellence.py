@@ -575,7 +575,7 @@ def _merge_metric_results(
 
 
 def _turnstile_observation(site_root: Path, *, expected_environment: str) -> dict[str, Any]:
-    from scripts.site.public_copy_scope import relpath, route_for, visitor_facing_html_files
+    from scripts.site.public_copy_scope import artifact_html_files, relpath, route_for
 
     forms = re.compile(r"<form\b(?P<attrs>[^>]*)>(?P<body>.*?)</form>", re.I | re.S)
     action = re.compile(
@@ -589,7 +589,10 @@ def _turnstile_observation(site_root: Path, *, expected_environment: str) -> dic
     missing: list[str] = []
     production_empty = False
     protected_form_count = 0
-    for path in visitor_facing_html_files(site_root):
+    # This collector receives the assembled public artifact, not the source
+    # tree. A packaging regression must not hide a form behind source-only
+    # exclusions such as piloto/, oportunidades/ or a noindex declaration.
+    for path in artifact_html_files(site_root):
         html = path.read_text(encoding="utf-8", errors="replace")
         route = route_for(relpath(path, site_root))
         for match in forms.finditer(html):

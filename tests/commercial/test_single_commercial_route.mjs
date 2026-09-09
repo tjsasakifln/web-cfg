@@ -9,6 +9,7 @@
 import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
+import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -26,7 +27,6 @@ const pageContract = json("data/commercial/page-contract-contratos.v1.json");
 const naming = json("data/commercial/offer-naming.v1.json");
 const frozenHashes = json("data/bofu-dominance/frozen-specs/hashes.json");
 const deliverables = json("data/commercial/deliverables-registry.v1.json");
-const pricingProjection = json("data/corporate/pricing-gate-projection.v1.json");
 const commercialConstitution = json("data/corporate/commercial-constitution.v1.json");
 const taxonomy = json("data/corporate/taxonomy.v1.json");
 
@@ -40,6 +40,8 @@ const anchorForCta = (html, ctaId) =>
   (html.match(new RegExp(`<a\\b(?=[^>]*\\bdata-cta-id=["']${ctaId}["'])[^>]*>`, "i")) || [""])[0];
 const attr = (tag, name) =>
   (tag.match(new RegExp(`\\b${name}=["']([^"']*)["']`, "i")) || ["", ""])[1];
+const elementById = (html, tagName, id) =>
+  (html.match(new RegExp(`<${tagName}\\b(?=[^>]*\\bid=["']${id}["'])[^>]*>[\\s\\S]*?<\\/${tagName}>`, "i")) || [""])[0];
 const obsoleteEditorialLocks = (candidate) => {
   const serialized = JSON.stringify(candidate);
   const forbiddenStates = [
@@ -53,33 +55,39 @@ const obsoleteEditorialLocks = (candidate) => {
   }
   return errors;
 };
-const bindingPriceAuthorization = (deliverableId, projection = pricingProjection) =>
-  (projection.observed_authorization_evidence || []).find(
-    (evidence) =>
-      (evidence.binding_offer_ids || []).includes(deliverableId) &&
-      ["PUBLICATION_AUTHORIZED", "CHECKOUT_AUTHORIZED"].includes(evidence.state) &&
-      evidence.public_display_authorized === true,
-  );
-const bindingCheckoutAuthorization = (deliverableId, projection = pricingProjection) =>
-  (projection.observed_authorization_evidence || []).find(
-    (evidence) =>
-      (evidence.binding_offer_ids || []).includes(deliverableId) &&
-      evidence.state === "CHECKOUT_AUTHORIZED" &&
-      evidence.checkout_authorized === true,
-  );
-const priceExposureErrors = ({ exposure, registryItem, projection = pricingProjection }) => {
+const priceExposureErrors = ({ exposure, terms, sourceItem, registryItem, pageImplementation, surfaceContexts }) => {
   const errors = [];
-  const binding = bindingPriceAuthorization(registryItem.deliverable_id, projection);
-  if (exposure.public_display_authorized && !binding) errors.push("public_price_without_binding_authority");
+  if (exposure.state !== "AUTHORIZED_EXISTING_PILOT_PRICE" || exposure.public_display_authorized !== true) {
+    errors.push("existing_public_price_misclassified");
+  }
   if (
-    exposure.checkout_authorized &&
-    (registryItem.checkout_enabled !== true || !bindingCheckoutAuthorization(registryItem.deliverable_id, projection))
-  ) {
-    errors.push("checkout_without_binding_authority");
+    exposure.authority_contract !== "data/commercial/page-contract-contratos.v1.json#items[item=18]" ||
+    exposure.authority_issue !== 333 ||
+    exposure.implementation_pr !== 398 ||
+    exposure.implementation_commit !== "9fe19a24b732d4b3233e0fd8b9f2491271750a8b"
+  ) errors.push("existing_authority_trace_mismatch");
+  if (
+    exposure.published_price_cents !== 490000 ||
+    exposure.published_price_cents !== terms.pilot_price_cents ||
+    exposure.published_price_cents !== sourceItem.pilot_price_cents ||
+    exposure.published_price_cents !== registryItem.price.amount_cents
+  ) errors.push("published_price_mismatch");
+  if (exposure.observed_state !== registryItem.price_state || exposure.observed_state !== terms.price_state) {
+    errors.push("price_state_mismatch");
   }
-  if (!binding && exposure.state !== "WITHHELD_NO_PUBLICATION_AUTHORITY") {
-    errors.push("missing_fail_closed_price_state");
+  if (!equal(exposure.display_surfaces, ["services_hub"])) errors.push("display_surfaces_mismatch");
+  const pricePattern = /R\$\s*4\.900(?:,00)?/i;
+  for (const [role, html] of Object.entries(surfaceContexts || {})) {
+    if (pricePattern.test(html) !== exposure.display_surfaces.includes(role)) {
+      errors.push(`${role}:price_visibility_mismatch`);
+    }
   }
+  if (
+    exposure.buyable !== false ||
+    exposure.checkout_authorized !== false ||
+    registryItem.checkout_enabled !== false ||
+    pageImplementation.checkout_enabled !== false
+  ) errors.push("checkout_or_buyability_without_authority");
   if (exposure.depends_on_form_presence !== false) errors.push("price_incorrectly_depends_on_form");
   return errors;
 };
@@ -191,62 +199,29 @@ assert("price_state_is_hypothesis", terms.price_state === "PILOT_HYPOTHESIS", te
 const registryItem = deliverables.deliverables.find((item) => item.deliverable_id === route.deliverable_id);
 assert("deliverables_registry_cfg_d18_exists", Boolean(registryItem));
 assert("cfg_d18_remains_validate", registryItem?.public_state === "VALIDATE", registryItem?.public_state);
-assert("cfg_d18_price_remains_internal_hypothesis", registryItem?.price_state === "PILOT_HYPOTHESIS", registryItem?.price_state);
+assert("cfg_d18_price_remains_public_pilot_hypothesis", registryItem?.price_state === "PILOT_HYPOTHESIS", registryItem?.price_state);
 assert("cfg_d18_checkout_remains_disabled", registryItem?.checkout_enabled === false, registryItem?.checkout_enabled);
-assert("cfg_d18_has_no_binding_public_price_authority", !bindingPriceAuthorization(route.deliverable_id), pricingProjection.observed_authorization_evidence);
 assert(
-  "public_price_is_withheld_by_material_authority_not_form",
-  terms.public_price_exposure?.state === "WITHHELD_NO_PUBLICATION_AUTHORITY" &&
-    terms.public_price_exposure?.required_state === "PUBLICATION_AUTHORIZED" &&
+  "existing_public_pilot_price_authority_is_traced",
+  terms.public_price_exposure?.state === "AUTHORIZED_EXISTING_PILOT_PRICE" &&
+    terms.public_price_exposure?.authority_issue === 333 &&
+    terms.public_price_exposure?.implementation_pr === 398 &&
+    terms.public_price_exposure?.implementation_commit === "9fe19a24b732d4b3233e0fd8b9f2491271750a8b" &&
     terms.public_price_exposure?.observed_state === "PILOT_HYPOTHESIS" &&
-    terms.public_price_exposure?.public_display_authorized === false &&
+    terms.public_price_exposure?.published_price_cents === 490000 &&
+    terms.public_price_exposure?.public_display_authorized === true &&
+    terms.public_price_exposure?.buyable === false &&
     terms.public_price_exposure?.checkout_authorized === false &&
     terms.public_price_exposure?.depends_on_form_presence === false,
   terms.public_price_exposure,
 );
 assert(
-  "price_exposure_contract_is_fail_closed",
-  priceExposureErrors({ exposure: terms.public_price_exposure, registryItem }).length === 0,
-  priceExposureErrors({ exposure: terms.public_price_exposure, registryItem }),
-);
-const unauthorizedPublicPrice = {
-  ...terms.public_price_exposure,
-  state: "PUBLICATION_AUTHORIZED",
-  public_display_authorized: true,
-};
-assert(
-  "negative_fixture_rejects_public_price_without_binding_pin",
-  priceExposureErrors({ exposure: unauthorizedPublicPrice, registryItem }).includes(
-    "public_price_without_binding_authority",
-  ),
-  priceExposureErrors({ exposure: unauthorizedPublicPrice, registryItem }),
-);
-const publicationOnlyProjection = structuredClone(pricingProjection);
-publicationOnlyProjection.observed_authorization_evidence.push({
-  authorization_id: "negative-publication-only",
-  binding_offer_ids: [route.deliverable_id],
-  state: "PUBLICATION_AUTHORIZED",
-  public_display_authorized: true,
-  checkout_authorized: false,
-});
-const unauthorizedCheckout = {
-  ...terms.public_price_exposure,
-  state: "PUBLICATION_AUTHORIZED",
-  public_display_authorized: true,
-  checkout_authorized: true,
-};
-assert(
-  "negative_fixture_rejects_checkout_with_publication_only_pin",
-  priceExposureErrors({
-    exposure: unauthorizedCheckout,
-    registryItem: { ...registryItem, checkout_enabled: true },
-    projection: publicationOnlyProjection,
-  }).includes("checkout_without_binding_authority"),
-  priceExposureErrors({
-    exposure: unauthorizedCheckout,
-    registryItem: { ...registryItem, checkout_enabled: true },
-    projection: publicationOnlyProjection,
-  }),
+  "proposal_conditions_do_not_turn_public_price_into_checkout",
+  /confere o escopo|conferência do escopo/i.test(terms.public_price_exposure?.proposal_condition_pt_br || "") &&
+    /documentos/i.test(terms.public_price_exposure?.proposal_condition_pt_br || "") &&
+    /agenda/i.test(terms.public_price_exposure?.proposal_condition_pt_br || "") &&
+    /não inicia cobrança/i.test(terms.public_price_exposure?.proposal_condition_pt_br || ""),
+  terms.public_price_exposure?.proposal_condition_pt_br,
 );
 
 const expectedRoles = ["home", "services_hub", "editorial_canary", "canonical_destination"];
@@ -322,7 +297,6 @@ assert("pillar_hash_matches_live", sha256(pillar.file) === pillar.expected_sha25
 assert("pillar_hash_matches_reviewed_baseline", frozenHashes.forbidden[pillar.file] === pillar.expected_sha256, frozenHashes.forbidden[pillar.file]);
 assert("pillar_links_back_to_canary", read(pillar.file).includes(`href="${canarySurface.route}"`), canarySurface.route);
 const pillarHtml = read(pillar.file);
-assert("internal_price_not_published_on_pillar", !/R\$\s*4(?:[.\s])?900(?:,00)?/i.test(pillarHtml));
 assert(
   "rendered_pillar_keeps_umbrella_and_specialist_scope",
   /\bengenharia\b/i.test(pillarHtml) && /\bprivad[oa]s?\b/i.test(pillarHtml) &&
@@ -341,6 +315,92 @@ assert(
     /href=["']mailto:tiago\.sasaki@confenge\.com\.br["']/i.test(pillarHtml) &&
     /href=["']tel:\+5548988344559["']/i.test(pillarHtml),
   pillar.file,
+);
+
+const servicesHubHtml = read("servicos-obras-publicas/index.html");
+const item18Card = elementById(servicesHubHtml, "article", "entrega-18");
+const hubCapture = elementById(servicesHubHtml, "section", "captura-contrato");
+assert("cfg_d18_public_card_exists", Boolean(item18Card), "#entrega-18");
+assert(
+  "cfg_d18_public_card_matches_authoritative_terms",
+  item18Card.includes(route.public_name_pt_br) &&
+    item18Card.includes(route.value_line_pt_br) &&
+    item18Card.includes("R$ 4.900") &&
+    item18Card.includes("5 dias úteis") &&
+    item18Card.includes('data-deliverable-id="CFG-D18"') &&
+    item18Card.includes('href="#captura-contrato"'),
+  item18Card,
+);
+assert(
+  "cfg_d18_public_card_leads_to_contextual_proposal_contact",
+  /<form\b[^>]*action="\/\.netlify\/functions\/lead"/i.test(hubCapture) &&
+    hubCapture.includes('<option value="CFG-D18">') &&
+    /Solicitar uma proposta/i.test(hubCapture) &&
+    /confere o escopo, os documentos mínimos e a agenda/i.test(hubCapture) &&
+    /envio não inicia cobrança/i.test(hubCapture),
+  "#captura-contrato",
+);
+
+const surfaceContexts = {
+  home: homeJourney,
+  services_hub: item18Card,
+  editorial_canary: elementById(canaryHtml, "aside", "diagnostico-confenge"),
+  canonical_destination: pillarHtml,
+};
+const priceValidation = {
+  exposure: terms.public_price_exposure,
+  terms,
+  sourceItem: item18,
+  registryItem,
+  pageImplementation: pageContract.public_implementation,
+  surfaceContexts,
+};
+assert(
+  "public_price_matches_authority_and_declared_surface",
+  priceExposureErrors(priceValidation).length === 0,
+  priceExposureErrors(priceValidation),
+);
+
+const falseWithheld = {
+  ...terms.public_price_exposure,
+  state: "WITHHELD_NO_PUBLICATION_AUTHORITY",
+  public_display_authorized: false,
+};
+assert(
+  "negative_fixture_rejects_hiding_existing_public_price",
+  priceExposureErrors({ ...priceValidation, exposure: falseWithheld }).includes(
+    "existing_public_price_misclassified",
+  ),
+  priceExposureErrors({ ...priceValidation, exposure: falseWithheld }),
+);
+const mismatchedPrice = { ...terms.public_price_exposure, published_price_cents: 490100 };
+assert(
+  "negative_fixture_rejects_public_price_mismatch",
+  priceExposureErrors({ ...priceValidation, exposure: mismatchedPrice }).includes("published_price_mismatch"),
+  priceExposureErrors({ ...priceValidation, exposure: mismatchedPrice }),
+);
+const inferredCheckout = { ...terms.public_price_exposure, checkout_authorized: true, buyable: true };
+assert(
+  "negative_fixture_rejects_checkout_inferred_from_publication",
+  priceExposureErrors({ ...priceValidation, exposure: inferredCheckout }).includes(
+    "checkout_or_buyability_without_authority",
+  ),
+  priceExposureErrors({ ...priceValidation, exposure: inferredCheckout }),
+);
+assert(
+  "all_governed_surfaces_remain_without_checkout",
+  Object.values(surfaceContexts).every((html) => !/data-checkout|\/\.netlify\/functions\/checkout/i.test(html)),
+  Object.keys(surfaceContexts),
+);
+
+const renderer = spawnSync(process.execPath, ["scripts/commercial/render_contract_defense_products.mjs", "--check"], {
+  cwd: root,
+  encoding: "utf8",
+});
+assert(
+  "authoritative_contract_renderer_has_no_drift",
+  renderer.status === 0 && /CONTRACT_DEFENSE_PRODUCTS_OK/.test(renderer.stdout),
+  `${renderer.stdout}\n${renderer.stderr}`,
 );
 
 const eventContractSource = read("script.js");

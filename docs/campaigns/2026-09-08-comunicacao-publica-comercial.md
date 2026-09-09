@@ -60,6 +60,16 @@ passaram (sete rotas, zero violações, estilo inline não autorizado bloqueado)
 Esse checkpoint não é declaração de publicação; o fluxo obrigatório repete
 os controles no candidato integrado.
 
+O preflight adicional do PR #647 encontrou uma lacuna no coletor de proteção
+antirrobô do scorecard: ele recebia `_site`, mas aplicava exclusões da árvore
+de fontes. `site_excellence.py` agora percorre todos os HTML físicos do artefato.
+A contraprova existente de formulário sem token em `/piloto/forms/` reprovava
+antes da correção; o teste passou a exercitar também `/oportunidades/forms/`,
+rota nova e noindex, mantendo a distinção dos endpoints que realmente exigem
+token. A retirada do defeito e a restauração da proteção são verificadas nos
+mesmos casos (15 testes aprovados). Isso amplia o controle; não publica os
+rascunhos nem altera o mecanismo de captura.
+
 Revogações em execução (contraprovas locais; o candidato integrado e o artefato
 final ainda precisam dos checks e da publicação):
 
@@ -178,7 +188,7 @@ Complementos de fonte e contraprovas:
 | Regra ou defeito anterior | Propriedade legítima preservada | Substituição, arquivos e contraprova |
 | --- | --- | --- |
 | Congelamento BOFU até 16/09 ou nova medição (#533) | Integridade de bytes, experimento histórico e verdade dos termos | `frozen_specs/hashing.py`, `materialize.py`, `unlock-plan.v1.json`: correção comercial autorizada exige leitura renderizada, recaptura real e gates; os patches experimentais históricos não são automaticamente autorizados. Divergência real continua reprovando. |
-| O contrato da issue #390 impunha `FROZEN_READ_ONLY`/`OWNED_BY_389_READ_ONLY` até 16/09 e atribuía a não exposição de preço ao congelamento e à ausência de formulário persistente | Rota comercial única, procedência das issues, autenticidade técnica, integridade dos bytes, termos verdadeiros e separação entre hipótese de preço, autorização pública e checkout | `single-commercial-route.v1.json` e seu teste: as quatro superfícies aceitam a correção editorial `EXECUTE_NOW`, sem espera por data; os owners históricos permanecem como procedência. O hash real continua conferido. CFG-D18 permanece `VALIDATE`, R$ 4.900 permanece `PILOT_HYPOTHESIS` interno e checkout permanece desabilitado; a falta de autorização material — não a presença de formulário — impede exposição pública. Contraprovas reprovam a volta do congelamento e preço público sem pin vinculante. |
+| O contrato da issue #390 impunha `FROZEN_READ_ONLY`/`OWNED_BY_389_READ_ONLY` até 16/09 e atribuía a não exposição de preço ao congelamento e à ausência de formulário persistente | Rota comercial única, procedência das issues, autenticidade técnica, integridade dos bytes, termos verdadeiros e separação entre preço-piloto público, validação de margem e checkout | `single-commercial-route.v1.json` e seu teste: as quatro superfícies aceitam a correção editorial `EXECUTE_NOW`, sem espera por data; os owners históricos permanecem como procedência e o hash real continua conferido. A issue #333 do fundador definiu “Preço-piloto: R$ 4.900. SLA: 5 dias úteis”, preservou preço e escopo e foi encerrada como implementada pelo PR #398, que publicou esses termos no hub. CFG-D18 permanece `VALIDATE`/`PILOT_HYPOTHESIS`, contratação depende de proposta e checkout permanece desabilitado. Contraprovas reprovam a volta do congelamento, a ocultação do preço existente, divergência de valor e a inferência de checkout. |
 | Rol público de 54 capacidades, estados e contadores | Cadastro interno completo e nenhuma promoção de oferta pendente | `deliverables-registry.v1.json`, `task-doors.v1.json`, `render_public_catalog.mjs` e testes comerciais/UI: 54 registros internos, oito ofertas publicadas; projetos, revisão, compatibilização e orçamento têm explicação e destinos. Testes não exigem census no comprador. |
 | Todo o hub, preço e crédito rotulados sintéticos | Exemplo não pode virar cliente nem resultado real | `real_proof_registry.mjs`, registro de prova, gerador do catálogo e testes: aviso ligado ao modelo e acesso correspondente, separado das condições verdadeiras. Mutação com cliente inventado ou preço rotulado sintético reprova. |
 | Segundo revisor como presença obrigatória ou déficit anunciado | Autoria responsável, fontes, cálculos, limites e correção | Política editorial 1.3 e `authority.py`: revisor distinto só se existe. Versões 1.0–1.2 preservadas. Separação de blocos impede concatenar “avaliação” e item “04” como nota de cliente; contraprova mantém reprovação de nota real sem base. |
