@@ -101,11 +101,6 @@
 .capability-roll__intro .eyebrow{grid-column:1/-1;margin:0}
 .capability-roll__intro h2{max-width:19ch;margin:0;font-size:clamp(2rem,3.5vw,3.5rem)}
 .capability-roll__intro p{max-width:700px;margin:0;color:#435369;line-height:1.65}
-.capability-state-legend{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-bottom:20px;border:1px solid #bdc9d1;background:#fff}
-.capability-state-legend>div{padding:14px 16px}
-.capability-state-legend>div+div{border-left:1px solid #d5dde2}
-.capability-state-legend strong{display:block;margin-bottom:4px;color:var(--ink);font-family:var(--mono);font-size:max(var(--text-micro),12.8px);letter-spacing:.05em}
-.capability-state-legend span{display:block;color:#536477;font-size:.76rem;line-height:1.45}
 .capability-groups{display:grid;gap:8px}
 .capability-group{background:#fff;border:1px solid #bdc9d1;border-radius:4px}
 .capability-group>summary{display:grid;grid-template-columns:42px minmax(0,1fr) auto;gap:8px 14px;align-items:center;min-height:64px;padding:12px 16px;cursor:pointer;list-style-position:inside}
@@ -172,9 +167,6 @@
   .compare-ladder-figures>div+div{padding-left:8px;border-left:1px solid #cbd4dc}
   .compare-ladder-figures dt{font-size:.62rem}
   .compare-ladder-figures dd{font-size:.86rem}
-  .capability-state-legend{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .capability-state-legend>div{padding:10px 8px}
-  .capability-state-legend>div+div{border-left:1px solid #d5dde2}
   .capability-group>summary{padding:10px 12px}
   .capability-group__body{padding:0 12px 12px}
   .capability-item{column-gap:10px;row-gap:0;padding:12px 0}
