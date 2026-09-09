@@ -455,9 +455,13 @@ function renderCapabilityItem(entry) {
   // padding, papel nem ARIA: existia so para ocupar a coluna 2 da grade, o que
   // grid-column/grid-row fazem sem elemento. Sao 54 nos devolvidos ao orcamento
   // de DOM de /entregas/, um por capacidade do rol.
+  // Um link por capacidade publicada, e nenhum nas demais: o convite para
+  // descrever a situacao aparece uma vez por porta, no rodape do grupo, em vez
+  // de 46 vezes identicas. Alem de estourar o orcamento de links de <main>, a
+  // repeticao nao ajudava ninguem a decidir.
   const action = entry.public_state === "PUBLISHED"
     ? `<a href="#entrega-${entry.catalog_number}">Ver oferta publicada acima</a>`
-    : `<a href="/triagem-tecnica/">Descrever esta situação</a>`;
+    : "";
   // A explicacao de PUBLISHED dizia o mesmo que o link logo abaixo dela ("Ver
   // oferta publicada acima"). Uma das duas frases e ruido; fica o link, que
   // alem de dizer, leva. Os estados nao publicados nao tem link e mantem a
