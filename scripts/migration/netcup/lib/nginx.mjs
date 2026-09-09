@@ -298,7 +298,7 @@ export function renderRedirects(contract) {
     lines.push(`# rule ${rule.order}: ${rule.from.raw} -> ${rule.to.raw} ${rule.status}${rule.force ? "!" : ""}`);
     lines.push(`location ~ ${routeRegex(rule)} {`);
     if (rule.from.match === "prefix") lines.push(`  set ${captureVariable} $1;`);
-    if (rule.force) {
+    if (rule.force || rule.action === "gone") {
       lines.push(...renderTerminalAction(contract, rule, {
         splatVariable: rule.from.match === "prefix" ? captureVariable : "",
         redirectResponse: responseName,
@@ -308,7 +308,7 @@ export function renderRedirects(contract) {
     }
     lines.push("}");
 
-    if (!rule.force) {
+    if (!rule.force && rule.action !== "gone") {
       lines.push(`location ${routeName} {`);
       lines.push(
         ...renderTerminalAction(contract, rule, {

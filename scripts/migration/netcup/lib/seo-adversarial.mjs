@@ -192,8 +192,9 @@ export async function runSeoAdversarial({
   }
 
   for (const rule of contract.routes.filter((candidate) => candidate.from.kind === "path" && candidate.status === 410)) {
-    const response = await candidateClient.request(rule.from.path);
-    check(checks, `gone-stays-410:${rule.from.path}`, response.status === 410, { status: response.status });
+    const requestPath = rule.from.match === "prefix" ? rule.from.path.replace(/\*$/, "__retired_existing__/") : rule.from.path;
+    const response = await candidateClient.request(requestPath);
+    check(checks, `gone-stays-410:${requestPath}`, response.status === 410, { status: response.status });
   }
   const [missing, custom404] = await Promise.all([
     candidateClient.request("/__seo_adversarial_missing_page__"),

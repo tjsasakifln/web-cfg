@@ -286,7 +286,7 @@ function makeRedirectRule({ from, to, statusToken, source, line, origin }) {
     force,
     preserveQuery: [200, 301, 302].includes(status),
     fragmentServerSide: false,
-    shadowPolicy: force ? "rule-first" : "static-file-first",
+    shadowPolicy: force || status === 410 ? "rule-first" : "static-file-first",
     provenance: [{ source, line, syntax: origin.syntax }],
   };
 }

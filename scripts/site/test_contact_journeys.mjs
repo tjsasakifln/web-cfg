@@ -176,7 +176,19 @@ try {
     await page.select("#estagio", scenario.stage);
     await page.click("[data-form-next]");
     await page.waitForSelector('#form-step-2.is-active');
-    if (syntheticCompany) await page.type("#empresa", syntheticCompany);
+    // The UI intentionally focuses the new step after two animation frames.
+    // Wait for that accessibility transition before typing; otherwise its
+    // delayed focus can steal the first keystrokes from the target field and
+    // make the probe report a preservation bug that the form did not cause.
+    await page.waitForFunction(() => {
+      const step = document.querySelector("#form-step-2.is-active");
+      return Boolean(step && step.contains(document.activeElement));
+    });
+    if (syntheticCompany) {
+      await page.click("#empresa");
+      await page.type("#empresa", syntheticCompany);
+    }
+    await page.click("#mensagem");
     await page.type("#mensagem", userNeed);
     const state = await page.evaluate(({ scenario, syntheticName, syntheticEmail, syntheticCompany, contextToken, userNeed }) => {
       const form = document.querySelector("#formulario-contato");

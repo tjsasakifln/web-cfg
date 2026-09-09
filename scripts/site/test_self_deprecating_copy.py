@@ -204,6 +204,13 @@ _JSONLD_TEXT_KEYS = {
     "name",
     "abstract",
     "text",
+    "jobTitle",
+    "articleSection",
+    "keywords",
+    "serviceType",
+    "alternateName",
+    "slogan",
+    "caption",
 }
 
 
@@ -217,11 +224,21 @@ def jsonld_prose(html: str) -> str:
     """
     out: list[str] = []
 
+    def append_text(node: object) -> None:
+        if isinstance(node, str):
+            out.append(node)
+        elif isinstance(node, list):
+            for item in node:
+                append_text(item)
+        elif isinstance(node, dict):
+            for item in node.values():
+                append_text(item)
+
     def walk(node: object) -> None:
         if isinstance(node, dict):
             for key, value in node.items():
-                if key in _JSONLD_TEXT_KEYS and isinstance(value, str):
-                    out.append(value)
+                if key in _JSONLD_TEXT_KEYS:
+                    append_text(value)
                 else:
                     walk(value)
         elif isinstance(node, list):

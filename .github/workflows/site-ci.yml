@@ -192,7 +192,18 @@ jobs:
           PUBLIC_ARTIFACT_REQUIRED: "1"
         run: |
           npm run test:ui
+      - name: Rendered first-fold measurement on exact artifact
+        env:
+          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+          PUBLIC_ARTIFACT_REQUIRED: "1"
+        run: |
           node scripts/site/measure_first_fold.mjs --artifact --report build/reports/first-fold-current.json
+      - name: Preserve mandatory first-fold evidence
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: first-fold-${{ github.sha }}
+          path: build/reports/first-fold-current.json
+          if-no-files-found: error
       - name: Sitewide layout geometry
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
@@ -338,6 +349,8 @@ jobs:
             --required-step "Published HTML and FAQ integrity" \
             --required-step "Public artifact audit" \
             --required-step "Commercial visitor journeys on the built artifact" \
+            --required-step "Rendered first-fold measurement on exact artifact" \
+            --required-step "Preserve mandatory first-fold evidence" \
             --required-step "axe accessibility" \
             --required-step "Playwright checklist on _site"
 

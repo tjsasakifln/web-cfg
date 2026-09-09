@@ -641,6 +641,146 @@
           }
         ]
       }
+    },
+    {
+      "source_report": "current-independent-c1-review.json (second agent source reading, 2026-09-09)",
+      "report": {
+        "schema": "CONFENGE_CURRENT_INDEPENDENT_C1_REVIEW/1.0.0",
+        "reviewer": {
+          "identity": "/root/release_discovery",
+          "kind": "independent_agent_source_read",
+          "independent_human_or_professional_review": false
+        },
+        "basis": {
+          "repository_head": "f3a461e130cec079d29a8dbae9521c63be15e6a8",
+          "working_tree": "dirty; source files read after concurrent corrections, not a final artifact or production acceptance",
+          "campaign_record": "docs/campaigns/2026-09-09-commercial-review.json",
+          "scope": "commercial destinations omitted or conditional in the campaign record, plus named current corrections"
+        },
+        "reviewed_destinations": [
+          {
+            "route": "/nurture/",
+            "role": "optional educational sequence, not the primary commercial path",
+            "evidence": {
+              "C1": "nurture/index.html:56-61 names three B2G situations and routes project/pericia/SST needs to triagem tecnica.",
+              "C2": "lines 70-102 describe the technical themes/messages.",
+              "C3": "lines 66-104 enumerate each short sequence and its linked supporting material.",
+              "C4": "line 57 says each message points to proof, dossier or decision.",
+              "C5": "lines 58 and 104-107 identify the technical responsible through an author link and route the guidance to content with authorship, sources, method and limits; lines 110-117 disclose confirmation/unsubscribe behavior and commercial-sequence interruption.",
+              "C6": "lines 140-144 provide contextual home-contact and WhatsApp actions for urgent cases."
+            },
+            "result": "PASS_SOURCE",
+            "limitation": "No delivery/receipt behavior was executed; source reading does not establish e-mail persistence or runtime sending."
+          },
+          {
+            "route": "/ferramentas/checklist-reequilibrio/",
+            "role": "browser-local orientative tool with optional second reading",
+            "evidence": {
+              "C1": "lines 42-44 identify documentary blockers for a reequilibrio request.",
+              "C2": "lines 49-51 state the fact/nexus, economic support and request-instruction checks.",
+              "C3": "lines 88-111 distinguish the completed local result from the optional human-dossier request.",
+              "C4": "lines 43 and 51 say the result orders corrections without deciding merit.",
+              "C5": "lines 56-58 and 116-119 identify dated method, Lei 14.133/TCU sources, author and limits; no reviewer is invented.",
+              "C6": "lines 88-111 provide a consented, contextual second-reading form after the free result."
+            },
+            "result": "PASS_SOURCE",
+            "limitation": "Form persistence/receipt remains a runtime test, not established here."
+          },
+          {
+            "route": "/ferramentas/diagnostico-defesa-margem/",
+            "role": "public-contract factual reading tool",
+            "evidence": {
+              "C1": "lines 50-52 name contract/CNPJ/PNCP context and the decision before aditivo, reajuste or reequilibrio.",
+              "C2": "lines 56-62 explain the versioned read-only projection and fact/calculation/inference/unknown separation.",
+              "C3": "lines 83-96 introduce factual layers and contract identification rendered by the tool.",
+              "C4": "lines 50-52 say it lists what must be checked before the contractual request.",
+              "C5": "lines 58-62 and 187-189 identify the PNCP source, reference/review dates, institutional author and technical responsible; dynamic code maps OFFICIAL/DERIVED/INFERENCE to visitor Portuguese at lines 248-258 and preserves unknown as a contextual evidentiary state.",
+              "C6": "The campaign record identifies the contextual second-reading path at line 170; source behavior/contact receipt was not executed in this review."
+            },
+            "result": "PASS_SOURCE_COPY"
+          },
+          {
+            "route": "/ferramentas/limite-acrescimos-supressoes/",
+            "role": "local calculation tool",
+            "evidence": {
+              "C1-C6": "Campaign record lines 458-467 contains substantive witnesses for base/history/change, three-step calculation, balances, use, legal-method limit and optional CFG-D19 request."
+            },
+            "result": "PASS_SOURCE",
+            "finding": "Current line 198 renders visitor-facing 'Referência da página' and retains the factual legal-source date; no exact '(as of)' remains in this source."
+          },
+          {
+            "route": "/conflitos/",
+            "role": "privacy-preserving conflict screening policy, not a commercial offer",
+            "evidence": {
+              "C1": "lines 69-71 name the visitor need: independent technical work across public/private/pericial/valuation/SST contexts.",
+              "C2-C4": "lines 78-101 explain conflict checks, the three preliminary outcomes and their utility before documents are accepted.",
+              "C5": "lines 70-81 name policy owner/version/date; it does not call the author an independent reviewer.",
+              "C6": "lines 100-134 provide the privacy-minimized screening and correction/triagem link; no generic commercial CTA is required for this policy role."
+            },
+            "result": "PASS_FOR_POLICY_ROLE",
+            "limitation": "Controls are disabled without JavaScript; dynamic gate behavior requires its dedicated test."
+          }
+        ],
+        "current_corrections_confirmed": [
+          {
+            "item": "llms public commercial scope",
+            "evidence": "llms.txt:2 states 'Projetos e serviços de engenharia para obras públicas e privadas'; lines 11-30 name project, inspection, pericia, SST and quantitative/budget work for individuals, professionals, condominiums, companies and public bodies. Lines 32-44 preserve B2G as specialization and distinguish real offers from synthetic examples.",
+            "source_sha256": "856369027cd06ab9b753e938d8f37703c44bce7f3eb169880e06a4839d2295cb"
+          },
+          {
+            "item": "pre-licitacao delivery coherence",
+            "evidence": "diagnostico-pre-licitacao/index.html:64-65 now describes edital/project/budget/proposal risk analysis and a participate/esclarecer/nao-participar decision, consistent with CTA at line 103.",
+            "source_sha256": "1d2d4f72c1f13a08134d4ef510effebe95131b533cf0428ca3005958d59c5e76"
+          },
+          {
+            "item": "rain article authorship wording",
+            "evidence": "conteudos/chuva-prorrogacao-prazo-obra-publica/index.html:87 replaces the self-deprecating no-human/no-second-review statement with institutional authorship, decision authority, methods, sources and limits; it does not claim an independent reviewer.",
+            "source_sha256": "0ddcba81ff38e6fa4247bbe4ceb3f0372e01cfd69ed98006b7de1a13f71c3693"
+          },
+          {
+            "item": "BOFU proof/fonte wording",
+            "evidence": "Current source hashes were captured for aditivos, medicoes, reequilibrio and auditoria; their current source text includes the named technical responsibility/proof line and visitor-facing 'Referência' wording. Artifact rebuild remains required.",
+            "hashes": {
+              "aditivos": "0420d9d06b5fe310e4de7f51504a02ddbe4d6d9dd0a8223d39f4ae8cbdaf756e",
+              "medicoes": "a87564ef27269d543565f3cc707c4a7b60c81e87740456e4e580415e25fffc73",
+              "reequilibrio": "76129e6990ee72cbcfd1bad35ba3442fde70734629a148eeb9dad41c648f6d58",
+              "auditoria": "72aa2a19ee450d32737eec0e7133157784f196fc8b01afd43e4275883448c783"
+            }
+          },
+          {
+            "item": "404 commercial wording",
+            "evidence": "404.html has current uncommitted correction (sha256 55acb006ecf473b9d8ba5a8c61487dc363e669e0c29b19f9dce533e694e0967b); final artifact verification is still required."
+          },
+          {
+            "item": "diagnostico B2G 360 authority witness",
+            "evidence": "diagnostico-b2g-360/index.html:66 has the visible authority byline, and lines 234-236 name institutional author, technical responsible, date, method and document/interview source boundary.",
+            "source_sha256": "ce182fe7be3f1f4faee69848a65acd6d22a741b3fe6b58fb0a95dbc739da9f6c"
+          },
+          {
+            "item": "nurture C5 and recoverable error states",
+            "evidence": "nurture/index.html:58 supplies the accountable-author/confianca links; lines 153-185 now give invalid-field, rate-limit, temporary-unavailability and connection recovery messages without claiming subscription receipt.",
+            "source_sha256": "5b51db63be3b9f174ab68aaa77277405ab3f16061a4a5b4f58361432814485f0"
+          },
+          {
+            "item": "limit tool visitor label",
+            "evidence": "ferramentas/limite-acrescimos-supressoes/index.html:198 now says 'Referência da página'; lines 199-201 preserve method, legal source and limit.",
+            "source_sha256": "b62a72f16d47b6d49904c9fa03e100e92b16ba2a01af387724869372da23dc6d"
+          }
+        ],
+        "real_blockers_or_open_findings": [
+          {
+            "id": "final_artifact_and_runtime_not_examined",
+            "evidence": "All conclusions here are source-only after concurrent edits; they cannot approve built composition, dynamic tool result state, forms, release or production.",
+            "classification": "required downstream validation, not a source-copy failure"
+          }
+        ],
+        "summary": {
+          "source_destinations_read": 5,
+          "source_copy_passes_by_role": 5,
+          "mandatory_source_defects_open": 0,
+          "production_approved": false
+        }
+      }
     }
   ]
 }

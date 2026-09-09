@@ -71,6 +71,20 @@ FORBIDDEN = {
     "handoff": r"\bhandoffs?\b",
     "readback": r"\breadbacks?\b",
     "pii": r"\bPII\b",
+    # Dispensable visitor-facing English and internal commercial shorthand.
+    # URL slugs, JSON keys and source code identifiers are outside human_surface;
+    # only text a person or search engine reads reaches these patterns.
+    "backlog": r"\bbacklogs?\b",
+    "feeling": r"\bfeelings?\b",
+    "hub": r"\bhubs?\b",
+    "sla": r"\bSLAs?\b",
+    "input": r"\binputs?\b",
+    "check": r"\bchecks?\b",
+    "card": r"\bcards?\b",
+    "ready": r"\bREADY\b",
+    "briefing": r"\bbriefings?\b",
+    "b2g": r"\bB2G\b",
+    "score-honesto": r"\bscore\s+honesto\b",
 }
 
 # State-machine, registry and wire-protocol labels. These are matched
@@ -276,6 +290,26 @@ def legitimate_reason(term: str, sentence: str) -> str | None:
         return "orientacao_fisica_no_objeto_transcrito"
     if term == "nucleo" and re.search(r"\bn[úu]cleo da prote[çc][ãa]o\b", sentence, re.I):
         return "substantivo_comum_centro_da_protecao"
+    if term == "b2g" and re.search(
+        r"\bB2G\b[^.!?]{0,100}\b(?:business-to-government|rela[çc][ãa]o entre empresas? e (?:o )?poder p[úu]blico)\b"
+        r"|\btranscri[çc][ãa]o fiel\b[^.!?]{0,100}\bB2G\b",
+        sentence,
+        re.I,
+    ):
+        return "sigla_definida_ou_transcricao_externa_identificada"
+    if term == "sla" and re.search(
+        r"\bSLA\b\s*\([^)]*acordo de n[íi]vel de servi[çc]o[^)]*\)"
+        r"|\bacordo de n[íi]vel de servi[çc]o\b[^.!?]{0,60}\bSLA\b",
+        sentence,
+        re.I,
+    ):
+        return "sigla_tecnica_definida_em_portugues"
+    if term == "hub" and re.search(
+        r"\bContrata[çc][ãa]o da empresa Igua[çc]u HUB\b",
+        sentence,
+        re.I,
+    ):
+        return "nome_empresarial_transcrito_do_objeto_publico"
     return None
 
 
@@ -394,9 +428,65 @@ def rendered_internal_code_failures(root: Path | None = None) -> list[str]:
     return out
 
 
+def _surface_defect_terms(html: str) -> set[str]:
+    """Run the same term/reason decision used by the site scan on one fixture."""
+    found: set[str] = set()
+    for sentence in _SENTENCE_SPLIT.split(human_surface(html)):
+        normalized = " ".join(sentence.split())
+        for term, pattern in FORBIDDEN.items():
+            if re.search(pattern, normalized, flags=re.IGNORECASE) and not legitimate_reason(
+                term, normalized
+            ):
+                found.add(term)
+    return found
+
+
 # The exact shapes that shipped. A detector that stops recognising them has
 # stopped working, so they are checked on the same code path the gate runs.
 COUNTER_CASES = (
+    (
+        "jargao-comercial-em-corpo-metadado-noindex-e-estado-dinamico",
+        lambda: {
+            "backlog", "feeling", "hub", "sla", "input", "check", "card",
+            "ready", "briefing", "b2g", "score-honesto",
+        }.issubset(
+            _surface_defect_terms(
+                '<meta name="robots" content="noindex"><meta name="description" '
+                'content="Backlog, feeling e Hub"><main>SLA, input, check, card e briefing. '
+                'Consultoria B2G com score honesto.</main><template>READY</template>'
+                '<script>status.textContent = "backlog";</script>'
+            )
+        ),
+    ),
+    (
+        "siglas-definidas-em-portugues-passam",
+        lambda: not _surface_defect_terms(
+            "<main><p>B2G (business-to-government, relação entre empresas e o poder público).</p>"
+            "<p>Acordo de nível de serviço (SLA).</p></main>"
+        ).intersection({"b2g", "sla"}),
+    ),
+    (
+        "b2g-em-jobtitle-jsonld-reprova",
+        lambda: "b2g" in _surface_defect_terms(
+            '<script type="application/ld+json">'
+            '{"@context":"https://schema.org","@type":"Person",'
+            '"name":"Responsável técnico","jobTitle":"Engenheiro e consultor B2G"}'
+            '</script>'
+        ),
+    ),
+    (
+        "nome-externo-em-objeto-publico-passa",
+        lambda: "hub" not in _surface_defect_terms(
+            "<p>Objeto da fonte oficial: Contratação da empresa Iguaçu HUB para prestação de serviços técnicos.</p>"
+        ),
+    ),
+    (
+        "chaves-e-url-internas-nao-sao-traduzidas",
+        lambda: not _surface_defect_terms(
+            '<a href="/diagnostico-b2g-360/">Diagnóstico de obras públicas</a>'
+            '<script type="application/json">{"proof_state":"READY","input":"ok"}</script>'
+        ),
+    ),
     (
         "option-label-igual-ao-valor",
         lambda: _option_pairs_rejected(

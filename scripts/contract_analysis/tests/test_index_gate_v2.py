@@ -314,6 +314,35 @@ def test_one_byte_material_and_render_drift_refuses_index(tmp_path, monkeypatch)
     assert "noindex" in new_html
 
 
+@pytest.mark.parametrize("tamper", ["false_check", "legacy_key"])
+def test_active_canary_recalculates_and_rejects_tampered_checklist(
+    tmp_path, monkeypatch, tamper
+):
+    rec = _stage_official(tmp_path, monkeypatch)["records"][0]
+    rec["root_content_hash"] = rec.get("root_content_hash") or rec.get("content_hash")
+    decision = evaluate_publication(rec, cohort=[rec])
+    html, _ = _index_shaped(rec, decision)
+    _approve_v2(rec, tmp_path, html)
+    ok, reasons = approval_allows_index(rec, root=tmp_path)
+    assert ok is True, reasons
+
+    path = tmp_path / "data" / "editorial" / "contract-analysis" / "approvals.json"
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    active = next(row for row in payload["approvals"] if not row.get("withdrawn"))
+    if tamper == "false_check":
+        active["checklist"]["reviewer_representation_consistent"] = False
+    else:
+        active.pop("checklist_schema")
+        active["checklist"]["method_limitations_author_reviewer_visible"] = active[
+            "checklist"
+        ].pop("method_limitations_author_visible")
+    path.write_text(json.dumps(payload), encoding="utf-8")
+
+    ok, reasons = approval_allows_index(rec, root=tmp_path)
+    assert ok is False
+    assert any(reason.startswith("approval_checklist_") for reason in reasons), reasons
+
+
 def test_public_shell_drift_refuses_index(tmp_path, monkeypatch):
     rec = _stage_official(tmp_path, monkeypatch)["records"][0]
     rec["root_content_hash"] = rec.get("root_content_hash") or rec.get("content_hash")

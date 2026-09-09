@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 import { execFileSync, spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { join, resolve } from "node:path";
+import { dirname, extname, join, resolve } from "node:path";
 
 import { writeRenderedContract } from "./lib/nginx.mjs";
 import { createOriginClient } from "./lib/origin-client.mjs";
@@ -11,6 +11,7 @@ import { createOriginClient } from "./lib/origin-client.mjs";
 const ROOT = resolve(new URL("../../..", import.meta.url).pathname);
 const output = resolve(ROOT, "build/netcup-host-contract");
 const scratch = mkdtempSync(join(tmpdir(), "confenge-nginx-test-"));
+const seededSite = join(scratch, "site");
 const config = join(scratch, "nginx.conf");
 const wrapperConfig = join(scratch, "nginx-wrappers.conf");
 const testCertificate = join(scratch, "fullchain.pem");
@@ -33,6 +34,16 @@ function assertProbe(name, condition, detail) {
 
 try {
   const { contract } = writeRenderedContract({ root: ROOT, outputDir: output });
+  // Seed only a disposable copy. A withdrawn URL must stay gone even if a
+  // generator accidentally emits a real file; never mutate the gated artifact.
+  cpSync(resolve(ROOT, "_site"), seededSite, { recursive: true });
+  const goneProbes = contract.routes.filter(rule => rule.action === "gone").map(rule =>
+    rule.from.match === "prefix" ? rule.from.path.replace(/\*$/, "__retired_existing__/") : rule.from.path);
+  for (const route of goneProbes) {
+    const target = resolve(seededSite, "." + route, extname(route) ? "" : "index.html");
+    mkdirSync(dirname(target), { recursive: true });
+    writeFileSync(target, "<h1>RETIRED_FILE_MUST_NEVER_BE_SERVED</h1>", "utf8");
+  }
   const globalHeaders = Object.fromEntries(
     contract.headers
       .find((rule) => rule.match === "global")
@@ -75,7 +86,7 @@ http {
       "--volume",
       `${output}:/contract:ro`,
       "--volume",
-      `${resolve(ROOT, "_site")}:/site:ro`,
+      `${seededSite}:/site:ro`,
       "nginx:1.27-alpine",
       "nginx",
       "-t",
@@ -128,7 +139,7 @@ ${normalizeWrapper("confenge-web-public.conf")}
       "--volume",
       `${output}:/contract:ro`,
       "--volume",
-      `${resolve(ROOT, "_site")}:/site:ro`,
+      `${seededSite}:/site:ro`,
       "--volume",
       `${scratch}:/test:ro`,
       "nginx:1.27-alpine",
@@ -154,7 +165,7 @@ ${normalizeWrapper("confenge-web-public.conf")}
       "--volume",
       `${output}:/contract:ro`,
       "--volume",
-      `${resolve(ROOT, "_site")}:/site:ro`,
+      `${seededSite}:/site:ro`,
       "--volume",
       `${scratch}:/test:ro`,
       "nginx:1.27-alpine",
@@ -310,7 +321,7 @@ ${normalizeWrapper("confenge-web-public.conf")}
       "--volume",
       `${output}:/contract:ro`,
       "--volume",
-      `${resolve(ROOT, "_site")}:/site:ro`,
+      `${seededSite}:/site:ro`,
       "nginx:1.27-alpine",
     ],
     { encoding: "utf8", timeout: 120_000 },
@@ -334,6 +345,10 @@ ${normalizeWrapper("confenge-web-public.conf")}
     }
   }
   if (!ready) throw new Error("nginx test container did not become ready");
+  for (const route of goneProbes) {
+    const response = await client.request(route);
+    assertProbe(`gone_existing_file:${route}`, response.status === 410 && !response.body.includes("RETIRED_FILE_MUST_NEVER_BE_SERVED"), `status=${response.status}`);
+  }
 
   const ops = await client.request("/ops/");
   const opsCacheControl = String(ops.headers["cache-control"] || "").toLowerCase();

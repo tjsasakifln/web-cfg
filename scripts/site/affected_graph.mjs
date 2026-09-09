@@ -334,6 +334,7 @@ export const SUITE_GRAPH = Object.freeze({
     producers: [
       "tests/commercial/test_first_fold_contract.mjs",
       "scripts/site/first_fold_rules.mjs",
+      "scripts/site/first_fold_identity.mjs",
       "scripts/site/measure_first_fold.mjs",
       "data/commercial/first-fold-contract.v1.json",
       "data/commercial/first-fold-measurements.v1.json",

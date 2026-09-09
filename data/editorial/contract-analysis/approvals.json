@@ -76,6 +76,7 @@
       "comparable_available": true,
       "comparable_consumed": false,
       "comparable_reason": "singular_document_insight_no_comparative_claim",
+      "checklist_schema": "contract-analysis-conditional-checklist/2.0",
       "checklist": {
         "source_official_live": true,
         "handoff_ready_verified": true,
@@ -85,7 +86,8 @@
         "no_dimension_below_75": true,
         "insight_singular": true,
         "utility_beyond_source": true,
-        "method_limitations_author_reviewer_visible": true,
+        "method_limitations_author_visible": true,
+        "reviewer_representation_consistent": true,
         "author_assigned_after_review": true,
         "reputational_safety": true,
         "unique_content_anti_doorway": true,

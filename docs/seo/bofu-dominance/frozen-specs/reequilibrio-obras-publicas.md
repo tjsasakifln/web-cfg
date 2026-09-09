@@ -6,6 +6,12 @@
 **`earliest_safe_action_at`:** `2026-09-16`  
 **Decision state:** P1 / VALIDATE / INBOUND ENGINE. Leverage: revenue + distribution.
 
+The preparation restriction above applies only to the historical experimental
+patch. The founder's 2026-09-09 EXECUTE_NOW decision revokes editorial freezes
+for the commercial correction campaign. Review the affected rendered content,
+retain real terms and provenance, recapture actual hashes and execute the
+required integration/release gates; do not wait for conversion measurements.
+
 ## Visitor job
 
 Decidir se cabe reequilíbrio agora e estruturar evento, matriz de riscos, nexo e impacto auditável — sem confundir com reajuste.
@@ -21,7 +27,7 @@ Decidir se cabe reequilíbrio agora e estruturar evento, matriz de riscos, nexo 
 | robots | index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1 |
 | schema | Organization, Country, ContactPoint, Person, CollegeOrUniversity, CollectionPage, WebSite, ItemList, ListItem, Service, BreadcrumbList, FAQPage, Question, Answer |
 | og:title | Reequilíbrio econômico-financeiro de obra pública: o que é e quando cabe | CONFENGE |
-| content_sha256 | `0da041de3a009ccacbb06d22354d894b9ad9472c7f4115f07e5f014b76dae996` |
+| content_sha256 | `76129e6990ee72cbcfd1bad35ba3442fde70734629a148eeb9dad41c648f6d58` |
 | hero CTA | Verificar o contrato no diagnóstico de defesa de margem → `/ferramentas/diagnostico-defesa-margem/` |
 | when-not-to-hire | True |
 

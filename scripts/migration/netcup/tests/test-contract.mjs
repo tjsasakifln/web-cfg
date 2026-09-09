@@ -73,11 +73,13 @@ test("withdrawn prefixes return 410 without weakening redirect or rewrite mappin
   assert.equal(rule.action, "gone");
   assert.equal(rule.from.match, "prefix");
   assert.equal(rule.to.usesSplat, false);
+  assert.equal(rule.shadowPolicy, "rule-first");
   const { contract } = buildHostContract(ROOT);
   contract.routes = [rule];
   const output = renderRedirects(contract);
   assert.match(output, /return 410;/);
   assert.doesNotMatch(output, /add_header Location|rewrite \^/);
+  assert.doesNotMatch(output, /try_files/);
   for (const status of [200, 301, 302]) {
     expectCode(() => parseRedirects(`/retired/* /404.html ${status}\n`), "HC_REDIRECT_SPLAT_UNSAFE");
   }

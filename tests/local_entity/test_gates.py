@@ -59,6 +59,11 @@ def test_technical_360_review_is_not_a_customer_rating() -> None:
     assert any("invented_credential" in error for error in audit_html_honesty("<p>Avaliação 4,9 de clientes.</p>"))
 
 
+def test_card_number_is_not_a_rating_but_inline_rating_is_rejected() -> None:
+    assert audit_html_honesty('<article><a>Perícia e avaliação</a></article><article><span>04</span><h2>Segurança do trabalho</h2></article>') == []
+    assert any('invented_credential' in error for error in audit_html_honesty('<p>Avaliação <strong>04</strong> estrelas.</p>'))
+
+
 def test_collapsed_map_pack_into_organic_rejected() -> None:
     doc = json.loads(_load("collapsed-census.json"))
     errors = validate_census(doc)

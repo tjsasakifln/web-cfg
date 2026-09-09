@@ -8,6 +8,7 @@ from typing import Any
 
 HASH_FIELDS = (
     "id",
+    "title",
     "watermark",
     "permalink",
     "canonical",

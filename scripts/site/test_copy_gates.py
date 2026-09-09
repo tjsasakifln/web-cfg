@@ -216,7 +216,6 @@ def test_copy_gate_scope_has_no_handwritten_route_allowlist():
         "servicos-obras-publicas",
         "problemas-que-resolvemos",
         "analises-contratos-publicos",
-        "panorama-mercado-obras-publicas",
         "politica-editorial",
         "comercial",
         "conflitos",

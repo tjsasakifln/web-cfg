@@ -6,6 +6,12 @@
 **`earliest_safe_action_at`:** `2026-09-16`  
 **Decision state:** P1 / VALIDATE / INBOUND ENGINE. Leverage: revenue + distribution.
 
+The preparation restriction above applies only to the historical experimental
+patch. The founder's 2026-09-09 EXECUTE_NOW decision revokes editorial freezes
+for the commercial correction campaign. Review the affected rendered content,
+retain real terms and provenance, recapture actual hashes and execute the
+required integration/release gates; do not wait for conversion measurements.
+
 ## Visitor job
 
 Enquadrar uma mudança de obra (acréscimo, supressão, item novo, serviço extra) em fato documentado, preço justificável e decisão formal antes de executar sem cobertura.
@@ -21,7 +27,7 @@ Enquadrar uma mudança de obra (acréscimo, supressão, item novo, serviço extr
 | robots | index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1 |
 | schema | Organization, Country, ContactPoint, Person, CollegeOrUniversity, CollectionPage, WebSite, ItemList, ListItem, Service, BreadcrumbList, FAQPage, Question, Answer |
 | og:title | Aditivos em obras públicas: documentos e margem | CONFENGE |
-| content_sha256 | `9fc3bd1e48dbeb4596a579628681e15c7954b249b929ca41cfe3c9effce5c6b1` |
+| content_sha256 | `0420d9d06b5fe310e4de7f51504a02ddbe4d6d9dd0a8223d39f4ae8cbdaf756e` |
 | hero CTA | Verificar o contrato no diagnóstico de defesa de margem → `/ferramentas/diagnostico-defesa-margem/` |
 | when-not-to-hire | True |
 

@@ -215,6 +215,11 @@ def test_site_ci_shape():
         errors.append("site-ci must fail closed when UI geometry cannot launch Chrome")
     if "npm run audit:layout-sitewide" not in text:
         errors.append("site-ci must execute the full sitewide layout audit claimed by #293")
+    if "node scripts/site/measure_first_fold.mjs --artifact --report build/reports/first-fold-current.json" not in text:
+        errors.append("site-ci must measure the exact rendered artifact, not only read historical first-fold records")
+    fold_upload = text.split("- name: Preserve mandatory first-fold evidence", 1)[-1].split("- name:", 1)[0]
+    if "path: build/reports/first-fold-current.json" not in fold_upload or "if-no-files-found: error" not in fold_upload:
+        errors.append("site-ci must preserve mandatory first-fold evidence and reject its absence")
     if 'LH_HOME_RUNS: "3"' not in text:
         errors.append("site-ci must run the #185 home Lighthouse gate three times")
     for needle in ("npm run audit:accessibility", "npm run test:lighthouse-gates", "npm run audit:performance"):
@@ -679,6 +684,8 @@ def test_required_execution_evidence_fails_closed_after_the_gate_job():
         '--required-step "Final public-surface coverage and copy gate"',
         '--required-step "Build public site"',
         '--required-step "Playwright checklist on _site"',
+        '--required-step "Rendered first-fold measurement on exact artifact"',
+        '--required-step "Preserve mandatory first-fold evidence"',
     )
     for needle in required:
         if needle not in (workflow if needle == "actions: read" else evidence):
@@ -689,6 +696,18 @@ def test_required_execution_evidence_fails_closed_after_the_gate_job():
     assert "empty-selection" in source
     assert "endswith(\" / \" + required_job)" in source
     assert "required step" in source and "head_sha" in source
+    # Execute a negative fixture against the real shape checker: retaining a
+    # green UI step cannot compensate for deleting the rendered measurement.
+    from unittest.mock import patch
+    original_read = _read
+    command = "node scripts/site/measure_first_fold.mjs --artifact --report build/reports/first-fold-current.json"
+    with patch.dict(globals(), {"_read": lambda file: original_read(file).replace(command, "") if file == SITE_CI else original_read(file)}):
+        try:
+            test_site_ci_shape()
+        except AssertionError as error:
+            assert "must measure the exact rendered artifact" in str(error)
+        else:
+            raise AssertionError("removed first-fold measurement command escaped the workflow gate")
 
 
 def test_deliberate_force_fail_env():

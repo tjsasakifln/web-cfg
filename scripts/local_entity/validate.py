@@ -6,7 +6,7 @@ import json
 import re
 from typing import Any
 
-from scripts.site.authority import INVENTED_CREDENTIAL_PATTERNS
+from scripts.site.authority import INVENTED_CREDENTIAL_PATTERNS, _strip_tags as credential_visible_text
 
 from scripts.local_entity.census import validate_census, validate_gsc_live
 from scripts.local_entity.constants import (
@@ -83,7 +83,9 @@ def audit_graph_honesty(graph: dict[str, Any], html: str = "") -> list[str]:
             blob = json.dumps(cred, ensure_ascii=False)
             if re.search(r"\bcrea\b", blob, re.I):
                 errors.append("invented_credential:crea")
-    blob = visible_text(html).lower() if html else ""
+    # Share block-aware extraction: adjacent cards cannot manufacture a
+    # rating, and inline markup cannot hide an actual customer-rating claim.
+    blob = credential_visible_text(html).lower() if html else ""
     raw = (html or "").lower()
     search = blob + " " + raw
     for pat in INVENTED_CREDENTIAL_PATTERNS:

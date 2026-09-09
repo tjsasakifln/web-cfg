@@ -25,8 +25,8 @@
     "unknown_or_nonpositive": 25,
     "usable": 5038
   },
-  "package_hash": "97655741f7d4eecc9c5617bf3f2085aebd389a201fbdc069e65cebcb8b866ce5",
-  "package_version": "sc-pavimentacao-ticket-1.0·2026-08-17T11:29:23.193694+02:00·97655741f7d4",
+  "package_hash": "67da8f705d6a4db3ae092d5aa6ab169ab5e63c3a5c702c06df7be54409777674",
+  "package_version": "sc-pavimentacao-ticket-1.0·2026-08-17T11:29:23.193694+02:00·67da8f705d6a",
   "payload_content_hash": "568880b7eacf30e2adaf7481945fa50cfc77039be10b27ffc6af0959bf6c6d9d",
   "permalink": "https://confenge.com.br/assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/",
   "png_included": false,
@@ -39,6 +39,6 @@
     "p75": 708950.0,
     "unit": "integral_nominal_instrument"
   },
-  "title": "Valor contratual típico de pavimentação em Santa Catarina — kit de citação",
+  "title": "Valor contratual típico de pavimentação em Santa Catarina, kit de citação",
   "usage_guidance": "Ao citar, preserve o link canônico da CONFENGE, o método, a data dos dados, o tamanho da amostra, os 25 registros fora da amostra e as limitações. Não há licença aberta. Não republique o recorte como estatística nacional nem converta o valor integral nominal do contrato em custo por km."
 }

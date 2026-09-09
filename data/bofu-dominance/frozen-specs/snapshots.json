@@ -48,8 +48,8 @@
         "whatsapp_present": true,
         "form_count": 0
       },
-      "content_sha256": "c96e5c641f7a37d6aa4e24d17c1ac1af7afc6c70f01f0b03abe976d6d844e6d3",
-      "bytes": 26856,
+      "content_sha256": "0420d9d06b5fe310e4de7f51504a02ddbe4d6d9dd0a8223d39f4ae8cbdaf756e",
+      "bytes": 26784,
       "noindex": false
     },
     {
@@ -98,8 +98,8 @@
         "whatsapp_present": true,
         "form_count": 0
       },
-      "content_sha256": "7cff440c571ebff52297d1be6503fd35ca8fea2b19b3af4c79c6b39b3935c4de",
-      "bytes": 28844,
+      "content_sha256": "a87564ef27269d543565f3cc707c4a7b60c81e87740456e4e580415e25fffc73",
+      "bytes": 28772,
       "noindex": false
     },
     {
@@ -148,8 +148,8 @@
         "whatsapp_present": true,
         "form_count": 0
       },
-      "content_sha256": "38bc3eef20baae05104d83e27c91a494ea61ebcf2c0276feb9ddfed3f11830ae",
-      "bytes": 25029,
+      "content_sha256": "76129e6990ee72cbcfd1bad35ba3442fde70734629a148eeb9dad41c648f6d58",
+      "bytes": 24957,
       "noindex": false
     },
     {
@@ -198,8 +198,8 @@
         "whatsapp_present": true,
         "form_count": 0
       },
-      "content_sha256": "ce64028481a686f07f8684db6381596287b474c1907d76177b640c7fb7583662",
-      "bytes": 29510,
+      "content_sha256": "72aa2a19ee450d32737eec0e7133157784f196fc8b01afd43e4275883448c783",
+      "bytes": 29438,
       "noindex": false
     },
     {
@@ -207,7 +207,7 @@
       "path": "/diagnostico-b2g-360/",
       "html_rel": "diagnostico-b2g-360/index.html",
       "title": "Diagnóstico da Operação em Obras Públicas | CONFENGE",
-      "meta_description": "Mapeie capacidade, mercado, acervo, carteira de oportunidades e riscos da operação em obras públicas. Plano executivo de 90 dias para prioridades e backlog de implantação.",
+      "meta_description": "Mapeie capacidade, mercado, acervo, carteira de oportunidades e riscos da operação em obras públicas. Plano executivo de 90 dias para prioridades e ações para implantação.",
       "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
       "canonical": "https://confenge.com.br/diagnostico-b2g-360/",
       "og_title": "Mapeie onde a frente pública perde tempo, margem e controle.",
@@ -255,8 +255,8 @@
         "whatsapp_present": true,
         "form_count": 0
       },
-      "content_sha256": "5e4f0fc121f30aa9d06bc6bc843a40b494cadedb48e461356f22842fe42656ba",
-      "bytes": 21627,
+      "content_sha256": "101b019cb8113967cd7ffd50b07d1011af982ac22dd449aefcc868bff4b79409",
+      "bytes": 21389,
       "noindex": false
     },
     {
@@ -305,8 +305,8 @@
         "whatsapp_present": true,
         "form_count": 0
       },
-      "content_sha256": "c55a45d022f0f383bb86552b6fc818156b7f4d301a70708dd4028d69018d7590",
-      "bytes": 23753,
+      "content_sha256": "1d2d4f72c1f13a08134d4ef510effebe95131b533cf0428ca3005958d59c5e76",
+      "bytes": 23706,
       "noindex": false
     }
   ]

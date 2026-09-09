@@ -5,6 +5,15 @@ Operators and `scripts/site/runtime_authority.mjs` parse the YAML block below.
 There is one public production plane. Stage and legacy are named separately so
 they cannot be mistaken for it.
 
+Release-control clarification (2026-09-09): the canonical workflow executes
+`deploy/netcup/run_bundle_control.py`, streaming the controller from its exact
+checksummed release bundle over pinned SSH after gated-checkout byte equality.
+The host verifies the streamed digest before compilation. Root-owned runtime
+launchers and permissions are unchanged. New-release rollback uses the same
+verified controller bundle with `--operation rollback --rollback-target`, as
+documented in `deploy/netcup/README.md`; stored incoming bundles remain the
+recovery source after CI artifact expiration.
+
 Observed 2026-08-29: `https://confenge.com.br/` is proxied through Cloudflare
 and serves `Server: cloudflare` while preserving
 `X-Confenge-Host-Architecture-Version: confenge-nginx-node/v2` from the Netcup

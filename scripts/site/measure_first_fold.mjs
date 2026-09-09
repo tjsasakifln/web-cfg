@@ -23,6 +23,7 @@ import { dirname, extname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import puppeteer from "puppeteer-core";
 import { resolveChromePath } from "./resolve_chrome.mjs";
+import { firstFoldInputHashes, firstFoldIdentityProblems } from "./first_fold_identity.mjs";
 import {
   DESKTOP_VIEWPORT,
   MOBILE_VIEWPORT,
@@ -176,6 +177,10 @@ async function measureRoute(page, route, viewport) {
 const contract = JSON.parse(readFileSync(CONTRACT_PATH, "utf8"));
 const unlockPlan = JSON.parse(readFileSync(UNLOCK_PLAN_PATH, "utf8"));
 const routes = contract.census.map((row) => row.route);
+const initialCommit = execFileSync("git", ["rev-parse", "HEAD"], { cwd: ROOT, encoding: "utf8" }).trim();
+const initialDirty = execFileSync("git", ["status", "--porcelain"], { cwd: ROOT, encoding: "utf8" }).trim();
+if (!ARTIFACT && process.argv.includes("--write") && initialDirty) throw new Error("first_fold_source_write_requires_clean_checkout");
+const initialInputHashes = firstFoldInputHashes(SITE_ROOT, routes, ROOT);
 const today = new Date().toISOString().slice(0, 10);
 const BLOCKER = blockerText(unlockPlan);
 
@@ -223,6 +228,7 @@ const evidence = {
   measured_on: today,
   commit_sha: commit,
   tree_dirty: Boolean(dirty),
+  input_hashes: firstFoldInputHashes(SITE_ROOT, routes, ROOT),
   surface: ARTIFACT ? "built_artifact" : "source",
   artifact_identity: ARTIFACT ? JSON.parse(readFileSync(join(SITE_ROOT, ".well-known/build-info.json"), "utf8")) : null,
   viewports: [DESKTOP_VIEWPORT, MOBILE_VIEWPORT],
@@ -230,6 +236,9 @@ const evidence = {
   rules: "scripts/site/first_fold_rules.mjs",
   routes: measurements,
 };
+if (commit !== initialCommit || firstFoldIdentityProblems({ input_hashes: initialInputHashes }, evidence.input_hashes).length) {
+  throw new Error("first_fold_inputs_changed_during_measurement");
+}
 
 const byRoute = new Map(measurements.map((row) => [row.route, row]));
 const nextCensus = contract.census.map((surface) => {

@@ -6,6 +6,12 @@
 **`earliest_safe_action_at`:** `2026-09-16`  
 **Decision state:** P1 / VALIDATE / INBOUND ENGINE. Leverage: revenue + distribution.
 
+The preparation restriction above applies only to the historical experimental
+patch. The founder's 2026-09-09 EXECUTE_NOW decision revokes editorial freezes
+for the commercial correction campaign. Review the affected rendered content,
+retain real terms and provenance, recapture actual hashes and execute the
+required integration/release gates; do not wait for conversion measurements.
+
 ## Visitor job
 
 Mapear onde a operação B2G de obras perde tempo, margem e controle, e sair com um plano de 90 dias — not a generic 'vender para o governo' quiz.
@@ -15,13 +21,13 @@ Mapear onde a operação B2G de obras perde tempo, margem e controle, e sair com
 | Field | Value |
 |---|---|
 | title | Diagnóstico da Operação em Obras Públicas | CONFENGE |
-| meta | Mapeie capacidade, mercado, acervo, carteira de oportunidades e riscos da operação B2G. Plano executivo de 90 dias para prioridades e backlog de implantação. |
+| meta | Mapeie capacidade, mercado, acervo, carteira de oportunidades e riscos da operação em obras públicas. Plano executivo de 90 dias para prioridades e ações para implantação. |
 | H1 | Diagnóstico da Operação em Obras Públicas |
 | canonical | https://confenge.com.br/diagnostico-b2g-360/ |
 | robots | index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1 |
 | schema | Organization, WebPage, Service, Country, BreadcrumbList, ListItem |
 | og:title | Mapeie onde a frente pública perde tempo, margem e controle. |
-| content_sha256 | `3c612cb3c2282ebaddb32ade526433f061f3e4dc8a32be01e04e8695e699bdcd` |
+| content_sha256 | `101b019cb8113967cd7ffd50b07d1011af982ac22dd449aefcc868bff4b79409` |
 | hero CTA | Solicitar diagnóstico da operação → `/#contato?jornada=operacao` |
 | when-not-to-hire | True |
 

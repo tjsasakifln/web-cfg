@@ -219,6 +219,17 @@ def test_payload_update_invalidates_package():
     assert updated["invalidated_previous"] == old["package_hash"]
 
 
+def test_public_title_is_package_hash_bound_and_normalized_at_source():
+    asset = load_asset(REAL_ASSET, root=ROOT)
+    assert "—" not in asset["title"]
+    assert asset["previous_package_hash"] == "97655741f7d4eecc9c5617bf3f2085aebd389a201fbdc069e65cebcb8b866ce5"
+    original = build_package(asset, asset_dir=REAL_ASSET.parent, generated_at=AS_OF)
+    changed = dict(asset)
+    changed["title"] = asset["title"] + " (edição alterada)"
+    modified = build_package(changed, asset_dir=REAL_ASSET.parent, generated_at=AS_OF)
+    assert modified["package_hash"] != original["package_hash"]
+
+
 def test_public_namespace_noindex_and_off_sitemap():
     public = ROOT / PUBLIC_REL
     assert public.is_dir()

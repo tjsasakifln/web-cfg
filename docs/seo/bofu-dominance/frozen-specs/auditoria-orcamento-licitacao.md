@@ -6,6 +6,12 @@
 **`earliest_safe_action_at`:** `2026-09-16`  
 **Decision state:** P1 / VALIDATE / INBOUND ENGINE. Leverage: revenue + distribution.
 
+The preparation restriction above applies only to the historical experimental
+patch. The founder's 2026-09-09 EXECUTE_NOW decision revokes editorial freezes
+for the commercial correction campaign. Review the affected rendered content,
+retain real terms and provenance, recapture actual hashes and execute the
+required integration/release gates; do not wait for conversion measurements.
+
 ## Visitor job
 
 Encontrar itens que concentram risco de preço/BDI/referência e conhecer a margem real antes de assumir a obra.
@@ -21,7 +27,7 @@ Encontrar itens que concentram risco de preço/BDI/referência e conhecer a marg
 | robots | index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1 |
 | schema | Organization, Country, ContactPoint, Person, CollegeOrUniversity, CollectionPage, WebSite, ItemList, ListItem, Service, BreadcrumbList, FAQPage, Question, Answer |
 | og:title | Auditoria de orçamento, BDI, SINAPI e preço | CONFENGE |
-| content_sha256 | `04086a6fde3f42b24a48d6c8b4527fd6888eeda0ac62976b2a693a2807904949` |
+| content_sha256 | `72aa2a19ee450d32737eec0e7133157784f196fc8b01afd43e4275883448c783` |
 | hero CTA | Analisar uma demanda → `https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20uma%20demanda%20relacionada%20a%20licita%C3%A7%C3%A3o%2C%20contrato%20ou%20obra%20p%C3%BAblica.` |
 | when-not-to-hire | True |
 

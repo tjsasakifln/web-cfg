@@ -593,7 +593,7 @@ def _render_market(c: Candidate, manifest: dict[str, Any]) -> str:
 <div class="aside-card"><span>Próximo passo</span><h2>{e(c.cta_label)}</h2>
 <p>Leve o recorte de {e(m.get('region'))} para uma conversa objetiva.</p>
 <a class="button button-primary" data-cta-position="aside" data-pseo-event="pseo_whatsapp_click" href="https://wa.me/5548988344559" rel="noopener" target="_blank">Conversar</a></div>
-<div class="aside-card aside-compact"><strong>Hub</strong><a href="/inteligencia/mercados/">Todos os mercados</a></div>
+<div class="aside-card aside-compact"><strong>Coleção</strong><a href="/inteligencia/mercados/">Todos os mercados</a></div>
 </aside>
 </div>
 """
@@ -793,7 +793,7 @@ def _render_agency(c: Candidate, manifest: dict[str, Any]) -> str:
 <aside class="article-aside">
 <div class="aside-card"><span>Próximo passo</span><h2>{e(c.cta_label)}</h2>
 <a class="button button-primary" data-cta-position="aside" href="{e('https://wa.me/5548988344559')}" rel="noopener" target="_blank">Conversar</a></div>
-<div class="aside-card aside-compact"><strong>Hub</strong><a href="/inteligencia/orgaos/">Todos os órgãos</a></div>
+<div class="aside-card aside-compact"><strong>Coleção</strong><a href="/inteligencia/orgaos/">Todos os órgãos</a></div>
 </aside></div>
 """
     graph = [
@@ -956,7 +956,7 @@ e teste de exequibilidade quando o deságio implícito ameaça a margem.</p></se
 <aside class="article-aside">
 <div class="aside-card"><span>Próximo passo</span><h2>{e(c.cta_label)}</h2>
 <a class="button button-primary" data-cta-position="aside" href="https://wa.me/5548988344559" rel="noopener" target="_blank">Conversar</a></div>
-<div class="aside-card aside-compact"><strong>Hub</strong><a href="/inteligencia/precos/">Todos os benchmarks</a></div>
+<div class="aside-card aside-compact"><strong>Coleção</strong><a href="/inteligencia/precos/">Todas as referências de preço</a></div>
 </aside></div>
 """
     graph = [
@@ -1086,7 +1086,7 @@ Não autoriza inferir capacidade técnica, intenção de disputa futura ou risco
 <aside class="article-aside">
 <div class="aside-card"><span>Próximo passo</span><h2>{e(c.cta_label)}</h2>
 <a class="button button-primary" data-cta-position="aside" href="https://wa.me/5548988344559" rel="noopener" target="_blank">Conversar</a></div>
-<div class="aside-card aside-compact"><strong>Hub</strong><a href="/inteligencia/concorrencia/">Concorrência</a></div>
+<div class="aside-card aside-compact"><strong>Coleção</strong><a href="/inteligencia/concorrencia/">Concorrência</a></div>
 </aside></div>
 """
     graph = [
@@ -1245,7 +1245,7 @@ def _render_radar(c: Candidate, manifest: dict[str, Any]) -> str:
 <aside class="article-aside">
 <div class="aside-card"><span>Próximo passo</span><h2>{e(c.cta_label)}</h2>
 <a class="button button-primary" data-cta-position="aside" href="https://wa.me/5548988344559" rel="noopener" target="_blank">Conversar</a></div>
-<div class="aside-card aside-compact"><strong>Hub</strong><a href="/radar/">Radar</a></div>
+<div class="aside-card aside-compact"><strong>Coleção</strong><a href="/radar/">Radar</a></div>
 </aside></div>
 """
     graph = [
@@ -1548,7 +1548,7 @@ def render_hub(
             '<div class="commercial-bridge" style="margin:2rem 0">'
             "<h2>Evidência pública só vira valor com a capacidade da empresa.</h2>"
             "<p>Quando houver recortes publicáveis, eles aparecem aqui com data, fonte e limites. "
-            "Até lá, o próximo passo é aplicar os dados à sua operação B2G.</p>"
+            "Até lá, o próximo passo é aplicar os dados à atuação da sua empresa no mercado público.</p>"
             '<div class="hero-actions">'
             '<a class="button button-primary" href="/diretoria-b2g/">Como funciona a Diretoria Fracionada para o Mercado Público</a>'
             '<a class="button button-secondary" href="/diagnostico-b2g-360/">Solicitar diagnóstico da operação</a>'
@@ -1557,7 +1557,7 @@ def render_hub(
     back = (
         '<p><a class="text-link" href="/">Voltar ao início</a></p>'
         if path.rstrip("/") == "/inteligencia"
-        else '<p><a class="text-link" href="/inteligencia/">Voltar ao hub de inteligência</a></p>'
+        else '<p><a class="text-link" href="/inteligencia/">Voltar à inteligência de mercado</a></p>'
 )
     disclosure = ""
     if path.rstrip("/") == "/inteligencia":

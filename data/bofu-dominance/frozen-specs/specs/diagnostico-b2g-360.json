@@ -163,7 +163,7 @@
     "path": "/diagnostico-b2g-360/",
     "html_rel": "diagnostico-b2g-360/index.html",
     "title": "Diagnóstico da Operação em Obras Públicas | CONFENGE",
-    "meta_description": "Mapeie capacidade, mercado, acervo, carteira de oportunidades e riscos da operação em obras públicas. Plano executivo de 90 dias para prioridades e backlog de implantação.",
+    "meta_description": "Mapeie capacidade, mercado, acervo, carteira de oportunidades e riscos da operação em obras públicas. Plano executivo de 90 dias para prioridades e ações para implantação.",
     "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
     "canonical": "https://confenge.com.br/diagnostico-b2g-360/",
     "og_title": "Mapeie onde a frente pública perde tempo, margem e controle.",
@@ -211,8 +211,8 @@
       "whatsapp_present": true,
       "form_count": 0
     },
-    "content_sha256": "5e4f0fc121f30aa9d06bc6bc843a40b494cadedb48e461356f22842fe42656ba",
-    "bytes": 21627,
+    "content_sha256": "101b019cb8113967cd7ffd50b07d1011af982ac22dd449aefcc868bff4b79409",
+    "bytes": 21389,
     "noindex": false
   }
 }

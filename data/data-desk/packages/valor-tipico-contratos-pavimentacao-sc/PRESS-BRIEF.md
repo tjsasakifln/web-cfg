@@ -1,4 +1,4 @@
-# Valor contratual típico de pavimentação em Santa Catarina — kit de citação
+# Valor contratual típico de pavimentação em Santa Catarina, kit de citação
 
 
 **Identificador:** valor-tipico-contratos-pavimentacao-sc-citation-kit

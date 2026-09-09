@@ -2,6 +2,7 @@
 
 Campaign `CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01`. Exclusive trees only.
 This campaign **must not** mutate pillar HTML, `script.js`, CSS, analytics, sitemap, robots, redirects, content-service-map or offer code.
+This is the historical experiment's scope, not a prohibition on commercial correction. The founder's 2026-09-09 EXECUTE_NOW instruction supersedes editorial freezes; the current drift gate requires rendered review and actual hash recapture, preserving true terms and all required release checks.
 
 - `earliest_safe_action_at`: `2026-09-16`
 - corresponding issue: #128 `LANDED_AWAITING_LIVE_EVIDENCE`
