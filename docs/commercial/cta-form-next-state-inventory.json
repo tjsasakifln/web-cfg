@@ -29,13 +29,13 @@
       "commercial_configuration"
     ],
     "baseline_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
-    "expected_declared_ctas": 125
+    "expected_declared_ctas": 124
   },
   "coverage": {
     "authority": "data/organic/public-family-registry.json",
     "manual_route_allowlist": false,
     "active_capture_routes": 25,
-    "declared_ctas": 125,
+    "declared_ctas": 124,
     "protected_routes_with_capture": [],
     "problems": []
   },
@@ -2832,21 +2832,6 @@
           "boundary": "Sem cobrança; preço e escopo exigem aceite.",
           "event_semantics": [
             "cta_click"
-          ]
-        },
-        {
-          "cta_id": "",
-          "position": "",
-          "href": "/triagem-tecnica/",
-          "stage": "compare",
-          "commitment": "low",
-          "current_label": "Descrever a situação",
-          "useful_next_state": "Abre o destino declarado por “Descrever a situação” para continuar a decisão.",
-          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
-          "field_purpose": "not_applicable",
-          "boundary": "Sem cobrança; preço e escopo exigem aceite.",
-          "event_semantics": [
-            "no_direct_event_declared"
           ]
         }
       ]
