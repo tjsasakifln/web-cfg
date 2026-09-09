@@ -10,6 +10,7 @@ HASHED_DASH = re.compile(r"-[0-9a-f]{8,}\.[A-Za-z0-9]+$")
 HASHED_DOT = re.compile(r"\.[0-9a-f]{8,}\.(?:css|js)$")
 IMMUTABLE_CACHE = "public, max-age=31536000, immutable"
 REVALIDATABLE_IDENTITY = "no-cache, max-age=0, must-revalidate"
+HTML_SERVING_CACHE_OVERRIDES = ("/assets/data-desk/*",)
 
 
 def parse_header_rules(text: str) -> dict[str, dict[str, str]]:
@@ -49,6 +50,25 @@ def is_revalidatable(value: str) -> bool:
 
 def is_hashed_asset_name(name: str) -> bool:
     return bool(HASHED_DASH.search(name) or HASHED_DOT.search(name))
+
+
+def cache_directives(value: str) -> set[str]:
+    return {directive.strip().lower() for directive in value.split(",") if directive.strip()}
+
+
+def require_html_override_no_transform(
+    *,
+    parsed: dict[str, dict[str, str]],
+    label: str,
+) -> list[str]:
+    errors: list[str] = []
+    for route in HTML_SERVING_CACHE_OVERRIDES:
+        cache = parsed.get(route, {}).get("cache-control", "")
+        if "no-transform" not in cache_directives(cache):
+            errors.append(
+                f"{label}{route} serves HTML and must preserve Cache-Control: no-transform"
+            )
+    return errors
 
 
 def render_hashed_cache_block(hrefs: list[str], *, begin: str, end: str) -> str:
@@ -98,10 +118,10 @@ def evaluate_cache_contract(
     if "no-transform" not in global_cache.lower():
         errors.append("HTML default must set no-transform to prevent edge script injection")
 
+    errors.extend(require_html_override_no_transform(parsed=parsed, label=""))
+
     private_ops = parsed.get("/ops/*", {}).get("cache-control", "")
-    private_ops_directives = {
-        directive.strip().lower() for directive in private_ops.split(",") if directive.strip()
-    }
+    private_ops_directives = cache_directives(private_ops)
     if not {"no-store", "no-transform"}.issubset(private_ops_directives):
         errors.append(
             "/ops/* private surfaces must use Cache-Control: no-store, no-transform"
@@ -155,6 +175,9 @@ def evaluate_cache_contract(
             errors.append(f"immutable rules without fingerprinted assets: {sorted(source_stale)}")
 
         published = parse_header_rules(published_headers_text or headers_text)
+        errors.extend(
+            require_html_override_no_transform(parsed=published, label="published ")
+        )
         published_immutable = {
             route
             for route, headers in published.items()

@@ -225,6 +225,8 @@ def _headers(body: str) -> str:
         + body
         + "/ops/*\n"
         "  Cache-Control: no-store, no-transform\n"
+        "/assets/data-desk/*\n"
+        "  Cache-Control: public, max-age=3600, must-revalidate, no-transform\n"
     )
 
 
@@ -311,6 +313,47 @@ def test_private_ops_surface_must_be_no_store_and_no_transform() -> None:
     errors = evaluate_cache_contract(headers_text=text, hashed_source_assets=set())
     assert any(
         "/ops/*" in item and "no-store" in item and "no-transform" in item
+        for item in errors
+    ), errors
+
+
+def test_html_serving_override_must_preserve_no_transform() -> None:
+    valid = _headers(
+        "/assets/*\n"
+        "  Cache-Control: public, max-age=3600, must-revalidate\n"
+        "/.well-known/build-info.json\n"
+        "  Cache-Control: no-cache, max-age=0, must-revalidate\n"
+    )
+    mutated = valid.replace(
+        "public, max-age=3600, must-revalidate, no-transform\n",
+        "public, max-age=3600, must-revalidate\n",
+        1,
+    )
+
+    assert not evaluate_cache_contract(
+        headers_text=valid,
+        hashed_source_assets=set(),
+        hashed_published_assets=set(),
+        published_headers_text=valid,
+    )
+
+    errors = evaluate_cache_contract(
+        headers_text=mutated,
+        hashed_source_assets=set(),
+    )
+    assert any(
+        "/assets/data-desk/*" in item and "no-transform" in item
+        for item in errors
+    ), errors
+
+    errors = evaluate_cache_contract(
+        headers_text=valid,
+        hashed_source_assets=set(),
+        hashed_published_assets=set(),
+        published_headers_text=mutated,
+    )
+    assert any(
+        "published /assets/data-desk/*" in item and "no-transform" in item
         for item in errors
     ), errors
 

@@ -393,6 +393,26 @@ ${normalizeWrapper("confenge-web-public.conf")}
   assertProbe("missing_asset_cache", /max-age=3600/.test(missingAsset.headers["cache-control"] || ""), `cache=${missingAsset.headers["cache-control"]}`);
   assertProbe("missing_asset_not_404_path_noindex", !missingAsset.headers["x-robots-tag"], `x-robots=${missingAsset.headers["x-robots-tag"]}`);
 
+  const dataDeskPath = "/assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/";
+  const dataDesk = await client.request(dataDeskPath);
+  const dataDeskCacheControl = String(dataDesk.headers["cache-control"] || "").toLowerCase();
+  const dataDeskCacheDirectives = dataDeskCacheControl.split(",").map((token) => token.trim());
+  const dataDeskArtifact = readFileSync(resolve(
+    seededSite,
+    "assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/index.html",
+  ));
+  assertProbe("data_desk_html_200", dataDesk.status === 200, `status=${dataDesk.status}`);
+  assertProbe(
+    "data_desk_html_cache_no_transform",
+    dataDeskCacheDirectives.includes("no-transform"),
+    `cache-control=${dataDeskCacheControl}`,
+  );
+  assertProbe(
+    "data_desk_html_body_exact",
+    sha256(dataDesk.body) === sha256(dataDeskArtifact),
+    `response=${sha256(dataDesk.body)} artifact=${sha256(dataDeskArtifact)}`,
+  );
+
   for (const path of ["/healthz", "/.well-known/runtime-info.json", "/api/web/lead", "/.netlify/functions/lead"]) {
     const response = await client.request(path);
     assertProbe(`runtime_allowlist_${path}`, response.status === 204, `status=${response.status}`);

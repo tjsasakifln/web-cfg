@@ -1,9 +1,16 @@
 from __future__ import annotations
 
 import hashlib
+import http.client
+import io
 import json
 import sys
+import urllib.error
+from email.message import Message
 from pathlib import Path
+from types import SimpleNamespace
+
+import pytest
 
 import scripts.site.public_server_acceptance as acceptance
 from scripts.site.public_server_acceptance import (
@@ -17,6 +24,47 @@ ARTIFACT_HASH = "b" * 64
 MANIFEST_HASH = "c" * 64
 BUNDLE_HASH = "d" * 64
 HOME = b"<html><head><title>CONFENGE</title></head><body><main><h1>Engenharia</h1></main></body></html>"
+
+
+@pytest.mark.parametrize("mode,expected_error", [
+    ("complete", None),
+    ("empty", "first_hop_empty_410_body"),
+    ("short", "first_hop_content_length_mismatch"),
+    ("oserror", "first_hop_read_failed:OSError"),
+    ("incomplete", "first_hop_read_failed:IncompleteRead"),
+])
+def test_first_hop_preserves_error_body_failures(monkeypatch, mode, expected_error):
+    headers = Message()
+    headers["Content-Type"] = "text/html"
+    body = b"" if mode == "empty" else HOME
+    headers["Content-Length"] = str(len(body) + (1 if mode == "short" else 0))
+    failure = urllib.error.HTTPError(CANONICAL_BASE + "/retirada", 410, "Gone", headers, io.BytesIO(body))
+    if mode in {"oserror", "incomplete"}:
+        def broken_read(_limit):
+            if mode == "incomplete":
+                raise http.client.IncompleteRead(HOME[:7], len(HOME) - 7)
+            raise OSError("controlled body read failure")
+        failure.read = broken_read
+    def open_failure(*_args, **_kwargs):
+        raise failure
+    monkeypatch.setattr(acceptance.urllib.request, "build_opener", lambda *_: SimpleNamespace(open=open_failure))
+    entry, received = acceptance._probe_first_hop(CANONICAL_BASE + "/retirada", 1)
+    assert entry["status"] == 410
+    assert entry["headers"]["content-length"] == headers["Content-Length"]
+    if expected_error:
+        assert entry["error"].startswith(expected_error)
+        assert received is None
+    else:
+        assert entry["error"] is None
+        assert received == HOME
+        assert entry["sha256"] == hashlib.sha256(HOME).hexdigest()
+    if mode == "incomplete":
+        assert entry["bytes_received"] == 7
+
+
+def test_empty_redirect_body_remains_legitimate():
+    response = SimpleNamespace(read=lambda _limit: b"", headers={"Content-Length": "0"})
+    assert acceptance._read_first_hop_body(response, 301) == (b"", None)
 
 
 def _fixture(tmp_path: Path, html: dict[str, bytes] | None = None) -> dict:
@@ -247,6 +295,27 @@ def _run(tmp_path: Path, fixture: dict, **kwargs):
         clock=kwargs.get("clock", acceptance.time.monotonic),
         sleeper=kwargs.get("sleeper", acceptance.time.sleep),
     )
+
+
+@pytest.mark.parametrize("cache_control,accepted", [
+    ("public, max-age=3600, must-revalidate, no-transform", True),
+    ("public, max-age=3600, must-revalidate", False),
+    ("public, x-no-transform", False),
+    ("", False),
+])
+def test_public_datadesk_requires_actual_no_transform_header(tmp_path, cache_control, accepted):
+    rel = "assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/index.html"
+    fixture = _fixture(tmp_path, {"index.html": HOME, rel: HOME})
+    delegate = _html_fetcher(fixture["html"])
+    def fetch(path, timeout):
+        entry, body = delegate(path, timeout)
+        if path == rel:
+            entry["headers"]["cache-control"] = cache_control
+        return entry, body
+    report = _run(tmp_path, fixture, html_fetcher=fetch)
+    assert report["ok"] is accepted, report["errors"]
+    if not accepted:
+        assert f"http_html_cache_no_transform_missing:{rel}" in report["errors"]
 
 
 def test_accepts_complete_exact_server_inventory(tmp_path):
