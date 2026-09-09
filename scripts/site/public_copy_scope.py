@@ -58,11 +58,16 @@ SKIP_PARTS = {
 # Non-HTML public text surfaces that ship visitor-readable copy.
 EXTRA_TEXT_SURFACES = ("llms.txt",)
 
-# Routes the publish step ships but that carry no visitor copy. One reason each.
+# Exact public HTML routes whose copy is operational rather than commercial.
+# Their shells remain in the artifact census and receive their own applicable
+# checks.  The HTML is publicly retrievable; only the data APIs require a token.
+# This is intentionally not a prefix exemption: a new /ops/ HTML route enters
+# the normal scanner until it receives an exact, reasoned classification.
 MANIFEST_ROUTE_EXEMPT = {
-    # Authenticated RevOps console: noindex,nofollow,noarchive, token-gated, and
-    # its labels are operator chrome by design (see ops/index.html).
+    # Public RevOps shell; data calls use the bearer token entered by an operator.
     "/ops/",
+    # Public noindex editorial-review shell; contains only the named fixture cohort.
+    "/ops/wave1-review.html",
 }
 
 

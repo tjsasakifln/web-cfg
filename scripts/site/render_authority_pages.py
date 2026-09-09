@@ -165,12 +165,23 @@ def _write(rel: str, html_doc: str) -> Path:
 
 def _historico_body(policy: dict) -> str:
     rows = []
+    current = current_policy_version(policy)
+    published_archives = set(policy.get("published_archives") or [])
     for entry in policy.get("changelog") or []:
-        ver = entry.get("version") or ""
-        href = entry.get("archive_path") or f"/politica-editorial/v/{ver}/"
+        ver = str(entry.get("version") or "")
+        if ver == current:
+            version_label = f'<a href="/politica-editorial/">Versão {_esc(ver)}</a>'
+        elif ver in published_archives:
+            href = entry.get("archive_path") or f"/politica-editorial/v/{ver}/"
+            version_label = f'<a href="{_esc(href)}">Versão {_esc(ver)}</a>'
+        else:
+            # Historical entries stay immutable even when their archive_path
+            # used to be the then-current canonical URL. Do not make that old
+            # record point at the body of a newer policy version.
+            version_label = f"<span>Versão {_esc(ver)}</span>"
         rows.append(
             "<li>"
-            f'<a href="{_esc(href)}">Versão {_esc(ver)}</a>'
+            f"{version_label}"
             f" · vigente em {_esc(entry.get('effective_at') or '')}. "
             f"{escape_prose_with_opaque_tokens(entry.get('summary') or '')}"
             "</li>"
@@ -179,7 +190,7 @@ def _historico_body(policy: dict) -> str:
         "<h2 id=\"historico\">Histórico de versões</h2>"
         "<p>Mudança de política gera versão nova. O histórico abaixo preserva o texto e a data de cada decisão.</p>"
         f"<ol>{''.join(rows)}</ol>"
-        f"<p>Versão vigente: <strong>{_esc(current_policy_version(policy))}</strong>. "
+        f"<p>Versão vigente: <strong>{_esc(current)}</strong>. "
         "Não há prazo prometido em dias para publicar uma correção; toda correção aceita entra no histórico acima, com a data.</p>"
     )
 

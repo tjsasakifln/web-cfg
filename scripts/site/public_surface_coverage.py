@@ -99,11 +99,6 @@ def _url_for_relpath(rel: str) -> str:
     return _CANONICAL_ORIGIN + path
 
 
-def _is_private_url(url: str) -> bool:
-    path = urllib.parse.urlsplit(url).path
-    return path == "/ops" or path.startswith("/ops/")
-
-
 class _CanonicalRedirects(urllib.request.HTTPRedirectHandler):
     """Follow only redirects that stay on the canonical public origin."""
 
@@ -113,7 +108,6 @@ class _CanonicalRedirects(urllib.request.HTTPRedirectHandler):
             parsed.scheme != "https"
             or parsed.hostname != "confenge.com.br"
             or parsed.port is not None
-            or _is_private_url(newurl)
         ):
             raise urllib.error.HTTPError(
                 newurl, code, "redirect outside canonical public surface", headers, fp
@@ -151,9 +145,6 @@ def _fetch_one(rel: str, timeout: float) -> tuple[dict[str, object], bytes | Non
                 body = None
             elif "text/html" not in content_type.lower():
                 error = f"unexpected_content_type:{content_type}"
-                body = None
-            elif _is_private_url(final_url):
-                error = "redirected_to_private_surface"
                 body = None
             result = {
                 "path": rel,
@@ -219,8 +210,6 @@ def fetch_server_mirror(
     if unsafe:
         inventory_errors.append(f"server_inventory_unsafe_entry:{len(unsafe)}")
     fetchable = sorted(set(rels) - set(unsafe))
-    private = sorted(rel for rel in fetchable if _is_private_url(_url_for_relpath(rel)))
-    fetchable = sorted(set(fetchable) - set(private))
     mirror = mirror.resolve()
     if mirror.exists() and any(mirror.iterdir()):
         raise ValueError(f"fetch mirror must be absent or empty: {mirror}")
@@ -241,7 +230,7 @@ def fetch_server_mirror(
     errors = list(inventory_errors)
     if failures:
         errors.append(f"server_html_fetch_failures:{len(failures)}")
-    if len(entries) + len(private) != len(rels) - len(unsafe):
+    if len(entries) != len(rels) - len(unsafe):
         errors.append("server_inventory_fetch_accounting_mismatch")
     report: dict[str, object] = {
         "schema": "confenge.public-html-mirror/v1",
@@ -251,7 +240,8 @@ def fetch_server_mirror(
         "inventory_html_total": len(rels),
         "fetched_html": len(entries) - len(failures),
         "failed_html": len(failures),
-        "skipped_private": private,
+        "skipped_private": [],
+        "fetch_scope": "inventory HTML only; no links, subresources, forms or data APIs",
         "mirror": str(mirror),
         "concurrency": concurrency,
         "timeout_seconds": timeout,
@@ -315,6 +305,19 @@ def semantic_fixture_findings(html: str, route: str) -> list[str]:
     if route.startswith("/servicos/") and (len(main.split()) < 25 or not has_action):
         out.append("commercial_page_without_substance_or_action")
     return out
+
+
+def noncommercial_route_controls(route: str, html: str) -> dict[str, bool]:
+    """Applicable checks for exact public operator/editorial HTML shells."""
+    controls = {"html_inspected": True, "noindex": not is_indexable_html(html)}
+    if route == "/ops/":
+        controls["password_control_present"] = bool(
+            re.search(r'<input\b[^>]*type=["\']password["\']', html, re.I)
+        )
+        controls["bearer_auth_for_data_calls"] = bool(
+            re.search(r'Authorization\s*:\s*["\']Bearer\s+["\']\s*\+', html)
+        )
+    return controls
 
 
 def _load_manifest(path: Path) -> tuple[list[str], list[str]]:
@@ -385,6 +388,7 @@ def _runtime_comparison(
     mirror_rels: set[str] = set()
     mirror_copy_findings: dict[str, dict[str, int]] = {}
     mirror_semantic_findings: dict[str, list[str]] = {}
+    mirror_noncommercial_controls: dict[str, dict[str, bool]] = {}
     mirror_control_vocabulary: dict[str, object] | None = None
     mirror_option_defects: list[str] = []
     mirror_rendered_code_defects: list[str] = []
@@ -404,6 +408,11 @@ def _runtime_comparison(
             rel = relpath(path, mirror)
             route = route_for(rel)
             if route in MANIFEST_ROUTE_EXEMPT:
+                html = path.read_text(encoding="utf-8", errors="replace")
+                controls = noncommercial_route_controls(route, html)
+                mirror_noncommercial_controls[route] = controls
+                if not all(controls.values()):
+                    errors.append(f"server_noncommercial_route_control_failed:{route}")
                 continue
             html = path.read_text(encoding="utf-8", errors="replace")
             found = findings_for(html)
@@ -451,6 +460,7 @@ def _runtime_comparison(
         "server_html_bodies_scanned": len(mirror_rels),
         "server_copy_findings": mirror_copy_findings,
         "server_semantic_findings": mirror_semantic_findings,
+        "server_noncommercial_route_controls": mirror_noncommercial_controls,
         "server_control_vocabulary": {
             "matched_occurrences": sum(
                 sum(counts.values())
@@ -513,6 +523,7 @@ def coverage_report(
 
     scanned: list[str] = []
     exempt: list[str] = []
+    noncommercial_controls: dict[str, dict[str, bool]] = {}
     copy_findings: dict[str, dict[str, int]] = {}
     semantic_findings: dict[str, list[str]] = {}
     noindex = 0
@@ -521,6 +532,11 @@ def coverage_report(
         route = route_for(rel)
         if route in MANIFEST_ROUTE_EXEMPT:
             exempt.append(route)
+            html = path.read_text(encoding="utf-8", errors="replace")
+            controls = noncommercial_route_controls(route, html)
+            noncommercial_controls[route] = controls
+            if not all(controls.values()):
+                errors.append(f"noncommercial_route_control_failed:{route}")
             continue
         html = path.read_text(encoding="utf-8", errors="replace")
         scanned.append(route)
@@ -562,7 +578,8 @@ def coverage_report(
         "manifest_routes": len(manifest_routes),
         "copy_scanned_html": len(scanned),
         "copy_scanned_noindex_html": noindex,
-        "copy_exempt_routes": sorted(set(exempt)),
+        "classified_noncommercial_routes": sorted(set(exempt)),
+        "noncommercial_route_controls": noncommercial_controls,
         "artifact_routes_unlisted": unlisted,
         "manifest_routes_missing_from_artifact": missing,
         "copy_findings": copy_findings,
@@ -698,6 +715,25 @@ def run_mutation_contracts() -> list[str]:
             raise AssertionError("unlisted_artifact_route_not_rejected")
     passed.append("unlisted_artifact_route")
 
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        artifact = root / "_site"
+        target = artifact / "ops" / "index.html"
+        target.parent.mkdir(parents=True)
+        target.write_text(
+            '<meta name="robots" content="noindex"><main><h1>Operação</h1></main>',
+            encoding="utf-8",
+        )
+        manifest = root / "manifest.json"
+        manifest.write_text(
+            json.dumps({"html_route_count": 1, "html_routes": ["/ops/"]}),
+            encoding="utf-8",
+        )
+        report = coverage_report(artifact, manifest)
+        if report["ok"] or "noncommercial_route_control_failed:/ops/" not in report["errors"]:
+            raise AssertionError("operator_shell_without_data_auth_control_not_rejected")
+    passed.append("operator_shell_applicable_controls")
+
     # The canonical stage overlay replaces packaged opportunity fixtures with
     # official records.  Compare two independent file sets while requiring all
     # served bodies to be mirrored and scanned.
@@ -794,12 +830,13 @@ def run_mutation_contracts() -> list[str]:
         )
         if (
             not mirror_report["ok"]
-            or mirror_report["fetched_html"] != 1
-            or mirror_report["skipped_private"] != ["ops/index.html"]
+            or mirror_report["fetched_html"] != 2
+            or mirror_report["skipped_private"]
             or not (root / "mirror" / "index.html").is_file()
+            or not (root / "mirror" / "ops" / "index.html").is_file()
         ):
             raise AssertionError("public_mirror_fetch_contract_failed")
-    passed.append("public_mirror_fetch_and_private_skip")
+    passed.append("public_mirror_inventory_only")
 
     def fake_failure(rel: str, _timeout: float):
         return (
@@ -952,6 +989,9 @@ def main() -> int:
         "manifest_routes": report["manifest_routes"],
         "copy_scanned_html": report["copy_scanned_html"],
         "copy_scanned_noindex_html": report["copy_scanned_noindex_html"],
+        "noncommercial_html_inspected": len(
+            report["classified_noncommercial_routes"]
+        ),
         "copy_findings_routes": len(report["copy_findings"]),
         "semantic_findings_routes": len(report["semantic_findings"]),
         "control_vocabulary_matched_occurrences": report["control_vocabulary"][

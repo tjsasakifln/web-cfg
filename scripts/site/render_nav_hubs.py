@@ -245,6 +245,12 @@ def _services_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
         )
         items.append({"name": offer["name"], "url": offer["url"]})
     grid = "".join(cards)
+    items.append(
+        {
+            "name": "Análises técnicas documentadas de contratos públicos",
+            "url": "/analises-contratos-publicos/",
+        }
+    )
     return (
         f"""<section aria-labelledby="hub-title" class="section section--tight">
 <div class="container">
@@ -274,6 +280,8 @@ def _services_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
 <p><a class="button button-secondary" href="/diagnostico-b2g-360/">Começar pelo Diagnóstico da Operação em Obras Públicas <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
 <p><a class="text-link" href="{e(problems["url"])}">Conhecer os problemas que resolvemos <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
 <p><a class="text-link" href="/ferramentas/">Usar uma ferramenta antes de falar com a gente <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
+<p><a class="text-link" href="/analises-contratos-publicos/">Examinar análises técnicas documentadas <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
+<p><small>As análises examinam fontes públicas, método, cálculos e limites. Não são casos de cliente e não afirmam relação comercial com as partes dos contratos.</small></p>
 </div>
 </section>""",
         items,
