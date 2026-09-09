@@ -24,7 +24,7 @@
     "commercial_destination": "/medicoes-glosas-obras-publicas/",
     "offer": "Dossiê de Medição, Glosa e Pagamento",
     "before_sha256": "455200070af5d118d3f564a9cf74de643d24a1511f058b61c30c070dfc708f8a",
-    "after_sha256": "6ccb45f566c0d78e4a6f4cad8a84b922005717cf8eee8d5b28b5b8a667a6df12",
+    "after_sha256": "7c33f71a4bb28a65e8a5afb6424643506497d5a373806f01bffbac2ba1a89c56",
     "after_sha256_recaptured_at": "2026-09-08",
     "after_sha256_recapture_reason": "Campanha de comunicacao publica (PR #644), recaptura final. Alem do cromo institucional compartilhado, esta pagina teve os quatro rotulos epistemicos em ingles (FACT, CALCULATION, INFERENCE, UNKNOWN) substituidos por rotulos em portugues no exemplo demonstrativo: Premissa do exemplo, Calculo, Leitura tecnica e O que falta confirmar no caso real. Eram vocabulario de controle interno impresso para o comprador de engenharia. A classificacao linha a linha -- que era a propriedade protegida -- continua exigida, agora em portugues, e os termos em ingles passaram a ser proibidos na superficie visivel. Nenhum fato, calculo, citacao legal, canonical, robots ou destino comercial mudou."
   },
@@ -75,9 +75,10 @@
     "membership_changed": false,
     "new_sitemap_created": false,
     "lastmod_before": "2026-07-30",
-    "lastmod_after": "2026-08-29",
+    "lastmod_after": "2026-09-08",
     "recapture_registry": "data/bofu-dominance/frozen-specs/hashes.json",
-    "reason": "O build propaga a revisão factual do HTML ao lastmod da URL já existente. O corpo do canário foi reescrito em 2026-08-28 (CFG10X-06) e reconciliado com o main, as fontes oficiais e o gate do artefato publicado em 2026-08-29. As cinco superfícies de revisão da URL - article:modified_time, dateModified do JSON-LD, o \"Revisado em\" visível, a data de consulta das fontes e o lastmod do sitemap - declaram 2026-08-29. Divergência entre as cinco é barrada por scripts/organic/cluster_medicao_originality.revision_failures. Os seis pilares protegidos e a composição dos sitemaps permanecem inalterados."
+    "reason": "O build propaga a revisão factual do HTML ao lastmod da URL já existente. O corpo do canário foi reescrito em 2026-08-28 (CFG10X-06) e reconciliado com o main, as fontes oficiais e o gate do artefato publicado em 2026-08-29. As cinco superfícies de revisão da URL - article:modified_time, dateModified do JSON-LD, o \"Revisado em\" visível, a data de consulta das fontes e o lastmod do sitemap - declaram 2026-08-29. Divergência entre as cinco é barrada por scripts/organic/cluster_medicao_originality.revision_failures. Os seis pilares protegidos e a composição dos sitemaps permanecem inalterados.",
+    "lastmod_after_updated_reason": "2026-09-08. O corpo desta pagina mudou na campanha de comunicacao publica (rotulos epistemicos em ingles trocados por portugues, e a negativa generica de resultado tecnico substituida pelo que o recorte produz). Corpo alterado e data de revisao movida sao a mesma coisa: as quatro superficies de revisao e o lastmod do sitemap passaram para 2026-09-08. A data de consulta as fontes permanece 2026-08-29, porque as fontes nao foram reconsultadas -- as duas ancoras foram desacopladas em cluster_medicao_originality.py exatamente para nao forcar essa afirmacao falsa."
   },
   "content_contract": {
     "title": "Atraso na medição de obra pública: o que fazer | CONFENGE",
@@ -128,7 +129,7 @@
     },
     {
       "path": "conteudos/fiscal-nao-assina-medicao-obra-publica/index.html",
-      "sha256": "2da8f1ea7dd83f4af7ada56707320741fb708eac6348c7a5b75afd335a75f88b"
+      "sha256": "bdc84e4efd2e6ca56206ad81b389855a84bdc3c46ab786a2790f56bf71aea5bf"
     },
     {
       "path": "medicoes-glosas-obras-publicas/index.html",

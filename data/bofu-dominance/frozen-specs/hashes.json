@@ -25,11 +25,30 @@
     "styles-tokens.css": "15cc0770e76276b418c11493fa9e53827ae14bb8f854b0a63d8c6dd63afc02fc",
     "styles-tools.css": "8c42a4b5fadba13e4dae52bd7168c64b9f5548f3fd3f8d4f0707ce4e9463c7ba",
     "robots.txt": "132889da3782dff11ceec9b6588a6e7962f2ba28738da9133a7d5318f148dcaf",
-    "sitemap.xml": "8cd00f2efd6207f652103b9ccee0b5f1ff8c60582261bc7676766e31e6843425",
+    "sitemap.xml": "b0fa6b52488d3b2b9941e078848295c5b88b07cf8b137d35b3155b3bf0bd3396",
     "sitemap.txt": "a43ee48357392a12fe77a584407b9682788edd5f6aa07bc3ce404eb695eb9c1f",
     "sitemap-index.xml": "a5d1f565d1861b27c93910d1d43124e9c2cff36180ed889c5c04fdfc47f0c45e",
     "_redirects": "a47b3e0cf8932818606d8e301a5c85d7eee8102ca287a2075d7e38565cf26933",
     "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
     "js/modules/analytics.js": "bf5a0898d4c5b142165ea35ffc58c9c88f7d3746989a50ece7343f2b2e6b2e92"
+  },
+  "recapture_diff_lines_vs_origin_main": {
+    "aditivos-obras-publicas/index.html": 16,
+    "medicoes-glosas-obras-publicas/index.html": 12,
+    "reequilibrio-obras-publicas/index.html": 12,
+    "auditoria-orcamento-licitacao/index.html": 20,
+    "diagnostico-b2g-360/index.html": 26,
+    "diagnostico-pre-licitacao/index.html": 14,
+    "script.js": 4,
+    "styles.css": 0,
+    "styles-tokens.css": 0,
+    "styles-tools.css": 0,
+    "robots.txt": 0,
+    "sitemap.xml": 12,
+    "sitemap.txt": 0,
+    "sitemap-index.xml": 0,
+    "_redirects": 0,
+    "data/organic/content-service-map.json": 0,
+    "js/modules/analytics.js": 0
   }
 }
