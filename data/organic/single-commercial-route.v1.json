@@ -45,6 +45,16 @@
     "forced_wait": false,
     "integrity_rule_pt_br": "A edição comercial autorizada exige revisão do conteúdo renderizado, recaptura do hash real e aprovação dos controles; o hash registra os bytes auditados, mas não impede correção editorial."
   },
+  "brand_and_scope": {
+    "umbrella_brand": "CONFENGE",
+    "corporate_category_pt_br": "Engenharia, Perícias e Inteligência Técnica",
+    "umbrella_audiences": [
+      "private",
+      "public"
+    ],
+    "specialist_vertical": "public_works_b2g",
+    "route_scope_pt_br": "Medições, glosas e pagamentos em obras públicas"
+  },
   "hypothesis_pt_br": "Uma dor de medição ou glosa reconhecida na busca deve avançar por uma única transferência comercial, com nome estável e contexto completo, antes da captura CONFENGE_WEB.",
   "route": {
     "commercial_transfer_route": "/medicoes-glosas-obras-publicas/",

@@ -27,6 +27,8 @@ const naming = json("data/commercial/offer-naming.v1.json");
 const frozenHashes = json("data/bofu-dominance/frozen-specs/hashes.json");
 const deliverables = json("data/commercial/deliverables-registry.v1.json");
 const pricingProjection = json("data/corporate/pricing-gate-projection.v1.json");
+const commercialConstitution = json("data/corporate/commercial-constitution.v1.json");
+const taxonomy = json("data/corporate/taxonomy.v1.json");
 
 const results = [];
 function assert(name, condition, detail = "") {
@@ -135,6 +137,22 @@ assert(
   obsoleteEditorialLocks(frozenMutation).includes("FROZEN_READ_ONLY") &&
     obsoleteEditorialLocks(frozenMutation).includes("canonical_destination:forced_wait"),
   obsoleteEditorialLocks(frozenMutation),
+);
+
+const publicWorksVertical = taxonomy.nuclei.find((nucleus) => nucleus.id === "public_works_b2g");
+assert(
+  "confenge_umbrella_and_public_private_scope_preserved",
+  contract.brand_and_scope?.umbrella_brand === commercialConstitution.brand?.name &&
+    contract.brand_and_scope?.corporate_category_pt_br === commercialConstitution.brand?.category_pt_br &&
+    equal(contract.brand_and_scope?.umbrella_audiences, ["private", "public"]),
+  contract.brand_and_scope,
+);
+assert(
+  "public_works_remains_specialist_vertical_not_corporate_category",
+  contract.brand_and_scope?.specialist_vertical === publicWorksVertical?.id &&
+    publicWorksVertical?.protection === "protected_vertical" &&
+    taxonomy.corporate_category?.b2g_is_corporate_category === false,
+  contract.brand_and_scope,
 );
 
 const route = contract.route;
@@ -305,6 +323,18 @@ assert("pillar_hash_matches_reviewed_baseline", frozenHashes.forbidden[pillar.fi
 assert("pillar_links_back_to_canary", read(pillar.file).includes(`href="${canarySurface.route}"`), canarySurface.route);
 const pillarHtml = read(pillar.file);
 assert("internal_price_not_published_on_pillar", !/R\$\s*4(?:[.\s])?900(?:,00)?/i.test(pillarHtml));
+assert(
+  "rendered_pillar_keeps_umbrella_and_specialist_scope",
+  /\bengenharia\b/i.test(pillarHtml) && /\bprivad[oa]s?\b/i.test(pillarHtml) &&
+    /públic[oa]s?/i.test(pillarHtml) && pillarHtml.includes(route.commercial_transfer_route),
+  pillar.file,
+);
+assert(
+  "rendered_pillar_keeps_professional_and_source_authenticity",
+  /href=["']\/especialista\/tiago-jun-sasaki\/["']/.test(pillarHtml) &&
+    /14[.]?133\s*\/\s*2021/.test(pillarHtml) && /id=["']metodo["']/.test(pillarHtml),
+  pillar.file,
+);
 assert(
   "pillar_keeps_functional_contextual_contact",
   /href=["']https:\/\/wa\.me\/5548988344559\?text=[^"']+/i.test(pillarHtml) &&

@@ -328,7 +328,10 @@ def walk(
         raise AssertionError("CTA copy drifted")
 
     html = render_html(candidate, bound, decision, site_root=root())
-    has_cta = CTA_COPY in html
+    # Copy is intentionally visitor-facing and may evolve. The renderer's
+    # stable CTA identity is the semantic contract for this walk; checking the
+    # retired label made a real contextual WhatsApp action look absent.
+    has_cta = 'data-ma-event="cta_click" data-cta-id="veja-sua-empresa"' in html
     has_evidence_link = "data-ma-event=\"evidence_drilldown\"" in html
     has_analysis_link = any(item.get("analysis_href") for item in model.get("contracts") or [])
     if has_analysis_link and "análise técnica" not in html and "analise tecnica" not in html.lower():

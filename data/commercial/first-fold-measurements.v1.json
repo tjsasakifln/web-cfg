@@ -1,9 +1,9 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-09-09T16:15:10.692Z",
+  "measured_at": "2026-09-09T18:16:36.241Z",
   "measured_on": "2026-09-09",
-  "commit_sha": "3ec50a67ab77bb335567c2b497a6fbb7f81ef196",
+  "commit_sha": "e72a2cbf02842f7c4fb2d1badebd4bdbd5f8028d",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "f168038814087e1b365d1de3042af9a3f3364743756e104711fecc0fb9fe7477",
@@ -13,7 +13,7 @@
     "aditivos-obras-publicas/index.html": "c9f37bdfa249ad3f0f2869774d48e33b6f5a3f921919df252b5a96eda96b6ac0",
     "assets/archivo-var-latin-bf6e041e.woff2": "bf6e041e98b0fa244d965027e9f2b6ed53470ed95f2227615510a08a67ea7f4a",
     "assets/eight-offer-contract.css": "d2aead054169392b26c739ab4d95c8b2f651a66c9d6ac27aa7fd98bdafc4f79d",
-    "assets/home-10x.css": "a86b4fd8e1b1119ad6da453a5379db091119274be6a5e85eb5cd8a927bcaf89e",
+    "assets/home-10x.css": "d159547e61a4aae817e0e2bada5b8138b140d8e7948b5a604d8a5cfa8a72f40a",
     "assets/report-capture.css": "669b93f113f417ba6a8175d9d0ab0dd846a19e991245ad9f2f1ebea48d8c0552",
     "assets/report-model-a11y-v293.css": "148fb54ad084edad56eff48e6b635e2df177e8679a724d50e2e92a88421fddce",
     "assets/report-model.css": "79e09ea8559deb4e01c78df860a00f0ff542659b3c2b9274bc8401444fab2447",
@@ -110,8 +110,8 @@
             "eyebrow": {
               "selector": ".hero-eyebrow",
               "box": {
-                "top": 135,
-                "bottom": 155,
+                "top": 119,
+                "bottom": 139,
                 "left": 83,
                 "right": 791,
                 "width": 708,
@@ -122,8 +122,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 169,
-                "bottom": 378,
+                "top": 153,
+                "bottom": 362,
                 "left": 83,
                 "right": 772,
                 "width": 689,
@@ -134,8 +134,8 @@
             "lead": {
               "selector": ".hero-lead",
               "box": {
-                "top": 390,
-                "bottom": 476,
+                "top": 374,
+                "bottom": 460,
                 "left": 83,
                 "right": 596,
                 "width": 513,
@@ -146,8 +146,8 @@
             "proof": {
               "selector": ".hero-proof",
               "box": {
-                "top": 718,
-                "bottom": 752,
+                "top": 702,
+                "bottom": 736,
                 "left": 83,
                 "right": 791,
                 "width": 708,
@@ -158,8 +158,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 646,
-                "bottom": 702,
+                "top": 630,
+                "bottom": 686,
                 "left": 83,
                 "right": 313,
                 "width": 230,
@@ -173,8 +173,8 @@
               "text": "Conhecer os serviços",
               "href": "/servicos/",
               "box": {
-                "top": 646,
-                "bottom": 702,
+                "top": 630,
+                "bottom": 686,
                 "left": 83,
                 "right": 313,
                 "width": 230,
