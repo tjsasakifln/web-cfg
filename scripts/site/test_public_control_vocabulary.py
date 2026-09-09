@@ -288,6 +288,12 @@ def legitimate_reason(term: str, sentence: str) -> str | None:
         return "classificacao_tecnica_legal_do_fato_obrigacao_ou_instrumento"
     if term == "vertical" and re.search(r"\bhorizontal e vertical\b", sentence, re.I):
         return "orientacao_fisica_no_objeto_transcrito"
+    if term == "vertical" and re.search(
+        r"\bsinaliza[çc][ãa]o\s+(?:vi[áa]ria\s+)?vertical\b",
+        sentence,
+        re.I,
+    ):
+        return "orientacao_fisica_em_sinalizacao_viaria"
     if term == "nucleo" and re.search(r"\bn[úu]cleo da prote[çc][ãa]o\b", sentence, re.I):
         return "substantivo_comum_centro_da_protecao"
     if term == "b2g" and re.search(
@@ -600,8 +606,22 @@ COUNTER_CASES = (
         == "orientacao_fisica_no_objeto_transcrito",
     ),
     (
+        "sinalizacao-vertical-em-objeto-publico-e-legitima",
+        lambda: legitimate_reason(
+            "vertical",
+            "Objeto: contratação de serviços de sinalização vertical e fornecimento de dispositivos de sinalização viária.",
+        )
+        == "orientacao_fisica_em_sinalizacao_viaria",
+    ),
+    (
         "vertical-comercial-e-bastidor",
         lambda: legitimate_reason("vertical", "Esta é nossa vertical comercial.") is None,
+    ),
+    (
+        "vertical-b2g-de-marketing-continua-reprovada",
+        lambda: "vertical" in _surface_defect_terms(
+            "<main><p>Nossa vertical B2G organiza a oferta comercial.</p></main>"
+        ),
     ),
 )
 

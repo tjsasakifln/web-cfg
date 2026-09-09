@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import concurrent.futures
 import hashlib
+import http.client
 import json
 import re
 import sys
@@ -309,6 +310,30 @@ class _NoRedirect(urllib.request.HTTPRedirectHandler):
         return None
 
 
+def _read_first_hop_body(response: Any, status: int) -> tuple[bytes, str | None]:
+    """Keep transport failures explicit; never accept an empty/truncated error page."""
+    limit = 5 * 1024 * 1024
+    try:
+        body = response.read(limit + 1)
+    except http.client.IncompleteRead as exc:
+        return exc.partial, f"first_hop_read_failed:IncompleteRead:{exc}"
+    except OSError as exc:
+        return b"", f"first_hop_read_failed:{type(exc).__name__}:{exc}"
+    if len(body) > limit:
+        return body, "first_hop_body_too_large"
+    declared = response.headers.get("Content-Length") if response.headers else None
+    if declared is not None:
+        try:
+            expected_length = int(declared)
+        except ValueError:
+            return body, "first_hop_invalid_content_length"
+        if expected_length < 0 or expected_length != len(body):
+            return body, f"first_hop_content_length_mismatch:{expected_length}:{len(body)}"
+    if status == 410 and not body:
+        return body, "first_hop_empty_410_body"
+    return body, None
+
+
 def _probe_first_hop(url: str, timeout: float) -> tuple[dict[str, Any], bytes | None]:
     """GET one normal URL without following its first HTTP disposition."""
     request = urllib.request.Request(
@@ -322,9 +347,7 @@ def _probe_first_hop(url: str, timeout: float) -> tuple[dict[str, Any], bytes | 
     try:
         opener = urllib.request.build_opener(_NoRedirect())
         with opener.open(request, timeout=timeout) as response:
-            body = response.read(5 * 1024 * 1024 + 1)
-            if len(body) > 5 * 1024 * 1024:
-                raise ValueError("first_hop_body_too_large")
+            body, error = _read_first_hop_body(response, int(response.status))
             headers = {
                 name.lower(): response.headers.get(name)
                 for name in _EVIDENCE_HEADERS
@@ -337,18 +360,14 @@ def _probe_first_hop(url: str, timeout: float) -> tuple[dict[str, Any], bytes | 
                 "content_type": response.headers.get("Content-Type"),
                 "headers": headers,
                 "sha256": hashlib.sha256(body).hexdigest(),
-                "error": None,
-            }, body
+                "bytes_received": len(body),
+                "error": error,
+            }, None if error else body
     except urllib.error.HTTPError as exc:
         try:
-            body = exc.read(5 * 1024 * 1024 + 1)
-        except OSError:
-            body = b""
-        if len(body) > 5 * 1024 * 1024:
-            body = b""
-            error = "first_hop_body_too_large"
-        else:
-            error = None
+            body, error = _read_first_hop_body(exc, int(exc.code))
+        finally:
+            exc.close()
         headers = {
             name.lower(): exc.headers.get(name)
             for name in _EVIDENCE_HEADERS
@@ -361,8 +380,9 @@ def _probe_first_hop(url: str, timeout: float) -> tuple[dict[str, Any], bytes | 
             "content_type": exc.headers.get("Content-Type") if exc.headers else None,
             "headers": headers,
             "sha256": hashlib.sha256(body).hexdigest() if body else None,
+            "bytes_received": len(body),
             "error": error,
-        }, body or None
+        }, None if error else body or None
     except (OSError, TimeoutError, urllib.error.URLError, ValueError) as exc:
         return {
             "url": url,
@@ -569,6 +589,8 @@ def verify_contract_probes(
                 "sha256": entry.get("sha256"),
                 "cf_cache_status": cache_state or None,
                 "age": headers.get("age"),
+                "headers": headers,
+                "bytes_received": entry.get("bytes_received"),
                 "error": entry.get("error"),
                 "decision": None,
             }

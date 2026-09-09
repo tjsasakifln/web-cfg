@@ -2,6 +2,52 @@
   "schema": "CONFENGE_COMMERCIAL_REVIEW_EVIDENCE/1.0.0",
   "status": "PRE_RELEASE_SOURCE_REVIEW",
   "decision": "EXECUTE_NOW 2026-09-09",
+  "publication_attempt_ceb8004c": {
+    "result": "PUBLIC_ACCEPTANCE_FAILED_AUTOMATIC_ROLLBACK_CONFIRMED",
+    "pull_request": "https://github.com/tjsasakifln/web-cfg/pull/647",
+    "run": "https://github.com/tjsasakifln/web-cfg/actions/runs/34400752543",
+    "integrated_sha": "ceb8004c190881aa03c7796f286f671827f1af8b",
+    "restored_served_sha": "54b51438a110767c88256c2e9e5272173066cc9c",
+    "artifact_sha256": "ce08f5f1366f5714924867bd250d57888e853850fc62c14f1626f7187ddd62b9",
+    "bundle_sha256": "87d35b4025f26abe197ad08195a2cf839de44c36dc19004572e3552c2b274669",
+    "executed": {
+      "protected_pr_checks": "site-ci 34398192566, pSEO 34398192574 and CodeQL 34398192657 passed on final head 4fe845dabef1817a021dd073affa280c1b0b3f28; integrated tree identical",
+      "canonical_release": "main preflight, repeated site-ci and pSEO, exact-artifact package/attestation, stage and atomic promotion passed; public acceptance failed; runtime Lighthouse not executed; automatic rollback passed",
+      "server_html_expected": 518,
+      "server_html_fetched": 517,
+      "withdrawal_probes_expected": 78,
+      "withdrawal_probes_executed": 78,
+      "withdrawal_probes_passed": 77
+    },
+    "dynamic_snapshot": {
+      "source_run_id": "LI-2026-09-03-1da9152d93fed3ec2b87fa6279a0bcc4",
+      "as_of": "2026-09-03",
+      "manifest_hash": "61952b4c9edbd921f9d7c1a7e46087619bf48415aa517a5cee0bba7546752d57",
+      "accepted_projection_sha256": "3345927ef7ca4f0329e61fa61e5feba2c4c6b28aa1eea75402425d022761000e",
+      "accepted_html": 301
+    },
+    "findings": [
+      {
+        "cause": "DataDesk Cache-Control override omitted no-transform, permitting Cloudflare Web Analytics automatic injection",
+        "counterproof": "The observed 367-byte beacon inserted into the 3597-byte gated artifact reproduces exactly the rejected 3964-byte response SHA 090a295a387f028755d6c974852667f685c9b3d58f402c1b93eb3a4fb99cbf47",
+        "correction": "Preserve cache lifetime and add no-transform at the source override; enforce header and byte equality in cache and nginx controls; never normalize injected HTML or relax checksums"
+      },
+      {
+        "cause": "Legitimate road-sign orientation in two external procurement transcriptions was classified as internal commercial vocabulary",
+        "routes": ["/oportunidades/23773012000154-1-000109/2026/", "/oportunidades/23773012000154-1-000111/2026/"],
+        "correction": "Context-specific sinalizacao vertical classification, preserving source transcriptions and rejecting vertical comercial / vertical B2G",
+        "counterproof": "16 occurrences reclassified; captured 517-body HTTP mirror: 935/935 legitimate vocabulary occurrences, zero vocabulary defects; not a claim that missing DataDesk was covered"
+      },
+      {
+        "cause": "One /avaliacoes-imobiliarias 410 response yielded no body; historical transport cause not established. Collector discarded body read errors and retained error=null",
+        "correction": "Explicit read/truncation/empty-410 failures, received byte count and response headers in evidence; no added retry or acceptance of empty responses",
+        "counterproof": "Eight subsequent read-only probes returned complete baseline 410 bodies. Tests reject controlled OSError, IncompleteRead, empty and truncated 410; full 410 and empty redirect remain valid. All 78 exact final-release probes still required"
+      }
+    ],
+    "evidence_directory": "/tmp/confenge-commercial-20260909.zaPcn3/runtime-acceptance-ceb8-failed",
+    "contact": "No production synthetic POST performed in this failed attempt; order storage outside releases preserved",
+    "acceptance": "Not complete. Corrected candidate must pass protected checks, canonical release, complete HTTP coverage, runtime audits and contact journeys."
+  },
   "limitations": "Agent editorial readings, not human or buyer research; source snapshots are explicit in each report. Final artifact and production acceptance must reconcile affected compositions after all generators.",
   "final_rendered_review": {
     "schema": "CONFENGE_CONTEXTUAL_C1_C6_ARTIFACT_REVIEW/1.0.0",
