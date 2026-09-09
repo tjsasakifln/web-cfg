@@ -122,6 +122,10 @@ jobs:
           source_date_epoch=$(git show -s --format=%ct "$RELEASE_SHA")
           node_version=$(node --version)
           python_version=$(python3 --version | awk '{print $2}')
+          # This job starts from a fresh checkout. Bind the canonical host CSP
+          # to the exact downloaded HTML without rebuilding or changing _site.
+          python3 scripts/site/csp_contract.py --write _headers --root _site
+          python3 scripts/site/test_csp_contract.py
           node scripts/migration/netcup/render.mjs \
             --root . \
             --output build/netcup-host-contract

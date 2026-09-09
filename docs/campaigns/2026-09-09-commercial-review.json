@@ -3,6 +3,3115 @@
   "status": "PRE_RELEASE_SOURCE_REVIEW",
   "decision": "EXECUTE_NOW 2026-09-09",
   "limitations": "Agent editorial readings, not human or buyer research; source snapshots are explicit in each report. Final artifact and production acceptance must reconcile affected compositions after all generators.",
+  "final_rendered_review": {
+    "schema": "CONFENGE_CONTEXTUAL_C1_C6_ARTIFACT_REVIEW/1.0.0",
+    "reviewer": {
+      "identity": "/root/coverage_controls",
+      "kind": "agent_contextual_second_read",
+      "independent_human_or_professional_review": false,
+      "authorship_disclosure": "Reviewer co-authored coverage controls and Radar corrections; not an independent review of own code or buyer research."
+    },
+    "basis": {
+      "artifact_root": "/tmp/confenge-commercial-20260909.zaPcn3/candidate-dab32/_site",
+      "commit": "dab32b69f4a367fd9c807a511ca35cfc8ba0e34b",
+      "campaign_record": "docs/campaigns/2026-09-09-commercial-review.json",
+      "method": "Contextual reading by visitor need; exact DOM witnesses were located after judgment. No keyword score decided acceptance.",
+      "limitation": "Static artifact only; no browser, receipt/persistence, release or production proof.",
+      "artifact_hash": "23662a948c0e35895b32624373865a2b6f44e588d3899b1e4072de1484f18bb6",
+      "manifest_hash": "834e948cc4cc19a551dd8e2e739cf14e38a213f29f1e129205e4e264c46449a6",
+      "build_time": "2026-09-09T17:37:04Z",
+      "build_info_file_sha256": "78860d5e129cb5e4aed71d00c16e9ab4797fb7db6b777a256d8c27b4ca6cdf80"
+    },
+    "destination_reviews": [
+      {
+        "route": "/",
+        "artifact_file": "index.html",
+        "sha256": "2fdd452ffae8a9dd34f458d713f77bbdda987c7da81174e9820d05da207d3006",
+        "dimensions": {
+          "C1": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "necessidade reconhecida",
+            "witnesses": [
+              {
+                "location": "index.html:90",
+                "element": "h1",
+                "quote": "Projetos e serviços de engenharia para obras públicas e privadas."
+              },
+              {
+                "location": "index.html:89",
+                "element": "p",
+                "quote": "Engenharia, Perícias e Inteligência Técnica"
+              }
+            ]
+          },
+          "C2": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "trabalho executado",
+            "witnesses": [
+              {
+                "location": "index.html:165",
+                "element": "p",
+                "quote": "O projeto desenhado e calculado, com plantas, detalhes e memória de cálculo; ou a revisão que aponta o que está incoerente; ou a compatibilização, que confere as interfaces entre as disciplinas e registra os ajustes."
+              }
+            ]
+          },
+          "C3": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "entrega e conteúdo",
+            "witnesses": [
+              {
+                "location": "index.html:92",
+                "element": "p",
+                "quote": "Você recebe plantas, detalhes e memórias de cálculo; registros de revisão e compatibilização; planilhas de quantitativos e orçamento; ou laudos, pareceres e relatórios. A proposta define qual entrega atende à necessidade e quais informações são necessárias."
+              }
+            ]
+          },
+          "C4": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "utilidade prática",
+            "witnesses": [
+              {
+                "location": "index.html:91",
+                "element": "p",
+                "quote": "Elaboração e revisão de projetos, compatibilização entre disciplinas, quantitativos, orçamentos, perícias e análises técnicas para fazer a obra ou a decisão avançar."
+              }
+            ]
+          },
+          "C5": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "fundamento verdadeiro de confiança",
+            "witnesses": [
+              {
+                "location": "index.html:179",
+                "element": "p",
+                "quote": "Tiago Sasaki é Engenheiro Civil formado pela EESC-USP e responde tecnicamente pela CONFENGE, CNPJ 52.407.089/0001-09 ."
+              }
+            ]
+          },
+          "C6": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "ação funcional e próximo passo",
+            "witnesses": [
+              {
+                "location": "index.html:434",
+                "element": "a",
+                "quote": "Falar pelo WhatsApp",
+                "href": "https://wa.me/5548988344559"
+              }
+            ]
+          }
+        },
+        "material_missing_dimensions": []
+      },
+      {
+        "route": "/acompanhamento-contratos-obras/",
+        "artifact_file": "acompanhamento-contratos-obras/index.html",
+        "sha256": "6e8898be4176f746b631a9a9bf0a11b82a9726ecc0cf787dd435b0791a577b29",
+        "dimensions": {
+          "C1": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "necessidade reconhecida",
+            "witnesses": [
+              {
+                "location": "acompanhamento-contratos-obras/index.html:66",
+                "element": "h1",
+                "quote": "Acompanhamento de contratos de obras públicas: rotina preventiva e recorrente"
+              },
+              {
+                "location": "acompanhamento-contratos-obras/index.html:66",
+                "element": "p",
+                "quote": "Decidir durante a execução, não reconstruir depois"
+              }
+            ]
+          },
+          "C2": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "trabalho executado",
+            "witnesses": [
+              {
+                "location": "acompanhamento-contratos-obras/index.html:73",
+                "element": "p",
+                "quote": "A pauta transforma registros da semana em decisão: o que corrigir, documentar, quantificar, encaminhar a dossiê ou apenas acompanhar. Um evento já litigioso exige trabalho pontual."
+              }
+            ]
+          },
+          "C3": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "entrega e conteúdo",
+            "witnesses": [
+              {
+                "location": "acompanhamento-contratos-obras/index.html:74",
+                "element": "li",
+                "quote": "Matriz de obrigações, mudanças e pendências com responsável."
+              }
+            ]
+          },
+          "C4": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "utilidade prática",
+            "witnesses": [
+              {
+                "location": "acompanhamento-contratos-obras/index.html:73",
+                "element": "p",
+                "quote": "A pauta transforma registros da semana em decisão: o que corrigir, documentar, quantificar, encaminhar a dossiê ou apenas acompanhar. Um evento já litigioso exige trabalho pontual."
+              }
+            ]
+          },
+          "C5": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "fundamento verdadeiro de confiança",
+            "witnesses": [
+              {
+                "location": "acompanhamento-contratos-obras/index.html:78",
+                "element": "p",
+                "quote": "Prova verificável: Engº Tiago Sasaki , Engenharia Civil pela EESC-USP, fiscalização e gestão contratual."
+              }
+            ]
+          },
+          "C6": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "ação funcional e próximo passo",
+            "witnesses": [
+              {
+                "location": "acompanhamento-contratos-obras/index.html:99",
+                "element": "a",
+                "quote": "Falar pelo WhatsApp",
+                "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20problema%20urgente%20em%20contrato%20p%C3%BAblico%20(glosa%2C%20medi%C3%A7%C3%A3o%2C%20aditivo%2C%20reequil%C3%ADbrio%20ou%20atraso)%20e%20preciso%20de%20an%C3%A1lise%20inicial."
+              }
+            ]
+          }
+        },
+        "material_missing_dimensions": []
+      },
+      {
+        "route": "/aditivos-obras-publicas/",
+        "artifact_file": "aditivos-obras-publicas/index.html",
+        "sha256": "15e59241355c02601118c1cafccc02bd41000af26c7c2a64e62ce3b0902fcfae",
+        "dimensions": {
+          "C1": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "necessidade reconhecida",
+            "witnesses": [
+              {
+                "location": "aditivos-obras-publicas/index.html:66",
+                "element": "h1",
+                "quote": "Aditivos e serviços extras em obras públicas: documentar, precificar e decidir"
+              },
+              {
+                "location": "aditivos-obras-publicas/index.html:66",
+                "element": "p",
+                "quote": "Mudanças de escopo sem trabalho gratuito"
+              }
+            ]
+          },
+          "C2": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "trabalho executado",
+            "witnesses": [
+              {
+                "location": "aditivos-obras-publicas/index.html:85",
+                "element": "p",
+                "quote": "A CONFENGE integra leitura de engenharia, contrato, orçamento, cronograma e registros para que a empresa não dependa de interpretações soltas. A entrega é um documento: você recebe a cronologia do que aconteceu com a prova de cada evento, o cálculo do que está em jogo em reais, a posição técnica da empresa escrita para ser protocolada e a recomendação de qual ação cabe agora."
+              }
+            ]
+          },
+          "C3": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "entrega e conteúdo",
+            "witnesses": [
+              {
+                "location": "aditivos-obras-publicas/index.html:85",
+                "element": "p",
+                "quote": "A CONFENGE integra leitura de engenharia, contrato, orçamento, cronograma e registros para que a empresa não dependa de interpretações soltas. A entrega é um documento: você recebe a cronologia do que aconteceu com a prova de cada evento, o cálculo do que está em jogo em reais, a posição técnica da empresa escrita para ser protocolada e a recomendação de qual ação cabe agora."
+              }
+            ]
+          },
+          "C4": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "utilidade prática",
+            "witnesses": [
+              {
+                "location": "aditivos-obras-publicas/index.html:127",
+                "element": "p",
+                "quote": "Limitação: não é parecer jurídico. A CONFENGE responde pelo documento entregue e pelo método que o sustenta; a decisão do órgão, do juízo ou da empresa é de quem decide. Atualizado em 15 de agosto de 2026 . Encontrou um erro? ."
+              }
+            ]
+          },
+          "C5": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "fundamento verdadeiro de confiança",
+            "witnesses": [
+              {
+                "location": "aditivos-obras-publicas/index.html:127",
+                "element": "p",
+                "quote": "Limitação: não é parecer jurídico. A CONFENGE responde pelo documento entregue e pelo método que o sustenta; a decisão do órgão, do juízo ou da empresa é de quem decide. Atualizado em 15 de agosto de 2026 . Encontrou um erro? ."
+              }
+            ]
+          },
+          "C6": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "ação funcional e próximo passo",
+            "witnesses": [
+              {
+                "location": "aditivos-obras-publicas/index.html:123",
+                "element": "a",
+                "quote": "Abrir o diagnóstico no WhatsApp",
+                "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20uma%20demanda%20relacionada%20a%20licita%C3%A7%C3%A3o%2C%20contrato%20ou%20obra%20p%C3%BAblica."
+              }
+            ]
+          }
+        },
+        "material_missing_dimensions": []
+      },
+      {
+        "route": "/analise-cnpj/",
+        "artifact_file": "analise-cnpj/index.html",
+        "sha256": "ac2772ae2d94d002242a53d232ed294d17b6c3ace41d4ae64f1305f88dab39c8",
+        "dimensions": {
+          "C1": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "necessidade reconhecida",
+            "witnesses": [
+              {
+                "location": "analise-cnpj/index.html:48",
+                "element": "h1",
+                "quote": "Qual é o perfil contratual público deste CNPJ?"
+              },
+              {
+                "location": "analise-cnpj/index.html:49",
+                "element": "p",
+                "quote": "O resultado descreve o histórico público declarado nas fontes citadas: categorias, faixas, geografias, compradores e quais oportunidades abertas são aderentes a esse histórico. O resultado aparece antes de qualquer pedido de contato."
+              }
+            ]
+          },
+          "C2": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "trabalho executado",
+            "witnesses": [
+              {
+                "location": "analise-cnpj/index.html:127",
+                "element": "p",
+                "quote": "A consulta lê uma projeção versionada de contratos públicos já publicados. Não há coleta nova, não há cruzamento com bases privadas e não há criação de um cadastro paralelo de empresas."
+              }
+            ]
+          },
+          "C3": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "entrega e conteúdo",
+            "witnesses": [
+              {
+                "location": "analise-cnpj/index.html:49",
+                "element": "p",
+                "quote": "O resultado descreve o histórico público declarado nas fontes citadas: categorias, faixas, geografias, compradores e quais oportunidades abertas são aderentes a esse histórico. O resultado aparece antes de qualquer pedido de contato."
+              }
+            ]
+          },
+          "C4": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "utilidade prática",
+            "witnesses": [
+              {
+                "location": "analise-cnpj/index.html:86",
+                "element": "button",
+                "quote": "Monitorar oportunidades aderentes ao CNPJ"
+              }
+            ]
+          },
+          "C5": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "fundamento verdadeiro de confiança",
+            "witnesses": [
+              {
+                "location": "analise-cnpj/index.html:78",
+                "element": "p",
+                "quote": "Aderência histórica não é habilitação, capacidade nem recomendação. Os dados descrevem o histórico público declarado nas fontes citadas e podem estar incompletos."
+              }
+            ]
+          },
+          "C6": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "ação funcional e próximo passo",
+            "witnesses": [
+              {
+                "location": "analise-cnpj/index.html:115",
+                "element": "button",
+                "quote": "Registrar seguimento desta análise"
+              }
+            ]
+          }
+        },
+        "material_missing_dimensions": []
+      },
+      {
+        "route": "/analise-cnpj/r/",
+        "artifact_file": "analise-cnpj/r/index.html",
+        "sha256": "695f81d17406e260c669c9b3c60542bad55560349f91761983bbe07388101852",
+        "dimensions": {
+          "C1": {
+            "status": "PASS_CONDITIONAL_DYNAMIC_SHELL",
+            "criterion": "necessidade reconhecida",
+            "witnesses": [
+              {
+                "location": "analise-cnpj/r/index.html:35",
+                "element": "h1",
+                "quote": "Resultado da análise"
+              },
+              {
+                "location": "analise-cnpj/r/index.html:36",
+                "element": "p",
+                "quote": "Este endereço identifica uma análise por um código aleatório. O CNPJ consultado não está nele, não foi gravado e não pode ser deduzido a partir dele."
+              }
+            ]
+          },
+          "C2": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "trabalho executado",
+            "witnesses": [
+              {
+                "location": "analise-cnpj/r/index.html:104",
+                "element": "p",
+                "quote": "A consulta lê uma projeção versionada de contratos públicos já publicados. Não há coleta nova, não há cruzamento com bases privadas e não há criação de um cadastro paralelo de empresas."
+              }
+            ]
+          },
+          "C3": {
+            "status": "PASS_CONDITIONAL_DYNAMIC_SHELL",
+            "criterion": "entrega e conteúdo",
+            "witnesses": [
+              {
+                "location": "analise-cnpj/r/index.html:35",
+                "element": "h1",
+                "quote": "Resultado da análise"
+              }
+            ]
+          },
+          "C4": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "utilidade prática",
+            "witnesses": [
+              {
+                "location": "analise-cnpj/r/index.html:60",
+                "element": "p",
+                "quote": "Escolha o próximo passo. O pedido segue pelo mesmo canal de contato do site, com consentimento explícito."
+              }
+            ]
+          },
+          "C5": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "fundamento verdadeiro de confiança",
+            "witnesses": [
+              {
+                "location": "analise-cnpj/r/index.html:54",
+                "element": "p",
+                "quote": "Aderência histórica não é habilitação, capacidade nem recomendação. Os dados descrevem o histórico público declarado nas fontes citadas e podem estar incompletos."
+              }
+            ]
+          },
+          "C6": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "ação funcional e próximo passo",
+            "witnesses": [
+              {
+                "location": "analise-cnpj/r/index.html:92",
+                "element": "button",
+                "quote": "Registrar seguimento desta análise"
+              }
+            ]
+          }
+        },
+        "material_missing_dimensions": []
+      },
+      {
+        "route": "/atrasos-prorrogacao-obras-publicas/",
+        "artifact_file": "atrasos-prorrogacao-obras-publicas/index.html",
+        "sha256": "5017f4886ee1b90bdd318974ed3a58d8455cb7e7fd3fdeb34eeff0a12b37526d",
+        "dimensions": {
+          "C1": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "necessidade reconhecida",
+            "witnesses": [
+              {
+                "location": "atrasos-prorrogacao-obras-publicas/index.html:68",
+                "element": "h1",
+                "quote": "Atrasos e prorrogações: causa, responsabilidade, caminho crítico e registro contemporâneo"
+              },
+              {
+                "location": "atrasos-prorrogacao-obras-publicas/index.html:68",
+                "element": "p",
+                "quote": "Separar dias imputáveis antes de pedir prazo"
+              }
+            ]
+          },
+          "C2": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "trabalho executado",
+            "witnesses": [
+              {
+                "location": "atrasos-prorrogacao-obras-publicas/index.html:94",
+                "element": "p",
+                "quote": "O serviço de R$ 5.900 e 7 dias úteis reconcilia cronograma, registros e comunicações de uma janela causal e entrega a cronologia, os dias impactados calculados e o pedido técnico de prorrogação para a decisão da direção."
+              }
+            ]
+          },
+          "C3": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "entrega e conteúdo",
+            "witnesses": [
+              {
+                "location": "atrasos-prorrogacao-obras-publicas/index.html:104",
+                "element": "p",
+                "quote": "Cronologia, nexo, dias impactados calculados, concorrência de causas, medidas de mitigação, pedido técnico recomendado e lacunas."
+              }
+            ]
+          },
+          "C4": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "utilidade prática",
+            "witnesses": [
+              {
+                "location": "atrasos-prorrogacao-obras-publicas/index.html:84",
+                "element": "p",
+                "quote": "A direção usa o dossiê para decidir se pede prorrogação, mitiga, absorve ou leva o recorte ao jurídico. O trabalho termina na base técnica; peça e protocolo permanecem com o cliente."
+              }
+            ]
+          },
+          "C5": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "fundamento verdadeiro de confiança",
+            "witnesses": [
+              {
+                "location": "atrasos-prorrogacao-obras-publicas/index.html:117",
+                "element": "p",
+                "quote": "Autor institucional: CONFENGE · Responsável técnico: Engº Tiago Sasaki · Referência: 15 de agosto de 2026"
+              }
+            ]
+          },
+          "C6": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "ação funcional e próximo passo",
+            "witnesses": [
+              {
+                "location": "atrasos-prorrogacao-obras-publicas/index.html:116",
+                "element": "a",
+                "quote": "Falar pelo WhatsApp",
+                "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Temos%20atraso%20no%20pagamento%20de%20parcela%20em%20contrato%20p%C3%BAblico%20de%20obra%20e%20queremos%20enquadrar%20o%20risco."
+              }
+            ]
+          }
+        },
+        "material_missing_dimensions": []
+      },
+      {
+        "route": "/auditoria-orcamento-licitacao/",
+        "artifact_file": "auditoria-orcamento-licitacao/index.html",
+        "sha256": "720293bbf4237ce07297891ce944e6384abd8f2880328b41d7c13c38abd5e7be",
+        "dimensions": {
+          "C1": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "necessidade reconhecida",
+            "witnesses": [
+              {
+                "location": "auditoria-orcamento-licitacao/index.html:65",
+                "element": "h1",
+                "quote": "Auditoria de orçamento, BDI, SINAPI e preço"
+              },
+              {
+                "location": "auditoria-orcamento-licitacao/index.html:65",
+                "element": "p",
+                "quote": "Preço defendável e margem verificável"
+              }
+            ]
+          },
+          "C2": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "trabalho executado",
+            "witnesses": [
+              {
+                "location": "auditoria-orcamento-licitacao/index.html:105",
+                "element": "p",
+                "quote": "Entram no trabalho o edital, a planilha orçamentária com a curva ABC, as composições unitárias, a memória de BDI e a data-base do certame. Sai a lista dos itens que concentram risco de preço e exequibilidade, a revisão das premissas de produtividade e logística, e a leitura da margem real antes da decisão de participar. Começa por conversa no WhatsApp, com o edital, o prazo da sessão e a planilha que já existe."
+              }
+            ]
+          },
+          "C3": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "entrega e conteúdo",
+            "witnesses": [
+              {
+                "location": "auditoria-orcamento-licitacao/index.html:75",
+                "element": "p",
+                "quote": "A CONFENGE integra leitura de engenharia, contrato, orçamento, cronograma e registros para que a empresa não dependa de interpretações soltas. A entrega é um documento: você recebe a cronologia do que aconteceu com a prova de cada evento, o cálculo do que está em jogo em reais, a posição técnica da empresa escrita para ser protocolada e a recomendação de qual ação cabe agora."
+              }
+            ]
+          },
+          "C4": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "utilidade prática",
+            "witnesses": [
+              {
+                "location": "auditoria-orcamento-licitacao/index.html:91",
+                "element": "p",
+                "quote": "Não. A consultoria estrutura a base técnica, contratual e econômica do caso para que engenharia, direção e jurídico decidam com mais segurança."
+              }
+            ]
+          },
+          "C5": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "fundamento verdadeiro de confiança",
+            "witnesses": [
+              {
+                "location": "auditoria-orcamento-licitacao/index.html:124",
+                "element": "p",
+                "quote": "Limitação: não é parecer jurídico e não substitui planilha da proposta. Atualizado em 15 de agosto de 2026 . Encontrou um erro? ."
+              }
+            ]
+          },
+          "C6": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "ação funcional e próximo passo",
+            "witnesses": [
+              {
+                "location": "auditoria-orcamento-licitacao/index.html:105",
+                "element": "a",
+                "quote": "Abrir a auditoria no WhatsApp",
+                "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20uma%20demanda%20relacionada%20a%20licita%C3%A7%C3%A3o%2C%20contrato%20ou%20obra%20p%C3%BAblica."
+              }
+            ]
+          }
+        },
+        "material_missing_dimensions": []
+      },
+      {
+        "route": "/bid-room-licitacoes-obras/",
+        "artifact_file": "bid-room-licitacoes-obras/index.html",
+        "sha256": "061f50faabbe5e57d5ac00c4ae383efed4570df5f4abb74270c0d19cdfbe4fb9",
+        "dimensions": {
+          "C1": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "necessidade reconhecida",
+            "witnesses": [
+              {
+                "location": "bid-room-licitacoes-obras/index.html:64",
+                "element": "h1",
+                "quote": "Operação de Proposta para Licitação Crítica"
+              },
+              {
+                "location": "bid-room-licitacoes-obras/index.html:63",
+                "element": "p",
+                "quote": "Uma proposta material, uma decisão de capital"
+              }
+            ]
+          },
+          "C2": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "trabalho executado",
+            "witnesses": [
+              {
+                "location": "bid-room-licitacoes-obras/index.html:82",
+                "element": "p",
+                "quote": "Documentos para a proposta: plano de trabalho, matriz de responsabilidade, riscos registrados, revisão crítica e checklist final. A empresa decide o preço, assina e protocola."
+              }
+            ]
+          },
+          "C3": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "entrega e conteúdo",
+            "witnesses": [
+              {
+                "location": "bid-room-licitacoes-obras/index.html:82",
+                "element": "p",
+                "quote": "Documentos para a proposta: plano de trabalho, matriz de responsabilidade, riscos registrados, revisão crítica e checklist final. A empresa decide o preço, assina e protocola."
+              }
+            ]
+          },
+          "C4": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "utilidade prática",
+            "witnesses": [
+              {
+                "location": "bid-room-licitacoes-obras/index.html:82",
+                "element": "p",
+                "quote": "Documentos para a proposta: plano de trabalho, matriz de responsabilidade, riscos registrados, revisão crítica e checklist final. A empresa decide o preço, assina e protocola."
+              }
+            ]
+          },
+          "C5": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "fundamento verdadeiro de confiança",
+            "witnesses": [
+              {
+                "location": "bid-room-licitacoes-obras/index.html:89",
+                "element": "p",
+                "quote": "Método: revisão crítica das frentes da proposta. Fonte: escopo público CONFENGE. Responsável técnico: Engº Tiago Sasaki · Atualizado em 19 de agosto de 2026 · Como corrigir"
+              }
+            ]
+          },
+          "C6": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "ação funcional e próximo passo",
+            "witnesses": [
+              {
+                "location": "bid-room-licitacoes-obras/index.html:290",
+                "element": "button",
+                "quote": "Solicitar canal seguro para envio"
+              }
+            ]
+          }
+        },
+        "material_missing_dimensions": []
+      },
+      {
+        "route": "/casos/",
+        "artifact_file": "casos/index.html",
+        "sha256": "dae8f714853fe9cbceb67a05053a507c8573355585793ad592acfe41307cd49a",
+        "dimensions": {
+          "C1": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "necessidade reconhecida",
+            "witnesses": [
+              {
+                "location": "casos/index.html:52",
+                "element": "h1",
+                "quote": "Exemplos de entrega (demonstrativos)"
+              },
+              {
+                "location": "casos/index.html:51",
+                "element": "p",
+                "quote": "DEMONSTRATIVO · EXEMPLO DE ENTREGA · ESTRUTURA REAL, NÚMEROS HIPOTÉTICOS"
+              }
+            ]
+          },
+          "C2": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "trabalho executado",
+            "witnesses": [
+              {
+                "location": "casos/index.html:54",
+                "element": "p",
+                "quote": "Veja o trabalho antes de conversar: cada exemplo de entrega abre o formato, a memória de cálculo e a decisão que a CONFENGE coloca na mesa da diretoria. São demonstrativos, com estrutura real e números hipotéticos, e cada página indica isso ao lado do conteúdo. Os exemplos publicados até aqui detalham a especialidade de obras públicas e contratos administrativos; projeto, perícia, avaliação e segurança do trabalho têm escopo, método e entrega descritos em Serviços e problemas ."
+              }
+            ]
+          },
+          "C3": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "entrega e conteúdo",
+            "witnesses": [
+              {
+                "location": "casos/index.html:54",
+                "element": "p",
+                "quote": "Veja o trabalho antes de conversar: cada exemplo de entrega abre o formato, a memória de cálculo e a decisão que a CONFENGE coloca na mesa da diretoria. São demonstrativos, com estrutura real e números hipotéticos, e cada página indica isso ao lado do conteúdo. Os exemplos publicados até aqui detalham a especialidade de obras públicas e contratos administrativos; projeto, perícia, avaliação e segurança do trabalho têm escopo, método e entrega descritos em Serviços e problemas ."
+              }
+            ]
+          },
+          "C4": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "utilidade prática",
+            "witnesses": [
+              {
+                "location": "casos/index.html:58",
+                "element": "p",
+                "quote": "Cada demonstrativo abre a cadeia completa que a CONFENGE entrega em contrato: de onde vem cada número, como ele é re-derivável e qual decisão de diretoria ele sustenta. A estrutura é a mesma do trabalho real; os valores e órgãos são hipotéticos, e nenhum contrato, contratante ou resultado de cliente é apresentado aqui."
+              }
+            ]
+          },
+          "C5": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "fundamento verdadeiro de confiança",
+            "witnesses": [
+              {
+                "location": "casos/index.html:53",
+                "element": "p",
+                "quote": "Responsável técnico: Engº Tiago Sasaki · Atualizado em 28 de agosto de 2026 · Exemplo demonstrativo: mostra o método, com números hipotéticos · Política de evidência · Como corrigir"
+              }
+            ]
+          },
+          "C6": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "ação funcional e próximo passo",
+            "witnesses": [
+              {
+                "location": "casos/index.html:88",
+                "element": "p",
+                "quote": "Verificador art. 125 · Matriz de atraso · Defesa de margem · Prontidão técnica de obra privada · Contar o que aconteceu"
+              }
+            ]
+          }
+        },
+        "material_missing_dimensions": []
+      },
+      {
+        "route": "/casos/modelo-apresentacao-executiva-resultados/",
+        "artifact_file": "casos/modelo-apresentacao-executiva-resultados/index.html",
+        "sha256": "3d3b70784ef7aadad0e61bee88a87cf8c23d567a347bbfb689a170af9effc021",
+        "dimensions": {
+          "C1": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "necessidade reconhecida",
+            "witnesses": [
+              {
+                "location": "casos/modelo-apresentacao-executiva-resultados/index.html:70",
+                "element": "h1",
+                "quote": "Demonstrativo. Transforme o diagnóstico em decisão assinada na reunião."
+              },
+              {
+                "location": "casos/modelo-apresentacao-executiva-resultados/index.html:71",
+                "element": "p",
+                "quote": "A CONFENGE condensa o diagnóstico inteiro em uma narrativa de 16 slides que a sua diretoria atravessa em uma reunião. Você recebe uma ideia por slide, apenas números já reconciliados no relatório e na base, e três decisões prontas para aprovação."
+              }
+            ]
+          },
+          "C2": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "trabalho executado",
+            "witnesses": [
+              {
+                "location": "casos/modelo-apresentacao-executiva-resultados/index.html:71",
+                "element": "p",
+                "quote": "A CONFENGE condensa o diagnóstico inteiro em uma narrativa de 16 slides que a sua diretoria atravessa em uma reunião. Você recebe uma ideia por slide, apenas números já reconciliados no relatório e na base, e três decisões prontas para aprovação."
+              }
+            ]
+          },
+          "C3": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "entrega e conteúdo",
+            "witnesses": [
+              {
+                "location": "casos/modelo-apresentacao-executiva-resultados/index.html:108",
+                "element": "h2",
+                "quote": "O que você recebe"
+              },
+              {
+                "location": "casos/modelo-apresentacao-executiva-resultados/index.html:71",
+                "element": "p",
+                "quote": "A CONFENGE condensa o diagnóstico inteiro em uma narrativa de 16 slides que a sua diretoria atravessa em uma reunião. Você recebe uma ideia por slide, apenas números já reconciliados no relatório e na base, e três decisões prontas para aprovação."
+              }
+            ]
+          },
+          "C4": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "utilidade prática",
+            "witnesses": [
+              {
+                "location": "casos/modelo-apresentacao-executiva-resultados/index.html:104",
+                "element": "p",
+                "quote": "Para quem serve: construtoras cuja direção precisa decidir foco de mercado, avanço comercial e política de dados na mesma reunião."
+              }
+            ]
+          },
+          "C5": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "fundamento verdadeiro de confiança",
+            "witnesses": [
+              {
+                "location": "casos/modelo-apresentacao-executiva-resultados/index.html:131",
+                "element": "p",
+                "quote": "Empresa, órgãos, concorrentes, contratos, valores, notas e decisões são integralmente sintéticos. A Empresa Alfa é um perfil fictício; este exemplar não representa cliente, licitação ou resultado real."
+              },
+              {
+                "location": "casos/modelo-apresentacao-executiva-resultados/index.html:459",
+                "element": "p",
+                "quote": "Responsável técnico pelo modelo: Engº Tiago Sasaki , da CONFENGE · Atualizado em 23 de agosto de 2026 · Exemplo demonstrativo, com dados sintéticos · Como corrigir"
+              }
+            ]
+          },
+          "C6": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "ação funcional e próximo passo",
+            "witnesses": [
+              {
+                "location": "casos/modelo-apresentacao-executiva-resultados/index.html:523",
+                "element": "button",
+                "quote": "Registrar pedido de apresentação executiva de resultados"
+              }
+            ]
+          }
+        },
+        "material_missing_dimensions": []
+      },
+      {
+        "route": "/casos/modelo-base-quantitativa-canonica/",
+        "artifact_file": "casos/modelo-base-quantitativa-canonica/index.html",
+        "sha256": "15b952595e8e1915297f9fbda045ebcaebbd0be5bd9978238df3465ca5d7e7cc",
+        "dimensions": {
+          "C1": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "necessidade reconhecida",
+            "witnesses": [
+              {
+                "location": "casos/modelo-base-quantitativa-canonica/index.html:70",
+                "element": "h1",
+                "quote": "Demonstrativo. Confira cada número antes de acreditar nele."
+              },
+              {
+                "location": "casos/modelo-base-quantitativa-canonica/index.html:71",
+                "element": "p",
+                "quote": "Esta é a fonte única de verdade quantitativa da qual todos os outros entregáveis derivam. Se um número aparece em um relatório, em um painel ou em um slide, ele é re-derivável aqui, por aba e por célula, com a fórmula à vista."
+              }
+            ]
+          },
+          "C2": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "trabalho executado",
+            "witnesses": [
+              {
+                "location": "casos/modelo-base-quantitativa-canonica/index.html:71",
+                "element": "p",
+                "quote": "Esta é a fonte única de verdade quantitativa da qual todos os outros entregáveis derivam. Se um número aparece em um relatório, em um painel ou em um slide, ele é re-derivável aqui, por aba e por célula, com a fórmula à vista."
+              }
+            ]
+          },
+          "C3": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "entrega e conteúdo",
+            "witnesses": [
+              {
+                "location": "casos/modelo-base-quantitativa-canonica/index.html:109",
+                "element": "h2",
+                "quote": "O que você recebe"
+              },
+              {
+                "location": "casos/modelo-base-quantitativa-canonica/index.html:71",
+                "element": "p",
+                "quote": "Esta é a fonte única de verdade quantitativa da qual todos os outros entregáveis derivam. Se um número aparece em um relatório, em um painel ou em um slide, ele é re-derivável aqui, por aba e por célula, com a fórmula à vista."
+              }
+            ]
+          },
+          "C4": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "utilidade prática",
+            "witnesses": [
+              {
+                "location": "casos/modelo-base-quantitativa-canonica/index.html:105",
+                "element": "p",
+                "quote": "Para quem serve: construtoras que querem testar o padrão de trabalho pelo degrau mais barato antes de contratar uma análise maior, e diretorias que exigem auditar a conta antes de aceitar a leitura."
+              }
+            ]
+          },
+          "C5": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "fundamento verdadeiro de confiança",
+            "witnesses": [
+              {
+                "location": "casos/modelo-base-quantitativa-canonica/index.html:132",
+                "element": "p",
+                "quote": "Empresa, órgãos, concorrentes, contratos, valores, campos e controles são integralmente sintéticos. A Empresa Alfa é um perfil fictício; este caso composto não representa cliente, licitação ou resultado real."
+              },
+              {
+                "location": "casos/modelo-base-quantitativa-canonica/index.html:364",
+                "element": "p",
+                "quote": "Responsável técnico pelo modelo: Engº Tiago Sasaki · Publicado pela CONFENGE · Atualizado em 23 de agosto de 2026 · Exemplo demonstrativo, com dados sintéticos · Como corrigir"
+              }
+            ]
+          },
+          "C6": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "ação funcional e próximo passo",
+            "witnesses": [
+              {
+                "location": "casos/modelo-base-quantitativa-canonica/index.html:428",
+                "element": "button",
+                "quote": "Registrar pedido de base quantitativa canônica"
+              }
+            ]
+          }
+        },
+        "material_missing_dimensions": []
+      },
+      {
+        "route": "/casos/modelo-contratos-vincendos-relicitacao/",
+        "artifact_file": "casos/modelo-contratos-vincendos-relicitacao/index.html",
+        "sha256": "95d5619250f473069da1e5d3a6b4428c16bf4a1b2cf980b5681c211a968b8e73",
+        "dimensions": {
+          "C1": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "necessidade reconhecida",
+            "witnesses": [
+              {
+                "location": "casos/modelo-contratos-vincendos-relicitacao/index.html:70",
+                "element": "h1",
+                "quote": "Demonstrativo. Descubra quais contratos vencem antes que o edital apareça."
+              },
+              {
+                "location": "casos/modelo-contratos-vincendos-relicitacao/index.html:69",
+                "element": "p",
+                "quote": "Radar de Contratos Próximos da Renovação"
+              }
+            ]
+          },
+          "C2": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "trabalho executado",
+            "witnesses": [
+              {
+                "location": "casos/modelo-contratos-vincendos-relicitacao/index.html:71",
+                "element": "p",
+                "quote": "A CONFENGE varre os contratos em execução que terminam numa janela distante o bastante para você se preparar e próxima o bastante para importar, agrupa por compra-mãe e mede a propensão de cada conjunto virar nova contratação em vez de simples prorrogação. Você recebe um calendário priorizado, o cálculo aberto por componente e a ordem de reconfirmar antes de gastar caixa."
+              }
+            ]
+          },
+          "C3": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "entrega e conteúdo",
+            "witnesses": [
+              {
+                "location": "casos/modelo-contratos-vincendos-relicitacao/index.html:108",
+                "element": "h2",
+                "quote": "O que você recebe"
+              },
+              {
+                "location": "casos/modelo-contratos-vincendos-relicitacao/index.html:71",
+                "element": "p",
+                "quote": "A CONFENGE varre os contratos em execução que terminam numa janela distante o bastante para você se preparar e próxima o bastante para importar, agrupa por compra-mãe e mede a propensão de cada conjunto virar nova contratação em vez de simples prorrogação. Você recebe um calendário priorizado, o cálculo aberto por componente e a ordem de reconfirmar antes de gastar caixa."
+              }
+            ]
+          },
+          "C4": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "utilidade prática",
+            "witnesses": [
+              {
+                "location": "casos/modelo-contratos-vincendos-relicitacao/index.html:104",
+                "element": "p",
+                "quote": "Para quem serve: construtoras que precisam decidir hoje onde investir preparação para disputar daqui a seis meses, sem torrar equipe em janelas que talvez não abram."
+              }
+            ]
+          },
+          "C5": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "fundamento verdadeiro de confiança",
+            "witnesses": [
+              {
+                "location": "casos/modelo-contratos-vincendos-relicitacao/index.html:131",
+                "element": "p",
+                "quote": "Empresa, órgãos, contratos, datas, valores, índices e faixas são integralmente sintéticos. A Empresa Alfa é um perfil fictício; este caso composto não representa cliente, licitação ou resultado real."
+              },
+              {
+                "location": "casos/modelo-contratos-vincendos-relicitacao/index.html:362",
+                "element": "p",
+                "quote": "Responsável técnico pelo modelo: Engº Tiago Sasaki · Atualizado em 23 de agosto de 2026 · Exemplo demonstrativo, com dados sintéticos · Como corrigir"
+              }
+            ]
+          },
+          "C6": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "ação funcional e próximo passo",
+            "witnesses": [
+              {
+                "location": "casos/modelo-contratos-vincendos-relicitacao/index.html:427",
+                "element": "button",
+                "quote": "Registrar pedido de painel de contratos vincendos"
+              }
+            ]
+          }
+        },
+        "material_missing_dimensions": []
+      },
+      {
+        "route": "/casos/modelo-mapa-compradores-publicos/",
+        "artifact_file": "casos/modelo-mapa-compradores-publicos/index.html",
+        "sha256": "8974be3c594d6d7ee745b3e9565f312d08826bac6b173411e0a80445a9f8a0aa",
+        "dimensions": {
+          "C1": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "necessidade reconhecida",
+            "witnesses": [
+              {
+                "location": "casos/modelo-mapa-compradores-publicos/index.html:70",
+                "element": "h1",
+                "quote": "Demonstrativo. Descubra quais órgãos compram o que a sua empresa executa."
+              },
+              {
+                "location": "casos/modelo-mapa-compradores-publicos/index.html:71",
+                "element": "p",
+                "quote": "A CONFENGE varre 36 meses de contratos públicos das suas tipologias, separa o que é comparável do que não é, e devolve os órgãos ordenados por frequência histórica, escala de valor e facilidade de aproximação. Você recebe uma lista de abordagem, não uma lista de nomes."
+              }
+            ]
+          },
+          "C2": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "trabalho executado",
+            "witnesses": [
+              {
+                "location": "casos/modelo-mapa-compradores-publicos/index.html:71",
+                "element": "p",
+                "quote": "A CONFENGE varre 36 meses de contratos públicos das suas tipologias, separa o que é comparável do que não é, e devolve os órgãos ordenados por frequência histórica, escala de valor e facilidade de aproximação. Você recebe uma lista de abordagem, não uma lista de nomes."
+              }
+            ]
+          },
+          "C3": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "entrega e conteúdo",
+            "witnesses": [
+              {
+                "location": "casos/modelo-mapa-compradores-publicos/index.html:108",
+                "element": "h2",
+                "quote": "O que você recebe"
+              },
+              {
+                "location": "casos/modelo-mapa-compradores-publicos/index.html:71",
+                "element": "p",
+                "quote": "A CONFENGE varre 36 meses de contratos públicos das suas tipologias, separa o que é comparável do que não é, e devolve os órgãos ordenados por frequência histórica, escala de valor e facilidade de aproximação. Você recebe uma lista de abordagem, não uma lista de nomes."
+              }
+            ]
+          },
+          "C4": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "utilidade prática",
+            "witnesses": [
+              {
+                "location": "casos/modelo-mapa-compradores-publicos/index.html:104",
+                "element": "p",
+                "quote": "Para quem serve: construtoras que já executam obra pública e precisam decidir quais órgãos merecem visita, cadastro e acompanhamento de edital no próximo trimestre."
+              }
+            ]
+          },
+          "C5": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "fundamento verdadeiro de confiança",
+            "witnesses": [
+              {
+                "location": "casos/modelo-mapa-compradores-publicos/index.html:131",
+                "element": "p",
+                "quote": "Órgãos, contratos, valores, distâncias, índices, fornecedores e datas são integralmente sintéticos. A Empresa Alfa é um perfil fictício; este caso composto não representa cliente, licitação ou resultado real."
+              },
+              {
+                "location": "casos/modelo-mapa-compradores-publicos/index.html:396",
+                "element": "p",
+                "quote": "Responsável técnico pelo modelo: Engº Tiago Sasaki , CONFENGE · Atualizado em 23 de agosto de 2026 · Exemplo demonstrativo, com dados sintéticos · Como corrigir"
+              }
+            ]
+          },
+          "C6": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "ação funcional e próximo passo",
+            "witnesses": [
+              {
+                "location": "casos/modelo-mapa-compradores-publicos/index.html:460",
+                "element": "button",
+                "quote": "Registrar pedido de mapa de compradores públicos"
+              }
+            ]
+          }
+        },
+        "material_missing_dimensions": []
+      },
+      {
+        "route": "/casos/modelo-mapeamento-concorrentes-publicos/",
+        "artifact_file": "casos/modelo-mapeamento-concorrentes-publicos/index.html",
+        "sha256": "3fc078966b6be71eaa9e61fdcaaf05d135f3207384225cfdd4ade83318931601",
+        "dimensions": {
+          "C1": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "necessidade reconhecida",
+            "witnesses": [
+              {
+                "location": "casos/modelo-mapeamento-concorrentes-publicos/index.html:70",
+                "element": "h1",
+                "quote": "Demonstrativo. Descubra contra quem você realmente disputa."
+              },
+              {
+                "location": "casos/modelo-mapeamento-concorrentes-publicos/index.html:71",
+                "element": "p",
+                "quote": "A CONFENGE lê os contratos do seu recorte de mercado e devolve os concorrentes ordenados por frequência e por valor, com a dependência de cada um em relação a um único comprador, a faixa de valor em que ele opera e o ponto em que ele está exposto."
+              }
+            ]
+          },
+          "C2": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "trabalho executado",
+            "witnesses": [
+              {
+                "location": "casos/modelo-mapeamento-concorrentes-publicos/index.html:71",
+                "element": "p",
+                "quote": "A CONFENGE lê os contratos do seu recorte de mercado e devolve os concorrentes ordenados por frequência e por valor, com a dependência de cada um em relação a um único comprador, a faixa de valor em que ele opera e o ponto em que ele está exposto."
+              }
+            ]
+          },
+          "C3": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "entrega e conteúdo",
+            "witnesses": [
+              {
+                "location": "casos/modelo-mapeamento-concorrentes-publicos/index.html:108",
+                "element": "h2",
+                "quote": "O que você recebe"
+              },
+              {
+                "location": "casos/modelo-mapeamento-concorrentes-publicos/index.html:71",
+                "element": "p",
+                "quote": "A CONFENGE lê os contratos do seu recorte de mercado e devolve os concorrentes ordenados por frequência e por valor, com a dependência de cada um em relação a um único comprador, a faixa de valor em que ele opera e o ponto em que ele está exposto."
+              }
+            ]
+          },
+          "C4": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "utilidade prática",
+            "witnesses": [
+              {
+                "location": "casos/modelo-mapeamento-concorrentes-publicos/index.html:104",
+                "element": "p",
+                "quote": "Para quem serve: construtoras que disputam recorrentemente os mesmos compradores públicos e precisam saber contra quem estão precificando antes de fechar a planilha."
+              }
+            ]
+          },
+          "C5": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "fundamento verdadeiro de confiança",
+            "witnesses": [
+              {
+                "location": "casos/modelo-mapeamento-concorrentes-publicos/index.html:131",
+                "element": "p",
+                "quote": "Empresa, órgãos, concorrentes, valores, medianas, participações e índices de concentração são integralmente sintéticos. A Empresa Alfa é um perfil fictício; este caso composto não representa cliente, licitação ou resultado real."
+              },
+              {
+                "location": "casos/modelo-mapeamento-concorrentes-publicos/index.html:391",
+                "element": "p",
+                "quote": "Responsável técnico pelo modelo: Engº Tiago Sasaki , pela CONFENGE · Publicado em 23 de agosto de 2026 · Atualizado em 23 de agosto de 2026 · Exemplo demonstrativo, com dados sintéticos · Como corrigir"
+              }
+            ]
+          },
+          "C6": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "ação funcional e próximo passo",
+            "witnesses": [
+              {
+                "location": "casos/modelo-mapeamento-concorrentes-publicos/index.html:455",
+                "element": "button",
+                "quote": "Registrar pedido de mapeamento de concorrentes"
+              }
+            ]
+          }
+        },
+        "material_missing_dimensions": []
+      },
+      {
+        "route": "/casos/modelo-painel-precos-obras-publicas/",
+        "artifact_file": "casos/modelo-painel-precos-obras-publicas/index.html",
+        "sha256": "d76f4b6e48b2683701ea6a41ac40cbc4ce959b5a559a92d4de780e6541ed5e85",
+        "dimensions": {
+          "C1": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "necessidade reconhecida",
+            "witnesses": [
+              {
+                "location": "casos/modelo-painel-precos-obras-publicas/index.html:70",
+                "element": "h1",
+                "quote": "Demonstrativo. Descubra a escala de contrato que este mercado realmente adjudica."
+              },
+              {
+                "location": "casos/modelo-painel-precos-obras-publicas/index.html:69",
+                "element": "p",
+                "quote": "Referências de Preços de Obras Públicas"
+              }
+            ]
+          },
+          "C2": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "trabalho executado",
+            "witnesses": [
+              {
+                "location": "casos/modelo-painel-precos-obras-publicas/index.html:71",
+                "element": "p",
+                "quote": "O painel lê os contratos publicados de uma janela de 36 meses e devolve faixas por tipologia, dispersão, outliers preservados e evolução anual. Com o mesmo rigor, ele declara em quais perguntas a base não encosta."
+              }
+            ]
+          },
+          "C3": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "entrega e conteúdo",
+            "witnesses": [
+              {
+                "location": "casos/modelo-painel-precos-obras-publicas/index.html:108",
+                "element": "h2",
+                "quote": "O que você recebe"
+              },
+              {
+                "location": "casos/modelo-painel-precos-obras-publicas/index.html:71",
+                "element": "p",
+                "quote": "O painel lê os contratos publicados de uma janela de 36 meses e devolve faixas por tipologia, dispersão, outliers preservados e evolução anual. Com o mesmo rigor, ele declara em quais perguntas a base não encosta."
+              }
+            ]
+          },
+          "C4": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "utilidade prática",
+            "witnesses": [
+              {
+                "location": "casos/modelo-painel-precos-obras-publicas/index.html:104",
+                "element": "p",
+                "quote": "Para quem serve: construtoras que precisam saber que tamanho de contrato disputar antes de montar preço, e diretorias que recebem médias de mercado sem saber o que elas escondem."
+              }
+            ]
+          },
+          "C5": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "fundamento verdadeiro de confiança",
+            "witnesses": [
+              {
+                "location": "casos/modelo-painel-precos-obras-publicas/index.html:131",
+                "element": "p",
+                "quote": "Órgãos, contratos, valores, percentis, datas e séries anuais são integralmente sintéticos. A Empresa Alfa é um perfil fictício; este painel composto não representa cliente, licitação ou resultado real."
+              },
+              {
+                "location": "casos/modelo-painel-precos-obras-publicas/index.html:384",
+                "element": "p",
+                "quote": "Responsável técnico pelo modelo: Engº Tiago Sasaki , da CONFENGE · Atualizado em 23 de agosto de 2026 · Exemplo demonstrativo, com dados sintéticos em todas as tabelas · Como corrigir"
+              }
+            ]
+          },
+          "C6": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "ação funcional e próximo passo",
+            "witnesses": [
+              {
+                "location": "casos/modelo-painel-precos-obras-publicas/index.html:448",
+                "element": "button",
+                "quote": "Registrar pedido de painel de preços de obras públicas"
+              }
+            ]
+          }
+        },
+        "material_missing_dimensions": []
+      },
+      {
+        "route": "/casos/modelo-relatorio-executivo-consolidado/",
+        "artifact_file": "casos/modelo-relatorio-executivo-consolidado/index.html",
+        "sha256": "755e2df80cbf9255c1d1c2b4e61a72d9958521a1aaade7b0c20f809d374d0a5f",
+        "dimensions": {
+          "C1": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "necessidade reconhecida",
+            "witnesses": [
+              {
+                "location": "casos/modelo-relatorio-executivo-consolidado/index.html:70",
+                "element": "h1",
+                "quote": "Demonstrativo. Decida onde alocar equipe, acervo e caixa nos próximos 90 dias."
+              },
+              {
+                "location": "casos/modelo-relatorio-executivo-consolidado/index.html:71",
+                "element": "p",
+                "quote": "Os cinco módulos do diagnóstico deixam de ser cinco arquivos e viram uma leitura só. A primeira camada permite decidir em dois minutos. As camadas seguintes sustentam cada número, até a célula que o originou."
+              }
+            ]
+          },
+          "C2": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "trabalho executado",
+            "witnesses": [
+              {
+                "location": "casos/modelo-relatorio-executivo-consolidado/index.html:71",
+                "element": "p",
+                "quote": "Os cinco módulos do diagnóstico deixam de ser cinco arquivos e viram uma leitura só. A primeira camada permite decidir em dois minutos. As camadas seguintes sustentam cada número, até a célula que o originou."
+              }
+            ]
+          },
+          "C3": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "entrega e conteúdo",
+            "witnesses": [
+              {
+                "location": "casos/modelo-relatorio-executivo-consolidado/index.html:108",
+                "element": "h2",
+                "quote": "O que você recebe"
+              },
+              {
+                "location": "casos/modelo-relatorio-executivo-consolidado/index.html:71",
+                "element": "p",
+                "quote": "Os cinco módulos do diagnóstico deixam de ser cinco arquivos e viram uma leitura só. A primeira camada permite decidir em dois minutos. As camadas seguintes sustentam cada número, até a célula que o originou."
+              }
+            ]
+          },
+          "C4": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "utilidade prática",
+            "witnesses": [
+              {
+                "location": "casos/modelo-relatorio-executivo-consolidado/index.html:104",
+                "element": "p",
+                "quote": "Para quem serve: direção de construtora que precisa alocar equipe, acervo e caixa nos próximos 90 dias e responder por essa alocação depois."
+              }
+            ]
+          },
+          "C5": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "fundamento verdadeiro de confiança",
+            "witnesses": [
+              {
+                "location": "casos/modelo-relatorio-executivo-consolidado/index.html:131",
+                "element": "p",
+                "quote": "Empresa, órgãos, concorrentes, contratos, valores, índices, índices e decisões são integralmente sintéticos. A Empresa Alfa é um perfil fictício; este caso composto não representa cliente, licitação ou resultado real. Os dados sintéticos foram construídos para reconciliar entre si, exatamente como o entregável real reconcilia."
+              },
+              {
+                "location": "casos/modelo-relatorio-executivo-consolidado/index.html:418",
+                "element": "p",
+                "quote": "Responsável técnico pelo modelo: Engº Tiago Sasaki , pela CONFENGE · Publicado em 23 de agosto de 2026 · Atualizado em 23 de agosto de 2026 · Exemplo demonstrativo, com dados sintéticos · Como corrigir"
+              }
+            ]
+          },
+          "C6": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "ação funcional e próximo passo",
+            "witnesses": [
+              {
+                "location": "casos/modelo-relatorio-executivo-consolidado/index.html:482",
+                "element": "button",
+                "quote": "Registrar pedido de relatório executivo consolidado"
+              }
+            ]
+          }
+        },
+        "material_missing_dimensions": []
+      },
+      {
+        "route": "/casos/modelo-relatorio-inteligencia-licitacoes/",
+        "artifact_file": "casos/modelo-relatorio-inteligencia-licitacoes/index.html",
+        "sha256": "df52700357e3e3ed0e247ada29e4ced7926cc86fe0fde33ea881d96e66a110ff",
+        "dimensions": {
+          "C1": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "necessidade reconhecida",
+            "witnesses": [
+              {
+                "location": "casos/modelo-relatorio-inteligencia-licitacoes/index.html:68",
+                "element": "h1",
+                "quote": "Modelo sintético: licitações a disputar ou recusar."
+              },
+              {
+                "location": "casos/modelo-relatorio-inteligencia-licitacoes/index.html:69",
+                "element": "p",
+                "quote": "A CONFENGE cruza editais e anexos com o acervo, a capacidade operacional, o capital de giro e a estratégia da sua construtora. Você recebe uma decisão priorizada, com impedimentos, riscos e próxima ação."
+              }
+            ]
+          },
+          "C2": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "trabalho executado",
+            "witnesses": [
+              {
+                "location": "casos/modelo-relatorio-inteligencia-licitacoes/index.html:69",
+                "element": "p",
+                "quote": "A CONFENGE cruza editais e anexos com o acervo, a capacidade operacional, o capital de giro e a estratégia da sua construtora. Você recebe uma decisão priorizada, com impedimentos, riscos e próxima ação."
+              }
+            ]
+          },
+          "C3": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "entrega e conteúdo",
+            "witnesses": [
+              {
+                "location": "casos/modelo-relatorio-inteligencia-licitacoes/index.html:107",
+                "element": "h2",
+                "quote": "O que você recebe"
+              },
+              {
+                "location": "casos/modelo-relatorio-inteligencia-licitacoes/index.html:69",
+                "element": "p",
+                "quote": "A CONFENGE cruza editais e anexos com o acervo, a capacidade operacional, o capital de giro e a estratégia da sua construtora. Você recebe uma decisão priorizada, com impedimentos, riscos e próxima ação."
+              }
+            ]
+          },
+          "C4": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "utilidade prática",
+            "witnesses": [
+              {
+                "location": "casos/modelo-relatorio-inteligencia-licitacoes/index.html:103",
+                "element": "p",
+                "quote": "Para quem serve: construtoras com oportunidades simultâneas e necessidade de decidir onde mobilizar equipe, acervo e caixa."
+              }
+            ]
+          },
+          "C5": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "fundamento verdadeiro de confiança",
+            "witnesses": [
+              {
+                "location": "casos/modelo-relatorio-inteligencia-licitacoes/index.html:130",
+                "element": "p",
+                "quote": "Empresa, órgãos, oportunidades, valores, distâncias, notas e decisões são integralmente sintéticos. A Empresa Alfa é um perfil fictício; este caso composto não representa cliente, licitação ou resultado real."
+              },
+              {
+                "location": "casos/modelo-relatorio-inteligencia-licitacoes/index.html:345",
+                "element": "p",
+                "quote": "Responsável técnico pelo modelo: Engº Tiago Sasaki · Atualizado em 23 de agosto de 2026 · Exemplo demonstrativo, com dados sintéticos · Como corrigir"
+              }
+            ]
+          },
+          "C6": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "ação funcional e próximo passo",
+            "witnesses": [
+              {
+                "location": "casos/modelo-relatorio-inteligencia-licitacoes/index.html:409",
+                "element": "button",
+                "quote": "Registrar pedido de relatório de priorização de licitações"
+              }
+            ]
+          }
+        },
+        "material_missing_dimensions": []
+      },
+      {
+        "route": "/comercial/radar-decisorio/",
+        "artifact_file": "comercial/radar-decisorio/index.html",
+        "sha256": "f45095235eb1cbbf32039d21b00870d9094de90d5ae2235004bd8ccffffc5905",
+        "dimensions": {
+          "C1": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "necessidade reconhecida",
+            "witnesses": [
+              {
+                "location": "comercial/radar-decisorio/index.html:54",
+                "element": "h1",
+                "quote": "Informe os parâmetros antes de pagar."
+              },
+              {
+                "location": "comercial/radar-decisorio/index.html:53",
+                "element": "p",
+                "quote": "Radar Decisório de Licitações AEC, edição avulsa"
+              }
+            ]
+          },
+          "C2": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "trabalho executado",
+            "witnesses": [
+              {
+                "location": "comercial/radar-decisorio/index.html:78",
+                "element": "h2",
+                "quote": "Seis respostas decidem o conteúdo do relatório."
+              }
+            ]
+          },
+          "C3": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "entrega e conteúdo",
+            "witnesses": [
+              {
+                "location": "comercial/radar-decisorio/index.html:55",
+                "element": "p",
+                "quote": "R$ 599 por um relatório adaptado ao perfil, ao acervo e ao raio de atuação da sua empresa. Este formulário define o que será produzido. Sem ele, a etapa de pagamento não abre."
+              }
+            ]
+          },
+          "C4": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "utilidade prática",
+            "witnesses": [
+              {
+                "location": "comercial/radar-decisorio/index.html:82",
+                "element": "li",
+                "quote": "Recorte geográfico. Cidade-base com raio em km, ou a UF inteira. Os 200 km de Florianópolis dos modelos publicados são um exemplo, não um padrão."
+              }
+            ]
+          },
+          "C5": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "fundamento verdadeiro de confiança",
+            "witnesses": [
+              {
+                "location": "comercial/radar-decisorio/index.html:70",
+                "element": "p",
+                "quote": "Prestador: CONFENGE SERVICOS DE DESENHOS TECNICOS LTDA, CNPJ 52.407.089/0001-09 . Obrigação de meio. Não é serviço jurídico."
+              }
+            ]
+          },
+          "C6": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "ação funcional e próximo passo",
+            "witnesses": [
+              {
+                "location": "comercial/radar-decisorio/index.html:145",
+                "element": "button",
+                "quote": "Confirmar e pedir instruções de pagamento"
+              }
+            ]
+          }
+        },
+        "material_missing_dimensions": []
+      },
+      {
+        "route": "/conflitos/",
+        "artifact_file": "conflitos/index.html",
+        "sha256": "e1d2f126d03191cdf682c63391eba3a5377584d56d48659955caf6a6c328f58f",
+        "dimensions": {
+          "C1": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "necessidade reconhecida",
+            "witnesses": [
+              {
+                "location": "conflitos/index.html:69",
+                "element": "h1",
+                "quote": "Como a CONFENGE protege a independência técnica"
+              },
+              {
+                "location": "conflitos/index.html:70",
+                "element": "p",
+                "quote": "Antes de receber documentos, a CONFENGE verifica se pode atuar com independência. A análise cobre trabalhos públicos, privados, periciais, avaliações e segurança do trabalho."
+              }
+            ]
+          },
+          "C2": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "trabalho executado",
+            "witnesses": [
+              {
+                "location": "conflitos/index.html:79",
+                "element": "p",
+                "quote": "Antes de receber documentos ou aceitar um trabalho, a CONFENGE verifica o objeto, o papel solicitado e qualquer atuação anterior que possa comprometer a independência. Se houver impedimento, a demanda é recusada sem expor partes ou motivos protegidos."
+              }
+            ]
+          },
+          "C3": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "entrega e conteúdo",
+            "witnesses": [
+              {
+                "location": "conflitos/index.html:93",
+                "element": "li",
+                "quote": "Demanda não aceita. Há impedimento nos critérios acima: dever público no mesmo caso, risco de uso de informação não pública, papéis periciais incompatíveis, pedido de uso de cargo ou influência, ou relação pessoal ou financeira que não pode ser reduzida. A CONFENGE recusa e não pede documentos."
+              }
+            ]
+          },
+          "C4": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "utilidade prática",
+            "witnesses": [
+              {
+                "location": "conflitos/index.html:101",
+                "element": "p",
+                "quote": "Responda sem identificar pessoas, órgãos, processos ou contratos. A página informa apenas se a demanda precisa ser recusada, revista ou retomada com mais informações."
+              }
+            ]
+          },
+          "C5": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "fundamento verdadeiro de confiança",
+            "witnesses": [
+              {
+                "location": "conflitos/index.html:71",
+                "element": "p",
+                "quote": "Responsável pela política: Tiago Jun Sasaki · Política 1.1.0 · Atualizado em 5 de setembro de 2026 · Encontrou um erro?"
+              }
+            ]
+          },
+          "C6": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "ação funcional e próximo passo",
+            "witnesses": [
+              {
+                "location": "conflitos/index.html:130",
+                "element": "button",
+                "quote": "Ver o resultado desta etapa"
+              }
+            ]
+          }
+        },
+        "material_missing_dimensions": []
+      },
+      {
+        "route": "/defesa-margem-contratos-publicos/",
+        "artifact_file": "defesa-margem-contratos-publicos/index.html",
+        "sha256": "3e75cc20255f930e7c6f55ea03e0b6381cd209b8eddfc73c685af150954498fc",
+        "dimensions": {
+          "C1": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "necessidade reconhecida",
+            "witnesses": [
+              {
+                "location": "defesa-margem-contratos-publicos/index.html:65",
+                "element": "h1",
+                "quote": "Defesa de margem em contratos públicos: detecção, documentação, cálculo e decisão"
+              },
+              {
+                "location": "defesa-margem-contratos-publicos/index.html:64",
+                "element": "p",
+                "quote": "Decidir antes que o custo vire perda absorvida"
+              }
+            ]
+          },
+          "C2": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "trabalho executado",
+            "witnesses": [
+              {
+                "location": "defesa-margem-contratos-publicos/index.html:162",
+                "element": "li",
+                "quote": "Montar cronologia, obrigações e matriz de risco."
+              }
+            ]
+          },
+          "C3": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "entrega e conteúdo",
+            "witnesses": [
+              {
+                "location": "defesa-margem-contratos-publicos/index.html:103",
+                "element": "li",
+                "quote": "Matriz de risco com até cinco eventos, prazo, impacto potencial, prova e lacunas."
+              }
+            ]
+          },
+          "C4": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "utilidade prática",
+            "witnesses": [
+              {
+                "location": "defesa-margem-contratos-publicos/index.html:74",
+                "element": "p",
+                "quote": "Cada evento termina em PRIORIZAR, REGISTRAR, QUANTIFICAR, NÃO PLEITEAR ou JURÍDICO, com o que sustenta e o que ainda falta."
+              }
+            ]
+          },
+          "C5": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "fundamento verdadeiro de confiança",
+            "witnesses": [
+              {
+                "location": "defesa-margem-contratos-publicos/index.html:254",
+                "element": "p",
+                "quote": "Responsável técnico: Engº Tiago Sasaki , formado em Engenharia Civil pela EESC-USP, com experiência em fiscalização e gestão contratual."
+              }
+            ]
+          },
+          "C6": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "ação funcional e próximo passo",
+            "witnesses": [
+              {
+                "location": "defesa-margem-contratos-publicos/index.html:227",
+                "element": "button",
+                "quote": "Solicitar canal seguro para envio"
+              }
+            ]
+          }
+        },
+        "material_missing_dimensions": []
+      },
+      {
+        "route": "/defesa-tecnica-contratos-publicos/",
+        "artifact_file": "defesa-tecnica-contratos-publicos/index.html",
+        "sha256": "c71ed258d7a0d58513b25e9138dea8f000a630209bfdaf7cd9350cd545a579a2",
+        "dimensions": {
+          "C1": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "necessidade reconhecida",
+            "witnesses": [
+              {
+                "location": "defesa-tecnica-contratos-publicos/index.html:67",
+                "element": "h1",
+                "quote": "Defesa técnica em contratos públicos: fatos e provas como subsídio técnico, não advocacia"
+              },
+              {
+                "location": "defesa-tecnica-contratos-publicos/index.html:67",
+                "element": "p",
+                "quote": "Responder no prazo com fato técnico organizado"
+              }
+            ]
+          },
+          "C2": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "trabalho executado",
+            "witnesses": [
+              {
+                "location": "defesa-tecnica-contratos-publicos/index.html:74",
+                "element": "p",
+                "quote": "A direção e o jurídico usam a matriz para confrontar cada alegação com obrigação, causa, medida adotada e prova. A CONFENGE organiza os anexos técnicos; representação, tese e protocolo permanecem com o advogado."
+              }
+            ]
+          },
+          "C3": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "entrega e conteúdo",
+            "witnesses": [
+              {
+                "location": "defesa-tecnica-contratos-publicos/index.html:75",
+                "element": "li",
+                "quote": "Fatos admitidos e controvertidos, cronologia, obrigação, causa e nexo."
+              }
+            ]
+          },
+          "C4": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "utilidade prática",
+            "witnesses": [
+              {
+                "location": "defesa-tecnica-contratos-publicos/index.html:74",
+                "element": "p",
+                "quote": "Fato, nexo e pedido no mesmo enquadramento, prontos para o jurídico decidir o próximo passo."
+              }
+            ]
+          },
+          "C5": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "fundamento verdadeiro de confiança",
+            "witnesses": [
+              {
+                "location": "defesa-tecnica-contratos-publicos/index.html:108",
+                "element": "p",
+                "quote": "Autor institucional: CONFENGE · Responsável técnico: Engº Tiago Sasaki · Referência: 15 de agosto de 2026"
+              }
+            ]
+          },
+          "C6": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "ação funcional e próximo passo",
+            "witnesses": [
+              {
+                "location": "defesa-tecnica-contratos-publicos/index.html:107",
+                "element": "a",
+                "quote": "Falar pelo WhatsApp",
+                "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Recebemos%20notifica%C3%A7%C3%A3o%20ou%20risco%20de%20san%C3%A7%C3%A3o%20em%20contrato%20p%C3%BAblico%20e%20preciso%20de%20leitura%20t%C3%A9cnica."
+              }
+            ]
+          }
+        },
+        "material_missing_dimensions": []
+      },
+      {
+        "route": "/diagnostico-b2g-360/",
+        "artifact_file": "diagnostico-b2g-360/index.html",
+        "sha256": "10d266f79795d3ce807a8b16870890c10ef98959cf24e255d8c961fbd1c7eb06",
+        "dimensions": {
+          "C1": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "necessidade reconhecida",
+            "witnesses": [
+              {
+                "location": "diagnostico-b2g-360/index.html:61",
+                "element": "h1",
+                "quote": "Diagnóstico da Operação em Obras Públicas"
+              },
+              {
+                "location": "diagnostico-b2g-360/index.html:62",
+                "element": "p",
+                "quote": "Mapeie onde a frente pública perde tempo, margem e controle."
+              }
+            ]
+          },
+          "C2": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "trabalho executado",
+            "witnesses": [
+              {
+                "location": "diagnostico-b2g-360/index.html:168",
+                "element": "li",
+                "quote": "Conduzir o mapeamento e as entrevistas."
+              }
+            ]
+          },
+          "C3": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "entrega e conteúdo",
+            "witnesses": [
+              {
+                "location": "diagnostico-b2g-360/index.html:142",
+                "element": "h2",
+                "quote": "Diagnóstico executivo + plano de 90 dias."
+              },
+              {
+                "location": "diagnostico-b2g-360/index.html:143",
+                "element": "p",
+                "quote": "Prioridades, ações para implantação e recomendação de formato: pontual, Operação de Proposta para Licitação Crítica ou Diretoria Fracionada para o Mercado Público."
+              }
+            ]
+          },
+          "C4": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "utilidade prática",
+            "witnesses": [
+              {
+                "location": "diagnostico-b2g-360/index.html:227",
+                "element": "p",
+                "quote": "Quando a frente de obras públicas existe mas a direção não vê o mapa completo: critérios de avançar ou recusar, gargalos de evidência e prioridades da carteira. Um único pleito pontual não precisa deste recorte."
+              }
+            ]
+          },
+          "C5": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "fundamento verdadeiro de confiança",
+            "witnesses": [
+              {
+                "location": "diagnostico-b2g-360/index.html:234",
+                "element": "p",
+                "quote": "Autor institucional: CONFENGE · Responsável técnico: Engº Tiago Sasaki · Referência: 1 de agosto de 2026"
+              }
+            ]
+          },
+          "C6": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "ação funcional e próximo passo",
+            "witnesses": [
+              {
+                "location": "diagnostico-b2g-360/index.html:211",
+                "element": "a",
+                "quote": "Solicitar diagnóstico da operação",
+                "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20solicitar%20o%20Diagn%C3%B3stico%20da%20Opera%C3%A7%C3%A3o%20em%20Obras%20P%C3%BAblicas%20para%20mapear%20oportunidades%2C%20margem%20e%20controle%20da%20nossa%20opera%C3%A7%C3%A3o."
+              }
+            ]
+          }
+        },
+        "material_missing_dimensions": []
+      },
+      {
+        "route": "/diagnostico-b2g-expansao/",
+        "artifact_file": "diagnostico-b2g-expansao/index.html",
+        "sha256": "8ff8cc9a37382dad7a3cb83067331f04f014611042991cee2b4004376b3ecb8b",
+        "dimensions": {
+          "C1": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "necessidade reconhecida",
+            "witnesses": [
+              {
+                "location": "diagnostico-b2g-expansao/index.html:65",
+                "element": "h1",
+                "quote": "Diagnóstico de Expansão no Mercado Público"
+              },
+              {
+                "location": "diagnostico-b2g-expansao/index.html:64",
+                "element": "p",
+                "quote": "Escolher onde crescer antes de dispersar capital"
+              }
+            ]
+          },
+          "C2": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "trabalho executado",
+            "witnesses": [
+              {
+                "location": "diagnostico-b2g-expansao/index.html:153",
+                "element": "p",
+                "quote": "Antes de começar, a CONFENGE confere legalidade do objeto, ausência de conflito de interesse e os dados mínimos do recorte. O prazo do topo começa quando esses requisitos estão cumpridos. A capacidade de atendimento é combinada na confirmação: o trabalho é pontual, com início e término definidos, e a data de início fica reservada quando o escopo é aceito."
+              }
+            ]
+          },
+          "C3": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "entrega e conteúdo",
+            "witnesses": [
+              {
+                "location": "diagnostico-b2g-expansao/index.html:85",
+                "element": "p",
+                "quote": "O que você recebe: mapa de compradores, até 15 concorrentes, painel de preços públicos e recomendações em PDF, planilhas e apresentação. A direção usa o pacote para priorizar onde investigar, disputar ou não avançar."
+              }
+            ]
+          },
+          "C4": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "utilidade prática",
+            "witnesses": [
+              {
+                "location": "diagnostico-b2g-expansao/index.html:182",
+                "element": "p",
+                "quote": "O pacote é obrigação de meio e sustenta uma decisão comercial; não garante resultado, vitória, adjudicação, economia ou receita. Representação, protocolo e revisão jurídica permanecem com os profissionais do cliente."
+              }
+            ]
+          },
+          "C5": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "fundamento verdadeiro de confiança",
+            "witnesses": [
+              {
+                "location": "diagnostico-b2g-expansao/index.html:96",
+                "element": "p",
+                "quote": "Método: obrigação de meio, produto pontual. Fonte: escopo comercial aprovado. Responsável técnico: Engº Tiago Sasaki · Atualizado em 19 de agosto de 2026 · Como corrigir"
+              }
+            ]
+          },
+          "C6": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "ação funcional e próximo passo",
+            "witnesses": [
+              {
+                "location": "diagnostico-b2g-expansao/index.html:246",
+                "element": "button",
+                "quote": "Pedir retorno da CONFENGE"
+              }
+            ]
+          }
+        },
+        "material_missing_dimensions": []
+      },
+      {
+        "route": "/diagnostico-pre-licitacao/",
+        "artifact_file": "diagnostico-pre-licitacao/index.html",
+        "sha256": "c3aba0cfc649333bf7c618ad206c595382cdb7a047828702c0bff79fc4500263",
+        "dimensions": {
+          "C1": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "necessidade reconhecida",
+            "witnesses": [
+              {
+                "location": "diagnostico-pre-licitacao/index.html:64",
+                "element": "h1",
+                "quote": "Diagnóstico pré-licitação para obras públicas"
+              },
+              {
+                "location": "diagnostico-pre-licitacao/index.html:64",
+                "element": "p",
+                "quote": "Edital, regime de execução, matriz de riscos, atestados, projeto, cronograma e exequibilidade analisados antes de transformar uma vitória na licitação em um contrato ruim."
+              }
+            ]
+          },
+          "C2": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "trabalho executado",
+            "witnesses": [
+              {
+                "location": "diagnostico-pre-licitacao/index.html:65",
+                "element": "p",
+                "quote": "A CONFENGE confronta as exigências do edital com o projeto, o orçamento e as condições da proposta. Você recebe uma análise dos riscos de participação, das exigências de habilitação técnica e das premissas de preço e prazo, com os pontos que precisam de esclarecimento ou ajuste. O documento ajuda a decidir se a proposta pode avançar, se cabe pedir esclarecimento ou se o risco recomenda não participar."
+              }
+            ]
+          },
+          "C3": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "entrega e conteúdo",
+            "witnesses": [
+              {
+                "location": "diagnostico-pre-licitacao/index.html:65",
+                "element": "p",
+                "quote": "A CONFENGE confronta as exigências do edital com o projeto, o orçamento e as condições da proposta. Você recebe uma análise dos riscos de participação, das exigências de habilitação técnica e das premissas de preço e prazo, com os pontos que precisam de esclarecimento ou ajuste. O documento ajuda a decidir se a proposta pode avançar, se cabe pedir esclarecimento ou se o risco recomenda não participar."
+              }
+            ]
+          },
+          "C4": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "utilidade prática",
+            "witnesses": [
+              {
+                "location": "diagnostico-pre-licitacao/index.html:75",
+                "element": "p",
+                "quote": "O custo do diagnóstico é pontual e delimitado, e se justifica pelo risco que o edital coloca em jogo: proposta mal formada em obra pública custa margem por todo o contrato. Se a sua empresa analisa edital toda semana, a recorrência pede rotina de operação, não um diagnóstico isolado. Limite: o diagnóstico lê o edital e a sua proposta, e não decide por você se vale participar. Para edital simples, o formato menor é a leitura curta do risco, e ela também é feita aqui: o formato acompanha o edital, nunca o tamanho da empresa."
+              }
+            ]
+          },
+          "C5": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "fundamento verdadeiro de confiança",
+            "witnesses": [
+              {
+                "location": "diagnostico-pre-licitacao/index.html:104",
+                "element": "p",
+                "quote": "Autor institucional: CONFENGE · Responsável técnico: Engº Tiago Sasaki · Referência: 15 de agosto de 2026"
+              }
+            ]
+          },
+          "C6": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "ação funcional e próximo passo",
+            "witnesses": [
+              {
+                "location": "diagnostico-pre-licitacao/index.html:103",
+                "element": "a",
+                "quote": "Falar com Tiago",
+                "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20uma%20demanda%20relacionada%20a%20licita%C3%A7%C3%A3o%2C%20contrato%20ou%20obra%20p%C3%BAblica."
+              }
+            ]
+          }
+        },
+        "material_missing_dimensions": []
+      },
+      {
+        "route": "/diretoria-b2g/",
+        "artifact_file": "diretoria-b2g/index.html",
+        "sha256": "9c93185427be0f3195f7965d8d10182e21b25d8b2fbd2b99cf777c3b02a613b6",
+        "dimensions": {
+          "C1": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "necessidade reconhecida",
+            "witnesses": [
+              {
+                "location": "diretoria-b2g/index.html:64",
+                "element": "h1",
+                "quote": "Diretoria Fracionada para o Mercado Público"
+              },
+              {
+                "location": "diretoria-b2g/index.html:63",
+                "element": "p",
+                "quote": "Direção semanal para alocar foco, capital e equipe"
+              }
+            ]
+          },
+          "C2": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "trabalho executado",
+            "witnesses": [
+              {
+                "location": "diretoria-b2g/index.html:107",
+                "element": "h2",
+                "quote": "A CONFENGE instala e conduz a cadência decisória da frente pública."
+              }
+            ]
+          },
+          "C3": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "entrega e conteúdo",
+            "witnesses": [
+              {
+                "location": "diretoria-b2g/index.html:81",
+                "element": "p",
+                "quote": "A direção recebe carteira priorizada, pauta e decisões para até quatro oportunidades e um contrato; a cadência integra Operação de Proposta e defesa de margem."
+              }
+            ]
+          },
+          "C4": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "utilidade prática",
+            "witnesses": [
+              {
+                "location": "diretoria-b2g/index.html:82",
+                "element": "p",
+                "quote": "Uso pela equipe: comercial sabe o que perseguir; engenharia e orçamento sabem o que entregar; a direção consegue avançar, revisar ou recusar com memória."
+              }
+            ]
+          },
+          "C5": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "fundamento verdadeiro de confiança",
+            "witnesses": [
+              {
+                "location": "diretoria-b2g/index.html:93",
+                "element": "p",
+                "quote": "Método: decisões semanais, até quatro oportunidades aceitas simultaneamente e um contrato ativo. Responsável técnico: Engº Tiago Sasaki · Atualizado em 19 de agosto de 2026 · Como corrigir"
+              }
+            ]
+          },
+          "C6": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "ação funcional e próximo passo",
+            "witnesses": [
+              {
+                "location": "diretoria-b2g/index.html:330",
+                "element": "button",
+                "quote": "Conversar sobre minha operação"
+              }
+            ]
+          }
+        },
+        "material_missing_dimensions": []
+      },
+      {
+        "route": "/entregas/",
+        "artifact_file": "entregas/index.html",
+        "sha256": "edf73363a9e0aaa5cc64ee3478fceae571bdff5c34411f4851cb950a8a6bebe1",
+        "dimensions": {
+          "C1": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "necessidade reconhecida",
+            "witnesses": [
+              {
+                "location": "entregas/index.html:66",
+                "element": "h1",
+                "quote": "Entregas de engenharia. Veja o conteúdo e para que ele serve. Exemplos identificados."
+              },
+              {
+                "location": "entregas/index.html:67",
+                "element": "p",
+                "quote": "Projetos, revisões, compatibilizações, orçamentos, inspeções, laudos, perícias, avaliações e análises técnicas atendem obras públicas e privadas. A página separa três coisas: o serviço que realizamos, o exemplo demonstrativo que você pode examinar e a oferta cujo preço e condições estão publicados."
+              }
+            ]
+          },
+          "C2": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "trabalho executado",
+            "witnesses": [
+              {
+                "location": "entregas/index.html:97",
+                "element": "p",
+                "quote": "Cada oferta reúne a situação atendida, o trabalho incluído, as informações necessárias, o conteúdo entregue, o preço, o prazo e a próxima ação. Os demais serviços de engenharia seguem por proposta porque variam com disciplina, fase, documentos e responsabilidade."
+              }
+            ]
+          },
+          "C3": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "entrega e conteúdo",
+            "witnesses": [
+              {
+                "location": "entregas/index.html:88",
+                "element": "p",
+                "quote": "Cálculos, plantas, detalhes, especificações e memória de cálculo; relatório de revisão com pontos localizados; ou registro das interferências e soluções entre estruturas e instalações hidrossanitárias, elétricas, de incêndio, climatização e telecomunicações."
+              }
+            ]
+          },
+          "C4": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "utilidade prática",
+            "witnesses": [
+              {
+                "location": "entregas/index.html:90",
+                "element": "p",
+                "quote": "Relatório, laudo, parecer, avaliação ou documentação técnica com evidências, método, conclusão e limites adequados à pergunta. O documento serve para decidir manutenção, registrar condição, sustentar prova, fundamentar valor ou orientar controles."
+              }
+            ]
+          },
+          "C5": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "fundamento verdadeiro de confiança",
+            "witnesses": [
+              {
+                "location": "entregas/index.html:68",
+                "element": "p",
+                "quote": "Consulte sem cadastro os exemplos demonstrativos e as ferramentas públicas . Dados identificados como sintéticos mostram o formato e o método; não representam cliente."
+              }
+            ]
+          },
+          "C6": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "ação funcional e próximo passo",
+            "witnesses": [
+              {
+                "location": "entregas/index.html:264",
+                "element": "a",
+                "quote": "Configurar este plano",
+                "href": "#captura-entregas"
+              }
+            ]
+          }
+        },
+        "material_missing_dimensions": []
+      },
+      {
+        "route": "/ferramentas/checklist-reequilibrio/",
+        "artifact_file": "ferramentas/checklist-reequilibrio/index.html",
+        "sha256": "9494e1b8f6b061f57d2e04ca1f3739d95fb06df08dbc58a534ea31265be95213",
+        "dimensions": {
+          "C1": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "necessidade reconhecida",
+            "witnesses": [
+              {
+                "location": "ferramentas/checklist-reequilibrio/index.html:43",
+                "element": "h1",
+                "quote": "Checklist de documentação para reequilíbrio"
+              },
+              {
+                "location": "ferramentas/checklist-reequilibrio/index.html:44",
+                "element": "p",
+                "quote": "Avalie a prontidão documental do pedido de reequilíbrio, encontre bloqueadores centrais e organize a próxima correção sem enviar dados. Marque o que já existe. A urgência ordena a correção; a materialidade só classifica a gravidade em faixas."
+              }
+            ]
+          },
+          "C2": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "trabalho executado",
+            "witnesses": [
+              {
+                "location": "ferramentas/checklist-reequilibrio/index.html:52",
+                "element": "p",
+                "quote": "O checklist organiza três frentes: fato e nexo, suporte econômico e instrução do pedido. Respostas não marcadas entram como pendentes; um bloqueador central impede prontidão alta. O resultado separa fato , cálculo , inferência e o que permanece desconhecido . O escore mede a prontidão documental do pedido; o mérito do reequilíbrio se decide sobre o dossiê completo, item a item."
+              }
+            ]
+          },
+          "C3": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "entrega e conteúdo",
+            "witnesses": [
+              {
+                "location": "ferramentas/checklist-reequilibrio/index.html:52",
+                "element": "p",
+                "quote": "O checklist organiza três frentes: fato e nexo, suporte econômico e instrução do pedido. Respostas não marcadas entram como pendentes; um bloqueador central impede prontidão alta. O resultado separa fato , cálculo , inferência e o que permanece desconhecido . O escore mede a prontidão documental do pedido; o mérito do reequilíbrio se decide sobre o dossiê completo, item a item."
+              }
+            ]
+          },
+          "C4": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "utilidade prática",
+            "witnesses": [
+              {
+                "location": "ferramentas/checklist-reequilibrio/index.html:52",
+                "element": "p",
+                "quote": "O checklist organiza três frentes: fato e nexo, suporte econômico e instrução do pedido. Respostas não marcadas entram como pendentes; um bloqueador central impede prontidão alta. O resultado separa fato , cálculo , inferência e o que permanece desconhecido . O escore mede a prontidão documental do pedido; o mérito do reequilíbrio se decide sobre o dossiê completo, item a item."
+              }
+            ]
+          },
+          "C5": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "fundamento verdadeiro de confiança",
+            "witnesses": [
+              {
+                "location": "ferramentas/checklist-reequilibrio/index.html:119",
+                "element": "p",
+                "quote": "Método: checklist orientativo de prontidão documental do pedido de reequilíbrio, com base na Lei nº 14.133/2021 e na orientação de reequilíbrio do TCU citada na página."
+              }
+            ]
+          },
+          "C6": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "ação funcional e próximo passo",
+            "witnesses": [
+              {
+                "location": "ferramentas/checklist-reequilibrio/index.html:111",
+                "element": "button",
+                "quote": "Registrar pedido de conferência do dossiê de reequilíbrio"
+              }
+            ]
+          }
+        },
+        "material_missing_dimensions": []
+      },
+      {
+        "route": "/ferramentas/diagnostico-defesa-margem/",
+        "artifact_file": "ferramentas/diagnostico-defesa-margem/index.html",
+        "sha256": "e8f3bcccb2ee07fd5f0f6cbb683e85208e32a64653e66759f808176058527a39",
+        "dimensions": {
+          "C1": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "necessidade reconhecida",
+            "witnesses": [
+              {
+                "location": "ferramentas/diagnostico-defesa-margem/index.html:51",
+                "element": "h1",
+                "quote": "Diagnóstico de Defesa de Margem em Contratos Públicos"
+              },
+              {
+                "location": "ferramentas/diagnostico-defesa-margem/index.html:50",
+                "element": "p",
+                "quote": "Contratos públicos · leitura factual"
+              }
+            ]
+          },
+          "C2": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "trabalho executado",
+            "witnesses": [
+              {
+                "location": "ferramentas/diagnostico-defesa-margem/index.html:59",
+                "element": "p",
+                "quote": "O diagnóstico consome um recorte público versionado de contratos oficiais (contrato public-read-margin-defense/1.0 ). Cada campo leva fonte, data de revisão e classificação. Campo ausente fica marcado como a conferir, e ausência não é prova de que o evento não ocorreu. A leitura separa fato oficial, cálculo , inferência derivada e o que permanece desconhecido ."
+              }
+            ]
+          },
+          "C3": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "entrega e conteúdo",
+            "witnesses": [
+              {
+                "location": "ferramentas/diagnostico-defesa-margem/index.html:105",
+                "element": "h2",
+                "quote": "Resumo executivo factual"
+              },
+              {
+                "location": "ferramentas/diagnostico-defesa-margem/index.html:114",
+                "element": "h2",
+                "quote": "Linha do tempo do contrato"
+              },
+              {
+                "location": "ferramentas/diagnostico-defesa-margem/index.html:132",
+                "element": "h2",
+                "quote": "Evidências e fontes"
+              }
+            ]
+          },
+          "C4": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "utilidade prática",
+            "witnesses": [
+              {
+                "location": "ferramentas/diagnostico-defesa-margem/index.html:141",
+                "element": "li",
+                "quote": "Tratar cada item a conferir como pendência de prova a levantar, não como fato negativo. É esse levantamento que sustenta um pedido de aditivo, reajuste ou reequilíbrio."
+              }
+            ]
+          },
+          "C5": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "fundamento verdadeiro de confiança",
+            "witnesses": [
+              {
+                "location": "ferramentas/diagnostico-defesa-margem/index.html:62",
+                "element": "li",
+                "quote": "Método: projeção somente de leitura do recorte oficial, sem alterar a fonte; fato oficial e dado derivado ficam sempre separados. Aniversário contratual é o único derivado: mês-dia da data de assinatura oficial."
+              }
+            ]
+          },
+          "C6": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "ação funcional e próximo passo",
+            "witnesses": [
+              {
+                "location": "ferramentas/diagnostico-defesa-margem/index.html:171",
+                "element": "button",
+                "quote": "Pedir uma segunda leitura do contrato"
+              }
+            ]
+          }
+        },
+        "material_missing_dimensions": []
+      },
+      {
+        "route": "/ferramentas/limite-acrescimos-supressoes/",
+        "artifact_file": "ferramentas/limite-acrescimos-supressoes/index.html",
+        "sha256": "d45d781e0516c89909a41d2c405c6963ad014627a027fcc051d6c5d80982245e",
+        "dimensions": {
+          "C1": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "necessidade reconhecida",
+            "witnesses": [
+              {
+                "location": "ferramentas/limite-acrescimos-supressoes/index.html:48",
+                "element": "h1",
+                "quote": "Verificador de limite de acréscimos e supressões"
+              },
+              {
+                "location": "ferramentas/limite-acrescimos-supressoes/index.html:49",
+                "element": "p",
+                "quote": "Informe a base do contrato, o histórico formalizado e a alteração em análise. Veja saldos de acréscimo e de supressão de forma independente."
+              }
+            ]
+          },
+          "C2": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "trabalho executado",
+            "witnesses": [
+              {
+                "location": "ferramentas/limite-acrescimos-supressoes/index.html:49",
+                "element": "p",
+                "quote": "Informe a base do contrato, o histórico formalizado e a alteração em análise. Veja saldos de acréscimo e de supressão de forma independente."
+              }
+            ]
+          },
+          "C3": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "entrega e conteúdo",
+            "witnesses": [
+              {
+                "location": "ferramentas/limite-acrescimos-supressoes/index.html:160",
+                "element": "p",
+                "quote": "A triagem acima permanece disponível sem cadastro. O dossiê é a análise humana do evento de mudança de escopo e entrega: escopo original comparado ao alterado, cronologia do evento, ordem ou autorização que o cobre, natureza qualitativa ou quantitativa da alteração, saldo de acréscimos e supressões, preço de item novo, impacto em prazo e custo e a matriz documental para instruir o termo aditivo ou a apostila."
+              }
+            ]
+          },
+          "C4": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "utilidade prática",
+            "witnesses": [
+              {
+                "location": "ferramentas/limite-acrescimos-supressoes/index.html:58",
+                "element": "p",
+                "quote": "Triagem numérica do art. 125 da Lei nº 14.133/2021: acréscimo de 25% do valor inicial atualizado (50% em reforma de edifício ou equipamento) e supressão de 25%. Os eixos são independentes. O resultado separa fato , cálculo , inferência e o que permanece desconhecido ."
+              }
+            ]
+          },
+          "C5": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "fundamento verdadeiro de confiança",
+            "witnesses": [
+              {
+                "location": "ferramentas/limite-acrescimos-supressoes/index.html:59",
+                "element": "p",
+                "quote": "O método cobre a regra geral de acréscimo e supressão do art. 125. Alteração consensual, transfiguração do objeto e o regime excepcional de calamidade da Lei nº 14.981/2024 dependem da análise do caso concreto."
+              }
+            ]
+          },
+          "C6": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "ação funcional e próximo passo",
+            "witnesses": [
+              {
+                "location": "ferramentas/limite-acrescimos-supressoes/index.html:190",
+                "element": "button",
+                "quote": "Solicitar o Dossiê de Aditivo e Serviço Extra"
+              }
+            ]
+          }
+        },
+        "material_missing_dimensions": []
+      },
+      {
+        "route": "/medicoes-glosas-obras-publicas/",
+        "artifact_file": "medicoes-glosas-obras-publicas/index.html",
+        "sha256": "19dd2ed0a7b400bc4272a1fa904979c6310ad3e5171b6255804cdbdf144accfd",
+        "dimensions": {
+          "C1": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "necessidade reconhecida",
+            "witnesses": [
+              {
+                "location": "medicoes-glosas-obras-publicas/index.html:65",
+                "element": "h1",
+                "quote": "Medições, glosas e pagamentos em obras públicas"
+              },
+              {
+                "location": "medicoes-glosas-obras-publicas/index.html:65",
+                "element": "p",
+                "quote": "Fluxo de caixa e direito ao recebimento"
+              }
+            ]
+          },
+          "C2": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "trabalho executado",
+            "witnesses": [
+              {
+                "location": "medicoes-glosas-obras-publicas/index.html:75",
+                "element": "p",
+                "quote": "A CONFENGE integra leitura de engenharia, contrato, orçamento, cronograma e registros para que a empresa não dependa de interpretações soltas. A entrega é um documento: você recebe a cronologia do que aconteceu com a prova de cada evento, o cálculo do que está em jogo em reais, a posição técnica da empresa escrita para ser protocolada e a recomendação de qual ação cabe agora."
+              }
+            ]
+          },
+          "C3": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "entrega e conteúdo",
+            "witnesses": [
+              {
+                "location": "medicoes-glosas-obras-publicas/index.html:75",
+                "element": "p",
+                "quote": "A CONFENGE integra leitura de engenharia, contrato, orçamento, cronograma e registros para que a empresa não dependa de interpretações soltas. A entrega é um documento: você recebe a cronologia do que aconteceu com a prova de cada evento, o cálculo do que está em jogo em reais, a posição técnica da empresa escrita para ser protocolada e a recomendação de qual ação cabe agora."
+              }
+            ]
+          },
+          "C4": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "utilidade prática",
+            "witnesses": [
+              {
+                "location": "medicoes-glosas-obras-publicas/index.html:99",
+                "element": "p",
+                "quote": "Não. A consultoria estrutura a base técnica, contratual e econômica do caso para que engenharia, direção e jurídico decidam com mais segurança."
+              }
+            ]
+          },
+          "C5": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "fundamento verdadeiro de confiança",
+            "witnesses": [
+              {
+                "location": "medicoes-glosas-obras-publicas/index.html:103",
+                "element": "p",
+                "quote": "Fonte: Lei nº 14.133/2021 e os critérios de medição do seu contrato. Dados públicos nem sempre trazem medição e pagamento; nesses casos a informação vem dos seus documentos."
+              }
+            ]
+          },
+          "C6": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "ação funcional e próximo passo",
+            "witnesses": [
+              {
+                "location": "medicoes-glosas-obras-publicas/index.html:100",
+                "element": "a",
+                "quote": "Falar com Tiago",
+                "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20uma%20demanda%20relacionada%20a%20licita%C3%A7%C3%A3o%2C%20contrato%20ou%20obra%20p%C3%BAblica."
+              }
+            ]
+          }
+        },
+        "material_missing_dimensions": []
+      },
+      {
+        "route": "/nurture/",
+        "artifact_file": "nurture/index.html",
+        "sha256": "abe4f706b28ea2ea8f711ef7a31ff383c94dceba29b491eb775dfb6e7f04d562",
+        "dimensions": {
+          "C1": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "necessidade reconhecida",
+            "witnesses": [
+              {
+                "location": "nurture/index.html:57",
+                "element": "h1",
+                "quote": "Cinco e-mails úteis, não newsletter genérica"
+              },
+              {
+                "location": "nurture/index.html:56",
+                "element": "p",
+                "quote": "E-mails técnicos · você confirma o cadastro por e-mail"
+              }
+            ]
+          },
+          "C2": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "trabalho executado",
+            "witnesses": [
+              {
+                "location": "nurture/index.html:58",
+                "element": "p",
+                "quote": "Sequências curtas para o problema que a construtora enfrenta agora: contrato sob pressão, edital em análise ou operação em obras públicas sem método. Cada mensagem aponta prova, dossiê ou decisão, e liga a ferramentas e páginas de apoio da CONFENGE."
+              }
+            ]
+          },
+          "C3": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "entrega e conteúdo",
+            "witnesses": [
+              {
+                "location": "nurture/index.html:58",
+                "element": "p",
+                "quote": "Sequências curtas para o problema que a construtora enfrenta agora: contrato sob pressão, edital em análise ou operação em obras públicas sem método. Cada mensagem aponta prova, dossiê ou decisão, e liga a ferramentas e páginas de apoio da CONFENGE."
+              }
+            ]
+          },
+          "C4": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "utilidade prática",
+            "witnesses": [
+              {
+                "location": "nurture/index.html:58",
+                "element": "p",
+                "quote": "Sequências curtas para o problema que a construtora enfrenta agora: contrato sob pressão, edital em análise ou operação em obras públicas sem método. Cada mensagem aponta prova, dossiê ou decisão, e liga a ferramentas e páginas de apoio da CONFENGE."
+              }
+            ]
+          },
+          "C5": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "fundamento verdadeiro de confiança",
+            "witnesses": [
+              {
+                "location": "nurture/index.html:59",
+                "element": "p",
+                "quote": "As orientações levam a conteúdos que identificam autoria, fontes, método e limites. Consulte quem responde tecnicamente pela CONFENGE e como as informações podem ser conferidas ."
+              }
+            ]
+          },
+          "C6": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "ação funcional e próximo passo",
+            "witnesses": [
+              {
+                "location": "nurture/index.html:145",
+                "element": "a",
+                "quote": "Enviar contexto para análise",
+                "href": "/#contato"
+              }
+            ]
+          }
+        },
+        "material_missing_dimensions": []
+      },
+      {
+        "route": "/quantitativos-orcamento-obras/",
+        "artifact_file": "quantitativos-orcamento-obras/index.html",
+        "sha256": "f7ec24a24079be3e77596014c1cd96cf36147c0c046aed4c96e79339528f577e",
+        "dimensions": {
+          "C1": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "necessidade reconhecida",
+            "witnesses": [
+              {
+                "location": "quantitativos-orcamento-obras/index.html:86",
+                "element": "h1",
+                "quote": "Quantitativos e orçamento de obras"
+              },
+              {
+                "location": "quantitativos-orcamento-obras/index.html:85",
+                "element": "p",
+                "quote": "Antes de comparar, contratar ou alterar o escopo"
+              }
+            ]
+          },
+          "C2": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "trabalho executado",
+            "witnesses": [
+              {
+                "location": "quantitativos-orcamento-obras/index.html:87",
+                "element": "p",
+                "quote": "Levantamos ou revisamos quantidades e custos de obras públicas e privadas para comparar propostas, preparar a contratação e planejar a execução. Você recebe a origem de cada quantidade, o critério de medição, as composições de custo e as lacunas dos documentos."
+              }
+            ]
+          },
+          "C3": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "entrega e conteúdo",
+            "witnesses": [
+              {
+                "location": "quantitativos-orcamento-obras/index.html:87",
+                "element": "p",
+                "quote": "Levantamos ou revisamos quantidades e custos de obras públicas e privadas para comparar propostas, preparar a contratação e planejar a execução. Você recebe a origem de cada quantidade, o critério de medição, as composições de custo e as lacunas dos documentos."
+              }
+            ]
+          },
+          "C4": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "utilidade prática",
+            "witnesses": [
+              {
+                "location": "quantitativos-orcamento-obras/index.html:136",
+                "element": "li",
+                "quote": "Exemplo sintético: duas propostas usam o mesmo nome de serviço, mas incluem quantidades diferentes. Uma memória rastreável permite comparar o que cada uma considerou; isso não representa cliente, obra, prazo, preço ou resultado da CONFENGE."
+              }
+            ]
+          },
+          "C5": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "fundamento verdadeiro de confiança",
+            "witnesses": [
+              {
+                "location": "quantitativos-orcamento-obras/index.html:134",
+                "element": "li",
+                "quote": "O responsável é Engenheiro Civil formado pela EESC-USP, com registro profissional ativo no CREA e mais de R$ 700 milhões em obras e projetos analisados ao longo da atuação profissional; identidade, registro e o alcance de cada afirmação estão em quem responde . Os serviços técnicos são emitidos com ART e nota fiscal, dentro do escopo e da atribuição profissional contratados."
+              }
+            ]
+          },
+          "C6": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "ação funcional e próximo passo",
+            "witnesses": [
+              {
+                "location": "quantitativos-orcamento-obras/index.html:170",
+                "element": "a",
+                "quote": "Enviar contexto por e-mail",
+                "href": "mailto:tiago.sasaki@confenge.com.br?subject=Quantitativos%20e%20or%C3%A7amento%20de%20obra"
+              }
+            ]
+          }
+        },
+        "material_missing_dimensions": []
+      },
+      {
+        "route": "/reequilibrio-obras-publicas/",
+        "artifact_file": "reequilibrio-obras-publicas/index.html",
+        "sha256": "0dcead707d2d38bab38d710900ed4713aa0c6f92f965f1b51296b447fa02a33e",
+        "dimensions": {
+          "C1": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "necessidade reconhecida",
+            "witnesses": [
+              {
+                "location": "reequilibrio-obras-publicas/index.html:65",
+                "element": "h1",
+                "quote": "Reequilíbrio econômico-financeiro de obra pública"
+              },
+              {
+                "location": "reequilibrio-obras-publicas/index.html:65",
+                "element": "p",
+                "quote": "Causalidade, prova e impacto econômico"
+              }
+            ]
+          },
+          "C2": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "trabalho executado",
+            "witnesses": [
+              {
+                "location": "reequilibrio-obras-publicas/index.html:87",
+                "element": "p",
+                "quote": "A CONFENGE integra leitura de engenharia, contrato, orçamento, cronograma e registros para que a empresa não dependa de interpretações soltas. A entrega é um documento: você recebe a cronologia do que aconteceu com a prova de cada evento, o cálculo do que está em jogo em reais, a posição técnica da empresa escrita para ser protocolada e a recomendação de qual ação cabe agora."
+              }
+            ]
+          },
+          "C3": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "entrega e conteúdo",
+            "witnesses": [
+              {
+                "location": "reequilibrio-obras-publicas/index.html:87",
+                "element": "p",
+                "quote": "A CONFENGE integra leitura de engenharia, contrato, orçamento, cronograma e registros para que a empresa não dependa de interpretações soltas. A entrega é um documento: você recebe a cronologia do que aconteceu com a prova de cada evento, o cálculo do que está em jogo em reais, a posição técnica da empresa escrita para ser protocolada e a recomendação de qual ação cabe agora."
+              }
+            ]
+          },
+          "C4": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "utilidade prática",
+            "witnesses": [
+              {
+                "location": "reequilibrio-obras-publicas/index.html:97",
+                "element": "p",
+                "quote": "O custo do dossiê de reequilíbrio é pontual e se justifica quando o desequilíbrio já pressiona a margem ou o caixa do contrato. Se eventos assim se repetem na carteira, a recorrência indica acompanhamento contínuo em vez de um dossiê por caso, e o risco fica coberto o ano inteiro. Limite: sem ruptura documentável da equação original, o pleito não se sustenta, porque narrar aumento de custo não é fato novo. Nesse quadro a primeira entrega é a leitura do evento e do registro que falta, e ela também é feita aqui."
+              }
+            ]
+          },
+          "C5": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "fundamento verdadeiro de confiança",
+            "witnesses": [
+              {
+                "location": "reequilibrio-obras-publicas/index.html:116",
+                "element": "p",
+                "quote": "Fonte: Lei nº 14.133/2021, orientação de reequilíbrio do TCU e o contrato concreto do visitante. Não inventa cobertura de aditivo ou índice."
+              }
+            ]
+          },
+          "C6": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "ação funcional e próximo passo",
+            "witnesses": [
+              {
+                "location": "reequilibrio-obras-publicas/index.html:113",
+                "element": "a",
+                "quote": "Abrir a análise no WhatsApp",
+                "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20uma%20demanda%20relacionada%20a%20licita%C3%A7%C3%A3o%2C%20contrato%20ou%20obra%20p%C3%BAblica."
+              }
+            ]
+          }
+        },
+        "material_missing_dimensions": []
+      },
+      {
+        "route": "/servicos-obras-publicas/",
+        "artifact_file": "servicos-obras-publicas/index.html",
+        "sha256": "3e65930a290d7390d8cdd5562b9b1ee01677e4ceed42618068ce2db629620eec",
+        "dimensions": {
+          "C1": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "necessidade reconhecida",
+            "witnesses": [
+              {
+                "location": "servicos-obras-publicas/index.html:62",
+                "element": "h1",
+                "quote": "Serviços para licitações e contratos de obras públicas"
+              },
+              {
+                "location": "servicos-obras-publicas/index.html:61",
+                "element": "p",
+                "quote": "Comece pela decisão que não pode esperar"
+              }
+            ]
+          },
+          "C2": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "trabalho executado",
+            "witnesses": [
+              {
+                "location": "servicos-obras-publicas/index.html:63",
+                "element": "p",
+                "quote": "Escolha pelo uso: definir onde crescer, coordenar uma proposta crítica, organizar um evento contratual ou instalar uma rotina de decisão."
+              }
+            ]
+          },
+          "C3": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "entrega e conteúdo",
+            "witnesses": [
+              {
+                "location": "servicos-obras-publicas/index.html:69",
+                "element": "p",
+                "quote": "Uma medição ou glosa do mesmo período, organizada em fatos, cálculo, provas e lacunas. Prazo de entrega de 5 dias úteis após os documentos mínimos. Não é petição jurídica nem promessa de recebimento."
+              }
+            ]
+          },
+          "C4": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "utilidade prática",
+            "witnesses": [
+              {
+                "location": "servicos-obras-publicas/index.html:91",
+                "element": "p",
+                "quote": "O dossiê concentra contrato, registros e cálculo numa saída delimitada para a direção, a engenharia e o jurídico usarem sem reconstruir o caso do zero."
+              }
+            ]
+          },
+          "C5": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "fundamento verdadeiro de confiança",
+            "witnesses": [
+              {
+                "location": "servicos-obras-publicas/index.html:87",
+                "element": "p",
+                "quote": "As análises examinam fontes públicas, método, cálculos e limites. Não são casos de cliente e não afirmam relação comercial com as partes dos contratos."
+              }
+            ]
+          },
+          "C6": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "ação funcional e próximo passo",
+            "witnesses": [
+              {
+                "location": "servicos-obras-publicas/index.html:91",
+                "element": "a",
+                "quote": "Registrar este evento",
+                "href": "#captura-contrato"
+              }
+            ]
+          }
+        },
+        "material_missing_dimensions": []
+      },
+      {
+        "route": "/servicos/",
+        "artifact_file": "servicos/index.html",
+        "sha256": "0a965308ac72df6609e1463e38126bdf7da1ff2049a10268325e91bf2f8582a4",
+        "dimensions": {
+          "C1": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "necessidade reconhecida",
+            "witnesses": [
+              {
+                "location": "servicos/index.html:77",
+                "element": "h1",
+                "quote": "Serviços de engenharia para obras públicas e privadas"
+              },
+              {
+                "location": "servicos/index.html:78",
+                "element": "p",
+                "quote": "Elaboramos e revisamos projetos, compatibilizamos disciplinas, levantamos quantitativos, preparamos orçamentos, inspecionamos edificações e produzimos perícias, avaliações e análises técnicas. Cada situação abaixo explica o trabalho, a entrega e a decisão que ela sustenta."
+              }
+            ]
+          },
+          "C2": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "trabalho executado",
+            "witnesses": [
+              {
+                "location": "servicos/index.html:106",
+                "element": "p",
+                "quote": "Trabalho e entrega: levantamos atividades, agentes e medidas existentes; analisamos exposição e documentação; e entregamos o relatório, parecer ou documento de segurança do trabalho aplicável. O conteúdo serve para corrigir controles, manter registros e subsidiar a assistência técnica, sem confundir atribuições de engenharia com atos médicos."
+              }
+            ]
+          },
+          "C3": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "entrega e conteúdo",
+            "witnesses": [
+              {
+                "location": "servicos/index.html:91",
+                "element": "p",
+                "quote": "Trabalho e entrega: na elaboração, desenvolvemos cálculos, plantas, detalhes, especificações e memória de cálculo na fase contratada. Na revisão, conferimos critérios, dimensionamento, coerência e executabilidade e entregamos um relatório com pontos localizados e correções propostas. Na compatibilização, sobrepomos e conferimos interfaces entre disciplinas, registramos interferências e consolidamos as soluções acordadas. Esses documentos servem para contratar, coordenar, orçar e executar com uma referência técnica comum; estudo preliminar continua identificado como estudo preliminar."
+              }
+            ]
+          },
+          "C4": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "utilidade prática",
+            "witnesses": [
+              {
+                "location": "servicos/index.html:111",
+                "element": "p",
+                "quote": "Trabalho e entrega: analisamos os documentos aplicáveis, reconstruímos fatos e cálculos e entregamos matriz de risco, orçamento, memória, relatório ou dossiê técnico. A entrega serve para planejar a contratação, decidir a participação, sustentar uma medição ou organizar uma posição contratual, conforme o lado atendido."
+              }
+            ]
+          },
+          "C5": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "fundamento verdadeiro de confiança",
+            "witnesses": [
+              {
+                "location": "servicos/index.html:119",
+                "element": "p",
+                "quote": "Atendemos clientes em todo o Brasil. Atividade de campo, responsável técnico, ART e eventuais registros ou vistos são confirmados para o objeto, a disciplina, o local e as atribuições aplicáveis antes de assumirmos a responsabilidade."
+              }
+            ]
+          },
+          "C6": {
+            "status": "PASS_CONTEXTUAL",
+            "criterion": "ação funcional e próximo passo",
+            "witnesses": [
+              {
+                "location": "servicos/index.html:119",
+                "element": "a",
+                "quote": "Falar pelo WhatsApp",
+                "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20explicar%20uma%20situa%C3%A7%C3%A3o%20t%C3%A9cnica%20e%20entender%20o%20pr%C3%B3ximo%20passo."
+              }
+            ]
+          }
+        },
+        "material_missing_dimensions": []
+      }
+    ],
+    "summary": {
+      "destinations_planned": 35,
+      "destinations_executed": 35,
+      "dimensions_planned": 210,
+      "dimensions_executed": 210,
+      "material_missing_dimensions": 0,
+      "result": "PASS_ON_REVIEWED_DAB32_COMPOSITIONS"
+    },
+    "supplemental_surface_review": {
+      "routes_planned": 20,
+      "routes_executed": 20,
+      "routes": [
+        {
+          "route": "/privacidade/",
+          "artifact_file": "privacidade/index.html",
+          "sha256": "befd0df49545c4a77de68e4ab3004d02986d52f59f4d7f8196c4f5fbdba82a45",
+          "robots": "index,follow,max-snippet:-1",
+          "heading": "Política de Privacidade",
+          "status": "PASS_BY_ROUTE_ROLE",
+          "note": "Contextually read as policy, state, method, data package, error or noindex surface; commercial layout not imposed."
+        },
+        {
+          "route": "/termos-de-uso/",
+          "artifact_file": "termos-de-uso/index.html",
+          "sha256": "3450f60c5ea971d82a708eb3d68aff1679ed4cf9124361504773f06247a2e920",
+          "robots": "index,follow,max-snippet:-1",
+          "heading": "Termos de Uso",
+          "status": "PASS_BY_ROUTE_ROLE",
+          "note": "Contextually read as policy, state, method, data package, error or noindex surface; commercial layout not imposed."
+        },
+        {
+          "route": "/politica-editorial/",
+          "artifact_file": "politica-editorial/index.html",
+          "sha256": "29f2d0b1eae28ea02b907b9cdf183075267d86bd531d2aee63e3d264660405c9",
+          "robots": "index,follow,max-snippet:-1",
+          "heading": "Política editorial",
+          "status": "PASS_BY_ROUTE_ROLE",
+          "note": "Contextually read as policy, state, method, data package, error or noindex surface; commercial layout not imposed."
+        },
+        {
+          "route": "/uso-de-ia/",
+          "artifact_file": "uso-de-ia/index.html",
+          "sha256": "259bea8c9bdda3f18be11326454b3474bbeec1258e8afb3f6285ff70370a52d5",
+          "robots": "index,follow,max-snippet:-1",
+          "heading": "Uso de inteligência artificial",
+          "status": "PASS_BY_ROUTE_ROLE",
+          "note": "Contextually read as policy, state, method, data package, error or noindex surface; commercial layout not imposed."
+        },
+        {
+          "route": "/comercial/privacidade-leads/",
+          "artifact_file": "comercial/privacidade-leads/index.html",
+          "sha256": "c3a6815119940a0a23ee5c81a8c9048b0f6c83554b17a735431625d030911f6c",
+          "robots": "index,follow",
+          "heading": "Aviso de privacidade - leads e contratação",
+          "status": "PASS_BY_ROUTE_ROLE",
+          "note": "Contextually read as policy, state, method, data package, error or noindex surface; commercial layout not imposed."
+        },
+        {
+          "route": "/comercial/termos-diagnostico-b2g/",
+          "artifact_file": "comercial/termos-diagnostico-b2g/index.html",
+          "sha256": "5b747f436f68ea916919393a590e78e982a205de7dc9a2325c2aa2ac01644d7b",
+          "robots": "index,follow",
+          "heading": "Termos para pessoa jurídica - Diagnóstico de Expansão no Mercado Público",
+          "status": "PASS_BY_ROUTE_ROLE",
+          "note": "Contextually read as policy, state, method, data package, error or noindex surface; commercial layout not imposed."
+        },
+        {
+          "route": "/ferramentas/prontidao-tecnica-obra-privada/",
+          "artifact_file": "ferramentas/prontidao-tecnica-obra-privada/index.html",
+          "sha256": "816ce080176b6d74b15e1d1c161484f11daf87a6d9170c5f70cb3cb2c533febc",
+          "robots": "noindex,follow",
+          "heading": "Identifique evidências técnicas presentes, ausentes ou desconhecidas antes de contratar, executar ou retomar uma obra privada",
+          "status": "PASS_BY_ROUTE_ROLE",
+          "note": "Contextually read as policy, state, method, data package, error or noindex surface; commercial layout not imposed."
+        },
+        {
+          "route": "/assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/",
+          "artifact_file": "assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/index.html",
+          "sha256": "1ff14a02c4a7f56ac558d85aac32bdcf2a42e7e8e4240d78b64c4c7e4e709ee4",
+          "robots": "noindex,follow",
+          "heading": "Kit de citação: valor contratual de pavimentação em Santa Catarina",
+          "status": "PASS_BY_ROUTE_ROLE",
+          "note": "Contextually read as policy, state, method, data package, error or noindex surface; commercial layout not imposed."
+        },
+        {
+          "route": "/radar/",
+          "artifact_file": "radar/index.html",
+          "sha256": "52bb59e1fbc5801d885a7fb4b1b1b30cb8834b6ad8eb18efaf77f693b1dee32f",
+          "robots": "noindex,follow",
+          "heading": "Radar de oportunidades para a sua operação, não para o mercado inteiro.",
+          "status": "PASS_BY_ROUTE_ROLE",
+          "note": "Contextually read as policy, state, method, data package, error or noindex surface; commercial layout not imposed."
+        },
+        {
+          "route": "/radar/nacional-obras-publicas/",
+          "artifact_file": "radar/nacional-obras-publicas/index.html",
+          "sha256": "71f493574488e92f2a1940cd0f0e10bd2e8a84b33b3265d827d061c65a1280bc",
+          "robots": "index,follow",
+          "heading": "Radar de obras públicas: método aberto e demanda observada",
+          "status": "PASS_BY_ROUTE_ROLE",
+          "note": "Contextually read as policy, state, method, data package, error or noindex surface; commercial layout not imposed."
+        },
+        {
+          "route": "/metodologia-inteligencia/",
+          "artifact_file": "metodologia-inteligencia/index.html",
+          "sha256": "9b644b1a4e7ba148670ec447a7f0bad55d56e05c577817fbb637144496ab5174",
+          "robots": "index,follow",
+          "heading": "Como a CONFENGE separa fato, cálculo, hipótese e ponto desconhecido",
+          "status": "PASS_BY_ROUTE_ROLE",
+          "note": "Contextually read as policy, state, method, data package, error or noindex surface; commercial layout not imposed."
+        },
+        {
+          "route": "/ops/",
+          "artifact_file": "ops/index.html",
+          "sha256": "d4d53143ec16cafbf53e91dd595415bd58772fca12b24c349dfaee98cb91f271",
+          "robots": "noindex,nofollow,noarchive",
+          "heading": "CONFENGE RevOps",
+          "status": "PASS_BY_ROUTE_ROLE",
+          "note": "Public noindex operator login shell inspected as noncommercial UI; API data authentication is separate."
+        },
+        {
+          "route": "/404.html",
+          "artifact_file": "404.html",
+          "sha256": "f3f720af07fef1e64668cc54d5bc2617c4c2e75a98d02373589fb4e2e4c567a9",
+          "robots": "noindex,nofollow",
+          "heading": "Esta página não existe ou não está mais disponível.",
+          "status": "PASS_BY_ROUTE_ROLE",
+          "note": "Contextually read as policy, state, method, data package, error or noindex surface; commercial layout not imposed."
+        },
+        {
+          "route": "/obrigado.html",
+          "artifact_file": "obrigado.html",
+          "sha256": "c6c5ece0bde719fe68df5fbd5c6dca6d125259a5a032ebefcfb5bca45145e5ea",
+          "robots": "noindex,follow",
+          "heading": "Confira a referência do envio.",
+          "status": "PASS_BY_ROUTE_ROLE",
+          "note": "Contextually read as policy, state, method, data package, error or noindex surface; commercial layout not imposed."
+        },
+        {
+          "route": "/obrigado-contrato.html",
+          "artifact_file": "obrigado-contrato.html",
+          "sha256": "86c269ee5658ad6a887b8e718d1c34a106ca3c9c66d1f556ef76c70fe6fc5a06",
+          "robots": "noindex,follow",
+          "heading": "Confira a referência da solicitação sobre o contrato.",
+          "status": "PASS_BY_ROUTE_ROLE",
+          "note": "Contextually read as policy, state, method, data package, error or noindex surface; commercial layout not imposed."
+        },
+        {
+          "route": "/obrigado-edital.html",
+          "artifact_file": "obrigado-edital.html",
+          "sha256": "a45e887cdbfe87c9a2c1de6dfa3e53d550a13e2a6f5ea61f4d28301f9ae724e8",
+          "robots": "noindex,follow",
+          "heading": "Confira a referência da solicitação sobre o edital.",
+          "status": "PASS_BY_ROUTE_ROLE",
+          "note": "Contextually read as policy, state, method, data package, error or noindex surface; commercial layout not imposed."
+        },
+        {
+          "route": "/obrigado-operacao.html",
+          "artifact_file": "obrigado-operacao.html",
+          "sha256": "9b088dc67b60d3704da1701f59babe00094504c62e1d63cc407d1c1320a04426",
+          "robots": "noindex,follow",
+          "heading": "Confira a referência do pedido de diagnóstico da operação.",
+          "status": "PASS_BY_ROUTE_ROLE",
+          "note": "Contextually read as policy, state, method, data package, error or noindex surface; commercial layout not imposed."
+        },
+        {
+          "route": "/diagnostico-b2g-expansao/obrigado/",
+          "artifact_file": "diagnostico-b2g-expansao/obrigado/index.html",
+          "sha256": "092b813a5f11b691222a278dc82f798bd4af8e413ce20201addcbca5bd06757d",
+          "robots": "noindex,nofollow",
+          "heading": "Pagamento pendente de confirmação",
+          "status": "PASS_BY_ROUTE_ROLE",
+          "note": "Contextually read as policy, state, method, data package, error or noindex surface; commercial layout not imposed."
+        },
+        {
+          "route": "/diagnostico-b2g-expansao/cancelado/",
+          "artifact_file": "diagnostico-b2g-expansao/cancelado/index.html",
+          "sha256": "85deba60208a2d6a7a768924e6b2be66f6e5cd8eb00e163f01d26cd79d5a74c7",
+          "robots": "noindex,nofollow",
+          "heading": "Pagamento cancelado",
+          "status": "PASS_BY_ROUTE_ROLE",
+          "note": "Contextually read as policy, state, method, data package, error or noindex surface; commercial layout not imposed."
+        },
+        {
+          "route": "/diagnostico-b2g-expansao/expirado/",
+          "artifact_file": "diagnostico-b2g-expansao/expirado/index.html",
+          "sha256": "e756a157a04052b5a2a64d8d9e9a676dc6ccb48c84f486e4a9b27f6e0f484c14",
+          "robots": "noindex,nofollow",
+          "heading": "Link de pagamento expirado",
+          "status": "PASS_BY_ROUTE_ROLE",
+          "note": "Contextually read as policy, state, method, data package, error or noindex surface; commercial layout not imposed."
+        }
+      ]
+    },
+    "artifact_reconciliation": {
+      "from_artifact": "/tmp/confenge-commercial-20260909.zaPcn3/candidate-8fdb/_site",
+      "to_artifact": "/tmp/confenge-commercial-20260909.zaPcn3/candidate-dab32/_site",
+      "from_html_paths": 217,
+      "to_html_paths": 217,
+      "path_set_equal": true,
+      "changed_html_count": 6,
+      "changed_html_paths": [
+        "comercial/privacidade-leads/index.html",
+        "inteligencia/valor-tipico-contratos-pavimentacao/index.html",
+        "metodologia-inteligencia/index.html",
+        "privacidade/index.html",
+        "radar/index.html",
+        "radar/nacional-obras-publicas/index.html"
+      ],
+      "note": "All changed dab32 compositions in the reviewed destination/supplemental set were reread; no acceptance was inherited solely from 8fdb."
+    },
+    "production_confirmed": false
+  },
   "reports": [
     {
       "source_report": "build/reports/commercial-c1-c6-review.json",

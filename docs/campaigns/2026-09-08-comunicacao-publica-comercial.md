@@ -49,6 +49,17 @@ Preflight confirmado nesta retomada:
   `c173461ccbcf93878c6ab59482e4ec4bb537a418`. Nenhuma promoção, reversão,
   alteração de permissões ou edição manual em produção foi feita no preflight.
 
+Correção do controle de publicação identificada no candidato `dab32b69`:
+a montagem final atualizava os hashes CSP em `_site/_headers`, enquanto a
+configuração canônica do Nginx consumia `_headers` da raiz, ainda anterior às
+transformações finais. O build agora executa o comando existente `csp:refresh`
+entre a montagem e a última geração do contrato do host. A contraprova falhou
+antes da correção e passou depois; o teste exige essa ordem. Nenhuma diretiva
+de segurança foi relaxada. No artefato de 217 HTML, o contrato e o navegador
+passaram (sete rotas, zero violações, estilo inline não autorizado bloqueado).
+Esse checkpoint não é declaração de publicação; o fluxo obrigatório repete
+os controles no candidato integrado.
+
 Revogações em execução (contraprovas locais; o candidato integrado e o artefato
 final ainda precisam dos checks e da publicação):
 

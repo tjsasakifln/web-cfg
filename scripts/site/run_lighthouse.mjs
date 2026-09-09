@@ -36,6 +36,22 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 const OUT = join(ROOT, "docs", "lighthouse-runs");
 const cliArgs = process.argv.slice(2);
 const option = (name) => cliArgs.find((arg) => arg.startsWith(`--${name}=`))?.split("=", 2)[1] || "";
+const evidenceLabel = option("label");
+if (evidenceLabel && !/^[a-z0-9-]+$/.test(evidenceLabel)) {
+  throw new Error(`--label must contain only lowercase letters, numbers and dashes: ${evidenceLabel}`);
+}
+const FINAL_REPEATED_RUNS = 3;
+const configuredRuns = option("runs") || process.env.LH_HOME_RUNS;
+const REPEATED_RUNS = Number(configuredRuns || FINAL_REPEATED_RUNS);
+if (!Number.isInteger(REPEATED_RUNS) || REPEATED_RUNS < 1 || REPEATED_RUNS > 5) {
+  throw new Error(`--runs/LH_HOME_RUNS must be an integer from 1 to 5, got ${configuredRuns}`);
+}
+const diagnosticRunCount = REPEATED_RUNS !== FINAL_REPEATED_RUNS;
+if (diagnosticRunCount && !evidenceLabel) {
+  throw new Error(
+    `--runs/LH_HOME_RUNS=${REPEATED_RUNS} is diagnostic-only and requires --label; final evidence requires ${FINAL_REPEATED_RUNS} runs`,
+  );
+}
 const coverage = deriveCoverage({ policy: loadPolicy(), siteRoot: resolveSiteRoot() });
 const runtimeRoutes = option("runtime-route").split(",").map((value) => value.trim()).filter(Boolean);
 if (new Set(runtimeRoutes).size !== runtimeRoutes.length) {
@@ -44,10 +60,6 @@ if (new Set(runtimeRoutes).size !== runtimeRoutes.length) {
 const runtimeContracts = runtimeRoutes.map((route) => runtimeLighthouseContractForRoute(route));
 const PAGES = [...coverage.lighthouse.pages, ...runtimeRoutes];
 const only = option("only");
-const evidenceLabel = option("label");
-if (evidenceLabel && !/^[a-z0-9-]+$/.test(evidenceLabel)) {
-  throw new Error(`--label must contain only lowercase letters, numbers and dashes: ${evidenceLabel}`);
-}
 const requestedPages = only ? only.split(",").map((value) => value.trim()).filter(Boolean) : PAGES;
 const unknownPages = requestedPages.filter((page) => !PAGES.includes(page));
 if (unknownPages.length) throw new Error(`--only contains route(s) outside derived coverage: ${unknownPages.join(", ")}`);
@@ -61,20 +73,8 @@ if (omittedRuntimeRoutes.length) {
 }
 const IMAGE_GATE_PAGES = new Set(coverage.lighthouse.image_gate_pages);
 const SEO_EXEMPT_PAGES = new Set(coverage.lighthouse.seo_exempt_pages);
-const FINAL_REPEATED_RUNS = 3;
-const configuredRuns = option("runs") || process.env.LH_HOME_RUNS;
-const REPEATED_RUNS = Number(configuredRuns || FINAL_REPEATED_RUNS);
 console.log(formatCoverageDeclaration(coverage));
 console.log(`lighthouse pages (${RUN_PAGES.length}/${PAGES.length}): ${RUN_PAGES.join(" ")}`);
-if (!Number.isInteger(REPEATED_RUNS) || REPEATED_RUNS < 1 || REPEATED_RUNS > 5) {
-  throw new Error(`--runs/LH_HOME_RUNS must be an integer from 1 to 5, got ${configuredRuns}`);
-}
-const diagnosticRunCount = REPEATED_RUNS !== FINAL_REPEATED_RUNS;
-if (diagnosticRunCount && !evidenceLabel) {
-  throw new Error(
-    `--runs/LH_HOME_RUNS=${REPEATED_RUNS} is diagnostic-only and requires --label; final evidence requires ${FINAL_REPEATED_RUNS} runs`,
-  );
-}
 for (const [name, configuredPages] of [
   ["image_gate_pages", IMAGE_GATE_PAGES],
   ["seo_exempt_pages", SEO_EXEMPT_PAGES],

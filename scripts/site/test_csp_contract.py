@@ -32,6 +32,27 @@ SITE_CI = ROOT / ".github" / "workflows" / "site-ci.yml"
 DOWNLOADABLE = "/radar/nacional-obras-publicas/gsc-demand-sample.json"
 
 
+def test_build_refreshes_canonical_csp_before_final_host_render() -> None:
+    """The host consumes canonical _headers, not the artifact's private copy."""
+    command = json.loads(PACKAGE.read_text(encoding="utf-8"))["scripts"]["build:site"]
+    steps = [step.strip() for step in command.split("&&")]
+    assemble = steps.index("python3 scripts/pseo/build_site.py")
+    refresh = steps.index("npm run csp:refresh")
+    final_host = max(i for i, step in enumerate(steps) if step == "npm run host-contract:render")
+    assert assemble < refresh < final_host, "canonical CSP must bind final HTML before host configuration"
+
+
+def test_package_refreshes_canonical_csp_from_downloaded_artifact() -> None:
+    workflow = (ROOT / ".github/workflows/netcup-release.yml").read_text(encoding="utf-8")
+    package = workflow.split("  package:\n", 1)[1].split("  stage:\n", 1)[0]
+    clean = package.index("git diff --quiet")
+    refresh = package.index("python3 scripts/site/csp_contract.py --write _headers --root _site")
+    verify = package.index("python3 scripts/site/test_csp_contract.py")
+    render = package.index("node scripts/migration/netcup/render.mjs")
+    pack = package.index("python3 deploy/netcup/package_release.py")
+    assert clean < refresh < verify < render < pack
+
+
 def _headers_with_script_src(
     script_src: str,
     extra_global: str = "",
