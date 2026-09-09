@@ -719,6 +719,54 @@ def test_deliberate_force_fail_env():
         )
 
 
+def _producer_checkout_errors(block: str) -> list[str]:
+    required = (
+        'EXTRA_CLI_REQUIRED: "1"',
+        'EXTRA_CLI_ROOT: ${{ github.workspace }}/.worktrees/extra-cli-contract',
+        'Path("data/pseo/manifest.json").read_text())["source_commit_sha"]',
+        're.fullmatch(r"[0-9a-f]{40}", sha)',
+        'repository: tjsasakifln/extra-cli',
+        'ref: ${{ steps.producer-contract.outputs.sha }}',
+        'path: .worktrees/extra-cli-contract',
+        'persist-credentials: false',
+        'git -C "$EXTRA_CLI_ROOT" rev-parse HEAD',
+    )
+    errors = [f"producer contract checkout missing {needle}" for needle in required if needle not in block]
+    for name in (
+        "Resolve contracted producer revision",
+        "Checkout contracted producer for fixture integration",
+        "Verify contracted producer checkout",
+    ):
+        marker = f"- name: {name}"
+        if marker not in block:
+            errors.append(f"producer contract setup missing {name}")
+            continue
+        step = block.split(marker, 1)[1].split("\n      - ", 1)[0]
+        if re.search(r"(?m)^\s+(?:if|continue-on-error):", step):
+            errors.append(f"producer contract setup may be skipped: {name}")
+    return errors
+
+
+def test_cross_repo_fixture_integration_cannot_skip_or_use_an_unpinned_producer():
+    for workflow, job in ((SITE_CI, "gates"), (PSEO, "pseo")):
+        block = _job_block(_read(workflow), job)
+        assert not _producer_checkout_errors(block), _producer_checkout_errors(block)
+        for old, new in (
+            ('EXTRA_CLI_REQUIRED: "1"', 'EXTRA_CLI_REQUIRED: "0"'),
+            ('ref: ${{ steps.producer-contract.outputs.sha }}', 'ref: main'),
+            ('repository: tjsasakifln/extra-cli', 'repository: unrelated/example'),
+            ('- name: Verify contracted producer checkout', '- name: Verify contracted producer checkout\n        if: false'),
+        ):
+            assert _producer_checkout_errors(block.replace(old, new)), f"mutation escaped: {old}"
+    evidence = _job_block(_read(SITE_CI), "execution_evidence")
+    for name in (
+        "Resolve contracted producer revision",
+        "Checkout contracted producer for fixture integration",
+        "Verify contracted producer checkout",
+    ):
+        assert f'--required-step "{name}"' in evidence
+
+
 def main() -> int:
     tests = [
         test_site_ci_shape,
@@ -736,6 +784,7 @@ def main() -> int:
         test_copy_ci_is_check_not_write,
         test_site_excellence_precedes_the_netcup_release_artifact,
         test_required_execution_evidence_fails_closed_after_the_gate_job,
+        test_cross_repo_fixture_integration_cannot_skip_or_use_an_unpinned_producer,
         test_deliberate_force_fail_env,
     ]
     failed = 0

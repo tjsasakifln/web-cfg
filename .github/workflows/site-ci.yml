@@ -23,12 +23,37 @@ jobs:
     # Validation feeds the stable site-ci aggregate below.
     name: site-validation
     runs-on: ubuntu-latest
+    env:
+      EXTRA_CLI_ROOT: ${{ github.workspace }}/.worktrees/extra-cli-contract
+      EXTRA_CLI_REQUIRED: "1"
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           # Full history required for package commit_sha ancestor checks (PR merge refs)
           fetch-depth: 0
+      - name: Resolve contracted producer revision
+        id: producer-contract
+        run: |
+          python3 - <<'PY'
+          import json, os, re
+          from pathlib import Path
+          sha = json.loads(Path("data/pseo/manifest.json").read_text())["source_commit_sha"]
+          if not re.fullmatch(r"[0-9a-f]{40}", sha):
+              raise SystemExit("invalid contracted producer revision")
+          with open(os.environ["GITHUB_OUTPUT"], "a") as output:
+              print(f"sha={sha}", file=output)
+          PY
+      - name: Checkout contracted producer for fixture integration
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          repository: tjsasakifln/extra-cli
+          ref: ${{ steps.producer-contract.outputs.sha }}
+          path: .worktrees/extra-cli-contract
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Verify contracted producer checkout
+        run: test "$(git -C "$EXTRA_CLI_ROOT" rev-parse HEAD)" = "${{ steps.producer-contract.outputs.sha }}"
       - name: Pin release build clock to the commit
         if: inputs.export_public_artifact
         run: echo "SOURCE_DATE_EPOCH=$(git show -s --format=%ct HEAD)" >> "$GITHUB_ENV"
@@ -342,6 +367,9 @@ jobs:
             --run-id "$GITHUB_RUN_ID" \
             --sha "$EXPECTED_RUN_SHA" \
             --required-job site-validation \
+            --required-step "Resolve contracted producer revision" \
+            --required-step "Checkout contracted producer for fixture integration" \
+            --required-step "Verify contracted producer checkout" \
             --required-step "Workflow gate shape" \
             --required-step "Unit and brand/copy/design gates" \
             --required-step "Contact and lead pathway gates" \

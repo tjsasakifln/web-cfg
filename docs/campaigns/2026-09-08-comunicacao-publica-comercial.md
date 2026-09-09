@@ -70,6 +70,19 @@ token. A retirada do defeito e a restauração da proteção são verificadas no
 mesmos casos (15 testes aprovados). Isso amplia o controle; não publica os
 rascunhos nem altera o mecanismo de captura.
 
+O preflight do bloco de 73 comandos também distinguiu três testes pulados:
+o teste de isolamento do artefato é inaplicável antes do build e tem execução
+obrigatória depois dele; dois testes produtor-consumidor não tinham checkout
+de `extra-cli` no CI. Os workflows agora recuperam, em modo somente leitura,
+o SHA `source_commit_sha` do manifesto versionado, verificam a identidade e
+exigem os testes com fixtures. Ausência do checkout, revisão divergente e
+incompatibilidade do snapshot reprovam; a antiga captura genérica de erro que
+continuava com outro snapshot foi removida. As dependências necessárias foram
+fixadas no lock Python existente e verificadas em ambiente 3.12 isolado. Não
+há acesso ao banco, nova consulta de dados, alteração no produtor ou mudança
+das datas editoriais. A contraprova exige falha do teste diante de um snapshot
+incompatível, além da falha por checkout ausente ou configuração de CI pulável.
+
 Revogações em execução (contraprovas locais; o candidato integrado e o artefato
 final ainda precisam dos checks e da publicação):
 

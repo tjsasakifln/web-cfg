@@ -8,6 +8,8 @@ Thumbs.db
 .idea/
 node_modules/
 .cache/
+# Read-only CI checkout of the exact contracted producer; never a public input.
+.worktrees/extra-cli-contract/
 .netlify/
 *.swp
 *~

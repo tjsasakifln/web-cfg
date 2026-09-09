@@ -386,6 +386,7 @@ def assemble_public_artifact(
     root: Path | None = None,
     *,
     dest_name: str = PUBLIC_DIR_NAME,
+    manifest_path: Path | None = None,
 ) -> dict[str, Any]:
     """Wipe and rebuild the public artifact from allowlisted sources only."""
     root = root or ROOT
@@ -485,7 +486,7 @@ def assemble_public_artifact(
     }
 
     # Private inventory (not published)
-    man_path = root / "seo" / "PUBLIC-ARTIFACT-MANIFEST.json"
+    man_path = manifest_path if manifest_path is not None else root / "seo" / "PUBLIC-ARTIFACT-MANIFEST.json"
     man_path.parent.mkdir(parents=True, exist_ok=True)
     man_payload = {
         **inv,
@@ -499,7 +500,7 @@ def assemble_public_artifact(
     man_path.write_text(
         json.dumps(man_payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
-    report["manifest_path"] = str(man_path.relative_to(root))
+    report["manifest_path"] = str(man_path.relative_to(root)) if man_path.is_relative_to(root) else str(man_path)
     return report
 
 
