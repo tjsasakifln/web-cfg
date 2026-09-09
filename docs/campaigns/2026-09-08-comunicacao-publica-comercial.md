@@ -151,3 +151,31 @@ Publicar as faixas de honorário na home a colocou no censo de rotas com preço,
 sem contrato de captura persistida. Em vez de relaxar o gate, o preço segue
 publicado por inteiro na página de cada oferta e a home leva até lá em um
 clique. Verificado: a home saiu do censo e o gate segue fail-closed.
+
+## Publicação (2026-09-09)
+
+PR #644 mergeada como `4075e91c6`. O `netcup-release` concluiu com sucesso e a
+promoção atômica publicou o release.
+
+**Identidade conferida em produção:**
+`/.well-known/build-info.json` -> `commit 4075e91c6…`, `environment production`,
+`build_time 2026-09-09T03:43:20Z`.
+`/.well-known/runtime-info.json` -> `release_sha 4075e91c6…`,
+`profile netcup-production`, `host confenge-nginx-node/v2`.
+
+**Conteúdo conferido no HTML servido** (não só no manifesto), em `/`, `/servicos/`,
+`/entregas/`, `/triagem-tecnica/`, `/aditivos-obras-publicas/` e `/confianca/`:
+18 de 19 verificações passaram na primeira medição. Sumiram da superfície pública
+"o que não conseguimos fazer", "fica abaixo do custo do dossiê", "ferramenta
+pública gratuita", "sem catálogo infinito", "Possíveis entregas", "Sem revisão
+independente", "em validação", "bloqueada", "se temos capacidade de atender" e o
+rótulo "Obras públicas e B2G". Apareceram "O trabalho termina em um documento
+assinado", "qualquer porte", "O que você recebe", "compatibilização", "Oito têm
+oferta publicada", "sob consulta", "Prova de cliente" e "Responsável técnico".
+
+**A verificação em produção encontrou um defeito remanescente**, corrigido em
+seguida: `/triagem-tecnica/` ainda dizia "Não prometemos prazo em dias porque
+nunca medimos um". A substância é honesta e fica; a explicação de bastidor sai.
+Corrigido em `scripts/site/render_authority_pages.py` (fonte) e nas duas rotas
+que publicavam a frase. É o tipo de achado que só a leitura do HTML servido
+produz, e a razão pela qual §4 exige trechos efetivamente renderizados.

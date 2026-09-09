@@ -179,7 +179,7 @@ def _historico_body(policy: dict) -> str:
         "<p>Mudança de política gera versão nova. O histórico abaixo não é reescrito em silêncio.</p>"
         f"<ol>{''.join(rows)}</ol>"
         f"<p>Versão vigente: <strong>{_esc(current_policy_version(policy))}</strong>. "
-        "Não prometemos prazo em dias para publicar uma correção porque nunca medimos um.</p>"
+        "Não há prazo prometido em dias para publicar uma correção; toda correção aceita entra no changelog acima, com a data.</p>"
     )
 
 
