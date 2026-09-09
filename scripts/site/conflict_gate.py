@@ -448,7 +448,14 @@ def public_policy_body(contract: dict[str, Any] | None = None) -> str:
 </ul>
 <h2 id="dados-minimos">Privacidade desde a primeira etapa</h2>
 <p>Esta página pede somente a área da demanda, o papel solicitado e respostas de sim, não ou “não sei informar”. Nomes, números de processo ou contrato, órgãos, partes, profissionais, motivos e documentos ficam fora da página e da medição pública.</p>
-<p>Uma resposta preliminar não substitui a confirmação final. Mudança de função, dever, regra aplicável ou informação relevante exige nova análise. Se o canal protegido estiver indisponível, a página nunca libera o envio de documentos.</p>
+<p>Uma resposta preliminar não substitui a confirmação final. Mudança de função, dever, regra aplicável ou informação relevante exige nova análise. Documentos e identificação entram apenas na etapa seguinte, combinada diretamente com a CONFENGE.</p>
+<h2 id="resultados">O que cada resultado desta etapa significa</h2>
+<ul>
+<li><strong>Demanda não aceita.</strong> Há impedimento nos critérios acima: dever público no mesmo caso, risco de uso de informação não pública, papéis periciais incompatíveis, pedido de uso de cargo ou influência, ou relação pessoal ou financeira que não pode ser reduzida. A CONFENGE recusa e não pede documentos.</li>
+<li><strong>Análise humana necessária.</strong> Há sinal que depende de leitura do caso concreto, como relação relevante com medida de mitigação possível ou mudança de papel depois de uma análise anterior. Tiago Jun Sasaki conclui a verificação antes de qualquer documento.</li>
+<li><strong>Faltam informações.</strong> Uma resposta essencial ficou em “não sei informar”. A triagem é retomada quando o dado existir, sem envio de documento nesse intervalo.</li>
+</ul>
+<p>Impedimento se verifica por caso, não por área: perícia, avaliação de imóvel, engenharia e documentação privada, segurança do trabalho e contratos públicos passam pelos mesmos critérios.</p>
 <p>Esta é uma política operacional da CONFENGE, não um parecer jurídico geral. Encontrou um possível conflito ou uma informação incorreta? <a href="{CORRECTION_CHANNEL_HREF}">Fale com a gente</a>.</p>
 """
 
@@ -508,8 +515,8 @@ def first_step_form_html(contract: dict[str, Any] | None = None) -> str:
 {tri_field("mitigation_requires_disclosure", "Existe uma medida concreta que exige informar a outra parte?")}
 {tri_field("client_requests_public_influence", "Há pedido para usar cargo, acesso ou influência pública?")}
 {tri_field("distinct_matter_no_signal", "A matéria é distinta e, neste recorte, não há sinal de conflito?")}
-<button class="button button-primary" type="submit" disabled="" data-conflict-submit="">Ver próximo passo da triagem</button>
-<p class="form-note">Use apenas estas opções. Nomes, detalhes e documentos serão pedidos depois, somente se houver canal protegido disponível.</p>
+<button class="button button-primary" type="submit" disabled="" data-conflict-submit="">Ver o resultado desta etapa</button>
+<p class="form-note">Use apenas estas opções. Nomes, detalhes e documentos entram só na etapa seguinte, combinada diretamente com a CONFENGE.</p>
 <div id="conflict-gate-result" role="status" aria-live="polite" data-conflict-gate-result="idle">Responda às perguntas para ver o próximo passo. Nenhum documento será enviado.</div>
 </form>
 """

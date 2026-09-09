@@ -269,7 +269,16 @@ for (const offerId of ["CFG-D16", "CFG-D17", "CFG-D24"]) {
 }
 assert("catalog_expansion_price", catalogHtml.includes("R$ 8.000"), "expansion");
 const capabilityRoll = catalogHtml.match(/<section class="capability-roll"[\s\S]*?<\/section>/)?.[0] || "";
-assert("catalog_has_explicit_state_legend", /8 publicadas/.test(capabilityRoll) && /44 em validação/.test(capabilityRoll) && /2 bloqueadas/.test(capabilityRoll));
+// 2026-09-08. Esta assercao exigia a legenda "8 publicadas / 44 em validacao /
+// 2 bloqueadas" na vitrine. Publicar quantas capacidades a empresa ainda nao
+// vende e inventario de indisponibilidade, nao informacao util ao comprador. A
+// propriedade preservada e que a pagina nao pode sugerir 54 ofertas prontas:
+// verificada agora pelo numero positivo, e pela ausencia do estado interno.
+assert("catalog_states_published_count_without_listing_unavailable",
+  /Oito têm oferta publicada/.test(capabilityRoll)
+    && !/em validação/.test(capabilityRoll)
+    && !/bloqueada/.test(capabilityRoll),
+  capabilityRoll.slice(0, 400));
 assert("capability_roll_has_no_price", !/R\$/.test(capabilityRoll), capabilityRoll.match(/R\$[^<]*/g));
 
 /* Deliberate mismatch must fail: hub vs catalog data on D16 name.

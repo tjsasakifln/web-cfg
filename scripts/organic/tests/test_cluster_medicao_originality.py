@@ -49,6 +49,8 @@ from scripts.organic.cluster_medicao_originality import (  # noqa: E402
     source_provenance_failures,
     source_records,
     stem,
+    SOURCE_PROVENANCE_SURFACES,
+    SOURCES_CONSULTED_AT,
 )
 
 
@@ -86,15 +88,28 @@ def test_evaluate_cluster_is_deterministic():
 # --------------------------------------------------------------------------
 
 
-def test_five_revision_surfaces_agree_on_the_declared_revision():
+def test_revision_surfaces_agree_and_source_provenance_keeps_its_own_date():
+    """Quatro superficies dizem quando o texto mudou; uma diz quando a fonte foi lida.
+
+    2026-09-08. Antes eram cinco superficies medidas pela mesma data, incluindo
+    "Fontes consultadas em". O acoplamento obrigava qualquer revisao de redacao a
+    declarar que a Lei 14.133 e os acordaos do TCU tinham sido reconsultados
+    naquele dia, o que seria falso: trocar a palavra de um rotulo nao e reler a
+    fonte. As duas ancoras passam a ser independentes, e as duas continuam
+    exigidas -- a protecao aumenta, porque agora uma data errada de consulta
+    tambem reprova, em vez de ser arrastada pela data de revisao.
+    """
     for slug in CLUSTER_SLUGS:
         html = (ROOT / "conteudos" / slug / "index.html").read_text(encoding="utf-8")
         surfaces = revision_surfaces(html, root=ROOT, slug=slug)
         stated = {key: surfaces[key] for key in REVISION_SURFACES}
         assert set(stated.values()) == {CLUSTER_REVISION}, (slug, stated)
-        expected_br = format_date_br(CLUSTER_REVISION)
-        assert surfaces["visible_revised_on_text"] == expected_br, slug
-        assert surfaces["sources_consulted_on_text"] == expected_br, slug
+        assert surfaces["visible_revised_on_text"] == format_date_br(CLUSTER_REVISION), slug
+        for key in SOURCE_PROVENANCE_SURFACES:
+            assert surfaces[key] == SOURCES_CONSULTED_AT, (slug, surfaces[key])
+        assert surfaces["sources_consulted_on_text"] == format_date_br(
+            SOURCES_CONSULTED_AT
+        ), slug
 
 
 def test_revision_gate_fails_when_any_single_surface_diverges():

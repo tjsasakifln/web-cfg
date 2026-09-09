@@ -530,7 +530,31 @@ def test_collection_kit_exists_as_operator_templates_not_public_cases():
 def test_casos_pages_label_synthetic_or_demonstrative_in_title_h1_schema_and_cta():
     hub = (ROOT / "casos" / "index.html").read_text(encoding="utf-8")
     assert "Exemplos de entrega" in hub
-    assert "Resultados de clientes" in hub
+    # 2026-09-08. A trava exigia literalmente a manchete "Resultados de
+    # clientes" no hub. Essa manchete era o próprio defeito: abria um bloco
+    # que prometia resultado de cliente e entregava apenas a política de
+    # publicação, ou seja, anunciava a ausência de prova no ponto em que o
+    # visitante decide. O que a asserção protegia não era a frase, e sim que o
+    # hub carregue o bloco canônico de estado de prova, declare a condição de
+    # autorização sob a qual trabalho de contratante é publicado e não exiba
+    # prova de cliente que não possui. Passa a ser verificada essa
+    # propriedade, que é mais forte do que a frase: o atributo de máquina
+    # data-proof-state, a condição de autorização dentro do bloco e a ausência
+    # de qualquer marcador de prova social nele.
+    proof_block = re.search(
+        r'<section\b[^>]*\bdata-proof-state="none"[^>]*>(.*?)</section>',
+        hub,
+        flags=re.I | re.S,
+    )
+    assert proof_block, "hub sem bloco canônico data-proof-state"
+    proof_text = re.sub(r"<[^>]+>", " ", proof_block.group(1))
+    assert re.search(r"autoriza[cç][aã]o", proof_text, flags=re.I), proof_text
+    assert not re.search(
+        r"\b(depoimento|review|avalia[cç][aã]o de cliente|caso de sucesso"
+        r"|nota agregada|logotipo de cliente)\b",
+        proof_text,
+        flags=re.I,
+    ), proof_text
     assert "<h1>Exemplos de entrega (demonstrativos)</h1>" in hub
     assert "demonstrativo" in hub.lower()
     pages = list((ROOT / "casos").glob("*/index.html")) + [ROOT / "casos" / "index.html"]

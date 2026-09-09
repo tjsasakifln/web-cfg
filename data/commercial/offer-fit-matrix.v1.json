@@ -342,30 +342,24 @@
       "contract_display": "R$ 179.737,67",
       "contract_cents": 17973767,
       "pncp_path": "pncp.gov.br/app/contratos/01258036000132/2026/7",
-      "one_percent_display": "R$ 1.797,38",
-      "one_percent_cents": 179738,
       "kind": "illustration",
-      "copy": "Conta ilustrativa: 1% deste contrato é R$ 1.797,38. Não é economia medida, serve para dar escala. Um dossiê crítico custa de R$ 6.900 a R$ 7.900, uma vez, e acompanhar a operação custa de R$ 12.500 a R$ 20.000 por mês. Como 1% fica abaixo do custo do dossiê, em contratos assim o começo costuma ser uma entrega de entrada ou a ferramenta pública gratuita."
+      "copy": "O que este contrato mostra: obra de porte local, medição simples e pouca margem para absorver imprevisto. A pergunta técnica costuma ser se o que foi executado está documentado no ritmo em que a medição é apresentada."
     },
     {
       "panel": "regional",
       "contract_display": "R$ 719.177,48",
       "contract_cents": 71917748,
       "pncp_path": "pncp.gov.br/app/contratos/14862788000150/2026/69",
-      "one_percent_display": "R$ 7.191,77",
-      "one_percent_cents": 719177,
       "kind": "illustration",
-      "copy": "Conta ilustrativa: 1% deste contrato é R$ 7.191,77. Não é economia medida, serve para dar escala. É quase o custo de um dossiê crítico, de R$ 6.900 a R$ 7.900, uma vez; acompanhar a operação custa de R$ 12.500 a R$ 20.000 por mês. O dossiê se justifica quando o risco é concreto e os documentos existem."
+      "copy": "O que este contrato mostra: prazo longo o bastante para acumular alteração de escopo, reajuste e evento não previsto. A pergunta técnica costuma ser se o pedido de aditivo ou de reequilíbrio está sustentado por registro contemporâneo."
     },
     {
       "panel": "strategic",
       "contract_display": "R$ 18.293.629,80",
       "contract_cents": 1829362980,
       "pncp_path": "pncp.gov.br/app/contratos/81648859000103/2026/45",
-      "one_percent_display": "R$ 182.936,30",
-      "one_percent_cents": 18293630,
       "kind": "illustration",
-      "copy": "Conta ilustrativa: 1% deste contrato é R$ 182.936,30. Não é economia medida, serve para dar escala. Um dossiê crítico custa de R$ 6.900 a R$ 7.900, uma vez, e acompanhar a operação custa de R$ 12.500 a R$ 20.000 por mês. Contrato grande não define o formato sozinho: ele depende do risco, dos documentos e de a necessidade ser pontual ou recorrente."
+      "copy": "O que este contrato mostra: várias frentes, medições sobrepostas e cadeia de subcontratação. A pergunta técnica costuma ser onde a glosa, o atraso e o desequilíbrio nascem, e quem tem o documento que prova cada um."
     }
   ],
   "route_copy": {
@@ -375,7 +369,7 @@
     },
     "diagnostico-pre-licitacao": {
       "headline": "Quando o diagnóstico cabe, e quando não",
-      "body": "O custo do diagnóstico é pontual e delimitado, e se justifica pelo risco que o edital coloca em jogo: proposta mal formada em obra pública custa margem por todo o contrato. Se a sua empresa analisa edital toda semana, a recorrência pede rotina de operação, não um diagnóstico isolado. Limite: edital simples, risco pequeno e equipe já confiante se resolvem na ferramenta pública gratuita. Para conferir essa leitura antes de decidir, fale com a gente."
+      "body": "O custo do diagnóstico é pontual e delimitado, e se justifica pelo risco que o edital coloca em jogo: proposta mal formada em obra pública custa margem por todo o contrato. Se a sua empresa analisa edital toda semana, a recorrência pede rotina de operação, não um diagnóstico isolado. Limite: o diagnóstico lê o edital e a sua proposta, e não decide por você se vale participar. Para edital simples, o formato menor é a leitura curta do risco, e ela também é feita aqui: o formato acompanha o edital, nunca o tamanho da empresa."
     },
     "medicoes-glosas-obras-publicas": {
       "headline": "Quando o dossiê de medição cabe, e quando não",
@@ -383,7 +377,7 @@
     },
     "reequilibrio-obras-publicas": {
       "headline": "Quando o dossiê de reequilíbrio cabe, e quando não",
-      "body": "O custo do dossiê é pontual e a conta fecha quando o desequilíbrio já morde a margem do contrato: o risco que você tem em jogo precisa ser maior que o trabalho de sustentar o pleito. Se eventos assim se repetem na carteira, a recorrência pede acompanhamento contínuo em vez de um dossiê por caso. Limite: sem ruptura documentável da equação original, o pleito não se sustenta, porque narrar aumento de custo não é fato novo. Nesse caso o próximo passo é organizar o registro interno ou fazer um diagnóstico antes de pleitear."
+      "body": "O custo do dossiê de reequilíbrio é pontual e se justifica quando o desequilíbrio já pressiona a margem ou o caixa do contrato. Se eventos assim se repetem na carteira, a recorrência indica acompanhamento contínuo em vez de um dossiê por caso, e o risco fica coberto o ano inteiro. Limite: sem ruptura documentável da equação original, o pleito não se sustenta, porque narrar aumento de custo não é fato novo. Nesse quadro a primeira entrega é a leitura do evento e do registro que falta, e ela também é feita aqui."
     },
     "acompanhamento-contratos-obras": {
       "headline": "Quando a rotina cabe, e quando não",

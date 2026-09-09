@@ -209,11 +209,11 @@
     "prior_clearance_invalidated"
   ],
   "next_steps": {
-    "CLEAR": "Nenhum sinal de conflito apareceu neste recorte. Os documentos só podem seguir por canal protegido depois da confirmação final.",
-    "CLEAR_WITH_DISCLOSURE": "A demanda pode seguir apenas com a condição registrada no canal protegido. Não envie documentos por esta página.",
-    "REVIEW_REQUIRED": "A demanda precisa de análise humana antes do envio de documentos.",
+    "CLEAR": "Nenhum sinal de conflito apareceu neste recorte. A confirmação final e a combinação de documentos acontecem no contato direto, em confenge.com.br/triagem-tecnica/.",
+    "CLEAR_WITH_DISCLOSURE": "A demanda pode seguir com a condição registrada, informada à outra parte. Combine a confirmação final em confenge.com.br/triagem-tecnica/ antes de enviar documentos.",
+    "REVIEW_REQUIRED": "Esta etapa termina com verificação humana: Tiago Jun Sasaki confirma se a CONFENGE pode atuar antes de qualquer documento. Descreva a demanda em confenge.com.br/triagem-tecnica/ para dar o próximo passo.",
     "DECLINE": "A CONFENGE não pode aceitar esta demanda. A resposta não expõe partes nem motivos protegidos.",
-    "UNKNOWN": "Ainda faltam informações para concluir. Não envie documentos até a análise ser retomada."
+    "UNKNOWN": "Ainda falta uma resposta essencial para concluir. Retome a triagem quando o dado existir, ou descreva a demanda em confenge.com.br/triagem-tecnica/. Não envie documentos até a confirmação."
   },
   "consumer_pins": {
     "taxonomy": "CONFENGE_CORPORATE_TAXONOMY/1.0.0-draft.20260904",
@@ -230,5 +230,5 @@
     "eyebrow": "Independência",
     "description": "Antes de receber documentos, a CONFENGE verifica se pode atuar com independência. A análise cobre trabalhos públicos, privados, periciais, avaliações e segurança do trabalho."
   },
-  "content_sha256": "9db68822a3f74146a1ac42b24562964c455ceeba0f297d47c3577a6fc6945fe0"
+  "content_sha256": "87db7e93381376fa1bb606f1f4d4562259f305734cc4f664ff4cd281a081b9d4"
 }

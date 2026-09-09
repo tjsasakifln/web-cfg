@@ -27,7 +27,8 @@
   "human_decision_rule": "classificação automática nunca encerra decisão humana",
   "public_copy_overrides": {
     "ausência de dado vira UNKNOWN": "ausência de dado aparece como NÃO INFORMADO",
-    "toda fonte pública é adquirida e versionada pelo extra-cli, não pelo web-cfg": "toda fonte pública tem origem e versão registradas antes da análise"
+    "toda fonte pública é adquirida e versionada pelo extra-cli, não pelo web-cfg": "toda fonte pública tem origem e versão registradas antes da análise",
+    "não é alerta ilimitado, assinatura, SaaS ou banco de dados do cliente": "não é alerta ilimitado, assinatura mensal, sistema hospedado ou banco de dados do cliente"
   },
   "common_inputs": [
     "CNPJ e decisão que está na mesa",
@@ -416,7 +417,7 @@
       "file": "casos/modelo-relatorio-executivo-consolidado/index.html",
       "price_cents": 375000,
       "price_display": "R$ 3.750",
-      "objeto_incluido": "integra módulos já reconciliados; não compra uma segunda pesquisa escondida",
+      "objeto_incluido": "módulos já reconciliados, integrados em um plano único, sem nova coleta de dados",
       "entrada": [
         "CNPJ e decisão que está na mesa",
         "território/raio e tipologias executáveis",

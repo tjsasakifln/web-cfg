@@ -41,8 +41,27 @@ def test_first_fold_answers_category_problem_result_trust_and_start() -> None:
     assert "Do problema técnico" in hero
     assert "à decisão documentada" in hero
     assert "projetos, imóveis, obras, perícias, segurança do trabalho ou contratos públicos" in hero
-    for deliverable in ("projeto", "orçamento", "laudo", "parecer", "plano de ação"):
-        assert deliverable in hero
+    # 2026-09-08. A lista antiga exigia "plano de acao" no hero. A primeira dobra
+    # dizia que o trabalho "pode resultar em" um daqueles formatos, e "plano de
+    # acao" era o unico que nao nomeia um documento assinado: tornava a entrega
+    # hipotetica no lugar de maior atencao da pagina. A propriedade protegida --
+    # a dobra nomeia os documentos que saem da mesa, e nao so a conversa --
+    # continua exigida, e com piso: pelo menos cinco documentos nomeados.
+    named = [
+        d
+        for d in (
+            "projeto",
+            "revisão",
+            "compatibilização",
+            "orçamento",
+            "laudo",
+            "parecer",
+            "avaliação",
+            "relatório",
+        )
+        if d in hero
+    ]
+    assert len(named) >= 5, named
     assert "Engenharia Civil pela EESC-USP" in hero
     assert "CNPJ 52.407.089/0001-09" in hero
     assert 'href="#situacoes"' in hero
@@ -62,7 +81,17 @@ def test_situation_chooser_has_five_paths_without_catalog_wall() -> None:
     for label in expected:
         assert label in chooser
     assert chooser.count('class="situation-row') == 5
-    assert 'href="/quantitativos-orcamento-obras/"' in chooser
+    # 2026-09-08. Esta linha exigia que a situacao de projeto apontasse para
+    # /quantitativos-orcamento-obras/: uma chamada que promete projetar,
+    # revisar, orcar e compatibilizar levando ao unico item que e orcamento.
+    # A trava congelava o defeito. A propriedade correta: as cinco situacoes tem
+    # cinco destinos distintos, nenhum repetido e todos internos.
+    hrefs = re.findall(r'class="situation-action"[^>]*href="([^"]+)"', chooser)
+    if not hrefs:
+        hrefs = re.findall(r'<a[^>]*class="situation-action"[^>]*href="([^"]+)"', chooser)
+    assert len(hrefs) == 5, hrefs
+    assert len(set(hrefs)) == 5, hrefs
+    assert all(h.startswith("/") for h in hrefs), hrefs
     assert chooser.count('href="/triagem-tecnica/#') == 3
     assert 'href="/servicos-obras-publicas/"' in chooser
     assert "ICP" not in chooser

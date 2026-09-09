@@ -59,7 +59,7 @@
           "current_label": "Descrever meu caso",
           "useful_next_state": "O contexto fica registrado para revisão de aderência, documentos mínimos e capacidade; o protocolo confirma que a análise pode ser enquadrada.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
-          "pre_form_value": "Registre a demanda e a decisão que está na mesa para a CONFENGE definir a entrega, a prova necessária e se temos capacidade de atender.",
+          "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
           "pre_form_value_visible": true,
           "field_purpose": {
             "visible_text": "Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
@@ -186,7 +186,7 @@
           "current_label": "Descrever meu caso",
           "useful_next_state": "O contexto fica registrado para revisão de aderência, documentos mínimos e capacidade; o protocolo confirma que a análise pode ser enquadrada.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
-          "pre_form_value": "Registre a demanda e a decisão que está na mesa para a CONFENGE definir a entrega, a prova necessária e se temos capacidade de atender.",
+          "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
           "pre_form_value_visible": true,
           "field_purpose": {
             "visible_text": "Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
@@ -287,8 +287,8 @@
           "href": "/diretoria-b2g/",
           "stage": "compare",
           "commitment": "low",
-          "current_label": "Operação B2G na execução",
-          "useful_next_state": "Abre o destino declarado por “Operação B2G na execução” para continuar a decisão.",
+          "current_label": "Diretoria Fracionada para o Mercado Público",
+          "useful_next_state": "Abre o destino declarado por “Diretoria Fracionada para o Mercado Público” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
           "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
@@ -347,7 +347,7 @@
           "current_label": "Solicitar canal seguro para envio",
           "useful_next_state": "O contexto fica registrado para revisão de aderência, documentos mínimos e capacidade; o protocolo confirma que a análise pode ser enquadrada.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
-          "pre_form_value": "Registre a demanda e a decisão que está na mesa para a CONFENGE definir a entrega, a prova necessária e se temos capacidade de atender.",
+          "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
           "pre_form_value_visible": true,
           "field_purpose": {
             "visible_text": "Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
@@ -1726,7 +1726,7 @@
           "current_label": "Solicitar canal seguro para envio",
           "useful_next_state": "O contexto fica registrado para revisão de aderência, documentos mínimos e capacidade; o protocolo confirma que a análise pode ser enquadrada.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
-          "pre_form_value": "Registre a demanda e a decisão que está na mesa para a CONFENGE definir a entrega, a prova necessária e se temos capacidade de atender.",
+          "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
           "pre_form_value_visible": true,
           "field_purpose": {
             "visible_text": "Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
@@ -1813,7 +1813,7 @@
           "href": "/ferramentas/diagnostico-defesa-margem/",
           "stage": "calculate",
           "commitment": "low",
-          "current_label": "Fazer uma primeira leitura do contrato",
+          "current_label": "Usar a ferramenta gratuita de diagnóstico de margem",
           "useful_next_state": "Abre a ferramenta pública para calcular ou inspecionar a situação antes do contato.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
@@ -1828,7 +1828,7 @@
           "href": "/ferramentas/diagnostico-defesa-margem/",
           "stage": "calculate",
           "commitment": "low",
-          "current_label": "Ainda estou verificando: fazer a primeira leitura",
+          "current_label": "Ainda estou verificando: usar a ferramenta gratuita",
           "useful_next_state": "Abre a ferramenta pública para calcular ou inspecionar a situação antes do contato.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
@@ -1934,7 +1934,7 @@
           "current_label": "Descrever meu caso",
           "useful_next_state": "O contexto fica registrado para revisão de aderência, documentos mínimos e capacidade; o protocolo confirma que a análise pode ser enquadrada.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
-          "pre_form_value": "Registre a demanda e a decisão que está na mesa para a CONFENGE definir a entrega, a prova necessária e se temos capacidade de atender.",
+          "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
           "pre_form_value_visible": true,
           "field_purpose": {
             "visible_text": "Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
@@ -2095,7 +2095,7 @@
           "current_label": "Pedir retorno da CONFENGE",
           "useful_next_state": "O contexto fica registrado para revisão de aderência, documentos mínimos e capacidade; o protocolo confirma que a análise pode ser enquadrada.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
-          "pre_form_value": "Registre a demanda e a decisão que está na mesa para a CONFENGE definir a entrega, a prova necessária e se temos capacidade de atender.",
+          "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
           "pre_form_value_visible": true,
           "field_purpose": {
             "visible_text": "Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
@@ -2223,7 +2223,7 @@
           "current_label": "Pedir avaliação de enquadramento",
           "useful_next_state": "O contexto fica registrado para revisão de aderência, documentos mínimos e capacidade; o protocolo confirma que a análise pode ser enquadrada.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
-          "pre_form_value": "Registre a demanda e a decisão que está na mesa para a CONFENGE definir a entrega, a prova necessária e se temos capacidade de atender.",
+          "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
           "pre_form_value_visible": true,
           "field_purpose": {
             "visible_text": "Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
@@ -2871,7 +2871,7 @@
               "mensagem"
             ]
           },
-          "boundary": "A leitura não é conclusão jurídica, não transforma UNKNOWN em fato e não recebe arquivo; documentos seguem apenas por canal seguro posterior. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary": "A leitura não é conclusão jurídica, não converte item pendente de conferência em fato e não recebe arquivo; documentos seguem apenas por canal seguro posterior. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
           "boundary_visible": true,
           "privacy_link_visible": true,
           "event_semantics": [
@@ -2936,7 +2936,7 @@
               "mensagem"
             ]
           },
-          "boundary": "A leitura não é conclusão jurídica, não transforma UNKNOWN em fato e não recebe arquivo; documentos seguem apenas por canal seguro posterior. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary": "A leitura não é conclusão jurídica, não converte item pendente de conferência em fato e não recebe arquivo; documentos seguem apenas por canal seguro posterior. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
           "boundary_visible": true,
           "privacy_link_visible": true,
           "event_semantics": [
@@ -2981,8 +2981,8 @@
           "runtime_profile": "shared_lead_form_v1",
           "stage": "request_fit_review",
           "commitment": "medium",
-          "submit_label": "Solicitar análise para CFG-D19",
-          "current_label": "Solicitar análise para CFG-D19",
+          "submit_label": "Solicitar o Dossiê de Aditivo e Serviço Extra",
+          "current_label": "Solicitar o Dossiê de Aditivo e Serviço Extra",
           "useful_next_state": "O contrato já lido fica vinculado ao pedido de segunda leitura; o protocolo confirma o registro para uma conferência humana contextual.",
           "actual_receipt": "lead_id ou receipt_id persistido e correlacionado ao identificador público do contrato",
           "pre_form_value": "Vincule a leitura pública a um pedido de conferência humana sem repetir os dados do contrato nem enviar documentos pelo site.",
@@ -3003,7 +3003,7 @@
               "email"
             ]
           },
-          "boundary": "A leitura não é conclusão jurídica, não transforma UNKNOWN em fato e não recebe arquivo; documentos seguem apenas por canal seguro posterior. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary": "A leitura não é conclusão jurídica, não converte item pendente de conferência em fato e não recebe arquivo; documentos seguem apenas por canal seguro posterior. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
           "boundary_visible": true,
           "privacy_link_visible": true,
           "event_semantics": [
@@ -3042,7 +3042,7 @@
           "useful_next_state": "Abre o destino declarado por “Veja a análise técnica para aditivos de obras públicas.” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "A leitura não é conclusão jurídica, não transforma UNKNOWN em fato e não recebe arquivo; documentos seguem apenas por canal seguro posterior.",
+          "boundary": "A leitura não é conclusão jurídica, não converte item pendente de conferência em fato e não recebe arquivo; documentos seguem apenas por canal seguro posterior.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -3155,11 +3155,11 @@
         {
           "cta_id": "home-private-quantities-budget",
           "position": "",
-          "href": "/quantitativos-orcamento-obras/",
+          "href": "/servicos/#servico-projeto",
           "stage": "compare",
           "commitment": "low",
-          "current_label": "Ver quantitativos e orçamento",
-          "useful_next_state": "Abre o destino declarado por “Ver quantitativos e orçamento” para continuar a decisão.",
+          "current_label": "Ver o que entregamos em projeto",
+          "useful_next_state": "Abre o destino declarado por “Ver o que entregamos em projeto” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
           "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem apenas por canal seguro combinado depois do protocolo.",
@@ -3294,7 +3294,7 @@
           "current_label": "Descrever meu caso",
           "useful_next_state": "O contexto fica registrado para revisão de aderência, documentos mínimos e capacidade; o protocolo confirma que a análise pode ser enquadrada.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
-          "pre_form_value": "Registre a demanda e a decisão que está na mesa para a CONFENGE definir a entrega, a prova necessária e se temos capacidade de atender.",
+          "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
           "pre_form_value_visible": true,
           "field_purpose": {
             "visible_text": "Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados. O e-mail precisa de domínio e extensão completos.",
@@ -3438,7 +3438,7 @@
           "current_label": "Registrar seguimento desta análise",
           "useful_next_state": "O contexto fica registrado para revisão de aderência, documentos mínimos e capacidade; o protocolo confirma que a análise pode ser enquadrada.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
-          "pre_form_value": "Registre a demanda e a decisão que está na mesa para a CONFENGE definir a entrega, a prova necessária e se temos capacidade de atender.",
+          "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
           "pre_form_value_visible": true,
           "field_purpose": {
             "visible_text": "Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
@@ -3503,7 +3503,7 @@
           "current_label": "Registrar seguimento desta análise",
           "useful_next_state": "O contexto fica registrado para revisão de aderência, documentos mínimos e capacidade; o protocolo confirma que a análise pode ser enquadrada.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
-          "pre_form_value": "Registre a demanda e a decisão que está na mesa para a CONFENGE definir a entrega, a prova necessária e se temos capacidade de atender.",
+          "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
           "pre_form_value_visible": true,
           "field_purpose": {
             "visible_text": "Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",

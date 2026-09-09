@@ -247,7 +247,7 @@ def render_all() -> list[Path]:
             role_label = "Responsável pela política"
             show_version_banner = False
             author_name = "Tiago Jun Sasaki"
-            wa_message = "Olá, Tiago. Quero verificar se a CONFENGE pode analisar minha demanda com independência."
+            wa_message = "Olá, Tiago. Quero descrever uma demanda técnica para a CONFENGE e combinar o próximo passo."
             written.append(_write("conflitos/conflict-gate.js", client_runtime_js(conflict)))
             from scripts.site.authority import policy_version_disclosure
 
@@ -278,7 +278,7 @@ def render_all() -> list[Path]:
         )
         if key == "conflicts":
             html_doc = html_doc.replace(
-                "Consultoria para licitações e contratos de obras públicas: análise de edital, orçamento, proposta e proteção de margem na execução para construtoras.",
+                "Engenharia, perícias e inteligência técnica: projeto, revisão, compatibilização, orçamento, inspeção, laudo, perícia, avaliação e segurança do trabalho, para clientes privados e públicos, com especialidade em licitações e contratos de obras públicas.",
                 "Serviços de engenharia, perícias e inteligência técnica para empresas, profissionais e órgãos públicos.",
             )
             html_doc, _removed = sanitize_html(

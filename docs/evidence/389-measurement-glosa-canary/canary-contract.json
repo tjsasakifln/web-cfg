@@ -24,7 +24,9 @@
     "commercial_destination": "/medicoes-glosas-obras-publicas/",
     "offer": "Dossiê de Medição, Glosa e Pagamento",
     "before_sha256": "455200070af5d118d3f564a9cf74de643d24a1511f058b61c30c070dfc708f8a",
-    "after_sha256": "e9a5138aa1a0aa17270327b0b78f4d59af3c85231ca5b3715dc33f3f42190e47"
+    "after_sha256": "7c33f71a4bb28a65e8a5afb6424643506497d5a373806f01bffbac2ba1a89c56",
+    "after_sha256_recaptured_at": "2026-09-08",
+    "after_sha256_recapture_reason": "Campanha de comunicacao publica (PR #644), recaptura final. Alem do cromo institucional compartilhado, esta pagina teve os quatro rotulos epistemicos em ingles (FACT, CALCULATION, INFERENCE, UNKNOWN) substituidos por rotulos em portugues no exemplo demonstrativo: Premissa do exemplo, Calculo, Leitura tecnica e O que falta confirmar no caso real. Eram vocabulario de controle interno impresso para o comprador de engenharia. A classificacao linha a linha -- que era a propriedade protegida -- continua exigida, agora em portugues, e os termos em ingles passaram a ser proibidos na superficie visivel. Nenhum fato, calculo, citacao legal, canonical, robots ou destino comercial mudou."
   },
   "selection_evidence": {
     "source": "seo/gsc-2026-08-09/Paginas.csv",
@@ -73,9 +75,10 @@
     "membership_changed": false,
     "new_sitemap_created": false,
     "lastmod_before": "2026-07-30",
-    "lastmod_after": "2026-08-29",
+    "lastmod_after": "2026-09-08",
     "recapture_registry": "data/bofu-dominance/frozen-specs/hashes.json",
-    "reason": "O build propaga a revisão factual do HTML ao lastmod da URL já existente. O corpo do canário foi reescrito em 2026-08-28 (CFG10X-06) e reconciliado com o main, as fontes oficiais e o gate do artefato publicado em 2026-08-29. As cinco superfícies de revisão da URL - article:modified_time, dateModified do JSON-LD, o \"Revisado em\" visível, a data de consulta das fontes e o lastmod do sitemap - declaram 2026-08-29. Divergência entre as cinco é barrada por scripts/organic/cluster_medicao_originality.revision_failures. Os seis pilares protegidos e a composição dos sitemaps permanecem inalterados."
+    "reason": "O build propaga a revisão factual do HTML ao lastmod da URL já existente. O corpo do canário foi reescrito em 2026-08-28 (CFG10X-06) e reconciliado com o main, as fontes oficiais e o gate do artefato publicado em 2026-08-29. As cinco superfícies de revisão da URL - article:modified_time, dateModified do JSON-LD, o \"Revisado em\" visível, a data de consulta das fontes e o lastmod do sitemap - declaram 2026-08-29. Divergência entre as cinco é barrada por scripts/organic/cluster_medicao_originality.revision_failures. Os seis pilares protegidos e a composição dos sitemaps permanecem inalterados.",
+    "lastmod_after_updated_reason": "2026-09-08. O corpo desta pagina mudou na campanha de comunicacao publica (rotulos epistemicos em ingles trocados por portugues, e a negativa generica de resultado tecnico substituida pelo que o recorte produz). Corpo alterado e data de revisao movida sao a mesma coisa: as quatro superficies de revisao e o lastmod do sitemap passaram para 2026-09-08. A data de consulta as fontes permanece 2026-08-29, porque as fontes nao foram reconsultadas -- as duas ancoras foram desacopladas em cluster_medicao_originality.py exatamente para nao forcar essa afirmacao falsa."
   },
   "content_contract": {
     "title": "Atraso na medição de obra pública: o que fazer | CONFENGE",
@@ -118,19 +121,19 @@
   "frozen_siblings": [
     {
       "path": "conteudos/glosa-de-medicao-obra-publica/index.html",
-      "sha256": "774d619e443033f7101fb5b4e1fcc7429ee6e8601798ec985c1c741622875e46"
+      "sha256": "3341c86ea9bc25be0fe7e605e97417d9e3cc8a32fe1045e81f866784b83625c3"
     },
     {
       "path": "conteudos/medicao-de-obra-publica-rejeitada/index.html",
-      "sha256": "739da67b9c9e5ec89fa3304e6d49081e19372da1b5eb53cd012a3fc2da865589"
+      "sha256": "884a64e1f80414299b108703c7f74ec219ff341b4a8bbb87bb85095874258fe8"
     },
     {
       "path": "conteudos/fiscal-nao-assina-medicao-obra-publica/index.html",
-      "sha256": "fc7d56a06bcf1473c39f864543f4a45bc5102a9e5ea6d849bf69df5f6eab8463"
+      "sha256": "bdc84e4efd2e6ca56206ad81b389855a84bdc3c46ab786a2790f56bf71aea5bf"
     },
     {
       "path": "medicoes-glosas-obras-publicas/index.html",
-      "sha256": "e340408565d0c02760f2c44e334d112db712ca955a9ce332ed8f28efbea1777d"
+      "sha256": "7cff440c571ebff52297d1be6503fd35ca8fea2b19b3af4c79c6b39b3935c4de"
     }
   ],
   "second_wave": {
@@ -181,5 +184,9 @@
       "sibling begins cannibalizing atraso_processamento_medicao"
     ]
   },
-  "adr": "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md"
+  "adr": "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md",
+  "sibling_sha256_recaptured_at": "2026-09-08",
+  "sibling_sha256_recapture_reason": "Campanha de comunicacao publica (PR #644). Verificado arquivo a arquivo que o diff destas paginas vs origin/main toca apenas cromo institucional compartilhado: a descricao Organization no JSON-LD e a frase de rodape. Nenhum corpo editorial, titulo, canonical, robots ou destino comercial mudou.",
+  "frozen_siblings_recaptured_at": "2026-09-08",
+  "frozen_siblings_recapture_reason": "Campanha de comunicacao publica (PR #644). Verificado linha a linha, contra origin/main, que estas paginas mudaram apenas por: (a) a descricao Organization no JSON-LD e a frase de rodape, cromo institucional compartilhado por todo o site; (b) a substituicao do bloco 'A entrega deve permitir decisao', que nao nomeava nenhum produto recebido, pelo que a pessoa efetivamente recebe; e (c) a retirada de 'Sem revisao independente: nao ha segundo revisor nomeado' da linha de Metodo, mantido 'Responsavel tecnico'. Nenhum criterio de medicao, glosa, parcela incontroversa, canonical, robots ou destino comercial mudou."
 }

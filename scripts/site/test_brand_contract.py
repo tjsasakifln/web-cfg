@@ -46,6 +46,14 @@ def test_no_approved_fabricated_cases():
     assert approved_cases() == []
 
 
+def _visible_home_text(html: str) -> str:
+    """Texto que uma pessoa le na home: sem script, style, svg e sem tags."""
+    import html as _h
+
+    stripped = re.sub(r"(?is)<(script|style|svg|noscript)[^>]*>.*?</\1>", " ", html)
+    stripped = re.sub(r"(?s)<!--.*?-->", " ", stripped)
+    return _h.unescape(re.sub(r"<[^>]+>", " ", stripped))
+
 def test_home_has_canonical_copy():
     brand = load_brand()
     hero = brand["hero"]
@@ -54,7 +62,15 @@ def test_home_has_canonical_copy():
     assert "Diretoria Fracionada para o Mercado Público" in html
     assert "Engenharia, Perícias e Inteligência Técnica" in html
     assert brand["positioning"]["org_description"] in html
-    assert "Obras públicas e B2G" in html
+    # 2026-09-08. Esta linha exigia o rotulo publico "Obras publicas e B2G".
+    # B2G e vocabulario interno: nenhum comprador de obra procura por isso, e
+    # a diretriz manda tirar a sigla de todo texto percebido pelo visitante.
+    # A propriedade que a linha protegia -- a home precisa apresentar a
+    # especialidade em obras publicas como secao propria, e nao dilui-la --
+    # continua verificada, agora pelo texto que o comprador usa.
+    assert "Especialidade em obras públicas" in html
+    assert "Obras públicas: edital, proposta e contrato em execução." in html
+    assert "B2G" not in _visible_home_text(html)
     assert 'name="diagnostico-b2g"' in html
     assert 'id="estagio"' in html
     assert 'id="urgencia"' in html

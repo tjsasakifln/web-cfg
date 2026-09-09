@@ -41,6 +41,10 @@ from scripts.site.test_organic_striking_distance_cro_01 import (  # noqa: E402,F
 )
 
 
+def _strip_tags(value: str) -> str:
+    return re.sub(r"<[^>]+>", " ", value)
+
+
 def _sha256(path: Path) -> str:
     # Keep the evidence stable across Windows and Linux checkouts.
     normalized = path.read_bytes().replace(b"\r\n", b"\n")
@@ -78,9 +82,25 @@ def test_measurement_delay_canary_389_is_single_url_and_fail_closed():
     page = ROOT / canary["source"]
     html = page.read_text(encoding="utf-8")
     visible_html = re.sub(r"<script[\s\S]*?</script>", "", html, flags=re.I)
+    # 2026-09-08: a trava exigia o byte-hash exato da página (_sha256(page) ==
+    # canary["after_sha256"]) e exigia a palavra UNKNOWN visível exatamente uma
+    # vez. Isso congelava a redação comercial junto com a medição e obrigava a
+    # página a estampar um rótulo epistêmico em inglês para o comprador de
+    # engenharia. A propriedade protegida era a integridade do contrato de
+    # medição do canário, não os bytes: rota indexável, uma única ponte
+    # comercial, um único link para o destino canônico, CTA com os atributos
+    # declarados, sem wa.me e sem formulário concorrente. Tudo isso continua
+    # verificado abaixo, item a item. O hash registrado permanece no contrato
+    # como marco histórico e é conferido como formato, não como congelamento.
+    # 2026-09-08 (revisao do integrador): a versao anterior desta linha trocou o
+    # vinculo de conteudo por um teste de formato do hash, o que nao substitui a
+    # protecao -- apaga. O hash aqui e procedencia: prova que a pagina servida e
+    # a que foi revisada. Isso permanece exigido. Quando a campanha altera a
+    # pagina legitimamente, o caminho e recapturar o hash com a razao escrita no
+    # proprio contrato, como esta feito em after_sha256_recapture_reason, e nao
+    # afrouxar a assercao.
     assert _sha256(page) == canary["after_sha256"]
     assert not re.search(r"\bowner\b", visible_html, re.I)
-    assert len(re.findall(r"\bUNKNOWN\b", visible_html)) == 1
 
     assert (
         '<meta content="index,follow,max-image-preview:large,max-snippet:-1,'
@@ -94,8 +114,15 @@ def test_measurement_delay_canary_389_is_single_url_and_fail_closed():
     assert f"<h1>{contract['content_contract']['h1']}</h1>" in html
     assert contract["content_contract"]["direct_answer_fragment"] in html
     assert contract["content_contract"]["demonstrative_example_label"] in html
+    # 2026-09-08: a trava exigia cada rótulo de required_epistemic_labels
+    # literalmente no HTML (FACT, CALCULATION, INFERENCE, UNKNOWN). Era o mesmo
+    # defeito da lista de exceções: vocabulário de controle interno impresso
+    # para o visitante. A propriedade protegida -- o exemplo demonstrativo
+    # continua classificando cada linha -- é verificada adiante nos <dt> em
+    # português da <dl class="stage-meta">. Aqui a lista passa a ser o que a
+    # superfície pública não pode exibir.
     for label in contract["content_contract"]["required_epistemic_labels"]:
-        assert label in html
+        assert label not in visible_html, label
 
     title_h1 = " ".join(re.findall(r"<(?:title|h1)>(.*?)</(?:title|h1)>", html, re.S)).lower()
     for prohibited in contract["content_contract"]["prohibited_target_intents_in_title_h1"]:
@@ -174,27 +201,41 @@ def test_measurement_delay_canary_389_is_single_url_and_fail_closed():
     assert terminal["no_prefix_fallback"] is True
     assert terminal["destination"] == canary["commercial_destination"]
 
+    # 2026-09-08: a trava exigia quatro exceções de plain_language registradas
+    # para esta rota e exigia que FACT, CALCULATION, INFERENCE e UNKNOWN
+    # aparecessem, cada um uma vez, como <dt> visível na tabela do exemplo.
+    # Isso era o defeito: quatro rótulos internos em inglês maiúsculo dentro do
+    # bloco que o comprador de engenharia precisa ler. A propriedade protegida
+    # era a rastreabilidade do exemplo demonstrativo -- cada linha declara se é
+    # premissa assumida, conta, leitura técnica ou lacuna -- e o escopo
+    # route-exact da exceção. As duas continuam verificadas, agora com proteção
+    # maior: os rótulos permanecem obrigatórios, em português, e os termos em
+    # inglês passam a ser proibidos na superfície visível em vez de exigidos.
     plain = contract["plain_language_contract"]
+    assert plain["scope"] == "ROUTE_EXACT"
+    assert plain["other_english_internal_labels_allowed"] is False
     scoped = [
         row
         for row in copy_exceptions["exceptions"]
         if row.get("rule") == "plain_language" and row.get("path") == plain["path"]
     ]
-    assert {row["match"] for row in scoped} == set(plain["required_editorial_tokens"])
-    assert len(scoped) == 4
-    assert all("route-exact" in row["reason"] for row in scoped)
-    assert plain["scope"] == "ROUTE_EXACT"
-    assert plain["other_english_internal_labels_allowed"] is False
+    assert scoped == [], scoped
+    for token_pattern in plain["required_editorial_tokens"]:
+        token = re.compile(token_pattern, re.I)
+        assert not token.search(_strip_tags(visible_html)), token_pattern
     classification_terms = [
-        re.sub(r"<[^>]+>", "", value)
-        for value in re.findall(r"<dt\b[^>]*>(.*?)</dt>", article_html, re.I | re.S)
+        _strip_tags(value).strip()
+        for value in re.findall(
+            r"<dl class=\"stage-meta\">(.*?)</dl>", article_html, re.I | re.S
+        )
+        for value in re.findall(r"<dt\b[^>]*>(.*?)</dt>", value, re.I | re.S)
     ]
-    for row in scoped:
-        token = re.compile(row["match"], re.I)
-        assert len(token.findall(visible_html)) == 1, row["match"]
-        assert sum(bool(token.search(term)) for term in classification_terms) == 1, row[
-            "match"
-        ]
+    assert classification_terms == [
+        "Premissa do exemplo",
+        "Cálculo",
+        "Leitura técnica",
+        "O que falta confirmar no caso real",
+    ], classification_terms
 
     interface = contract["interface_quality_coverage"]
     representative = next(

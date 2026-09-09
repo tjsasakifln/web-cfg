@@ -364,6 +364,15 @@ def _hub_label(archetype: str) -> tuple[str, str]:
     }.get(archetype, ("Conteúdos", "/conteudos/"))
 
 
+def _default_aside_title(archetype: str) -> str:
+    """Say what the reader takes to the contract, in the buyer's own words."""
+    return {
+        "guia": "Aplicar este roteiro ao seu contrato",
+        "lei_14133": "Aplicar esta regra ao seu contrato",
+        "jurisprudencia": "Aplicar esta leitura ao seu contrato",
+    }.get(archetype, "Aplicar esta análise ao seu contrato")
+
+
 def render_page(page: dict[str, Any]) -> str:
     archetype = page.get("archetype") or "guia"
     hub_name, hub_url = _hub_label(archetype)
@@ -551,7 +560,7 @@ def render_page(page: dict[str, Any]) -> str:
 <aside class="article-aside" aria-label="Ações laterais">
 <div class="aside-card aside-card--primary">
 <span class="aside-kicker">Diagnóstico CONFENGE</span>
-<h2 class="aside-title">{e(page.get('aside_title') or 'Aplicar este enquadramento ao seu contrato')}</h2>
+<h2 class="aside-title">{e(page.get('aside_title') or _default_aside_title(archetype))}</h2>
 <p class="aside-text">{e(page.get('aside_blurb') or 'Organize documentos, riscos e próximos passos com base no cenário real da obra.')}</p>
 <div class="aside-actions">
 <a class="button button-primary" data-cta-position="aside" data-cta-channel="whatsapp" href="{e(wa_link(page.get('cta_whatsapp') or ''))}" rel="noopener" target="_blank">{e(page.get('cta_wa_label') or 'Conversar pelo WhatsApp')}</a>
@@ -590,6 +599,16 @@ def render_page(page: dict[str, Any]) -> str:
     )
 
 
+def _archetype_badge(archetype: str | None) -> str:
+    """Rotulo legivel do card: o visitante nunca ve o id de maquina."""
+    return {
+        "lei_14133": "Lei 14.133",
+        "jurisprudencia": "Jurisprudência",
+        "guia": "Guia",
+        "inteligencia": "Inteligência de mercado",
+    }.get(archetype or "", "Guia")
+
+
 def render_hub(hub: dict[str, Any], pages: list[dict[str, Any]]) -> str:
     title = hub["title"]
     desc = hub["description"]
@@ -601,7 +620,7 @@ def render_hub(hub: dict[str, Any], pages: list[dict[str, Any]]) -> str:
             continue
         cards.append(
             f'<article class="library-item"><div class="library-rank"></div><div>'
-            f'<span class="content-badge guide-badge">{e(p.get("archetype") or "guia")}</span>'
+            f'<span class="content-badge guide-badge">{e(_archetype_badge(p.get("archetype")))}</span>'
             f'<h2><a href="{e(p["url"])}">{e(p["title"])}</a></h2>'
             f'<p>{e(p.get("meta_description") or p.get("direct_answer","")[:160])}</p>'
             f"</div></article>"
@@ -622,11 +641,33 @@ def render_hub(hub: dict[str, Any], pages: list[dict[str, Any]]) -> str:
         )
     else:
         library_block = ""
+
+    # Um hub tem de entregar leitura util a quem chega por qualquer tema do
+    # titulo, nao apenas ao unico arquetipo publicado nele.
+    related_items = hub.get("related") or []
+    if related_items:
+        related_cards = "".join(
+            f'<article class="library-item"><div class="library-rank"></div><div>'
+            f'<h2><a href="{e(r["url"])}">{e(r["title"])}</a></h2>'
+            f'<p>{e(r["blurb"])}</p>'
+            f"</div></article>"
+            for r in related_items
+        )
+        related_block = (
+            '<section class="section section--tight"><div class="container">'
+            '<header class="section-head"><p class="eyebrow">Na biblioteca</p>'
+            f'<h2>{e(hub.get("related_title") or "Leituras que continuam este tema")}</h2>'
+            f'<p class="section-lead">{e(hub.get("related_lead") or "")}</p></header>'
+            f'<div class="library-list">{related_cards}</div>'
+            "</div></section>"
+        )
+    else:
+        related_block = ""
     case_cta = f"""
 <section class="section section--tight" data-hub-case-cta><div class="container">
 <div class="lead-inline" data-cta-position="hub-footer">
 <div class="lead-inline-copy"><span>Próximo passo</span><strong>Levou uma dúvida do hub para o seu contrato?</strong>
-<p>Envie o tema e os documentos principais. Retorno com enquadramento inicial.</p></div>
+<p>Envie o tema e os documentos principais. Você recebe uma leitura inicial do caso: o que os documentos sustentam, o que falta reunir e qual o próximo passo.</p></div>
 <div class="lead-inline-actions">
 <a class="button button-primary" data-cta-position="hub-footer" data-cta-channel="whatsapp" href="{e(wa_link(wa_msg))}" rel="noopener" target="_blank">Enviar pelo WhatsApp</a>
 <a class="button button-secondary" data-cta-position="hub-footer" data-cta-channel="email" href="{e(mailto_href('tiago.sasaki@confenge.com.br', mail_subject, mail_body))}">Solicitar análise por e-mail</a>
@@ -641,6 +682,7 @@ def render_hub(hub: dict[str, Any], pages: list[dict[str, Any]]) -> str:
 <p class="content-lead">{e(desc)}</p>
 </div></header>
 {library_block}
+{related_block}
 {case_cta}
 """
     graph = [

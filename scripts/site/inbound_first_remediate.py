@@ -1120,6 +1120,7 @@ def remediate_hub(brand: dict[str, Any]) -> dict[str, Any]:
 <p class="eyebrow">Biblioteca técnica</p>
 <h1>Qual problema de licitação ou contrato você precisa resolver?</h1>
 <p class="content-lead">Análises técnicas para construtoras e empresas de engenharia: edital, orçamento, medição, aditivo, reequilíbrio, atraso e defesa. Digite o que travou a obra (glosa, BDI, SINAPI, aditivo). A lista aponta a análise e o próximo passo.</p>
+<p class="content-lead">As análises desta biblioteca tratam de licitações, contratos e obras públicas. Perícia, laudo, projeto e segurança do trabalho entram pela <a href="/triagem-tecnica/">triagem técnica</a>.</p>
 <div class="hub-search-priority directory-search">
 <label for="hub-search">Buscar por problema</label>
 <input id="hub-search" name="q" type="search" autocomplete="off" placeholder="Ex.: aditivo, glosa, BDI, atraso, reequilíbrio" data-hub-search aria-controls="diretorio"/>
@@ -1141,7 +1142,7 @@ def remediate_hub(brand: dict[str, Any]) -> dict[str, Any]:
 <header class="section-head">
 <p class="eyebrow">Navegação por situação</p>
 <h2>Onde você está no ciclo do contrato?</h2>
-<p class="section-lead">Três estágios. Temas sem conteúdo público não aparecem como opção principal.</p>
+<p class="section-lead">Três estágios do contrato. Escolha o momento em que a sua obra está e veja as análises daquele ponto.</p>
 </header>
 {stage_html}
 </div></section>"""
@@ -1323,9 +1324,8 @@ def remediate_hub(brand: dict[str, Any]) -> dict[str, Any]:
                 '<div class="container">'
                 '<p class="eyebrow">Ferramentas e pesquisa</p>'
                 "<h2>Do guia à decisão com evidência</h2>"
-                "<p>Use as ferramentas gratuitas e o Radar aberto (metodologia e demanda verificável). "
-                "Páginas de inteligência de mercado só entram na navegação pública depois de revisão técnica "
-                "e critérios de singularidade.</p>"
+                "<p>Use as ferramentas gratuitas para testar os seus números e o Radar aberto "
+                "para acompanhar a demanda pública, com a metodologia à vista.</p>"
                 '<p><a class="button button-secondary" href="/ferramentas/">Abrir ferramentas</a> '
                 '<a class="button button-secondary" href="/radar/nacional-obras-publicas/">Radar Nacional</a></p>'
                 "</div></section>"
@@ -1649,7 +1649,7 @@ def remediate_pillars(brand: dict[str, Any]) -> dict[str, Any]:
                     f'<div class="pillar-evidence">'
                     f'<p class="pillar-evidence-count"><strong>{n_kept}</strong> '
                     f"{guide_word} neste tema</p>"
-                    f'<p class="pillar-evidence-note">Engenharia, contrato e impacto econômico no mesmo enquadramento.</p>'
+                    f'<p class="pillar-evidence-note">Engenharia, contrato e impacto econômico lidos em conjunto.</p>'
                     f"</div>"
 ),
                 html,

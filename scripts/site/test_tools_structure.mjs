@@ -77,13 +77,23 @@ const MONEY_ASSET_SECTIONS = [
   "Eventos de defesa de margem",
   "Evidências e fontes",
   "O que merece conferência",
-  "Limites e UNKNOWN",
   "Pedir uma segunda leitura do contrato",
 ];
+// 2026-09-08: a lista exigia o título literal "Limites e UNKNOWN". A trava
+// obrigava um rótulo de estado interno em inglês a ficar no h2 que o comprador
+// lê -- o próprio defeito de redação que esta campanha corrige, na mesma forma
+// do caso "Timeline" tratado acima. A seção continua obrigatória, agora pelo id
+// estável E por um título em português, e a proteção é maior: o h2 reprova se
+// trouxer o jargão e a seção reprova se deixar de nomear a pendência.
 function moneyAssetSectionsMissing(html) {
   const missing = MONEY_ASSET_SECTIONS.filter((section) => !html.includes(section));
   if (!/id="h-timeline"/.test(html)) missing.push("id=h-timeline");
   if (/>\s*Timeline\s*</.test(html)) missing.push("heading-em-ingles");
+  if (!/id="h-unknown"/.test(html)) missing.push("id=h-unknown");
+  const limitsHeading = html.match(/<h2 id="h-unknown">([^<]*)<\/h2>/);
+  if (!limitsHeading) missing.push("h2-limites-ausente");
+  else if (/\bUNKNOWN\b/.test(limitsHeading[1])) missing.push("titulo-limites-em-jargao");
+  else if (!/(pend[êe]ncia|confer)/i.test(limitsHeading[1])) missing.push("titulo-limites-sem-pendencia");
   return missing;
 }
 {
@@ -99,6 +109,15 @@ function moneyAssetSectionsMissing(html) {
     '<h2 id="h-timeline">Timeline</h2>',
   );
   const dropped = money.replace(/<h2 id="h-timeline">[^<]*<\/h2>/, "");
+  // 2026-09-08: contraprova do título de limites -- o jargão que a trava
+  // antiga exigia agora tem de reprovar, e a seção continua não podendo sumir.
+  const jargon = money.replace(/<h2 id="h-unknown">[^<]*<\/h2>/, '<h2 id="h-unknown">Limites e UNKNOWN</h2>');
+  const limitsDropped = money.replace(/<h2 id="h-unknown">[^<]*<\/h2>/, "");
+  if (!moneyAssetSectionsMissing(jargon).includes("titulo-limites-em-jargao")
+      || !moneyAssetSectionsMissing(limitsDropped).length) {
+    console.error("FAIL money_limits_heading_counter_case");
+    fail++;
+  } else console.log("PASS money_limits_heading_counter_case");
   if (moneyAssetSectionsMissing(english).length && moneyAssetSectionsMissing(dropped).length) {
     console.log("PASS money_asset_sections_counter_case");
   } else {

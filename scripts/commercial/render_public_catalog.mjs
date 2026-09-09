@@ -430,19 +430,21 @@ ${renderOfferLadder(eightContract)}
 </section>`;
 }
 
+// 2026-09-08. Esta pagina publicava o estado comercial interno de cada uma das
+// 54 frentes: "Em validacao -- ainda nao e oferta pronta para contratacao" 44
+// vezes, e "Bloqueada -- indisponivel enquanto ... nao cumprir o gate" duas.
+// Era um inventario do que a empresa ainda nao vende, exibido na pagina que o
+// rodape de todo o site chama de "Entregas".
+//
+// Os estados continuam integros no registro (registry.public_state segue sendo
+// a fonte, e nada foi promovido a disponivel para sumir com um contador): o que
+// muda e que a vitrine deixa de ser onde eles aparecem. Quem tem oferta
+// publicada ganha o link para ela; as demais frentes ganham o convite
+// contextual para descrever a situacao, que e o caminho real de atendimento.
 const CAPABILITY_STATE = {
-  PUBLISHED: {
-    label: "Publicada",
-    explanation: "Oferta publicada acima, com preço, escopo e SLA consultáveis.",
-  },
-  VALIDATE: {
-    label: "Em validação",
-    explanation: "Capacidade em validação. Ainda não é oferta pronta para contratação.",
-  },
-  BLOCKED: {
-    label: "Bloqueada",
-    explanation: "Capacidade indisponível enquanto cobertura, proveniência ou dependência externa não cumprir o gate.",
-  },
+  PUBLISHED: { label: "Oferta publicada" },
+  VALIDATE: { label: "Sob consulta" },
+  BLOCKED: { label: "Sob consulta" },
 };
 
 function renderCapabilityItem(entry) {
@@ -453,6 +455,10 @@ function renderCapabilityItem(entry) {
   // padding, papel nem ARIA: existia so para ocupar a coluna 2 da grade, o que
   // grid-column/grid-row fazem sem elemento. Sao 54 nos devolvidos ao orcamento
   // de DOM de /entregas/, um por capacidade do rol.
+  // Um link por capacidade publicada, e nenhum nas demais: o convite para
+  // descrever a situacao aparece uma vez por porta, no rodape do grupo, em vez
+  // de 46 vezes identicas. Alem de estourar o orcamento de links de <main>, a
+  // repeticao nao ajudava ninguem a decidir.
   const action = entry.public_state === "PUBLISHED"
     ? `<a href="#entrega-${entry.catalog_number}">Ver oferta publicada acima</a>`
     : "";
@@ -461,9 +467,7 @@ function renderCapabilityItem(entry) {
   // alem de dizer, leva. Os estados nao publicados nao tem link e mantem a
   // explicacao, que e a unica coisa que diz por que a capacidade nao esta a
   // venda.
-  const explanation = entry.public_state === "PUBLISHED"
-    ? ""
-    : `<small>${state.explanation}</small>`;
+  const explanation = "";
   return `<li class="capability-item capability-item--${entry.public_state.toLocaleLowerCase()}" data-capability-id="${entry.deliverable_id}" data-public-state="${entry.public_state}"><span class="capability-item__number">${entry.catalog_number}</span><strong>${escapeHtml(entry.public_name_pt_br)}</strong><small>${escapeHtml(entry.decision_question)}</small><span class="capability-item__maturity"><strong>${state.label}</strong>${explanation}${action}</span></li>`;
 }
 
@@ -483,11 +487,9 @@ function renderCapabilityRoll(registry, taskDoors) {
         state,
         entries.filter((entry) => entry.public_state === state).length,
       ]));
-      const maturity = [
-        counts.PUBLISHED ? `${counts.PUBLISHED} publicada${counts.PUBLISHED === 1 ? "" : "s"}` : "",
-        counts.VALIDATE ? `${counts.VALIDATE} em validação` : "",
-        counts.BLOCKED ? `${counts.BLOCKED} bloqueada${counts.BLOCKED === 1 ? "" : "s"}` : "",
-      ].filter(Boolean).join(" · ");
+      const maturity = counts.PUBLISHED
+        ? `${counts.PUBLISHED} com oferta publicada`
+        : "sob consulta";
       return `<details class="capability-group" data-task-door="${door.door}"><summary><span>${String(door.order).padStart(2, "0")}</span><strong>${escapeHtml(door.public_label_pt_br)}</strong><small>${entries.length} capacidades · ${maturity}</small></summary><div class="capability-group__body"><p>${escapeHtml(door.decision_question_pt_br)}</p><ol>${entries.map(renderCapabilityItem).join("\n")}</ol></div></details>`;
     }).join("\n");
   const expectedIds = registry.deliverables.map((entry) => entry.deliverable_id).sort();
@@ -496,8 +498,7 @@ function renderCapabilityRoll(registry, taskDoors) {
   }
   return `<section class="capability-roll" id="rol-taxativo" data-section-archetype="reading_method" aria-labelledby="capability-roll-title">
 <div class="container">
-<header class="capability-roll__intro"><p class="eyebrow">Rol taxativo</p><h2 id="capability-roll-title">54 capacidades do rol taxativo, organizadas pela decisão do comprador.</h2><p>Este índice preserva o universo comercial da CONFENGE; ele não afirma que existem 54 ofertas prontas. Hoje são <strong>8 publicadas</strong>, <strong>44 em validação</strong> e <strong>2 bloqueadas</strong>. Abra uma situação para consultar nomes, perguntas e maturidade.</p></header>
-<div class="capability-state-legend" aria-label="Significado dos estados comerciais"><div><strong>PUBLICADA</strong><span>8 ofertas contratáveis ou consultáveis agora</span></div><div><strong>EM VALIDAÇÃO</strong><span>44 capacidades ainda sem oferta pronta</span></div><div><strong>BLOQUEADA</strong><span>2 capacidades indisponíveis até cumprir o gate</span></div></div>
+<header class="capability-roll__intro"><p class="eyebrow">Todo o trabalho</p><h2 id="capability-roll-title">As 54 frentes de trabalho, organizadas pela pergunta que está na mesa.</h2><p><strong>Oito têm oferta publicada acima</strong>, com preço, escopo e prazo consultáveis. As outras se contratam sob consulta: descreva a situação e dizemos qual documento resolve, que informação é necessária e em que condições. Abra uma situação para conhecer os nomes e as perguntas que cada frente responde.</p></header>
 <div class="capability-groups">${groups}</div>
 </div>
 </section>`;

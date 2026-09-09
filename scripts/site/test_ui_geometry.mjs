@@ -598,8 +598,32 @@ async function main() {
       })),
     );
     if (routes.length !== 5) throw new Error(`expected five situation routes: ${JSON.stringify(routes)}`);
-    if (routes[0].href !== "/quantitativos-orcamento-obras/") {
-      throw new Error(`promoted quantities route lost its canonical: ${JSON.stringify(routes[0])}`);
+    // 2026-09-08. Esta linha exigia que a situacao 01 -- "Projetar, revisar,
+    // orcar ou compatibilizar" -- apontasse para /quantitativos-orcamento-obras/.
+    // Era uma chamada que promete quatro servicos levando ao unico que e
+    // orcamento: quem chegou para projeto executivo ou compatibilizacao era
+    // conduzido a outra coisa. A trava congelava o defeito.
+    //
+    // A propriedade correta: o destino da situacao 01 tem de cobrir o que o
+    // rotulo promete, e a rota de quantitativos nao pode ficar orfa -- ela
+    // continua alcancavel a partir do destino, agora como um passo adiante.
+    if (!routes[0].href.startsWith("/servicos/") && routes[0].href !== "/quantitativos-orcamento-obras/") {
+      throw new Error(`situacao de projeto sem destino de projeto: ${JSON.stringify(routes[0])}`);
+    }
+    {
+      const target = routes[0].href.split("#")[0];
+      if (target !== "/quantitativos-orcamento-obras/") {
+        await page.goto(`${BASE}${target}`, { waitUntil: "networkidle0" });
+        const reachesQuantities = await page.evaluate(() =>
+          [...document.querySelectorAll("a[href]")].some(
+            (el) => (el.getAttribute("href") || "").startsWith("/quantitativos-orcamento-obras/"),
+          ),
+        );
+        if (!reachesQuantities) {
+          throw new Error(`quantitativos ficou orfa a partir de ${target}`);
+        }
+        await page.goto(`${BASE}/`, { waitUntil: "networkidle0" });
+      }
     }
     if (!routes.slice(1, 4).every((item) => item.href.startsWith("/triagem-tecnica/#"))) {
       throw new Error(`unpublished non-B2G routes must fall back to triage: ${JSON.stringify(routes)}`);
@@ -1084,7 +1108,13 @@ async function main() {
         const hasSuccess = await page.$("[data-lead-success]");
         if (!hasSuccess) throw new Error(`${path} missing data-lead-success`);
       } else {
-        if (!labels.some((l) => /diagnosticar|solicitar diagnóstico|falar com a confenge|contato/i.test(l))) {
+        // 2026-09-08. "solicitar diagnostico" continua aceito para nao quebrar
+        // outras rotas da familia, mas o rotulo da pagina do especialista mudou:
+        // prometia um diagnostico e o destino era /triagem-tecnica/. Rotulo e
+        // destino tem de coincidir, entao "descrever a situacao" entra na
+        // familia. A propriedade -- a pagina de quem assina oferece um caminho
+        // de atendimento nomeado -- continua exigida.
+        if (!labels.some((l) => /diagnosticar|solicitar diagnóstico|descrever a situação|explicar minha demanda|falar com a confenge|contato/i.test(l))) {
           throw new Error(`specialist missing primary family: ${labels.join(" | ")}`);
         }
         if (labels.some((l) => /analisar meu cenário|apresentar uma demanda/i.test(l))) {

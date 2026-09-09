@@ -46,7 +46,10 @@ CLUSTER_PAGE_CONTRACTS: tuple[ClusterPageContract, ...] = (
         ),
         artifact_decision_output="R$ 78.000,00 sem controvérsia no exemplo",
         decision_question="Qual etapa está parada?",
-        next_action="Avaliar o Dossiê de Medição, Glosa e Pagamento",
+        # 2026-09-08. O rotulo antigo, "Avaliar o Dossie de Medicao, Glosa e
+        # Pagamento", prometia avaliar a entrega e o href levava a uma pagina
+        # institucional de servico. O rotulo agora diz para onde leva.
+        next_action="Ver o serviço de medições, glosas e pagamentos",
         cta_family="dossie",
         source_ids=(
             "lei-14133-art92-medicao",
@@ -399,15 +402,29 @@ def load_jsonld(html: str) -> list[dict]:
 # changed, not a build clock: REVISION_BODY_SHA256 below pins the date-masked
 # body of each page, so editing the prose without moving this date fails the
 # gate, and moving this date without editing the prose fails it too.
-CLUSTER_REVISION = "2026-08-29"
+CLUSTER_REVISION = "2026-09-08"
 
+# 2026-09-08. Antes, a data em que as fontes foram consultadas era exigida igual
+# a CLUSTER_REVISION. O acoplamento estava errado e era perigoso: qualquer
+# revisao de redacao passava a exigir que as paginas declarassem ter reconsultado
+# a Lei 14.133 e os acordaos do TCU naquele dia, o que seria falso. Revisar a
+# palavra de um rotulo nao e reler a fonte. As duas datas passam a ser
+# independentes: CLUSTER_REVISION move com o corpo; SOURCES_CONSULTED_AT so move
+# quando as fontes sao efetivamente reconsultadas, e continua exigida igual em
+# todas as paginas do cluster e em cada registro de fonte.
+SOURCES_CONSULTED_AT = "2026-08-29"
+
+# 2026-09-08. "sources_consulted_on" saiu desta tupla: e superficie de
+# procedencia da FONTE, nao de revisao do texto, e agora e conferida contra
+# SOURCES_CONSULTED_AT logo abaixo. As quatro que restam sao as que de fato
+# declaram quando o texto mudou, e continuam obrigadas a concordar entre si.
 REVISION_SURFACES: tuple[str, ...] = (
     "meta_modified_time",
     "jsonld_date_modified",
     "visible_revised_on",
-    "sources_consulted_on",
     "sitemap_lastmod",
 )
+SOURCE_PROVENANCE_SURFACES: tuple[str, ...] = ("sources_consulted_on",)
 
 _PT_MONTHS = (
     "janeiro", "fevereiro", "março", "abril", "maio", "junho",
@@ -514,9 +531,9 @@ def content_fingerprint(html: str) -> str:
 # only together with a new CLUSTER_REVISION, because a changed body is a
 # changed revision date by definition.
 REVISION_BODY_SHA256: dict[str, str] = {
-    "atraso-na-medicao-obra-publica": "ec6f1034dedc7014d9af5a9676e83a316a74072004c64a25e84f4068fb2abf34",
+    "atraso-na-medicao-obra-publica": "14e26b7522ad2e0ee61eae5122963ded3cd4e230917559200b35d0cecde8d9b6",
     "fiscal-nao-assina-medicao-obra-publica": "64023e36c2d84ecd7976394e07ab30eb94c72656b33efa3ce757b736e5fd6233",
-    "glosa-por-qualidade-obra-publica": "ae9294d461fa979791485dd4eff29c8ca0034b02dbeaa51cea4fcf6c2ecf5392",
+    "glosa-por-qualidade-obra-publica": "fc356105ef4ee6118c7a1fce3bb0e0c4c05df2963a124c352db24d3ea0a1e543",
     "medicao-por-evento-obra-publica": "7c14f8ff418a07609e4fbc3a512adec6a131ec206d03746eb09514a0211e77f3",
     "pagamento-parcial-etapa-empreitada-global": "e2df8173f111e49caf99a90ce6a02e6957b188f846a1a76d4a2a0fb1638217b6",
     "atraso-pagamento-contrato-publico-suspender": "376986b4ebbacceda21c939d2fb046dcaac1a9476e5cc00bc32f6d2d26e7108d",
@@ -821,10 +838,10 @@ def source_provenance_failures(
         if not record:
             out.append(f"{slug}: source {source_id!r} absent from SOURCE-MANIFEST")
             continue
-        if record.get("accessed_at") != CLUSTER_REVISION:
+        if record.get("accessed_at") != SOURCES_CONSULTED_AT:
             out.append(
                 f"{slug}: source {source_id!r} accessed_at "
-                f"{record.get('accessed_at')!r}, expected {CLUSTER_REVISION!r}"
+                f"{record.get('accessed_at')!r}, expected {SOURCES_CONSULTED_AT!r}"
             )
         for field in ("body", "device", "limitations", "url"):
             if not record.get(field):
@@ -865,16 +882,29 @@ def revision_failures(slug: str, page: dict) -> list[str]:
             f"revision is {CLUSTER_REVISION!r}"
         )
 
-    expected_br = format_date_br(CLUSTER_REVISION)
-    for iso_key, text_key in (
-        ("visible_revised_on", "visible_revised_on_text"),
-        ("sources_consulted_on", "sources_consulted_on_text"),
+    # Cada data confere o proprio par ISO/texto contra a sua ancora: a revisao
+    # do texto contra CLUSTER_REVISION, a consulta as fontes contra
+    # SOURCES_CONSULTED_AT. Antes as duas eram medidas pela mesma ancora, o que
+    # obrigaria a pagina a declarar reconsulta de fonte a cada ajuste de redacao.
+    for iso_key, text_key, anchor in (
+        ("visible_revised_on", "visible_revised_on_text", CLUSTER_REVISION),
+        ("sources_consulted_on", "sources_consulted_on_text", SOURCES_CONSULTED_AT),
     ):
         text = rev.get(text_key, "")
-        if stated[iso_key] == CLUSTER_REVISION and text != expected_br:
+        if rev.get(iso_key, "") == anchor and text != format_date_br(anchor):
             out.append(
                 f"{slug}: {text_key} reads {text!r} but the machine-readable date is "
-                f"{CLUSTER_REVISION!r} ({expected_br!r})"
+                f"{anchor!r} ({format_date_br(anchor)!r})"
+            )
+    # A superficie de procedencia da fonte precisa declarar a data de consulta.
+    for key in SOURCE_PROVENANCE_SURFACES:
+        value = rev.get(key, "")
+        if not value:
+            out.append(f"{slug}: source provenance surface {key} is missing")
+        elif value != SOURCES_CONSULTED_AT:
+            out.append(
+                f"{slug}: {key} states {value!r} but the sources were consulted on "
+                f"{SOURCES_CONSULTED_AT!r}"
             )
 
     pinned = REVISION_BODY_SHA256.get(slug)

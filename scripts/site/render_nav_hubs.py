@@ -257,7 +257,7 @@ def _services_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
 <section class="lead-inline" data-commercial-route="medicoes-glosas" aria-label="Rota para medição, glosa e pagamento">
 <div class="lead-inline-copy"><span>Medição ou glosa sob pressão</span>
 <strong>Dossiê de Medição, Glosa e Pagamento</strong>
-<p>Uma medição ou glosa do mesmo período, organizada em fatos, cálculo, provas e lacunas. Prazo-piloto de 5 dias úteis após os documentos mínimos. Não é petição jurídica nem promessa de recebimento.</p></div>
+<p>Uma medição ou glosa do mesmo período, organizada em fatos, cálculo, provas e lacunas. Prazo de entrega de 5 dias úteis após os documentos mínimos. Não é petição jurídica nem promessa de recebimento.</p></div>
 <div class="lead-inline-actions">
 <a class="button button-primary" data-asset-family="hub" data-asset-id="servicos-obras-publicas" data-cta-id="hub-servicos-medicoes-glosas" data-cta-position="hub_services" data-journey="contrato" data-route-family="medicoes-glosas" href="/medicoes-glosas-obras-publicas/">Avaliar o Dossiê de Medição, Glosa e Pagamento <svg class="icon"><use href="#i-arrow"></use></svg></a>
 </div>
@@ -283,6 +283,7 @@ def _services_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
 def _problems_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
     meta = hub(brand, "problems")
     services = hub(brand, "services")
+    corporate = hub(brand, "corporate_services")
     clusters = problem_clusters(brand)
     stages = problem_stages(brand)
     fit = _offer_fit_copy("problemas-que-resolvemos")
@@ -344,7 +345,8 @@ def _problems_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
 <h2 class="hub-section-title" id="hub-next">Ainda não sabe em qual frente o seu caso entra?</h2>
 <p class="section-lead">A escolha muda conforme o contrato já esteja assinado, a obra em andamento ou o prazo de resposta correndo. Os serviços mostram como cada frente é conduzida.</p>
 </header>
-<p><a class="text-link" href="{e(services["url"])}">Conhecer os serviços <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
+<p><a class="text-link" href="{e(services["url"])}">Conhecer os serviços para obras públicas <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
+<p><a class="text-link" href="{e(corporate["url"])}">Outra situação: projeto, imóvel, perícia ou segurança do trabalho <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
 <p><a class="text-link" href="/ferramentas/">Calcular o seu caso nas ferramentas públicas <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
 </div>
 </section>""",

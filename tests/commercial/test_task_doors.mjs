@@ -303,7 +303,21 @@ assert("public_vitrine_omits_backlog_deep_links", expectedItems.slice(8).every((
 assert("public_page_has_no_filter_chrome", !entregas.includes("data-filter=") && !entregas.includes("data-catalog-filters"), "filters");
 const primaryOfferHtml = entregas.match(/<div class="vitrine-items">([\s\S]*?)<dl class="compare-ladder-figures">/)?.[1] || "";
 assert("public_page_has_one_complete_primary_representation", !entregas.includes('id="comparar"') && (primaryOfferHtml.match(/data-primary-offer="true"/g) || []).length === 8 && ["Situação", "Decisão", "Entrada", "Objeto e limite", "Saída", "SLA"].every((label) => (primaryOfferHtml.match(new RegExp(`<dt>${label}<\\/dt>`, "g")) || []).length === 8), "primary cards");
-assert("public_page_separates_capability_states", entregas.includes("54 capacidades do rol taxativo") && entregas.includes("44 em validação") && entregas.includes("2 bloqueadas") && !primaryOfferHtml.includes("Em validação"), "state separation");
+// 2026-09-08. A assercao antiga exigia que /entregas/ publicasse os contadores
+// "44 em validacao" e "2 bloqueadas" -- inventario do que a empresa ainda nao
+// vende, na pagina que o rodape chama de "Entregas". A propriedade legitima que
+// ela protegia era outra e continua exigida: a pagina nao pode dar a entender
+// que as 54 frentes sao contrataveis agora. Agora isso e verificado pelo lado
+// positivo -- a pagina diz quantas tem oferta publicada -- e pelo negativo: o
+// estado comercial interno nao aparece na vitrine.
+assert("public_page_states_what_is_published_without_listing_what_is_not",
+  entregas.includes("54 frentes de trabalho")
+    && entregas.includes("Oito têm oferta publicada")
+    && !entregas.includes("em validação")
+    && !entregas.includes("bloqueada")
+    && !entregas.includes("sem oferta pronta")
+    && !primaryOfferHtml.includes("Em validação"),
+  "entregas must publish what exists, not an inventory of what is not ready");
 assert("public_role_has_exact_census", (entregas.match(/data-capability-id="CFG-D\d{2}"/g) || []).length === 54 && (entregas.match(/class="capability-item capability-item--validate"/g) || []).length === 44 && (entregas.match(/class="capability-item capability-item--blocked"/g) || []).length === 2, "capability census");
 assert("catalog_data_has_exact_schema", catalogData?.schema === "confenge.public-deliverable-catalog/1.1", catalogData?.schema);
 assert("catalog_data_has_declared_fields", eq(catalogData?.fields, ["id", "name", "trigger", "decision", "unit", "input", "inputKinds", "inputCount", "decisionBusinessDays", "output", "sla", "price", "exclusion", "stepUp", "publicState", "contractHtml"]), catalogData?.fields);

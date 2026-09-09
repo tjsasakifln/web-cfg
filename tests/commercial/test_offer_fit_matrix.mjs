@@ -273,36 +273,26 @@ const localAgain = illustrationEconomics(local.contract_cents, matrix);
 assert("illustration_deterministic", JSON.stringify(localEcon) === JSON.stringify(localAgain), "local");
 assert("illustration_not_roi", localEcon.is_roi_claim === false && localEcon.kind === "illustration", localEcon);
 assert("illustration_label", /ilustrativ/i.test(localEcon.label), localEcon.label);
-assert(
-  "illustration_one_percent_matches_published_math",
-  localEcon.one_percent_cents === local.one_percent_cents &&
-    localEcon.one_percent_display === local.one_percent_display,
-  { got: localEcon.one_percent_display, expect: local.one_percent_display },
-);
-assert(
-  "local_one_percent_below_dossie_floor",
-  localEcon.one_percent_cents < matrix.cited_bands.dossie_critico.min_cents,
-  { one: localEcon.one_percent_cents, dossie: matrix.cited_bands.dossie_critico.min_cents },
-);
-assert("local_one_percent_does_not_cover_dossie", localEcon.dossie_covers_one_percent === false, localEcon);
+// 2026-09-08 (segunda revisao). As tres assercoes removidas daqui exigiam que
+// a matriz publicasse "1% do contrato" e que esse numero ficasse ABAIXO do piso
+// do dossie -- ou seja, obrigavam a home a demonstrar ao visitante de contrato
+// menor que o servico nao cabia no contrato dele. Essa era a comparacao que
+// convidava o cliente a se descartar. A funcao illustrationEconomics() continua
+// existindo e testada (format_one_percent, abaixo), porque o calculo tem uso
+// interno; o que deixa de ser exigido e que ele apareca na copy publica.
 assert("illustration_has_cost", localEcon.cost.label === "custo" && /R\$/.test(localEcon.cost.display), localEcon.cost);
 assert("illustration_has_risk", localEcon.risk.label === "risco", localEcon.risk);
 assert("illustration_has_recurrence", localEcon.recurrence.label === "recorrência", localEcon.recurrence);
 assert("illustration_has_limit", localEcon.limit.label === "limite", localEcon.limit);
-// 2026-09-08. A versao anterior exigia as quatro palavras literais "custo",
-// "risco", "recorrencia" e "limite" dentro da copy. Isso travava a redacao no
-// formato de rotulos e mantinha no ar um paragrafo ilegivel. O que importa nao
-// e a palavra: e que a copy declare que a conta nao e economia medida e cite as
-// faixas de preco publicadas na matriz. E isso que passa a ser verificado.
+// 2026-09-08 (segunda revisao). Exigir "nao e economia medida" e as faixas de
+// preco DENTRO de cada cartao so fazia sentido enquanto o cartao trazia a conta
+// de 1%: era o aviso que tentava neutralizar a comparacao. Sem a comparacao, o
+// aviso perde objeto e as faixas passam a ser publicadas uma vez, fora dos
+// cartoes. O que cada cartao precisa fazer agora e dizer o que aquele contrato
+// coloca em jogo tecnicamente -- e nao carregar percentual nem honorario.
 assert(
-  "illustration_copy_states_not_measured_saving",
-  /n[\u00e3a]o [\u00e9e] economia medida/i.test(local.copy),
-  local.copy,
-);
-assert(
-  "illustration_copy_cites_published_bands",
-  local.copy.includes(matrix.cited_bands.dossie_critico.display) &&
-    local.copy.includes(matrix.cited_bands.lideranca_fracionada.display),
+  "illustration_copy_has_substance",
+  local.copy.trim().length >= 120,
   local.copy,
 );
 assert("format_local_contract", formatBrlFromCents(17973767) === "R$ 179.737,67", formatBrlFromCents(17973767));
@@ -311,17 +301,25 @@ assert("format_one_percent", formatBrlFromCents(179738) === "R$ 1.797,38", forma
 for (const panel of matrix.home_illustrations) {
   const econ = illustrationEconomics(panel.contract_cents, matrix);
   assert(`panel_${panel.panel}_kind`, econ.kind === "illustration" && econ.is_roi_claim === false, panel.panel);
-  assert(`panel_${panel.panel}_math`, econ.one_percent_cents === panel.one_percent_cents, panel);
-  assert(`panel_${panel.panel}_copy_ilustr`, /ilustrativ/i.test(panel.copy), panel.copy);
+  assert(`panel_${panel.panel}_copy_has_substance`, panel.copy.trim().length >= 120, panel.copy);
+  // O defeito de classe: nenhum cartao pode parear percentual do contrato com
+  // honorario, nem empurrar o visitante para a ferramenta gratuita por porte.
   assert(
-    `panel_${panel.panel}_copy_not_measured_saving`,
-    /n[\u00e3a]o [\u00e9e] economia medida/i.test(panel.copy),
+    `panel_${panel.panel}_copy_has_no_percentage`,
+    !/\b1\s*%|\bum por cento\b|one_percent/i.test(panel.copy),
     panel.copy,
   );
   assert(
-    `panel_${panel.panel}_copy_cites_bands`,
-    panel.copy.includes(matrix.cited_bands.dossie_critico.display) &&
-      panel.copy.includes(matrix.cited_bands.lideranca_fracionada.display),
+    `panel_${panel.panel}_copy_has_no_fee`,
+    !panel.copy.includes(matrix.cited_bands.dossie_critico.display) &&
+      !panel.copy.includes(matrix.cited_bands.lideranca_fracionada.display),
+    panel.copy,
+  );
+  assert(
+    `panel_${panel.panel}_copy_does_not_disqualify_by_size`,
+    !/ferramenta p[\u00fau]blica gratuita|entrega de entrada|n[\u00e3a]o compensa|fica abaixo do custo|contratos assim/i.test(
+      panel.copy,
+    ),
     panel.copy,
   );
   assert(`panel_${panel.panel}_not_exemplo_ilustrativo`, !/exemplo ilustrativo/i.test(panel.copy), panel.copy);

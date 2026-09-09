@@ -599,14 +599,17 @@ def chassis_html(record: dict[str, Any]) -> str:
         f'<div><dt>Fonte</dt><dd>{_esc(method.get("source"))}</dd></div>\n'
         f'<div><dt>Período</dt><dd>{_esc(record.get("period"))}</dd></div>\n'
         f'<div><dt>Geografia</dt><dd>{_esc(record.get("geography"))}</dd></div>\n'
-        f'<div><dt>Grão</dt><dd>{_grain_cell(record.get("grain"))}</dd></div>\n'
+        f'<div><dt>Recorte</dt><dd>{_grain_cell(record.get("grain"))}</dd></div>\n'
         f'<div><dt>Autoria / revisão</dt><dd>{_esc(record.get("author"))} · {_esc(record.get("reviewer"))}</dd></div>\n'
-        f'<div><dt>Refresh</dt><dd>{_esc(record.get("refresh_owner"))}</dd></div>\n'
-        f'<div><dt>Hash</dt><dd><code data-opaque-token>{digest}</code></dd></div>\n'
+        # 2026-09-08: as linhas visíveis "Refresh" e "Hash" saíram da <dl>. Elas
+        # expunham ao comprador o dono do pipeline e um digest SHA-256, metadado
+        # interno que não é termo de quem lê orçamento de obra. A procedência
+        # continua publicada e verificável nos atributos data-refresh-owner e
+        # data-content-hash da <section>, logo acima, que não mudaram.
         f"</dl>\n"
         f'{visual}\n'
         f'<div class="breakout-limits" data-breakout-limitations="true">\n'
-        f"<h2>O que esta página não pode concluir</h2>\n<ul>{limits}</ul>\n</div>\n"
+        f"<h2>Onde esta leitura se aplica</h2>\n<ul>{limits}</ul>\n</div>\n"
         f'<p class="breakout-correction">Encontrou erro de fato? '
         f'<a href="{_esc(record.get("correction_route"))}" '
         f'data-asset-id="{_esc(record.get("asset_id"))}">Fale com a gente</a>.</p>\n'

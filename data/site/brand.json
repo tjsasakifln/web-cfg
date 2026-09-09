@@ -11,8 +11,8 @@
     "long": "A CONFENGE organiza diagnóstico, cálculo e evidências para decisões sobre projetos, edificações, imóveis, perícias, segurança do trabalho e obras públicas. O escopo e o entregável são confirmados na triagem; cada trabalho aplicável termina em documento técnico com responsável identificado.",
     "tagline": "Do problema técnico à decisão documentada.",
     "label": "Engenharia, Perícias e Inteligência Técnica",
-    "org_description": "Engenharia, perícias e inteligência técnica para decisões sobre projetos, edificações, imóveis, segurança do trabalho e obras públicas.",
-    "footer_blurb": "Engenharia, perícias e inteligência técnica para transformar situações complexas em decisões documentadas."
+    "org_description": "Engenharia, perícias e inteligência técnica: projeto, revisão, compatibilização, orçamento, inspeção, laudo, perícia, avaliação e segurança do trabalho, para clientes privados e públicos, com especialidade em licitações e contratos de obras públicas.",
+    "footer_blurb": "Projeto, revisão, compatibilização, orçamento, inspeção, laudo, perícia, avaliação e segurança do trabalho. Engenharia para clientes privados e públicos."
   },
   "contact": {
     "email": "tiago.sasaki@confenge.com.br",
@@ -156,7 +156,7 @@
         "h1": "Encontre o caminho técnico para a sua situação",
         "lead": "Comece pelo problema que precisa ser resolvido. A gente confirma se pode ajudar, o que consegue entregar e o que fica de fora.",
         "eyebrow": "Serviços organizados por situação",
-      "index_state": "index"
+        "index_state": "index"
       },
       "services": {
         "label": "Serviços",

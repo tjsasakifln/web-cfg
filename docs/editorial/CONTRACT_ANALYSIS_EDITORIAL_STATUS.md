@@ -5,7 +5,7 @@ Superseded by `CONTRACT_ANALYSIS_CANARY_STATUS`.
 # CONTRACT_ANALYSIS_CANARY_STATUS
 
 - Gate: `contract-analysis-publication-gate/1.0`
-- Generated: `2026-09-07T05:12:56Z`
+- Generated: `2026-09-09T00:32:01Z`
 - Evaluated: **1** (cap 10)
 - Source: `official_live` (`$CONFENGE_HANDOFF_DIR/contract-analysis/official-live-01`)
 - catalog_mode: `official_live` claimed_live=`False`

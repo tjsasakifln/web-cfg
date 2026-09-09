@@ -74,7 +74,16 @@ def test_microcopy_preferences():
     assert "critério técnico definido" in home.lower()
     assert "entrega e limite combinados" in home.lower()
     bid = (ROOT / "bid-room-licitacoes-obras" / "index.html").read_text(encoding="utf-8")
-    assert "revisão crítica independente" in bid.lower()
+    # 2026-09-08. A trava exigia a frase literal "revisão crítica independente"
+    # na sala de proposta. Era o defeito: a CONFENGE é prática individual e não
+    # tem segundo revisor nomeado, então a página anunciava uma independência
+    # que não pode comprovar. A propriedade protegida -- a etapa de revisão
+    # crítica continua nomeada na página -- passa a ser verificada de forma
+    # afirmativa, e a proteção aumenta: nenhuma alegação de revisor
+    # independente ou de segundo revisor pode voltar sem revisor nomeado.
+    assert "revisão crítica" in bid.lower()
+    for _claim in ("revisão crítica independente", "revisor independente", "segundo revisor"):
+        assert _claim not in bid.lower(), _claim
     assert not re.search(r"\bowners\b", home, re.I)
     assert not re.search(r"\bowners\b", bid, re.I)
     # Defensive / internal language must not appear on public home

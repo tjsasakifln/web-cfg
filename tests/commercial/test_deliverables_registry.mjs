@@ -148,9 +148,16 @@ assert(
 );
 const primaryShowcase = entregasHtml.match(/<div class="vitrine-items">([\s\S]*?)<dl class="compare-ladder-figures">/)?.[1] || "";
 assert("public_vitrine_omits_validate_and_blocked_cards", !/data-public-state="(?:VALIDATE|BLOCKED)"/.test(primaryShowcase), "non-published state in buying showcase");
-assert("public_page_distinguishes_capability_roll", /54 capacidades do rol taxativo/i.test(entregasHtml) && /não afirma que existem 54 ofertas prontas/i.test(entregasHtml), "54-capability distinction missing");
+// 2026-09-08. A assercao antiga exigia que /entregas/ publicasse os contadores
+// "44 em validacao" e "2 bloqueadas" -- inventario do que a empresa ainda nao
+// vende, na pagina que o rodape chama de "Entregas". A propriedade legitima que
+// ela protegia era outra e continua exigida: a pagina nao pode dar a entender
+// que as 54 frentes sao contrataveis agora. Agora isso e verificado pelo lado
+// positivo -- a pagina diz quantas tem oferta publicada -- e pelo negativo: o
+// estado comercial interno nao aparece na vitrine.
+assert("public_page_distinguishes_capability_roll", /54 frentes de trabalho/i.test(entregasHtml) && /Oito têm oferta publicada/i.test(entregasHtml), "54-capability distinction missing");
 assert("public_vitrine_omits_internal_price_ceiling", !entregasHtml.includes("R$ 39.800"), "R$ 39.800 leaked");
-assert("public_roll_labels_non_buyable_states", entregasHtml.includes("44 em validação") && entregasHtml.includes("2 bloqueadas") && !primaryShowcase.includes("Em validação"), "state separation missing");
+assert("public_roll_hides_internal_commercial_state", !entregasHtml.includes("em validação") && !entregasHtml.includes("bloqueada") && !entregasHtml.includes("sem oferta pronta") && !primaryShowcase.includes("Em validação"), "internal offer state leaked to the shop window");
 for (const entry of published) {
   const card = entregasHtml.match(
     new RegExp(`<article\\b[^>]*\\bid="entrega-${entry.catalog_number}"[\\s\\S]*?<\\/article>`),

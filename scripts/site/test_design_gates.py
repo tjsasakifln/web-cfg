@@ -246,8 +246,13 @@ def test_deliverables_library_declares_offer_and_capability_hierarchy_in_copy():
     text = re.sub(r"<[^>]+>", " ", html)
     text = re.sub(r"\s+", " ", text)
     assert "8 ofertas publicadas" in text
-    assert "54 capacidades do rol taxativo" in text
-    assert "não afirma que existem 54 ofertas prontas" in text
+    # 2026-09-08. Ver test_deliverables_registry.mjs: /entregas/ deixou de
+    # publicar o inventario de capacidades nao vendaveis. A propriedade
+    # verificada passa a ser positiva, e o estado interno nao pode vazar.
+    assert "54 frentes de trabalho" in text
+    assert "Oito têm oferta publicada" in text
+    assert "em validação" not in text
+    assert "bloqueada" not in text
     assert "Cada card reúne situação, entrada, limite, saída, crédito e próxima ação sem repetir a oferta em outra tabela" in text
 
     cards = re.findall(r'<article class="vitrine-item[\s\S]*?</article>', html)
@@ -358,7 +363,16 @@ def test_offer_depth_and_distinct_layouts():
     # at least 3 distinct section-order signatures
     assert len(set(structures)) >= 3, f"offer layouts too similar: {structures}"
     bid = (ROOT / "bid-room-licitacoes-obras" / "index.html").read_text(encoding="utf-8")
-    assert "revisão crítica independente" in bid.lower()
+    # 2026-09-08. A trava exigia a frase literal "revisão crítica independente"
+    # na sala de proposta. Era o defeito: a CONFENGE é prática individual e não
+    # tem segundo revisor nomeado, então a página anunciava uma independência
+    # que não pode comprovar. A propriedade protegida -- a etapa de revisão
+    # crítica continua nomeada na página -- passa a ser verificada de forma
+    # afirmativa, e a proteção aumenta: nenhuma alegação de revisor
+    # independente ou de segundo revisor pode voltar sem revisor nomeado.
+    assert "revisão crítica" in bid.lower()
+    for _claim in ("revisão crítica independente", "revisor independente", "segundo revisor"):
+        assert _claim not in bid.lower(), _claim
     assert "red team" not in bid.lower()
     defesa = (ROOT / "defesa-margem-contratos-publicos" / "index.html").read_text(encoding="utf-8")
     assert "Defesa de margem" in defesa
@@ -454,7 +468,13 @@ def test_home_five_second_clarity():
     assert 'href="#situacoes"' in fold
     assert "ver o escopo de serviços" in fold_lower
     assert 'href="/servicos/"' in fold
-    assert "obras públicas e b2g" in lower
+    # 2026-09-08. Estas linhas exigiam o rotulo publico "Obras publicas e B2G".
+    # B2G e sigla interna: nenhum comprador de obra procura por ela, e a
+    # diretriz manda tirar a sigla de todo texto lido pelo visitante. A
+    # propriedade protegida -- a especialidade em obras publicas tem secao
+    # propria na home, depois do seletor de situacoes -- continua verificada.
+    assert "especialidade em obras públicas" in lower
+    assert "obras públicas: edital, proposta e contrato em execução." in lower
     assert "#contato" in html or 'id="contato"' in html
 
 
@@ -475,7 +495,12 @@ def test_home_decision_fold_hierarchy():
     pncp_at = html.find("54.055")
     assert 0 < chooser_at < pncp_at, "PNCP must come after the corporate chooser"
     market = html[pncp_at:]
-    assert "Obras públicas e B2G" in html
+    # 2026-09-08. Estas linhas exigiam o rotulo publico "Obras publicas e B2G".
+    # B2G e sigla interna: nenhum comprador de obra procura por ela, e a
+    # diretriz manda tirar a sigla de todo texto lido pelo visitante. A
+    # propriedade protegida -- a especialidade em obras publicas tem secao
+    # propria na home, depois do seletor de situacoes -- continua verificada.
+    assert "Especialidade em obras públicas" in html
     assert "PNCP · 01/08/2026" in market
     assert "4,48 mi" in market
     assert "Números de mercado, não resultados de clientes" in market
@@ -1177,7 +1202,13 @@ def test_thankyou_specialist_cta_family():
         assert "wa.me" in text
         assert "Prazo" in text or "prazo" in text
     specialist = (ROOT / "especialista" / "tiago-jun-sasaki" / "index.html").read_text(encoding="utf-8")
-    assert "Solicitar diagnóstico" in specialist
+    # 2026-09-08. Esta linha exigia o rotulo "Solicitar diagnostico tecnico"
+    # no CTA principal, cujo href e /triagem-tecnica/. O rotulo prometia um
+    # diagnostico e o destino entregava uma triagem: rotulo e destino tem de
+    # coincidir. A propriedade preservada -- a pagina de quem assina leva a
+    # um caminho de atendimento nomeado -- passa a ser verificada assim.
+    assert "Descrever a situação para o Engº Tiago" in specialist
+    assert 'href="/triagem-tecnica/"' in specialist
     lower = specialist.lower()
     assert "analisar meu cenário" not in lower
     assert "apresentar uma demanda" not in lower
