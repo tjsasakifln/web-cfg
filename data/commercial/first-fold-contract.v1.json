@@ -232,7 +232,7 @@
       "measurement": {
         "date": "2026-09-09",
         "viewport": "1366x768",
-        "finding": "H1 de y=220 a y=300; linha de prova de y=480 a y=520; ação primária inteira de y=536 a y=584 em 1366x768, e de y=512 a y=562 em 390x844, dentro da dobra nos dois"
+        "finding": "H1 de y=210 a y=290; linha de prova de y=471 a y=510; ação primária inteira de y=526 a y=574 em 1366x768, e de y=512 a y=562 em 390x844, dentro da dobra nos dois"
       }
     },
     {
@@ -292,7 +292,7 @@
       "measurement": {
         "date": "2026-09-09",
         "viewport": "1366x768",
-        "finding": "H1 de y=222 a y=343; linha de prova de y=546 a y=585; ação primária inteira de y=601 a y=649 em 1366x768, e de y=688 a y=738 em 390x844, dentro da dobra nos dois"
+        "finding": "H1 de y=210 a y=330; linha de prova de y=533 a y=573; ação primária inteira de y=589 a y=637 em 1366x768, e de y=688 a y=738 em 390x844, dentro da dobra nos dois"
       }
     },
     {
@@ -566,8 +566,9 @@
           "route": "/entregas/",
           "ok": true,
           "eyebrow_adds": [
-            "comercial",
-            "vitrine"
+            "obras",
+            "privadas",
+            "publicas"
           ],
           "lead_adds": [
             "analises",
