@@ -1,9 +1,9 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "3ec50a67ab77bb335567c2b497a6fbb7f81ef196",
+  "baseline_commit": "16369b9fcd873ec35201943db9a6c4c2571945e5",
   "recaptured_at": "2026-09-09",
-  "recapture_reason": "Decisão expressa EXECUTE_NOW de 09/09/2026; bytes protegidos conferidos no checkpoint alcançável 3ec50a67ab77bb335567c2b497a6fbb7f81ef196. Os seis pilares receberam navegação institucional por situações, contato condicionado ao escopo, responsável técnico real e substituição do rótulo inglês 'as of' por 'Referência', sem alterar critérios, fontes, preços ou prometer resultado. Após a recaptura anterior, cinco pilares tiveram apenas a credencial estruturada harmonizada de 'Engenheiro Civil e consultor B2G' para o lastro público mais preciso 'Engenheiro Civil'; auditoria também alinhou a prova técnica visível ao mesmo lastro. O Diagnóstico 360 descreve o Plano de 90 dias como ações para implantação e liga sua prova ao perfil público do Engº Tiago Sasaki. O CSS resolve a leitura do Diagnóstico 360 em telas pequenas e mantém a ação de aditivos no primeiro quadro em desktop; a medição executada antes do freeze terminou com 25 aprovações, nenhuma falha e nenhuma pendência. Robots e redirects retiram famílias internas por destinos 410 exatos, em vez de tratar noindex como controle de acesso. Script, sitemaps, mapa de serviço e analytics preservam os bytes já revistos na recaptura anterior. As mudanças foram revisadas por agentes da campanha, não por compradores ou revisor humano independente; esta evidência não alega medição de conversão, nova atribuição, cliente ou aprovação externa. A trava PREPARE-ONLY continua aplicável apenas aos patches históricos não autorizados; ela não restaura o congelamento editorial revogado. Pillars, forbidden, snapshots, specs, patches e documentação foram recalculados dos bytes reais, sem exceção de digest.",
+  "recapture_reason": "Decisão expressa EXECUTE_NOW de 09/09/2026; bytes protegidos conferidos no checkpoint alcançável 16369b9fcd873ec35201943db9a6c4c2571945e5. Desde a recaptura anterior, styles.css perdeu somente cinco regras do seletor obsoleto .footer-clusters; a busca na fonte pública não encontrou essa classe em HTML, modelos ou JavaScript (as ocorrências restantes pertencem apenas a capturas axe históricas). Nenhum pilar, cálculo, conteúdo, condição comercial, autoridade, script, sitemap, robots, redirecionamento, mapa de serviço ou analytics mudou nesta recaptura. As mudanças foram revisadas por agentes da campanha, não por compradores ou revisor humano independente; esta evidência não alega medição de conversão, nova atribuição, cliente ou aprovação externa. A trava PREPARE-ONLY continua aplicável apenas aos patches históricos não autorizados; ela não restaura o congelamento editorial revogado. Pillars, forbidden, snapshots, specs, patches e documentação foram recalculados dos bytes reais, sem exceção de digest.",
   "html_mutation": true,
   "pillars": {
     "aditivos-obras-publicas": "c9f37bdfa249ad3f0f2869774d48e33b6f5a3f921919df252b5a96eda96b6ac0",
@@ -21,7 +21,7 @@
     "diagnostico-b2g-360/index.html": "101b019cb8113967cd7ffd50b07d1011af982ac22dd449aefcc868bff4b79409",
     "diagnostico-pre-licitacao/index.html": "65c6ea2c235ef0db5629922ed18c578bde2ef585339d6adec86830014e1229f4",
     "script.js": "be277e3bd0f6ada2b6db0d36b924e8e347fb413da8a73d60ebb7a7101e265880",
-    "styles.css": "1adf1fce8dc20876b3e8192e5b28b3c0750cad5f48b2d2991fbc8bcec0a2ce51",
+    "styles.css": "e0308ce5bd1b6da4d4b7a4cb58c4717a9d3512b36b839fb35ca6be21bf03eaf3",
     "styles-tokens.css": "15cc0770e76276b418c11493fa9e53827ae14bb8f854b0a63d8c6dd63afc02fc",
     "styles-tools.css": "8c42a4b5fadba13e4dae52bd7168c64b9f5548f3fd3f8d4f0707ce4e9463c7ba",
     "robots.txt": "f835994a0d90d3b0bf29bfd77ade13856a25c2b2b90752e1640bfae966534241",
@@ -40,7 +40,7 @@
     "diagnostico-b2g-360/index.html": 24,
     "diagnostico-pre-licitacao/index.html": 10,
     "script.js": 2,
-    "styles.css": 24,
+    "styles.css": 26,
     "styles-tokens.css": 0,
     "styles-tools.css": 0,
     "robots.txt": 6,
@@ -51,5 +51,5 @@
     "data/organic/content-service-map.json": 0,
     "js/modules/analytics.js": 0
   },
-  "previous_baseline_commit": "a36d34beb5d58bbd740494ef512ad0054dd7959f"
+  "previous_baseline_commit": "3ec50a67ab77bb335567c2b497a6fbb7f81ef196"
 }
