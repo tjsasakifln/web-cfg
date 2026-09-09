@@ -33,6 +33,7 @@ from scripts.pseo.html_shell import (
     breadcrumbs_html,
     e,
     page_shell,
+    wa_link,
 )
 from scripts.site.responsive_text import escape_prose_with_opaque_tokens
 
@@ -440,6 +441,10 @@ def _cta_html(record: dict[str, Any]) -> str:
         if val and key != "correlation_id"
     )
     href_attr = f"{href}{sep}{query}" if query else href
+    contact_href = wa_link(
+        "Olá, Tiago. Li uma análise técnica de contrato público e quero "
+        "conversar sobre um contrato da minha empresa."
+    )
     return (
         f'<section class="section lead-inline" id="proximo-passo"{archetype_attr("proximo-passo")} aria-label="Próximo passo">'
         f"<p>{e(text) if text else 'Se a sua empresa enfrenta um problema semelhante, o caminho é o serviço correspondente — não este contrato.'}</p>"
@@ -452,6 +457,11 @@ def _cta_html(record: dict[str, Any]) -> str:
         f'data-cta-id="{e(attr.get("cta_id") or "")}" '
         f'data-source="{e(attr.get("source") or "CONFENGE_WEB")}" '
         f'data-destination-service-id="{e(attr.get("destination_service_id") or "")}">{e(label)}</a></p>'
+        f'<p><a class="text-link" href="{e(contact_href)}" target="_blank" rel="noopener" '
+        'data-cta-id="analise-contrato-proprio-whatsapp" data-cta-position="analysis_next_step" '
+        'data-asset-family="analise-tecnica-contrato-publico" '
+        'data-route-family="analise-tecnica-contrato" data-journey="contrato">'
+        "Conversar sobre um contrato próprio</a></p>"
         "</section>"
     )
 
@@ -792,6 +802,26 @@ def render_hub_html(items: list[tuple[dict[str, Any], PublicationDecision]], *, 
         "<p>Nenhuma análise aprovada para publicação. "
         "Os materiais em revisão permanecem no ambiente editorial interno.</p>"
     )
+    contact_href = wa_link(
+        "Olá, Tiago. Consultei as análises técnicas de contratos públicos e quero "
+        "conversar sobre um contrato da minha empresa."
+    )
+    hub_next_step = (
+        f'<section class="section lead-inline" id="proximo-passo"{archetype_attr("proximo-passo")} '
+        'aria-label="Próximo passo"><div class="lead-inline-copy">'
+        "<span>Contrato próprio</span><strong>Leve a questão do seu contrato para uma conversa contextual.</strong>"
+        "<p>Informe o evento, a decisão necessária e o documento disponível. "
+        "A análise editorial desta biblioteca não substitui a leitura do seu instrumento.</p></div>"
+        '<div class="lead-inline-actions">'
+        f'<a class="button button-primary" href="{e(contact_href)}" target="_blank" rel="noopener" '
+        'data-cta-id="hub-analises-contrato-proprio-whatsapp" data-cta-position="hub_next_step" '
+        'data-asset-id="analises-contratos-publicos" '
+        'data-asset-family="analise-tecnica-contrato-publico" '
+        'data-route-family="analise-tecnica-contrato" data-journey="contrato">'
+        "Conversar sobre um contrato próprio</a>"
+        '<a class="text-link" href="/defesa-margem-contratos-publicos/">'
+        "Conhecer o serviço de defesa de margem</a></div></section>"
+    )
     body = (
         f'<header class="article-hero container"{archetype_attr("masthead")}>'
         f'<p class="eyebrow">{e(ANALYSIS_LABEL_PT)}</p>'
@@ -808,6 +838,7 @@ def render_hub_html(items: list[tuple[dict[str, Any], PublicationDecision]], *, 
         "fontes, método, limites e uma aplicação prática.</p>"
         f"{HUB_METHOD_HTML}"
         f"{listing}</div>"
+        f"{hub_next_step}"
         + author_box(archetype=ARCHETYPE_BY_SECTION_ID["author-box"])
     )
     schema = [

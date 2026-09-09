@@ -276,13 +276,6 @@
       "chrome_reason": "Hub noindex — reachable from search and child pages, not from header or footer."
     },
     {
-      "id": "panorama",
-      "route": "/panorama-mercado-obras-publicas/",
-      "role": "evidencia",
-      "label": "Panorama de mercado",
-      "next_action": "/#formulario-contato"
-    },
-    {
       "id": "inteligencia",
       "route": "/inteligencia/",
       "role": "evidencia",
@@ -465,15 +458,6 @@
       "parent": "/analises-contratos-publicos/"
     },
     {
-      "prefix": "/panorama-mercado-obras-publicas/",
-      "parent": "/",
-      "exact": true
-    },
-    {
-      "prefix": "/panorama-mercado-obras-publicas/",
-      "parent": "/panorama-mercado-obras-publicas/"
-    },
-    {
       "prefix": "/inteligencia/",
       "parent": "/",
       "exact": true
@@ -521,10 +505,6 @@
     },
     {
       "prefix": "/nurture/",
-      "parent": "/"
-    },
-    {
-      "prefix": "/piloto/",
       "parent": "/"
     }
   ],

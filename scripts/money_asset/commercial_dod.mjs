@@ -162,12 +162,19 @@ export function extractPillarSignals(html, loop = {}) {
   const text = String(html);
   const canonical = parseCanonicalHref(text);
   const robots = parseRobotsMeta(text);
+  const explainsMethod = /responsabilidades da CONFENGE/i.test(text) &&
+    /montar cronologia|organizar cronologia/i.test(text) &&
+    /separar (?:impacto potencial|fato, c[aá]lculo|fatos?, c[aá]lculos?)/i.test(text);
+  const explainsDelivery = /o que (?:voc[eê]|a empresa) (?:recebe|usa)/i.test(text) &&
+    /cronologia/i.test(text) &&
+    /matriz de risco/i.test(text) &&
+    /decis[aã]o/i.test(text);
   return {
     surface: "pillar",
     title_ok: /defesa t[eé]cnica e prote[cç][aã]o de margem/i.test(text),
     links_to_diagnostico: text.includes(loop.asset_path || ""),
     links_to_asset: text.includes(loop.asset_path || ""),
-    segunda_leitura_phrase: /segunda leitura/i.test(text),
+    method_and_delivery_explained: explainsMethod && explainsDelivery,
     visible_fonte: /fonte|evidenc/i.test(text),
     canonical_href: canonical,
     canonical_host_confenge: canonicalHostIsConfenge(canonical),

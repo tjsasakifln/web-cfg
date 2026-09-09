@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import sys
 from pathlib import Path
+from urllib.parse import unquote
 
 ROOT = Path(__file__).resolve().parents[3]
 if str(ROOT) not in sys.path:
@@ -147,6 +148,9 @@ def test_cta_url_has_no_cnpj_or_email():
     assert "52407089000109" not in cta_chunk
     assert "52.407.089" not in cta_chunk
     assert "@" not in cta_chunk.split("href=")[1].split(">")[0]
+    assert "wa.me/5548988344559" in cta_chunk
+    decoded_cta = unquote(cta_chunk)
+    assert "contrato da minha empresa" in decoded_cta
 
 
 def test_hub_and_analysis_expose_honest_authority_without_editorial_deficit():
@@ -173,6 +177,9 @@ def test_hub_and_analysis_expose_honest_authority_without_editorial_deficit():
     assert "A publicação não afirma" in hub
     assert "PUBLISHABLE_INDEX" not in hub
     assert "FACT" not in hub
+    assert "wa.me/5548988344559" in hub
+    assert "Conversar sobre um contrato próprio" in hub
+    assert "/defesa-margem-contratos-publicos/" in hub
     assert "UNKNOWN" not in hub
     assert "/triagem-tecnica/#corrigir-o-site" in hub
     assert '"@type":"CollectionPage"' in hub or '"@type": "CollectionPage"' in hub

@@ -17,8 +17,8 @@
 - robots: `noindex,nofollow`
 - sitemap: `False`
 - freshness_class: `STALE`
-- evaluated_at: `2026-09-09T13:50:40Z`
-- age_seconds: `2002876`
+- evaluated_at: `2026-09-09T15:00:47.825464Z`
+- age_seconds: `2007084`
 - expires_at: `2026-08-19T11:29:23.193694+02:00`
 
 - `official_live`: `True`

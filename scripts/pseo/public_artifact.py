@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import re
 import shutil
 import sys
@@ -65,7 +66,8 @@ PUBLIC_TOP_DIRS = frozenset(
         "lei-14133-obras",
         "jurisprudencia-contratos-obras",
         "guias-contratos-obras",
-        # Private RevOps UI (noindex + robots Disallow; still need publish for ops staff)
+        # Public operator login shell; it contains no lead data. The backing APIs
+        # require a bearer token and fail closed. Exact editorial files are excluded.
         "ops",
         # High-intent tools (conversion moat)
         "ferramentas",
@@ -73,15 +75,16 @@ PUBLIC_TOP_DIRS = frozenset(
         "nurture",
         "casos",
         "imprensa",
-        "piloto",
         # Contract-analysis family (#83). Fixture/noindex until INDEX approval.
         "analises-contratos-publicos",
-        # Market-panorama family. Noindex until an individual INDEX approval.
-        "panorama-mercado-obras-publicas",
+        # Unapproved market-panorama drafts stay as internal generator output.
+        # Re-adding this family requires an individual approval and an artifact
+        # test for the exact approved route; noindex is not publication authority.
         # Live Intelligence W1 (CNPJ analysis + opportunity pages). Fixture-backed,
         # noindex until the real CONFENGE_LIVE_INTELLIGENCE contract ships.
         "analise-cnpj",
-        "oportunidades",
+        # Opportunity fixture HTML is never packaged. The Netcup stage overlay
+        # may add only official-live pages through release_control.py.
         ".well-known",
     }
 )
@@ -116,6 +119,13 @@ PUBLIC_ROOT_FILES = frozenset(
         "content-index.json",
         "01ce18c7219b7c7dcb2ab06e226c2681.txt",
     }
+)
+
+# Exact internal files inside otherwise public trees. Keep this list narrow:
+# /ops/ is a public login shell, but editorial material and private operator
+# instructions are not visitor assets and therefore must not be copied.
+PUBLIC_EXCLUDED_RELPATHS = frozenset(
+    {"ops/wave1-review.html", "ops/README-data.txt"}
 )
 
 # Never copy these top-level names even if someone expands the allowlist by mistake.
@@ -313,6 +323,8 @@ def inventory_public_routes(root: Path | None = None) -> dict[str, Any]:
             continue
         for hp in sorted(d.rglob("index.html")):
             rel = hp.relative_to(root).as_posix()
+            if rel in PUBLIC_EXCLUDED_RELPATHS:
+                continue
             route = "/" + rel[: -len("index.html")]
             if not route.endswith("/"):
                 route += "/"
@@ -327,6 +339,20 @@ def inventory_public_routes(root: Path | None = None) -> dict[str, Any]:
         "html_routes": html_routes,
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
     }
+
+
+def omit_production_review_packet(dest: Path, context: str) -> list[str]:
+    """Keep the legacy preview-review protocol off the production visitor host.
+
+    The source packet and preview verifier remain intact. Build/runtime identity
+    endpoints are public diagnostics and are not part of this exact exclusion.
+    """
+    relative = ".well-known/editorial-review-packet.json"
+    packet = dest / relative
+    if context == "production" and packet.is_file():
+        packet.unlink()
+        return [relative]
+    return []
 
 
 def assemble_public_artifact(
@@ -376,6 +402,8 @@ def assemble_public_artifact(
                     skip.add(n)
                 if rel_dir.startswith("ops") and n.endswith("gsc-insights.json"):
                     skip.add(n)
+                if f"{rel_dir}/{n}".lstrip("/") in PUBLIC_EXCLUDED_RELPATHS:
+                    skip.add(n)
             return skip
 
         shutil.copytree(src, dest / name, ignore=_ignore, dirs_exist_ok=True)
@@ -396,6 +424,9 @@ def assemble_public_artifact(
         if ".well-known/" not in copied_dirs:
             copied_dirs.append(".well-known/")
 
+    omitted_review_metadata = omit_production_review_packet(
+        dest, os.environ.get("CONTEXT") or os.environ.get("NETLIFY_CONTEXT") or "local"
+    )
     finalized = finalize_public_artifact(dest)
     promoted_navigation_files = finalized["promoted_navigation_files"]
     navigation_audit = finalized["navigation_audit"]
@@ -411,6 +442,7 @@ def assemble_public_artifact(
         "copied_files": copied_files,
         "html_route_count": inv["html_route_count"],
         "errors": errors,
+        "omitted_production_review_metadata": omitted_review_metadata,
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "css_assets": css_assets,
         "promoted_navigation_files": promoted_navigation_files,

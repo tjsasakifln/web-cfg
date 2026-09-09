@@ -210,6 +210,26 @@ def test_footer_is_not_a_taxonomy_dump():
     assert rendered.count("<a ") <= 16
 
 
+def _assert_national_service_is_conditioned(rendered: str) -> None:
+    copy = rendered.casefold()
+    assert "brasil" in copy or "nacional" in copy
+    assert "escopo" in copy
+    assert "local" in copy
+    assert any(term in copy for term in ("modalidade", "vistoria", "campo"))
+    assert "<span>atendimento nacional</span>" not in copy
+
+
+def test_footer_conditions_national_service_on_scope_location_and_modality(monkeypatch):
+    _assert_national_service_is_conditioned(footer_columns_html())
+
+    # The pSEO fallback must preserve the same commercial condition even if the
+    # shared IA module is unavailable during an isolated generator execution.
+    from scripts.pseo import html_shell
+
+    monkeypatch.setattr(html_shell, "_footer_columns_html", None)
+    _assert_national_service_is_conditioned(html_shell._build_footer())
+
+
 def test_primary_nav_hygiene_and_no_indexable_orphans():
     hygiene = audit_primary_nav_hygiene(ROOT)
     assert hygiene == [], hygiene

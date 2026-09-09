@@ -69,6 +69,19 @@ _DEMO_AS_CLIENT = re.compile(
 )
 _INTERNAL_ENGLISH = re.compile(
     r"\b(?:proof_state|permission_class|offer_id|DRAFT|WITHHELD|READY|FINAL)\b"
+    r"|\(as of\)"
+    r"|\bas of\s+(?:\d{4}-\d{2}-\d{2}|\d{1,2}\s+[A-Za-z]+\s+\d{4})\b",
+    re.I,
+)
+_PUBLICATION_BACKSTAGE = re.compile(
+    r"\bpreview interno\b"
+    r"|\bcat[áa]logo p[úu]blico (?:desligado|=\s*false)\b"
+    r"|\bASAAS_MODE\b"
+    r"|\bcapacidade\s+APPROVED\b"
+    r"|\bfora do sitemap\b[^.!?]{0,70}\brevis[ãa]o humana\b"
+    r"|\bp[áa]gina em pr[ée]-visualiza[çc][ãa]o\b[^.!?]{0,90}"
+    r"\bn[ãa]o integra a publica[çc][ãa]o\b",
+    re.I,
 )
 
 _CANONICAL_ORIGIN = "https://confenge.com.br"
@@ -274,12 +287,16 @@ def semantic_fixture_findings(html: str, route: str) -> list[str]:
     main_html = main_match.group(1) if main_match else html
     text = visible_text(main_html)
     out: list[str] = []
+    if route == "/ops/wave1-review.html":
+        out.append("withdrawn_editorial_review_shell")
     if _MATURITY_SHOWCASE.search(text):
         out.append("internal_maturity_showcase")
     if _SIZE_REFUSAL.search(text):
         out.append("size_based_refusal")
     if _INTERNAL_ENGLISH.search(text):
         out.append("internal_english_state")
+    if _PUBLICATION_BACKSTAGE.search(text):
+        out.append("publication_backstage")
     if _DEMO_AS_CLIENT.search(text):
         out.append("demonstrative_claimed_as_client")
 
@@ -621,8 +638,14 @@ def run_mutation_contracts() -> list[str]:
 
     semantic_bad = {
         "internal_english": '<main><h1>Serviço</h1><p>proof_state: DRAFT</p></main>',
+        "english_reference_date": '<main><h1>Análise</h1><p>Referência (as of 2026-08-17).</p></main>',
+        "english_reference_label": '<main><h1>Análise</h1><p>Referência da página (as of): <time>15 de agosto de 2026</time></p></main>',
         "size_refusal": '<main><h1>Serviço</h1><p>Não atendemos clientes de pequeno porte.</p></main>',
         "maturity_showcase": '<main><h1>Entregas</h1><p>44 capacidades em validação.</p></main>',
+        "publication_backstage": (
+            '<main><h1>Oferta</h1><p>Preview interno · catálogo público desligado. '
+            'Capacidade APPROVED.</p></main>'
+        ),
         "demo_as_client": (
             '<main><h1>Exemplo</h1><p>Este demonstrativo retrata um cliente real.</p></main>'
         ),
@@ -631,6 +654,9 @@ def run_mutation_contracts() -> list[str]:
             '<a href="/quantitativos-orcamento-obras/">Ver orçamento</a></main>'
         ),
         "empty_commercial": '<main><h1>Projetos</h1><p>Soluções personalizadas.</p></main>',
+        "withdrawn_editorial_review_shell": (
+            '<main><h1>Revisão editorial</h1><p>Conteúdo completo e útil.</p></main>'
+        ),
     }
     complete = (
         "<p>Reconhecemos a necessidade e conferimos os documentos de entrada. "
@@ -639,12 +665,22 @@ def run_mutation_contracts() -> list[str]:
         '<a href="/triagem-tecnica/">Conversar sobre o serviço</a>'
     )
     for name, mutation in semantic_bad.items():
-        route = "/servicos/projetos/" if name in {"project_only_budget", "empty_commercial"} else "/fixture/"
+        route = (
+            "/servicos/projetos/"
+            if name in {"project_only_budget", "empty_commercial"}
+            else "/ops/wave1-review.html"
+            if name == "withdrawn_editorial_review_shell"
+            else "/fixture/"
+        )
         html = mutation if name in {"project_only_budget", "empty_commercial"} else mutation.replace("</main>", complete + "</main>")
         with tempfile.TemporaryDirectory() as tmp:
             fixture_root = Path(tmp)
             artifact = fixture_root / "_site"
-            target = artifact / route.strip("/") / "index.html"
+            target = (
+                artifact / route.lstrip("/")
+                if route.endswith(".html")
+                else artifact / route.strip("/") / "index.html"
+            )
             target.parent.mkdir(parents=True)
             target.write_text(html, encoding="utf-8")
             manifest = fixture_root / "manifest.json"
@@ -663,7 +699,8 @@ def run_mutation_contracts() -> list[str]:
         ),
         "aria_hidden_visible": '<main><p aria-hidden="true">as_of 2026-09-09</p></main>',
         "inert_visible": '<main><p inert>Classe de permissão: WITHHELD</p></main>',
-        "dynamic_js": '<main><p id="s"></p></main><script>s.textContent = "as_of 2026-09-09"</script>',
+        "dynamic_js": ('<main><p id="s"></p></main><script>'
+                       'const copy = "proof_state: DRAFT"; s.textContent = copy;</script>'),
     }
     for name, mutation in surface_bad.items():
         html = mutation.replace("</main>", complete + "</main>")
@@ -679,6 +716,28 @@ def run_mutation_contracts() -> list[str]:
             result = coverage_report(artifact, manifest)
             if result["ok"] or not result["copy_findings"]:
                 raise AssertionError(f"surface_mutation_not_rejected_by_full_gate:{name}")
+        passed.append(name)
+
+    control_bad = {
+        "acervo_pending_backstage": "Acervo pendente de revisão interna.",
+        "acervo_fabricated_superlative": "Nosso acervo é o melhor do mercado.",
+        "commercial_enquadramento": "Peça um enquadramento comercial para ver se atendemos.",
+    }
+    for name, copy in control_bad.items():
+        with tempfile.TemporaryDirectory() as tmp:
+            fixture_root = Path(tmp)
+            artifact = fixture_root / "_site"
+            artifact.mkdir(parents=True)
+            (artifact / "index.html").write_text(
+                f"<main><h1>Atendimento.</h1><p>{copy}</p>{complete}</main>", encoding="utf-8"
+            )
+            manifest = fixture_root / "manifest.json"
+            manifest.write_text(
+                json.dumps({"html_route_count": 1, "html_routes": ["/"]}), encoding="utf-8"
+            )
+            result = coverage_report(artifact, manifest)
+            if result["ok"] or not result["control_vocabulary"]["defect_occurrences"]:
+                raise AssertionError(f"control_vocabulary_mutation_not_rejected:{name}")
         passed.append(name)
 
     legitimate = (
@@ -697,6 +756,15 @@ def run_mutation_contracts() -> list[str]:
     if semantic_fixture_findings(legitimate_demo, "/confianca/"):
         raise AssertionError("legitimate_demonstrative_separation_rejected")
     passed.append("legitimate_demonstrative_separation")
+
+    legitimate_approval = (
+        '<main><h1>Projeto aprovado</h1><p>O documento aprovado pela autoridade '
+        'competente integra os dados de entrada da análise.</p>'
+        '<a href="/triagem-tecnica/">Conversar</a></main>'
+    )
+    if semantic_fixture_findings(legitimate_approval, "/conteudos/projeto-aprovado/"):
+        raise AssertionError("legitimate_technical_approval_rejected")
+    passed.append("legitimate_technical_approval")
 
     with tempfile.TemporaryDirectory() as tmp:
         root = Path(tmp)

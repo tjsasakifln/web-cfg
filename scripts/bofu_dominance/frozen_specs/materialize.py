@@ -172,14 +172,27 @@ def materialize(*, root: Path | None = None) -> dict[str, object]:
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     snaps = write_snapshots_json(DATA_DIR / "snapshots.json", base)
     hashes = {p["slug"]: p["content_sha256"] for p in snaps["pillars"]}
+    # Recapture provenance is reviewed evidence, not derivable from HTML.  In
+    # particular, baseline_commit and the founder-authorized reason must
+    # survive materialization so a refresh cannot silently turn an intentional
+    # commercial correction back into an anonymous PREPARE-ONLY snapshot.
+    # Callers update those fields only after the protected bytes have a real
+    # reachable checkpoint; the hash lists below are always recalculated.
+    previous_hashes: dict[str, Any] = {}
+    hashes_path = DATA_DIR / "hashes.json"
+    if hashes_path.is_file():
+        loaded = json.loads(hashes_path.read_text(encoding="utf-8"))
+        if isinstance(loaded, dict):
+            previous_hashes = loaded
     hashes_doc = {
+        **previous_hashes,
         "schema": "bofu_frozen_hashes/v1",
         "campaign": CAMPAIGN,
-        "html_mutation": False,
+        "html_mutation": previous_hashes.get("html_mutation", False),
         "pillars": hashes,
         "forbidden": forbidden_path_hashes(base),
     }
-    (DATA_DIR / "hashes.json").write_text(
+    hashes_path.write_text(
         json.dumps(hashes_doc, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
     )
     repl = _replacements()

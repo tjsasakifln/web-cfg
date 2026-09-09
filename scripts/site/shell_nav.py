@@ -77,8 +77,10 @@ SKIP_DIR_PARTS = frozenset(
 
 # BOFU pillar HTML frozen by campaign CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01
 # (issues #128/#226) until EARLIEST_SAFE_ACTION_AT = 2026-09-16 or evidential close.
-# Their bytes are hash-pinned in data/bofu-dominance/frozen-specs/hashes.json, so the
-# shell sync must skip them; once the freeze lifts, drop this set and re-run --write.
+# Their bytes are hash-pinned in data/bofu-dominance/frozen-specs/hashes.json. The
+# navigation/body remain frozen, but a founder-authorized correction to a shared
+# commercial footer must still propagate. `run()` therefore applies only the footer
+# sync to these files; the pin records the resulting reviewed byte drift.
 _FROZEN_FALLBACK = (
     "aditivos-obras-publicas/index.html",
     "medicoes-glosas-obras-publicas/index.html",
@@ -282,6 +284,13 @@ def shipped_html_files() -> list[Path]:
     return out
 
 
+def _shell_sync_files() -> list[Path]:
+    """Mutable pages plus pinned pillars eligible for footer-only corrections."""
+    paths = set(shipped_html_files())
+    paths.update(ROOT / rel for rel in FROZEN_SHELL_FILES if (ROOT / rel).is_file())
+    return sorted(paths)
+
+
 def _replace_nav(text: str, regex: re.Pattern[str], inner: str) -> str:
     def sub(match: re.Match[str]) -> str:
         return f"{match.group(1)}\n{inner}\n{match.group(3)}"
@@ -441,26 +450,32 @@ def sync_text(text: str, brand: dict[str, Any], current: str | None) -> str:
         inner = f"{mobile_links(brand, current)}\n{utility}"
         text = _replace_nav(text, MOBILE_NAV_RE, inner)
 
-    if FOOTER_TOP_RE.search(text):
-        blurb = html_lib.escape(footer_blurb(brand))
-        text = FOOTER_BRAND_BLURB_RE.sub(
-            lambda m: f"{m.group(1)}{blurb}{m.group(2)}", text, count=1
-        )
-        columns = footer_nav_links(brand)
-        text = FOOTER_TOP_RE.sub(
-            lambda m: f"{m.group(1)}\n{columns}{m.group(3)}", text, count=1
-        )
-    elif FOOTER_NAV_COL_RE.search(text):
-        links = footer_nav_links(brand)
-        text = FOOTER_NAV_COL_RE.sub(
-            lambda m: f"{m.group(1)}{links}{m.group(3)}", text, count=1
-        )
+    text = sync_footer(text, brand)
 
     text = sync_breadcrumbs(text, current)
 
     # Any remaining home-anchor pointer (footer, inline links) follows the label.
     for legacy, target in LEGACY_ANCHOR_HREFS.items():
         text = text.replace(f'href="{legacy}"', f'href="{target}"')
+    return text
+
+
+def sync_footer(text: str, brand: dict[str, Any]) -> str:
+    """Align only visitor-facing footer copy and discovery columns."""
+    if FOOTER_TOP_RE.search(text):
+        blurb = html_lib.escape(footer_blurb(brand))
+        text = FOOTER_BRAND_BLURB_RE.sub(
+            lambda m: f"{m.group(1)}{blurb}{m.group(2)}", text, count=1
+        )
+        columns = footer_nav_links(brand)
+        return FOOTER_TOP_RE.sub(
+            lambda m: f"{m.group(1)}\n{columns}{m.group(3)}", text, count=1
+        )
+    if FOOTER_NAV_COL_RE.search(text):
+        links = footer_nav_links(brand)
+        return FOOTER_NAV_COL_RE.sub(
+            lambda m: f"{m.group(1)}{links}{m.group(3)}", text, count=1
+        )
     return text
 
 
@@ -475,9 +490,13 @@ def run(write: bool) -> int:
         )
         return 1
     changed: list[str] = []
-    for path in shipped_html_files():
+    for path in _shell_sync_files():
         original = path.read_text(encoding="utf-8")
-        updated = sync_text(original, brand, page_path(path))
+        rel = path.relative_to(ROOT).as_posix()
+        if rel in FROZEN_SHELL_FILES:
+            updated = sync_footer(original, brand)
+        else:
+            updated = sync_text(original, brand, page_path(path))
         if updated == original:
             continue
         changed.append(path.relative_to(ROOT).as_posix())

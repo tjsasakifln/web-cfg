@@ -49,7 +49,8 @@ Preflight confirmado nesta retomada:
   `c173461ccbcf93878c6ab59482e4ec4bb537a418`. Nenhuma promoção, reversão,
   alteração de permissões ou edição manual em produção foi feita no preflight.
 
-Revogações em execução (contraprovas e HTML final completados no artefato de CI):
+Revogações em execução (contraprovas locais; o candidato integrado e o artefato
+final ainda precisam dos checks e da publicação):
 
 | Regra anterior | Defeito imposto | Proteção mantida | Substituição e origem |
 | --- | --- | --- | --- |
@@ -98,6 +99,30 @@ Complementos de fonte e contraprovas:
 | CTA da análise de mercado circulava entre duas âncoras | Dado útil sem formulário compulsório | `market_answers/render.py`: canal contextual real; teste rejeita ciclo e confere mensagem/canonical. Clique não é recebimento. Validade de 48 horas, expiração e fonte original conservadas; página vencida permanece noindex. |
 | Inglês operacional nos downloads e quatro capas | Método, limitações, direitos de uso e identidade verdadeira | Geradores `data_desk`, textos e metadados do pacote são revisados sem mudar estatística/data; capas corrigidas com imagegen integrado, sem inventar credenciais. Fontes/prompts em `data/site/commercial-media/source.json`; encoding em `encode_commercial_media.mjs`. |
 | Job agregado podia esconder teste pulado | Proteções existentes da branch e execução real | `site-ci.yml` + verificador de execução: `site-ci` depende de validação e evidência dos steps; skipped/neutral/missing/empty obrigatórios reprovam. Nenhuma proteção foi desabilitada. |
+| “Atendimento nacional” como selo incondicional no shell | Alcance nacional continua condicionado à viabilidade técnica e profissional real | `public_ia.py`, `html_shell.py` e `test_public_ia.py`: o rodapé agora condiciona atendimento a escopo, local e modalidade/vistoria/campo. A contraprova focal executada em 09/09 passou (1 teste); registro profissional, ART, logística e atribuições continuam verificações materiais, não slogans. |
+| Congelamento ou contagem histórica aprovava primeira dobra sem medir o candidato | Integridade do contrato visual e os mesmos papéis de conteúdo em 390×844 e 1366×768 | `first_fold_rules.mjs`, `measure_first_fold.mjs`, contrato e teste: EXECUTE_NOW revoga a espera editorial, mas exige medição nova. O checkpoint de fonte de 09/09 mediu 25 rotas: 23 PASS e 2 FAIL (`/` e `/aditivos-obras-publicas/`); `test:first-fold-contract` recusou aprovação. A medição final deve ser refeita no artefato integrado, com SHA e identidade, depois das correções. |
+| `noindex`, `Disallow` ou catálogo `DEFER` tratados como autorização para publicar previews | Fontes, travas financeiras, revisão real e overlay oficial permanecem preservados | `public-preview-route-decisions.json`, `public_artifact.py`, `_redirects` e testes: 24 fontes piloto, cinco fixtures de oportunidade, dois panoramas, o review/TXT de `/ops/` e o pacote editorial de preview ficam fora de produção; piloto/panorama e aliases definidos respondem 410, enquanto o pacote `editorial-review-packet.json` é omitido apenas em produção e deve responder 404. Overlay `official_live`, shell `/ops/`, build-info e runtime-info permanecem. |
+| Qualquer `acervo`/`enquadramento` fora de poucos padrões era legitimado por fallback; estado JS só era lido quando literal direto no sink | Termos técnicos verdadeiros e chaves internas de dados continuam permitidos | `test_public_control_vocabulary.py`, `test_self_deprecating_copy.py` e `public_surface_coverage.py`: legitimidade exige contexto técnico material na própria composição; 303 ocorrências em 114 rotas foram classificadas, com 303 legítimas e zero defeitos no retrato corrente. Declaração JS literal local usada em sink visível também entra no scanner. Seeds reprovam pendência, valorização fabricada, enquadramento comercial e `proof_state: DRAFT`; chave `as_of` em JSON interno e UI portuguesa legítima passam. O controle declara que não interpreta JavaScript arbitrário. |
+| Censo de logos congelado sobre coletor que incluía árvores internas | Hash, proporção e presença por elemento continuam exatos; ausência de master aprovada não é inventada | `logo-contract.v1.json` e `test_logo_contract.mjs`: recontagem real do universo-fonte público encontrou 216 HTML, 416 imagens de logo, 213 lockups de cabeçalho e 203 de rodapé; 3.926/3.926 checks passaram. O registro continua honesto: raster legado retido, master SVG ausente e entrega SVG de produção bloqueada à espera da arte do fundador. |
+
+Checkpoint dos controles desta rodada em 09/09, ainda pré-publicação:
+
+- `python3 -m pytest -q scripts/pseo/tests/test_public_preview_retirement.py`:
+  3 testes passaram; fonte do pacote editorial continua presente e a omissão é
+  estritamente `production`.
+- `python3 scripts/site/public_surface_coverage.py --fixture matching`: 27
+  contratos de mutação passaram no mesmo caminho do gate completo.
+- `python3 scripts/site/test_self_deprecating_copy.py`: zero rotas e zero
+  ocorrências no universo-fonte público corrente.
+- `node tests/brand/test_logo_contract.mjs`: 3.926/3.926 checks passaram, com a
+  observação medida acima.
+- `node tests/commercial/test_first_fold_contract.mjs`: reprovou o checkpoint
+  com duas falhas medidas e uma inconsistência de derivação já identificada;
+  portanto esta evidência não aprova publicação. O aceite exige nova execução
+  no artefato integrado e zero falhas.
+
+Esses resultados não são SHA servido, não comprovam cache público e não
+substituem os checks protegidos, a promoção Netcup nem a verificação HTTP final.
 
 A leitura de imagens examinou por OCR 145/145 JPG/PNG/WebP, sem falha de
 execução, e identificou quatro defeitos (imagem corporativa, especialista e

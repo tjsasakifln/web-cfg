@@ -40,9 +40,24 @@ const journeys = [
   ["pericia_avaliacao", "/servicos/#servico-pericia", "situacao-pericia", ".situation-action[href]"],
   ["seguranca_trabalho", "/servicos/#servico-sst", "situacao-sst", ".situation-action[href]"],
 ].map(([id, direct, homeAnchor, homeSelector]) => ({ id, direct, homeAnchor, homeSelector }));
+// Compact variation matrix for the real home form. This is deliberately not
+// a cartesian product: each row represents a visitor need and, together, the
+// rows cover the material inclusion risks without generating fake leads.
+const intakeScenarios = [
+  { id: "pf_reforma_sem_orcamento", audience: "pessoa_fisica", size: "pequeno", budget: "desconhecido", docs: "ausentes", stage: "obra ou imóvel para inspecionar ou documentar", journey: "obra", route: "/servicos/#servico-diagnostico", nextTerms: ["obra", "inspeção", "registro"] },
+  { id: "pf_avaliacao_com_referencia", audience: "pessoa_fisica", size: "pequeno", budget: "conhecido", docs: "disponiveis", stage: "perícia, assistência técnica ou avaliação", journey: "pericia", route: "/servicos/#servico-pericia", nextTerms: ["provado", "avaliado", "papel técnico"] },
+  { id: "profissional_compatibilizacao", audience: "profissional", size: "grande", budget: "conhecido", docs: "disponiveis", stage: "projeto, revisão ou compatibilização", journey: "projeto", route: "/servicos/#servico-projeto", nextTerms: ["finalidade", "projeto", "compatibilizar"] },
+  { id: "profissional_disciplina_nao_listada", audience: "profissional", size: "pequeno", budget: "desconhecido", docs: "ausentes", stage: "outro", journey: "outro", route: "/servicos/", nextTerms: ["situação", "atuação", "próximo passo"] },
+  { id: "condominio_anomalia", audience: "condominio", size: "grande", budget: "desconhecido", docs: "disponiveis", stage: "obra ou imóvel para inspecionar ou documentar", journey: "obra", route: "/servicos/#servico-diagnostico", nextTerms: ["obra", "diagnóstico", "local"] },
+  { id: "condominio_orcamento_reparo", audience: "condominio", size: "pequeno", budget: "conhecido", docs: "ausentes", stage: "quantitativos ou orçamento", journey: "orcamento", route: "/quantitativos-orcamento-obras/", nextTerms: ["quantificado", "orçado", "projeto"] },
+  { id: "empresa_projeto_estrutural", audience: "empresa", size: "grande", budget: "conhecido", docs: "disponiveis", stage: "projeto, revisão ou compatibilização", journey: "projeto", route: "/servicos/#servico-projeto", nextTerms: ["finalidade", "projetar", "material"] },
+  { id: "empresa_sst_sem_documentos", audience: "empresa", size: "pequeno", budget: "desconhecido", docs: "ausentes", stage: "segurança do trabalho", journey: "sst", route: "/servicos/#servico-sst", nextTerms: ["risco", "documentação", "apoio técnico"] },
+  { id: "orgao_planejando_projeto", audience: "orgao_publico", size: "grande", budget: "conhecido", docs: "disponiveis", stage: "planejamento de órgão público", journey: "orgao", route: "/servicos/#servico-obras-publicas", nextTerms: ["órgão", "etapa", "ajudar"] },
+  { id: "orgao_inspecao_inicial", audience: "orgao_publico", size: "pequeno", budget: "desconhecido", docs: "ausentes", stage: "obra ou imóvel para inspecionar ou documentar", journey: "obra", route: "/servicos/#servico-diagnostico", nextTerms: ["obra", "documentação técnica", "local"] },
+];
 const adaptiveWithheld = JSON.parse(readFileSync(join(root, "netlify/functions/data/adaptive-intake-authority.json"), "utf8")).status === "WITHHELD";
 const mime = { ".html": "text/html", ".js": "application/javascript", ".css": "text/css", ".json": "application/json", ".svg": "image/svg+xml", ".png": "image/png", ".woff2": "font/woff2" };
-const report = { candidate: null, identity: { git_head: null, artifact_commit: null, consistent: null }, site, planned: { journeys: journeys.length, viewport_route_checks: journeys.length * viewports.length }, viewports: viewports.map(([width, height]) => ({ width, height })), journeys: [], checks: [], failures: [], blockedRequests: [] };
+const report = { candidate: null, identity: { git_head: null, artifact_commit: null, consistent: null }, site, planned: { journeys: journeys.length, viewport_route_checks: journeys.length * viewports.length, intake_scenarios: intakeScenarios.length, intake_audiences: [...new Set(intakeScenarios.map(row => row.audience))], intake_sizes: [...new Set(intakeScenarios.map(row => row.size))], intake_budgets: [...new Set(intakeScenarios.map(row => row.budget))], intake_document_states: [...new Set(intakeScenarios.map(row => row.docs))], intake_fields: ["nome", "email", "estagio", "jornada", "empresa", "mensagem"], intake_controls: ["data-form-next", "data-situation-next", "data-situation-detail", "data-situation-channels", "data-situation-route", "data-situation-whatsapp"] }, viewports: viewports.map(([width, height]) => ({ width, height })), journeys: [], intakeScenarios: [], checks: [], failures: [], blockedRequests: [], leadRequests: [] };
 function record(name, pass, detail, context = {}) { const row = { name, pass, detail, ...context }; report.checks.push(row); if (!pass) report.failures.push(row); }
 // Keep running after an individual failure.  The report is evidence for every
 // planned route and viewport, not only the first broken CTA.
@@ -101,6 +116,12 @@ try {
   browser = await puppeteer.launch({ executablePath: executable(), headless: true, args: ["--no-sandbox"] });
   const page = await browser.newPage();
   await blockExternal(page);
+  page.on("request", request => {
+    const url = new URL(request.url());
+    if (/\/(?:api\/web\/lead|\.netlify\/functions\/lead)$/.test(url.pathname)) {
+      report.leadRequests.push({ method: request.method(), url: request.url() });
+    }
+  });
   for (const journey of journeys) {
     const row = { id: journey.id, direct: journey.direct, homeAnchor: journey.homeAnchor, viewportChecks: [] }; report.journeys.push(row);
     for (const [width, height] of viewports) {
@@ -136,6 +157,73 @@ try {
     const homeResult = await page.goto(routeUrl(href, `${journey.id}-home-destination`), { waitUntil: "domcontentloaded" });
     required("journey_home_entry_destination", homeResult?.status() === 200, `${href}: ${homeResult?.status()}`, { journey: journey.id, route: "/" });
   }
+  // Exercise the actual home form without submitting it. Each scenario must
+  // pass step-one validation with only name, one contact channel and the
+  // visitor's situation. Size, budget, documents, company and CNPJ are not
+  // prerequisites. The free context remains in the form and is never copied
+  // into analytics.
+  await page.setViewport({ width: 390, height: 844 });
+  for (const scenario of intakeScenarios) {
+    await page.goto(routeUrl("/", `intake-${scenario.id}`), { waitUntil: "domcontentloaded" });
+    await page.waitForFunction(() => document.querySelector("#formulario-contato")?.dataset.formReady === "true");
+    const syntheticName = `Teste controlado ${scenario.id}`;
+    const syntheticEmail = `qa-${scenario.id}@example.invalid`;
+    const syntheticCompany = ["empresa", "condominio", "orgao_publico"].includes(scenario.audience) ? `Organização sintética ${scenario.id}` : "";
+    const contextToken = `CENARIO_${scenario.id.toUpperCase()}`;
+    const userNeed = `${contextToken}. Público ${scenario.audience}; porte ${scenario.size}; orçamento ${scenario.budget}; documentos ${scenario.docs}. Necessidade técnica descrita sem dado real.`;
+    await page.type("#nome", syntheticName);
+    await page.type("#email", syntheticEmail);
+    await page.select("#estagio", scenario.stage);
+    await page.click("[data-form-next]");
+    await page.waitForSelector('#form-step-2.is-active');
+    if (syntheticCompany) await page.type("#empresa", syntheticCompany);
+    await page.type("#mensagem", userNeed);
+    const state = await page.evaluate(({ scenario, syntheticName, syntheticEmail, syntheticCompany, contextToken, userNeed }) => {
+      const form = document.querySelector("#formulario-contato");
+      const requiredFields = [...form.querySelectorAll("[required]")].map(field => field.getAttribute("name") || field.id);
+      const channels = form.querySelector("[data-situation-channels]");
+      const route = form.querySelector("[data-situation-route]");
+      const whatsapp = form.querySelector("[data-situation-whatsapp]");
+      const next = form.querySelector("[data-situation-next]");
+      const detail = form.querySelector("[data-situation-detail]");
+      const b2g = form.querySelector("[data-b2g-qualification]");
+      const analytics = JSON.stringify(window.dataLayer || []);
+      const forbiddenAnalyticsValues = [syntheticName, syntheticEmail, syntheticCompany, contextToken, userNeed].filter(Boolean);
+      const analyticsEvents = (window.dataLayer || []).map(event => event.event).filter(Boolean);
+      return {
+        step2Active: document.querySelector("#form-step-2")?.classList.contains("is-active") === true,
+        selectedStage: form.querySelector("#estagio")?.value || "",
+        hiddenJourney: form.querySelector("#jornada-hidden")?.value || "",
+        successDestination: form.getAttribute("data-success-destination") || "",
+        message: form.querySelector("#mensagem")?.value || "",
+        company: form.querySelector("#empresa")?.value || "",
+        requiredFields,
+        hasCnpjField: Boolean(form.querySelector('[name*="cnpj" i], [id*="cnpj" i]')),
+        hasFileField: Boolean(form.querySelector('input[type="file"]')),
+        b2gHidden: Boolean(b2g?.hidden && b2g?.hasAttribute("inert")),
+        nextVisible: Boolean(next && !next.hidden),
+        nextText: next?.textContent?.trim() || "",
+        detailVisible: Boolean(detail && !detail.hidden),
+        detailText: detail?.textContent?.trim() || "",
+        channelsVisible: Boolean(channels && !channels.hidden),
+        routeHref: route?.getAttribute("href") || "",
+        whatsappHref: whatsapp?.getAttribute("href") || "",
+        analyticsContainsPrivateInput: forbiddenAnalyticsValues.some(value => analytics.includes(value)),
+        analyticsSubmitOrSuccess: analyticsEvents.some(event => ["lead_form_submit", "lead_form_success", "lead_persisted"].includes(event)),
+        exclusionCopy: /recusad[oa]|não atendemos|fora (?:da|de) (?:atuação|escopo)|incompatível/i.test(`${next?.textContent || ""} ${detail?.textContent || ""}`),
+        scenario,
+      };
+    }, { scenario, syntheticName, syntheticEmail, syntheticCompany, contextToken, userNeed });
+    const context = { scenario: scenario.id, audience: scenario.audience, size: scenario.size, budget: scenario.budget, docs: scenario.docs, route: "/" };
+    required("intake_step_one_accepts_minimum_fields", state.step2Active, JSON.stringify(state), context);
+    required("intake_need_and_audience_are_preserved", state.selectedStage === scenario.stage && state.hiddenJourney === scenario.journey && state.successDestination === "/obrigado" && state.message === userNeed && state.company === syntheticCompany, JSON.stringify(state), context);
+    required("intake_company_budget_documents_and_cnpj_not_required", !state.hasCnpjField && !state.hasFileField && !state.requiredFields.some(name => /cnpj|empresa|faixa|risco|or[cç]amento|document|maturidade/i.test(name)), JSON.stringify(state.requiredFields), context);
+    required("intake_contextual_next_step", state.nextVisible && state.detailVisible && scenario.nextTerms.every(term => state.nextText.toLocaleLowerCase("pt-BR").includes(term.toLocaleLowerCase("pt-BR"))) && !state.exclusionCopy, JSON.stringify({ next: state.nextText, detail: state.detailText }), context);
+    required("intake_contextual_direct_channels", state.channelsVisible && state.routeHref === scenario.route && /^https:\/\/wa\.me\/5548988344559\?text=/.test(state.whatsappHref) && state.b2gHidden, JSON.stringify({ route: state.routeHref, whatsapp: state.whatsappHref, b2gHidden: state.b2gHidden }), context);
+    required("intake_no_private_input_in_analytics", !state.analyticsContainsPrivateInput && !state.analyticsSubmitOrSuccess, JSON.stringify(state), context);
+    report.intakeScenarios.push({ ...context, selectedStage: state.selectedStage, journey: state.hiddenJourney, nextText: state.nextText, routeHref: state.routeHref, requiredFields: state.requiredFields, leadSubmitted: false });
+  }
+  required("intake_no_lead_request_or_fake_persistence", report.leadRequests.length === 0, JSON.stringify(report.leadRequests), { route: "/", scenarios: intakeScenarios.length });
   if (adaptiveWithheld) {
     await page.setViewport({ width: 390, height: 844 });
     for (const route of ["/triagem-tecnica/", "/quantitativos-orcamento-obras/"]) {
@@ -200,7 +288,7 @@ try {
 } catch (error) {
   record("journey_harness_runtime", false, error instanceof Error ? error.stack : String(error));
 } finally { if (browser) await browser.close(); await new Promise(done => server.close(done)); }
-report.ok = report.failures.length === 0; report.executed = { journeys_started: report.journeys.length, viewport_route_checks: report.journeys.reduce((total, row) => total + row.viewportChecks.length, 0), check_count: report.checks.length, failure_count: report.failures.length };
+report.ok = report.failures.length === 0; report.executed = { journeys_started: report.journeys.length, viewport_route_checks: report.journeys.reduce((total, row) => total + row.viewportChecks.length, 0), intake_scenarios_completed: report.intakeScenarios.length, intake_scenario_checks: report.checks.filter(row => row.name.startsWith("intake_")).length, lead_requests_observed: report.leadRequests.length, check_count: report.checks.length, failure_count: report.failures.length };
 await import("node:fs/promises").then(fs => fs.writeFile(join(reportDir, "report.json"), JSON.stringify(report, null, 2)));
 if (!report.ok) { console.error("CONTACT_JOURNEYS_FAIL", JSON.stringify(report.failures)); process.exit(1); }
 console.log("CONTACT_JOURNEYS_OK", JSON.stringify(report.executed));

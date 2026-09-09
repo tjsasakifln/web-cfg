@@ -1,0 +1,61 @@
+{
+  "schema": "contract-analysis-activation-plan/1.0",
+  "analysis_id": "13ec615146b3d348190a9b0b9148831e",
+  "applied": false,
+  "forbidden_in_this_campaign": true,
+  "steps": [
+    {
+      "n": 1,
+      "action": "hash_bound_human_approval",
+      "command": "approve_one --id 13ec615146b3d348190a9b0b9148831e --actor HUMAN --rollback git:revert:13ec615146b3d348190a9b0b9148831e"
+    },
+    {
+      "n": 2,
+      "action": "confirm_author_reviewer",
+      "note": "Do not invent Tiago Sasaki."
+    },
+    {
+      "n": 3,
+      "action": "set_publication_state",
+      "from": "PUBLISHABLE_NOINDEX",
+      "to": "PUBLISHABLE_INDEX"
+    },
+    {
+      "n": 4,
+      "action": "render_final"
+    },
+    {
+      "n": 5,
+      "action": "remove_noindex_selectively"
+    },
+    {
+      "n": 6,
+      "action": "adjust_robots_headers",
+      "only": "contract-analysis family rules"
+    },
+    {
+      "n": 7,
+      "action": "write_family_sitemap"
+    },
+    {
+      "n": 8,
+      "action": "add_sitemap_index_entry"
+    },
+    {
+      "n": 9,
+      "action": "deploy"
+    },
+    {
+      "n": 10,
+      "action": "probe"
+    },
+    {
+      "n": 11,
+      "action": "handoff_discovery_86"
+    },
+    {
+      "n": 12,
+      "action": "rollback_ready"
+    }
+  ]
+}

@@ -192,7 +192,8 @@ def _build_footer() -> str:
             '<a href="/triagem-tecnica/">Contato e triagem</a>'
             '<a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a>'
             '<a href="tel:+5548988344559">(48) 98834-4559</a>'
-            "<span>Atendimento nacional</span></div>"
+            "<span>Atendimento em todo o Brasil, conforme escopo, local e "
+            "modalidade definidos na proposta.</span></div>"
         )
     return f"""<footer class="site-footer">
 <div class="container footer-top">

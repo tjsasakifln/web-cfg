@@ -602,7 +602,10 @@ def footer_columns_html(ia: dict[str, Any] | None = None) -> str:
                 f'<a href="{escape(CONTACT["tel_href"], quote=True)}">'
                 f'{escape(CONTACT["tel_label"])}</a>'
             )
-            links.append("<span>Atendimento nacional</span>")
+            links.append(
+                "<span>Atendimento em todo o Brasil, conforme escopo, local e "
+                "modalidade definidos na proposta.</span>"
+            )
         parts.append(
             f'<div class="footer-links"><strong>{heading}</strong>{"".join(links)}</div>'
         )

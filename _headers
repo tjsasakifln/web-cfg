@@ -84,10 +84,6 @@
   X-Robots-Tag: index, follow
 
 # Contract-analysis family — end
-# Offer catalog preview: public gate still off
-/piloto/ofertas/*
-  X-Robots-Tag: noindex, nofollow
-
 # CONFENGE Data Desk citation kits — exclusive namespace, not indexable
 /assets/data-desk/*
   X-Robots-Tag: noindex, follow

@@ -1,0 +1,117 @@
+{
+  "schema": "confenge.public-preview-route-decisions/1.0",
+  "decision": "EXECUTE_NOW",
+  "decided_at": "2026-09-09",
+  "authority": "Decisão expressa do fundador na revisão comercial de 09/09/2026",
+  "principle": "Noindex não é controle de acesso nem autorização editorial. Fontes de teste e rascunhos permanecem internas; apenas material individualmente aprovado pode entrar no pacote público.",
+  "groups": [
+    {
+      "id": "pilot-preview",
+      "source_root": "piloto/",
+      "source_preservation": "Os 24 HTML continuam versionados para testes e eventual nova decisão, fora de PUBLIC_TOP_DIRS.",
+      "public_decision": "RETIRE_410_PRESERVE_INTERNAL",
+      "runtime_rules": [
+        "/piloto",
+        "/piloto/*"
+      ],
+      "routes": [
+        "/piloto/",
+        "/piloto/concorrencia/edificacoes-publicas-rs/",
+        "/piloto/concorrencia/pavimentacao-infraestrutura-viaria-pr/",
+        "/piloto/concorrencia/pavimentacao-infraestrutura-viaria-rs/",
+        "/piloto/concorrencia/pavimentacao-infraestrutura-viaria-sc/",
+        "/piloto/concorrencia/pavimentacao-infraestrutura-viaria-sp/",
+        "/piloto/conversao-xray/",
+        "/piloto/mercados/edificacoes-publicas-rs/",
+        "/piloto/mercados/pavimentacao-infraestrutura-viaria-pr/",
+        "/piloto/mercados/pavimentacao-infraestrutura-viaria-rs/",
+        "/piloto/mercados/pavimentacao-infraestrutura-viaria-sc/",
+        "/piloto/mercados/pavimentacao-infraestrutura-viaria-sp/",
+        "/piloto/ofertas/",
+        "/piloto/ofertas/contratar/",
+        "/piloto/ofertas/diagnostico-expansao/",
+        "/piloto/ofertas/diretoria-180/",
+        "/piloto/ofertas/diretoria-365/",
+        "/piloto/ofertas/diretoria-flex/",
+        "/piloto/ofertas/faq/",
+        "/piloto/orgaos/base-administrativa-do-curado-pe-pe/engenharia/",
+        "/piloto/orgaos/base-aerea-de-anapolis-go/engenharia/",
+        "/piloto/orgaos/eem-euclides-pinheiro-de-andrade-ce/engenharia/",
+        "/piloto/orgaos/esp-prestacao-de-servicos-fde-see-sp/engenharia/",
+        "/piloto/orgaos/superintendencia-reg-pol-rodv-federal-go-go/engenharia/"
+      ],
+      "reason": "As páginas se apresentam como preview interno, expõem estados de publicação e preços sem autorização de oferta pública. A decisão DEFER de 24/08 não autoriza exposição pública e foi superada para esse efeito."
+    },
+    {
+      "id": "packaged-opportunity-fixtures",
+      "source_root": "oportunidades/",
+      "source_preservation": "Os cinco HTML de fixture continuam versionados para testes, fora do pacote. A origem Netcup pode acrescentar somente o conjunto official_live aceito.",
+      "public_decision": "EXCLUDE_FIXTURE_PACKAGE_KEEP_OFFICIAL_OVERLAY",
+      "runtime_rules": [
+        "/oportunidades/cc-2026-000047-ponte-rio-do-sul-sc",
+        "/oportunidades/cc-2026-000047-ponte-rio-do-sul-sc/index.html",
+        "/oportunidades/pe-2026-000188-reforma-ubs-londrina-pr",
+        "/oportunidades/pe-2026-000188-reforma-ubs-londrina-pr/index.html",
+        "/oportunidades/pe-2026-000412-pav-urbana-chapeco-sc",
+        "/oportunidades/pe-2026-000412-pav-urbana-chapeco-sc/index.html",
+        "/oportunidades/pe-2026-000903-sinalizacao-viaria-caxias-rs",
+        "/oportunidades/pe-2026-000903-sinalizacao-viaria-caxias-rs/index.html"
+      ],
+      "routes": [
+        "/oportunidades/",
+        "/oportunidades/cc-2026-000047-ponte-rio-do-sul-sc/",
+        "/oportunidades/pe-2026-000188-reforma-ubs-londrina-pr/",
+        "/oportunidades/pe-2026-000412-pav-urbana-chapeco-sc/",
+        "/oportunidades/pe-2026-000903-sinalizacao-viaria-caxias-rs/"
+      ],
+      "reason": "O conjunto commitado usa catálogo fixture e não corresponde a licitações reais. O hub público só existe quando o overlay official_live o recompõe; na falta da integração o release retira a família sem promover fixture."
+    },
+    {
+      "id": "unprotected-editorial-review-shell",
+      "source_root": "ops/",
+      "source_preservation": "O HTML estático e o TXT de orientação permanecem versionados como materiais internos; /ops/ continua sendo a interface operacional pública sem dados, com APIs autenticadas.",
+      "public_decision": "RETIRE_410_PRESERVE_INTERNAL",
+      "runtime_rules": [
+        "/ops/wave1-review.html",
+        "/ops/README-data.txt"
+      ],
+      "routes": [
+        "/ops/wave1-review.html",
+        "/ops/README-data.txt"
+      ],
+      "reason": "A página estática expunha revisão editorial e o TXT instruções internas sem autenticação. O login de /ops/ não protegia esses arquivos irmãos; noindex não é controle de acesso."
+    },
+    {
+      "id": "production-editorial-review-packet",
+      "source_root": ".well-known/editorial-review-packet.json",
+      "source_preservation": "O pacote continua versionado e disponível somente no contexto de deploy-preview para o protocolo de revisão; identidade de build/runtime permanece pública.",
+      "public_decision": "OMIT_PRODUCTION_404_PRESERVE_PREVIEW",
+      "runtime_rules": [],
+      "routes": [
+        "/.well-known/editorial-review-packet.json"
+      ],
+      "expected_production_status": 404,
+      "reason": "O arquivo descreve o protocolo e o alvo de uma revisão de preview; não é prova de aprovação do release de produção. O build de produção o omite exatamente, sem retirar build-info.json ou runtime-info.json."
+    },
+    {
+      "id": "unapproved-market-panorama",
+      "source_root": "panorama-mercado-obras-publicas/",
+      "source_preservation": "Hub e rascunho continuam como saída interna do gerador, fora de PUBLIC_TOP_DIRS.",
+      "public_decision": "RETIRE_410_PRESERVE_INTERNAL",
+      "runtime_rules": [
+        "/panorama-mercado-obras-publicas",
+        "/panorama-mercado-obras-publicas/*"
+      ],
+      "routes": [
+        "/panorama-mercado-obras-publicas/",
+        "/panorama-mercado-obras-publicas/obras-publicas-sc-2026-08/"
+      ],
+      "reason": "O registro de aprovação individual está vazio. DATA_READY autoriza processamento, não publicação; a página declara rascunho sem revisão humana confirmada e expõe estados do produtor."
+    }
+  ],
+  "counterproof": {
+    "official_opportunity_owner": "deploy/netcup/lib/release_control.py::_publish_live_intelligence_overlay",
+    "official_opportunity_contract": "source_kind=official_live com consume e ack aprovados",
+    "future_publication": "Uma futura oferta, panorama ou página piloto exige decisão individual nova e teste do destino; este registro não concede aprovação."
+  }
+}

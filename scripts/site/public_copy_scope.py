@@ -41,6 +41,12 @@ SKIP_PARTS = {
     "seo",  # generated audit reports and manifests
     "netlify",  # runtime function sources
     "node_modules",  # third-party packages
+    # Internal/generated source trees deliberately excluded from the public
+    # artifact. Artifact and served-body scans do not use this skip set, so a
+    # packaging regression still fails closed.
+    "piloto",
+    "panorama-mercado-obras-publicas",
+    "oportunidades",
     "_site",  # build output when walking source; use artifact_html_files() for it
     ".git",  # VCS internals
     ".worktrees",  # sibling checkouts
@@ -52,7 +58,7 @@ SKIP_PARTS = {
     ".cache",  # tool caches
     ".playwright-mcp",  # local browser traces
     "supabase",  # database project files
-    "ops",  # authenticated internal operations console, not a visitor surface
+    "ops",  # operator UI is non-commercial; artifact census applies exact controls
 }
 
 # Non-HTML public text surfaces that ship visitor-readable copy.
@@ -66,8 +72,6 @@ EXTRA_TEXT_SURFACES = ("llms.txt",)
 MANIFEST_ROUTE_EXEMPT = {
     # Public RevOps shell; data calls use the bearer token entered by an operator.
     "/ops/",
-    # Public noindex editorial-review shell; contains only the named fixture cohort.
-    "/ops/wave1-review.html",
 }
 
 

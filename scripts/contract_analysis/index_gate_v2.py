@@ -50,10 +50,19 @@ INDEX_ITEM_KEYS = (
 
 FORBIDDEN_SCHEMA = ("CaseStudy", "Review", "Product")
 FORBIDDEN_CLASS = ("CASO_CONFENGE", "customer success", "case study")
-PII_CTA_LEMMAS = ("@", "telefone", "whatsapp", "email")
+# A named visitor field or an address copied into the CTA is PII. The public
+# business channel itself is not: rejecting the word ``whatsapp`` made a real,
+# contextual contact path incompatible with the publication gate.
+PII_CTA_LEMMAS = ("@", "telefone=", "email=", "cnpj=", "cpf=", "phone=")
 GSC_QUERY_LEMMAS = ("gsc_query", "individual_query", "query.gsc")
 IRREGULAR_LEMMAS = ("irregularidade", "fraude", "culpa", "ilegalidade", "má-fé", "ma-fe")
 PERCENTILE_LEMMAS = ("acima da mediana", "abaixo da mediana", "ranking de pares")
+
+
+def cta_contains_visitor_pii(cta_html: str) -> bool:
+    """Detect visitor identifiers, without treating the public channel as PII."""
+    lowered = (cta_html or "").lower()
+    return any(token in lowered for token in PII_CTA_LEMMAS)
 
 
 def evaluate_index_items_v2(
@@ -189,7 +198,7 @@ def evaluate_index_items_v2(
     if start != -1:
         end = html.find("</section>", start)
         cta_slice = html[start:end if end != -1 else start + 800]
-    pii_hit = any(tok in cta_slice.lower() for tok in PII_CTA_LEMMAS) or any(
+    pii_hit = cta_contains_visitor_pii(cta_slice) or any(
         tok in lowered for tok in GSC_QUERY_LEMMAS
     )
     percentile_hit = any(tok in lowered for tok in PERCENTILE_LEMMAS)

@@ -104,9 +104,17 @@ SUBJECT = re.compile(
 INTERNAL_TAXONOMY = re.compile(
     r"classe de permiss[ãa]o"
     r"|\bas_of\b"
+    r"|\(as of\)"
+    r"|\bas of\s+(?:\d{4}-\d{2}-\d{2}|\d{1,2}\s+[A-Za-z]+\s+\d{4})\b"
     r"|\bpermission[_ ]class\b"
     r"|\bproof[_ ]state\b"
     r"|\bWITHHELD\b|\bSELF_ATTESTED\b",
+    re.I,
+)
+
+REVIEW_BACKSTAGE = re.compile(
+    r"\bn[ãa]o houve\b[^.!?]{0,45}\b(?:revis[ãa]o humana|segundo revisor)\b"
+    r"|\bsem\s+(?:revis[ãa]o humana|segundo revisor(?: independente)?)\b",
     re.I,
 )
 
@@ -241,15 +249,31 @@ _JS_ATTRIBUTE_SINK_RE = re.compile(
     r"\s*,\s*([\"'`])((?:\\.|(?!\2).)*?)\2",
     re.I | re.S,
 )
+_JS_LITERAL_DECL_RE = re.compile(
+    r"\b(?:const|let|var)\s+([A-Za-z_$][\w$]*)\s*=\s*([\"'`])"
+    r"((?:\\.|(?!\2).)*?)\2\s*;?",
+    re.S,
+)
+_JS_VARIABLE_TEXT_SINK_RE = re.compile(
+    r"(?:\.\s*(?:textContent|innerText|innerHTML)|\b(?:textContent|innerText|innerHTML))"
+    r"\s*=\s*([A-Za-z_$][\w$]*)\b",
+    re.I,
+)
+_JS_VARIABLE_ATTRIBUTE_SINK_RE = re.compile(
+    r"\.setAttribute\(\s*([\"'])(?:aria-label|aria-placeholder|title|alt|placeholder)\1"
+    r"\s*,\s*([A-Za-z_$][\w$]*)\s*\)",
+    re.I,
+)
 
 
 def dynamic_text_states(html: str) -> str:
     """Literal copy rendered by common interaction-time HTML/JS mechanisms.
 
     This is deliberately a bounded static analysis.  It covers HTML templates
-    and literal assignments to the browser's text/accessibility sinks.  It
-    does not claim to understand arbitrary JavaScript or strings assembled
-    across variables; browser journey tests remain responsible for those.
+    and literal assignments to the browser's text/accessibility sinks. It also
+    resolves a same-script identifier declared as one static literal. It does
+    not claim to understand arbitrary JavaScript, interpolation or runtime data;
+    browser journey tests remain responsible for those.
     """
     parts: list[str] = []
     for raw in _TEMPLATE_RE.findall(html or ""):
@@ -257,6 +281,13 @@ def dynamic_text_states(html: str) -> str:
     for script in _SCRIPT_RE.findall(html or ""):
         parts.extend(match.group(2) for match in _JS_TEXT_SINK_RE.finditer(script))
         parts.extend(match.group(3) for match in _JS_ATTRIBUTE_SINK_RE.finditer(script))
+        literals = {match.group(1): match.group(3) for match in _JS_LITERAL_DECL_RE.finditer(script)}
+        for match in _JS_VARIABLE_TEXT_SINK_RE.finditer(script):
+            if match.group(1) in literals:
+                parts.append(literals[match.group(1)])
+        for match in _JS_VARIABLE_ATTRIBUTE_SINK_RE.finditer(script):
+            if match.group(2) in literals:
+                parts.append(literals[match.group(2)])
     return " ".join(" ".join(parts).split())
 
 
@@ -286,6 +317,10 @@ def findings_for(html: str) -> dict[str, int]:
     n = len(INTERNAL_TAXONOMY.findall(surface))
     if n:
         counts["taxonomia_interna"] = n
+
+    n = len(REVIEW_BACKSTAGE.findall(surface))
+    if n:
+        counts["bastidor_de_revisao"] = n
 
     for _level, raw in HEADING_RE.findall(html or ""):
         heading = " ".join(re.sub(r"<[^>]+>", " ", raw).split())
@@ -347,6 +382,9 @@ def test_detector_catches_the_exact_phrases_the_owner_ordered_removed() -> None:
         '<h1>Página</h1><p class="authority-byline">Responsável: Engº Tiago Sasaki · '
         "Classe de permissão: demonstrativo (método, sem cliente)</p>",
         '<h1>Página</h1><p class="credential-as-of">as_of 4 de setembro de 2026.</p>',
+        '<h1>Página</h1><p>Referência (as of 2026-08-17).</p>',
+        '<h1>Página</h1><p>Referência da página (as of): <time>15 de agosto de 2026</time></p>',
+        '<h1>Página</h1><p>Não houve revisão humana manual nem segundo revisor independente.</p>',
         "<h1>Página</h1><h2>Resultados de clientes: nenhum publicado até agora</h2>",
         "<h1>Página</h1><p>Formação em engenharia civil: declaração do titular.</p>",
         '<h1>Página</h1><script type="application/ld+json">'
@@ -358,6 +396,7 @@ def test_detector_catches_the_exact_phrases_the_owner_ordered_removed() -> None:
         '<h1>Página</h1><p aria-hidden="true">as_of 2026-09-09</p>',
         '<h1>Página</h1><template><p>Resultados de clientes permanecem em zero</p></template>',
         '<h1>Página</h1><script>status.textContent = "as_of 2026-09-09";</script>',
+        '<h1>Página</h1><script>const copy = "proof_state: DRAFT"; status.textContent = copy;</script>',
     )
     for html in swept:
         assert findings_for(html), html[:90]
@@ -381,6 +420,9 @@ def test_detector_leaves_honest_uncertainty_and_demonstrative_labels_alone() -> 
         '<h1>Página</h1><p>O prazo depende dos documentos recebidos e começa quando '
         'confirmamos o conjunto necessário.</p>',
         '<h1>Página</h1><p>Acervo técnico exigido pelo edital: CAT compatível com a parcela.</p>',
+        '<h1>Página</h1><p>O projeto aprovado pela autoridade competente integra os documentos de entrada.</p>',
+        '<script type="application/json">{"as_of":"2026-08-17T11:29:23Z"}</script>',
+        '<h1>Página</h1><script>const copy = "Pedido recebido"; status.textContent = copy;</script>',
     )
     for html in kept:
         assert findings_for(html) == {}, (html[:90], findings_for(html))

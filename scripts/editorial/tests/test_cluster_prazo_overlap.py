@@ -185,7 +185,8 @@ def test_stage_ctas_request_secure_channel_without_fake_upload():
         )
         assert communication_ctas, route
         for href, label in communication_ctas:
-            assert "canal seguro" in label.lower(), (route, label)
+            assert re.search(r"(?:abrir|conversar|falar|solicitar|analisar)", label, re.I), (route, label)
+            assert not re.search(r"(?:enviado|recebido|registrado)", label, re.I), (route, label)
             decoded_href = unquote(href).lower()
             assert "canal seguro" in decoded_href, (route, href)
             assert channel_open_re.search(decoded_href), (route, href)

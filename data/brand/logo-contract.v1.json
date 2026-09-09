@@ -131,15 +131,15 @@
     "state": "LEGACY_RASTER_RETAINED",
     "header_primary": "/assets/logo-confenge-500-f8a83f6d.png",
     "footer_primary": "/assets/logo-confenge-white-500-1677038e.png",
-    "source_html_files_scanned": 276,
-    "logo_image_occurrences": 442,
-    "header_lockup_occurrences": 232,
-    "footer_lockup_occurrences": 210,
+    "source_html_files_scanned": 216,
+    "logo_image_occurrences": 416,
+    "header_lockup_occurrences": 213,
+    "footer_lockup_occurrences": 203,
     "legacy_asset_occurrences": {
+      "/assets/logo-confenge-500-f8a83f6d.png": 207,
+      "/assets/logo-confenge-white-500-1677038e.png": 197,
       "/assets/logo-confenge.png": 6,
-      "/assets/logo-confenge-500-f8a83f6d.png": 226,
-      "/assets/logo-confenge-white.png": 6,
-      "/assets/logo-confenge-white-500-1677038e.png": 204
+      "/assets/logo-confenge-white.png": 6
     },
     "intrinsic_ratio": "50:13",
     "header_black_on_white": "NON_COMPLIANT",
@@ -148,7 +148,7 @@
     "tagline_minimum_legibility": "NOT_APPROVED",
     "screenshot_regression": "MISSING",
     "production_svg_delivery": "BLOCKED_AWAITING_FOUNDER_ARTWORK",
-    "observation_note": "Recontado em 2026-09-08 depois de /triagem-tecnica/ receber o cabecalho e o rodape do site, que ela nunca teve (a rota publicava um <a class=\"brand-link\">CONFENGE</a> em texto, sem nav e sem rodape, fora do design system). A pagina passa a carregar exatamente um lockup de cabecalho e um de rodape, e os deltas fecham com ela e so com ela: 439->442 imagens contando o lockup de cabecalho, o de rodape e o do cabecalho movel, 230->232 lockups de cabecalho, 209->210 de rodape, 224->226 no asset de cabecalho e 203->204 no branco. Nenhum logo foi removido de pagina servida. Recontado em 2026-09-07 apos a retirada da pagina autonoma /correcoes/. A pagina tinha exatamente um logo de cabecalho e um de rodape (verificado em ac4c169cc), e os cinco deltas fecham com ela e so com ela: 440->438 imagens, 230->229 lockups de cabecalho, 210->209 de rodape, 224->223 e 204->203 por asset. Nenhum logo foi removido de pagina que continua servida. Recontado novamente em 2026-09-07 apos a publicacao de /oportunidades/index.html, que respondia 403 cru do nginx por nao ter indice. E o UNICO HTML novo do lote (git diff --name-status --diff-filter=A) e carrega exatamente um logo de cabecalho e nenhum de rodape (conferido no arquivo), e os tres deltas fecham com ela e so com ela: 438->439 imagens, 229->230 lockups de cabecalho, 223->224 no asset de cabecalho. Rodape (209) e asset branco (203) nao se movem, o que confirma a leitura. source_html_files_scanned permanece 276 por decisao explicita do gate: e evidencia imutavel de um coletor antigo que incluia arvores internas, e nao foi recapturada."
+    "observation_note": "Recontagem real de 2026-09-09 por tests/brand/test_logo_contract.mjs no universo publico corrente: 216 HTML, 416 logos, 213 lockups de cabecalho e 203 de rodape. Retiradas de rascunhos e fixtures nao alteram os arquivos-mestres nem legitimam ausencia de logo em pagina mantida; as assercoes por elemento, proporcao e hash permanecem. Contagens anteriores, incluindo 276 arquivos de um coletor que incluia arvores internas, estao preservadas no historico Git."
   },
   "promotion": {
     "current": "BLOCKED_AWAITING_FOUNDER_ARTWORK",

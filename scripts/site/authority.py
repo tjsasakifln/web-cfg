@@ -76,7 +76,8 @@ INVENTED_CREDENTIAL_PATTERNS = (
     r"\bselo\b",
     r"\bcertifica[cç][aã]o internacional\b",
     r"\b5\s*estrelas\b",
-    r"\bavalia[cç][aã]o\s+\d",
+    # A numerical customer rating is not the name of a technical 360° review.
+    r"\bavalia[cç][aã]o\s+0?[0-5](?:[.,]\d+)?(?![\d.,])\b",
     r"\b\d+\s+obras (entregues|executadas)\b",
     r"\br\$\s*\d+.*recuperad",
 )

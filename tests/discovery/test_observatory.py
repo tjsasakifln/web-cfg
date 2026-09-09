@@ -44,6 +44,14 @@ def test_cohort_covers_required_categories_and_size():
     assert "flagship-radar-nacional" in ids
     assert "fixture-only-citation-kit" in ids
 
+    analysis_hub = next(
+        asset for asset in cohort["assets"] if asset["id"] == "contract-analysis-hub"
+    )
+    assert analysis_hub["index_intent"] == "INDEX"
+    assert analysis_hub["noindex"] is False
+    assert analysis_hub["publicable"] is True
+    assert "approved" in analysis_hub["content_version"]
+
 
 def test_fixture_and_noindex_excluded_from_publicable_and_indexnow():
     report = build_report(root=ROOT, generated_at=AS_OF)

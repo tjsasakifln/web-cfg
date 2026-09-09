@@ -455,6 +455,16 @@ body[data-content-cluster="home"] .site-footer{background:var(--navy-950)}
 @media (max-width:940px){
   body[data-content-cluster="home"] .home-hero-grid{grid-template-columns:minmax(0,1fr);gap:1.25rem}
 }
+@media (min-width:941px){
+  /* Preserve the complete desktop promise/proof sequence while taking the
+   * fold margin from decorative whitespace, not from text size or content. */
+  body[data-content-cluster="home"] .hero{padding-top:2.5rem}
+  body[data-content-cluster="home"] .hero h1{margin-bottom:.8rem}
+  body[data-content-cluster="home"] .hero-lead{margin-bottom:.9rem}
+  body[data-content-cluster="home"] .hero-deliverable{margin-bottom:1.1rem;padding-top:.8rem}
+  body[data-content-cluster="home"] .hero-actions{margin-bottom:1rem}
+  body[data-content-cluster="home"] .hero-proof{padding-top:.75rem}
+}
 @media (max-width:1100px){
   .market-context-grid{grid-template-columns:minmax(0,1fr);gap:1.75rem}
   .home-method-strip{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -638,7 +648,7 @@ body[data-content-cluster="corporate-services"]{font-family:"Archivo Var",ui-san
   body[data-content-cluster="home"] .hero-secondary{min-height:44px;justify-content:flex-start}
   body[data-content-cluster="home"] .hero-proof{grid-template-columns:1fr;gap:.28rem;padding-top:.7rem}
   body[data-content-cluster="home"] .hero-proof li{min-height:0;font-size:.8rem}
-  body[data-content-cluster="home"] .corporate-hero-note{margin-top:.25rem}
+  body[data-content-cluster="home"] .corporate-hero-note{display:none}
   .situation-row{grid-template-columns:2rem minmax(0,1fr);gap:.7rem 1rem;padding:1.15rem 0}
   .situation-row p{font-size:1rem}
   .situation-row .situation-action{grid-column:2;justify-content:flex-start}

@@ -211,6 +211,22 @@ _INTERNAL_ACERVO = re.compile(
     r"|\b(?:editorial|interno)\b[^.!?]{0,35}\bacervo\b",
     re.I,
 )
+_LEGITIMATE_ACERVO = re.compile(
+    r"\bacervo(?:s)?\s+t[ée]cnic[oa]s?\b"
+    r"|\bacervo(?:s)?\b[^.!?]{0,130}\b(?:edital|licita[çc][ãa]o|habilita[çc][ãa]o|"
+    r"atestados?|CATs?|parcelas? relevantes?|capacidade|equipe|caixa|tipologias?|"
+    r"objeto|proposta|contrato|documentos?|concorrente|CNPJ|segmentos?|raio|"
+    r"quantitativos?|compradores?|[óo]rg[ãa]os?|cons[óo]rcio|san[çc][õo]es|pagamento|"
+    r"registro de pre[çc]os|faixa de R\$\s*\d|ader[êe]ncia)\b"
+    r"|\b(?:edital|licita[çc][ãa]o|habilita[çc][ãa]o|atestados?|CATs?|"
+    r"parcelas? relevantes?|capacidade|equipe|caixa|tipologias?|objeto|proposta|"
+    r"contrato|documentos?|concorrente|CNPJ|segmentos?|raio|quantitativos?|"
+    r"compradores?|[óo]rg[ãa]os?|cons[óo]rcio|san[çc][õo]es|pagamento|registro de pre[çc]os|"
+    r"faixa de R\$\s*\d|ader[êe]ncia)\b[^.!?]{0,130}\bacervo(?:s)?\b"
+    r"|\bacervo\b[^.!?]{0,90}\b(?:faixa de R\$\s*\d|pr[óo]ximo ciclo|compat[íi]vel|"
+    r"comprador|objetos? recorrentes?|campo de texto)\b",
+    re.I,
+)
 _INTERNAL_ADERENCIA = re.compile(
     r"\bader[êe]ncia\b[^.!?]{0,45}\b(?:editorial|ao gate|à taxonomia|ao funil|ao workflow)\b"
     r"|\b(?:gate|taxonomia|workflow)\b[^.!?]{0,45}\bader[êe]ncia\b",
@@ -222,17 +238,39 @@ _DELIVERABLE_CONTEXT = re.compile(
     r"|\babertura e enquadramento\b[^.!?]{0,80}\b(?:slide|contexto)\b",
     re.I,
 )
+_LEGITIMATE_ENQUADRAMENTO = re.compile(
+    r"\benquadr(?:amentos?|ar|a|amos|ada|ado)\b[^.!?]{0,120}\b(?:legal|jur[íi]dic[oa]|"
+    r"t[ée]cnic[oa]|contratual|tribut[áa]ri[oa]|trabalhista|aditivo|art\.?|lei|edital|"
+    r"matriz de riscos?|regime|fato|evento|obriga[çc][ãa]o|causa|escopo|responsabilidade|"
+    r"instrumento|projeto|formaliza[çc][ãa]o|c[áa]lculo|limite|medi[çc][ãa]o|vig[êe]ncia|"
+    r"execu[çc][ãa]o|altera[çc][ãa]o|reequil[íi]brio|risco|prova|atraso|"
+    r"indeferimento|documentos?|custos?|prazo|margem|BDI|SINAPI|CPRB|encargos?|"
+    r"desonera[çc][ãa]o|AGU|PGF|contrato|engenharia|obra|quantifica[çc][ãa]o|[íi]ndice|"
+    r"pre[çc]o|planilha|§)\b"
+    r"|\b(?:legal|jur[íi]dic[oa]|t[ée]cnic[oa]|contratual|tribut[áa]ri[oa]|trabalhista|"
+    r"aditivo|art\.?|lei|edital|matriz de riscos?|regime|fato|evento|obriga[çc][ãa]o|"
+    r"causa|escopo|responsabilidade|instrumento|projeto|formaliza[çc][ãa]o|c[áa]lculo|"
+    r"limite|medi[çc][ãa]o|vig[êe]ncia|execu[çc][ãa]o|altera[çc][ãa]o|"
+    r"reequil[íi]brio|risco|prova|atraso|indeferimento|documentos?|custos?|prazo|"
+    r"margem|BDI|SINAPI|CPRB|encargos?|desonera[çc][ãa]o|AGU|PGF|contrato|"
+    r"engenharia|obra|quantifica[çc][ãa]o|[íi]ndice|pre[çc]o|planilha|§)\b"
+    r"[^.!?]{0,120}\benquadr(?:amentos?|ar|a|amos|ada|ado)\b"
+    r"|\benquadramento\s+(?:do caso|pr[áa]tico|federal|da empresa|se aplica)\b",
+    re.I,
+)
 
 
 def legitimate_reason(term: str, sentence: str) -> str | None:
     """Return the material reason an ambiguous occurrence is visitor language."""
-    if term == "acervo" and not _INTERNAL_ACERVO.search(sentence):
+    if term == "acervo" and not _INTERNAL_ACERVO.search(sentence) and _LEGITIMATE_ACERVO.search(sentence):
         return "qualificacao_tecnica_da_empresa_em_licitacao"
     if term == "aderencia" and not _INTERNAL_ADERENCIA.search(sentence):
         return "compatibilidade_tecnica_entre_objeto_escopo_capacidade_ou_referencia"
     if term in {"enquadramento", "enquadrar"} and _DELIVERABLE_CONTEXT.search(sentence):
         return "contextualizacao_do_problema_e_premissas_na_entrega"
-    if term in {"enquadramento", "enquadrar"} and not _INTERNAL_ENQUADRAMENTO.search(sentence):
+    if (term in {"enquadramento", "enquadrar"}
+            and not _INTERNAL_ENQUADRAMENTO.search(sentence)
+            and _LEGITIMATE_ENQUADRAMENTO.search(sentence)):
         return "classificacao_tecnica_legal_do_fato_obrigacao_ou_instrumento"
     if term == "vertical" and re.search(r"\bhorizontal e vertical\b", sentence, re.I):
         return "orientacao_fisica_no_objeto_transcrito"
@@ -411,6 +449,18 @@ COUNTER_CASES = (
         is None,
     ),
     (
+        "acervo-pendente-nao-e-legitimado-por-fallback",
+        lambda: legitimate_reason("acervo", "Acervo pendente de revisão interna.") is None,
+    ),
+    (
+        "empresa-sozinha-nao-prova-contexto-do-acervo",
+        lambda: legitimate_reason("acervo", "O acervo da empresa segue pendente.") is None,
+    ),
+    (
+        "valorizacao-fabricada-do-acervo-nao-e-legitima",
+        lambda: legitimate_reason("acervo", "Nosso acervo é o melhor do mercado.") is None,
+    ),
+    (
         "aderencia-tecnica-e-legitima",
         lambda: legitimate_reason(
             "aderencia", "A aderência do objeto ao escopo e à capacidade será conferida."
@@ -445,6 +495,12 @@ COUNTER_CASES = (
             "enquadramento", "Envie um pedido de enquadramento pelo formulário."
         )
         is None,
+    ),
+    (
+        "enquadramento-comercial-nao-e-tecnico",
+        lambda: legitimate_reason(
+            "enquadramento", "Peça um enquadramento comercial para ver se atendemos."
+        ) is None,
     ),
     (
         "vertical-fisica-e-legitima",

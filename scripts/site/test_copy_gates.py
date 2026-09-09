@@ -131,9 +131,16 @@ def test_microcopy_preferences():
 
 def test_llms_consistent():
     text = (ROOT / "llms.txt").read_text(encoding="utf-8")
+    brand = load_brand()
+    assert brand["positioning"]["short"] in text
+    assert "https://confenge.com.br/servicos/" in text
+    assert "https://confenge.com.br/quantitativos-orcamento-obras/" in text
+    assert "obras públicas são uma especialidade" in text.lower()
     assert "Diretoria Fracionada para o Mercado Público" in text
     assert "/diretoria-b2g/" in text
     assert "Engenheiro Civil e Diretoria B2G fracionada" not in text
+    assert "canonical public-intelligence architecture" not in text.lower()
+    assert "extra-cli" not in text.lower()
 
 
 

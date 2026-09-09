@@ -1,51 +1,71 @@
 # CONFENGE
-> Consultoria para licitações e contratos de obras públicas. Modelo de rotina contínua: Diretoria Fracionada para o Mercado Público.
+> Projetos e serviços de engenharia para obras públicas e privadas.
 
 Site: https://confenge.com.br/
-Contato: tiago.sasaki@confenge.com.br | WhatsApp +55 48 98834-4559
-Responsável técnico: Eng. Tiago Sasaki (EESC-USP)
-Tagline: Licitação vencida não paga a conta. Contrato rentável, sim.
+Serviços: https://confenge.com.br/servicos/
+Contato: https://confenge.com.br/triagem-tecnica/
+E-mail: tiago.sasaki@confenge.com.br
+WhatsApp e telefone: +55 48 98834-4559
+Atendimento técnico: Engº Tiago Sasaki, Engenheiro Civil pela EESC-USP. A responsabilidade técnica, a ART e as atribuições aplicáveis são confirmadas para cada objeto antes da contratação.
 
-## Posicionamento
-A CONFENGE presta consultoria técnica a construtoras e empresas de engenharia em licitações e contratos de obras públicas: análise de edital, orçamento, decisão de participar, preparação de proposta e defesa de margem na execução (aditivos, reequilíbrio, medições, glosas e atrasos). Quando a empresa precisa de rotina contínua, o formato se chama Diretoria Fracionada para o Mercado Público.
+## O que a CONFENGE faz
+A CONFENGE elabora e revisa projetos, compatibiliza disciplinas, levanta quantitativos, prepara orçamentos, inspeciona edificações e produz laudos, perícias, avaliações, pareceres e análises técnicas. O trabalho atende pessoas físicas, profissionais, condomínios, empresas e órgãos públicos conforme a necessidade, a fase, o local, os documentos disponíveis e a atribuição profissional confirmada.
 
-## Jornadas de contato
-- Problema urgente em contrato: Solicitar canal seguro
-- Edital ou proposta em preparação: Enviar edital para triagem
-- Operação recorrente: Solicitar diagnóstico da operação
+- Projetos, revisão e compatibilização: https://confenge.com.br/servicos/#servico-projeto
+  Trabalho: cálculos, dimensionamento, revisão de critérios e conferência das interfaces entre disciplinas.
+  Entrega e uso: plantas, detalhes, especificações, memória de cálculo, relatório de revisão ou registro de interferências para contratar, coordenar, orçar ou executar com referência técnica comum.
+- Inspeção e diagnóstico de obra ou imóvel: https://confenge.com.br/servicos/#servico-diagnostico
+  Trabalho: inspeção do recorte, registro da condição e análise das causas sustentadas pelas evidências disponíveis.
+  Entrega e uso: relatório, laudo ou documentação do existente para priorizar manutenção, orçar reparo ou registrar uma condição.
+- Perícia, assistência técnica e avaliação: https://confenge.com.br/servicos/#servico-pericia
+  Trabalho: exame de documentos e evidências, formulação de quesitos e análise técnica delimitada.
+  Entrega e uso: laudo, parecer, análise crítica ou avaliação com método, dados, conclusão e limites para sustentar processo, negociação ou decisão patrimonial.
+- Segurança do trabalho: https://confenge.com.br/servicos/#servico-sst
+  Trabalho: levantamento de atividades, agentes, controles e documentação aplicável.
+  Entrega e uso: diagnóstico, relatório, parecer ou documento técnico para corrigir controles, manter registros ou subsidiar assistência técnica.
+- Quantitativos e orçamento de obras: https://confenge.com.br/quantitativos-orcamento-obras/
+  Trabalho: levantamento ou revisão de quantidades, critérios, composições, referências e data-base para obras públicas e privadas.
+  Entrega e uso: planilha de serviços e quantidades, memória de critérios e orçamento aberto para comparar propostas, preparar contratação, licitar ou planejar a execução.
 
-## Ofertas principais
-- https://confenge.com.br/diagnostico-b2g-360/ - Diagnóstico da Operação em Obras Públicas
-- https://confenge.com.br/diretoria-b2g/ - Diretoria Fracionada para o Mercado Público
-- https://confenge.com.br/bid-room-licitacoes-obras/ - Operação de Proposta para Licitação Crítica
-- https://confenge.com.br/defesa-margem-contratos-publicos/ - Diagnóstico de Riscos à Margem
+Os projetos podem envolver estruturas e instalações hidrossanitárias, elétricas, de prevenção e combate a incêndio, climatização e telecomunicações, além de outras disciplinas compatíveis com o objeto e com a atribuição profissional confirmada. Estudo preliminar, projeto básico e projeto executivo permanecem identificados pela fase realmente contratada.
 
-## Páginas principais
-- https://confenge.com.br/
-- https://confenge.com.br/conteudos/
-- https://confenge.com.br/inteligencia/
-- https://confenge.com.br/especialista/tiago-jun-sasaki/
-- https://confenge.com.br/#contato
+## Especialização em licitações e contratos de obras públicas
+Obras públicas são uma especialidade da CONFENGE, não o limite da atuação corporativa. A empresa também atende construtoras e órgãos públicos em análise de edital, orçamento, preparação de proposta, medição, glosa, aditivo, atraso, reequilíbrio, defesa de margem e rotina de decisão.
 
-## Páginas-pilar (clusters)
-- https://confenge.com.br/medicoes-glosas-obras-publicas/ - Medições, glosas e pagamentos
-- https://confenge.com.br/aditivos-obras-publicas/ - Aditivos e serviços extras
-- https://confenge.com.br/reequilibrio-obras-publicas/ - Reequilíbrio econômico-financeiro
-- https://confenge.com.br/defesa-tecnica-contratos-publicos/ - Sanções, defesa e extinção
-- https://confenge.com.br/acompanhamento-contratos-obras/ - Gestão contratual e pleitos
-- https://confenge.com.br/atrasos-prorrogacao-obras-publicas/ - Atrasos, prorrogação e paralisação
-- https://confenge.com.br/diagnostico-pre-licitacao/ - Edital, proposta e matriz de riscos
-- https://confenge.com.br/auditoria-orcamento-licitacao/ - Orçamento, BDI, SINAPI e preço
+- Serviços especializados: https://confenge.com.br/servicos-obras-publicas/
+- Diagnóstico da Operação em Obras Públicas: https://confenge.com.br/diagnostico-b2g-360/
+- Diretoria Fracionada para o Mercado Público: https://confenge.com.br/diretoria-b2g/
+- Operação de Proposta para Licitação Crítica: https://confenge.com.br/bid-room-licitacoes-obras/
+- Diagnóstico de Riscos à Margem: https://confenge.com.br/defesa-margem-contratos-publicos/
+- Problemas de licitações e contratos: https://confenge.com.br/problemas-que-resolvemos/
+- Análises técnicas publicadas: https://confenge.com.br/analises-contratos-publicos/
 
-## Biblioteca técnica
-Guias em https://confenge.com.br/conteudos/ sobre problemas reais de obra pública.
+## Entregas, exemplos e preços publicados
+O catálogo em https://confenge.com.br/entregas/ separa serviços de engenharia, ofertas com preço publicado e exemplos demonstrativos. Os dados de um exemplo são sintéticos; o preço, o crédito e as condições da oferta publicada são reais e permanecem sujeitos aos termos mostrados no catálogo.
 
-## O que a CONFENGE não é
-- Plataforma genérica de alertas
-- Promessa de vitória ou preço de lance ideal
-- Parecer jurídico genérico em substituição a análise individual
+- Radar de Licitações Prioritárias: R$ 599
+- Base de Mercado para Expansão: R$ 690
+- Síntese Executiva de Expansão: R$ 890
+- Mapa de Órgãos com Maior Potencial: R$ 1.200
+- Radar de Contratos Próximos da Renovação: R$ 1.450
+- Mapa de Concorrentes Relevantes: R$ 1.900
+- Referências de Preços de Obras Públicas: R$ 2.400
+- Plano Executivo de Expansão: R$ 3.750
 
+Cada oferta publicada informa a necessidade atendida, o trabalho realizado, as informações necessárias, a entrega, a utilidade, o preço, o prazo e as condições aplicáveis. Consultar um exemplo não comprova cliente, contratação ou resultado anterior.
 
-## Canonical public-intelligence architecture
+## Contato e próximo passo
+Qualquer pessoa ou organização pode explicar a necessidade em https://confenge.com.br/triagem-tecnica/, inclusive quando ainda não conhece o orçamento, não reuniu todos os documentos ou não encontrou a disciplina na lista. O contato não recusa automaticamente por porte e não promete resposta, preço, aprovação ou disponibilidade instantâneos.
 
-CONFENGE publishes public B2G intelligence, tools, datasets and acquisition journeys only at https://confenge.com.br/. Canonical facts and provenance are supplied through versioned, server-side public-data contracts; commercial next actions are orchestrated by CONFENGE's internal systems. SmartLic is not an active product or public brand: its useful assets and search equity are being selectively migrated, redirected or retired under ADR-STRAT-002.
+O formulário registra uma solicitação de contato; não conclui contratação, cobrança, análise técnica nem recebimento de documentos. O site não recebe arquivos. Quando documentos forem necessários, a CONFENGE combina um canal seguro depois do primeiro contato. Também é possível escrever para tiago.sasaki@confenge.com.br, ligar ou usar o WhatsApp +55 48 98834-4559.
+
+## Limites e confiança
+- Identidade, formação, registro e alcance das afirmações: https://confenge.com.br/especialista/tiago-jun-sasaki/
+- Método, fontes e limites: https://confenge.com.br/confianca/
+- Política de privacidade: https://confenge.com.br/privacidade/
+- A CONFENGE não promete aprovação, vitória em licitação, resultado pericial, decisão administrativa ou decisão judicial.
+- A CONFENGE não substitui o jurídico, não assina nem protocola pelo cliente e não opera credenciais do cliente.
+- O atendimento relacionado a uma obra não significa execução física da obra.
+
+## Superfície pública canônica
+O domínio público canônico é https://confenge.com.br/. Biblioteca técnica: https://confenge.com.br/conteudos/. Ferramentas públicas: https://confenge.com.br/ferramentas/. Casos demonstrativos: https://confenge.com.br/casos/.

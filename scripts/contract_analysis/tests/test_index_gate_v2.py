@@ -42,7 +42,11 @@ from scripts.contract_analysis.approval import (
 from scripts.contract_analysis.consume import load_canary
 from scripts.contract_analysis.gate import evaluate_cohort, evaluate_publication
 from scripts.contract_analysis.handoff import HANDOFF_READY
-from scripts.contract_analysis.index_gate_v2 import INDEX_ITEM_KEYS, evaluate_index_items_v2
+from scripts.contract_analysis.index_gate_v2 import (
+    INDEX_ITEM_KEYS,
+    cta_contains_visitor_pii,
+    evaluate_index_items_v2,
+)
 from scripts.contract_analysis.quality import evaluate_quality
 from scripts.contract_analysis.render import (
     apply_rendered_hash_gate,
@@ -237,6 +241,15 @@ def test_epistemic_taxonomy_cta_and_no_pii(tmp_path, monkeypatch):
             continue
         assert item.get("locator") or item.get("locators")
         assert item.get("source_ref") or item.get("url") or item.get("source_refs")
+
+
+def test_public_contact_channel_is_not_confused_with_visitor_pii():
+    direct_channel = (
+        '<a href="https://wa.me/5548988344559?text=Quero%20conversar%20sobre%20meu%20contrato">'
+        "Conversar pelo WhatsApp</a>"
+    )
+    assert cta_contains_visitor_pii(direct_channel) is False
+    assert cta_contains_visitor_pii(direct_channel + "&amp;telefone=48999999999") is True
 
 
 def test_v2_token_grants_index_only_when_hashes_match(tmp_path, monkeypatch):

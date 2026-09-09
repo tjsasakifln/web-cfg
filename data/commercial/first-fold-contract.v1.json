@@ -59,9 +59,9 @@
       "surface_class": "home",
       "evidence_state": "MEASURED_PASS",
       "measurement": {
-        "date": "2026-08-31",
+        "date": "2026-09-09",
         "viewport": "1366x768",
-        "finding": "H1 de y=200 a y=365; linha de prova de y=677 a y=700; ação primária inteira de y=550 a y=606 em 1366x768, e de y=446 a y=502 em 390x844, dentro da dobra nos dois"
+        "finding": "H1 de y=169 a y=378; linha de prova de y=718 a y=752; ação primária inteira de y=646 a y=702 em 1366x768, e de y=615 a y=665 em 390x844, dentro da dobra nos dois"
       }
     },
     {
@@ -69,9 +69,9 @@
       "surface_class": "money_hub",
       "evidence_state": "MEASURED_PASS",
       "measurement": {
-        "date": "2026-08-31",
+        "date": "2026-09-09",
         "viewport": "1366x768",
-        "finding": "H1 de y=191 a y=352; linha de prova de y=454 a y=498; ação primária inteira de y=516 a y=560 em 1366x768, e de y=631 a y=675 em 390x844, dentro da dobra nos dois"
+        "finding": "H1 de y=191 a y=352; linha de prova de y=479 a y=544; ação primária inteira de y=562 a y=606 em 1366x768, e de y=728 a y=772 em 390x844, dentro da dobra nos dois"
       },
       "observed_2026_08_24": "documento com cerca de 11266 px de altura; hero promove Conhecer o primeiro exemplo"
     },
@@ -80,9 +80,9 @@
       "surface_class": "money_hub",
       "evidence_state": "MEASURED_PASS",
       "measurement": {
-        "date": "2026-08-31",
+        "date": "2026-09-09",
         "viewport": "1366x768",
-        "finding": "H1 de y=243 a y=341; linha de prova de y=425 a y=512; ação primária inteira de y=622 a y=666 em 1366x768, e de y=797 a y=841 em 390x844, dentro da dobra nos dois"
+        "finding": "H1 de y=243 a y=341; linha de prova de y=425 a y=512; ação primária inteira de y=622 a y=666 em 1366x768, e de y=796 a y=840 em 390x844, dentro da dobra nos dois"
       }
     },
     {
@@ -90,7 +90,7 @@
       "surface_class": "money_hub",
       "evidence_state": "MEASURED_PASS",
       "measurement": {
-        "date": "2026-08-31",
+        "date": "2026-09-09",
         "viewport": "1366x768",
         "finding": "H1 de y=243 a y=390; linha de prova de y=474 a y=518; ação primária inteira de y=628 a y=672 em 1366x768, e de y=761 a y=805 em 390x844, dentro da dobra nos dois"
       }
@@ -100,31 +100,29 @@
       "surface_class": "money_offer",
       "evidence_state": "MEASURED_PASS",
       "measurement": {
-        "date": "2026-08-31",
+        "date": "2026-09-09",
         "viewport": "1366x768",
-        "finding": "H1 de y=211 a y=410; linha de prova de y=531 a y=601; ação primária inteira de y=625 a y=669 em 1366x768, e de y=599 a y=643 em 390x844, dentro da dobra nos dois"
+        "finding": "H1 de y=211 a y=410; linha de prova de y=622 a y=691; ação primária inteira de y=715 a y=759 em 1366x768, e de y=743 a y=787 em 390x844, dentro da dobra nos dois"
       }
     },
     {
       "route": "/diagnostico-pre-licitacao/",
       "surface_class": "money_offer",
-      "evidence_state": "MEASURED_FAIL",
+      "evidence_state": "MEASURED_PASS",
       "measurement": {
-        "date": "2026-08-31",
-        "viewport": "390x844",
-        "finding": "H1 de y=229 a y=428 em 1366x768; nenhuma linha de prova conferível na dobra em 1366x768 nem em 390x844",
-        "blocker": "#291 congela o HTML dos seis pilares BOFU e o styles.css como colateral de renderização até 2026-09-16, com html_mutation_authorized=false"
+        "date": "2026-09-09",
+        "viewport": "1366x768",
+        "finding": "H1 de y=229 a y=428; linha de prova de y=562 a y=621; ação primária inteira de y=641 a y=685 em 1366x768, e de y=620 a y=664 em 390x844, dentro da dobra nos dois"
       }
     },
     {
       "route": "/auditoria-orcamento-licitacao/",
       "surface_class": "money_offer",
-      "evidence_state": "MEASURED_FAIL",
+      "evidence_state": "MEASURED_PASS",
       "measurement": {
-        "date": "2026-08-31",
-        "viewport": "390x844",
-        "finding": "H1 de y=229 a y=428 em 1366x768; nenhuma linha de prova conferível na dobra em 1366x768 nem em 390x844",
-        "blocker": "#291 congela o HTML dos seis pilares BOFU e o styles.css como colateral de renderização até 2026-09-16, com html_mutation_authorized=false"
+        "date": "2026-09-09",
+        "viewport": "1366x768",
+        "finding": "H1 de y=229 a y=428; linha de prova de y=562 a y=621; ação primária inteira de y=641 a y=685 em 1366x768, e de y=620 a y=664 em 390x844, dentro da dobra nos dois"
       }
     },
     {
@@ -132,9 +130,9 @@
       "surface_class": "money_offer",
       "evidence_state": "MEASURED_PASS",
       "measurement": {
-        "date": "2026-08-31",
+        "date": "2026-09-09",
         "viewport": "1366x768",
-        "finding": "H1 de y=211 a y=344; linha de prova de y=404 a y=474; ação primária inteira de y=498 a y=542 em 1366x768, e de y=532 a y=576 em 390x844, dentro da dobra nos dois"
+        "finding": "H1 de y=211 a y=344; linha de prova de y=465 a y=534; ação primária inteira de y=558 a y=602 em 1366x768, e de y=592 a y=636 em 390x844, dentro da dobra nos dois"
       }
     },
     {
@@ -142,31 +140,29 @@
       "surface_class": "money_offer",
       "evidence_state": "MEASURED_PASS",
       "measurement": {
-        "date": "2026-08-31",
+        "date": "2026-09-09",
         "viewport": "1366x768",
-        "finding": "H1 de y=211 a y=543; linha de prova de y=603 a y=650; ação primária inteira de y=674 a y=718 em 1366x768, e de y=683 a y=727 em 390x844, dentro da dobra nos dois"
+        "finding": "H1 de y=211 a y=543; linha de prova de y=634 a y=680; ação primária inteira de y=704 a y=748 em 1366x768, e de y=744 a y=788 em 390x844, dentro da dobra nos dois"
       }
     },
     {
       "route": "/medicoes-glosas-obras-publicas/",
       "surface_class": "money_offer",
-      "evidence_state": "MEASURED_FAIL",
+      "evidence_state": "MEASURED_PASS",
       "measurement": {
-        "date": "2026-08-31",
-        "viewport": "390x844",
-        "finding": "H1 de y=229 a y=428 em 1366x768; nenhuma linha de prova conferível na dobra em 1366x768 nem em 390x844",
-        "blocker": "#291 congela o HTML dos seis pilares BOFU e o styles.css como colateral de renderização até 2026-09-16, com html_mutation_authorized=false"
+        "date": "2026-09-09",
+        "viewport": "1366x768",
+        "finding": "H1 de y=229 a y=428; linha de prova de y=562 a y=621; ação primária inteira de y=641 a y=685 em 1366x768, e de y=643 a y=687 em 390x844, dentro da dobra nos dois"
       }
     },
     {
       "route": "/aditivos-obras-publicas/",
       "surface_class": "money_offer",
-      "evidence_state": "MEASURED_FAIL",
+      "evidence_state": "MEASURED_PASS",
       "measurement": {
-        "date": "2026-08-31",
-        "viewport": "390x844",
-        "finding": "H1 de y=229 a y=561 em 1366x768; nenhuma linha de prova conferível na dobra em 1366x768 nem em 390x844",
-        "blocker": "#291 congela o HTML dos seis pilares BOFU e o styles.css como colateral de renderização até 2026-09-16, com html_mutation_authorized=false"
+        "date": "2026-09-09",
+        "viewport": "1366x768",
+        "finding": "H1 de y=187 a y=519; linha de prova de y=646 a y=705; ação primária inteira de y=717 a y=761 em 1366x768, e de y=726 a y=770 em 390x844, dentro da dobra nos dois"
       }
     },
     {
@@ -174,20 +170,19 @@
       "surface_class": "money_offer",
       "evidence_state": "MEASURED_PASS",
       "measurement": {
-        "date": "2026-08-31",
+        "date": "2026-09-09",
         "viewport": "1366x768",
-        "finding": "H1 de y=213 a y=389; linha de prova de y=507 a y=577; ação primária inteira de y=577 a y=621 em 1366x768, e de y=713 a y=757 em 390x844, dentro da dobra nos dois"
+        "finding": "H1 de y=213 a y=389; linha de prova de y=478 a y=548; ação primária inteira de y=548 a y=592 em 1366x768, e de y=662 a y=706 em 390x844, dentro da dobra nos dois"
       }
     },
     {
       "route": "/reequilibrio-obras-publicas/",
       "surface_class": "money_offer",
-      "evidence_state": "MEASURED_FAIL",
+      "evidence_state": "MEASURED_PASS",
       "measurement": {
-        "date": "2026-08-31",
-        "viewport": "390x844",
-        "finding": "H1 de y=229 a y=495 em 1366x768; nenhuma linha de prova conferível na dobra em 1366x768 nem em 390x844",
-        "blocker": "#291 congela o HTML dos seis pilares BOFU e o styles.css como colateral de renderização até 2026-09-16, com html_mutation_authorized=false"
+        "date": "2026-09-09",
+        "viewport": "1366x768",
+        "finding": "H1 de y=229 a y=495; linha de prova de y=628 a y=688; ação primária inteira de y=708 a y=752 em 1366x768, e de y=650 a y=694 em 390x844, dentro da dobra nos dois"
       }
     },
     {
@@ -195,20 +190,19 @@
       "surface_class": "money_offer",
       "evidence_state": "MEASURED_PASS",
       "measurement": {
-        "date": "2026-08-31",
+        "date": "2026-09-09",
         "viewport": "1366x768",
-        "finding": "H1 de y=213 a y=345; linha de prova de y=463 a y=509; ação primária inteira de y=509 a y=553 em 1366x768, e de y=622 a y=666 em 390x844, dentro da dobra nos dois"
+        "finding": "H1 de y=213 a y=389; linha de prova de y=507 a y=553; ação primária inteira de y=553 a y=597 em 1366x768, e de y=628 a y=672 em 390x844, dentro da dobra nos dois"
       }
     },
     {
       "route": "/diagnostico-b2g-360/",
       "surface_class": "money_offer",
-      "evidence_state": "MEASURED_FAIL",
+      "evidence_state": "MEASURED_PASS",
       "measurement": {
-        "date": "2026-08-31",
-        "viewport": "390x844",
-        "finding": "H1 de y=229 a y=362 em 1366x768; linha de prova de y=870 a y=939 em 390x844, fora da dobra de 844; ação primária inteira de y=939 a y=983 em 390x844, fora da dobra de 844",
-        "blocker": "#291 congela o HTML dos seis pilares BOFU e o styles.css como colateral de renderização até 2026-09-16, com html_mutation_authorized=false"
+        "date": "2026-09-09",
+        "viewport": "1366x768",
+        "finding": "H1 de y=229 a y=362; linha de prova de y=643 a y=668; ação primária inteira de y=709 a y=753 em 1366x768, e de y=780 a y=824 em 390x844, dentro da dobra nos dois"
       }
     },
     {
@@ -216,9 +210,9 @@
       "surface_class": "money_offer",
       "evidence_state": "MEASURED_PASS",
       "measurement": {
-        "date": "2026-08-31",
+        "date": "2026-09-09",
         "viewport": "1366x768",
-        "finding": "H1 de y=213 a y=345; linha de prova de y=434 a y=481; ação primária inteira de y=481 a y=525 em 1366x768, e de y=651 a y=695 em 390x844, dentro da dobra nos dois"
+        "finding": "H1 de y=213 a y=345; linha de prova de y=434 a y=481; ação primária inteira de y=481 a y=525 em 1366x768, e de y=630 a y=674 em 390x844, dentro da dobra nos dois"
       }
     },
     {
@@ -226,7 +220,7 @@
       "surface_class": "money_offer",
       "evidence_state": "MEASURED_PASS",
       "measurement": {
-        "date": "2026-08-31",
+        "date": "2026-09-09",
         "viewport": "1366x768",
         "finding": "H1 de y=211 a y=344; linha de prova de y=434 a y=481; ação primária inteira de y=505 a y=549 em 1366x768, e de y=532 a y=576 em 390x844, dentro da dobra nos dois"
       }
@@ -236,7 +230,7 @@
       "surface_class": "money_example",
       "evidence_state": "MEASURED_PASS",
       "measurement": {
-        "date": "2026-08-31",
+        "date": "2026-09-09",
         "viewport": "1366x768",
         "finding": "H1 de y=220 a y=300; linha de prova de y=480 a y=520; ação primária inteira de y=536 a y=584 em 1366x768, e de y=512 a y=562 em 390x844, dentro da dobra nos dois"
       }
@@ -246,7 +240,7 @@
       "surface_class": "money_example",
       "evidence_state": "MEASURED_PASS",
       "measurement": {
-        "date": "2026-08-31",
+        "date": "2026-09-09",
         "viewport": "1366x768",
         "finding": "H1 de y=240 a y=320; linha de prova de y=500 a y=540; ação primária inteira de y=556 a y=604 em 1366x768, e de y=569 a y=619 em 390x844, dentro da dobra nos dois"
       }
@@ -256,9 +250,9 @@
       "surface_class": "money_example",
       "evidence_state": "MEASURED_PASS",
       "measurement": {
-        "date": "2026-08-31",
+        "date": "2026-09-09",
         "viewport": "1366x768",
-        "finding": "H1 de y=210 a y=331; linha de prova de y=558 a y=597; ação primária inteira de y=613 a y=661 em 1366x768, e de y=620 a y=670 em 390x844, dentro da dobra nos dois"
+        "finding": "H1 de y=224 a y=344; linha de prova de y=571 a y=611; ação primária inteira de y=627 a y=675 em 1366x768, e de y=620 a y=670 em 390x844, dentro da dobra nos dois"
       }
     },
     {
@@ -266,7 +260,7 @@
       "surface_class": "money_example",
       "evidence_state": "MEASURED_PASS",
       "measurement": {
-        "date": "2026-08-31",
+        "date": "2026-09-09",
         "viewport": "1366x768",
         "finding": "H1 de y=222 a y=342; linha de prova de y=546 a y=586; ação primária inteira de y=602 a y=650 em 1366x768, e de y=642 a y=692 em 390x844, dentro da dobra nos dois"
       }
@@ -276,7 +270,7 @@
       "surface_class": "money_example",
       "evidence_state": "MEASURED_PASS",
       "measurement": {
-        "date": "2026-08-31",
+        "date": "2026-09-09",
         "viewport": "1366x768",
         "finding": "H1 de y=278 a y=399; linha de prova de y=627 a y=667; ação primária inteira de y=683 a y=731 em 1366x768, e de y=728 a y=778 em 390x844, dentro da dobra nos dois"
       }
@@ -286,9 +280,9 @@
       "surface_class": "money_example",
       "evidence_state": "MEASURED_PASS",
       "measurement": {
-        "date": "2026-08-31",
+        "date": "2026-09-09",
         "viewport": "1366x768",
-        "finding": "H1 de y=233 a y=313; linha de prova de y=518 a y=557; ação primária inteira de y=573 a y=621 em 1366x768, e de y=585 a y=635 em 390x844, dentro da dobra nos dois"
+        "finding": "H1 de y=210 a y=290; linha de prova de y=517 a y=557; ação primária inteira de y=573 a y=621 em 1366x768, e de y=585 a y=635 em 390x844, dentro da dobra nos dois"
       }
     },
     {
@@ -296,7 +290,7 @@
       "surface_class": "money_example",
       "evidence_state": "MEASURED_PASS",
       "measurement": {
-        "date": "2026-08-31",
+        "date": "2026-09-09",
         "viewport": "1366x768",
         "finding": "H1 de y=222 a y=343; linha de prova de y=546 a y=585; ação primária inteira de y=601 a y=649 em 1366x768, e de y=688 a y=738 em 390x844, dentro da dobra nos dois"
       }
@@ -306,9 +300,9 @@
       "surface_class": "money_example",
       "evidence_state": "MEASURED_PASS",
       "measurement": {
-        "date": "2026-08-31",
+        "date": "2026-09-09",
         "viewport": "1366x768",
-        "finding": "H1 de y=226 a y=346; linha de prova de y=526 a y=566; ação primária inteira de y=582 a y=630 em 1366x768, e de y=581 a y=631 em 390x844, dentro da dobra nos dois"
+        "finding": "H1 de y=239 a y=359; linha de prova de y=540 a y=579; ação primária inteira de y=595 a y=643 em 1366x768, e de y=581 a y=631 em 390x844, dentro da dobra nos dois"
       }
     }
   ],
@@ -468,7 +462,7 @@
           "route": "/diagnostico-b2g-360/",
           "primary_actions_in_fold": {
             "1366x768": 1,
-            "390x844": 0
+            "390x844": 1
           }
         },
         {
@@ -542,7 +536,7 @@
           }
         }
       ],
-      "measured_at": "2026-08-31"
+      "measured_at": "2026-09-09"
     },
     "category_repetition": {
       "fields": [
@@ -557,16 +551,15 @@
           "route": "/",
           "ok": true,
           "eyebrow_adds": [
-            "consultoria",
-            "contratos",
-            "licitacoes",
-            "obras"
+            "inteligencia",
+            "pericias",
+            "tecnica"
           ],
           "lead_adds": [
-            "capital",
-            "construtoras",
-            "decidir",
-            "edital"
+            "analises",
+            "avancar",
+            "compatibilizacao",
+            "decisao"
           ]
         },
         {
@@ -577,25 +570,26 @@
             "vitrine"
           ],
           "lead_adds": [
-            "abaixo",
-            "acao",
-            "agora",
-            "apresentadas"
+            "analises",
+            "atendem",
+            "avaliacoes",
+            "coisas"
           ]
         },
         {
           "route": "/servicos-obras-publicas/",
           "ok": true,
           "eyebrow_adds": [
-            "contrato",
-            "escolha",
-            "momento"
+            "comece",
+            "decisao",
+            "esperar",
+            "pode"
           ],
           "lead_adds": [
-            "abaixo",
-            "ciclo",
-            "confenge",
-            "decide"
+            "contratual",
+            "coordenar",
+            "crescer",
+            "critica"
           ]
         },
         {
@@ -618,13 +612,16 @@
           "route": "/diagnostico-b2g-expansao/",
           "ok": true,
           "eyebrow_adds": [
-            "pontual"
+            "capital",
+            "crescer",
+            "dispersar",
+            "escolher"
           ],
           "lead_adds": [
-            "aceite",
-            "confirmacao",
-            "dados",
-            "dias"
+            "comercial",
+            "compradores",
+            "concentrar",
+            "decida"
           ]
         },
         {
@@ -661,27 +658,31 @@
           "route": "/bid-room-licitacoes-obras/",
           "ok": true,
           "eyebrow_adds": [
-            "obras",
-            "propostas",
-            "recorrente"
+            "capital",
+            "decisao",
+            "material"
           ],
           "lead_adds": [
+            "comprometer",
             "coordenacao",
-            "edital",
-            "exige",
-            "improviso"
+            "decida",
+            "disputar"
           ]
         },
         {
           "route": "/defesa-margem-contratos-publicos/",
           "ok": true,
           "eyebrow_adds": [
-            "protecao"
+            "absorvida",
+            "custo",
+            "decidir",
+            "perda"
           ],
           "lead_adds": [
-            "enfraquece",
-            "posicao",
-            "registro"
+            "descubra",
+            "encaminhamento",
+            "eventos",
+            "merecem"
           ]
         },
         {
@@ -720,16 +721,16 @@
           "route": "/atrasos-prorrogacao-obras-publicas/",
           "ok": true,
           "eyebrow_adds": [
-            "atraso",
-            "obra",
-            "paralisacao",
-            "pedido"
+            "dias",
+            "imputaveis",
+            "pedir",
+            "prazo"
           ],
           "lead_adds": [
-            "artigo",
-            "chuva",
-            "defesa",
-            "dossie"
+            "absorvido",
+            "alheia",
+            "atingiu",
+            "contratada"
           ]
         },
         {
@@ -751,16 +752,16 @@
           "route": "/defesa-tecnica-contratos-publicos/",
           "ok": true,
           "eyebrow_adds": [
-            "construtora",
-            "notificada",
-            "risco",
-            "sancao"
+            "fato",
+            "organizado",
+            "prazo",
+            "responder"
           ],
           "lead_adds": [
-            "advogado",
-            "assina",
-            "coerente",
-            "cronologia"
+            "acusacao",
+            "base",
+            "contraponto",
+            "evolua"
           ]
         },
         {
@@ -780,26 +781,26 @@
           "route": "/acompanhamento-contratos-obras/",
           "ok": true,
           "eyebrow_adds": [
-            "apagar",
+            "decidir",
+            "durante",
             "execucao",
-            "incendio",
-            "obra"
+            "reconstruir"
           ],
           "lead_adds": [
+            "absorvido",
             "comunicacoes",
-            "defesa",
-            "desvio",
-            "diario"
+            "converta",
+            "custo"
           ]
         },
         {
           "route": "/diretoria-b2g/",
           "ok": true,
           "eyebrow_adds": [
-            "contratos",
+            "alocar",
+            "capital",
             "direcao",
-            "licitacoes",
-            "semanal"
+            "equipe"
           ],
           "lead_adds": [
             "custo",
@@ -937,7 +938,7 @@
           "finding": "o texto repete a mesma categoria no eyebrow, no H1, no title e na navegação sem acrescentar decisão"
         }
       ],
-      "measured_at": "2026-08-31",
+      "measured_at": "2026-09-09",
       "method_pt_br": "Palavras de conteúdo com quatro letras ou mais, sem acento e sem palavras de ligação. O eyebrow precisa trazer ao menos uma palavra que o H1 não traz, e o lead ao menos uma que eyebrow e H1 não trazem."
     }
   },

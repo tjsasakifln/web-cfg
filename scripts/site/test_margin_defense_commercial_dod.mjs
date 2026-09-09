@@ -111,11 +111,25 @@ const [primaryLoop, secondLoop] = loopRegistry.loops.filter((loop) => loop.enabl
 {
   const pillar = extractPillarSignals(pillarHtml, primaryLoop);
   assert.equal(pillar.links_to_diagnostico, true);
-  assert.equal(pillar.segunda_leitura_phrase, true);
+  assert.equal(pillar.method_and_delivery_explained, true);
   assert.equal(pillar.canonical_host_confenge, true);
   assert.equal(pillar.robots_indexable, true);
   assert.equal(pillar.smartlic_present, false);
   pass("pillar_signals", { canonical: pillar.canonical_href });
+}
+
+{
+  const ctaOnly = extractPillarSignals(
+    `<main><a href="${primaryLoop.asset_path}">Solicitar análise</a></main>`,
+    primaryLoop,
+  );
+  assert.equal(ctaOnly.links_to_diagnostico, true);
+  assert.equal(
+    ctaOnly.method_and_delivery_explained,
+    false,
+    "a CTA sozinha não comprova método nem entrega",
+  );
+  pass("pillar_value_counter_case");
 }
 
 {

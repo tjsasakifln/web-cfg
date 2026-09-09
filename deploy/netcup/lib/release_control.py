@@ -66,15 +66,10 @@ LIVE_INTEL_OVERLAY_REWRITES = frozenset(
     {
         "_site/sitemap-index.xml",
         "_site/ferramentas/index.html",
-        # The family parent is now a committed page, so it IS hashed in the
-        # package -- and the overlay still rewrites it at stage time to list the
-        # opportunities actually consumed from the official snapshot. Both facts
-        # are intended: the route must answer with a branded page instead of the
-        # server's raw 403 even with zero renderable records, and it must reflect
-        # real records when they exist. The packaged bytes carry the build's
-        # transforms (no-js class, bootstrap, fingerprinted CSS) while the
-        # stage-time render does not, so the digests legitimately differ.
-        # The file-set check above still applies; only this one digest may move.
+        # New artifacts exclude the opportunity fixtures and receive this hub
+        # only from official host data. Keep the existing exact allowance for
+        # rollback to older releases that packaged the hub before stage rendered
+        # it. No new file or prefix is authorized to change its packaged digest.
         "_site/oportunidades/index.html",
     }
 )

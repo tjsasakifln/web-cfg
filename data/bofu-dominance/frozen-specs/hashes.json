@@ -1,9 +1,9 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "a7eeb2137e7f5a1b8172652afd8405ab0d0d143d",
+  "baseline_commit": "f3a461e130cec079d29a8dbae9521c63be15e6a8",
   "recaptured_at": "2026-09-09",
-  "recapture_reason": "Decisão expressa EXECUTE_NOW de 09/09/2026. Fontes revisadas no commit baseline_commit: navegação institucional, diagnósticos em linguagem de serviço, termos materiais de defesa, fallback de necessidade desconhecida para outro (sem rebaixamento), sitemap e retiradas 410 específicas. As alterações de apresentação e C1–C6 foram revistas por agentes da campanha, não por pessoas ou compradores. Esta recaptura calcula bytes reais do commit, conserva os controles de integridade e não alega medição de conversão, nova atribuição ou aprovação externa. O bloco pillars é a referência histórica do experimento; forbidden, snapshots e specs vinculam os bytes atuais.",
+  "recapture_reason": "Decisão expressa EXECUTE_NOW de 09/09/2026. Fontes revisadas no commit baseline_commit: navegação institucional, diagnósticos em linguagem de serviço, termos materiais de defesa, fallback de necessidade desconhecida para outro (sem rebaixamento), sitemap e retiradas 410 específicas. As alterações de apresentação e C1–C6 foram revistas por agentes da campanha, não por pessoas ou compradores. Esta recaptura calcula bytes reais do commit, conserva os controles de integridade e não alega medição de conversão, nova atribuição ou aprovação externa. O bloco pillars é a referência histórica do experimento; forbidden, snapshots e specs vinculam os bytes atuais. Complemento f3a461e13: script.js vincula a referência de envio à página de confirmação correta, sem afirmar recebimento no acesso direto; robots e sitemaps incluem hub e única análise aprovada, nunca os cinco rascunhos retirados. Testes de sessão correspondente, query isolada e destino divergente preservam a distinção entre UI e persistência; o probe real continua separado. Hashes calculados novamente dos bytes presentes, sem exceção de digest.",
   "html_mutation": true,
   "pillars": {
     "aditivos-obras-publicas": "9fc3bd1e48dbeb4596a579628681e15c7954b249b929ca41cfe3c9effce5c6b1",
@@ -20,14 +20,14 @@
     "auditoria-orcamento-licitacao/index.html": "ce64028481a686f07f8684db6381596287b474c1907d76177b640c7fb7583662",
     "diagnostico-b2g-360/index.html": "5e4f0fc121f30aa9d06bc6bc843a40b494cadedb48e461356f22842fe42656ba",
     "diagnostico-pre-licitacao/index.html": "c55a45d022f0f383bb86552b6fc818156b7f4d301a70708dd4028d69018d7590",
-    "script.js": "e895bf1ee7c512332a9c84f09132ccfd7bcc43a538f69c828b7eebceac543456",
+    "script.js": "be277e3bd0f6ada2b6db0d36b924e8e347fb413da8a73d60ebb7a7101e265880",
     "styles.css": "0fc5b330b995bd79317bb7b27630f3e15f9f0faf7401660173312461cfc14b43",
     "styles-tokens.css": "15cc0770e76276b418c11493fa9e53827ae14bb8f854b0a63d8c6dd63afc02fc",
     "styles-tools.css": "8c42a4b5fadba13e4dae52bd7168c64b9f5548f3fd3f8d4f0707ce4e9463c7ba",
-    "robots.txt": "132889da3782dff11ceec9b6588a6e7962f2ba28738da9133a7d5318f148dcaf",
+    "robots.txt": "fa29aab1622bbbf246ad135a7690ce004082ee02dc5221e7aff30537568e0c69",
     "sitemap.xml": "de36951f3fd09a564842f18049eaa632386401d291bf9b2b4999463cdc71fddb",
-    "sitemap.txt": "a43ee48357392a12fe77a584407b9682788edd5f6aa07bc3ce404eb695eb9c1f",
-    "sitemap-index.xml": "571d68f04a9682de20f9c03d891c3e17278c290ca7032e8f7441768a2f33715d",
+    "sitemap.txt": "5dace94ea3495da837ae6c8548cdb42fd4f21f6bab64ca5b046bf6c01d76bd08",
+    "sitemap-index.xml": "02dc7b457f4aa1acbc2ef424d34838c1bf29a07915e40fab9d9fdcd24dbbd7d5",
     "_redirects": "3dc83f98fb2f9952c1dc7b9b8fb2403556cd122638d949b67be1d524321641e5",
     "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
     "js/modules/analytics.js": "bf5a0898d4c5b142165ea35ffc58c9c88f7d3746989a50ece7343f2b2e6b2e92"
@@ -43,13 +43,13 @@
     "styles.css": 0,
     "styles-tokens.css": 0,
     "styles-tools.css": 0,
-    "robots.txt": 0,
+    "robots.txt": 2,
     "sitemap.xml": 8,
-    "sitemap.txt": 0,
-    "sitemap-index.xml": 2,
+    "sitemap.txt": 2,
+    "sitemap-index.xml": 6,
     "_redirects": 17,
     "data/organic/content-service-map.json": 0,
     "js/modules/analytics.js": 0
   },
-  "previous_baseline_commit": "fcf0d060cd4536cf4dcc376b44689705e83b09ce"
+  "previous_baseline_commit": "a7eeb2137e7f5a1b8172652afd8405ab0d0d143d"
 }

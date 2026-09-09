@@ -422,16 +422,32 @@ async function main() {
     await page.setJavaScriptEnabled(false);
     await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded" });
     const nojs = await page.evaluate(() => {
-      const t = document.body.innerText;
+      const heroDelivery = (document.querySelector(".hero-deliverable")?.textContent || "")
+        .replace(/\s+/g, " ")
+        .trim();
       return {
         h1: !!document.querySelector("#hero-title"),
         situations: document.querySelectorAll(".situation-row").length,
-        form: !!document.querySelector('form[name="diagnostico-b2g"]'),
-        hasOutcome: /decisão documentada/i.test(t),
+        serviceDestinations: document.querySelectorAll(
+          '.hero a[href^="/servicos/"], .situation-row a[href^="/servicos/"]',
+        ).length,
+        directChannels: document.querySelectorAll(
+          'a[href^="mailto:"], a[href^="tel:"], a[href^="https://wa.me/"]',
+        ).length,
+        deliveryExplained:
+          heroDelivery.length >= 120
+          && /(planta|projeto|memória|planilha)/i.test(heroDelivery)
+          && /(orçamento|laudo|parecer|relatório)/i.test(heroDelivery),
       };
     });
     await page.setJavaScriptEnabled(true);
-    if (!nojs.h1 || nojs.situations !== 5 || !nojs.form || !nojs.hasOutcome) throw new Error(JSON.stringify(nojs));
+    if (
+      !nojs.h1
+      || nojs.situations !== 5
+      || nojs.serviceDestinations < 4
+      || nojs.directChannels < 2
+      || !nojs.deliveryExplained
+    ) throw new Error(JSON.stringify(nojs));
     ok("essential_content_without_js");
   } catch (e) {
     await page.setJavaScriptEnabled(true);
@@ -585,9 +601,8 @@ async function main() {
     fail("journeys_mobile_hierarchy", e.message || e);
   }
 
-  // 12c) The promoted private wedge keeps its exact canonical; corporate
-  // situations without a money page fail closed to triage, while the B2G
-  // situation keeps its own canonical hub.
+  // 12c) Each situation must land on an explanation of the promised service;
+  // the destination, not a generic form, owns the path to contextual contact.
   try {
     await page.setViewport({ width: 1024, height: 900 });
     await page.goto(`${BASE}/`, { waitUntil: "networkidle0" });
@@ -625,8 +640,40 @@ async function main() {
         await page.goto(`${BASE}/`, { waitUntil: "networkidle0" });
       }
     }
-    if (!routes.slice(1, 4).every((item) => item.href.startsWith("/triagem-tecnica/#"))) {
-      throw new Error(`unpublished non-B2G routes must fall back to triage: ${JSON.stringify(routes)}`);
+    const privateRoutes = routes.slice(0, 4);
+    if (!privateRoutes.every((item) => /^\/servicos\/#servico-[a-z-]+$/.test(item.href))) {
+      throw new Error(`engineering situation lost its service explanation: ${JSON.stringify(privateRoutes)}`);
+    }
+    if (new Set(privateRoutes.map((item) => item.href)).size !== privateRoutes.length) {
+      throw new Error(`distinct engineering needs collapse to one destination: ${JSON.stringify(privateRoutes)}`);
+    }
+    for (const item of privateRoutes) {
+      const [pathname, fragment] = item.href.split("#");
+      await page.goto(`${BASE}${pathname}`, { waitUntil: "networkidle0" });
+      const destination = await page.evaluate((id) => {
+        const section = document.getElementById(id);
+        const text = (section?.textContent || "").replace(/\s+/g, " ").trim();
+        return {
+          exists: Boolean(section),
+          substantial: text.length >= 300,
+          explainsWorkAndDelivery: /trabalho e entrega/i.test(text),
+          hasContextualContact: Boolean(section?.querySelector('a[href^="/triagem-tecnica/"]')),
+          reachesQuantities: Boolean(
+            section?.querySelector('a[href^="/quantitativos-orcamento-obras/"]'),
+          ),
+        };
+      }, fragment);
+      if (
+        !destination.exists
+        || !destination.substantial
+        || !destination.explainsWorkAndDelivery
+        || !destination.hasContextualContact
+      ) {
+        throw new Error(`${item.href}: incomplete promise → destination → contact chain ${JSON.stringify(destination)}`);
+      }
+      if (fragment === "servico-projeto" && !destination.reachesQuantities) {
+        throw new Error(`${item.href}: project path lost the distinct quantities destination`);
+      }
     }
     if (routes[4].href !== "/servicos-obras-publicas/") {
       throw new Error(`B2G route lost its canonical hub: ${JSON.stringify(routes[4])}`);
@@ -636,24 +683,30 @@ async function main() {
     fail("journey_cta_binds_form", e.message || e);
   }
 
-  // 13) primary CTA opens the situation chooser; the B2G form remains present.
+  // 13) The primary CTA lands on a substantive service explanation and that
+  // destination offers contextual contact. It need not force a generic form.
   try {
     await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded" });
     const href = await page.$eval(".hero .button-primary", (el) => el.getAttribute("href"));
-    if (href !== "#situacoes") {
-      throw new Error(`hero CTA href ${href}`);
+    if (href !== "/servicos/") throw new Error(`hero CTA href ${href}`);
+    await page.goto(`${BASE}${href}`, { waitUntil: "networkidle0" });
+    const destination = await page.evaluate(() => ({
+      h1: Boolean(document.querySelector("main h1")),
+      services: document.querySelectorAll('[id^="servico-"]').length,
+      substantial: (document.querySelector("main")?.innerText || "").trim().length >= 1800,
+      contact: Boolean(document.querySelector('main a[href^="/triagem-tecnica/"]')),
+    }));
+    if (!destination.h1 || destination.services < 5 || !destination.substantial || !destination.contact) {
+      throw new Error(`hero destination does not explain service and next step: ${JSON.stringify(destination)}`);
     }
-    const chooser = await page.$("#situacoes");
-    if (!chooser) throw new Error("situation chooser missing");
-    const form = await page.$("#formulario-contato, #contato form, form[name='diagnostico-b2g']");
-    if (!form) throw new Error("contact form missing");
-    ok("primary_cta_targets_form");
+    ok("primary_cta_explains_service_then_contact");
   } catch (e) {
-    fail("primary_cta_targets_form", e.message || e);
+    fail("primary_cta_explains_service_then_contact", e.message || e);
   }
 
-  // 13b) The corporate CTA must reveal the situation chooser. The title and
-  // first actionable row remain usable under the sticky header.
+  // 13b) A real same-page discovery link must reveal its promised situation
+  // under the sticky header. This keeps fragment navigation covered without
+  // forcing the hero's service CTA to become an in-page control.
   try {
     const sizes = [
       { w: 320, h: 844, mobile: true },
@@ -670,12 +723,11 @@ async function main() {
       });
       await page.goto(`${BASE}/`, { waitUntil: "networkidle0" });
       await page.evaluate(() => window.scrollTo(0, 0));
-      await page.click('.hero a[href="#situacoes"]');
+      await page.evaluate(() => document.querySelector('footer a[href="/#situacao-projeto"]').click());
       await new Promise((r) => setTimeout(r, 2600));
       const rep = await page.evaluate(() => {
-        const chooser = document.querySelector("#situacoes");
-        const title = document.querySelector("#situations-title");
-        const first = chooser?.querySelector(".situation-action");
+        const target = document.querySelector("#situacao-projeto");
+        const title = target?.querySelector("h3");
         const header = document.querySelector(".site-header");
         const box = (el) => {
           const r = el.getBoundingClientRect();
@@ -686,23 +738,19 @@ async function main() {
           viewport: window.innerHeight,
           headerBottom: header ? Math.round(header.getBoundingClientRect().bottom) : 0,
           title: title ? box(title) : null,
-          first: first ? box(first) : null,
-          chooserVisible: !!(chooser && getComputedStyle(chooser).display !== "none"),
+          targetVisible: !!(target && getComputedStyle(target).display !== "none"),
         };
       });
       const visible = (b) => b && b.top >= rep.headerBottom - 1 && b.bottom <= rep.viewport;
-      if (rep.hash !== "#situacoes") {
+      if (rep.hash !== "#situacao-projeto") {
         throw new Error(`${size.w}px: fragment lost (${rep.hash || "empty"})`);
       }
       if (!visible(rep.title)) {
-        throw new Error(`${size.w}px: chooser title outside the viewport ${JSON.stringify(rep.title)}`);
+        throw new Error(`${size.w}px: project situation title outside the viewport ${JSON.stringify(rep.title)}`);
       }
-      if (!visible(rep.first)) {
-        throw new Error(`${size.w}px: first chooser action outside the viewport ${JSON.stringify(rep.first)}`);
-      }
-      if (!rep.chooserVisible) throw new Error(`${size.w}px: chooser is hidden`);
+      if (!rep.targetVisible) throw new Error(`${size.w}px: project situation is hidden`);
     }
-    ok("cta_reveals_situation_chooser (320,390,430,1440)");
+    ok("in_page_service_anchor_reveals_target (320,390,430,1440)");
   } catch (e) {
     fail("cta_reveals_situation_chooser", e.message || e);
   }
@@ -714,7 +762,7 @@ async function main() {
     await page.setViewport({ width: 390, height: 844, isMobile: false, hasTouch: false });
     await page.goto(`${BASE}/`, { waitUntil: "networkidle0" });
     await page.evaluate(() => window.scrollTo(0, 0));
-    await page.click('.hero a[href="#situacoes"]');
+    await page.evaluate(() => document.querySelector('footer a[href="/#situacao-projeto"]').click());
     await new Promise((r) => setTimeout(r, 50));
     await page.mouse.move(195, 422);
     await page.mouse.wheel({ deltaY: -1200 });
@@ -722,15 +770,15 @@ async function main() {
     const manualY = await page.evaluate(() => window.scrollY);
     await new Promise((r) => setTimeout(r, 1800));
     const afterManual = await page.evaluate(() => {
-      const chooser = document.querySelector("#situacoes");
-      const title = document.querySelector("#situations-title");
+      const target = document.querySelector("#situacao-projeto");
+      const title = target.querySelector("h3");
       const offset = Math.max(
-        parseFloat(getComputedStyle(chooser).scrollMarginTop) || 0,
+        parseFloat(getComputedStyle(target).scrollMarginTop) || 0,
         parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0
       );
       return {
         y: window.scrollY,
-        targetY: Math.round(chooser.getBoundingClientRect().top + window.scrollY - offset),
+        targetY: Math.round(target.getBoundingClientRect().top + window.scrollY - offset),
         titleTop: Math.round(title.getBoundingClientRect().top),
         viewport: window.innerHeight,
       };
@@ -755,7 +803,7 @@ async function main() {
     await page.evaluate(async () => {
       window.dataLayer = [];
       window.scrollTo(0, 0);
-      document.querySelector('.hero a[href="#situacoes"]').click();
+      document.querySelector('footer a[href="/#situacao-projeto"]').click();
       await new Promise((resolveFrame) => requestAnimationFrame(() => requestAnimationFrame(resolveFrame)));
       window.location.hash = "#triagem-tecnica";
     });
@@ -777,8 +825,8 @@ async function main() {
         titleBottom: Math.round(title.getBoundingClientRect().bottom),
         headerBottom: header ? Math.round(header.getBoundingClientRect().bottom) : 0,
         viewport: window.innerHeight,
-        staleChooserArrival: (window.dataLayer || []).some(
-          (event) => event.event === "cta_view" && event.cta_id === "situacoes"
+        staleFirstArrival: (window.dataLayer || []).some(
+          (event) => event.event === "cta_view" && event.cta_id === "situacao-projeto"
         ),
       };
     });
@@ -791,7 +839,7 @@ async function main() {
     if (competing.titleTop < competing.headerBottom - 1 || competing.titleBottom > competing.viewport) {
       throw new Error(`latest anchor title not visible: ${JSON.stringify(competing)}`);
     }
-    if (competing.staleChooserArrival) throw new Error("superseded chooser anchor emitted cta_view");
+    if (competing.staleFirstArrival) throw new Error("superseded project anchor emitted cta_view");
     ok("latest_anchor_wins_competing_navigation");
   } catch (e) {
     fail("latest_anchor_wins_competing_navigation", e.message || e);
@@ -805,27 +853,27 @@ async function main() {
       window.dataLayer = [];
       window.scrollTo(0, 0);
     });
-    await page.click('.hero a[href="#situacoes"]');
-    await page.waitForFunction(() => window.location.hash === "#situacoes");
+    await page.evaluate(() => document.querySelector('footer a[href="/#situacao-projeto"]').click());
+    await page.waitForFunction(() => window.location.hash === "#situacao-projeto");
     await page.evaluate(() => window.history.back());
     await page.waitForFunction(() => window.location.hash === "");
     await new Promise((r) => setTimeout(r, 1800));
     const backed = await page.evaluate(() => {
-      const chooser = document.querySelector("#situacoes");
-      const title = document.querySelector("#situations-title");
+      const target = document.querySelector("#situacao-projeto");
+      const title = target.querySelector("h3");
       const offset = Math.max(
-        parseFloat(getComputedStyle(chooser).scrollMarginTop) || 0,
+        parseFloat(getComputedStyle(target).scrollMarginTop) || 0,
         parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0
       );
-      const targetY = Math.round(chooser.getBoundingClientRect().top + window.scrollY - offset);
+      const targetY = Math.round(target.getBoundingClientRect().top + window.scrollY - offset);
       const titleBox = title.getBoundingClientRect();
       return {
         hash: window.location.hash,
         y: Math.round(window.scrollY),
         targetY,
         titleVisible: titleBox.top < window.innerHeight && titleBox.bottom > 0,
-        staleChooserArrival: (window.dataLayer || []).some(
-          (event) => event.event === "cta_view" && event.cta_id === "situacoes"
+        staleFirstArrival: (window.dataLayer || []).some(
+          (event) => event.event === "cta_view" && event.cta_id === "situacao-projeto"
         ),
       };
     });
@@ -833,7 +881,7 @@ async function main() {
     if (backed.titleVisible || backed.y >= backed.targetY - 844) {
       throw new Error(`superseded anchor reclaimed Back position: ${JSON.stringify(backed)}`);
     }
-    if (backed.staleChooserArrival) throw new Error("anchor cancelled by Back emitted cta_view");
+    if (backed.staleFirstArrival) throw new Error("anchor cancelled by Back emitted cta_view");
     ok("back_cancels_inflight_anchor_navigation");
   } catch (e) {
     fail("back_cancels_inflight_anchor_navigation", e.message || e);

@@ -176,12 +176,73 @@ def test_inteligencia_hub_decision_copy():
     assert "sem ranking proprietário" not in build_src
 
 
+def _llms_positioning_errors(text: str) -> set[str]:
+    lower = text.lower()
+    errors = set()
+    if not re.search(r"obras? públicas? e privadas?", lower):
+        errors.add("corporate_public_private_scope_missing")
+    if "https://confenge.com.br/servicos/" not in text:
+        errors.add("corporate_services_missing")
+    if "obras públicas são uma especialidade" not in lower or "/servicos-obras-publicas/" not in text:
+        errors.add("legitimate_public_works_vertical_missing")
+    if not all(
+        path in text
+        for path in (
+            "/servicos/#servico-projeto",
+            "/servicos/#servico-diagnostico",
+            "/servicos/#servico-pericia",
+            "/servicos/#servico-sst",
+            "/quantitativos-orcamento-obras/",
+            "/entregas/",
+        )
+    ):
+        errors.add("service_or_delivery_path_missing")
+    if not all(audience in lower for audience in ("pessoas físicas", "condomínios", "empresas", "órgãos públicos")):
+        errors.add("inclusive_audience_missing")
+    if "tiago.sasaki@confenge.com.br" not in lower or "+55 48 98834-4559" not in text:
+        errors.add("direct_contact_missing")
+    if "não recebe arquivos" not in lower or "não conclui contratação" not in lower:
+        errors.add("contact_boundary_missing")
+    if "exclusivamente obras públicas" in lower or "somente construtoras" in lower:
+        errors.add("corporate_scope_narrowed_to_b2g")
+    return errors
+
+
 def test_llms_positioning():
     text = (ROOT / "llms.txt").read_text(encoding="utf-8")
+    assert _llms_positioning_errors(text) == set()
     assert "Diretoria Fracionada para o Mercado Público" in text
     assert "/diretoria-b2g/" in text
     assert "lance ótimo" not in text.lower() or "não" in text.lower()
     assert "extra-cli" not in text.lower()
+
+    catalog = (ROOT / "entregas" / "index.html").read_text(encoding="utf-8")
+    cards = re.findall(
+        r'<article\b[^>]*data-public-state="PUBLISHED"[^>]*>(.*?)</article>',
+        catalog,
+        re.I | re.S,
+    )
+    assert len(cards) == 8
+    for card in cards:
+        name = re.search(r"<h2\b[^>]*>([^<]+)</h2>", card, re.I)
+        price = re.search(r'class="vitrine-item__price"[\s\S]*?<strong>(R\$\s*[\d.]+)</strong>', card, re.I)
+        assert name and price
+        assert name.group(1).strip() in text
+        assert price.group(1).strip() in text
+
+
+def test_llms_scope_guard_rejects_b2g_only_but_accepts_a_legitimate_vertical():
+    b2g_only = """
+    # CONFENGE
+    Consultoria exclusivamente para obras públicas e somente construtoras.
+    Serviços: https://confenge.com.br/servicos-obras-publicas/
+    """
+    assert "corporate_public_private_scope_missing" in _llms_positioning_errors(b2g_only)
+    assert "corporate_scope_narrowed_to_b2g" in _llms_positioning_errors(b2g_only)
+
+    current = (ROOT / "llms.txt").read_text(encoding="utf-8")
+    assert "legitimate_public_works_vertical_missing" not in _llms_positioning_errors(current)
+    assert "corporate_scope_narrowed_to_b2g" not in _llms_positioning_errors(current)
 
 
 def test_sitemap_includes_offers():
