@@ -179,3 +179,46 @@ nunca medimos um". A substância é honesta e fica; a explicação de bastidor s
 Corrigido em `scripts/site/render_authority_pages.py` (fonte) e nas duas rotas
 que publicavam a frase. É o tipo de achado que só a leitura do HTML servido
 produz, e a razão pela qual §4 exige trechos efetivamente renderizados.
+
+## Estado final (2026-09-09)
+
+**Releases publicados e conferidos:** `4075e91c6` (PR #644) e `c173461cc` (PR #645).
+Ambos com `netcup-release` bem-sucedido e promoção atômica. Identidade conferida
+no release final: `build-info` e `runtime-info` em `c173461cc`,
+`environment production`, `profile netcup-production`,
+`build_time 2026-09-09T04:30:13Z`.
+
+**Conteúdo servido conferido**, 28 verificações sobre `/`, `/servicos/`,
+`/entregas/`, `/triagem-tecnica/`, `/aditivos-obras-publicas/`, `/confianca/`,
+`/problemas-que-resolvemos/` e `/especialista/tiago-jun-sasaki/`. Nenhum defeito
+remanescente. Duas divergências investigadas e explicadas:
+
+- `"conforme o escopo"` sobrevive UMA vez em `/servicos/`, na seção de fronteira:
+  "a definição de responsável técnico, ART e eventuais registros ou vistos é feita
+  conforme o escopo contratado, as atribuições profissionais e a jurisdição
+  aplicável". É condição material dita uma vez, no lugar pertinente, que §6
+  permite. O defeito era repeti-la em cada linha de entrega, e esse sumiu.
+- `/problemas-que-resolvemos/` diz "Conhecer os serviços para obras públicas"
+  (-> `/servicos-obras-publicas/`) mais "Outra situação: projeto, imóvel, perícia
+  ou segurança do trabalho" (-> `/servicos/`). É a correção feita no gerador, que
+  preserva a especialização da página e abre o caminho da marca inteira.
+
+**Contato em produção:** formulário da home presente (`id="formulario-contato"`);
+`/contato/` redireciona 301 para `/#contato`; WhatsApp e e-mail presentes em `/`
+e em `/triagem-tecnica/`.
+
+## Não verificado, explicitamente
+
+- **Recebimento humano.** E-mail tem MX vivo e SPF; WhatsApp resolve para conversa
+  válida sem envio. Nenhum dos dois prova que uma pessoa leu.
+- **Intake adaptativo.** Segue `WITHHELD` por decisão de Governance. Não forçado.
+- **Dívida de vocabulário.** 487 ocorrências em 158 rotas seguem registradas e
+  contadas. Exige triagem por ocorrência: em artigos da Lei 14.133,
+  "enquadramento" é vocabulário do comprador e §7 manda preservar.
+- **`test_margin_cluster_inventory.mjs`** falha em `origin/main` intocada
+  (`missing Método`), verificado com `git stash`. Não encadeado em `npm test`.
+- **Efeito comercial.** Nenhum. Texto aprovado não prova conversão.
+
+## Reversão
+
+`/opt/confenge-web/bin/rollback 4075e91c6686d966fb64ed68d980e1efa15b1eb4`
