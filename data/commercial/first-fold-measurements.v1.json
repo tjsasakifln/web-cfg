@@ -1,9 +1,9 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-09-09T18:16:36.241Z",
+  "measured_at": "2026-09-09T18:45:49.224Z",
   "measured_on": "2026-09-09",
-  "commit_sha": "e72a2cbf02842f7c4fb2d1badebd4bdbd5f8028d",
+  "commit_sha": "e1b4dc92fe62ab27b1788fdd95c73f3d57fa7d7a",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "f168038814087e1b365d1de3042af9a3f3364743756e104711fecc0fb9fe7477",
@@ -42,8 +42,8 @@
     "diagnostico-b2g-expansao/index.html": "864d53e45b946f8f8252ca0568d005cb209e618a177d2234582054533e63e715",
     "diagnostico-pre-licitacao/index.html": "65c6ea2c235ef0db5629922ed18c578bde2ef585339d6adec86830014e1229f4",
     "diretoria-b2g/index.html": "72d1ffd411f911fd295b6ae13fd1318c28356aa007fbf73f71cac80e39f68197",
-    "entregas/index.html": "8b44aafcd6437596f75c33414cbbfa038ca362a0b365e90fd6b4999154ef3cd7",
-    "entregas/styles.css": "65e3d0b8c42390eceabd3a7bb8650650283be0a8e27118a62586d2132cab38ac",
+    "entregas/index.html": "5be186353c5c1ab7f3fb74a360ef8381a6fe1bef9adada404c2575ba8db22adb",
+    "entregas/styles.css": "0dca7831c23ee3d1a521fa99b6b234aaefed87de989b9d31482faf4b74a35226",
     "index.html": "05f8ba51328a9353d95a15c1568459bab5a2adc2d9cf1a5157f93de2f6e1c919",
     "medicoes-glosas-obras-publicas/index.html": "fe3d3c644ac158dae63f85369301da200b5f4de025b0db3364b9cb3e3d929c61",
     "problemas-que-resolvemos/index.html": "fbd929bd17c6890969ee4b0f5c3647dca7ee81bf75b3a8ae4e124c38aef0b280",
@@ -54,7 +54,7 @@
     "styles-offers.css": "26ab81eca7465514c8840c985c0df73c7153a2a525592d3783be36b88864f5d4",
     "styles-tokens.css": "15cc0770e76276b418c11493fa9e53827ae14bb8f854b0a63d8c6dd63afc02fc",
     "styles-tools.css": "8c42a4b5fadba13e4dae52bd7168c64b9f5548f3fd3f8d4f0707ce4e9463c7ba",
-    "styles.css": "1adf1fce8dc20876b3e8192e5b28b3c0750cad5f48b2d2991fbc8bcec0a2ce51"
+    "styles.css": "e0308ce5bd1b6da4d4b7a4cb58c4717a9d3512b36b839fb35ca6be21bf03eaf3"
   },
   "surface": "source",
   "artifact_identity": null,
@@ -310,7 +310,7 @@
     },
     {
       "route": "/entregas/",
-      "html_sha256": "8b44aafcd6437596f75c33414cbbfa038ca362a0b365e90fd6b4999154ef3cd7",
+      "html_sha256": "5be186353c5c1ab7f3fb74a360ef8381a6fe1bef9adada404c2575ba8db22adb",
       "measured_on": "2026-09-09",
       "viewports": {
         "1366x768": {
@@ -457,8 +457,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 728,
-                "bottom": 772,
+                "top": 726,
+                "bottom": 770,
                 "left": 20,
                 "right": 370,
                 "width": 350,
@@ -472,8 +472,8 @@
               "text": "Ver entregas e exemplos",
               "href": "#servicos-e-entregas",
               "box": {
-                "top": 728,
-                "bottom": 772,
+                "top": 726,
+                "bottom": 770,
                 "left": 20,
                 "right": 370,
                 "width": 350,
