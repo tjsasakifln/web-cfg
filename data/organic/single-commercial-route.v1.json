@@ -19,16 +19,31 @@
   },
   "implementation": {
     "public_state": "PARTIAL",
-    "completed_surface_roles": [
+    "state_scope": "historical_issue_390_work_record",
+    "historical_issue_completed_surface_roles": [
       "home",
       "services_hub"
     ],
-    "pending_surface_roles": [
+    "historical_issue_unresolved_surface_roles": [
+      "editorial_canary",
+      "canonical_destination"
+    ],
+    "editorially_authorized_surface_roles": [
+      "home",
+      "services_hub",
       "editorial_canary",
       "canonical_destination"
     ],
     "parent_issue_close_allowed": false,
-    "limitation_pt_br": "O canário é exclusivo da issue #389 e o destino canônico permanece congelado até 2026-09-16; esta entrega não satisfaz sozinha toda a aceitação da issue #390."
+    "commercial_campaign_blocked": false,
+    "limitation_pt_br": "PARTIAL registra somente o histórico de aceite da issue #390 e não bloqueia a campanha comercial nem correções editoriais autorizadas em suas superfícies. O encerramento da issue continua dependente de seus próprios critérios e responsáveis."
+  },
+  "editorial_authorization": {
+    "decision": "EXECUTE_NOW",
+    "effective_at": "2026-09-09",
+    "authority_record": "docs/campaigns/2026-09-08-comunicacao-publica-comercial.md",
+    "forced_wait": false,
+    "integrity_rule_pt_br": "A edição comercial autorizada exige revisão do conteúdo renderizado, recaptura do hash real e aprovação dos controles; o hash registra os bytes auditados, mas não impede correção editorial."
   },
   "hypothesis_pt_br": "Uma dor de medição ou glosa reconhecida na busca deve avançar por uma única transferência comercial, com nome estável e contexto completo, antes da captura CONFENGE_WEB.",
   "route": {
@@ -59,8 +74,14 @@
       "UNKNOWN"
     ],
     "public_price_exposure": {
-      "state": "DEFERRED_BY_FROZEN_DESTINATION",
-      "reason_pt_br": "O preço-piloto continua aplicável no contrato comercial, mas não é inserido nas superfícies desta transferência enquanto o destino canônico estiver byte-frozen e sem captura persistida on-page."
+      "state": "WITHHELD_NO_PUBLICATION_AUTHORITY",
+      "authority_contract": "data/corporate/pricing-gate-projection.v1.json",
+      "required_state": "PUBLICATION_AUTHORIZED",
+      "observed_state": "PILOT_HYPOTHESIS",
+      "public_display_authorized": false,
+      "checkout_authorized": false,
+      "depends_on_form_presence": false,
+      "reason_pt_br": "R$ 4.900 permanece hipótese comercial interna de CFG-D18: não há pin material que autorize sua exibição pública nem checkout. O contato contextual continua funcional e não depende de formulário obrigatório."
     }
   },
   "surfaces": [
@@ -69,21 +90,22 @@
       "route": "/",
       "file": "index.html",
       "cta_id": "home-medicoes-glosas-dossie",
-      "mutation_state": "AUTHORIZED"
+      "mutation_state": "EDITORIAL_AUTHORIZED"
     },
     {
       "role": "services_hub",
       "route": "/servicos-obras-publicas/",
       "file": "servicos-obras-publicas/index.html",
       "cta_id": "hub-servicos-medicoes-glosas",
-      "mutation_state": "AUTHORIZED"
+      "mutation_state": "EDITORIAL_AUTHORIZED"
     },
     {
       "role": "editorial_canary",
       "route": "/conteudos/atraso-na-medicao-obra-publica/",
       "file": "conteudos/atraso-na-medicao-obra-publica/index.html",
-      "mutation_state": "OWNED_BY_389_READ_ONLY",
+      "mutation_state": "EDITORIAL_AUTHORIZED",
       "content_owner_issue": 389,
+      "ownership_role": "historical_provenance",
       "existing_semantic_link": "/medicoes-glosas-obras-publicas/",
       "required_final_cta_id": "canary-medicao-dossie"
     },
@@ -91,16 +113,15 @@
       "role": "canonical_destination",
       "route": "/medicoes-glosas-obras-publicas/",
       "file": "medicoes-glosas-obras-publicas/index.html",
-      "mutation_state": "FROZEN_READ_ONLY",
-      "freeze_owner_issues": [
+      "mutation_state": "EDITORIAL_AUTHORIZED",
+      "historical_freeze_owner_issues": [
         128,
         291
       ],
-      "earliest_safe_action_at": "2026-09-16",
-      "expected_sha256": "7cff440c571ebff52297d1be6503fd35ca8fea2b19b3af4c79c6b39b3935c4de",
-      "expected_sha256_note": "Recapturado em 2026-09-08 junto com data/bofu-dominance/frozen-specs/hashes.json: o descongelamento das seis paginas-pilar foi autorizado pelo fundador para tirar de producao copy que negava o proprio servico e tokens internos na copy do CTA. O hash continua sendo verificado contra a linha de base revisada; o que mudou foi a linha de base.",
-      "expected_sha256_recaptured_at": "2026-09-08",
-      "expected_sha256_recapture_reason": "Campanha de comunicacao publica (PR #644). A pagina-pilar mudou pelas correcoes editoriais desta campanha, sob a autorizacao de descongelamento editorial do fundador ja registrada em data/bofu-dominance/frozen-specs/hashes.json. A data de destravamento (earliest_safe_action_at 2026-09-16) e o regime FROZEN_READ_ONLY permanecem inalterados: o que se recaptura e a linha de base revisada, nao a autorizacao. Preco, prazo, escopo, limite legal e destino comercial da rota seguem identicos."
+      "expected_sha256": "fe3d3c644ac158dae63f85369301da200b5f4de025b0db3364b9cb3e3d929c61",
+      "expected_sha256_note": "Linha de base de bytes efetivamente auditada em 2026-09-09 e reconciliada com data/bofu-dominance/frozen-specs/hashes.json. O hash preserva integridade e procedência; não cria espera nem veto editorial.",
+      "expected_sha256_recaptured_at": "2026-09-09",
+      "expected_sha256_recapture_reason": "Decisão EXECUTE_NOW de 2026-09-09: correções comerciais podem alcançar a página com revisão renderizada, recaptura real e gates aprovados. Preço, prazo, escopo, limite legal e destino comercial permanecem sujeitos às suas autoridades materiais próprias."
     }
   ],
   "primary_cta_contract": {
@@ -126,6 +147,6 @@
   },
   "rollback": {
     "trigger_pt_br": "Aumento de confusão entre a resposta editorial e a próxima ação, queda observável na transferência ou conflito de ownership.",
-    "action_pt_br": "Reverter a copy e os links das duas superfícies autorizadas, mantendo o conteúdo técnico, a URL canônica, o canário sob #389 e o pilar byte-frozen."
+    "action_pt_br": "Reverter a alteração defeituosa sem retirar o conteúdo técnico nem a URL canônica; preservar a procedência da issue #389, a integridade medida e as autoridades materiais de preço, checkout e responsabilidade profissional."
   }
 }

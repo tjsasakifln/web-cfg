@@ -331,9 +331,9 @@ try {
   await page.setViewport({ width: 390, height: 844 });
   const marketRoute = "/inteligencia/valor-tipico-contratos-pavimentacao/";
   const marketResponse = await page.goto(routeUrl(marketRoute, "market-answer"), { waitUntil: "domcontentloaded" });
-  const marketAction = await page.$('[data-ma-event="xray_start"]');
+  const marketAction = await page.$('[data-ma-event="cta_click"][data-cta-id="veja-sua-empresa"]');
   required("market_answer_status", marketResponse?.status() === 200, String(marketResponse?.status()), { route: marketRoute });
-  required("market_answer_contextual_action", Boolean(marketAction), "[data-ma-event=xray_start]", { route: marketRoute });
+  required("market_answer_contextual_action", Boolean(marketAction), "[data-ma-event=cta_click][data-cta-id=veja-sua-empresa]", { route: marketRoute });
   if (marketAction) {
     const href = await marketAction.evaluate(anchor => anchor.getAttribute("href") || "");
     const decoded = decodeURIComponent(href);

@@ -1,10 +1,10 @@
 /**
  * Gate da rota comercial unica de Medicoes/Glosas, issue 390.
  *
- * O pilar canonico permanece byte-frozen por 128/291. Este gate prova a
- * transferencia semantica nas superficies autorizadas e falha se alguem
- * criar um segundo destino comercial, enfraquecer a atribuicao ou editar o
- * destino protegido antes do desbloqueio.
+ * A decisao EXECUTE_NOW autoriza a revisao editorial das quatro superficies.
+ * Este gate preserva a transferencia semantica, a procedencia e a integridade
+ * dos bytes sem transformar hash, owner historico ou data em veto editorial.
+ * Preco publico e checkout continuam fail-closed por suas autoridades materiais.
  */
 import crypto from "node:crypto";
 import fs from "node:fs";
@@ -25,6 +25,8 @@ const contract = json("data/organic/single-commercial-route.v1.json");
 const pageContract = json("data/commercial/page-contract-contratos.v1.json");
 const naming = json("data/commercial/offer-naming.v1.json");
 const frozenHashes = json("data/bofu-dominance/frozen-specs/hashes.json");
+const deliverables = json("data/commercial/deliverables-registry.v1.json");
+const pricingProjection = json("data/corporate/pricing-gate-projection.v1.json");
 
 const results = [];
 function assert(name, condition, detail = "") {
@@ -36,6 +38,49 @@ const anchorForCta = (html, ctaId) =>
   (html.match(new RegExp(`<a\\b(?=[^>]*\\bdata-cta-id=["']${ctaId}["'])[^>]*>`, "i")) || [""])[0];
 const attr = (tag, name) =>
   (tag.match(new RegExp(`\\b${name}=["']([^"']*)["']`, "i")) || ["", ""])[1];
+const obsoleteEditorialLocks = (candidate) => {
+  const serialized = JSON.stringify(candidate);
+  const forbiddenStates = [
+    "FROZEN_READ_ONLY",
+    "OWNED_BY_389_READ_ONLY",
+    "DEFERRED_BY_FROZEN_DESTINATION",
+  ];
+  const errors = forbiddenStates.filter((state) => serialized.includes(state));
+  for (const surface of candidate.surfaces || []) {
+    if (Object.hasOwn(surface, "earliest_safe_action_at")) errors.push(`${surface.role}:forced_wait`);
+  }
+  return errors;
+};
+const bindingPriceAuthorization = (deliverableId, projection = pricingProjection) =>
+  (projection.observed_authorization_evidence || []).find(
+    (evidence) =>
+      (evidence.binding_offer_ids || []).includes(deliverableId) &&
+      ["PUBLICATION_AUTHORIZED", "CHECKOUT_AUTHORIZED"].includes(evidence.state) &&
+      evidence.public_display_authorized === true,
+  );
+const bindingCheckoutAuthorization = (deliverableId, projection = pricingProjection) =>
+  (projection.observed_authorization_evidence || []).find(
+    (evidence) =>
+      (evidence.binding_offer_ids || []).includes(deliverableId) &&
+      evidence.state === "CHECKOUT_AUTHORIZED" &&
+      evidence.checkout_authorized === true,
+  );
+const priceExposureErrors = ({ exposure, registryItem, projection = pricingProjection }) => {
+  const errors = [];
+  const binding = bindingPriceAuthorization(registryItem.deliverable_id, projection);
+  if (exposure.public_display_authorized && !binding) errors.push("public_price_without_binding_authority");
+  if (
+    exposure.checkout_authorized &&
+    (registryItem.checkout_enabled !== true || !bindingCheckoutAuthorization(registryItem.deliverable_id, projection))
+  ) {
+    errors.push("checkout_without_binding_authority");
+  }
+  if (!binding && exposure.state !== "WITHHELD_NO_PUBLICATION_AUTHORITY") {
+    errors.push("missing_fail_closed_price_state");
+  }
+  if (exposure.depends_on_form_presence !== false) errors.push("price_incorrectly_depends_on_form");
+  return errors;
+};
 
 assert("schema", contract.schema === "confenge.organic.single-commercial-route.v1", contract.schema);
 assert("decision_execute_now", contract.decision_state === "EXECUTE_NOW", contract.decision_state);
@@ -43,16 +88,54 @@ assert("source_issue_390", contract.source_issue === 390, contract.source_issue)
 assert("parent_issue_387", contract.parent_issue === 387, contract.parent_issue);
 assert("public_implementation_is_partial", contract.implementation?.public_state === "PARTIAL", contract.implementation);
 assert(
-  "completed_surfaces_are_home_and_hub",
-  equal(contract.implementation?.completed_surface_roles, ["home", "services_hub"]),
-  contract.implementation?.completed_surface_roles,
+  "partial_is_historical_issue_state_only",
+  contract.implementation?.state_scope === "historical_issue_390_work_record" &&
+    contract.implementation?.commercial_campaign_blocked === false,
+  contract.implementation,
 );
 assert(
-  "pending_surfaces_are_explicit",
-  equal(contract.implementation?.pending_surface_roles, ["editorial_canary", "canonical_destination"]),
-  contract.implementation?.pending_surface_roles,
+  "historical_issue_progress_remains_honest",
+  equal(contract.implementation?.historical_issue_completed_surface_roles, ["home", "services_hub"]) &&
+    equal(contract.implementation?.historical_issue_unresolved_surface_roles, [
+      "editorial_canary",
+      "canonical_destination",
+    ]),
+  contract.implementation,
+);
+assert(
+  "all_surface_roles_are_editorially_authorized",
+  equal(contract.implementation?.editorially_authorized_surface_roles, [
+    "home",
+    "services_hub",
+    "editorial_canary",
+    "canonical_destination",
+  ]),
+  contract.implementation?.editorially_authorized_surface_roles,
+);
+assert(
+  "no_current_pending_list_recreates_revoked_freeze",
+  !Object.hasOwn(contract.implementation || {}, "pending_surface_roles"),
+  contract.implementation,
 );
 assert("parent_issue_cannot_close", contract.implementation?.parent_issue_close_allowed === false, contract.implementation);
+assert(
+  "execute_now_editorial_authority_has_no_forced_wait",
+  contract.editorial_authorization?.decision === "EXECUTE_NOW" &&
+    contract.editorial_authorization?.effective_at === "2026-09-09" &&
+    contract.editorial_authorization?.forced_wait === false,
+  contract.editorial_authorization,
+);
+assert("obsolete_editorial_lock_chain_absent", obsoleteEditorialLocks(contract).length === 0, obsoleteEditorialLocks(contract));
+
+const frozenMutation = structuredClone(contract);
+frozenMutation.surfaces.find((surface) => surface.role === "canonical_destination").mutation_state = "FROZEN_READ_ONLY";
+frozenMutation.surfaces.find((surface) => surface.role === "canonical_destination").earliest_safe_action_at = "2026-09-16";
+assert(
+  "negative_fixture_rejects_restored_freeze",
+  obsoleteEditorialLocks(frozenMutation).includes("FROZEN_READ_ONLY") &&
+    obsoleteEditorialLocks(frozenMutation).includes("canonical_destination:forced_wait"),
+  obsoleteEditorialLocks(frozenMutation),
+);
 
 const route = contract.route;
 assert(
@@ -86,11 +169,66 @@ assert("sla_from_333", terms.sla_business_days === item18?.sla_business_days && 
 assert("legal_boundary_from_333", terms.legal_boundary_pt_br === item18?.legal_boundary?.statement_pt_br, terms.legal_boundary_pt_br);
 assert("evidence_grades_from_333", equal(terms.evidence_grades, Object.keys(item18?.evidence_grades || {})), terms.evidence_grades);
 assert("price_state_is_hypothesis", terms.price_state === "PILOT_HYPOTHESIS", terms.price_state);
+
+const registryItem = deliverables.deliverables.find((item) => item.deliverable_id === route.deliverable_id);
+assert("deliverables_registry_cfg_d18_exists", Boolean(registryItem));
+assert("cfg_d18_remains_validate", registryItem?.public_state === "VALIDATE", registryItem?.public_state);
+assert("cfg_d18_price_remains_internal_hypothesis", registryItem?.price_state === "PILOT_HYPOTHESIS", registryItem?.price_state);
+assert("cfg_d18_checkout_remains_disabled", registryItem?.checkout_enabled === false, registryItem?.checkout_enabled);
+assert("cfg_d18_has_no_binding_public_price_authority", !bindingPriceAuthorization(route.deliverable_id), pricingProjection.observed_authorization_evidence);
 assert(
-  "price_exposure_respects_freeze",
-  terms.public_price_exposure?.state === "DEFERRED_BY_FROZEN_DESTINATION" &&
-    /byte-frozen/i.test(terms.public_price_exposure?.reason_pt_br || ""),
+  "public_price_is_withheld_by_material_authority_not_form",
+  terms.public_price_exposure?.state === "WITHHELD_NO_PUBLICATION_AUTHORITY" &&
+    terms.public_price_exposure?.required_state === "PUBLICATION_AUTHORIZED" &&
+    terms.public_price_exposure?.observed_state === "PILOT_HYPOTHESIS" &&
+    terms.public_price_exposure?.public_display_authorized === false &&
+    terms.public_price_exposure?.checkout_authorized === false &&
+    terms.public_price_exposure?.depends_on_form_presence === false,
   terms.public_price_exposure,
+);
+assert(
+  "price_exposure_contract_is_fail_closed",
+  priceExposureErrors({ exposure: terms.public_price_exposure, registryItem }).length === 0,
+  priceExposureErrors({ exposure: terms.public_price_exposure, registryItem }),
+);
+const unauthorizedPublicPrice = {
+  ...terms.public_price_exposure,
+  state: "PUBLICATION_AUTHORIZED",
+  public_display_authorized: true,
+};
+assert(
+  "negative_fixture_rejects_public_price_without_binding_pin",
+  priceExposureErrors({ exposure: unauthorizedPublicPrice, registryItem }).includes(
+    "public_price_without_binding_authority",
+  ),
+  priceExposureErrors({ exposure: unauthorizedPublicPrice, registryItem }),
+);
+const publicationOnlyProjection = structuredClone(pricingProjection);
+publicationOnlyProjection.observed_authorization_evidence.push({
+  authorization_id: "negative-publication-only",
+  binding_offer_ids: [route.deliverable_id],
+  state: "PUBLICATION_AUTHORIZED",
+  public_display_authorized: true,
+  checkout_authorized: false,
+});
+const unauthorizedCheckout = {
+  ...terms.public_price_exposure,
+  state: "PUBLICATION_AUTHORIZED",
+  public_display_authorized: true,
+  checkout_authorized: true,
+};
+assert(
+  "negative_fixture_rejects_checkout_with_publication_only_pin",
+  priceExposureErrors({
+    exposure: unauthorizedCheckout,
+    registryItem: { ...registryItem, checkout_enabled: true },
+    projection: publicationOnlyProjection,
+  }).includes("checkout_without_binding_authority"),
+  priceExposureErrors({
+    exposure: unauthorizedCheckout,
+    registryItem: { ...registryItem, checkout_enabled: true },
+    projection: publicationOnlyProjection,
+  }),
 );
 
 const expectedRoles = ["home", "services_hub", "editorial_canary", "canonical_destination"];
@@ -103,9 +241,11 @@ assert(
 );
 
 const requiredAttrs = contract.primary_cta_contract.required_attributes;
-const authorized = contract.surfaces.filter((surface) => surface.mutation_state === "AUTHORIZED");
-assert("two_authorized_surfaces", authorized.length === 2, authorized.map((surface) => surface.role));
-for (const surface of authorized) {
+const editoriallyAuthorized = contract.surfaces.filter(
+  (surface) => surface.mutation_state === "EDITORIAL_AUTHORIZED",
+);
+assert("four_editorially_authorized_surfaces", editoriallyAuthorized.length === 4, editoriallyAuthorized.map((surface) => surface.role));
+for (const surface of editoriallyAuthorized.filter((item) => item.cta_id)) {
   const html = read(surface.file);
   const tag = anchorForCta(html, surface.cta_id);
   assert(`${surface.role}_file_exists`, fs.existsSync(path.join(root, surface.file)), surface.file);
@@ -134,8 +274,10 @@ assert("home_focused_journey_uses_canonical_name", homeJourney.includes(route.pu
 const canarySurface = contract.surfaces.find((surface) => surface.role === "editorial_canary");
 const canaryHtml = read(canarySurface.file);
 assert(
-  "canary_is_exclusive_to_389",
-  canarySurface?.mutation_state === "OWNED_BY_389_READ_ONLY" && canarySurface?.content_owner_issue === 389,
+  "canary_owner_is_provenance_not_editorial_lock",
+  canarySurface?.mutation_state === "EDITORIAL_AUTHORIZED" &&
+    canarySurface?.content_owner_issue === 389 &&
+    canarySurface?.ownership_role === "historical_provenance",
   canarySurface,
 );
 assert(
@@ -145,18 +287,31 @@ assert(
   canarySurface?.existing_semantic_link,
 );
 assert(
-  "canary_final_cta_contract_handed_to_389",
-  canarySurface?.required_final_cta_id === "canary-medicao-dossie",
-  canarySurface?.required_final_cta_id,
+  "canary_final_cta_present",
+  canarySurface?.required_final_cta_id === "canary-medicao-dossie" &&
+    Boolean(anchorForCta(canaryHtml, canarySurface.required_final_cta_id)),
+  canarySurface,
 );
 
 const pillar = contract.surfaces.find((surface) => surface.role === "canonical_destination");
-assert("pillar_is_frozen_read_only", pillar?.mutation_state === "FROZEN_READ_ONLY", pillar);
-assert("pillar_freeze_owners", equal(pillar?.freeze_owner_issues, [128, 291]), pillar?.freeze_owner_issues);
-assert("pillar_unlock_date_unchanged", pillar?.earliest_safe_action_at === "2026-09-16", pillar?.earliest_safe_action_at);
+assert("pillar_is_editorially_authorized", pillar?.mutation_state === "EDITORIAL_AUTHORIZED", pillar);
+assert(
+  "pillar_historical_owners_preserved_as_provenance",
+  equal(pillar?.historical_freeze_owner_issues, [128, 291]),
+  pillar?.historical_freeze_owner_issues,
+);
 assert("pillar_hash_matches_live", sha256(pillar.file) === pillar.expected_sha256, sha256(pillar.file));
 assert("pillar_hash_matches_reviewed_baseline", frozenHashes.forbidden[pillar.file] === pillar.expected_sha256, frozenHashes.forbidden[pillar.file]);
 assert("pillar_links_back_to_canary", read(pillar.file).includes(`href="${canarySurface.route}"`), canarySurface.route);
+const pillarHtml = read(pillar.file);
+assert("internal_price_not_published_on_pillar", !/R\$\s*4(?:[.\s])?900(?:,00)?/i.test(pillarHtml));
+assert(
+  "pillar_keeps_functional_contextual_contact",
+  /href=["']https:\/\/wa\.me\/5548988344559\?text=[^"']+/i.test(pillarHtml) &&
+    /href=["']mailto:tiago\.sasaki@confenge\.com\.br["']/i.test(pillarHtml) &&
+    /href=["']tel:\+5548988344559["']/i.test(pillarHtml),
+  pillar.file,
+);
 
 const eventContractSource = read("script.js");
 assert("analytics_source_confenge_web", contract.primary_cta_contract.analytics_source === "CONFENGE_WEB" && /CONFENGE_WEB/.test(eventContractSource));

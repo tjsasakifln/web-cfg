@@ -458,7 +458,7 @@ body[data-content-cluster="home"] .site-footer{background:var(--navy-950)}
 @media (min-width:941px){
   /* Preserve the complete desktop promise/proof sequence while taking the
    * fold margin from decorative whitespace, not from text size or content. */
-  body[data-content-cluster="home"] .hero{padding-top:2.5rem}
+  body[data-content-cluster="home"] .hero{padding-top:1.5rem}
   body[data-content-cluster="home"] .hero h1{margin-bottom:.8rem}
   body[data-content-cluster="home"] .hero-lead{margin-bottom:.9rem}
   body[data-content-cluster="home"] .hero-deliverable{margin-bottom:1.1rem;padding-top:.8rem}

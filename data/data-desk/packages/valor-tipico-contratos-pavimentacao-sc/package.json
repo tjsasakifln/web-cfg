@@ -80,8 +80,8 @@
     "unknown_or_nonpositive": 25,
     "usable": 5038
   },
-  "package_hash": "67da8f705d6a4db3ae092d5aa6ab169ab5e63c3a5c702c06df7be54409777674",
-  "package_version": "sc-pavimentacao-ticket-1.0·2026-08-17T11:29:23.193694+02:00·67da8f705d6a",
+  "package_hash": "5a9ab729d90c2859c064fccf3409b15928d23607ffa885d244d731183f808771",
+  "package_version": "sc-pavimentacao-ticket-1.0·2026-08-17T11:29:23.193694+02:00·5a9ab729d90c",
   "payload_content_hash": "568880b7eacf30e2adaf7481945fa50cfc77039be10b27ffc6af0959bf6c6d9d",
   "period": {
     "end": "2026-08-15",
@@ -90,7 +90,7 @@
   "permalink": "https://confenge.com.br/assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/",
   "png_included": false,
   "png_sha256": null,
-  "previous_package_hash": "97655741f7d4eecc9c5617bf3f2085aebd389a201fbdc069e65cebcb8b866ce5",
+  "previous_package_hash": "67da8f705d6a4db3ae092d5aa6ab169ab5e63c3a5c702c06df7be54409777674",
   "prohibited_claims": [
     "estatística nacional ou brasileira",
     "custo por km, m² ou unidade física",
@@ -102,7 +102,7 @@
   "public_canonical": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
   "publisher": "CONFENGE",
   "refresh_owner": "CONFENGE / análises de mercado",
-  "rendered_content_hash": "0896c280408245f981adb2f20628f1f0cd190aa558212521ad193b7fd5c249fe",
+  "rendered_content_hash": "a7142fd5baa7ac3a97debb32bc6645672fcd261d9deaf182a5aacf5b78930279",
   "request_contract": {
     "allowed_fields": [
       "finalidade",
@@ -187,7 +187,7 @@
       {
         "angle": "Referência estadual de ticket nominal para associadas de obras pesadas em Santa Catarina.",
         "asset_link": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
-        "asset_version": "sc-pavimentacao-ticket-1.0·2026-08-17T11:29:23.193694+02:00·67da8f705d6a",
+        "asset_version": "sc-pavimentacao-ticket-1.0·2026-08-17T11:29:23.193694+02:00·5a9ab729d90c",
         "audience_type": "associação",
         "auto_send": false,
         "citation_link_requirements": "Preserve the CONFENGE canonical source, method/as_of, n/missingness and limitations. Do not convert the integral nominal ticket into custo/km. Do not claim a national statistic.",
@@ -206,7 +206,7 @@
       {
         "angle": "Pauta técnica de ticket típico de pavimentação em SC, sem endosso do plenário.",
         "asset_link": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
-        "asset_version": "sc-pavimentacao-ticket-1.0·2026-08-17T11:29:23.193694+02:00·67da8f705d6a",
+        "asset_version": "sc-pavimentacao-ticket-1.0·2026-08-17T11:29:23.193694+02:00·5a9ab729d90c",
         "audience_type": "conselho profissional",
         "auto_send": false,
         "citation_link_requirements": "Preserve the CONFENGE canonical source, method/as_of, n/missingness and limitations. Do not convert the integral nominal ticket into custo/km. Do not claim a national statistic.",
@@ -225,7 +225,7 @@
       {
         "angle": "Quartis de ticket de pavimentação em SC adjacentes à pauta de porte contratual da COINFRA.",
         "asset_link": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
-        "asset_version": "sc-pavimentacao-ticket-1.0·2026-08-17T11:29:23.193694+02:00·67da8f705d6a",
+        "asset_version": "sc-pavimentacao-ticket-1.0·2026-08-17T11:29:23.193694+02:00·5a9ab729d90c",
         "audience_type": "associação",
         "auto_send": false,
         "citation_link_requirements": "Preserve the CONFENGE canonical source, method/as_of, n/missingness and limitations. Do not convert the integral nominal ticket into custo/km. Do not claim a national statistic.",
@@ -244,7 +244,7 @@
       {
         "angle": "Ticket nominal de pavimentação em SC como recorte estadual para o setor rodoviário.",
         "asset_link": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
-        "asset_version": "sc-pavimentacao-ticket-1.0·2026-08-17T11:29:23.193694+02:00·67da8f705d6a",
+        "asset_version": "sc-pavimentacao-ticket-1.0·2026-08-17T11:29:23.193694+02:00·5a9ab729d90c",
         "audience_type": "associação",
         "auto_send": false,
         "citation_link_requirements": "Preserve the CONFENGE canonical source, method/as_of, n/missingness and limitations. Do not convert the integral nominal ticket into custo/km. Do not claim a national statistic.",
@@ -263,7 +263,7 @@
       {
         "angle": "Nota factual de ticket contratual de pavimentação em Santa Catarina.",
         "asset_link": "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/",
-        "asset_version": "sc-pavimentacao-ticket-1.0·2026-08-17T11:29:23.193694+02:00·67da8f705d6a",
+        "asset_version": "sc-pavimentacao-ticket-1.0·2026-08-17T11:29:23.193694+02:00·5a9ab729d90c",
         "audience_type": "imprensa",
         "auto_send": false,
         "citation_link_requirements": "Preserve the CONFENGE canonical source, method/as_of, n/missingness and limitations. Do not convert the integral nominal ticket into custo/km. Do not claim a national statistic.",

@@ -14,7 +14,13 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from scripts.data_desk.bind import CANONICAL_SOURCE, load_approved_source
+from scripts.data_desk.bind import (
+    APPROVALS_REL,
+    CANONICAL_SOURCE,
+    EXPORT_REL,
+    LKG_REL,
+    load_approved_source,
+)
 from scripts.data_desk.embed import embed_has_tracker, embed_has_visible_source
 from scripts.data_desk.hashing import package_hash
 from scripts.data_desk.package import (
@@ -40,6 +46,25 @@ PII_MARKERS = ("cpf", "rg", "-----begin", "private key", "datalake", "raw_rows")
 
 def _source():
     return load_approved_source(ROOT)
+
+
+def test_superseded_editorial_hash_cannot_reauthorize_data_desk(tmp_path):
+    for rel in (EXPORT_REL, APPROVALS_REL, LKG_REL):
+        target = tmp_path / rel
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes((ROOT / rel).read_bytes())
+    old_hash = "0896c280408245f981adb2f20628f1f0cd190aa558212521ad193b7fd5c249fe"
+    approvals = json.loads((tmp_path / APPROVALS_REL).read_text(encoding="utf-8"))
+    approvals["approvals"][0]["rendered_content_hash"] = old_hash
+    (tmp_path / APPROVALS_REL).write_text(
+        json.dumps(approvals, ensure_ascii=False), encoding="utf-8"
+    )
+    lkg = json.loads((tmp_path / LKG_REL).read_text(encoding="utf-8"))
+    lkg["rendered_content_hash"] = old_hash
+    (tmp_path / LKG_REL).write_text(json.dumps(lkg, ensure_ascii=False), encoding="utf-8")
+
+    with pytest.raises(SchemaError, match="rendered_content_hash_drift"):
+        load_approved_source(tmp_path)
 
 
 def test_operational_default_is_real_approved_asset():
@@ -222,7 +247,7 @@ def test_payload_update_invalidates_package():
 def test_public_title_is_package_hash_bound_and_normalized_at_source():
     asset = load_asset(REAL_ASSET, root=ROOT)
     assert "—" not in asset["title"]
-    assert asset["previous_package_hash"] == "97655741f7d4eecc9c5617bf3f2085aebd389a201fbdc069e65cebcb8b866ce5"
+    assert asset["previous_package_hash"] == "67da8f705d6a4db3ae092d5aa6ab169ab5e63c3a5c702c06df7be54409777674"
     original = build_package(asset, asset_dir=REAL_ASSET.parent, generated_at=AS_OF)
     changed = dict(asset)
     changed["title"] = asset["title"] + " (edição alterada)"

@@ -24,10 +24,19 @@ const require = createRequire(import.meta.url);
 const lib = require(path.join(root, "scripts/commercial/deliverables.cjs"));
 
 const results = [];
+// Count source text segments for the field-completeness assertion. This is
+// deliberately not an HTML sanitizer and its output is never rendered.
+function sourceTextLength(value) {
+  return [...value.matchAll(/(?:^|>)([^<>]*)(?=<|$)/g)]
+    .reduce((length, match) => length + match[1].trim().length, 0);
+}
 function assert(name, cond, detail) {
   results.push({ name, ok: Boolean(cond), detail });
   if (!cond) console.error("FAIL", name, detail === undefined ? "" : JSON.stringify(detail));
 }
+assert("decision_text_counts_plain_content", sourceTextLength("Entrega técnica") >= 10);
+assert("decision_text_counts_nested_content", sourceTextLength("<strong>Entrega</strong> técnica") >= 10);
+assert("decision_text_rejects_empty_markup", sourceTextLength('<a title="conteúdo apenas no atributo"></a>') === 0);
 
 const registry = lib.loadRegistry();
 const firstFold = lib.loadFirstFoldContract();
@@ -164,7 +173,7 @@ for (const entry of published) {
   assert(`public_state_${entry.deliverable_id}`, card.includes(`data-public-state="${entry.public_state}"`), entry.public_state);
   assert(`public_deep_link_${entry.deliverable_id}`, entregasHtml.includes(`id="entrega-${entry.catalog_number}"`));
   const facts = [...card.matchAll(/<dt>([^<]+)<\/dt>\s*<dd>([\s\S]*?)<\/dd>/g)];
-  assert(`public_decision_fields_${entry.deliverable_id}`, facts.length >= 8 && facts.every(([, label, value]) => label.trim() && value.replace(/<[^>]+>/g, "").trim().length >= 10) && ["value_outcome", "value_created", "artifact", "positive_proof"].every((role) => card.includes(`data-copy-role="${role}"`)), entry.deliverable_id);
+  assert(`public_decision_fields_${entry.deliverable_id}`, facts.length >= 8 && facts.every(([, label, value]) => label.trim() && sourceTextLength(value) >= 10) && ["value_outcome", "value_created", "artifact", "positive_proof"].every((role) => card.includes(`data-copy-role="${role}"`)), entry.deliverable_id);
   assert(`public_plain_terms_${entry.deliverable_id}`, facts.every(([, label]) => !/\b(?:SLA|inputs|checks|gates)\b/i.test(label)) && /dias úteis/.test(card) && /confirma\w* por escrito.*antes da cobrança/i.test(card), entry.deliverable_id);
 }
 const vitrineHtml = (entregasHtml.match(/<!-- GENERATED:PUBLIC-CATALOG:START -->[\s\S]*?<!-- GENERATED:PUBLIC-CATALOG:END -->/) || [""])[0];

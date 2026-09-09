@@ -13,7 +13,7 @@ Mediana e quartis pelo método do posto mais próximo do valor integral nominal 
 - Dados consultados em: 2026-08-17T11:29:23.193694+02:00
 - Fonte canônica: https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/
 - Hash do conjunto aprovado: `568880b7eacf30e2adaf7481945fa50cfc77039be10b27ffc6af0959bf6c6d9d`
-- Hash da análise publicada aprovada: `0896c280408245f981adb2f20628f1f0cd190aa558212521ad193b7fd5c249fe`
+- Hash da análise publicada aprovada: `a7142fd5baa7ac3a97debb32bc6645672fcd261d9deaf182a5aacf5b78930279`
 - Imagem PNG: não incluída (não há conversor local reprodutível)
 - Responsável pela atualização: CONFENGE / análises de mercado
 
