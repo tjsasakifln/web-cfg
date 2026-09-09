@@ -42,6 +42,12 @@ REPORT_SCHEMA = "confenge.public-server-acceptance/v1"
 FULL_SHA = re.compile(r"^[0-9a-f]{40}$")
 HEX256 = re.compile(r"^[0-9a-f]{64}$")
 SAFE_HTML = re.compile(r"^[A-Za-z0-9._/-]+\.html$")
+SAFE_ASSET = re.compile(r"^[A-Za-z0-9._/-]+$")
+NONPUBLIC_CONFIG_FILES = frozenset({"_headers", "_redirects"})
+OVERLAY_NON_HTML_FILES = frozenset({
+    "sitemap-index.xml", "sitemap-oportunidades.xml",
+    ".well-known/live-intelligence-overlay.json",
+})
 IDENTITY_LIMIT = 1024 * 1024
 CACHE_PROPAGATION_SECONDS = 310.0
 CACHE_RETRY_MAX_SLEEP = 15.0
@@ -51,6 +57,7 @@ _EVIDENCE_HEADERS = (
     "Cache-Control",
     "CF-Cache-Status",
     "Content-Length",
+    "Content-Encoding",
     "Content-Type",
     "ETag",
     "Last-Modified",
@@ -139,6 +146,21 @@ def load_served_inventory(path: Path) -> tuple[dict[str, Any], list[str]]:
         normalized[rel] = str(digest)
     if len(normalized) != len(raw_hashes):
         errors.append("served_inventory_html_accounting_mismatch")
+    assets: dict[str, str] = {}
+    raw_assets = payload.get("non_html_sha256")
+    if not isinstance(raw_assets, dict) or not raw_assets:
+        errors.append("served_inventory_non_html_sha256_empty")
+    else:
+        for rel, digest in raw_assets.items():
+            if (
+                not isinstance(rel, str) or not SAFE_ASSET.fullmatch(rel)
+                or rel.startswith("/") or rel.endswith(".html")
+                or any(part in {"", ".", ".."} for part in rel.split("/"))
+                or not HEX256.fullmatch(str(digest))
+            ):
+                errors.append(f"served_inventory_non_html_entry_invalid:{str(rel)[:100]}")
+            else:
+                assets[rel] = str(digest)
     if not isinstance(payload.get("overlay"), dict):
         errors.append("served_inventory_overlay_invalid")
     if not isinstance(payload.get("build_info"), dict):
@@ -246,6 +268,7 @@ def load_served_inventory(path: Path) -> tuple[dict[str, Any], list[str]]:
         "payload": payload,
         "release_sha": release_sha,
         "html_sha256": normalized,
+        "non_html_sha256": assets,
         "http_dispositions": dispositions,
         "contract_probes": contract_probes,
         "overlay": payload.get("overlay"),
@@ -344,7 +367,8 @@ def _probe_first_hop(url: str, timeout: float) -> tuple[dict[str, Any], bytes | 
     request = urllib.request.Request(
         url,
         headers={
-            "Accept": "text/html,application/xhtml+xml",
+            "Accept": "*/*",
+            "Accept-Encoding": "identity",
             "Cache-Control": "no-cache",
             "User-Agent": "CONFENGE-Public-Server-Acceptance/1.0",
         },
@@ -674,6 +698,78 @@ def verify_contract_probes(
     }
 
 
+def verify_non_html_assets(
+    *, site: Path, inventory: dict[str, Any], overlay: dict[str, Any],
+    base: str, fetcher: Callable, concurrency: int, timeout: float,
+) -> dict[str, Any]:
+    """Reconcile physical assets independently, then verify exact public bytes."""
+    host = inventory.get("non_html_sha256") or {}
+    artifact = {
+        path.relative_to(site).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
+        for path in site.rglob("*")
+        if path.is_file() and not path.is_symlink() and path.suffix != ".html"
+    }
+    errors: list[str] = []
+    overlay_allowed = OVERLAY_NON_HTML_FILES if overlay.get("source_kind") == "official_live" else frozenset()
+    # The public overlay receipt exists for both official and withheld states.
+    receipt = ".well-known/live-intelligence-overlay.json"
+    if overlay.get("schema") == "confenge.live-intelligence-overlay/v1":
+        overlay_allowed = overlay_allowed | {receipt}
+    for rel in sorted(set(artifact) - set(host)):
+        errors.append(f"server_non_html_missing:{rel}")
+    for rel in sorted(set(host) - set(artifact) - overlay_allowed):
+        errors.append(f"server_non_html_unlisted:{rel}")
+    for rel in sorted(set(host) & set(artifact)):
+        if host[rel] != artifact[rel] and rel not in overlay_allowed:
+            errors.append(f"server_non_html_artifact_digest_mismatch:{rel}")
+    if receipt in host:
+        # Bind receipt semantics to the independently verified inventory; HTTP
+        # still has to match the exact bytes, without JSON normalization.
+        if not overlay or overlay.get("release_sha") != inventory.get("release_sha"):
+            errors.append("server_non_html_overlay_identity_invalid")
+    requests = [("/" + rel, rel) for rel in sorted(host)]
+    for rel in sorted(NONPUBLIC_CONFIG_FILES & set(host)):
+        requests.extend([("/" + rel + "?download=1", rel), ("/%5F" + rel[1:], rel)])
+
+    def verify_one(item: tuple[str, str]) -> dict[str, Any]:
+        request_path, rel = item
+        protected = rel in NONPUBLIC_CONFIG_FILES
+        status = 404 if protected else 200
+        expected = (inventory.get("html_sha256") or {}).get("404.html") if protected else host[rel]
+        entry, body = fetcher(base + request_path, timeout)
+        headers = entry.get("headers") or {}
+        digest = hashlib.sha256(body).hexdigest() if body is not None else None
+        ok = (
+            entry.get("error") is None and entry.get("status") == status
+            and entry.get("location") is None and body is not None
+            and digest == expected and entry.get("sha256") == digest
+            and str(headers.get("content-encoding") or "identity").lower() == "identity"
+        )
+        return {
+            "path": rel, "request_path": request_path,
+            "expected_status": status, "status": entry.get("status"),
+            "expected_sha256": expected, "http_sha256": digest,
+            "bytes": len(body) if body is not None else None,
+            "headers": headers, "location": entry.get("location"),
+            "config_body_withheld": protected and ok,
+            "ok": ok, "error": entry.get("error"),
+        }
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=concurrency) as pool:
+        rows = list(pool.map(verify_one, requests))
+    failures = [row for row in rows if not row["ok"]]
+    if failures:
+        errors.append(f"public_non_html_response_failures:{len(failures)}")
+    if not artifact or not host or not rows:
+        errors.append("public_non_html_empty_selection")
+    return {
+        "artifact_files": len(artifact), "server_files": len(host),
+        "planned": len(requests), "executed": len(rows),
+        "passed": len(rows) - len(failures), "failures": failures,
+        "results": rows, "errors": errors, "ok": not errors,
+    }
+
+
 def run_acceptance(
     *,
     site: Path,
@@ -689,6 +785,7 @@ def run_acceptance(
     disposition_fetcher: Callable[
         [str, float], tuple[dict[str, Any], bytes | None]
     ] = _probe_first_hop,
+    asset_fetcher: Callable = _probe_first_hop,
     run_mutations: bool = True,
     cache_deadline_seconds: float = CACHE_PROPAGATION_SECONDS,
     clock: Callable[[], float] = time.monotonic,
@@ -931,6 +1028,14 @@ def run_acceptance(
     _write_json(contract_probes_path, contract_probes)
     if not contract_probes["ok"]:
         errors.append("withdrawn_contract_probes_failed")
+    non_html_assets = verify_non_html_assets(
+        site=site, inventory=inventory, overlay=overlay_payload, base=base,
+        fetcher=asset_fetcher, concurrency=concurrency, timeout=timeout,
+    )
+    assets_path = report_dir / "non-html-assets.json"
+    _write_json(assets_path, non_html_assets)
+    if not non_html_assets["ok"]:
+        errors.append("public_non_html_acceptance_failed")
 
     manifest = site.parent / "seo" / "PUBLIC-ARTIFACT-MANIFEST.json"
     try:
@@ -1002,6 +1107,9 @@ def run_acceptance(
             "failures": len(contract_probes["failures"]),
             "ok": contract_probes["ok"],
         },
+        "non_html_assets": {key: non_html_assets[key] for key in (
+            "artifact_files", "server_files", "planned", "executed", "passed", "errors", "ok"
+        )},
         "cache_propagation_attempts": propagation_fetcher.attempts,
         "identity_before": before,
         "identity_after": after,
@@ -1017,6 +1125,7 @@ def run_acceptance(
             "fetch": str(mirror_report_path),
             "cache_propagation": str(propagation_path),
             "contract_probes": str(contract_probes_path),
+            "non_html_assets": str(assets_path),
             "mirror": str(mirror),
             "coverage": str(report_dir / "public-surface-coverage.json"),
         },

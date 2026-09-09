@@ -115,6 +115,10 @@ def _fixture(tmp_path: Path, html: dict[str, bytes] | None = None) -> dict:
                 "schema": "confenge.served-html-inventory/v1",
                 "release_sha": SHA,
                 "html_sha256": hashes,
+                "non_html_sha256": {
+                    path.relative_to(site).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
+                    for path in site.rglob("*") if path.is_file() and path.suffix != ".html"
+                },
                 "http_dispositions": {
                     rel: {
                         "request_path": acceptance._request_path_for_html(rel),
@@ -275,6 +279,16 @@ def _cached_entry(rel: str, body: bytes, state: str, age: str = "0"):
     }, body)
 
 
+def _asset_fetcher(fixture: dict):
+    def fetch(url, _timeout):
+        rel = acceptance.urllib.parse.unquote(acceptance.urllib.parse.urlsplit(url).path).lstrip("/")
+        protected = rel in acceptance.NONPUBLIC_CONFIG_FILES
+        path = fixture["site"] / ("404.html" if protected else rel)
+        body = path.read_bytes()
+        return _probe_entry(url, 404 if protected else 200, body)
+    return fetch
+
+
 def _run(tmp_path: Path, fixture: dict, **kwargs):
     return run_acceptance(
         site=fixture["site"],
@@ -288,6 +302,7 @@ def _run(tmp_path: Path, fixture: dict, **kwargs):
         disposition_fetcher=kwargs.get(
             "disposition_fetcher", acceptance._probe_first_hop
         ),
+        asset_fetcher=kwargs.get("asset_fetcher", _asset_fetcher(fixture)),
         run_mutations=kwargs.get("run_mutations", False),
         cache_deadline_seconds=kwargs.get(
             "cache_deadline_seconds", acceptance.CACHE_PROPAGATION_SECONDS
@@ -334,16 +349,115 @@ def test_accepts_complete_exact_server_inventory(tmp_path):
     assert report["http_responses"][0]["content_type"].startswith("text/html")
     assert report["identity_before"]["build"]["payload"]["artifact_hash"] == ARTIFACT_HASH
     assert report["identity_before"]["build"]["payload"]["manifest_hash"] == MANIFEST_HASH
-    assert (
-        report["identity_before"]["runtime"]["payload"]["release_bundle_hash"]
-        == BUNDLE_HASH
-    )
+    assert report["identity_before"]["runtime"]["payload"]["release_bundle_hash"] == BUNDLE_HASH
     assert report["identity_before"]["runtime"]["headers"] == {
         "server": "cloudflare",
         "x-confenge-host-architecture-version": "confenge-nginx-node/v2",
     }
     assert report["mutation_contracts_passed"]
     assert (tmp_path / "report" / "acceptance.json").is_file()
+
+
+@pytest.mark.parametrize("leak", [None, "direct", "query", "encoded", "empty"])
+def test_public_control_files_are_denied_in_every_probed_variant(tmp_path, leak):
+    fixture, not_found = _fixture_with_contract_probe(tmp_path)
+    payload = json.loads(fixture["inventory"].read_text())
+    payload["contract_probes"] = {}
+    for rel in acceptance.NONPUBLIC_CONFIG_FILES:
+        body = b"PRIVATE PUBLICATION CONTROL"
+        (fixture["site"] / rel).write_bytes(body)
+        payload["non_html_sha256"][rel] = hashlib.sha256(body).hexdigest()
+    fixture["inventory"].write_text(json.dumps(payload))
+    delegate = _asset_fetcher(fixture)
+    def fetch(url, timeout):
+        entry, body = delegate(url, timeout)
+        config = "headers" in url or "redirects" in url
+        leaking = config and (
+            leak == "direct" or (leak == "query" and "?" in url)
+            or (leak == "encoded" and "%5F" in url)
+        )
+        if leaking:
+            return _probe_entry(url, 200, b"PRIVATE PUBLICATION CONTROL")
+        if config and leak == "empty":
+            return _probe_entry(url, 404, b"")
+        return entry, body
+    report = _run(tmp_path, fixture, asset_fetcher=fetch)
+    assert report["ok"] is (leak is None), report["errors"]
+    assert report["non_html_assets"]["planned"] == 7
+    assert report["non_html_assets"]["executed"] == 7
+    if leak is not None:
+        assert "public_non_html_acceptance_failed" in report["errors"]
+
+
+@pytest.mark.parametrize("mutation", ["missing", "unlisted", "changed", "empty"])
+def test_non_html_inventory_reconciliation_fails_closed(tmp_path, mutation):
+    fixture = _fixture(tmp_path)
+    inventory = json.loads(fixture["inventory"].read_text())
+    if mutation == "missing":
+        (fixture["site"] / "citation.csv").write_bytes(b"public,data\n")
+    elif mutation == "empty":
+        inventory["non_html_sha256"] = {}
+    elif mutation == "unlisted":
+        inventory["non_html_sha256"]["new-download.csv"] = "f" * 64
+    else:
+        inventory["non_html_sha256"][".well-known/build-info.json"] = "f" * 64
+    fixture["inventory"].write_text(json.dumps(inventory))
+    def fetch(url, timeout):
+        if url.endswith("new-download.csv"):
+            return _probe_entry(url, 200, b"unexpected download")
+        return _asset_fetcher(fixture)(url, timeout)
+    report = _run(tmp_path, fixture, asset_fetcher=fetch)
+    assert not report["ok"]
+    assert "public_non_html_acceptance_failed" in report["errors"]
+
+
+def test_non_html_http_bytes_cannot_be_normalized_or_served_from_old_cache(tmp_path):
+    fixture = _fixture(tmp_path)
+    def changed(url, _timeout):
+        body = (fixture["site"] / ".well-known/build-info.json").read_bytes() + b"\n"
+        return _probe_entry(url, 200, body, "HIT")
+    report = _run(tmp_path, fixture, asset_fetcher=changed)
+    assert not report["ok"]
+    assert report["non_html_assets"]["executed"] == 1
+    assert report["non_html_assets"]["passed"] == 0
+
+
+def test_only_declared_non_html_overlay_changes_are_accepted(tmp_path):
+    fixture = _fixture(tmp_path)
+    site = fixture["site"]
+    (site / "sitemap-index.xml").write_bytes(b"<sitemapindex/>")
+    overlay = {
+        "schema": "confenge.live-intelligence-overlay/v1",
+        "release_sha": SHA, "source_kind": "official_live",
+    }
+    bodies = {
+        ".well-known/build-info.json": (site / ".well-known/build-info.json").read_bytes(),
+        "sitemap-index.xml": b"<sitemapindex>official child</sitemapindex>",
+        "sitemap-oportunidades.xml": b"<urlset>official routes</urlset>",
+        ".well-known/live-intelligence-overlay.json": json.dumps(overlay).encode(),
+    }
+    inventory = {
+        "release_sha": SHA,
+        "non_html_sha256": {p: hashlib.sha256(b).hexdigest() for p, b in bodies.items()},
+    }
+    def fetch(url, _timeout):
+        return _probe_entry(url, 200, bodies[url.removeprefix(CANONICAL_BASE + "/")])
+    report = acceptance.verify_non_html_assets(
+        site=site, inventory=inventory, overlay=overlay, base=CANONICAL_BASE,
+        fetcher=fetch, concurrency=2, timeout=1,
+    )
+    assert report["ok"], report["errors"]
+    assert report["planned"] == report["executed"] == report["passed"] == 4
+    # A recognized producer cannot rewrite unrelated immutable assets.
+    (site / "style.css").write_bytes(b"body{}")
+    bodies["style.css"] = b"body{display:none}"
+    inventory["non_html_sha256"]["style.css"] = hashlib.sha256(bodies["style.css"]).hexdigest()
+    report = acceptance.verify_non_html_assets(
+        site=site, inventory=inventory, overlay=overlay, base=CANONICAL_BASE,
+        fetcher=fetch, concurrency=2, timeout=1,
+    )
+    assert not report["ok"]
+    assert "server_non_html_artifact_digest_mismatch:style.css" in report["errors"]
 
 
 def test_rejects_server_html_not_authorized_by_artifact_or_overlay(tmp_path):
@@ -733,6 +847,7 @@ def test_withdrawn_contract_probe_retries_cached_200_then_proves_exact_410(tmp_p
         identity_fetcher=_identity_fetcher(),
         html_fetcher=_html_fetcher(fixture["html"]),
         disposition_fetcher=probe,
+        asset_fetcher=_asset_fetcher(fixture),
         run_mutations=False,
         clock=fake_time.clock,
         sleeper=fake_time.sleep,

@@ -1907,6 +1907,11 @@ def served_html_inventory(sha: str) -> dict[str, Any]:
         }
         if not html_sha256:
             raise ReleaseError("served release HTML inventory is empty")
+        non_html_sha256 = {
+            path.relative_to(site).as_posix(): sha256_file(path)
+            for path in sorted(site.rglob("*"))
+            if path.is_file() and not path.is_symlink() and path.suffix != ".html"
+        }
         host_contract = load_json(
             release / "nginx/generated/contract.normalized.json"
         )
@@ -1939,6 +1944,7 @@ def served_html_inventory(sha: str) -> dict[str, Any]:
             "schema": "confenge.served-html-inventory/v1",
             "release_sha": sha,
             "html_sha256": html_sha256,
+            "non_html_sha256": non_html_sha256,
             "http_dispositions": http_dispositions,
             "contract_probes": contract_probes,
             "overlay": load_json(public_overlay) if public_overlay.is_file() else None,
