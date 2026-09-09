@@ -297,6 +297,27 @@ def _run(tmp_path: Path, fixture: dict, **kwargs):
     )
 
 
+@pytest.mark.parametrize("cache_control,accepted", [
+    ("public, max-age=3600, must-revalidate, no-transform", True),
+    ("public, max-age=3600, must-revalidate", False),
+    ("public, x-no-transform", False),
+    ("", False),
+])
+def test_public_datadesk_requires_actual_no_transform_header(tmp_path, cache_control, accepted):
+    rel = "assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/index.html"
+    fixture = _fixture(tmp_path, {"index.html": HOME, rel: HOME})
+    delegate = _html_fetcher(fixture["html"])
+    def fetch(path, timeout):
+        entry, body = delegate(path, timeout)
+        if path == rel:
+            entry["headers"]["cache-control"] = cache_control
+        return entry, body
+    report = _run(tmp_path, fixture, html_fetcher=fetch)
+    assert report["ok"] is accepted, report["errors"]
+    if not accepted:
+        assert f"http_html_cache_no_transform_missing:{rel}" in report["errors"]
+
+
 def test_accepts_complete_exact_server_inventory(tmp_path):
     fixture = _fixture(tmp_path)
     report = _run(

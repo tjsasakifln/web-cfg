@@ -16,6 +16,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from html.parser import HTMLParser
+from fnmatch import fnmatchcase
 from pathlib import Path
 from typing import Any, Callable
 
@@ -29,6 +30,10 @@ from scripts.site.public_surface_coverage import (  # noqa: E402
     coverage_report,
     fetch_server_mirror,
     run_mutation_contracts,
+)
+from scripts.site.cache_contract import (  # noqa: E402
+    HTML_SERVING_CACHE_OVERRIDES,
+    cache_directives,
 )
 
 CANONICAL_BASE = "https://confenge.com.br"
@@ -876,6 +881,16 @@ def run_acceptance(
 
         if not digest_matches:
             errors.append(f"http_host_html_digest_mismatch:{rel}")
+        response_headers = ((first_hop or {}) if expected_status == 410 else row).get("headers") or {}
+        no_transform_required = any(
+            fnmatchcase("/" + effective_rel, pattern)
+            for pattern in HTML_SERVING_CACHE_OVERRIDES
+        )
+        no_transform_present = "no-transform" in cache_directives(
+            str(response_headers.get("cache-control") or "")
+        )
+        if no_transform_required and not no_transform_present:
+            errors.append(f"http_html_cache_no_transform_missing:{rel}")
         http_rows.append(
             {
                 "path": rel,
@@ -884,6 +899,9 @@ def run_acceptance(
                 "final_url": final_url,
                 "title": _title(target) if target.is_file() else None,
                 "content_type": content_type,
+                "headers": response_headers,
+                "no_transform_required": no_transform_required,
+                "no_transform_present": no_transform_present,
                 "bytes": byte_count,
                 "physical_sha256": physical_digest,
                 "expected_first_hop_status": expected_status,

@@ -30,12 +30,12 @@
       {
         "cause": "DataDesk Cache-Control override omitted no-transform, permitting Cloudflare Web Analytics automatic injection",
         "counterproof": "The observed 367-byte beacon inserted into the 3597-byte gated artifact reproduces exactly the rejected 3964-byte response SHA 090a295a387f028755d6c974852667f685c9b3d58f402c1b93eb3a4fb99cbf47",
-        "correction": "Preserve cache lifetime and add no-transform at the source override; enforce header and byte equality in cache and nginx controls; never normalize injected HTML or relax checksums"
+        "correction": "Preserve cache lifetime and add no-transform at the source override; enforce header and byte equality in cache, nginx and actual public HTTP acceptance controls; never normalize injected HTML or relax checksums"
       },
       {
         "cause": "Legitimate road-sign orientation in two external procurement transcriptions was classified as internal commercial vocabulary",
         "routes": ["/oportunidades/23773012000154-1-000109/2026/", "/oportunidades/23773012000154-1-000111/2026/"],
-        "correction": "Context-specific sinalizacao vertical classification, preserving source transcriptions and rejecting vertical comercial / vertical B2G",
+        "correction": "Occurrence-bound physical-orientation classification, preserving source transcriptions and rejecting vertical comercial / vertical B2G even when a legitimate technical occurrence shares the same sentence",
         "counterproof": "16 occurrences reclassified; captured 517-body HTTP mirror: 935/935 legitimate vocabulary occurrences, zero vocabulary defects; not a claim that missing DataDesk was covered"
       },
       {
