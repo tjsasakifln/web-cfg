@@ -89,7 +89,16 @@ assert(coverage.axe.routes.every((entry) =>
 // "rota com preco precisa capturar lead" nao esta exigindo captura em /confianca/ nem
 // em /especialista/. Se algum dia exigir, a correcao e ensinar o detector a diferenca,
 // NUNCA remover o numero nem plantar um formulario numa pagina de confianca.
-assert.equal(coverage.axe.price_route_count, 50);
+// 2026-09-08: 50 -> 51. /casos/medicao-glosa-demonstrativo/ entrou no censo de
+// preco. O caso demonstrativo passou a trazer os valores da glosa (R$ 1.200.000
+// apresentados, R$ 300.000 glosados, e a divisao entre formalidade e
+// quantitativo), que e o que torna o metodo conferivel em vez de abstrato.
+// Sao numeros hipoteticos, e a pagina diz isso onde eles aparecem: o selo
+// "DEMONSTRATIVO - NAO E RESULTADO DE CLIENTE - NAO E CASE" e o titulo
+// "Contexto (hipotetico)" estao imediatamente acima. A cobertura SOBE: uma
+// rota a mais auditada, nenhuma a menos, e o gate fail-closed de conversao
+// continua verde (npm run test:inbound-gates), porque a rota nao vende nada.
+assert.equal(coverage.axe.price_route_count, 51);
 // 2026-09-08: 28 -> 26. /triagem-tecnica/ e /quantitativos-orcamento-obras/
 // deixaram de publicar formulario de captura porque a autoridade de Governanca em
 // netlify/functions/data/adaptive-intake-authority.json esta WITHHELD e o endpoint
@@ -101,7 +110,11 @@ assert.equal(coverage.axe.capture_form_route_count, 26);
 // de captura; sem formulario, e sem preco na pagina, ela sai do recorte. A rota
 // continua auditada por audit:accessibility e pelo audit de layout, e as outras 58
 // rotas do censo nao se movem.
-assert.equal(coverage.axe.route_count, 58);
+// 2026-09-08 (segunda revisao): 58 -> 59. A rota que entrou e a mesma do censo
+// de preco acima, /casos/medicao-glosa-demonstrativo/: ao publicar os valores
+// hipoteticos da glosa, ela passou a ser auditada por axe. Uma rota a mais
+// auditada, nenhuma a menos.
+assert.equal(coverage.axe.route_count, 59);
 assert(selected.has("/conteudos/atraso-na-medicao-obra-publica/"));
 assert(selected.has("/conteudos/sinapi-desonerado-nao-desonerado/"));
 assert.deepEqual(
