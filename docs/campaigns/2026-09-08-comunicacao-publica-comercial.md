@@ -83,6 +83,14 @@ há acesso ao banco, nova consulta de dados, alteração no produtor ou mudança
 das datas editoriais. A contraprova exige falha do teste diante de um snapshot
 incompatível, além da falha por checkout ausente ou configuração de CI pulável.
 
+O CI do candidato `95b7794c` reprovou corretamente o checkout da fixture dentro
+da árvore do consumidor: o auditor de CSS encontrou 15 folhas externas como
+órfãs. Os dois workflows agora movem o checkout para `runner.temp` imediatamente
+após a obtenção, antes das auditorias, e verificam o SHA no destino. Não foi
+adicionada exceção ao auditor de CSS. O próprio comando de isolamento é testado
+com sucesso, origem ausente, revisão errada e destino já existente; este último
+reprova sem sobrescrever os arquivos. Os testes de contrato continuam obrigatórios.
+
 Revogações em execução (contraprovas locais; o candidato integrado e o artefato
 final ainda precisam dos checks e da publicação):
 

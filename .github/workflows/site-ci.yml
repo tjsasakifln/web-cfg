@@ -24,7 +24,7 @@ jobs:
     name: site-validation
     runs-on: ubuntu-latest
     env:
-      EXTRA_CLI_ROOT: ${{ github.workspace }}/.worktrees/extra-cli-contract
+      EXTRA_CLI_ROOT: ${{ runner.temp }}/extra-cli-contract
       EXTRA_CLI_REQUIRED: "1"
     timeout-minutes: 45
     steps:
@@ -53,7 +53,13 @@ jobs:
           persist-credentials: false
           fetch-depth: 1
       - name: Verify contracted producer checkout
-        run: test "$(git -C "$EXTRA_CLI_ROOT" rev-parse HEAD)" = "${{ steps.producer-contract.outputs.sha }}"
+        run: |
+          set -euo pipefail
+          # checkout requires a workspace-relative path; isolate the external
+          # fixture before any repository-wide public-source audit runs.
+          test ! -e "$EXTRA_CLI_ROOT"
+          mv -- .worktrees/extra-cli-contract "$EXTRA_CLI_ROOT"
+          test "$(git -C "$EXTRA_CLI_ROOT" rev-parse HEAD)" = "${{ steps.producer-contract.outputs.sha }}"
       - name: Pin release build clock to the commit
         if: inputs.export_public_artifact
         run: echo "SOURCE_DATE_EPOCH=$(git show -s --format=%ct HEAD)" >> "$GITHUB_ENV"

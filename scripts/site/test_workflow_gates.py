@@ -14,7 +14,10 @@ from __future__ import annotations
 import json
 import os
 import re
+import subprocess
 import sys
+import tempfile
+import textwrap
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -722,13 +725,15 @@ def test_deliberate_force_fail_env():
 def _producer_checkout_errors(block: str) -> list[str]:
     required = (
         'EXTRA_CLI_REQUIRED: "1"',
-        'EXTRA_CLI_ROOT: ${{ github.workspace }}/.worktrees/extra-cli-contract',
+        'EXTRA_CLI_ROOT: ${{ runner.temp }}/extra-cli-contract',
         'Path("data/pseo/manifest.json").read_text())["source_commit_sha"]',
         're.fullmatch(r"[0-9a-f]{40}", sha)',
         'repository: tjsasakifln/extra-cli',
         'ref: ${{ steps.producer-contract.outputs.sha }}',
         'path: .worktrees/extra-cli-contract',
         'persist-credentials: false',
+        'test ! -e "$EXTRA_CLI_ROOT"',
+        'mv -- .worktrees/extra-cli-contract "$EXTRA_CLI_ROOT"',
         'git -C "$EXTRA_CLI_ROOT" rev-parse HEAD',
     )
     errors = [f"producer contract checkout missing {needle}" for needle in required if needle not in block]
@@ -755,9 +760,42 @@ def test_cross_repo_fixture_integration_cannot_skip_or_use_an_unpinned_producer(
             ('EXTRA_CLI_REQUIRED: "1"', 'EXTRA_CLI_REQUIRED: "0"'),
             ('ref: ${{ steps.producer-contract.outputs.sha }}', 'ref: main'),
             ('repository: tjsasakifln/extra-cli', 'repository: unrelated/example'),
+            ('EXTRA_CLI_ROOT: ${{ runner.temp }}/extra-cli-contract', 'EXTRA_CLI_ROOT: ${{ github.workspace }}/.worktrees/extra-cli-contract'),
+            ('mv -- .worktrees/extra-cli-contract "$EXTRA_CLI_ROOT"', ':'),
             ('- name: Verify contracted producer checkout', '- name: Verify contracted producer checkout\n        if: false'),
         ):
             assert _producer_checkout_errors(block.replace(old, new)), f"mutation escaped: {old}"
+        # Execute the real shell step, including absence, revision and no-clobber
+        # counterproofs. External CSS must leave the public-source tree entirely.
+        step = block.split('- name: Verify contracted producer checkout', 1)[1].split('\n      - ', 1)[0]
+        command = textwrap.dedent(step.split('run: |\n', 1)[1])
+        for scenario in ('matching', 'missing', 'wrong-revision', 'destination-exists'):
+            with tempfile.TemporaryDirectory(prefix='producer-isolation-') as tmp:
+                fixture = Path(tmp)
+                workspace = fixture / 'workspace'
+                workspace.mkdir()
+                source = workspace / '.worktrees/extra-cli-contract'
+                destination = fixture / 'runner-temp/extra-cli-contract'
+                destination.parent.mkdir()
+                sha = 'a' * 40
+                if scenario != 'missing':
+                    source.mkdir(parents=True)
+                    (source / 'external.css').write_text('.foreign{color:red}')
+                    for args in (['init', '-q'], ['add', '.'], ['-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.invalid', 'commit', '-qm', 'fixture']):
+                        subprocess.run(['git', '-C', str(source), *args], check=True, capture_output=True)
+                    sha = subprocess.check_output(['git', '-C', str(source), 'rev-parse', 'HEAD'], text=True).strip()
+                if scenario == 'destination-exists':
+                    destination.mkdir()
+                    (destination / 'keep').write_text('must not be overwritten')
+                expected = 'b' * 40 if scenario == 'wrong-revision' else sha
+                result = subprocess.run(['bash', '-c', command.replace('${{ steps.producer-contract.outputs.sha }}', expected)], cwd=workspace, env={**os.environ, 'EXTRA_CLI_ROOT': str(destination)}, capture_output=True, text=True)
+                assert (result.returncode == 0) == (scenario == 'matching'), (scenario, result.stderr)
+                if scenario == 'matching':
+                    assert not list(workspace.rglob('*.css'))
+                    assert (destination / 'external.css').is_file()
+                if scenario == 'destination-exists':
+                    assert (destination / 'keep').read_text() == 'must not be overwritten'
+                    assert (source / 'external.css').is_file()
     evidence = _job_block(_read(SITE_CI), "execution_evidence")
     for name in (
         "Resolve contracted producer revision",
