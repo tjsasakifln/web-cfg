@@ -274,7 +274,21 @@ for (const width of widths) {
   // After removing redundant links and duplicate credit copy, the integrated
   // component measures 16,554 px at 390 px. 16,650 px keeps ~96 px (0.6%) of
   // rendering headroom while continuing to catch unrelated page-length drift.
-  if (width === 390 && metrics.documentHeight > 16650) errors.push(`document_height=${metrics.documentHeight}`);
+  // The 2026-09-09 founder decision (EXECUTE_NOW) then replaced the eight
+  // "Trabalho realizado" sentences: they described disorganization ("sem uma
+  // fila comparável") instead of the comparison and prioritization actually
+  // produced. Saying the work performed costs characters -- the mandated copy
+  // grew 698 -> 960 chars across the eight offers. Two repetition passes ran
+  // FIRST, cutting 254 chars by removing the shared three-verb scaffold and
+  // restated clauses; only the founder's literal wording for offer 01 is kept
+  // verbatim. What remains was reviewed and found substantive, so the budget
+  // moves to the measurement rather than squeezing mandated copy back into the
+  // old number -- the same rule applied at 12,500 -> 15,750 -> 16,650. The
+  // integrated component now measures 16,791 px at 390 px; 16,890 px keeps
+  // ~99 px (0.6%) of headroom and still catches unrelated page-length drift.
+  // decisionNavTop improved to 1,206 px in the same run, so the taller page did
+  // not push the decision nav toward its own 1,800 px limit.
+  if (width === 390 && metrics.documentHeight > 16890) errors.push(`document_height=${metrics.documentHeight}`);
   if (width === 390 && metrics.decisionNavTop > 1800) errors.push(`decision_nav_top=${metrics.decisionNavTop}`);
   if (width <= 360 && metrics.decisionNavColumns !== 2) {
     errors.push(`decision_nav_columns=${metrics.decisionNavColumns}`);
