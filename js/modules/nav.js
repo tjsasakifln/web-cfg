@@ -484,7 +484,9 @@
       if (s.includes('edital') || s.includes('proposta')) return 'edital';
       if (s.includes('contrato') || s.includes('urgente') || s.includes('glosa') || s.includes('execução') || s.includes('execucao')) return 'contrato';
       if (s.includes('operação') || s.includes('operacao') || s.includes('oportunidade') || s.includes('estrutur')) return 'operacao';
-      return 'operacao';
+      // An undeclared visitor need must remain unclassified.  Sending it to
+      // the B2G operation ladder would silently narrow the demand.
+      return 'outro';
     };
     // Exportadas para que o gate execute exatamente a funcao que o formulario
     // usa, e nao uma copia. Sem isto, apagar a consulta a HOME_SITUATIONS
@@ -496,7 +498,9 @@
     }
     const applyJourneyToForm = (journeyId, forceStage = false) => {
       if (!form || !journeyId) return;
-      const j = JOURNEY_ACTIONS[journeyId] ? journeyId : 'operacao';
+      // Keep an unknown query/CTA journey in the generic route too.  This is
+      // the same fail-safe classification used by stageToJourney above.
+      const j = JOURNEY_ACTIONS[journeyId] ? journeyId : 'outro';
       ensureHidden('jornada', j, true);
       if (form.getAttribute('data-receipt-required') === 'true') {
         form.setAttribute('data-success-destination', JOURNEY_ACTIONS[j] || '/obrigado');

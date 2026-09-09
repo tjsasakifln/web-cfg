@@ -79,7 +79,8 @@ def test_home_has_canonical_copy():
     assert "Projetar, revisar, orçar ou compatibilizar" in html
     assert "Perícia, assistência técnica ou avaliação" in html
     assert "Segurança do trabalho" in html
-    assert "Escolher minha situação" in html
+    assert "Conhecer os serviços" in html
+    assert 'href="/servicos/#servico-projeto"' in html
     assert "Contrato sob pressão" in html
     assert "Edital e proposta" in html
     assert "Operação recorrente" in html

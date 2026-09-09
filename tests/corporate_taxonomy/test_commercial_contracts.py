@@ -108,3 +108,16 @@ def test_unproved_public_price_and_credential_fail_closed() -> None:
 
 def test_new_authority_layer_has_no_dispatch_or_smtp_client() -> None:
     assert scan_owned_implementation_for_network_clients() == []
+
+
+@pytest.mark.parametrize("field,value,reason", [
+    ("priced_route_requires_lead_capture", True, "price_alone_must_not_require_form"),
+    ("priced_route_requires_contextual_contact", False, "priced_contact_required"),
+    ("active_form_requires_verified_persistence", False, "active_form_persistence_required"),
+    ("direct_channel_open_is_receipt", True, "channel_open_is_not_receipt"),
+])
+def test_commercial_revision_preserves_truthful_contact(field, value, reason):
+    docs = load_contracts()
+    docs["page"]["conversion"][field] = value
+    with pytest.raises(CommercialContractError, match=reason):
+        validate_commercial_contracts(docs)

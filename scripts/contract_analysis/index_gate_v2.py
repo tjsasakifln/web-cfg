@@ -129,13 +129,11 @@ def evaluate_index_items_v2(
     )
 
     author = record.get("author") if isinstance(record.get("author"), dict) else {"name": record.get("author")}
-    reviewer = record.get("reviewer") if isinstance(record.get("reviewer"), dict) else {"name": record.get("reviewer")}
     author_name = str((author or {}).get("name") if isinstance(author, dict) else author or "")
-    reviewer_name = str((reviewer or {}).get("name") if isinstance(reviewer, dict) else reviewer or "")
     items["authorship_method_as_of_limitations_correction"] = (
         record.get("human_authorship_confirmed") is True
         and "rascunho" not in author_name.lower()
-        and (len(reviewer_name) >= 5 or bool(record.get("solo_reviewer_disclosure")))
+        and len(author_name) >= 5
         and len(str(record.get("methodology") or "")) >= 40
         and len(str(record.get("limitations") or "")) >= 40
         and bool(str(record.get("as_of") or (record.get("freshness") or {}).get("as_of") or ""))

@@ -71,6 +71,7 @@ jobs:
       export_public_artifact: true
     permissions:
       contents: read
+      actions: read
 
   pseo_gates:
     name: exact SHA through pSEO

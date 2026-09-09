@@ -55,6 +55,12 @@ def _write_spec_markdown(spec: dict[str, Any]) -> None:
 **`earliest_safe_action_at`:** `{spec['earliest_safe_action_at']}`  
 **Decision state:** P1 / VALIDATE / INBOUND ENGINE. Leverage: revenue + distribution.
 
+The preparation restriction above applies only to the historical experimental
+patch. The founder's 2026-09-09 EXECUTE_NOW decision revokes editorial freezes
+for the commercial correction campaign. Review the affected rendered content,
+retain real terms and provenance, recapture actual hashes and execute the
+required integration/release gates; do not wait for conversion measurements.
+
 ## Visitor job
 
 {spec['visitor_job']}
@@ -138,6 +144,7 @@ def _write_index_markdown(spec_files: list[str]) -> None:
         "",
         "Campaign `CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01`. Exclusive trees only.",
         "This campaign **must not** mutate pillar HTML, `script.js`, CSS, analytics, sitemap, robots, redirects, content-service-map or offer code.",
+        "This is the historical experiment's scope, not a prohibition on commercial correction. The founder's 2026-09-09 EXECUTE_NOW instruction supersedes editorial freezes; the current drift gate requires rendered review and actual hash recapture, preserving true terms and all required release checks.",
         "",
         f"- `earliest_safe_action_at`: `{EARLIEST_SAFE_ACTION_AT.isoformat()}`",
         f"- corresponding issue: #{CORRESPONDING_ISSUE} `LANDED_AWAITING_LIVE_EVIDENCE`",

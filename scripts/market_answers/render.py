@@ -12,6 +12,7 @@ import json
 from html import escape
 from pathlib import Path
 from typing import Any
+from urllib.parse import quote
 
 from scripts.market_answers import (
     ASSET_FAMILY,
@@ -169,6 +170,9 @@ def render_html(
 ) -> str:
     site_root = site_root or _root()
     copy = visitor_copy(record, payload)
+    from scripts.site.shell_nav import load_brand
+    brand = load_brand()
+    contact_url = brand["contact"]["whatsapp_base"] + "?text=" + quote(copy["contact_message"])
     fold = copy["first_fold"]
     stats = payload.get("statistics") or {}
     rows = _distribution_rows(payload)
@@ -321,13 +325,13 @@ def render_html(
 <div class="ma-method" id="metodologia">
 <p class="ma-kicker">Método (curto)</p>
 <p>{escape(method_short)}</p>
-<p>Grain: valor integral nominal do instrumento. Unidade: {escape(_text(stats.get("unit") or "ticket_contratual_integral"))}. Moeda: {escape(_text(stats.get("currency") or "BRL"))}.</p>
+<p>O cálculo usa o valor integral nominal do instrumento, em reais (BRL).</p>
 <p><a href="#fontes">Fontes e metodologia completa</a> · <a href="/metodologia-inteligencia/">Como a CONFENGE lê evidências</a></p>
-<p><strong>as_of:</strong> <time datetime="{as_of}">{as_of}</time></p>
-<p><strong>source_as_of:</strong> <time datetime="{source_as_of}">{source_as_of}</time></p>
+<p>Dados atualizados em <time datetime="{as_of}">{as_of}</time>.</p>
+<p>Fonte consultada em <time datetime="{source_as_of}">{source_as_of}</time>.</p>
 <p>{escape(copy["validity_policy"])}</p>
 <p id="cobertura">{escape(copy["coverage"])}</p>
-<p id="missingness">{escape(copy["missingness"])}</p>
+<p id="missingness">Registros sem valor total positivo não entram na amostra; a cobertura acima informa sua quantidade.</p>
 <p id="fonte">{escape(copy["fonte"])}</p>
 </div>
 <div class="ma-limits" id="limitacoes">
@@ -361,15 +365,14 @@ def render_html(
 <li>Não é custo, preço unitário ou custo por km de pavimentação.</li>
 <li>Não é ranking de empresas, órgãos ou sobrepreço.</li>
 <li>Não autoriza inferir irregularidade a partir de um outlier.</li>
-<li>Demanda de busca da pergunta: <strong>UNKNOWN</strong>. {escape(demand_note)}</li>
 </ul>
 </section>
 
 <section id="xray" aria-labelledby="xray-titulo">
 <h2 id="xray-titulo">Veja sua empresa neste mercado</h2>
-<p>O B2G X-Ray (carteira observada por CNPJ no mesmo factual plane) ainda não é um produto público. Este bloco só registra a intenção e o próximo passo. A resposta acima permanece visível sem cadastro.</p>
+<p>A resposta acima permanece visível sem cadastro. Para discutir um contrato ou sua carteira, use os caminhos abaixo.</p>
 <p class="ma-cta">
-<a class="button button-primary" data-ma-event="xray_start" data-cta-id="veja-sua-empresa" href="#cta">Veja sua empresa neste mercado</a>
+<a class="button button-primary" data-ma-event="xray_start" data-cta-id="veja-sua-empresa" href="{escape(contact_url)}">{escape(copy['contact_label'])}</a>
 </p>
 </section>
 
@@ -377,23 +380,19 @@ def render_html(
 <h2 id="cta-titulo">Próximo passo</h2>
 <p>A resposta e o método não ficam atrás de formulário. Se quiser aplicar o recorte à sua carteira ou pedir segunda leitura de um contrato, use um destes caminhos.</p>
 <p class="ma-cta">
-<a class="button button-primary" data-ma-event="cta_click" data-cta-id="veja-sua-empresa" href="#xray">Veja sua empresa neste mercado</a>
+<a class="button button-primary" data-ma-event="cta_click" data-cta-id="veja-sua-empresa" href="{escape(contact_url)}">{escape(copy['contact_label'])}</a>
 <a class="button" data-ma-event="cta_click" data-cta-id="analise-contrato" href="/ferramentas/diagnostico-defesa-margem/">Analise um contrato / peça segunda leitura</a>
 </p>
-<p class="ma-note">Atribuição: source <code>CONFENGE_WEB</code>, asset <code>{ASSET_ID}</code>, família <code>{ASSET_FAMILY}</code>. <a data-ma-event="correction_open" href="{CORRECTION_PATH}">Encontrou um erro nesta página?</a></p>
+<p class="ma-note">O botão abre o WhatsApp com o contexto desta página. A mensagem só é enviada quando você confirmar no aplicativo; a abertura não registra um pedido.</p>
+<p class="ma-note"><a data-ma-event="correction_open" href="{CORRECTION_PATH}">Encontrou um erro nesta página?</a></p>
 </section>
 
 <section id="dataset" data-dataset="valor-tipico-contratos-pavimentacao-sc" aria-labelledby="fontes-titulo">
-<h2 id="fontes-titulo">Fontes, versão e refresh</h2>
+<h2 id="fontes-titulo">Fontes e atualização</h2>
 <ul>
-<li>Schema: <code>{escape(_text(payload.get("schema")))}</code></li>
-<li>content_hash: <code>{escape(decision.content_hash)}</code></li>
-<li>producer_status: <code>{escape(decision.producer_status)}</code></li>
-<li>producer_sha: <code>{escape(_text(payload.get("producer_sha")))}</code></li>
-<li>Responsável pela atualização: {escape(_text(((record.get("refresh") or {{}}).get("owner")) if isinstance(record.get("refresh"), dict) else record.get("refresh_owner") or "CONFENGE / market-answers"))}</li>
-<li>Estado do gate: <code>{escape(decision.state)}</code> · recomendação <code>{escape(decision.recommendation)}</code></li>
+<li>Responsável pela apresentação e atualização: CONFENGE</li>
 </ul>
-<p>A leitura factual é SELECT-only, versionada e com proveniência. Notas internas de integração ficam fora desta página.</p>
+<p>Os dados vêm de contratos públicos do recorte. A página informa método, período, cobertura e limites de uso para que o número seja lido no contexto correto.</p>
 </section>
 </div>
 </main>
@@ -425,12 +424,8 @@ def write_page(
     # antigo de seis itens e reprovava `npm run test:nav` -- que foi exatamente
     # o que aconteceu. Sincronizar aqui torna a saida canonica POR CONSTRUCAO,
     # em vez de depender de alguem lembrar de rodar --write depois.
-    try:
-        from scripts.site.shell_nav import load_brand, sync_text
-
-        html = sync_text(html, load_brand(), f"/{PAGE_DIR}/")
-    except Exception:  # noqa: BLE001 - nunca impedir a geracao por causa do shell
-        pass
+    from scripts.site.shell_nav import load_brand, sync_text
+    html = sync_text(html, load_brand(), f"/{PAGE_DIR}/")
     path = directory / "index.html"
     path.write_text(html, encoding="utf-8")
     as_of = parse_instant(payload.get("as_of"))

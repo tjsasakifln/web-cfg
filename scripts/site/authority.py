@@ -1179,7 +1179,7 @@ def representative_pages() -> dict[str, Path]:
         "caso_proof": ROOT / "casos" / "aditivo-art125-demonstrativo" / "index.html",
         "analise_tecnica_contrato": ROOT
         / "analises-contratos-publicos"
-        / "bdi-composicao-vs-referencia-sc"
+        / "reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026"
         / "index.html",
     }
 

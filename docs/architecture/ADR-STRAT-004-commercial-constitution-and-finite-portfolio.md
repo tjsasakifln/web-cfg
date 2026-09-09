@@ -20,6 +20,24 @@ canibalizar a vertical já publicada.
 
 ## Decisão
 
+### Emenda vigente de 2026-09-09
+
+Decisão expressa do fundador: EXECUTE_NOW na campanha de comunicação pública
+vinculada à #611. Engenharia e projetos atendem necessidades públicas e privadas;
+o cadastro operacional incompleto pede apuração, não recusa pública automática.
+Estados de maturidade e lacunas internas não são conteúdo obrigatório de oferta.
+As entregas, fases, autoria e responsabilidade profissional continuam verdadeiras.
+
+Preço autorizado exige condições materiais claras, contato contextual funcional
+e eventos que descrevam o que ocorreu. Não exige por si só um formulário.
+Formulários ativos preservam consentimento, atribuição e persistência comprovada;
+abrir um canal direto não significa pedido recebido. Preço, margem e checkout
+continuam autorizações distintas. Esta campanha pode integrar os registros e
+publicar pelas proteções existentes, substituindo a exclusividade operacional
+temporária de MV-09. A vigência desta emenda alcança validadores e geradores.
+
+### Decisão estrutural preservada
+
 CONFENGE é a única marca pública e sua categoria é **Engenharia, Perícias e
 Inteligência Técnica**. Obras públicas e B2G permanecem uma vertical protegida,
 não a categoria corporativa inteira.
@@ -54,8 +72,8 @@ Nenhum deles é inferido do outro.
   como obrigação de copy.
 - As campanhas MV-04 a MV-07 consomem o contrato sem inventar famílias, ofertas,
   preços, prazos ou claims.
-- MV-09 é a única campanha autorizada a integrar registros compartilhados,
-  mergear e publicar.
+- A integração dos registros compartilhados e a publicação seguem a campanha
+  autorizada pelo fundador e as proteções do repositório.
 - B2G mantém rotas, catálogo, preço, captura e equity até decisão URL-exata.
 - `web-cfg` não recebe CRM, fila, cadência, SMTP ou dispatch; Warmbly continua
   dono da ação comercial.

@@ -7,10 +7,11 @@ routes ages: every public family published after the list was written fell
 outside the gate by default, so a new family shipped with almost no copy
 enforcement while CI stayed green.
 
-The scope is therefore *derived* from the repository — every shipped visitor
-HTML file — and narrowed only by a named, justified skip-list of trees that are
-not visitor surfaces at all. A new public family is in scope the moment its
-first `index.html` lands, with no list to edit.
+The source scope is derived from the repository and the release scope is
+derived independently from the assembled ``_site`` tree.  Comparing those two
+views with the publish manifest is deliberate: a manifest produced by the same
+source walk cannot prove that a later build transformation did not add, retain
+or drop a route.
 
 Legitimate individual occurrences are handled by
 `data/site/copy-exceptions.json`: one entry per (rule, match, exact path) with a
@@ -40,7 +41,7 @@ SKIP_PARTS = {
     "seo",  # generated audit reports and manifests
     "netlify",  # runtime function sources
     "node_modules",  # third-party packages
-    "_site",  # build output; the sources are gated instead
+    "_site",  # build output when walking source; use artifact_html_files() for it
     ".git",  # VCS internals
     ".worktrees",  # sibling checkouts
     ".claude",  # agent worktrees and local config
@@ -106,8 +107,6 @@ class _PublicCopy(HTMLParser):
         return (
             tag in _NON_COPY_TAGS
             or "hidden" in values
-            or "inert" in values
-            or str(values.get("aria-hidden") or "").strip().lower() == "true"
             or bool(_DISPLAY_NONE.search(style))
         )
 
@@ -238,6 +237,37 @@ def visitor_facing_html_files(root: Path | None = None) -> list[Path]:
             continue
         out.append(path)
     return sorted(out)
+
+
+def artifact_html_files(artifact_root: Path) -> list[Path]:
+    """Every HTML file physically present in an assembled public artifact.
+
+    This walk intentionally does not share ``SKIP_PARTS`` with the source
+    detector.  ``_site`` is already the release allowlist boundary; silently
+    skipping a newly introduced directory inside it would let the detector
+    certify its own incomplete universe.  An exact route can be excluded from
+    a particular copy gate later, with a reason, but it remains in this census.
+    """
+    base = Path(artifact_root)
+    if not base.is_dir():
+        return []
+    return sorted(path for path in base.rglob("*.html") if path.is_file())
+
+
+def artifact_html_routes(artifact_root: Path) -> list[str]:
+    """Routes for every HTML response file in the assembled artifact."""
+    base = Path(artifact_root)
+    return [route_for(relpath(path, base)) for path in artifact_html_files(base)]
+
+
+def artifact_index_routes(artifact_root: Path) -> list[str]:
+    """Directory-style routes independently discovered from artifact files."""
+    base = Path(artifact_root)
+    return [
+        route_for(relpath(path, base))
+        for path in artifact_html_files(base)
+        if path.name == "index.html"
+    ]
 
 
 def visitor_facing_relpaths(root: Path | None = None) -> list[str]:

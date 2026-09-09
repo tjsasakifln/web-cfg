@@ -80,9 +80,10 @@ def forbidden_drift(root: Path | None = None) -> dict[str, DriftHashes]:
 def forbidden_drift_policy(root: Path | None = None) -> dict[str, DriftPolicy]:
     """Classify drift without weakening the committed-baseline comparison.
 
-    Frozen pillar HTML and collateral capable of changing its rendering are
-    hard errors. Other collateral still fails closed, but names the required
-    remediation: a reviewed baseline recapture committed with the change.
+    Every mismatch fails closed. The founder revoked the editorial freeze on
+    2026-09-09: a changed page is no longer automatically ordered reverted.
+    HTML/rendering changes require contextual review and actual hash recapture;
+    this never makes a mismatching digest pass or authorizes new offer terms.
     """
     drift = forbidden_drift(root)
     out: dict[str, DriftPolicy] = {}
@@ -90,11 +91,11 @@ def forbidden_drift_policy(root: Path | None = None) -> dict[str, DriftPolicy]:
         if rel in _FROZEN_HTML:
             category = "frozen_html"
             severity = "error"
-            action = "revert_frozen_html"
+            action = "review_commercial_content_and_recapture_or_revert"
         elif rel in _RENDERING_COLLATERAL:
             category = "rendering_collateral"
             severity = "error"
-            action = "prove_no_frozen_rendering_change_or_revert"
+            action = "verify_rendered_experience_and_recapture_or_revert"
         else:
             category = "non_rendering_collateral"
             severity = "recapture_required"

@@ -290,11 +290,11 @@ def test_pre_recapture_fixture_names_collateral_and_nominal_drifts(tmp_path):
 def test_drift_policy_separates_html_rendering_and_recapture(tmp_path):
     _copy_forbidden_tree(tmp_path)
     mutations = {
-        "aditivos-obras-publicas/index.html": ("frozen_html", "error", "revert_frozen_html"),
+        "aditivos-obras-publicas/index.html": ("frozen_html", "error", "review_commercial_content_and_recapture_or_revert"),
         "script.js": (
             "rendering_collateral",
             "error",
-            "prove_no_frozen_rendering_change_or_revert",
+            "verify_rendered_experience_and_recapture_or_revert",
         ),
         "robots.txt": (
             "non_rendering_collateral",

@@ -197,9 +197,10 @@ def test_comparable_available_not_consumed(tmp_path, monkeypatch):
     assert rec.get("comparable_consumed") is False
     assert rec.get("comparable_reason") == SINGULAR_COMPARABLE_REASON
     html = render_analysis_html(rec, evaluate_publication(rec, cohort=[rec]))
-    assert "comparable_available=true" in html
-    assert "comparable_consumed=false" in html
-    assert SINGULAR_COMPARABLE_REASON in html
+    assert 'data-comparable-available="true"' in html
+    assert 'data-comparable-consumed="false"' in html
+    assert f'data-comparable-reason="{SINGULAR_COMPARABLE_REASON}"' in html
+    assert "Há referências comparáveis no pacote de origem" in html
     assert "acima da mediana" not in html.lower()
     assert "ranking de pares" not in html.lower()
     assert "HOLD_FOR_DATA" not in html
@@ -440,6 +441,9 @@ def test_withdraw_rebuild_noindex_no_ghost_loc(tmp_path, monkeypatch):
     assert "X-Robots-Tag: index, follow" not in headers_after
     if family_map.exists():
         assert rec["slug"] not in family_map.read_text(encoding="utf-8")
+    assert not (
+        tmp_path / "analises-contratos-publicos" / rec["slug"] / "index.html"
+    ).exists()
     html_after = render_analysis_html(rec, rolled)
     assert "noindex" in html_after
     assert sitemap_locs([(rec, rolled)]) == []

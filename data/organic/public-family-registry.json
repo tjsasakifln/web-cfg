@@ -12,7 +12,7 @@
     "none": "sem ação terminal. Só é aceito com profile trust_or_legal e motivo escrito."
   },
   "profile_rules": {
-    "priced_offer": "Derivado do HTML, não da declaração: rota indexável que exibe preço passa a exigir captura persistida, mesmo que a família declare ação mais fraca. Uma família comercial que exiba preço sem se declarar priced_offer reprova (undeclared_priced_offer).",
+    "priced_offer": "Derivado do HTML, não da declaração: preço exige condições autorizadas e contato contextual funcional, por formulário ativo com persistência ou canal direto com destino real, contexto da oferta e evento de abertura fiel. Decisão do fundador de 2026-09-09: preço isoladamente não exige formulário. Uma oferta não declarada continua reprovando (undeclared_priced_offer).",
     "service_pillar": "Rotas de data/organic/bofu-intent-matrix.json. A exigência de captura on-page permanece na regra dedicada missing_on_page_form, que honra o congelamento de #291; a checagem de ação terminal não duplica esse achado.",
     "trust_or_legal": "Páginas legais e de confiança. Isentas de ação terminal, com motivo escrito. Preço nessas rotas reprova, salvo se a rota exata estiver em priced_reference_routes com motivo.",
     "commercial_content": "Conteúdo comercial. A ação terminal exigida é a declarada pela família."

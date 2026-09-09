@@ -135,7 +135,7 @@ def test_family_is_preserved_from_pseo_wipe():
 
     assert is_preserved_static_surface("analises-contratos-publicos/index.html") is True
     assert is_preserved_static_surface(
-        "analises-contratos-publicos/bdi-composicao-vs-referencia-sc/index.html"
+        "analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/index.html"
     ) is True
 
 
@@ -146,7 +146,6 @@ def test_rendered_preview_is_noindex_and_absent_from_sitemaps():
     hub = ROOT / "analises-contratos-publicos" / "index.html"
     assert hub.is_file()
     html = hub.read_text(encoding="utf-8")
-    assert 'content="noindex' in html
     assert "/correcoes/" not in html
     assert "/triagem-tecnica/#corrigir-o-site" in html
     canary_slug = AUTHORIZED_CANONICAL_PATH.strip("/").split("/")[-1]
@@ -159,6 +158,10 @@ def test_rendered_preview_is_noindex_and_absent_from_sitemaps():
         if row.get("id") == "13ec615146b3d348190a9b0b9148831e"
     )
     approved, _reasons = approval_allows_index(record, root=ROOT)
+    if approved:
+        assert 'content="index,follow"' in html or 'content="index, follow"' in html
+    else:
+        assert 'content="noindex' in html
     pages = list((ROOT / "analises-contratos-publicos").rglob("index.html"))
     assert pages
     indexable_pages = []
@@ -167,17 +170,20 @@ def test_rendered_preview_is_noindex_and_absent_from_sitemaps():
         assert "CaseStudy" not in body
         assert '"@type":"Review"' not in body and '"@type": "Review"' not in body
         is_canary = canary_slug in str(page)
-        if is_canary and approved:
+        if approved and (is_canary or page == hub):
             assert 'content="index,follow"' in body or 'content="index, follow"' in body
             indexable_pages.append(page)
         else:
             assert 'content="noindex' in body
     if approved:
-        assert len(indexable_pages) == 1
+        assert len(indexable_pages) == 2
         members = analysis_urls_in_sitemaps(ROOT)
         assert members
     else:
         assert analysis_urls_in_sitemaps(ROOT) == []
+    assert {page.parent.name for page in pages if page != hub} <= {
+        canary_slug,
+    }
 
 
 def test_robots_and_headers_block_fixture_family():

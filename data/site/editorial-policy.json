@@ -2,8 +2,8 @@
   "schema_version": "1.0.0",
   "issue": 74,
   "campaign": "WEB-010",
-  "current_version": "1.2.0",
-  "effective_at": "2026-09-07",
+  "current_version": "1.3.0",
+  "effective_at": "2026-09-09",
   "canonical_path": "/politica-editorial/",
   "historico_path": "/politica-editorial/historico/",
   "commercial_copy_contracts": {
@@ -50,6 +50,14 @@
       "archive_path": "/politica-editorial/",
       "content_sha256": "29cc8ea825d56305fc3d36d873272cd65e7cd256b80bf37f6602a01cf13e0c30",
       "entry_sha256": "59a47803023cecd7a84c0f1939fb08af70c632464e7f285a9de3a21e9c067a8a"
+    },
+    {
+      "version": "1.3.0",
+      "effective_at": "2026-09-09",
+      "summary": "Responsabilidade editorial sem autodepreciação: revisão independente continua sendo declarada somente quando uma pessoa distinta realmente participou, enquanto autoria, fontes, cálculos, limites, datas, correção e responsabilidade profissional permanecem verificáveis. A ausência de outro revisor deixa de ser anúncio obrigatório ao visitante. Substitui a 1.2.0 sem apagá-la.",
+      "archive_path": "/politica-editorial/",
+      "content_sha256": "67f443232af162efcf9521ef20eff3c0661147974e688f71321128c7ef535736",
+      "entry_sha256": "a88aec173806b7d8308836a8b2603c003524a020626549d1cfbf815cf761f4de"
     }
   ],
   "versions": {
@@ -144,6 +152,36 @@
           "eyebrow": "Conflitos",
           "description": "A CONFENGE é consultoria comercial. Conteúdo técnico apoia serviços; conflito não declarado pode ser corrigido.",
           "body": "<h2 id=\"natureza\">Natureza comercial</h2>\n<p>A CONFENGE vende serviços de engenharia. As páginas técnicas, as ferramentas e as pesquisas existem para você decidir melhor e, quando fizer sentido, conversar com a gente. Isso está declarado, não escondido.</p>\n<h2 id=\"o-que-nao-ha\">O que não existe aqui</h2>\n<ul>\n<li>Avaliação paga, nota de cliente ou selo de terceiro inventado</li>\n<li>Patrocínio não declarado de página técnica</li>\n<li>Caso com nome de cliente sem autorização dele</li>\n<li>Independência editorial fingida em relação aos próprios serviços da CONFENGE</li>\n</ul>\n<h2 id=\"casos\">Casos e demonstrações</h2>\n<p>As páginas em <a href=\"/casos/\">Casos</a> são demonstrações construídas para mostrar o formato do trabalho: são exemplos, não clientes reais, e dizem isso na própria página. Um caso real só é publicado com autorização registrada de quem contratou.</p>\n<h2 id=\"contestacao\">Encontrou um conflito não declarado?</h2>\n<p>Se um conflito de interesse não declarado aparecer no site, <a href=\"/triagem-tecnica/#corrigir-o-site\">envie o link da página e explique o que precisa ser corrigido</a>. Responsável: Engº Tiago Sasaki, <a href=\"mailto:tiago.sasaki@confenge.com.br\">tiago.sasaki@confenge.com.br</a>.</p>\n<p>Política editorial vigente: <a href=\"/politica-editorial/\">versão 1.2.0</a>.</p>"
+        }
+      }
+    },
+    "1.3.0": {
+      "effective_at": "2026-09-09",
+      "prazo_then": "não medido; a política não promete prazo em dias",
+      "pages": {
+        "editorial": {
+          "slug": "politica-editorial",
+          "title": "Política editorial",
+          "h1": "Política editorial",
+          "eyebrow": "Governança",
+          "description": "Como a CONFENGE decide o que publica: fontes, autoria, revisão, atualização, correção e retirada.",
+          "body": "<h2 id=\"escopo\">O que esta política cobre</h2>\n<p>Aplica-se a páginas de serviço, conteúdos técnicos, ferramentas, pesquisas, dados, análises técnicas de projeto, perícia, avaliação, segurança do trabalho e contrato público, e casos publicados em confenge.com.br. Não é um selo de qualidade que a CONFENGE atribui a si mesma, não cria ranking e não publica avaliação de cliente.</p>\n<p>Análise técnica de um fato público, seja um contrato, uma obra ou um edital, é uma coisa; caso da CONFENGE é outra. Analisar um fato público não significa ter trabalhado para o órgão, para a empresa contratada ou para qualquer das partes. Um caso só é publicado com autorização real de quem contratou.</p>\n<p>Para cada afirmação relevante você deve conseguir ver: quem afirma, com que competência, a partir de qual método ou dado, como foi revisada, de quando é, o que ela não cobre e como pedir correção.</p>\n<h2 id=\"identidade\">Identidade</h2>\n<p>A empresa é a CONFENGE, CNPJ 52.407.089/0001-09. O responsável técnico é o <a href=\"/especialista/tiago-jun-sasaki/\">Engº Tiago Sasaki</a>. Não existe uma segunda marca pública.</p>\n<h2 id=\"autoria\">Autoria e responsabilidade</h2>\n<p>Toda página coberta por esta política mostra quem a assina: uma pessoa ou a biblioteca técnica da CONFENGE. O autor declarado para mecanismos de busca é o mesmo que aparece na página. A pessoa que assina responde pela revisão que efetivamente realizou; autoria própria não é apresentada como revisão independente.</p>\n<h2 id=\"fontes\">Fontes</h2>\n<p>Lei, jurisprudência, portais de contratação e exportações nomeadas entram identificadas e com o período a que se referem. Quando não há fonte que sustente um trecho, ele não sobe, e continua não subindo até existir a fonte. Não preenchemos lacuna com estimativa.</p>\n<h2 id=\"tipos-de-afirmacao\">Dado, cálculo e leitura são coisas diferentes</h2>\n<p>A CONFENGE mantém essa distinção no texto público, e ela muda o quanto você deve confiar em cada frase.</p>\n<ul>\n<li><strong>Dado observado:</strong> vem de uma fonte identificada, com período. Você pode conferir.</li>\n<li><strong>Cálculo:</strong> resultado obtido a partir de premissas e de uma fórmula que ficam visíveis na página. Você pode refazer a conta.</li>\n<li><strong>Leitura técnica:</strong> interpretação humana a partir dos dois anteriores. É opinião fundamentada e aparece como tal.</li>\n</ul>\n<h2 id=\"revisao\">Revisão</h2>\n<p>A revisão confere se afirmações, fontes, cálculos, autoria, limites e datas combinam entre si. Quando uma pessoa distinta participa da revisão, ela só é nomeada depois de confirmada sua atuação. Quando o próprio autor revisa o texto, a página mantém a autoria e a responsabilidade reais, sem transformar a ausência de outra pessoa em anúncio comercial. Afirmações sobre lei e jurisprudência continuam rastreadas à fonte, qualificadas como técnicas e sujeitas a correção; não inventamos parecer ou revisor independente.</p>\n<h2 id=\"conflitos\">Conflitos</h2>\n<p>A CONFENGE é uma empresa de serviços técnicos e isso está declarado em <a href=\"/conflitos/\">Conflitos de interesse</a>.</p>\n<h2 id=\"uso-de-ia\">Uso de IA</h2>\n<p>Onde a IA entra na produção do que você lê está em <a href=\"/uso-de-ia/\">Uso de IA</a>. A responsabilidade pelo texto continua sendo humana.</p>\n<h2 id=\"atualizacao\">Atualização</h2>\n<p>Páginas com data visível declaram a que momento se referem. Recortes de dados só sobem com fonte e período. Uma nova versão desta política não apaga a anterior: a mudança fica registrada no <a href=\"/politica-editorial/historico/\">histórico</a>.</p>\n<h2 id=\"correcao\">Correção</h2>\n<p>Erro de autoria, data, método, cobertura, limitação, texto legal ou um caso publicado sem autorização é corrigido na própria página ou em nota visível. Se você encontrou um erro no site, <a href=\"/triagem-tecnica/#corrigir-o-site\">envie o link da página e explique o que precisa ser corrigido</a>. A correção entra na própria página, com a data de atualização visível.</p>\n<h2 id=\"retirada\">Retirada</h2>\n<p>Se a fonte deixar de estar disponível, ou se um trecho não puder ser sustentado, ele é limitado ou retirado. A versão anterior desta política continua registrada.</p>\n<h2 id=\"historico\">Versão</h2>\n<p>Esta é a versão 1.3.0, vigente em 9 de setembro de 2026. O <a href=\"/politica-editorial/historico/\">histórico</a> registra as versões anteriores e o que mudou em cada uma.</p>"
+        },
+        "ai_use": {
+          "slug": "uso-de-ia",
+          "title": "Uso de IA",
+          "h1": "Uso de inteligência artificial",
+          "eyebrow": "Uso de IA",
+          "description": "Onde a IA entra na produção pública da CONFENGE, o que ela não faz e quem responde pelo texto.",
+          "body": "<h2 id=\"principio\">Princípio</h2>\n<p>Sistemas de IA ajudam a redigir, classificar, revisar consistência e operar infraestrutura na CONFENGE. Esse uso é declarado sempre que altera o texto ou o recorte que você lê. A IA não assina o conteúdo e não produz caso, avaliação, credencial, volume de mercado ou resultado financeiro.</p>\n<h2 id=\"responsavel\">Quem responde</h2>\n<p>O responsável técnico pelo que está publicado é o <a href=\"/especialista/tiago-jun-sasaki/\">Engº Tiago Sasaki</a>. Uma página que não possa nomear um autor humano ou a biblioteca técnica não vai ao ar.</p>\n<h2 id=\"limites\">O que a IA não faz aqui</h2>\n<ul>\n<li>Transformar uma leitura técnica em dado observado</li>\n<li>Preencher com estimativa aquilo que não sabemos</li>\n<li>Inventar cliente, depoimento, nota, selo ou jurisprudência</li>\n<li>Criar marcação estruturada que não corresponda ao que está publicado na página</li>\n<li>Substituir parecer jurídico</li>\n<li>Apresentar-se como ranking proprietário ou como garantia de resultado</li>\n</ul>\n<h2 id=\"transparencia\">Transparência</h2>\n<p>Esta página é a declaração pública de uso de IA da CONFENGE. Encontrou um erro? <a href=\"/triagem-tecnica/#corrigir-o-site\">Fale com a gente</a>. Política editorial vigente: <a href=\"/politica-editorial/\">versão 1.3.0</a>.</p>"
+        },
+        "conflicts": {
+          "slug": "conflitos",
+          "title": "Conflitos de interesse",
+          "h1": "Conflitos e interesses comerciais",
+          "eyebrow": "Conflitos",
+          "description": "A CONFENGE é consultoria comercial. Conteúdo técnico apoia serviços; conflito não declarado pode ser corrigido.",
+          "body": "<h2 id=\"natureza\">Natureza comercial</h2>\n<p>A CONFENGE vende serviços de engenharia. As páginas técnicas, as ferramentas e as pesquisas existem para você decidir melhor e, quando fizer sentido, conversar com a gente. Isso está declarado, não escondido.</p>\n<h2 id=\"o-que-nao-ha\">O que não existe aqui</h2>\n<ul>\n<li>Avaliação paga, nota de cliente ou selo de terceiro inventado</li>\n<li>Patrocínio não declarado de página técnica</li>\n<li>Caso com nome de cliente sem autorização dele</li>\n<li>Independência editorial fingida em relação aos próprios serviços da CONFENGE</li>\n</ul>\n<h2 id=\"casos\">Casos e demonstrações</h2>\n<p>As páginas em <a href=\"/casos/\">Casos</a> são demonstrações construídas para mostrar o formato do trabalho: são exemplos, não clientes reais, e dizem isso na própria página. Um caso real só é publicado com autorização registrada de quem contratou.</p>\n<h2 id=\"contestacao\">Encontrou um conflito não declarado?</h2>\n<p>Se um conflito de interesse não declarado aparecer no site, <a href=\"/triagem-tecnica/#corrigir-o-site\">envie o link da página e explique o que precisa ser corrigido</a>. Responsável: Engº Tiago Sasaki, <a href=\"mailto:tiago.sasaki@confenge.com.br\">tiago.sasaki@confenge.com.br</a>.</p>\n<p>Política editorial vigente: <a href=\"/politica-editorial/\">versão 1.3.0</a>.</p>"
         }
       }
     }

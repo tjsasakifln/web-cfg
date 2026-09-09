@@ -131,15 +131,18 @@ test("public route is low-friction, transparent and free of sensitive inputs", (
   }
 });
 
-test("MV-09 publishes one bounded private wedge with embedded triage and three safe channels", () => {
+test("budget service welcomes public and private needs and retains safe contextual contact", () => {
   const html = fs.readFileSync(path.resolve("quantitativos-orcamento-obras/index.html"), "utf8");
   for (const expected of [
     "Quantitativos e orçamento de obras",
-    "Serve para obra privada",
-    "não recebe arquivo, planta, orçamento, endereço exato, CPF, processo ou texto livre",
   ]) {
     assert.equal(html.includes(expected), true, `missing bounded wedge contract: ${expected}`);
   }
+  const main = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i)?.[1] || "";
+  assert.match(main, /públic[oa]s?/i, "the service must explain public demand here");
+  assert.match(main, /privad[oa]s?/i, "the service must explain private demand here");
+  // Absence of an upload field is a data-minimization property, not a sentence
+  // the visitor must be made to read in the service opening.
   assert.match(html, /<meta(?=[^>]*name="robots")(?=[^>]*content="index,follow[^\"]*")[^>]*>/);
   // 2026-09-08. Mesma correcao da rota /triagem-tecnica/: com a autoridade em
   // WITHHELD o formulario adaptativo desta rota tambem e recusado em producao,

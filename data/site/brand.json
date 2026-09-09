@@ -7,9 +7,9 @@
     "name": "Engº Tiago Sasaki"
   },
   "positioning": {
-    "short": "Engenharia, perícias e inteligência técnica para transformar uma situação complexa em decisão documentada.",
-    "long": "A CONFENGE organiza diagnóstico, cálculo e evidências para decisões sobre projetos, edificações, imóveis, perícias, segurança do trabalho e obras públicas. O escopo e o entregável são confirmados na triagem; cada trabalho aplicável termina em documento técnico com responsável identificado.",
-    "tagline": "Do problema técnico à decisão documentada.",
+    "short": "Projetos e serviços de engenharia para obras públicas e privadas.",
+    "long": "A CONFENGE elabora e revisa projetos, compatibiliza disciplinas, levanta quantitativos, prepara orçamentos e produz análises técnicas para obras públicas e privadas. Cada trabalho tem conteúdo, finalidade e responsabilidade definidos antes da proposta.",
+    "tagline": "Projetos e serviços de engenharia para obras públicas e privadas.",
     "label": "Engenharia, Perícias e Inteligência Técnica",
     "org_description": "Engenharia, perícias e inteligência técnica: projeto, revisão, compatibilização, orçamento, inspeção, laudo, perícia, avaliação e segurança do trabalho, para clientes privados e públicos, com especialidade em licitações e contratos de obras públicas.",
     "footer_blurb": "Projeto, revisão, compatibilização, orçamento, inspeção, laudo, perícia, avaliação e segurança do trabalho. Engenharia para clientes privados e públicos."
@@ -25,17 +25,17 @@
   },
   "hero": {
     "eyebrow": "Engenharia, Perícias e Inteligência Técnica",
-    "h1": "Do problema técnico à decisão documentada.",
-    "h1_html": "Do problema técnico <span class=\"type-serif\">à decisão documentada.</span>",
-    "subheadline": "Diagnóstico, cálculo e evidências para você decidir o próximo passo em projetos, imóveis, obras, perícias, segurança do trabalho ou contratos públicos.",
-    "cta_primary": "Escolher minha situação",
-    "cta_secondary": "Ver o escopo de serviços",
-    "cta_secondary_wa": "Olá, Tiago. Quero explicar uma situação técnica e saber se ela se encaixa na atuação da CONFENGE.",
+    "h1": "Projetos e serviços de engenharia para obras públicas e privadas.",
+    "h1_html": "Projetos e serviços de engenharia <span class=\"type-serif\">para obras públicas e privadas.</span>",
+    "subheadline": "Elaboração e revisão de projetos, compatibilização entre disciplinas, quantitativos, orçamentos, perícias e análises técnicas para fazer a obra ou a decisão avançar.",
+    "cta_primary": "Conhecer os serviços",
+    "cta_secondary": "Conversar sobre seu projeto",
+    "cta_secondary_wa": "Olá, Tiago. Quero conversar sobre um projeto ou serviço de engenharia e solicitar uma proposta.",
     "microcopy": "Triagem inicial para confirmar aderência, limites e próximo passo.",
     "meta_title": "CONFENGE | Engenharia, Perícias e Inteligência Técnica",
-    "meta_description": "Engenharia, perícias e inteligência técnica: diagnóstico, cálculo e evidências para decisões em projetos, imóveis, obras, SST e contratos públicos.",
-    "og_title": "Do problema técnico à decisão documentada.",
-    "og_description": "Engenharia, perícias e inteligência técnica para escolher o próximo passo com diagnóstico, cálculo e evidências."
+    "meta_description": "Projetos e serviços de engenharia para obras públicas e privadas: elaboração, revisão, compatibilização, quantitativos, orçamento, perícias e análises técnicas.",
+    "og_title": "Projetos e serviços de engenharia para obras públicas e privadas.",
+    "og_description": "Elaboração e revisão de projetos, compatibilização, quantitativos, orçamentos, perícias e análises técnicas pela CONFENGE."
   },
   "journeys": [
     {
@@ -83,7 +83,7 @@
       "obrigado": "/obrigado-operacao",
       "wa_message": "Olá, Tiago. Quero solicitar o Diagnóstico da Operação em Obras Públicas e entender se a Diretoria Fracionada para o Mercado Público se encaixa.",
       "response_sla": "Agendamento ou retorno de enquadramento em até 2 dias úteis.",
-      "next_step": "Conversamos com quem decide a frente pública. Você recebe o enquadramento do formato (diagnóstico pontual ou rotina contínua)."
+      "next_step": "Conversamos com quem decide a frente pública para combinar o escopo do diagnóstico pontual ou do apoio contínuo à operação."
     }
   ],
   "service_situations": [
@@ -91,33 +91,34 @@
       "id": "project_delivery",
       "label": "Projetar, revisar, orçar ou compatibilizar",
       "summary": "Quando um projeto precisa ganhar definição, coerência entre disciplinas ou base quantitativa para avançar.",
-      "deliverables": "Projeto ou revisão técnica, compatibilização, orçamento e memória de cálculo, conforme o escopo.",
-      "href": "/triagem-tecnica/#projetos",
-      "index_state": "triage_fallback"
+      "deliverables": "Plantas, detalhes e memória de cálculo do projeto; relatório de revisão; registro de compatibilização; ou planilha orçamentária com quantitativos e composições.",
+      "href": "/servicos/#servico-projeto",
+      "index_state": "service_hub_index",
+      "scope": "Elaboração, revisão e compatibilização de projetos para obras públicas e privadas; quantitativos e orçamento mantêm destino específico."
     },
     {
       "id": "building_diagnosis",
       "label": "Inspecionar, diagnosticar ou documentar obra e imóvel",
       "summary": "Quando há anomalia, dúvida sobre condição, necessidade de vistoria ou registro técnico da situação existente.",
       "deliverables": "Inspeção, diagnóstico, laudo, relatório ou documentação técnica, conforme o escopo.",
-      "href": "/triagem-tecnica/#obra-imovel",
-      "index_state": "triage_fallback"
+      "href": "/servicos/#servico-diagnostico",
+      "index_state": "service_hub_index"
     },
     {
       "id": "expert_evidence_valuation",
       "label": "Perícia, assistência técnica ou avaliação",
       "summary": "Quando um processo, negociação ou decisão patrimonial depende de prova, análise ou valor tecnicamente fundamentado.",
       "deliverables": "Parecer, laudo, quesitos, análise crítica ou avaliação, conforme o papel e o escopo.",
-      "href": "/triagem-tecnica/#pericia-avaliacao",
-      "index_state": "triage_fallback"
+      "href": "/servicos/#servico-pericia",
+      "index_state": "service_hub_index"
     },
     {
       "id": "occupational_safety",
       "label": "Segurança do trabalho",
       "summary": "Quando a empresa precisa reconhecer, documentar ou tratar uma situação de risco ocupacional.",
       "deliverables": "Diagnóstico, documentação ou apoio técnico, depois de confirmarmos que podemos assumir o caso.",
-      "href": "/triagem-tecnica/#sst",
-      "index_state": "triage_fallback"
+      "href": "/servicos/#servico-sst",
+      "index_state": "service_hub_index"
     },
     {
       "id": "public_works_b2g",
@@ -144,7 +145,7 @@
       }
     ],
     "cta": {
-      "label": "Iniciar triagem",
+      "label": "Solicitar proposta",
       "href": "/triagem-tecnica/"
     },
     "hubs": {
@@ -152,9 +153,9 @@
         "label": "Serviços",
         "url": "/servicos/",
         "title": "Serviços de engenharia, perícias e inteligência técnica",
-        "description": "Encontre o caminho para projetos, edificações, imóveis, perícias, segurança do trabalho ou obras públicas sem percorrer um catálogo extenso.",
+        "description": "Serviços de engenharia para obras públicas e privadas: projetos, revisão, compatibilização, orçamento, inspeção, perícia, avaliação e segurança do trabalho.",
         "h1": "Encontre o caminho técnico para a sua situação",
-        "lead": "Comece pelo problema que precisa ser resolvido. A gente confirma se pode ajudar, o que consegue entregar e o que fica de fora.",
+        "lead": "Comece pelo que a obra ou a decisão precisa. Cada serviço explica o trabalho realizado, o documento entregue, sua utilidade e as informações necessárias para preparar a proposta.",
         "eyebrow": "Serviços organizados por situação",
         "index_state": "index"
       },

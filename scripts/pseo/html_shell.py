@@ -136,7 +136,7 @@ def _build_header() -> str:
         {"label": "Biblioteca", "href": "/conteudos/"},
     ]
     cta = (brand.get("navigation") or {}).get("cta") or {
-        "label": "Iniciar triagem",
+        "label": "Solicitar proposta",
         "href": "/triagem-tecnica/",
     }
     links = "\n".join(

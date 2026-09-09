@@ -60,7 +60,12 @@ function publicText(value) {
     .replace(/\bCALCULATION\b/g, "CÁLCULO")
     .replace(/\bINFERENCE\b/g, "INFERÊNCIA")
     .replace(/\bUNKNOWN\b/g, "DESCONHECIDO")
-    .replace(/\binputs\b/gi, "insumos")
+    .replace(/\binputs válidos\b/gi, "informações necessárias confirmadas")
+    .replace(/\binputs\b/gi, "informações necessárias")
+    .replace(/\bchecks\b/gi, "conferências")
+    .replace(/\bgates\b/gi, "condições")
+    .replace(/\bgate\b/gi, "condição")
+    .replace(/\bartefato\b/gi, "documento")
     .replace(/\bextra-cli\b/gi, "fonte versionada de dados públicos")
     .replace(/\bDataLake\b/gi, "base paralela de dados")
     .replace(/fale conosco/gi, "atendimento genérico")
@@ -204,15 +209,15 @@ function contractBody(entry, neighbor, executionContract) {
     copyClause("observable_trigger", "Compre quando", `<p>${escapeHtml(publicText(lowerFirst(entry.trigger)))}</p>`),
     copyClause("cost_of_inaction", "Custo de não agir", `<p>Sem esta análise, a pergunta “${escapeHtml(entry.decision_question)}” segue sem critério documentado.</p>`),
     copyClause("decision_that_changes", "Decisão antes e depois", `<p>Antes: ${escapeHtml(entry.decision_question)} Depois: ${escapeHtml(publicText(entry.included_outputs[0]))}.</p>`),
-    copyClause("concrete_result_and_artifact_example", "Resultado e artefato", publicList(entry.included_outputs)),
+    copyClause("concrete_result_and_artifact_example", "Resultado e entrega", publicList(entry.included_outputs)),
     copyClause("scope_in", "O que entra", `<p>${escapeHtml(publicText(entry.scope.unit))}.</p>${publicList(entry.scope.limits)}`),
-    copyClause("client_inputs_and_sla_start", "Insumos e início do prazo", `${publicList(entry.required_inputs)}<p>O prazo começa após ${escapeHtml(publicText(entry.sla.starts_after))}.</p>`),
+    copyClause("client_inputs_and_sla_start", "Informações necessárias e início do prazo", `${publicList(entry.required_inputs)}<p>O prazo começa após ${escapeHtml(publicText(entry.sla.starts_after))}.</p>`),
     copyClause("method_and_provenance", "Método e proveniência", `<p>Em ${escapeHtml(entry.public_name_pt_br)}, a decisão “${escapeHtml(entry.decision_question)}” usa fonte, data, método e cobertura, com afirmações marcadas como ${escapeHtml(grades.join(", "))}.</p>`),
     copyClause("price_and_sla_same_block", "Preço e prazo", `<p>${escapeHtml(entry.public_name_pt_br)}: <strong>${escapeHtml(priceLabel(entry))}</strong> · ${escapeHtml(publicText(slaLabel(entry)))}</p>`),
     copyClause("exclusions_and_third_party", "Não inclui", publicList(entry.exclusions, "Não inclui: ")),
     copyClause("fit_and_misfit", "Serve e não serve", `<p>Serve quando ${escapeHtml(publicText(lowerFirst(entry.trigger)))}</p><p>Não serve para ${escapeHtml(publicText(entry.exclusions[0]))}.</p>`),
     copyClause("proof_matching_real_state", "Prova disponível", `<p>${escapeHtml(proof)}</p>`),
-    copyClause("specific_objections", "Objeção que precisa ser resolvida", `<p>Em ${escapeHtml(entry.public_name_pt_br)}, sem ${escapeHtml(publicText(entry.required_inputs[0]))}, o SLA não começa e a decisão “${escapeHtml(entry.decision_question)}” permanece em revisão.</p>`),
+    copyClause("specific_objections", "Informação que precisa ser resolvida", `<p>Em ${escapeHtml(entry.public_name_pt_br)}, sem ${escapeHtml(publicText(entry.required_inputs[0]))}, o prazo não começa e a decisão “${escapeHtml(entry.decision_question)}” permanece em revisão.</p>`),
     copyClause("cta_with_post_click_expectation", "Próxima ação", `<p>${escapeHtml(actionExpectation)}</p><p>Estado atual: ${escapeHtml(state.label)}.</p>`),
     copyClause("neighbor_alternative_and_step_up", "Alternativa e próximo nível", `<p>${escapeHtml(neighborCopy)}</p><p>Próximo nível: ${escapeHtml(stepUpLabel(entry))}.</p>`),
   ];
@@ -351,6 +356,13 @@ function eightContractCopy(contract, value) {
   return publicText(contract.public_copy_overrides?.[value] || value);
 }
 
+function deadlineStart(contractItem) {
+  if (contractItem.sla.counts_from === "UNKNOWN") {
+    return "Definida e confirmada por escrito na proposta antes da cobrança.";
+  }
+  return `${publicText(contractItem.sla.counts_from)}. A CONFENGE confirma por escrito a condição de início antes da cobrança.`;
+}
+
 function vitrineCard(entry, contractItem) {
   if (!contractItem || contractItem.deliverable_id !== entry.deliverable_id) {
     throw new Error(`EIGHT_CONTRACT_MISSING: ${entry.deliverable_id}`);
@@ -373,15 +385,16 @@ function vitrineCard(entry, contractItem) {
 <header class="vitrine-item__head"><div class="vitrine-item__identity"><span>${entry.catalog_number}</span><span class="offer-state">Oferta publicada</span></div><h2 id="${headingId}">${escapeHtml(entry.public_name_pt_br)}</h2><p class="vitrine-item__price"><span>Preço</span><strong>${escapeHtml(priceLabel(entry))}</strong></p></header>
 <dl class="vitrine-item__facts">
 <div data-copy-role="value_outcome"><dt>Decisão</dt><dd>${escapeHtml(value.actual_contract_value)}</dd></div>
-<div data-copy-role="value_created"><dt>Trabalho que a entrega comprime</dt><dd>${escapeHtml(value.work_removed)}</dd></div>
-<div data-copy-role="artifact"><dt>Artefato em uso</dt><dd>${escapeHtml(value.artifact_use)}</dd></div>
-<div data-copy-role="positive_proof"><dt>O que você pode inspecionar</dt><dd>${escapeHtml(value.proof_statement)}</dd></div>
+<div data-copy-role="value_created"><dt>Trabalho realizado</dt><dd>${escapeHtml(publicText(value.work_removed))}</dd></div>
+<div data-copy-role="artifact"><dt>Como a entrega será usada</dt><dd>${escapeHtml(publicText(value.artifact_use))}</dd></div>
+<div data-copy-role="positive_proof"><dt>O que você pode inspecionar</dt><dd>${escapeHtml(publicText(value.proof_statement))}</dd></div>
 <div><dt>Situação</dt><dd>${escapeHtml(publicText(entry.trigger))}</dd></div>
-<div><dt>Entrada</dt><dd>${renderInlineList(entry.required_inputs)}</dd></div>
-<div><dt>Objeto e limite</dt><dd>${escapeHtml(contractItem.objeto_incluido)}</dd></div>
-<div><dt>Saída</dt><dd>${escapeHtml(contractItem.saida_minima)}</dd></div>
-<div><dt>Por que este preço</dt><dd>${escapeHtml(value.price_anchor)}</dd></div>
-<div><dt>SLA</dt><dd>${escapeHtml(contractItem.sla.text)}</dd></div>
+<div><dt>Informações necessárias</dt><dd>${renderInlineList(entry.required_inputs)}</dd></div>
+<div><dt>Trabalho incluído</dt><dd>${escapeHtml(publicText(contractItem.objeto_incluido))}</dd></div>
+<div><dt>Saída</dt><dd>${escapeHtml(publicText(contractItem.saida_minima))}</dd></div>
+<div><dt>Por que este preço</dt><dd>${escapeHtml(publicText(value.price_anchor))}</dd></div>
+<div><dt>Prazo</dt><dd>${escapeHtml(publicText(contractItem.sla.text))}</dd></div>
+<div><dt>Quando a contagem começa</dt><dd>${escapeHtml(deadlineStart(contractItem))}</dd></div>
 </dl>
 ${bundle}
 <div class="vitrine-item__actions">
@@ -396,7 +409,7 @@ function renderOfferLadder(contract) {
   const pkg = contract.package;
   if (!ladder) throw new Error("PUBLIC_VALUE_LADDER_MISSING");
   return `<section class="offer-value-ladder" data-offer-ladder="unit-diagnosis-recurring" aria-labelledby="offer-value-ladder-title">
-<header><p class="eyebrow">Próxima camada pelo tipo de decisão</p><h3 id="offer-value-ladder-title">Unidade, Diagnóstico ou direção recorrente?</h3><p>A escolha começa pelo gatilho e pelo escopo da decisão, não apenas pelo preço.</p></header>
+<header><p class="eyebrow">Próxima camada pelo tipo de decisão</p><h3 id="offer-value-ladder-title">Unidade, Diagnóstico ou direção recorrente?</h3><p>A escolha começa pela situação e pelo recorte da decisão, não apenas pelo preço.</p></header>
 <ol><li data-ladder-step="unit"><strong>Uma unidade basta</strong><span>Quando há uma pergunta delimitada e o recorte permanece nos eixos declarados na oferta.</span></li>
 <li data-ladder-step="diagnosis"><strong>Diagnóstico integrado</strong><span>Quando ${escapeHtml(ladder.diagnosis_trigger)}, o <a data-asset-id="entregas-exemplos-hub" data-cta-id="deliverables-bundle-from-offer-summary" data-cta-position="offer_summary" data-event-name="cta_click" href="${escapeHtml(ladder.diagnosis_route)}">${escapeHtml(pkg.public_name_pt_br)}</a> reúne ${escapeHtml(ladder.diagnosis_scope)} por ${escapeHtml(pkg.package_price_display)}.</span></li>
 <li data-ladder-step="recurring"><strong>Direção recorrente</strong><span>Quando ${escapeHtml(ladder.recurring_direction_trigger)}, a <a href="${escapeHtml(ladder.recurring_direction_route)}">${escapeHtml(ladder.recurring_direction_name_pt_br)}</a> assume ${escapeHtml(ladder.recurring_direction_scope)}.</span></li></ol>
@@ -421,96 +434,63 @@ function renderOfferShowcase(published, eightContract) {
   const commonInputs = eightContract.common_inputs.map((value) => publicText(value));
   return `<section class="deliverables-vitrine" id="enquadrar" data-section-archetype="catalog_index" aria-labelledby="catalog-title">
 <div class="container">
-<header class="deliverables-vitrine__intro"><p class="eyebrow">8 ofertas publicadas agora</p><h2 id="catalog-title">Escolha pela decisão. Compare uma vez, com o contrato inteiro à vista.</h2><p>Estas são as únicas ofertas com escopo, preço e SLA publicados para consulta agora. Cada card reúne situação, entrada, limite, saída, crédito e próxima ação sem repetir a oferta em outra tabela.</p></header>
+<header class="deliverables-vitrine__intro"><p class="eyebrow">Ofertas com preço publicado</p><h2 id="catalog-title">Oito análises para licitações e mercado de obras públicas.</h2><p>Cada oferta reúne a situação atendida, o trabalho incluído, as informações necessárias, o conteúdo entregue, o preço, o prazo e a próxima ação. Os demais serviços de engenharia seguem por proposta porque variam com disciplina, fase, documentos e responsabilidade.</p></header>
 <nav class="offer-decision-nav" aria-label="Escolher oferta pela decisão"><p>Qual pergunta está na mesa?</p><ol>${decisions}</ol></nav>
 <div class="vitrine-items">${published.map((entry) => vitrineCard(entry, contractById.get(entry.deliverable_id))).join("\n")}</div>
 ${renderOfferLadder(eightContract)}
-<aside class="published-offers__common" aria-labelledby="published-common-title"><div><p class="eyebrow">Condições da análise</p><h3 id="published-common-title">O que vale para as oito ofertas</h3><p><strong>Entrada comum:</strong> ${renderInlineList(commonInputs)}. A entrada específica aparece em cada oferta.</p></div><div><h4>Fronteiras que valem para todas as ofertas</h4><p>${renderInlineList(commonBoundaries)}. Cobertura, data de corte, método e o rótulo NÃO INFORMADO acompanham o resultado.</p></div></aside>
+<aside class="published-offers__common" aria-labelledby="published-common-title"><div><p class="eyebrow">Condições da análise</p><h3 id="published-common-title">O que vale para as oito ofertas</h3><p><strong>Informações comuns:</strong> ${renderInlineList(commonInputs)}. Cada oferta acrescenta o que precisa para começar.</p></div><div><h4>Limites comuns</h4><p>${renderInlineList(commonBoundaries)}. Cobertura, data de corte, método e o rótulo NÃO INFORMADO acompanham o resultado.</p></div></aside>
 </div>
 </section>`;
 }
 
-// 2026-09-08. Esta pagina publicava o estado comercial interno de cada uma das
-// 54 frentes: "Em validacao -- ainda nao e oferta pronta para contratacao" 44
-// vezes, e "Bloqueada -- indisponivel enquanto ... nao cumprir o gate" duas.
-// Era um inventario do que a empresa ainda nao vende, exibido na pagina que o
-// rodape de todo o site chama de "Entregas".
-//
-// Os estados continuam integros no registro (registry.public_state segue sendo
-// a fonte, e nada foi promovido a disponivel para sumir com um contador): o que
-// muda e que a vitrine deixa de ser onde eles aparecem. Quem tem oferta
-// publicada ganha o link para ela; as demais frentes ganham o convite
-// contextual para descrever a situacao, que e o caminho real de atendimento.
-const CAPABILITY_STATE = {
-  PUBLISHED: { label: "Oferta publicada" },
-  VALIDATE: { label: "Sob consulta" },
-  BLOCKED: { label: "Sob consulta" },
-};
-
-function renderCapabilityItem(entry) {
-  const state = CAPABILITY_STATE[entry.public_state];
-  if (!state) throw new Error(`CAPABILITY_STATE_UNKNOWN: ${entry.public_state}`);
-  // O nome e a pergunta de decisao entram como filhos diretos do <li>. O <span
-  // class="capability-item__copy"> que os embrulhava nao tinha borda, fundo,
-  // padding, papel nem ARIA: existia so para ocupar a coluna 2 da grade, o que
-  // grid-column/grid-row fazem sem elemento. Sao 54 nos devolvidos ao orcamento
-  // de DOM de /entregas/, um por capacidade do rol.
-  // Um link por capacidade publicada, e nenhum nas demais: o convite para
-  // descrever a situacao aparece uma vez por porta, no rodape do grupo, em vez
-  // de 46 vezes identicas. Alem de estourar o orcamento de links de <main>, a
-  // repeticao nao ajudava ninguem a decidir.
-  const action = entry.public_state === "PUBLISHED"
-    ? `<a href="#entrega-${entry.catalog_number}">Ver oferta publicada acima</a>`
-    : "";
-  // A explicacao de PUBLISHED dizia o mesmo que o link logo abaixo dela ("Ver
-  // oferta publicada acima"). Uma das duas frases e ruido; fica o link, que
-  // alem de dizer, leva. Os estados nao publicados nao tem link e mantem a
-  // explicacao, que e a unica coisa que diz por que a capacidade nao esta a
-  // venda.
-  const explanation = "";
-  return `<li class="capability-item capability-item--${entry.public_state.toLocaleLowerCase()}" data-capability-id="${entry.deliverable_id}" data-public-state="${entry.public_state}"><span class="capability-item__number">${entry.catalog_number}</span><strong>${escapeHtml(entry.public_name_pt_br)}</strong><small>${escapeHtml(entry.decision_question)}</small><span class="capability-item__maturity"><strong>${state.label}</strong>${explanation}${action}</span></li>`;
+// 2026-09-09. A vitrine publicava o inventário interno de 54 capacidades e seus
+// estados de maturidade. Isso descrevia a administração do catálogo, não o que
+// um comprador recebe. O registro continua íntegro como autoridade B2G, mas a
+// página pública mostra as famílias de entrega que a empresa efetivamente
+// explica e o caminho correspondente. Nenhuma capacidade é promovida por esta
+// projeção e os oito preços autorizados continuam vindo do contrato tipado.
+function datePtBr(iso) {
+  const [year, month, day] = String(iso).split("-").map(Number);
+  if (!year || !month || !day) throw new Error(`PUBLIC_CATALOG_DATE_INVALID: ${iso}`);
+  return new Intl.DateTimeFormat("pt-BR", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(Date.UTC(year, month - 1, day)));
 }
 
-function renderCapabilityRoll(registry, taskDoors) {
-  const byId = new Map(registry.deliverables.map((entry) => [entry.deliverable_id, entry]));
-  const renderedIds = [];
-  const groups = [...taskDoors.doors]
-    .sort((left, right) => left.order - right.order)
-    .map((door) => {
-      const entries = door.members.map(({ deliverable_id: id }) => {
-        const entry = byId.get(id);
-        if (!entry) throw new Error(`CAPABILITY_DOOR_UNKNOWN_ID: ${door.door}/${id}`);
-        renderedIds.push(id);
-        return entry;
-      });
-      const counts = Object.fromEntries(Object.keys(CAPABILITY_STATE).map((state) => [
-        state,
-        entries.filter((entry) => entry.public_state === state).length,
-      ]));
-      const maturity = counts.PUBLISHED
-        ? `${counts.PUBLISHED} com oferta publicada`
-        : "sob consulta";
-      return `<details class="capability-group" data-task-door="${door.door}"><summary><span>${String(door.order).padStart(2, "0")}</span><strong>${escapeHtml(door.public_label_pt_br)}</strong><small>${entries.length} capacidades · ${maturity}</small></summary><div class="capability-group__body"><p>${escapeHtml(door.decision_question_pt_br)}</p><ol>${entries.map(renderCapabilityItem).join("\n")}</ol></div></details>`;
-    }).join("\n");
-  const expectedIds = registry.deliverables.map((entry) => entry.deliverable_id).sort();
-  if (JSON.stringify([...renderedIds].sort()) !== JSON.stringify(expectedIds)) {
-    throw new Error(`CAPABILITY_DOOR_CENSUS: expected ${expectedIds.length}, got ${renderedIds.length}`);
+function publicCatalogDates(registry) {
+  const dates = registry.public_catalog || {};
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(dates.date_published || "") ||
+      !/^\d{4}-\d{2}-\d{2}$/.test(dates.date_modified || "")) {
+    throw new Error("PUBLIC_CATALOG_DATES_MISSING");
   }
-  return `<section class="capability-roll" id="rol-taxativo" data-section-archetype="reading_method" aria-labelledby="capability-roll-title">
+  return dates;
+}
+
+function renderServiceDeliveryOverview(registry) {
+  const dates = publicCatalogDates(registry);
+  return `<section class="capability-roll" id="servicos-e-entregas" data-section-archetype="reading_method" aria-labelledby="service-deliveries-title">
 <div class="container">
-<header class="capability-roll__intro"><p class="eyebrow">Todo o trabalho</p><h2 id="capability-roll-title">As 54 frentes de trabalho, organizadas pela pergunta que está na mesa.</h2><p><strong>Oito têm oferta publicada acima</strong>, com preço, escopo e prazo consultáveis. As outras se contratam sob consulta: descreva a situação e dizemos qual documento resolve, que informação é necessária e em que condições. Abra uma situação para conhecer os nomes e as perguntas que cada frente responde.</p></header>
-<div class="capability-groups">${groups}</div>
+<header class="capability-roll__intro"><p class="eyebrow">Engenharia além dos exemplos</p><h2 id="service-deliveries-title">Serviços que terminam em documentos utilizáveis.</h2><p>Os oito itens com preço abaixo pertencem à especialidade de inteligência para obras públicas. A atuação da CONFENGE também inclui projetos e serviços de engenharia para obras públicas e privadas, definidos por proposta depois da leitura da necessidade.</p></header>
+<div class="capability-groups">
+<article class="capability-group"><div class="capability-group__body"><h3>Projetos, revisão e compatibilização</h3><p>Cálculos, plantas, detalhes, especificações e memória de cálculo; relatório de revisão com pontos localizados; ou registro das interferências e soluções entre estruturas e instalações hidrossanitárias, elétricas, de incêndio, climatização e telecomunicações.</p><p><a href="/servicos/#servico-projeto">Entender o trabalho de projeto</a></p></div></article>
+<article class="capability-group"><div class="capability-group__body"><h3>Quantitativos e orçamento</h3><p>Planilha de serviços e quantidades, memória dos critérios, composições abertas, referências e data-base para comparar propostas, preparar contratação ou revisar a estimativa de obra pública ou privada.</p><p><a href="/quantitativos-orcamento-obras/">Ver quantitativos e orçamento de obras</a></p></div></article>
+<article class="capability-group"><div class="capability-group__body"><h3>Inspeção, perícia, avaliação e segurança do trabalho</h3><p>Relatório, laudo, parecer, avaliação ou documentação técnica com evidências, método, conclusão e limites adequados à pergunta. O documento serve para decidir manutenção, registrar condição, sustentar prova, fundamentar valor ou orientar controles.</p><p><a href="/servicos/#servico-diagnostico">Conhecer os demais serviços de engenharia</a></p></div></article>
+</div>
+<p class="catalog-publication-dates"><small>Publicação original: <time datetime="${dates.date_published}">${datePtBr(dates.date_published)}</time>. Revisão comercial: <time datetime="${dates.date_modified}">${datePtBr(dates.date_modified)}</time>.</small></p>
 </div>
 </section>`;
 }
 
 export function renderClientData(registry, executionContract) {
   const byTask = new Map();
-  for (const entry of registry.deliverables) {
+  for (const entry of publishedVitrine(registry)) {
     if (!byTask.has(entry.task_door)) byTask.set(entry.task_door, []);
     byTask.get(entry.task_door).push(entry);
   }
-  const items = registry.deliverables.map((entry) => {
+  const items = publishedVitrine(registry).map((entry) => {
     const taskEntries = byTask.get(entry.task_door) || [];
     const ownIndex = taskEntries.findIndex((candidate) => candidate.deliverable_id === entry.deliverable_id);
     const neighbor = taskEntries.length > 1
@@ -551,8 +531,8 @@ export function renderClientData(registry, executionContract) {
 export function renderCatalog(registry, taskDoors, eightContract) {
   const published = publishedVitrine(registry);
   return `${CATALOG_START}
+${renderServiceDeliveryOverview(registry)}
 ${renderOfferShowcase(published, eightContract)}
-${renderCapabilityRoll(registry, taskDoors)}
 ${CATALOG_END}`;
 }
 
@@ -572,6 +552,29 @@ function replaceBlock(html, start, end, rendered) {
   return `${html.slice(0, from)}${rendered}${html.slice(to + end.length)}`;
 }
 
+function syncCatalogJsonLd(html, registry) {
+  const dates = publicCatalogDates(registry);
+  let found = false;
+  const next = html.replace(
+    /(<script\b[^>]*type="application\/ld\+json"[^>]*>)([\s\S]*?)(<\/script>)/i,
+    (whole, open, body, close) => {
+      const parsed = JSON.parse(body);
+      const graph = Array.isArray(parsed["@graph"]) ? parsed["@graph"] : [];
+      const page = graph.find((node) =>
+        node?.["@type"] === "CollectionPage" &&
+        node?.url === "https://confenge.com.br/entregas/"
+      );
+      if (!page) return whole;
+      page.datePublished = dates.date_published;
+      page.dateModified = dates.date_modified;
+      found = true;
+      return `${open}${JSON.stringify(parsed)}${close}`;
+    },
+  );
+  if (!found) throw new Error("PUBLIC_CATALOG_JSONLD_MISSING");
+  return next;
+}
+
 export function renderPage(html, registry, taskDoors, eightContract) {
   let next = replaceBlock(
     html,
@@ -583,7 +586,7 @@ export function renderPage(html, registry, taskDoors, eightContract) {
     next = replaceBlock(next, LEGACY_HUB_START, LEGACY_HUB_END, "");
   }
   next = replaceBlock(next, SELECT_START, SELECT_END, renderSelect(registry));
-  return next;
+  return syncCatalogJsonLd(next, registry);
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {

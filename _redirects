@@ -9,6 +9,23 @@ https://confenge.netlify.app/*  https://confenge.com.br/:splat  301!
 # --- File extension / legacy HTML ---
 /privacidade.html  /privacidade/  301!
 
+# Founder 2026-09-09: withdraw unapproved fixture/preview exposure. Source
+# fixtures and the research preview are preserved under internal scripts/docs.
+# Exact routes include direct file aliases; no home redirect or approval claim.
+/analises-contratos-publicos/aditivo-saldo-art125-item-novo /404.html 410
+/analises-contratos-publicos/aditivo-saldo-art125-item-novo/index.html /404.html 410
+/analises-contratos-publicos/atraso-eventos-sem-comunicacao-contemporanea /404.html 410
+/analises-contratos-publicos/atraso-eventos-sem-comunicacao-contemporanea/index.html /404.html 410
+/analises-contratos-publicos/bdi-composicao-vs-referencia-sc /404.html 410
+/analises-contratos-publicos/bdi-composicao-vs-referencia-sc/index.html /404.html 410
+/analises-contratos-publicos/comparaveis-rejeitados-regime-distinto /404.html 410
+/analises-contratos-publicos/comparaveis-rejeitados-regime-distinto/index.html /404.html 410
+/analises-contratos-publicos/reajuste-aniversario-serie-indice /404.html 410
+/analises-contratos-publicos/reajuste-aniversario-serie-indice/index.html /404.html 410
+/radar/pesquisa/edicao-zero-4uf /404.html 410
+/radar/pesquisa/edicao-zero-4uf/index.html /404.html 410
+/radar/pesquisa/edicao-zero-4uf/edicao-zero-citation.json /404.html 410
+
 # --- Retired 2026-09-07: the standalone corrections page was bureaucracy, not a
 # service. The function it carried -- "found an error on the site?" -- lives on
 # the contact page. The protocol endpoint /.netlify/functions/correction is

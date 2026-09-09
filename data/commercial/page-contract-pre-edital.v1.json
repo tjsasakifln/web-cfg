@@ -312,7 +312,7 @@
     "statement_pt_br": "Os contratos public-read são criados e versionados no extra-cli com provenance, freshness, coverage, deduplicação e FACT, CALCULATION, INFERENCE ou UNKNOWN. O web-cfg consome apenas snapshots SELECT-only e captura CONFENGE_WEB. Nenhum crawler novo nasce no site."
   },
   "conversion_gate": {
-    "every_priced_route_captures_lead": true,
+    "every_priced_route_has_contextual_contact": true,
     "lead_destination": "warmbly:CONFENGE_WEB",
     "gate_owner_issues": [88, 300, 327],
     "statement_pt_br": "Toda rota com preço desta família captura lead e passa pelos gates de captura, ação terminal e primeira dobra, cujas donas continuam sendo as issues #88, #300 e #327."

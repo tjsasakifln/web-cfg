@@ -109,12 +109,17 @@ def test_site_ci_shape():
     if not text.lstrip().startswith("name: site-ci"):
         errors.append("site-ci workflow name must be 'site-ci'")
 
-    job = _job_block(text, "gates")
+    job = _job_block(text, "site_ci")
     if f"name: {EXPECTED_SITE_CI_JOB_NAME}" not in job and f'name: "{EXPECTED_SITE_CI_JOB_NAME}"' not in job:
         errors.append(
-            f"site-ci job 'gates' must set name: {EXPECTED_SITE_CI_JOB_NAME!r} "
+            f"site-ci aggregate job must set name: {EXPECTED_SITE_CI_JOB_NAME!r} "
             "(stable GitHub check context)"
         )
+    validation = _job_block(text, "gates")
+    if "name: site-validation" not in validation:
+        errors.append("site-ci validation job must have a distinct site-validation context")
+    if "needs: [gates, execution_evidence]" not in job:
+        errors.append("stable site-ci context must aggregate validation and execution evidence")
 
     # Triggers
     if "pull_request" not in text:
@@ -149,7 +154,7 @@ def test_site_ci_shape():
             errors.append("site-ci install must not fall back to bare npm install")
 
     # No continue-on-error on job or non-upload steps
-    if re.search(r"(?m)^\s+continue-on-error:\s*true\s*$", job):
+    if re.search(r"(?m)^\s+continue-on-error:\s*true\s*$", validation):
         # upload may use if: always() but not continue-on-error true on gates
         # Allow only if solely under a clearly named non-gate step — forbid any true
         errors.append("site-ci gates job must not use continue-on-error: true")
@@ -170,6 +175,7 @@ def test_site_ci_shape():
         "npm run test:diagnose-margin",
         "npm run editorial:test",
         "npm run discovery:test",
+        "npm run test:contact-journeys",
     ):
         if needle not in text:
             errors.append(f"site-ci missing required step command: {needle}")
@@ -659,6 +665,32 @@ def test_site_excellence_precedes_the_netcup_release_artifact():
         raise AssertionError("Netcup package must wait for site-ci and pSEO on the exact SHA")
 
 
+def test_required_execution_evidence_fails_closed_after_the_gate_job():
+    """The API-backed verifier catches skipped/neutral/missing mandatory steps."""
+    workflow = _read(SITE_CI)
+    evidence = _job_block(workflow, "execution_evidence")
+    required = (
+        "if: always()",
+        "needs: gates",
+        "actions: read",
+        "verify_required_execution.py",
+        '--required-job site-validation',
+        '--required-step "Contact and lead pathway gates"',
+        '--required-step "Final public-surface coverage and copy gate"',
+        '--required-step "Build public site"',
+        '--required-step "Playwright checklist on _site"',
+    )
+    for needle in required:
+        if needle not in (workflow if needle == "actions: read" else evidence):
+            raise AssertionError(f"required execution evidence missing {needle!r}")
+    verifier = ROOT / "scripts" / "site" / "verify_required_execution.py"
+    assert verifier.is_file(), "missing required execution verifier"
+    source = verifier.read_text(encoding="utf-8")
+    assert "empty-selection" in source
+    assert "endswith(\" / \" + required_job)" in source
+    assert "required step" in source and "head_sha" in source
+
+
 def test_deliberate_force_fail_env():
     """Controlled negative path: env forces red so CI can prove the test blocks."""
     if os.environ.get("WORKFLOW_GATE_FORCE_FAIL") == "1":
@@ -684,6 +716,7 @@ def main() -> int:
         test_codeql_is_fail_closed,
         test_copy_ci_is_check_not_write,
         test_site_excellence_precedes_the_netcup_release_artifact,
+        test_required_execution_evidence_fails_closed_after_the_gate_job,
         test_deliberate_force_fail_env,
     ]
     failed = 0

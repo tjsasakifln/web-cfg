@@ -288,7 +288,8 @@
     "test:offer-fit": "node tests/commercial/test_offer_fit_matrix.mjs && node tests/commercial/test_offer_fit_copy.mjs && python3 -m pytest scripts/site/test_home_real_contract_case.py -q",
     "test:adaptive-intake": "node scripts/site/test_adaptive_authority.mjs && node scripts/site/test_adaptive_intake.mjs",
     "test:private-readiness": "node scripts/site/test_private_project_technical_readiness.mjs",
-    "test:convergence-browser": "node scripts/site/test_convergence_browser.mjs"
+    "test:convergence-browser": "node scripts/site/test_convergence_browser.mjs",
+    "test:contact-journeys": "node scripts/site/test_contact_journeys.mjs"
   },
   "engines": {
     "node": ">=22.19 <23"

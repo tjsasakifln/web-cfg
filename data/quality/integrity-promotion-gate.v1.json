@@ -325,7 +325,7 @@
     "cnpj_in_analytics": false,
     "cnpj_in_urls": false,
     "pii_in_analytics": false,
-    "price_route_requires_lead_capture": true,
+    "price_route_requires_contextual_contact": true,
     "statement_pt_br": "O resultado individual permanece noindex, fora de todo sitemap e fora de links internos. Nenhum CNPJ aparece em artefato público, em URL ou em analytics."
   },
 

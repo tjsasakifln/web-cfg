@@ -1,5 +1,16 @@
 # Itens adiados pela janela de medição (overhaul value-first, 2026-08-30)
 
+## Direção vigente em 09/09/2026
+
+A decisão expressa do fundador `EXECUTE_NOW` revoga os congelamentos abaixo
+quando impedem a correção comercial, editorial ou funcional desta campanha.
+Este documento conserva o histórico, não impõe espera até 13/09, 16/09 ou
+25/10. O contrato `cta-form-next-state.v1.json` foi atualizado; a validação de
+deriva exige revisão e recaptura verdadeira, não reversão automática da
+correção. Consentimento, atribuição, privacidade, persistência, preços e
+responsabilidade permanecem protegidos. Medições anteriores não certificam
+a versão corrigida, e sua ausência não impede esta publicação.
+
 **Contexto.** O overhaul value-first tocou toda a superfície comercial pública.
 Seis rotas BOFU e quatro artefatos compartilhados estão sob janela de medição
 de primeira dobra (issues #529 e #533, donos de janela #128 e #387). Mutação

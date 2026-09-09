@@ -1,7 +1,7 @@
 {
   "schema": "confenge.price-gate-projection/1.0",
   "contract": "CONFENGE_PRICE_GATE_PROJECTION/1.0.0",
-  "effective_at": "2026-09-05",
+  "effective_at": "2026-09-09",
   "issues": ["#341", "#577", "#583"],
   "role": "NON_AUTHORITATIVE_FAIL_CLOSED_PROJECTION",
   "authority_owner": "governance",
@@ -30,7 +30,7 @@
     },
     {
       "state": "PUBLICATION_AUTHORIZED",
-      "meaning": "Preço específico recebeu decisão material para exibição na superfície pública com escopo e captura compatíveis.",
+      "meaning": "Preço específico recebeu decisão material para exibição na superfície pública com escopo, condições e contato contextual compatíveis.",
       "capabilities_if_authoritatively_granted": ["manual_proposal", "public_display"],
       "means_margin_validated": false
     },
@@ -78,7 +78,7 @@
     "inventar preço, faixa, desconto, margem ou capacidade",
     "tratar FOUNDER_AUTHORIZED_EXPERIMENT como MARGIN_VALIDATED",
     "ligar checkout por inferência de preço, entrevista, clique ou proposta",
-    "publicar preço sem captura fail-closed e família pública declarada",
+    "publicar preço sem condições materiais verdadeiras, contato contextual funcional e família pública declarada",
     "prometer resultado ou cobrar comissão de êxito"
   ]
 }

@@ -29,13 +29,14 @@ O QUE ESTE GATE NÃO TOCA -- e não deve passar a tocar:
   prova -- e nunca por uma frase de método.
 * O registro histórico da política editorial, preservado como foi publicado.
 
-CATRACA, no mesmo formato de test_public_control_vocabulary.py: as rotas de
-ENFORCED reprovam qualquer ocorrência; qualquer outra rota reprova se piorar em
-relação à linha de base; o teto global só pode descer.
+ESCOPO ATUAL: desde a decisão expressa de 2026-09-09, toda ocorrência em uma
+superfície pública atual reprova. A antiga linha de base continua no histórico
+do repositório, mas não é lida nem pode ser regravada para aprovar dívida.
 """
 
 from __future__ import annotations
 
+import argparse
 import json
 import re
 import sys
@@ -47,12 +48,12 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from scripts.site.public_copy_scope import (  # noqa: E402
-    indexable_visitor_html_files,
+    MANIFEST_ROUTE_EXEMPT,
+    artifact_html_files,
     relpath,
     visible_text,
+    visitor_facing_html_files,
 )
-
-BASELINE_PATH = ROOT / "data" / "site" / "self-deprecation-baseline.json"
 
 # ---------------------------------------------------------------------------
 # 1 + 4. Déficit voluntário, e a palavra do titular rebaixada.
@@ -132,25 +133,6 @@ SENTENCE_SPLIT = re.compile(r"(?<=[.!?;])\s+|\s*·\s*|\s*\|\s*")
 
 RULES = ("deficit_sobre_nos", "taxonomia_interna", "manchete_de_ausencia")
 
-# O lote varrido pela campanha do #638 mais a home. Aqui nenhuma ocorrência passa.
-ENFORCED = (
-    "index.html",
-    "confianca/index.html",
-    "especialista/tiago-jun-sasaki/index.html",
-    "quantitativos-orcamento-obras/index.html",
-    "casos/index.html",
-    "casos/aditivo-art125-demonstrativo/index.html",
-    "casos/medicao-glosa-demonstrativo/index.html",
-    "casos/modelo-apresentacao-executiva-resultados/index.html",
-    "casos/modelo-base-quantitativa-canonica/index.html",
-    "casos/modelo-contratos-vincendos-relicitacao/index.html",
-    "casos/modelo-mapa-compradores-publicos/index.html",
-    "casos/modelo-mapeamento-concorrentes-publicos/index.html",
-    "casos/modelo-painel-precos-obras-publicas/index.html",
-    "casos/modelo-relatorio-executivo-consolidado/index.html",
-    "casos/modelo-relatorio-inteligencia-licitacoes/index.html",
-)
-
 # O registro histórico é preservado como foi publicado. Reescrevê-lo para
 # satisfazer um gate de linguagem seria falsificar o passado. Rotas exatas.
 ARCHIVE_ROUTES = (
@@ -160,13 +142,9 @@ ARCHIVE_ROUTES = (
     "politica-editorial/historico/index.html",
 )
 
-# Teto medido em 2026-09-07, depois da varredura do #638. O que resta é a chave
-# técnica `as_of` impressa em duas rotas que pertencem a outras trilhas
-# (defesa de margem e a ferramenta de diagnóstico de margem) e são escritas por
-# geradores que esta campanha não pode tocar sem invadir outra trilha. Fica
-# contado como dívida aberta, explicitamente NÃO aprovada, e o teto só desce.
-MAX_OPEN_DEBT_OCCURRENCES = 4
-MAX_OPEN_DEBT_ROUTES = 2
+# The 2026-09-09 founder decision superseded the ratchet.  A historical
+# baseline is evidence of what was once open; it is not authorization to ship
+# any occurrence now.  There is therefore no mutable ceiling in this gate.
 
 
 class _HumanNames(HTMLParser):
@@ -250,6 +228,38 @@ def jsonld_prose(html: str) -> str:
     return " ".join(" ".join(out).split())
 
 
+_TEMPLATE_RE = re.compile(r"<template\b[^>]*>(.*?)</template>", re.I | re.S)
+_TAG_RE = re.compile(r"<[^>]+>")
+_SCRIPT_RE = re.compile(r"<script\b(?![^>]*application/ld\+json)[^>]*>(.*?)</script>", re.I | re.S)
+_JS_TEXT_SINK_RE = re.compile(
+    r"(?:\.\s*(?:textContent|innerText|innerHTML)|\b(?:textContent|innerText|innerHTML))"
+    r"\s*=\s*([\"'`])((?:\\.|(?!\1).)*?)\1",
+    re.I | re.S,
+)
+_JS_ATTRIBUTE_SINK_RE = re.compile(
+    r"\.setAttribute\(\s*([\"'])(?:aria-label|aria-placeholder|title|alt|placeholder)\1"
+    r"\s*,\s*([\"'`])((?:\\.|(?!\2).)*?)\2",
+    re.I | re.S,
+)
+
+
+def dynamic_text_states(html: str) -> str:
+    """Literal copy rendered by common interaction-time HTML/JS mechanisms.
+
+    This is deliberately a bounded static analysis.  It covers HTML templates
+    and literal assignments to the browser's text/accessibility sinks.  It
+    does not claim to understand arbitrary JavaScript or strings assembled
+    across variables; browser journey tests remain responsible for those.
+    """
+    parts: list[str] = []
+    for raw in _TEMPLATE_RE.findall(html or ""):
+        parts.append(_TAG_RE.sub(" ", raw))
+    for script in _SCRIPT_RE.findall(html or ""):
+        parts.extend(match.group(2) for match in _JS_TEXT_SINK_RE.finditer(script))
+        parts.extend(match.group(3) for match in _JS_ATTRIBUTE_SINK_RE.finditer(script))
+    return " ".join(" ".join(parts).split())
+
+
 def human_names(html: str) -> str:
     parser = _HumanNames()
     parser.feed(html)
@@ -257,8 +267,11 @@ def human_names(html: str) -> str:
 
 
 def human_surface(html: str) -> str:
-    """Tudo que uma pessoa lê: corpo, nome acessível, busca e dado estruturado."""
-    return f"{visible_text(html)} \n {human_names(html)} \n {jsonld_prose(html)}"
+    """Corpo, nomes acessíveis, busca, dado estruturado e estados de interação."""
+    return (
+        f"{visible_text(html)} \n {human_names(html)} \n {jsonld_prose(html)}"
+        f" \n {dynamic_text_states(html)}"
+    )
 
 
 def findings_for(html: str) -> dict[str, int]:
@@ -284,11 +297,26 @@ def findings_for(html: str) -> dict[str, int]:
     return counts
 
 
-def scan() -> dict[str, dict[str, int]]:
+def _scan_files(base: Path, *, require_artifact: bool) -> list[Path]:
+    if require_artifact:
+        files = artifact_html_files(base)
+        if not files:
+            raise ValueError(f"public artifact has no HTML: {base}")
+        return files
+    return visitor_facing_html_files(base)
+
+
+def scan(
+    root: Path | None = None, *, require_artifact: bool = False
+) -> dict[str, dict[str, int]]:
+    """Scan every HTML surface, including noindex and interaction-time copy."""
+    base = (root or ROOT).resolve()
     found: dict[str, dict[str, int]] = {}
-    for path in indexable_visitor_html_files(ROOT):
-        rel = relpath(path, ROOT)
+    for path in _scan_files(base, require_artifact=require_artifact):
+        rel = relpath(path, base)
         if rel in ARCHIVE_ROUTES:
+            continue
+        if require_artifact and "/" + rel.removesuffix("index.html") in MANIFEST_ROUTE_EXEMPT:
             continue
         counts = findings_for(path.read_text(encoding="utf-8", errors="replace"))
         if counts:
@@ -296,60 +324,13 @@ def scan() -> dict[str, dict[str, int]]:
     return found
 
 
-def load_baseline() -> dict[str, dict[str, int]]:
-    if not BASELINE_PATH.is_file():
-        return {}
-    return json.loads(BASELINE_PATH.read_text(encoding="utf-8")).get("open_debt") or {}
-
-
-def write_baseline(found: dict[str, dict[str, int]]) -> None:
-    payload = {
-        "schema_version": "1.0.0",
-        "purpose": (
-            "Dívida aberta de comunicação autodepreciativa na superfície pública. "
-            "Não é aprovação: é a contagem do que falta corrigir. Só pode diminuir."
-        ),
-        "owner_issue": 638,
-        "owner_decision": (
-            "Tiago Jun Sasaki, 2026-09-07: toda comunicação de autossabotagem deve ser "
-            "varrida do site."
-        ),
-        "recorded_at": "2026-09-07",
-        "rules": list(RULES),
-        "enforced_routes": list(ENFORCED),
-        "open_debt": dict(sorted(found.items())),
-    }
-    BASELINE_PATH.write_text(
-        json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
-    )
-
-
-def failures() -> list[str]:
-    found = scan()
-    base = load_baseline()
-    out: list[str] = []
-    for rel in ENFORCED:
-        for rule, n in sorted((found.get(rel) or {}).items()):
-            out.append(f"{rel}: '{rule}' x{n} — rota varrida no #638, não admite ocorrência")
-    for rel, counts in sorted(found.items()):
-        if rel in ENFORCED:
-            continue
-        for rule, n in sorted(counts.items()):
-            was = (base.get(rel) or {}).get(rule, 0)
-            if n > was:
-                out.append(f"{rel}: '{rule}' x{n} (linha de base {was}) — piorou")
-    total = sum(sum(c.values()) for c in found.values())
-    if total > MAX_OPEN_DEBT_OCCURRENCES:
-        out.append(
-            f"divida aberta subiu para {total} ocorrencias; o teto e "
-            f"{MAX_OPEN_DEBT_OCCURRENCES} e so pode descer"
-        )
-    if len(found) > MAX_OPEN_DEBT_ROUTES:
-        out.append(
-            f"divida aberta subiu para {len(found)} rotas; o teto e "
-            f"{MAX_OPEN_DEBT_ROUTES} e so pode descer"
-        )
-    return out
+def failures(root: Path | None = None, *, require_artifact: bool = False) -> list[str]:
+    found = scan(root, require_artifact=require_artifact)
+    return [
+        f"{rel}: '{rule}' x{n} — superfície pública não admite a ocorrência"
+        for rel, counts in sorted(found.items())
+        for rule, n in sorted(counts.items())
+    ]
 
 
 def test_self_deprecating_copy_does_not_reach_the_visitor() -> None:
@@ -371,6 +352,12 @@ def test_detector_catches_the_exact_phrases_the_owner_ordered_removed() -> None:
         '<h1>Página</h1><script type="application/ld+json">'
         '{"@type":"WebPage","description":"Resultados de clientes permanecem em zero '
         'até existir autorização e evidência."}</script>',
+        '<meta name="robots" content="noindex"><meta name="description" '
+        'content="Credenciais sem comprovação"><h1>Rascunho</h1>',
+        '<h1>Página</h1><section inert>Classe de permissão: WITHHELD</section>',
+        '<h1>Página</h1><p aria-hidden="true">as_of 2026-09-09</p>',
+        '<h1>Página</h1><template><p>Resultados de clientes permanecem em zero</p></template>',
+        '<h1>Página</h1><script>status.textContent = "as_of 2026-09-09";</script>',
     )
     for html in swept:
         assert findings_for(html), html[:90]
@@ -391,32 +378,41 @@ def test_detector_leaves_honest_uncertainty_and_demonstrative_labels_alone() -> 
         "profissional ativo no CREA e mais de R$ 700 milhões em obras e projetos "
         "analisados. Serviços técnicos emitidos com ART e nota fiscal.</p>",
         "<h1>Página</h1><p>Fonte: registro público</p><p>Fonte: Tiago Jun Sasaki</p>",
+        '<h1>Página</h1><p>O prazo depende dos documentos recebidos e começa quando '
+        'confirmamos o conjunto necessário.</p>',
+        '<h1>Página</h1><p>Acervo técnico exigido pelo edital: CAT compatível com a parcela.</p>',
     )
     for html in kept:
         assert findings_for(html) == {}, (html[:90], findings_for(html))
 
 
 def main() -> int:
-    if "--record" in sys.argv:
-        found = scan()
-        write_baseline(found)
-        total = sum(sum(c.values()) for c in found.values())
-        print(f"recorded open debt: {len(found)} routes, {total} occurrences")
-        return 0
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--root", type=Path, default=ROOT)
+    parser.add_argument("--require-artifact", action="store_true")
+    parser.add_argument("--record", action="store_true", help=argparse.SUPPRESS)
+    args = parser.parse_args()
+    if args.record:
+        print("REFUSED: the 2026-09-09 zero-tolerance gate cannot record open debt", file=sys.stderr)
+        return 2
     for test in (
         test_detector_catches_the_exact_phrases_the_owner_ordered_removed,
         test_detector_leaves_honest_uncertainty_and_demonstrative_labels_alone,
     ):
         test()
         print(f"OK {test.__name__}")
-    bad = failures()
-    found = scan()
+    try:
+        bad = failures(args.root, require_artifact=args.require_artifact)
+        found = scan(args.root, require_artifact=args.require_artifact)
+    except ValueError as exc:
+        print(f"FAIL: {exc}", file=sys.stderr)
+        return 1
     total = sum(sum(c.values()) for c in found.values())
     by_rule: dict[str, int] = {}
     for counts in found.values():
         for rule, n in counts.items():
             by_rule[rule] = by_rule.get(rule, 0) + n
-    print(f"OPEN DEBT (explicitly not approved): {len(found)} routes, {total} occurrences")
+    print(f"PUBLIC FINDINGS: {len(found)} routes, {total} occurrences")
     for rule, n in sorted(by_rule.items(), key=lambda kv: -kv[1]):
         print(f"  {rule:24} {n:5}")
     if bad:

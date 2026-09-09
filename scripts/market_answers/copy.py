@@ -112,21 +112,22 @@ def visible_limitations(payload: dict[str, Any]) -> list[str]:
     peer_status = _text(peer.get("status")).upper()
     if peer_status in {"NOT_COMPARABLE", "HOLD_FOR_DATA", "UNAVAILABLE", ""}:
         items.append(
-            "Comparáveis oficiais permanecem indisponíveis neste recorte. "
-            "Não há grupo de pares publicado."
+            "A comparação é pela distribuição do recorte. A equivalência técnica "
+            "entre contratos exige conferir escopo, unidade e condições de cada obra."
         )
     refs = payload.get("contract_refs")
     if not refs or (isinstance(refs, list) and refs and not isinstance(refs[0], dict)):
         items.append(
-            "O drill-down de contratos individuais permanece limitado. "
-            "Não há páginas combinatórias por município, órgão ou métrica."
+            "Leia este resultado agregado pelo período e pela geografia informados; "
+            "a análise de um contrato específico exige seus documentos e condições."
         )
     items.append(
         "A tipologia usa o classificador documental de pavimentação do recorte. "
         "Correspondências por palavra-chave podem misturar escopos de obra."
     )
     items.append(
-        "Valores totais não positivos entram em missingness e não entram na amostra útil."
+        "Registros com valor ausente ou não positivo são contabilizados separadamente "
+        "e não entram no cálculo da amostra útil."
     )
     return items
 
@@ -140,24 +141,27 @@ def coverage_visible(payload: dict[str, Any]) -> str:
     miss = coverage.get("missing_or_nonpositive")
     if miss is None:
         miss = missing.get("unknown_or_nonpositive") or missing.get("usable")
-    parts = [f"Cobertura: {status or 'n/d'}"]
+    status_label = {"COMPLETE": "recorte processado", "PARTIAL": "recorte parcial"}.get(status, "conforme os registros disponíveis")
+    parts = [f"Cobertura: {status_label}"]
     if n is not None:
         parts.append(f"n útil = {n}")
     if total is not None:
         parts.append(f"denominador do recorte = {total}")
     if miss is not None:
-        parts.append(f"missingness = {miss}")
+        parts.append(f"registros com valor ausente ou não positivo = {miss}")
     return " · ".join(parts)
 
 
 def missingness_visible(payload: dict[str, Any]) -> str:
     missing = payload.get("missingness") if isinstance(payload.get("missingness"), dict) else {}
     if not missing:
-        return "Missingness: não informado no payload."
+        return "O recorte não informa a quantidade de registros com valor ausente."
+    labels = {"total_keyword_rows": "registros identificados", "unknown_or_nonpositive": "valores ausentes ou não positivos", "usable": "registros úteis"}
     bits = []
     for key, value in missing.items():
-        bits.append(f"{key}={value}")
-    return "Missingness: " + "; ".join(bits)
+        if key in labels:
+            bits.append(f"{labels[key]}: {value}")
+    return "Qualidade dos dados: " + "; ".join(bits)
 
 
 def first_fold_copy(payload: dict[str, Any]) -> dict[str, str]:
@@ -206,10 +210,10 @@ def visitor_copy(record: dict[str, Any], payload: dict[str, Any]) -> dict[str, A
         freshness.get("source_as_of") or payload.get("as_of") or freshness.get("as_of")
     )
     validity = (
-        f"Política de validade: {_text(freshness.get('policy')) or 'publication-slo'}; "
-        f"source_as_of {source_as_of or 'n/d'}; "
-        f"max_age_hours {freshness.get('max_age_hours') if freshness.get('max_age_hours') is not None else 48}; "
-        f"expires_at {_text(freshness.get('expires_at')) or 'n/d'}."
+        f"Dados consultados em {source_as_of or 'data informada no recorte'}; "
+        f"o recorte conserva a data original da fonte"
+        f"{f'; a idade máxima para publicação atualizada é de {freshness.get("max_age_hours")} horas' if freshness.get('max_age_hours') is not None else ''}"
+        f"{f' e vale até {_text(freshness.get("expires_at"))}' if _text(freshness.get('expires_at')) else ''}."
     )
     resumo = f"{fold['answer']} {fold['range']} {fold['n']} {fold['geography']}"
     description = f"{fold['answer']} {fold['ticket_not_km']}"
@@ -238,8 +242,10 @@ def visitor_copy(record: dict[str, Any], payload: dict[str, Any]) -> dict[str, A
         "method_short": method_short,
         "source_as_of": source_as_of,
         "validity_policy": validity,
-        "fonte": "Contratos públicos do recorte, leitura SELECT-only do payload official_live.",
-        "kicker": f"Market Answer · {geo}",
+        "fonte": "Contratos públicos do recorte, com método e data de consulta identificados nesta página.",
+        "kicker": f"Análise de mercado · {geo}",
+        "contact_label": "Conversar sobre este mercado",
+        "contact_message": f"Olá, CONFENGE. Quero conversar sobre contratos de pavimentação e a aplicação deste recorte à minha necessidade: {CANONICAL}",
     }
 
 
@@ -269,6 +275,10 @@ def editorial_surfaces(record: dict[str, Any], payload: dict[str, Any]) -> dict[
         "missingness_visible": copy["missingness"],
         "method_short": copy["method_short"],
         "fonte": copy["fonte"],
+        "contact_label": copy["contact_label"],
+        "contact_message": copy["contact_message"],
+        "validity_policy": copy["validity_policy"],
+        "kicker": copy["kicker"],
         "period": period_label(payload),
         "n": stats.get("n"),
         "p25": stats.get("p25"),

@@ -45,7 +45,7 @@ const PORT = 8792;
 const CHROME = resolveChromePath();
 const STATE = resolveCaptureState();
 const VIEWPORTS = resolveViewports();
-const DEFAULT_PATHS = ["/", "/diretoria-b2g/", "/diagnostico-b2g-360/", "/bid-room-licitacoes-obras/", "/defesa-margem-contratos-publicos/", "/conteudos/", "/analises-contratos-publicos/aditivo-saldo-art125-item-novo/", "/panorama-mercado-obras-publicas/obras-publicas-sc-2026-08/"];
+const DEFAULT_PATHS = ["/", "/diretoria-b2g/", "/diagnostico-b2g-360/", "/bid-room-licitacoes-obras/", "/defesa-margem-contratos-publicos/", "/conteudos/", "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/", "/panorama-mercado-obras-publicas/obras-publicas-sc-2026-08/"];
 const PATHS = String(process.env.CAPTURE_PATHS || "")
   .split(",")
   .map((path) => path.trim())
@@ -67,7 +67,7 @@ const COMPONENTS = {
   "/bid-room-licitacoes-obras/": [".decision-map"],
   "/defesa-margem-contratos-publicos/": [".compare-split"],
   "/conteudos/": [".content-directory-item"],
-  "/analises-contratos-publicos/aditivo-saldo-art125-item-novo/": ["#fatos"],
+  "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/": ["#fatos"],
   "/panorama-mercado-obras-publicas/obras-publicas-sc-2026-08/": ["#faixas-de-valor"],
 };
 

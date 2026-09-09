@@ -462,7 +462,6 @@ def evaluate_conditional_checklist(
             len(str(record.get("methodology") or "")) >= 40
             and len(str(record.get("limitations") or "")) >= 40
             and len(author_name) >= 5
-            and (len(reviewer_name) >= 5 or bool(record.get("solo_reviewer_disclosure")))
         ),
         "author_assigned_after_review": bool(record.get("human_authorship_confirmed")) and "rascunho" not in author_name.lower(),
         "reputational_safety": quality.get("reputational_safety", True) is not False

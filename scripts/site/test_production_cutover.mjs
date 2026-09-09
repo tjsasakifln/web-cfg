@@ -90,9 +90,8 @@ const origin = createOriginClient({
   hostHeader: OPTIONS.host,
   resolveIp: OPTIONS.resolveIp,
 });
-/** Exact corporate H1 markup as required by the canonical public shell. */
-const EXPECTED_H1_MARKUP =
-  '<h1 id="hero-title">Do problema técnico <span class="type-serif">à decisão documentada.</span></h1>';
+/** Semantic fragments required in the corporate H1; wording may keep evolving. */
+const EXPECTED_H1_TERMS = ["projetos", "serviços de engenharia", "obras públicas", "privadas"];
 const RETIRED = [
   "Oito momentos em que",
   "Todo o conteúdo permanece legível sem JavaScript",
@@ -232,7 +231,13 @@ if (OPTIONS.expectedRuntimeIdentity) {
 // Home architecture
 const home = await fetchText("/");
 ok("home_200", home.status === 200, `status=${home.status}`);
-ok("home_h1_full", home.body.includes(EXPECTED_H1_MARKUP), "exact corporate H1 missing");
+const homeH1 = home.body.match(/<h1\b[^>]*id="hero-title"[^>]*>([\s\S]*?)<\/h1>/i)?.[1] || "";
+const homeH1Text = homeH1.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().toLocaleLowerCase("pt-BR");
+ok(
+  "home_h1_service_scope",
+  EXPECTED_H1_TERMS.every((term) => homeH1Text.includes(term)),
+  "corporate H1 must name engineering services and public/private works",
+);
 const situationRows = (home.body.match(/class="[^"]*\bsituation-row\b/g) || []).length;
 ok("five_situation_paths", situationRows === 5, `situation rows=${situationRows}`);
 const blocks = (home.body.match(/data-section-archetype="/g) || []).length;

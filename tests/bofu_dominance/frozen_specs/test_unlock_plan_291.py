@@ -13,6 +13,12 @@ PROPOSED = json.loads((FROZEN / "proposed-replacements.json").read_text(encoding
 
 
 def test_plan_is_prepare_only_until_the_original_date():
+    assert "historical experimental replacements" in PLAN["scope"]
+    current = PLAN["commercial_revision"]
+    assert current["decision_state"] == "EXECUTE_NOW"
+    assert current["editorial_freeze_revoked"] is True
+    assert current["measurement_wait_required"] is False
+    assert "required PR and release checks" in current["required"]
     assert PLAN["issue"] == 291
     assert PLAN["decision_state"] == "DEFER_UNTIL_DATE"
     assert PLAN["earliest_safe_action_at"] == PROPOSED["earliest_safe_action_at"] == "2026-09-16"
@@ -73,7 +79,8 @@ def test_every_precondition_is_named_and_fail_closed():
     assert all((ROOT / path).is_file() for path in capture["evidence_paths"])
     gate_source = (ROOT / capture["evidence_paths"][0]).read_text(encoding="utf-8")
     assert 'profile == "priced_offer"' in gate_source
-    assert 'required = "capture_form"' in gate_source
+    assert 'required = "contextual_contact"' in gate_source
+    assert '_has_contextual_direct_contact' in gate_source
     assert PLAN["non_claims"]
     assert any("date alone" in item for item in PLAN["non_claims"])
     assert any("without --force" in item for item in PLAN["execution_sequence"])

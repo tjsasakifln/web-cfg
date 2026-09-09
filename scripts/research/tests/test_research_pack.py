@@ -285,32 +285,21 @@ def test_cli_validate_and_build_exit_zero(tmp_path):
     assert validate.returncode == 0, validate.stderr
 
 
-def test_preview_survives_pseo_wipe():
-    """Drive the shipped pSEO wipe gate. Preview must not be unlinked on build:site."""
-    from scripts.pseo.build import is_preserved_static_surface
+def test_unapproved_preview_is_preserved_internally_not_published():
+    from scripts.research.render import PREVIEW_DIR
+    from scripts.pseo.public_artifact import PUBLIC_TOP_DIRS
 
-    preview_rel = "radar/pesquisa/edicao-zero-4uf/index.html"
-    assert is_preserved_static_surface(preview_rel) is True
-    assert is_preserved_static_surface("radar/nacional-obras-publicas/index.html") is True
-    # The classifier must discriminate, or "the preview survives" means nothing.
-    # This is asserted on the classifier that build:site actually calls, not by
-    # hunting the tree for a wipeable page: #566 withdrew all seven rejected
-    # radar pages, so a tree scan now finds none and would prove nothing either
-    # way. A radar page that is published again later is wipeable by design.
-    assert is_preserved_static_surface("radar/edificacoes-publicas-pr/index.html") is False
-    assert (ROOT / preview_rel).is_file()
-    would_wipe = []
-    for index in (ROOT / "radar").rglob("index.html"):
-        rel = index.relative_to(ROOT).as_posix()
-        if not is_preserved_static_surface(rel):
-            would_wipe.append(rel)
-    assert preview_rel not in would_wipe
+    assert PREVIEW_DIR.parts[0] not in PUBLIC_TOP_DIRS
+    assert (ROOT / PREVIEW_DIR / "index.html").is_file()
+    assert (ROOT / PREVIEW_DIR / "edicao-zero-citation.json").is_file()
+    assert not (ROOT / "radar/pesquisa/edicao-zero-4uf/index.html").exists()
+    assert not (ROOT / "radar/pesquisa/edicao-zero-4uf/edicao-zero-citation.json").exists()
 
 
 def test_preview_is_noindex_and_absent_from_sitemaps():
-    preview = ROOT / "radar/pesquisa/edicao-zero-4uf/index.html"
-    if not preview.is_file():
-        pytest.skip("preview not generated yet")
+    from scripts.research.render import PREVIEW_DIR
+    preview = ROOT / PREVIEW_DIR / "index.html"
+    assert preview.is_file(), "internal preservation is mandatory"
     html = preview.read_text(encoding="utf-8")
     assert 'content="noindex,nofollow"' in html
     assert "Como citar:" in html

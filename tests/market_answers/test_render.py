@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import re
+from html.parser import HTMLParser
+from urllib.parse import parse_qs, urlparse
 from datetime import date
 
 from scripts.market_answers.gate import evaluate
@@ -12,6 +14,25 @@ from tests.market_answers.helpers import load_shipped_candidate, load_shipped_fi
 TODAY = date(2026, 8, 17)
 
 
+def test_primary_market_contact_does_not_loop_between_anchors():
+    class Links(HTMLParser):
+        links = []
+        def handle_starttag(self, tag, attrs):
+            row = dict(attrs)
+            if tag == "a" and row.get("data-cta-id") == "veja-sua-empresa":
+                self.links.append(row["href"])
+    parser = Links()
+    parser.feed(_html())
+    assert len(parser.links) == 2
+    for href in parser.links:
+        url = urlparse(href)
+        assert url.hostname == "wa.me"
+        assert url.path == "/5548988344559"
+        message = parse_qs(url.query)["text"][0]
+        assert "pavimentação" in message
+        assert "/inteligencia/valor-tipico-contratos-pavimentacao/" in message
+
+
 def _html() -> str:
     record = load_shipped_candidate()
     payload = load_shipped_fixture()
@@ -19,7 +40,7 @@ def _html() -> str:
     return render_html(record, payload, decision)
 
 
-def test_first_fold_has_answer_range_n_period_geo_method_as_of_limitations():
+def test_first_fold_has_answer_range_n_period_geo_method_date_limitations():
     record = load_shipped_candidate()
     payload = load_shipped_fixture()
     fold = first_fold_copy(payload)
@@ -31,7 +52,9 @@ def test_first_fold_has_answer_range_n_period_geo_method_as_of_limitations():
     assert fold["geography"] in html
     assert "não custo por km" in html.lower()
     assert 'id="metodologia"' in html
-    assert "as_of" in html
+    assert "Dados atualizados em" in html
+    assert "source_as_of" not in html
+    assert "max_age_hours" not in html
     assert "2026-07-31" in html
     assert 'id="limitacoes"' in html
     assert "Fontes e metodologia" in html
@@ -54,7 +77,8 @@ def test_ticket_never_becomes_cost_per_km():
     assert "custo/km" not in html.lower() or "não" in html.lower()
     # grain displayed is ticket, not km
     assert "valor integral nominal" in html
-    assert "ticket_contratual_integral" in html
+    assert "em reais (BRL)" in html
+    assert "ticket_contratual_integral" not in html
 
 
 def test_graph_and_table_are_accessible():

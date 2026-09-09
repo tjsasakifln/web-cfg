@@ -52,12 +52,16 @@ def test_ia_contract_is_valid_without_html():
     assert len(situations) == 5
     assert sum(row["href"] == "/servicos-obras-publicas/" for row in situations) == 1
     by_id = {row["id"]: row for row in situations}
-    assert by_id["project_delivery"]["href"] == "/quantitativos-orcamento-obras/"
-    assert by_id["project_delivery"]["index_state"] == "private_wedge_index"
+    assert by_id["project_delivery"]["href"] == "/servicos/#servico-projeto"
+    assert by_id["project_delivery"]["index_state"] == "service_hub_index"
     assert by_id["project_delivery"]["scope"]
+    assert by_id["building_diagnosis"]["href"] == "/servicos/#servico-diagnostico"
+    assert by_id["building_diagnosis"]["index_state"] == "service_hub_index"
+    assert by_id["expert_evidence_valuation"]["href"] == "/servicos/#servico-pericia"
+    assert by_id["occupational_safety"]["href"] == "/servicos/#servico-sst"
     assert all(
-        by_id[item]["href"].startswith("/triagem-tecnica/#")
-        for item in ("building_diagnosis", "expert_evidence_valuation", "occupational_safety")
+        by_id[item]["index_state"] == "service_hub_index"
+        for item in ("expert_evidence_valuation", "occupational_safety")
     )
 
 

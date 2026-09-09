@@ -15,30 +15,30 @@
       "id": "project_delivery",
       "label": "Projetar, revisar, orçar ou compatibilizar",
       "visitor_language": "Preciso tirar um projeto do impasse ou conferir se ele pode avançar",
-      "href": "/quantitativos-orcamento-obras/",
-      "index_state": "private_wedge_index",
-      "scope": "Somente quantitativos e orçamento de obra privada; revisão, projeto e compatibilização permanecem na triagem."
+      "href": "/servicos/#servico-projeto",
+      "index_state": "service_hub_index",
+      "scope": "Elaboração, revisão e compatibilização de projetos para obras públicas e privadas; quantitativos e orçamento mantêm destino específico."
     },
     {
       "id": "building_diagnosis",
       "label": "Inspecionar, diagnosticar ou documentar obra e imóvel",
       "visitor_language": "Preciso entender e registrar uma condição da obra ou do imóvel",
-      "href": "/triagem-tecnica/#obra-imovel",
-      "index_state": "triage_fallback"
+      "href": "/servicos/#servico-diagnostico",
+      "index_state": "service_hub_index"
     },
     {
       "id": "expert_evidence_valuation",
       "label": "Perícia, assistência técnica ou avaliação",
       "visitor_language": "Preciso produzir, examinar ou contestar uma prova ou um valor técnico",
-      "href": "/triagem-tecnica/#pericia-avaliacao",
-      "index_state": "triage_fallback"
+      "href": "/servicos/#servico-pericia",
+      "index_state": "service_hub_index"
     },
     {
       "id": "occupational_safety",
       "label": "Segurança do trabalho",
       "visitor_language": "Preciso reconhecer, documentar ou tratar uma situação de risco ocupacional",
-      "href": "/triagem-tecnica/#sst",
-      "index_state": "triage_fallback"
+      "href": "/servicos/#servico-sst",
+      "index_state": "service_hub_index"
     },
     {
       "id": "public_works_b2g",
@@ -112,7 +112,7 @@
       }
     ],
     "cta": {
-      "label": "Iniciar triagem",
+      "label": "Solicitar proposta",
       "href": "/triagem-tecnica/"
     }
   },

@@ -57,7 +57,7 @@
     "reason": "no_reproducible_local_converter"
   },
   "refresh_owner": "CONFENGE / market-answers",
-  "rendered_content_hash": "185dcd038951689ef1482973c7bdc51d858c01b77bfeb460a2d05e2ece8d39fa",
+  "rendered_content_hash": "0896c280408245f981adb2f20628f1f0cd190aa558212521ad193b7fd5c249fe",
   "schema": "data_desk_method_v1",
   "schema_version": "data_desk_asset_v1",
   "source_schema_version": "public-read-market-answer/1.0",

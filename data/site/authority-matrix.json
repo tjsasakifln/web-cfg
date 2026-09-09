@@ -21,12 +21,8 @@
     "consent"
   ],
   "reviewer_trigger": {
-    "required_when": [
-      "lei_14133_page",
-      "jurisprudencia_page",
-      "material_legal_claim"
-    ],
-    "definition": "Revisor independente é obrigatório quando a superfície faz afirmação normativa material (lei, jurisprudência ou enquadramento prescritivo) e não declara, de forma visível, que não há segundo revisor nomeado.",
+    "required_when": [],
+    "definition": "A revisão técnica é responsabilidade de quem assina. Uma pessoa distinta só é declarada como revisora quando sua participação estiver confirmada; autoria própria nunca é apresentada como revisão independente. Afirmações normativas continuam exigindo fonte, qualificação técnica, limites e canal de correção.",
     "solo_responsible_allowed": true,
     "solo_disclosure_tokens": [
       "responsável técnico",
@@ -49,7 +45,7 @@
     "servico": {
       "label": "página de serviço",
       "author": "required",
-      "reviewer": "optional_unless_legal_claim",
+      "reviewer": "optional",
       "evidence": "required_if_credential_or_proof",
       "update_history": "required",
       "methodology": "optional",
@@ -72,7 +68,7 @@
     "conteudo_tecnico": {
       "label": "conteúdo técnico",
       "author": "required",
-      "reviewer": "required_if_legal_claim",
+      "reviewer": "recommended",
       "evidence": "required",
       "update_history": "required",
       "methodology": "recommended",
@@ -92,7 +88,7 @@
     "ferramenta": {
       "label": "ferramenta",
       "author": "required",
-      "reviewer": "optional_unless_legal_claim",
+      "reviewer": "recommended",
       "evidence": "required",
       "update_history": "required",
       "methodology": "required",
@@ -154,7 +150,7 @@
     "analise_tecnica_contrato": {
       "label": "análise técnica de contrato público",
       "author": "required",
-      "reviewer": "required",
+      "reviewer": "recommended",
       "evidence": "required",
       "update_history": "required",
       "methodology": "required",
@@ -169,7 +165,7 @@
       "mutually_exclusive_with": "caso_proof",
       "examples": [
         "/analises-contratos-publicos/",
-        "/analises-contratos-publicos/bdi-composicao-vs-referencia-sc/"
+        "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/"
       ]
     }
   }

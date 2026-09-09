@@ -7,7 +7,7 @@
   "approved_for_index": false,
   "human_authorship_confirmed": true,
   "date_published": "2026-08-18",
-  "date_modified": "2026-08-20",
+  "date_modified": "2026-09-09",
   "comparable_available": true,
   "comparable_consumed": false,
   "comparable_reason": "singular_document_insight_no_comparative_claim",
@@ -19,7 +19,7 @@
   "insight_singular": "O valor informacional não é o valor global nem a área. É a coexistência, no mesmo PDF, de três relógios: vigência publicada no JSON, irreajustabilidade de um ano contada da data do orçamento estimado (12.1) e interregno de um ano contado da data do orçamento da proposta (12.2), com índice INCC Coluna 35/FGV (12.3). A listagem oficial não publica essas duas datas de orçamento. Quem usa 2027-07-08 como data de reajuste está lendo um relógio que o instrumento não autorizou como base.",
   "thesis": "O valor informacional não é o valor global nem a área. É a coexistência, no mesmo PDF, de três relógios: vigência publicada no JSON, irreajustabilidade de um ano contada da data do orçamento estimado (12.1) e interregno de um ano contado da data do orçamento da proposta (12.2), com índice INCC Coluna 35/FGV (12.3). A listagem oficial não publica essas duas datas de orçamento. Quem usa 2027-07-08 como data de reajuste está lendo um relógio que o instrumento não autorizou como base.",
   "thesis_falsifiable": true,
-  "correction_route": "/correcoes/",
+  "correction_route": "/triagem-tecnica/#corrigir-o-site",
   "utility_beyond_source": "A fonte entrega objeto, valor, vigência e o texto das cláusulas 12.2 e 12.3. A análise entrega o protocolo: antes de protocolar ou recusar reajuste, exigir a data do orçamento estimado e a data do orçamento da proposta; não substituí-las pelo aniversário da vigência; e tratar 152,6916 BRL/m² apenas como quociente publicado, nunca como preço unitário de medição ou referência de mercado.",
   "intent": "reajuste",
   "body": "A leitura útil deste instrumento não começa pelo valor global. Começa pela diferença entre o que o JSON do PNCP publica e o que o PDF oficial ancora como procedimento de reajuste.\n\nFACT. A listagem em https://pncp.gov.br/api/pncp/v1/orgaos/14862788000150/contratos/2026/69 (SHA-256 do snapshot do produtor 89a3ba4c49eac6a83d74030981248f352528c115aebb193013e0048ced620303) publica objeto «Pavimentação em Paralelepípedo de 4.710,00 m² de ruas no município de São Gonçalo do Piauí - PI», valorGlobal 719177.48, dataVigenciaInicio 2026-07-08 e dataVigenciaFim 2027-07-08. A mesma listagem publica unidadeOrgao.municipioNome = «Teresina». Não há, nesse JSON, data do orçamento estimado nem data do orçamento da proposta.\n\nFACT. O PDF em https://pncp.gov.br/pncp-api/v1/orgaos/14862788000150/contratos/2026/69/arquivos/1, SHA-256 64a238e6094f4d093f1ee970820fd277bcd34a66457d776a59225219b8e77604, página 13, encerra a cláusula 12.1: «Os preços são fixos e irreajustáveis no prazo de um ano contado da data do orçamento estimado.» A página 14 continua: 12.2 autoriza reajuste «após o interregno de um ano, contado a partir da data do orçamento a que a proposta se referir», com fórmula em que Io é o índice do mês do orçamento da proposta, pro rata dia, e I é o índice da data do reajuste, pro rata dia. 12.3 fixa o índice: «Índice Nacional da Construção Civil – Coluna 35, calculado e publicado pela Fundação Getúlio Vargas na revista Conjuntura Econômica, salvo de outro índice for indicado na Parte Específica deste Contrato.» 12.4 conta o interregno subsequente a partir dos efeitos financeiros do último reajuste. 12.5 atribui à contratada o ônus de requerer o reajuste; os efeitos começam após o requerimento; valores de medições anteriores não são devidos por essa via. A página 15, 12.7, trata atraso atribuível à adjudicatária: se os índices aumentam, prevalecem as datas do cronograma; se diminuem, prevalecem as datas de execução. 12.10 exige duas faturas após o reajustamento: preços originais e parcela de reajuste.\n\nFACT. A página 46 do mesmo PDF, Parte Específica, marca 12.3 com (x): o índice da Parte Geral (INCC Coluna 35 / FGV) é o escolhido. A alternativa em branco («será utilizado o índice (...)») não está marcada.\n\nCALCULATION. 719177.48 ÷ 4710.00, Decimal, quantize 0.0001, produz 152.6916 BRL/m². Semântica declarada pelo produtor: valor_global / área documentada no objeto. Não é custo completo por m², não é preço unitário de medição, não é SINAPI, não é SICRO, não é custo/km e não é comparável a outro contrato.\n\nINFERENCE. Os três relógios não são o mesmo fato. A vigência publicada é um intervalo de 12 meses a partir de 2026-07-08. A irreajustabilidade de 12.1 corre a partir de uma data de orçamento estimado que este pacote não publica. O interregno de 12.2 corre a partir de uma data de orçamento da proposta que este pacote também não publica. Sem essas duas datas, a cláusula descreve um procedimento e um índice; não descreve uma competência de reajuste já vencida ou já devida.\n\nINFERENCE. A Parte Específica, ao marcar Coluna 35, reduz a incerteza sobre qual índice a Parte Geral deixou em aberto. Isso não prova que o índice foi aplicado, nem que houve medição, nem que houve pagamento de reajuste.\n\nUNKNOWN. Data do orçamento estimado. Data do orçamento da proposta. Se a Parte Específica publicou outro índice em algum aditivo posterior. Se houve requerimento nos termos de 12.5. Se houve medição. Qual string municipal descreve o local da execução.\n\nA divergência Teresina / São Gonçalo do Piauí permanece como duas publicações. Não se corrige, não se infere sede versus objeto, não se escolhe a «verdadeira».",
@@ -69,9 +69,10 @@
     "scope": "autoria editorial e interpretação de engenharia/gestão contratual"
   },
   "reviewer": {
-    "name": "Revisão editorial/técnica do responsável técnico, em engenharia e gestão contratual; revisão jurídica externa ausente"
+    "name": "",
+    "confirmed": false
   },
-  "solo_reviewer_disclosure": true,
+  "solo_reviewer_disclosure": false,
   "maintenance_owner": "web-cfg#83",
   "refresh_cost": "Releitura do dossiê official-live (READY XOR BLOCKED, SHA256SUMS, content_hash) + conferência das páginas 13–15 e 46 do PDF cujo SHA-256 está bound. Sem novo instrumento, o custo é uma execução do consume/gate/render. Qualquer drift de hash do produtor ou do render invalida INDEX e devolve noindex. Não há cadência automática; owner de atualização é web-cfg#83.",
   "citation_text": "CONFENGE. Três relógios de reajuste no mesmo instrumento de pavimentação em paralelepípedo. Análise técnica de contrato público. as_of 2026-08-18. https://confenge.com.br/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
@@ -83,11 +84,15 @@
   "update_history": [
     {
       "date": "2026-08-18",
-      "text": "Primeira análise official-live em PUBLISHABLE_NOINDEX / READY_FOR_HUMAN_REVIEW. Sem aprovação humana e sem INDEX."
+      "text": "Primeira análise preparada a partir do dossiê oficial e mantida fora da indexação enquanto aguardava decisão editorial."
     },
     {
       "date": "2026-08-20",
-      "text": "Campanha CONFENGE-WEB-CONTRACT-ANALYSIS-V2-CURRENT-MAIN-01: token V2 2026-08-20 bound a hashes correntes, comparable_available=true / comparable_consumed=false / reason=singular_document_insight_no_comparative_claim. Sem claim comparativo no corpo."
+      "text": "Publicação aprovada com hashes vinculados às fontes e sem usar referências comparáveis para afirmar posição de mercado."
+    },
+    {
+      "date": "2026-09-09",
+      "text": "Apresentação editorial revisada: autoria e responsabilidade técnica preservadas; uma pessoa distinta só é nomeada como revisora quando sua participação estiver confirmada. Fatos, cálculos, fontes e limites da análise não foram alterados."
     }
   ],
   "counterproof": "A leitura alternativa — usar a vigência 2026-07-08/2027-07-08 como único relógio — só seria defensável se o instrumento identificasse essa vigência como data do orçamento estimado e como data do orçamento da proposta. O PDF não faz essa identificação nas páginas 13–15. A contraprova exigiria o orçamento citado em 12.1 e 12.2.",

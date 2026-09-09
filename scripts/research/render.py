@@ -16,7 +16,9 @@ from scripts.research.metrics import WEDGE
 from scripts.site.responsive_text import escape_prose_with_opaque_tokens
 
 DOCS_DIR = Path("docs/research/edicao-zero-4uf")
-PREVIEW_DIR = Path("radar/pesquisa/edicao-zero-4uf")
+# Founder 2026-09-09: noindex is not access control. Preserve the unapproved
+# research preview and citation package in internal documentation only.
+PREVIEW_DIR = DOCS_DIR / "preview"
 DISTRIBUTION_PATH = Path("data/distribution/edicao-zero-research-pack.json")
 
 

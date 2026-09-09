@@ -424,42 +424,6 @@
       "primary_ctas": 4
     },
     {
-      "path": "analises-contratos-publicos/aditivo-saldo-art125-item-novo/index.html",
-      "family": "analises-contratos-publicos",
-      "state": "gated",
-      "narrative_blocks": 18,
-      "annotated_blocks": 18,
-      "longest_identical_skeleton_run": 2,
-      "primary_ctas": 3
-    },
-    {
-      "path": "analises-contratos-publicos/atraso-eventos-sem-comunicacao-contemporanea/index.html",
-      "family": "analises-contratos-publicos",
-      "state": "gated",
-      "narrative_blocks": 17,
-      "annotated_blocks": 17,
-      "longest_identical_skeleton_run": 2,
-      "primary_ctas": 2
-    },
-    {
-      "path": "analises-contratos-publicos/bdi-composicao-vs-referencia-sc/index.html",
-      "family": "analises-contratos-publicos",
-      "state": "gated",
-      "narrative_blocks": 19,
-      "annotated_blocks": 19,
-      "longest_identical_skeleton_run": 2,
-      "primary_ctas": 3
-    },
-    {
-      "path": "analises-contratos-publicos/comparaveis-rejeitados-regime-distinto/index.html",
-      "family": "analises-contratos-publicos",
-      "state": "gated",
-      "narrative_blocks": 18,
-      "annotated_blocks": 18,
-      "longest_identical_skeleton_run": 2,
-      "primary_ctas": 3
-    },
-    {
       "path": "analises-contratos-publicos/index.html",
       "family": "analises-contratos-publicos",
       "state": "blocked_container_wrapped",
@@ -467,15 +431,6 @@
       "annotated_blocks": 2,
       "longest_identical_skeleton_run": 1,
       "primary_ctas": 2
-    },
-    {
-      "path": "analises-contratos-publicos/reajuste-aniversario-serie-indice/index.html",
-      "family": "analises-contratos-publicos",
-      "state": "gated",
-      "narrative_blocks": 18,
-      "annotated_blocks": 18,
-      "longest_identical_skeleton_run": 2,
-      "primary_ctas": 3
     },
     {
       "path": "analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/index.html",

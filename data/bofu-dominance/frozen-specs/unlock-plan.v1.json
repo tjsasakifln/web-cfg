@@ -2,6 +2,16 @@
   "schema": "bofu_frozen_unlock_plan/v1",
   "issue": 291,
   "decision_state": "DEFER_UNTIL_DATE",
+  "scope": "Only the historical experimental replacements in proposed-replacements.json; not maintenance of the public commercial surface.",
+  "commercial_revision": {
+    "decision_state": "EXECUTE_NOW",
+    "authorized_at": "2026-09-09",
+    "authority": "express founder instruction",
+    "editorial_freeze_revoked": true,
+    "measurement_wait_required": false,
+    "required": ["truthful terms and responsibility", "contextual functional contact", "reviewed source and rendered output", "actual hash recapture", "required PR and release checks"],
+    "does_not_authorize": ["automatic application of legacy experimental patches", "invented measurement readiness", "changed prices or checkout permission", "checksum suppression"]
+  },
   "executive_front": "INBOUND ENGINE",
   "leverage": ["revenue", "distribution"],
   "owner": "CONFENGE",
@@ -40,7 +50,8 @@
   },
   "capture": {
     "required_on_all_six": true,
-    "contract": "persisted CONFENGE_WEB lead capture introduced by issue #289",
+    "contract": "Contextual contact for each real priced offer; an active form must persist its CONFENGE_WEB event faithfully. Opening a direct channel is not receipt.",
+    "measurement": "Historical form count, not a current commercial acceptance threshold",
     "current_coverage": 0,
     "current_total": 6
   },
@@ -66,7 +77,7 @@
       "id": "capture_profile",
       "state": "READY",
       "owner": "web-cfg#289",
-      "evidence": "PR #307 merged the derived priced_offer persisted-capture profile and its fail-closed tests",
+      "evidence": "The 2026-09-09 priced_offer profile requires functional contextual contact; retained active forms keep consent, attribution and persistence checks.",
       "evidence_paths": [
         "scripts/site/inbound_gates.py",
         "scripts/site/test_deliverable_models.py",
@@ -85,7 +96,7 @@
     "Mark every evidenced precondition READY and set html_mutation_authorized=true only in the reviewed execution PR; the date or evidential close alone is insufficient.",
     "Remove the three before-equals-after entries with a written no-op reason.",
     "Apply only the three true replacements through the frozen patch mechanism.",
-    "Add persisted capture to all six pillars without changing the source or attribution contract.",
+    "Verify contextual contact on all six pillars; preserve healthy forms and verify their persistence without changing source or attribution contracts.",
     "Add FAQPage and Person only to diagnostico-b2g-360 with visible parity.",
     "Run the non-hash content and contract checks, then inspect the expected frozen drift before recapture.",
     "Recapture hashes and snapshots without --force, then run every required gate against the reviewed baseline."

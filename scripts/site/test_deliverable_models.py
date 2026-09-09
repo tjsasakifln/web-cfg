@@ -319,7 +319,11 @@ def test_competitor_ranking_rule_is_consistent() -> None:
     competitor_map = _html("modelo-mapeamento-concorrentes-publicos")
     assert "15 primeiros por valor" not in consolidated
     assert "15 primeiros por frequência, com desempate por valor" in consolidated
-    assert "Ordenação por frequência, depois por valor" in competitor_map
+    assert re.search(
+        r"Quadro comparativo por frequência.{0,80}depois.{0,30}valor",
+        competitor_map,
+        re.DOTALL,
+    )
 
 
 def test_value_ladder_prices_are_visible_and_strictly_ascending() -> None:

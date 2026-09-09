@@ -38,6 +38,7 @@ UPDATED_BR = {
     "2026-09-04": "4 de setembro de 2026",
     "2026-09-05": "5 de setembro de 2026",
     "2026-09-07": "7 de setembro de 2026",
+    "2026-09-09": "9 de setembro de 2026",
 }
 
 
@@ -175,18 +176,18 @@ def _historico_body(policy: dict) -> str:
             "</li>"
         )
     return (
-        "<h2 id=\"changelog\">Changelog</h2>"
-        "<p>Mudança de política gera versão nova. O histórico abaixo não é reescrito em silêncio.</p>"
+        "<h2 id=\"historico\">Histórico de versões</h2>"
+        "<p>Mudança de política gera versão nova. O histórico abaixo preserva o texto e a data de cada decisão.</p>"
         f"<ol>{''.join(rows)}</ol>"
         f"<p>Versão vigente: <strong>{_esc(current_policy_version(policy))}</strong>. "
-        "Não há prazo prometido em dias para publicar uma correção; toda correção aceita entra no changelog acima, com a data.</p>"
+        "Não há prazo prometido em dias para publicar uma correção; toda correção aceita entra no histórico acima, com a data.</p>"
     )
 
 
 def _archive_body(entry: dict, version_rec: dict) -> str:
     parts = [
         f"<p><strong>Resumo desta versão:</strong> {_esc(entry.get('summary') or '')}</p>",
-        f"<p>Prazo então registrado: {_esc(version_rec.get('prazo_then') or version_rec.get('prazo') or 'UNKNOWN')}.</p>",
+        f"<p>Prazo então registrado: {_esc(version_rec.get('prazo_then') or version_rec.get('prazo') or 'não informado')}.</p>",
     ]
     pages = version_rec.get("pages") or {}
     for key in ("editorial", "corrections", "ai_use", "conflicts"):
@@ -291,7 +292,7 @@ def render_all() -> list[Path]:
     historico = _page(
         path="/politica-editorial/historico/",
         title="Histórico da política editorial",
-        description="Changelog das políticas públicas da CONFENGE. Versões anteriores permanecem legíveis.",
+        description="Histórico das políticas públicas da CONFENGE. Versões anteriores permanecem legíveis.",
         h1="Histórico da política editorial",
         eyebrow="Governança",
         crumbs=[

@@ -117,7 +117,7 @@
     "service_fit_review": {
       "stage": "request_fit_review",
       "commitment": "medium",
-      "next_useful_state": "O contexto fica registrado para revisão de aderência, documentos mínimos e capacidade; o protocolo confirma que a análise pode ser enquadrada.",
+      "next_useful_state": "O protocolo confirma o registro do contexto. A CONFENGE então analisa a necessidade e combina os documentos, o escopo e a disponibilidade para atendimento.",
       "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
       "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
       "field_purpose": "Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados.",
@@ -128,7 +128,7 @@
       "commitment": "medium",
       "next_useful_state": "O evento demonstrado fica registrado para identificar a prova faltante e o trabalho aplicável, sem tratar exemplo sintético como resultado de cliente.",
       "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
-      "pre_form_value": "Use o demonstrativo como referência e registre o evento real para a CONFENGE indicar qual prova falta e qual análise pode ser enquadrada.",
+      "pre_form_value": "Use o demonstrativo como referência e conte o que aconteceu na sua obra. A CONFENGE analisa os documentos disponíveis e indica o escopo de análise adequado ao caso.",
       "field_purpose": "Nome identifica o responsável; um canal válido permite retorno; empresa e descrição do evento ajudam a ligar a situação ao demonstrativo e são opcionais.",
       "boundary": "Os demonstrativos são sintéticos. O formulário não recebe arquivo, não cobra e não conclui contratação."
     },
@@ -209,16 +209,17 @@
       "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
       "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
       "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação.",
-      "mutation_state": "FROZEN_BY_533",
-      "authority": "docs/decisions/DEFERRED-BY-MEASUREMENT-FREEZE-2026-08-30.md"
+      "mutation_state": "COMMERCIAL_CORRECTION_AUTHORIZED_20260909",
+      "authority": "docs/campaigns/2026-09-08-comunicacao-publica-comercial.md",
+      "preserved_controls": "Consent, attribution, anti-abuse, real persistence and required release checks remain mandatory. No waiting for the former measurement window."
     },
     "inline_receipt_v1": {
-      "initial": "Pedido de enquadramento disponível com campos e limites visíveis.",
+      "initial": "Pedido de contato disponível com campos e condições visíveis.",
       "validation_error": "O navegador mantém required e tipos antes do envio; o servidor recusa formato ou consentimento inválido.",
       "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
-      "loading": "Registrando pedido de enquadramento…",
+      "loading": "Registrando seu pedido…",
       "error": "O pedido continua não registrado e pode ser reenviado sem presumir protocolo.",
-      "success": "Pedido persistido; a confirmação mostra o protocolo e informa que o próximo estado é a revisão de enquadramento.",
+      "success": "Pedido persistido; a confirmação mostra o protocolo e informa que a CONFENGE analisará a necessidade e responderá pelo canal informado.",
       "receipt": "lead_id ou receipt_id opaco devolvido pelo servidor."
     },
     "inline_reference_v1": {

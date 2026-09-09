@@ -20,18 +20,17 @@ Duas diferenças em relação ao gate irmão, ambas deliberadas:
    controle e o rótulo de uma opção também são lidos por uma pessoa. Um leitor
    de tela lê aria-label; o Google lê meta description. Os dois entram.
 
-2. CATRACA EM VEZ DE EXCEÇÃO. A campanha que criou esta regra corrigiu um lote e
-   deixou o restante do acervo explicitamente aberto. Registrar cada ocorrência
-   remanescente como exceção seria aprová-la, e uma exceção genérica por pasta ou
-   por palavra esconderia a cobertura. Então:
-     * as rotas de ENFORCED reprovam qualquer ocorrência, sempre;
-     * qualquer outra rota reprova se PIORAR em relação à linha de base;
-     * o que resta aparece contado no relatório, sem aprovação e sem sumir.
-   A linha de base só pode descer. Zerá-la encerra a dívida.
+2. CLASSIFICAÇÃO CONTEXTUAL, NÃO BANIMENTO DE PALAVRA. ``Acervo técnico`` e
+   ``enquadramento legal`` pertencem ao vocabulário do comprador. A decisão do
+   fundador de 2026-09-09 exige que cada ocorrência seja classificada: usos
+   técnicos recebem fundamento verificável; linguagem de bastidor reprova sem
+   herdar a antiga linha de base. Os classificadores são testados com uma forma
+   legítima e uma forma operacional para cada palavra ambígua.
 """
 
 from __future__ import annotations
 
+import argparse
 import json
 import re
 import sys
@@ -43,13 +42,18 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from scripts.site.public_copy_scope import (  # noqa: E402
+    MANIFEST_ROUTE_EXEMPT,
+    artifact_html_files,
     relpath,
+    route_for,
     select_options,
     visible_text,
     visitor_facing_html_files,
 )
-
-BASELINE_PATH = ROOT / "data" / "site" / "control-vocabulary-baseline.json"
+from scripts.site.test_self_deprecating_copy import (  # noqa: E402
+    dynamic_text_states,
+    jsonld_prose,
+)
 
 # Palavra inteira. "fatorial" não é "FACT"; "delegate" não é "gate"; e o
 # acento de "aderência" não pode ser a forma de escapar da regra.
@@ -122,19 +126,6 @@ RENDERED_INTERNAL_CODE = re.compile(
     r"""|public_state|publication_state|canonical_status|state_token)\b"""
 )
 
-# O lote corrigido por esta campanha, mais o que é compartilhado por todo o
-# site. Aqui a regra é fechada: nenhuma ocorrência passa.
-ENFORCED = (
-    "index.html",
-    "politica-editorial/index.html",
-    "uso-de-ia/index.html",
-    "conflitos/index.html",
-    "quantitativos-orcamento-obras/index.html",
-    "triagem-tecnica/index.html",
-    "servicos/index.html",
-    "servicos-obras-publicas/index.html",
-)
-
 # O registro histórico é preservado como foi publicado. Reescrevê-lo para
 # satisfazer um gate de linguagem seria falsificar o passado -- e a política
 # vigente não usa esse vocabulário.
@@ -146,36 +137,8 @@ ARCHIVE_ROUTES = (
     "politica-editorial/historico/index.html",
 )
 
-# Teto da divida, medido em 2026-09-07 com o detector JA ALARGADO (formas
-# verbais incluidas). O salto de 420 para o numero abaixo NAO e divida nova:
-# e cobertura nova. "Enquadrar" sempre esteve nas paginas; o que faltava era
-# uma regra que o enxergasse.
-# A catraca so pode descer: se alguem rodar --record depois de
-# piorar uma pagina, o total sobe e ESTE numero reprova. Baixar o teto exige
-# ter corrigido paginas de verdade.
-# 2026-09-07 (#611 vocabulary lane): 491 -> 490. Exactly one counted occurrence
-# was removed -- the "vertical" in the margin-defense pillar's provenance line,
-# which was there because a test demanded the internal tokens
-# `source`/`as_of`/`limitation` in visitor copy. That test now grades what the
-# paragraph SAYS, so the line could be written in Portuguese.
-#
-# The lane's other fixes were invisible to this ratchet, so they cannot show up
-# as a decrease here. Measured with the detector below before they were fixed:
-# PUBLISHED x8 on /entregas/, PAYMENT_RECEIVED x2, Timeline x2, "Job do
-# visitante" x3, plus one option label and one JavaScript-rendered offer code
-# that no word scan could see at all. All are now at zero and covered by
-# FORBIDDEN_EXACT_CASE and the two structural checks, so the ceiling did not
-# move to make room for them.
-#
-# 2026-09-07 (#611 privacy lane, same campaign): three further counted
-# occurrences left /privacidade/ when the policy was reconciled with the real
-# runtime, retiring that route from the open-debt set entirely.
-#
-# The two lanes were measured independently against the pre-campaign tree, so
-# their ceilings (490 and 488) are not additive. The value below was RE-MEASURED
-# with both lanes applied together rather than inferred by arithmetic.
-MAX_OPEN_DEBT_OCCURRENCES = 487
-MAX_OPEN_DEBT_ROUTES = 158
+# The old 487-occurrence ratchet is historical evidence only.  It cannot be
+# recorded or consulted as publication authorization after 2026-09-09.
 
 
 class _HumanNames(HTMLParser):
@@ -218,52 +181,145 @@ def human_names(html: str) -> str:
 
 
 def human_surface(html: str) -> str:
-    """Tudo que uma pessoa lê: corpo visível, nome acessível e texto de busca."""
-    return f"{visible_text(html)} \n {human_names(html)}"
+    """Corpo, nomes acessíveis, busca, dados estruturados e estados literais."""
+    return (
+        f"{visible_text(html)} \n {human_names(html)} \n {jsonld_prose(html)}"
+        f" \n {dynamic_text_states(html)}"
+    )
+
+
+_SENTENCE_SPLIT = re.compile(r"(?<=[.!?])\s+|\s*[·|]\s*")
+_INTERNAL_ENQUADRAMENTO = re.compile(
+    r"\bpedido de enquadramento\b"
+    r"|\bdura[çc][ãa]o t[íi]pica da conversa\b[^.!?]{0,55}\benquadramento\b"
+    r"|\bconversa de enquadramento\b"
+    r"|\btriagem aplica\b[^.!?]{0,55}\benquadramentos?\b"
+    r"|\benquadramentos?\b[^.!?]{0,55}\b(?:valores publicados|proposta comercial)\b"
+    r"|\b(?:pedir|solicitar)\b[^.!?]{0,35}\benquadramento\b"
+    r"|\benquadramento (?:do diagn[óo]stico|e termos)\b"
+    r"|\buso destes dados\b[^.!?]{0,60}\benquadramento\b"
+    r"|\b1 enquadramento\b[^.!?]{0,80}\bCNPJ\b"
+    r"|\bos enquadramentos?\b[^.!?]{0,80}\b(?:essencial|complexa|especial)\b"
+    r"|\bo que voc[êe] recebe\b[^.!?]{0,30}\benquadramento do formato\b"
+    r"|\benquadrar (?:a oportunidade cr[íi]tica|esta demanda|a necessidade)\b"
+    r"|\benquadramos a necessidade\b"
+    r"|\ban[áa]lise pode ser enquadrada\b",
+    re.I,
+)
+_INTERNAL_ACERVO = re.compile(
+    r"\bacervo\b[^.!?]{0,35}\b(?:editorial|interno|do site|de conte[úu]do|de provas?)\b"
+    r"|\b(?:editorial|interno)\b[^.!?]{0,35}\bacervo\b",
+    re.I,
+)
+_INTERNAL_ADERENCIA = re.compile(
+    r"\bader[êe]ncia\b[^.!?]{0,45}\b(?:editorial|ao gate|à taxonomia|ao funil|ao workflow)\b"
+    r"|\b(?:gate|taxonomia|workflow)\b[^.!?]{0,45}\bader[êe]ncia\b",
+    re.I,
+)
+_DELIVERABLE_CONTEXT = re.compile(
+    r"\benquadramento e regras\b[^.!?]{0,80}\bm[ée]todo\b"
+    r"|\bdo enquadramento at[ée] as decis[õo]es\b"
+    r"|\babertura e enquadramento\b[^.!?]{0,80}\b(?:slide|contexto)\b",
+    re.I,
+)
+
+
+def legitimate_reason(term: str, sentence: str) -> str | None:
+    """Return the material reason an ambiguous occurrence is visitor language."""
+    if term == "acervo" and not _INTERNAL_ACERVO.search(sentence):
+        return "qualificacao_tecnica_da_empresa_em_licitacao"
+    if term == "aderencia" and not _INTERNAL_ADERENCIA.search(sentence):
+        return "compatibilidade_tecnica_entre_objeto_escopo_capacidade_ou_referencia"
+    if term in {"enquadramento", "enquadrar"} and _DELIVERABLE_CONTEXT.search(sentence):
+        return "contextualizacao_do_problema_e_premissas_na_entrega"
+    if term in {"enquadramento", "enquadrar"} and not _INTERNAL_ENQUADRAMENTO.search(sentence):
+        return "classificacao_tecnica_legal_do_fato_obrigacao_ou_instrumento"
+    if term == "vertical" and re.search(r"\bhorizontal e vertical\b", sentence, re.I):
+        return "orientacao_fisica_no_objeto_transcrito"
+    if term == "nucleo" and re.search(r"\bn[úu]cleo da prote[çc][ãa]o\b", sentence, re.I):
+        return "substantivo_comum_centro_da_protecao"
+    return None
+
+
+def _surface_files(base: Path, *, require_artifact: bool) -> list[Path]:
+    files = artifact_html_files(base) if require_artifact else visitor_facing_html_files(base)
+    if require_artifact and not files:
+        raise ValueError(f"public artifact has no HTML: {base}")
+    return files
+
+
+def classify_scan(
+    root: Path | None = None, *, require_artifact: bool = False
+) -> dict[str, object]:
+    """Classify every matched occurrence as legitimate or a publication defect."""
+    base = (root or ROOT).resolve()
+    all_found: dict[str, dict[str, int]] = {}
+    legitimate: dict[str, dict[str, int]] = {}
+    defects: dict[str, dict[str, int]] = {}
+    reasons: dict[str, int] = {}
+    classifications: list[dict[str, object]] = []
+    defect_examples: list[dict[str, object]] = []
+    for path in _surface_files(base, require_artifact=require_artifact):
+        rel = relpath(path, base)
+        if rel in ARCHIVE_ROUTES or (
+            require_artifact and route_for(rel) in MANIFEST_ROUTE_EXEMPT
+        ):
+            continue
+        surface = human_surface(path.read_text(encoding="utf-8"))
+        for sentence in _SENTENCE_SPLIT.split(surface):
+            normalized = " ".join(sentence.split())
+            if not normalized:
+                continue
+            for term, pattern in FORBIDDEN.items():
+                n = len(re.findall(pattern, normalized, flags=re.IGNORECASE))
+                if not n:
+                    continue
+                all_found.setdefault(rel, {})[term] = all_found.setdefault(rel, {}).get(term, 0) + n
+                reason = legitimate_reason(term, normalized)
+                target = legitimate if reason else defects
+                target.setdefault(rel, {})[term] = target.setdefault(rel, {}).get(term, 0) + n
+                if reason:
+                    reasons[reason] = reasons.get(reason, 0) + n
+                item = {
+                    "path": rel,
+                    "term": term,
+                    "count": n,
+                    "status": "legitimate" if reason else "defect",
+                    "reason": reason,
+                    "context": normalized[:500],
+                }
+                classifications.append(item)
+                if not reason:
+                    defect_examples.append(item)
+            for term, pattern in FORBIDDEN_EXACT_CASE.items():
+                n = len(re.findall(pattern, normalized))
+                if not n:
+                    continue
+                all_found.setdefault(rel, {})[term] = all_found.setdefault(rel, {}).get(term, 0) + n
+                defects.setdefault(rel, {})[term] = defects.setdefault(rel, {}).get(term, 0) + n
+                item = {
+                    "path": rel,
+                    "term": term,
+                    "count": n,
+                    "status": "defect",
+                    "reason": None,
+                    "context": normalized[:500],
+                }
+                classifications.append(item)
+                defect_examples.append(item)
+    return {
+        "all": all_found,
+        "legitimate": legitimate,
+        "defects": defects,
+        "legitimate_reasons": reasons,
+        "classifications": classifications,
+        "defect_examples": defect_examples,
+    }
 
 
 def scan() -> dict[str, dict[str, int]]:
-    """{rota: {termo: ocorrências}} sobre toda a superfície humana."""
-    found: dict[str, dict[str, int]] = {}
-    for path in visitor_facing_html_files(ROOT):
-        rel = relpath(path, ROOT)
-        if rel in ARCHIVE_ROUTES:
-            continue
-        surface = human_surface(path.read_text(encoding="utf-8"))
-        counts = {}
-        for term, pattern in FORBIDDEN.items():
-            n = len(re.findall(pattern, surface, flags=re.IGNORECASE))
-            if n:
-                counts[term] = n
-        for term, pattern in FORBIDDEN_EXACT_CASE.items():
-            n = len(re.findall(pattern, surface))
-            if n:
-                counts[term] = n
-        if counts:
-            found[rel] = counts
-    return found
-
-
-def load_baseline() -> dict[str, dict[str, int]]:
-    if not BASELINE_PATH.is_file():
-        return {}
-    return json.loads(BASELINE_PATH.read_text(encoding="utf-8")).get("open_debt") or {}
-
-
-def write_baseline(found: dict[str, dict[str, int]]) -> None:
-    payload = {
-        "schema_version": "1.0.0",
-        "purpose": (
-            "Dívida aberta de vocabulário de controle na superfície pública. "
-            "Não é aprovação: é a contagem do que falta corrigir. Só pode diminuir."
-        ),
-        "owner_issue": 611,
-        "recorded_at": "2026-09-07",
-        "enforced_routes": list(ENFORCED),
-        "open_debt": dict(sorted(found.items())),
-    }
-    BASELINE_PATH.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
-                             encoding="utf-8")
+    """Backward-compatible full census; publication uses classify_scan()."""
+    return classify_scan()["all"]  # type: ignore[return-value]
 
 
 def option_label_failures(root: Path | None = None) -> list[str]:
@@ -342,6 +398,65 @@ COUNTER_CASES = (
             FORBIDDEN_EXACT_CASE["estado-de-publicacao"], "Oferta publicada em agosto"
         ),
     ),
+    (
+        "acervo-tecnico-e-legitimo",
+        lambda: legitimate_reason(
+            "acervo", "O edital exige acervo técnico compatível com a parcela relevante."
+        )
+        == "qualificacao_tecnica_da_empresa_em_licitacao",
+    ),
+    (
+        "acervo-editorial-e-bastidor",
+        lambda: legitimate_reason("acervo", "Consulte nosso acervo editorial interno.")
+        is None,
+    ),
+    (
+        "aderencia-tecnica-e-legitima",
+        lambda: legitimate_reason(
+            "aderencia", "A aderência do objeto ao escopo e à capacidade será conferida."
+        )
+        == "compatibilidade_tecnica_entre_objeto_escopo_capacidade_ou_referencia",
+    ),
+    (
+        "aderencia-ao-gate-e-bastidor",
+        lambda: legitimate_reason(
+            "aderencia", "A aderência ao gate editorial será conferida."
+        )
+        is None,
+    ),
+    (
+        "enquadramento-legal-e-legitimo",
+        lambda: legitimate_reason(
+            "enquadramento", "O enquadramento legal do aditivo muda a memória de cálculo."
+        )
+        == "classificacao_tecnica_legal_do_fato_obrigacao_ou_instrumento",
+    ),
+    (
+        "enquadramento-contextual-da-entrega-e-legitimo",
+        lambda: legitimate_reason(
+            "enquadramento",
+            "A narrativa vai do enquadramento até as decisões documentadas.",
+        )
+        == "contextualizacao_do_problema_e_premissas_na_entrega",
+    ),
+    (
+        "pedido-de-enquadramento-e-bastidor",
+        lambda: legitimate_reason(
+            "enquadramento", "Envie um pedido de enquadramento pelo formulário."
+        )
+        is None,
+    ),
+    (
+        "vertical-fisica-e-legitima",
+        lambda: legitimate_reason(
+            "vertical", "Sinalização viária horizontal e vertical."
+        )
+        == "orientacao_fisica_no_objeto_transcrito",
+    ),
+    (
+        "vertical-comercial-e-bastidor",
+        lambda: legitimate_reason("vertical", "Esta é nossa vertical comercial.") is None,
+    ),
 )
 
 
@@ -360,40 +475,20 @@ def selftest_failures() -> list[str]:
     ]
 
 
-def failures() -> list[str]:
-    found = scan()
-    base = load_baseline()
+def failures(
+    root: Path | None = None, *, require_artifact: bool = False
+) -> list[str]:
+    classified = classify_scan(root, require_artifact=require_artifact)
+    found = classified["defects"]
     out: list[str] = []
     out.extend(selftest_failures())
-    out.extend(option_label_failures())
-    out.extend(rendered_internal_code_failures())
-    for rel in ENFORCED:
-        for term, n in (found.get(rel) or {}).items():
-            out.append(f"{rel}: '{term}' x{n} — rota do lote corrigido, não admite ocorrência")
+    out.extend(option_label_failures(root))
+    out.extend(rendered_internal_code_failures(root))
     for rel, counts in sorted(found.items()):
-        if rel in ENFORCED:
-            continue
         for term, n in sorted(counts.items()):
-            if term in FORBIDDEN_EXACT_CASE:
-                # Fail closed, and stay closed. These classes entered the gate at
-                # zero, so there is no debt to inherit: a hit is always new. This
-                # ignores the baseline on purpose -- otherwise a future `--record`
-                # would file them as tolerated debt and raise the ceiling.
-                out.append(
-                    f"{rel}: '{term}' x{n} — rótulo interno de máquina ou de registro, "
-                    "não admite ocorrência na superfície pública"
-                )
-                continue
-            was = (base.get(rel) or {}).get(term, 0)
-            if n > was:
-                out.append(f"{rel}: '{term}' x{n} (linha de base {was}) — piorou")
-    total = sum(sum(c.values()) for c in found.values())
-    if total > MAX_OPEN_DEBT_OCCURRENCES:
-        out.append(f"divida aberta subiu para {total} ocorrencias; o teto e "
-                   f"{MAX_OPEN_DEBT_OCCURRENCES} e so pode descer")
-    if len(found) > MAX_OPEN_DEBT_ROUTES:
-        out.append(f"divida aberta subiu para {len(found)} rotas; o teto e "
-                   f"{MAX_OPEN_DEBT_ROUTES} e so pode descer")
+            out.append(
+                f"{rel}: '{term}' x{n} — uso de controle/bastidor sem fundamento técnico"
+            )
     return out
 
 
@@ -403,20 +498,53 @@ def test_control_vocabulary_does_not_reach_the_visitor() -> None:
 
 
 def main() -> int:
-    if "--record" in sys.argv:
-        found = scan()
-        write_baseline(found)
-        total = sum(sum(c.values()) for c in found.values())
-        print(f"recorded open debt: {len(found)} routes, {total} occurrences")
-        return 0
-    bad = failures()
-    found = scan()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--root", type=Path, default=ROOT)
+    parser.add_argument("--require-artifact", action="store_true")
+    parser.add_argument("--report", type=Path)
+    parser.add_argument("--record", action="store_true", help=argparse.SUPPRESS)
+    args = parser.parse_args()
+    if args.record:
+        print("REFUSED: the 2026-09-09 classified gate cannot record open debt", file=sys.stderr)
+        return 2
+    try:
+        bad = failures(args.root, require_artifact=args.require_artifact)
+        classified = classify_scan(args.root, require_artifact=args.require_artifact)
+    except ValueError as exc:
+        print(f"FAIL: {exc}", file=sys.stderr)
+        return 1
+    found = classified["all"]
+    defects = classified["defects"]
+    legitimate = classified["legitimate"]
     total = sum(sum(c.values()) for c in found.values())
+    defect_total = sum(sum(c.values()) for c in defects.values())
+    legitimate_total = sum(sum(c.values()) for c in legitimate.values())
     by_term: dict[str, int] = {}
     for counts in found.values():
         for t, n in counts.items():
             by_term[t] = by_term.get(t, 0) + n
-    print(f"OPEN DEBT (explicitly not approved): {len(found)} routes, {total} occurrences")
+    report = {
+        "schema": "confenge.control-vocabulary-classification/v1",
+        "ok": not bad,
+        "root": str(args.root.resolve()),
+        "matched_routes": len(found),
+        "matched_occurrences": total,
+        "legitimate_occurrences": legitimate_total,
+        "defect_routes": len(defects),
+        "defect_occurrences": defect_total,
+        "legitimate_reasons": classified["legitimate_reasons"],
+        "classifications": classified["classifications"],
+        "defect_examples": classified["defect_examples"],
+    }
+    if args.report:
+        args.report.parent.mkdir(parents=True, exist_ok=True)
+        args.report.write_text(
+            json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        )
+    print(
+        f"CLASSIFIED: {len(found)} routes, {total} occurrences; "
+        f"legitimate={legitimate_total}; defects={defect_total} on {len(defects)} routes"
+    )
     for t, n in sorted(by_term.items(), key=lambda kv: -kv[1]):
         print(f"  {t:16} {n:5}")
     if bad:
@@ -424,7 +552,7 @@ def main() -> int:
         for line in bad:
             print("  " + line)
         return 1
-    print("\nPASS: no regression, and the corrected batch stays clean")
+    print("\nPASS: every occurrence classified and no visitor-facing control vocabulary defect")
     return 0
 
 

@@ -71,8 +71,11 @@ def test_brand_forbidden_phrases_still_enforced():
 def test_microcopy_preferences():
     home = (ROOT / "index.html").read_text(encoding="utf-8")
     assert "responsáveis" in home.lower() or "responsável" in home.lower()
-    assert "critério técnico definido" in home.lower()
-    assert "entrega e limite combinados" in home.lower()
+    # The home must name engineering work and a deliverable, without freezing
+    # one internal triage slogan into every future revision.
+    public = visible_text(home).lower()
+    assert re.search(r"\b(?:projeto|revisão|compatibilização|orçamento)s?\b", public)
+    assert re.search(r"\b(?:entrega|desenho|memorial|quantitativo|laudo)s?\b", public)
     bid = (ROOT / "bid-room-licitacoes-obras" / "index.html").read_text(encoding="utf-8")
     # 2026-09-08. A trava exigia a frase literal "revisão crítica independente"
     # na sala de proposta. Era o defeito: a CONFENGE é prática individual e não
@@ -324,9 +327,7 @@ def test_public_surfaces_have_no_prose_em_dashes():
     assert "perfil da empresa (capacidade, acervo" in radar
     assert "calibrar o recorte, não assinar" in radar
     home = (ROOT / "index.html").read_text(encoding="utf-8")
-    assert "situação compreendida" in home
-    assert "critério técnico definido" in home
-    assert "entrega e limite combinados" in home
+    assert residual_em_dashes(home) == [], "home: authorial prose punctuation drift"
     # Journey confirmations exist
     for name in ("obrigado-contrato.html", "obrigado-edital.html", "obrigado-operacao.html"):
         p = ROOT / name
@@ -488,18 +489,26 @@ def evaluate_copy_html(html: str, rel: str = "fixture.html") -> list[str]:
     return scan_backstage_html(html, rel) + scan_brand_html(html, rel)
 
 
-def test_copy_scanners_ignore_non_perceptible_subtrees():
-    """Hidden implementation copy is not visitor-facing brand/backstage copy."""
+def test_copy_scanners_ignore_only_actually_non_perceptible_subtrees():
+    """hidden/display:none stay out; inert/aria-hidden may remain visible."""
     html = """
     <main>
       <template><p>extra-cli</p></template>
       <section hidden><p>fale conosco</p></section>
-      <section aria-hidden="true"><p>excelência</p></section>
-      <section inert><p>alta intenção</p></section>
       <section style="color: red; display: none !important"><p>inovação</p></section>
     </main>
     """
     assert evaluate_copy_html(html) == []
+
+    still_painted = """
+    <main>
+      <section aria-hidden="true"><p>excelência</p></section>
+      <section inert><p>alta intenção</p></section>
+    </main>
+    """
+    found = evaluate_copy_html(still_painted)
+    assert any("excelência" in item for item in found), found
+    assert any("alta intenção" in item for item in found), found
 
 
 def test_brand_scanner_keeps_public_copy_channels_only():

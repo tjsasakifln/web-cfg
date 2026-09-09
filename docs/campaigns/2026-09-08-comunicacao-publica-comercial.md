@@ -4,6 +4,66 @@ Registro de retomada. Issue guarda-chuva: #611. PR: #644.
 Base: `234a061f1` (= `origin/main` = SHA servido em produção no início).
 Branch: `campanha/comunicacao-publica-comercial`.
 
+## Retomada autorizada em 2026-09-09
+
+A decisão expressa EXECUTE_NOW de 09/09 substitui o encerramento e os limites
+editoriais anteriores desta etapa. As seções anteriores de execução abaixo são
+históricas, não aceite do universo atual. Frente executiva: INBOUND ENGINE;
+alavancas: customer, trust, revenue e automation. Tempo para evidência: cada
+lote tem validação e publicação imediatas após os checks obrigatórios. Cem
+repetições devem melhorar os mesmos contratos, geradores e testes, sem criar
+cem campanhas ou inventários paralelos.
+
+Preflight confirmado nesta retomada:
+
+- `origin/main` e os dois endpoints públicos de identidade:
+  `54b51438a110767c88256c2e9e5272173066cc9c`.
+- Artefato público observado:
+  `7b6161067270a6ac7e0e30b51e7f710660180b0f95427ea5c67916b587d5c903`;
+  bundle observado `84cce7ed93447966c458272d8609a2fc89612c173c66865548e8f67bd558feb2`.
+- Build `2026-09-09T05:15:14Z`; produção `netcup-production`,
+  `confenge-nginx-node/v2`, armazenamento `filesystem`.
+- Publicação anterior: Actions `34314143158`; site-ci `34314142753`.
+  Branch protection exige `site-ci` e `pSEO quality gates`, strict; nenhum
+  revisor adicional requerido. Ambientes stage/production restringem branches
+  protegidas e dispõem dos nomes de secrets SSH necessários. Valores secretos
+  não foram consultados nem publicados. Autorizações não foram alteradas.
+- Árvore original limpa; branch de retomada
+  `campanha/revisao-comercial-20260909`, baseada em origin/main. PRs antigos
+  permanecem preservados; #639 tem checks falhando e não é candidato de release.
+- A observação inicial de 253 HTML-fonte, 549 HTML no `_site` local preexistente
+  e 249 entradas do manifesto evidencia divergência de universos. O `_site`
+  preexistente não certifica a nova revisão. O aceite usará build limpo e
+  reconciliação independente do artefato final.
+- Pacote efetivamente publicado recuperado de
+  [Actions 34314143158](https://github.com/tjsasakifln/web-cfg/actions/runs/34314143158),
+  artifact `10089970459`: checksum SHA-256 e atestação Sigstore conferidos.
+  O pacote contém **255 HTML**, dos quais **249 index.html**. Inventário
+  independente obtido por SSH somente leitura em
+  `/opt/confenge-web/current/_site`: **551 HTML**. A diferença decorre da
+  transformação autorizada de oportunidades no stage; os dois universos
+  serão reconciliados com seus respectivos retratos, sem chamar o pacote
+  anterior ou o manifesto-fonte de inventário completo do servidor.
+- Acesso de leitura ao host e executável de rollback confirmado. `current`
+  aponta para `54b51438…`; `rollback` aponta para
+  `c173461ccbcf93878c6ab59482e4ec4bb537a418`. Nenhuma promoção, reversão,
+  alteração de permissões ou edição manual em produção foi feita no preflight.
+
+Revogações em execução (contraprovas e HTML final completados no artefato de CI):
+
+| Regra anterior | Defeito imposto | Proteção mantida | Substituição e origem |
+| --- | --- | --- | --- |
+| Preço exige um formulário de captura persistida | Impede preço verdadeiro com contato direto; induz ocultação de preço | Autorização de valor, condições, privacidade, recibo verdadeiro | AGENTS, ADR-STRAT-004, contratos corporativos/comerciais, registro de famílias e `inbound_gates.py`: contato contextual verificável; formulários ativos mantêm todo o contrato |
+| Home/chrome B2G até integração exclusiva MV-09 | Preserva categoria corporativa estreita e congela correção autorizada | Especialização pública, URLs úteis, autoridade operacional dos owners | ADR-STRAT-002/004, constituição, taxonomia e matriz: projetos/serviços públicos e privados por necessidade |
+| Prova exige ausência explícita | Faz do inventário de ausências a apresentação pública | Toda alegação precisa de fundamento verdadeiro | Contrato público de serviço: competência, método e exemplos atribuídos corretamente |
+| Scanner indexável, fonte e descarte de aria-hidden/inert | Certifica sem ler páginas públicas noindex e texto ainda visível | Separação de material interno, histórico e transcrição | Escopo do scanner e gate sobre pacote construído, com inventário independente e defeitos semeados |
+
+Os hashes dos contratos locais modificados são recalculados a partir do JSON
+canônico e fixados no consumer-pin desta campanha por esta decisão comercial;
+isso não concede aprovação externa, não muda pins de Governance nem apaga
+verificações de integridade. Dados, datas de consulta e autorizações financeiras
+externas conservam sua autoridade original.
+
 ## Universo auditado
 
 378 rotas no sitemap servido: 74 autorais + ~22 artigos editoriais + ~280

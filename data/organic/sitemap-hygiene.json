@@ -1,6 +1,12 @@
 {
-  "ok": true,
-  "issues": [],
+  "ok": false,
+  "issues": [
+    {
+      "severity": "high",
+      "code": "indexable_missing_from_sitemap",
+      "url": "/inteligencia/valor-tipico-contratos-pavimentacao/"
+    }
+  ],
   "url_count": 78,
   "unique_paths": 78,
   "locs": [
@@ -99,7 +105,7 @@
     "https://confenge.com.br/sitemap-index.xml"
   ],
   "broken": 0,
-  "orphan_indexable": 0,
+  "orphan_indexable": 1,
   "noindex_in_sitemap": 0,
   "market_answer_indexable": false,
   "market_answer_in_graph": false

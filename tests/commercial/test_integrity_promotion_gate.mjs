@@ -159,7 +159,7 @@ assert("publication_noindex", publication.individual_result_noindex === true && 
 assert("publication_no_distribution", publication.individual_result_in_sitemap === false && publication.individual_result_in_internal_links === false, publication);
 assert("publication_no_cnpj", publication.cnpj_in_public_artifacts === false && publication.cnpj_in_analytics === false && publication.cnpj_in_urls === false, publication);
 assert("publication_no_pii", publication.pii_in_analytics === false, publication);
-assert("publication_capture", publication.price_route_requires_lead_capture === true, publication);
+assert("publication_contextual_contact", publication.price_route_requires_contextual_contact === true, publication);
 
 const downstream = data.downstream_blocks ?? [];
 assert("downstream_two", downstream.length === 2, downstream);

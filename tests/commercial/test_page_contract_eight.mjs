@@ -57,7 +57,20 @@ function nonEmptyList(v) {
 }
 
 function publicCopy(value) {
-  return contract.public_copy_overrides?.[value] || value;
+  return String(contract.public_copy_overrides?.[value] || value)
+    .replace(/\bFACT\b/g, "FATO")
+    .replace(/\bCALCULATION\b/g, "CÁLCULO")
+    .replace(/\bINFERENCE\b/g, "INFERÊNCIA")
+    .replace(/\bUNKNOWN\b/g, "DESCONHECIDO")
+    .replace(/\binputs válidos\b/gi, "informações necessárias confirmadas")
+    .replace(/\binputs\b/gi, "informações necessárias")
+    .replace(/\bchecks\b/gi, "conferências")
+    .replace(/\bgates\b/gi, "condições")
+    .replace(/\bgate\b/gi, "condição")
+    .replace(/\bartefato\b/gi, "documento")
+    .replace(/\bextra-cli\b/gi, "fonte versionada de dados públicos")
+    .replace(/\bDataLake\b/gi, "base paralela de dados")
+    .replace(/\s*\(CFG-D\d{2}\)/g, "");
 }
 
 // ---------------------------------------------------------------- 0. tipografia
@@ -252,8 +265,9 @@ for (const d of dels) {
     ["saida", d.saida_minima],
     ["sla", d.sla.text],
   ]) {
-    assert(`pagina_imprime_${field}_${n}`, pageText.includes(value), `${field} ausente em ${d.file}`);
-    assert(`hub_imprime_${field}_${n}`, hubText.includes(value), `${field} ausente no hub`);
+    const visibleValue = publicCopy(value);
+    assert(`pagina_imprime_${field}_${n}`, pageText.includes(visibleValue), `${field} ausente em ${d.file}`);
+    assert(`hub_imprime_${field}_${n}`, hubText.includes(visibleValue), `${field} ausente no hub`);
   }
   for (const [field, value] of [
     ["valor_contratual", d.value_first.actual_contract_value],
@@ -262,8 +276,9 @@ for (const d of dels) {
     ["ancora_preco", d.value_first.price_anchor],
     ["prova_positiva", d.value_first.proof_statement],
   ]) {
-    assert(`pagina_imprime_${field}_${n}`, pageText.includes(value), `${field} ausente em ${d.file}`);
-    assert(`hub_imprime_${field}_${n}`, hubText.includes(value), `${field} ausente no hub`);
+    const visibleValue = publicCopy(value);
+    assert(`pagina_imprime_${field}_${n}`, pageText.includes(visibleValue), `${field} ausente em ${d.file}`);
+    assert(`hub_imprime_${field}_${n}`, hubText.includes(visibleValue), `${field} ausente no hub`);
   }
   assert(`hub_cta_util_inspecao_${n}`, hubText.includes(d.value_first.cta_inspect), d.value_first.cta_inspect);
   assert(`hub_cta_util_configuracao_${n}`, hubText.includes(d.value_first.cta_configure), d.value_first.cta_configure);
@@ -400,8 +415,8 @@ assert("campos_da_primeira_venda",
   JSON.stringify(nd.first_sale_fields) === JSON.stringify(["horas", "retrabalho", "margem", "outcome"]),
   nd.first_sale_fields);
 assert("sla_visivel_nas_rotas",
-  nd.sla_visible_on_route_pages === "DONE" && dels.every((d) => textOf(d.file).includes(d.sla.text)),
-  "SLA ausente em alguma rota");
+  nd.sla_visible_on_route_pages === "DONE" && dels.every((d) => textOf(d.file).includes(publicCopy(d.sla.text))),
+  "prazo ausente em alguma rota");
 assert("implementacao_publica_declarada",
   contract.public_implementation?.route_pages === 8 &&
     contract.public_implementation?.hub_route === "/entregas/" &&

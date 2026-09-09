@@ -35,7 +35,7 @@
     "pilot_prices_do_not_change_other_items": true,
     "capacity_gate_required_in_family": true,
     "automatic_checkout_anywhere_in_family": false,
-    "lead_capture_required_where_price_is_displayed": true,
+    "contextual_contact_required_where_price_is_displayed": true,
     "no_data_or_identity_originates_in_web_cfg": true,
     "truth_and_provenance_remain_in": "extra-cli",
     "no_success_fee": true,

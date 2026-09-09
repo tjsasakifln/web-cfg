@@ -527,7 +527,7 @@ assert(
 /* ------------------------------------------------------------------ */
 
 const cg = data.conversion_gate ?? {};
-assert("conversion_every_priced_route_captures_lead", cg.every_priced_route_captures_lead === true, cg);
+assert("conversion_every_priced_route_has_contextual_contact", cg.every_priced_route_has_contextual_contact === true, cg);
 assert("conversion_lead_destination_is_warmbly", cg.lead_destination === "warmbly:CONFENGE_WEB", cg.lead_destination);
 assert(
   "conversion_gate_owner_issues_88_300_327",
