@@ -27,6 +27,8 @@
 .deliverables-next h2{margin:0 0 14px;color:#fff;font-size:clamp(2.15rem,3.8vw,3.8rem)}
 .deliverables-next p:not(.eyebrow){max-width:680px;margin:0;color:#c1ccd6;line-height:1.7}
 .deliverables-hero-actions{display:flex;align-items:center;flex-wrap:wrap;gap:14px 22px}
+.deliverables-example-nav{padding:24px 0;background:#fff;border-bottom:1px solid var(--line)}
+.deliverables-example-nav .offer-decision-nav{margin:0}
 .deliverables-page .pillar-capture-grid,.deliverables-page .pillar-capture-form,.deliverables-page .pillar-capture-form label{min-width:0}
 .deliverables-page .pillar-capture-form select{box-sizing:border-box;display:block;width:100%;max-width:100%;min-width:0;padding:12px 14px;color:var(--text);background:#fff;border:1px solid #a9b6b0;border-radius:8px;font:inherit}
 .deliverables-page .pillar-capture-form select:focus{outline:2px solid transparent;outline-offset:2px;box-shadow:var(--focus-ring);border-color:var(--green)}
@@ -111,18 +113,6 @@
 .capability-group__body{padding:0 16px 16px}
 .capability-group__body>p{margin:0 0 12px;padding:12px 0;color:#435369;border-top:1px solid #d8e0e6;font-size:.82rem;line-height:1.5}
 .capability-group ol{margin:0;padding:0;list-style:none;border-top:1px solid #d8e0e6}
-.capability-item{display:grid;grid-template-columns:42px minmax(0,1fr) minmax(220px,.52fr);column-gap:14px;row-gap:0;align-items:center;padding:12px 0;border-bottom:1px solid #d8e0e6}
-.capability-item__number{grid-column:1;grid-row:1/3;color:var(--green-700);font-family:var(--mono);font-size:.7rem;font-weight:850}
-.capability-item>strong,.capability-item>small,.capability-item__maturity strong,.capability-item__maturity small{display:block}
-.capability-item>strong{grid-column:2;grid-row:1;align-self:end;color:var(--ink);font-size:.86rem;line-height:1.35}
-.capability-item>small{grid-column:2;grid-row:2;align-self:start;margin-top:3px;color:#536477;font-size:.72rem;line-height:1.45}
-.capability-item__maturity{grid-column:3;grid-row:1/3;padding-left:14px;border-left:3px solid #9baab4}
-.capability-item__maturity strong{color:#34465a;font-family:var(--mono);font-size:max(var(--text-micro),12.8px);text-transform:uppercase}
-.capability-item__maturity small{margin-top:2px;color:#657284;font-size:.68rem;line-height:1.4}
-.capability-item__maturity a{display:inline-block;min-height:44px;margin-top:4px;padding-top:11px;color:var(--green-700);font-size:.72rem;font-weight:800}
-.capability-item--published .capability-item__maturity{border-left-color:var(--green-700)}
-.capability-item--validate .capability-item__maturity{border-left-color:#9b7b31}
-.capability-item--blocked .capability-item__maturity{border-left-color:#8b3e32}
 @media(max-width:900px){
   .deliverables-vitrine__intro,.capability-roll__intro{grid-template-columns:1fr;align-items:start}
   .offer-decision-nav ol{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -130,8 +120,6 @@
   .vitrine-item__facts{grid-template-columns:repeat(2,minmax(0,1fr))}
   .capability-group>summary{grid-template-columns:42px minmax(0,1fr)}
   .capability-group>summary>small{grid-column:2;text-align:left}
-  .capability-item{grid-template-columns:42px minmax(0,1fr)}
-  .capability-item__maturity{grid-column:2;grid-row:3;margin-top:12px}
 }
 @media(max-width:620px){
   .deliverables-hero{padding:20px 0 18px}
@@ -142,26 +130,29 @@
      de 12.500px por documento da #468 e um limite real. Estes quatro ajustes
      devolvem a altura no espaco entre blocos,sem tirar nenhum fato da pagina. */
   .deliverables-lead{margin-bottom:18px}
-  .deliverables-hero-copy .offer-proof-line{margin-top:10px;margin-bottom:14px}
+  .deliverables-hero-copy .offer-proof-line{margin-top:10px;margin-bottom:12px}
   .deliverables-status ul{gap:8px;margin-bottom:12px;padding:12px 0}
   .deliverables-status>p{margin-bottom:6px}
   .deliverables-vitrine,.capability-roll{padding:20px 0 24px}
+  .deliverables-example-nav{padding:16px 0}
   .deliverables-vitrine__intro h2,.capability-roll__intro h2{font-size:2rem}
   .offer-decision-nav{padding:14px}
   .offer-decision-nav ol{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
   .published-offers__common{padding:18px;gap:16px}
-  .vitrine-items{gap:8px}
-  .vitrine-item{padding:12px}
+  .vitrine-items{gap:6px}
+  .vitrine-item{padding:11px}
   .vitrine-item__head{grid-template-columns:minmax(0,1fr) auto;gap:8px 12px}
   .vitrine-item__head h2{font-size:1.28rem}
   .vitrine-item__price strong{font-size:1.08rem}
   .vitrine-item__facts{display:block}
-  .vitrine-item__facts>div{display:grid;grid-template-columns:78px minmax(0,1fr);gap:7px;padding:4px 8px}
+  .vitrine-item__facts>div{display:grid;grid-template-columns:78px minmax(0,1fr);gap:7px;padding:3px 8px}
   .vitrine-item__facts dt{font-size:max(var(--text-micro),12.8px)}
   .vitrine-item__facts dd{margin:0;font-size:.74rem;line-height:1.35}
   .vitrine-item__actions{align-items:center}
   .vitrine-item__actions .button{font-size:max(var(--text-small),14px)}
   .vitrine-item__actions .text-link{min-height:44px}
+  .vitrine-item__credit{margin-bottom:16px;padding:10px 12px}
+  .catalog-publication-dates{margin-bottom:10px}
   .compare-ladder-figures{grid-template-columns:repeat(3,minmax(0,1fr));margin-top:20px}
   .compare-ladder-figures>div{padding:14px 0}
   .compare-ladder-figures>div+div{padding-left:8px;border-left:1px solid #cbd4dc}
@@ -169,8 +160,6 @@
   .compare-ladder-figures dd{font-size:.86rem}
   .capability-group>summary{padding:10px 12px}
   .capability-group__body{padding:0 12px 12px}
-  .capability-item{column-gap:10px;row-gap:0;padding:12px 0}
-  .capability-item__maturity{padding-left:10px;margin-top:10px}
   .deliverables-next{padding:32px 0}
   .deliverables-next h2{font-size:1.6rem}
   .deliverables-page .pillar-capture{padding:20px 0}

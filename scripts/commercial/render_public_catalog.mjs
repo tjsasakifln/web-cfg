@@ -422,20 +422,27 @@ function renderOfferLadder(contract) {
 </section>`;
 }
 
+function renderDecisionNav(published) {
+  const decisions = published.map((entry) =>
+    `<li><a aria-label="${escapeHtml(entry.decision_question)}" href="#entrega-${entry.catalog_number}"><span>${entry.catalog_number}</span>${escapeHtml(VITRINE_DECISION_NAV[entry.catalog_number])}</a></li>`,
+  ).join("");
+  return `<section class="deliverables-example-nav" aria-labelledby="examples-nav-title">
+<div class="container">
+<nav class="offer-decision-nav" aria-label="Escolher exemplo de obras públicas pela decisão"><p id="examples-nav-title">Exemplos de obras públicas — dados sintéticos</p><ol>${decisions}</ol></nav>
+</div>
+</section>`;
+}
+
 function renderOfferShowcase(published, eightContract) {
   const contractById = new Map(
     eightContract.deliverables.map((entry) => [entry.deliverable_id, entry]),
   );
-  const decisions = published.map((entry) =>
-    `<li><a aria-label="${escapeHtml(entry.decision_question)}" href="#entrega-${entry.catalog_number}"><span>${entry.catalog_number}</span>${escapeHtml(VITRINE_DECISION_NAV[entry.catalog_number])}</a></li>`,
-  ).join("");
   const commonBoundaries = eightContract.common_boundaries
     .map((value) => eightContractCopy(eightContract, value));
   const commonInputs = eightContract.common_inputs.map((value) => publicText(value));
   return `<section class="deliverables-vitrine" id="enquadrar" data-section-archetype="catalog_index" aria-labelledby="catalog-title">
 <div class="container">
 <header class="deliverables-vitrine__intro"><p class="eyebrow">Ofertas com preço publicado</p><h2 id="catalog-title">Oito análises para licitações e mercado de obras públicas.</h2><p>Cada oferta reúne a situação atendida, o trabalho incluído, as informações necessárias, o conteúdo entregue, o preço, o prazo e a próxima ação. Os demais serviços de engenharia seguem por proposta porque variam com disciplina, fase, documentos e responsabilidade.</p></header>
-<nav class="offer-decision-nav" aria-label="Escolher oferta pela decisão"><p>Qual pergunta está na mesa?</p><ol>${decisions}</ol></nav>
 <div class="vitrine-items">${published.map((entry) => vitrineCard(entry, contractById.get(entry.deliverable_id))).join("\n")}</div>
 ${renderOfferLadder(eightContract)}
 <aside class="published-offers__common" aria-labelledby="published-common-title"><div><p class="eyebrow">Condições da análise</p><h3 id="published-common-title">O que vale para as oito ofertas</h3><p><strong>Informações comuns:</strong> ${renderInlineList(commonInputs)}. Cada oferta acrescenta o que precisa para começar.</p></div><div><h4>Limites comuns</h4><p>${renderInlineList(commonBoundaries)}. Cobertura, data de corte, método e o rótulo NÃO INFORMADO acompanham o resultado.</p></div></aside>
@@ -531,6 +538,7 @@ export function renderClientData(registry, executionContract) {
 export function renderCatalog(registry, taskDoors, eightContract) {
   const published = publishedVitrine(registry);
   return `${CATALOG_START}
+${renderDecisionNav(published)}
 ${renderServiceDeliveryOverview(registry)}
 ${renderOfferShowcase(published, eightContract)}
 ${CATALOG_END}`;
