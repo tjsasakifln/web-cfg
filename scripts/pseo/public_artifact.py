@@ -256,7 +256,12 @@ def _sha256_tree(base: Path) -> str:
     return content_tree_hash(base)
 
 
-def finalize_public_artifact(dest: Path) -> dict[str, Any]:
+def finalize_public_artifact(
+    dest: Path,
+    *,
+    commercial_media_source_root: Path | None = None,
+    require_commercial_media_assets: bool = False,
+) -> dict[str, Any]:
     """Apply the complete deterministic HTML/CSS transform used at publish time.
 
     This is deliberately shared with approval hashing: an INDEX approval is
@@ -286,6 +291,27 @@ def finalize_public_artifact(dest: Path) -> dict[str, Any]:
     from scripts.site.fingerprint_css import fingerprint_published_css
 
     css_assets = fingerprint_published_css(dest)
+    from scripts.site.version_commercial_media import (
+        SOURCE_MANIFEST as COMMERCIAL_MEDIA_SOURCE_MANIFEST,
+        version_commercial_media_references,
+    )
+
+    media_source_root = (commercial_media_source_root or ROOT).resolve()
+    media_contract_present = (media_source_root / COMMERCIAL_MEDIA_SOURCE_MANIFEST).is_file()
+    if not media_contract_present and media_source_root == ROOT.resolve():
+        raise FileNotFoundError(
+            f"commercial media source manifest is absent: {COMMERCIAL_MEDIA_SOURCE_MANIFEST}"
+        )
+    commercial_media = (
+        version_commercial_media_references(
+            Path(dest),
+            source_root=media_source_root,
+            require_published_assets=require_commercial_media_assets,
+            write_public_manifest=require_commercial_media_assets,
+        )
+        if media_contract_present
+        else {"applicable": False, "reason": "isolated_fixture_without_media_contract"}
+    )
     headers_path = Path(dest) / "_headers"
     if headers_path.is_file() and (Path(dest) / "index.html").is_file():
         from scripts.site.csp_contract import apply_artifact_csp_hashes
@@ -300,6 +326,7 @@ def finalize_public_artifact(dest: Path) -> dict[str, Any]:
         "promoted_navigation_files": promoted_navigation_files,
         "navigation_audit": navigation_audit,
         "css_assets": css_assets,
+        "commercial_media": commercial_media,
     }
 
 
@@ -427,10 +454,15 @@ def assemble_public_artifact(
     omitted_review_metadata = omit_production_review_packet(
         dest, os.environ.get("CONTEXT") or os.environ.get("NETLIFY_CONTEXT") or "local"
     )
-    finalized = finalize_public_artifact(dest)
+    finalized = finalize_public_artifact(
+        dest,
+        commercial_media_source_root=root,
+        require_commercial_media_assets=True,
+    )
     promoted_navigation_files = finalized["promoted_navigation_files"]
     navigation_audit = finalized["navigation_audit"]
     css_assets = finalized["css_assets"]
+    commercial_media = finalized["commercial_media"]
 
     artifact_hash = _sha256_tree(dest)
     inv = inventory_public_routes(root)
@@ -445,6 +477,7 @@ def assemble_public_artifact(
         "omitted_production_review_metadata": omitted_review_metadata,
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "css_assets": css_assets,
+        "commercial_media": commercial_media,
         "promoted_navigation_files": promoted_navigation_files,
         "navigation_audit": navigation_audit,
         "scrubbed_html_files": finalized["scrubbed_html_files"],
@@ -619,6 +652,11 @@ def audit_public_artifact(
         ".well-known/pseo-build.json",
         ".well-known/css-assets.json",
     ]
+    from scripts.site.version_commercial_media import SOURCE_MANIFEST as COMMERCIAL_MEDIA_SOURCE_MANIFEST
+
+    media_contract_present = (root.resolve() / COMMERCIAL_MEDIA_SOURCE_MANIFEST).is_file()
+    if media_contract_present:
+        required.append(".well-known/commercial-media-assets.json")
     for req in required:
         if not (dest / req).exists():
             findings.append(
@@ -637,6 +675,19 @@ def audit_public_artifact(
         validate_css_asset_manifest,
     )
     from scripts.site.structured_identity import audit_html as audit_structured_identity_html
+    from scripts.site.version_commercial_media import validate_commercial_media_versioning
+
+    if media_contract_present:
+        try:
+            validate_commercial_media_versioning(dest, source_root=root)
+        except (FileNotFoundError, ValueError) as exc:
+            findings.append(
+                {
+                    "code": "invalid_commercial_media_versioning",
+                    "path": ".well-known/commercial-media-assets.json",
+                    "detail": str(exc),
+                }
+            )
 
     manifest_hrefs: set[str] = set()
     manifest_valid = False

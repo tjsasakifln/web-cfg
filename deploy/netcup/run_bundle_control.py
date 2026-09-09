@@ -32,7 +32,7 @@ def validate_checkout(sha: str) -> None:
         raise ValueError("release controller checkout is not clean")
 
 
-def verified_controller(directory: Path, sha: str) -> tuple[bytes, str]:
+def verified_controller(directory: Path, sha: str) -> tuple[bytes, str, str]:
     spec = importlib.util.spec_from_file_location("bundle_release_control", CONTROL)
     control = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(control)
@@ -53,15 +53,19 @@ def verified_controller(directory: Path, sha: str) -> tuple[bytes, str]:
     if code != CONTROL.read_bytes():
         raise ValueError("bundle controller differs from exact gated checkout")
     print(f"NETCUP_CONTROL_VERIFIED sha={sha} bundle={manifest['artifact']['sha256']} controller={digest}", flush=True)
-    return code, digest
+    return code, digest, manifest["artifact"]["sha256"]
 
 
 def remote_command(operation: str, sha: str, digest: str, upload_dir: str | None = None,
-                   expected_current: str | None = None) -> str:
+                   expected_current: str | None = None, *, artifact_sha256: str,
+                   controller_sha: str | None = None) -> str:
     if operation not in {"stage", "verify", "promote", "rollback", "inventory"}:
         raise ValueError("unsupported controller operation")
     if not re.fullmatch(r"[0-9a-f]{40}", sha) or not re.fullmatch(r"[0-9a-f]{64}", digest):
         raise ValueError("invalid controller identity")
+    controller_sha = controller_sha or sha
+    if not re.fullmatch(r"[0-9a-f]{40}", controller_sha) or not re.fullmatch(r"[0-9a-f]{64}", artifact_sha256):
+        raise ValueError("invalid verified bundle identity")
     if upload_dir is not None and (operation != "stage" or not re.fullmatch(
         rf"/opt/confenge-web/incoming/\.upload-{sha}-[0-9]+-[0-9]+", upload_dir
     )):
@@ -72,6 +76,8 @@ def remote_command(operation: str, sha: str, digest: str, upload_dir: str | None
         "actual=hashlib.sha256(code).hexdigest();"
         "hmac.compare_digest(actual,expected) or sys.exit('controller transport digest mismatch');"
         "os.environ['CONFENGE_RELEASE_CONTROL_SHA256']=actual;"
+        f"os.environ['CONFENGE_EXPECTED_RELEASE_SHA']={controller_sha!r};"
+        f"os.environ['CONFENGE_EXPECTED_RELEASE_ARTIFACT_SHA256']={artifact_sha256!r};"
         "exec(compile(code,'<verified-release-bundle-controller>','exec'))"
     )
     argv = ["env", "PYTHONDONTWRITEBYTECODE=1", "CONFENGE_LOCAL_ORIGIN=http://127.0.0.1:8088",
@@ -81,6 +87,10 @@ def remote_command(operation: str, sha: str, digest: str, upload_dir: str | None
     if operation == "promote":
         if expected_current != "NONE" and not re.fullmatch(r"[0-9a-f]{40}", expected_current or ""):
             raise ValueError("promotion requires the predecessor observed before stage")
+        argv += ["--expected-current", expected_current]
+    elif operation == "rollback" and expected_current is not None:
+        if not re.fullmatch(r"[0-9a-f]{40}", expected_current):
+            raise ValueError("compensating rollback requires the exact failed release SHA")
         argv += ["--expected-current", expected_current]
     return shlex.join(argv)
 
@@ -100,11 +110,12 @@ def main() -> None:
     if not re.fullmatch(r"[a-z_][a-z0-9_-]*@[A-Za-z0-9.:-]+", args.target):
         parser.error("invalid pinned SSH target")
     validate_checkout(args.sha)
-    code, digest = verified_controller(args.bundle_directory, args.sha)
+    code, digest, artifact_digest = verified_controller(args.bundle_directory, args.sha)
     if args.rollback_target and args.operation != "rollback":
         parser.error("rollback target only applies to rollback")
     command = remote_command(args.operation, args.rollback_target or args.sha, digest,
-                             args.upload_dir, args.expected_current)
+                             args.upload_dir, args.expected_current,
+                             artifact_sha256=artifact_digest, controller_sha=args.sha)
     if args.output and args.operation != "inventory":
         parser.error("output capture only applies to read-only inventory")
     result = subprocess.run(["ssh", *args.ssh_option, args.target, command], input=code,

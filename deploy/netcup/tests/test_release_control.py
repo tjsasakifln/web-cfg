@@ -25,14 +25,19 @@ REPO_ROOT = Path(__file__).resolve().parents[3]
 
 
 def test_live_intel_overlay_paths_are_explicit() -> None:
-    assert control.is_live_intel_overlay("_site/oportunidades/abc/index.html")
+    assert not control.is_live_intel_overlay("_site/oportunidades/abc/index.html")
     assert control.is_live_intel_overlay("_site/sitemap-oportunidades.xml")
     assert control.is_live_intel_overlay("_site/sitemap-index.xml")
     assert control.is_live_intel_overlay("_site/ferramentas/index.html")
-    assert control.is_live_intel_overlay("data/live_intelligence/official/manifest.json")
+    assert control.is_live_intel_overlay(
+        "data/live_intelligence/accepted/opportunities.json"
+    )
+    assert not control.is_live_intel_overlay(
+        "data/live_intelligence/official/manifest.json"
+    )
     assert not control.is_live_intel_overlay("_site/index.html")
     assert not control.is_live_intel_overlay("netlify/functions/lead.cjs")
-    assert control.is_live_intel_withdrawal(
+    assert not control.is_live_intel_withdrawal(
         "_site/oportunidades/pe-2026-000188-reforma-ubs-londrina-pr/index.html"
     )
     assert control.is_live_intel_withdrawal("_site/sitemap-oportunidades.xml")
@@ -69,6 +74,10 @@ def make_site(tmp_path: Path, sha: str) -> Path:
     manifest_hash = sha256_file(REPO_ROOT / "deploy" / "netcup" / "package_release.py")
     (site / "index.html").write_text(
         "<!doctype html><html lang='pt-BR'><body>CONFENGE</body></html>\n",
+        encoding="utf-8",
+    )
+    (site / "404.html").write_text(
+        "<!doctype html><html lang='pt-BR'><body>Página não encontrada</body></html>\n",
         encoding="utf-8",
     )
     identity = {
@@ -371,13 +380,64 @@ def test_sha_mismatch_is_rejected(host: Path, tmp_path: Path) -> None:
         control.stage_release(SHA_A)
 
 
+def test_expected_artifact_binding_applies_only_to_the_candidate_sha(
+    host: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    incoming = make_incoming(tmp_path, host, SHA_A)
+    actual = control.sha256_file(incoming["artifact"])
+    wrong = "0" * 64 if actual != "0" * 64 else "1" * 64
+
+    # A candidate verified by the local runner must be the same bundle received
+    # by the host, even though its own envelope is internally self-consistent.
+    monkeypatch.setenv("CONFENGE_EXPECTED_RELEASE_SHA", SHA_A)
+    monkeypatch.setenv("CONFENGE_EXPECTED_RELEASE_ARTIFACT_SHA256", wrong)
+    with pytest.raises(control.ReleaseError, match="locally verified release artifact"):
+        control.validate_incoming(host, SHA_A)
+
+    # The candidate binding must not be misapplied to an older rollback target.
+    monkeypatch.setenv("CONFENGE_EXPECTED_RELEASE_SHA", SHA_B)
+    package, _ = control.validate_incoming(host, SHA_A)
+    assert package == incoming["artifact"]
+
+
+def test_release_verification_binds_the_stored_files_manifest_to_the_package(
+    host: Path, tmp_path: Path
+) -> None:
+    make_incoming(tmp_path, host, SHA_A)
+    control.stage_release(SHA_A)
+    release = host / "releases" / SHA_A
+    page = release / "_site/index.html"
+    page.write_text("<main>tampered after extraction</main>\n", encoding="utf-8")
+    files_manifest = release / "metadata/files.sha256"
+    rewritten = []
+    for line in files_manifest.read_text(encoding="utf-8").splitlines():
+        if line.endswith("  _site/index.html"):
+            line = f"{control.sha256_file(page)}  _site/index.html"
+        rewritten.append(line)
+    files_manifest.write_text("\n".join(rewritten) + "\n", encoding="utf-8")
+
+    # Re-hashing both the modified body and its mutable local ledger used to
+    # satisfy tree verification. The uploaded tar member is now the authority.
+    assert control.verify_release_tree(host, SHA_A)["commit"] == SHA_A
+    with pytest.raises(
+        control.ReleaseError,
+        match="stored metadata/files.sha256 differs from the immutable incoming package",
+    ):
+        control.verify_release_envelope_and_tree(host, SHA_A)
+    with pytest.raises(
+        control.ReleaseError,
+        match="stored metadata/files.sha256 differs from the immutable incoming package",
+    ):
+        control.stage_release(SHA_A)
+
+
 def test_promote_is_atomic_and_live_identity_matches(
     host: Path, tmp_path: Path
 ) -> None:
     make_incoming(tmp_path, host, SHA_A)
     control.stage_release(SHA_A)
     with LiveServer(host):
-        control.promote_release(SHA_A)
+        control.promote_release(SHA_A, None)
         assert (host / "current").is_symlink()
         assert control.read_release_link(host, "current") == SHA_A
         with urllib.request.urlopen(
@@ -392,7 +452,183 @@ def test_concurrent_promote_is_refused_by_host_lock(host: Path) -> None:
         control.deploy_lock(host),
         pytest.raises(control.ReleaseError, match="deploy lock busy"),
     ):
-        control.promote_release(SHA_A)
+        control.promote_release(SHA_A, None)
+
+
+def test_promote_rejects_a_stale_authorized_predecessor(
+    host: Path, tmp_path: Path
+) -> None:
+    make_incoming(tmp_path, host, SHA_A)
+    make_incoming(tmp_path, host, SHA_B)
+    control.stage_release(SHA_A)
+    control.stage_release(SHA_B)
+    with LiveServer(host):
+        control.promote_release(SHA_A, None)
+        with pytest.raises(control.ReleaseError, match="changed since authorization"):
+            control.promote_release(SHA_B, None)
+    assert control.read_release_link(host, "current") == SHA_A
+
+
+def test_served_inventory_requires_current_and_rejects_post_stage_injection(
+    host: Path, tmp_path: Path
+) -> None:
+    make_incoming(tmp_path, host, SHA_A)
+    control.stage_release(SHA_A)
+    with pytest.raises(control.ReleaseError, match="current release mismatch"):
+        control.served_html_inventory(SHA_A)
+    with LiveServer(host):
+        control.promote_release(SHA_A, None)
+        inventory = control.served_html_inventory(SHA_A)
+        assert inventory["schema"] == "confenge.served-html-inventory/v1"
+        assert inventory["release_sha"] == SHA_A
+        assert inventory["html_sha256"]["index.html"] == control.sha256_file(
+            host / "releases" / SHA_A / "_site/index.html"
+        )
+        assert inventory["http_dispositions"]["index.html"] == {
+            "request_path": "/",
+            "status": 200,
+            "location": None,
+            "final_status": 200,
+            "effective_html_path": "index.html",
+            "sha256": inventory["html_sha256"]["index.html"],
+        }
+        assert inventory["build_info"]["commit"] == SHA_A
+        rogue = (
+            host
+            / "releases"
+            / SHA_A
+            / "_site/oportunidades/nao-aceita-pelo-produtor/index.html"
+        )
+        rogue.parent.mkdir(parents=True)
+        rogue.write_text("<main>injetada</main>\n", encoding="utf-8")
+        with pytest.raises(control.ReleaseError, match="file set mismatch"):
+            control.served_html_inventory(SHA_A)
+
+
+def test_served_inventory_resolves_contract_redirects_and_gone_without_route_allowlist(
+    host: Path, tmp_path: Path
+) -> None:
+    site = make_site(tmp_path, SHA_A)
+    contract_dir = make_host_contract(tmp_path)
+    contract = json.loads(
+        (contract_dir / "contract.normalized.json").read_text(encoding="utf-8")
+    )
+    aliases = [
+        rule
+        for rule in contract["routes"]
+        if rule["from"]["kind"] == "path"
+        and rule["from"]["match"] == "exact"
+        and rule["action"] == "redirect"
+        and rule["force"] is True
+        and rule["status"] in {301, 302}
+        and rule["to"]["absolute"] is False
+        and ":splat" not in rule["to"]["pathname"]
+        and rule["to"]["fragment"] is None
+    ][:2]
+    gone = next(
+        rule
+        for rule in contract["routes"]
+        if rule["from"]["kind"] == "path"
+        and rule["from"]["match"] == "exact"
+        and rule["action"] == "gone"
+        and not rule["from"]["path"].endswith(".html")
+    )
+    assert len(aliases) == 2
+
+    def html_rel(path: str) -> str:
+        clean = path.lstrip("/")
+        return clean if clean.endswith(".html") else f"{clean.rstrip('/')}/index.html"
+
+    for index, rule in enumerate(aliases):
+        for role, path in (
+            ("alias", rule["from"]["path"]),
+            ("destination", rule["to"]["pathname"]),
+        ):
+            target = site / html_rel(path)
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_text(
+                f"<main>{role}-{index}</main>\n", encoding="utf-8"
+            )
+    gone_html = site / html_rel(gone["from"]["path"])
+    gone_html.parent.mkdir(parents=True, exist_ok=True)
+    gone_html.write_text("<main>must-not-be-served</main>\n", encoding="utf-8")
+    (site / "404.html").write_text("<main>gone</main>\n", encoding="utf-8")
+
+    output = tmp_path / "package-http-dispositions"
+    package = build_release(
+        repo_root=REPO_ROOT,
+        site=site,
+        host_contract=contract_dir,
+        output_dir=output,
+        sha=SHA_A,
+        node_version="v22.19.0",
+        python_version="3.12.10",
+        ci_run_id="1234",
+        ci_run_url="https://github.com/tjsasakifln/web-cfg/actions/runs/1234",
+        source_date_epoch=1787756400,
+    )
+    incoming = host / "incoming" / SHA_A
+    incoming.mkdir(parents=True)
+    for path in package.values():
+        shutil.copy2(path, incoming / path.name)
+    control.stage_release(SHA_A)
+    with LiveServer(host):
+        control.promote_release(SHA_A, None)
+        inventory = control.served_html_inventory(SHA_A)
+
+    for rule in aliases:
+        source_rel = html_rel(rule["from"]["path"])
+        destination_rel = html_rel(rule["to"]["pathname"])
+        disposition = inventory["http_dispositions"][source_rel]
+        assert disposition["status"] == rule["status"]
+        assert disposition["location"] == rule["to"]["raw"]
+        assert disposition["final_status"] == 200
+        assert disposition["effective_html_path"] == destination_rel
+        assert disposition["sha256"] == inventory["html_sha256"][destination_rel]
+    gone_disposition = inventory["http_dispositions"][html_rel(gone["from"]["path"])]
+    assert gone_disposition == {
+        "request_path": control._html_request_path(html_rel(gone["from"]["path"])),
+        "status": 410,
+        "location": None,
+        "final_status": 410,
+        "effective_html_path": "404.html",
+        "sha256": inventory["html_sha256"]["404.html"],
+    }
+    assert inventory["contract_probes"][gone["from"]["path"]] == {
+        "request_path": gone["from"]["path"],
+        "status": 410,
+        "location": None,
+        "final_status": 410,
+        "effective_html_path": "404.html",
+        "sha256": inventory["html_sha256"]["404.html"],
+        "rule_order": gone["order"],
+        "match": "exact",
+    }
+
+    # Contract-only withdrawn URLs remain observable even when no corresponding
+    # HTML exists in the candidate. They are probes, not served-page inventory.
+    absent_gone = next(
+        rule
+        for rule in contract["routes"]
+        if rule["from"]["kind"] == "path"
+        and rule["from"]["match"] == "exact"
+        and rule["action"] == "gone"
+        and control._html_for_request(site, rule["from"]["path"]) is None
+    )
+    absent_path = absent_gone["from"]["path"]
+    assert absent_path not in {
+        value["request_path"] for value in inventory["http_dispositions"].values()
+    }
+    assert inventory["contract_probes"][absent_path]["status"] == 410
+    assert inventory["contract_probes"][absent_path]["sha256"] == inventory[
+        "html_sha256"
+    ]["404.html"]
+    assert any(
+        path.endswith("/__confenge_contract_probe__")
+        and probe["match"] == "prefix"
+        and probe["status"] == 410
+        for path, probe in inventory["contract_probes"].items()
+    )
 
 
 def test_rollback_and_previous_release_preserved(host: Path, tmp_path: Path) -> None:
@@ -401,13 +637,28 @@ def test_rollback_and_previous_release_preserved(host: Path, tmp_path: Path) -> 
     control.stage_release(SHA_A)
     control.stage_release(SHA_B)
     with LiveServer(host):
-        control.promote_release(SHA_A)
-        control.promote_release(SHA_B)
+        control.promote_release(SHA_A, None)
+        control.promote_release(SHA_B, SHA_A)
         assert (host / "releases" / SHA_A).is_dir()
         assert control.read_release_link(host, "rollback") == SHA_A
         control.rollback_release(SHA_A)
         assert control.read_release_link(host, "current") == SHA_A
         assert control.read_release_link(host, "rollback") == SHA_B
+
+
+def test_compensating_rollback_rejects_stale_candidate_without_swap(
+    host: Path, tmp_path: Path
+) -> None:
+    for index, sha in enumerate((SHA_A, SHA_B, SHA_C)):
+        make_incoming(tmp_path / str(index), host, sha)
+        control.stage_release(sha)
+    with LiveServer(host):
+        control.promote_release(SHA_A, None)
+        control.promote_release(SHA_B, SHA_A)
+        control.promote_release(SHA_C, SHA_B)
+        with pytest.raises(control.ReleaseError, match="changed since authorization"):
+            control.rollback_release(SHA_A, expected_current=SHA_B)
+    assert control.read_release_link(host, "current") == SHA_C
 
 
 def test_promote_rollback_and_idempotent_switch_always_reload_nginx(
@@ -424,10 +675,10 @@ def test_promote_rollback_and_idempotent_switch_always_reload_nginx(
 
     monkeypatch.setattr(control, "nginx_reload", reload_nginx)
     with LiveServer(host):
-        control.promote_release(SHA_A)
-        control.promote_release(SHA_B)
+        control.promote_release(SHA_A, None)
+        control.promote_release(SHA_B, SHA_A)
         control.rollback_release(SHA_A)
-        control.promote_release(SHA_A)
+        control.promote_release(SHA_A, SHA_A)
     assert reloads["n"] == 4
 
 
@@ -445,8 +696,8 @@ def test_prune_preserves_current_rollback_and_n_previous(
         control.stage_release(sha)
         os.utime(host / "releases" / sha, ns=(index + 1, index + 1))
     with LiveServer(host):
-        control.promote_release(shas[0])
-        control.promote_release(shas[1])
+        control.promote_release(shas[0], None)
+        control.promote_release(shas[1], shas[0])
     removed = control.prune_releases(keep=1)
     assert shas[1] not in removed
     assert shas[0] not in removed
@@ -462,7 +713,7 @@ def test_symlink_escape_is_rejected(host: Path, tmp_path: Path) -> None:
     (host / "outside").mkdir()
     (host / "current").symlink_to(host / "outside")
     with pytest.raises(control.ReleaseError, match="escapes"):
-        control.promote_release(SHA_A)
+        control.promote_release(SHA_A, None)
     assert (host / "current").resolve() == (host / "outside").resolve()
 
 
@@ -505,12 +756,56 @@ def test_failed_post_swap_check_restores_previous(
     control.stage_release(SHA_A)
     control.stage_release(SHA_B)
     with LiveServer(host):
-        control.promote_release(SHA_A)
+        control.promote_release(SHA_A, None)
         monkeypatch.setenv("CONFENGE_TEST_LIVE_FAIL_SHA", SHA_B)
         with pytest.raises(control.ReleaseError, match="previous release restored"):
-            control.promote_release(SHA_B)
+            control.promote_release(SHA_B, SHA_A)
         assert control.read_release_link(host, "current") == SHA_A
         control.smoke_live(SHA_A)
+
+
+def test_failed_switch_seals_and_restores_a_route_exact_legacy_overlay(
+    host: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from scripts.live_intelligence.test_consume import _write_539_candidate
+
+    make_incoming(tmp_path, host, SHA_A)
+    make_incoming(tmp_path, host, SHA_B)
+    control.stage_release(SHA_A)
+    control.stage_release(SHA_B)
+    release_a = host / "releases" / SHA_A
+    export = _write_539_candidate(tmp_path / "legacy-official", catalog_mode="official_live")
+    with LiveServer(host):
+        control.promote_release(SHA_A, None)
+        monkeypatch.delenv("CONFENGE_RELEASE_TEST_MODE", raising=False)
+        monkeypatch.setattr(control, "HOST_OFFICIAL_DIR", export)
+        control._publish_live_intelligence_overlay(release_a)
+        (release_a / control.LIVE_INTEL_OVERLAY_MANIFEST).unlink()
+        (release_a / control.LIVE_INTEL_PUBLIC_MANIFEST).unlink()
+        before = {
+            path.relative_to(release_a).as_posix(): control.sha256_file(path)
+            for path in release_a.rglob("*")
+            if path.is_file() and not control.is_release_ephemeral(
+                path.relative_to(release_a).as_posix()
+            )
+        }
+        monkeypatch.setenv("CONFENGE_RELEASE_TEST_MODE", "1")
+        monkeypatch.setenv("CONFENGE_TEST_LIVE_FAIL_SHA", SHA_B)
+        with pytest.raises(control.ReleaseError, match="previous release restored"):
+            control.promote_release(SHA_B, SHA_A)
+    assert control.read_release_link(host, "current") == SHA_A
+    after = {
+        path.relative_to(release_a).as_posix(): control.sha256_file(path)
+        for path in release_a.rglob("*")
+        if path.is_file() and not control.is_release_ephemeral(
+            path.relative_to(release_a).as_posix()
+        )
+    }
+    assert after == before, "legacy current release/docroot must remain byte-identical"
+    assert not (release_a / control.LIVE_INTEL_OVERLAY_MANIFEST).exists()
+    assert not (release_a / control.LIVE_INTEL_PUBLIC_MANIFEST).exists()
+    assert control._legacy_overlay_state_path(release_a, SHA_A).is_file()
+    assert control.verify_release_tree_at(release_a, SHA_A)["commit"] == SHA_A
 
 
 def test_failed_evidence_write_after_swap_restores_previous(
@@ -521,7 +816,7 @@ def test_failed_evidence_write_after_swap_restores_previous(
     control.stage_release(SHA_A)
     control.stage_release(SHA_B)
     with LiveServer(host):
-        control.promote_release(SHA_A)
+        control.promote_release(SHA_A, None)
         original_append = control.append_evidence
 
         def fail_promoted(root: Path, event: str, sha: str, **details: object) -> None:
@@ -531,7 +826,7 @@ def test_failed_evidence_write_after_swap_restores_previous(
 
         monkeypatch.setattr(control, "append_evidence", fail_promoted)
         with pytest.raises(control.ReleaseError, match="previous release restored"):
-            control.promote_release(SHA_B)
+            control.promote_release(SHA_B, SHA_A)
         assert control.read_release_link(host, "current") == SHA_A
         control.smoke_live(SHA_A)
 
@@ -621,19 +916,33 @@ def test_overlay_withdraws_fixtures_without_scripts_when_official_absent(
         / "index.html"
     )
     fixture.parent.mkdir(parents=True)
-    fixture.write_text("<html>fixture</html>\n", encoding="utf-8")
+    fixture.write_text(
+        '<html><body data-intel-surface="opportunity" '
+        'data-route-family="live-opportunity">fixture</body></html>\n',
+        encoding="utf-8",
+    )
     control._publish_live_intelligence_overlay(release)
     assert not fixture.exists()
     assert not (release / "_site" / "oportunidades").exists()
 
 
-def _stage_release_with_fixture_opportunity(host: Path, tmp_path: Path) -> Path:
+def _stage_release_with_fixture_opportunity(
+    host: Path, tmp_path: Path, *, rogue_child: bool = False
+) -> Path:
     site = make_site(tmp_path, SHA_A)
     fixture = (
         site / "oportunidades" / "pe-2026-000188-reforma-ubs-londrina-pr" / "index.html"
     )
     fixture.parent.mkdir(parents=True)
-    fixture.write_text("<html>fixture</html>\n", encoding="utf-8")
+    fixture.write_text(
+        '<html><body data-intel-surface="opportunity" '
+        'data-route-family="live-opportunity">fixture</body></html>\n',
+        encoding="utf-8",
+    )
+    if rogue_child:
+        rogue = site / "oportunidades/nao-gerenciada/index.html"
+        rogue.parent.mkdir(parents=True)
+        rogue.write_text("<main>página arbitrária</main>\n", encoding="utf-8")
     output = tmp_path / "package-withdraw"
     result = build_release(
         repo_root=REPO_ROOT,
@@ -653,6 +962,21 @@ def _stage_release_with_fixture_opportunity(host: Path, tmp_path: Path) -> Path:
         shutil.copy2(path, incoming / path.name)
     control.stage_release(SHA_A)
     return host / "releases" / SHA_A
+
+
+def test_overlay_cannot_seal_a_rogue_packaged_child_removal(
+    host: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    release = _stage_release_with_fixture_opportunity(
+        host, tmp_path, rogue_child=True
+    )
+    monkeypatch.delenv("CONFENGE_RELEASE_TEST_MODE", raising=False)
+    monkeypatch.delenv("CONFENGE_LI_OFFICIAL_DIR", raising=False)
+    monkeypatch.setattr(control, "HOST_OFFICIAL_DIR", tmp_path / "no-official")
+    with pytest.raises(
+        control.ReleaseError, match="publisher changed undeclared files"
+    ):
+        control._publish_live_intelligence_overlay(release)
 
 
 def test_overlay_withdraws_fixtures_when_official_absent(
@@ -705,6 +1029,94 @@ def test_overlay_prunes_fixture_and_writes_index_when_official_present(
     assert 'content="index,follow" name="robots"' in html
     assert "UNKNOWN" not in html
     assert "1M_10M" not in html
+    public_snapshot = control.load_json(
+        release / control.LIVE_INTEL_PUBLIC_MANIFEST
+    )
+    assert public_snapshot["schema"] == control.LIVE_INTEL_PUBLIC_SCHEMA
+    assert public_snapshot["release_sha"] == SHA_A
+    assert public_snapshot["manifest_hash"] == public_snapshot[
+        "consumer_observed_manifest_hash"
+    ]
+    assert public_snapshot["routes"] == [
+        {
+            "opportunity_id": "12345678000190-1/2026",
+            "route": "/oportunidades/12345678000190-1/2026/",
+            "html_path": "_site/oportunidades/12345678000190-1/2026/index.html",
+            "content_hash": public_snapshot["routes"][0]["content_hash"],
+            "sha256": control.sha256_file(index_page),
+        }
+    ]
+    assert control.verify_release_tree_at(release, SHA_A)["commit"] == SHA_A
+
+
+def test_stale_official_overlay_withdraws_records_and_keeps_truthful_hub(
+    host: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from scripts.live_intelligence import consume
+    from scripts.live_intelligence.test_consume import _write_539_candidate
+
+    def stale(manifest: dict) -> None:
+        manifest["source_as_of"] = "2026-01-01T00:00:00+00:00"
+        manifest["generated_at"] = "2026-08-01T00:00:00+00:00"
+        manifest["as_of"] = "2026-01-01"
+        manifest["freshness"] = {
+            **manifest["freshness"],
+            "source_as_of": manifest["source_as_of"],
+            "generated_at": manifest["generated_at"],
+        }
+        manifest["manifest_hash"] = consume.manifest_hash_of(manifest)
+
+    release = _stage_release_with_fixture_opportunity(host, tmp_path)
+    export = _write_539_candidate(
+        tmp_path / "stale-official",
+        catalog_mode="official_live",
+        mutate_manifest=stale,
+    )
+    monkeypatch.delenv("CONFENGE_RELEASE_TEST_MODE", raising=False)
+    monkeypatch.setattr(control, "HOST_OFFICIAL_DIR", export)
+    result = control._publish_live_intelligence_overlay(release)
+    assert result["status"] == "withdrawn"
+    assert result["official_live"] is False
+    assert (release / "_site/oportunidades/index.html").is_file()
+    assert not (
+        release / "_site/oportunidades/12345678000190-1/2026/index.html"
+    ).exists()
+    public = control.load_json(release / control.LIVE_INTEL_PUBLIC_MANIFEST)
+    assert public["routes"] == []
+    assert public["static_html_paths"] == ["_site/oportunidades/index.html"]
+    assert public["official_live"] is False
+    assert control.verify_release_tree_at(release, SHA_A)["commit"] == SHA_A
+
+
+def test_release_verification_rejects_rogue_or_tampered_opportunity_overlay(
+    host: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from scripts.live_intelligence.test_consume import _write_539_candidate
+
+    release = _stage_release_with_fixture_opportunity(host, tmp_path)
+    export = _write_539_candidate(tmp_path / "official-integrity", catalog_mode="official_live")
+    monkeypatch.delenv("CONFENGE_RELEASE_TEST_MODE", raising=False)
+    monkeypatch.setattr(control, "HOST_OFFICIAL_DIR", export)
+    control._publish_live_intelligence_overlay(release)
+    accepted = (
+        release / "_site/oportunidades/12345678000190-1/2026/index.html"
+    )
+    original = accepted.read_bytes()
+
+    rogue = release / "_site/oportunidades/nao-aceita-pelo-produtor/index.html"
+    rogue.parent.mkdir(parents=True)
+    rogue.write_text("<main>injetada</main>\n", encoding="utf-8")
+    with pytest.raises(control.ReleaseError, match="file set mismatch"):
+        control.verify_release_tree_at(release, SHA_A)
+    shutil.rmtree(rogue.parent)
+
+    accepted.write_text("<main>adulterada</main>\n", encoding="utf-8")
+    with pytest.raises(
+        control.ReleaseError, match="overlay routes differ|overlay checksum mismatch"
+    ):
+        control.verify_release_tree_at(release, SHA_A)
+    accepted.write_bytes(original)
+    assert control.verify_release_tree_at(release, SHA_A)["commit"] == SHA_A
 
 
 # systemd returns from `restart` as soon as it has spawned a Type=simple unit, so
@@ -847,7 +1259,8 @@ def test_only_the_declared_overlay_files_may_move_their_digest() -> None:
         not in LIVE_INTEL_OVERLAY_REWRITES
     assert len(LIVE_INTEL_OVERLAY_REWRITES) == 3
 
-    # The directory itself remains overlay territory, which is what lets the
-    # host-owned child pages appear as extras without failing the file-set check.
-    assert is_live_intel_overlay("_site/oportunidades/whatever/index.html")
+    # A sibling under the family is not authorized until the release-local
+    # accepted projection names its exact id/route and the stage manifest binds
+    # its digest.
+    assert not is_live_intel_overlay("_site/oportunidades/whatever/index.html")
     assert not is_live_intel_overlay("_site/casos/index.html")

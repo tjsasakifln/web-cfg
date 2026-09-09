@@ -68,7 +68,8 @@ _DEMO_AS_CLIENT = re.compile(
     re.I,
 )
 _INTERNAL_ENGLISH = re.compile(
-    r"\b(?:proof_state|permission_class|offer_id|DRAFT|WITHHELD|READY|FINAL)\b"
+    r"\b(?:proof_state|permission_class|offer_id|DRAFT|WITHHELD|READY)\b"
+    r"|\b(?:estado(?: de publica[çc][ãa]o)?|status|publication_state)\s*[:=]\s*FINAL\b"
     r"|\(as of\)"
     r"|\bas of\s+(?:\d{4}-\d{2}-\d{2}|\d{1,2}\s+[A-Za-z]+\s+\d{4})\b",
     re.I,
@@ -360,8 +361,32 @@ def _inventory_relpaths(path: Path) -> tuple[set[str], list[str]]:
     errors: list[str] = []
     if not path.is_file():
         return set(), [f"server_inventory_missing:{path}"]
+    raw = path.read_text(encoding="utf-8")
+    stripped = raw.lstrip()
+    lines: list[str]
+    if stripped.startswith("{"):
+        try:
+            payload = json.loads(raw)
+        except json.JSONDecodeError as exc:
+            return set(), [f"server_inventory_json_invalid:{exc}"]
+        hashes = payload.get("html_sha256") if isinstance(payload, dict) else None
+        if (
+            not isinstance(payload, dict)
+            or payload.get("schema") != "confenge.served-html-inventory/v1"
+            or not isinstance(hashes, dict)
+            or any(
+                not isinstance(rel, str)
+                or not isinstance(digest, str)
+                or not re.fullmatch(r"[0-9a-f]{64}", digest)
+                for rel, digest in hashes.items()
+            )
+        ):
+            return set(), ["server_inventory_json_contract_invalid"]
+        lines = list(hashes)
+    else:
+        lines = raw.splitlines()
     rels: set[str] = set()
-    for line in path.read_text(encoding="utf-8").splitlines():
+    for line in lines:
         item = line.strip().replace("\\", "/")
         if not item or item.startswith("#"):
             continue
@@ -377,25 +402,131 @@ def _inventory_relpaths(path: Path) -> tuple[set[str], list[str]]:
     return rels, errors
 
 
-def _runtime_comparison(
-    package_files: list[Path], artifact: Path, inventory: Path, mirror: Path | None
-) -> dict:
-    from deploy.netcup.lib.release_control import (
-        is_live_intel_overlay,
-        is_live_intel_withdrawal,
+def _inventory_html_hashes(path: Path) -> dict[str, str]:
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    hashes = payload.get("html_sha256") if isinstance(payload, dict) else None
+    return (
+        {str(rel): str(digest) for rel, digest in hashes.items()}
+        if isinstance(hashes, dict)
+        else {}
     )
 
+
+def _load_server_overlay_manifest(path: Path | None) -> tuple[dict, list[str]]:
+    if path is None:
+        return {}, ["server_overlay_manifest_missing"]
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        return {}, [f"server_overlay_manifest_invalid:{exc}"]
+    if not isinstance(payload, dict) or payload.get("schema") != "confenge.live-intelligence-overlay/v1":
+        return {}, ["server_overlay_manifest_schema_invalid"]
+    routes = payload.get("routes")
+    removed = payload.get("removed_html_paths")
+    static_html = payload.get("static_html_paths")
+    static_hashes = payload.get("static_html_sha256")
+    if (
+        not isinstance(routes, list)
+        or not isinstance(removed, list)
+        or not isinstance(static_html, list)
+        or not isinstance(static_hashes, dict)
+    ):
+        return {}, ["server_overlay_manifest_shape_invalid"]
+    if not re.fullmatch(r"[0-9a-f]{40}", str(payload.get("release_sha") or "")):
+        return {}, ["server_overlay_manifest_release_sha_invalid"]
+    route_paths: set[str] = set()
+    for item in routes:
+        if not isinstance(item, dict):
+            return {}, ["server_overlay_manifest_route_invalid"]
+        opportunity_id = str(item.get("opportunity_id") or "").strip("/")
+        canonical = f"/oportunidades/{opportunity_id}/"
+        html_path = f"_site{canonical}index.html"
+        if (
+            not opportunity_id
+            or ".." in opportunity_id.split("/")
+            or item.get("route") != canonical
+            or item.get("html_path") != html_path
+            or not re.fullmatch(r"[0-9a-f]{64}", str(item.get("content_hash") or ""))
+            or not re.fullmatch(r"[0-9a-f]{64}", str(item.get("sha256") or ""))
+        ):
+            return {}, ["server_overlay_manifest_route_invalid"]
+        route_paths.add(html_path.removeprefix("_site/"))
+    if len(route_paths) != len(routes):
+        return {}, ["server_overlay_manifest_route_duplicate"]
+    if any(item != "_site/oportunidades/index.html" for item in static_html):
+        return {}, ["server_overlay_manifest_static_path_invalid"]
+    if set(static_hashes) != set(static_html) or any(
+        not re.fullmatch(r"[0-9a-f]{64}", str(value))
+        for value in static_hashes.values()
+    ):
+        return {}, ["server_overlay_manifest_static_digest_invalid"]
+    route_paths.update(str(item).removeprefix("_site/") for item in static_html)
+    removed_paths = {
+        str(item).removeprefix("_site/")
+        for item in removed
+        if isinstance(item, str)
+        and item.startswith("_site/")
+        and item.endswith(".html")
+    }
+    if len(removed_paths) != len(removed):
+        return {}, ["server_overlay_manifest_removed_path_invalid"]
+    if routes and (
+        payload.get("official_live") is not True
+        or payload.get("source_kind") != "official_live"
+        or not re.fullmatch(r"[0-9a-f]{64}", str(payload.get("manifest_hash") or ""))
+        or payload.get("manifest_hash") != payload.get("consumer_observed_manifest_hash")
+        or not re.fullmatch(
+            r"[0-9a-f]{64}", str(payload.get("accepted_projection_sha256") or "")
+        )
+    ):
+        return {}, ["server_overlay_manifest_identity_invalid"]
+    return {
+        "payload": payload,
+        "added_html": route_paths,
+        "removed_html": removed_paths,
+        "route_rows": {
+            **{
+                str(item["html_path"]).removeprefix("_site/"): item
+                for item in routes
+            },
+            **{
+                str(path).removeprefix("_site/"): {"sha256": digest}
+                for path, digest in static_hashes.items()
+            },
+        },
+        "path": str(path),
+    }, []
+
+
+def _runtime_comparison(
+    package_files: list[Path],
+    artifact: Path,
+    inventory: Path,
+    mirror: Path | None,
+    overlay_manifest: Path | None,
+) -> dict:
     server_rels, errors = _inventory_relpaths(inventory)
+    inventory_hashes = _inventory_html_hashes(inventory)
+    overlay, overlay_errors = _load_server_overlay_manifest(overlay_manifest)
+    errors.extend(overlay_errors)
+    try:
+        artifact_build = json.loads(
+            (artifact / ".well-known/build-info.json").read_text(encoding="utf-8")
+        )
+    except (OSError, json.JSONDecodeError):
+        artifact_build = {}
+        errors.append("artifact_build_identity_unavailable_for_server_overlay")
+    if overlay and overlay["payload"].get("release_sha") != artifact_build.get("commit"):
+        errors.append("server_overlay_release_sha_mismatch")
     package_rels = {relpath(path, artifact) for path in package_files}
     added = server_rels - package_rels
     removed = package_rels - server_rels
-    allowed_added = sorted(
-        rel for rel in added if is_live_intel_overlay(f"_site/{rel}")
-    )
+    allowed_added = sorted(set(added) & set(overlay.get("added_html", set())))
     unauthorized_added = sorted(set(added) - set(allowed_added))
-    allowed_removed = sorted(
-        rel for rel in removed if is_live_intel_withdrawal(f"_site/{rel}")
-    )
+    allowed_removed = sorted(set(removed) & set(overlay.get("removed_html", set())))
     unexpected_removed = sorted(set(removed) - set(allowed_removed))
     if unauthorized_added:
         errors.append(f"server_unauthorized_html_added:{len(unauthorized_added)}")
@@ -423,6 +554,8 @@ def _runtime_comparison(
             errors.append(f"server_mirror_not_in_inventory:{len(extra_bodies)}")
         for path in mirror_files:
             rel = relpath(path, mirror)
+            if inventory_hashes and hashlib.sha256(path.read_bytes()).hexdigest() != inventory_hashes.get(rel):
+                errors.append(f"server_inventory_html_digest_mismatch:{rel}")
             route = route_for(rel)
             if route in MANIFEST_ROUTE_EXEMPT:
                 html = path.read_text(encoding="utf-8", errors="replace")
@@ -438,6 +571,9 @@ def _runtime_comparison(
             semantic = semantic_fixture_findings(html, route)
             if semantic:
                 mirror_semantic_findings[rel] = semantic
+            overlay_row = (overlay.get("route_rows") or {}).get(rel)
+            if overlay_row and hashlib.sha256(path.read_bytes()).hexdigest() != overlay_row["sha256"]:
+                errors.append(f"server_overlay_html_digest_mismatch:{rel}")
         if mirror_copy_findings:
             errors.append(
                 f"server_self_deprecating_or_internal_copy:{len(mirror_copy_findings)}"
@@ -468,6 +604,19 @@ def _runtime_comparison(
                 )
     return {
         "server_inventory": str(inventory),
+        "server_overlay_manifest": overlay.get("path"),
+        "server_overlay_identity": {
+            key: (overlay.get("payload") or {}).get(key)
+            for key in (
+                "release_sha",
+                "source_kind",
+                "source_run_id",
+                "as_of",
+                "manifest_hash",
+                "consumer_observed_manifest_hash",
+                "accepted_projection_sha256",
+            )
+        },
         "server_html_total": len(server_rels),
         "server_overlay_html_added": allowed_added,
         "server_unauthorized_html_added": unauthorized_added,
@@ -517,6 +666,7 @@ def coverage_report(
     *,
     server_inventory: Path | None = None,
     server_mirror: Path | None = None,
+    server_overlay_manifest: Path | None = None,
 ) -> dict:
     artifact = artifact.resolve()
     files = artifact_html_files(artifact)
@@ -625,7 +775,13 @@ def coverage_report(
         "errors": errors,
     }
     if server_inventory is not None:
-        runtime = _runtime_comparison(files, artifact, server_inventory, server_mirror)
+        runtime = _runtime_comparison(
+            files,
+            artifact,
+            server_inventory,
+            server_mirror,
+            server_overlay_manifest,
+        )
         report["runtime"] = runtime
         errors.extend(runtime["errors"])
         report["ok"] = not errors
@@ -766,6 +922,13 @@ def run_mutation_contracts() -> list[str]:
         raise AssertionError("legitimate_technical_approval_rejected")
     passed.append("legitimate_technical_approval")
 
+    legitimate_final = '<main><h1>Prazo final do contrato</h1><p>A revisão final confere documentos e cálculos antes da apresentação final.</p></main>'
+    if semantic_fixture_findings(legitimate_final, "/conteudos/prazo/"):
+        raise AssertionError("legitimate_portuguese_final_rejected")
+    if "internal_english_state" not in semantic_fixture_findings('<main><h1>Análise</h1><p>Estado de publicação: FINAL</p></main>', "/conteudos/prazo/"):
+        raise AssertionError("publication_final_state_not_rejected")
+    passed.append("portuguese_final_vs_publication_state")
+
     with tempfile.TemporaryDirectory() as tmp:
         root = Path(tmp)
         artifact = root / "_site"
@@ -815,6 +978,11 @@ def run_mutation_contracts() -> list[str]:
                 "<main><h1>CONFENGE</h1><p>Engenharia para obras.</p></main>",
                 encoding="utf-8",
             )
+        build_identity = artifact / ".well-known" / "build-info.json"
+        build_identity.parent.mkdir(parents=True)
+        build_identity.write_text(
+            json.dumps({"commit": "a" * 40}) + "\n", encoding="utf-8"
+        )
         packaged = artifact / "oportunidades" / "fixture" / "index.html"
         packaged.parent.mkdir(parents=True)
         packaged.write_text("<main><h1>Oportunidade de exemplo</h1></main>", encoding="utf-8")
@@ -832,8 +1000,46 @@ def run_mutation_contracts() -> list[str]:
             encoding="utf-8",
         )
         inventory = root / "server-inventory.txt"
-        inventory.write_text(
-            "index.html\noportunidades/registro-oficial/index.html\n",
+        inventory_payload = {
+            "schema": "confenge.served-html-inventory/v1",
+            "release_sha": "a" * 40,
+            "html_sha256": {
+                "index.html": hashlib.sha256((mirror / "index.html").read_bytes()).hexdigest(),
+                "oportunidades/registro-oficial/index.html": hashlib.sha256(
+                    served.read_bytes()
+                ).hexdigest(),
+            },
+        }
+        inventory.write_text(json.dumps(inventory_payload), encoding="utf-8")
+        overlay_manifest = root / "live-intelligence-overlay.json"
+        overlay_manifest.write_text(
+            json.dumps(
+                {
+                    "schema": "confenge.live-intelligence-overlay/v1",
+                    "release_sha": "a" * 40,
+                    "official_live": True,
+                    "source_kind": "official_live",
+                    "source_run_id": "mutation-contract",
+                    "as_of": "2026-09-09T00:00:00Z",
+                    "manifest_hash": "b" * 64,
+                    "consumer_observed_manifest_hash": "b" * 64,
+                    "accepted_projection_sha256": "c" * 64,
+                    "routes": [
+                        {
+                            "opportunity_id": "registro-oficial",
+                            "route": "/oportunidades/registro-oficial/",
+                            "html_path": "_site/oportunidades/registro-oficial/index.html",
+                            "content_hash": "d" * 64,
+                            "sha256": hashlib.sha256(served.read_bytes()).hexdigest(),
+                        }
+                    ],
+                    "static_html_paths": [],
+                    "static_html_sha256": {},
+                    "removed_html_paths": [
+                        "_site/oportunidades/fixture/index.html"
+                    ],
+                }
+            ),
             encoding="utf-8",
         )
         report = coverage_report(
@@ -841,13 +1047,55 @@ def run_mutation_contracts() -> list[str]:
             manifest,
             server_inventory=inventory,
             server_mirror=mirror,
+            server_overlay_manifest=overlay_manifest,
         )
         if not report["ok"]:
             raise AssertionError(f"authorized_server_overlay_rejected:{report['errors']}")
         passed.append("authorized_server_overlay")
 
-        inventory.write_text("index.html\nsurpresa/index.html\n", encoding="utf-8")
-        surprise = mirror / "surpresa" / "index.html"
+        inventory_payload["html_sha256"]["index.html"] = "f" * 64
+        inventory.write_text(json.dumps(inventory_payload), encoding="utf-8")
+        report = coverage_report(
+            artifact,
+            manifest,
+            server_inventory=inventory,
+            server_mirror=mirror,
+            server_overlay_manifest=overlay_manifest,
+        )
+        if report["ok"] or not any(
+            error.startswith("server_inventory_html_digest_mismatch:")
+            for error in report["errors"]
+        ):
+            raise AssertionError("server_inventory_digest_mismatch_not_rejected")
+        inventory_payload["html_sha256"]["index.html"] = hashlib.sha256(
+            (mirror / "index.html").read_bytes()
+        ).hexdigest()
+        inventory.write_text(json.dumps(inventory_payload), encoding="utf-8")
+        passed.append("server_inventory_html_digest")
+
+        stale = json.loads(overlay_manifest.read_text(encoding="utf-8"))
+        stale["release_sha"] = "e" * 40
+        overlay_manifest.write_text(json.dumps(stale), encoding="utf-8")
+        report = coverage_report(
+            artifact,
+            manifest,
+            server_inventory=inventory,
+            server_mirror=mirror,
+            server_overlay_manifest=overlay_manifest,
+        )
+        if report["ok"] or "server_overlay_release_sha_mismatch" not in report["errors"]:
+            raise AssertionError("stale_server_overlay_manifest_not_rejected")
+        stale["release_sha"] = "a" * 40
+        overlay_manifest.write_text(json.dumps(stale), encoding="utf-8")
+        passed.append("stale_server_overlay_manifest")
+
+        inventory.write_text(
+            "index.html\noportunidades/nao-aceita-pelo-produtor/index.html\n",
+            encoding="utf-8",
+        )
+        surprise = (
+            mirror / "oportunidades" / "nao-aceita-pelo-produtor" / "index.html"
+        )
         surprise.parent.mkdir(parents=True)
         surprise.write_text("<main><h1>Surpresa</h1></main>", encoding="utf-8")
         served.unlink()
@@ -856,6 +1104,7 @@ def run_mutation_contracts() -> list[str]:
             manifest,
             server_inventory=inventory,
             server_mirror=mirror,
+            server_overlay_manifest=overlay_manifest,
         )
         if report["ok"] or not report["runtime"]["server_unauthorized_html_added"]:
             raise AssertionError("unauthorized_server_route_not_rejected")
@@ -865,6 +1114,7 @@ def run_mutation_contracts() -> list[str]:
             artifact,
             manifest,
             server_inventory=inventory,
+            server_overlay_manifest=overlay_manifest,
         )
         if report["ok"] or "server_inventory_without_body_mirror" not in report["errors"]:
             raise AssertionError("unscanned_server_bodies_not_rejected")
@@ -984,6 +1234,11 @@ def main() -> int:
     parser.add_argument("--server-inventory", type=Path)
     parser.add_argument("--server-mirror", type=Path)
     parser.add_argument(
+        "--server-overlay-manifest",
+        type=Path,
+        help="fetched /.well-known/live-intelligence-overlay.json for exact stage reconciliation",
+    )
+    parser.add_argument(
         "--fetch-server",
         type=Path,
         metavar="INVENTORY",
@@ -1039,6 +1294,7 @@ def main() -> int:
                 args.manifest,
                 server_inventory=args.server_inventory,
                 server_mirror=args.server_mirror,
+                server_overlay_manifest=args.server_overlay_manifest,
             )
         )
     except (AssertionError, ValueError) as exc:

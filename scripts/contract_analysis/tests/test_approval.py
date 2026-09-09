@@ -131,6 +131,20 @@ def test_unconfirmed_reviewer_name_cannot_pass_representation_check():
     assert checklist["reviewer_representation_consistent"] is False
 
 
+def test_confirmed_reviewer_same_as_author_cannot_pass_representation_check():
+    rec = complete_live_record(
+        human_authorship_confirmed=True,
+        author={"name": "Engº Tiago Sasaki"},
+        reviewer={"name": "  ENGº TIAGO SASAKI ", "confirmed": True},
+    )
+    html = (
+        '<section id="metodologia"></section><section id="limitacoes"></section>'
+        '<p>Engº Tiago Sasaki</p>'
+    )
+    checklist = evaluate_conditional_checklist(rec, rendered_html=html)
+    assert checklist["reviewer_representation_consistent"] is False
+
+
 def test_withdraw_invalidates_stored_approval(tmp_path):
     rec = complete_live_record()
     approve_one(rec, actor="editor", rollback="git:revert:ca", root=tmp_path)

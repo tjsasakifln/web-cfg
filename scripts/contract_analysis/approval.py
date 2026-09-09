@@ -424,9 +424,12 @@ def _record_checklist(
     author_name = str((author or {}).get("name") if isinstance(author, dict) else author or "")
     reviewer_name = str((reviewer or {}).get("name") if isinstance(reviewer, dict) else reviewer or "")
     reviewer_confirmed = bool(isinstance(reviewer, dict) and reviewer.get("confirmed") is True)
+    author_identity = " ".join(author_name.split()).casefold()
+    reviewer_identity = " ".join(reviewer_name.split()).casefold()
     reviewer_consistent = (
         reviewer_confirmed
         and len(reviewer_name.strip()) >= 5
+        and reviewer_identity != author_identity
         and (rendered_html is None or reviewer_name in rendered_html)
     ) or (not reviewer_confirmed and not reviewer_name.strip())
     method_author_present = (

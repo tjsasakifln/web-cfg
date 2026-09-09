@@ -15,9 +15,10 @@ def test_bundle_controller_is_bound_to_payload_and_checkout(tmp_path, monkeypatc
     host = tmp_path / "host"
     files = make_incoming(tmp_path, host, SHA_A)
     directory = next(iter(files.values())).parent
-    code, digest = runner.verified_controller(directory, SHA_A)
+    code, digest, artifact_digest = runner.verified_controller(directory, SHA_A)
     assert code == runner.CONTROL.read_bytes()
     assert digest == hashlib.sha256(code).hexdigest()
+    assert len(artifact_digest) == 64
     changed = tmp_path / "changed-controller.py"
     changed.write_bytes(code + b"\n")
     monkeypatch.setattr(runner, "CONTROL", changed)
@@ -32,12 +33,13 @@ def test_bundle_controller_is_bound_to_payload_and_checkout(tmp_path, monkeypatc
 
 @pytest.mark.parametrize("operation", ["stage", "verify", "promote", "rollback"])
 def test_streamed_controller_checks_bytes_before_execution(operation):
-    code = b"import os,sys; print(sys.argv[1:]); print(os.environ['CONFENGE_RELEASE_CONTROL_SHA256'])"
+    code = b"import os,sys; print(sys.argv[1:]); print(os.environ['CONFENGE_RELEASE_CONTROL_SHA256']); print(os.environ['CONFENGE_EXPECTED_RELEASE_SHA']); print(os.environ['CONFENGE_EXPECTED_RELEASE_ARTIFACT_SHA256'])"
     digest = hashlib.sha256(code).hexdigest()
-    command = runner.remote_command(operation, SHA_A, digest, expected_current=SHA_B)
+    command = runner.remote_command(operation, SHA_A, digest, expected_current=SHA_B, artifact_sha256="c" * 64)
     result = subprocess.run(shlex.split(command), input=code, capture_output=True)
     assert result.returncode == 0, result.stderr
     assert operation.encode() in result.stdout and digest.encode() in result.stdout
+    assert SHA_A.encode() in result.stdout and ("c" * 64).encode() in result.stdout
     if operation == "promote":
         assert b"--expected-current" in result.stdout and SHA_B.encode() in result.stdout
     drift = subprocess.run(shlex.split(command), input=code + b"x", capture_output=True)
@@ -48,9 +50,9 @@ def test_streamed_controller_checks_bytes_before_execution(operation):
 
 def test_streamed_promote_requires_predecessor_and_upload_is_exact():
     with pytest.raises(ValueError, match="predecessor"):
-        runner.remote_command("promote", SHA_A, "a" * 64)
+        runner.remote_command("promote", SHA_A, "a" * 64, artifact_sha256="c" * 64)
     with pytest.raises(ValueError, match="upload"):
-        runner.remote_command("stage", SHA_A, "a" * 64, "/tmp/untrusted")
+        runner.remote_command("stage", SHA_A, "a" * 64, "/tmp/untrusted", artifact_sha256="c" * 64)
 
 
 def test_real_bundle_controller_stages_verifies_and_promotes_via_stream(tmp_path, monkeypatch):
@@ -59,14 +61,14 @@ def test_real_bundle_controller_stages_verifies_and_promotes_via_stream(tmp_path
     monkeypatch.setenv("CONFENGE_RELEASE_ROOT", str(host))
     monkeypatch.setenv("CONFENGE_ORIGIN_HOST", "confenge.com.br")
     files = make_incoming(tmp_path, host, SHA_A)
-    code, digest = runner.verified_controller(next(iter(files.values())).parent, SHA_A)
+    code, digest, artifact_digest = runner.verified_controller(next(iter(files.values())).parent, SHA_A)
     for operation in ("stage", "verify"):
-        result = subprocess.run(shlex.split(runner.remote_command(operation, SHA_A, digest)),
+        result = subprocess.run(shlex.split(runner.remote_command(operation, SHA_A, digest, artifact_sha256=artifact_digest)),
                                 input=code, capture_output=True)
         assert result.returncode == 0, result.stderr.decode()
     assert not (host / "current").exists()
     with LiveServer(host):
-        command = shlex.split(runner.remote_command("promote", SHA_A, digest, expected_current="NONE"))
+        command = shlex.split(runner.remote_command("promote", SHA_A, digest, expected_current="NONE", artifact_sha256=artifact_digest))
         command[2] = "CONFENGE_LOCAL_ORIGIN=" + os.environ["CONFENGE_LOCAL_ORIGIN"]
         result = subprocess.run(command, input=code, capture_output=True)
         assert result.returncode == 0, result.stderr.decode()

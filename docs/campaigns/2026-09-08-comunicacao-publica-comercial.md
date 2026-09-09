@@ -69,6 +69,24 @@ externas conservam sua autoridade original.
 
 ### Fechamento da fonte e endurecimento de release (09/09, ainda não publicado)
 
+Fechamento dos controles de 09/09: 45 testes do controlador de release,
+15 do aceite HTTP e 31 contraprovas de cobertura passaram. A rodada integrada
+de runner, workflow, aceite HTTP e mídia passou em 40 testes. Essas execuções
+locais não substituem a execução no candidato integrado. O ledger
+`metadata/files.sha256` deve ser byte-idêntico ao membro do tar validado;
+o host também confere o digest recebido contra o digest verificado no runner.
+Rollback compensador exige o candidato ainda ativo sob lock; uma repetição
+do workflow preserva o predecessor real como destino de recuperação.
+
+As quatro imagens corrigidas recebem referências `?v=<sha256 dos bytes>`
+somente na finalização do artefato, antes do manifesto de integridade. Duas
+execuções sobre a mesma cópia produziram bytes idênticos: 236 referências em
+192 arquivos. Isso evita reutilizar imagens antigas do cache do navegador.
+Os arquivos físicos legados são preservados e precisam de conferência/purga
+de cache após a promoção; nenhuma URL nova foi requisitada em produção antes
+de haver os bytes correspondentes. A credencial Cloudflare existente reconhece
+a zona, mas a permissão de purga ainda não foi exercida nem presumida.
+
 Checkpoint de fonte `3ec50a67ab77bb335567c2b497a6fbb7f81ef196`:
 varredura ampliada encontrou inicialmente 198 defeitos em 154 rotas
 (170 apresentações autorais de B2G, 27 de Hub e uma de SLA), incluindo

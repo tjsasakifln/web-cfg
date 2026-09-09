@@ -2,6 +2,12 @@
   "decision": "EXECUTE_NOW 2026-09-09",
   "tool": "built-in image_gen",
   "scope": "Text-only commercial revision of historical raster sharing cards. No new professional credential or client claim.",
+  "public_reference_versioning": {
+    "schema": "confenge.commercial-media-query-version/v1",
+    "parameter": "v",
+    "digest": "sha256",
+    "digest_length": 64
+  },
   "assets": [
     {
       "target": "assets/og-confenge.jpg",

@@ -406,9 +406,19 @@ def evaluate_conditions(
     # The signer remains accountable for the review that actually happened.
     # A second person is optional and must never be synthesized, nor must their
     # absence be advertised to make an otherwise sound analysis publishable.
-    reviewer_ok = True
+    reviewer = record.get("reviewer")
+    reviewer_name = _text(
+        reviewer.get("name") if isinstance(reviewer, dict) else reviewer
+    )
+    author_name = _text(author.get("name") if isinstance(author, dict) else author)
+    reviewer_ok = not reviewer_name or (
+        " ".join(reviewer_name.split()).casefold()
+        != " ".join(author_name.split()).casefold()
+    )
     if not author_ok:
         reasons.append("responsible_author_absent")
+    if not reviewer_ok:
+        reasons.append("reviewer_not_independent_from_author")
 
     if reputation_errors:
         reasons.extend(reputation_errors)
