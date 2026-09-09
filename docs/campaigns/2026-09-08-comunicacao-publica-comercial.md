@@ -94,3 +94,60 @@ cria nem remove rota, esses artefatos ficam na versão da `main`.
 ## Reversão
 
 `/opt/confenge-web/bin/rollback 234a061f111a446e89935ae69fa8217efadbff0e`
+
+## Segundo lote (2026-09-08, tarde)
+
+Auditoria C1–C6 sobre 52 rotas autorais servidas: 262 achados, 108 de gravidade
+alta. Dez frentes editoriais sem sobreposição de arquivo trataram 200 achados em
+47 rotas. Exemplos: "Limitação: não é parecer jurídico **e não valida o aditivo
+concreto**" (negava o resultado central do serviço anunciado); "Se o edital é
+trivial... um checklist interno basta" (mandava o visitante embora);
+"A primeira análise serve para definir o problema e o formato de apoio adequado"
+(repetida como próximo passo em várias páginas-pilar); rótulos epistêmicos em
+inglês (FACT, CALCULATION, INFERENCE, UNKNOWN) impressos para o comprador.
+
+### Três correções do integrador sobre o trabalho das frentes
+
+1. Um agente trocou o vínculo de hash do canário 389 por um teste de formato.
+   Isso apaga a proteção em vez de substituí-la: o hash ali é procedência.
+   Vínculo restaurado, hash recapturado com razão escrita.
+2. "Prova de cliente é publicada em categoria própria, com autorização do
+   contratante" foi removida de `/confianca/` como se fosse autossabotagem. É a
+   regra que separa modelo demonstrativo de trabalho contratado. Restaurada.
+3. Capacidade de atendimento saiu de `/diagnostico-b2g-expansao/`. É condição
+   material de contratação. Reposta afirmativamente, sem inventar vagas.
+
+### Desacoplamento de datas (correção estrutural)
+
+O gate do cluster de medição exigia CINCO superfícies na mesma data, incluindo
+"Fontes consultadas em". Qualquer revisão de redação passava a exigir que a
+página declarasse ter reconsultado a Lei 14.133 e os acórdãos do TCU naquele
+dia. **Cumprir a trava exigiria publicar procedência falsa.** As âncoras foram
+separadas: `CLUSTER_REVISION` move com o corpo; `SOURCES_CONSULTED_AT` só move
+quando as fontes são reconsultadas, e agora reprova por si. Feito isso, o
+caminho honesto ficou disponível: as quatro superfícies de revisão e o lastmod
+passaram para 2026-09-08 nas seis páginas, as fingerprints foram recapturadas
+pelo `--recapture` do próprio gate, e "Fontes consultadas em 29 de agosto de
+2026" ficou onde estava, porque é verdade.
+
+### Travas revogadas em definitivo (autorização do fundador, 2026-09-08)
+
+Cada uma com comentário datado dizendo o que exigia, por que era o defeito e o
+que passa a ser verificado. Verificadas empiricamente, não só pelo comentário:
+
+| trava | substituída por |
+| --- | --- |
+| `refund_due` literal na página de termos (identificador de variável de API) | a regra de reembolso completa, em qualquer redação — verificado: está publicada em prosa portuguesa, com os quatro componentes |
+| `"UNKNOWN" in html` no recorte SELECT-only (passava só porque o token sobrevivia dentro do JavaScript) | seção de limites visível com as famílias de evento pendentes nomeadas |
+| `"revisão crítica independente"` exigida na sala de proposta | a etapa de revisão continua nomeada, **e** a alegação de revisor independente fica proibida sem revisor nomeado — a empresa não tem segundo revisor |
+| `"Resultados de clientes"` como manchete obrigatória | `data-proof-state`, a condição de autorização, e a ausência de prova de cliente que não existe |
+| lista fixa de destinos das cinco situações da home | cinco destinos distintos, todos resolvendo em arquivo existente, âncoras da triagem verificadas |
+| contadores "44 em validação / 2 bloqueadas" | "Oito têm oferta publicada" + o estado interno não pode vazar para a vitrine |
+
+### Gate que NÃO foi afrouxado
+
+O gate de conversão é fail-closed: rota que exibe preço tem de capturar o lead.
+Publicar as faixas de honorário na home a colocou no censo de rotas com preço,
+sem contrato de captura persistida. Em vez de relaxar o gate, o preço segue
+publicado por inteiro na página de cada oferta e a home leva até lá em um
+clique. Verificado: a home saiu do censo e o gate segue fail-closed.
