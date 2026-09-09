@@ -728,15 +728,17 @@ def _producer_checkout_errors(block: str) -> list[str]:
         'EXTRA_CLI_ROOT: ${{ runner.temp }}/extra-cli-contract',
         'Path("data/pseo/manifest.json").read_text())["source_commit_sha"]',
         're.fullmatch(r"[0-9a-f]{40}", sha)',
-        'repository: tjsasakifln/extra-cli',
-        'ref: ${{ steps.producer-contract.outputs.sha }}',
-        'path: .worktrees/extra-cli-contract',
-        'persist-credentials: false',
+        'git init --quiet "$EXTRA_CLI_ROOT"',
+        'fetch --no-tags --depth=1 https://github.com/tjsasakifln/extra-cli.git "${{ steps.producer-contract.outputs.sha }}"',
+        'git -C "$EXTRA_CLI_ROOT" checkout --quiet --detach FETCH_HEAD',
+        'printf \'EXTRA_CLI_ROOT=%s\\n\' "$EXTRA_CLI_ROOT" >> "$GITHUB_ENV"',
         'test ! -e "$EXTRA_CLI_ROOT"',
-        'mv -- .worktrees/extra-cli-contract "$EXTRA_CLI_ROOT"',
+        'test ! -L "$EXTRA_CLI_ROOT"',
         'git -C "$EXTRA_CLI_ROOT" rev-parse HEAD',
     )
     errors = [f"producer contract checkout missing {needle}" for needle in required if needle not in block]
+    if '${{ runner.' in block.split('    steps:', 1)[0]:
+        errors.append('runner context is unavailable in job-level env')
     for name in (
         "Resolve contracted producer revision",
         "Checkout contracted producer for fixture integration",
@@ -758,23 +760,28 @@ def test_cross_repo_fixture_integration_cannot_skip_or_use_an_unpinned_producer(
         assert not _producer_checkout_errors(block), _producer_checkout_errors(block)
         for old, new in (
             ('EXTRA_CLI_REQUIRED: "1"', 'EXTRA_CLI_REQUIRED: "0"'),
-            ('ref: ${{ steps.producer-contract.outputs.sha }}', 'ref: main'),
-            ('repository: tjsasakifln/extra-cli', 'repository: unrelated/example'),
+            ('extra-cli.git "${{ steps.producer-contract.outputs.sha }}"', 'extra-cli.git main'),
+            ('https://github.com/tjsasakifln/extra-cli.git', 'https://github.com/unrelated/example.git'),
             ('EXTRA_CLI_ROOT: ${{ runner.temp }}/extra-cli-contract', 'EXTRA_CLI_ROOT: ${{ github.workspace }}/.worktrees/extra-cli-contract'),
-            ('mv -- .worktrees/extra-cli-contract "$EXTRA_CLI_ROOT"', ':'),
+            ('git init --quiet "$EXTRA_CLI_ROOT"', ':'),
             ('- name: Verify contracted producer checkout', '- name: Verify contracted producer checkout\n        if: false'),
         ):
             assert _producer_checkout_errors(block.replace(old, new)), f"mutation escaped: {old}"
         # Execute the real shell step, including absence, revision and no-clobber
         # counterproofs. External CSS must leave the public-source tree entirely.
-        step = block.split('- name: Verify contracted producer checkout', 1)[1].split('\n      - ', 1)[0]
-        command = textwrap.dedent(step.split('run: |\n', 1)[1])
-        for scenario in ('matching', 'missing', 'wrong-revision', 'destination-exists'):
+        invalid_job_env = block.replace('    steps:', '      FIXTURE_ROOT: ${{ runner.temp }}/fixture\n    steps:', 1)
+        assert _producer_checkout_errors(invalid_job_env)
+        command = ''
+        for name in ('Checkout contracted producer for fixture integration', 'Verify contracted producer checkout'):
+            step = block.split(f'- name: {name}', 1)[1].split('\n      - ', 1)[0]
+            assert 'uses: actions/checkout@' not in step, 'external fixture must not leave a workspace-bound post-checkout action'
+            command += textwrap.dedent(step.split('run: |\n', 1)[1]) + '\n'
+        for scenario in ('matching', 'missing', 'wrong-revision', 'destination-exists', 'destination-symlink'):
             with tempfile.TemporaryDirectory(prefix='producer-isolation-') as tmp:
                 fixture = Path(tmp)
                 workspace = fixture / 'workspace'
                 workspace.mkdir()
-                source = workspace / '.worktrees/extra-cli-contract'
+                source = fixture / 'producer'
                 destination = fixture / 'runner-temp/extra-cli-contract'
                 destination.parent.mkdir()
                 sha = 'a' * 40
@@ -787,12 +794,19 @@ def test_cross_repo_fixture_integration_cannot_skip_or_use_an_unpinned_producer(
                 if scenario == 'destination-exists':
                     destination.mkdir()
                     (destination / 'keep').write_text('must not be overwritten')
+                if scenario == 'destination-symlink':
+                    destination.symlink_to(fixture / 'absent-target')
                 expected = 'b' * 40 if scenario == 'wrong-revision' else sha
-                result = subprocess.run(['bash', '-c', command.replace('${{ steps.producer-contract.outputs.sha }}', expected)], cwd=workspace, env={**os.environ, 'EXTRA_CLI_ROOT': str(destination)}, capture_output=True, text=True)
+                env_file = fixture / 'github-env'
+                test_command = command.replace('${{ steps.producer-contract.outputs.sha }}', expected).replace('https://github.com/tjsasakifln/extra-cli.git', str(source))
+                result = subprocess.run(['bash', '-c', test_command], cwd=workspace, env={**os.environ, 'EXTRA_CLI_ROOT': str(destination), 'GITHUB_ENV': str(env_file)}, capture_output=True, text=True)
                 assert (result.returncode == 0) == (scenario == 'matching'), (scenario, result.stderr)
                 if scenario == 'matching':
                     assert not list(workspace.rglob('*.css'))
                     assert (destination / 'external.css').is_file()
+                    assert env_file.read_text() == f'EXTRA_CLI_ROOT={destination}\n'
+                else:
+                    assert not env_file.exists(), 'failed checkout must not expose a fixture root to later tests'
                 if scenario == 'destination-exists':
                     assert (destination / 'keep').read_text() == 'must not be overwritten'
                     assert (source / 'external.css').is_file()

@@ -4,6 +4,7 @@ import json
 import os
 import re
 import subprocess
+import textwrap
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -165,6 +166,46 @@ def test_compensation_condition_preserves_a_failed_idempotent_retry() -> None:
         expression = expression.replace("github.sha", repr("b"))
         expression = expression.replace("&&", " and ").replace("||", " or ")
         assert eval(expression, {"__builtins__": {}}, {}) is expected
+
+
+def test_promotion_rechecks_main_after_the_remote_swap_and_public_acceptance(tmp_path) -> None:
+    workflow = WORKFLOW.read_text(encoding="utf-8")
+    atomic = workflow.split('- name: Atomic promote and live identity confirmation', 1)[1].split('\n      - name:', 1)[0]
+    command = textwrap.dedent(atomic.split('run: |\n', 1)[1])
+    assert command.index('promoted_main_sha=') > command.index('--operation promote')
+    assert '"$promoted_main_sha" != "$RELEASE_SHA"' in command
+    accepted = workflow.split('- name: Confirm accepted release still matches main', 1)[1].split('\n      - name:', 1)[0]
+    assert '"$accepted_main_sha" != "$RELEASE_SHA"' in accepted
+    assert 'if:' not in accepted and 'continue-on-error:' not in accepted
+    assert workflow.index('Verify the served runtime family') < workflow.index('Confirm accepted release still matches main') < workflow.index('Store mandatory post-promote evidence')
+    prelude = r'''
+gh() {
+  if [ -e "$TEST_API_CALLED" ]; then printf '%s\n' "$TEST_MAIN_AFTER";
+  else touch "$TEST_API_CALLED"; printf '%s\n' "$TEST_MAIN_BEFORE"; fi
+}
+python3() { touch "$TEST_PROMOTED"; }
+ssh() { :; }
+'''
+    candidate = 'a' * 40
+    newer = 'b' * 40
+    for index, (before, after, expected_success, expected_swap) in enumerate((
+        (candidate, candidate, True, True),
+        (newer, newer, False, False),
+        (candidate, newer, False, True),
+    )):
+        marker = tmp_path / f'promoted-{index}'
+        env = {**os.environ, 'RELEASE_SHA': candidate, 'EXPECTED_CURRENT': 'c' * 40,
+               'GITHUB_REPOSITORY': 'fixture/example', 'RUNNER_TEMP': str(tmp_path),
+               'NETCUP_DEPLOY_PORT': '22', 'NETCUP_DEPLOY_USER': 'fixture', 'NETCUP_DEPLOY_HOST': 'example.invalid',
+               'TEST_API_CALLED': str(tmp_path / f'api-{index}'), 'TEST_PROMOTED': str(marker),
+               'TEST_MAIN_BEFORE': before, 'TEST_MAIN_AFTER': after}
+        result = subprocess.run(['bash', '-c', prelude + command], env=env, capture_output=True, text=True)
+        assert (result.returncode == 0) == expected_success, result.stderr
+        assert marker.exists() == expected_swap
+    final_command = textwrap.dedent(accepted.split('run: |\n', 1)[1])
+    for sha, success in ((candidate, True), (newer, False)):
+        result = subprocess.run(['bash', '-c', 'gh() { printf "%s\\n" "$TEST_MAIN_AFTER"; }\n' + final_command], env={**os.environ, 'RELEASE_SHA': candidate, 'GITHUB_REPOSITORY': 'fixture/example', 'TEST_MAIN_AFTER': sha}, capture_output=True, text=True)
+        assert (result.returncode == 0) == success, result.stderr
 
 
 def test_recovery_target_uses_the_real_predecessor_on_idempotent_retry(tmp_path) -> None:

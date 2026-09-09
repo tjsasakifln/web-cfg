@@ -85,11 +85,31 @@ incompatível, além da falha por checkout ausente ou configuração de CI pulá
 
 O CI do candidato `95b7794c` reprovou corretamente o checkout da fixture dentro
 da árvore do consumidor: o auditor de CSS encontrou 15 folhas externas como
-órfãs. Os dois workflows agora movem o checkout para `runner.temp` imediatamente
-após a obtenção, antes das auditorias, e verificam o SHA no destino. Não foi
-adicionada exceção ao auditor de CSS. O próprio comando de isolamento é testado
-com sucesso, origem ausente, revisão errada e destino já existente; este último
-reprova sem sobrescrever os arquivos. Os testes de contrato continuam obrigatórios.
+órfãs. A tentativa intermediária `f9dcd6dc` foi rejeitada pelo GitHub antes de
+criar jobs: `runner.temp` não é permitido no ambiente do job. Os workflows agora
+fazem fetch público direto do SHA contratado no diretório temporário, com contexto
+no passo, exportação posterior por `GITHUB_ENV` e verificação obrigatória de SHA.
+Não há segundo `actions/checkout`, cuja limpeza posterior dependeria do caminho
+original, nem exceção nova no auditor de CSS. O comando real é testado com sucesso,
+origem ausente, revisão errada, destino existente e symlink pendente; falhas não
+exportam o caminho nem sobrescrevem arquivos. Os testes de contrato permanecem
+obrigatórios.
+
+A revisão de release também fechou a corrida entre a leitura de `main` e o
+swap remoto: o workflow reconsulta `main` imediatamente após a promoção e depois
+do aceite público. Um avanço concorrente reprova e aciona a compensação existente,
+que não substitui outro release já ativo. A contraprova executa o shell com `main`
+estável, já adiantado antes do swap e adiantado durante ele; nenhum SHA antigo é
+aceito como conclusão do fluxo.
+
+O aceite público passou a conferir também a identidade material, não só o SHA:
+`artifact_hash` e `manifest_hash` precisam coincidir entre pacote, inventário do
+host e `build-info` público; o runtime público precisa coincidir com o runtime
+observado na origem, incluindo bundle, artefato, arquitetura e armazenamento.
+Os dois endpoints devem trazer os headers Cloudflare e da arquitetura canônica.
+As contraprovas de digest e headers divergentes reprovam antes e depois da
+varredura; os testes de aliases, 410 e propagação de cache continuam aprovados
+na mesma suíte de 17 testes. Não se antecipa o resultado da execução em produção.
 
 Revogações em execução (contraprovas locais; o candidato integrado e o artefato
 final ainda precisam dos checks e da publicação):

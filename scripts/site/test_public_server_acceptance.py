@@ -13,6 +13,9 @@ from scripts.site.public_server_acceptance import (
 )
 
 SHA = "a" * 40
+ARTIFACT_HASH = "b" * 64
+MANIFEST_HASH = "c" * 64
+BUNDLE_HASH = "d" * 64
 HOME = b"<html><head><title>CONFENGE</title></head><body><main><h1>Engenharia</h1></main></body></html>"
 
 
@@ -21,7 +24,15 @@ def _fixture(tmp_path: Path, html: dict[str, bytes] | None = None) -> dict:
     site = tmp_path / "candidate" / "_site"
     (site / ".well-known").mkdir(parents=True)
     (site / ".well-known" / "build-info.json").write_text(
-        json.dumps({"commit": SHA, "environment": "production"}), encoding="utf-8"
+        json.dumps(
+            {
+                "commit": SHA,
+                "environment": "production",
+                "artifact_hash": ARTIFACT_HASH,
+                "manifest_hash": MANIFEST_HASH,
+            }
+        ),
+        encoding="utf-8",
     )
     for rel, body in html.items():
         target = site / rel
@@ -69,7 +80,20 @@ def _fixture(tmp_path: Path, html: dict[str, bytes] | None = None) -> dict:
                 },
                 "contract_probes": {},
                 "overlay": overlay,
-                "build_info": {"commit": SHA, "environment": "production"},
+                "build_info": {
+                    "commit": SHA,
+                    "environment": "production",
+                    "artifact_hash": ARTIFACT_HASH,
+                    "manifest_hash": MANIFEST_HASH,
+                },
+                "runtime_info": {
+                    "release_sha": SHA,
+                    "environment": "production",
+                    "public_artifact_hash": ARTIFACT_HASH,
+                    "release_bundle_hash": BUNDLE_HASH,
+                    "host_architecture_version": acceptance.EXPECTED_HOST_ARCHITECTURE_VERSION,
+                    "storage_backend": acceptance.EXPECTED_STORAGE_BACKEND,
+                },
             }
         ),
         encoding="utf-8",
@@ -82,12 +106,43 @@ def _fixture(tmp_path: Path, html: dict[str, bytes] | None = None) -> dict:
     }
 
 
-def _identity_fetcher(commit: str = SHA):
+def _identity_fetcher(
+    commit: str = SHA,
+    *,
+    build_overrides: dict | None = None,
+    build_headers: dict | None = None,
+    runtime_overrides: dict | None = None,
+    runtime_headers: dict | None = None,
+):
     def fetch(url: str, _timeout: float) -> dict:
         if url.endswith("build-info.json"):
-            payload = {"commit": commit, "environment": "production"}
+            payload = {
+                "commit": commit,
+                "environment": "production",
+                "artifact_hash": ARTIFACT_HASH,
+                "manifest_hash": MANIFEST_HASH,
+                **(build_overrides or {}),
+            }
+            headers = {
+                "server": acceptance.EXPECTED_SERVER_HEADER,
+                "x-confenge-host-architecture-version": acceptance.EXPECTED_HOST_ARCHITECTURE_VERSION,
+                **(build_headers or {}),
+            }
         else:
-            payload = {"release_sha": commit, "environment": "production"}
+            payload = {
+                "release_sha": commit,
+                "environment": "production",
+                "public_artifact_hash": ARTIFACT_HASH,
+                "release_bundle_hash": BUNDLE_HASH,
+                "host_architecture_version": acceptance.EXPECTED_HOST_ARCHITECTURE_VERSION,
+                "storage_backend": acceptance.EXPECTED_STORAGE_BACKEND,
+                **(runtime_overrides or {}),
+            }
+            headers = {
+                "server": acceptance.EXPECTED_SERVER_HEADER,
+                "x-confenge-host-architecture-version": acceptance.EXPECTED_HOST_ARCHITECTURE_VERSION,
+                **(runtime_headers or {}),
+            }
         return {
             "ok": True,
             "url": url,
@@ -96,6 +151,7 @@ def _identity_fetcher(commit: str = SHA):
             "content_type": "application/json",
             "sha256": hashlib.sha256(json.dumps(payload).encode()).hexdigest(),
             "payload": payload,
+            "headers": headers,
             "error": None,
         }
 
@@ -207,6 +263,16 @@ def test_accepts_complete_exact_server_inventory(tmp_path):
     assert report["server_html_digest_matched"] == 1
     assert report["http_responses"][0]["title"] == "CONFENGE"
     assert report["http_responses"][0]["content_type"].startswith("text/html")
+    assert report["identity_before"]["build"]["payload"]["artifact_hash"] == ARTIFACT_HASH
+    assert report["identity_before"]["build"]["payload"]["manifest_hash"] == MANIFEST_HASH
+    assert (
+        report["identity_before"]["runtime"]["payload"]["release_bundle_hash"]
+        == BUNDLE_HASH
+    )
+    assert report["identity_before"]["runtime"]["headers"] == {
+        "server": "cloudflare",
+        "x-confenge-host-architecture-version": "confenge-nginx-node/v2",
+    }
     assert report["mutation_contracts_passed"]
     assert (tmp_path / "report" / "acceptance.json").is_file()
 
@@ -243,6 +309,47 @@ def test_rejects_wrong_public_identity_before_and_after(tmp_path):
     assert "before:public_runtime_sha_mismatch" in report["errors"]
     assert "after:public_build_sha_mismatch" in report["errors"]
     assert "after:public_runtime_sha_mismatch" in report["errors"]
+
+
+def test_rejects_public_build_digest_not_bound_to_exact_artifact(tmp_path):
+    fixture = _fixture(tmp_path)
+    report = _run(
+        tmp_path,
+        fixture,
+        identity_fetcher=_identity_fetcher(
+            build_overrides={"artifact_hash": "e" * 64, "manifest_hash": "f" * 64}
+        ),
+    )
+    assert report["ok"] is False
+    for phase in ("before", "after"):
+        assert f"{phase}:public_build_artifact_hash_mismatch" in report["errors"]
+        assert f"{phase}:public_build_manifest_hash_mismatch" in report["errors"]
+
+
+def test_rejects_runtime_identity_or_authority_header_mismatch(tmp_path):
+    fixture = _fixture(tmp_path)
+    report = _run(
+        tmp_path,
+        fixture,
+        identity_fetcher=_identity_fetcher(
+            build_headers={
+                "server": "nginx",
+                "x-confenge-host-architecture-version": "confenge-nginx-node/v1",
+            },
+            runtime_overrides={"release_bundle_hash": "e" * 64},
+            runtime_headers={
+                "server": "nginx",
+                "x-confenge-host-architecture-version": "confenge-nginx-node/v1",
+            },
+        ),
+    )
+    assert report["ok"] is False
+    for phase in ("before", "after"):
+        assert f"{phase}:public_build_server_header_mismatch" in report["errors"]
+        assert f"{phase}:public_build_host_architecture_header_mismatch" in report["errors"]
+        assert f"{phase}:public_runtime_release_bundle_hash_mismatch" in report["errors"]
+        assert f"{phase}:public_runtime_server_header_mismatch" in report["errors"]
+        assert f"{phase}:public_runtime_host_architecture_header_mismatch" in report["errors"]
 
 
 def test_rejects_incomplete_http_mirror(tmp_path):

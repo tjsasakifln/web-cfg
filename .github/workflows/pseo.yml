@@ -12,7 +12,6 @@ jobs:
     name: pSEO quality gates
     runs-on: ubuntu-latest
     env:
-      EXTRA_CLI_ROOT: ${{ runner.temp }}/extra-cli-contract
       EXTRA_CLI_REQUIRED: "1"
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -32,20 +31,21 @@ jobs:
               print(f"sha={sha}", file=output)
           PY
       - name: Checkout contracted producer for fixture integration
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-        with:
-          repository: tjsasakifln/extra-cli
-          ref: ${{ steps.producer-contract.outputs.sha }}
-          path: .worktrees/extra-cli-contract
-          persist-credentials: false
-          fetch-depth: 1
+        env:
+          EXTRA_CLI_ROOT: ${{ runner.temp }}/extra-cli-contract
+        run: |
+          set -euo pipefail
+          # Public, pinned, read-only fixture: no credentials or post-checkout
+          # action, and no external source files inside the website workspace.
+          test ! -e "$EXTRA_CLI_ROOT"
+          test ! -L "$EXTRA_CLI_ROOT"
+          git init --quiet "$EXTRA_CLI_ROOT"
+          git -C "$EXTRA_CLI_ROOT" fetch --no-tags --depth=1 https://github.com/tjsasakifln/extra-cli.git "${{ steps.producer-contract.outputs.sha }}"
+          git -C "$EXTRA_CLI_ROOT" checkout --quiet --detach FETCH_HEAD
+          printf 'EXTRA_CLI_ROOT=%s\n' "$EXTRA_CLI_ROOT" >> "$GITHUB_ENV"
       - name: Verify contracted producer checkout
         run: |
           set -euo pipefail
-          # checkout requires a workspace-relative path; isolate the external
-          # fixture before any repository-wide public-source audit runs.
-          test ! -e "$EXTRA_CLI_ROOT"
-          mv -- .worktrees/extra-cli-contract "$EXTRA_CLI_ROOT"
           test "$(git -C "$EXTRA_CLI_ROOT" rev-parse HEAD)" = "${{ steps.producer-contract.outputs.sha }}"
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
         with:

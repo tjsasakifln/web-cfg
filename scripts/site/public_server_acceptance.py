@@ -49,11 +49,16 @@ _EVIDENCE_HEADERS = (
     "ETag",
     "Last-Modified",
     "Location",
+    "Server",
     "X-Build-Sha",
+    "X-Confenge-Host-Architecture-Version",
     "X-Confenge-Build-Sha",
     "X-Confenge-Release-Id",
     "X-Release-Id",
 )
+EXPECTED_SERVER_HEADER = "cloudflare"
+EXPECTED_HOST_ARCHITECTURE_VERSION = "confenge-nginx-node/v2"
+EXPECTED_STORAGE_BACKEND = "filesystem"
 
 
 class _Title(HTMLParser):
@@ -132,6 +137,8 @@ def load_served_inventory(path: Path) -> tuple[dict[str, Any], list[str]]:
         errors.append("served_inventory_overlay_invalid")
     if not isinstance(payload.get("build_info"), dict):
         errors.append("served_inventory_build_info_invalid")
+    if not isinstance(payload.get("runtime_info"), dict):
+        errors.append("served_inventory_runtime_info_invalid")
     raw_dispositions = payload.get("http_dispositions")
     dispositions: dict[str, dict[str, Any]] = {}
     if not isinstance(raw_dispositions, dict):
@@ -237,6 +244,7 @@ def load_served_inventory(path: Path) -> tuple[dict[str, Any], list[str]]:
         "contract_probes": contract_probes,
         "overlay": payload.get("overlay"),
         "build_info": payload.get("build_info"),
+        "runtime_info": payload.get("runtime_info"),
     }, errors
 
 
@@ -266,6 +274,11 @@ def _fetch_public_json(url: str, timeout: float) -> dict[str, Any]:
             payload = json.loads(body)
             if not isinstance(payload, dict):
                 raise ValueError("identity_payload_not_object")
+            headers = {
+                name.lower(): response.headers.get(name)
+                for name in _EVIDENCE_HEADERS
+                if response.headers.get(name) is not None
+            }
             return {
                 "ok": True,
                 "url": url,
@@ -274,6 +287,7 @@ def _fetch_public_json(url: str, timeout: float) -> dict[str, Any]:
                 "content_type": content_type,
                 "sha256": hashlib.sha256(body).hexdigest(),
                 "payload": payload,
+                "headers": headers,
                 "error": None,
             }
     except (OSError, TimeoutError, urllib.error.URLError, json.JSONDecodeError, ValueError) as exc:
@@ -285,6 +299,7 @@ def _fetch_public_json(url: str, timeout: float) -> dict[str, Any]:
             "content_type": None,
             "sha256": None,
             "payload": {},
+            "headers": {},
             "error": f"{type(exc).__name__}:{exc}",
         }
 
@@ -363,6 +378,8 @@ def _probe_first_hop(url: str, timeout: float) -> tuple[dict[str, Any], bytes | 
 def _identity_snapshot(
     base: str,
     expected_sha: str,
+    artifact_build: dict[str, Any],
+    inventory_runtime: dict[str, Any],
     fetcher: Callable[[str, float], dict[str, Any]],
     timeout: float,
 ) -> tuple[dict[str, Any], list[str]]:
@@ -383,6 +400,45 @@ def _identity_snapshot(
         errors.append("public_build_environment_mismatch")
     if runtime_payload.get("environment") != "production":
         errors.append("public_runtime_environment_mismatch")
+
+    for field in ("artifact_hash", "manifest_hash"):
+        expected = artifact_build.get(field)
+        if not HEX256.fullmatch(str(expected or "")):
+            errors.append(f"artifact_build_{field}_invalid")
+        if build_payload.get(field) != expected:
+            errors.append(f"public_build_{field}_mismatch")
+
+    runtime_fields = (
+        "public_artifact_hash",
+        "release_bundle_hash",
+        "host_architecture_version",
+        "storage_backend",
+    )
+    for field in runtime_fields:
+        if runtime_payload.get(field) != inventory_runtime.get(field):
+            errors.append(f"public_runtime_{field}_mismatch")
+    for field in ("public_artifact_hash", "release_bundle_hash"):
+        if not HEX256.fullmatch(str(inventory_runtime.get(field) or "")):
+            errors.append(f"served_inventory_runtime_{field}_invalid")
+    if inventory_runtime.get("public_artifact_hash") != artifact_build.get("artifact_hash"):
+        errors.append("served_inventory_runtime_public_artifact_hash_mismatch")
+    if (
+        inventory_runtime.get("host_architecture_version")
+        != EXPECTED_HOST_ARCHITECTURE_VERSION
+    ):
+        errors.append("served_inventory_runtime_host_architecture_version_mismatch")
+    if inventory_runtime.get("storage_backend") != EXPECTED_STORAGE_BACKEND:
+        errors.append("served_inventory_runtime_storage_backend_mismatch")
+
+    for name, response in (("build", build), ("runtime", runtime)):
+        headers = response.get("headers") if isinstance(response.get("headers"), dict) else {}
+        if str(headers.get("server") or "").lower() != EXPECTED_SERVER_HEADER:
+            errors.append(f"public_{name}_server_header_mismatch")
+        if (
+            headers.get("x-confenge-host-architecture-version")
+            != EXPECTED_HOST_ARCHITECTURE_VERSION
+        ):
+            errors.append(f"public_{name}_host_architecture_header_mismatch")
     return {"build": build, "runtime": runtime}, errors
 
 
@@ -657,8 +713,24 @@ def run_acceptance(
         errors.append(f"artifact_build_info_invalid:{exc}")
     if artifact_build.get("commit") != expected_sha:
         errors.append("artifact_build_sha_mismatch")
+    inventory_build = inventory.get("build_info") or {}
+    for field in ("artifact_hash", "manifest_hash"):
+        if inventory_build.get(field) != artifact_build.get(field):
+            errors.append(f"served_inventory_build_{field}_mismatch")
+    inventory_runtime = inventory.get("runtime_info") or {}
+    if inventory_runtime.get("release_sha") != expected_sha:
+        errors.append("served_inventory_runtime_sha_mismatch")
+    if inventory_runtime.get("environment") != "production":
+        errors.append("served_inventory_runtime_environment_mismatch")
 
-    before, before_errors = _identity_snapshot(base, expected_sha, identity_fetcher, timeout)
+    before, before_errors = _identity_snapshot(
+        base,
+        expected_sha,
+        artifact_build,
+        inventory_runtime,
+        identity_fetcher,
+        timeout,
+    )
     errors.extend(f"before:{item}" for item in before_errors)
     _write_json(report_dir / "identity-before.json", before)
 
@@ -837,7 +909,14 @@ def run_acceptance(
     if not surface.get("ok"):
         errors.append("public_surface_coverage_failed")
 
-    after, after_errors = _identity_snapshot(base, expected_sha, identity_fetcher, timeout)
+    after, after_errors = _identity_snapshot(
+        base,
+        expected_sha,
+        artifact_build,
+        inventory_runtime,
+        identity_fetcher,
+        timeout,
+    )
     errors.extend(f"after:{item}" for item in after_errors)
     _write_json(report_dir / "identity-after.json", after)
     before_build = ((before.get("build") or {}).get("payload") or {}).get("commit")

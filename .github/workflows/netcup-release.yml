@@ -369,6 +369,11 @@ jobs:
             --bundle-directory "dist/netcup/$RELEASE_SHA" --sha "$RELEASE_SHA" \
             --target "$target" "${controller_ssh[@]}" --operation promote \
             --expected-current "$EXPECTED_CURRENT"
+          promoted_main_sha="$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/main" --jq .object.sha)"
+          if [ "$promoted_main_sha" != "$RELEASE_SHA" ]; then
+            echo "NETCUP_PROMOTE_SUPERSEDED: main advanced during promotion; restoring predecessor" >&2
+            exit 1
+          fi
           ssh "${ssh_options[@]}" "$target" "tail -n 1 /opt/confenge-web/evidence/deploy.ndjson"
 
       - name: Reconcile every served HTML against the exact artifact
@@ -405,6 +410,17 @@ jobs:
             https://confenge.com.br \
             --expected-sha="$RELEASE_SHA" \
             --report="build/reports/runtime-public-acceptance-$RELEASE_SHA.json"
+      - name: Confirm accepted release still matches main
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          accepted_main_sha="$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/main" --jq .object.sha)"
+          if [ "$accepted_main_sha" != "$RELEASE_SHA" ]; then
+            echo "NETCUP_ACCEPTANCE_SUPERSEDED: main advanced during public verification; restoring predecessor" >&2
+            exit 1
+          fi
       - name: Store mandatory post-promote evidence
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
