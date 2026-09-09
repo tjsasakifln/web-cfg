@@ -1,25 +1,25 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "a36d34beb5d58bbd740494ef512ad0054dd7959f",
+  "baseline_commit": "3ec50a67ab77bb335567c2b497a6fbb7f81ef196",
   "recaptured_at": "2026-09-09",
-  "recapture_reason": "Decisão expressa EXECUTE_NOW de 09/09/2026; bytes protegidos conferidos no checkpoint alcançável a36d34beb5d58bbd740494ef512ad0054dd7959f. Os seis pilares receberam navegação institucional por situações, contato condicionado ao escopo, responsável técnico real e substituição do rótulo inglês 'as of' por 'Referência', sem alterar critérios, fontes, preços ou prometer resultado. O Diagnóstico 360 também descreve o Plano de 90 dias como ações para implantação e liga sua prova ao perfil público do Engº Tiago Sasaki. O CSS novo resolve a leitura do Diagnóstico 360 em telas pequenas e mantém a ação de aditivos no primeiro quadro em desktop; a medição executada antes do freeze terminou com 25 aprovações, nenhuma falha e nenhuma pendência. Robots e redirects retiram famílias internas por destinos 410 exatos, em vez de tratar noindex como controle de acesso. Script, sitemaps, mapa de serviço e analytics preservam os bytes já revistos na recaptura anterior. As mudanças foram revisadas por agentes da campanha, não por compradores ou revisor humano independente; esta evidência não alega medição de conversão, nova atribuição, cliente ou aprovação externa. A trava PREPARE-ONLY continua aplicável apenas aos patches históricos não autorizados; ela não restaura o congelamento editorial revogado. Pillars, forbidden, snapshots, specs, patches e documentação foram recalculados dos bytes reais, sem exceção de digest.",
+  "recapture_reason": "Decisão expressa EXECUTE_NOW de 09/09/2026; bytes protegidos conferidos no checkpoint alcançável 3ec50a67ab77bb335567c2b497a6fbb7f81ef196. Os seis pilares receberam navegação institucional por situações, contato condicionado ao escopo, responsável técnico real e substituição do rótulo inglês 'as of' por 'Referência', sem alterar critérios, fontes, preços ou prometer resultado. Após a recaptura anterior, cinco pilares tiveram apenas a credencial estruturada harmonizada de 'Engenheiro Civil e consultor B2G' para o lastro público mais preciso 'Engenheiro Civil'; auditoria também alinhou a prova técnica visível ao mesmo lastro. O Diagnóstico 360 descreve o Plano de 90 dias como ações para implantação e liga sua prova ao perfil público do Engº Tiago Sasaki. O CSS resolve a leitura do Diagnóstico 360 em telas pequenas e mantém a ação de aditivos no primeiro quadro em desktop; a medição executada antes do freeze terminou com 25 aprovações, nenhuma falha e nenhuma pendência. Robots e redirects retiram famílias internas por destinos 410 exatos, em vez de tratar noindex como controle de acesso. Script, sitemaps, mapa de serviço e analytics preservam os bytes já revistos na recaptura anterior. As mudanças foram revisadas por agentes da campanha, não por compradores ou revisor humano independente; esta evidência não alega medição de conversão, nova atribuição, cliente ou aprovação externa. A trava PREPARE-ONLY continua aplicável apenas aos patches históricos não autorizados; ela não restaura o congelamento editorial revogado. Pillars, forbidden, snapshots, specs, patches e documentação foram recalculados dos bytes reais, sem exceção de digest.",
   "html_mutation": true,
   "pillars": {
-    "aditivos-obras-publicas": "0420d9d06b5fe310e4de7f51504a02ddbe4d6d9dd0a8223d39f4ae8cbdaf756e",
-    "medicoes-glosas-obras-publicas": "a87564ef27269d543565f3cc707c4a7b60c81e87740456e4e580415e25fffc73",
-    "reequilibrio-obras-publicas": "76129e6990ee72cbcfd1bad35ba3442fde70734629a148eeb9dad41c648f6d58",
-    "auditoria-orcamento-licitacao": "72aa2a19ee450d32737eec0e7133157784f196fc8b01afd43e4275883448c783",
+    "aditivos-obras-publicas": "c9f37bdfa249ad3f0f2869774d48e33b6f5a3f921919df252b5a96eda96b6ac0",
+    "medicoes-glosas-obras-publicas": "fe3d3c644ac158dae63f85369301da200b5f4de025b0db3364b9cb3e3d929c61",
+    "reequilibrio-obras-publicas": "11d0cf94f61308da770640898df3019f4cbdd0b3dcd42f9df8ad73a8aa79d6ca",
+    "auditoria-orcamento-licitacao": "fb2fa86a4c47f7d0fe83a322c2157097a696f234bc5ca00732b900128eaedb78",
     "diagnostico-b2g-360": "101b019cb8113967cd7ffd50b07d1011af982ac22dd449aefcc868bff4b79409",
-    "diagnostico-pre-licitacao": "1d2d4f72c1f13a08134d4ef510effebe95131b533cf0428ca3005958d59c5e76"
+    "diagnostico-pre-licitacao": "65c6ea2c235ef0db5629922ed18c578bde2ef585339d6adec86830014e1229f4"
   },
   "forbidden": {
-    "aditivos-obras-publicas/index.html": "0420d9d06b5fe310e4de7f51504a02ddbe4d6d9dd0a8223d39f4ae8cbdaf756e",
-    "medicoes-glosas-obras-publicas/index.html": "a87564ef27269d543565f3cc707c4a7b60c81e87740456e4e580415e25fffc73",
-    "reequilibrio-obras-publicas/index.html": "76129e6990ee72cbcfd1bad35ba3442fde70734629a148eeb9dad41c648f6d58",
-    "auditoria-orcamento-licitacao/index.html": "72aa2a19ee450d32737eec0e7133157784f196fc8b01afd43e4275883448c783",
+    "aditivos-obras-publicas/index.html": "c9f37bdfa249ad3f0f2869774d48e33b6f5a3f921919df252b5a96eda96b6ac0",
+    "medicoes-glosas-obras-publicas/index.html": "fe3d3c644ac158dae63f85369301da200b5f4de025b0db3364b9cb3e3d929c61",
+    "reequilibrio-obras-publicas/index.html": "11d0cf94f61308da770640898df3019f4cbdd0b3dcd42f9df8ad73a8aa79d6ca",
+    "auditoria-orcamento-licitacao/index.html": "fb2fa86a4c47f7d0fe83a322c2157097a696f234bc5ca00732b900128eaedb78",
     "diagnostico-b2g-360/index.html": "101b019cb8113967cd7ffd50b07d1011af982ac22dd449aefcc868bff4b79409",
-    "diagnostico-pre-licitacao/index.html": "1d2d4f72c1f13a08134d4ef510effebe95131b533cf0428ca3005958d59c5e76",
+    "diagnostico-pre-licitacao/index.html": "65c6ea2c235ef0db5629922ed18c578bde2ef585339d6adec86830014e1229f4",
     "script.js": "be277e3bd0f6ada2b6db0d36b924e8e347fb413da8a73d60ebb7a7101e265880",
     "styles.css": "1adf1fce8dc20876b3e8192e5b28b3c0750cad5f48b2d2991fbc8bcec0a2ce51",
     "styles-tokens.css": "15cc0770e76276b418c11493fa9e53827ae14bb8f854b0a63d8c6dd63afc02fc",
@@ -51,5 +51,5 @@
     "data/organic/content-service-map.json": 0,
     "js/modules/analytics.js": 0
   },
-  "previous_baseline_commit": "f3a461e130cec079d29a8dbae9521c63be15e6a8"
+  "previous_baseline_commit": "a36d34beb5d58bbd740494ef512ad0054dd7959f"
 }

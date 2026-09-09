@@ -24,7 +24,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: netcup-release-${{ github.repository }}-${{ github.event_name == 'push' && 'automatic' || 'manual' }}
+  group: netcup-release-${{ github.repository }}
   cancel-in-progress: false
 
 jobs:
@@ -155,12 +155,15 @@ jobs:
     name: Netcup stage and host-local verify
     if: github.event_name == 'push' || inputs.operation == 'stage_verify' || inputs.operation == 'promote'
     needs: package
+    outputs:
+      expected_current: ${{ steps.stage_control.outputs.expected_current }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     environment: netcup-stage
     permissions:
       contents: read
     steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - name: Download attested release bundle
         uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
         with:
@@ -201,6 +204,7 @@ jobs:
             exit 1
           }
       - name: Upload, stage, and verify without changing current
+        id: stage_control
         env:
           NETCUP_DEPLOY_HOST: ${{ secrets.NETCUP_DEPLOY_HOST }}
           NETCUP_DEPLOY_PORT: ${{ vars.NETCUP_DEPLOY_PORT }}
@@ -219,14 +223,26 @@ jobs:
             -i "$RUNNER_TEMP/netcup-ssh/id_ed25519"
           )
           target="$NETCUP_DEPLOY_USER@$NETCUP_DEPLOY_HOST"
+          current_link="$(ssh "${ssh_options[@]}" "$target" "readlink /opt/confenge-web/current")"
+          if ! [[ "$current_link" =~ ^(releases/|/opt/confenge-web/releases/)[0-9a-f]{40}$ ]]; then
+            echo "NETCUP_RELEASE_BLOCKED: current release identity is missing or unsafe" >&2
+            exit 1
+          fi
+          expected_current="${current_link##*/}"
+          echo "expected_current=$expected_current" >> "$GITHUB_OUTPUT"
           upload="/opt/confenge-web/incoming/.upload-$RELEASE_SHA-$CI_RUN_ID-$CI_RUN_ATTEMPT"
           ssh "${ssh_options[@]}" "$target" "install -d -m 0750 '$upload'"
           rsync -a --delay-updates --chmod=F640,D750 \
             -e "ssh -p $NETCUP_DEPLOY_PORT -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$RUNNER_TEMP/netcup-ssh/known_hosts -i $RUNNER_TEMP/netcup-ssh/id_ed25519" \
             "dist/netcup/$RELEASE_SHA/" "$target:$upload/"
-          ssh "${ssh_options[@]}" "$target" \
-            "PYTHONDONTWRITEBYTECODE=1 /opt/confenge-web/bin/stage-release '$RELEASE_SHA' --upload-dir '$upload'"
-          ssh "${ssh_options[@]}" "$target" "/opt/confenge-web/bin/verify-release '$RELEASE_SHA'"
+          controller_ssh=()
+          for option in "${ssh_options[@]}"; do controller_ssh+=("--ssh-option=$option"); done
+          python3 deploy/netcup/run_bundle_control.py \
+            --bundle-directory "dist/netcup/$RELEASE_SHA" --sha "$RELEASE_SHA" \
+            --target "$target" "${controller_ssh[@]}" --operation stage --upload-dir "$upload"
+          python3 deploy/netcup/run_bundle_control.py \
+            --bundle-directory "dist/netcup/$RELEASE_SHA" --sha "$RELEASE_SHA" \
+            --target "$target" "${controller_ssh[@]}" --operation verify
 
   promote:
     name: Authorized atomic promote
@@ -238,6 +254,12 @@ jobs:
     permissions:
       contents: read
     steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Download the same attested controller bundle
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          name: netcup-release-${{ github.sha }}
+          path: dist/netcup/${{ github.sha }}
       - name: Require an explicit post-ADR cutover authorization
         env:
           CUTOVER_AUTHORIZATION: ${{ vars.NETCUP_CUTOVER_AUTHORIZED }}
@@ -288,6 +310,7 @@ jobs:
           NETCUP_DEPLOY_PORT: ${{ vars.NETCUP_DEPLOY_PORT }}
           NETCUP_DEPLOY_USER: ${{ secrets.NETCUP_DEPLOY_USER }}
           RELEASE_SHA: ${{ github.sha }}
+          EXPECTED_CURRENT: ${{ needs.stage.outputs.expected_current }}
         run: |
           set -euo pipefail
           current_main_sha="$(
@@ -306,6 +329,152 @@ jobs:
             -i "$RUNNER_TEMP/netcup-ssh/id_ed25519"
           )
           target="$NETCUP_DEPLOY_USER@$NETCUP_DEPLOY_HOST"
-          ssh "${ssh_options[@]}" "$target" \
-            "CONFENGE_LOCAL_ORIGIN=http://127.0.0.1:8088 /opt/confenge-web/bin/promote-release '$RELEASE_SHA'"
+          controller_ssh=()
+          for option in "${ssh_options[@]}"; do controller_ssh+=("--ssh-option=$option"); done
+          python3 deploy/netcup/run_bundle_control.py \
+            --bundle-directory "dist/netcup/$RELEASE_SHA" --sha "$RELEASE_SHA" \
+            --target "$target" "${controller_ssh[@]}" --operation promote \
+            --expected-current "$EXPECTED_CURRENT"
           ssh "${ssh_options[@]}" "$target" "tail -n 1 /opt/confenge-web/evidence/deploy.ndjson"
+
+  runtime_public_acceptance:
+    name: Full served coverage and runtime acceptance
+    if: github.event_name == 'push' || inputs.operation == 'promote'
+    needs: [stage, promote]
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment: netcup-production
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Install the gated Lighthouse toolchain
+        run: npm ci --ignore-scripts
+      - name: Require pinned SSH inputs
+        env:
+          NETCUP_DEPLOY_HOST: ${{ secrets.NETCUP_DEPLOY_HOST }}
+          NETCUP_DEPLOY_PORT: ${{ vars.NETCUP_DEPLOY_PORT }}
+          NETCUP_DEPLOY_USER: ${{ secrets.NETCUP_DEPLOY_USER }}
+          NETCUP_SSH_PRIVATE_KEY: ${{ secrets.NETCUP_SSH_PRIVATE_KEY }}
+          NETCUP_SSH_KNOWN_HOSTS: ${{ secrets.NETCUP_SSH_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          if [ -z "$NETCUP_DEPLOY_HOST" ] || [ -z "$NETCUP_DEPLOY_PORT" ] || \
+             [ -z "$NETCUP_DEPLOY_USER" ] || \
+             [ -z "$NETCUP_SSH_PRIVATE_KEY" ] || [ -z "$NETCUP_SSH_KNOWN_HOSTS" ]; then
+            echo "NETCUP_RELEASE_BLOCKED: configure the SSH host, port, user, key and pinned host keys; no fallback is allowed" >&2
+            exit 1
+          fi
+          if ! [[ "$NETCUP_DEPLOY_HOST" =~ ^[A-Za-z0-9.:-]+$ ]] || \
+             ! [[ "$NETCUP_DEPLOY_PORT" =~ ^[1-9][0-9]{0,4}$ ]] || \
+             ! [[ "$NETCUP_DEPLOY_USER" =~ ^[a-z_][a-z0-9_-]*$ ]] || \
+             (( NETCUP_DEPLOY_PORT > 65535 )); then
+            echo "NETCUP_RELEASE_BLOCKED: invalid SSH host/port/user shape" >&2
+            exit 1
+          fi
+          install -d -m 0700 "$RUNNER_TEMP/netcup-ssh"
+          printf '%s\n' "$NETCUP_SSH_PRIVATE_KEY" > "$RUNNER_TEMP/netcup-ssh/id_ed25519"
+          printf '%s\n' "$NETCUP_SSH_KNOWN_HOSTS" > "$RUNNER_TEMP/netcup-ssh/known_hosts"
+          chmod 0600 "$RUNNER_TEMP/netcup-ssh/id_ed25519" "$RUNNER_TEMP/netcup-ssh/known_hosts"
+          known_host="$NETCUP_DEPLOY_HOST"
+          if [ "$NETCUP_DEPLOY_PORT" != "22" ]; then
+            known_host="[$NETCUP_DEPLOY_HOST]:$NETCUP_DEPLOY_PORT"
+          fi
+          ssh-keygen -F "$known_host" -f "$RUNNER_TEMP/netcup-ssh/known_hosts" >/dev/null || {
+            echo "NETCUP_RELEASE_BLOCKED: pinned known_hosts has no entry for NETCUP_DEPLOY_HOST:NETCUP_DEPLOY_PORT" >&2
+            exit 1
+          }
+      - name: Download the same gated public artifact
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          name: site-ci-public-${{ github.sha }}
+          path: _site
+      - name: Download the same verified release controller
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          name: netcup-release-${{ github.sha }}
+          path: dist/netcup/${{ github.sha }}
+      - name: Reconcile every served HTML against the exact artifact
+        id: served_coverage
+        env:
+          RELEASE_SHA: ${{ github.sha }}
+          NETCUP_DEPLOY_HOST: ${{ secrets.NETCUP_DEPLOY_HOST }}
+          NETCUP_DEPLOY_PORT: ${{ vars.NETCUP_DEPLOY_PORT }}
+          NETCUP_DEPLOY_USER: ${{ secrets.NETCUP_DEPLOY_USER }}
+        run: |
+          set -euo pipefail
+          python3 deploy/netcup/run_bundle_control.py \
+            --bundle-directory "dist/netcup/$RELEASE_SHA" --sha "$RELEASE_SHA" \
+            --target "$NETCUP_DEPLOY_USER@$NETCUP_DEPLOY_HOST" \
+            --ssh-option=-o --ssh-option=BatchMode=yes \
+            --ssh-option=-o --ssh-option=IdentitiesOnly=yes \
+            --ssh-option=-o --ssh-option=StrictHostKeyChecking=yes \
+            --ssh-option=-o --ssh-option="UserKnownHostsFile=$RUNNER_TEMP/netcup-ssh/known_hosts" \
+            --ssh-option=-p --ssh-option="$NETCUP_DEPLOY_PORT" \
+            --ssh-option=-i --ssh-option="$RUNNER_TEMP/netcup-ssh/id_ed25519" \
+            --operation inventory --output "build/reports/server-inventory-$RELEASE_SHA.json"
+          python3 scripts/site/public_server_acceptance.py \
+            --site _site --expected-sha "$RELEASE_SHA" --base https://confenge.com.br \
+            --server-inventory "build/reports/server-inventory-$RELEASE_SHA.json" \
+            --report-dir build/reports/served-public-acceptance
+      - name: Setup Chrome for public runtime verification
+        uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2
+        id: runtime_chrome
+      - name: Verify the served runtime family and its applicable behavior
+        id: runtime_acceptance
+        env:
+          RELEASE_SHA: ${{ github.sha }}
+          CHROME_PATH: ${{ steps.runtime_chrome.outputs.chrome-path }}
+        run: |
+          set -euo pipefail
+          node scripts/site/runtime_lighthouse_acceptance.mjs \
+            https://confenge.com.br \
+            --expected-sha="$RELEASE_SHA" \
+            --report="build/reports/runtime-public-acceptance-$RELEASE_SHA.json"
+      - name: Restore the predecessor after material public acceptance failure
+        if: failure() && (steps.served_coverage.outcome == 'failure' || steps.runtime_acceptance.outcome == 'failure')
+        env:
+          RELEASE_SHA: ${{ github.sha }}
+          PREVIOUS_SHA: ${{ needs.stage.outputs.expected_current }}
+          NETCUP_DEPLOY_HOST: ${{ secrets.NETCUP_DEPLOY_HOST }}
+          NETCUP_DEPLOY_PORT: ${{ vars.NETCUP_DEPLOY_PORT }}
+          NETCUP_DEPLOY_USER: ${{ secrets.NETCUP_DEPLOY_USER }}
+        run: |
+          set -euo pipefail
+          ssh_options=(
+            -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes
+            -o "UserKnownHostsFile=$RUNNER_TEMP/netcup-ssh/known_hosts"
+            -p "$NETCUP_DEPLOY_PORT" -i "$RUNNER_TEMP/netcup-ssh/id_ed25519"
+          )
+          target="$NETCUP_DEPLOY_USER@$NETCUP_DEPLOY_HOST"
+          current_link="$(ssh "${ssh_options[@]}" "$target" "readlink /opt/confenge-web/current")"
+          if [ "$current_link" != "releases/$RELEASE_SHA" ] && [ "$current_link" != "/opt/confenge-web/releases/$RELEASE_SHA" ]; then
+            echo "NETCUP_ROLLBACK_BLOCKED: another release is current; refusing to replace it" >&2
+            exit 1
+          fi
+          controller_ssh=()
+          for option in "${ssh_options[@]}"; do controller_ssh+=("--ssh-option=$option"); done
+          python3 deploy/netcup/run_bundle_control.py \
+            --bundle-directory "dist/netcup/$RELEASE_SHA" --sha "$RELEASE_SHA" \
+            --target "$target" "${controller_ssh[@]}" \
+            --operation rollback --rollback-target "$PREVIOUS_SHA"
+          ssh "${ssh_options[@]}" "$target" "tail -n 1 /opt/confenge-web/evidence/deploy.ndjson"
+      - name: Store mandatory post-promote evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: netcup-runtime-acceptance-${{ github.sha }}
+          path: |
+            build/reports/server-inventory-${{ github.sha }}.json
+            build/reports/served-public-acceptance/
+            build/reports/runtime-public-acceptance-${{ github.sha }}.json
+            docs/lighthouse-runs/summary-${{ github.sha }}.json
+            docs/lighthouse-runs/*-${{ github.sha }}*.json
+          if-no-files-found: error
+          retention-days: 30

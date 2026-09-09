@@ -47,7 +47,8 @@ def test_release_tracks_main_automatically_and_manual_dispatch_is_sha_pinned() -
     assert '"refs/heads/main"' in text
     assert '"$EXPECTED_SHA" != "$RELEASE_SHA"' in text
     assert "github.event_name == 'push'" in text
-    assert "github.event_name == 'push' && 'automatic' || 'manual'" in text
+    assert "group: netcup-release-${{ github.repository }}\n" in text
+    assert "&& 'automatic' || 'manual'" not in text
     assert "cancel-in-progress: false" in text
     assert "environment: netcup-production" in text
     assert "CONFENGE_NETCUP_CUTOVER_APPROVED" in text
@@ -96,10 +97,37 @@ def test_artifact_is_checksummed_attested_and_actions_are_pinned() -> None:
 def test_stage_is_not_promotion_and_public_traffic_is_untouched() -> None:
     text = WORKFLOW.read_text(encoding="utf-8")
     stage_block = text.split("  stage:", 1)[1].split("  promote:", 1)[0]
-    assert "stage-release" in stage_block and "verify-release" in stage_block
-    assert "promote-release" not in stage_block
+    assert "--operation stage" in stage_block and "--operation verify" in stage_block
+    assert "--operation promote" not in stage_block
+    assert "run_bundle_control.py" in stage_block
+    promote = text.split("  promote:", 1)[1]
+    assert "--operation promote" in promote
+    assert '--expected-current "$EXPECTED_CURRENT"' in promote
+    assert "needs.stage.outputs.expected_current" in promote
+    assert "name: netcup-release-${{ github.sha }}" in promote
+    assert "/opt/confenge-web/bin/stage-release" not in text
+    assert "/opt/confenge-web/bin/promote-release" not in text
     assert "DNS" not in text.upper()
     assert "netlify.toml" not in text
+
+
+def test_post_promote_reconciles_all_served_html_and_restores_a_failed_release() -> None:
+    text = WORKFLOW.read_text(encoding="utf-8")
+    post = text.split("  runtime_public_acceptance:", 1)[1]
+    for required in (
+        "needs: [stage, promote]", "environment: netcup-production",
+        "name: site-ci-public-${{ github.sha }}", "name: netcup-release-${{ github.sha }}",
+        "--operation inventory", "public_server_acceptance.py", "--server-inventory",
+        "--site _site", '--expected-sha "$RELEASE_SHA"',
+        "runtime_lighthouse_acceptance.mjs", "if-no-files-found: error",
+        "steps.served_coverage.outcome == 'failure'", "steps.runtime_acceptance.outcome == 'failure'",
+        '--operation rollback --rollback-target "$PREVIOUS_SHA"',
+        "another release is current; refusing to replace it",
+        "build/reports/served-public-acceptance/",
+    ):
+        assert required in post, f"post-promote proof missing {required}"
+    assert "continue-on-error" not in post
+    assert "python3 -m pytest scripts/site/test_public_server_acceptance.py -q" in SITE_CI.read_text(encoding="utf-8")
 
 
 def test_nginx_contract_is_loopback_only_and_consumes_only_generated_behavior() -> None:

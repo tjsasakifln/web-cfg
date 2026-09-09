@@ -227,6 +227,28 @@ assert.match(
   "Chromium profiles must stay in the isolated temporary directory",
 );
 const interfaceCoverage = deriveCoverage({ policy: loadPolicy(), siteRoot: ROOT });
+assert.equal(interfaceCoverage.lighthouse.runtime_families.length, 1);
+assert.deepEqual(
+  committedSummary.coverage.runtime_families,
+  interfaceCoverage.lighthouse.runtime_families,
+  "package evidence must declare the post-stage runtime family without marking it measured",
+);
+assert.equal(
+  committedSummary.coverage.runtime_evidence,
+  null,
+  "the package matrix cannot claim evidence for an overlay that is added only during stage",
+);
+for (const runtimeFamily of interfaceCoverage.lighthouse.runtime_families) {
+  const routePattern = new RegExp(runtimeFamily.route_pattern);
+  assert(
+    !(committedSummary.coverage.pages || []).some((path) => routePattern.test(path)),
+    `package Lighthouse pages contain a virtual runtime representative for ${runtimeFamily.id}`,
+  );
+  assert(
+    !(committedSummary.results || []).some((row) => routePattern.test(row.path)),
+    `package Lighthouse rows claim runtime evidence for ${runtimeFamily.id}`,
+  );
+}
 const seoExempt = new Set(interfaceCoverage.lighthouse.seo_exempt_pages || []);
 const measuredPages = interfaceCoverage.lighthouse.pages.filter((path) => !seoExempt.has(path));
 const expectedRows = measuredPages.flatMap((path) =>

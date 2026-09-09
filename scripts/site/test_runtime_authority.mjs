@@ -59,7 +59,12 @@ test("parses the shipped authority yaml from RUNTIME-AUTHORITY.md", () => {
   assert.deepEqual(record.public_canonical.dns.origin_apex_a, ["159.195.18.88"]);
   assert.equal(record.public_canonical.dns.apex_a, undefined);
   assert.equal(record.public_canonical.dns.www_cname, "confenge.com.br");
-  assert.equal(record.public_canonical.rollback, "/opt/confenge-web/bin/rollback FULL_SHA");
+  assert.equal(record.public_canonical.rollback.controller, "deploy/netcup/run_bundle_control.py");
+  assert.equal(record.public_canonical.rollback.controller_checkout, "clean checkout at CONTROLLER_SHA");
+  assert.match(record.public_canonical.rollback.bundle_source, /incoming\/CONTROLLER_SHA/);
+  assert.match(record.public_canonical.rollback.command, /--sha CONTROLLER_SHA --operation rollback --rollback-target PREVIOUS_SHA/);
+  assert.match(record.public_canonical.rollback.command, /pinned SSH options/);
+  assert.match(record.public_canonical.rollback.legacy_host_launcher, /provisioning reference only/);
   assert.equal(record.public_canonical.storage.backend, "filesystem");
   assert.equal(record.public_canonical.storage.survives_release_rollback, true);
   assert.equal(record.stage.plane, "stage");
@@ -221,6 +226,26 @@ test("the whole repository is green: no unexcused production instruction survive
   assert.equal(scan.ok, true, JSON.stringify(scan.hits, null, 2));
   assert.equal(scan.violations.length, 0);
   assert.equal(scan.register_failures.length, 0);
+});
+
+test("rollback runbook and generated defaults name the verified bundle controller", () => {
+  const runbook = readFileSync(join(ROOT, "docs/ops/ROLLBACK.md"), "utf8");
+  assert.match(runbook, /checkout limpo do `CONTROLLER_SHA`/);
+  assert.match(runbook, /incoming\/<CONTROLLER_SHA>/);
+  assert.match(runbook, /--sha <CONTROLLER_SHA>[\s\S]*--operation rollback[\s\S]*--rollback-target <PREVIOUS_SHA>/);
+  assert.match(runbook, /UserKnownHostsFile=\/absolute\/pinned\/known_hosts/);
+  assert.doesNotMatch(runbook, /comando canônico no host é `\/opt\/confenge-web\/bin\/rollback/);
+
+  for (const rel of [
+    "scripts/migration/build_manifesto.py",
+    "scripts/legacy_equity/build_inventory.py",
+  ]) {
+    const source = readFileSync(join(ROOT, rel), "utf8");
+    assert.match(source, /run_bundle_control\.py/);
+    assert.match(source, /--sha CONTROLLER_SHA/);
+    assert.match(source, /--rollback-target PREVIOUS_SHA/);
+    assert.doesNotMatch(source, /with \/opt\/confenge-web\/bin\/rollback FULL_SHA/);
+  }
 });
 
 test("the scan inventory is derived from the repository, not from a curated list", () => {

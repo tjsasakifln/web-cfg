@@ -13,6 +13,9 @@ import {
   loadPublicFamilyRegistry,
   resolveSiteRoot,
   routeToFile,
+  runtimeLighthouseContractForRoute,
+  verifyRuntimeAcceptedProjectionDocument,
+  verifyRuntimeInventoryDocument,
 } from "./interface_coverage.mjs";
 
 const rootFixture = mkdtempSync(join(tmpdir(), "confenge-site-root-"));
@@ -59,62 +62,16 @@ assert(coverage.axe.routes.every((entry) =>
   entry.reasons.length > 0
   && entry.reasons.every((reason) => reason === "price" || reason === "capture_form")
 ), "axe routes must derive only from declared visitor risk");
-// #566 withdrew 18 priced pSEO pages. #563/W1 added 3 fixture opportunity pages with visible BRL (44+3=47) and 3 axe routes (53+3=56).
-// All 18 rendered a visible price and none carried a capture form, so the
-// price count drops by exactly 18. The recovered Art. 125 receipt and the
-// issue #61 reequilibrio checklist receipt are result-gated capture forms and
-// have to be included in the recaptured census. Direct convergence adds one
-// fail-closed capture route, and MV-09 adds the bounded private quantities
-// journey, so the census was 29 forms across 58 routes.
-// 2026-09-07: a pagina autonoma /correcoes/ foi descontinuada. Ela carregava um
-// formulario de captura (<form id="correction-form"> para
-// /.netlify/functions/correction) com quatro campos obrigatorios, incluindo
-// "correcao proposta". A funcao util -- avisar um erro no site -- passou para a
-// pagina de contato como canal direto, sem formulario e sem exigir solucao
-// proposta. Uma rota a menos e um formulario a menos: consolidacao deliberada,
-// nao perda de canal. O endpoint continua servido para os protocolos antigos.
-// 2026-09-07 (#611): o fundador autorizou publicar o proprio historico -- "mais de
-// R$ 700 milhoes em obras e projetos analisados" -- em /quantitativos-orcamento-obras/,
-// /confianca/ e /especialista/tiago-jun-sasaki/. O detector de preco enxerga qualquer
-// valor em BRL visivel, entao essas TRES rotas passam a contar como price_route
-// (47 -> 50) e DUAS delas entram novas no censo de axe (57 -> 59); a terceira ja
-// estava incluida pelo formulario de captura, e por isso capture_form_route_count
-// nao se move (28).
-//
-// A cobertura SOBE: sao duas rotas a mais auditadas por axe, nenhuma a menos.
-//
-// Ressalva registrada de proposito, e nao resolvida aqui: "R$ 700 milhoes analisados"
-// NAO e um preco, e um numero de trajetoria. O detector nao distingue as duas coisas.
-// Hoje isso e inofensivo -- `npm run inbound:gates` passa e a regra fail-closed de
-// "rota com preco precisa capturar lead" nao esta exigindo captura em /confianca/ nem
-// em /especialista/. Se algum dia exigir, a correcao e ensinar o detector a diferenca,
-// NUNCA remover o numero nem plantar um formulario numa pagina de confianca.
-// 2026-09-08: 50 -> 51. /casos/medicao-glosa-demonstrativo/ entrou no censo de
-// preco. O caso demonstrativo passou a trazer os valores da glosa (R$ 1.200.000
-// apresentados, R$ 300.000 glosados, e a divisao entre formalidade e
-// quantitativo), que e o que torna o metodo conferivel em vez de abstrato.
-// Sao numeros hipoteticos, e a pagina diz isso onde eles aparecem: o selo
-// "DEMONSTRATIVO - NAO E RESULTADO DE CLIENTE - NAO E CASE" e o titulo
-// "Contexto (hipotetico)" estao imediatamente acima. A cobertura SOBE: uma
-// rota a mais auditada, nenhuma a menos, e o gate fail-closed de conversao
-// continua verde (npm run test:inbound-gates), porque a rota nao vende nada.
-assert.equal(coverage.axe.price_route_count, 51);
-// 2026-09-08: 28 -> 26. /triagem-tecnica/ e /quantitativos-orcamento-obras/
-// deixaram de publicar formulario de captura porque a autoridade de Governanca em
-// netlify/functions/data/adaptive-intake-authority.json esta WITHHELD e o endpoint
-// de configuracao responde 503: o formulario aparecia morto na pagina. As duas rotas
-// continuam no censo de axe por outros motivos; o que caiu foi a contagem de
-// formularios, nao a cobertura de auditoria.
-assert.equal(coverage.axe.capture_form_route_count, 26);
-// 2026-09-08: 59 -> 58. /triagem-tecnica/ entrava no censo de axe pelo formulario
-// de captura; sem formulario, e sem preco na pagina, ela sai do recorte. A rota
-// continua auditada por audit:accessibility e pelo audit de layout, e as outras 58
-// rotas do censo nao se movem.
-// 2026-09-08 (segunda revisao): 58 -> 59. A rota que entrou e a mesma do censo
-// de preco acima, /casos/medicao-glosa-demonstrativo/: ao publicar os valores
-// hipoteticos da glosa, ela passou a ser auditada por axe. Uma rota a mais
-// auditada, nenhuma a menos.
-assert.equal(coverage.axe.route_count, 59);
+// The census is measured from every artifact route on every run. Fixed totals
+// would turn legitimate retirement/publication into a stale gate; recomputing
+// independently retains the important invariant that no current risk escapes.
+const measuredRisk = routes.map((route) => {
+  const html = readFileSync(routeToFile(ROOT, route), "utf8");
+  return { route, price: hasPrice(html), capture: hasCaptureForm(html) };
+});
+assert.equal(coverage.axe.price_route_count, measuredRisk.filter((row) => row.price).length);
+assert.equal(coverage.axe.capture_form_route_count, measuredRisk.filter((row) => row.capture).length);
+assert.equal(coverage.axe.route_count, measuredRisk.filter((row) => row.price || row.capture).length);
 assert(selected.has("/conteudos/atraso-na-medicao-obra-publica/"));
 assert(selected.has("/conteudos/sinapi-desonerado-nao-desonerado/"));
 assert.deepEqual(
@@ -138,9 +95,15 @@ for (const [route, why] of [
 assert.equal(coverage.axe.page_loads, coverage.axe.route_count * 2);
 assert(coverage.axe.not_sampled.every((entry) => entry.reason), "every omitted axe route needs a reason");
 assert.equal(coverage.lighthouse.canonical_family_count, registry.families.length);
-assert.equal(coverage.lighthouse.canonical_family_count, 38);
 assert.equal(coverage.lighthouse.supplemental_family_count, 1);
-assert.equal(coverage.lighthouse.pages.length, 42);
+assert.equal(coverage.lighthouse.runtime_families.length, 1);
+assert.equal(
+  coverage.lighthouse.pages.length,
+  coverage.lighthouse.canonical_family_count
+    - coverage.lighthouse.runtime_families.length
+    + coverage.lighthouse.supplemental_family_count
+    + policy.lighthouse.additional_pages.length,
+);
 assert(coverage.lighthouse.pages.includes("/conteudos/atraso-na-medicao-obra-publica/"));
 assert(coverage.lighthouse.pages.includes("/diretoria-b2g/"));
 assert(coverage.lighthouse.pages.includes("/diagnostico-b2g-expansao/"));
@@ -155,8 +118,15 @@ assert.deepEqual(
   "Lighthouse commercial taxonomy must be exactly the canonical public registry",
 );
 for (const family of coverage.lighthouse.families) {
-  assert(coverage.lighthouse.pages.includes(family.lighthouse_representative));
   assert(family.representative_reason, `family has no representative reason: ${family.id}`);
+  if (family.runtime_only) {
+    assert.equal(family.route_count, 0, `runtime-only family leaked into package: ${family.id}`);
+    assert.equal(family.lighthouse_representative, null);
+    assert(!coverage.lighthouse.pages.includes(family.lighthouse_representative));
+    assert.equal(family.runtime_only.post_stage_lighthouse_required, true);
+    continue;
+  }
+  assert(coverage.lighthouse.pages.includes(family.lighthouse_representative));
   const html = readFileSync(routeToFile(ROOT, family.lighthouse_representative), "utf8");
   if (family.kind === "canonical") {
     if (family.seo_exempt) {
@@ -251,6 +221,185 @@ assert.throws(
   () => deriveCoverage({ policy: knownAxeRegression, registry, siteRoot: ROOT }),
   /known exceptions are forbidden/,
 );
+
+const runtimeContract = runtimeLighthouseContractForRoute(
+  "/oportunidades/00394429000100-1-002200/2026/",
+  policy,
+  registry,
+);
+assert.equal(runtimeContract.family_id, "live-intelligence-opportunity");
+assert.equal(runtimeContract.post_stage_lighthouse_required, true);
+assert.equal(runtimeContract.inventory_route, "/sitemap-oportunidades.xml");
+assert.equal(runtimeContract.accepted_projection_route, "/.well-known/live-intelligence-overlay.json");
+const expectedRuntimeSha = "a".repeat(40);
+const acceptedRuntimeDocument = {
+  schema: "confenge.live-intelligence-overlay/v1",
+  release_sha: expectedRuntimeSha,
+  official_live: true,
+  source_kind: "official_live",
+  source_run_id: "LI-2026-09-09-test",
+  as_of: "2026-09-09T12:00:00Z",
+  manifest_hash: "b".repeat(64),
+  consumer_observed_manifest_hash: "b".repeat(64),
+  accepted_projection_sha256: "c".repeat(64),
+  routes: [{
+    opportunity_id: "00394429000100-1-002200/2026",
+    route: runtimeContract.route,
+    html_path: "_site/oportunidades/00394429000100-1-002200/2026/index.html",
+    content_hash: "d".repeat(64),
+    sha256: "e".repeat(64),
+  }],
+  static_html_paths: ["_site/oportunidades/index.html"],
+  static_html_sha256: { "_site/oportunidades/index.html": "f".repeat(64) },
+  removed_html_paths: [],
+};
+assert.equal(
+  verifyRuntimeAcceptedProjectionDocument(
+    runtimeContract.route,
+    acceptedRuntimeDocument,
+    runtimeContract,
+    expectedRuntimeSha,
+  ).opportunity_id,
+  "00394429000100-1-002200/2026",
+);
+assert.equal(
+  verifyRuntimeInventoryDocument(
+    runtimeContract.route,
+    `<urlset><url><loc>https://confenge.com.br${runtimeContract.route}</loc></url></urlset>`,
+    runtimeContract,
+    acceptedRuntimeDocument.routes.map((item) => item.route),
+  ),
+  true,
+);
+assert.throws(
+  () => verifyRuntimeInventoryDocument(
+    runtimeContract.route,
+    `<urlset><url><loc>https://confenge.com.br${runtimeContract.route}</loc></url><url><loc>https://confenge.com.br/oportunidades/unaccepted/</loc></url></urlset>`,
+    runtimeContract,
+    acceptedRuntimeDocument.routes.map((item) => item.route),
+  ),
+  /sitemap differs from the exact accepted projection/,
+  "a sitemap-only opportunity absent from the accepted projection must fail closed",
+);
+assert.throws(
+  () => verifyRuntimeAcceptedProjectionDocument(
+    runtimeContract.route,
+    { ...acceptedRuntimeDocument, routes: [] },
+    runtimeContract,
+    expectedRuntimeSha,
+  ),
+  /has no exact routes/,
+  "a family-level official claim without an exact accepted route cannot approve Lighthouse",
+);
+assert.throws(
+  () => verifyRuntimeAcceptedProjectionDocument(
+    runtimeContract.route,
+    { ...acceptedRuntimeDocument, consumer_observed_manifest_hash: "f".repeat(64) },
+    runtimeContract,
+    expectedRuntimeSha,
+  ),
+  /divergent producer\/consumer manifest hashes/,
+  "an accepted projection with divergent hash identity must fail closed",
+);
+assert.throws(
+  () => verifyRuntimeAcceptedProjectionDocument(
+    runtimeContract.route,
+    { ...acceptedRuntimeDocument, release_sha: "0".repeat(40) },
+    runtimeContract,
+    expectedRuntimeSha,
+  ),
+  /release mismatch/,
+  "accepted routes from another release cannot certify the candidate",
+);
+assert.throws(
+  () => verifyRuntimeAcceptedProjectionDocument(
+    runtimeContract.route,
+    {
+      ...acceptedRuntimeDocument,
+      removed_html_paths: [acceptedRuntimeDocument.routes[0].html_path],
+    },
+    runtimeContract,
+    expectedRuntimeSha,
+  ),
+  /both publishes and removes/,
+  "the stage manifest cannot claim the selected page as both published and withdrawn",
+);
+assert.throws(
+  () => verifyRuntimeAcceptedProjectionDocument(
+    runtimeContract.route,
+    { ...acceptedRuntimeDocument, static_html_paths: ["_site/oportunidades/unaccepted/index.html"] },
+    runtimeContract,
+    expectedRuntimeSha,
+  ),
+  /invalid static_html_paths allowlist/,
+  "a static family hub cannot authorize an arbitrary opportunity child",
+);
+assert.throws(
+  () => verifyRuntimeAcceptedProjectionDocument(
+    runtimeContract.route,
+    { ...acceptedRuntimeDocument, static_html_sha256: {} },
+    runtimeContract,
+    expectedRuntimeSha,
+  ),
+  /invalid static_html_sha256 identity/,
+  "the static commercial hub must be bound to its exact served bytes",
+);
+assert.throws(
+  () => verifyRuntimeInventoryDocument(
+    runtimeContract.route,
+    "<urlset></urlset>",
+    runtimeContract,
+  ),
+  /absent from \/sitemap-oportunidades\.xml/,
+  "a syntactically valid route is not runtime evidence until the stage inventory contains it",
+);
+assert.throws(
+  () => runtimeLighthouseContractForRoute("/oportunidades/", policy, registry),
+  /does not match the owned detail-route contract/,
+  "the runtime hub is not a substitute for a real opportunity detail page",
+);
+
+const genericRuntimeException = structuredClone(policy);
+genericRuntimeException.lighthouse.canonical_representatives
+  .find((entry) => entry.family_id === "live-intelligence-opportunity")
+  .runtime_only.owner = "some-runtime";
+assert.throws(
+  () => deriveCoverage({ policy: genericRuntimeException, registry, siteRoot: ROOT }),
+  /invalid official runtime Lighthouse contract/,
+  "a generic runtime exception cannot waive package coverage",
+);
+
+const virtualRepresentative = structuredClone(policy);
+const virtualEntry = virtualRepresentative.lighthouse.canonical_representatives
+  .find((entry) => entry.family_id === "live-intelligence-opportunity");
+delete virtualEntry.runtime_only;
+virtualEntry.route = "/oportunidades/pe-2026-000188-reforma-ubs-londrina-pr/";
+assert.throws(
+  () => deriveCoverage({ policy: virtualRepresentative, registry, siteRoot: ROOT }),
+  /Lighthouse families absent from the artifact/,
+  "a source fixture absent from the package cannot stand in for runtime evidence",
+);
+
+assert.throws(
+  () => deriveCoverage({
+    policy,
+    registry,
+    siteRoot: ROOT,
+    routes: [...routes, "/oportunidades/pe-2026-000188-reforma-ubs-londrina-pr/"],
+  }),
+  /runtime-only Lighthouse families must be absent from the package/,
+  "putting a committed opportunity fixture back into the package must fail closed",
+);
+
+assert.match(runner, /--runtime-route requires --expected-sha/);
+assert.match(runner, /--only omitted mandatory runtime Lighthouse route/);
+assert.match(runner, /\.well-known\/build-info\.json/);
+assert.match(runner, /\.well-known\/runtime-info\.json/);
+assert.match(runner, /contract\.accepted_projection_route/);
+assert.match(runner, /verifyRuntimeAcceptedProjectionDocument/);
+assert.match(runner, /verifyRuntimeInventoryDocument/);
+assert.match(runner, /accepted HTML digest mismatch/);
+assert.match(runner, /data-opportunity-id/);
 
 console.log(
   `INTERFACE_COVERAGE_OK routes=${coverage.route_count} axe=${coverage.axe.route_count}x2 `

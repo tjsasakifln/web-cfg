@@ -67,6 +67,65 @@ externas conservam sua autoridade original.
 
 ## Universo auditado
 
+### Fechamento da fonte e endurecimento de release (09/09, ainda não publicado)
+
+Checkpoint de fonte `3ec50a67ab77bb335567c2b497a6fbb7f81ef196`:
+varredura ampliada encontrou inicialmente 198 defeitos em 154 rotas
+(170 apresentações autorais de B2G, 27 de Hub e uma de SLA), incluindo
+`jobTitle` e arrays de JSON-LD. Depois da correção na origem: 303 ocorrências
+contextuais legítimas em 114 rotas e zero defeitos nesse detector. Os números
+não são aditivos aos de outros scanners. Fontes e testes preservam siglas
+definidas tecnicamente, chaves/URLs internas e nomes externos transcritos.
+
+A primeira dobra foi medida novamente em um checkout isolado **limpo** desse
+checkpoint: **25/25 rotas PASS, zero FAIL/PENDING**. A evidência registra 49
+entradas de conteúdo, scripts, CSS/fontes e controles; o teste recusa árvore
+suja, conteúdo divergente e evidência de commit não ancestral. A medição
+equivalente no artefato final é um step separado e obrigatório no site-ci,
+com upload obrigatório; remover o comando reprova o teste do workflow.
+Isso substitui a medição intermediária de 23/25 abaixo, sem apagar seu histórico.
+
+A revisão adversarial encontrou e orientou a correção destes controles:
+
+| Regra/defeito anterior | Proteção preservada | Substituição e contraprova |
+| --- | --- | --- |
+| 410 não forçado cedia a arquivo existente | Retirada exata, sem redirect à home | Contrato/nginx tornam `gone` terminal; E2E semeia arquivo em cópia descartável, exige 410 e ausência do texto, sem alterar o artefato |
+| Qualquer rota sob oportunidades era overlay autorizado | Snapshot aceito pelo owner, hashes e promoção atômica | Manifesto identifica IDs/caminhos/digests exatos; rota inventada sob o mesmo prefixo reprova; compatibilidade legada usa estado privado fora do release |
+| Aprovação ativa declarava visibilidade de revisor inexistente | Autoria, fontes, limites e hashes materiais | Checklist 2.0 separa autor/método e consistência da representação do revisor; dez predicados são recalculados; false, chave antiga e schema ausente reprovam; 219 testes passaram |
+| Controlador instalado uma vez não recebia correções do pacote | Conta de deploy e sudo restrito existentes | Workflow usa controlador do mesmo bundle verificado, igual ao checkout, com hash conferido antes de executar; drift local/remoto de um byte reprova; stage/verify/promote por streaming testados |
+| Execução automática/manual tinha locks distintos | Proteções de branch e ambientes mantidas | Uma fila canônica e predecessor conferido sob lock do host; promoção superada reprova; rollback intencional continua disponível |
+
+O host foi consultado somente para leitura: controlador root instalado com
+SHA-256 `7f43f3d488dacf802c412d44093bc241d671b3a8cb540ccc7e01b5587962bd1c`;
+snapshot oficial gerado em `2026-09-04T00:46:51+00:00`, fonte de
+`2026-09-03T16:10:59+00:00`, vencido na data desta revisão. A indisponibilidade
+retira detalhes e descoberta de oportunidades, mantendo hub informativo com
+contato contextual; não renova a fonte nem inventa estado atual. O novo fluxo
+concilia inventário independente do host, todos os HTML obtidos por URLs
+normais, digests e scanner, além de Lighthouse ou retirada comprovada. Falha
+material pós-promoção aciona rollback do predecessor pelo mesmo controlador,
+sem substituir uma publicação concorrente ou tocar pedidos.
+
+Evidência local: `/tmp/confenge-commercial-20260909.zaPcn3/`, arquivos
+`source-3ec-first-fold.log`, `first-fold-source-bound-tests.log`,
+`bundle-controller-tests.log`, `netcup-final-control-tests.log` e
+`workflow-bound-full-release.log`; varreduras léxicas em
+`/tmp/confenge-lexical-before.json` e `/tmp/confenge-lexical-after.json`.
+São checkpoints reais, não aceite do SHA integrado/servido. Evidência final
+será vinculada ao run de publicação sem novo merge apenas para declarar término.
+
+Compatibilidade exercitada também contra cópias reais do current `54b51438…`
+e rollback `c173461c…`: os quatro diretórios release/incoming coincidiram com
+o host em contagem e hash agregado. Cada release manteve seus 1.091 arquivos
+byte a byte; os envelopes e 300 rotas aceitas passaram na verificação nova,
+com manifesto externo ao docroot. Evidência em
+`/tmp/confenge-legacy-compat.I5hsNZ` e `/tmp/confenge-legacy-seal-fresh.EP7O1E`.
+Nenhuma mutação no host foi feita nesse ensaio. O hash da home obtida por URL
+normal também coincidiu com o arquivo do host. O edge respondeu `HIT`, idade
+272 segundos, apesar do `no-cache` da origem; o aceite deve respeitar o TTL
+de 300 segundos já documentado, registrar propagação e continuar reprovando
+qualquer digest divergente, sem aceitar HTML antigo como versão nova.
+
 ### Evidências da retomada de 09/09 (candidato ainda não publicado)
 
 O inventário anterior independente foi concluído: **551/551 HTML obtidos por

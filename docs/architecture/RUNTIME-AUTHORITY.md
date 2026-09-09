@@ -74,7 +74,12 @@ public_canonical:
     ready: /ready
     ops: /.netlify/functions/ops?action=health
     ops_alias: /api/web/ops?action=health
-  rollback: /opt/confenge-web/bin/rollback FULL_SHA
+  rollback:
+    controller: deploy/netcup/run_bundle_control.py
+    controller_checkout: clean checkout at CONTROLLER_SHA
+    bundle_source: /opt/confenge-web/incoming/CONTROLLER_SHA exact three-file envelope
+    command: python3 deploy/netcup/run_bundle_control.py --bundle-directory BUNDLE_DIRECTORY --sha CONTROLLER_SHA --operation rollback --rollback-target PREVIOUS_SHA --target confenge-deploy@PINNED_HOST with pinned SSH options
+    legacy_host_launcher: /opt/confenge-web/bin/rollback PREVIOUS_SHA is a provisioning reference only
   release_root: /opt/confenge-web
   current_symlink: /opt/confenge-web/current
   purpose: public acquisition, utility, lead capture and conversion

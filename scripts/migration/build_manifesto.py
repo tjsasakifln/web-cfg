@@ -55,7 +55,10 @@ MONITORING = {
 }
 
 ROLLBACK = (
-    "Roll the public plane back with /opt/confenge-web/bin/rollback FULL_SHA and restore this inventory hash. "
+    "From a clean CONTROLLER_SHA checkout, restore the public plane with "
+    "deploy/netcup/run_bundle_control.py --bundle-directory BUNDLE_DIRECTORY --sha CONTROLLER_SHA "
+    "--operation rollback --rollback-target PREVIOUS_SHA over pinned SSH; BUNDLE_DIRECTORY must be "
+    "the exact retained /opt/confenge-web/incoming/CONTROLLER_SHA envelope. Restore this inventory hash. "
     "Do not reactivate SmartLic as a product, SaaS, brand or public runtime. "
     "Bridge rollback is SmartLic#2115 (DNS/proxy to last non-destructive state)."
 )

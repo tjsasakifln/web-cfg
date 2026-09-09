@@ -6,6 +6,7 @@
  */
 import { createServer } from "http";
 import { gzipSync } from "zlib";
+import { createHash } from "crypto";
 import {
   readFileSync,
   writeFileSync,
@@ -26,14 +27,22 @@ import {
   formatCoverageDeclaration,
   loadPolicy,
   resolveSiteRoot,
+  runtimeLighthouseContractForRoute,
+  verifyRuntimeAcceptedProjectionDocument,
+  verifyRuntimeInventoryDocument,
 } from "./interface_coverage.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 const OUT = join(ROOT, "docs", "lighthouse-runs");
-const coverage = deriveCoverage({ policy: loadPolicy(), siteRoot: resolveSiteRoot() });
-const PAGES = coverage.lighthouse.pages;
 const cliArgs = process.argv.slice(2);
 const option = (name) => cliArgs.find((arg) => arg.startsWith(`--${name}=`))?.split("=", 2)[1] || "";
+const coverage = deriveCoverage({ policy: loadPolicy(), siteRoot: resolveSiteRoot() });
+const runtimeRoutes = option("runtime-route").split(",").map((value) => value.trim()).filter(Boolean);
+if (new Set(runtimeRoutes).size !== runtimeRoutes.length) {
+  throw new Error("--runtime-route contains duplicate routes");
+}
+const runtimeContracts = runtimeRoutes.map((route) => runtimeLighthouseContractForRoute(route));
+const PAGES = [...coverage.lighthouse.pages, ...runtimeRoutes];
 const only = option("only");
 const evidenceLabel = option("label");
 if (evidenceLabel && !/^[a-z0-9-]+$/.test(evidenceLabel)) {
@@ -45,6 +54,10 @@ if (unknownPages.length) throw new Error(`--only contains route(s) outside deriv
 const RUN_PAGES = [...new Set(requestedPages)];
 if (only && !RUN_PAGES.includes("/")) {
   throw new Error("focused Lighthouse evidence must include / so the repeated home gate cannot be bypassed");
+}
+const omittedRuntimeRoutes = runtimeRoutes.filter((route) => !RUN_PAGES.includes(route));
+if (omittedRuntimeRoutes.length) {
+  throw new Error(`--only omitted mandatory runtime Lighthouse route(s): ${omittedRuntimeRoutes.join(", ")}`);
 }
 const IMAGE_GATE_PAGES = new Set(coverage.lighthouse.image_gate_pages);
 const SEO_EXEMPT_PAGES = new Set(coverage.lighthouse.seo_exempt_pages);
@@ -82,6 +95,16 @@ const MIME = {
 };
 
 const baseArg = cliArgs.find((arg) => !arg.startsWith("--"));
+const expectedSha = option("expected-sha");
+if (runtimeRoutes.length && !baseArg) {
+  throw new Error("--runtime-route requires an explicit staged/production base URL");
+}
+if (runtimeRoutes.length && !/^[0-9a-f]{40}$/.test(expectedSha)) {
+  throw new Error("--runtime-route requires --expected-sha=<40 lowercase hex> to bind runtime evidence to the release");
+}
+if (runtimeRoutes.length && evidenceLabel !== expectedSha) {
+  throw new Error("--runtime-route requires --label=<expected-sha> so post-stage evidence cannot overwrite package evidence");
+}
 let server = null;
 let BASE = baseArg;
 
@@ -128,6 +151,118 @@ if (!BASE) {
   await new Promise((r) => server.listen(PORT, "127.0.0.1", r));
   BASE = `http://127.0.0.1:${PORT}`;
 }
+
+async function fetchRequired(url, kind) {
+  const response = await fetch(url, { redirect: "manual", headers: { accept: kind === "json" ? "application/json" : "application/xml,text/xml" } });
+  if (response.status !== 200) throw new Error(`runtime Lighthouse ${kind} fetch failed: ${url} -> ${response.status}`);
+  return kind === "json" ? response.json() : response.text();
+}
+
+async function fetchExactRuntimeHtml(origin, route) {
+  const response = await fetch(`${origin}${route}`, {
+    redirect: "manual",
+    headers: { accept: "text/html" },
+  });
+  if (response.status !== 200) {
+    throw new Error(`runtime Lighthouse direct HTML fetch failed: ${route} -> ${response.status}`);
+  }
+  const body = Buffer.from(await response.arrayBuffer());
+  return { body, text: body.toString("utf8") };
+}
+
+async function verifyRuntimeEvidenceInputs() {
+  if (!runtimeContracts.length) return null;
+  const origin = BASE.replace(/\/$/, "");
+  const [buildInfo, runtimeInfo] = await Promise.all([
+    fetchRequired(`${origin}/.well-known/build-info.json`, "json"),
+    fetchRequired(`${origin}/.well-known/runtime-info.json`, "json"),
+  ]);
+  if (buildInfo.commit !== expectedSha || runtimeInfo.release_sha !== expectedSha) {
+    throw new Error(
+      `runtime Lighthouse identity mismatch: expected=${expectedSha} build=${buildInfo.commit || "missing"} runtime=${runtimeInfo.release_sha || "missing"}`,
+    );
+  }
+  const inventories = new Map();
+  const projections = new Map();
+  const selectedRoutes = [];
+  for (const contract of runtimeContracts) {
+    if (!projections.has(contract.accepted_projection_route)) {
+      projections.set(
+        contract.accepted_projection_route,
+        await fetchRequired(`${origin}${contract.accepted_projection_route}`, "json"),
+      );
+    }
+    const projection = projections.get(contract.accepted_projection_route);
+    const acceptedItem = verifyRuntimeAcceptedProjectionDocument(
+      contract.route,
+      projection,
+      contract,
+      expectedSha,
+    );
+    if (!inventories.has(contract.inventory_route)) {
+      inventories.set(
+        contract.inventory_route,
+        await fetchRequired(`${origin}${contract.inventory_route}`, "xml"),
+      );
+    }
+    verifyRuntimeInventoryDocument(
+      contract.route,
+      inventories.get(contract.inventory_route),
+      contract,
+      projection.routes.map((item) => item.route),
+    );
+    const page = await fetchExactRuntimeHtml(origin, contract.route);
+    const observedSha256 = createHash("sha256").update(page.body).digest("hex");
+    if (observedSha256 !== acceptedItem.sha256) {
+      throw new Error(
+        `runtime Lighthouse accepted HTML digest mismatch: route=${contract.route} accepted=${acceptedItem.sha256} observed=${observedSha256}`,
+      );
+    }
+    if (
+      !page.text.includes(`data-opportunity-id="${acceptedItem.opportunity_id}"`)
+      || !page.text.includes('data-index-state="INDEX"')
+    ) {
+      throw new Error(`runtime Lighthouse accepted page identity is absent from rendered HTML: ${contract.route}`);
+    }
+    selectedRoutes.push({
+      family_id: contract.family_id,
+      route: contract.route,
+      opportunity_id: acceptedItem.opportunity_id,
+      content_hash: acceptedItem.content_hash,
+      html_sha256: observedSha256,
+      accepted_projection_sha256: projection.accepted_projection_sha256,
+      producer_manifest_hash: projection.manifest_hash,
+      consumer_observed_manifest_hash: projection.consumer_observed_manifest_hash,
+      source_run_id: projection.source_run_id,
+      as_of: projection.as_of,
+    });
+  }
+  const staticHtml = [];
+  for (const projection of projections.values()) {
+    for (const htmlPath of projection.static_html_paths) {
+      const route = htmlPath
+        .replace(/^_site/, "")
+        .replace(/index\.html$/, "");
+      const page = await fetchExactRuntimeHtml(origin, route);
+      const observedSha256 = createHash("sha256").update(page.body).digest("hex");
+      if (observedSha256 !== projection.static_html_sha256[htmlPath]) {
+        throw new Error(
+          `runtime Lighthouse static HTML digest mismatch: route=${route} accepted=${projection.static_html_sha256[htmlPath]} observed=${observedSha256}`,
+        );
+      }
+      staticHtml.push({ route, html_path: htmlPath, sha256: observedSha256 });
+    }
+  }
+  return {
+    expected_sha: expectedSha,
+    build_commit: buildInfo.commit,
+    runtime_release_sha: runtimeInfo.release_sha,
+    routes: selectedRoutes,
+    static_html: staticHtml,
+  };
+}
+
+const runtimeEvidence = await verifyRuntimeEvidenceInputs();
 
 mkdirSync(OUT, { recursive: true });
 const results = [];
@@ -288,6 +423,8 @@ const summary = {
     public_route_count: coverage.route_count,
     family_count: coverage.lighthouse.families.length,
     families: coverage.lighthouse.families,
+    runtime_families: coverage.lighthouse.runtime_families,
+    runtime_evidence: runtimeEvidence,
     pages: PAGES,
     measured_pages: RUN_PAGES,
     critical_money_pages: [...CRITICAL_MONEY_PATHS],
