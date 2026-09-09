@@ -147,6 +147,47 @@ async function unnamedInteractiveNodes(page) {
     return nodes.filter(node => ["button", "link", "textbox", "combobox"].includes(node.role?.value) && !node.ignored && !String(node.name?.value || "").trim()).length;
   } finally { await client.detach(); }
 }
+async function formStepTransitionDiagnostics(page) {
+  // Deliberately return only structural and validity state: form values may
+  // contain the synthetic probe context and must never enter this report.
+  return page.evaluate(() => {
+    const form = document.querySelector("#formulario-contato");
+    const step1 = document.querySelector("#form-step-1");
+    const step2 = document.querySelector("#form-step-2");
+    const next = document.querySelector("[data-form-next]");
+    const fieldValid = selector => {
+      const field = document.querySelector(selector);
+      return field ? Boolean(field.validity?.valid) : null;
+    };
+    const focused = document.activeElement;
+    const focusTarget = focused && form?.contains(focused)
+      ? (focused.id || focused.getAttribute("name") || focused.tagName.toLowerCase())
+      : "outside_form";
+    let nextHitTarget = null;
+    if (next) {
+      const rect = next.getBoundingClientRect();
+      const hit = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);
+      nextHitTarget = Boolean(hit && (hit === next || next.contains(hit)));
+    }
+    return {
+      form_ready: form?.dataset.formReady === "true",
+      multistep_enabled: form?.dataset.formMultistep === "true",
+      step1_active: Boolean(step1?.classList.contains("is-active")),
+      step2_active: Boolean(step2?.classList.contains("is-active")),
+      stage_selected: Boolean(document.querySelector("#estagio")?.value),
+      focused_element: focusTarget,
+      next_disabled: next ? Boolean(next.disabled) : null,
+      next_aria_disabled: next?.getAttribute("aria-disabled") === "true",
+      next_hit_target: nextHitTarget,
+      step1_validity: {
+        nome: fieldValid("#nome"),
+        email: fieldValid("#email"),
+        telefone: fieldValid("#telefone"),
+        estagio: fieldValid("#estagio"),
+      },
+    };
+  });
+}
 async function blockExternal(page) {
   await page.setRequestInterception(true);
   page.on("request", request => {
@@ -250,8 +291,15 @@ try {
     await page.type("#nome", syntheticName);
     await page.type("#email", syntheticEmail);
     await page.select("#estagio", scenario.stage);
+    const transitionBefore = await formStepTransitionDiagnostics(page);
     await page.click("[data-form-next]");
-    await page.waitForSelector('#form-step-2.is-active');
+    try {
+      await page.waitForSelector('#form-step-2.is-active');
+    } catch (error) {
+      const transitionAfter = await formStepTransitionDiagnostics(page);
+      const message = error instanceof Error ? error.message : String(error);
+      throw new Error(`home form step transition did not activate; diagnostics=${JSON.stringify({ before: transitionBefore, after: transitionAfter })}; ${message}`);
+    }
     // The UI intentionally focuses the new step after two animation frames.
     // Wait for that accessibility transition before typing; otherwise its
     // delayed focus can steal the first keystrokes from the target field and
