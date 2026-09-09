@@ -148,7 +148,7 @@
       "next_useful_state": "O pedido da unidade escolhida fica registrado com recorte, data e decisão para confirmação de escopo e capacidade antes de qualquer cobrança.",
       "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
       "pre_form_value": "Configure o recorte da unidade demonstrada para deixar um pedido rastreável, com data de corte e decisão explicitadas.",
-      "field_purpose": "CNPJ identifica a empresa; datas delimitam corte e prazo da decisão; intenção define o uso do artefato; nome e um canal válido permitem retorno. Empresa e recorte textual são opcionais.",
+      "field_purpose": "CNPJ identifica a empresa; datas delimitam corte e prazo da decisão; finalidade explica como a entrega será usada; nome e um canal válido permitem retorno. Empresa e recorte textual são opcionais.",
       "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente."
     },
     "second_reading": {
@@ -172,7 +172,7 @@
     "adaptive_triage": {
       "stage": "register_context",
       "commitment": "medium",
-      "next_useful_state": "A triagem fica registrada somente após a persistência confirmada; o protocolo permite à equipe avaliar enquadramento e capacidade em canal posterior.",
+      "next_useful_state": "O protocolo confirma o registro da solicitação. A CONFENGE então analisa a necessidade e combina o escopo e a disponibilidade pelo canal informado.",
       "actual_receipt": "lead_id ou receipt_id opaco, exibido na confirmação inline apenas após a persistência.",
       "pre_form_value": "Vamos registrar o tipo de problema, seu nome e um canal de retorno. Empresa é opcional. Cidade e UF aparecem somente quando ajudam a avaliar uma possível vistoria.",
       "field_purpose": "A situação direciona a triagem; nome e um canal válido permitem o retorno. Empresa é opcional, e cidade e UF são pedidas apenas quando uma vistoria pode ser necessária.",
@@ -187,7 +187,7 @@
     "adaptive_quantities_triage": {
       "stage": "register_context",
       "commitment": "medium",
-      "next_useful_state": "A triagem fica registrada somente após a persistência confirmada; o protocolo permite à equipe avaliar enquadramento e capacidade em canal posterior.",
+      "next_useful_state": "O protocolo confirma o registro da solicitação. A CONFENGE então analisa a necessidade e combina o escopo e a disponibilidade pelo canal informado.",
       "actual_receipt": "lead_id ou receipt_id opaco, exibido na confirmação inline apenas após a persistência.",
       "pre_form_value": "Confirme a situação e informe nome mais um canal de retorno. Para este primeiro recorte documental, cidade e UF não são necessárias.",
       "field_purpose": "A situação delimita o pedido; nome e um canal válido permitem o retorno. Não pedimos localização neste recorte documental.",

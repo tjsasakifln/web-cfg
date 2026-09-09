@@ -233,6 +233,20 @@ def test_fail_closed_credential_not_backed():
     assert check_credentials_against_proof(clean) == []
 
 
+def test_credential_scan_preserves_semantic_boundaries_without_hiding_inline_claims():
+    adjacent_cards = _fixture(
+        "<article><a>Entender perícia, assistência e avaliação</a></article>"
+        "<article><span>04</span><h2>Segurança do trabalho</h2></article>"
+    )
+    assert check_credentials_against_proof(adjacent_cards) == []
+
+    unsupported_inline_claim = _fixture(
+        "<p>Avaliação <strong>04</strong> estrelas comprovada.</p>"
+    )
+    errors = check_credentials_against_proof(unsupported_inline_claim)
+    assert any(error.startswith("credential_pattern_forbidden:") for error in errors)
+
+
 def test_fail_closed_case_missing_permission_class():
     html = _fixture("<h1>Case de cliente</h1><p>Recuperamos margem sem dizer de quem.</p>")
     assert "permission_class_absent" in check_case_permission_class(html)

@@ -364,6 +364,20 @@ def test_whatsapp_float_in_landmark():
         assert 'aria-label="Contato rápido"' in text or "Contato rápido" in text
 
 
+def test_checkout_return_does_not_claim_payment_or_premature_service_start():
+    """A provider return URL is not proof of payment or authorization to start."""
+
+    text = (ROOT / "diagnostico-b2g-expansao" / "obrigado" / "index.html").read_text(encoding="utf-8")
+    visible = visible_text(text).lower()
+
+    assert "não comprova" in visible
+    assert not re.search(r"\bseu\s+pagamento\s+foi\s+enviado\b", visible)
+    assert not re.search(r"\bvoc[eê]\s+concluiu\s+o\s+pagamento\b", visible)
+    assert "depois que o provedor confirmar" in visible
+    for condition in ("aceite", "confirmação financeira", "dados necessários", "reunião inicial"):
+        assert condition in visible, f"checkout return omitted start condition: {condition}"
+
+
 # Visitor-visible backstage / marketing-objective language (public surface banlist).
 # Keep in sync with brand.json forbidden_phrases / copy_leaks extensions.
 PUBLIC_BACKSTAGE_PHRASES = (

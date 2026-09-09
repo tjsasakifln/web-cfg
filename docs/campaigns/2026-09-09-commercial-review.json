@@ -1,0 +1,646 @@
+{
+  "schema": "CONFENGE_COMMERCIAL_REVIEW_EVIDENCE/1.0.0",
+  "status": "PRE_RELEASE_SOURCE_REVIEW",
+  "decision": "EXECUTE_NOW 2026-09-09",
+  "limitations": "Agent editorial readings, not human or buyer research; source snapshots are explicit in each report. Final artifact and production acceptance must reconcile affected compositions after all generators.",
+  "reports": [
+    {
+      "source_report": "build/reports/commercial-c1-c6-review.json",
+      "report": {
+        "schema": "CONFENGE_COMMERCIAL_C1_C6_REVIEW/1.0.0",
+        "reviewer": {
+          "identity": "/root/contact_journeys",
+          "kind": "agent_editorial_review",
+          "independent_human_or_professional_review": false
+        },
+        "basis": {
+          "surface": "current source HTML before final isolated build",
+          "scope": "A home/shared navigation, B deliveries/examples entry, C quantities and budget; journey chains starting with the thirteen requested needs",
+          "limitation": "This is source evidence, not a release or production acceptance."
+        },
+        "destinations": [
+          {
+            "route": "/",
+            "locations": [
+              "index.html:90",
+              "index.html:91",
+              "index.html:92",
+              "index.html:97",
+              "index.html:94"
+            ],
+            "c1": "PASS — 'Projetos e serviços de engenharia para obras públicas e privadas.'",
+            "c2": "PASS — 'Elaboração e revisão de projetos, compatibilização entre disciplinas, quantitativos, orçamentos, perícias e análises técnicas'.",
+            "c3": "PASS — 'plantas, detalhes e memórias de cálculo ... planilhas ... laudos, pareceres e relatórios'.",
+            "c4": "PASS — 'para fazer a obra ou a decisão avançar'.",
+            "c5": "PASS — EESC-USP, CNPJ and link to published method/limits are presented as checkable claims.",
+            "c6": "PASS — visible routes to /servicos/ and contextual project contact."
+          },
+          {
+            "route": "/servicos/",
+            "locations": [
+              "servicos/index.html:91",
+              "servicos/index.html:96",
+              "servicos/index.html:101",
+              "servicos/index.html:106",
+              "servicos/index.html:111"
+            ],
+            "c1": "PASS — project, building/condominium, expertise/valuation, SST and public-works situations are named, including public/private works and other compatible disciplines.",
+            "c2": "PASS — each row names performed work such as calculation, inspection, examination, or measurement.",
+            "c3": "PASS — outputs are concrete: plants, calculation memo, report, laudo, parecer, matrix or dossier.",
+            "c4": "PASS — each row states use such as contracting, coordinating, repairing, judging, maintaining or organizing a contractual position.",
+            "c5": "PASS — shared service closing states professional attribution, ART and registration confirmation before technical responsibility (servicos/index.html:119).",
+            "c6": "PASS — each row supplies an anchored triage/service link."
+          },
+          {
+            "route": "/quantitativos-orcamento-obras/",
+            "locations": [
+              "quantitativos-orcamento-obras/index.html:84",
+              "quantitativos-orcamento-obras/index.html:85",
+              "quantitativos-orcamento-obras/index.html:97",
+              "quantitativos-orcamento-obras/index.html:109",
+              "quantitativos-orcamento-obras/index.html:169"
+            ],
+            "c1": "PASS — public and private works, proposal comparison, contracting and execution are named.",
+            "c2": "PASS — the page says it measures/reviews quantities and costs, relates quantities to source documents, and applies the appropriate public/private reference.",
+            "c3": "PASS — quantity schedule, assumptions/memory and open cost composition/review are described.",
+            "c4": "PASS — the documents are stated to support comparing proposals, contracting, bidding and reviewing an estimate.",
+            "c5": "PASS — responsible engineer/CREA/ART claim and linked identity/method are visible (quantitativos-orcamento-obras/index.html:133).",
+            "c6": "PASS — three direct channels, with public/private context and no initial-document requirement (quantitativos-orcamento-obras/index.html:165-171)."
+          },
+          {
+            "route": "/entregas/",
+            "locations": [
+              "entregas/index.html:72",
+              "entregas/index.html:101-110",
+              "entregas/index.html:172-175"
+            ],
+            "c1": "PASS for the published public-works offers sampled: each has a stated buyer situation.",
+            "c2": "PASS — fact cards state research, comparison, reconciliation or prioritization work.",
+            "c3": "PASS — outputs and demonstrative models are distinguished in cards and actions.",
+            "c4": "PASS — decision/use cards say how the deliverable is used.",
+            "c5": "PASS — model/example labels and synthetic-data labels prevent treating examples as client work.",
+            "c6": "PASS — each sample has a demonstrative destination and scoped contact action.",
+            "limitation": "This review sampled the newly changed hub structure; it is not certification of every catalog card."
+          }
+        ],
+        "journey_classification": {
+          "real_gaps": [
+            {
+              "needs": [
+                "all"
+              ],
+              "path": "/triagem-tecnica/ and /entregas/ shared header/mobile navigation",
+              "finding": "The visible header CTA remains 'Iniciar triagem' in triagem-tecnica/index.html:41,50 and entregas/index.html:46,55 after home has moved to proposal-oriented wording.",
+              "required_correction": "Update the shared-shell source/generator so the visitor-facing action is consistent across the public navigation."
+            },
+            {
+              "needs": [
+                "pericia_avaliacao",
+                "seguranca_trabalho"
+              ],
+              "path": "/#situacao-pericia or /#situacao-sst -> /triagem-tecnica/#...",
+              "finding": "The home action bypasses the corresponding explanatory service row. The triage page gives contact but not the work, deliverable and utility already available in /servicos/#servico-pericia and /servicos/#servico-sst.",
+              "required_correction": "Point the home action first to the relevant service anchor, retaining the contextual triage action there."
+            }
+          ],
+          "retired_heuristics": [
+            "Literal C1 token matching was unable to recognize valid descriptions such as fissura/infiltração/falha and outras disciplinas compatíveis.",
+            "C4 regex matching omitted valid utility formulations such as para comparar propostas and a entrega serve para planejar.",
+            "Main-wide channel aggregation treated shared channels as if they were the selected situation CTA."
+          ]
+        },
+        "models_and_contract_services": {
+          "models": {
+            "reviewed_routes": [
+              "/casos/modelo-apresentacao-executiva-resultados/",
+              "/casos/modelo-base-quantitativa-canonica/",
+              "/casos/modelo-contratos-vincendos-relicitacao/",
+              "/casos/modelo-mapa-compradores-publicos/",
+              "/casos/modelo-mapeamento-concorrentes-publicos/",
+              "/casos/modelo-painel-precos-obras-publicas/",
+              "/casos/modelo-relatorio-executivo-consolidado/",
+              "/casos/modelo-relatorio-inteligencia-licitacoes/"
+            ],
+            "c1": "PASS — each model names the decision/use case in its demonstrative H1 and fit statement; e.g. the executive model names a director decision in casos/modelo-apresentacao-executiva-resultados/index.html:70,104.",
+            "c2": "PASS — the reports describe the analysis, reconciliation, prioritization or presentation work that produces the example.",
+            "c3": "PASS — each has an 'O que você recebe' section and the rendered demonstrative report/table; e.g. executive model line 108 and quantitative-base model line 109.",
+            "c4": "PASS — the examples state the decision/use of the output rather than only its fields; e.g. executive model line 104 and quantitative-base model line 261.",
+            "c5": "PASS — schema and visible badges identify the author/organization and state that company, buyers, values and results are synthetic, not client work; e.g. executive model lines 30 and 131-132.",
+            "c6": "PASS — each exposes a scoped configuration/contact CTA and separates the true offer terms from the synthetic example; e.g. executive model lines 77-80, 123.",
+            "finding": "No material C1–C6 defect found in these eight stable source models. This does not claim their synthetic data proves client outcomes.",
+            "individual_rendered_witnesses": [
+              {
+                "route": "/casos/modelo-apresentacao-executiva-resultados/",
+                "c1_c4": "index.html:70 — 'Transforme o diagnóstico em decisão assinada na reunião.'",
+                "c2_c3": "index.html:108 — 'O que você recebe'; report sequence is rendered below it.",
+                "c5": "index.html:30/131 — synthetic demonstration, not client work.",
+                "c6": "index.html:79 — contextual WhatsApp offer: 'Configurar esta síntese por R$ 890'."
+              },
+              {
+                "route": "/casos/modelo-base-quantitativa-canonica/",
+                "c1_c4": "index.html:70 — 'Confira cada número antes de acreditar nele.'",
+                "c2_c3": "index.html:109 — 'O que você recebe'; tables/formulas are the displayed deliverable.",
+                "c5": "index.html:30/131 — synthetic case is distinguished from client work.",
+                "c6": "index.html:79 — 'Configurar esta base por R$ 690'."
+              },
+              {
+                "route": "/casos/modelo-contratos-vincendos-relicitacao/",
+                "c1_c4": "index.html:70 — 'Descubra quais contratos vencem antes que o edital apareça.'",
+                "c2_c3": "index.html:108 — 'O que você recebe'; the prioritized calendar is visible.",
+                "c5": "index.html:30/131 — contracts and dates are synthetic.",
+                "c6": "index.html:79 — 'Configurar este radar por R$ 1.450'."
+              },
+              {
+                "route": "/casos/modelo-mapa-compradores-publicos/",
+                "c1_c4": "index.html:70 — 'Descubra quais órgãos compram o que a sua empresa executa.'",
+                "c2_c3": "index.html:108 — 'O que você recebe'; buyer map is rendered.",
+                "c5": "index.html:131 — 'integralmente sintéticos' and 'não representa cliente'.",
+                "c6": "index.html:79 — 'Configurar este mapa por R$ 1.200'."
+              },
+              {
+                "route": "/casos/modelo-mapeamento-concorrentes-publicos/",
+                "c1_c4": "index.html:70 — 'Descubra contra quem você realmente disputa.'",
+                "c2_c3": "index.html:108 — 'O que você recebe'; competitive profiles are rendered.",
+                "c5": "index.html:131 — fictional profile, not client/licitação/result.",
+                "c6": "index.html:79 — 'Configurar este mapa competitivo por R$ 1.900'."
+              },
+              {
+                "route": "/casos/modelo-painel-precos-obras-publicas/",
+                "c1_c4": "index.html:70 — 'Descubra a escala de contrato que este mercado realmente adjudica.'",
+                "c2_c3": "index.html:108 — 'O que você recebe'; price ranges and limits are rendered.",
+                "c5": "index.html:30/131 — panel is demonstrative, not a client result.",
+                "c6": "index.html:79 — 'Configurar estas referências por R$ 2.400'."
+              },
+              {
+                "route": "/casos/modelo-relatorio-executivo-consolidado/",
+                "c1_c4": "index.html:70 — 'Decida onde alocar equipe, acervo e caixa nos próximos 90 dias.'",
+                "c2_c3": "index.html:108 — 'O que você recebe'; consolidated report is displayed.",
+                "c5": "index.html:30/131 — company/data/decisions are synthetic.",
+                "c6": "index.html:79 — 'Configurar este plano por R$ 3.750'."
+              },
+              {
+                "route": "/casos/modelo-relatorio-inteligencia-licitacoes/",
+                "c1_c4": "index.html:68 — 'licitações a disputar ou recusar.'",
+                "c2_c3": "index.html:107 — 'O que você recebe'; prioritized portfolio and criteria are rendered.",
+                "c5": "index.html:28/130 — opportunities and values are synthetic, not client/licitação.",
+                "c6": "index.html:352/376 — contextual portfolio request and written protocol capture."
+              }
+            ]
+          },
+          "contract_services_d_e": {
+            "reviewed_routes": [
+              "/atrasos-prorrogacao-obras-publicas/",
+              "/defesa-tecnica-contratos-publicos/",
+              "/acompanhamento-contratos-obras/",
+              "/defesa-margem-contratos-publicos/"
+            ],
+            "c1": "PASS — each names the triggering contract situation; defense-margin example: event, glosa, aditivo, reajuste or omission (defesa-margem-contratos-publicos/index.html:71).",
+            "c2": "PASS — pages describe document analysis, fact reconstruction, calculation, monitoring or technical reading.",
+            "c3": "PASS — stated outputs include chronology, obligations, risk matrix, panel, dossier, reports and decision record; defense-margin lines 72 and 197.",
+            "c4": "PASS — utility is explicit: plan a response, prioritize/register/quantify an event, or keep decisions current; defense-margin line 197 and acompanhamento line 73.",
+            "c5": "PASS — each renders method/proof/limits and distinguishes a synthetic event from a documented fact; defense-margin line 197.",
+            "c6": "PASS — active consented forms with optional company fields and direct WhatsApp alternatives are present; defesa-tecnica-contratos-publicos/index.html:97-107 and acompanhamento-contratos-obras/index.html:94-99.",
+            "finding": "No material C1–C6 defect found in the reviewed stable D/E service sources. The visible phrase 'Informação não localizada' is a valid evidentiary state; the internal `data-evidence-grade=UNKNOWN` token is not visitor copy.",
+            "individual_rendered_witnesses": [
+              {
+                "route": "/atrasos-prorrogacao-obras-publicas/",
+                "c1_c4": "index.html:68 — delays, responsibility, critical path and contemporary record; lead explains avoided cost/multa/pedido frágil.",
+                "c2_c3": "index.html:73/104 — chronology, nexus, days, mitigation and recommended technical request.",
+                "c5": "index.html:104 — fact/calculation/inference are visibly separated.",
+                "c6": "index.html:106/116 — consented form plus contextual WhatsApp alternative."
+              },
+              {
+                "route": "/defesa-tecnica-contratos-publicos/",
+                "c1_c4": "index.html:67 — notification/sanction need and technical basis before deadline.",
+                "c2_c3": "index.html:72/95 — facts, chronology, evidence, gaps and technical annexes.",
+                "c5": "index.html:95 — factual evidence and technical interpretation are separated; no legal representation promise.",
+                "c6": "index.html:97/107 — consented form plus contextual WhatsApp alternative."
+              },
+              {
+                "route": "/acompanhamento-contratos-obras/",
+                "c1_c4": "index.html:68/73 — recurring contract decisions and records kept current.",
+                "c2_c3": "index.html:73/96 — monitoring, panel, record and decision outputs.",
+                "c5": "index.html:96 — method/limits are rendered with the scoped service.",
+                "c6": "index.html:94-99 — contextual form/direct contact, with company optional."
+              },
+              {
+                "route": "/defesa-margem-contratos-publicos/",
+                "c1_c4": "index.html:65/197 — event that erodes margin and decision before loss.",
+                "c2_c3": "index.html:72/197 — chronology, risk matrix, impact, proof, gaps and decision.",
+                "c5": "index.html:197 — event/fact/calculation/inference labels distinguish the synthetic example.",
+                "c6": "index.html:79/202 — contextual WhatsApp and consented form; contact does not start billing."
+              }
+            ]
+          }
+        },
+        "new_harness_review": {
+          "false_acceptance_protection": [
+            "Requires all planned 13 journeys and records actual, not planned, execution counts.",
+            "Checks direct route status, fragment existence, overflow at four widths and 200%-equivalent reflow, keyboard reachability, browser AX names, CNPJ-required controls, JS-off essentials and WITHHELD direct channels.",
+            "Blocks and reports all non-loopback requests; it does not activate WhatsApp, email, telephone, lead or payment endpoints."
+          ],
+          "current_limit": "The CI harness no longer uses regex as a C1–C5 approval. It verifies the route/fragment/contact chain and records browser evidence; this separate review records substantive C1–C6 findings for the bounded destinations."
+        }
+      }
+    },
+    {
+      "source_report": "build/reports/commercial-c1-c6-additional.json",
+      "report": {
+        "schema": "CONFENGE_COMMERCIAL_C1_C6_ADDITIONAL_REVIEW/1.0.0",
+        "reviewer": {
+          "identity": "/root/commercial_pages",
+          "kind": "independent_agent_editorial_review",
+          "human_or_customer_review": false,
+          "method": "Contextual reading of each rendered composition against the visitor need; no keyword score was used."
+        },
+        "basis": {
+          "source_head_read": "f1d43279dbd6363db191bf413aced0f3ab3d6497",
+          "artifact_root": "/tmp/confenge-commercial-20260909.zaPcn3/release-validation/_site",
+          "artifact_commit": "f1d43279dbd6363db191bf413aced0f3ab3d6497",
+          "artifact_hash": "0367ecae73962840dbc91d6f4663cc4ab1a8bfb055680afa230c6cb83427caec",
+          "manifest_hash": "25268b1fb9fdc68a7afedbe49fb02461dce838f8082fc9b6d7b3d3374fb301bf",
+          "scope_note": "The artifact was read before the checkout-return correction below. Source HTML is authoritative for that correction until the integrator rebuilds the candidate; this report is not production acceptance."
+        },
+        "universe": {
+          "capture_route_rule": "Tracked public HTML containing the canonical lead action or the home contact form; documentation prototypes and test fixtures excluded.",
+          "capture_route_count": 25,
+          "capture_routes": [
+            "/",
+            "/acompanhamento-contratos-obras/",
+            "/analise-cnpj/",
+            "/analise-cnpj/r/",
+            "/atrasos-prorrogacao-obras-publicas/",
+            "/bid-room-licitacoes-obras/",
+            "/casos/",
+            "/casos/modelo-apresentacao-executiva-resultados/",
+            "/casos/modelo-base-quantitativa-canonica/",
+            "/casos/modelo-contratos-vincendos-relicitacao/",
+            "/casos/modelo-mapa-compradores-publicos/",
+            "/casos/modelo-mapeamento-concorrentes-publicos/",
+            "/casos/modelo-painel-precos-obras-publicas/",
+            "/casos/modelo-relatorio-executivo-consolidado/",
+            "/casos/modelo-relatorio-inteligencia-licitacoes/",
+            "/comercial/radar-decisorio/",
+            "/defesa-margem-contratos-publicos/",
+            "/defesa-tecnica-contratos-publicos/",
+            "/diagnostico-b2g-expansao/",
+            "/diretoria-b2g/",
+            "/entregas/",
+            "/ferramentas/checklist-reequilibrio/",
+            "/ferramentas/diagnostico-defesa-margem/",
+            "/ferramentas/limite-acrescimos-supressoes/",
+            "/servicos-obras-publicas/"
+          ],
+          "six_non_capture_service_pillars": [
+            "/aditivos-obras-publicas/",
+            "/auditoria-orcamento-licitacao/",
+            "/diagnostico-b2g-360/",
+            "/diagnostico-pre-licitacao/",
+            "/medicoes-glosas-obras-publicas/",
+            "/reequilibrio-obras-publicas/"
+          ],
+          "confirmation_routes": [
+            "/obrigado.html",
+            "/obrigado-contrato.html",
+            "/obrigado-edital.html",
+            "/obrigado-operacao.html",
+            "/diagnostico-b2g-expansao/obrigado/",
+            "/diagnostico-b2g-expansao/cancelado/",
+            "/diagnostico-b2g-expansao/expirado/"
+          ]
+        },
+        "capture_route_reconciliation": {
+          "reviewed_contextually_here": [
+            "/acompanhamento-contratos-obras/",
+            "/analise-cnpj/",
+            "/analise-cnpj/r/",
+            "/bid-room-licitacoes-obras/",
+            "/casos/",
+            "/comercial/radar-decisorio/",
+            "/diagnostico-b2g-expansao/",
+            "/diretoria-b2g/",
+            "/ferramentas/checklist-reequilibrio/",
+            "/ferramentas/diagnostico-defesa-margem/",
+            "/ferramentas/limite-acrescimos-supressoes/",
+            "/servicos-obras-publicas/"
+          ],
+          "reviewed_in_parent_report_and_rechecked_as_compositions": [
+            "/",
+            "/atrasos-prorrogacao-obras-publicas/",
+            "/defesa-margem-contratos-publicos/",
+            "/defesa-tecnica-contratos-publicos/",
+            "/entregas/",
+            "/casos/modelo-apresentacao-executiva-resultados/",
+            "/casos/modelo-base-quantitativa-canonica/",
+            "/casos/modelo-contratos-vincendos-relicitacao/",
+            "/casos/modelo-mapa-compradores-publicos/",
+            "/casos/modelo-mapeamento-concorrentes-publicos/",
+            "/casos/modelo-painel-precos-obras-publicas/",
+            "/casos/modelo-relatorio-executivo-consolidado/",
+            "/casos/modelo-relatorio-inteligencia-licitacoes/"
+          ],
+          "route_count_reconciled": 25,
+          "unreviewed_capture_routes": 0,
+          "result": "PASS_WITH_CONFIRMATION_FINDINGS_RECORDED_SEPARATELY"
+        },
+        "c1_c6_reviews": [
+          {
+            "route": "/bid-room-licitacoes-obras/",
+            "need": "Coordinate a material public tender proposal before committing team, guarantee and capital.",
+            "C1": "PASS — the material tender and capital decision are explicit at bid-room-licitacoes-obras/index.html:63-78.",
+            "C2": "PASS — CONFENGE joins tender reading, qualification/acervo, budget, BDI, schedule, risk and responsible people at lines 81 and 94-107.",
+            "C3": "PASS — work plan, responsibility matrix, recorded risks, critical review and final checklist are enumerated at lines 82 and 115-123.",
+            "C4": "PASS — the company uses the outputs to decide whether to bid and then signs and submits; CONFENGE does not claim submission, lines 82 and 106-107.",
+            "C5": "PASS — open synthetic example, method, named technical responsibility and limits appear at lines 66, 83 and 88-89.",
+            "C6": "PASS — the contextual on-page intake and WhatsApp are at lines 85-86 and 270-290; the form says it does not conclude hiring."
+          },
+          {
+            "route": "/diretoria-b2g/",
+            "need": "Install a recurring decision cadence for simultaneous public opportunities and an active contract.",
+            "C1": "PASS — competing tenders/contracts and delayed decisions are named at diretoria-b2g/index.html:63-81 and 96-100.",
+            "C2": "PASS — weekly triage, decision room, coordination and memory are described at lines 103-115.",
+            "C3": "PASS — prioritized portfolio, demand board, proposal/margin coordination, agenda and decision record appear at lines 118-130.",
+            "C4": "PASS — commercial, engineering, budget and direction uses are explicit at line 82.",
+            "C5": "PASS — method, capacity boundary, responsible engineer and no-victory promise appear at lines 83-93.",
+            "C6": "PASS — contextual WhatsApp and on-page request are at lines 88-90 and 316-330."
+          },
+          {
+            "route": "/diagnostico-b2g-expansao/",
+            "need": "Choose buyers, territories and segments before dispersing expansion capital.",
+            "C1": "PASS — expansion focus and the cost of pursuing too many territories are named at diagnostico-b2g-expansao/index.html:64-82.",
+            "C2": "PASS — the page describes the bounded public-data comparison and recommendation work in the output/workflow sections starting at lines 100-128.",
+            "C3": "PASS — buyer map, up to 15 competitors, price panel and recommendations in PDF, spreadsheets and presentation are at line 85.",
+            "C4": "PASS — direction uses the package to prioritize investigation, bidding or not advancing, line 85.",
+            "C5": "PASS — synthetic example, obligation of means, responsible engineer, public price and exact start conditions are at lines 68-96.",
+            "C6": "PASS — scoped form and direct WhatsApp are at lines 92-93 and 216-250; the form does not charge or conclude contracting."
+          },
+          {
+            "route": "/acompanhamento-contratos-obras/",
+            "need": "Turn current site records into preventive contract decisions instead of reconstructing a dispute later.",
+            "C1": "PASS — active-contract and late-decision conditions are at acompanhamento-contratos-obras/index.html:66-70.",
+            "C2": "PASS — weekly record, indicator, queue, agenda and decision cycle are described at lines 73-78.",
+            "C3": "PASS — obligation matrix, schedule/measurement/cash panel, fact queue, alerts and minutes are at lines 71 and 74.",
+            "C4": "PASS — the cycle tells direction what to correct, document, quantify, send to a dossier or monitor, line 73.",
+            "C5": "PASS — tool/example proof, method, technical responsibility and legal/operational boundaries are at lines 66, 78 and 100-103.",
+            "C6": "PASS — contextual form and direct alternative are at lines 94-99."
+          },
+          {
+            "route": "/casos/",
+            "need": "Inspect the shape of a deliverable without mistaking a demonstration for client work.",
+            "C1": "PASS — visitor job and public-works/current broader-service boundary are explicit at casos/index.html:50-57.",
+            "C2": "PASS — provenance, re-derivation and decision work are described at lines 56-57 and 79-80.",
+            "C3": "PASS — ten demonstrative destinations and their contents are enumerated at lines 60-74.",
+            "C4": "PASS — each model is tied to a decision and the hub offers browser calculations at lines 63-72 and 84-92.",
+            "C5": "PASS — hypothetical values, no client/result claim, named responsibility and evidence policy are visible at lines 50-57 and 78-81.",
+            "C6": "PASS — public/private engineering services have the correct service destination at line 75; contract examples have a scoped form at lines 96-123."
+          },
+          {
+            "route": "/servicos-obras-publicas/",
+            "need": "Choose the document needed for a public tender or contract event and register enough context for a proposal.",
+            "C1": "PASS — the hub opens by decision and enumerates seven recognizable events at servicos-obras-publicas/index.html:62 and 91.",
+            "C2": "PASS — each card states the fact/calculation/document work; the hub explains that contract, records and calculation are concentrated into a bounded output at line 91.",
+            "C3": "PASS — named dossiers/calculation, true prices and delivery times are visible at line 91.",
+            "C4": "PASS — uses include contesting glosa, instructing aditivo/prorrogação/reequilíbrio and responding to accusation, line 91.",
+            "C5": "PASS — public analyses are explicitly not client cases, and obligation-of-means/source/document limits are at lines 85-91.",
+            "C6": "PASS — event-specific links plus proposal form explain document, schedule and no-charge-before-proposal state at line 91."
+          },
+          {
+            "route": "/analise-cnpj/",
+            "need": "Read a public-contract profile and relevant open opportunities before deciding whether to request follow-up.",
+            "C1": "PASS — the question and historical public profile are named at analise-cnpj/index.html:47-48.",
+            "C2": "PASS — the tool reads the versioned public projection without new/private collection, lines 125-128.",
+            "C3": "PASS — categories, ranges, geographies, buyers and adherent open opportunities are the stated result at line 48.",
+            "C4": "PASS — monitor, deepen or request human review are distinct choices at lines 82-87.",
+            "C5": "PASS — source incompleteness, non-habilitation boundary and CNPJ privacy are visible at lines 58 and 76-80, 125-128.",
+            "C6": "PASS — result comes before contact; consented follow-up is at lines 82-114."
+          },
+          {
+            "route": "/analise-cnpj/r/",
+            "need": "Open a share-token result without exposing or persisting the queried CNPJ.",
+            "C1": "PASS conditionally — the static shell identifies a share-token result; the concrete need is supplied by the loaded result state, analise-cnpj/r/index.html:34-57.",
+            "C2": "PASS — the page describes a time-limited public-result lookup, not new collection, lines 102 onward.",
+            "C3": "PASS conditionally — result blocks are state-driven; the static artifact is not treated as a completed analysis.",
+            "C4": "PASS — result actions distinguish monitor, deepen and human review at lines 58-63.",
+            "C5": "PASS — random-code privacy, source limitations and expiration are explicit in the rendered shell, lines 34-57 and 102 onward.",
+            "C6": "PASS — consented follow-up is at lines 58-91. Dynamic-state validation remains required in the live-intelligence test suite."
+          },
+          {
+            "route": "/comercial/radar-decisorio/",
+            "need": "Configure the company, territory, segments and acervo for a R$ 599 report before receiving payment instructions.",
+            "C1": "PASS — configured report, price and pre-payment sequencing are explicit at comercial/radar-decisorio/index.html:53-67.",
+            "C2": "PASS — the six parameter inputs and why each is used are described at lines 74-88.",
+            "C3": "PASS — adapted report/PDF destination and exact configured inputs are at lines 55 and 80-88.",
+            "C4": "PASS — inputs delimit the search and prevent taking payment without knowing what to produce, lines 55 and 98-101.",
+            "C5": "PASS — provider identity, obligation of means, no quantity promise and stated timeline are at lines 58-70.",
+            "C6": "PASS — the form records parameters before opening a still-disabled direct-payment step; failure stays fail-closed, lines 98-147 and 152-162."
+          },
+          {
+            "route": "/ferramentas/checklist-reequilibrio/",
+            "need": "Identify documentary blockers for reequilíbrio without treating a score as entitlement.",
+            "C1": "PASS — need and decision boundary are at ferramentas/checklist-reequilibrio/index.html:42-45.",
+            "C2": "PASS — fact/nexus, economic support and request-instruction checks are described at lines 49-51.",
+            "C3": "PASS — browser-only diagnosis, ordered gaps and downloadable/copyable result are exposed by the tool.",
+            "C4": "PASS — result orders corrections while preserving item-by-item merit review, lines 43-51.",
+            "C5": "PASS — method, TCU/legal sources, browser-only processing and legal boundary are at lines 116-120.",
+            "C6": "PASS — optional human dossier review follows the complete free result at lines 87-110."
+          },
+          {
+            "route": "/ferramentas/diagnostico-defesa-margem/",
+            "need": "Separate official facts, derivations and unknowns in a public contract before a second reading.",
+            "C1": "PASS — the contract/CNPJ/PNCP situation is explicit at ferramentas/diagnostico-defesa-margem/index.html:50-53.",
+            "C2": "PASS — SELECT-only versioned projection method and classification are at lines 56-61 and 186-190.",
+            "C3": "PASS — factual summary, timeline, margin events, evidence, sources and items to verify are rendered sections.",
+            "C4": "PASS — output supports deciding what needs confirmation before aditivo, reajuste or reequilíbrio, lines 50-53.",
+            "C5": "PASS — PNCP source, reference date, explicit unknowns and no-fact-from-silence boundary are visible at lines 133 and 186-190.",
+            "C6": "PASS — a second-reading request is contextual and does not resend contract data, line 170 and its form boundary."
+          },
+          {
+            "route": "/ferramentas/limite-acrescimos-supressoes/",
+            "need": "Calculate independent art. 125 addition/suppression balances and expose assumptions still needing review.",
+            "C1": "PASS — base, history and contemplated change are named at ferramentas/limite-acrescimos-supressoes/index.html:49-52.",
+            "C2": "PASS — three-step calculation and independent axes are explained at lines 57-59 and in the form stages.",
+            "C3": "PASS — balances, alerts and copy/download/print actions are available after calculation.",
+            "C4": "PASS — the result identifies the numerical boundary and unconfirmed assumptions, line 52.",
+            "C5": "PASS — art. 124-126 source, versioned method and non-legal-opinion limit are at lines 197-201.",
+            "C6": "PASS — the complete local result precedes an optional, contextual CFG-D19 request at lines 159-191."
+          }
+        ],
+        "six_pillar_group_review": {
+          "result": "PASS",
+          "shared_C1_C4": "Each route starts from a distinct event and closes with a concrete output/use, rather than a generic contact pitch.",
+          "shared_C5": "Each names institutional/technical responsibility, method, sources, date and limits; no approval or outcome is promised.",
+          "shared_C6": "Each has a contextual direct action; lack of an on-page form is not treated as lack of contact.",
+          "witnesses": [
+            {
+              "route": "/aditivos-obras-publicas/",
+              "C1_C4": "aditivos-obras-publicas/index.html:66,85,123 — change in scope; chronology/proof, price memory and protocol-ready position before uncompensated work.",
+              "C5_C6": "lines 123-125 — contextual WhatsApp, named responsibility and fact/legal-limit/item-price method."
+            },
+            {
+              "route": "/medicoes-glosas-obras-publicas/",
+              "C1_C4": "medicoes-glosas-obras-publicas/index.html:65,75,100 — contested measurement; execution chronology, glosa calculation and protocol-ready position.",
+              "C5_C6": "lines 100-102 — direct contact, named responsibility and contemporary-evidence method."
+            },
+            {
+              "route": "/reequilibrio-obras-publicas/",
+              "C1_C4": "reequilibrio-obras-publicas/index.html:65,87,113 — event/risk/nexus/impact; viability, item-period calculation and technical request.",
+              "C5_C6": "lines 113-115 — direct contact, named responsibility and no-deferment boundary."
+            },
+            {
+              "route": "/auditoria-orcamento-licitacao/",
+              "C1_C4": "auditoria-orcamento-licitacao/index.html:65,75,105 — BDI/reference/date-base risk; critical items, premise review and real-margin decision.",
+              "C5_C6": "lines 105,121-122 — contextual WhatsApp, named responsibility and system-level budget method."
+            },
+            {
+              "route": "/diagnostico-pre-licitacao/",
+              "C1_C4": "diagnostico-pre-licitacao/index.html:64-65,103 — tender risk before price; risk reading, financial exposure and participate/clarify/challenge/leave recommendation.",
+              "C5_C6": "lines 103-104 — direct contact and named responsibility; decision remains with visitor/authority."
+            },
+            {
+              "route": "/diagnostico-b2g-360/",
+              "C1_C4": "diagnostico-b2g-360/index.html:61-65,77-86,138-143 — operational losses; capacity/portfolio/process mapping and 90-day plan used to set priorities.",
+              "C5_C6": "lines 66-70,207-212,234-235 — named responsibility/method and contextual WhatsApp/home intake. The six-axis maturity map evaluates the visitor's operation; it is not a public counter of CONFENGE offer readiness."
+            }
+          ]
+        },
+        "confirmation_state_review": [
+          {
+            "routes": [
+              "/obrigado.html",
+              "/obrigado-contrato.html",
+              "/obrigado-edital.html",
+              "/obrigado-operacao.html"
+            ],
+            "status": "SOURCE_CORRECTED_REBUILD_REQUIRED",
+            "finding": "Direct access without a receipt still displays 'Recebemos...' and body data-lead-success=1. The inline script only reveals the receipt code when query/session evidence exists; it does not downgrade the unconfirmed page or suppress the success event.",
+            "evidence": "obrigado.html:14,43-47,72-78; obrigado-contrato.html:14,43-46,70-76; equivalent structure in edital/operacao.",
+            "correction": "Static title, metadata and H1 are now neutral. Success copy, next-step boxes, protocol and data-lead-success unlock only when a receipt in the URL exactly matches the allowed-format receipt and its canonical destination stored by the successful server response in the same browser session. This prevents a real receipt from one journey confirming another route. Direct channels remain contextual and no longer claim a prior submission.",
+            "verification": "scripts/site/test_document_intake_honesty.py::test_direct_confirmation_url_cannot_claim_a_persisted_request"
+          },
+          {
+            "route": "/diagnostico-b2g-expansao/obrigado/",
+            "status": "SOURCE_CORRECTED_REBUILD_REQUIRED",
+            "before": "The f1 artifact said both 'sent for confirmation' and 'you completed payment', then announced service start before the published prerequisites.",
+            "after": "diagnostico-b2g-expansao/obrigado/index.html:22-24 now uses a neutral pending state, says the return proves neither submission nor financial confirmation, and repeats acceptance, financial confirmation, required-data and initial-meeting/written-waiver conditions.",
+            "source_sha256_after": "96fd286927838ef79583f253875dffb342cc47b14d1dbcdf83ca885c7065d282",
+            "artifact_sha256_before": "631cc0e7366a65db7f8f93bfece89f705498c1aee9346b9d71e25c30f1974e07"
+          },
+          {
+            "routes": [
+              "/diagnostico-b2g-expansao/cancelado/",
+              "/diagnostico-b2g-expansao/expirado/"
+            ],
+            "status": "PASS",
+            "evidence": "cancelado/index.html:16-18 says no payment was confirmed; expirado/index.html:16-18 says callback is not payment and requires a new acceptance/link. Both return to the offer."
+          }
+        ],
+        "catalog_truth_scope_correction": {
+          "status": "SOURCE_CORRECTED_REBUILD_REQUIRED",
+          "finding": "The eight real offer price/credit paragraphs in /entregas/ carried an inline 'DADOS SINTÉTICOS' label, making true commercial terms appear hypothetical.",
+          "source_cause": "scripts/commercial/render_public_catalog.mjs::vitrineCard bundle markup",
+          "correction": "Removed the synthetic qualifier from price and credit terms. Each demonstrative destination remains explicitly qualified in the adjacent example action and accessible name; offer state, price, term and credit remain real.",
+          "evidence": "scripts/commercial/render_public_catalog.mjs:379-380; entregas/index.html:114,135,156,177,198,219,240,261; scripts/site/test_deliverables_hub.py::test_synthetic_disclosure_does_not_relabel_real_price_or_credit_terms"
+        },
+        "material_findings": {
+          "found": 3,
+          "source_corrected_here": 3,
+          "open_for_integrator": 0,
+          "open_ids": [],
+          "release_note": "Both corrections still require a clean artifact rebuild and candidate revalidation."
+        },
+        "relevant_source_artifact_comparisons": {
+          "interpretation": "Raw hashes differ on stable commercial pages because the isolated build fingerprints shared assets. Content evidence above was read from both source and rendered artifact; checkout confirmations changed after this artifact and must be rebuilt.",
+          "routes": [
+            {
+              "route": "/bid-room-licitacoes-obras/",
+              "source_sha256": "b9ccb328cdd64ab068f963760a86f3960c5e7de1278db8230b0e6def1a64bb5f",
+              "artifact_sha256": "fb4773a66276a11428ac44266b69fd09a0e454aae71bb5c8fec5d90b95cd3cf8"
+            },
+            {
+              "route": "/diretoria-b2g/",
+              "source_sha256": "257494c2c7151fd62047a2c01eadd785655459ff298a9dbeff7740d0b99a2213",
+              "artifact_sha256": "da9f9d3691ad81f785dce908211ea067b96357bf39178488177046bf12fa3418"
+            },
+            {
+              "route": "/diagnostico-b2g-360/",
+              "source_sha256": "5e4f0fc121f30aa9d06bc6bc843a40b494cadedb48e461356f22842fe42656ba",
+              "artifact_sha256": "6d3594874194a011fc1a573029cf5dfed95bac4f6400389a0d50a3905c0e7c63"
+            },
+            {
+              "route": "/diagnostico-b2g-expansao/",
+              "source_sha256": "fdcc530dffa8679e2edbdf70e2e2b92a24f72964e6a5ce9eedca86164079180f",
+              "artifact_sha256": "593b6b7a74ffe5b43f4551bf8a6c50200f07b42371aad0eb5eec996f147f2d37"
+            },
+            {
+              "route": "/aditivos-obras-publicas/",
+              "source_sha256": "c96e5c641f7a37d6aa4e24d17c1ac1af7afc6c70f01f0b03abe976d6d844e6d3",
+              "artifact_sha256": "2a0d3ba674689b8e9b7854a1f7c1328fac30378427246a18cac5d7a06dc896c8"
+            },
+            {
+              "route": "/medicoes-glosas-obras-publicas/",
+              "source_sha256": "7cff440c571ebff52297d1be6503fd35ca8fea2b19b3af4c79c6b39b3935c4de",
+              "artifact_sha256": "ef3a7d87c561e4b39d964938e51e4cc44d5e9ea7aa60c567f12e0a645ab279de"
+            },
+            {
+              "route": "/reequilibrio-obras-publicas/",
+              "source_sha256": "38bc3eef20baae05104d83e27c91a494ea61ebcf2c0276feb9ddfed3f11830ae",
+              "artifact_sha256": "a013bf8cd7489e0b6045900c7ab1f1a48a6f147e2fdfdb113ace69216aba1e18"
+            },
+            {
+              "route": "/auditoria-orcamento-licitacao/",
+              "source_sha256": "ce64028481a686f07f8684db6381596287b474c1907d76177b640c7fb7583662",
+              "artifact_sha256": "3776d60881761051b2113c0641d619388ad57adeb2fa618e39a8ad5337be333a"
+            },
+            {
+              "route": "/diagnostico-pre-licitacao/",
+              "source_sha256": "c55a45d022f0f383bb86552b6fc818156b7f4d301a70708dd4028d69018d7590",
+              "artifact_sha256": "7b1bbcea02eaf87702839fe8ae0656d4388fad16744ea918625692c7eb835506"
+            },
+            {
+              "route": "/acompanhamento-contratos-obras/",
+              "source_sha256": "756eb9009dac31c08c7f2b14cfd58438d4563e4abab3e863712b36861550c944",
+              "artifact_sha256": "a3485d032d1ec343b489b31f7c2121f580863a80d9f39a34789626087e3cae40"
+            },
+            {
+              "route": "/casos/",
+              "source_sha256": "d639bf18fec8bd88407fc6260259cdba8122101a02666f1fc7809eeda74780fb",
+              "artifact_sha256": "2b2b2136d5953bfb559ef66692fdeaa2eec919a5fe734fd37d2038187b1ef75f"
+            },
+            {
+              "route": "/servicos-obras-publicas/",
+              "source_sha256": "c646b6ab314c72b89fda30247411214e6d3bddf03b5304c88abd133259d248e6",
+              "artifact_sha256": "c4958083c0bfae8a22eeca0366aa3b1090a8267b9e83e21854963e75e43ef4ae"
+            }
+          ]
+        },
+        "tests_after_source_correction": [
+          {
+            "command": "pytest -q scripts/site/test_copy_gates.py -k checkout_return --disable-warnings",
+            "result": "1 passed, 23 deselected",
+            "note": "Targeted regression only; deselected tests are not claimed executed."
+          },
+          {
+            "command": "pytest -q scripts/site/test_document_intake_honesty.py --disable-warnings",
+            "result": "8 passed",
+            "note": "Includes direct/no-receipt confirmation state, contextual direct-channel copy and the existing document-intake honesty contract."
+          },
+          {
+            "command": "pytest -q scripts/site/test_document_intake_honesty.py scripts/site/test_copy_gates.py --disable-warnings",
+            "result": "30 passed, 2 failed",
+            "note": "The two failures are concurrent integration state outside this subtask: six generated routes missing from the current manifest-derived copy scope and one dead plain-language exception. They are not counted as passed and were reported to the integrator."
+          },
+          {
+            "command": "node scripts/commercial/render_public_catalog.mjs --check && pytest -q scripts/site/test_deliverables_hub.py scripts/site/test_document_intake_honesty.py --disable-warnings && node tests/commercial/test_deliverables_registry.mjs",
+            "result": "PUBLIC_CATALOG_OK internal=54 public=8; 31 passed; deliverables-registry 3647/3647 checks passed",
+            "note": "Full targeted catalogue, deliverables-hub and confirmation/document-intake suites after the source corrections."
+          },
+          {
+            "command": "node scripts/site/build_script_modules.mjs --write && node scripts/site/build_script_modules.mjs --check",
+            "result": "script.js regenerated; CHECK_OK; sha256 be277e3bd0f6ada2b6db0d36b924e8e347fb413da8a73d60ebb7a7101e265880",
+            "note": "The integrator must update the legitimate runtime integrity pin; the old hash now correctly fails rather than silently accepting a changed runtime."
+          }
+        ]
+      }
+    }
+  ]
+}

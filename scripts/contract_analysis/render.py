@@ -880,6 +880,11 @@ def sitemap_locs(pairs: list[tuple[dict[str, Any], PublicationDecision]]) -> lis
     for _, decision in pairs:
         if decision.state == "PUBLISHABLE_INDEX" and decision.sitemap:
             locs.append(f"{SITE}{_canonical_path(decision.slug)}")
+    # The hub becomes indexable only when it has at least one approved member;
+    # in that state it is itself a canonical public route and must be in the
+    # same family sitemap as the approved analysis.
+    if locs:
+        locs.insert(0, f"{SITE}{FAMILY_PATH}")
     return locs
 
 
@@ -988,6 +993,8 @@ def sync_family_crawler_rules(
     if robots_path.is_file():
         robots = robots_path.read_text(encoding="utf-8")
         crawlable_paths = {f"{FAMILY_PATH}{slug}/" for slug in slugs}
+        if slugs:
+            crawlable_paths.add(FAMILY_PATH)
         allow_lines = "".join(f"Allow: {path}\n" for path in sorted(crawlable_paths))
         block = (
             f"{ROBOTS_FAMILY_BEGIN}\n"
@@ -1014,9 +1021,19 @@ def sync_family_crawler_rules(
             )
             for slug in slugs
         )
-        allow_blocks = "".join(allow_block_parts)
+        hub_allow_block = (
+            _header_stanza(
+                FAMILY_PATH,
+                "  X-Robots-Tag: index, follow\n",
+                retained_headers.get(FAMILY_PATH, ()),
+            )
+            if slugs
+            else ""
+        )
+        allow_blocks = hub_allow_block + "".join(allow_block_parts)
         generated_selectors = {
             f"{FAMILY_PATH}*",
+            FAMILY_PATH,
             *(f"{FAMILY_PATH}{slug}/*" for slug in slugs),
         }
         stale_non_crawler_blocks = "".join(

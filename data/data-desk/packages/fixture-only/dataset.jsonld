@@ -16,7 +16,7 @@
   },
   "identifier": "fixture-only-citation-kit",
   "isAccessibleForFree": true,
-  "license": "https://confenge.com.br/termos-de-uso/",
+  "license": null,
   "name": "Fixture aggregated counts",
   "publisher": {
     "@type": "Organization",

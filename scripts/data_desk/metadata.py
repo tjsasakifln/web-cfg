@@ -40,7 +40,7 @@ def dataset_jsonld(
         "description": dataset.get("description"),
         "creator": {"@type": "Organization", "name": package.get("creator"), "url": "https://confenge.com.br/"},
         "publisher": {"@type": "Organization", "name": package.get("publisher"), "url": "https://confenge.com.br/"},
-        "license": package.get("license"),
+        "license": package.get("license_url"),
         "identifier": package.get("identifier"),
         "dateModified": package.get("as_of"),
         "isAccessibleForFree": True,

@@ -20,7 +20,11 @@ ROOT = Path(__file__).resolve().parents[3]
 OFFICIAL_CANARY = ROOT / "scripts/contract_analysis/fixtures/official-live-01"
 
 
-def test_checked_in_canary_matches_current_approval_decision() -> None:
+def test_checked_in_canary_matches_current_approval_decision(monkeypatch) -> None:
+    # The suite-level fixture isolates ordinary unit tests under a temporary
+    # approval root. This test explicitly audits checked-in state, so bind the
+    # approval lookup to the repository it is comparing against.
+    monkeypatch.setenv("CONFENGE_CONTRACT_ANALYSIS_ROOT", str(ROOT))
     bundle = load_canary(live_path=OFFICIAL_CANARY)
     records = [
         record

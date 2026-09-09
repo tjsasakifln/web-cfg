@@ -7,7 +7,7 @@ import { fileURLToPath } from "url";
 import puppeteer from "puppeteer-core";
 import { resolveChromePath } from "./resolve_chrome.mjs";
 
-// One primary card per published offer; the 54-item roll is reference-only.
+// One primary card per published offer; the 54-item operational roll stays internal.
 const EXPECTED_EXAMPLES = 8;
 
 const require = createRequire(import.meta.url);
@@ -105,7 +105,7 @@ for (const width of widths) {
       && element.getBoundingClientRect().width > 0
       && element.getBoundingClientRect().height > 0,
     );
-    const heroCtaElement = document.querySelector('.deliverables-hero [href="#enquadrar"]');
+    const heroCtaElement = document.querySelector('.deliverables-hero .button-primary');
     const heroCta = heroCtaElement?.getBoundingClientRect();
     const firstReport = document.querySelector('[data-cta-id="deliverables-open-report"]')?.getBoundingClientRect();
     const decisionNav = document.querySelector(".offer-decision-nav");
@@ -140,6 +140,7 @@ for (const width of widths) {
     const footerDeliverables = document.querySelector('footer a[href="/entregas/"]');
     const offerCards = [...document.querySelectorAll('article.vitrine-item[data-primary-offer="true"]')];
     const capabilityRows = [...document.querySelectorAll(".capability-item")];
+    const engineeringGroups = [...document.querySelectorAll(".capability-group")];
     return {
       overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
       longestArchetypeRun: archetypes.reduce(
@@ -153,7 +154,7 @@ for (const width of widths) {
       h1Count: document.querySelectorAll("h1").length,
       h1Text: document.querySelector("h1")?.textContent?.replace(/\s+/g, " ").trim() || "",
       heroCtaHref: heroCtaElement?.getAttribute("href") || "",
-      heroCtaTargetExists: Boolean(document.querySelector("#enquadrar")),
+      heroCtaTargetExists: Boolean(document.querySelector(heroCtaElement?.getAttribute("href") || "#missing-hero-target")),
       heroCtaVisible: Boolean(heroCta && heroCta.width > 0 && heroCta.height >= 44),
       heroCtaBottom: heroCta?.bottom || null,
       firstReportVisible: Boolean(firstReport && firstReport.width > 0 && firstReport.height >= 44),
@@ -202,7 +203,12 @@ for (const width of widths) {
           counts[state] = (counts[state] || 0) + 1;
           return counts;
         }, {}),
-        groups: document.querySelectorAll(".capability-group").length,
+        groups: engineeringGroups.length,
+        substantiveGroups: engineeringGroups.filter((group) => (
+          (group.querySelector("h3")?.textContent?.trim().length || 0) >= 12
+          && (group.querySelector("p")?.textContent?.trim().length || 0) >= 80
+          && /^\//.test(group.querySelector("a")?.getAttribute("href") || "")
+        )).length,
         openGroups: document.querySelectorAll(".capability-group[open]").length,
         shortSummaries: [...document.querySelectorAll(".capability-group>summary")]
           .filter((summary) => summary.getBoundingClientRect().height < 44).length,
@@ -230,15 +236,15 @@ for (const width of widths) {
   if (!response || ![200, 304].includes(response.status())) errors.push(`http=${response?.status()}`);
   if (metrics.overflow) errors.push("document_overflow");
   const h1 = metrics.h1Text.toLocaleLowerCase("pt-BR");
-  if (metrics.h1Count !== 1 || !h1.includes("8 ofertas publicadas") || !h1.includes("decisão")) errors.push("hero_clarity");
-  if (!metrics.heroCtaVisible || !metrics.heroCtaTargetExists || metrics.heroCtaHref !== "#enquadrar" ||
+  if (metrics.h1Count !== 1 || !h1.includes("entregas de engenharia") || !h1.includes("para que ele serve")) errors.push("hero_clarity");
+  if (!metrics.heroCtaVisible || !metrics.heroCtaTargetExists || metrics.heroCtaHref !== "#servicos-e-entregas" ||
       (width <= 390 && metrics.heroCtaBottom > height)) errors.push("hero_cta");
   if (!metrics.firstReportVisible || metrics.offers.length !== EXPECTED_EXAMPLES) errors.push("published_offers");
   const expectedIds = Array.from({ length: EXPECTED_EXAMPLES }, (_, index) => `CFG-D${String(index + 1).padStart(2, "0")}`);
   if (JSON.stringify(metrics.offers.map(({ id }) => id)) !== JSON.stringify(expectedIds)) errors.push("published_offer_order");
   if (metrics.offers.some(({ state }) => state !== "PUBLISHED")) errors.push("published_offer_state");
   if (metrics.offers.some((offer) => !offer.visible || offer.hiddenEssential)) errors.push("published_offer_substance_hidden");
-  const requiredFacts = ["Situação", "Decisão", "Entrada", "Objeto e limite", "Saída", "SLA"];
+  const requiredFacts = ["Situação", "Decisão", "Informações necessárias", "Trabalho incluído", "Saída", "Prazo", "Quando a contagem começa"];
   if (metrics.offers.some(({ factLabels }) => !requiredFacts.every((label) => factLabels.includes(label)))) errors.push("published_offer_facts");
   const starvedName = metrics.offers.filter(({ nameWidth }) => nameWidth < 120);
   if (starvedName.length) errors.push(`offer_name_starved=${starvedName.map(({ nameWidth }) => nameWidth).join(",")}`);
@@ -252,11 +258,8 @@ for (const width of widths) {
   if (wrappedPrices.length) errors.push(`price_wrapped=${wrappedPrices.map(({ priceText, priceLines }) => `${priceText}/${priceLines}L`).join(",")}`);
   if (brokenPrices.length) errors.push(`price_text_corrupt=${brokenPrices.map(({ priceText }) => priceText).join(",")}`);
   const roll = metrics.capabilityRoll;
-  if (roll.rowCount !== 54 || roll.groups !== 7) errors.push(`capability_roll=${roll.rowCount}/${roll.groups}`);
-  if (JSON.stringify(roll.stateCounts) !== JSON.stringify({ PUBLISHED: 8, VALIDATE: 44, BLOCKED: 2 })) {
-    errors.push(`capability_states=${JSON.stringify(roll.stateCounts)}`);
-  }
-  if (roll.openGroups !== 0 || roll.shortSummaries) errors.push("capability_progressive_disclosure");
+  if (roll.rowCount !== 0 || Object.keys(roll.stateCounts).length) errors.push(`internal_capability_leak=${roll.rowCount}`);
+  if (roll.groups !== 3 || roll.substantiveGroups !== 3) errors.push(`engineering_groups=${roll.groups}/${roll.substantiveGroups}`);
   // #468 measured 13,098 px at 390 px with the same eight offers rendered three
   // times, later tightened to a 12,500 px budget. #527-#534 (2026-08-30) added four
   // value-first fields per card (value_outcome, value_created, artifact,
@@ -343,8 +346,8 @@ if (catalogBoot.enhanced || catalogBoot.filterPresent || catalogBoot.dataCount) 
 if (
   catalogBoot.cards !== EXPECTED_EXAMPLES
   || catalogBoot.backlogCards !== 0
-  || catalogBoot.capabilityRows !== 54
-  || catalogBoot.capabilityGroups !== 7
+  || catalogBoot.capabilityRows !== 0
+  || catalogBoot.capabilityGroups !== 3
 ) catalogErrors.push("catalog_data_contract");
 const frameKeyboard = await page.evaluate(() => {
   const first = document.querySelector(".offer-decision-nav a");
@@ -375,12 +378,12 @@ if (
   noScriptCatalog.cards !== EXPECTED_EXAMPLES
   || noScriptCatalog.visibleCards !== EXPECTED_EXAMPLES
   || noScriptCatalog.backlogCards !== 0
-  || noScriptCatalog.capabilityRows !== 54
-  || noScriptCatalog.capabilityGroups !== 7
+  || noScriptCatalog.capabilityRows !== 0
+  || noScriptCatalog.capabilityGroups !== 3
 ) {
   noScriptErrors.push("catalog_noscript_content");
 }
-const noScriptFactLabels = ["Situação", "Decisão", "Entrada", "Objeto e limite", "Saída", "SLA"];
+const noScriptFactLabels = ["Situação", "Decisão", "Informações necessárias", "Trabalho incluído", "Saída", "Prazo", "Quando a contagem começa"];
 if (
   !noScriptCatalog.decisionNav
   || noScriptCatalog.essentialFactSets.some((labels) => !noScriptFactLabels.every((label) => labels.includes(label)))

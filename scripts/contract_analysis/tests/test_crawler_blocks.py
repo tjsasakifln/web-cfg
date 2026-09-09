@@ -358,6 +358,8 @@ def test_legacy_header_migration_preserves_index_override_non_crawler_directives
         f"{CONTRACT_BEGIN}\n"
         "/analises-contratos-publicos/*\n"
         "  X-Robots-Tag: noindex, nofollow, noarchive\n\n"
+        "/analises-contratos-publicos/\n"
+        "  X-Robots-Tag: index, follow\n\n"
         f"{selector}\n"
         "  X-Robots-Tag: index, follow\n"
         "  Cache-Control: no-store\n"

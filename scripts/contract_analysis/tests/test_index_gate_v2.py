@@ -391,6 +391,7 @@ def test_index_count_xor_and_no_other_slug(tmp_path, monkeypatch):
     }
     assert rec["slug"] not in other_slugs
     assert sitemap_locs([(rec, indexed[0])]) == [
+        "https://confenge.com.br/analises-contratos-publicos/",
         f"https://confenge.com.br{AUTHORIZED_CANONICAL_PATH}"
     ]
 

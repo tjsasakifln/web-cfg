@@ -23,6 +23,8 @@ HASH_FIELDS = (
     "creator",
     "publisher",
     "license",
+    "license_notice",
+    "license_url",
     "usage_guidance",
     "identifier",
     "provenance",

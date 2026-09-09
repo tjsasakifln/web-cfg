@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import re
 import sys
 from pathlib import Path
 
@@ -19,6 +20,15 @@ from scripts.site.document_intake import (  # noqa: E402
     is_frozen,
     visitor_html_files,
 )
+
+
+def test_seo_confirmation_gate_rejects_unconditional_success_and_missing_guard():
+    from seo.scripts.validate_seo import confirmation_state_problems
+
+    html = (ROOT / "obrigado.html").read_text(encoding="utf-8")
+    assert confirmation_state_problems(html) == []
+    assert "unconditional_lead_success" in confirmation_state_problems(html.replace("<body", '<body data-lead-success="1"', 1))
+    assert "guarded_receipt_confirmation_missing" in confirmation_state_problems(html.replace('r !== stored', 'false'))
 
 
 def test_honest_cta_on_former_document_surfaces() -> None:
@@ -42,6 +52,24 @@ def test_confirmation_persists_protocol_and_b_sla() -> None:
         assert "Protocolo" in html, name
         assert CHANNEL_SLA in html, name
         assert 'data-lead-success' in html, name
+
+
+def test_direct_confirmation_url_cannot_claim_a_persisted_request() -> None:
+    """Only the receipt returned in this browser session can unlock success copy/events."""
+
+    for name in ("obrigado.html", "obrigado-contrato.html", "obrigado-edital.html", "obrigado-operacao.html"):
+        html = (ROOT / name).read_text(encoding="utf-8")
+        body_tag = re.search(r"<body\b[^>]*>", html, re.I)
+        assert body_tag and "data-lead-success" not in body_tag.group(0), name
+        h1 = re.search(r"<h1\b[^>]*>(.*?)</h1>", html, re.I | re.S)
+        assert h1 and not re.search(r"\brecebemos\b|\bregistrad[ao]\b", h1.group(1), re.I), name
+        assert 'q.get("receipt")' in html and 'sessionStorage.getItem("confenge_last_receipt")' in html, name
+        assert 'sessionStorage.getItem("confenge_last_receipt_destination")' in html, name
+        assert "r !== stored" in html, name
+        assert 'document.body.setAttribute("data-lead-success", "1")' in html, name
+        assert len(re.findall(r"data-confirmed-only hidden", html)) >= 2, name
+        for false_prefill in ("%20Acabei%20", "%0AEnviei%20", "%0APedi%20"):
+            assert false_prefill not in html, f"{name}: direct-access prefill claims an unproved submission"
 
 
 def test_dishonest_detector_catches_sinapi_conjunction_variants() -> None:

@@ -197,7 +197,7 @@ for (const offer of truth.offers) {
       : brl(offer.price.min_cents);
     assert(`${offer.offer_id}_visible_price`, text.includes(number), { number, sample: text.slice(0, 200) });
     if (offer.commercial_mode === "PILOT_NOT_BUYABLE") {
-      assert(`${offer.offer_id}_pilot_not_checkout`, /preço-piloto|em validação|análise de aderência|não há compra/i.test(text), offer.offer_id);
+      assert(`${offer.offer_id}_pilot_not_checkout`, /proposta|análise de aderência/i.test(text) && /antes da cobrança|sem cobrança|não há compra|não abre compra/i.test(text) && !/href=["'][^"']*(?:checkout|pay\.asaas)/i.test(html), offer.offer_id);
     }
   } else if (offer.frozen) {
     assert(`${offer.offer_id}_frozen_omits_amount`, !text.includes(brl(offer.price.amount_cents)), offer.offer_id);
@@ -255,30 +255,24 @@ for (const offerId of truth.hub.cited_offer_ids) {
   assert(`hub_jsonld_lists_${offerId}`, hubList.includes(offer.public_name), hubList);
 }
 
-/* Only PUBLISHED units are buying cards; every state remains findable in the reference roll. */
+/* Only PUBLISHED units are buying cards; internal states stay in the registry. */
 const catalogHtml = read("entregas/index.html");
 const catalogData = read("entregas/catalog-data.js");
 assert("public_vitrine_has_8_cards", (catalogHtml.match(/<article class="vitrine-item/g) || []).length === 8);
 for (const offerId of ["CFG-D16", "CFG-D17", "CFG-D24"]) {
   const offer = truth.byId.get(offerId);
   assert(`catalog_omits_validate_card_${offerId}`, !catalogHtml.includes(`data-deliverable-id="${offerId}"`), offerId);
-  assert(`catalog_lists_validate_capability_${offerId}`, catalogHtml.includes(`data-capability-id="${offerId}" data-public-state="VALIDATE"`), offerId);
-  assert(`catalog_data_has_${offerId}`, catalogData.includes(`"${offerId}"`), offerId);
+  assert(`catalog_omits_validate_capability_${offerId}`, !catalogHtml.includes(`data-capability-id="${offerId}"`), offerId);
+  assert(`catalog_data_omits_pending_${offerId}`, !catalogData.includes(`"${offerId}"`), offerId);
   assert(`catalog_not_buy_cta_${offerId}`, !new RegExp(`data-deliverable-id="${offerId}"[\\s\\S]{0,800}comprar agora`, "i").test(catalogHtml));
   assert(`catalog_name_not_sold_as_published_${offerId}`, offer.public_state === "VALIDATE", offer.public_state);
 }
 assert("catalog_expansion_price", catalogHtml.includes("R$ 8.000"), "expansion");
 const capabilityRoll = catalogHtml.match(/<section class="capability-roll"[\s\S]*?<\/section>/)?.[0] || "";
-// 2026-09-08. Esta assercao exigia a legenda "8 publicadas / 44 em validacao /
-// 2 bloqueadas" na vitrine. Publicar quantas capacidades a empresa ainda nao
-// vende e inventario de indisponibilidade, nao informacao util ao comprador. A
-// propriedade preservada e que a pagina nao pode sugerir 54 ofertas prontas:
-// verificada agora pelo numero positivo, e pela ausencia do estado interno.
-assert("catalog_states_published_count_without_listing_unavailable",
-  /Oito têm oferta publicada/.test(capabilityRoll)
-    && !/em validação/.test(capabilityRoll)
-    && !/bloqueada/.test(capabilityRoll),
-  capabilityRoll.slice(0, 400));
+// Founder 2026-09-09: preserve the exact approved offer set and real terms,
+// without requiring a visible comparison against internal pending capacity.
+assert("catalog_omits_internal_maturity_roll", !capabilityRoll.includes("data-capability-id") && !/data-public-state="(?:VALIDATE|BLOCKED)"/.test(capabilityRoll), capabilityRoll.slice(0, 400));
+assert("catalog_no_pending_inventory", !/\b(?:44 em validação|2 bloqueadas|54 capacidades)\b/.test(visibleText(catalogHtml)));
 assert("capability_roll_has_no_price", !/R\$/.test(capabilityRoll), capabilityRoll.match(/R\$[^<]*/g));
 
 /* Deliberate mismatch must fail: hub vs catalog data on D16 name.
@@ -288,7 +282,7 @@ assert("capability_roll_has_no_price", !/R\$/.test(capabilityRoll), capabilityRo
   const elected = truth.byId.get("CFG-D16").public_name;
   const fakeHub = hubHtml.replaceAll(elected, "Bid Room");
   const fakeText = visibleText(fakeHub);
-  const mismatch = fakeText.includes("Bid Room") && catalogData.includes(elected) && elected !== "Bid Room";
+  const mismatch = fakeText.includes("Bid Room") && truth.byId.get("CFG-D16").public_name === elected && elected !== "Bid Room";
   assert("deliberate_hub_catalog_name_mismatch_is_detectable", mismatch === true, { elected });
 }
 

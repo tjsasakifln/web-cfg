@@ -4,13 +4,13 @@ from __future__ import annotations
 
 import json
 import os
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
 from scripts.contract_analysis import GATE_VERSION, MAX_CANARY, PUBLICATION_STATES, QUALITY_VERSION
 from scripts.contract_analysis.gate import PublicationDecision
 from scripts.contract_analysis.handoff import FACTUAL_HANDOFF_PENDING, HANDOFF_BLOCKED
+from scripts.pseo.reproducible import build_timestamp
 
 REPORT_STEM = "CONTRACT_ANALYSIS_CANARY_STATUS"
 REPORT_MD = Path("docs/editorial") / f"{REPORT_STEM}.md"
@@ -171,7 +171,10 @@ def build_status(
     return {
         "report": REPORT_STEM,
         "gate_version": GATE_VERSION,
-        "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        # The report is part of the versioned build output. Honor
+        # SOURCE_DATE_EPOCH exactly like the public manifests so two builds of
+        # the same snapshot do not differ merely because the clock advanced.
+        "generated_at": build_timestamp(),
         "evaluated": len(decisions),
         "evaluated_cap": MAX_CANARY,
         "source_kind": bundle.get("source_kind"),
@@ -207,10 +210,8 @@ def build_status(
         "factual_handoff_pending": handoff_pending,
         "handoff": handoff,
         "quality_version": QUALITY_VERSION,
-        "written_analyses": 0 if handoff_pending else sum(
-            1
-            for d in decisions
-            if d.human_review_status in {"HUMAN_REVIEW_PENDING", "READY_FOR_HUMAN_REVIEW"}
+        "written_analyses": sum(
+            1 for key in (written or {}) if key != "hub"
         ),
     }
 

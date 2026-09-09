@@ -516,7 +516,10 @@
               source: 'CONFENGE_WEB',
             });
             try {
-              if (protocol) sessionStorage.setItem('confenge_last_receipt', protocol);
+              if (protocol) {
+                sessionStorage.setItem('confenge_last_receipt', protocol);
+                sessionStorage.setItem('confenge_last_receipt_destination', dest);
+              }
               if (receiptRequired) sessionStorage.removeItem(receiptStorageKey());
             } catch (_) { /* private mode */ }
             const q = protocol

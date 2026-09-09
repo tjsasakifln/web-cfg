@@ -66,6 +66,56 @@ externas conservam sua autoridade original.
 
 ## Universo auditado
 
+### Evidências da retomada de 09/09 (candidato ainda não publicado)
+
+O inventário anterior independente foi concluído: **551/551 HTML obtidos por
+URLs públicas normais, 551 respostas 200, zero falhas e zero exclusões**. Frente
+ao pacote atestado de 255 HTML, o stage autorizado adicionava 300 páginas de
+oportunidades e retirava quatro; nenhuma diferença de rota sem autoridade foi
+encontrada. Aplicados os novos controles ao retrato anterior, houve sete rotas
+com defeitos de redação, quatro com falhas semânticas e 113 ocorrências de
+vocabulário de controle em 32 rotas. Isso substitui os números históricos como
+comparação desta execução; não soma contagens de detectores diferentes.
+
+Arquivos de execução locais estão em
+`/tmp/confenge-commercial-20260909.zaPcn3/`: `public-surface-before.json`,
+`production-http-before-all-report.json`, `production-html-before.txt` e o
+espelho `production-http-before-all/`. O aceite final deve vincular os mesmos
+controles ao pacote e ao servidor novos. Estes arquivos preliminares não são
+certificação do release final.
+
+Complementos de fonte e contraprovas:
+
+| Regra ou defeito anterior | Propriedade legítima preservada | Substituição, arquivos e contraprova |
+| --- | --- | --- |
+| Congelamento BOFU até 16/09 ou nova medição (#533) | Integridade de bytes, experimento histórico e verdade dos termos | `frozen_specs/hashing.py`, `materialize.py`, `unlock-plan.v1.json`: correção comercial autorizada exige leitura renderizada, recaptura real e gates; os patches experimentais históricos não são automaticamente autorizados. Divergência real continua reprovando. |
+| Rol público de 54 capacidades, estados e contadores | Cadastro interno completo e nenhuma promoção de oferta pendente | `deliverables-registry.v1.json`, `task-doors.v1.json`, `render_public_catalog.mjs` e testes comerciais/UI: 54 registros internos, oito ofertas publicadas; projetos, revisão, compatibilização e orçamento têm explicação e destinos. Testes não exigem census no comprador. |
+| Todo o hub, preço e crédito rotulados sintéticos | Exemplo não pode virar cliente nem resultado real | `real_proof_registry.mjs`, registro de prova, gerador do catálogo e testes: aviso ligado ao modelo e acesso correspondente, separado das condições verdadeiras. Mutação com cliente inventado ou preço rotulado sintético reprova. |
+| Segundo revisor como presença obrigatória ou déficit anunciado | Autoria responsável, fontes, cálculos, limites e correção | Política editorial 1.3 e `authority.py`: revisor distinto só se existe. Versões 1.0–1.2 preservadas. Separação de blocos impede concatenar “avaliação” e item “04” como nota de cliente; contraprova mantém reprovação de nota real sem base. |
+| Cinco fixtures publicadas em noindex | Aprovação técnica real e preservação do trabalho interno | `public-route-decisions.json`, gerador de análises e `_redirects`: cinco decisões exatas de retirada, aliases 410 e hashes internos; apenas uma análise aprovada mais hub são gerados. Rascunho reintroduzido reprova. |
+| Família de análises ausente do build completo/sitemap | Mesma cadeia de aprovação no pacote efetivo | `build_site.py` chama o gerador offline com `official-live-01`; duas execuções isoladas com o mesmo relógio comparam todos os bytes. A aprovação existente não é nova revisão profissional. |
+| Página de obrigado afirmava recebimento/pagamento por acesso direto | Recibo persistido não se confunde com clique ou leitura humana | Quatro `obrigado*.html` exigem referência coerente com a sessão criada após sucesso; retorno de pagamento continua pendente. Fixtures de browser distinguem acesso direto, query isolada, sessão divergente e sessão correspondente. |
+| CTA da análise de mercado circulava entre duas âncoras | Dado útil sem formulário compulsório | `market_answers/render.py`: canal contextual real; teste rejeita ciclo e confere mensagem/canonical. Clique não é recebimento. Validade de 48 horas, expiração e fonte original conservadas; página vencida permanece noindex. |
+| Inglês operacional nos downloads e quatro capas | Método, limitações, direitos de uso e identidade verdadeira | Geradores `data_desk`, textos e metadados do pacote são revisados sem mudar estatística/data; capas corrigidas com imagegen integrado, sem inventar credenciais. Fontes/prompts em `data/site/commercial-media/source.json`; encoding em `encode_commercial_media.mjs`. |
+| Job agregado podia esconder teste pulado | Proteções existentes da branch e execução real | `site-ci.yml` + verificador de execução: `site-ci` depende de validação e evidência dos steps; skipped/neutral/missing/empty obrigatórios reprovam. Nenhuma proteção foi desabilitada. |
+
+A leitura de imagens examinou por OCR 145/145 JPG/PNG/WebP, sem falha de
+execução, e identificou quatro defeitos (imagem corporativa, especialista e
+dois artigos). As demais capas tratam de situações técnicas específicas;
+“obras públicas”, limites legais e siglas técnicas nesses contextos são
+legítimos. Os três AVIF restantes são variantes do retrato, com origem no PNG
+registrado, não peças com texto. OCR não é alegação de cobertura semântica
+universal. Texto final das quatro capas foi inspecionado visualmente pelo
+agente integrador; logo e pessoa não representam cliente nem nova credencial.
+
+Pré-condições do probe de recebimento verificadas por consulta autenticada:
+credenciais existentes, contrato READY, destino WARMBLY_PRODUCTION_V1,
+auto_send_off=true e dispatch_attempted=false. Nenhum POST foi feito nessa
+consulta. A prova sintética final deve testar persistência/idempotência e
+destino sem disparos, não alegar leitura humana.
+
+### Retrato histórico de 08/09
+
 378 rotas no sitemap servido: 74 autorais + ~22 artigos editoriais + ~280
 `/oportunidades/` (um único modelo parametrizado, amostrado). A auditoria C1–C6
 cobriu **52 rotas autorais lidas no HTML renderizado de produção**, uma a uma,

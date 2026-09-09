@@ -164,6 +164,33 @@ try {
     required("market_answer_no_cta_loop", !["#cta", "#xray", ""].includes(href), href, { route: marketRoute });
     required("market_answer_contextual_whatsapp", /^https:\/\/wa\.me\/5548988344559\?text=/.test(href) && /pavimentação/i.test(decoded) && /valor-tipico-contratos-pavimentacao/.test(decoded), href, { route: marketRoute });
   }
+  // These are isolated browser-state fixtures, never evidence of a real lead.
+  // Direct links and forged query strings must not manufacture confirmation.
+  for (const route of ["/obrigado.html", "/obrigado-contrato.html", "/obrigado-edital.html", "/obrigado-operacao.html"]) {
+    const fixture = "lead-0123456789abcdef0123456789a";
+    for (const state of ["direct", "query_only", "mismatch", "matching_session"]) {
+      await page.goto(routeUrl(route, "confirmation-setup"), { waitUntil: "domcontentloaded" });
+      await page.evaluate(({ state, fixture }) => {
+        sessionStorage.removeItem("confenge_last_receipt");
+        sessionStorage.removeItem("confenge_last_receipt_destination");
+        if (state === "matching_session") {
+          sessionStorage.setItem("confenge_last_receipt", fixture);
+          sessionStorage.setItem("confenge_last_receipt_destination", location.pathname.replace(/\.html$/, ""));
+        }
+        if (state === "mismatch") sessionStorage.setItem("confenge_last_receipt", "lead-fffffffffffffffffffffffffff");
+      }, { state, fixture });
+      const url = new URL(route, base);
+      if (state !== "direct") url.searchParams.set("receipt", fixture);
+      const response = await page.goto(url.href, { waitUntil: "domcontentloaded" });
+      const status = await page.evaluate(() => ({
+        success: document.body.getAttribute("data-lead-success") === "1",
+        receiptVisible: document.getElementById("receipt-id")?.hidden === false,
+        title: document.getElementById("confirmation-title")?.textContent || "",
+      }));
+      const expected = state === "matching_session";
+      required("confirmation_receipt_state", response?.status() === 200 && status.success === expected && status.receiptVisible === expected && (expected || !/recebemos|recebido|enviado com sucesso/i.test(status.title)), JSON.stringify({ state, ...status }), { route });
+    }
+  }
   // Essential contact content must survive without JavaScript.  This checks the
   // shared contact route plus the two routes whose adaptive form is withheld.
   const noJs = await browser.newPage(); await noJs.setJavaScriptEnabled(false);

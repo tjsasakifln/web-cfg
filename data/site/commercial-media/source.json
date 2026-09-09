@@ -1,0 +1,27 @@
+{
+  "decision": "EXECUTE_NOW 2026-09-09",
+  "tool": "built-in image_gen",
+  "scope": "Text-only commercial revision of historical raster sharing cards. No new professional credential or client claim.",
+  "assets": [
+    {
+      "target": "assets/og-confenge.jpg",
+      "source": "data/site/commercial-media/og-confenge.png",
+      "prompt": "Use case: text-localization. Asset: existing 1200x630 website sharing card. Input image is edit target. Replace main headline with exactly \"Projetos e serviços de engenharia para obras públicas e privadas.\" Use line wrapping within the left panel. Replace support line with \"Projetos • revisão • orçamentos\". Replace bottom national promise with \"Converse sobre sua necessidade\". Keep original CONFENGE logo, navy/lime palette and construction background unchanged. Do not add any claim. Change only specified text. Preserve aspect ratio 1200:630 and original graphic quality; large crisp readable Portuguese typography, exact accents, no extra words or watermark."
+    },
+    {
+      "target": "assets/og-tiago-sasaki-v11.jpg",
+      "source": "data/site/commercial-media/og-tiago-sasaki-v11.png",
+      "prompt": "Use case: text-localization. Asset: existing 1200x630 website sharing card. Input image is edit target. Replace headline with exactly \"Engenharia, projetos e análises técnicas\". Replace supporting paragraph with exactly \"Serviços de engenharia para necessidades públicas e privadas.\" Keep name ENGº TIAGO SASAKI and CONFENGE wordmark and ALL portrait pixels/identity/pose/clothes/background as unchanged as possible. No invented credentials. Change only specified text. Preserve aspect ratio 1200:630 and original graphic quality; large crisp readable Portuguese typography, exact accents, no extra words or watermark."
+    },
+    {
+      "target": "assets/conteudos/consultoria-b2g-engenharia-construtora.jpg",
+      "source": "data/site/commercial-media/consultoria-b2g-engenharia-construtora.png",
+      "prompt": "Use case: text-localization. Asset: existing 1200x630 website sharing card. Input image is edit target. Replace headline with exactly \"Equipe interna ou consultoria técnica: qual modelo faz sentido para a construtora?\" Remove the editorial number 093 from the upper right, keep the decorative line/circle. Keep all other text, original logo, grid, colors and composition unchanged. Change only specified text. Preserve aspect ratio 1200:630 and original graphic quality; large crisp readable Portuguese typography, exact accents, no extra words or watermark."
+    },
+    {
+      "target": "assets/conteudos/gestao-contrato-obra-publica-indicadores.jpg",
+      "source": "data/site/commercial-media/gestao-contrato-obra-publica-indicadores.png",
+      "prompt": "Use case: text-localization. Asset: existing 1200x630 website sharing card. Input image is edit target. Replace headline with exactly \"Painel do contrato público: 12 indicadores para acompanhar a obra\". Remove the editorial number 073 from the upper right, keep decorative line/circle. Keep all other text, original logo, grid, colors and composition unchanged. Change only specified text. Preserve aspect ratio 1200:630 and original graphic quality; large crisp readable Portuguese typography, exact accents, no extra words or watermark."
+    }
+  ]
+}

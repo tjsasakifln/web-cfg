@@ -26,6 +26,7 @@ from scripts.data_desk.package import (
     invalidate_on_update,
     load_asset,
 )
+from scripts.data_desk.publish import assert_public_human_copy
 from scripts.data_desk.schema import WATERMARK, SchemaError
 from scripts.data_desk.syndication import validate_manifest
 from scripts.discovery.inspect import load_sitemap_urls
@@ -102,6 +103,9 @@ def test_real_package_reconciles_approved_payload(tmp_path):
     assert package["indexable"] is False
     assert package["sitemap"] is False
     assert package["png_included"] is False
+    assert package["license"] == "NEEDS_REVIEW"
+    assert "licença aberta" in package["license_notice"].lower()
+    assert package["license_url"] == "https://confenge.com.br/termos-de-uso/"
 
 
 def test_real_artifacts_named_and_canonical(tmp_path):
@@ -225,6 +229,15 @@ def test_public_namespace_noindex_and_off_sitemap():
     assert CANONICAL_SOURCE in html
     assert WATERMARK not in html
     assert "<script" not in html.lower()
+    body = re.search(r"<body\b[^>]*>(.*?)</body>", html, re.I | re.S)
+    assert body
+    assert "noindex" not in body.group(1).lower()
+    assert "5038 registros utilizáveis" in body.group(1)
+    assert "R$ 218.284,50" in body.group(1)
+    assert "R$ 19.969,495" in body.group(1)
+    assert "Leia a análise técnica e a fonte canônica" in body.group(1)
+    assert "Solicitar correção ou falar com a CONFENGE" in body.group(1)
+    assert "https://confenge.com.br/triagem-tecnica/#corrigir-o-site" in html
     sitemap = " ".join(load_sitemap_urls(ROOT))
     assert "/assets/data-desk/" not in sitemap
     assert "valor-tipico-contratos-pavimentacao-sc/v1" not in sitemap
@@ -243,6 +256,17 @@ def test_public_namespace_noindex_and_off_sitemap():
         if path.name != "request-contract.json":
             assert re.search(r"\bcpf\b", text) is None
         assert re.search(r"\b\d{11}\b", raw) is None
+    assert not (public / "request-contract.json").exists()
+    assert not (public / "syndication.json").exists()
+    assert_public_human_copy(public)
+
+
+def test_public_copy_control_rejects_seeded_internal_language(tmp_path):
+    (tmp_path / "README.txt").write_text(
+        "Cite o Market Answer. Licença: NEEDS_REVIEW.", encoding="utf-8"
+    )
+    with pytest.raises(ValueError, match="public_data_desk_copy_internal:README.txt"):
+        assert_public_human_copy(tmp_path)
 
 
 def test_targets_prepared_not_sent():

@@ -87,15 +87,20 @@ export function labelIntegrityProblems(html, kind, explicitLabelPattern) {
   const title = TITLE_RE.exec(page)?.[1] ?? "";
   const h1 = H1_RE.exec(page)?.[1] ?? "";
   const schemaText = jsonLdPayloads(page).filter(Boolean).map((value) => JSON.stringify(value)).join(" ");
-  if (!labelToken(title, explicitLabelPattern)) problems.push("title_label_absent");
-  if (!labelToken(h1, explicitLabelPattern)) problems.push("h1_label_absent");
+  // A commercial hub is not itself hypothetical. Label the linked examples,
+  // while keeping true offer prices/terms semantically distinct from them.
+  if (kind !== "library" && !labelToken(title, explicitLabelPattern)) problems.push("title_label_absent");
+  if (kind !== "library" && !labelToken(h1, explicitLabelPattern)) problems.push("h1_label_absent");
   if (!labelToken(schemaText, explicitLabelPattern)) problems.push("schema_label_absent");
 
   if (kind === "library") {
     const cards = [...page.matchAll(/<article\b[^>]*class=["'][^"']*\bvitrine-item\b[^"']*["'][^>]*>([\s\S]*?)<\/article>/gi)];
     if (cards.length !== 8) problems.push(`library_card_count:${cards.length}`);
     cards.forEach((match, index) => {
-      if (!match[1].includes(SYNTHETIC_LABEL)) problems.push(`library_card_label_absent:${index + 1}`);
+      const examples = anchorsToModels(match[1]);
+      if (!examples.length || examples.some((anchor) => !labelToken(anchor.visibleLabel, explicitLabelPattern))) problems.push(`library_card_label_absent:${index + 1}`);
+      const terms = [...match[1].matchAll(/<(?:p|div)\b[^>]*class=["'][^"']*vitrine-item__(?:price|credit)[^"']*["'][^>]*>([\s\S]*?)<\/(?:p|div)>/gi)];
+      if (terms.some((term) => labelToken(term[1], explicitLabelPattern))) problems.push(`library_real_terms_labelled_synthetic:${index + 1}`);
     });
     const itemLists = flattenNodes(jsonLdPayloads(page).filter(Boolean)).filter((node) => node["@type"] === "ItemList");
     const items = itemLists.flatMap((node) => node.itemListElement ?? []);

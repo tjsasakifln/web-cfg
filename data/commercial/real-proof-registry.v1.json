@@ -49,6 +49,7 @@
     ],
     "inline_cards": [],
     "required_positions": ["title", "h1", "card", "schema", "relevant_cta"],
+    "position_scope_pt_br": "Nos modelos, a natureza demonstrativa deve estar clara no título, abertura, exemplo, dados estruturados e acesso relevante. No hub comercial, o aviso pertence aos exemplos e seus links/dados estruturados, não à marca, ao serviço oferecido nem a preços e condições verdadeiros. Decisão EXECUTE_NOW de 09/09/2026 substitui a rotulagem sintética do hub inteiro.",
     "synthetic_label_pt_br": "DADOS SINTÉTICOS",
     "demonstrative_label_pt_br": "DEMONSTRATIVO"
   },

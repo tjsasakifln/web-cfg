@@ -234,6 +234,17 @@ def _norm(text: str) -> str:
 def _strip_tags(html: str) -> str:
     text = re.sub(r"<script\b[^>]*>.*?</script>", " ", html or "", flags=re.I | re.S)
     text = re.sub(r"<style\b[^>]*>.*?</style>", " ", text, flags=re.I | re.S)
+    # A block boundary is also a semantic sentence boundary. Keeping only a
+    # space here can manufacture claims across adjacent cards/list items (for
+    # example, a CTA ending in "avaliação" followed by item number "04").
+    # Inline elements deliberately remain joinable so a real phrase split by
+    # <strong>/<span>/<a> is still inspected as one claim.
+    text = re.sub(
+        r"</?(?:address|article|aside|blockquote|br|dd|div|dl|dt|fieldset|figcaption|figure|footer|form|h[1-6]|header|hr|li|main|nav|ol|p|section|table|tbody|td|tfoot|th|thead|tr|ul)\b[^>]*>",
+        ". ",
+        text,
+        flags=re.I,
+    )
     text = re.sub(r"<[^>]+>", " ", text)
     return re.sub(r"\s+", " ", unescape(text))
 

@@ -71,6 +71,12 @@ def cmd_build(args: argparse.Namespace) -> int:
 
         packets = []
         for rec, dec in effective_pairs:
+            # A current hash-bound approval is the durable decision. Do not
+            # regenerate a "founder decision required" packet for an analysis
+            # that is already PUBLISHABLE_INDEX; that would create a false
+            # pending state beside the active approval record.
+            if dec.state == "PUBLISHABLE_INDEX" and dec.indexable:
+                continue
             official = (
                 dec.human_review_status == READY_FOR_HUMAN_REVIEW
                 or dec.review_recommendation in {INDEX_READY_VERDICT, DEPTH_REVIEW_REQUIRED}

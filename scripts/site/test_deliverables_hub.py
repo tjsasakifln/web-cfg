@@ -326,6 +326,21 @@ def test_every_example_uses_the_same_action_label() -> None:
         assert f"Pedir análise de {name}" in html, name
 
 
+def test_synthetic_disclosure_does_not_relabel_real_price_or_credit_terms() -> None:
+    """Synthetic labels qualify the demonstrative link, never the actual offer terms."""
+
+    html = _html()
+    for number in range(1, 9):
+        card = re.search(
+            rf'id="entrega-0{number}"[\s\S]*?(?=<article class="vitrine-item"|<!-- GENERATED:PUBLIC-CATALOG:END -->)',
+            html,
+        )
+        assert card, number
+        credit = re.search(r'class="vitrine-item__credit">([\s\S]*?)</p>', card.group(0))
+        assert credit and not re.search(r"sint[eé]tic", _visible_text(credit.group(1)), re.I), number
+        assert re.search(r'aria-label="[^"]*(?:sint[eé]tico|sint[eé]tica)[^"]*"', card.group(0), re.I), number
+
+
 def test_the_library_has_one_name_across_its_own_surfaces() -> None:
     html = _html()
     title = re.search(r"<title>([^<]*)</title>", html).group(1)

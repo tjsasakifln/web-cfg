@@ -1,0 +1,86 @@
+{
+  "schema": "contract-analysis-public-route-decisions/1.0",
+  "decision_authority": "Decisão expressa do fundador EXECUTE_NOW, 2026-09-09",
+  "decided_at": "2026-09-09",
+  "source_fixture": {
+    "path": "scripts/contract_analysis/fixtures/canary.v1.json",
+    "sha256": "a4161d85e460bc460d84fee09f241cf630c881fdf0847ce438b8cf07719c39e5",
+    "preservation": "O fixture de teste permanece interno e não é promovido a publicação técnica."
+  },
+  "public_runtime_contract": {
+    "status": 410,
+    "aliases_per_route": [
+      "/<slug>/",
+      "/<slug>/index.html"
+    ],
+    "owner": "fluxo canônico compartilhado de redirects e build"
+  },
+  "records": [
+    {
+      "analysis_id": "ca-aditivo-teto-item-novo",
+      "slug": "aditivo-saldo-art125-item-novo",
+      "canonical_path": "/analises-contratos-publicos/aditivo-saldo-art125-item-novo/",
+      "index_alias": "/analises-contratos-publicos/aditivo-saldo-art125-item-novo/index.html",
+      "source_record_sha256": "eb600dcb5b42c2131458b22b57a83bf1176d2fe537cf3a6812fbafc6590f10b5",
+      "approval_record": "ABSENT",
+      "decision": "WITHDRAW_PUBLIC_PRESERVE_INTERNAL",
+      "reason": "Fixture editorial sem aprovação técnica individual; retirar o rótulo de rascunho não o torna publicável.",
+      "public_source": "analises-contratos-publicos/aditivo-saldo-art125-item-novo/index.html",
+      "internal_source": "scripts/contract_analysis/fixtures/canary.v1.json#ca-aditivo-teto-item-novo"
+    },
+    {
+      "analysis_id": "ca-atraso-diario-sem-comunicacao",
+      "slug": "atraso-eventos-sem-comunicacao-contemporanea",
+      "canonical_path": "/analises-contratos-publicos/atraso-eventos-sem-comunicacao-contemporanea/",
+      "index_alias": "/analises-contratos-publicos/atraso-eventos-sem-comunicacao-contemporanea/index.html",
+      "source_record_sha256": "b16abb4d5512c4de1c567b9fe905534033ae534e1711f45d96bc52b77657013d",
+      "approval_record": "ABSENT",
+      "decision": "WITHDRAW_PUBLIC_PRESERVE_INTERNAL",
+      "reason": "Fixture editorial sem aprovação técnica individual; noindex não é controle de acesso nem aprovação.",
+      "public_source": "analises-contratos-publicos/atraso-eventos-sem-comunicacao-contemporanea/index.html",
+      "internal_source": "scripts/contract_analysis/fixtures/canary.v1.json#ca-atraso-diario-sem-comunicacao"
+    },
+    {
+      "analysis_id": "ca-bdi-composicao-referencia",
+      "slug": "bdi-composicao-vs-referencia-sc",
+      "canonical_path": "/analises-contratos-publicos/bdi-composicao-vs-referencia-sc/",
+      "index_alias": "/analises-contratos-publicos/bdi-composicao-vs-referencia-sc/index.html",
+      "source_record_sha256": "5a1d45ce54441e993fdb39d8639291caf63e2589c48f9d65a2bd4c42ffda6730",
+      "approval_record": "ABSENT",
+      "decision": "WITHDRAW_PUBLIC_PRESERVE_INTERNAL",
+      "reason": "Fixture editorial sem aprovação técnica individual; a preservação do teste não autoriza exposição pública.",
+      "public_source": "analises-contratos-publicos/bdi-composicao-vs-referencia-sc/index.html",
+      "internal_source": "scripts/contract_analysis/fixtures/canary.v1.json#ca-bdi-composicao-referencia"
+    },
+    {
+      "analysis_id": "ca-comparavel-regime-distinto",
+      "slug": "comparaveis-rejeitados-regime-distinto",
+      "canonical_path": "/analises-contratos-publicos/comparaveis-rejeitados-regime-distinto/",
+      "index_alias": "/analises-contratos-publicos/comparaveis-rejeitados-regime-distinto/index.html",
+      "source_record_sha256": "a9d3e257a627e8ac52a1413c1c84d8e2823cf43414992e1a6256288dfe6b1544",
+      "approval_record": "ABSENT",
+      "decision": "WITHDRAW_PUBLIC_PRESERVE_INTERNAL",
+      "reason": "Fixture editorial sem aprovação técnica individual; material de teste não deve ser apresentado como análise publicada.",
+      "public_source": "analises-contratos-publicos/comparaveis-rejeitados-regime-distinto/index.html",
+      "internal_source": "scripts/contract_analysis/fixtures/canary.v1.json#ca-comparavel-regime-distinto"
+    },
+    {
+      "analysis_id": "ca-reajuste-serie-descontinuada",
+      "slug": "reajuste-aniversario-serie-indice",
+      "canonical_path": "/analises-contratos-publicos/reajuste-aniversario-serie-indice/",
+      "index_alias": "/analises-contratos-publicos/reajuste-aniversario-serie-indice/index.html",
+      "source_record_sha256": "a2863c393a329c6cfa71b1e654c217d4c4967fcf7bd583c89c86b1d3033dfc26",
+      "approval_record": "ABSENT",
+      "decision": "WITHDRAW_PUBLIC_PRESERVE_INTERNAL",
+      "reason": "Fixture editorial sem aprovação técnica individual; a URL pública não pode sobreviver apenas por ter sido gerada antes.",
+      "public_source": "analises-contratos-publicos/reajuste-aniversario-serie-indice/index.html",
+      "internal_source": "scripts/contract_analysis/fixtures/canary.v1.json#ca-reajuste-serie-descontinuada"
+    }
+  ],
+  "counterproof": {
+    "approved_analysis_id": "13ec615146b3d348190a9b0b9148831e",
+    "approved_canonical_path": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
+    "approval_registry": "data/editorial/contract-analysis/approvals.json",
+    "generator_behavior": "Somente análise PUBLISHABLE_INDEX com aprovação individual pode gerar HTML público; fixtures continuam disponíveis aos testes internos."
+  }
+}

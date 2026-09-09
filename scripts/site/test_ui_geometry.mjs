@@ -1105,8 +1105,10 @@ async function main() {
           /whatsapp|voltar|falar com a confenge|diagnosticar|edital|documentos|agilizar|canal seguro/i.test(l)
         );
         if (!okLabel) throw new Error(`obrigado CTAs: ${labels.join(" | ")}`);
-        const hasSuccess = await page.$("[data-lead-success]");
-        if (!hasSuccess) throw new Error(`${path} missing data-lead-success`);
+        const hasSuccess = await page.$('[data-lead-success="1"]');
+        if (hasSuccess) throw new Error(`${path} invents receipt on direct access`);
+        const neutralTitle = await page.$("#confirmation-title");
+        if (!neutralTitle) throw new Error(`${path} missing neutral confirmation state`);
       } else {
         // 2026-09-08. "solicitar diagnostico" continua aceito para nao quebrar
         // outras rotas da familia, mas o rotulo da pagina do especialista mudou:

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import os
 import subprocess
 import sys
@@ -36,6 +37,42 @@ def test_canary_states_never_index_fixtures():
     assert all(d.is_fixture for d in decisions)
     assert all("noindex" in d.robots for d in decisions)
     assert states.issubset(set(PUBLICATION_STATES))
+
+
+def test_withdrawn_public_routes_are_exact_and_preserve_the_internal_fixture():
+    decisions_path = (
+        ROOT / "data/editorial/contract-analysis/public-route-decisions.json"
+    )
+    decisions = json.loads(decisions_path.read_text(encoding="utf-8"))
+    fixture_path = ROOT / decisions["source_fixture"]["path"]
+    fixture_bytes = fixture_path.read_bytes()
+    assert hashlib.sha256(fixture_bytes).hexdigest() == decisions["source_fixture"]["sha256"]
+
+    fixture = json.loads(fixture_bytes)
+    fixture_by_id = {item["id"]: item for item in fixture["analyses"]}
+    approval_ids = {
+        item["analysis_id"]
+        for item in json.loads(
+            (ROOT / "data/editorial/contract-analysis/approvals.json").read_text(
+                encoding="utf-8"
+            )
+        )["approvals"]
+        if not item.get("withdrawn")
+    }
+    assert len(decisions["records"]) == 5
+    for item in decisions["records"]:
+        source = fixture_by_id[item["analysis_id"]]
+        canonical = json.dumps(
+            source, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+        ).encode("utf-8")
+        assert hashlib.sha256(canonical).hexdigest() == item["source_record_sha256"]
+        assert source["is_fixture"] is True
+        assert item["approval_record"] == "ABSENT"
+        assert item["analysis_id"] not in approval_ids
+        assert item["decision"] == "WITHDRAW_PUBLIC_PRESERVE_INTERNAL"
+        assert item["canonical_path"].endswith(f"/{item['slug']}/")
+        assert item["index_alias"] == f"{item['canonical_path']}index.html"
+        assert not (ROOT / item["public_source"]).exists()
 
 
 def test_editorial_fixture_still_exercises_non_index_states():
@@ -103,7 +140,12 @@ def test_status_report_exists_and_names_the_gate():
     data = json.loads(js.read_text(encoding="utf-8"))
     assert data["report"] == "CONTRACT_ANALYSIS_CANARY_STATUS"
     assert data["evaluated"] <= MAX_CANARY
-    assert data["index_count"] == 0
+    # The versioned official snapshot now has one current, hash-bound human
+    # approval. The five editorial fixtures remain internal and therefore do
+    # not contribute to the public count.
+    assert data["index_count"] == 1
+    indexed = [item for item in data["items"] if item.get("indexable")]
+    assert [item["id"] for item in indexed] == ["13ec615146b3d348190a9b0b9148831e"]
     assert data["test_only"] is False
     assert data["source_kind"] == "official_live"
     assert data["recommendation"] in {"EXPAND", "ADJUST", "STOP"}
@@ -118,7 +160,8 @@ def test_status_report_exists_and_names_the_gate():
         }
         assert "reason_codes" in item
         assert item["fixture"] is False
-        assert item["state"] != "PUBLISHABLE_INDEX"
+        if item["state"] == "PUBLISHABLE_INDEX":
+            assert item["id"] == "13ec615146b3d348190a9b0b9148831e"
     text = md.read_text(encoding="utf-8")
     assert "CONTRACT_ANALYSIS_CANARY_STATUS" in text
     assert "index_count" in text
