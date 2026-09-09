@@ -1,9 +1,9 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-09-09T23:42:26.563Z",
+  "measured_at": "2026-09-09T23:49:11.220Z",
   "measured_on": "2026-09-09",
-  "commit_sha": "75c4d2fdb98e252cefd583e74342e141ef380636",
+  "commit_sha": "aadcdb6c769d6b94ae7294e486f22264c8cf326e",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "f168038814087e1b365d1de3042af9a3f3364743756e104711fecc0fb9fe7477",
@@ -42,7 +42,7 @@
     "diagnostico-b2g-expansao/index.html": "864d53e45b946f8f8252ca0568d005cb209e618a177d2234582054533e63e715",
     "diagnostico-pre-licitacao/index.html": "65c6ea2c235ef0db5629922ed18c578bde2ef585339d6adec86830014e1229f4",
     "diretoria-b2g/index.html": "72d1ffd411f911fd295b6ae13fd1318c28356aa007fbf73f71cac80e39f68197",
-    "entregas/index.html": "6ee15ed642342a2e9305acbb3275d4c5de8557cea2216ba1ef4e65f33ba7ce12",
+    "entregas/index.html": "2ac4d54f4f6f256e366ded1a34ca83018dd2433f2c850aafd7e62c540e636620",
     "entregas/styles.css": "0dca7831c23ee3d1a521fa99b6b234aaefed87de989b9d31482faf4b74a35226",
     "index.html": "05f8ba51328a9353d95a15c1568459bab5a2adc2d9cf1a5157f93de2f6e1c919",
     "medicoes-glosas-obras-publicas/index.html": "fe3d3c644ac158dae63f85369301da200b5f4de025b0db3364b9cb3e3d929c61",
@@ -310,7 +310,7 @@
     },
     {
       "route": "/entregas/",
-      "html_sha256": "6ee15ed642342a2e9305acbb3275d4c5de8557cea2216ba1ef4e65f33ba7ce12",
+      "html_sha256": "2ac4d54f4f6f256e366ded1a34ca83018dd2433f2c850aafd7e62c540e636620",
       "measured_on": "2026-09-09",
       "viewports": {
         "1366x768": {
@@ -326,7 +326,7 @@
                 "width": 713,
                 "height": 23
               },
-              "text": "Obras públicas e privadas"
+              "text": "Entregas para obras públicas e privadas"
             },
             "h1": {
               "selector": "h1",
@@ -410,19 +410,19 @@
               "selector": "header .eyebrow",
               "box": {
                 "top": 120,
-                "bottom": 143,
+                "bottom": 166,
                 "left": 20,
                 "right": 370,
                 "width": 350,
-                "height": 23
+                "height": 46
               },
-              "text": "Obras públicas e privadas"
+              "text": "Entregas para obras públicas e privadas"
             },
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 157,
-                "bottom": 380,
+                "top": 180,
+                "bottom": 403,
                 "left": 20,
                 "right": 362,
                 "width": 342,
@@ -433,8 +433,8 @@
             "lead": {
               "selector": ".deliverables-lead",
               "box": {
-                "top": 392,
-                "bottom": 612,
+                "top": 415,
+                "bottom": 635,
                 "left": 20,
                 "right": 370,
                 "width": 350,
@@ -445,8 +445,8 @@
             "proof": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 630,
-                "bottom": 714,
+                "top": 653,
+                "bottom": 737,
                 "left": 20,
                 "right": 370,
                 "width": 350,
@@ -457,8 +457,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 726,
-                "bottom": 770,
+                "top": 749,
+                "bottom": 793,
                 "left": 20,
                 "right": 370,
                 "width": 350,
@@ -472,8 +472,8 @@
               "text": "Ver entregas e exemplos",
               "href": "#servicos-e-entregas",
               "box": {
-                "top": 726,
-                "bottom": 770,
+                "top": 749,
+                "bottom": 793,
                 "left": 20,
                 "right": 370,
                 "width": 350,
@@ -481,12 +481,7 @@
               }
             }
           ],
-          "secondary_actions_in_fold": [
-            {
-              "text": "Solicitar proposta",
-              "href": "#captura-entregas"
-            }
-          ],
+          "secondary_actions_in_fold": [],
           "verifiable_proof": {
             "text": "exemplos demonstrativos",
             "href": "/casos/"
