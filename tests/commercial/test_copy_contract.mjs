@@ -351,8 +351,11 @@ assert("copy_audit_is_registry_derived", contract.public_implementation?.manual_
 assert("copy_audit_covers_54", derivedAudit.metrics.deliverables === 54 && derivedAudit.metrics.titleless_unique === 54, derivedAudit.metrics);
 assert("copy_audit_covers_810_clauses", derivedAudit.metrics.clauses_per_deliverable === 15 && derivedAudit.metrics.clause_instances === 810, derivedAudit.metrics);
 assert(
-  "copy_audit_810_clause_bodies_are_distinct",
-  derivedAudit.metrics.clause_bodies_unique === 810 && derivedAudit.metrics.clause_body_duplicates === 0,
+  "copy_audit_projects_only_eight_published_offers",
+  derivedAudit.metrics.public_deliverables === 8 &&
+    derivedAudit.metrics.public_clause_instances === 120 &&
+    derivedAudit.metrics.clause_bodies_unique === 120 &&
+    derivedAudit.metrics.clause_body_duplicates === 0,
   derivedAudit.metrics,
 );
 assert("copy_audit_discovers_live_routes", derivedRoutes.length >= 20 && derivedAudit.metrics.routes_derived === derivedRoutes.length, derivedRoutes);

@@ -1,8 +1,8 @@
 {
   "ok": true,
   "issues": [],
-  "url_count": 78,
-  "unique_paths": 78,
+  "url_count": 80,
+  "unique_paths": 80,
   "locs": [
     "https://confenge.com.br/",
     "https://confenge.com.br/acompanhamento-contratos-obras/",
@@ -81,19 +81,24 @@
     "https://confenge.com.br/guias-contratos-obras/",
     "https://confenge.com.br/guias-contratos-obras/checklist-pedido-aditivo/",
     "https://confenge.com.br/lei-14133-obras/",
-    "https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/"
+    "https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/",
+    "https://confenge.com.br/analises-contratos-publicos/",
+    "https://confenge.com.br/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/"
   ],
   "families": {
     "core": 74,
-    "editorial": 4
+    "editorial": 4,
+    "contract_analysis": 2
   },
   "member_sitemaps": [
     "https://confenge.com.br/sitemap.xml",
-    "https://confenge.com.br/sitemap-editorial.xml"
+    "https://confenge.com.br/sitemap-editorial.xml",
+    "https://confenge.com.br/sitemap-analises-contratos.xml"
   ],
   "walked_members": [
     "sitemap.xml",
-    "sitemap-editorial.xml"
+    "sitemap-editorial.xml",
+    "sitemap-analises-contratos.xml"
   ],
   "robots_sitemaps": [
     "https://confenge.com.br/sitemap-index.xml"

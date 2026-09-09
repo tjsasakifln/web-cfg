@@ -7,7 +7,7 @@
     "url": "https://confenge.com.br/"
   },
   "dateModified": "2026-08-17T11:29:23.193694+02:00",
-  "description": "Tabela agregada com P25, mediana, P75, n útil, denominador e missingness do recorte UF=SC. Não é dump de contratos nem de IDs pessoais.",
+  "description": "Tabela agregada com P25, mediana, P75, quantidade utilizável, total encontrado e registros fora da amostra no recorte de Santa Catarina. Não contém contratos individuais nem identificadores pessoais.",
   "distribution": {
     "@type": "DataDownload",
     "contentUrl": "https://confenge.com.br/assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/table.csv",
@@ -16,8 +16,8 @@
   },
   "identifier": "valor-tipico-contratos-pavimentacao-sc-citation-kit",
   "isAccessibleForFree": true,
-  "license": "NEEDS_REVIEW",
-  "name": "Quartis agregados do ticket contratual de pavimentação em Santa Catarina",
+  "license": "https://confenge.com.br/termos-de-uso/",
+  "name": "Quartis agregados do valor contratual de pavimentação em Santa Catarina",
   "publisher": {
     "@type": "Organization",
     "name": "CONFENGE",

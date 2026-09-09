@@ -1128,7 +1128,6 @@ def test_value_ladder_price_and_persisted_order_entry_contract() -> None:
     for marker in (
         "Conclusão executiva",
         "Carteira priorizada",
-        "Critérios e gates",
         "Capacidade da empresa",
         "Ficha decisória",
         "Comparação decisória",
@@ -1136,6 +1135,9 @@ def test_value_ladder_price_and_persisted_order_entry_contract() -> None:
         "Método e limites",
     ):
         assert marker in html
+    assert re.search(r"Critérios.{0,80}(?:elimin|decis|condiç)", html), (
+        "the report must explain the criteria that affect the decision"
+    )
 
     commercial_tags = re.findall(
         r'<a\b[^>]*href="/comercial/radar-decisorio/"[^>]*>', html

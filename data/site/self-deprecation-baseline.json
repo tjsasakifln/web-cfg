@@ -1,6 +1,8 @@
 {
   "schema_version": "1.0.0",
-  "purpose": "Dívida aberta de comunicação autodepreciativa na superfície pública. Não é aprovação: é a contagem do que falta corrigir. Só pode diminuir.",
+  "status": "SUPERSEDED",
+  "purpose": "Retrato histórico de 2026-09-07, preservado como evidência. A decisão EXECUTE_NOW de 2026-09-09 substituiu a catraca: este arquivo não autoriza ocorrências nem participa do gate de publicação.",
+  "superseded_by": "EXECUTE_NOW/2026-09-09",
   "owner_issue": 638,
   "owner_decision": "Tiago Jun Sasaki, 2026-09-07: toda comunicação de autossabotagem deve ser varrida do site.",
   "recorded_at": "2026-09-07",
@@ -26,7 +28,7 @@
     "casos/modelo-relatorio-executivo-consolidado/index.html",
     "casos/modelo-relatorio-inteligencia-licitacoes/index.html"
   ],
-  "open_debt": {
+  "historical_snapshot": {
     "defesa-margem-contratos-publicos/index.html": {
       "taxonomia_interna": 1
     },

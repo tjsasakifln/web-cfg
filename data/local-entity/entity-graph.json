@@ -42,7 +42,7 @@
     "sameAs": [
       "https://github.com/tjsasakifln"
     ],
-    "jobTitle": "Engenheiro Civil e consultor B2G",
+    "jobTitle": "Engenheiro Civil",
     "worksFor": {
       "@id": "https://confenge.com.br/#organization"
     },
@@ -113,7 +113,7 @@
       "id": "person-jobTitle",
       "entity": "Person",
       "field": "credentials",
-      "value": "Engenheiro Civil e consultor B2G",
+      "value": "Engenheiro Civil",
       "status": "SELF_DECLARED",
       "basis": "specialist JSON-LD jobTitle + brand.json person.jobTitle",
       "third_party_verified": false,

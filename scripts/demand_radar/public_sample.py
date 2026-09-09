@@ -52,7 +52,8 @@ EXPORT_DATE = EXPORT_ID.rsplit("gsc-", 1)[-1]
 #: Fixed, not echoed, for the same reason: a warning the artifact could quietly
 #: soften is not a warning.
 ATTRIBUTION_WARNING = (
-    "Search Console aggregate only. Not joinable to individual leads."
+    "Dados agregados do Search Console. Não permitem identificar nem associar "
+    "resultados a contatos individuais."
 )
 
 #: Suffixes a gate in this repository can read back and check for staleness.

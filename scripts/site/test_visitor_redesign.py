@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 import sys
 import tempfile
@@ -19,7 +20,7 @@ from scripts.site.inbound_first_remediate import (  # noqa: E402
     load_stage_classification,
     resolve_content_stage,
 )
-from scripts.site.public_ia import header_items  # noqa: E402
+from scripts.site.public_ia import header_cta, header_items  # noqa: E402
 from scripts.site.public_navigation import (  # noqa: E402
     FROZEN_NAV_HTML_PATHS,
     audit_public_navigation_tree,
@@ -27,6 +28,9 @@ from scripts.site.public_navigation import (  # noqa: E402
 
 ALLOWED = frozenset(ALLOWED_STAGES)
 EXPECTED_NAV = [item["label"] for item in header_items()]
+EXPECTED_CTA_CONTRACT = header_cta()
+EXPECTED_CTA = EXPECTED_CTA_CONTRACT["label"]
+EXPECTED_CTA_HREF = EXPECTED_CTA_CONTRACT["href"]
 LEGACY_NAV = [
     "Serviços",
     "Problemas que resolvemos",
@@ -34,7 +38,6 @@ LEGACY_NAV = [
     "Ferramentas",
     "Especialista",
 ]
-EXPECTED_CTA = "Iniciar triagem"
 LEGACY_CTA = "Analisar meu caso"
 BANNED_ZERO = (
     "0 guias",
@@ -222,7 +225,7 @@ def _public_html_files() -> list[Path]:
     out: list[Path] = []
     for p in ROOT.rglob("*.html"):
         rel = p.relative_to(ROOT)
-        if any(part in skip_parts for part in rel.parts):
+        if any(part in skip_parts or part.startswith("_site") for part in rel.parts):
             continue
         # skip private ops-ish
         if rel.parts and rel.parts[0] in {"ops", "private"}:
@@ -453,7 +456,7 @@ def test_global_shell_nav_contracts_are_explicit_after_mv09_activation():
     assert brand_labels == EXPECTED_NAV
     cta_meta = (brand.get("navigation") or {}).get("cta") or {}
     assert cta_meta.get("label") == EXPECTED_CTA
-    assert cta_meta.get("href") == "/triagem-tecnica/", (
+    assert cta_meta.get("href") == EXPECTED_CTA_HREF, (
         f"brand CTA must target corporate triage, got {cta_meta.get('href')!r}"
     )
 
@@ -515,7 +518,7 @@ def test_global_shell_nav_contracts_are_explicit_after_mv09_activation():
         )
         if header_cta:
             href = header_cta.group(1) or header_cta.group(2)
-            expected_href = "/triagem-tecnica/"
+            expected_href = EXPECTED_CTA_HREF
             if relative_path not in FROZEN_NAV_HTML_PATHS and href != expected_href:
                 failures.append(
                     f"{path.relative_to(ROOT)}: header-cta href {href!r} not {expected_href}"
@@ -556,7 +559,8 @@ def test_global_shell_nav_contracts_are_explicit_after_mv09_activation():
                     failures.append(f"{path.relative_to(ROOT)}: old nav {banned}")
 
     artifact_root = ROOT / "_site"
-    if artifact_root.exists():
+    if os.environ.get("PUBLIC_ARTIFACT_REQUIRED") == "1":
+        assert artifact_root.is_dir(), "PUBLIC_ARTIFACT_REQUIRED=1 but _site is absent"
         try:
             audit_public_navigation_tree(artifact_root)
         except ValueError as error:
@@ -711,7 +715,7 @@ def test_hub_problem_first_structure():
 
 def test_home_nav_and_hierarchy():
     home = (ROOT / "index.html").read_text(encoding="utf-8")
-    assert "Iniciar triagem" in home
+    assert EXPECTED_CTA in home
     assert "Serviços e problemas" in home
     assert "Obras públicas" in home
     assert "Biblioteca" in home
@@ -1040,7 +1044,7 @@ def test_organic_tool_block_waits_for_outer_section_close():
 
 
 def test_home_form_anchor_reveals_fields():
-    """Corporate entry lands on situations; B2G capture remains intact."""
+    """Corporate entry explains services before preserving contact paths."""
     html = (ROOT / "index.html").read_text(encoding="utf-8")
     css = (ROOT / "styles.css").read_text(encoding="utf-8")
     form = re.search(
@@ -1064,12 +1068,17 @@ def test_home_form_anchor_reveals_fields():
     hero_section = re.search(r'<section\b[^>]*class="[^"]*\bhero\b[^"]*"[\s\S]*?</section>', html, re.I)
     assert hero_section, "home hero section missing"
     hero = re.search(
-        r'<a\b[^>]*class="[^"]*\bbutton-primary\b[^"]*"[^>]*href="([^"]+)"[^>]*>[\s\S]*?Escolher minha situação',
+        r'<a\b[^>]*class="[^"]*\bbutton-primary\b[^"]*"[^>]*href="([^"]+)"[^>]*>',
         hero_section.group(0),
         re.I,
     )
-    assert hero, "hero/primary Escolher minha situação CTA missing"
-    assert hero.group(1) == "#situacoes", hero.group(1)
+    assert hero, "home hero primary CTA missing"
+    assert hero.group(1) == "/servicos/", hero.group(1)
+    assert (ROOT / "servicos" / "index.html").is_file()
+    hero_text = re.sub(r"<[^>]+>", " ", hero_section.group(0))
+    assert re.search(r"projetos?", hero_text, re.I)
+    assert re.search(r"obras? públicas? e privadas?", hero_text, re.I)
+    assert re.search(r"plantas|memórias? de cálculo|planilhas?|laudos?|pareceres?|relatórios?", hero_text, re.I)
     assert 'id="situacoes"' in html
     header_cta = re.search(
         r'<a\b[^>]*\bheader-cta\b[^>]*href="([^"]+)"|'
@@ -1078,17 +1087,17 @@ def test_home_form_anchor_reveals_fields():
     )
     assert header_cta, "home header-cta missing"
     header_href = header_cta.group(1) or header_cta.group(2)
-    assert header_href == "/triagem-tecnica/", (
+    assert header_href == EXPECTED_CTA_HREF, (
         f"home header-cta must target corporate triage, got {header_href!r}"
     )
     mobile = re.search(r'<nav\b[^>]*\bmobile-nav\b[^>]*>(.*?)</nav>', html, re.S | re.I)
     assert mobile, "home mobile-nav missing"
     mobile_cta = re.search(
-        r'<a\b[^>]*href="([^"]+)"[^>]*>\s*Iniciar triagem\s*</a>',
+        rf'<a\b[^>]*href="([^"]+)"[^>]*>\s*{re.escape(EXPECTED_CTA)}\s*</a>',
         mobile.group(1),
     )
-    assert mobile_cta, "home mobile Iniciar triagem missing"
-    assert mobile_cta.group(1) == "/triagem-tecnica/", (
+    assert mobile_cta, "home mobile CTA declared by the IA contract is missing"
+    assert mobile_cta.group(1) == EXPECTED_CTA_HREF, (
         f"home mobile CTA must target corporate triage, got {mobile_cta.group(1)!r}"
     )
     assert 'id="contato"' in html, "keep #contato section id for back-compat"
@@ -1121,14 +1130,15 @@ def test_home_form_anchor_reveals_fields():
         assert href.startswith("/"), href
         target = href.split("#", 1)[0]
         assert (ROOT / target.strip("/") / "index.html").is_file(), href
-    # As tres situacoes sem pagina de oferta propria continuam levando ao
-    # atendimento, na ancora da propria situacao.
-    triage = [h for h in situation_hrefs if h.startswith("/triagem-tecnica/#")]
-    assert len(triage) == 3, situation_hrefs
-    for href in triage:
-        anchor = href.split("#", 1)[1]
-        page = (ROOT / "triagem-tecnica" / "index.html").read_text(encoding="utf-8")
-        assert f'id="{anchor}"' in page, href
+    # Cada promessa chega à explicação correspondente; quando há fragmento,
+    # ele precisa existir no destino e não pode virar um contato genérico.
+    for href in situation_hrefs:
+        target, _, anchor = href.partition("#")
+        target_page = ROOT / target.strip("/") / "index.html"
+        assert target_page.is_file(), href
+        if anchor:
+            target_html = target_page.read_text(encoding="utf-8")
+            assert f'id="{anchor}"' in target_html, href
     # The shipped script must realign the landing: deferred section sizes (#185)
     # move the target while the jump runs.
     nav_js = (ROOT / "js" / "modules" / "nav.js").read_text(encoding="utf-8")
@@ -1138,14 +1148,22 @@ def test_home_form_anchor_reveals_fields():
     assert "cta_view" in nav_js
 
 
-def test_analisar_meu_caso_shell_targets_form():
-    """Corporate and staged legacy shell CTAs each retain their exact target."""
-    shell_src = (ROOT / "scripts" / "pseo" / "html_shell.py").read_text(encoding="utf-8")
+def test_shell_ctas_target_their_declared_destination():
+    """Corporate and staged legacy shells each retain their declared target."""
+    from scripts.pseo.html_shell import _build_header
+
+    shell_html = _build_header()
     remediator = (ROOT / "scripts" / "site" / "inbound_first_remediate.py").read_text(
         encoding="utf-8"
     )
-    assert '"label": "Iniciar triagem"' in shell_src
-    assert '"href": "/triagem-tecnica/"' in shell_src
+    shell_header = re.search(
+        r'<a\b[^>]*\bheader-cta\b[^>]*href="([^"]+)"[^>]*>(.*?)</a>',
+        shell_html,
+        re.S | re.I,
+    )
+    assert shell_header
+    assert shell_header.group(1) == EXPECTED_CTA_HREF
+    assert re.sub(r"<[^>]+>", "", shell_header.group(2)).strip() == EXPECTED_CTA
     assert 'href": "/#formulario-contato"' in remediator
     failures = []
     for path in _public_html_files():
@@ -1164,7 +1182,7 @@ def test_analisar_meu_caso_shell_targets_form():
             label = re.sub(r"\s+", " ", label).strip()
             href_m = re.search(r'\bhref="([^"]+)"', attrs)
             href = href_m.group(1) if href_m else ""
-            if label == EXPECTED_CTA and href != "/triagem-tecnica/":
+            if label == EXPECTED_CTA and href != EXPECTED_CTA_HREF:
                 failures.append(f"{path.relative_to(ROOT)}: corporate header-cta {href!r}")
             if label == LEGACY_CTA and "#formulario-contato" not in href:
                 failures.append(f"{path.relative_to(ROOT)}: legacy header-cta {href!r}")
@@ -1173,7 +1191,7 @@ def test_analisar_meu_caso_shell_targets_form():
         )
         if mobile:
             for label, expected_fragment in (
-                (EXPECTED_CTA, "/triagem-tecnica/"),
+                (EXPECTED_CTA, EXPECTED_CTA_HREF),
                 (LEGACY_CTA, "#formulario-contato"),
             ):
                 mcta = re.search(

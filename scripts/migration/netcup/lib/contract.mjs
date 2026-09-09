@@ -227,7 +227,10 @@ function parseRedirectTarget(value, redirectSource, status, source, line) {
   }
   const sourceHasSplat = redirectSource.path.endsWith("/*");
   const splatCount = (value.match(/:splat/g) || []).length;
-  if (splatCount > 1 || (splatCount === 1 && !sourceHasSplat) || (sourceHasSplat && splatCount !== 1)) {
+  // A 410 terminates the request; its local body is not a mapped destination.
+  // Redirects and rewrites still require an exact wildcard/placeholder pairing.
+  const fixedGoneBody = status === 410 && !absolute && splatCount === 0;
+  if (splatCount > 1 || (splatCount === 1 && !sourceHasSplat) || (sourceHasSplat && splatCount !== 1 && !fixedGoneBody)) {
     fail(
       "HC_REDIRECT_SPLAT_UNSAFE",
       source,
@@ -283,7 +286,7 @@ function makeRedirectRule({ from, to, statusToken, source, line, origin }) {
     force,
     preserveQuery: [200, 301, 302].includes(status),
     fragmentServerSide: false,
-    shadowPolicy: force ? "rule-first" : "static-file-first",
+    shadowPolicy: force || status === 410 ? "rule-first" : "static-file-first",
     provenance: [{ source, line, syntax: origin.syntax }],
   };
 }

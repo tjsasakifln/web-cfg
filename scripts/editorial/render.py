@@ -568,7 +568,7 @@ def render_page(page: dict[str, Any]) -> str:
 </div>
 </div>
 <div class="aside-card aside-compact">
-<span class="aside-kicker">Hub</span>
+<span class="aside-kicker">Coleção</span>
 <a class="aside-hub-link" href="{e(hub_url)}">{e(hub_name)}</a>
 </div>
 </aside>
@@ -626,11 +626,11 @@ def render_hub(hub: dict[str, Any], pages: list[dict[str, Any]]) -> str:
             f"</div></article>"
         )
     wa_msg = hub.get("cta_whatsapp") or (
-        f"Olá, Tiago. Estou no hub {title} da CONFENGE e quero orientação sobre contratos de obras públicas."
+        f"Olá, Tiago. Estou na seção {title} da CONFENGE e quero orientação sobre contratos de obras públicas."
     )
     mail_subject = hub.get("cta_email_subject") or f"Orientação: {title}"
     mail_body = hub.get("cta_email_body") or (
-        f"Olá, Tiago.\n\nAcessei {url} e gostaria de orientação sobre o tema do hub.\n"
+        f"Olá, Tiago.\n\nAcessei {url} e gostaria de orientação sobre o tema desta seção.\n"
     )
     # Never publish an empty library section or "0 guias" / empty-index copy.
     if cards:
@@ -666,7 +666,7 @@ def render_hub(hub: dict[str, Any], pages: list[dict[str, Any]]) -> str:
     case_cta = f"""
 <section class="section section--tight" data-hub-case-cta><div class="container">
 <div class="lead-inline" data-cta-position="hub-footer">
-<div class="lead-inline-copy"><span>Próximo passo</span><strong>Levou uma dúvida do hub para o seu contrato?</strong>
+<div class="lead-inline-copy"><span>Próximo passo</span><strong>Levou uma dúvida da biblioteca para o seu contrato?</strong>
 <p>Envie o tema e os documentos principais. Você recebe uma leitura inicial do caso: o que os documentos sustentam, o que falta reunir e qual o próximo passo.</p></div>
 <div class="lead-inline-actions">
 <a class="button button-primary" data-cta-position="hub-footer" data-cta-channel="whatsapp" href="{e(wa_link(wa_msg))}" rel="noopener" target="_blank">Enviar pelo WhatsApp</a>

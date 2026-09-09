@@ -1,7 +1,7 @@
 {
   "schema": "confenge.public-service-page/1.0",
   "contract": "CONFENGE_PUBLIC_SERVICE_PAGE/1.0.0",
-  "effective_at": "2026-09-05",
+  "effective_at": "2026-09-09",
   "required_sequence": [
     "situation",
     "consequence_or_decision",
@@ -16,9 +16,9 @@
     "consequence_or_decision": "O que precisa ser decidido ou protegido e o custo de continuar sem clareza, sem alarmismo inventado.",
     "deliverable": "Objeto técnico finito, distinguido de processo, promessa ou lista ilimitada.",
     "method": "Etapas, premissas, fontes, norma aplicável, revisão e tratamento de UNKNOWN.",
-    "proof": "Evidência autorizada da competência, do método ou de resultado; ausência permanece explícita.",
+    "proof": "Evidência verdadeira e autorizada de competência, método ou resultado, atribuída à fonte real; não inventar prova nem anunciar inventário de ausências.",
     "material_boundary": "O que não está incluído, atribuições, campo, local, dependências, conflito, sigilo, prazo e preço.",
-    "next_useful_state": "Estado concreto alcançável pelo visitante, com captura quando houver intenção comercial."
+    "next_useful_state": "Próximo passo concreto alcançável pelo visitante por formulário ativo ou canal direto contextual. Abertura de canal, persistência de pedido e leitura humana são eventos distintos."
   },
   "document_types": [
     {"type": "laudo", "definition": "Peça técnica conclusiva dentro de objeto, método, evidências, limitações e responsabilidade definidos; não é sinônimo de qualquer relatório.", "must_not_claim": "aprovação, incontestabilidade ou êxito"},
@@ -33,7 +33,7 @@
     {"class": "professional_scope", "minimum_proof": "atribuição comprovada, objeto e jurisdição confirmados antes da contratação", "examples": ["responsabilidade técnica", "disciplina", "ART"]},
     {"class": "method", "minimum_proof": "estrutura de método, norma aplicável e limitações; demonstração identificada como demonstrativa", "examples": ["NBR", "NR", "matriz de análise"]},
     {"class": "case_or_outcome", "minimum_proof": "caso real com evidência, consentimento, redação e aprovação editorial", "examples": ["resultado", "cliente", "economia", "prazo observado"]},
-    {"class": "price", "minimum_proof": "estado PUBLICATION_AUTHORIZED ou CHECKOUT_AUTHORIZED e gate de captura", "examples": ["preço", "faixa", "condição"]},
+    {"class": "price", "minimum_proof": "estado PUBLICATION_AUTHORIZED ou CHECKOUT_AUTHORIZED, condições materiais verdadeiras e contato contextual funcional", "examples": ["preço", "faixa", "condição"]},
     {"class": "national_availability", "minimum_proof": "policy nacional vigente e qualificação de local/escopo", "examples": ["atendimento em todo o Brasil"]}
   ],
   "art_nf": {
@@ -50,7 +50,7 @@
   },
   "other_technical_demand": {
     "public_state": "NEEDS_CONTEXT",
-    "allowed_copy": "Descreva a situação, o local e a decisão que precisa tomar. Confirmaremos se há enquadramento técnico seguro ou registraremos a lacuna.",
+    "allowed_copy": "Conte o que você precisa e onde fica o projeto ou a atividade. Vamos combinar as informações necessárias para definir o serviço e preparar a proposta.",
     "terminal_action": "NEEDS_CONTEXT",
     "forbidden": ["SKU automático", "competência ilimitada", "parceiro presumido", "prazo ou preço inferido"]
   },
@@ -59,7 +59,9 @@
     "source": "CONFENGE_WEB",
     "analytics_pii_allowed": false,
     "inbound_authorizes_outbound": false,
-    "priced_route_requires_lead_capture": true,
+    "priced_route_requires_contextual_contact": true,
+    "active_form_requires_verified_persistence": true,
+    "direct_channel_open_is_receipt": false,
     "terminal_actions": ["REQUEST_SCOPE_REVIEW", "REQUEST_TECHNICAL_TRIAGE", "REQUEST_CONFLICT_CHECK", "REQUEST_FORMAL_VALUATION_SCOPE", "REQUEST_SST_SCOPE", "REQUEST_PUBLIC_ENTITY_PLANNING_SCOPE", "REQUEST_B2G_FIT", "NEEDS_CONTEXT"]
   }
 }

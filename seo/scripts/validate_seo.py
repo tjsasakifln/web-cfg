@@ -51,6 +51,23 @@ def iter_seo_html_pages(root: Path | None = None) -> list[Path]:
     return visitor_facing_html_files(root or ROOT)
 
 
+def confirmation_state_problems(html: str) -> list[str]:
+    """Direct access is neutral; client confirmation needs the receipt guard."""
+    problems = []
+    body = re.search(r"<body\b[^>]*>", html, re.I)
+    if body and "data-lead-success" in body.group(0):
+        problems.append("unconditional_lead_success")
+    required = (
+        'sessionStorage.getItem("confenge_last_receipt")',
+        'sessionStorage.getItem("confenge_last_receipt_destination")',
+        'r !== stored',
+        'document.body.setAttribute("data-lead-success", "1")',
+    )
+    if not all(part in html for part in required):
+        problems.append("guarded_receipt_confirmation_missing")
+    return problems
+
+
 def page_path(p: Path) -> str:
     if p.name == "index.html":
         if p.parent == ROOT:
@@ -367,8 +384,7 @@ def main() -> int:
         if ev not in js:
             errors.append(f"analytics missing {ev}")
     obrigado = (ROOT / "obrigado.html").read_text(encoding="utf-8")
-    if 'data-lead-success="1"' not in obrigado:
-        errors.append("obrigado.html missing data-lead-success for lead_form_success")
+    errors.extend(f"obrigado.html:{problem}" for problem in confirmation_state_problems(obrigado))
     if "script.js" not in obrigado:
         errors.append("obrigado.html must load script.js to fire lead_form_success")
     if "/@|" not in js and r"/@|" not in js:

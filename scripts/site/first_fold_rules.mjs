@@ -30,6 +30,9 @@ export const ROLE_SELECTORS = {
     ".offer-proof-line",
     ".report-proof-line",
     ".section-proof",
+    // A named responsible author linked to the real profile is verifiable
+    // evidence too; do not demand a duplicate claim in a decorative list.
+    ".authority-byline",
     ".hero-proof",
     ".report-hero-result",
     ".deliverables-status",
@@ -86,6 +89,9 @@ export function categoryRepetition({ eyebrow, h1, lead }) {
  * Uma rota so pode ficar MEASURED_FAIL apontando um dono e uma data.
  */
 export function blockerText(unlockPlan) {
+  if (unlockPlan.commercial_revision?.editorial_freeze_revoked === true) {
+    return "EXECUTE_NOW 2026-09-09: corrigir e medir; o congelamento editorial não autoriza manter uma falha pública";
+  }
   return (
     `#${unlockPlan.issue} congela o HTML dos seis pilares BOFU e o styles.css como colateral de ` +
     `renderização até ${unlockPlan.earliest_safe_action_at}, com html_mutation_authorized=false`
@@ -93,6 +99,7 @@ export function blockerText(unlockPlan) {
 }
 
 export function frozenRoutes(unlockPlan) {
+  if (unlockPlan.commercial_revision?.editorial_freeze_revoked === true) return new Set();
   return new Set((unlockPlan.protected_pillars || []).map((slug) => `/${slug}/`));
 }
 

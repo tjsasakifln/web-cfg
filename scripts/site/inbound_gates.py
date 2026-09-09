@@ -13,9 +13,10 @@ import unicodedata
 from collections import Counter, defaultdict
 from dataclasses import asdict, dataclass, field
 from datetime import date, datetime
+from html import unescape
 from pathlib import Path
 from typing import Any, Iterable
-from urllib.parse import urlparse
+from urllib.parse import parse_qs, urlparse
 
 ROOT = Path(__file__).resolve().parents[2]
 # Fail closed when the walk collapses: a real checkout ships far more than this.
@@ -1138,6 +1139,38 @@ def priced_offer_routes(base: Path | None = None) -> dict[str, str]:
     return routes
 
 
+def _has_contextual_direct_contact(main: str, route: str) -> bool:
+    """Founder 2026-09-09: a working direct channel can carry price context.
+
+    This checks the HTML contract, not receipt or human reading. The existing
+    shared client records whatsapp_click/email_click, never lead_persisted.
+    An arbitrary external link, placeholder or footer contact is insufficient.
+    """
+    contact = json.loads((ROOT / "data/site/brand.json").read_text())["contact"]
+    for anchor in re.findall(r"(?is)<a\b[^>]*>.*?</a>", main):
+        tag = anchor.split(">", 1)[0]
+        if re.search(r'\b(?:hidden|inert|disabled)\b|aria-disabled=["\']true', tag, re.I):
+            continue
+        attrs = dict(re.findall(r'''([\w-]+)=["']([^"']*)["']''', tag))
+        if not attrs.get("data-cta-id") or not strip_html(anchor).strip():
+            continue
+        url = urlparse(unescape(attrs.get("href", "")))
+        query = parse_qs(url.query)
+        if url.scheme == "https" and url.netloc == "wa.me" and url.path == "/" + contact["whatsapp_number"]:
+            context = " ".join(query.get("text", []))
+        elif url.scheme == "mailto" and url.path == contact["email"]:
+            context = " ".join(query.get("subject", []) + query.get("body", []))
+        else:
+            continue
+        if len(context.strip()) < 20 or re.search(r"\{\{|\[insira|undefined|\bnull\b", context, re.I):
+            continue
+        # Canonical route in the message preserves the offered service without
+        # requiring the visitor to type information already known by the page.
+        if f"{SITE}{route}" in context:
+            return True
+    return False
+
+
 def _priced_offer_findings(
     page: Path,
     base: Path,
@@ -1146,7 +1179,7 @@ def _priced_offer_findings(
     priced_offers: set[str],
     family_id: str,
 ) -> list[Finding]:
-    """A priced surface must persist a fully attributed, non-checkout handraise."""
+    """Validate contact; active forms keep their full persistence contract."""
     rel = str(page.relative_to(base))
     findings: list[Finding] = []
 
@@ -1167,7 +1200,8 @@ def _priced_offer_findings(
         re.I | re.S,
     )
     if not form_match:
-        fail("priced_offer_missing_persisted_capture")
+        if not _has_contextual_direct_contact(main, route):
+            fail("priced_offer_missing_contextual_contact")
         return findings
     form = form_match.group(0)
     open_tag = form.split(">", 1)[0]
@@ -1880,12 +1914,13 @@ def gate_conversion(
 
             required = "none" if profile == "trust_or_legal" else str(family.get("terminal_action"))
             if profile == "priced_offer":
-                # A displayed price always demands persisted capture, whatever
-                # the family declared. Derived from the HTML, not declarable away.
-                required = "capture_form"
+                # Price requires contextual contact; a form is one valid path.
+                # A direct-channel click is never evidence of a persisted lead.
+                required = "contextual_contact"
             satisfied = {
                 "none": True,
                 "capture_form": has_main_form,
+                "contextual_contact": has_main_form or _has_contextual_direct_contact(main, route),
                 "whatsapp": has_main_wa,
                 "capture_form_or_whatsapp": (
                     has_main_form or has_main_wa or has_linked_capture_route

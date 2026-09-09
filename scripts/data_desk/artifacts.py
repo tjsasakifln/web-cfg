@@ -25,7 +25,7 @@ def build_citation_text(asset: dict[str, Any]) -> str:
         f"Mediana {json_number(stats['median'])} BRL (valor integral nominal do instrumento); "
         f"P25 {json_number(stats['p25'])}; P75 {json_number(stats['p75'])}; "
         f"n útil {stats['n']} de {missing['total_keyword_rows']} "
-        f"(missingness {missing['unknown_or_nonpositive']}). "
+        f"({missing['unknown_or_nonpositive']} registros com valor ausente ou não positivo). "
         f"Período {period['start']}–{period['end']}. UF=SC. "
         f"Método {asset.get('method_version')}. "
         f"Fonte canônica: {source}. "
@@ -70,7 +70,7 @@ def build_aggregate_csv(asset: dict[str, Any]) -> str:
             period["start"],
             period["end"],
             source,
-            "quartile from approved payload; not custo/km",
+            "quartil copiado do conjunto aprovado; não é custo por km",
         ),
         (
             "median",
@@ -80,7 +80,7 @@ def build_aggregate_csv(asset: dict[str, Any]) -> str:
             period["start"],
             period["end"],
             source,
-            "integral nominal ticket; not custo/km",
+            "valor integral nominal do instrumento; não é custo por km",
         ),
         (
             "p75",
@@ -90,7 +90,7 @@ def build_aggregate_csv(asset: dict[str, Any]) -> str:
             period["start"],
             period["end"],
             source,
-            "quartile from approved payload; not custo/km",
+            "quartil copiado do conjunto aprovado; não é custo por km",
         ),
         (
             "n_usable",
@@ -100,7 +100,7 @@ def build_aggregate_csv(asset: dict[str, Any]) -> str:
             period["start"],
             period["end"],
             source,
-            "usable sample; missingness not coerced to zero",
+            "amostra utilizável; registros ausentes não são convertidos em zero",
         ),
         (
             "n_total_keyword_rows",
@@ -110,7 +110,7 @@ def build_aggregate_csv(asset: dict[str, Any]) -> str:
             period["start"],
             period["end"],
             source,
-            "denominator of the SC recorte",
+            "total encontrado no recorte de Santa Catarina",
         ),
         (
             "missingness_unknown_or_nonpositive",
@@ -120,7 +120,7 @@ def build_aggregate_csv(asset: dict[str, Any]) -> str:
             period["start"],
             period["end"],
             source,
-            "excluded non-positive totals; not a real ticket of zero",
+            "valores ausentes ou não positivos fora dos quartis; não representam contrato de valor zero",
         ),
     ]
     writer.writerows(rows)
@@ -137,7 +137,7 @@ def build_quartile_svg(asset: dict[str, Any]) -> str:
         return 80.0 + (float(value) / max_v) * 520.0
 
     x25, xmed, x75 = x_of(p25), x_of(median), x_of(p75)
-    title = "Quartis do ticket contratual de pavimentação em Santa Catarina"
+    title = "Quartis do valor contratual de pavimentação em Santa Catarina"
     desc = (
         f"P25 {json_number(p25)} BRL, mediana {json_number(median)} BRL, "
         f"P75 {json_number(p75)} BRL. Valor integral nominal do instrumento, "
@@ -150,7 +150,7 @@ def build_quartile_svg(asset: dict[str, Any]) -> str:
         f"  <desc>{desc}</desc>\n"
         '  <rect width="720" height="280" fill="#f8fafc"/>\n'
         '  <text x="24" y="32" font-family="system-ui,sans-serif" font-size="16" fill="#061a33">'
-        "Ticket contratual típico de pavimentação — Santa Catarina</text>\n"
+        "Valor contratual típico de pavimentação — Santa Catarina</text>\n"
         '  <text x="24" y="54" font-family="system-ui,sans-serif" font-size="12" fill="#475569">'
         "Valor integral nominal do instrumento · não é custo por km · não é estatística nacional</text>\n"
         f'  <rect x="{x25:.2f}" y="110" width="{x75 - x25:.2f}" height="48" fill="#dbeafe" '
@@ -163,7 +163,7 @@ def build_quartile_svg(asset: dict[str, Any]) -> str:
         f'  <text x="{x75:.2f}" y="96" text-anchor="end" font-family="system-ui,sans-serif" '
         f'font-size="12" fill="#0f4c81">P75 {json_number(p75)}</text>\n'
         '  <text x="24" y="200" font-family="system-ui,sans-serif" font-size="12" fill="#334155">'
-        f"n útil = {stats['n']} · missingness = {asset['missingness']['unknown_or_nonpositive']} "
+        f"n útil = {stats['n']} · fora da amostra = {asset['missingness']['unknown_or_nonpositive']} "
         f"· período {asset['period']['start']}–{asset['period']['end']} · UF=SC</text>\n"
         '  <text x="24" y="228" font-family="system-ui,sans-serif" font-size="12" fill="#334155">'
         f"Fonte canônica: {source}</text>\n"
@@ -199,17 +199,17 @@ def build_method_document(asset: dict[str, Any], package: dict[str, Any]) -> dic
             "p75": stats["p75"],
         },
         "description": (
-            "Mediana e quartis (nearest-rank) do valor integral nominal do instrumento, "
+            "Mediana e quartis pelo método do posto mais próximo do valor integral nominal do instrumento, "
             "tipologia documental de pavimentação, recorte exclusivo de Santa Catarina. "
-            "Não estima custo por km, m² ou unidade física. Missingness de valores "
-            "não positivos permanece visível e não é convertida em zero."
+            "Não estima custo por km, m² ou unidade física. Registros com valor ausente "
+            "ou não positivo permanecem contabilizados e não são convertidos em zero."
         ),
         "canonical_source": asset.get("canonical_source") or CANONICAL_SOURCE,
         "payload_content_hash": asset.get("payload_content_hash"),
         "rendered_content_hash": asset.get("rendered_content_hash"),
         "png": {
             "included": False,
-            "reason": "no_reproducible_local_converter",
+            "reason": "não há conversor local reprodutível",
         },
         "refresh_owner": asset.get("refresh_owner") or "CONFENGE / market-answers",
         "invalidation": asset.get("invalidation"),
@@ -218,29 +218,32 @@ def build_method_document(asset: dict[str, Any], package: dict[str, Any]) -> dic
 
 def method_markdown(doc: dict[str, Any]) -> str:
     stats = doc["stats"]
+    missing = doc.get("missingness") or {}
     return "\n".join(
         [
             f"# Método — {doc.get('method_version')}",
             "",
             doc.get("description") or "",
             "",
-            f"- Grain: `{doc.get('grain')}`",
-            f"- Não é: {', '.join(doc.get('grain_not') or [])}",
-            f"- Unidade: `{doc.get('unit')}` · moeda {doc.get('currency')}",
+            "- Unidade analisada: valor integral nominal de cada instrumento contratual",
+            "- O recorte não representa: custo por km, preço unitário ou preço por m²",
+            f"- Moeda: {doc.get('currency')}",
             f"- Geografia: UF=SC (Santa Catarina). Sem estatística nacional.",
             f"- Período: {doc['period']['start']}–{doc['period']['end']}",
             f"- n útil: {doc.get('n_usable')} · denominador: {doc.get('n_total_keyword_rows')}",
-            f"- Missingness: {json.dumps(doc.get('missingness'), ensure_ascii=False)}",
+            f"- Registros utilizáveis e fora da amostra: {missing.get('usable')} utilizáveis de "
+            f"{missing.get('total_keyword_rows')}; {missing.get('unknown_or_nonpositive')} "
+            "fora dos quartis por valor ausente ou não positivo",
             f"- P25: {json_number(stats['p25'])} · mediana: {json_number(stats['median'])} · P75: {json_number(stats['p75'])}",
-            f"- as_of: {doc.get('as_of')}",
+            f"- Dados consultados em: {doc.get('as_of')}",
             f"- Fonte canônica: {doc.get('canonical_source')}",
-            f"- payload_content_hash: `{doc.get('payload_content_hash')}`",
-            f"- rendered_content_hash: `{doc.get('rendered_content_hash')}`",
-            f"- PNG: omitido ({(doc.get('png') or {}).get('reason')})",
+            f"- Hash do conjunto aprovado: `{doc.get('payload_content_hash')}`",
+            f"- Hash da análise publicada aprovada: `{doc.get('rendered_content_hash')}`",
+            f"- Imagem PNG: não incluída ({(doc.get('png') or {}).get('reason')})",
             f"- Responsável pela atualização: {doc.get('refresh_owner')}",
             "",
-            "Atualização do payload invalida este pacote ou exige nova `data_version`. "
-            "Não há backfill silencioso.",
+            "Uma atualização do conjunto de dados invalida este pacote ou exige uma nova versão. "
+            "Não há atualização retroativa silenciosa.",
             "",
         ]
     )
@@ -262,12 +265,12 @@ def coverage_manifest(asset: dict[str, Any]) -> dict[str, Any]:
         "n_total": (asset.get("missingness") or {}).get("total_keyword_rows"),
         "claim_scope": "uf",
         "national_statistic": False,
-        "source": "extra-cli public-read SELECT-only + editorial approval hashes",
+        "source": "Exportação somente para leitura e hashes da aprovação editorial",
         "extra_cli_content_hash_not_binding": asset.get("extra_cli_content_hash"),
         "note": (
-            "The binding hashes are payload_content_hash and rendered_content_hash "
-            "from data/editorial/market-answers/approvals.json. extra-cli content_hash "
-            "is provenance only and must not be treated as the approval hash."
+            "Os hashes vinculantes são os do conjunto aprovado e da análise publicada, "
+            "registrados na aprovação editorial. O hash da exportação de origem serve "
+            "apenas para procedência e não substitui a aprovação."
         ),
     }
 
@@ -285,7 +288,7 @@ def limitations_markdown(asset: dict[str, Any]) -> str:
     lines.extend(
         [
             "",
-            "## Claims proibidos",
+            "## Usos que estes dados não sustentam",
             "",
         ]
     )
@@ -294,8 +297,8 @@ def limitations_markdown(asset: dict[str, Any]) -> str:
     lines.extend(
         [
             "",
-            "Missingness não é zero. Ticket nominal não é custo/km. "
-            "O recorte é Santa Catarina, não o Brasil.",
+            "Registros ausentes ou com valor não positivo não são zero. O valor nominal "
+            "integral do contrato não é custo por km. O recorte é Santa Catarina, não o Brasil.",
             "",
         ]
     )

@@ -72,10 +72,12 @@ const libraryRel = config.synthetic_surfaces.library_index;
 const library = pages.get(libraryRel);
 assert.deepEqual(labelIntegrityProblems(library, "library", explicitLabelPattern), []);
 assert.ok(
-  labelIntegrityProblems(library.replace("DADOS SINTÉTICOS", "EXEMPLO"), "library", explicitLabelPattern).some((code) =>
+  labelIntegrityProblems(library.replace(/<a\b[^>]*href=["'](\/casos\/modelo-[^"']+)["'][^>]*>[\s\S]*?<\/a>/i, '<a href="$1">Entrega de cliente</a>'), "library", explicitLabelPattern).some((code) =>
     code.startsWith("library_card_label_absent"),
   ),
 );
+assert.ok(labelIntegrityProblems(library.replace('class="vitrine-item__price">', 'class="vitrine-item__price">DADOS SINTÉTICOS '), "library", explicitLabelPattern).some((code) => code.startsWith("library_real_terms_labelled_synthetic")), "true price must not inherit an example disclaimer");
+assert.deepEqual(labelIntegrityProblems(library.replace(/<title>[\s\S]*?<\/title>/i, "<title>Entregas de engenharia</title>").replace(/<h1\b[^>]*>[\s\S]*?<\/h1>/i, "<h1>Trabalho e conteúdo entregue</h1>"), "library", explicitLabelPattern), [], "commercial hub need not claim to be hypothetical");
 const unlabelledCta = library.replace(
   /<a\b[^>]*href=["'](\/casos\/modelo-[^"']+)["'][^>]*>[\s\S]*?<\/a>/i,
   '<a href="$1">Abrir entrega</a>',

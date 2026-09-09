@@ -3,6 +3,7 @@
  * public-read-margin-defense/1.0 export. No reimplementation.
  */
 import assert from "node:assert/strict";
+import { runInNewContext } from "node:vm";
 import { createRequire } from "node:module";
 import { readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
@@ -10,6 +11,19 @@ import { fileURLToPath } from "node:url";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 const require = createRequire(import.meta.url);
+// Execute the actual visitor-label functions, not a second implementation.
+const uiHtml = readFileSync(resolve(root, "ferramentas/diagnostico-defesa-margem/index.html"), "utf8");
+const labelFunctions = uiHtml.slice(uiHtml.indexOf("  var REASON_PT ="), uiHtml.indexOf("  function render(diagnosis)"));
+assert.ok(labelFunctions.includes("function fmt(fact)"));
+const labels = { esc: String };
+runInNewContext(labelFunctions, labels);
+for (const classification of ["UNKNOWN", "WITHHELD", "NEW_INTERNAL_STATE"]) {
+  assert.doesNotMatch(labels.fmt({ classification, value: null }), /UNKNOWN|WITHHELD|NEW_INTERNAL_STATE/);
+}
+assert.equal(labels.fmt({ classification: "OFFICIAL", value: "2026-08-17" }), "2026-08-17");
+assert.match(labels.fmt({ classification: "DERIVED", value: 16 }), /16.*calculado/);
+assert.doesNotMatch(labels.familyPt("internal_source_family"), /internal_source_family/);
+assert.doesNotMatch(uiHtml, /freshness\s*\|\|\s*"UNKNOWN"/);
 const {
   diagnoseMargin,
   selectContract,

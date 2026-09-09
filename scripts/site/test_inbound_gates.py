@@ -100,6 +100,31 @@ def test_measurement_delay_canary_389_is_single_url_and_fail_closed():
     # proprio contrato, como esta feito em after_sha256_recapture_reason, e nao
     # afrouxar a assercao.
     assert _sha256(page) == canary["after_sha256"]
+    recapture = contract["metadata_only_recapture"]
+    assert recapture == {
+        "compared_from": "a36d34beb",
+        "compared_to": "0d3606c697c62d994517cf4d0a975c486f706648",
+        "paths": [
+            "conteudos/atraso-na-medicao-obra-publica/index.html",
+            "conteudos/glosa-de-medicao-obra-publica/index.html",
+            "conteudos/medicao-de-obra-publica-rejeitada/index.html",
+            "conteudos/fiscal-nao-assina-medicao-obra-publica/index.html",
+            "medicoes-glosas-obras-publicas/index.html",
+        ],
+        "only_change": (
+            "JSON-LD Person.jobTitle: Engenheiro Civil e consultor B2G -> "
+            "Engenheiro Civil"
+        ),
+        "visible_body_unchanged": True,
+        "author_identity_unchanged": True,
+        "dates_facts_calculations_sources_actions_unchanged": True,
+    }
+    graph = json.loads(
+        re.search(r'<script type="application/ld\+json">(.*?)</script>', html, re.S).group(1)
+    )["@graph"]
+    person = next(node for node in graph if node.get("@type") == "Person")
+    assert person["name"] == "Engº Tiago Sasaki"
+    assert person["jobTitle"] == "Engenheiro Civil"
     assert not re.search(r"\bowner\b", visible_html, re.I)
 
     assert (
@@ -521,7 +546,7 @@ def test_priced_offer_profile_is_derived_from_the_published_price():
         assert re.search(r'<input[^>]+name="offer_id"[^>]+value=""', html), route
 
 
-def test_priced_offer_gate_rejects_a_priced_page_without_persisted_capture():
+def test_priced_offer_gate_rejects_a_priced_page_without_functional_contextual_contact():
     with tempfile.TemporaryDirectory(prefix="confenge-priced-gate-") as tmp:
         tmp_path = Path(tmp)
         _capture_gate_tree(tmp_path)
@@ -542,7 +567,7 @@ def test_priced_offer_gate_rejects_a_priced_page_without_persisted_capture():
         assert [
             f.path
             for f in report.findings
-            if f.reason == "priced_offer_missing_persisted_capture"
+            if f.reason == "priced_offer_missing_contextual_contact"
         ] == [str(victim.relative_to(tmp_path))]
 
         # 2) A ninth priced page shipped without capture fails on arrival.
@@ -557,7 +582,7 @@ def test_priced_offer_gate_rejects_a_priced_page_without_persisted_capture():
         assert [
             f.path
             for f in report.findings
-            if f.reason == "priced_offer_missing_persisted_capture"
+            if f.reason == "priced_offer_missing_contextual_contact"
         ] == [str(ninth.relative_to(tmp_path))]
 
 
@@ -583,7 +608,7 @@ def test_priced_offer_gate_catches_a_price_that_was_never_registered():
         report = gate_conversion(tmp_path)
         assert report.ok is False
         assert any(
-            f.reason == "priced_offer_missing_persisted_capture"
+            f.reason == "priced_offer_missing_contextual_contact"
             and f.path == str(rogue.relative_to(tmp_path))
             for f in report.findings
         ), report.findings[:5]
@@ -944,7 +969,7 @@ def test_registered_debt_is_route_exact_and_never_absorbs_a_sibling():
         assert any(f.reason == "missing_terminal_action" for f in report.findings)
 
 
-def test_priced_route_requires_persisted_capture_not_only_an_attributed_cta():
+def test_priced_route_rejects_unregistered_destination_and_missing_context():
     with tempfile.TemporaryDirectory(prefix="confenge-family-gate-") as tmp:
         tmp_path = Path(tmp)
         _green_fixture_root(tmp_path)
@@ -959,6 +984,30 @@ def test_priced_route_requires_persisted_capture_not_only_an_attributed_cta():
         assert report.ok is False
         assert "undeclared_priced_offer" in reasons, reasons
         assert "missing_terminal_action" in reasons, reasons
+
+
+def test_price_allows_contextual_direct_contact_without_claiming_receipt():
+    from urllib.parse import urlencode
+    from scripts.site.inbound_gates import _has_contextual_direct_contact, _priced_offer_findings
+
+    route = "/casos/modelo-relatorio-inteligencia-licitacoes/"
+    brand = json.loads((ROOT / "data/site/brand.json").read_text())["contact"]
+    message = "Quero conversar sobre esta entrega: https://confenge.com.br" + route
+    href = brand["whatsapp_base"] + "?" + urlencode({"text": message})
+    anchor = f'<a href="{href}" data-cta-id="modelo-contato">Conversar sobre esta entrega</a>'
+    assert _has_contextual_direct_contact(anchor, route)
+    assert not _priced_offer_findings(ROOT / route.strip("/") / "index.html", ROOT, route, anchor, set(), "casos-modelos-precificados")
+    for damaged in (
+        anchor.replace(brand["whatsapp_number"], "5511999999999"),
+        anchor.replace(href, brand["whatsapp_base"]),
+        anchor.replace("<a ", "<a inert "),
+        anchor.replace("data-cta-id", "data-untracked"),
+        anchor.replace("Conversar sobre esta entrega", ""),
+    ):
+        assert not _has_contextual_direct_contact(damaged, route), damaged
+    assert "lead_persisted" not in anchor
+    mail = "mailto:" + brand["email"] + "?" + urlencode({"subject": "Solicitar proposta", "body": message})
+    assert _has_contextual_direct_contact(anchor.replace(href, mail), route)
 
 
 def test_bare_currency_amounts_are_data_not_a_priced_offer():

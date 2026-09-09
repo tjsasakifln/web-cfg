@@ -29,7 +29,7 @@
 <a data-cta-position="header_nav" href="/servicos-obras-publicas/" style="min-height:44px">Obras públicas</a>
 <a data-cta-position="header_nav" aria-current="page" href="/conteudos/" style="min-height:44px">Biblioteca</a>
 </nav>
-<a class="button button-primary header-cta" href="/triagem-tecnica/">Iniciar triagem</a>
+<a class="button button-primary header-cta" href="/triagem-tecnica/">Solicitar proposta</a>
 <button aria-controls="mobile-menu" aria-expanded="false" aria-label="Abrir menu" class="menu-toggle" type="button">
 <svg class="icon menu-open"><use href="#i-menu"></use></svg><svg class="icon menu-close"><use href="#i-close"></use></svg>
 </button>
@@ -38,7 +38,7 @@
 <a data-cta-position="mobile_nav" href="/servicos/" style="min-height:44px">Serviços e problemas</a>
 <a data-cta-position="mobile_nav" href="/servicos-obras-publicas/" style="min-height:44px">Obras públicas</a>
 <a data-cta-position="mobile_nav" aria-current="page" href="/conteudos/" style="min-height:44px">Biblioteca</a>
-<a class="button button-primary" href="/triagem-tecnica/">Iniciar triagem</a>
+<a class="button button-primary" href="/triagem-tecnica/">Solicitar proposta</a>
 </nav>
 </header>
 <main id="conteudo">
@@ -184,11 +184,11 @@
 </section>
 </div>
 <section class="authority-method container" id="metodo" data-surface-type="ferramenta" aria-label="Método e limitações">
-<p>Autor institucional: CONFENGE · Responsável técnico: <a href="/especialista/tiago-jun-sasaki/">Engº Tiago Sasaki</a> · Referência (as of): <time datetime="2026-08-14">14 de agosto de 2026</time> · Página revista em <time datetime="2026-08-15">15 de agosto de 2026</time></p>
+<p>Autor institucional: CONFENGE · Responsável técnico: <a href="/especialista/tiago-jun-sasaki/">Engº Tiago Sasaki</a> · Referência: <time datetime="2026-08-14">14 de agosto de 2026</time> · Página revista em <time datetime="2026-08-15">15 de agosto de 2026</time></p>
 <p>Método: leitura factual a partir de exportação pública versionada public-read-margin-defense/1.0, com fontes, data de revisão e marcação explícita de cada campo que ainda não está no contrato de dados.</p>
 <p>Fonte: PNCP (contratos de fornecedor). Responsável pela atualização: CONFENGE editorial, sobre o recorte versionado.</p>
 <p>Limitação: leitura factual do recorte oficial. Aditivos, reajuste, medições e pagamentos entram na leitura assim que a fonte pública os publicar.</p>
-<p>Como citar: CONFENGE. Diagnóstico de Defesa de Margem em Contratos Públicos. https://confenge.com.br/ferramentas/diagnostico-defesa-margem/ (as of 2026-08-14).</p>
+<p>Como citar: CONFENGE. Diagnóstico de Defesa de Margem em Contratos Públicos. https://confenge.com.br/ferramentas/diagnostico-defesa-margem/ (referência em 2026-08-14).</p>
 </section>
 </main>
 <script src="/assets/js/tool-persist.js"></script>
@@ -245,16 +245,17 @@
     pagamento: "Pagamento"
   };
   var PENDING_LABEL = "a conferir na fonte oficial";
+  var CLASSIFICATION_PT = { OFFICIAL: "registrado no recorte oficial", DERIVED: "calculado a partir dos dados", INFERENCE: "inferência" };
   function familyPt(family){
-    return FAMILY_PT[family] || String(family || "Evento");
+    return FAMILY_PT[family] || "Evento a conferir";
   }
   function reasonPt(code){
     if (!code) return "";
     return REASON_PT[code] || "sem registro neste recorte público";
   }
   function fmt(fact){
-    if (!fact || fact.classification === "UNKNOWN") return PENDING_LABEL;
-    var label = fact.classification === "OFFICIAL" ? "" : " [" + fact.classification + "]";
+    if (!fact || !CLASSIFICATION_PT[fact.classification]) return PENDING_LABEL;
+    var label = fact.classification === "OFFICIAL" ? "" : " [" + CLASSIFICATION_PT[fact.classification] + "]";
     return esc(String(fact.value) + label);
   }
   function render(diagnosis){
@@ -275,14 +276,14 @@
     if (!timeline.length) timeline.push("<li class=\"journey-stage\"><span class=\"type-mono\">a conferir</span><h3>Vigência a conferir na fonte oficial</h3></li>");
     document.getElementById("out-timeline").innerHTML = timeline.join("");
     document.getElementById("out-eventos").innerHTML = diagnosis.eventos_defesa_margem.map(function(e){
-      var state = e.classification === "UNKNOWN" ? PENDING_LABEL : String(e.classification === "OFFICIAL" ? "registrado no recorte oficial" : e.classification);
+      var state = CLASSIFICATION_PT[e.classification] || PENDING_LABEL;
       var why = e.classification === "UNKNOWN" ? reasonPt(e.reason) : "";
       return "<li>" + esc(familyPt(e.family)) + ": " + esc(state) + (why ? " (" + esc(why) + ")" : "") + ".</li>";
     }).join("");
     var fontes = [];
     var officialUrl = diagnosis.fontes.classification === "OFFICIAL" ? safeExternalUrl(diagnosis.fontes.value) : "";
     if (officialUrl) {
-      fontes.push("<li><a href=\"" + esc(officialUrl) + "\" rel=\"external noopener\" target=\"_blank\">Fonte oficial</a> · data de referência " + esc(diagnosis.freshness || "UNKNOWN") + "</li>");
+      fontes.push("<li><a href=\"" + esc(officialUrl) + "\" rel=\"external noopener\" target=\"_blank\">Fonte oficial</a> · data de referência " + esc(diagnosis.freshness || "não informada") + "</li>");
     } else {
       fontes.push("<li>Fonte: " + fmt(diagnosis.fontes) + "</li>");
     }
@@ -422,7 +423,7 @@
 <footer class="site-footer">
 <div class="container footer-top">
 <div class="footer-brand"><img alt="CONFENGE" decoding="async" height="58" loading="lazy" src="/assets/logo-confenge-white-500-1677038e.png" width="224"/><p>Projeto, revisão, compatibilização, orçamento, inspeção, laudo, perícia, avaliação e segurança do trabalho. Engenharia para clientes privados e públicos.</p></div>
-<div class="footer-links"><strong>Situações</strong><a href="/#situacao-projeto">Projetos e edificações</a><a href="/#situacao-pericia">Perícias e avaliações</a><a href="/#situacao-sst">Segurança do trabalho</a><a href="/servicos-obras-publicas/">Obras públicas</a></div><div class="footer-links"><strong>Biblioteca e provas</strong><a href="/conteudos/">Conteúdos</a><a href="/ferramentas/">Ferramentas</a><a href="/entregas/">Entregas</a><a href="/casos/">Casos demonstrativos</a></div><div class="footer-links"><strong>Empresa</strong><a href="/especialista/tiago-jun-sasaki/">Quem responde</a><a href="/confianca/">Como verificamos</a><a href="/triagem-tecnica/">Contato e triagem</a><a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a><a href="tel:+5548988344559">(48) 98834-4559</a><span>Atendimento nacional</span></div>
+<div class="footer-links"><strong>Situações</strong><a href="/#situacao-projeto">Projetos e edificações</a><a href="/#situacao-pericia">Perícias e avaliações</a><a href="/#situacao-sst">Segurança do trabalho</a><a href="/servicos-obras-publicas/">Obras públicas</a></div><div class="footer-links"><strong>Biblioteca e provas</strong><a href="/conteudos/">Conteúdos</a><a href="/ferramentas/">Ferramentas</a><a href="/entregas/">Entregas</a><a href="/casos/">Casos demonstrativos</a></div><div class="footer-links"><strong>Empresa</strong><a href="/especialista/tiago-jun-sasaki/">Quem responde</a><a href="/confianca/">Como verificamos</a><a href="/triagem-tecnica/">Contato e triagem</a><a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a><a href="tel:+5548988344559">(48) 98834-4559</a><span>Atendimento em todo o Brasil, conforme escopo, local e modalidade definidos na proposta.</span></div>
 </div>
 <div class="container footer-bottom"><span>© <span id="year">2026</span> CONFENGE. CNPJ 52.407.089/0001-09.</span><nav class="footer-authority" aria-label="Autoridade e políticas"><a href="/politica-editorial/">Política editorial</a><a href="/triagem-tecnica/#corrigir-o-site">Encontrou um erro?</a><a href="/uso-de-ia/">Uso de IA</a><a href="/conflitos/">Conflitos</a><a href="/privacidade/">Privacidade</a></nav></div>
 </footer>

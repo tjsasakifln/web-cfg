@@ -4,8 +4,9 @@
  * Auditoria derivada do registro para o contrato editorial da issue #338.
  *
  * Não mantém allowlist de páginas: rotas vêm do registro de entregáveis, dos
- * contêineres e das famílias públicas precificadas. O catálogo precisa expor
- * as 15 cláusulas para cada um dos 54 itens. Revisão humana continua separada.
+ * contêineres e das famílias públicas precificadas. Os 54 itens continuam
+ * governados no registro; somente ofertas PUBLISHED projetam as 15 cláusulas
+ * no catálogo público. Revisão humana continua separada.
  */
 
 import fs from "fs";
@@ -224,6 +225,9 @@ export function auditCopyContract({ contract, registry, taskDoors, familyRegistr
   const clauses = contract.per_offer_contract.map((clause) => clause.key);
   const routes = deriveMoneyRoutes(registry, taskDoors, familyRegistry);
   const ids = registry.deliverables.map((entry) => entry.deliverable_id);
+  const publicIds = registry.deliverables
+    .filter((entry) => entry.public_state === "PUBLISHED")
+    .map((entry) => entry.deliverable_id);
   const signatures = new Map();
 
   if (registry.deliverables.length !== 54) problems.push("catalog_count");
@@ -234,16 +238,25 @@ export function auditCopyContract({ contract, registry, taskDoors, familyRegistr
     if (words(entry.public_name_pt_br) > 8) problems.push(`title_over_8_words:${entry.deliverable_id}`);
     if (words(entry.trigger) > 24) problems.push(`trigger_over_24_words:${entry.deliverable_id}`);
     if (!entry.data_contract?.provenance_required || !entry.data_contract?.freshness_required) problems.push(`provenance:${entry.deliverable_id}`);
-    if (!catalogContractsHtml.includes(`data-copy-contract-id="${entry.deliverable_id}"`)) problems.push(`missing_public_contract:${entry.deliverable_id}`);
+  }
+  const renderedContractIds = [...catalogContractsHtml.matchAll(/data-copy-contract-id="([^"]+)"/g)]
+    .map((match) => match[1]);
+  for (const id of publicIds) {
+    if (!renderedContractIds.includes(id)) problems.push(`missing_public_contract:${id}`);
+  }
+  for (const id of renderedContractIds) {
+    if (!publicIds.includes(id)) problems.push(`nonpublic_contract_exposed:${id}`);
   }
   for (const clause of clauses) {
     const count = (catalogContractsHtml.match(new RegExp(`data-copy-clause="${clause}"`, "g")) || []).length;
-    if (count !== ids.length) problems.push(`clause_coverage:${clause}:${count}`);
+    if (count !== publicIds.length) problems.push(`public_clause_coverage:${clause}:${count}`);
   }
-  if ((catalogContractsHtml.match(/data-copy-contract-id=/g) || []).length !== ids.length) problems.push("public_contract_count");
+  if (renderedContractIds.length !== publicIds.length || new Set(renderedContractIds).size !== publicIds.length) {
+    problems.push("public_contract_count");
+  }
   if (!catalogContractsHtml.includes("Compre quando") || catalogContractsHtml.includes(">Saiba mais<")) problems.push("catalog_action_copy");
   const clauseScan = scanClauseDuplicates(catalogContractsHtml, clauses);
-  if (clauseScan.observed !== ids.length * clauses.length) problems.push(`clause_scan_count:${clauseScan.observed}`);
+  if (clauseScan.observed !== publicIds.length * clauses.length) problems.push(`public_clause_scan_count:${clauseScan.observed}`);
   clauseScan.duplicates.forEach((finding) => problems.push(`duplicate_copy_clause:${finding.clause}:${finding.deliverable_id}:${finding.duplicates}`));
 
   const extraSurfaces = catalogContractsHtml === catalogHtml
@@ -259,8 +272,10 @@ export function auditCopyContract({ contract, registry, taskDoors, familyRegistr
     problems,
     metrics: {
       deliverables: ids.length,
+      public_deliverables: publicIds.length,
       clauses_per_deliverable: clauses.length,
       clause_instances: ids.length * clauses.length,
+      public_clause_instances: publicIds.length * clauses.length,
       clause_bodies_unique: clauseScan.unique,
       clause_body_duplicates: clauseScan.duplicates.length,
       titleless_unique: signatures.size,
@@ -288,5 +303,5 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     console.error(JSON.stringify(report, null, 2));
     process.exit(1);
   }
-  console.log(`COPY_CONTRACT_AUDIT_OK deliverables=${report.metrics.deliverables} clauses=${report.metrics.clause_instances} routes=${report.metrics.routes_derived}`);
+  console.log(`COPY_CONTRACT_AUDIT_OK governed=${report.metrics.deliverables} public=${report.metrics.public_deliverables} public_clauses=${report.metrics.public_clause_instances} routes=${report.metrics.routes_derived}`);
 }

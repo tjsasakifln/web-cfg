@@ -51,8 +51,9 @@ not create that variable, does not change DNS, and does not dispatch a release.
 - ADR affected: ADR-STRAT-002 remains the canonical-surface decision;
   RUNTIME-AUTHORITY records Cloudflare as the public edge and nginx/Netcup as
   the production origin.
-- Rollback: atomic `current` symlink restoration via
-  `/opt/confenge-web/bin/rollback <FULL_SHA>`. See `docs/ops/ROLLBACK.md`.
+- Rollback: atomic `current` symlink restoration via the verified bundle's
+  `run_bundle_control.py --operation rollback --rollback-target <PREVIOUS_SHA>`.
+  See `docs/ops/ROLLBACK.md`.
 
 ## Chain and invariants
 
@@ -64,11 +65,11 @@ push to main (or exact-SHA manual dispatch)
   -> GitHub build-provenance attestation
   -> SSH upload to /opt/confenge-web/incoming/.upload-FULL_SHA-RUN_ID-ATTEMPT
   -> checksum validation + atomic adoption as incoming/FULL_SHA
-  -> stage-release + verify-release (no current change)
+  -> verified bundle controller: --operation stage + --operation verify (no current change)
   -> explicit promote gate
-  -> promote-release (atomic current swap)
+  -> same bundle controller: --operation promote (predecessor-checked atomic current swap)
   -> /opt/confenge-web/evidence/deploy.ndjson
-  -> rollback FULL_SHA
+  -> same verified controller: --operation rollback --rollback-target PREVIOUS_SHA
 ```
 
 `/.well-known/build-info.json` remains the static build identity.
@@ -86,6 +87,40 @@ and stage/verify/promote/rollback scripts. Persistent records live in the
 mode-0700 `/var/lib/confenge-web`; controls and evidence live outside releases.
 
 ## One-time host provisioning (do not run from a docs PR)
+
+### Versioned controller execution (2026-09-09)
+
+The canonical workflow now uses `run_bundle_control.py` for stage, verify and
+promotion. It checks the three-file envelope, bundle checksum, internal payload
+checksum and controller equality with the exact clean gated checkout. Pinned
+SSH streams the controller into a Python bootstrap which verifies its digest
+before compilation. The existing deploy account, sudo allowlist, runtime
+launchers and order storage are unchanged. No controller installation on the
+host is necessary. Automatic and manual workflow executions share a concurrency
+group; promotion also compares the predecessor captured before stage under the
+host deployment lock.
+
+For rollback of a release published by this workflow, retain its three-file
+bundle in `/opt/confenge-web/incoming/<CONTROLLER_SHA>` and use a clean checkout
+of that controller SHA. Download those three files through pinned SSH if the
+Actions artifact has expired, then invoke the same verified runner:
+
+```sh
+python3 deploy/netcup/run_bundle_control.py \
+  --bundle-directory /absolute/local/bundle-directory \
+  --sha <CONTROLLER_SHA> --operation rollback --rollback-target <PREVIOUS_SHA> \
+  --target confenge-deploy@<PINNED_HOST> \
+  --ssh-option=-o --ssh-option=BatchMode=yes \
+  --ssh-option=-o --ssh-option=StrictHostKeyChecking=yes \
+  --ssh-option=-i --ssh-option=/absolute/private/key-path
+```
+
+Use the pinned host-key file and port from the authorized release configuration.
+The controller and bundle identities are recorded with release evidence. This
+procedure survives the 30-day Actions retention window and does not change or
+remove persistent requests. The historical root-owned commands below remain
+provisioning references and legacy recovery tools; they are not evidence that
+new repository controller fixes ran.
 
 Review paths on the target first. The dedicated account owns release data, not
 the root-owned control scripts:
@@ -227,6 +262,8 @@ The workflow and host both serialize deploys.
 Host commands (full SHA only):
 
 ```text
+# Historical provisioned commands only; new releases use the verified bundle
+# runner documented above, including for rollback.
 /opt/confenge-web/bin/stage-release <FULL_SHA>
 /opt/confenge-web/bin/verify-release <FULL_SHA>
 CONFENGE_LOCAL_ORIGIN=http://127.0.0.1:8088 /opt/confenge-web/bin/promote-release <FULL_SHA>

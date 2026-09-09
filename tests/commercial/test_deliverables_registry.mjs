@@ -24,10 +24,19 @@ const require = createRequire(import.meta.url);
 const lib = require(path.join(root, "scripts/commercial/deliverables.cjs"));
 
 const results = [];
+// Count source text segments for the field-completeness assertion. This is
+// deliberately not an HTML sanitizer and its output is never rendered.
+function sourceTextLength(value) {
+  return [...value.matchAll(/(?:^|>)([^<>]*)(?=<|$)/g)]
+    .reduce((length, match) => length + match[1].trim().length, 0);
+}
 function assert(name, cond, detail) {
   results.push({ name, ok: Boolean(cond), detail });
   if (!cond) console.error("FAIL", name, detail === undefined ? "" : JSON.stringify(detail));
 }
+assert("decision_text_counts_plain_content", sourceTextLength("Entrega técnica") >= 10);
+assert("decision_text_counts_nested_content", sourceTextLength("<strong>Entrega</strong> técnica") >= 10);
+assert("decision_text_rejects_empty_markup", sourceTextLength('<a title="conteúdo apenas no atributo"></a>') === 0);
 
 const registry = lib.loadRegistry();
 const firstFold = lib.loadFirstFoldContract();
@@ -148,14 +157,10 @@ assert(
 );
 const primaryShowcase = entregasHtml.match(/<div class="vitrine-items">([\s\S]*?)<dl class="compare-ladder-figures">/)?.[1] || "";
 assert("public_vitrine_omits_validate_and_blocked_cards", !/data-public-state="(?:VALIDATE|BLOCKED)"/.test(primaryShowcase), "non-published state in buying showcase");
-// 2026-09-08. A assercao antiga exigia que /entregas/ publicasse os contadores
-// "44 em validacao" e "2 bloqueadas" -- inventario do que a empresa ainda nao
-// vende, na pagina que o rodape chama de "Entregas". A propriedade legitima que
-// ela protegia era outra e continua exigida: a pagina nao pode dar a entender
-// que as 54 frentes sao contrataveis agora. Agora isso e verificado pelo lado
-// positivo -- a pagina diz quantas tem oferta publicada -- e pelo negativo: o
-// estado comercial interno nao aparece na vitrine.
-assert("public_page_distinguishes_capability_roll", /54 frentes de trabalho/i.test(entregasHtml) && /Oito têm oferta publicada/i.test(entregasHtml), "54-capability distinction missing");
+// EXECUTE_NOW 2026-09-09: internal completeness remains checked above, but
+// publishing its maturity census is not a buyer requirement. Only approved
+// offers may be sold, and the hub must explain the broader engineering work.
+assert("public_page_explains_engineering_deliveries", ["/servicos/#servico-projeto", "/quantitativos-orcamento-obras/"].every((href) => entregasHtml.includes(`href="${href}"`)), "engineering delivery destinations missing");
 assert("public_vitrine_omits_internal_price_ceiling", !entregasHtml.includes("R$ 39.800"), "R$ 39.800 leaked");
 assert("public_roll_hides_internal_commercial_state", !entregasHtml.includes("em validação") && !entregasHtml.includes("bloqueada") && !entregasHtml.includes("sem oferta pronta") && !primaryShowcase.includes("Em validação"), "internal offer state leaked to the shop window");
 for (const entry of published) {
@@ -167,7 +172,9 @@ for (const entry of published) {
   assert(`public_price_${entry.deliverable_id}`, card.includes(brl(lib.entryAmountCents(entry))), brl(lib.entryAmountCents(entry)));
   assert(`public_state_${entry.deliverable_id}`, card.includes(`data-public-state="${entry.public_state}"`), entry.public_state);
   assert(`public_deep_link_${entry.deliverable_id}`, entregasHtml.includes(`id="entrega-${entry.catalog_number}"`));
-  assert(`public_decision_fields_${entry.deliverable_id}`, ["Situação", "Decisão", "Entrada", "Objeto e limite", "Saída", "SLA"].every((label) => card.includes(`<dt>${label}</dt>`)) && card.includes("Pacote e crédito"), entry.deliverable_id);
+  const facts = [...card.matchAll(/<dt>([^<]+)<\/dt>\s*<dd>([\s\S]*?)<\/dd>/g)];
+  assert(`public_decision_fields_${entry.deliverable_id}`, facts.length >= 8 && facts.every(([, label, value]) => label.trim() && sourceTextLength(value) >= 10) && ["value_outcome", "value_created", "artifact", "positive_proof"].every((role) => card.includes(`data-copy-role="${role}"`)), entry.deliverable_id);
+  assert(`public_plain_terms_${entry.deliverable_id}`, facts.every(([, label]) => !/\b(?:SLA|inputs|checks|gates)\b/i.test(label)) && /dias úteis/.test(card) && /confirma\w* por escrito.*antes da cobrança/i.test(card), entry.deliverable_id);
 }
 const vitrineHtml = (entregasHtml.match(/<!-- GENERATED:PUBLIC-CATALOG:START -->[\s\S]*?<!-- GENERATED:PUBLIC-CATALOG:END -->/) || [""])[0];
 for (const entry of entries.filter((item) => item.public_state !== "PUBLISHED")) {
@@ -175,8 +182,8 @@ for (const entry of entries.filter((item) => item.public_state !== "PUBLISHED"))
   assert(`internal_name_not_sold_as_product_${entry.deliverable_id}`, !primaryShowcase.includes(entry.public_name_pt_br), entry.public_name_pt_br);
 }
 const capabilityRows = [...entregasHtml.matchAll(/<li class="capability-item[^>]*data-capability-id="([^"]+)"[^>]*data-public-state="([^"]+)"/g)];
-assert("public_roll_has_54_capabilities", capabilityRows.length === 54, capabilityRows.length);
-assert("public_roll_state_census", ["PUBLISHED", "VALIDATE", "BLOCKED"].every((state) => capabilityRows.filter((row) => row[2] === state).length === ({ PUBLISHED: 8, VALIDATE: 44, BLOCKED: 2 })[state]), capabilityRows.map((row) => row[2]));
+assert("public_roll_omits_internal_census", capabilityRows.length === 0 && !/54 (?:frentes|capacidades)/i.test(entregasHtml), capabilityRows.length);
+assert("internal_state_census_preserved", ["PUBLISHED", "VALIDATE", "BLOCKED"].every((state) => entries.filter((entry) => entry.public_state === state).length === ({ PUBLISHED: 8, VALIDATE: 44, BLOCKED: 2 })[state]), entries.map((entry) => entry.public_state));
 assert("public_catalog_has_one_terminal_form", (entregasHtml.match(/<form\b/g) || []).length === 1);
 assert("public_catalog_captures_deliverable_id", entregasHtml.includes('name="deliverable_id"'));
 assert("public_catalog_captures_terms_id", entregasHtml.includes('name="terms_id"'));

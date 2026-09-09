@@ -10,7 +10,7 @@
   },
   "currency": "BRL",
   "data_version": "sc-pavimentacao-ticket-1.0",
-  "description": "Mediana e quartis (nearest-rank) do valor integral nominal do instrumento, tipologia documental de pavimentação, recorte exclusivo de Santa Catarina. Não estima custo por km, m² ou unidade física. Missingness de valores não positivos permanece visível e não é convertida em zero.",
+  "description": "Mediana e quartis pelo método do posto mais próximo do valor integral nominal do instrumento, tipologia documental de pavimentação, recorte exclusivo de Santa Catarina. Não estima custo por km, m² ou unidade física. Registros com valor ausente ou não positivo permanecem contabilizados e não são convertidos em zero.",
   "geography": {
     "code": "SC",
     "kind": "uf",
@@ -36,8 +36,8 @@
       "source",
       "as_of"
     ],
-    "owner": "CONFENGE / market-answers",
-    "rule": "Any change to an invalidation key requires a new data_version and a new package_hash. Silent backfill is forbidden."
+    "owner": "CONFENGE / análises de mercado",
+    "rule": "Qualquer mudança em uma chave de invalidação exige nova versão dos dados e novo hash do pacote. Não há atualização silenciosa."
   },
   "method_version": "integral-nominal-nearest-rank/1.0",
   "missingness": {
@@ -54,10 +54,10 @@
   },
   "png": {
     "included": false,
-    "reason": "no_reproducible_local_converter"
+    "reason": "não há conversor local reprodutível"
   },
-  "refresh_owner": "CONFENGE / market-answers",
-  "rendered_content_hash": "185dcd038951689ef1482973c7bdc51d858c01b77bfeb460a2d05e2ece8d39fa",
+  "refresh_owner": "CONFENGE / análises de mercado",
+  "rendered_content_hash": "a7142fd5baa7ac3a97debb32bc6645672fcd261d9deaf182a5aacf5b78930279",
   "schema": "data_desk_method_v1",
   "schema_version": "data_desk_asset_v1",
   "source_schema_version": "public-read-market-answer/1.0",

@@ -13,8 +13,8 @@
  *      censo a mao reprova;
  *   3. nenhuma alegacao de compreensao pode nascer de automacao;
  *   4. o censo e derivado do registro publico de familias, nao mantido a mao;
- *   5. uma falha medida precisa nomear dono e data, e so e aceita numa rota que
- *      a #291 realmente congelou.
+ *   5. uma falha medida impede publicação, inclusive nos antigos pilares
+ *      congelados: a decisão de 2026-09-09 exige corrigir e medir novamente.
  *
  * A automacao aqui verifica caixa renderizada, contagem de acao, repeticao
  * lexical, viewport e regressao de contrato. Ela nunca declara compreensao
@@ -24,6 +24,9 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { execFileSync } from "node:child_process";
+import { createHash } from "node:crypto";
+import { firstFoldInputHashes, firstFoldIdentityProblems } from "../../scripts/site/first_fold_identity.mjs";
 import { consumerSuitesForPath } from "../../scripts/site/affected_graph.mjs";
 import {
   DESKTOP_VIEWPORT,
@@ -396,6 +399,18 @@ assert(
   evidence.viewports,
 );
 assert("evidence_records_a_commit_sha", /^[0-9a-f]{40}$/.test(evidence.commit_sha || ""), evidence.commit_sha);
+let sourceCommitReachable = false;
+try { execFileSync("git", ["merge-base", "--is-ancestor", evidence.commit_sha, "HEAD"], { cwd: root, stdio: "pipe" }); sourceCommitReachable = true; } catch {}
+assert("evidence_source_commit_is_reachable", sourceCommitReachable, evidence.commit_sha);
+const actualInputHashes = firstFoldInputHashes(root, census.map(row => row.route));
+const identityProblems = firstFoldIdentityProblems(evidence, actualInputHashes);
+assert("evidence_is_clean_and_bound_to_current_inputs", identityProblems.length === 0, identityProblems);
+assert("identity_rejects_dirty_measurement", firstFoldIdentityProblems({ surface: "source", tree_dirty: true, input_hashes: actualInputHashes }, actualInputHashes).includes("first_fold_dirty_source_evidence"), "dirty source negative seed");
+assert("identity_rejects_changed_input", firstFoldIdentityProblems({ ...evidence, input_hashes: { ...actualInputHashes, "index.html": "0".repeat(64) } }, actualInputHashes).some(problem => problem === "first_fold_input_changed:index.html"), "changed HTML negative seed");
+for (const row of evidence.routes || []) {
+  const currentHash = createHash("sha256").update(fs.readFileSync(routeToFile(row.route))).digest("hex");
+  assert(`evidence_${row.route}_html_bytes_match`, row.html_sha256 === currentHash, [row.html_sha256, currentHash]);
+}
 assert("evidence_records_a_measurement_date", /^\d{4}-\d{2}-\d{2}$/.test(evidence.measured_on || ""), evidence.measured_on);
 assert("evidence_role_selectors_match_the_rules", eq(evidence.role_selectors, ROLE_SELECTORS), Object.keys(evidence.role_selectors || {}));
 assert(
@@ -403,7 +418,8 @@ assert(
   unlockPlan.html_mutation_authorized === false,
   unlockPlan.html_mutation_authorized,
 );
-assert("unlock_plan_protects_six_pillars", FROZEN_ROUTES.size === 6, [...FROZEN_ROUTES]);
+assert("commercial_revision_has_no_frozen_failure_exception", FROZEN_ROUTES.size === 0, [...FROZEN_ROUTES]);
+assert("commercial_revision_revokes_editorial_wait", unlockPlan.commercial_revision?.editorial_freeze_revoked === true && unlockPlan.commercial_revision?.measurement_wait_required === false, unlockPlan.commercial_revision);
 
 const measuredByRoute = new Map((evidence.routes || []).map((row) => [row.route, row]));
 assert(
@@ -547,30 +563,23 @@ for (const surface of census) {
   }
 
   if (surface.evidence_state === "MEASURED_FAIL") {
-    // Uma falha honesta nomeia dono e data. Falha sem bloqueio declarado, ou
-    // numa rota que ninguem congelou, e divida escondida e reprova aqui.
+    // Keep the actual failure and its coordinates as evidence, not an exception.
     assert(`fail_${route}_records_coordinates`, /y=\d+/.test(surface.measurement?.finding || ""), surface.measurement?.finding);
-    assert(`fail_${route}_names_a_blocking_issue`, /#\d+/.test(surface.measurement?.blocker || ""), surface.measurement?.blocker);
     assert(`fail_${route}_blocker_is_the_declared_one`, surface.measurement?.blocker === BLOCKER, surface.measurement?.blocker);
-    assert(`fail_${route}_is_a_frozen_pillar`, FROZEN_ROUTES.has(route), route);
     assert(`fail_${route}_has_measured_problems`, foldProblems(row).length > 0, foldProblems(row));
   }
 }
 
-// Toda rota que a #291 congela esta no censo e continua reprovando enquanto o
-// HTML dela nao puder ser tocado. Quando a data chegar, remediar e remedir.
-for (const route of FROZEN_ROUTES) {
-  assert(`frozen_pillar_${route}_is_in_the_census`, byRoute.has(route), route);
-  assert(
-    `frozen_pillar_${route}_is_not_promoted_while_frozen`,
-    byRoute.get(route)?.evidence_state === "MEASURED_FAIL",
-    byRoute.get(route)?.evidence_state,
-  );
+// The historical experiment still owns its six routes, but cannot force their
+// current commercial presentation to remain defective.
+for (const slug of unlockPlan.protected_pillars || []) {
+  const route = `/${slug}/`;
+  assert(`former_frozen_pillar_${route}_is_in_the_census`, byRoute.has(route), route);
 }
 const failures = census.filter((s) => s.evidence_state === "MEASURED_FAIL");
 assert(
-  "every_measured_failure_is_a_frozen_pillar",
-  failures.every((s) => FROZEN_ROUTES.has(s.route)),
+  "no_measured_failure_is_accepted_for_publication",
+  failures.length === 0,
   failures.map((s) => s.route),
 );
 assert(
@@ -676,8 +685,8 @@ assert("derivation_has_priced_offer_families", pricedFamilies.length >= 2, price
 const obligatedPricedFamilies = pricedFamilies.filter((f) => f.classification !== "PILOT_STAGING");
 assert(
   "derivation_excludes_pilot_staging_from_first_fold_census",
-  pricedFamilies.some((f) => f.classification === "PILOT_STAGING")
-    && obligatedPricedFamilies.every((f) => f.classification !== "PILOT_STAGING"),
+  obligatedPricedFamilies.every((f) => f.classification !== "PILOT_STAGING")
+    && !census.some((surface) => surface.route?.startsWith("/piloto/")),
   pricedFamilies.filter((f) => f.classification === "PILOT_STAGING").map((f) => f.id),
 );
 for (const fam of obligatedPricedFamilies) {

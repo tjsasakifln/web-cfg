@@ -13,7 +13,7 @@
     "name": "Engº Tiago Sasaki",
     "url": "https://confenge.com.br/especialista/tiago-jun-sasaki/",
     "id": "https://confenge.com.br/#tiago",
-    "job_title": "Engenheiro Civil e consultor B2G"
+    "job_title": "Engenheiro Civil"
   },
   "correction": {
     "owner_name": "Engº Tiago Sasaki",
@@ -30,7 +30,7 @@
   },
   "policy": {
     "record": "data/site/editorial-policy.json",
-    "current_version": "1.2.0",
+    "current_version": "1.3.0",
     "public_path": "/politica-editorial/",
     "historico_path": "/politica-editorial/historico/"
   },

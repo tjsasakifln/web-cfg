@@ -643,7 +643,7 @@ def test_renderable_skips_non_ready_records():
     assert [item["opportunity_id"] for item in records] == ["c"]
 
 
-def test_live_intelligence_families_are_declared_and_still_governed_noindex():
+def test_live_intelligence_families_are_declared_and_still_governed_noindex(projection):
     """Fixture/CNPJ-result surfaces stay noindex; official INDEX is earned per page.
 
     Families are declared so the evidence gate can judge them. Fixture pages in
@@ -679,14 +679,34 @@ def test_live_intelligence_families_are_declared_and_still_governed_noindex():
         is_noindex,
     )
 
+    from scripts.live_intelligence import render as R
+
     ctx = build_indexation_context(ROOT)
-    for route in ("/oportunidades/pe-2026-000188-reforma-ubs-londrina-pr/", "/analise-cnpj/"):
-        html = ctx.html_by_route.get(route, "")
-        assert html, f"{route} not found on disk -- fixture set changed?"
-        assert is_noindex(html), f"{route} must still be noindex while fixture-backed"
-        family = ctx.route_family.get(route)
-        ready, _ = instance_index_ready_for_route(route, html, family, ctx)
-        assert not ready, f"{route} must not independently earn an index slot yet"
+    retired_route = "/oportunidades/pe-2026-000188-reforma-ubs-londrina-pr/"
+    assert retired_route not in ctx.html_by_route, (
+        "the retired fixture route must not return to the governed public surface"
+    )
+    fixture_record = next(
+        item for item in projection["opportunities"] if item["route"] == retired_route
+    )
+    fixture_html = R.render_opportunity_html(fixture_record)
+    opportunity_family = next(
+        family for family in ctx.families if family["id"] == "live-intelligence-opportunity"
+    )
+    assert is_noindex(fixture_html), "the internal fixture renderer must remain fail-closed"
+    ready, _ = instance_index_ready_for_route(
+        retired_route, fixture_html, opportunity_family, ctx
+    )
+    assert not ready, "an internal fixture must not independently earn an index slot"
+
+    cnpj_route = "/analise-cnpj/"
+    cnpj_html = ctx.html_by_route.get(cnpj_route, "")
+    assert cnpj_html, f"{cnpj_route} not found on disk"
+    assert is_noindex(cnpj_html), f"{cnpj_route} must still be noindex while fixture-backed"
+    ready, _ = instance_index_ready_for_route(
+        cnpj_route, cnpj_html, ctx.route_family.get(cnpj_route), ctx
+    )
+    assert not ready, f"{cnpj_route} must not independently earn an index slot yet"
 
 
 # --- Intent kinds mirror the server allowlist -------------------------------

@@ -2,7 +2,7 @@
   "contract_id": "CONFENGE_CORPORATE_TAXONOMY",
   "contract_version": "1.0.0",
   "schema_id": "confenge-corporate-taxonomy/v1",
-  "as_of": "2026-09-05",
+  "as_of": "2026-09-09",
   "decision_date": "2026-09-04",
   "owner_issue": 578,
   "parent_issue": 577,
@@ -212,7 +212,7 @@
       "id": "building_engineering_documentation",
       "public_name": "Engenharia de Edificações e Documentação",
       "corporate_category_id": "engineering_expert_evidence_technical_intelligence",
-      "visitor_job": "Resolver uma decisão técnica de edificação — orçamento, BIM, patologia, as built ou regularização documental — com responsável técnico e próximo passo claro.",
+      "visitor_job": "Elaborar, revisar ou compatibilizar projetos de engenharia, orçar ou documentar uma edificação pública ou privada com entrega, utilidade e responsabilidade técnica definidas.",
       "icps": [
         "proprietários e síndicos",
         "construtoras e incorporadoras privadas",
@@ -226,6 +226,7 @@
         "as built e regularização documental"
       ],
       "typical_decisions_artifacts": [
+        "projeto de engenharia com desenhos, especificações e memórias na fase contratada",
         "orçamento ou conferência",
         "relatório de compatibilização",
         "laudo de inspeção ou patologia",
@@ -395,7 +396,7 @@
       "route": "/",
       "nucleus_id": "public_works_b2g",
       "status": "published",
-      "notes": "Current production home remains the B2G vertical surface until MV-09 integrates an approved public information architecture."
+      "notes": "Corporate home routes public and private engineering needs through the public intent matrix. nucleus_id retains legacy operational attribution only; it does not restrict the public offer."
     },
     {
       "route": "/servicos-obras-publicas/",
@@ -420,7 +421,7 @@
   ],
   "b2g_coexistence": {
     "status": "protected_vertical",
-    "cannibalization": "New service families must not rewrite, redirect or noindex B2G URLs. Public navigation may expose only approved buyer-language intent families after MV-09 integrates the information architecture; internal nucleus names are not public route truth.",
+    "cannibalization": "Preserve useful approved public-works routes and commercial conditions. The authorized commercial campaign may correct copy and resolve improper draft exposure URL by URL. Public navigation uses buyer-language intent families; internal nucleus names are not public route truth.",
     "url_policy": "Preserve current B2G routes, indexation and conversion. No blanket redirect to home. MIGRATE/REDIRECT/RETIRE remains URL-exact.",
     "equity_policy": "B2G content, offers, proof and data remain in force. The vertical is not deprecated and is not the corporate category."
   },
@@ -437,5 +438,5 @@
     "notes": "Sibling contracts are consumed by MV-03 through MV-07 and integrated only by MV-09. They are not runtime fallbacks. Missing or divergent taxonomy version/hash fails closed."
   },
   "notes": "Founder decision 2026-09-04 recorded in #577/#578 and red-teamed by MV-01 on 2026-09-05. This document is the single operational authority for five internal nuclei. Their names are not mandatory public navigation or route labels; customer-facing entry is the public intent matrix. Consumers pin contract_id, contract_version and content_sha256.",
-  "content_sha256": "967d301289a1dcaaa5616d9363c90d17058fd27785c26b426917ba454e0b1683"
+  "content_sha256": "a75f9d2392630cbb5a0e21ee556c9e1aa1aa56784e8a23da05c46092f100667c"
 }

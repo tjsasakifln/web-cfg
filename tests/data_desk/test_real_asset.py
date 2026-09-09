@@ -14,7 +14,13 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from scripts.data_desk.bind import CANONICAL_SOURCE, load_approved_source
+from scripts.data_desk.bind import (
+    APPROVALS_REL,
+    CANONICAL_SOURCE,
+    EXPORT_REL,
+    LKG_REL,
+    load_approved_source,
+)
 from scripts.data_desk.embed import embed_has_tracker, embed_has_visible_source
 from scripts.data_desk.hashing import package_hash
 from scripts.data_desk.package import (
@@ -26,6 +32,7 @@ from scripts.data_desk.package import (
     invalidate_on_update,
     load_asset,
 )
+from scripts.data_desk.publish import assert_public_human_copy
 from scripts.data_desk.schema import WATERMARK, SchemaError
 from scripts.data_desk.syndication import validate_manifest
 from scripts.discovery.inspect import load_sitemap_urls
@@ -39,6 +46,25 @@ PII_MARKERS = ("cpf", "rg", "-----begin", "private key", "datalake", "raw_rows")
 
 def _source():
     return load_approved_source(ROOT)
+
+
+def test_superseded_editorial_hash_cannot_reauthorize_data_desk(tmp_path):
+    for rel in (EXPORT_REL, APPROVALS_REL, LKG_REL):
+        target = tmp_path / rel
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes((ROOT / rel).read_bytes())
+    old_hash = "0896c280408245f981adb2f20628f1f0cd190aa558212521ad193b7fd5c249fe"
+    approvals = json.loads((tmp_path / APPROVALS_REL).read_text(encoding="utf-8"))
+    approvals["approvals"][0]["rendered_content_hash"] = old_hash
+    (tmp_path / APPROVALS_REL).write_text(
+        json.dumps(approvals, ensure_ascii=False), encoding="utf-8"
+    )
+    lkg = json.loads((tmp_path / LKG_REL).read_text(encoding="utf-8"))
+    lkg["rendered_content_hash"] = old_hash
+    (tmp_path / LKG_REL).write_text(json.dumps(lkg, ensure_ascii=False), encoding="utf-8")
+
+    with pytest.raises(SchemaError, match="rendered_content_hash_drift"):
+        load_approved_source(tmp_path)
 
 
 def test_operational_default_is_real_approved_asset():
@@ -102,6 +128,9 @@ def test_real_package_reconciles_approved_payload(tmp_path):
     assert package["indexable"] is False
     assert package["sitemap"] is False
     assert package["png_included"] is False
+    assert package["license"] == "NEEDS_REVIEW"
+    assert "licença aberta" in package["license_notice"].lower()
+    assert package["license_url"] == "https://confenge.com.br/termos-de-uso/"
 
 
 def test_real_artifacts_named_and_canonical(tmp_path):
@@ -215,6 +244,17 @@ def test_payload_update_invalidates_package():
     assert updated["invalidated_previous"] == old["package_hash"]
 
 
+def test_public_title_is_package_hash_bound_and_normalized_at_source():
+    asset = load_asset(REAL_ASSET, root=ROOT)
+    assert "—" not in asset["title"]
+    assert asset["previous_package_hash"] == "67da8f705d6a4db3ae092d5aa6ab169ab5e63c3a5c702c06df7be54409777674"
+    original = build_package(asset, asset_dir=REAL_ASSET.parent, generated_at=AS_OF)
+    changed = dict(asset)
+    changed["title"] = asset["title"] + " (edição alterada)"
+    modified = build_package(changed, asset_dir=REAL_ASSET.parent, generated_at=AS_OF)
+    assert modified["package_hash"] != original["package_hash"]
+
+
 def test_public_namespace_noindex_and_off_sitemap():
     public = ROOT / PUBLIC_REL
     assert public.is_dir()
@@ -225,6 +265,15 @@ def test_public_namespace_noindex_and_off_sitemap():
     assert CANONICAL_SOURCE in html
     assert WATERMARK not in html
     assert "<script" not in html.lower()
+    body = re.search(r"<body\b[^>]*>(.*?)</body>", html, re.I | re.S)
+    assert body
+    assert "noindex" not in body.group(1).lower()
+    assert "5038 registros utilizáveis" in body.group(1)
+    assert "R$ 218.284,50" in body.group(1)
+    assert "R$ 19.969,495" in body.group(1)
+    assert "Leia a análise técnica e a fonte canônica" in body.group(1)
+    assert "Solicitar correção ou falar com a CONFENGE" in body.group(1)
+    assert "https://confenge.com.br/triagem-tecnica/#corrigir-o-site" in html
     sitemap = " ".join(load_sitemap_urls(ROOT))
     assert "/assets/data-desk/" not in sitemap
     assert "valor-tipico-contratos-pavimentacao-sc/v1" not in sitemap
@@ -243,6 +292,17 @@ def test_public_namespace_noindex_and_off_sitemap():
         if path.name != "request-contract.json":
             assert re.search(r"\bcpf\b", text) is None
         assert re.search(r"\b\d{11}\b", raw) is None
+    assert not (public / "request-contract.json").exists()
+    assert not (public / "syndication.json").exists()
+    assert_public_human_copy(public)
+
+
+def test_public_copy_control_rejects_seeded_internal_language(tmp_path):
+    (tmp_path / "README.txt").write_text(
+        "Cite o Market Answer. Licença: NEEDS_REVIEW.", encoding="utf-8"
+    )
+    with pytest.raises(ValueError, match="public_data_desk_copy_internal:README.txt"):
+        assert_public_human_copy(tmp_path)
 
 
 def test_targets_prepared_not_sent():

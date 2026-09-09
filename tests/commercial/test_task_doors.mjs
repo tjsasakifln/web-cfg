@@ -1,11 +1,9 @@
 /**
  * Gate da arquitetura de navegação por tarefa (issue #335).
  *
- * Prova, contra o proprio JSON e contra artefatos ja publicados em main,
- * que o rol taxativo de 54 entregaveis tem contagem inequivoca:
- * sete portas, uniao exata de 01 a 54, uma unica aparicao primaria por item,
- * disclosure progressiva onde a tela passa de seis opcoes, encontrabilidade
- * declarada e nenhuma das oito entregas atuais removida.
+ * Prova que as 54 capacidades continuam integras na classificacao interna,
+ * enquanto a superficie publica mostra somente oito ofertas reais e tres
+ * grupos substantivos de entregas de engenharia, sem censo de maturidade.
  */
 import fs from "fs";
 import path from "path";
@@ -44,10 +42,11 @@ const CATALOG_SIZE = 54;
 
 /* 1. Identidade do documento -------------------------------------- */
 assert("schema_id", doc.schema === "confenge.commercial.task_doors.v1", doc.schema);
-assert("implementation_contract_v2", doc.version === "2.0.0", doc.version);
+assert("implementation_contract_v2_1", doc.version === "2.1.0", doc.version);
 assert("source_issue_335", doc.source_issue === 335, doc.source_issue);
 assert("parent_issue_329", doc.parent_issue === 329, doc.parent_issue);
-assert("decision_state_not_validated", doc.decision_state === "VALIDATE", doc.decision_state);
+assert("founder_decision_execute_now", doc.decision_state === "EXECUTE_NOW", doc.decision_state);
+assert("internal_catalog_scope", doc.catalog.visibility === "INTERNAL_OPERATIONAL", doc.catalog.visibility);
 
 /* 2. Sete portas, ordem 1 a 7 sem lacuna nem repeticao ------------- */
 const doors = Array.isArray(doc.doors) ? doc.doors : [];
@@ -174,39 +173,36 @@ assert("questions_unique", new Set(doors.map((d) => d.decision_question_pt_br)).
 const f = doc.findability || {};
 const idx = f.numbered_index || {};
 assert("index_numbered", idx.numbered === true, idx.numbered);
-assert("index_searchable", idx.searchable === true, idx.searchable);
+assert("public_index_needs_no_search", idx.searchable === false, idx.searchable);
 assert("index_keyboard_accessible", idx.keyboard_accessible === true, idx.keyboard_accessible);
-assert("index_two_views", eq(idx.views, ["por_tarefa", "alfabetica"]), idx.views);
+assert("index_view_by_decision", eq(idx.views, ["por_decisao"]), idx.views);
 assert("index_count_derived_from_registry", idx.count_derived_from_registry === true, idx.count_derived_from_registry);
 assert(
   "index_per_item_fields",
-  ["deep_link", "public_state", "price"].every((k) => (idx.per_item_fields_required || []).includes(k)),
+  ["deep_link", "public_state", "price", "next_action"].every((k) => (idx.per_item_fields_required || []).includes(k)),
   idx.per_item_fields_required,
 );
 assert("index_route_is_canonical_deliverables", idx.route === "/entregas/", idx.route);
 assert("deep_link_required_per_item", f.deep_link && f.deep_link.required_per_item === true, f.deep_link);
 assert("deep_link_pattern_is_stable", f.deep_link && f.deep_link.pattern === "#entrega-{NN}", f.deep_link);
 const sec = f.secondary_access || {};
-assert("secondary_access_label", sec.label_pt_br === "Registrar a decisão na mesa", sec.label_pt_br);
+assert("secondary_access_label", sec.label_pt_br === "Solicitar proposta", sec.label_pt_br);
 assert("secondary_access_on_first_fold", sec.location === "primeira_dobra" && sec.target === "captura_entregas", sec);
 assert("secondary_access_without_js", sec.requires_javascript === false, sec.requires_javascript);
 assert("first_fold_secondary_matches_findability", doc.first_fold.secondary_access_label_pt_br === sec.label_pt_br, doc.first_fold.secondary_access_label_pt_br);
-assert("first_fold_primary_cta", doc.first_fold.cta_primary_label_pt_br === "Encontrar a entrega certa", doc.first_fold.cta_primary_label_pt_br);
+assert("first_fold_primary_cta", doc.first_fold.cta_primary_label_pt_br === "Ver entregas e exemplos", doc.first_fold.cta_primary_label_pt_br);
 assert("first_fold_viewports", eq(doc.first_fold.viewports, ["390x844", "1366x768"]) && doc.first_fold.no_scroll_required === true, doc.first_fold.viewports);
 const un = f.unmapped_request || {};
-assert("unmapped_falls_back_to_item_48", un.fallback_item === "48", un.fallback_item);
-assert("unmapped_fallback_id_matches", un.fallback_deliverable_id === "CFG-D48", un.fallback_deliverable_id);
-const capability = doors.find((d) => d.door === "CAPABILITY");
-assert("item_48_is_a_primary_member", capability && capability.members.some((m) => m.item === "48"), capability && capability.members.map((m) => m.item));
-assert("unmapped_refusal_allowed", un.refusal_allowed === true, un.refusal_allowed);
-assert("unmapped_statement_explicit", typeof un.statement_pt_br === "string" && un.statement_pt_br.includes("48") && /recusad/i.test(un.statement_pt_br), un.statement_pt_br);
+assert("unmapped_has_no_forced_item", un.fallback_item === null && un.fallback_deliverable_id === null, un);
+assert("unmapped_refusal_revoked", un.refusal_allowed === false, un.refusal_allowed);
+assert("unmapped_statement_welcomes_context", typeof un.statement_pt_br === "string" && /contato contextual/i.test(un.statement_pt_br) && /sem recusa automática/i.test(un.statement_pt_br), un.statement_pt_br);
 assert(
   "no_offer_only_in_form_footer_chat",
   ["formulario", "rodape", "conversa"].every((k) => (f.no_offer_exists_only_in || []).includes(k)),
   f.no_offer_exists_only_in,
 );
 const sd = f.state_display_rule || {};
-assert("blocked_validate_never_buyable", eq(sd.states_not_purchasable, ["BLOCKED", "VALIDATE"]) && sd.never_presented_as_buyable === true && sd.requires_explanation === true, sd);
+assert("internal_states_never_public_or_buyable", eq(sd.states_not_purchasable, ["BLOCKED", "VALIDATE"]) && sd.never_presented_as_buyable === true && sd.internal_states_not_public === true, sd);
 
 /* 9. Faixa de preco geral ----------------------------------------- */
 const pb = doc.price_band || {};
@@ -219,7 +215,7 @@ const vitrine = doc.public_vitrine || {};
 assert("public_vitrine_count_8", vitrine.count === 8, vitrine.count);
 assert("public_vitrine_band_599_3750", vitrine.min_brl === 599 && vitrine.max_brl === 3750 && vitrine.price_band_display_pt_br === "R$ 599 a R$ 3.750", vitrine);
 assert("public_vitrine_has_no_filters", vitrine.filters === false, vitrine.filters);
-assert("public_vitrine_primary_fields", eq(vitrine.primary_card_fields_pt_br, ["situação", "decisão", "entrada", "objeto e limite", "saída", "SLA", "preço", "pacote e crédito"]), vitrine.primary_card_fields_pt_br);
+assert("public_vitrine_primary_fields", eq(vitrine.primary_card_fields_pt_br, ["situação", "decisão", "informações necessárias", "trabalho incluído", "saída", "prazo", "preço", "pacote e crédito"]), vitrine.primary_card_fields_pt_br);
 
 /* 10. Enquadramento, recomendacao, filtros e comparacao ------------ */
 const ir = doc.interaction_rules;
@@ -272,73 +268,58 @@ for (const item of legacy.items || []) {
 }
 assert("legacy_names_unique", new Set((legacy.items || []).map((i) => i.public_name)).size === 8, "legacy names");
 
-/* 12. Superficie progressiva publicada ---------------------------- */
-const catalogScriptPath = path.join(root, "entregas/catalog.js");
-const catalogLoaderPath = path.join(root, "entregas/catalog-bootstrap.js");
+/* 12. Superficie publica positiva, sem inventario de maturidade ---- */
 const catalogDataPath = path.join(root, "entregas/catalog-data.js");
 const catalogStylePath = path.join(root, "entregas/styles.css");
-const catalogScript = fs.readFileSync(catalogScriptPath, "utf8");
-const catalogLoader = fs.readFileSync(catalogLoaderPath, "utf8");
 const catalogDataScript = fs.readFileSync(catalogDataPath, "utf8");
 const catalogDataMatch = /^window\.CONFENGE_CATALOG_DATA=(\{.*\});\s*$/.exec(catalogDataScript);
 const catalogData = catalogDataMatch ? JSON.parse(catalogDataMatch[1]) : null;
 const catalogStyle = fs.readFileSync(catalogStylePath, "utf8");
 const implementation = doc.public_implementation || {};
+const heroHtml = entregas.match(/<header class="deliverables-hero"[\s\S]*?<\/header>/)?.[0] || "";
+const heroText = heroHtml.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().toLocaleLowerCase("pt-BR");
 assert("implementation_route", implementation.route === "/entregas/", implementation.route);
-assert("implementation_artifacts_exist", [implementation.renderer, implementation.client_loader, implementation.client_script, implementation.client_data_asset, implementation.stylesheet].every((file) => fs.existsSync(path.join(root, file))), implementation);
+assert("implementation_artifacts_exist", [implementation.renderer, implementation.stylesheet, ...(implementation.internal_catalog_assets || [])].every((file) => fs.existsSync(path.join(root, file))), implementation);
 assert("implementation_declares_no_retired_stylesheet", implementation.client_stylesheet === undefined && !fs.existsSync(path.join(root, "entregas/catalog.css")), implementation.client_stylesheet);
-assert("implementation_counts_and_steps", implementation.published_offer_count === 8 && implementation.capability_roll_count === 54 && implementation.capability_group_count === 7 && implementation.primary_representation_per_offer === 1 && implementation.framing_steps === 1, implementation);
+assert("implementation_public_counts", implementation.published_offer_count === 8 && implementation.public_capability_inventory_count === 0 && implementation.engineering_delivery_group_count === 3 && implementation.primary_representation_per_offer === 1, implementation);
 assert("implementation_has_no_public_filters", eq(implementation.filter_dimensions, []) && implementation.alphabetical_view === false, implementation.filter_dimensions);
-assert("implementation_uses_native_progressive_disclosure", implementation.progressive_disclosure === "native_details_by_task", implementation.progressive_disclosure);
+assert("implementation_needs_no_maturity_disclosure", implementation.progressive_disclosure === "not_required_for_three_engineering_groups", implementation.progressive_disclosure);
 assert("implementation_has_one_complete_primary_card", implementation.comparison?.mode === "single_primary_card" && implementation.comparison?.duplicated_representation === false && implementation.comparison?.mobile_hides_essential_fields === false, implementation.comparison);
 assert("implementation_fail_closed", implementation.terminal_capture === true && implementation.human_validation === "NOT_STARTED", implementation);
 assert("implementation_no_new_analytics_dimensions", implementation.new_analytics_dimensions === false, implementation.new_analytics_dimensions);
-assert("hero_decision_h1", entregas.includes("8 ofertas publicadas") && entregas.includes("Escolha pela decisão que está na mesa"), "hero");
-assert("hero_synthetic_disclosure", entregas.includes("exemplos sintéticos de resultados de clientes"), "synthetic disclosure");
+assert("hero_explains_engineering_value", heroText.length >= 160 && /entreg/.test(heroText) && /engenharia/.test(heroText) && /serv/.test(heroText), heroText);
+assert("hero_synthetic_disclosure", entregas.includes("Dados identificados como sintéticos") && entregas.includes("não representam cliente"), "synthetic disclosure");
 assert("hero_public_price_band", entregas.includes("R$ 599 a R$ 3.750") && !entregas.includes("R$ 39.800"), "price range");
-assert("hero_primary_and_secondary_access", entregas.includes(">Encontrar a entrega certa ") && entregas.includes(">Registrar a decisão na mesa</a>"), "hero actions");
+assert("hero_primary_and_secondary_access", entregas.includes("Ver entregas e exemplos") && entregas.includes(">Solicitar proposta</a>"), "hero actions");
 assert("public_vitrine_has_8_cards", (entregas.match(/<article class="vitrine-item/g) || []).length === 8, (entregas.match(/<article class="vitrine-item/g) || []).length);
 assert("public_vitrine_has_published_deep_links", ["01","02","03","04","05","06","07","08"].every((item) => entregas.includes(`id="entrega-${item}"`)), "deep links");
 assert("public_vitrine_omits_backlog_deep_links", expectedItems.slice(8).every((item) => !entregas.includes(`id="entrega-${item}"`)), "backlog deep links");
 assert("public_page_has_no_filter_chrome", !entregas.includes("data-filter=") && !entregas.includes("data-catalog-filters"), "filters");
-const primaryOfferHtml = entregas.match(/<div class="vitrine-items">([\s\S]*?)<dl class="compare-ladder-figures">/)?.[1] || "";
-assert("public_page_has_one_complete_primary_representation", !entregas.includes('id="comparar"') && (primaryOfferHtml.match(/data-primary-offer="true"/g) || []).length === 8 && ["Situação", "Decisão", "Entrada", "Objeto e limite", "Saída", "SLA"].every((label) => (primaryOfferHtml.match(new RegExp(`<dt>${label}<\\/dt>`, "g")) || []).length === 8), "primary cards");
-// 2026-09-08. A assercao antiga exigia que /entregas/ publicasse os contadores
-// "44 em validacao" e "2 bloqueadas" -- inventario do que a empresa ainda nao
-// vende, na pagina que o rodape chama de "Entregas". A propriedade legitima que
-// ela protegia era outra e continua exigida: a pagina nao pode dar a entender
-// que as 54 frentes sao contrataveis agora. Agora isso e verificado pelo lado
-// positivo -- a pagina diz quantas tem oferta publicada -- e pelo negativo: o
-// estado comercial interno nao aparece na vitrine.
-assert("public_page_states_what_is_published_without_listing_what_is_not",
-  entregas.includes("54 frentes de trabalho")
-    && entregas.includes("Oito têm oferta publicada")
+const primaryOfferHtml = entregas.match(/<div class="vitrine-items">([\s\S]*?)<\/section>\s*<!-- GENERATED:PUBLIC-CATALOG:END -->/)?.[1] || "";
+const requiredPublicFacts = ["Situação", "Decisão", "Informações necessárias", "Trabalho incluído", "Saída", "Prazo", "Quando a contagem começa"];
+assert("public_page_has_one_complete_primary_representation", !entregas.includes('id="comparar"') && (primaryOfferHtml.match(/data-primary-offer="true"/g) || []).length === 8 && requiredPublicFacts.every((label) => (primaryOfferHtml.match(new RegExp(`<dt>${label}<\\/dt>`, "g")) || []).length === 8), "primary cards");
+assert("public_page_has_no_maturity_census",
+  !entregas.includes("54 frentes de trabalho")
     && !entregas.includes("em validação")
     && !entregas.includes("bloqueada")
     && !entregas.includes("sem oferta pronta")
-    && !primaryOfferHtml.includes("Em validação"),
-  "entregas must publish what exists, not an inventory of what is not ready");
-assert("public_role_has_exact_census", (entregas.match(/data-capability-id="CFG-D\d{2}"/g) || []).length === 54 && (entregas.match(/class="capability-item capability-item--validate"/g) || []).length === 44 && (entregas.match(/class="capability-item capability-item--blocked"/g) || []).length === 2, "capability census");
+    && !entregas.includes("data-capability-id"),
+  "internal maturity inventory leaked");
+const engineeringGroupHtml = [...entregas.matchAll(/<article class="capability-group">([\s\S]*?)<\/article>/g)].map((match) => match[1]);
+const engineeringGroupText = engineeringGroupHtml.join(" ").replace(/<[^>]+>/g, " ").toLocaleLowerCase("pt-BR");
+assert("engineering_deliveries_have_substance", engineeringGroupHtml.length === 3 && engineeringGroupHtml.every((group) => /<h3>[^<]{12,}<\/h3>/.test(group) && /<p>[^<]{80,}<\/p>/.test(group) && /<a href="\/[^"]+">/.test(group)) && [/projet|compatibiliza/, /quantitativ|orçamento/, /perícia|avaliação|segurança do trabalho/].every((concept) => concept.test(engineeringGroupText)) && ["/servicos/#servico-projeto", "/quantitativos-orcamento-obras/", "/servicos/#servico-diagnostico"].every((href) => entregas.includes(`href="${href}"`)), "engineering groups");
 assert("catalog_data_has_exact_schema", catalogData?.schema === "confenge.public-deliverable-catalog/1.1", catalogData?.schema);
 assert("catalog_data_has_declared_fields", eq(catalogData?.fields, ["id", "name", "trigger", "decision", "unit", "input", "inputKinds", "inputCount", "decisionBusinessDays", "output", "sla", "price", "exclusion", "stepUp", "publicState", "contractHtml"]), catalogData?.fields);
-assert("catalog_data_has_54_records", catalogData?.items?.length === CATALOG_SIZE, catalogData?.items?.length);
+assert("catalog_data_has_only_8_public_records", catalogData?.items?.length === 8, catalogData?.items?.length);
 const catalogRecords = new Map((catalogData?.items || []).map((row) => [row[0], Object.fromEntries(catalogData.fields.map((field, index) => [field, row[index]]))]));
-assert("catalog_data_ids_are_unique", catalogRecords.size === CATALOG_SIZE, catalogRecords.size);
-assert("catalog_data_covers_internal_ids", expectedItems.every((item) => catalogRecords.has(`CFG-D${item}`)), "internal data join");
+assert("catalog_data_ids_are_unique", catalogRecords.size === 8, catalogRecords.size);
+assert("catalog_data_covers_published_ids_only", expectedItems.slice(0, 8).every((item) => catalogRecords.has(`CFG-D${item}`)) && expectedItems.slice(8).every((item) => !catalogRecords.has(`CFG-D${item}`)), "public data join");
 assert("public_html_joins_only_published_ids", ["01","02","03","04","05","06","07","08"].every((item) => entregas.includes(`data-deliverable-id="CFG-D${item}"`)), "published data-deliverable-id");
 assert("catalog_data_exposes_comparison_dimensions", [...catalogRecords.values()].every((record) => ["trigger", "decision", "unit", "input", "output", "sla", "price", "exclusion", "stepUp"].every((field) => typeof record[field] === "string" && record[field].trim())), "comparison dimensions");
 assert("catalog_data_exposes_framing_dimensions", [...catalogRecords.values()].every((record) => Array.isArray(record.inputKinds) && record.inputKinds.every((kind) => ["edital", "planilha", "documentos", "cronograma", "dados"].includes(kind)) && Number.isInteger(record.inputCount) && record.inputCount > 0 && (record.decisionBusinessDays === "" || (Number.isInteger(record.decisionBusinessDays) && record.decisionBusinessDays > 0))), "framing dimensions");
-assert("catalog_data_exposes_54_complete_copy_contracts", [...catalogRecords.values()].every((record) => typeof record.contractHtml === "string" && (record.contractHtml.match(/data-copy-clause=/g) || []).length === 15), "copy contracts");
+assert("catalog_data_exposes_8_complete_copy_contracts", [...catalogRecords.values()].every((record) => typeof record.contractHtml === "string" && (record.contractHtml.match(/data-copy-clause=/g) || []).length === 15), "copy contracts");
 assert("public_page_does_not_load_backlog_catalog_js", !entregas.includes("/entregas/catalog-bootstrap.js") && !entregas.includes('src="/entregas/catalog-data.js"') && !entregas.includes('src="/entregas/catalog.js"'), "no public catalog js");
-assert("catalog_data_and_behavior_are_lazy", catalogLoader.indexOf('data.src = "/entregas/catalog-data.js"') < catalogLoader.indexOf('behavior.src = "/entregas/catalog.js"'), "lazy script order");
-assert("catalog_lazy_load_has_proximity_and_anchor_paths", catalogLoader.includes("IntersectionObserver") && catalogLoader.includes('rootMargin: "1200px 0px"') && catalogLoader.includes('a[href^="#"]') && catalogLoader.includes("location.hash"), "lazy activation");
-assert("catalog_behavior_validates_exact_data_shape", catalogScript.includes("EXPECTED_FIELDS") && catalogScript.includes("payload.fields.length !== EXPECTED_FIELDS.length") && catalogScript.includes("payload.items.length !== cards.length") && catalogScript.includes("records.size !== cards.length"), "fail-closed client data");
-assert("catalog_behavior_validates_exact_copy_contract", catalogScript.includes("EXPECTED_CONTRACT_CLAUSES") && catalogScript.includes("hasExactContract(row[15])") && catalogScript.includes("javascript:"), "fail-closed copy contract");
-assert("catalog_contracts_hydrate_only_on_disclosure", catalogScript.includes('details.addEventListener("toggle"') && catalogScript.includes("hydrateContract(details)") && catalogScript.includes("recordFor(card)?.contractHtml"), "lazy copy contract");
 assert("catalog_base_html_omits_deferred_contract_markup", !entregas.includes("data-copy-contract-id") && !entregas.includes("data-copy-clause"), "compact initial HTML");
-assert("public_page_does_not_block_on_catalog_css", !entregas.includes("/entregas/catalog.css") && !catalogLoader.includes("catalog.css"), "catalog css");
-assert("script_has_no_network_or_analytics_sink", !/(fetch\s*\(|XMLHttpRequest|sendBeacon|dataLayer\.push)/.test(catalogScript), "client script");
-assert("loader_has_no_data_or_analytics_sink", !/(fetch\s*\(|XMLHttpRequest|sendBeacon|dataLayer\.push)/.test(catalogLoader), "client loader");
 assert("style_uses_stacked_mobile_comparison", catalogStyle.includes(".vitrine-item__facts{display:block}") && catalogStyle.includes(".vitrine-item__facts>div{display:grid;grid-template-columns:78px minmax(0,1fr)"), "mobile comparison");
 assert("base_style_excludes_progressive_catalog", !catalogStyle.includes(".catalog-recommendation__items") && !catalogStyle.includes(".catalog-compare-tray"), "blocking CSS boundary");
 
@@ -374,12 +355,12 @@ assert("not_delivered_declared", nd.length >= 3, nd.length);
 assert("not_delivered_rejects_automatic_fit", nd.some((s) => /tela/i.test(s) && /não declara adequação automática/i.test(s)), nd);
 assert("not_delivered_says_no_human_sessions", nd.some((s) => /sess(ã|a)o|sessões|sessoes/i.test(s)), nd);
 
-/* 16. Divergencia 48 vs 54 registrada ------------------------------ */
+/* 16. Revogacao publica e preservacao interna registradas ---------- */
 assert(
-  "prose_divergence_recorded",
+  "public_census_revocation_recorded",
   typeof doc.catalog.prose_divergence_note_pt_br === "string"
-    && doc.catalog.prose_divergence_note_pt_br.includes("48")
-    && doc.catalog.prose_divergence_note_pt_br.includes("54"),
+    && doc.catalog.prose_divergence_note_pt_br.includes("54")
+    && /sem apagar o inventário interno/i.test(doc.catalog.prose_divergence_note_pt_br),
   doc.catalog.prose_divergence_note_pt_br,
 );
 

@@ -38,7 +38,7 @@
 <a data-cta-position="header_nav" href="/servicos-obras-publicas/" style="min-height:44px">Obras públicas</a>
 <a data-cta-position="header_nav" href="/conteudos/" style="min-height:44px">Biblioteca</a>
 </nav>
-<a class="button button-primary header-cta" href="/triagem-tecnica/">Iniciar triagem</a>
+<a class="button button-primary header-cta" href="/triagem-tecnica/">Solicitar proposta</a>
 <button aria-controls="mobile-menu" aria-expanded="false" aria-label="Abrir menu" class="menu-toggle" type="button">
 <svg class="icon menu-open"><use href="#i-menu"></use></svg><svg class="icon menu-close"><use href="#i-close"></use></svg>
 </button>
@@ -47,7 +47,7 @@
 <a data-cta-position="mobile_nav" href="/servicos/" style="min-height:44px">Serviços e problemas</a>
 <a data-cta-position="mobile_nav" href="/servicos-obras-publicas/" style="min-height:44px">Obras públicas</a>
 <a data-cta-position="mobile_nav" href="/conteudos/" style="min-height:44px">Biblioteca</a>
-<a class="button button-primary" href="/triagem-tecnica/">Iniciar triagem</a>
+<a class="button button-primary" href="/triagem-tecnica/">Solicitar proposta</a>
 </nav>
 </header>
 <main id="conteudo" class="container n-wrap" style="padding:2rem 1rem 4rem">
@@ -55,6 +55,7 @@
 <p class="eyebrow">E-mails técnicos · você confirma o cadastro por e-mail</p>
 <h1>Cinco e-mails úteis, não newsletter genérica</h1>
 <p class="content-lead">Sequências curtas para o problema que a construtora enfrenta agora: contrato sob pressão, edital em análise ou operação em obras públicas sem método. Cada mensagem aponta prova, dossiê ou decisão, e liga a ferramentas e páginas de apoio da CONFENGE.</p>
+<p class="n-meta">As orientações levam a conteúdos que identificam autoria, fontes, método e limites. Consulte <a rel="author" href="/especialista/tiago-jun-sasaki/">quem responde tecnicamente pela CONFENGE</a> e <a href="/confianca/">como as informações podem ser conferidas</a>.</p>
 
 <div class="n-card">
 <h2>Para quem é (e para quem não é)</h2>
@@ -73,7 +74,7 @@
 <li>O que registrar nas próximas 48h (cronologia e prova contemporânea)</li>
 <li>Glosa e medição: o que separa discussão de dossiê</li>
 <li>Aditivo: saldo orientativo do art. 125 antes de protocolar</li>
-<li>Reequilíbrio: checklist de prontidão do dossiê (score honesto)</li>
+<li>Reequilíbrio: checklist do grau de prontidão do dossiê</li>
 <li>Posição técnica: onde a engenharia decide o caso (cronologia, causalidade, cálculo, aditivo, reequilíbrio, glosa, atraso)</li>
 </ul>
 <p class="n-meta">Ferramenta: <a href="/ferramentas/matriz-atraso-obra/">matriz de atraso</a> · Oferta: <a href="/defesa-margem-contratos-publicos/">Defesa de margem</a></p>
@@ -86,10 +87,10 @@
 <li>Cinco riscos antes de comprometer capital (matriz, orçamento, exequibilidade, habilitação, prazo)</li>
 <li>BDI e orçamento: onde a margem morre cedo</li>
 <li>Impugnação e esclarecimento: tempismo é posição</li>
-<li>Decisão de participar: critérios, não feeling</li>
+<li>Decisão de participar: critérios, não intuição</li>
 <li>Próximo passo se o edital ainda está vivo</li>
 </ul>
-<p class="n-meta">Hub: <a href="/ferramentas/">ferramentas gratuitas</a> · Oferta: <a href="/bid-room-licitacoes-obras/">Operação de Proposta para Licitação Crítica</a></p>
+<p class="n-meta">Ferramentas: <a href="/ferramentas/">recursos técnicos gratuitos</a> · Oferta: <a href="/bid-room-licitacoes-obras/">Operação de Proposta para Licitação Crítica</a></p>
 </div>
 
 <div class="n-card" id="trilha-operacao">
@@ -125,8 +126,8 @@
 <option value="edital">Edital em análise</option>
 <option value="operacao">Estruturação da operação em obras públicas</option>
 </select>
-<label for="email">E-mail corporativo</label>
-<input id="email" name="email" type="email" required autocomplete="email" placeholder="voce@construtora.com.br"/>
+<label for="email">E-mail</label>
+<input id="email" name="email" type="email" required autocomplete="email" placeholder="voce@exemplo.com"/>
 <label style="font-weight:500;display:flex;gap:.5rem;align-items:flex-start;margin-top:1rem">
 <input id="consent" name="consent" type="checkbox" required style="width:auto;margin-top:.3rem"/>
 <span>Autorizo até 5 e-mails técnicos desta trilha e li a <a href="/privacidade/">Privacidade</a>. Posso sair a qualquer momento.</span>
@@ -150,7 +151,16 @@
 document.getElementById('nurture-form').addEventListener('submit', async (e) => {
  e.preventDefault();
  const status = document.getElementById('status');
- status.hidden = false; status.textContent = 'Enviando…';
+ const form = e.currentTarget;
+ const button = form.querySelector('button[type="submit"]');
+ status.hidden = false;
+ if (!form.checkValidity()) {
+   status.textContent = 'Revise os campos indicados antes de continuar.';
+   form.reportValidity();
+   return;
+ }
+ status.textContent = 'Enviando…';
+ button.disabled = true;
  try {
  const res = await fetch('/.netlify/functions/nurture?action=subscribe', {
  method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
@@ -161,10 +171,21 @@ document.getElementById('nurture-form').addEventListener('submit', async (e) => 
  source: 'nurture_landing', landing_page: '/nurture/'
  })
  });
- const j = await res.json();
- if (!res.ok) throw new Error(j.message || j.error || 'falha');
- status.textContent = j.message || 'Verifique seu e-mail para confirmar.';
- } catch (err) { status.textContent = 'Não foi possível inscrever: ' + (err.message || err); }
+ try { await res.json(); } catch (_) { /* a resposta pública não depende do detalhe interno */ }
+ if (!res.ok) {
+   status.textContent = res.status === 400
+     ? 'Revise o e-mail, a trilha e a autorização antes de tentar novamente.'
+     : res.status === 429
+       ? 'Muitas tentativas em pouco tempo. Aguarde alguns minutos e tente novamente.'
+       : 'A inscrição está temporariamente indisponível. Tente novamente mais tarde ou use o contato direto.';
+   return;
+ }
+ status.textContent = 'Verifique seu e-mail para confirmar.';
+ } catch (_) {
+   status.textContent = 'Não foi possível conectar agora. Confira sua conexão e tente novamente.';
+ } finally {
+   button.disabled = false;
+ }
 });
 </script>
 
@@ -172,7 +193,7 @@ document.getElementById('nurture-form').addEventListener('submit', async (e) => 
 <footer class="site-footer">
 <div class="container footer-top">
 <div class="footer-brand"><img alt="CONFENGE" decoding="async" height="58" loading="lazy" src="/assets/logo-confenge-white-500-1677038e.png" width="224"/><p>Projeto, revisão, compatibilização, orçamento, inspeção, laudo, perícia, avaliação e segurança do trabalho. Engenharia para clientes privados e públicos.</p></div>
-<div class="footer-links"><strong>Situações</strong><a href="/#situacao-projeto">Projetos e edificações</a><a href="/#situacao-pericia">Perícias e avaliações</a><a href="/#situacao-sst">Segurança do trabalho</a><a href="/servicos-obras-publicas/">Obras públicas</a></div><div class="footer-links"><strong>Biblioteca e provas</strong><a href="/conteudos/">Conteúdos</a><a href="/ferramentas/">Ferramentas</a><a href="/entregas/">Entregas</a><a href="/casos/">Casos demonstrativos</a></div><div class="footer-links"><strong>Empresa</strong><a href="/especialista/tiago-jun-sasaki/">Quem responde</a><a href="/confianca/">Como verificamos</a><a href="/triagem-tecnica/">Contato e triagem</a><a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a><a href="tel:+5548988344559">(48) 98834-4559</a><span>Atendimento nacional</span></div>
+<div class="footer-links"><strong>Situações</strong><a href="/#situacao-projeto">Projetos e edificações</a><a href="/#situacao-pericia">Perícias e avaliações</a><a href="/#situacao-sst">Segurança do trabalho</a><a href="/servicos-obras-publicas/">Obras públicas</a></div><div class="footer-links"><strong>Biblioteca e provas</strong><a href="/conteudos/">Conteúdos</a><a href="/ferramentas/">Ferramentas</a><a href="/entregas/">Entregas</a><a href="/casos/">Casos demonstrativos</a></div><div class="footer-links"><strong>Empresa</strong><a href="/especialista/tiago-jun-sasaki/">Quem responde</a><a href="/confianca/">Como verificamos</a><a href="/triagem-tecnica/">Contato e triagem</a><a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a><a href="tel:+5548988344559">(48) 98834-4559</a><span>Atendimento em todo o Brasil, conforme escopo, local e modalidade definidos na proposta.</span></div>
 </div>
 <div class="container footer-bottom"><span>© <span id="year">2026</span> CONFENGE. CNPJ 52.407.089/0001-09.</span><a href="/privacidade/">Política de Privacidade</a></div>
 </footer>

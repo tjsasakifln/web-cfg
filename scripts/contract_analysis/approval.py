@@ -37,7 +37,8 @@ CONDITIONAL_CHECKLIST = (
     "no_dimension_below_75",
     "insight_singular",
     "utility_beyond_source",
-    "method_limitations_author_reviewer_visible",
+    "method_limitations_author_visible",
+    "reviewer_representation_consistent",
     "author_assigned_after_review",
     "reputational_safety",
     "unique_content_anti_doorway",
@@ -50,7 +51,26 @@ CONDITIONAL_CHECKLIST = (
     "v2_token_and_hashes_bound",
 )
 APPROVAL_SCHEMA = "contract-analysis-approvals/1.0"
+CONDITIONAL_CHECKLIST_SCHEMA = "contract-analysis-conditional-checklist/2.0"
 RENDERED_HASH_SCOPE = "public_artifact_v2"
+
+# These predicates depend only on the current material record and on hashes
+# stored with the approval.  They can therefore be recalculated every time an
+# INDEX decision is requested.  Transient evidence (suite, quality report,
+# handoff and rendered HTML) remains hash-bound in the stored checklist and in
+# the separately verified rendered_content_hash.
+RECALCULABLE_CHECKLIST_KEYS = (
+    "source_official_live",
+    "material_claims_have_locators",
+    "insight_singular",
+    "utility_beyond_source",
+    "method_limitations_author_visible",
+    "reviewer_representation_consistent",
+    "author_assigned_after_review",
+    "snapshot_hashes_recorded",
+    "comparable_available_not_consumed",
+    "v2_token_and_hashes_bound",
+)
 
 _MATERIAL_KEYS = (
     "id",
@@ -308,6 +328,10 @@ def approval_allows_index(record: dict[str, Any], *, root: Path | None = None) -
         bind_reasons = _canary_binding_reasons(stored, record)
         if bind_reasons:
             return False, bind_reasons
+    elif stored is not None and stored.get("token"):
+        checklist_reasons = _checklist_binding_reasons(stored, record)
+        if checklist_reasons:
+            return False, checklist_reasons
     if stored is None:
         # Inline approval on the record (tests) still needs the triple + hash + rollback.
         inline_hash = str(record.get("material_hash") or "")
@@ -379,6 +403,83 @@ def rendered_content_hash(
         return hashlib.sha256(page.read_bytes()).hexdigest()
 
 
+def _record_checklist(
+    record: dict[str, Any],
+    *,
+    producer_root_hash: str,
+    source_dossier_hash: str,
+    rendered_html: str | None = None,
+) -> dict[str, bool]:
+    """Recalculate approval facts carried by the current material record."""
+    from scripts.contract_analysis.consume import (
+        claim_has_locator,
+        iter_material_claims,
+        official_live_declared,
+    )
+    locators_ok = bool(iter_material_claims(record)) and all(
+        claim_has_locator(item) for item in iter_material_claims(record)
+    )
+    author = record.get("author") if isinstance(record.get("author"), dict) else {"name": record.get("author")}
+    reviewer = record.get("reviewer") if isinstance(record.get("reviewer"), dict) else {"name": record.get("reviewer")}
+    author_name = str((author or {}).get("name") if isinstance(author, dict) else author or "")
+    reviewer_name = str((reviewer or {}).get("name") if isinstance(reviewer, dict) else reviewer or "")
+    reviewer_confirmed = bool(isinstance(reviewer, dict) and reviewer.get("confirmed") is True)
+    author_identity = " ".join(author_name.split()).casefold()
+    reviewer_identity = " ".join(reviewer_name.split()).casefold()
+    reviewer_consistent = (
+        reviewer_confirmed
+        and len(reviewer_name.strip()) >= 5
+        and reviewer_identity != author_identity
+        and (rendered_html is None or reviewer_name in rendered_html)
+    ) or (not reviewer_confirmed and not reviewer_name.strip())
+    method_author_present = (
+        len(str(record.get("methodology") or "")) >= 40
+        and len(str(record.get("limitations") or "")) >= 40
+        and len(author_name.strip()) >= 5
+    )
+    if rendered_html is not None:
+        method_author_present = (
+            method_author_present
+            and 'id="metodologia"' in rendered_html
+            and 'id="limitacoes"' in rendered_html
+            and author_name in rendered_html
+        )
+    content_hash = str(record.get("content_hash") or "")
+    ready_root = str(record.get("root_content_hash") or "")
+    hashes_ok = bool(producer_root_hash and source_dossier_hash and content_hash)
+    hashes_bound = (
+        hashes_ok
+        and source_dossier_hash == content_hash
+        and (not ready_root or producer_root_hash == ready_root)
+    )
+    comparable_ok = (
+        str(record.get("id") or record.get("analysis_id") or "") != AUTHORIZED_ANALYSIS_ID
+        or (
+            record.get("comparable_available") is True
+            and record.get("comparable_consumed") is False
+            and str(record.get("comparable_reason") or "") == SINGULAR_COMPARABLE_REASON
+        )
+    )
+    return {
+        "source_official_live": official_live_declared(record)
+        or (
+            record.get("source_kind") == "official_live"
+            and record.get("catalog_mode") == "official_live"
+            and not record.get("is_fixture")
+        ),
+        "material_claims_have_locators": locators_ok,
+        "insight_singular": len(str(record.get("insight_singular") or "")) >= 80,
+        "utility_beyond_source": len(str(record.get("utility_beyond_source") or "")) >= 60,
+        "method_limitations_author_visible": method_author_present,
+        "reviewer_representation_consistent": reviewer_consistent,
+        "author_assigned_after_review": bool(record.get("human_authorship_confirmed"))
+        and "rascunho" not in author_name.lower(),
+        "snapshot_hashes_recorded": hashes_ok,
+        "comparable_available_not_consumed": comparable_ok,
+        "v2_token_and_hashes_bound": hashes_bound,
+    }
+
+
 def evaluate_conditional_checklist(
     record: dict[str, Any],
     *,
@@ -389,11 +490,6 @@ def evaluate_conditional_checklist(
     source_dossier_hash: str = "",
     suite_green: bool = False,
 ) -> dict[str, bool]:
-    from scripts.contract_analysis.consume import (
-        claim_has_locator,
-        iter_material_claims,
-        official_live_declared,
-    )
     from scripts.contract_analysis.handoff import HANDOFF_READY
 
     quality = quality or {}
@@ -405,13 +501,6 @@ def evaluate_conditional_checklist(
         score_n = int(score)
     except (TypeError, ValueError):
         score_n = -1
-    locators_ok = bool(iter_material_claims(record)) and all(
-        claim_has_locator(item) for item in iter_material_claims(record)
-    )
-    author = record.get("author") if isinstance(record.get("author"), dict) else {"name": record.get("author")}
-    reviewer = record.get("reviewer") if isinstance(record.get("reviewer"), dict) else {"name": record.get("reviewer")}
-    author_name = str((author or {}).get("name") if isinstance(author, dict) else author or "")
-    reviewer_name = str((reviewer or {}).get("name") if isinstance(reviewer, dict) else reviewer or "")
     html = rendered_html or ""
     cta_ok = (
         'data-asset-id="' in html
@@ -434,47 +523,35 @@ def evaluate_conditional_checklist(
         .replace("nao implica relacao comercial", " ")
     )
     commercial = commercial or "caso confenge" in remainder
-    hashes_ok = bool(producer_root_hash and source_dossier_hash and record.get("content_hash"))
-    comparable_ok = (
-        str(record.get("id") or record.get("analysis_id") or "") != AUTHORIZED_ANALYSIS_ID
-        or (
-            record.get("comparable_available") is True
-            and record.get("comparable_consumed") is False
-            and str(record.get("comparable_reason") or "") == SINGULAR_COMPARABLE_REASON
-        )
+    recalculated = _record_checklist(
+        record,
+        producer_root_hash=producer_root_hash,
+        source_dossier_hash=source_dossier_hash,
+        rendered_html=html,
     )
     return {
-        "source_official_live": official_live_declared(record)
-        or (
-            record.get("source_kind") == "official_live"
-            and record.get("catalog_mode") == "official_live"
-            and not record.get("is_fixture")
-        ),
+        "source_official_live": recalculated["source_official_live"],
         "handoff_ready_verified": handoff.get("status") == HANDOFF_READY and bool(handoff.get("path")),
-        "material_claims_have_locators": locators_ok,
+        "material_claims_have_locators": recalculated["material_claims_have_locators"],
         "hard_gates_all_true": bool(hard_gates) and all(bool(value) for value in hard_gates.values()),
         "quality_total_ge_88": score_n >= OWNER_QUALITY_MIN,
         "no_dimension_below_75": bool(dimensions)
         and all(int(value) >= OWNER_DIMENSION_MIN for value in dimensions.values() if value is not None),
-        "insight_singular": len(str(record.get("insight_singular") or "")) >= 80,
-        "utility_beyond_source": len(str(record.get("utility_beyond_source") or "")) >= 60,
-        "method_limitations_author_reviewer_visible": (
-            len(str(record.get("methodology") or "")) >= 40
-            and len(str(record.get("limitations") or "")) >= 40
-            and len(author_name) >= 5
-            and (len(reviewer_name) >= 5 or bool(record.get("solo_reviewer_disclosure")))
-        ),
-        "author_assigned_after_review": bool(record.get("human_authorship_confirmed")) and "rascunho" not in author_name.lower(),
+        "insight_singular": recalculated["insight_singular"],
+        "utility_beyond_source": recalculated["utility_beyond_source"],
+        "method_limitations_author_visible": recalculated["method_limitations_author_visible"],
+        "reviewer_representation_consistent": recalculated["reviewer_representation_consistent"],
+        "author_assigned_after_review": recalculated["author_assigned_after_review"],
         "reputational_safety": quality.get("reputational_safety", True) is not False
         and "reputation_" not in str(quality.get("findings") or ""),
         "unique_content_anti_doorway": quality.get("unique_content", True) is not False,
         "cta_attribution_preserved": bool(html) and cta_ok,
         "canonical_robots_schema_sitemap_coherent": bool(html) and 'rel="canonical"' in html and schema_ok,
         "no_implied_commercial_relation": not commercial,
-        "snapshot_hashes_recorded": hashes_ok,
+        "snapshot_hashes_recorded": recalculated["snapshot_hashes_recorded"],
         "suite_green": bool(suite_green),
-        "comparable_available_not_consumed": comparable_ok,
-        "v2_token_and_hashes_bound": hashes_ok and bool(producer_root_hash) and bool(source_dossier_hash),
+        "comparable_available_not_consumed": recalculated["comparable_available_not_consumed"],
+        "v2_token_and_hashes_bound": recalculated["v2_token_and_hashes_bound"],
     }
 
 
@@ -548,6 +625,7 @@ def approve_conditional_canary(
         row["comparable_available"] = True
         row["comparable_consumed"] = False
         row["comparable_reason"] = SINGULAR_COMPARABLE_REASON
+    row["checklist_schema"] = CONDITIONAL_CHECKLIST_SCHEMA
     row["checklist"] = checklist
     payload = load_approvals(root)
     updated = []
@@ -565,6 +643,34 @@ def approve_conditional_canary(
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return row
+
+
+def _checklist_binding_reasons(
+    stored: dict[str, Any], record: dict[str, Any]
+) -> list[str]:
+    """Reject stale, manually weakened or no-longer-true canary checklists."""
+    reasons: list[str] = []
+    if stored.get("checklist_schema") != CONDITIONAL_CHECKLIST_SCHEMA:
+        reasons.append("approval_checklist_schema_stale")
+    checklist = stored.get("checklist")
+    if not isinstance(checklist, dict):
+        return [*reasons, "approval_checklist_absent"]
+    expected_keys = set(CONDITIONAL_CHECKLIST)
+    actual_keys = set(checklist)
+    if actual_keys != expected_keys:
+        reasons.append("approval_checklist_keys_mismatch")
+    if any(checklist.get(key) is not True for key in CONDITIONAL_CHECKLIST):
+        reasons.append("approval_checklist_incomplete")
+    current = _record_checklist(
+        record,
+        producer_root_hash=str(stored.get("producer_root_hash") or ""),
+        source_dossier_hash=str(
+            stored.get("source_dossier_hash") or stored.get("official_payload_hash") or ""
+        ),
+    )
+    if any(current.get(key) is not True for key in RECALCULABLE_CHECKLIST_KEYS):
+        reasons.append("approval_checklist_recalculation_failed")
+    return reasons
 
 
 def _canary_binding_reasons(stored: dict[str, Any], record: dict[str, Any]) -> list[str]:
@@ -589,4 +695,5 @@ def _canary_binding_reasons(stored: dict[str, Any], record: dict[str, Any]) -> l
         reasons.append("approval_payload_hash_mismatch")
     if str(stored.get("material_hash") or "") != material_hash(record):
         reasons.append("approval_material_hash_mismatch")
+    reasons.extend(_checklist_binding_reasons(stored, record))
     return reasons

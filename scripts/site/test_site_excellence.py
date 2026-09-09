@@ -300,13 +300,15 @@ def test_468_browser_report_feeds_price_word_and_1000px_cta_metrics() -> None:
         assert metrics[metric_id]["evidence"]["viewports"]
 
 
-def test_turnstile_census_targets_only_forms_whose_runtime_requires_the_token() -> None:
+@pytest.mark.parametrize("public_prefix", ["piloto", "oportunidades", "nova-rota"])
+def test_turnstile_census_targets_only_forms_whose_runtime_requires_the_token(public_prefix: str) -> None:
     with tempfile.TemporaryDirectory() as tmp:
         root = Path(tmp)
-        route = root / "piloto" / "forms"
+        route = root / public_prefix / "forms"
         route.mkdir(parents=True)
         (route / "index.html").write_text(
             """
+            <meta name="robots" content="noindex">
             <form action="/.netlify/functions/conversion-intake">
               <input type="hidden" name="action" value="xray">
             </form>
@@ -320,8 +322,21 @@ def test_turnstile_census_targets_only_forms_whose_runtime_requires_the_token() 
 
         result = _turnstile_observation(root, expected_environment="local")
 
-    assert result["missing_routes"] == ["/piloto/forms/"]
+        page = route / "index.html"
+        page.write_text(
+            page.read_text(encoding="utf-8").replace(
+                '<input type="hidden" name="action" value="handraise">',
+                '<input type="hidden" name="action" value="handraise">'
+                '<input type="hidden" name="turnstile_token" value="">',
+            ),
+            encoding="utf-8",
+        )
+        restored = _turnstile_observation(root, expected_environment="local")
+
+    assert result["missing_routes"] == [f"/{public_prefix}/forms/"]
     assert result["protected_form_count"] == 1
+    assert restored["missing_routes"] == []
+    assert restored["protected_form_count"] == 1
 
 
 def test_accessibility_evidence_fails_when_its_derived_census_collapses() -> None:

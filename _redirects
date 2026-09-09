@@ -9,6 +9,42 @@ https://confenge.netlify.app/*  https://confenge.com.br/:splat  301!
 # --- File extension / legacy HTML ---
 /privacidade.html  /privacidade/  301!
 
+# Founder 2026-09-09: withdraw unapproved fixture/preview exposure. Source
+# fixtures and the research preview are preserved under internal scripts/docs.
+# Exact routes include direct file aliases; no home redirect or approval claim.
+/analises-contratos-publicos/aditivo-saldo-art125-item-novo /404.html 410
+/analises-contratos-publicos/aditivo-saldo-art125-item-novo/index.html /404.html 410
+/analises-contratos-publicos/atraso-eventos-sem-comunicacao-contemporanea /404.html 410
+/analises-contratos-publicos/atraso-eventos-sem-comunicacao-contemporanea/index.html /404.html 410
+/analises-contratos-publicos/bdi-composicao-vs-referencia-sc /404.html 410
+/analises-contratos-publicos/bdi-composicao-vs-referencia-sc/index.html /404.html 410
+/analises-contratos-publicos/comparaveis-rejeitados-regime-distinto /404.html 410
+/analises-contratos-publicos/comparaveis-rejeitados-regime-distinto/index.html /404.html 410
+/analises-contratos-publicos/reajuste-aniversario-serie-indice /404.html 410
+/analises-contratos-publicos/reajuste-aniversario-serie-indice/index.html /404.html 410
+/radar/pesquisa/edicao-zero-4uf /404.html 410
+/radar/pesquisa/edicao-zero-4uf/index.html /404.html 410
+/radar/pesquisa/edicao-zero-4uf/edicao-zero-citation.json /404.html 410
+
+# Founder 2026-09-09: internal preview sources are preserved in the repository,
+# but noindex is not publication authority. These exact families/fixture URLs
+# return Gone; official-live opportunity routes are still supplied only by the
+# authorized Netcup stage overlay.
+/piloto /404.html 410
+/piloto/* /404.html 410
+/panorama-mercado-obras-publicas /404.html 410
+/panorama-mercado-obras-publicas/* /404.html 410
+/ops/wave1-review.html /404.html 410
+/ops/README-data.txt /404.html 410
+/oportunidades/cc-2026-000047-ponte-rio-do-sul-sc /404.html 410
+/oportunidades/cc-2026-000047-ponte-rio-do-sul-sc/index.html /404.html 410
+/oportunidades/pe-2026-000188-reforma-ubs-londrina-pr /404.html 410
+/oportunidades/pe-2026-000188-reforma-ubs-londrina-pr/index.html /404.html 410
+/oportunidades/pe-2026-000412-pav-urbana-chapeco-sc /404.html 410
+/oportunidades/pe-2026-000412-pav-urbana-chapeco-sc/index.html /404.html 410
+/oportunidades/pe-2026-000903-sinalizacao-viaria-caxias-rs /404.html 410
+/oportunidades/pe-2026-000903-sinalizacao-viaria-caxias-rs/index.html /404.html 410
+
 # --- Retired 2026-09-07: the standalone corrections page was bureaucracy, not a
 # service. The function it carried -- "found an error on the site?" -- lives on
 # the contact page. The protocol endpoint /.netlify/functions/correction is

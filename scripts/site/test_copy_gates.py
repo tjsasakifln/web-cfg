@@ -71,8 +71,11 @@ def test_brand_forbidden_phrases_still_enforced():
 def test_microcopy_preferences():
     home = (ROOT / "index.html").read_text(encoding="utf-8")
     assert "responsáveis" in home.lower() or "responsável" in home.lower()
-    assert "critério técnico definido" in home.lower()
-    assert "entrega e limite combinados" in home.lower()
+    # The home must name engineering work and a deliverable, without freezing
+    # one internal triage slogan into every future revision.
+    public = visible_text(home).lower()
+    assert re.search(r"\b(?:projeto|revisão|compatibilização|orçamento)s?\b", public)
+    assert re.search(r"\b(?:entrega|desenho|memorial|quantitativo|laudo)s?\b", public)
     bid = (ROOT / "bid-room-licitacoes-obras" / "index.html").read_text(encoding="utf-8")
     # 2026-09-08. A trava exigia a frase literal "revisão crítica independente"
     # na sala de proposta. Era o defeito: a CONFENGE é prática individual e não
@@ -128,9 +131,16 @@ def test_microcopy_preferences():
 
 def test_llms_consistent():
     text = (ROOT / "llms.txt").read_text(encoding="utf-8")
+    brand = load_brand()
+    assert brand["positioning"]["short"] in text
+    assert "https://confenge.com.br/servicos/" in text
+    assert "https://confenge.com.br/quantitativos-orcamento-obras/" in text
+    assert "obras públicas são uma especialidade" in text.lower()
     assert "Diretoria Fracionada para o Mercado Público" in text
     assert "/diretoria-b2g/" in text
     assert "Engenheiro Civil e Diretoria B2G fracionada" not in text
+    assert "canonical public-intelligence architecture" not in text.lower()
+    assert "extra-cli" not in text.lower()
 
 
 
@@ -206,7 +216,6 @@ def test_copy_gate_scope_has_no_handwritten_route_allowlist():
         "servicos-obras-publicas",
         "problemas-que-resolvemos",
         "analises-contratos-publicos",
-        "panorama-mercado-obras-publicas",
         "politica-editorial",
         "comercial",
         "conflitos",
@@ -324,9 +333,7 @@ def test_public_surfaces_have_no_prose_em_dashes():
     assert "perfil da empresa (capacidade, acervo" in radar
     assert "calibrar o recorte, não assinar" in radar
     home = (ROOT / "index.html").read_text(encoding="utf-8")
-    assert "situação compreendida" in home
-    assert "critério técnico definido" in home
-    assert "entrega e limite combinados" in home
+    assert residual_em_dashes(home) == [], "home: authorial prose punctuation drift"
     # Journey confirmations exist
     for name in ("obrigado-contrato.html", "obrigado-edital.html", "obrigado-operacao.html"):
         p = ROOT / name
@@ -361,6 +368,20 @@ def test_whatsapp_float_in_landmark():
         text = path.read_text(encoding="utf-8")
         assert "contact-float" in text, f"{path}: missing contact-float landmark"
         assert 'aria-label="Contato rápido"' in text or "Contato rápido" in text
+
+
+def test_checkout_return_does_not_claim_payment_or_premature_service_start():
+    """A provider return URL is not proof of payment or authorization to start."""
+
+    text = (ROOT / "diagnostico-b2g-expansao" / "obrigado" / "index.html").read_text(encoding="utf-8")
+    visible = visible_text(text).lower()
+
+    assert "não comprova" in visible
+    assert not re.search(r"\bseu\s+pagamento\s+foi\s+enviado\b", visible)
+    assert not re.search(r"\bvoc[eê]\s+concluiu\s+o\s+pagamento\b", visible)
+    assert "depois que o provedor confirmar" in visible
+    for condition in ("aceite", "confirmação financeira", "dados necessários", "reunião inicial"):
+        assert condition in visible, f"checkout return omitted start condition: {condition}"
 
 
 # Visitor-visible backstage / marketing-objective language (public surface banlist).
@@ -488,18 +509,26 @@ def evaluate_copy_html(html: str, rel: str = "fixture.html") -> list[str]:
     return scan_backstage_html(html, rel) + scan_brand_html(html, rel)
 
 
-def test_copy_scanners_ignore_non_perceptible_subtrees():
-    """Hidden implementation copy is not visitor-facing brand/backstage copy."""
+def test_copy_scanners_ignore_only_actually_non_perceptible_subtrees():
+    """hidden/display:none stay out; inert/aria-hidden may remain visible."""
     html = """
     <main>
       <template><p>extra-cli</p></template>
       <section hidden><p>fale conosco</p></section>
-      <section aria-hidden="true"><p>excelência</p></section>
-      <section inert><p>alta intenção</p></section>
       <section style="color: red; display: none !important"><p>inovação</p></section>
     </main>
     """
     assert evaluate_copy_html(html) == []
+
+    still_painted = """
+    <main>
+      <section aria-hidden="true"><p>excelência</p></section>
+      <section inert><p>alta intenção</p></section>
+    </main>
+    """
+    found = evaluate_copy_html(still_painted)
+    assert any("excelência" in item for item in found), found
+    assert any("alta intenção" in item for item in found), found
 
 
 def test_brand_scanner_keeps_public_copy_channels_only():

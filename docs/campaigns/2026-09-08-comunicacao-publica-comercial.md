@@ -4,7 +4,284 @@ Registro de retomada. Issue guarda-chuva: #611. PR: #644.
 Base: `234a061f1` (= `origin/main` = SHA servido em produção no início).
 Branch: `campanha/comunicacao-publica-comercial`.
 
+## Retomada autorizada em 2026-09-09
+
+A decisão expressa EXECUTE_NOW de 09/09 substitui o encerramento e os limites
+editoriais anteriores desta etapa. As seções anteriores de execução abaixo são
+históricas, não aceite do universo atual. Frente executiva: INBOUND ENGINE;
+alavancas: customer, trust, revenue e automation. Tempo para evidência: cada
+lote tem validação e publicação imediatas após os checks obrigatórios. Cem
+repetições devem melhorar os mesmos contratos, geradores e testes, sem criar
+cem campanhas ou inventários paralelos.
+
+Preflight confirmado nesta retomada:
+
+- `origin/main` e os dois endpoints públicos de identidade:
+  `54b51438a110767c88256c2e9e5272173066cc9c`.
+- Artefato público observado:
+  `7b6161067270a6ac7e0e30b51e7f710660180b0f95427ea5c67916b587d5c903`;
+  bundle observado `84cce7ed93447966c458272d8609a2fc89612c173c66865548e8f67bd558feb2`.
+- Build `2026-09-09T05:15:14Z`; produção `netcup-production`,
+  `confenge-nginx-node/v2`, armazenamento `filesystem`.
+- Publicação anterior: Actions `34314143158`; site-ci `34314142753`.
+  Branch protection exige `site-ci` e `pSEO quality gates`, strict; nenhum
+  revisor adicional requerido. Ambientes stage/production restringem branches
+  protegidas e dispõem dos nomes de secrets SSH necessários. Valores secretos
+  não foram consultados nem publicados. Autorizações não foram alteradas.
+- Árvore original limpa; branch de retomada
+  `campanha/revisao-comercial-20260909`, baseada em origin/main. PRs antigos
+  permanecem preservados; #639 tem checks falhando e não é candidato de release.
+- A observação inicial de 253 HTML-fonte, 549 HTML no `_site` local preexistente
+  e 249 entradas do manifesto evidencia divergência de universos. O `_site`
+  preexistente não certifica a nova revisão. O aceite usará build limpo e
+  reconciliação independente do artefato final.
+- Pacote efetivamente publicado recuperado de
+  [Actions 34314143158](https://github.com/tjsasakifln/web-cfg/actions/runs/34314143158),
+  artifact `10089970459`: checksum SHA-256 e atestação Sigstore conferidos.
+  O pacote contém **255 HTML**, dos quais **249 index.html**. Inventário
+  independente obtido por SSH somente leitura em
+  `/opt/confenge-web/current/_site`: **551 HTML**. A diferença decorre da
+  transformação autorizada de oportunidades no stage; os dois universos
+  serão reconciliados com seus respectivos retratos, sem chamar o pacote
+  anterior ou o manifesto-fonte de inventário completo do servidor.
+- Acesso de leitura ao host e executável de rollback confirmado. `current`
+  aponta para `54b51438…`; `rollback` aponta para
+  `c173461ccbcf93878c6ab59482e4ec4bb537a418`. Nenhuma promoção, reversão,
+  alteração de permissões ou edição manual em produção foi feita no preflight.
+
+Correção do controle de publicação identificada no candidato `dab32b69`:
+a montagem final atualizava os hashes CSP em `_site/_headers`, enquanto a
+configuração canônica do Nginx consumia `_headers` da raiz, ainda anterior às
+transformações finais. O build agora executa o comando existente `csp:refresh`
+entre a montagem e a última geração do contrato do host. A contraprova falhou
+antes da correção e passou depois; o teste exige essa ordem. Nenhuma diretiva
+de segurança foi relaxada. No artefato de 217 HTML, o contrato e o navegador
+passaram (sete rotas, zero violações, estilo inline não autorizado bloqueado).
+Esse checkpoint não é declaração de publicação; o fluxo obrigatório repete
+os controles no candidato integrado.
+
+O preflight adicional do PR #647 encontrou uma lacuna no coletor de proteção
+antirrobô do scorecard: ele recebia `_site`, mas aplicava exclusões da árvore
+de fontes. `site_excellence.py` agora percorre todos os HTML físicos do artefato.
+A contraprova existente de formulário sem token em `/piloto/forms/` reprovava
+antes da correção; o teste passou a exercitar também `/oportunidades/forms/`,
+rota nova e noindex, mantendo a distinção dos endpoints que realmente exigem
+token. A retirada do defeito e a restauração da proteção são verificadas nos
+mesmos casos (15 testes aprovados). Isso amplia o controle; não publica os
+rascunhos nem altera o mecanismo de captura.
+
+O preflight do bloco de 73 comandos também distinguiu três testes pulados:
+o teste de isolamento do artefato é inaplicável antes do build e tem execução
+obrigatória depois dele; dois testes produtor-consumidor não tinham checkout
+de `extra-cli` no CI. Os workflows agora recuperam, em modo somente leitura,
+o SHA `source_commit_sha` do manifesto versionado, verificam a identidade e
+exigem os testes com fixtures. Ausência do checkout, revisão divergente e
+incompatibilidade do snapshot reprovam; a antiga captura genérica de erro que
+continuava com outro snapshot foi removida. As dependências necessárias foram
+fixadas no lock Python existente e verificadas em ambiente 3.12 isolado. Não
+há acesso ao banco, nova consulta de dados, alteração no produtor ou mudança
+das datas editoriais. A contraprova exige falha do teste diante de um snapshot
+incompatível, além da falha por checkout ausente ou configuração de CI pulável.
+
+O CI do candidato `95b7794c` reprovou corretamente o checkout da fixture dentro
+da árvore do consumidor: o auditor de CSS encontrou 15 folhas externas como
+órfãs. A tentativa intermediária `f9dcd6dc` foi rejeitada pelo GitHub antes de
+criar jobs: `runner.temp` não é permitido no ambiente do job. Os workflows agora
+fazem fetch público direto do SHA contratado no diretório temporário, com contexto
+no passo, exportação posterior por `GITHUB_ENV` e verificação obrigatória de SHA.
+Não há segundo `actions/checkout`, cuja limpeza posterior dependeria do caminho
+original, nem exceção nova no auditor de CSS. O comando real é testado com sucesso,
+origem ausente, revisão errada, destino existente e symlink pendente; falhas não
+exportam o caminho nem sobrescrevem arquivos. Os testes de contrato permanecem
+obrigatórios.
+
+A revisão de release também fechou a corrida entre a leitura de `main` e o
+swap remoto: o workflow reconsulta `main` imediatamente após a promoção e depois
+do aceite público. Um avanço concorrente reprova e aciona a compensação existente,
+que não substitui outro release já ativo. A contraprova executa o shell com `main`
+estável, já adiantado antes do swap e adiantado durante ele; nenhum SHA antigo é
+aceito como conclusão do fluxo.
+
+O aceite público passou a conferir também a identidade material, não só o SHA:
+`artifact_hash` e `manifest_hash` precisam coincidir entre pacote, inventário do
+host e `build-info` público; o runtime público precisa coincidir com o runtime
+observado na origem, incluindo bundle, artefato, arquitetura e armazenamento.
+Os dois endpoints devem trazer os headers Cloudflare e da arquitetura canônica.
+As contraprovas de digest e headers divergentes reprovam antes e depois da
+varredura; os testes de aliases, 410 e propagação de cache continuam aprovados
+na mesma suíte de 17 testes. Não se antecipa o resultado da execução em produção.
+
+Revogações em execução (contraprovas locais; o candidato integrado e o artefato
+final ainda precisam dos checks e da publicação):
+
+| Regra anterior | Defeito imposto | Proteção mantida | Substituição e origem |
+| --- | --- | --- | --- |
+| Preço exige um formulário de captura persistida | Impede preço verdadeiro com contato direto; induz ocultação de preço | Autorização de valor, condições, privacidade, recibo verdadeiro | AGENTS, ADR-STRAT-004, contratos corporativos/comerciais, registro de famílias e `inbound_gates.py`: contato contextual verificável; formulários ativos mantêm todo o contrato |
+| Home/chrome B2G até integração exclusiva MV-09 | Preserva categoria corporativa estreita e congela correção autorizada | Especialização pública, URLs úteis, autoridade operacional dos owners | ADR-STRAT-002/004, constituição, taxonomia e matriz: projetos/serviços públicos e privados por necessidade |
+| Prova exige ausência explícita | Faz do inventário de ausências a apresentação pública | Toda alegação precisa de fundamento verdadeiro | Contrato público de serviço: competência, método e exemplos atribuídos corretamente |
+| Scanner indexável, fonte e descarte de aria-hidden/inert | Certifica sem ler páginas públicas noindex e texto ainda visível | Separação de material interno, histórico e transcrição | Escopo do scanner e gate sobre pacote construído, com inventário independente e defeitos semeados |
+
+Os hashes dos contratos locais modificados são recalculados a partir do JSON
+canônico e fixados no consumer-pin desta campanha por esta decisão comercial;
+isso não concede aprovação externa, não muda pins de Governance nem apaga
+verificações de integridade. Dados, datas de consulta e autorizações financeiras
+externas conservam sua autoridade original.
+
 ## Universo auditado
+
+### Fechamento da fonte e endurecimento de release (09/09, ainda não publicado)
+
+Fechamento dos controles de 09/09: 45 testes do controlador de release,
+15 do aceite HTTP e 31 contraprovas de cobertura passaram. A rodada integrada
+de runner, workflow, aceite HTTP e mídia passou em 40 testes. Essas execuções
+locais não substituem a execução no candidato integrado. O ledger
+`metadata/files.sha256` deve ser byte-idêntico ao membro do tar validado;
+o host também confere o digest recebido contra o digest verificado no runner.
+Rollback compensador exige o candidato ainda ativo sob lock; uma repetição
+do workflow preserva o predecessor real como destino de recuperação.
+
+As quatro imagens corrigidas recebem referências `?v=<sha256 dos bytes>`
+somente na finalização do artefato, antes do manifesto de integridade. Duas
+execuções sobre a mesma cópia produziram bytes idênticos: 236 referências em
+192 arquivos. Isso evita reutilizar imagens antigas do cache do navegador.
+Os arquivos físicos legados são preservados e precisam de conferência/purga
+de cache após a promoção; nenhuma URL nova foi requisitada em produção antes
+de haver os bytes correspondentes. A credencial Cloudflare existente reconhece
+a zona, mas a permissão de purga ainda não foi exercida nem presumida.
+
+Checkpoint de fonte `3ec50a67ab77bb335567c2b497a6fbb7f81ef196`:
+varredura ampliada encontrou inicialmente 198 defeitos em 154 rotas
+(170 apresentações autorais de B2G, 27 de Hub e uma de SLA), incluindo
+`jobTitle` e arrays de JSON-LD. Depois da correção na origem: 303 ocorrências
+contextuais legítimas em 114 rotas e zero defeitos nesse detector. Os números
+não são aditivos aos de outros scanners. Fontes e testes preservam siglas
+definidas tecnicamente, chaves/URLs internas e nomes externos transcritos.
+
+A primeira dobra foi medida novamente em um checkout isolado **limpo** desse
+checkpoint: **25/25 rotas PASS, zero FAIL/PENDING**. A evidência registra 49
+entradas de conteúdo, scripts, CSS/fontes e controles; o teste recusa árvore
+suja, conteúdo divergente e evidência de commit não ancestral. A medição
+equivalente no artefato final é um step separado e obrigatório no site-ci,
+com upload obrigatório; remover o comando reprova o teste do workflow.
+Isso substitui a medição intermediária de 23/25 abaixo, sem apagar seu histórico.
+
+A revisão adversarial encontrou e orientou a correção destes controles:
+
+| Regra/defeito anterior | Proteção preservada | Substituição e contraprova |
+| --- | --- | --- |
+| 410 não forçado cedia a arquivo existente | Retirada exata, sem redirect à home | Contrato/nginx tornam `gone` terminal; E2E semeia arquivo em cópia descartável, exige 410 e ausência do texto, sem alterar o artefato |
+| Qualquer rota sob oportunidades era overlay autorizado | Snapshot aceito pelo owner, hashes e promoção atômica | Manifesto identifica IDs/caminhos/digests exatos; rota inventada sob o mesmo prefixo reprova; compatibilidade legada usa estado privado fora do release |
+| Aprovação ativa declarava visibilidade de revisor inexistente | Autoria, fontes, limites e hashes materiais | Checklist 2.0 separa autor/método e consistência da representação do revisor; dez predicados são recalculados; false, chave antiga e schema ausente reprovam; 219 testes passaram |
+| Controlador instalado uma vez não recebia correções do pacote | Conta de deploy e sudo restrito existentes | Workflow usa controlador do mesmo bundle verificado, igual ao checkout, com hash conferido antes de executar; drift local/remoto de um byte reprova; stage/verify/promote por streaming testados |
+| Execução automática/manual tinha locks distintos | Proteções de branch e ambientes mantidas | Uma fila canônica e predecessor conferido sob lock do host; promoção superada reprova; rollback intencional continua disponível |
+
+O host foi consultado somente para leitura: controlador root instalado com
+SHA-256 `7f43f3d488dacf802c412d44093bc241d671b3a8cb540ccc7e01b5587962bd1c`;
+snapshot oficial gerado em `2026-09-04T00:46:51+00:00`, fonte de
+`2026-09-03T16:10:59+00:00`, vencido na data desta revisão. A indisponibilidade
+retira detalhes e descoberta de oportunidades, mantendo hub informativo com
+contato contextual; não renova a fonte nem inventa estado atual. O novo fluxo
+concilia inventário independente do host, todos os HTML obtidos por URLs
+normais, digests e scanner, além de Lighthouse ou retirada comprovada. Falha
+material pós-promoção aciona rollback do predecessor pelo mesmo controlador,
+sem substituir uma publicação concorrente ou tocar pedidos.
+
+Evidência local: `/tmp/confenge-commercial-20260909.zaPcn3/`, arquivos
+`source-3ec-first-fold.log`, `first-fold-source-bound-tests.log`,
+`bundle-controller-tests.log`, `netcup-final-control-tests.log` e
+`workflow-bound-full-release.log`; varreduras léxicas em
+`/tmp/confenge-lexical-before.json` e `/tmp/confenge-lexical-after.json`.
+São checkpoints reais, não aceite do SHA integrado/servido. Evidência final
+será vinculada ao run de publicação sem novo merge apenas para declarar término.
+
+Compatibilidade exercitada também contra cópias reais do current `54b51438…`
+e rollback `c173461c…`: os quatro diretórios release/incoming coincidiram com
+o host em contagem e hash agregado. Cada release manteve seus 1.091 arquivos
+byte a byte; os envelopes e 300 rotas aceitas passaram na verificação nova,
+com manifesto externo ao docroot. Evidência em
+`/tmp/confenge-legacy-compat.I5hsNZ` e `/tmp/confenge-legacy-seal-fresh.EP7O1E`.
+Nenhuma mutação no host foi feita nesse ensaio. O hash da home obtida por URL
+normal também coincidiu com o arquivo do host. O edge respondeu `HIT`, idade
+272 segundos, apesar do `no-cache` da origem; o aceite deve respeitar o TTL
+de 300 segundos já documentado, registrar propagação e continuar reprovando
+qualquer digest divergente, sem aceitar HTML antigo como versão nova.
+
+### Evidências da retomada de 09/09 (candidato ainda não publicado)
+
+O inventário anterior independente foi concluído: **551/551 HTML obtidos por
+URLs públicas normais, 551 respostas 200, zero falhas e zero exclusões**. Frente
+ao pacote atestado de 255 HTML, o stage autorizado adicionava 300 páginas de
+oportunidades e retirava quatro; nenhuma diferença de rota sem autoridade foi
+encontrada. Aplicados os novos controles ao retrato anterior, houve sete rotas
+com defeitos de redação, quatro com falhas semânticas e 113 ocorrências de
+vocabulário de controle em 32 rotas. Isso substitui os números históricos como
+comparação desta execução; não soma contagens de detectores diferentes.
+
+Arquivos de execução locais estão em
+`/tmp/confenge-commercial-20260909.zaPcn3/`: `public-surface-before.json`,
+`production-http-before-all-report.json`, `production-html-before.txt` e o
+espelho `production-http-before-all/`. O aceite final deve vincular os mesmos
+controles ao pacote e ao servidor novos. Estes arquivos preliminares não são
+certificação do release final.
+
+Complementos de fonte e contraprovas:
+
+| Regra ou defeito anterior | Propriedade legítima preservada | Substituição, arquivos e contraprova |
+| --- | --- | --- |
+| Congelamento BOFU até 16/09 ou nova medição (#533) | Integridade de bytes, experimento histórico e verdade dos termos | `frozen_specs/hashing.py`, `materialize.py`, `unlock-plan.v1.json`: correção comercial autorizada exige leitura renderizada, recaptura real e gates; os patches experimentais históricos não são automaticamente autorizados. Divergência real continua reprovando. |
+| O contrato da issue #390 impunha `FROZEN_READ_ONLY`/`OWNED_BY_389_READ_ONLY` até 16/09 e atribuía a não exposição de preço ao congelamento e à ausência de formulário persistente | Rota comercial única, procedência das issues, autenticidade técnica, integridade dos bytes, termos verdadeiros e separação entre preço-piloto público, validação de margem e checkout | `single-commercial-route.v1.json` e seu teste: as quatro superfícies aceitam a correção editorial `EXECUTE_NOW`, sem espera por data; os owners históricos permanecem como procedência e o hash real continua conferido. A issue #333 do fundador definiu “Preço-piloto: R$ 4.900. SLA: 5 dias úteis”, preservou preço e escopo e foi encerrada como implementada pelo PR #398, que publicou esses termos no hub. CFG-D18 permanece `VALIDATE`/`PILOT_HYPOTHESIS`, contratação depende de proposta e checkout permanece desabilitado. Contraprovas reprovam a volta do congelamento, a ocultação do preço existente, divergência de valor e a inferência de checkout. |
+| Rol público de 54 capacidades, estados e contadores | Cadastro interno completo e nenhuma promoção de oferta pendente | `deliverables-registry.v1.json`, `task-doors.v1.json`, `render_public_catalog.mjs` e testes comerciais/UI: 54 registros internos, oito ofertas publicadas; projetos, revisão, compatibilização e orçamento têm explicação e destinos. Testes não exigem census no comprador. |
+| Todo o hub, preço e crédito rotulados sintéticos | Exemplo não pode virar cliente nem resultado real | `real_proof_registry.mjs`, registro de prova, gerador do catálogo e testes: aviso ligado ao modelo e acesso correspondente, separado das condições verdadeiras. Mutação com cliente inventado ou preço rotulado sintético reprova. |
+| Segundo revisor como presença obrigatória ou déficit anunciado | Autoria responsável, fontes, cálculos, limites e correção | Política editorial 1.3 e `authority.py`: revisor distinto só se existe. Versões 1.0–1.2 preservadas. Separação de blocos impede concatenar “avaliação” e item “04” como nota de cliente; contraprova mantém reprovação de nota real sem base. |
+| Cinco fixtures publicadas em noindex | Aprovação técnica real e preservação do trabalho interno | `public-route-decisions.json`, gerador de análises e `_redirects`: cinco decisões exatas de retirada, aliases 410 e hashes internos; apenas uma análise aprovada mais hub são gerados. Rascunho reintroduzido reprova. |
+| Família de análises ausente do build completo/sitemap | Mesma cadeia de aprovação no pacote efetivo | `build_site.py` chama o gerador offline com `official-live-01`; duas execuções isoladas com o mesmo relógio comparam todos os bytes. A aprovação existente não é nova revisão profissional. |
+| Página de obrigado afirmava recebimento/pagamento por acesso direto | Recibo persistido não se confunde com clique ou leitura humana | Quatro `obrigado*.html` exigem referência coerente com a sessão criada após sucesso; retorno de pagamento continua pendente. Fixtures de browser distinguem acesso direto, query isolada, sessão divergente e sessão correspondente. |
+| CTA da análise de mercado circulava entre duas âncoras | Dado útil sem formulário compulsório | `market_answers/render.py`: canal contextual real; teste rejeita ciclo e confere mensagem/canonical. Clique não é recebimento. Validade de 48 horas, expiração e fonte original conservadas; página vencida permanece noindex. |
+| Inglês operacional nos downloads e quatro capas | Método, limitações, direitos de uso e identidade verdadeira | Geradores `data_desk`, textos e metadados do pacote são revisados sem mudar estatística/data; capas corrigidas com imagegen integrado, sem inventar credenciais. Fontes/prompts em `data/site/commercial-media/source.json`; encoding em `encode_commercial_media.mjs`. |
+| Job agregado podia esconder teste pulado | Proteções existentes da branch e execução real | `site-ci.yml` + verificador de execução: `site-ci` depende de validação e evidência dos steps; skipped/neutral/missing/empty obrigatórios reprovam. Nenhuma proteção foi desabilitada. |
+| “Atendimento nacional” como selo incondicional no shell | Alcance nacional continua condicionado à viabilidade técnica e profissional real | `public_ia.py`, `html_shell.py` e `test_public_ia.py`: o rodapé agora condiciona atendimento a escopo, local e modalidade/vistoria/campo. A contraprova focal executada em 09/09 passou (1 teste); registro profissional, ART, logística e atribuições continuam verificações materiais, não slogans. |
+| Congelamento ou contagem histórica aprovava primeira dobra sem medir o candidato | Integridade do contrato visual e os mesmos papéis de conteúdo em 390×844 e 1366×768 | `first_fold_rules.mjs`, `measure_first_fold.mjs`, contrato e teste: EXECUTE_NOW revoga a espera editorial, mas exige medição nova. O checkpoint de fonte de 09/09 mediu 25 rotas: 23 PASS e 2 FAIL (`/` e `/aditivos-obras-publicas/`); `test:first-fold-contract` recusou aprovação. A medição final deve ser refeita no artefato integrado, com SHA e identidade, depois das correções. |
+| `noindex`, `Disallow` ou catálogo `DEFER` tratados como autorização para publicar previews | Fontes, travas financeiras, revisão real e overlay oficial permanecem preservados | `public-preview-route-decisions.json`, `public_artifact.py`, `_redirects` e testes: 24 fontes piloto, cinco fixtures de oportunidade, dois panoramas, o review/TXT de `/ops/` e o pacote editorial de preview ficam fora de produção; piloto/panorama e aliases definidos respondem 410, enquanto o pacote `editorial-review-packet.json` é omitido apenas em produção e deve responder 404. Overlay `official_live`, shell `/ops/`, build-info e runtime-info permanecem. |
+| Qualquer `acervo`/`enquadramento` fora de poucos padrões era legitimado por fallback; estado JS só era lido quando literal direto no sink | Termos técnicos verdadeiros e chaves internas de dados continuam permitidos | `test_public_control_vocabulary.py`, `test_self_deprecating_copy.py` e `public_surface_coverage.py`: legitimidade exige contexto técnico material na própria composição; 303 ocorrências em 114 rotas foram classificadas, com 303 legítimas e zero defeitos no retrato corrente. Declaração JS literal local usada em sink visível também entra no scanner. Seeds reprovam pendência, valorização fabricada, enquadramento comercial e `proof_state: DRAFT`; chave `as_of` em JSON interno e UI portuguesa legítima passam. O controle declara que não interpreta JavaScript arbitrário. |
+| O Radar publicava metadados e uma tabela de seis recortes “em preparação”, e seu contrato/teste exigia esse inventário de pendências | Limites honestos, método reproduzível, números GSC reais, janela, denominador e nenhuma estimativa nacional inventada | `radar/`, `metodologia-inteligencia/`, `public-family-registry.json`, `pseo/build.py` e `test_public_sample.py`: a página agora explica como usar a demanda observada e como o recorte empresarial é configurado, sem promover série inexistente. O teste preserva fonte, datas, denominador, downloads e canonical, e reprova a volta de vitrine de maturidade; o scanner semeia a paráfrase conhecida. |
+| A política de privacidade apresentava a ausência de cargo formal como mensagem institucional | Canal real, direitos, retenção e responsabilidades de privacidade permanecem explícitos | `test_self_deprecating_copy.py` reprova a paráfrase de ausência de cargo e aceita como contraprova a identificação direta do canal e dos pedidos atendidos, sem inventar encarregado. |
+| Censo de logos congelado sobre coletor que incluía árvores internas | Hash, proporção e presença por elemento continuam exatos; ausência de master aprovada não é inventada | `logo-contract.v1.json` e `test_logo_contract.mjs`: recontagem real do universo-fonte público encontrou 216 HTML, 416 imagens de logo, 213 lockups de cabeçalho e 203 de rodapé; 3.926/3.926 checks passaram. O registro continua honesto: raster legado retido, master SVG ausente e entrega SVG de produção bloqueada à espera da arte do fundador. |
+
+Checkpoint dos controles desta rodada em 09/09, ainda pré-publicação:
+
+- `python3 -m pytest -q scripts/pseo/tests/test_public_preview_retirement.py`:
+  3 testes passaram; fonte do pacote editorial continua presente e a omissão é
+  estritamente `production`.
+- `python3 scripts/site/public_surface_coverage.py --fixture matching`: 27
+  contratos de mutação passaram no mesmo caminho do gate completo.
+- `python3 scripts/site/test_self_deprecating_copy.py`: zero rotas e zero
+  ocorrências no universo-fonte público corrente.
+- `node tests/brand/test_logo_contract.mjs`: 3.926/3.926 checks passaram, com a
+  observação medida acima.
+- `node tests/commercial/test_first_fold_contract.mjs`: reprovou o checkpoint
+  com duas falhas medidas e uma inconsistência de derivação já identificada;
+  portanto esta evidência não aprova publicação. O aceite exige nova execução
+  no artefato integrado e zero falhas.
+
+Esses resultados não são SHA servido, não comprovam cache público e não
+substituem os checks protegidos, a promoção Netcup nem a verificação HTTP final.
+
+A leitura de imagens examinou por OCR 145/145 JPG/PNG/WebP, sem falha de
+execução, e identificou quatro defeitos (imagem corporativa, especialista e
+dois artigos). As demais capas tratam de situações técnicas específicas;
+“obras públicas”, limites legais e siglas técnicas nesses contextos são
+legítimos. Os três AVIF restantes são variantes do retrato, com origem no PNG
+registrado, não peças com texto. OCR não é alegação de cobertura semântica
+universal. Texto final das quatro capas foi inspecionado visualmente pelo
+agente integrador; logo e pessoa não representam cliente nem nova credencial.
+
+Pré-condições do probe de recebimento verificadas por consulta autenticada:
+credenciais existentes, contrato READY, destino WARMBLY_PRODUCTION_V1,
+auto_send_off=true e dispatch_attempted=false. Nenhum POST foi feito nessa
+consulta. A prova sintética final deve testar persistência/idempotência e
+destino sem disparos, não alegar leitura humana.
+
+### Retrato histórico de 08/09
 
 378 rotas no sitemap servido: 74 autorais + ~22 artigos editoriais + ~280
 `/oportunidades/` (um único modelo parametrizado, amostrado). A auditoria C1–C6

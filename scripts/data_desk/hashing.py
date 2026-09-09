@@ -8,6 +8,7 @@ from typing import Any
 
 HASH_FIELDS = (
     "id",
+    "title",
     "watermark",
     "permalink",
     "canonical",
@@ -23,6 +24,8 @@ HASH_FIELDS = (
     "creator",
     "publisher",
     "license",
+    "license_notice",
+    "license_url",
     "usage_guidance",
     "identifier",
     "provenance",

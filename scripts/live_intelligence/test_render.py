@@ -299,10 +299,20 @@ def test_family_index_never_claims_indexation_its_children_do_not_have():
     # list is not a claim that no public tender exists.
     assert "Nenhuma oportunidade está publicada neste momento" in html
     assert "não que não existam licitações abertas" in html
+    assert 'href="/triagem-tecnica/"' in html
+    assert 'href="mailto:tiago.sasaki@confenge.com.br?subject=' in html
+    assert 'href="tel:+5548988344559"' in html
+    assert "continua atendendo órgãos, construtoras e profissionais" in html
+    assert "Falar sobre uma destas oportunidades" not in html
 
 
 def test_family_index_reports_fixture_provenance_in_plain_words():
-    projection = R.load_projection()
+    # This assertion is specifically about the committed test-only projection.
+    # load_projection() deliberately prefers a host-accepted official projection
+    # when present, so bind the fixture path instead of letting machine state
+    # change what this test claims to exercise.
+    fixture = Path(__file__).resolve().parents[2] / R.DEFAULT_LIVE_DIR / R.OPPORTUNITIES_OUT
+    projection = R.load_projection(fixture)
     html = R.render_opportunities_index_html(
         R.renderable(projection), projection_kind=projection.get("source_kind")
     )

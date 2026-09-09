@@ -11,39 +11,9 @@
   "exceptions": [
     {
       "rule": "plain_language",
-      "match": "\\bunknown\\b",
-      "path": "conteudos/chuva-prorrogacao-prazo-obra-publica/index.html",
-      "reason": "A issue #127 e a autorizacao desta campanha exigem que dias efetivamente impactados permaneçam literalmente UNKNOWN quando evento, atividade, caminho critico, mitigacao ou causas concorrentes nao fecham o nexo. A pagina explica o termo em portugues como ausencia de evidencia suficiente; a excecao e route-exact e nao libera jargao em outra superficie."
-    },
-    {
-      "rule": "plain_language",
-      "match": "\\bfact\\b",
-      "path": "analises-contratos-publicos/index.html",
-      "reason": "O valor e a classe epistemica emitida pelo contrato de dados versionado que alimenta a pagina (contract-analysis, market-answers, market-panorama e o recorte public-read-margin-defense). E enum da fonte, exibido para o leitor conferir de onde vem cada afirmacao, nao texto de redacao. Traduzir o enum e escopo da issue #188 e exige mudar o contrato de dados junto."
-    },
-    {
-      "rule": "plain_language",
-      "match": "\\bfact\\b",
-      "path": "analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/index.html",
-      "reason": "O valor e a classe epistemica emitida pelo contrato de dados versionado que alimenta a pagina (contract-analysis, market-answers, market-panorama e o recorte public-read-margin-defense). E enum da fonte, exibido para o leitor conferir de onde vem cada afirmacao, nao texto de redacao. Traduzir o enum e escopo da issue #188 e exige mudar o contrato de dados junto."
-    },
-    {
-      "rule": "plain_language",
       "match": "\\bfact\\b",
       "path": "politica-editorial/historico/index.html",
       "reason": "Arquivo historico congelado da politica anterior. O texto e preservado byte a byte porque e o registro do que a politica realmente dizia; reescreve-lo seria falsificar o historico. A obrigacao de conservar o registro e distinta da decisao de publica-lo, e a versao vigente (1.2.0) nao usa este vocabulario. Retirada da web permanece possivel sem tocar no registro."
-    },
-    {
-      "rule": "plain_language",
-      "match": "\\bcalculation\\b",
-      "path": "analises-contratos-publicos/index.html",
-      "reason": "O valor e a classe epistemica emitida pelo contrato de dados versionado que alimenta a pagina (contract-analysis, market-answers, market-panorama e o recorte public-read-margin-defense). E enum da fonte, exibido para o leitor conferir de onde vem cada afirmacao, nao texto de redacao. Traduzir o enum e escopo da issue #188 e exige mudar o contrato de dados junto."
-    },
-    {
-      "rule": "plain_language",
-      "match": "\\bcalculation\\b",
-      "path": "analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/index.html",
-      "reason": "O valor e a classe epistemica emitida pelo contrato de dados versionado que alimenta a pagina (contract-analysis, market-answers, market-panorama e o recorte public-read-margin-defense). E enum da fonte, exibido para o leitor conferir de onde vem cada afirmacao, nao texto de redacao. Traduzir o enum e escopo da issue #188 e exige mudar o contrato de dados junto."
     },
     {
       "rule": "plain_language",
@@ -54,68 +24,8 @@
     {
       "rule": "plain_language",
       "match": "\\binference\\b",
-      "path": "analises-contratos-publicos/index.html",
-      "reason": "O valor e a classe epistemica emitida pelo contrato de dados versionado que alimenta a pagina (contract-analysis, market-answers, market-panorama e o recorte public-read-margin-defense). E enum da fonte, exibido para o leitor conferir de onde vem cada afirmacao, nao texto de redacao. Traduzir o enum e escopo da issue #188 e exige mudar o contrato de dados junto."
-    },
-    {
-      "rule": "plain_language",
-      "match": "\\binference\\b",
-      "path": "analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/index.html",
-      "reason": "O valor e a classe epistemica emitida pelo contrato de dados versionado que alimenta a pagina (contract-analysis, market-answers, market-panorama e o recorte public-read-margin-defense). E enum da fonte, exibido para o leitor conferir de onde vem cada afirmacao, nao texto de redacao. Traduzir o enum e escopo da issue #188 e exige mudar o contrato de dados junto."
-    },
-    {
-      "rule": "plain_language",
-      "match": "\\binference\\b",
       "path": "politica-editorial/historico/index.html",
       "reason": "Arquivo historico congelado da politica anterior. O texto e preservado byte a byte porque e o registro do que a politica realmente dizia; reescreve-lo seria falsificar o historico. A obrigacao de conservar o registro e distinta da decisao de publica-lo, e a versao vigente (1.2.0) nao usa este vocabulario. Retirada da web permanece possivel sem tocar no registro."
-    },
-    {
-      "rule": "plain_language",
-      "match": "\\bunknown\\b",
-      "path": "analises-contratos-publicos/aditivo-saldo-art125-item-novo/index.html",
-      "reason": "O valor e a classe epistemica emitida pelo contrato de dados versionado que alimenta a pagina (contract-analysis, market-answers, market-panorama e o recorte public-read-margin-defense). E enum da fonte, exibido para o leitor conferir de onde vem cada afirmacao, nao texto de redacao. Traduzir o enum e escopo da issue #188 e exige mudar o contrato de dados junto."
-    },
-    {
-      "rule": "plain_language",
-      "match": "\\bunknown\\b",
-      "path": "analises-contratos-publicos/atraso-eventos-sem-comunicacao-contemporanea/index.html",
-      "reason": "O valor e a classe epistemica emitida pelo contrato de dados versionado que alimenta a pagina (contract-analysis, market-answers, market-panorama e o recorte public-read-margin-defense). E enum da fonte, exibido para o leitor conferir de onde vem cada afirmacao, nao texto de redacao. Traduzir o enum e escopo da issue #188 e exige mudar o contrato de dados junto."
-    },
-    {
-      "rule": "plain_language",
-      "match": "\\bunknown\\b",
-      "path": "analises-contratos-publicos/bdi-composicao-vs-referencia-sc/index.html",
-      "reason": "O valor e a classe epistemica emitida pelo contrato de dados versionado que alimenta a pagina (contract-analysis, market-answers, market-panorama e o recorte public-read-margin-defense). E enum da fonte, exibido para o leitor conferir de onde vem cada afirmacao, nao texto de redacao. Traduzir o enum e escopo da issue #188 e exige mudar o contrato de dados junto."
-    },
-    {
-      "rule": "plain_language",
-      "match": "\\bunknown\\b",
-      "path": "analises-contratos-publicos/comparaveis-rejeitados-regime-distinto/index.html",
-      "reason": "O valor e a classe epistemica emitida pelo contrato de dados versionado que alimenta a pagina (contract-analysis, market-answers, market-panorama e o recorte public-read-margin-defense). E enum da fonte, exibido para o leitor conferir de onde vem cada afirmacao, nao texto de redacao. Traduzir o enum e escopo da issue #188 e exige mudar o contrato de dados junto."
-    },
-    {
-      "rule": "plain_language",
-      "match": "\\bunknown\\b",
-      "path": "analises-contratos-publicos/index.html",
-      "reason": "O valor e a classe epistemica emitida pelo contrato de dados versionado que alimenta a pagina (contract-analysis, market-answers, market-panorama e o recorte public-read-margin-defense). E enum da fonte, exibido para o leitor conferir de onde vem cada afirmacao, nao texto de redacao. Traduzir o enum e escopo da issue #188 e exige mudar o contrato de dados junto."
-    },
-    {
-      "rule": "plain_language",
-      "match": "\\bunknown\\b",
-      "path": "analises-contratos-publicos/reajuste-aniversario-serie-indice/index.html",
-      "reason": "O valor e a classe epistemica emitida pelo contrato de dados versionado que alimenta a pagina (contract-analysis, market-answers, market-panorama e o recorte public-read-margin-defense). E enum da fonte, exibido para o leitor conferir de onde vem cada afirmacao, nao texto de redacao. Traduzir o enum e escopo da issue #188 e exige mudar o contrato de dados junto."
-    },
-    {
-      "rule": "plain_language",
-      "match": "\\bunknown\\b",
-      "path": "analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/index.html",
-      "reason": "O valor e a classe epistemica emitida pelo contrato de dados versionado que alimenta a pagina (contract-analysis, market-answers, market-panorama e o recorte public-read-margin-defense). E enum da fonte, exibido para o leitor conferir de onde vem cada afirmacao, nao texto de redacao. Traduzir o enum e escopo da issue #188 e exige mudar o contrato de dados junto."
-    },
-    {
-      "rule": "plain_language",
-      "match": "\\bunknown\\b",
-      "path": "inteligencia/valor-tipico-contratos-pavimentacao/index.html",
-      "reason": "O valor e a classe epistemica emitida pelo contrato de dados versionado que alimenta a pagina (contract-analysis, market-answers, market-panorama e o recorte public-read-margin-defense). E enum da fonte, exibido para o leitor conferir de onde vem cada afirmacao, nao texto de redacao. Traduzir o enum e escopo da issue #188 e exige mudar o contrato de dados junto."
     },
     {
       "rule": "plain_language",

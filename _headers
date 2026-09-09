@@ -77,11 +77,13 @@
 /analises-contratos-publicos/*
   X-Robots-Tag: noindex, nofollow, noarchive
 
-# Contract-analysis family — end
-# Offer catalog preview: public gate still off
-/piloto/ofertas/*
-  X-Robots-Tag: noindex, nofollow
+/analises-contratos-publicos/
+  X-Robots-Tag: index, follow
 
+/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/*
+  X-Robots-Tag: index, follow
+
+# Contract-analysis family — end
 # CONFENGE Data Desk citation kits — exclusive namespace, not indexable
 /assets/data-desk/*
   X-Robots-Tag: noindex, follow

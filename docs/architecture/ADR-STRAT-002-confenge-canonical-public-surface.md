@@ -8,7 +8,32 @@
 - **Amendment authority:** [#577](https://github.com/tjsasakifln/web-cfg/issues/577), [#578](https://github.com/tjsasakifln/web-cfg/issues/578), [#583](https://github.com/tjsasakifln/web-cfg/issues/583) and ADR-STRAT-004
 - **Taxonomy contract:** `CONFENGE_CORPORATE_TAXONOMY/1.0.0` in `data/corporate/taxonomy.v1.json`
 
-## Amendment 2026-09-05 (current)
+## Amendment 2026-09-09 (current)
+
+The founder's EXECUTE_NOW decision authorizes the continuing #611 commercial
+revision, including shared contracts, generators, public copy and publication
+checks. The public opening names engineering projects and services for public
+and private needs. The 2026-09-05 restrictions preserving B2G-only home/chrome
+and limiting shared-registry integration to MV-09 are superseded. URL-specific
+remediation may correct approved analyses or withdraw unapproved drafts while
+preserving their internal sources; noindex is not access control. Protect useful
+public-works routes and genuine sources, not obsolete editorial deficits.
+Price/contact and professional-responsibility semantics follow the 2026-09-09
+amendment of ADR-STRAT-004. Identity, owner planes and runtime are unchanged.
+
+The canonical release workflow executes the release controller carried by the
+same checksummed, attested bundle, after matching its bytes to the exact gated
+checkout and its payload manifest. SSH streams those verified bytes to Python
+under the existing deploy account; it does not replace root-owned launchers,
+change sudo permissions or edit public files. Automatic and manual promotions
+share one workflow concurrency group, with a host-side predecessor check under
+the deployment lock. Rollback uses the verified controller of the promoted
+bundle and verifies the previous release, including its accepted data snapshot.
+This replaces the assumption that a one-time installed controller incorporates
+future repository fixes. Root-owned runtime launchers and persistent order
+storage remain unchanged.
+
+## Amendment 2026-09-05 (structural decision; editorial limits amended above)
 
 On 2026-09-04 the founder recorded that CONFENGE is the umbrella public brand
 for **Engenharia, Perícias e Inteligência Técnica** (Engineering, Expert
@@ -155,7 +180,7 @@ Priority is assessed with a shared model: `(demand × commercial relevance × re
 - Legacy URLs are mapped individually to migrate, redirect or retire; blanket redirects to the home page are prohibited.
 - Existing implementation role names may remain temporarily for compatibility but do not define architectural ownership.
 - The public runtime host for `confenge.com.br` is the nginx/Netcup VPS plane recorded in [RUNTIME-AUTHORITY.md](RUNTIME-AUTHORITY.md) (`confenge-nginx-node/v2`). Netlify is a leftover/preview plane, not production.
-- Navigation, footer, home, forms and rendered schema continue to describe the current B2G surface until later campaigns consume the taxonomy. Tests that assert that current HTML remain `KEEP_VERTICAL`.
+- Navigation, footer, home, forms and rendered schema consume the public intent matrix for public and private engineering needs. Preserve the public-works specialization within that broader offer.
 
 ## Rejected alternatives
 

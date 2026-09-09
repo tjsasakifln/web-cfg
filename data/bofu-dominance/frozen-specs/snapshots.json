@@ -48,8 +48,8 @@
         "whatsapp_present": true,
         "form_count": 0
       },
-      "content_sha256": "9fc3bd1e48dbeb4596a579628681e15c7954b249b929ca41cfe3c9effce5c6b1",
-      "bytes": 26133,
+      "content_sha256": "c9f37bdfa249ad3f0f2869774d48e33b6f5a3f921919df252b5a96eda96b6ac0",
+      "bytes": 26768,
       "noindex": false
     },
     {
@@ -98,8 +98,8 @@
         "whatsapp_present": true,
         "form_count": 0
       },
-      "content_sha256": "e340408565d0c02760f2c44e334d112db712ca955a9ce332ed8f28efbea1777d",
-      "bytes": 28271,
+      "content_sha256": "fe3d3c644ac158dae63f85369301da200b5f4de025b0db3364b9cb3e3d929c61",
+      "bytes": 28756,
       "noindex": false
     },
     {
@@ -148,8 +148,8 @@
         "whatsapp_present": true,
         "form_count": 0
       },
-      "content_sha256": "0da041de3a009ccacbb06d22354d894b9ad9472c7f4115f07e5f014b76dae996",
-      "bytes": 24625,
+      "content_sha256": "11d0cf94f61308da770640898df3019f4cbdd0b3dcd42f9df8ad73a8aa79d6ca",
+      "bytes": 24941,
       "noindex": false
     },
     {
@@ -191,15 +191,15 @@
           {
             "position": "pillar_bridge",
             "href": "/diretoria-b2g/",
-            "text": "Operação B2G continuada"
+            "text": "Diretoria Fracionada para o Mercado Público"
           }
         ],
         "when_not_to_hire": true,
         "whatsapp_present": true,
         "form_count": 0
       },
-      "content_sha256": "04086a6fde3f42b24a48d6c8b4527fd6888eeda0ac62976b2a693a2807904949",
-      "bytes": 28879,
+      "content_sha256": "fb2fa86a4c47f7d0fe83a322c2157097a696f234bc5ca00732b900128eaedb78",
+      "bytes": 29415,
       "noindex": false
     },
     {
@@ -207,7 +207,7 @@
       "path": "/diagnostico-b2g-360/",
       "html_rel": "diagnostico-b2g-360/index.html",
       "title": "Diagnóstico da Operação em Obras Públicas | CONFENGE",
-      "meta_description": "Mapeie capacidade, mercado, acervo, carteira de oportunidades e riscos da operação B2G. Plano executivo de 90 dias para prioridades e backlog de implantação.",
+      "meta_description": "Mapeie capacidade, mercado, acervo, carteira de oportunidades e riscos da operação em obras públicas. Plano executivo de 90 dias para prioridades e ações para implantação.",
       "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
       "canonical": "https://confenge.com.br/diagnostico-b2g-360/",
       "og_title": "Mapeie onde a frente pública perde tempo, margem e controle.",
@@ -255,8 +255,8 @@
         "whatsapp_present": true,
         "form_count": 0
       },
-      "content_sha256": "3c612cb3c2282ebaddb32ade526433f061f3e4dc8a32be01e04e8695e699bdcd",
-      "bytes": 21339,
+      "content_sha256": "101b019cb8113967cd7ffd50b07d1011af982ac22dd449aefcc868bff4b79409",
+      "bytes": 21389,
       "noindex": false
     },
     {
@@ -305,8 +305,8 @@
         "whatsapp_present": true,
         "form_count": 0
       },
-      "content_sha256": "488d89d650d56c09cfde525ba057061558b5c61c6c7d72efdecde5acf631a7a3",
-      "bytes": 23361,
+      "content_sha256": "65c6ea2c235ef0db5629922ed18c578bde2ef585339d6adec86830014e1229f4",
+      "bytes": 23690,
       "noindex": false
     }
   ]

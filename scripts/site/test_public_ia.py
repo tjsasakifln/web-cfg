@@ -52,12 +52,16 @@ def test_ia_contract_is_valid_without_html():
     assert len(situations) == 5
     assert sum(row["href"] == "/servicos-obras-publicas/" for row in situations) == 1
     by_id = {row["id"]: row for row in situations}
-    assert by_id["project_delivery"]["href"] == "/quantitativos-orcamento-obras/"
-    assert by_id["project_delivery"]["index_state"] == "private_wedge_index"
+    assert by_id["project_delivery"]["href"] == "/servicos/#servico-projeto"
+    assert by_id["project_delivery"]["index_state"] == "service_hub_index"
     assert by_id["project_delivery"]["scope"]
+    assert by_id["building_diagnosis"]["href"] == "/servicos/#servico-diagnostico"
+    assert by_id["building_diagnosis"]["index_state"] == "service_hub_index"
+    assert by_id["expert_evidence_valuation"]["href"] == "/servicos/#servico-pericia"
+    assert by_id["occupational_safety"]["href"] == "/servicos/#servico-sst"
     assert all(
-        by_id[item]["href"].startswith("/triagem-tecnica/#")
-        for item in ("building_diagnosis", "expert_evidence_valuation", "occupational_safety")
+        by_id[item]["index_state"] == "service_hub_index"
+        for item in ("expert_evidence_valuation", "occupational_safety")
     )
 
 
@@ -204,6 +208,26 @@ def test_footer_is_not_a_taxonomy_dump():
     assert "Inteligência" not in rendered
     assert "Metodologia" not in rendered
     assert rendered.count("<a ") <= 16
+
+
+def _assert_national_service_is_conditioned(rendered: str) -> None:
+    copy = rendered.casefold()
+    assert "brasil" in copy or "nacional" in copy
+    assert "escopo" in copy
+    assert "local" in copy
+    assert any(term in copy for term in ("modalidade", "vistoria", "campo"))
+    assert "<span>atendimento nacional</span>" not in copy
+
+
+def test_footer_conditions_national_service_on_scope_location_and_modality(monkeypatch):
+    _assert_national_service_is_conditioned(footer_columns_html())
+
+    # The pSEO fallback must preserve the same commercial condition even if the
+    # shared IA module is unavailable during an isolated generator execution.
+    from scripts.pseo import html_shell
+
+    monkeypatch.setattr(html_shell, "_footer_columns_html", None)
+    _assert_national_service_is_conditioned(html_shell._build_footer())
 
 
 def test_primary_nav_hygiene_and_no_indexable_orphans():

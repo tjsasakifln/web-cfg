@@ -13,7 +13,7 @@ CANONICAL_SOURCE = (
     "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/"
 )
 APPROVED_PAYLOAD_HASH = "568880b7eacf30e2adaf7481945fa50cfc77039be10b27ffc6af0959bf6c6d9d"
-APPROVED_RENDERED_HASH = "185dcd038951689ef1482973c7bdc51d858c01b77bfeb460a2d05e2ece8d39fa"
+APPROVED_RENDERED_HASH = "a7142fd5baa7ac3a97debb32bc6645672fcd261d9deaf182a5aacf5b78930279"
 EXPORT_REL = Path("data/extra-cli/public-read-market-answer-pavimentacao/1.0/export.json")
 APPROVALS_REL = Path("data/editorial/market-answers/approvals.json")
 LKG_REL = Path("data/editorial/market-answers/lkg.json")

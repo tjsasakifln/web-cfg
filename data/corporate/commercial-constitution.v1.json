@@ -1,7 +1,7 @@
 {
   "schema": "confenge.commercial-constitution/1.0",
   "contract": "CONFENGE_COMMERCIAL_CONSTITUTION/1.0.0",
-  "effective_at": "2026-09-05",
+  "effective_at": "2026-09-09",
   "campaign": "CONFENGE_MV_CAMPAIGN=01",
   "decision_state": {
     "priority": "P0",
@@ -22,9 +22,12 @@
     "single_public_identity": true,
     "subbrands_allowed": false
   },
-  "commercial_thesis_pt_br": "A CONFENGE transforma situações de engenharia que exigem decisão, prova ou coordenação em entregas técnicas delimitadas. Obras públicas e B2G permanecem uma vertical forte; não definem sozinhas a categoria corporativa.",
+  "commercial_thesis_pt_br": "A CONFENGE elabora projetos e presta serviços de engenharia para necessidades públicas e privadas, com revisão, compatibilização, orçamentos, análises e entregas técnicas delimitadas. A especialização em obras públicas complementa a oferta corporativa.",
   "clarity_rules": [
     "A entrada pública começa pela situação que o comprador reconhece, não pelo organograma interno.",
+    "Explique o trabalho, o conteúdo da entrega, sua utilidade, o fundamento verdadeiro de confiança e o contato funcional; mantenha estados operacionais e contadores de maturidade no ambiente interno.",
+    "Porte, orçamento desconhecido, documentos iniciais incompletos ou disciplina não listada não recusam automaticamente o contato; confirme as condições técnicas antes da contratação.",
+    "Preço autorizado exige condições materiais verdadeiras e contato contextual funcional. Formulário específico não decorre apenas da presença de preço; confirmação de pedido depende de persistência real.",
     "Uma demanda só vira oferta quando existe unidade de trabalho, entrega, método, fronteira material e próximo estado úteis.",
     "Capacidade modelada não prova atribuição profissional, disponibilidade, experiência, preço, prazo ou resultado.",
     "Demanda plausível sem enquadramento seguro termina em NEEDS_CONTEXT ou GAP; nunca cria SKU automaticamente.",

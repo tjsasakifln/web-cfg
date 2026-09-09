@@ -576,8 +576,19 @@ def render_opportunities_index_html(
             _index_item_html(record, projection_kind=projection_kind) for record in records
         )
         listing = f'<ul class="card-grid" id="lista-oportunidades">\n{items}\n</ul>'
+        next_step = """<p>Duas ações possíveis a partir desta lista:</p>
+<div class="journey-next">
+<a class="button button-primary" data-intel-cta="analyze" data-cta-id="intel_analyze_company" data-cta-position="opportunity_index_next_action" href="{company_route}">Analisar para minha empresa</a>
+<a class="button button-secondary" data-cta-id="intel_talk_to_engineer" data-cta-position="opportunity_index_next_action" href="/#formulario-contato">Falar sobre uma destas oportunidades</a>
+</div>""".format(company_route=e(COMPANY_ROUTE_PREFIX))
     else:
         listing = f'<p id="lista-oportunidades">{e(INDEX_EMPTY_PT)}</p>'
+        next_step = """<p>O monitor depende de dados oficiais atuais. Enquanto não há uma oportunidade publicada, a CONFENGE continua atendendo órgãos, construtoras e profissionais que precisam preparar uma licitação, avaliar um edital ou organizar uma decisão contratual.</p>
+<div class="journey-next">
+<a class="button button-primary" data-cta-id="intel_talk_to_engineer" data-cta-position="opportunity_index_empty" href="/triagem-tecnica/">Conversar sobre a necessidade</a>
+<a class="button button-secondary" href="mailto:tiago.sasaki@confenge.com.br?subject=Obras%20p%C3%BAblicas%20-%20contato">Escrever por e-mail</a>
+<a class="button button-secondary" href="tel:+5548988344559">Ligar para a CONFENGE</a>
+</div>"""
     json_ld = json.dumps(
         {
             "@context": "https://schema.org",
@@ -635,11 +646,7 @@ def render_opportunities_index_html(
 
 <section class="section" id="proximo-passo">
 <h2>Próximo passo</h2>
-<p>Duas ações possíveis a partir desta lista:</p>
-<div class="journey-next">
-<a class="button button-primary" data-intel-cta="analyze" data-cta-id="intel_analyze_company" data-cta-position="opportunity_index_next_action" href="{e(COMPANY_ROUTE_PREFIX)}">Analisar para minha empresa</a>
-<a class="button button-secondary" data-cta-id="intel_talk_to_engineer" data-cta-position="opportunity_index_next_action" href="/#formulario-contato">Falar sobre uma destas oportunidades</a>
-</div>
+{next_step}
 <p><a href="/ferramentas/">Ver outras ferramentas públicas</a></p>
 </section>
 </article>

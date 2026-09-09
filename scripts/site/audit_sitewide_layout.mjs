@@ -28,7 +28,7 @@ const ROOT = resolve(fileURLToPath(new URL("../..", import.meta.url)));
 const PORT = Number(process.env.LAYOUT_AUDIT_PORT || 8796);
 const CHROME = resolveChromePath();
 const SITE_ROOT = resolveSiteRoot();
-const VIEWPORTS = [360, 390, 768, 1024, 1440, 1920];
+const VIEWPORTS = [360, 390, 768, 1024, 1366, 1440, 1920];
 const CRITICAL_ROUTES = [
   "/",
   "/acompanhamento-contratos-obras/",
@@ -44,8 +44,10 @@ const CRITICAL_ROUTES = [
   "/conteudos/documentos-reequilibrio-obra-publica/",
   "/conteudos/",
   "/inteligencia/",
-  "/analises-contratos-publicos/aditivo-saldo-art125-item-novo/",
-  "/panorama-mercado-obras-publicas/obras-publicas-sc-2026-08/",
+  "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
+  // The unapproved panorama fixture is retired from publication. Exercise the
+  // approved historical market answer as the public data-analysis composition.
+  "/inteligencia/valor-tipico-contratos-pavimentacao/",
   "/entregas/",
   "/casos/",
   "/especialista/tiago-jun-sasaki/",

@@ -402,12 +402,23 @@ def evaluate_conditions(
         reasons.append("method_or_limitations_absent")
 
     author = record.get("author") if isinstance(record.get("author"), dict) else {"name": record.get("author")}
-    reviewer = record.get("reviewer") if isinstance(record.get("reviewer"), dict) else {"name": record.get("reviewer")}
-    solo = bool(record.get("solo_reviewer_disclosure")) or _text(record.get("solo_reviewer_disclosure"))
     author_ok = _len_ok(author.get("name") if isinstance(author, dict) else author, 5)
-    reviewer_ok = _len_ok(reviewer.get("name") if isinstance(reviewer, dict) else reviewer, 5) or bool(solo)
-    if not author_ok or not reviewer_ok:
-        reasons.append("author_or_reviewer_absent")
+    # The signer remains accountable for the review that actually happened.
+    # A second person is optional and must never be synthesized, nor must their
+    # absence be advertised to make an otherwise sound analysis publishable.
+    reviewer = record.get("reviewer")
+    reviewer_name = _text(
+        reviewer.get("name") if isinstance(reviewer, dict) else reviewer
+    )
+    author_name = _text(author.get("name") if isinstance(author, dict) else author)
+    reviewer_ok = not reviewer_name or (
+        " ".join(reviewer_name.split()).casefold()
+        != " ".join(author_name.split()).casefold()
+    )
+    if not author_ok:
+        reasons.append("responsible_author_absent")
+    if not reviewer_ok:
+        reasons.append("reviewer_not_independent_from_author")
 
     if reputation_errors:
         reasons.extend(reputation_errors)

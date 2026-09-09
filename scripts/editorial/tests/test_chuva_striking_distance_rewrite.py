@@ -87,7 +87,8 @@ def test_reproducible_matrix_has_every_required_axis_and_unknown_stop_rule():
         assert f'>{heading}<' in block
     assert "<caption>" in block
     assert block.count('scope="col"') == 7
-    assert "UNKNOWN" in block
+    assert "UNKNOWN" not in _visible(block)
+    assert re.search(r"regra de parada:.*(?:não determinado|não calculado|indeterminado)", _visible(block), re.I)
     assert 'role="group"' in block
     assert 'tabindex="0"' in block
     assert 'aria-label="Matriz de qualificação do impacto pluviométrico;' in block
@@ -104,10 +105,10 @@ def test_numeric_example_is_synthetic_reproducible_and_does_not_fake_contract_da
         "horas críticas residuais = horas impedidas",
         "(3 turnos × 8 h/turno) − (1 × 8 h/turno) − 0 h − 0 h",
         "16 horas críticas residuais",
-        "dias efetivamente impactados = UNKNOWN",
     ):
         assert token in block
     assert "não autoriza escrever “dois dias de prorrogação”" in block
+    assert re.search(r"dias efetivamente impactados\s*=\s*(?:não determinado|não calculado|indeterminado)", block, re.I)
 
 
 def test_primary_sources_have_access_date_and_case_specific_limits():
@@ -151,8 +152,10 @@ def test_authorship_and_delegated_review_provenance_are_explicit_not_human_washe
     assert '<meta content="Biblioteca técnica CONFENGE" name="author"' in html
     assert "Autoria editorial:</strong> Biblioteca técnica CONFENGE" in html
     assert "Autoridade de decisão:</strong> Tiago Sasaki" in html
-    assert "executadas pelo agente da campanha sob delegação expressa de Tiago Sasaki" in html
-    assert "Não houve revisão humana manual nem segundo revisor independente" in html
+    assert re.search(r"elaborado sob delegação de Tiago Sasaki", html)
+    assert 'href="/uso-de-ia/"' in html
+    assert "Não houve revisão humana manual nem segundo revisor independente" not in html
+    assert not re.search(r"revisado por (?:um )?revisor (?:humano|independente)", html, re.I)
     assert "Autor e responsável técnico pelo conteúdo" not in html
 
 

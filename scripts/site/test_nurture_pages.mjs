@@ -1,6 +1,7 @@
 import { readFileSync, existsSync } from "fs";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
+import vm from "node:vm";
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 
 const shellPages = [
@@ -99,12 +100,81 @@ const valueMarkers = [
   ["Confirme o e-mail", "confirmacao_de_email"],
   ["link de confirmação", "confirmacao_explicita"],
   ["nurture-form", "subscribe_form"],
+  ['rel="author" href="/especialista/tiago-jun-sasaki/"', "responsavel_vinculado"],
+  ['href="/confianca/"', "fontes_metodo_limites_vinculados"],
 ];
 for (const [needle, name] of valueMarkers) {
   if (!nurture.includes(needle)) {
     console.error("FAIL nurture_value", name);
     fail++;
   } else console.log("PASS nurture_value", name);
+}
+
+for (const leak of ["score honesto", "feeling", "Hub:", "E-mail corporativo", "j.error", "err.message"]) {
+  if (nurture.includes(leak)) {
+    console.error("FAIL nurture_internal_or_excluding_copy", leak);
+    fail++;
+  } else console.log("PASS nurture_public_copy", leak);
+}
+
+// Synthetic browser contract: exercise recoverable failures without making a
+// network request or sending an email. Hostile server/exception details must
+// never be copied into the visitor status region.
+const inline = nurture.match(/<script>\s*(document\.getElementById\('nurture-form'\)[\s\S]*?)<\/script>/)?.[1];
+if (!inline) {
+  console.error("FAIL nurture_inline_handler_missing");
+  fail++;
+} else {
+  async function exerciseFailure(fetchImpl, valid = true) {
+    let submit;
+    const button = { disabled: false };
+    const elements = {
+      "nurture-form": {
+        addEventListener(_name, handler) { submit = handler; },
+        querySelector() { return button; },
+        checkValidity() { return valid; },
+        reportValidity() {},
+      },
+      status: { hidden: true, textContent: "" },
+      email: { value: "pessoa@example.com" },
+      track: { value: "contrato" },
+      consent: { checked: true },
+    };
+    vm.runInNewContext(inline, {
+      document: { getElementById(id) { return elements[id]; } },
+      fetch: fetchImpl,
+      JSON,
+    });
+    await submit({ preventDefault() {}, currentTarget: elements["nurture-form"] });
+    return { status: elements.status, button };
+  }
+
+  const invalid = await exerciseFailure(async () => ({
+    ok: false,
+    status: 400,
+    async json() { return { error: "private_validation_detail" }; },
+  }));
+  const offline = await exerciseFailure(async () => {
+    throw new Error("private_network_detail");
+  });
+  let invalidFetchCalled = false;
+  const localInvalid = await exerciseFailure(async () => {
+    invalidFetchCalled = true;
+    throw new Error("must_not_fetch");
+  }, false);
+  for (const [name, result, secret] of [
+    ["invalid", invalid, "private_validation_detail"],
+    ["offline", offline, "private_network_detail"],
+  ]) {
+    if (result.status.hidden || result.button.disabled || result.status.textContent.includes(secret)) {
+      console.error("FAIL nurture_recoverable_error", name, result);
+      fail++;
+    } else console.log("PASS nurture_recoverable_error", name);
+  }
+  if (invalidFetchCalled || localInvalid.button.disabled || !/Revise os campos/.test(localInvalid.status.textContent)) {
+    console.error("FAIL nurture_local_validation", localInvalid);
+    fail++;
+  } else console.log("PASS nurture_local_validation");
 }
 
 if (fail) process.exit(1);

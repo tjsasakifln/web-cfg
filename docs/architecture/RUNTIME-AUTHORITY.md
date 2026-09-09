@@ -5,6 +5,15 @@ Operators and `scripts/site/runtime_authority.mjs` parse the YAML block below.
 There is one public production plane. Stage and legacy are named separately so
 they cannot be mistaken for it.
 
+Release-control clarification (2026-09-09): the canonical workflow executes
+`deploy/netcup/run_bundle_control.py`, streaming the controller from its exact
+checksummed release bundle over pinned SSH after gated-checkout byte equality.
+The host verifies the streamed digest before compilation. Root-owned runtime
+launchers and permissions are unchanged. New-release rollback uses the same
+verified controller bundle with `--operation rollback --rollback-target`, as
+documented in `deploy/netcup/README.md`; stored incoming bundles remain the
+recovery source after CI artifact expiration.
+
 Observed 2026-08-29: `https://confenge.com.br/` is proxied through Cloudflare
 and serves `Server: cloudflare` while preserving
 `X-Confenge-Host-Architecture-Version: confenge-nginx-node/v2` from the Netcup
@@ -65,7 +74,12 @@ public_canonical:
     ready: /ready
     ops: /.netlify/functions/ops?action=health
     ops_alias: /api/web/ops?action=health
-  rollback: /opt/confenge-web/bin/rollback FULL_SHA
+  rollback:
+    controller: deploy/netcup/run_bundle_control.py
+    controller_checkout: clean checkout at CONTROLLER_SHA
+    bundle_source: /opt/confenge-web/incoming/CONTROLLER_SHA exact three-file envelope
+    command: python3 deploy/netcup/run_bundle_control.py --bundle-directory BUNDLE_DIRECTORY --sha CONTROLLER_SHA --operation rollback --rollback-target PREVIOUS_SHA --target confenge-deploy@PINNED_HOST with pinned SSH options
+    legacy_host_launcher: /opt/confenge-web/bin/rollback PREVIOUS_SHA is a provisioning reference only
   release_root: /opt/confenge-web
   current_symlink: /opt/confenge-web/current
   purpose: public acquisition, utility, lead capture and conversion

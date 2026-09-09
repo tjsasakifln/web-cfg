@@ -25,6 +25,21 @@ def test_complete_live_record_can_index_when_alone():
     assert all(decision.conditions[name] for name in INDEX_CONDITIONS)
 
 
+def test_optional_reviewer_may_be_absent_but_cannot_repeat_author_identity():
+    absent = complete_live_record(reviewer={"name": "", "confirmed": False})
+    absent_decision = evaluate_publication(absent, cohort=[absent])
+    assert absent_decision.conditions["author_reviewer"] is True
+
+    same_person = complete_live_record(
+        author={"name": "Engº Tiago Sasaki"},
+        reviewer={"name": "  ENGº TIAGO SASAKI ", "confirmed": True},
+    )
+    decision = evaluate_publication(same_person, cohort=[same_person])
+    assert decision.state != "PUBLISHABLE_INDEX"
+    assert decision.conditions["author_reviewer"] is False
+    assert "reviewer_not_independent_from_author" in decision.reason_codes
+
+
 def test_missing_any_index_condition_blocks_index():
     knockouts = {
         "data_readiness": {"data_incomplete": True, "facts": []},

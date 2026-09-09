@@ -575,7 +575,7 @@ const cr = data.common_rules || {};
 assert("rule_pilot_does_not_change_other_items", cr.pilot_prices_do_not_change_other_items === true, cr.pilot_prices_do_not_change_other_items);
 assert("rule_capacity_gate_required_in_family", cr.capacity_gate_required_in_family === true, cr.capacity_gate_required_in_family);
 assert("rule_no_automatic_checkout_in_family", cr.automatic_checkout_anywhere_in_family === false, cr.automatic_checkout_anywhere_in_family);
-assert("rule_lead_capture_required_where_price_shows", cr.lead_capture_required_where_price_is_displayed === true, cr.lead_capture_required_where_price_is_displayed);
+assert("rule_contextual_contact_required_where_price_shows", cr.contextual_contact_required_where_price_is_displayed === true, cr.contextual_contact_required_where_price_is_displayed);
 assert("rule_nothing_originates_in_web_cfg", cr.no_data_or_identity_originates_in_web_cfg === true && cr.truth_and_provenance_remain_in === "extra-cli", [cr.no_data_or_identity_originates_in_web_cfg, cr.truth_and_provenance_remain_in]);
 assert("rule_no_success_fee", cr.no_success_fee === true, cr.no_success_fee);
 assert("rule_no_result_promise", cr.no_promise_of_result_or_award === true, cr.no_promise_of_result_or_award);

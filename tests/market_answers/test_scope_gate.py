@@ -62,7 +62,10 @@ def test_sc_page_plus_sc_payload_passes():
     assert 'id="cobertura"' in html
     assert 'id="missingness"' in html
     assert 'id="limitacoes"' in html
-    assert "source_as_of" in html
+    source_date = visitor_copy(record, payload)["source_as_of"]
+    assert f'<time datetime="{source_date}">{source_date}</time>' in html
+    assert "Fonte consultada em" in html
+    assert "source_as_of" not in html
 
 
 def test_official_live_sc_payload_indexes_when_approved():

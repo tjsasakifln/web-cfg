@@ -102,8 +102,9 @@ def test_matrix_names_five_surfaces_and_audit_chain():
         "como_corrigir",
     ]
     trigger = matrix["reviewer_trigger"]
-    assert "material_legal_claim" in trigger["required_when"]
+    assert trigger["required_when"] == []
     assert trigger["solo_responsible_allowed"] is True
+    assert "só é declarada" in trigger["definition"]
     servico = matrix["surfaces"]["servico"]
     assert servico["author"] == "required"
     assert servico["permission_class"] == "not_applicable"
@@ -113,8 +114,9 @@ def test_matrix_names_five_surfaces_and_audit_chain():
     caso = matrix["surfaces"]["caso_proof"]
     assert caso["permission_class"] == "required"
     tecnico = matrix["surfaces"]["conteudo_tecnico"]
-    assert tecnico["reviewer"] == "required_if_legal_claim"
+    assert tecnico["reviewer"] == "recommended"
     analise = matrix["surfaces"]["analise_tecnica_contrato"]
+    assert analise["reviewer"] == "recommended"
     assert analise["permission_class"] == "not_applicable"
     assert analise["methodology"] == "required"
     assert analise["as_of"] == "required"
@@ -136,7 +138,7 @@ def test_fail_closed_author_absent():
     assert "author_absent" in errors
 
 
-def test_fail_closed_reviewer_absent_when_legal_claim():
+def test_legal_claim_keeps_real_responsibility_without_advertising_reviewer_absence():
     html = _fixture(
         "<p>Autor: <a rel='author' href='/especialista/tiago-jun-sasaki/'>Engº Tiago Sasaki</a></p>"
         "<time datetime='2026-08-15'>15 de agosto de 2026</time>"
@@ -145,8 +147,8 @@ def test_fail_closed_reviewer_absent_when_legal_claim():
         "<a href='/correcoes/'>Correções</a>"
     )
     errors = check_required_slots(html, "conteudo_tecnico")
-    assert "reviewer_absent" in errors
-    # 2026-09-08. O slot de revisor era cumprido publicando "Sem revisao
+    assert "reviewer_absent" not in errors
+    # 2026-09-09. O slot de revisor era cumprido publicando "Sem revisao
     # independente: nao ha segundo revisor nomeado" -- um inventario de
     # credencial ausente exibido ao comprador na pagina de oferta. A
     # propriedade real e outra e continua exigida: a pagina precisa nomear
@@ -160,8 +162,8 @@ def test_fail_closed_reviewer_absent_when_legal_claim():
     assert "reviewer_absent" not in check_required_slots(html_ok, "conteudo_tecnico")
 
 
-def test_fail_closed_reviewer_absent_when_lei_14133_without_numero_or_artigo():
-    """Site copy often says 'Lei 14.133' with neither nº nor art. Still a legal claim."""
+def test_lei_14133_without_numero_is_detected_but_does_not_invent_reviewer():
+    """A claim stays detectable for source/limit controls without a fake reviewer."""
     html = _fixture(
         "<p>Autor: <a rel='author' href='/especialista/tiago-jun-sasaki/'>Engº Tiago Sasaki</a></p>"
         "<time datetime='2026-08-15'>15 de agosto de 2026</time>"
@@ -174,7 +176,7 @@ def test_fail_closed_reviewer_absent_when_lei_14133_without_numero_or_artigo():
     assert "nº" not in html and "n°" not in html
     assert has_material_legal_claim(html) is True
     errors = check_required_slots(html, "conteudo_tecnico")
-    assert "reviewer_absent" in errors
+    assert "reviewer_absent" not in errors
 
 
 def test_fail_closed_schema_diverges_from_visible():
@@ -229,6 +231,20 @@ def test_fail_closed_credential_not_backed():
         "<li>Atendimento nacional</li></ul>"
     )
     assert check_credentials_against_proof(clean) == []
+
+
+def test_credential_scan_preserves_semantic_boundaries_without_hiding_inline_claims():
+    adjacent_cards = _fixture(
+        "<article><a>Entender perícia, assistência e avaliação</a></article>"
+        "<article><span>04</span><h2>Segurança do trabalho</h2></article>"
+    )
+    assert check_credentials_against_proof(adjacent_cards) == []
+
+    unsupported_inline_claim = _fixture(
+        "<p>Avaliação <strong>04</strong> estrelas comprovada.</p>"
+    )
+    errors = check_credentials_against_proof(unsupported_inline_claim)
+    assert any(error.startswith("credential_pattern_forbidden:") for error in errors)
 
 
 def test_fail_closed_case_missing_permission_class():
@@ -521,7 +537,7 @@ def test_classify_surface_from_real_paths():
     assert classify_surface("/ferramentas/limite-acrescimos-supressoes/") == "ferramenta"
     assert classify_surface("/radar/nacional-obras-publicas/") == "pesquisa_dataset"
     assert classify_surface("/casos/aditivo-art125-demonstrativo/") == "caso_proof"
-    assert classify_surface("/analises-contratos-publicos/bdi-composicao-vs-referencia-sc/") == "analise_tecnica_contrato"
+    assert classify_surface("/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/") == "analise_tecnica_contrato"
     assert classify_surface("/analises-contratos-publicos/") == "analise_tecnica_contrato"
     assert classify_surface("/analises-contratos-publicos/") != "caso_proof"
     assert classify_surface("/aditivos-obras-publicas/") == "servico"
@@ -812,7 +828,7 @@ def test_real_schema_types_mirror_visible_copy():
         "Person": ROOT / "especialista" / "tiago-jun-sasaki" / "index.html",
         "Article": ROOT
         / "analises-contratos-publicos"
-        / "bdi-composicao-vs-referencia-sc"
+        / "reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026"
         / "index.html",
         "Dataset": ROOT / "radar" / "nacional-obras-publicas" / "index.html",
         "BreadcrumbList": ROOT / "especialista" / "tiago-jun-sasaki" / "index.html",

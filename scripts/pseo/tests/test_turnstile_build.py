@@ -208,6 +208,9 @@ def _tracked_capture_html() -> list[tuple[str, str]]:
 # com Turnstile; quando a autoridade voltar a FINAL e o formulario voltar, as duas
 # rotas voltam para esta lista. A propriedade verificada continua a mesma: toda
 # rota que publica captura recebe widget e sitekey.
+# Em 2026-09-09, piloto/conversao-xray também saiu: a fonte segue como fixture
+# interna, mas o namespace /piloto/ foi retirado do artefato e responde 410. As
+# 25 rotas públicas de captura abaixo preservam a prova real do antiabuso.
 ISSUE_440_CAPTURE_ROUTES = {
     "acompanhamento-contratos-obras/index.html",
     "analise-cnpj/index.html",
@@ -233,7 +236,6 @@ ISSUE_440_CAPTURE_ROUTES = {
     "ferramentas/diagnostico-defesa-margem/index.html",
     "ferramentas/limite-acrescimos-supressoes/index.html",
     "index.html",
-    "piloto/conversao-xray/index.html",
     "servicos-obras-publicas/index.html",
 }
 

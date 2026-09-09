@@ -1,7 +1,7 @@
 format: frozen_patch_v1
 slug: diagnostico-pre-licitacao
 path: diagnostico-pre-licitacao/index.html
-content_sha256: c55a45d022f0f383bb86552b6fc818156b7f4d301a70708dd4028d69018d7590
+content_sha256: 65c6ea2c235ef0db5629922ed18c578bde2ef585339d6adec86830014e1229f4
 earliest_safe_action_at: 2026-09-16
 corresponding_issue: 128
 html_mutation_authorized: false

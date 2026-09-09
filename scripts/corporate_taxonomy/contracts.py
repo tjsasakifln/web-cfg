@@ -203,6 +203,15 @@ def validate_commercial_contracts(
         raise CommercialContractError("other_demand_must_need_context")
     if page.get("conversion", {}).get("inbound_authorizes_outbound") is not False:
         raise CommercialContractError("inbound_must_not_authorize_outbound")
+    conversion = page.get("conversion", {})
+    if conversion.get("priced_route_requires_lead_capture"):
+        raise CommercialContractError("price_alone_must_not_require_form")
+    if conversion.get("priced_route_requires_contextual_contact") is not True:
+        raise CommercialContractError("priced_contact_required")
+    if conversion.get("active_form_requires_verified_persistence") is not True:
+        raise CommercialContractError("active_form_persistence_required")
+    if conversion.get("direct_channel_open_is_receipt") is not False:
+        raise CommercialContractError("channel_open_is_not_receipt")
 
     if pricing.get("role") != "NON_AUTHORITATIVE_FAIL_CLOSED_PROJECTION":
         raise CommercialContractError("pricing_projection_role")

@@ -70,8 +70,26 @@ async function runLive() {
       return Boolean(org && person && [org.legalName, org.taxID, org.address?.streetAddress, person.jobTitle].every(value => document.body.innerText.includes(value)));
     }), "Organization/Person visible-schema parity missing");
     await page.goto(`${live}/triagem-tecnica/`, { waitUntil: "networkidle0" }); await new Promise(wait => setTimeout(wait, 400));
-    const config = await fetch(`${live}/.netlify/functions/adaptive-intake-config`);
-    check("live_triage_config_state", config.ok || await page.$eval('[type="submit"]', el => el.disabled), `config=${config.status}, submit enabled while unavailable`);
+    // WITHHELD removes the adaptive form from the served page.  Looking up a
+    // submit control in that state made this live proof fail for the correct
+    // visitor experience.  Evaluate the runtime response and DOM together so
+    // a retained form must be disabled, while a removed form must leave the
+    // three usable direct channels.
+    const triageState = await page.evaluate(async () => {
+      let status = 0; let ok = false;
+      try { const response = await fetch("/.netlify/functions/adaptive-intake-config"); status = response.status; ok = response.ok; } catch (_) {}
+      return {
+        status, ok,
+        submits: document.querySelectorAll('[type="submit"]').length,
+        disabled: [...document.querySelectorAll('[type="submit"]')].every(el => el.disabled),
+        channels: ["https://wa.me/", "mailto:", "tel:"].every(prefix => Boolean(document.querySelector(`a[href^="${prefix}"]`))),
+      };
+    });
+    check("live_triage_config_state",
+      triageState.ok
+        ? triageState.submits > 0 && !triageState.disabled
+        : (triageState.submits === 0 ? triageState.channels : triageState.disabled && triageState.channels),
+      JSON.stringify(triageState));
   } finally { await browser.close(); }
 }
 

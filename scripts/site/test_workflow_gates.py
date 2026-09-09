@@ -14,7 +14,10 @@ from __future__ import annotations
 import json
 import os
 import re
+import subprocess
 import sys
+import tempfile
+import textwrap
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -109,12 +112,17 @@ def test_site_ci_shape():
     if not text.lstrip().startswith("name: site-ci"):
         errors.append("site-ci workflow name must be 'site-ci'")
 
-    job = _job_block(text, "gates")
+    job = _job_block(text, "site_ci")
     if f"name: {EXPECTED_SITE_CI_JOB_NAME}" not in job and f'name: "{EXPECTED_SITE_CI_JOB_NAME}"' not in job:
         errors.append(
-            f"site-ci job 'gates' must set name: {EXPECTED_SITE_CI_JOB_NAME!r} "
+            f"site-ci aggregate job must set name: {EXPECTED_SITE_CI_JOB_NAME!r} "
             "(stable GitHub check context)"
         )
+    validation = _job_block(text, "gates")
+    if "name: site-validation" not in validation:
+        errors.append("site-ci validation job must have a distinct site-validation context")
+    if "needs: [gates, execution_evidence]" not in job:
+        errors.append("stable site-ci context must aggregate validation and execution evidence")
 
     # Triggers
     if "pull_request" not in text:
@@ -149,7 +157,7 @@ def test_site_ci_shape():
             errors.append("site-ci install must not fall back to bare npm install")
 
     # No continue-on-error on job or non-upload steps
-    if re.search(r"(?m)^\s+continue-on-error:\s*true\s*$", job):
+    if re.search(r"(?m)^\s+continue-on-error:\s*true\s*$", validation):
         # upload may use if: always() but not continue-on-error true on gates
         # Allow only if solely under a clearly named non-gate step — forbid any true
         errors.append("site-ci gates job must not use continue-on-error: true")
@@ -170,6 +178,7 @@ def test_site_ci_shape():
         "npm run test:diagnose-margin",
         "npm run editorial:test",
         "npm run discovery:test",
+        "npm run test:contact-journeys",
     ):
         if needle not in text:
             errors.append(f"site-ci missing required step command: {needle}")
@@ -209,6 +218,11 @@ def test_site_ci_shape():
         errors.append("site-ci must fail closed when UI geometry cannot launch Chrome")
     if "npm run audit:layout-sitewide" not in text:
         errors.append("site-ci must execute the full sitewide layout audit claimed by #293")
+    if "node scripts/site/measure_first_fold.mjs --artifact --report build/reports/first-fold-current.json" not in text:
+        errors.append("site-ci must measure the exact rendered artifact, not only read historical first-fold records")
+    fold_upload = text.split("- name: Preserve mandatory first-fold evidence", 1)[-1].split("- name:", 1)[0]
+    if "path: build/reports/first-fold-current.json" not in fold_upload or "if-no-files-found: error" not in fold_upload:
+        errors.append("site-ci must preserve mandatory first-fold evidence and reject its absence")
     if 'LH_HOME_RUNS: "3"' not in text:
         errors.append("site-ci must run the #185 home Lighthouse gate three times")
     for needle in ("npm run audit:accessibility", "npm run test:lighthouse-gates", "npm run audit:performance"):
@@ -659,6 +673,46 @@ def test_site_excellence_precedes_the_netcup_release_artifact():
         raise AssertionError("Netcup package must wait for site-ci and pSEO on the exact SHA")
 
 
+def test_required_execution_evidence_fails_closed_after_the_gate_job():
+    """The API-backed verifier catches skipped/neutral/missing mandatory steps."""
+    workflow = _read(SITE_CI)
+    evidence = _job_block(workflow, "execution_evidence")
+    required = (
+        "if: always()",
+        "needs: gates",
+        "actions: read",
+        "verify_required_execution.py",
+        '--required-job site-validation',
+        '--required-step "Contact and lead pathway gates"',
+        '--required-step "Final public-surface coverage and copy gate"',
+        '--required-step "Build public site"',
+        '--required-step "Playwright checklist on _site"',
+        '--required-step "Rendered first-fold measurement on exact artifact"',
+        '--required-step "Preserve mandatory first-fold evidence"',
+    )
+    for needle in required:
+        if needle not in (workflow if needle == "actions: read" else evidence):
+            raise AssertionError(f"required execution evidence missing {needle!r}")
+    verifier = ROOT / "scripts" / "site" / "verify_required_execution.py"
+    assert verifier.is_file(), "missing required execution verifier"
+    source = verifier.read_text(encoding="utf-8")
+    assert "empty-selection" in source
+    assert "endswith(\" / \" + required_job)" in source
+    assert "required step" in source and "head_sha" in source
+    # Execute a negative fixture against the real shape checker: retaining a
+    # green UI step cannot compensate for deleting the rendered measurement.
+    from unittest.mock import patch
+    original_read = _read
+    command = "node scripts/site/measure_first_fold.mjs --artifact --report build/reports/first-fold-current.json"
+    with patch.dict(globals(), {"_read": lambda file: original_read(file).replace(command, "") if file == SITE_CI else original_read(file)}):
+        try:
+            test_site_ci_shape()
+        except AssertionError as error:
+            assert "must measure the exact rendered artifact" in str(error)
+        else:
+            raise AssertionError("removed first-fold measurement command escaped the workflow gate")
+
+
 def test_deliberate_force_fail_env():
     """Controlled negative path: env forces red so CI can prove the test blocks."""
     if os.environ.get("WORKFLOW_GATE_FORCE_FAIL") == "1":
@@ -666,6 +720,103 @@ def test_deliberate_force_fail_env():
             "deliberate workflow-gate failure (WORKFLOW_GATE_FORCE_FAIL=1) — "
             "restore by unsetting the env var"
         )
+
+
+def _producer_checkout_errors(block: str) -> list[str]:
+    required = (
+        'EXTRA_CLI_REQUIRED: "1"',
+        'EXTRA_CLI_ROOT: ${{ runner.temp }}/extra-cli-contract',
+        'Path("data/pseo/manifest.json").read_text())["source_commit_sha"]',
+        're.fullmatch(r"[0-9a-f]{40}", sha)',
+        'git init --quiet "$EXTRA_CLI_ROOT"',
+        'fetch --no-tags --depth=1 https://github.com/tjsasakifln/extra-cli.git "${{ steps.producer-contract.outputs.sha }}"',
+        'git -C "$EXTRA_CLI_ROOT" checkout --quiet --detach FETCH_HEAD',
+        'printf \'EXTRA_CLI_ROOT=%s\\n\' "$EXTRA_CLI_ROOT" >> "$GITHUB_ENV"',
+        'test ! -e "$EXTRA_CLI_ROOT"',
+        'test ! -L "$EXTRA_CLI_ROOT"',
+        'git -C "$EXTRA_CLI_ROOT" rev-parse HEAD',
+    )
+    errors = [f"producer contract checkout missing {needle}" for needle in required if needle not in block]
+    if '${{ runner.' in block.split('    steps:', 1)[0]:
+        errors.append('runner context is unavailable in job-level env')
+    for name in (
+        "Resolve contracted producer revision",
+        "Checkout contracted producer for fixture integration",
+        "Verify contracted producer checkout",
+    ):
+        marker = f"- name: {name}"
+        if marker not in block:
+            errors.append(f"producer contract setup missing {name}")
+            continue
+        step = block.split(marker, 1)[1].split("\n      - ", 1)[0]
+        if re.search(r"(?m)^\s+(?:if|continue-on-error):", step):
+            errors.append(f"producer contract setup may be skipped: {name}")
+    return errors
+
+
+def test_cross_repo_fixture_integration_cannot_skip_or_use_an_unpinned_producer():
+    for workflow, job in ((SITE_CI, "gates"), (PSEO, "pseo")):
+        block = _job_block(_read(workflow), job)
+        assert not _producer_checkout_errors(block), _producer_checkout_errors(block)
+        for old, new in (
+            ('EXTRA_CLI_REQUIRED: "1"', 'EXTRA_CLI_REQUIRED: "0"'),
+            ('extra-cli.git "${{ steps.producer-contract.outputs.sha }}"', 'extra-cli.git main'),
+            ('https://github.com/tjsasakifln/extra-cli.git', 'https://github.com/unrelated/example.git'),
+            ('EXTRA_CLI_ROOT: ${{ runner.temp }}/extra-cli-contract', 'EXTRA_CLI_ROOT: ${{ github.workspace }}/.worktrees/extra-cli-contract'),
+            ('git init --quiet "$EXTRA_CLI_ROOT"', ':'),
+            ('- name: Verify contracted producer checkout', '- name: Verify contracted producer checkout\n        if: false'),
+        ):
+            assert _producer_checkout_errors(block.replace(old, new)), f"mutation escaped: {old}"
+        # Execute the real shell step, including absence, revision and no-clobber
+        # counterproofs. External CSS must leave the public-source tree entirely.
+        invalid_job_env = block.replace('    steps:', '      FIXTURE_ROOT: ${{ runner.temp }}/fixture\n    steps:', 1)
+        assert _producer_checkout_errors(invalid_job_env)
+        command = ''
+        for name in ('Checkout contracted producer for fixture integration', 'Verify contracted producer checkout'):
+            step = block.split(f'- name: {name}', 1)[1].split('\n      - ', 1)[0]
+            assert 'uses: actions/checkout@' not in step, 'external fixture must not leave a workspace-bound post-checkout action'
+            command += textwrap.dedent(step.split('run: |\n', 1)[1]) + '\n'
+        for scenario in ('matching', 'missing', 'wrong-revision', 'destination-exists', 'destination-symlink'):
+            with tempfile.TemporaryDirectory(prefix='producer-isolation-') as tmp:
+                fixture = Path(tmp)
+                workspace = fixture / 'workspace'
+                workspace.mkdir()
+                source = fixture / 'producer'
+                destination = fixture / 'runner-temp/extra-cli-contract'
+                destination.parent.mkdir()
+                sha = 'a' * 40
+                if scenario != 'missing':
+                    source.mkdir(parents=True)
+                    (source / 'external.css').write_text('.foreign{color:red}')
+                    for args in (['init', '-q'], ['add', '.'], ['-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.invalid', 'commit', '-qm', 'fixture']):
+                        subprocess.run(['git', '-C', str(source), *args], check=True, capture_output=True)
+                    sha = subprocess.check_output(['git', '-C', str(source), 'rev-parse', 'HEAD'], text=True).strip()
+                if scenario == 'destination-exists':
+                    destination.mkdir()
+                    (destination / 'keep').write_text('must not be overwritten')
+                if scenario == 'destination-symlink':
+                    destination.symlink_to(fixture / 'absent-target')
+                expected = 'b' * 40 if scenario == 'wrong-revision' else sha
+                env_file = fixture / 'github-env'
+                test_command = command.replace('${{ steps.producer-contract.outputs.sha }}', expected).replace('https://github.com/tjsasakifln/extra-cli.git', str(source))
+                result = subprocess.run(['bash', '-c', test_command], cwd=workspace, env={**os.environ, 'EXTRA_CLI_ROOT': str(destination), 'GITHUB_ENV': str(env_file)}, capture_output=True, text=True)
+                assert (result.returncode == 0) == (scenario == 'matching'), (scenario, result.stderr)
+                if scenario == 'matching':
+                    assert not list(workspace.rglob('*.css'))
+                    assert (destination / 'external.css').is_file()
+                    assert env_file.read_text() == f'EXTRA_CLI_ROOT={destination}\n'
+                else:
+                    assert not env_file.exists(), 'failed checkout must not expose a fixture root to later tests'
+                if scenario == 'destination-exists':
+                    assert (destination / 'keep').read_text() == 'must not be overwritten'
+                    assert (source / 'external.css').is_file()
+    evidence = _job_block(_read(SITE_CI), "execution_evidence")
+    for name in (
+        "Resolve contracted producer revision",
+        "Checkout contracted producer for fixture integration",
+        "Verify contracted producer checkout",
+    ):
+        assert f'--required-step "{name}"' in evidence
 
 
 def main() -> int:
@@ -684,6 +835,8 @@ def main() -> int:
         test_codeql_is_fail_closed,
         test_copy_ci_is_check_not_write,
         test_site_excellence_precedes_the_netcup_release_artifact,
+        test_required_execution_evidence_fails_closed_after_the_gate_job,
+        test_cross_repo_fixture_integration_cannot_skip_or_use_an_unpinned_producer,
         test_deliberate_force_fail_env,
     ]
     failed = 0

@@ -132,4 +132,12 @@ def test_home_contract_case_keeps_one_primary_hero_cta():
     assert "data-evidence-selector" not in hero
     assert "Prefiro WhatsApp" not in hero
     assert "Analisar meu contrato" not in hero
-    assert "Escolher minha situação" in hero
+    primary = re.search(r'<a\b[^>]*class="[^"]*button-primary[^"]*"[^>]*href="([^"]+)"[^>]*>([\s\S]*?)</a>', hero)
+    assert primary
+    href = primary.group(1)
+    if href.startswith("#"):
+        assert f'id="{href[1:]}"' in html
+    else:
+        assert href == "/servicos/"
+        assert (HOME.parent / "servicos/index.html").is_file()
+    assert re.search(r"servi[çc]o|situa[çc][aã]o|necessidade|projeto", primary.group(2), re.I)

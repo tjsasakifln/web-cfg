@@ -142,8 +142,13 @@ def test_progressive_catalog_never_serializes_false_integrity_conclusions() -> N
         assert forbidden not in f"{html}\n{client_data}"
     assert "data-exclusion=" not in html
     assert "confenge.public-deliverable-catalog/1.1" in client_data
-    assert "certificado, selo ou declaração" in client_data
-    assert "universal" in client_data
+    # The browser payload contains only the eight visitor-facing offers. The
+    # internal 54-item state inventory remains in its governed source, but is
+    # not shipped as a public maturity dashboard.
+    assert all(f'"cfg-d{number:02d}"' in client_data for number in range(1, 9))
+    assert '"cfg-d09"' not in client_data
+    assert "validate" not in client_data
+    assert "blocked" not in client_data
 
 
 def test_progressive_catalog_controls_keep_a_mobile_touch_target() -> None:
@@ -157,8 +162,8 @@ def test_progressive_catalog_controls_keep_a_mobile_touch_target() -> None:
         assert f"min-height:{minimum}px" in rule.group(1)
 
 
-def test_public_ia_separates_published_offers_from_taxative_capabilities() -> None:
-    """The buying showcase and the taxative capability roll are distinct sets."""
+def test_public_ia_separates_engineering_services_examples_and_priced_offers() -> None:
+    """Internal portfolio state remains governed without becoming buyer copy."""
     html = _html()
     registry = json.loads(
         (ROOT / "data/commercial/deliverables-registry.v1.json").read_text(
@@ -174,12 +179,15 @@ def test_public_ia_separates_published_offers_from_taxative_capabilities() -> No
         for state in expected_states
     } == expected_states
 
+    visible = _visible_text(html)
     h1 = _visible_text(re.search(r"<h1[^>]*>.*?</h1>", html, re.DOTALL).group(0))
-    assert "8 ofertas publicadas" in h1
-    # 2026-09-08. A vitrine deixou de publicar o estado comercial interno das
-    # capacidades nao vendaveis; o rol continua exigido, com o texto novo.
-    assert "54 frentes de trabalho" in _visible_text(html)
-    assert "oito têm oferta publicada" in _visible_text(html)
+    assert all(term in h1 for term in ("entregas", "engenharia"))
+    assert all(term in visible for term in ("serviço", "exemplo", "oferta"))
+    assert all(term in visible for term in ("projetos", "compatibilização", "orçamentos"))
+    assert "54 frentes de trabalho" not in visible
+    assert "rol taxativo" not in visible
+    assert "em validação" not in visible
+    assert "bloqueada" not in visible
 
     title = re.search(r"<title>([^<]+)</title>", html).group(1)
     description = re.search(r'<meta content="([^"]+)" name="description"/>', html).group(1)
@@ -187,28 +195,19 @@ def test_public_ia_separates_published_offers_from_taxative_capabilities() -> No
     og_description = re.search(
         r'<meta content="([^"]+)" property="og:description"/>', html
     ).group(1)
-    # 2026-09-08: o gate exigia o title literal "8 ofertas publicadas e 54
-    # capacidades, exemplos sintéticos | CONFENGE", o que fixava na aba do
-    # navegador a negação do valor da própria vitrine. A trava de redação foi
-    # trocada pelas propriedades que ela realmente protegia: o title continua
-    # declarando as 8 ofertas publicadas, as 54 capacidades, a marca, e segue
-    # proibido prometer 54 ofertas. A procedência sintética dos exemplos
-    # permanece verificada na description, no og:description e nos cards.
-    assert "8 ofertas publicadas" in title
-    assert "54 capacidades" in title
+    # Metadata describes the page's three public concepts without exporting
+    # the internal inventory or implying that examples are client cases.
+    assert all(term in title.casefold() for term in ("entregas", "ofertas", "confenge"))
     assert title.endswith("| CONFENGE")
-    assert "54 ofertas" not in title.casefold()
     for surface in (description, og_title, og_description):
-        assert "8" in surface
-        assert "54" in surface or "rol taxativo completo" in surface
-        assert "54 ofertas" not in surface.casefold()
+        assert "54" not in surface
+        assert "rol taxativo" not in surface.casefold()
 
     graph = _jsonld_graph()
     collection = next(node for node in graph if node.get("@type") == "CollectionPage")
     item_list = next(node for node in graph if node.get("@type") == "ItemList")
-    assert "8 ofertas publicadas" in collection["name"]
-    assert "54 capacidades" in collection["name"]
-    assert item_list["name"] == "8 ofertas publicadas da CONFENGE"
+    assert all(term in collection["name"].casefold() for term in ("entregas", "ofertas"))
+    assert all(term in item_list["name"].casefold() for term in ("ofertas", "confenge"))
     assert item_list["numberOfItems"] == len(item_list["itemListElement"]) == 8
 
     primary_ids = re.findall(
@@ -216,19 +215,7 @@ def test_public_ia_separates_published_offers_from_taxative_capabilities() -> No
     )
     assert primary_ids == [f"CFG-D{number:02d}" for number in range(1, 9)]
 
-    capability_rows = re.findall(
-        r'<li class="capability-item[^>]*data-capability-id="([^"]+)"'
-        r'[^>]*data-public-state="([^"]+)"',
-        html,
-    )
-    assert len(capability_rows) == 54
-    assert sorted(item_id for item_id, _ in capability_rows) == [
-        f"CFG-D{number:02d}" for number in range(1, 55)
-    ]
-    assert {
-        state: sum(row_state == state for _, row_state in capability_rows)
-        for state in expected_states
-    } == expected_states
+    assert 'class="capability-item' not in html
 
 
 def test_each_published_offer_has_one_primary_representation_with_essential_terms() -> None:
@@ -247,10 +234,10 @@ def test_each_published_offer_has_one_primary_representation_with_essential_term
         for label in (
             "situação",
             "decisão",
-            "entrada",
-            "objeto e limite",
+            "informações necessárias",
+            "trabalho incluído",
             "saída",
-            "sla",
+            "prazo",
             "preço",
             "pacote e crédito",
         ):
@@ -285,9 +272,9 @@ def test_progressive_catalog_css_does_not_block_first_paint() -> None:
 def test_hub_is_honest_about_every_published_example() -> None:
     html = _html()
     for phrase in (
-        "8 ofertas publicadas agora",
-        "Estas são as únicas ofertas com escopo, preço e SLA publicados",
-        "54 capacidades do rol taxativo",
+        "Serviços que terminam em documentos utilizáveis",
+        "Ofertas com preço publicado",
+        "Os preços e condições pertencem somente às ofertas que os exibem",
         "Radar de Licitações Prioritárias",
         "R$ 599 por unidade",
         "R$ 599 a R$ 3.750",
@@ -298,6 +285,7 @@ def test_hub_is_honest_about_every_published_example() -> None:
     library = re.sub(r"(?is)<form\b.*?</form>", "", html).casefold()
     assert "em breve" not in library
     assert "as 54 entregáveis" not in library
+    assert "rol taxativo" not in library
     assert "r$ 39.800" not in library
     cards = re.findall(r'<article class="vitrine-item', html)
     assert len(cards) == 8
@@ -338,13 +326,28 @@ def test_every_example_uses_the_same_action_label() -> None:
         assert f"Pedir análise de {name}" in html, name
 
 
+def test_synthetic_disclosure_does_not_relabel_real_price_or_credit_terms() -> None:
+    """Synthetic labels qualify the demonstrative link, never the actual offer terms."""
+
+    html = _html()
+    for number in range(1, 9):
+        card = re.search(
+            rf'id="entrega-0{number}"[\s\S]*?(?=<article class="vitrine-item"|<!-- GENERATED:PUBLIC-CATALOG:END -->)',
+            html,
+        )
+        assert card, number
+        credit = re.search(r'class="vitrine-item__credit">([\s\S]*?)</p>', card.group(0))
+        assert credit and not re.search(r"sint[eé]tic", _visible_text(credit.group(1)), re.I), number
+        assert re.search(r'aria-label="[^"]*(?:sint[eé]tico|sint[eé]tica)[^"]*"', card.group(0), re.I), number
+
+
 def test_the_library_has_one_name_across_its_own_surfaces() -> None:
     html = _html()
     title = re.search(r"<title>([^<]*)</title>", html).group(1)
     h1 = re.sub(r"<[^>]+>", " ", re.search(r"<h1[^>]*>(.*?)</h1>", html, re.DOTALL).group(1))
     breadcrumb = re.search(r'class="breadcrumbs container">(.*?)</nav>', html, re.DOTALL).group(1)
-    assert title.startswith("8 ofertas publicadas e 54 capacidades")
-    assert "8 ofertas publicadas" in h1.casefold()
+    assert all(term in title.casefold() for term in ("entregas", "ofertas", "confenge"))
+    assert all(term in h1.casefold() for term in ("entregas", "engenharia"))
     assert "Entregas" in breadcrumb
     assert "Exemplos de entregas da CONFENGE" not in html
     # The entry example carries the canonical #343 name here, on its own page and in JSON-LD.
@@ -354,8 +357,8 @@ def test_the_library_has_one_name_across_its_own_surfaces() -> None:
     assert "Modelo de relatório de inteligência" not in report
 
 
-def test_the_eight_are_decidable_once_before_the_taxative_roll() -> None:
-    """The decision nav and complete primary cards replace the repeated table."""
+def test_services_precede_the_eight_decidable_offers_without_internal_roll() -> None:
+    """Service explanation and complete offer cards replace the maturity roll."""
     html = _html()
     showcase = re.search(
         r'<div class="vitrine-items">(.*?)<dl class="compare-ladder-figures">',
@@ -364,15 +367,23 @@ def test_the_eight_are_decidable_once_before_the_taxative_roll() -> None:
     )
     assert showcase, "no published-offer showcase"
     surface = showcase.group(0)
+    assert html.index('id="servicos-e-entregas"') < html.index('id="enquadrar"')
     assert html.index('class="offer-decision-nav"') < html.index('id="entrega-01"')
-    assert html.index('id="entrega-08"') < html.index('id="rol-taxativo"')
+    decision_nav = re.search(r'<nav class="offer-decision-nav".*?</nav>', html, re.DOTALL)
+    assert decision_nav, "early offer decision navigation missing"
+    # These anchors land on authorized public offer cards, not on the separate
+    # /casos/ demonstrative examples. Their framing must not imply synthetic data.
+    nav_text = _visible_text(decision_nav.group(0)).casefold()
+    assert 'href="#entrega-' in decision_nav.group(0)
+    assert "sintét" not in nav_text
+    assert 'id="rol-taxativo"' not in html
     assert "compare-table" not in html
     for price in ("R$ 599", "R$ 690", "R$ 890", "R$ 1.200", "R$ 1.450", "R$ 1.900", "R$ 2.400", "R$ 3.750"):
         assert price in surface, price
     for route in LADDER_ROUTES:
         assert surface.count(f'href="{route}"') == 1, route
     assert surface.count('data-primary-offer="true"') == len(LADDER_ROUTES)
-    for label in ("Situação", "Decisão", "Entrada", "Objeto e limite", "Saída", "SLA"):
+    for label in ("Situação", "Decisão", "Informações necessárias", "Trabalho incluído", "Saída", "Prazo"):
         assert surface.count(f"<dt>{label}</dt>") == len(LADDER_ROUTES), label
 
 
@@ -699,7 +710,7 @@ def test_asset_identifiers_are_stable_and_do_not_contain_pii() -> None:
 
     home = _html(ROOT / "index.html")
     primary = re.search(
-        r'<a\b[^>]*data-cta-position="hero"[^>]*href="#situacoes"[^>]*>',
+        r'<a\b[^>]*data-cta-position="hero"[^>]*href="/servicos/"[^>]*>',
         home,
     )
     assert primary and 'data-event-name="cta_click"' in primary.group(0)

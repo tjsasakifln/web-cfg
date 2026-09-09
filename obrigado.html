@@ -5,13 +5,13 @@
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
 <meta content="noindex,follow" name="robots"/>
 <meta content="#061a33" name="theme-color"/>
-<title>Solicitação recebida | CONFENGE</title>
+<title>Status da solicitação | CONFENGE</title>
 <link href="/assets/favicon-32.png" rel="icon" sizes="32x32" type="image/png"/>
 <link href="/styles.css" rel="stylesheet"/>
 <script defer="" src="/script.js?v=fortune02"></script>
-<meta content="Confirmação de recebimento de solicitação enviada à CONFENGE." name="description"/>
+<meta content="Consulte a referência da sua solicitação e veja os próximos canais da CONFENGE." name="description"/>
 </head>
-<body class="simple-page" data-lead-success="1" data-journey="operacao">
+<body class="simple-page" data-journey="operacao">
 <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 <svg aria-hidden="true" class="svg-sprite" height="0" width="0">
 <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"></path></symbol>
@@ -26,7 +26,7 @@
 <a data-cta-position="header_nav" href="/servicos-obras-publicas/" style="min-height:44px">Obras públicas</a>
 <a data-cta-position="header_nav" href="/conteudos/" style="min-height:44px">Biblioteca</a>
 </nav>
-<a class="button button-primary header-cta" href="/triagem-tecnica/">Iniciar triagem</a>
+<a class="button button-primary header-cta" href="/triagem-tecnica/">Solicitar proposta</a>
 <button aria-controls="mobile-menu" aria-expanded="false" aria-label="Abrir menu" class="menu-toggle" type="button">
 <svg class="icon menu-open"><use href="#i-menu"></use></svg><svg class="icon menu-close"><use href="#i-close"></use></svg>
 </button>
@@ -35,28 +35,28 @@
 <a data-cta-position="mobile_nav" href="/servicos/" style="min-height:44px">Serviços e problemas</a>
 <a data-cta-position="mobile_nav" href="/servicos-obras-publicas/" style="min-height:44px">Obras públicas</a>
 <a data-cta-position="mobile_nav" href="/conteudos/" style="min-height:44px">Biblioteca</a>
-<a class="button button-primary" href="/triagem-tecnica/">Iniciar triagem</a>
+<a class="button button-primary" href="/triagem-tecnica/">Solicitar proposta</a>
 </nav>
 </header>
 <main class="simple-main" id="conteudo">
 <article class="simple-card">
-<p class="eyebrow">Solicitação recebida</p>
-<h1>Recebemos seu contato.</h1>
-<p>O próximo passo é enquadrar a necessidade (contrato sob pressão, edital em análise ou operação em obras públicas recorrente), a urgência e o formato de apoio.</p>
+<p class="eyebrow">Status da solicitação</p>
+<h1 id="confirmation-title" data-confirmed-title="Solicitação registrada.">Confira a referência do envio.</h1>
+<p id="confirmation-summary" data-confirmed-copy="O servidor registrou sua solicitação. O próximo passo é entender sua necessidade de projeto, serviço ou análise técnica, a urgência e o formato de apoio, para uma demanda pública ou privada.">O recebimento só é confirmado nesta página quando o protocolo retornado pelo servidor coincide com a referência mantida nesta sessão.</p>
 
 <p class="sla-box" id="receipt-id" hidden><strong>Protocolo de recebimento:</strong> <code></code></p>
 
-<div class="sla-box">
-<strong>Próximo passo:</strong> enquadramos a necessidade, a urgência e o formato de apoio.<br/>
+<div class="sla-box" data-confirmed-only hidden>
+<strong>Próximo passo:</strong> a CONFENGE analisa a solicitação e combina pelo canal informado o escopo e a continuidade do atendimento.<br/>
 <strong>Prazo esperado:</strong> retorno em até <strong>2 dias úteis</strong> (casos urgentes de contrato: até 1 dia útil).<br/>
 <strong>O que você recebe:</strong> análise fundamentada e recomendações técnicas sobre o caso; as decisões administrativas, contratuais e judiciais permanecem com as autoridades competentes.
 </div>
-<div class="sla-box">
+<div class="sla-box" data-confirmed-only hidden>
 <strong>Documentos:</strong> após a confirmação, a CONFENGE abre um canal seguro para o envio da documentação, canal escolhido posteriormente. Não anexe arquivo nesta mensagem.
 </div>
 <div class="journey-next">
-<a class="button button-primary" data-event-name="whatsapp_click" href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Acabei%20de%20enviar%20uma%20solicita%C3%A7%C3%A3o%20pelo%20site." rel="noopener" target="_blank">Continuar pelo WhatsApp</a>
-<a class="button button-secondary" data-event-name="email_click" href="mailto:tiago.sasaki@confenge.com.br?subject=Solicitacao%20site%20CONFENGE&amp;body=Ol%C3%A1%2C%20Tiago.%0A%0AEnviei%20contato%20pelo%20site.%0AProtocolo%3A%20(cole%20aqui).%0A">Alternativa por e-mail</a>
+<a class="button button-primary" data-event-name="whatsapp_click" href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20conversar%20sobre%20uma%20necessidade%20de%20projeto%2C%20servi%C3%A7o%20ou%20an%C3%A1lise%20t%C3%A9cnica%20pelo%20site." rel="noopener" target="_blank">Continuar pelo WhatsApp</a>
+<a class="button button-secondary" data-event-name="email_click" href="mailto:tiago.sasaki@confenge.com.br?subject=Necessidade%20de%20engenharia%20-%20contato%20CONFENGE">Alternativa por e-mail</a>
 <p class="form-hint">E-mail copiável: <button type="button" class="text-link" data-copy-email="tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</button></p>
 <a class="button button-secondary" href="/especialista/tiago-jun-sasaki/">Conhecer quem vai analisar o caso</a>
 <a class="button button-secondary" href="/">Voltar para a página inicial</a>
@@ -66,14 +66,22 @@
 <footer class="site-footer">
 <div class="container footer-bottom"><span>© <span id="year">2026</span> CONFENGE. CNPJ 52.407.089/0001-09.</span><a href="/privacidade/">Política de Privacidade</a></div>
 </footer>
-<aside class="contact-float" aria-label="Contato rápido"><a aria-label="Falar com a CONFENGE pelo WhatsApp" class="whatsapp-float" href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Acabei%20de%20enviar%20uma%20solicita%C3%A7%C3%A3o%20pelo%20site." rel="noopener" target="_blank"><svg class="icon"><use href="#i-whatsapp"></use></svg></a></aside>
+<aside class="contact-float" aria-label="Contato rápido"><a aria-label="Falar com a CONFENGE pelo WhatsApp" class="whatsapp-float" href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20conversar%20sobre%20uma%20necessidade%20de%20projeto%2C%20servi%C3%A7o%20ou%20an%C3%A1lise%20t%C3%A9cnica%20pelo%20site." rel="noopener" target="_blank"><svg class="icon"><use href="#i-whatsapp"></use></svg></a></aside>
 
 <script>
 (function(){
   try {
     var q = new URLSearchParams(location.search);
-    var r = q.get("receipt") || sessionStorage.getItem("confenge_last_receipt");
-    if (!r) return;
+    var r = q.get("receipt");
+    var stored = sessionStorage.getItem("confenge_last_receipt");
+    var storedDestination = sessionStorage.getItem("confenge_last_receipt_destination");
+    if (!r || r !== stored || storedDestination !== "/obrigado" || !/^(?:lead-[0-9a-f]{27}|[0-9a-f]{24})$/i.test(r)) return;
+    document.body.setAttribute("data-lead-success", "1");
+    var title = document.getElementById("confirmation-title");
+    var summary = document.getElementById("confirmation-summary");
+    if (title) title.textContent = title.getAttribute("data-confirmed-title");
+    if (summary) summary.textContent = summary.getAttribute("data-confirmed-copy");
+    document.querySelectorAll("[data-confirmed-only]").forEach(function(node){ node.hidden = false; });
     var el = document.getElementById("receipt-id");
     if (el) { el.hidden = false; el.querySelector("code").textContent = r; }
   } catch (e) {}

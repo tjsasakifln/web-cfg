@@ -29,13 +29,13 @@
   "n_total": 5063,
   "n_usable": 5038,
   "national_statistic": false,
-  "note": "The binding hashes are payload_content_hash and rendered_content_hash from data/editorial/market-answers/approvals.json. extra-cli content_hash is provenance only and must not be treated as the approval hash.",
+  "note": "Os hashes vinculantes são os do conjunto aprovado e da análise publicada, registrados na aprovação editorial. O hash da exportação de origem serve apenas para procedência e não substitui a aprovação.",
   "payload_content_hash": "568880b7eacf30e2adaf7481945fa50cfc77039be10b27ffc6af0959bf6c6d9d",
   "period": {
     "end": "2026-08-15",
     "start": "2023-07-20"
   },
-  "rendered_content_hash": "185dcd038951689ef1482973c7bdc51d858c01b77bfeb460a2d05e2ece8d39fa",
+  "rendered_content_hash": "a7142fd5baa7ac3a97debb32bc6645672fcd261d9deaf182a5aacf5b78930279",
   "schema": "data_desk_coverage_v1",
-  "source": "extra-cli public-read SELECT-only + editorial approval hashes"
+  "source": "Exportação somente para leitura e hashes da aprovação editorial"
 }

@@ -73,7 +73,7 @@
       "requires_confirmed_capacity": true,
       "surcharge_percent": 50,
       "surcharge_prepaid": true,
-      "statement_pt_br": "Prazo mais curto que o SLA é possível com capacidade confirmada na agenda: a entrega acelerada tem adicional de 50 por cento sobre o preço-piloto ou o preço publicado daquela entrega, combinado e pago antes do início. Exemplo: o Diagnóstico de Riscos à Margem custa R$ 2.900 em 5 dias úteis; em 2 dias úteis, o adicional é R$ 1.450 e o total fica R$ 4.350. A data possível é confirmada no retorno."
+      "statement_pt_br": "Prazo mais curto que o prazo publicado depende de capacidade confirmada na agenda: a entrega acelerada tem adicional de 50 por cento sobre o preço da entrega, combinado e pago antes do início. Exemplo: o Diagnóstico de Riscos à Margem custa R$ 2.900 em 5 dias úteis; em 2 dias úteis, o adicional é R$ 1.450 e o total fica R$ 4.350. A data possível é confirmada no retorno."
     },
     "public_sources_rule": {
       "complements": true,
@@ -114,6 +114,9 @@
       "route": "/defesa-margem-contratos-publicos/",
       "page_file": "defesa-margem-contratos-publicos/index.html",
       "pilot_price_cents": 290000,
+      "public_price_label_pt_br": "Preço",
+      "contact_mode": "PROPOSAL_AFTER_SCOPE_REVIEW",
+      "availability_statement_pt_br": "Serviço disponível mediante confirmação do escopo, dos documentos mínimos e da agenda. O contato solicita uma proposta e não inicia cobrança.",
       "sla_business_days": 5,
       "safe_deadline_gate": null,
       "scope_unit_pt_br": "Um contrato e até cinco eventos indicados pelo cliente ou encontrados na leitura.",
@@ -352,7 +355,7 @@
       "not_included_pt_br": [
         "Advocacia.",
         "Protocolo da resposta.",
-        "Garantia de afastamento de multa ou de impedimento.",
+        "A análise não garante afastamento de multa ou de impedimento.",
         "Representação jurídica."
       ],
       "legal_boundary": {

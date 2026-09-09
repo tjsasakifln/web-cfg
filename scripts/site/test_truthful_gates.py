@@ -159,7 +159,7 @@ def test_integral_catalog_has_each_registry_deliverable_exactly_once():
     assert any("CFG-D02: duplicated in integral catalog" in row for row in findings), findings
 
 
-def test_public_entregas_separates_eight_offer_vitrine_from_taxative_roll():
+def test_public_entregas_separates_eight_offers_from_internal_capability_inventory():
     html = (ROOT / "entregas" / "index.html").read_text(encoding="utf-8")
     cards = re.findall(
         r"<article\b[^>]*class=[\"'][^\"']*\bvitrine-item\b[^\"']*[\"'][^>]*>",
@@ -173,25 +173,35 @@ def test_public_entregas_separates_eight_offer_vitrine_from_taxative_roll():
     assert len(cards) == 8, len(cards)
     assert ids == [f"CFG-D0{i}" for i in range(1, 9)], ids
     assert states == ["PUBLISHED"] * 8, states
-    capability_rows = re.findall(
-        r'<li class="capability-item[^>]*data-capability-id="([^"]+)"'
-        r'[^>]*data-public-state="([^"]+)"',
-        html,
-        flags=re.I,
-    )
-    assert len(capability_rows) == 54, len(capability_rows)
-    assert sum(state == "PUBLISHED" for _, state in capability_rows) == 8
-    assert sum(state == "VALIDATE" for _, state in capability_rows) == 44
-    assert sum(state == "BLOCKED" for _, state in capability_rows) == 2
-    # 2026-09-08. Ver test_deliverables_registry.mjs: /entregas/ deixou de
-    # publicar o inventario de capacidades nao vendaveis. A propriedade
-    # verificada passa a ser positiva, e o estado interno nao pode vazar.
-    assert "54 frentes de trabalho" in html
-    assert "Oito têm oferta publicada" in html
+    assert "data-capability-id" not in html
+    assert "54 frentes de trabalho" not in html
     assert "em validação" not in html
     assert "bloqueada" not in html
-    # Os atributos data-public-state acima seguem exigidos: o estado comercial
-    # continua integro no markup de maquina, so nao aparece como texto ao visitante.
+    assert "sem oferta pronta" not in html
+    service_groups = re.findall(
+        r'<article class="capability-group">([\s\S]*?)</article>', html, flags=re.I
+    )
+    assert len(service_groups) == 3
+    assert all(
+        re.search(r"<h3>[^<]{12,}</h3>", group)
+        and re.search(r"<p>[^<]{80,}</p>", group)
+        and re.search(r'<a href="/[^"]+">', group)
+        for group in service_groups
+    )
+    service_text = visible_text(" ".join(service_groups)).lower()
+    assert re.search(r"projet|compatibiliza", service_text)
+    assert re.search(r"quantitativ|orçamento", service_text)
+    assert re.search(r"perícia|avaliação|segurança do trabalho", service_text)
+    assert all(
+        f'href="{href}"' in html
+        for href in (
+            "/servicos/#servico-projeto",
+            "/quantitativos-orcamento-obras/",
+            "/servicos/#servico-diagnostico",
+        )
+    )
+    assert 'href="#captura-entregas"' in html
+    assert "R$ 599 a R$ 3.750" in html
     findings = evaluate_commercial_html(html, load_registry())
     assert not any("missing from integral catalog" in row for row in findings), findings
     assert not any("8↔54" in row for row in findings), findings

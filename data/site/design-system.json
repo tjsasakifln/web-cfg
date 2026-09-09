@@ -304,7 +304,7 @@
     ]
   },
   "job_title_allowed": [
-    "Engenheiro Civil e consultor B2G",
+    "Engenheiro Civil",
     "Engenheiro Civil e diretor da CONFENGE"
   ],
   "job_title_forbidden": [
@@ -314,11 +314,6 @@
   "archetype_gated_surfaces": [
     "index.html",
     "entregas/index.html",
-    "analises-contratos-publicos/aditivo-saldo-art125-item-novo/index.html",
-    "analises-contratos-publicos/atraso-eventos-sem-comunicacao-contemporanea/index.html",
-    "analises-contratos-publicos/bdi-composicao-vs-referencia-sc/index.html",
-    "analises-contratos-publicos/comparaveis-rejeitados-regime-distinto/index.html",
-    "analises-contratos-publicos/reajuste-aniversario-serie-indice/index.html",
     "analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/index.html"
   ],
   "archetype_gate_rollout": "data/site/archetype-gate-rollout.json"

@@ -19,6 +19,7 @@ from scripts.contract_analysis.approval import (
     approve_all,
     approve_many,
     approve_one,
+    evaluate_conditional_checklist,
     find_approval,
     material_hash,
     withdraw_approval,
@@ -99,6 +100,49 @@ def test_mass_approval_path_fails():
         approve_many([rec, rec])
     with pytest.raises(ApprovalError, match="mass_approval_forbidden"):
         approve_all([rec])
+
+
+def test_checklist_does_not_claim_a_reviewer_when_only_author_is_confirmed():
+    rec = complete_live_record(
+        human_authorship_confirmed=True,
+        reviewer={"name": "", "confirmed": False},
+    )
+    html = (
+        '<link rel="canonical" href="https://confenge.com.br/analise/">'
+        '<section id="metodologia"></section><section id="limitacoes"></section>'
+        '<p>Engº Tiago Sasaki</p>'
+    )
+    checklist = evaluate_conditional_checklist(rec, rendered_html=html)
+    assert checklist["method_limitations_author_visible"] is True
+    assert checklist["reviewer_representation_consistent"] is True
+    assert "method_limitations_author_reviewer_visible" not in checklist
+
+
+def test_unconfirmed_reviewer_name_cannot_pass_representation_check():
+    rec = complete_live_record(
+        human_authorship_confirmed=True,
+        reviewer={"name": "Pessoa não confirmada", "confirmed": False},
+    )
+    html = (
+        '<section id="metodologia"></section><section id="limitacoes"></section>'
+        '<p>Engº Tiago Sasaki · Pessoa não confirmada</p>'
+    )
+    checklist = evaluate_conditional_checklist(rec, rendered_html=html)
+    assert checklist["reviewer_representation_consistent"] is False
+
+
+def test_confirmed_reviewer_same_as_author_cannot_pass_representation_check():
+    rec = complete_live_record(
+        human_authorship_confirmed=True,
+        author={"name": "Engº Tiago Sasaki"},
+        reviewer={"name": "  ENGº TIAGO SASAKI ", "confirmed": True},
+    )
+    html = (
+        '<section id="metodologia"></section><section id="limitacoes"></section>'
+        '<p>Engº Tiago Sasaki</p>'
+    )
+    checklist = evaluate_conditional_checklist(rec, rendered_html=html)
+    assert checklist["reviewer_representation_consistent"] is False
 
 
 def test_withdraw_invalidates_stored_approval(tmp_path):

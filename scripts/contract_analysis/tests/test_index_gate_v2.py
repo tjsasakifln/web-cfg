@@ -42,7 +42,11 @@ from scripts.contract_analysis.approval import (
 from scripts.contract_analysis.consume import load_canary
 from scripts.contract_analysis.gate import evaluate_cohort, evaluate_publication
 from scripts.contract_analysis.handoff import HANDOFF_READY
-from scripts.contract_analysis.index_gate_v2 import INDEX_ITEM_KEYS, evaluate_index_items_v2
+from scripts.contract_analysis.index_gate_v2 import (
+    INDEX_ITEM_KEYS,
+    cta_contains_visitor_pii,
+    evaluate_index_items_v2,
+)
 from scripts.contract_analysis.quality import evaluate_quality
 from scripts.contract_analysis.render import (
     apply_rendered_hash_gate,
@@ -197,9 +201,10 @@ def test_comparable_available_not_consumed(tmp_path, monkeypatch):
     assert rec.get("comparable_consumed") is False
     assert rec.get("comparable_reason") == SINGULAR_COMPARABLE_REASON
     html = render_analysis_html(rec, evaluate_publication(rec, cohort=[rec]))
-    assert "comparable_available=true" in html
-    assert "comparable_consumed=false" in html
-    assert SINGULAR_COMPARABLE_REASON in html
+    assert 'data-comparable-available="true"' in html
+    assert 'data-comparable-consumed="false"' in html
+    assert f'data-comparable-reason="{SINGULAR_COMPARABLE_REASON}"' in html
+    assert "Há referências comparáveis no pacote de origem" in html
     assert "acima da mediana" not in html.lower()
     assert "ranking de pares" not in html.lower()
     assert "HOLD_FOR_DATA" not in html
@@ -236,6 +241,15 @@ def test_epistemic_taxonomy_cta_and_no_pii(tmp_path, monkeypatch):
             continue
         assert item.get("locator") or item.get("locators")
         assert item.get("source_ref") or item.get("url") or item.get("source_refs")
+
+
+def test_public_contact_channel_is_not_confused_with_visitor_pii():
+    direct_channel = (
+        '<a href="https://wa.me/5548988344559?text=Quero%20conversar%20sobre%20meu%20contrato">'
+        "Conversar pelo WhatsApp</a>"
+    )
+    assert cta_contains_visitor_pii(direct_channel) is False
+    assert cta_contains_visitor_pii(direct_channel + "&amp;telefone=48999999999") is True
 
 
 def test_v2_token_grants_index_only_when_hashes_match(tmp_path, monkeypatch):
@@ -298,6 +312,35 @@ def test_one_byte_material_and_render_drift_refuses_index(tmp_path, monkeypatch)
     assert downgraded.state != "PUBLISHABLE_INDEX"
     assert "noindex" in downgraded.robots
     assert "noindex" in new_html
+
+
+@pytest.mark.parametrize("tamper", ["false_check", "legacy_key"])
+def test_active_canary_recalculates_and_rejects_tampered_checklist(
+    tmp_path, monkeypatch, tamper
+):
+    rec = _stage_official(tmp_path, monkeypatch)["records"][0]
+    rec["root_content_hash"] = rec.get("root_content_hash") or rec.get("content_hash")
+    decision = evaluate_publication(rec, cohort=[rec])
+    html, _ = _index_shaped(rec, decision)
+    _approve_v2(rec, tmp_path, html)
+    ok, reasons = approval_allows_index(rec, root=tmp_path)
+    assert ok is True, reasons
+
+    path = tmp_path / "data" / "editorial" / "contract-analysis" / "approvals.json"
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    active = next(row for row in payload["approvals"] if not row.get("withdrawn"))
+    if tamper == "false_check":
+        active["checklist"]["reviewer_representation_consistent"] = False
+    else:
+        active.pop("checklist_schema")
+        active["checklist"]["method_limitations_author_reviewer_visible"] = active[
+            "checklist"
+        ].pop("method_limitations_author_visible")
+    path.write_text(json.dumps(payload), encoding="utf-8")
+
+    ok, reasons = approval_allows_index(rec, root=tmp_path)
+    assert ok is False
+    assert any(reason.startswith("approval_checklist_") for reason in reasons), reasons
 
 
 def test_public_shell_drift_refuses_index(tmp_path, monkeypatch):
@@ -390,6 +433,7 @@ def test_index_count_xor_and_no_other_slug(tmp_path, monkeypatch):
     }
     assert rec["slug"] not in other_slugs
     assert sitemap_locs([(rec, indexed[0])]) == [
+        "https://confenge.com.br/analises-contratos-publicos/",
         f"https://confenge.com.br{AUTHORIZED_CANONICAL_PATH}"
     ]
 
@@ -440,6 +484,9 @@ def test_withdraw_rebuild_noindex_no_ghost_loc(tmp_path, monkeypatch):
     assert "X-Robots-Tag: index, follow" not in headers_after
     if family_map.exists():
         assert rec["slug"] not in family_map.read_text(encoding="utf-8")
+    assert not (
+        tmp_path / "analises-contratos-publicos" / rec["slug"] / "index.html"
+    ).exists()
     html_after = render_analysis_html(rec, rolled)
     assert "noindex" in html_after
     assert sitemap_locs([(rec, rolled)]) == []

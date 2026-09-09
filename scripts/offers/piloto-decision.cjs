@@ -7,6 +7,7 @@ const path = require("path");
 const crypto = require("crypto");
 
 const DECISION_PATH = path.join(__dirname, "../../data/offers/piloto-checkout-decision.v1.json");
+const PUBLIC_DECISION_REL = "data/editorial/public-preview-route-decisions.json";
 const SCHEMA = "confenge.piloto-checkout-decision/1.0";
 const DECISION_ID = "CFG-PILOTO-CHECKOUT-2026-08-24";
 const DECIDED_ON = "2026-08-24";
@@ -243,11 +244,6 @@ function urlToHtml(url) {
   return `${url.slice("/piloto/".length)}index.html`;
 }
 
-function htmlAttribute(tag, name) {
-  const match = tag.match(new RegExp(`(?:^|\\s)${name}\\s*=\\s*(["'])(.*?)\\1`, "i"));
-  return match ? match[2] : null;
-}
-
 function validateRepository(root, decision = loadDecision(), options = {}) {
   const validation = validateDecision(decision);
   const errors = [...validation.errors];
@@ -267,26 +263,28 @@ function validateRepository(root, decision = loadDecision(), options = {}) {
     errors.push("piloto_html_inventory_drift");
   }
 
-  for (const file of actualFiles) {
-    const html = fs.readFileSync(path.join(root, "piloto", file), "utf8");
-    const robotsMeta = (html.match(/<meta\b[^>]*>/gi) || [])
-      .find((tag) => String(htmlAttribute(tag, "name") || "").toLowerCase() === "robots");
-    const directives = String(robotsMeta ? htmlAttribute(robotsMeta, "content") : "")
-      .toLowerCase()
-      .split(/[\s,]+/)
-      .filter(Boolean);
-    if (!directives.includes("noindex")) {
-      errors.push(`piloto_noindex_missing:${file}`);
-    }
-  }
-
   const robots = fs.readFileSync(path.join(root, "robots.txt"), "utf8");
-  if (!/^Disallow:\s*\/piloto\/\s*$/m.test(robots)) errors.push("robots_disallow_missing");
-  const headers = fs.readFileSync(path.join(root, "_headers"), "utf8");
-  const offerBlock = headers.match(/(?:^|\n)\/piloto\/ofertas\/\*\r?\n((?:[ \t]+[^\r\n]*(?:\r?\n|$))+)/);
-  if (!offerBlock || !/^\s*X-Robots-Tag:\s*noindex,\s*nofollow\s*$/im.test(offerBlock[1])) {
-    errors.push("offer_headers_noindex_missing");
+  if (/^Disallow:\s*\/piloto\/\s*$/m.test(robots)) errors.push("withdrawn_piloto_hidden_from_crawlers");
+  let publicDecision = null;
+  try {
+    publicDecision = JSON.parse(fs.readFileSync(path.join(root, PUBLIC_DECISION_REL), "utf8"));
+  } catch {
+    errors.push("public_retirement_decision_invalid");
   }
+  const pilotRetirement = publicDecision?.groups?.find((row) => row.id === "pilot-preview");
+  if (pilotRetirement?.public_decision !== "RETIRE_410_PRESERVE_INTERNAL"
+      || pilotRetirement.routes?.length !== 24
+      || !pilotRetirement.runtime_rules?.includes("/piloto")
+      || !pilotRetirement.runtime_rules?.includes("/piloto/*")) {
+    errors.push("public_retirement_decision_missing");
+  }
+  const redirects = fs.readFileSync(path.join(root, "_redirects"), "utf8");
+  if (!/^\/piloto \/404\.html 410$/m.test(redirects)
+      || !/^\/piloto\/\* \/404\.html 410$/m.test(redirects)) {
+    errors.push("piloto_410_missing");
+  }
+  const artifactSource = fs.readFileSync(path.join(root, "scripts/pseo/public_artifact.py"), "utf8");
+  if (/^\s*"piloto",\s*$/m.test(artifactSource)) errors.push("piloto_in_public_artifact_allowlist");
 
   for (const sitemap of fs.readdirSync(root).filter((name) => /^sitemap.*\.(?:xml|txt)$/i.test(name))) {
     const body = fs.readFileSync(path.join(root, sitemap), "utf8");

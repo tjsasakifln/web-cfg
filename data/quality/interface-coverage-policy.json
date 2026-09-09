@@ -1,8 +1,8 @@
 {
   "schema_version": "interface-coverage-policy-v2",
   "issue": 293,
-  "updated_at": "2026-09-05",
-  "purpose": "Derive axe coverage from visible money/capture risk and Lighthouse coverage from the canonical public-family-registry, with explicit noindex-only supplemental families for public artifact routes outside the indexable registry.",
+  "updated_at": "2026-09-09",
+  "purpose": "Derive axe coverage from visible money/capture risk and Lighthouse coverage from the canonical public-family-registry. Package families use real artifact representatives; the official-live opportunity overlay has an exact runtime owner contract and mandatory SHA-bound post-stage Lighthouse evidence, never a virtual fixture representative.",
   "axe": {
     "viewports": [
       {
@@ -135,8 +135,7 @@
       {
         "family_id": "analises-contratos-publicos",
         "route": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
-        "reason": "authorized canary retained as the family representative after its stale approval failed closed",
-        "seo_exempt_reason": "the entire family is intentionally noindex until a new hash-bound human INDEX approval exists"
+        "reason": "the individually approved, indexable analysis is the only packaged article in this family and exercises its rendered SEO contract"
       },
       {
         "family_id": "casos",
@@ -187,9 +186,20 @@
       },
       {
         "family_id": "live-intelligence-opportunity",
-        "route": "/oportunidades/pe-2026-000188-reforma-ubs-londrina-pr/",
-        "reason": "fixture opportunity page; official INDEX pages replace this representative when live",
-        "seo_exempt_reason": "fixture opportunity pages are noindex; official INDEX is host-rendered"
+        "reason": "A família não existe no pacote: somente uma oportunidade official_live aceita pode ser acrescentada pelo overlay canônico Netcup. O Lighthouse desta família é obrigatório depois do stage, sobre uma URL real inventariada pelo runtime.",
+        "runtime_only": {
+          "mode": "official_live_overlay",
+          "owner": "deploy/netcup/lib/release_control.py::_publish_live_intelligence_overlay",
+          "source_contract": "data/live_intelligence/accepted/opportunities.json#official_live-indexable-projection",
+          "required_source_kind": "official_live",
+          "accepted_projection_route": "/.well-known/live-intelligence-overlay.json",
+          "accepted_projection_schema": "confenge.live-intelligence-overlay/v1",
+          "inventory_route": "/sitemap-oportunidades.xml",
+          "route_pattern": "^/oportunidades/[A-Za-z0-9][A-Za-z0-9._-]{0,80}(?:/[A-Za-z0-9][A-Za-z0-9._-]{0,20}){0,3}/$",
+          "absence_behavior": "withdraw_family",
+          "absence_verifier": "deploy/netcup/lib/release_control.py::_withdraw_packaged_opportunity_pages",
+          "post_stage_lighthouse_required": true
+        }
       },
       {
         "family_id": "diagnostico-b2g-expansao-estados",
@@ -208,18 +218,6 @@
         "route": "/404.html",
         "reason": "host 404 utility",
         "seo_exempt_reason": "HTTP 404 utility is permanently noindex"
-      },
-      {
-        "family_id": "piloto-ofertas",
-        "route": "/piloto/ofertas/",
-        "reason": "priced offer index on the pilot shell",
-        "seo_exempt_reason": "pilot surface intentionally noindex"
-      },
-      {
-        "family_id": "piloto-preview",
-        "route": "/piloto/",
-        "reason": "pilot shell hub",
-        "seo_exempt_reason": "pilot shell intentionally noindex"
       },
       {
         "family_id": "market-answer-canary",
@@ -244,12 +242,6 @@
         "route": "/jurisprudencia-contratos-obras/",
         "reason": "jurisprudence family hub",
         "seo_exempt_reason": "jurisprudence drafts remain noindex pending editorial approval"
-      },
-      {
-        "family_id": "panorama-mercado-obras-publicas",
-        "route": "/panorama-mercado-obras-publicas/",
-        "reason": "market panorama hub",
-        "seo_exempt_reason": "panorama publication authorization remains false"
       },
       {
         "family_id": "prontidao-tecnica-obra-privada",

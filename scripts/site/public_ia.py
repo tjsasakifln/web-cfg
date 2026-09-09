@@ -602,7 +602,10 @@ def footer_columns_html(ia: dict[str, Any] | None = None) -> str:
                 f'<a href="{escape(CONTACT["tel_href"], quote=True)}">'
                 f'{escape(CONTACT["tel_label"])}</a>'
             )
-            links.append("<span>Atendimento nacional</span>")
+            links.append(
+                "<span>Atendimento em todo o Brasil, conforme escopo, local e "
+                "modalidade definidos na proposta.</span>"
+            )
         parts.append(
             f'<div class="footer-links"><strong>{heading}</strong>{"".join(links)}</div>'
         )
@@ -671,9 +674,31 @@ def validate_contract(ia: dict[str, Any] | None = None) -> list[str]:
         if row.get("id") == "public_works_b2g":
             if row.get("href") != "/servicos-obras-publicas/":
                 errors.append("public works situation must preserve its canonical hub")
-        elif row.get("id") == "project_delivery" and row.get("index_state") == "private_wedge_index":
-            if row.get("href") != "/quantitativos-orcamento-obras/" or not row.get("scope"):
-                errors.append("private project wedge must be route-exact and scope-bounded")
+        elif row.get("id") == "project_delivery":
+            if (
+                row.get("index_state") != "service_hub_index"
+                or row.get("href") != "/servicos/#servico-projeto"
+                or not row.get("scope")
+            ):
+                errors.append("project situation must resolve to the project service explanation")
+        elif row.get("id") == "building_diagnosis":
+            if (
+                row.get("index_state") != "service_hub_index"
+                or row.get("href") != "/servicos/#servico-diagnostico"
+            ):
+                errors.append("building situation must resolve to the diagnosis service explanation")
+        elif row.get("id") == "expert_evidence_valuation":
+            if (
+                row.get("index_state") != "service_hub_index"
+                or row.get("href") != "/servicos/#servico-pericia"
+            ):
+                errors.append("expert-evidence situation must resolve to its service explanation")
+        elif row.get("id") == "occupational_safety":
+            if (
+                row.get("index_state") != "service_hub_index"
+                or row.get("href") != "/servicos/#servico-sst"
+            ):
+                errors.append("occupational-safety situation must resolve to its service explanation")
         elif _path_with_slash(_normalize_route(str(row.get("href") or ""))) != "/triagem-tecnica/":
             errors.append(f"unpublished situation must fail closed to triage: {row.get('id')}")
     footer_count = 0

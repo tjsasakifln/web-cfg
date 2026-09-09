@@ -12,6 +12,7 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { renderClientData } from "../../scripts/commercial/render_public_catalog.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "../..");
@@ -733,7 +734,7 @@ assert("credit_dynamic_cap_cannot_exceed_registry_max",
   canonicalCreditSource?.credit_rule);
 
 /* ------------------------------------------------------------------ */
-/* publicação progressiva da família no catálogo                       */
+/* contrato interno preservado sem publicar a fila de validação       */
 /* ------------------------------------------------------------------ */
 
 const catalogDataScript = fs.readFileSync(path.join(root, "entregas/catalog-data.js"), "utf8");
@@ -744,102 +745,121 @@ const catalogContractIndex = catalogData?.fields?.indexOf("contractHtml") ?? -1;
 const contractById = new Map((catalogData?.items || []).map((row) => [row[catalogIdIndex], row[catalogContractIndex]]));
 assert("catalog_copy_contract_asset_is_versioned", catalogData?.schema === "confenge.public-deliverable-catalog/1.1", catalogData?.schema);
 assert("catalog_copy_contract_fields_exist", catalogIdIndex >= 0 && catalogContractIndex >= 0, catalogData?.fields);
-
-function articleFor(number) {
-  const idAt = hub.indexOf(`id="entrega-${number}"`);
-  const start = hub.lastIndexOf("<article", idAt);
-  const end = hub.indexOf("</article>", idAt);
-  return idAt >= 0 && start >= 0 && end > idAt ? hub.slice(start, end) : "";
-}
-
-function sectionFor(article, clause) {
-  const marker = `data-copy-clause="${clause}"`;
-  const markerAt = article.indexOf(marker);
-  const start = article.lastIndexOf("<section", markerAt);
-  const end = article.indexOf("</section>", markerAt);
-  return markerAt >= 0 && start >= 0 && end > markerAt ? article.slice(start, end) : "";
-}
-
-function publicHtml(value) {
-  return String(value ?? "")
-    .replace(/\bUNKNOWN\b/g, "DESCONHECIDO")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;");
-}
+assert(
+  "catalog_asset_matches_public_projection_renderer",
+  renderClientData(registry, data) === catalogDataScript,
+  "entregas/catalog-data.js",
+);
 
 for (const item of items) {
-  const article = articleFor(item.number);
   const canonical = canonicalById.get(item.deliverable_id);
-  const copyContract = contractById.get(item.deliverable_id) || "";
-  const inputSection = sectionFor(copyContract, "client_inputs_and_sla_start");
-  const outputSection = sectionFor(copyContract, "concrete_result_and_artifact_example");
-  assert(`item_${item.number}_is_not_sold_on_vitrine`, article.length === 0 && !hub.includes(`id="entrega-${item.number}"`), item.deliverable_id);
-  assert(`item_${item.number}_kept_in_internal_copy_contract`, copyContract.includes(item.public_name_pt_br), item.public_name_pt_br);
-  assert(`item_${item.number}_value_line_kept_internally`, namingById.get(item.deliverable_id)?.value_line_pt_br === item.value_line_pt_br, item.value_line_pt_br);
   assert(
-    `item_${item.number}_inputs_are_progressively_visible`,
-    canonical?.required_inputs?.length >= 4 &&
-      canonical.required_inputs.every((value) => inputSection.includes(`<li>${publicHtml(value)}</li>`)),
-    canonical?.required_inputs,
+    `item_${item.number}_is_not_exposed_by_public_projection`,
+    !contractById.has(item.deliverable_id) &&
+      !hub.includes(item.deliverable_id) &&
+      !catalogDataScript.includes(item.deliverable_id) &&
+      !hub.includes(item.public_name_pt_br) &&
+      !catalogDataScript.includes(item.public_name_pt_br),
+    item.deliverable_id,
   );
   assert(
-    `item_${item.number}_outputs_are_progressively_visible`,
-    canonical?.included_outputs?.length >= 4 &&
-      canonical.included_outputs.every((value) => outputSection.includes(`<li>${publicHtml(value)}</li>`)),
-    canonical?.included_outputs,
+    `item_${item.number}_kept_in_internal_contracts`,
+    item.public_name_pt_br === canonical?.public_name_pt_br && canonical?.public_state === "VALIDATE",
+    { contract: item.public_name_pt_br, registry: canonical?.public_name_pt_br, state: canonical?.public_state },
+  );
+  assert(`item_${item.number}_value_line_kept_internally`, namingById.get(item.deliverable_id)?.value_line_pt_br === item.value_line_pt_br, item.value_line_pt_br);
+  assert(
+    `item_${item.number}_inputs_remain_complete_in_internal_contracts`,
+    filledList(item.inputs_pt_br, 4) && filledList(canonical?.required_inputs, 4),
+    { pageContract: item.inputs_pt_br, registry: canonical?.required_inputs },
+  );
+  assert(
+    `item_${item.number}_outputs_remain_complete_in_internal_contracts`,
+    filledList(item.outputs_pt_br, 4) && filledList(canonical?.included_outputs, 4),
+    { pageContract: item.outputs_pt_br, registry: canonical?.included_outputs },
   );
 }
 
-const item16 = contractById.get("CFG-D16") || "";
-assert("item_16_shows_execution_composition", item16.includes('data-execution-composition="CFG-D16"'), item16.length);
+const licitacaoContractPath = path.join(root, "data/commercial/page-contract-licitacao.v1.json");
+const licitacaoContract = JSON.parse(fs.readFileSync(licitacaoContractPath, "utf8"));
+const item16 = licitacaoContract.items?.find((item) => item.deliverable_id === "CFG-D16");
+const canonical16 = canonicalById.get("CFG-D16");
 assert(
-  "item_16_links_all_six_separate_executions",
-  items.every((item) => item16.includes(`href="#entrega-${item.number}"`) && item16.includes(item.public_name_pt_br)),
+  "item_16_composition_source_remains_internal",
+  item16?.public_name_pt_br === canonical16?.public_name_pt_br &&
+    filledList(item16?.required_inputs_pt_br, 3) &&
+    filledList(item16?.output_pt_br, 4) &&
+    canonical16?.public_state === "VALIDATE" &&
+    !contractById.has("CFG-D16") &&
+    !hub.includes("CFG-D16") &&
+    !catalogDataScript.includes("CFG-D16"),
+  { item16: item16?.public_name_pt_br, state: canonical16?.public_state },
+);
+assert(
+  "item_16_internal_composition_keeps_all_six_separate_executions",
+  items.every((item) => {
+    const limits = canonicalById.get(item.deliverable_id)?.scope?.limits ?? [];
+    return limits.some((value) => /pode compor o item 16.*CFG-D16/i.test(value) && /comprável separadamente/i.test(value));
+  }),
   items.map((item) => item.number),
 );
 assert(
-  "item_16_forbids_silent_double_charging",
-  item16.includes("não soma preços silenciosamente") && item16.includes("proposta discrimina cada item incluído"),
-  "composition disclosure",
+  "item_16_internal_composition_forbids_silent_double_charging",
+  items.every((item) => {
+    const limits = canonicalById.get(item.deliverable_id)?.scope?.limits ?? [];
+    return limits.some((value) => /proposta discrimina o que está incluído/i.test(value) && /não soma preços/i.test(value));
+  }),
+  items.map((item) => item.deliverable_id),
 );
 assert(
-  "item_16_shows_item_13_credit_once",
-  item16.includes("maior valor efetivamente pago no item 13") && item16.includes("um único crédito") && item16.includes("em até 30 dias") && item16.includes("sem acúmulo") && item16.includes("limitado ao valor pago"),
-  "credit disclosure",
+  "item_16_internal_composition_keeps_item_13_credit_once",
+  credit.applies_to_items.includes(16) &&
+    credit.uses_allowed === 1 &&
+    credit.window_days === 30 &&
+    credit.accumulates === false &&
+    credit.cap_cents === null &&
+    credit.originates_in_paying_item === true,
+  credit,
 );
 
-const item49 = contractById.get("CFG-D49") || "";
 assert(
-  "item_49_visibly_differs_from_item_14",
-  item49.includes('data-execution-boundary="14-49"') && item49.includes("item 14 audita") && item49.includes("item 49 produz"),
-  "audit versus production",
-);
-const item51 = contractById.get("CFG-D51") || "";
-assert(
-  "item_51_visibly_differs_from_item_13",
-  item51.includes('data-execution-boundary="13-51"') && item51.includes("item 13 diagnostica") && item51.includes("item 51 monta"),
-  "diagnosis versus assembly",
+  "item_49_internal_contract_differs_from_item_14",
+  b49_14?.against_item === 14 &&
+    b49_14?.their_verb_pt_br === "audita" &&
+    b49_14?.our_verb_pt_br === "produz" &&
+    /item 14 audita/i.test(b49_14?.statement_pt_br ?? "") &&
+    /item 49 produz/i.test(b49_14?.statement_pt_br ?? ""),
+  b49_14,
 );
 assert(
-  "item_51_visibly_discloses_item_13_credit",
-  item51.includes('data-execution-credit="13-51"') &&
-    item51.includes("maior valor efetivamente pago no item 13") &&
-    item51.includes("um único crédito") &&
-    item51.includes("em até 30 dias") &&
-    item51.includes("sem acúmulo") &&
-    item51.includes("limitado ao valor pago"),
-  "credit visible at the offer where it applies",
+  "item_51_internal_contract_differs_from_item_13",
+  b51_13?.against_item === 13 &&
+    b51_13?.their_verb_pt_br === "diagnostica" &&
+    b51_13?.our_verb_pt_br === "monta" &&
+    /item 13 diagnostica/i.test(b51_13?.statement_pt_br ?? "") &&
+    /item 51 monta/i.test(b51_13?.statement_pt_br ?? ""),
+  b51_13,
 );
-const item53 = contractById.get("CFG-D53") || "";
 assert(
-  "item_53_visibly_keeps_client_as_operator",
-  item53.includes('data-execution-operator="client-only"') &&
-    item53.includes("único operador da plataforma") &&
-    item53.includes("A CONFENGE não dá lance") &&
-    item53.includes("não opera credencial, login, certificado ou plataforma"),
-  "client only operator",
+  "item_51_internal_contract_keeps_item_13_credit",
+  credit.source_item === 13 &&
+    JSON.stringify(credit.applies_to_items) === JSON.stringify([51, 16]) &&
+    /crédito nasce no item pagador/i.test(credit.statement_pt_br ?? "") &&
+    /maior valor pago/i.test(credit.statement_pt_br ?? "") &&
+    /uma única vez/i.test(credit.statement_pt_br ?? "") &&
+    /30 dias/i.test(credit.statement_pt_br ?? "") &&
+    /sem acumulação/i.test(credit.statement_pt_br ?? ""),
+  credit,
+);
+const canonical53 = canonicalById.get("CFG-D53");
+assert(
+  "item_53_internal_contract_keeps_client_as_operator",
+  /representante do licitante é o único operador da plataforma/i.test(it53.operator_of_record_pt_br ?? "") &&
+    canonical53?.scope?.limits?.some((value) => /representante do licitante é o único operador da plataforma/i.test(value)) &&
+    canonical53?.exclusions?.some((value) => /CONFENGE não dá lance/i.test(value)) &&
+    canonical53?.exclusions?.some((value) => /operar credencial, login ou certificado do cliente/i.test(value)) &&
+    Object.values(it53.session_conduct_negatives_pt_br ?? {}).every(filled),
+  { operator: it53.operator_of_record_pt_br, exclusions: canonical53?.exclusions },
 );
 
 assert("execution_items_are_not_public_vitrine", items.every((item) => !hub.includes(`id="entrega-${item.number}"`)), items.map((item) => item.number));

@@ -1,6 +1,11 @@
 {
   "schema": "confenge.deliverables-registry/1.0",
   "registry_version": "CFG-DELIVERABLES-2026-08-25-v2",
+  "public_catalog": {
+    "route": "/entregas/",
+    "date_published": "2026-08-23",
+    "date_modified": "2026-09-09"
+  },
   "generated_for_issues": [
     "#329",
     "#330",
@@ -1685,6 +1690,9 @@
         "billing": "one_time"
       },
       "price_state": "PILOT_HYPOTHESIS",
+      "public_price_label_pt_br": "Preço",
+      "contact_mode": "PROPOSAL_AFTER_SCOPE_REVIEW",
+      "availability_statement_pt_br": "Serviço disponível mediante confirmação do escopo, dos documentos mínimos e da agenda. O contato solicita uma proposta e não inicia cobrança.",
       "sla": {
         "business_days_min": 5,
         "business_days_max": 5,

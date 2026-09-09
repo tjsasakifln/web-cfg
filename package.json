@@ -157,7 +157,7 @@
     "host-contract:nginx-test": "node scripts/migration/netcup/validate-nginx.mjs",
     "host-contract:parity": "node scripts/migration/netcup/parity.mjs",
     "host-contract:seo": "node scripts/migration/netcup/seo-adversarial.mjs",
-    "build:site": "npm run host-contract:render && python3 scripts/pseo/build_site.py && npm run host-contract:render",
+    "build:site": "npm run host-contract:render && python3 scripts/pseo/build_site.py && npm run csp:refresh && npm run host-contract:render",
     "repro:compare": "python3 scripts/pseo/reproducible.py compare",
     "repro:hash": "python3 scripts/pseo/reproducible.py hash",
     "pseo:build": "python3 scripts/pseo/build.py",
@@ -191,7 +191,7 @@
     "test:production-cutover:local": "node scripts/site/test_production_cutover.mjs http://127.0.0.1:8765",
     "test:lighthouse": "node scripts/site/run_lighthouse.mjs",
     "test:lighthouse:nfr": "node scripts/site/run_lighthouse.mjs --only=/,/entregas/,/conteudos/documentos-reequilibrio-obra-publica/,/diretoria-b2g/,/ferramentas/diagnostico-defesa-margem/,/diagnostico-b2g-expansao/,/casos/,/especialista/tiago-jun-sasaki/ --runs=3 --label=nfr-critical",
-    "test:lighthouse-gates": "node scripts/site/test_lighthouse_thresholds.mjs && node scripts/site/test_interface_coverage.mjs",
+    "test:lighthouse-gates": "node scripts/site/test_lighthouse_thresholds.mjs && node scripts/site/test_interface_coverage.mjs && node scripts/site/test_runtime_lighthouse_acceptance.mjs",
     "audit:css-usage": "python3 scripts/site/test_audit_css_usage.py && python3 scripts/site/audit_css_usage.py",
     "test:redirects": "node scripts/site/test_redirects.mjs",
     "test:redirects:prod": "node scripts/site/test_redirects.mjs https://confenge.com.br",
@@ -288,7 +288,8 @@
     "test:offer-fit": "node tests/commercial/test_offer_fit_matrix.mjs && node tests/commercial/test_offer_fit_copy.mjs && python3 -m pytest scripts/site/test_home_real_contract_case.py -q",
     "test:adaptive-intake": "node scripts/site/test_adaptive_authority.mjs && node scripts/site/test_adaptive_intake.mjs",
     "test:private-readiness": "node scripts/site/test_private_project_technical_readiness.mjs",
-    "test:convergence-browser": "node scripts/site/test_convergence_browser.mjs"
+    "test:convergence-browser": "node scripts/site/test_convergence_browser.mjs",
+    "test:contact-journeys": "node scripts/site/test_contact_journeys.mjs"
   },
   "engines": {
     "node": ">=22.19 <23"

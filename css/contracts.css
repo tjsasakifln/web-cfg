@@ -58,3 +58,29 @@ code,pre,kbd,samp,[data-opaque-token],.opaque-token{overflow-wrap:anywhere;word-
  * reescrito, entao o ajuste e tipografico. */
 body[data-asset-family="oportunidade-publica"] .simple-card{overflow-wrap:anywhere}
 body[data-asset-family="oportunidade-publica"] .simple-card h1{font-size:clamp(1.35rem,4.2vw,2.1rem);line-height:1.25;overflow-wrap:anywhere;hyphens:auto}
+
+/* Keep the primary commercial action inside the first mobile viewport while
+ * retaining every material condition and trust signal in the hero. */
+@media (max-width:760px){
+  body[data-content-cluster="servicos"] main>.section:first-of-type{padding-top:18px}
+  body[data-content-cluster="servicos"] main>.section:first-of-type .lead-inline{margin-top:16px}
+
+  body[data-offer-id="diagnostico-b2g-360"] .content-hero.offer-hero{padding-top:28px;padding-bottom:36px}
+  body[data-offer-id="diagnostico-b2g-360"] .content-hero h1{margin-bottom:16px;font-size:clamp(1.85rem,8.5vw,2.15rem);line-height:1.08}
+  body[data-offer-id="diagnostico-b2g-360"] .content-lead{margin-bottom:12px;line-height:1.55}
+  body[data-offer-id="diagnostico-b2g-360"] .offer-hero-desc{margin-bottom:10px;font-size:.9rem;line-height:1.5}
+  body[data-offer-id="diagnostico-b2g-360"] .offer-result{margin-bottom:12px;line-height:1.5}
+  body[data-offer-id="diagnostico-b2g-360"] .hero-micro{margin-bottom:12px;line-height:1.5}
+  body[data-offer-id="diagnostico-b2g-360"] .authority-byline{margin-top:8px;font-size:.875rem;line-height:1.45}
+  body[data-offer-id="diagnostico-b2g-360"] .hero-proof{padding-top:10px}
+  body[data-offer-id="diagnostico-b2g-360"] .hero-actions{gap:8px}
+}
+
+/* The long aditivos title remains intact and at its established type size.
+ * At desktop width the fold margin comes from hero whitespace only. */
+@media (min-width:1051px){
+  body[data-route-family="aditivos"] .content-hero{padding-top:24px}
+  body[data-route-family="aditivos"] .content-lead{line-height:1.62}
+  body[data-route-family="aditivos"] .offer-proof-line{margin-top:12px;margin-bottom:12px}
+  body[data-route-family="aditivos"] .hero-actions{gap:12px;margin-bottom:18px}
+}

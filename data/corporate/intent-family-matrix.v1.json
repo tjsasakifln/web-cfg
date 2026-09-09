@@ -1,7 +1,7 @@
 {
   "schema": "confenge.public-intent-matrix/1.0",
   "contract": "CONFENGE_PUBLIC_INTENT_MATRIX/1.0.0",
-  "effective_at": "2026-09-05",
+  "effective_at": "2026-09-09",
   "routing_rule": "A situação e a decisão definem a família. A audiência é somente exemplo e nunca resolve rota ou oferta.",
   "operational_domains_note": "Os cinco núcleos da taxonomia são agrupamentos internos. Os nomes abaixo são famílias canônicas de serviço e situações públicas; não são sub-marcas.",
   "offer_id_semantics": {
@@ -34,10 +34,10 @@
   "intent_families": [
     {
       "intent_family": "projetar_revisar_compatibilizar",
-      "public_wording": "Preciso completar, revisar ou compatibilizar projetos de engenharia antes da obra.",
+      "public_wording": "Preciso elaborar, completar, revisar ou compatibilizar projetos de engenharia antes da obra.",
       "canonical_service_family": "engineering_projects_coordination",
       "offer_ids": ["complementary_engineering_project_review", "bim_coordination_clash_register", "private_project_technical_readiness_assessment"],
-      "audience_examples": ["construtoras", "incorporadoras", "escritórios de engenharia", "escritórios e plataformas de arquitetura como clientes de engenharia complementar"],
+      "audience_examples": ["pessoas físicas", "condomínios", "órgãos públicos", "construtoras", "incorporadoras", "escritórios de engenharia", "escritórios e plataformas de arquitetura como clientes de engenharia complementar"],
       "terminal_action": "REQUEST_SCOPE_REVIEW",
       "adjacent_intents": ["orcar_planejar_decidir", "documentar_as_built_regularizar"],
       "disambiguation": "Não oferece autoria arquitetônica. Disciplina, atribuição, autoria de origem, interfaces e responsabilidade técnica precisam ser confirmadas antes da proposta."
@@ -50,7 +50,7 @@
       "audience_examples": ["construtoras", "incorporadoras", "desenvolvedores imobiliários", "escritórios de engenharia"],
       "terminal_action": "REQUEST_SCOPE_REVIEW",
       "adjacent_intents": ["projetar_revisar_compatibilizar", "planejar_contratacao_publica"],
-      "disambiguation": "Orçamento privado não é automaticamente orçamento de licitação; a finalidade, a base de preços, o estágio do projeto e o objeto definem a família."
+      "disambiguation": "A família atende orçamento público e privado. Finalidade, referências de preços, critérios, estágio do projeto e objeto definem a entrega; preserve a necessidade original no contato."
     },
     {
       "intent_family": "inspecionar_diagnosticar",
@@ -154,7 +154,7 @@
     },
     {
       "intent_family": "outra_demanda_tecnica",
-      "public_wording": "Tenho outra demanda técnica e preciso saber se existe enquadramento seguro.",
+      "public_wording": "Tenho outra demanda de engenharia e quero conversar sobre o serviço necessário.",
       "canonical_service_family": null,
       "offer_ids": [],
       "audience_examples": ["qualquer comprador com situação ainda não delimitada"],

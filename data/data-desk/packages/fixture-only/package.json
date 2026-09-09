@@ -34,7 +34,7 @@
     },
     "identifier": "fixture-only-citation-kit",
     "isAccessibleForFree": true,
-    "license": "https://confenge.com.br/termos-de-uso/",
+    "license": null,
     "name": "Fixture aggregated counts",
     "publisher": {
       "@type": "Organization",
@@ -51,10 +51,12 @@
   "identifier": "fixture-only-citation-kit",
   "indexable": false,
   "license": "https://confenge.com.br/termos-de-uso/",
+  "license_notice": null,
+  "license_url": null,
   "limitations": "FIXTURE_ONLY. No public canonical. Absent from sitemap. Not for press, partners, embeds in the wild, or IndexNow.",
   "method_version": "1",
-  "package_hash": "ed4cbf8409f6061a1416d81e76283ff2acae757bb5029d7819236ef9897cdf08",
-  "package_version": "fixture-1·2026-08-16·ed4cbf8409f6",
+  "package_hash": "58dc9c0e3dd9e0b3fb9b602a11283f949154e5448f9cefab0db651beca14ef63",
+  "package_version": "fixture-1·2026-08-16·58dc9c0e3dd9",
   "permalink": "/internal/data-desk/fixture-only/",
   "png_included": false,
   "png_sha256": null,
@@ -138,7 +140,7 @@
     "targets": [
       {
         "angle": "UNNAMED",
-        "asset_version": "fixture-1·2026-08-16·ed4cbf8409f6",
+        "asset_version": "fixture-1·2026-08-16·58dc9c0e3dd9",
         "audience_type": "UNNAMED",
         "citation_link_requirements": "Preserve CONFENGE permalink or canonical, method/as_of, and limitations. Do not present the fixture as a public statistic.",
         "id": "target-1",
@@ -149,7 +151,7 @@
       },
       {
         "angle": "UNNAMED",
-        "asset_version": "fixture-1·2026-08-16·ed4cbf8409f6",
+        "asset_version": "fixture-1·2026-08-16·58dc9c0e3dd9",
         "audience_type": "UNNAMED",
         "citation_link_requirements": "Preserve CONFENGE permalink or canonical, method/as_of, and limitations. Do not present the fixture as a public statistic.",
         "id": "target-2",
@@ -160,7 +162,7 @@
       },
       {
         "angle": "UNNAMED",
-        "asset_version": "fixture-1·2026-08-16·ed4cbf8409f6",
+        "asset_version": "fixture-1·2026-08-16·58dc9c0e3dd9",
         "audience_type": "UNNAMED",
         "citation_link_requirements": "Preserve CONFENGE permalink or canonical, method/as_of, and limitations. Do not present the fixture as a public statistic.",
         "id": "target-3",
@@ -171,7 +173,7 @@
       },
       {
         "angle": "UNNAMED",
-        "asset_version": "fixture-1·2026-08-16·ed4cbf8409f6",
+        "asset_version": "fixture-1·2026-08-16·58dc9c0e3dd9",
         "audience_type": "UNNAMED",
         "citation_link_requirements": "Preserve CONFENGE permalink or canonical, method/as_of, and limitations. Do not present the fixture as a public statistic.",
         "id": "target-4",
@@ -182,7 +184,7 @@
       },
       {
         "angle": "UNNAMED",
-        "asset_version": "fixture-1·2026-08-16·ed4cbf8409f6",
+        "asset_version": "fixture-1·2026-08-16·58dc9c0e3dd9",
         "audience_type": "UNNAMED",
         "citation_link_requirements": "Preserve CONFENGE permalink or canonical, method/as_of, and limitations. Do not present the fixture as a public statistic.",
         "id": "target-5",

@@ -147,7 +147,7 @@ const runtimeDrift = structuredClone(decision);
 runtimeDrift.analytics.new_runtime_while_deferred = true;
 assert.ok(decisionGate.validateDecision(runtimeDrift).errors.includes("analytics_contract_invalid"));
 
-const indexabilityRoot = fs.mkdtempSync(path.join(os.tmpdir(), "piloto-decision-indexability-"));
+const indexabilityRoot = fs.mkdtempSync(path.join(os.tmpdir(), "piloto-decision-retirement-"));
 try {
   fs.cpSync(path.join(root, "piloto"), path.join(indexabilityRoot, "piloto"), { recursive: true });
   fs.mkdirSync(path.join(indexabilityRoot, "data/offers"), { recursive: true });
@@ -155,28 +155,21 @@ try {
     fs.copyFileSync(path.join(root, "data/offers", file), path.join(indexabilityRoot, "data/offers", file));
   }
   fs.copyFileSync(path.join(root, "robots.txt"), path.join(indexabilityRoot, "robots.txt"));
-  fs.copyFileSync(path.join(root, "_headers"), path.join(indexabilityRoot, "_headers"));
+  fs.mkdirSync(path.join(indexabilityRoot, "data/editorial"), { recursive: true });
+  fs.mkdirSync(path.join(indexabilityRoot, "scripts/pseo"), { recursive: true });
+  fs.copyFileSync(path.join(root, "data/editorial/public-preview-route-decisions.json"), path.join(indexabilityRoot, "data/editorial/public-preview-route-decisions.json"));
+  fs.copyFileSync(path.join(root, "scripts/pseo/public_artifact.py"), path.join(indexabilityRoot, "scripts/pseo/public_artifact.py"));
+  fs.copyFileSync(path.join(root, "_redirects"), path.join(indexabilityRoot, "_redirects"));
 
-  const indexPath = path.join(indexabilityRoot, "piloto/index.html");
-  const indexHtml = fs.readFileSync(indexPath, "utf8");
-  const deceptiveRobots = indexHtml.replace(
-    /<meta\b[^>]*name=["']robots["'][^>]*>/i,
-    '<meta name="robots" content="index" data-content="noindex">',
-  );
-  assert.notEqual(deceptiveRobots, indexHtml, "fixture must replace the real robots tag");
-  fs.writeFileSync(indexPath, deceptiveRobots);
-  const deceptiveResult = decisionGate.validateRepository(indexabilityRoot, decision, { today: "2026-08-24" });
-  assert.ok(deceptiveResult.errors.includes("piloto_noindex_missing:index.html"));
+  const redirectsPath = path.join(indexabilityRoot, "_redirects");
+  fs.writeFileSync(redirectsPath, fs.readFileSync(redirectsPath, "utf8").replace("/piloto/* /404.html 410", ""));
+  const missing410 = decisionGate.validateRepository(indexabilityRoot, decision, { today: "2026-08-24" });
+  assert.ok(missing410.errors.includes("piloto_410_missing"));
 
-  const headers = fs.readFileSync(path.join(indexabilityRoot, "_headers"), "utf8");
-  const unsafeHeaders = headers.replace(
-    "/piloto/ofertas/*\n  X-Robots-Tag: noindex, nofollow",
-    "/piloto/ofertas/*\n  X-Robots-Tag: index, follow",
-  );
-  assert.notEqual(unsafeHeaders, headers, "fixture must replace the offer header block");
-  fs.writeFileSync(path.join(indexabilityRoot, "_headers"), unsafeHeaders);
-  const headerResult = decisionGate.validateRepository(indexabilityRoot, decision, { today: "2026-08-24" });
-  assert.ok(headerResult.errors.includes("offer_headers_noindex_missing"));
+  fs.copyFileSync(path.join(root, "_redirects"), redirectsPath);
+  fs.appendFileSync(path.join(indexabilityRoot, "scripts/pseo/public_artifact.py"), '\n    "piloto",\n');
+  const leakedArtifact = decisionGate.validateRepository(indexabilityRoot, decision, { today: "2026-08-24" });
+  assert.ok(leakedArtifact.errors.includes("piloto_in_public_artifact_allowlist"));
 } finally {
   fs.rmSync(indexabilityRoot, { recursive: true, force: true });
 }

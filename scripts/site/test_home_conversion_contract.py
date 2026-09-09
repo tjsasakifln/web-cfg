@@ -38,9 +38,9 @@ def test_first_fold_answers_category_problem_result_trust_and_start() -> None:
     hero = _section(_home(), r'class="hero')
 
     assert "Engenharia, Perícias e Inteligência Técnica" in hero
-    assert "Do problema técnico" in hero
-    assert "à decisão documentada" in hero
-    assert "projetos, imóveis, obras, perícias, segurança do trabalho ou contratos públicos" in hero
+    assert "Projetos e serviços de engenharia" in hero
+    assert "obras públicas e privadas" in hero
+    assert all(term in hero.casefold() for term in ("elaboração", "revisão", "compatibilização", "orçamentos"))
     # 2026-09-08. A lista antiga exigia "plano de acao" no hero. A primeira dobra
     # dizia que o trabalho "pode resultar em" um daqueles formatos, e "plano de
     # acao" era o unico que nao nomeia um documento assinado: tornava a entrega
@@ -64,7 +64,7 @@ def test_first_fold_answers_category_problem_result_trust_and_start() -> None:
     assert len(named) >= 5, named
     assert "Engenharia Civil pela EESC-USP" in hero
     assert "CNPJ 52.407.089/0001-09" in hero
-    assert 'href="#situacoes"' in hero
+    assert 'href="/servicos/"' in hero
     assert hero.count("button-primary") == 1
     assert "PNCP" not in hero
 
@@ -92,7 +92,12 @@ def test_situation_chooser_has_five_paths_without_catalog_wall() -> None:
     assert len(hrefs) == 5, hrefs
     assert len(set(hrefs)) == 5, hrefs
     assert all(h.startswith("/") for h in hrefs), hrefs
-    assert chooser.count('href="/triagem-tecnica/#') == 3
+    assert chooser.count('href="/triagem-tecnica/#') == 0
+    assert 'href="/servicos/#servico-projeto"' in chooser
+    assert 'href="/servicos/#servico-diagnostico"' in chooser
+    assert 'href="/servicos/#servico-pericia"' in chooser
+    assert 'href="/servicos/#servico-sst"' in chooser
+    assert 'href="/quantitativos-orcamento-obras/"' in chooser
     assert 'href="/servicos-obras-publicas/"' in chooser
     assert "ICP" not in chooser
     assert "CTA" not in chooser

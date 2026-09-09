@@ -33,8 +33,10 @@ sys.path.insert(0, str(ROOT))
 
 def _find_extra_cli() -> Path | None:
     env = os.environ.get("EXTRA_CLI_ROOT")
-    if env and (Path(env) / "scripts" / "pseo" / "export_web_cfg.py").exists():
-        return Path(env)
+    if env:
+        # An explicit contracted checkout must never fall back to a different
+        # local revision when its path is absent or incomplete.
+        return Path(env) if (Path(env) / "scripts" / "pseo" / "export_web_cfg.py").is_file() else None
     candidates = [
         Path("/tmp/grok-goal-51e314319eb4/implementer/extra-cli-main"),
         Path("/tmp/grok-goal-51e314319eb4/implementer/extra-cli"),
@@ -47,6 +49,19 @@ def _find_extra_cli() -> Path | None:
 
 
 EXTRA = _find_extra_cli()
+if os.environ.get("EXTRA_CLI_REQUIRED") == "1" and EXTRA is None:
+    raise RuntimeError("EXTRA_CLI_REQUIRED: contracted producer checkout is missing")
+
+
+def test_required_checkout_fails_instead_of_skipping_or_using_a_local_fallback():
+    with tempfile.TemporaryDirectory(prefix="missing-contracted-producer-") as tmp:
+        env = dict(os.environ, EXTRA_CLI_ROOT=tmp, EXTRA_CLI_REQUIRED="1")
+        result = subprocess.run(
+            [sys.executable, "-c", "import scripts.pseo.tests.test_cross_repo_integration"],
+            cwd=ROOT, env=env, capture_output=True, text=True, timeout=30,
+        )
+    assert result.returncode != 0
+    assert "EXTRA_CLI_REQUIRED: contracted producer checkout is missing" in result.stderr
 
 
 @unittest.skipUnless(EXTRA is not None, "extra-cli checkout not found (set EXTRA_CLI_ROOT)")
@@ -56,7 +71,13 @@ class TestCrossRepoIntegration(unittest.TestCase):
         cls.extra = EXTRA
         assert cls.extra is not None
         cls.fixture = cls.extra / "tests" / "pseo" / "fixtures" / "sample_contracts.json"
-        cls.assertTrue(cls.fixture.exists(), f"missing fixture {cls.fixture}")
+        assert cls.fixture.is_file(), f"missing fixture {cls.fixture}"
+        cls.producer_sha = subprocess.check_output(
+            ["git", "rev-parse", "HEAD"], cwd=cls.extra, text=True,
+        ).strip()
+        if os.environ.get("EXTRA_CLI_REQUIRED") == "1":
+            contracted_sha = json.loads((ROOT / "data/pseo/manifest.json").read_text())["source_commit_sha"]
+            assert cls.producer_sha == contracted_sha, "producer checkout does not match the versioned contract"
 
     def _export(self, out: Path, *, approval: Path | None = None) -> dict:
         cmd = [
@@ -154,6 +175,7 @@ print(out.read_text(encoding="utf-8")[:200])
             man1 = self._export(out_unapproved, approval=None)
             self.assertIn("dataset_hash", man1)
             self.assertIn("source_commit_sha", man1)
+            self.assertEqual(man1["source_commit_sha"], self.producer_sha)
             # Fixture export from main checkout should pin main commit when run on main tip
             status = (man1.get("snapshot_status") or man1.get("publish_status") or "").upper()
             self.assertNotEqual(status, "PUBLISH_READY")
@@ -191,39 +213,31 @@ print(out.read_text(encoding="utf-8")[:200])
                     f"exporter missing {name}",
                 )
 
-            # 5b: consume with real validate_snapshot when checksums compose
-            try:
-                snap = validate_snapshot(consumer_dir)
-                consumer_ok = True
-            except Exception as exc:  # noqa: BLE001
-                # Fixture may not satisfy web-cfg 1.1.0 recompute rules; still prove render path
-                # using production data_dir for consumer gates while export proved above.
-                consumer_ok = False
-                snap = None
-                export_err = str(exc)
-
-            if consumer_ok and snap:
-                cands = build_candidates(snap["data"], snap["manifest"])
-                # 6–8: render + editorial on first available candidate types
-                for c in cands[:3]:
-                    html = render_candidate(c, snap["manifest"])
-                    self.assertNotIn("datalake", html.lower())
-                    self.assertNotIn("historical_count", html)
-                    self.assertNotIn("pncp_supplier_contracts", html)
-                    reg = {
-                        "page_id": c.page_id,
-                        "url": c.url,
-                        "page_type": c.page_type,
-                        "status": c.status,
-                        "human_review": "PENDING",
-                        "title": c.title,
-                    }
-                    with tempfile.TemporaryDirectory() as hd:
-                        hp = Path(hd) / "index.html"
-                        hp.write_text(html, encoding="utf-8")
-                        audit = audit_page(reg, hp)
-                        codes = {i.code for i in audit.issues}
-                        self.assertNotIn("internal_language_public", codes)
+            # 5b: incompatible producer output is an integration failure. A
+            # different local snapshot cannot stand in for this export.
+            snap = validate_snapshot(consumer_dir)
+            cands = build_candidates(snap["data"], snap["manifest"])
+            self.assertTrue(cands, "producer fixture yielded no consumer candidates")
+            # 6–8: render + editorial on first available candidate types
+            for c in cands[:3]:
+                html = render_candidate(c, snap["manifest"])
+                self.assertNotIn("datalake", html.lower())
+                self.assertNotIn("historical_count", html)
+                self.assertNotIn("pncp_supplier_contracts", html)
+                reg = {
+                    "page_id": c.page_id,
+                    "url": c.url,
+                    "page_type": c.page_type,
+                    "status": c.status,
+                    "human_review": "PENDING",
+                    "title": c.title,
+                }
+                with tempfile.TemporaryDirectory() as hd:
+                    hp = Path(hd) / "index.html"
+                    hp.write_text(html, encoding="utf-8")
+                    audit = audit_page(reg, hp)
+                    codes = {i.code for i in audit.issues}
+                    self.assertNotIn("internal_language_public", codes)
 
             # Always also drive production web-cfg consumer path (real shipped data)
             prod = validate_snapshot(ROOT / "data" / "pseo")
@@ -295,21 +309,34 @@ print(out.read_text(encoding="utf-8")[:200])
 
                 # Keep the exact production-built _site intact for the browser
                 # gates that run later in the same npm test process.
+                source_manifest = ROOT / "seo/PUBLIC-ARTIFACT-MANIFEST.json"
+                source_manifest_before = source_manifest.read_bytes()
                 rep = assemble_public_artifact(
                     ROOT,
                     dest_name=str(td_path / "public-artifact"),
+                    manifest_path=td_path / "public-artifact-manifest.json",
                 )
                 self.assertTrue(rep.get("ok"), rep)
+                emitted = json.loads((td_path / "public-artifact-manifest.json").read_text())
+                self.assertEqual(emitted["public_artifact_hash"], rep["public_artifact_hash"])
+                self.assertEqual(source_manifest.read_bytes(), source_manifest_before)
 
-            # Record whether full validate_snapshot on fixture export succeeded
-            if not consumer_ok:
-                # Honest: fixture export ran (steps 1–4) but may not match web-cfg hash composition
-                self.assertTrue(
-                    (out_unapproved / "manifest.json").exists(),
-                    f"export missing despite validate fail: {export_err}",
-                )
+    def test_invalid_export_cannot_fall_back_to_a_local_snapshot(self):
+        from unittest.mock import patch
+        from scripts.pseo.schema import validate_snapshot
 
-    def test_extra_cli_entrypoint_on_main_checkout(self):
+        def reject_export(path, *args, **kwargs):
+            if Path(path).resolve() != (ROOT / "data/pseo").resolve():
+                raise ValueError("seed_incompatible_producer_snapshot")
+            return validate_snapshot(path, *args, **kwargs)
+
+        # The old broad exception handler could continue with the local data
+        # after this failure. Integration must fail on its actual producer.
+        with patch("scripts.pseo.schema.validate_snapshot", side_effect=reject_export):
+            with self.assertRaisesRegex(ValueError, "seed_incompatible_producer_snapshot"):
+                self.test_ten_step_export_consume_path()
+
+    def test_extra_cli_entrypoint_on_contracted_checkout(self):
         r = subprocess.run(
             [sys.executable, "-m", "scripts.pseo.export_web_cfg", "--help"],
             cwd=str(self.extra),
@@ -318,7 +345,8 @@ print(out.read_text(encoding="utf-8")[:200])
             timeout=60,
         )
         self.assertNotIn("No module named", r.stderr)
-        self.assertIn(r.returncode, {0, 1, 2})
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertIn("--out", r.stdout)
 
 
 if __name__ == "__main__":

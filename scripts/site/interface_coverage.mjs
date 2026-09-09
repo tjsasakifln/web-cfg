@@ -15,7 +15,15 @@ export const POLICY_PATH = join(ROOT, "data/quality/interface-coverage-policy.js
 export const FAMILY_REGISTRY_PATH = join(ROOT, "data/organic/public-family-registry.json");
 const BOFU_MATRIX_PATH = join(ROOT, "data/organic/bofu-intent-matrix.json");
 const MANIFEST_PATH = join(ROOT, "seo/PUBLIC-ARTIFACT-MANIFEST.json");
+const PUBLIC_PREVIEW_DECISIONS_PATH = join(ROOT, "data/editorial/public-preview-route-decisions.json");
+const RELEASE_CONTROL_PATH = join(ROOT, "deploy/netcup/lib/release_control.py");
 const BOFU_SOURCE = "data/organic/bofu-intent-matrix.json#rows[].canonical_service_route";
+const OFFICIAL_OVERLAY_OWNER = "deploy/netcup/lib/release_control.py::_publish_live_intelligence_overlay";
+const OFFICIAL_OVERLAY_SOURCE_CONTRACT = "data/live_intelligence/accepted/opportunities.json#official_live-indexable-projection";
+const OFFICIAL_OVERLAY_PROJECTION_ROUTE = "/.well-known/live-intelligence-overlay.json";
+const OFFICIAL_OVERLAY_PROJECTION_SCHEMA = "confenge.live-intelligence-overlay/v1";
+const OFFICIAL_OPPORTUNITY_ROUTE_PATTERN = "^/oportunidades/[A-Za-z0-9][A-Za-z0-9._-]{0,80}(?:/[A-Za-z0-9][A-Za-z0-9._-]{0,20}){0,3}/$";
+const OFFICIAL_OVERLAY_ABSENCE_VERIFIER = "deploy/netcup/lib/release_control.py::_withdraw_packaged_opportunity_pages";
 
 /** Prefer the built public artifact; fall back to the repo root working copy. */
 export function resolveSiteRoot(root = ROOT) {
@@ -137,6 +145,47 @@ function supplementalFamilyFor(route, families) {
   return matches[0] || null;
 }
 
+function validateRuntimeOnlyRepresentative(entry, family) {
+  const runtime = entry.runtime_only;
+  if (!runtime || entry.route) {
+    throw new Error(`canonical representative requires exactly one of route or runtime_only: ${entry.family_id}`);
+  }
+  const exact = runtime.mode === "official_live_overlay"
+    && runtime.owner === OFFICIAL_OVERLAY_OWNER
+    && runtime.source_contract === OFFICIAL_OVERLAY_SOURCE_CONTRACT
+    && runtime.required_source_kind === "official_live"
+    && runtime.accepted_projection_route === OFFICIAL_OVERLAY_PROJECTION_ROUTE
+    && runtime.accepted_projection_schema === OFFICIAL_OVERLAY_PROJECTION_SCHEMA
+    && runtime.inventory_route === "/sitemap-oportunidades.xml"
+    && runtime.route_pattern === OFFICIAL_OPPORTUNITY_ROUTE_PATTERN
+    && runtime.absence_behavior === "withdraw_family"
+    && runtime.absence_verifier === OFFICIAL_OVERLAY_ABSENCE_VERIFIER
+    && runtime.post_stage_lighthouse_required === true
+    && family?.match?.prefix === "/oportunidades/";
+  if (!exact) {
+    throw new Error(`invalid official runtime Lighthouse contract: ${entry.family_id}`);
+  }
+
+  const decisions = JSON.parse(readFileSync(PUBLIC_PREVIEW_DECISIONS_PATH, "utf8"));
+  const sourceDecision = (decisions.groups || []).find((group) => group.id === "packaged-opportunity-fixtures");
+  const controller = readFileSync(RELEASE_CONTROL_PATH, "utf8");
+  const ownerVerified = sourceDecision?.source_root === "oportunidades/"
+    && sourceDecision?.public_decision === "EXCLUDE_FIXTURE_PACKAGE_KEEP_OFFICIAL_OVERLAY"
+    && decisions.counterproof?.official_opportunity_owner === OFFICIAL_OVERLAY_OWNER
+    && /source_kind=official_live/.test(decisions.counterproof?.official_opportunity_contract || "")
+    && /def _publish_live_intelligence_overlay\(release: Path\)/.test(controller)
+    && /def _accepted_overlay_identity\(release: Path\)/.test(controller)
+    && /def _write_live_intelligence_overlay_manifest\(/.test(controller)
+    && /LIVE_INTEL_PUBLIC_MANIFEST/.test(controller)
+    && /def _withdraw_packaged_opportunity_pages\(release: Path\)/.test(controller)
+    && /CONFENGE_LI_OFFICIAL_DIR/.test(controller)
+    && /result = publish\(/.test(controller);
+  if (!ownerVerified) {
+    throw new Error(`official runtime owner contract is not verifiable: ${entry.family_id}`);
+  }
+  return runtime;
+}
+
 function validatePolicyShape(policy, registry) {
   if (policy.axe?.always_include?.length) {
     throw new Error("axe.always_include is forbidden: axe coverage must derive from price/capture risk");
@@ -167,6 +216,182 @@ function validatePolicyShape(policy, registry) {
   if (duplicateRoutes.length) {
     throw new Error(`canonical Lighthouse representatives must be unique: ${duplicateRoutes.join(", ")}`);
   }
+  for (const entry of representatives) {
+    const family = registry.families.find((candidate) => candidate.id === entry.family_id);
+    if (entry.runtime_only) validateRuntimeOnlyRepresentative(entry, family);
+    else if (!entry.route) throw new Error(`canonical representative has no route: ${entry.family_id}`);
+  }
+}
+
+/** Resolve and verify one real post-stage route owned by a runtime-only family. */
+export function runtimeLighthouseContractForRoute(
+  route,
+  policy = loadPolicy(),
+  registry = loadPublicFamilyRegistry(),
+) {
+  validatePolicyShape(policy, registry);
+  const family = publicFamilyForRoute(route, registry);
+  if (!family) throw new Error(`runtime Lighthouse route has no canonical family: ${route}`);
+  const representative = policy.lighthouse.canonical_representatives
+    .find((entry) => entry.family_id === family.id);
+  if (!representative?.runtime_only) {
+    throw new Error(`runtime Lighthouse route belongs to a packaged family: ${route}`);
+  }
+  const runtime = validateRuntimeOnlyRepresentative(representative, family);
+  if (!(new RegExp(runtime.route_pattern)).test(route)) {
+    throw new Error(`runtime Lighthouse route does not match the owned detail-route contract: ${route}`);
+  }
+  return {
+    family_id: family.id,
+    route,
+    reason: representative.reason,
+    ...runtime,
+  };
+}
+
+/** Prove that a selected post-stage route came from the runtime inventory. */
+export function verifyRuntimeInventoryDocument(route, sitemapXml, contract, acceptedRoutes = null) {
+  if (!contract?.post_stage_lighthouse_required || contract.route !== route) {
+    throw new Error(`runtime Lighthouse inventory check has no matching contract: ${route}`);
+  }
+  const inventoried = [...String(sitemapXml || "").matchAll(/<loc>([^<]+)<\/loc>/gi)]
+    .map((match) => match[1].replace(/&amp;/g, "&"))
+    .map((value) => {
+      try { return new URL(value, "https://runtime.invalid").pathname; }
+      catch { return ""; }
+    });
+  if (!inventoried.includes(route)) {
+    throw new Error(`runtime Lighthouse route is absent from ${contract.inventory_route}: ${route}`);
+  }
+  if (acceptedRoutes) {
+    const accepted = [...new Set(acceptedRoutes)];
+    if (accepted.length !== acceptedRoutes.length) {
+      throw new Error("runtime Lighthouse accepted route inventory contains duplicates");
+    }
+    const observed = [...new Set(inventoried)];
+    if (
+      observed.length !== accepted.length
+      || observed.some((value) => !accepted.includes(value))
+      || accepted.some((value) => !observed.includes(value))
+    ) {
+      throw new Error(
+        `runtime Lighthouse sitemap differs from the exact accepted projection: accepted=${accepted.length} inventoried=${observed.length}`,
+      );
+    }
+  }
+  return true;
+}
+
+/**
+ * Bind a post-stage Lighthouse route to the consumer-accepted official projection.
+ * The route prefix and runtime sitemap are insufficient evidence on their own:
+ * both could contain an unaccepted file. The stage-owned document is emitted only
+ * after consumer hash identity and per-record publication checks pass.
+ */
+export function verifyRuntimeAcceptedProjectionDocument(
+  route,
+  document,
+  contract,
+  expectedSha,
+) {
+  if (!contract?.post_stage_lighthouse_required || contract.route !== route) {
+    throw new Error(`runtime Lighthouse accepted-projection check has no matching contract: ${route}`);
+  }
+  if (!document || typeof document !== "object" || Array.isArray(document)) {
+    throw new Error("runtime Lighthouse accepted-projection document is not an object");
+  }
+  if (document.schema !== contract.accepted_projection_schema) {
+    throw new Error(`runtime Lighthouse accepted-projection schema mismatch: ${document.schema || "missing"}`);
+  }
+  if (document.release_sha !== expectedSha || !/^[0-9a-f]{40}$/.test(String(expectedSha || ""))) {
+    throw new Error(
+      `runtime Lighthouse accepted-projection release mismatch: expected=${expectedSha || "missing"} observed=${document.release_sha || "missing"}`,
+    );
+  }
+  if (document.official_live !== true || document.source_kind !== contract.required_source_kind) {
+    throw new Error("runtime Lighthouse accepted projection is not official_live");
+  }
+  for (const field of ["manifest_hash", "consumer_observed_manifest_hash", "accepted_projection_sha256"]) {
+    if (!/^[0-9a-f]{64}$/.test(String(document[field] || ""))) {
+      throw new Error(`runtime Lighthouse accepted projection has invalid ${field}`);
+    }
+  }
+  if (document.manifest_hash !== document.consumer_observed_manifest_hash) {
+    throw new Error("runtime Lighthouse accepted projection has divergent producer/consumer manifest hashes");
+  }
+  for (const field of ["source_run_id", "as_of"]) {
+    if (typeof document[field] !== "string" || !document[field].trim()) {
+      throw new Error(`runtime Lighthouse accepted projection has no ${field}`);
+    }
+  }
+  if (!Array.isArray(document.routes) || document.routes.length === 0) {
+    throw new Error("runtime Lighthouse accepted projection has no exact routes");
+  }
+  if (!Array.isArray(document.removed_html_paths)) {
+    throw new Error("runtime Lighthouse accepted projection has invalid removed_html_paths");
+  }
+  if (
+    !Array.isArray(document.static_html_paths)
+    || document.static_html_paths.length > 1
+    || (document.static_html_paths.length === 1
+      && document.static_html_paths[0] !== "_site/oportunidades/index.html")
+  ) {
+    throw new Error("runtime Lighthouse accepted projection has invalid static_html_paths allowlist");
+  }
+  if (
+    !document.static_html_sha256
+    || typeof document.static_html_sha256 !== "object"
+    || Array.isArray(document.static_html_sha256)
+    || Object.keys(document.static_html_sha256).length !== document.static_html_paths.length
+    || document.static_html_paths.some((path) => !/^[0-9a-f]{64}$/.test(String(document.static_html_sha256[path] || "")))
+    || Object.keys(document.static_html_sha256).some((path) => !document.static_html_paths.includes(path))
+  ) {
+    throw new Error("runtime Lighthouse accepted projection has invalid static_html_sha256 identity");
+  }
+  const removedPaths = new Set();
+  for (const value of document.removed_html_paths) {
+    const path = String(value || "");
+    if (!/^_site\/oportunidades\/.+\/index\.html$/.test(path) || removedPaths.has(path)) {
+      throw new Error(`runtime Lighthouse accepted projection has invalid removed html path: ${path || "missing"}`);
+    }
+    removedPaths.add(path);
+  }
+
+  const routePattern = new RegExp(contract.route_pattern);
+  const routes = new Set();
+  const ids = new Set();
+  const htmlPaths = new Set();
+  for (const item of document.routes) {
+    const opportunityId = String(item?.opportunity_id || "");
+    const acceptedRoute = String(item?.route || "");
+    const htmlPath = String(item?.html_path || "").replace(/^_site\//, "");
+    if (!opportunityId || acceptedRoute !== `/oportunidades/${opportunityId}/` || !routePattern.test(acceptedRoute)) {
+      throw new Error(`runtime Lighthouse accepted projection has inconsistent route: ${acceptedRoute || "missing"}`);
+    }
+    if (htmlPath !== `oportunidades/${opportunityId}/index.html`) {
+      throw new Error(`runtime Lighthouse accepted projection has inconsistent html_path: ${item?.html_path || "missing"}`);
+    }
+    for (const field of ["content_hash", "sha256"]) {
+      if (!/^[0-9a-f]{64}$/.test(String(item?.[field] || ""))) {
+        throw new Error(`runtime Lighthouse accepted projection route has invalid ${field}: ${acceptedRoute}`);
+      }
+    }
+    if (routes.has(acceptedRoute) || ids.has(opportunityId) || htmlPaths.has(htmlPath)) {
+      throw new Error(`runtime Lighthouse accepted projection has duplicate route identity: ${acceptedRoute}`);
+    }
+    routes.add(acceptedRoute);
+    ids.add(opportunityId);
+    htmlPaths.add(htmlPath);
+  }
+  for (const htmlPath of htmlPaths) {
+    if (removedPaths.has(`_site/${htmlPath}`)) {
+      throw new Error(`runtime Lighthouse accepted projection both publishes and removes: ${htmlPath}`);
+    }
+  }
+  if (!routes.has(route)) {
+    throw new Error(`runtime Lighthouse route is absent from the accepted official projection: ${route}`);
+  }
+  return document.routes.find((item) => item.route === route);
 }
 
 /** Derive the complete axe and Lighthouse coverage plan. */
@@ -190,8 +415,9 @@ export function deriveCoverage(options = {}) {
         label: family.visitor_job,
         kind: "canonical",
         routes: [],
-        lighthouse_representative: representative.route,
+        lighthouse_representative: representative.route || null,
         representative_reason: representative.reason,
+        runtime_only: representative.runtime_only || null,
         image_gate: Boolean(representative.image_gate),
         seo_exempt: Boolean(representative.seo_exempt_reason),
         seo_exempt_reason: representative.seo_exempt_reason || null,
@@ -247,12 +473,20 @@ export function deriveCoverage(options = {}) {
   }
 
   const families = [...canonicalFamilies.values(), ...supplementalFamilies.values()];
-  const emptyFamilies = families.filter((family) => !family.routes.length);
+  const unexpectedPackagedRuntimeFamilies = families.filter(
+    (family) => family.runtime_only && family.routes.length,
+  );
+  if (unexpectedPackagedRuntimeFamilies.length) {
+    throw new Error(
+      `runtime-only Lighthouse families must be absent from the package: ${unexpectedPackagedRuntimeFamilies.map((f) => f.id).join(", ")}`,
+    );
+  }
+  const emptyFamilies = families.filter((family) => !family.routes.length && !family.runtime_only);
   if (emptyFamilies.length) {
     throw new Error(`Lighthouse families absent from the artifact: ${emptyFamilies.map((f) => f.id).join(", ")}`);
   }
   const invalidRepresentatives = families.filter(
-    (family) => !family.routes.includes(family.lighthouse_representative),
+    (family) => !family.runtime_only && !family.routes.includes(family.lighthouse_representative),
   );
   if (invalidRepresentatives.length) {
     throw new Error(
@@ -268,6 +502,7 @@ export function deriveCoverage(options = {}) {
   }
 
   const invalidCanonicalSeo = [...canonicalFamilies.values()].filter((family) => {
+    if (family.runtime_only) return false;
     const representativeNoindex = isNoindex(
       readFileSync(routeToFile(siteRoot, family.lighthouse_representative), "utf8"),
     );
@@ -361,7 +596,9 @@ export function deriveCoverage(options = {}) {
       };
     });
 
-  const representativePages = families.map((family) => family.lighthouse_representative);
+  const representativePages = families
+    .filter((family) => !family.runtime_only)
+    .map((family) => family.lighthouse_representative);
   const lighthousePages = [
     ...representativePages,
     ...additionalLighthousePages.map((entry) => entry.route),
@@ -414,7 +651,17 @@ export function deriveCoverage(options = {}) {
         image_gate: Boolean(family.image_gate),
         seo_exempt: Boolean(family.seo_exempt),
         seo_exempt_reason: family.seo_exempt_reason || null,
+        runtime_only: family.runtime_only,
       })),
+      runtime_families: families
+        .filter((family) => family.runtime_only)
+        .map((family) => ({
+          id: family.id,
+          label: family.label,
+          execution_state: "post_stage_required_if_published_otherwise_verified_withdrawal",
+          representative_reason: family.representative_reason,
+          ...family.runtime_only,
+        })),
       additional_pages: additionalLighthousePages,
       pages: lighthousePages,
       image_gate_pages: [
@@ -455,7 +702,8 @@ export function formatCoverageDeclaration(coverage) {
     `axe not sampled: ${coverage.axe.not_sampled_count} routes, each with a recorded reason`,
     `lighthouse families: ${coverage.lighthouse.canonical_family_count} canonical + `
       + `${coverage.lighthouse.supplemental_family_count} supplemental noindex; `
-      + `${coverage.lighthouse.pages.length} pages, ${coverage.lighthouse.not_sampled_count} omissions recorded`,
+      + `${coverage.lighthouse.pages.length} package pages, ${coverage.lighthouse.runtime_families.length} runtime family pending post-stage, `
+      + `${coverage.lighthouse.not_sampled_count} package omissions recorded`,
     "axe critical/serious exceptions: unsupported",
   ].join("\n");
 }

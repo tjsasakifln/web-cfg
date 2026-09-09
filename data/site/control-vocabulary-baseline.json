@@ -1,6 +1,8 @@
 {
   "schema_version": "1.0.0",
-  "purpose": "Dívida aberta de vocabulário de controle na superfície pública. Não é aprovação: é a contagem do que falta corrigir. Só pode diminuir.",
+  "status": "SUPERSEDED",
+  "purpose": "Retrato histórico de 2026-09-07, preservado como evidência. A decisão EXECUTE_NOW de 2026-09-09 substituiu a catraca: este arquivo não autoriza ocorrências nem participa do gate de publicação.",
+  "superseded_by": "EXECUTE_NOW/2026-09-09",
   "owner_issue": 611,
   "recorded_at": "2026-09-07",
   "enforced_routes": [
@@ -13,7 +15,7 @@
     "servicos/index.html",
     "servicos-obras-publicas/index.html"
   ],
-  "open_debt": {
+  "historical_snapshot": {
     "acompanhamento-contratos-obras/index.html": {
       "enquadramento": 1,
       "enquadrar": 1,

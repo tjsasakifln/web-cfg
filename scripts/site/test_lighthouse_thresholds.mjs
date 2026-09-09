@@ -1,5 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { spawnSync } from "node:child_process";
 import {
   CLS_CAP,
   CRITICAL_MONEY_PATHS,
@@ -211,6 +213,36 @@ const committedSummary = JSON.parse(
   readFileSync(new URL("../../docs/lighthouse-runs/summary.json", import.meta.url), "utf8"),
 );
 const runnerSource = readFileSync(new URL("./run_lighthouse.mjs", import.meta.url), "utf8");
+assert.match(
+  runnerSource,
+  /const FINAL_REPEATED_RUNS = 3;[\s\S]*configuredRuns \|\| FINAL_REPEATED_RUNS/,
+  "the default Lighthouse command must collect the three runs required by final evidence",
+);
+assert.match(
+  runnerSource,
+  /diagnosticRunCount && !evidenceLabel[\s\S]*diagnostic-only and requires --label/,
+  "a non-final run count must be explicitly labelled and cannot overwrite final evidence",
+);
+assert.match(
+  runnerSource,
+  /diagnostic completed; evidence is labelled and is not final/,
+  "diagnostic evidence must not be reported as a passing final gate",
+);
+const unlabelledDiagnostic = spawnSync(
+  process.execPath,
+  [fileURLToPath(new URL("./run_lighthouse.mjs", import.meta.url)), "--runs=1"],
+  { encoding: "utf8", env: { ...process.env, LH_HOME_RUNS: "" } },
+);
+assert.notEqual(
+  unlabelledDiagnostic.status,
+  0,
+  "an explicit one-run diagnostic must not masquerade as final evidence",
+);
+assert.match(
+  `${unlabelledDiagnostic.stdout}\n${unlabelledDiagnostic.stderr}`,
+  /diagnostic-only and requires --label/,
+  "the rejected diagnostic must explain how to keep its evidence separate",
+);
 assert.doesNotMatch(
   runnerSource,
   /retry:\s*["']home_lcp|retriesLeft|LH_HOME_LCP_MAX_MS/,
@@ -227,6 +259,28 @@ assert.match(
   "Chromium profiles must stay in the isolated temporary directory",
 );
 const interfaceCoverage = deriveCoverage({ policy: loadPolicy(), siteRoot: ROOT });
+assert.equal(interfaceCoverage.lighthouse.runtime_families.length, 1);
+assert.deepEqual(
+  committedSummary.coverage.runtime_families,
+  interfaceCoverage.lighthouse.runtime_families,
+  "package evidence must declare the post-stage runtime family without marking it measured",
+);
+assert.equal(
+  committedSummary.coverage.runtime_evidence,
+  null,
+  "the package matrix cannot claim evidence for an overlay that is added only during stage",
+);
+for (const runtimeFamily of interfaceCoverage.lighthouse.runtime_families) {
+  const routePattern = new RegExp(runtimeFamily.route_pattern);
+  assert(
+    !(committedSummary.coverage.pages || []).some((path) => routePattern.test(path)),
+    `package Lighthouse pages contain a virtual runtime representative for ${runtimeFamily.id}`,
+  );
+  assert(
+    !(committedSummary.results || []).some((row) => routePattern.test(row.path)),
+    `package Lighthouse rows claim runtime evidence for ${runtimeFamily.id}`,
+  );
+}
 const seoExempt = new Set(interfaceCoverage.lighthouse.seo_exempt_pages || []);
 const measuredPages = interfaceCoverage.lighthouse.pages.filter((path) => !seoExempt.has(path));
 const expectedRows = measuredPages.flatMap((path) =>

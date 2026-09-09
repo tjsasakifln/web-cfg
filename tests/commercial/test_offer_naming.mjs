@@ -241,8 +241,10 @@ const missingCanonicalOnPrimarySurface = publishedNames.filter((offer) => !prima
 assert("canonical_names_on_primary_surface_8_of_8", missingCanonicalOnPrimarySurface.length === 0, missingCanonicalOnPrimarySurface.map((offer) => offer.deliverable_id));
 const backlogNamesOnPrimarySurface = names.filter((offer) => !publishedSurface.primary_offer_ids.includes(offer.deliverable_id) && primaryBody.includes(offer.public_name_pt_br));
 assert("backlog_names_not_sold_on_vitrine", backlogNamesOnPrimarySurface.length === 0, backlogNamesOnPrimarySurface.map((offer) => offer.deliverable_id));
-const capabilityRoll = entregasHtml.match(/<section class="capability-roll"[\s\S]*?<\/section>/)?.[0] || "";
-assert("all_54_canonical_names_findable_in_taxative_roll", names.every((offer) => capabilityRoll.includes(offer.public_name_pt_br)), names.filter((offer) => !capabilityRoll.includes(offer.public_name_pt_br)).map((offer) => offer.deliverable_id));
+// The complete naming authority is internal; only approved offers belong in
+// the buying catalogue. EXECUTE_NOW 2026-09-09 revokes the public maturity roll.
+assert("all_canonical_names_resolve_in_registry", names.every((offer) => canonicalById.get(offer.deliverable_id)?.public_name_pt_br === offer.public_name_pt_br), names.filter((offer) => canonicalById.get(offer.deliverable_id)?.public_name_pt_br !== offer.public_name_pt_br).map((offer) => offer.deliverable_id));
+assert("public_catalog_omits_internal_roll", !entregasHtml.includes('data-capability-id="'), "internal catalogue must not become the public service explanation");
 const primaryNames = names.slice(0, 8).map((offer) => offer.public_name_pt_br);
 const primaryHeadings = [...primaryBody.matchAll(/<h2[^>]*>([^<]+)<\/h2>/g)].map((match) => match[1]);
 assert("primary_cards_use_canonical_names", primaryNames.every((name) => primaryHeadings.includes(name)), primaryNames.filter((name) => !primaryHeadings.includes(name)));

@@ -15,19 +15,51 @@ on:
         default: false
 
 permissions:
+  actions: read
   contents: read
 
 jobs:
   gates:
-    # Stable GitHub check context — require this name in branch protection
-    name: site-ci
+    # Validation feeds the stable site-ci aggregate below.
+    name: site-validation
     runs-on: ubuntu-latest
+    env:
+      EXTRA_CLI_REQUIRED: "1"
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           # Full history required for package commit_sha ancestor checks (PR merge refs)
           fetch-depth: 0
+      - name: Resolve contracted producer revision
+        id: producer-contract
+        run: |
+          python3 - <<'PY'
+          import json, os, re
+          from pathlib import Path
+          sha = json.loads(Path("data/pseo/manifest.json").read_text())["source_commit_sha"]
+          if not re.fullmatch(r"[0-9a-f]{40}", sha):
+              raise SystemExit("invalid contracted producer revision")
+          with open(os.environ["GITHUB_OUTPUT"], "a") as output:
+              print(f"sha={sha}", file=output)
+          PY
+      - name: Checkout contracted producer for fixture integration
+        env:
+          EXTRA_CLI_ROOT: ${{ runner.temp }}/extra-cli-contract
+        run: |
+          set -euo pipefail
+          # Public, pinned, read-only fixture: no credentials or post-checkout
+          # action, and no external source files inside the website workspace.
+          test ! -e "$EXTRA_CLI_ROOT"
+          test ! -L "$EXTRA_CLI_ROOT"
+          git init --quiet "$EXTRA_CLI_ROOT"
+          git -C "$EXTRA_CLI_ROOT" fetch --no-tags --depth=1 https://github.com/tjsasakifln/extra-cli.git "${{ steps.producer-contract.outputs.sha }}"
+          git -C "$EXTRA_CLI_ROOT" checkout --quiet --detach FETCH_HEAD
+          printf 'EXTRA_CLI_ROOT=%s\n' "$EXTRA_CLI_ROOT" >> "$GITHUB_ENV"
+      - name: Verify contracted producer checkout
+        run: |
+          set -euo pipefail
+          test "$(git -C "$EXTRA_CLI_ROOT" rev-parse HEAD)" = "${{ steps.producer-contract.outputs.sha }}"
       - name: Pin release build clock to the commit
         if: inputs.export_public_artifact
         run: echo "SOURCE_DATE_EPOCH=$(git show -s --format=%ct HEAD)" >> "$GITHUB_ENV"
@@ -74,9 +106,6 @@ jobs:
           npm run organic:test
           npm run test:diagnose-margin
           npm run test:analytics
-          npm run test:form-funnel
-          npm run test:cta-form-next-state
-          npm run test:lead-function
           npm run test:search-observation
           npm run test:checkout-negatives
           npm run test:deliverables-registry
@@ -131,6 +160,11 @@ jobs:
           npm run test:tools
           npm run test:tool-compute
           npm run test:nurture
+      - name: Contact and lead pathway gates
+        run: |
+          npm run test:form-funnel
+          npm run test:cta-form-next-state
+          npm run test:lead-function
       - name: Build public site
         env:
           # The release artifact must carry the production identity it will be
@@ -140,6 +174,11 @@ jobs:
           CONTEXT: ${{ inputs.export_public_artifact && 'production' || '' }}
           TURNSTILE_SITE_KEY: ${{ vars.TURNSTILE_SITE_KEY }}
         run: npm run build:site
+      - name: Final public-surface coverage and copy gate
+        run: |
+          python3 -m pytest scripts/site/test_public_server_acceptance.py -q
+          python3 scripts/site/public_surface_coverage.py --artifact _site --manifest seo/PUBLIC-ARTIFACT-MANIFEST.json --report build/reports/public-surface-coverage.json
+          python3 scripts/site/test_self_deprecating_copy.py --root _site --require-artifact
       - name: Prototype isolation in the built artifact
         run: npm run test:prototype-isolation
       - name: Published medição cluster originality
@@ -162,6 +201,11 @@ jobs:
         run: |
           npm run test:csp-browser
           npm run test:convergence-browser
+      - name: Commercial visitor journeys on the built artifact
+        env:
+          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+          SITE_ROOT: _site
+        run: npm run test:contact-journeys
       - name: Money asset canary browser e2e
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
@@ -178,7 +222,20 @@ jobs:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
           UI_GEOMETRY_REQUIRED: "1"
           PUBLIC_ARTIFACT_REQUIRED: "1"
-        run: npm run test:ui
+        run: |
+          npm run test:ui
+      - name: Rendered first-fold measurement on exact artifact
+        env:
+          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+          PUBLIC_ARTIFACT_REQUIRED: "1"
+        run: |
+          node scripts/site/measure_first_fold.mjs --artifact --report build/reports/first-fold-current.json
+      - name: Preserve mandatory first-fold evidence
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: first-fold-${{ github.sha }}
+          path: build/reports/first-fold-current.json
+          if-no-files-found: error
       - name: Sitewide layout geometry
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
@@ -284,6 +341,66 @@ jobs:
             build/reports/deliverables-hub-ui.json
             build/reports/axe-report.json
             build/reports/convergence/
+            build/reports/contact-journeys/
+            build/reports/public-surface-coverage.json
+            build/reports/first-fold-current.json
             build/reports/site-excellence.json
             build/reports/site-excellence.md
           if-no-files-found: ignore
+
+  execution_evidence:
+    name: required execution evidence
+    if: always()
+    needs: gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Verify mandatory gate execution for the exact candidate SHA
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          EXPECTED_RUN_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          CANDIDATE_CHECKOUT_SHA: ${{ github.sha }}
+          RELEASE_ARTIFACT_REQUIRED: ${{ inputs.export_public_artifact && '1' || '0' }}
+        run: |
+          observed_checkout_sha="$(git rev-parse HEAD)"
+          if [ "$observed_checkout_sha" != "$CANDIDATE_CHECKOUT_SHA" ]; then
+            echo "REQUIRED_EXECUTION_FAIL checked-out candidate differs from GitHub candidate" >&2
+            exit 1
+          fi
+          python3 scripts/site/verify_required_execution.py \
+            --repo "$GITHUB_REPOSITORY" \
+            --run-id "$GITHUB_RUN_ID" \
+            --sha "$EXPECTED_RUN_SHA" \
+            --required-job site-validation \
+            --required-step "Resolve contracted producer revision" \
+            --required-step "Checkout contracted producer for fixture integration" \
+            --required-step "Verify contracted producer checkout" \
+            --required-step "Workflow gate shape" \
+            --required-step "Unit and brand/copy/design gates" \
+            --required-step "Contact and lead pathway gates" \
+            --required-step "Build public site" \
+            --required-step "Final public-surface coverage and copy gate" \
+            --required-step "Published HTML and FAQ integrity" \
+            --required-step "Public artifact audit" \
+            --required-step "Commercial visitor journeys on the built artifact" \
+            --required-step "Rendered first-fold measurement on exact artifact" \
+            --required-step "Preserve mandatory first-fold evidence" \
+            --required-step "axe accessibility" \
+            --required-step "Playwright checklist on _site"
+
+  site_ci:
+    # Stable branch-protection context. This aggregator is intentionally not
+    # inspected by execution_evidence, avoiding a dependency cycle.
+    name: site-ci
+    if: always()
+    needs: [gates, execution_evidence]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require validation and execution evidence
+        env:
+          VALIDATION_RESULT: ${{ needs.gates.result }}
+          EXECUTION_EVIDENCE_RESULT: ${{ needs.execution_evidence.result }}
+        run: |
+          test "$VALIDATION_RESULT" = success
+          test "$EXECUTION_EVIDENCE_RESULT" = success

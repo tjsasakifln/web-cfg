@@ -64,7 +64,7 @@
     {
       "order": 5,
       "key": "concrete_result_and_artifact_example",
-      "requirement": "resultado concreto e exemplo do artefato"
+      "requirement": "resultado concreto e exemplo da entrega"
     },
     {
       "order": 6,
@@ -74,7 +74,7 @@
     {
       "order": 7,
       "key": "client_inputs_and_sla_start",
-      "requirement": "o que o cliente fornece e condição para iniciar o SLA"
+      "requirement": "informações necessárias, forma de confirmação e condição para iniciar a contagem do prazo"
     },
     {
       "order": 8,
@@ -141,7 +141,7 @@
       },
       {
         "order": 6,
-        "block": "cards resumidos com trigger, decisão, preço e SLA"
+        "block": "resumo com situação atendida, decisão, trabalho, preço e prazo"
       },
       {
         "order": 7,
@@ -183,7 +183,7 @@
       },
       {
         "order": 5,
-        "block": "processo e SLA"
+        "block": "processo, prazo e condição de início da contagem"
       },
       {
         "order": 6,
@@ -685,7 +685,7 @@
     },
     {
       "id": "QC-03",
-      "criterion": "preço e SLA visíveis sem accordion",
+      "criterion": "preço, prazo e condição de início visíveis sem depender de expansão",
       "metric": "price_and_sla_visible_without_accordion",
       "operator": "==",
       "threshold": true,
@@ -858,30 +858,32 @@
       "data/organic/public-family-registry.json#families[profile=priced_offer]"
     ],
     "manual_route_allowlist": false,
-    "deliverables_covered": 54,
+    "deliverables_governed": 54,
+    "public_offers_rendered": 8,
     "clauses_per_deliverable": 15,
-    "clause_instances": 810,
-    "distinct_clause_bodies": 810,
+    "internal_clause_requirement_instances": 810,
+    "public_clause_instances": 120,
+    "distinct_public_clause_bodies": 120,
     "exact_duplicate_clause_bodies": 0,
     "adversarial_review_package": "docs/research/copy-adversarial-v1",
     "human_review_state": "NOT_STARTED"
   },
   "money_page_scan": {
     "state": "MEASURED_PASS",
-    "measured_at": "2026-09-08",
-    "measured_against": "goal/10x10-entregas-commercial-ia-20260829",
+    "measured_at": "2026-09-09",
+    "measured_against": "EXECUTE_NOW commercial revision, a36d34beb public route registry; withdrawn previews remain preserved internally",
     "primary_runner": "scripts/commercial/copy_contract_audit.mjs",
     "route_discovery": "registry_and_public_family_derived",
     "manual_route_allowlist": false,
     "method": "Cada rota derivada é lida do repositório, tem script e style removidos, tem a marcação removida e é normalizada por NFD_STRIP_ACCENTS_LOWERCASE. Cada entrada com checker term_scan roda o seu padrão sobre o texto resultante. Só um instituto de mercado, uma negação na mesma frase ou uma seção estrutural Não inclui pode gerar isenção no texto visível; aliases antigos ficam apenas em metadados de busca, analytics e compatibilidade.",
     "gate_rule": "O runner deriva todas as rotas a cada execução, expõe cada ocorrência viva no relatório e reprova qualquer violação. Não existe exceção nominal ou de rota para apresentar nome público aposentado. pages e boundaries abaixo preservam apenas a medição histórica inicial e não limitam nem autorizam a varredura viva.",
     "live_measurement": {
-      "routes_derived": 30,
-      "language_boundaries": 78,
+      "routes_derived": 23,
+      "language_boundaries": 24,
       "language_observations": 0,
       "language_violations": 0,
       "structured_social_proof_hits": 0,
-      "clause_bodies_unique": 810,
+      "clause_bodies_unique": 120,
       "clause_body_duplicates": 0
     },
     "historical_baseline_note": "A lista pages e suas boundaries são o recorte inicial de doze páginas e permanecem apenas como trilha auditável. O portão atual não as consome como allowlist.",

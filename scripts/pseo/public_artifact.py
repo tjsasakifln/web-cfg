@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import re
 import shutil
 import sys
@@ -65,7 +66,8 @@ PUBLIC_TOP_DIRS = frozenset(
         "lei-14133-obras",
         "jurisprudencia-contratos-obras",
         "guias-contratos-obras",
-        # Private RevOps UI (noindex + robots Disallow; still need publish for ops staff)
+        # Public operator login shell; it contains no lead data. The backing APIs
+        # require a bearer token and fail closed. Exact editorial files are excluded.
         "ops",
         # High-intent tools (conversion moat)
         "ferramentas",
@@ -73,15 +75,16 @@ PUBLIC_TOP_DIRS = frozenset(
         "nurture",
         "casos",
         "imprensa",
-        "piloto",
         # Contract-analysis family (#83). Fixture/noindex until INDEX approval.
         "analises-contratos-publicos",
-        # Market-panorama family. Noindex until an individual INDEX approval.
-        "panorama-mercado-obras-publicas",
+        # Unapproved market-panorama drafts stay as internal generator output.
+        # Re-adding this family requires an individual approval and an artifact
+        # test for the exact approved route; noindex is not publication authority.
         # Live Intelligence W1 (CNPJ analysis + opportunity pages). Fixture-backed,
         # noindex until the real CONFENGE_LIVE_INTELLIGENCE contract ships.
         "analise-cnpj",
-        "oportunidades",
+        # Opportunity fixture HTML is never packaged. The Netcup stage overlay
+        # may add only official-live pages through release_control.py.
         ".well-known",
     }
 )
@@ -116,6 +119,13 @@ PUBLIC_ROOT_FILES = frozenset(
         "content-index.json",
         "01ce18c7219b7c7dcb2ab06e226c2681.txt",
     }
+)
+
+# Exact internal files inside otherwise public trees. Keep this list narrow:
+# /ops/ is a public login shell, but editorial material and private operator
+# instructions are not visitor assets and therefore must not be copied.
+PUBLIC_EXCLUDED_RELPATHS = frozenset(
+    {"ops/wave1-review.html", "ops/README-data.txt"}
 )
 
 # Never copy these top-level names even if someone expands the allowlist by mistake.
@@ -246,7 +256,12 @@ def _sha256_tree(base: Path) -> str:
     return content_tree_hash(base)
 
 
-def finalize_public_artifact(dest: Path) -> dict[str, Any]:
+def finalize_public_artifact(
+    dest: Path,
+    *,
+    commercial_media_source_root: Path | None = None,
+    require_commercial_media_assets: bool = False,
+) -> dict[str, Any]:
     """Apply the complete deterministic HTML/CSS transform used at publish time.
 
     This is deliberately shared with approval hashing: an INDEX approval is
@@ -276,6 +291,27 @@ def finalize_public_artifact(dest: Path) -> dict[str, Any]:
     from scripts.site.fingerprint_css import fingerprint_published_css
 
     css_assets = fingerprint_published_css(dest)
+    from scripts.site.version_commercial_media import (
+        SOURCE_MANIFEST as COMMERCIAL_MEDIA_SOURCE_MANIFEST,
+        version_commercial_media_references,
+    )
+
+    media_source_root = (commercial_media_source_root or ROOT).resolve()
+    media_contract_present = (media_source_root / COMMERCIAL_MEDIA_SOURCE_MANIFEST).is_file()
+    if not media_contract_present and media_source_root == ROOT.resolve():
+        raise FileNotFoundError(
+            f"commercial media source manifest is absent: {COMMERCIAL_MEDIA_SOURCE_MANIFEST}"
+        )
+    commercial_media = (
+        version_commercial_media_references(
+            Path(dest),
+            source_root=media_source_root,
+            require_published_assets=require_commercial_media_assets,
+            write_public_manifest=require_commercial_media_assets,
+        )
+        if media_contract_present
+        else {"applicable": False, "reason": "isolated_fixture_without_media_contract"}
+    )
     headers_path = Path(dest) / "_headers"
     if headers_path.is_file() and (Path(dest) / "index.html").is_file():
         from scripts.site.csp_contract import apply_artifact_csp_hashes
@@ -290,6 +326,7 @@ def finalize_public_artifact(dest: Path) -> dict[str, Any]:
         "promoted_navigation_files": promoted_navigation_files,
         "navigation_audit": navigation_audit,
         "css_assets": css_assets,
+        "commercial_media": commercial_media,
     }
 
 
@@ -313,6 +350,8 @@ def inventory_public_routes(root: Path | None = None) -> dict[str, Any]:
             continue
         for hp in sorted(d.rglob("index.html")):
             rel = hp.relative_to(root).as_posix()
+            if rel in PUBLIC_EXCLUDED_RELPATHS:
+                continue
             route = "/" + rel[: -len("index.html")]
             if not route.endswith("/"):
                 route += "/"
@@ -329,10 +368,25 @@ def inventory_public_routes(root: Path | None = None) -> dict[str, Any]:
     }
 
 
+def omit_production_review_packet(dest: Path, context: str) -> list[str]:
+    """Keep the legacy preview-review protocol off the production visitor host.
+
+    The source packet and preview verifier remain intact. Build/runtime identity
+    endpoints are public diagnostics and are not part of this exact exclusion.
+    """
+    relative = ".well-known/editorial-review-packet.json"
+    packet = dest / relative
+    if context == "production" and packet.is_file():
+        packet.unlink()
+        return [relative]
+    return []
+
+
 def assemble_public_artifact(
     root: Path | None = None,
     *,
     dest_name: str = PUBLIC_DIR_NAME,
+    manifest_path: Path | None = None,
 ) -> dict[str, Any]:
     """Wipe and rebuild the public artifact from allowlisted sources only."""
     root = root or ROOT
@@ -376,6 +430,8 @@ def assemble_public_artifact(
                     skip.add(n)
                 if rel_dir.startswith("ops") and n.endswith("gsc-insights.json"):
                     skip.add(n)
+                if f"{rel_dir}/{n}".lstrip("/") in PUBLIC_EXCLUDED_RELPATHS:
+                    skip.add(n)
             return skip
 
         shutil.copytree(src, dest / name, ignore=_ignore, dirs_exist_ok=True)
@@ -396,10 +452,18 @@ def assemble_public_artifact(
         if ".well-known/" not in copied_dirs:
             copied_dirs.append(".well-known/")
 
-    finalized = finalize_public_artifact(dest)
+    omitted_review_metadata = omit_production_review_packet(
+        dest, os.environ.get("CONTEXT") or os.environ.get("NETLIFY_CONTEXT") or "local"
+    )
+    finalized = finalize_public_artifact(
+        dest,
+        commercial_media_source_root=root,
+        require_commercial_media_assets=True,
+    )
     promoted_navigation_files = finalized["promoted_navigation_files"]
     navigation_audit = finalized["navigation_audit"]
     css_assets = finalized["css_assets"]
+    commercial_media = finalized["commercial_media"]
 
     artifact_hash = _sha256_tree(dest)
     inv = inventory_public_routes(root)
@@ -411,8 +475,10 @@ def assemble_public_artifact(
         "copied_files": copied_files,
         "html_route_count": inv["html_route_count"],
         "errors": errors,
+        "omitted_production_review_metadata": omitted_review_metadata,
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "css_assets": css_assets,
+        "commercial_media": commercial_media,
         "promoted_navigation_files": promoted_navigation_files,
         "navigation_audit": navigation_audit,
         "scrubbed_html_files": finalized["scrubbed_html_files"],
@@ -420,7 +486,7 @@ def assemble_public_artifact(
     }
 
     # Private inventory (not published)
-    man_path = root / "seo" / "PUBLIC-ARTIFACT-MANIFEST.json"
+    man_path = manifest_path if manifest_path is not None else root / "seo" / "PUBLIC-ARTIFACT-MANIFEST.json"
     man_path.parent.mkdir(parents=True, exist_ok=True)
     man_payload = {
         **inv,
@@ -434,7 +500,7 @@ def assemble_public_artifact(
     man_path.write_text(
         json.dumps(man_payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
-    report["manifest_path"] = str(man_path.relative_to(root))
+    report["manifest_path"] = str(man_path.relative_to(root)) if man_path.is_relative_to(root) else str(man_path)
     return report
 
 
@@ -587,6 +653,11 @@ def audit_public_artifact(
         ".well-known/pseo-build.json",
         ".well-known/css-assets.json",
     ]
+    from scripts.site.version_commercial_media import SOURCE_MANIFEST as COMMERCIAL_MEDIA_SOURCE_MANIFEST
+
+    media_contract_present = (root.resolve() / COMMERCIAL_MEDIA_SOURCE_MANIFEST).is_file()
+    if media_contract_present:
+        required.append(".well-known/commercial-media-assets.json")
     for req in required:
         if not (dest / req).exists():
             findings.append(
@@ -605,6 +676,19 @@ def audit_public_artifact(
         validate_css_asset_manifest,
     )
     from scripts.site.structured_identity import audit_html as audit_structured_identity_html
+    from scripts.site.version_commercial_media import validate_commercial_media_versioning
+
+    if media_contract_present:
+        try:
+            validate_commercial_media_versioning(dest, source_root=root)
+        except (FileNotFoundError, ValueError) as exc:
+            findings.append(
+                {
+                    "code": "invalid_commercial_media_versioning",
+                    "path": ".well-known/commercial-media-assets.json",
+                    "detail": str(exc),
+                }
+            )
 
     manifest_hrefs: set[str] = set()
     manifest_valid = False

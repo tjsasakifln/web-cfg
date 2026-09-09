@@ -234,8 +234,8 @@ def test_section_archetype_gate_covers_more_than_the_home():
         assert primaries <= 5, f"{relative}: {primaries} primary CTAs"
 
 
-def test_deliverables_library_declares_offer_and_capability_hierarchy_in_copy():
-    """Eight buying units and the 54-item reference roll must remain distinct."""
+def test_deliverables_library_distinguishes_services_examples_and_priced_offers():
+    """Buyer copy explains engineering work before the eight priced offers."""
     path = ROOT / "entregas" / "index.html"
     html = path.read_text(encoding="utf-8")
     blocks = narrative_blocks(html)
@@ -245,20 +245,18 @@ def test_deliverables_library_declares_offer_and_capability_hierarchy_in_copy():
 
     text = re.sub(r"<[^>]+>", " ", html)
     text = re.sub(r"\s+", " ", text)
-    assert "8 ofertas publicadas" in text
-    # 2026-09-08. Ver test_deliverables_registry.mjs: /entregas/ deixou de
-    # publicar o inventario de capacidades nao vendaveis. A propriedade
-    # verificada passa a ser positiva, e o estado interno nao pode vazar.
-    assert "54 frentes de trabalho" in text
-    assert "Oito têm oferta publicada" in text
+    assert all(term in text for term in ("Serviço, exemplo e oferta", "Ofertas com preço publicado"))
+    assert all(term in text for term in ("Projetos, revisão e compatibilização", "Quantitativos e orçamento"))
+    assert "54 frentes de trabalho" not in text
+    assert "rol taxativo" not in text.casefold()
     assert "em validação" not in text
     assert "bloqueada" not in text
-    assert "Cada card reúne situação, entrada, limite, saída, crédito e próxima ação sem repetir a oferta em outra tabela" in text
+    assert all(term in text for term in ("informações necessárias", "conteúdo entregue", "preço", "prazo"))
 
     cards = re.findall(r'<article class="vitrine-item[\s\S]*?</article>', html)
     assert len(cards) == 8, len(cards)
     assert all(
-        all(f"<dt>{label}</dt>" in card for label in ("Situação", "Decisão", "Entrada", "Objeto e limite", "Saída", "SLA"))
+        all(f"<dt>{label}</dt>" in card for label in ("Situação", "Decisão", "Informações necessárias", "Trabalho incluído", "Saída", "Prazo"))
         for card in cards
     )
     lengths = [
@@ -433,16 +431,16 @@ def test_primary_cta_not_spam():
     # Header twins, hero, corporate triage and preserved B2G form — the viewport
     # gate separately proves that only one is visible in the first fold.
     assert primary <= 5, f"too many primary CTAs on home: {primary}"
-    assert "Escolher minha situação" in html
-    assert "Iniciar triagem por e-mail" in html
+    assert "Conhecer os serviços" in html
+    assert "Solicitar proposta por e-mail" in html
     assert "Descrever minha situação" in html
     # Secondary path must not share primary button class in hero
     hero = re.search(r'class="hero[\s\S]*?</section>', html)
     assert hero, "hero missing"
     hero_html = hero.group(0)
     assert hero_html.count("button-primary") == 1, "hero must have exactly one primary CTA"
-    assert 'href="#situacoes"' in hero_html
-    assert 'href="/servicos/"' in hero_html
+    assert hero_html.count('href="/servicos/"') == 1
+    assert 'href="/triagem-tecnica/#projetos"' in hero_html
     assert "EESC-USP" in html
 
 
@@ -456,18 +454,18 @@ def test_home_five_second_clarity():
     lower = html.lower()
     # What the company is, the outcome and the cross-service situations.
     assert "engenharia, perícias e inteligência técnica" in fold_lower
-    assert "decisão documentada" in fold_lower
-    for token in ("projetos", "imóveis", "perícias", "segurança do trabalho", "contratos públicos"):
+    assert "obras públicas e privadas" in fold_lower
+    for token in ("projetos", "compatibilização", "orçamentos", "perícias", "análises técnicas"):
         assert token in fold_lower
     # True microproofs and an explicit limits path.
     assert "eesc-usp" in fold_lower
     assert "52.407.089/0001-09" in fold_lower
     assert "método e limites publicados" in fold_lower
     # Comprehensible next actions.
-    assert "escolher minha situação" in fold_lower
-    assert 'href="#situacoes"' in fold
-    assert "ver o escopo de serviços" in fold_lower
+    assert "conhecer os serviços" in fold_lower
     assert 'href="/servicos/"' in fold
+    assert "conversar sobre seu projeto" in fold_lower
+    assert 'href="/triagem-tecnica/#projetos"' in fold
     # 2026-09-08. Estas linhas exigiam o rotulo publico "Obras publicas e B2G".
     # B2G e sigla interna: nenhum comprador de obra procura por ela, e a
     # diretriz manda tirar a sigla de todo texto lido pelo visitante. A
@@ -484,8 +482,8 @@ def test_home_decision_fold_hierarchy():
     hero = re.search(r'<section[^>]*class="hero[\s\S]*?</section>', html)
     assert hero, "hero missing"
     hero_html = hero.group(0)
-    assert "Do problema técnico" in hero_html
-    assert "à decisão documentada" in hero_html
+    assert "Projetos e serviços de engenharia" in hero_html
+    assert "obras públicas e privadas" in hero_html
     assert "data-evidence-selector" not in hero_html
     assert "hero-evidence" not in hero_html
     assert hero_html.count("button-primary") == 1

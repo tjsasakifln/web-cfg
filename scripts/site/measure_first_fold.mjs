@@ -16,12 +16,14 @@
  *   node scripts/site/measure_first_fold.mjs --write    # grava evidencia e censo
  */
 import { createServer } from "node:http";
-import { existsSync, readFileSync, statSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
+import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
-import { extname, join, resolve } from "node:path";
+import { dirname, extname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import puppeteer from "puppeteer-core";
 import { resolveChromePath } from "./resolve_chrome.mjs";
+import { firstFoldInputHashes, firstFoldIdentityProblems } from "./first_fold_identity.mjs";
 import {
   DESKTOP_VIEWPORT,
   MOBILE_VIEWPORT,
@@ -29,11 +31,16 @@ import {
   blockerText,
   categoryRepetition,
   foldProblems,
-  frozenRoutes,
   measurementRecord,
 } from "./first_fold_rules.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("../..", import.meta.url)));
+const ARTIFACT = process.argv.includes("--artifact");
+const SITE_ROOT = ARTIFACT ? join(ROOT, "_site") : ROOT;
+const reportAt = process.argv.indexOf("--report");
+const REPORT_PATH = reportAt < 0 ? null : resolve(process.argv[reportAt + 1] || "");
+if (!existsSync(join(SITE_ROOT, "index.html"))) throw new Error("first_fold_surface_missing");
+if (ARTIFACT && process.argv.includes("--write")) throw new Error("artifact_measurement_cannot_rewrite_source_census");
 const PORT = Number(process.env.FIRST_FOLD_PORT || 8796);
 const CONTRACT_PATH = join(ROOT, "data/commercial/first-fold-contract.v1.json");
 const EVIDENCE_PATH = join(ROOT, "data/commercial/first-fold-measurements.v1.json");
@@ -57,8 +64,8 @@ function startServer() {
   const server = createServer((req, res) => {
     let pathname = decodeURIComponent((req.url || "/").split("?")[0]);
     if (pathname.endsWith("/")) pathname += "index.html";
-    const file = join(ROOT, pathname);
-    if (!file.startsWith(ROOT) || !existsSync(file) || statSync(file).isDirectory()) {
+    const file = join(SITE_ROOT, pathname);
+    if (!file.startsWith(SITE_ROOT) || !existsSync(file) || statSync(file).isDirectory()) {
       res.writeHead(404);
       res.end("not found");
       return;
@@ -170,9 +177,12 @@ async function measureRoute(page, route, viewport) {
 const contract = JSON.parse(readFileSync(CONTRACT_PATH, "utf8"));
 const unlockPlan = JSON.parse(readFileSync(UNLOCK_PLAN_PATH, "utf8"));
 const routes = contract.census.map((row) => row.route);
+const initialCommit = execFileSync("git", ["rev-parse", "HEAD"], { cwd: ROOT, encoding: "utf8" }).trim();
+const initialDirty = execFileSync("git", ["status", "--porcelain"], { cwd: ROOT, encoding: "utf8" }).trim();
+if (!ARTIFACT && process.argv.includes("--write") && initialDirty) throw new Error("first_fold_source_write_requires_clean_checkout");
+const initialInputHashes = firstFoldInputHashes(SITE_ROOT, routes, ROOT);
 const today = new Date().toISOString().slice(0, 10);
 const BLOCKER = blockerText(unlockPlan);
-const FROZEN_ROUTES = frozenRoutes(unlockPlan);
 
 const server = await startServer();
 const browser = await puppeteer.launch({
@@ -191,6 +201,7 @@ try {
     const desktop = perViewport[DESKTOP_VIEWPORT];
     const routeMeasurement = {
       route,
+      html_sha256: createHash("sha256").update(readFileSync(join(SITE_ROOT, route, "index.html"))).digest("hex"),
       measured_on: today,
       viewports: perViewport,
       category_repetition: categoryRepetition({
@@ -217,20 +228,21 @@ const evidence = {
   measured_on: today,
   commit_sha: commit,
   tree_dirty: Boolean(dirty),
+  input_hashes: firstFoldInputHashes(SITE_ROOT, routes, ROOT),
+  surface: ARTIFACT ? "built_artifact" : "source",
+  artifact_identity: ARTIFACT ? JSON.parse(readFileSync(join(SITE_ROOT, ".well-known/build-info.json"), "utf8")) : null,
   viewports: [DESKTOP_VIEWPORT, MOBILE_VIEWPORT],
   role_selectors: ROLE_SELECTORS,
   rules: "scripts/site/first_fold_rules.mjs",
   routes: measurements,
 };
+if (commit !== initialCommit || firstFoldIdentityProblems({ input_hashes: initialInputHashes }, evidence.input_hashes).length) {
+  throw new Error("first_fold_inputs_changed_during_measurement");
+}
 
 const byRoute = new Map(measurements.map((row) => [row.route, row]));
 const nextCensus = contract.census.map((surface) => {
   const { state, record } = measurementRecord(byRoute.get(surface.route), BLOCKER);
-  if (state === "MEASURED_FAIL" && !FROZEN_ROUTES.has(surface.route)) {
-    throw new Error(
-      `first_fold_unexplained_failure:${surface.route}:${foldProblems(byRoute.get(surface.route)).join(" ")}`,
-    );
-  }
   const next = { ...surface, evidence_state: state, measurement: record };
   return next;
 });
@@ -274,7 +286,13 @@ const nextContract = {
 const passes = nextCensus.filter((s) => s.evidence_state === "MEASURED_PASS").length;
 const fails = nextCensus.filter((s) => s.evidence_state === "MEASURED_FAIL").length;
 const pending = nextCensus.filter((s) => s.evidence_state === "PENDING").length;
+if (!routes.length || measurements.length !== routes.length) throw new Error("first_fold_incomplete_execution");
+if (ARTIFACT && evidence.artifact_identity.commit !== commit) throw new Error("first_fold_artifact_sha_mismatch");
 console.log(`first-fold: medidas ${passes} PASS, ${fails} FAIL, ${pending} PENDING em ${nextCensus.length} rotas`);
+if (REPORT_PATH) {
+  mkdirSync(dirname(REPORT_PATH), { recursive: true });
+  writeFileSync(REPORT_PATH, `${JSON.stringify({ ...evidence, planned: routes.length, executed: measurements.length, passes, fails, pending, ok: fails === 0 && pending === 0 }, null, 2)}\n`, "utf8");
+}
 
 if (process.argv.includes("--write")) {
   writeFileSync(EVIDENCE_PATH, `${JSON.stringify(evidence, null, 2)}\n`, "utf8");
@@ -284,3 +302,5 @@ if (process.argv.includes("--write")) {
 } else {
   console.log("dry run: nada gravado; use --write");
 }
+// Preserve measured failures as evidence, but never report them as approval.
+if (fails || pending) process.exitCode = 1;

@@ -1,4 +1,10 @@
-# Decisão das 24 páginas de checkout em `/piloto/`
+# Decisão de checkout das 24 fontes internas em `/piloto/`
+
+> **Superada quanto à exposição pública em 09/09/2026.** A decisão expressa do
+> fundador retirou as 24 páginas do pacote público e definiu HTTP 410 para o
+> namespace. Este documento continua vigente apenas para preservar as travas de
+> catálogo, provedor e dinheiro real. A decisão pública atual está em
+> `data/editorial/public-preview-route-decisions.json`.
 
 - Issue: [#251](https://github.com/tjsasakifln/web-cfg/issues/251)
 - Decisão: **DEFER**
@@ -10,7 +16,11 @@ Contrato versionado: `data/offers/piloto-checkout-decision.v1.json`
 
 ## Decisão e razão
 
-As 24 páginas ficam preservadas, não indexadas e sem checkout de produção. Não há justificativa para `SUNSET` agora: o catálogo e o adaptador são ativos reversíveis ligados à validação da issue #88. Também não há evidência para `EXECUTE`: #88 segue em `VALIDATE`, os quatro mapeamentos do provedor estão vazios, todas as flags de dinheiro estão desligadas e ainda faltam autorização de canário e aprovações externas versionadas.
+As 24 fontes ficam preservadas internamente e sem checkout de produção. Elas não
+integram o artefato público. Não há evidência para `EXECUTE`: #88 segue em
+`VALIDATE`, os quatro mapeamentos do provedor estão vazios, todas as flags de
+dinheiro estão desligadas e ainda faltam autorização de canário e aprovações
+externas versionadas.
 
 O estado, portanto, é `DEFER`. A revisão em 2026-09-20 não ativa nada automaticamente. Nessa data o owner deve publicar uma nova decisão `EXECUTE`, `DEFER` ou `SUNSET` apoiada em evidência.
 
@@ -32,15 +42,20 @@ decorativo, data impossível, revisão depois de 2026-09-20 ou edição para
 `EXECUTE` falham. Uma nova decisão precisa de schema/revisão próprios; não se
 obtém autoridade editando este JSON.
 
-## Inventário, indexação e eventual sunset
+## Inventário e retirada pública
 
-O contrato enumera as 24 URLs e o gate exige correspondência exata com os 24 arquivos HTML. Cada página deve manter `noindex`; `robots.txt` deve manter `Disallow: /piloto/`; as páginas de oferta também mantêm `X-Robots-Tag: noindex,nofollow`. Nenhum URL de `/piloto/` pode entrar nos sitemaps.
+O contrato enumera as 24 URLs e o gate exige correspondência exata com os 24
+arquivos-fonte. O controle atual também exige: `piloto` ausente de
+`PUBLIC_TOP_DIRS`; regras 410 para `/piloto` e `/piloto/*`; ausência dos URLs em
+sitemaps; catálogo e cobranças desabilitados. `noindex`, `robots.txt` e
+`X-Robots-Tag` não são tratados como autorização de publicação ou controle de
+acesso. O `Disallow` foi removido para que rastreadores possam observar o 410.
 
 Se a próxima revisão decidir `SUNSET`, ela precisa substituir `DEFER` por `MIGRATE`, `REDIRECT` ou `RETIRE` para cada uma das 24 URLs. Redirect exige destino específico coerente com o trabalho do visitante; redirecionamento geral para `/` é proibido.
 
 ## Evidência de pull request
 
-- **Visitor job:** entender recortes de mercado e ofertas em pré-visualização, sem encontrar uma promessa de contratação que ainda não pode ser cumprida.
+- **Visitor job:** não receber preview interno ou promessa de contratação que ainda não pode ser cumprida; uma oferta futura precisa de destino público aprovado.
 - **Hipótese de aquisição/conversão:** preservar o ativo até que uma oportunidade qualificada com intenção de compra e o canário aprovado demonstrem que checkout reduz atrito sem antecipar automação.
 - **Data owner/contract:** CONFENGE é owner da decisão e superfície; catálogo usa `confenge.offer-catalog/1.0`; verdade de aquisição continua SELECT-only de `extra-cli`; ação comercial continua em Warmbly com `source=CONFENGE_WEB`.
 - **North Star:** oportunidade comercial qualificada, não número de páginas, cliques, leads brutos ou checkouts criados.

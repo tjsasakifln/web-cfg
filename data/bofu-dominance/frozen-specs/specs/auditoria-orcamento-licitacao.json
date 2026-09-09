@@ -199,15 +199,15 @@
         {
           "position": "pillar_bridge",
           "href": "/diretoria-b2g/",
-          "text": "Operação B2G continuada"
+          "text": "Diretoria Fracionada para o Mercado Público"
         }
       ],
       "when_not_to_hire": true,
       "whatsapp_present": true,
       "form_count": 0
     },
-    "content_sha256": "ce64028481a686f07f8684db6381596287b474c1907d76177b640c7fb7583662",
-    "bytes": 28879,
+    "content_sha256": "fb2fa86a4c47f7d0fe83a322c2157097a696f234bc5ca00732b900128eaedb78",
+    "bytes": 29415,
     "noindex": false
   }
 }

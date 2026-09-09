@@ -13,14 +13,14 @@ A divisão 719177.48 / 4710.00 = 152.6916 BRL/m² é apenas valor global publica
 
 Esta página é ANÁLISE TÉCNICA DE CONTRATO PÚBLICO. Não é um caso CONFENGE. Não implica relação comercial da CONFENGE com o órgão ou o contratado. publication_authorization=false e index_authorization=false permanecem falsos.
 - estado publicação: PUBLISHABLE_NOINDEX
-- review: READY_FOR_HUMAN_REVIEW
+- review: HUMAN_REVIEW_PENDING
 - quality verdict: INDEX_READY_HUMAN_REVIEW
 - score: 100
 - dimensions: {'profundidade_documental': 100, 'singularidade_novidade': 100, 'utilidade_decisoria': 100, 'integridade_epistemica': 100, 'calculos_engenharia': 100, 'comunicacao': 100, 'seo_citabilidade_manutencao': 100}
 - findings: []
-- rendered-content.sha256: 6bb560c3875c2f15b1ad882daa5518cad5a3a530917842dd7127eddc98b01b57
+- rendered-content.sha256: 9df87a476c91b3a580f3e1ddf46ac92618cd3238210a9515f225d6c08b5f2f25
 - evidence-pack.sha256: f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b
-- material_hash: 7b927ffe7c68d3297a2bf9eb1621f41e5472e78a1c74dc69a8f4b6e7baf2fb19
+- material_hash: ff2a3862779f5e6c59f9a39f0a048e6f02b2bb61f6fcf08be064cab889e4a328
 
 ## Texto / preview
 
@@ -189,4 +189,4 @@ A leitura alternativa — usar a vigência 2026-07-08/2027-07-08 como único rel
 
 withdraw_approval('13ec615146b3d348190a9b0b9148831e') and keep noindex.
 
-READY_FOR_HUMAN_REVIEW; no human approval, authorship or INDEX was simulated.
+HUMAN_REVIEW_PENDING; no human approval, authorship or INDEX was simulated.

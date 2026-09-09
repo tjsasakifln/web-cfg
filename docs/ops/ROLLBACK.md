@@ -7,10 +7,13 @@ conhecido sem adivinhar o host, sem a UI da Netlify e sem apagar leads.
 
 Produção é o plano `public_canonical` em
 [`docs/architecture/RUNTIME-AUTHORITY.md`](../architecture/RUNTIME-AUTHORITY.md).
-O comando canônico no host é `/opt/confenge-web/bin/rollback <FULL_SHA>`.
-Ele faz o mesmo swap atômico de `current` que a promoção: valida o candidato,
-troca o symlink, recarrega nginx, verifica identidade ao vivo e, se falhar,
-restaura o symlink anterior.
+O rollback canônico executa `deploy/netcup/run_bundle_control.py` a partir de
+um checkout limpo do `CONTROLLER_SHA`. O diretório local informado ao runner
+deve conter as três partes do envelope preservado em
+`/opt/confenge-web/incoming/<CONTROLLER_SHA>`; `--sha` identifica esse mesmo
+controller, enquanto `--rollback-target` identifica o `PREVIOUS_SHA` a
+restaurar. O runner valida o envelope e o controller, transmite o código pelo
+SSH fixado e só então solicita o swap atômico de `current`.
 
 Stage não troca `current`. Legacy Netlify não é produção.
 
@@ -90,14 +93,27 @@ Promoção automática e manual continuam atrás do ambiente GitHub
 `NETCUP_CUTOVER_AUTHORIZED=CONFENGE_NETCUP_CUTOVER_APPROVED`. Esta documentação
 não cria essa variável e não dispara o workflow.
 
-Host:
+Runner canônico (checkout limpo em `CONTROLLER_SHA`, bundle do mesmo SHA e
+host/porta/chave/known-hosts da configuração autorizada):
 
-```text
-/opt/confenge-web/bin/stage-release <FULL_SHA>
-/opt/confenge-web/bin/verify-release <FULL_SHA>
-CONFENGE_LOCAL_ORIGIN=http://127.0.0.1:8088 /opt/confenge-web/bin/promote-release <FULL_SHA>
-CONFENGE_LOCAL_ORIGIN=http://127.0.0.1:8088 /opt/confenge-web/bin/rollback <FULL_SHA>
+```bash
+python3 deploy/netcup/run_bundle_control.py \
+  --bundle-directory /absolute/local/incoming/<CONTROLLER_SHA> \
+  --sha <CONTROLLER_SHA> \
+  --operation rollback \
+  --rollback-target <PREVIOUS_SHA> \
+  --target confenge-deploy@<PINNED_HOST> \
+  --ssh-option=-p --ssh-option=<PINNED_PORT> \
+  --ssh-option=-o --ssh-option=BatchMode=yes \
+  --ssh-option=-o --ssh-option=IdentitiesOnly=yes \
+  --ssh-option=-o --ssh-option=StrictHostKeyChecking=yes \
+  --ssh-option=-o --ssh-option=UserKnownHostsFile=/absolute/pinned/known_hosts \
+  --ssh-option=-i --ssh-option=/absolute/private/key-path
 ```
+
+O launcher root-owned `/opt/confenge-web/bin/rollback` permanece somente como
+referência histórica de provisionamento e recuperação legada. Chamá-lo não
+comprova que correções do controller versionado no repositório foram usadas.
 
 ## 3. Atomicidade
 
@@ -132,10 +148,13 @@ CONFENGE_LOCAL_ORIGIN=http://127.0.0.1:8088 /opt/confenge-web/bin/rollback <FULL
 1. Escolher um SHA **já verificado** em `/opt/confenge-web/releases/`. O alvo
    típico é `readlink /opt/confenge-web/rollback`.
 2. Confirmar que o SHA existe e que `verify-release` já passou nesse SHA.
-3. Executar `/opt/confenge-web/bin/rollback <FULL_SHA>` com
-   `CONFENGE_LOCAL_ORIGIN=http://127.0.0.1:8088`.
-4. Rodar a verificação da seção 4.
-5. Se o rollback foi de emergência, abrir PR de correção a partir do tip de
+3. Obter por SSH fixado o envelope exato de
+   `/opt/confenge-web/incoming/<CONTROLLER_SHA>` e conferir que o checkout limpo
+   está em `CONTROLLER_SHA`.
+4. Executar o runner canônico da seção 2 com `--sha <CONTROLLER_SHA>` e
+   `--rollback-target <PREVIOUS_SHA>`.
+5. Rodar a verificação da seção 4.
+6. Se o rollback foi de emergência, abrir PR de correção a partir do tip de
    `main` e promover pelo caminho de release. Nunca force-push em `main` como
    substituto de rollback.
 
@@ -202,7 +221,10 @@ Preflight (read-only):
 
 Ensaio (somente se autorizado):
 
-- [ ] `rollback <FULL_SHA>` no host.
+- [ ] Checkout limpo = `CONTROLLER_SHA`; envelope local = incoming preservado
+      do mesmo `CONTROLLER_SHA`.
+- [ ] `run_bundle_control.py --sha CONTROLLER_SHA --operation rollback
+      --rollback-target PREVIOUS_SHA` pelo SSH fixado.
 - [ ] Seção 4 verde.
 - [ ] Lead sintético persiste no filesystem (mesmo `lead_id` se retry).
 - [ ] Re-promote do SHA de `main` se o drill era temporário.

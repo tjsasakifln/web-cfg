@@ -3,11 +3,11 @@
 
 Order (fail-closed on critical):
   1. validate snapshot schema + checksums + provenance
-  2. generate pages + hubs
-  3. generate pSEO sitemap + sitemap index
+  2. generate pSEO + editorial pages and sitemaps
+  3. build the approved contract-analysis family from its versioned snapshot
   4. write public build manifest (/.well-known/pseo-build.json)
-  5. validate canonical/robots/links
-  6. similarity already inside build; editorial + attribution gates
+  5. assemble the public artifact
+  6. validate canonical/robots/links and required gates
   7. abort on critical failure
 """
 
@@ -19,6 +19,8 @@ import re
 import shutil
 import subprocess
 import sys
+from argparse import Namespace
+from contextlib import contextmanager
 from html import escape
 from pathlib import Path
 
@@ -45,6 +47,118 @@ from scripts.pseo.reproducible import (  # noqa: E402
 from scripts.pseo.schema import SnapshotError, validate_snapshot  # noqa: E402
 from scripts.pseo.validate import validate_all  # noqa: E402
 from scripts.site.responsive_text import mark_opaque_tokens_in_html_text  # noqa: E402
+
+
+CONTRACT_ANALYSIS_SNAPSHOT = Path(
+    "scripts/contract_analysis/fixtures/official-live-01"
+)
+CONTRACT_ANALYSIS_DECISIONS = Path(
+    "data/editorial/contract-analysis/public-route-decisions.json"
+)
+
+
+@contextmanager
+def _contract_analysis_root(root: Path):
+    """Bind contract-analysis writes to this build root, then restore the env."""
+    key = "CONFENGE_CONTRACT_ANALYSIS_ROOT"
+    previous = os.environ.get(key)
+    os.environ[key] = str(root)
+    try:
+        yield
+    finally:
+        if previous is None:
+            os.environ.pop(key, None)
+        else:
+            os.environ[key] = previous
+
+
+def build_contract_analysis_family(root: Path | None = None) -> dict[str, object]:
+    """Build the approved contract-analysis family from its versioned snapshot.
+
+    This is deliberately offline: the build consumes the checked-in official
+    evidence pack and its checked-in editorial approval. Runtime discovery or
+    a fresh network response cannot silently change the release candidate.
+    """
+    build_root = (root or ROOT).resolve()
+    live_snapshot = build_root / CONTRACT_ANALYSIS_SNAPSHOT
+    route_decisions_path = build_root / CONTRACT_ANALYSIS_DECISIONS
+    if not live_snapshot.is_dir():
+        raise RuntimeError(f"contract_analysis_snapshot_missing:{live_snapshot}")
+    if not route_decisions_path.is_file():
+        raise RuntimeError(
+            f"contract_analysis_route_decisions_missing:{route_decisions_path}"
+        )
+
+    from scripts.contract_analysis import (
+        AUTHORIZED_CANONICAL_PATH,
+        MAX_CANARY,
+    )
+    from scripts.contract_analysis.__main__ import cmd_build
+    from scripts.contract_analysis.render import FAMILY_PATH, SITEMAP_NAME
+
+    with _contract_analysis_root(build_root):
+        result = cmd_build(
+            Namespace(
+                live=str(live_snapshot),
+                fixture=None,
+                limit=MAX_CANARY,
+                report_only=False,
+            )
+        )
+    if result != 0:
+        raise RuntimeError(f"contract_analysis_build_failed:{result}")
+
+    approved_rel = AUTHORIZED_CANONICAL_PATH.strip("/") + "/index.html"
+    approved_page = build_root / approved_rel
+    hub_page = build_root / FAMILY_PATH.strip("/") / "index.html"
+    family_sitemap = build_root / SITEMAP_NAME
+    sitemap_index = build_root / "sitemap-index.xml"
+    required = (approved_page, hub_page, family_sitemap, sitemap_index)
+    missing = [path.relative_to(build_root).as_posix() for path in required if not path.is_file()]
+    if missing:
+        raise RuntimeError("contract_analysis_build_missing:" + ",".join(missing))
+
+    decisions = json.loads(route_decisions_path.read_text(encoding="utf-8"))
+    withdrawn = []
+    for item in decisions.get("records") or []:
+        public_source = str(item.get("public_source") or "")
+        if not public_source:
+            raise RuntimeError("contract_analysis_withdrawal_missing_public_source")
+        if (build_root / public_source).exists():
+            withdrawn.append(public_source)
+    if withdrawn:
+        raise RuntimeError(
+            "contract_analysis_withdrawn_route_rendered:" + ",".join(withdrawn)
+        )
+
+    approved_url = f"https://confenge.com.br{AUTHORIZED_CANONICAL_PATH}"
+    if approved_url not in family_sitemap.read_text(encoding="utf-8"):
+        raise RuntimeError("contract_analysis_approved_route_absent_from_sitemap")
+    if SITEMAP_NAME not in sitemap_index.read_text(encoding="utf-8"):
+        raise RuntimeError("contract_analysis_family_absent_from_sitemap_index")
+
+    public_pages = sorted(
+        path.relative_to(build_root).as_posix()
+        for path in (build_root / FAMILY_PATH.strip("/")).rglob("index.html")
+    )
+    expected_pages = sorted(
+        [
+            f"{FAMILY_PATH.strip('/')}/index.html",
+            approved_rel,
+        ]
+    )
+    if public_pages != expected_pages:
+        raise RuntimeError(
+            "contract_analysis_public_page_set_mismatch:"
+            + json.dumps(public_pages, ensure_ascii=False)
+        )
+    return {
+        "snapshot": CONTRACT_ANALYSIS_SNAPSHOT.as_posix(),
+        "approved_route": AUTHORIZED_CANONICAL_PATH,
+        "public_pages": public_pages,
+        "withdrawn_routes": len(decisions.get("records") or []),
+        "sitemap": SITEMAP_NAME,
+    }
 
 
 def _deploy_commit() -> str:
@@ -625,6 +739,20 @@ def main(argv: list[str] | None = None) -> int:
             errors.extend(f"editorial_truth:{failure}" for failure in truth_failures)
     except Exception as exc:  # noqa: BLE001
         print(f"FAIL-CLOSED editorial build: {exc}", file=sys.stderr)
+        return 2
+
+    # Contract analyses have a separate, fail-closed approval chain. Build the
+    # family from the versioned official snapshot after the other sitemap
+    # generators and before artifact assembly, then verify the exact public
+    # page set (one approved analysis + hub; withdrawn fixtures remain internal).
+    try:
+        contract_analysis = build_contract_analysis_family(ROOT)
+        print(
+            "contract-analysis build: "
+            + json.dumps(contract_analysis, ensure_ascii=False, sort_keys=True)
+        )
+    except Exception as exc:  # noqa: BLE001
+        print(f"FAIL-CLOSED contract-analysis build: {exc}", file=sys.stderr)
         return 2
 
     # Public copy: strip AI-tell em-dashes from visitor HTML after generators run.

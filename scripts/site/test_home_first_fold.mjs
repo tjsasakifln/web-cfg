@@ -14,23 +14,70 @@ const PORT = Number(process.env.HOME_FIRST_FOLD_PORT || 8794);
 const CLEARANCE_PX = 8;
 const MIN_TAP_TARGET_PX = 44;
 const MIN_CTA_CONTRAST = 4.5;
-const PRIMARY_CTA_HREF_SUFFIX = "#situacoes";
-// Presence/visibility tokens only. This gate never scores wording quality:
-// it asserts that the words a visitor needs are actually rendered in the fold.
-const CONTENT_TOKENS = [
+const PRIMARY_CTA_PATH_PREFIX = "/servicos/";
+// Semantic concepts, not frozen sentences. The fold may be rewritten, but it
+// must still name the corporate scope, concrete work/output and real trust.
+const CONTENT_CONCEPTS = [
   {
     id: "categoria_corporativa",
     label: "categoria corporativa",
-    any: ["engenharia, perícias e inteligência técnica"],
+    terms: ["engenharia"],
+    minMatches: 1,
   },
-  { id: "beneficio", label: "benefício concreto", any: ["decisão documentada"] },
-  { id: "metodo", label: "base técnica", any: ["diagnóstico, cálculo e evidências"] },
-  { id: "projetos", label: "situação de projeto", any: ["projetos"] },
-  { id: "imoveis", label: "situação de imóvel", any: ["imóveis"] },
-  { id: "pericias", label: "situação de perícia", any: ["perícias"] },
-  { id: "sst", label: "situação de SST em linguagem pública", any: ["segurança do trabalho"] },
-  { id: "obras_publicas", label: "situação de contrato público", any: ["contratos públicos"] },
+  {
+    id: "escopo_publico_privado",
+    label: "obras públicas e privadas",
+    terms: ["públic", "privad"],
+    minMatches: 2,
+  },
+  {
+    id: "trabalho_executado",
+    label: "trabalho de engenharia concreto",
+    terms: [
+      "elaboração", "revisão", "compatibilização", "quantitativos",
+      "orçamentos", "perícias", "análises técnicas",
+    ],
+    minMatches: 3,
+  },
+  {
+    id: "entregas_tangiveis",
+    label: "entregas técnicas tangíveis",
+    terms: [
+      "plantas", "detalhes", "memórias de cálculo", "planilhas",
+      "laudos", "pareceres", "relatórios",
+    ],
+    minMatches: 3,
+  },
+  {
+    id: "utilidade_pratica",
+    label: "utilidade prática",
+    terms: ["obra", "decisão", "contratar", "coordenar", "orçar", "executar"],
+    minMatches: 2,
+  },
+  {
+    id: "confianca_verificavel",
+    label: "fundamento verificável de confiança",
+    terms: ["eesc-usp", "cnpj", "método", "limites"],
+    minMatches: 2,
+  },
 ];
+
+function conceptResults(text, concepts = CONTENT_CONCEPTS) {
+  const normalized = String(text || "").toLowerCase();
+  return concepts.map((concept) => {
+    const matched = concept.terms.filter((term) => normalized.includes(term.toLowerCase()));
+    return { ...concept, matched, ok: matched.length >= concept.minMatches };
+  });
+}
+
+const counterproof = {
+  generic_hero_is_rejected: conceptResults(
+    "Engenharia com solução personalizada. Solicite uma proposta.",
+  ).some((concept) => !concept.ok),
+  obsolete_fragment_is_not_a_service_destination: !"#situacoes".startsWith(
+    PRIMARY_CTA_PATH_PREFIX,
+  ),
+};
 const VIEWPORTS = [
   { width: 390, height: 844 },
   { width: 1366, height: 768 },
@@ -220,10 +267,10 @@ try {
           href,
           text: (cta.innerText || "").trim().replace(/\s+/g, " "),
           box,
-          href_ok: href.endsWith(config.hrefSuffix),
+          href_ok: href.startsWith(config.hrefPrefix),
           height_ok: box.height >= config.minTapTarget,
         };
-        if (!ctaReport.href_ok) problems.push(`primary_cta: href "${href}" does not end with "${config.hrefSuffix}"`);
+        if (!ctaReport.href_ok) problems.push(`primary_cta: href "${href}" does not lead to a service explanation under "${config.hrefPrefix}"`);
         if (!ctaReport.height_ok) problems.push(`primary_cta: height ${box.height}px is below the ${config.minTapTarget}px tap target`);
       } else {
         problems.push("primary_cta: no primary action visible in the fold to inspect");
@@ -294,13 +341,23 @@ try {
         if (visibleHere) chunks.push(node.textContent);
       }
       const foldText = chunks.join(" ").replace(/\s+/g, " ").trim().toLowerCase();
-      const tokens = config.tokens.map((token) => {
-        const matched = token.any.find((needle) => foldText.includes(needle.toLowerCase())) || null;
-        return { id: token.id, label: token.label, expected_any: token.any, matched, ok: Boolean(matched) };
+      const concepts = config.concepts.map((concept) => {
+        const matched = concept.terms.filter((term) => foldText.includes(term.toLowerCase()));
+        return {
+          id: concept.id,
+          label: concept.label,
+          terms: concept.terms,
+          min_matches: concept.minMatches,
+          matched,
+          ok: matched.length >= concept.minMatches,
+        };
       });
-      for (const token of tokens) {
-        if (!token.ok) {
-          problems.push(`content_token: ${token.label} not found in fold text (expected one of: ${token.expected_any.join(" | ")})`);
+      for (const concept of concepts) {
+        if (!concept.ok) {
+          problems.push(
+            `content_concept: ${concept.label} matched ${concept.matched.length}/${concept.min_matches}`
+            + ` concepts (candidates: ${concept.terms.join(" | ")})`,
+          );
         }
       }
 
@@ -336,29 +393,80 @@ try {
         primary_cta: ctaReport,
         hierarchy,
         fold_text_chars: foldText.length,
-        content_tokens: tokens,
+        content_concepts: concepts,
         cta_contrast: contrast,
         ok: problems.length === 0,
         problems,
       };
     }, {
-      hrefSuffix: PRIMARY_CTA_HREF_SUFFIX,
+      hrefPrefix: PRIMARY_CTA_PATH_PREFIX,
       minTapTarget: MIN_TAP_TARGET_PX,
       minContrast: MIN_CTA_CONTRAST,
-      tokens: CONTENT_TOKENS,
+      concepts: CONTENT_CONCEPTS,
     });
 
     report.three_second = threeSecond;
+    const destinationHref = threeSecond.primary_cta?.href || "";
+    let destination = {
+      href: destinationHref,
+      http_ok: false,
+      engineering_heading: false,
+      service_sections: 0,
+      explained_deliveries: 0,
+      contextual_contact: false,
+      ok: false,
+    };
+    if (destinationHref.startsWith(PRIMARY_CTA_PATH_PREFIX)) {
+      const response = await page.goto(`http://127.0.0.1:${PORT}${destinationHref}`, {
+        waitUntil: "networkidle0",
+        timeout: 30000,
+      });
+      const renderedDestination = await page.evaluate(() => {
+        const main = document.querySelector("main");
+        const heading = (main?.querySelector("h1")?.textContent || "").toLowerCase();
+        return {
+          engineering_heading: heading.includes("engenharia"),
+          service_sections: main?.querySelectorAll(".corporate-service-row").length || 0,
+          explained_deliveries: main?.querySelectorAll(".corporate-service-row .service-output").length || 0,
+          contextual_contact: Boolean(main?.querySelector(
+            'a[href^="/triagem-tecnica/"], a[href^="https://wa.me/"]',
+          )),
+        };
+      });
+      destination = {
+        href: destinationHref,
+        http_ok: Boolean(response?.ok()),
+        ...renderedDestination,
+        ok: Boolean(
+          response?.ok()
+          && renderedDestination.engineering_heading
+          && renderedDestination.service_sections >= 4
+          && renderedDestination.explained_deliveries >= 4
+          && renderedDestination.contextual_contact
+        ),
+      };
+    }
+    report.primary_destination = destination;
     reports.push(report);
     if (!report.fullyVisible) failures.push(`${report.viewport}: first-fold elements are not fully visible`);
     if (report.horizontalOverflow) failures.push(`${report.viewport}: horizontal overflow`);
     for (const problem of threeSecond.problems) {
       failures.push(`${report.viewport}: THREE_SECOND_FOLD ${problem}`);
     }
+    if (!destination.ok) {
+      failures.push(
+        `${report.viewport}: PRIMARY_DESTINATION does not explain engineering services and contextual contact: `
+        + JSON.stringify(destination),
+      );
+    }
   }
 } finally {
   await browser.close();
   server.close();
+}
+
+for (const [name, bites] of Object.entries(counterproof)) {
+  if (!bites) failures.push(`COUNTERPROOF ${name} did not make the gate bite`);
 }
 
 console.log(JSON.stringify({
@@ -369,9 +477,15 @@ console.log(JSON.stringify({
     scope: "presence, visibility and hierarchy only — never message quality",
     min_tap_target_px: MIN_TAP_TARGET_PX,
     min_cta_contrast: MIN_CTA_CONTRAST,
-    primary_cta_href_suffix: PRIMARY_CTA_HREF_SUFFIX,
-    content_tokens: CONTENT_TOKENS,
+    primary_cta_path_prefix: PRIMARY_CTA_PATH_PREFIX,
+    content_concepts: CONTENT_CONCEPTS,
+    destination_contract: {
+      min_service_sections: 4,
+      min_explained_deliveries: 4,
+      contextual_contact_required: true,
+    },
   },
+  counterproof,
   reports,
 }, null, 2));
 if (failures.length) {

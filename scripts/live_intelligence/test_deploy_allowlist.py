@@ -16,12 +16,16 @@ if str(ROOT) not in sys.path:
 
 from scripts.pseo.public_artifact import PUBLIC_TOP_DIRS, assemble_public_artifact
 
-LIVE_INTELLIGENCE_PUBLIC_DIRS = ("analise-cnpj", "oportunidades")
+LIVE_INTELLIGENCE_PUBLIC_DIRS = ("analise-cnpj",)
 
 
 def test_live_intelligence_dirs_are_in_the_deploy_allowlist():
     missing = [d for d in LIVE_INTELLIGENCE_PUBLIC_DIRS if d not in PUBLIC_TOP_DIRS]
     assert not missing, f"missing from PUBLIC_TOP_DIRS: {missing}"
+    assert "oportunidades" not in PUBLIC_TOP_DIRS, (
+        "fixture opportunities must not ship in the package; the Netcup stage "
+        "overlay is the only publisher of official_live opportunity pages"
+    )
 
 
 def test_assembled_artifact_actually_contains_the_routes():
@@ -31,9 +35,7 @@ def test_assembled_artifact_actually_contains_the_routes():
         dest = ROOT / dest_name
         assert (dest / "analise-cnpj" / "index.html").exists()
         assert (dest / "analise-cnpj" / "r" / "index.html").exists()
-        oportunidades = dest / "oportunidades"
-        assert oportunidades.is_dir()
-        assert any((p / "index.html").exists() for p in oportunidades.iterdir() if p.is_dir())
+        assert not (dest / "oportunidades").exists()
     finally:
         shutil.rmtree(ROOT / dest_name, ignore_errors=True)
 

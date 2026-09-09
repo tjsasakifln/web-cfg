@@ -1,11 +1,11 @@
 {
   "schema": "confenge.commercial.task_doors.v1",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "source_issue": 335,
   "parent_issue": 329,
   "related_issues": [183, 188, 295, 300, 327, 336, 338, 343],
-  "decision_state": "VALIDATE",
-  "purpose_pt_br": "Arquitetura de navegação primária do rol taxativo: sete portas por tarefa, cada entregável em uma única porta, com as regras de interação, filtro, disclosure progressiva, acesso secundário e busca exigidas pela issue 335.",
+  "decision_state": "EXECUTE_NOW",
+  "purpose_pt_br": "Classificação operacional interna das 54 capacidades e contrato da superfície pública: oito ofertas reais com preço, entregas de engenharia explicadas com substância e contato contextual.",
   "authority": {
     "public_name_pt_br": "#343",
     "comparacao_das_oito_atuais": "#295",
@@ -13,7 +13,8 @@
     "primeira_dobra": "#327",
     "compreensao": "#188",
     "contrato_editorial": "#338",
-    "note_pt_br": "Este arquivo é dono da arquitetura de navegação. Não é o registro canônico de preço, SLA ou nome público."
+    "founder_decision": "EXECUTE_NOW, 2026-09-09",
+    "note_pt_br": "Este arquivo preserva a classificação operacional interna e o contrato da vitrine pública. Preço e condições continuam pertencendo ao registro canônico de entregas."
   },
   "catalog": {
     "deliverable_count": 54,
@@ -21,9 +22,10 @@
     "item_id_first": "01",
     "item_id_last": "54",
     "deliverable_id_prefix": "CFG-D",
-    "primary_placement_rule_pt_br": "Cada item de 01 a 54 aparece exatamente uma vez na navegação primária. Tags e crosslinks secundários são permitidos e não alteram a contagem.",
-    "count_source_pt_br": "A contagem exibida deriva do registro canônico, nunca de string escrita à mão na página.",
-    "prose_divergence_note_pt_br": "A prosa da issue 335 ainda cita 48 em três trechos da seção Problema. Título, arquitetura primária, acesso secundário e acceptance dizem 54. Este arquivo segue 54."
+    "visibility": "INTERNAL_OPERATIONAL",
+    "primary_placement_rule_pt_br": "Cada item de 01 a 54 aparece exatamente uma vez na classificação operacional interna. Tags e crosslinks secundários são permitidos e não alteram a contagem.",
+    "count_source_pt_br": "A contagem interna deriva do registro canônico e não é apresentada ao visitante como tamanho do portfólio público.",
+    "prose_divergence_note_pt_br": "O universo operacional continua com 54 registros. A decisão comercial de 2026-09-09 revoga sua publicação como censo de maturidade, sem apagar o inventário interno."
   },
   "containers": [
     {
@@ -62,8 +64,8 @@
       "CTA dominante",
       "acesso secundário à captura da decisão"
     ],
-    "cta_primary_label_pt_br": "Encontrar a entrega certa",
-    "secondary_access_label_pt_br": "Registrar a decisão na mesa"
+    "cta_primary_label_pt_br": "Ver entregas e exemplos",
+    "secondary_access_label_pt_br": "Solicitar proposta"
   },
   "public_vitrine": {
     "count": 8,
@@ -72,8 +74,8 @@
     "min_brl": 599,
     "max_brl": 3750,
     "filters": false,
-    "primary_card_fields_pt_br": ["situação", "decisão", "entrada", "objeto e limite", "saída", "SLA", "preço", "pacote e crédito"],
-    "note_pt_br": "A vitrine pública de /entregas/ mostra oito ofertas PUBLISHED como unidades decisórias. A mesma página preserva as 54 capacidades em um rol taxativo de referência, agrupado por tarefa e rotulado por maturidade."
+    "primary_card_fields_pt_br": ["situação", "decisão", "informações necessárias", "trabalho incluído", "saída", "prazo", "preço", "pacote e crédito"],
+    "note_pt_br": "A vitrine pública de /entregas/ mostra oito ofertas PUBLISHED como unidades decisórias. O inventário interno de 54 capacidades e seus estados de maturidade não são apresentados ao visitante."
   },
   "doors": [
     {
@@ -377,40 +379,41 @@
   "findability": {
     "numbered_index": {
       "numbered": true,
-      "id_scheme_pt_br": "01 a 54, com dois dígitos",
-      "searchable": true,
+      "id_scheme_pt_br": "01 a 08, com dois dígitos",
+      "searchable": false,
       "keyboard_accessible": true,
-      "views": ["por_tarefa", "alfabetica"],
+      "views": ["por_decisao"],
       "count_derived_from_registry": true,
-      "per_item_fields_required": ["deep_link", "public_state", "price"],
+      "per_item_fields_required": ["deep_link", "public_state", "price", "next_action"],
       "route": "/entregas/",
-      "route_note_pt_br": "O índice integral é publicado na superfície canônica de entregáveis e deriva do registro versionado."
+      "route_note_pt_br": "A navegação pública cobre as oito ofertas publicadas; o inventário operacional permanece interno."
     },
     "deep_link": {
       "required_per_item": true,
       "pattern": "#entrega-{NN}",
-      "pattern_note_pt_br": "Cada item de 01 a 54 tem fragmento estável na superfície canônica."
+      "pattern_note_pt_br": "Cada oferta publicada de 01 a 08 tem fragmento estável na superfície canônica."
     },
     "secondary_access": {
-      "label_pt_br": "Registrar a decisão na mesa",
+      "label_pt_br": "Solicitar proposta",
       "location": "primeira_dobra",
       "target": "captura_entregas",
       "requires_javascript": false
     },
     "unmapped_request": {
-      "policy": "fallback_ou_recusa",
-      "fallback_item": "48",
-      "fallback_deliverable_id": "CFG-D48",
-      "fallback_description_pt_br": "inteligência pública sob medida",
-      "refusal_allowed": true,
-      "statement_pt_br": "A inexistência fora do rol é explícita. Pedido não mapeado vai para o item 48 (inteligência pública sob medida) ou é recusado por fronteira declarada."
+      "policy": "contato_contextual",
+      "fallback_item": null,
+      "fallback_deliverable_id": null,
+      "fallback_description_pt_br": "leitura da necessidade e proposta quando houver escopo atendível",
+      "refusal_allowed": false,
+      "statement_pt_br": "Uma disciplina ou necessidade não listada segue para contato contextual. A CONFENGE confirma escopo, documentos, responsabilidade e condições antes da proposta, sem recusa automática por ausência no inventário."
     },
     "no_offer_exists_only_in": ["formulario", "rodape", "conversa"],
     "state_display_rule": {
       "states_not_purchasable": ["BLOCKED", "VALIDATE"],
-      "requires_explanation": true,
+      "requires_explanation": false,
       "requires_coherent_cta": true,
-      "never_presented_as_buyable": true
+      "never_presented_as_buyable": true,
+      "internal_states_not_public": true
     }
   },
   "legacy_eight_preserved": {
@@ -463,19 +466,17 @@
   "public_implementation": {
     "route": "/entregas/",
     "renderer": "scripts/commercial/render_public_catalog.mjs",
-    "client_loader": "entregas/catalog-bootstrap.js",
-    "client_script": "entregas/catalog.js",
-    "client_data_asset": "entregas/catalog-data.js",
     "stylesheet": "entregas/styles.css",
     "published_offer_count": 8,
-    "capability_roll_count": 54,
-    "capability_group_count": 7,
+    "public_capability_inventory_count": 0,
+    "engineering_delivery_group_count": 3,
     "primary_representation_per_offer": 1,
     "framing_steps": 1,
     "filter_dimensions": [],
     "url_state": false,
     "alphabetical_view": false,
-    "progressive_disclosure": "native_details_by_task",
+    "progressive_disclosure": "not_required_for_three_engineering_groups",
+    "internal_catalog_assets": ["entregas/catalog-bootstrap.js", "entregas/catalog.js", "entregas/catalog-data.js"],
     "comparison": {
       "mode": "single_primary_card",
       "duplicated_representation": false,

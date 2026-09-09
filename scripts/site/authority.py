@@ -76,7 +76,8 @@ INVENTED_CREDENTIAL_PATTERNS = (
     r"\bselo\b",
     r"\bcertifica[cç][aã]o internacional\b",
     r"\b5\s*estrelas\b",
-    r"\bavalia[cç][aã]o\s+\d",
+    # A numerical customer rating is not the name of a technical 360° review.
+    r"\bavalia[cç][aã]o\s+0?[0-5](?:[.,]\d+)?(?![\d.,])\b",
     r"\b\d+\s+obras (entregues|executadas)\b",
     r"\br\$\s*\d+.*recuperad",
 )
@@ -234,6 +235,17 @@ def _norm(text: str) -> str:
 def _strip_tags(html: str) -> str:
     text = re.sub(r"<script\b[^>]*>.*?</script>", " ", html or "", flags=re.I | re.S)
     text = re.sub(r"<style\b[^>]*>.*?</style>", " ", text, flags=re.I | re.S)
+    # A block boundary is also a semantic sentence boundary. Keeping only a
+    # space here can manufacture claims across adjacent cards/list items (for
+    # example, a CTA ending in "avaliação" followed by item number "04").
+    # Inline elements deliberately remain joinable so a real phrase split by
+    # <strong>/<span>/<a> is still inspected as one claim.
+    text = re.sub(
+        r"</?(?:address|article|aside|blockquote|br|dd|div|dl|dt|fieldset|figcaption|figure|footer|form|h[1-6]|header|hr|li|main|nav|ol|p|section|table|tbody|td|tfoot|th|thead|tr|ul)\b[^>]*>",
+        ". ",
+        text,
+        flags=re.I,
+    )
     text = re.sub(r"<[^>]+>", " ", text)
     return re.sub(r"\s+", " ", unescape(text))
 
@@ -1179,7 +1191,7 @@ def representative_pages() -> dict[str, Path]:
         "caso_proof": ROOT / "casos" / "aditivo-art125-demonstrativo" / "index.html",
         "analise_tecnica_contrato": ROOT
         / "analises-contratos-publicos"
-        / "bdi-composicao-vs-referencia-sc"
+        / "reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026"
         / "index.html",
     }
 

@@ -415,7 +415,10 @@ for (const item of ACTIVE_ITEMS.map((number) => byItem.get(number))) {
     item.legal_boundary.statement_pt_br,
   ]) assert(`public_value_${item.item}_${results.length}`, html.includes(value), value);
   for (const grade of GRADES) assert(`public_grade_${item.item}_${grade}`, html.includes(`data-evidence-grade="${grade}"`), grade);
-  assert(`public_synthetic_flow_${item.item}`, /Evento sintético/.test(html) && /<strong>Decisão<\/strong>/.test(html), item.page_file);
+  assert(`public_demonstrative_flow_${item.item}`, /Evento demonstrativo/.test(html) && /<strong>Uso prático<\/strong>/.test(html), item.page_file);
+  assert(`public_no_pilot_backstage_${item.item}`, !/preço-piloto|piloto em validação|\bo piloto\b/i.test(html), item.page_file);
+  assert(`public_scope_start_condition_${item.item}`, /Quando o prazo começa/.test(html), item.page_file);
+  assert(`public_proposal_action_${item.item}`, /Solicitar proposta/.test(html), item.page_file);
   assert(`public_lead_form_${item.item}`, /action="\/\.netlify\/functions\/lead"/.test(html), item.page_file);
   for (const field of requiredCapture) assert(`public_capture_${item.item}_${field}`, html.includes(`name="${field}"`), field);
   assert(`public_no_checkout_${item.item}`, html.includes('name="offer_id"') && !/data-checkout|\/\.netlify\/functions\/checkout/i.test(html), item.page_file);
@@ -436,6 +439,8 @@ for (const item of HELD_ITEMS.map((number) => byItem.get(number))) {
   assert(`held_no_new_capture_${item.item}`, !html.includes("CONTRACT-DEFENSE-FIELDS"), item.page_file);
 }
 const hubHtml = fs.readFileSync(path.join(root, "servicos-obras-publicas/index.html"), "utf8");
+assert("hub_no_internal_item_counters", !/<article class="contract-products-hub__card"[^>]*><p>\d{2}<\/p>/.test(hubHtml));
+assert("hub_no_pilot_backstage", !/preço-piloto|piloto em validação|\bo piloto\b/i.test(hubHtml));
 for (const item of items) {
   assert(`hub_name_${item.item}`, hubHtml.includes(item.public_name_pt_br), item.public_name_pt_br);
   assert(`hub_id_${item.item}`, hubHtml.includes(`value="${item.deliverable_id}"`), item.deliverable_id);

@@ -48,33 +48,40 @@ ALLOWED_TOP_LEVEL = {
     "package-lock.json",
 }
 LOOPBACK_HOSTS = {"127.0.0.1", "localhost", "::1"}
-# Host-owned official snapshot and the INDEX pages rendered from it. These are
-# not in the GitHub package (gitignored producer input). They may appear as
-# extra files after stage-time consume/render. They must never replace a hashed
-# packaged file.
-LIVE_INTEL_OVERLAY_PREFIXES = (
-    "_site/oportunidades/",
-    "data/live_intelligence/official/",
-    "data/live_intelligence/official.private/",
-    "data/live_intelligence/accepted/",
-    "data/live_intelligence/accepted.last/",
+# Host-owned official snapshot is SELECT-only input. Stage may only persist the
+# two accepted projection files and public files derived from the exact accepted
+# opportunity ids. Prefix membership is deliberately not publication authority.
+LIVE_INTEL_ACCEPTED_FILES = frozenset(
+    {
+        "data/live_intelligence/accepted/opportunities.json",
+        "data/live_intelligence/accepted/companies.json",
+        "data/live_intelligence/accepted.last/opportunities.json",
+        "data/live_intelligence/accepted.last/companies.json",
+    }
 )
-LIVE_INTEL_OVERLAY_FILES = frozenset({"_site/sitemap-oportunidades.xml"})
+LIVE_INTEL_OVERLAY_MANIFEST = "metadata/live-intelligence-overlay.json"
+LIVE_INTEL_PUBLIC_MANIFEST = "_site/.well-known/live-intelligence-overlay.json"
+LIVE_INTEL_OVERLAY_SCHEMA = "confenge.live-intelligence-stage-overlay/v1"
+LIVE_INTEL_LEGACY_STATE_SCHEMA = "confenge.live-intelligence-legacy-overlay-state/v1"
+LIVE_INTEL_PUBLIC_SCHEMA = "confenge.live-intelligence-overlay/v1"
+LIVE_INTEL_OVERLAY_FILES = frozenset(
+    {
+        "_site/sitemap-oportunidades.xml",
+        LIVE_INTEL_OVERLAY_MANIFEST,
+        LIVE_INTEL_PUBLIC_MANIFEST,
+        *LIVE_INTEL_ACCEPTED_FILES,
+    }
+)
 # sitemap-index is hashed in the package. Stage overlay may add the
 # oportunidades child after official consume; checksum may then differ.
 LIVE_INTEL_OVERLAY_REWRITES = frozenset(
     {
         "_site/sitemap-index.xml",
         "_site/ferramentas/index.html",
-        # The family parent is now a committed page, so it IS hashed in the
-        # package -- and the overlay still rewrites it at stage time to list the
-        # opportunities actually consumed from the official snapshot. Both facts
-        # are intended: the route must answer with a branded page instead of the
-        # server's raw 403 even with zero renderable records, and it must reflect
-        # real records when they exist. The packaged bytes carry the build's
-        # transforms (no-js class, bootstrap, fingerprinted CSS) while the
-        # stage-time render does not, so the digests legitimately differ.
-        # The file-set check above still applies; only this one digest may move.
+        # New artifacts exclude the opportunity fixtures and receive this hub
+        # only from official host data. Keep the existing exact allowance for
+        # rollback to older releases that packaged the hub before stage rendered
+        # it. No new file or prefix is authorized to change its packaged digest.
         "_site/oportunidades/index.html",
     }
 )
@@ -82,18 +89,17 @@ HOST_OFFICIAL_DIR = Path("/var/lib/confenge-web/live_intelligence/official")
 
 
 def is_live_intel_overlay(rel: str) -> bool:
-    return (
-        rel in LIVE_INTEL_OVERLAY_FILES
-        or rel in LIVE_INTEL_OVERLAY_REWRITES
-        or rel.startswith(LIVE_INTEL_OVERLAY_PREFIXES)
-    )
+    """Return only statically named overlay files.
+
+    Opportunity child pages require a release-local overlay manifest and are
+    intentionally not authorized by this path-only helper.
+    """
+    return rel in LIVE_INTEL_OVERLAY_FILES or rel in LIVE_INTEL_OVERLAY_REWRITES
 
 
 def is_live_intel_withdrawal(rel: str) -> bool:
-    """Packaged fixture/opportunity files overlay may delete. Rewrites must stay."""
-    return rel in LIVE_INTEL_OVERLAY_FILES or rel.startswith(
-        LIVE_INTEL_OVERLAY_PREFIXES
-    )
+    """Only an exact staged manifest can authorize a packaged-file withdrawal."""
+    return rel == "_site/sitemap-oportunidades.xml"
 
 
 def is_release_ephemeral(rel: str) -> bool:
@@ -177,12 +183,21 @@ def deploy_lock(root: Path) -> Iterator[None]:
             os.close(descriptor)
 
 
+def release_controller_evidence_hash() -> str | None:
+    controller_hash = os.environ.get("CONFENGE_RELEASE_CONTROL_SHA256")
+    if controller_hash is not None and not HEX_256.fullmatch(controller_hash):
+        raise ReleaseError("release controller SHA-256 evidence is invalid")
+    return controller_hash
+
+
 def append_evidence(root: Path, event: str, sha: str, **details: Any) -> None:
+    controller_hash = release_controller_evidence_hash()
     payload = {
         "at": utc_now(),
         "event": event,
         "sha": sha,
         "actor": os.environ.get("SUDO_USER") or os.environ.get("USER") or "unknown",
+        "release_control_sha256": controller_hash,
         **details,
     }
     path = root / "evidence" / "deploy.ndjson"
@@ -300,7 +315,57 @@ def validate_incoming(
         raise ReleaseError("detached checksum file conflicts with release manifest")
     if package.stat().st_size != manifest["artifact"].get("size_bytes"):
         raise ReleaseError("artifact size conflicts with release manifest")
+    expected_release = os.environ.get("CONFENGE_EXPECTED_RELEASE_SHA")
+    expected_artifact = os.environ.get("CONFENGE_EXPECTED_RELEASE_ARTIFACT_SHA256")
+    if (expected_release is None) != (expected_artifact is None):
+        raise ReleaseError("expected release SHA and artifact SHA-256 must be paired")
+    if expected_release is not None:
+        validate_sha(expected_release)
+        if not HEX_256.fullmatch(str(expected_artifact)):
+            raise ReleaseError("expected release artifact SHA-256 is invalid")
+        if sha == expected_release and actual != expected_artifact:
+            raise ReleaseError(
+                "incoming artifact differs from the locally verified release artifact"
+            )
     return package, manifest
+
+
+def _files_manifest_bytes_from_package(package: Path) -> bytes:
+    target = "metadata/files.sha256"
+    try:
+        with tarfile.open(package, mode="r:gz") as archive:
+            matches = [
+                member
+                for member in archive.getmembers()
+                if member.name.rstrip("/") == target
+            ]
+            if len(matches) != 1 or not matches[0].isfile():
+                raise ReleaseError(
+                    "release package must contain one regular metadata/files.sha256"
+                )
+            extracted = archive.extractfile(matches[0])
+            if extracted is None:
+                raise ReleaseError("cannot read packaged metadata/files.sha256")
+            return extracted.read()
+    except ReleaseError:
+        raise
+    except (OSError, tarfile.TarError) as exc:
+        raise ReleaseError(f"cannot inspect packaged metadata/files.sha256: {exc}") from exc
+
+
+def _verify_files_manifest_matches_incoming(root: Path, sha: str) -> None:
+    package, _ = validate_incoming(root, sha)
+    release_manifest = root / "releases" / sha / "metadata/files.sha256"
+    try:
+        local = release_manifest.read_bytes()
+    except OSError as exc:
+        raise ReleaseError(
+            f"stored release files manifest is missing: {release_manifest}"
+        ) from exc
+    if local != _files_manifest_bytes_from_package(package):
+        raise ReleaseError(
+            "stored metadata/files.sha256 differs from the immutable incoming package"
+        )
 
 
 def _safe_member_name(name: str) -> str:
@@ -371,6 +436,438 @@ def _actual_release_files(release: Path) -> dict[str, Path]:
     return actual
 
 
+def _canonical_opportunity_route(opportunity_id: str) -> tuple[str, str]:
+    clean = opportunity_id.strip("/")
+    if not clean or "\\" in clean or any(
+        part in {"", ".", ".."} for part in clean.split("/")
+    ):
+        raise ReleaseError(f"unsafe accepted opportunity id: {opportunity_id!r}")
+    route = f"/oportunidades/{clean}/"
+    return route, f"_site{route}index.html"
+
+
+def _accepted_overlay_identity(release: Path) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    """Read the release-local accepted projection and derive exact INDEX routes."""
+    path = release / "data/live_intelligence/accepted/opportunities.json"
+    if not path.is_file():
+        return (
+            {
+                "official_live": False,
+                "source_kind": None,
+                "source_run_id": None,
+                "as_of": None,
+                "manifest_hash": None,
+                "consumer_observed_manifest_hash": None,
+                "accepted_projection_sha256": None,
+            },
+            [],
+        )
+    payload = load_json(path)
+    declared = str(payload.get("manifest_hash") or "")
+    observed = str(payload.get("consumer_observed_manifest_hash") or "")
+    if (
+        payload.get("source_kind") != "official_live"
+        or payload.get("official_live") is not True
+        or not HEX_256.fullmatch(declared)
+        or declared != observed
+    ):
+        raise ReleaseError("stage accepted projection is not verified official_live input")
+    records = payload.get("opportunities")
+    if not isinstance(records, list):
+        raise ReleaseError("stage accepted opportunities must be a list")
+    routes: list[dict[str, Any]] = []
+    seen_ids: set[str] = set()
+    seen_routes: set[str] = set()
+    for record in records:
+        if not isinstance(record, dict):
+            raise ReleaseError("stage accepted opportunity record must be an object")
+        indexable = (
+            (record.get("source_kind") or payload.get("source_kind")) == "official_live"
+            and record.get("publication_state") == "PUBLISHABLE_INDEX"
+            and record.get("index_eligible") is True
+        )
+        if not indexable:
+            continue
+        opportunity_id = str(record.get("opportunity_id") or "")
+        route, html_path = _canonical_opportunity_route(opportunity_id)
+        content_hash = str(record.get("content_hash") or "")
+        if not HEX_256.fullmatch(content_hash):
+            raise ReleaseError(
+                f"accepted opportunity content hash is invalid for {opportunity_id!r}"
+            )
+        if record.get("route") != route:
+            raise ReleaseError(
+                f"accepted opportunity route is not canonical for {opportunity_id!r}"
+            )
+        if opportunity_id in seen_ids or route in seen_routes:
+            raise ReleaseError(f"duplicate accepted opportunity route: {route}")
+        page = release / html_path
+        if not page.is_file() or page.is_symlink():
+            raise ReleaseError(f"accepted opportunity page was not rendered: {html_path}")
+        seen_ids.add(opportunity_id)
+        seen_routes.add(route)
+        routes.append(
+            {
+                "opportunity_id": opportunity_id,
+                "route": route,
+                "html_path": html_path,
+                "content_hash": content_hash,
+                "sha256": sha256_file(page),
+            }
+        )
+    routes.sort(key=lambda item: item["route"])
+    return (
+        {
+            "official_live": True,
+            "source_kind": "official_live",
+            "source_run_id": payload.get("source_run_id"),
+            "as_of": payload.get("as_of"),
+            "manifest_hash": declared,
+            "consumer_observed_manifest_hash": observed,
+            "accepted_projection_sha256": sha256_file(path),
+        },
+        routes,
+    )
+
+
+def _overlay_allowed_paths(routes: list[dict[str, Any]]) -> set[str]:
+    return {
+        *LIVE_INTEL_OVERLAY_FILES,
+        *LIVE_INTEL_OVERLAY_REWRITES,
+        *(str(item["html_path"]) for item in routes),
+    }
+
+
+def _managed_packaged_opportunity_pages(
+    release: Path, expected: dict[str, str], *, allow_missing_legacy: bool = False
+) -> set[str]:
+    """Return exact packaged child pages owned by the opportunity renderer."""
+    managed: set[str] = set()
+    for rel in expected:
+        if not re.fullmatch(r"_site/oportunidades/.+/index\.html", rel):
+            continue
+        path = release / rel
+        if not path.is_file():
+            if allow_missing_legacy:
+                managed.add(rel)
+            continue
+        html = path.read_text(encoding="utf-8", errors="replace")
+        if (
+            'data-intel-surface="opportunity"' in html
+            and 'data-route-family="live-opportunity"' in html
+        ):
+            managed.add(rel)
+    return managed
+
+
+def _write_live_intelligence_overlay_manifest(
+    release: Path,
+    sha: str,
+    expected: dict[str, str],
+    *,
+    managed_packaged_html: set[str],
+) -> None:
+    """Bind stage output to the release-local accepted projection and file digests."""
+    identity, routes = _accepted_overlay_identity(release)
+    actual = _actual_release_files(release)
+    actual_hashed = {
+        rel: sha256_file(path)
+        for rel, path in actual.items()
+        if rel
+        not in {
+            "metadata/files.sha256",
+            "metadata/release-manifest.json",
+            LIVE_INTEL_OVERLAY_MANIFEST,
+        }
+        and not is_release_ephemeral(rel)
+    }
+    removed = {
+        rel: digest
+        for rel, digest in expected.items()
+        if rel not in actual_hashed
+    }
+    changed = {
+        rel: digest
+        for rel, digest in actual_hashed.items()
+        if expected.get(rel) != digest
+    }
+    allowed = (
+        _overlay_allowed_paths(routes)
+        if identity["official_live"]
+        else {
+            "_site/oportunidades/index.html",
+            "_site/sitemap-oportunidades.xml",
+        }
+    )
+    unexpected_changed = sorted(set(changed) - allowed)
+    unauthorized_removed = sorted(
+        rel
+        for rel in removed
+        if not (
+            rel == "_site/sitemap-oportunidades.xml"
+            or rel in LIVE_INTEL_ACCEPTED_FILES
+            or rel in managed_packaged_html
+        )
+    )
+    if unexpected_changed or unauthorized_removed:
+        raise ReleaseError(
+            "live-intelligence publisher changed undeclared files; "
+            f"changed={unexpected_changed}, removed={unauthorized_removed}"
+        )
+    accepted_html = {str(item["html_path"]) for item in routes}
+    public_children = {
+        rel
+        for rel in changed
+        if rel.startswith("_site/oportunidades/")
+        and rel != "_site/oportunidades/index.html"
+    }
+    if public_children != accepted_html:
+        raise ReleaseError(
+            "stage opportunity HTML does not equal accepted INDEX projection; "
+            f"accepted={sorted(accepted_html)}, rendered={sorted(public_children)}"
+        )
+    public_payload = {
+        "schema": LIVE_INTEL_PUBLIC_SCHEMA,
+        "release_sha": sha,
+        **identity,
+        "routes": routes,
+        "static_html_paths": (
+            ["_site/oportunidades/index.html"]
+            if (release / "_site/oportunidades/index.html").is_file()
+            else []
+        ),
+        "static_html_sha256": (
+            {
+                "_site/oportunidades/index.html": sha256_file(
+                    release / "_site/oportunidades/index.html"
+                )
+            }
+            if (release / "_site/oportunidades/index.html").is_file()
+            else {}
+        ),
+        "removed_html_paths": sorted(
+            rel for rel in removed if rel.startswith("_site/") and rel.endswith(".html")
+        ),
+    }
+    public_path = release / LIVE_INTEL_PUBLIC_MANIFEST
+    public_path.parent.mkdir(parents=True, exist_ok=True)
+    public_path.write_text(
+        json.dumps(public_payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    changed[LIVE_INTEL_PUBLIC_MANIFEST] = sha256_file(public_path)
+    internal_payload = {
+        "schema": LIVE_INTEL_OVERLAY_SCHEMA,
+        "release_sha": sha,
+        **identity,
+        "routes": routes,
+        "files": dict(sorted(changed.items())),
+        "removed_files": dict(sorted(removed.items())),
+        "managed_packaged_html": sorted(managed_packaged_html),
+    }
+    internal_path = release / LIVE_INTEL_OVERLAY_MANIFEST
+    internal_path.parent.mkdir(parents=True, exist_ok=True)
+    internal_path.write_text(
+        json.dumps(internal_payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+
+
+def _seal_legacy_live_intelligence_overlay(release: Path, sha: str) -> bool:
+    """One-time route-exact sealing for a pre-contract staged release.
+
+    The release-local accepted projection is the authority. A legacy prefix is
+    never accepted: unexpected files make manifest creation fail closed.
+    """
+    releases = release.parent
+    root = releases.parent
+    if releases.name == "releases" and (root / "incoming" / sha).is_dir():
+        # A legacy state record derives its exact paths and digests from this
+        # manifest. Bind those bytes to the immutable uploaded package before
+        # allowing the record to become an authority for rollback.
+        _verify_files_manifest_matches_incoming(root, sha)
+    if (release / LIVE_INTEL_OVERLAY_MANIFEST).is_file():
+        return False
+    state_path = _legacy_overlay_state_path(release, sha)
+    if state_path.is_file():
+        return False
+    expected = _parse_files_manifest(release / "metadata/files.sha256")
+    actual = _actual_release_files(release)
+    actual_digests = {
+        rel: sha256_file(path)
+        for rel, path in actual.items()
+        if rel not in {"metadata/files.sha256", "metadata/release-manifest.json"}
+        and not is_release_ephemeral(rel)
+    }
+    has_stage_delta = (
+        set(actual_digests) != set(expected)
+        or any(actual_digests.get(rel) != digest for rel, digest in expected.items())
+    )
+    if not has_stage_delta:
+        return False
+    identity, routes = _accepted_overlay_identity(release)
+    removed = {
+        rel: digest for rel, digest in expected.items() if rel not in actual_digests
+    }
+    changed = {
+        rel: digest
+        for rel, digest in actual_digests.items()
+        if expected.get(rel) != digest
+    }
+    managed_packaged_html = _managed_packaged_opportunity_pages(
+        release, expected, allow_missing_legacy=True
+    )
+    allowed = (
+        _overlay_allowed_paths(routes) - {
+            LIVE_INTEL_OVERLAY_MANIFEST,
+            LIVE_INTEL_PUBLIC_MANIFEST,
+        }
+        if identity["official_live"]
+        else {
+            "_site/oportunidades/index.html",
+            "_site/sitemap-oportunidades.xml",
+        }
+    )
+    unexpected = sorted(set(changed) - allowed)
+    bad_removed = sorted(
+        rel
+        for rel in removed
+        if not (
+            rel == "_site/sitemap-oportunidades.xml"
+            or rel in LIVE_INTEL_ACCEPTED_FILES
+            or rel in managed_packaged_html
+        )
+    )
+    accepted_html = {str(item["html_path"]) for item in routes}
+    changed_children = {
+        rel
+        for rel in changed
+        if rel.startswith("_site/oportunidades/")
+        and rel != "_site/oportunidades/index.html"
+    }
+    if unexpected or bad_removed or changed_children != accepted_html:
+        raise ReleaseError(
+            "legacy live-intelligence overlay is not route-exact; "
+            f"changed={unexpected}, removed={bad_removed}, "
+            f"accepted={sorted(accepted_html)}, rendered={sorted(changed_children)}"
+        )
+    payload = {
+        "schema": LIVE_INTEL_LEGACY_STATE_SCHEMA,
+        "release_sha": sha,
+        **identity,
+        "routes": routes,
+        "files": dict(sorted(changed.items())),
+        "removed_files": dict(sorted(removed.items())),
+        "managed_packaged_html": sorted(managed_packaged_html),
+    }
+    state_path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = state_path.with_name(f".{state_path.name}.{uuid.uuid4().hex}")
+    temporary.write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    os.replace(temporary, state_path)
+    return True
+
+
+def _legacy_overlay_state_path(release: Path, sha: str) -> Path:
+    releases = release.parent
+    if releases.name != "releases":
+        return release / "metadata" / f".{sha}.legacy-overlay-state.unavailable"
+    return releases.parent / "state" / "live-intelligence-overlays" / f"{sha}.json"
+
+
+def _overlay_contract(
+    release: Path, sha: str, expected: dict[str, str]
+) -> tuple[dict[str, str], dict[str, str]]:
+    """Validate and return exact changed/removed files for this staged release."""
+    internal_path = release / LIVE_INTEL_OVERLAY_MANIFEST
+    path = (
+        internal_path
+        if internal_path.is_file()
+        else _legacy_overlay_state_path(release, sha)
+    )
+    if not path.is_file():
+        return {}, {}
+    payload = load_json(path)
+    is_internal = path == internal_path
+    expected_schema = (
+        LIVE_INTEL_OVERLAY_SCHEMA if is_internal else LIVE_INTEL_LEGACY_STATE_SCHEMA
+    )
+    if payload.get("schema") != expected_schema or payload.get("release_sha") != sha:
+        raise ReleaseError("live-intelligence overlay manifest identity mismatch")
+    files = payload.get("files")
+    removed = payload.get("removed_files")
+    routes = payload.get("routes")
+    managed_packaged_html = payload.get("managed_packaged_html")
+    if (
+        not isinstance(files, dict)
+        or not isinstance(removed, dict)
+        or not isinstance(routes, list)
+        or not isinstance(managed_packaged_html, list)
+        or any(not isinstance(rel, str) for rel in managed_packaged_html)
+        or len(managed_packaged_html) != len(set(managed_packaged_html))
+    ):
+        raise ReleaseError("live-intelligence overlay manifest shape is invalid")
+    if any(not isinstance(key, str) or not isinstance(value, str) or not HEX_256.fullmatch(value) for key, value in files.items()):
+        raise ReleaseError("live-intelligence overlay file digest is invalid")
+    if any(not isinstance(key, str) or not isinstance(value, str) or not HEX_256.fullmatch(value) for key, value in removed.items()):
+        raise ReleaseError("live-intelligence overlay removed-file digest is invalid")
+    identity, accepted_routes = _accepted_overlay_identity(release)
+    if routes != accepted_routes:
+        raise ReleaseError("live-intelligence overlay routes differ from accepted projection")
+    for key, value in identity.items():
+        if payload.get(key) != value:
+            raise ReleaseError(f"live-intelligence overlay {key} mismatch")
+    allowed = _overlay_allowed_paths(accepted_routes)
+    if set(files) - allowed:
+        raise ReleaseError(
+            f"live-intelligence overlay contains unauthorized files: {sorted(set(files) - allowed)}"
+        )
+    managed_set = set(managed_packaged_html)
+    if any(
+        expected.get(rel) is None
+        or not re.fullmatch(r"_site/oportunidades/.+/index\.html", rel)
+        for rel in managed_set
+    ):
+        raise ReleaseError("live-intelligence managed packaged HTML is invalid")
+    for rel, digest in removed.items():
+        if expected.get(rel) != digest or not (
+            rel == "_site/sitemap-oportunidades.xml"
+            or rel in LIVE_INTEL_ACCEPTED_FILES
+            or rel in managed_set
+        ):
+            raise ReleaseError(f"live-intelligence overlay withdrawal is invalid: {rel}")
+    if is_internal:
+        public = load_json(release / LIVE_INTEL_PUBLIC_MANIFEST)
+        expected_public = {
+            "schema": LIVE_INTEL_PUBLIC_SCHEMA,
+            "release_sha": sha,
+            **identity,
+            "routes": accepted_routes,
+            "static_html_paths": (
+                ["_site/oportunidades/index.html"]
+                if (release / "_site/oportunidades/index.html").is_file()
+                else []
+            ),
+            "static_html_sha256": (
+                {
+                    "_site/oportunidades/index.html": sha256_file(
+                        release / "_site/oportunidades/index.html"
+                    )
+                }
+                if (release / "_site/oportunidades/index.html").is_file()
+                else {}
+            ),
+            "removed_html_paths": sorted(
+                rel for rel in removed if rel.startswith("_site/") and rel.endswith(".html")
+            ),
+        }
+        if public != expected_public:
+            raise ReleaseError("public live-intelligence overlay snapshot mismatch")
+    return ({str(key): str(value) for key, value in files.items()}, {str(key): str(value) for key, value in removed.items()})
+
+
 def verify_release_tree_at(release: Path, sha: str) -> dict[str, Any]:
     if not release.is_dir() or release.is_symlink():
         raise ReleaseError(f"release does not exist as a real directory: {sha}")
@@ -425,27 +922,32 @@ def verify_release_tree_at(release: Path, sha: str) -> dict[str, Any]:
         rel for rel in actual if rel not in ignored and not is_release_ephemeral(rel)
     }
 
-    extra = sorted(actual_hashed - set(expected))
-    missing = sorted(
-        rel
-        for rel in (set(expected) - actual_hashed)
-        if not is_live_intel_withdrawal(rel)
+    overlay_files, overlay_removed = _overlay_contract(release, sha, expected)
+    overlay_manifest_files = (
+        {LIVE_INTEL_OVERLAY_MANIFEST}
+        if (release / LIVE_INTEL_OVERLAY_MANIFEST).is_file()
+        else set()
     )
-    unexpected = [rel for rel in extra if not is_live_intel_overlay(rel)]
-    if missing or unexpected:
+    permitted_actual = (set(expected) - set(overlay_removed)) | set(overlay_files) | overlay_manifest_files
+    extra = sorted(actual_hashed - permitted_actual)
+    missing = sorted(permitted_actual - actual_hashed)
+    if missing or extra:
         raise ReleaseError(
-            f"release file set mismatch; missing={missing}, extra={unexpected}"
+            f"release file set mismatch; missing={missing}, extra={extra}"
         )
     for rel, digest in expected.items():
+        if rel in overlay_removed:
+            continue
         if rel not in actual:
-            if is_live_intel_withdrawal(rel):
-                continue
             raise ReleaseError(f"release file checksum mismatch: {rel}")
         found = sha256_file(actual[rel])
-        if found != digest:
-            if rel in LIVE_INTEL_OVERLAY_REWRITES:
-                continue
+        accepted_digest = overlay_files.get(rel, digest)
+        if found != accepted_digest:
             raise ReleaseError(f"release file checksum mismatch: {rel}")
+    for rel, digest in overlay_files.items():
+        path = actual.get(rel)
+        if path is None or sha256_file(path) != digest:
+            raise ReleaseError(f"live-intelligence overlay checksum mismatch: {rel}")
 
     source = load_json(release / "metadata" / "release-source.json")
     manifest = load_json(release / "metadata" / "release-manifest.json")
@@ -528,7 +1030,18 @@ def verify_release_tree(root: Path, sha: str) -> dict[str, Any]:
 
 
 def verify_release_envelope_and_tree(root: Path, sha: str) -> dict[str, Any]:
-    _, incoming_manifest = validate_incoming(root, sha)
+    package, incoming_manifest = validate_incoming(root, sha)
+    stored_files_manifest = root / "releases" / sha / "metadata/files.sha256"
+    try:
+        stored_files_manifest_bytes = stored_files_manifest.read_bytes()
+    except OSError as exc:
+        raise ReleaseError(
+            f"stored release files manifest is missing: {stored_files_manifest}"
+        ) from exc
+    if stored_files_manifest_bytes != _files_manifest_bytes_from_package(package):
+        raise ReleaseError(
+            "stored metadata/files.sha256 differs from the immutable incoming package"
+        )
     stored_manifest = verify_release_tree(root, sha)
     if stored_manifest["artifact"]["sha256"] != incoming_manifest["artifact"]["sha256"]:
         raise ReleaseError("stored release and incoming artifact checksums diverge")
@@ -865,10 +1378,33 @@ def _withdraw_packaged_opportunity_pages(release: Path) -> None:
         sitemap.unlink()
 
 
-def _publish_live_intelligence_overlay(release: Path) -> None:
+def _publish_live_intelligence_overlay(release: Path) -> dict[str, Any]:
     """Render official INDEX pages into the staged `_site` without rewriting hashed files."""
     if os.environ.get("CONFENGE_RELEASE_TEST_MODE") == "1":
-        return
+        return {"status": "not_applied_in_test_mode", "official_live": False}
+    source_path = release / "metadata/release-source.json"
+    files_path = release / "metadata/files.sha256"
+    expected_files = _parse_files_manifest(files_path) if files_path.is_file() else {}
+    managed_packaged_html = (
+        _managed_packaged_opportunity_pages(release, expected_files)
+        if expected_files
+        else set()
+    )
+
+    def finalize_manifest() -> None:
+        # Tiny direct-unit fixtures exercise withdrawal without a release
+        # envelope. Real stage always has both files and must bind the delta.
+        if not source_path.is_file() or not files_path.is_file():
+            return
+        source = load_json(source_path)
+        commit = validate_sha(str(source.get("commit") or ""))
+        _write_live_intelligence_overlay_manifest(
+            release,
+            commit,
+            expected_files,
+            managed_packaged_html=managed_packaged_html,
+        )
+
     official: Path | None = HOST_OFFICIAL_DIR
     if not (official / "manifest.json").is_file():
         bundled = release / "data" / "live_intelligence" / "official" / "manifest.json"
@@ -881,7 +1417,8 @@ def _publish_live_intelligence_overlay(release: Path) -> None:
         os.environ.pop("CONFENGE_LI_OFFICIAL_DIR", None)
         if not publish_py.is_file() or not organic_py.is_file():
             _withdraw_packaged_opportunity_pages(release)
-            return
+            finalize_manifest()
+            return {"status": "withdrawn", "reason": "official_input_absent", "official_live": False}
     else:
         os.environ["CONFENGE_LI_OFFICIAL_DIR"] = str(official)
         if not publish_py.is_file() or not organic_py.is_file():
@@ -893,11 +1430,15 @@ def _publish_live_intelligence_overlay(release: Path) -> None:
     if str(release) not in sys.path:
         sys.path.insert(0, str(release))
     try:
-        from scripts.live_intelligence.publish import publish
+        from scripts.live_intelligence.publish import (
+            publish,
+            withdraw_packaged_opportunities,
+        )
     except ImportError as exc:
         if official is None:
             _withdraw_packaged_opportunity_pages(release)
-            return
+            finalize_manifest()
+            return {"status": "withdrawn", "reason": "official_input_absent", "official_live": False}
         raise ReleaseError(
             "live-intelligence official overlay import failed; the release "
             "payload must include scripts/live_intelligence and scripts/organic"
@@ -911,21 +1452,53 @@ def _publish_live_intelligence_overlay(release: Path) -> None:
         withdraw_if_absent=True,
     )
     if result.get("ok") is False:
-        raise ReleaseError(
-            f"live-intelligence official overlay rejected: {result.get('reason')}"
-        )
+        # A stale/invalid integration must never refresh accepted state or
+        # publish a purportedly live opportunity, but it must not take down
+        # unrelated commercial pages. Withdraw the family records and retain
+        # the branded empty hub as the truthful direct-contact alternative.
+        for dirname in ("accepted", "accepted.last"):
+            target = release / "data/live_intelligence" / dirname
+            if target.is_dir() and not target.is_symlink():
+                shutil.rmtree(target)
+        withdraw_packaged_opportunities(release / "_site")
+        finalize_manifest()
+        return {
+            "status": "withdrawn",
+            "reason": str(result.get("reason") or "official_overlay_rejected"),
+            "official_live": False,
+        }
+    finalize_manifest()
+    return {
+        "status": "published",
+        "reason": str(result.get("reason") or "official_live_published"),
+        "official_live": True,
+        "indexable": int(result.get("indexable") or 0),
+    }
 
 
 def stage_release(sha: str, upload_dir: Path | None = None) -> dict[str, Any]:
     sha = validate_sha(sha)
     root = release_root()
     with deploy_lock(root):
+        for link_name in ("current", "rollback"):
+            legacy_sha = read_release_link(root, link_name)
+            if legacy_sha and _seal_legacy_live_intelligence_overlay(
+                root / "releases" / legacy_sha, legacy_sha
+            ):
+                verify_release_tree_at(root / "releases" / legacy_sha, legacy_sha)
+                append_evidence(
+                    root,
+                    "LEGACY_OVERLAY_SEALED",
+                    legacy_sha,
+                    release_link=link_name,
+                    overlay_manifest=LIVE_INTEL_OVERLAY_MANIFEST,
+                )
         if upload_dir is not None:
             _adopt_uploaded_bundle(root, sha, upload_dir)
         package, incoming_manifest = validate_incoming(root, sha)
         target = root / "releases" / sha
         if os.path.lexists(target):
-            stored = verify_release_tree(root, sha)
+            stored = verify_release_envelope_and_tree(root, sha)
             if stored["artifact"]["sha256"] != incoming_manifest["artifact"]["sha256"]:
                 raise ReleaseError(
                     "pre-existing release directory has divergent artifact identity"
@@ -951,7 +1524,7 @@ def stage_release(sha: str, upload_dir: Path | None = None) -> dict[str, Any]:
                 encoding="utf-8",
             )
             stored = verify_release_tree_at(temporary, sha)
-            _publish_live_intelligence_overlay(temporary)
+            overlay_result = _publish_live_intelligence_overlay(temporary)
             stored = verify_release_tree_at(temporary, sha)
             os.replace(temporary, target)
         except Exception:
@@ -964,6 +1537,7 @@ def stage_release(sha: str, upload_dir: Path | None = None) -> dict[str, Any]:
             sha,
             artifact_sha256=stored["artifact"]["sha256"],
             ci_run_url=(stored.get("ci") or {}).get("run_url"),
+            live_intelligence=overlay_result,
         )
         return stored
 
@@ -972,6 +1546,7 @@ def verify_release(sha: str) -> dict[str, Any]:
     sha = validate_sha(sha)
     root = release_root()
     with deploy_lock(root):
+        _seal_legacy_live_intelligence_overlay(root / "releases" / sha, sha)
         manifest = verify_release_envelope_and_tree(root, sha)
         smoke_candidate(root / "releases" / sha, sha)
         verify_portable_runtime(root / "releases" / sha)
@@ -1006,11 +1581,41 @@ def _append_evidence_best_effort(
     return None
 
 
-def _switch_release(root: Path, sha: str, event: str) -> dict[str, Any]:
+def _switch_release(
+    root: Path,
+    sha: str,
+    event: str,
+    *,
+    expected_current: str | None | object,
+) -> dict[str, Any]:
+    previous_before_checks = read_release_link(root, "current")
+    rollback_before_checks = read_release_link(root, "rollback")
+    if expected_current is not _NO_CURRENT_PRECONDITION:
+        if isinstance(expected_current, str):
+            validate_sha(expected_current)
+        if previous_before_checks != expected_current:
+            raise ReleaseError(
+                "current release changed since authorization; "
+                f"expected={expected_current or 'NONE'}, "
+                f"found={previous_before_checks or 'NONE'}"
+            )
+    recovery_predecessor = None
+    if event == "PROMOTED":
+        recovery_predecessor = (
+            rollback_before_checks
+            if previous_before_checks == sha
+            else previous_before_checks
+        )
+    for candidate in {value for value in (sha, recovery_predecessor) if value}:
+        _seal_legacy_live_intelligence_overlay(root / "releases" / candidate, candidate)
     manifest = verify_release_envelope_and_tree(root, sha)
+    if recovery_predecessor and recovery_predecessor != sha:
+        # Never move the canonical symlink toward a candidate whose recovery
+        # release is already corrupt. On an idempotent retry, the real recovery
+        # release is the rollback link, not the candidate already at current.
+        verify_release_envelope_and_tree(root, recovery_predecessor)
     smoke_candidate(root / "releases" / sha, sha)
     previous = read_release_link(root, "current")
-    read_release_link(root, "rollback")
     if previous == sha:
         nginx_test()
         runtime_restart()
@@ -1083,20 +1688,264 @@ def _switch_release(root: Path, sha: str, event: str) -> dict[str, Any]:
     return manifest
 
 
-def promote_release(sha: str) -> dict[str, Any]:
+_NO_CURRENT_PRECONDITION = object()
+
+
+def promote_release(sha: str, expected_current: str | None) -> dict[str, Any]:
     sha = validate_sha(sha)
     root = release_root()
     with deploy_lock(root):
-        return _switch_release(root, sha, "PROMOTED")
+        return _switch_release(
+            root, sha, "PROMOTED", expected_current=expected_current
+        )
 
 
-def rollback_release(sha: str) -> dict[str, Any]:
+def rollback_release(
+    sha: str,
+    expected_current: str | None | object = _NO_CURRENT_PRECONDITION,
+) -> dict[str, Any]:
     sha = validate_sha(sha)
     root = release_root()
     with deploy_lock(root):
         if not (root / "releases" / sha).is_dir():
             raise ReleaseError(f"rollback target does not exist: {sha}")
-        return _switch_release(root, sha, "ROLLED_BACK")
+        return _switch_release(
+            root,
+            sha,
+            "ROLLED_BACK",
+            expected_current=expected_current,
+        )
+
+
+def _html_request_path(rel: str) -> str:
+    if rel == "index.html":
+        return "/"
+    if rel.endswith("/index.html"):
+        return f"/{rel[:-len('index.html')]}"
+    return f"/{rel}"
+
+
+def _html_for_request(site: Path, request_path: str) -> str | None:
+    path = urllib.parse.unquote(request_path).split("?", 1)[0]
+    if not path.startswith("/") or "\\" in path:
+        raise ReleaseError(f"unsafe HTTP inventory request path: {request_path!r}")
+    clean = path.lstrip("/")
+    if any(part in {".", ".."} for part in clean.split("/")):
+        raise ReleaseError(f"unsafe HTTP inventory request path: {request_path!r}")
+    candidates: list[str] = []
+    if not clean:
+        candidates.append("index.html")
+    else:
+        if clean.endswith(".html"):
+            candidates.append(clean)
+        if clean.endswith("/"):
+            candidates.append(f"{clean}index.html")
+        else:
+            candidates.extend((f"{clean}.html", f"{clean}/index.html"))
+    for rel in candidates:
+        target = site / rel
+        if target.is_file() and not target.is_symlink():
+            return rel
+    return None
+
+
+def _matching_path_rule(
+    routes: list[dict[str, Any]], request_path: str
+) -> tuple[dict[str, Any] | None, str]:
+    normalized_request = request_path if request_path == "/" else request_path.rstrip("/")
+    for rule in routes:
+        source = rule.get("from") or {}
+        if source.get("kind") != "path":
+            continue
+        source_path = str(source.get("path") or "")
+        match = source.get("match")
+        if match == "exact":
+            normalized_source = (
+                source_path if source_path == "/" else source_path.rstrip("/")
+            )
+            if normalized_request == normalized_source:
+                return rule, ""
+        elif match == "prefix":
+            base = source_path.removesuffix("/*").rstrip("/")
+            prefix = f"{base}/"
+            if request_path.startswith(prefix):
+                return rule, request_path[len(prefix) :]
+    return None, ""
+
+
+def _resolved_http_disposition(
+    site: Path,
+    routes: list[dict[str, Any]],
+    request_path: str,
+    *,
+    remaining: int = 8,
+    seen: frozenset[str] = frozenset(),
+) -> dict[str, Any]:
+    if remaining <= 0 or request_path in seen:
+        raise ReleaseError(f"HTTP inventory redirect cycle at {request_path}")
+    physical = _html_for_request(site, request_path)
+    rule, splat = _matching_path_rule(routes, request_path)
+    if rule is not None:
+        action = rule.get("action")
+        status = rule.get("status")
+        terminal = action == "gone" or rule.get("force") is True or physical is None
+        if terminal and action == "gone":
+            body = _html_for_request(site, "/404.html")
+            if body is None:
+                raise ReleaseError("HTTP 410 inventory body /404.html is missing")
+            return {
+                "status": 410,
+                "location": None,
+                "final_status": 410,
+                "effective_html_path": body,
+                "sha256": sha256_file(site / body),
+            }
+        target = rule.get("to") or {}
+        target_path = str(target.get("pathname") or "").replace(":splat", splat)
+        if terminal and action == "redirect":
+            raw_location = str(target.get("raw") or "").replace(":splat", splat)
+            absolute = target.get("absolute") is True
+            origin = str(target.get("origin") or "")
+            if absolute and origin not in {"https://confenge.com.br", "http://confenge.com.br"}:
+                return {
+                    "status": int(status),
+                    "location": raw_location,
+                    "final_status": None,
+                    "effective_html_path": None,
+                    "sha256": None,
+                }
+            final = _resolved_http_disposition(
+                site,
+                routes,
+                target_path,
+                remaining=remaining - 1,
+                seen=seen | {request_path},
+            )
+            return {
+                "status": int(status),
+                "location": raw_location,
+                "final_status": final["final_status"],
+                "effective_html_path": final["effective_html_path"],
+                "sha256": final["sha256"],
+            }
+        if terminal and action == "rewrite":
+            physical = _html_for_request(site, target_path)
+            if physical is None:
+                raise ReleaseError(
+                    f"HTTP 200 rewrite target has no HTML body: {target_path}"
+                )
+    if physical is None:
+        raise ReleaseError(f"physical HTML has no effective HTTP body: {request_path}")
+    return {
+        "status": 200,
+        "location": None,
+        "final_status": 200,
+        "effective_html_path": physical,
+        "sha256": sha256_file(site / physical),
+    }
+
+
+def _gone_contract_probes(
+    site: Path, routes: list[dict[str, Any]]
+) -> dict[str, dict[str, Any]]:
+    """Enumerate withdrawn URLs independently from physical HTML inventory."""
+    probes: dict[str, dict[str, Any]] = {}
+    for rule in routes:
+        source = rule.get("from") or {}
+        if source.get("kind") != "path" or rule.get("action") != "gone":
+            continue
+        source_path = str(source.get("path") or "")
+        match = source.get("match")
+        if match == "exact":
+            request_paths = [source_path]
+            if source_path != "/" and not source_path.endswith("/"):
+                request_paths.append(f"{source_path}/")
+        elif match == "prefix":
+            base = source_path.removesuffix("/*").rstrip("/")
+            request_paths = [f"{base}/__confenge_contract_probe__"]
+        else:
+            raise ReleaseError("gone host-contract rule has unsupported match type")
+        for request_path in request_paths:
+            disposition = _resolved_http_disposition(site, routes, request_path)
+            if disposition["status"] != 410 or disposition["final_status"] != 410:
+                raise ReleaseError(
+                    f"gone host-contract probe did not resolve to 410: {request_path}"
+                )
+            entry = {
+                "request_path": request_path,
+                **disposition,
+                "rule_order": rule.get("order"),
+                "match": match,
+            }
+            previous = probes.get(request_path)
+            if previous is not None and previous != entry:
+                raise ReleaseError(
+                    f"conflicting gone host-contract probes: {request_path}"
+                )
+            probes[request_path] = entry
+    return dict(sorted(probes.items()))
+
+
+def served_html_inventory(sha: str) -> dict[str, Any]:
+    """Inventory the actual current release independently of build manifests."""
+    sha = validate_sha(sha)
+    root = release_root()
+    with deploy_lock(root):
+        current = read_release_link(root, "current")
+        if current != sha:
+            raise ReleaseError(
+                "served inventory current release mismatch; "
+                f"expected={sha}, found={current or 'NONE'}"
+            )
+        manifest = verify_release_envelope_and_tree(root, sha)
+        release = root / "releases" / sha
+        site = release / "_site"
+        html_sha256 = {
+            path.relative_to(site).as_posix(): sha256_file(path)
+            for path in sorted(site.rglob("*.html"))
+            if path.is_file() and not path.is_symlink()
+        }
+        if not html_sha256:
+            raise ReleaseError("served release HTML inventory is empty")
+        host_contract = load_json(
+            release / "nginx/generated/contract.normalized.json"
+        )
+        routes = host_contract.get("routes")
+        if not isinstance(routes, list):
+            raise ReleaseError("host contract routes are not a list")
+        http_dispositions = {}
+        for rel in html_sha256:
+            request_path = _html_request_path(rel)
+            http_dispositions[rel] = {
+                "request_path": request_path,
+                **_resolved_http_disposition(site, routes, request_path),
+            }
+        contract_probes = _gone_contract_probes(site, routes)
+        public_overlay = release / LIVE_INTEL_PUBLIC_MANIFEST
+        build_info = load_json(site / ".well-known/build-info.json")
+        runtime_info: dict[str, Any] | None = None
+        if os.environ.get("CONFENGE_RELEASE_TEST_MODE") != "1":
+            upstream = (manifest.get("host_contract") or {}).get("runtime_upstream") or {}
+            host = upstream.get("host")
+            port = upstream.get("port")
+            if host in LOOPBACK_HOSTS and isinstance(port, int):
+                try:
+                    runtime_info = _http_get_json(
+                        f"http://{host}:{port}/.well-known/runtime-info.json"
+                    )
+                except ReleaseError:
+                    runtime_info = None
+        return {
+            "schema": "confenge.served-html-inventory/v1",
+            "release_sha": sha,
+            "html_sha256": html_sha256,
+            "http_dispositions": http_dispositions,
+            "contract_probes": contract_probes,
+            "overlay": load_json(public_overlay) if public_overlay.is_file() else None,
+            "build_info": build_info,
+            "runtime_info": runtime_info,
+            "release_control_sha256": release_controller_evidence_hash(),
+        }
 
 
 def prune_releases(keep: int = 5) -> list[str]:
@@ -1146,6 +1995,7 @@ def _command_from_argv0(argv0: str) -> str | None:
         "verify-release": "verify",
         "promote-release": "promote",
         "rollback": "rollback",
+        "served-html-inventory": "inventory",
         "prune-releases": "prune",
     }.get(name)
 
@@ -1157,11 +2007,22 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         argv.insert(0, implicit)
     parser = argparse.ArgumentParser(description=__doc__)
     subparsers = parser.add_subparsers(dest="command", required=True)
-    for command in ("stage", "verify", "promote", "rollback"):
+    for command in ("stage", "verify", "promote", "rollback", "inventory"):
         child = subparsers.add_parser(command)
         child.add_argument("sha")
         if command == "stage":
             child.add_argument("--upload-dir", type=Path)
+        if command == "promote":
+            child.add_argument(
+                "--expected-current",
+                required=True,
+                help="authorized predecessor full SHA, or NONE when no current release exists",
+            )
+        if command == "rollback":
+            child.add_argument(
+                "--expected-current",
+                help="optional compensating guard: candidate full SHA, or NONE",
+            )
     prune = subparsers.add_parser("prune")
     prune.add_argument("--keep", type=int, default=5)
     return parser.parse_args(argv)
@@ -1185,19 +2046,33 @@ def main(argv: list[str] | None = None) -> int:
                 "artifact_sha256": manifest["artifact"]["sha256"],
             }
         elif args.command == "promote":
-            promote_release(args.sha)
+            expected_current = (
+                None
+                if args.expected_current == "NONE"
+                else validate_sha(args.expected_current)
+            )
+            promote_release(args.sha, expected_current)
             result = {
                 "status": "PROMOTED",
                 "sha": args.sha,
                 "current_identity": args.sha,
             }
         elif args.command == "rollback":
-            rollback_release(args.sha)
+            rollback_expected: str | None | object = _NO_CURRENT_PRECONDITION
+            if args.expected_current is not None:
+                rollback_expected = (
+                    None
+                    if args.expected_current == "NONE"
+                    else validate_sha(args.expected_current)
+                )
+            rollback_release(args.sha, rollback_expected)
             result = {
                 "status": "ROLLED_BACK",
                 "sha": args.sha,
                 "current_identity": args.sha,
             }
+        elif args.command == "inventory":
+            result = served_html_inventory(args.sha)
         else:
             removed = prune_releases(args.keep)
             result = {
@@ -1205,6 +2080,7 @@ def main(argv: list[str] | None = None) -> int:
                 "removed": removed,
                 "keep_previous": args.keep,
             }
+        result["release_control_sha256"] = release_controller_evidence_hash()
     except ReleaseError as exc:
         print(f"NETCUP_RELEASE_ERROR: {exc}", file=sys.stderr)
         return 2

@@ -196,13 +196,41 @@ def catalog_offer_ids(root: Path) -> set[str]:
 
 
 def catalog_offers(root: Path) -> dict[str, dict[str, Any]]:
+    """Return commercial SLA authorities without changing public eligibility.
+
+    Checkout offers remain in ``catalog.snapshot.json``. Services that are
+    available by proposal can have a truthful public delivery term while their
+    deliverable is still ``VALIDATE`` and therefore absent from the eight-item
+    public catalog. Their SLA authority is the internal deliverables registry;
+    loading it here does not add its IDs to ``catalog_offer_ids`` or to the
+    visitor-facing catalog projection.
+    """
     snapshot = root / "data" / "offers" / "catalog.snapshot.json"
     if not snapshot.is_file():
         snapshot = ROOT / "data" / "offers" / "catalog.snapshot.json"
-    if not snapshot.is_file():
-        return {}
-    doc = json.loads(snapshot.read_text(encoding="utf-8"))
-    return {str(offer["offer_id"]): offer for offer in doc.get("offers") or []}
+    offers: dict[str, dict[str, Any]] = {}
+    if snapshot.is_file():
+        doc = json.loads(snapshot.read_text(encoding="utf-8"))
+        offers.update({str(offer["offer_id"]): offer for offer in doc.get("offers") or []})
+
+    registry = root / "data" / "commercial" / "deliverables-registry.v1.json"
+    if not registry.is_file():
+        registry = ROOT / "data" / "commercial" / "deliverables-registry.v1.json"
+    if registry.is_file():
+        doc = json.loads(registry.read_text(encoding="utf-8"))
+        for entry in doc.get("deliverables") or []:
+            minimum = (entry.get("sla") or {}).get("business_days_min")
+            maximum = (entry.get("sla") or {}).get("business_days_max")
+            if not isinstance(minimum, int) or not isinstance(maximum, int):
+                continue
+            offers[str(entry["deliverable_id"])] = {
+                "offer_id": str(entry["deliverable_id"]),
+                "route": entry.get("route"),
+                "public_state": entry.get("public_state"),
+                "sla_business_days": str(minimum) if minimum == maximum else f"{minimum}-{maximum}",
+                "sla_authority": "internal_deliverables_registry",
+            }
+    return offers
 
 
 _SLA_RANGE_RE = re.compile(
@@ -216,11 +244,12 @@ _SLA_SINGLE_RE = re.compile(r"\b(?P<value>\d{1,3})\s+dias(?:\s+[uú]teis)?\b", r
 
 
 def _parse_catalog_sla_interval(raw: Any) -> tuple[int, int] | None:
-    match = re.fullmatch(r"\s*(\d{1,3})\s*[-–—]\s*(\d{1,3})\s*", str(raw or ""))
+    match = re.fullmatch(r"\s*(\d{1,3})(?:\s*[-–—]\s*(\d{1,3}))?\s*", str(raw or ""))
     if not match:
         return None
-    lower, upper = int(match.group(1)), int(match.group(2))
-    if lower < 1 or upper <= lower:
+    lower = int(match.group(1))
+    upper = int(match.group(2) or match.group(1))
+    if lower < 1 or upper < lower:
         return None
     return lower, upper
 
@@ -280,6 +309,16 @@ def audit_service_sla_claims(
     delivery_sentences = _delivery_sentences(html)
     raw_ids = row.get("offer_id")
     offer_ids = [raw_ids] if isinstance(raw_ids, str) else list(raw_ids or [])
+    # An explicit offer association requires its declared term to be visible.
+    # Route inference has the opposite job: validate a term the page actually
+    # claims, without forcing every internal VALIDATE service to publish one.
+    if not offer_ids and delivery_sentences:
+        route = path.rstrip("/") + "/"
+        offer_ids = [
+            offer_id
+            for offer_id, offer in offers.items()
+            if str(offer.get("route") or "").rstrip("/") + "/" == route
+        ]
     allowed_raw = {
         str(offers[offer_id]["sla_business_days"])
         for offer_id in offer_ids
@@ -309,7 +348,11 @@ def audit_service_sla_claims(
     exact = [
         claim
         for claim in claims
-        if claim[0] == "interval" and (claim[1], claim[2]) in allowed
+        if (claim[1], claim[2]) in allowed
+        and (
+            (claim[0] == "interval" and claim[1] < claim[2])
+            or (claim[0] == "single" and claim[1] == claim[2])
+        )
     ]
     if not allowed or len(exact) != len(claims) or not claims:
         return [

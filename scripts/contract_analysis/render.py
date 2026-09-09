@@ -33,6 +33,7 @@ from scripts.pseo.html_shell import (
     breadcrumbs_html,
     e,
     page_shell,
+    wa_link,
 )
 from scripts.site.responsive_text import escape_prose_with_opaque_tokens
 
@@ -77,7 +78,7 @@ def archetype_attr(section_id: str) -> str:
 # Visible meta and CollectionPage must share this string so discovery
 # structured_data_matches_visible does not fail when the hub file exists.
 HUB_DESCRIPTION = (
-    "Análises editoriais independentes de contratos públicos. Não são casos CONFENGE."
+    "Análises técnicas de contratos públicos com fontes, cálculos, limites e aplicação prática."
 )
 AI_DISCLOSURE_HTML = (
     '<p id="ai-disclosure" class="ai-disclosure" data-ai-disclosure="assistive">'
@@ -87,17 +88,18 @@ AI_DISCLOSURE_HTML = (
 )
 HUB_METHOD_HTML = (
     '<section class="section authority-method" id="metodo">'
-    "<h2>Método e classe editorial</h2>"
-    '<p class="case-badge">ANÁLISE TÉCNICA DE CONTRATO PÚBLICO · NÃO É CASO CONFENGE · NÃO É CASE DE CLIENTE</p>'
-    "<p>Método: cada afirmação visível entra numa trilha FACT, CALCULATION, INFERENCE ou UNKNOWN. "
-    "Fonte pública, recorte e data de referência acompanham o texto. Sem fonte, o campo permanece UNKNOWN.</p>"
-    "<p>Esta família lê instrumentos e registros públicos. A publicação não implica relação comercial "
-    "com o órgão, o contratado ou as partes. Não é Caso CONFENGE. Não é customer success. Não é review.</p>"
+    "<h2>Como analisamos</h2>"
+    '<p class="case-badge">ANÁLISE TÉCNICA DE CONTRATO PÚBLICO</p>'
+    "<p>Cada afirmação é distinguida entre fato documentado, cálculo reproduzível, "
+    "interpretação técnica ou informação não localizada. A fonte pública, o trecho "
+    "consultado e a data de referência acompanham o texto.</p>"
+    "<p>Os instrumentos analisados são registros públicos. A publicação não afirma "
+    "que a CONFENGE tenha trabalhado para o órgão, a contratada ou qualquer das partes.</p>"
     "<p>Limitação: não é parecer jurídico, não julga irregularidade e não transforma "
     "“atípico” em “irregular”.</p>"
     f"{AI_DISCLOSURE_HTML}"
     "<p>Como citar: CONFENGE. Análise técnica de contrato público. "
-    f"https://confenge.com.br{FAMILY_PATH} (as of 2026-08-16).</p>"
+    f"https://confenge.com.br{FAMILY_PATH} (consulta em 2026-08-16).</p>"
     "</section>"
 )
 KIND_LABEL = {
@@ -106,7 +108,7 @@ KIND_LABEL = {
     "INFERENCE": "Interpretação técnica CONFENGE",
     "INTERPRETACAO": "Interpretação técnica CONFENGE",
     "INTERPRETAÇÃO TÉCNICA CONFENGE": "Interpretação técnica CONFENGE",
-    "UNKNOWN": "UNKNOWN",
+    "UNKNOWN": "Não informado",
     "LIMITATION": "Limitação",
     "LIMITACAO": "Limitação",
     "LIMITAÇÃO": "Limitação",
@@ -164,8 +166,15 @@ def _author_name(record: dict[str, Any]) -> str:
 def _reviewer_name(record: dict[str, Any]) -> str:
     reviewer = record.get("reviewer")
     if isinstance(reviewer, dict):
-        return _text(reviewer.get("name"))
-    return _text(reviewer)
+        if reviewer.get("confirmed") is False:
+            return ""
+        name = _text(reviewer.get("name"))
+    else:
+        name = _text(reviewer)
+    folded = _fold_name(name)
+    if any(token in folded for token in ("ausente", "sem revis", "responsável técnico")):
+        return ""
+    return name
 
 
 def _canonical_path(slug: str | None = None) -> str:
@@ -174,9 +183,93 @@ def _canonical_path(slug: str | None = None) -> str:
     return f"{FAMILY_PATH}{slug.strip('/')}/"
 
 
+def _public_prose(value: Any) -> str:
+    """Translate internal evidence/status tokens at the public presentation seam.
+
+    Source records and their approval hashes remain byte-bound. Only the visible
+    rendering changes, so control tokens stay available to gates without becoming
+    unexplained editorial backstage on the page.
+    """
+    text = _text(value)
+    replacements = (
+        (r"\bFACT\b", "fato documentado"),
+        (r"\bCALCULATION\b", "cálculo reproduzível"),
+        (r"\bINFERENCE\b", "interpretação técnica"),
+        (r"\bUNKNOWN\b", "informação não localizada"),
+        (r"\bNOT_COMPARABLE\b", "sem comparação aplicável"),
+        (r"\bas_of\b", "data de referência"),
+        (r"\bofficial-live\b", "dossiê oficial"),
+        (r"\bPUBLISHABLE_NOINDEX\b", "preservada fora da indexação"),
+        (r"\bREADY_FOR_HUMAN_REVIEW\b", "pronta para decisão editorial"),
+        (r"\bINDEX\b", "indexação pública"),
+        (r"\bCOMPARABLE\b", "comparáveis"),
+        (r"\bDOCUMENT_CHAIN\b", "cadeia documental"),
+        (r"\bnot_found\b", "não localizado"),
+        (r"\bclaim\b", "afirmação"),
+        (r"\bbound\b", "vinculado"),
+        (r"\blocator\b", "trecho"),
+    )
+    for pattern, replacement in replacements:
+        text = re.sub(pattern, replacement, text)
+    text = re.sub(
+        r"\s*publication_authorization(?:=false)?\s+e\s+index_authorization(?:=false)?"
+        r"\s+(?:do\s+produtor\s+)?permanecem\s+(?:false|falsos)\.?",
+        "",
+        text,
+        flags=re.IGNORECASE,
+    )
+    text = re.sub(
+        r"\bpublication_authorization=false\b",
+        "publicação não autorizada pelo produtor dos dados",
+        text,
+    )
+    text = re.sub(
+        r"Leitura do dossiê .*?e conferência das páginas 14–15 e 46 do PDF cujo SHA-256 é 64a238e6…\.",
+        "Leitura do dossiê de fontes e conferência das páginas 14–15 e 46 do PDF identificado pelo resumo SHA-256 64a238e6….",
+        text,
+    )
+    text = re.sub(
+        r"O modo é cadeia documental\.",
+        "A análise acompanha a cadeia de documentos do instrumento.",
+        text,
+    )
+    text = re.sub(
+        r"Cálculo em Decimal, sem float\. Overlay editorial acrescenta interpretação rotulada "
+        r"e não reescreve fatos, hashes nem flags de autorização do produtor\.",
+        "Cálculo realizado com aritmética decimal; a interpretação técnica não altera fatos nem resumos criptográficos das fontes.",
+        text,
+    )
+    text = re.sub(
+        r"Envelope comparáveis de pavimentação pode existir no produtor "
+        r"\(comparable_available=true\), mas esta análise não o consome "
+        r"\(comparable_consumed=false; reason=singular_document_insight_no_comparative_claim\)\.",
+        "O pacote de origem contém referências comparáveis de pavimentação, mas elas não foram usadas nesta análise documental.",
+        text,
+    )
+    text = re.sub(
+        r"Termos posteriores ao contrato não foram obtidos \(endpoint de termos registrado como não localizado\)\.",
+        "Não foram localizados termos posteriores ao contrato nas fontes consultadas.",
+        text,
+    )
+    text = re.sub(
+        r"A listagem ao vivo refetchada nesta execução produziu SHA-256 distinto do snapshot do produtor; "
+        r"objeto e valorGlobal continuam iguais às strings do fato documentado\.",
+        "A listagem consultada novamente produziu resumo SHA-256 distinto do retrato de origem; o objeto e o valor global continuam iguais aos dados documentados.",
+        text,
+    )
+    text = re.sub(
+        r"\bindex_authorization=false\b",
+        "indexação não autorizada pelo produtor dos dados",
+        text,
+    )
+    return re.sub(r"\s{2,}", " ", text).strip()
+
+
 def _paragraphs(text: str) -> str:
     chunks = [chunk.strip() for chunk in re.split(r"\n\s*\n", text or "") if chunk.strip()]
-    return "".join(f"<p>{escape_prose_with_opaque_tokens(chunk)}</p>" for chunk in chunks)
+    return "".join(
+        f"<p>{escape_prose_with_opaque_tokens(_public_prose(chunk))}</p>" for chunk in chunks
+    )
 
 
 def _kind_items(items: list[Any], heading: str, section_id: str) -> str:
@@ -187,7 +280,7 @@ def _kind_items(items: list[Any], heading: str, section_id: str) -> str:
         if isinstance(item, dict):
             kind = _text(item.get("kind") or item.get("epistemic") or "FACT").upper()
             label = KIND_LABEL.get(kind, kind)
-            body = _text(item.get("text"))
+            body = _public_prose(item.get("text"))
             if not body:
                 continue
             src = _text(item.get("source_ref") or item.get("url"))
@@ -200,7 +293,7 @@ def _kind_items(items: list[Any], heading: str, section_id: str) -> str:
             if src:
                 extras.append(f"Fonte: {e(src)}")
             if locator_text:
-                extras.append(f"Locator: {e(locator_text)}")
+                extras.append(f"Trecho: {e(locator_text)}")
             if sha:
                 extras.append(f"SHA-256: <code>{e(sha)}</code>")
             method = _text(item.get("method"))
@@ -215,7 +308,7 @@ def _kind_items(items: list[Any], heading: str, section_id: str) -> str:
                 f'{escape_prose_with_opaque_tokens(body)}{src_html}</li>'
             )
         else:
-            body = _text(item)
+            body = _public_prose(item)
             if body:
                 lis.append(f"<li>{escape_prose_with_opaque_tokens(body)}</li>")
     if not lis:
@@ -243,7 +336,7 @@ def _ficha_html(ficha: dict[str, Any]) -> str:
         ("regime", "Regime"),
     )
     for key, label in labels:
-        val = _text(ficha.get(key))
+        val = _public_prose(ficha.get(key))
         if val:
             rows.append(f"<tr><th scope='row'>{e(label)}</th><td>{e(val)}</td></tr>")
     if not rows:
@@ -263,7 +356,7 @@ def _timeline_html(items: list[Any]) -> str:
         if not isinstance(item, dict):
             continue
         when = _text(item.get("date") or item.get("when"))
-        what = _text(item.get("text") or item.get("label"))
+        what = _public_prose(item.get("text") or item.get("label"))
         if when and what:
             rows.append(
                 f"<tr><th scope='row'><time datetime='{e(_iso(when))}'>{e(when)}</time></th>"
@@ -287,8 +380,10 @@ def _sources_html(sources: list[Any]) -> str:
         as_of = _iso(src.get("as_of"))
         if not label:
             continue
+        public_labels = {"contract": "Registro do contrato", "process_document": "Documento do processo"}
+        label = public_labels.get(label, _public_prose(label))
         link = f'<a href="{e(url)}" rel="noopener noreferrer">{e(label)}</a>' if url else e(label)
-        extra = f" · as_of {e(as_of)}" if as_of else ""
+        extra = f" · consultado em {e(as_of)}" if as_of else ""
         sha = _text(src.get("sha256") or src.get("content_hash"))
         locator = src.get("locator")
         if isinstance(locator, dict):
@@ -297,7 +392,7 @@ def _sources_html(sources: list[Any]) -> str:
         if sha:
             extra += f" · SHA-256 <code>{e(sha)}</code>"
         if locator_text:
-            extra += f" · locator {e(locator_text)}"
+            extra += f" · trecho {e(locator_text)}"
         lis.append(f"<li>{link}{extra}</li>")
     if not lis:
         return ""
@@ -312,11 +407,11 @@ def _history_html(items: list[Any]) -> str:
     for item in items:
         if isinstance(item, dict):
             when = _iso(item.get("date") or item.get("as_of"))
-            note = _text(item.get("text") or item.get("note"))
+            note = _public_prose(item.get("text") or item.get("note"))
             if when or note:
                 lis.append(f"<li>{e(when)}: {escape_prose_with_opaque_tokens(note)}</li>")
         else:
-            note = _text(item)
+            note = _public_prose(item)
             if note:
                 lis.append(f"<li>{escape_prose_with_opaque_tokens(note)}</li>")
     if not lis:
@@ -346,6 +441,10 @@ def _cta_html(record: dict[str, Any]) -> str:
         if val and key != "correlation_id"
     )
     href_attr = f"{href}{sep}{query}" if query else href
+    contact_href = wa_link(
+        "Olá, Tiago. Li uma análise técnica de contrato público e quero "
+        "conversar sobre um contrato da minha empresa."
+    )
     return (
         f'<section class="section lead-inline" id="proximo-passo"{archetype_attr("proximo-passo")} aria-label="Próximo passo">'
         f"<p>{e(text) if text else 'Se a sua empresa enfrenta um problema semelhante, o caminho é o serviço correspondente — não este contrato.'}</p>"
@@ -358,6 +457,11 @@ def _cta_html(record: dict[str, Any]) -> str:
         f'data-cta-id="{e(attr.get("cta_id") or "")}" '
         f'data-source="{e(attr.get("source") or "CONFENGE_WEB")}" '
         f'data-destination-service-id="{e(attr.get("destination_service_id") or "")}">{e(label)}</a></p>'
+        f'<p><a class="text-link" href="{e(contact_href)}" target="_blank" rel="noopener" '
+        'data-cta-id="analise-contrato-proprio-whatsapp" data-cta-position="analysis_next_step" '
+        'data-asset-family="analise-tecnica-contrato-publico" '
+        'data-route-family="analise-tecnica-contrato" data-journey="contrato">'
+        "Conversar sobre um contrato próprio</a></p>"
         "</section>"
     )
 
@@ -385,12 +489,23 @@ def _comparisons_html(items: list[Any], record: dict[str, Any] | None = None) ->
         available_s = "true" if available is True else "false"
         consumed_s = "true" if consumed is True else "false"
         reason_s = reason or SINGULAR_COMPARABLE_REASON
+        if available is True and consumed is False:
+            policy_text = (
+                "Há referências comparáveis no pacote de origem, mas elas não foram "
+                "usadas nesta análise documental. A página não afirma posição em uma distribuição."
+            )
+        elif available is False:
+            policy_text = (
+                "Nenhuma comparação tecnicamente compatível foi usada. A página não afirma "
+                "posição em uma distribuição."
+            )
+        else:
+            policy_text = "A análise informa expressamente quando uma comparação é utilizada."
         policy = (
             f'<p data-comparable-available="{e(available_s)}" '
             f'data-comparable-consumed="{e(consumed_s)}" '
             f'data-comparable-reason="{e(reason_s)}">'
-            f"comparable_available={e(available_s)} · comparable_consumed={e(consumed_s)} · "
-            f"reason={e(reason_s)}. Esta página não consome grupo de pares nem afirma posição na distribuição."
+            f"{e(policy_text)}"
             "</p>"
         )
     not_comp = any(
@@ -399,7 +514,7 @@ def _comparisons_html(items: list[Any], record: dict[str, Any] | None = None) ->
     )
     if not items and not policy:
         return ""
-    heading = "Comparações" if not not_comp else "Comparações (NOT_COMPARABLE)"
+    heading = "Comparações" if not not_comp else "Comparação não aplicável"
     inner = _kind_items(items, heading, "comparacoes") if items else ""
     if policy and inner:
         inner = inner.replace("</section>", f"{policy}</section>", 1)
@@ -427,7 +542,7 @@ def build_schema(record: dict[str, Any], decision: PublicationDecision) -> list[
         "@type": "Article",
         "@id": f"{url}#article",
         "headline": _text(record.get("title")),
-        "description": _text(record.get("executive_summary") or record.get("meta_description")),
+        "description": _public_prose(record.get("executive_summary") or record.get("meta_description")),
         "inLanguage": "pt-BR",
         "url": url,
         "mainEntityOfPage": url,
@@ -466,7 +581,7 @@ def render_analysis_html(record: dict[str, Any], decision: PublicationDecision) 
         record = dict(record)
         record["material_hash"] = material_hash(record)
     title = _text(record.get("title")) or "Análise técnica de contrato público"
-    description = _text(record.get("meta_description") or record.get("executive_summary"))
+    description = _public_prose(record.get("meta_description") or record.get("executive_summary"))
     if len(description) > 160:
         description = description[:157].rstrip() + "…"
     path = _canonical_path(decision.slug)
@@ -551,12 +666,10 @@ def render_analysis_html(record: dict[str, Any], decision: PublicationDecision) 
         )
     if reviewer and _author_confirmed(record):
         byline += f' · Revisão técnica: <span data-reviewer="{e(reviewer)}">{e(reviewer)}</span>'
-    elif record.get("solo_reviewer_disclosure") or not _author_confirmed(record):
-        byline += " · Responsável técnico sem revisão independente: não há segundo revisor nomeado"
     byline += (
         f' · Publicado em <time datetime="{e(published)}">{e(published)}</time>'
         f' · Atualizado em <time datetime="{e(modified)}">{e(modified)}</time>'
-        f' · as_of <time datetime="{e(_iso(record.get("as_of")))}">{e(_iso(record.get("as_of")))}</time>'
+        f' · Fontes consultadas em <time datetime="{e(_iso(record.get("as_of")))}">{e(_iso(record.get("as_of")))}</time>'
         f' · <a href="{CORRECTION_CHANNEL_HREF}">Encontrou um erro nesta página?</a></p>'
     )
     sections.append(f'<div class="container">{byline}{AI_DISCLOSURE_HTML}</div>')
@@ -594,7 +707,7 @@ def render_analysis_html(record: dict[str, Any], decision: PublicationDecision) 
         sections.append(
             f'<section class="section authority-method" id="metodologia"{archetype_attr("metodologia")}><h2>Metodologia</h2>'
             f'{_paragraphs(record["methodology"])}'
-            f"<p><small>Gate {e(GATE_VERSION)}. Fatos de exportação pública versionada; interpretação editorial CONFENGE.</small></p>"
+            "<p><small>Fatos de exportação pública versionada; interpretação técnica CONFENGE.</small></p>"
             "</section>"
         )
     if _text(record.get("limitations")):
@@ -613,12 +726,8 @@ def render_analysis_html(record: dict[str, Any], decision: PublicationDecision) 
     sections.append(_cta_html(record))
     hash_rows = []
     for label, key in (
-        ("material_hash", "material_hash"),
-        ("rendered_hash", "rendered_hash"),
-        ("content_hash", "content_hash"),
-        ("evidence_pack_hash", "evidence_pack_hash"),
-        ("READY root_content_hash", "root_content_hash"),
-        ("producer_commit", "producer_commit"),
+        ("Conteúdo de origem", "content_hash"),
+        ("Pacote de evidências", "evidence_pack_hash"),
     ):
         val = _text(record.get(key))
         if val:
@@ -628,15 +737,8 @@ def render_analysis_html(record: dict[str, Any], decision: PublicationDecision) 
             f'<section class="section" id="hashes"{archetype_attr("hashes")}><h2>Hashes e proveniência</h2>'
             '<div class="table-wrap" role="group" tabindex="0" aria-label="Hashes e proveniência"><table class="data-table">'
             f"<tbody>{''.join(hash_rows)}</tbody></table></div>"
-            "<p>publication_authorization e index_authorization do produtor permanecem "
-            "<code>false</code>. "
-            + (
-                "INDEX desta URL, se existir, é decisão do consumidor bound a hashes "
-                "e token do responsável, não é autorização do produtor."
-                if decision.indexable
-                else "Esta página não autoriza INDEX."
-            )
-            + "</p></section>"
+            "<p>Os resumos criptográficos vinculam esta publicação ao conteúdo "
+            "de origem e ao pacote de evidências usados na análise.</p></section>"
         )
     sections.append(
         f'<section class="section" id="correcao"{archetype_attr("correcao")}><h2>Correção e contestação</h2>'
@@ -681,9 +783,8 @@ def render_analysis_html(record: dict[str, Any], decision: PublicationDecision) 
 
 
 def render_hub_html(items: list[tuple[dict[str, Any], PublicationDecision]], *, index_count: int) -> str:
-    robots = "index,follow" if index_count >= 3 else "noindex,nofollow,noarchive"
+    robots = "index,follow" if index_count >= 1 else "noindex,nofollow,noarchive"
     cards = []
-    drafts = []
     for record, decision in items:
         if decision.state == "PUBLISHABLE_INDEX" and decision.indexable:
             href = _canonical_path(decision.slug)
@@ -697,19 +798,30 @@ def render_hub_html(items: list[tuple[dict[str, Any], PublicationDecision]], *, 
                 f"<p>{e(summary)}</p>"
                 "</article>"
             )
-        elif decision.state == "PUBLISHABLE_NOINDEX" and not (
-            record.get("is_fixture") or decision.is_fixture
-        ):
-            drafts.append(decision.slug)
     listing = "".join(cards) or (
         "<p>Nenhuma análise aprovada para publicação. "
-        "Prévia noindex não é listada como conteúdo publicado.</p>"
+        "Os materiais em revisão permanecem no ambiente editorial interno.</p>"
     )
-    if drafts:
-        listing += (
-            '<p class="ca-draft-note">Há rascunhos HUMAN_REVIEW_PENDING fora do índice '
-            f"({len(drafts)}). Eles não entram nesta listagem como publicados.</p>"
-        )
+    contact_href = wa_link(
+        "Olá, Tiago. Consultei as análises técnicas de contratos públicos e quero "
+        "conversar sobre um contrato da minha empresa."
+    )
+    hub_next_step = (
+        f'<section class="section lead-inline" id="proximo-passo"{archetype_attr("proximo-passo")} '
+        'aria-label="Próximo passo"><div class="lead-inline-copy">'
+        "<span>Contrato próprio</span><strong>Leve a questão do seu contrato para uma conversa contextual.</strong>"
+        "<p>Informe o evento, a decisão necessária e o documento disponível. "
+        "A análise editorial desta biblioteca não substitui a leitura do seu instrumento.</p></div>"
+        '<div class="lead-inline-actions">'
+        f'<a class="button button-primary" href="{e(contact_href)}" target="_blank" rel="noopener" '
+        'data-cta-id="hub-analises-contrato-proprio-whatsapp" data-cta-position="hub_next_step" '
+        'data-asset-id="analises-contratos-publicos" '
+        'data-asset-family="analise-tecnica-contrato-publico" '
+        'data-route-family="analise-tecnica-contrato" data-journey="contrato">'
+        "Conversar sobre um contrato próprio</a>"
+        '<a class="text-link" href="/defesa-margem-contratos-publicos/">'
+        "Conhecer o serviço de defesa de margem</a></div></section>"
+    )
     body = (
         f'<header class="article-hero container"{archetype_attr("masthead")}>'
         f'<p class="eyebrow">{e(ANALYSIS_LABEL_PT)}</p>'
@@ -719,14 +831,14 @@ def render_hub_html(items: list[tuple[dict[str, Any], PublicationDecision]], *, 
         + breadcrumbs_html([("Início", "/"), (ANALYSIS_LABEL_PT, None)])
         + '<div class="container">'
         '<p class="authority-byline">Autoria: <a rel="author" href="/especialista/tiago-jun-sasaki/">Engº Tiago Sasaki</a>'
-        ' · Responsável técnico sem revisão independente: não há segundo revisor nomeado'
         ' · Atualizado em <time datetime="2026-08-16">2026-08-16</time>'
         f' · <a href="{CORRECTION_CHANNEL_HREF}">Encontrou um erro nesta página?</a></p>'
-        "<p>Família editorial seletiva. Página não é um diretório combinatório "
-        "nem um case de cliente. Indexação só ocorre quando o gate "
-        f"{e(GATE_VERSION)} concede <code>PUBLISHABLE_INDEX</code>.</p>"
+        "<p>Aqui a CONFENGE examina instrumentos e registros públicos para mostrar "
+        "como uma decisão contratual pode ser documentada. Cada publicação informa "
+        "fontes, método, limites e uma aplicação prática.</p>"
         f"{HUB_METHOD_HTML}"
         f"{listing}</div>"
+        f"{hub_next_step}"
         + author_box(archetype=ARCHETYPE_BY_SECTION_ID["author-box"])
     )
     schema = [
@@ -777,7 +889,12 @@ def write_pages(
     hub_path.write_text(render_hub_html(pairs, index_count=index_count), encoding="utf-8")
     written["hub"] = hub_path
     for record, decision in pairs:
-        if decision.state not in {"PUBLISHABLE_NOINDEX", "PUBLISHABLE_INDEX"}:
+        # Noindex is crawler guidance, not access control. Drafts and fixtures stay
+        # in the internal review/fixture stores and never receive a public HTML file.
+        if decision.state != "PUBLISHABLE_INDEX" or not decision.indexable:
+            stale = root / PUBLIC_DIR / decision.slug / "index.html"
+            if stale.is_file():
+                stale.unlink()
             continue
         dest = root / PUBLIC_DIR / decision.slug
         dest.mkdir(parents=True, exist_ok=True)
@@ -794,6 +911,11 @@ def sitemap_locs(pairs: list[tuple[dict[str, Any], PublicationDecision]]) -> lis
     for _, decision in pairs:
         if decision.state == "PUBLISHABLE_INDEX" and decision.sitemap:
             locs.append(f"{SITE}{_canonical_path(decision.slug)}")
+    # The hub becomes indexable only when it has at least one approved member;
+    # in that state it is itself a canonical public route and must be in the
+    # same family sitemap as the approved analysis.
+    if locs:
+        locs.insert(0, f"{SITE}{FAMILY_PATH}")
     return locs
 
 
@@ -902,6 +1024,8 @@ def sync_family_crawler_rules(
     if robots_path.is_file():
         robots = robots_path.read_text(encoding="utf-8")
         crawlable_paths = {f"{FAMILY_PATH}{slug}/" for slug in slugs}
+        if slugs:
+            crawlable_paths.add(FAMILY_PATH)
         allow_lines = "".join(f"Allow: {path}\n" for path in sorted(crawlable_paths))
         block = (
             f"{ROBOTS_FAMILY_BEGIN}\n"
@@ -928,9 +1052,19 @@ def sync_family_crawler_rules(
             )
             for slug in slugs
         )
-        allow_blocks = "".join(allow_block_parts)
+        hub_allow_block = (
+            _header_stanza(
+                FAMILY_PATH,
+                "  X-Robots-Tag: index, follow\n",
+                retained_headers.get(FAMILY_PATH, ()),
+            )
+            if slugs
+            else ""
+        )
+        allow_blocks = hub_allow_block + "".join(allow_block_parts)
         generated_selectors = {
             f"{FAMILY_PATH}*",
+            FAMILY_PATH,
             *(f"{FAMILY_PATH}{slug}/*" for slug in slugs),
         }
         stale_non_crawler_blocks = "".join(

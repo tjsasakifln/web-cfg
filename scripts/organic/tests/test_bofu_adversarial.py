@@ -13,6 +13,7 @@ if str(ROOT) not in sys.path:
 from scripts.organic.bofu_adversarial import (
     FINDING_CODES,
     audit_service_sla_claims,
+    catalog_offers,
     load_intent_matrix,
     run_audit,
 )
@@ -183,6 +184,22 @@ def test_sla_guard_accepts_semantically_exact_catalog_intervals():
     assert _sla_fixture("10–15 dias úteis") == []
     assert _sla_fixture("10 a 15 dias úteis") == []
     assert _sla_fixture("entre 10 e 15 dias úteis") == []
+
+
+def test_sla_guard_accepts_single_term_from_internal_service_registry():
+    offers = catalog_offers(ROOT)
+    internal = offers["CFG-D17"]
+    assert internal["public_state"] == "VALIDATE"
+    assert internal["sla_authority"] == "internal_deliverables_registry"
+    assert internal["sla_business_days"] == "5"
+    assert audit_service_sla_claims(
+        "/defesa-margem-contratos-publicos/",
+        "<main><p>Prazo de entrega: 5 dias úteis.</p></main>",
+        {"offer_id": None},
+        offers,
+    ) == []
+    public_catalog = (ROOT / "entregas" / "catalog-data.js").read_text(encoding="utf-8")
+    assert '"CFG-D17"' not in public_catalog
 
 
 def test_sla_guard_rejects_reduced_expanded_or_singleton_claims():

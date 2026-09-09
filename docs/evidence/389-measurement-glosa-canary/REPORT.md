@@ -44,9 +44,9 @@ em `canary-contract.json` e impede transformar ausência em evidência.
 - H1 e primeira resposta distinguem medição, ateste, liquidação e pagamento;
 - exemplo hipotético calculado separa R$ 78.000,00 sem controvérsia no exemplo
   e R$ 18.000,00 em conferência, sem afirmar crédito ou recuperação;
-- `FACT | CALCULATION | INFERENCE | UNKNOWN` ficam visíveis;
-- esses quatro nomes de classe são as únicas exceções de idioma, registradas
-  uma a uma e apenas para esta rota; os demais rótulos ficam em português;
+- o exemplo preserva a classificação linha a linha com os rótulos públicos
+  `Premissa do exemplo | Cálculo | Leitura técnica | O que falta confirmar no
+  caso real`; os antigos nomes internos em inglês não ficam visíveis;
 - seis documentos mínimos, cinco limites e fronteira jurídica explícita;
 - fontes oficiais e data de consulta visíveis;
 - autoria técnica continua ligada ao perfil verificável;
@@ -61,6 +61,15 @@ em `canary-contract.json` e impede transformar ausência em evidência.
 
 O before/after nominal está em `serp-contract.json`; as capturas renderizadas
 estão em `screenshots/`.
+
+Na recaptura da PR #647, a comparação exata dos cinco arquivos vinculados a
+este contrato entre `a36d34beb` e `0d3606c697c62d994517cf4d0a975c486f706648`
+encontrou somente a generalização de `Person.jobTitle` no JSON-LD, de
+`Engenheiro Civil e consultor B2G` para `Engenheiro Civil`. O nome do autor e o
+corpo visível, incluindo datas, fatos, cálculos, fontes, ação, canonical e
+robots, ficaram inalterados. Os hashes do canário e dos quatro siblings foram
+recapturados individualmente; `canary-contract.json` registra o conjunto e a
+contraprova, em vez de aceitar uma exceção ampla ao hash.
 
 ## Evidência exigida por AGENTS.md
 

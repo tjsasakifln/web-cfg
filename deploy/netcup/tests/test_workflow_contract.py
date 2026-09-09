@@ -1,7 +1,10 @@
 from __future__ import annotations
 
 import json
+import os
 import re
+import subprocess
+import textwrap
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -47,7 +50,8 @@ def test_release_tracks_main_automatically_and_manual_dispatch_is_sha_pinned() -
     assert '"refs/heads/main"' in text
     assert '"$EXPECTED_SHA" != "$RELEASE_SHA"' in text
     assert "github.event_name == 'push'" in text
-    assert "github.event_name == 'push' && 'automatic' || 'manual'" in text
+    assert "group: netcup-release-${{ github.repository }}\n" in text
+    assert "&& 'automatic' || 'manual'" not in text
     assert "cancel-in-progress: false" in text
     assert "environment: netcup-production" in text
     assert "CONFENGE_NETCUP_CUTOVER_APPROVED" in text
@@ -96,10 +100,138 @@ def test_artifact_is_checksummed_attested_and_actions_are_pinned() -> None:
 def test_stage_is_not_promotion_and_public_traffic_is_untouched() -> None:
     text = WORKFLOW.read_text(encoding="utf-8")
     stage_block = text.split("  stage:", 1)[1].split("  promote:", 1)[0]
-    assert "stage-release" in stage_block and "verify-release" in stage_block
-    assert "promote-release" not in stage_block
+    assert "--operation stage" in stage_block and "--operation verify" in stage_block
+    assert "--operation promote" not in stage_block
+    assert "run_bundle_control.py" in stage_block
+    promote = text.split("  promote:", 1)[1]
+    assert "--operation promote" in promote
+    assert '--expected-current "$EXPECTED_CURRENT"' in promote
+    assert "needs.stage.outputs.expected_current" in promote
+    assert "name: netcup-release-${{ github.sha }}" in promote
+    assert "/opt/confenge-web/bin/stage-release" not in text
+    assert "/opt/confenge-web/bin/promote-release" not in text
     assert "DNS" not in text.upper()
     assert "netlify.toml" not in text
+
+
+def test_post_promote_reconciles_all_served_html_and_restores_a_failed_release() -> None:
+    text = WORKFLOW.read_text(encoding="utf-8")
+    post = text.split("  promote:", 1)[1]
+    for required in (
+        "needs: stage", "environment: netcup-production",
+        "name: site-ci-public-${{ github.sha }}", "name: netcup-release-${{ github.sha }}",
+        "--operation inventory", "public_server_acceptance.py", "--server-inventory",
+        "--site _site", '--expected-sha "$RELEASE_SHA"',
+        "runtime_lighthouse_acceptance.mjs", "if-no-files-found: error",
+        "steps.atomic_promote.outcome == 'success'", "steps.atomic_promote.outcome == 'failure'",
+        '--operation rollback --rollback-target "$PREVIOUS_SHA"',
+        "another release is current; refusing to replace it",
+        "build/reports/served-public-acceptance/",
+    ):
+        assert required in post, f"post-promote proof missing {required}"
+    assert "continue-on-error" not in post
+    assert "python3 -m pytest scripts/site/test_public_server_acceptance.py -q" in SITE_CI.read_text(encoding="utf-8")
+    promote_at = post.index("      - name: Atomic promote and live identity confirmation")
+    for prerequisite in (
+        "actions/checkout@", "actions/setup-node@", "npm ci --ignore-scripts",
+        "Require pinned SSH inputs", "Download the same attested controller bundle",
+        "Download the same gated public artifact", "Setup Chrome for public runtime verification",
+    ):
+        assert 0 <= post.index(prerequisite) < promote_at, f"must prepare {prerequisite} before promotion"
+    assert post.index("Store mandatory post-promote evidence") < post.index("Restore the predecessor")
+    # An unsuccessful idempotent retry must not undo an already-active release.
+    # A new promotion with an interrupted SSH response can need compensation;
+    # the host expected-current guard still refuses a different active release.
+    assert "steps.atomic_promote.outcome == 'failure' && needs.stage.outputs.expected_current != github.sha" in post
+    assert "steps.served_coverage.outcome == 'failure'" not in post
+    assert 'PREVIOUS_SHA: ${{ needs.stage.outputs.recovery_target }}' in post
+    assert '--rollback-target "$PREVIOUS_SHA" --expected-current "$RELEASE_SHA"' in post
+
+
+def test_compensation_condition_preserves_a_failed_idempotent_retry() -> None:
+    workflow = WORKFLOW.read_text(encoding="utf-8")
+    block = workflow.split("- name: Restore the predecessor after material public acceptance failure", 1)[1]
+    condition = next(line.strip()[4:] for line in block.splitlines() if line.strip().startswith("if: "))
+    for failed, outcome, already_current, expected in (
+        (True, "failure", True, False),  # API/local validation failure, no swap
+        (True, "failure", False, True),  # new swap may precede lost SSH reply
+        (True, "success", True, True),  # fresh public proof failed
+        (True, "success", False, True),
+        (True, "skipped", False, False),
+        (False, "success", False, False),
+    ):
+        expression = condition.replace("failure()", repr(failed))
+        expression = expression.replace("steps.atomic_promote.outcome", repr(outcome))
+        expression = expression.replace("needs.stage.outputs.expected_current", repr("b" if already_current else "a"))
+        expression = expression.replace("github.sha", repr("b"))
+        expression = expression.replace("&&", " and ").replace("||", " or ")
+        assert eval(expression, {"__builtins__": {}}, {}) is expected
+
+
+def test_promotion_rechecks_main_after_the_remote_swap_and_public_acceptance(tmp_path) -> None:
+    workflow = WORKFLOW.read_text(encoding="utf-8")
+    atomic = workflow.split('- name: Atomic promote and live identity confirmation', 1)[1].split('\n      - name:', 1)[0]
+    command = textwrap.dedent(atomic.split('run: |\n', 1)[1])
+    assert command.index('promoted_main_sha=') > command.index('--operation promote')
+    assert '"$promoted_main_sha" != "$RELEASE_SHA"' in command
+    accepted = workflow.split('- name: Confirm accepted release still matches main', 1)[1].split('\n      - name:', 1)[0]
+    assert '"$accepted_main_sha" != "$RELEASE_SHA"' in accepted
+    assert 'if:' not in accepted and 'continue-on-error:' not in accepted
+    assert workflow.index('Verify the served runtime family') < workflow.index('Confirm accepted release still matches main') < workflow.index('Store mandatory post-promote evidence')
+    prelude = r'''
+gh() {
+  if [ -e "$TEST_API_CALLED" ]; then printf '%s\n' "$TEST_MAIN_AFTER";
+  else touch "$TEST_API_CALLED"; printf '%s\n' "$TEST_MAIN_BEFORE"; fi
+}
+python3() { touch "$TEST_PROMOTED"; }
+ssh() { :; }
+'''
+    candidate = 'a' * 40
+    newer = 'b' * 40
+    for index, (before, after, expected_success, expected_swap) in enumerate((
+        (candidate, candidate, True, True),
+        (newer, newer, False, False),
+        (candidate, newer, False, True),
+    )):
+        marker = tmp_path / f'promoted-{index}'
+        env = {**os.environ, 'RELEASE_SHA': candidate, 'EXPECTED_CURRENT': 'c' * 40,
+               'GITHUB_REPOSITORY': 'fixture/example', 'RUNNER_TEMP': str(tmp_path),
+               'NETCUP_DEPLOY_PORT': '22', 'NETCUP_DEPLOY_USER': 'fixture', 'NETCUP_DEPLOY_HOST': 'example.invalid',
+               'TEST_API_CALLED': str(tmp_path / f'api-{index}'), 'TEST_PROMOTED': str(marker),
+               'TEST_MAIN_BEFORE': before, 'TEST_MAIN_AFTER': after}
+        result = subprocess.run(['bash', '-c', prelude + command], env=env, capture_output=True, text=True)
+        assert (result.returncode == 0) == expected_success, result.stderr
+        assert marker.exists() == expected_swap
+    final_command = textwrap.dedent(accepted.split('run: |\n', 1)[1])
+    for sha, success in ((candidate, True), (newer, False)):
+        result = subprocess.run(['bash', '-c', 'gh() { printf "%s\\n" "$TEST_MAIN_AFTER"; }\n' + final_command], env={**os.environ, 'RELEASE_SHA': candidate, 'GITHUB_REPOSITORY': 'fixture/example', 'TEST_MAIN_AFTER': sha}, capture_output=True, text=True)
+        assert (result.returncode == 0) == success, result.stderr
+
+
+def test_recovery_target_uses_the_real_predecessor_on_idempotent_retry(tmp_path) -> None:
+    workflow = WORKFLOW.read_text(encoding="utf-8")
+    start = workflow.index('          recovery_target="$expected_current"')
+    end = workflow.index('          upload=', start)
+    actual_script = workflow[start:end]
+    old, candidate = "a" * 40, "b" * 40
+    cases = (
+        (old, f"releases/{candidate}", old, True),
+        (candidate, f"releases/{old}", old, True),
+        (candidate, f"releases/{candidate}", None, False),
+        (candidate, "unsafe/path", None, False),
+    )
+    for index, (current, rollback, expected, passes) in enumerate(cases):
+        output = tmp_path / f"case-{index}.txt"
+        script = 'set -euo pipefail\nssh_options=()\ntarget=controlled-fixture\nssh() { printf "%s\\n" "$TEST_ROLLBACK_LINK"; }\n' + actual_script
+        result = subprocess.run(["bash", "-c", script], capture_output=True, text=True, env={
+            **os.environ, "expected_current": current, "RELEASE_SHA": candidate,
+            "TEST_ROLLBACK_LINK": rollback, "GITHUB_OUTPUT": str(output),
+        })
+        assert (result.returncode == 0) is passes, result.stderr
+        if passes:
+            assert output.read_text().strip() == f"recovery_target={expected}"
+        else:
+            assert not output.exists()
 
 
 def test_nginx_contract_is_loopback_only_and_consumes_only_generated_behavior() -> None:

@@ -68,6 +68,25 @@ test("normalizes global/path headers, cache, content type and X-Robots", () => {
   assert.equal(rules[2].headers.find((header) => header.semantic === "x-robots").value, "noindex, nofollow");
 });
 
+test("withdrawn prefixes return 410 without weakening redirect or rewrite mapping", () => {
+  const [rule] = parseRedirects("/retired/* /404.html 410\n");
+  assert.equal(rule.action, "gone");
+  assert.equal(rule.from.match, "prefix");
+  assert.equal(rule.to.usesSplat, false);
+  assert.equal(rule.shadowPolicy, "rule-first");
+  const { contract } = buildHostContract(ROOT);
+  contract.routes = [rule];
+  const output = renderRedirects(contract);
+  assert.match(output, /return 410;/);
+  assert.doesNotMatch(output, /add_header Location|rewrite \^/);
+  assert.doesNotMatch(output, /try_files/);
+  for (const status of [200, 301, 302]) {
+    expectCode(() => parseRedirects(`/retired/* /404.html ${status}\n`), "HC_REDIRECT_SPLAT_UNSAFE");
+  }
+  expectCode(() => parseRedirects("/retired /target/:splat 410\n"), "HC_REDIRECT_SPLAT_UNSAFE");
+  expectCode(() => parseRedirects("/retired https://example.com/gone 410\n"), "HC_GONE_TARGET_UNSUPPORTED");
+});
+
 test("accepts a long CSP without truncation", () => {
   const [global] = parseHeaders(fixture("csp-long.headers"), { source: "csp-long" });
   const csp = global.headers.find((header) => header.semantic === "csp").value;
@@ -231,7 +250,7 @@ test("render is byte-deterministic and manifest binds every output", () => {
 
 test("production cutover keeps valuable checks and adds host-neutral identities", () => {
   const source = readFileSync(resolve(ROOT, "scripts/site/test_production_cutover.mjs"), "utf8");
-  for (const retained of ["home_h1_full", "css_sha256_matches_artifact", "gone_410", "sitemap_200", "public_release_result_matches_head"]) {
+  for (const retained of ["home_h1_service_scope", "css_sha256_matches_artifact", "gone_410", "sitemap_200", "public_release_result_matches_head"]) {
     assert.match(source, new RegExp(retained));
   }
   for (const evolved of ["artifact_hash_matches_expected", "artifact_hash_expected_required", "host_architecture_version_matches_expected", "runtime_identity_matches_expected", "requiresHostArchitecture ? HOST_ARCHITECTURE_VERSION", 'OPTIONS.phase === "candidate"']) {
