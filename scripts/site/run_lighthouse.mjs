@@ -61,11 +61,19 @@ if (omittedRuntimeRoutes.length) {
 }
 const IMAGE_GATE_PAGES = new Set(coverage.lighthouse.image_gate_pages);
 const SEO_EXEMPT_PAGES = new Set(coverage.lighthouse.seo_exempt_pages);
-const REPEATED_RUNS = Number(option("runs") || process.env.LH_HOME_RUNS || 1);
+const FINAL_REPEATED_RUNS = 3;
+const configuredRuns = option("runs") || process.env.LH_HOME_RUNS;
+const REPEATED_RUNS = Number(configuredRuns || FINAL_REPEATED_RUNS);
 console.log(formatCoverageDeclaration(coverage));
 console.log(`lighthouse pages (${RUN_PAGES.length}/${PAGES.length}): ${RUN_PAGES.join(" ")}`);
 if (!Number.isInteger(REPEATED_RUNS) || REPEATED_RUNS < 1 || REPEATED_RUNS > 5) {
-  throw new Error(`--runs/LH_HOME_RUNS must be an integer from 1 to 5, got ${option("runs") || process.env.LH_HOME_RUNS}`);
+  throw new Error(`--runs/LH_HOME_RUNS must be an integer from 1 to 5, got ${configuredRuns}`);
+}
+const diagnosticRunCount = REPEATED_RUNS !== FINAL_REPEATED_RUNS;
+if (diagnosticRunCount && !evidenceLabel) {
+  throw new Error(
+    `--runs/LH_HOME_RUNS=${REPEATED_RUNS} is diagnostic-only and requires --label; final evidence requires ${FINAL_REPEATED_RUNS} runs`,
+  );
 }
 for (const [name, configuredPages] of [
   ["image_gate_pages", IMAGE_GATE_PAGES],
@@ -443,5 +451,10 @@ const summaryName = evidenceLabel ? `summary-${evidenceLabel}.json` : "summary.j
 writeFileSync(join(OUT, summaryName), JSON.stringify(summary, null, 2));
 console.log("Wrote", join(OUT, summaryName));
 if (!evaluation.ok) console.error("Lighthouse gates failed", JSON.stringify(evaluation));
-else console.log("Lighthouse gates passed", JSON.stringify(evaluation.home));
+else if (diagnosticRunCount) {
+  console.log(
+    "Lighthouse diagnostic completed; evidence is labelled and is not final",
+    JSON.stringify(evaluation.home),
+  );
+} else console.log("Lighthouse gates passed", JSON.stringify(evaluation.home));
 process.exit(evaluation.ok ? 0 : 1);

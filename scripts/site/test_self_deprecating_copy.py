@@ -118,6 +118,11 @@ REVIEW_BACKSTAGE = re.compile(
     re.I,
 )
 
+INSTITUTIONAL_BACKSTAGE = re.compile(
+    r"\bn[ãa]o h[áa]\s+(?:cargo|fun[çc][ãa]o)\s+formal\s+de\s+privacidade\b",
+    re.I,
+)
+
 # ---------------------------------------------------------------------------
 # 3. Manchete cujo assunto é a ausência.
 # ---------------------------------------------------------------------------
@@ -339,6 +344,10 @@ def findings_for(html: str) -> dict[str, int]:
     if n:
         counts["bastidor_de_revisao"] = n
 
+    n = len(INSTITUTIONAL_BACKSTAGE.findall(surface))
+    if n:
+        counts["bastidor_institucional"] = n
+
     for _level, raw in HEADING_RE.findall(html or ""):
         heading = " ".join(re.sub(r"<[^>]+>", " ", raw).split())
         if HEADING_SECOND_PERSON.search(heading):
@@ -402,6 +411,7 @@ def test_detector_catches_the_exact_phrases_the_owner_ordered_removed() -> None:
         '<h1>Página</h1><p>Referência (as of 2026-08-17).</p>',
         '<h1>Página</h1><p>Referência da página (as of): <time>15 de agosto de 2026</time></p>',
         '<h1>Página</h1><p>Não houve revisão humana manual nem segundo revisor independente.</p>',
+        '<h1>Página</h1><p>Não há cargo formal de privacidade além deste canal.</p>',
         "<h1>Página</h1><h2>Resultados de clientes: nenhum publicado até agora</h2>",
         "<h1>Página</h1><p>Formação em engenharia civil: declaração do titular.</p>",
         '<h1>Página</h1><script type="application/ld+json">'
@@ -436,6 +446,8 @@ def test_detector_leaves_honest_uncertainty_and_demonstrative_labels_alone() -> 
         "<h1>Página</h1><p>Fonte: registro público</p><p>Fonte: Tiago Jun Sasaki</p>",
         '<h1>Página</h1><p>O prazo depende dos documentos recebidos e começa quando '
         'confirmamos o conjunto necessário.</p>',
+        '<h1>Página</h1><p>Canal de privacidade: privacidade@confenge.com.br. '
+        'Pedidos de acesso, correção e exclusão podem ser enviados por esse endereço.</p>',
         '<h1>Página</h1><p>Acervo técnico exigido pelo edital: CAT compatível com a parcela.</p>',
         '<h1>Página</h1><p>O projeto aprovado pela autoridade competente integra os documentos de entrada.</p>',
         '<script type="application/json">{"as_of":"2026-08-17T11:29:23Z"}</script>',

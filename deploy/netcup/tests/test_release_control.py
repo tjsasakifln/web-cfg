@@ -469,6 +469,62 @@ def test_promote_rejects_a_stale_authorized_predecessor(
     assert control.read_release_link(host, "current") == SHA_A
 
 
+def test_promote_refuses_a_corrupt_recovery_predecessor_before_swap(
+    host: Path, tmp_path: Path
+) -> None:
+    make_incoming(tmp_path / "a", host, SHA_A)
+    make_incoming(tmp_path / "b", host, SHA_B)
+    control.stage_release(SHA_A)
+    control.stage_release(SHA_B)
+    with LiveServer(host):
+        control.promote_release(SHA_A, None)
+        (host / "releases" / SHA_A / "_site/index.html").write_text(
+            "<main>corrupted predecessor</main>\n", encoding="utf-8"
+        )
+        with pytest.raises(control.ReleaseError):
+            control.promote_release(SHA_B, SHA_A)
+    assert control.read_release_link(host, "current") == SHA_A
+    assert control.read_release_link(host, "rollback") is None
+
+
+def test_idempotent_promote_validates_the_real_rollback_predecessor(
+    host: Path, tmp_path: Path
+) -> None:
+    make_incoming(tmp_path / "a", host, SHA_A)
+    make_incoming(tmp_path / "b", host, SHA_B)
+    control.stage_release(SHA_A)
+    control.stage_release(SHA_B)
+    with LiveServer(host):
+        control.promote_release(SHA_A, None)
+        control.promote_release(SHA_B, SHA_A)
+        assert control.read_release_link(host, "rollback") == SHA_A
+        (host / "releases" / SHA_A / "_site/index.html").write_text(
+            "<main>corrupted rollback</main>\n", encoding="utf-8"
+        )
+        with pytest.raises(control.ReleaseError):
+            control.promote_release(SHA_B, SHA_B)
+    assert control.read_release_link(host, "current") == SHA_B
+    assert control.read_release_link(host, "rollback") == SHA_A
+
+
+def test_rollback_can_escape_a_corrupt_current_release(
+    host: Path, tmp_path: Path
+) -> None:
+    make_incoming(tmp_path / "a", host, SHA_A)
+    make_incoming(tmp_path / "b", host, SHA_B)
+    control.stage_release(SHA_A)
+    control.stage_release(SHA_B)
+    with LiveServer(host):
+        control.promote_release(SHA_A, None)
+        control.promote_release(SHA_B, SHA_A)
+        (host / "releases" / SHA_B / "_site/index.html").write_text(
+            "<main>corrupted current release</main>\n", encoding="utf-8"
+        )
+        control.rollback_release(SHA_A, expected_current=SHA_B)
+    assert control.read_release_link(host, "current") == SHA_A
+    assert control.read_release_link(host, "rollback") == SHA_B
+
+
 def test_served_inventory_requires_current_and_rejects_post_stage_injection(
     host: Path, tmp_path: Path
 ) -> None:

@@ -1,19 +1,22 @@
 """The public radar page may only promise what it actually delivers.
 
-Four defects were live on `/radar/nacional-obras-publicas/` and each one is
+Five defects were live on `/radar/nacional-obras-publicas/` and each one is
 pinned here with the property that forbids it plus an executable counter-case,
 so a regression fails instead of passing quietly:
 
 1. the entity layer (title, h1, og:title, schema.org Dataset, breadcrumb leaf)
-   advertised a *national* radar of public works and contract margin while all
-   six national cuts on the same page read `em preparação`;
+   advertised a *national* radar of public works and contract margin without a
+   published national series;
 2. the coverage window and the denominator were never disclosed -- the page
    cited only the export id, and the published JSON restamped a 15-day
    aggregate as a single-day observation;
 3. the served PDF was a pre-correction render, so a download contradicted the
    page it was downloaded from;
 4. the parent `/radar/` never linked down to the child it is the breadcrumb
-   parent of.
+   parent of;
+5. the page and its parent exposed a six-row inventory of unpublished cuts and
+   their maturity state instead of explaining the value of the evidence that
+   is actually available.
 
 The URL and the canonical are deliberately untouched: an established URL is not
 renamed to improve a label.
@@ -43,12 +46,13 @@ from scripts.demand_radar.public_sample import (
 ROOT = Path(__file__).resolve().parents[2]
 PAGE = ROOT / "radar" / "nacional-obras-publicas" / "index.html"
 HUB = ROOT / "radar" / "index.html"
+HUB_GENERATOR = ROOT / "scripts" / "pseo" / "build.py"
 SAMPLE = ROOT / "radar" / "nacional-obras-publicas" / "gsc-demand-sample.json"
 REGISTRY = ROOT / "data" / "organic" / "public-family-registry.json"
 
 # The claim the page cannot support: a national series of public-works
-# contracts and contractual margin. Every cut that would deliver it is still
-# `em preparação`, so the words may not appear in the entity layer.
+# contracts and contractual margin. The published evidence is the method and
+# first-party search demand, so the words may not appear in the entity layer.
 UNDELIVERED_PROMISE = re.compile(r"nacion(?:al|ais)|margem contratual", re.IGNORECASE)
 
 
@@ -88,9 +92,50 @@ def entity_layer(html: str) -> dict[str, str]:
 # --------------------------------------------------------------------------
 
 
-def test_page_still_declares_the_national_cuts_as_unpublished() -> None:
-    """Guard for the guard: the premise of the naming rule is really on-page."""
-    assert _page().count("em prepara") >= 6
+def test_page_explains_published_value_without_a_maturity_inventory() -> None:
+    html = _page().lower()
+    assert "em prepara" not in html
+    assert "recortes planejados" not in html
+    assert "como usar esta leitura" in html
+    assert "priorizar a revisão do orçamento ou do contrato" in html
+    for internal_label in (
+        "long-tail",
+        "striking distance",
+        "entidade legada",
+        "guest posts",
+        "releases só",
+        "página (path)",
+    ):
+        assert internal_label not in html
+    assert "taxa de cliques (ctr)" in html
+    assert "busca específica com baixa visibilidade" in html
+    assert "artigos convidados" in html
+
+
+def test_hub_generator_and_rendered_hub_share_the_same_public_property() -> None:
+    generator = HUB_GENERATOR.read_text(encoding="utf-8").lower()
+    hub = HUB.read_text(encoding="utf-8").lower()
+    for text in (generator, hub):
+        assert "recortes nacionais de contratos seguem" not in text
+        assert "nenhum deles está publicado" not in text
+        assert "limites da amostra" in text
+        assert "perfil da empresa" in text
+
+
+def test_public_surface_gate_rejects_the_known_pending_inventory_paraphrases() -> None:
+    # This is a bounded regression check for the observed family of wording;
+    # it does not claim universal semantic interpretation.
+    from scripts.site.public_surface_coverage import semantic_fixture_findings
+
+    bad = (
+        "<main><h1>Radar</h1><h2>Recortes planejados</h2>"
+        "<p>Onde a série contratual ainda não foi revisada, o campo aparece "
+        "em preparação.</p></main>"
+    )
+    assert "publication_backstage" in semantic_fixture_findings(bad, "/radar/")
+    assert "publication_backstage" not in semantic_fixture_findings(
+        _page(), "/radar/nacional-obras-publicas/"
+    )
 
 
 def test_entity_layer_does_not_promise_the_undelivered_national_series() -> None:
@@ -109,8 +154,8 @@ def test_entity_layer_does_not_promise_the_undelivered_national_series() -> None
     }
     offenders = {k: v for k, v in named.items() if UNDELIVERED_PROMISE.search(v)}
     assert not offenders, (
-        "the entity layer promises a national contract/margin series the page "
-        f"marks 'em preparação': {offenders}"
+        "the entity layer promises a national contract/margin series that the "
+        f"published evidence does not support: {offenders}"
     )
 
 
@@ -140,8 +185,9 @@ def test_registry_visitor_job_matches_the_renamed_entity() -> None:
     radar = next(f for f in families if f["id"] == "radar")
     job = radar["visitor_job"]
     assert not re.search(r"radar nacional", job, re.IGNORECASE), job
-    assert "em prepara" in job, job
+    assert "em prepara" not in job, job
     assert "demanda" in job.lower(), job
+    assert "limites da amostra" in job.lower(), job
 
 
 # --------------------------------------------------------------------------
@@ -350,8 +396,9 @@ def test_radar_hub_links_down_to_the_page_that_points_up_to_it() -> None:
     assert 'href="/radar/nacional-obras-publicas/"' in hub, (
         "/radar/ is the declared breadcrumb parent but never links to its child"
     )
-    # The link has to describe the child truthfully, not re-promise the
-    # national series the child does not publish.
+    # The link has to describe the value of the published evidence, rather than
+    # expose an inventory of future cuts or re-promise a national series.
     section = hub[hub.index('href="/radar/nacional-obras-publicas/"') :][:1400]
-    assert "em prepara" in section
+    assert "em prepara" not in section
     assert "2026-07-14" in section and "325" in section
+    assert "perfil da empresa" in section

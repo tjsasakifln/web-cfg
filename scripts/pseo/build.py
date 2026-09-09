@@ -577,17 +577,16 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
             # its own child, and editing the built HTML did not survive a rebuild.
             extra_html = (
                 '<section aria-labelledby="radar-publicado" style="margin:2.5rem 0">'
-                '<h2 id="radar-publicado">O que já está publicado neste radar</h2>'
+                '<h2 id="radar-publicado">Método e demanda observada</h2>'
                 '<p><a class="text-link" href="/radar/nacional-obras-publicas/">'
-                "Radar de obras públicas: método aberto e demanda observada</a> publica o "
+                "Radar de obras públicas: método aberto e demanda observada</a> apresenta o "
                 "método reproduzível de leitura de contratos públicos e a demanda orgânica "
                 "medida no próprio domínio pelo Google Search Console, na janela de "
                 "2026-07-14 a 2026-07-28 (15 dias, 10 cliques e 325 impressões em "
                 "confenge.com.br inteiro).</p>"
-                "<p>Os recortes nacionais de contratos seguem <strong>em preparação</strong>: "
-                "segmento de obra, região, concentração de compradores, tickets, frequência "
-                "de aditivos e padrões de prazo. Nenhum deles está publicado, e a página não "
-                "estima volume nacional de contratos.</p>"
+                "<p>A leitura ajuda a localizar temas de orçamento e contratos que já atraem "
+                "buscas e explica os limites da amostra. Para uma decisão sobre oportunidades, "
+                "o recorte é configurado com perfil da empresa, região, segmentos e acervo.</p>"
                 "</section>"
 )
         html = render_hub(

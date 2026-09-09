@@ -483,7 +483,7 @@
     },
     {
       "id": "radar",
-      "visitor_job": "Ler o método aberto do Radar de obras públicas e a demanda orgânica observada no domínio da CONFENGE, ver que os recortes nacionais de contratos seguem em preparação, e decidir se quer o recorte aplicado à própria empresa.",
+      "visitor_job": "Ler o método aberto do Radar de obras públicas e a demanda orgânica observada no domínio da CONFENGE, compreender os limites da amostra e decidir se quer um recorte aplicado ao perfil da própria empresa.",
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
       "match": {
@@ -502,7 +502,7 @@
         "not_applicable": [
           "citable_source"
         ],
-        "reason": "Método proprietário publicado em versão aberta, com limites na própria página, mais demanda orgânica medida no próprio domínio (export Google Search Console seo/gsc-2026-07-30, janela observada 2026-07-14 a 2026-07-28). A CONFENGE é a fonte primária desse recorte de primeira parte; não existe URL oficial de terceiro que o publique. Nenhum recorte nacional de contratos é publicado.",
+        "reason": "Método proprietário publicado em versão aberta, com limites na própria página, mais demanda orgânica medida no próprio domínio (export Google Search Console seo/gsc-2026-07-30, janela observada 2026-07-14 a 2026-07-28). A CONFENGE é a fonte primária desse recorte de primeira parte; não existe URL oficial de terceiro que o publique. A página limita os números à demanda observada e não os apresenta como estimativa do mercado nacional de contratos.",
         "authority": [
           "/politica-editorial/",
           "/metodologia-inteligencia/",

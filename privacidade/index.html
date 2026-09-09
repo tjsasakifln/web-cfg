@@ -58,7 +58,7 @@
 <h2>Finalidades e bases legais</h2>
 <ul>
 <li><strong>Resposta a solicitação e atendimento comercial</strong>, consentimento (art. 7º, I) manifestado no formulário; execução de procedimentos preliminares a pedido do titular (art. 7º, V), quando aplicável.</li>
-<li><strong>Segurança, prevenção a fraude e abuso</strong> (rate limit, verificação antiabuso, honeypot), legítimo interesse (art. 7º, IX) e/ou cumprimento de obrigação de segurança.</li>
+<li><strong>Segurança, prevenção a fraude e abuso</strong> (limitação de requisições, verificação antiabuso e campos de detecção de robôs), legítimo interesse (art. 7º, IX) e/ou cumprimento de obrigação de segurança.</li>
 <li><strong>Medição de visitas e de etapas de contato</strong> (origem da visita e passos até o contato), com registro por evento sem dado identificável de pessoa, legítimo interesse, com minimização.</li>
 </ul>
 <h2>Como o formulário funciona</h2>
@@ -81,7 +81,7 @@
 <h2>Retenção e eliminação</h2>
 <p>Solicitações de contato: retenção padrão de até 730 dias (ajustável por política interna), após o que o registro é elegível a eliminação, salvo obrigação legal ou exercício regular de direitos. Registros de telemetria de navegação: prazo padrão de 90 dias. Assinaturas das sequências de e-mail: prazo padrão de 730 dias. A eliminação é executada mediante pedido pelo canal acima, inclusive antes do prazo padrão; a CONFENGE confirma o protocolo e o resultado.</p>
 <h2>Segurança</h2>
-<p>Medidas aplicadas ao canal digital: HTTPS; validação e sanitização no servidor; limite de payload; restrição de origem; rate limiting por IP/fingerprint técnico; honeypot; verificação antiabuso (Turnstile quando ativo); respostas de API sem exposição de segredos ou canais internos; registro de acesso minimizado no servidor de origem e registros de aplicação sem o conteúdo da mensagem; persistência antes da confirmação ao usuário.</p>
+<p>Medidas aplicadas ao canal digital: conexão protegida por HTTPS; validação dos dados no servidor e limite do tamanho enviado; restrição dos sites de origem autorizados; limitação de requisições por endereço IP e identificação técnica; campos de detecção de robôs e verificação antiabuso (Turnstile quando ativo); respostas dos sistemas sem exposição de segredos ou canais internos; registro de acesso minimizado no servidor de origem e registros de aplicação sem o conteúdo da mensagem; armazenamento antes da confirmação ao usuário.</p>
 <h2>Cookies e analytics</h2>
 <p>Utilizamos armazenamento local/sessão do navegador para atribuição de campanha (UTMs de primeiro toque) e identificador técnico de sessão, sem cookies de publicidade de terceiros no estado padrão. Eventos de navegação e contato são enviados ao coletor de primeira parte da CONFENGE, no endereço <code>/api/web/collect</code> do próprio site, sem nome, telefone, e-mail ou texto de mensagem. Integrações opcionais (p.ex. Plausible ou GA4) só entram em operação se explicitamente configuradas e refletidas nesta política.</p>
 <h2>Sequências de e-mail</h2>

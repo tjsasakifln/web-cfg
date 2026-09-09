@@ -23,7 +23,7 @@ def test_primary_market_contact_does_not_loop_between_anchors():
                 self.links.append(row["href"])
     parser = Links()
     parser.feed(_html())
-    assert len(parser.links) == 2
+    assert len(parser.links) == 1
     for href in parser.links:
         url = urlparse(href)
         assert url.hostname == "wa.me"
@@ -56,11 +56,14 @@ def test_first_fold_has_answer_range_n_period_geo_method_date_limitations():
     assert "source_as_of" not in html
     assert "max_age_hours" not in html
     assert "2026-07-31" in html
+    assert "Retrato histórico dos dados consultados em 31/07/2026" in html
+    assert "não representa uma atualização em tempo real" in html
+    assert "idade máxima para publicação" not in html
+    assert "vale até" not in html
     assert 'id="limitacoes"' in html
     assert "Fontes e metodologia" in html
-    assert "FIXTURE / PREVIEW" in html
-    assert "official_live=false" in html
-    assert "CONTRACT_FIXTURE" in html
+    assert "Demonstração sem dados oficiais" in html
+    assert "não devem ser usados como referência de mercado" in html
 
 
 def test_rendered_html_does_not_name_extra_cli():
@@ -97,7 +100,8 @@ def test_no_lead_gate_on_first_fold():
     assert "<form" not in fold
     assert 'id="resposta"' in fold
     assert 'id="metodologia"' in fold
-    assert "Veja sua empresa neste mercado" in html
+    assert html.count('data-ma-cta-block="1"') == 1
+    assert "Aplicar o recorte à sua necessidade" in html
     assert "Analise um contrato" in html
 
 
@@ -116,6 +120,60 @@ def test_canonical_noindex_and_no_combinatorial_paths():
     assert "municipio" not in html or "?stratum=" in html
     # only the one canonical path plus optional query strata
     assert html.count("/inteligencia/valor-tipico-contratos-pavimentacao/") >= 1
+
+
+def test_public_explanation_keeps_controls_but_not_publication_internals():
+    from scripts.market_answers.consume import load_payload
+
+    record = load_shipped_candidate()
+    payload = load_payload()
+    decision = evaluate(record, payload, {"approvals": []}, today=TODAY)
+    html = render_html(record, payload, decision)
+    assert 'content="noindex,nofollow"' in html
+    assert "A comparação disponível nesta página é o recorte estadual publicado" in html
+    assert "não identifica contratos individuais para consulta nesta página" in html
+    assert "extensão não medida neste conjunto de dados" in html
+    assert "?stratum=" not in html, "a query que não altera o resultado não pode ser CTA"
+    for internal_copy in (
+        "· noindex,nofollow</p>",
+        "filtro noindex",
+        "neste grain",
+        "Drill-down:",
+        "contratos/evidence",
+        "X-Ray/CTA",
+        "não autorizados no payload",
+        "análise técnica #83",
+        "ainda não publicada nesta superfície",
+        "tipologia keyword",
+        "outlier",
+        "ticket contratual",
+    ):
+        assert internal_copy not in html
+
+
+def test_official_page_omits_empty_distribution_visualization():
+    from scripts.market_answers.consume import load_payload
+
+    record = load_shipped_candidate()
+    payload = load_payload()
+    decision = evaluate(record, payload, {"approvals": []}, today=TODAY)
+    html = render_html(record, payload, decision)
+    assert payload.get("distribution", {}).get("rows") in (None, [])
+    assert 'class="ma-chart-wrap"' not in html
+    assert "<table" not in html
+    assert "<tbody></tbody>" not in html
+    assert "As barras do gráfico repetem a tabela" not in html
+    assert "Faixa interquartil:" in html
+    assert "Retrato histórico dos dados consultados em 17/08/2026" in html
+    assert "idade máxima para publicação" not in html
+    assert "vale até" not in html
+
+
+def test_distribution_explanation_is_rendered_only_with_real_rows():
+    html = _html()
+    assert 'class="ma-chart-wrap"' in html
+    assert "As barras do gráfico repetem a tabela" in html
+    assert "Faixas de valores integrais dos contratos" in html
 
 
 def test_official_sc_html_does_not_advertise_rs_fixture_strata():

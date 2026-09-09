@@ -9,6 +9,7 @@ so the gate can scan the same strings the renderer emits.
 from __future__ import annotations
 
 import re
+from datetime import datetime
 from typing import Any
 
 from scripts.market_answers import CANONICAL, QUESTION_TEXT, SITE
@@ -30,6 +31,17 @@ SC_MARKERS = ("santa catarina", " sc")
 
 def _text(value: Any) -> str:
     return str(value or "").strip()
+
+
+def _date_label(value: Any) -> str:
+    raw = _text(value)
+    if not raw:
+        return "data informada no recorte"
+    try:
+        parsed = datetime.fromisoformat(raw.replace("Z", "+00:00"))
+    except ValueError:
+        return raw
+    return parsed.strftime("%d/%m/%Y")
 
 
 def brl(value: Any) -> str:
@@ -169,7 +181,7 @@ def first_fold_copy(payload: dict[str, Any]) -> dict[str, str]:
     geo = geography_label(payload)
     return {
         "answer": (
-            f"Em {geo}, o ticket contratual típico de pavimentação "
+            f"Em {geo}, o valor integral típico dos contratos de pavimentação "
             f"é {brl(stats.get('median'))} (mediana do valor integral nominal do instrumento)."
         ),
         "range": (
@@ -195,11 +207,17 @@ def visitor_copy(record: dict[str, Any], payload: dict[str, Any]) -> dict[str, A
         else f"Valor típico de contratos de pavimentação ({geo})"
     )
     dataset_name = (
-        "Ticket contratual típico de pavimentação em Santa Catarina"
+        "Valor integral típico dos contratos de pavimentação em Santa Catarina"
         if is_sc_uf_payload(payload)
-        else f"Ticket contratual típico de pavimentação ({geo})"
+        else f"Valor integral típico dos contratos de pavimentação ({geo})"
     )
     method_short = _text(payload.get("method_short") or (payload.get("method") or {}).get("short"))
+    method_short = re.sub(
+        r"tipologia\s+keyword\s+de\s+pavimenta[cç][aã]o",
+        "contratos identificados por palavras-chave relacionadas à pavimentação",
+        method_short,
+        flags=re.IGNORECASE,
+    )
     if not method_short or NATIONAL_CLAIM_RE.search(method_short):
         method_short = (
             "Mediana e quartis do valor integral nominal do instrumento, "
@@ -210,10 +228,9 @@ def visitor_copy(record: dict[str, Any], payload: dict[str, Any]) -> dict[str, A
         freshness.get("source_as_of") or payload.get("as_of") or freshness.get("as_of")
     )
     validity = (
-        f"Dados consultados em {source_as_of or 'data informada no recorte'}; "
-        f"o recorte conserva a data original da fonte"
-        f"{f'; a idade máxima para publicação atualizada é de {freshness.get("max_age_hours")} horas' if freshness.get('max_age_hours') is not None else ''}"
-        f"{f' e vale até {_text(freshness.get("expires_at"))}' if _text(freshness.get('expires_at')) else ''}."
+        f"Retrato histórico dos dados consultados em {_date_label(source_as_of)}. "
+        "A data original da fonte foi preservada; esta página não representa uma "
+        "atualização em tempo real."
     )
     resumo = f"{fold['answer']} {fold['range']} {fold['n']} {fold['geography']}"
     description = f"{fold['answer']} {fold['ticket_not_km']}"

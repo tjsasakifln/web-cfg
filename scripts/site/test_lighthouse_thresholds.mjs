@@ -1,5 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { spawnSync } from "node:child_process";
 import {
   CLS_CAP,
   CRITICAL_MONEY_PATHS,
@@ -211,6 +213,36 @@ const committedSummary = JSON.parse(
   readFileSync(new URL("../../docs/lighthouse-runs/summary.json", import.meta.url), "utf8"),
 );
 const runnerSource = readFileSync(new URL("./run_lighthouse.mjs", import.meta.url), "utf8");
+assert.match(
+  runnerSource,
+  /const FINAL_REPEATED_RUNS = 3;[\s\S]*configuredRuns \|\| FINAL_REPEATED_RUNS/,
+  "the default Lighthouse command must collect the three runs required by final evidence",
+);
+assert.match(
+  runnerSource,
+  /diagnosticRunCount && !evidenceLabel[\s\S]*diagnostic-only and requires --label/,
+  "a non-final run count must be explicitly labelled and cannot overwrite final evidence",
+);
+assert.match(
+  runnerSource,
+  /diagnostic completed; evidence is labelled and is not final/,
+  "diagnostic evidence must not be reported as a passing final gate",
+);
+const unlabelledDiagnostic = spawnSync(
+  process.execPath,
+  [fileURLToPath(new URL("./run_lighthouse.mjs", import.meta.url)), "--runs=1"],
+  { encoding: "utf8", env: { ...process.env, LH_HOME_RUNS: "" } },
+);
+assert.notEqual(
+  unlabelledDiagnostic.status,
+  0,
+  "an explicit one-run diagnostic must not masquerade as final evidence",
+);
+assert.match(
+  `${unlabelledDiagnostic.stdout}\n${unlabelledDiagnostic.stderr}`,
+  /diagnostic-only and requires --label/,
+  "the rejected diagnostic must explain how to keep its evidence separate",
+);
 assert.doesNotMatch(
   runnerSource,
   /retry:\s*["']home_lcp|retriesLeft|LH_HOME_LCP_MAX_MS/,

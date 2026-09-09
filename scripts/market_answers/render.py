@@ -20,7 +20,6 @@ from scripts.market_answers import (
     CANONICAL,
     DEFAULT_LKG,
     PAGE_DIR,
-    PRODUCER_STATUS_FIXTURE,
     ROUTE_FAMILY,
     SITE,
 )
@@ -84,7 +83,7 @@ def _svg_chart(rows: list[dict[str, Any]]) -> str:
     return (
         f'<svg class="ma-chart" viewBox="0 0 {width} {height}" width="100%" '
         f'role="img" aria-labelledby="ma-chart-title ma-chart-desc">'
-        f'<title id="ma-chart-title">Distribuição dos tickets contratuais no recorte</title>'
+        f'<title id="ma-chart-title">Distribuição dos valores integrais dos contratos no recorte</title>'
         f'<desc id="ma-chart-desc">Gráfico de barras com a contagem de contratos '
         f"em cada faixa de valor integral nominal. A tabela seguinte repete os mesmos números.</desc>"
         f"{''.join(bars)}{''.join(labels)}</svg>"
@@ -102,9 +101,9 @@ def _table(rows: list[dict[str, Any]]) -> str:
             "</tr>"
         )
     return (
-        '<div class="table-wrap" role="group" tabindex="0" aria-label="Faixas de ticket contratual">'
+        '<div class="table-wrap" role="group" tabindex="0" aria-label="Faixas de valores integrais dos contratos">'
         '<table class="ma-table">'
-        "<caption>Faixas de ticket contratual (valor integral nominal, não custo por km)</caption>"
+        "<caption>Faixas de valores integrais dos contratos (não são custos por km)</caption>"
         "<thead><tr><th scope=\"col\">Faixa</th><th scope=\"col\">Contratos (n)</th>"
         "<th scope=\"col\">Participação</th></tr></thead>"
         f"<tbody>{''.join(body)}</tbody></table></div>"
@@ -114,7 +113,9 @@ def _table(rows: list[dict[str, Any]]) -> str:
 def _schema(payload: dict[str, Any], decision: GateDecision, copy: dict[str, Any]) -> dict[str, Any]:
     description = copy["json_ld_description"]
     if decision.is_fixture:
-        description += " Preview CONTRACT_FIXTURE; official_live=false."
+        description += (
+            " Demonstração sem dados oficiais; não deve ser usada como referência de mercado."
+        )
     crumbs = []
     hrefs = [f"{SITE}/", f"{SITE}/inteligencia/", CANONICAL]
     for idx, name in enumerate(copy["breadcrumbs"], start=1):
@@ -176,6 +177,18 @@ def render_html(
     fold = copy["first_fold"]
     stats = payload.get("statistics") or {}
     rows = _distribution_rows(payload)
+    distribution_html = (
+        '<div class="ma-chart-wrap" id="distribuicao">'
+        f"{_svg_chart(rows)}{_table(rows)}</div>"
+        if rows
+        else ""
+    )
+    chart_note = (
+        "<p>As barras do gráfico repetem a tabela. Se o gráfico não carregar, "
+        "os mesmos números permanecem na tabela acessível.</p>"
+        if rows
+        else ""
+    )
     model = drilldown_model(payload, site_root=site_root)
     limitations = copy["limitations"]
     method_short = copy["method_short"]
@@ -184,15 +197,15 @@ def render_html(
     if fixture:
         fixture_banner = (
             '<div class="ma-fixture" role="status">'
-            "<strong>FIXTURE / PREVIEW: não é fato oficial.</strong> "
-            f"<code>official_live=false</code> · <code>producer_status={escape(decision.producer_status or PRODUCER_STATUS_FIXTURE)}</code>. "
-            "Esta página permanece noindex e fora do sitemap até existir payload official_live autorizado."
+            "<strong>Demonstração sem dados oficiais.</strong> "
+            "Os valores desta versão servem apenas para verificar o formato da página "
+            "e não devem ser usados como referência de mercado."
             "</div>"
         )
     strata_html = "".join(
-        f'<li><a href="{escape(item["href"])}">{escape(item["label"])}</a>'
-        f'{" <span class=\"ma-pill\">filtro noindex</span>" if item.get("noindex") else ""}</li>'
+        f'<li>{escape(item["label"])}</li>'
         for item in model["strata"]
+        if not item.get("noindex")
     )
     evidence_html = []
     for item in model["contracts"]:
@@ -200,10 +213,10 @@ def render_html(
         if item.get("analysis_href"):
             analysis = (
                 f' · <a data-ma-event="analysis_click" data-analysis-id="{escape(item["id"])}" '
-                f'href="{escape(item["analysis_href"])}">análise técnica #83</a>'
+                f'href="{escape(item["analysis_href"])}">análise técnica do contrato</a>'
             )
         else:
-            analysis = " · análise técnica #83 ainda não publicada nesta superfície"
+            analysis = " · análise técnica individual não disponível nesta página"
         evidence_html.append(
             f'<li id="evidencias-{escape(item["id"])}">'
             f'<a data-ma-event="evidence_drilldown" data-evidence-id="{escape(item["id"])}" '
@@ -212,8 +225,8 @@ def render_html(
         )
     if not evidence_html:
         evidence_html.append(
-            "<li>Contratos de evidência ainda não autorizados no payload. "
-            "O drill-down permanece no modelo, sem URL combinatória.</li>"
+            "<li>O conjunto publicado sustenta a distribuição agregada acima, "
+            "mas não identifica contratos individuais para consulta nesta página.</li>"
         )
     unknown_demand = record.get("demand") if isinstance(record.get("demand"), dict) else {}
     demand_note = _text(unknown_demand.get("note")) or (
@@ -271,7 +284,6 @@ def render_html(
 .ma-table th,.ma-table td {{ border:1px solid #dbe3ea; padding:.45rem .55rem; text-align:left; }}
 .ma-table th {{ background:#eef3f7; }}
 .ma-method, .ma-limits {{ background:#fff; border:1px solid #dbe3ea; border-radius:8px; padding:1rem 1.1rem; margin:1rem 0; }}
-.ma-pill {{ display:inline-block; font-size:.75rem; background:#e2e8f0; padding:.1rem .4rem; border-radius:999px; }}
 .ma-cta {{ display:flex; flex-wrap:wrap; gap:.75rem; margin:1rem 0; }}
 .ma-note {{ color:#475569; }}
 </style>
@@ -305,7 +317,7 @@ def render_html(
 <li aria-current="page">{escape(copy["breadcrumb_current"])}</li>
 </ol></nav>
 <div class="ma-wrap">
-<p class="ma-kicker">{escape(copy["kicker"])} · {escape(robots)}</p>
+<p class="ma-kicker">{escape(copy["kicker"])}</p>
 <h1>{escape(copy["h1"])}</h1>
 {fixture_banner}
 <section id="resposta" class="ma-answer" aria-labelledby="resposta-titulo">
@@ -318,10 +330,7 @@ def render_html(
 <p>{escape(fold["geography"])}</p>
 <p><strong>{escape(fold["ticket_not_km"])}</strong></p>
 </div>
-<div class="ma-chart-wrap" id="distribuicao">
-{_svg_chart(rows)}
-{_table(rows)}
-</div>
+{distribution_html}
 <div class="ma-method" id="metodologia">
 <p class="ma-kicker">Método (curto)</p>
 <p>{escape(method_short)}</p>
@@ -342,18 +351,18 @@ def render_html(
 
 <section id="como-ler" aria-labelledby="como-ler-titulo">
 <h2 id="como-ler-titulo">Como ler a distribuição</h2>
-<p>A mediana é o contrato do meio quando os tickets são ordenados. P25 e P75 descrevem a faixa em que fica a metade central da amostra. Um contrato acima do P75 é grande neste recorte; isso não o torna irregular, superfaturado ou representativo do quilômetro construído.</p>
-<p>Barras do gráfico repetem a tabela. Se o gráfico não carregar, os mesmos números permanecem na tabela acessível.</p>
+<p>A mediana é o contrato do meio quando os valores integrais são ordenados. P25 e P75 descrevem a faixa em que fica a metade central da amostra. Um contrato acima do P75 é grande neste recorte; isso não o torna irregular, superfaturado ou representativo do quilômetro construído.</p>
+{chart_note}
 </section>
 
 <section id="diferencas" aria-labelledby="diferencas-titulo">
 <h2 id="diferencas-titulo">O que explica diferenças</h2>
-<p>Objeto (restauração, recapeamento, implantação), extensão não medida neste grain, regime, esfera, porte do município e ano de assinatura empurram o ticket. Sem quantidade física verificada, a diferença entre dois contratos não vira custo por km.</p>
+<p>Objeto (restauração, recapeamento, implantação), extensão não medida neste conjunto de dados, regime, esfera, porte do município e ano de assinatura influenciam o valor integral. Sem quantidade física verificada, a diferença entre dois contratos não vira custo por km.</p>
 </section>
 
 <section id="evidencias" aria-labelledby="evidencias-titulo">
 <h2 id="evidencias-titulo">Contratos e evidência</h2>
-<p>Drill-down: mercado → estrato permitido → contratos/evidence → análise → X-Ray/CTA. Filtros dinâmicos nesta URL são noindex. Não há páginas combinatórias UF × município × objeto × métrica.</p>
+<p>A comparação disponível nesta página é o recorte estadual publicado. Para examinar um contrato específico, é necessário conferir seus documentos, escopo, unidade e condições de execução.</p>
 <ul class="ma-strata">{strata_html}</ul>
 <ul>{''.join(evidence_html)}</ul>
 </section>
@@ -364,21 +373,14 @@ def render_html(
 <li>Não descreve o país inteiro. O recorte publicado é {escape(geography_label(payload))}.</li>
 <li>Não é custo, preço unitário ou custo por km de pavimentação.</li>
 <li>Não é ranking de empresas, órgãos ou sobrepreço.</li>
-<li>Não autoriza inferir irregularidade a partir de um outlier.</li>
+<li>Não autoriza inferir irregularidade a partir de um valor muito acima ou abaixo do restante do recorte.</li>
 </ul>
 </section>
 
-<section id="xray" aria-labelledby="xray-titulo">
-<h2 id="xray-titulo">Veja sua empresa neste mercado</h2>
-<p>A resposta acima permanece visível sem cadastro. Para discutir um contrato ou sua carteira, use os caminhos abaixo.</p>
-<p class="ma-cta">
-<a class="button button-primary" data-ma-event="xray_start" data-cta-id="veja-sua-empresa" href="{escape(contact_url)}">{escape(copy['contact_label'])}</a>
-</p>
-</section>
-
 <section id="cta" aria-labelledby="cta-titulo" data-ma-cta-block="1">
-<h2 id="cta-titulo">Próximo passo</h2>
-<p>A resposta e o método não ficam atrás de formulário. Se quiser aplicar o recorte à sua carteira ou pedir segunda leitura de um contrato, use um destes caminhos.</p>
+<span id="xray" aria-hidden="true"></span>
+<h2 id="cta-titulo">Aplicar o recorte à sua necessidade</h2>
+<p>A resposta e o método permanecem visíveis sem cadastro. Para discutir um contrato ou sua carteira, use um destes caminhos.</p>
 <p class="ma-cta">
 <a class="button button-primary" data-ma-event="cta_click" data-cta-id="veja-sua-empresa" href="{escape(contact_url)}">{escape(copy['contact_label'])}</a>
 <a class="button" data-ma-event="cta_click" data-cta-id="analise-contrato" href="/ferramentas/diagnostico-defesa-margem/">Analise um contrato / peça segunda leitura</a>

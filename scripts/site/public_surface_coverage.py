@@ -71,7 +71,13 @@ _INTERNAL_ENGLISH = re.compile(
     r"\b(?:proof_state|permission_class|offer_id|DRAFT|WITHHELD|READY)\b"
     r"|\b(?:estado(?: de publica[çc][ãa]o)?|status|publication_state)\s*[:=]\s*FINAL\b"
     r"|\(as of\)"
-    r"|\bas of\s+(?:\d{4}-\d{2}-\d{2}|\d{1,2}\s+[A-Za-z]+\s+\d{4})\b",
+    r"|\bas of\s+(?:\d{4}-\d{2}-\d{2}|\d{1,2}\s+[A-Za-z]+\s+\d{4})\b"
+    r"|\blong[- ]tail\b"
+    r"|\bstriking distance\b"
+    r"|\bguest posts?\b"
+    r"|\breleases?\s+s[óo]\b"
+    r"|\bp[áa]gina\s*\(path\)"
+    r"|\(\s*home\s*\)",
     re.I,
 )
 _PUBLICATION_BACKSTAGE = re.compile(
@@ -81,7 +87,12 @@ _PUBLICATION_BACKSTAGE = re.compile(
     r"|\bcapacidade\s+APPROVED\b"
     r"|\bfora do sitemap\b[^.!?]{0,70}\brevis[ãa]o humana\b"
     r"|\bp[áa]gina em pr[ée]-visualiza[çc][ãa]o\b[^.!?]{0,90}"
-    r"\bn[ãa]o integra a publica[çc][ãa]o\b",
+    r"\bn[ãa]o integra a publica[çc][ãa]o\b"
+    r"|\brecortes? planejados?\b"
+    r"|\bnada nesta tabela est[áa] publicado\b"
+    r"|\b(?:recortes?|s[ée]ries? contratuais?|campos?|per[íi]odo contratual)\b"
+    r"[^.!?]{0,100}\b(?:seguem?|permanece[m]?|aparece[m]?|est[áa][o]?|ainda n[ãa]o (?:foi|foram))\b"
+    r"[^.!?]{0,35}\b(?:em prepara[çc][ãa]o|revisad[oa]s?)\b",
     re.I,
 )
 
@@ -796,11 +807,19 @@ def run_mutation_contracts() -> list[str]:
         "internal_english": '<main><h1>Serviço</h1><p>proof_state: DRAFT</p></main>',
         "english_reference_date": '<main><h1>Análise</h1><p>Referência (as of 2026-08-17).</p></main>',
         "english_reference_label": '<main><h1>Análise</h1><p>Referência da página (as of): <time>15 de agosto de 2026</time></p></main>',
+        "radar_internal_english": (
+            '<main><h1>Radar</h1><p>Sinal: comercial / long-tail fraco; '
+            'resultado em striking distance.</p></main>'
+        ),
         "size_refusal": '<main><h1>Serviço</h1><p>Não atendemos clientes de pequeno porte.</p></main>',
         "maturity_showcase": '<main><h1>Entregas</h1><p>44 capacidades em validação.</p></main>',
         "publication_backstage": (
             '<main><h1>Oferta</h1><p>Preview interno · catálogo público desligado. '
             'Capacidade APPROVED.</p></main>'
+        ),
+        "pending_inventory": (
+            '<main><h1>Radar</h1><h2>Recortes planejados</h2>'
+            '<p>Os recortes nacionais de contratos seguem em preparação.</p></main>'
         ),
         "demo_as_client": (
             '<main><h1>Exemplo</h1><p>Este demonstrativo retrata um cliente real.</p></main>'
@@ -928,6 +947,23 @@ def run_mutation_contracts() -> list[str]:
     if "internal_english_state" not in semantic_fixture_findings('<main><h1>Análise</h1><p>Estado de publicação: FINAL</p></main>', "/conteudos/prazo/"):
         raise AssertionError("publication_final_state_not_rejected")
     passed.append("portuguese_final_vs_publication_state")
+
+    legitimate_preparation = (
+        '<main><h1>Planejamento da obra</h1><p>A preparação do canteiro integra '
+        'o cronograma físico. A análise depende dos documentos do caso.</p>'
+        '<a href="/triagem-tecnica/">Conversar</a></main>'
+    )
+    if semantic_fixture_findings(legitimate_preparation, "/conteudos/canteiro/"):
+        raise AssertionError("legitimate_technical_preparation_rejected")
+    passed.append("legitimate_technical_preparation")
+
+    legitimate_product_names = (
+        '<main><h1>Demanda observada</h1><p>Fonte: Google Search Console. '
+        'Baixe a amostra em JSON para conferir a janela.</p></main>'
+    )
+    if semantic_fixture_findings(legitimate_product_names, "/radar/amostra/"):
+        raise AssertionError("legitimate_product_names_rejected")
+    passed.append("legitimate_product_names")
 
     with tempfile.TemporaryDirectory() as tmp:
         root = Path(tmp)

@@ -14,7 +14,7 @@
       },
       "claim_scope": "uf",
       "payload_content_hash": "568880b7eacf30e2adaf7481945fa50cfc77039be10b27ffc6af0959bf6c6d9d",
-      "rendered_content_hash": "0896c280408245f981adb2f20628f1f0cd190aa558212521ad193b7fd5c249fe",
+      "rendered_content_hash": "a7142fd5baa7ac3a97debb32bc6645672fcd261d9deaf182a5aacf5b78930279",
       "editorial_rebind": {
         "at": "2026-09-09",
         "authority": "express founder instruction EXECUTE_NOW",
@@ -22,6 +22,24 @@
         "reviewer_executor": "/root/contact_journeys (agent editorial review)",
         "manual_human_review": false,
         "reason": "Visitor labels and material limitations expressed in Portuguese; contextual contact replaces an anchor loop. Source dates, 48-hour age limit, expiry, statistics, scope and payload hash unchanged. Bind now also covers validity text and CTA. This does not renew source freshness or grant current INDEX; evaluate the actual snapshot at the current build time."
+      },
+      "presentation_rebind_2026_09_09": {
+        "at": "2026-09-09",
+        "authority": "express founder instruction EXECUTE_NOW",
+        "previous_rendered_content_hash": "0896c280408245f981adb2f20628f1f0cd190aa558212521ad193b7fd5c249fe",
+        "new_rendered_content_hash": "b40810251437890bbc2400c17ebe5849da46c84aa30f1f167a8a75e2544ccf2e",
+        "reviewer_executor": "/root/analyses_defense (agent editorial review)",
+        "manual_human_review": false,
+        "reason": "Presentation-only rewrite: replaces internal English with a faithful explanation of keyword classification, names whole-contract values in Portuguese, omits an empty distribution visualization and consolidates duplicate contact blocks. Payload content hash, method identifier, statistics, coverage, source and source dates are unchanged. This does not renew freshness, create technical approval or change the current index decision."
+      },
+      "historical_snapshot_rebind_2026_09_09": {
+        "at": "2026-09-09",
+        "authority": "express founder instruction EXECUTE_NOW",
+        "previous_rendered_content_hash": "b40810251437890bbc2400c17ebe5849da46c84aa30f1f167a8a75e2544ccf2e",
+        "new_rendered_content_hash": "a7142fd5baa7ac3a97debb32bc6645672fcd261d9deaf182a5aacf5b78930279",
+        "reviewer_executor": "/root/analyses_defense (agent editorial review)",
+        "manual_human_review": false,
+        "reason": "Presentation-only rewrite: describes the dated result as a historical snapshot instead of exposing the internal 48-hour publication window and its expired deadline. Payload content hash, freshness contract, source date, statistics, method and current NEEDS_DATA/noindex decision remain unchanged. This does not renew the source consultation or create a new technical approval."
       },
       "method_version": "integral-nominal-nearest-rank/1.0",
       "schema_version": "public-read-market-answer/1.0",

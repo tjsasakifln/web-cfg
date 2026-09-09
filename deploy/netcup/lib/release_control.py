@@ -1589,6 +1589,7 @@ def _switch_release(
     expected_current: str | None | object,
 ) -> dict[str, Any]:
     previous_before_checks = read_release_link(root, "current")
+    rollback_before_checks = read_release_link(root, "rollback")
     if expected_current is not _NO_CURRENT_PRECONDITION:
         if isinstance(expected_current, str):
             validate_sha(expected_current)
@@ -1598,12 +1599,23 @@ def _switch_release(
                 f"expected={expected_current or 'NONE'}, "
                 f"found={previous_before_checks or 'NONE'}"
             )
-    for candidate in {value for value in (sha, previous_before_checks) if value}:
+    recovery_predecessor = None
+    if event == "PROMOTED":
+        recovery_predecessor = (
+            rollback_before_checks
+            if previous_before_checks == sha
+            else previous_before_checks
+        )
+    for candidate in {value for value in (sha, recovery_predecessor) if value}:
         _seal_legacy_live_intelligence_overlay(root / "releases" / candidate, candidate)
     manifest = verify_release_envelope_and_tree(root, sha)
+    if recovery_predecessor and recovery_predecessor != sha:
+        # Never move the canonical symlink toward a candidate whose recovery
+        # release is already corrupt. On an idempotent retry, the real recovery
+        # release is the rollback link, not the candidate already at current.
+        verify_release_envelope_and_tree(root, recovery_predecessor)
     smoke_candidate(root / "releases" / sha, sha)
     previous = read_release_link(root, "current")
-    read_release_link(root, "rollback")
     if previous == sha:
         nginx_test()
         runtime_restart()
