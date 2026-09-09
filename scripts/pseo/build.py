@@ -492,7 +492,8 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
             "Dossiês de órgãos compradores",
             "Histórico de contratação em engenharia com massa crítica.",
             "Dossiês de órgãos com contratos primários, fornecedores e limitações explícitas. "
-            "Útil para mapear aderência antes de precificar.",
+            "Útil para comparar o histórico de contratação do órgão com o objeto, "
+            "o acervo técnico e a capacidade da empresa.",
             items_for("agency"),
             [("Início", "/"), ("Inteligência", "/inteligencia/"), ("Órgãos", None)],
             "agency",

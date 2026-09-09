@@ -858,7 +858,7 @@ def test_product_promise_value_and_scope_are_explicit_before_the_example() -> No
         "Decisão executiva",
         "Carteira priorizada",
         "Impedimentos e condições",
-        "Aderência à sua empresa",
+        "Aderência técnica à sua empresa",
         "Exposição financeira preliminar",
         "Ficha por oportunidade",
         "Próximas ações",
@@ -1123,7 +1123,7 @@ def test_value_ladder_price_and_persisted_order_entry_contract() -> None:
         "report_final",
         "report_mobile_sticky",
     } == positions
-    assert html.count("Configurar esta priorização por R$ 599") >= 3
+    assert html.count("Configurar o radar de licitações prioritárias por R$ 599") >= 3
     assert "R$ 599 = 1 relatório adaptado" in html
     for marker in (
         "Conclusão executiva",

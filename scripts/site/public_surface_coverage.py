@@ -739,8 +739,14 @@ def coverage_report(
     control_defects = control_vocabulary["defects"]
     option_defects = option_label_failures(artifact)
     rendered_code_defects = rendered_internal_code_failures(artifact)
+    control_pending = control_vocabulary["pending_review"]
+    control_confirmed = control_vocabulary["confirmed_defects"]
     if control_defects:
         errors.append(f"unclassified_control_vocabulary_defects:{len(control_defects)}")
+    if control_pending:
+        # Pendente de revisão não é aprovação: o release não avança enquanto a
+        # ocorrência não receber decisão editorial explícita.
+        errors.append(f"control_vocabulary_pending_review:{len(control_pending)}")
     if option_defects:
         errors.append(f"internal_option_labels:{len(option_defects)}")
     if rendered_code_defects:
@@ -780,6 +786,14 @@ def coverage_report(
                 sum(counts.values()) for counts in control_defects.values()
             ),
             "defect_examples": control_vocabulary["defect_examples"],
+            "confirmed_defect_routes": len(control_confirmed),
+            "confirmed_defect_occurrences": sum(
+                sum(counts.values()) for counts in control_confirmed.values()
+            ),
+            "pending_review_routes": len(control_pending),
+            "pending_review_occurrences": sum(
+                sum(counts.values()) for counts in control_pending.values()
+            ),
             "option_label_defects": option_defects,
             "rendered_internal_code_defects": rendered_code_defects,
         },
@@ -897,6 +911,14 @@ def run_mutation_contracts() -> list[str]:
         "acervo_pending_backstage": "Acervo pendente de revisão interna.",
         "acervo_fabricated_superlative": "Nosso acervo é o melhor do mercado.",
         "commercial_enquadramento": "Peça um enquadramento comercial para ver se atendemos.",
+        # Triagem de encaixe comercial e vocabulário de segmento não passam por
+        # não coincidirem com uma lista de expressões internas: sem fundamento
+        # técnico positivo, nada é aprovado por omissão.
+        "commercial_aderencia_triage": (
+            "Faça a triagem de aderência comercial antes de solicitar orçamento."
+        ),
+        "commercial_vertical": "Conheça nossa vertical de serviços.",
+        "aderencia_without_positive_ground": "A aderência será conferida depois.",
     }
     for name, copy in control_bad.items():
         with tempfile.TemporaryDirectory() as tmp:
@@ -914,6 +936,29 @@ def run_mutation_contracts() -> list[str]:
             if result["ok"] or not result["control_vocabulary"]["defect_occurrences"]:
                 raise AssertionError(f"control_vocabulary_mutation_not_rejected:{name}")
         passed.append(name)
+
+    # Transcrição fiel do objeto público não pode ser reprovada por conter um
+    # termo que também é jargão comercial. Texto literal do objeto publicado nas
+    # rotas /oportunidades/23773012000154-1-000109/2026/ e -000111/2026/.
+    transcribed_source = (
+        "<main><h1>Objeto declarado na fonte</h1><p>REGISTRO DE PREÇOS PARA FUTURA "
+        "E EVENTUAL CONTRATAÇÃO DE EMPRESA ESPECIALIZADA NA PRESTAÇÃO DE SERVIÇOS "
+        "DE SINALIZAÇÃO VERTICAL E NO FORNECIMENTO DE MATERIAIS E DISPOSITIVOS DE "
+        "SINALIZAÇÃO VIÁRIA.</p>" + complete + "</main>"
+    )
+    with tempfile.TemporaryDirectory() as tmp:
+        fixture_root = Path(tmp)
+        artifact = fixture_root / "_site"
+        artifact.mkdir(parents=True)
+        (artifact / "index.html").write_text(transcribed_source, encoding="utf-8")
+        manifest = fixture_root / "manifest.json"
+        manifest.write_text(
+            json.dumps({"html_route_count": 1, "html_routes": ["/"]}), encoding="utf-8"
+        )
+        result = coverage_report(artifact, manifest)
+        if result["control_vocabulary"]["defect_occurrences"]:
+            raise AssertionError("transcribed_public_object_rejected")
+    passed.append("transcribed_public_object")
 
     legitimate = (
         '<main><h1>Acervo técnico exigido no edital</h1><p>A CAT deve ser compatível '

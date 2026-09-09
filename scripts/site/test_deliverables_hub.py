@@ -254,6 +254,22 @@ def test_each_published_offer_has_one_primary_representation_with_essential_term
         assert 'aria-label="Ver o demonstrativo sintético de ' in card
         assert 'aria-label="Pedir análise de ' in card
 
+
+
+def test_hero_eyebrow_is_not_internal_catalog_jargon() -> None:
+    """Front D: a primeira linha do hub nomeia o que o visitante encontra.
+
+    "Vitrine comercial" e vocabulario de catalogo interno: descreve como a
+    empresa organiza a pagina, nao a utilidade de quem chega. O sobrenome tem
+    de citar entregas ou exemplos, que sao as duas coisas que a rota publica.
+    """
+    html = _html()
+    eyebrow = re.search(r'<p class="eyebrow">([^<]+)</p>', html)
+    assert eyebrow is not None, "hero eyebrow missing"
+    text = eyebrow.group(1)
+    assert "vitrine" not in text.casefold(), text
+    assert re.search(r"entrega|exemplo", text, re.IGNORECASE), text
+
 def test_progressive_catalog_css_does_not_block_first_paint() -> None:
     html = _html()
     # The retired progressive stylesheet is deleted, not merely unlinked.
