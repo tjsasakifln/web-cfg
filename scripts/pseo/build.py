@@ -458,7 +458,7 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
     hubs = [
         (
             "/inteligencia/",
-            "Inteligência aplicada à decisão B2G | CONFENGE",
+            "Inteligência aplicada à decisão no mercado público | CONFENGE",
             "O mercado público deixa rastros. Nós transformamos esses rastros em decisão.",
             "Mercados, órgãos, preços e concorrência como evidência para decisões de participação, preço e proteção de margem.",
             "Contratos, órgãos, preços, concorrência e oportunidades só criam valor quando são confrontados "
@@ -530,7 +530,7 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
 ),
         (
             "/radar/",
-            "Radar de oportunidades B2G | CONFENGE",
+            "Radar de oportunidades no mercado público | CONFENGE",
             "Radar de oportunidades para a sua operação, não para o mercado inteiro.",
             "Monitoramento estruturado do mercado público calibrado ao perfil da construtora.",
             "O radar da CONFENGE não é um feed genérico de editais. Ele parte do perfil da empresa "
@@ -566,7 +566,7 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
 ),
                     "primary_label": "Configurar meu radar de oportunidades",
                     "primary_href": _wa_link(wa),
-                    "secondary_label": "Começar pelo diagnóstico B2G",
+                    "secondary_label": "Começar pelo diagnóstico da operação em obras públicas",
                     "secondary_href": "/diagnostico-b2g-360/",
                 }
         extra_html = ""
