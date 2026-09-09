@@ -428,7 +428,7 @@ function renderDecisionNav(published) {
   ).join("");
   return `<section class="deliverables-example-nav" aria-labelledby="examples-nav-title">
 <div class="container">
-<nav class="offer-decision-nav" aria-label="Escolher exemplo de obras públicas pela decisão"><p id="examples-nav-title">Exemplos de obras públicas — dados sintéticos</p><ol>${decisions}</ol></nav>
+<nav class="offer-decision-nav" aria-label="Escolher análise para obra pública pela decisão"><p id="examples-nav-title">Ofertas de análises para obras públicas</p><ol>${decisions}</ol></nav>
 </div>
 </section>`;
 }

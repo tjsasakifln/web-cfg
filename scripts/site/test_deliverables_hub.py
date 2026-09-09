@@ -369,6 +369,13 @@ def test_services_precede_the_eight_decidable_offers_without_internal_roll() -> 
     surface = showcase.group(0)
     assert html.index('id="servicos-e-entregas"') < html.index('id="enquadrar"')
     assert html.index('class="offer-decision-nav"') < html.index('id="entrega-01"')
+    decision_nav = re.search(r'<nav class="offer-decision-nav".*?</nav>', html, re.DOTALL)
+    assert decision_nav, "early offer decision navigation missing"
+    # These anchors land on authorized public offer cards, not on the separate
+    # /casos/ demonstrative examples. Their framing must not imply synthetic data.
+    nav_text = _visible_text(decision_nav.group(0)).casefold()
+    assert 'href="#entrega-' in decision_nav.group(0)
+    assert "sintét" not in nav_text
     assert 'id="rol-taxativo"' not in html
     assert "compare-table" not in html
     for price in ("R$ 599", "R$ 690", "R$ 890", "R$ 1.200", "R$ 1.450", "R$ 1.900", "R$ 2.400", "R$ 3.750"):

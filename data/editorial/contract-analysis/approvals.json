@@ -66,11 +66,11 @@
       "producer_root_hash": "5957e02b7982e000ca7dda2a9a06b88769085bc2a163eadcd8d59bd134b26b3e",
       "source_dossier_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
       "official_payload_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
-      "rendered_content_hash": "da2b8a7ba59d11bcc93318f2c44ac5f6c1faddf92350901075103947983031ea",
-      "rendered_content_hash_previous": "b4d2008e4e42bdd61e1d42f99cccba1672d31378ff4846cd0447862e812b4d51",
+      "rendered_content_hash": "975ed18105c8fc56e1ffe7424a11aec2f1b78f4f50778ee90994a6583937d6de",
+      "rendered_content_hash_previous": "da2b8a7ba59d11bcc93318f2c44ac5f6c1faddf92350901075103947983031ea",
       "rendered_hash_scope": "public_artifact_v2",
-      "rendered_hash_recaptured_at": "2026-09-09T17:03:52Z",
-      "rendered_hash_recapture_reason": "Decisão expressa do fundador EXECUTE_NOW em 2026-09-09: a transformação determinística do artefato público acrescenta à imagem social o parâmetro v com o SHA-256 do arquivo, tanto em og:image quanto em Organization.image. Comparação antes/depois confirmou que essas foram as únicas duas referências alteradas; o material_hash, fatos, cálculos, fontes, tese, limites, autoria, datas de consulta e hashes do produtor permanecem idênticos. Executor: agente Codex; não houve nova aprovação técnica nem revisão humana independente.",
+      "rendered_hash_recaptured_at": "2026-09-09T18:50:42Z",
+      "rendered_hash_recapture_reason": "Decisão expressa do fundador EXECUTE_NOW em 2026-09-09: a transformação determinística do artefato público trocou somente a referência do CSS canônico de /assets/css/styles.af0516fc8f25.css para /assets/css/styles.daa268664c35.css após a remoção verificada de cinco regras sem consumidor do seletor .footer-clusters. A comparação do HTML montado antes/depois confirmou essa única diferença. O material_hash, fatos, cálculos, fontes, tese, limites, autoria, datas de consulta e hashes do produtor permanecem idênticos. Executor: agente Codex; não houve nova aprovação técnica nem revisão humana independente.",
       "canonical_url": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
       "base_sha": "d1c7aaa66969cc63aa673f2c16a5df22a90bc7a9",
       "comparable_available": true,
@@ -200,6 +200,35 @@
         "og_image": "parâmetro v com SHA-256 do ativo de mídia",
         "organization_image_json_ld": "o mesmo parâmetro v com SHA-256 do ativo de mídia",
         "asset_sha256": "b8e2b8da84ecc580f71f9e5ae39ba54ced875a7a57aacfb352f89fc9cbc71d0c"
+      },
+      "byte_equivalence": {
+        "material_hash": "ff2a3862779f5e6c59f9a39f0a048e6f02b2bb61f6fcf08be064cab889e4a328",
+        "facts": true,
+        "calculations": true,
+        "sources": true,
+        "thesis": true,
+        "limitations": true,
+        "authorship": true,
+        "consultation_dates": true,
+        "content_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
+        "producer_root_hash": "5957e02b7982e000ca7dda2a9a06b88769085bc2a163eadcd8d59bd134b26b3e"
+      }
+    },
+    {
+      "action": "recapture_rendered_presentation",
+      "analysis_id": "13ec615146b3d348190a9b0b9148831e",
+      "actor": "CODEX_AGENT_EXECUTOR",
+      "authority": "Decisão expressa do fundador EXECUTE_NOW, 2026-09-09",
+      "at": "2026-09-09T18:50:42Z",
+      "reviewer": "comparação determinística pelo próprio agente; nenhuma nova aprovação técnica ou revisão humana independente alegada",
+      "rendered_content_hash_previous": "da2b8a7ba59d11bcc93318f2c44ac5f6c1faddf92350901075103947983031ea",
+      "rendered_content_hash": "975ed18105c8fc56e1ffe7424a11aec2f1b78f4f50778ee90994a6583937d6de",
+      "presentation_delta": {
+        "stylesheet_href_previous": "/assets/css/styles.af0516fc8f25.css",
+        "stylesheet_href": "/assets/css/styles.daa268664c35.css",
+        "styles_source_sha256_previous": "1adf1fce8dc20876b3e8192e5b28b3c0750cad5f48b2d2991fbc8bcec0a2ce51",
+        "styles_source_sha256": "e0308ce5bd1b6da4d4b7a4cb58c4717a9d3512b36b839fb35ca6be21bf03eaf3",
+        "removed_rules": "cinco regras sem consumidor do seletor .footer-clusters"
       },
       "byte_equivalence": {
         "material_hash": "ff2a3862779f5e6c59f9a39f0a048e6f02b2bb61f6fcf08be064cab889e4a328",
