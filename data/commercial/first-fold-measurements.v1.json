@@ -1,9 +1,9 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-09-10T02:37:48.648Z",
+  "measured_at": "2026-09-10T02:57:48.727Z",
   "measured_on": "2026-09-10",
-  "commit_sha": "574de91247f0f31ebb0c91909438bc53e8ccacfd",
+  "commit_sha": "91c27642ae97c6cb96a62e52e06e318f6f1c02de",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "f168038814087e1b365d1de3042af9a3f3364743756e104711fecc0fb9fe7477",
@@ -42,8 +42,8 @@
     "diagnostico-b2g-expansao/index.html": "864d53e45b946f8f8252ca0568d005cb209e618a177d2234582054533e63e715",
     "diagnostico-pre-licitacao/index.html": "65c6ea2c235ef0db5629922ed18c578bde2ef585339d6adec86830014e1229f4",
     "diretoria-b2g/index.html": "72d1ffd411f911fd295b6ae13fd1318c28356aa007fbf73f71cac80e39f68197",
-    "entregas/index.html": "24b3190e0565cb532b23608a1d7043258961ea688a2999622ac4a082c9150f87",
-    "entregas/styles.css": "0dca7831c23ee3d1a521fa99b6b234aaefed87de989b9d31482faf4b74a35226",
+    "entregas/index.html": "f7fefcdf18de55f6acd0b1a09f576f8e10a5eb44721c0c4a6409ae204a0c744b",
+    "entregas/styles.css": "370c07fe81e8f3d39c2c6c6f4f7b05316ca30f93a8435f137ff3dae2d8cd2949",
     "index.html": "e902d81c7857a36a56921800b64c96b8c208cc7c2d60e526e9ba11e5421cdb03",
     "medicoes-glosas-obras-publicas/index.html": "fe3d3c644ac158dae63f85369301da200b5f4de025b0db3364b9cb3e3d929c61",
     "problemas-que-resolvemos/index.html": "fbd929bd17c6890969ee4b0f5c3647dca7ee81bf75b3a8ae4e124c38aef0b280",
@@ -310,7 +310,7 @@
     },
     {
       "route": "/entregas/",
-      "html_sha256": "24b3190e0565cb532b23608a1d7043258961ea688a2999622ac4a082c9150f87",
+      "html_sha256": "f7fefcdf18de55f6acd0b1a09f576f8e10a5eb44721c0c4a6409ae204a0c744b",
       "measured_on": "2026-09-10",
       "viewports": {
         "1366x768": {
@@ -326,37 +326,37 @@
                 "width": 713,
                 "height": 23
               },
-              "text": "Entregas inspecionáveis"
+              "text": "O que você recebe"
             },
             "h1": {
               "selector": "h1",
               "box": {
                 "top": 191,
-                "bottom": 352,
+                "bottom": 323,
                 "left": 83,
                 "right": 653,
                 "width": 570,
-                "height": 161
+                "height": 133
               },
-              "text": "Entregas de engenharia. Veja o conteúdo e para que ele serve.Exemplos identificados."
+              "text": "Entregas de engenharia. Veja o conteúdo e para que ele serve."
             },
             "lead": {
               "selector": ".deliverables-lead",
               "box": {
-                "top": 368,
-                "bottom": 467,
+                "top": 389,
+                "bottom": 439,
                 "left": 83,
                 "right": 733,
                 "width": 650,
-                "height": 99
+                "height": 50
               },
-              "text": "Projetos, revisões, compatibilizações, orçamentos, inspeções, laudos, perícias, avaliações e análises técnicas atendem obras públicas e privadas. A página separa três coisas: o serviço que realizamos, o exemplo demonstrativo que você pode e"
+              "text": "Projetos, revisões, compatibilizações, orçamentos, inspeções, laudos, perícias, avaliações e análises técnicas atendem obras públicas e privadas."
             },
             "proof": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 479,
-                "bottom": 544,
+                "top": 451,
+                "bottom": 516,
                 "left": 83,
                 "right": 653,
                 "width": 570,
@@ -367,8 +367,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 562,
-                "bottom": 606,
+                "top": 534,
+                "bottom": 578,
                 "left": 83,
                 "right": 357,
                 "width": 274,
@@ -382,8 +382,8 @@
               "text": "Ver entregas e exemplos",
               "href": "#servicos-e-entregas",
               "box": {
-                "top": 562,
-                "bottom": 606,
+                "top": 534,
+                "bottom": 578,
                 "left": 83,
                 "right": 357,
                 "width": 274,
@@ -416,37 +416,37 @@
                 "width": 350,
                 "height": 23
               },
-              "text": "Entregas inspecionáveis"
+              "text": "O que você recebe"
             },
             "h1": {
               "selector": "h1",
               "box": {
                 "top": 157,
-                "bottom": 380,
+                "bottom": 346,
                 "left": 20,
                 "right": 362,
                 "width": 342,
-                "height": 223
+                "height": 189
               },
-              "text": "Entregas de engenharia. Veja o conteúdo e para que ele serve.Exemplos identificados."
+              "text": "Entregas de engenharia. Veja o conteúdo e para que ele serve."
             },
             "lead": {
               "selector": ".deliverables-lead",
               "box": {
-                "top": 392,
-                "bottom": 612,
+                "top": 402,
+                "bottom": 512,
                 "left": 20,
                 "right": 370,
                 "width": 350,
-                "height": 220
+                "height": 110
               },
-              "text": "Projetos, revisões, compatibilizações, orçamentos, inspeções, laudos, perícias, avaliações e análises técnicas atendem obras públicas e privadas. A página separa três coisas: o serviço que realizamos, o exemplo demonstrativo que você pode e"
+              "text": "Projetos, revisões, compatibilizações, orçamentos, inspeções, laudos, perícias, avaliações e análises técnicas atendem obras públicas e privadas."
             },
             "proof": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 630,
-                "bottom": 714,
+                "top": 530,
+                "bottom": 614,
                 "left": 20,
                 "right": 370,
                 "width": 350,
@@ -457,8 +457,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 726,
-                "bottom": 770,
+                "top": 626,
+                "bottom": 670,
                 "left": 20,
                 "right": 370,
                 "width": 350,
@@ -472,8 +472,8 @@
               "text": "Ver entregas e exemplos",
               "href": "#servicos-e-entregas",
               "box": {
-                "top": 726,
-                "bottom": 770,
+                "top": 626,
+                "bottom": 670,
                 "left": 20,
                 "right": 370,
                 "width": 350,
@@ -498,32 +498,23 @@
         "ok": true,
         "reason": "cada_campo_acrescenta_palavra_de_conteudo",
         "eyebrow_new": [
-          "inspecionaveis"
+          "recebe"
         ],
         "lead_new": [
           "analises",
           "atendem",
           "avaliacoes",
-          "coisas",
           "compatibilizacoes",
-          "demonstrativo",
-          "exemplo",
           "inspecoes",
           "laudos",
           "obras",
           "orcamentos",
-          "pagina",
           "pericias",
-          "pode",
           "privadas",
           "projetos",
           "publicas",
-          "realizamos",
           "revisoes",
-          "separa",
-          "servico",
-          "tecnicas",
-          "tres"
+          "tecnicas"
         ]
       }
     },
