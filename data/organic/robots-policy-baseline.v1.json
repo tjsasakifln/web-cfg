@@ -26,9 +26,11 @@
     "meta-externalagent"
   ],
   "private_surfaces_denied_to_every_agent": [
-    "/ops/",
+    "/%6Fps/",
+    "/.netlify/",
+    "/intr%61net",
     "/intranet",
-    "/.netlify/"
+    "/ops/"
   ],
   "withdrawn_with_410_so_crawlers_can_see_the_gone": {
     "paths": [
@@ -1292,6 +1294,163 @@
       "path": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
       "allowed": false,
       "rule": "disallow:/"
+    },
+    {
+      "agent": "AgenteDesconhecido",
+      "path": "/%6Fps/",
+      "allowed": false,
+      "rule": "disallow:/ops/"
+    },
+    {
+      "agent": "AgenteDesconhecido",
+      "path": "/intr%61net",
+      "allowed": false,
+      "rule": "disallow:/intranet"
+    },
+    {
+      "agent": "Amazonbot",
+      "path": "/%6Fps/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Amazonbot",
+      "path": "/intr%61net",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Applebot-Extended",
+      "path": "/%6Fps/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Applebot-Extended",
+      "path": "/intr%61net",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Bytespider",
+      "path": "/%6Fps/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Bytespider",
+      "path": "/intr%61net",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "CCBot",
+      "path": "/%6Fps/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "CCBot",
+      "path": "/intr%61net",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "ClaudeBot",
+      "path": "/%6Fps/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "ClaudeBot",
+      "path": "/intr%61net",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "CloudflareBrowserRenderingCrawler",
+      "path": "/%6Fps/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "CloudflareBrowserRenderingCrawler",
+      "path": "/intr%61net",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "DuckDuckBot",
+      "path": "/%6Fps/",
+      "allowed": false,
+      "rule": "disallow:/ops/"
+    },
+    {
+      "agent": "DuckDuckBot",
+      "path": "/intr%61net",
+      "allowed": false,
+      "rule": "disallow:/intranet"
+    },
+    {
+      "agent": "GPTBot",
+      "path": "/%6Fps/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "GPTBot",
+      "path": "/intr%61net",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Google-Extended",
+      "path": "/%6Fps/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Google-Extended",
+      "path": "/intr%61net",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Googlebot",
+      "path": "/%6Fps/",
+      "allowed": false,
+      "rule": "disallow:/ops/"
+    },
+    {
+      "agent": "Googlebot",
+      "path": "/intr%61net",
+      "allowed": false,
+      "rule": "disallow:/intranet"
+    },
+    {
+      "agent": "bingbot",
+      "path": "/%6Fps/",
+      "allowed": false,
+      "rule": "disallow:/ops/"
+    },
+    {
+      "agent": "bingbot",
+      "path": "/intr%61net",
+      "allowed": false,
+      "rule": "disallow:/intranet"
+    },
+    {
+      "agent": "meta-externalagent",
+      "path": "/%6Fps/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "meta-externalagent",
+      "path": "/intr%61net",
+      "allowed": false,
+      "rule": "disallow:/"
     }
-  ]
+  ],
+  "percent_encoding_note": "RFC 3986 6.2.2.2: a forma percent-encoded de um caractere unreserved e equivalente ao caractere. As sondas /%6Fps/ e /intr%61net existem para provar que a restricao nao escapa pela codificacao. Apenas o conjunto unreserved e decodificado, entao %2A nao vira curinga."
 }

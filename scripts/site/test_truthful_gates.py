@@ -181,7 +181,14 @@ def test_public_entregas_separates_eight_offers_from_internal_capability_invento
     service_groups = re.findall(
         r'<article class="capability-group">([\s\S]*?)</article>', html, flags=re.I
     )
-    assert len(service_groups) == 3
+    # 2026-09-10: eram 3. Inspecao, pericia/avaliacao e seguranca do trabalho
+    # dividiam UM bloco, entao a pagina anunciava as familias mas nao deixava a
+    # diferenca do servico inequivoca -- a inspecao descreve a condicao do que
+    # existe, a pericia responde quesitos com metodo rastreavel e a seguranca do
+    # trabalho trata risco ocupacional. Cada uma passou a ter bloco e esquema
+    # proprios. A propriedade protegida aqui -- o inventario interno de 54
+    # capacidades nao vaza para a vitrine -- continua verificada acima.
+    assert len(service_groups) == 5
     assert all(
         re.search(r"<h3>[^<]{12,}</h3>", group)
         and re.search(r"<p>[^<]{80,}</p>", group)
@@ -191,7 +198,14 @@ def test_public_entregas_separates_eight_offers_from_internal_capability_invento
     service_text = visible_text(" ".join(service_groups)).lower()
     assert re.search(r"projet|compatibiliza", service_text)
     assert re.search(r"quantitativ|orçamento", service_text)
-    assert re.search(r"perícia|avaliação|segurança do trabalho", service_text)
+    # As tres familias antes agrupadas precisam aparecer SEPARADAS, cada uma
+    # nomeada; um unico bloco que citasse as tres ja nao basta.
+    for needle in ("inspeção", "perícia", "avaliação", "segurança do trabalho"):
+        assert needle in service_text, needle
+    headings = [re.search(r"<h3>([^<]+)</h3>", g).group(1) for g in service_groups]
+    assert len(set(headings)) == 5, headings
+    assert any("Inspeção" in h for h in headings) and any("Perícia" in h for h in headings) \
+        and any("Segurança do trabalho" in h for h in headings), headings
     assert all(
         f'href="{href}"' in html
         for href in (

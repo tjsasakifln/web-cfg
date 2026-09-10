@@ -766,3 +766,81 @@ def test_every_bundle_transition_is_attributable_to_its_origin() -> None:
     for number in range(1, 9):
         assert f"example_{number:02d}_price" in positions, number
     assert "UNKNOWN_SERVICE" not in html
+
+
+# ---------------------------------------------------------------------------
+# Esquema ilustrativo: veracidade e comunicacao sao DOIS aceites separados
+# ---------------------------------------------------------------------------
+#
+# Um esquema pode ser perfeitamente honesto e, ainda assim, reprovar
+# comercialmente -- foi o que aconteceu quando cada bloco anunciava que "por si
+# so nao comprova experiencia" e mandava o visitante para credenciais e limites.
+# Aquilo satisfazia a veracidade e produzia autossabotagem na mesma frase. Os
+# dois aceites abaixo precisam passar; nenhum substitui o outro.
+
+_SCHEMA_BLOCK = re.compile(
+    r'<div class="capability-group__schema">(.*?)</div>', re.S
+)
+
+
+def _schema_blocks() -> list[str]:
+    blocks = _SCHEMA_BLOCK.findall(_html())
+    assert blocks, "nenhum esquema ilustrativo na pagina"
+    return blocks
+
+
+def test_schema_veracity_acceptance() -> None:
+    """VERACIDADE: o esquema nunca pode passar por experiencia ou caso de cliente."""
+    for block in _schema_blocks():
+        text = re.sub(r"<[^>]+>", " ", block)
+        # Identificacao inequivoca, proxima e legivel -- no proprio bloco.
+        assert "Esquema ilustrativo da entrega" in block, block[:160]
+        # A informacao material que impede sugerir cliente, execucao ou validacao.
+        assert "sem obra executada e sem dados de cliente" in text, text[:200]
+        # Nada que simule trabalho executado ou responsabilidade assumida.
+        for forbidden in ("ART ", "CREA-", "assinado por", "carimbo", "aprovado em",
+                          "cliente:", "contratante:", "obra executada em"):
+            assert forbidden.casefold() not in text.casefold(), (forbidden, text[:200])
+        # Sem numeros que pareçam medicao ou calculo de um trabalho real.
+        assert not re.search(r"\b\d+[,.]\d+\s*(?:m²|m2|m³|m3|kN|MPa|kg)\b", text), text[:200]
+
+
+def test_schema_communication_acceptance() -> None:
+    """COMUNICACAO: identificar nao e se autonegar.
+
+    O criterio interno -- impedir que o esquema passe por experiencia -- ja e
+    cumprido pela identificacao e pela informacao material. Publicar, alem
+    disso, que a propria entrega "nao comprova" nada, e desviar dali para
+    bastidor, tira do visitante justamente o que ele veio entender.
+    """
+    for block in _schema_blocks():
+        text = re.sub(r"<[^>]+>", " ", block)
+        lowered = text.casefold()
+        for self_negation in ("não comprova", "nao comprova", "por si só não",
+                              "não prova", "nao prova", "não é prova", "não demonstra"):
+            assert self_negation not in lowered, (self_negation, text[:200])
+        # O encaminhamento para bastidor sai do bloco comercial.
+        assert 'href="/confianca/"' not in block, block[:200]
+        # E o bloco explica CONTEUDO e UTILIDADE, que e o que o visitante veio ver.
+        assert "capability-group__schema-title" in block
+        assert "capability-group__schema-list" in block
+        assert "capability-group__schema-note" in block
+        assert "para que serve" in lowered, text[:200]
+
+
+def test_every_announced_family_has_its_own_distinguishable_schema() -> None:
+    """Inspecao, pericia/avaliacao e seguranca do trabalho sao servicos distintos.
+
+    Enquanto os tres dividiam um unico bloco, a pagina anunciava as familias mas
+    nao deixava a diferenca do servico inequivoca.
+    """
+    html = _html()
+    for heading in ("Projetos, revisão e compatibilização",
+                    "Quantitativos e orçamento",
+                    "Inspeção e diagnóstico de edificações",
+                    "Perícia, assistência técnica e avaliação",
+                    "Segurança do trabalho"):
+        assert f"<h3>{heading}</h3>" in html, heading
+    titles = re.findall(r'class="capability-group__schema-title">([^<]+)<', html)
+    assert len(titles) == 5, titles
+    assert len(set(titles)) == 5, titles

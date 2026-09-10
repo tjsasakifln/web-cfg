@@ -151,6 +151,22 @@ def _select_group(parsed: ParsedRobots, agent: str) -> list[tuple[str, str]] | N
     return parsed.groups.get("*")
 
 
+# RFC 3986 6.2.2.2: um octeto do conjunto "unreserved" escrito em percent-encoding
+# e equivalente ao caractere. Sem normalizar, "/%6Fps/" nao casa com
+# "Disallow: /ops/" e um rastreador que peca a forma codificada passa por cima da
+# restricao. So o conjunto unreserved e decodificado: "%2A" continua sendo "%2A" e
+# nao vira o curinga "*", entao normalizar nao cria casamento onde nao havia.
+_UNRESERVED = re.compile(r"%([0-9A-Fa-f]{2})")
+
+
+def _normalize_path(value: str) -> str:
+    def decode(match: re.Match[str]) -> str:
+        char = chr(int(match.group(1), 16))
+        return char if (char.isascii() and (char.isalnum() or char in "-._~")) else match.group(0)
+
+    return _UNRESERVED.sub(decode, value)
+
+
 def _rule_to_regex(pattern: str) -> re.Pattern[str]:
     out = []
     for ch in pattern:
@@ -164,10 +180,14 @@ def _rule_to_regex(pattern: str) -> re.Pattern[str]:
 
 
 def _match_length(pattern: str, path: str) -> int | None:
-    """Comprimento do casamento, ou None. O "$" ancora o fim (RFC 9309 2.2.3)."""
+    """Comprimento do casamento, ou None. O "$" ancora o fim (RFC 9309 2.2.3).
+
+    Regra e caminho sao normalizados antes de comparar, para que a forma
+    percent-encoded de um caractere unreserved nao escape da restricao.
+    """
     if not pattern:
         return None
-    match = _rule_to_regex(pattern).match(path)
+    match = _rule_to_regex(_normalize_path(pattern)).match(_normalize_path(path))
     if match is None:
         return None
     # A especificidade e o tamanho da REGRA, nao do trecho casado.
@@ -398,13 +418,19 @@ def derive_expected_effective(baseline: dict[str, Any]) -> list[dict[str, Any]]:
     decisao de indexar de ter qualquer efeito.
     """
     ai = {a.lower() for a in baseline.get("ai_crawlers_denied_everywhere", [])}
-    private = tuple(baseline.get("private_surfaces_denied_to_every_agent", []))
+    # Normalizado dos dois lados: a politica declara "/ops/" uma vez e vale
+    # tambem para "/%6Fps/", em vez de exigir que alguem lembre de listar cada
+    # codificacao possivel.
+    private = tuple(
+        _normalize_path(p) for p in baseline.get("private_surfaces_denied_to_every_agent", [])
+    )
     rows = []
     for row in baseline.get("expected_effective", []):
         agent, path = row["agent"], row["path"]
+        normalized = _normalize_path(path)
         if agent.lower() in ai:
             allowed = False
-        elif any(path.startswith(prefix) for prefix in private):
+        elif any(normalized.startswith(prefix) for prefix in private):
             allowed = False
         else:
             allowed = True

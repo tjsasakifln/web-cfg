@@ -244,7 +244,7 @@ def test_the_baseline_is_derived_from_declared_policy_not_from_the_candidate_bod
     )
     stored = {(r["agent"], r["path"]): r["allowed"] for r in baseline["expected_effective"]}
     derived = {(r["agent"], r["path"]): r["allowed"] for r in derive_expected_effective(baseline)}
-    assert len(stored) == len(baseline["expected_effective"]) == 208
+    assert len(stored) == len(baseline["expected_effective"]) == 234
     assert derived == stored, {k: (stored[k], derived[k]) for k in stored if stored[k] != derived[k]}
 
 
@@ -263,3 +263,33 @@ def test_the_derivation_would_reject_a_baseline_row_that_contradicts_the_policy(
     assert derived[("GPTBot", "/")] is False
     assert derived[("Googlebot", "/ops/")] is False
     assert derived[("Googlebot", "/servicos/")] is True
+
+
+# --------------------------------------------------------------------------
+# Contraprova: a forma percent-encoded nao escapa da restricao
+# --------------------------------------------------------------------------
+
+@needs_package
+@pytest.mark.parametrize("path", ["/%6Fps/", "/%6fps/", "/%6Fps/README-data.txt", "/intr%61net"])
+def test_percent_encoded_private_paths_stay_blocked(path):
+    """"/%6Fps/" e "/ops/". Sem normalizar, um rastreador que pedisse a forma
+    codificada passaria por cima do Disallow -- e o gate de bytes nunca veria,
+    porque o arquivo estaria intacto (RFC 3986 6.2.2.2)."""
+    parsed = parse_robots(SERVED)
+    allowed, rule = is_allowed(parsed, "Googlebot", path)
+    assert not allowed, f"{path} deveria continuar bloqueado, venceu {rule}"
+
+
+@needs_package
+def test_normalization_does_not_invent_matches():
+    """So o conjunto unreserved e decodificado.
+
+    "%2A" nao pode virar o curinga "*", senao normalizar criaria casamento onde
+    nao havia -- o defeito oposto, e pior.
+    """
+    parsed = parse_robots(SERVED)
+    assert is_allowed(parsed, "Googlebot", "/%2Aops/")[0] is True
+    assert is_allowed(parsed, "Googlebot", "/servi%63os/")[0] is True
+    # E a regra tambem e normalizada, nao so o caminho.
+    encoded_rule = parse_robots("User-agent: *\nAllow: /\nDisallow: /%6Fps/\n")
+    assert is_allowed(encoded_rule, "Googlebot", "/ops/")[0] is False
