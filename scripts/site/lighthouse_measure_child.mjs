@@ -42,6 +42,20 @@ if (!specPath || !outcomePath) {
 }
 const spec = JSON.parse(readFileSync(specPath, "utf8"));
 
+/** The browser this process owns. Declared before any exit path can reach it,
+ * and assigned by BOTH the preflight and the measurement path, so every exit
+ * route can take the browser down with it. */
+let launched = null;
+
+// The supervisor enforces its deadline with SIGTERM then SIGKILL. SIGTERM must
+// not leave the browser running for the attempts that follow.
+for (const signal of ["SIGTERM", "SIGINT"]) {
+  process.on(signal, () => {
+    killBrowserNow();
+    process.exit(1);
+  });
+}
+
 /** The outcome file is written once. The first writer wins, so a late failure
  * can never downgrade an outcome that was already established. */
 let settled = false;
@@ -52,6 +66,30 @@ function settle(outcome) {
     writeFileSync(outcomePath, JSON.stringify(outcome, null, 2));
   } catch (error) {
     console.error("could not persist the measurement outcome", String(error?.message || error));
+  }
+}
+
+/**
+ * Kills the browser synchronously. `process.exit()` skips `finally`, and
+ * chrome-launcher spawns Chrome detached (its own process group) with no exit
+ * handler of its own, so an exit path that does not do this leaves a live
+ * headless Chrome behind. The leak is not the problem: an orphan competes for
+ * CPU with every subsequent measurement on a 4-vCPU runner and inflates their
+ * TBT and LCP, manufacturing failures that look like performance regressions.
+ * That would contaminate exactly what this file claims to isolate.
+ */
+function killBrowserNow() {
+  const pid = launched?.chrome?.pid ?? launched?.chrome?.process?.pid;
+  if (!pid) return;
+  try {
+    // Negative pid: the detached process group, so renderers go too.
+    process.kill(-pid, "SIGKILL");
+  } catch {
+    try {
+      process.kill(pid, "SIGKILL");
+    } catch {
+      /* already gone */
+    }
   }
 }
 
@@ -76,6 +114,7 @@ process.on("unhandledRejection", (reason) => {
     origin: "async_rejection",
     lhr_written: lhrWritten,
   });
+  killBrowserNow();
   process.exit(1);
 });
 process.on("uncaughtException", (error) => {
@@ -86,6 +125,7 @@ process.on("uncaughtException", (error) => {
     origin: "uncaught_exception",
     lhr_written: lhrWritten,
   });
+  killBrowserNow();
   process.exit(1);
 });
 
@@ -112,8 +152,9 @@ async function launchIsolatedChrome() {
   // The final duplicate flag wins, keeps all mutable browser state in /tmp and
   // lets us remove the exact profile after every run.
   const profileDir = mkdtempSync(join(tmpdir(), "confenge-lighthouse-profile-"));
+  let chrome = null;
   try {
-    const chrome = await launchChrome({
+    chrome = await launchChrome({
       chromePath: spec.chrome_path || process.env.CHROME_PATH || "/usr/bin/google-chrome",
       userDataDir: profileDir,
       chromeFlags: [
@@ -135,6 +176,22 @@ async function launchIsolatedChrome() {
     await waitForCdp(chrome.port);
     return { chrome, profileDir };
   } catch (error) {
+    // The browser may already be up while the debugging endpoint never became
+    // usable. Leaving it running would slow every measurement that follows.
+    if (chrome) {
+      try {
+        await chrome.kill();
+      } catch {
+        const pid = chrome.pid ?? chrome.process?.pid;
+        if (pid) {
+          try {
+            process.kill(-pid, "SIGKILL");
+          } catch {
+            /* already gone */
+          }
+        }
+      }
+    }
     rmSync(profileDir, { recursive: true, force: true });
     throw error;
   }
@@ -142,7 +199,6 @@ async function launchIsolatedChrome() {
 
 /** Preflight only: warms the executable and page cache, produces no result. */
 if (spec.preflight) {
-  let launched = null;
   try {
     launched = await launchIsolatedChrome();
     console.log("Lighthouse browser preflight", "clean_port=", launched.chrome.port);
@@ -161,22 +217,20 @@ if (spec.preflight) {
   process.exit(process.exitCode || 0);
 }
 
-let chrome = null;
-let profileDir = null;
 try {
-  ({ chrome, profileDir } = await launchIsolatedChrome());
+  launched = await launchIsolatedChrome();
   console.log(
     "Lighthouse",
     spec.url,
     `run=${spec.run}`,
     "clean_port=",
-    chrome.port,
+    launched.chrome.port,
     spec.attempt > 1 ? `infrastructure_attempt=${spec.attempt}` : "",
   );
 
   phase = "navigate";
   const runnerResult = await lighthouse(spec.url, {
-    port: chrome.port,
+    port: launched.chrome.port,
     hostname: "127.0.0.1",
     output: "json",
     logLevel: "error",
@@ -281,12 +335,13 @@ try {
   // Cleanup is bounded and idempotent and must never overwrite the outcome
   // already established above.
   try {
-    if (chrome) await chrome.kill();
+    if (launched?.chrome) await launched.chrome.kill();
   } catch (error) {
     console.error("chrome cleanup failed after the outcome was recorded", describe(error));
+    killBrowserNow();
   }
   try {
-    if (profileDir) rmSync(profileDir, { recursive: true, force: true });
+    if (launched?.profileDir) rmSync(launched.profileDir, { recursive: true, force: true });
   } catch (error) {
     console.error("profile cleanup failed after the outcome was recorded", describe(error));
   }

@@ -161,12 +161,42 @@ pass("only_a_passing_measurement_authorises_the_promotion");
 // attempt at this release, not this one.
 // ---------------------------------------------------------------------------
 {
-  for (const [field, value] of [["run_id", "999"], ["run_attempt", "0"]]) {
-    const record = { ...goodRecord(), [field]: value };
-    const { ok: allowed } = verifyQualification({ record, expected: EXPECTED });
-    assert.equal(allowed, false, `${field} must be bound to this run`);
-  }
+  const stale = { ...goodRecord(), run_id: "999" };
+  assert.equal(
+    verifyQualification({ record: stale, expected: EXPECTED }).ok,
+    false,
+    "run_id must be bound to this run",
+  );
   pass("a_stale_qualification_from_a_previous_run_blocks_the_promotion");
+
+  // run_attempt is recorded but deliberately NOT bound: binding it would make
+  // "Re-run failed jobs" impossible after a transient SSH or API failure, since
+  // the successful qualify job does not re-run while the attempt counter
+  // advances. Within one run over one immutable artifact, run_id already gives
+  // freshness. This asserts the decision so it cannot be reintroduced silently.
+  const reRun = { ...goodRecord(), run_attempt: "2" };
+  assert.equal(
+    verifyQualification({ record: reRun, expected: { ...EXPECTED, runAttempt: "3" } }).ok,
+    true,
+    "a re-run of the promote job must still be able to use its qualification",
+  );
+  pass("re_running_failed_jobs_does_not_invalidate_the_qualification");
+}
+
+// ---------------------------------------------------------------------------
+// The bundle digest is the one identity field that is NOT tautological:
+// artifact_hash and manifest_hash are read from a build-info.json that travels
+// inside the artifact itself, so a substituted bundle carries its own matching
+// values. The digest is computed over the packaged tarball.
+// ---------------------------------------------------------------------------
+{
+  const expected = { ...EXPECTED, bundleDigest: "e".repeat(64) };
+  assert.equal(verifyQualification({ record: goodRecord(), expected }).ok, true);
+  const substituted = { ...goodRecord(), bundle_digest: "7".repeat(64) };
+  const { ok: allowed, refusals } = verifyQualification({ record: substituted, expected });
+  assert.equal(allowed, false, "a different bundle must block the promotion");
+  assert.ok(refusals.some((r) => /bundle digest/.test(r)), refusals.join("; "));
+  pass("a_substituted_bundle_blocks_the_promotion");
 }
 
 // ---------------------------------------------------------------------------

@@ -21,6 +21,7 @@ import {
   KILL_GRACE_MS,
   MEASUREMENT_TIMEOUT_MS,
   OUTCOME,
+  deriveTerminalState,
   isRetryableOutcome,
   readOutcome,
   runMeasurement,
@@ -409,6 +410,65 @@ pass("page_http_tls_and_availability_failures_are_never_innocent_infrastructure"
   assert.equal(orphaned.outcome, OUTCOME.INVALID_OR_INCOMPLETE);
   assert.equal(orphaned.lhr_written, true);
   pass("read_outcome_contract_holds");
+}
+
+// ---------------------------------------------------------------------------
+// 15. The terminal state must not blame the artifact for the instrument.
+//     Defective implementation (shipped briefly during this campaign): the
+//     state was derived from `evaluation.ok` alone, so three failed browser
+//     launches on one page — the originating incident — produced MEASURED_FAIL
+//     and told the operator the site was defective.
+// ---------------------------------------------------------------------------
+{
+  const clean = [{ path: "/", run: 1, performance: 100 }];
+  assert.equal(
+    deriveTerminalState({ results: clean, fatal: null, evaluationOk: true }),
+    "MEASURED_PASS",
+  );
+
+  // A real budget breach, measured: the artifact IS the problem.
+  const measuredFailure = [{ path: "/", run: 1, error: "home: LCP 2264ms must be <= 2000ms" }];
+  assert.equal(
+    deriveTerminalState({ results: measuredFailure, fatal: null, evaluationOk: false }),
+    "MEASURED_FAIL",
+    "a budget exceeded by a real measurement is a verdict about the artifact",
+  );
+
+  // The instrument never measured: inconclusive, not defective.
+  for (const outcome of [OUTCOME.INFRA_ERROR, OUTCOME.INVALID_OR_INCOMPLETE]) {
+    const rows = [
+      { path: "/", run: 1, performance: 100 },
+      { path: "/casos/", run: 1, error: "browser died", status: "error", outcome, phase: "launch" },
+    ];
+    assert.equal(
+      deriveTerminalState({ results: rows, fatal: null, evaluationOk: false }),
+      "INVALID_OR_INCOMPLETE",
+      `${outcome} must not be reported as a defective site`,
+    );
+  }
+
+  // A mixture: one genuinely failing measurement AND one unmeasured row. The
+  // run still cannot claim a verdict, because part of it was never measured.
+  assert.equal(
+    deriveTerminalState({
+      results: [
+        { path: "/", run: 1, error: "home: CLS 0.07 must be <= 0.05" },
+        { path: "/casos/", run: 1, error: "browser died", outcome: OUTCOME.INFRA_ERROR },
+      ],
+      fatal: null,
+      evaluationOk: false,
+    }),
+    "INVALID_OR_INCOMPLETE",
+  );
+
+  // A run that could not finish is never a verdict, even with clean rows.
+  assert.equal(
+    deriveTerminalState({ results: clean, fatal: "budget exhausted", evaluationOk: true }),
+    "INVALID_OR_INCOMPLETE",
+    "a run that could not complete never reports a pass",
+  );
+  assert.equal(deriveTerminalState({}), "MEASURED_FAIL");
+  pass("terminal_state_never_blames_the_artifact_for_the_instrument");
 }
 
 assert.ok(MEASUREMENT_TIMEOUT_MS > 0, "a measurement deadline must exist");

@@ -166,6 +166,9 @@ def test_promotion_requires_a_qualification_bound_to_this_exact_candidate() -> N
     assert "--run-id=\"$GITHUB_RUN_ID\"" in qualify
     assert "--run-attempt=\"$GITHUB_RUN_ATTEMPT\"" in qualify
     assert "if-no-files-found: error" in qualify
+    # An older committed summary must not be able to fill the gap left by a run
+    # that died before writing its own.
+    assert "rm -f docs/lighthouse-runs/summary.json" in qualify
     # It must never change production.
     assert "--operation promote" not in qualify
     assert "--operation rollback" not in qualify
@@ -174,8 +177,16 @@ def test_promotion_requires_a_qualification_bound_to_this_exact_candidate() -> N
     require_at = post.index("release_qualification.mjs --require")
     promote_at = post.index("      - name: Atomic promote and live identity confirmation")
     assert require_at < promote_at, "the barrier must be consulted before the promotion"
-    for bound in ('--sha="$RELEASE_SHA"', "--run-id=\"$GITHUB_RUN_ID\"", "--run-attempt=\"$GITHUB_RUN_ATTEMPT\""):
+    # `run_attempt` is deliberately NOT bound on the require side: binding it
+    # would make "Re-run failed jobs" impossible after a transient SSH or API
+    # failure, because the successful qualify job does not re-run while the
+    # attempt counter advances. run_id already gives freshness within one run.
+    for bound in ('--sha="$RELEASE_SHA"', '--run-id="$GITHUB_RUN_ID"', '--bundle-digest="$bundle_digest"'):
         assert bound in post, f"the barrier must bind {bound}"
+    require_block = post[post.index("release_qualification.mjs --require"):][:400]
+    assert "--run-attempt" not in require_block, (
+        "binding run_attempt removes the re-run recovery path"
+    )
     assert post.index("Store mandatory post-promote evidence") < post.index("Restore the predecessor")
     # An unsuccessful idempotent retry must not undo an already-active release.
     # A new promotion with an interrupted SSH response can need compensation;

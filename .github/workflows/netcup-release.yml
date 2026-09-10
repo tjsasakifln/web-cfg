@@ -299,6 +299,11 @@ jobs:
         with:
           name: site-ci-public-${{ github.sha }}
           path: _site
+      - name: Download the attested release bundle
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          name: netcup-release-${{ github.sha }}
+          path: dist/netcup/${{ github.sha }}
       - name: Setup Chrome for candidate qualification
         uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2
         id: qualify_chrome
@@ -319,6 +324,10 @@ jobs:
           LH_HOME_RUNS: "3"
         run: |
           set -euo pipefail
+          # The checkout ships a committed summary from a previous release. It
+          # is removed first so a run that dies before writing its own cannot
+          # have the gap filled by an older report.
+          rm -f docs/lighthouse-runs/summary.json
           # The runner's own server over the exact gated tree, the same
           # thresholds, the same counts. A candidate that cannot be measured to
           # a passing terminal state does not reach the visitors.
@@ -334,12 +343,18 @@ jobs:
           state="INVALID_OR_INCOMPLETE"
           result="FAILED"
           if [ -f docs/lighthouse-runs/summary.json ]; then
+            # A summary without a terminal state predates this contract and is
+            # not evidence about this run.
             state="$(python3 -c 'import json;print(json.load(open("docs/lighthouse-runs/summary.json")).get("terminal_state") or "INVALID_OR_INCOMPLETE")')"
+          else
+            echo "no summary was produced by this run; the candidate stays unqualified" >&2
           fi
           if [ "$MEASURED" = "success" ] && [ "$state" = "MEASURED_PASS" ]; then result="PASSED"; fi
+          bundle_digest="$(cut -d" " -f1 < "dist/netcup/$RELEASE_SHA/confenge-web-$RELEASE_SHA.tar.gz.sha256")"
           node scripts/site/release_qualification.mjs --emit \
             --sha="$RELEASE_SHA" \
             --site=_site \
+            --bundle-digest="$bundle_digest" \
             --out="build/reports/release-qualification-$RELEASE_SHA.json" \
             --terminal-state="$state" \
             --acceptance-result="$result" \
@@ -445,20 +460,25 @@ jobs:
         run: |
           set -euo pipefail
           record="qualification/build/reports/release-qualification-$RELEASE_SHA.json"
-          qualified="$(python3 -c "import json;print(json.load(open('$record')).get('toolchain',''))")"
-          echo "qualified with: $qualified"
-          echo "verifying with chrome=$PROMOTE_CHROME, node=$(node --version)"
-          # `stable` is a moving label, so the resolution is recorded on both
-          # sides and compared here rather than assumed.
-          case "$qualified" in
-            *"chrome=$PROMOTE_CHROME"*) ;;
-            *)
-              echo "NETCUP_PROMOTE_BLOCKED: the candidate was qualified with a different browser than this verification uses" >&2
-              echo "  qualified: $qualified" >&2
-              echo "  verifying: chrome=$PROMOTE_CHROME" >&2
-              exit 1
-              ;;
-          esac
+          # An unset resolution must FAIL, not match everything: a glob over the
+          # whole toolchain string turns an empty version into `*chrome=*`, and
+          # a truncated one into a prefix match. Compare exact, parsed fields.
+          if [ -z "${PROMOTE_CHROME:-}" ]; then
+            echo "NETCUP_PROMOTE_BLOCKED: the browser version for the public verification is unknown" >&2
+            exit 1
+          fi
+          qualified_chrome="$(python3 -c 'import json,sys; t=json.load(open(sys.argv[1])).get("toolchain") or ""; print(dict(p.split("=",1) for p in t.split(",") if "=" in p).get("chrome",""))' "$record")"
+          echo "qualified with chrome=$qualified_chrome; verifying with chrome=$PROMOTE_CHROME"
+          if [ -z "$qualified_chrome" ]; then
+            echo "NETCUP_PROMOTE_BLOCKED: the qualification records no browser version" >&2
+            exit 1
+          fi
+          if [ "$qualified_chrome" != "$PROMOTE_CHROME" ]; then
+            echo "NETCUP_PROMOTE_BLOCKED: the candidate was qualified with a different browser than this verification uses" >&2
+            echo "  qualified: chrome=$qualified_chrome" >&2
+            echo "  verifying: chrome=$PROMOTE_CHROME" >&2
+            exit 1
+          fi
       - name: Refuse to promote a candidate that is not qualified
         # The barrier, enforced immediately before `current` can change. The
         # qualification must exist, be readable, and match this candidate's
@@ -471,12 +491,13 @@ jobs:
           RELEASE_SHA: ${{ github.sha }}
         run: |
           set -euo pipefail
+          bundle_digest="$(cut -d" " -f1 < "dist/netcup/$RELEASE_SHA/confenge-web-$RELEASE_SHA.tar.gz.sha256")"
           node scripts/site/release_qualification.mjs --require \
             --sha="$RELEASE_SHA" \
             --site=_site \
+            --bundle-digest="$bundle_digest" \
             --record="qualification/build/reports/release-qualification-$RELEASE_SHA.json" \
-            --run-id="$GITHUB_RUN_ID" \
-            --run-attempt="$GITHUB_RUN_ATTEMPT"
+            --run-id="$GITHUB_RUN_ID"
       - name: Atomic promote and live identity confirmation
         id: atomic_promote
         env:

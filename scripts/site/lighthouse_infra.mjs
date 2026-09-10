@@ -189,3 +189,27 @@ export function readOutcome({ outcomePath, lhrPath, fallback }) {
   }
   return fallback;
 }
+
+/**
+ * The run's terminal state.
+ *
+ * MEASURED_FAIL is a statement ABOUT THE ARTIFACT and may only be used when
+ * every failing row has a measurement behind it. A row that never produced one
+ * — the browser died, the attempt was terminated, the evidence was
+ * inconclusive — makes the RUN inconclusive, not the site defective. Without
+ * this the originating incident inverts: three failed browser launches on one
+ * page would be reported as "the site is defective", the opposite of what
+ * happened, and the operator would go looking for a regression that does not
+ * exist.
+ *
+ * It can never loosen the barrier: promotion requires MEASURED_PASS, so
+ * downgrading a failure to INVALID_OR_INCOMPLETE forbids strictly more.
+ */
+export function deriveTerminalState({ results = [], fatal = null, evaluationOk = false } = {}) {
+  if (evaluationOk && !fatal) return "MEASURED_PASS";
+  const unmeasured = results.filter(
+    (row) => row?.error && row?.outcome && row.outcome !== OUTCOME.MEASURED,
+  );
+  if (fatal || unmeasured.length > 0) return "INVALID_OR_INCOMPLETE";
+  return "MEASURED_FAIL";
+}

@@ -24,6 +24,7 @@ import {
   INFRASTRUCTURE_ATTEMPTS,
   MEASUREMENT_TIMEOUT_MS,
   OUTCOME,
+  deriveTerminalState,
   isRetryableOutcome,
   runMeasurement,
 } from "./lighthouse_infra.mjs";
@@ -317,7 +318,10 @@ const WORK = mkdtempSync(join(tmpdir(), "confenge-lighthouse-supervisor-"));
  * run, so the terminal summary and its evidence are always persisted. */
 const GLOBAL_BUDGET_MS = Number(process.env.LH_GLOBAL_BUDGET_MS || 21 * 60 * 1000);
 const startedAt = Date.now();
-const budgetExhausted = () => Date.now() - startedAt > GLOBAL_BUDGET_MS;
+/** Whether a whole measurement still fits, so none is started only to be cut
+ * short and blamed on the page it was measuring. */
+const affordsMeasurement = () =>
+  GLOBAL_BUDGET_MS - (Date.now() - startedAt) >= MEASUREMENT_TIMEOUT_MS;
 
 /**
  * Performs one attempt in a disposable child process.
@@ -330,13 +334,17 @@ async function measureOnce(spec, lhrPath) {
   const specPath = join(WORK, `spec-${spec.slug}-${spec.run}-${spec.attempt}.json`);
   const outcomePath = join(WORK, `outcome-${spec.slug}-${spec.run}-${spec.attempt}.json`);
   writeFileSync(specPath, JSON.stringify(spec, null, 2));
-  const remaining = GLOBAL_BUDGET_MS - (Date.now() - startedAt);
   return runMeasurement({
     childPath: CHILD,
     specPath,
     outcomePath,
     lhrPath,
-    timeoutMs: Math.max(30000, Math.min(MEASUREMENT_TIMEOUT_MS, remaining)),
+    // A full deadline or none at all. Shrinking it to whatever budget is left
+    // would terminate a healthy page early and then report the truncation as
+    // evidence about that page — Lighthouse alone waits up to 45s for load, so
+    // a 30s remainder guarantees a false verdict. The caller refuses to start a
+    // measurement it cannot afford (see the budget check below).
+    timeoutMs: MEASUREMENT_TIMEOUT_MS,
   });
 }
 
@@ -358,8 +366,9 @@ try {
     if (fatal) break;
     const attempts = CRITICAL_MONEY_PATHS.has(path) ? REPEATED_RUNS : 1;
     for (let run = 1; run <= attempts; ) {
-      if (budgetExhausted()) {
-        fatal = `the Lighthouse budget of ${GLOBAL_BUDGET_MS}ms was exhausted before ${path} run ${run}`;
+      // Enough budget for a FULL measurement, not merely some budget left.
+      if (!affordsMeasurement()) {
+        fatal = `the Lighthouse budget of ${GLOBAL_BUDGET_MS}ms cannot afford a full measurement of ${path} run ${run}`;
         break;
       }
       const url = `${BASE.replace(/\/$/, "")}${path}`;
@@ -399,7 +408,10 @@ try {
           outcome.phase,
           outcome.error,
         );
-        if (budgetExhausted()) break;
+        if (!affordsMeasurement()) {
+          fatal = fatal || `the Lighthouse budget of ${GLOBAL_BUDGET_MS}ms was exhausted while re-attempting ${path} run ${run}`;
+          break;
+        }
       }
 
       if (outcome?.outcome === OUTCOME.MEASURED && outcome.row) {
@@ -467,12 +479,28 @@ if (fatal) {
   evaluation.ok = false;
   evaluation.errors = [...(evaluation.errors || []), fatal];
 }
-summary.terminal_state = fatal
-  ? "INVALID_OR_INCOMPLETE"
-  : evaluation.ok
-    ? "MEASURED_PASS"
-    : "MEASURED_FAIL";
+
+// MEASURED_FAIL is a statement ABOUT THE ARTIFACT, so it may only be used when
+// every row that failed did so with a measurement behind it. A row that never
+// produced one — the browser died, the attempt was terminated, the evidence was
+// inconclusive — makes the run inconclusive, not the site defective. Without
+// this the originating incident inverts: three failed browser launches on one
+// page would be reported as "the site is defective", which is exactly the
+// confusion this contract exists to remove. It cannot weaken the barrier:
+// promotion already requires MEASURED_PASS, so downgrading a failure to
+// INVALID_OR_INCOMPLETE forbids strictly more.
+const unmeasured = results.filter(
+  (row) => row.error && row.outcome && row.outcome !== OUTCOME.MEASURED,
+);
+summary.terminal_state = deriveTerminalState({ results, fatal, evaluationOk: evaluation.ok });
 summary.fatal = fatal;
+summary.unmeasured = unmeasured.map((row) => ({
+  path: row.path,
+  run: row.run,
+  outcome: row.outcome,
+  phase: row.phase,
+  error: row.error,
+}));
 
 // The terminal summary is written on every path — passed, failed, or unable to
 // finish. The release evidence upload requires it, and a missing summary must

@@ -148,11 +148,15 @@ export function verifyQualification({ record, expected }) {
 
   // A qualification from an earlier run described an earlier attempt at this
   // release. It is not evidence about this one.
+  //
+  // `run_attempt` is recorded but deliberately NOT bound. Binding it would make
+  // GitHub's "Re-run failed jobs" unusable: after a transient SSH or API error
+  // the successful `qualify` job does not re-run, the attempt counter advances,
+  // and the record could never match again — removing the bounded recovery path
+  // this release process depends on. Within one run, over one immutable
+  // artifact, `run_id` already supplies the freshness guarantee.
   if (expected.runId !== null && expected.runId !== undefined) {
     bind("run_id", String(expected.runId), "workflow run");
-  }
-  if (expected.runAttempt !== null && expected.runAttempt !== undefined) {
-    bind("run_attempt", String(expected.runAttempt), "workflow run attempt");
   }
 
   // Nothing unknown is a pass.
@@ -246,16 +250,26 @@ function main(argv) {
       console.error(`RELEASE_QUALIFICATION_BLOCKED: ${String(identityError?.message || identityError)}`);
       return 1;
     }
+    let verifier = null;
+    try {
+      verifier = verifierVersion();
+    } catch (verifierError) {
+      // A barrier that dies without its own diagnostic is an operability
+      // defect: the release is blocked and the log says only "ENOENT".
+      console.error(
+        `RELEASE_QUALIFICATION_BLOCKED: the verifier could not be identified: ${String(verifierError?.message || verifierError)}`,
+      );
+      return 1;
+    }
     const { ok, refusals } = verifyQualification({
       record,
       expected: {
         releaseSha,
         artifactHash: identity.artifact_hash,
         manifestHash: identity.manifest_hash,
-        verifierVersion: verifierVersion(),
+        verifierVersion: verifier,
         bundleDigest: flag("bundle-digest") || null,
         runId: flag("run-id") || null,
-        runAttempt: flag("run-attempt") || null,
       },
     });
     if (!ok) {
