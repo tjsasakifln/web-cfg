@@ -42,15 +42,27 @@ REPORT_SCHEMA = "confenge.public-server-acceptance/v1"
 FULL_SHA = re.compile(r"^[0-9a-f]{40}$")
 HEX256 = re.compile(r"^[0-9a-f]{64}$")
 SAFE_HTML = re.compile(r"^[A-Za-z0-9._/-]+\.html$")
+SAFE_ASSET = re.compile(r"^[A-Za-z0-9._/-]+$")
+NONPUBLIC_CONFIG_FILES = frozenset({"_headers", "_redirects"})
+OVERLAY_NON_HTML_FILES = frozenset({
+    "sitemap-index.xml", "sitemap-oportunidades.xml",
+    ".well-known/live-intelligence-overlay.json",
+})
 IDENTITY_LIMIT = 1024 * 1024
 CACHE_PROPAGATION_SECONDS = 310.0
 CACHE_RETRY_MAX_SLEEP = 15.0
 CACHE_TRANSIENT_STATES = {"HIT", "STALE", "UPDATING"}
+# Transport/read blips get their own small budget: reusing the cache-propagation
+# budget would let a network blip spend the time reserved for edge propagation.
+TRANSPORT_RETRY_MAX_ATTEMPTS = 3
+TRANSPORT_RETRY_SLEEP = 2.0
+NON_RETRYABLE_STATUS = {401, 403, 407}
 _EVIDENCE_HEADERS = (
     "Age",
     "Cache-Control",
     "CF-Cache-Status",
     "Content-Length",
+    "Content-Encoding",
     "Content-Type",
     "ETag",
     "Last-Modified",
@@ -139,6 +151,21 @@ def load_served_inventory(path: Path) -> tuple[dict[str, Any], list[str]]:
         normalized[rel] = str(digest)
     if len(normalized) != len(raw_hashes):
         errors.append("served_inventory_html_accounting_mismatch")
+    assets: dict[str, str] = {}
+    raw_assets = payload.get("non_html_sha256")
+    if not isinstance(raw_assets, dict) or not raw_assets:
+        errors.append("served_inventory_non_html_sha256_empty")
+    else:
+        for rel, digest in raw_assets.items():
+            if (
+                not isinstance(rel, str) or not SAFE_ASSET.fullmatch(rel)
+                or rel.startswith("/") or rel.endswith(".html")
+                or any(part in {"", ".", ".."} for part in rel.split("/"))
+                or not HEX256.fullmatch(str(digest))
+            ):
+                errors.append(f"served_inventory_non_html_entry_invalid:{str(rel)[:100]}")
+            else:
+                assets[rel] = str(digest)
     if not isinstance(payload.get("overlay"), dict):
         errors.append("served_inventory_overlay_invalid")
     if not isinstance(payload.get("build_info"), dict):
@@ -246,6 +273,7 @@ def load_served_inventory(path: Path) -> tuple[dict[str, Any], list[str]]:
         "payload": payload,
         "release_sha": release_sha,
         "html_sha256": normalized,
+        "non_html_sha256": assets,
         "http_dispositions": dispositions,
         "contract_probes": contract_probes,
         "overlay": payload.get("overlay"),
@@ -315,28 +343,83 @@ class _NoRedirect(urllib.request.HTTPRedirectHandler):
         return None
 
 
-def _read_first_hop_body(response: Any, status: int) -> tuple[bytes, str | None]:
-    """Keep transport failures explicit; never accept an empty/truncated error page."""
+def _read_first_hop_body(response: Any, status: int) -> dict[str, Any]:
+    """Read one first-hop body and keep the read outcome explicit and distinct.
+
+    Never collapse "empty body, read finished" into "body never read": the first
+    keeps its digest (the sha256 of zero bytes) and the second has no digest at
+    all. Content-Length absent alone never proves truncation.
+    """
     limit = 5 * 1024 * 1024
+    declared_raw = response.headers.get("Content-Length") if response.headers else None
+    record: dict[str, Any] = {
+        "body": b"",
+        "read_completed": False,
+        "bytes_read": 0,
+        "declared_length": None,
+        "declared_length_raw": declared_raw,
+        "read_phase": "body_read",
+        "exception_type": None,
+        "error": None,
+    }
     try:
         body = response.read(limit + 1)
     except http.client.IncompleteRead as exc:
-        return exc.partial, f"first_hop_read_failed:IncompleteRead:{exc}"
-    except OSError as exc:
-        return b"", f"first_hop_read_failed:{type(exc).__name__}:{exc}"
+        record["body"] = exc.partial
+        record["bytes_read"] = len(exc.partial)
+        record["exception_type"] = "IncompleteRead"
+        if exc.expected is not None:
+            record["declared_length"] = record["bytes_read"] + int(exc.expected)
+        record["error"] = f"first_hop_read_failed:IncompleteRead:{exc}"
+        return record
+    except (OSError, http.client.HTTPException, EOFError, ValueError) as exc:
+        record["exception_type"] = type(exc).__name__
+        record["error"] = f"first_hop_read_failed:{type(exc).__name__}:{exc}"
+        return record
+    record["body"] = body
+    record["bytes_read"] = len(body)
+    record["read_completed"] = True
+    record["read_phase"] = "read_complete"
     if len(body) > limit:
-        return body, "first_hop_body_too_large"
-    declared = response.headers.get("Content-Length") if response.headers else None
-    if declared is not None:
+        record["error"] = "first_hop_body_too_large"
+        return record
+    if declared_raw is not None:
         try:
-            expected_length = int(declared)
+            expected_length = int(declared_raw)
         except ValueError:
-            return body, "first_hop_invalid_content_length"
+            record["error"] = "first_hop_invalid_content_length"
+            return record
+        record["declared_length"] = expected_length
         if expected_length < 0 or expected_length != len(body):
-            return body, f"first_hop_content_length_mismatch:{expected_length}:{len(body)}"
+            record["error"] = f"first_hop_content_length_mismatch:{expected_length}:{len(body)}"
+            return record
     if status == 410 and not body:
-        return body, "first_hop_empty_410_body"
-    return body, None
+        record["error"] = "first_hop_empty_410_body"
+    return record
+
+
+def _first_hop_entry(url: str, status: int, headers: Any, record: dict[str, Any]) -> dict[str, Any]:
+    """Build the evidence row. A digest exists only for bytes actually read."""
+    evidence = {
+        name.lower(): headers.get(name)
+        for name in _EVIDENCE_HEADERS
+        if headers is not None and headers.get(name) is not None
+    }
+    body = record["body"]
+    return {
+        "url": url,
+        "status": status,
+        "location": headers.get("Location") if headers is not None else None,
+        "content_type": headers.get("Content-Type") if headers is not None else None,
+        "headers": evidence,
+        "sha256": hashlib.sha256(body).hexdigest() if record["read_completed"] else None,
+        "bytes_received": record["bytes_read"],
+        "read_completed": record["read_completed"],
+        "read_phase": record["read_phase"],
+        "exception_type": record["exception_type"],
+        "declared_length": record["declared_length"],
+        "error": record["error"],
+    }
 
 
 def _probe_first_hop(url: str, timeout: float) -> tuple[dict[str, Any], bytes | None]:
@@ -344,7 +427,8 @@ def _probe_first_hop(url: str, timeout: float) -> tuple[dict[str, Any], bytes | 
     request = urllib.request.Request(
         url,
         headers={
-            "Accept": "text/html,application/xhtml+xml",
+            "Accept": "*/*",
+            "Accept-Encoding": "identity",
             "Cache-Control": "no-cache",
             "User-Agent": "CONFENGE-Public-Server-Acceptance/1.0",
         },
@@ -352,43 +436,15 @@ def _probe_first_hop(url: str, timeout: float) -> tuple[dict[str, Any], bytes | 
     try:
         opener = urllib.request.build_opener(_NoRedirect())
         with opener.open(request, timeout=timeout) as response:
-            body, error = _read_first_hop_body(response, int(response.status))
-            headers = {
-                name.lower(): response.headers.get(name)
-                for name in _EVIDENCE_HEADERS
-                if response.headers.get(name) is not None
-            }
-            return {
-                "url": url,
-                "status": int(response.status),
-                "location": response.headers.get("Location"),
-                "content_type": response.headers.get("Content-Type"),
-                "headers": headers,
-                "sha256": hashlib.sha256(body).hexdigest(),
-                "bytes_received": len(body),
-                "error": error,
-            }, None if error else body
+            record = _read_first_hop_body(response, int(response.status))
+            entry = _first_hop_entry(url, int(response.status), response.headers, record)
     except urllib.error.HTTPError as exc:
         try:
-            body, error = _read_first_hop_body(exc, int(exc.code))
+            record = _read_first_hop_body(exc, int(exc.code))
         finally:
             exc.close()
-        headers = {
-            name.lower(): exc.headers.get(name)
-            for name in _EVIDENCE_HEADERS
-            if exc.headers and exc.headers.get(name) is not None
-        }
-        return {
-            "url": url,
-            "status": int(exc.code),
-            "location": exc.headers.get("Location") if exc.headers else None,
-            "content_type": exc.headers.get("Content-Type") if exc.headers else None,
-            "headers": headers,
-            "sha256": hashlib.sha256(body).hexdigest() if body else None,
-            "bytes_received": len(body),
-            "error": error,
-        }, None if error else body or None
-    except (OSError, TimeoutError, urllib.error.URLError, ValueError) as exc:
+        entry = _first_hop_entry(url, int(exc.code), exc.headers, record)
+    except (OSError, TimeoutError, urllib.error.URLError, http.client.HTTPException, ValueError) as exc:
         return {
             "url": url,
             "status": None,
@@ -396,8 +452,14 @@ def _probe_first_hop(url: str, timeout: float) -> tuple[dict[str, Any], bytes | 
             "content_type": None,
             "headers": {},
             "sha256": None,
-            "error": f"{type(exc).__name__}:{exc}",
+            "bytes_received": 0,
+            "read_completed": False,
+            "read_phase": "connect",
+            "exception_type": type(exc).__name__,
+            "declared_length": None,
+            "error": f"first_hop_transport_failed:{type(exc).__name__}:{exc}",
         }, None
+    return entry, None if entry["error"] else record["body"]
 
 
 def _identity_snapshot(
@@ -573,13 +635,18 @@ def verify_contract_probes(
         request_path, expected = item
         url = base + request_path
         attempts: list[dict[str, Any]] = []
+        transport_retries = 0
         while True:
             entry, body = fetcher(url, timeout)
             entry = dict(entry)
             headers = entry.get("headers") if isinstance(entry.get("headers"), dict) else {}
             cache_state = str(headers.get("cf-cache-status") or "").upper()
+            encoding = str(headers.get("content-encoding") or "identity").lower()
+            read_completed = bool(entry.get("read_completed"))
             exact = (
                 entry.get("error") is None
+                and read_completed
+                and encoding == "identity"
                 and entry.get("status") == expected["status"]
                 and entry.get("location") == expected["location"]
                 and body is not None
@@ -596,6 +663,11 @@ def verify_contract_probes(
                 "age": headers.get("age"),
                 "headers": headers,
                 "bytes_received": entry.get("bytes_received"),
+                "read_completed": read_completed,
+                "read_phase": entry.get("read_phase"),
+                "exception_type": entry.get("exception_type"),
+                "declared_length": entry.get("declared_length"),
+                "content_encoding": encoding,
                 "error": entry.get("error"),
                 "decision": None,
             }
@@ -609,8 +681,11 @@ def verify_contract_probes(
                     "actual_status": entry.get("status"),
                     "actual_location": entry.get("location"),
                     "actual_sha256": entry.get("sha256"),
+                    "read_completed": True,
+                    "bytes_received": entry.get("bytes_received"),
                     "error_page_digest_matched": True,
                     "withdrawn_source_body_absent": True,
+                    "attempts": len(attempts),
                     "ok": True,
                     "error": None,
                 }
@@ -627,13 +702,42 @@ def verify_contract_probes(
                 attempts.append(attempt)
                 sleeper(min(CACHE_RETRY_MAX_SLEEP, remaining))
                 continue
-            if (
+            # A read that never finished proves nothing about the served body:
+            # it is NOT VERIFIED, never "empty" and never approved.
+            read_failure = not read_completed and bool(entry.get("exception_type"))
+            retryable_read = read_failure and entry.get("status") not in NON_RETRYABLE_STATUS
+            # Orçamento PRÓPRIO da falha de transporte. Enquanto o teto olhava
+            # len(attempts), as retentativas de propagação de cache consumiam o
+            # orçamento de leitura: um transitório recuperável virava
+            # read_not_verified_budget_exhausted e provocava reprovação por
+            # diagnóstico ruim, não por defeito material.
+            if retryable_read and transport_retries + 1 < TRANSPORT_RETRY_MAX_ATTEMPTS and remaining > 0:
+                attempt["decision"] = "retry_transport_read_failure"
+                attempts.append(attempt)
+                transport_retries += 1
+                sleeper(min(TRANSPORT_RETRY_SLEEP, remaining))
+                continue
+            if read_failure:
+                failure = "contract_probe_read_not_verified"
+                if not retryable_read:
+                    attempt["decision"] = "read_not_verified_no_retry"
+                elif remaining > 0:
+                    attempt["decision"] = "read_not_verified_budget_exhausted"
+                else:
+                    attempt["decision"] = "read_not_verified_deadline_exhausted"
+            elif (
                 entry.get("status") == 200
                 and cache_state in CACHE_TRANSIENT_STATES
                 and remaining <= 0
             ):
                 failure = "contract_probe_cache_deadline_exhausted"
                 attempt["decision"] = "cache_deadline_exhausted"
+            elif encoding != "identity":
+                failure = "contract_probe_non_identity_encoding"
+                attempt["decision"] = "non_identity_encoding_no_retry"
+            elif str(entry.get("error") or "").startswith("first_hop_content_length_mismatch"):
+                failure = "contract_probe_partial_body"
+                attempt["decision"] = "partial_body_no_retry"
             else:
                 failure = "contract_probe_response_mismatch"
                 attempt["decision"] = "response_mismatch_no_retry"
@@ -645,8 +749,11 @@ def verify_contract_probes(
                 "actual_status": entry.get("status"),
                 "actual_location": entry.get("location"),
                 "actual_sha256": entry.get("sha256"),
+                "read_completed": read_completed,
+                "bytes_received": entry.get("bytes_received"),
                 "error_page_digest_matched": False,
                 "withdrawn_source_body_absent": False,
+                "attempts": len(attempts),
                 "ok": False,
                 "error": failure,
             }
@@ -674,6 +781,78 @@ def verify_contract_probes(
     }
 
 
+def verify_non_html_assets(
+    *, site: Path, inventory: dict[str, Any], overlay: dict[str, Any],
+    base: str, fetcher: Callable, concurrency: int, timeout: float,
+) -> dict[str, Any]:
+    """Reconcile physical assets independently, then verify exact public bytes."""
+    host = inventory.get("non_html_sha256") or {}
+    artifact = {
+        path.relative_to(site).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
+        for path in site.rglob("*")
+        if path.is_file() and not path.is_symlink() and path.suffix != ".html"
+    }
+    errors: list[str] = []
+    overlay_allowed = OVERLAY_NON_HTML_FILES if overlay.get("source_kind") == "official_live" else frozenset()
+    # The public overlay receipt exists for both official and withheld states.
+    receipt = ".well-known/live-intelligence-overlay.json"
+    if overlay.get("schema") == "confenge.live-intelligence-overlay/v1":
+        overlay_allowed = overlay_allowed | {receipt}
+    for rel in sorted(set(artifact) - set(host)):
+        errors.append(f"server_non_html_missing:{rel}")
+    for rel in sorted(set(host) - set(artifact) - overlay_allowed):
+        errors.append(f"server_non_html_unlisted:{rel}")
+    for rel in sorted(set(host) & set(artifact)):
+        if host[rel] != artifact[rel] and rel not in overlay_allowed:
+            errors.append(f"server_non_html_artifact_digest_mismatch:{rel}")
+    if receipt in host:
+        # Bind receipt semantics to the independently verified inventory; HTTP
+        # still has to match the exact bytes, without JSON normalization.
+        if not overlay or overlay.get("release_sha") != inventory.get("release_sha"):
+            errors.append("server_non_html_overlay_identity_invalid")
+    requests = [("/" + rel, rel) for rel in sorted(host)]
+    for rel in sorted(NONPUBLIC_CONFIG_FILES & set(host)):
+        requests.extend([("/" + rel + "?download=1", rel), ("/%5F" + rel[1:], rel)])
+
+    def verify_one(item: tuple[str, str]) -> dict[str, Any]:
+        request_path, rel = item
+        protected = rel in NONPUBLIC_CONFIG_FILES
+        status = 404 if protected else 200
+        expected = (inventory.get("html_sha256") or {}).get("404.html") if protected else host[rel]
+        entry, body = fetcher(base + request_path, timeout)
+        headers = entry.get("headers") or {}
+        digest = hashlib.sha256(body).hexdigest() if body is not None else None
+        ok = (
+            entry.get("error") is None and entry.get("status") == status
+            and entry.get("location") is None and body is not None
+            and digest == expected and entry.get("sha256") == digest
+            and str(headers.get("content-encoding") or "identity").lower() == "identity"
+        )
+        return {
+            "path": rel, "request_path": request_path,
+            "expected_status": status, "status": entry.get("status"),
+            "expected_sha256": expected, "http_sha256": digest,
+            "bytes": len(body) if body is not None else None,
+            "headers": headers, "location": entry.get("location"),
+            "config_body_withheld": protected and ok,
+            "ok": ok, "error": entry.get("error"),
+        }
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=concurrency) as pool:
+        rows = list(pool.map(verify_one, requests))
+    failures = [row for row in rows if not row["ok"]]
+    if failures:
+        errors.append(f"public_non_html_response_failures:{len(failures)}")
+    if not artifact or not host or not rows:
+        errors.append("public_non_html_empty_selection")
+    return {
+        "artifact_files": len(artifact), "server_files": len(host),
+        "planned": len(requests), "executed": len(rows),
+        "passed": len(rows) - len(failures), "failures": failures,
+        "results": rows, "errors": errors, "ok": not errors,
+    }
+
+
 def run_acceptance(
     *,
     site: Path,
@@ -689,6 +868,7 @@ def run_acceptance(
     disposition_fetcher: Callable[
         [str, float], tuple[dict[str, Any], bytes | None]
     ] = _probe_first_hop,
+    asset_fetcher: Callable = _probe_first_hop,
     run_mutations: bool = True,
     cache_deadline_seconds: float = CACHE_PROPAGATION_SECONDS,
     clock: Callable[[], float] = time.monotonic,
@@ -931,6 +1111,14 @@ def run_acceptance(
     _write_json(contract_probes_path, contract_probes)
     if not contract_probes["ok"]:
         errors.append("withdrawn_contract_probes_failed")
+    non_html_assets = verify_non_html_assets(
+        site=site, inventory=inventory, overlay=overlay_payload, base=base,
+        fetcher=asset_fetcher, concurrency=concurrency, timeout=timeout,
+    )
+    assets_path = report_dir / "non-html-assets.json"
+    _write_json(assets_path, non_html_assets)
+    if not non_html_assets["ok"]:
+        errors.append("public_non_html_acceptance_failed")
 
     manifest = site.parent / "seo" / "PUBLIC-ARTIFACT-MANIFEST.json"
     try:
@@ -1002,6 +1190,9 @@ def run_acceptance(
             "failures": len(contract_probes["failures"]),
             "ok": contract_probes["ok"],
         },
+        "non_html_assets": {key: non_html_assets[key] for key in (
+            "artifact_files", "server_files", "planned", "executed", "passed", "errors", "ok"
+        )},
         "cache_propagation_attempts": propagation_fetcher.attempts,
         "identity_before": before,
         "identity_after": after,
@@ -1017,6 +1208,7 @@ def run_acceptance(
             "fetch": str(mirror_report_path),
             "cache_propagation": str(propagation_path),
             "contract_probes": str(contract_probes_path),
+            "non_html_assets": str(assets_path),
             "mirror": str(mirror),
             "coverage": str(report_dir / "public-surface-coverage.json"),
         },

@@ -345,6 +345,34 @@ ${normalizeWrapper("confenge-web-public.conf")}
     }
   }
   if (!ready) throw new Error("nginx test container did not become ready");
+  const hiddenControlArtifacts = [
+    {
+      name: "_headers",
+      aliases: ["/_headers", "/_headers/", "/_headers?host_contract=1", "//_headers", "/%5fheaders", "/_he%61ders", "/_headers%2f"],
+    },
+    {
+      name: "_redirects",
+      aliases: ["/_redirects", "/_redirects/", "/_redirects?host_contract=1", "//_redirects", "/%5fredirects", "/_red%69rects", "/_redirects%2f"],
+    },
+  ];
+  const notFoundDigest = sha256(readFileSync(resolve(seededSite, "404.html")));
+  for (const artifact of hiddenControlArtifacts) {
+    const physicalPath = resolve(seededSite, artifact.name);
+    const physicalDigest = sha256(readFileSync(physicalPath));
+    for (const alias of artifact.aliases) {
+      const response = await client.request(alias);
+      assertProbe(
+        `host_control_hidden:${artifact.name}:${alias}`,
+        response.status === 404 && sha256(response.body) === notFoundDigest,
+        `status=${response.status} response=${sha256(response.body)} expected=${notFoundDigest}`,
+      );
+    }
+    assertProbe(
+      `host_control_preserved:${artifact.name}`,
+      sha256(readFileSync(physicalPath)) === physicalDigest,
+      `physical artifact changed: ${physicalPath}`,
+    );
+  }
   for (const route of goneProbes) {
     const response = await client.request(route);
     assertProbe(`gone_existing_file:${route}`, response.status === 410 && !response.body.includes("RETIRED_FILE_MUST_NEVER_BE_SERVED"), `status=${response.status}`);

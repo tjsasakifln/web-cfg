@@ -18,6 +18,7 @@ const BANNER = [
 // Keep generated map values comfortably below that boundary and concatenate
 // variables at response time so the public header remains byte-identical.
 const NGINX_MAP_VALUE_CHUNK_BYTES = 3000;
+const HOST_ONLY_STATIC_CONTROL_PATHS = ["/_headers", "/_redirects"];
 
 function escapeLiteral(value) {
   return value.replaceAll("\\", "\\\\").replaceAll('"', '\\"').replaceAll("$", "\\$");
@@ -356,6 +357,14 @@ export function renderLocations(contract) {
     lines.push(`add_header ${name} ${headerValueExpression(contract, lower, name)} always;`);
   }
   lines.push("");
+
+  for (const path of HOST_ONLY_STATIC_CONTROL_PATHS) {
+    for (const normalizedPath of [path, `${path}/`]) {
+      lines.push(`location = ${quoted(normalizedPath)} {`);
+      lines.push("  return 404;");
+      lines.push("}", "");
+    }
+  }
 
   for (const headerRule of contract.headers) {
     if (headerRule.match === "global") continue;

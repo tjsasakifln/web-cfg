@@ -537,6 +537,11 @@ def test_served_inventory_requires_current_and_rejects_post_stage_injection(
         inventory = control.served_html_inventory(SHA_A)
         assert inventory["schema"] == "confenge.served-html-inventory/v1"
         assert inventory["release_sha"] == SHA_A
+        site = host / "releases" / SHA_A / "_site"
+        assert inventory["non_html_sha256"] == {
+            path.relative_to(site).as_posix(): control.sha256_file(path)
+            for path in site.rglob("*") if path.is_file() and path.suffix != ".html"
+        }
         assert inventory["html_sha256"]["index.html"] == control.sha256_file(
             host / "releases" / SHA_A / "_site/index.html"
         )

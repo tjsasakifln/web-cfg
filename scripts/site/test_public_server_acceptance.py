@@ -32,6 +32,7 @@ HOME = b"<html><head><title>CONFENGE</title></head><body><main><h1>Engenharia</h
     ("short", "first_hop_content_length_mismatch"),
     ("oserror", "first_hop_read_failed:OSError"),
     ("incomplete", "first_hop_read_failed:IncompleteRead"),
+    ("protocol", "first_hop_read_failed:BadStatusLine"),
 ])
 def test_first_hop_preserves_error_body_failures(monkeypatch, mode, expected_error):
     headers = Message()
@@ -39,10 +40,12 @@ def test_first_hop_preserves_error_body_failures(monkeypatch, mode, expected_err
     body = b"" if mode == "empty" else HOME
     headers["Content-Length"] = str(len(body) + (1 if mode == "short" else 0))
     failure = urllib.error.HTTPError(CANONICAL_BASE + "/retirada", 410, "Gone", headers, io.BytesIO(body))
-    if mode in {"oserror", "incomplete"}:
+    if mode in {"oserror", "incomplete", "protocol"}:
         def broken_read(_limit):
             if mode == "incomplete":
                 raise http.client.IncompleteRead(HOME[:7], len(HOME) - 7)
+            if mode == "protocol":
+                raise http.client.BadStatusLine("truncated status line")
             raise OSError("controlled body read failure")
         failure.read = broken_read
     def open_failure(*_args, **_kwargs):
@@ -60,11 +63,97 @@ def test_first_hop_preserves_error_body_failures(monkeypatch, mode, expected_err
         assert entry["sha256"] == hashlib.sha256(HOME).hexdigest()
     if mode == "incomplete":
         assert entry["bytes_received"] == 7
+        assert entry["read_completed"] is False
+        assert entry["exception_type"] == "IncompleteRead"
+        assert entry["sha256"] is None
+    if mode in {"oserror", "protocol"}:
+        # Read never finished: NOT VERIFIED, never reported as an empty body.
+        assert entry["sha256"] is None
+        assert entry["bytes_received"] == 0
+        assert entry["read_completed"] is False
+        assert entry["read_phase"] == "body_read"
+    if mode == "empty":
+        # Confirmed empty body: the digest of zero bytes exists and still fails.
+        assert entry["sha256"] == hashlib.sha256(b"").hexdigest()
+        assert entry["bytes_received"] == 0
+        assert entry["read_completed"] is True
+    if mode == "short":
+        assert entry["read_completed"] is True
+        assert entry["declared_length"] == len(HOME) + 1
+        assert entry["bytes_received"] == len(HOME)
+
+
+def test_successful_response_read_failure_is_not_verified(monkeypatch):
+    """A read exception on a non-error response must not digest zero bytes."""
+    headers = Message()
+    headers["Content-Type"] = "text/html"
+
+    def broken_read(_limit):
+        raise OSError("controlled body read failure")
+
+    class _Response:
+        status = 200
+
+        def __init__(self) -> None:
+            self.headers = headers
+
+        def read(self, limit):
+            return broken_read(limit)
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_exc):
+            return False
+
+    response = _Response()
+    monkeypatch.setattr(
+        acceptance.urllib.request,
+        "build_opener",
+        lambda *_: SimpleNamespace(open=lambda *_a, **_k: response),
+    )
+    entry, received = acceptance._probe_first_hop(CANONICAL_BASE + "/", 1)
+    assert received is None
+    assert entry["status"] == 200
+    assert entry["sha256"] is None
+    assert entry["read_completed"] is False
+    assert entry["bytes_received"] == 0
+    assert entry["exception_type"] == "OSError"
+    assert entry["error"].startswith("first_hop_read_failed:OSError")
+
+
+def test_connection_failure_records_phase_and_no_digest(monkeypatch):
+    def open_failure(*_args, **_kwargs):
+        raise urllib.error.URLError("connection refused")
+
+    monkeypatch.setattr(
+        acceptance.urllib.request, "build_opener", lambda *_: SimpleNamespace(open=open_failure)
+    )
+    entry, received = acceptance._probe_first_hop(CANONICAL_BASE + "/", 1)
+    assert received is None
+    assert entry["status"] is None
+    assert entry["sha256"] is None
+    assert entry["read_completed"] is False
+    assert entry["read_phase"] == "connect"
+    assert entry["error"].startswith("first_hop_transport_failed:URLError")
 
 
 def test_empty_redirect_body_remains_legitimate():
     response = SimpleNamespace(read=lambda _limit: b"", headers={"Content-Length": "0"})
-    assert acceptance._read_first_hop_body(response, 301) == (b"", None)
+    record = acceptance._read_first_hop_body(response, 301)
+    assert record["body"] == b""
+    assert record["error"] is None
+    assert record["read_completed"] is True
+    assert record["bytes_read"] == 0
+
+
+def test_missing_content_length_alone_does_not_prove_truncation():
+    response = SimpleNamespace(read=lambda _limit: HOME, headers={})
+    record = acceptance._read_first_hop_body(response, 410)
+    assert record["error"] is None
+    assert record["read_completed"] is True
+    assert record["declared_length"] is None
+    assert record["bytes_read"] == len(HOME)
 
 
 def _fixture(tmp_path: Path, html: dict[str, bytes] | None = None) -> dict:
@@ -115,6 +204,10 @@ def _fixture(tmp_path: Path, html: dict[str, bytes] | None = None) -> dict:
                 "schema": "confenge.served-html-inventory/v1",
                 "release_sha": SHA,
                 "html_sha256": hashes,
+                "non_html_sha256": {
+                    path.relative_to(site).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
+                    for path in site.rglob("*") if path.is_file() and path.suffix != ".html"
+                },
                 "http_dispositions": {
                     rel: {
                         "request_path": acceptance._request_path_for_html(rel),
@@ -275,6 +368,16 @@ def _cached_entry(rel: str, body: bytes, state: str, age: str = "0"):
     }, body)
 
 
+def _asset_fetcher(fixture: dict):
+    def fetch(url, _timeout):
+        rel = acceptance.urllib.parse.unquote(acceptance.urllib.parse.urlsplit(url).path).lstrip("/")
+        protected = rel in acceptance.NONPUBLIC_CONFIG_FILES
+        path = fixture["site"] / ("404.html" if protected else rel)
+        body = path.read_bytes()
+        return _probe_entry(url, 404 if protected else 200, body)
+    return fetch
+
+
 def _run(tmp_path: Path, fixture: dict, **kwargs):
     return run_acceptance(
         site=fixture["site"],
@@ -288,6 +391,7 @@ def _run(tmp_path: Path, fixture: dict, **kwargs):
         disposition_fetcher=kwargs.get(
             "disposition_fetcher", acceptance._probe_first_hop
         ),
+        asset_fetcher=kwargs.get("asset_fetcher", _asset_fetcher(fixture)),
         run_mutations=kwargs.get("run_mutations", False),
         cache_deadline_seconds=kwargs.get(
             "cache_deadline_seconds", acceptance.CACHE_PROPAGATION_SECONDS
@@ -334,16 +438,115 @@ def test_accepts_complete_exact_server_inventory(tmp_path):
     assert report["http_responses"][0]["content_type"].startswith("text/html")
     assert report["identity_before"]["build"]["payload"]["artifact_hash"] == ARTIFACT_HASH
     assert report["identity_before"]["build"]["payload"]["manifest_hash"] == MANIFEST_HASH
-    assert (
-        report["identity_before"]["runtime"]["payload"]["release_bundle_hash"]
-        == BUNDLE_HASH
-    )
+    assert report["identity_before"]["runtime"]["payload"]["release_bundle_hash"] == BUNDLE_HASH
     assert report["identity_before"]["runtime"]["headers"] == {
         "server": "cloudflare",
         "x-confenge-host-architecture-version": "confenge-nginx-node/v2",
     }
     assert report["mutation_contracts_passed"]
     assert (tmp_path / "report" / "acceptance.json").is_file()
+
+
+@pytest.mark.parametrize("leak", [None, "direct", "query", "encoded", "empty"])
+def test_public_control_files_are_denied_in_every_probed_variant(tmp_path, leak):
+    fixture, not_found = _fixture_with_contract_probe(tmp_path)
+    payload = json.loads(fixture["inventory"].read_text())
+    payload["contract_probes"] = {}
+    for rel in acceptance.NONPUBLIC_CONFIG_FILES:
+        body = b"PRIVATE PUBLICATION CONTROL"
+        (fixture["site"] / rel).write_bytes(body)
+        payload["non_html_sha256"][rel] = hashlib.sha256(body).hexdigest()
+    fixture["inventory"].write_text(json.dumps(payload))
+    delegate = _asset_fetcher(fixture)
+    def fetch(url, timeout):
+        entry, body = delegate(url, timeout)
+        config = "headers" in url or "redirects" in url
+        leaking = config and (
+            leak == "direct" or (leak == "query" and "?" in url)
+            or (leak == "encoded" and "%5F" in url)
+        )
+        if leaking:
+            return _probe_entry(url, 200, b"PRIVATE PUBLICATION CONTROL")
+        if config and leak == "empty":
+            return _probe_entry(url, 404, b"")
+        return entry, body
+    report = _run(tmp_path, fixture, asset_fetcher=fetch)
+    assert report["ok"] is (leak is None), report["errors"]
+    assert report["non_html_assets"]["planned"] == 7
+    assert report["non_html_assets"]["executed"] == 7
+    if leak is not None:
+        assert "public_non_html_acceptance_failed" in report["errors"]
+
+
+@pytest.mark.parametrize("mutation", ["missing", "unlisted", "changed", "empty"])
+def test_non_html_inventory_reconciliation_fails_closed(tmp_path, mutation):
+    fixture = _fixture(tmp_path)
+    inventory = json.loads(fixture["inventory"].read_text())
+    if mutation == "missing":
+        (fixture["site"] / "citation.csv").write_bytes(b"public,data\n")
+    elif mutation == "empty":
+        inventory["non_html_sha256"] = {}
+    elif mutation == "unlisted":
+        inventory["non_html_sha256"]["new-download.csv"] = "f" * 64
+    else:
+        inventory["non_html_sha256"][".well-known/build-info.json"] = "f" * 64
+    fixture["inventory"].write_text(json.dumps(inventory))
+    def fetch(url, timeout):
+        if url.endswith("new-download.csv"):
+            return _probe_entry(url, 200, b"unexpected download")
+        return _asset_fetcher(fixture)(url, timeout)
+    report = _run(tmp_path, fixture, asset_fetcher=fetch)
+    assert not report["ok"]
+    assert "public_non_html_acceptance_failed" in report["errors"]
+
+
+def test_non_html_http_bytes_cannot_be_normalized_or_served_from_old_cache(tmp_path):
+    fixture = _fixture(tmp_path)
+    def changed(url, _timeout):
+        body = (fixture["site"] / ".well-known/build-info.json").read_bytes() + b"\n"
+        return _probe_entry(url, 200, body, "HIT")
+    report = _run(tmp_path, fixture, asset_fetcher=changed)
+    assert not report["ok"]
+    assert report["non_html_assets"]["executed"] == 1
+    assert report["non_html_assets"]["passed"] == 0
+
+
+def test_only_declared_non_html_overlay_changes_are_accepted(tmp_path):
+    fixture = _fixture(tmp_path)
+    site = fixture["site"]
+    (site / "sitemap-index.xml").write_bytes(b"<sitemapindex/>")
+    overlay = {
+        "schema": "confenge.live-intelligence-overlay/v1",
+        "release_sha": SHA, "source_kind": "official_live",
+    }
+    bodies = {
+        ".well-known/build-info.json": (site / ".well-known/build-info.json").read_bytes(),
+        "sitemap-index.xml": b"<sitemapindex>official child</sitemapindex>",
+        "sitemap-oportunidades.xml": b"<urlset>official routes</urlset>",
+        ".well-known/live-intelligence-overlay.json": json.dumps(overlay).encode(),
+    }
+    inventory = {
+        "release_sha": SHA,
+        "non_html_sha256": {p: hashlib.sha256(b).hexdigest() for p, b in bodies.items()},
+    }
+    def fetch(url, _timeout):
+        return _probe_entry(url, 200, bodies[url.removeprefix(CANONICAL_BASE + "/")])
+    report = acceptance.verify_non_html_assets(
+        site=site, inventory=inventory, overlay=overlay, base=CANONICAL_BASE,
+        fetcher=fetch, concurrency=2, timeout=1,
+    )
+    assert report["ok"], report["errors"]
+    assert report["planned"] == report["executed"] == report["passed"] == 4
+    # A recognized producer cannot rewrite unrelated immutable assets.
+    (site / "style.css").write_bytes(b"body{}")
+    bodies["style.css"] = b"body{display:none}"
+    inventory["non_html_sha256"]["style.css"] = hashlib.sha256(bodies["style.css"]).hexdigest()
+    report = acceptance.verify_non_html_assets(
+        site=site, inventory=inventory, overlay=overlay, base=CANONICAL_BASE,
+        fetcher=fetch, concurrency=2, timeout=1,
+    )
+    assert not report["ok"]
+    assert "server_non_html_artifact_digest_mismatch:style.css" in report["errors"]
 
 
 def test_rejects_server_html_not_authorized_by_artifact_or_overlay(tmp_path):
@@ -705,6 +908,11 @@ def _probe_entry(url: str, status: int, body: bytes, cache: str = ""):
             "content-type": "text/html; charset=utf-8",
         },
         "sha256": hashlib.sha256(body).hexdigest(),
+        "bytes_received": len(body),
+        "read_completed": True,
+        "read_phase": "read_complete",
+        "exception_type": None,
+        "declared_length": len(body),
         "error": None,
     }, body)
 
@@ -733,6 +941,7 @@ def test_withdrawn_contract_probe_retries_cached_200_then_proves_exact_410(tmp_p
         identity_fetcher=_identity_fetcher(),
         html_fetcher=_html_fetcher(fixture["html"]),
         disposition_fetcher=probe,
+        asset_fetcher=_asset_fetcher(fixture),
         run_mutations=False,
         clock=fake_time.clock,
         sleeper=fake_time.sleep,
@@ -814,3 +1023,262 @@ def test_withdrawn_contract_probe_cached_200_stops_at_global_deadline(tmp_path):
         "cache_deadline_exhausted",
     ]
     assert fake_time.sleeps == [15.0, 5.0]
+
+
+def _probe_attempts(tmp_path: Path) -> list[dict]:
+    evidence = json.loads(
+        (tmp_path / "report" / "contract-probes.json").read_text(encoding="utf-8")
+    )
+    return evidence["attempts"]["/piloto/__confenge_contract_probe__"], evidence
+
+
+def _read_failure_entry(url: str, status: int = 410):
+    """Read never finished: no digest, nothing proved about the served body."""
+    return ({
+        "url": url,
+        "status": status,
+        "location": None,
+        "content_type": "text/html; charset=utf-8",
+        "headers": {"content-type": "text/html; charset=utf-8"},
+        "sha256": None,
+        "bytes_received": 0,
+        "read_completed": False,
+        "read_phase": "body_read",
+        "exception_type": "OSError",
+        "declared_length": None,
+        "error": "first_hop_read_failed:OSError:controlled body read failure",
+    }, None)
+
+
+def test_withdrawn_contract_probe_rejects_confirmed_empty_410_body(tmp_path):
+    """Zero bytes actually read has the zero-byte digest and still fails."""
+    fixture, _not_found = _fixture_with_contract_probe(tmp_path)
+
+    def empty_410(url: str, _timeout: float):
+        entry, _body = _probe_entry(url, 410, b"")
+        entry["error"] = "first_hop_empty_410_body"
+        return entry, None
+
+    report = _run(tmp_path, fixture, disposition_fetcher=empty_410)
+    assert report["ok"] is False
+    assert "withdrawn_contract_probes_failed" in report["errors"]
+    attempts, evidence = _probe_attempts(tmp_path)
+    assert len(attempts) == 1
+    assert attempts[0]["decision"] == "response_mismatch_no_retry"
+    assert attempts[0]["read_completed"] is True
+    assert attempts[0]["bytes_received"] == 0
+    assert attempts[0]["sha256"] == hashlib.sha256(b"").hexdigest()
+    assert evidence["failures"][0]["error"] == "contract_probe_response_mismatch"
+
+
+def test_withdrawn_contract_probe_rejects_partial_body(tmp_path):
+    fixture, not_found = _fixture_with_contract_probe(tmp_path)
+
+    def partial_410(url: str, _timeout: float):
+        entry, _body = _probe_entry(url, 410, not_found[:20])
+        entry["declared_length"] = len(not_found)
+        entry["error"] = (
+            f"first_hop_content_length_mismatch:{len(not_found)}:20"
+        )
+        return entry, None
+
+    report = _run(tmp_path, fixture, disposition_fetcher=partial_410)
+    assert report["ok"] is False
+    attempts, evidence = _probe_attempts(tmp_path)
+    assert len(attempts) == 1
+    assert attempts[0]["decision"] == "partial_body_no_retry"
+    assert attempts[0]["read_completed"] is True
+    assert attempts[0]["bytes_received"] == 20
+    assert attempts[0]["declared_length"] == len(not_found)
+    assert evidence["failures"][0]["error"] == "contract_probe_partial_body"
+
+
+def test_withdrawn_contract_probe_read_exception_is_never_treated_as_empty(tmp_path):
+    fixture, _not_found = _fixture_with_contract_probe(tmp_path)
+    fake_time = _FakeTime()
+    report = _run(
+        tmp_path,
+        fixture,
+        disposition_fetcher=lambda url, _timeout: _read_failure_entry(url),
+        clock=fake_time.clock,
+        sleeper=fake_time.sleep,
+    )
+    assert report["ok"] is False
+    assert "withdrawn_contract_probes_failed" in report["errors"]
+    attempts, evidence = _probe_attempts(tmp_path)
+    assert [row["decision"] for row in attempts] == [
+        "retry_transport_read_failure",
+        "retry_transport_read_failure",
+        "read_not_verified_budget_exhausted",
+    ]
+    assert all(row["sha256"] is None for row in attempts)
+    assert all(row["read_completed"] is False for row in attempts)
+    assert all(row["exception_type"] == "OSError" for row in attempts)
+    assert evidence["failures"][0]["error"] == "contract_probe_read_not_verified"
+    assert evidence["failures"][0]["actual_sha256"] is None
+    assert fake_time.sleeps == [2.0, 2.0]
+
+
+@pytest.mark.parametrize("wrong", [
+    b"<html><body>rascunho interno proof_state: DRAFT</body></html>",
+    b"<html><head><title>Conteudo indisponivel</title></head><body><main>Outra release.</main></body></html>",
+])
+def test_withdrawn_contract_probe_rejects_wrong_410_body(tmp_path, wrong):
+    """Status 410 alone never substitutes the exact withdrawal body."""
+    fixture, not_found = _fixture_with_contract_probe(tmp_path)
+    assert wrong != not_found
+    report = _run(
+        tmp_path,
+        fixture,
+        disposition_fetcher=lambda url, _timeout: _probe_entry(url, 410, wrong),
+    )
+    assert report["ok"] is False
+    assert "withdrawn_contract_probes_failed" in report["errors"]
+    attempts, evidence = _probe_attempts(tmp_path)
+    assert len(attempts) == 1
+    assert attempts[0]["decision"] == "response_mismatch_no_retry"
+    assert evidence["failures"][0]["actual_status"] == 410
+    assert evidence["failures"][0]["actual_sha256"] == hashlib.sha256(wrong).hexdigest()
+    assert evidence["failures"][0]["error_page_digest_matched"] is False
+
+
+def test_withdrawn_contract_probe_rejects_unexpected_alias_redirect(tmp_path):
+    fixture, not_found = _fixture_with_contract_probe(tmp_path)
+
+    def aliased(url: str, _timeout: float):
+        entry, body = _probe_entry(url, 301, not_found)
+        entry["location"] = CANONICAL_BASE + "/"
+        return entry, body
+
+    report = _run(tmp_path, fixture, disposition_fetcher=aliased)
+    assert report["ok"] is False
+    attempts, evidence = _probe_attempts(tmp_path)
+    assert len(attempts) == 1
+    assert attempts[0]["decision"] == "response_mismatch_no_retry"
+    assert evidence["failures"][0]["actual_status"] == 301
+    assert evidence["failures"][0]["actual_location"] == CANONICAL_BASE + "/"
+
+
+def test_withdrawn_contract_probe_rejects_non_identity_encoding(tmp_path):
+    fixture, not_found = _fixture_with_contract_probe(tmp_path)
+
+    def encoded(url: str, _timeout: float):
+        entry, body = _probe_entry(url, 410, not_found)
+        entry["headers"]["content-encoding"] = "gzip"
+        return entry, body
+
+    report = _run(tmp_path, fixture, disposition_fetcher=encoded)
+    assert report["ok"] is False
+    attempts, evidence = _probe_attempts(tmp_path)
+    assert attempts[0]["decision"] == "non_identity_encoding_no_retry"
+    assert evidence["failures"][0]["error"] == "contract_probe_non_identity_encoding"
+
+
+def test_withdrawn_contract_probe_transient_read_failure_then_exact_410(tmp_path):
+    """A passing retry never erases the failed first attempt."""
+    fixture, not_found = _fixture_with_contract_probe(tmp_path)
+    calls = iter([
+        lambda url: _read_failure_entry(url),
+        lambda url: _probe_entry(url, 410, not_found),
+    ])
+    fake_time = _FakeTime()
+    report = _run(
+        tmp_path,
+        fixture,
+        disposition_fetcher=lambda url, _timeout: next(calls)(url),
+        clock=fake_time.clock,
+        sleeper=fake_time.sleep,
+    )
+    assert report["ok"] is True, report["errors"]
+    attempts, evidence = _probe_attempts(tmp_path)
+    assert [row["decision"] for row in attempts] == [
+        "retry_transport_read_failure",
+        "exact_410_contract_matched",
+    ]
+    assert attempts[0]["sha256"] is None and attempts[0]["read_completed"] is False
+    assert attempts[1]["sha256"] == hashlib.sha256(not_found).hexdigest()
+    assert evidence["results"][0]["attempts"] == 2
+    assert evidence["results"][0]["ok"] is True
+    assert fake_time.sleeps == [2.0]
+
+
+def test_cache_retries_do_not_consume_the_transport_read_budget(tmp_path):
+    """Orçamentos separados: propagação de cache não gasta a cota de leitura.
+
+    Enquanto o teto de transporte olhava len(attempts), duas retentativas de
+    cache zeravam a cota e um transitório recuperável saía como
+    read_not_verified_budget_exhausted -- reprovação por diagnóstico ruim.
+    """
+    fixture, not_found = _fixture_with_contract_probe(tmp_path)
+    stale = fixture["html"]["404.html"] + b"<!-- release anterior -->"
+    calls = iter([
+        lambda url: _cached_entry(url, stale, "HIT"),
+        lambda url: _cached_entry(url, stale, "HIT"),
+        lambda url: _read_failure_entry(url),
+        lambda url: _probe_entry(url, 410, not_found),
+    ])
+    fake_time = _FakeTime()
+    report = _run(
+        tmp_path,
+        fixture,
+        disposition_fetcher=lambda url, _timeout: next(calls)(url),
+        clock=fake_time.clock,
+        sleeper=fake_time.sleep,
+    )
+    attempts, evidence = _probe_attempts(tmp_path)
+    decisions = [row["decision"] for row in attempts]
+    assert "read_not_verified_budget_exhausted" not in decisions, decisions
+    assert decisions[-2:] == [
+        "retry_transport_read_failure",
+        "exact_410_contract_matched",
+    ], decisions
+    assert report["ok"] is True, report["errors"]
+    assert evidence["results"][0]["attempts"] == 4
+
+
+def test_withdrawn_contract_probe_accepts_exact_410_on_first_attempt(tmp_path):
+    fixture, not_found = _fixture_with_contract_probe(tmp_path)
+    report = _run(
+        tmp_path,
+        fixture,
+        disposition_fetcher=lambda url, _timeout: _probe_entry(url, 410, not_found),
+    )
+    assert report["ok"] is True, report["errors"]
+    assert report["contract_probes"]["passed"] == 1
+    attempts, evidence = _probe_attempts(tmp_path)
+    assert len(attempts) == 1
+    assert attempts[0]["decision"] == "exact_410_contract_matched"
+    assert attempts[0]["read_completed"] is True
+    assert attempts[0]["sha256"] == hashlib.sha256(not_found).hexdigest()
+    assert evidence["results"][0]["withdrawn_source_body_absent"] is True
+
+
+def test_withdrawn_contract_probe_forbidden_read_failure_is_not_a_body_mismatch(tmp_path):
+    """403 plus a broken read is NOT VERIFIED, never retried, never a mismatch."""
+    fixture, _not_found = _fixture_with_contract_probe(tmp_path)
+    fake_time = _FakeTime()
+    report = _run(
+        tmp_path,
+        fixture,
+        disposition_fetcher=lambda url, _timeout: _read_failure_entry(url, 403),
+        clock=fake_time.clock,
+        sleeper=fake_time.sleep,
+    )
+    assert report["ok"] is False
+    attempts, evidence = _probe_attempts(tmp_path)
+    assert len(attempts) == 1
+    assert attempts[0]["decision"] == "read_not_verified_no_retry"
+    assert attempts[0]["sha256"] is None
+    assert evidence["failures"][0]["error"] == "contract_probe_read_not_verified"
+    assert fake_time.sleeps == []
+
+
+def test_incomplete_read_without_declared_length_reports_no_declared_length():
+    def broken_read(_limit):
+        raise http.client.IncompleteRead(HOME[:5])
+
+    response = SimpleNamespace(read=broken_read, headers={})
+    record = acceptance._read_first_hop_body(response, 410)
+    assert record["read_completed"] is False
+    assert record["bytes_read"] == 5
+    assert record["declared_length"] is None

@@ -2,6 +2,25 @@
   "schema": "CONFENGE_COMMERCIAL_REVIEW_EVIDENCE/1.0.0",
   "status": "PRE_RELEASE_SOURCE_REVIEW",
   "decision": "EXECUTE_NOW 2026-09-09",
+  "publication_attempt_64d03187": {
+    "result": "CANCELLED_BEFORE_PROMOTION_FOR_CONFIRMED_PUBLIC_CONTROL_FILE_EXPOSURE",
+    "pull_request": "https://github.com/tjsasakifln/web-cfg/pull/648",
+    "run": "https://github.com/tjsasakifln/web-cfg/actions/runs/34408085045",
+    "integrated_sha": "64d031877fd521f0ee1206af8e72b0305f128675",
+    "served_sha_after_cancellation": "54b51438a110767c88256c2e9e5272173066cc9c",
+    "reason": "Independent non-HTML enumeration found publication configuration exposed by the nginx fallback: /_headers returned 200 with 12107 bytes; /_redirects returned 200 with 4274 bytes on the baseline. The candidate renderer retained that behavior. No promotion or synthetic POST occurred in this attempt.",
+    "replacement": "Retain both physical files for build/package controls, but deny normal and normalized public URLs with exact 404 error-page bytes. Extend the existing locked host inventory and public acceptance to every non-HTML file, including assets, downloads and configuration-denial probes.",
+    "protected_properties": "No removal of source controls, no generic scanner exclusion, no weakening of checksums/CSP or mutation permissions. Artifact-to-host comparison allows only the existing exact overlay XML/receipt changes; public HTTP must match host bytes without JSON/XML normalization.",
+    "counterproofs": "Renderer RED without protected locations; nginx RED with configuration bytes served 200. Corrected renderer 17/17 PASS and nginx E2E PASS on 14 direct/query/slash/percent-encoded variants. New acceptance tests reject 200 leaks, empty 404, missing/unlisted/changed assets, empty selection and even whitespace-only HTTP digest divergence.",
+    "evidence": [
+      "/tmp/confenge-commercial-20260909.zaPcn3/public-config-headers-response.txt",
+      "/tmp/confenge-commercial-20260909.zaPcn3/public-config-redirects-response.txt",
+      "/tmp/confenge-host-controls-render-red.log",
+      "/tmp/confenge-host-controls-nginx-red.log",
+      "/tmp/confenge-host-controls-nginx-green.log"
+    ],
+    "acceptance": "Not complete. A new protected PR and canonical release must execute the expanded acceptance."
+  },
   "publication_attempt_ceb8004c": {
     "result": "PUBLIC_ACCEPTANCE_FAILED_AUTOMATIC_ROLLBACK_CONFIRMED",
     "pull_request": "https://github.com/tjsasakifln/web-cfg/pull/647",

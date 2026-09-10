@@ -178,6 +178,21 @@ test("nginx output preserves fragments/query and emits only the explicit runtime
   assert.doesNotMatch(runtimeLocations, /location ~ \^\/\.netlify\/functions\/\.\*/);
 });
 
+test("host-only control artifacts are denied without removing them from the package", () => {
+  const { contract } = buildHostContract(ROOT);
+  const locations = renderLocations(contract);
+  for (const path of ["/_headers", "/_redirects"]) {
+    assert.match(
+      locations,
+      new RegExp(`location = "${path}" \\{\\n  return 404;\\n\\}`),
+    );
+    assert.match(
+      locations,
+      new RegExp(`location = "${path}/" \\{\\n  return 404;\\n\\}`),
+    );
+  }
+});
+
 test("nginx escaping keeps input values inside quoted arguments", () => {
   const { contract } = buildHostContract(ROOT);
   const clone = structuredClone(contract);

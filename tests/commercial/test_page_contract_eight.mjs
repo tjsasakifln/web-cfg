@@ -142,6 +142,26 @@ for (const d of dels) {
   ];
   assert(`value_first_matrix_${n}`, valueKeys.every((key) => nonEmptyString(value[key])), JSON.stringify(value));
   assert(`value_first_cta_is_next_state_${n}`, /^(Examinar|Configurar)\b/.test(value.cta_inspect) && /^Configurar\b/.test(value.cta_configure), `${value.cta_inspect} | ${value.cta_configure}`);
+  // Front D: "Trabalho realizado" precisa narrar o trabalho executado, nao a
+  // desorganizacao do visitante. Texto que descreve ausencia ("sem uma fila
+  // comparavel", "manualmente", "tentar comparar") reprova aqui, na fonte.
+  assert(`value_first_work_is_performed_${n}`,
+    /^[A-ZÁÉÍÓÚÂÊÔÃÕÀÇ][^\s]*(?:amos|imos)\b/.test(value.work_removed) &&
+      !/\bsem\s|manualmente|\btentar\b|\bfalta\b|\bdispers[ao]s?\b/i.test(value.work_removed),
+    value.work_removed);
+  // Front D: rotulos de CTA precisam nomear o que o visitante reconhece. O
+  // demonstrativo pronominal ("esta priorizacao", "este mapa") e o jargao de
+  // catalogo ("trilha", "vitrine") reprovam.
+  assert(`value_first_cta_names_visitor_object_${n}`,
+    [value.cta_inspect, value.cta_configure].every((label) =>
+      !/\b(?:esta|este|estas|estes)\b/i.test(label) && !/\btrilha\b|\bvitrine\b/i.test(label)),
+    `${value.cta_inspect} | ${value.cta_configure}`);
+  // Front D: a identificacao do exemplo hipotetico fica junto do exemplo, no
+  // proprio rotulo que leva ate ele, e nunca no rotulo de contratacao.
+  assert(`value_first_cta_labels_example_${n}`,
+    /sint[eé]tic|demonstrativ/i.test(value.cta_inspect) &&
+      !/sint[eé]tic|demonstrativ/i.test(value.cta_configure),
+    `${value.cta_inspect} | ${value.cta_configure}`);
   assert(`value_first_no_roi_claim_${n}`, !/\b(?:ROI|retorno garantido|economia garantida|receita garantida)\b/i.test(Object.values(value).join(" | ")), JSON.stringify(value));
   assert(`preco_inteiro_positivo_${n}`,
     Number.isInteger(d.price_cents) && d.price_cents > 0 && d.price_cents % 100 === 0,
