@@ -48,6 +48,8 @@ assert.deepEqual(evaluateLighthouseResults(passing, { homeRuns: 3 }), {
     maximum_own_long_task_ms: 185,
     minimum_lcp_ms: 1500,
     maximum_lcp_ms: 1500,
+    maximum_lcp_net_ms: 1500,
+    maximum_lcp_network_allowance_ms: 0,
     maximum_cls: 0,
   },
 });
@@ -474,6 +476,14 @@ for (const row of process.env.LH_REQUIRE_RAW_EVIDENCE === "1" ? committedSummary
   assert.ok(lcpErrors({ lcp_ms: 2600, lcp_network_allowance_ms: 500 }).length > 0,
     "the allowance never hides an artifact regression");
   assert.match(lcpErrors({ lcp_ms: 2600, lcp_network_allowance_ms: 500 })[0], /network allowance 500ms/);
+  // The aggregated home gate applies the same allowance (runtime run 34517284468
+  // failed only here: per-row LCP passed net of allowance, the home maximum did not).
+  const homeRuns = [home(1, 98, 55, 100, { lcp_ms: 1835, lcp_network_allowance_ms: 606 }), home(2, 98, 62, 112, { lcp_ms: 2264, lcp_network_allowance_ms: 599 }), home(3, 98, 60, 100, { lcp_ms: 2258, lcp_network_allowance_ms: 598 })];
+  const homeEval = evaluateLighthouseResults(homeRuns, { homeRuns: 3 });
+  assert.equal(homeEval.errors.filter((e) => e.includes("LCP")).length, 0, JSON.stringify(homeEval.errors));
+  assert.equal(homeEval.home.maximum_lcp_net_ms, 2264 - 599);
+  const homeRegressed = evaluateLighthouseResults(homeRuns.map((r) => ({ ...r, lcp_ms: r.lcp_ms + 400 })), { homeRuns: 3 });
+  assert.ok(homeRegressed.errors.some((e) => e.startsWith("home: LCP")), "the home gate still bites net of allowance");
   // The declared numbers are ceilings: loosening throws, tightening bites.
   const declared = JSON.parse(readFileSync(new URL("../../data/site/design-system.json", import.meta.url), "utf8")).performance_budget;
   assert.equal(declared.critical_content_bytes_max, CONTENT_BYTES_CAP);

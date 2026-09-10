@@ -155,6 +155,14 @@ export function evaluateLighthouseResults(results, options = {}) {
     maximum_lcp_ms: home.length
       ? Math.max(...home.map((row) => Number(row.lcp_ms) || 0))
       : null,
+    // LCP net of the measured network allowance (0 in lab mode); this is the
+    // number the home budget is applied to, see lighthouse_payload.mjs.
+    maximum_lcp_net_ms: home.length
+      ? Math.max(...home.map((row) => (Number(row.lcp_ms) || 0) - (Number(row.lcp_network_allowance_ms) || 0)))
+      : null,
+    maximum_lcp_network_allowance_ms: home.length
+      ? Math.max(...home.map((row) => Number(row.lcp_network_allowance_ms) || 0))
+      : null,
     maximum_cls: home.length
       ? Math.max(...home.map((row) => Number(row.cls) || 0))
       : null,
@@ -258,8 +266,10 @@ export function evaluateLighthouseResults(results, options = {}) {
       `home: maximum own long task ${homeGate.maximum_own_long_task_ms}ms must be <= 200ms`,
     );
   }
-  if (homeGate.maximum_lcp_ms == null || homeGate.maximum_lcp_ms > homeLcpMaxMs) {
-    errors.push(`home: LCP ${homeGate.maximum_lcp_ms}ms must be <= ${homeLcpMaxMs}ms`);
+  if (homeGate.maximum_lcp_net_ms == null || homeGate.maximum_lcp_net_ms > homeLcpMaxMs) {
+    errors.push(
+      `home: LCP ${homeGate.maximum_lcp_ms}ms${homeGate.maximum_lcp_network_allowance_ms ? ` (network allowance up to ${homeGate.maximum_lcp_network_allowance_ms}ms)` : ""} must be <= ${homeLcpMaxMs}ms`,
+    );
   }
   if (homeGate.maximum_cls == null || homeGate.maximum_cls > homeClsMax) {
     errors.push(`home: CLS ${homeGate.maximum_cls} must be <= ${homeClsMax}`);
