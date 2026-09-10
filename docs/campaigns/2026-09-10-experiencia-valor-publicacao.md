@@ -282,3 +282,52 @@ para não sugerir preço publicado onde não há.
 |---|---|---|
 | rodapé separar `Projetos e edificações` de inspeção, e nomear a vertical B2G no breadcrumb | altera o shell de todas as páginas; o hash de aprovação editorial da análise publicada cobre a página inteira, e a mudança derrubava a aprovação para `noindex` | reaprovação humana da análise, que não pode ser auto-emitida |
 | E5 — aceite visual e de compreensão por tarefa | exige interação real em 320/360/390/768/1366, teclado, foco visível, contraste, menu, âncoras e conteúdo sem JavaScript | rodar sobre a versão pública final, depois da promoção |
+
+
+## E5 — aceite visual e de compreensão (inspeção própria, não pesquisa com clientes)
+
+Medido no artefato construído, servido localmente, com navegador real.
+
+**Aprovado, com número:** nenhuma das cinco rotas centrais tem rolagem horizontal
+em 320, 360, 390, 768 ou 1366; as dez âncoras profundas caem livres do cabeçalho
+fixo (alvo ~82px contra cabeçalho de 61px) e nenhuma está dentro de `<details>`
+fechado; o *skip link* aparece ao foco e leva o foco ao `<main>`; o menu móvel
+abre por teclado, prende o foco (cinco Tabs seguidos não escaparam), fecha no
+Escape e devolve o foco ao botão; sem JavaScript o HTML servido já traz preços,
+canais e a mensagem alternativa do formulário; contraste 9,68:1 no corpo, 6,13:1
+no CTA primário e 7,42:1 no bloco do esquema ilustrativo. As sete tarefas do
+visitante passaram, entrando pela home e pela URL específica.
+
+**Corrigido nesta rodada:** os CTA dos cards de oferta mediam 198×19 e 196×19 px
+a 390px, abaixo do mínimo de 24px da WCAG 2.2. Passaram a 198×44 e 196×44,
+conferido no navegador, sem mudar o texto visível.
+
+### Defeito obrigatório em aberto: refluxo com texto ampliado
+
+Com o texto ampliado sobre 320px, a página inteira ganha rolagem horizontal:
+
+| rota | 125% | 200% |
+|---|---|---|
+| `/` | 0 px (bloco `.contact-copy` 11 px) | **118 px** |
+| `/servicos/` | **67 px** | **270 px** |
+| `/entregas/` | 0 px | **162 px** |
+| `/triagem-tecnica/` | 0 px | **162 px** |
+| `/servicos-obras-publicas/` | 0 px | **162 px** |
+
+Causa medida: itens de grade com o mínimo `auto`. `1fr` equivale a
+`minmax(auto,1fr)`, e o mínimo `auto` impede a coluna de encolher abaixo do
+`min-content`. A cadeia medida em `/servicos/` a 125% mostra um contêiner de
+250 px com um filho de 337 px.
+
+**Por que não foi corrigido nesta versão.** A correção é uma linha de CSS
+(`minmax(0,1fr)` mais `min-width:0` nos filhos). Mas `rendered_content_hash`, que
+sustenta a aprovação editorial da análise publicada, **cobre as folhas de estilo
+junto com o HTML da página**. Ao aplicar a correção, a build reprovou fechada com
+`contract_analysis_build_missing`: a aprovação caiu, a página deixou de ser
+renderizada e o sitemap perdeu a entrada. Aprovação editorial é ato humano e não
+se auto-emite. A correção foi revertida e a aprovação voltou a `PUBLISHABLE_INDEX`.
+
+Isto é a **mesma restrição estrutural** que já bloqueia o rodapé e o breadcrumb:
+qualquer mudança no *shell* ou no CSS compartilhado exige reaprovação humana da
+análise publicada. As duas pendências destravam juntas, com um único ato de
+reaprovação.
