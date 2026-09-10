@@ -238,3 +238,47 @@ anti-jargão e anti-falso-lastro do contrato das oito ofertas, a unicidade das 1
 cláusulas do registro de entregáveis, o mecanismo de subconjunto do `proof.json`
 (a lista de frases permitidas **ganhou** a substituta, nunca foi esvaziada), a
 divulgação de limites da calculadora pública, preços, prazos e condições materiais.
+
+
+## E3 — demonstração honesta em `/entregas/`
+
+Retirados da página: `Entregas inspecionáveis`, `Como ler a página`,
+`Serviço, exemplo e oferta`, `Serviços que terminam em documentos utilizáveis`
+e a explicação de que a página separa categorias. A distinção passa a nascer da
+organização e de rótulos locais.
+
+Condições materiais **preservadas**, apenas movidas para junto das ofertas, que é
+onde valem: a faixa `R$ 599 a R$ 3.750` e a cláusula de escopo — preços e
+condições pertencem somente às ofertas que os exibem, e o aviso de dados
+sintéticos pertence somente aos exemplos demonstrativos.
+
+### A demonstração, e o que ela deliberadamente não prova
+
+Não há amostra de cliente publicável. A decisão autoriza, nesse caso, mostrar a
+**organização ilustrativa do conteúdo**. Cada família anunciada ganhou um esquema
+em HTML acessível — sem miniatura ilegível, carrossel obrigatório ou PDF:
+
+| família | o esquema mostra |
+|---|---|
+| projetos de estruturas e instalações, revisão e compatibilização | plantas e cortes, detalhes, especificações, memória de cálculo e registro de compatibilização, e a pergunta que cada peça responde na obra |
+| quantitativos e orçamento | levantamento, composições abertas, referências e data-base, planilha e memória dos critérios |
+| inspeção, perícia, avaliação e segurança do trabalho | objeto e pergunta, evidências, método, conclusão e limites |
+
+A distinção obrigatória fica **no próprio esquema**, não num aviso distante da
+página: o rótulo diz que ele mostra como a entrega se organiza, que **não é
+trabalho executado nem representa cliente**, e que **por si só não comprova
+experiência** — os fundamentos de confiança estão em credenciais e limites.
+Nenhuma dimensão, cálculo, assinatura, ART, carimbo ou conclusão fictícia foi
+usada para fazê-lo parecer executado.
+
+A captura da página deixou de oferecer apenas licitação: entram projeto, revisão
+e compatibilização, quantitativos e orçamento, inspeção e diagnóstico, perícia e
+avaliação, e segurança do trabalho, num grupo declarado como **por proposta**,
+para não sugerir preço publicado onde não há.
+
+## Pendências obrigatórias em aberto
+
+| item | por quê ainda não | o que destrava |
+|---|---|---|
+| rodapé separar `Projetos e edificações` de inspeção, e nomear a vertical B2G no breadcrumb | altera o shell de todas as páginas; o hash de aprovação editorial da análise publicada cobre a página inteira, e a mudança derrubava a aprovação para `noindex` | reaprovação humana da análise, que não pode ser auto-emitida |
+| E5 — aceite visual e de compreensão por tarefa | exige interação real em 320/360/390/768/1366, teclado, foco visível, contraste, menu, âncoras e conteúdo sem JavaScript | rodar sobre a versão pública final, depois da promoção |
