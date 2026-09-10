@@ -1,9 +1,9 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-09-10T02:57:48.727Z",
+  "measured_at": "2026-09-10T03:24:58.919Z",
   "measured_on": "2026-09-10",
-  "commit_sha": "91c27642ae97c6cb96a62e52e06e318f6f1c02de",
+  "commit_sha": "e52db8cd11f1f5ff3a5b9537a8c9fd7b4b38073a",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "f168038814087e1b365d1de3042af9a3f3364743756e104711fecc0fb9fe7477",
@@ -44,14 +44,14 @@
     "diretoria-b2g/index.html": "72d1ffd411f911fd295b6ae13fd1318c28356aa007fbf73f71cac80e39f68197",
     "entregas/index.html": "f7fefcdf18de55f6acd0b1a09f576f8e10a5eb44721c0c4a6409ae204a0c744b",
     "entregas/styles.css": "370c07fe81e8f3d39c2c6c6f4f7b05316ca30f93a8435f137ff3dae2d8cd2949",
-    "index.html": "e902d81c7857a36a56921800b64c96b8c208cc7c2d60e526e9ba11e5421cdb03",
+    "index.html": "c50bde199694a72be3e0ba8cfecf812897d1bafa597388cfc6e97d7f458dbd18",
     "medicoes-glosas-obras-publicas/index.html": "fe3d3c644ac158dae63f85369301da200b5f4de025b0db3364b9cb3e3d929c61",
     "problemas-que-resolvemos/index.html": "fbd929bd17c6890969ee4b0f5c3647dca7ee81bf75b3a8ae4e124c38aef0b280",
     "reequilibrio-obras-publicas/index.html": "11d0cf94f61308da770640898df3019f4cbdd0b3dcd42f9df8ad73a8aa79d6ca",
-    "script.js": "be277e3bd0f6ada2b6db0d36b924e8e347fb413da8a73d60ebb7a7101e265880",
-    "servicos-obras-publicas/index.html": "90a286cbc25bc71c3a392e7a0ba0f505d8645bc879d625f43eebf2b994707fc5",
+    "script.js": "9a0b4eb31d7d27cce00bfd43ea8a1b1dc67f984745d2b5d68423563fed53427a",
+    "servicos-obras-publicas/index.html": "21697e2503be585f78fd1696a3ed8107fd1b966e56ab23abbe5e1a4561530c6b",
     "styles-hubs.css": "ed4668833ad8de5cef5acc5fc1e8f21e519870f0bf282247c3b4a9644a094592",
-    "styles-offers.css": "26ab81eca7465514c8840c985c0df73c7153a2a525592d3783be36b88864f5d4",
+    "styles-offers.css": "0c1efa4797709ae6d2b776aa58e863ef095a880646b5e4b158a7a47e0963ec2e",
     "styles-tokens.css": "15cc0770e76276b418c11493fa9e53827ae14bb8f854b0a63d8c6dd63afc02fc",
     "styles-tools.css": "8c42a4b5fadba13e4dae52bd7168c64b9f5548f3fd3f8d4f0707ce4e9463c7ba",
     "styles.css": "e0308ce5bd1b6da4d4b7a4cb58c4717a9d3512b36b839fb35ca6be21bf03eaf3"
@@ -101,7 +101,7 @@
   "routes": [
     {
       "route": "/",
-      "html_sha256": "e902d81c7857a36a56921800b64c96b8c208cc7c2d60e526e9ba11e5421cdb03",
+      "html_sha256": "c50bde199694a72be3e0ba8cfecf812897d1bafa597388cfc6e97d7f458dbd18",
       "measured_on": "2026-09-10",
       "viewports": {
         "1366x768": {
@@ -520,7 +520,7 @@
     },
     {
       "route": "/servicos-obras-publicas/",
-      "html_sha256": "90a286cbc25bc71c3a392e7a0ba0f505d8645bc879d625f43eebf2b994707fc5",
+      "html_sha256": "21697e2503be585f78fd1696a3ed8107fd1b966e56ab23abbe5e1a4561530c6b",
       "measured_on": "2026-09-10",
       "viewports": {
         "1366x768": {
