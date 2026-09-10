@@ -693,3 +693,27 @@ de fonte; em navegador com a fonte local, bloquear o woff2 não pode mover o
 herói mais de 4 px. O logotipo do cabeçalho (`224×58` declarado, `500×130`
 intrínseco) contribui ≤ 0,2 px e fica registrado, não alterado, por ser
 markup do shell compartilhado.
+
+
+### Auditoria pré-merge do #652 (fronteira artefato → pacote → nginx → Cloudflare → navegador)
+
+Duas revisões adversariais independentes mapearam todos os gates que só rodam
+depois da promoção e responderam à pergunta crítica ("algo passa no PR e reprova
+só depois de promovido?"). Achados corrigidos antes do merge:
+
+| achado | classe | correção |
+|---|---|---|
+| a "folga de rede" lia `metrics.timeToFirstByte`, que é o TTFB **simulado** do Lantern (~450 ms fixos também no laboratório) — a folga de ~599 ms não media nada | erro de modelagem da métrica | folga = latência de servidor **observada** (`network-server-latency`, mediana), teto 250 ms, zero sem medição; TLS retirado |
+| a borda foi medida sobre **h3**; o simulador do Lighthouse só modela multiplexação para `h2` e trata `h3` como HTTP/1.1 com handshake por conexão (+~300 ms). Medido: o mesmo artefato local dá 1.809–1.963 ms em HTTP/1.1 e **1.584–1.595 ms** em HTTPS+HTTP/2 | erro de modelagem da métrica | Chrome do runner com `--disable-quic`: a borda é medida sobre HTTP/2, o protocolo que o simulador modela; visitantes h3 não ficam piores |
+| ramo de retirada do aceite de runtime exigia **404** para o detalhe retirado, mas o contrato serve **410** (`_redirects`; a retirada não toca `_redirects`) — reprovação determinística só após promoção quando o overlay publica zero rotas | defeito do gate | aceita 410 ou 404; contraprova unitária |
+| pré-requisitos do Lighthouse na borda sem timeout nem retry; re-fetch do payload sem retry para 403/429/5xx | defeito do gate (rollback espúrio) | timeout 20 s e 3 tentativas com backoff; não-200 estável continua reprovando |
+| CLS e performance ausentes passavam abertos; LCP `NaN` na home não reprovava o agregado | defeito do gate | fail-closed nos três |
+| gate da reserva tipográfica pulava a etapa de navegador sem fonte local | defeito do gate | `FONT_FALLBACK_BROWSER_REQUIRED=1` no CI (o runner tem Liberation Sans) |
+| `content_byte_weight` e a folga não eram recomputáveis da evidência bruta | evidência | `payload_details` por URL persistido e recomputação no laço de evidência bruta |
+
+Verificado e mantido: nenhum probe do aceite servido lê CSP/XFO/Permissions/
+Referrer (a regra de documento não pode quebrá-lo; 78/78 probes passaram sob o
+contrato novo no run 34517284468); `robots-txt` do Lighthouse aceita
+`Content-Signal` na versão travada; CLS residual da home com a reserva:
+**0,00008** (harness que reproduz os 0,0676 da borda com cinco decimais);
+cenários frio/lento/bloqueado/quente a 390 e 1366: deslocamento 0 px.

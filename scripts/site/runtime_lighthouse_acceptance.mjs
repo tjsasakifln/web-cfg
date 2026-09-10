@@ -61,6 +61,19 @@ export function validateWithdrawnOverlay(document, expectedSha) {
   return true;
 }
 
+/**
+ * A withdrawn fixture detail is gone when the host answers 410 (the release
+ * contract: _redirects maps the packaged fixture paths to /404.html with 410,
+ * and _withdraw_packaged_opportunity_pages never touches _redirects) or 404
+ * (a host that never had the rule). Anything else means it is still exposed.
+ */
+export function assertWithdrawnDetailStatus(status) {
+  if (status !== 410 && status !== 404) {
+    throw new Error(`withdrawn fixture detail remains exposed: ${WITHDRAWAL_PROBE} -> ${status}`);
+  }
+  return status;
+}
+
 export function hasFunctionalOpportunityAlternative(html) {
   const source = String(html || "");
   return /href=["']\/triagem-tecnica\/["']/.test(source)
@@ -165,9 +178,7 @@ async function runAcceptance(args = process.argv.slice(2)) {
         fetchExact(origin, "/sitemap-oportunidades.xml", "application/xml,text/xml"),
         fetchExact(origin, "/oportunidades/", "text/html"),
       ]);
-      if (detail.status !== 404) {
-        throw new Error(`withdrawn fixture detail remains exposed: ${WITHDRAWAL_PROBE} -> ${detail.status}`);
-      }
+      assertWithdrawnDetailStatus(detail.status);
       if (sitemap.status !== 404 && !(sitemap.status === 200 && !/<loc>/i.test(sitemap.body.toString("utf8")))) {
         throw new Error(`withdrawn opportunity sitemap is neither absent nor empty: ${sitemap.status}`);
       }

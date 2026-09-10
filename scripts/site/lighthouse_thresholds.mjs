@@ -129,8 +129,14 @@ export function evaluateLighthouseResults(results, options = {}) {
         errors.push(`${row.path}: performance ${row.performance} < ${floor}`);
       }
     }
-    if (Number.isFinite(row.cls) && row.cls > clsMax) {
+    // Fail closed: a row without a CLS or performance measurement is not a pass.
+    if (!Number.isFinite(row.cls)) {
+      errors.push(`${row.path}: CLS was not measured`);
+    } else if (row.cls > clsMax) {
       errors.push(`${row.path}: CLS ${row.cls} > ${clsMax}`);
+    }
+    if (!Number.isFinite(row.performance)) {
+      errors.push(`${row.path}: performance was not measured`);
     }
     if (
       imageGatePages.has(row.path)
@@ -157,14 +163,16 @@ export function evaluateLighthouseResults(results, options = {}) {
       : null,
     // LCP net of the measured network allowance (0 in lab mode); this is the
     // number the home budget is applied to, see lighthouse_payload.mjs.
+    // A home row without a finite LCP cannot lower the maximum: it becomes NaN
+    // and fails the comparison below (fail closed).
     maximum_lcp_net_ms: home.length
-      ? Math.max(...home.map((row) => (Number(row.lcp_ms) || 0) - (Number(row.lcp_network_allowance_ms) || 0)))
+      ? Math.max(...home.map((row) => (Number.isFinite(row.lcp_ms) ? row.lcp_ms : NaN) - (Number(row.lcp_network_allowance_ms) || 0)))
       : null,
     maximum_lcp_network_allowance_ms: home.length
       ? Math.max(...home.map((row) => Number(row.lcp_network_allowance_ms) || 0))
       : null,
     maximum_cls: home.length
-      ? Math.max(...home.map((row) => Number(row.cls) || 0))
+      ? Math.max(...home.map((row) => (Number.isFinite(row.cls) ? row.cls : NaN)))
       : null,
   };
   if (home.length !== homeRuns) {
@@ -266,12 +274,12 @@ export function evaluateLighthouseResults(results, options = {}) {
       `home: maximum own long task ${homeGate.maximum_own_long_task_ms}ms must be <= 200ms`,
     );
   }
-  if (homeGate.maximum_lcp_net_ms == null || homeGate.maximum_lcp_net_ms > homeLcpMaxMs) {
+  if (homeGate.maximum_lcp_net_ms == null || !Number.isFinite(homeGate.maximum_lcp_net_ms) || homeGate.maximum_lcp_net_ms > homeLcpMaxMs) {
     errors.push(
       `home: LCP ${homeGate.maximum_lcp_ms}ms${homeGate.maximum_lcp_network_allowance_ms ? ` (network allowance up to ${homeGate.maximum_lcp_network_allowance_ms}ms)` : ""} must be <= ${homeLcpMaxMs}ms`,
     );
   }
-  if (homeGate.maximum_cls == null || homeGate.maximum_cls > homeClsMax) {
+  if (homeGate.maximum_cls == null || !Number.isFinite(homeGate.maximum_cls) || homeGate.maximum_cls > homeClsMax) {
     errors.push(`home: CLS ${homeGate.maximum_cls} must be <= ${homeClsMax}`);
   }
 

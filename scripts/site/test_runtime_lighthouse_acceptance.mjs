@@ -3,6 +3,7 @@ import { execFileSync } from "node:child_process";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
+  assertWithdrawnDetailStatus,
   hasFunctionalOpportunityAlternative,
   validateRuntimeIdentity,
   validateWithdrawnOverlay,
@@ -67,5 +68,14 @@ assert.equal(
   true,
   "the real empty-family renderer must provide triage, email and phone rather than a dead opportunity action",
 );
+
+// The release contract retires the packaged fixture detail with 410
+// (_site/_redirects), and that rule survives withdrawal; the branch used to
+// demand 404 and would have rolled back a healthy release the first time the
+// withdrawal path ran against the canonical host.
+assert.equal(assertWithdrawnDetailStatus(410), 410);
+assert.equal(assertWithdrawnDetailStatus(404), 404);
+assert.throws(() => assertWithdrawnDetailStatus(200), /remains exposed/);
+assert.throws(() => assertWithdrawnDetailStatus(301), /remains exposed/);
 
 console.log("RUNTIME_LIGHTHOUSE_ACCEPTANCE_CONTRACT_OK");

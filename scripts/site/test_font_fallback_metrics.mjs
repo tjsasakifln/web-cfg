@@ -114,7 +114,12 @@ try {
   assert.equal(withFont.archivoLoaded, true, "Archivo must load normally");
   assert.equal(withoutFont.fallbackDeclared, true, "the served stylesheet must declare the fallback face");
   if (!withoutFont.fallbackAvailable) {
-    console.log("FONT_FALLBACK_METRICS_OK static+metrics; browser step skipped: no Arial/Liberation Sans/Helvetica on this machine");
+    // CI sets FONT_FALLBACK_BROWSER_REQUIRED=1: the runner has Liberation Sans,
+    // so an unavailable fallback there is a defect, never a skip.
+    if (process.env.FONT_FALLBACK_BROWSER_REQUIRED === "1") {
+      throw new Error("FONT_FALLBACK_BROWSER_REQUIRED=1 but no local Arial/Liberation Sans/Helvetica resolved the fallback face");
+    }
+    console.log("FONT_FALLBACK_METRICS_OK static+metrics; browser step skipped: no Arial/Liberation Sans/Helvetica on this machine (set FONT_FALLBACK_BROWSER_REQUIRED=1 to fail instead)");
   } else {
     const drift = Math.abs(withFont.actionsTop - withoutFont.actionsTop);
     const deliverableDrift = Math.abs(withFont.deliverable - withoutFont.deliverable);

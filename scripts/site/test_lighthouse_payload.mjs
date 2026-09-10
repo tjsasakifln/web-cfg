@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { createServer } from "node:http";
 import { gzipSync } from "node:zlib";
 import {
+  LCP_ALLOWANCE_CAP_MS,
   fetchWireBodyBytes,
   headerByteWeight,
   lcpNetworkAllowanceMs,
@@ -62,16 +63,37 @@ try {
   assert.equal(broken.content_byte_weight, null);
   assert.match(broken.error, /payload refetch .*-> 404/);
 
-  // Network allowance: zero in lab mode; measured on the edge.
-  const audits = { metrics: { details: { items: [{ timeToFirstByte: 456 }] } }, "network-rtt": { numericValue: 22 } };
-  assert.deepEqual(lcpNetworkAllowanceMs({ audits, origin, runtimeMode: false }).allowance_ms, 0);
-  const edge = lcpNetworkAllowanceMs({ audits, origin: "https://confenge.com.br", runtimeMode: true });
-  assert.equal(edge.allowance_ms, Math.round(456 - 22 + 150));
-  assert.equal(edge.tls_rtt_ms, 150);
-  const plainRuntime = lcpNetworkAllowanceMs({ audits, origin: "http://stage.internal", runtimeMode: true });
-  assert.equal(plainRuntime.allowance_ms, 456 - 22, "no TLS RTT on a plain http origin");
-  const noTtfb = lcpNetworkAllowanceMs({ audits: {}, origin: "https://confenge.com.br", runtimeMode: true });
-  assert.equal(noTtfb.allowance_ms, 150, "without an observed TTFB only the TLS RTT is allowed");
+  // Network allowance: zero in lab mode; the OBSERVED origin latency on the
+  // edge (network-server-latency), capped, and zero when not measured.
+  // metrics.timeToFirstByte is Lantern's SIMULATED TTFB (~450 ms in the lab
+  // too) and must never feed the allowance.
+  const edgeAudits = { metrics: { details: { items: [{ timeToFirstByte: 456 }] } }, "network-rtt": { numericValue: 22 }, "network-server-latency": { numericValue: 7.6 } };
+  assert.equal(lcpNetworkAllowanceMs({ audits: edgeAudits, runtimeMode: false }).allowance_ms, 0, "lab mode never has an allowance");
+  const edge = lcpNetworkAllowanceMs({ audits: edgeAudits, runtimeMode: true });
+  assert.equal(edge.allowance_ms, 7, "the allowance is the observed origin latency, floored");
+  assert.equal(edge.capped, false);
+  const simulatedOnly = { metrics: { details: { items: [{ timeToFirstByte: 450 }] } }, "network-rtt": { numericValue: 0.9 } };
+  assert.equal(lcpNetworkAllowanceMs({ audits: simulatedOnly, runtimeMode: true }).allowance_ms, 0, "the simulated TTFB buys nothing");
+  assert.equal(lcpNetworkAllowanceMs({ audits: {}, runtimeMode: true }).allowance_ms, 0, "no measurement, no allowance");
+  const slowOrigin = lcpNetworkAllowanceMs({ audits: { "network-server-latency": { numericValue: 900 } }, runtimeMode: true });
+  assert.equal(slowOrigin.allowance_ms, LCP_ALLOWANCE_CAP_MS, "an incident-sized latency is capped, not credited");
+  assert.equal(slowOrigin.capped, true);
+  assert.equal(lcpNetworkAllowanceMs({ audits: { "network-server-latency": { numericValue: -5 } }, runtimeMode: true }).allowance_ms, 0);
+
+  // Transient edge answers are retried; a stable non-200 still fails closed.
+  {
+    let calls = 0;
+    const flaky = async () => { calls += 1; return calls < 3 ? { status: 429, bytes: 0, encoding: "identity" } : { status: 200, bytes: 321, encoding: "gzip" }; };
+    const recovered = await measureContentByteWeight([{ url: `${origin}/x.css`, statusCode: 200, transferSize: 1, finished: true }], origin, flaky, { sleep: async () => {} });
+    assert.equal(recovered.content_byte_weight, 321);
+    assert.equal(calls, 3);
+    let stableCalls = 0;
+    const stable = async () => { stableCalls += 1; return { status: 403, bytes: 0, encoding: "identity" }; };
+    const refused = await measureContentByteWeight([{ url: `${origin}/y.css`, statusCode: 200, transferSize: 1, finished: true }], origin, stable, { sleep: async () => {} });
+    assert.equal(refused.content_byte_weight, null);
+    assert.match(refused.error, /-> 403/);
+    assert.equal(stableCalls, 3);
+  }
   console.log("LIGHTHOUSE_PAYLOAD_OK", JSON.stringify({ content: measured.content_byte_weight, transfer: transferTotal }));
 } finally {
   server.close();

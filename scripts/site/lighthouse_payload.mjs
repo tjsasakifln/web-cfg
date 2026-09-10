@@ -15,18 +15,31 @@
  * CONTENT bytes: the compressed body of every first-party response the page
  * loaded, re-fetched with the same Accept-Encoding and counted on the wire.
  *
- * LCP: the lab run is http://127.0.0.1 with a ~2 ms TTFB. Lighthouse's
- * simulation (mobile, 150 ms RTT) adds the OBSERVED server latency of the
- * document and one extra RTT for TLS on https origins. Those two terms are
- * infrastructure (edge geography, origin distance, TLS), not the artifact. In
- * runtime mode they are measured from the run itself and recorded as an
- * explicit allowance; the budget number is never changed.
+ * LCP: the lab run is http://127.0.0.1 with sub-millisecond server latency.
+ * Lighthouse's simulation adds the OBSERVED server latency of the origin to
+ * every request on the critical path; on the edge that latency is geography
+ * (runner → edge → origin) and not the artifact. In runtime mode the median
+ * observed server latency (`network-server-latency`) is recorded as an explicit,
+ * capped allowance; the budget number itself never changes and a missing
+ * measurement yields no allowance at all. (`metrics.timeToFirstByte` is NOT
+ * used: it is Lantern's simulated TTFB — ~450 ms with the mobile RTT — and is
+ * the same in the lab and on the edge.)
+ *
+ * Protocol: Lantern models multiplexing only for `h2`; an `h3` (QUIC) session
+ * is simulated as HTTP/1.1 with a TCP+TLS handshake per connection, which
+ * inflated the edge LCP by ~300 ms on Cloudflare. The runner disables QUIC so
+ * the edge is measured over HTTP/2, the protocol the simulator models; real
+ * visitors on HTTP/3 do at least as well.
  */
 import http from "node:http";
 import https from "node:https";
 
 export const ACCEPT_ENCODING = "gzip, deflate, br";
-export const SIMULATED_RTT_MS = 150;
+// Ceiling for the runtime allowance: observed origin latency is tens of ms on
+// the edge; anything larger is an incident, not a budget.
+export const LCP_ALLOWANCE_CAP_MS = 250;
+const REFETCH_ATTEMPTS = 3;
+const REFETCH_BACKOFF_MS = 1500;
 
 function sameOrigin(url, origin) {
   try {
@@ -41,7 +54,11 @@ function sameOrigin(url, origin) {
  * server compresses). Node's http/https clients do not decode bodies, so the
  * chunk lengths are the wire bytes of the entity, without headers or framing.
  */
-export function fetchWireBodyBytes(url, { timeoutMs = 20000, userAgent = "confenge-lighthouse-payload/1" } = {}) {
+export function fetchWireBodyBytes(url, options = {}) {
+  return fetchWireBodyBytesOnce(url, options);
+}
+
+function fetchWireBodyBytesOnce(url, { timeoutMs = 20000, userAgent = "confenge-lighthouse-payload/1" } = {}) {
   const target = new URL(url);
   const client = target.protocol === "https:" ? https : http;
   return new Promise((resolvePromise, reject) => {
@@ -71,7 +88,25 @@ export function fetchWireBodyBytes(url, { timeoutMs = 20000, userAgent = "confen
  * Fails closed: a request that cannot be re-fetched with the same status makes
  * the measurement invalid (null) instead of silently shrinking the total.
  */
-export async function measureContentByteWeight(networkItems, origin, fetcher = fetchWireBodyBytes) {
+// A transient transport/edge answer (network error, 403/429/5xx) is retried
+// before it counts as a failed measurement, so a challenge or a blip is
+// distinguishable from a real regression; a stable non-200 still fails closed.
+async function fetchWithRetry(fetcher, url, { attempts = REFETCH_ATTEMPTS, backoffMs = REFETCH_BACKOFF_MS, sleep = (ms) => new Promise((r) => setTimeout(r, ms)) } = {}) {
+  let last = null;
+  for (let attempt = 1; attempt <= attempts; attempt += 1) {
+    try {
+      const response = await fetcher(url);
+      if (response.status === 200 || !(response.status === 403 || response.status === 429 || response.status >= 500)) return response;
+      last = response;
+    } catch (error) {
+      last = { status: 0, bytes: 0, encoding: "identity", error: String(error?.message || error) };
+    }
+    if (attempt < attempts) await sleep(backoffMs * attempt);
+  }
+  return last;
+}
+
+export async function measureContentByteWeight(networkItems, origin, fetcher = fetchWireBodyBytes, retryOptions = {}) {
   const seen = new Set();
   const requests = [];
   for (const item of networkItems || []) {
@@ -84,9 +119,9 @@ export async function measureContentByteWeight(networkItems, origin, fetcher = f
   let contentBytes = 0;
   const measured = [];
   for (const request of requests) {
-    const response = await fetcher(request.url);
+    const response = await fetchWithRetry(fetcher, request.url, retryOptions);
     if (response.status !== 200) {
-      return { content_byte_weight: null, requests: measured, error: `payload refetch ${request.url} -> ${response.status}` };
+      return { content_byte_weight: null, requests: measured, error: `payload refetch ${request.url} -> ${response.status}${response.error ? ` (${response.error})` : ""}` };
     }
     contentBytes += response.bytes;
     measured.push({ ...request, content_bytes: response.bytes, encoding: response.encoding });
@@ -104,23 +139,24 @@ export function headerByteWeight(totalByteWeight, contentByteWeight) {
 }
 
 /**
- * Measured network allowance for the LCP budget in runtime mode:
- * observed document server latency (TTFB minus one observed RTT) plus one
- * simulated RTT for TLS when the origin is https. Zero in lab mode.
+ * Measured network allowance for the LCP budget in runtime mode: the median
+ * OBSERVED origin latency of the run (`network-server-latency`), capped at
+ * LCP_ALLOWANCE_CAP_MS. Zero in lab mode, zero when the audit is absent.
  */
-export function lcpNetworkAllowanceMs({ audits, origin, runtimeMode }) {
-  if (!runtimeMode) return { allowance_ms: 0, observed_ttfb_ms: null, observed_rtt_ms: null, tls_rtt_ms: 0 };
-  const metrics = audits?.metrics?.details?.items?.[0] || {};
-  const observedTtfb = Number(metrics.timeToFirstByte);
+export function lcpNetworkAllowanceMs({ audits, runtimeMode }) {
+  const observed = Number(audits?.["network-server-latency"]?.numericValue);
   const observedRtt = Number(audits?.["network-rtt"]?.numericValue);
-  const serverLatency = Number.isFinite(observedTtfb)
-    ? Math.max(0, observedTtfb - (Number.isFinite(observedRtt) ? observedRtt : 0))
-    : 0;
-  const tlsRtt = /^https:/i.test(String(origin)) ? SIMULATED_RTT_MS : 0;
+  if (!runtimeMode) {
+    return { allowance_ms: 0, observed_server_latency_ms: Number.isFinite(observed) ? observed : null, observed_rtt_ms: Number.isFinite(observedRtt) ? observedRtt : null, capped: false };
+  }
+  if (!Number.isFinite(observed) || observed < 0) {
+    return { allowance_ms: 0, observed_server_latency_ms: null, observed_rtt_ms: Number.isFinite(observedRtt) ? observedRtt : null, capped: false };
+  }
+  const capped = observed > LCP_ALLOWANCE_CAP_MS;
   return {
-    allowance_ms: Math.round(serverLatency + tlsRtt),
-    observed_ttfb_ms: Number.isFinite(observedTtfb) ? observedTtfb : null,
+    allowance_ms: Math.floor(Math.min(observed, LCP_ALLOWANCE_CAP_MS)),
+    observed_server_latency_ms: observed,
     observed_rtt_ms: Number.isFinite(observedRtt) ? observedRtt : null,
-    tls_rtt_ms: tlsRtt,
+    capped,
   };
 }

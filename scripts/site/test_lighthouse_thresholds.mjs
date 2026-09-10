@@ -14,6 +14,7 @@ import {
   validateDeclaredBudget,
 } from "./lighthouse_thresholds.mjs";
 import { ROOT, deriveCoverage, loadPolicy } from "./interface_coverage.mjs";
+import { lcpNetworkAllowanceMs } from "./lighthouse_payload.mjs";
 
 const home = (run, performance, tbt_ms, longest_own_task_ms, extra = {}) => ({
   path: "/",
@@ -383,6 +384,21 @@ for (const row of process.env.LH_REQUIRE_RAW_EVIDENCE === "1" ? committedSummary
       `summary.json ${field} does not match ${filename}`,
     );
   }
+  // The budgets moved to derived quantities; they must stay recomputable.
+  const runtimeMode = Boolean(committedSummary.coverage?.runtime_evidence);
+  assert.equal(
+    row.lcp_network_allowance_ms,
+    lcpNetworkAllowanceMs({ audits, runtimeMode }).allowance_ms,
+    `summary.json lcp_network_allowance_ms does not match ${filename}`,
+  );
+  assert.ok(Array.isArray(row.payload_details) && row.payload_details.length === row.payload_requests, `summary.json payload_details missing for ${row.path}`);
+  assert.equal(
+    row.content_byte_weight,
+    row.payload_details.reduce((sum, item) => sum + item.content_bytes, 0),
+    `summary.json content_byte_weight is not the sum of its persisted requests for ${row.path}`,
+  );
+  const firstParty = new Set((audits["network-requests"]?.details?.items || []).filter((item) => item.statusCode === 200 && String(item.url).startsWith(committedSummary.base)).map((item) => item.url));
+  assert.equal(row.payload_details.length, firstParty.size, `summary.json payload_details do not cover the artifact's first-party requests for ${row.path}`);
 }
 
 // --- #508: the CLS budget is one declared number, enforced on live Chrome ---
@@ -495,6 +511,14 @@ for (const row of process.env.LH_REQUIRE_RAW_EVIDENCE === "1" ? committedSummary
   assert.ok(payloadErrors({ content_byte_weight: 140000 }).length === 0);
   assert.ok(evaluateLighthouseResults([row({ content_byte_weight: 140000 })], { homeRuns: 0, criticalRuns: 1, criticalByteWeightMax: 130000 })
     .errors.some((error) => error.includes("payload")), "a tighter declared content budget must bite");
+  // Fail closed on missing measurements (run 34517284468 failed only on CLS:
+  // a row that lost its CLS or performance audit must not pass silently).
+  const missingCls = evaluateLighthouseResults([{ ...home(1, 98, 55, 100), cls: undefined }, home(2, 98, 55, 100), home(3, 98, 55, 100)], { homeRuns: 3 });
+  assert.ok(missingCls.errors.some((e) => /CLS was not measured|home: CLS/.test(e)), JSON.stringify(missingCls.errors));
+  const missingPerf = evaluateLighthouseResults([home(1, undefined, 55, 100), home(2, 98, 55, 100), home(3, 98, 55, 100)], { homeRuns: 3 });
+  assert.ok(missingPerf.errors.some((e) => /performance was not measured|minimum performance/.test(e)), JSON.stringify(missingPerf.errors));
+  const nanLcp = evaluateLighthouseResults([{ ...home(1, 98, 55, 100), lcp_ms: NaN }, home(2, 98, 55, 100), home(3, 98, 55, 100)], { homeRuns: 3, criticalPaths: new Set(["/entregas/"]) });
+  assert.ok(nanLcp.errors.some((e) => e.startsWith("home: LCP")), "a home row without LCP fails the aggregate even outside the critical set");
   console.log("OK content_bytes_and_network_allowance");
 }
 
