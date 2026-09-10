@@ -200,3 +200,16 @@
   .deliverables-status>strong{margin-bottom:14px;font-size:clamp(1.35rem,1.9vw,1.7rem)}
   .deliverables-status ul{gap:8px;margin-bottom:14px;padding:14px 0}
 }
+
+/* Esquema ilustrativo da entrega. Mostra COMO o conteudo se organiza; nunca
+   passa por trabalho executado. O rotulo fica junto do esquema, nao numa nota
+   distante, porque e ali que a confusao aconteceria. */
+.capability-group__schema{margin:0 0 12px;padding:12px;border:1px solid #d8e0e6;border-radius:4px;background:#f7f9fb}
+.capability-group__schema-label{margin:0 0 8px;color:#435369;font-size:.78rem;line-height:1.5}
+.capability-group__schema-label strong{color:#1f2d3d}
+.capability-group__schema-title{margin:0 0 6px;color:#1f2d3d;font-size:.85rem;font-weight:600}
+.capability-group__schema-list{margin:0;padding-left:18px;display:grid;gap:6px}
+.capability-group__schema-list li{color:#435369;font-size:.82rem;line-height:1.5}
+.capability-group__schema-list strong{color:#1f2d3d}
+.capability-group__schema-note{margin:8px 0 0;color:#435369;font-size:.8rem;line-height:1.5}
+@media (max-width:600px){.capability-group__schema{padding:10px}}

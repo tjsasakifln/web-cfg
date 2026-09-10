@@ -245,7 +245,19 @@ def test_deliverables_library_distinguishes_services_examples_and_priced_offers(
 
     text = re.sub(r"<[^>]+>", " ", html)
     text = re.sub(r"\s+", " ", text)
-    assert all(term in text for term in ("Serviço, exemplo e oferta", "Ofertas com preço publicado"))
+    # Regra substituida (campanha 2026-09-10): "Servico, exemplo e oferta" era o
+    # rotulo do bloco "Como ler a pagina" -- a pagina ensinando a propria
+    # taxonomia comercial. A distincao tem de nascer da ORGANIZACAO e de rotulos
+    # locais claros, nao de um manual. O que se exige agora e que as tres coisas
+    # continuem visivelmente distintas na propria pagina.
+    assert all(term in text for term in (
+        "Serviços de engenharia",          # o trabalho realizado
+        "exemplos demonstrativos",         # o exemplo, identificado como tal
+        "Ofertas com preço publicado",     # a oferta precificada
+    )), text[:400]
+    # Contraprova: o manual do catalogo nao pode voltar.
+    assert "Como ler a página" not in text
+    assert "Serviço, exemplo e oferta" not in text
     assert all(term in text for term in ("Projetos, revisão e compatibilização", "Quantitativos e orçamento"))
     assert "54 frentes de trabalho" not in text
     assert "rol taxativo" not in text.casefold()

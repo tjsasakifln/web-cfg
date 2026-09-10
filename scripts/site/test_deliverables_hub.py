@@ -267,8 +267,16 @@ def test_hero_eyebrow_is_not_internal_catalog_jargon() -> None:
     eyebrow = re.search(r'<p class="eyebrow">([^<]+)</p>', html)
     assert eyebrow is not None, "hero eyebrow missing"
     text = eyebrow.group(1)
-    assert "vitrine" not in text.casefold(), text
-    assert re.search(r"entrega|exemplo", text, re.IGNORECASE), text
+    # Regra substituida (campanha 2026-09-10): exigir a palavra "entrega" ou
+    # "exemplo" no rotulo forcava vocabulario de catalogo na primeira linha --
+    # foi assim que "Entregas inspecionaveis" passou, sendo exatamente uma das
+    # frases que a campanha manda tirar. O que se exige agora e mais proximo da
+    # intencao original: nada de vocabulario de administracao do catalogo, e o
+    # rotulo tem de nomear o que o visitante encontra ou recebe.
+    lowered = text.casefold()
+    for jargon in ("vitrine", "catálogo", "portfólio", "inspecionáveis", "acervo"):
+        assert jargon not in lowered, text
+    assert re.search(r"entrega|exemplo|recebe|serviço|precisa", text, re.IGNORECASE), text
 
 def test_progressive_catalog_css_does_not_block_first_paint() -> None:
     html = _html()
@@ -288,7 +296,11 @@ def test_progressive_catalog_css_does_not_block_first_paint() -> None:
 def test_hub_is_honest_about_every_published_example() -> None:
     html = _html()
     for phrase in (
-        "Serviços que terminam em documentos utilizáveis",
+        # Regra substituida (campanha 2026-09-10): a frase anterior liderava pelo
+        # DOCUMENTO ("terminam em documentos utilizaveis") em vez da aplicacao do
+        # trabalho. O que o hub tem de dizer, antes das ofertas com preco, e para
+        # que serve a engenharia que a CONFENGE realiza.
+        "Projetos para orientar a execução, orçamentos para contratar com critério",
         "Ofertas com preço publicado",
         "Os preços e condições pertencem somente às ofertas que os exibem",
         "Radar de Licitações Prioritárias",
