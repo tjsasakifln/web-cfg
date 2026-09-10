@@ -482,3 +482,68 @@ Contexto real com `javaScriptEnabled: false`, viewport 390×844: o botão do men
 fica **oculto**, os quatro destinos ficam **visíveis** com altura medida
 (50, 50, 52 e 44 px) e **clicar navega de fato** — `/servicos-obras-publicas/`
 respondeu com o título esperado. Não é só presença no HTML.
+
+## Revisão adversarial do diff (2026-09-10, antes da integração)
+
+Três frentes independentes (robots/aceite; superfície pública, formulário e
+navegação; geradores, contratos e manifestos) revisaram o diff completo contra
+`origin/main`, reproduzindo cada achado no código ou no navegador antes de
+registrá-lo. Nenhuma correção foi feita por sintoma: cada uma tem causa, fonte
+corrigida, regeneração pelo processo oficial e contraprova que reprova o
+código anterior. Commit das correções: `e276a9fba`.
+
+### Leads que o servidor rejeitava (422, nada persistido)
+
+| onde | causa | correção | contraprova |
+|---|---|---|---|
+| `/entregas/`, cinco famílias "por proposta" | valores `SERVICO-*` desconhecidos do handler (e dois acima do limite de 16 do campo) | `SERV-*`; o handler os reconhece como **tipo de necessidade** com o mesmo valor da home e deriva a jornada dele, nunca do `operacao` oculto do formulário | `service_family_by_proposal_persisted` (5 famílias 201 e persistidas; id inexistente continua 422) |
+| `/servicos-obras-publicas/`, "ainda não sei" | valor `UNKNOWN` rejeitado num select `required` | opção vazia (entrega nula = pedido genérico), select sem `required` | gerador `--check` e `test:lead-function` |
+| quatro rotas B2G, contrato e prazo "(opcional)" | servidor exigia os dois | servidor aceita ausência; quando informados, seguem os formatos publicados (3+ caracteres; prazo válido e seguro) | `contract_product_optional_id_and_deadline_accepted`; `ab` e prazo passado continuam 422 |
+
+### Reclassificação silenciosa da jornada
+
+`data-set-journey="contrato"` no atalho de obras públicas preenchia a **primeira**
+opção da jornada, "problema urgente em contrato", para quem só declarou obra
+pública; `?jornada=outro` trocava "Outra necessidade" por "ainda não sei". A opção
+neutra de cada jornada com mais de uma opção ganha `data-journey-default` e o
+script a prefere. Contraprovas: estrutural
+(`test_stage_options_sharing_a_journey_declare_one_neutral_default`) e no
+navegador (`journey_default_stage_is_neutral`). O hash do bloco do formulário foi
+atualizado por revisão explícita: a única mudança é esse atributo em três opções;
+campos, consentimento, validação, envio e instrumentação não mudaram.
+
+### Menu móvel
+
+Com o painel aberto o botão fica inerte e o toque chega ao ancestral; o menu
+fechava com o foco no `<body>`. Passa a devolver o foco ao botão
+(`mobile_menu_toggle_tap_returns_focus`). `script.js` recompilado e recapturado
+(`35a8b63f4`).
+
+### Motor RFC 9309 e fontes de autorização
+
+- `$` só ancora no fim da regra (no meio é literal); especificidade pela regra
+  **normalizada** (`/%6Fps/` empata com `/ops/` e o empate favorece o Allow);
+  estrofes adjacentes do `_headers` não herdam o caminho anterior; origem exata
+  de 410 (`/ia`) não autoriza perder restrição sobre `/iainterna/`.
+- O canary do hub lia a linha do **slug filho**, sempre presente: o ramo "hub
+  fechado" nunca executava. Passa a linha exata do hub, com cinco cenários.
+- `npm run test:robots-policy` saía verde com o módulo inteiro pulado sem pacote;
+  `ROBOTS_PACKAGE_REQUIRED=1` reprova.
+- A docstring do gerador afirmava "keep the rest of the family Disallow", o que o
+  arquivo emitido nunca fez; passa a dizer a verdade: com o hub liberado os
+  filhos são rastreáveis de propósito (para que o 410 seja visto) e o fechamento
+  da família é o `X-Robots-Tag: noindex`.
+
+### Gates que tinham ficado mais fracos
+
+`Configurar` sai do verbo de próximo estado (sete dos oito rótulos revogados
+voltavam a passar); a contagem de âncoras nomeadas da triagem volta; o conceito
+de confiança da primeira dobra casa por palavra inteira (`art` não é `partes`);
+o rótulo do esquema ilustrativo sobe a 12,8 px; a nota do H1 de `/entregas/`
+volta a ser estilizada.
+
+### Verificado e limpo
+
+Re-pin do catálogo (só a redação de `CFG-D01`), geradores em `--check`, `%0A` no
+`mailto`, `proof.json` (uma frase permitida acrescentada), breadcrumb B2G,
+primeira dobra remedida (`876f8dd4f`, 25/25).
