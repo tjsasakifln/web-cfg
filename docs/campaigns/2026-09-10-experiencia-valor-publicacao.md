@@ -331,3 +331,52 @@ Isto é a **mesma restrição estrutural** que já bloqueia o rodapé e o breadc
 qualquer mudança no *shell* ou no CSS compartilhado exige reaprovação humana da
 análise publicada. As duas pendências destravam juntas, com um único ato de
 reaprovação.
+
+
+## Reconciliação das reprovações, por workflow, execução e candidato
+
+Nenhuma aprovação de release anterior vale como aprovação **deste** candidato.
+Onde a verificação não chegou a rodar sobre este código, o estado é
+`NÃO VERIFICADO` — não `aprovado por herança`.
+
+| workflow | execução | candidato | reprovação | classe | estado |
+|---|---|---|---|---|---|
+| site-ci | 34429246281 | `6e0cfee7b` | `test_whatsapp_contextual_on_home` | congelamento editorial: exigia uma de quatro frases de obra pública no canal geral | corrigido, regra substituída mais estrita |
+| site-ci | 34430208411 | `f407b660c` | `home missing data-set-journey="contrato"` | atributo movido do canal geral para o caminho B2G | corrigido, com contraprova |
+| site-ci | 34431466006 | `79f354d3a` | idem | mesma causa, correção ainda não publicada naquele momento | corrigido |
+| site-ci | todas as três | — | 7 × `MEASURED_FAIL` do *site-excellence scorecard* | **consequente**: o passo roda com `if: always()` e lê artefatos de navegador que o passo anterior, já abortado, nunca produziu | **NÃO VERIFICADO neste candidato** |
+| pSEO | 34431465970 | `79f354d3a` | `catalog_pin_hash:sha256:ee1beea1…` | pin de integridade do catálogo multivertical | re-pinado com prova, controle preservado |
+| pSEO | local, este candidato | `5ff24ffd3` | `engineering_deliveries_have_substance` | contagem de famílias 3 → 5 | corrigido, exigência estendida às cinco |
+
+### Sobre o scorecard
+
+As sete linhas `MEASURED_FAIL` (`census_artifact_drift`, `browser_evidence_missing` ×3,
+`accessibility_census_incomplete`, `csp_evidence_unavailable`,
+`deploy_identity_commit_drift`) **não são defeitos visuais novos**: elas dizem que
+a evidência não existia, porque o passo que a produz abortou antes. Isso não as
+torna aprovadas. Elas permanecem **verificações pendentes deste candidato** e só
+se resolvem quando o bloco de gates passar inteiro e o scorecard rodar com os
+artefatos presentes.
+
+### Sobre o pin do catálogo
+
+O controle **não foi removido**. Antes de re-pinar, foi verificado contra
+`origin/main` que apenas **um** entregável mudou (`CFG-D01`) e que preços, nomes
+públicos e prazos são byte a byte idênticos: a mudança é de redação voltada ao
+comprador (`ponto de revalidação` → `data em que a decisão precisa ser revista`),
+não de oferta. Os dois pins — `consumer-pin.json` e
+`consumer-conformance-fixture.json` — foram atualizados juntos, porque um sem o
+outro deixaria a conformidade divergente do catálogo.
+
+## Estado por categoria
+
+Separado como pedido, sem misturar os três níveis.
+
+| requisito | implementado | verificado no candidato | confirmado em produção |
+|---|---|---|---|
+| R — robots por política e por bytes | sim | sim, 24 + 66 testes | **não** |
+| E1 — navegação | sim (breadcrumb B2G resolvido; rodapé bloqueado) | sim | **não** |
+| E2 — valor e leitura | sim | sim | **não** |
+| E3 — demonstração honesta | sim, 5 famílias, 2 aceites separados | sim, 27 testes | **não** |
+| E4 — contato contextual | sim | sim | **não** |
+| E5 — usabilidade e compreensão | parcial | medido no candidato `5ff24ffd3`; refluxo com texto ampliado **em aberto** | **não** |
