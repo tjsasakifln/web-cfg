@@ -599,3 +599,19 @@ controle, permaneça alcançável, e que abrir por Enter não feche no mesmo eve
 A tentativa intermediária de manter o botão inerte e recuperar o foco pela
 geometria do clique foi descartada também por custo: estourava o orçamento de
 bytes da home (153.600) em 89 bytes, e o limite não foi elevado.
+
+### Retificação: opção neutra primeiro, e a jornada de `/entregas/` fora do bundle da home
+
+O orçamento Lighthouse da home (153.600 bytes) conta bytes **comprimidos**, e o
+código de preferência pela opção neutra mais o bloco de `/entregas/` no bundle
+global o estouravam em 42 a 109 bytes. Em vez de elevar o limite, as duas causas
+foram resolvidas na origem: (1) a opção neutra de cada jornada partilhada passa a
+vir **primeiro no HTML** ("Contrato em execução" antes de "Problema urgente em
+contrato"), e o preenchimento automático continua a escolher a primeira, sem
+marcador `data-journey-default` nem código extra; para `?jornada=outro` a primeira
+é a orientação ("Ainda não sei qual serviço preciso"); (2) a sincronização da
+jornada com a entrega escolhida em `/entregas/` vive num script **local àquela
+página**, emitido pelo gerador do catálogo com hash de CSP calculado no build,
+para que a home não pague por lógica que não usa. `script.js`: 77.258 → 76.580
+bytes. Contraprovas mantidas: `test_stage_options_sharing_a_journey_list_the_neutral_one_first`,
+`journey_default_stage_is_neutral`, `entregas_deliverable_option_drives_journey`.

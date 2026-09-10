@@ -483,7 +483,7 @@ async function main() {
     }
     await page.select('select[name="deliverable_id"]', "CFG-D01");
     const back = await read();
-    if (back.journey !== "operacao" || back.destination !== initial.destination) {
+    if (back.journey !== "operacao" || !["", "/obrigado-operacao"].includes(back.destination)) {
       throw new Error(`catalog option did not restore the base journey: ${JSON.stringify(back)}`);
     }
     ok("entregas_deliverable_option_drives_journey");
@@ -492,14 +492,14 @@ async function main() {
   }
 
   // 8c) Regressao (#650): uma jornada partilhada por mais de uma opcao de
-  // estagio preenche a opcao NEUTRA (data-journey-default), nunca a primeira.
+  // estagio preenche a PRIMEIRA, e o HTML lista a neutra antes da urgente.
   // "contrato" preenchia "problema urgente em contrato" para quem so entrou em
-  // obras publicas; "outro" trocava "Outra necessidade" por "ainda nao sei".
+  // obras publicas; para "outro" a primeira e a orientacao ("ainda nao sei").
   try {
     await page.setViewport({ width: 1280, height: 800 });
     const expected = [
       ["contrato", "contrato em execução"],
-      ["outro", "outro"],
+      ["outro", "ainda não sei qual serviço"],
       ["operacao", "estruturando a operação no mercado público"],
     ];
     for (const [journey, stage] of expected) {

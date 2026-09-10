@@ -587,12 +587,11 @@
       }
       const stage = form.querySelector('#estagio');
       if (stage && (forceStage || !stage.value)) {
-        // Varias opcoes partilham a mesma jornada (p. ex. "problema urgente em
-        // contrato" e "contrato em execucao"). A jornada sozinha nao autoriza
-        // escolher a mais grave: prefere-se a opcao marcada como neutra
-        // (data-journey-default); so na falta dela vale a primeira.
-        const candidates = [...stage.options].filter((o) => o.dataset.journey === j);
-        const opt = candidates.find((o) => 'journeyDefault' in o.dataset) || candidates[0];
+        // Varias opcoes partilham a mesma jornada (p. ex. "contrato em
+        // execucao" e "problema urgente em contrato"); vale a PRIMEIRA, e o
+        // HTML lista a neutra antes da urgente -- a jornada sozinha nao
+        // autoriza escolher a mais grave. Gate: test_home_conversion_contract.
+        const opt = [...stage.options].find((o) => o.dataset.journey === j);
         if (opt) stage.value = opt.value;
       }
     };
@@ -843,22 +842,6 @@
         applyJourneyToForm(el.getAttribute('data-set-journey'), true);
       });
     });
-
-    // A entrega escolhida pode declarar a jornada (data-journey na opcao). As
-    // familias "por proposta" de /entregas/ nao sao B2G: sem isto o formulario
-    // mantinha o "operacao" oculto, confirmava em /obrigado-operacao e informava
-    // a jornada errada ao analytics, enquanto o servidor gravava outra. Uma
-    // opcao sem jornada devolve a jornada base do formulario.
-    const deliverableSelect = form && form.querySelector('select[name="deliverable_id"]');
-    if (deliverableSelect) {
-      const baseJourney = form.elements.jornada ? form.elements.jornada.value : '';
-      const syncJourney = () => {
-        const opt = deliverableSelect.selectedOptions[0];
-        applyJourneyToForm((opt && opt.dataset.journey) || baseJourney);
-      };
-      deliverableSelect.addEventListener('change', syncJourney);
-      syncJourney();
-    }
 
     const pagePath = window.location.pathname || '/';
     const defaultCluster = clusterFromPath(pagePath);

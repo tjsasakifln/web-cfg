@@ -546,6 +546,11 @@ ${renderOfferShowcase(published, eightContract)}
 ${CATALOG_END}`;
 }
 
+// A entrega escolhida pode declarar a jornada (data-journey na opcao). As
+// familias "por proposta" nao sao B2G: sem isto o formulario mantinha o
+// "operacao" oculto, confirmava em /obrigado-operacao e informava a jornada
+// errada ao analytics, enquanto o servidor gravava outra. O script e local a
+// esta pagina (hash de CSP calculado no build) para nao pesar o bundle da home.
 export function renderSelect(registry) {
   const options = publishedVitrine(registry).map((entry) =>
     `<option value="${entry.deliverable_id}">${entry.catalog_number} · ${escapeHtml(entry.public_name_pt_br)}</option>`
@@ -560,6 +565,7 @@ export function renderSelect(registry) {
 <option value="SERV-SST" data-journey="sst">Segurança do trabalho</option>
 </optgroup>
 <optgroup label="Análises para obras públicas, com preço publicado">${options}</optgroup></select></label>
+<script>(function(){var s=document.querySelector('select[name="deliverable_id"]'),f=s&&s.form,h=f&&f.elements.jornada;if(!h)return;var b=h.value;s.addEventListener('change',function(){var o=s.selectedOptions[0],j=(o&&o.dataset.journey)||b,m=window.CONFENGE_JOURNEY_ACTIONS||{};h.value=j;f.setAttribute('data-success-destination',m[j]||'/obrigado');});})();</script>
 ${SELECT_END}`;
 }
 

@@ -328,6 +328,7 @@
 <option value="CFG-D06">06 · Mapa de Concorrentes Relevantes</option>
 <option value="CFG-D07">07 · Referências de Preços de Obras Públicas</option>
 <option value="CFG-D08">08 · Plano Executivo de Expansão</option></optgroup></select></label>
+<script>(function(){var s=document.querySelector('select[name="deliverable_id"]'),f=s&&s.form,h=f&&f.elements.jornada;if(!h)return;var b=h.value;s.addEventListener('change',function(){var o=s.selectedOptions[0],j=(o&&o.dataset.journey)||b,m=window.CONFENGE_JOURNEY_ACTIONS||{};h.value=j;f.setAttribute('data-success-destination',m[j]||'/obrigado');});})();</script>
 <!-- GENERATED:DELIVERABLE-SELECT:END -->
 <label>Nome <input id="nome" name="nome" required autocomplete="name"/></label>
 <label>Empresa <input id="empresa" name="empresa" autocomplete="organization"/></label>
