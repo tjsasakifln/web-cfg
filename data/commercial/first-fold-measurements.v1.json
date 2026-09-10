@@ -1,9 +1,9 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-09-10T04:20:26.306Z",
+  "measured_at": "2026-09-10T04:55:50.938Z",
   "measured_on": "2026-09-10",
-  "commit_sha": "05c5b8131499b445d2acbd3e19f1e7c92cd6b4c9",
+  "commit_sha": "c4f6755fcdc9a6d4d60f09a2ccf67b3d2f33dc9a",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "f168038814087e1b365d1de3042af9a3f3364743756e104711fecc0fb9fe7477",
@@ -42,8 +42,8 @@
     "diagnostico-b2g-expansao/index.html": "fe60cef824e78beff5d03ec679f1e430cad33b7754a748069654bbb293f28835",
     "diagnostico-pre-licitacao/index.html": "65c6ea2c235ef0db5629922ed18c578bde2ef585339d6adec86830014e1229f4",
     "diretoria-b2g/index.html": "72d1ffd411f911fd295b6ae13fd1318c28356aa007fbf73f71cac80e39f68197",
-    "entregas/index.html": "2c6e4cb08b91dc0b7453b4a14f3675feea4fd6a371ba2ab1cfe8e2570fdc5d5e",
-    "entregas/styles.css": "370c07fe81e8f3d39c2c6c6f4f7b05316ca30f93a8435f137ff3dae2d8cd2949",
+    "entregas/index.html": "858309d150165e7220e759d16f163ac7316187dabce9355b096411b87d93b8e4",
+    "entregas/styles.css": "1d46125ece51a9c568b8c1bec18a6f0315536472235d5e16505f8b011ff156a4",
     "index.html": "c50bde199694a72be3e0ba8cfecf812897d1bafa597388cfc6e97d7f458dbd18",
     "medicoes-glosas-obras-publicas/index.html": "fe3d3c644ac158dae63f85369301da200b5f4de025b0db3364b9cb3e3d929c61",
     "problemas-que-resolvemos/index.html": "fbd929bd17c6890969ee4b0f5c3647dca7ee81bf75b3a8ae4e124c38aef0b280",
@@ -310,7 +310,7 @@
     },
     {
       "route": "/entregas/",
-      "html_sha256": "2c6e4cb08b91dc0b7453b4a14f3675feea4fd6a371ba2ab1cfe8e2570fdc5d5e",
+      "html_sha256": "858309d150165e7220e759d16f163ac7316187dabce9355b096411b87d93b8e4",
       "measured_on": "2026-09-10",
       "viewports": {
         "1366x768": {
