@@ -4,6 +4,8 @@ import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
 import {
   CLS_CAP,
+  CONTENT_BYTES_CAP,
+  LCP_MS_CAP,
   CRITICAL_MONEY_PATHS,
   DECLARED_CLS_MAX,
   evaluateLighthouseResults,
@@ -26,6 +28,7 @@ const home = (run, performance, tbt_ms, longest_own_task_ms, extra = {}) => ({
   cls: extra.cls ?? 0,
   dom_elements: extra.dom_elements ?? 500,
   total_byte_weight: extra.total_byte_weight ?? 80 * 1024,
+  content_byte_weight: extra.content_byte_weight ?? extra.total_byte_weight ?? 80 * 1024,
   font_display_score: extra.font_display_score ?? 1,
   image_aspect_ratio: 1,
   image_size_responsive: 1,
@@ -62,6 +65,7 @@ const criticalPage = (path, performance, cls, extra = {}) => ({
   lcp_ms: extra.lcp_ms ?? 1600,
   dom_elements: extra.dom_elements ?? 500,
   total_byte_weight: extra.total_byte_weight ?? 80 * 1024,
+  content_byte_weight: extra.content_byte_weight ?? extra.total_byte_weight ?? 80 * 1024,
   font_display_score: extra.font_display_score ?? 1,
   ...extra,
   image_aspect_ratio: 1,
@@ -135,6 +139,7 @@ const entregas = (performance) => ({
   lcp_ms: 1600,
   dom_elements: 500,
   total_byte_weight: 80 * 1024,
+  content_byte_weight: 80 * 1024,
   font_display_score: 1,
   cls: 0,
   image_aspect_ratio: 1,
@@ -425,6 +430,7 @@ for (const row of process.env.LH_REQUIRE_RAW_EVIDENCE === "1" ? committedSummary
     lcp_ms: 1000,
     dom_elements: 500,
     total_byte_weight: 1000,
+    content_byte_weight: 1000,
     font_display_score: 1,
     image_aspect_ratio: 1,
     image_size_responsive: 1,
@@ -444,6 +450,43 @@ for (const row of process.env.LH_REQUIRE_RAW_EVIDENCE === "1" ? committedSummary
   console.log("OK declared_cls_budget_is_read_and_bites");
 }
 
+// --- 2026-09-10: payload is CONTENT bytes; LCP carries a measured network allowance ---
+{
+  const row = (extra) => criticalPage("/entregas/", 100, 0, extra);
+  const payloadErrors = (extra) =>
+    evaluateLighthouseResults([row(extra)], { homeRuns: 0, criticalRuns: 1 })
+      .errors.filter((error) => error.includes("payload"));
+  // Headers are not content: the same artifact must pass with any header overhead.
+  assert.equal(payloadErrors({ total_byte_weight: 201033, content_byte_weight: 150000 }).length, 0,
+    "header overhead in transferSize must not fail the content budget");
+  assert.ok(payloadErrors({ total_byte_weight: 150000, content_byte_weight: 153601 }).length > 0,
+    "content above the budget fails even when transfer is small");
+  assert.ok(payloadErrors({ total_byte_weight: 150000, content_byte_weight: undefined }).length > 0,
+    "a row without a content measurement fails closed");
+  assert.equal(payloadErrors({ total_byte_weight: 150000, content_byte_weight: 153600 }).length, 0,
+    "a row exactly on the content budget passes");
+  const lcpErrors = (extra) =>
+    evaluateLighthouseResults([row(extra)], { homeRuns: 0, criticalRuns: 1 })
+      .errors.filter((error) => error.includes("critical LCP"));
+  assert.ok(lcpErrors({ lcp_ms: 2400 }).length > 0, "lab mode: no allowance, 2400 fails");
+  assert.equal(lcpErrors({ lcp_ms: 2400, lcp_network_allowance_ms: 500 }).length, 0,
+    "runtime mode: the measured network allowance is subtracted");
+  assert.ok(lcpErrors({ lcp_ms: 2600, lcp_network_allowance_ms: 500 }).length > 0,
+    "the allowance never hides an artifact regression");
+  assert.match(lcpErrors({ lcp_ms: 2600, lcp_network_allowance_ms: 500 })[0], /network allowance 500ms/);
+  // The declared numbers are ceilings: loosening throws, tightening bites.
+  const declared = JSON.parse(readFileSync(new URL("../../data/site/design-system.json", import.meta.url), "utf8")).performance_budget;
+  assert.equal(declared.critical_content_bytes_max, CONTENT_BYTES_CAP);
+  assert.equal(declared.critical_lcp_max_ms, LCP_MS_CAP);
+  assert.throws(() => validateDeclaredBudget({ ...declared, critical_content_bytes_max: CONTENT_BYTES_CAP + 1 }), /exceeds cap/);
+  assert.throws(() => validateDeclaredBudget({ ...declared, critical_lcp_max_ms: LCP_MS_CAP + 1 }), /exceeds cap/);
+  assert.throws(() => validateDeclaredBudget({ ...declared, budget_notes: { ...declared.budget_notes, content_bytes: "" } }), /justification/);
+  assert.ok(payloadErrors({ content_byte_weight: 140000 }).length === 0);
+  assert.ok(evaluateLighthouseResults([row({ content_byte_weight: 140000 })], { homeRuns: 0, criticalRuns: 1, criticalByteWeightMax: 130000 })
+    .errors.some((error) => error.includes("payload")), "a tighter declared content budget must bite");
+  console.log("OK content_bytes_and_network_allowance");
+}
+
 console.log("LIGHTHOUSE_THRESHOLDS_OK");
 
 // Per-route DOM budget: /entregas/ is the catalogue, so its element count
@@ -451,7 +494,7 @@ console.log("LIGHTHOUSE_THRESHOLDS_OK");
 // money route must keep the shared 800 budget.
 {
   const base = {
-    performance: 100, lcp_ms: 1000, tbt_ms: 10, total_byte_weight: 1000,
+    performance: 100, lcp_ms: 1000, tbt_ms: 10, total_byte_weight: 1000, content_byte_weight: 1000,
     accessibility: 100, best_practices: 100, seo: 100,
   };
   const domErrors = (path, dom) => {

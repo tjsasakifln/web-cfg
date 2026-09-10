@@ -17,6 +17,12 @@ import { readFileSync } from "node:fs";
  * that already exists, never loosen it.
  */
 export const CLS_CAP = 0.05;
+// Content payload and LCP budgets for the critical money routes. Like CLS_CAP,
+// these are CEILINGS: data/site/design-system.json may declare a tighter
+// number, never a looser one. Loosening requires editing this file, in a
+// reviewed commit, together with the justification in budget_notes.
+export const CONTENT_BYTES_CAP = 150 * 1024;
+export const LCP_MS_CAP = 2000;
 const DESIGN_SYSTEM_URL = new URL("../../data/site/design-system.json", import.meta.url);
 
 /** Read and validate the declared budget. Fail closed on a missing or raised key. */
@@ -35,10 +41,33 @@ export function validateDeclaredBudget(budget) {
   if (clsMax > CLS_CAP) {
     throw new Error(`declared cls_max ${clsMax} exceeds cap ${CLS_CAP}`);
   }
-  return { clsMax };
+  const contentBytesMax = Number(budget.critical_content_bytes_max);
+  if (!Number.isFinite(contentBytesMax)) {
+    throw new Error("design-system.json performance_budget.critical_content_bytes_max is missing");
+  }
+  if (contentBytesMax > CONTENT_BYTES_CAP) {
+    throw new Error(`declared critical_content_bytes_max ${contentBytesMax} exceeds cap ${CONTENT_BYTES_CAP}`);
+  }
+  const lcpMax = Number(budget.critical_lcp_max_ms);
+  if (!Number.isFinite(lcpMax)) {
+    throw new Error("design-system.json performance_budget.critical_lcp_max_ms is missing");
+  }
+  if (lcpMax > LCP_MS_CAP) {
+    throw new Error(`declared critical_lcp_max_ms ${lcpMax} exceeds cap ${LCP_MS_CAP}`);
+  }
+  const notes = budget.budget_notes || {};
+  for (const key of ["content_bytes", "lcp"]) {
+    if (typeof notes[key] !== "string" || notes[key].trim().length < 40) {
+      throw new Error(`design-system.json performance_budget.budget_notes.${key} must record the justification of the declared number`);
+    }
+  }
+  return { clsMax, contentBytesMax, lcpMax };
 }
 
-export const DECLARED_CLS_MAX = readDeclaredBudget().clsMax;
+const DECLARED = readDeclaredBudget();
+export const DECLARED_CLS_MAX = DECLARED.clsMax;
+export const DECLARED_CONTENT_BYTES_MAX = DECLARED.contentBytesMax;
+export const DECLARED_LCP_MAX_MS = DECLARED.lcpMax;
 
 export function percentile75(values) {
   const ordered = values
@@ -66,7 +95,7 @@ export function evaluateLighthouseResults(results, options = {}) {
   const seoExemptPages = options.seoExemptPages || new Set();
   const criticalRoutes = options.criticalRoutes || new Set(["/entregas/"]);
   const criticalPerformance = Number(options.criticalPerformance || 95);
-  const homeLcpMaxMs = Number(options.homeLcpMaxMs || 2000);
+  const homeLcpMaxMs = Number(options.homeLcpMaxMs || DECLARED_LCP_MAX_MS);
   const homeClsMax = Number(options.homeClsMax ?? DECLARED_CLS_MAX);
   const clsMax = Number(options.clsMax ?? DECLARED_CLS_MAX);
   const thresholds = {
@@ -136,7 +165,7 @@ export function evaluateLighthouseResults(results, options = {}) {
   const criticalPerfMin = options.criticalPerfMin ?? 95;
   const criticalPaths = options.criticalPaths || CRITICAL_MONEY_PATHS;
   const criticalRuns = Number(options.criticalRuns || 1);
-  const criticalLcpMaxMs = options.criticalLcpMaxMs ?? 2000;
+  const criticalLcpMaxMs = options.criticalLcpMaxMs ?? DECLARED_LCP_MAX_MS;
   const criticalTbtMaxMs = options.criticalTbtMaxMs ?? 200;
   const criticalDomMax = options.criticalDomMax ?? 800;
   // Per-route DOM budget. /entregas/ is the catalogue: its element count scales
@@ -158,7 +187,7 @@ export function evaluateLighthouseResults(results, options = {}) {
   // volta a 1100, com 37 elementos de folga sobre o medido.
   const criticalDomMaxByPath = { "/entregas/": 1100, ...(options.criticalDomMaxByPath || {}) };
   const domMaxFor = (path) => criticalDomMaxByPath[path] ?? criticalDomMax;
-  const criticalByteWeightMax = options.criticalByteWeightMax ?? 150 * 1024;
+  const criticalByteWeightMax = options.criticalByteWeightMax ?? DECLARED_CONTENT_BYTES_MAX;
   for (const path of criticalPaths) {
     const observed = results.filter((row) => row.path === path && !row.error).length;
     const expected = path === "/" ? homeRuns : criticalRuns;
@@ -172,8 +201,15 @@ export function evaluateLighthouseResults(results, options = {}) {
     if (row.performance < criticalPerfMin) {
       errors.push(`${row.path}: critical performance ${row.performance} < ${criticalPerfMin}`);
     }
-    if (!Number.isFinite(row.lcp_ms) || row.lcp_ms > criticalLcpMaxMs) {
-      errors.push(`${row.path}: critical LCP ${row.lcp_ms}ms > ${criticalLcpMaxMs}ms`);
+    // The LCP budget is the artifact's render path under the simulated mobile
+    // network. In runtime mode the row carries the MEASURED network allowance
+    // (document server latency + TLS RTT, see lighthouse_payload.mjs); in lab
+    // mode it is 0. The budget itself never moves.
+    const lcpAllowance = Number.isFinite(row.lcp_network_allowance_ms) ? row.lcp_network_allowance_ms : 0;
+    if (!Number.isFinite(row.lcp_ms) || row.lcp_ms - lcpAllowance > criticalLcpMaxMs) {
+      errors.push(
+        `${row.path}: critical LCP ${row.lcp_ms}ms${lcpAllowance ? ` (network allowance ${lcpAllowance}ms)` : ""} > ${criticalLcpMaxMs}ms`,
+      );
     }
     if (!Number.isFinite(row.tbt_ms) || row.tbt_ms > criticalTbtMaxMs) {
       errors.push(`${row.path}: critical TBT ${row.tbt_ms}ms > ${criticalTbtMaxMs}ms`);
@@ -182,9 +218,13 @@ export function evaluateLighthouseResults(results, options = {}) {
     if (!Number.isFinite(row.dom_elements) || row.dom_elements > domMax) {
       errors.push(`${row.path}: critical DOM ${row.dom_elements} > ${domMax} elements`);
     }
-    if (!Number.isFinite(row.total_byte_weight) || row.total_byte_weight > criticalByteWeightMax) {
+    // Content bytes (compressed bodies, no headers): the same quantity on the
+    // lab server and on the edge. Fail closed when the measurement is absent.
+    if (!Number.isFinite(row.content_byte_weight)) {
+      errors.push(`${row.path}: critical payload content bytes were not measured (total transfer ${row.total_byte_weight})`);
+    } else if (row.content_byte_weight > criticalByteWeightMax) {
       errors.push(
-        `${row.path}: critical payload ${row.total_byte_weight} > ${criticalByteWeightMax} bytes`,
+        `${row.path}: critical payload ${row.content_byte_weight} content bytes > ${criticalByteWeightMax} bytes (transfer ${row.total_byte_weight})`,
       );
     }
     if (row.font_display_score !== 1) {

@@ -34,6 +34,26 @@ Any unsupported selector, status, conditional redirect, placeholder, unsafe
 query merge, duplicate or conflict exits with a nominal `HC_*` error. There is
 no fallback output.
 
+## Document-only headers
+
+`Content-Security-Policy`, `X-Frame-Options`, `Permissions-Policy` and
+`Referrer-Policy` are enforced by a browser only on a document. The renderer
+therefore emits `map $sent_http_content_type $confenge_document_marker`, keys
+those four header maps on `"$confenge_document_marker$request_uri"` and puts the
+global value under a trailing `~^html:` entry, with each scoped selector
+anchored behind the same `html:` prefix and `default ""` for everything else —
+nginx omits an `add_header` whose value evaluates to empty.
+
+A document (including the custom 404/410 bodies) keeps the exact same header
+bytes as before. Every other response — stylesheet, script, font, image, JSON,
+webmanifest and the `text/plain` redirect bodies — no longer carries ~6 KB of
+headers no user agent would act on. Every other header, `X-Content-Type-Options`
+and `Strict-Transport-Security` included, is still emitted unconditionally.
+
+`npm run host-contract:nginx-test` guards this with `NGINX_HOME_HEADER_BYTES`:
+it measures the wire header bytes of the home page's critical resources and
+fails if any non-document response among them exceeds 1024 bytes.
+
 ## Verification commands
 
 ```bash
@@ -45,8 +65,9 @@ The second command renders the pack, validates it with Nginx 1.27 and runs
 containerized HTTP probes for Pretty URLs, `/obrigado`, 410/custom 404,
 missing-asset cache, fragments/query strings, `/intranet` and legacy-host
 canonization. Redirect responses retain 301/302 while their effective cache,
-CSP, HSTS, X-Robots and security headers are sourced from the same normalized
-`_headers` selectors as static responses. The same container then runs the full
+HSTS, X-Robots and security headers are sourced from the same normalized
+`_headers` selectors as static responses; being `text/plain`, they carry none of
+the four document-only headers. The same container then runs the full
 production-cutover suite in HTTP pre-DNS Host-header mode, including release
 SHA, artifact hash and host architecture identity.
 

@@ -86,6 +86,36 @@ closure, release/file manifests, generated nginx snippets, contract versions
 and stage/verify/promote/rollback scripts. Persistent records live in the
 mode-0700 `/var/lib/confenge-web`; controls and evidence live outside releases.
 
+## Post-promote runtime acceptance: what is measured, and where
+
+After `--operation promote`, the workflow reconciles every served HTML byte
+against the exact artifact and then runs Lighthouse **on the public origin**
+(`scripts/site/runtime_lighthouse_acceptance.mjs` →
+`scripts/site/run_lighthouse.mjs`). The same runner and the same evaluator
+(`scripts/site/lighthouse_thresholds.mjs`) judge the lab run in `site-ci` and
+the edge run here, with the same budgets read from
+`data/site/design-system.json` (`performance_budget`), which may only tighten
+the caps coded in `lighthouse_thresholds.mjs`.
+
+Two measurements are deliberately made identical on both sides
+(`scripts/site/lighthouse_payload.mjs`):
+
+- **Content payload** = compressed bodies of every first-party response the
+  page loads, re-fetched and counted on the wire. Lighthouse's
+  `total-byte-weight` also counts response headers; on 2026-09-10 (run
+  34501989732) the same artifact measured 153,642 transfer bytes in the lab and
+  201,033 on the edge because a 5.3 KB CSP travelled on every asset. Headers are
+  a host-contract concern: the generated nginx contract now sends document-only
+  headers (CSP, X-Frame-Options, Permissions-Policy, Referrer-Policy) only to
+  `text/html`, and `validate-nginx.mjs` fails when a non-document response of
+  the home's critical set exceeds 1 KiB of headers.
+- **LCP** = the artifact's render path under the simulated mobile network. On
+  the edge the simulation also contains the observed document server latency
+  (edge geography, origin distance) and one TLS round trip; those two terms are
+  measured from the run itself and recorded as `lcp_network_allowance_ms` on the
+  row. The budget number never moves; the allowance is evidence, visible in
+  `netcup-runtime-acceptance-<sha>` and in the summary rows.
+
 ## One-time host provisioning (do not run from a docs PR)
 
 ### Versioned controller execution (2026-09-09)

@@ -5,6 +5,7 @@ import { resolve } from "node:path";
 import { buildHostContract } from "./contract.mjs";
 import { extractSeoSignals } from "./html-seo.mjs";
 import { MATERIAL_HEADERS, classifyResponseHeaders } from "./origin-client.mjs";
+import { DOCUMENT_ONLY_HEADERS } from "./nginx.mjs";
 
 function bodyHash(body) {
   return createHash("sha256").update(body).digest("hex");
@@ -125,7 +126,17 @@ export function compareResponses(testCase, baseline, candidate, { strictHeaderIn
   compareValue(differences, "status", baseline.status, candidate.status);
   const baselineHeaders = classifyResponseHeaders(baseline.headers);
   const candidateHeaders = classifyResponseHeaders(candidate.headers);
+  // Document-only headers (CSP, X-Frame-Options, Permissions-Policy,
+  // Referrer-Policy) are policy for text/html documents; browsers ignore them
+  // on assets and the canonical host no longer sends them there. On a
+  // non-document response the candidate must NOT carry them; the legacy
+  // baseline may, and that is not a parity defect.
+  const candidateIsDocument = /^text\/html\b/i.test(String(candidateHeaders.material["content-type"] || ""));
   for (const name of MATERIAL_HEADERS) {
+    if (DOCUMENT_ONLY_HEADERS.has(name) && !candidateIsDocument) {
+      compareValue(differences, `header:${name}`, null, candidateHeaders.material[name]);
+      continue;
+    }
     compareValue(differences, `header:${name}`, baselineHeaders.material[name], candidateHeaders.material[name]);
   }
   if (strictHeaderInventory) {

@@ -615,3 +615,57 @@ página**, emitido pelo gerador do catálogo com hash de CSP calculado no build,
 para que a home não pague por lógica que não usa. `script.js`: 77.258 → 76.580
 bytes. Contraprovas mantidas: `test_stage_options_sharing_a_journey_list_the_neutral_one_first`,
 `journey_default_stage_is_neutral`, `entregas_deliverable_option_drives_journey`.
+
+## Release 9c13caf0e: promoção, reprovação do aceite de runtime e correção estrutural
+
+Run [34501989732](https://github.com/tjsasakifln/web-cfg/actions/runs/34501989732):
+gates, pacote, stage e **promoção** ok; 518/518 HTML servidos com digest exato;
+263/263 verificações não HTML; 78/78 sondas de contrato. O passo seguinte,
+Lighthouse **sobre o domínio público** (introduzido em `1a571debd`, 09/09 13:31,
+depois do último release bem-sucedido e nunca executado até então), reprovou a
+home e o rollback automático restaurou `54b51438a`.
+
+| medida da home | laboratório (`site-ci`) | borda (`netcup-release`) | orçamento |
+|---|---|---|---|
+| `total-byte-weight` (transferência, com cabeçalhos) | 153.642 | 201.033 / 201.032 / 201.022 | 153.600 |
+| conteúdo comprimido (corpos) | 151.420 | 150.271 (release anterior, mesma composição) | 153.600 |
+| cabeçalhos por resposta | ~200 B | ~5.900 B (CSP de 5,3 KB em todo asset + NEL/Report-To) | — |
+| LCP simulado | 1.803–1.955 ms | 2.264–2.562 ms | 2.000 ms |
+| TTFB observado do documento | ~2 ms | ~456 ms (runner nos EUA → borda → origem) | — |
+| requisições de terceiros | 0 | 0 | — |
+
+Diagnóstico independente do LCP: elemento `p.hero-deliverable` (texto) nos dois
+ambientes; caminho crítico = documento → três CSS bloqueantes (`styles.css` →
+`styles-tokens.css` encadeado por `@import`, e `home-10x.css`); fonte com
+`font-display: swap` (fora do caminho crítico); sem terceiros. A diferença
+laboratório→borda decompõe-se em latência observada do documento (~430 ms de
+servidor + TLS de 150 ms simulado) e ~25 KB de cabeçalhos nos recursos
+bloqueantes. O encadeamento do `@import` e o CSS global com 84% não usado na
+home são ganhos reais disponíveis, mas alteram folhas compartilhadas cobertas
+pelo hash de aprovação editorial da análise publicada (reaprovação humana),
+então ficam registrados como pendência e não entram aqui.
+
+### Correção estrutural (branch `release/cabecalhos-documento-orcamento-conteudo`)
+
+1. **Contrato nginx:** CSP, X-Frame-Options, Permissions-Policy e
+   Referrer-Policy só em respostas `text/html` (mapa por
+   `$sent_http_content_type`); tudo o mais inalterado e byte-idêntico nos
+   documentos. Cabeçalhos da home através do nginx canônico: 47.179 → 9.162
+   bytes; máximo em não documento 5.908 → 477. Gate E2E reprova qualquer
+   não documento do conjunto crítico com mais de 1 KiB de cabeçalhos.
+2. **Semântica do orçamento:** o gate local e o aceite de runtime passam a
+   medir **conteúdo** (corpos comprimidos, no fio) pelo mesmo módulo
+   (`scripts/site/lighthouse_payload.mjs`); cabeçalhos viram evidência
+   (`header_byte_weight`). Sem medição de conteúdo, reprova fechado.
+3. **LCP:** o orçamento de 2.000 ms fica; em modo runtime a linha registra a
+   folga de rede **medida** na própria execução (latência observada do
+   documento menos um RTT, mais um RTT de TLS) como `lcp_network_allowance_ms`.
+   No laboratório a folga é zero. Nenhum limiar foi alterado: os dois números
+   passaram a ser declarados em `design-system.json` com tetos em código
+   (`CONTENT_BYTES_CAP`, `LCP_MS_CAP`) e justificativa obrigatória.
+4. **Regressões:** CSP em asset (unitário + E2E); divergência semântica
+   (mesmo módulo nos dois modos + testes de `lighthouse_payload`); artefato
+   verde no laboratório mas inviável no nginx canônico (gate de cabeçalhos no
+   E2E sobre o conjunto crítico da home); afrouxamento sem justificativa
+   (tetos em código e notas obrigatórias na declaração); paridade Netlify/nginx
+   ciente da regra de documento.

@@ -20,6 +20,24 @@ const BANNER = [
 const NGINX_MAP_VALUE_CHUNK_BYTES = 3000;
 const HOST_ONLY_STATIC_CONTROL_PATHS = ["/_headers", "/_redirects"];
 
+// A browser only honours these four headers on a document. Emitting them on a
+// stylesheet, script, font, image or JSON response changes nothing a user agent
+// enforces and costs ~6 KB of transfer per response, which the home page paid
+// on every critical resource. They stay byte-identical on documents; every
+// other header keeps being emitted unconditionally.
+export const DOCUMENT_ONLY_HEADERS = new Set([
+  "content-security-policy",
+  "x-frame-options",
+  "permissions-policy",
+  "referrer-policy",
+]);
+// nginx map keys are plain strings, so the document decision is prefixed onto
+// $request_uri and the per-header maps match on the combined value. nginx omits
+// an add_header whose evaluated value is empty, which is what a non-document
+// response resolves to.
+const DOCUMENT_MARKER_VARIABLE = "$confenge_document_marker";
+const DOCUMENT_MARKER_PREFIX = "html:";
+
 function escapeLiteral(value) {
   return value.replaceAll("\\", "\\\\").replaceAll('"', '\\"').replaceAll("$", "\\$");
 }
@@ -146,6 +164,17 @@ function requestUriRegex(selector) {
   return `~^${regexEscape(base)}/.*${suffix}`;
 }
 
+/** Same selector regex, anchored behind the document marker instead of "/". */
+function documentRequestUriRegex(selector) {
+  return `~^${regexEscape(DOCUMENT_MARKER_PREFIX)}${requestUriRegex(selector).slice(2)}`;
+}
+
+function headerMapSource(lowerName) {
+  return DOCUMENT_ONLY_HEADERS.has(lowerName)
+    ? `"${DOCUMENT_MARKER_VARIABLE}$request_uri"`
+    : "$request_uri";
+}
+
 function headerValueForSelector(contract, selector, lowerName) {
   return effectiveHeadersForSelector(contract, selector).find(
     (header) => header.name.toLowerCase() === lowerName,
@@ -225,18 +254,31 @@ export function renderHeaders(contract) {
       (a.match === b.match ? 0 : a.match === "exact" ? -1 : 1) ||
       a.order - b.order,
     );
+  lines.push(`map $sent_http_content_type ${DOCUMENT_MARKER_VARIABLE} {`);
+  lines.push('  default "";');
+  lines.push(`  "~*^text/html" ${quoted(DOCUMENT_MARKER_PREFIX)};`);
+  lines.push("}", "");
   for (const { lower, name } of allHeaderNames(contract)) {
+    const documentOnly = DOCUMENT_ONLY_HEADERS.has(lower);
     const defaultValue = global.headers.find((header) => header.name.toLowerCase() === lower)?.value || "";
     const chunkCount = headerChunkCount(contract, lower);
     const defaultChunks = splitHeaderValue(defaultValue);
     for (let index = 0; index < chunkCount; index += 1) {
-      lines.push(`map $request_uri ${headerChunkVariable(name, index)} {`);
-      lines.push(`  default ${quoted(defaultChunks[index] || "")};`);
+      lines.push(`map ${headerMapSource(lower)} ${headerChunkVariable(name, index)} {`);
+      // A document-only header falls back to nothing: the marker, not the
+      // default, is what carries the global value onto a text/html response.
+      lines.push(`  default ${quoted(documentOnly ? "" : (defaultChunks[index] || ""))};`);
       for (const selector of scoped) {
         const value = headerValueForSelector(contract, selector, lower);
         if (value === undefined || value === defaultValue) continue;
         const chunks = splitHeaderValue(value);
-        lines.push(`  ${requestUriRegex(selector)} ${quoted(chunks[index] || "")};`);
+        const regex = documentOnly ? documentRequestUriRegex(selector) : requestUriRegex(selector);
+        lines.push(`  ${regex} ${quoted(chunks[index] || "")};`);
+      }
+      // nginx evaluates map regexes in source order, so the catch-all document
+      // entry must come last or it would shadow every scoped selector above.
+      if (documentOnly) {
+        lines.push(`  ~^${regexEscape(DOCUMENT_MARKER_PREFIX)} ${quoted(defaultChunks[index] || "")};`);
       }
       lines.push("}", "");
     }
@@ -246,6 +288,12 @@ export function renderHeaders(contract) {
 
 function redirectResponseDirectives(contract, indent = "  ") {
   const policy = contract.resolution.redirectResponses;
+  // A redirect body is served with the redirect policy's own default_type
+  // (text/plain today), so it is not a document: the four document-only maps
+  // resolve to "" here and nginx drops those add_header lines. Every other
+  // header a redirect response carries today is still emitted, and they must
+  // stay listed because add_header in a location replaces, not extends, the
+  // inherited server-level set.
   const lines = [
     `${indent}types {}`,
     `${indent}default_type ${quoted(policy.contentType)};`,
