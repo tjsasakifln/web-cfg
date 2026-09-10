@@ -584,3 +584,18 @@ Riscos que a auditoria declara **não verificáveis antes da promoção** e que 
 aceite pós-deploy cobre: fechamento da família de análises só por
 `X-Robots-Tag` no host servido; caminho de 503 do armazenamento em produção;
 identidade do artefato servido (`build-info`/`runtime-info` = SHA de `main`).
+
+### Retificação: o botão do menu deixa de ficar inerte
+
+A tabela de cenários de `inert` acima contava **7** elementos inertes com o
+painel aberto porque o próprio botão do menu estava entre eles. Isso o tornava
+um controle visível que nenhuma tecnologia assistiva alcançava, e o toque nele
+chegava ao ancestral e fechava o menu com o foco perdido no `<body>` (achado da
+revisão adversarial). A correção na causa retira o botão da lista: ele é o
+controle do próprio diálogo (mostra o X, `aria-expanded`, `aria-controls`) e
+trata o próprio clique, mantendo o foco. Com o painel aberto ficam **6**
+elementos inertes; o gate exige que nada focável fora do diálogo, exceto esse
+controle, permaneça alcançável, e que abrir por Enter não feche no mesmo evento.
+A tentativa intermediária de manter o botão inerte e recuperar o foco pela
+geometria do clique foi descartada também por custo: estourava o orçamento de
+bytes da home (153.600) em 89 bytes, e o limite não foi elevado.

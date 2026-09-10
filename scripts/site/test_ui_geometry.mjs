@@ -417,9 +417,10 @@ async function main() {
     fail("mobile_menu_escape", e.message || e);
   }
 
-  // 8b) Regressao (#650): com o painel aberto o botao do menu fica inerte e o
-  // toque chega ao ancestral. Ainda assim e o botao que o visitante tocou:
-  // o menu fecha e o foco volta para ele, em vez de cair no <body>.
+  // 8b) Regressao (#650): o botao do menu e o controle do proprio dialogo e
+  // nao pode ficar inerte com o painel aberto; o toque nele fecha o menu e o
+  // foco fica nele, em vez de cair no <body>. Tudo o mais fora do dialogo e
+  // inerte.
   try {
     await page.setViewport({ width: 390, height: 844 });
     await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded" });
@@ -435,7 +436,7 @@ async function main() {
       const menu = document.querySelector(".mobile-nav");
       const focusable = [...document.querySelectorAll("a[href], button, input, select, textarea, [tabindex]:not([tabindex='-1'])")];
       return focusable
-        .filter((el) => !(menu && menu.contains(el)) && el.offsetParent !== null && !el.closest("[inert]"))
+        .filter((el) => !(menu && menu.contains(el)) && !el.classList.contains("menu-toggle") && el.offsetParent !== null && !el.closest("[inert]"))
         .map((el) => `${el.tagName.toLowerCase()}${el.className ? "." + String(el.className).split(" ")[0] : ""}`);
     });
     if (leaked.length) throw new Error(`focusable elements outside the open dialog are not inert: ${leaked.join(", ")}`);

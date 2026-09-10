@@ -127,10 +127,13 @@
     // hash de aprovacao editorial da analise publicada.
     let inertApplied = [];
     let closeButton = null;
+    // O botao do menu NAO entra: e o controle do proprio dialogo (mostra o X,
+    // aria-expanded e aria-controls). Torna-lo inerte deixava um controle
+    // visivel que nenhuma tecnologia assistiva alcancava e cujo toque chegava
+    // ao ancestral, fechando o menu com o foco perdido no body.
     const backdropCandidates = () => [
       ...document.querySelectorAll('main, footer, .whatsapp-float, .skip-link, .site-head .brand, .site-head .button, header .brand, header .button'),
-      toggle,
-    ].filter((element) => element && !element.contains(menu) && !menu.contains(element));
+    ].filter((element) => element && element !== toggle && !element.contains(menu) && !menu.contains(element));
     // Os dois lados importam: nao tornar inerte um ANCESTRAL do dialogo, e
     // nao alcancar nada DENTRO dele. O seletor 'header .button' pegava a CTA
     // 'Solicitar proposta' que vive dentro do proprio painel, deixando-a
@@ -199,19 +202,7 @@
           first.focus();
         }
       });
-      document.addEventListener('click', (event) => {
-        if (toggle.getAttribute('aria-expanded') !== 'true' || menu.contains(event.target)) return;
-        // O clique que ABRE o menu borbulha ate aqui com aria-expanded ja em
-        // "true": o proprio botao trata esse clique, e este ouvinte nao pode
-        // fecha-lo de volta.
-        if (toggle.contains(event.target)) return;
-        // Com o painel aberto o botao esta inerte e o toque chega ao
-        // ancestral; ainda assim e o botao que o visitante tocou, entao o
-        // foco volta para ele, como no fechamento por Escape.
-        const box = toggle.getBoundingClientRect();
-        closeMenu(event.clientX >= box.left && event.clientX <= box.right
-          && event.clientY >= box.top && event.clientY <= box.bottom);
-      });
+      document.addEventListener('click', (event) => { if (toggle.getAttribute('aria-expanded') === 'true' && !menu.contains(event.target) && !toggle.contains(event.target)) closeMenu(); });
       window.addEventListener('resize', () => { if (window.innerWidth > 900) closeMenu(); }, { passive: true });
     }
     const currentYear = String(new Date().getFullYear());
@@ -600,8 +591,8 @@
         // contrato" e "contrato em execucao"). A jornada sozinha nao autoriza
         // escolher a mais grave: prefere-se a opcao marcada como neutra
         // (data-journey-default); so na falta dela vale a primeira.
-        const candidates = [...stage.options].filter((o) => o.getAttribute('data-journey') === j);
-        const opt = candidates.find((o) => o.hasAttribute('data-journey-default')) || candidates[0];
+        const candidates = [...stage.options].filter((o) => o.dataset.journey === j);
+        const opt = candidates.find((o) => 'journeyDefault' in o.dataset) || candidates[0];
         if (opt) stage.value = opt.value;
       }
     };
@@ -859,12 +850,11 @@
     // a jornada errada ao analytics, enquanto o servidor gravava outra. Uma
     // opcao sem jornada devolve a jornada base do formulario.
     const deliverableSelect = form && form.querySelector('select[name="deliverable_id"]');
-    const journeyHidden = form && form.querySelector('#jornada-hidden');
-    if (deliverableSelect && journeyHidden) {
-      const baseJourney = journeyHidden.value;
+    if (deliverableSelect) {
+      const baseJourney = form.elements.jornada ? form.elements.jornada.value : '';
       const syncJourney = () => {
-        const opt = deliverableSelect.options[deliverableSelect.selectedIndex];
-        applyJourneyToForm((opt && opt.getAttribute('data-journey')) || baseJourney);
+        const opt = deliverableSelect.selectedOptions[0];
+        applyJourneyToForm((opt && opt.dataset.journey) || baseJourney);
       };
       deliverableSelect.addEventListener('change', syncJourney);
       syncJourney();
