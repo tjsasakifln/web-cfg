@@ -209,9 +209,8 @@
         // ancestral; ainda assim e o botao que o visitante tocou, entao o
         // foco volta para ele, como no fechamento por Escape.
         const box = toggle.getBoundingClientRect();
-        const onToggle = event.clientX >= box.left && event.clientX <= box.right &&
-          event.clientY >= box.top && event.clientY <= box.bottom;
-        closeMenu(onToggle);
+        closeMenu(event.clientX >= box.left && event.clientX <= box.right
+          && event.clientY >= box.top && event.clientY <= box.bottom);
       });
       window.addEventListener('resize', () => { if (window.innerWidth > 900) closeMenu(); }, { passive: true });
     }
@@ -856,30 +855,19 @@
 
     // A entrega escolhida pode declarar a jornada (data-journey na opcao). As
     // familias "por proposta" de /entregas/ nao sao B2G: sem isto o formulario
-    // mantinha o "operacao" oculto, confirmava em /obrigado-operacao (pagina
-    // que promete diagnostico de operacao em obra publica) e informava a
-    // jornada errada ao analytics, enquanto o servidor gravava outra.
-    if (form) {
-      const deliverableSelect = form.querySelector('select[name="deliverable_id"]');
-      const journeyHidden = form.querySelector('#jornada-hidden');
-      if (deliverableSelect && journeyHidden) {
-        const baseJourney = journeyHidden.value;
-        const baseDestination = form.getAttribute('data-success-destination');
-        const syncJourneyToDeliverable = () => {
-          const opt = deliverableSelect.options[deliverableSelect.selectedIndex];
-          const j = opt ? opt.getAttribute('data-journey') : '';
-          if (j) {
-            journeyHidden.value = j;
-            form.setAttribute('data-success-destination', JOURNEY_ACTIONS[j] || '/obrigado');
-            return;
-          }
-          journeyHidden.value = baseJourney;
-          if (baseDestination) form.setAttribute('data-success-destination', baseDestination);
-          else form.removeAttribute('data-success-destination');
-        };
-        deliverableSelect.addEventListener('change', syncJourneyToDeliverable);
-        syncJourneyToDeliverable();
-      }
+    // mantinha o "operacao" oculto, confirmava em /obrigado-operacao e informava
+    // a jornada errada ao analytics, enquanto o servidor gravava outra. Uma
+    // opcao sem jornada devolve a jornada base do formulario.
+    const deliverableSelect = form && form.querySelector('select[name="deliverable_id"]');
+    const journeyHidden = form && form.querySelector('#jornada-hidden');
+    if (deliverableSelect && journeyHidden) {
+      const baseJourney = journeyHidden.value;
+      const syncJourney = () => {
+        const opt = deliverableSelect.options[deliverableSelect.selectedIndex];
+        applyJourneyToForm((opt && opt.getAttribute('data-journey')) || baseJourney);
+      };
+      deliverableSelect.addEventListener('change', syncJourney);
+      syncJourney();
     }
 
     const pagePath = window.location.pathname || '/';
