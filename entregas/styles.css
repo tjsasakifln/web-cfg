@@ -213,3 +213,15 @@
 .capability-group__schema-list strong{color:#1f2d3d}
 .capability-group__schema-note{margin:8px 0 0;color:#435369;font-size:.8rem;line-height:1.5}
 @media (max-width:600px){.capability-group__schema{padding:10px}}
+
+.capability-group__schema-details>summary{cursor:pointer;list-style:none}
+.capability-group__schema-details>summary::-webkit-details-marker{display:none}
+.capability-group__schema-details>summary::after{content:" +";font-weight:800}
+.capability-group__schema-details[open]>summary::after{content:" \2212"}
+
+@media (max-width:430px){
+  .capability-group__schema{margin:0 0 8px;padding:8px 10px}
+  .capability-group__schema-title{font-size:.8rem;line-height:1.4}
+  .capability-group__body{padding:0 12px 10px}
+  .capability-group__body>p{margin:0 0 8px;padding:8px 0}
+}

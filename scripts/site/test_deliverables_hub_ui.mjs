@@ -259,7 +259,7 @@ for (const width of widths) {
   if (brokenPrices.length) errors.push(`price_text_corrupt=${brokenPrices.map(({ priceText }) => priceText).join(",")}`);
   const roll = metrics.capabilityRoll;
   if (roll.rowCount !== 0 || Object.keys(roll.stateCounts).length) errors.push(`internal_capability_leak=${roll.rowCount}`);
-  if (roll.groups !== 3 || roll.substantiveGroups !== 3) errors.push(`engineering_groups=${roll.groups}/${roll.substantiveGroups}`);
+  if (roll.groups !== 5 || roll.substantiveGroups !== 5) errors.push(`engineering_groups=${roll.groups}/${roll.substantiveGroups}`);
   // #468 measured 13,098 px at 390 px with the same eight offers rendered three
   // times, later tightened to a 12,500 px budget. #527-#534 (2026-08-30) added four
   // value-first fields per card (value_outcome, value_created, artifact,
@@ -288,7 +288,19 @@ for (const width of widths) {
   // ~99 px (0.6%) of headroom and still catches unrelated page-length drift.
   // decisionNavTop improved to 1,206 px in the same run, so the taller page did
   // not push the decision nav toward its own 1,800 px limit.
-  if (width === 390 && metrics.documentHeight > 16890) errors.push(`document_height=${metrics.documentHeight}`);
+  //
+  // 2026-09-10, mesma regra: 16,890 -> 17,900. O orcamento anterior foi calibrado
+  // quando a pagina anunciava TRES familias de engenharia. A campanha exige que
+  // inspecao, pericia/avaliacao e seguranca do trabalho deixem de dividir um
+  // bloco -- sao servicos distintos -- e cinco familias sao conteudo exigido, nao
+  // enchimento. Para pagar o minimo possivel por isso, os cinco esquemas
+  // ilustrativos ficam em divulgacao progressiva, com a identificacao visivel no
+  // proprio summary, e o espacamento dos blocos foi comprimido ate 430 px. O
+  // componente integrado mede 17,784 px a 390 px; 17,900 deixa 116 px (0,65%) de
+  // folga, a mesma ordem de grandeza das calibracoes anteriores, e continua
+  // pegando deriva de comprimento nao relacionada. decisionNavTop caiu para
+  // 1,060 px na mesma medicao, longe do proprio limite de 1,800 px.
+  if (width === 390 && metrics.documentHeight > 17900) errors.push(`document_height=${metrics.documentHeight}`);
   if (width === 390 && metrics.decisionNavTop > 1800) errors.push(`decision_nav_top=${metrics.decisionNavTop}`);
   if (width <= 360 && metrics.decisionNavColumns !== 2) {
     errors.push(`decision_nav_columns=${metrics.decisionNavColumns}`);
@@ -361,7 +373,7 @@ if (
   catalogBoot.cards !== EXPECTED_EXAMPLES
   || catalogBoot.backlogCards !== 0
   || catalogBoot.capabilityRows !== 0
-  || catalogBoot.capabilityGroups !== 3
+  || catalogBoot.capabilityGroups !== 5
 ) catalogErrors.push("catalog_data_contract");
 const frameKeyboard = await page.evaluate(() => {
   const first = document.querySelector(".offer-decision-nav a");
@@ -393,7 +405,7 @@ if (
   || noScriptCatalog.visibleCards !== EXPECTED_EXAMPLES
   || noScriptCatalog.backlogCards !== 0
   || noScriptCatalog.capabilityRows !== 0
-  || noScriptCatalog.capabilityGroups !== 3
+  || noScriptCatalog.capabilityGroups !== 5
 ) {
   noScriptErrors.push("catalog_noscript_content");
 }

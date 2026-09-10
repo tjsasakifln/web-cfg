@@ -841,6 +841,9 @@ def test_every_announced_family_has_its_own_distinguishable_schema() -> None:
                     "Perícia, assistência técnica e avaliação",
                     "Segurança do trabalho"):
         assert f"<h3>{heading}</h3>" in html, heading
-    titles = re.findall(r'class="capability-group__schema-title">([^<]+)<', html)
+    # O summary passou a conter <strong> com a identificacao, entao o titulo
+    # nao e mais texto puro: capturar o conteudo inteiro e limpar as tags.
+    titles = [re.sub(r"<[^>]+>", " ", t).strip()
+              for t in re.findall(r'class="capability-group__schema-title">([\s\S]*?)</summary>', html)]
     assert len(titles) == 5, titles
     assert len(set(titles)) == 5, titles
