@@ -68,22 +68,31 @@ const CONTENT_CONCEPTS = [
   },
 ];
 
-// Casamento por palavra inteira: "art" nao pode ser satisfeito por "partes",
+// Casamento no INICIO de palavra: "art" nao pode ser satisfeito por "partes",
 // "quarta" ou "cartorio", senao o conceito de confianca vira atalho lexical.
+// So a borda inicial e exigida porque varios termos sao radicais de proposito
+// ("públic" cobre pública/públicas/público).
 function termPresent(text, term) {
   const escaped = String(term).toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  return new RegExp(`(^|[^\\p{L}\\p{N}])${escaped}([^\\p{L}\\p{N}]|$)`, "iu").test(text);
+  return new RegExp(`(^|[^\\p{L}\\p{N}])${escaped}`, "iu").test(text);
 }
 
 function conceptResults(text, concepts = CONTENT_CONCEPTS) {
   const normalized = String(text || "").toLowerCase();
   return concepts.map((concept) => {
-    const matched = concept.terms.filter((term) => normalized.includes(term.toLowerCase()));
+    const matched = concept.terms.filter((term) => termPresent(normalized, term));
     return { ...concept, matched, ok: matched.length >= concept.minMatches };
   });
 }
 
 const counterproof = {
+  // "partes" e "quarta" contem "art"; so "cnpj" pode casar, e um unico
+  // termo fica abaixo do minimo: a dobra reprova.
+  substring_is_not_a_credential: (() => {
+    const c = conceptResults("As partes do contrato e a quarta etapa. CNPJ publicado.")
+      .find((item) => item.id === "confianca_verificavel");
+    return c.matched.length === 1 && c.matched[0] === "cnpj" && !c.ok;
+  })(),
   generic_hero_is_rejected: conceptResults(
     "Engenharia com solução personalizada. Solicite uma proposta.",
   ).some((concept) => !concept.ok),
@@ -354,8 +363,14 @@ try {
         if (visibleHere) chunks.push(node.textContent);
       }
       const foldText = chunks.join(" ").replace(/\s+/g, " ").trim().toLowerCase();
+      // Mesma regra de palavra inteira do lado do Node (termPresent); este
+      // bloco roda no navegador e nao enxerga o modulo, por isso e repetida.
+      const termPresentHere = (text, term) => {
+        const escaped = String(term).toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        return new RegExp(`(^|[^\\p{L}\\p{N}])${escaped}`, "iu").test(text);
+      };
       const concepts = config.concepts.map((concept) => {
-        const matched = concept.terms.filter((term) => termPresent(foldText, term));
+        const matched = concept.terms.filter((term) => termPresentHere(foldText, term));
         return {
           id: concept.id,
           label: concept.label,
