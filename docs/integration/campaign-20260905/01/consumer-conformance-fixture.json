@@ -2,7 +2,7 @@
   "schema": "confenge.mv01-consumer-conformance/1.0",
   "pin": {
     "catalog_contract": "CONFENGE_OFFER_CATALOG/2.0.0",
-    "catalog_hash": "sha256:ee1beea106572f3c826650ef6ed4ea69faaebfdd8dc09661e5f2f6f83b2e6734",
+    "catalog_hash": "sha256:053acb2a93d128106ec552495ec7d99e3f02d14b19e889beaa99e6209e9ccdb6",
     "taxonomy_contract": "CONFENGE_CORPORATE_TAXONOMY/1.0.0",
     "taxonomy_hash": "sha256:a75f9d2392630cbb5a0e21ee556c9e1aa1aa56784e8a23da05c46092f100667c",
     "constitution_contract": "CONFENGE_COMMERCIAL_CONSTITUTION/1.0.0",

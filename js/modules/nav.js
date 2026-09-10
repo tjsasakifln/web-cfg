@@ -67,6 +67,16 @@
         whatsapp: 'Olá, Tiago. Sou de um órgão público e quero explicar em que etapa está o planejamento da obra.',
         placeholder: 'O que o órgão precisa preparar e em que etapa está.',
       },
+      'ainda não sei qual serviço': {
+        journey: 'outro',
+        ladder: false,
+        next_step: 'Conte o que precisa avançar e o que já existe. A resposta diz qual trabalho atende, o que você recebe e o que falta para delimitar a proposta.',
+        detail: 'Nesta etapa basta o contexto. Não envie documentos nem arquivos.',
+        route: '/servicos/',
+        route_label: 'Ver os serviços de engenharia',
+        whatsapp: 'Olá, Tiago. Ainda não sei qual serviço preciso e quero explicar a situação para ser orientado.',
+        placeholder: 'O que precisa avançar e o que já existe hoje.',
+      },
       'outro': {
         journey: 'outro',
         ladder: false,
