@@ -201,14 +201,16 @@
       });
       document.addEventListener('click', (event) => {
         if (toggle.getAttribute('aria-expanded') !== 'true' || menu.contains(event.target)) return;
-        // Com o painel aberto o botao esta inerte e o clique chega ao
+        // O clique que ABRE o menu borbulha ate aqui com aria-expanded ja em
+        // "true": o proprio botao trata esse clique, e este ouvinte nao pode
+        // fecha-lo de volta.
+        if (toggle.contains(event.target)) return;
+        // Com o painel aberto o botao esta inerte e o toque chega ao
         // ancestral; ainda assim e o botao que o visitante tocou, entao o
         // foco volta para ele, como no fechamento por Escape.
         const box = toggle.getBoundingClientRect();
-        const onToggle = toggle.contains(event.target) || (
-          event.clientX >= box.left && event.clientX <= box.right &&
-          event.clientY >= box.top && event.clientY <= box.bottom
-        );
+        const onToggle = event.clientX >= box.left && event.clientX <= box.right &&
+          event.clientY >= box.top && event.clientY <= box.bottom;
         closeMenu(onToggle);
       });
       window.addEventListener('resize', () => { if (window.innerWidth > 900) closeMenu(); }, { passive: true });
