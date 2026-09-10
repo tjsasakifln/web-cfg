@@ -669,3 +669,27 @@ então ficam registrados como pendência e não entram aqui.
    E2E sobre o conjunto crítico da home); afrouxamento sem justificativa
    (tetos em código e notas obrigatórias na declaração); paridade Netlify/nginx
    ciente da regra de documento.
+
+### Release b4078ab08 (correção estrutural): o que a borda provou e o que faltou
+
+Run [34517284468](https://github.com/tjsasakifln/web-cfg/actions/runs/34517284468):
+promoção executada; aceite servido integral; Lighthouse na borda com o contrato
+novo: **transferência 161,7 KB (10,3 KB de cabeçalhos, antes ~50 KB)**, conteúdo
+**151.431 bytes ≤ 153.600** — o orçamento de payload passou pela primeira vez na
+borda. Cada linha da home passou no LCP líquido da folga medida (1.835 / 2.264 /
+2.258 ms com folga 606 / 599 / 598 ms). Reprovaram dois pontos, e o rollback
+restaurou `54b51438a`:
+
+| reprovação | causa medida | correção |
+|---|---|---|
+| `home: LCP 2264 ms must be <= 2000` | o gate **agregado** da home comparava o máximo bruto; só o gate por linha aplicava a folga | máximo líquido (`maximum_lcp_net_ms`) com a folga máxima na evidência; teste com as três linhas reais |
+| `CLS 0,068` em 1 de 3 execuções (0 no laboratório) | `font-display: swap` com a fonte chegando depois da primeira pintura (colo frio) recompõe o herói; a sonda ao vivo reproduziu 0,065 com causas "Web font loaded" e o logotipo | face local `Archivo Fallback` (Arial / Liberation Sans / Helvetica) com `size-adjust` 98,56 %, `ascent-override` 89,08 %, `descent-override` 21,31 %, `line-gap-override` 0, derivados do woff2 (fontTools); deslocamento do herói com a fonte bloqueada: **82,9 px → 0 px** |
+
+`home-10x.css` não integra o hash de aprovação editorial (só `styles.css`,
+`tokens`, `tools`, `offers`), então não há reaprovação envolvida. Gate novo
+`scripts/site/test_font_fallback_metrics.mjs` (no `test:ui`): face e quatro
+descritores presentes e em toda pilha Archivo; números recomputados do arquivo
+de fonte; em navegador com a fonte local, bloquear o woff2 não pode mover o
+herói mais de 4 px. O logotipo do cabeçalho (`224×58` declarado, `500×130`
+intrínseco) contribui ≤ 0,2 px e fica registrado, não alterado, por ser
+markup do shell compartilhado.
