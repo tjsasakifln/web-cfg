@@ -356,6 +356,9 @@ pass("page_http_tls_and_availability_failures_are_never_innocent_infrastructure"
 //     rather than thrown.
 // ---------------------------------------------------------------------------
 {
+  // The child inherits stderr, so Node's MODULE_NOT_FOUND banner below is the
+  // expected output of this case, not a failure of the suite.
+  console.log("-- expected below: MODULE_NOT_FOUND from a deliberately unspawnable child --");
   const { outcome } = await measure(join(WORK, "does-not-exist.mjs"), { timeoutMs: 8000 });
   assert.notEqual(outcome.outcome, OUTCOME.MEASURED);
   pass("an_unspawnable_measurement_is_reported_not_thrown");

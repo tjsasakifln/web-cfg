@@ -118,7 +118,11 @@ def test_post_promote_reconciles_all_served_html_and_restores_a_failed_release()
     text = WORKFLOW.read_text(encoding="utf-8")
     post = text.split("  promote:", 1)[1]
     for required in (
-        "needs: stage", "environment: netcup-production",
+        # Promotion depends on the pre-promotion barrier as well as on staging.
+        # Five releases were promoted before they were verified and every one of
+        # them was rolled back; `qualify` is what makes the candidate prove
+        # itself while it is still a candidate.
+        "needs: [stage, qualify]", "environment: netcup-production",
         "name: site-ci-public-${{ github.sha }}", "name: netcup-release-${{ github.sha }}",
         "--operation inventory", "public_server_acceptance.py", "--server-inventory",
         "--site _site", '--expected-sha "$RELEASE_SHA"',
@@ -136,8 +140,42 @@ def test_post_promote_reconciles_all_served_html_and_restores_a_failed_release()
         "actions/checkout@", "actions/setup-node@", "npm ci --ignore-scripts",
         "Require pinned SSH inputs", "Download the same attested controller bundle",
         "Download the same gated public artifact", "Setup Chrome for public runtime verification",
+        # The barrier itself, and the evidence it consumes, must be in place
+        # before `current` can change.
+        "Download this candidate's qualification",
+        "release_qualification.mjs --require",
+        "Refuse to promote a candidate that is not qualified",
     ):
         assert 0 <= post.index(prerequisite) < promote_at, f"must prepare {prerequisite} before promotion"
+
+
+def test_promotion_requires_a_qualification_bound_to_this_exact_candidate() -> None:
+    """A candidate reaches the visitors only with matching, passing evidence.
+
+    The refusal path itself is proved behaviourally in
+    scripts/site/test_release_qualification.mjs, including the exit code; what
+    is asserted here is that the workflow actually consults it, before the
+    promotion and with the identity of this run.
+    """
+    text = WORKFLOW.read_text(encoding="utf-8")
+    assert "  qualify:" in text, "the pre-promotion qualification job must exist"
+    qualify = text.split("  qualify:", 1)[1].split("  promote:", 1)[0]
+    # The barrier qualifies the exact artifact the release will serve.
+    assert "name: site-ci-public-${{ github.sha }}" in qualify
+    assert "release_qualification.mjs --emit" in qualify
+    assert "--run-id=\"$GITHUB_RUN_ID\"" in qualify
+    assert "--run-attempt=\"$GITHUB_RUN_ATTEMPT\"" in qualify
+    assert "if-no-files-found: error" in qualify
+    # It must never change production.
+    assert "--operation promote" not in qualify
+    assert "--operation rollback" not in qualify
+
+    post = text.split("  promote:", 1)[1]
+    require_at = post.index("release_qualification.mjs --require")
+    promote_at = post.index("      - name: Atomic promote and live identity confirmation")
+    assert require_at < promote_at, "the barrier must be consulted before the promotion"
+    for bound in ('--sha="$RELEASE_SHA"', "--run-id=\"$GITHUB_RUN_ID\"", "--run-attempt=\"$GITHUB_RUN_ATTEMPT\""):
+        assert bound in post, f"the barrier must bind {bound}"
     assert post.index("Store mandatory post-promote evidence") < post.index("Restore the predecessor")
     # An unsuccessful idempotent retry must not undo an already-active release.
     # A new promotion with an interrupted SSH response can need compensation;
