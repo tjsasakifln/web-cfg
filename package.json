@@ -11,6 +11,7 @@
     "runtime:schedule": "node runtime/schedule.mjs",
     "test:runtime": "node --test --test-concurrency=1 runtime/test/*.test.mjs",
     "test:release-filters": "python3 scripts/site/test_release_result_filters.py",
+    "test:robots-policy": "python3 -m pytest scripts/site/test_robots_policy.py -q && python3 -m pytest scripts/site/test_public_server_acceptance.py -q",
     "research:build": "python3 -m scripts.research build",
     "research:validate": "python3 -m scripts.research validate",
     "test:research-pack": "python3 -m pytest scripts/research/tests -q",

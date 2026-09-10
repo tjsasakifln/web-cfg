@@ -97,6 +97,7 @@ def audit_shipped(root: Path, approvals: dict) -> list[str]:
 
     indexable_slugs: list[str] = []
     hub_indexes = False
+    allow_lines = {ln.strip() for ln in robots.splitlines()}
     for page in sorted(family.rglob("index.html")):
         html = page.read_text(encoding="utf-8", errors="replace")
         match = ROBOTS_META.search(html)
@@ -113,7 +114,7 @@ def audit_shipped(root: Path, approvals: dict) -> list[str]:
         entry = approvals.get(_slug_approval_id(html))
         if not isinstance(entry, dict) or entry.get("approved") is not True:
             problems.append(f"{slug}: page claims index with no approved ledger entry")
-        if f"Allow: {FAMILY_PATH}{slug}/" not in robots:
+        if f"Allow: {FAMILY_PATH}{slug}/" not in allow_lines:
             problems.append(f"{slug}: page claims index but robots.txt does not allow it")
         if f"{FAMILY_PATH}{slug}/*" not in headers:
             problems.append(f"{slug}: page claims index but _headers has no index override")
@@ -122,7 +123,7 @@ def audit_shipped(root: Path, approvals: dict) -> list[str]:
 
     if hub_indexes and not indexable_slugs:
         problems.append("hub claims index while every child is a draft")
-    if indexable_slugs and f"Allow: {FAMILY_PATH}$" not in robots:
+    if indexable_slugs and f"Allow: {FAMILY_PATH}$" not in allow_lines:
         problems.append("an approved page exists but the hub is not crawlable, so nothing links to it")
     sitemap = root / SITEMAP_NAME
     if indexable_slugs and not sitemap.is_file():

@@ -1323,3 +1323,82 @@ def test_incomplete_read_without_declared_length_reports_no_declared_length():
     assert record["read_completed"] is False
     assert record["bytes_read"] == 5
     assert record["declared_length"] is None
+
+
+# ---------------------------------------------------------------------------
+# Regras efetivas do robots.txt servido (politica, nao bytes)
+# ---------------------------------------------------------------------------
+#
+# O contrato de bytes de robots_edge_contract prova que a borda nao adulterou o
+# nosso arquivo. Estes testes provam a outra metade: que o arquivo continua
+# exprimindo a politica vigente. Uma restricao pode sumir da origem sem que um
+# unico byte seja adulterado no caminho, e o gate de bytes aprovaria.
+#
+# O corpo usado aqui e composto do prefixo REAL capturado em confenge.com.br
+# (scripts/site/testdata/robots-managed-prefix.txt, 1836 bytes com o separador)
+# com o robots.txt do PACOTE, e nao de uma fixture conveniente.
+
+_MANAGED_PREFIX = (
+    Path(__file__).resolve().parent / "testdata" / "robots-managed-prefix.txt"
+).read_bytes()
+_PACKAGE_ROBOTS = acceptance.ROOT / "_site" / "robots.txt"
+
+
+def _served_robots() -> bytes:
+    return _MANAGED_PREFIX + _PACKAGE_ROBOTS.read_bytes()
+
+
+@pytest.mark.skipif(not _PACKAGE_ROBOTS.is_file(), reason="pacote nao construido")
+def test_the_real_composed_robots_body_satisfies_the_approved_policy_baseline():
+    report = acceptance.verify_robots_policy(_served_robots())
+    assert report["ok"] is True, report
+    assert report["checked"] >= 200
+    assert report["divergences"] == []
+    assert report["missing_policy_directives"] == []
+
+
+@pytest.mark.skipif(not _PACKAGE_ROBOTS.is_file(), reason="pacote nao construido")
+def test_losing_a_live_private_surface_restriction_fails_closed():
+    """Bytes intactos no caminho, politica perdida na origem."""
+    body = _served_robots().replace(b"Disallow: /ops/\n", b"")
+    report = acceptance.verify_robots_policy(body)
+    assert report["ok"] is False
+    assert any(e.startswith("robots_effective_rules_diverged") for e in report["errors"])
+    lost = {(d["agent"], d["path"]) for d in report["divergences"]}
+    assert ("Googlebot", "/ops/") in lost
+
+
+@pytest.mark.skipif(not _PACKAGE_ROBOTS.is_file(), reason="pacote nao construido")
+def test_turning_off_the_managed_composition_is_caught_as_granting_ai_training():
+    """Contraprova da decisao de MANTER a composicao gerenciada.
+
+    Servir so a nossa origem nao e "fonte unica": e conceder rastreio a GPTBot,
+    ClaudeBot, CCBot, Google-Extended e Amazonbot, e perder o Content-Signal
+    ai-train=no, que existe apenas na parcela gerenciada.
+    """
+    report = acceptance.verify_robots_policy(_PACKAGE_ROBOTS.read_bytes())
+    assert report["ok"] is False
+    granted = {d["agent"] for d in report["divergences"] if d["served_allowed"]}
+    assert {"GPTBot", "ClaudeBot", "CCBot", "Google-Extended", "Amazonbot"} <= granted
+    assert report["missing_policy_directives"]
+
+
+def test_robots_policy_fails_closed_when_the_published_file_has_no_body():
+    report = acceptance.verify_robots_policy(None, published=True)
+    assert report["ok"] is False
+    assert "robots_policy_body_absent" in report["errors"]
+
+
+def test_robots_policy_is_skipped_only_when_the_file_is_not_published():
+    report = acceptance.verify_robots_policy(None, published=False)
+    assert report["ok"] is True
+    assert report["applicable"] is False
+
+
+def test_robots_policy_fails_closed_when_the_baseline_is_missing_or_empty(tmp_path):
+    absent = acceptance.verify_robots_policy(b"User-agent: *\n", baseline_path=tmp_path / "nope.json")
+    assert absent["ok"] is False and "robots_policy_baseline_missing" in absent["errors"]
+    empty = tmp_path / "empty.json"
+    empty.write_text(json.dumps({"expected_effective": []}), encoding="utf-8")
+    blank = acceptance.verify_robots_policy(b"User-agent: *\n", baseline_path=empty)
+    assert blank["ok"] is False and "robots_policy_baseline_empty" in blank["errors"]

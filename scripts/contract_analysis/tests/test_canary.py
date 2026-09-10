@@ -235,7 +235,26 @@ def test_robots_and_headers_block_fixture_family():
 
     robots = (ROOT / "robots.txt").read_text(encoding="utf-8")
     headers = (ROOT / "_headers").read_text(encoding="utf-8")
-    assert "Disallow: /analises-contratos-publicos/" in robots
+    # A familia continua fechada, mas o robots.txt tem de DIZER a verdade sobre
+    # como. Pela RFC 9309 2.2.2 um Allow e um Disallow de mesmo comprimento
+    # empatam em favor do Allow, entao "Disallow: /analises-contratos-publicos/"
+    # nao restringe nada enquanto o hub estiver liberado -- afirmar a restricao
+    # ali faria o arquivo declarar uma politica que nao existe.
+    # Regra substituida: o bloqueio efetivo da familia e provado pelo
+    # X-Robots-Tag do _headers, que vale para todos os filhos; o Disallow so e
+    # exigido no caso em que ele realmente restringe, ou seja, quando o hub NAO
+    # esta liberado.
+    from scripts.site.robots_policy import is_allowed, parse_robots
+
+    hub_allowed = f"Allow: {AUTHORIZED_CANONICAL_PATH}" in robots
+    if not hub_allowed:
+        assert "Disallow: /analises-contratos-publicos/" in robots
+        parsed = parse_robots(robots)
+        # Contraprova: quando exigido, o Disallow tem de bloquear de fato.
+        assert not is_allowed(parsed, "Googlebot", "/analises-contratos-publicos/")[0]
+        assert not is_allowed(parsed, "Googlebot", "/analises-contratos-publicos/qualquer/")[0]
+    else:
+        assert "Disallow: /analises-contratos-publicos/" not in robots
     assert "/analises-contratos-publicos/*" in headers
     assert "X-Robots-Tag: noindex" in headers
     official = load_canary(

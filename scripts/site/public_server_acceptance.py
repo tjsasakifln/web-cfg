@@ -31,6 +31,7 @@ from scripts.site.public_surface_coverage import (  # noqa: E402
     fetch_server_mirror,
     run_mutation_contracts,
 )
+from scripts.site import robots_policy  # noqa: E402
 from scripts.site.cache_contract import (  # noqa: E402
     HTML_SERVING_CACHE_OVERRIDES,
     cache_directives,
@@ -829,6 +830,70 @@ def robots_edge_contract(body: bytes, expected: bytes) -> tuple[bool, dict[str, 
     }
 
 
+ROBOTS_POLICY_BASELINE = ROOT / "data" / "organic" / "robots-policy-baseline.v1.json"
+
+
+def verify_robots_policy(
+    body: bytes | None, *, published: bool = True,
+    baseline_path: Path = ROBOTS_POLICY_BASELINE,
+) -> dict[str, Any]:
+    """Confere as REGRAS EFETIVAS do robots.txt realmente servido.
+
+    O contrato de bytes prova que a borda nao adulterou o arquivo; nao prova que
+    o arquivo continua exprimindo a politica vigente. Uma restricao pode sumir da
+    origem sem que um unico byte seja adulterado no caminho, e o gate de bytes
+    aprovaria. Aqui a expectativa vem da politica aprovada e versionada, derivada
+    independentemente -- nunca copiada da resposta que se deseja validar.
+    """
+    # A aplicabilidade vem do inventario do proprio host: so nao se aplica
+    # quando o robots.txt nao faz parte da superficie publicada. Enquanto ele
+    # existir, a ausencia do corpo reprova em vez de dispensar a verificacao.
+    if not published:
+        return {"ok": True, "errors": [], "checked": 0, "applicable": False}
+    if not baseline_path.is_file():
+        return {"ok": False, "errors": ["robots_policy_baseline_missing"], "checked": 0}
+    baseline = json.loads(baseline_path.read_text(encoding="utf-8"))
+    expected = baseline.get("expected_effective") or []
+    if not expected:
+        return {"ok": False, "errors": ["robots_policy_baseline_empty"], "checked": 0}
+    if body is None:
+        return {"ok": False, "errors": ["robots_policy_body_absent"], "checked": 0}
+
+    parsed = robots_policy.parse_robots(body)
+    divergences = []
+    for row in expected:
+        allowed, rule = robots_policy.is_allowed(parsed, row["agent"], row["path"])
+        if allowed != row["allowed"]:
+            divergences.append({
+                "agent": row["agent"], "path": row["path"],
+                "expected_allowed": row["allowed"], "served_allowed": allowed,
+                "served_rule": rule, "baseline_rule": row.get("rule"),
+            })
+
+    # As diretivas que nao controlam allow/disallow tambem exprimem politica.
+    missing_policy = []
+    signals = parsed.group_policy.get("*", {}).get("content-signal") or []
+    for declared in baseline.get("managed_composition", {}).get("carries_policy", []):
+        value = declared.split(":", 1)[1].strip() if ":" in declared else declared
+        if value not in signals:
+            missing_policy.append(declared)
+
+    errors: list[str] = []
+    if divergences:
+        errors.append(f"robots_effective_rules_diverged:{len(divergences)}")
+    if missing_policy:
+        errors.append(f"robots_policy_directive_absent:{len(missing_policy)}")
+    return {
+        "schema": "confenge.robots-policy-acceptance/v1",
+        "baseline": baseline_path.name,
+        "checked": len(expected),
+        "divergences": divergences,
+        "missing_policy_directives": missing_policy,
+        "errors": errors,
+        "ok": not errors,
+    }
+
+
 def verify_non_html_assets(
     *, site: Path, inventory: dict[str, Any], overlay: dict[str, Any],
     base: str, fetcher: Callable, concurrency: int, timeout: float,
@@ -862,6 +927,8 @@ def verify_non_html_assets(
     for rel in sorted(NONPUBLIC_CONFIG_FILES & set(host)):
         requests.extend([("/" + rel + "?download=1", rel), ("/%5F" + rel[1:], rel)])
 
+    served_robots: dict[str, bytes] = {}
+
     def verify_one(item: tuple[str, str]) -> dict[str, Any]:
         request_path, rel = item
         protected = rel in NONPUBLIC_CONFIG_FILES
@@ -878,6 +945,7 @@ def verify_non_html_assets(
         )
         edge: dict[str, Any] = {}
         if transport_ok and rel == EDGE_MANAGED_ROBOTS and not protected:
+            served_robots[rel] = body
             body_ok, edge = robots_edge_contract(body, site.joinpath(rel).read_bytes())
         else:
             body_ok = digest == expected
@@ -900,11 +968,18 @@ def verify_non_html_assets(
         errors.append(f"public_non_html_response_failures:{len(failures)}")
     if not artifact or not host or not rows:
         errors.append("public_non_html_empty_selection")
+    # Bytes integros nao provam politica integra: as duas coisas reprovam por
+    # motivos diferentes e nenhuma substitui a outra.
+    policy = verify_robots_policy(
+        served_robots.get(EDGE_MANAGED_ROBOTS),
+        published=EDGE_MANAGED_ROBOTS in host,
+    )
+    errors.extend(policy["errors"])
     return {
         "artifact_files": len(artifact), "server_files": len(host),
         "planned": len(requests), "executed": len(rows),
         "passed": len(rows) - len(failures), "failures": failures,
-        "results": rows, "errors": errors, "ok": not errors,
+        "results": rows, "robots_policy": policy, "errors": errors, "ok": not errors,
     }
 
 

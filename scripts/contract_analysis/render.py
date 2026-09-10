@@ -1027,9 +1027,15 @@ def sync_family_crawler_rules(
         if slugs:
             crawlable_paths.add(FAMILY_PATH)
         allow_lines = "".join(f"Allow: {path}\n" for path in sorted(crawlable_paths))
+        # RFC 9309 2.2.2: an Allow and a Disallow of equal rule length tie in
+        # favour of Allow. "Disallow: {FAMILY_PATH}" is exactly as long as
+        # "Allow: {FAMILY_PATH}", so once the hub itself is crawlable the
+        # Disallow line is inert and would misstate the policy if emitted.
+        # Only assert it when the hub is not in the crawlable set.
+        disallow_line = "" if FAMILY_PATH in crawlable_paths else f"Disallow: {FAMILY_PATH}\n"
         block = (
             f"{ROBOTS_FAMILY_BEGIN}\n"
-            f"{allow_lines}Disallow: {FAMILY_PATH}\n"
+            f"{allow_lines}{disallow_line}"
             f"{ROBOTS_FAMILY_END}\n"
         )
         robots = _replace_or_append_block(
