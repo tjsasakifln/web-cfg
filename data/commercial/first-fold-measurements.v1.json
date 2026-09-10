@@ -1,9 +1,9 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-09-10T04:55:50.938Z",
+  "measured_at": "2026-09-10T12:22:53.162Z",
   "measured_on": "2026-09-10",
-  "commit_sha": "c4f6755fcdc9a6d4d60f09a2ccf67b3d2f33dc9a",
+  "commit_sha": "35a8b63f480478bc555d5ecdcf503b7cf6c5e19b",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "f168038814087e1b365d1de3042af9a3f3364743756e104711fecc0fb9fe7477",
@@ -42,14 +42,14 @@
     "diagnostico-b2g-expansao/index.html": "fe60cef824e78beff5d03ec679f1e430cad33b7754a748069654bbb293f28835",
     "diagnostico-pre-licitacao/index.html": "65c6ea2c235ef0db5629922ed18c578bde2ef585339d6adec86830014e1229f4",
     "diretoria-b2g/index.html": "72d1ffd411f911fd295b6ae13fd1318c28356aa007fbf73f71cac80e39f68197",
-    "entregas/index.html": "858309d150165e7220e759d16f163ac7316187dabce9355b096411b87d93b8e4",
-    "entregas/styles.css": "1d46125ece51a9c568b8c1bec18a6f0315536472235d5e16505f8b011ff156a4",
-    "index.html": "c50bde199694a72be3e0ba8cfecf812897d1bafa597388cfc6e97d7f458dbd18",
+    "entregas/index.html": "2fb2834b72b05db82b1cc7158e8b6e0502b93ced7a8e72d1f2c7afeb08400662",
+    "entregas/styles.css": "7f2817c86d856247fe607b2961856073ce0ae163dcc51baa9f743d9b27255774",
+    "index.html": "06ad0f33e2f5e461dc8b1a4d99156fc56723a7b04f5f5f5db6830b5ca1e9db00",
     "medicoes-glosas-obras-publicas/index.html": "fe3d3c644ac158dae63f85369301da200b5f4de025b0db3364b9cb3e3d929c61",
     "problemas-que-resolvemos/index.html": "fbd929bd17c6890969ee4b0f5c3647dca7ee81bf75b3a8ae4e124c38aef0b280",
     "reequilibrio-obras-publicas/index.html": "11d0cf94f61308da770640898df3019f4cbdd0b3dcd42f9df8ad73a8aa79d6ca",
-    "script.js": "3e6f199fde6a76b3e2ba20db63c66ea00895c5c9629edb59a2c6e3e1d7181df7",
-    "servicos-obras-publicas/index.html": "86d9b96420c56bf1cfaec951b20704ddd24fe43ce83f7f40e0b36e69715e5f43",
+    "script.js": "1fd394eae3b794c392635aef52ca1bd84acfb79bfbf3f89069370c219d596be1",
+    "servicos-obras-publicas/index.html": "7fb62cdb2a3c93e06ced52475551515a5ef9996c8d51075294e84939283de04b",
     "styles-hubs.css": "ed4668833ad8de5cef5acc5fc1e8f21e519870f0bf282247c3b4a9644a094592",
     "styles-offers.css": "0c1efa4797709ae6d2b776aa58e863ef095a880646b5e4b158a7a47e0963ec2e",
     "styles-tokens.css": "15cc0770e76276b418c11493fa9e53827ae14bb8f854b0a63d8c6dd63afc02fc",
@@ -101,7 +101,7 @@
   "routes": [
     {
       "route": "/",
-      "html_sha256": "c50bde199694a72be3e0ba8cfecf812897d1bafa597388cfc6e97d7f458dbd18",
+      "html_sha256": "06ad0f33e2f5e461dc8b1a4d99156fc56723a7b04f5f5f5db6830b5ca1e9db00",
       "measured_on": "2026-09-10",
       "viewports": {
         "1366x768": {
@@ -310,7 +310,7 @@
     },
     {
       "route": "/entregas/",
-      "html_sha256": "858309d150165e7220e759d16f163ac7316187dabce9355b096411b87d93b8e4",
+      "html_sha256": "2fb2834b72b05db82b1cc7158e8b6e0502b93ced7a8e72d1f2c7afeb08400662",
       "measured_on": "2026-09-10",
       "viewports": {
         "1366x768": {
@@ -343,8 +343,8 @@
             "lead": {
               "selector": ".deliverables-lead",
               "box": {
-                "top": 389,
-                "bottom": 439,
+                "top": 360,
+                "bottom": 410,
                 "left": 83,
                 "right": 733,
                 "width": 650,
@@ -355,8 +355,8 @@
             "proof": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 451,
-                "bottom": 516,
+                "top": 422,
+                "bottom": 487,
                 "left": 83,
                 "right": 653,
                 "width": 570,
@@ -367,8 +367,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 534,
-                "bottom": 578,
+                "top": 505,
+                "bottom": 549,
                 "left": 83,
                 "right": 357,
                 "width": 274,
@@ -382,8 +382,8 @@
               "text": "Ver entregas e exemplos",
               "href": "#servicos-e-entregas",
               "box": {
-                "top": 534,
-                "bottom": 578,
+                "top": 505,
+                "bottom": 549,
                 "left": 83,
                 "right": 357,
                 "width": 274,
@@ -433,8 +433,8 @@
             "lead": {
               "selector": ".deliverables-lead",
               "box": {
-                "top": 402,
-                "bottom": 512,
+                "top": 380,
+                "bottom": 490,
                 "left": 20,
                 "right": 370,
                 "width": 350,
@@ -445,8 +445,8 @@
             "proof": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 530,
-                "bottom": 614,
+                "top": 508,
+                "bottom": 592,
                 "left": 20,
                 "right": 370,
                 "width": 350,
@@ -457,8 +457,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 626,
-                "bottom": 670,
+                "top": 604,
+                "bottom": 648,
                 "left": 20,
                 "right": 370,
                 "width": 350,
@@ -472,8 +472,8 @@
               "text": "Ver entregas e exemplos",
               "href": "#servicos-e-entregas",
               "box": {
-                "top": 626,
-                "bottom": 670,
+                "top": 604,
+                "bottom": 648,
                 "left": 20,
                 "right": 370,
                 "width": 350,
@@ -520,7 +520,7 @@
     },
     {
       "route": "/servicos-obras-publicas/",
-      "html_sha256": "86d9b96420c56bf1cfaec951b20704ddd24fe43ce83f7f40e0b36e69715e5f43",
+      "html_sha256": "7fb62cdb2a3c93e06ced52475551515a5ef9996c8d51075294e84939283de04b",
       "measured_on": "2026-09-10",
       "viewports": {
         "1366x768": {
