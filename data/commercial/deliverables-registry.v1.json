@@ -174,7 +174,7 @@
         "decisão AVANÇAR, CONDICIONAR, INVESTIGAR ou RECUSAR por oportunidade",
         "justificativa vinculada à evidência",
         "responsável indicado",
-        "ponto de revalidação"
+        "data em que a decisão precisa ser revista"
       ],
       "exclusions": [
         "montagem de proposta",

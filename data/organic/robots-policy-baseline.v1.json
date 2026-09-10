@@ -1,0 +1,1456 @@
+{
+  "schema": "confenge.robots-policy-baseline/v1",
+  "decided_at": "2026-09-10",
+  "decision_state": "EXECUTE_NOW",
+  "authority": "Politica de rastreio vigente em confenge.com.br. Esta tabela e a EXPECTATIVA aprovada, derivada da politica e da configuracao, nao copiada da resposta que se deseja validar. Mudar a politica exige mudar este arquivo, sob revisao.",
+  "managed_composition": {
+    "enabled": true,
+    "provider": "cloudflare-managed-robots",
+    "begin_marker": "# BEGIN Cloudflare Managed content",
+    "end_marker": "# END Cloudflare Managed Content",
+    "note": "A caixa difere entre os marcadores: 'content' minusculo na abertura, 'Content' maiusculo no fechamento.",
+    "why_kept": "O bloco gerenciado carrega politica que nao existe neste repositorio: Content-Signal search=yes,ai-train=no,use=reference e Disallow: / para os rastreadores de IA. Desligar a composicao para obter 'fonte unica' concederia silenciosamente treinamento de IA hoje negado -- mudanca de politica disfarcada de limpeza. A composicao e mantida de proposito, e o contrato de borda exige os bytes de origem integros.",
+    "carries_policy": [
+      "Content-Signal: search=yes,ai-train=no,use=reference"
+    ]
+  },
+  "ai_crawlers_denied_everywhere": [
+    "Amazonbot",
+    "Applebot-Extended",
+    "Bytespider",
+    "CCBot",
+    "ClaudeBot",
+    "CloudflareBrowserRenderingCrawler",
+    "Google-Extended",
+    "GPTBot",
+    "meta-externalagent"
+  ],
+  "private_surfaces_denied_to_every_agent": [
+    "/%6Fps/",
+    "/.netlify/",
+    "/intr%61net",
+    "/intranet",
+    "/ops/"
+  ],
+  "withdrawn_with_410_so_crawlers_can_see_the_gone": {
+    "paths": [
+      "/piloto/",
+      "/panorama-mercado-obras-publicas/"
+    ],
+    "why": "Sobre uma URL retirada com 410 um Disallow seria MAIS FRACO, nao mais forte: impediria o rastreador de ver o 410 e de remover a URL do indice. A retirada com 410 e verificada pelas provas de URLs retiradas do proprio aceite."
+  },
+  "published_index_follow": {
+    "paths": [
+      "/analises-contratos-publicos/",
+      "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/"
+    ],
+    "why": "Uma analise foi aprovada e publicada com X-Robots-Tag: index, follow no _headers do pacote. O Allow correspondente e a condicao para que a decisao de indexar tenha efeito; sem ele a rota nunca chega a ser lida."
+  },
+  "expected_effective": [
+    {
+      "agent": "Googlebot",
+      "path": "/",
+      "allowed": true,
+      "rule": "allow:/"
+    },
+    {
+      "agent": "Googlebot",
+      "path": "/servicos/",
+      "allowed": true,
+      "rule": "allow:/"
+    },
+    {
+      "agent": "Googlebot",
+      "path": "/entregas/",
+      "allowed": true,
+      "rule": "allow:/"
+    },
+    {
+      "agent": "Googlebot",
+      "path": "/triagem-tecnica/",
+      "allowed": true,
+      "rule": "allow:/"
+    },
+    {
+      "agent": "Googlebot",
+      "path": "/contato",
+      "allowed": true,
+      "rule": "allow:/"
+    },
+    {
+      "agent": "Googlebot",
+      "path": "/casos/",
+      "allowed": true,
+      "rule": "allow:/"
+    },
+    {
+      "agent": "Googlebot",
+      "path": "/conteudos/",
+      "allowed": true,
+      "rule": "allow:/"
+    },
+    {
+      "agent": "Googlebot",
+      "path": "/ops/",
+      "allowed": false,
+      "rule": "disallow:/ops/"
+    },
+    {
+      "agent": "Googlebot",
+      "path": "/ops/README-data.txt",
+      "allowed": false,
+      "rule": "disallow:/ops/"
+    },
+    {
+      "agent": "Googlebot",
+      "path": "/intranet",
+      "allowed": false,
+      "rule": "disallow:/intranet"
+    },
+    {
+      "agent": "Googlebot",
+      "path": "/.netlify/",
+      "allowed": false,
+      "rule": "disallow:/.netlify/"
+    },
+    {
+      "agent": "Googlebot",
+      "path": "/piloto/",
+      "allowed": true,
+      "rule": "allow:/"
+    },
+    {
+      "agent": "Googlebot",
+      "path": "/piloto/ofertas/",
+      "allowed": true,
+      "rule": "allow:/"
+    },
+    {
+      "agent": "Googlebot",
+      "path": "/panorama-mercado-obras-publicas/",
+      "allowed": true,
+      "rule": "allow:/"
+    },
+    {
+      "agent": "Googlebot",
+      "path": "/analises-contratos-publicos/",
+      "allowed": true,
+      "rule": "allow:/analises-contratos-publicos/"
+    },
+    {
+      "agent": "Googlebot",
+      "path": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
+      "allowed": true,
+      "rule": "allow:/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/"
+    },
+    {
+      "agent": "bingbot",
+      "path": "/",
+      "allowed": true,
+      "rule": "allow:/"
+    },
+    {
+      "agent": "bingbot",
+      "path": "/servicos/",
+      "allowed": true,
+      "rule": "allow:/"
+    },
+    {
+      "agent": "bingbot",
+      "path": "/entregas/",
+      "allowed": true,
+      "rule": "allow:/"
+    },
+    {
+      "agent": "bingbot",
+      "path": "/triagem-tecnica/",
+      "allowed": true,
+      "rule": "allow:/"
+    },
+    {
+      "agent": "bingbot",
+      "path": "/contato",
+      "allowed": true,
+      "rule": "allow:/"
+    },
+    {
+      "agent": "bingbot",
+      "path": "/casos/",
+      "allowed": true,
+      "rule": "allow:/"
+    },
+    {
+      "agent": "bingbot",
+      "path": "/conteudos/",
+      "allowed": true,
+      "rule": "allow:/"
+    },
+    {
+      "agent": "bingbot",
+      "path": "/ops/",
+      "allowed": false,
+      "rule": "disallow:/ops/"
+    },
+    {
+      "agent": "bingbot",
+      "path": "/ops/README-data.txt",
+      "allowed": false,
+      "rule": "disallow:/ops/"
+    },
+    {
+      "agent": "bingbot",
+      "path": "/intranet",
+      "allowed": false,
+      "rule": "disallow:/intranet"
+    },
+    {
+      "agent": "bingbot",
+      "path": "/.netlify/",
+      "allowed": false,
+      "rule": "disallow:/.netlify/"
+    },
+    {
+      "agent": "bingbot",
+      "path": "/piloto/",
+      "allowed": true,
+      "rule": "allow:/"
+    },
+    {
+      "agent": "bingbot",
+      "path": "/piloto/ofertas/",
+      "allowed": true,
+      "rule": "allow:/"
+    },
+    {
+      "agent": "bingbot",
+      "path": "/panorama-mercado-obras-publicas/",
+      "allowed": true,
+      "rule": "allow:/"
+    },
+    {
+      "agent": "bingbot",
+      "path": "/analises-contratos-publicos/",
+      "allowed": true,
+      "rule": "allow:/analises-contratos-publicos/"
+    },
+    {
+      "agent": "bingbot",
+      "path": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
+      "allowed": true,
+      "rule": "allow:/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/"
+    },
+    {
+      "agent": "DuckDuckBot",
+      "path": "/",
+      "allowed": true,
+      "rule": "allow:/"
+    },
+    {
+      "agent": "DuckDuckBot",
+      "path": "/servicos/",
+      "allowed": true,
+      "rule": "allow:/"
+    },
+    {
+      "agent": "DuckDuckBot",
+      "path": "/entregas/",
+      "allowed": true,
+      "rule": "allow:/"
+    },
+    {
+      "agent": "DuckDuckBot",
+      "path": "/triagem-tecnica/",
+      "allowed": true,
+      "rule": "allow:/"
+    },
+    {
+      "agent": "DuckDuckBot",
+      "path": "/contato",
+      "allowed": true,
+      "rule": "allow:/"
+    },
+    {
+      "agent": "DuckDuckBot",
+      "path": "/casos/",
+      "allowed": true,
+      "rule": "allow:/"
+    },
+    {
+      "agent": "DuckDuckBot",
+      "path": "/conteudos/",
+      "allowed": true,
+      "rule": "allow:/"
+    },
+    {
+      "agent": "DuckDuckBot",
+      "path": "/ops/",
+      "allowed": false,
+      "rule": "disallow:/ops/"
+    },
+    {
+      "agent": "DuckDuckBot",
+      "path": "/ops/README-data.txt",
+      "allowed": false,
+      "rule": "disallow:/ops/"
+    },
+    {
+      "agent": "DuckDuckBot",
+      "path": "/intranet",
+      "allowed": false,
+      "rule": "disallow:/intranet"
+    },
+    {
+      "agent": "DuckDuckBot",
+      "path": "/.netlify/",
+      "allowed": false,
+      "rule": "disallow:/.netlify/"
+    },
+    {
+      "agent": "DuckDuckBot",
+      "path": "/piloto/",
+      "allowed": true,
+      "rule": "allow:/"
+    },
+    {
+      "agent": "DuckDuckBot",
+      "path": "/piloto/ofertas/",
+      "allowed": true,
+      "rule": "allow:/"
+    },
+    {
+      "agent": "DuckDuckBot",
+      "path": "/panorama-mercado-obras-publicas/",
+      "allowed": true,
+      "rule": "allow:/"
+    },
+    {
+      "agent": "DuckDuckBot",
+      "path": "/analises-contratos-publicos/",
+      "allowed": true,
+      "rule": "allow:/analises-contratos-publicos/"
+    },
+    {
+      "agent": "DuckDuckBot",
+      "path": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
+      "allowed": true,
+      "rule": "allow:/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/"
+    },
+    {
+      "agent": "AgenteDesconhecido",
+      "path": "/",
+      "allowed": true,
+      "rule": "allow:/"
+    },
+    {
+      "agent": "AgenteDesconhecido",
+      "path": "/servicos/",
+      "allowed": true,
+      "rule": "allow:/"
+    },
+    {
+      "agent": "AgenteDesconhecido",
+      "path": "/entregas/",
+      "allowed": true,
+      "rule": "allow:/"
+    },
+    {
+      "agent": "AgenteDesconhecido",
+      "path": "/triagem-tecnica/",
+      "allowed": true,
+      "rule": "allow:/"
+    },
+    {
+      "agent": "AgenteDesconhecido",
+      "path": "/contato",
+      "allowed": true,
+      "rule": "allow:/"
+    },
+    {
+      "agent": "AgenteDesconhecido",
+      "path": "/casos/",
+      "allowed": true,
+      "rule": "allow:/"
+    },
+    {
+      "agent": "AgenteDesconhecido",
+      "path": "/conteudos/",
+      "allowed": true,
+      "rule": "allow:/"
+    },
+    {
+      "agent": "AgenteDesconhecido",
+      "path": "/ops/",
+      "allowed": false,
+      "rule": "disallow:/ops/"
+    },
+    {
+      "agent": "AgenteDesconhecido",
+      "path": "/ops/README-data.txt",
+      "allowed": false,
+      "rule": "disallow:/ops/"
+    },
+    {
+      "agent": "AgenteDesconhecido",
+      "path": "/intranet",
+      "allowed": false,
+      "rule": "disallow:/intranet"
+    },
+    {
+      "agent": "AgenteDesconhecido",
+      "path": "/.netlify/",
+      "allowed": false,
+      "rule": "disallow:/.netlify/"
+    },
+    {
+      "agent": "AgenteDesconhecido",
+      "path": "/piloto/",
+      "allowed": true,
+      "rule": "allow:/"
+    },
+    {
+      "agent": "AgenteDesconhecido",
+      "path": "/piloto/ofertas/",
+      "allowed": true,
+      "rule": "allow:/"
+    },
+    {
+      "agent": "AgenteDesconhecido",
+      "path": "/panorama-mercado-obras-publicas/",
+      "allowed": true,
+      "rule": "allow:/"
+    },
+    {
+      "agent": "AgenteDesconhecido",
+      "path": "/analises-contratos-publicos/",
+      "allowed": true,
+      "rule": "allow:/analises-contratos-publicos/"
+    },
+    {
+      "agent": "AgenteDesconhecido",
+      "path": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
+      "allowed": true,
+      "rule": "allow:/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/"
+    },
+    {
+      "agent": "GPTBot",
+      "path": "/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "GPTBot",
+      "path": "/servicos/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "GPTBot",
+      "path": "/entregas/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "GPTBot",
+      "path": "/triagem-tecnica/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "GPTBot",
+      "path": "/contato",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "GPTBot",
+      "path": "/casos/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "GPTBot",
+      "path": "/conteudos/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "GPTBot",
+      "path": "/ops/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "GPTBot",
+      "path": "/ops/README-data.txt",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "GPTBot",
+      "path": "/intranet",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "GPTBot",
+      "path": "/.netlify/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "GPTBot",
+      "path": "/piloto/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "GPTBot",
+      "path": "/piloto/ofertas/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "GPTBot",
+      "path": "/panorama-mercado-obras-publicas/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "GPTBot",
+      "path": "/analises-contratos-publicos/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "GPTBot",
+      "path": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "ClaudeBot",
+      "path": "/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "ClaudeBot",
+      "path": "/servicos/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "ClaudeBot",
+      "path": "/entregas/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "ClaudeBot",
+      "path": "/triagem-tecnica/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "ClaudeBot",
+      "path": "/contato",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "ClaudeBot",
+      "path": "/casos/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "ClaudeBot",
+      "path": "/conteudos/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "ClaudeBot",
+      "path": "/ops/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "ClaudeBot",
+      "path": "/ops/README-data.txt",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "ClaudeBot",
+      "path": "/intranet",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "ClaudeBot",
+      "path": "/.netlify/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "ClaudeBot",
+      "path": "/piloto/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "ClaudeBot",
+      "path": "/piloto/ofertas/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "ClaudeBot",
+      "path": "/panorama-mercado-obras-publicas/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "ClaudeBot",
+      "path": "/analises-contratos-publicos/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "ClaudeBot",
+      "path": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "CCBot",
+      "path": "/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "CCBot",
+      "path": "/servicos/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "CCBot",
+      "path": "/entregas/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "CCBot",
+      "path": "/triagem-tecnica/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "CCBot",
+      "path": "/contato",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "CCBot",
+      "path": "/casos/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "CCBot",
+      "path": "/conteudos/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "CCBot",
+      "path": "/ops/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "CCBot",
+      "path": "/ops/README-data.txt",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "CCBot",
+      "path": "/intranet",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "CCBot",
+      "path": "/.netlify/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "CCBot",
+      "path": "/piloto/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "CCBot",
+      "path": "/piloto/ofertas/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "CCBot",
+      "path": "/panorama-mercado-obras-publicas/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "CCBot",
+      "path": "/analises-contratos-publicos/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "CCBot",
+      "path": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Google-Extended",
+      "path": "/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Google-Extended",
+      "path": "/servicos/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Google-Extended",
+      "path": "/entregas/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Google-Extended",
+      "path": "/triagem-tecnica/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Google-Extended",
+      "path": "/contato",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Google-Extended",
+      "path": "/casos/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Google-Extended",
+      "path": "/conteudos/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Google-Extended",
+      "path": "/ops/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Google-Extended",
+      "path": "/ops/README-data.txt",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Google-Extended",
+      "path": "/intranet",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Google-Extended",
+      "path": "/.netlify/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Google-Extended",
+      "path": "/piloto/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Google-Extended",
+      "path": "/piloto/ofertas/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Google-Extended",
+      "path": "/panorama-mercado-obras-publicas/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Google-Extended",
+      "path": "/analises-contratos-publicos/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Google-Extended",
+      "path": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Amazonbot",
+      "path": "/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Amazonbot",
+      "path": "/servicos/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Amazonbot",
+      "path": "/entregas/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Amazonbot",
+      "path": "/triagem-tecnica/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Amazonbot",
+      "path": "/contato",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Amazonbot",
+      "path": "/casos/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Amazonbot",
+      "path": "/conteudos/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Amazonbot",
+      "path": "/ops/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Amazonbot",
+      "path": "/ops/README-data.txt",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Amazonbot",
+      "path": "/intranet",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Amazonbot",
+      "path": "/.netlify/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Amazonbot",
+      "path": "/piloto/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Amazonbot",
+      "path": "/piloto/ofertas/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Amazonbot",
+      "path": "/panorama-mercado-obras-publicas/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Amazonbot",
+      "path": "/analises-contratos-publicos/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Amazonbot",
+      "path": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Applebot-Extended",
+      "path": "/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Applebot-Extended",
+      "path": "/servicos/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Applebot-Extended",
+      "path": "/entregas/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Applebot-Extended",
+      "path": "/triagem-tecnica/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Applebot-Extended",
+      "path": "/contato",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Applebot-Extended",
+      "path": "/casos/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Applebot-Extended",
+      "path": "/conteudos/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Applebot-Extended",
+      "path": "/ops/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Applebot-Extended",
+      "path": "/ops/README-data.txt",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Applebot-Extended",
+      "path": "/intranet",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Applebot-Extended",
+      "path": "/.netlify/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Applebot-Extended",
+      "path": "/piloto/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Applebot-Extended",
+      "path": "/piloto/ofertas/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Applebot-Extended",
+      "path": "/panorama-mercado-obras-publicas/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Applebot-Extended",
+      "path": "/analises-contratos-publicos/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Applebot-Extended",
+      "path": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Bytespider",
+      "path": "/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Bytespider",
+      "path": "/servicos/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Bytespider",
+      "path": "/entregas/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Bytespider",
+      "path": "/triagem-tecnica/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Bytespider",
+      "path": "/contato",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Bytespider",
+      "path": "/casos/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Bytespider",
+      "path": "/conteudos/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Bytespider",
+      "path": "/ops/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Bytespider",
+      "path": "/ops/README-data.txt",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Bytespider",
+      "path": "/intranet",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Bytespider",
+      "path": "/.netlify/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Bytespider",
+      "path": "/piloto/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Bytespider",
+      "path": "/piloto/ofertas/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Bytespider",
+      "path": "/panorama-mercado-obras-publicas/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Bytespider",
+      "path": "/analises-contratos-publicos/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Bytespider",
+      "path": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "meta-externalagent",
+      "path": "/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "meta-externalagent",
+      "path": "/servicos/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "meta-externalagent",
+      "path": "/entregas/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "meta-externalagent",
+      "path": "/triagem-tecnica/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "meta-externalagent",
+      "path": "/contato",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "meta-externalagent",
+      "path": "/casos/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "meta-externalagent",
+      "path": "/conteudos/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "meta-externalagent",
+      "path": "/ops/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "meta-externalagent",
+      "path": "/ops/README-data.txt",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "meta-externalagent",
+      "path": "/intranet",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "meta-externalagent",
+      "path": "/.netlify/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "meta-externalagent",
+      "path": "/piloto/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "meta-externalagent",
+      "path": "/piloto/ofertas/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "meta-externalagent",
+      "path": "/panorama-mercado-obras-publicas/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "meta-externalagent",
+      "path": "/analises-contratos-publicos/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "meta-externalagent",
+      "path": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "CloudflareBrowserRenderingCrawler",
+      "path": "/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "CloudflareBrowserRenderingCrawler",
+      "path": "/servicos/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "CloudflareBrowserRenderingCrawler",
+      "path": "/entregas/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "CloudflareBrowserRenderingCrawler",
+      "path": "/triagem-tecnica/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "CloudflareBrowserRenderingCrawler",
+      "path": "/contato",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "CloudflareBrowserRenderingCrawler",
+      "path": "/casos/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "CloudflareBrowserRenderingCrawler",
+      "path": "/conteudos/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "CloudflareBrowserRenderingCrawler",
+      "path": "/ops/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "CloudflareBrowserRenderingCrawler",
+      "path": "/ops/README-data.txt",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "CloudflareBrowserRenderingCrawler",
+      "path": "/intranet",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "CloudflareBrowserRenderingCrawler",
+      "path": "/.netlify/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "CloudflareBrowserRenderingCrawler",
+      "path": "/piloto/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "CloudflareBrowserRenderingCrawler",
+      "path": "/piloto/ofertas/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "CloudflareBrowserRenderingCrawler",
+      "path": "/panorama-mercado-obras-publicas/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "CloudflareBrowserRenderingCrawler",
+      "path": "/analises-contratos-publicos/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "CloudflareBrowserRenderingCrawler",
+      "path": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "AgenteDesconhecido",
+      "path": "/%6Fps/",
+      "allowed": false,
+      "rule": "disallow:/ops/"
+    },
+    {
+      "agent": "AgenteDesconhecido",
+      "path": "/intr%61net",
+      "allowed": false,
+      "rule": "disallow:/intranet"
+    },
+    {
+      "agent": "Amazonbot",
+      "path": "/%6Fps/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Amazonbot",
+      "path": "/intr%61net",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Applebot-Extended",
+      "path": "/%6Fps/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Applebot-Extended",
+      "path": "/intr%61net",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Bytespider",
+      "path": "/%6Fps/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Bytespider",
+      "path": "/intr%61net",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "CCBot",
+      "path": "/%6Fps/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "CCBot",
+      "path": "/intr%61net",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "ClaudeBot",
+      "path": "/%6Fps/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "ClaudeBot",
+      "path": "/intr%61net",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "CloudflareBrowserRenderingCrawler",
+      "path": "/%6Fps/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "CloudflareBrowserRenderingCrawler",
+      "path": "/intr%61net",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "DuckDuckBot",
+      "path": "/%6Fps/",
+      "allowed": false,
+      "rule": "disallow:/ops/"
+    },
+    {
+      "agent": "DuckDuckBot",
+      "path": "/intr%61net",
+      "allowed": false,
+      "rule": "disallow:/intranet"
+    },
+    {
+      "agent": "GPTBot",
+      "path": "/%6Fps/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "GPTBot",
+      "path": "/intr%61net",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Google-Extended",
+      "path": "/%6Fps/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Google-Extended",
+      "path": "/intr%61net",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "Googlebot",
+      "path": "/%6Fps/",
+      "allowed": false,
+      "rule": "disallow:/ops/"
+    },
+    {
+      "agent": "Googlebot",
+      "path": "/intr%61net",
+      "allowed": false,
+      "rule": "disallow:/intranet"
+    },
+    {
+      "agent": "bingbot",
+      "path": "/%6Fps/",
+      "allowed": false,
+      "rule": "disallow:/ops/"
+    },
+    {
+      "agent": "bingbot",
+      "path": "/intr%61net",
+      "allowed": false,
+      "rule": "disallow:/intranet"
+    },
+    {
+      "agent": "meta-externalagent",
+      "path": "/%6Fps/",
+      "allowed": false,
+      "rule": "disallow:/"
+    },
+    {
+      "agent": "meta-externalagent",
+      "path": "/intr%61net",
+      "allowed": false,
+      "rule": "disallow:/"
+    }
+  ],
+  "percent_encoding_note": "RFC 3986 6.2.2.2: a forma percent-encoded de um caractere unreserved e equivalente ao caractere. As sondas /%6Fps/ e /intr%61net existem para provar que a restricao nao escapa pela codificacao. Apenas o conjunto unreserved e decodificado, entao %2A nao vira curinga."
+}

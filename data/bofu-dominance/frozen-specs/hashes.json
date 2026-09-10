@@ -1,9 +1,9 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "16369b9fcd873ec35201943db9a6c4c2571945e5",
-  "recaptured_at": "2026-09-09",
-  "recapture_reason": "Decisão expressa EXECUTE_NOW de 09/09/2026; bytes protegidos conferidos no checkpoint alcançável 16369b9fcd873ec35201943db9a6c4c2571945e5. Desde a recaptura anterior, styles.css perdeu somente cinco regras do seletor obsoleto .footer-clusters; a busca na fonte pública não encontrou essa classe em HTML, modelos ou JavaScript (as ocorrências restantes pertencem apenas a capturas axe históricas). Nenhum pilar, cálculo, conteúdo, condição comercial, autoridade, script, sitemap, robots, redirecionamento, mapa de serviço ou analytics mudou nesta recaptura. As mudanças foram revisadas por agentes da campanha, não por compradores ou revisor humano independente; esta evidência não alega medição de conversão, nova atribuição, cliente ou aprovação externa. A trava PREPARE-ONLY continua aplicável apenas aos patches históricos não autorizados; ela não restaura o congelamento editorial revogado. Pillars, forbidden, snapshots, specs, patches e documentação foram recalculados dos bytes reais, sem exceção de digest.",
+  "baseline_commit": "929c5b4978f8823eab66d235cc4818e1326f5ef3",
+  "recaptured_at": "2026-09-10",
+  "recapture_reason": "Decima recaptura de 2026-09-10, sobre 929c5b497. Unico byte protegido que mudou: script.js (CHECK_OK): sai o codigo de preferencia pela opcao neutra (a ordem do HTML passa a garanti-la) e o bloco de /entregas/ (agora script local da pagina). Nenhuma rota, preco ou permissao mudou. Nona recaptura de 2026-09-10, sobre fedb4763d. Unico byte protegido que mudou: script.js (CHECK_OK): o botao do menu movel deixa de ficar inerte com o painel aberto e volta a tratar o proprio clique; ouvinte do documento volta a uma linha. Nenhuma rota, preco ou permissao mudou. Oitava recaptura de 2026-09-10, sobre ce0373e6b. Unico byte protegido que mudou: script.js, reconstruido de js/modules/nav.js (CHECK_OK), compactado em 214 bytes para o orcamento Lighthouse da home sem mudanca de comportamento. Setima recaptura de 2026-09-10, sobre 83ca3543f, apos a auditoria ultracode. Unico byte protegido que mudou: script.js, reconstruido de js/modules/nav.js (CHECK_OK). Comportamento: em /entregas/ a entrega escolhida que declara data-journey passa a dirigir a jornada oculta e o destino de confirmacao (as familias por proposta deixam de confirmar em /obrigado-operacao). Nenhuma rota, preco ou permissao mudou; o HTML servido da pagina de analise aprovada nao muda. Sexta recaptura de 2026-09-10, sobre 75b8baae2. Unico byte protegido que mudou: script.js, reconstruido de js/modules/nav.js (CHECK_OK). Correcao de comportamento: o clique que abre o menu movel deixa de ser fechado pelo ouvinte do documento no mesmo evento (regressao vista em CI). Nenhuma rota, preco ou permissao mudou; o HTML servido nao muda. Quinta recaptura de 2026-09-10, sobre e276a9fba, apos a revisao adversarial de #650. Unico byte protegido que mudou: script.js, reconstruido de js/modules/nav.js por scripts/site/build_script_modules.mjs (CHECK_OK). Duas mudancas de comportamento, nenhuma de rota, preco ou permissao: (1) quando varias opcoes de estagio partilham a mesma jornada, o preenchimento automatico prefere a opcao marcada data-journey-default (neutra) em vez da primeira -- antes, quem so entrava em obras publicas era reclassificado como 'problema urgente em contrato'; (2) o toque no botao do menu movel, inerte com o painel aberto, fecha o menu e devolve o foco ao botao em vez de deixa-lo no body. O HTML servido da pagina de analise aprovada nao muda. As decisoes aprovadas do robots sao 234 (a mencao anterior a 208 estava desatualizada). Quarta recaptura de 2026-09-10. script.js reconstruido de js/modules/nav.js: o dialogo movel ganhou botao de fechar interno e o inert deixou de alcancar o interior do proprio dialogo. Comportamento apenas; o HTML servido nao muda. Terceira recaptura de 2026-09-10. script.js reconstruido de js/modules/nav.js para declarar o menu movel como dialogo modal (role, aria-modal e inert no fundo, aplicados em tempo de execucao) e para dar escopo ao Escape. Nenhuma rota, preco ou permissao mudou; o HTML servido nao muda, o que foi conferido byte a byte na pagina de analise aprovada. Segunda recaptura de 2026-09-10, mesma decisão EXECUTE_NOW. Único byte protegido que mudou desta vez: script.js, reconstruído de js/modules/nav.js por scripts/site/build_script_modules.mjs. A mudança é ADITIVA: uma entrada nova em HOME_SITUATIONS para a opção \"ainda não sei qual serviço\", que o formulário da home passou a oferecer. Sem a entrada, a opção cairia no default 'operacao' de stageToJourney -- a reclassificação silenciosa que o próprio gate de funil proíbe. Nenhuma situação existente foi alterada ou removida; conferido no diff contra origin/main (10 linhas acrescentadas, nenhuma removida). Decisão expressa EXECUTE_NOW de 09/09/2026, campanha experiência/publicação. Único byte protegido que mudou: robots.txt perdeu a linha \"Disallow: /analises-contratos-publicos/\", que era INERTE. Pela RFC 9309 2.2.2, um Allow e um Disallow de mesmo comprimento empatam em favor do Allow, e o Allow do hub tem exatamente o mesmo comprimento: o arquivo afirmava uma restrição que não existia. A remoção foi feita no gerador (scripts/contract_analysis/render.py), não no arquivo, e o Disallow continua sendo emitido e bloqueando de fato quando o hub NÃO está liberado, com contraprova em scripts/contract_analysis/tests/test_canary.py. Zero mudança de regra efetiva, conferida antes e depois com o motor RFC 9309 em scripts/site/robots_policy.py, e a política efetiva servida continua verificada contra as 208 decisões aprovadas de data/organic/robots-policy-baseline.v1.json. Nenhuma permissão de indexação, rastreio ou treinamento foi alterada. Decisão expressa EXECUTE_NOW de 09/09/2026; bytes protegidos conferidos no checkpoint alcançável 16369b9fcd873ec35201943db9a6c4c2571945e5. Desde a recaptura anterior, styles.css perdeu somente cinco regras do seletor obsoleto .footer-clusters; a busca na fonte pública não encontrou essa classe em HTML, modelos ou JavaScript (as ocorrências restantes pertencem apenas a capturas axe históricas). Nenhum pilar, cálculo, conteúdo, condição comercial, autoridade, script, sitemap, robots, redirecionamento, mapa de serviço ou analytics mudou nesta recaptura. As mudanças foram revisadas por agentes da campanha, não por compradores ou revisor humano independente; esta evidência não alega medição de conversão, nova atribuição, cliente ou aprovação externa. A trava PREPARE-ONLY continua aplicável apenas aos patches históricos não autorizados; ela não restaura o congelamento editorial revogado. Pillars, forbidden, snapshots, specs, patches e documentação foram recalculados dos bytes reais, sem exceção de digest.",
   "html_mutation": true,
   "pillars": {
     "aditivos-obras-publicas": "c9f37bdfa249ad3f0f2869774d48e33b6f5a3f921919df252b5a96eda96b6ac0",
@@ -20,11 +20,11 @@
     "auditoria-orcamento-licitacao/index.html": "fb2fa86a4c47f7d0fe83a322c2157097a696f234bc5ca00732b900128eaedb78",
     "diagnostico-b2g-360/index.html": "101b019cb8113967cd7ffd50b07d1011af982ac22dd449aefcc868bff4b79409",
     "diagnostico-pre-licitacao/index.html": "65c6ea2c235ef0db5629922ed18c578bde2ef585339d6adec86830014e1229f4",
-    "script.js": "be277e3bd0f6ada2b6db0d36b924e8e347fb413da8a73d60ebb7a7101e265880",
+    "script.js": "4a17b3a089d30f9e74626ea4482f66fd68f617f4d153c4f0161806b1b056f40b",
     "styles.css": "e0308ce5bd1b6da4d4b7a4cb58c4717a9d3512b36b839fb35ca6be21bf03eaf3",
     "styles-tokens.css": "15cc0770e76276b418c11493fa9e53827ae14bb8f854b0a63d8c6dd63afc02fc",
     "styles-tools.css": "8c42a4b5fadba13e4dae52bd7168c64b9f5548f3fd3f8d4f0707ce4e9463c7ba",
-    "robots.txt": "f835994a0d90d3b0bf29bfd77ade13856a25c2b2b90752e1640bfae966534241",
+    "robots.txt": "f34281026ed1e2be3af8182fd31fc5fea6fff645c01f5442e68b2bcf59625fd9",
     "sitemap.xml": "de36951f3fd09a564842f18049eaa632386401d291bf9b2b4999463cdc71fddb",
     "sitemap.txt": "5dace94ea3495da837ae6c8548cdb42fd4f21f6bab64ca5b046bf6c01d76bd08",
     "sitemap-index.xml": "02dc7b457f4aa1acbc2ef424d34838c1bf29a07915e40fab9d9fdcd24dbbd7d5",
@@ -33,23 +33,8 @@
     "js/modules/analytics.js": "bf5a0898d4c5b142165ea35ffc58c9c88f7d3746989a50ece7343f2b2e6b2e92"
   },
   "recapture_diff_lines_vs_origin_main": {
-    "aditivos-obras-publicas/index.html": 10,
-    "medicoes-glosas-obras-publicas/index.html": 10,
-    "reequilibrio-obras-publicas/index.html": 10,
-    "auditoria-orcamento-licitacao/index.html": 10,
-    "diagnostico-b2g-360/index.html": 24,
-    "diagnostico-pre-licitacao/index.html": 10,
     "script.js": 2,
-    "styles.css": 26,
-    "styles-tokens.css": 0,
-    "styles-tools.css": 0,
-    "robots.txt": 6,
-    "sitemap.xml": 8,
-    "sitemap.txt": 2,
-    "sitemap-index.xml": 6,
-    "_redirects": 36,
-    "data/organic/content-service-map.json": 0,
-    "js/modules/analytics.js": 0
+    "js/modules/nav.js": 38
   },
-  "previous_baseline_commit": "3ec50a67ab77bb335567c2b497a6fbb7f81ef196"
+  "previous_baseline_commit": "fedb4763dd29283f4f05f75b84043cc5da4abfab"
 }

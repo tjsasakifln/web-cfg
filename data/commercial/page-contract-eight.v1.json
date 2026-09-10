@@ -48,7 +48,15 @@
     "public_name_pt_br": "Diagnóstico de Expansão no Mercado Público",
     "hub_route": "/entregas/",
     "hub_file": "entregas/index.html",
-    "units_in_package": ["02", "03", "04", "05", "06", "07", "08"],
+    "units_in_package": [
+      "02",
+      "03",
+      "04",
+      "05",
+      "06",
+      "07",
+      "08"
+    ],
     "units_sum_cents": 1228000,
     "units_sum_display": "R$ 12.280",
     "package_price_cents": 800000,
@@ -74,8 +82,18 @@
     "recurring_direction_scope": "cadência recorrente de prioridades, responsáveis, indicadores e memória das decisões"
   },
   "sla_counts_from_gap": {
-    "declared_in_issue": ["01", "03", "08"],
-    "unknown": ["02", "04", "05", "06", "07"],
+    "declared_in_issue": [
+      "01",
+      "03",
+      "08"
+    ],
+    "unknown": [
+      "02",
+      "04",
+      "05",
+      "06",
+      "07"
+    ],
     "note": "A tabela da 331 declara o marco inicial apenas em três linhas. Nas outras cinco o marco é UNKNOWN, conforme a própria regra de ausência de dado da issue. O gate impede que essa lacuna cresça."
   },
   "deliverables": [
@@ -96,18 +114,18 @@
         "autorização para usar documentos privados fornecidos",
         "data de corte"
       ],
-      "saida_minima": "AVANÇAR / CONDICIONAR / INVESTIGAR / RECUSAR, justificativa, responsável e ponto de revalidação",
+      "saida_minima": "AVANÇAR / CONDICIONAR / INVESTIGAR / RECUSAR, justificativa, responsável e a data em que a decisão precisa ser revista",
       "value_first": {
         "current_value": "O card permite comparar situação, decisão, entrada, limite, saída, preço e SLA.",
-        "actual_contract_value": "Concentrar a leitura nas oportunidades abertas que merecem decisão e deixar justificativa, responsável e ponto de revalidação.",
+        "actual_contract_value": "Concentrar a leitura nas oportunidades abertas que merecem decisão e deixar justificativa, responsável e a data em que a decisão precisa ser revista.",
         "diagnosed_gap": "A decisão e a saída existiam, mas o trabalho manual comprimido e o uso da priorização não estavam explícitos antes das fronteiras comuns.",
         "implemented_direction": "Abrir pela alocação da equipe, explicar busca, leitura e comparação comprimidas e mostrar a priorização como artefato de decisão.",
         "work_removed": "Localizamos os editais abertos no território definido, comparamos suas exigências com a atuação da empresa e organizamos as oportunidades por prioridade, com justificativa.",
         "artifact_use": "Levar a lista AVANÇAR, CONDICIONAR, INVESTIGAR ou RECUSAR para distribuir responsáveis e marcar revalidação.",
-        "price_anchor": "O preço remunera o recorte, a comparação das oportunidades, a justificativa vinculada e o ponto de revalidação, não uma lista bruta de editais.",
-        "proof_statement": "O modelo integral permite inspecionar critérios, fonte, data e o estado decisório antes do pedido.",
+        "price_anchor": "O preço remunera o recorte, a comparação das oportunidades, a justificativa vinculada e a data de revisão de cada decisão, não uma lista bruta de editais.",
+        "proof_statement": "O modelo integral permite inspecionar critérios, fonte, data e a recomendação registrada para cada oportunidade antes do pedido.",
         "cta_inspect": "Examinar o demonstrativo do radar de licitações",
-        "cta_configure": "Configurar o radar de licitações prioritárias",
+        "cta_configure": "Pedir a análise dos editais prioritários",
         "retained_boundary_destination": "Status sintético junto do modelo; cobertura e ausência de garantia junto da leitura do resultado."
       },
       "sla": {
@@ -154,7 +172,7 @@
         "price_anchor": "O preço remunera reconciliação, dicionário, fórmulas, checks e ressalvas rastreáveis, não a simples entrega de uma planilha.",
         "proof_statement": "O modelo integral expõe dados, fórmulas, checks, cobertura e ressalvas para inspeção.",
         "cta_inspect": "Examinar o demonstrativo da base de mercado",
-        "cta_configure": "Configurar a base de mercado",
+        "cta_configure": "Pedir a base de mercado de obras públicas",
         "retained_boundary_destination": "Status sintético junto dos dados; cobertura e UNKNOWN junto da fonte e da fórmula."
       },
       "sla": {
@@ -201,7 +219,7 @@
         "price_anchor": "O preço remunera a síntese de uma análise já reconciliada em narrativa e decisões utilizáveis, sem embutir nova pesquisa.",
         "proof_statement": "O modelo integral mostra a sequência narrativa, a evidência vinculada e a forma das decisões.",
         "cta_inspect": "Examinar o demonstrativo da síntese executiva",
-        "cta_configure": "Configurar a síntese executiva",
+        "cta_configure": "Pedir a síntese executiva dos resultados",
         "retained_boundary_destination": "Status sintético junto do modelo; ausência de nova pesquisa junto do objeto incluído."
       },
       "sla": {
@@ -248,7 +266,7 @@
         "price_anchor": "O preço remunera o recorte de 36 meses, a reconciliação e a priorização de até 20 órgãos com cobertura declarada.",
         "proof_statement": "O modelo integral mostra critérios, recorrência, concentração, calendário, fonte e cobertura.",
         "cta_inspect": "Examinar o demonstrativo do mapa de órgãos",
-        "cta_configure": "Configurar o mapa de órgãos",
+        "cta_configure": "Pedir o mapa de órgãos compradores",
         "retained_boundary_destination": "Status sintético junto do mapa; limites de cobertura e inferência junto dos campos correspondentes."
       },
       "sla": {
@@ -295,7 +313,7 @@
         "price_anchor": "O preço remunera recorte, verificação de vigência e qualificação de até 30 sinais, inclusive falso positivo e próxima observação.",
         "proof_statement": "O modelo integral permite conferir vigência, estágio, confiança, fonte e motivo do falso positivo.",
         "cta_inspect": "Examinar o demonstrativo do radar de renovações",
-        "cta_configure": "Configurar o radar de renovações",
+        "cta_configure": "Pedir a análise dos contratos a vencer",
         "retained_boundary_destination": "Status sintético junto dos sinais; ausência de previsão garantida junto do estágio e da próxima observação."
       },
       "sla": {
@@ -342,7 +360,7 @@
         "price_anchor": "O preço remunera o recorte de 36 meses, a comparação de até 15 concorrentes observados e a resposta explicada.",
         "proof_statement": "O modelo integral mostra contratos observados, concentração, faixa, exposição, fonte e resposta sugerida.",
         "cta_inspect": "Examinar o demonstrativo do mapa de concorrentes",
-        "cta_configure": "Configurar o mapa de concorrentes",
+        "cta_configure": "Pedir o mapa de concorrentes",
         "retained_boundary_destination": "Status sintético junto do mapa; limites contra conluio e dado privado junto da interpretação competitiva."
       },
       "sla": {
@@ -389,7 +407,7 @@
         "price_anchor": "O preço remunera seleção comparável, normalização e leitura estatística de 36 meses, não uma tabela bruta de valores.",
         "proof_statement": "O modelo integral expõe recorte, percentis, dispersão, outliers, fonte, período e método.",
         "cta_inspect": "Examinar o demonstrativo das referências de preços",
-        "cta_configure": "Configurar as referências de preços",
+        "cta_configure": "Pedir as referências de preços de obra",
         "retained_boundary_destination": "Status sintético junto dos números; limite contra preço previsto ou verdade universal junto do método."
       },
       "sla": {
@@ -436,7 +454,7 @@
         "price_anchor": "O preço remunera integração e julgamento sobre módulos já reconciliados, com trilha decisória, sem esconder uma segunda pesquisa.",
         "proof_statement": "O modelo integral mostra decisões, responsáveis, trilha até fonte ou célula e lacunas declaradas.",
         "cta_inspect": "Examinar o demonstrativo do plano de expansão",
-        "cta_configure": "Configurar o plano de expansão",
+        "cta_configure": "Pedir o plano de expansão",
         "retained_boundary_destination": "Status sintético junto do plano; ausência de segunda pesquisa junto dos módulos incluídos."
       },
       "sla": {
@@ -476,7 +494,12 @@
     "price_changed": false,
     "sla_visible_on_route_pages": "DONE",
     "first_sale_evidence": "NOT_STARTED",
-    "first_sale_fields": ["horas", "retrabalho", "margem", "outcome"],
+    "first_sale_fields": [
+      "horas",
+      "retrabalho",
+      "margem",
+      "outcome"
+    ],
     "evidence": []
   }
 }

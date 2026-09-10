@@ -1,9 +1,9 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-09-10T00:11:28.038Z",
+  "measured_at": "2026-09-10T15:32:13.031Z",
   "measured_on": "2026-09-10",
-  "commit_sha": "dcbe2c78647f7774f1780065546070f019b30d83",
+  "commit_sha": "298fe0bff2ff604fad0dd7e6153505b02ad4f304",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "f168038814087e1b365d1de3042af9a3f3364743756e104711fecc0fb9fe7477",
@@ -17,41 +17,41 @@
     "assets/report-capture.css": "669b93f113f417ba6a8175d9d0ab0dd846a19e991245ad9f2f1ebea48d8c0552",
     "assets/report-model-a11y-v293.css": "148fb54ad084edad56eff48e6b635e2df177e8679a724d50e2e92a88421fddce",
     "assets/report-model.css": "79e09ea8559deb4e01c78df860a00f0ff542659b3c2b9274bc8401444fab2447",
-    "atrasos-prorrogacao-obras-publicas/index.html": "1998134164e6d5b7a9b0971ea665f99210d9d9614b477ae47a514f0ce5293b9f",
+    "atrasos-prorrogacao-obras-publicas/index.html": "4a3a8ee17290630f6ebfb65898131bf5a412ba261fd9113f95c1380c570a5727",
     "auditoria-orcamento-licitacao/index.html": "fb2fa86a4c47f7d0fe83a322c2157097a696f234bc5ca00732b900128eaedb78",
     "bid-room-licitacoes-obras/index.html": "bcbe90836cc8cd8d6421809ac6a2d2726d92f3b8feab290d35967662ab43d72e",
-    "casos/modelo-apresentacao-executiva-resultados/index.html": "6bf8650a2e5091d282201df8224a039199dc91d4bd79aa962ce6ec67f11dec7c",
+    "casos/modelo-apresentacao-executiva-resultados/index.html": "48d94d71d273741eb1bb887f472071d8623096b0d849c075d96b1ea83db66b7f",
     "casos/modelo-apresentacao-executiva-resultados/styles.css": "8ace8a9960dbc19f71c9f69e4908f39ac223991715a13707587d1d06f483048d",
-    "casos/modelo-base-quantitativa-canonica/index.html": "325799e74bbd42ab59b17c11ed983322cecaadf423d0c7f41380d75dc1c1d94f",
+    "casos/modelo-base-quantitativa-canonica/index.html": "b5630d2a1e1cb6fbbc552dba98b3292307b8f6100bd813f53e321dde1545302e",
     "casos/modelo-base-quantitativa-canonica/styles.css": "c8d0c0fcc67bb3ff7368e313a7eb7978728dd012668bbd57c6d4584fd3331d83",
-    "casos/modelo-contratos-vincendos-relicitacao/index.html": "9764099be3a35262c24dca85895aa35e663a5d392a4f1a2d3ac7fa6d0817fd6e",
+    "casos/modelo-contratos-vincendos-relicitacao/index.html": "dd5303649ceaf04e615c56fd5f1c52bdc059d471dc9620652fc59fffb531e50c",
     "casos/modelo-contratos-vincendos-relicitacao/styles.css": "5092ad1880bb2170a9de801c7a865ff2259dd0716210b13c5fe44569e603fe1e",
-    "casos/modelo-mapa-compradores-publicos/index.html": "9d5ca19ccb64f2ae0970070240a441575f537cdafb3d9ef3e5ae1ba3d1d70d37",
+    "casos/modelo-mapa-compradores-publicos/index.html": "44029580ecea3f465b45d8235c3debd58af5a0a89c98bc4ee6aef4dd6cddde25",
     "casos/modelo-mapa-compradores-publicos/styles.css": "f6eda4b508c8e46e4a5274bd0ac16046c053791ffe13efd82c75cfa9d272e815",
-    "casos/modelo-mapeamento-concorrentes-publicos/index.html": "f8bc0a9c4322db18616091fabbf54010ae36c13022bd0c0fa1d77f6f41ee3dd0",
+    "casos/modelo-mapeamento-concorrentes-publicos/index.html": "b2641f98e8446b4bbb19cff87164fc67f0a7f3aeed49e21bd35f4daf9de3f1d0",
     "casos/modelo-mapeamento-concorrentes-publicos/styles.css": "3739f8d4ed9a2b20308629bd19ea3a5a21a0e9f1574992009edd455ff44135ac",
-    "casos/modelo-painel-precos-obras-publicas/index.html": "848a3b402b9e2382f1dd455a9b8ab8f02ca8a900511af666613d514a8d726885",
+    "casos/modelo-painel-precos-obras-publicas/index.html": "cee59248aebd602ee6172f237c3be84615b592e39deb2fb790281c242df82618",
     "casos/modelo-painel-precos-obras-publicas/styles.css": "eddc3b734030a33898728fe41affb4c3bce7ccee5338d13ff05a8cbf7d669e6a",
-    "casos/modelo-relatorio-executivo-consolidado/index.html": "d7f5fdc81964ac56ac72f6c47117bc8186beae56dadc8f985f913f3e50e0f742",
+    "casos/modelo-relatorio-executivo-consolidado/index.html": "e92ef97bcd06c9ec74e51219a25883644d2dd6e3c7b7ea82b814fec276cf0dcc",
     "casos/modelo-relatorio-executivo-consolidado/styles.css": "d2f580f6061be6c0bcafa966877693be469fa8a7171a7a3469c7ec967e11b63a",
-    "casos/modelo-relatorio-inteligencia-licitacoes/index.html": "c8d4033da9c46b16c79b119385ffa5ddf906466bfe189e488b0ac89479e2f461",
+    "casos/modelo-relatorio-inteligencia-licitacoes/index.html": "a48d9d1df3520993cff4ad646cbe6a5cca62728ad24bd9b8c78d90cb67ecbab9",
     "casos/modelo-relatorio-inteligencia-licitacoes/styles.css": "79e09ea8559deb4e01c78df860a00f0ff542659b3c2b9274bc8401444fab2447",
-    "defesa-margem-contratos-publicos/index.html": "f80147fcb34217b0eb4f08f5f880750e28b6748e116309a70265317205c2ad88",
-    "defesa-tecnica-contratos-publicos/index.html": "4e4d22dbcaa56a71b2cefc25c14b2b0da6953ffa842100ce1b9dccb7f1c0c712",
+    "defesa-margem-contratos-publicos/index.html": "b05a8aa130f79bca426e60b1f0bdf9af279576e7702243bf76625c2c2d0ad474",
+    "defesa-tecnica-contratos-publicos/index.html": "c910324e7487dfd4ee0fcb019f420c4e8f4cf32869426e4b9e53c605ab199f14",
     "diagnostico-b2g-360/index.html": "101b019cb8113967cd7ffd50b07d1011af982ac22dd449aefcc868bff4b79409",
-    "diagnostico-b2g-expansao/index.html": "864d53e45b946f8f8252ca0568d005cb209e618a177d2234582054533e63e715",
+    "diagnostico-b2g-expansao/index.html": "fe60cef824e78beff5d03ec679f1e430cad33b7754a748069654bbb293f28835",
     "diagnostico-pre-licitacao/index.html": "65c6ea2c235ef0db5629922ed18c578bde2ef585339d6adec86830014e1229f4",
     "diretoria-b2g/index.html": "72d1ffd411f911fd295b6ae13fd1318c28356aa007fbf73f71cac80e39f68197",
-    "entregas/index.html": "1b5017444cdd7ee44f64b7cbca2486f0b2d5cf53f7657c675dfde5ac0846d015",
-    "entregas/styles.css": "0dca7831c23ee3d1a521fa99b6b234aaefed87de989b9d31482faf4b74a35226",
-    "index.html": "05f8ba51328a9353d95a15c1568459bab5a2adc2d9cf1a5157f93de2f6e1c919",
+    "entregas/index.html": "18e783d72a03f83073714aa1ab4994de149976042b5928c949fdfae6264dccc1",
+    "entregas/styles.css": "7f2817c86d856247fe607b2961856073ce0ae163dcc51baa9f743d9b27255774",
+    "index.html": "50decdd06e3de09da085f498f2f90c8b97bee5c17fd413fe5ee42deb7028ebab",
     "medicoes-glosas-obras-publicas/index.html": "fe3d3c644ac158dae63f85369301da200b5f4de025b0db3364b9cb3e3d929c61",
     "problemas-que-resolvemos/index.html": "fbd929bd17c6890969ee4b0f5c3647dca7ee81bf75b3a8ae4e124c38aef0b280",
     "reequilibrio-obras-publicas/index.html": "11d0cf94f61308da770640898df3019f4cbdd0b3dcd42f9df8ad73a8aa79d6ca",
-    "script.js": "be277e3bd0f6ada2b6db0d36b924e8e347fb413da8a73d60ebb7a7101e265880",
-    "servicos-obras-publicas/index.html": "8a6f19908d503d55eee264894860c097154f2332db3c3c460fe9ed013134dc7f",
+    "script.js": "4a17b3a089d30f9e74626ea4482f66fd68f617f4d153c4f0161806b1b056f40b",
+    "servicos-obras-publicas/index.html": "7fb62cdb2a3c93e06ced52475551515a5ef9996c8d51075294e84939283de04b",
     "styles-hubs.css": "ed4668833ad8de5cef5acc5fc1e8f21e519870f0bf282247c3b4a9644a094592",
-    "styles-offers.css": "26ab81eca7465514c8840c985c0df73c7153a2a525592d3783be36b88864f5d4",
+    "styles-offers.css": "0c1efa4797709ae6d2b776aa58e863ef095a880646b5e4b158a7a47e0963ec2e",
     "styles-tokens.css": "15cc0770e76276b418c11493fa9e53827ae14bb8f854b0a63d8c6dd63afc02fc",
     "styles-tools.css": "8c42a4b5fadba13e4dae52bd7168c64b9f5548f3fd3f8d4f0707ce4e9463c7ba",
     "styles.css": "e0308ce5bd1b6da4d4b7a4cb58c4717a9d3512b36b839fb35ca6be21bf03eaf3"
@@ -101,7 +101,7 @@
   "routes": [
     {
       "route": "/",
-      "html_sha256": "05f8ba51328a9353d95a15c1568459bab5a2adc2d9cf1a5157f93de2f6e1c919",
+      "html_sha256": "50decdd06e3de09da085f498f2f90c8b97bee5c17fd413fe5ee42deb7028ebab",
       "measured_on": "2026-09-10",
       "viewports": {
         "1366x768": {
@@ -153,7 +153,7 @@
                 "width": 708,
                 "height": 33
               },
-              "text": "·Engenharia Civil pela EESC-USP ·CNPJ 52.407.089/0001-09 ·Método e limites publicados"
+              "text": "·Engenharia Civil pela EESC-USP ·CNPJ 52.407.089/0001-09 ·Como conferir credenciais e limites"
             },
             "primary_action": {
               "selector": "a.button-primary",
@@ -184,12 +184,12 @@
           ],
           "secondary_actions_in_fold": [
             {
-              "text": "Conversar sobre seu projeto",
-              "href": "/triagem-tecnica/#projetos"
+              "text": "Descrever a minha situação",
+              "href": "/triagem-tecnica/"
             }
           ],
           "verifiable_proof": {
-            "text": "Método e limites publicados",
+            "text": "Como conferir credenciais e limites",
             "href": "/confianca/"
           },
           "horizontal_overflow": false
@@ -243,7 +243,7 @@
                 "width": 350,
                 "height": 82
               },
-              "text": "·Engenharia Civil pela EESC-USP ·CNPJ 52.407.089/0001-09 ·Método e limites publicados"
+              "text": "·Engenharia Civil pela EESC-USP ·CNPJ 52.407.089/0001-09 ·Como conferir credenciais e limites"
             },
             "primary_action": {
               "selector": "a.button-primary",
@@ -274,12 +274,12 @@
           ],
           "secondary_actions_in_fold": [
             {
-              "text": "Conversar sobre seu projeto",
-              "href": "/triagem-tecnica/#projetos"
+              "text": "Descrever a minha situação",
+              "href": "/triagem-tecnica/"
             }
           ],
           "verifiable_proof": {
-            "text": "Método e limites publicados",
+            "text": "Como conferir credenciais e limites",
             "href": "/confianca/"
           },
           "horizontal_overflow": false
@@ -310,7 +310,7 @@
     },
     {
       "route": "/entregas/",
-      "html_sha256": "1b5017444cdd7ee44f64b7cbca2486f0b2d5cf53f7657c675dfde5ac0846d015",
+      "html_sha256": "18e783d72a03f83073714aa1ab4994de149976042b5928c949fdfae6264dccc1",
       "measured_on": "2026-09-10",
       "viewports": {
         "1366x768": {
@@ -326,37 +326,37 @@
                 "width": 713,
                 "height": 23
               },
-              "text": "Entregas inspecionáveis"
+              "text": "O que você recebe"
             },
             "h1": {
               "selector": "h1",
               "box": {
                 "top": 191,
-                "bottom": 352,
+                "bottom": 323,
                 "left": 83,
                 "right": 653,
                 "width": 570,
-                "height": 161
+                "height": 133
               },
-              "text": "Entregas de engenharia. Veja o conteúdo e para que ele serve.Exemplos identificados."
+              "text": "Entregas de engenharia. Veja o conteúdo e para que ele serve."
             },
             "lead": {
               "selector": ".deliverables-lead",
               "box": {
-                "top": 368,
-                "bottom": 467,
+                "top": 360,
+                "bottom": 410,
                 "left": 83,
                 "right": 733,
                 "width": 650,
-                "height": 99
+                "height": 50
               },
-              "text": "Projetos, revisões, compatibilizações, orçamentos, inspeções, laudos, perícias, avaliações e análises técnicas atendem obras públicas e privadas. A página separa três coisas: o serviço que realizamos, o exemplo demonstrativo que você pode e"
+              "text": "Projetos, revisões, compatibilizações, orçamentos, inspeções, laudos, perícias, avaliações e análises técnicas atendem obras públicas e privadas."
             },
             "proof": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 479,
-                "bottom": 544,
+                "top": 422,
+                "bottom": 487,
                 "left": 83,
                 "right": 653,
                 "width": 570,
@@ -367,8 +367,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 562,
-                "bottom": 606,
+                "top": 505,
+                "bottom": 549,
                 "left": 83,
                 "right": 357,
                 "width": 274,
@@ -382,8 +382,8 @@
               "text": "Ver entregas e exemplos",
               "href": "#servicos-e-entregas",
               "box": {
-                "top": 562,
-                "bottom": 606,
+                "top": 505,
+                "bottom": 549,
                 "left": 83,
                 "right": 357,
                 "width": 274,
@@ -416,37 +416,37 @@
                 "width": 350,
                 "height": 23
               },
-              "text": "Entregas inspecionáveis"
+              "text": "O que você recebe"
             },
             "h1": {
               "selector": "h1",
               "box": {
                 "top": 157,
-                "bottom": 380,
+                "bottom": 346,
                 "left": 20,
                 "right": 362,
                 "width": 342,
-                "height": 223
+                "height": 189
               },
-              "text": "Entregas de engenharia. Veja o conteúdo e para que ele serve.Exemplos identificados."
+              "text": "Entregas de engenharia. Veja o conteúdo e para que ele serve."
             },
             "lead": {
               "selector": ".deliverables-lead",
               "box": {
-                "top": 392,
-                "bottom": 612,
+                "top": 380,
+                "bottom": 490,
                 "left": 20,
                 "right": 370,
                 "width": 350,
-                "height": 220
+                "height": 110
               },
-              "text": "Projetos, revisões, compatibilizações, orçamentos, inspeções, laudos, perícias, avaliações e análises técnicas atendem obras públicas e privadas. A página separa três coisas: o serviço que realizamos, o exemplo demonstrativo que você pode e"
+              "text": "Projetos, revisões, compatibilizações, orçamentos, inspeções, laudos, perícias, avaliações e análises técnicas atendem obras públicas e privadas."
             },
             "proof": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 630,
-                "bottom": 714,
+                "top": 508,
+                "bottom": 592,
                 "left": 20,
                 "right": 370,
                 "width": 350,
@@ -457,8 +457,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 726,
-                "bottom": 770,
+                "top": 604,
+                "bottom": 648,
                 "left": 20,
                 "right": 370,
                 "width": 350,
@@ -472,8 +472,8 @@
               "text": "Ver entregas e exemplos",
               "href": "#servicos-e-entregas",
               "box": {
-                "top": 726,
-                "bottom": 770,
+                "top": 604,
+                "bottom": 648,
                 "left": 20,
                 "right": 370,
                 "width": 350,
@@ -498,38 +498,29 @@
         "ok": true,
         "reason": "cada_campo_acrescenta_palavra_de_conteudo",
         "eyebrow_new": [
-          "inspecionaveis"
+          "recebe"
         ],
         "lead_new": [
           "analises",
           "atendem",
           "avaliacoes",
-          "coisas",
           "compatibilizacoes",
-          "demonstrativo",
-          "exemplo",
           "inspecoes",
           "laudos",
           "obras",
           "orcamentos",
-          "pagina",
           "pericias",
-          "pode",
           "privadas",
           "projetos",
           "publicas",
-          "realizamos",
           "revisoes",
-          "separa",
-          "servico",
-          "tecnicas",
-          "tres"
+          "tecnicas"
         ]
       }
     },
     {
       "route": "/servicos-obras-publicas/",
-      "html_sha256": "8a6f19908d503d55eee264894860c097154f2332db3c3c460fe9ed013134dc7f",
+      "html_sha256": "7fb62cdb2a3c93e06ced52475551515a5ef9996c8d51075294e84939283de04b",
       "measured_on": "2026-09-10",
       "viewports": {
         "1366x768": {
@@ -927,7 +918,7 @@
     },
     {
       "route": "/diagnostico-b2g-expansao/",
-      "html_sha256": "864d53e45b946f8f8252ca0568d005cb209e618a177d2234582054533e63e715",
+      "html_sha256": "fe60cef824e78beff5d03ec679f1e430cad33b7754a748069654bbb293f28835",
       "measured_on": "2026-09-10",
       "viewports": {
         "1366x768": {
@@ -1769,7 +1760,7 @@
     },
     {
       "route": "/defesa-margem-contratos-publicos/",
-      "html_sha256": "f80147fcb34217b0eb4f08f5f880750e28b6748e116309a70265317205c2ad88",
+      "html_sha256": "b05a8aa130f79bca426e60b1f0bdf9af279576e7702243bf76625c2c2d0ad474",
       "measured_on": "2026-09-10",
       "viewports": {
         "1366x768": {
@@ -2405,7 +2396,7 @@
     },
     {
       "route": "/atrasos-prorrogacao-obras-publicas/",
-      "html_sha256": "1998134164e6d5b7a9b0971ea665f99210d9d9614b477ae47a514f0ce5293b9f",
+      "html_sha256": "4a3a8ee17290630f6ebfb65898131bf5a412ba261fd9113f95c1380c570a5727",
       "measured_on": "2026-09-10",
       "viewports": {
         "1366x768": {
@@ -2824,7 +2815,7 @@
     },
     {
       "route": "/defesa-tecnica-contratos-publicos/",
-      "html_sha256": "4e4d22dbcaa56a71b2cefc25c14b2b0da6953ffa842100ce1b9dccb7f1c0c712",
+      "html_sha256": "c910324e7487dfd4ee0fcb019f420c4e8f4cf32869426e4b9e53c605ab199f14",
       "measured_on": "2026-09-10",
       "viewports": {
         "1366x768": {
@@ -3638,7 +3629,7 @@
     },
     {
       "route": "/casos/modelo-relatorio-inteligencia-licitacoes/",
-      "html_sha256": "c8d4033da9c46b16c79b119385ffa5ddf906466bfe189e488b0ac89479e2f461",
+      "html_sha256": "a48d9d1df3520993cff4ad646cbe6a5cca62728ad24bd9b8c78d90cb67ecbab9",
       "measured_on": "2026-09-10",
       "viewports": {
         "1366x768": {
@@ -3698,23 +3689,23 @@
                 "top": 526,
                 "bottom": 574,
                 "left": 83,
-                "right": 594,
-                "width": 511,
+                "right": 553,
+                "width": 470,
                 "height": 48
               },
-              "text": "Configurar o radar de licitações prioritárias por R$ 599"
+              "text": "Pedir a análise dos editais prioritários por R$ 599"
             }
           },
           "primary_actions_in_fold": [
             {
-              "text": "Configurar o radar de licitações prioritárias por R$ 599",
+              "text": "Pedir a análise dos editais prioritários por R$ 599",
               "href": "/comercial/radar-decisorio/",
               "box": {
                 "top": 526,
                 "bottom": 574,
                 "left": 83,
-                "right": 594,
-                "width": 511,
+                "right": 553,
+                "width": 470,
                 "height": 48
               }
             }
@@ -3792,12 +3783,12 @@
                 "width": 350,
                 "height": 50
               },
-              "text": "Configurar o radar de licitações prioritárias por R$ 599"
+              "text": "Pedir a análise dos editais prioritários por R$ 599"
             }
           },
           "primary_actions_in_fold": [
             {
-              "text": "Configurar o radar de licitações prioritárias por R$ 599",
+              "text": "Pedir a análise dos editais prioritários por R$ 599",
               "href": "/comercial/radar-decisorio/",
               "box": {
                 "top": 512,
@@ -3848,7 +3839,7 @@
     },
     {
       "route": "/casos/modelo-base-quantitativa-canonica/",
-      "html_sha256": "325799e74bbd42ab59b17c11ed983322cecaadf423d0c7f41380d75dc1c1d94f",
+      "html_sha256": "b5630d2a1e1cb6fbbc552dba98b3292307b8f6100bd813f53e321dde1545302e",
       "measured_on": "2026-09-10",
       "viewports": {
         "1366x768": {
@@ -3857,8 +3848,8 @@
             "eyebrow": {
               "selector": ".report-kicker",
               "box": {
-                "top": 208,
-                "bottom": 226,
+                "top": 178,
+                "bottom": 196,
                 "left": 83,
                 "right": 787,
                 "width": 704,
@@ -3869,8 +3860,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 240,
-                "bottom": 320,
+                "top": 210,
+                "bottom": 290,
                 "left": 83,
                 "right": 787,
                 "width": 704,
@@ -3881,8 +3872,8 @@
             "lead": {
               "selector": ".report-lead",
               "box": {
-                "top": 334,
-                "bottom": 406,
+                "top": 304,
+                "bottom": 376,
                 "left": 83,
                 "right": 775,
                 "width": 692,
@@ -3893,8 +3884,8 @@
             "proof": {
               "selector": ".report-proof-line",
               "box": {
-                "top": 500,
-                "bottom": 540,
+                "top": 471,
+                "bottom": 510,
                 "left": 83,
                 "right": 671,
                 "width": 588,
@@ -3905,26 +3896,26 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 556,
-                "bottom": 604,
+                "top": 526,
+                "bottom": 574,
                 "left": 83,
-                "right": 489,
-                "width": 406,
+                "right": 591,
+                "width": 508,
                 "height": 48
               },
-              "text": "Configurar a base de mercado por R$ 690"
+              "text": "Pedir a base de mercado de obras públicas por R$ 690"
             }
           },
           "primary_actions_in_fold": [
             {
-              "text": "Configurar a base de mercado por R$ 690",
+              "text": "Pedir a base de mercado de obras públicas por R$ 690",
               "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20base%20quantitativa%20can%C3%B4nica%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%20690.",
               "box": {
-                "top": 556,
-                "bottom": 604,
+                "top": 526,
+                "bottom": 574,
                 "left": 83,
-                "right": 489,
-                "width": 406,
+                "right": 591,
+                "width": 508,
                 "height": 48
               }
             }
@@ -4002,12 +3993,12 @@
                 "width": 350,
                 "height": 50
               },
-              "text": "Configurar a base de mercado por R$ 690"
+              "text": "Pedir a base de mercado de obras públicas por R$ 690"
             }
           },
           "primary_actions_in_fold": [
             {
-              "text": "Configurar a base de mercado por R$ 690",
+              "text": "Pedir a base de mercado de obras públicas por R$ 690",
               "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20base%20quantitativa%20can%C3%B4nica%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%20690.",
               "box": {
                 "top": 569,
@@ -4058,7 +4049,7 @@
     },
     {
       "route": "/casos/modelo-apresentacao-executiva-resultados/",
-      "html_sha256": "6bf8650a2e5091d282201df8224a039199dc91d4bd79aa962ce6ec67f11dec7c",
+      "html_sha256": "48d94d71d273741eb1bb887f472071d8623096b0d849c075d96b1ea83db66b7f",
       "measured_on": "2026-09-10",
       "viewports": {
         "1366x768": {
@@ -4067,8 +4058,8 @@
             "eyebrow": {
               "selector": ".report-kicker",
               "box": {
-                "top": 192,
-                "bottom": 210,
+                "top": 178,
+                "bottom": 196,
                 "left": 83,
                 "right": 787,
                 "width": 704,
@@ -4079,8 +4070,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 224,
-                "bottom": 344,
+                "top": 210,
+                "bottom": 330,
                 "left": 83,
                 "right": 787,
                 "width": 704,
@@ -4091,8 +4082,8 @@
             "lead": {
               "selector": ".report-lead",
               "box": {
-                "top": 358,
-                "bottom": 454,
+                "top": 344,
+                "bottom": 440,
                 "left": 83,
                 "right": 775,
                 "width": 692,
@@ -4103,8 +4094,8 @@
             "proof": {
               "selector": ".report-proof-line",
               "box": {
-                "top": 571,
-                "bottom": 611,
+                "top": 557,
+                "bottom": 597,
                 "left": 83,
                 "right": 671,
                 "width": 588,
@@ -4115,26 +4106,26 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 627,
-                "bottom": 675,
+                "top": 613,
+                "bottom": 661,
                 "left": 83,
-                "right": 492,
-                "width": 409,
+                "right": 572,
+                "width": 489,
                 "height": 48
               },
-              "text": "Configurar a síntese executiva por R$ 890"
+              "text": "Pedir a síntese executiva dos resultados por R$ 890"
             }
           },
           "primary_actions_in_fold": [
             {
-              "text": "Configurar a síntese executiva por R$ 890",
+              "text": "Pedir a síntese executiva dos resultados por R$ 890",
               "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20apresenta%C3%A7%C3%A3o%20executiva%20de%20resultados%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%20890.",
               "box": {
-                "top": 627,
-                "bottom": 675,
+                "top": 613,
+                "bottom": 661,
                 "left": 83,
-                "right": 492,
-                "width": 409,
+                "right": 572,
+                "width": 489,
                 "height": 48
               }
             }
@@ -4212,12 +4203,12 @@
                 "width": 350,
                 "height": 50
               },
-              "text": "Configurar a síntese executiva por R$ 890"
+              "text": "Pedir a síntese executiva dos resultados por R$ 890"
             }
           },
           "primary_actions_in_fold": [
             {
-              "text": "Configurar a síntese executiva por R$ 890",
+              "text": "Pedir a síntese executiva dos resultados por R$ 890",
               "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20apresenta%C3%A7%C3%A3o%20executiva%20de%20resultados%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%20890.",
               "box": {
                 "top": 620,
@@ -4270,7 +4261,7 @@
     },
     {
       "route": "/casos/modelo-mapa-compradores-publicos/",
-      "html_sha256": "9d5ca19ccb64f2ae0970070240a441575f537cdafb3d9ef3e5ae1ba3d1d70d37",
+      "html_sha256": "44029580ecea3f465b45d8235c3debd58af5a0a89c98bc4ee6aef4dd6cddde25",
       "measured_on": "2026-09-10",
       "viewports": {
         "1366x768": {
@@ -4279,8 +4270,8 @@
             "eyebrow": {
               "selector": ".report-kicker",
               "box": {
-                "top": 190,
-                "bottom": 208,
+                "top": 178,
+                "bottom": 196,
                 "left": 83,
                 "right": 787,
                 "width": 704,
@@ -4291,8 +4282,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 222,
-                "bottom": 342,
+                "top": 210,
+                "bottom": 330,
                 "left": 83,
                 "right": 787,
                 "width": 704,
@@ -4303,8 +4294,8 @@
             "lead": {
               "selector": ".report-lead",
               "box": {
-                "top": 356,
-                "bottom": 452,
+                "top": 344,
+                "bottom": 440,
                 "left": 83,
                 "right": 775,
                 "width": 692,
@@ -4315,8 +4306,8 @@
             "proof": {
               "selector": ".report-proof-line",
               "box": {
-                "top": 546,
-                "bottom": 586,
+                "top": 535,
+                "bottom": 574,
                 "left": 83,
                 "right": 671,
                 "width": 588,
@@ -4327,26 +4318,26 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 602,
-                "bottom": 650,
+                "top": 590,
+                "bottom": 638,
                 "left": 83,
-                "right": 496,
-                "width": 413,
+                "right": 562,
+                "width": 479,
                 "height": 48
               },
-              "text": "Configurar o mapa de órgãos por R$ 1.200"
+              "text": "Pedir o mapa de órgãos compradores por R$ 1.200"
             }
           },
           "primary_actions_in_fold": [
             {
-              "text": "Configurar o mapa de órgãos por R$ 1.200",
+              "text": "Pedir o mapa de órgãos compradores por R$ 1.200",
               "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20mapa%20de%20compradores%20p%C3%BAblicos%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.200.",
               "box": {
-                "top": 602,
-                "bottom": 650,
+                "top": 590,
+                "bottom": 638,
                 "left": 83,
-                "right": 496,
-                "width": 413,
+                "right": 562,
+                "width": 479,
                 "height": 48
               }
             }
@@ -4424,12 +4415,12 @@
                 "width": 350,
                 "height": 50
               },
-              "text": "Configurar o mapa de órgãos por R$ 1.200"
+              "text": "Pedir o mapa de órgãos compradores por R$ 1.200"
             }
           },
           "primary_actions_in_fold": [
             {
-              "text": "Configurar o mapa de órgãos por R$ 1.200",
+              "text": "Pedir o mapa de órgãos compradores por R$ 1.200",
               "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20mapa%20de%20compradores%20p%C3%BAblicos%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.200.",
               "box": {
                 "top": 642,
@@ -4482,7 +4473,7 @@
     },
     {
       "route": "/casos/modelo-contratos-vincendos-relicitacao/",
-      "html_sha256": "9764099be3a35262c24dca85895aa35e663a5d392a4f1a2d3ac7fa6d0817fd6e",
+      "html_sha256": "dd5303649ceaf04e615c56fd5f1c52bdc059d471dc9620652fc59fffb531e50c",
       "measured_on": "2026-09-10",
       "viewports": {
         "1366x768": {
@@ -4491,8 +4482,8 @@
             "eyebrow": {
               "selector": ".report-kicker",
               "box": {
-                "top": 246,
-                "bottom": 264,
+                "top": 215,
+                "bottom": 233,
                 "left": 83,
                 "right": 787,
                 "width": 704,
@@ -4503,8 +4494,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 278,
-                "bottom": 399,
+                "top": 247,
+                "bottom": 368,
                 "left": 83,
                 "right": 787,
                 "width": 704,
@@ -4515,8 +4506,8 @@
             "lead": {
               "selector": ".report-lead",
               "box": {
-                "top": 413,
-                "bottom": 533,
+                "top": 382,
+                "bottom": 502,
                 "left": 83,
                 "right": 775,
                 "width": 692,
@@ -4527,8 +4518,8 @@
             "proof": {
               "selector": ".report-proof-line",
               "box": {
-                "top": 627,
-                "bottom": 667,
+                "top": 596,
+                "bottom": 636,
                 "left": 83,
                 "right": 671,
                 "width": 588,
@@ -4539,26 +4530,26 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 683,
-                "bottom": 731,
+                "top": 652,
+                "bottom": 700,
                 "left": 83,
-                "right": 532,
-                "width": 449,
+                "right": 569,
+                "width": 486,
                 "height": 48
               },
-              "text": "Configurar o radar de renovações por R$ 1.450"
+              "text": "Pedir a análise dos contratos a vencer por R$ 1.450"
             }
           },
           "primary_actions_in_fold": [
             {
-              "text": "Configurar o radar de renovações por R$ 1.450",
+              "text": "Pedir a análise dos contratos a vencer por R$ 1.450",
               "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20contratos%20vincendos%20e%20recontrata%C3%A7%C3%A3o%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.450.",
               "box": {
-                "top": 683,
-                "bottom": 731,
+                "top": 652,
+                "bottom": 700,
                 "left": 83,
-                "right": 532,
-                "width": 449,
+                "right": 569,
+                "width": 486,
                 "height": 48
               }
             }
@@ -4636,12 +4627,12 @@
                 "width": 350,
                 "height": 50
               },
-              "text": "Configurar o radar de renovações por R$ 1.450"
+              "text": "Pedir a análise dos contratos a vencer por R$ 1.450"
             }
           },
           "primary_actions_in_fold": [
             {
-              "text": "Configurar o radar de renovações por R$ 1.450",
+              "text": "Pedir a análise dos contratos a vencer por R$ 1.450",
               "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20contratos%20vincendos%20e%20recontrata%C3%A7%C3%A3o%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.450.",
               "box": {
                 "top": 728,
@@ -4695,7 +4686,7 @@
     },
     {
       "route": "/casos/modelo-mapeamento-concorrentes-publicos/",
-      "html_sha256": "f8bc0a9c4322db18616091fabbf54010ae36c13022bd0c0fa1d77f6f41ee3dd0",
+      "html_sha256": "b2641f98e8446b4bbb19cff87164fc67f0a7f3aeed49e21bd35f4daf9de3f1d0",
       "measured_on": "2026-09-10",
       "viewports": {
         "1366x768": {
@@ -4704,8 +4695,8 @@
             "eyebrow": {
               "selector": ".report-kicker",
               "box": {
-                "top": 178,
-                "bottom": 196,
+                "top": 190,
+                "bottom": 208,
                 "left": 83,
                 "right": 787,
                 "width": 704,
@@ -4716,8 +4707,8 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 210,
-                "bottom": 290,
+                "top": 222,
+                "bottom": 302,
                 "left": 83,
                 "right": 787,
                 "width": 704,
@@ -4728,8 +4719,8 @@
             "lead": {
               "selector": ".report-lead",
               "box": {
-                "top": 304,
-                "bottom": 400,
+                "top": 316,
+                "bottom": 412,
                 "left": 83,
                 "right": 775,
                 "width": 692,
@@ -4740,8 +4731,8 @@
             "proof": {
               "selector": ".report-proof-line",
               "box": {
-                "top": 517,
-                "bottom": 557,
+                "top": 529,
+                "bottom": 568,
                 "left": 83,
                 "right": 671,
                 "width": 588,
@@ -4752,26 +4743,26 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 573,
-                "bottom": 621,
+                "top": 584,
+                "bottom": 632,
                 "left": 83,
-                "right": 546,
-                "width": 463,
+                "right": 504,
+                "width": 421,
                 "height": 48
               },
-              "text": "Configurar o mapa de concorrentes por R$ 1.900"
+              "text": "Pedir o mapa de concorrentes por R$ 1.900"
             }
           },
           "primary_actions_in_fold": [
             {
-              "text": "Configurar o mapa de concorrentes por R$ 1.900",
+              "text": "Pedir o mapa de concorrentes por R$ 1.900",
               "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20mapeamento%20de%20concorrentes%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.900.",
               "box": {
-                "top": 573,
-                "bottom": 621,
+                "top": 584,
+                "bottom": 632,
                 "left": 83,
-                "right": 546,
-                "width": 463,
+                "right": 504,
+                "width": 421,
                 "height": 48
               }
             }
@@ -4849,12 +4840,12 @@
                 "width": 350,
                 "height": 50
               },
-              "text": "Configurar o mapa de concorrentes por R$ 1.900"
+              "text": "Pedir o mapa de concorrentes por R$ 1.900"
             }
           },
           "primary_actions_in_fold": [
             {
-              "text": "Configurar o mapa de concorrentes por R$ 1.900",
+              "text": "Pedir o mapa de concorrentes por R$ 1.900",
               "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20mapeamento%20de%20concorrentes%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.900.",
               "box": {
                 "top": 585,
@@ -4903,7 +4894,7 @@
     },
     {
       "route": "/casos/modelo-painel-precos-obras-publicas/",
-      "html_sha256": "848a3b402b9e2382f1dd455a9b8ab8f02ca8a900511af666613d514a8d726885",
+      "html_sha256": "cee59248aebd602ee6172f237c3be84615b592e39deb2fb790281c242df82618",
       "measured_on": "2026-09-10",
       "viewports": {
         "1366x768": {
@@ -4963,23 +4954,23 @@
                 "top": 589,
                 "bottom": 637,
                 "left": 83,
-                "right": 549,
-                "width": 466,
+                "right": 572,
+                "width": 489,
                 "height": 48
               },
-              "text": "Configurar as referências de preços por R$ 2.400"
+              "text": "Pedir as referências de preços de obra por R$ 2.400"
             }
           },
           "primary_actions_in_fold": [
             {
-              "text": "Configurar as referências de preços por R$ 2.400",
+              "text": "Pedir as referências de preços de obra por R$ 2.400",
               "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20painel%20de%20pre%C3%A7os%20de%20obras%20p%C3%BAblicas%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%202.400.",
               "box": {
                 "top": 589,
                 "bottom": 637,
                 "left": 83,
-                "right": 549,
-                "width": 466,
+                "right": 572,
+                "width": 489,
                 "height": 48
               }
             }
@@ -5057,12 +5048,12 @@
                 "width": 350,
                 "height": 50
               },
-              "text": "Configurar as referências de preços por R$ 2.400"
+              "text": "Pedir as referências de preços de obra por R$ 2.400"
             }
           },
           "primary_actions_in_fold": [
             {
-              "text": "Configurar as referências de preços por R$ 2.400",
+              "text": "Pedir as referências de preços de obra por R$ 2.400",
               "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20painel%20de%20pre%C3%A7os%20de%20obras%20p%C3%BAblicas%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%202.400.",
               "box": {
                 "top": 688,
@@ -5117,7 +5108,7 @@
     },
     {
       "route": "/casos/modelo-relatorio-executivo-consolidado/",
-      "html_sha256": "d7f5fdc81964ac56ac72f6c47117bc8186beae56dadc8f985f913f3e50e0f742",
+      "html_sha256": "e92ef97bcd06c9ec74e51219a25883644d2dd6e3c7b7ea82b814fec276cf0dcc",
       "measured_on": "2026-09-10",
       "viewports": {
         "1366x768": {
@@ -5177,23 +5168,23 @@
                 "top": 595,
                 "bottom": 643,
                 "left": 83,
-                "right": 518,
-                "width": 435,
+                "right": 476,
+                "width": 393,
                 "height": 48
               },
-              "text": "Configurar o plano de expansão por R$ 3.750"
+              "text": "Pedir o plano de expansão por R$ 3.750"
             }
           },
           "primary_actions_in_fold": [
             {
-              "text": "Configurar o plano de expansão por R$ 3.750",
+              "text": "Pedir o plano de expansão por R$ 3.750",
               "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20relat%C3%B3rio%20executivo%20consolidado%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%203.750.",
               "box": {
                 "top": 595,
                 "bottom": 643,
                 "left": 83,
-                "right": 518,
-                "width": 435,
+                "right": 476,
+                "width": 393,
                 "height": 48
               }
             }
@@ -5271,12 +5262,12 @@
                 "width": 350,
                 "height": 50
               },
-              "text": "Configurar o plano de expansão por R$ 3.750"
+              "text": "Pedir o plano de expansão por R$ 3.750"
             }
           },
           "primary_actions_in_fold": [
             {
-              "text": "Configurar o plano de expansão por R$ 3.750",
+              "text": "Pedir o plano de expansão por R$ 3.750",
               "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20relat%C3%B3rio%20executivo%20consolidado%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%203.750.",
               "box": {
                 "top": 581,

@@ -17,7 +17,13 @@ SERVICES = ROOT / "servicos" / "index.html"
 # valendo sem alteracao: 23 controles, 3 obrigatorios, action /obrigado, sem
 # upload. O que mudou foram opcoes e copy, e as assercoes semanticas novas
 # dizem o que a mudanca tinha de preservar.
-CAPTURE_FORM_SHA256 = "114261cde438a7fee3fb4b2c0b0d0d8956398cfc5a3e920c0dc05c516f60d005"
+# 2026-09-10: o select ganhou a opcao "ainda nao sei qual servico preciso",
+# porque quem chega indefinido nao tinha como se declarar sem escolher uma
+# disciplina que nao e a dele. A opcao tem proximo passo declarado em
+# HOME_SITUATIONS; sem isso ela cairia no default "operacao" de stageToJourney,
+# que e a reclassificacao silenciosa. As invariantes estruturais seguem
+# identicas: 23 controles, 3 obrigatorios, action /obrigado, sem upload.
+CAPTURE_FORM_SHA256 = "798d9b47c8b32c45c506e92eb55f0c7a9c5b0f4cabe3cd210326922f7c15d220"
 
 
 def _home() -> str:
@@ -215,3 +221,25 @@ def test_services_hub_is_corporate_indexable_and_price_free() -> None:
 
 if __name__ == "__main__":
     raise SystemExit(__import__("pytest").main([__file__, "-q"]))
+
+
+def test_stage_options_sharing_a_journey_list_the_neutral_one_first() -> None:
+    """Regressao (#650): a jornada "contrato" tem duas opcoes de estagio e o
+    preenchimento automatico escolhe a PRIMEIRA que carrega a jornada; antes
+    era "problema urgente em contrato", imposta a quem so entrou em obras
+    publicas. A opcao neutra vem primeiro no HTML, sem marcador nem codigo
+    extra no bundle: para toda jornada com mais de uma opcao, a primeira nunca
+    e a urgente, e para "contrato" ela e "contrato em execução"."""
+    html = _home()
+    form = re.search(r'<form\b[^>]*id="formulario-contato"[\s\S]*?</form>', html).group(0)
+    by_journey: dict[str, list[str]] = {}
+    for attrs in re.findall(r'<option\b([^>]*)>', form):
+        journey = re.search(r'data-journey="([^"]+)"', attrs)
+        if journey:
+            by_journey.setdefault(journey.group(1), []).append(attrs)
+    assert "contrato" in by_journey and len(by_journey["contrato"]) >= 2
+    for journey, attrs_list in by_journey.items():
+        if len(attrs_list) > 1:
+            assert "urgente" not in attrs_list[0].lower(), (journey, attrs_list[0])
+    assert 'value="contrato em execução"' in by_journey["contrato"][0]
+    assert "data-journey-default" not in form

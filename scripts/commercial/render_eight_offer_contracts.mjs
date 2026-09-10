@@ -236,17 +236,26 @@ function renderActionLabels(html, item) {
       let nextAttrs = attrs;
       const position = attrs.match(/\bdata-cta-position=["']([^"']+)["']/i)?.[1] || "";
       const href = attrs.match(/\bhref=["']([^"']+)["']/i)?.[1] || "";
-      const ariaLabel = /https:\/\/(?:wa\.me|api\.whatsapp\.com)\//i.test(href)
-        ? `${fullLabel} pelo WhatsApp`
-        : `${fullLabel}: abrir configuração do pedido`;
+      // WCAG 2.5.3 (rotulo no nome): quando o texto visivel e a forma curta
+      // "Pedir análise + preço", o nome acessivel comeca por ela e so entao
+      // detalha o objeto e o canal. "Configurar" saiu: o comprador pede uma
+      // analise, nao configura nada.
+      const shortLabel = `Pedir análise ${item.price_display}`;
+      const compact = /<span\b/i.test(content) || position === "report_header";
+      const channel = /https:\/\/(?:wa\.me|api\.whatsapp\.com)\//i.test(href)
+        ? "pelo WhatsApp"
+        : "e abrir o pedido";
+      const ariaLabel = compact
+        ? `${shortLabel}: ${fullLabel} ${channel}`
+        : `${fullLabel} ${channel}`;
       if (/\baria-label=["']/i.test(nextAttrs)) {
         nextAttrs = nextAttrs.replace(/\baria-label=["'][^"']*["']/i, `aria-label="${escapeHtml(ariaLabel)}"`);
       }
       if (/<span\b/i.test(content)) {
-        const nextContent = content.replace(/<span\b[^>]*>[\s\S]*?<\/span>/i, "<span>Configurar pedido</span>");
+        const nextContent = content.replace(/<span\b[^>]*>[\s\S]*?<\/span>/i, "<span>Pedir análise</span>");
         return `<a${nextAttrs}>${nextContent}</a>`;
       }
-      if (position === "report_header") return `<a${nextAttrs}>Configurar pedido</a>`;
+      if (position === "report_header") return `<a${nextAttrs}>Pedir análise</a>`;
       const suffix = content.match(/\s*(<svg\b[\s\S]*)$/i)?.[1] || "";
       return `<a${nextAttrs}>${escapeHtml(fullLabel)}${suffix ? ` ${suffix}` : ""}</a>`;
     },

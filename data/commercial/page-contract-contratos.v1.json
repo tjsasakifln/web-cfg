@@ -66,7 +66,7 @@
       ],
       "max_credited_items": 1,
       "cumulative": false,
-      "statement_pt_br": "O Diagnóstico de Riscos à Margem gera crédito de até R$ 2.900 para um único dossiê entre os itens 18 e 23 contratado em 30 dias, sem acúmulo com outro crédito."
+      "statement_pt_br": "O Diagnóstico de Riscos à Margem gera crédito de até R$ 2.900 para um único dossiê de evento contratual (Medição/Glosa, Aditivo, Atraso, Reajuste, Reequilíbrio ou Notificação/Sanção) contratado em 30 dias, sem acúmulo com outro crédito."
     },
     "urgency_rule": {
       "below_sla_allowed": true,

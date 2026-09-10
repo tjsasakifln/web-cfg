@@ -1123,7 +1123,18 @@ def test_value_ladder_price_and_persisted_order_entry_contract() -> None:
         "report_final",
         "report_mobile_sticky",
     } == positions
-    assert html.count("Configurar o radar de licitações prioritárias por R$ 599") >= 3
+    # Regra substituida (campanha 2026-09-10): o rotulo de compra deixou de ser
+    # um literal congelado. O que continua exigido -- e agora derivado da fonte,
+    # nao redigitado aqui -- e que a CTA apareca em pelo menos tres posicoes e
+    # carregue o preco publicado, ligada ao mesmo contrato que gera a pagina.
+    contract = json.loads(
+        (ROOT / "data/commercial/page-contract-eight.v1.json").read_text(encoding="utf-8")
+    )
+    offer = contract["deliverables"][0]
+    cta = f"{offer['value_first']['cta_configure']} por {offer['price_display']}"
+    assert html.count(cta) >= 3, cta
+    # Contraprova: o jargao de bastidor nao pode voltar pela porta dos fundos.
+    assert "Configurar o radar" not in html
     assert "R$ 599 = 1 relatório adaptado" in html
     for marker in (
         "Conclusão executiva",

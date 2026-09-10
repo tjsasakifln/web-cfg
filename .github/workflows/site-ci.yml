@@ -176,7 +176,10 @@ jobs:
         run: npm run build:site
       - name: Final public-surface coverage and copy gate
         run: |
-          python3 -m pytest scripts/site/test_public_server_acceptance.py -q
+          ROBOTS_PACKAGE_REQUIRED=1 python3 -m pytest scripts/site/test_public_server_acceptance.py -q
+          # Regras efetivas do robots.txt: bytes integros nao provam politica
+          # integra. Roda depois do build, contra o robots.txt do proprio pacote.
+          ROBOTS_PACKAGE_REQUIRED=1 python3 -m pytest scripts/site/test_robots_policy.py -q
           python3 scripts/site/public_surface_coverage.py --artifact _site --manifest seo/PUBLIC-ARTIFACT-MANIFEST.json --report build/reports/public-surface-coverage.json
           python3 scripts/site/test_self_deprecating_copy.py --root _site --require-artifact
       - name: Prototype isolation in the built artifact

@@ -1011,8 +1011,13 @@ def sync_family_crawler_rules(
     *,
     root: Path | None = None,
 ) -> None:
-    """Allow only INDEX slugs; keep the rest of the family Disallow / X-Robots noindex.
+    """Allow the hub and the INDEX slugs; the family stays closed by X-Robots-Tag.
 
+    The robots.txt block never restricts the rest of the family: once the hub
+    is crawlable, every child inherits "Allow: {FAMILY_PATH}" (RFC 9309 2.2.2,
+    equal-length tie favours Allow), and that is deliberate so crawlers can
+    reach the 410 of a withdrawn slug and drop it from the index. Family
+    closure is enforced only by the "X-Robots-Tag: noindex" block in _headers.
     Netlify last-match wins for X-Robots-Tag on overlapping paths, so the INDEX
     override is written after the family noindex block. A noindex URL is never
     Allowed: robots, X-Robots-Tag, sitemap and canonical are one decision.
@@ -1027,9 +1032,15 @@ def sync_family_crawler_rules(
         if slugs:
             crawlable_paths.add(FAMILY_PATH)
         allow_lines = "".join(f"Allow: {path}\n" for path in sorted(crawlable_paths))
+        # RFC 9309 2.2.2: an Allow and a Disallow of equal rule length tie in
+        # favour of Allow. "Disallow: {FAMILY_PATH}" is exactly as long as
+        # "Allow: {FAMILY_PATH}", so once the hub itself is crawlable the
+        # Disallow line is inert and would misstate the policy if emitted.
+        # Only assert it when the hub is not in the crawlable set.
+        disallow_line = "" if FAMILY_PATH in crawlable_paths else f"Disallow: {FAMILY_PATH}\n"
         block = (
             f"{ROBOTS_FAMILY_BEGIN}\n"
-            f"{allow_lines}Disallow: {FAMILY_PATH}\n"
+            f"{allow_lines}{disallow_line}"
             f"{ROBOTS_FAMILY_END}\n"
         )
         robots = _replace_or_append_block(

@@ -4,6 +4,7 @@ import hashlib
 import http.client
 import io
 import json
+import os
 import sys
 import urllib.error
 from email.message import Message
@@ -498,6 +499,47 @@ def test_non_html_inventory_reconciliation_fails_closed(tmp_path, mutation):
     report = _run(tmp_path, fixture, asset_fetcher=fetch)
     assert not report["ok"]
     assert "public_non_html_acceptance_failed" in report["errors"]
+
+
+_MANAGED = (
+    b"# As a condition of accessing this website...\n\n"
+    b"# BEGIN Cloudflare Managed content\n\n"
+    b"User-agent: *\nContent-Signal: search=yes,ai-train=no,use=reference\nAllow: /\n\n"
+    b"User-agent: GPTBot\nDisallow: /\n\n"
+    b"# END Cloudflare Managed Content"
+)
+_ROBOTS = b"User-agent: *\nAllow: /\n\nSitemap: https://confenge.com.br/sitemap-index.xml\n"
+
+
+def test_robots_accepts_only_the_marked_edge_block_around_exact_origin_bytes():
+    """O Cloudflare Managed robots.txt antepoe um bloco; o resto tem de ser exato."""
+    ok, info = acceptance.robots_edge_contract(_ROBOTS, _ROBOTS)
+    assert ok and info["edge_managed"] is False and info["managed_prefix_bytes"] == 0
+
+    ok, info = acceptance.robots_edge_contract(_MANAGED + b"\n\n" + _ROBOTS, _ROBOTS)
+    assert ok, info
+    assert info["edge_managed"] is True and info["separator_bytes"] == 2
+
+
+@pytest.mark.parametrize("body,reason", [
+    # Uma diretiva nossa alterada continua reprovando.
+    (_MANAGED + b"\n\n" + _ROBOTS.replace(b"Allow: /", b"Disallow: /"),
+     "robots_origin_bytes_not_preserved"),
+    # Conteudo acrescentado DEPOIS do nosso corpo continua reprovando.
+    (_MANAGED + b"\n\n" + _ROBOTS + b"Disallow: /servicos/\n",
+     "robots_origin_bytes_not_preserved"),
+    # Corpo diferente sem marcador nenhum: e transformacao nao documentada.
+    (b"User-agent: *\nDisallow: /\n", "robots_differs_without_managed_markers"),
+    # Diretiva ativa injetada ANTES do bloco gerenciado.
+    (b"Disallow: /\n" + _MANAGED + b"\n\n" + _ROBOTS,
+     "robots_active_directive_before_managed_block"),
+    # Bytes estranhos entre o marcador de fim e o nosso corpo.
+    (_MANAGED + b"\n\n\n\n\n\n\n" + _ROBOTS, "robots_unexpected_bytes_before_origin"),
+])
+def test_robots_edge_contract_rejects_every_other_divergence(body, reason):
+    ok, info = acceptance.robots_edge_contract(body, _ROBOTS)
+    assert not ok
+    assert info["reason"] == reason
 
 
 def test_non_html_http_bytes_cannot_be_normalized_or_served_from_old_cache(tmp_path):
@@ -1282,3 +1324,112 @@ def test_incomplete_read_without_declared_length_reports_no_declared_length():
     assert record["read_completed"] is False
     assert record["bytes_read"] == 5
     assert record["declared_length"] is None
+
+
+# ---------------------------------------------------------------------------
+# Regras efetivas do robots.txt servido (politica, nao bytes)
+# ---------------------------------------------------------------------------
+#
+# O contrato de bytes de robots_edge_contract prova que a borda nao adulterou o
+# nosso arquivo. Estes testes provam a outra metade: que o arquivo continua
+# exprimindo a politica vigente. Uma restricao pode sumir da origem sem que um
+# unico byte seja adulterado no caminho, e o gate de bytes aprovaria.
+#
+# O corpo usado aqui e composto do prefixo REAL capturado em confenge.com.br
+# (scripts/site/testdata/robots-managed-prefix.txt, 1836 bytes com o separador)
+# com o robots.txt do PACOTE, e nao de uma fixture conveniente.
+
+_MANAGED_PREFIX = (
+    Path(__file__).resolve().parent / "testdata" / "robots-managed-prefix.txt"
+).read_bytes()
+_PACKAGE_ROBOTS = acceptance.ROOT / "_site" / "robots.txt"
+# O gate npm e o CI pos-build exigem o pacote: pular o modulo sairia verde.
+if os.environ.get("ROBOTS_PACKAGE_REQUIRED") == "1" and not _PACKAGE_ROBOTS.is_file():
+    raise RuntimeError("ROBOTS_PACKAGE_REQUIRED=1 mas _site/robots.txt nao existe: rode npm run build:site")
+
+
+def _served_robots() -> bytes:
+    return _MANAGED_PREFIX + _PACKAGE_ROBOTS.read_bytes()
+
+
+@pytest.mark.skipif(not _PACKAGE_ROBOTS.is_file(), reason="pacote nao construido")
+def test_the_real_composed_robots_body_satisfies_the_approved_policy_baseline():
+    report = acceptance.verify_robots_policy(_served_robots())
+    assert report["ok"] is True, report
+    assert report["checked"] >= 200
+    assert report["divergences"] == []
+    assert report["missing_policy_directives"] == []
+
+
+@pytest.mark.skipif(not _PACKAGE_ROBOTS.is_file(), reason="pacote nao construido")
+def test_losing_a_live_private_surface_restriction_fails_closed():
+    """Bytes intactos no caminho, politica perdida na origem."""
+    body = _served_robots().replace(b"Disallow: /ops/\n", b"")
+    report = acceptance.verify_robots_policy(body)
+    assert report["ok"] is False
+    assert any(e.startswith("robots_effective_rules_diverged") for e in report["errors"])
+    lost = {(d["agent"], d["path"]) for d in report["divergences"]}
+    assert ("Googlebot", "/ops/") in lost
+
+
+@pytest.mark.skipif(not _PACKAGE_ROBOTS.is_file(), reason="pacote nao construido")
+def test_turning_off_the_managed_composition_is_caught_as_granting_ai_training():
+    """Contraprova da decisao de MANTER a composicao gerenciada.
+
+    Servir so a nossa origem nao e "fonte unica": e conceder rastreio a GPTBot,
+    ClaudeBot, CCBot, Google-Extended e Amazonbot, e perder o Content-Signal
+    ai-train=no, que existe apenas na parcela gerenciada.
+    """
+    report = acceptance.verify_robots_policy(_PACKAGE_ROBOTS.read_bytes())
+    assert report["ok"] is False
+    granted = {d["agent"] for d in report["divergences"] if d["served_allowed"]}
+    assert {"GPTBot", "ClaudeBot", "CCBot", "Google-Extended", "Amazonbot"} <= granted
+    assert report["missing_policy_directives"]
+
+
+def test_robots_policy_fails_closed_when_the_published_file_has_no_body():
+    report = acceptance.verify_robots_policy(None, published=True)
+    assert report["ok"] is False
+    assert "robots_policy_body_absent" in report["errors"]
+
+
+def test_robots_policy_is_skipped_only_when_the_file_is_not_published():
+    report = acceptance.verify_robots_policy(None, published=False)
+    assert report["ok"] is True
+    assert report["applicable"] is False
+
+
+def test_robots_policy_fails_closed_when_the_baseline_is_missing_or_empty(tmp_path):
+    absent = acceptance.verify_robots_policy(b"User-agent: *\n", baseline_path=tmp_path / "nope.json")
+    assert absent["ok"] is False and "robots_policy_baseline_missing" in absent["errors"]
+    empty = tmp_path / "empty.json"
+    empty.write_text(json.dumps({"expected_effective": []}), encoding="utf-8")
+    blank = acceptance.verify_robots_policy(b"User-agent: *\n", baseline_path=empty)
+    assert blank["ok"] is False and "robots_policy_baseline_empty" in blank["errors"]
+
+
+@pytest.mark.skipif(not _PACKAGE_ROBOTS.is_file(), reason="pacote nao construido")
+def test_an_allow_injected_inside_the_managed_block_fails_closed():
+    """Regressao (#650): a amostra de caminhos da linha de base nao via um
+    "Allow" injetado dentro do bloco gerenciado da borda -- que o contrato de
+    bytes nao inspeciona -- e o gate aprovava a abertura de /ops/. Toda regra
+    Allow sob superficie privada reprova, em qualquer grupo, e um filho
+    sentinela de cada superficie e sondado para todos os agentes."""
+    served = _served_robots()
+    marker = b"# END Cloudflare Managed Content"
+    assert marker in served
+    for injected in (b"Allow: /ops/painel/\n", b"Allow: /%6Fps/\n", b"Allow: /intranet/relatorios\n"):
+        body = served.replace(marker, injected + marker, 1)
+        report = acceptance.verify_robots_policy(body)
+        assert report["ok"] is False, (injected, report["errors"])
+        assert any(e.startswith("robots_private_surface_allow_injected") for e in report["errors"]), report["errors"]
+    # Um Allow fora das superficies privadas continua aceito.
+    body = served.replace(marker, b"Allow: /servicos/\n" + marker, 1)
+    report = acceptance.verify_robots_policy(body)
+    assert not any(e.startswith("robots_private_surface_allow_injected") for e in report["errors"]), report["errors"]
+    # Um grupo novo para um agente nomeado tambem nao escapa: a sentinela
+    # reprova mesmo sem regra Allow literal sob o prefixo.
+    body = served + b"\nUser-agent: Googlebot\nAllow: /\n"
+    report = acceptance.verify_robots_policy(body)
+    assert report["ok"] is False
+    assert any(d["path"].endswith("/__gate_probe") for d in report["divergences"]), report["divergences"][:3]

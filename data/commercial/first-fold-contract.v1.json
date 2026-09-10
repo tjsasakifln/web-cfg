@@ -71,7 +71,7 @@
       "measurement": {
         "date": "2026-09-10",
         "viewport": "1366x768",
-        "finding": "H1 de y=191 a y=352; linha de prova de y=479 a y=544; ação primária inteira de y=562 a y=606 em 1366x768, e de y=726 a y=770 em 390x844, dentro da dobra nos dois"
+        "finding": "H1 de y=191 a y=323; linha de prova de y=422 a y=487; ação primária inteira de y=505 a y=549 em 1366x768, e de y=604 a y=648 em 390x844, dentro da dobra nos dois"
       },
       "observed_2026_08_24": "documento com cerca de 11266 px de altura; hero promove Conhecer o primeiro exemplo"
     },
@@ -242,7 +242,7 @@
       "measurement": {
         "date": "2026-09-10",
         "viewport": "1366x768",
-        "finding": "H1 de y=240 a y=320; linha de prova de y=500 a y=540; ação primária inteira de y=556 a y=604 em 1366x768, e de y=569 a y=619 em 390x844, dentro da dobra nos dois"
+        "finding": "H1 de y=210 a y=290; linha de prova de y=471 a y=510; ação primária inteira de y=526 a y=574 em 1366x768, e de y=569 a y=619 em 390x844, dentro da dobra nos dois"
       }
     },
     {
@@ -252,7 +252,7 @@
       "measurement": {
         "date": "2026-09-10",
         "viewport": "1366x768",
-        "finding": "H1 de y=224 a y=344; linha de prova de y=571 a y=611; ação primária inteira de y=627 a y=675 em 1366x768, e de y=620 a y=670 em 390x844, dentro da dobra nos dois"
+        "finding": "H1 de y=210 a y=330; linha de prova de y=557 a y=597; ação primária inteira de y=613 a y=661 em 1366x768, e de y=620 a y=670 em 390x844, dentro da dobra nos dois"
       }
     },
     {
@@ -262,7 +262,7 @@
       "measurement": {
         "date": "2026-09-10",
         "viewport": "1366x768",
-        "finding": "H1 de y=222 a y=342; linha de prova de y=546 a y=586; ação primária inteira de y=602 a y=650 em 1366x768, e de y=642 a y=692 em 390x844, dentro da dobra nos dois"
+        "finding": "H1 de y=210 a y=330; linha de prova de y=535 a y=574; ação primária inteira de y=590 a y=638 em 1366x768, e de y=642 a y=692 em 390x844, dentro da dobra nos dois"
       }
     },
     {
@@ -272,7 +272,7 @@
       "measurement": {
         "date": "2026-09-10",
         "viewport": "1366x768",
-        "finding": "H1 de y=278 a y=399; linha de prova de y=627 a y=667; ação primária inteira de y=683 a y=731 em 1366x768, e de y=728 a y=778 em 390x844, dentro da dobra nos dois"
+        "finding": "H1 de y=247 a y=368; linha de prova de y=596 a y=636; ação primária inteira de y=652 a y=700 em 1366x768, e de y=728 a y=778 em 390x844, dentro da dobra nos dois"
       }
     },
     {
@@ -282,7 +282,7 @@
       "measurement": {
         "date": "2026-09-10",
         "viewport": "1366x768",
-        "finding": "H1 de y=210 a y=290; linha de prova de y=517 a y=557; ação primária inteira de y=573 a y=621 em 1366x768, e de y=585 a y=635 em 390x844, dentro da dobra nos dois"
+        "finding": "H1 de y=222 a y=302; linha de prova de y=529 a y=568; ação primária inteira de y=584 a y=632 em 1366x768, e de y=585 a y=635 em 390x844, dentro da dobra nos dois"
       }
     },
     {
@@ -566,13 +566,13 @@
           "route": "/entregas/",
           "ok": true,
           "eyebrow_adds": [
-            "inspecionaveis"
+            "recebe"
           ],
           "lead_adds": [
             "analises",
             "atendem",
             "avaliacoes",
-            "coisas"
+            "compatibilizacoes"
           ]
         },
         {

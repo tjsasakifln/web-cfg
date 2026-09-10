@@ -221,9 +221,18 @@ function mapLeadToInboundV1(record) {
 
   const referrer = sanitizeUrl(record.referrer);
   if (referrer) body.referrer = referrer;
+  // Familia de servico "por proposta" escolhida em /entregas/: nao e uma
+  // entrega do registro, mas e o sinal que o visitante deu e o proximo passo
+  // depende dele. Sem isto a escolha chegava com menos sinal que um CFG-D0x.
+  const serviceFamily = !deliverableId
+    && String(record.route_family || "") === "entregas"
+    && String(record.estagio || "") !== "entregas-exemplos-hub"
+    ? clampText(record.estagio, 120)
+    : "";
   const qualification = [
     ["situação", record.jornada],
     ["entrega", deliverableId],
+    ["família de serviço", serviceFamily],
     ["prazo", record.opportunity_deadline],
     ["evento contratual", record.contract_event],
     ["estágio contratual", record.contract_stage],

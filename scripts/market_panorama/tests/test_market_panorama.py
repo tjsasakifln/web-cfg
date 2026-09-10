@@ -528,6 +528,86 @@ def test_validate_fails_on_a_page_that_ships_indexable_without_approval(tmp_path
     assert any("robots.txt does not allow it" in p for p in report["shipped_problems"])
 
 
+def test_audit_shipped_catches_a_per_slug_allow_that_is_only_a_substring(tmp_path):
+    """A deeper child Allow must not be mistaken for the slug hub itself.
+
+    ``Allow: {FAMILY_PATH}{slug}/anexos/`` contains ``Allow: {FAMILY_PATH}{slug}/``
+    as a plain substring, so a naive ``needle in robots`` check is fooled into
+    believing the slug page is crawlable. Under RFC 9309, with the family
+    ``Disallow:`` in force, the slug path itself is genuinely blocked -- only
+    its child ``anexos/`` is allowed. This is a real false negative, not a
+    hypothetical: confirm the premise with the RFC 9309 engine before trusting
+    the validator's verdict on it.
+    """
+    from scripts.market_panorama import __main__ as cli
+    from scripts.market_panorama.render import PUBLIC_DIR
+    from scripts.site.robots_policy import is_allowed, parse_robots
+
+    slug = "obras-publicas-sc-2026-08"
+    family_path = "/panorama-mercado-obras-publicas/"
+    root = _shipped_root(
+        tmp_path,
+        robots_extra=(
+            f"\nAllow: {family_path}{slug}/anexos/\nDisallow: {family_path}\n"
+        ),
+        headers_extra=f"\n{family_path}{slug}/*\n  X-Robots-Tag: index, follow\n\n",
+    )
+    robots = (root / "robots.txt").read_text(encoding="utf-8")
+    parsed = parse_robots(robots)
+    allowed, rule = is_allowed(parsed, "*", f"{family_path}{slug}/")
+    assert allowed is False, f"premise check: slug path must be genuinely blocked, was allowed by {rule}"
+
+    page = root / PUBLIC_DIR / slug / "index.html"
+    page.parent.mkdir(parents=True, exist_ok=True)
+    page.write_text(
+        f'<meta content="index,follow" name="robots"/><body data-panorama-id="mp-{slug}"></body>',
+        encoding="utf-8",
+    )
+    problems = cli.audit_shipped(root, approvals={f"mp-{slug}": {"approved": True}})
+    assert any("robots.txt does not allow it" in p for p in problems)
+
+
+def test_audit_shipped_catches_a_hub_allow_that_is_only_commented_out(tmp_path):
+    """A commented-out hub Allow line must not satisfy the substring check.
+
+    ``# Allow: {FAMILY_PATH}$ - reverted`` contains the exact needle
+    ``Allow: {FAMILY_PATH}$`` as a plain substring, so a naive ``needle in
+    robots`` check is fooled into believing the hub is crawlable. Confirm with
+    the RFC 9309 engine that the hub is genuinely blocked before trusting the
+    validator's verdict on it.
+    """
+    from scripts.market_panorama import __main__ as cli
+    from scripts.market_panorama.render import PUBLIC_DIR
+    from scripts.site.robots_policy import is_allowed, parse_robots
+
+    slug = "obras-publicas-sc-2026-08"
+    family_path = "/panorama-mercado-obras-publicas/"
+    root = _shipped_root(
+        tmp_path,
+        robots_extra=(
+            f"\n# Allow: {family_path}$ - reverted\n"
+            f"Allow: {family_path}{slug}/\nDisallow: {family_path}\n"
+        ),
+        headers_extra=(
+            f"\n{family_path}\n  X-Robots-Tag: index, follow\n\n"
+            f"{family_path}{slug}/*\n  X-Robots-Tag: index, follow\n\n"
+        ),
+    )
+    robots = (root / "robots.txt").read_text(encoding="utf-8")
+    parsed = parse_robots(robots)
+    allowed, rule = is_allowed(parsed, "*", family_path)
+    assert allowed is False, f"premise check: hub must be genuinely blocked, was allowed by {rule}"
+
+    page = root / PUBLIC_DIR / slug / "index.html"
+    page.parent.mkdir(parents=True, exist_ok=True)
+    page.write_text(
+        f'<meta content="index,follow" name="robots"/><body data-panorama-id="mp-{slug}"></body>',
+        encoding="utf-8",
+    )
+    problems = cli.audit_shipped(root, approvals={f"mp-{slug}": {"approved": True}})
+    assert any("hub is not crawlable" in p for p in problems)
+
+
 def test_validate_fails_on_a_duplicated_generated_block(tmp_path, capsys):
     from scripts.market_panorama import __main__ as cli
     from scripts.market_panorama.render import ROBOTS_FAMILY_BEGIN

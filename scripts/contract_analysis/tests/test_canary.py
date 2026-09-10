@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[3]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from scripts.contract_analysis import MAX_CANARY, PUBLICATION_STATES
+from scripts.contract_analysis import AUTHORIZED_CANONICAL_PATH, FAMILY_PATH, MAX_CANARY, PUBLICATION_STATES
 from scripts.contract_analysis.consume import load_canary, load_editorial_fixture
 from scripts.contract_analysis.gate import evaluate_cohort
 from scripts.contract_analysis.render import analysis_urls_in_sitemaps
@@ -229,13 +229,71 @@ def test_rendered_preview_is_noindex_and_absent_from_sitemaps():
     }
 
 
+
+def family_robots_contract(robots: str) -> str:
+    """Estado do hub no robots.txt e as asserções que valem em cada estado.
+
+    O hub e reconhecido pela linha EXATA "Allow: /analises-contratos-publicos/":
+    um slug filho liberado nao conta como hub, e uma linha comentada ou
+    "revertida" tambem nao. Devolve "hub_open" ou "hub_closed".
+    """
+    from scripts.site.robots_policy import is_allowed, parse_robots
+
+    lines = {line.strip() for line in robots.splitlines()}
+    hub_allowed = f"Allow: {FAMILY_PATH}" in lines
+    parsed = parse_robots(robots)
+    if not hub_allowed:
+        assert f"Disallow: {FAMILY_PATH}" in lines
+        # Contraprova: quando exigido, o Disallow tem de bloquear de fato.
+        assert not is_allowed(parsed, "Googlebot", FAMILY_PATH)[0]
+        assert not is_allowed(parsed, "Googlebot", f"{FAMILY_PATH}qualquer/")[0]
+        return "hub_closed"
+    assert f"Disallow: {FAMILY_PATH}" not in lines
+    assert is_allowed(parsed, "Googlebot", FAMILY_PATH)[0]
+    return "hub_open"
+
+
+def test_family_robots_contract_recognizes_the_hub_by_exact_line_not_by_child_slug():
+    """Regressao: o estado do hub era lido pela linha do slug filho, sempre
+    presente, entao o ramo "hub fechado" nunca rodava e um robots.txt sem o
+    Allow do hub passava. Cada cenario abaixo tem de cair no ramo certo."""
+    import pytest
+
+    child = f"Allow: {AUTHORIZED_CANONICAL_PATH}"
+    assert AUTHORIZED_CANONICAL_PATH != FAMILY_PATH
+
+    assert family_robots_contract(f"User-agent: *\nAllow: {FAMILY_PATH}\n{child}\n") == "hub_open"
+    assert (
+        family_robots_contract(f"User-agent: *\nDisallow: {FAMILY_PATH}\n{child}\n") == "hub_closed"
+    )
+    # Slug filho liberado sem o hub e sem Disallow: nao e hub aberto, e o
+    # Disallow exigido esta ausente -- tem de reprovar.
+    with pytest.raises(AssertionError):
+        family_robots_contract(f"User-agent: *\nAllow: /\n{child}\n")
+    # Linha comentada/"revertida" nao e Allow do hub.
+    with pytest.raises(AssertionError):
+        family_robots_contract(f"User-agent: *\n# Allow: {FAMILY_PATH} - revertido\n{child}\n")
+    # Hub aberto e Disallow inerte ao mesmo tempo: o arquivo mente.
+    with pytest.raises(AssertionError):
+        family_robots_contract(f"User-agent: *\nAllow: {FAMILY_PATH}\nDisallow: {FAMILY_PATH}\n")
+
+
 def test_robots_and_headers_block_fixture_family():
     from scripts.contract_analysis import AUTHORIZED_CANONICAL_PATH
     from scripts.contract_analysis.approval import approval_allows_index
 
     robots = (ROOT / "robots.txt").read_text(encoding="utf-8")
     headers = (ROOT / "_headers").read_text(encoding="utf-8")
-    assert "Disallow: /analises-contratos-publicos/" in robots
+    # A familia continua fechada, mas o robots.txt tem de DIZER a verdade sobre
+    # como. Pela RFC 9309 2.2.2 um Allow e um Disallow de mesmo comprimento
+    # empatam em favor do Allow, entao "Disallow: /analises-contratos-publicos/"
+    # nao restringe nada enquanto o hub estiver liberado -- afirmar a restricao
+    # ali faria o arquivo declarar uma politica que nao existe.
+    # Regra substituida: o bloqueio efetivo da familia (noindex de todos os
+    # filhos) e provado pelo X-Robots-Tag do _headers. Com o hub liberado, os
+    # filhos sao RASTREAVEIS de proposito, para que o 410 de um slug retirado
+    # seja visto; o Disallow so e exigido quando o hub NAO esta liberado.
+    family_robots_contract(robots)
     assert "/analises-contratos-publicos/*" in headers
     assert "X-Robots-Tag: noindex" in headers
     official = load_canary(

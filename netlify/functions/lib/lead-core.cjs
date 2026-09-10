@@ -163,9 +163,24 @@ try {
   DELIVERABLE_STATE_BY_ID = new Map();
 }
 
+// Familias de servico "por proposta" que o formulario de /entregas/ oferece ao
+// lado do catalogo com preco. Nao sao entregas do registro: viram o tipo de
+// necessidade (estagio) com o MESMO valor que a home usa, e a jornada e
+// derivada dele -- nunca do "operacao" oculto do formulario, que e B2G.
+const SERVICE_FAMILY_STAGE = new Map([
+  ["SERV-PROJETO", "projeto, revisão ou compatibilização"],
+  ["SERV-ORCAMENTO", "quantitativos ou orçamento"],
+  ["SERV-DIAGNOSTICO", "obra ou imóvel para inspecionar ou documentar"],
+  ["SERV-PERICIA", "perícia, assistência técnica ou avaliação"],
+  ["SERV-SST", "segurança do trabalho"],
+]);
+
 function assertDeliverableSelection(raw) {
   const id = clamp(raw, MAX_FIELD.deliverable_id).toUpperCase();
   if (!id) return { ok: true, deliverable_id: null };
+  if (SERVICE_FAMILY_STAGE.has(id)) {
+    return { ok: true, deliverable_id: null, service_family_stage: SERVICE_FAMILY_STAGE.get(id) };
+  }
   const state = DELIVERABLE_STATE_BY_ID.get(id);
   if (!state) {
     return {
@@ -370,24 +385,35 @@ const CONTRACT_STAGES = new Set([
 ]);
 
 function assertContractDefenseQualification(data, deliverableId) {
-  if (!CONTRACT_DEFENSE_IDS.has(deliverableId)) return { ok: true, qualification: null };
   const publicContractId = clamp(data.public_contract_id, MAX_FIELD.public_contract_id);
   const contractEvent = clamp(data.contract_event, MAX_FIELD.contract_event);
   const deadline = clamp(data.opportunity_deadline, MAX_FIELD.opportunity_deadline);
   const contractStage = clamp(data.contract_stage, MAX_FIELD.contract_stage);
-  const safeDays = businessDaysUntil(deadline);
+  // O hub de obras publicas aceita "ainda nao sei qual entrega" (entrega
+  // vazia) e ainda assim publica evento e estagio como obrigatorios: o que o
+  // visitante informou tem de ser validado e persistido, nao descartado.
+  // Identificador e prazo tambem pertencem a qualificacao de licitacao, por
+  // isso so evento e estagio -- exclusivos deste formulario -- abrem o contexto.
+  const contractContext = CONTRACT_DEFENSE_IDS.has(deliverableId)
+    || Boolean(contractEvent || contractStage);
+  if (!contractContext) return { ok: true, qualification: null };
+  // Identificador do contrato e prazo sao OPCIONAIS na captura publicada
+  // (decisao 2026-09-09: demanda incompleta e bem-vinda; o que falta e pedido
+  // na triagem). Quando informados, continuam nos formatos publicados: um
+  // identificador com 3+ caracteres e um prazo valido e seguro.
+  const safeDays = deadline ? businessDaysUntil(deadline) : null;
   const minDays = deliverableId === "CFG-D23" ? 5 : 1;
   if (
-    publicContractId.length < 3 ||
+    (publicContractId && publicContractId.length < 3) ||
     !CONTRACT_EVENTS.has(contractEvent) ||
     !CONTRACT_STAGES.has(contractStage) ||
-    safeDays < minDays
+    (deadline && safeDays < minDays)
   ) {
     return {
       ok: false,
       status: 422,
       error: "contract_qualification_invalid",
-      message: "Informe contrato, evento, prazo seguro e estágio nos formatos publicados.",
+      message: "Informe evento e estágio; contrato e prazo, se informados, nos formatos publicados.",
     };
   }
   return {
@@ -836,12 +862,13 @@ function validateAndNormalize(data) {
   const normalizedEmail = normalizeEmail(rawEmail);
   // On a Radar order the delivery e-mail is also the contact channel.
   const email = normalizedEmail || (radarParams ? radarParams.email_entrega : "");
+  const familyStage = deliverableCheck.service_family_stage || "";
   const estagio = adaptiveFields
     ? adaptiveFields.estagio
-    : clamp(data.estagio || data.tipo_demanda || data.demand_type, MAX_FIELD.estagio);
+    : familyStage || clamp(data.estagio || data.tipo_demanda || data.demand_type, MAX_FIELD.estagio);
   const jornada = adaptiveFields
     ? adaptiveFields.jornada
-    : normalizeJourney(data.jornada || data.journey, estagio);
+    : normalizeJourney(familyStage ? "" : data.jornada || data.journey, estagio);
   const consentRaw = data.consentimento ?? data.consent ?? data.lgpd;
   const consentimento =
     consentRaw === true ||
