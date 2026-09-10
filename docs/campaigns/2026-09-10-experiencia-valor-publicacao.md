@@ -547,3 +547,40 @@ volta a ser estilizada.
 Re-pin do catálogo (só a redação de `CFG-D01`), geradores em `--check`, `%0A` no
 `mailto`, `proof.json` (uma frase permitida acrescentada), breadcrumb B2G,
 primeira dobra remedida (`876f8dd4f`, 25/25).
+
+## Auditoria ultracode do conjunto de correções (2026-09-10)
+
+Sete dimensões independentes revisaram `git diff origin/main..HEAD` em 8753cba2d
+(contrato de leads e formulários; navegação e jornada; motor RFC 9309 e aceite;
+integridade dos testes e do executor; coerência fonte → saída → manifestos;
+texto público e acessibilidade; eventos de analytics), com **34 candidatos**.
+Os 14 melhor classificados passaram por **três lentes adversariais**
+(correção, reprodução independente, impacto); um achado só sobreviveu com no
+máximo uma refutação. Resultado: **5 confirmados, 9 refutados**, mais 1 achado
+do crítico de completude em área que nenhuma dimensão cobria. Commit das
+correções: `83ca3543f`.
+
+| confirmado | causa | correção | contraprova |
+|---|---|---|---|
+| `/entregas/`: famílias "por proposta" confirmavam em `/obrigado-operacao` e informavam `journey=operacao` ao analytics enquanto o servidor gravava `outro` | as opções `SERV-*` não declaravam jornada; o formulário mantinha o `operacao` oculto | opções declaram `data-journey`; o formulário segue a opção escolhida (jornada oculta e destino) e volta ao padrão para entregas do catálogo | `entregas_deliverable_option_drives_journey` (navegador) |
+| hub B2G: "ainda não sei qual entrega" descartava evento e estágio publicados como obrigatórios | qualificação contratual só abria por entrega `CFG-D17..23` | abre também por evento/estágio; validado e persistido; evento inválido segue 422 | `hub_unknown_deliverable_keeps_contract_fields` |
+| Warmbly recebia a família de serviço com menos sinal que uma entrega do catálogo | contexto do próximo passo só carregava `entrega=CFG-D..` | `família de serviço=…` no contexto quando não há entrega do registro | `handoff_service_family_context` |
+| um `Allow` injetado sob superfície privada dentro do bloco gerenciado passava pelos dois gates | a amostra de 234 caminhos não cobria regras injetadas em qualquer grupo | toda regra `Allow` que desce a uma superfície privada reprova (`robots_private_surface_allow_injected`) e um filho sentinela por superfície é sondado para todos os agentes; `Allow: /` amplo continua legítimo | `test_an_allow_injected_inside_the_managed_block_fails_closed` (três injeções, um grupo novo) |
+| nenhum gate provava que o fundo fica inerte com o diálogo aberto | — | o teste exige zero focáveis alcançáveis fora do painel e que abrir por Enter não feche no mesmo evento | `mobile_menu_toggle_tap_returns_focus` |
+| (crítico) `/casos/`: CTA fixo com texto visível "Configurar pedido" e nome acessível "Pedir … pelo WhatsApp" | rótulo no nome (WCAG 2.5.3) rompido pela troca do verbo | texto visível "Pedir análise + preço", nome acessível começa por ele; gerador das oito ofertas | `test_cta_form_next_state` |
+
+Também aplicado a partir dos candidatos não verificados: o CI passa a exigir o
+pacote nos dois módulos de robots (`ROBOTS_PACKAGE_REQUIRED=1`), para que um
+módulo pulado nunca saia verde. Verificado e descartado: o bloco do esquema em
+`/entregas/` não tem `div` aninhado (a extração não trunca).
+
+Refutados pela verificação, sem alteração: triplicação do conjunto `SERV-*`
+(há gate ligando geração e servidor), dupla contagem de `lead_persisted`,
+discriminador de idempotência, mensagem do prazo, rebaixamento por
+`data-set-journey`, X sintético no iOS, foco em outros fechamentos, prefixo de
+estrofe pai no `_headers`, conjunto de linhas da linha de base.
+
+Riscos que a auditoria declara **não verificáveis antes da promoção** e que o
+aceite pós-deploy cobre: fechamento da família de análises só por
+`X-Robots-Tag` no host servido; caminho de 503 do armazenamento em produção;
+identidade do artefato servido (`build-info`/`runtime-info` = SHA de `main`).
