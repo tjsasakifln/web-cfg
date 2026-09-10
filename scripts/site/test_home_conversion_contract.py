@@ -17,7 +17,13 @@ SERVICES = ROOT / "servicos" / "index.html"
 # valendo sem alteracao: 23 controles, 3 obrigatorios, action /obrigado, sem
 # upload. O que mudou foram opcoes e copy, e as assercoes semanticas novas
 # dizem o que a mudanca tinha de preservar.
-CAPTURE_FORM_SHA256 = "114261cde438a7fee3fb4b2c0b0d0d8956398cfc5a3e920c0dc05c516f60d005"
+# 2026-09-10: o select ganhou a opcao "ainda nao sei qual servico preciso",
+# porque quem chega indefinido nao tinha como se declarar sem escolher uma
+# disciplina que nao e a dele. A opcao tem proximo passo declarado em
+# HOME_SITUATIONS; sem isso ela cairia no default "operacao" de stageToJourney,
+# que e a reclassificacao silenciosa. As invariantes estruturais seguem
+# identicas: 23 controles, 3 obrigatorios, action /obrigado, sem upload.
+CAPTURE_FORM_SHA256 = "3666168daedb59a70b49be59528d7b5663d428d18d4e4134c6fe1422d804cd69"
 
 
 def _home() -> str:

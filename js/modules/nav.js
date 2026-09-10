@@ -117,19 +117,54 @@
     // excecao: ele e o controle de fechar do proprio dialogo e continua na
     // ordem de foco. A marca, a CTA do cabecalho e o botao flutuante ficavam
     // alcancaveis por Tab e por cursor virtual mesmo cobertos pelo painel.
-    const backdropParts = () => [
+    // O dialogo e o proprio #mobile-menu, que ja tem nome acessivel
+    // ("Navegacao movel"). O botao que abre e IRMAO dele, nao filho: aprovar um
+    // ciclo de foco que sai do dialogo para alcancar o botao de fechar seria
+    // aprovar um dialogo sem controle de fechar dentro. Por isso o fechamento
+    // passa a existir DENTRO do painel, e o botao externo fica inerte enquanto
+    // ele esta aberto. O botao interno e injetado em tempo de execucao e
+    // estilizado inline, porque folhas de estilo compartilhadas fazem parte do
+    // hash de aprovacao editorial da analise publicada.
+    let inertApplied = [];
+    let closeButton = null;
+    const backdropCandidates = () => [
       ...document.querySelectorAll('main, footer, .whatsapp-float, .skip-link, .site-head .brand, .site-head .button, header .brand, header .button'),
-    ].filter((element) => element && !element.contains(menu) && !element.contains(toggle) && element !== toggle);
+      toggle,
+    ].filter((element) => element && !element.contains(menu) && !menu.contains(element));
+    // Os dois lados importam: nao tornar inerte um ANCESTRAL do dialogo, e
+    // nao alcancar nada DENTRO dele. O seletor 'header .button' pegava a CTA
+    // 'Solicitar proposta' que vive dentro do proprio painel, deixando-a
+    // inalcancavel por Tab: o foco saia do dialogo para o body.
+    const ensureCloseButton = () => {
+      if (closeButton) return closeButton;
+      closeButton = document.createElement('button');
+      closeButton.type = 'button';
+      closeButton.className = 'mobile-nav__close';
+      closeButton.setAttribute('aria-label', 'Fechar menu');
+      closeButton.textContent = 'Fechar';
+      closeButton.style.cssText = 'display:flex;align-items:center;justify-content:center;'
+        + 'min-height:44px;min-width:44px;margin:0 0 8px auto;padding:8px 14px;'
+        + 'font:inherit;font-weight:700;color:inherit;background:transparent;'
+        + 'border:1px solid currentColor;border-radius:6px;cursor:pointer';
+      closeButton.addEventListener('click', () => closeMenu(true));
+      return closeButton;
+    };
     const setModalSemantics = (on) => {
       if (!menu) return;
       if (on) {
         menu.setAttribute('role', 'dialog');
         menu.setAttribute('aria-modal', 'true');
-        backdropParts().forEach((element) => element.setAttribute('inert', ''));
+        menu.insertBefore(ensureCloseButton(), menu.firstChild);
+        // Guarda SO os que este menu tornou inertes: um inert preexistente de
+        // outro componente nao pode ser removido ao fechar.
+        inertApplied = backdropCandidates().filter((element) => !element.hasAttribute('inert'));
+        inertApplied.forEach((element) => element.setAttribute('inert', ''));
       } else {
         menu.removeAttribute('role');
         menu.removeAttribute('aria-modal');
-        backdropParts().forEach((element) => element.removeAttribute('inert'));
+        if (closeButton && closeButton.parentNode === menu) menu.removeChild(closeButton);
+        inertApplied.forEach((element) => element.removeAttribute('inert'));
+        inertApplied = [];
       }
     };
     const closeMenu = (returnFocus = false) => {
@@ -140,7 +175,7 @@
       if (returnFocus) toggle.focus();
     };
     if (toggle && menu) {
-      toggle.addEventListener('click', () => toggle.getAttribute('aria-expanded') === 'true' ? closeMenu() : (toggle.setAttribute('aria-expanded','true'), toggle.setAttribute('aria-label','Fechar menu'), menu.classList.add('is-open'), document.body.classList.add('menu-open'), setModalSemantics(true), menu.querySelector('a')?.focus()));
+      toggle.addEventListener('click', () => toggle.getAttribute('aria-expanded') === 'true' ? closeMenu() : (toggle.setAttribute('aria-expanded','true'), toggle.setAttribute('aria-label','Fechar menu'), menu.classList.add('is-open'), document.body.classList.add('menu-open'), setModalSemantics(true), (closeButton || menu.querySelector('a'))?.focus()));
       menu.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => closeMenu()));
       document.addEventListener('keydown', (event) => {
         // Escape so pertence ao menu quando o menu esta aberto. Antes, uma
@@ -151,7 +186,7 @@
           return;
         }
         if (event.key !== 'Tab' || toggle.getAttribute('aria-expanded') !== 'true') return;
-        const focusable = [toggle, ...menu.querySelectorAll('a[href], button:not([disabled])')]
+        const focusable = [...menu.querySelectorAll('a[href], button:not([disabled])')]
           .filter((element) => element.offsetParent !== null);
         if (!focusable.length) return;
         const first = focusable[0];
