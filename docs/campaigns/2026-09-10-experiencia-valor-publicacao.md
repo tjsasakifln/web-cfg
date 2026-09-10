@@ -380,3 +380,105 @@ Separado como pedido, sem misturar os três níveis.
 | E3 — demonstração honesta | sim, 5 famílias, 2 aceites separados | sim, 27 testes | **não** |
 | E4 — contato contextual | sim | sim | **não** |
 | E5 — usabilidade e compreensão | parcial | medido no candidato `5ff24ffd3`; refluxo com texto ampliado **em aberto** | **não** |
+
+
+## Retificação: o que cada procedimento de zoom realmente provou
+
+Candidato `56f0de259`. Duas coisas diferentes foram medidas e antes eu as tratei
+como uma só.
+
+### Procedimento A — redução da viewport CSS
+Prova **reformatação/layout**. **Não é execução de zoom do navegador e não é
+execução da técnica G142.** Resultado válido e mantido: nas rotas `/`,
+`/servicos/` e `/entregas/`, com viewport CSS de 640 px e de 320 px, o
+`scrollWidth` não excede o `clientWidth` — **0 px de rolagem horizontal da
+página**, sem texto cortado e sem controle desaparecido.
+
+### Procedimento B — zoom de página pelo Chrome, via CDP
+`Emulation.setDeviceMetricsOverride` com `deviceScaleFactor`, que é o que o zoom
+do navegador faz: mesma largura física, viewport CSS dividida pelo fator, cada
+CSS px pintado maior.
+
+**O que reproduz:** a redução da viewport CSS e a ampliação física do CSS px.
+**O que não reproduz:** o menu visual do Chrome, o *font boosting* móvel e a
+configuração de tamanho de texto do usuário.
+
+| medida em `/servicos/` | base 1280 | zoom 200% | zoom 400% |
+|---|---|---|---|
+| viewport CSS | 1280 | 640 | 320 |
+| `deviceScaleFactor` | 1 | 2 | 4 |
+| corpo de texto (`main p`) | 14 px CSS | 14 px CSS | 14 px CSS |
+| `h1` (`clamp()` com `vw`) | **64 px CSS** | **37,6 px CSS** | **37,6 px CSS** |
+| rolagem horizontal | 0 | 0 | 0 |
+
+### O achado que a ausência de overflow escondia
+
+O corpo de texto mantém 14 px CSS e, com `deviceScaleFactor` 2, dobra de tamanho
+físico: **1.4.4 atendido para o texto corrido**.
+
+O `h1` **encolhe** de 64 px para 37,6 px CSS ao ampliar, porque o termo `vw` do
+`clamp()` acompanha a viewport que o zoom estreitou. Em tamanho físico
+equivalente à base: 37,6 × 2 = 75,2, ou seja **1,18×** — não 2×. Pelo mecanismo
+só-texto (`font-size` da raiz a 200%) o mesmo `h1` chega a 1,59×. **Nenhum dos
+dois mecanismos leva o título responsivo ao dobro do tamanho apresentado
+inicialmente.**
+
+**Estado: NÃO ATENDIDO** para os títulos com `clamp()`+`vw`. Não é limitação do
+instrumento: é comportamento medido do produto. A correção é de CSS
+compartilhado e cai na mesma trava de reaprovação editorial das outras duas
+pendências. **Nenhuma alteração de CSS foi feita para satisfazer instrumento.**
+
+### Sobre a reversão anterior
+
+Ela não se justifica por “o primeiro teste era mais exigente”. O que se demonstra
+é o comportamento do produto resultante: sob o mecanismo admitido, o candidato
+`56f0de259` não tem rolagem horizontal a 200% nem a 400%. A regra de CSS
+revertida continua fora, e a pendência real que resta é a do `clamp()` acima.
+
+## Objetos exatos da verificação de integridade do script
+
+A frase anterior — “módulo, script compilado e script exportado compartilham um
+SHA-256” — era imprecisa e escondia uma distinção necessária. O que foi
+comparado:
+
+| objeto | papel | sha256 (16) |
+|---|---|---|
+| `js/modules/analytics.js` | entrada | `bf5a0898d4c5b142` |
+| `js/modules/form.js` | entrada | `9747f5b6cd4a2f24` |
+| `js/modules/nav.js` | entrada | `2ee8cb18b7493b36` |
+| `js/modules/offer-fit.js` | entrada | `835c8913eebbc07c` |
+| `script.js` | produto compilado | `3e6f199fde6a76b3` |
+| `_site/script.js` | artefato exportado | `3e6f199fde6a76b3` |
+
+Duas propriedades distintas, e só a segunda é uma igualdade de hash:
+
+1. **Compilação reproduzível:** `node scripts/site/build_script_modules.mjs`
+   responde `CHECK_OK`, isto é, recompilar os quatro módulos reproduz `script.js`
+   byte a byte.
+2. **Correspondência do exportado:** `script.js` e `_site/script.js` têm o mesmo
+   sha256 — o arquivo distribuído é o produto validado.
+
+Os módulos **têm conteúdo diferente do bundle** e portanto hashes diferentes,
+como deve ser. Exigir hash igual entre fonte modular e bundle seria exigir a
+coisa errada.
+
+## Menu modal: cenários de `inert` registrados separadamente
+
+`zero inert` só é o esperado quando esse era o estado inicial.
+
+| cenário | inicial | com o painel aberto | após fechar | após ir a desktop |
+|---|---|---|---|---|
+| A, sem `inert` preexistente | 0 | 7 | **0** | **0** |
+| B, com `inert` plantado no rodapé | 1 | 7 | **1** | **1** |
+
+Em B o `inert` do rodapé **sobrevive** ao fechamento e à mudança de largura: o
+menu remove somente o que ele próprio marcou. Nos dois cenários a CTA
+`Solicitar proposta` fica alcançável dentro do diálogo, o nome acessível é
+`Navegação móvel` e o foco volta ao botão após `Escape`.
+
+## Sem JavaScript, no navegador
+
+Contexto real com `javaScriptEnabled: false`, viewport 390×844: o botão do menu
+fica **oculto**, os quatro destinos ficam **visíveis** com altura medida
+(50, 50, 52 e 44 px) e **clicar navega de fato** — `/servicos-obras-publicas/`
+respondeu com o título esperado. Não é só presença no HTML.
