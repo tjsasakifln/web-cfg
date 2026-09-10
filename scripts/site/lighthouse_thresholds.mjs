@@ -204,10 +204,27 @@ export function evaluateLighthouseResults(results, options = {}) {
   const criticalDomMaxByPath = { "/entregas/": 1100, ...(options.criticalDomMaxByPath || {}) };
   const domMaxFor = (path) => criticalDomMaxByPath[path] ?? criticalDomMax;
   const criticalByteWeightMax = options.criticalByteWeightMax ?? DECLARED_CONTENT_BYTES_MAX;
+  // `measuredPages` is the set the run was supposed to cover. Without it a
+  // critical money route that produced NO row at all — dropped by --only, or
+  // abandoned when the run ran out of budget — used to pass unnoticed, because
+  // `observed > 0` excused a total absence while catching a partial one.
+  // Absent evidence is not satisfied evidence.
+  const measuredPages = options.measuredPages ? new Set(options.measuredPages) : null;
   for (const path of criticalPaths) {
-    const observed = results.filter((row) => row.path === path && !row.error).length;
+    const rows = results.filter((row) => row.path === path);
+    const observed = rows.filter((row) => !row.error).length;
     const expected = path === "/" ? homeRuns : criticalRuns;
-    if (observed > 0 && observed !== expected) {
+    if (observed === 0 && rows.length === 0) {
+      // Only a caller that declared what it set out to measure can distinguish
+      // "this route was legitimately outside this run" from "this route was
+      // silently lost". The runner always declares it; a caller that does not
+      // gets the previous, weaker reading rather than a false failure.
+      if (measuredPages && measuredPages.has(path)) {
+        errors.push(`${path}: expected ${expected} critical runs, observed none`);
+      }
+      continue;
+    }
+    if (observed !== expected) {
       errors.push(`${path}: expected ${expected} critical runs, observed ${observed}`);
     }
   }

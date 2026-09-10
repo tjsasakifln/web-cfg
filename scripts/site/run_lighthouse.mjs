@@ -19,11 +19,14 @@ import {
 import { tmpdir } from "os";
 import { join, resolve, extname, dirname } from "path";
 import { fileURLToPath } from "url";
-import { launch as launchChrome } from "chrome-launcher";
-import lighthouse from "lighthouse";
 import { CRITICAL_MONEY_PATHS, evaluateLighthouseResults } from "./lighthouse_thresholds.mjs";
-import { headerByteWeight, lcpNetworkAllowanceMs, measureContentByteWeight } from "./lighthouse_payload.mjs";
-import { INFRASTRUCTURE_ATTEMPTS, installAsyncFailureTrap, isInfrastructureError } from "./lighthouse_infra.mjs";
+import {
+  INFRASTRUCTURE_ATTEMPTS,
+  MEASUREMENT_TIMEOUT_MS,
+  OUTCOME,
+  isRetryableOutcome,
+  runMeasurement,
+} from "./lighthouse_infra.mjs";
 import {
   deriveCoverage,
   formatCoverageDeclaration,
@@ -289,202 +292,147 @@ async function verifyRuntimeEvidenceInputs() {
   };
 }
 
-const runtimeEvidence = await verifyRuntimeEvidenceInputs();
-
+// The evidence directory exists before any step that can fail, so a terminal
+// summary can always be written. A run that ends without one is indistinguishable
+// from a run that never happened, and the release evidence upload requires it.
 mkdirSync(OUT, { recursive: true });
+
 const results = [];
-// Lighthouse can reject asynchronously from its target manager (a browser
-// session attaching and vanishing); without this trap that rejection kills
-// the runner instead of failing the attempt.
-const asyncFailures = installAsyncFailureTrap();
+/** Non-null once something made the run unable to continue. It never turns a
+ * failure into a pass; it names the cause inside the terminal summary. */
+let fatal = null;
 
-async function waitForCdp(port, attempts = 40) {
-  for (let i = 0; i < attempts; i++) {
-    try {
-      const res = await fetch(`http://127.0.0.1:${port}/json/version`);
-      if (res.ok) return true;
-    } catch {
-      /* retry */
-    }
-    await new Promise((r) => setTimeout(r, 250));
-  }
-  throw new Error(`Chrome CDP not ready on port ${port}`);
+let runtimeEvidence = null;
+try {
+  runtimeEvidence = await verifyRuntimeEvidenceInputs();
+} catch (error) {
+  fatal = `runtime evidence prerequisites did not verify: ${String(error?.message || error)}`;
 }
 
-async function launchIsolatedChrome() {
-  // chrome-launcher mistakes this WSL host for Windows and otherwise hands the
-  // Linux Chrome a relative C:\\Users\\... profile path inside the checkout.
-  // The final duplicate flag wins, keeps all mutable browser state in /tmp and
-  // lets us remove the exact profile after every run.
-  const profileDir = mkdtempSync(join(tmpdir(), "confenge-lighthouse-profile-"));
-  try {
-    const chrome = await launchChrome({
-      chromePath: process.env.CHROME_PATH || "/usr/bin/google-chrome",
-      // Keep chrome-launcher's logs and pid file in the same exact temporary
-      // profile that we own. Under WSL its platform detection otherwise makes
-      // a Windows-looking relative directory inside the checkout before the
-      // final Linux --user-data-dir flag below takes precedence.
-      userDataDir: profileDir,
-      chromeFlags: [
-        "--headless=new",
-        "--no-sandbox",
-        "--disable-gpu",
-        "--disable-dev-shm-usage",
-        "--disable-extensions",
-        // Lantern models multiplexing only for h2; an h3/QUIC session is
-        // simulated as HTTP/1.1 with a handshake per connection, which
-        // inflated the edge LCP by ~300 ms (run 34517284468). Measure over
-        // HTTP/2, the protocol the simulator models; h3 visitors do no worse.
-        "--disable-quic",
-        `--user-data-dir=${profileDir}`,
-      ],
-      connectionPollInterval: 250,
-      maxConnectionRetries: 50,
-    });
-    await waitForCdp(chrome.port);
-    return { chrome, profileDir };
-  } catch (error) {
-    rmSync(profileDir, { recursive: true, force: true });
-    throw error;
-  }
-}
+const CHILD = join(ROOT, "scripts", "site", "lighthouse_measure_child.mjs");
+const WORK = mkdtempSync(join(tmpdir(), "confenge-lighthouse-supervisor-"));
 
-async function warmChromeHost() {
-  // A deterministic, result-free preflight warms the Chromium executable and
-  // shared-library page cache. It runs once for every matrix and never depends
-  // on a score, so no failing page result is retried or discarded.
-  let launched = null;
-  try {
-    launched = await launchIsolatedChrome();
-    console.log("Lighthouse browser preflight", "clean_port=", launched.chrome.port);
-  } finally {
-    if (launched?.chrome) await launched.chrome.kill();
-    if (launched?.profileDir) rmSync(launched.profileDir, { recursive: true, force: true });
-  }
+/** Whole-run budget. The release job allows 30 minutes and the site-ci gates
+ * 45; reserving time here means the supervisor, not the job timeout, ends the
+ * run, so the terminal summary and its evidence are always persisted. */
+const GLOBAL_BUDGET_MS = Number(process.env.LH_GLOBAL_BUDGET_MS || 21 * 60 * 1000);
+const startedAt = Date.now();
+const budgetExhausted = () => Date.now() - startedAt > GLOBAL_BUDGET_MS;
+
+/**
+ * Performs one attempt in a disposable child process.
+ *
+ * The supervisor never launches a browser itself: it owns only the deadline,
+ * the attempt bookkeeping and the evidence. That is what keeps an asynchronous
+ * rejection inside Lighthouse from ending the run.
+ */
+async function measureOnce(spec, lhrPath) {
+  const specPath = join(WORK, `spec-${spec.slug}-${spec.run}-${spec.attempt}.json`);
+  const outcomePath = join(WORK, `outcome-${spec.slug}-${spec.run}-${spec.attempt}.json`);
+  writeFileSync(specPath, JSON.stringify(spec, null, 2));
+  const remaining = GLOBAL_BUDGET_MS - (Date.now() - startedAt);
+  return runMeasurement({
+    childPath: CHILD,
+    specPath,
+    outcomePath,
+    lhrPath,
+    timeoutMs: Math.max(30000, Math.min(MEASUREMENT_TIMEOUT_MS, remaining)),
+  });
 }
 
 try {
-  await warmChromeHost();
+  // A deterministic, result-free preflight warms the Chromium executable and
+  // shared-library page cache. It runs once and never depends on a score, so
+  // no failing page result is retried or discarded.
+  const preflight = await measureOnce(
+    { preflight: true, slug: "preflight", run: 0, attempt: 1, chrome_path: process.env.CHROME_PATH },
+    null,
+  );
+  if (preflight.outcome !== OUTCOME.MEASURED) {
+    // The preflight is not evidence, but a browser that cannot start at all is
+    // an instrument failure that must be named, not silently absorbed.
+    console.error("lighthouse preflight failed", preflight.phase, preflight.error);
+  }
+
   for (const path of RUN_PAGES) {
+    if (fatal) break;
     const attempts = CRITICAL_MONEY_PATHS.has(path) ? REPEATED_RUNS : 1;
-    // Infrastructure failures (the browser or its debugging session died
-    // before a measurement existed) are attempted again with a fresh browser,
-    // a bounded number of times. A MEASURED result is never re-sampled.
-    let infrastructureAttempt = 1;
     for (let run = 1; run <= attempts; ) {
+      if (budgetExhausted()) {
+        fatal = `the Lighthouse budget of ${GLOBAL_BUDGET_MS}ms was exhausted before ${path} run ${run}`;
+        break;
+      }
       const url = `${BASE.replace(/\/$/, "")}${path}`;
       const baseSlug = path === "/" ? "home" : path.replace(/\//g, "_").replace(/^_|_$/g, "");
       const slug = evidenceLabel ? `${baseSlug}-${evidenceLabel}` : baseSlug;
       const suffix = attempts > 1 ? `-run-${run}` : "";
       const outJson = join(OUT, `${slug}${suffix}.json`);
-      let chrome = null;
-      let profileDir = null;
-      try {
-        ({ chrome, profileDir } = await launchIsolatedChrome());
-        console.log("Lighthouse", url, `run=${run}`, "clean_port=", chrome.port, infrastructureAttempt > 1 ? `infrastructure_attempt=${infrastructureAttempt}` : "");
-        asyncFailures.drain();
-        const runnerResult = await lighthouse(url, {
-          port: chrome.port,
-          hostname: "127.0.0.1",
-          output: "json",
-          logLevel: "error",
-          onlyCategories: ["performance", "accessibility", "best-practices", "seo"],
-          formFactor: coverage.lighthouse.form_factor,
-          screenEmulation: {
-            mobile: coverage.lighthouse.form_factor === "mobile",
-            width: coverage.lighthouse.viewport.width,
-            height: coverage.lighthouse.viewport.height,
-            deviceScaleFactor: coverage.lighthouse.viewport.device_scale_factor,
-            disabled: false,
+
+      let outcome = null;
+      // Only an instrument failure raised before the artifact was touched is
+      // attempted again, and only a bounded number of times. A measurement
+      // that exists is never re-sampled, whatever its score.
+      for (let attempt = 1; attempt <= INFRASTRUCTURE_ATTEMPTS; attempt += 1) {
+        outcome = await measureOnce(
+          {
+            url,
+            path,
+            slug: baseSlug,
+            run,
+            attempt,
+            out_json: outJson,
+            base: BASE,
+            form_factor: coverage.lighthouse.form_factor,
+            viewport: coverage.lighthouse.viewport,
+            runtime_mode: runtimeContracts.length > 0,
+            seo_exempt: SEO_EXEMPT_PAGES.has(path),
+            chrome_path: process.env.CHROME_PATH,
           },
-          maxWaitForLoad: 45000,
-        });
-        const asyncFailure = asyncFailures.drain();
-        if (asyncFailure) throw asyncFailure;
-        if (!runnerResult?.lhr) throw new Error("empty lighthouse result");
-        writeFileSync(outJson, JSON.stringify(runnerResult.lhr, null, 2));
-        const cats = runnerResult.lhr.categories || {};
-        const audits = runnerResult.lhr.audits || {};
-        const ownLongTasks = (audits["long-tasks"]?.details?.items || [])
-          .filter((item) => String(item.url || "").startsWith(BASE))
-          .map((item) => Number(item.duration) || 0);
-        // Same semantics on the lab server and on the edge: content bytes are
-        // the compressed bodies the page loaded, re-fetched from the same
-        // origin; header overhead is evidence, gated by the host contract.
-        const payload = await measureContentByteWeight(
-          audits["network-requests"]?.details?.items || [],
-          BASE,
+          outJson,
         );
-        if (payload.error) throw new Error(payload.error);
-        const totalByteWeight = audits["total-byte-weight"]?.numericValue;
-        const network = lcpNetworkAllowanceMs({
-          audits,
-          runtimeMode: runtimeContracts.length > 0,
-        });
-        const row = {
+        if (!isRetryableOutcome(outcome) || attempt === INFRASTRUCTURE_ATTEMPTS) break;
+        console.error(
+          "lighthouse infrastructure failure",
+          path,
+          `run ${run}`,
+          `attempt ${attempt}/${INFRASTRUCTURE_ATTEMPTS}`,
+          outcome.phase,
+          outcome.error,
+        );
+        if (budgetExhausted()) break;
+      }
+
+      if (outcome?.outcome === OUTCOME.MEASURED && outcome.row) {
+        results.push(outcome.row);
+      } else {
+        // Every other outcome is recorded as a failing row carrying its class,
+        // phase and cause. Nothing unknown becomes a pass, and nothing here
+        // starts another navigation for this run.
+        console.error("lighthouse failed", path, `run ${run}`, outcome?.outcome, outcome?.phase, outcome?.error);
+        results.push({
           path,
           run,
-          performance: Math.round((cats.performance?.score || 0) * 100),
-          accessibility: Math.round((cats.accessibility?.score || 0) * 100),
-          best_practices: Math.round((cats["best-practices"]?.score || 0) * 100),
-          seo: Math.round((cats.seo?.score || 0) * 100),
-          lcp_ms: audits["largest-contentful-paint"]?.numericValue,
-          cls: audits["cumulative-layout-shift"]?.numericValue,
-          tbt_ms: audits["total-blocking-time"]?.numericValue,
-          longest_own_task_ms: Math.max(0, ...ownLongTasks),
-          fcp_ms: audits["first-contentful-paint"]?.numericValue,
-          si_ms: audits["speed-index"]?.numericValue,
-          image_aspect_ratio: audits["image-aspect-ratio"]?.score,
-          image_size_responsive: audits["image-size-responsive"]?.score,
-          dom_elements: audits["dom-size-insight"]?.numericValue,
-          total_byte_weight: totalByteWeight,
-          content_byte_weight: payload.content_byte_weight,
-          header_byte_weight: headerByteWeight(totalByteWeight, payload.content_byte_weight),
-          payload_requests: payload.requests.length,
-          payload_details: payload.requests,
-          lcp_network_allowance_ms: network.allowance_ms,
-          lcp_observed_server_latency_ms: network.observed_server_latency_ms,
-          lcp_observed_rtt_ms: network.observed_rtt_ms,
-          lcp_network_allowance_capped: network.capped,
-          render_blocking_savings_ms:
-            audits["render-blocking-insight"]?.metricSavings?.LCP || 0,
-          image_delivery_savings_bytes:
-            audits["image-delivery-insight"]?.details?.debugData?.wastedBytes || 0,
-          font_display_score: audits["font-display-insight"]?.score,
-          benchmark_index: runnerResult.lhr.environment?.benchmarkIndex,
-          seo_exempt: SEO_EXEMPT_PAGES.has(path),
-        };
-        results.push(row);
-        console.log(JSON.stringify(row));
-        run += 1;
-        infrastructureAttempt = 1;
-      } catch (err) {
-        const detail = (err && err.message) || String(err);
-        if (isInfrastructureError(err) && infrastructureAttempt < INFRASTRUCTURE_ATTEMPTS) {
-          // No measurement exists for this attempt: the browser failed before
-          // or during collection. Try again with a fresh isolated browser.
-          infrastructureAttempt += 1;
-          console.error("lighthouse infrastructure failure", path, `run ${run}`, `attempt ${infrastructureAttempt - 1}/${INFRASTRUCTURE_ATTEMPTS}`, detail);
-          continue;
-        }
-        console.error("lighthouse failed", path, `run ${run}`, detail);
-        results.push({ path, run, error: detail, status: "error", infrastructure_attempts: infrastructureAttempt });
-        run += 1;
-        infrastructureAttempt = 1;
-      } finally {
-        if (chrome) await chrome.kill();
-        if (profileDir) rmSync(profileDir, { recursive: true, force: true });
+          error: `${outcome?.outcome || OUTCOME.INVALID_OR_INCOMPLETE} in ${outcome?.phase || "unknown"}: ${outcome?.error || "no outcome recorded"}`,
+          status: "error",
+          outcome: outcome?.outcome || OUTCOME.INVALID_OR_INCOMPLETE,
+          phase: outcome?.phase || "unknown",
+          lhr_written: Boolean(outcome?.lhr_written),
+        });
       }
+      run += 1;
     }
   }
+} catch (error) {
+  fatal = `the Lighthouse supervisor stopped: ${String(error?.message || error)}`;
 } finally {
-  asyncFailures.dispose();
   if (server) server.close();
+  rmSync(WORK, { recursive: true, force: true });
 }
 
 const evaluation = evaluateLighthouseResults(results, {
   homeRuns: REPEATED_RUNS,
   criticalRuns: REPEATED_RUNS,
+  measuredPages: RUN_PAGES,
   imageGatePages: IMAGE_GATE_PAGES,
   seoExemptPages: SEO_EXEMPT_PAGES,
   thresholds: coverage.lighthouse.thresholds,
@@ -513,9 +461,25 @@ const summary = {
   results,
   evaluation,
 };
+// A run that could not complete is reported as incomplete evidence, never as
+// a pass and never as a measured verdict about the artifact.
+if (fatal) {
+  evaluation.ok = false;
+  evaluation.errors = [...(evaluation.errors || []), fatal];
+}
+summary.terminal_state = fatal
+  ? "INVALID_OR_INCOMPLETE"
+  : evaluation.ok
+    ? "MEASURED_PASS"
+    : "MEASURED_FAIL";
+summary.fatal = fatal;
+
+// The terminal summary is written on every path — passed, failed, or unable to
+// finish. The release evidence upload requires it, and a missing summary must
+// never be mistaken for an accessory error.
 const summaryName = evidenceLabel ? `summary-${evidenceLabel}.json` : "summary.json";
 writeFileSync(join(OUT, summaryName), JSON.stringify(summary, null, 2));
-console.log("Wrote", join(OUT, summaryName));
+console.log("Wrote", join(OUT, summaryName), summary.terminal_state);
 if (!evaluation.ok) console.error("Lighthouse gates failed", JSON.stringify(evaluation));
 else if (diagnosticRunCount) {
   console.log(

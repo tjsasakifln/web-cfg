@@ -263,10 +263,107 @@ jobs:
             --bundle-directory "dist/netcup/$RELEASE_SHA" --sha "$RELEASE_SHA" \
             --target "$target" "${controller_ssh[@]}" --operation verify
 
+  qualify:
+    # The barrier. Until this job produces a qualification bound to THIS
+    # candidate's identity and this run, `promote` refuses to change `current`.
+    #
+    # Five consecutive releases (34400752543, 34422538162, 34501989732,
+    # 34517284468, 34532136335) were promoted first and verified afterwards
+    # against the public domain; every one of them was rolled back. The
+    # candidate is now exercised, with a real browser and the exact gated
+    # artifact, while it is still a candidate.
+    #
+    # What this job deliberately does NOT prove is recorded inside the
+    # qualification as `residual_differences`: the candidate cannot be served
+    # through the real nginx contract or the real runtime before the symlink
+    # swap, so edge latency, Cloudflare, the runtime-served endpoints and the
+    # overlay branch remain verified after promotion, by the steps that already
+    # do so and that stay blocking.
+    name: Pre-promotion candidate qualification
+    if: github.event_name == 'push' || inputs.operation == 'promote'
+    needs: stage
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Install the gated Lighthouse toolchain
+        run: npm ci --ignore-scripts
+      - name: Download the exact gated public artifact
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          name: site-ci-public-${{ github.sha }}
+          path: _site
+      - name: Setup Chrome for candidate qualification
+        uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2
+        id: qualify_chrome
+      - name: Confirm the candidate carries the release identity
+        env:
+          RELEASE_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          carried="$(python3 -c 'import json,sys; print(json.load(open("_site/.well-known/build-info.json"))["commit"])')"
+          if [ "$carried" != "$RELEASE_SHA" ]; then
+            echo "NETCUP_QUALIFICATION_BLOCKED: the artifact carries $carried, not $RELEASE_SHA" >&2
+            exit 1
+          fi
+      - name: Measure the candidate with the release verifier
+        id: candidate_acceptance
+        env:
+          CHROME_PATH: ${{ steps.qualify_chrome.outputs.chrome-path }}
+          LH_HOME_RUNS: "3"
+        run: |
+          set -euo pipefail
+          # The runner's own server over the exact gated tree, the same
+          # thresholds, the same counts. A candidate that cannot be measured to
+          # a passing terminal state does not reach the visitors.
+          node scripts/site/run_lighthouse.mjs
+      - name: Emit the qualification bound to this candidate and this run
+        if: always()
+        env:
+          RELEASE_SHA: ${{ github.sha }}
+          MEASURED: ${{ steps.candidate_acceptance.outcome }}
+        run: |
+          set -euo pipefail
+          mkdir -p build/reports
+          state="INVALID_OR_INCOMPLETE"
+          result="FAILED"
+          if [ -f docs/lighthouse-runs/summary.json ]; then
+            state="$(python3 -c 'import json;print(json.load(open("docs/lighthouse-runs/summary.json")).get("terminal_state") or "INVALID_OR_INCOMPLETE")')"
+          fi
+          if [ "$MEASURED" = "success" ] && [ "$state" = "MEASURED_PASS" ]; then result="PASSED"; fi
+          node scripts/site/release_qualification.mjs --emit \
+            --sha="$RELEASE_SHA" \
+            --site=_site \
+            --out="build/reports/release-qualification-$RELEASE_SHA.json" \
+            --terminal-state="$state" \
+            --acceptance-result="$result" \
+            --run-id="$GITHUB_RUN_ID" \
+            --run-attempt="$GITHUB_RUN_ATTEMPT" \
+            --base="local-candidate" \
+            --evidence="docs/lighthouse-runs/summary.json" \
+            --toolchain="node=$(node --version),chrome=${{ steps.qualify_chrome.outputs.chrome-version }},lighthouse=$(node -p "require('lighthouse/package.json').version")" \
+            --residual="real edge network latency and RTT;Cloudflare edge caching and transforms;the production nginx contract and its headers;the Node runtime endpoints (/.well-known/runtime-info.json);the live-intelligence overlay published at stage"
+      - name: Store the qualification
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: netcup-qualification-${{ github.sha }}
+          path: |
+            build/reports/release-qualification-${{ github.sha }}.json
+            docs/lighthouse-runs/summary.json
+          if-no-files-found: error
+          retention-days: 30
+
   promote:
     name: Authorized atomic promote
     if: github.event_name == 'push' || inputs.operation == 'promote'
-    needs: stage
+    needs: [stage, qualify]
     runs-on: ubuntu-latest
     timeout-minutes: 30
     environment: netcup-production
@@ -336,6 +433,50 @@ jobs:
       - name: Setup Chrome for public runtime verification
         uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2
         id: runtime_chrome
+      - name: Download this candidate's qualification
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          name: netcup-qualification-${{ github.sha }}
+          path: qualification
+      - name: Confirm the public verification uses the qualified toolchain
+        env:
+          RELEASE_SHA: ${{ github.sha }}
+          PROMOTE_CHROME: ${{ steps.runtime_chrome.outputs.chrome-version }}
+        run: |
+          set -euo pipefail
+          record="qualification/build/reports/release-qualification-$RELEASE_SHA.json"
+          qualified="$(python3 -c "import json;print(json.load(open('$record')).get('toolchain',''))")"
+          echo "qualified with: $qualified"
+          echo "verifying with chrome=$PROMOTE_CHROME, node=$(node --version)"
+          # `stable` is a moving label, so the resolution is recorded on both
+          # sides and compared here rather than assumed.
+          case "$qualified" in
+            *"chrome=$PROMOTE_CHROME"*) ;;
+            *)
+              echo "NETCUP_PROMOTE_BLOCKED: the candidate was qualified with a different browser than this verification uses" >&2
+              echo "  qualified: $qualified" >&2
+              echo "  verifying: chrome=$PROMOTE_CHROME" >&2
+              exit 1
+              ;;
+          esac
+      - name: Refuse to promote a candidate that is not qualified
+        # The barrier, enforced immediately before `current` can change. The
+        # qualification must exist, be readable, and match this candidate's
+        # SHA, artifact hash, manifest hash, verifier version and this exact
+        # run and attempt, and it must record MEASURED_PASS. Absent, stale,
+        # mismatched or failing evidence stops the release here, with
+        # production untouched. The refusal path is proved by
+        # scripts/site/test_release_qualification.mjs.
+        env:
+          RELEASE_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          node scripts/site/release_qualification.mjs --require \
+            --sha="$RELEASE_SHA" \
+            --site=_site \
+            --record="qualification/build/reports/release-qualification-$RELEASE_SHA.json" \
+            --run-id="$GITHUB_RUN_ID" \
+            --run-attempt="$GITHUB_RUN_ATTEMPT"
       - name: Atomic promote and live identity confirmation
         id: atomic_promote
         env:
@@ -421,6 +562,38 @@ jobs:
             echo "NETCUP_ACCEPTANCE_SUPERSEDED: main advanced during public verification; restoring predecessor" >&2
             exit 1
           fi
+      - name: Name the acceptance terminal state
+        # Fail-closed is preserved: a measured failure and inconclusive evidence
+        # both still restore the predecessor. What this step adds is that the
+        # run says WHICH of the two happened. "The site is defective" and "the
+        # instrument could not conclude" demand different next actions, and the
+        # absence of mandatory evidence must never be filed as an accessory
+        # error.
+        if: always()
+        env:
+          RELEASE_SHA: ${{ github.sha }}
+          COVERAGE: ${{ steps.served_coverage.outcome }}
+          ACCEPTANCE: ${{ steps.runtime_acceptance.outcome }}
+          PROMOTED: ${{ steps.atomic_promote.outcome }}
+        run: |
+          set -uo pipefail
+          summary="docs/lighthouse-runs/summary-$RELEASE_SHA.json"
+          state="EVIDENCE_ABSENT"
+          if [ -f "$summary" ]; then
+            state="$(python3 -c "import json;print(json.load(open('$summary')).get('terminal_state') or 'INVALID_OR_INCOMPLETE')" 2>/dev/null || echo INVALID_OR_INCOMPLETE)"
+          fi
+          echo "NETCUP_ACCEPTANCE_TERMINAL_STATE promoted=$PROMOTED served_coverage=$COVERAGE runtime_acceptance=$ACCEPTANCE lighthouse=$state"
+          {
+            echo "### Release acceptance terminal state"
+            echo ""
+            echo "| signal | value |"
+            echo "| --- | --- |"
+            echo "| release | \`$RELEASE_SHA\` |"
+            echo "| promotion | $PROMOTED |"
+            echo "| served coverage | $COVERAGE |"
+            echo "| runtime acceptance | $ACCEPTANCE |"
+            echo "| lighthouse terminal state | $state |"
+          } >> "$GITHUB_STEP_SUMMARY"
       - name: Store mandatory post-promote evidence
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7

@@ -1,47 +1,191 @@
 /**
- * Classifies a failed Lighthouse attempt as an INFRASTRUCTURE failure (the
- * browser or its debugging session died before or during collection, so no
- * measurement exists) versus anything else. Only infrastructure failures may
- * be attempted again with a fresh browser; a measured result is never
- * re-sampled (see test_lighthouse_thresholds.mjs, which forbids retrying for a
- * favourable home run).
+ * Measurement outcome contract and the supervisor that enforces it.
  *
- * Origin (netcup-release run 34532136335): the second home run on the public
- * edge died with "Protocol error (Target.getTargetInfo): Session with given id
- * not found" raised asynchronously from Lighthouse's TargetManager — an
- * unhandled rejection that crashed the runner after the first run had passed
- * every budget. Nothing about the artifact was measured by that crash.
+ * Origin (netcup-release runs 34501989732, 34517284468, 34532136335): the
+ * public acceptance ran inside a single process that both measured and judged.
+ * On the second home run of 34532136335 Lighthouse raised
+ * "Protocol error (Target.getTargetInfo): Session with given id not found"
+ * asynchronously from its TargetManager, outside the awaited call chain. That
+ * rejection killed the runner after the first run had passed every budget: no
+ * summary was written, the acceptance reported a bare exit=1, and a healthy
+ * release was rolled back.
+ *
+ * Two rules follow, and this module exists to make them structural rather than
+ * advisory.
+ *
+ * 1. Isolation is per attempt and real. Every measurement runs in a disposable
+ *    child process (lighthouse_measure_child.mjs) that is never reused. The
+ *    supervisor survives a child that dies in any manner, owns a deadline it
+ *    can actually enforce by killing that child, and always reaches its own
+ *    terminal summary.
+ *
+ * 2. Nothing unknown is a pass. Every attempt resolves to exactly one outcome,
+ *    and only MEASURED carries a row:
+ *
+ *      MEASURED               a valid, complete measurement exists. Whether it
+ *                             meets the budgets is decided later, by the
+ *                             thresholds, and is never re-sampled.
+ *      INFRA_ERROR            our own browser or its debugging session failed
+ *                             before any measurement existed. This is the only
+ *                             outcome eligible for another attempt.
+ *      INVALID_OR_INCOMPLETE  a navigation happened but the evidence is absent,
+ *                             inconsistent or inconclusive. It fails the gate
+ *                             and is never re-navigated.
+ *
+ * Classification is by cause, origin and phase — reported by the child, which
+ * knows where it was — not by matching words in a message. A page that never
+ * painted (NO_FCP/NO_LCP), a hung page, a navigation timeout, a TLS failure or
+ * a refused connection against the ORIGIN UNDER TEST are all evidence about
+ * the artifact. Only a failure raising our own browser is innocent, and only
+ * before a measurement existed.
  */
-export const INFRASTRUCTURE_ERROR_PATTERNS = [
-  /Protocol error/i,
-  /Session with given id not found/i,
-  /Target closed/i,
-  /Target crashed/i,
-  /Chrome CDP not ready/i,
-  /Unable to connect to Chrome/i,
-  /WebSocket is not open/i,
-  /ECONNREFUSED|ECONNRESET|EPIPE/i,
-  /Navigation timeout|NO_FCP|NO_LCP|PAGE_HUNG|TARGET_CRASHED|CHROME_INTERSTITIAL_ERROR/i,
-];
+import { spawn } from "child_process";
+import { existsSync, readFileSync, rmSync } from "fs";
 
+export const OUTCOME = {
+  MEASURED: "MEASURED",
+  INFRA_ERROR: "INFRA_ERROR",
+  INVALID_OR_INCOMPLETE: "INVALID_OR_INCOMPLETE",
+};
+
+/** Total attempts per eligible measurement, wrapper included. Never multiplied
+ * by a second retry layer anywhere else in the chain. */
 export const INFRASTRUCTURE_ATTEMPTS = 3;
 
-export function isInfrastructureError(error) {
-  const text = String(error?.message || error?.protocolError || error || "");
-  return INFRASTRUCTURE_ERROR_PATTERNS.some((pattern) => pattern.test(text));
+/** Deadline for one child. Lighthouse's own maxWaitForLoad is 45 s and the
+ * complementary collection retries with backoff, so this bounds the whole
+ * attempt including a browser that never returns. */
+export const MEASUREMENT_TIMEOUT_MS = Number(process.env.LH_MEASUREMENT_TIMEOUT_MS || 240000);
+
+/** Grace between SIGTERM and SIGKILL for a child that ignores the first. */
+export const KILL_GRACE_MS = 5000;
+
+/** Only these phases can be re-attempted: they are our own browser coming up,
+ * before the artifact under test has been touched. */
+const RETRYABLE_PHASES = new Set(["launch", "cdp"]);
+
+/**
+ * True when an outcome may be attempted again. Requires an explicit
+ * INFRA_ERROR, a phase that precedes any contact with the artifact, and the
+ * absence of a measurement. A missing or malformed outcome is never eligible.
+ */
+export function isRetryableOutcome(outcome) {
+  if (!outcome || outcome.outcome !== OUTCOME.INFRA_ERROR) return false;
+  if (outcome.lhr_written) return false;
+  return RETRYABLE_PHASES.has(String(outcome.phase || ""));
 }
 
 /**
- * Registers a process-level trap so an asynchronous browser failure raised
- * outside the awaited call chain is captured for the current attempt instead
- * of crashing the runner. Returns a function that drains the captured error.
+ * Runs one measurement in a disposable child process and returns its outcome.
+ *
+ * The outcome is read from the file the child writes, not inferred from its
+ * exit code: a child that recorded INVALID_OR_INCOMPLETE and then died during
+ * cleanup has still told us the truth, and a child killed at the deadline has
+ * told us nothing. When no outcome file exists we decide from evidence on
+ * disk — whether a measurement was already produced — never from the wording
+ * of a message.
  */
-export function installAsyncFailureTrap(target = process) {
-  let captured = null;
-  const onRejection = (reason) => { if (!captured) captured = reason instanceof Error ? reason : new Error(String(reason)); };
-  target.on("unhandledRejection", onRejection);
-  return {
-    drain() { const error = captured; captured = null; return error; },
-    dispose() { target.off("unhandledRejection", onRejection); },
-  };
+export function runMeasurement({
+  childPath,
+  specPath,
+  outcomePath,
+  lhrPath,
+  timeoutMs = MEASUREMENT_TIMEOUT_MS,
+  nodeExecutable = process.execPath,
+  spawnFn = spawn,
+  env = process.env,
+}) {
+  return new Promise((resolve) => {
+    rmSync(outcomePath, { force: true });
+    const child = spawnFn(nodeExecutable, [childPath, specPath, outcomePath], {
+      stdio: ["ignore", "inherit", "inherit"],
+      env,
+    });
+
+    let timedOut = false;
+    let killTimer = null;
+    const deadline = setTimeout(() => {
+      timedOut = true;
+      try {
+        child.kill("SIGTERM");
+      } catch {
+        /* already gone */
+      }
+      killTimer = setTimeout(() => {
+        try {
+          child.kill("SIGKILL");
+        } catch {
+          /* already gone */
+        }
+      }, KILL_GRACE_MS);
+    }, timeoutMs);
+
+    const finish = (fallback) => {
+      clearTimeout(deadline);
+      if (killTimer) clearTimeout(killTimer);
+      resolve(readOutcome({ outcomePath, lhrPath, fallback }));
+    };
+
+    child.on("error", (error) => {
+      finish({
+        outcome: OUTCOME.INFRA_ERROR,
+        phase: "launch",
+        error: `could not start the measurement subprocess: ${String(error?.message || error)}`,
+        origin: "supervisor",
+      });
+    });
+
+    child.on("close", (code, signal) => {
+      finish({
+        // A child killed at the deadline produced no verdict. Whether that is
+        // an unusable instrument or an unusable page is not knowable from
+        // here, so it is inconclusive evidence, never innocent infrastructure
+        // and never a pass.
+        outcome: timedOut ? OUTCOME.INVALID_OR_INCOMPLETE : OUTCOME.INFRA_ERROR,
+        phase: timedOut ? "navigate" : "launch",
+        error: timedOut
+          ? `measurement exceeded ${timeoutMs}ms and was terminated`
+          : `measurement subprocess exited without recording an outcome (code=${code}, signal=${signal})`,
+        origin: "supervisor",
+        timed_out: timedOut,
+      });
+    });
+  });
+}
+
+/**
+ * Reads the outcome the child recorded. When it is missing, the presence of a
+ * measurement on disk decides: a produced LHR means a navigation happened, so
+ * the attempt is incomplete evidence rather than a re-attemptable instrument
+ * failure.
+ */
+export function readOutcome({ outcomePath, lhrPath, fallback }) {
+  if (existsSync(outcomePath)) {
+    try {
+      const parsed = JSON.parse(readFileSync(outcomePath, "utf8"));
+      if (parsed && typeof parsed === "object" && OUTCOME[parsed.outcome]) return parsed;
+      return {
+        outcome: OUTCOME.INVALID_OR_INCOMPLETE,
+        phase: "postprocess",
+        error: "the measurement subprocess recorded an unrecognised outcome",
+        origin: "supervisor",
+      };
+    } catch (error) {
+      return {
+        outcome: OUTCOME.INVALID_OR_INCOMPLETE,
+        phase: "postprocess",
+        error: `the recorded outcome could not be read: ${String(error?.message || error)}`,
+        origin: "supervisor",
+      };
+    }
+  }
+  if (lhrPath && existsSync(lhrPath)) {
+    return {
+      ...fallback,
+      outcome: OUTCOME.INVALID_OR_INCOMPLETE,
+      lhr_written: true,
+      error: `${fallback.error} (a measurement was produced but never completed)`,
+    };
+  }
+  return fallback;
 }
