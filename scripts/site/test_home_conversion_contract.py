@@ -248,6 +248,7 @@ def test_stage_options_sharing_a_journey_declare_one_neutral_default() -> None:
             assert not defaults, (journey, attrs_list)
     default_contrato = next(a for a in by_journey["contrato"] if "data-journey-default" in a)
     assert 'value="contrato em execução"' in default_contrato
-    # O script compilado carrega a preferencia pela opcao neutra.
+    # O script compilado carrega a preferencia pela opcao neutra (lida via
+    # dataset: "journeyDefault" e a chave DOM de data-journey-default).
     script = (ROOT / "script.js").read_text(encoding="utf-8")
-    assert "data-journey-default" in script
+    assert "journeyDefault" in script or "data-journey-default" in script
