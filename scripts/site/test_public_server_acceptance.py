@@ -1406,3 +1406,30 @@ def test_robots_policy_fails_closed_when_the_baseline_is_missing_or_empty(tmp_pa
     empty.write_text(json.dumps({"expected_effective": []}), encoding="utf-8")
     blank = acceptance.verify_robots_policy(b"User-agent: *\n", baseline_path=empty)
     assert blank["ok"] is False and "robots_policy_baseline_empty" in blank["errors"]
+
+
+@pytest.mark.skipif(not _PACKAGE_ROBOTS.is_file(), reason="pacote nao construido")
+def test_an_allow_injected_inside_the_managed_block_fails_closed():
+    """Regressao (#650): a amostra de caminhos da linha de base nao via um
+    "Allow" injetado dentro do bloco gerenciado da borda -- que o contrato de
+    bytes nao inspeciona -- e o gate aprovava a abertura de /ops/. Toda regra
+    Allow sob superficie privada reprova, em qualquer grupo, e um filho
+    sentinela de cada superficie e sondado para todos os agentes."""
+    served = _served_robots()
+    marker = b"# END Cloudflare Managed Content"
+    assert marker in served
+    for injected in (b"Allow: /ops/painel/\n", b"Allow: /%6Fps/\n", b"Allow: /intranet/relatorios\n"):
+        body = served.replace(marker, injected + marker, 1)
+        report = acceptance.verify_robots_policy(body)
+        assert report["ok"] is False, (injected, report["errors"])
+        assert any(e.startswith("robots_private_surface_allow_injected") for e in report["errors"]), report["errors"]
+    # Um Allow fora das superficies privadas continua aceito.
+    body = served.replace(marker, b"Allow: /servicos/\n" + marker, 1)
+    report = acceptance.verify_robots_policy(body)
+    assert not any(e.startswith("robots_private_surface_allow_injected") for e in report["errors"]), report["errors"]
+    # Um grupo novo para um agente nomeado tambem nao escapa: a sentinela
+    # reprova mesmo sem regra Allow literal sob o prefixo.
+    body = served + b"\nUser-agent: Googlebot\nAllow: /\n"
+    report = acceptance.verify_robots_policy(body)
+    assert report["ok"] is False
+    assert any(d["path"].endswith("/__gate_probe") for d in report["divergences"]), report["divergences"][:3]

@@ -159,7 +159,12 @@ for (const item of eight.deliverables) {
     const label = anchor[2].replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
     const position = anchor[1].match(/\bdata-cta-position=["']([^"']+)["']/i)?.[1] || "";
     if (/<span\b/i.test(anchor[2]) || position === "report_header") {
-      assert.match(label, /^Configurar pedido\b/i, `${item.route}: ${position}: ${label}`);
+      assert.match(label, /^Pedir análise\b/i, `${item.route}: ${position}: ${label}`);
+      // O nome acessivel comeca pelo texto visivel (WCAG 2.5.3).
+      const ariaLabel = anchor[1].match(/\baria-label=["']([^"']+)["']/i)?.[1] || "";
+      if (ariaLabel) {
+        assert.ok(ariaLabel.startsWith(`Pedir análise ${item.price_display}`), `${item.route}: ${position}: aria-label "${ariaLabel}" does not start with the visible label`);
+      }
     }
     else assert.match(label, new RegExp(item.value_first.cta_configure, "i"), `${item.route}: ${label}`);
     assert.doesNotMatch(label, /^Quero\b/i, `${item.route}: generic desire label`);

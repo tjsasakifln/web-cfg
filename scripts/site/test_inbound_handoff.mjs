@@ -1288,4 +1288,28 @@ try {
   }
 }
 
+// Regressao (#650): a familia de servico "por proposta" escolhida em
+// /entregas/ (sem entrega do registro) chega ao contexto do proximo passo;
+// antes chegava com menos sinal que uma entrega CFG-D0x do mesmo select.
+{
+  const { mapLeadToInboundV1 } = require(path.join(root, "netlify/functions/lib/inbound-handoff.cjs"));
+  const family = mapLeadToInboundV1({
+    lead_id: "lead-qa-family", jornada: "outro", route_family: "entregas",
+    estagio: "perícia, assistência técnica ou avaliação", deliverable_id: null,
+    consentimento: true, nome: "QA", email: "qa@example.com",
+  });
+  if (!family.message || !family.message.includes("família de serviço=perícia, assistência técnica ou avaliação")) {
+    fail("handoff_service_family_context", family);
+  }
+  const catalog = mapLeadToInboundV1({
+    lead_id: "lead-qa-catalog", jornada: "operacao", route_family: "entregas",
+    estagio: "entregas-exemplos-hub", deliverable_id: "CFG-D01",
+    consentimento: true, nome: "QA", email: "qa@example.com",
+  });
+  if (!catalog.message || !catalog.message.includes("entrega=CFG-D01") || catalog.message.includes("família de serviço=")) {
+    fail("handoff_catalog_deliverable_unchanged", catalog);
+  }
+  pass("handoff_service_family_context", { family: true, catalog: true });
+}
+
 console.log("INBOUND_HANDOFF_OK", JSON.stringify({ tests: results.length }));

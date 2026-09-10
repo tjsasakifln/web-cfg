@@ -843,6 +843,32 @@ _reset();
     fail("contract_product_optional_id_and_deadline_accepted", { status: partial.statusCode, partialData, partialStored });
   }
   pass("contract_product_optional_id_and_deadline_accepted", { lead_id: partialData.lead_id });
+
+  // Regressao (#650): o hub aceita "ainda nao sei qual entrega" (entrega
+  // vazia) e publica evento e estagio como obrigatorios. Eles tem de ser
+  // validados e persistidos mesmo sem entrega; antes eram descartados.
+  const hubUnknown = await handler(event({
+    ...base,
+    deliverable_id: "",
+    public_contract_id: "CONTRATO-HUB-2026-02",
+    contract_event: "reajuste",
+    contract_stage: "identificado",
+    idempotency_key: "qa-hub-unknown-deliverable",
+  }, "POST", { ip: "203.0.113.95" }));
+  const hubData = JSON.parse(hubUnknown.body);
+  const hubStored = hubData.lead_id ? await mem.get(hubData.lead_id) : null;
+  if (hubUnknown.statusCode !== 201 || !hubStored || hubStored.deliverable_id ||
+      hubStored.contract_event !== "reajuste" || hubStored.contract_stage !== "identificado" ||
+      hubStored.public_contract_id !== "CONTRATO-HUB-2026-02" || hubStored.opportunity_deadline !== deadline) {
+    fail("hub_unknown_deliverable_keeps_contract_fields", { status: hubUnknown.statusCode, hubData, hubStored });
+  }
+  const hubInvalid = await handler(event({
+    ...base, deliverable_id: "", contract_event: "evento_livre",
+  }, "POST", { ip: "203.0.113.94" }));
+  if (hubInvalid.statusCode !== 422 || JSON.parse(hubInvalid.body).error !== "contract_qualification_invalid") {
+    fail("hub_unknown_deliverable_still_validates_event", { status: hubInvalid.statusCode, body: hubInvalid.body });
+  }
+  pass("hub_unknown_deliverable_keeps_contract_fields", { lead_id: hubData.lead_id });
 }
 
 // Regressao (#650): as familias de servico "por proposta" oferecidas pelo

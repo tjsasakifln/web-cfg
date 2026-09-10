@@ -430,6 +430,15 @@ async function main() {
       const r = el.getBoundingClientRect();
       return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
     });
+    // Enquanto aberto, nada focavel fora do painel pode estar alcancavel.
+    const leaked = await page.evaluate(() => {
+      const menu = document.querySelector(".mobile-nav");
+      const focusable = [...document.querySelectorAll("a[href], button, input, select, textarea, [tabindex]:not([tabindex='-1'])")];
+      return focusable
+        .filter((el) => !(menu && menu.contains(el)) && el.offsetParent !== null && !el.closest("[inert]"))
+        .map((el) => `${el.tagName.toLowerCase()}${el.className ? "." + String(el.className).split(" ")[0] : ""}`);
+    });
+    if (leaked.length) throw new Error(`focusable elements outside the open dialog are not inert: ${leaked.join(", ")}`);
     await page.mouse.click(box.x, box.y);
     const after = await page.evaluate(() => ({
       expanded: document.querySelector(".menu-toggle").getAttribute("aria-expanded"),
@@ -439,9 +448,46 @@ async function main() {
     if (after.expanded !== "false") throw new Error("tap on the toggle did not close the menu");
     if (!after.focusOnToggle) throw new Error("focus did not return to the toggle after tapping it");
     if (after.inertLeft !== 0) throw new Error(`inert left behind: ${after.inertLeft}`);
+    // Abrir pelo teclado (Enter no botao) nao pode fechar no mesmo evento.
+    await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded" });
+    await page.focus(".menu-toggle");
+    await page.keyboard.press("Enter");
+    const keyboardOpen = await page.evaluate(() => document.querySelector(".menu-toggle").getAttribute("aria-expanded"));
+    if (keyboardOpen !== "true") throw new Error("Enter on the toggle did not leave the menu open");
+    await page.keyboard.press("Escape");
     ok("mobile_menu_toggle_tap_returns_focus");
   } catch (e) {
     fail("mobile_menu_toggle_tap_returns_focus", e.message || e);
+  }
+
+  // 8d) Regressao (#650): em /entregas/ a entrega escolhida declara a jornada.
+  // As familias "por proposta" nao sao B2G: a jornada oculta e o destino de
+  // confirmacao seguem a opcao, e voltam ao padrao quando a opcao nao declara.
+  try {
+    await page.setViewport({ width: 1280, height: 800 });
+    await page.goto(`${BASE}/entregas/`, { waitUntil: "networkidle0" });
+    const read = () => page.evaluate(() => {
+      const form = document.querySelector('select[name="deliverable_id"]')?.closest("form");
+      return {
+        journey: form?.querySelector("#jornada-hidden")?.value || "",
+        destination: form?.getAttribute("data-success-destination") || "",
+      };
+    });
+    const initial = await read();
+    if (initial.journey !== "operacao") throw new Error(`unexpected initial journey ${JSON.stringify(initial)}`);
+    await page.select('select[name="deliverable_id"]', "SERV-PERICIA");
+    const pericia = await read();
+    if (pericia.journey !== "pericia" || pericia.destination !== "/obrigado") {
+      throw new Error(`SERV-PERICIA did not drive the journey: ${JSON.stringify(pericia)}`);
+    }
+    await page.select('select[name="deliverable_id"]', "CFG-D01");
+    const back = await read();
+    if (back.journey !== "operacao" || back.destination !== initial.destination) {
+      throw new Error(`catalog option did not restore the base journey: ${JSON.stringify(back)}`);
+    }
+    ok("entregas_deliverable_option_drives_journey");
+  } catch (e) {
+    fail("entregas_deliverable_option_drives_journey", e.message || e);
   }
 
   // 8c) Regressao (#650): uma jornada partilhada por mais de uma opcao de

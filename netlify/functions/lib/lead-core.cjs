@@ -385,11 +385,18 @@ const CONTRACT_STAGES = new Set([
 ]);
 
 function assertContractDefenseQualification(data, deliverableId) {
-  if (!CONTRACT_DEFENSE_IDS.has(deliverableId)) return { ok: true, qualification: null };
   const publicContractId = clamp(data.public_contract_id, MAX_FIELD.public_contract_id);
   const contractEvent = clamp(data.contract_event, MAX_FIELD.contract_event);
   const deadline = clamp(data.opportunity_deadline, MAX_FIELD.opportunity_deadline);
   const contractStage = clamp(data.contract_stage, MAX_FIELD.contract_stage);
+  // O hub de obras publicas aceita "ainda nao sei qual entrega" (entrega
+  // vazia) e ainda assim publica evento e estagio como obrigatorios: o que o
+  // visitante informou tem de ser validado e persistido, nao descartado.
+  // Identificador e prazo tambem pertencem a qualificacao de licitacao, por
+  // isso so evento e estagio -- exclusivos deste formulario -- abrem o contexto.
+  const contractContext = CONTRACT_DEFENSE_IDS.has(deliverableId)
+    || Boolean(contractEvent || contractStage);
+  if (!contractContext) return { ok: true, qualification: null };
   // Identificador do contrato e prazo sao OPCIONAIS na captura publicada
   // (decisao 2026-09-09: demanda incompleta e bem-vinda; o que falta e pedido
   // na triagem). Quando informados, continuam nos formatos publicados: um

@@ -870,6 +870,37 @@ def verify_robots_policy(
                 "served_rule": rule, "baseline_rule": row.get("rule"),
             })
 
+    # A amostra de caminhos da linha de base nao cobre um "Allow" injetado em
+    # qualquer ponto do corpo servido (inclusive dentro do bloco gerenciado,
+    # que o contrato de bytes nao inspeciona). Toda regra Allow de qualquer
+    # grupo que caia sob uma superficie privada declarada reprova, e um filho
+    # sentinela de cada superficie e sondado para todos os agentes conhecidos.
+    private_prefixes = [
+        robots_policy._normalize_path(prefix)
+        for prefix in baseline.get("private_surfaces_denied_to_every_agent", [])
+    ]
+    injected_allows = []
+    for token, rules in parsed.groups.items():
+        for kind, pattern in rules:
+            if kind != "allow" or not pattern:
+                continue
+            normalized = robots_policy._normalize_path(pattern).rstrip("*").rstrip("$")
+            # Um Allow amplo ("/") e legitimo: o casamento mais longo mantem o
+            # Disallow. So um Allow que desce ate a superficie privada e injecao.
+            if any(normalized.startswith(prefix) for prefix in private_prefixes):
+                injected_allows.append({"agent": token, "rule": f"allow:{pattern}"})
+    sentinel_agents = sorted({row["agent"] for row in expected})
+    for prefix in private_prefixes:
+        sentinel = prefix.rstrip("/") + "/__gate_probe"
+        for agent in sentinel_agents:
+            allowed, rule = robots_policy.is_allowed(parsed, agent, sentinel)
+            if allowed:
+                divergences.append({
+                    "agent": agent, "path": sentinel,
+                    "expected_allowed": False, "served_allowed": True,
+                    "served_rule": rule, "baseline_rule": "private_surface_sentinel",
+                })
+
     # As diretivas que nao controlam allow/disallow tambem exprimem politica.
     missing_policy = []
     signals = parsed.group_policy.get("*", {}).get("content-signal") or []
@@ -881,6 +912,8 @@ def verify_robots_policy(
     errors: list[str] = []
     if divergences:
         errors.append(f"robots_effective_rules_diverged:{len(divergences)}")
+    if injected_allows:
+        errors.append(f"robots_private_surface_allow_injected:{len(injected_allows)}")
     if missing_policy:
         errors.append(f"robots_policy_directive_absent:{len(missing_policy)}")
     return {
@@ -888,6 +921,7 @@ def verify_robots_policy(
         "baseline": baseline_path.name,
         "checked": len(expected),
         "divergences": divergences,
+        "injected_allows": injected_allows,
         "missing_policy_directives": missing_policy,
         "errors": errors,
         "ok": not errors,
