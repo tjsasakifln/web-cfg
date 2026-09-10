@@ -213,3 +213,28 @@ Os achados de linguagem interna citados nominalmente pela campanha (`Configurar 
 documento resolve`, `Método e limites publicados`, `Conferir evidências e limites`) estão presos também
 em contratos e testes, mapeados na frente de contratos. Onde a regra é puramente editorial ela é
 substituída com contraprova registrada; onde é guarda de verdade, preço ou responsabilidade, é preservada.
+
+
+## Regras editoriais revogadas, com regra substituta e contraprova
+
+A decisão revoga regras **exclusivamente editoriais/comerciais** que impediam E1–E5 ou
+perpetuavam a autossabotagem. Não revoga veracidade, privacidade, responsabilidade
+profissional, integridade, segurança nem proteção de branch. Em todos os casos abaixo a
+regra que entra é **mais forte**, não mais frouxa, e cada uma traz a contraprova que
+continua reprovando.
+
+| onde | regra revogada | regra substituta | contraprova que continua reprovando |
+|---|---|---|---|
+| `tests/commercial/test_page_contract_eight.mjs` | rótulo de compra tinha de começar pelo literal `Configurar` | verbo imperativo de próximo estado **e** o objeto do visitante nomeado no rótulo | `Saiba mais`, `Ver detalhes`, `Fale conosco`, `Pedir agora`, `Clique aqui` — e também o antigo `Configurar o radar`, que não nomeia objeto |
+| `scripts/site/test_report_model_599.py` | contava o literal `Configurar o radar de licitações prioritárias por R$ 599` | CTA derivada do contrato de origem, em ≥3 posições, carregando o preço publicado | rótulo sem preço, menos de 3 posições, ou a volta de `Configurar o radar` |
+| `scripts/site/test_brand_contract.py` | exigia **uma** de quatro frases congeladas de obra pública (`problema urgente`, `decisão crítica`) na home | **todo** canal de WhatsApp da home tem de ser contextual, por texto pré-escrito ou por preenchimento a partir da situação escolhida | canal nu sem `text=`, e mensagem genérica que não nomeia a situação |
+| `scripts/site/test_design_gates.py` | heroi tinha de apontar para `/triagem-tecnica/#projetos` | o heroi tem de oferecer exatamente um caminho de contato, e ele leva à triagem | heroi sem caminho de contato, ou com mais de um |
+| `scripts/site/test_design_gates.py` | primeira dobra tinha de conter `método e limites publicados` | primeira dobra tem de trazer o caminho de verificação `/confianca/` e nomear credenciais ou limites | dobra sem caminho de verificação |
+| `scripts/site/test_home_first_fold.mjs` | `método` e `limites` valiam como fundamento de confiança | só credenciais e identidade verificáveis contam (`EESC-USP`, `CNPJ`, `CREA`, `ART`, engenheiro responsável) | dobra que só dissesse "método e limites publicados" agora pontua zero e reprova |
+| `scripts/contract_analysis/tests/test_canary.py` | exigia `Disallow: /analises-contratos-publicos/` sempre | o `Disallow` é exigido **quando restringe de fato**, isto é, quando o hub não está liberado; o bloqueio efetivo da família é provado pelo `X-Robots-Tag` | com o hub fechado, o `Disallow` tem de existir **e** bloquear hub e filhos |
+
+Preservadas intactas, por serem guardas de verdade e não de redação: as regras
+anti-jargão e anti-falso-lastro do contrato das oito ofertas, a unicidade das 120
+cláusulas do registro de entregáveis, o mecanismo de subconjunto do `proof.json`
+(a lista de frases permitidas **ganhou** a substituta, nunca foi esvaziada), a
+divulgação de limites da calculadora pública, preços, prazos e condições materiais.

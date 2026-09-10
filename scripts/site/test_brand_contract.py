@@ -140,16 +140,48 @@ def test_org_description_consistent():
     assert "Diretoria B2G" in shell or "org_description" in shell
 
 
+def _home_whatsapp_links(html: str) -> list[tuple[str, str]]:
+    """Cada link do WhatsApp da home com a tag de abertura e o texto decodificado."""
+    import urllib.parse
+
+    out = []
+    for match in re.finditer(r"<a\b[^>]*wa\.me/5548988344559([^\"']*)[^>]*>", html):
+        query = match.group(1).replace("&amp;", "&").lstrip("?")
+        text = urllib.parse.parse_qs(query).get("text", [""])[0]
+        out.append((match.group(0), text))
+    return out
+
+
 def test_whatsapp_contextual_on_home():
+    """Todo canal de WhatsApp da home tem de chegar com contexto.
+
+    Regra substituida (campanha 2026-09-10): a versao anterior exigia UMA de
+    quatro frases congeladas de obra publica ("problema urgente", "decisao
+    critica"). Isso obrigava o canal GERAL da home a declarar contrato publico,
+    reclassificando a disciplina de quem chega com projeto, pericia ou seguranca
+    do trabalho -- o proprio defeito que a campanha corrige.
+
+    A regra que entra e mais forte, nao mais frouxa: em vez de UM link com uma
+    frase especifica, TODOS os links precisam ser contextuais, seja pelo texto
+    pre-escrito, seja porque o script preenche a mensagem com a situacao que o
+    visitante acabou de escolher.
+    """
     html = (ROOT / "index.html").read_text(encoding="utf-8")
-    assert "wa.me/5548988344559" in html
-    # Contextual prefill for urgent contract / critical decision path
-    assert (
-        "decis%C3%A3o%20cr%C3%ADtica" in html
-        or "cr%C3%ADtica" in html
-        or "an%C3%A1lise%20inicial" in html
-        or "problema%20urgente" in html
-    )
+    links = _home_whatsapp_links(html)
+    assert links, "a home precisa de pelo menos um canal de WhatsApp"
+
+    for tag, text in links:
+        scripted = "data-situation-whatsapp" in tag
+        assert scripted or text.strip(), f"canal sem contexto: {tag[:120]}"
+
+    prefilled = [text for _tag, text in links if text.strip()]
+    assert prefilled, "nenhum canal chega com mensagem escrita"
+    # O contexto tem de nomear a situacao em palavras do visitante, sem prender
+    # a home a uma unica disciplina.
+    assert any(
+        re.search(r"projeto|servi[çc]o de engenharia|situa[çc][ãa]o t[ée]cnica|obra|im[óo]vel|per[íi]cia", t, re.I)
+        for t in prefilled
+    ), prefilled
 
 
 def test_radar_not_empty_wave_message():

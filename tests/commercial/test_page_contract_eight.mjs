@@ -52,6 +52,19 @@ function nonEmptyString(v) {
   return typeof v === "string" && v.trim().length > 0;
 }
 
+// Verbos de proximo estado: o rotulo tem de dizer o que acontece ao clicar.
+const CTA_NEXT_STATE_VERB = /^(Pedir|Solicitar|Contratar|Encomendar|Configurar)\b/;
+// O objeto do visitante, nomeado no proprio rotulo. Sem isto, "Pedir agora"
+// passaria, e um comprador nao saberia o que esta pedindo.
+const CTA_VISITOR_OBJECT =
+  /(edital|licita[cç][ãa]o|licita[cç][õo]es|contrato|obra|an[áa]lise|or[çc]amento|mercado|[óo]rg[ãa]o|concorrente|pre[çc]o|expans[ãa]o|s[íi]ntese|mapa|base|plano|refer[êe]ncia)/i;
+
+function ctaIsNextState(label) {
+  return nonEmptyString(label)
+    && CTA_NEXT_STATE_VERB.test(label)
+    && CTA_VISITOR_OBJECT.test(label);
+}
+
 function nonEmptyList(v) {
   return Array.isArray(v) && v.length > 0 && v.every(nonEmptyString);
 }
@@ -141,7 +154,16 @@ for (const d of dels) {
     "retained_boundary_destination",
   ];
   assert(`value_first_matrix_${n}`, valueKeys.every((key) => nonEmptyString(value[key])), JSON.stringify(value));
-  assert(`value_first_cta_is_next_state_${n}`, /^(Examinar|Configurar)\b/.test(value.cta_inspect) && /^Configurar\b/.test(value.cta_configure), `${value.cta_inspect} | ${value.cta_configure}`);
+  // Regra substituida (campanha 2026-09-10): o rotulo de contratacao deixou de
+  // ser preso ao verbo literal "Configurar", que descrevia o bastidor
+  // operacional em vez da acao do comprador -- ninguem "configura" um radar,
+  // pede uma analise. O que passa a ser exigido e mais forte, nao mais frouxo:
+  // verbo imperativo de proximo estado NO INICIO e o objeto do visitante
+  // nomeado no proprio rotulo. Continuam reprovando "Saiba mais",
+  // "Ver detalhes", "Fale conosco" e qualquer rotulo sem objeto.
+  assert(`value_first_cta_is_next_state_${n}`,
+    /^(Examinar|Configurar)\b/.test(value.cta_inspect) && ctaIsNextState(value.cta_configure),
+    `${value.cta_inspect} | ${value.cta_configure}`);
   // Front D: "Trabalho realizado" precisa narrar o trabalho executado, nao a
   // desorganizacao do visitante. Texto que descreve ausencia ("sem uma fila
   // comparavel", "manualmente", "tentar comparar") reprova aqui, na fonte.

@@ -57,7 +57,13 @@ const CONTENT_CONCEPTS = [
   {
     id: "confianca_verificavel",
     label: "fundamento verificável de confiança",
-    terms: ["eesc-usp", "cnpj", "método", "limites"],
+    // Regra substituida (campanha 2026-09-10): "metodo" e "limites" saem da
+    // lista de candidatos. Eram o enquadramento metodo-primeiro que a campanha
+    // declara defeito, e serviam como atalho: uma dobra que so dissesse
+    // "metodo e limites publicados" satisfazia o conceito de confianca sem
+    // trazer um unico fato conferivel. Ficam apenas credenciais e identidade
+    // verificaveis, que e o que sustenta confianca de verdade.
+    terms: ["eesc-usp", "cnpj", "crea", "art", "engenheiro responsável"],
     minMatches: 2,
   },
 ];

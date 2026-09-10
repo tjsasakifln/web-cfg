@@ -391,7 +391,9 @@ def test_journey_accessible_without_js():
         assert f'id="{stage}"' in html
     assert '<ol class="situation-list">' in html
     assert html.count('class="situation-action"') == 5
-    assert html.count('href="/triagem-tecnica/#') >= 4
+    # As cinco situacoes continuam sendo links comuns; o heroi deixou de contar
+    # como sexta ancora porque nao pre-classifica mais a disciplina.
+    assert html.count('href="/triagem-tecnica/') >= 4
     assert 'href="/servicos-obras-publicas/"' in html
 
 
@@ -440,7 +442,15 @@ def test_primary_cta_not_spam():
     hero_html = hero.group(0)
     assert hero_html.count("button-primary") == 1, "hero must have exactly one primary CTA"
     assert hero_html.count('href="/servicos/"') == 1
-    assert 'href="/triagem-tecnica/#projetos"' in hero_html
+    # Regra substituida (campanha 2026-09-10): o caminho secundario do heroi
+    # deixou de ser preso a ancora de UMA disciplina. Prender "#projetos" ali
+    # reclassificava como projeto todo visitante que chega por pericia,
+    # avaliacao, inspecao ou seguranca do trabalho, na primeira dobra e antes de
+    # ler qualquer explicacao. O que continua exigido: o heroi tem de oferecer um
+    # caminho de contato, e ele tem de levar a triagem.
+    secondary = re.findall(r'href="(/triagem-tecnica/[^"]*)"', hero_html)
+    assert len(secondary) == 1, secondary
+    assert secondary[0] in ("/triagem-tecnica/", "/triagem-tecnica/#projetos"), secondary
     assert "EESC-USP" in html
 
 
@@ -460,12 +470,18 @@ def test_home_five_second_clarity():
     # True microproofs and an explicit limits path.
     assert "eesc-usp" in fold_lower
     assert "52.407.089/0001-09" in fold_lower
-    assert "método e limites publicados" in fold_lower
+    # Regra substituida: o microproof deixou de liderar pelo METODO. O que
+    # continua exigido -- e verificado de forma mais forte -- e que a primeira
+    # dobra traga fatos conferiveis e um caminho para conferi-los.
+    assert "/confianca/" in fold, "a primeira dobra precisa do caminho de verificacao"
+    assert "limites" in fold_lower or "credenciais" in fold_lower
     # Comprehensible next actions.
     assert "conhecer os serviços" in fold_lower
     assert 'href="/servicos/"' in fold
-    assert "conversar sobre seu projeto" in fold_lower
-    assert 'href="/triagem-tecnica/#projetos"' in fold
+    # O rotulo do caminho secundario nao e mais congelado numa disciplina; o
+    # que se exige e que ele convide a descrever a situacao e leve a triagem.
+    assert re.search(r'href="/triagem-tecnica/', fold), fold_lower[:200]
+    assert re.search(r"(situa[çc][ãa]o|projeto|conversar|descrever)", fold_lower)
     # 2026-09-08. Estas linhas exigiam o rotulo publico "Obras publicas e B2G".
     # B2G e sigla interna: nenhum comprador de obra procura por ela, e a
     # diretriz manda tirar a sigla de todo texto lido pelo visitante. A
