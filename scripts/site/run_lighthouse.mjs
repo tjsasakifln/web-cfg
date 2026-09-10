@@ -22,6 +22,7 @@ import { fileURLToPath } from "url";
 import { launch as launchChrome } from "chrome-launcher";
 import lighthouse from "lighthouse";
 import { CRITICAL_MONEY_PATHS, evaluateLighthouseResults } from "./lighthouse_thresholds.mjs";
+import { headerByteWeight, lcpNetworkAllowanceMs, measureContentByteWeight } from "./lighthouse_payload.mjs";
 import {
   deriveCoverage,
   formatCoverageDeclaration,
@@ -373,6 +374,20 @@ try {
         const ownLongTasks = (audits["long-tasks"]?.details?.items || [])
           .filter((item) => String(item.url || "").startsWith(BASE))
           .map((item) => Number(item.duration) || 0);
+        // Same semantics on the lab server and on the edge: content bytes are
+        // the compressed bodies the page loaded, re-fetched from the same
+        // origin; header overhead is evidence, gated by the host contract.
+        const payload = await measureContentByteWeight(
+          audits["network-requests"]?.details?.items || [],
+          BASE,
+        );
+        if (payload.error) throw new Error(payload.error);
+        const totalByteWeight = audits["total-byte-weight"]?.numericValue;
+        const network = lcpNetworkAllowanceMs({
+          audits,
+          origin: BASE,
+          runtimeMode: runtimeContracts.length > 0,
+        });
         const row = {
           path,
           run,
@@ -389,7 +404,13 @@ try {
           image_aspect_ratio: audits["image-aspect-ratio"]?.score,
           image_size_responsive: audits["image-size-responsive"]?.score,
           dom_elements: audits["dom-size-insight"]?.numericValue,
-          total_byte_weight: audits["total-byte-weight"]?.numericValue,
+          total_byte_weight: totalByteWeight,
+          content_byte_weight: payload.content_byte_weight,
+          header_byte_weight: headerByteWeight(totalByteWeight, payload.content_byte_weight),
+          payload_requests: payload.requests.length,
+          lcp_network_allowance_ms: network.allowance_ms,
+          lcp_observed_ttfb_ms: network.observed_ttfb_ms,
+          lcp_observed_rtt_ms: network.observed_rtt_ms,
           render_blocking_savings_ms:
             audits["render-blocking-insight"]?.metricSavings?.LCP || 0,
           image_delivery_savings_bytes:

@@ -45,6 +45,24 @@ test("volatile headers are explicitly excluded and additional headers are compar
   assert.deepEqual(sameUnknown.additionalComparedHeaders, ["x-mystery"]);
 });
 
+test("document-only headers are not compared on non-document responses, but must be absent there", () => {
+  const asset = { ...security, "content-type": "text/css" };
+  const legacy = response({ headers: asset });
+  const canonical = response({ headers: {
+    "content-type": "text/css",
+    "cache-control": security["cache-control"],
+    "strict-transport-security": security["strict-transport-security"],
+  } });
+  const ok = compareResponses(baseCase, legacy, canonical);
+  assert.equal(ok.ok, true, JSON.stringify(ok.differences));
+  const leaked = compareResponses(baseCase, legacy, response({ headers: asset }));
+  assert.equal(leaked.ok, false, "a CSP on a stylesheet is a defect of the candidate, not parity");
+  assert.ok(leaked.differences.some((d) => d.field === "header:content-security-policy" && d.baseline === null));
+  const document = response({ headers: { ...security, "content-type": "text/html; charset=utf-8" } });
+  const strippedDocument = response({ headers: { ...security, "content-type": "text/html; charset=utf-8", "content-security-policy": undefined } });
+  assert.equal(compareResponses(baseCase, document, strippedDocument).ok, false, "a document must keep its CSP");
+});
+
 test("material normalization ignores formatting but not semantics", () => {
   const left = response({ headers: security });
   const reordered = response({ headers: {

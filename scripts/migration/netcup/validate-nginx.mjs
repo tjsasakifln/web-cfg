@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { execFileSync, spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, extname, join, resolve } from "node:path";
 
@@ -345,6 +345,165 @@ ${normalizeWrapper("confenge-web-public.conf")}
     }
   }
   if (!ready) throw new Error("nginx test container did not become ready");
+
+  // --- Document-only security headers -------------------------------------
+  // Browsers honour Content-Security-Policy, X-Frame-Options, Permissions-Policy
+  // and Referrer-Policy only on a document. The generated host contract emits
+  // those four exclusively when $sent_http_content_type is text/html, so every
+  // asset stops paying ~6 KB of dead header bytes on every single response.
+  const documentOnlyHeaders = [
+    "content-security-policy",
+    "x-frame-options",
+    "permissions-policy",
+    "referrer-policy",
+  ];
+  const alwaysOnHeaders = ["strict-transport-security", "x-content-type-options"];
+
+  // curl --dump-header captures the exact response header block off the wire,
+  // which is what Lighthouse counts as transferSize overhead. Parsed header
+  // objects cannot measure it because they drop the status line and CRLFs.
+  function responseHeaderBytes(path) {
+    const dump = mkdtempSync(join(tmpdir(), "confenge-nginx-header-bytes-"));
+    const headerFile = join(dump, "headers.txt");
+    try {
+      execFileSync(
+        "curl",
+        [
+          "--silent",
+          "--show-error",
+          "--compressed",
+          "--max-time",
+          "20",
+          "--header",
+          "Host: confenge.com.br",
+          "--dump-header",
+          headerFile,
+          "--output",
+          "/dev/null",
+          `http://127.0.0.1:${port}${path}`,
+        ],
+        { stdio: "pipe", timeout: 30_000 },
+      );
+      return statSync(headerFile).size;
+    } finally {
+      rmSync(dump, { recursive: true, force: true });
+    }
+  }
+
+  const homeHtml = readFileSync(resolve(ROOT, "_site/index.html"), "utf8");
+  const homeTags = [...homeHtml.matchAll(/<(?:link|script)\b[^>]*>/gi)].map((match) => match[0]);
+  const tagAttribute = (tag, name) => tag.match(new RegExp(`\\b${name}="([^"]*)"`, "i"))?.[1] || null;
+  const homeStylesheets = homeTags
+    .filter((tag) => tagAttribute(tag, "rel") === "stylesheet")
+    .map((tag) => tagAttribute(tag, "href"));
+  const homePreloads = homeTags
+    .filter((tag) => tagAttribute(tag, "rel") === "preload")
+    .map((tag) => tagAttribute(tag, "href"));
+  const homeDeferredScript = homeTags
+    .filter((tag) => /^<script\b/i.test(tag) && /\bdefer\b/i.test(tag))
+    .map((tag) => tagAttribute(tag, "src"))
+    .find(Boolean);
+  if (homeStylesheets.length === 0 || !homeDeferredScript || homePreloads.length < 2) {
+    throw new Error(`home critical-resource discovery failed: ${JSON.stringify({ homeStylesheets, homeDeferredScript, homePreloads })}`);
+  }
+  const homeCriticalResources = [...new Set([
+    "/",
+    ...homeStylesheets,
+    homeDeferredScript,
+    ...homePreloads,
+    "/manifest.webmanifest",
+    "/assets/favicon-32.png",
+  ].filter((path) => path && path.startsWith("/")))];
+
+  let homeHeaderBytesTotal = 0;
+  let homeHeaderBytesMax = 0;
+  const homeHeaderBudgetOverflow = [];
+  for (const path of homeCriticalResources) {
+    const response = await client.request(path);
+    const bytes = responseHeaderBytes(path);
+    const isDocument = /^text\/html/i.test(response.headers["content-type"] || "");
+    homeHeaderBytesTotal += bytes;
+    homeHeaderBytesMax = Math.max(homeHeaderBytesMax, bytes);
+    if (!isDocument && bytes > 1024) homeHeaderBudgetOverflow.push(`${path}=${bytes}`);
+    console.log(`NGINX_HOME_HEADER_BYTES_DETAIL path=${path} status=${response.status} document=${isDocument} bytes=${bytes}`);
+  }
+  console.log(`NGINX_HOME_HEADER_BYTES total=${homeHeaderBytesTotal} per_response_max=${homeHeaderBytesMax}`);
+  // A global header silently returning to assets is exactly what this budget
+  // stops: no non-document response among the home critical path may spend
+  // more than 1 KiB on response headers.
+  assertProbe(
+    "home_non_document_header_budget",
+    homeHeaderBudgetOverflow.length === 0,
+    `non-document responses above 1024 header bytes: ${homeHeaderBudgetOverflow.join(" ")}`,
+  );
+
+  // (a) Security is preserved in full on every document: the same global CSP
+  // byte-for-byte, plus the other three document-only headers.
+  for (const path of ["/", "/obrigado/"]) {
+    const response = await client.request(path);
+    assertProbe(`document_headers_status:${path}`, response.status === 200, `status=${response.status}`);
+    assertProbe(
+      `document_headers_content_type:${path}`,
+      /^text\/html/i.test(response.headers["content-type"] || ""),
+      `content-type=${response.headers["content-type"]}`,
+    );
+    for (const header of documentOnlyHeaders) {
+      assertProbe(
+        `document_header_present:${path}:${header}`,
+        response.headers[header] === globalHeaders[header],
+        `value=${response.headers[header]} expected=${globalHeaders[header]}`,
+      );
+    }
+  }
+
+  // (b) The same four headers are dead bytes on a non-document response and
+  // must be absent there, while the headers a user agent does honour off a
+  // document keep being served unconditionally.
+  const hashedHomeStylesheet = homeStylesheets.find((href) => href.startsWith("/assets/css/"));
+  if (!hashedHomeStylesheet) throw new Error("no hashed stylesheet under /assets/css/ in _site/index.html");
+  const nonDocumentProbes = [
+    homeDeferredScript,
+    "/script.js",
+    hashedHomeStylesheet,
+    "/assets/favicon-32.png",
+    "/manifest.webmanifest",
+    "/.well-known/build-info.json",
+  ];
+  for (const path of nonDocumentProbes) {
+    const response = await client.request(path);
+    assertProbe(`non_document_status:${path}`, response.status === 200, `status=${response.status}`);
+    assertProbe(
+      `non_document_not_html:${path}`,
+      !/^text\/html/i.test(response.headers["content-type"] || ""),
+      `content-type=${response.headers["content-type"]}`,
+    );
+    for (const header of documentOnlyHeaders) {
+      assertProbe(
+        `non_document_header_absent:${path}:${header}`,
+        response.headers[header] === undefined,
+        `${header}=${response.headers[header]}`,
+      );
+    }
+    for (const header of alwaysOnHeaders) {
+      assertProbe(
+        `non_document_header_kept:${path}:${header}`,
+        response.headers[header] === globalHeaders[header],
+        `${header}=${response.headers[header]} expected=${globalHeaders[header]}`,
+      );
+    }
+  }
+
+  // (c) The custom 404 and 410 bodies are documents, so the security contract
+  // must survive the error_page rewrite as well.
+  for (const path of ["/__host_contract_missing_document__", "/vision"]) {
+    const response = await client.request(path);
+    assertProbe(
+      `error_document_csp:${path}`,
+      /^text\/html/i.test(response.headers["content-type"] || "") &&
+        response.headers["content-security-policy"] === globalHeaders["content-security-policy"],
+      `status=${response.status} content-type=${response.headers["content-type"]} csp=${response.headers["content-security-policy"]}`,
+    );
+  }
   const hiddenControlArtifacts = [
     {
       name: "_headers",
@@ -476,7 +635,19 @@ ${normalizeWrapper("confenge-web-public.conf")}
   assertProbe("legacy_host_redirect_content_type", /^text\/plain/i.test(legacyResponse.headers["content-type"] || ""), `content-type=${legacyResponse.headers["content-type"]}`);
   assertProbe("legacy_host_redirect_hsts", legacyResponse.headers["strict-transport-security"] === globalHeaders["strict-transport-security"], `hsts=${legacyResponse.headers["strict-transport-security"]}`);
   assertProbe("legacy_host_redirect_cache", legacyResponse.headers["cache-control"] === globalHeaders["cache-control"], `cache=${legacyResponse.headers["cache-control"]}`);
-  assertProbe("legacy_host_redirect_csp", legacyResponse.headers["content-security-policy"] === globalHeaders["content-security-policy"], `csp=${legacyResponse.headers["content-security-policy"]}`);
+  // Inverted on purpose. This probe used to assert the global CSP on the
+  // legacy-host redirect; that response is served with the redirect policy's
+  // text/plain default_type, so it is not a document and no browser would ever
+  // enforce CSP, X-Frame-Options, Permissions-Policy or Referrer-Policy on it.
+  // Carrying them only inflated every legacy-host redirect. Cache-Control,
+  // HSTS and Location above still prove the redirect keeps its real contract.
+  for (const header of documentOnlyHeaders) {
+    assertProbe(
+      header === "content-security-policy" ? "legacy_host_redirect_csp" : `legacy_host_redirect_absent:${header}`,
+      legacyResponse.headers[header] === undefined,
+      `${header}=${legacyResponse.headers[header]}`,
+    );
+  }
   execFileSync(
     process.execPath,
     [

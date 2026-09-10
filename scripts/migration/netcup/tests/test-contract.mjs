@@ -36,6 +36,31 @@ function expectCode(fn, code) {
   assert.throws(fn, (error) => error instanceof HostContractError && error.code === code && error.message.includes(`[${code}]`));
 }
 
+/** Read one generated `map <source> <variable> { ... }` block back out. */
+function mapBlock(rendered, variable) {
+  const opening = ` ${variable} {\n`;
+  const start = rendered.indexOf(opening);
+  assert(start !== -1, `no map emits ${variable}`);
+  const lineStart = rendered.lastIndexOf("\nmap ", start) + "\nmap ".length;
+  const end = rendered.indexOf("\n}", start);
+  return {
+    source: rendered.slice(lineStart, start),
+    entries: rendered
+      .slice(start + opening.length, end)
+      .split("\n")
+      .map((line) => line.trim())
+      .filter(Boolean)
+      .map((line) => {
+        const parsed = line.match(/^(\S+)\s+"([\s\S]*)";$/);
+        assert(parsed, `unparseable map entry for ${variable}: ${line}`);
+        // Single-pass inverse of the renderer's escapeLiteral.
+        return { key: parsed[1], value: parsed[2].replace(/\\(.)/g, "$1") };
+      }),
+  };
+}
+
+const DOCUMENT_MAP_SOURCE = '"$confenge_document_marker$request_uri"';
+
 test("parses nominal 301, 302, 200 rewrite and 410 actions", () => {
   const inputs = [
     ["301.redirects", 301, "redirect"],
@@ -164,7 +189,9 @@ test("nginx output preserves fragments/query and emits only the explicit runtime
   assert.doesNotMatch(redirects, /proxy_pass|return 301 "https:\/\/ops[^\n]*intranet/);
   assert.match(locations, /error_page 404 \/404\.html;/);
   assert.match(locations, /try_files \$uri \$uri\/ \$uri\.html \$uri\/index\.html =404;/);
-  assert.match(rendered["headers.generated.conf"], /map \$request_uri \$confenge_header_content_security_policy/);
+  // Adjusted: CSP is now a document-only header, so its map is keyed on the
+  // document marker prefixed onto $request_uri instead of $request_uri alone.
+  assert.match(rendered["headers.generated.conf"], /map "\$confenge_document_marker\$request_uri" \$confenge_header_content_security_policy/);
   assert.match(renderRuntimeUpstream(contract), /server 127\.0\.0\.1:18100;/);
   const runtimeLocations = renderRuntimeLocations(contract);
   assert.match(runtimeLocations, /\.netlify\/functions\|api\/web/);
@@ -219,8 +246,22 @@ test("long response headers are chunked below nginx's configuration token limit"
     routes: [],
   };
   const headers = renderHeaders(contract);
-  assert.match(headers, /map \$request_uri \$confenge_header_content_security_policy \{/);
-  assert.match(headers, /map \$request_uri \$confenge_header_content_security_policy_part_1 \{/);
+  // Adjusted: both chunk maps are keyed on the document marker now. The chunks
+  // must still concatenate to the exact same CSP bytes for a document.
+  assert.match(headers, /map "\$confenge_document_marker\$request_uri" \$confenge_header_content_security_policy \{/);
+  assert.match(headers, /map "\$confenge_document_marker\$request_uri" \$confenge_header_content_security_policy_part_1 \{/);
+  const cspChunks = [
+    mapBlock(headers, "$confenge_header_content_security_policy"),
+    mapBlock(headers, "$confenge_header_content_security_policy_part_1"),
+  ];
+  assert.equal(
+    cspChunks.map((chunk) => chunk.entries.find((entry) => entry.key === "~^html:").value).join(""),
+    value,
+    "a document must receive the global CSP byte-for-byte across both chunks",
+  );
+  for (const chunk of cspChunks) {
+    assert.equal(chunk.entries.find((entry) => entry.key === "default").value, "");
+  }
   for (const line of headers.split("\n")) {
     assert(Buffer.byteLength(line) < 4096, `nginx config line must stay below 4 KiB: ${Buffer.byteLength(line)}`);
   }
@@ -228,6 +269,92 @@ test("long response headers are chunked below nginx's configuration token limit"
     renderLocations(contract),
     /add_header Content-Security-Policy "\$confenge_header_content_security_policy\$confenge_header_content_security_policy_part_1" always;/,
   );
+});
+
+test("document-only headers render behind the document marker and default to empty", () => {
+  const contract = {
+    routes: [],
+    headers: [
+      {
+        match: "global",
+        order: 0,
+        path: "/*",
+        headers: [
+          { name: "X-Frame-Options", value: "SAMEORIGIN" },
+          { name: "X-Content-Type-Options", value: "nosniff" },
+          { name: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          { name: "Permissions-Policy", value: "camera=(), microphone=()" },
+          { name: "Content-Security-Policy", value: "default-src 'self'" },
+          { name: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains; preload" },
+        ],
+      },
+    ],
+  };
+  const rendered = renderHeaders(contract);
+  // The marker is the only thing that reads the response Content-Type.
+  assert.match(rendered, /map \$sent_http_content_type \$confenge_document_marker \{\n  default "";\n  "~\*\^text\/html" "html:";\n\}/);
+  for (const [variable, value] of [
+    ["$confenge_header_content_security_policy", "default-src 'self'"],
+    ["$confenge_header_x_frame_options", "SAMEORIGIN"],
+    ["$confenge_header_permissions_policy", "camera=(), microphone=()"],
+    ["$confenge_header_referrer_policy", "strict-origin-when-cross-origin"],
+  ]) {
+    const block = mapBlock(rendered, variable);
+    assert.equal(block.source, DOCUMENT_MAP_SOURCE, `${variable} must key on the document marker`);
+    assert.deepEqual(block.entries, [
+      { key: "default", value: "" },
+      { key: "~^html:", value },
+    ], `${variable} must be empty off a document and carry the global value on one`);
+  }
+  // A header a user agent honours off a document stays unconditional.
+  for (const [variable, value] of [
+    ["$confenge_header_strict_transport_security", "max-age=31536000; includeSubDomains; preload"],
+    ["$confenge_header_x_content_type_options", "nosniff"],
+  ]) {
+    const block = mapBlock(rendered, variable);
+    assert.equal(block.source, "$request_uri", `${variable} must not depend on the response Content-Type`);
+    assert.deepEqual(block.entries, [{ key: "default", value }]);
+  }
+  assert.match(
+    renderLocations(contract),
+    /add_header Strict-Transport-Security \$confenge_header_strict_transport_security always;/,
+  );
+});
+
+test("a scoped CSP override applies to documents only and never shadows the global entry", () => {
+  const contract = {
+    routes: [],
+    headers: [
+      {
+        match: "global",
+        order: 0,
+        path: "/*",
+        headers: [{ name: "Content-Security-Policy", value: "default-src 'self'" }],
+      },
+      {
+        match: "exact",
+        order: 1,
+        path: "/relatorio",
+        headers: [{ name: "Content-Security-Policy", value: "default-src 'none'" }],
+      },
+      {
+        match: "prefix",
+        order: 2,
+        path: "/ops/*",
+        headers: [{ name: "Content-Security-Policy", value: "default-src 'self' https://ops.confenge.com.br" }],
+      },
+    ],
+  };
+  const block = mapBlock(renderHeaders(contract), "$confenge_header_content_security_policy");
+  assert.equal(block.source, DOCUMENT_MAP_SOURCE);
+  // nginx takes the first matching regex, so the catch-all document entry has
+  // to stay last; every scoped selector is anchored behind the same marker.
+  assert.deepEqual(block.entries, [
+    { key: "default", value: "" },
+    { key: "~^html:/relatorio/?(?:\\?.*)?$", value: "default-src 'none'" },
+    { key: "~^html:/ops/.*(?:\\?.*)?$", value: "default-src 'self' https://ops.confenge.com.br" },
+    { key: "~^html:", value: "default-src 'self'" },
+  ]);
 });
 
 test("exact header selectors are not overwritten by a same-base terminal wildcard", () => {
