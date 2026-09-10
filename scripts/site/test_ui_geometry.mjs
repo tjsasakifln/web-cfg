@@ -417,6 +417,59 @@ async function main() {
     fail("mobile_menu_escape", e.message || e);
   }
 
+  // 8b) Regressao (#650): com o painel aberto o botao do menu fica inerte e o
+  // toque chega ao ancestral. Ainda assim e o botao que o visitante tocou:
+  // o menu fecha e o foco volta para ele, em vez de cair no <body>.
+  try {
+    await page.setViewport({ width: 390, height: 844 });
+    await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded" });
+    await page.click(".menu-toggle");
+    const open = await page.evaluate(() => document.querySelector(".menu-toggle").getAttribute("aria-expanded"));
+    if (open !== "true") throw new Error("menu did not open");
+    const box = await page.$eval(".menu-toggle", (el) => {
+      const r = el.getBoundingClientRect();
+      return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+    });
+    await page.mouse.click(box.x, box.y);
+    const after = await page.evaluate(() => ({
+      expanded: document.querySelector(".menu-toggle").getAttribute("aria-expanded"),
+      focusOnToggle: document.activeElement === document.querySelector(".menu-toggle"),
+      inertLeft: document.querySelectorAll("[inert]").length,
+    }));
+    if (after.expanded !== "false") throw new Error("tap on the toggle did not close the menu");
+    if (!after.focusOnToggle) throw new Error("focus did not return to the toggle after tapping it");
+    if (after.inertLeft !== 0) throw new Error(`inert left behind: ${after.inertLeft}`);
+    ok("mobile_menu_toggle_tap_returns_focus");
+  } catch (e) {
+    fail("mobile_menu_toggle_tap_returns_focus", e.message || e);
+  }
+
+  // 8c) Regressao (#650): uma jornada partilhada por mais de uma opcao de
+  // estagio preenche a opcao NEUTRA (data-journey-default), nunca a primeira.
+  // "contrato" preenchia "problema urgente em contrato" para quem so entrou em
+  // obras publicas; "outro" trocava "Outra necessidade" por "ainda nao sei".
+  try {
+    await page.setViewport({ width: 1280, height: 800 });
+    const expected = [
+      ["contrato", "contrato em execução"],
+      ["outro", "outro"],
+      ["operacao", "estruturando a operação no mercado público"],
+    ];
+    for (const [journey, stage] of expected) {
+      await page.goto(`${BASE}/?jornada=${journey}`, { waitUntil: "networkidle0" });
+      const state = await page.evaluate(() => ({
+        stage: document.querySelector("#estagio")?.value || "",
+        journey: document.querySelector("#jornada-hidden")?.value || "",
+      }));
+      if (state.journey !== journey || state.stage !== stage) {
+        throw new Error(`journey ${journey}: expected stage ${JSON.stringify(stage)}, got ${JSON.stringify(state)}`);
+      }
+    }
+    ok("journey_default_stage_is_neutral (contrato,outro,operacao)");
+  } catch (e) {
+    fail("journey_default_stage_is_neutral", e.message || e);
+  }
+
   // 9) no-JS essential content
   try {
     await page.setJavaScriptEnabled(false);

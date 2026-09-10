@@ -405,6 +405,9 @@ def test_journey_accessible_without_js():
     assert html.count('class="situation-action"') == 5
     # As cinco situacoes continuam sendo links comuns; o heroi deixou de contar
     # como sexta ancora porque nao pre-classifica mais a disciplina.
+    # Tres ancoras nomeadas sobrevivem (o heroi deixou de pre-classificar
+    # como #projetos); contar links nus ao hub nao provaria ancora alguma.
+    assert html.count('href="/triagem-tecnica/#') >= 3
     assert html.count('href="/triagem-tecnica/') >= 4
     assert 'href="/servicos-obras-publicas/"' in html
 

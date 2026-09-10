@@ -167,7 +167,7 @@
 
 @media(max-width:900px){.offer-value-ladder>header,.offer-value-ladder>ol{grid-template-columns:1fr}}
 @media(max-width:620px){.offer-value-ladder{padding:22px 18px}.offer-value-ladder .compare-ladder-figures>div+div{border-left:0;border-top:1px solid #405269}}
-.deliverables-hero-copy h1 .hero-h1-note{display:block;margin-top:12px;color:#42566b;font-size:max(1rem,.26em);font-weight:600;letter-spacing:0;line-height:1.35}
+.deliverables-hero-copy .hero-h1-note{display:block;margin-bottom:0;margin-top:12px;color:#42566b;font-size:max(1rem,.26em);font-weight:600;letter-spacing:0;line-height:1.35}
 .offer-decision-nav a,.offer-decision-nav a span{overflow-wrap:break-word;word-break:normal;hyphens:none}
 @media(max-width:620px){
   /* Two-up must actually fit its labels: trim the number column and the
@@ -192,7 +192,7 @@
   .deliverables-hero{padding:26px 0 26px}
   .deliverables-hero-grid{gap:clamp(32px,4vw,64px)}
   .deliverables-hero-copy h1{max-width:20ch;margin-bottom:16px;font-size:clamp(2.1rem,3vw,2.85rem)}
-  .deliverables-hero-copy h1 .hero-h1-note{margin-top:8px;font-size:max(.95rem,.34em)}
+  .deliverables-hero-copy .hero-h1-note{margin-top:8px;font-size:max(.95rem,.34em)}
   .deliverables-lead{margin-bottom:0;font-size:1rem;line-height:1.55}
   .deliverables-hero-copy .offer-proof-line{margin-top:12px;font-size:.875rem}
   .deliverables-hero-actions{margin-top:18px}
@@ -205,7 +205,7 @@
    passa por trabalho executado. O rotulo fica junto do esquema, nao numa nota
    distante, porque e ali que a confusao aconteceria. */
 .capability-group__schema{margin:0 0 12px;padding:12px;border:1px solid #d8e0e6;border-radius:4px;background:#f7f9fb}
-.capability-group__schema-label{margin:0 0 8px;color:#435369;font-size:.78rem;line-height:1.5}
+.capability-group__schema-label{margin:0 0 8px;color:#435369;font-size:max(var(--text-micro,.8rem),12.8px);line-height:1.5}
 .capability-group__schema-label strong{color:#1f2d3d}
 .capability-group__schema-title{margin:0 0 6px;color:#1f2d3d;font-size:.85rem;font-weight:600}
 .capability-group__schema-list{margin:0;padding-left:18px;display:grid;gap:6px}

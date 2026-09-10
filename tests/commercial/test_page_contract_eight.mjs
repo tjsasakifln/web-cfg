@@ -53,7 +53,10 @@ function nonEmptyString(v) {
 }
 
 // Verbos de proximo estado: o rotulo tem de dizer o que acontece ao clicar.
-const CTA_NEXT_STATE_VERB = /^(Pedir|Solicitar|Contratar|Encomendar|Configurar)\b/;
+// "Configurar" fica FORA: era o verbo de bastidor revogado pela campanha de
+// 2026-09-10 ("ninguem configura um radar, pede uma analise"); mante-lo aqui
+// deixaria os rotulos revogados passarem de novo.
+const CTA_NEXT_STATE_VERB = /^(Pedir|Solicitar|Contratar|Encomendar)\b/;
 // O objeto do visitante, nomeado no proprio rotulo. Sem isto, "Pedir agora"
 // passaria, e um comprador nao saberia o que esta pedindo.
 const CTA_VISITOR_OBJECT =
@@ -160,7 +163,8 @@ for (const d of dels) {
   // pede uma analise. O que passa a ser exigido e mais forte, nao mais frouxo:
   // verbo imperativo de proximo estado NO INICIO e o objeto do visitante
   // nomeado no proprio rotulo. Continuam reprovando "Saiba mais",
-  // "Ver detalhes", "Fale conosco" e qualquer rotulo sem objeto.
+  // "Ver detalhes", "Fale conosco", qualquer rotulo sem objeto e os rotulos
+  // revogados que comecavam por "Configurar".
   assert(`value_first_cta_is_next_state_${n}`,
     /^(Examinar|Configurar)\b/.test(value.cta_inspect) && ctaIsNextState(value.cta_configure),
     `${value.cta_inspect} | ${value.cta_configure}`);

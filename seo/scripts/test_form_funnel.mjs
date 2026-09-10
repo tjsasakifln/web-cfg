@@ -276,8 +276,12 @@ const PRESERVED_PUBLIC_OPTIONS = {
   "escolhendo oportunidades": "operacao",
   "contrato em execução": "contrato",
 };
+// A marca data-journey-default (opcao neutra que o preenchimento automatico
+// prefere quando varias opcoes partilham a jornada) nao altera valor nem jornada.
+const escapeRe = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 for (const [value, journey] of Object.entries(PRESERVED_PUBLIC_OPTIONS)) {
-  if (!estagioSelect.includes(`<option value="${value}" data-journey="${journey}">`)) {
+  const intact = new RegExp(`<option value="${escapeRe(value)}" data-journey="${journey}"( data-journey-default)?>`);
+  if (!intact.test(estagioSelect)) {
     situationFail("public option changed", `${value} -> ${journey}`);
   }
 }

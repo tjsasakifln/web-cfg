@@ -3315,7 +3315,6 @@
             "visible_text": "Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados. O e-mail precisa de domínio e extensão completos.",
             "visible": true,
             "required": [
-              "deliverable_id",
               "contract_event",
               "contract_stage",
               "nome",
@@ -3323,6 +3322,7 @@
               "consentimento"
             ],
             "optional": [
+              "deliverable_id",
               "public_contract_id",
               "opportunity_deadline",
               "mensagem"

@@ -553,11 +553,11 @@ export function renderSelect(registry) {
   return `${SELECT_START}
 <label>Entrega relacionada <select id="deliverable-id" name="deliverable_id"><option value="">Ainda não sei qual entrega escolher</option>
 <optgroup label="Serviços de engenharia, por proposta">
-<option value="SERVICO-PROJETO">Projeto, revisão ou compatibilização</option>
-<option value="SERVICO-ORCAMENTO">Quantitativos e orçamento</option>
-<option value="SERVICO-DIAGNOSTICO">Inspeção, diagnóstico ou documentação de obra e imóvel</option>
-<option value="SERVICO-PERICIA">Perícia, assistência técnica ou avaliação</option>
-<option value="SERVICO-SST">Segurança do trabalho</option>
+<option value="SERV-PROJETO">Projeto, revisão ou compatibilização</option>
+<option value="SERV-ORCAMENTO">Quantitativos e orçamento</option>
+<option value="SERV-DIAGNOSTICO">Inspeção, diagnóstico ou documentação de obra e imóvel</option>
+<option value="SERV-PERICIA">Perícia, assistência técnica ou avaliação</option>
+<option value="SERV-SST">Segurança do trabalho</option>
 </optgroup>
 <optgroup label="Análises para obras públicas, com preço publicado">${options}</optgroup></select></label>
 ${SELECT_END}`;

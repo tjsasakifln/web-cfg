@@ -23,7 +23,7 @@ SERVICES = ROOT / "servicos" / "index.html"
 # HOME_SITUATIONS; sem isso ela cairia no default "operacao" de stageToJourney,
 # que e a reclassificacao silenciosa. As invariantes estruturais seguem
 # identicas: 23 controles, 3 obrigatorios, action /obrigado, sem upload.
-CAPTURE_FORM_SHA256 = "3666168daedb59a70b49be59528d7b5663d428d18d4e4134c6fe1422d804cd69"
+CAPTURE_FORM_SHA256 = "dfccd373fde801a8dfffde054dbf444d1453d966a96b01d1fb17baac06507b6d"
 
 
 def _home() -> str:
@@ -221,3 +221,33 @@ def test_services_hub_is_corporate_indexable_and_price_free() -> None:
 
 if __name__ == "__main__":
     raise SystemExit(__import__("pytest").main([__file__, "-q"]))
+
+
+def test_stage_options_sharing_a_journey_declare_one_neutral_default() -> None:
+    """Regressao (#650): a jornada "contrato" tem duas opcoes de estagio e o
+    preenchimento automatico escolhia a PRIMEIRA, "problema urgente em
+    contrato", para quem so entrou em obras publicas. A opcao neutra e marcada
+    com data-journey-default e e ela que o script prefere; cada jornada com
+    mais de uma opcao tem exatamente uma marcada, e a marcada nunca e a
+    urgente."""
+    html = _home()
+    form = re.search(r'<form\b[^>]*id="formulario-contato"[\s\S]*?</form>', html).group(0)
+    options = re.findall(r'<option\b([^>]*)>', form)
+    by_journey: dict[str, list[str]] = {}
+    for attrs in options:
+        journey = re.search(r'data-journey="([^"]+)"', attrs)
+        if journey:
+            by_journey.setdefault(journey.group(1), []).append(attrs)
+    assert "contrato" in by_journey and len(by_journey["contrato"]) >= 2
+    for journey, attrs_list in by_journey.items():
+        defaults = [a for a in attrs_list if "data-journey-default" in a]
+        if len(attrs_list) > 1:
+            assert len(defaults) == 1, (journey, attrs_list)
+            assert "urgente" not in defaults[0].lower(), defaults[0]
+        else:
+            assert not defaults, (journey, attrs_list)
+    default_contrato = next(a for a in by_journey["contrato"] if "data-journey-default" in a)
+    assert 'value="contrato em execução"' in default_contrato
+    # O script compilado carrega a preferencia pela opcao neutra.
+    script = (ROOT / "script.js").read_text(encoding="utf-8")
+    assert "data-journey-default" in script

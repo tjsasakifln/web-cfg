@@ -66,7 +66,7 @@ function isHeldProtected(item, current) {
 
 function qualificationFields(item, select = false) {
   const deliverable = select
-    ? `<label>Entrega mais próxima <select name="deliverable_id" required><option value="">Selecione</option><option value="UNKNOWN">Ainda não sei qual entrega, quero orientação</option>${contract.items.map((entry) => `<option value="${entry.deliverable_id}">${esc(entry.public_name_pt_br)}</option>`).join("")}</select></label>`
+    ? `<label>Entrega mais próxima <select name="deliverable_id"><option value="">Ainda não sei qual entrega, quero orientação</option>${contract.items.map((entry) => `<option value="${entry.deliverable_id}">${esc(entry.public_name_pt_br)}</option>`).join("")}</select></label>`
     : `<input name="deliverable_id" type="hidden" value="${item.deliverable_id}"/>`;
   return `${FIELDS_START}
 ${deliverable}

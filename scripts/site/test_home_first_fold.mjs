@@ -68,6 +68,13 @@ const CONTENT_CONCEPTS = [
   },
 ];
 
+// Casamento por palavra inteira: "art" nao pode ser satisfeito por "partes",
+// "quarta" ou "cartorio", senao o conceito de confianca vira atalho lexical.
+function termPresent(text, term) {
+  const escaped = String(term).toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return new RegExp(`(^|[^\\p{L}\\p{N}])${escaped}([^\\p{L}\\p{N}]|$)`, "iu").test(text);
+}
+
 function conceptResults(text, concepts = CONTENT_CONCEPTS) {
   const normalized = String(text || "").toLowerCase();
   return concepts.map((concept) => {
@@ -348,7 +355,7 @@ try {
       }
       const foldText = chunks.join(" ").replace(/\s+/g, " ").trim().toLowerCase();
       const concepts = config.concepts.map((concept) => {
-        const matched = concept.terms.filter((term) => foldText.includes(term.toLowerCase()));
+        const matched = concept.terms.filter((term) => termPresent(foldText, term));
         return {
           id: concept.id,
           label: concept.label,

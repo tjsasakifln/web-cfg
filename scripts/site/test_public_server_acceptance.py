@@ -4,6 +4,7 @@ import hashlib
 import http.client
 import io
 import json
+import os
 import sys
 import urllib.error
 from email.message import Message
@@ -1342,6 +1343,9 @@ _MANAGED_PREFIX = (
     Path(__file__).resolve().parent / "testdata" / "robots-managed-prefix.txt"
 ).read_bytes()
 _PACKAGE_ROBOTS = acceptance.ROOT / "_site" / "robots.txt"
+# O gate npm e o CI pos-build exigem o pacote: pular o modulo sairia verde.
+if os.environ.get("ROBOTS_PACKAGE_REQUIRED") == "1" and not _PACKAGE_ROBOTS.is_file():
+    raise RuntimeError("ROBOTS_PACKAGE_REQUIRED=1 mas _site/robots.txt nao existe: rode npm run build:site")
 
 
 def _served_robots() -> bytes:

@@ -792,9 +792,10 @@ _reset();
     }
   }
   for (const invalid of [
-    { public_contract_id: "" },
+    { public_contract_id: "ab" },
     { contract_event: "evento_livre" },
     { opportunity_deadline: "2026-99-99" },
+    { opportunity_deadline: "2020-01-01" },
     { contract_stage: "estagio_livre" },
   ]) {
     const before = mem.map.size;
@@ -822,6 +823,74 @@ _reset();
     fail("contract_product_no_checkout", stored);
   }
   pass("contract_products_fail_closed_and_persisted", { ids: 7, lead_id: data.lead_id });
+
+  // Regressao (#650): a captura publica "(opcional)" o identificador do
+  // contrato e o prazo; o servidor tem de aceitar a ausencia dos dois e
+  // persistir o que foi informado. Antes, o formulario prometia opcional e o
+  // servidor respondia 422 -- lead perdido.
+  const partial = await handler(event({
+    ...base,
+    deliverable_id: "CFG-D18",
+    public_contract_id: "",
+    opportunity_deadline: "",
+    idempotency_key: "qa-contract-product-18-optional",
+  }, "POST", { ip: "203.0.113.96" }));
+  const partialData = JSON.parse(partial.body);
+  const partialStored = partialData.lead_id ? await mem.get(partialData.lead_id) : null;
+  if (partial.statusCode !== 201 || !partialStored || partialStored.deliverable_id !== "CFG-D18" ||
+      partialStored.contract_event !== base.contract_event || partialStored.contract_stage !== base.contract_stage ||
+      partialStored.public_contract_id || partialStored.opportunity_deadline) {
+    fail("contract_product_optional_id_and_deadline_accepted", { status: partial.statusCode, partialData, partialStored });
+  }
+  pass("contract_product_optional_id_and_deadline_accepted", { lead_id: partialData.lead_id });
+}
+
+// Regressao (#650): as familias de servico "por proposta" oferecidas pelo
+// formulario de /entregas/ nao sao entregas do registro. Antes respondiam 422
+// deliverable_id_unknown e nada era persistido. Agora viram o tipo de
+// necessidade (mesmo valor da home) e a jornada e derivada dele, nunca do
+// "operacao" oculto do formulario.
+{
+  const expected = new Map([
+    ["SERV-PROJETO", ["projeto, revisão ou compatibilização", "outro"]],
+    ["SERV-ORCAMENTO", ["quantitativos ou orçamento", "outro"]],
+    ["SERV-DIAGNOSTICO", ["obra ou imóvel para inspecionar ou documentar", "outro"]],
+    ["SERV-PERICIA", ["perícia, assistência técnica ou avaliação", "outro"]],
+    ["SERV-SST", ["segurança do trabalho", "outro"]],
+  ]);
+  let n = 0;
+  for (const [id, [stage, journey]] of expected) {
+    n += 1;
+    const res = await handler(event({
+      nome: "QA Familias",
+      email: "qa-familias@example.com",
+      estagio: "entregas-exemplos-hub",
+      jornada: "operacao",
+      origem: "entregas",
+      route_family: "entregas",
+      asset_id: "entregas-exemplos-hub",
+      cta_id: "entregas-hub-handraise",
+      landing_page: "https://confenge.com.br/entregas/",
+      deliverable_id: id,
+      consentimento: "1",
+      record_kind: "qa",
+      test_mode: true,
+      idempotency_key: `qa-service-family-${n}`,
+    }, "POST", { ip: `203.0.113.${60 + n}` }));
+    const data = JSON.parse(res.body);
+    const stored = data.lead_id ? await mem.get(data.lead_id) : null;
+    if (res.statusCode !== 201 || !stored || stored.deliverable_id || stored.estagio !== stage || stored.jornada !== journey) {
+      fail("service_family_by_proposal_persisted", { id, status: res.statusCode, data, stored });
+    }
+  }
+  const unknown = await handler(event({
+    nome: "QA Familias", email: "qa-familias@example.com", estagio: "x", consentimento: "1",
+    deliverable_id: "SERV-INEXISTENTE", record_kind: "qa", test_mode: true,
+  }, "POST", { ip: "203.0.113.70" }));
+  if (unknown.statusCode !== 422 || JSON.parse(unknown.body).error !== "deliverable_id_unknown") {
+    fail("service_family_unknown_still_fails_closed", { status: unknown.statusCode, body: unknown.body });
+  }
+  pass("service_family_by_proposal_persisted", { families: expected.size });
 }
 
 // 5i) Issue #556 Art. 125 utility persists the CFG-D19 categorical handoff,

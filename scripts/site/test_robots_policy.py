@@ -12,6 +12,7 @@ Cloudflare antepoe seguido do nosso arquivo -- e nao uma fixture conveniente.
 from __future__ import annotations
 
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -42,8 +43,13 @@ MANAGED_PREFIX = (Path(__file__).resolve().parent / "testdata" / "robots-managed
 # de congelar uma copia que envelhece em silencio.
 # Sem pacote construido o teste e PULADO, nunca substituido: um corpo escrito a
 # mao que passa por producao transforma lacuna de cobertura em falsa seguranca.
+# Com ROBOTS_PACKAGE_REQUIRED=1 (o gate npm e o CI pos-build) a ausencia do
+# pacote REPROVA em vez de pular: um modulo inteiro pulado sai verde do pytest.
 _PACKAGE_ROBOTS = ROOT / "_site" / "robots.txt"
 _HAS_PACKAGE = _PACKAGE_ROBOTS.is_file()
+_PACKAGE_REQUIRED = os.environ.get("ROBOTS_PACKAGE_REQUIRED") == "1"
+if _PACKAGE_REQUIRED and not _HAS_PACKAGE:
+    raise RuntimeError("ROBOTS_PACKAGE_REQUIRED=1 mas _site/robots.txt nao existe: rode npm run build:site")
 needs_package = pytest.mark.skipif(not _HAS_PACKAGE, reason="pacote nao construido: rode npm run build:site")
 
 ORIGIN = _PACKAGE_ROBOTS.read_bytes().decode("utf-8") if _HAS_PACKAGE else ""
@@ -233,7 +239,7 @@ def test_evaluate_probes_reports_the_winning_rule_for_every_probe():
 def test_the_baseline_is_derived_from_declared_policy_not_from_the_candidate_body():
     """Se a expectativa vier do corpo, o gate vira tautologia.
 
-    As 208 linhas aprovadas tem de cair das DECLARACOES de politica do proprio
+    As 234 linhas aprovadas tem de cair das DECLARACOES de politica do proprio
     arquivo -- rastreadores de IA negados em todo caminho, superficies privadas
     negadas a qualquer agente, o restante rastreavel -- sem nunca ler o
     robots.txt do pacote. Assim um defeito no pacote produz divergencia real em
@@ -293,3 +299,53 @@ def test_normalization_does_not_invent_matches():
     # E a regra tambem e normalizada, nao so o caminho.
     encoded_rule = parse_robots("User-agent: *\nAllow: /\nDisallow: /%6Fps/\n")
     assert is_allowed(encoded_rule, "Googlebot", "/ops/")[0] is False
+
+
+# --------------------------------------------------------------------------
+# Regressoes do motor e das fontes de autorizacao (revisao adversarial do #650)
+# --------------------------------------------------------------------------
+
+def test_dollar_is_an_anchor_only_at_the_end_of_the_rule():
+    """RFC 9309 2.2.3: "$" fecha a regra; no meio dela e literal."""
+    parsed = parse_robots("User-agent: *\nDisallow: /a$b\nDisallow: /fim$\n")
+    assert is_allowed(parsed, "Googlebot", "/a$b")[0] is False
+    assert is_allowed(parsed, "Googlebot", "/a$bc")[0] is False
+    assert is_allowed(parsed, "Googlebot", "/fim")[0] is False
+    assert is_allowed(parsed, "Googlebot", "/fim/")[0] is True
+
+
+def test_specificity_uses_the_normalized_rule_length():
+    """"/%6Fps/" e "/ops/" sao a mesma regra de cinco octetos: empatam, e o
+    empate favorece o Allow. Antes, a grafia percent-encoded vencia por ter
+    mais caracteres, reprovando um caminho que a politica libera."""
+    encoded = parse_robots("User-agent: *\nAllow: /ops/\nDisallow: /%6Fps/\n")
+    literal = parse_robots("User-agent: *\nAllow: /ops/\nDisallow: /ops/\n")
+    assert is_allowed(encoded, "Googlebot", "/ops/x") == is_allowed(literal, "Googlebot", "/ops/x")
+    assert is_allowed(encoded, "Googlebot", "/ops/x")[0] is True
+
+
+def test_adjacent_header_stanzas_do_not_inherit_the_previous_path():
+    """Sem linha em branco entre estrofes, "/a/*" (noindex) nao pode herdar o
+    "index, follow" de "/b/*"."""
+    text = "/a/*\n  X-Robots-Tag: noindex, nofollow\n/b/*\n  X-Robots-Tag: index, follow\n"
+    assert indexable_prefixes_from_headers(text) == ["/b/"]
+    grouped = "/a/*\n/b/*\n  X-Robots-Tag: index, follow\n"
+    assert indexable_prefixes_from_headers(grouped) == ["/a/", "/b/"]
+
+
+def test_exact_410_source_does_not_authorize_losing_a_sibling_restriction():
+    """"/ia  /404.html  410" retira /ia e /ia/, nunca /iainterna/."""
+    entries = withdrawn_prefixes_from_redirects("/ia  /404.html  410\n/piloto/*  /404.html  410\n")
+    assert entries == ["/ia", "/piloto/*"]
+    served = "User-agent: *\nDisallow: /iainterna/\nDisallow: /ia\nDisallow: /piloto/\n"
+    candidate = "User-agent: *\n"
+    probes = [
+        {"agent": "Googlebot", "path": "/ia"},
+        {"agent": "Googlebot", "path": "/ia/"},
+        {"agent": "Googlebot", "path": "/iainterna/"},
+        {"agent": "Googlebot", "path": "/piloto/x"},
+    ]
+    report = policy_regression(served=served, candidate=candidate, probes=probes, withdrawn_prefixes=entries)
+    assert report["ok"] is False
+    assert [r["path"] for r in report["lost_restrictions"]] == ["/iainterna/"]
+    assert {r["path"] for r in report["authorized_relaxations"]} == {"/ia", "/ia/", "/piloto/x"}

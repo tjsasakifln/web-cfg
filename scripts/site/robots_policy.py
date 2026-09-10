@@ -168,14 +168,19 @@ def _normalize_path(value: str) -> str:
 
 
 def _rule_to_regex(pattern: str) -> re.Pattern[str]:
+    # RFC 9309 2.2.3: "$" so e ancora quando FECHA a regra. No meio dela e um
+    # caractere literal; tratar todo "$" como ancora faria "Disallow: /a$b"
+    # nunca casar e deixaria /a$b liberado.
+    anchored = pattern.endswith("$")
+    body = pattern[:-1] if anchored else pattern
     out = []
-    for ch in pattern:
+    for ch in body:
         if ch == "*":
             out.append(".*")
-        elif ch == "$":
-            out.append("$")
         else:
             out.append(re.escape(ch))
+    if anchored:
+        out.append("$")
     return re.compile("".join(out))
 
 
@@ -187,11 +192,14 @@ def _match_length(pattern: str, path: str) -> int | None:
     """
     if not pattern:
         return None
-    match = _rule_to_regex(_normalize_path(pattern)).match(_normalize_path(path))
+    normalized = _normalize_path(pattern)
+    match = _rule_to_regex(normalized).match(_normalize_path(path))
     if match is None:
         return None
-    # A especificidade e o tamanho da REGRA, nao do trecho casado.
-    return len(pattern)
+    # A especificidade e o tamanho da REGRA, nao do trecho casado -- e da regra
+    # NORMALIZADA: "/%6Fps/" e "/ops/" sao a mesma regra de cinco octetos
+    # (RFC 3986 6.2.2.2) e tem de empatar, nao vencer pelo tamanho da grafia.
+    return len(normalized)
 
 
 def is_allowed(parsed: ParsedRobots, agent: str, path: str) -> tuple[bool, str]:
@@ -277,7 +285,7 @@ def policy_regression(
             "served_rule": before["rule"],
             "candidate_rule": after["rule"],
         }
-        if any(path.startswith(prefix) for prefix in prefixes):
+        if any(_withdrawn_covers(path, prefix) for prefix in prefixes):
             authorized.append({**row, "because": "withdrawn_410"})
             continue
         if any(path.startswith(prefix) for prefix in indexable):
@@ -324,17 +332,26 @@ def indexable_prefixes_from_headers(headers: Path | str) -> list[str]:
     text = path.read_text(encoding="utf-8") if path.is_file() else str(headers)
     out: set[str] = set()
     current: list[str] = []
+    in_headers = False
     for raw in text.splitlines():
         line = raw.split("#", 1)[0].rstrip()
         if not line.strip():
             current = []
+            in_headers = False
             continue
         if not line[:1].isspace():
+            # Um caminho que vem logo depois de um bloco de cabecalhos, sem
+            # linha em branco, abre uma estrofe NOVA: herdar o caminho anterior
+            # faria um "noindex" adjacente ser lido como "index, follow".
+            if in_headers:
+                current = []
+                in_headers = False
             if line.strip().startswith("/"):
                 current.append(line.strip())
             else:
                 current = []
             continue
+        in_headers = True
         field, _, value = line.strip().partition(":")
         if field.strip().lower() != "x-robots-tag":
             continue
@@ -347,7 +364,13 @@ def indexable_prefixes_from_headers(headers: Path | str) -> list[str]:
 
 
 def withdrawn_prefixes_from_redirects(redirects: Path | str) -> list[str]:
-    """Prefixos retirados com 410, lidos do ``_redirects`` do proprio pacote."""
+    """Caminhos retirados com 410, lidos do ``_redirects`` do proprio pacote.
+
+    Uma origem com curinga (``/piloto/*``) vira prefixo e e devolvida com o
+    ``*`` preservado. Uma origem exata (``/ia``) so autoriza ela mesma, com ou
+    sem barra final: devolve-la como prefixo faria ``/ia`` autorizar a perda de
+    uma restricao viva sobre ``/iainterna/``.
+    """
     text = Path(redirects).read_text(encoding="utf-8") if Path(redirects).is_file() else str(redirects)
     out: set[str] = set()
     for raw in text.splitlines():
@@ -358,14 +381,17 @@ def withdrawn_prefixes_from_redirects(redirects: Path | str) -> list[str]:
         if len(parts) < 3:
             continue
         source = parts[0]
-        if source.endswith("/*"):
-            out.add(source[:-1])
-        elif source.endswith("*"):
-            out.add(source[:-1])
-        else:
-            out.add(source.rstrip("/") + "/")
+        if source.endswith("*"):
             out.add(source)
+        else:
+            out.add(source.rstrip("/") or "/")
     return sorted(out)
+
+
+def _withdrawn_covers(path: str, entry: str) -> bool:
+    if entry.endswith("*"):
+        return path.startswith(entry[:-1])
+    return path.rstrip("/") == entry.rstrip("/")
 
 
 def main(argv: list[str] | None = None) -> int:

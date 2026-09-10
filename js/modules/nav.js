@@ -199,7 +199,18 @@
           first.focus();
         }
       });
-      document.addEventListener('click', (event) => { if (toggle.getAttribute('aria-expanded') === 'true' && !menu.contains(event.target) && !toggle.contains(event.target)) closeMenu(); });
+      document.addEventListener('click', (event) => {
+        if (toggle.getAttribute('aria-expanded') !== 'true' || menu.contains(event.target)) return;
+        // Com o painel aberto o botao esta inerte e o clique chega ao
+        // ancestral; ainda assim e o botao que o visitante tocou, entao o
+        // foco volta para ele, como no fechamento por Escape.
+        const box = toggle.getBoundingClientRect();
+        const onToggle = toggle.contains(event.target) || (
+          event.clientX >= box.left && event.clientX <= box.right &&
+          event.clientY >= box.top && event.clientY <= box.bottom
+        );
+        closeMenu(onToggle);
+      });
       window.addEventListener('resize', () => { if (window.innerWidth > 900) closeMenu(); }, { passive: true });
     }
     const currentYear = String(new Date().getFullYear());
@@ -584,7 +595,12 @@
       }
       const stage = form.querySelector('#estagio');
       if (stage && (forceStage || !stage.value)) {
-        const opt = [...stage.options].find((o) => o.getAttribute('data-journey') === j);
+        // Varias opcoes partilham a mesma jornada (p. ex. "problema urgente em
+        // contrato" e "contrato em execucao"). A jornada sozinha nao autoriza
+        // escolher a mais grave: prefere-se a opcao marcada como neutra
+        // (data-journey-default); so na falta dela vale a primeira.
+        const candidates = [...stage.options].filter((o) => o.getAttribute('data-journey') === j);
+        const opt = candidates.find((o) => o.hasAttribute('data-journey-default')) || candidates[0];
         if (opt) stage.value = opt.value;
       }
     };
