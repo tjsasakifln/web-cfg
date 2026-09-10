@@ -58,6 +58,23 @@
   font-style:normal;
   font-display:swap;
 }
+/* Reserva com metricas casadas. Com font-display:swap o texto pinta primeiro
+ * na fonte do sistema e recompoe quando o Archivo chega; na borda (colo frio,
+ * fonte depois da primeira pintura) isso media CLS 0,065-0,068 no bloco do
+ * heroi (run 34517284468), zero no laboratorio onde a fonte chega antes.
+ * Arial/Liberation Sans/Helvetica sao metricamente equivalentes; os ajustes
+ * vem das metricas reais do arquivo (fontTools, instancia wght 400/wdth 100,
+ * media de avancos ponderada pela frequencia de letras em pt-BR contra a de
+ * Arial): size-adjust 98,56 %, ascent 878/1000 e descent 210/1000 divididos
+ * pelo size-adjust, line-gap 0. Gate: scripts/site/test_font_fallback_metrics.mjs. */
+@font-face{
+  font-family:"Archivo Fallback";
+  src:local("Arial"),local("Liberation Sans"),local("Helvetica"),local("Helvetica Neue");
+  size-adjust:98.56%;
+  ascent-override:89.08%;
+  descent-override:21.31%;
+  line-gap-override:0%;
+}
 
 /* ── 0. Tokens da home ─────────────────────────────────────────────────── */
 /* Uma superficie nova,--field: o preto-verde da marca,nao o navy corporativo
@@ -107,7 +124,7 @@ body[data-content-cluster="home"]{
   --page-gutter:clamp(1.15rem,3.2vw,3rem);
   --wide:96%;
   --narrow:78%;
-  font-family:"Archivo Var",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-family:"Archivo Var","Archivo Fallback",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
   font-weight:400;
   font-variant-numeric:tabular-nums slashed-zero;
   background:var(--white);
@@ -120,7 +137,7 @@ body[data-content-cluster="home"] main{overflow-x:clip}
  * da pagina e ambas sao o default de qualquer navegador. Saem. O eixo de
  * largura do Archivo faz o mesmo trabalho e pertence a marca. */
 body[data-content-cluster="home"] .type-serif,body[data-content-cluster="home"] .type-mono{
-  font-family:"Archivo Var",ui-sans-serif,system-ui,sans-serif;
+  font-family:"Archivo Var","Archivo Fallback",ui-sans-serif,system-ui,sans-serif;
 }
 body[data-content-cluster="home"] .type-serif{font-stretch:var(--wide);font-weight:700;letter-spacing:-.03em}
 
@@ -608,7 +625,7 @@ body[data-content-cluster="home"] .audience-layout .eyebrow{color:var(--dark-acc
 .triage-actions .button{min-width:min(100%,23rem)}
 .triage-actions p{max-width:52ch;margin:.5rem 0 0;color:var(--muted);font-size:.88rem}
 
-body[data-content-cluster="corporate-services"]{font-family:"Archivo Var",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+body[data-content-cluster="corporate-services"]{font-family:"Archivo Var","Archivo Fallback",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
 .corporate-services-hero{padding-block:clamp(3.5rem,8vw,7rem);background:#fff;border-bottom:1px solid var(--line)}
 .corporate-services-hero h1{max-width:18ch;font-size:clamp(2.35rem,5vw,4.4rem)}
 .corporate-service-list{max-width:70rem}

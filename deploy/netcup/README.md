@@ -110,11 +110,18 @@ Two measurements are deliberately made identical on both sides
   `text/html`, and `validate-nginx.mjs` fails when a non-document response of
   the home's critical set exceeds 1 KiB of headers.
 - **LCP** = the artifact's render path under the simulated mobile network. On
-  the edge the simulation also contains the observed document server latency
-  (edge geography, origin distance) and one TLS round trip; those two terms are
-  measured from the run itself and recorded as `lcp_network_allowance_ms` on the
-  row. The budget number never moves; the allowance is evidence, visible in
-  `netcup-runtime-acceptance-<sha>` and in the summary rows.
+  the edge the simulation also contains the OBSERVED origin latency of the run
+  (`network-server-latency`: runner → edge → origin, tens of milliseconds);
+  that term is recorded as `lcp_network_allowance_ms` on the row, capped at
+  250 ms and zero when not measured. `metrics.timeToFirstByte` is never used:
+  it is Lantern's simulated TTFB (~450 ms) and is identical in the lab. The
+  budget number never moves; the allowance is evidence, visible in
+  `netcup-runtime-acceptance-<sha>` and recomputable from the raw report.
+- **Protocol**: the runner's Chrome disables QUIC (`--disable-quic`). Lantern
+  models multiplexing only for `h2`; an `h3` session is simulated as HTTP/1.1
+  with a handshake per connection, which inflated the edge LCP by ~300 ms on
+  Cloudflare. The edge is measured over HTTP/2, the protocol the simulator
+  models; HTTP/3 visitors do at least as well.
 
 ## One-time host provisioning (do not run from a docs PR)
 

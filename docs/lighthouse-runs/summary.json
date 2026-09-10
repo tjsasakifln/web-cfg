@@ -1,6 +1,6 @@
 {
   "base": "http://127.0.0.1:8766",
-  "generated_at": "2026-09-10T17:49:21.368Z",
+  "generated_at": "2026-09-10T20:44:12.124Z",
   "coverage": {
     "policy_path": "data/quality/interface-coverage-policy.json",
     "public_route_count": 217,
@@ -1509,12 +1509,12 @@
       "accessibility": 100,
       "best_practices": 96,
       "seo": 100,
-      "lcp_ms": 1367.7387,
+      "lcp_ms": 1422.46775,
       "cls": 0,
-      "tbt_ms": 13,
-      "longest_own_task_ms": 76,
-      "fcp_ms": 1067.7387,
-      "si_ms": 1067.7387,
+      "tbt_ms": 14,
+      "longest_own_task_ms": 78,
+      "fcp_ms": 1061.3613,
+      "si_ms": 1061.3613,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 116,
@@ -1522,13 +1522,65 @@
       "content_byte_weight": 69985,
       "header_byte_weight": 1643,
       "payload_requests": 7,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/triagem-tecnica/",
+          "transfer_size": 4150,
+          "resource_size": 11388,
+          "content_bytes": 3920,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/triagem-tecnica/styles.abc2e5d06fbe.css",
+          "transfer_size": 1869,
+          "resource_size": 4482,
+          "content_bytes": 1655,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-white-500-1677038e.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
+      "lcp_observed_server_latency_ms": 3.7871,
+      "lcp_observed_rtt_ms": 0.1074,
+      "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 400,
       "image_delivery_savings_bytes": 18071,
       "font_display_score": 1,
-      "benchmark_index": 2268,
+      "benchmark_index": 1307,
       "seo_exempt": false
     },
     {
@@ -1538,12 +1590,12 @@
       "accessibility": 100,
       "best_practices": 96,
       "seo": 69,
-      "lcp_ms": 1511.40435,
+      "lcp_ms": 1453.9672500000001,
       "cls": 0,
       "tbt_ms": 0,
-      "longest_own_task_ms": 66,
-      "fcp_ms": 1211.40435,
-      "si_ms": 1211.40435,
+      "longest_own_task_ms": 64,
+      "fcp_ms": 1210.9672500000001,
+      "si_ms": 1210.9672500000001,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 252,
@@ -1551,13 +1603,86 @@
       "content_byte_weight": 76025,
       "header_byte_weight": 2352,
       "payload_requests": 10,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/ferramentas/prontidao-tecnica-obra-privada/",
+          "transfer_size": 5268,
+          "resource_size": 17328,
+          "content_bytes": 5037,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tools.43ce52155407.css",
+          "transfer_size": 4543,
+          "resource_size": 18782,
+          "content_bytes": 4328,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/ferramentas/prontidao-tecnica-obra-privada/styles.a9db6af65ed2.css",
+          "transfer_size": 1101,
+          "resource_size": 2349,
+          "content_bytes": 887,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/js/private-project-technical-readiness.js",
+          "transfer_size": 7582,
+          "resource_size": 30122,
+          "content_bytes": 7353,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/js/tools-common.js",
+          "transfer_size": 2929,
+          "resource_size": 7649,
+          "content_bytes": 2701,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/ferramentas/prontidao-tecnica-obra-privada/app.js",
+          "transfer_size": 2142,
+          "resource_size": 5414,
+          "content_bytes": 1914,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
+      "lcp_observed_server_latency_ms": 3.65575,
+      "lcp_observed_rtt_ms": 0.14925,
+      "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 550,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2183,
+      "benchmark_index": 2540.5,
       "seo_exempt": true
     },
     {
@@ -1567,26 +1692,99 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1954.9560000000001,
+      "lcp_ms": 1953.9808,
       "cls": 0,
-      "tbt_ms": 32,
-      "longest_own_task_ms": 82,
-      "fcp_ms": 1207.434,
-      "si_ms": 1207.434,
+      "tbt_ms": 30,
+      "longest_own_task_ms": 80,
+      "fcp_ms": 1205.9712,
+      "si_ms": 1205.9712,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 520,
-      "total_byte_weight": 153513,
-      "content_byte_weight": 151420,
+      "total_byte_weight": 153941,
+      "content_byte_weight": 151848,
       "header_byte_weight": 2093,
       "payload_requests": 10,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/",
+          "transfer_size": 12841,
+          "resource_size": 43824,
+          "content_bytes": 12610,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/archivo-var-latin-bf6e041e.woff2",
+          "transfer_size": 60271,
+          "resource_size": 60064,
+          "content_bytes": 60064,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/assets/home-10x.2303b9f581df.css",
+          "transfer_size": 12069,
+          "resource_size": 43254,
+          "content_bytes": 11854,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js?v=fortune04",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/manifest.webmanifest",
+          "transfer_size": 610,
+          "resource_size": 403,
+          "content_bytes": 403,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/icon-192.png",
+          "transfer_size": 12331,
+          "resource_size": 12139,
+          "content_bytes": 12139,
+          "encoding": "identity"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
+      "lcp_observed_server_latency_ms": 1.9903999999999997,
+      "lcp_observed_rtt_ms": 0.0786,
+      "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 150,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2326.5,
+      "benchmark_index": 2397,
       "seo_exempt": false
     },
     {
@@ -1596,55 +1794,201 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1952.9767,
+      "lcp_ms": 1952.8273,
       "cls": 0,
-      "tbt_ms": 32,
-      "longest_own_task_ms": 82,
-      "fcp_ms": 1204.46505,
-      "si_ms": 1204.46505,
+      "tbt_ms": 26,
+      "longest_own_task_ms": 76,
+      "fcp_ms": 1204.2409499999999,
+      "si_ms": 1204.2409499999999,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 520,
-      "total_byte_weight": 153513,
-      "content_byte_weight": 151420,
+      "total_byte_weight": 153941,
+      "content_byte_weight": 151848,
       "header_byte_weight": 2093,
       "payload_requests": 10,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/",
+          "transfer_size": 12841,
+          "resource_size": 43824,
+          "content_bytes": 12610,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/archivo-var-latin-bf6e041e.woff2",
+          "transfer_size": 60271,
+          "resource_size": 60064,
+          "content_bytes": 60064,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/assets/home-10x.2303b9f581df.css",
+          "transfer_size": 12069,
+          "resource_size": 43254,
+          "content_bytes": 11854,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js?v=fortune04",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/manifest.webmanifest",
+          "transfer_size": 610,
+          "resource_size": 403,
+          "content_bytes": 403,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/icon-192.png",
+          "transfer_size": 12331,
+          "resource_size": 12139,
+          "content_bytes": 12139,
+          "encoding": "identity"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
-      "render_blocking_savings_ms": 150,
+      "lcp_observed_server_latency_ms": 1.4136499999999999,
+      "lcp_observed_rtt_ms": 0.07935,
+      "lcp_network_allowance_capped": false,
+      "render_blocking_savings_ms": 200,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1745.5,
+      "benchmark_index": 2427,
       "seo_exempt": false
     },
     {
       "path": "/",
       "run": 3,
-      "performance": 100,
+      "performance": 99,
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1802.9417,
+      "lcp_ms": 1952.6542999999997,
       "cls": 0,
-      "tbt_ms": 21,
-      "longest_own_task_ms": 71,
-      "fcp_ms": 1054.41255,
-      "si_ms": 1054.41255,
+      "tbt_ms": 30,
+      "longest_own_task_ms": 80,
+      "fcp_ms": 1203.98145,
+      "si_ms": 1203.98145,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 520,
-      "total_byte_weight": 153513,
-      "content_byte_weight": 151420,
+      "total_byte_weight": 153941,
+      "content_byte_weight": 151848,
       "header_byte_weight": 2093,
       "payload_requests": 10,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/",
+          "transfer_size": 12841,
+          "resource_size": 43824,
+          "content_bytes": 12610,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/archivo-var-latin-bf6e041e.woff2",
+          "transfer_size": 60271,
+          "resource_size": 60064,
+          "content_bytes": 60064,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/assets/home-10x.2303b9f581df.css",
+          "transfer_size": 12069,
+          "resource_size": 43254,
+          "content_bytes": 11854,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js?v=fortune04",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/manifest.webmanifest",
+          "transfer_size": 610,
+          "resource_size": 403,
+          "content_bytes": 403,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/icon-192.png",
+          "transfer_size": 12331,
+          "resource_size": 12139,
+          "content_bytes": 12139,
+          "encoding": "identity"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
-      "render_blocking_savings_ms": 350,
+      "lcp_observed_server_latency_ms": 1.32715,
+      "lcp_observed_rtt_ms": 0.10784999999999999,
+      "lcp_network_allowance_capped": false,
+      "render_blocking_savings_ms": 150,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2216.5,
+      "benchmark_index": 1169.5,
       "seo_exempt": false
     },
     {
@@ -1654,12 +1998,12 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1354.52505,
+      "lcp_ms": 1506.5032,
       "cls": 0,
-      "tbt_ms": 21.5,
-      "longest_own_task_ms": 93,
-      "fcp_ms": 1054.52505,
-      "si_ms": 1054.52505,
+      "tbt_ms": 62,
+      "longest_own_task_ms": 112,
+      "fcp_ms": 1053.7548000000002,
+      "si_ms": 1053.7548000000002,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 150,
@@ -1667,13 +2011,72 @@
       "content_byte_weight": 72640,
       "header_byte_weight": 1671,
       "payload_requests": 8,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/servicos/",
+          "transfer_size": 5551,
+          "resource_size": 16199,
+          "content_bytes": 5320,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js?v=mv04",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/manifest.webmanifest",
+          "transfer_size": 610,
+          "resource_size": 403,
+          "content_bytes": 403,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/icon-192.png",
+          "transfer_size": 12331,
+          "resource_size": 12139,
+          "content_bytes": 12139,
+          "encoding": "identity"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
+      "lcp_observed_server_latency_ms": 1.2515999999999998,
+      "lcp_observed_rtt_ms": 0.1164,
+      "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 400,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 970,
+      "benchmark_index": 2569.5,
       "seo_exempt": false
     },
     {
@@ -1683,12 +2086,12 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1563.59245,
+      "lcp_ms": 1507.3365000000001,
       "cls": 0,
-      "tbt_ms": 8,
-      "longest_own_task_ms": 71,
-      "fcp_ms": 1055.59245,
-      "si_ms": 1055.59245,
+      "tbt_ms": 0,
+      "longest_own_task_ms": 56,
+      "fcp_ms": 1057.3365,
+      "si_ms": 1057.3365,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 161,
@@ -1696,13 +2099,86 @@
       "content_byte_weight": 80718,
       "header_byte_weight": 2114,
       "payload_requests": 10,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/quantitativos-orcamento-obras/",
+          "transfer_size": 5974,
+          "resource_size": 17371,
+          "content_bytes": 5743,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/triagem-tecnica/styles.abc2e5d06fbe.css",
+          "transfer_size": 1869,
+          "resource_size": 4482,
+          "content_bytes": 1655,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js?v=mv09",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/js/adaptive-intake.js",
+          "transfer_size": 6229,
+          "resource_size": 19110,
+          "content_bytes": 6000,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/manifest.webmanifest",
+          "transfer_size": 610,
+          "resource_size": 403,
+          "content_bytes": 403,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/icon-192.png",
+          "transfer_size": 12331,
+          "resource_size": 12139,
+          "content_bytes": 12139,
+          "encoding": "identity"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
-      "render_blocking_savings_ms": 350,
+      "lcp_observed_server_latency_ms": 2.4455,
+      "lcp_observed_rtt_ms": 0.0975,
+      "lcp_network_allowance_capped": false,
+      "render_blocking_savings_ms": 400,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1906,
+      "benchmark_index": 2673.5,
       "seo_exempt": false
     },
     {
@@ -1712,12 +2188,12 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1355.1207,
+      "lcp_ms": 1475.9367499999998,
       "cls": 0,
-      "tbt_ms": 0,
-      "longest_own_task_ms": 196,
-      "fcp_ms": 1055.1207,
-      "si_ms": 1055.1207,
+      "tbt_ms": 72,
+      "longest_own_task_ms": 122,
+      "fcp_ms": 1217.6245,
+      "si_ms": 1217.6245,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 288,
@@ -1725,13 +2201,79 @@
       "content_byte_weight": 78321,
       "header_byte_weight": 1885,
       "payload_requests": 9,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/acompanhamento-contratos-obras/",
+          "transfer_size": 8323,
+          "resource_size": 26046,
+          "content_bytes": 8092,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-offers.0c1efa479770.css",
+          "transfer_size": 3123,
+          "resource_size": 11174,
+          "content_bytes": 2909,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js?v=64807d95a6",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/manifest.webmanifest",
+          "transfer_size": 610,
+          "resource_size": 403,
+          "content_bytes": 403,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/icon-192.png",
+          "transfer_size": 12331,
+          "resource_size": 12139,
+          "content_bytes": 12139,
+          "encoding": "identity"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
+      "lcp_observed_server_latency_ms": 1.31225,
+      "lcp_observed_rtt_ms": 0.06675,
+      "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 150,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 894,
+      "benchmark_index": 2594,
       "seo_exempt": false
     },
     {
@@ -1741,12 +2283,12 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1203.2545499999999,
+      "lcp_ms": 1203.7254,
       "cls": 0,
       "tbt_ms": 0,
-      "longest_own_task_ms": 63,
-      "fcp_ms": 1053.2545499999999,
-      "si_ms": 1053.2545499999999,
+      "longest_own_task_ms": 50,
+      "fcp_ms": 1053.7254,
+      "si_ms": 1053.7254,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 108,
@@ -1754,13 +2296,51 @@
       "content_byte_weight": 35155,
       "header_byte_weight": 1042,
       "payload_requests": 5,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/termos-de-uso/",
+          "transfer_size": 4323,
+          "resource_size": 10818,
+          "content_bytes": 4093,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
+      "lcp_observed_server_latency_ms": 1.2418000000000002,
+      "lcp_observed_rtt_ms": 0.12719999999999998,
+      "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 400,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1968,
+      "benchmark_index": 2477.5,
       "seo_exempt": false
     },
     {
@@ -1770,12 +2350,12 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1353.8109,
+      "lcp_ms": 1203.55755,
       "cls": 0,
       "tbt_ms": 0,
       "longest_own_task_ms": 0,
-      "fcp_ms": 1053.8109,
-      "si_ms": 1053.8109,
+      "fcp_ms": 1053.55755,
+      "si_ms": 1053.55755,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 79,
@@ -1783,13 +2363,58 @@
       "content_byte_weight": 34899,
       "header_byte_weight": 1232,
       "payload_requests": 6,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/comercial/privacidade-leads/",
+          "transfer_size": 3701,
+          "resource_size": 8154,
+          "content_bytes": 3471,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/assets/simple-page-a11y-v293.d9765cdedeb4.css",
+          "transfer_size": 556,
+          "resource_size": 366,
+          "content_bytes": 366,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
+      "lcp_observed_server_latency_ms": 1.1858499999999998,
+      "lcp_observed_rtt_ms": 0.08564999999999999,
+      "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 400,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1247,
+      "benchmark_index": 1319.5,
       "seo_exempt": false
     },
     {
@@ -1799,12 +2424,12 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1451.0354000000002,
+      "lcp_ms": 1467.8104,
       "cls": 0,
-      "tbt_ms": 0,
-      "longest_own_task_ms": 59,
-      "fcp_ms": 1057.5531,
-      "si_ms": 1057.5531,
+      "tbt_ms": 23,
+      "longest_own_task_ms": 73,
+      "fcp_ms": 1054.2156,
+      "si_ms": 1054.2156,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 150,
@@ -1812,13 +2437,72 @@
       "content_byte_weight": 72494,
       "header_byte_weight": 1671,
       "payload_requests": 8,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/politica-editorial/",
+          "transfer_size": 5405,
+          "resource_size": 14760,
+          "content_bytes": 5174,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/manifest.webmanifest",
+          "transfer_size": 610,
+          "resource_size": 403,
+          "content_bytes": 403,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/icon-192.png",
+          "transfer_size": 12331,
+          "resource_size": 12139,
+          "content_bytes": 12139,
+          "encoding": "identity"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
+      "lcp_observed_server_latency_ms": 1.4052,
+      "lcp_observed_rtt_ms": 0.1293,
+      "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 400,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2088,
+      "benchmark_index": 2519,
       "seo_exempt": false
     },
     {
@@ -1828,12 +2512,12 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1492.0767,
+      "lcp_ms": 1496.5362,
       "cls": 0,
-      "tbt_ms": 41,
-      "longest_own_task_ms": 137,
-      "fcp_ms": 1054.61505,
-      "si_ms": 1054.61505,
+      "tbt_ms": 42,
+      "longest_own_task_ms": 113,
+      "fcp_ms": 1053.8043,
+      "si_ms": 1053.8043,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 347,
@@ -1841,13 +2525,72 @@
       "content_byte_weight": 76726,
       "header_byte_weight": 1671,
       "payload_requests": 8,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/conteudos/atraso-na-medicao-obra-publica/",
+          "transfer_size": 9637,
+          "resource_size": 29626,
+          "content_bytes": 9406,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js?v=64807d95a6",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/manifest.webmanifest",
+          "transfer_size": 610,
+          "resource_size": 403,
+          "content_bytes": 403,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/icon-192.png",
+          "transfer_size": 12331,
+          "resource_size": 12139,
+          "content_bytes": 12139,
+          "encoding": "identity"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
+      "lcp_observed_server_latency_ms": 1.2680999999999996,
+      "lcp_observed_rtt_ms": 0.1134,
+      "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 300,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1966.5,
+      "benchmark_index": 2239.5,
       "seo_exempt": false
     },
     {
@@ -1857,12 +2600,12 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1353.7698,
+      "lcp_ms": 1355.28525,
       "cls": 0,
       "tbt_ms": 0,
-      "longest_own_task_ms": 85,
-      "fcp_ms": 1053.7698,
-      "si_ms": 1053.7698,
+      "longest_own_task_ms": 80,
+      "fcp_ms": 1055.28525,
+      "si_ms": 1055.28525,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 374,
@@ -1870,13 +2613,72 @@
       "content_byte_weight": 76834,
       "header_byte_weight": 1671,
       "payload_requests": 8,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/conteudos/",
+          "transfer_size": 9745,
+          "resource_size": 40999,
+          "content_bytes": 9514,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js?v=64807d95a6",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/manifest.webmanifest",
+          "transfer_size": 610,
+          "resource_size": 403,
+          "content_bytes": 403,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/icon-192.png",
+          "transfer_size": 12331,
+          "resource_size": 12139,
+          "content_bytes": 12139,
+          "encoding": "identity"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
+      "lcp_observed_server_latency_ms": 1.7617500000000001,
+      "lcp_observed_rtt_ms": 0.09075,
+      "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 350,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1716,
+      "benchmark_index": 2511.5,
       "seo_exempt": false
     },
     {
@@ -1886,12 +2688,12 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1354.7757000000001,
+      "lcp_ms": 1512.1522499999999,
       "cls": 0,
-      "tbt_ms": 19.5,
-      "longest_own_task_ms": 89,
-      "fcp_ms": 1054.7757000000001,
-      "si_ms": 1054.7757000000001,
+      "tbt_ms": 6.5,
+      "longest_own_task_ms": 63,
+      "fcp_ms": 1053.1826999999998,
+      "si_ms": 1053.1826999999998,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 138,
@@ -1899,13 +2701,79 @@
       "content_byte_weight": 81930,
       "header_byte_weight": 1862,
       "payload_requests": 9,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/guias-contratos-obras/",
+          "transfer_size": 4235,
+          "resource_size": 12437,
+          "content_bytes": 4005,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/manifest.webmanifest",
+          "transfer_size": 610,
+          "resource_size": 403,
+          "content_bytes": 403,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-white-500-1677038e.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/icon-192.png",
+          "transfer_size": 12331,
+          "resource_size": 12139,
+          "content_bytes": 12139,
+          "encoding": "identity"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
+      "lcp_observed_server_latency_ms": 1.0609,
+      "lcp_observed_rtt_ms": 0.0861,
+      "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 400,
       "image_delivery_savings_bytes": 18071,
       "font_display_score": 1,
-      "benchmark_index": 1031,
+      "benchmark_index": 1091.5,
       "seo_exempt": false
     },
     {
@@ -1915,12 +2783,12 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1540.1401250000001,
+      "lcp_ms": 1563.4341,
       "cls": 0,
-      "tbt_ms": 15,
-      "longest_own_task_ms": 80,
-      "fcp_ms": 1054.9681500000002,
-      "si_ms": 1054.9681500000002,
+      "tbt_ms": 11,
+      "longest_own_task_ms": 61,
+      "fcp_ms": 1053.65115,
+      "si_ms": 1053.65115,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 138,
@@ -1928,13 +2796,79 @@
       "content_byte_weight": 81997,
       "header_byte_weight": 1862,
       "payload_requests": 9,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/lei-14133-obras/",
+          "transfer_size": 4302,
+          "resource_size": 12646,
+          "content_bytes": 4072,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/manifest.webmanifest",
+          "transfer_size": 610,
+          "resource_size": 403,
+          "content_bytes": 403,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-white-500-1677038e.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/icon-192.png",
+          "transfer_size": 12331,
+          "resource_size": 12139,
+          "content_bytes": 12139,
+          "encoding": "identity"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
+      "lcp_observed_server_latency_ms": 1.21705,
+      "lcp_observed_rtt_ms": 0.08295000000000001,
+      "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 400,
       "image_delivery_savings_bytes": 18071,
       "font_display_score": 1,
-      "benchmark_index": 1811.5,
+      "benchmark_index": 2464.5,
       "seo_exempt": false
     },
     {
@@ -1944,12 +2878,12 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1430.9341000000002,
+      "lcp_ms": 1438.223,
       "cls": 0,
-      "tbt_ms": 20,
-      "longest_own_task_ms": 70,
-      "fcp_ms": 1060.9341000000002,
-      "si_ms": 1060.9341000000002,
+      "tbt_ms": 0,
+      "longest_own_task_ms": 82,
+      "fcp_ms": 1053.3345,
+      "si_ms": 1053.3345,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 264,
@@ -1957,13 +2891,79 @@
       "content_byte_weight": 80045,
       "header_byte_weight": 1864,
       "payload_requests": 9,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/especialista/tiago-jun-sasaki/",
+          "transfer_size": 7031,
+          "resource_size": 22055,
+          "content_bytes": 6800,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js?v=64807d95a6",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/tiago-sasaki-foto-v11-sem-fundo-560.avif",
+          "transfer_size": 6118,
+          "resource_size": 5925,
+          "content_bytes": 5925,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/manifest.webmanifest",
+          "transfer_size": 610,
+          "resource_size": 403,
+          "content_bytes": 403,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/icon-192.png",
+          "transfer_size": 12331,
+          "resource_size": 12139,
+          "content_bytes": 12139,
+          "encoding": "identity"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
-      "render_blocking_savings_ms": 400,
+      "lcp_observed_server_latency_ms": 1.1115,
+      "lcp_observed_rtt_ms": 0.0945,
+      "lcp_network_allowance_capped": false,
+      "render_blocking_savings_ms": 350,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 958.5,
+      "benchmark_index": 2339.5,
       "seo_exempt": false
     },
     {
@@ -1973,12 +2973,12 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1434.1748,
+      "lcp_ms": 1439.35565,
       "cls": 0,
-      "tbt_ms": 24,
-      "longest_own_task_ms": 74,
-      "fcp_ms": 1060.1748,
-      "si_ms": 1060.1748,
+      "tbt_ms": 36,
+      "longest_own_task_ms": 86,
+      "fcp_ms": 1053.35565,
+      "si_ms": 1053.35565,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 264,
@@ -1986,13 +2986,79 @@
       "content_byte_weight": 80045,
       "header_byte_weight": 1864,
       "payload_requests": 9,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/especialista/tiago-jun-sasaki/",
+          "transfer_size": 7031,
+          "resource_size": 22055,
+          "content_bytes": 6800,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js?v=64807d95a6",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/tiago-sasaki-foto-v11-sem-fundo-560.avif",
+          "transfer_size": 6118,
+          "resource_size": 5925,
+          "content_bytes": 5925,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/manifest.webmanifest",
+          "transfer_size": 610,
+          "resource_size": 403,
+          "content_bytes": 403,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/icon-192.png",
+          "transfer_size": 12331,
+          "resource_size": 12139,
+          "content_bytes": 12139,
+          "encoding": "identity"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
+      "lcp_observed_server_latency_ms": 1.1185500000000002,
+      "lcp_observed_rtt_ms": 0.08145000000000001,
+      "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 350,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2245,
+      "benchmark_index": 2488,
       "seo_exempt": false
     },
     {
@@ -2002,12 +3068,12 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1523.0615000000003,
+      "lcp_ms": 1421.029,
       "cls": 0,
-      "tbt_ms": 43,
-      "longest_own_task_ms": 93,
-      "fcp_ms": 1054.5922500000001,
-      "si_ms": 1054.5922500000001,
+      "tbt_ms": 17,
+      "longest_own_task_ms": 67,
+      "fcp_ms": 1054.029,
+      "si_ms": 1054.029,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 264,
@@ -2015,13 +3081,79 @@
       "content_byte_weight": 80045,
       "header_byte_weight": 1864,
       "payload_requests": 9,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/especialista/tiago-jun-sasaki/",
+          "transfer_size": 7031,
+          "resource_size": 22055,
+          "content_bytes": 6800,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js?v=64807d95a6",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/tiago-sasaki-foto-v11-sem-fundo-560.avif",
+          "transfer_size": 6118,
+          "resource_size": 5925,
+          "content_bytes": 5925,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/manifest.webmanifest",
+          "transfer_size": 610,
+          "resource_size": 403,
+          "content_bytes": 403,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/icon-192.png",
+          "transfer_size": 12331,
+          "resource_size": 12139,
+          "content_bytes": 12139,
+          "encoding": "identity"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
-      "render_blocking_savings_ms": 350,
+      "lcp_observed_server_latency_ms": 1.342999999999999,
+      "lcp_observed_rtt_ms": 0.069,
+      "lcp_network_allowance_capped": false,
+      "render_blocking_savings_ms": 400,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1039.5,
+      "benchmark_index": 2455,
       "seo_exempt": false
     },
     {
@@ -2031,12 +3163,12 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1205.4561,
+      "lcp_ms": 1206.24225,
       "cls": 0,
-      "tbt_ms": 9,
-      "longest_own_task_ms": 70,
-      "fcp_ms": 1055.4561,
-      "si_ms": 1055.4561,
+      "tbt_ms": 0,
+      "longest_own_task_ms": 67,
+      "fcp_ms": 1056.24225,
+      "si_ms": 1056.24225,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 164,
@@ -2044,13 +3176,58 @@
       "content_byte_weight": 60491,
       "header_byte_weight": 1272,
       "payload_requests": 6,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/nurture/",
+          "transfer_size": 5944,
+          "resource_size": 14936,
+          "content_bytes": 5713,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
+      "lcp_observed_server_latency_ms": 2.08075,
+      "lcp_observed_rtt_ms": 0.09975,
+      "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 350,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1823.5,
+      "benchmark_index": 1325,
       "seo_exempt": false
     },
     {
@@ -2060,12 +3237,12 @@
       "accessibility": 100,
       "best_practices": 96,
       "seo": 100,
-      "lcp_ms": 1354.57845,
+      "lcp_ms": 1355.20605,
       "cls": 0,
-      "tbt_ms": 0,
-      "longest_own_task_ms": 70,
-      "fcp_ms": 1054.57845,
-      "si_ms": 1054.57845,
+      "tbt_ms": 5,
+      "longest_own_task_ms": 57,
+      "fcp_ms": 1055.20605,
+      "si_ms": 1055.20605,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 131,
@@ -2073,13 +3250,51 @@
       "content_byte_weight": 58022,
       "header_byte_weight": 1238,
       "payload_requests": 5,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/metodologia-inteligencia/",
+          "transfer_size": 4448,
+          "resource_size": 11706,
+          "content_bytes": 4217,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js?v=vc2040",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
+      "lcp_observed_server_latency_ms": 1.73535,
+      "lcp_observed_rtt_ms": 0.09465,
+      "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 400,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2180,
+      "benchmark_index": 2606,
       "seo_exempt": false
     },
     {
@@ -2089,12 +3304,12 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1358.8015500000001,
+      "lcp_ms": 1354.4832000000001,
       "cls": 0,
-      "tbt_ms": 23,
-      "longest_own_task_ms": 80,
-      "fcp_ms": 1058.8015500000001,
-      "si_ms": 1058.8015500000001,
+      "tbt_ms": 0,
+      "longest_own_task_ms": 60,
+      "fcp_ms": 1054.4832000000001,
+      "si_ms": 1054.4832000000001,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 248,
@@ -2102,13 +3317,58 @@
       "content_byte_weight": 61300,
       "header_byte_weight": 1272,
       "payload_requests": 6,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/radar/nacional-obras-publicas/",
+          "transfer_size": 6753,
+          "resource_size": 18309,
+          "content_bytes": 6522,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
-      "render_blocking_savings_ms": 350,
+      "lcp_observed_server_latency_ms": 1.4944000000000002,
+      "lcp_observed_rtt_ms": 0.10110000000000001,
+      "lcp_network_allowance_capped": false,
+      "render_blocking_savings_ms": 400,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1784.5,
+      "benchmark_index": 2552,
       "seo_exempt": false
     },
     {
@@ -2118,12 +3378,12 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1487.5859,
+      "lcp_ms": 1481.4699,
       "cls": 0,
-      "tbt_ms": 39,
-      "longest_own_task_ms": 93,
-      "fcp_ms": 1053.87885,
-      "si_ms": 1053.87885,
+      "tbt_ms": 34,
+      "longest_own_task_ms": 84,
+      "fcp_ms": 1053.70485,
+      "si_ms": 1053.70485,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 398,
@@ -2131,13 +3391,72 @@
       "content_byte_weight": 77755,
       "header_byte_weight": 1671,
       "payload_requests": 8,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
+          "transfer_size": 10666,
+          "resource_size": 39984,
+          "content_bytes": 10435,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/manifest.webmanifest",
+          "transfer_size": 610,
+          "resource_size": 403,
+          "content_bytes": 403,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/icon-192.png",
+          "transfer_size": 12331,
+          "resource_size": 12139,
+          "content_bytes": 12139,
+          "encoding": "identity"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
+      "lcp_observed_server_latency_ms": 1.2349500000000002,
+      "lcp_observed_rtt_ms": 0.08055,
+      "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 350,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2122,
+      "benchmark_index": 1335,
       "seo_exempt": false
     },
     {
@@ -2147,12 +3466,12 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1355.28555,
+      "lcp_ms": 1353.5067,
       "cls": 0,
-      "tbt_ms": 43,
-      "longest_own_task_ms": 93,
-      "fcp_ms": 1205.28555,
-      "si_ms": 1205.28555,
+      "tbt_ms": 35,
+      "longest_own_task_ms": 85,
+      "fcp_ms": 1203.5067,
+      "si_ms": 1203.5067,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 191,
@@ -2160,13 +3479,65 @@
       "content_byte_weight": 64058,
       "header_byte_weight": 1486,
       "payload_requests": 7,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/casos/",
+          "transfer_size": 6602,
+          "resource_size": 17700,
+          "content_bytes": 6371,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-offers.0c1efa479770.css",
+          "transfer_size": 3123,
+          "resource_size": 11174,
+          "content_bytes": 2909,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
+      "lcp_observed_server_latency_ms": 1.1689,
+      "lcp_observed_rtt_ms": 0.10409999999999998,
+      "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 150,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1796.5,
+      "benchmark_index": 2408.5,
       "seo_exempt": false
     },
     {
@@ -2176,12 +3547,12 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1353.57495,
+      "lcp_ms": 1353.2980499999999,
       "cls": 0,
-      "tbt_ms": 44,
-      "longest_own_task_ms": 94,
-      "fcp_ms": 1203.57495,
-      "si_ms": 1203.57495,
+      "tbt_ms": 37,
+      "longest_own_task_ms": 87,
+      "fcp_ms": 1203.2980499999999,
+      "si_ms": 1203.2980499999999,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 191,
@@ -2189,13 +3560,65 @@
       "content_byte_weight": 64058,
       "header_byte_weight": 1486,
       "payload_requests": 7,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/casos/",
+          "transfer_size": 6602,
+          "resource_size": 17700,
+          "content_bytes": 6371,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-offers.0c1efa479770.css",
+          "transfer_size": 3123,
+          "resource_size": 11174,
+          "content_bytes": 2909,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
+      "lcp_observed_server_latency_ms": 1.09935,
+      "lcp_observed_rtt_ms": 0.13065,
+      "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 150,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1127.5,
+      "benchmark_index": 1121.5,
       "seo_exempt": false
     },
     {
@@ -2205,12 +3628,12 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1353.67965,
+      "lcp_ms": 1353.702,
       "cls": 0,
       "tbt_ms": 41,
       "longest_own_task_ms": 91,
-      "fcp_ms": 1203.67965,
-      "si_ms": 1203.67965,
+      "fcp_ms": 1203.702,
+      "si_ms": 1203.702,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 191,
@@ -2218,13 +3641,65 @@
       "content_byte_weight": 64058,
       "header_byte_weight": 1486,
       "payload_requests": 7,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/casos/",
+          "transfer_size": 6602,
+          "resource_size": 17700,
+          "content_bytes": 6371,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-offers.0c1efa479770.css",
+          "transfer_size": 3123,
+          "resource_size": 11174,
+          "content_bytes": 2909,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
+      "lcp_observed_server_latency_ms": 1.234,
+      "lcp_observed_rtt_ms": 0.10200000000000001,
+      "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 150,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1965,
+      "benchmark_index": 2372,
       "seo_exempt": false
     },
     {
@@ -2234,12 +3709,12 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1550.4813499999996,
+      "lcp_ms": 1537.7799499999996,
       "cls": 0,
       "tbt_ms": 0,
-      "longest_own_task_ms": 359.0000000000001,
-      "fcp_ms": 1359.48135,
-      "si_ms": 1359.48135,
+      "longest_own_task_ms": 245.9999999999999,
+      "fcp_ms": 1508.7799499999996,
+      "si_ms": 1508.7799499999996,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 886,
@@ -2247,13 +3722,93 @@
       "content_byte_weight": 90211,
       "header_byte_weight": 2314,
       "payload_requests": 11,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/casos/modelo-relatorio-inteligencia-licitacoes/",
+          "transfer_size": 15290,
+          "resource_size": 53296,
+          "content_bytes": 15059,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/assets/report-capture.669b93f113f4.css",
+          "transfer_size": 1274,
+          "resource_size": 3173,
+          "content_bytes": 1060,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/assets/eight-offer-contract.d2aead054169.css",
+          "transfer_size": 1188,
+          "resource_size": 3378,
+          "content_bytes": 974,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/casos/modelo-relatorio-inteligencia-licitacoes/styles.79e09ea8559d.css",
+          "transfer_size": 6013,
+          "resource_size": 29997,
+          "content_bytes": 5798,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js?v=fortune01",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/manifest.webmanifest",
+          "transfer_size": 610,
+          "resource_size": 403,
+          "content_bytes": 403,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/icon-192.png",
+          "transfer_size": 12331,
+          "resource_size": 12139,
+          "content_bytes": 12139,
+          "encoding": "identity"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
-      "render_blocking_savings_ms": 200,
+      "lcp_observed_server_latency_ms": 2.9266499999999995,
+      "lcp_observed_rtt_ms": 0.10334999999999998,
+      "lcp_network_allowance_capped": false,
+      "render_blocking_savings_ms": 500,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2316,
+      "benchmark_index": 2227.5,
       "seo_exempt": false
     },
     {
@@ -2263,12 +3818,12 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1455.9749,
+      "lcp_ms": 1439.5760999999998,
       "cls": 0,
       "tbt_ms": 0,
-      "longest_own_task_ms": 208,
-      "fcp_ms": 1205.9623499999998,
-      "si_ms": 1205.9623499999998,
+      "longest_own_task_ms": 217,
+      "fcp_ms": 1206.8641499999999,
+      "si_ms": 1206.8641499999999,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 772,
@@ -2276,13 +3831,86 @@
       "content_byte_weight": 88791,
       "header_byte_weight": 2100,
       "payload_requests": 10,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/entregas/",
+          "transfer_size": 14243,
+          "resource_size": 60851,
+          "content_bytes": 14012,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-offers.0c1efa479770.css",
+          "transfer_size": 3123,
+          "resource_size": 11174,
+          "content_bytes": 2909,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/entregas/styles.7f2817c86d85.css",
+          "transfer_size": 4765,
+          "resource_size": 18936,
+          "content_bytes": 4550,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js?v=fortune04",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/manifest.webmanifest",
+          "transfer_size": 610,
+          "resource_size": 403,
+          "content_bytes": 403,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/icon-192.png",
+          "transfer_size": 12331,
+          "resource_size": 12139,
+          "content_bytes": 12139,
+          "encoding": "identity"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
+      "lcp_observed_server_latency_ms": 2.2880500000000006,
+      "lcp_observed_rtt_ms": 0.10544999999999999,
+      "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 350,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1743,
+      "benchmark_index": 2477,
       "seo_exempt": false
     },
     {
@@ -2292,12 +3920,12 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1478.7133,
+      "lcp_ms": 1452.0868999999998,
       "cls": 0,
       "tbt_ms": 0,
-      "longest_own_task_ms": 233,
-      "fcp_ms": 1205.5699499999998,
-      "si_ms": 1205.5699499999998,
+      "longest_own_task_ms": 182,
+      "fcp_ms": 1207.63035,
+      "si_ms": 1207.63035,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 772,
@@ -2305,13 +3933,86 @@
       "content_byte_weight": 88791,
       "header_byte_weight": 2100,
       "payload_requests": 10,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/entregas/",
+          "transfer_size": 14243,
+          "resource_size": 60851,
+          "content_bytes": 14012,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-offers.0c1efa479770.css",
+          "transfer_size": 3123,
+          "resource_size": 11174,
+          "content_bytes": 2909,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/entregas/styles.7f2817c86d85.css",
+          "transfer_size": 4765,
+          "resource_size": 18936,
+          "content_bytes": 4550,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js?v=fortune04",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/manifest.webmanifest",
+          "transfer_size": 610,
+          "resource_size": 403,
+          "content_bytes": 403,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/icon-192.png",
+          "transfer_size": 12331,
+          "resource_size": 12139,
+          "content_bytes": 12139,
+          "encoding": "identity"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
-      "render_blocking_savings_ms": 350,
+      "lcp_observed_server_latency_ms": 2.54345,
+      "lcp_observed_rtt_ms": 0.11055,
+      "lcp_network_allowance_capped": false,
+      "render_blocking_savings_ms": 400,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1596.5,
+      "benchmark_index": 1321,
       "seo_exempt": false
     },
     {
@@ -2321,12 +4022,12 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1453.0045999999998,
+      "lcp_ms": 1432.2413,
       "cls": 0,
       "tbt_ms": 0,
-      "longest_own_task_ms": 197,
-      "fcp_ms": 1204.5068999999999,
-      "si_ms": 1204.5068999999999,
+      "longest_own_task_ms": 184,
+      "fcp_ms": 1204.86195,
+      "si_ms": 1204.86195,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 772,
@@ -2334,28 +4035,101 @@
       "content_byte_weight": 88791,
       "header_byte_weight": 2100,
       "payload_requests": 10,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/entregas/",
+          "transfer_size": 14243,
+          "resource_size": 60851,
+          "content_bytes": 14012,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-offers.0c1efa479770.css",
+          "transfer_size": 3123,
+          "resource_size": 11174,
+          "content_bytes": 2909,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/entregas/styles.7f2817c86d85.css",
+          "transfer_size": 4765,
+          "resource_size": 18936,
+          "content_bytes": 4550,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js?v=fortune04",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/manifest.webmanifest",
+          "transfer_size": 610,
+          "resource_size": 403,
+          "content_bytes": 403,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/icon-192.png",
+          "transfer_size": 12331,
+          "resource_size": 12139,
+          "content_bytes": 12139,
+          "encoding": "identity"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
+      "lcp_observed_server_latency_ms": 1.6206500000000001,
+      "lcp_observed_rtt_ms": 0.11535,
+      "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 400,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2056,
+      "benchmark_index": 2458.5,
       "seo_exempt": false
     },
     {
       "path": "/servicos-obras-publicas/",
       "run": 1,
-      "performance": 100,
+      "performance": 99,
       "accessibility": 100,
       "best_practices": 96,
       "seo": 100,
-      "lcp_ms": 1429.9327500000002,
+      "lcp_ms": 1527.0919,
       "cls": 0,
-      "tbt_ms": 7.5,
-      "longest_own_task_ms": 119,
-      "fcp_ms": 1204.9327500000002,
-      "si_ms": 1204.9327500000002,
+      "tbt_ms": 71,
+      "longest_own_task_ms": 121,
+      "fcp_ms": 1377.0919,
+      "si_ms": 1377.0919,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 300,
@@ -2363,13 +4137,65 @@
       "content_byte_weight": 64601,
       "header_byte_weight": 1666,
       "payload_requests": 7,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/servicos-obras-publicas/",
+          "transfer_size": 6852,
+          "resource_size": 21795,
+          "content_bytes": 6621,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-hubs.ed4668833ad8.css",
+          "transfer_size": 1480,
+          "resource_size": 2674,
+          "content_bytes": 1266,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-offers.0c1efa479770.css",
+          "transfer_size": 3123,
+          "resource_size": 11174,
+          "content_bytes": 2909,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
-      "render_blocking_savings_ms": 450,
+      "lcp_observed_server_latency_ms": 2.04595,
+      "lcp_observed_rtt_ms": 0.10305,
+      "lcp_network_allowance_capped": false,
+      "render_blocking_savings_ms": 300,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2146,
+      "benchmark_index": 2338.5,
       "seo_exempt": false
     },
     {
@@ -2379,12 +4205,12 @@
       "accessibility": 100,
       "best_practices": 96,
       "seo": 100,
-      "lcp_ms": 1354.1235000000001,
+      "lcp_ms": 1415.6757499999999,
       "cls": 0,
-      "tbt_ms": 12.5,
-      "longest_own_task_ms": 89,
-      "fcp_ms": 1054.1235000000001,
-      "si_ms": 1054.1235000000001,
+      "tbt_ms": 15,
+      "longest_own_task_ms": 80,
+      "fcp_ms": 1053.8109,
+      "si_ms": 1053.8109,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 176,
@@ -2392,13 +4218,65 @@
       "content_byte_weight": 70295,
       "header_byte_weight": 1644,
       "payload_requests": 7,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/problemas-que-resolvemos/",
+          "transfer_size": 4850,
+          "resource_size": 15291,
+          "content_bytes": 4619,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-hubs.ed4668833ad8.css",
+          "transfer_size": 1480,
+          "resource_size": 2674,
+          "content_bytes": 1266,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-white-500-1677038e.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
-      "render_blocking_savings_ms": 350,
+      "lcp_observed_server_latency_ms": 1.2703000000000002,
+      "lcp_observed_rtt_ms": 0.0972,
+      "lcp_network_allowance_capped": false,
+      "render_blocking_savings_ms": 400,
       "image_delivery_savings_bytes": 18071,
       "font_display_score": 1,
-      "benchmark_index": 2161.5,
+      "benchmark_index": 2318,
       "seo_exempt": false
     },
     {
@@ -2408,12 +4286,12 @@
       "accessibility": 100,
       "best_practices": 96,
       "seo": 100,
-      "lcp_ms": 1460.2319000000002,
+      "lcp_ms": 1425.2688,
       "cls": 0,
-      "tbt_ms": 9,
-      "longest_own_task_ms": 72,
-      "fcp_ms": 1054.84785,
-      "si_ms": 1054.84785,
+      "tbt_ms": 0,
+      "longest_own_task_ms": 70,
+      "fcp_ms": 1054.9032,
+      "si_ms": 1054.9032,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 195,
@@ -2421,13 +4299,72 @@
       "content_byte_weight": 66719,
       "header_byte_weight": 1909,
       "payload_requests": 8,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/ferramentas/",
+          "transfer_size": 5177,
+          "resource_size": 16433,
+          "content_bytes": 4946,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tools.43ce52155407.css",
+          "transfer_size": 4543,
+          "resource_size": 18782,
+          "content_bytes": 4328,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/js/tool-persist.js",
+          "transfer_size": 1167,
+          "resource_size": 2265,
+          "content_bytes": 939,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/js/tools-common.js",
+          "transfer_size": 2929,
+          "resource_size": 7649,
+          "content_bytes": 2701,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
+      "lcp_observed_server_latency_ms": 1.6344,
+      "lcp_observed_rtt_ms": 0.0876,
+      "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 350,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2013,
+      "benchmark_index": 1361.5,
       "seo_exempt": false
     },
     {
@@ -2437,12 +4374,12 @@
       "accessibility": 100,
       "best_practices": 96,
       "seo": 100,
-      "lcp_ms": 1538.42,
+      "lcp_ms": 1533.6257,
       "cls": 0,
       "tbt_ms": 0,
-      "longest_own_task_ms": 101,
-      "fcp_ms": 1209.42,
-      "si_ms": 1209.42,
+      "longest_own_task_ms": 92,
+      "fcp_ms": 1207.6257,
+      "si_ms": 1207.6257,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 264,
@@ -2450,13 +4387,93 @@
       "content_byte_weight": 87119,
       "header_byte_weight": 2550,
       "payload_requests": 11,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/ferramentas/diagnostico-defesa-margem/",
+          "transfer_size": 10546,
+          "resource_size": 34080,
+          "content_bytes": 10315,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tools.43ce52155407.css",
+          "transfer_size": 4543,
+          "resource_size": 18782,
+          "content_bytes": 4328,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/ferramentas/diagnostico-defesa-margem/styles.5d26dcc1b5b0.css",
+          "transfer_size": 234,
+          "resource_size": 45,
+          "content_bytes": 45,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/js/tool-persist.js",
+          "transfer_size": 1167,
+          "resource_size": 2265,
+          "content_bytes": 939,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/js/tools-common.js",
+          "transfer_size": 2929,
+          "resource_size": 7649,
+          "content_bytes": 2701,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/js/diagnose-margin.js",
+          "transfer_size": 8707,
+          "resource_size": 33914,
+          "content_bytes": 8478,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/ferramentas/diagnostico-defesa-margem/snapshot.json",
+          "transfer_size": 6731,
+          "resource_size": 70717,
+          "content_bytes": 6508,
+          "encoding": "gzip"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
+      "lcp_observed_server_latency_ms": 2.5419,
+      "lcp_observed_rtt_ms": 0.0876,
+      "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 500,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2339.5,
+      "benchmark_index": 2632,
       "seo_exempt": false
     },
     {
@@ -2466,12 +4483,12 @@
       "accessibility": 100,
       "best_practices": 96,
       "seo": 100,
-      "lcp_ms": 1542.83565,
+      "lcp_ms": 1532.0076000000001,
       "cls": 0,
       "tbt_ms": 0,
-      "longest_own_task_ms": 107,
-      "fcp_ms": 1206.83565,
-      "si_ms": 1206.83565,
+      "longest_own_task_ms": 95,
+      "fcp_ms": 1205.0076000000001,
+      "si_ms": 1205.0076000000001,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 264,
@@ -2479,13 +4496,93 @@
       "content_byte_weight": 87119,
       "header_byte_weight": 2550,
       "payload_requests": 11,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/ferramentas/diagnostico-defesa-margem/",
+          "transfer_size": 10546,
+          "resource_size": 34080,
+          "content_bytes": 10315,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tools.43ce52155407.css",
+          "transfer_size": 4543,
+          "resource_size": 18782,
+          "content_bytes": 4328,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/ferramentas/diagnostico-defesa-margem/styles.5d26dcc1b5b0.css",
+          "transfer_size": 234,
+          "resource_size": 45,
+          "content_bytes": 45,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/js/tool-persist.js",
+          "transfer_size": 1167,
+          "resource_size": 2265,
+          "content_bytes": 939,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/js/tools-common.js",
+          "transfer_size": 2929,
+          "resource_size": 7649,
+          "content_bytes": 2701,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/js/diagnose-margin.js",
+          "transfer_size": 8707,
+          "resource_size": 33914,
+          "content_bytes": 8478,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/ferramentas/diagnostico-defesa-margem/snapshot.json",
+          "transfer_size": 6731,
+          "resource_size": 70717,
+          "content_bytes": 6508,
+          "encoding": "gzip"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
+      "lcp_observed_server_latency_ms": 1.6692,
+      "lcp_observed_rtt_ms": 0.0813,
+      "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 500,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1914.5,
+      "benchmark_index": 2398,
       "seo_exempt": false
     },
     {
@@ -2495,12 +4592,12 @@
       "accessibility": 100,
       "best_practices": 96,
       "seo": 100,
-      "lcp_ms": 1559.1335499999998,
+      "lcp_ms": 1533.9537500000001,
       "cls": 0,
-      "tbt_ms": 1.9999999999998863,
-      "longest_own_task_ms": 138,
-      "fcp_ms": 1207.13355,
-      "si_ms": 1207.13355,
+      "tbt_ms": 0,
+      "longest_own_task_ms": 99,
+      "fcp_ms": 1204.9537500000001,
+      "si_ms": 1204.9537500000001,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 264,
@@ -2508,13 +4605,93 @@
       "content_byte_weight": 87119,
       "header_byte_weight": 2550,
       "payload_requests": 11,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/ferramentas/diagnostico-defesa-margem/",
+          "transfer_size": 10546,
+          "resource_size": 34080,
+          "content_bytes": 10315,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tools.43ce52155407.css",
+          "transfer_size": 4543,
+          "resource_size": 18782,
+          "content_bytes": 4328,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/ferramentas/diagnostico-defesa-margem/styles.5d26dcc1b5b0.css",
+          "transfer_size": 234,
+          "resource_size": 45,
+          "content_bytes": 45,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/js/tool-persist.js",
+          "transfer_size": 1167,
+          "resource_size": 2265,
+          "content_bytes": 939,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/js/tools-common.js",
+          "transfer_size": 2929,
+          "resource_size": 7649,
+          "content_bytes": 2701,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/js/diagnose-margin.js",
+          "transfer_size": 8707,
+          "resource_size": 33914,
+          "content_bytes": 8478,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/ferramentas/diagnostico-defesa-margem/snapshot.json",
+          "transfer_size": 6731,
+          "resource_size": 70717,
+          "content_bytes": 6508,
+          "encoding": "gzip"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
-      "render_blocking_savings_ms": 450,
+      "lcp_observed_server_latency_ms": 1.6512500000000003,
+      "lcp_observed_rtt_ms": 0.09075,
+      "lcp_network_allowance_capped": false,
+      "render_blocking_savings_ms": 500,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 859.5,
+      "benchmark_index": 2438,
       "seo_exempt": false
     },
     {
@@ -2524,12 +4701,12 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 66,
-      "lcp_ms": 1441.1223999999997,
+      "lcp_ms": 1246.1649000000002,
       "cls": 0,
       "tbt_ms": 0,
       "longest_own_task_ms": 0,
-      "fcp_ms": 1056.1835999999998,
-      "si_ms": 1056.1835999999998,
+      "fcp_ms": 1054.74735,
+      "si_ms": 1054.74735,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 116,
@@ -2537,13 +4714,65 @@
       "content_byte_weight": 65290,
       "header_byte_weight": 1501,
       "payload_requests": 7,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/analise-cnpj/",
+          "transfer_size": 4452,
+          "resource_size": 12174,
+          "content_bytes": 4221,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js?v=fortune02",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/js/live-intelligence.js",
+          "transfer_size": 6520,
+          "resource_size": 20124,
+          "content_bytes": 6291,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
+      "lcp_observed_server_latency_ms": 1.5824500000000001,
+      "lcp_observed_rtt_ms": 0.09855,
+      "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 400,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1899,
+      "benchmark_index": 2447,
       "seo_exempt": true
     },
     {
@@ -2553,12 +4782,12 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 66,
-      "lcp_ms": 1405.8511,
+      "lcp_ms": 1446.8631,
       "cls": 0.01278846585794431,
       "tbt_ms": 0,
       "longest_own_task_ms": 0,
-      "fcp_ms": 1054.27665,
-      "si_ms": 1054.27665,
+      "fcp_ms": 1054.29465,
+      "si_ms": 1054.29465,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 93,
@@ -2566,13 +4795,65 @@
       "content_byte_weight": 64634,
       "header_byte_weight": 1500,
       "payload_requests": 7,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/analise-cnpj/r/",
+          "transfer_size": 3795,
+          "resource_size": 9675,
+          "content_bytes": 3565,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js?v=fortune02",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/js/live-intelligence.js",
+          "transfer_size": 6520,
+          "resource_size": 20124,
+          "content_bytes": 6291,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
+      "lcp_observed_server_latency_ms": 1.4315499999999999,
+      "lcp_observed_rtt_ms": 0.10544999999999999,
+      "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 400,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1983,
+      "benchmark_index": 1117,
       "seo_exempt": true
     },
     {
@@ -2581,13 +4862,13 @@
       "performance": 100,
       "accessibility": 100,
       "best_practices": 96,
-      "seo": 45,
-      "lcp_ms": 752.6411,
+      "seo": 54,
+      "lcp_ms": 751.9718,
       "cls": 0,
       "tbt_ms": 0,
       "longest_own_task_ms": 0,
-      "fcp_ms": 631.32055,
-      "si_ms": 631.32055,
+      "fcp_ms": 625.9859,
+      "si_ms": 625.9859,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 8,
@@ -2595,13 +4876,23 @@
       "content_byte_weight": 827,
       "header_byte_weight": 363,
       "payload_requests": 1,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/diagnostico-b2g-expansao/cancelado/",
+          "transfer_size": 1033,
+          "resource_size": 827,
+          "content_bytes": 827,
+          "encoding": "identity"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
+      "lcp_observed_server_latency_ms": 0.9859000000000001,
+      "lcp_observed_rtt_ms": 0.0801,
+      "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 0,
       "image_delivery_savings_bytes": 0,
       "font_display_score": 1,
-      "benchmark_index": 2032.5,
+      "benchmark_index": 2506.5,
       "seo_exempt": true
     },
     {
@@ -2611,12 +4902,12 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 66,
-      "lcp_ms": 1355.1366,
+      "lcp_ms": 1204.19685,
       "cls": 0,
       "tbt_ms": 0,
       "longest_own_task_ms": 0,
-      "fcp_ms": 1055.1366,
-      "si_ms": 1055.1366,
+      "fcp_ms": 1054.19685,
+      "si_ms": 1054.19685,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 65,
@@ -2624,13 +4915,58 @@
       "content_byte_weight": 57681,
       "header_byte_weight": 1271,
       "payload_requests": 6,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/obrigado.html",
+          "transfer_size": 3133,
+          "resource_size": 7299,
+          "content_bytes": 2903,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js?v=fortune02",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
+      "lcp_observed_server_latency_ms": 1.3989500000000001,
+      "lcp_observed_rtt_ms": 0.09255,
+      "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 400,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2087.5,
+      "benchmark_index": 2534,
       "seo_exempt": true
     },
     {
@@ -2640,12 +4976,12 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 66,
-      "lcp_ms": 1279.97055,
+      "lcp_ms": 1279.1638500000001,
       "cls": 0,
       "tbt_ms": 0,
       "longest_own_task_ms": 0,
-      "fcp_ms": 1054.97055,
-      "si_ms": 1054.97055,
+      "fcp_ms": 1054.1638500000001,
+      "si_ms": 1054.1638500000001,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 75,
@@ -2653,13 +4989,65 @@
       "content_byte_weight": 44388,
       "header_byte_weight": 1424,
       "payload_requests": 7,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/404.html",
+          "transfer_size": 2585,
+          "resource_size": 5850,
+          "content_bytes": 2355,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/assets/simple-page-a11y-v293.d9765cdedeb4.css",
+          "transfer_size": 556,
+          "resource_size": 366,
+          "content_bytes": 366,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-white-500-1677038e.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
+      "lcp_observed_server_latency_ms": 1.38795,
+      "lcp_observed_rtt_ms": 0.07604999999999999,
+      "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 400,
       "image_delivery_savings_bytes": 18071,
       "font_display_score": 1,
-      "benchmark_index": 1749,
+      "benchmark_index": 2557,
       "seo_exempt": true
     },
     {
@@ -2669,12 +5057,12 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 69,
-      "lcp_ms": 1353.16515,
+      "lcp_ms": 1353.4473,
       "cls": 0,
-      "tbt_ms": 2,
-      "longest_own_task_ms": 52,
-      "fcp_ms": 1053.16515,
-      "si_ms": 1053.16515,
+      "tbt_ms": 0,
+      "longest_own_task_ms": 0,
+      "fcp_ms": 1053.4473,
+      "si_ms": 1053.4473,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 101,
@@ -2682,13 +5070,72 @@
       "content_byte_weight": 65321,
       "header_byte_weight": 1715,
       "payload_requests": 8,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/inteligencia/valor-tipico-contratos-pavimentacao/",
+          "transfer_size": 5287,
+          "resource_size": 15159,
+          "content_bytes": 5056,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tools.43ce52155407.css",
+          "transfer_size": 4543,
+          "resource_size": 18782,
+          "content_bytes": 4328,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/js/market-answer.js",
+          "transfer_size": 1387,
+          "resource_size": 3007,
+          "content_bytes": 1159,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
+      "lcp_observed_server_latency_ms": 1.1491,
+      "lcp_observed_rtt_ms": 0.07289999999999999,
+      "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 400,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1944,
+      "benchmark_index": 1336,
       "seo_exempt": true
     },
     {
@@ -2698,12 +5145,12 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 69,
-      "lcp_ms": 1518.447,
+      "lcp_ms": 1492.046625,
       "cls": 0,
-      "tbt_ms": 4,
-      "longest_own_task_ms": 58,
-      "fcp_ms": 1054.1363999999999,
-      "si_ms": 1054.1363999999999,
+      "tbt_ms": 0,
+      "longest_own_task_ms": 0,
+      "fcp_ms": 1053.05595,
+      "si_ms": 1053.05595,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 124,
@@ -2711,13 +5158,79 @@
       "content_byte_weight": 81604,
       "header_byte_weight": 1862,
       "payload_requests": 9,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/inteligencia/",
+          "transfer_size": 3909,
+          "resource_size": 10498,
+          "content_bytes": 3679,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/manifest.webmanifest",
+          "transfer_size": 610,
+          "resource_size": 403,
+          "content_bytes": 403,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-white-500-1677038e.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/icon-192.png",
+          "transfer_size": 12331,
+          "resource_size": 12139,
+          "content_bytes": 12139,
+          "encoding": "identity"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
+      "lcp_observed_server_latency_ms": 1.01865,
+      "lcp_observed_rtt_ms": 0.07935,
+      "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 400,
       "image_delivery_savings_bytes": 18071,
       "font_display_score": 1,
-      "benchmark_index": 1031.5,
+      "benchmark_index": 2643.5,
       "seo_exempt": true
     },
     {
@@ -2727,12 +5240,12 @@
       "accessibility": 100,
       "best_practices": 96,
       "seo": 66,
-      "lcp_ms": 752.5029999999999,
+      "lcp_ms": 751.8747000000001,
       "cls": 0,
       "tbt_ms": 0,
       "longest_own_task_ms": 0,
-      "fcp_ms": 628.2515,
-      "si_ms": 628.2515,
+      "fcp_ms": 622.93735,
+      "si_ms": 622.93735,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 56,
@@ -2740,13 +5253,23 @@
       "content_byte_weight": 1612,
       "header_byte_weight": 387,
       "payload_requests": 1,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/",
+          "transfer_size": 1842,
+          "resource_size": 3597,
+          "content_bytes": 1612,
+          "encoding": "gzip"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
+      "lcp_observed_server_latency_ms": 0.9373500000000001,
+      "lcp_observed_rtt_ms": 0.06765,
+      "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 0,
       "image_delivery_savings_bytes": 0,
       "font_display_score": 1,
-      "benchmark_index": 2100,
+      "benchmark_index": 2634.5,
       "seo_exempt": true
     },
     {
@@ -2756,12 +5279,12 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 69,
-      "lcp_ms": 1512.5054999999998,
+      "lcp_ms": 1494.841625,
       "cls": 0,
-      "tbt_ms": 3.5,
-      "longest_own_task_ms": 57,
-      "fcp_ms": 1053.6065999999998,
-      "si_ms": 1053.6065999999998,
+      "tbt_ms": 0,
+      "longest_own_task_ms": 0,
+      "fcp_ms": 1053.40995,
+      "si_ms": 1053.40995,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 103,
@@ -2769,13 +5292,79 @@
       "content_byte_weight": 81399,
       "header_byte_weight": 1862,
       "payload_requests": 9,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/jurisprudencia-contratos-obras/",
+          "transfer_size": 3704,
+          "resource_size": 10676,
+          "content_bytes": 3474,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/manifest.webmanifest",
+          "transfer_size": 610,
+          "resource_size": 403,
+          "content_bytes": 403,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-white-500-1677038e.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/icon-192.png",
+          "transfer_size": 12331,
+          "resource_size": 12139,
+          "content_bytes": 12139,
+          "encoding": "identity"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
+      "lcp_observed_server_latency_ms": 1.1366500000000002,
+      "lcp_observed_rtt_ms": 0.10035000000000001,
+      "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 400,
       "image_delivery_savings_bytes": 18071,
       "font_display_score": 1,
-      "benchmark_index": 1886.5,
+      "benchmark_index": 2608,
       "seo_exempt": true
     },
     {
@@ -2785,12 +5374,12 @@
       "accessibility": 93,
       "best_practices": 96,
       "seo": 58,
-      "lcp_ms": 752.6351999999999,
+      "lcp_ms": 641.3181,
       "cls": 0,
       "tbt_ms": 0,
       "longest_own_task_ms": 0,
-      "fcp_ms": 652.3176,
-      "si_ms": 652.3176,
+      "fcp_ms": 641.3181,
+      "si_ms": 641.3181,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 92,
@@ -2798,13 +5387,23 @@
       "content_byte_weight": 4475,
       "header_byte_weight": 388,
       "payload_requests": 1,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/ops/",
+          "transfer_size": 4706,
+          "resource_size": 12253,
+          "content_bytes": 4475,
+          "encoding": "gzip"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
+      "lcp_observed_server_latency_ms": 1.3180999999999998,
+      "lcp_observed_rtt_ms": 0.1104,
+      "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 0,
       "image_delivery_savings_bytes": 0,
       "font_display_score": 1,
-      "benchmark_index": 2245.5,
+      "benchmark_index": 2680.5,
       "seo_exempt": true
     },
     {
@@ -2814,12 +5413,12 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1438.1992999999998,
+      "lcp_ms": 1491.13995,
       "cls": 0,
-      "tbt_ms": 77.70017499999994,
-      "longest_own_task_ms": 175,
-      "fcp_ms": 1288.1992999999998,
-      "si_ms": 1288.1992999999998,
+      "tbt_ms": 88,
+      "longest_own_task_ms": 138,
+      "fcp_ms": 1237.0933,
+      "si_ms": 1237.0933,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 472,
@@ -2827,28 +5426,189 @@
       "content_byte_weight": 80208,
       "header_byte_weight": 1885,
       "payload_requests": 9,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/diretoria-b2g/",
+          "transfer_size": 10210,
+          "resource_size": 35418,
+          "content_bytes": 9979,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-offers.0c1efa479770.css",
+          "transfer_size": 3123,
+          "resource_size": 11174,
+          "content_bytes": 2909,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js?v=fortune01",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/manifest.webmanifest",
+          "transfer_size": 610,
+          "resource_size": 403,
+          "content_bytes": 403,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/icon-192.png",
+          "transfer_size": 12331,
+          "resource_size": 12139,
+          "content_bytes": 12139,
+          "encoding": "identity"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
+      "lcp_observed_server_latency_ms": 1.04665,
+      "lcp_observed_rtt_ms": 0.09435,
+      "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 150,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1644,
+      "benchmark_index": 2675,
       "seo_exempt": false
     },
     {
       "path": "/diretoria-b2g/",
       "run": 2,
+      "performance": 100,
+      "accessibility": 100,
+      "best_practices": 100,
+      "seo": 100,
+      "lcp_ms": 1438.6659,
+      "cls": 0,
+      "tbt_ms": 82.33352500000001,
+      "longest_own_task_ms": 180,
+      "fcp_ms": 1288.6659,
+      "si_ms": 1288.6659,
+      "image_aspect_ratio": 1,
+      "image_size_responsive": 1,
+      "dom_elements": 472,
+      "total_byte_weight": 82093,
+      "content_byte_weight": 80208,
+      "header_byte_weight": 1885,
+      "payload_requests": 9,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/diretoria-b2g/",
+          "transfer_size": 10210,
+          "resource_size": 35418,
+          "content_bytes": 9979,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-offers.0c1efa479770.css",
+          "transfer_size": 3123,
+          "resource_size": 11174,
+          "content_bytes": 2909,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js?v=fortune01",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/manifest.webmanifest",
+          "transfer_size": 610,
+          "resource_size": 403,
+          "content_bytes": 403,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/icon-192.png",
+          "transfer_size": 12331,
+          "resource_size": 12139,
+          "content_bytes": 12139,
+          "encoding": "identity"
+        }
+      ],
+      "lcp_network_allowance_ms": 0,
+      "lcp_observed_server_latency_ms": 1.3329499999999999,
+      "lcp_observed_rtt_ms": 0.19304999999999997,
+      "lcp_network_allowance_capped": false,
+      "render_blocking_savings_ms": 150,
+      "image_delivery_savings_bytes": 9519,
+      "font_display_score": 1,
+      "benchmark_index": 1047,
+      "seo_exempt": false
+    },
+    {
+      "path": "/diretoria-b2g/",
+      "run": 3,
       "performance": 99,
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1527.7772,
+      "lcp_ms": 1510.505,
       "cls": 0,
-      "tbt_ms": 123,
-      "longest_own_task_ms": 173,
-      "fcp_ms": 1297.1848,
-      "si_ms": 1297.1848,
+      "tbt_ms": 105,
+      "longest_own_task_ms": 155,
+      "fcp_ms": 1272.67,
+      "si_ms": 1272.67,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 472,
@@ -2856,42 +5616,79 @@
       "content_byte_weight": 80208,
       "header_byte_weight": 1885,
       "payload_requests": 9,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/diretoria-b2g/",
+          "transfer_size": 10210,
+          "resource_size": 35418,
+          "content_bytes": 9979,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-offers.0c1efa479770.css",
+          "transfer_size": 3123,
+          "resource_size": 11174,
+          "content_bytes": 2909,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js?v=fortune01",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/manifest.webmanifest",
+          "transfer_size": 610,
+          "resource_size": 403,
+          "content_bytes": 403,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/icon-192.png",
+          "transfer_size": 12331,
+          "resource_size": 12139,
+          "content_bytes": 12139,
+          "encoding": "identity"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
+      "lcp_observed_server_latency_ms": 1.835,
+      "lcp_observed_rtt_ms": 0.087,
+      "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 150,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1674,
-      "seo_exempt": false
-    },
-    {
-      "path": "/diretoria-b2g/",
-      "run": 3,
-      "performance": 98,
-      "accessibility": 100,
-      "best_practices": 100,
-      "seo": 100,
-      "lcp_ms": 1629.4913,
-      "cls": 0,
-      "tbt_ms": 160,
-      "longest_own_task_ms": 210,
-      "fcp_ms": 1329.4913,
-      "si_ms": 1329.4913,
-      "image_aspect_ratio": 1,
-      "image_size_responsive": 1,
-      "dom_elements": 472,
-      "total_byte_weight": 82093,
-      "content_byte_weight": 80208,
-      "header_byte_weight": 1885,
-      "payload_requests": 9,
-      "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
-      "render_blocking_savings_ms": 150,
-      "image_delivery_savings_bytes": 9519,
-      "font_display_score": 1,
-      "benchmark_index": 860,
+      "benchmark_index": 2515.5,
       "seo_exempt": false
     },
     {
@@ -2901,12 +5698,12 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1483.7089,
+      "lcp_ms": 1553.8642,
       "cls": 0,
-      "tbt_ms": 11.5,
-      "longest_own_task_ms": 139,
-      "fcp_ms": 1207.0633500000001,
-      "si_ms": 1207.0633500000001,
+      "tbt_ms": 0,
+      "longest_own_task_ms": 108,
+      "fcp_ms": 1207.8642,
+      "si_ms": 1207.8642,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 303,
@@ -2914,13 +5711,86 @@
       "content_byte_weight": 84354,
       "header_byte_weight": 2100,
       "payload_requests": 10,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/diagnostico-b2g-expansao/",
+          "transfer_size": 10028,
+          "resource_size": 32412,
+          "content_bytes": 9797,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-offers.0c1efa479770.css",
+          "transfer_size": 3123,
+          "resource_size": 11174,
+          "content_bytes": 2909,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tools.43ce52155407.css",
+          "transfer_size": 4543,
+          "resource_size": 18782,
+          "content_bytes": 4328,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js?v=fortune01",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/manifest.webmanifest",
+          "transfer_size": 610,
+          "resource_size": 403,
+          "content_bytes": 403,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/icon-192.png",
+          "transfer_size": 12331,
+          "resource_size": 12139,
+          "content_bytes": 12139,
+          "encoding": "identity"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
-      "render_blocking_savings_ms": 450,
+      "lcp_observed_server_latency_ms": 2.6214,
+      "lcp_observed_rtt_ms": 0.0966,
+      "lcp_network_allowance_capped": false,
+      "render_blocking_savings_ms": 500,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1787,
+      "benchmark_index": 2418,
       "seo_exempt": false
     },
     {
@@ -2930,12 +5800,12 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1412.8447,
+      "lcp_ms": 1448.4549,
       "cls": 0,
-      "tbt_ms": 4,
-      "longest_own_task_ms": 127,
-      "fcp_ms": 1204.8447,
-      "si_ms": 1204.8447,
+      "tbt_ms": 0,
+      "longest_own_task_ms": 106,
+      "fcp_ms": 1203.68235,
+      "si_ms": 1203.68235,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 303,
@@ -2943,13 +5813,86 @@
       "content_byte_weight": 84354,
       "header_byte_weight": 2100,
       "payload_requests": 10,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/diagnostico-b2g-expansao/",
+          "transfer_size": 10028,
+          "resource_size": 32412,
+          "content_bytes": 9797,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-offers.0c1efa479770.css",
+          "transfer_size": 3123,
+          "resource_size": 11174,
+          "content_bytes": 2909,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tools.43ce52155407.css",
+          "transfer_size": 4543,
+          "resource_size": 18782,
+          "content_bytes": 4328,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js?v=fortune01",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/manifest.webmanifest",
+          "transfer_size": 610,
+          "resource_size": 403,
+          "content_bytes": 403,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/icon-192.png",
+          "transfer_size": 12331,
+          "resource_size": 12139,
+          "content_bytes": 12139,
+          "encoding": "identity"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
-      "render_blocking_savings_ms": 450,
+      "lcp_observed_server_latency_ms": 1.2274500000000002,
+      "lcp_observed_rtt_ms": 0.11505,
+      "lcp_network_allowance_capped": false,
+      "render_blocking_savings_ms": 500,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2175.5,
+      "benchmark_index": 2475,
       "seo_exempt": false
     },
     {
@@ -2959,12 +5902,12 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 100,
-      "lcp_ms": 1412.7549000000001,
+      "lcp_ms": 1472.1979000000001,
       "cls": 0,
-      "tbt_ms": 3.5,
-      "longest_own_task_ms": 116,
-      "fcp_ms": 1205.7549000000001,
-      "si_ms": 1205.7549000000001,
+      "tbt_ms": 0,
+      "longest_own_task_ms": 110,
+      "fcp_ms": 1224.2968500000002,
+      "si_ms": 1224.2968500000002,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 303,
@@ -2972,13 +5915,86 @@
       "content_byte_weight": 84354,
       "header_byte_weight": 2100,
       "payload_requests": 10,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/diagnostico-b2g-expansao/",
+          "transfer_size": 10028,
+          "resource_size": 32412,
+          "content_bytes": 9797,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-offers.0c1efa479770.css",
+          "transfer_size": 3123,
+          "resource_size": 11174,
+          "content_bytes": 2909,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tools.43ce52155407.css",
+          "transfer_size": 4543,
+          "resource_size": 18782,
+          "content_bytes": 4328,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js?v=fortune01",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/manifest.webmanifest",
+          "transfer_size": 610,
+          "resource_size": 403,
+          "content_bytes": 403,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/icon-192.png",
+          "transfer_size": 12331,
+          "resource_size": 12139,
+          "content_bytes": 12139,
+          "encoding": "identity"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
-      "render_blocking_savings_ms": 450,
+      "lcp_observed_server_latency_ms": 8.098950000000002,
+      "lcp_observed_rtt_ms": 0.09855,
+      "lcp_network_allowance_capped": false,
+      "render_blocking_savings_ms": 500,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2104,
+      "benchmark_index": 2297.5,
       "seo_exempt": false
     },
     {
@@ -2988,12 +6004,12 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 69,
-      "lcp_ms": 1483.3053999999997,
+      "lcp_ms": 1502.9348,
       "cls": 0,
-      "tbt_ms": 37,
-      "longest_own_task_ms": 98,
-      "fcp_ms": 1053.4580999999998,
-      "si_ms": 1053.4580999999998,
+      "tbt_ms": 47,
+      "longest_own_task_ms": 101,
+      "fcp_ms": 1063.4022,
+      "si_ms": 1063.4022,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 331,
@@ -3001,13 +6017,72 @@
       "content_byte_weight": 75650,
       "header_byte_weight": 1671,
       "payload_requests": 8,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/conteudos/documentos-reequilibrio-obra-publica/",
+          "transfer_size": 8561,
+          "resource_size": 27668,
+          "content_bytes": 8330,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js?v=ced23fca5a",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/manifest.webmanifest",
+          "transfer_size": 610,
+          "resource_size": 403,
+          "content_bytes": 403,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/icon-192.png",
+          "transfer_size": 12331,
+          "resource_size": 12139,
+          "content_bytes": 12139,
+          "encoding": "identity"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
+      "lcp_observed_server_latency_ms": 4.4674000000000005,
+      "lcp_observed_rtt_ms": 0.0771,
+      "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 350,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2221.5,
+      "benchmark_index": 2458.5,
       "seo_exempt": true
     },
     {
@@ -3017,12 +6092,12 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 69,
-      "lcp_ms": 1489.9182,
+      "lcp_ms": 1467.0346,
       "cls": 0,
-      "tbt_ms": 39,
-      "longest_own_task_ms": 98,
-      "fcp_ms": 1054.3773,
-      "si_ms": 1054.3773,
+      "tbt_ms": 18,
+      "longest_own_task_ms": 85,
+      "fcp_ms": 1053.0519,
+      "si_ms": 1053.0519,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 331,
@@ -3030,13 +6105,72 @@
       "content_byte_weight": 75650,
       "header_byte_weight": 1671,
       "payload_requests": 8,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/conteudos/documentos-reequilibrio-obra-publica/",
+          "transfer_size": 8561,
+          "resource_size": 27668,
+          "content_bytes": 8330,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js?v=ced23fca5a",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/manifest.webmanifest",
+          "transfer_size": 610,
+          "resource_size": 403,
+          "content_bytes": 403,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/icon-192.png",
+          "transfer_size": 12331,
+          "resource_size": 12139,
+          "content_bytes": 12139,
+          "encoding": "identity"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
+      "lcp_observed_server_latency_ms": 1.0172999999999999,
+      "lcp_observed_rtt_ms": 0.10769999999999999,
+      "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 350,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 2202.5,
+      "benchmark_index": 2580,
       "seo_exempt": true
     },
     {
@@ -3046,12 +6180,12 @@
       "accessibility": 100,
       "best_practices": 100,
       "seo": 69,
-      "lcp_ms": 1511.9571,
+      "lcp_ms": 1510.0974,
       "cls": 0,
-      "tbt_ms": 50,
-      "longest_own_task_ms": 109,
-      "fcp_ms": 1054.4356500000001,
-      "si_ms": 1054.4356500000001,
+      "tbt_ms": 41,
+      "longest_own_task_ms": 107,
+      "fcp_ms": 1054.6461000000002,
+      "si_ms": 1054.6461000000002,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "dom_elements": 331,
@@ -3059,13 +6193,72 @@
       "content_byte_weight": 75650,
       "header_byte_weight": 1671,
       "payload_requests": 8,
+      "payload_details": [
+        {
+          "url": "http://127.0.0.1:8766/conteudos/documentos-reequilibrio-obra-publica/",
+          "transfer_size": 8561,
+          "resource_size": 27668,
+          "content_bytes": 8330,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles.daa268664c35.css",
+          "transfer_size": 18904,
+          "resource_size": 90246,
+          "content_bytes": 18689,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/script.js?v=ced23fca5a",
+          "transfer_size": 23945,
+          "resource_size": 76580,
+          "content_bytes": 23716,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/logo-confenge-500-f8a83f6d.png",
+          "transfer_size": 10797,
+          "resource_size": 10605,
+          "content_bytes": 10605,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/manifest.webmanifest",
+          "transfer_size": 610,
+          "resource_size": 403,
+          "content_bytes": 403,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/css/styles-tokens.15cc0770e762.css",
+          "transfer_size": 1009,
+          "resource_size": 1599,
+          "content_bytes": 795,
+          "encoding": "gzip"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/favicon-32.png",
+          "transfer_size": 1164,
+          "resource_size": 973,
+          "content_bytes": 973,
+          "encoding": "identity"
+        },
+        {
+          "url": "http://127.0.0.1:8766/assets/icon-192.png",
+          "transfer_size": 12331,
+          "resource_size": 12139,
+          "content_bytes": 12139,
+          "encoding": "identity"
+        }
+      ],
       "lcp_network_allowance_ms": 0,
-      "lcp_observed_ttfb_ms": null,
-      "lcp_observed_rtt_ms": null,
+      "lcp_observed_server_latency_ms": 1.5487000000000002,
+      "lcp_observed_rtt_ms": 0.1158,
+      "lcp_network_allowance_capped": false,
       "render_blocking_savings_ms": 350,
       "image_delivery_savings_bytes": 9519,
       "font_display_score": 1,
-      "benchmark_index": 1646,
+      "benchmark_index": 1321,
       "seo_exempt": true
     }
   ],
@@ -3076,10 +6269,12 @@
       "expected_runs": 3,
       "observed_runs": 3,
       "minimum_performance": 99,
-      "p75_tbt_ms": 32,
-      "maximum_own_long_task_ms": 82,
-      "minimum_lcp_ms": 1802.9417,
-      "maximum_lcp_ms": 1954.9560000000001,
+      "p75_tbt_ms": 30,
+      "maximum_own_long_task_ms": 80,
+      "minimum_lcp_ms": 1952.6542999999997,
+      "maximum_lcp_ms": 1953.9808,
+      "maximum_lcp_net_ms": 1953.9808,
+      "maximum_lcp_network_allowance_ms": 0,
       "maximum_cls": 0
     }
   }

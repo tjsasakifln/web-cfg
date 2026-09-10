@@ -669,3 +669,51 @@ então ficam registrados como pendência e não entram aqui.
    E2E sobre o conjunto crítico da home); afrouxamento sem justificativa
    (tetos em código e notas obrigatórias na declaração); paridade Netlify/nginx
    ciente da regra de documento.
+
+### Release b4078ab08 (correção estrutural): o que a borda provou e o que faltou
+
+Run [34517284468](https://github.com/tjsasakifln/web-cfg/actions/runs/34517284468):
+promoção executada; aceite servido integral; Lighthouse na borda com o contrato
+novo: **transferência 161,7 KB (10,3 KB de cabeçalhos, antes ~50 KB)**, conteúdo
+**151.431 bytes ≤ 153.600** — o orçamento de payload passou pela primeira vez na
+borda. Cada linha da home passou no LCP líquido da folga medida (1.835 / 2.264 /
+2.258 ms com folga 606 / 599 / 598 ms). Reprovaram dois pontos, e o rollback
+restaurou `54b51438a`:
+
+| reprovação | causa medida | correção |
+|---|---|---|
+| `home: LCP 2264 ms must be <= 2000` | o gate **agregado** da home comparava o máximo bruto; só o gate por linha aplicava a folga | máximo líquido (`maximum_lcp_net_ms`) com a folga máxima na evidência; teste com as três linhas reais |
+| `CLS 0,068` em 1 de 3 execuções (0 no laboratório) | `font-display: swap` com a fonte chegando depois da primeira pintura (colo frio) recompõe o herói; a sonda ao vivo reproduziu 0,065 com causas "Web font loaded" e o logotipo | face local `Archivo Fallback` (Arial / Liberation Sans / Helvetica) com `size-adjust` 98,56 %, `ascent-override` 89,08 %, `descent-override` 21,31 %, `line-gap-override` 0, derivados do woff2 (fontTools); deslocamento do herói com a fonte bloqueada: **82,9 px → 0 px** |
+
+`home-10x.css` não integra o hash de aprovação editorial (só `styles.css`,
+`tokens`, `tools`, `offers`), então não há reaprovação envolvida. Gate novo
+`scripts/site/test_font_fallback_metrics.mjs` (no `test:ui`): face e quatro
+descritores presentes e em toda pilha Archivo; números recomputados do arquivo
+de fonte; em navegador com a fonte local, bloquear o woff2 não pode mover o
+herói mais de 4 px. O logotipo do cabeçalho (`224×58` declarado, `500×130`
+intrínseco) contribui ≤ 0,2 px e fica registrado, não alterado, por ser
+markup do shell compartilhado.
+
+
+### Auditoria pré-merge do #652 (fronteira artefato → pacote → nginx → Cloudflare → navegador)
+
+Duas revisões adversariais independentes mapearam todos os gates que só rodam
+depois da promoção e responderam à pergunta crítica ("algo passa no PR e reprova
+só depois de promovido?"). Achados corrigidos antes do merge:
+
+| achado | classe | correção |
+|---|---|---|
+| a "folga de rede" lia `metrics.timeToFirstByte`, que é o TTFB **simulado** do Lantern (~450 ms fixos também no laboratório) — a folga de ~599 ms não media nada | erro de modelagem da métrica | folga = latência de servidor **observada** (`network-server-latency`, mediana), teto 250 ms, zero sem medição; TLS retirado |
+| a borda foi medida sobre **h3**; o simulador do Lighthouse só modela multiplexação para `h2` e trata `h3` como HTTP/1.1 com handshake por conexão (+~300 ms). Medido: o mesmo artefato local dá 1.809–1.963 ms em HTTP/1.1 e **1.584–1.595 ms** em HTTPS+HTTP/2 | erro de modelagem da métrica | Chrome do runner com `--disable-quic`: a borda é medida sobre HTTP/2, o protocolo que o simulador modela; visitantes h3 não ficam piores |
+| ramo de retirada do aceite de runtime exigia **404** para o detalhe retirado, mas o contrato serve **410** (`_redirects`; a retirada não toca `_redirects`) — reprovação determinística só após promoção quando o overlay publica zero rotas | defeito do gate | aceita 410 ou 404; contraprova unitária |
+| pré-requisitos do Lighthouse na borda sem timeout nem retry; re-fetch do payload sem retry para 403/429/5xx | defeito do gate (rollback espúrio) | timeout 20 s e 3 tentativas com backoff; não-200 estável continua reprovando |
+| CLS e performance ausentes passavam abertos; LCP `NaN` na home não reprovava o agregado | defeito do gate | fail-closed nos três |
+| gate da reserva tipográfica pulava a etapa de navegador sem fonte local | defeito do gate | `FONT_FALLBACK_BROWSER_REQUIRED=1` no CI (o runner tem Liberation Sans) |
+| `content_byte_weight` e a folga não eram recomputáveis da evidência bruta | evidência | `payload_details` por URL persistido e recomputação no laço de evidência bruta |
+
+Verificado e mantido: nenhum probe do aceite servido lê CSP/XFO/Permissions/
+Referrer (a regra de documento não pode quebrá-lo; 78/78 probes passaram sob o
+contrato novo no run 34517284468); `robots-txt` do Lighthouse aceita
+`Content-Signal` na versão travada; CLS residual da home com a reserva:
+**0,00008** (harness que reproduz os 0,0676 da borda com cinco decimais);
+cenários frio/lento/bloqueado/quente a 390 e 1366: deslocamento 0 px.

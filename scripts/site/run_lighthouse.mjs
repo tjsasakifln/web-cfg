@@ -161,17 +161,34 @@ if (!BASE) {
   BASE = `http://127.0.0.1:${PORT}`;
 }
 
+// Prerequisite fetches against the public edge get a timeout and a bounded
+// retry so a transport blip cannot masquerade as a failed release; a stable
+// non-200 still fails closed.
+const EDGE_FETCH_TIMEOUT_MS = 20000;
+const EDGE_FETCH_ATTEMPTS = 3;
+async function fetchEdge(url, headers) {
+  let last = null;
+  for (let attempt = 1; attempt <= EDGE_FETCH_ATTEMPTS; attempt += 1) {
+    try {
+      const response = await fetch(url, { redirect: "manual", headers, signal: AbortSignal.timeout(EDGE_FETCH_TIMEOUT_MS) });
+      if (response.status === 200 || !(response.status === 403 || response.status === 429 || response.status >= 500)) return response;
+      last = new Error(`${url} -> ${response.status}`);
+    } catch (error) {
+      last = error;
+    }
+    if (attempt < EDGE_FETCH_ATTEMPTS) await new Promise((r) => setTimeout(r, 1500 * attempt));
+  }
+  throw last;
+}
+
 async function fetchRequired(url, kind) {
-  const response = await fetch(url, { redirect: "manual", headers: { accept: kind === "json" ? "application/json" : "application/xml,text/xml" } });
+  const response = await fetchEdge(url, { accept: kind === "json" ? "application/json" : "application/xml,text/xml" });
   if (response.status !== 200) throw new Error(`runtime Lighthouse ${kind} fetch failed: ${url} -> ${response.status}`);
   return kind === "json" ? response.json() : response.text();
 }
 
 async function fetchExactRuntimeHtml(origin, route) {
-  const response = await fetch(`${origin}${route}`, {
-    redirect: "manual",
-    headers: { accept: "text/html" },
-  });
+  const response = await fetchEdge(`${origin}${route}`, { accept: "text/html" });
   if (response.status !== 200) {
     throw new Error(`runtime Lighthouse direct HTML fetch failed: ${route} -> ${response.status}`);
   }
@@ -309,6 +326,11 @@ async function launchIsolatedChrome() {
         "--disable-gpu",
         "--disable-dev-shm-usage",
         "--disable-extensions",
+        // Lantern models multiplexing only for h2; an h3/QUIC session is
+        // simulated as HTTP/1.1 with a handshake per connection, which
+        // inflated the edge LCP by ~300 ms (run 34517284468). Measure over
+        // HTTP/2, the protocol the simulator models; h3 visitors do no worse.
+        "--disable-quic",
         `--user-data-dir=${profileDir}`,
       ],
       connectionPollInterval: 250,
@@ -385,7 +407,6 @@ try {
         const totalByteWeight = audits["total-byte-weight"]?.numericValue;
         const network = lcpNetworkAllowanceMs({
           audits,
-          origin: BASE,
           runtimeMode: runtimeContracts.length > 0,
         });
         const row = {
@@ -408,9 +429,11 @@ try {
           content_byte_weight: payload.content_byte_weight,
           header_byte_weight: headerByteWeight(totalByteWeight, payload.content_byte_weight),
           payload_requests: payload.requests.length,
+          payload_details: payload.requests,
           lcp_network_allowance_ms: network.allowance_ms,
-          lcp_observed_ttfb_ms: network.observed_ttfb_ms,
+          lcp_observed_server_latency_ms: network.observed_server_latency_ms,
           lcp_observed_rtt_ms: network.observed_rtt_ms,
+          lcp_network_allowance_capped: network.capped,
           render_blocking_savings_ms:
             audits["render-blocking-insight"]?.metricSavings?.LCP || 0,
           image_delivery_savings_bytes:
