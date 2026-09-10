@@ -23,6 +23,7 @@ import { launch as launchChrome } from "chrome-launcher";
 import lighthouse from "lighthouse";
 import { CRITICAL_MONEY_PATHS, evaluateLighthouseResults } from "./lighthouse_thresholds.mjs";
 import { headerByteWeight, lcpNetworkAllowanceMs, measureContentByteWeight } from "./lighthouse_payload.mjs";
+import { INFRASTRUCTURE_ATTEMPTS, installAsyncFailureTrap, isInfrastructureError } from "./lighthouse_infra.mjs";
 import {
   deriveCoverage,
   formatCoverageDeclaration,
@@ -292,6 +293,10 @@ const runtimeEvidence = await verifyRuntimeEvidenceInputs();
 
 mkdirSync(OUT, { recursive: true });
 const results = [];
+// Lighthouse can reject asynchronously from its target manager (a browser
+// session attaching and vanishing); without this trap that rejection kills
+// the runner instead of failing the attempt.
+const asyncFailures = installAsyncFailureTrap();
 
 async function waitForCdp(port, attempts = 40) {
   for (let i = 0; i < attempts; i++) {
@@ -362,6 +367,10 @@ try {
   await warmChromeHost();
   for (const path of RUN_PAGES) {
     const attempts = CRITICAL_MONEY_PATHS.has(path) ? REPEATED_RUNS : 1;
+    // Infrastructure failures (the browser or its debugging session died
+    // before a measurement existed) are attempted again with a fresh browser,
+    // a bounded number of times. A MEASURED result is never re-sampled.
+    let infrastructureAttempt = 1;
     for (let run = 1; run <= attempts; ) {
       const url = `${BASE.replace(/\/$/, "")}${path}`;
       const baseSlug = path === "/" ? "home" : path.replace(/\//g, "_").replace(/^_|_$/g, "");
@@ -372,7 +381,8 @@ try {
       let profileDir = null;
       try {
         ({ chrome, profileDir } = await launchIsolatedChrome());
-        console.log("Lighthouse", url, `run=${run}`, "clean_port=", chrome.port);
+        console.log("Lighthouse", url, `run=${run}`, "clean_port=", chrome.port, infrastructureAttempt > 1 ? `infrastructure_attempt=${infrastructureAttempt}` : "");
+        asyncFailures.drain();
         const runnerResult = await lighthouse(url, {
           port: chrome.port,
           hostname: "127.0.0.1",
@@ -389,6 +399,8 @@ try {
           },
           maxWaitForLoad: 45000,
         });
+        const asyncFailure = asyncFailures.drain();
+        if (asyncFailure) throw asyncFailure;
         if (!runnerResult?.lhr) throw new Error("empty lighthouse result");
         writeFileSync(outJson, JSON.stringify(runnerResult.lhr, null, 2));
         const cats = runnerResult.lhr.categories || {};
@@ -445,11 +457,20 @@ try {
         results.push(row);
         console.log(JSON.stringify(row));
         run += 1;
+        infrastructureAttempt = 1;
       } catch (err) {
         const detail = (err && err.message) || String(err);
+        if (isInfrastructureError(err) && infrastructureAttempt < INFRASTRUCTURE_ATTEMPTS) {
+          // No measurement exists for this attempt: the browser failed before
+          // or during collection. Try again with a fresh isolated browser.
+          infrastructureAttempt += 1;
+          console.error("lighthouse infrastructure failure", path, `run ${run}`, `attempt ${infrastructureAttempt - 1}/${INFRASTRUCTURE_ATTEMPTS}`, detail);
+          continue;
+        }
         console.error("lighthouse failed", path, `run ${run}`, detail);
-        results.push({ path, run, error: detail, status: "error" });
+        results.push({ path, run, error: detail, status: "error", infrastructure_attempts: infrastructureAttempt });
         run += 1;
+        infrastructureAttempt = 1;
       } finally {
         if (chrome) await chrome.kill();
         if (profileDir) rmSync(profileDir, { recursive: true, force: true });
@@ -457,6 +478,7 @@ try {
     }
   }
 } finally {
+  asyncFailures.dispose();
   if (server) server.close();
 }
 

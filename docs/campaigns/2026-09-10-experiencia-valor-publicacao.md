@@ -717,3 +717,26 @@ contrato novo no run 34517284468); `robots-txt` do Lighthouse aceita
 `Content-Signal` na versão travada; CLS residual da home com a reserva:
 **0,00008** (harness que reproduz os 0,0676 da borda com cinco decimais);
 cenários frio/lento/bloqueado/quente a 390 e 1366: deslocamento 0 px.
+
+
+### Release 2c25e6fbf (#652): a borda aprovou o artefato; o runner do Lighthouse caiu
+
+Run [34532136335](https://github.com/tjsasakifln/web-cfg/actions/runs/34532136335):
+promoção executada; aceite servido integral. **Primeira execução da home na
+borda, com o contrato corrigido e o Chrome sem QUIC: LCP 1.570 ms (folga medida
+17 ms), CLS 0, performance 100, conteúdo 151.857 bytes, cabeçalhos 17,2 KB** —
+todos os orçamentos cumpridos sem folga relevante. A segunda execução não chegou
+a medir: o Lighthouse lançou, de dentro do seu `TargetManager`, uma rejeição
+assíncrona (`Protocol error (Target.getTargetInfo): Session with given id not
+found`) que derrubou o processo do runner; sem sumário, o aceite reprovou e o
+rollback restaurou `54b51438a`. Classe: infraestrutura de medição (sessão do
+navegador que anexa e some), não produto nem gate.
+
+Correção (`scripts/site/lighthouse_infra.mjs`): armadilha de rejeições
+assíncronas do processo (a falha reprova a tentativa, não mata o runner) e
+nova tentativa com navegador novo **apenas** para falhas de infraestrutura
+classificadas (erro de protocolo, alvo fechado/quebrado, CDP indisponível),
+no máximo três tentativas, registradas. Um resultado medido nunca é
+reamostrado e uma linha registrada nunca é substituída — o teste de inspeção
+da fonte exige o classificador e a fronteira, e continua proibindo qualquer
+repetição por amostra favorável.

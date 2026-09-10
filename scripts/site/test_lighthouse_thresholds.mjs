@@ -257,6 +257,12 @@ assert.doesNotMatch(
   /retry:\s*["']home_lcp|retriesLeft|LH_HOME_LCP_MAX_MS/,
   "Lighthouse evidence must not discard a failing home run and retry for a favorable sample",
 );
+// The only permitted re-attempt is an INFRASTRUCTURE failure (no measurement
+// exists); it must be gated by the classifier, bounded, and happen before the
+// row is pushed — a pushed row is never replaced.
+assert.match(runnerSource, /isInfrastructureError\(err\) && infrastructureAttempt < INFRASTRUCTURE_ATTEMPTS/, "infrastructure re-attempts must be classified and bounded");
+assert.doesNotMatch(runnerSource, /results\.(pop|splice)\(/, "a recorded row must never be discarded");
+assert.match(runnerSource, /const asyncFailure = asyncFailures\.drain\(\);\s*if \(asyncFailure\) throw asyncFailure;/, "asynchronous browser failures must fail the attempt, not the process");
 assert.match(
   runnerSource,
   /await warmChromeHost\(\);[\s\S]*for \(const path of RUN_PAGES\)/,
