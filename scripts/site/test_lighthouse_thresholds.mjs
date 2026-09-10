@@ -29,6 +29,7 @@ const home = (run, performance, tbt_ms, longest_own_task_ms, extra = {}) => ({
   dom_elements: extra.dom_elements ?? 500,
   total_byte_weight: extra.total_byte_weight ?? 80 * 1024,
   content_byte_weight: extra.content_byte_weight ?? extra.total_byte_weight ?? 80 * 1024,
+  lcp_network_allowance_ms: extra.lcp_network_allowance_ms ?? 0,
   font_display_score: extra.font_display_score ?? 1,
   image_aspect_ratio: 1,
   image_size_responsive: 1,
