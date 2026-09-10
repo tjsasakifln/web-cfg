@@ -1,9 +1,9 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-09-10T14:55:23.685Z",
+  "measured_at": "2026-09-10T15:32:13.031Z",
   "measured_on": "2026-09-10",
-  "commit_sha": "9a17b2683db242a1a6a04d39c9c3734e5ef051c8",
+  "commit_sha": "298fe0bff2ff604fad0dd7e6153505b02ad4f304",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "f168038814087e1b365d1de3042af9a3f3364743756e104711fecc0fb9fe7477",
@@ -42,13 +42,13 @@
     "diagnostico-b2g-expansao/index.html": "fe60cef824e78beff5d03ec679f1e430cad33b7754a748069654bbb293f28835",
     "diagnostico-pre-licitacao/index.html": "65c6ea2c235ef0db5629922ed18c578bde2ef585339d6adec86830014e1229f4",
     "diretoria-b2g/index.html": "72d1ffd411f911fd295b6ae13fd1318c28356aa007fbf73f71cac80e39f68197",
-    "entregas/index.html": "26e1c07feb51a96539021de77d60e6a0db3a56465655e166843a8a52bde8fca3",
+    "entregas/index.html": "18e783d72a03f83073714aa1ab4994de149976042b5928c949fdfae6264dccc1",
     "entregas/styles.css": "7f2817c86d856247fe607b2961856073ce0ae163dcc51baa9f743d9b27255774",
-    "index.html": "06ad0f33e2f5e461dc8b1a4d99156fc56723a7b04f5f5f5db6830b5ca1e9db00",
+    "index.html": "50decdd06e3de09da085f498f2f90c8b97bee5c17fd413fe5ee42deb7028ebab",
     "medicoes-glosas-obras-publicas/index.html": "fe3d3c644ac158dae63f85369301da200b5f4de025b0db3364b9cb3e3d929c61",
     "problemas-que-resolvemos/index.html": "fbd929bd17c6890969ee4b0f5c3647dca7ee81bf75b3a8ae4e124c38aef0b280",
     "reequilibrio-obras-publicas/index.html": "11d0cf94f61308da770640898df3019f4cbdd0b3dcd42f9df8ad73a8aa79d6ca",
-    "script.js": "22fdab14d505df38517115437e3e3a434a0f335272596d87cbc79d3531f05654",
+    "script.js": "4a17b3a089d30f9e74626ea4482f66fd68f617f4d153c4f0161806b1b056f40b",
     "servicos-obras-publicas/index.html": "7fb62cdb2a3c93e06ced52475551515a5ef9996c8d51075294e84939283de04b",
     "styles-hubs.css": "ed4668833ad8de5cef5acc5fc1e8f21e519870f0bf282247c3b4a9644a094592",
     "styles-offers.css": "0c1efa4797709ae6d2b776aa58e863ef095a880646b5e4b158a7a47e0963ec2e",
@@ -101,7 +101,7 @@
   "routes": [
     {
       "route": "/",
-      "html_sha256": "06ad0f33e2f5e461dc8b1a4d99156fc56723a7b04f5f5f5db6830b5ca1e9db00",
+      "html_sha256": "50decdd06e3de09da085f498f2f90c8b97bee5c17fd413fe5ee42deb7028ebab",
       "measured_on": "2026-09-10",
       "viewports": {
         "1366x768": {
@@ -310,7 +310,7 @@
     },
     {
       "route": "/entregas/",
-      "html_sha256": "26e1c07feb51a96539021de77d60e6a0db3a56465655e166843a8a52bde8fca3",
+      "html_sha256": "18e783d72a03f83073714aa1ab4994de149976042b5928c949fdfae6264dccc1",
       "measured_on": "2026-09-10",
       "viewports": {
         "1366x768": {
