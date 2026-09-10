@@ -107,17 +107,47 @@
 
     const toggle = document.querySelector('.menu-toggle');
     const menu = document.querySelector('.mobile-nav');
+    // O menu movel SE COMPORTA como modal: cobre a tela, trava a rolagem do
+    // fundo e prende o Tab. Faltava DECLARAR isso. Sem role/aria-modal e sem
+    // inert no fundo, quem navega por cursor virtual continuava alcancando e
+    // ouvindo o conteudo de tras -- comportamento modal com semantica de
+    // simples expansor. As marcacoes sao aplicadas em tempo de execucao, na
+    // abertura, e nao no HTML: assim o shell servido nao muda.
+    // Tudo que fica ATRAS do painel vira inerte. O botao que abre e a unica
+    // excecao: ele e o controle de fechar do proprio dialogo e continua na
+    // ordem de foco. A marca, a CTA do cabecalho e o botao flutuante ficavam
+    // alcancaveis por Tab e por cursor virtual mesmo cobertos pelo painel.
+    const backdropParts = () => [
+      ...document.querySelectorAll('main, footer, .whatsapp-float, .skip-link, .site-head .brand, .site-head .button, header .brand, header .button'),
+    ].filter((element) => element && !element.contains(menu) && !element.contains(toggle) && element !== toggle);
+    const setModalSemantics = (on) => {
+      if (!menu) return;
+      if (on) {
+        menu.setAttribute('role', 'dialog');
+        menu.setAttribute('aria-modal', 'true');
+        backdropParts().forEach((element) => element.setAttribute('inert', ''));
+      } else {
+        menu.removeAttribute('role');
+        menu.removeAttribute('aria-modal');
+        backdropParts().forEach((element) => element.removeAttribute('inert'));
+      }
+    };
     const closeMenu = (returnFocus = false) => {
       if (!toggle || !menu) return;
       toggle.setAttribute('aria-expanded', 'false'); toggle.setAttribute('aria-label', 'Abrir menu');
-      menu.classList.remove('is-open'); document.body.classList.remove('menu-open'); if (returnFocus) toggle.focus();
+      menu.classList.remove('is-open'); document.body.classList.remove('menu-open');
+      setModalSemantics(false);
+      if (returnFocus) toggle.focus();
     };
     if (toggle && menu) {
-      toggle.addEventListener('click', () => toggle.getAttribute('aria-expanded') === 'true' ? closeMenu() : (toggle.setAttribute('aria-expanded','true'), toggle.setAttribute('aria-label','Fechar menu'), menu.classList.add('is-open'), document.body.classList.add('menu-open'), menu.querySelector('a')?.focus()));
+      toggle.addEventListener('click', () => toggle.getAttribute('aria-expanded') === 'true' ? closeMenu() : (toggle.setAttribute('aria-expanded','true'), toggle.setAttribute('aria-label','Fechar menu'), menu.classList.add('is-open'), document.body.classList.add('menu-open'), setModalSemantics(true), menu.querySelector('a')?.focus()));
       menu.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => closeMenu()));
       document.addEventListener('keydown', (event) => {
+        // Escape so pertence ao menu quando o menu esta aberto. Antes, uma
+        // tecla Escape em qualquer lugar da pagina roubava o foco para o botao
+        // do menu.
         if (event.key === 'Escape') {
-          closeMenu(true);
+          if (toggle.getAttribute('aria-expanded') === 'true') closeMenu(true);
           return;
         }
         if (event.key !== 'Tab' || toggle.getAttribute('aria-expanded') !== 'true') return;
