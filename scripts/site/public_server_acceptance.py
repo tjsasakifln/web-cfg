@@ -781,6 +781,54 @@ def verify_contract_probes(
     }
 
 
+EDGE_MANAGED_ROBOTS = "robots.txt"
+_ROBOTS_MANAGED_BEGIN = b"# BEGIN Cloudflare Managed content"
+_ROBOTS_MANAGED_END = b"# END Cloudflare Managed Content"
+_ROBOTS_MAX_SEPARATOR = 4
+
+
+def robots_edge_contract(body: bytes, expected: bytes) -> tuple[bool, dict[str, Any]]:
+    """Contrato especifico do robots.txt aumentado na borda.
+
+    O Cloudflare "Managed robots.txt" ANTEPOE um aviso de Content Signals e um
+    bloco delimitado por marcadores. Medido em producao: cabecalho de 1834
+    bytes seguido dos nossos 507 bytes, com 2 bytes de separador -- nenhuma
+    diretiva nossa alterada. Isto NAO e permissao para aceitar qualquer corpo:
+    a representacao esperada continua sendo os bytes do pacote, derivados
+    independentemente, e o unico prefixo tolerado e o bloco gerenciado
+    delimitado pelos dois marcadores, sem nenhuma diretiva ativa antes dele.
+    Qualquer alteracao no NOSSO conteudo, qualquer byte apos ele e qualquer
+    prefixo sem marcador continuam reprovando.
+    """
+    if body == expected:
+        return True, {"edge_managed": False, "managed_prefix_bytes": 0}
+    begin = body.find(_ROBOTS_MANAGED_BEGIN)
+    end = body.find(_ROBOTS_MANAGED_END)
+    if begin == -1 or end == -1 or end < begin:
+        return False, {"edge_managed": False, "reason": "robots_differs_without_managed_markers"}
+    for line in body[:begin].splitlines():
+        stripped = line.strip()
+        if stripped and not stripped.startswith(b"#"):
+            return False, {"edge_managed": True, "reason": "robots_active_directive_before_managed_block"}
+    tail = body[end + len(_ROBOTS_MANAGED_END):]
+    origin = tail.lstrip(b"\r\n")
+    separator = len(tail) - len(origin)
+    if origin != expected:
+        return False, {
+            "edge_managed": True,
+            "reason": "robots_origin_bytes_not_preserved",
+            "origin_sha256": hashlib.sha256(origin).hexdigest(),
+        }
+    if separator > _ROBOTS_MAX_SEPARATOR:
+        return False, {"edge_managed": True, "reason": "robots_unexpected_bytes_before_origin"}
+    return True, {
+        "edge_managed": True,
+        "managed_prefix_bytes": end + len(_ROBOTS_MANAGED_END),
+        "separator_bytes": separator,
+        "origin_sha256": hashlib.sha256(origin).hexdigest(),
+    }
+
+
 def verify_non_html_assets(
     *, site: Path, inventory: dict[str, Any], overlay: dict[str, Any],
     base: str, fetcher: Callable, concurrency: int, timeout: float,
@@ -822,12 +870,18 @@ def verify_non_html_assets(
         entry, body = fetcher(base + request_path, timeout)
         headers = entry.get("headers") or {}
         digest = hashlib.sha256(body).hexdigest() if body is not None else None
-        ok = (
+        transport_ok = (
             entry.get("error") is None and entry.get("status") == status
             and entry.get("location") is None and body is not None
-            and digest == expected and entry.get("sha256") == digest
             and str(headers.get("content-encoding") or "identity").lower() == "identity"
+            and (body is None or entry.get("sha256") == digest)
         )
+        edge: dict[str, Any] = {}
+        if transport_ok and rel == EDGE_MANAGED_ROBOTS and not protected:
+            body_ok, edge = robots_edge_contract(body, site.joinpath(rel).read_bytes())
+        else:
+            body_ok = digest == expected
+        ok = transport_ok and body_ok
         return {
             "path": rel, "request_path": request_path,
             "expected_status": status, "status": entry.get("status"),
@@ -835,6 +889,7 @@ def verify_non_html_assets(
             "bytes": len(body) if body is not None else None,
             "headers": headers, "location": entry.get("location"),
             "config_body_withheld": protected and ok,
+            "edge_contract": edge or None,
             "ok": ok, "error": entry.get("error"),
         }
 

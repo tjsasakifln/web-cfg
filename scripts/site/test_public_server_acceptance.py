@@ -500,6 +500,47 @@ def test_non_html_inventory_reconciliation_fails_closed(tmp_path, mutation):
     assert "public_non_html_acceptance_failed" in report["errors"]
 
 
+_MANAGED = (
+    b"# As a condition of accessing this website...\n\n"
+    b"# BEGIN Cloudflare Managed content\n\n"
+    b"User-agent: *\nContent-Signal: search=yes,ai-train=no,use=reference\nAllow: /\n\n"
+    b"User-agent: GPTBot\nDisallow: /\n\n"
+    b"# END Cloudflare Managed Content"
+)
+_ROBOTS = b"User-agent: *\nAllow: /\n\nSitemap: https://confenge.com.br/sitemap-index.xml\n"
+
+
+def test_robots_accepts_only_the_marked_edge_block_around_exact_origin_bytes():
+    """O Cloudflare Managed robots.txt antepoe um bloco; o resto tem de ser exato."""
+    ok, info = acceptance.robots_edge_contract(_ROBOTS, _ROBOTS)
+    assert ok and info["edge_managed"] is False and info["managed_prefix_bytes"] == 0
+
+    ok, info = acceptance.robots_edge_contract(_MANAGED + b"\n\n" + _ROBOTS, _ROBOTS)
+    assert ok, info
+    assert info["edge_managed"] is True and info["separator_bytes"] == 2
+
+
+@pytest.mark.parametrize("body,reason", [
+    # Uma diretiva nossa alterada continua reprovando.
+    (_MANAGED + b"\n\n" + _ROBOTS.replace(b"Allow: /", b"Disallow: /"),
+     "robots_origin_bytes_not_preserved"),
+    # Conteudo acrescentado DEPOIS do nosso corpo continua reprovando.
+    (_MANAGED + b"\n\n" + _ROBOTS + b"Disallow: /servicos/\n",
+     "robots_origin_bytes_not_preserved"),
+    # Corpo diferente sem marcador nenhum: e transformacao nao documentada.
+    (b"User-agent: *\nDisallow: /\n", "robots_differs_without_managed_markers"),
+    # Diretiva ativa injetada ANTES do bloco gerenciado.
+    (b"Disallow: /\n" + _MANAGED + b"\n\n" + _ROBOTS,
+     "robots_active_directive_before_managed_block"),
+    # Bytes estranhos entre o marcador de fim e o nosso corpo.
+    (_MANAGED + b"\n\n\n\n\n\n\n" + _ROBOTS, "robots_unexpected_bytes_before_origin"),
+])
+def test_robots_edge_contract_rejects_every_other_divergence(body, reason):
+    ok, info = acceptance.robots_edge_contract(body, _ROBOTS)
+    assert not ok
+    assert info["reason"] == reason
+
+
 def test_non_html_http_bytes_cannot_be_normalized_or_served_from_old_cache(tmp_path):
     fixture = _fixture(tmp_path)
     def changed(url, _timeout):
