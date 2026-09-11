@@ -1,0 +1,92 @@
+{
+  "schema": "confenge.inbound-campaign-shared-changes/2.0",
+  "campaign_id": "11",
+  "prompt_version": "2.0.0",
+  "owner_campaign": "11",
+  "changes": [
+    {
+      "change_id": "inb11-family-parcerias-engenharia",
+      "owner_campaign": "16",
+      "path": "data/organic/public-family-registry.json",
+      "base_blob_sha": "61e219892d5ad8c80f37dc18399f51f5df119ca1",
+      "operation": "upsert",
+      "key_or_anchor": "families[].id=parcerias-engenharia",
+      "expected_old": null,
+      "desired_new": {
+        "id": "parcerias-engenharia",
+        "visitor_job": "Entender como encaminhar uma necessidade de orçamento, revisão, compatibilização ou disciplina complementar mantendo o relacionamento com o cliente.",
+        "profile": "commercial_content",
+        "terminal_action": "capture_form_or_whatsapp",
+        "match": {
+          "routes": [
+            "/parcerias-engenharia/"
+          ]
+        },
+        "gate_coverage": {
+          "conversion": "full",
+          "copy": "full",
+          "accessibility": "full"
+        },
+        "declared_at": "2026-09-11",
+        "owner_issue": 300,
+        "debt": [],
+        "index_evidence": {
+          "substrate": "first_party_publication",
+          "not_applicable": [
+            "official_live",
+            "citable_source"
+          ],
+          "reason": "Página comercial de primeira parte que explica uma forma real de colaboração e aponta a entregas já publicadas da CONFENGE; não representa registro externo.",
+          "authority": [
+            "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md",
+            "data/corporate/commercial-constitution.v1.json",
+            "data/distribution/partner-reference-kits.v1.json"
+          ],
+          "declared_at": "2026-09-11",
+          "owner_issue": 300
+        }
+      },
+      "rationale": "Rota indexável nova da campanha 11. Sem esta família o gate de conversão reprova public_family_not_declared. owner_issue 300 é o dono do registry; 16 pode religar ao issue da composição.",
+      "acceptance_test": "gate_conversion() não emite public_family_not_declared para /parcerias-engenharia/; a ação terminal capture_form_or_whatsapp encontra wa.me em main."
+    },
+    {
+      "change_id": "inb11-public-top-dir",
+      "owner_campaign": "16",
+      "path": "scripts/pseo/public_artifact.py",
+      "base_blob_sha": "02fab887985de241dbc62d3c6f27b706200f359a",
+      "operation": "insert",
+      "key_or_anchor": "PUBLIC_TOP_DIRS",
+      "expected_old": "        \"quantitativos-orcamento-obras\",\n        \"triagem-tecnica\",",
+      "desired_new": "        \"quantitativos-orcamento-obras\",\n        \"parcerias-engenharia\",\n        \"triagem-tecnica\",",
+      "integration_patch": "docs/campaigns/inb-20260911/11/integration-public-artifact.patch",
+      "rationale": "Sem o diretório na allowlist do artefato a página não entra em _site.",
+      "acceptance_test": "assemble_public_artifact copia parcerias-engenharia/ e a rota aparece no censo público."
+    },
+    {
+      "change_id": "inb11-sitemap-xml",
+      "owner_campaign": "16",
+      "path": "sitemap.xml",
+      "base_blob_sha": "3c91a643271d02ea536f08a0378716d3e2aa34af",
+      "operation": "upsert",
+      "key_or_anchor": "urlset.url.loc=https://confenge.com.br/parcerias-engenharia/",
+      "expected_old": null,
+      "desired_new": {
+        "loc": "https://confenge.com.br/parcerias-engenharia/"
+      },
+      "rationale": "Página pedida como indexável. test_conversion_indexable_has_cta exige scanned == locs do grafo. Sem lastmod fabricado.",
+      "acceptance_test": "sitemap.xml contém exatamente um loc https://confenge.com.br/parcerias-engenharia/ e a rota indexável entra no grafo."
+    },
+    {
+      "change_id": "inb11-sitemap-txt",
+      "owner_campaign": "16",
+      "path": "sitemap.txt",
+      "base_blob_sha": "f8c2e2c31e3d859170e46617304345cc1d60d72e",
+      "operation": "upsert",
+      "key_or_anchor": "https://confenge.com.br/parcerias-engenharia/",
+      "expected_old": null,
+      "desired_new": "https://confenge.com.br/parcerias-engenharia/",
+      "rationale": "Espelho textual do urlset, inserção alfabética entre /nurture/ e /politica-editorial/.",
+      "acceptance_test": "sitemap.txt lista a rota uma vez, na ordem alfabética do grafo."
+    }
+  ]
+}
