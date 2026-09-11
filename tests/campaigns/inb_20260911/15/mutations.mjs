@@ -6,7 +6,14 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { createRequire } from "node:module";
-import { FAIL, PASS } from "./lib/harness.mjs";
+import {
+  FAIL,
+  HARD_AT_RELEASE,
+  MISSING_DEPENDENCY,
+  OPTIONAL_ENRICHMENT,
+  PASS,
+  finish,
+} from "./lib/harness.mjs";
 import { CORE_IDS } from "./matrix.mjs";
 import { receiptImpliesPersist, retryDuplicated, piiHitsInProps, unknownTreatedAsDefect } from "./checks.mjs";
 import * as html from "./lib/html.mjs";
@@ -250,6 +257,80 @@ export async function runMutations(root) {
         controlPass: CORE_IDS.includes("03") && CORE_IDS.length === 10,
         mutationDetected: omitted.includes("03"),
         detail: { omitted },
+      }),
+    );
+  }
+
+  {
+    const control = finish(
+      {
+        results: [{ id: "journey.orcamento-privado-sem-licitacao", campaign: "03", status: PASS }],
+      },
+      { strictRelease: true },
+    );
+    const mutated = finish(
+      {
+        results: [
+          {
+            id: "journey.orcamento-privado-sem-licitacao",
+            campaign: "03",
+            status: MISSING_DEPENDENCY,
+            dependency_level: HARD_AT_RELEASE,
+          },
+        ],
+      },
+      { strictRelease: true },
+    );
+    rows.push(
+      mutationRow("strict_release_missing_required", {
+        controlPass: control.summary.exit_code === 0 && control.summary.fail === 0,
+        mutationDetected: mutated.summary.exit_code === 1 && mutated.summary.publication_required_missing === 1,
+        detail: {
+          controlExit: control.summary.exit_code,
+          mutationExit: mutated.summary.exit_code,
+          mutationRequiredMissing: mutated.summary.publication_required_missing_ids,
+        },
+      }),
+    );
+  }
+
+  {
+    const defaultMode = finish({
+      results: [
+        {
+          id: "journey.orcamento-privado-sem-licitacao",
+          campaign: "03",
+          status: MISSING_DEPENDENCY,
+          dependency_level: HARD_AT_RELEASE,
+        },
+      ],
+    });
+    const optionalStrict = finish(
+      {
+        results: [
+          {
+            id: "journey.arquiteto-complementares.dedicated_route",
+            campaign: "12",
+            status: MISSING_DEPENDENCY,
+            dependency_level: OPTIONAL_ENRICHMENT,
+          },
+        ],
+      },
+      { strictRelease: true },
+    );
+    const optionalNotPassed = optionalStrict.results[0].status === MISSING_DEPENDENCY;
+    rows.push(
+      mutationRow("strict_release_does_not_pass_absence", {
+        controlPass: defaultMode.summary.exit_code === 0 && defaultMode.summary.MISSING_DEPENDENCY === 1,
+        mutationDetected:
+          optionalStrict.summary.exit_code === 0 &&
+          optionalNotPassed &&
+          optionalStrict.summary.optional_or_external_missing === 1,
+        detail: {
+          defaultExitWithRequiredMissing: defaultMode.summary.exit_code,
+          optionalStrictExit: optionalStrict.summary.exit_code,
+          optionalStatus: optionalStrict.results[0].status,
+        },
       }),
     );
   }

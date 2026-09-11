@@ -2,7 +2,7 @@
 /**
  * Reusable CORE_QA_SUITE runner for INB-20260911 campaign 15.
  * Invoke directly (package.json is owned by campaign 16):
- *   node tests/campaigns/inb_20260911/15/run.mjs --root . --report /tmp/report.json --mutations
+ *   node tests/campaigns/inb_20260911/15/run.mjs --root . --report /tmp/report.json --mutations --strict-release
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -27,6 +27,7 @@ function parseArgs(argv) {
     examinedKind: "baseline",
     included: [],
     overlays: null,
+    strictRelease: false,
   };
   for (let i = 0; i < argv.length; i += 1) {
     const a = argv[i];
@@ -34,6 +35,7 @@ function parseArgs(argv) {
     else if (a === "--report") out.report = argv[++i];
     else if (a === "--mutations") out.mutations = true;
     else if (a === "--examined-kind") out.examinedKind = argv[++i];
+    else if (a === "--strict-release") out.strictRelease = true;
     else if (a === "--included") out.included = String(argv[++i] || "").split(",").filter(Boolean);
     else if (a === "--overlay-hash") {
       out.overlays = out.overlays || [];
@@ -77,13 +79,16 @@ async function main() {
     report.mutation_detection_ok = report.mutations.every((m) => m.detected && m.control === "pass");
   }
 
-  finish(report);
+  finish(report, { strictRelease: args.strictRelease });
   report.test_suite_path = "tests/campaigns/inb_20260911/15/run.mjs";
   report.candidate_sha = subjectSha(root);
   if (args.report) writeJson(path.resolve(args.report), report);
   else console.log(JSON.stringify({ summary: report.summary, findings: report.findings.length }, null, 2));
 
-  if (report.summary.fail > 0 || (args.mutations && report.mutation_detection_ok === false)) {
+  if (
+    report.summary.exit_code !== 0 ||
+    (args.mutations && report.mutation_detection_ok === false)
+  ) {
     process.exitCode = 1;
   }
 }

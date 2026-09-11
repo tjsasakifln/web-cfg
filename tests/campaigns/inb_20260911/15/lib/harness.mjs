@@ -11,11 +11,40 @@ export const PASS = "pass";
 export const FAIL = "fail";
 export const MISSING_DEPENDENCY = "MISSING_DEPENDENCY";
 
+export const HARD_AT_RELEASE = "HARD_AT_RELEASE";
+export const OPTIONAL_ENRICHMENT = "OPTIONAL_ENRICHMENT";
+export const EXTERNAL_EVIDENCE = "EXTERNAL_EVIDENCE";
+
 export const SEVERITY = Object.freeze({
   EXPOSURE: "exposicao/seguranca/veracidade/recebimento",
   JOURNEY: "quebra_jornada/indexacao",
   IMPROVEMENT: "melhoria_nao_bloqueante",
 });
+
+const CORE_CAMPAIGN_IDS = new Set(["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "15", "16"]);
+const EXPANSION_CAMPAIGN_IDS = new Set(["11", "12", "13", "14"]);
+
+/**
+ * Classify a result row. Absence is never rewritten to PASS.
+ * Live GSC / Perfil da Empresa stay EXTERNAL_EVIDENCE.
+ * Expansion-only dedicated routes may be OPTIONAL_ENRICHMENT.
+ * Unknown missing rows fail closed as HARD_AT_RELEASE.
+ */
+export function dependencyLevel(row) {
+  if (row?.dependency_level) return row.dependency_level;
+  const id = String(row?.id || "");
+  if (/gsc|search.?console|perfil.?da.?empresa|google.?business/i.test(id) && /live|credential|external/i.test(id)) {
+    return EXTERNAL_EVIDENCE;
+  }
+  if (id.includes(".dedicated_route")) return OPTIONAL_ENRICHMENT;
+  if (CORE_CAMPAIGN_IDS.has(String(row?.campaign || ""))) return HARD_AT_RELEASE;
+  if (EXPANSION_CAMPAIGN_IDS.has(String(row?.campaign || ""))) return OPTIONAL_ENRICHMENT;
+  return HARD_AT_RELEASE;
+}
+
+export function isPublicationRequired(row) {
+  return dependencyLevel(row) === HARD_AT_RELEASE;
+}
 
 export function nowIso() {
   return new Date().toISOString();
@@ -90,6 +119,7 @@ export function record(report, item) {
     impact: item.impact || null,
     evidence: item.evidence || null,
     detail: item.detail || null,
+    dependency_level: item.dependency_level || null,
   };
   report.results.push(row);
   const tag =
@@ -114,16 +144,26 @@ export function record(report, item) {
   return row;
 }
 
-export function finish(report) {
+export function finish(report, { strictRelease = false } = {}) {
   report.finished_at = nowIso();
   const productFails = report.results.filter((r) => r.status === FAIL).length;
-  const missing = report.results.filter((r) => r.status === MISSING_DEPENDENCY).length;
+  const missingRows = report.results.filter((r) => r.status === MISSING_DEPENDENCY);
+  const missing = missingRows.length;
   const passes = report.results.filter((r) => r.status === PASS).length;
+  const publicationRequiredMissingRows = missingRows.filter((r) => isPublicationRequired(r));
+  const publicationRequiredMissing = publicationRequiredMissingRows.length;
+  const optionalOrExternalMissing = missing - publicationRequiredMissing;
+  const exitCode =
+    productFails > 0 || (strictRelease && publicationRequiredMissing > 0) ? 1 : 0;
   report.summary = {
     pass: passes,
     fail: productFails,
     MISSING_DEPENDENCY: missing,
-    exit_code: productFails > 0 ? 1 : 0,
+    publication_required_missing: publicationRequiredMissing,
+    optional_or_external_missing: optionalOrExternalMissing,
+    strict_release: Boolean(strictRelease),
+    publication_required_missing_ids: publicationRequiredMissingRows.map((r) => r.id),
+    exit_code: exitCode,
   };
   return report;
 }
