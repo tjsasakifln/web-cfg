@@ -1139,6 +1139,22 @@ console.log("PASS whatsapp_without_message_is_contact_intent_not_receipt");
   console.log("PASS countPersistedContactsByServiceOrigin");
 }
 
+{
+  const jsHref = sourceToService.classifyTransition({
+    href: "javascript:alert(1)",
+    origin_path: "/",
+  });
+  if (jsHref && (jsHref.event === "lead_persisted" || jsHref.kind === "lead")) {
+    fail("javascript_href_became_lead", jsHref);
+  }
+  const waPost = sourceToService.classifyTransition({
+    href: "https://wa.me/5548988344559?text=pedido",
+    origin_path: "/",
+  });
+  if (waPost.event === "lead_persisted") fail("whatsapp_text_became_receipt", waPost);
+  console.log("PASS pos_inb_01_whatsapp_and_javascript_are_not_receipts");
+}
+
 const primary = {
   journeys: journeyResults.map((j) => ({
     name: j.name,

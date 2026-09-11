@@ -1,0 +1,44 @@
+{
+  "schema": "CONFENGE_CTA_CONTEXT/1.0.0",
+  "campaign": "POS-INB-20260911/01",
+  "surface": "https://confenge.com.br",
+  "post_target": "/api/web/lead",
+  "compatibility_alias": "/.netlify/functions/lead",
+  "receipt_after": "durable_persist",
+  "owners_write_html": ["02", "04", "05", "07"],
+  "this_campaign_does_not_overwrite_page_html": true,
+  "required_fields": ["nome", "telefone_or_email", "estagio", "consentimento"],
+  "optional_fields": ["empresa", "mensagem", "urgencia", "document_intent"],
+  "forbidden_for_private_demand": ["cnpj", "public_contract_id", "licitacao_ladder_required", "upload"],
+  "first_touch_frozen": [
+    "origem",
+    "origin_url",
+    "landing_url",
+    "landing_page",
+    "utm_source",
+    "utm_medium",
+    "utm_campaign",
+    "utm_content",
+    "utm_term"
+  ],
+  "current_need_may_evolve": [
+    "estagio",
+    "jornada",
+    "cta_id",
+    "asset_id",
+    "route_family",
+    "tema"
+  ],
+  "envelope": ["correlation_id", "session_id", "idempotency_key"],
+  "html_data_attrs": [
+    "data-cta-id",
+    "data-route-family",
+    "data-asset-id",
+    "data-asset-family",
+    "data-event-name"
+  ],
+  "validation": "server_allowlist_and_url_sanitize",
+  "absent_context": "omit_never_invent",
+  "whatsapp_click_without_post": "not_a_lead",
+  "browser_cannot_claim": ["synthetic", "paid_priority", "qualified", "handoff_accepted"]
+}
