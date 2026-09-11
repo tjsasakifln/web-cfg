@@ -1,0 +1,118 @@
+{
+  "schema": "confenge.partner-reference-kits/1.0",
+  "id": "partner-reference-kits-v1",
+  "site_origin": "https://confenge.com.br",
+  "auto_send": false,
+  "send_forbidden": true,
+  "public_route": "/parcerias-engenharia/",
+  "role": "Explicar como um escritório de arquitetura ou empresa de projeto encaminha uma necessidade de orçamento, revisão, compatibilização ou disciplina complementar, mantendo o cliente com quem encaminha.",
+  "optional_enrichment": {
+    "campaign_id": "12",
+    "level": "OPTIONAL_ENRICHMENT",
+    "kit_id": "complementares",
+    "candidate_paths": [
+      "/projetos-complementares-engenharia/",
+      "/projetos-complementares/",
+      "/engenharia-complementar/"
+    ]
+  },
+  "kits": [
+    {
+      "id": "orcamento-quantitativos",
+      "title": "Orçamento e quantitativos",
+      "purchase": "levantar ou revisar quantidades e custos",
+      "intent_family": "orcar_planejar_decidir",
+      "offer_id": "quantity_takeoff_budgeting",
+      "destination": {
+        "path": "/quantitativos-orcamento-obras/",
+        "label": "Quantitativos e orçamento de obras",
+        "required": true
+      },
+      "sample": {
+        "path": "/casos/modelo-base-quantitativa-canonica/",
+        "id": "base-quantitativa-canonica-demonstrativo",
+        "label": "Demonstrativo de base quantitativa",
+        "kind": "demonstrative",
+        "required": true
+      },
+      "conversation": {
+        "needed": [
+          "Se a obra é pública ou privada",
+          "Para que o orçamento vai ser usado",
+          "Em que fase está o projeto",
+          "Quais disciplinas e documentos já existem"
+        ],
+        "incomplete_ok": true
+      },
+      "share": {
+        "cta_id": "share-copy-kit-orcamento",
+        "utm_campaign": "inb11_orcamento"
+      }
+    },
+    {
+      "id": "revisao-compatibilizacao",
+      "title": "Revisão e compatibilização",
+      "purchase": "revisar um projeto existente ou registrar interferências entre disciplinas",
+      "intent_family": "projetar_revisar_compatibilizar",
+      "offer_id": "bim_coordination_clash_register",
+      "destination": {
+        "path": "/servicos/#servico-projeto",
+        "label": "Elaborar, revisar e compatibilizar projetos",
+        "required": true
+      },
+      "sample": {
+        "path": "/entregas/",
+        "id": "entregas-exemplos-hub",
+        "label": "Esquema ilustrativo da entrega de projeto, revisão e compatibilização",
+        "kind": "illustrative_schema",
+        "required": true
+      },
+      "conversation": {
+        "needed": [
+          "Se o pedido é revisar, compatibilizar ou as duas coisas",
+          "Quais disciplinas entram no recorte",
+          "Quem é o autor de origem de cada peça",
+          "Qual decisão o documento precisa sustentar"
+        ],
+        "incomplete_ok": true
+      },
+      "share": {
+        "cta_id": "share-copy-kit-revisao",
+        "utm_campaign": "inb11_revisao"
+      }
+    },
+    {
+      "id": "complementares",
+      "title": "Disciplina complementar",
+      "purchase": "completar uma disciplina de engenharia que falta no pacote",
+      "intent_family": "projetar_revisar_compatibilizar",
+      "offer_id": "complementary_engineering_project_review",
+      "destination": {
+        "path": "/servicos/#servico-projeto",
+        "label": "Elaborar, revisar e compatibilizar projetos",
+        "required": true
+      },
+      "sample": {
+        "path": null,
+        "id": null,
+        "label": null,
+        "kind": "optional_enrichment",
+        "required": false,
+        "enrichment_campaign": "12"
+      },
+      "conversation": {
+        "needed": [
+          "Qual disciplina precisa ser completada",
+          "O que já existe no pacote de projeto",
+          "Quem permanece autor de origem",
+          "Para que a disciplina vai ser usada"
+        ],
+        "incomplete_ok": true
+      },
+      "share": {
+        "cta_id": "share-copy-kit-complementares",
+        "utm_campaign": "inb11_complementares"
+      }
+    }
+  ]
+}

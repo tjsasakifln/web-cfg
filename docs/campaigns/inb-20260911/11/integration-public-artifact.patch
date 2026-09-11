@@ -1,0 +1,10 @@
+--- a/scripts/pseo/public_artifact.py
++++ b/scripts/pseo/public_artifact.py
+@@ -42,6 +42,7 @@ PUBLIC_TOP_DIRS = frozenset(
+         "confianca",
+         "servicos",
+         "quantitativos-orcamento-obras",
++        "parcerias-engenharia",
+         "triagem-tecnica",
+         "acompanhamento-contratos-obras",
+         "aditivos-obras-publicas",
