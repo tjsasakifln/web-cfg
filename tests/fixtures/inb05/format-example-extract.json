@@ -1,0 +1,111 @@
+{
+  "schema": "confenge.project-review-extract/1.0",
+  "kind": "demonstrative_format_example",
+  "source_campaign": "05",
+  "canonical_proof_campaign": "06",
+  "founder_approved": false,
+  "not_client_work": true,
+  "label": "Exemplo de formato do relatório de revisão. Não é conferência de um projeto real, não é trabalho de cliente e não substitui a prova canônica de INB-06.",
+  "package": {
+    "object": "edificação de uso misto — recorte estrutural didático",
+    "discipline": "estrutural",
+    "purpose": "decidir se o material recebido pode instruir contratação ou execução"
+  },
+  "geometry_verified": false,
+  "norm_verified": false,
+  "documents": [
+    {
+      "id": "doc-e04",
+      "name": "Prancha E-04 — plantas e cortes",
+      "revision": "R02",
+      "present": true
+    },
+    {
+      "id": "doc-memorial",
+      "name": "Memorial de cálculo estrutural",
+      "revision": "R01",
+      "present": true
+    },
+    {
+      "id": "doc-spec-concreto",
+      "name": "Especificação de concreto",
+      "revision": null,
+      "present": false
+    }
+  ],
+  "items": [
+    {
+      "id": "item-viga-v12",
+      "kind": "finding",
+      "document_id": "doc-e04",
+      "document_revision": "R02",
+      "element": "viga V12, corte A-A e quadro de seções na mesma prancha",
+      "finding_text": "O corte A-A desenha a viga V12 com seção 50×30 cm; o quadro de seções da mesma prancha lista V12 como 40×30 cm.",
+      "evidence_refs": ["doc-e04#corte-aa", "doc-e04#quadro-secoes"],
+      "implication": "Quantidades, forma e conferência de execução derivadas do quadro não coincidem com o corte desenhado.",
+      "missing_information": null,
+      "forwarding": "Devolver ao autor original o pedido de conciliar corte e quadro na mesma revisão.",
+      "geometry_verified": true,
+      "norm_verified": true
+    },
+    {
+      "id": "item-memorial-revisao",
+      "kind": "finding",
+      "document_id": "doc-memorial",
+      "document_revision": "R02",
+      "element": "capa do memorial versus selo da prancha E-04",
+      "finding_text": "O memorial apresentado está em R01 e a prancha conferida está em R02.",
+      "evidence_refs": ["doc-memorial#capa"],
+      "implication": "Não é possível afirmar que o cálculo apresentado corresponde à geometria da revisão examinada.",
+      "missing_information": "qual revisão do memorial acompanha a prancha E-04 R02",
+      "forwarding": "Solicitar o memorial na mesma revisão da prancha ou a declaração do autor de que R01 permanece válida."
+    },
+    {
+      "id": "item-spec-ausente",
+      "kind": "finding",
+      "document_id": "doc-spec-concreto",
+      "document_revision": null,
+      "element": "especificação de concreto citada no selo da prancha",
+      "finding_text": "A prancha cita especificação de concreto que não veio no pacote.",
+      "evidence_refs": ["doc-spec-concreto"],
+      "implication": null,
+      "missing_information": "documento de especificação de concreto",
+      "forwarding": "Pedir o documento ou confirmar que o critério está em outra peça do pacote."
+    },
+    {
+      "id": "item-recomendacao-coordenar",
+      "kind": "recommendation",
+      "document_id": "doc-e04",
+      "document_revision": "R02",
+      "element": "pacote estrutural antes de forma e armação",
+      "finding_text": null,
+      "evidence_refs": ["doc-e04#corte-aa"],
+      "implication": null,
+      "missing_information": null,
+      "forwarding": "Recomenda-se que o autor original emita uma revisão coordenada da prancha antes de usar E-04 para forma; esta recomendação não substitui a autoria nem aprova o projeto."
+    },
+    {
+      "id": "item-geometria-norma",
+      "kind": "verification",
+      "document_id": "doc-e04",
+      "document_revision": "R02",
+      "element": "viga V12 contra critério normativo aplicável",
+      "finding_text": "A conferência de geometria e de norma aplicável à V12 ainda não foi realizada neste recorte.",
+      "evidence_refs": ["doc-e04#corte-aa"],
+      "requires_geometry_or_norm": true,
+      "geometry_verified": false,
+      "norm_verified": false,
+      "implication": null,
+      "missing_information": "quais critérios de conferência foram contratados para a V12",
+      "forwarding": "Manter a pergunta técnica: qual critério se aplica à V12 neste recorte? Sem geometria e norma verificadas, não se conclui risco nem não conformidade."
+    }
+  ],
+  "checklist": [
+    {
+      "id": "chk-armadura",
+      "prompt": "Conferir armadura da V12 contra o memorial",
+      "status": "not_performed",
+      "document_id": "doc-memorial"
+    }
+  ]
+}
