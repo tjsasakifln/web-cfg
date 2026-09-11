@@ -42,13 +42,13 @@
       {
         "document_id": "PR-ARQ",
         "discipline": "arquitetônico",
-        "title": "Arquitetônico — planta e elevação leste",
+        "title": "Arquitetônico, planta e elevação leste",
         "revision": "R00"
       },
       {
         "document_id": "PR-EST",
         "discipline": "estrutural",
-        "title": "Estrutural — viga B-01",
+        "title": "Estrutural, viga B-01",
         "revision": "R00"
       }
     ],
@@ -93,7 +93,7 @@
         {
           "document_id": "PR-HID",
           "discipline": "hidrossanitário",
-          "title": "Hidrossanitário — poço HS-01",
+          "title": "Hidrossanitário, poço HS-01",
           "revision": "R00"
         }
       ],

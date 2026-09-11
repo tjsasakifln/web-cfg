@@ -94,7 +94,7 @@
 <p class="rv-lead">Conferimos o projeto que você recebeu e devolvemos um relatório com o que a evidência sustenta, o que falta, o que recomendamos e o que ainda não foi verificado. A proposta delimita documentos, disciplina e grau de detalhamento. Não substituímos o autor original nem assinamos projeto de terceiro.</p>
 <div class="hero-actions">
 <a class="button button-primary button-lg" data-cta-id="frame-project-review-hero" data-cta-position="hero" href="#contato-revisao">Conversar sobre a revisão do projeto <svg class="icon"><use href="#i-arrow"></use></svg></a>
-<a class="text-link" data-cta-id="understand-review-scope" href="#escopo-revisao">Ver o que entra na proposta</a>
+<a class="text-link" data-cta-id="understand-review-scope" href="#extrato-demonstrativo">Ver o extrato demonstrativo</a>
 </div>
 </div>
 <aside class="rv-signal">
@@ -138,58 +138,67 @@
 <header class="section-head">
 <p class="eyebrow">Como o relatório separa o que sabe do que pergunta</p>
 <h2 id="rv-extract-title">Extrato do recorte demonstrativo de revisão.</h2>
-<p class="section-lead rv-note" data-extract-kind="demonstrative" data-extract-canonical-source="inb-06">SELECT do demonstrativo <a href="/casos/demonstrativo-projeto-privado/">recorte de banheiro R01</a> e do <a href="/casos/demonstrativo-projeto-privado/data/revisao.csv">revisao.csv</a>. Exemplo demonstrativo, não é trabalho de cliente, não é conteúdo aprovado pelo fundador como case e não é parecer para executar obra. Item de checklist não respondido e norma não examinada não viram erro do projeto.</p>
 </header>
+<!--pos-inb-02:review-extract--><div class="rv-extract-slot" data-extract-kind="demonstrative" data-extract-canonical-source="inb-06" data-proof-id="demo-private-project-pilot-2026-09">
+<p class="section-lead rv-note">Exemplo demonstrativo do <a href="/casos/demonstrativo-projeto-privado/">recorte de banheiro</a> e do <a href="/casos/demonstrativo-projeto-privado/data/revisao.csv">arquivo de revisão</a>: não é trabalho de cliente e não é parecer para executar obra. Item de checklist não respondido e norma não examinada não viram erro do projeto.</p>
 <div class="rv-extract">
 <article class="rv-extract-item" data-extract-class="constatacao_sustentada" data-extract-id="RF-01">
 <p class="rv-class">Constatação sustentada</p>
 <h3>RF-01 · PR-ARQ-R00</h3>
 <dl>
-<dt>Documento e revisão</dt><dd>PR-ARQ-R00, extrato publicado em R01</dd>
-<dt>Trecho ou elemento</dt><dd>WN-01 × B-01</dd>
+<dt>Documento</dt><dd>PR-ARQ-R00 (extrato em R01)</dd>
 <dt>Constatação</dt><dd>A verga da janela WN-01 invade o volume da viga B-01 no estado original.</dd>
-<dt>Implicação</dt><dd>No estado original R00 a verga está em 2,30 m e o fundo da viga B-01 em 2,20 m, com sobreposição de 0,10 m no eixo Z. Estado no recorte: resolved_in_R01.</dd>
-<dt>Informação faltante</dt><dd>Nenhuma neste item: a sobreposição está nas faixas Z conferidas.</dd>
-<dt>Encaminhamento</dt><dd>Rebaixar a verga para 2,10 m no recorte R01 e manter a viga na cota original.</dd>
-</dl>
-</article>
-<article class="rv-extract-item" data-extract-class="informacao_faltante" data-extract-id="RF-02">
-<p class="rv-class">Informação faltante</p>
-<h3>RF-02 · PR-HID-R00</h3>
-<dl>
-<dt>Documento e revisão</dt><dd>PR-HID-R00, extrato publicado em R01</dd>
-<dt>Trecho ou elemento</dt><dd>HS-01</dd>
-<dt>Constatação</dt><dd>O poço hidrossanitário HS-01 não declara vão livre interno nem diâmetros.</dd>
-<dt>Implicação</dt><dd>Campo do recorte vazio. Ausência de informação, não conformidade com norma não examinada.</dd>
-<dt>Informação faltante</dt><dd>vão livre interno e diâmetros de tubulação do HS-01</dd>
-<dt>Encaminhamento</dt><dd>Registrar pedido de informação; não converter a lacuna em falha comprovada.</dd>
+<dt>Implicação</dt><dd>No estado original R00 a verga da janela está em 2,30 m e o fundo da viga B-01 em 2,20 m, com sobreposição de 0,10 m no eixo Z. Corrigido na revisão R01.</dd>
+<dt>Recomendação</dt><dd>Rebaixar a verga para 2,10 m no recorte R01 e manter a viga na cota original.</dd>
+<dt>Elementos no desenho</dt><dd><code>WN-01 B-01</code></dd>
 </dl>
 </article>
 <article class="rv-extract-item" data-extract-class="recomendacao" data-extract-id="RF-01-acao">
 <p class="rv-class">Recomendação</p>
 <h3>Ação de RF-01 no mesmo recorte</h3>
 <dl>
-<dt>Documento e revisão</dt><dd>PR-ARQ-R00 → correção publicada em R01</dd>
-<dt>Trecho ou elemento</dt><dd>WN-01 × B-01</dd>
-<dt>Constatação</dt><dd>Não há segundo edifício: a ação parte da constatação RF-01 já evidenciada.</dd>
-<dt>Implicação</dt><dd>No recorte R01 a verga desce para 2,10 m, com folga de 0,10 m até o fundo da viga.</dd>
-<dt>Informação faltante</dt><dd>Nenhuma neste item.</dd>
-<dt>Encaminhamento</dt><dd>Rebaixar a verga para 2,10 m no recorte R01 e manter a viga na cota original. A recomendação não substitui a autoria nem aprova o projeto.</dd>
+<dt>Documento</dt><dd>PR-ARQ-R00 (extrato em R01)</dd>
+<dt>Constatação</dt><dd>Rebaixar a verga para 2,10 m no recorte R01 e manter a viga na cota original.</dd>
+<dt>Implicação</dt><dd>Conferência geométrica das faixas Z dos dois elementos no recorte, sem exame de norma de dimensionamento.</dd>
+<dt>Recomendação</dt><dd>Rebaixar a verga para 2,10 m no recorte R01 e manter a viga na cota original.</dd>
+<dt>Elementos no desenho</dt><dd><code>WN-01 B-01</code></dd>
 </dl>
 </article>
 <article class="rv-extract-item" data-extract-class="verificacao_nao_realizada" data-extract-id="RF-01-norma">
 <p class="rv-class">Verificação ainda não realizada</p>
 <h3>Norma de dimensionamento não examinada</h3>
 <dl>
-<dt>Documento e revisão</dt><dd>PR-ARQ-R00 / PR-HID-R00, extrato R01</dd>
-<dt>Trecho ou elemento</dt><dd>WN-01 × B-01 e HS-01</dd>
-<dt>Constatação</dt><dd>Conferência geométrica das faixas Z dos dois elementos no recorte, sem exame de norma de dimensionamento. Campo do recorte do HS-01 vazio: ausência de informação, não conformidade com norma não examinada.</dd>
-<dt>Implicação</dt><dd>Não se conclui risco, não conformidade nem laudo de segurança a partir de norma não examinada.</dd>
-<dt>Informação faltante</dt><dd>qual critério normativo, se algum, se aplica a este recorte</dd>
-<dt>Encaminhamento</dt><dd>Manter a pergunta técnica. Checklist não respondido não é erro do projeto.</dd>
+<dt>Documento</dt><dd>PR-ARQ-R00 (extrato em R01)</dd>
+<dt>Constatação</dt><dd>Conferência geométrica das faixas Z dos dois elementos no recorte, sem exame de norma de dimensionamento.</dd>
+<dt>Implicação</dt><dd>Conferência geométrica das faixas Z dos dois elementos no recorte, sem exame de norma de dimensionamento.</dd>
+<dt>Recomendação</dt><dd>Manter a pergunta técnica: qual critério normativo, se algum, se aplica a este recorte? Sem norma examinada, não se conclui risco nem não conformidade.</dd>
+<dt>Elementos no desenho</dt><dd><code>WN-01 B-01</code></dd>
+</dl>
+</article>
+<article class="rv-extract-item" data-extract-class="informacao_faltante" data-extract-id="RF-02">
+<p class="rv-class">Informação faltante</p>
+<h3>RF-02 · PR-HID-R00</h3>
+<dl>
+<dt>Documento</dt><dd>PR-HID-R00 (extrato em R01)</dd>
+<dt>Constatação</dt><dd>O poço hidrossanitário HS-01 não declara vão livre interno nem diâmetros.</dd>
+<dt>Implicação</dt><dd>Campo do recorte vazio. Ausência de informação, não conformidade com norma não examinada.</dd>
+<dt>Recomendação</dt><dd>Registrar pedido de informação; não converter a lacuna em falha comprovada.</dd>
+<dt>Elementos no desenho</dt><dd><code>HS-01</code></dd>
+</dl>
+</article>
+<article class="rv-extract-item" data-extract-class="verificacao_nao_realizada" data-extract-id="RF-02-norma">
+<p class="rv-class">Verificação ainda não realizada</p>
+<h3>Norma de dimensionamento não examinada</h3>
+<dl>
+<dt>Documento</dt><dd>PR-HID-R00 (extrato em R01)</dd>
+<dt>Constatação</dt><dd>Campo do recorte vazio. Ausência de informação, não conformidade com norma não examinada.</dd>
+<dt>Implicação</dt><dd>Campo do recorte vazio. Ausência de informação, não conformidade com norma não examinada.</dd>
+<dt>Recomendação</dt><dd>Manter a pergunta técnica: qual critério normativo, se algum, se aplica a este recorte? Sem norma examinada, não se conclui risco nem não conformidade.</dd>
+<dt>Elementos no desenho</dt><dd><code>HS-01</code></dd>
 </dl>
 </article>
 </div>
+</div><!--/pos-inb-02:review-extract-->
 <p><a class="text-link" href="/conteudos/como-contratar-revisao-tecnica-projeto/">Como contratar a revisão: insumos e entrega</a></p>
 </div>
 </section>
@@ -228,7 +237,7 @@
 <p class="eyebrow">Próximo passo</p>
 <h2 id="rv-triage-title">Descreva a necessidade da revisão e como prefere o retorno.</h2>
 <p data-form-value>Diga o que você precisa conferir, o contato para retorno e, se quiser, um contexto opcional: se a obra é pública ou privada, o que já existe de projeto e a decisão que a revisão deve apoiar. Não é necessário listar normas ou disciplinas para conversar. Documentação inicial incompleta não impede o contato.</p>
-<p>O primeiro contato é direto com o Engº Tiago Sasaki, por WhatsApp, e-mail ou telefone. A resposta combina o canal seguro para os arquivos e informa o que ainda falta para preparar a proposta da revisão.</p>
+<p>O primeiro contato é direto com o Engº Tiago Sasaki, por WhatsApp, e-mail ou telefone. A resposta combina o canal seguro para os arquivos e informa o que ainda falta para preparar a proposta da revisão. O recorte, o formato do relatório e o modo de combinar devolutivas com o autor original ficam na proposta. Revisão, elaboração e compatibilização continuam compras diferentes.</p>
 </div>
 <div>
 <aside aria-labelledby="rv-channels-title" class="channel-card rv-channels">

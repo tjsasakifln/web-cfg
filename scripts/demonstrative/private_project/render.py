@@ -343,9 +343,14 @@ def render_html(extracts: dict[str, Any]) -> str:
     )
 
     state_pt = {
-        "resolved_in_R01": "resolvido em R01",
-        "information_requested": "informação pedida",
+        "resolved_in_R01": "Corrigido na revisão R01",
+        "information_requested": "Pedido de informação",
     }
+
+    def public_state(code: str) -> str:
+        if code in state_pt:
+            return state_pt[code]
+        raise SystemExit(f"unpublished_public_state:{code}")
     check_pt = {
         "arithmetic_documental_coherence": "conferência aritmética, documental e de coerência",
         "documental_coherence": "conferência documental",
@@ -354,7 +359,7 @@ def render_html(extracts: dict[str, Any]) -> str:
         [
             item["id"],
             "geométrica" if item["kind"] == "geometric" else "informação faltante",
-            state_pt.get(item["state"], item["state"]),
+            public_state(item["state"]),
             item["location_pt_br"],
             item["evidence_pt_br"],
             item["forwarding_pt_br"],
@@ -380,7 +385,7 @@ def render_html(extracts: dict[str, Any]) -> str:
 <p><strong>Local:</strong> {e(item["location_pt_br"])}</p>
 <p><strong>Evidência:</strong> {e(item["evidence_pt_br"])}</p>
 <p><strong>Encaminhamento:</strong> {e(item["forwarding_pt_br"])}</p>
-<p><strong>Estado:</strong> {e(state_pt.get(item["state"], item["state"]))} · elementos {e(" ".join(item["element_ids"]))}</p>
+<p><strong>Estado:</strong> {e(public_state(item["state"]))} · elementos {e(" ".join(item["element_ids"]))}</p>
 </article>"""
         for item in extracts["coordination_findings"]
     )
@@ -474,7 +479,7 @@ def render_html(extracts: dict[str, Any]) -> str:
 <section aria-labelledby="contratar">
 <h2 id="contratar">Pedir o mesmo tipo de entrega no seu projeto</h2>
 <p>O recorte cabe em qualquer porte e aceita contexto inicial incompleto. Elaboração, revisão, compatibilização, quantitativos e orçamento são compras distintas: o pedido descreve a necessidade, a proposta recorta o serviço. Autoria, atribuição, visita, logística e ART, quando couberem, são confirmadas antes do aceite técnico.</p>
-<p>Veja o escopo em <a href="/servicos/#servico-projeto">elaborar, revisar e compatibilizar projetos</a>. Traga o que você já tem.</p>
+<p>Peça a entrega que corresponde ao recorte: <a href="/quantitativos-orcamento-obras/">quantitativos e orçamento</a>, <a href="/revisao-tecnica-projetos-engenharia/">revisão técnica</a> ou <a href="/compatibilizacao-projetos-engenharia/">compatibilização</a>. Traga o que você já tem.</p>
 <div class="demo-actions">
 <a class="button button-primary" data-journey="contrato" data-cta-position="inline_cta" href="{e(wa)}" rel="noopener" target="_blank">Pedir proposta pelo WhatsApp</a>
 <a class="button button-secondary" data-journey="contrato" href="/triagem-tecnica/#projetos">Pedir pela triagem técnica</a>

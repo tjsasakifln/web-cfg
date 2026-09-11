@@ -166,7 +166,8 @@ test("landing extract separates four honest classes and refuses invented errors"
   assert.match(main, /data-extract-kind="demonstrative"/);
   assert.match(main, /data-extract-canonical-source="inb-06"/);
   assert.match(main, /não é trabalho de cliente/);
-  assert.match(main, /não é conteúdo aprovado pelo fundador/);
+  assert.equal(/aprovado pelo fundador|SELECT do demonstrativo|resolved_in_R01/.test(main), false);
+  assert.match(main, /Corrigido na revisão R01/);
   assert.match(main, /RF-01/);
   assert.match(main, /WN-01/);
   assert.match(main, /HS-01/);
@@ -180,7 +181,7 @@ test("landing extract separates four honest classes and refuses invented errors"
     assert.equal(main.includes(`data-extract-class="${cls}"`), true, `missing class ${cls}`);
   }
   assert.match(main, /Item de checklist não respondido|Checklist não respondido não é erro do projeto/);
-  assert.match(main, /não se conclui risco, não conformidade/i);
+  assert.match(main, /não se conclui risco(,| nem) não conformidade/i);
   assert.equal(/classifica[çc][aã]o de gravidade|nota de risco/i.test(main), false);
 });
 

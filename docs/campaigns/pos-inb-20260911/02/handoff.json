@@ -1,0 +1,192 @@
+{
+  "schema": "confenge.campaign-handoff/1.0",
+  "campaign_set": "POS-INB-20260911",
+  "campaign_id": "02",
+  "prompt_version": "1.0.0",
+  "state": "READY_FOR_INTEGRATION",
+  "base_sha": "cb6facfaaf50aa8f1834aba43d0245e04cbea672",
+  "branch": "campaign/pos-inb-20260911/02-prova-e-compra",
+  "pr_title": "[POS-INB-20260911][02] Prova técnica visível e páginas prioritárias contratáveis",
+  "decision_state": "EXECUTE_NOW",
+  "executive_front": "Connect the existing private-project demonstrative to quantitativos, revisão and compatibilização so a buyer can confer a sample and request a proposal.",
+  "time_to_evidence": "local generate + directed tests; production evidence after campaign 10 compose",
+  "leverage": ["trust", "revenue", "automation"],
+  "owned_paths": [
+    "quantitativos-orcamento-obras/",
+    "revisao-tecnica-projetos-engenharia/",
+    "compatibilizacao-projetos-engenharia/",
+    "casos/demonstrativo-projeto-privado/",
+    "data/demonstrative/private-project-pilot/",
+    "scripts/demonstrative/private_project/",
+    "scripts/campaigns/inb-20260911/05/",
+    "scripts/campaigns/pos-inb-20260911/02/",
+    "data/coordination/",
+    "scripts/coordination/",
+    "conteudos/documentos-para-levantamento-quantitativos/",
+    "conteudos/comparar-propostas-execucao-obra/",
+    "conteudos/revisar-ou-refazer-orcamento-obra/",
+    "conteudos/quando-compatibilizar-projetos/",
+    "conteudos/como-contratar-compatibilizacao-projetos/",
+    "conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/",
+    "conteudos/como-contratar-revisao-tecnica-projeto/",
+    "tests/pos-inb-20260911/02/",
+    "docs/campaigns/pos-inb-20260911/02/"
+  ],
+  "changed_paths": [
+    "quantitativos-orcamento-obras/index.html",
+    "quantitativos-orcamento-obras/sample-trail.mjs",
+    "revisao-tecnica-projetos-engenharia/index.html",
+    "compatibilizacao-projetos-engenharia/index.html",
+    "casos/demonstrativo-projeto-privado/index.html",
+    "data/demonstrative/private-project-pilot/consumption.v1.json",
+    "scripts/demonstrative/private_project/derive.py",
+    "scripts/demonstrative/private_project/generate.py",
+    "scripts/demonstrative/private_project/render.py",
+    "scripts/campaigns/inb-20260911/05/project_review_extract.mjs",
+    "scripts/campaigns/pos-inb-20260911/02/public_state.mjs",
+    "scripts/campaigns/pos-inb-20260911/02/compose_purchase_proof.mjs",
+    "scripts/coordination/interference_register.mjs",
+    "data/coordination/interference-register.v1.json",
+    "conteudos/como-contratar-revisao-tecnica-projeto/index.html",
+    "conteudos/como-contratar-compatibilizacao-projetos/index.html",
+    "conteudos/quando-compatibilizar-projetos/index.html",
+    "conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/index.html",
+    "tests/pos-inb-20260911/02/test_purchase_proof.mjs",
+    "tests/intake/test_quantity_takeoff_path.mjs",
+    "tests/intake/test_inb05_revisao_projetos.mjs",
+    "tests/intake/fixtures/quantity-takeoff-trail.fixture.json",
+    "tests/coordination/test_register_status.mjs",
+    "tests/coordination/test_page_contract.mjs",
+    "docs/campaigns/pos-inb-20260911/02/handoff.json",
+    "docs/campaigns/pos-inb-20260911/02/shared-changes.json"
+  ],
+  "requirements": [
+    {
+      "id": "F02",
+      "state": "DONE",
+      "evidence": "quantitativos-orcamento-obras/index.html ships #qty-sample-trail data-sample-trail-state=canonical with Q-PAR-01 numbers from consumption.sample_trail (19,60 m², ORC-PAR-01, formula sum(length*height)-openings>=0.50) and a link to /casos/demonstrativo-projeto-privado/#quantitativos. No awaiting-canonical-excerpt."
+    },
+    {
+      "id": "F04-revisao",
+      "state": "DONE",
+      "evidence": "revisao-tecnica-projetos-engenharia/index.html no longer prints SELECT do demonstrativo, aprovação pelo fundador or resolved_in_R01. RF-01 implication presents Corrigido na revisão R01. Extract fields are Documento, Constatação, Implicação, Recomendação."
+    },
+    {
+      "id": "A-pipeline",
+      "state": "DONE",
+      "evidence": "source.v1.json -> derive.py -> consumption.v1.json (sample_trail + richer findings) -> compose_purchase_proof.mjs injects the three purchase pages. generate.py calls compose. Root cause of F02: sample-trail.mjs pointed at non-existent casos/demonstrativo-quantitativos-orcamento/excerpt.v1.json and injectSampleTrail was test-only."
+    },
+    {
+      "id": "B-trail",
+      "state": "DONE",
+      "evidence": "Complete trail in initial HTML without JS: element W-02 + drawing location, criterion, formula/memory, quantity, spreadsheet item ORC-PAR-01, review reference RF-01. Hypothetical prices labelled not service price and not real SINAPI. Missing required input fails compose/generate."
+    },
+    {
+      "id": "C-compat-review",
+      "state": "DONE",
+      "evidence": "CF-GEO-01 shows geometric interference, forwarding and state Corrigido na revisão R01 with data-resolved=false. CF-INFO-01 remains Pedido de informação. Clash is not safety certification or structural validation."
+    },
+    {
+      "id": "D-states",
+      "state": "DONE",
+      "evidence": "scripts/campaigns/pos-inb-20260911/02/public_state.mjs maps resolved_in_R01 to Corrigido na revisão R01. Unknown codes are not printed and never map to aprovado. Tests cover unpublished_ok_to_build_v9."
+    },
+    {
+      "id": "E-F-G-buyer",
+      "state": "DONE",
+      "evidence": "Three purchase pages keep distinct canons and existing WhatsApp/e-mail/tel contracts (private_quantities_budget_route_v1, private_project_review_route_v1, engineering_coordination_clash_route_v1). Decision-content headers that already chose a purchase no longer bounce to /triagem-tecnica/. Shared lead handler unchanged. No UTM on internal links."
+    },
+    {
+      "id": "H-demo",
+      "state": "DONE",
+      "evidence": "Demonstrative regenerated from the same source. Window head remains verga da janela WN-01, not cota superior of B-01. Public state label Corrigido na revisão R01. CTA now points to the three distinct purchases instead of /servicos/#servico-projeto."
+    }
+  ],
+  "build_hook_for_10": {
+    "command": "python3 -m scripts.demonstrative.private_project.generate",
+    "also": "node scripts/campaigns/pos-inb-20260911/02/compose_purchase_proof.mjs",
+    "precondition": "data/demonstrative/private-project-pilot/source.v1.json exists. After generate, casos/demonstrativo-projeto-privado/data/{quantitativos,orcamento,revisao,coordenacao}.csv and consumption.v1.json exist.",
+    "fail_closed_test": "tests/pos-inb-20260911/02/test_purchase_proof.mjs cases removing source and removing quantitativos.csv",
+    "package_json": "requested in shared-changes.json; not edited by 02"
+  },
+  "dependencies": [
+    {
+      "id": "10-npm-scripts",
+      "provider": "10",
+      "state": "PENDING",
+      "note": "package.json scripts not applied here. Local generate and tests pass without them."
+    },
+    {
+      "id": "01-contact-runtime",
+      "provider": "01",
+      "state": "CAPTURED_CURRENT",
+      "note": "Preserved existing wa.me / mailto / tel contracts on the three landings. Did not wait for a new form."
+    },
+    {
+      "id": "03-csv-packaging",
+      "provider": "03",
+      "state": "NOT_BLOCKING",
+      "note": "02 provides source files and public CSV paths. 03 packages them."
+    },
+    {
+      "id": "08-infra-demo",
+      "provider": "08",
+      "state": "NOT_USED",
+      "note": "New infrastructure demonstrative is later enrichment, not a substitute for F02."
+    }
+  ],
+  "shared_changes": "docs/campaigns/pos-inb-20260911/02/shared-changes.json",
+  "commands_results": [
+    {
+      "command": "python3 -m scripts.demonstrative.private_project.generate",
+      "result": "PASS twice; regen-1 vs regen-2 diff empty for demonstrative HTML, consumption and the three purchase pages"
+    },
+    {
+      "command": "node --test tests/pos-inb-20260911/02/test_purchase_proof.mjs tests/intake/test_quantity_takeoff_path.mjs tests/intake/test_inb05_revisao_projetos.mjs tests/intake/test_inb05_project_review_extract.mjs tests/coordination/test_register_status.mjs tests/coordination/test_page_contract.mjs",
+      "result": "51 passed"
+    },
+    {
+      "command": "python3 -m pytest tests/demonstrative/test_private_project_pilot.py -q",
+      "result": "15 passed"
+    }
+  ],
+  "before_after": {
+    "quantitativos": {
+      "before": "#qty-sample-trail data-sample-trail-state=awaiting-canonical-excerpt and the sentence Os números conferíveis desta trilha entram aqui quando o demonstrativo canônico da CONFENGE estiver publicado.",
+      "after": "Canonical trail for Q-PAR-01 / ORC-PAR-01 with drawing location, criterion, formula, 19,60 m², RF-01 and a working link to the demonstrative. Visible with JS off."
+    },
+    "revisao": {
+      "before": "SELECT do demonstrativo; não é conteúdo aprovado pelo fundador como case; Estado no recorte: resolved_in_R01.",
+      "after": "Exemplo demonstrativo notice. Fields Documento, Constatação, Implicação, Recomendação. Corrigido na revisão R01. No founder/SELECT/raw code."
+    },
+    "compatibilizacao": {
+      "before": "CF-GEO-01 labelled Registrada, ajuste pendente do autor while the demonstrative already publishes R01.",
+      "after": "Interference, forwarding and state Corrigido na revisão R01 (not aprovado, data-resolved=false). CF-INFO-01 remains Pedido de informação."
+    },
+    "extract_interface": {
+      "before": "Hand-written HTML; injectSampleTrail test-only; review interpolated cf.state.",
+      "after": "consumption.sample_trail + classifyExtract + renderExtractHtml + renderRegisterHtml written by compose_purchase_proof.mjs. Markers pos-inb-02:* so the next generate overwrites numbers."
+    }
+  },
+  "reproducible_commands": [
+    "python3 -m scripts.demonstrative.private_project.generate",
+    "node scripts/campaigns/pos-inb-20260911/02/compose_purchase_proof.mjs",
+    "node --test tests/pos-inb-20260911/02/test_purchase_proof.mjs",
+    "node --test tests/intake/test_quantity_takeoff_path.mjs tests/intake/test_inb05_revisao_projetos.mjs",
+    "python3 -m pytest tests/demonstrative/test_private_project_pilot.py -q"
+  ],
+  "contact_contracts_captured": [
+    "private_quantities_budget_route_v1",
+    "private_project_review_route_v1",
+    "engineering_coordination_clash_route_v1"
+  ],
+  "unresolved": [
+    "Campaign 10 has not yet wired package.json / CI. Dependency 10-npm-scripts remains PENDING, not PASS.",
+    "Independent technical approval of the demonstrative remains absent and is still described as generator conferral, not a named professional review of a client project."
+  ],
+  "rollback": "Revert this branch. The previous public HTML of the three purchases and the INB-03 pending trail return. No production mutation was made by 02.",
+  "notes": [
+    "origin/main examined: cb6facfaaf50aa8f1834aba43d0245e04cbea672 (merge #669). #670 remains OPEN at e45c016f5742ce3a5420371798b8979dfacdb5e0; untouched.",
+    "READY_FOR_INTEGRATION is local delivery, not site approval."
+  ]
+}
