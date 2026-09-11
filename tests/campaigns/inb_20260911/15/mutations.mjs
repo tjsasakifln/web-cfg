@@ -8,7 +8,7 @@ import { fileURLToPath } from "node:url";
 import { createRequire } from "node:module";
 import { FAIL, PASS } from "./lib/harness.mjs";
 import { CORE_IDS } from "./matrix.mjs";
-import { receiptImpliesPersist, piiHitsInProps, unknownTreatedAsDefect } from "./checks.mjs";
+import { receiptImpliesPersist, retryDuplicated, piiHitsInProps, unknownTreatedAsDefect } from "./checks.mjs";
 import * as html from "./lib/html.mjs";
 import {
   leadEvent,
@@ -165,6 +165,77 @@ export async function runMutations(root) {
         controlPass,
         mutationDetected,
         detail: { controlUnknown: result.unknown_count, mutationStatus: mutated.status },
+      }),
+    );
+  }
+
+  // 7) erro/timeout/retry duplicado
+  {
+    process.env.NODE_ENV = "test";
+    const { handler, setStoreForTests, MemoryStore, _reset } = loadLead(root);
+    const mem = new MemoryStore();
+    setStoreForTests(mem);
+    _reset();
+    const originalFetch = globalThis.fetch;
+    let fetches = 0;
+    globalThis.fetch = async () => {
+      fetches += 1;
+      if (fetches === 1) {
+        const err = new Error("timeout");
+        err.name = "AbortError";
+        throw err;
+      }
+      return { ok: true, status: 200, text: async () => "{}", json: async () => ({}) };
+    };
+    process.env.OPS_WEBHOOK_URL = "https://ops.example.test/hook";
+    process.env.OPS_WEBHOOK_ALLOWED_HOSTS = "ops.example.test";
+    let controlPass = false;
+    try {
+      const payload = validLead({
+        nome: "Maria Construtora Norte",
+        telefone: "48999994401",
+        idempotency_key: "inb15-mut-retry-001",
+      });
+      const headers = { ip: "198.51.100.41", "Idempotency-Key": "inb15-mut-retry-001" };
+      const first = await handler(leadEvent(payload, "POST", headers));
+      const second = await handler(leadEvent(payload, "POST", headers));
+      const listed = await mem.list();
+      const v = retryDuplicated(first, second, listed.length);
+      controlPass = first.statusCode === 201 && v.sameId && v.replay && !v.duplicated;
+    } finally {
+      globalThis.fetch = originalFetch;
+      delete process.env.OPS_WEBHOOK_URL;
+      delete process.env.OPS_WEBHOOK_ALLOWED_HOSTS;
+    }
+    const fakeStore = new MemoryStore();
+    const fake = require("./fixtures/adversarial/retry-double-persist.cjs").createDoublePersistHandler(fakeStore);
+    const payload = validLead({ telefone: "48999994402", idempotency_key: "inb15-mut-retry-dup" });
+    const headers = { ip: "198.51.100.42", "Idempotency-Key": "inb15-mut-retry-dup" };
+    const m1 = await fake.handler(leadEvent(payload, "POST", headers));
+    const m2 = await fake.handler(leadEvent(payload, "POST", headers));
+    const listed = await fakeStore.list();
+    const mv = retryDuplicated(m1, m2, listed.length);
+    rows.push(
+      mutationRow("erro_timeout_retry_duplicado", {
+        controlPass,
+        mutationDetected: mv.duplicated,
+        detail: { controlPass, mutationStore: listed.length, mutationIds: [mv.firstId, mv.secondId] },
+      }),
+    );
+  }
+
+  // 8) quebra de público ao ampliar privado
+  {
+    const controlRel = "medicoes-glosas-obras-publicas/index.html";
+    const controlHtml = fs.readFileSync(path.join(root, controlRel), "utf8");
+    const mutatedHtml = fs.readFileSync(path.join(fixtures, "adversarial/b2g-cannibalized-private.html"), "utf8");
+    const control = html.b2gPublicPreserved(controlHtml, "/medicoes-glosas-obras-publicas/");
+    const mutated = html.b2gPublicPreserved(mutatedHtml, "/medicoes-glosas-obras-publicas/");
+    rows.push(
+      mutationRow("quebra_de_publico_ao_ampliar_privado", {
+        controlPass: !control.cannibalized,
+        mutationDetected: mutated.cannibalized,
+        detail: { control, mutated },
       }),
     );
   }

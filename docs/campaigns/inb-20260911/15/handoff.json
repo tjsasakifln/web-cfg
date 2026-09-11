@@ -26,6 +26,8 @@
     "tests/campaigns/inb_20260911/15/fixtures/adversarial/missing-proof.html",
     "tests/campaigns/inb_20260911/15/fixtures/adversarial/broken-required-link.html",
     "tests/campaigns/inb_20260911/15/fixtures/adversarial/core-manifest-omit.json",
+    "tests/campaigns/inb_20260911/15/fixtures/adversarial/retry-double-persist.cjs",
+    "tests/campaigns/inb_20260911/15/fixtures/adversarial/b2g-cannibalized-private.html",
     "tests/campaigns/inb_20260911/15/fixtures/control/sample-with-ids.html",
     "docs/campaigns/inb-20260911/15/handoff.json",
     "docs/campaigns/inb-20260911/15/shared-changes.json",
