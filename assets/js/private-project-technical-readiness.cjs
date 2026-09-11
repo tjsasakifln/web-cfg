@@ -269,13 +269,18 @@
   function justifyPrimary(primaryId, triggeredIds, decision) {
     var hasCost = triggeredIds.indexOf(ROUTE_ORCAMENTO) !== -1;
     var hasInterfaces = triggeredIds.indexOf(ROUTE_COMPAT) !== -1;
+    var row = routingRowById(primaryId);
     if (hasCost && hasInterfaces) {
       if (primaryId === ROUTE_COMPAT) {
         return "A recomendação principal é compatibilização porque a decisão declarada envolve contratar ou iniciar execução, e interfaces não conferidas alteram quantidades. O orçamento permanece como caminho possível; não é necessário contratar os dois de uma vez.";
       }
-      return "A recomendação principal é levantamento quantitativo e orçamentação porque a lacuna de quantidades e base de custo é a que mais trava a decisão de preço neste recorte. A conferência de interfaces permanece como caminho possível; não é necessário contratar os dois de uma vez.";
+      if (primaryId === ROUTE_ORCAMENTO) {
+        return "A recomendação principal é levantamento quantitativo e orçamentação porque a lacuna de quantidades e base de custo é a que mais trava a decisão de preço neste recorte. A conferência de interfaces permanece como caminho possível; não é necessário contratar os dois de uma vez.";
+      }
+      if (primaryId === ROUTE_REVISAO) {
+        return "A recomendação principal é revisão de projeto recebido porque a decisão declarada é contratar projeto, e o conjunto recebido está incompleto. Orçamento e compatibilização permanecem como caminhos possíveis; não é necessário contratar os dois de uma vez.";
+      }
     }
-    var row = routingRowById(primaryId);
     if (!row) return "Nenhuma contratação é sugerida a partir destas respostas.";
     if (decision && decision !== UNKNOWN) {
       return row.why + " A prioridade segue a decisão declarada, sem exigir outro serviço no mesmo passo.";
