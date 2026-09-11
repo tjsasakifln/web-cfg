@@ -143,6 +143,18 @@ try {
       waitUntil: "networkidle0",
       timeout: 30000,
     });
+    const arrival = await page.evaluate(() => ({
+      scrollY: Math.round(window.scrollY),
+      hash: window.location.hash,
+      origem: (() => {
+        try {
+          const raw = sessionStorage.getItem("confenge_pseo_attribution");
+          return raw ? JSON.parse(raw).origem || null : null;
+        } catch {
+          return null;
+        }
+      })(),
+    }));
     const report = await page.evaluate((clearance) => {
       const selectors = {
         category: ".hero-eyebrow",
@@ -433,7 +445,13 @@ try {
       concepts: CONTENT_CONCEPTS,
     });
 
+    report.arrival = arrival;
     report.three_second = threeSecond;
+    if (Math.abs(arrival.scrollY) > 8) {
+      failures.push(
+        `${report.viewport}: home arrived scrolled (scrollY=${arrival.scrollY}, hash=${JSON.stringify(arrival.hash)}, stored_origem=${JSON.stringify(arrival.origem)}); first-touch origem must not jump to the form`
+      );
+    }
     const destinationHref = threeSecond.primary_cta?.href || "";
     let destination = {
       href: destinationHref,

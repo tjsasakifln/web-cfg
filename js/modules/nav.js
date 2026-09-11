@@ -895,13 +895,24 @@
     });
 
     let anchoredOnLoad = false;
-    if (tema || origem || fromUrl.pseo_page_id || storedPseo.pseo_page_id
+    // Jump to the form only when THIS navigation asked for it (query or
+    // #contato). First-touch attribution copies landing_url into stored
+    // origem — on a plain "/" visit that value is "/", which is truthy and
+    // used to steal the first fold on every home load.
+    const urlAsksForContact = Boolean(
+      tema
+      || searchParams.get('origem')
+      || hashParams.get('origem')
+      || fromUrl.pseo_page_id
+      || searchParams.get('jornada')
+      || hashParams.get('jornada')
       || window.location.hash.startsWith('#contato')
-      || searchParams.get('jornada')) {
+      || window.location.hash.startsWith('#formulario-contato')
+    );
+    if (urlAsksForContact) {
       const contact = document.getElementById('formulario-contato')
         || document.getElementById('contato');
-      if (contact && (tema || origem || fromUrl.pseo_page_id || storedPseo.pseo_page_id
-        || searchParams.get('jornada') || window.location.hash.startsWith('#contato'))) {
+      if (contact) {
         anchoredOnLoad = true;
         goToAnchor(contact, true);
       }
