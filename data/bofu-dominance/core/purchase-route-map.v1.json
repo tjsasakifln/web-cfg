@@ -1,0 +1,1799 @@
+{
+  "schema_version": "confenge-purchase-route-map/v1",
+  "contract": "CONFENGE_PURCHASE_ROUTE_MAP/1.0.0",
+  "intent_contract": "CONFENGE_PUBLIC_INTENT_MATRIX/1.0.0",
+  "as_of": "2026-09-11",
+  "public_surface": "https://confenge.com.br",
+  "authority": {
+    "intent_universe": "data/corporate/intent-family-matrix.v1.json#intent_families",
+    "public_route_family_gate": "data/organic/public-family-registry.json",
+    "bofu_projection": "data/bofu-dominance/core/buyer-decision-map.v1.json",
+    "bofu_intent_matrix": "data/organic/bofu-intent-matrix.json",
+    "noindex_governance": "data/organic/noindex-governance-registry.json",
+    "commercial_action": "Warmbly after CONFENGE_WEB receipt",
+    "rule": "Este arquivo é o matcher compra→rota sobre IDs já declarados. Não cria segunda taxonomia nem altera IDs do consumidor comercial. A pasta de campanha não é fonte do site. INB-10 lê esta autoridade."
+  },
+  "page_kinds": [
+    "serviço",
+    "conteúdo de decisão",
+    "prova",
+    "ferramenta",
+    "hub"
+  ],
+  "business_contexts": [
+    "public",
+    "private",
+    "mixed",
+    "unknown"
+  ],
+  "decisions": [
+    "KEEP",
+    "ENRICH",
+    "CREATE",
+    "MERGE",
+    "REDIRECT",
+    "RETIRE"
+  ],
+  "zero_impressions_policy": "A rota nova pertinente com qualidade é permitida com zero impressões GSC. Zero não é ausência de demanda nem bloqueio.",
+  "cannibalization_rule": "Duas URLs comerciais da mesma compra sem diferenciação de função geram finding com as duas URLs e o conflito. Semelhança lexical ou família compartilhada, isoladamente, é aviso.",
+  "publication_cohorts": {
+    "existing-pre-inb-20260911": "Páginas já publicadas; histórico preservado.",
+    "inb-20260911-new": "Páginas novas desta campanha, sem apagar o histórico existente."
+  },
+  "gsc_sample_bound": {
+    "property": "sc-domain:confenge.com.br",
+    "export_date": "2026-09-11",
+    "period": "2026-09-02/2026-09-08",
+    "property_impressions": 176,
+    "property_clicks": 6,
+    "property_ctr": 0.0341,
+    "brasil_impressions": 147,
+    "brasil_clicks": 6,
+    "note": "Amostra pequena. Não inventar volumes, entrevistas, conversões, cases ou resultado de busca além do divulgado."
+  },
+  "purchases": [
+    {
+      "canonical": "https://confenge.com.br/servicos/",
+      "b2g_protected": false,
+      "quality_state": "EXISTING_COMPLETE",
+      "gsc_impressions": null,
+      "blocked_by_zero_impressions": false,
+      "equivalent_urls": [],
+      "commercial_surfaces": [],
+      "support_destinations": [
+        "/quantitativos-orcamento-obras/",
+        "/servicos-obras-publicas/",
+        "/triagem-tecnica/#projetos"
+      ],
+      "current_surface_kind": "hub",
+      "bofu_family_id": null,
+      "reindex_proposal": null,
+      "serp_sample": null,
+      "purchase_id": "hub-servicos",
+      "campaign_owner": "INB-09",
+      "visitor_job": "Reconhecer a situação técnica e seguir para a entrega aplicável sem precisar conhecer a estrutura interna.",
+      "seed_query_hypothesis": {
+        "query": "serviços de engenharia",
+        "status": "HYPOTHESIS",
+        "date": "2026-09-11",
+        "uncertainty": "Hipótese declarada. Amostra GSC 02–08/09/2026 é pequena; não é volume, dificuldade nem ranking permanente. Os termos dos seis cliques da propriedade não foram divulgados.",
+        "impressions_are_volume_claim": false
+      },
+      "intent_family": "outra_demanda_tecnica",
+      "offer_id": null,
+      "page_kind": "hub",
+      "question_answered": "Qual frente de engenharia corresponde à minha situação?",
+      "business_context": "mixed",
+      "primary_url": "/servicos/",
+      "proposed_primary_url": "/servicos/",
+      "source_of_truth": "/servicos/",
+      "requested_alias": null,
+      "supporting_urls": [
+        "/entregas/",
+        "/problemas-que-resolvemos/"
+      ],
+      "required_proof": "Âncoras de /servicos/ preservadas; não fundir revisão, compatibilização e elaboração nesta página.",
+      "terminal_contact": {
+        "mode": "capture_form_or_whatsapp",
+        "destination": "/triagem-tecnica/"
+      },
+      "decision": "KEEP",
+      "function_differentiation": "Navegação entre situações distintas; não é landing exclusiva de uma compra.",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "publication_cohort": {
+        "id": "existing-pre-inb-20260911",
+        "history_preserved": true
+      },
+      "contact_mode": "capture_form_or_whatsapp"
+    },
+    {
+      "canonical": "https://confenge.com.br/servicos-obras-publicas/",
+      "b2g_protected": false,
+      "quality_state": "EXISTING_COMPLETE",
+      "gsc_impressions": null,
+      "blocked_by_zero_impressions": false,
+      "equivalent_urls": [],
+      "commercial_surfaces": [],
+      "support_destinations": [],
+      "current_surface_kind": "hub",
+      "bofu_family_id": null,
+      "reindex_proposal": null,
+      "serp_sample": null,
+      "purchase_id": "hub-servicos-obras-publicas",
+      "campaign_owner": "INB-09",
+      "visitor_job": "Comparar a entrega para um evento de licitação ou contrato público e registrar o contexto antes da proposta.",
+      "seed_query_hypothesis": {
+        "query": "serviços obras públicas engenharia",
+        "status": "HYPOTHESIS",
+        "date": "2026-09-11",
+        "uncertainty": "Hipótese declarada. Amostra GSC 02–08/09/2026 é pequena; não é volume, dificuldade nem ranking permanente. Os termos dos seis cliques da propriedade não foram divulgados.",
+        "impressions_are_volume_claim": false
+      },
+      "intent_family": "decidir_disputar_licitacao",
+      "offer_id": null,
+      "page_kind": "hub",
+      "question_answered": "Qual serviço de obra pública corresponde ao meu evento contratual?",
+      "business_context": "public",
+      "primary_url": "/servicos-obras-publicas/",
+      "proposed_primary_url": "/servicos-obras-publicas/",
+      "source_of_truth": "/servicos-obras-publicas/",
+      "requested_alias": null,
+      "supporting_urls": [
+        "/servicos/#servico-obras-publicas"
+      ],
+      "required_proof": "Registro B2G existente preservado; não canibalizar pilares.",
+      "terminal_contact": {
+        "mode": "capture_form",
+        "destination": "/servicos-obras-publicas/"
+      },
+      "decision": "KEEP",
+      "function_differentiation": "Catálogo B2G de eventos; não substitui o pilar de um evento único.",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "publication_cohort": {
+        "id": "existing-pre-inb-20260911",
+        "history_preserved": true
+      },
+      "contact_mode": "capture_form"
+    },
+    {
+      "canonical": "https://confenge.com.br/casos/",
+      "b2g_protected": false,
+      "quality_state": "EXISTING_COMPLETE",
+      "gsc_impressions": null,
+      "blocked_by_zero_impressions": false,
+      "equivalent_urls": [],
+      "commercial_surfaces": [],
+      "support_destinations": [],
+      "current_surface_kind": "hub",
+      "bofu_family_id": null,
+      "reindex_proposal": null,
+      "serp_sample": null,
+      "purchase_id": "hub-casos",
+      "campaign_owner": "INB-09",
+      "visitor_job": "Ver um exemplo de entrega demonstrativo, com estrutura real e números hipotéticos, antes de contratar.",
+      "seed_query_hypothesis": {
+        "query": "exemplos de entrega engenharia",
+        "status": "HYPOTHESIS",
+        "date": "2026-09-11",
+        "uncertainty": "Hipótese declarada. Amostra GSC 02–08/09/2026 é pequena; não é volume, dificuldade nem ranking permanente. Os termos dos seis cliques da propriedade não foram divulgados.",
+        "impressions_are_volume_claim": false
+      },
+      "intent_family": "executar_proteger_contrato_publico",
+      "offer_id": null,
+      "page_kind": "hub",
+      "question_answered": "Como é o formato da entrega, sem tratar o demonstrativo como caso de cliente?",
+      "business_context": "public",
+      "primary_url": "/casos/",
+      "proposed_primary_url": "/casos/",
+      "source_of_truth": "/casos/",
+      "requested_alias": null,
+      "supporting_urls": [
+        "/entregas/"
+      ],
+      "required_proof": "Rótulo demonstrativo visível; zero resultados de cliente inventados.",
+      "terminal_contact": {
+        "mode": "capture_form_or_whatsapp",
+        "destination": "/triagem-tecnica/"
+      },
+      "decision": "KEEP",
+      "function_differentiation": "Índice de demonstrativos; não é página de contratação.",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "publication_cohort": {
+        "id": "existing-pre-inb-20260911",
+        "history_preserved": true
+      },
+      "contact_mode": "capture_form_or_whatsapp"
+    },
+    {
+      "canonical": "https://confenge.com.br/quantitativos-orcamento-obras/",
+      "b2g_protected": false,
+      "quality_state": "EXISTING_COMPLETE",
+      "gsc_impressions": null,
+      "blocked_by_zero_impressions": false,
+      "equivalent_urls": [],
+      "commercial_surfaces": [
+        {
+          "url": "/quantitativos-orcamento-obras/",
+          "function": "levantar quantitativos e orçar obra pública ou privada"
+        }
+      ],
+      "support_destinations": [],
+      "current_surface_kind": "serviço",
+      "bofu_family_id": null,
+      "reindex_proposal": null,
+      "serp_sample": null,
+      "purchase_id": "quantitativos-orcamento",
+      "campaign_owner": "INB-03",
+      "visitor_job": "Levantar quantitativos ou orçar obra pública ou privada com memória, premissas e referências identificadas.",
+      "seed_query_hypothesis": {
+        "query": "quantitativos orçamento obras",
+        "status": "GSC_CORROBORATION",
+        "date": "2026-09-11",
+        "uncertainty": "Uma impressão na consulta divulgada não é volume nem ausência de demanda privada. Não inventar os termos dos seis cliques da propriedade.",
+        "impressions_are_volume_claim": false,
+        "source": "GSC Web 02–08/09/2026, exportado em 11/09/2026",
+        "impressions": 1,
+        "clicks": 0,
+        "position": 1.0
+      },
+      "intent_family": "orcar_planejar_decidir",
+      "offer_id": "quantity_takeoff_budgeting",
+      "page_kind": "serviço",
+      "question_answered": "Como obter planilha de serviços, quantidades, composições e data-base para comparar propostas ou revisar a estimativa?",
+      "business_context": "mixed",
+      "primary_url": "/quantitativos-orcamento-obras/",
+      "proposed_primary_url": "/quantitativos-orcamento-obras/",
+      "source_of_truth": "/quantitativos-orcamento-obras/",
+      "requested_alias": null,
+      "supporting_urls": [
+        "/servicos/#servico-projeto",
+        "/entregas/"
+      ],
+      "required_proof": "Método, limites, ART quando aplicável e contato contextual já na landing existente.",
+      "terminal_contact": {
+        "mode": "capture_form_or_whatsapp",
+        "destination": "/quantitativos-orcamento-obras/#triagem-quantitativos"
+      },
+      "decision": "KEEP",
+      "function_differentiation": "Levantamento de quantitativos e orçamento de obra pública ou privada, não auditoria da planilha do edital.",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "publication_cohort": {
+        "id": "existing-pre-inb-20260911",
+        "history_preserved": true
+      },
+      "contact_mode": "capture_form_or_whatsapp"
+    },
+    {
+      "canonical": "https://confenge.com.br/auditoria-orcamento-licitacao/",
+      "b2g_protected": true,
+      "quality_state": "EXISTING_COMPLETE",
+      "gsc_impressions": null,
+      "blocked_by_zero_impressions": false,
+      "equivalent_urls": [],
+      "commercial_surfaces": [
+        {
+          "url": "/auditoria-orcamento-licitacao/",
+          "function": "auditar orçamento e BDI do edital público"
+        }
+      ],
+      "support_destinations": [
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "current_surface_kind": "serviço",
+      "bofu_family_id": "orcamento-bdi",
+      "reindex_proposal": null,
+      "serp_sample": null,
+      "purchase_id": "auditoria-orcamento-edital",
+      "campaign_owner": "INB-01",
+      "visitor_job": "Auditar orçamento, BDI e referências do edital público antes de precificar a proposta.",
+      "seed_query_hypothesis": {
+        "query": "sinapi desonerado",
+        "status": "GSC_CORROBORATION",
+        "date": "2026-09-11",
+        "uncertainty": "Corroboração qualitativa da família orçamento/SINAPI; não é ranking permanente nem prova de conversão.",
+        "impressions_are_volume_claim": false,
+        "source": "GSC Web 02–08/09/2026, exportado em 11/09/2026",
+        "impressions": 17,
+        "clicks": 1,
+        "position": 6.71
+      },
+      "intent_family": "orcar_planejar_decidir",
+      "offer_id": "budget_audit_feasibility",
+      "page_kind": "serviço",
+      "question_answered": "A planilha do edital e o BDI são coerentes com o regime e a referência de preços?",
+      "business_context": "public",
+      "primary_url": "/auditoria-orcamento-licitacao/",
+      "proposed_primary_url": "/auditoria-orcamento-licitacao/",
+      "source_of_truth": "/auditoria-orcamento-licitacao/",
+      "requested_alias": null,
+      "supporting_urls": [
+        "/conteudos/sinapi-desonerado-nao-desonerado/",
+        "/conteudos/sinapi-ou-sicro-obra-publica/",
+        "/conteudos/produtividade-sinapi-obra-publica/"
+      ],
+      "required_proof": "Pilar B2G protegido; artigo SINAPI permanece informacional e aponta para este serviço, não para contato genérico.",
+      "terminal_contact": {
+        "mode": "capture_form",
+        "destination": "/auditoria-orcamento-licitacao/"
+      },
+      "decision": "KEEP",
+      "function_differentiation": "Auditoria da planilha e do BDI do edital público, distinta do levantamento de quantitativos de uma obra.",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "publication_cohort": {
+        "id": "existing-pre-inb-20260911",
+        "history_preserved": true
+      },
+      "contact_mode": "capture_form"
+    },
+    {
+      "canonical": "https://confenge.com.br/compatibilizacao-projetos-engenharia/",
+      "b2g_protected": false,
+      "quality_state": "PASS_PENDING_PUBLICATION",
+      "gsc_impressions": 0,
+      "blocked_by_zero_impressions": false,
+      "equivalent_urls": [
+        "/servicos/#servico-projeto"
+      ],
+      "commercial_surfaces": [],
+      "support_destinations": [],
+      "current_surface_kind": "hub",
+      "bofu_family_id": null,
+      "reindex_proposal": null,
+      "serp_sample": {
+        "source": "web_search",
+        "date": "2026-09-11",
+        "observed_job": "contratar integração de disciplinas e detecção de interferências antes da obra",
+        "uncertainty": "amostra de SERP, não evidência de volume"
+      },
+      "purchase_id": "compatibilizacao-projetos",
+      "campaign_owner": "INB-04",
+      "visitor_job": "Resolver interferências entre disciplinas de projeto antes da execução.",
+      "seed_query_hypothesis": {
+        "query": "compatibilização de projetos de engenharia",
+        "status": "SERP_SAMPLE",
+        "date": "2026-09-11",
+        "uncertainty": "Amostra de resultados públicos em 2026-09-11 mostra contratação de detecção de interferências entre estrutura, instalações e arquitetura. Não é volume, dificuldade nem ranking permanente.",
+        "impressions_are_volume_claim": false,
+        "source": "web_search 2026-09-11"
+      },
+      "intent_family": "projetar_revisar_compatibilizar",
+      "offer_id": "bim_coordination_clash_register",
+      "page_kind": "serviço",
+      "question_answered": "Como registrar e resolver choques entre disciplinas antes da obra?",
+      "business_context": "mixed",
+      "primary_url": "/servicos/#servico-projeto",
+      "proposed_primary_url": "/compatibilizacao-projetos-engenharia/",
+      "source_of_truth": "/servicos/#servico-projeto",
+      "requested_alias": "/compatibilizacao-projetos-engenharia/",
+      "supporting_urls": [
+        "/entregas/"
+      ],
+      "required_proof": "Diferenciação explícita frente a revisão de um projeto e a elaboração de disciplina complementar.",
+      "terminal_contact": {
+        "mode": "capture_form_or_whatsapp",
+        "destination": "/triagem-tecnica/#projetos"
+      },
+      "decision": "CREATE",
+      "function_differentiation": "Coordenação de interfaces e registro de interferências entre disciplinas, não revisão de critérios de um projeto isolado nem elaboração da disciplina.",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "publication_cohort": {
+        "id": "inb-20260911-new",
+        "history_preserved": true,
+        "note": "Coorte de páginas novas desta campanha; não apaga o histórico das existentes."
+      },
+      "contact_mode": "capture_form_or_whatsapp"
+    },
+    {
+      "canonical": "https://confenge.com.br/revisao-tecnica-projetos-engenharia/",
+      "b2g_protected": false,
+      "quality_state": "PASS_PENDING_PUBLICATION",
+      "gsc_impressions": 0,
+      "blocked_by_zero_impressions": false,
+      "equivalent_urls": [
+        "/servicos/#servico-projeto"
+      ],
+      "commercial_surfaces": [],
+      "support_destinations": [],
+      "current_surface_kind": "hub",
+      "bofu_family_id": null,
+      "reindex_proposal": null,
+      "serp_sample": null,
+      "purchase_id": "revisao-tecnica-projetos",
+      "campaign_owner": "INB-05",
+      "visitor_job": "Revisar critérios, dimensionamento, coerência e executabilidade de um projeto já elaborado.",
+      "seed_query_hypothesis": {
+        "query": "revisão técnica de projetos de engenharia",
+        "status": "HYPOTHESIS",
+        "date": "2026-09-11",
+        "uncertainty": "Hipótese declarada. Amostra GSC 02–08/09/2026 é pequena; não é volume, dificuldade nem ranking permanente. Os termos dos seis cliques da propriedade não foram divulgados.",
+        "impressions_are_volume_claim": false
+      },
+      "intent_family": "projetar_revisar_compatibilizar",
+      "offer_id": "complementary_engineering_project_review",
+      "page_kind": "serviço",
+      "question_answered": "O projeto existente está coerente, executável e com critérios localizados para correção?",
+      "business_context": "mixed",
+      "primary_url": "/servicos/#servico-projeto",
+      "proposed_primary_url": "/revisao-tecnica-projetos-engenharia/",
+      "source_of_truth": "/servicos/#servico-projeto",
+      "requested_alias": "/revisao-tecnica-projetos-engenharia/",
+      "supporting_urls": [
+        "/entregas/"
+      ],
+      "required_proof": "Relatório de pontos localizados; não confundir com compatibilização de interfaces nem com elaboração da disciplina.",
+      "terminal_contact": {
+        "mode": "capture_form_or_whatsapp",
+        "destination": "/triagem-tecnica/#projetos"
+      },
+      "decision": "CREATE",
+      "function_differentiation": "Revisão de um projeto já existente (critérios, dimensionamento, coerência), não registro de interferências entre disciplinas nem elaboração da peça.",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "publication_cohort": {
+        "id": "inb-20260911-new",
+        "history_preserved": true,
+        "note": "Coorte de páginas novas desta campanha; não apaga o histórico das existentes."
+      },
+      "contact_mode": "capture_form_or_whatsapp"
+    },
+    {
+      "canonical": "https://confenge.com.br/projetos-complementares-engenharia/",
+      "b2g_protected": false,
+      "quality_state": "PASS_PENDING_PUBLICATION",
+      "gsc_impressions": 0,
+      "blocked_by_zero_impressions": false,
+      "equivalent_urls": [
+        "/servicos/#servico-projeto"
+      ],
+      "commercial_surfaces": [],
+      "support_destinations": [],
+      "current_surface_kind": "hub",
+      "bofu_family_id": null,
+      "reindex_proposal": null,
+      "serp_sample": null,
+      "purchase_id": "projetos-complementares",
+      "campaign_owner": "INB-12",
+      "visitor_job": "Elaborar disciplina de engenharia complementar (estrutura, hidrossanitário, elétrico, incêndio, climatização ou telecomunicações) com atribuição confirmada.",
+      "seed_query_hypothesis": {
+        "query": "projetos complementares de engenharia",
+        "status": "HYPOTHESIS",
+        "date": "2026-09-11",
+        "uncertainty": "Hipótese declarada. Amostra GSC 02–08/09/2026 é pequena; não é volume, dificuldade nem ranking permanente. Os termos dos seis cliques da propriedade não foram divulgados.",
+        "impressions_are_volume_claim": false
+      },
+      "intent_family": "projetar_revisar_compatibilizar",
+      "offer_id": "complementary_engineering_project_review",
+      "page_kind": "serviço",
+      "question_answered": "Quem elabora a disciplina que falta e entrega plantas, detalhes e memória na fase contratada?",
+      "business_context": "mixed",
+      "primary_url": "/servicos/#servico-projeto",
+      "proposed_primary_url": "/projetos-complementares-engenharia/",
+      "source_of_truth": "/servicos/#servico-projeto",
+      "requested_alias": "/projetos-complementares-engenharia/",
+      "supporting_urls": [
+        "/entregas/"
+      ],
+      "required_proof": "Não oferece autoria arquitetônica; disciplina e ART confirmadas antes do aceite.",
+      "terminal_contact": {
+        "mode": "capture_form_or_whatsapp",
+        "destination": "/triagem-tecnica/#projetos"
+      },
+      "decision": "CREATE",
+      "function_differentiation": "Elaboração da disciplina complementar, não revisão de peça alheia nem compatibilização de interfaces.",
+      "requested_indexability": "index,follow",
+      "release_unit": "EXPANSÃO",
+      "publication_cohort": {
+        "id": "inb-20260911-new",
+        "history_preserved": true,
+        "note": "Coorte de páginas novas desta campanha; não apaga o histórico das existentes."
+      },
+      "contact_mode": "capture_form_or_whatsapp"
+    },
+    {
+      "canonical": "https://confenge.com.br/casos/",
+      "b2g_protected": false,
+      "quality_state": "PASS_PENDING_PUBLICATION",
+      "gsc_impressions": 0,
+      "blocked_by_zero_impressions": false,
+      "equivalent_urls": [],
+      "commercial_surfaces": [],
+      "support_destinations": [],
+      "current_surface_kind": "hub",
+      "bofu_family_id": null,
+      "reindex_proposal": null,
+      "serp_sample": null,
+      "purchase_id": "demonstrativo-casos-inb06",
+      "campaign_owner": "INB-06",
+      "visitor_job": "Ver um demonstrativo subordinado a /casos/ que mostra método, não um caso de cliente nem uma nova landing de contratação.",
+      "seed_query_hypothesis": {
+        "query": "exemplo de entrega engenharia",
+        "status": "HYPOTHESIS",
+        "date": "2026-09-11",
+        "uncertainty": "Hipótese declarada. Amostra GSC 02–08/09/2026 é pequena; não é volume, dificuldade nem ranking permanente. Os termos dos seis cliques da propriedade não foram divulgados.",
+        "impressions_are_volume_claim": false
+      },
+      "intent_family": "projetar_revisar_compatibilizar",
+      "offer_id": null,
+      "page_kind": "prova",
+      "question_answered": "Como é o formato da entrega demonstrativa, com números hipotéticos identificados?",
+      "business_context": "mixed",
+      "primary_url": "/casos/",
+      "proposed_primary_url": "/casos/",
+      "source_of_truth": "/casos/",
+      "requested_alias": null,
+      "supporting_urls": [
+        "/casos/modelo-base-quantitativa-canonica/"
+      ],
+      "required_proof": "Rótulo demonstrativo; INB-06 escolhe o slug-filho sob /casos/ sem criar página de contratação.",
+      "terminal_contact": {
+        "mode": "service_transition",
+        "destination": "/casos/"
+      },
+      "decision": "CREATE",
+      "function_differentiation": "Demonstração metodológica subordinada a /casos/, não oferta de serviço nem landing comercial.",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "publication_cohort": {
+        "id": "inb-20260911-new",
+        "history_preserved": true,
+        "note": "Coorte de páginas novas desta campanha; não apaga o histórico das existentes."
+      },
+      "contact_mode": "service_transition"
+    },
+    {
+      "canonical": "https://confenge.com.br/servicos/",
+      "b2g_protected": false,
+      "quality_state": "EXISTING_COMPLETE",
+      "gsc_impressions": null,
+      "blocked_by_zero_impressions": false,
+      "equivalent_urls": [
+        "/servicos/"
+      ],
+      "commercial_surfaces": [],
+      "support_destinations": [],
+      "current_surface_kind": "hub",
+      "bofu_family_id": null,
+      "reindex_proposal": null,
+      "serp_sample": null,
+      "purchase_id": "inspecionar-diagnosticar",
+      "campaign_owner": "INB-01",
+      "visitor_job": "Entender fissura, infiltração, falha ou condição da edificação antes de decidir o reparo.",
+      "seed_query_hypothesis": {
+        "query": "inspeção predial patologia",
+        "status": "HYPOTHESIS",
+        "date": "2026-09-11",
+        "uncertainty": "Hipótese declarada. Amostra GSC 02–08/09/2026 é pequena; não é volume, dificuldade nem ranking permanente. Os termos dos seis cliques da propriedade não foram divulgados.",
+        "impressions_are_volume_claim": false
+      },
+      "intent_family": "inspecionar_diagnosticar",
+      "offer_id": "building_inspection_pathology",
+      "page_kind": "serviço",
+      "question_answered": "Qual é a condição observada e o que isso implica antes do reparo?",
+      "business_context": "mixed",
+      "primary_url": "/servicos/#servico-diagnostico",
+      "proposed_primary_url": "/servicos/#servico-diagnostico",
+      "source_of_truth": "/servicos/#servico-diagnostico",
+      "requested_alias": null,
+      "supporting_urls": [
+        "/servicos/"
+      ],
+      "required_proof": "Pergunta distinta da âncora de /servicos/; não criar slug novo enquanto o hub já atende a mesma compra.",
+      "terminal_contact": {
+        "mode": "capture_form_or_whatsapp",
+        "destination": "/triagem-tecnica/#obra-imovel"
+      },
+      "decision": "ENRICH",
+      "function_differentiation": "Diagnóstico da condição da edificação, não laudo pericial nem plano de reforma.",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "publication_cohort": {
+        "id": "existing-pre-inb-20260911",
+        "history_preserved": true
+      },
+      "contact_mode": "capture_form_or_whatsapp"
+    },
+    {
+      "canonical": "https://confenge.com.br/servicos/",
+      "b2g_protected": false,
+      "quality_state": "EXISTING_COMPLETE",
+      "gsc_impressions": null,
+      "blocked_by_zero_impressions": false,
+      "equivalent_urls": [
+        "/servicos/"
+      ],
+      "commercial_surfaces": [],
+      "support_destinations": [],
+      "current_surface_kind": "hub",
+      "bofu_family_id": null,
+      "reindex_proposal": null,
+      "serp_sample": null,
+      "purchase_id": "receber-entregar-reformar",
+      "campaign_owner": "INB-01",
+      "visitor_job": "Vistoriar recebimento, entrega ou reforma e registrar o que deve ser corrigido.",
+      "seed_query_hypothesis": {
+        "query": "vistoria de recebimento de obra",
+        "status": "HYPOTHESIS",
+        "date": "2026-09-11",
+        "uncertainty": "Hipótese declarada. Amostra GSC 02–08/09/2026 é pequena; não é volume, dificuldade nem ranking permanente. Os termos dos seis cliques da propriedade não foram divulgados.",
+        "impressions_are_volume_claim": false
+      },
+      "intent_family": "receber_entregar_reformar",
+      "offer_id": "renovation_plan_condo_review",
+      "page_kind": "serviço",
+      "question_answered": "O que deve ser corrigido na entrega, no recebimento ou na reforma?",
+      "business_context": "mixed",
+      "primary_url": "/servicos/#servico-diagnostico",
+      "proposed_primary_url": "/servicos/#servico-diagnostico",
+      "source_of_truth": "/servicos/#servico-diagnostico",
+      "requested_alias": null,
+      "supporting_urls": [
+        "/servicos/"
+      ],
+      "required_proof": "Pergunta distinta da âncora de /servicos/; não criar slug novo enquanto o hub já atende a mesma compra.",
+      "terminal_contact": {
+        "mode": "capture_form_or_whatsapp",
+        "destination": "/triagem-tecnica/#obra-imovel"
+      },
+      "decision": "ENRICH",
+      "function_differentiation": "Registro de pendências de recebimento/entrega/reforma, não diagnóstico de patologia isolada.",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "publication_cohort": {
+        "id": "existing-pre-inb-20260911",
+        "history_preserved": true
+      },
+      "contact_mode": "capture_form_or_whatsapp"
+    },
+    {
+      "canonical": "https://confenge.com.br/servicos/",
+      "b2g_protected": false,
+      "quality_state": "EXISTING_COMPLETE",
+      "gsc_impressions": null,
+      "blocked_by_zero_impressions": false,
+      "equivalent_urls": [
+        "/servicos/"
+      ],
+      "commercial_surfaces": [],
+      "support_destinations": [],
+      "current_surface_kind": "hub",
+      "bofu_family_id": null,
+      "reindex_proposal": null,
+      "serp_sample": null,
+      "purchase_id": "documentar-as-built",
+      "campaign_owner": "INB-01",
+      "visitor_job": "Registrar o que foi construído e organizar a documentação técnica que falta.",
+      "seed_query_hypothesis": {
+        "query": "as built documentação de obra",
+        "status": "HYPOTHESIS",
+        "date": "2026-09-11",
+        "uncertainty": "Hipótese declarada. Amostra GSC 02–08/09/2026 é pequena; não é volume, dificuldade nem ranking permanente. Os termos dos seis cliques da propriedade não foram divulgados.",
+        "impressions_are_volume_claim": false
+      },
+      "intent_family": "documentar_as_built_regularizar",
+      "offer_id": "asbuilt_document_reconciliation",
+      "page_kind": "serviço",
+      "question_answered": "Como documentar o existente sem prometer regularização ou aprovação?",
+      "business_context": "mixed",
+      "primary_url": "/servicos/#servico-diagnostico",
+      "proposed_primary_url": "/servicos/#servico-diagnostico",
+      "source_of_truth": "/servicos/#servico-diagnostico",
+      "requested_alias": null,
+      "supporting_urls": [
+        "/servicos/"
+      ],
+      "required_proof": "Pergunta distinta da âncora de /servicos/; não criar slug novo enquanto o hub já atende a mesma compra.",
+      "terminal_contact": {
+        "mode": "capture_form_or_whatsapp",
+        "destination": "/triagem-tecnica/#obra-imovel"
+      },
+      "decision": "ENRICH",
+      "function_differentiation": "Documentação do construído, não aprovação junto a órgão nem projeto novo.",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "publication_cohort": {
+        "id": "existing-pre-inb-20260911",
+        "history_preserved": true
+      },
+      "contact_mode": "capture_form_or_whatsapp"
+    },
+    {
+      "canonical": "https://confenge.com.br/servicos/",
+      "b2g_protected": false,
+      "quality_state": "EXISTING_COMPLETE",
+      "gsc_impressions": null,
+      "blocked_by_zero_impressions": false,
+      "equivalent_urls": [
+        "/servicos/"
+      ],
+      "commercial_surfaces": [],
+      "support_destinations": [],
+      "current_surface_kind": "hub",
+      "bofu_family_id": null,
+      "reindex_proposal": null,
+      "serp_sample": null,
+      "purchase_id": "avaliar-imovel",
+      "campaign_owner": "INB-01",
+      "visitor_job": "Obter valor de imóvel para uma finalidade e uma data definidas.",
+      "seed_query_hypothesis": {
+        "query": "avaliação de imóvel engenheiro",
+        "status": "HYPOTHESIS",
+        "date": "2026-09-11",
+        "uncertainty": "Hipótese declarada. Amostra GSC 02–08/09/2026 é pequena; não é volume, dificuldade nem ranking permanente. Os termos dos seis cliques da propriedade não foram divulgados.",
+        "impressions_are_volume_claim": false
+      },
+      "intent_family": "avaliar_imovel",
+      "offer_id": "urban_property_valuation",
+      "page_kind": "serviço",
+      "question_answered": "Qual valor, para qual finalidade e em qual data, com método declarado?",
+      "business_context": "private",
+      "primary_url": "/servicos/#servico-pericia",
+      "proposed_primary_url": "/servicos/#servico-pericia",
+      "source_of_truth": "/servicos/#servico-pericia",
+      "requested_alias": null,
+      "supporting_urls": [
+        "/servicos/"
+      ],
+      "required_proof": "Pergunta distinta da âncora de /servicos/; não criar slug novo enquanto o hub já atende a mesma compra.",
+      "terminal_contact": {
+        "mode": "capture_form_or_whatsapp",
+        "destination": "/triagem-tecnica/#pericia-avaliacao"
+      },
+      "decision": "ENRICH",
+      "function_differentiation": "Avaliação formal de imóvel urbano, não assistência de disputa nem parecer preliminar isolado.",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "publication_cohort": {
+        "id": "existing-pre-inb-20260911",
+        "history_preserved": true
+      },
+      "contact_mode": "capture_form_or_whatsapp"
+    },
+    {
+      "canonical": "https://confenge.com.br/servicos/",
+      "b2g_protected": false,
+      "quality_state": "EXISTING_COMPLETE",
+      "gsc_impressions": null,
+      "blocked_by_zero_impressions": false,
+      "equivalent_urls": [
+        "/servicos/"
+      ],
+      "commercial_surfaces": [],
+      "support_destinations": [],
+      "current_surface_kind": "hub",
+      "bofu_family_id": null,
+      "reindex_proposal": null,
+      "serp_sample": null,
+      "purchase_id": "produzir-prova-tecnica",
+      "campaign_owner": "INB-01",
+      "visitor_job": "Organizar prova técnica ou assistência de engenharia para uma disputa.",
+      "seed_query_hypothesis": {
+        "query": "assistência técnica engenharia perícia",
+        "status": "HYPOTHESIS",
+        "date": "2026-09-11",
+        "uncertainty": "Hipótese declarada. Amostra GSC 02–08/09/2026 é pequena; não é volume, dificuldade nem ranking permanente. Os termos dos seis cliques da propriedade não foram divulgados.",
+        "impressions_are_volume_claim": false
+      },
+      "intent_family": "produzir_prova_tecnica",
+      "offer_id": "pre_litigation_technical_screening",
+      "page_kind": "serviço",
+      "question_answered": "Qual prova técnica a parte precisa e qual o conflito de interesse?",
+      "business_context": "mixed",
+      "primary_url": "/servicos/#servico-pericia",
+      "proposed_primary_url": "/servicos/#servico-pericia",
+      "source_of_truth": "/servicos/#servico-pericia",
+      "requested_alias": null,
+      "supporting_urls": [
+        "/servicos/"
+      ],
+      "required_proof": "Pergunta distinta da âncora de /servicos/; não criar slug novo enquanto o hub já atende a mesma compra.",
+      "terminal_contact": {
+        "mode": "capture_form_or_whatsapp",
+        "destination": "/triagem-tecnica/#pericia-avaliacao"
+      },
+      "decision": "ENRICH",
+      "function_differentiation": "Assistência técnica de parte, não advocacia nem nomeação como perito do juízo.",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "publication_cohort": {
+        "id": "existing-pre-inb-20260911",
+        "history_preserved": true
+      },
+      "contact_mode": "capture_form_or_whatsapp"
+    },
+    {
+      "canonical": "https://confenge.com.br/servicos/",
+      "b2g_protected": false,
+      "quality_state": "EXISTING_COMPLETE",
+      "gsc_impressions": null,
+      "blocked_by_zero_impressions": false,
+      "equivalent_urls": [
+        "/servicos/"
+      ],
+      "commercial_surfaces": [],
+      "support_destinations": [],
+      "current_surface_kind": "hub",
+      "bofu_family_id": null,
+      "reindex_proposal": null,
+      "serp_sample": null,
+      "purchase_id": "assistencia-trabalhista-sst",
+      "campaign_owner": "INB-01",
+      "visitor_job": "Obter suporte técnico de SST em reclamação ou perícia trabalhista.",
+      "seed_query_hypothesis": {
+        "query": "assistência técnica SST trabalhista",
+        "status": "HYPOTHESIS",
+        "date": "2026-09-11",
+        "uncertainty": "Hipótese declarada. Amostra GSC 02–08/09/2026 é pequena; não é volume, dificuldade nem ranking permanente. Os termos dos seis cliques da propriedade não foram divulgados.",
+        "impressions_are_volume_claim": false
+      },
+      "intent_family": "assistencia_trabalhista_sst",
+      "offer_id": "labor_sst_technical_assistance",
+      "page_kind": "serviço",
+      "question_answered": "Qual suporte técnico de SST cabe nesta reclamação, após checagem de conflito?",
+      "business_context": "mixed",
+      "primary_url": "/servicos/#servico-sst",
+      "proposed_primary_url": "/servicos/#servico-sst",
+      "source_of_truth": "/servicos/#servico-sst",
+      "requested_alias": null,
+      "supporting_urls": [
+        "/servicos/"
+      ],
+      "required_proof": "Pergunta distinta da âncora de /servicos/; não criar slug novo enquanto o hub já atende a mesma compra.",
+      "terminal_contact": {
+        "mode": "capture_form_or_whatsapp",
+        "destination": "/triagem-tecnica/#sst"
+      },
+      "decision": "ENRICH",
+      "function_differentiation": "Assistência técnica de SST em disputa trabalhista, não PGR/LTCAT preventivo.",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "publication_cohort": {
+        "id": "existing-pre-inb-20260911",
+        "history_preserved": true
+      },
+      "contact_mode": "capture_form_or_whatsapp"
+    },
+    {
+      "canonical": "https://confenge.com.br/servicos/",
+      "b2g_protected": false,
+      "quality_state": "EXISTING_COMPLETE",
+      "gsc_impressions": null,
+      "blocked_by_zero_impressions": false,
+      "equivalent_urls": [
+        "/servicos/"
+      ],
+      "commercial_surfaces": [],
+      "support_destinations": [],
+      "current_surface_kind": "hub",
+      "bofu_family_id": null,
+      "reindex_proposal": null,
+      "serp_sample": null,
+      "purchase_id": "organizar-sst",
+      "campaign_owner": "INB-01",
+      "visitor_job": "Saber quais riscos e documentos de SST se aplicam e o que precisa ser atualizado.",
+      "seed_query_hypothesis": {
+        "query": "PGR LTCAT engenharia de segurança",
+        "status": "HYPOTHESIS",
+        "date": "2026-09-11",
+        "uncertainty": "Hipótese declarada. Amostra GSC 02–08/09/2026 é pequena; não é volume, dificuldade nem ranking permanente. Os termos dos seis cliques da propriedade não foram divulgados.",
+        "impressions_are_volume_claim": false
+      },
+      "intent_family": "organizar_sst",
+      "offer_id": "sst_risk_documentation_diagnosis",
+      "page_kind": "serviço",
+      "question_answered": "Quais documentos de SST se aplicam a esta operação e o que falta atualizar?",
+      "business_context": "mixed",
+      "primary_url": "/servicos/#servico-sst",
+      "proposed_primary_url": "/servicos/#servico-sst",
+      "source_of_truth": "/servicos/#servico-sst",
+      "requested_alias": null,
+      "supporting_urls": [
+        "/servicos/"
+      ],
+      "required_proof": "Pergunta distinta da âncora de /servicos/; não criar slug novo enquanto o hub já atende a mesma compra.",
+      "terminal_contact": {
+        "mode": "capture_form_or_whatsapp",
+        "destination": "/triagem-tecnica/#sst"
+      },
+      "decision": "ENRICH",
+      "function_differentiation": "Diagnóstico e documentos preventivos de SST, não assistência em reclamação trabalhista.",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "publication_cohort": {
+        "id": "existing-pre-inb-20260911",
+        "history_preserved": true
+      },
+      "contact_mode": "capture_form_or_whatsapp"
+    },
+    {
+      "canonical": "https://confenge.com.br/servicos/",
+      "b2g_protected": false,
+      "quality_state": "EXISTING_COMPLETE",
+      "gsc_impressions": null,
+      "blocked_by_zero_impressions": false,
+      "equivalent_urls": [
+        "/servicos/"
+      ],
+      "commercial_surfaces": [],
+      "support_destinations": [],
+      "current_surface_kind": "hub",
+      "bofu_family_id": null,
+      "reindex_proposal": null,
+      "serp_sample": null,
+      "purchase_id": "planejar-contratacao-publica",
+      "campaign_owner": "INB-01",
+      "visitor_job": "Organizar tecnicamente uma contratação pública de obra ou serviço de engenharia, no papel do ente.",
+      "seed_query_hypothesis": {
+        "query": "planejamento de contratação pública de obras",
+        "status": "HYPOTHESIS",
+        "date": "2026-09-11",
+        "uncertainty": "Hipótese declarada. Amostra GSC 02–08/09/2026 é pequena; não é volume, dificuldade nem ranking permanente. Os termos dos seis cliques da propriedade não foram divulgados.",
+        "impressions_are_volume_claim": false
+      },
+      "intent_family": "planejar_contratacao_publica",
+      "offer_id": "public_works_technical_procurement_planning",
+      "page_kind": "serviço",
+      "question_answered": "Como o ente estrutura tecnicamente a contratação sem misturar o papel do licitante?",
+      "business_context": "public",
+      "primary_url": "/servicos/#servico-obras-publicas",
+      "proposed_primary_url": "/servicos/#servico-obras-publicas",
+      "source_of_truth": "/servicos/#servico-obras-publicas",
+      "requested_alias": null,
+      "supporting_urls": [
+        "/servicos/"
+      ],
+      "required_proof": "Pergunta distinta da âncora de /servicos/; não criar slug novo enquanto o hub já atende a mesma compra.",
+      "terminal_contact": {
+        "mode": "capture_form_or_whatsapp",
+        "destination": "/triagem-tecnica/#planejamento-publico"
+      },
+      "decision": "ENRICH",
+      "function_differentiation": "Apoio técnico ao ente contratante, não consultoria ao licitante no mesmo certame.",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "publication_cohort": {
+        "id": "existing-pre-inb-20260911",
+        "history_preserved": true
+      },
+      "contact_mode": "capture_form_or_whatsapp"
+    },
+    {
+      "canonical": "https://confenge.com.br/triagem-tecnica/",
+      "b2g_protected": false,
+      "quality_state": "EXISTING_COMPLETE",
+      "gsc_impressions": null,
+      "blocked_by_zero_impressions": false,
+      "equivalent_urls": [],
+      "commercial_surfaces": [],
+      "support_destinations": [],
+      "current_surface_kind": "serviço",
+      "bofu_family_id": null,
+      "reindex_proposal": null,
+      "serp_sample": null,
+      "purchase_id": "outra-demanda-tecnica",
+      "campaign_owner": "INB-02",
+      "visitor_job": "Descrever uma demanda de engenharia ainda não delimitada e obter o próximo passo honesto.",
+      "seed_query_hypothesis": {
+        "query": "falar com engenheiro sobre obra",
+        "status": "HYPOTHESIS",
+        "date": "2026-09-11",
+        "uncertainty": "Hipótese declarada. Amostra GSC 02–08/09/2026 é pequena; não é volume, dificuldade nem ranking permanente. Os termos dos seis cliques da propriedade não foram divulgados.",
+        "impressions_are_volume_claim": false
+      },
+      "intent_family": "outra_demanda_tecnica",
+      "offer_id": null,
+      "page_kind": "serviço",
+      "question_answered": "Como registrar o contexto mínimo sem inventar competência, preço ou SKU?",
+      "business_context": "unknown",
+      "primary_url": "/triagem-tecnica/",
+      "proposed_primary_url": "/triagem-tecnica/",
+      "source_of_truth": "/triagem-tecnica/",
+      "requested_alias": null,
+      "supporting_urls": [
+        "/servicos/"
+      ],
+      "required_proof": "NEEDS_CONTEXT; não forçar diagnóstico obrigatório em toda visita às landings.",
+      "terminal_contact": {
+        "mode": "capture_form_or_whatsapp",
+        "destination": "/triagem-tecnica/"
+      },
+      "decision": "KEEP",
+      "function_differentiation": "Coleta de contexto quando a família ainda não está delimitada; não é owner das compras específicas.",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "publication_cohort": {
+        "id": "existing-pre-inb-20260911",
+        "history_preserved": true
+      },
+      "contact_mode": "capture_form_or_whatsapp"
+    },
+    {
+      "canonical": "https://confenge.com.br/diagnostico-pre-licitacao/",
+      "b2g_protected": true,
+      "quality_state": "EXISTING_COMPLETE",
+      "gsc_impressions": null,
+      "blocked_by_zero_impressions": false,
+      "equivalent_urls": [],
+      "commercial_surfaces": [
+        {
+          "url": "/diagnostico-pre-licitacao/",
+          "function": "Diagnóstico pré-licitação do licitante, não planejamento do ente."
+        }
+      ],
+      "support_destinations": [],
+      "current_surface_kind": "serviço",
+      "bofu_family_id": "edital-proposta",
+      "reindex_proposal": null,
+      "serp_sample": null,
+      "purchase_id": "diagnostico-pre-licitacao",
+      "campaign_owner": "INB-01",
+      "visitor_job": "Decidir se disputa o edital e quais riscos da proposta precisam ser enquadrados antes do preço.",
+      "seed_query_hypothesis": {
+        "query": "diagnóstico pré licitação obras",
+        "status": "HYPOTHESIS",
+        "date": "2026-09-11",
+        "uncertainty": "Hipótese declarada. Amostra GSC 02–08/09/2026 é pequena; não é volume, dificuldade nem ranking permanente. Os termos dos seis cliques da propriedade não foram divulgados.",
+        "impressions_are_volume_claim": false
+      },
+      "intent_family": "decidir_disputar_licitacao",
+      "offer_id": null,
+      "page_kind": "serviço",
+      "question_answered": "Vale participar, impugnar ou ajustar a proposta deste edital?",
+      "business_context": "public",
+      "primary_url": "/diagnostico-pre-licitacao/",
+      "proposed_primary_url": "/diagnostico-pre-licitacao/",
+      "source_of_truth": "/diagnostico-pre-licitacao/",
+      "requested_alias": null,
+      "supporting_urls": [
+        "/servicos-obras-publicas/"
+      ],
+      "required_proof": "Pilar B2G existente; não redirecionar à home nem fundir com outra compra.",
+      "terminal_contact": {
+        "mode": "capture_form",
+        "destination": "/diagnostico-pre-licitacao/"
+      },
+      "decision": "KEEP",
+      "function_differentiation": "Diagnóstico pré-licitação do licitante, não planejamento do ente.",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "publication_cohort": {
+        "id": "existing-pre-inb-20260911",
+        "history_preserved": true
+      },
+      "contact_mode": "capture_form"
+    },
+    {
+      "canonical": "https://confenge.com.br/medicoes-glosas-obras-publicas/",
+      "b2g_protected": true,
+      "quality_state": "EXISTING_COMPLETE",
+      "gsc_impressions": null,
+      "blocked_by_zero_impressions": false,
+      "equivalent_urls": [],
+      "commercial_surfaces": [
+        {
+          "url": "/medicoes-glosas-obras-publicas/",
+          "function": "Medição e glosa em contrato público, não aditivo nem reequilíbrio."
+        }
+      ],
+      "support_destinations": [],
+      "current_surface_kind": "serviço",
+      "bofu_family_id": "medicoes-pagamentos",
+      "reindex_proposal": null,
+      "serp_sample": null,
+      "purchase_id": "medicoes-glosas",
+      "campaign_owner": "INB-01",
+      "visitor_job": "Organizar medição, glosa ou parcela retida com prova contemporânea antes de perder prazo ou caixa.",
+      "seed_query_hypothesis": {
+        "query": "glosa de medição obra pública",
+        "status": "GSC_CORROBORATION",
+        "date": "2026-09-11",
+        "uncertainty": "Hipótese declarada. Amostra GSC 02–08/09/2026 é pequena; não é volume, dificuldade nem ranking permanente. Os termos dos seis cliques da propriedade não foram divulgados.",
+        "impressions_are_volume_claim": false,
+        "source": "GSC Web 02–08/09/2026, exportado em 11/09/2026",
+        "impressions": 28,
+        "clicks": 0,
+        "position": 4.79
+      },
+      "intent_family": "executar_proteger_contrato_publico",
+      "offer_id": null,
+      "page_kind": "serviço",
+      "question_answered": "Como contestar a glosa ou regularizar a medição com nexo e documentos?",
+      "business_context": "public",
+      "primary_url": "/medicoes-glosas-obras-publicas/",
+      "proposed_primary_url": "/medicoes-glosas-obras-publicas/",
+      "source_of_truth": "/medicoes-glosas-obras-publicas/",
+      "requested_alias": null,
+      "supporting_urls": [
+        "/servicos-obras-publicas/"
+      ],
+      "required_proof": "Pilar B2G existente; não redirecionar à home nem fundir com outra compra.",
+      "terminal_contact": {
+        "mode": "capture_form",
+        "destination": "/medicoes-glosas-obras-publicas/"
+      },
+      "decision": "KEEP",
+      "function_differentiation": "Medição e glosa em contrato público, não aditivo nem reequilíbrio.",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "publication_cohort": {
+        "id": "existing-pre-inb-20260911",
+        "history_preserved": true
+      },
+      "contact_mode": "capture_form"
+    },
+    {
+      "canonical": "https://confenge.com.br/aditivos-obras-publicas/",
+      "b2g_protected": true,
+      "quality_state": "EXISTING_COMPLETE",
+      "gsc_impressions": null,
+      "blocked_by_zero_impressions": false,
+      "equivalent_urls": [],
+      "commercial_surfaces": [
+        {
+          "url": "/aditivos-obras-publicas/",
+          "function": "Aditivos e alterações de escopo, não glosa de medição nem reequilíbrio econômico."
+        }
+      ],
+      "support_destinations": [],
+      "current_surface_kind": "serviço",
+      "bofu_family_id": "aditivos",
+      "reindex_proposal": null,
+      "serp_sample": null,
+      "purchase_id": "aditivos-obras-publicas",
+      "campaign_owner": "INB-01",
+      "visitor_job": "Enquadrar alteração contratual, item novo ou limite de acréscimo/supressão antes de executar sem cobertura.",
+      "seed_query_hypothesis": {
+        "query": "aditivos obras públicas",
+        "status": "GSC_CORROBORATION",
+        "date": "2026-09-11",
+        "uncertainty": "Hipótese declarada. Amostra GSC 02–08/09/2026 é pequena; não é volume, dificuldade nem ranking permanente. Os termos dos seis cliques da propriedade não foram divulgados.",
+        "impressions_are_volume_claim": false,
+        "source": "GSC Web 02–08/09/2026, exportado em 11/09/2026",
+        "impressions": 30,
+        "clicks": 0,
+        "position": 23.83
+      },
+      "intent_family": "executar_proteger_contrato_publico",
+      "offer_id": null,
+      "page_kind": "serviço",
+      "question_answered": "O fato cabe em aditivo e quais documentos sustentam a decisão formal?",
+      "business_context": "public",
+      "primary_url": "/aditivos-obras-publicas/",
+      "proposed_primary_url": "/aditivos-obras-publicas/",
+      "source_of_truth": "/aditivos-obras-publicas/",
+      "requested_alias": null,
+      "supporting_urls": [
+        "/servicos-obras-publicas/"
+      ],
+      "required_proof": "Pilar B2G existente; não redirecionar à home nem fundir com outra compra.",
+      "terminal_contact": {
+        "mode": "capture_form",
+        "destination": "/aditivos-obras-publicas/"
+      },
+      "decision": "KEEP",
+      "function_differentiation": "Aditivos e alterações de escopo, não glosa de medição nem reequilíbrio econômico.",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "publication_cohort": {
+        "id": "existing-pre-inb-20260911",
+        "history_preserved": true
+      },
+      "contact_mode": "capture_form"
+    },
+    {
+      "canonical": "https://confenge.com.br/reequilibrio-obras-publicas/",
+      "b2g_protected": true,
+      "quality_state": "EXISTING_COMPLETE",
+      "gsc_impressions": null,
+      "blocked_by_zero_impressions": false,
+      "equivalent_urls": [],
+      "commercial_surfaces": [
+        {
+          "url": "/reequilibrio-obras-publicas/",
+          "function": "Reequilíbrio econômico-financeiro, não aditivo de escopo nem reajuste automático."
+        }
+      ],
+      "support_destinations": [],
+      "current_surface_kind": "serviço",
+      "bofu_family_id": "reequilibrio",
+      "reindex_proposal": null,
+      "serp_sample": null,
+      "purchase_id": "reequilibrio-obras-publicas",
+      "campaign_owner": "INB-01",
+      "visitor_job": "Estruturar nexo fato–contrato–valor para reequilíbrio econômico-financeiro.",
+      "seed_query_hypothesis": {
+        "query": "reequilíbrio contrato obra pública",
+        "status": "HYPOTHESIS",
+        "date": "2026-09-11",
+        "uncertainty": "Hipótese declarada. Amostra GSC 02–08/09/2026 é pequena; não é volume, dificuldade nem ranking permanente. Os termos dos seis cliques da propriedade não foram divulgados.",
+        "impressions_are_volume_claim": false
+      },
+      "intent_family": "executar_proteger_contrato_publico",
+      "offer_id": null,
+      "page_kind": "serviço",
+      "question_answered": "Há nexo e memória para pedir reequilíbrio sem prometar deferimento?",
+      "business_context": "public",
+      "primary_url": "/reequilibrio-obras-publicas/",
+      "proposed_primary_url": "/reequilibrio-obras-publicas/",
+      "source_of_truth": "/reequilibrio-obras-publicas/",
+      "requested_alias": null,
+      "supporting_urls": [
+        "/servicos-obras-publicas/"
+      ],
+      "required_proof": "Pilar B2G existente; não redirecionar à home nem fundir com outra compra.",
+      "terminal_contact": {
+        "mode": "capture_form",
+        "destination": "/reequilibrio-obras-publicas/"
+      },
+      "decision": "KEEP",
+      "function_differentiation": "Reequilíbrio econômico-financeiro, não aditivo de escopo nem reajuste automático.",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "publication_cohort": {
+        "id": "existing-pre-inb-20260911",
+        "history_preserved": true
+      },
+      "contact_mode": "capture_form"
+    },
+    {
+      "canonical": "https://confenge.com.br/diagnostico-b2g-360/",
+      "b2g_protected": true,
+      "quality_state": "EXISTING_COMPLETE",
+      "gsc_impressions": null,
+      "blocked_by_zero_impressions": false,
+      "equivalent_urls": [],
+      "commercial_surfaces": [
+        {
+          "url": "/diagnostico-b2g-360/",
+          "function": "Diagnóstico de carteira B2G, não um evento contratual isolado."
+        }
+      ],
+      "support_destinations": [],
+      "current_surface_kind": "serviço",
+      "bofu_family_id": "carteira-operacao",
+      "reindex_proposal": null,
+      "serp_sample": null,
+      "purchase_id": "diagnostico-b2g-360",
+      "campaign_owner": "INB-01",
+      "visitor_job": "Ver a carteira de obras públicas e os riscos de operação em um recorte único.",
+      "seed_query_hypothesis": {
+        "query": "diagnóstico b2g obras",
+        "status": "HYPOTHESIS",
+        "date": "2026-09-11",
+        "uncertainty": "Hipótese declarada. Amostra GSC 02–08/09/2026 é pequena; não é volume, dificuldade nem ranking permanente. Os termos dos seis cliques da propriedade não foram divulgados.",
+        "impressions_are_volume_claim": false
+      },
+      "intent_family": "decidir_disputar_licitacao",
+      "offer_id": null,
+      "page_kind": "serviço",
+      "question_answered": "Qual é o recorte 360 da carteira e o que priorizar?",
+      "business_context": "public",
+      "primary_url": "/diagnostico-b2g-360/",
+      "proposed_primary_url": "/diagnostico-b2g-360/",
+      "source_of_truth": "/diagnostico-b2g-360/",
+      "requested_alias": null,
+      "supporting_urls": [
+        "/servicos-obras-publicas/"
+      ],
+      "required_proof": "Pilar B2G existente; não redirecionar à home nem fundir com outra compra.",
+      "terminal_contact": {
+        "mode": "capture_form",
+        "destination": "/diagnostico-b2g-360/"
+      },
+      "decision": "KEEP",
+      "function_differentiation": "Diagnóstico de carteira B2G, não um evento contratual isolado.",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "publication_cohort": {
+        "id": "existing-pre-inb-20260911",
+        "history_preserved": true
+      },
+      "contact_mode": "capture_form"
+    },
+    {
+      "canonical": "https://confenge.com.br/atrasos-prorrogacao-obras-publicas/",
+      "b2g_protected": false,
+      "quality_state": "EXISTING_COMPLETE",
+      "gsc_impressions": null,
+      "blocked_by_zero_impressions": false,
+      "equivalent_urls": [],
+      "commercial_surfaces": [
+        {
+          "url": "/atrasos-prorrogacao-obras-publicas/",
+          "function": "Prazos e prorrogações, não defesa de sanção já instaurada."
+        }
+      ],
+      "support_destinations": [],
+      "current_surface_kind": "serviço",
+      "bofu_family_id": "atrasos-prorrogacao",
+      "reindex_proposal": null,
+      "serp_sample": null,
+      "purchase_id": "atrasos-prorrogacao",
+      "campaign_owner": "INB-01",
+      "visitor_job": "Provar nexo de atraso e caminho crítico a tempo de pedir prorrogação ou responder notificação.",
+      "seed_query_hypothesis": {
+        "query": "prorrogação de prazo obra pública",
+        "status": "HYPOTHESIS",
+        "date": "2026-09-11",
+        "uncertainty": "Hipótese declarada. Amostra GSC 02–08/09/2026 é pequena; não é volume, dificuldade nem ranking permanente. Os termos dos seis cliques da propriedade não foram divulgados.",
+        "impressions_are_volume_claim": false
+      },
+      "intent_family": "executar_proteger_contrato_publico",
+      "offer_id": null,
+      "page_kind": "serviço",
+      "question_answered": "O atraso é imputável e quais documentos pedem a prorrogação?",
+      "business_context": "public",
+      "primary_url": "/atrasos-prorrogacao-obras-publicas/",
+      "proposed_primary_url": "/atrasos-prorrogacao-obras-publicas/",
+      "source_of_truth": "/atrasos-prorrogacao-obras-publicas/",
+      "requested_alias": null,
+      "supporting_urls": [
+        "/servicos-obras-publicas/"
+      ],
+      "required_proof": "Pilar B2G existente; não redirecionar à home nem fundir com outra compra.",
+      "terminal_contact": {
+        "mode": "capture_form",
+        "destination": "/atrasos-prorrogacao-obras-publicas/"
+      },
+      "decision": "KEEP",
+      "function_differentiation": "Prazos e prorrogações, não defesa de sanção já instaurada.",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "publication_cohort": {
+        "id": "existing-pre-inb-20260911",
+        "history_preserved": true
+      },
+      "contact_mode": "capture_form"
+    },
+    {
+      "canonical": "https://confenge.com.br/defesa-margem-contratos-publicos/",
+      "b2g_protected": false,
+      "quality_state": "EXISTING_COMPLETE",
+      "gsc_impressions": null,
+      "blocked_by_zero_impressions": false,
+      "equivalent_urls": [],
+      "commercial_surfaces": [
+        {
+          "url": "/defesa-margem-contratos-publicos/",
+          "function": "Defesa de margem, não defesa sancionatória."
+        }
+      ],
+      "support_destinations": [],
+      "current_surface_kind": "serviço",
+      "bofu_family_id": "defesa-margem",
+      "reindex_proposal": null,
+      "serp_sample": null,
+      "purchase_id": "defesa-margem",
+      "campaign_owner": "INB-01",
+      "visitor_job": "Defender margem contratual com memória e nexo antes de executar prejuízo.",
+      "seed_query_hypothesis": {
+        "query": "defesa de margem contrato público",
+        "status": "HYPOTHESIS",
+        "date": "2026-09-11",
+        "uncertainty": "Hipótese declarada. Amostra GSC 02–08/09/2026 é pequena; não é volume, dificuldade nem ranking permanente. Os termos dos seis cliques da propriedade não foram divulgados.",
+        "impressions_are_volume_claim": false
+      },
+      "intent_family": "executar_proteger_contrato_publico",
+      "offer_id": null,
+      "page_kind": "serviço",
+      "question_answered": "Como documentar a exposição de margem neste contrato público?",
+      "business_context": "public",
+      "primary_url": "/defesa-margem-contratos-publicos/",
+      "proposed_primary_url": "/defesa-margem-contratos-publicos/",
+      "source_of_truth": "/defesa-margem-contratos-publicos/",
+      "requested_alias": null,
+      "supporting_urls": [
+        "/servicos-obras-publicas/"
+      ],
+      "required_proof": "Pilar B2G existente; não redirecionar à home nem fundir com outra compra.",
+      "terminal_contact": {
+        "mode": "capture_form",
+        "destination": "/defesa-margem-contratos-publicos/"
+      },
+      "decision": "KEEP",
+      "function_differentiation": "Defesa de margem, não defesa sancionatória.",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "publication_cohort": {
+        "id": "existing-pre-inb-20260911",
+        "history_preserved": true
+      },
+      "contact_mode": "capture_form"
+    },
+    {
+      "canonical": "https://confenge.com.br/defesa-tecnica-contratos-publicos/",
+      "b2g_protected": false,
+      "quality_state": "EXISTING_COMPLETE",
+      "gsc_impressions": null,
+      "blocked_by_zero_impressions": false,
+      "equivalent_urls": [],
+      "commercial_surfaces": [
+        {
+          "url": "/defesa-tecnica-contratos-publicos/",
+          "function": "Defesa técnica sancionatória, não pedido de aditivo."
+        }
+      ],
+      "support_destinations": [],
+      "current_surface_kind": "serviço",
+      "bofu_family_id": "defesa-sancoes",
+      "reindex_proposal": null,
+      "serp_sample": null,
+      "purchase_id": "defesa-sancoes",
+      "campaign_owner": "INB-01",
+      "visitor_job": "Responder notificação ou processo sancionador com cronologia e prova contemporânea.",
+      "seed_query_hypothesis": {
+        "query": "defesa técnica contrato público",
+        "status": "HYPOTHESIS",
+        "date": "2026-09-11",
+        "uncertainty": "Hipótese declarada. Amostra GSC 02–08/09/2026 é pequena; não é volume, dificuldade nem ranking permanente. Os termos dos seis cliques da propriedade não foram divulgados.",
+        "impressions_are_volume_claim": false
+      },
+      "intent_family": "executar_proteger_contrato_publico",
+      "offer_id": null,
+      "page_kind": "serviço",
+      "question_answered": "Como responder a notificação sem admitir fato não comprovado?",
+      "business_context": "public",
+      "primary_url": "/defesa-tecnica-contratos-publicos/",
+      "proposed_primary_url": "/defesa-tecnica-contratos-publicos/",
+      "source_of_truth": "/defesa-tecnica-contratos-publicos/",
+      "requested_alias": null,
+      "supporting_urls": [
+        "/servicos-obras-publicas/"
+      ],
+      "required_proof": "Pilar B2G existente; não redirecionar à home nem fundir com outra compra.",
+      "terminal_contact": {
+        "mode": "capture_form",
+        "destination": "/defesa-tecnica-contratos-publicos/"
+      },
+      "decision": "KEEP",
+      "function_differentiation": "Defesa técnica sancionatória, não pedido de aditivo.",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "publication_cohort": {
+        "id": "existing-pre-inb-20260911",
+        "history_preserved": true
+      },
+      "contact_mode": "capture_form"
+    },
+    {
+      "canonical": "https://confenge.com.br/acompanhamento-contratos-obras/",
+      "b2g_protected": false,
+      "quality_state": "EXISTING_COMPLETE",
+      "gsc_impressions": null,
+      "blocked_by_zero_impressions": false,
+      "equivalent_urls": [],
+      "commercial_surfaces": [
+        {
+          "url": "/acompanhamento-contratos-obras/",
+          "function": "Acompanhamento contínuo, não um pleito pontual."
+        }
+      ],
+      "support_destinations": [],
+      "current_surface_kind": "serviço",
+      "bofu_family_id": "gestao-contratual",
+      "reindex_proposal": null,
+      "serp_sample": null,
+      "purchase_id": "gestao-contratual",
+      "campaign_owner": "INB-01",
+      "visitor_job": "Acompanhar o contrato público com registro contínuo de fatos, prazos e medições.",
+      "seed_query_hypothesis": {
+        "query": "acompanhamento de contrato de obra pública",
+        "status": "HYPOTHESIS",
+        "date": "2026-09-11",
+        "uncertainty": "Hipótese declarada. Amostra GSC 02–08/09/2026 é pequena; não é volume, dificuldade nem ranking permanente. Os termos dos seis cliques da propriedade não foram divulgados.",
+        "impressions_are_volume_claim": false
+      },
+      "intent_family": "executar_proteger_contrato_publico",
+      "offer_id": null,
+      "page_kind": "serviço",
+      "question_answered": "Como manter o dossiê do contrato enquanto a obra corre?",
+      "business_context": "public",
+      "primary_url": "/acompanhamento-contratos-obras/",
+      "proposed_primary_url": "/acompanhamento-contratos-obras/",
+      "source_of_truth": "/acompanhamento-contratos-obras/",
+      "requested_alias": null,
+      "supporting_urls": [
+        "/servicos-obras-publicas/"
+      ],
+      "required_proof": "Pilar B2G existente; não redirecionar à home nem fundir com outra compra.",
+      "terminal_contact": {
+        "mode": "capture_form",
+        "destination": "/acompanhamento-contratos-obras/"
+      },
+      "decision": "KEEP",
+      "function_differentiation": "Acompanhamento contínuo, não um pleito pontual.",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "publication_cohort": {
+        "id": "existing-pre-inb-20260911",
+        "history_preserved": true
+      },
+      "contact_mode": "capture_form"
+    },
+    {
+      "canonical": "https://confenge.com.br/bid-room-licitacoes-obras/",
+      "b2g_protected": false,
+      "quality_state": "EXISTING_COMPLETE",
+      "gsc_impressions": null,
+      "blocked_by_zero_impressions": false,
+      "equivalent_urls": [],
+      "commercial_surfaces": [
+        {
+          "url": "/bid-room-licitacoes-obras/",
+          "function": "Sala de proposta de um certame, não diretoria permanente."
+        }
+      ],
+      "support_destinations": [],
+      "current_surface_kind": "serviço",
+      "bofu_family_id": "bid-room",
+      "reindex_proposal": null,
+      "serp_sample": null,
+      "purchase_id": "bid-room",
+      "campaign_owner": "INB-01",
+      "visitor_job": "Operar a sala de proposta de um certame específico com papéis e prazos.",
+      "seed_query_hypothesis": {
+        "query": "bid room licitações obras",
+        "status": "HYPOTHESIS",
+        "date": "2026-09-11",
+        "uncertainty": "Hipótese declarada. Amostra GSC 02–08/09/2026 é pequena; não é volume, dificuldade nem ranking permanente. Os termos dos seis cliques da propriedade não foram divulgados.",
+        "impressions_are_volume_claim": false
+      },
+      "intent_family": "decidir_disputar_licitacao",
+      "offer_id": null,
+      "page_kind": "serviço",
+      "question_answered": "Como montar a proposta deste certame com os documentos certos?",
+      "business_context": "public",
+      "primary_url": "/bid-room-licitacoes-obras/",
+      "proposed_primary_url": "/bid-room-licitacoes-obras/",
+      "source_of_truth": "/bid-room-licitacoes-obras/",
+      "requested_alias": null,
+      "supporting_urls": [
+        "/servicos-obras-publicas/"
+      ],
+      "required_proof": "Pilar B2G existente; não redirecionar à home nem fundir com outra compra.",
+      "terminal_contact": {
+        "mode": "capture_form",
+        "destination": "/bid-room-licitacoes-obras/"
+      },
+      "decision": "KEEP",
+      "function_differentiation": "Sala de proposta de um certame, não diretoria permanente.",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "publication_cohort": {
+        "id": "existing-pre-inb-20260911",
+        "history_preserved": true
+      },
+      "contact_mode": "capture_form"
+    },
+    {
+      "canonical": "https://confenge.com.br/diretoria-b2g/",
+      "b2g_protected": false,
+      "quality_state": "EXISTING_COMPLETE",
+      "gsc_impressions": null,
+      "blocked_by_zero_impressions": false,
+      "equivalent_urls": [],
+      "commercial_surfaces": [
+        {
+          "url": "/diretoria-b2g/",
+          "function": "Diretoria B2G no tempo, não um diagnóstico pontual de edital."
+        }
+      ],
+      "support_destinations": [],
+      "current_surface_kind": "serviço",
+      "bofu_family_id": "diretoria-b2g",
+      "reindex_proposal": null,
+      "serp_sample": null,
+      "purchase_id": "diretoria-b2g",
+      "campaign_owner": "INB-01",
+      "visitor_job": "Sustentar a operação B2G no tempo, com governança da carteira.",
+      "seed_query_hypothesis": {
+        "query": "diretoria b2g obras públicas",
+        "status": "HYPOTHESIS",
+        "date": "2026-09-11",
+        "uncertainty": "Hipótese declarada. Amostra GSC 02–08/09/2026 é pequena; não é volume, dificuldade nem ranking permanente. Os termos dos seis cliques da propriedade não foram divulgados.",
+        "impressions_are_volume_claim": false
+      },
+      "intent_family": "decidir_disputar_licitacao",
+      "offer_id": null,
+      "page_kind": "serviço",
+      "question_answered": "Como a diretoria acompanha a carteira de obras públicas?",
+      "business_context": "public",
+      "primary_url": "/diretoria-b2g/",
+      "proposed_primary_url": "/diretoria-b2g/",
+      "source_of_truth": "/diretoria-b2g/",
+      "requested_alias": null,
+      "supporting_urls": [
+        "/servicos-obras-publicas/"
+      ],
+      "required_proof": "Pilar B2G existente; não redirecionar à home nem fundir com outra compra.",
+      "terminal_contact": {
+        "mode": "capture_form",
+        "destination": "/diretoria-b2g/"
+      },
+      "decision": "KEEP",
+      "function_differentiation": "Diretoria B2G no tempo, não um diagnóstico pontual de edital.",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "publication_cohort": {
+        "id": "existing-pre-inb-20260911",
+        "history_preserved": true
+      },
+      "contact_mode": "capture_form"
+    },
+    {
+      "canonical": "https://confenge.com.br/diagnostico-b2g-expansao/",
+      "b2g_protected": false,
+      "quality_state": "EXISTING_COMPLETE",
+      "gsc_impressions": null,
+      "blocked_by_zero_impressions": false,
+      "equivalent_urls": [],
+      "commercial_surfaces": [
+        {
+          "url": "/diagnostico-b2g-expansao/",
+          "function": "Expansão de carteira, não diagnóstico de um edital isolado."
+        }
+      ],
+      "support_destinations": [],
+      "current_surface_kind": "serviço",
+      "bofu_family_id": "diagnostico-expansao",
+      "reindex_proposal": null,
+      "serp_sample": null,
+      "purchase_id": "diagnostico-b2g-expansao",
+      "campaign_owner": "INB-01",
+      "visitor_job": "Avaliar expansão geográfica da operação de obras públicas.",
+      "seed_query_hypothesis": {
+        "query": "expansão obras públicas estados",
+        "status": "HYPOTHESIS",
+        "date": "2026-09-11",
+        "uncertainty": "Hipótese declarada. Amostra GSC 02–08/09/2026 é pequena; não é volume, dificuldade nem ranking permanente. Os termos dos seis cliques da propriedade não foram divulgados.",
+        "impressions_are_volume_claim": false
+      },
+      "intent_family": "decidir_disputar_licitacao",
+      "offer_id": null,
+      "page_kind": "serviço",
+      "question_answered": "Faz sentido expandir a operação B2G para outro recorte?",
+      "business_context": "public",
+      "primary_url": "/diagnostico-b2g-expansao/",
+      "proposed_primary_url": "/diagnostico-b2g-expansao/",
+      "source_of_truth": "/diagnostico-b2g-expansao/",
+      "requested_alias": null,
+      "supporting_urls": [
+        "/servicos-obras-publicas/"
+      ],
+      "required_proof": "Pilar B2G existente; não redirecionar à home nem fundir com outra compra.",
+      "terminal_contact": {
+        "mode": "capture_form",
+        "destination": "/diagnostico-b2g-expansao/"
+      },
+      "decision": "KEEP",
+      "function_differentiation": "Expansão de carteira, não diagnóstico de um edital isolado.",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "publication_cohort": {
+        "id": "existing-pre-inb-20260911",
+        "history_preserved": true
+      },
+      "contact_mode": "capture_form"
+    },
+    {
+      "canonical": "https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/",
+      "b2g_protected": false,
+      "quality_state": "EXISTING_COMPLETE",
+      "gsc_impressions": null,
+      "blocked_by_zero_impressions": false,
+      "equivalent_urls": [],
+      "commercial_surfaces": [],
+      "support_destinations": [
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "current_surface_kind": "conteúdo de decisão",
+      "bofu_family_id": "orcamento-bdi",
+      "reindex_proposal": null,
+      "serp_sample": null,
+      "purchase_id": "sinapi-referencia-informacional",
+      "campaign_owner": "INB-01",
+      "visitor_job": "Entender qual tabela SINAPI ou SICRO usar no orçamento público, sem tratar o artigo como serviço contratável.",
+      "seed_query_hypothesis": {
+        "query": "sinapi desonerado ou não desonerado",
+        "status": "GSC_CORROBORATION",
+        "date": "2026-09-11",
+        "uncertainty": "Artigo informacional com contexto de obra pública. Clique único não prova conversão nem ranking permanente.",
+        "impressions_are_volume_claim": false,
+        "source": "GSC Web 02–08/09/2026, exportado em 11/09/2026",
+        "impressions": 17,
+        "clicks": 1,
+        "position": 6.71
+      },
+      "intent_family": "orcar_planejar_decidir",
+      "offer_id": null,
+      "page_kind": "conteúdo de decisão",
+      "question_answered": "Qual tabela de referência (desonerada ou não, SINAPI ou SICRO) cabe neste regime?",
+      "business_context": "public",
+      "primary_url": "/conteudos/sinapi-desonerado-nao-desonerado/",
+      "proposed_primary_url": "/conteudos/sinapi-desonerado-nao-desonerado/",
+      "source_of_truth": "/conteudos/sinapi-desonerado-nao-desonerado/",
+      "requested_alias": null,
+      "supporting_urls": [
+        "/conteudos/sinapi-ou-sicro-obra-publica/",
+        "/conteudos/produtividade-sinapi-obra-publica/"
+      ],
+      "required_proof": "Permanecer informacional; próximo passo comercial é a auditoria de orçamento, não contato genérico.",
+      "terminal_contact": {
+        "mode": "service_transition",
+        "destination": "/auditoria-orcamento-licitacao/"
+      },
+      "decision": "KEEP",
+      "function_differentiation": "Conteúdo de decisão sobre referência de preços públicos, distinto de contratar levantamento de quantitativos ou auditoria da planilha.",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "publication_cohort": {
+        "id": "existing-pre-inb-20260911",
+        "history_preserved": true
+      },
+      "contact_mode": "service_transition"
+    },
+    {
+      "canonical": "https://confenge.com.br/ferramentas/prontidao-tecnica-obra-privada/",
+      "b2g_protected": false,
+      "quality_state": "EXISTING_COMPLETE",
+      "gsc_impressions": null,
+      "blocked_by_zero_impressions": false,
+      "equivalent_urls": [],
+      "commercial_surfaces": [],
+      "support_destinations": [],
+      "current_surface_kind": "ferramenta",
+      "bofu_family_id": null,
+      "reindex_proposal": {
+        "index_now": false,
+        "reason_code_observed": "commercial_surface_deferred",
+        "robots_txt_disallow": false,
+        "meta_robots": "noindex,follow",
+        "url_removal": false,
+        "condition": "Reindexar somente se a ferramenta for útil, completa e sem impedimento material (lógica de falso positivo corrigida). Não confundir robots.txt, noindex e remoção de URL."
+      },
+      "serp_sample": null,
+      "purchase_id": "prontidao-tecnica-obra-privada",
+      "campaign_owner": "INB-07",
+      "visitor_job": "Identificar evidências, lacunas e desconhecidos de uma obra privada antes de contratar ou retomar, lendo o resultado sem contato.",
+      "seed_query_hypothesis": {
+        "query": "prontidão técnica obra privada",
+        "status": "HYPOTHESIS",
+        "date": "2026-09-11",
+        "uncertainty": "Hipótese declarada. Amostra GSC 02–08/09/2026 é pequena; não é volume, dificuldade nem ranking permanente. Os termos dos seis cliques da propriedade não foram divulgados.",
+        "impressions_are_volume_claim": false
+      },
+      "intent_family": "orcar_planejar_decidir",
+      "offer_id": "private_project_technical_readiness_assessment",
+      "page_kind": "ferramenta",
+      "question_answered": "O que já está evidenciado e o que ainda é desconhecido nesta obra privada?",
+      "business_context": "private",
+      "primary_url": "/ferramentas/prontidao-tecnica-obra-privada/",
+      "proposed_primary_url": "/ferramentas/prontidao-tecnica-obra-privada/",
+      "source_of_truth": "/ferramentas/prontidao-tecnica-obra-privada/",
+      "requested_alias": null,
+      "supporting_urls": [
+        "/ferramentas/",
+        "/triagem-tecnica/"
+      ],
+      "required_proof": "noindex atual é commercial_surface_deferred (falso positivo de prontidão), não inventário de maturidade obsoleto nem Disallow em robots.txt.",
+      "terminal_contact": {
+        "mode": "capture_form_or_whatsapp",
+        "destination": "/ferramentas/prontidao-tecnica-obra-privada/"
+      },
+      "decision": "KEEP",
+      "function_differentiation": "Ferramenta de leitura de lacunas; não é landing de quantitativos nem diagnóstico B2G.",
+      "requested_indexability": "noindex,follow",
+      "release_unit": "CORE",
+      "publication_cohort": {
+        "id": "existing-pre-inb-20260911",
+        "history_preserved": true
+      },
+      "contact_mode": "capture_form_or_whatsapp"
+    }
+  ]
+}

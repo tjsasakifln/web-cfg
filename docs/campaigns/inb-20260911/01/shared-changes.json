@@ -1,0 +1,165 @@
+{
+  "schema": "confenge.inbound-shared-changes/1.0",
+  "campaign_id": "01",
+  "owner_campaign": "01",
+  "applier": "16",
+  "base_sha": "8f508544835490ec635d02517bce0207c6f8e426",
+  "changes": [
+    {
+      "change_id": "INB-01-IFM-projetar-disambiguation",
+      "owner_campaign": "16",
+      "path": "data/corporate/intent-family-matrix.v1.json",
+      "base_blob_sha": "7aa37ff4c28928881950a8c31bd215b98ccd91a3",
+      "operation": "upsert",
+      "key_or_anchor": "intent_families[intent_family=projetar_revisar_compatibilizar].disambiguation",
+      "expected_old": "Não oferece autoria arquitetônica. Disciplina, atribuição, autoria de origem, interfaces e responsabilidade técnica precisam ser confirmadas antes da proposta.",
+      "desired_new": "Não oferece autoria arquitetônica. Elaboração de disciplina complementar, revisão de um projeto já existente e compatibilização de interfaces são compras distintas e não devem ser fundidas. Disciplina, atribuição, autoria de origem, interfaces e responsabilidade técnica precisam ser confirmadas antes da proposta.",
+      "rationale": "A família canônica permanece uma; o matcher de INB-01 desdobra três compras. Sem segundo núcleo. IDs de oferta inalterados.",
+      "acceptance_test": "test:corporate-taxonomy continua fechado no shape atual; purchase map mantém três purchase_id distintos com a mesma intent_family."
+    },
+    {
+      "change_id": "INB-01-IFM-orcar-mixed-distinct",
+      "owner_campaign": "16",
+      "path": "data/corporate/intent-family-matrix.v1.json",
+      "base_blob_sha": "7aa37ff4c28928881950a8c31bd215b98ccd91a3",
+      "operation": "upsert",
+      "key_or_anchor": "intent_families[intent_family=orcar_planejar_decidir].disambiguation",
+      "expected_old": "A família atende orçamento público e privado. Finalidade, referências de preços, critérios, estágio do projeto e objeto definem a entrega; preserve a necessidade original no contato.",
+      "desired_new": "A família atende orçamento público e privado. Levantamento de quantitativos de uma obra e auditoria da planilha do edital são compras distintas. Uma oferta de orçamento para ambos os contextos permanece mixed, não exclusivamente pública ou privada. Finalidade, referências de preços, critérios, estágio do projeto e objeto definem a entrega; preserve a necessidade original no contato.",
+      "rationale": "business_context=mixed no mapa de INB-01. Não forçar orçar_planejar_decidir a ser só B2G ou só privado.",
+      "acceptance_test": "quantitativos-orcamento permanece business_context=mixed e /quantitativos-orcamento-obras/; auditoria-orcamento-edital permanece public em /auditoria-orcamento-licitacao/."
+    },
+    {
+      "change_id": "INB-01-PFR-compatibilizacao",
+      "owner_campaign": "16",
+      "path": "data/organic/public-family-registry.json",
+      "base_blob_sha": "61e219892d5ad8c80f37dc18399f51f5df119ca1",
+      "operation": "upsert",
+      "key_or_anchor": "families[id=compatibilizacao-projetos-engenharia]",
+      "expected_old": null,
+      "desired_new": {
+        "id": "compatibilizacao-projetos-engenharia",
+        "visitor_job": "Resolver interferências entre disciplinas de projeto antes da execução e solicitar o registro das soluções.",
+        "profile": "commercial_content",
+        "terminal_action": "capture_form_or_whatsapp",
+        "match": {
+          "routes": [
+            "/compatibilizacao-projetos-engenharia/"
+          ]
+        },
+        "gate_coverage": {
+          "conversion": "full",
+          "copy": "full",
+          "accessibility": "full"
+        },
+        "declared_at": "2026-09-11",
+        "owner_issue": null,
+        "debt": [],
+        "index_evidence": {
+          "substrate": "first_party_publication",
+          "not_applicable": [
+            "official_live",
+            "citable_source"
+          ],
+          "reason": "Landing comercial de primeira parte sobre compatibilização de projetos da própria CONFENGE.",
+          "authority": [
+            "data/corporate/intent-family-matrix.v1.json",
+            "data/bofu-dominance/core/purchase-route-map.v1.json"
+          ],
+          "declared_at": "2026-09-11",
+          "owner_issue": null
+        }
+      },
+      "rationale": "Família pública para a landing CREATE de INB-04. Aplicar quando o HTML existir; rota ainda não publicada. Não indexar URL vazia.",
+      "acceptance_test": "Com o HTML de INB-04 presente, a rota indexável pertence a esta família e não à âncora genérica de /servicos/ como owner exclusivo da compra."
+    },
+    {
+      "change_id": "INB-01-PFR-revisao-tecnica",
+      "owner_campaign": "16",
+      "path": "data/organic/public-family-registry.json",
+      "base_blob_sha": "61e219892d5ad8c80f37dc18399f51f5df119ca1",
+      "operation": "upsert",
+      "key_or_anchor": "families[id=revisao-tecnica-projetos-engenharia]",
+      "expected_old": null,
+      "desired_new": {
+        "id": "revisao-tecnica-projetos-engenharia",
+        "visitor_job": "Revisar critérios, dimensionamento, coerência e executabilidade de um projeto já elaborado.",
+        "profile": "commercial_content",
+        "terminal_action": "capture_form_or_whatsapp",
+        "match": {
+          "routes": [
+            "/revisao-tecnica-projetos-engenharia/"
+          ]
+        },
+        "gate_coverage": {
+          "conversion": "full",
+          "copy": "full",
+          "accessibility": "full"
+        },
+        "declared_at": "2026-09-11",
+        "owner_issue": null,
+        "debt": [],
+        "index_evidence": {
+          "substrate": "first_party_publication",
+          "not_applicable": [
+            "official_live",
+            "citable_source"
+          ],
+          "reason": "Landing comercial de primeira parte sobre revisão técnica de projetos da própria CONFENGE.",
+          "authority": [
+            "data/corporate/intent-family-matrix.v1.json",
+            "data/bofu-dominance/core/purchase-route-map.v1.json"
+          ],
+          "declared_at": "2026-09-11",
+          "owner_issue": null
+        }
+      },
+      "rationale": "Família pública para a landing CREATE de INB-05. Aplicar quando o HTML existir.",
+      "acceptance_test": "Revisão e compatibilização permanecem famílias e compras distintas; o gate não as funde por semelhança de termo."
+    },
+    {
+      "change_id": "INB-01-PFR-projetos-complementares",
+      "owner_campaign": "16",
+      "path": "data/organic/public-family-registry.json",
+      "base_blob_sha": "61e219892d5ad8c80f37dc18399f51f5df119ca1",
+      "operation": "upsert",
+      "key_or_anchor": "families[id=projetos-complementares-engenharia]",
+      "expected_old": null,
+      "desired_new": {
+        "id": "projetos-complementares-engenharia",
+        "visitor_job": "Elaborar disciplina de engenharia complementar com atribuição confirmada.",
+        "profile": "commercial_content",
+        "terminal_action": "capture_form_or_whatsapp",
+        "match": {
+          "routes": [
+            "/projetos-complementares-engenharia/"
+          ]
+        },
+        "gate_coverage": {
+          "conversion": "full",
+          "copy": "full",
+          "accessibility": "full"
+        },
+        "declared_at": "2026-09-11",
+        "owner_issue": null,
+        "debt": [],
+        "index_evidence": {
+          "substrate": "first_party_publication",
+          "not_applicable": [
+            "official_live",
+            "citable_source"
+          ],
+          "reason": "Landing comercial de primeira parte sobre elaboração de disciplina complementar da própria CONFENGE.",
+          "authority": [
+            "data/corporate/intent-family-matrix.v1.json",
+            "data/bofu-dominance/core/purchase-route-map.v1.json"
+          ],
+          "declared_at": "2026-09-11",
+          "owner_issue": null
+        }
+      },
+      "rationale": "Família pública para a landing CREATE de INB-12. Aplicar quando o HTML existir. EXPANSÃO.",
+      "acceptance_test": "Elaboração permanece compra distinta de revisão e de compatibilização, mesmo compartilhando offer_id complementary_engineering_project_review."
+    }
+  ]
+}
