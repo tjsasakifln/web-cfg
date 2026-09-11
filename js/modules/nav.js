@@ -330,6 +330,7 @@
       'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term',
     ];
     const UTM_KEYS = FIRST_TOUCH_KEYS.filter((k) => k.startsWith('utm_'));
+    const ORIGIN_KEYS = ['origem', 'origin_url', 'landing_url', 'landing_page'];
     const isConfengeHostName = (host) => {
       const h = String(host || '').toLowerCase().replace(/^www\./, '').replace(/:\d+$/, '');
       return h === 'confenge.com.br' || h === 'localhost' || h === '127.0.0.1';
@@ -348,14 +349,20 @@
       const stored = prior && typeof prior === 'object' ? prior : {};
       const next = incoming && typeof incoming === 'object' ? incoming : {};
       const internal = Boolean(opts && opts.internalReferrer);
+      const hasOrigin = ORIGIN_KEYS.some((k) => stored[k]);
       const out = { ...stored };
       Object.keys(next).forEach((k) => {
         const v = next[k];
         if (v == null || v === '') return;
+        if (ORIGIN_KEYS.includes(k) && hasOrigin) return;
         if (FIRST_TOUCH_KEYS.includes(k) && stored[k]) return;
         if (UTM_KEYS.includes(k) && internal) return;
         out[k] = v;
       });
+      if (!out.origem) {
+        const fallback = out.origin_url || out.landing_url || out.landing_page || '';
+        if (fallback) out.origem = fallback;
+      }
       return out;
     };
     const ROUTE_FAMILY_BY_PREFIX = [
@@ -415,10 +422,15 @@
     };
     const writeStoredPseo = (obj) => {
       try {
+        const prior = readStoredPseo();
+        const sessionStarted = Boolean(
+          prior.landing_url || prior.origem || prior.origin_url || prior.landing_page,
+        );
+        const merged = mergeFirstTouch(prior, obj, { internalReferrer: sessionStarted });
         const clean = {};
-        Object.keys(obj || {}).forEach((k) => {
+        Object.keys(merged || {}).forEach((k) => {
           if (!PSEO_ATTR_KEYS.includes(k) && k !== 'saved_at') return;
-          const v = sanitizeAttr(obj[k], k);
+          const v = sanitizeAttr(merged[k], k);
           if (v) clean[k] = v;
         });
         if (Object.keys(clean).length) {
@@ -545,6 +557,7 @@
     window.confengeAttribution = {
       ALLOWLIST: PSEO_ATTR_KEYS.slice(),
       FIRST_TOUCH_KEYS: FIRST_TOUCH_KEYS.slice(),
+      ORIGIN_KEYS: ORIGIN_KEYS.slice(),
       mergeFirstTouch,
       isInternalReferrer,
       sanitize: sanitizeAttr,
