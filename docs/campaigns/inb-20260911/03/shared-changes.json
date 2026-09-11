@@ -1,0 +1,117 @@
+{
+  "schema": "confenge.inbound-campaign-shared-changes/2.0",
+  "campaign_set": "INB-20260911",
+  "campaign_id": "03",
+  "prompt_version": "2.0.0",
+  "changes": [
+    {
+      "change_id": "03-family-routes-decision-pages",
+      "owner_campaign": "16",
+      "path": "data/organic/public-family-registry.json",
+      "base_blob_sha": "61e219892d5ad8c80f37dc18399f51f5df119ca1",
+      "operation": "upsert",
+      "key_or_anchor": "families[id=private-engineering-quantities-budget].match.routes",
+      "expected_old": [
+        "/quantitativos-orcamento-obras/"
+      ],
+      "desired_new": [
+        "/quantitativos-orcamento-obras/",
+        "/conteudos/documentos-para-levantamento-quantitativos/",
+        "/conteudos/comparar-propostas-execucao-obra/",
+        "/conteudos/revisar-ou-refazer-orcamento-obra/"
+      ],
+      "rationale": "As três páginas decisórias de 03 respondem o mesmo job de quantitativos e orçamento. Sem este upsert elas caem no prefixo editorial-library. Cada página já publica id=triagem-quantitativos para o CTA local da família.",
+      "acceptance_test": "inbound:gates atribui as três rotas a private-engineering-quantities-budget e o header value-first aponta para #triagem-quantitativos presente no HTML."
+    },
+    {
+      "change_id": "03-family-header-hiring-cta",
+      "owner_campaign": "16",
+      "path": "data/organic/public-family-registry.json",
+      "base_blob_sha": "61e219892d5ad8c80f37dc18399f51f5df119ca1",
+      "operation": "upsert",
+      "key_or_anchor": "families[id=private-engineering-quantities-budget].value_first_header_cta.label",
+      "expected_old": "Conversar sobre minha obra",
+      "desired_new": "Solicitar proposta de orçamento",
+      "rationale": "O CTA da primeira dobra da landing já é ação de contratação. O rótulo do header, hoje preso ao registry, continua genérico. 03 não altera o registry nesta branch.",
+      "acceptance_test": "shell_nav --check e o HTML da landing mostram o mesmo rótulo Solicitar proposta de orçamento no header value-first, href #triagem-quantitativos."
+    },
+    {
+      "change_id": "03-sitemap-decision-pages",
+      "owner_campaign": "16",
+      "path": "data/organic/sitemap-hygiene.json",
+      "base_blob_sha": "9ca4f84ec634ba5142a222836bb580f17227fa2f",
+      "operation": "upsert",
+      "key_or_anchor": "locs[]",
+      "expected_old": null,
+      "desired_new": [
+        "https://confenge.com.br/conteudos/documentos-para-levantamento-quantitativos/",
+        "https://confenge.com.br/conteudos/comparar-propostas-execucao-obra/",
+        "https://confenge.com.br/conteudos/revisar-ou-refazer-orcamento-obra/"
+      ],
+      "rationale": "Rotas indexáveis novas de 03 não podem ficar fora do sitemap na publicação. A landing /quantitativos-orcamento-obras/ já está em locs.",
+      "acceptance_test": "As três URLs aparecem no sitemap editorial ou no core após regenerar a higiene; url_count sobe em 3."
+    },
+    {
+      "change_id": "03-ia-breadcrumb-labels",
+      "owner_campaign": "16",
+      "path": "data/site/public-ia-map.json",
+      "base_blob_sha": "2621a2133b592b2a6560714c76fde902eecc2ebc",
+      "operation": "upsert",
+      "key_or_anchor": "breadcrumb_labels",
+      "expected_old": null,
+      "desired_new": {
+        "/conteudos/documentos-para-levantamento-quantitativos/": "Documentos para levantamento de quantitativos",
+        "/conteudos/comparar-propostas-execucao-obra/": "Como comparar propostas de execução",
+        "/conteudos/revisar-ou-refazer-orcamento-obra/": "Revisar ou refazer o orçamento"
+      },
+      "rationale": "Rótulos de breadcrumb para as três páginas decisórias, filhas de /conteudos/.",
+      "acceptance_test": "python3 scripts/site/shell_nav.py --check permanece PASS com os rótulos acima."
+    },
+    {
+      "change_id": "03-hub-conteudos-cards",
+      "owner_campaign": "09",
+      "path": "conteudos/index.html",
+      "base_blob_sha": "ae9dd30258751f478352ccf51b95b5750a21df4f",
+      "operation": "upsert",
+      "key_or_anchor": "ItemList.numberOfItems e cards do hub",
+      "expected_old": 22,
+      "desired_new": {
+        "numberOfItems": 25,
+        "add_urls": [
+          "/conteudos/documentos-para-levantamento-quantitativos/",
+          "/conteudos/comparar-propostas-execucao-obra/",
+          "/conteudos/revisar-ou-refazer-orcamento-obra/"
+        ],
+        "cards": [
+          {
+            "title": "Documentos para levantamento de quantitativos",
+            "blurb": "O que enviar mesmo com projeto parcial, e o que volta como planilha e memória."
+          },
+          {
+            "title": "Como comparar propostas de execução",
+            "blurb": "Equalizar escopo, unidades, exclusões, quantidades e responsabilidades — não só o menor total."
+          },
+          {
+            "title": "Revisar ou refazer o orçamento",
+            "blurb": "Quando a planilha existente ainda responde e quando é preciso elaborar de novo."
+          }
+        ]
+      },
+      "rationale": "count_indexable_conteudos() conta páginas indexáveis em conteudos/*/index.html. Sem atualizar o hub, numberOfItems=22 diverge das 25 páginas. 03 não edita o hub (posse de 09).",
+      "acceptance_test": "Hub lista as três URLs, numberOfItems coincide com as páginas indexáveis em /conteudos/*/ e nenhum conteúdo de 03 fica órfão."
+    }
+  ],
+  "notes_for_08": {
+    "request": "Ligar o artigo SINAPI (e, se couber, medição/aditivos) a /quantitativos-orcamento-obras/ com o contexto preservado: SINAPI é referência de orçamento público, não preço de mercado universal da obra privada.",
+    "do_not": "03 não altera páginas de 08."
+  },
+  "notes_for_10": {
+    "cohort_routes": [
+      "/quantitativos-orcamento-obras/",
+      "/conteudos/documentos-para-levantamento-quantitativos/",
+      "/conteudos/comparar-propostas-execucao-obra/",
+      "/conteudos/revisar-ou-refazer-orcamento-obra/"
+    ],
+    "gsc_baseline_note": "GSC Web 02–08/09/2026: quantitativos 1 impressão / 0 cliques / posição 1,00. Amostra pequena; não é diagnóstico causal. Hipótese de descoberta permanece hipótese até evidência."
+  }
+}

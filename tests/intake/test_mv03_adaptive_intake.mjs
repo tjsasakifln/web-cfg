@@ -139,6 +139,19 @@ test("budget service welcomes public and private needs and retains safe contextu
     assert.equal(html.includes(expected), true, `missing bounded wedge contract: ${expected}`);
   }
   const main = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i)?.[1] || "";
+  const hero = main.match(/<section\b[^>]*class="[^"]*qty-hero[\s\S]*?<\/section>/i)?.[0] || main.slice(0, 2500);
+  assert.match(hero, /levant/i, "first fold must name the work");
+  assert.match(hero, /planilha|memória|orçamento/i, "first fold must name the deliverable");
+  assert.match(hero, /solicitar proposta de orçamento/i, "first fold primary CTA must be a hiring action");
+  assert.match(hero, /#triagem-quantitativos/, "first fold must point to the existing contact");
+  assert.match(main, /levantamento de quantitativos/i, "takeoff must be a distinct purchase choice");
+  assert.match(main, /elaboração de orçamento/i, "budgeting must be a distinct purchase choice");
+  assert.match(main, /revisão de orçamento/i, "review must be a distinct purchase choice");
+  assert.match(main, /projeto (ainda )?parcial|documentação inicial incompleta|estudo preliminar/i, "partial project must be accepted");
+  assert.match(main, /disciplina|extensão|detalhamento|estágio do projeto|referências/i, "proposal effort factors must be named");
+  assert.match(main, /SINAPI.{0,160}n[aã]o é preço de mercado universal/i, "SINAPI must be denied as a universal market price");
+  assert.match(main, /obra privada/i);
+  assert.match(main, /n[aã]o pedimos campos de licitação/i, "private buyers must not be forced through procurement fields");
   assert.match(main, /públic[oa]s?/i, "the service must explain public demand here");
   assert.match(main, /privad[oa]s?/i, "the service must explain private demand here");
   // Absence of an upload field is a data-minimization property, not a sentence

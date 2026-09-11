@@ -1,0 +1,35 @@
+{
+  "schema": "confenge.quantity-takeoff-excerpt/1.0",
+  "status": "TEST_FIXTURE_NOT_FOR_PUBLICATION",
+  "label": "Amostra demonstrativa de teste — não publicar",
+  "disclaimer": "Amostra demonstrativa de teste. Não é orçamento válido para executar obra.",
+  "element": {
+    "id": "ALV-01",
+    "name": "Alvenaria de vedação em bloco cerâmico 14x19x29",
+    "source": "Planta baixa pavimento tipo, paredes P-12 a P-18"
+  },
+  "criterion": {
+    "unit": "m²",
+    "rule": "Área líquida de parede: comprimento × pé-direito, descontando vãos de porta e janela com área ≥ 1,00 m²"
+  },
+  "calculation": {
+    "formula": "(C × H) − Σ vãos",
+    "inputs": [
+      { "label": "comprimento", "value": 12.4, "unit": "m" },
+      { "label": "pé-direito", "value": 2.8, "unit": "m" },
+      { "label": "vão porta", "value": 1.68, "unit": "m²" },
+      { "label": "vão janela", "value": 2.4, "unit": "m²" }
+    ],
+    "memory": "12,40 × 2,80 = 34,72 m²; 34,72 − 1,68 − 2,40 = 30,64 m²"
+  },
+  "quantity": {
+    "value": 30.64,
+    "unit": "m²"
+  },
+  "spreadsheet_item": {
+    "code": "ALV-VED-14",
+    "description": "Alvenaria de vedação em bloco cerâmico 14 cm",
+    "unit": "m²",
+    "quantity": 30.64
+  }
+}
