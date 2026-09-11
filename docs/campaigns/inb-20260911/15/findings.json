@@ -1,0 +1,9 @@
+{
+  "schema": "confenge.inbound-findings/2.0",
+  "campaign_id": "15",
+  "prompt_version": "2.0.0",
+  "examined_kind": "baseline",
+  "candidate_sha": "8f508544835490ec635d02517bce0207c6f8e426",
+  "note": "Nenhum defeito de produto encontrado neste SHA. Ausência de finding não prova ausência de qualquer defeito. Parecer não cobre SHA posterior. Correção de produto, se surgir, fica com o produtor ou INB-16.",
+  "findings": []
+}

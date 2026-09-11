@@ -14,7 +14,12 @@ from scripts.bofu_dominance.core.buyer_decision_map import (
     check_report,
     validate_buyer_decision_map,
 )
-from scripts.bofu_dominance.core.constants import BUYER_DECISION_MAP_PATH, ROOT
+from scripts.bofu_dominance.core.constants import BUYER_DECISION_MAP_PATH, PURCHASE_ROUTE_MAP_PATH, ROOT
+from scripts.bofu_dominance.core.purchase_route_map import (
+    RouteFacts,
+    project_intent_route_table,
+    validate_purchase_route_map,
+)
 
 
 def _document() -> dict:
@@ -490,3 +495,337 @@ def test_measurement_windows_are_unchanged_from_origin_main():
         }
 
     assert windows(after) == windows(before)
+
+
+# --- Purchase-to-route layer (corporate public/private families) ---
+
+
+def _purchase_document() -> dict:
+    return json.loads(PURCHASE_ROUTE_MAP_PATH.read_text(encoding="utf-8"))
+
+
+def _purchase_row(document: dict, purchase_id: str) -> dict:
+    return next(row for row in document["purchases"] if row["purchase_id"] == purchase_id)
+
+
+def _purchase_reasons(document: dict, **kwargs) -> set[str]:
+    return {
+        item.reason
+        for item in validate_purchase_route_map(document=document, **kwargs).findings
+    }
+
+
+def test_purchase_map_covers_declared_intent_families_with_owner_xor_gap():
+    document = _purchase_document()
+    report = validate_purchase_route_map(document=document)
+    assert report.ok, report.findings
+    matrix = _json("data/corporate/intent-family-matrix.v1.json")
+    declared = {item["intent_family"] for item in matrix["intent_families"]}
+    covered = {row["intent_family"] for row in document["purchases"]}
+    assert covered == declared
+    for row in document["purchases"]:
+        has_gap = isinstance(row.get("gap"), dict)
+        has_owner = row["decision"] in {"KEEP", "ENRICH", "CREATE"}
+        assert has_owner != has_gap, row["purchase_id"]
+    assert report.stats["intent_families_covered"] == len(declared)
+    assert report.stats["protected_b2g_routes"] == 6
+
+
+def test_quantitativos_keep_mixed_context_and_zero_impressions_do_not_block_create():
+    document = _purchase_document()
+    quantitativos = _purchase_row(document, "quantitativos-orcamento")
+    assert quantitativos["decision"] == "KEEP"
+    assert quantitativos["primary_url"] == "/quantitativos-orcamento-obras/"
+    assert quantitativos["source_of_truth"] == "/quantitativos-orcamento-obras/"
+    assert quantitativos["business_context"] == "mixed"
+    assert quantitativos["intent_family"] == "orcar_planejar_decidir"
+    assert quantitativos["offer_id"] == "quantity_takeoff_budgeting"
+    assert quantitativos["requested_alias"] is None
+
+    created = _purchase_row(document, "compatibilizacao-projetos")
+    assert created["gsc_impressions"] == 0
+    assert created["blocked_by_zero_impressions"] is False
+    assert created["quality_state"] == "PASS_PENDING_PUBLICATION"
+    report = validate_purchase_route_map(document=document)
+    assert report.ok, report.findings
+    assert "zero_impressions_forbid_quality_route" not in {
+        item.reason for item in report.findings
+    }
+
+
+def test_revisao_and_compatibilizacao_remain_distinct_purchases():
+    document = _purchase_document()
+    compat = _purchase_row(document, "compatibilizacao-projetos")
+    revisao = _purchase_row(document, "revisao-tecnica-projetos")
+    complementares = _purchase_row(document, "projetos-complementares")
+    assert compat["intent_family"] == revisao["intent_family"] == complementares["intent_family"]
+    assert compat["requested_alias"] == "/compatibilizacao-projetos-engenharia/"
+    assert revisao["requested_alias"] == "/revisao-tecnica-projetos-engenharia/"
+    assert complementares["requested_alias"] == "/projetos-complementares-engenharia/"
+    assert compat["source_of_truth"] == "/servicos/#servico-projeto"
+    assert compat["function_differentiation"] != revisao["function_differentiation"]
+    assert revisao["function_differentiation"] != complementares["function_differentiation"]
+    assert compat["decision"] == revisao["decision"] == "CREATE"
+    report = validate_purchase_route_map(document=document)
+    reasons = {item.reason for item in report.findings if item.severity == "error"}
+    assert "undifferentiated_same_purchase" not in reasons
+
+
+def test_sinapi_article_stays_informational_with_public_works_context():
+    document = _purchase_document()
+    sinapi = _purchase_row(document, "sinapi-referencia-informacional")
+    assert sinapi["page_kind"] == "conteúdo de decisão"
+    assert sinapi["business_context"] == "public"
+    assert sinapi["offer_id"] is None
+    assert sinapi["terminal_contact"]["destination"] == "/auditoria-orcamento-licitacao/"
+    assert "/conteudos/sinapi-desonerado-nao-desonerado/" in sinapi["primary_url"]
+    report = validate_purchase_route_map(document=document)
+    assert report.ok, report.findings
+    warnings = [
+        item
+        for item in report.findings
+        if item.reason == "lexical_similarity_only"
+        and "sinapi-referencia-informacional" in item.detail
+    ]
+    assert warnings, report.findings
+    assert all(item.severity == "warning" for item in warnings)
+
+
+def test_b2g_protected_routes_and_servicos_anchors_are_preserved():
+    document = _purchase_document()
+    protected = {
+        row["source_of_truth"]
+        for row in document["purchases"]
+        if row.get("b2g_protected")
+    }
+    assert protected >= {
+        "/diagnostico-pre-licitacao/",
+        "/auditoria-orcamento-licitacao/",
+        "/medicoes-glosas-obras-publicas/",
+        "/aditivos-obras-publicas/",
+        "/reequilibrio-obras-publicas/",
+        "/diagnostico-b2g-360/",
+    }
+    hub = _purchase_row(document, "hub-servicos")
+    assert hub["primary_url"] == "/servicos/"
+    assert hub["decision"] == "KEEP"
+    inb06 = _purchase_row(document, "demonstrativo-casos-inb06")
+    assert inb06["page_kind"] == "prova"
+    assert inb06["source_of_truth"].startswith("/casos/")
+    assert inb06["offer_id"] is None
+
+
+def test_publication_cohort_records_new_pages_without_wiping_existing():
+    document = _purchase_document()
+    existing = [
+        row["purchase_id"]
+        for row in document["purchases"]
+        if row["publication_cohort"]["id"] == "existing-pre-inb-20260911"
+    ]
+    created = [
+        row["purchase_id"]
+        for row in document["purchases"]
+        if row["publication_cohort"]["id"] == "inb-20260911-new"
+    ]
+    assert "quantitativos-orcamento" in existing
+    assert "aditivos-obras-publicas" in existing
+    assert "compatibilizacao-projetos" in created
+    assert all(row["publication_cohort"]["history_preserved"] is True for row in document["purchases"])
+    wiped = copy.deepcopy(document)
+    _purchase_row(wiped, "quantitativos-orcamento")["publication_cohort"][
+        "history_preserved"
+    ] = False
+    assert "existing_history_wiped" in _purchase_reasons(wiped)
+
+
+def test_intent_route_table_is_the_single_consumable_authority():
+    table = project_intent_route_table()
+    by_id = {row["purchase_id"]: row for row in table}
+    assert by_id["quantitativos-orcamento"]["business_context"] == "mixed"
+    assert by_id["quantitativos-orcamento"]["path"] == "/quantitativos-orcamento-obras/"
+    assert by_id["compatibilizacao-projetos"]["requested_alias"] == (
+        "/compatibilizacao-projetos-engenharia/"
+    )
+    assert by_id["auditoria-orcamento-edital"]["business_context"] == "public"
+    assert table, "INB-10 reads this table from the owned map, not a campaign folder"
+    assert PURCHASE_ROUTE_MAP_PATH.as_posix().endswith(
+        "data/bofu-dominance/core/purchase-route-map.v1.json"
+    )
+
+
+def test_undifferentiated_same_purchase_names_both_urls_and_function_conflict():
+    document = copy.deepcopy(_purchase_document())
+    target = _purchase_row(document, "quantitativos-orcamento")
+    target["commercial_surfaces"] = [
+        {
+            "url": "/quantitativos-orcamento-obras/",
+            "function": "orçar a mesma compra",
+        },
+        {
+            "url": "/orcamento-quantitativos-duplicado/",
+            "function": "orçar a mesma compra",
+        },
+    ]
+    report = validate_purchase_route_map(document=document)
+    findings = [item for item in report.findings if item.reason == "undifferentiated_same_purchase"]
+    assert findings, report.findings
+    detail = findings[0].detail
+    assert "/quantitativos-orcamento-obras/" in detail
+    assert "/orcamento-quantitativos-duplicado/" in detail
+    assert "function_conflict" in detail
+    assert report.ok is False
+
+
+def test_lexical_similarity_warns_without_excluding_distinct_purchases():
+    document = copy.deepcopy(_purchase_document())
+    left = _purchase_row(document, "revisao-tecnica-projetos")
+    right = _purchase_row(document, "compatibilizacao-projetos")
+    left["visitor_job"] = (
+        "coordenar interferencias geometricas entre disciplinas de instalacoes hidrossanitarias"
+    )
+    right["visitor_job"] = (
+        "coordenar interferencias geometricas entre disciplinas de instalacoes eletricas"
+    )
+    left["question_answered"] = "interferencias geometricas hidrossanitarias disciplinas"
+    right["question_answered"] = "interferencias geometricas eletricas disciplinas"
+    report = validate_purchase_route_map(document=document)
+    reasons = {item.reason: item for item in report.findings}
+    assert "lexical_similarity_only" in reasons
+    assert reasons["lexical_similarity_only"].severity == "warning"
+    assert "undifferentiated_same_purchase" not in reasons
+    assert report.ok is True
+
+
+def test_destination_without_family_unresolved_id_and_generic_support_fail_closed():
+    document = copy.deepcopy(_purchase_document())
+    target = _purchase_row(document, "quantitativos-orcamento")
+    inventory = {
+        "/quantitativos-orcamento-obras/": RouteFacts(
+            path="/quantitativos-orcamento-obras/",
+            exists=True,
+            robots="index,follow",
+            canonical="https://confenge.com.br/quantitativos-orcamento-obras/",
+            public_family_id=None,
+        )
+    }
+    report = validate_purchase_route_map(document=document, inventory=inventory)
+    assert "destination_without_family" in {item.reason for item in report.findings}
+
+    unresolved = copy.deepcopy(_purchase_document())
+    _purchase_row(unresolved, "quantitativos-orcamento")["intent_family"] = "familia_inventada"
+    _purchase_row(unresolved, "quantitativos-orcamento")["offer_id"] = "sku_inventado"
+    reasons = _purchase_reasons(unresolved)
+    assert "unresolved_intent_family" in reasons
+    assert "unresolved_offer_id" in reasons
+
+    generic = copy.deepcopy(_purchase_document())
+    sinapi = _purchase_row(generic, "sinapi-referencia-informacional")
+    sinapi["support_destinations"] = ["/contato/"]
+    inventory = {
+        "/conteudos/sinapi-desonerado-nao-desonerado/": RouteFacts(
+            path="/conteudos/sinapi-desonerado-nao-desonerado/",
+            exists=True,
+            robots="index,follow",
+            next_hops=["/contato/"],
+            public_family_id="editorial-library",
+        )
+    }
+    reasons = _purchase_reasons(generic, inventory=inventory)
+    assert "support_only_generic_contact" in reasons
+
+
+def test_canonical_without_equivalence_and_home_dump_fail_closed():
+    document = copy.deepcopy(_purchase_document())
+    target = _purchase_row(document, "quantitativos-orcamento")
+    target["canonical"] = "https://confenge.com.br/"
+    reasons = _purchase_reasons(document)
+    assert "canonical_dumps_to_home" in reasons
+
+    other = copy.deepcopy(_purchase_document())
+    _purchase_row(other, "quantitativos-orcamento")["canonical"] = (
+        "https://confenge.com.br/pagina-sem-equivalencia/"
+    )
+    assert "canonical_without_equivalence" in _purchase_reasons(other)
+
+
+def test_indexable_route_blocked_and_obsolete_maturity_noindex_mutations():
+    document = copy.deepcopy(_purchase_document())
+    inventory = {
+        "/quantitativos-orcamento-obras/": RouteFacts(
+            path="/quantitativos-orcamento-obras/",
+            exists=True,
+            robots="noindex,follow",
+            public_family_id="private-engineering-quantities-budget",
+            robots_txt_disallow=True,
+        )
+    }
+    reasons = _purchase_reasons(document, inventory=inventory)
+    assert "indexable_route_blocked" in reasons
+
+    private = copy.deepcopy(_purchase_document())
+    _purchase_row(private, "prontidao-tecnica-obra-privada")["requested_indexability"] = (
+        "noindex,follow"
+    )
+    obsolete = {
+        "/ferramentas/prontidao-tecnica-obra-privada/": RouteFacts(
+            path="/ferramentas/prontidao-tecnica-obra-privada/",
+            exists=True,
+            robots="noindex,follow",
+            public_family_id="prontidao-tecnica-obra-privada",
+            noindex_reason_code="obsolete_maturity_inventory",
+            noindex_reason_note="inventário de maturidade de 2025",
+        )
+    }
+    reasons = _purchase_reasons(private, inventory=obsolete)
+    assert "obsolete_maturity_noindex" in reasons
+
+    material = {
+        "/ferramentas/prontidao-tecnica-obra-privada/": RouteFacts(
+            path="/ferramentas/prontidao-tecnica-obra-privada/",
+            exists=True,
+            robots="noindex,follow",
+            public_family_id="prontidao-tecnica-obra-privada",
+            noindex_reason_code="commercial_surface_deferred",
+            noindex_reason_note="falso positivo de prontidão no estágio de planejamento",
+        )
+    }
+    reasons = _purchase_reasons(private, inventory=material)
+    assert "obsolete_maturity_noindex" not in reasons
+
+
+def test_unmutated_purchase_map_stays_ok_while_mutation_fails():
+    clean = validate_purchase_route_map()
+    assert clean.ok, clean.findings
+    mutated = copy.deepcopy(_purchase_document())
+    _purchase_row(mutated, "quantitativos-orcamento")["commercial_surfaces"].append(
+        {
+            "url": "/quantitativos-clone/",
+            "function": _purchase_row(mutated, "quantitativos-orcamento")[
+                "commercial_surfaces"
+            ][0]["function"],
+        }
+    )
+    broken = validate_purchase_route_map(document=mutated)
+    assert broken.ok is False
+    assert "undifferentiated_same_purchase" in {item.reason for item in broken.findings}
+    assert validate_purchase_route_map().ok is True
+
+
+def test_prontidao_index_is_not_robots_disallow_or_url_removal():
+    document = _purchase_document()
+    row = _purchase_row(document, "prontidao-tecnica-obra-privada")
+    proposal = row["reindex_proposal"]
+    assert proposal["index_now"] is True
+    assert proposal["reason_code_observed"] is None
+    assert proposal["robots_txt_disallow"] is False
+    assert proposal["url_removal"] is False
+    html = (ROOT / "ferramentas/prontidao-tecnica-obra-privada/index.html").read_text(
+        encoding="utf-8"
+    )
+    assert 'content="index,follow"' in html
+    assert 'content="noindex,follow"' not in html
+    robots = (ROOT / "robots.txt").read_text(encoding="utf-8")
+    assert "prontidao" not in robots.lower()
+    assert "Disallow: /ferramentas/" not in robots
+    report = validate_purchase_route_map()
+    assert "obsolete_maturity_noindex" not in {item.reason for item in report.findings}

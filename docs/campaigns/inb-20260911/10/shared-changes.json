@@ -1,0 +1,45 @@
+{
+  "schema": "confenge.inbound-shared-changes/1.0",
+  "campaign_id": "10",
+  "campaign_set": "INB-20260911",
+  "owner_campaign": "10",
+  "prompt_version": "2.0.0",
+  "changes": [
+    {
+      "change_id": "inb10-pkg-gsc-learn-script",
+      "owner_campaign": "16",
+      "path": "package.json",
+      "base_blob_sha": "6449c565138aa0794c31765d75079fe2cdbc3226",
+      "operation": "upsert",
+      "key_or_anchor": "scripts.revops:gsc:learn",
+      "expected_old": null,
+      "desired_new": "python3 scripts/revops/search_demand_observatory.py learn --dir scripts/revops/fixtures/gsc-founder-baseline-2026-09-02-08",
+      "rationale": "Expor o comando privado de aprendizagem GSC já implementado em 10, sem alterar o import histórico de 2026-07-30.",
+      "acceptance_test": "npm pkg get scripts.revops:gsc:learn imprime o comando; python3 scripts/revops/search_demand_observatory.py learn --dir scripts/revops/fixtures/gsc-founder-baseline-2026-09-02-08 sai 0 com freshness NOT_CURRENT."
+    },
+    {
+      "change_id": "inb10-pkg-gsc-import-baseline-script",
+      "owner_campaign": "16",
+      "path": "package.json",
+      "base_blob_sha": "6449c565138aa0794c31765d75079fe2cdbc3226",
+      "operation": "upsert",
+      "key_or_anchor": "scripts.revops:gsc:import-baseline",
+      "expected_old": null,
+      "desired_new": "python3 scripts/revops/search_demand_observatory.py import-csv --dir scripts/revops/fixtures/gsc-founder-baseline-2026-09-02-08 --extracted-at 2026-09-11",
+      "rationale": "Importação local idempotente do baseline 02–08/09/2026 sem segredo e sem promover fixture a CURRENT. Não substitui scripts.revops:gsc:import (julho).",
+      "acceptance_test": "O comando reproduz property 6/176, pages 215, queries 16/0, Brasil 147/6; segunda execução marca idempotent_replay true."
+    },
+    {
+      "change_id": "inb10-ops-doc-historical-not-current",
+      "owner_campaign": "16",
+      "path": "docs/ops/GSC-INSIGHTS-SINGLE-SOURCE.md",
+      "base_blob_sha": "0d766404e51f811033c66f0bbb5e2dd77a17d56f",
+      "operation": "insert_after",
+      "key_or_anchor": "## CURRENT contract",
+      "expected_old": null,
+      "desired_new": "CSV histórico e o baseline fornecido pelo fundador (scripts/revops/fixtures/gsc-founder-baseline-2026-09-02-08) são `historical_csv_export` / `fixture`. Não são CURRENT. A data no nome de um ZIP não é last-data date. Tabelas de página, consulta e país não se somam à série da propriedade. Extração autenticada ausente permanece EXTERNAL_EVIDENCE; o CORE local de importação continua válido.",
+      "rationale": "Deixar explícito no documento de autoridade que o observatório endurecido em 10 não promove fixture a CURRENT nem cruza dimensões.",
+      "acceptance_test": "O parágrafo aparece após CURRENT contract e não altera as regras de CURRENT/STALE/UNKNOWN do consumidor durável."
+    }
+  ]
+}

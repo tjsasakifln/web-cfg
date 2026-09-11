@@ -1,0 +1,55 @@
+--- sitemap.xml
++++ sitemap.xml
+@@ -28,6 +28,10 @@
+  <lastmod>2026-08-03</lastmod>
+  </url>
+  <url>
++ <loc>https://confenge.com.br/casos/demonstrativo-projeto-privado/</loc>
++ <lastmod>2026-09-11</lastmod>
++ </url>
++ <url>
+  <loc>https://confenge.com.br/casos/medicao-glosa-demonstrativo/</loc>
+  <lastmod>2026-08-03</lastmod>
+  </url>
+
+--- sitemap.txt
++++ sitemap.txt
+@@ -8,6 +8,7 @@
+ https://confenge.com.br/bid-room-licitacoes-obras/
+ https://confenge.com.br/casos/
+ https://confenge.com.br/casos/aditivo-art125-demonstrativo/
++https://confenge.com.br/casos/demonstrativo-projeto-privado/
+ https://confenge.com.br/casos/medicao-glosa-demonstrativo/
+ https://confenge.com.br/casos/modelo-apresentacao-executiva-resultados/
+ https://confenge.com.br/casos/modelo-base-quantitativa-canonica/
+
+--- data/commercial/real-proof-registry.v1.json
++++ data/commercial/real-proof-registry.v1.json
+@@ -45,6 +45,7 @@
+     "demonstrative_pages": [
+       "casos/index.html",
+       "casos/aditivo-art125-demonstrativo/index.html",
++      "casos/demonstrativo-projeto-privado/index.html",
+       "casos/medicao-glosa-demonstrativo/index.html"
+     ],
+     "inline_cards": [],
+
+--- seo/PUBLIC-ARTIFACT-MANIFEST.json
++++ seo/PUBLIC-ARTIFACT-MANIFEST.json
+@@ -74,7 +74,7 @@
+     "styles-tools.css",
+     "styles.css"
+   ],
+-  "html_route_count": 212,
++  "html_route_count": 213,
+   "html_routes": [
+     "/",
+     "/acompanhamento-contratos-obras/",
+@@ -88,6 +88,7 @@
+     "/auditoria-orcamento-licitacao/",
+     "/bid-room-licitacoes-obras/",
+     "/casos/aditivo-art125-demonstrativo/",
++    "/casos/demonstrativo-projeto-privado/",
+     "/casos/",
+     "/casos/medicao-glosa-demonstrativo/",
+     "/casos/modelo-apresentacao-executiva-resultados/",

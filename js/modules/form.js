@@ -567,6 +567,8 @@
           payload.idempotency_key = payload.idempotency_key
             || ensureReceiptIdempotency()
             || `fe-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+          // Request-processing consent is `consentimento`. Analytics/marketing
+          // denial, blocked storage, or missing cookies must not stop this POST.
           // Attribution already injected into hidden fields; ensure landing
           if (!payload.landing_page) payload.landing_page = pagePath;
           // Turnstile token if widget present
@@ -689,13 +691,10 @@
 
     // Persist body-level pSEO markers when on a leaf page
     if (isPseoPage && pseoRoot) {
-      const bodyAttr = {
+      writeStoredPseo(mergeFirstTouch(storedAttr, {
         pseo_page_id: pseoRoot.getAttribute('data-pseo-page-id') || '',
         page_type: pseoRoot.getAttribute('data-pseo-page-type') || '',
-        origem: pagePath,
-        origin_url: pagePath,
-      };
-      writeStoredPseo({ ...storedAttr, ...bodyAttr });
+      }, { internalReferrer: true }));
     }
 
     if (hasPseoContext) {
@@ -720,12 +719,17 @@
           if (!allowed[eventName]) return;
           // Persist CTA click context before navigation
           const ctaPos = el.getAttribute('data-cta-position') || 'inline';
-          writeStoredPseo({
-            ...readStoredPseo(),
-            ...pseoBase,
+          writeStoredPseo(mergeFirstTouch(readStoredPseo(), {
+            page_type: pseoBase.page_type,
+            pseo_page_id: pseoBase.pseo_page_id,
+            archetype: pseoBase.archetype,
+            segment: pseoBase.segment,
+            region: pseoBase.region,
+            intent: pseoBase.intent,
+            source_run_id: pseoBase.source_run_id,
+            dataset_hash: pseoBase.dataset_hash,
             cta_position: ctaPos,
-            origem: pseoBase.pseo_page_id ? pagePath : (storedAttr.origem || pagePath),
-          });
+          }, { internalReferrer: true }));
           track(eventName, {
             page_path: pseoBase.page_path,
             content_cluster: 'pseo',

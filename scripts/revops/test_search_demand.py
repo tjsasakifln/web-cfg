@@ -767,6 +767,341 @@ def main() -> int:
             == "UNKNOWN",
         )
 
+        from scripts.revops import gsc_import_learning as gil
+
+        founder_dir = ROOT / "scripts/revops/fixtures/gsc-founder-baseline-2026-09-02-08"
+        with tempfile.TemporaryDirectory() as td:
+            tpath = Path(td)
+            founder = gil.import_gsc_export(
+                founder_dir,
+                persist=True,
+                data_dir=tpath / "gsc",
+                private_dir=tpath / "gsc" / "private",
+            )
+        insights_before = (ROOT / "data/revops/gsc/insights_latest.json").read_bytes()
+        sdo.analyze(founder)
+        ok(
+            "historical_analyze_does_not_clobber_live",
+            (ROOT / "data/revops/gsc/insights_latest.json").read_bytes() == insights_before,
+        )
+        ok("founder_ok", founder.get("ok") is True)
+        ok("founder_not_current", founder.get("freshness") == "NOT_CURRENT")
+        ok("founder_not_product", founder.get("ready_for_product_decisions") is False)
+        ok("founder_historical", founder.get("source_kind") == "historical_csv_export")
+        ok("founder_fixture", founder.get("fixture") is True)
+        ok("founder_site", founder.get("site") == "sc-domain:confenge.com.br")
+        ok("founder_search_type", founder.get("search_type") == "web")
+        ok("founder_extracted_at", founder.get("extracted_at") == "2026-09-11")
+        ok("founder_last_data", founder.get("last_data_date") == "2026-09-08")
+        ok("founder_interval_start", (founder.get("effective_interval") or {}).get("start") == "2026-09-02")
+        ok("founder_pt_calendar", founder.get("search_analytics_calendar_timezone") == "America/Los_Angeles")
+        ok("founder_sp_report", founder.get("executive_report_timezone") == "America/Sao_Paulo")
+        ok("founder_not_utc_shift", founder.get("aggregate_date_not_shifted_as_utc") is True)
+        prop = (founder.get("dimensions") or {}).get("property") or {}
+        page_dim = (founder.get("dimensions") or {}).get("page") or {}
+        query_dim = (founder.get("dimensions") or {}).get("query") or {}
+        country_dim = (founder.get("dimensions") or {}).get("country") or {}
+        ok("founder_property_clicks", prop.get("clicks") == 6)
+        ok("founder_property_imps", prop.get("impressions") == 176)
+        ok("founder_property_ctr", prop.get("ctr") == 6 / 176)
+        ok("founder_property_pos", abs((prop.get("position") or 0) - (1667.2 / 176)) < 1e-9)
+        ok("founder_property_pos_approx", prop.get("position_approximate") is True)
+        ok("founder_page_imps", page_dim.get("impressions") == 215)
+        ok("founder_query_imps", query_dim.get("impressions") == 16)
+        ok("founder_query_clicks", query_dim.get("clicks") == 0)
+        ok("founder_query_count", founder.get("query_count") == 4)
+        brazil = country_dim.get("brazil") or {}
+        ok("founder_brazil_imps", brazil.get("impressions") == 147)
+        ok("founder_brazil_clicks", brazil.get("clicks") == 6)
+        ok("founder_brazil_filter_absent", (founder.get("filters") or {}).get("brazil_filter_present") is False)
+        ok("founder_country_not_invented_on_queries", all(q.get("country") is None for q in founder.get("queries") or []))
+        ok("founder_omitted_unknown", (founder.get("omitted_queries") or {}).get("status") == "UNKNOWN")
+        ok("founder_omitted_not_reconstructed", (founder.get("omitted_queries") or {}).get("reconstructed") is False)
+        ok(
+            "founder_suppressed_not_in_disclosed",
+            not any(gil.is_suppressed_query(str(q.get("query") or "")) is False and q.get("suppressed") for q in founder.get("queries") or []),
+        )
+        isolated = gil.isolate_dimension_totals(founder)
+        ok("founder_isolated", gil.validate_dimension_isolation(isolated) is True)
+        ok("founder_no_combined", "combined" not in isolated)
+        mutated = dict(isolated)
+        mutated["summed_impressions"] = (prop.get("impressions") or 0) + (page_dim.get("impressions") or 0)
+        ok("counterproof_sum_rejected", gil.validate_dimension_isolation(mutated) is False)
+        raised = False
+        try:
+            gil.reject_cross_dimension_sum(176, 215)
+        except gil.DimensionIsolationError:
+            raised = True
+        ok("counterproof_cross_sum_raises", raised is True)
+
+        zero = gil.ctr_from_sums(0, 0)
+        ok("zero_denominator_undefined", zero["status"] == "UNDEFINED" and zero["ctr"] is None)
+        ok("zero_denominator_flag", zero["zero_denominator"] is True)
+        missing_ctr = gil.ctr_from_sums(None, 10)
+        ok("missing_clicks_unknown_ctr", missing_ctr["ctr"] is None and missing_ctr["status"] == "UNKNOWN")
+
+        suppressed = gil.is_suppressed_query("(consultas ocultas)")
+        ok("suppressed_marker", suppressed is True)
+        ok("empty_query_unknown", gil.is_suppressed_query("") is True)
+
+        en_dir = Path(tempfile.mkdtemp())
+        (en_dir / "Chart.csv").write_text(
+            "Date,Clicks,Impressions,CTR,Position\n"
+            "2026-09-02,2,43,4.65%,9.5\n"
+            "2026-09-03,0,44,0%,7.6\n"
+            "2026-09-04,2,34,5.88%,10.3\n"
+            "2026-09-05,0,7,0%,25.6\n"
+            "2026-09-06,1,11,9.09%,12.8\n"
+            "2026-09-07,0,8,0%,11.1\n"
+            "2026-09-08,1,29,3.45%,5.7\n",
+            encoding="utf-8",
+        )
+        (en_dir / "Queries.csv").write_text(
+            "Query,Clicks,Impressions,CTR,Position\n"
+            "desonerado e não desonerado,0,6,0%,9.2\n"
+            "não desonerado,0,4,0%,6.67\n"
+            "aditivos obra pública,0,5,0%,23.8\n"
+            "empreitada por preço unitário,0,1,0%,16\n",
+            encoding="utf-8",
+        )
+        en_payload = gil.import_gsc_export(en_dir, persist=False, extracted_at="2026-09-11")
+        ok("en_locale_property_imps", (en_payload.get("dimensions") or {}).get("property", {}).get("impressions") == 176)
+        ok("en_locale_ctr", (en_payload.get("dimensions") or {}).get("property", {}).get("ctr") == 6 / 176)
+
+        pt_semi = Path(tempfile.mkdtemp())
+        (pt_semi / "Grafico.csv").write_text(
+            "Data;Cliques;Impressões;CTR;Posição\n"
+            "2026-09-02;2;43;4,65%;9,5\n"
+            "2026-09-08;1;29;3,45%;5,7\n",
+            encoding="utf-8",
+        )
+        pt_payload = gil.import_gsc_export(pt_semi, persist=False)
+        pt_prop = (pt_payload.get("dimensions") or {}).get("property") or {}
+        ok("pt_semicolon_clicks", pt_prop.get("clicks") == 3)
+        ok("pt_semicolon_imps", pt_prop.get("impressions") == 72)
+
+        no_br = Path(tempfile.mkdtemp())
+        (no_br / "Grafico.csv").write_text("Data,Cliques,Impressões,CTR,Posição\n2026-09-02,1,10,10%,5\n", encoding="utf-8")
+        (no_br / "Filtros.csv").write_text("Filtro,Valor\nTipo de pesquisa,Web\n", encoding="utf-8")
+        no_br_payload = gil.import_gsc_export(no_br, persist=False)
+        ok("brazil_filter_unavailable", (no_br_payload.get("filters") or {}).get("brazil_filter_present") is False)
+        ok("brazil_not_invented", (no_br_payload.get("dimensions") or {}).get("country", {}).get("brazil") is None)
+        ok("country_dim_absent", (no_br_payload.get("dimensions") or {}).get("country", {}).get("available") is False)
+
+        new_page = gil.publication_cohort(
+            "/pagina-nova-sem-historico/",
+            {"available": False, "records": {}},
+        )
+        ok("new_page_cohort_unknown", new_page.get("status") == "UNKNOWN")
+        ok("new_page_no_git_pub", new_page.get("commit_is_not_publication") is True)
+        ok("new_page_no_pr_pub", new_page.get("pr_is_not_publication") is True)
+        ok("new_page_first_verified_null", new_page.get("first_verified_deploy_at") is None)
+        dated = gil.publication_cohort(
+            "/aditivos-obras-publicas/",
+            {"records": {"/aditivos-obras-publicas/": {"first_verified_deploy_at": "2026-08-01T12:00:00-03:00", "editorial_changed_at": "2026-09-04T10:00:00-03:00"}}},
+        )
+        ok("cohort_uses_verified_deploy", dated.get("cohort") == "2026-08-01")
+        ok("editorial_distinct", dated.get("editorial_changed_at") != dated.get("first_verified_deploy_at"))
+
+        incomplete = gil.complete_window_assessment(
+            days=["2026-09-01", "2026-09-02"],
+            available_dates={"2026-09-02"},
+            exploratory=False,
+        )
+        ok("incomplete_not_complete", incomplete["complete"] is False)
+        ok("incomplete_not_comparable", incomplete["comparable"] is False)
+        ok("incomplete_not_zero", "not_zero" in (incomplete.get("note") or ""))
+        unknown_win = gil.complete_window_assessment(
+            days=["2026-09-01"], available_dates=None, exploratory=True
+        )
+        ok("missing_available_dates_unknown", unknown_win["completeness"] == "UNKNOWN")
+        comparison = gil.compare_equivalent_windows(
+            ["2026-09-01"],
+            ["2026-08-04"],
+            {"2026-09-01"},
+        )
+        ok("incomplete_28_insufficient", comparison["status"] == "INSUFFICIENT_EVIDENCE")
+        ok("no_proven_lift", comparison["proven_lift"] is False)
+
+        delayed = gil.delayed_data_status(sdo.date(2026, 9, 5), expected_end=sdo.date(2026, 9, 8))
+        ok("delayed_status", delayed["status"] == "DELAYED")
+        ok("delayed_not_zero_filled", delayed["zero_filled"] is False)
+
+        with tempfile.TemporaryDirectory() as td:
+            tpath = Path(td)
+            first = gil.import_gsc_export(
+                founder_dir, persist=True, data_dir=tpath / "gsc", private_dir=tpath / "gsc" / "private"
+            )
+            second = gil.import_gsc_export(
+                founder_dir, persist=True, data_dir=tpath / "gsc", private_dir=tpath / "gsc" / "private"
+            )
+            ok("reimport_idempotent_flag", second.get("idempotent_replay") is True)
+            ok("reimport_no_dup_rows", second.get("duplicate_rows_written") is False)
+            ok("reimport_same_key", first.get("idempotency_key") == second.get("idempotency_key"))
+            ok("reimport_same_imps", (first.get("dimensions") or {}).get("property", {}).get("impressions") == 176)
+            ok("reimport_same_imps_2", (second.get("dimensions") or {}).get("property", {}).get("impressions") == 176)
+
+        timeout = gil.provider_failure_record(
+            "api_timeout",
+            history_state={"last_known_good": {"as_of": "2026-08-10", "snapshot_sha256": "abc"}},
+            site="sc-domain:confenge.com.br",
+        )
+        ok("timeout_ok_false", timeout.get("ok") is False)
+        ok("timeout_null_imps", timeout.get("impressions") is None)
+        ok("timeout_null_clicks", timeout.get("clicks") is None)
+        ok("timeout_keeps_lkg", timeout.get("last_known_good_preserved") is True)
+        ok("timeout_not_zeroed", timeout.get("metrics_zeroed") is False)
+        ok("timeout_external", timeout.get("external_evidence") is True)
+
+        missing = sdo.pull_api(7)
+        ok("missing_secret_error", missing.get("error") == "missing_credentials")
+        ok("missing_secret_null_rows", missing.get("rows") is None)
+        ok("missing_secret_external", missing.get("external_evidence") is True)
+
+        leaked = {
+            "email": "pessoa@example.com",
+            "phone": "11999999999",
+            "whatsapp": "11999999999",
+            "query": "consulta privada",
+            "path": "/x/",
+            "commercial_stages": {
+                "received_contact": {"status": "UNKNOWN", "value": None, "authority": "warmbly_absent"}
+            },
+        }
+        ok("personal_detected", gil.artifact_contains_personal_field(leaked) is True)
+        stripped = gil.redact_personal_fields(leaked)
+        ok("personal_stripped", gil.artifact_contains_personal_field(stripped) is False)
+        ok("personal_email_gone", "pessoa@example.com" not in json.dumps(stripped) and "email" not in stripped)
+        ok("personal_phone_gone", "phone" not in stripped)
+        ok("personal_whatsapp_gone", "whatsapp" not in stripped)
+        ok("personal_query_key_gone", "query" not in stripped)
+        ok(
+            "redact_keeps_received_contact",
+            (stripped.get("commercial_stages") or {}).get("received_contact", {}).get("status") == "UNKNOWN",
+        )
+        ok(
+            "contact_key_is_not_pii",
+            "contact" not in gil.PERSONAL_FIELD_KEYS,
+        )
+
+        need_budget = gil.classify_need_class("https://confenge.com.br/quantitativos-orcamento-obras/")
+        ok("budget_need_mixed", need_budget.get("need_class") == "mixed")
+        ok("budget_not_url_keyword", need_budget.get("url_keyword_classifier") is False)
+        need_aditivo = gil.classify_need_class("https://confenge.com.br/aditivos-obras-publicas/")
+        ok("aditivo_need_public", need_aditivo.get("need_class") == "public")
+        need_home = gil.classify_need_class("https://confenge.com.br/")
+        ok("home_need_unknown", need_home.get("need_class") == "unknown")
+        ok("home_click_not_brand", need_home.get("home_click_does_not_infer_brand") is True)
+        need_unknown = gil.classify_need_class("https://confenge.com.br/conteudos/pagina-sem-contrato/")
+        ok("unjoined_need_unknown", need_unknown.get("need_class") == "unknown")
+
+        stages = gil.commercial_stages(impressions=28, clicks=0, warmbly=None)
+        ok("proposal_unknown_without_warmbly", stages["proposal"]["status"] == "UNKNOWN")
+        ok("proposal_not_zero", stages["proposal"]["value"] is None)
+        ok("hire_unknown", stages["hire"]["status"] == "UNKNOWN")
+        ok("received_contact_unknown_without_store", stages["received_contact"]["status"] == "UNKNOWN")
+        ok("received_contact_not_zero", stages["received_contact"]["value"] is None)
+        ok("no_person_join", stages["anonymous_query_not_joined_to_person"] is True)
+        ok("one_imp_no_failure_alert", gil.is_failure_alert_forbidden(1, 0) is True)
+
+        learning = gil.build_operational_learning(founder)
+        ok("learning_not_current", learning.get("freshness") == "NOT_CURRENT")
+        ok("learning_queue_max", (learning.get("queue") or {}).get("count", 99) <= 3)
+        ok("learning_no_ab", (learning.get("queue") or {}).get("authorizes_ab_test") is False)
+        blob = json.dumps(learning)
+        ok("learning_no_raw_query", "desonerado e não desonerado" not in blob)
+        ok("learning_no_personal", gil.artifact_contains_personal_field(learning) is False)
+        learn_pages = learning.get("pages") or []
+        ok("learning_has_pages", len(learn_pages) >= 1)
+        rc = (learn_pages[0].get("commercial_stages") or {}).get("received_contact") or {}
+        ok("learn_received_contact_present", rc.get("status") == "UNKNOWN")
+        ok("learn_received_contact_not_zero", rc.get("value") is None)
+        ok("learning_no_failure_from_one_imp", all(not c.get("commercial_failure_alert") for c in (learning.get("queue") or {}).get("candidates") or []))
+        ok("learning_no_proven_lift", all(c.get("proven_lift") is False for c in (learning.get("queue") or {}).get("candidates") or []))
+
+        behind = json.loads(json.dumps(founder))
+        behind["last_data_date"] = "2026-09-05"
+        behind["as_of"] = "2026-09-05"
+        learn_behind = gil.build_operational_learning(
+            behind, search_analytics_today_date=sdo.date(2026, 9, 11)
+        )
+        delayed_learn = learn_behind.get("delayed") or {}
+        ok("learn_behind_delayed", delayed_learn.get("status") == "DELAYED")
+        ok("learn_behind_not_zero_filled", delayed_learn.get("zero_filled") is False)
+        ok(
+            "learn_behind_expected_end_is_pt_last_complete",
+            delayed_learn.get("expected_end")
+            == gil.search_analytics_last_complete_day(today=sdo.date(2026, 9, 11)).isoformat(),
+        )
+        ok("learn_behind_expected_end_2026_09_10", delayed_learn.get("expected_end") == "2026-09-10")
+        behind_prop = (learn_behind.get("dimensions") or {}).get("property") or {}
+        ok("learn_behind_does_not_zero_clicks", behind_prop.get("clicks") == 6)
+        ok("learn_behind_does_not_zero_imps", behind_prop.get("impressions") == 176)
+        one_imp_page = {
+            "pages": [{"page": "https://confenge.com.br/x/", "path": "/x/", "impressions": 1, "clicks": 0}],
+            "queries": [],
+        }
+        tiny_queue = gil.build_learning_queue(one_imp_page)
+        ok(
+            "one_impression_not_queued_as_failure",
+            not any(c.get("diagnosis") == "pertinent_impression_without_click" for c in tiny_queue.get("candidates") or []),
+        )
+
+        zip_dir = Path(tempfile.mkdtemp())
+        zip_path = zip_dir / "confenge.com.br-Performance-on-Search-2026-09-11.zip"
+        import zipfile
+
+        with zipfile.ZipFile(zip_path, "w") as zf:
+            zf.writestr("Grafico.csv", (founder_dir / "Grafico.csv").read_text(encoding="utf-8"))
+            zf.writestr("Consultas.csv", (founder_dir / "Consultas.csv").read_text(encoding="utf-8"))
+            zf.writestr("Paginas.csv", (founder_dir / "Paginas.csv").read_text(encoding="utf-8"))
+            zf.writestr("Paises.csv", (founder_dir / "Paises.csv").read_text(encoding="utf-8"))
+            zf.writestr("Filtros.csv", (founder_dir / "Filtros.csv").read_text(encoding="utf-8"))
+            zf.writestr("meta.json", (founder_dir / "meta.json").read_text(encoding="utf-8"))
+            zf.writestr("../escape.csv", "x")
+            zf.writestr("nested/../../etc/passwd", "root")
+        unsafe = False
+        try:
+            gil.safe_unzip(zip_path, zip_dir / "out")
+        except gil.UnsafeZipError:
+            unsafe = True
+        ok("zip_rejects_traversal", unsafe is True)
+        safe_zip = zip_dir / "safe.zip"
+        with zipfile.ZipFile(safe_zip, "w") as zf:
+            zf.writestr("Grafico.csv", (founder_dir / "Grafico.csv").read_text(encoding="utf-8"))
+            zf.writestr("Consultas.csv", (founder_dir / "Consultas.csv").read_text(encoding="utf-8"))
+            zf.writestr("Paginas.csv", (founder_dir / "Paginas.csv").read_text(encoding="utf-8"))
+            zf.writestr("Paises.csv", (founder_dir / "Paises.csv").read_text(encoding="utf-8"))
+            zf.writestr("Filtros.csv", (founder_dir / "Filtros.csv").read_text(encoding="utf-8"))
+        zip_payload = gil.import_gsc_zip(
+            safe_zip,
+            dest=zip_dir / "extracted",
+            persist=False,
+            extracted_at="2026-09-11",
+        )
+        ok("zip_property_imps", (zip_payload.get("dimensions") or {}).get("property", {}).get("impressions") == 176)
+        ok("zip_name_date_not_last_data", zip_payload.get("last_data_date") != "2026-09-11")
+        ok("zip_last_data_from_chart", zip_payload.get("last_data_date") == "2026-09-08")
+
+        ok("parse_num_empty_none", gil.parse_gsc_number("") is None)
+        ok("parse_num_not_zero", gil.parse_gsc_number("") != 0)
+        ok("parse_pt_percent", abs((gil.parse_gsc_rate("3,41%") or 0) - 0.0341) < 1e-9)
+        ok("parse_en_thousands", gil.parse_gsc_number("1,234.5") == 1234.5)
+        ok("parse_pt_thousands", gil.parse_gsc_number("1.234,5") == 1234.5)
+
+        windows = sdo.complete_windows(
+            today=sdo.date(2026, 9, 11),
+            provider_max_date=sdo.date(2026, 9, 8),
+            available_dates={sdo.date(2026, 9, 8)},
+        )
+        ok("pulse_exploratory", windows["pulse"]["exploratory"] is True)
+        ok("pulse_not_comparable", windows["pulse"]["comparable"] is False)
+        ok("trend_incomplete_observed", windows["trend"]["current"]["observed_complete"] is False)
+        ok(
+            "trend_comparison_insufficient",
+            (windows["trend"].get("comparison") or {}).get("status") == "INSUFFICIENT_EVIDENCE",
+        )
+
         if failures:
             print("FAILURES", failures)
             return 1

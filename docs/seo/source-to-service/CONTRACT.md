@@ -86,6 +86,36 @@ Assisted transitions keep `destination_path` and `destination_service_id` (not o
 | Qualified / pipeline / won / lost | `warmbly` (#88) |
 | Indexable content→service links | #128 (not reopened here) |
 
+## Page-consumer interface (INB-20260911/02)
+
+Other producers must reuse the existing contact path. Do not invent query params or event names the server ignores.
+
+**Destinations (already live)**
+
+| Act | href / endpoint | Event (canonical) | Receipt? |
+|---|---|---|---|
+| Form submit | `POST /api/web/lead` (alias `/api/web`) | `lead_form_submit` then, only after persist id, `lead_persisted` | Yes — `lead_id` / `receipt_id` after durable store |
+| Form UX success | thank-you page | `lead_form_success` | No (not the persist denominator) |
+| WhatsApp | `https://wa.me/5548988344559` (+ human `?text=` of non-sensitive need) | `whatsapp_click` | No |
+| Email | `mailto:tiago.sasaki@confenge.com.br` | `email_click` | No |
+| In-page contact | `/#contato` or `/?tema=` | `cta_click` | No |
+| Tool result | existing tool complete hook | `tool_complete` | No |
+| Page impression | current path | `page_view` / `service_page_view` / `editorial_page_view` | No |
+| Handoff accepted | store `handoff.status=DELIVERED` | semantic `handoff_accepted` (not browser-admitted) | Internal only |
+| Commercial result | Warmbly observation | `qualified_lead` / `pipeline` | Observed only; absent = `UNKNOWN` |
+
+**Accepted form fields (server allowlist / validation)**
+
+- Required: `nome`, one valid `telefone` or `email`, `estagio` (editable need), `consentimento` (request processing — not analytics).
+- Optional: `empresa`, `mensagem`, `urgencia`, materials / `document_intent=secure_channel_request`. No upload. No public-contract / CNPJ / B2G ladder unless the chosen catalog deliverable requires it.
+- Origin (first-touch, frozen): `origem`, `origin_url`, `landing_url`, `landing_page`, `utm_*` (external first touch only).
+- Current context (may evolve): `estagio`, `jornada`, `cta_id`, `asset_id`, `route_family`, `tema`.
+- Envelope: `correlation_id`, `session_id`, `idempotency_key`.
+
+Internal links must not carry UTM. Browser values never grant `paid_priority`, approval, or privileged identity. Analytics opt-out (`CONFENGE_ANALYTICS_OPT_OUT` or `localStorage.confenge_analytics=denied`) must not block POST.
+
+`lead_form_success` is not `lead_persisted`. A WhatsApp click is not a received contact. A 200 from an intermediate endpoint is not Warmbly delivery.
+
 ## Tests
 
 `npm run test:attribution` drives shipped `script.js` click/track, shipped `admitEvent` / `collect`, and shipped `aggregateEvents` / `attributeLeads` against current HTML `data-*` / `href` fixtures.

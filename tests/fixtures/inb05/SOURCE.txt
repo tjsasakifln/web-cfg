@@ -1,0 +1,5 @@
+Copied SELECT-only from origin/campaign/inb-20260911/06-prova-tecnica-privada
+sha 399a32c415171ccc9e26cae565ecf83f9ecd4c92
+data/demonstrative/private-project-pilot/consumption.v1.json
+casos/demonstrativo-projeto-privado/data/revisao.csv
+Not a second building. Not a public sample.

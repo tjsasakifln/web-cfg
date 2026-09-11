@@ -1,0 +1,9 @@
+# exemplo demonstrativo; revisao=R01
+id;descricao;unidade;quantidade;elementos;prancha;formula;desconto;revisao
+Q-PISO-01;Revestimento cerâmico de piso;m2;4.32;SL-01;PR-ARQ-R01;2.40*1.80;sem desconto de abertura no piso;R01
+Q-PAR-01;Revestimento cerâmico de parede;m2;19.60;W-01 W-02 W-03 W-04 D-01 WN-01;PR-ARQ-R01;sum(length*height)-openings>=0.50;Aberturas com área igual ou maior que 0,50 m² são descontadas integralmente das quantidades de revestimento de parede. Aberturas menores não são descontadas.;R01
+Q-IMP-01;Impermeabilização de piso e rodapé;m2;6.84;SL-01 W-01 W-02 W-03 W-04;PR-ARQ-R01;4.32+8.40*0.30;"rodapé contínuo; porta não reduz a faixa molhada do piso";R01
+Q-CTR-01;Contrpiso de regularização;m3;0.1296;SL-01;PR-ARQ-R01;4.32*0.03;espessura constante no recorte;R01
+Q-PRT-01;Porta de giro;un;1;D-01;PR-ARQ-R01;count(D-01);não se aplica;R01
+Q-JAN-01;Janela do recorte;un;1;WN-01;PR-ARQ-R01;count(WN-01);não se aplica;R01
+Q-ROD-01;Rodapé cerâmico;m;7.60;D-01 W-01 W-02 W-03 W-04;PR-ARQ-R01;8.40-0.80;desconto da largura da porta;R01

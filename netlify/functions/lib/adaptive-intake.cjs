@@ -61,6 +61,14 @@ const INTAKE_CONTEXTS = Object.freeze({
     need_code: "obra_edificacao_ou_documentacao",
     location_material: false,
   },
+  project_coordination: {
+    need_code: "obra_edificacao_ou_documentacao",
+    location_material: false,
+  },
+  complementary_elaboration: {
+    need_code: "obra_edificacao_ou_documentacao",
+    location_material: false,
+  },
 });
 
 const PIN_KEYS = Object.freeze([

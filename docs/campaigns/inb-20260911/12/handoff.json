@@ -1,0 +1,169 @@
+{
+  "schema": "confenge.inbound-campaign-handoff/2.0",
+  "campaign_set": "INB-20260911",
+  "campaign_id": "12",
+  "prompt_version": "2.0.0",
+  "base_sha": "8f508544835490ec635d02517bce0207c6f8e426",
+  "state": "READY_FOR_INTEGRATION_WITH_DEPENDENCIES",
+  "decision_state": "EXECUTE_NOW",
+  "release_unit": "EXPANSION",
+  "preserved_capabilities": [
+    "Intencao projetar_revisar_compatibilizar e offer_id complementary_engineering_project_review reutilizados, sem offer_id novo por slug.",
+    "Contato funcional atual (WhatsApp, e-mail, telefone) em fallback, sem formulario morto enquanto a autoridade de intake permanece WITHHELD.",
+    "Hub /servicos/#servico-projeto, /quantitativos-orcamento-obras/, /entregas/, /triagem-tecnica/ e credenciais publicadas em /especialista/tiago-jun-sasaki/ permanecem as provas e destinos existentes.",
+    "test:page-contract-complementares (CFG-D45-48) nao foi retargetado."
+  ],
+  "observable_difference": [
+    "Landing exclusiva /projetos-complementares-engenharia/ vende elaboracao complementar (finalidade, fase, insumos, disciplinas a delimitar, interfaces, formatos, controle de versao, responsavel).",
+    "Conteudo exclusivo /conteudos/como-contratar-projetos-complementares/ responde como preparar insumos e ler a proposta, job distinto da landing e do comparativo de revisao.",
+    "Tres esquemas SVG exclusivos abrem e correspondem ao texto; nao sao prova de dimensionamento completo nem recorte de clash."
+  ],
+  "owned_sources": [
+    "projetos-complementares-engenharia/index.html",
+    "conteudos/como-contratar-projetos-complementares/index.html",
+    "assets/projetos-complementares-engenharia/pacote-entrega.svg",
+    "assets/projetos-complementares-engenharia/interfaces-versoes.svg",
+    "assets/conteudos/como-contratar-projetos-complementares.svg",
+    "tests/inb-20260911/12/test_page_contract_projetos_complementares.mjs",
+    "docs/campaigns/inb-20260911/12/handoff.json",
+    "docs/campaigns/inb-20260911/12/shared-changes.json",
+    "docs/campaigns/inb-20260911/12/patches/package.json.patch",
+    "docs/campaigns/inb-20260911/12/patches/servicos-index.html.patch"
+  ],
+  "changed_sources": [
+    "projetos-complementares-engenharia/index.html",
+    "conteudos/como-contratar-projetos-complementares/index.html",
+    "assets/projetos-complementares-engenharia/pacote-entrega.svg",
+    "assets/projetos-complementares-engenharia/interfaces-versoes.svg",
+    "assets/conteudos/como-contratar-projetos-complementares.svg",
+    "tests/inb-20260911/12/test_page_contract_projetos_complementares.mjs",
+    "docs/campaigns/inb-20260911/12/handoff.json",
+    "docs/campaigns/inb-20260911/12/shared-changes.json",
+    "docs/campaigns/inb-20260911/12/patches/package.json.patch",
+    "docs/campaigns/inb-20260911/12/patches/servicos-index.html.patch"
+  ],
+  "routes": [
+    {
+      "path": "/projetos-complementares-engenharia/",
+      "kind": "service_landing",
+      "intent_family": "projetar_revisar_compatibilizar",
+      "offer_id": "complementary_engineering_project_review",
+      "canonical": "https://confenge.com.br/projetos-complementares-engenharia/",
+      "requested_indexability": "index,follow",
+      "release_unit": "EXPANSION",
+      "contact_mode": "direct_channels_whatsapp_email_phone",
+      "job": "Elaborar documentacao de engenharia complementar a partir da arquitetura e dos insumos de origem.",
+      "primary_question": "O que a elaboracao devolve, com qual recorte e de quem e cada parte?",
+      "proof": "Credencial civil/CREA publicada, ART apos confirmacao, esquemas ilustrativos de metodo rotulados.",
+      "cta": "Solicitar proposta de elaboracao",
+      "cta_destination": "#escopo-projeto"
+    },
+    {
+      "path": "/conteudos/como-contratar-projetos-complementares/",
+      "kind": "decision_content",
+      "intent_family": "projetar_revisar_compatibilizar",
+      "offer_id": "complementary_engineering_project_review",
+      "canonical": "https://confenge.com.br/conteudos/como-contratar-projetos-complementares/",
+      "requested_indexability": "index,follow",
+      "release_unit": "EXPANSION",
+      "contact_mode": "service_transition_plus_whatsapp",
+      "job": "Preparar insumos, definir interfaces e versoes e conferir o que consta da proposta.",
+      "primary_question": "O que reunir, combinar e conferir antes de contratar elaboracao complementar?",
+      "proof": "Esquema de conferencia de insumos, interfaces e proposta.",
+      "cta": "Solicitar proposta de elaboracao",
+      "cta_destination": "/projetos-complementares-engenharia/#escopo-projeto"
+    }
+  ],
+  "dependencies": [
+    {
+      "provider_campaign": "01",
+      "artifact_path": "data/corporate/intent-family-matrix.v1.json",
+      "level": "HARD_AT_RELEASE",
+      "fallback": "ALREADY_SATISFIED",
+      "proof": "Familia projetar_revisar_compatibilizar e offer_id complementary_engineering_project_review ja existem na base 8f508544835490ec635d02517bce0207c6f8e426. Superficie exclusiva proposta em shared-changes INB12-public-ia-map-note."
+    },
+    {
+      "provider_campaign": "02",
+      "artifact_path": "netlify/functions/data/adaptive-intake-authority.json",
+      "level": "HARD_AT_RELEASE",
+      "fallback": "direct_channels_whatsapp_email_phone",
+      "proof": "Landing carrega adaptive-intake.js sem formulario morto; tres canais data-fallback-channel no main, no mesmo padrao de /quantitativos-orcamento-obras/. Extensao intake_context=complementary_elaboration fica para 02/16."
+    },
+    {
+      "provider_campaign": "06",
+      "artifact_path": null,
+      "level": "HARD_AT_RELEASE",
+      "fallback": "first_party_method_schematic",
+      "proof": "Worktree de 06 na abertura desta missao estava em origin/main, sem excerto de elaboracao. Esquemas exclusivos ilustram o pacote e as interfaces; a pagina declara que nao comprovam dimensionamento completo nem substituem o recorte da proposta. Clash/apontamento nao foi reutilizado."
+    },
+    {
+      "provider_campaign": "04",
+      "artifact_path": "servicos/index.html#servico-projeto",
+      "level": "OPTIONAL_ENRICHMENT",
+      "fallback": "ALREADY_SATISFIED",
+      "proof": "Compatibilizacao aponta para /entregas/ e /servicos/#servico-projeto, destinos existentes. Rota exclusiva de 04, se nascer, pode substituir o href na composicao."
+    },
+    {
+      "provider_campaign": "05",
+      "artifact_path": "servicos/index.html#servico-projeto",
+      "level": "OPTIONAL_ENRICHMENT",
+      "fallback": "ALREADY_SATISFIED",
+      "proof": "Revisao aponta para /servicos/#servico-projeto. Comparativo canonico permanece no hub, nao duplicado aqui."
+    },
+    {
+      "provider_campaign": "09",
+      "artifact_path": "servicos/index.html",
+      "level": "OPTIONAL_ENRICHMENT",
+      "fallback": "ALREADY_SATISFIED",
+      "proof": "Landing e conteudo ja ligam ao hub. Patch INB12-servicos-hub-link pede o inverso, de posse de 09."
+    },
+    {
+      "provider_campaign": "11",
+      "artifact_path": null,
+      "level": "OPTIONAL_ENRICHMENT",
+      "fallback": "/triagem-tecnica/",
+      "proof": "Colaboracao continua usa contato existente; pagina de parceria de 11 ainda nao existia na abertura. Nenhum href vazio."
+    },
+    {
+      "provider_campaign": "16",
+      "artifact_path": "docs/campaigns/inb-20260911/12/shared-changes.json",
+      "level": "HARD_AT_RELEASE",
+      "fallback": null,
+      "proof": "Familia, sitemap, manifesto, package, grafo e catalogo sao centrais. Estado honesto e WITH_DEPENDENCIES ate 16 aplicar os upserts."
+    }
+  ],
+  "shared_changes": "docs/campaigns/inb-20260911/12/shared-changes.json",
+  "tests": [
+    {
+      "command": "node tests/inb-20260911/12/test_page_contract_projetos_complementares.mjs",
+      "exit_code": 0,
+      "subject_sha": null,
+      "subject_sha_note": "Executado na arvore produtora sobre base 8f508544835490ec635d02517bce0207c6f8e426 com overlays exclusivos. O SHA do commit HEAD_READY nao e gravado neste arquivo.",
+      "overlay_hashes": {
+        "tests/inb-20260911/12/test_page_contract_projetos_complementares.mjs": "sha256:7ddd52164b0b172cf4fd4b69a0bb7877b59a3cff89f95e4da9a75a7bb7e449c3",
+        "projetos-complementares-engenharia/index.html": "sha256:631aacdc4b090b1a544e4c52b3fdfc721f19b12a0cb22c1f1e06a6b80a99da8a",
+        "conteudos/como-contratar-projetos-complementares/index.html": "sha256:a08b15b9ecf36394e3c79552457d9e038c5e12426cfd74abb60c0822bb011f41",
+        "assets/projetos-complementares-engenharia/pacote-entrega.svg": "sha256:da023000fd4b3c9fdb43643d88a3f6c60f32d9b9fa2542d00088d9ee907a9c73",
+        "assets/projetos-complementares-engenharia/interfaces-versoes.svg": "sha256:caec4a8f2ba840e3bdbe7e8be2e83fb3d446d21495def0a887e8f46c9f366dec",
+        "assets/conteudos/como-contratar-projetos-complementares.svg": "sha256:d61a4843d51271bdcbcee2b6c923fda6e7bff1f684e4ee5468c675b41ba1b562"
+      },
+      "runs": 2,
+      "result_summary": "153/153 ok nas duas execucoes. Contraprova grava copia temporaria da landing, reinsere habilitacao irrestrita, reexecuta assertPageContract (CONTRAPROVA_FAIL mutated_forbids_habilitacao_irrestrita), confirma arquivo enviado intacto e reexecuta o contrato na landing original (PASS)."
+    }
+  ],
+  "evidence_paths": [
+    "projetos-complementares-engenharia/index.html",
+    "conteudos/como-contratar-projetos-complementares/index.html",
+    "assets/projetos-complementares-engenharia/pacote-entrega.svg",
+    "assets/projetos-complementares-engenharia/interfaces-versoes.svg",
+    "assets/conteudos/como-contratar-projetos-complementares.svg",
+    "tests/inb-20260911/12/test_page_contract_projetos_complementares.mjs"
+  ],
+  "unresolved": [
+    "inbound:gates local falha fechado sem a familia proposta; nao editar o registry nesta branch.",
+    "INB-06 ainda sem excerto pertinente de elaboracao; esquemas sao metodo ilustrado, nao prova de dimensionamento.",
+    "INB-02 ainda nao publicou intake_context=complementary_elaboration; canais diretos sustentam a conversa.",
+    "Link de parceria continua usa /triagem-tecnica/ ate 11 publicar destino proprio.",
+    "Patch do hub /servicos/ e de posse de 09; 16 nao disputa a branch 09."
+  ]
+}

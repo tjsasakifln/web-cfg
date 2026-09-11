@@ -55,10 +55,19 @@ def test_ia_contract_is_valid_without_html():
     assert by_id["project_delivery"]["href"] == "/servicos/#servico-projeto"
     assert by_id["project_delivery"]["index_state"] == "service_hub_index"
     assert by_id["project_delivery"]["scope"]
-    assert by_id["building_diagnosis"]["href"] == "/servicos/#servico-diagnostico"
+    assert by_id["building_diagnosis"]["href"] in (
+        "/servicos/#servico-diagnostico",
+        "/inspecao-diagnostico-edificacoes/",
+    )
     assert by_id["building_diagnosis"]["index_state"] == "service_hub_index"
-    assert by_id["expert_evidence_valuation"]["href"] == "/servicos/#servico-pericia"
-    assert by_id["occupational_safety"]["href"] == "/servicos/#servico-sst"
+    assert by_id["expert_evidence_valuation"]["href"] in (
+        "/servicos/#servico-pericia",
+        "/assistencia-tecnica-pericial-engenharia/",
+    )
+    assert by_id["occupational_safety"]["href"] in (
+        "/servicos/#servico-sst",
+        "/seguranca-trabalho-apoio-tecnico/",
+    )
     assert all(
         by_id[item]["index_state"] == "service_hub_index"
         for item in ("expert_evidence_valuation", "occupational_safety")

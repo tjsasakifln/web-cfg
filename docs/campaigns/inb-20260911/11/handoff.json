@@ -1,0 +1,131 @@
+{
+  "schema": "confenge.inbound-campaign-handoff/2.0",
+  "campaign_set": "INB-20260911",
+  "campaign_id": "11",
+  "prompt_version": "2.0.0",
+  "base_sha": "8f508544835490ec635d02517bce0207c6f8e426",
+  "state": "READY_FOR_INTEGRATION_WITH_DEPENDENCIES",
+  "owned_sources": [
+    "parcerias-engenharia/index.html",
+    "parcerias-engenharia/styles.css",
+    "parcerias-engenharia/share.js",
+    "data/distribution/partner-reference-kits.v1.json",
+    "scripts/distribution/partner_reference.mjs",
+    "scripts/distribution/tests/test_partner_reference.mjs",
+    "docs/campaigns/inb-20260911/11/inventory.md",
+    "docs/campaigns/inb-20260911/11/approach-drafts.md",
+    "docs/campaigns/inb-20260911/11/external-directories-plan.md",
+    "docs/campaigns/inb-20260911/11/shared-changes.json",
+    "docs/campaigns/inb-20260911/11/integration-public-artifact.patch",
+    "docs/campaigns/inb-20260911/11/handoff.json"
+  ],
+  "changed_sources": [
+    "parcerias-engenharia/index.html",
+    "parcerias-engenharia/styles.css",
+    "parcerias-engenharia/share.js",
+    "data/distribution/partner-reference-kits.v1.json",
+    "scripts/distribution/partner_reference.mjs",
+    "scripts/distribution/tests/test_partner_reference.mjs",
+    "docs/campaigns/inb-20260911/11/inventory.md",
+    "docs/campaigns/inb-20260911/11/approach-drafts.md",
+    "docs/campaigns/inb-20260911/11/external-directories-plan.md",
+    "docs/campaigns/inb-20260911/11/shared-changes.json",
+    "docs/campaigns/inb-20260911/11/integration-public-artifact.patch",
+    "docs/campaigns/inb-20260911/11/handoff.json"
+  ],
+  "routes": [
+    {
+      "path": "/parcerias-engenharia/",
+      "kind": "commercial_content",
+      "intent_family": "projetar_revisar_compatibilizar",
+      "offer_id": "complementary_engineering_project_review",
+      "canonical": "https://confenge.com.br/parcerias-engenharia/",
+      "requested_indexability": "indexable",
+      "release_unit": "EXPANSION",
+      "contact_mode": "whatsapp_email_phone_existing"
+    }
+  ],
+  "dependencies": [
+    {
+      "provider_campaign": "02",
+      "artifact_path": "netlify/functions/lib/lead-core.cjs",
+      "level": "HARD_AT_RELEASE",
+      "fallback": null,
+      "status": "ALREADY_SATISFIED",
+      "proof": "buildShareUrl chama pickAttribution e ATTR_ALLOWLIST do lead-core atual"
+    },
+    {
+      "provider_campaign": "03",
+      "artifact_path": "quantitativos-orcamento-obras/index.html",
+      "level": "HARD_AT_RELEASE",
+      "fallback": null,
+      "status": "ALREADY_SATISFIED",
+      "proof": "kit orcamento-quantitativos resolve /quantitativos-orcamento-obras/"
+    },
+    {
+      "provider_campaign": "04",
+      "artifact_path": "servicos/index.html#servico-projeto",
+      "level": "HARD_AT_RELEASE",
+      "fallback": null,
+      "status": "ALREADY_SATISFIED",
+      "proof": "kit revisao-compatibilizacao usa /servicos/#servico-projeto, que distingue revisão e compatibilização pela compra"
+    },
+    {
+      "provider_campaign": "05",
+      "artifact_path": "servicos/index.html#servico-projeto",
+      "level": "HARD_AT_RELEASE",
+      "fallback": null,
+      "status": "ALREADY_SATISFIED",
+      "proof": "mesmo destino de revisão; compra distinta da compatibilização no copy do kit"
+    },
+    {
+      "provider_campaign": "06",
+      "artifact_path": "casos/modelo-base-quantitativa-canonica/index.html",
+      "level": "HARD_AT_RELEASE",
+      "fallback": null,
+      "status": "ALREADY_SATISFIED",
+      "proof": "amostra reusa URL/ID base-quantitativa-canonica-demonstrativo; arquivo não duplicado"
+    },
+    {
+      "provider_campaign": "12",
+      "artifact_path": null,
+      "level": "OPTIONAL_ENRICHMENT",
+      "fallback": "kit complementares aponta a /servicos/#servico-projeto e omite amostra; não anuncia entrega pendente nem troca por /",
+      "status": "ABSENT_IN_THIS_TREE"
+    }
+  ],
+  "shared_changes": "docs/campaigns/inb-20260911/11/shared-changes.json",
+  "tests": [
+    {
+      "command": "node scripts/distribution/tests/test_partner_reference.mjs",
+      "exit_code": 0,
+      "subject_sha": null,
+      "overlay_hashes": null,
+      "log": "inb11-tests.log"
+    },
+    {
+      "command": "npm run test:attribution-allowlist",
+      "exit_code": 0,
+      "subject_sha": null,
+      "overlay_hashes": null,
+      "log": "attribution-allowlist.log"
+    },
+    {
+      "command": "python3 scripts.site.inbound_gates.gate_conversion (parcerias-engenharia)",
+      "exit_code": 1,
+      "subject_sha": null,
+      "overlay_hashes": null,
+      "note": "public_family_not_declared até 16 aplicar inb11-family-parcerias-engenharia; esperado neste PR produtor"
+    }
+  ],
+  "evidence_paths": [
+    "docs/campaigns/inb-20260911/11/inventory.md",
+    "docs/campaigns/inb-20260911/11/approach-drafts.md",
+    "docs/campaigns/inb-20260911/11/external-directories-plan.md"
+  ],
+  "unresolved": [
+    "16 aplicar shared-changes: família, PUBLIC_TOP_DIRS, sitemap.xml e sitemap.txt. Sem isso, test_conversion_indexable_has_cta e test_run_all_gates_ok reprovam neste PR.",
+    "Amostra do kit complementares só entra quando 12 publicar rota real no tree; operação externa de diretórios e disparo dos rascunhos não executada.",
+    "Nav hubs (09) não foram alterados; a página não é promovida no header até 09/16 decidirem."
+  ]
+}

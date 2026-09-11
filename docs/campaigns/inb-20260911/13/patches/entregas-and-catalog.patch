@@ -1,0 +1,11 @@
+--- a/entregas/index.html
++++ b/entregas/index.html
+@@
+-<p><a href="/servicos/#servico-diagnostico">Entender inspeção e diagnóstico</a></p>
++<p><a href="/inspecao-diagnostico-edificacoes/">Ver inspeção e diagnóstico de edificações</a></p>
+
+--- a/scripts/commercial/render_public_catalog.mjs
++++ b/scripts/commercial/render_public_catalog.mjs
+@@
+-<p><a href="/servicos/#servico-diagnostico">Entender inspeção e diagnóstico</a></p>
++<p><a href="/inspecao-diagnostico-edificacoes/">Ver inspeção e diagnóstico de edificações</a></p>

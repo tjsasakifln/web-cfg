@@ -40,7 +40,7 @@
       "audience_examples": ["pessoas físicas", "condomínios", "órgãos públicos", "construtoras", "incorporadoras", "escritórios de engenharia", "escritórios e plataformas de arquitetura como clientes de engenharia complementar"],
       "terminal_action": "REQUEST_SCOPE_REVIEW",
       "adjacent_intents": ["orcar_planejar_decidir", "documentar_as_built_regularizar"],
-      "disambiguation": "Não oferece autoria arquitetônica. Disciplina, atribuição, autoria de origem, interfaces e responsabilidade técnica precisam ser confirmadas antes da proposta."
+      "disambiguation": "Não oferece autoria arquitetônica. Elaboração de disciplina complementar, revisão de um projeto já existente e compatibilização de interfaces são compras distintas e não devem ser fundidas. Disciplina, atribuição, autoria de origem, interfaces e responsabilidade técnica precisam ser confirmadas antes da proposta."
     },
     {
       "intent_family": "orcar_planejar_decidir",
@@ -50,7 +50,7 @@
       "audience_examples": ["construtoras", "incorporadoras", "desenvolvedores imobiliários", "escritórios de engenharia"],
       "terminal_action": "REQUEST_SCOPE_REVIEW",
       "adjacent_intents": ["projetar_revisar_compatibilizar", "planejar_contratacao_publica"],
-      "disambiguation": "A família atende orçamento público e privado. Finalidade, referências de preços, critérios, estágio do projeto e objeto definem a entrega; preserve a necessidade original no contato."
+      "disambiguation": "A família atende orçamento público e privado. Levantamento de quantitativos de uma obra e auditoria da planilha do edital são compras distintas. Uma oferta de orçamento para ambos os contextos permanece mixed, não exclusivamente pública ou privada. Finalidade, referências de preços, critérios, estágio do projeto e objeto definem a entrega; preserve a necessidade original no contato."
     },
     {
       "intent_family": "inspecionar_diagnosticar",

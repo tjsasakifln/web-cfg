@@ -3,7 +3,7 @@
   "campaign": "CONFENGE-FORTUNE-CONVERSION-SEO-01",
   "content_library_by_disposition": {
     "noindex": 96,
-    "manter": 22,
+    "manter": 30,
     "consolidar": 2
   },
   "generic_boilerplate_stripped_pages": 116,
@@ -341,6 +341,48 @@
       "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
+      "slug": "como-contratar-compatibilizacao-projetos",
+      "path": "/conteudos/como-contratar-compatibilizacao-projetos/",
+      "title": "Como contratar compatibilização de projetos | CONFENGE",
+      "words": 772,
+      "answer_still_generic": false,
+      "criteria_templated": false,
+      "classification": "manter",
+      "priority_gsc": false,
+      "deepened_handcrafted": true,
+      "consolidate_into": null,
+      "disposition": "manter",
+      "generic_boilerplate_removed": true
+    },
+    {
+      "slug": "como-contratar-projetos-complementares",
+      "path": "/conteudos/como-contratar-projetos-complementares/",
+      "title": "Como contratar projetos complementares de engenharia | CONFENGE",
+      "words": 933,
+      "answer_still_generic": false,
+      "criteria_templated": false,
+      "classification": "manter",
+      "priority_gsc": false,
+      "deepened_handcrafted": true,
+      "consolidate_into": null,
+      "disposition": "manter",
+      "generic_boilerplate_removed": true
+    },
+    {
+      "slug": "como-contratar-revisao-tecnica-projeto",
+      "path": "/conteudos/como-contratar-revisao-tecnica-projeto/",
+      "title": "Como contratar revisão técnica de projeto: insumos e entrega | CONFENGE",
+      "words": 602,
+      "answer_still_generic": false,
+      "criteria_templated": false,
+      "classification": "manter",
+      "priority_gsc": false,
+      "deepened_handcrafted": true,
+      "consolidate_into": null,
+      "disposition": "manter",
+      "generic_boilerplate_removed": true
+    },
+    {
       "slug": "como-provar-atraso-obra-publica",
       "path": "/conteudos/como-provar-atraso-obra-publica/",
       "title": "Como provar que o atraso da obra não foi responsabilidade da empresa",
@@ -354,6 +396,20 @@
       "disposition": "noindex",
       "generic_boilerplate_removed": true,
       "noindex_reason": "thin_or_template_pending_rewrite"
+    },
+    {
+      "slug": "comparar-propostas-execucao-obra",
+      "path": "/conteudos/comparar-propostas-execucao-obra/",
+      "title": "Como comparar propostas de execução de obra | CONFENGE",
+      "words": 589,
+      "answer_still_generic": false,
+      "criteria_templated": false,
+      "classification": "manter",
+      "priority_gsc": false,
+      "deepened_handcrafted": true,
+      "consolidate_into": null,
+      "disposition": "manter",
+      "generic_boilerplate_removed": true
     },
     {
       "slug": "compensacao-acrescimo-supressao-aditivo",
@@ -740,6 +796,20 @@
       "disposition": "noindex",
       "generic_boilerplate_removed": true,
       "noindex_reason": "thin_or_template_pending_rewrite"
+    },
+    {
+      "slug": "documentos-para-levantamento-quantitativos",
+      "path": "/conteudos/documentos-para-levantamento-quantitativos/",
+      "title": "Documentos para levantamento de quantitativos | CONFENGE",
+      "words": 661,
+      "answer_still_generic": false,
+      "criteria_templated": false,
+      "classification": "manter",
+      "priority_gsc": false,
+      "deepened_handcrafted": true,
+      "consolidate_into": null,
+      "disposition": "manter",
+      "generic_boilerplate_removed": true
     },
     {
       "slug": "documentos-reequilibrio-obra-publica",
@@ -1498,6 +1568,20 @@
       "noindex_reason": "thin_or_template_pending_rewrite"
     },
     {
+      "slug": "quando-compatibilizar-projetos",
+      "path": "/conteudos/quando-compatibilizar-projetos/",
+      "title": "Quando compatibilizar projetos de engenharia | CONFENGE",
+      "words": 810,
+      "answer_still_generic": false,
+      "criteria_templated": false,
+      "classification": "manter",
+      "priority_gsc": false,
+      "deepened_handcrafted": true,
+      "consolidate_into": null,
+      "disposition": "manter",
+      "generic_boilerplate_removed": true
+    },
+    {
       "slug": "quantitativo-insuficiente-planilha-obra-publica",
       "path": "/conteudos/quantitativo-insuficiente-planilha-obra-publica/",
       "title": "Quantitativo insuficiente na planilha: quando cabe aditivo? | CONFENGE",
@@ -1671,6 +1755,34 @@
       "criteria_templated": false,
       "classification": "manter",
       "priority_gsc": true,
+      "deepened_handcrafted": true,
+      "consolidate_into": null,
+      "disposition": "manter",
+      "generic_boilerplate_removed": true
+    },
+    {
+      "slug": "revisao-compatibilizacao-ou-elaboracao-projetos",
+      "path": "/conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/",
+      "title": "Revisar, compatibilizar ou elaborar o projeto: qual compra fazer? | CONFENGE",
+      "words": 626,
+      "answer_still_generic": false,
+      "criteria_templated": false,
+      "classification": "manter",
+      "priority_gsc": false,
+      "deepened_handcrafted": true,
+      "consolidate_into": null,
+      "disposition": "manter",
+      "generic_boilerplate_removed": true
+    },
+    {
+      "slug": "revisar-ou-refazer-orcamento-obra",
+      "path": "/conteudos/revisar-ou-refazer-orcamento-obra/",
+      "title": "Revisar ou refazer o orçamento da obra | CONFENGE",
+      "words": 672,
+      "answer_still_generic": false,
+      "criteria_templated": false,
+      "classification": "manter",
+      "priority_gsc": false,
       "deepened_handcrafted": true,
       "consolidate_into": null,
       "disposition": "manter",

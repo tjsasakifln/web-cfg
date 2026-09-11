@@ -1,0 +1,134 @@
+{
+  "schema": "confenge.inbound-campaign-handoff/2.0",
+  "campaign_set": "INB-20260911",
+  "campaign_id": "05",
+  "prompt_version": "2.0.0",
+  "base_sha": "8f508544835490ec635d02517bce0207c6f8e426",
+  "implementation_sha": "51707a4a1c92049f4b57d7c6542194f4ab6d6e6e",
+  "state": "READY_FOR_INTEGRATION_WITH_DEPENDENCIES",
+  "owned_sources": [
+    "revisao-tecnica-projetos-engenharia/index.html",
+    "conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/index.html",
+    "conteudos/como-contratar-revisao-tecnica-projeto/index.html",
+    "scripts/campaigns/inb-20260911/05/project_review_extract.mjs",
+    "tests/fixtures/inb05/consumption.v1.json",
+    "tests/fixtures/inb05/revisao.csv",
+    "tests/fixtures/inb05/SOURCE.txt",
+    "tests/intake/test_inb05_revisao_projetos.mjs",
+    "tests/intake/test_inb05_project_review_extract.mjs",
+    "docs/campaigns/inb-20260911/05/shared-changes.json",
+    "docs/campaigns/inb-20260911/05/integration.patch",
+    "docs/campaigns/inb-20260911/05/handoff.json"
+  ],
+  "changed_sources": [
+    "revisao-tecnica-projetos-engenharia/index.html",
+    "conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/index.html",
+    "conteudos/como-contratar-revisao-tecnica-projeto/index.html",
+    "scripts/campaigns/inb-20260911/05/project_review_extract.mjs",
+    "tests/fixtures/inb05/consumption.v1.json",
+    "tests/fixtures/inb05/revisao.csv",
+    "tests/fixtures/inb05/SOURCE.txt",
+    "tests/intake/test_inb05_revisao_projetos.mjs",
+    "tests/intake/test_inb05_project_review_extract.mjs",
+    "docs/campaigns/inb-20260911/05/README.md",
+    "docs/campaigns/inb-20260911/05/shared-changes.json",
+    "docs/campaigns/inb-20260911/05/integration.patch",
+    "docs/campaigns/inb-20260911/05/handoff.json"
+  ],
+  "routes": [
+    {
+      "path": "/revisao-tecnica-projetos-engenharia/",
+      "kind": "commercial_landing",
+      "intent_family": "projetar_revisar_compatibilizar",
+      "offer_id": "complementary_engineering_project_review",
+      "canonical": "https://confenge.com.br/revisao-tecnica-projetos-engenharia/",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "contact_mode": "direct_channels_withheld_form"
+    },
+    {
+      "path": "/conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/",
+      "kind": "decision_content",
+      "intent_family": "projetar_revisar_compatibilizar",
+      "offer_id": "complementary_engineering_project_review",
+      "canonical": "https://confenge.com.br/conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "contact_mode": "service_transition_plus_whatsapp"
+    },
+    {
+      "path": "/conteudos/como-contratar-revisao-tecnica-projeto/",
+      "kind": "decision_content",
+      "intent_family": "projetar_revisar_compatibilizar",
+      "offer_id": "complementary_engineering_project_review",
+      "canonical": "https://confenge.com.br/conteudos/como-contratar-revisao-tecnica-projeto/",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "contact_mode": "service_transition_plus_whatsapp"
+    }
+  ],
+  "dependencies": [
+    {
+      "provider_campaign": "01",
+      "artifact_path": "data/site/public-ia-map.json",
+      "level": "HARD_AT_RELEASE",
+      "fallback": "Rotas se ligam entre si; o upsert de breadcrumb/parent/active_header está em shared-changes.json (inb05-public-ia-map-breadcrumb-parent)."
+    },
+    {
+      "provider_campaign": "02",
+      "artifact_path": "netlify/functions/data/adaptive-intake-authority.json",
+      "level": "ALREADY_SATISFIED",
+      "fallback": null,
+      "proof": "Autoridade WITHHELD; a landing reusa os três canais diretos já funcionais (WhatsApp, e-mail, telefone) sem formulário morto. Testes em tests/intake/test_inb05_revisao_projetos.mjs."
+    },
+    {
+      "provider_campaign": "06",
+      "artifact_path": "data/demonstrative/private-project-pilot/consumption.v1.json",
+      "level": "HARD_AT_RELEASE",
+      "provider_sha": "399a32c415171ccc9e26cae565ecf83f9ecd4c92",
+      "fallback": "SELECT de review_findings RF-01 (WN-01×B-01) e RF-02 (HS-01) no SHA origin/campaign/inb-20260911/06-prova-tecnica-privada. Fixture tests/fixtures/inb05/consumption.v1.json copia as mesmas linhas."
+    },
+    {
+      "provider_campaign": "06",
+      "artifact_path": "casos/demonstrativo-projeto-privado/data/revisao.csv",
+      "level": "HARD_AT_RELEASE",
+      "provider_sha": "399a32c415171ccc9e26cae565ecf83f9ecd4c92",
+      "fallback": "SELECT das linhas RF-01 e RF-02. Fixture tests/fixtures/inb05/revisao.csv copia o CSV. A landing não inventa segundo edifício."
+    }
+  ],
+  "shared_changes": "docs/campaigns/inb-20260911/05/shared-changes.json",
+  "tests": [
+    {
+      "command": "node --test tests/intake/test_inb05_revisao_projetos.mjs",
+      "exit_code": 0,
+      "subject_sha": "51707a4a1c92049f4b57d7c6542194f4ab6d6e6e",
+      "overlay_hashes": {
+        "docs/campaigns/inb-20260911/05/shared-changes.json": "sha256:1c5825ee782dde9ce468e3063d87569dcf638943073b0186d32c434fb1bc4747"
+      }
+    },
+    {
+      "command": "node --test tests/intake/test_inb05_project_review_extract.mjs",
+      "exit_code": 0,
+      "subject_sha": "51707a4a1c92049f4b57d7c6542194f4ab6d6e6e",
+      "overlay_hashes": {
+        "scripts/campaigns/inb-20260911/05/project_review_extract.mjs": "sha256:17519928548fee9ab2ee96a8208ec61cd3e45fb258a7e76a878d12f06c339de8",
+        "tests/fixtures/inb05/consumption.v1.json": "sha256:72ada53aa99eb42fbb560538c01337712722c5b99f18221ffda567f23c4f940d",
+        "tests/fixtures/inb05/revisao.csv": "sha256:f60f0b21d9bee7bff4e8f69d8c4a5e62f587c655be173a6ac41cf928dfaa7558"
+      }
+    }
+  ],
+  "evidence_paths": [
+    "tests/intake/test_inb05_revisao_projetos.mjs",
+    "tests/intake/test_inb05_project_review_extract.mjs",
+    "revisao-tecnica-projetos-engenharia/index.html",
+    "conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/index.html",
+    "conteudos/como-contratar-revisao-tecnica-projeto/index.html",
+    "tests/fixtures/inb05/consumption.v1.json",
+    "tests/fixtures/inb05/revisao.csv"
+  ],
+  "unresolved": [
+    "INB-06 publicou RF-01/RF-02; a landing faz SELECT desses fatos. 16 ainda precisa incorporar os arquivos de 06 no candidato.",
+    "16 precisa aplicar PUBLIC_TOP_DIRS, família, sitemap e mapa para a landing entrar no artefato público e no gate fail-closed.",
+    "Playwright/headless não estava disponível neste ambiente; verificação visual 360/390 ficou em HTML estático + curl 200 + testes de markup."
+  ]
+}

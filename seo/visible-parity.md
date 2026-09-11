@@ -1,20 +1,24 @@
 # Visible parity
 
 - ok: `True`
-- pages: `78`
+- pages: `97`
 - defects: `0`
-- site_root: `/tmp/claude-1000/-home-tjsasakifln-code-confenge-web-cfg/00c05faa-bef8-4907-a4f3-a23173631031/scratchpad/wt-main/_site`
+- site_root: `/home/tjsasakifln/code/confenge/web-cfg/.grok/worktrees/inb-16-integracao/_site`
 
 | url | ok | defects | claimed | visible |
 | --- | --- | --- | --- | --- |
-| https://confenge.com.br/ | True | — | Organization,Person | Do problema técnico à decisão documentada. |
+| https://confenge.com.br/ | True | — | Organization,Person | Projetos e serviços de engenharia para obras públicas e privadas. |
 | https://confenge.com.br/acompanhamento-contratos-obras/ | True | — | Organization,Person,BreadcrumbList | Acompanhamento de contratos de obras públicas: rotina preventiva e recorrente |
 | https://confenge.com.br/aditivos-obras-publicas/ | True | — | Organization,Person,BreadcrumbList | Aditivos e serviços extras em obras públicas: documentar, precificar e decidir |
+| https://confenge.com.br/analises-contratos-publicos/ | True | — | Organization,Person,BreadcrumbList | Análises técnicas de contratos públicos |
+| https://confenge.com.br/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/ | True | — | Organization,Person,BreadcrumbList,Article; Três relógios de reajuste no mesmo instrumento de pavimentação em paralelepípedo | Três relógios de reajuste no mesmo instrumento de pavimentação em paralelepípedo |
+| https://confenge.com.br/assistencia-tecnica-pericial-engenharia/ | True | — | BreadcrumbList | Assistência técnica de engenharia em disputas |
 | https://confenge.com.br/atrasos-prorrogacao-obras-publicas/ | True | — | Organization,Person,BreadcrumbList | Atrasos e prorrogações: causa, responsabilidade, caminho crítico e registro contemporâneo |
 | https://confenge.com.br/auditoria-orcamento-licitacao/ | True | — | Organization,Person,BreadcrumbList | Auditoria de orçamento, BDI, SINAPI e preço |
 | https://confenge.com.br/bid-room-licitacoes-obras/ | True | — | Organization,BreadcrumbList,Person | Operação de Proposta para Licitação Crítica |
 | https://confenge.com.br/casos/ | True | — | Organization,Person,BreadcrumbList | Exemplos de entrega (demonstrativos) |
 | https://confenge.com.br/casos/aditivo-art125-demonstrativo/ | True | — | Organization,Person,BreadcrumbList | Demonstrativo. Aditivo: verificar saldos do art. 125 antes de protocolar |
+| https://confenge.com.br/casos/demonstrativo-projeto-privado/ | True | — | Organization,Person,BreadcrumbList | Demonstrativo. Recorte de banheiro com quantitativos, orçamento, revisão e compatibilização |
 | https://confenge.com.br/casos/medicao-glosa-demonstrativo/ | True | — | Organization,Person,BreadcrumbList | Demonstrativo. Medição glosada: do apontamento ao pedido certo |
 | https://confenge.com.br/casos/modelo-apresentacao-executiva-resultados/ | True | — | Organization,Person,BreadcrumbList | Demonstrativo. Transforme o diagnóstico em decisão assinada na reunião. |
 | https://confenge.com.br/casos/modelo-base-quantitativa-canonica/ | True | — | Organization,Person,BreadcrumbList | Demonstrativo. Confira cada número antes de acreditar nele. |
@@ -25,10 +29,11 @@
 | https://confenge.com.br/casos/modelo-relatorio-executivo-consolidado/ | True | — | Organization,Person,BreadcrumbList | Demonstrativo. Decida onde alocar equipe, acervo e caixa nos próximos 90 dias. |
 | https://confenge.com.br/casos/modelo-relatorio-inteligencia-licitacoes/ | True | — | Organization,Person,BreadcrumbList | Modelo sintético: licitações a disputar ou recusar. |
 | https://confenge.com.br/comercial/privacidade-leads/ | True | — |  | Aviso de privacidade - leads e contratação |
-| https://confenge.com.br/comercial/termos-diagnostico-b2g/ | True | — |  | Termos B2B - Diagnóstico de Expansão no Mercado Público |
+| https://confenge.com.br/comercial/termos-diagnostico-b2g/ | True | — |  | Termos para pessoa jurídica - Diagnóstico de Expansão no Mercado Público |
+| https://confenge.com.br/compatibilizacao-projetos-engenharia/ | True | — | BreadcrumbList | Compatibilização de projetos de engenharia |
 | https://confenge.com.br/confianca/ | True | — | Organization,Person,BreadcrumbList | Quem responde pela CONFENGE |
 | https://confenge.com.br/conflitos/ | True | — | Organization,Person,BreadcrumbList | Como a CONFENGE protege a independência técnica |
-| https://confenge.com.br/conteudos/ | True | — | Organization,Person,BreadcrumbList | Qual problema de licitação ou contrato você precisa resolver? |
+| https://confenge.com.br/conteudos/ | True | — | Organization,Person,BreadcrumbList | Qual problema de projeto, orçamento ou contrato você precisa resolver? |
 | https://confenge.com.br/conteudos/aditivo-empreitada-por-preco-global/ | True | — | Organization,Person,Article,BreadcrumbList; Aditivo em empreitada global: o que o risco de quantitativo não cobre | Aditivo em empreitada global: o que o risco de quantitativo não cobre |
 | https://confenge.com.br/conteudos/administracao-local-orcamento-obra-publica/ | True | — | Organization,Person,Article,BreadcrumbList; Administração local: item, BDI ou planilha? | Administração local no orçamento: direto, BDI ou planilha? |
 | https://confenge.com.br/conteudos/atraso-na-medicao-obra-publica/ | True | — | Organization,Person,Article,BreadcrumbList; Atraso na medição de obra pública: o que fazer | Atraso na medição de obra pública: onde o processo travou? |
@@ -36,9 +41,14 @@
 | https://confenge.com.br/conteudos/atraso-pagamento-contrato-publico-suspender/ | True | — | Organization,Person,Article,BreadcrumbList; Atraso de pagamento: pode suspender a obra pública? | Atraso de pagamento: pode suspender a obra pública? |
 | https://confenge.com.br/conteudos/bdi-diferenciado-obra-publica/ | True | — | Organization,Person,Article,BreadcrumbList; BDI diferenciado em materiais e equipamentos: quando usar | BDI diferenciado em materiais e equipamentos: quando usar |
 | https://confenge.com.br/conteudos/chuva-prorrogacao-prazo-obra-publica/ | True | — | Organization,Article,BreadcrumbList; Chuva na obra pública: quando o prazo é tecnicamente impactado | Chuva na obra pública: quando o prazo é tecnicamente impactado |
+| https://confenge.com.br/conteudos/como-contratar-compatibilizacao-projetos/ | True | — | Article,BreadcrumbList; Como contratar compatibilização de projetos | Como contratar a compatibilização de projetos |
+| https://confenge.com.br/conteudos/como-contratar-projetos-complementares/ | True | — | Article,BreadcrumbList; Como contratar projetos complementares de engenharia | Como contratar projetos complementares de engenharia |
+| https://confenge.com.br/conteudos/como-contratar-revisao-tecnica-projeto/ | True | — | Article,BreadcrumbList; Como contratar revisão técnica de projeto: insumos e entrega | Como contratar revisão técnica de projeto: insumos e entrega |
+| https://confenge.com.br/conteudos/comparar-propostas-execucao-obra/ | True | — | BreadcrumbList | Como comparar propostas de execução de obra |
 | https://confenge.com.br/conteudos/comprovacao-exequibilidade-proposta-obra/ | True | — | Organization,Person,Article,BreadcrumbList; Exequibilidade da proposta: o que comprovar | Exequibilidade da proposta: o que comprovar |
 | https://confenge.com.br/conteudos/data-base-orcamento-reajuste-obra-publica/ | True | — | Organization,Person,Article,BreadcrumbList; Data-base e reajuste: meses sem cobertura | Data-base e reajuste: meses sem cobertura |
 | https://confenge.com.br/conteudos/demolicao-nao-prevista-obra-publica/ | True | — | Organization,Person,Article,BreadcrumbList; Demolição fora da planilha: como documentar antes de executar | Demolição fora da planilha: como documentar antes de executar |
+| https://confenge.com.br/conteudos/documentos-para-levantamento-quantitativos/ | True | — | BreadcrumbList | O que enviar para levantar quantitativos |
 | https://confenge.com.br/conteudos/empreitada-preco-global-preco-unitario/ | True | — | Organization,Person,Article,BreadcrumbList; Preço global ou unitário: o risco de quantidade | Preço global ou unitário: o risco de quantidade |
 | https://confenge.com.br/conteudos/fiscal-nao-assina-medicao-obra-publica/ | True | — | Organization,Person,Article,BreadcrumbList; Fiscal não assina medição: o que fazer nas primeiras 48h | Fiscal não assina medição: o que fazer nas primeiras 48h |
 | https://confenge.com.br/conteudos/glosa-por-qualidade-obra-publica/ | True | — | Organization,Person,Article,BreadcrumbList; Glosa por qualidade: pode glosar a medição inteira? | Glosa por qualidade: pode glosar a medição inteira? |
@@ -48,7 +58,10 @@
 | https://confenge.com.br/conteudos/mobilizacao-desmobilizacao-orcamento-obra/ | True | — | Organization,Person,Article,BreadcrumbList; Mobilização e desmobilização na planilha | Mobilização e desmobilização na planilha |
 | https://confenge.com.br/conteudos/pagamento-parcial-etapa-empreitada-global/ | True | — | Organization,Person,Article,BreadcrumbList; Pagamento parcial em empreitada global: quando vale | Pagamento parcial em empreitada global: quando vale |
 | https://confenge.com.br/conteudos/prorrogacao-prazo-obra-publica-documentos/ | True | — | Organization,Person,Article,BreadcrumbList; Dossiê do pedido de prorrogação de prazo | Dossiê do pedido de prorrogação de prazo |
+| https://confenge.com.br/conteudos/quando-compatibilizar-projetos/ | True | — | Article,BreadcrumbList; Quando compatibilizar projetos de engenharia | Quando compatibilizar os projetos que você já tem |
 | https://confenge.com.br/conteudos/resposta-notificacao-atraso-obra-publica/ | True | — | Organization,Person,Article,BreadcrumbList; Resposta à notificação de atraso em obra pública | Resposta à notificação de atraso em obra pública |
+| https://confenge.com.br/conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/ | True | — | Article,BreadcrumbList; Revisar, compatibilizar ou elaborar o projeto: qual compra fazer? | Revisar, compatibilizar ou elaborar o projeto: qual compra fazer? |
+| https://confenge.com.br/conteudos/revisar-ou-refazer-orcamento-obra/ | True | — | BreadcrumbList | Revisar ou refazer o orçamento da obra |
 | https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/ | True | — | Organization,Person,Article,BreadcrumbList; SINAPI desonerado ou não desonerado: qual usar? | SINAPI desonerado ou não desonerado: qual usar? |
 | https://confenge.com.br/conteudos/sinapi-ou-sicro-obra-publica/ | True | — | Organization,Person,Article,BreadcrumbList; SINAPI ou SICRO: a referência de cada serviço | SINAPI ou SICRO: a referência de cada serviço |
 | https://confenge.com.br/defesa-margem-contratos-publicos/ | True | — | Organization,BreadcrumbList,Person | Defesa de margem em contratos públicos: detecção, documentação, cálculo e decisão |
@@ -57,31 +70,37 @@
 | https://confenge.com.br/diagnostico-b2g-expansao/ | True | — | Organization,BreadcrumbList,Person | Diagnóstico de Expansão no Mercado Público |
 | https://confenge.com.br/diagnostico-pre-licitacao/ | True | — | Organization,Person,BreadcrumbList | Diagnóstico pré-licitação para obras públicas |
 | https://confenge.com.br/diretoria-b2g/ | True | — | Organization,Person,BreadcrumbList | Diretoria Fracionada para o Mercado Público |
-| https://confenge.com.br/entregas/ | True | — | Organization,BreadcrumbList | 8 ofertas publicadas. Escolha pela decisão que está na mesa.Exemplos sintéticos. |
+| https://confenge.com.br/entregas/ | True | — | Organization,BreadcrumbList | Entregas de engenharia. Veja o conteúdo e para que ele serve. |
 | https://confenge.com.br/especialista/tiago-jun-sasaki/ | True | — | Organization,Person,BreadcrumbList | Engº Tiago Sasaki |
-| https://confenge.com.br/ferramentas/ | True | — | BreadcrumbList | Ferramentas para licitações, contratos e obras públicas |
+| https://confenge.com.br/ferramentas/ | True | — | BreadcrumbList | Ferramentas de decisão para contratos, obras públicas e obras privadas |
 | https://confenge.com.br/ferramentas/checklist-reequilibrio/ | True | — | Organization,BreadcrumbList | Checklist de documentação para reequilíbrio |
 | https://confenge.com.br/ferramentas/diagnostico-defesa-margem/ | True | — | Organization,BreadcrumbList | Diagnóstico de Defesa de Margem em Contratos Públicos |
 | https://confenge.com.br/ferramentas/limite-acrescimos-supressoes/ | True | — | Person,BreadcrumbList | Verificador de limite de acréscimos e supressões |
 | https://confenge.com.br/ferramentas/matriz-atraso-obra/ | True | — | Person,BreadcrumbList | Matriz de atraso de obra |
+| https://confenge.com.br/ferramentas/prontidao-tecnica-obra-privada/ | True | — |  | Identifique evidências técnicas presentes, ausentes ou desconhecidas antes de contratar, executar ou retomar uma obra privada |
 | https://confenge.com.br/guias-contratos-obras/ | True | — | Organization,BreadcrumbList | Guias e checklists para contratos de obras públicas |
 | https://confenge.com.br/guias-contratos-obras/checklist-pedido-aditivo/ | True | — | Organization,BreadcrumbList,Article; Checklist de pedido de aditivo em obra pública | Checklist de pedido de aditivo em obra pública |
 | https://confenge.com.br/imprensa/ | True | — |  | Imprensa e pesquisa |
+| https://confenge.com.br/inspecao-diagnostico-edificacoes/ | True | — | BreadcrumbList | Inspeção e diagnóstico de edificações |
 | https://confenge.com.br/lei-14133-obras/ | True | — | Organization,BreadcrumbList | Lei nº 14.133/2021 aplicada a obras e serviços de engenharia |
 | https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/ | True | — | Organization,BreadcrumbList,Article; Item novo no aditivo: preço e relação proposta/orçamento-base | Item novo no aditivo: preço e relação proposta/orçamento-base |
 | https://confenge.com.br/medicoes-glosas-obras-publicas/ | True | — | Organization,Person,BreadcrumbList | Medições, glosas e pagamentos em obras públicas |
-| https://confenge.com.br/metodologia-inteligencia/ | True | — | Organization,Person,BreadcrumbList | Como lemos o mercado público sem transformar histórico em profecia. |
+| https://confenge.com.br/metodologia-inteligencia/ | True | — | Organization,Person,BreadcrumbList | Como a CONFENGE separa fato, cálculo, hipótese e ponto desconhecido |
 | https://confenge.com.br/nurture/ | True | — |  | Cinco e-mails úteis, não newsletter genérica |
+| https://confenge.com.br/parcerias-engenharia/ | True | — | BreadcrumbList | Encaminhe o recorte de engenharia e continue com o seu cliente. |
 | https://confenge.com.br/politica-editorial/ | True | — | Organization,Person,BreadcrumbList | Política editorial |
 | https://confenge.com.br/politica-editorial/historico/ | True | — | Organization,Person,BreadcrumbList | Histórico da política editorial |
 | https://confenge.com.br/politica-editorial/v/1.0.0/ | True | — | Organization,Person,BreadcrumbList | Política editorial 1.0.0 |
 | https://confenge.com.br/privacidade/ | True | — |  | Política de Privacidade |
 | https://confenge.com.br/problemas-que-resolvemos/ | True | — | BreadcrumbList | Problemas que resolvemos em licitações e contratos de obras |
+| https://confenge.com.br/projetos-complementares-engenharia/ | True | — | BreadcrumbList | Projetos complementares de engenharia |
 | https://confenge.com.br/quantitativos-orcamento-obras/ | True | — | BreadcrumbList | Quantitativos e orçamento de obras |
-| https://confenge.com.br/radar/nacional-obras-publicas/ | True | — | Dataset,Organization,BreadcrumbList; Radar Nacional de Obras Públicas e Margem Contratual: recorte aberto | Radar Nacional de Obras Públicas e Margem Contratual |
+| https://confenge.com.br/radar/nacional-obras-publicas/ | True | — | Dataset,Organization,BreadcrumbList; Radar de obras públicas: método aberto e demanda observada | Radar de obras públicas: método aberto e demanda observada |
 | https://confenge.com.br/reequilibrio-obras-publicas/ | True | — | Organization,Person,BreadcrumbList | Reequilíbrio econômico-financeiro de obra pública |
+| https://confenge.com.br/revisao-tecnica-projetos-engenharia/ | True | — | BreadcrumbList | Revisão técnica de projetos de engenharia |
+| https://confenge.com.br/seguranca-trabalho-apoio-tecnico/ | True | — | BreadcrumbList | Apoio técnico de segurança do trabalho |
 | https://confenge.com.br/servicos-obras-publicas/ | True | — | BreadcrumbList | Serviços para licitações e contratos de obras públicas |
-| https://confenge.com.br/servicos/ | True | — | BreadcrumbList | Encontre o caminho técnico para a sua situação |
+| https://confenge.com.br/servicos/ | True | — | BreadcrumbList | Serviços de engenharia para obras públicas e privadas |
 | https://confenge.com.br/termos-de-uso/ | True | — |  | Termos de Uso |
 | https://confenge.com.br/triagem-tecnica/ | True | — |  | Explique sua situação em menos de um minuto |
 | https://confenge.com.br/uso-de-ia/ | True | — | Organization,Person,BreadcrumbList | Uso de inteligência artificial |

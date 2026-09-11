@@ -52,104 +52,170 @@
       "layer": "page_view",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["js/modules/form.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "js/modules/form.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Generic page impression. Never a lead, qualified lead, or pipeline."
     },
     "service_page_view": {
       "layer": "page_view",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["js/modules/nav.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "js/modules/nav.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Offer or service page impression. Same layer as page_view; not a lead."
     },
     "editorial_page_view": {
       "layer": "page_view",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["js/modules/nav.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "js/modules/nav.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Editorial/legal/guide impression. Same layer as page_view; not a lead."
     },
     "legal_article_view": {
       "layer": "page_view",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["js/modules/nav.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "js/modules/nav.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Lei 14.133 article impression."
     },
     "case_law_page_view": {
       "layer": "page_view",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["js/modules/nav.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "js/modules/nav.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Case-law page impression."
     },
     "checklist_view": {
       "layer": "page_view",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["js/modules/nav.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "js/modules/nav.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Guide/checklist page impression."
     },
     "data_insight_view": {
       "layer": "page_view",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["js/modules/nav.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "js/modules/nav.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Intelligence/data insight page impression."
     },
     "offer_view": {
       "layer": "page_view",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["js/modules/nav.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "js/modules/nav.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Offer page with data-offer-id. Impression only."
     },
     "asset_view": {
       "layer": "page_view",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["ferramentas/diagnostico-defesa-margem/index.html"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "ferramentas/diagnostico-defesa-margem/index.html"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Money-asset page load. Impression; not a lead."
     },
     "answer_view": {
       "layer": "page_view",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["assets/js/market-answer.js", "scripts/market_answers/events.py"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "assets/js/market-answer.js",
+        "scripts/market_answers/events.py"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Market Answer impression. Not a lead."
     },
     "intel_view": {
       "layer": "page_view",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["assets/js/live-intelligence.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "assets/js/live-intelligence.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Live-intelligence surface impression. Impression only; not a lead."
     },
     "organic_landing": {
       "layer": "page_view",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["ferramentas/diagnostico-defesa-margem/index.html"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "ferramentas/diagnostico-defesa-margem/index.html"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "First view of an asset from referrer/UTM. Impression annotation."
     },
     "session_start": {
       "layer": "session",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["js/modules/form.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "js/modules/form.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "First event of a browser session. Not a page view and not a lead."
     },
     "cta_view": {
@@ -161,226 +227,377 @@
         "ferramentas/diagnostico-defesa-margem/index.html",
         "js/modules/nav.js"
       ],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "CTA became visible. Engagement; not a lead."
     },
     "cta_click": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["js/modules/form.js", "js/modules/nav.js", "assets/js/conversion-journey.js", "assets/js/market-answer.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "js/modules/form.js",
+        "js/modules/nav.js",
+        "assets/js/conversion-journey.js",
+        "assets/js/market-answer.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Canonical CTA activation. Engagement; not a lead or pipeline."
     },
     "whatsapp_click": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["js/modules/nav.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "js/modules/nav.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "One physical click on a wa.me destination. Engagement. Carries the non-PII short protocol in correlation_id and, when named by the link, versioned offer and next-action context for later Warmbly reconciliation."
     },
     "email_click": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["js/modules/nav.js", "js/modules/form.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "js/modules/nav.js",
+        "js/modules/form.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Click on a mailto destination. Engagement."
     },
     "internal_search": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["js/modules/nav.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "js/modules/nav.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Library search with query_len only. Never the raw query."
     },
     "scroll_depth": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["js/modules/form.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "js/modules/form.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Canonical 50/75 percent scroll. Engagement, not qualified lead."
     },
     "content_to_service": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.1.0",
-      "producers": ["js/modules/nav.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "js/modules/nav.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "One physical click from an editorial/data/tool origin to a canonical service/offer. Carries source_path, source_asset_id, source_asset_family, destination_path, destination_service_id, cta_id, route_family, event_id. Engagement only; never a lead, qualified lead, pipeline, or won/lost. Unknown dest is UNKNOWN_SERVICE."
     },
     "outbound_click": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["js/modules/nav.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "js/modules/nav.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Click on an external http(s) or tel: destination. Not a content_to_service transition."
     },
     "web_vital": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["js/modules/analytics.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "js/modules/analytics.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Anonymous Core Web Vital sample."
     },
     "comparison_view": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["js/modules/nav.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "js/modules/nav.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Comparison section became visible."
     },
     "proof_expand": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["js/modules/nav.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "js/modules/nav.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Proof/evidence block expanded."
     },
     "method_open": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["assets/js/market-answer.js", "scripts/market_answers/events.py"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "assets/js/market-answer.js",
+        "scripts/market_answers/events.py"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Market Answer methodology opened."
     },
     "evidence_drilldown": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["assets/js/market-answer.js", "scripts/market_answers/events.py"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "assets/js/market-answer.js",
+        "scripts/market_answers/events.py"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Evidence stratum opened. Engagement; not a lead."
     },
     "analysis_click": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["assets/js/market-answer.js", "scripts/market_answers/events.py"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "assets/js/market-answer.js",
+        "scripts/market_answers/events.py"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Answer to contract-analysis navigation."
     },
     "xray_start": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["assets/js/market-answer.js", "scripts/market_answers/events.py"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "assets/js/market-answer.js",
+        "scripts/market_answers/events.py"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Visitor started B2G X-Ray. Not completion and not a lead."
     },
     "correction_open": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["assets/js/market-answer.js", "scripts/market_answers/events.py"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "assets/js/market-answer.js",
+        "scripts/market_answers/events.py"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Correction history opened."
     },
     "tool_view": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["assets/js/tools-common.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "assets/js/tools-common.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Tool page bound/viewed."
     },
     "tool_start": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["assets/js/tools-common.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "assets/js/tools-common.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Visitor started using a tool. Not completion."
     },
     "tool_copy": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["assets/js/tools-common.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "assets/js/tools-common.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Tool result copied."
     },
     "tool_download": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["assets/js/tools-common.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "assets/js/tools-common.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Tool report downloaded."
     },
     "tool_reset": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["assets/js/tools-common.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "assets/js/tools-common.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Tool state reset."
     },
     "tool_to_content": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["assets/js/tools-common.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "assets/js/tools-common.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Tool to related content click."
     },
     "tool_to_offer": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["assets/js/tools-common.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "assets/js/tools-common.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Tool to offer click."
     },
     "tool_to_whatsapp": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["assets/js/tools-common.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "assets/js/tools-common.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Tool to WhatsApp click."
     },
     "tool_to_form": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["assets/js/tools-common.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "assets/js/tools-common.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Tool to lead form click."
     },
     "lead_form_start": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["js/modules/form.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "js/modules/form.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "First focus on a lead form. Not a lead."
     },
     "lead_form_step": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["js/modules/form.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "js/modules/form.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Multi-step form advance or back."
     },
     "lead_form_error": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.1.0",
-      "producers": ["js/modules/form.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "js/modules/form.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Form validation or rate-limit error. validation_category, when present, is one finite PII-free value: required, contact_format, or rate_limited. It never carries a field name, value, native message, contact, document, free text, or Turnstile token. Legacy events without validation_category remain readable as UNKNOWN_CATEGORY; lead_form_backend_error remains separate.",
       "property_allowlist": {
-        "validation_category": ["required", "contact_format", "rate_limited"]
+        "validation_category": [
+          "required",
+          "contact_format",
+          "rate_limited"
+        ]
       },
       "strict_no_pii_props": true
     },
@@ -388,200 +605,330 @@
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["js/modules/form.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "js/modules/form.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Valid form submit attempt. Not persist and not a lead."
     },
     "lead_form_backend_error": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["js/modules/form.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "js/modules/form.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Lead function failed after submit."
     },
     "lead_form_success": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["js/modules/form.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "js/modules/form.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Form UX success or confirmation view. Not persist; do not count as lead."
     },
     "qualification_stage_select": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["js/modules/form.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "js/modules/form.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Need-type select changed."
     },
     "qualification_urgency_select": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["js/modules/form.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "js/modules/form.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Urgency select changed."
     },
     "contract_selected": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["ferramentas/diagnostico-defesa-margem/index.html"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "ferramentas/diagnostico-defesa-margem/index.html"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Visitor selected a snapshot contract. Not analysis completion."
     },
     "field_abandonment": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["assets/js/conversion-journey.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "assets/js/conversion-journey.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Required field left empty. Field name only; never the value."
     },
     "pseo_table_interaction": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["js/modules/form.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "js/modules/form.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "pSEO table interaction."
     },
     "pseo_source_open": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["js/modules/form.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "js/modules/form.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "pSEO source/provenance opened."
     },
     "pseo_related_page_click": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["js/modules/form.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "js/modules/form.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "pSEO related-page click."
     },
     "xray_error": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["assets/js/conversion-journey.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "assets/js/conversion-journey.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "X-Ray request returned an error. Not completion."
     },
     "xray_timeout": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["assets/js/conversion-journey.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "assets/js/conversion-journey.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "X-Ray request timed out. Not completion."
     },
     "confirmation_view": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["js/modules/form.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "js/modules/form.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Thank-you page viewed. Not persist."
     },
     "tool_complete": {
       "layer": "completion",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["assets/js/tools-common.js", "ferramentas/limite-acrescimos-supressoes/index.html", "ferramentas/checklist-reequilibrio/index.html", "ferramentas/matriz-atraso-obra/index.html"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "assets/js/tools-common.js",
+        "ferramentas/limite-acrescimos-supressoes/index.html",
+        "ferramentas/checklist-reequilibrio/index.html",
+        "ferramentas/matriz-atraso-obra/index.html",
+        "ferramentas/prontidao-tecnica-obra-privada/app.js",
+        "ferramentas/prontidao-tecnica-obra-privada/index.html"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Tool produced a result. Completion; not a lead."
     },
     "contract_analyzed": {
       "layer": "completion",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["ferramentas/diagnostico-defesa-margem/index.html"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "ferramentas/diagnostico-defesa-margem/index.html"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Money-asset diagnosis rendered. Completion; not a lead."
     },
     "xray_complete": {
       "layer": "completion",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["assets/js/conversion-journey.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "assets/js/conversion-journey.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "X-Ray recorte returned. Completion; not a qualified lead."
     },
     "company_analysis_start": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["assets/js/live-intelligence.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "assets/js/live-intelligence.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Visitor submitted a CNPJ for analysis. Engagement; the CNPJ never enters the payload."
     },
     "company_analysis_complete": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["assets/js/live-intelligence.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "assets/js/live-intelligence.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Analysis call returned. Engagement; outcome is a fixed state label, never a computed value."
     },
     "fit_result_shown": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["assets/js/live-intelligence.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "assets/js/live-intelligence.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Adherence result rendered to the visitor. Engagement; carries no company facts."
     },
     "monitor_cta_click": {
       "layer": "engagement",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["assets/js/live-intelligence.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "assets/js/live-intelligence.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Monitoring or deep-dive CTA clicked. Engagement; not a lead until the form persists."
     },
     "monitor_request_persisted": {
       "layer": "lead",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["assets/js/live-intelligence.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "assets/js/live-intelligence.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Monitoring request persisted (intent_kind MONITOR_OPPORTUNITY or MONITOR_COMPANY). Lead; not qualified lead or pipeline."
     },
     "deep_dive_request_persisted": {
       "layer": "lead",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["assets/js/live-intelligence.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "assets/js/live-intelligence.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Deep-dive or human-review request persisted (intent_kind REQUEST_DEEP_DIVE or REQUEST_HUMAN_REVIEW). Lead; not qualified lead or pipeline."
     },
     "lead_persisted": {
       "layer": "lead",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["js/modules/form.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "js/modules/form.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Lead function returned a persisted id. Lead denominator. Not qualified lead or pipeline."
     },
     "lead_receipt_correlated": {
       "layer": "lead",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["scripts/market_answers/events.py"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "scripts/market_answers/events.py"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Lead receipt joined by correlation_id. Lead; not pipeline."
     },
     "handraise_complete": {
       "layer": "lead",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["assets/js/conversion-journey.js"],
-      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "producers": [
+        "assets/js/conversion-journey.js"
+      ],
+      "consumers": [
+        "netlify/functions/collect.cjs",
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Hand-raise persisted. Lead; Warmbly outcome stays UNKNOWN until observed."
     },
     "qualified_lead": {
@@ -590,7 +937,9 @@
       "schema_version": "1.0.0",
       "admission": "observed_only",
       "producers": [],
-      "consumers": ["netlify/functions/lib/analytics-agg.cjs"],
+      "consumers": [
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Reserved. Only an observed Warmbly/operator qualification. Never admitted from collect or confengeTrack. Never derived from page_view, engagement, completion, or lead."
     },
     "pipeline": {
@@ -599,8 +948,23 @@
       "schema_version": "1.0.0",
       "admission": "observed_only",
       "producers": [],
-      "consumers": ["netlify/functions/lib/analytics-agg.cjs"],
+      "consumers": [
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
       "semantic": "Reserved. Only an observed Warmbly commercial pipeline outcome. Never admitted from collect or confengeTrack. Never derived from an earlier stage."
+    },
+    "handoff_accepted": {
+      "layer": "lead",
+      "owner": "web-cfg",
+      "schema_version": "1.0.0",
+      "admission": "observed_only",
+      "producers": [
+        "netlify/functions/lib/inbound-handoff.cjs"
+      ],
+      "consumers": [
+        "netlify/functions/lib/analytics-agg.cjs"
+      ],
+      "semantic": "Warmbly inbound accepted the CONFENGE_WEB handoff (store handoff.status=DELIVERED). Never admitted from collect or confengeTrack. Not a commercial result. Absent remains UNKNOWN."
     }
   },
   "aliases": {
@@ -735,7 +1099,9 @@
       "replacement": null
     }
   },
-  "reject_prefixes": ["custom_"],
+  "reject_prefixes": [
+    "custom_"
+  ],
   "pii_keys": [
     "field",
     "field_id",
@@ -828,7 +1194,7 @@
       "/correcoes/",
       "/uso-de-ia/",
       "/conflitos/",
-    "/imprensa/",
+      "/imprensa/",
       "/nurture/",
       "/ops/",
       "/comercial/",

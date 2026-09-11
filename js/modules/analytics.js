@@ -98,7 +98,7 @@
     tool_view: 1, web_vital: 1, whatsapp_click: 1, xray_complete: 1, xray_error: 1,
     xray_start: 1, xray_timeout: 1,
   };
-  const OBSERVED_ONLY_EVENTS = { qualified_lead: 1, pipeline: 1 };
+  const OBSERVED_ONLY_EVENTS = { qualified_lead: 1, pipeline: 1, handoff_accepted: 1 };
   const RETIRED_EVENTS = { conversion: 1, journey_nav_click: 1 };
   const ENVELOPE_ID_KEYS = {
     correlation_id: 1,
@@ -248,8 +248,20 @@
     if (/^\d{14}$/.test(val.trim())) return true;
     return false;
   };
+  const analyticsDenied = () => {
+    try {
+      if (window.CONFENGE_ANALYTICS_OPT_OUT === true) return true;
+      if (window.localStorage && window.localStorage.getItem('confenge_analytics') === 'denied') {
+        return true;
+      }
+    } catch (_) {
+      /* blocked storage is not analytics denial and must not affect the form */
+    }
+    return false;
+  };
   const track = (eventName, params = {}) => {
     try {
+      if (analyticsDenied()) return;
       const resolved = resolveTrackedName(eventName);
       if (!resolved.ok) {
         if (window.CONFENGE_DEBUG_ANALYTICS) {

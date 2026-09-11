@@ -1,0 +1,137 @@
+{
+  "schema": "confenge.interference-register/1.0",
+  "source": "inb06",
+  "provider_campaign": "06",
+  "provider_head": "399a32c415171ccc9e26cae565ecf83f9ecd4c92",
+  "provider_path": "data/demonstrative/private-project-pilot/consumption.v1.json",
+  "proof_id": "demo-private-project-pilot-2026-09",
+  "piloto_url": "/casos/demonstrativo-projeto-privado/",
+  "piloto_finding_href": "/casos/demonstrativo-projeto-privado/#CF-GEO-01",
+  "public_label": "Exemplo demonstrativo do piloto técnico. Não é obra de cliente.",
+  "public_label_note": "CF-GEO-01 foi conferida contra R00. A revisão R01 do piloto altera a verga; essa revisão não herda a conferência. Detecção não é correção feita nem aceite do autor.",
+  "finding": {
+    "id": "CF-GEO-01",
+    "type": "geometric_interference",
+    "type_label": "Interferência geométrica",
+    "location": {
+      "space": "Parede leste W-02 do recorte de banheiro demonstrativo",
+      "axis": "leste",
+      "elevation": "verga WN-01 2,30 m / fundo B-01 2,20 m",
+      "elements": [
+        {
+          "id": "WN-01",
+          "discipline": "arquitetônico",
+          "name": "Janela WN-01 na parede leste W-02"
+        },
+        {
+          "id": "B-01",
+          "discipline": "estrutural",
+          "name": "Viga B-01 no mesmo alinhamento leste"
+        },
+        {
+          "id": "W-02",
+          "discipline": "arquitetônico",
+          "name": "Parede leste W-02"
+        }
+      ]
+    },
+    "description": "No estado original R00 a verga da janela WN-01 está em 2,30 m e o fundo da viga B-01 em 2,20 m: sobreposição de 0,10 m no eixo Z.",
+    "evidence": "Elevação leste do recorte demonstrativo em R00: faixas Z de WN-01 e B-01 se cruzam. A conferência é geométrica, sem exame de dimensionamento da viga.",
+    "possible_consequence": "Na execução a viga pode ser cortada ou o vão da janela reduzido sem o autor redesenhar a verga.",
+    "compared_documents": [
+      {
+        "document_id": "PR-ARQ",
+        "discipline": "arquitetônico",
+        "title": "Arquitetônico — planta e elevação leste",
+        "revision": "R00"
+      },
+      {
+        "document_id": "PR-EST",
+        "discipline": "estrutural",
+        "title": "Estrutural — viga B-01",
+        "revision": "R00"
+      }
+    ],
+    "conferred_against": [
+      { "document_id": "PR-ARQ", "revision": "R00" },
+      { "document_id": "PR-EST", "revision": "R00" }
+    ],
+    "detection": "detected",
+    "correction_designed": false,
+    "correction_status": "pending",
+    "author_acceptance": {
+      "accepted": false,
+      "by": null,
+      "at": null
+    },
+    "provider_state": "resolved_in_R01",
+    "provider_state_note": "O piloto publica R01 com a verga rebaixada. Isso é revisão nova do recorte, não conferência herdada nem correção feita pela detecção em R00.",
+    "forwarding": {
+      "action": "Encaminhar ao autor do recorte arquitetônico demonstrativo: avaliar rebaixar a verga e manter B-01 na cota original.",
+      "adjustment_owner_role": "autor do recorte arquitetônico demonstrativo",
+      "coordinator_role": "registrar, localizar e encaminhar; não projetar a correção neste recorte"
+    }
+  },
+  "secondary_findings": [
+    {
+      "id": "CF-INFO-01",
+      "type": "requirement_incompatibility",
+      "type_label": "Incompatibilidade de requisitos",
+      "location": {
+        "space": "Poço hidrossanitário HS-01 na parede oeste W-04",
+        "axis": "oeste",
+        "elevation": null,
+        "elements": [
+          { "id": "HS-01", "discipline": "hidrossanitário", "name": "Poço HS-01" },
+          { "id": "W-04", "discipline": "arquitetônico", "name": "Parede oeste W-04" }
+        ]
+      },
+      "description": "O recorte declara o contorno externo 0,40 m × 0,40 m e deixa em branco vão livre interno e diâmetros de tubulação.",
+      "evidence": "Campo do recorte vazio. Ausência de informação, não conformidade com norma não examinada.",
+      "possible_consequence": "Dimensionar ou furar o poço sem o vão e os diâmetros declarados.",
+      "compared_documents": [
+        {
+          "document_id": "PR-HID",
+          "discipline": "hidrossanitário",
+          "title": "Hidrossanitário — poço HS-01",
+          "revision": "R00"
+        }
+      ],
+      "conferred_against": [
+        { "document_id": "PR-HID", "revision": "R00" }
+      ],
+      "detection": "detected",
+      "correction_designed": false,
+      "correction_status": "pending",
+      "author_acceptance": { "accepted": false, "by": null, "at": null },
+      "provider_state": "information_requested",
+      "forwarding": {
+        "action": "Pedir ao projetista hidrossanitário de origem as dimensões internas e os diâmetros. Enquanto esses dados não chegam, o item permanece pedido de informação, não falha comprovada.",
+        "adjustment_owner_role": "projetista hidrossanitário de origem",
+        "coordinator_role": "registrar o pedido de informação; não converter a lacuna em falha comprovada"
+      }
+    }
+  ],
+  "live_documents": [
+    { "document_id": "PR-ARQ", "revision": "R00" },
+    { "document_id": "PR-EST", "revision": "R00" },
+    { "document_id": "PR-HID", "revision": "R00" }
+  ],
+  "type_catalog": [
+    {
+      "type": "geometric_interference",
+      "label": "Interferência geométrica",
+      "definition": "Dois elementos ocupam o mesmo espaço, ou um atravessa o outro, nas plantas ou no modelo comparados. No piloto: CF-GEO-01, WN-01 × B-01 em R00."
+    },
+    {
+      "type": "requirement_incompatibility",
+      "label": "Incompatibilidade de requisitos",
+      "definition": "As soluções podem não se cruzar no espaço e mesmo assim não caberem juntas, ou faltar dado declarado. No piloto: CF-INFO-01, poço HS-01 sem vão interno."
+    },
+    {
+      "type": "dimensioning_review",
+      "label": "Revisão de dimensionamento",
+      "definition": "Conferir se uma viga, um duto ou uma prumada está dimensionada. No piloto, RF-01 declara que a conferência geométrica não examina norma de dimensionamento. Isso é outra compra."
+    }
+  ]
+}

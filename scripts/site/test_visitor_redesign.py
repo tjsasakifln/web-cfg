@@ -703,7 +703,7 @@ def test_no_visible_technical_js_fallback():
 
 def test_hub_problem_first_structure():
     hub = _hub_html()
-    assert "Qual problema de licitação ou contrato você precisa resolver?" in hub
+    assert "Qual problema de projeto, orçamento ou contrato você precisa resolver?" in hub
     assert "data-hub-search" in hub or "hub-search" in hub
     assert "Antes de contratar" in hub
     assert "Durante a execução" in hub

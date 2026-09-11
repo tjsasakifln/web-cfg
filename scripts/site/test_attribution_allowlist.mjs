@@ -195,7 +195,17 @@ const hopSession = {
 };
 const GENERATED_UUID = "00000000-0000-4000-8000-000000000099";
 
-function loadShippedScript({ pathname, search, hash, dataset, withForm, session = hopSession }) {
+function loadShippedScript({
+  pathname,
+  search,
+  hash,
+  dataset,
+  withForm,
+  session = hopSession,
+  referrer = "",
+  bodyAttrs = {},
+  pseoEvents = [],
+}) {
   const hidden = {};
   const formAttrs = {};
   const form = withForm
@@ -223,7 +233,10 @@ function loadShippedScript({ pathname, search, hash, dataset, withForm, session 
       if (String(sel).includes("diagnostico-")) return form;
       return null;
     },
-    querySelectorAll: () => [],
+    querySelectorAll: (sel) => {
+      if (String(sel) === "[data-pseo-event]") return pseoEvents;
+      return [];
+    },
     getElementById: () => null,
     createElement: (tag) => ({ tagName: String(tag).toUpperCase(), type: "", name: "", value: "" }),
     documentElement: { scrollHeight: 2000 },
@@ -233,8 +246,15 @@ function loadShippedScript({ pathname, search, hash, dataset, withForm, session 
     body: {
       classList: { remove() {}, add() {} },
       dataset: dataset || {},
+      getAttribute(name) {
+        if (name === "data-pseo-page-id") return bodyAttrs.pseoPageId || "";
+        if (name === "data-pseo-page-type") return bodyAttrs.pseoPageType || "";
+        if (name === "data-offer-id") return bodyAttrs.offerId || "";
+        if (name === "data-lead-success") return bodyAttrs.leadSuccess || null;
+        return null;
+      },
     },
-    referrer: "",
+    referrer: referrer || "",
   };
   const windowObj = {
     dataLayer: [],
@@ -398,5 +418,134 @@ if (homeAfterClick.formAttrs.action !== "/obrigado-edital") {
   fail("click_form_action_not_edital", homeAfterClick.formAttrs);
 }
 pass("click_anchor_reaches_home_form_hiddens");
+
+const apiMerge = first.sandbox.window.confengeAttribution;
+if (!apiMerge || typeof apiMerge.mergeFirstTouch !== "function") {
+  fail("mergeFirstTouch_export", apiMerge);
+}
+const frozen = apiMerge.mergeFirstTouch(
+  { origem: "/ferramentas/x/", utm_source: "gsc", landing_url: "/ferramentas/x/" },
+  { origem: "/servicos/", utm_source: "internal", landing_url: "/servicos/", jornada: "projeto" },
+  { internalReferrer: true },
+);
+if (frozen.origem !== "/ferramentas/x/") fail("merge_origem_overwritten", frozen);
+if (frozen.utm_source !== "gsc") fail("merge_utm_restarted", frozen);
+if (frozen.landing_url !== "/ferramentas/x/") fail("merge_landing_overwritten", frozen);
+if (frozen.jornada !== "projeto") fail("merge_need_not_evolved", frozen);
+pass("mergeFirstTouch_freezes_origin_allows_need");
+
+const utmHopStore = {};
+const utmSession = {
+  getItem: (k) => utmHopStore[k] || null,
+  setItem: (k, v) => {
+    utmHopStore[k] = String(v);
+  },
+  removeItem: (k) => {
+    delete utmHopStore[k];
+  },
+};
+loadShippedScript({
+  pathname: "/ferramentas/checklist-reequilibrio/",
+  search: "?utm_source=gsc&utm_campaign=editorial",
+  hash: "",
+  dataset: {},
+  withForm: false,
+  session: utmSession,
+  referrer: "https://www.google.com/",
+});
+const afterTool = JSON.parse(utmHopStore.confenge_pseo_attribution || "{}");
+if (afterTool.utm_source !== "gsc") fail("utm_first_touch", afterTool);
+if (afterTool.landing_url !== "/ferramentas/checklist-reequilibrio/") fail("utm_landing", afterTool);
+loadShippedScript({
+  pathname: "/",
+  search: "?utm_source=nav-internal&utm_campaign=restart",
+  hash: "#contato",
+  dataset: {},
+  withForm: true,
+  session: utmSession,
+  referrer: "https://confenge.com.br/ferramentas/checklist-reequilibrio/",
+});
+const afterInternal = JSON.parse(utmHopStore.confenge_pseo_attribution || "{}");
+if (afterInternal.utm_source !== "gsc") fail("internal_utm_restarted", afterInternal);
+if (afterInternal.utm_campaign !== "editorial") fail("internal_utm_campaign_restarted", afterInternal);
+if (afterInternal.landing_url !== "/ferramentas/checklist-reequilibrio/") {
+  fail("internal_landing_restarted", afterInternal);
+}
+pass("internal_nav_does_not_restart_utm_or_origin");
+
+const toolToPseoStore = {};
+const toolToPseoSession = {
+  getItem: (k) => toolToPseoStore[k] || null,
+  setItem: (k, v) => {
+    toolToPseoStore[k] = String(v);
+  },
+  removeItem: (k) => {
+    delete toolToPseoStore[k];
+  },
+};
+loadShippedScript({
+  pathname: "/ferramentas/checklist-reequilibrio/",
+  search: "",
+  hash: "",
+  dataset: {},
+  withForm: false,
+  session: toolToPseoSession,
+  referrer: "https://www.google.com/",
+});
+const afterToolLanding = JSON.parse(toolToPseoStore.confenge_pseo_attribution || "{}");
+if (afterToolLanding.landing_url !== "/ferramentas/checklist-reequilibrio/") {
+  fail("tool_landing_missing", afterToolLanding);
+}
+const pseoCta = {
+  listeners: {},
+  addEventListener(type, fn) {
+    this.listeners[type] = fn;
+  },
+  getAttribute(name) {
+    if (name === "data-pseo-event") return "pseo_related_page_click";
+    if (name === "data-cta-position") return "mid";
+    if (name === "href") return "/#contato";
+    return "";
+  },
+};
+loadShippedScript({
+  pathname: "/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
+  search: "",
+  hash: "",
+  dataset: {},
+  withForm: false,
+  session: toolToPseoSession,
+  referrer: "https://confenge.com.br/ferramentas/checklist-reequilibrio/",
+  bodyAttrs: {
+    pseoPageId: "referencia-sinapi-sicro-margem",
+    pseoPageType: "cenario",
+  },
+  pseoEvents: [pseoCta],
+});
+const afterPseoLoad = JSON.parse(toolToPseoStore.confenge_pseo_attribution || "{}");
+if (afterPseoLoad.landing_url !== "/ferramentas/checklist-reequilibrio/") {
+  fail("pseo_load_rewrote_landing", afterPseoLoad);
+}
+if (afterPseoLoad.origem !== "/ferramentas/checklist-reequilibrio/") {
+  fail("pseo_load_origem_became_current_path", afterPseoLoad);
+}
+if (typeof pseoCta.listeners.click !== "function") {
+  fail("pseo_click_listener_missing", Object.keys(pseoCta.listeners));
+}
+pseoCta.listeners.click();
+const afterPseoClick = JSON.parse(toolToPseoStore.confenge_pseo_attribution || "{}");
+if (afterPseoClick.landing_url !== "/ferramentas/checklist-reequilibrio/") {
+  fail("pseo_click_rewrote_landing", afterPseoClick);
+}
+if (afterPseoClick.origem !== "/ferramentas/checklist-reequilibrio/") {
+  fail("pseo_click_origem_became_current_path", afterPseoClick);
+}
+if (afterPseoClick.origem === "/inteligencia/cenarios/referencia-sinapi-sicro-margem/") {
+  fail("pseo_click_used_intermediate_page_as_origin", afterPseoClick);
+}
+pass("tool_to_pseo_keeps_first_touch_origem", {
+  origem: afterPseoClick.origem,
+  landing_url: afterPseoClick.landing_url,
+});
 
 console.log("OK attribution-allowlist");

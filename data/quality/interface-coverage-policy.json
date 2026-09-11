@@ -246,13 +246,57 @@
       {
         "family_id": "prontidao-tecnica-obra-privada",
         "route": "/ferramentas/prontidao-tecnica-obra-privada/",
-        "reason": "single-route anonymous private-project readiness tool; complete result before contact",
-        "seo_exempt_reason": "tool remains noindex during the corporate launch so it cannot outrank or distract from the consulting path before promotion evidence"
+        "reason": "single-route anonymous private-project readiness tool; complete result before contact"
       },
       {
         "family_id": "triagem-tecnica",
         "route": "/triagem-tecnica/",
         "reason": "single-route adaptive intake with runtime availability gate and persistent receipt"
+      },
+      {
+        "family_id": "engineering-projects-coordination-clash",
+        "route": "/compatibilizacao-projetos-engenharia/",
+        "reason": "single-route compatibility landing for clash register and interface coordination"
+      },
+      {
+        "family_id": "engineering-projects-coordination-contents",
+        "route": "/conteudos/quando-compatibilizar-projetos/",
+        "reason": "indexable editorial representative of the compatibility decision family"
+      },
+      {
+        "family_id": "private-engineering-project-review",
+        "route": "/revisao-tecnica-projetos-engenharia/",
+        "reason": "single-route technical review landing distinct from compatibility and elaboration"
+      },
+      {
+        "family_id": "parcerias-engenharia",
+        "route": "/parcerias-engenharia/",
+        "reason": "single-route partner-forwarding surface that keeps the client with who refers"
+      },
+      {
+        "family_id": "complementary-engineering-elaboration",
+        "route": "/projetos-complementares-engenharia/",
+        "reason": "single-route complementary-discipline elaboration landing"
+      },
+      {
+        "family_id": "como-contratar-projetos-complementares",
+        "route": "/conteudos/como-contratar-projetos-complementares/",
+        "reason": "indexable editorial representative of complementary-discipline hiring"
+      },
+      {
+        "family_id": "inspecao-diagnostico-edificacoes",
+        "route": "/inspecao-diagnostico-edificacoes/",
+        "reason": "single-route building inspection and diagnosis landing"
+      },
+      {
+        "family_id": "assistencia-tecnica-pericial-engenharia",
+        "route": "/assistencia-tecnica-pericial-engenharia/",
+        "reason": "single-route technical assistance and expert-witness landing"
+      },
+      {
+        "family_id": "seguranca-trabalho-apoio-tecnico",
+        "route": "/seguranca-trabalho-apoio-tecnico/",
+        "reason": "single-route occupational-safety technical-support landing"
       }
     ],
     "additional_pages": [

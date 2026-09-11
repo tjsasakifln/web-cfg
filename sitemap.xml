@@ -10,6 +10,9 @@
  <loc>https://confenge.com.br/aditivos-obras-publicas/</loc>
  </url>
  <url>
+ <loc>https://confenge.com.br/assistencia-tecnica-pericial-engenharia/</loc>
+ </url>
+ <url>
  <loc>https://confenge.com.br/atrasos-prorrogacao-obras-publicas/</loc>
  </url>
  <url>
@@ -26,6 +29,10 @@
  <url>
  <loc>https://confenge.com.br/casos/aditivo-art125-demonstrativo/</loc>
  <lastmod>2026-08-03</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/casos/demonstrativo-projeto-privado/</loc>
+ <lastmod>2026-09-11</lastmod>
  </url>
  <url>
  <loc>https://confenge.com.br/casos/medicao-glosa-demonstrativo/</loc>
@@ -70,6 +77,9 @@
  <loc>https://confenge.com.br/comercial/termos-diagnostico-b2g/</loc>
  </url>
  <url>
+ <loc>https://confenge.com.br/compatibilizacao-projetos-engenharia/</loc>
+ </url>
+ <url>
  <loc>https://confenge.com.br/confianca/</loc>
  <lastmod>2026-09-05</lastmod>
  </url>
@@ -109,6 +119,19 @@
  <lastmod>2026-08-29</lastmod>
  </url>
  <url>
+ <loc>https://confenge.com.br/conteudos/como-contratar-compatibilizacao-projetos/</loc>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/conteudos/como-contratar-projetos-complementares/</loc>
+ <lastmod>2026-09-11</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/conteudos/como-contratar-revisao-tecnica-projeto/</loc>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/conteudos/comparar-propostas-execucao-obra/</loc>
+ </url>
+ <url>
  <loc>https://confenge.com.br/conteudos/comprovacao-exequibilidade-proposta-obra/</loc>
  <lastmod>2026-08-29</lastmod>
  </url>
@@ -119,6 +142,9 @@
  <url>
  <loc>https://confenge.com.br/conteudos/demolicao-nao-prevista-obra-publica/</loc>
  <lastmod>2026-08-29</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/conteudos/documentos-para-levantamento-quantitativos/</loc>
  </url>
  <url>
  <loc>https://confenge.com.br/conteudos/empreitada-preco-global-preco-unitario/</loc>
@@ -157,8 +183,17 @@
  <lastmod>2026-08-28</lastmod>
  </url>
  <url>
+ <loc>https://confenge.com.br/conteudos/quando-compatibilizar-projetos/</loc>
+ </url>
+ <url>
  <loc>https://confenge.com.br/conteudos/resposta-notificacao-atraso-obra-publica/</loc>
  <lastmod>2026-08-28</lastmod>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/</loc>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/conteudos/revisar-ou-refazer-orcamento-obra/</loc>
  </url>
  <url>
  <loc>https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/</loc>
@@ -216,7 +251,14 @@
  <lastmod>2026-08-15</lastmod>
  </url>
  <url>
+ <loc>https://confenge.com.br/ferramentas/prontidao-tecnica-obra-privada/</loc>
+ <lastmod>2026-09-11</lastmod>
+ </url>
+ <url>
  <loc>https://confenge.com.br/imprensa/</loc>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/inspecao-diagnostico-edificacoes/</loc>
  </url>
  <url>
  <loc>https://confenge.com.br/medicoes-glosas-obras-publicas/</loc>
@@ -227,6 +269,9 @@
  </url>
  <url>
  <loc>https://confenge.com.br/nurture/</loc>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/parcerias-engenharia/</loc>
  </url>
  <url>
  <loc>https://confenge.com.br/politica-editorial/</loc>
@@ -247,6 +292,9 @@
  <loc>https://confenge.com.br/problemas-que-resolvemos/</loc>
  </url>
  <url>
+ <loc>https://confenge.com.br/projetos-complementares-engenharia/</loc>
+ </url>
+ <url>
  <loc>https://confenge.com.br/quantitativos-orcamento-obras/</loc>
  </url>
  <url>
@@ -255,6 +303,12 @@
  </url>
  <url>
  <loc>https://confenge.com.br/reequilibrio-obras-publicas/</loc>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/revisao-tecnica-projetos-engenharia/</loc>
+ </url>
+ <url>
+ <loc>https://confenge.com.br/seguranca-trabalho-apoio-tecnico/</loc>
  </url>
  <url>
  <loc>https://confenge.com.br/servicos/</loc>

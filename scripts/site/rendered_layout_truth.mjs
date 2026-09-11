@@ -309,7 +309,19 @@ export async function hoverLiftFindings(page, options = {}) {
     if (!element) return null;
     if (element.matches(":hover") !== hovered) return null;
     const box = element.getBoundingClientRect();
-    return { top: box.top + window.scrollY, left: box.left + window.scrollX };
+    const position = getComputedStyle(element).position;
+    let visuallyFixed = position === "fixed" || position === "sticky";
+    for (let node = element.parentElement; node && !visuallyFixed; node = node.parentElement) {
+      const parentPosition = getComputedStyle(node).position;
+      if (parentPosition === "fixed" || parentPosition === "sticky") visuallyFixed = true;
+    }
+    return {
+      top: box.top,
+      left: box.left,
+      scrollY: window.scrollY,
+      position,
+      visuallyFixed,
+    };
   }, selector, wantHover);
 
   for (let index = 0; index < signatures.length; index += 1) {
@@ -317,10 +329,14 @@ export async function hoverLiftFindings(page, options = {}) {
     const handle = await page.$(selector);
     if (!handle) continue;
     try {
-      // hover() scrolls the element into view first; both samples are taken
-      // afterwards and in document space, so scrolling cannot fake or mask a
-      // displacement.
-      await handle.hover();
+      // ElementHandle.hover() calls scrollIntoView. For position:fixed controls
+      // (the WhatsApp float) Chrome treats the in-flow offset as the target and
+      // jumps the document by thousands of pixels. Move the pointer to the
+      // current viewport box instead; a real CSS lift still shows up there.
+      const box = await handle.boundingBox();
+      if (!box || box.width < 1 || box.height < 1) continue;
+      const pinnedY = await page.evaluate(() => window.scrollY);
+      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
       await wait(settleMs);
       const hovered = await geometry(selector, true);
       // A probe the pointer cannot actually reach (covered by a sticky layer,
@@ -328,10 +344,14 @@ export async function hoverLiftFindings(page, options = {}) {
       // than invent a finding. A real lift stays reachable by definition.
       if (!hovered) continue;
       await page.mouse.move(1, 1);
+      await page.evaluate((y) => window.scrollTo(0, y), pinnedY);
       await wait(settleMs);
       const resting = await geometry(selector, false);
       if (!resting) continue;
-      const dy = hovered.top - resting.top;
+      const fixed = Boolean(hovered.visuallyFixed || resting.visuallyFixed);
+      const dy = fixed
+        ? hovered.top - resting.top
+        : (hovered.top + hovered.scrollY) - (resting.top + resting.scrollY);
       if (Math.abs(dy) > tolerancePx) {
         findings.push(`hover_lift ${signatures[index]} ${dy.toFixed(1)}px`);
       }

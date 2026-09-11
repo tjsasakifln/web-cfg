@@ -1,0 +1,5 @@
+{
+  "comment": "Adversarial overlay that drops CORE campaign 03 from a release manifest. The suite must still run 03 and emit a finding.",
+  "release_unit": "CORE",
+  "campaigns": ["01", "02", "04", "05", "06", "07", "08", "09", "10", "15"]
+}

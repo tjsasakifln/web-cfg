@@ -1,0 +1,43 @@
+{
+  "schema": "confenge.interference-register/1.0",
+  "source": "test_fixture",
+  "public_label": "Fixture de teste. Não publicar.",
+  "finding": {
+    "id": "INT-TEST-PENDING",
+    "type": "geometric_interference",
+    "type_label": "Interferência geométrica",
+    "location": {
+      "space": "Shaft do 1º pavimento",
+      "axis": "B/2",
+      "elevation": "+3,20 m",
+      "elements": [
+        { "id": "EL-ELET-01", "discipline": "elétrico", "name": "Eletrocalha 200 mm" },
+        { "id": "EST-V08", "discipline": "estrutural", "name": "Viga V-08" }
+      ]
+    },
+    "description": "A eletrocalha atravessa a viga V-08.",
+    "evidence": "Sobreposição das plantas de teste.",
+    "possible_consequence": "Furo não previsto.",
+    "compared_documents": [
+      { "document_id": "EL-TR-01", "discipline": "elétrico", "title": "Elétrico — trajetos", "revision": "R01", "dated": "2026-01-10" },
+      { "document_id": "EST-VIG-T", "discipline": "estrutural", "title": "Estrutural — vigas", "revision": "R02", "dated": "2026-01-12" }
+    ],
+    "conferred_against": [
+      { "document_id": "EL-TR-01", "revision": "R01" },
+      { "document_id": "EST-VIG-T", "revision": "R02" }
+    ],
+    "detection": "detected",
+    "correction_designed": false,
+    "correction_status": "pending",
+    "author_acceptance": { "accepted": false, "by": null, "at": null },
+    "forwarding": {
+      "action": "Encaminhar aos autores.",
+      "adjustment_owner_role": "autores das disciplinas",
+      "coordinator_role": "registrar e encaminhar"
+    }
+  },
+  "live_documents": [
+    { "document_id": "EL-TR-01", "revision": "R01" },
+    { "document_id": "EST-VIG-T", "revision": "R02" }
+  ]
+}

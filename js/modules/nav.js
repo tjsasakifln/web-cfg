@@ -325,6 +325,46 @@
       'analysis_id', 'evidence_pack_version', 'asset_family', 'query_class',
       'jornada', 'tema', 'snap', 'intent_kind',
     ];
+    const FIRST_TOUCH_KEYS = [
+      'origem', 'origin_url', 'landing_url', 'landing_page',
+      'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term',
+    ];
+    const UTM_KEYS = FIRST_TOUCH_KEYS.filter((k) => k.startsWith('utm_'));
+    const ORIGIN_KEYS = ['origem', 'origin_url', 'landing_url', 'landing_page'];
+    const isConfengeHostName = (host) => {
+      const h = String(host || '').toLowerCase().replace(/^www\./, '').replace(/:\d+$/, '');
+      return h === 'confenge.com.br' || h === 'localhost' || h === '127.0.0.1';
+    };
+    const isInternalReferrer = (ref) => {
+      const raw = String(ref || '');
+      if (!raw) return false;
+      try {
+        const u = new URL(raw);
+        return isConfengeHostName(u.hostname);
+      } catch (_) {
+        return false;
+      }
+    };
+    const mergeFirstTouch = (prior, incoming, opts) => {
+      const stored = prior && typeof prior === 'object' ? prior : {};
+      const next = incoming && typeof incoming === 'object' ? incoming : {};
+      const internal = Boolean(opts && opts.internalReferrer);
+      const hasOrigin = ORIGIN_KEYS.some((k) => stored[k]);
+      const out = { ...stored };
+      Object.keys(next).forEach((k) => {
+        const v = next[k];
+        if (v == null || v === '') return;
+        if (ORIGIN_KEYS.includes(k) && hasOrigin) return;
+        if (FIRST_TOUCH_KEYS.includes(k) && stored[k]) return;
+        if (UTM_KEYS.includes(k) && internal) return;
+        out[k] = v;
+      });
+      if (!out.origem) {
+        const fallback = out.origin_url || out.landing_url || out.landing_page || '';
+        if (fallback) out.origem = fallback;
+      }
+      return out;
+    };
     const ROUTE_FAMILY_BY_PREFIX = [
       ['/defesa-margem-contratos-publicos/', 'margin-defense'],
       ['/reequilibrio-obras-publicas/', 'reequilibrio'],
@@ -382,10 +422,15 @@
     };
     const writeStoredPseo = (obj) => {
       try {
+        const prior = readStoredPseo();
+        const sessionStarted = Boolean(
+          prior.landing_url || prior.origem || prior.origin_url || prior.landing_page,
+        );
+        const merged = mergeFirstTouch(prior, obj, { internalReferrer: sessionStarted });
         const clean = {};
-        Object.keys(obj || {}).forEach((k) => {
+        Object.keys(merged || {}).forEach((k) => {
           if (!PSEO_ATTR_KEYS.includes(k) && k !== 'saved_at') return;
-          const v = sanitizeAttr(obj[k], k);
+          const v = sanitizeAttr(merged[k], k);
           if (v) clean[k] = v;
         });
         if (Object.keys(clean).length) {
@@ -398,8 +443,10 @@
     // Only allowlisted keys persist — arbitrary query params are dropped.
     // First-touch: empty values on the current page must not wipe a stored landing/family.
     const storedPrior = readStoredPseo();
+    const internalNav = isInternalReferrer(typeof document !== 'undefined' ? document.referrer : '');
     const fromUrl = {};
     PSEO_ATTR_KEYS.forEach((name) => {
+      if (UTM_KEYS.includes(name) && (internalNav || storedPrior[name])) return;
       const v = searchParams.get(name) || hashParams.get(name);
       if (v) {
         const s = sanitizeAttr(v, name);
@@ -456,7 +503,7 @@
     if (!fromUrl.referrer) {
       try { fromUrl.referrer = sanitizeAttr(document.referrer || '', 'referrer'); } catch (_) { /* ignore */ }
     }
-    writeStoredPseo({ ...storedPrior, ...fromUrl });
+    writeStoredPseo(mergeFirstTouch(storedPrior, fromUrl, { internalReferrer: internalNav }));
     const DATASET_TO_ATTR = {
       tema: 'tema',
       origem: 'origem',
@@ -492,21 +539,27 @@
     document.addEventListener('click', (event) => {
       const a = event.target && event.target.closest && event.target.closest('a[href]');
       if (!a || !a.dataset) return;
-      const next = { ...readStoredPseo() };
+      const prior = readStoredPseo();
+      const incoming = {};
       let wrote = false;
       Object.keys(DATASET_TO_ATTR).forEach((camel) => {
         const raw = a.dataset[camel];
         if (!raw) return;
         const key = DATASET_TO_ATTR[camel];
+        if (UTM_KEYS.includes(key)) return;
         const s = sanitizeAttr(raw, key);
         if (!s) return;
-        next[key] = s;
+        incoming[key] = s;
         wrote = true;
       });
-      if (wrote) writeStoredPseo(next);
+      if (wrote) writeStoredPseo(mergeFirstTouch(prior, incoming, { internalReferrer: true }));
     }, true);
     window.confengeAttribution = {
       ALLOWLIST: PSEO_ATTR_KEYS.slice(),
+      FIRST_TOUCH_KEYS: FIRST_TOUCH_KEYS.slice(),
+      ORIGIN_KEYS: ORIGIN_KEYS.slice(),
+      mergeFirstTouch,
+      isInternalReferrer,
       sanitize: sanitizeAttr,
       pickFromSearch: (search) => {
         const params = new URLSearchParams(search || '');
@@ -600,15 +653,26 @@
         ? window.confengeSessionId()
         : '';
       ensureHidden('session_id', sessionId, true);
-      ensureHidden('origem', origem || storedPseo.origem || window.location.pathname || '/');
-      ensureHidden('landing_page', sessionStorage.getItem('confenge_landing') || window.location.pathname || '/', true);
-      ensureHidden('utm_source', searchParams.get('utm_source') || sessionStorage.getItem('utm_source') || '');
-      ensureHidden('utm_medium', searchParams.get('utm_medium') || sessionStorage.getItem('utm_medium') || '');
-      ensureHidden('utm_campaign', searchParams.get('utm_campaign') || sessionStorage.getItem('utm_campaign') || '');
+      ensureHidden(
+        'origem',
+        origem || storedPseo.origem || storedPseo.origin_url || storedPseo.landing_url
+          || sessionStorage.getItem('confenge_landing') || window.location.pathname || '/',
+      );
+      ensureHidden(
+        'landing_page',
+        storedPseo.landing_url || sessionStorage.getItem('confenge_landing') || window.location.pathname || '/',
+        true,
+      );
+      const storedUtm = storedPseo;
+      const utmFromUrl = (k) => (internalNav || storedUtm[k] ? '' : searchParams.get(k));
+      ensureHidden('utm_source', storedUtm.utm_source || utmFromUrl('utm_source') || sessionStorage.getItem('utm_source') || '');
+      ensureHidden('utm_medium', storedUtm.utm_medium || utmFromUrl('utm_medium') || sessionStorage.getItem('utm_medium') || '');
+      ensureHidden('utm_campaign', storedUtm.utm_campaign || utmFromUrl('utm_campaign') || sessionStorage.getItem('utm_campaign') || '');
       ['utm_source', 'utm_medium', 'utm_campaign'].forEach((k) => {
+        if (internalNav || storedUtm[k]) return;
         const v = searchParams.get(k);
         if (v) {
-          try { sessionStorage.setItem(k, sanitizeAttr(v)); } catch (_) { /* private */ }
+          try { sessionStorage.setItem(k, sanitizeAttr(v, k)); } catch (_) { /* private */ }
         }
       });
       try {
@@ -806,25 +870,49 @@
       if (!target) return;
       event.preventDefault();
       if (window.location.hash !== url.hash) {
-        try { window.history.pushState(null, '', url.hash); } catch (_) { window.location.hash = url.hash; }
+        try {
+          if ('scrollRestoration' in window.history) window.history.scrollRestoration = 'manual';
+          const here = Object.assign({}, window.history.state || {});
+          here.confengeScrollY = window.scrollY;
+          window.history.replaceState(here, '');
+          window.history.pushState({ confengeScrollY: window.scrollY }, '', url.hash);
+        } catch (_) { window.location.hash = url.hash; }
       }
       focusAnchor(target);
       goToAnchor(target, true);
     });
-    window.addEventListener('popstate', () => {
+    window.addEventListener('popstate', (event) => {
       if (typeof cancelActiveAnchor === 'function') cancelActiveAnchor();
       const target = anchorFromHash(window.location.hash);
-      if (target) goToAnchor(target, false);
+      if (target) {
+        goToAnchor(target, false);
+        return;
+      }
+      const restored = event && event.state && Number.isFinite(event.state.confengeScrollY)
+        ? event.state.confengeScrollY
+        : 0;
+      jumpTo(restored);
     });
 
     let anchoredOnLoad = false;
-    if (tema || origem || fromUrl.pseo_page_id || storedPseo.pseo_page_id
+    // Jump to the form only when THIS navigation asked for it (query or
+    // #contato). First-touch attribution copies landing_url into stored
+    // origem — on a plain "/" visit that value is "/", which is truthy and
+    // used to steal the first fold on every home load.
+    const urlAsksForContact = Boolean(
+      tema
+      || searchParams.get('origem')
+      || hashParams.get('origem')
+      || fromUrl.pseo_page_id
+      || searchParams.get('jornada')
+      || hashParams.get('jornada')
       || window.location.hash.startsWith('#contato')
-      || searchParams.get('jornada')) {
+      || window.location.hash.startsWith('#formulario-contato')
+    );
+    if (urlAsksForContact) {
       const contact = document.getElementById('formulario-contato')
         || document.getElementById('contato');
-      if (contact && (tema || origem || fromUrl.pseo_page_id || storedPseo.pseo_page_id
-        || searchParams.get('jornada') || window.location.hash.startsWith('#contato'))) {
+      if (contact) {
         anchoredOnLoad = true;
         goToAnchor(contact, true);
       }

@@ -102,20 +102,16 @@ function publicRoutes() {
 function authorityGatedCaptureFor(family) {
   const spec = family?.capture_availability;
   if (!spec) return null;
-  const configEndpoints = {
-    "triagem-tecnica": "/.netlify/functions/adaptive-intake-config",
-    "private-engineering-quantities-budget":
-      "/.netlify/functions/adaptive-intake-config?intake_context=quantities_budget",
-  };
+  const allowedEndpoint = /^\/\.netlify\/functions\/adaptive-intake-config(?:\?intake_context=[a-z0-9_]+)?$/;
+  if (!allowedEndpoint.test(String(spec.config_endpoint || ""))) {
+    throw new Error(`capture availability is not declared for ${family.id}`);
+  }
   const expected = {
     mode: "external_authority_fail_closed",
     runtime_profile: "adaptive_intake_standalone_v1",
-    config_endpoint: configEndpoints[family.id],
+    config_endpoint: spec.config_endpoint,
     client_script: "/assets/js/adaptive-intake.js",
     authority_manifest: "netlify/functions/data/adaptive-intake-authority.json",
-  };
-  if (!expected.config_endpoint) {
-    throw new Error(`capture availability is not declared for ${family.id}`);
   }
   for (const [key, value] of Object.entries(expected)) {
     if (spec[key] !== value) throw new Error(`capture availability ${key} is not authoritative for ${family.id}`);

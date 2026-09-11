@@ -1,0 +1,158 @@
+{
+  "schema": "confenge.inbound-campaign-handoff/2.0",
+  "campaign_set": "INB-20260911",
+  "campaign_id": "08",
+  "prompt_version": "2.0.0",
+  "base_sha": "8f508544835490ec635d02517bce0207c6f8e426",
+  "state": "READY_FOR_INTEGRATION",
+  "state_note": "Escopo local implementado. HARD_AT_RELEASE 02 e 03 tratados como ALREADY_SATISFIED com prova de destino existente. Pedidos a 02 (contexto de contato) e 10 (observatório) não bloqueiam a experiência.",
+  "owned_sources": [
+    "medicoes-glosas-obras-publicas/index.html",
+    "aditivos-obras-publicas/index.html",
+    "conteudos/sinapi-desonerado-nao-desonerado/index.html",
+    "scripts/organic/tests/test_inb08_owned_routes.py",
+    "docs/campaigns/inb-20260911/08/"
+  ],
+  "changed_sources": [
+    "medicoes-glosas-obras-publicas/index.html",
+    "aditivos-obras-publicas/index.html",
+    "conteudos/sinapi-desonerado-nao-desonerado/index.html",
+    "scripts/organic/tests/test_inb08_owned_routes.py",
+    "docs/campaigns/inb-20260911/08/preserve-gap-delta.md",
+    "docs/campaigns/inb-20260911/08/shared-changes.json",
+    "docs/campaigns/inb-20260911/08/handoff.json",
+    "data/bofu-dominance/frozen-specs/hashes.json",
+    "data/bofu-dominance/frozen-specs/snapshots.json",
+    "data/bofu-dominance/frozen-specs/specs/medicoes-glosas-obras-publicas.json",
+    "data/bofu-dominance/frozen-specs/specs/aditivos-obras-publicas.json",
+    "data/bofu-dominance/frozen-specs/patches/medicoes-glosas-obras-publicas.patch.txt",
+    "data/bofu-dominance/frozen-specs/patches/aditivos-obras-publicas.patch.txt",
+    "docs/seo/bofu-dominance/frozen-specs/medicoes-glosas-obras-publicas.md",
+    "docs/seo/bofu-dominance/frozen-specs/aditivos-obras-publicas.md",
+    "data/commercial/first-fold-measurements.v1.json",
+    "data/organic/single-commercial-route.v1.json"
+  ],
+  "unchanged_related_guides": [
+    "conteudos/custos-indiretos-atraso-administracao-obra/index.html",
+    "conteudos/jogo-de-planilha-aditivo-obra-publica/index.html",
+    "conteudos/fiscal-nao-assina-medicao-obra-publica/index.html"
+  ],
+  "routes": [
+    {
+      "path": "/medicoes-glosas-obras-publicas/",
+      "kind": "service_pillar",
+      "intent_family": "executar_proteger_contrato_publico",
+      "offer_id": "CFG-D18",
+      "canonical": "https://confenge.com.br/medicoes-glosas-obras-publicas/",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "contact_mode": "whatsapp_or_form_existing"
+    },
+    {
+      "path": "/aditivos-obras-publicas/",
+      "kind": "service_pillar",
+      "intent_family": "executar_proteger_contrato_publico",
+      "offer_id": "CFG-D19",
+      "canonical": "https://confenge.com.br/aditivos-obras-publicas/",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "contact_mode": "whatsapp_or_form_existing"
+    },
+    {
+      "path": "/conteudos/sinapi-desonerado-nao-desonerado/",
+      "kind": "editorial_library",
+      "intent_family": "decidir_disputar_licitacao",
+      "offer_id": "CFG-D14",
+      "canonical": "https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "contact_mode": "whatsapp_or_form_existing"
+    }
+  ],
+  "dependencies": [
+    {
+      "provider_campaign": "02",
+      "artifact_path": "captura/atribuição vigente (WhatsApp + formulário home/contato)",
+      "level": "HARD_AT_RELEASE",
+      "fallback": "ALREADY_SATISFIED",
+      "proof": "wa.me/5548988344559 e âncoras /#formulario-contato ou /#contato presentes no HTML enviado; extensão de contexto pedida em shared-changes, não rebuild."
+    },
+    {
+      "provider_campaign": "03",
+      "artifact_path": "quantitativos-orcamento-obras/index.html",
+      "level": "HARD_AT_RELEASE",
+      "fallback": "ALREADY_SATISFIED",
+      "proof": "Rota /quantitativos-orcamento-obras/ existe na base 8f5085448 com canonical próprio; SINAPI aponta para ela como elaboração/revisão."
+    }
+  ],
+  "shared_changes": "docs/campaigns/inb-20260911/08/shared-changes.json",
+  "tests": [
+    {
+      "command": "python3 -m pytest scripts/organic/tests/test_inb08_owned_routes.py -q",
+      "exit_code": 0,
+      "subject_sha": "e87a0abe0fc360411927ba088122d94449525742",
+      "overlay_hashes": null
+    },
+    {
+      "command": "npm run test:page-contract-contratos",
+      "exit_code": 0,
+      "subject_sha": "e87a0abe0fc360411927ba088122d94449525742",
+      "overlay_hashes": null
+    },
+    {
+      "command": "python3 -m pytest scripts/organic/tests/test_sinapi_ctr.py scripts/organic/tests/test_cluster_medicao_originality.py scripts/editorial/tests/test_cfg10x_09_aditivo_ownership.py scripts/organic/tests/test_orcamento_cluster.py -q",
+      "exit_code": 0,
+      "subject_sha": "e87a0abe0fc360411927ba088122d94449525742",
+      "overlay_hashes": null
+    },
+    {
+      "command": "npm run test:copy-contract",
+      "exit_code": 0,
+      "subject_sha": "e87a0abe0fc360411927ba088122d94449525742",
+      "overlay_hashes": null
+    },
+    {
+      "command": "npm run inbound:gates",
+      "exit_code": 0,
+      "subject_sha": "e87a0abe0fc360411927ba088122d94449525742",
+      "overlay_hashes": null
+    },
+    {
+      "command": "npm run test:first-fold-contract",
+      "exit_code": 0,
+      "subject_sha": "e87a0abe0fc360411927ba088122d94449525742",
+      "overlay_hashes": null
+    },
+    {
+      "command": "npm run test:single-commercial-route",
+      "exit_code": 0,
+      "subject_sha": "e87a0abe0fc360411927ba088122d94449525742",
+      "overlay_hashes": null
+    },
+    {
+      "command": "python3 -m pytest tests/bofu_dominance/frozen_specs/test_frozen_specs.py tests/bofu_dominance/safe_execution/test_bofu_safe_execution.py -q",
+      "exit_code": 0,
+      "subject_sha": "e87a0abe0fc360411927ba088122d94449525742",
+      "overlay_hashes": null
+    }
+  ],
+  "evidence_paths": [
+    "docs/campaigns/inb-20260911/08/preserve-gap-delta.md",
+    "docs/campaigns/inb-20260911/08/shared-changes.json"
+  ],
+  "unresolved": [
+    {
+      "id": "inb02-contact-context",
+      "status": "REQUESTED",
+      "detail": "Pedir a 02 contexto de contato compatível com CFG-D18/D19 sem reconstruir as páginas."
+    },
+    {
+      "id": "inb10-observatory",
+      "status": "REQUESTED",
+      "detail": "Anotar para o observatório GSC a alteração de conteúdo das três URLs; não tratar publicação como prova de CTR."
+    }
+  ],
+  "normative_changes": [],
+  "fold_geometry": "left_in_place",
+  "click_origin_rewrite": false
+}

@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 640" role="img" aria-labelledby="ifaceTitle ifaceDesc">
+  <title id="ifaceTitle">Esquema de insumos, interfaces e versões na elaboração complementar</title>
+  <desc id="ifaceDesc">Fluxo da compra de elaboração: arquitetura e insumos de origem, disciplina delimitada, registro de interfaces e devolutiva versionada aos autores. Esquema didático, sem prazo, preço ou equipe implícita.</desc>
+  <rect width="1200" height="640" fill="#f7f9f8"/>
+  <rect x="24" y="24" width="1152" height="592" fill="#ffffff" stroke="#dce3e8" stroke-width="2"/>
+  <text x="56" y="72" fill="#2d6f2d" font-family="ui-sans-serif, system-ui, sans-serif" font-size="18" font-weight="800" letter-spacing="2">CONTROLE DE INTERFACES E VERSÕES</text>
+  <text x="56" y="112" fill="#061a33" font-family="ui-sans-serif, system-ui, sans-serif" font-size="32" font-weight="760">Como a produção conversa com a origem</text>
+  <text x="56" y="148" fill="#5d6a7a" font-family="ui-sans-serif, system-ui, sans-serif" font-size="16">Cada seta é uma combinação explícita. Nenhuma etapa copia ou adultera o projeto de terceiro.</text>
+
+  <g>
+    <rect x="56" y="196" width="240" height="200" fill="#fff" stroke="#2d6f2d" stroke-width="3"/>
+    <text x="76" y="236" fill="#2d6f2d" font-family="ui-sans-serif, system-ui, sans-serif" font-size="14" font-weight="800">A</text>
+    <text x="76" y="272" fill="#061a33" font-family="ui-sans-serif, system-ui, sans-serif" font-size="20" font-weight="760">Insumos de origem</text>
+    <text x="76" y="308" fill="#314256" font-family="ui-sans-serif, system-ui, sans-serif" font-size="15">Arquitetura, fase, finalidade e o que já existe do pacote.</text>
+  </g>
+  <polygon points="312,296 348,280 348,312" fill="#2d6f2d"/>
+  <g>
+    <rect x="360" y="196" width="240" height="200" fill="#fff" stroke="#dce3e8" stroke-width="2"/>
+    <text x="380" y="236" fill="#2d6f2d" font-family="ui-sans-serif, system-ui, sans-serif" font-size="14" font-weight="800">B</text>
+    <text x="380" y="272" fill="#061a33" font-family="ui-sans-serif, system-ui, sans-serif" font-size="20" font-weight="760">Disciplina delimitada</text>
+    <text x="380" y="308" fill="#314256" font-family="ui-sans-serif, system-ui, sans-serif" font-size="15">Recorte, responsável e o que não entra neste ciclo.</text>
+  </g>
+  <polygon points="616,296 652,280 652,312" fill="#2d6f2d"/>
+  <g>
+    <rect x="664" y="196" width="240" height="200" fill="#fff" stroke="#dce3e8" stroke-width="2"/>
+    <text x="684" y="236" fill="#2d6f2d" font-family="ui-sans-serif, system-ui, sans-serif" font-size="14" font-weight="800">C</text>
+    <text x="684" y="272" fill="#061a33" font-family="ui-sans-serif, system-ui, sans-serif" font-size="20" font-weight="760">Interfaces</text>
+    <text x="684" y="308" fill="#314256" font-family="ui-sans-serif, system-ui, sans-serif" font-size="15">Pontos de encontro com as demais partes, com dono de cada lado.</text>
+  </g>
+  <polygon points="920,296 956,280 956,312" fill="#2d6f2d"/>
+  <g>
+    <rect x="968" y="196" width="176" height="200" fill="#edf5ec" stroke="#cfe0cc" stroke-width="2"/>
+    <text x="988" y="236" fill="#2d6f2d" font-family="ui-sans-serif, system-ui, sans-serif" font-size="14" font-weight="800">D</text>
+    <text x="988" y="272" fill="#061a33" font-family="ui-sans-serif, system-ui, sans-serif" font-size="18" font-weight="760">Versão devolvida</text>
+    <text x="988" y="308" fill="#314256" font-family="ui-sans-serif, system-ui, sans-serif" font-size="15">Data, responsável e o que mudou.</text>
+  </g>
+
+  <rect x="56" y="428" width="1088" height="152" fill="#f3f6f8" stroke="#dce3e8"/>
+  <text x="76" y="468" fill="#061a33" font-family="ui-sans-serif, system-ui, sans-serif" font-size="18" font-weight="760">O responsável de cada parte permanece visível</text>
+  <text x="76" y="504" fill="#314256" font-family="ui-sans-serif, system-ui, sans-serif" font-size="16">Autor da arquitetura decide o que altera no próprio projeto. A CONFENGE elabora a disciplina contratada e registra pendências para os autores de origem.</text>
+  <text x="76" y="540" fill="#5d6a7a" font-family="ui-sans-serif, system-ui, sans-serif" font-size="14">Número de ciclos, prazo e preço não aparecem neste esquema: entram na proposta, depois da leitura dos insumos.</text>
+</svg>

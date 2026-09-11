@@ -1,0 +1,201 @@
+{
+  "schema": "confenge.inbound-campaign-shared-changes/2.0",
+  "campaign_id": "05",
+  "prompt_version": "2.0.0",
+  "base_sha": "8f508544835490ec635d02517bce0207c6f8e426",
+  "changes": [
+    {
+      "change_id": "inb05-family-private-engineering-project-review",
+      "owner_campaign": "16",
+      "path": "data/organic/public-family-registry.json",
+      "base_blob_sha": "61e219892d5ad8c80f37dc18399f51f5df119ca1",
+      "operation": "upsert",
+      "key_or_anchor": "families[id=private-engineering-project-review]",
+      "expected_old": null,
+      "desired_new": {
+        "id": "private-engineering-project-review",
+        "visitor_job": "Conferir um projeto de engenharia recebido antes de contratar, executar ou aprovar uma alteração, entender o recorte da proposta e solicitar retorno com dados mínimos.",
+        "profile": "commercial_content",
+        "terminal_action": "capture_form_or_whatsapp",
+        "match": {
+          "routes": [
+            "/revisao-tecnica-projetos-engenharia/"
+          ]
+        },
+        "value_first_header_cta": {
+          "mode": "local_fragment_before_contact",
+          "label": "Conversar sobre a revisão do projeto",
+          "href": "#contato-revisao"
+        },
+        "capture_availability": {
+          "mode": "external_authority_fail_closed",
+          "withheld_fallback": ["whatsapp", "email", "telephone"],
+          "runtime_profile": "adaptive_intake_standalone_v1",
+          "config_endpoint": "/.netlify/functions/adaptive-intake-config",
+          "client_script": "/assets/js/adaptive-intake.js",
+          "authority_manifest": "netlify/functions/data/adaptive-intake-authority.json"
+        },
+        "gate_coverage": {
+          "conversion": "full",
+          "copy": "full",
+          "accessibility": "full"
+        },
+        "declared_at": "2026-09-11",
+        "owner_issue": 20260911,
+        "debt": [],
+        "index_evidence": {
+          "substrate": "first_party_publication",
+          "not_applicable": ["official_live", "citable_source"],
+          "reason": "Página comercial de primeira parte sobre revisão técnica de projeto da própria CONFENGE; não representa registro externo, preço, prazo, caso de cliente ou habilitação profissional.",
+          "authority": [
+            "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md",
+            "data/corporate/commercial-constitution.v1.json",
+            "data/corporate/intent-family-matrix.v1.json"
+          ],
+          "declared_at": "2026-09-11",
+          "owner_issue": 20260911
+        }
+      },
+      "rationale": "Rota indexável nova exige família fail-closed. Os dois conteúdos em /conteudos/ já herdam editorial-library pelo prefixo.",
+      "acceptance_test": "inbound:gates aceita /revisao-tecnica-projetos-engenharia/ na família private-engineering-project-review com WhatsApp no main enquanto a autoridade de intake permanecer WITHHELD."
+    },
+    {
+      "change_id": "inb05-sitemap-landing",
+      "owner_campaign": "16",
+      "path": "sitemap.xml",
+      "base_blob_sha": "3c91a643271d02ea536f08a0378716d3e2aa34af",
+      "operation": "upsert",
+      "key_or_anchor": "urlset/url[loc=https://confenge.com.br/revisao-tecnica-projetos-engenharia/]",
+      "expected_old": null,
+      "desired_new": {
+        "loc": "https://confenge.com.br/revisao-tecnica-projetos-engenharia/"
+      },
+      "rationale": "Landing comercial indexável precisa de loc no sitemap canônico. Sem lastmod fabricado.",
+      "acceptance_test": "sitemap.xml contém exatamente uma loc para /revisao-tecnica-projetos-engenharia/ e o HTML correspondente declara robots index,follow e canonical idêntico."
+    },
+    {
+      "change_id": "inb05-sitemap-choice-content",
+      "owner_campaign": "16",
+      "path": "sitemap.xml",
+      "base_blob_sha": "3c91a643271d02ea536f08a0378716d3e2aa34af",
+      "operation": "upsert",
+      "key_or_anchor": "urlset/url[loc=https://confenge.com.br/conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/]",
+      "expected_old": null,
+      "desired_new": {
+        "loc": "https://confenge.com.br/conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/"
+      },
+      "rationale": "Conteúdo decisório indexável desta campanha. Não fabricar lastmod.",
+      "acceptance_test": "sitemap.xml contém a loc e o HTML declara index,follow com canonical idêntico."
+    },
+    {
+      "change_id": "inb05-sitemap-hiring-content",
+      "owner_campaign": "16",
+      "path": "sitemap.xml",
+      "base_blob_sha": "3c91a643271d02ea536f08a0378716d3e2aa34af",
+      "operation": "upsert",
+      "key_or_anchor": "urlset/url[loc=https://confenge.com.br/conteudos/como-contratar-revisao-tecnica-projeto/]",
+      "expected_old": null,
+      "desired_new": {
+        "loc": "https://confenge.com.br/conteudos/como-contratar-revisao-tecnica-projeto/"
+      },
+      "rationale": "Conteúdo de contratação da revisão, indexável, distinto do comparativo.",
+      "acceptance_test": "sitemap.xml contém a loc e o HTML declara index,follow com canonical idêntico."
+    },
+    {
+      "change_id": "inb05-sitemap-hygiene-locs",
+      "owner_campaign": "16",
+      "path": "data/organic/sitemap-hygiene.json",
+      "base_blob_sha": "9ca4f84ec634ba5142a222836bb580f17227fa2f",
+      "operation": "upsert",
+      "key_or_anchor": "locs",
+      "expected_old": null,
+      "desired_new": [
+        "https://confenge.com.br/revisao-tecnica-projetos-engenharia/",
+        "https://confenge.com.br/conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/",
+        "https://confenge.com.br/conteudos/como-contratar-revisao-tecnica-projeto/"
+      ],
+      "rationale": "Higiene do grafo de sitemap deve conhecer as três rotas indexáveis desta missão. Inserir as URLs no array locs; não substituir o arquivo.",
+      "acceptance_test": "As três URLs existem em locs e o url_count/unique_paths são recalculados, não chutados."
+    },
+    {
+      "change_id": "inb05-public-artifact-allowlist",
+      "owner_campaign": "16",
+      "path": "scripts/pseo/public_artifact.py",
+      "base_blob_sha": "02fab887985de241dbc62d3c6f27b706200f359a",
+      "operation": "upsert",
+      "key_or_anchor": "PUBLIC_TOP_DIRS",
+      "expected_old": "\"quantitativos-orcamento-obras\",\n        \"triagem-tecnica\",",
+      "desired_new": "\"quantitativos-orcamento-obras\",\n        \"revisao-tecnica-projetos-engenharia\",\n        \"triagem-tecnica\",",
+      "integration_patch": "docs/campaigns/inb-20260911/05/integration.patch",
+      "rationale": "Sem este allowlist a landing não entra no artefato público. Os dois conteúdos já estão sob conteudos/.",
+      "acceptance_test": "PUBLIC_TOP_DIRS contém revisao-tecnica-projetos-engenharia e audit:public-artifact inclui /revisao-tecnica-projetos-engenharia/."
+    },
+    {
+      "change_id": "inb05-public-ia-map-breadcrumb-parent",
+      "owner_campaign": "16",
+      "path": "data/site/public-ia-map.json",
+      "base_blob_sha": "2621a2133b592b2a6560714c76fde902eecc2ebc",
+      "operation": "upsert",
+      "key_or_anchor": "breadcrumb_labels[/revisao-tecnica-projetos-engenharia/] + parents + active_header",
+      "expected_old": null,
+      "desired_new": {
+        "breadcrumb_labels": {
+          "/revisao-tecnica-projetos-engenharia/": "Revisão técnica de projetos"
+        },
+        "parents_entry": {
+          "prefix": "/revisao-tecnica-projetos-engenharia/",
+          "parent": "/servicos/",
+          "exact": true
+        },
+        "active_header_entry": {
+          "prefix": "/revisao-tecnica-projetos-engenharia/",
+          "href": "/servicos/"
+        }
+      },
+      "rationale": "Mapa de IA/navegação precisa conhecer a landing como filha de /servicos/, no mesmo padrão de quantitativos.",
+      "acceptance_test": "breadcrumb_labels, parents e active_header contêm o prefixo da landing; clique interno não usa UTM."
+    },
+    {
+      "change_id": "inb05-content-service-map-cluster",
+      "owner_campaign": "16",
+      "path": "data/organic/content-service-map.json",
+      "base_blob_sha": "b2e73c35e70839d2cf7cfb7859ac425166a5f4ac",
+      "operation": "upsert",
+      "key_or_anchor": "clusters[id=projetos-revisao] + path_overrides",
+      "expected_old": null,
+      "desired_new": {
+        "cluster": {
+          "id": "projetos-revisao",
+          "tokens": ["revisao-tecnica", "revisão técnica", "elaboracao-projetos", "compatibilizacao-ou-elaboracao"],
+          "service_path": "/revisao-tecnica-projetos-engenharia/",
+          "service_slug": "revisao-tecnica-projetos-engenharia",
+          "tools": [],
+          "bridge_title": "Quando a decisão é conferir o projeto recebido",
+          "bridge_body": "Se o material já existe e a dúvida é o que ele sustenta antes de contratar, executar ou aprovar uma alteração, a compra é revisão, não elaboração nem registro de interferências.",
+          "cta_label": "Ver revisão técnica de projetos"
+        },
+        "path_overrides": {
+          "/conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/": "projetos-revisao",
+          "/conteudos/como-contratar-revisao-tecnica-projeto/": "projetos-revisao"
+        }
+      },
+      "rationale": "Os dois conteúdos decisórios precisam de cluster próprio para não caírem em aditivos/orçamento B2G por token. Não editar clusters existentes.",
+      "acceptance_test": "path_overrides das duas URLs resolvem para projetos-revisao e service_path é /revisao-tecnica-projetos-engenharia/."
+    },
+    {
+      "change_id": "inb05-catalog-offer-already-applies",
+      "owner_campaign": "16",
+      "path": "data/offers/multivertical/catalog.v2.json",
+      "base_blob_sha": "14c0cfed73c6974b07b3f7bbe30caefba36b160f",
+      "operation": "noop",
+      "key_or_anchor": "offers[offer_id=complementary_engineering_project_review]",
+      "expected_old": {
+        "offer_id": "complementary_engineering_project_review",
+        "buyer_job": "Completar ou revisar uma disciplina de engenharia e organizar suas interfaces sem transferir autoria arquitetônica à CONFENGE."
+      },
+      "desired_new": null,
+      "rationale": "A oferta já cobre revisão e complemento. A discriminação de compra (revisar vs elaborar vs compatibilizar) está nas páginas desta missão. Não criar offer_id novo a partir do slug e não quebrar consumers.",
+      "acceptance_test": "tests/offers/test_multivertical_catalog.mjs continua a resolver complementary_engineering_project_review; a landing declara data-offer-id igual."
+    }
+  ]
+}

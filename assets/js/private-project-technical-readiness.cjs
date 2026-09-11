@@ -7,7 +7,7 @@
   "use strict";
 
   var ENGINE_ID = "private_project_technical_readiness_v1";
-  var ENGINE_VERSION = "1.0.0";
+  var ENGINE_VERSION = "1.1.0";
   var ASSET_ID = "private_project_technical_readiness_v1";
   var NUCLEUS = "building_engineering_documentation";
   var OFFER_CANDIDATE = "private_project_technical_readiness_assessment";
@@ -54,6 +54,17 @@
     "score percentual",
     "% de prontidão",
     "% de prontidao",
+    "obra segura",
+    "obra ilegal",
+    "cálculo validado",
+    "calculo validado",
+    "conformidade normativa",
+    "conformidade total",
+    "art válida",
+    "art valida",
+    "projeto errado",
+    "aprovação garantida",
+    "aprovacao garantida",
   ]);
 
   var DOMAIN_IDS = Object.freeze([
@@ -154,7 +165,7 @@
       next: "Conferir se cada linha de quantitativo aponta para um desenho/revisão e se a composição aponta para uma base nomeada.",
     }),
     coordination_constructability_bim: Object.freeze({
-      label: "Compatibilização, constructability e BIM",
+      label: "Compatibilização, construtibilidade e BIM",
       present_evidence: "Issue register rastreado e evidência de construtibilidade (modelo federado atual ou revisão registrada).",
       missing: "Issue register com status e evidência de construtibilidade (modelo federado atual ou revisão registrada). Ausência de BIM isolada não preenche essa evidência.",
       consequence: "Iniciar execução sem interferências registradas deixa choques de disciplina para o canteiro.",
@@ -182,6 +193,263 @@
       next: "Conferir os documentos de ART e os registros de inspeção fora desta autoavaliação, com o responsável técnico do caso.",
     }),
   });
+
+  var ROUTE_ORCAMENTO = "orcamento";
+  var ROUTE_COMPAT = "compatibilizacao";
+  var ROUTE_REVISAO = "revisao";
+  var ROUTE_ESCOPO = "escopo";
+  var HUMAN_CONTACT_PATH = "/triagem-tecnica/";
+  var HUMAN_CONTACT_HASH = "obra-imovel";
+  var NEED_CODE = "obra_edificacao_ou_documentacao";
+  var ROUTE_FAMILY = "prontidao-tecnica-obra-privada";
+  var DESTINATION_MAP_SCHEMA = "confenge.canonical-destination-map/1.0";
+
+  var ROUTING_TABLE = Object.freeze([
+    Object.freeze({
+      id: ROUTE_ORCAMENTO,
+      domain_id: "quantities_budget_bases_memory",
+      offer_id: "quantity_takeoff_budgeting",
+      intent_family: "orcar_planejar_decidir",
+      public_name: "Levantamento quantitativo e orçamentação",
+      why: "Faltam quantitativos ligados aos projetos ou base de custo com composições. Sem essa cadeia, comparar preço, medição ou aditivo fica sem âncora.",
+      next: "Pedir levantamento quantitativo e orçamentação do recorte, ou esclarecer o projeto de origem se ele ainda não puder ser lido.",
+    }),
+    Object.freeze({
+      id: ROUTE_COMPAT,
+      domain_id: "coordination_constructability_bim",
+      offer_id: "bim_coordination_clash_register",
+      intent_family: "projetar_revisar_compatibilizar",
+      public_name: "Compatibilização e registro de interferências",
+      why: "As interfaces entre disciplinas não estão conferidas com registro. Contratar ou iniciar execução assim deixa interferências para o canteiro.",
+      next: "Pedir compatibilização com registro de interferências antes de executar ou fechar o preço da obra.",
+    }),
+    Object.freeze({
+      id: ROUTE_REVISAO,
+      domain_id: "design_set_revisions_responsibility",
+      offer_id: "complementary_engineering_project_review",
+      intent_family: "projetar_revisar_compatibilizar",
+      public_name: "Revisão de projeto recebido",
+      why: "O conjunto de projetos recebido está incompleto, sem controle de revisão ou sem responsável por disciplina. Convém revisar o que chegou antes de orçar ou executar.",
+      next: "Pedir revisão do projeto recebido para localizar inconsistências e o que falta documentar.",
+    }),
+  ]);
+
+  function routingRowById(id) {
+    for (var i = 0; i < ROUTING_TABLE.length; i += 1) {
+      if (ROUTING_TABLE[i].id === id) return ROUTING_TABLE[i];
+    }
+    return null;
+  }
+
+  function cloneRoute(row, extra) {
+    var out = {
+      id: row.id,
+      domain_id: row.domain_id,
+      offer_id: row.offer_id,
+      intent_family: row.intent_family,
+      public_name: row.public_name,
+      why: row.why,
+      next: row.next,
+    };
+    var extraKeys = extra ? Object.keys(extra) : [];
+    for (var i = 0; i < extraKeys.length; i += 1) out[extraKeys[i]] = extra[extraKeys[i]];
+    return out;
+  }
+
+  function primaryOrderForDecision(decision) {
+    if (decision === "iniciar_execucao" || decision === "contratar_execucao") {
+      return [ROUTE_COMPAT, ROUTE_ORCAMENTO, ROUTE_REVISAO];
+    }
+    if (decision === "contratar_projeto") {
+      return [ROUTE_REVISAO, ROUTE_COMPAT, ROUTE_ORCAMENTO];
+    }
+    return [ROUTE_ORCAMENTO, ROUTE_REVISAO, ROUTE_COMPAT];
+  }
+
+  function justifyPrimary(primaryId, triggeredIds, decision) {
+    var hasCost = triggeredIds.indexOf(ROUTE_ORCAMENTO) !== -1;
+    var hasInterfaces = triggeredIds.indexOf(ROUTE_COMPAT) !== -1;
+    var row = routingRowById(primaryId);
+    if (hasCost && hasInterfaces) {
+      if (primaryId === ROUTE_COMPAT) {
+        return "A recomendação principal é compatibilização porque a decisão declarada envolve contratar ou iniciar execução, e interfaces não conferidas alteram quantidades. O orçamento permanece como caminho possível; não é necessário contratar os dois de uma vez.";
+      }
+      if (primaryId === ROUTE_ORCAMENTO) {
+        return "A recomendação principal é levantamento quantitativo e orçamentação porque a lacuna de quantidades e base de custo é a que mais trava a decisão de preço neste recorte. A conferência de interfaces permanece como caminho possível; não é necessário contratar os dois de uma vez.";
+      }
+      if (primaryId === ROUTE_REVISAO) {
+        return "A recomendação principal é revisão de projeto recebido porque a decisão declarada é contratar projeto, e o conjunto recebido está incompleto. Orçamento e compatibilização permanecem como caminhos possíveis; não é necessário contratar os dois de uma vez.";
+      }
+    }
+    if (!row) return "Nenhuma contratação é sugerida a partir destas respostas.";
+    if (decision && decision !== UNKNOWN) {
+      return row.why + " A prioridade segue a decisão declarada, sem exigir outro serviço no mesmo passo.";
+    }
+    return row.why + " A prioridade segue a lacuna declarada, sem exigir outro serviço no mesmo passo.";
+  }
+
+  function domainByIdFromList(domains, id) {
+    for (var i = 0; i < domains.length; i += 1) {
+      if (domains[i].id === id) return domains[i];
+    }
+    return null;
+  }
+
+  function routePrivateProjectReadiness(result) {
+    var domains = result && result.domains ? result.domains : [];
+    var answers = result && result.answers ? result.answers : emptyAnswers();
+    var triggered = [];
+    var i;
+    for (i = 0; i < ROUTING_TABLE.length; i += 1) {
+      var spec = ROUTING_TABLE[i];
+      var domain = domainByIdFromList(domains, spec.domain_id);
+      if (domain && domain.status === GAP) triggered.push(cloneRoute(spec, { priority: domain.priority }));
+    }
+    var triggeredIds = [];
+    for (i = 0; i < triggered.length; i += 1) triggeredIds.push(triggered[i].id);
+
+    var unknownCommercial = 0;
+    for (i = 0; i < ROUTING_TABLE.length; i += 1) {
+      var commercial = domainByIdFromList(domains, ROUTING_TABLE[i].domain_id);
+      if (commercial && commercial.status === UNKNOWN) unknownCommercial += 1;
+    }
+
+    var primary = null;
+    var alternatives = [];
+    if (triggered.length === 1) {
+      primary = triggered[0];
+    } else if (triggered.length > 1) {
+      var order = primaryOrderForDecision(answers.decision_on_table);
+      var chosenId = null;
+      for (i = 0; i < order.length; i += 1) {
+        if (triggeredIds.indexOf(order[i]) !== -1) {
+          chosenId = order[i];
+          break;
+        }
+      }
+      for (i = 0; i < triggered.length; i += 1) {
+        if (triggered[i].id === chosenId) primary = triggered[i];
+        else alternatives.push(triggered[i]);
+      }
+    }
+
+    var scopeConversation = false;
+    var summaryNext = "";
+    if (primary) {
+      summaryNext = primary.next;
+    } else if (unknownCommercial > 0) {
+      scopeConversation = true;
+      summaryNext = "Ainda não há elementos suficientes para indicar um serviço. Uma conversa de escopo esclarece o recorte. Esta leitura não é um diagnóstico conclusivo.";
+    } else {
+      summaryNext = "As respostas não apontam lacuna nos caminhos de orçamento, revisão ou compatibilização. Nenhuma contratação é sugerida. O resultado completo continua disponível, sem contato.";
+    }
+
+    var justification = primary
+      ? justifyPrimary(primary.id, triggeredIds, answers.decision_on_table)
+      : summaryNext;
+
+    return {
+      table_id: "private_project_readiness_routing_v1",
+      unknown_never_scores: true,
+      force_two_contracts: false,
+      primary: primary,
+      alternatives: alternatives,
+      triggered_ids: triggeredIds,
+      justification: justification,
+      scope_conversation: scopeConversation,
+      human_alternative: {
+        required: false,
+        path: HUMAN_CONTACT_PATH,
+        hash: HUMAN_CONTACT_HASH,
+        need_code: NEED_CODE,
+        label: "Conversar sobre o recorte, sem compromisso",
+      },
+      summary_next: summaryNext,
+    };
+  }
+
+  function normalizeDestinationMap(raw) {
+    var empty = { schema: DESTINATION_MAP_SCHEMA, by_offer_id: {} };
+    if (!raw || typeof raw !== "object" || Array.isArray(raw)) return empty;
+    var source = raw.by_offer_id && typeof raw.by_offer_id === "object" ? raw.by_offer_id : raw;
+    var byOffer = {};
+    var keys = Object.keys(source);
+    for (var i = 0; i < keys.length; i += 1) {
+      var key = keys[i];
+      var value = source[key];
+      var path = null;
+      var intentFamily = null;
+      if (typeof value === "string") path = value;
+      else if (value && typeof value === "object") {
+        path = value.path || value.href || null;
+        intentFamily = value.intent_family || null;
+      }
+      if (typeof path === "string" && path.charAt(0) === "/" && path.indexOf("://") === -1) {
+        byOffer[key] = { path: path, intent_family: intentFamily };
+      }
+    }
+    return { schema: DESTINATION_MAP_SCHEMA, by_offer_id: byOffer };
+  }
+
+  function resolveCommercialDestination(offerId, canonicalMap) {
+    var id = String(offerId || "");
+    var map = normalizeDestinationMap(canonicalMap);
+    var entry = map.by_offer_id[id];
+    if (!id || !entry || !entry.path) {
+      return { offer_id: id || null, href: null, present: false, intent_family: null };
+    }
+    return {
+      offer_id: id,
+      href: entry.path,
+      present: true,
+      intent_family: entry.intent_family || null,
+    };
+  }
+
+  function buildContactContext(result) {
+    var routing = result && result.routing ? result.routing : {};
+    var primary = routing.primary || null;
+    return {
+      source_origin_asset_id: ASSET_ID,
+      source_origin_route_family: ROUTE_FAMILY,
+      need_code: NEED_CODE,
+      offer_candidate_id: primary && primary.offer_id ? primary.offer_id : "",
+      intent_family: primary && primary.intent_family ? primary.intent_family : "",
+      route_id: primary && primary.id ? primary.id : ROUTE_ESCOPO,
+    };
+  }
+
+  function buildContactHref(context) {
+    var ctx = context && typeof context === "object" ? context : {};
+    var params = [];
+    var allowed = ["need_code", "offer_candidate_id", "intent_family", "route_id", "source_origin_asset_id", "source_origin_route_family"];
+    for (var i = 0; i < allowed.length; i += 1) {
+      var key = allowed[i];
+      var value = ctx[key];
+      if (value) params.push(encodeURIComponent(key) + "=" + encodeURIComponent(String(value)));
+    }
+    var query = params.length ? "?" + params.join("&") : "";
+    return HUMAN_CONTACT_PATH + query + "#" + HUMAN_CONTACT_HASH;
+  }
+
+  function summarizeReadiness(result) {
+    var domains = result && result.domains ? result.domains : [];
+    var present = [];
+    var gaps = [];
+    var unknowns = [];
+    for (var i = 0; i < domains.length; i += 1) {
+      var row = {
+        id: domains[i].id,
+        label: domains[i].label,
+        why: domains[i].decision_consequence,
+        next: domains[i].next_verification,
+      };
+      if (domains[i].status === EVIDENCE_PRESENT) present.push(row);
+      else if (domains[i].status === GAP) gaps.push(row);
+      else unknowns.push(row);
+    }
+    return { present: present, gaps: gaps, unknowns: unknowns };
+  }
 
   function fnv1aHex(text) {
     var h = 2166136261;
@@ -572,6 +840,9 @@
         named_gap_artifact: namedArtifact,
       },
     };
+    result.routing = routePrivateProjectReadiness(result);
+    result.summary = summarizeReadiness(result);
+    result.contact_context = buildContactContext(result);
     result.result_hash = hashPayload(answers, domains);
     var blob = stableStringify(result);
     assertSafeWording(blob, "result");
@@ -627,6 +898,16 @@
     diagnosePrivateProjectTechnicalReadiness: diagnosePrivateProjectTechnicalReadiness,
     normalizeAnswers: normalizeAnswers,
     compareDomainReadiness: compareDomainReadiness,
+    routePrivateProjectReadiness: routePrivateProjectReadiness,
+    resolveCommercialDestination: resolveCommercialDestination,
+    normalizeDestinationMap: normalizeDestinationMap,
+    buildContactContext: buildContactContext,
+    buildContactHref: buildContactHref,
+    summarizeReadiness: summarizeReadiness,
+    ROUTING_TABLE: ROUTING_TABLE,
+    DESTINATION_MAP_SCHEMA: DESTINATION_MAP_SCHEMA,
+    NEED_CODE: NEED_CODE,
+    ROUTE_FAMILY: ROUTE_FAMILY,
     buildAnalyticsEvent: buildAnalyticsEvent,
     collectForbiddenClaims: collectForbiddenClaims,
     causalDomainsForQuestion: causalDomainsForQuestion,

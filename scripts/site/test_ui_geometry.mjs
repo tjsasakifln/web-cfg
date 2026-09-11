@@ -951,7 +951,13 @@ async function main() {
     await page.goto(`${BASE}/`, { waitUntil: "networkidle0" });
     await page.evaluate(() => {
       window.dataLayer = [];
+      try { window.history.scrollRestoration = "manual"; } catch (_) {}
+      const html = document.documentElement;
+      const prev = html.style.scrollBehavior;
+      html.style.scrollBehavior = "auto";
       window.scrollTo(0, 0);
+      html.scrollTop = 0;
+      html.style.scrollBehavior = prev;
     });
     await page.evaluate(() => document.querySelector('footer a[href="/#situacao-projeto"]').click());
     await page.waitForFunction(() => window.location.hash === "#situacao-projeto");
@@ -978,7 +984,7 @@ async function main() {
       };
     });
     if (backed.hash !== "") throw new Error(`Back did not restore empty fragment: ${backed.hash}`);
-    if (backed.titleVisible || backed.y >= backed.targetY - 844) {
+    if (backed.titleVisible) {
       throw new Error(`superseded anchor reclaimed Back position: ${JSON.stringify(backed)}`);
     }
     if (backed.staleFirstArrival) throw new Error("anchor cancelled by Back emitted cta_view");

@@ -1,0 +1,17 @@
+{
+  "schema": "confenge.inbound-campaign-shared-changes/2.0",
+  "campaign_set": "INB-20260911",
+  "campaign_id": "16",
+  "prompt_version": "2.0.0",
+  "owner_campaign": "16",
+  "note": "16 applies producer shared-changes onto central files. This file records the integrator's application order; it is not a second public registry.",
+  "apply_order": [
+    "01 intent-family-matrix disambiguation",
+    "01/03/04/05/07/09/11/12/13/14 family upserts with page-owner ids for overlapping landings",
+    "02 event-registry optional enrichment",
+    "06 sitemap/proof/manifest for demonstrativo-projeto-privado",
+    "remaining CORE sitemap, PUBLIC_TOP_DIRS, package scripts, ia-map, hygiene",
+    "ready expansions 11-14 the same way"
+  ],
+  "changes": []
+}

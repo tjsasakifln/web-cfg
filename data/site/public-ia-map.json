@@ -1,6 +1,6 @@
 {
   "schema_version": "1.1.0",
-  "updated_at": "2026-09-05",
+  "updated_at": "2026-09-11",
   "purpose": "Source of truth for the corporate situation chooser, compact global chrome, protected public-works vertical, hub roles, and route → job → parent → next action → index state.",
   "rollout": {
     "campaign": "CONFENGE_MV_CAMPAIGN=09",
@@ -17,27 +17,28 @@
       "visitor_language": "Preciso tirar um projeto do impasse ou conferir se ele pode avançar",
       "href": "/servicos/#servico-projeto",
       "index_state": "service_hub_index",
-      "scope": "Elaboração, revisão e compatibilização de projetos para obras públicas e privadas; quantitativos e orçamento mantêm destino específico."
+      "scope": "Elaboração, revisão e compatibilização de projetos para obras públicas e privadas; quantitativos e orçamento mantêm destino específico.",
+      "exclusive_elaboration_route": "/projetos-complementares-engenharia/"
     },
     {
       "id": "building_diagnosis",
       "label": "Inspecionar, diagnosticar ou documentar obra e imóvel",
       "visitor_language": "Preciso entender e registrar uma condição da obra ou do imóvel",
-      "href": "/servicos/#servico-diagnostico",
+      "href": "/inspecao-diagnostico-edificacoes/",
       "index_state": "service_hub_index"
     },
     {
       "id": "expert_evidence_valuation",
       "label": "Perícia, assistência técnica ou avaliação",
       "visitor_language": "Preciso produzir, examinar ou contestar uma prova ou um valor técnico",
-      "href": "/servicos/#servico-pericia",
+      "href": "/assistencia-tecnica-pericial-engenharia/",
       "index_state": "service_hub_index"
     },
     {
       "id": "occupational_safety",
       "label": "Segurança do trabalho",
       "visitor_language": "Preciso reconhecer, documentar ou tratar uma situação de risco ocupacional",
-      "href": "/servicos/#servico-sst",
+      "href": "/seguranca-trabalho-apoio-tecnico/",
       "index_state": "service_hub_index"
     },
     {
@@ -52,7 +53,24 @@
     "/quantitativos-orcamento-obras/": "Quantitativos e orçamento",
     "/servicos-obras-publicas/": "Obras públicas",
     "/problemas-que-resolvemos/": "Contrato sob pressão",
-    "/conteudos/": "Biblioteca"
+    "/conteudos/": "Biblioteca",
+    "/conteudos/documentos-para-levantamento-quantitativos/": "Documentos para levantamento de quantitativos",
+    "/conteudos/comparar-propostas-execucao-obra/": "Como comparar propostas de execução",
+    "/conteudos/revisar-ou-refazer-orcamento-obra/": "Revisar ou refazer o orçamento",
+    "/compatibilizacao-projetos-engenharia/": "Compatibilização de projetos",
+    "/revisao-tecnica-projetos-engenharia/": "Revisão técnica de projetos",
+    "/projetos-complementares-engenharia/": "Projetos complementares",
+    "/conteudos/quando-compatibilizar-projetos/": "Quando compatibilizar projetos",
+    "/conteudos/como-contratar-compatibilizacao-projetos/": "Como contratar compatibilização",
+    "/conteudos/como-contratar-revisao-tecnica-projeto/": "Como contratar revisão técnica",
+    "/conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/": "Revisão, compatibilização ou elaboração",
+    "/conteudos/como-contratar-projetos-complementares/": "Como contratar projetos complementares",
+    "/casos/demonstrativo-projeto-privado/": "Demonstrativo de projeto privado",
+    "/parcerias-engenharia/": "Parcerias de engenharia",
+    "/inspecao-diagnostico-edificacoes/": "Inspeção e diagnóstico de edificações",
+    "/assistencia-tecnica-pericial-engenharia/": "Assistência técnica em disputas",
+    "/seguranca-trabalho-apoio-tecnico/": "Apoio técnico de SST",
+    "/ferramentas/prontidao-tecnica-obra-privada/": "Prontidão técnica de obra privada"
   },
   "quality_baseline": {
     "origin_main_sha": "72ed3831ba28c9400627cdc9599aa54e9329e178",
@@ -506,6 +524,41 @@
     {
       "prefix": "/nurture/",
       "parent": "/"
+    },
+    {
+      "prefix": "/compatibilizacao-projetos-engenharia/",
+      "parent": "/servicos/",
+      "exact": true
+    },
+    {
+      "prefix": "/revisao-tecnica-projetos-engenharia/",
+      "parent": "/servicos/",
+      "exact": true
+    },
+    {
+      "prefix": "/projetos-complementares-engenharia/",
+      "parent": "/servicos/",
+      "exact": true
+    },
+    {
+      "prefix": "/parcerias-engenharia/",
+      "parent": "/servicos/",
+      "exact": true
+    },
+    {
+      "prefix": "/inspecao-diagnostico-edificacoes/",
+      "parent": "/servicos/",
+      "exact": true
+    },
+    {
+      "prefix": "/assistencia-tecnica-pericial-engenharia/",
+      "parent": "/servicos/",
+      "exact": true
+    },
+    {
+      "prefix": "/seguranca-trabalho-apoio-tecnico/",
+      "parent": "/servicos/",
+      "exact": true
     }
   ],
   "active_header": [
@@ -596,6 +649,34 @@
     {
       "prefix": "/ferramentas/",
       "href": "/conteudos/"
+    },
+    {
+      "prefix": "/compatibilizacao-projetos-engenharia/",
+      "href": "/servicos/"
+    },
+    {
+      "prefix": "/revisao-tecnica-projetos-engenharia/",
+      "href": "/servicos/"
+    },
+    {
+      "prefix": "/projetos-complementares-engenharia/",
+      "href": "/servicos/"
+    },
+    {
+      "prefix": "/inspecao-diagnostico-edificacoes/",
+      "href": "/servicos/"
+    },
+    {
+      "prefix": "/assistencia-tecnica-pericial-engenharia/",
+      "href": "/servicos/"
+    },
+    {
+      "prefix": "/seguranca-trabalho-apoio-tecnico/",
+      "href": "/servicos/"
+    },
+    {
+      "prefix": "/parcerias-engenharia/",
+      "href": "/servicos/"
     }
   ],
   "removed_from_primary_nav": [

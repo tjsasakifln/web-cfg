@@ -1,0 +1,4 @@
+chrome_binaries: none of google-chrome, chromium, chromium-browser
+puppeteer-core: not installed in candidate node_modules
+fallback: structural HTML + shipped unit predicates
+not_a_product_defect: launcher unavailable in this environment

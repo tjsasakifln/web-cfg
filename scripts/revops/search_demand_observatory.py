@@ -53,13 +53,43 @@ from scripts.revops.gsc_history import (  # noqa: E402
     record_failed_attempt,
     write_history,
 )
+from scripts.revops.gsc_import_learning import (  # noqa: E402
+    EXECUTIVE_REPORT_TZ,
+    LEARNING_MIN_IMPRESSIONS,
+    SEARCH_ANALYTICS_CALENDAR_TZ,
+    artifact_contains_personal_field,
+    build_learning_queue,
+    build_operational_learning,
+    classify_need_class,
+    commercial_stages,
+    compare_equivalent_windows,
+    complete_window_assessment,
+    ctr_from_sums,
+    delayed_data_status,
+    import_gsc_export,
+    import_gsc_zip,
+    isolate_dimension_totals,
+    is_failure_alert_forbidden,
+    is_suppressed_query,
+    parse_gsc_number,
+    parse_gsc_rate,
+    parse_search_analytics_date,
+    publication_cohort,
+    provider_failure_record,
+    redact_personal_fields,
+    reject_cross_dimension_sum,
+    safe_unzip,
+    search_analytics_today,
+    validate_dimension_isolation,
+    weighted_position,
+)
 
 DATA = ROOT / "data" / "revops" / "gsc"
 PRIVATE_DIR = DATA / "private"
 HISTORY_PATH = DATA / "history.json"
 BRAND_CLASSIFICATION_VERSION = "brand-class/v1"
 WINDOW_POLICY_VERSION = "complete-days/v1"
-PROPERTY_TZ = ZoneInfo("America/Sao_Paulo")
+PROPERTY_TZ = EXECUTIVE_REPORT_TZ
 CTR_MIN_IMPRESSIONS = 100
 SEARCH_ANALYTICS_LIMITATION = (
     "Search Analytics may return top rows only and is not an exhaustive total. "
@@ -339,6 +369,9 @@ def credential_blocker_record(*, site: str | None = None) -> dict[str, Any]:
         "note": "July/August 2026 CSV snapshots are historical only — not continuous current data.",
         "recorded_at": datetime.now(timezone.utc).isoformat(),
         "timezone": "America/Sao_Paulo",
+        "search_analytics_calendar_timezone": "America/Los_Angeles",
+        "executive_report_timezone": "America/Sao_Paulo",
+        "external_evidence": True,
         "search_analytics_limitation": SEARCH_ANALYTICS_LIMITATION,
     }
 
@@ -484,6 +517,24 @@ def complete_windows(
     incomplete: list[str] = []
     if today not in (available_dates or set()) and today > end:
         incomplete.append(today.isoformat())
+    available_iso: set[str] | None = None
+    if available_dates is not None:
+        available_iso = {
+            d.isoformat() if isinstance(d, date) else str(d) for d in available_dates
+        }
+    pulse_obs = complete_window_assessment(
+        days=pulse_days, available_dates=available_iso, exploratory=True
+    )
+    trend_obs = complete_window_assessment(
+        days=trend_days, available_dates=available_iso, exploratory=False
+    )
+    prior_obs = complete_window_assessment(
+        days=prior_days, available_dates=available_iso, exploratory=False
+    )
+    context_obs = complete_window_assessment(
+        days=context_days, available_dates=available_iso, exploratory=False
+    )
+    comparison = compare_equivalent_windows(trend_days, prior_days, available_iso)
     return {
         "version": WINDOW_POLICY_VERSION,
         "today": today.isoformat(),
@@ -492,12 +543,18 @@ def complete_windows(
         "incomplete_days_excluded": incomplete,
         "today_missing_is_not_zero": True,
         "mixed_incomplete_periods": False,
+        "search_analytics_calendar_timezone": "America/Los_Angeles",
+        "executive_report_timezone": "America/Sao_Paulo",
         "pulse": {
             "label": "pulse_7_complete_days",
             "start": pulse_start.isoformat(),
             "end": end.isoformat(),
             "days": pulse_days,
             "complete": True,
+            "observed_complete": pulse_obs["observed_complete"],
+            "completeness": pulse_obs["completeness"],
+            "comparable": False,
+            "exploratory": True,
         },
         "trend": {
             "label": "trend_28_complete_vs_prior_28",
@@ -506,13 +563,22 @@ def complete_windows(
                 "end": end.isoformat(),
                 "days": trend_days,
                 "complete": True,
+                "observed_complete": trend_obs["observed_complete"],
+                "completeness": trend_obs["completeness"],
+                "comparable": trend_obs["comparable"],
+                "exploratory": False,
             },
             "prior": {
                 "start": prior_start.isoformat(),
                 "end": prior_end.isoformat(),
                 "days": prior_days,
                 "complete": True,
+                "observed_complete": prior_obs["observed_complete"],
+                "completeness": prior_obs["completeness"],
+                "comparable": prior_obs["comparable"],
+                "exploratory": False,
             },
+            "comparison": comparison,
         },
         "context": {
             "label": "context_up_to_90_complete_days",
@@ -520,6 +586,10 @@ def complete_windows(
             "end": end.isoformat(),
             "days": context_days,
             "complete": True,
+            "observed_complete": context_obs["observed_complete"],
+            "completeness": context_obs["completeness"],
+            "comparable": context_obs["comparable"],
+            "exploratory": False,
         },
         "search_analytics_limitation": SEARCH_ANALYTICS_LIMITATION,
     }
@@ -1385,122 +1455,32 @@ def col(row: dict[str, str], *names: str) -> str:
 
 
 def import_csv_dir(src: Path, as_of: str | None = None) -> dict[str, Any]:
-    ensure_dirs()
-    as_of = as_of or date.today().isoformat()
-    queries_file = None
-    pages_file = None
-    for p in src.rglob("*.csv"):
-        name = p.name.lower()
-        if "consulta" in name or "quer" in name:
-            queries_file = p
-        if "pagina" in name or "p[aá]gina" in name or "page" in name:
-            pages_file = p
-        # Portuguese with accents may be mangled
-        if "ginas" in name or name.startswith("p"):
-            if pages_file is None and "filtro" not in name and "pais" not in name and "pa" in name:
-                pages_file = p
-    # Prefer exact known names
-    for cand in ("Consultas.csv", "consultas.csv", "Queries.csv"):
-        if (src / cand).exists():
-            queries_file = src / cand
-    for cand in ("Paginas.csv", "Páginas.csv", "Pages.csv"):
-        # try variants
-        pass
-    for p in src.iterdir() if src.is_dir() else []:
-        if p.suffix.lower() != ".csv":
+    """Historical CSV import. Never CURRENT. Dimensions stay isolated."""
+    payload = import_gsc_export(src, as_of=as_of)
+    # Preserve cluster/intent enrichment used by the existing twelve analyses.
+    for query in payload.get("queries") or []:
+        text = str(query.get("query") or "")
+        if not text or query.get("suppressed"):
             continue
-        low = p.name.lower()
-        if "consulta" in low:
-            queries_file = p
-        if "gina" in low or low.startswith("pág") or "pagina" in low:
-            pages_file = p
-
-    query_rows: list[dict[str, Any]] = []
-    page_rows: list[dict[str, Any]] = []
-
-    if queries_file and queries_file.exists():
-        for row in read_csv_flexible(queries_file):
-            q = col(row, "Top consultas", "Consultas", "Query", "query", "Consulta")
-            if not q:
-                continue
-            clicks = parse_num(col(row, "Cliques", "Clicks", "clicks"))
-            imps = parse_num(col(row, "Impressões", "Impressions", "impressions"))
-            ctr = parse_pct(col(row, "CTR", "ctr"))
-            pos = parse_num(col(row, "Posição", "Position", "position"))
-            enr = enrich_path(q)
-            query_rows.append(
-                {
-                    "date": as_of,
-                    "query": q,
-                    "page": None,
-                    "country": "bra",
-                    "device": "all",
-                    "impressions": imps,
-                    "clicks": clicks,
-                    "ctr": ctr if ctr else (clicks / imps if imps else 0),
-                    "position": pos,
-                    "branded": branded(q),
-                    "brand_class": classify_query(q),
-                    "cluster": enr["cluster"],
-                    "offer": enr["offer"],
-                    "intent": enr["intent"],
-                    "funnel_stage": enr["funnel_stage"],
-                    "source": "csv_export",
-                }
-            )
-
-    if pages_file and pages_file.exists():
-        for row in read_csv_flexible(pages_file):
-            page = col(row, "Páginas principais", "Páginas", "Pages", "page", "URL", "Top pages")
-            if not page:
-                continue
-            clicks = parse_num(col(row, "Cliques", "Clicks"))
-            imps = parse_num(col(row, "Impressões", "Impressions"))
-            ctr = parse_pct(col(row, "CTR"))
-            pos = parse_num(col(row, "Posição", "Position"))
-            enr = enrich_path(page)
-            page_rows.append(
-                {
-                    "date": as_of,
-                    "query": None,
-                    "page": page if page.startswith("http") else f"https://confenge.com.br{page}",
-                    "path": enr["path"],
-                    "country": "bra",
-                    "device": "all",
-                    "impressions": imps,
-                    "clicks": clicks,
-                    "ctr": ctr if ctr else (clicks / imps if imps else 0),
-                    "position": pos,
-                    "branded": False,
-                    "cluster": enr["cluster"],
-                    "offer": enr["offer"],
-                    "intent": enr["intent"],
-                    "funnel_stage": enr["funnel_stage"],
-                    "source": "csv_export",
-                }
-            )
-
-    payload = {
-        "imported_at": datetime.now(timezone.utc).isoformat(),
-        "as_of": as_of,
-        "source_dir": str(src.relative_to(ROOT)) if src.is_relative_to(ROOT) else str(src),
-        "source": "csv_export",
-        "source_kind": "historical_csv_export",
-        "synthetic": True,
-        "fixture": True,
-        "historical": True,
-        "ready_for_product_decisions": False,
-        "live_baseline_invented": False,
-        "queries": query_rows,
-        "pages": page_rows,
-        "query_count": len(query_rows),
-        "page_count": len(page_rows),
-        "search_analytics_limitation": SEARCH_ANALYTICS_LIMITATION,
-    }
-    out = DATA / "imports" / f"import-{as_of}.json"
-    out.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
-    # Also mirror latest
-    (DATA / "latest_import.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+        enr = enrich_path(text)
+        query.setdefault("cluster", enr["cluster"])
+        query.setdefault("offer", enr["offer"])
+        query.setdefault("intent", enr["intent"])
+        query.setdefault("funnel_stage", enr["funnel_stage"])
+        query.setdefault("branded", branded(text))
+        query.setdefault("brand_class", classify_query(text))
+        query.setdefault("date", payload.get("as_of"))
+        query.setdefault("page", None)
+    for page in payload.get("pages") or []:
+        url = str(page.get("page") or page.get("path") or "")
+        enr = enrich_path(url)
+        page.setdefault("cluster", enr["cluster"])
+        page.setdefault("offer", enr["offer"])
+        page.setdefault("intent", enr["intent"])
+        page.setdefault("funnel_stage", enr["funnel_stage"])
+        page.setdefault("path", enr["path"])
+        page.setdefault("date", payload.get("as_of"))
+        page.setdefault("branded", False)
     return payload
 
 
@@ -1829,27 +1809,27 @@ def analyze(data: dict[str, Any] | None = None) -> dict[str, Any]:
         )
 
     persisted_insights = insights
+    PRIVATE_DIR.mkdir(parents=True, exist_ok=True)
+    (PRIVATE_DIR / "insights_latest.json").write_text(
+        json.dumps(insights, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
     if is_live_gsc_payload(data):
-        PRIVATE_DIR.mkdir(parents=True, exist_ok=True)
-        (PRIVATE_DIR / "insights_latest.json").write_text(
-            json.dumps(insights, ensure_ascii=False, indent=2), encoding="utf-8"
-        )
         persisted_insights = redact_live_query_fields(insights)
         persisted_insights["query_text_redacted"] = True
         persisted_insights["raw_query_rows_in_git"] = False
-
-    out = DATA / "insights_latest.json"
-    out.write_text(json.dumps(persisted_insights, ensure_ascii=False, indent=2), encoding="utf-8")
-    # Private ops copies only — never publish as static public (auth via ops?action=gsc_insights)
-    private_targets = [
-        ROOT / "data" / "ops" / "gsc-insights.json",
-        ROOT / "netlify" / "functions" / "data" / "gsc-insights.json",
-    ]
-    for ops_out in private_targets:
-        ops_out.parent.mkdir(parents=True, exist_ok=True)
-        ops_out.write_text(
-            json.dumps(persisted_insights, ensure_ascii=False, indent=2), encoding="utf-8"
-        )
+        out = DATA / "insights_latest.json"
+        out.write_text(json.dumps(persisted_insights, ensure_ascii=False, indent=2), encoding="utf-8")
+        # Private ops copies only — never publish as static public (auth via ops?action=gsc_insights)
+        private_targets = [
+            ROOT / "data" / "ops" / "gsc-insights.json",
+            ROOT / "netlify" / "functions" / "data" / "gsc-insights.json",
+        ]
+        for ops_out in private_targets:
+            ops_out.parent.mkdir(parents=True, exist_ok=True)
+            ops_out.write_text(
+                json.dumps(persisted_insights, ensure_ascii=False, indent=2), encoding="utf-8"
+            )
+    # Historical/fixture analyses stay private. They never overwrite CURRENT insights.
     # Remove legacy public static path if present
     legacy = ROOT / "ops" / "data" / "gsc-insights.json"
     if legacy.is_file():
@@ -1941,7 +1921,7 @@ def pull_api(
             "install": "pip install google-api-python-client google-auth",
         }
 
-    today = property_today()
+    today = search_analytics_today()
     end = last_complete_day(today=today, provider_max_date=today - timedelta(days=3))
     start = end - timedelta(days=max(days, reprocess_days) - 1)
     service = build("searchconsole", "v1", credentials=creds, cache_discovery=False)
@@ -1953,46 +1933,64 @@ def pull_api(
     pages_fetched = 0
     last_batch_size = 0
     truncated = False
-    while True:
-        body = {
-            "startDate": start.isoformat(),
-            "endDate": end.isoformat(),
-            "dimensions": dimensions,
-            "rowLimit": row_limit,
-            "startRow": start_row,
-        }
-        resp = service.searchanalytics().query(siteUrl=site, body=body).execute()
-        batch = resp.get("rows") or []
-        pages_fetched += 1
-        last_batch_size = len(batch)
-        for row in batch:
-            keys = row.get("keys") or []
-            q = keys[1] if len(keys) > 1 else ""
-            page = keys[2] if len(keys) > 2 else ""
-            enr = enrich_path(page or q)
-            rows_out.append(
-                {
-                    "date": keys[0] if keys else None,
-                    "query": q,
-                    "page": page,
-                    "country": keys[3] if len(keys) > 3 else None,
-                    "device": keys[4] if len(keys) > 4 else None,
-                    "impressions": row["impressions"] if "impressions" in row else None,
-                    "clicks": row["clicks"] if "clicks" in row else None,
-                    "ctr": row["ctr"] if "ctr" in row else None,
-                    "position": row["position"] if "position" in row else None,
-                    "branded": branded(q),
-                    "brand_class": classify_query(q),
-                    **enr,
-                    "source": "search_analytics_api",
-                }
-            )
-        if len(batch) < row_limit:
-            break
-        start_row += row_limit
-        if pages_fetched > 40:  # hard safety
-            truncated = True
-            break
+    try:
+        while True:
+            body = {
+                "startDate": start.isoformat(),
+                "endDate": end.isoformat(),
+                "dimensions": dimensions,
+                "rowLimit": row_limit,
+                "startRow": start_row,
+            }
+            resp = service.searchanalytics().query(siteUrl=site, body=body).execute()
+            batch = resp.get("rows") or []
+            pages_fetched += 1
+            last_batch_size = len(batch)
+            for row in batch:
+                keys = row.get("keys") or []
+                q = keys[1] if len(keys) > 1 else ""
+                page = keys[2] if len(keys) > 2 else ""
+                enr = enrich_path(page or q)
+                rows_out.append(
+                    {
+                        "date": keys[0] if keys else None,
+                        "query": q,
+                        "page": page,
+                        "country": keys[3] if len(keys) > 3 else None,
+                        "device": keys[4] if len(keys) > 4 else None,
+                        "impressions": row["impressions"] if "impressions" in row else None,
+                        "clicks": row["clicks"] if "clicks" in row else None,
+                        "ctr": row["ctr"] if "ctr" in row else None,
+                        "position": row["position"] if "position" in row else None,
+                        "branded": branded(q),
+                        "brand_class": classify_query(q),
+                        **enr,
+                        "source": "search_analytics_api",
+                    }
+                )
+            if len(batch) < row_limit:
+                break
+            start_row += row_limit
+            if pages_fetched > 40:  # hard safety
+                truncated = True
+                break
+    except Exception as exc:  # noqa: BLE001 — map timeout; never print secrets
+        err_name = type(exc).__name__.lower()
+        msg = str(exc).lower()
+        if "timeout" in err_name or "timed out" in msg or "deadline" in msg:
+            run_id = operational_run_id()
+            history_state = record_failed_attempt(history_state, "api_timeout", run_id=run_id)
+            write_history(HISTORY_PATH, history_state)
+            rec = provider_failure_record("api_timeout", history_state=history_state, site=site)
+            rec["source_kind"] = "absence"
+            rec["freshness"] = "NOT_CURRENT"
+            rec["external_evidence"] = True
+            rec["reason_codes"] = list(history_state["readiness"]["reason_codes"])
+            rec["readiness_status"] = history_state["readiness"]["status"]
+            rec["readiness_access_mode"] = history_state["readiness"]["access_mode"]
+            rec["promote_insights"] = False
+            return rec
+        raise
 
     # Dedupe
     seen: set[tuple] = set()
@@ -2080,6 +2078,9 @@ def pull_api(
         "end": end.isoformat(),
         "reprocess_days": reprocess_days,
         "timezone": "America/Sao_Paulo",
+        "search_analytics_calendar_timezone": "America/Los_Angeles",
+        "executive_report_timezone": "America/Sao_Paulo",
+        "aggregate_date_not_shifted_as_utc": True,
         "queries": deduped,
         "pages": [],
         "query_count": len(deduped),
@@ -2247,6 +2248,7 @@ def sync_incremental(
         "missing_credentials": "missing_credentials",
         "oauth_flow_not_automated_here": "credential_failure",
         "google_api_client_not_installed": "dependency_unavailable",
+        "api_timeout": "api_timeout",
     }.get(error, error if error.startswith("gsc_history_") else "dependency_unavailable")
     history_state = record_failed_attempt(history_state, reason_code, run_id=run_id)
     write_history(HISTORY_PATH, history_state)
@@ -3073,8 +3075,12 @@ def main(argv: list[str] | None = None) -> int:
     sub = parser.add_subparsers(dest="cmd", required=True)
 
     p_imp = sub.add_parser("import-csv", help="Import GSC UI CSV export directory")
-    p_imp.add_argument("--dir", required=True, type=Path)
+    p_imp.add_argument("--dir", required=False, type=Path, default=None)
+    p_imp.add_argument("--zip", dest="zip_path", default=None, type=Path)
     p_imp.add_argument("--as-of", default=None)
+    p_imp.add_argument("--extracted-at", default=None)
+    p_imp.add_argument("--site", default=None)
+    p_imp.add_argument("--search-type", default=None)
 
     sub.add_parser("analyze", help="Run automatic analyses on latest import")
     p_api = sub.add_parser("pull-api", help="Pull Search Analytics API (needs credentials)")
@@ -3132,21 +3138,86 @@ def main(argv: list[str] | None = None) -> int:
     p_base.add_argument("--snapshot", type=Path, default=None)
     p_base.add_argument("--dry-run", action="store_true")
 
+    p_learn = sub.add_parser(
+        "learn",
+        help="Private operational learning from an imported snapshot (never public)",
+    )
+    p_learn.add_argument("--dir", type=Path, default=None)
+    p_learn.add_argument("--zip", dest="zip_path", default=None, type=Path)
+    p_learn.add_argument("--extracted-at", default=None)
+    p_learn.add_argument("--out", type=Path, default=None)
+
     args = parser.parse_args(argv)
 
     if args.cmd == "import-csv":
-        src = args.dir if args.dir.is_absolute() else ROOT / args.dir
-        if not src.exists():
-            print(json.dumps({"ok": False, "error": "dir_not_found", "dir": str(src)}))
-            return 1
-        payload = import_csv_dir(src, args.as_of)
+        if getattr(args, "zip_path", None):
+            zpath = args.zip_path if args.zip_path.is_absolute() else ROOT / args.zip_path
+            if not zpath.exists():
+                print(json.dumps({"ok": False, "error": "zip_not_found", "zip": str(zpath)}))
+                return 1
+            payload = import_gsc_zip(
+                zpath,
+                as_of=args.as_of,
+                extracted_at=getattr(args, "extracted_at", None),
+                site=getattr(args, "site", None),
+                search_type=getattr(args, "search_type", None),
+            )
+        else:
+            if args.dir is None:
+                print(json.dumps({"ok": False, "error": "dir_or_zip_required"}))
+                return 1
+            src = args.dir if args.dir.is_absolute() else ROOT / args.dir
+            if not src.exists():
+                print(json.dumps({"ok": False, "error": "dir_not_found", "dir": str(src)}))
+                return 1
+            payload = import_csv_dir(src, args.as_of)
+            if getattr(args, "extracted_at", None):
+                payload["extracted_at"] = args.extracted_at
+            if getattr(args, "site", None):
+                payload["site"] = args.site
+            if getattr(args, "search_type", None):
+                payload["search_type"] = args.search_type
         insights = analyze(payload)
+        dims = isolate_dimension_totals(payload)
         print(
             json.dumps(
                 {
                     "ok": True,
-                    "queries": payload["query_count"],
-                    "pages": payload["page_count"],
+                    "source_kind": payload.get("source_kind"),
+                    "freshness": payload.get("freshness") or "NOT_CURRENT",
+                    "ready_for_product_decisions": payload.get("ready_for_product_decisions"),
+                    "site": payload.get("site"),
+                    "search_type": payload.get("search_type"),
+                    "extracted_at": payload.get("extracted_at"),
+                    "last_data_date": payload.get("last_data_date"),
+                    "effective_interval": payload.get("effective_interval"),
+                    "queries": payload.get("query_count"),
+                    "pages": payload.get("page_count"),
+                    "dimensions": {
+                        "property": {
+                            "impressions": (dims.get("property") or {}).get("impressions"),
+                            "clicks": (dims.get("property") or {}).get("clicks"),
+                            "ctr": (dims.get("property") or {}).get("ctr"),
+                            "position": (dims.get("property") or {}).get("position"),
+                        },
+                        "page": {
+                            "impressions": (dims.get("page") or {}).get("impressions"),
+                            "clicks": (dims.get("page") or {}).get("clicks"),
+                        },
+                        "query": {
+                            "impressions": (dims.get("query") or {}).get("impressions"),
+                            "clicks": (dims.get("query") or {}).get("clicks"),
+                        },
+                        "country": {
+                            "impressions": (dims.get("country") or {}).get("impressions"),
+                            "clicks": (dims.get("country") or {}).get("clicks"),
+                            "brazil": (payload.get("dimensions") or {}).get("country", {}).get("brazil"),
+                        },
+                    },
+                    "omitted_queries": payload.get("omitted_queries"),
+                    "idempotency_key": payload.get("idempotency_key"),
+                    "idempotent_replay": payload.get("idempotent_replay"),
+                    "zip_filename_date_note": payload.get("zip_filename_date_note"),
                     "priority_actions": len(insights["priority_actions"]),
                     "legacy_entity_queries": len(
                         insights["analyses"]["legacy_entity_demand_still_ranking"]
@@ -3327,6 +3398,48 @@ def main(argv: list[str] | None = None) -> int:
                 {k: v for k, v in written.items() if k not in {"baseline", "queue", "report"}},
                 ensure_ascii=False,
                 indent=2,
+            )
+        )
+        return 0
+
+    if args.cmd == "learn":
+        PRIVATE_DIR.mkdir(parents=True, exist_ok=True)
+        if getattr(args, "zip_path", None):
+            zpath = args.zip_path if args.zip_path.is_absolute() else ROOT / args.zip_path
+            payload = import_gsc_zip(
+                zpath, extracted_at=getattr(args, "extracted_at", None)
+            )
+        elif args.dir:
+            src = args.dir if args.dir.is_absolute() else ROOT / args.dir
+            payload = import_gsc_export(
+                src, extracted_at=getattr(args, "extracted_at", None)
+            )
+        else:
+            payload = load_labeled_snapshot()
+        learning = build_operational_learning(payload)
+        out = args.out
+        if out is None:
+            out = PRIVATE_DIR / "operational-learning.json"
+        elif not out.is_absolute():
+            out = ROOT / out
+        out.parent.mkdir(parents=True, exist_ok=True)
+        if artifact_contains_personal_field(learning):
+            print(json.dumps({"ok": False, "error": "personal_field_in_artifact"}))
+            return 1
+        out.write_text(json.dumps(learning, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        print(
+            json.dumps(
+                {
+                    "ok": True,
+                    "out": str(out),
+                    "private": "private" in str(out) or str(out).startswith(str(PRIVATE_DIR)),
+                    "source_kind": learning.get("source_kind"),
+                    "freshness": learning.get("freshness"),
+                    "ready_for_product_decisions": learning.get("ready_for_product_decisions"),
+                    "queue": (learning.get("queue") or {}).get("count"),
+                    "as_of": learning.get("as_of"),
+                },
+                ensure_ascii=False,
             )
         )
         return 0

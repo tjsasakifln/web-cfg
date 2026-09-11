@@ -932,6 +932,10 @@ function validateAndNormalize(data) {
       message: "É necessário autorizar o uso dos dados para retorno.",
     };
   }
+  // analytics_consent / marketing_consent / cookie_consent never substitute
+  // this request-processing consent and never block persist. Privilege claims
+  // from the browser (paid_priority, approved, authorized, …) are not copied
+  // onto the lead and grant no commercial status.
 
   const lead = {
     nome,

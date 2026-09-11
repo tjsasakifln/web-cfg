@@ -1,0 +1,6 @@
+--- a/servicos/index.html
++++ b/servicos/index.html
+@@
+-<a class="button button-primary" href="/triagem-tecnica/#projetos">Conversar sobre o projeto <svg class="icon"><use href="#i-arrow"></use></svg></a> <a class="text-link" data-asset-id="corporate_services_hub_v1" data-cta-id="services-private-quantities-budget" data-route-family="servicos-corporativos" href="/quantitativos-orcamento-obras/">Ver quantitativos e orçamento de obra</a>
++<a class="button button-primary" href="/triagem-tecnica/#projetos">Conversar sobre o projeto <svg class="icon"><use href="#i-arrow"></use></svg></a> <a class="text-link" data-asset-id="corporate_services_hub_v1" data-cta-id="services-private-elaboration" data-route-family="servicos-corporativos" href="/projetos-complementares-engenharia/">Ver elaboração de projetos complementares</a> <a class="text-link" data-asset-id="corporate_services_hub_v1" data-cta-id="services-private-quantities-budget" data-route-family="servicos-corporativos" href="/quantitativos-orcamento-obras/">Ver quantitativos e orçamento de obra</a>
+ owner: INB-09 (hub /servicos/). Do not rewrite the hub body. Insert the elaboration text-link before the quantities link.
