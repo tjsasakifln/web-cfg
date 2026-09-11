@@ -18,6 +18,7 @@ from scripts.site.public_navigation import (
     audit_public_navigation_tree,
     promote_public_navigation,
 )
+from scripts.site.shell_nav import value_first_cta_contract
 from scripts.site.test_report_model_599 import (
     _assert_no_scope_contradictions,
     _visible_text,
@@ -678,11 +679,19 @@ def test_public_artifact_navigation_promotion_is_ordered_and_fail_closed(
     value_first = promote_public_navigation(
         legacy, relative_path="quantitativos-orcamento-obras/index.html"
     )
-    assert value_first.count("Conversar sobre minha obra") == 2
+    quantitativos_cta = value_first_cta_contract("/quantitativos-orcamento-obras/")
+    assert quantitativos_cta is not None
+    assert quantitativos_cta["href"] == "#triagem-quantitativos"
+    assert value_first.count(quantitativos_cta["label"]) == 2
     assert "Enquadrar quantitativos" not in value_first
+    assert "Conversar sobre minha obra" not in value_first
     assert value_first.count('href="#triagem-quantitativos"') == 2
     assert value_first.count('data-value-first-cta="true"') == 2
-    assert CANONICAL_CTA[0] not in value_first
+    assert f'href="{CANONICAL_CTA[1]}"' not in value_first
+    assert (
+        f'data-cta-position="header_cta" data-event-name="cta_click" '
+        f'href="{CANONICAL_CTA[1]}"'
+    ) not in value_first
 
 
 def test_report_returns_to_deliverables_without_changing_offer_contract() -> None:
