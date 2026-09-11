@@ -1,0 +1,8 @@
+--- a/package.json
++++ b/package.json
+@@
+     "test:page-contract-complementares": "node tests/commercial/test_page_contract_complementares.mjs",
++    "test:page-contract-projetos-complementares": "node tests/inb-20260911/12/test_page_contract_projetos_complementares.mjs",
+     "test:page-contract-execucao": "node tests/commercial/test_page_contract_execucao.mjs",
+ precondition: the B2G page-contract-complementares script remains; this adds a distinct elaboration contract and does not retarget CFG-D45-48.
+ also_chain: insert `&& npm run test:page-contract-projetos-complementares` after `npm run test:page-contract-complementares` in scripts.test and scripts.test:commercial-contracts.
