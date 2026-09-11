@@ -1,0 +1,166 @@
+{
+  "schema": "confenge.inbound-shared-changes/2.0",
+  "campaign_id": "13",
+  "prompt_version": "2.0.0",
+  "base_sha": "8f508544835490ec635d02517bce0207c6f8e426",
+  "changes": [
+    {
+      "change_id": "13-servicos-diagnostico-link",
+      "owner_campaign": "09",
+      "path": "servicos/index.html",
+      "base_blob_sha": "abae7e331cafc620db17d5ea7e139ff99eb335be",
+      "operation": "replace_exact",
+      "key_or_anchor": "id=servico-diagnostico CTA",
+      "expected_old": "<a class=\"text-link\" href=\"/triagem-tecnica/#obra-imovel\">Conversar sobre a edificação <svg class=\"icon\"><use href=\"#i-arrow\"></use></svg></a>",
+      "desired_new": "<a class=\"button button-primary\" href=\"/inspecao-diagnostico-edificacoes/\">Ver inspeção e diagnóstico de edificações <svg class=\"icon\"><use href=\"#i-arrow\"></use></svg></a> <a class=\"text-link\" href=\"/triagem-tecnica/#obra-imovel\">Conversar sobre a edificação</a>",
+      "rationale": "O hub 09 continua dono de /servicos/. O bloco de inspeção ganha o mesmo padrão do quantitativos: caminho comercial específico + conversa direta. Sem isso o visitante só cai na triagem genérica.",
+      "acceptance_test": "servicos/index.html contém href=\"/inspecao-diagnostico-edificacoes/\" dentro de #servico-diagnostico e preserva /triagem-tecnica/#obra-imovel.",
+      "integration_patch": "docs/campaigns/inb-20260911/13/patches/servicos.index.html.patch"
+    },
+    {
+      "change_id": "13-family-registry-upsert",
+      "owner_campaign": "16",
+      "path": "data/organic/public-family-registry.json",
+      "base_blob_sha": "61e219892d5ad8c80f37dc18399f51f5df119ca1",
+      "operation": "upsert",
+      "key_or_anchor": "families[id=inspecao-diagnostico-edificacoes]",
+      "expected_old": null,
+      "desired_new": {
+        "id": "inspecao-diagnostico-edificacoes",
+        "visitor_job": "Reconhecer fissura, infiltração, condição do imóvel ou recebimento, entender o que a inspeção entrega e solicitar proposta com local e necessidade como contexto.",
+        "profile": "commercial_content",
+        "terminal_action": "capture_form_or_whatsapp",
+        "match": {
+          "routes": [
+            "/inspecao-diagnostico-edificacoes/"
+          ]
+        },
+        "value_first_header_cta": {
+          "mode": "local_fragment_before_contact",
+          "label": "Conversar sobre a edificação",
+          "href": "#contato-inspecao"
+        },
+        "capture_availability": {
+          "mode": "external_authority_fail_closed",
+          "withheld_fallback": [
+            "whatsapp",
+            "email",
+            "telephone"
+          ]
+        },
+        "gate_coverage": {
+          "conversion": "full",
+          "copy": "full",
+          "accessibility": "full"
+        },
+        "declared_at": "2026-09-11",
+        "owner_issue": 13,
+        "debt": [],
+        "index_evidence": {
+          "substrate": "first_party_publication",
+          "not_applicable": [
+            "official_live",
+            "citable_source"
+          ],
+          "reason": "Página comercial de primeira parte sobre inspeção e diagnóstico da própria CONFENGE; não representa registro externo, preço, prazo, cidade atendida, caso de cliente ou habilitação inventada.",
+          "authority": [
+            "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md",
+            "data/corporate/intent-family-matrix.v1.json",
+            "data/offers/multivertical/catalog.v2.json"
+          ],
+          "declared_at": "2026-09-11",
+          "owner_issue": 13
+        }
+      },
+      "rationale": "Rota indexável nova falha o gate fail-closed sem família declarada. owner_issue 13 identifica a campanha produtora; 16 pode substituir pelo issue GitHub da composição se o processo exigir. Atualizar também as_of do registry para >= 2026-09-11, senão declared_at reprova.",
+      "acceptance_test": "npm run inbound:gates cobre /inspecao-diagnostico-edificacoes/ na família inspecao-diagnostico-edificacoes com WhatsApp em main; sem undeclared_indexable_route."
+    },
+    {
+      "change_id": "13-family-registry-as-of",
+      "owner_campaign": "16",
+      "path": "data/organic/public-family-registry.json",
+      "base_blob_sha": "61e219892d5ad8c80f37dc18399f51f5df119ca1",
+      "operation": "upsert",
+      "key_or_anchor": "as_of",
+      "expected_old": "2026-09-05",
+      "desired_new": "2026-09-11",
+      "rationale": "Família nova com declared_at 2026-09-11 é rejeitada se as_of do registry permanecer 2026-09-05.",
+      "acceptance_test": "as_of >= declared_at da família inspecao-diagnostico-edificacoes."
+    },
+    {
+      "change_id": "13-public-artifact-allowlist",
+      "owner_campaign": "16",
+      "path": "scripts/pseo/public_artifact.py",
+      "base_blob_sha": "02fab887985de241dbc62d3c6f27b706200f359a",
+      "operation": "insert_line",
+      "key_or_anchor": "PUBLIC_TOP_DIRS",
+      "expected_old": "        \"quantitativos-orcamento-obras\",",
+      "desired_new": "        \"quantitativos-orcamento-obras\",\n        \"inspecao-diagnostico-edificacoes\",",
+      "rationale": "Sem o diretório na allowlist o artefato Netcup não publica a landing.",
+      "acceptance_test": "PUBLIC_TOP_DIRS contém inspecao-diagnostico-edificacoes e o assemble copia inspecao-diagnostico-edificacoes/index.html.",
+      "integration_patch": "docs/campaigns/inb-20260911/13/patches/public_artifact.py.patch"
+    },
+    {
+      "change_id": "13-sitemap-url",
+      "owner_campaign": "16",
+      "path": "sitemap.xml",
+      "base_blob_sha": "3c91a643271d02ea536f08a0378716d3e2aa34af",
+      "operation": "insert_url",
+      "key_or_anchor": "https://confenge.com.br/inspecao-diagnostico-edificacoes/",
+      "expected_old": null,
+      "desired_new": " <url>\n <loc>https://confenge.com.br/inspecao-diagnostico-edificacoes/</loc>\n </url>",
+      "rationale": "Rota indexável precisa de loc no sitemap, sem lastmod fabricado, em ordem alfabética entre /imprensa/ e /medicoes-glosas-obras-publicas/.",
+      "acceptance_test": "sitemap.xml contém exatamente um loc da rota nova e não inventa lastmod.",
+      "integration_patch": "docs/campaigns/inb-20260911/13/patches/sitemap.xml.patch"
+    },
+    {
+      "change_id": "13-ia-map-building-diagnosis-href",
+      "owner_campaign": "16",
+      "path": "data/site/public-ia-map.json",
+      "base_blob_sha": "2621a2133b592b2a6560714c76fde902eecc2ebc",
+      "operation": "upsert",
+      "key_or_anchor": "service_situations[id=building_diagnosis].href",
+      "expected_old": "/servicos/#servico-diagnostico",
+      "desired_new": "/inspecao-diagnostico-edificacoes/",
+      "rationale": "A situação pública de inspeção/diagnóstico passa a apontar o caminho comercial específico, como quantitativos já faz para orçamento. Regenerar a home a partir do mapa.",
+      "acceptance_test": "data/site/public-ia-map.json building_diagnosis.href == /inspecao-diagnostico-edificacoes/ e a home renderizada usa o mesmo href."
+    },
+    {
+      "change_id": "13-brand-building-diagnosis-href",
+      "owner_campaign": "16",
+      "path": "data/site/brand.json",
+      "base_blob_sha": "e0a92b8a52d831457e01e6bcf193f6782456fe2c",
+      "operation": "upsert",
+      "key_or_anchor": "journeys[id=building_diagnosis].href",
+      "expected_old": "/servicos/#servico-diagnostico",
+      "desired_new": "/inspecao-diagnostico-edificacoes/",
+      "rationale": "brand.json é a autoridade paralela do chooser. Manter href antigo depois do mapa novo dessincroniza testes de contrato.",
+      "acceptance_test": "scripts/site/test_brand_contract.py e test_public_ia.py passam com o href novo."
+    },
+    {
+      "change_id": "13-entregas-inspection-href",
+      "owner_campaign": "16",
+      "path": "scripts/commercial/render_public_catalog.mjs",
+      "base_blob_sha": "0d50a874ee5f89f6f5a1e73aa1d5eda5ed7aae5c",
+      "operation": "replace_exact",
+      "key_or_anchor": "Inspeção e diagnóstico de edificações href",
+      "expected_old": "<p><a href=\"/servicos/#servico-diagnostico\">Entender inspeção e diagnóstico</a></p>",
+      "desired_new": "<p><a href=\"/inspecao-diagnostico-edificacoes/\">Ver inspeção e diagnóstico de edificações</a></p>",
+      "rationale": "O hub de entregas hoje aponta o âncora do hub de serviços. Depois da landing dedicada, o mesmo padrão do quantitativos deve valer. Regenerar entregas/index.html (blob 213588415da63026e9432d58fc7d25eef8b8457b) com o mesmo replace. Atualizar tests/commercial/test_task_doors.mjs se ainda exigir o âncora antigo.",
+      "acceptance_test": "entregas/index.html e o gerador apontam /inspecao-diagnostico-edificacoes/; test_task_doors continua exigindo substância do grupo de inspeção.",
+      "integration_patch": "docs/campaigns/inb-20260911/13/patches/entregas-and-catalog.patch"
+    },
+    {
+      "change_id": "13-package-test-script",
+      "owner_campaign": "16",
+      "path": "package.json",
+      "base_blob_sha": "6449c565138aa0794c31765d75079fe2cdbc3226",
+      "operation": "upsert",
+      "key_or_anchor": "scripts.test:inspecao-diagnostico",
+      "expected_old": null,
+      "desired_new": "node --test tests/intake/test_inspecao_diagnostico.mjs && python3 -m pytest tests/inspecao -q",
+      "rationale": "Os testes da landing já existem nesta branch e rodam sem o script; o npm script só entra na suíte global quando 16 incorporar.",
+      "acceptance_test": "npm run test:inspecao-diagnostico exit 0 no candidato que contém a landing."
+    }
+  ]
+}

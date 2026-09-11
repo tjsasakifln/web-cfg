@@ -1,0 +1,112 @@
+{
+  "schema": "confenge.inbound-local-coverage-facts/1.0",
+  "campaign_id": "13",
+  "as_of": "2026-09-11",
+  "offer_id": "building_inspection_pathology",
+  "offer_readiness": "CAPACITY_UNKNOWN",
+  "offer_wave_class": "WITHHELD_CAPACITY",
+  "decision": "USE_EXISTING_SERVICE",
+  "public_page_rule": "A página comercial existe sem converter capacidade de campo desconhecida em disponibilidade.",
+  "confirmed_facts": [
+    {
+      "id": "brand-domain",
+      "fact": "CONFENGE e https://confenge.com.br são a única marca, domínio e superfície pública.",
+      "source": "data/corporate/commercial-constitution.v1.json"
+    },
+    {
+      "id": "cnpj",
+      "fact": "CNPJ 52.407.089/0001-09, razão social Confenge Serviços de Desenhos Técnicos Ltda.",
+      "source": "data/site/credential-registry.json"
+    },
+    {
+      "id": "contact-channels",
+      "fact": "Canais públicos: WhatsApp/telefone +55 48 98834-4559 e e-mail tiago.sasaki@confenge.com.br. DDD 48 é prefixo de contato, não área de serviço verificada.",
+      "source": "data/local-entity/entity-graph.json"
+    },
+    {
+      "id": "national-area-served",
+      "fact": "JSON-LD e copy visível declaram areaServed Country Brasil de forma auto-declarada e condicional a escopo, local, logística, atribuição e ART.",
+      "source": "especialista/tiago-jun-sasaki/index.html"
+    },
+    {
+      "id": "no-public-street-nap",
+      "fact": "Não há NAP de rua publicado como estabelecimento aberto ao público. Endereço cadastral/fiscal existe em /confianca/ com o aviso de que reuniões são online ou no local do cliente.",
+      "source": ["data/local-entity/surface-decision.json", "confianca/index.html"]
+    },
+    {
+      "id": "remote-documentary",
+      "fact": "Conversa inicial e leitura documental podem ser remotas.",
+      "source": "quantitativos-orcamento-obras/index.html"
+    },
+    {
+      "id": "field-at-client-site",
+      "fact": "Quando o recorte exige visita, o atendimento de campo é no local do cliente, mediante agendamento, não em loja da CONFENGE.",
+      "source": "data/site/credential-registry.json#org-cadastral-address"
+    },
+    {
+      "id": "professional",
+      "fact": "Engenheiro Civil EESC-USP, registro profissional ativo no CREA (autoatestado), serviços técnicos com ART e nota fiscal no recorte contratado.",
+      "source": "data/site/credential-registry.json"
+    },
+    {
+      "id": "adaptive-intake",
+      "fact": "Autoridade de intake adaptativo está WITHHELD; a rota publica WhatsApp, e-mail e telefone, sem formulário morto.",
+      "source": "netlify/functions/data/adaptive-intake-authority.json"
+    },
+    {
+      "id": "existing-equivalent",
+      "fact": "Equivalente atual: /servicos/#servico-diagnostico e /triagem-tecnica/#obra-imovel. Não há landing dedicada de inspeção. /conteudos/ herda família B2G editorial-library.",
+      "source": "servicos/index.html"
+    }
+  ],
+  "pending_facts": [
+    {
+      "id": "field-displacement-capacity",
+      "status": "pending",
+      "fact": "Capacidade de deslocamento presencial por município ou região não está comprovada para publicação. Catalog readiness CAPACITY_UNKNOWN / WITHHELD_CAPACITY.",
+      "public_treatment": "A página pede o município como contexto e confirma visita antes do aceite técnico. Não lista cidades."
+    },
+    {
+      "id": "city-area-served",
+      "status": "pending",
+      "fact": "Nenhuma cidade tem areaServed VERIFIED.",
+      "public_treatment": "JSON-LD areaServed permanece Country Brasil, condicionado na copy visível."
+    },
+    {
+      "id": "gbp-presence",
+      "status": "pending",
+      "fact": "Presença de Perfil da Empresa no Google não foi observada nesta missão. Não há login, reivindicação nem edição.",
+      "public_treatment": "Checklist de operador em gbp-operator-checklist.md. Não afirmar criação ou otimização de perfil."
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "founder-city-is-not-storefront",
+      "text": "Florianópolis/SC é contexto do fundador e do endereço cadastral/fiscal. Não autoriza estabelecimento aberto ao público nem cobertura presencial irrestrita em SC ou no Brasil."
+    },
+    {
+      "id": "recebimento-same-purchase",
+      "text": "Recebimento/entrega de imóvel, quando a pergunta é registrar a condição, cabe no mesmo offer_id building_inspection_pathology. Não há diferença de compra suficiente para uma segunda landing nesta rodada."
+    }
+  ],
+  "external_actions": [
+    {
+      "id": "gbp",
+      "status": "not_executed",
+      "action": "Observar Perfil da Empresa com o checklist somente leitura. Qualquer ficha, reivindicação ou área de serviço com endereço oculto é decisão do fundador fora desta PR."
+    },
+    {
+      "id": "citations",
+      "status": "not_executed",
+      "action": "Não comprar citação local nem registrar diretório externo."
+    }
+  ],
+  "url_decision": {
+    "main_path": "/inspecao-diagnostico-edificacoes/",
+    "decision_support": "/inspecao-diagnostico-edificacoes/#como-contratar",
+    "rejected_conteudos_url": "/conteudos/contratar-vistoria-inspecao-imovel/",
+    "rejected_reason": "O prefixo /conteudos/ herda a família editorial-library B2G. A decisão de contratação da inspeção não é problema contratual de obra pública; consolidar no mesmo destino comercial evita família errada e segunda URL sem diferença útil de compra.",
+    "rejected_city_doorways": true,
+    "rejected_recebimento_landing": true
+  }
+}
