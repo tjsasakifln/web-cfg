@@ -1,0 +1,127 @@
+{
+  "schema": "confenge.inbound-campaign-handoff/2.0",
+  "campaign_set": "POS-INB-20260911",
+  "campaign_id": "05",
+  "prompt_version": "1.0.0",
+  "base_sha": "cb6facfaaf50aa8f1834aba43d0245e04cbea672",
+  "state": "READY_FOR_INTEGRATION",
+  "owned_paths": [
+    "parcerias-engenharia/index.html",
+    "parcerias-engenharia/styles.css",
+    "parcerias-engenharia/share.js",
+    "data/distribution/partner-reference-kits.v1.json",
+    "scripts/distribution/partner_reference.mjs",
+    "scripts/distribution/tests/test_partner_reference.mjs",
+    "tests/pos-inb-20260911/05/",
+    "docs/campaigns/pos-inb-20260911/05/"
+  ],
+  "changed_paths": [
+    "parcerias-engenharia/index.html",
+    "parcerias-engenharia/styles.css",
+    "parcerias-engenharia/share.js",
+    "data/distribution/partner-reference-kits.v1.json",
+    "scripts/distribution/partner_reference.mjs",
+    "scripts/distribution/tests/test_partner_reference.mjs",
+    "tests/pos-inb-20260911/05/test_partner_kits_contract.mjs",
+    "docs/campaigns/pos-inb-20260911/05/handoff.json",
+    "docs/campaigns/pos-inb-20260911/05/shared-changes.json",
+    "docs/campaigns/pos-inb-20260911/05/service-sample-url-map.json",
+    "docs/campaigns/pos-inb-20260911/05/approach-drafts.md"
+  ],
+  "requirements": [
+    {
+      "id": "A-four-choices",
+      "state": "DONE",
+      "evidence": "Catálogo e renderer exigem quatro kits com destinos /quantitativos-orcamento-obras/, /revisao-tecnica-projetos-engenharia/, /compatibilizacao-projetos-engenharia/, /projetos-complementares-engenharia/. /servicos/#servico-projeto deixa de ser destino substituto."
+    },
+    {
+      "id": "B-samples",
+      "state": "DONE",
+      "evidence": "Orçamento → recorte privado #quantitativos com CSV; revisão → #extrato-demonstrativo; compatibilização → #registro-interferencias; elaboração → #entregaveis ilustração, sem clash como prova de cálculo."
+    },
+    {
+      "id": "C-share-agree",
+      "state": "DONE",
+      "evidence": "htmlAgreesWithSurfaces compara HTML ao resolver. Âncoras internas sem UTM. data-share-attributed casa com buildShareUrl externo na ATTR_ALLOWLIST."
+    },
+    {
+      "id": "D-copyable-summary",
+      "state": "DONE",
+      "evidence": "Resumo copiável por kit no HTML. share.js clipboard/share com gesto; não afirma copiado se a operação falhou; sem fetch de lead."
+    },
+    {
+      "id": "E-copy",
+      "state": "DONE",
+      "evidence": "Copy de relacionamento. Sem exclusividade, white-label, comissão, sigilo, SLA, não competição, nem 'cada conjunto aponta à entrega'."
+    },
+    {
+      "id": "F-og",
+      "state": "DONE_WITH_SHARED_CHANGES",
+      "evidence": "/parcerias-engenharia/ tem title, description, og:title, og:description, og:image em assets/og-confenge.jpg. Destinos 02/07 sem og:image: pedido em shared-changes.json."
+    },
+    {
+      "id": "G-print",
+      "state": "DONE",
+      "evidence": "@media print em parcerias-engenharia/styles.css e nota de referência na secção #referencia-impressao. Sem PDF obrigatório."
+    }
+  ],
+  "dependencies": [
+    {
+      "provider_campaign": "02",
+      "artifact_path": "casos/demonstrativo-projeto-privado/",
+      "level": "HARD_AT_RELEASE",
+      "status": "ALREADY_SATISFIED",
+      "proof": "Amostra de orçamento usa #quantitativos e CSV quantitativos.csv/orcamento.csv do recorte privado já em origin/main cb6facfaa. Extratos de revisão e compatibilização nas páginas dedicadas."
+    },
+    {
+      "provider_campaign": "03",
+      "artifact_path": "casos/demonstrativo-projeto-privado/data/",
+      "level": "HARD_AT_RELEASE",
+      "status": "ALREADY_SATISFIED",
+      "proof": "Resolver exige os CSV listados no kit de orçamento; presentes neste tree."
+    },
+    {
+      "provider_campaign": "01",
+      "artifact_path": "netlify/functions/lib/lead-core.cjs",
+      "level": "HARD_AT_RELEASE",
+      "status": "ALREADY_SATISFIED",
+      "proof": "buildShareUrl chama pickAttribution e ATTR_ALLOWLIST. Share permanece engagement, não lead."
+    },
+    {
+      "provider_campaign": "07",
+      "artifact_path": "projetos-complementares-engenharia/index.html",
+      "level": "HARD_AT_RELEASE",
+      "status": "ALREADY_SATISFIED",
+      "proof": "Kit elaboração aponta à página dedicada e ao esquema ilustrativo #entregaveis."
+    },
+    {
+      "provider_campaign": "08",
+      "artifact_path": null,
+      "level": "OPTIONAL_ENRICHMENT",
+      "status": "NOT_WAITED",
+      "proof": "Demonstrativo de infraestrutura não é amostra desta frente. Adoção futura é delta da 10."
+    }
+  ],
+  "shared_changes": "docs/campaigns/pos-inb-20260911/05/shared-changes.json",
+  "commands_results": [
+    {
+      "command": "node scripts/distribution/tests/test_partner_reference.mjs",
+      "exit_code": 0,
+      "cwd": ".grok/worktrees/pos-inb-05-parcerias",
+      "log": "scratch partner-reference-tests.log"
+    },
+    {
+      "command": "node tests/pos-inb-20260911/05/test_partner_kits_contract.mjs",
+      "exit_code": 0,
+      "cwd": ".grok/worktrees/pos-inb-05-parcerias",
+      "log": "scratch partner-counterproofs.log",
+      "notes": "Contrato das quatro escolhas e contraprovas: swap revisão/elaboração, CSV ausente, clipboard reject, UTM interno, destino malicioso."
+    }
+  ],
+  "unresolved": [
+    "Campanhas 02 e 07 (ou a 10 no composto) aplicam og:image nos quatro destinos listados em shared-changes.json. Sem isso a prévia de compartilhamento dessas rotas permanece sem imagem. A página /parcerias-engenharia/ já tem og:image próprio.",
+    "Verificação de metadados é local. Prévia real no WhatsApp não observada.",
+    "Playwright local em 127.0.0.1:18005 carregou /parcerias-engenharia/ duas vezes, zero pageerror, quatro destinos corretos e um clique em Copiar no kit de orçamento. Prévia WhatsApp não observada."
+  ],
+  "rollback": "Reverter o commit desta branch restaura os três kits INB-11 e os destinos /servicos/#servico-projeto. Não há mutação de produção nesta frente."
+}

@@ -1,0 +1,61 @@
+{
+  "schema": "confenge.inbound-campaign-shared-changes/2.0",
+  "campaign_set": "POS-INB-20260911",
+  "campaign_id": "05",
+  "prompt_version": "1.0.0",
+  "owner_campaign": "05",
+  "changes": [
+    {
+      "change_id": "posinb05-og-image-quantitativos",
+      "owner_campaign": "02",
+      "path": "quantitativos-orcamento-obras/index.html",
+      "base_blob_sha": "70046f8f0d390d12ac921e420593b036d0b2864e",
+      "operation": "insert",
+      "key_or_anchor": "head meta[property=og:url]",
+      "expected_old": "<meta content=\"https://confenge.com.br/quantitativos-orcamento-obras/\" property=\"og:url\"/>",
+      "desired_new": "<meta content=\"https://confenge.com.br/quantitativos-orcamento-obras/\" property=\"og:url\"/>\n<meta content=\"https://confenge.com.br/assets/og-confenge.jpg\" property=\"og:image\"/>",
+      "rationale": "A página de orçamento já tem title, description, og:title e og:description, mas não tem og:image. A campanha 05 compartilha essa rota e precisa de prévia coerente. Reusar o asset público já existente. Sem pacote novo de imagens.",
+      "acceptance_test": "quantitativos-orcamento-obras/index.html contém property=\"og:image\" apontando a https://confenge.com.br/assets/og-confenge.jpg e o ficheiro assets/og-confenge.jpg existe no tree.",
+      "consumer_test": "Prévia local de /quantitativos-orcamento-obras/ lê og:image no HTML fonte. Não afirma prévia validada no WhatsApp."
+    },
+    {
+      "change_id": "posinb05-og-image-revisao",
+      "owner_campaign": "02",
+      "path": "revisao-tecnica-projetos-engenharia/index.html",
+      "base_blob_sha": "d5690e6007826ca8218a81c7b61d01d9961e9c8f",
+      "operation": "insert",
+      "key_or_anchor": "head meta[property=og:url]",
+      "expected_old": "<meta content=\"https://confenge.com.br/revisao-tecnica-projetos-engenharia/\" property=\"og:url\"/>",
+      "desired_new": "<meta content=\"https://confenge.com.br/revisao-tecnica-projetos-engenharia/\" property=\"og:url\"/>\n<meta content=\"https://confenge.com.br/assets/og-confenge.jpg\" property=\"og:image\"/>",
+      "rationale": "Destino de revisão compartilhado pela 05 sem og:image. Delta mínimo no head, asset já público.",
+      "acceptance_test": "revisao-tecnica-projetos-engenharia/index.html contém og:image https://confenge.com.br/assets/og-confenge.jpg.",
+      "consumer_test": "Kit revisao-tecnica em /parcerias-engenharia/ continua a apontar a esta rota; a prévia local do destino passa a ter imagem."
+    },
+    {
+      "change_id": "posinb05-og-image-compatibilizacao",
+      "owner_campaign": "02",
+      "path": "compatibilizacao-projetos-engenharia/index.html",
+      "base_blob_sha": "35c6c8477c3511e5dd31839ace8d49068b0e697f",
+      "operation": "insert",
+      "key_or_anchor": "head meta[property=og:url]",
+      "expected_old": "<meta content=\"https://confenge.com.br/compatibilizacao-projetos-engenharia/\" property=\"og:url\"/>",
+      "desired_new": "<meta content=\"https://confenge.com.br/compatibilizacao-projetos-engenharia/\" property=\"og:url\"/>\n<meta content=\"https://confenge.com.br/assets/og-confenge.jpg\" property=\"og:image\"/>",
+      "rationale": "Destino de compatibilização compartilhado pela 05 sem og:image.",
+      "acceptance_test": "compatibilizacao-projetos-engenharia/index.html contém og:image https://confenge.com.br/assets/og-confenge.jpg.",
+      "consumer_test": "Kit compatibilizacao-interfaces aponta a esta rota; prévia local do destino passa a ter imagem."
+    },
+    {
+      "change_id": "posinb05-og-image-elaboracao",
+      "owner_campaign": "07",
+      "path": "projetos-complementares-engenharia/index.html",
+      "base_blob_sha": "00d3aaec87844c284cb7ba271ca77070a65faeea",
+      "operation": "insert",
+      "key_or_anchor": "head meta[property=og:url]",
+      "expected_old": "<meta content=\"https://confenge.com.br/projetos-complementares-engenharia/\" property=\"og:url\"/>",
+      "desired_new": "<meta content=\"https://confenge.com.br/projetos-complementares-engenharia/\" property=\"og:url\"/>\n<meta content=\"https://confenge.com.br/assets/og-confenge.jpg\" property=\"og:image\"/>",
+      "rationale": "Destino de elaboração complementar (campanha 07) compartilhado pela 05 sem og:image. A 05 não edita esse ficheiro.",
+      "acceptance_test": "projetos-complementares-engenharia/index.html contém og:image https://confenge.com.br/assets/og-confenge.jpg.",
+      "consumer_test": "Kit elaboracao-complementar aponta a esta rota; prévia local do destino passa a ter imagem."
+    }
+  ]
+}

@@ -5,6 +5,12 @@
 (function () {
   "use strict";
 
+  var COPY_LINK_OK = "Link copiado. Isso não envia mensagem nem registra um pedido.";
+  var COPY_SUMMARY_OK = "Resumo copiado. Isso não envia mensagem nem registra um pedido.";
+  var COPY_FAIL = "Não foi possível copiar. O texto continua visível para você selecionar.";
+  var SHARE_OK = "Link compartilhado. Isso não envia um pedido em seu nome.";
+  var SHARE_FAIL = "O compartilhamento nativo não concluiu. O endereço continua visível.";
+
   function classifyShareAction() {
     return {
       event: "cta_click",
@@ -39,24 +45,29 @@
   }
 
   function copyWithFallback(text, input) {
-    if (navigator.clipboard && navigator.clipboard.writeText) {
+    if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
       return navigator.clipboard.writeText(text).then(function () {
         return true;
       }).catch(function () {
-        return selectFallback(input);
+        return selectFallback(input, text);
       });
     }
-    return Promise.resolve(selectFallback(input));
+    return Promise.resolve(selectFallback(input, text));
   }
 
-  function selectFallback(input) {
+  function selectFallback(input, text) {
     if (!input) return false;
     try {
+      if (typeof text === "string" && input.value !== text) {
+        input.value = text;
+      }
       input.focus();
       input.select();
-      input.setSelectionRange(0, input.value.length);
+      if (typeof input.setSelectionRange === "function") {
+        input.setSelectionRange(0, input.value.length);
+      }
       if (typeof document.execCommand === "function") {
-        return document.execCommand("copy");
+        return document.execCommand("copy") === true;
       }
     } catch (_) {
       return false;
@@ -74,24 +85,44 @@
 
   function bindRoot(root) {
     var input = root.querySelector("[data-share-url]");
+    var summary = root.querySelector("[data-share-summary]");
     var copyBtn = root.querySelector("[data-share-copy]");
+    var copySummaryBtn = root.querySelector("[data-share-copy-summary]");
     var nativeBtn = root.querySelector("[data-share-native]");
     var attributed = root.getAttribute("data-share-attributed") || "";
     var canonical = (input && input.value) || root.getAttribute("data-share-canonical") || "";
     var ctaId = root.getAttribute("data-cta-id") || "share-copy-kit";
     var title = root.getAttribute("data-share-title") || "CONFENGE";
+    var summaryText = (summary && summary.value) || root.getAttribute("data-share-summary-text") || "";
 
     if (copyBtn) {
       copyBtn.hidden = false;
       copyBtn.addEventListener("click", function () {
         var text = attributed || canonical;
-        copyWithFallback(text, input).then(function (ok) {
+        return copyWithFallback(text, input).then(function (ok) {
           if (ok) {
-            setStatus(root, "Link copiado. Isso não envia mensagem nem registra um pedido.", false);
+            setStatus(root, COPY_LINK_OK, false);
             emitCopy(ctaId);
-            return;
+            return false;
           }
-          setStatus(root, "Não foi possível copiar. Use o endereço visível ou abra a entrega.", true);
+          setStatus(root, COPY_FAIL, true);
+          return false;
+        });
+      });
+    }
+
+    if (copySummaryBtn) {
+      copySummaryBtn.hidden = false;
+      copySummaryBtn.addEventListener("click", function () {
+        var text = summaryText || (summary && summary.value) || "";
+        return copyWithFallback(text, summary || input).then(function (ok) {
+          if (ok) {
+            setStatus(root, COPY_SUMMARY_OK, false);
+            emitCopy(ctaId + "-summary");
+            return false;
+          }
+          setStatus(root, COPY_FAIL, true);
+          return false;
         });
       });
     }
@@ -99,14 +130,16 @@
     if (nativeBtn && typeof navigator.share === "function") {
       nativeBtn.hidden = false;
       nativeBtn.addEventListener("click", function () {
-        navigator.share({
+        var payload = {
           title: title,
           url: attributed || canonical,
-        }).then(function () {
-          setStatus(root, "Link compartilhado. Isso não envia um pedido em seu nome.", false);
+        };
+        if (summaryText) payload.text = summaryText;
+        navigator.share(payload).then(function () {
+          setStatus(root, SHARE_OK, false);
           emitCopy(ctaId);
         }).catch(function () {
-          setStatus(root, "O compartilhamento nativo não concluiu. O endereço continua visível.", true);
+          setStatus(root, SHARE_FAIL, true);
         });
       });
     }
@@ -119,6 +152,14 @@
   window.confengePartnerShare = {
     classifyShareAction: classifyShareAction,
     enhance: enhance,
+    bindRoot: bindRoot,
+    copyWithFallback: copyWithFallback,
+    setStatus: setStatus,
+    COPY_LINK_OK: COPY_LINK_OK,
+    COPY_SUMMARY_OK: COPY_SUMMARY_OK,
+    COPY_FAIL: COPY_FAIL,
+    SHARE_OK: SHARE_OK,
+    SHARE_FAIL: SHARE_FAIL,
   };
 
   if (document.readyState === "loading") {

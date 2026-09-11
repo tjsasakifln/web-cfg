@@ -5,17 +5,7 @@
   "auto_send": false,
   "send_forbidden": true,
   "public_route": "/parcerias-engenharia/",
-  "role": "Explicar como um escritório de arquitetura ou empresa de projeto encaminha uma necessidade de orçamento, revisão, compatibilização ou disciplina complementar, mantendo o cliente com quem encaminha.",
-  "optional_enrichment": {
-    "campaign_id": "12",
-    "level": "OPTIONAL_ENRICHMENT",
-    "kit_id": "complementares",
-    "candidate_paths": [
-      "/projetos-complementares-engenharia/",
-      "/projetos-complementares/",
-      "/engenharia-complementar/"
-    ]
-  },
+  "role": "Explicar como um escritório de arquitetura ou empresa de projeto encaminha uma necessidade de orçamento, revisão, compatibilização ou elaboração complementar, mantendo o cliente com quem encaminha.",
   "kits": [
     {
       "id": "orcamento-quantitativos",
@@ -26,14 +16,21 @@
       "destination": {
         "path": "/quantitativos-orcamento-obras/",
         "label": "Quantitativos e orçamento de obras",
+        "proposal_fragment": "#triagem-quantitativos",
+        "proposal_label": "Solicitar proposta de orçamento",
         "required": true
       },
       "sample": {
-        "path": "/casos/modelo-base-quantitativa-canonica/",
-        "id": "base-quantitativa-canonica-demonstrativo",
-        "label": "Demonstrativo de base quantitativa",
-        "kind": "demonstrative",
-        "required": true
+        "path": "/casos/demonstrativo-projeto-privado/",
+        "fragment": "#quantitativos",
+        "id": "demonstrativo-projeto-privado-quantitativos",
+        "label": "Amostra de quantitativos e planilha no recorte privado",
+        "kind": "quantitativos_planilha",
+        "required": true,
+        "files": [
+          "casos/demonstrativo-projeto-privado/data/quantitativos.csv",
+          "casos/demonstrativo-projeto-privado/data/orcamento.csv"
+        ]
       },
       "conversation": {
         "needed": [
@@ -46,63 +43,115 @@
       },
       "share": {
         "cta_id": "share-copy-kit-orcamento",
-        "utm_campaign": "inb11_orcamento"
+        "utm_campaign": "posinb05_orcamento",
+        "title": "Quantitativos e orçamento de obras",
+        "copyable_summary": "Orçamento e quantitativos. A CONFENGE levanta quantidades e monta a planilha com origem visível, no recorte que o seu escritório já conduz. O cliente permanece com quem encaminha.\nAmostra de quantitativos e planilha: https://confenge.com.br/casos/demonstrativo-projeto-privado/#quantitativos\nServiço: https://confenge.com.br/quantitativos-orcamento-obras/"
       }
     },
     {
-      "id": "revisao-compatibilizacao",
-      "title": "Revisão e compatibilização",
-      "purchase": "revisar um projeto existente ou registrar interferências entre disciplinas",
+      "id": "revisao-tecnica",
+      "title": "Revisão técnica de projeto",
+      "purchase": "conferir um projeto existente e devolver apontamentos",
       "intent_family": "projetar_revisar_compatibilizar",
-      "offer_id": "bim_coordination_clash_register",
+      "offer_id": "complementary_engineering_project_review",
       "destination": {
         "path": "/revisao-tecnica-projetos-engenharia/",
         "label": "Revisão técnica de projetos de engenharia",
+        "proposal_fragment": "#contato-revisao",
+        "proposal_label": "Solicitar proposta da revisão",
         "required": true
       },
       "sample": {
-        "path": "/casos/demonstrativo-projeto-privado/",
-        "id": "demonstrativo-projeto-privado",
-        "label": "Recorte demonstrativo de revisão",
-        "kind": "demonstrative",
+        "path": "/revisao-tecnica-projetos-engenharia/",
+        "fragment": "#extrato-demonstrativo",
+        "id": "extrato-apontamentos-revisao",
+        "label": "Amostra de apontamentos de revisão",
+        "kind": "review_findings",
         "required": true
       },
       "conversation": {
         "needed": [
-          "Se o pedido é revisar, compatibilizar ou as duas coisas",
-          "Quais disciplinas entram no recorte",
-          "Quem é o autor de origem de cada peça",
-          "Qual decisão o documento precisa sustentar"
+          "Qual disciplina e quais documentos entram na conferência",
+          "Quem é o autor de origem",
+          "Qual decisão o relatório precisa sustentar",
+          "O que já existe no pacote, mesmo que incompleto"
         ],
         "incomplete_ok": true
       },
       "share": {
         "cta_id": "share-copy-kit-revisao",
-        "utm_campaign": "inb11_revisao"
+        "utm_campaign": "posinb05_revisao",
+        "title": "Revisão técnica de projetos de engenharia",
+        "fragment": "#extrato-demonstrativo",
+        "copyable_summary": "Revisão técnica de projeto. A CONFENGE confere o pacote que você já tem e devolve apontamentos com evidência. O cliente permanece com o escritório.\nAmostra de apontamentos: https://confenge.com.br/revisao-tecnica-projetos-engenharia/#extrato-demonstrativo\nServiço: https://confenge.com.br/revisao-tecnica-projetos-engenharia/"
       }
     },
     {
-      "id": "complementares",
-      "title": "Disciplina complementar",
-      "purchase": "completar uma disciplina de engenharia que falta no pacote",
+      "id": "compatibilizacao-interfaces",
+      "title": "Compatibilização de disciplinas",
+      "purchase": "registrar interferências e interfaces entre disciplinas",
+      "intent_family": "projetar_revisar_compatibilizar",
+      "offer_id": "bim_coordination_clash_register",
+      "destination": {
+        "path": "/compatibilizacao-projetos-engenharia/",
+        "label": "Compatibilização de projetos de engenharia",
+        "proposal_fragment": "#pedido-compatibilizacao",
+        "proposal_label": "Solicitar proposta da compatibilização",
+        "required": true
+      },
+      "sample": {
+        "path": "/compatibilizacao-projetos-engenharia/",
+        "fragment": "#registro-interferencias",
+        "id": "registro-interferencias-interfaces",
+        "label": "Amostra de conflito e interfaces",
+        "kind": "clash_interfaces",
+        "required": true
+      },
+      "conversation": {
+        "needed": [
+          "Quais disciplinas e revisões entram no recorte",
+          "Quem é o autor de origem de cada peça",
+          "Se o pedido é só registrar interferências",
+          "Qual decisão o registro precisa sustentar"
+        ],
+        "incomplete_ok": true
+      },
+      "share": {
+        "cta_id": "share-copy-kit-compatibilizacao",
+        "utm_campaign": "posinb05_compat",
+        "title": "Compatibilização de projetos de engenharia",
+        "fragment": "#registro-interferencias",
+        "copyable_summary": "Compatibilização de disciplinas. A CONFENGE registra interferências e interfaces entre os projetos do pacote. O escritório segue com o cliente.\nAmostra de conflito e interfaces: https://confenge.com.br/compatibilizacao-projetos-engenharia/#registro-interferencias\nServiço: https://confenge.com.br/compatibilizacao-projetos-engenharia/"
+      }
+    },
+    {
+      "id": "elaboracao-complementar",
+      "title": "Elaboração complementar",
+      "purchase": "produzir a disciplina de engenharia que falta no pacote",
       "intent_family": "projetar_revisar_compatibilizar",
       "offer_id": "complementary_engineering_project_review",
       "destination": {
         "path": "/projetos-complementares-engenharia/",
         "label": "Projetos complementares de engenharia",
+        "proposal_fragment": "#escopo-projeto",
+        "proposal_label": "Solicitar proposta de elaboração",
         "required": true
       },
       "sample": {
-        "path": null,
-        "id": null,
-        "label": null,
-        "kind": "optional_enrichment",
-        "required": false,
-        "enrichment_campaign": "12"
+        "path": "/projetos-complementares-engenharia/",
+        "fragment": "#entregaveis",
+        "id": "esquema-ilustrativo-elaboracao",
+        "label": "Ilustração do esquema de entrega complementar",
+        "kind": "illustrative_schema",
+        "labeled_as_illustration": true,
+        "required": true,
+        "files": [
+          "assets/projetos-complementares-engenharia/pacote-entrega.svg"
+        ]
       },
       "conversation": {
         "needed": [
-          "Qual disciplina precisa ser completada",
+          "Qual disciplina precisa ser elaborada",
           "O que já existe no pacote de projeto",
           "Quem permanece autor de origem",
           "Para que a disciplina vai ser usada"
@@ -110,8 +159,11 @@
         "incomplete_ok": true
       },
       "share": {
-        "cta_id": "share-copy-kit-complementares",
-        "utm_campaign": "inb11_complementares"
+        "cta_id": "share-copy-kit-elaboracao",
+        "utm_campaign": "posinb05_elaboracao",
+        "title": "Projetos complementares de engenharia",
+        "fragment": "#entregaveis",
+        "copyable_summary": "Elaboração complementar. A CONFENGE produz a disciplina de engenharia que falta, com escopo e entregáveis combinados na proposta. O cliente permanece com o escritório.\nIlustração da entrega, esquema e não cálculo completo: https://confenge.com.br/projetos-complementares-engenharia/#entregaveis\nServiço: https://confenge.com.br/projetos-complementares-engenharia/"
       }
     }
   ]

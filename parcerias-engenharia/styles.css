@@ -8,15 +8,23 @@
 .partner-step{padding-top:1rem;border-top:3px solid var(--green-700)}
 .partner-step::before{counter-increment:partner-step;content:"0" counter(partner-step);display:block;margin-bottom:.65rem;color:var(--green-700);font-weight:800}
 .partner-kits{display:grid;gap:1.5rem}
+@media(min-width:960px){
+  .partner-kits{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
 .partner-kit{padding:1.5rem;border:1px solid var(--line);background:#fff}
 .partner-kit h3{margin-top:0}
 .partner-kit-meta{margin:0;padding-left:1.2rem}
 .partner-kit-meta li+li{margin-top:.55rem}
+.partner-kit-actions{display:flex;flex-wrap:wrap;gap:.75rem 1.25rem;margin:1rem 0}
+.partner-kit-actions a{min-height:44px;display:inline-flex;align-items:center}
 .partner-share{margin-top:1.25rem;padding:1rem;border:1px solid var(--line);background:var(--soft)}
 .partner-share label{display:block;margin-bottom:.4rem;font-weight:700}
 .partner-share-row{display:flex;flex-wrap:wrap;gap:.75rem;align-items:stretch}
 .partner-share textarea[readonly]{flex:1 1 16rem;min-width:0;min-height:44px;padding:.65rem .8rem;border:1px solid var(--line);background:#fff;font:inherit;line-height:1.4;resize:none;overflow-wrap:anywhere;word-break:break-word}
+.partner-summary{margin-top:1rem}
+.partner-summary textarea[readonly]{width:100%;min-height:7rem;flex-basis:100%}
 .partner-share [data-share-status]{margin:.65rem 0 0;color:var(--muted)}
+.partner-print-note{display:none}
 .partner-contact{background:#f3f6f8;border-top:1px solid var(--line)}
 .partner-contact-grid{display:grid;grid-template-columns:minmax(16rem,.7fr) minmax(0,1.3fr);gap:clamp(2rem,6vw,5rem);align-items:start}
 @media(max-width:800px){
@@ -27,4 +35,12 @@
   .partner-hero h1{max-width:none}
   .partner-share-row{flex-direction:column}
   .partner-share textarea[readonly]{width:100%;flex-basis:auto}
+}
+@media print{
+  .partner-print-note{display:block;margin:0 0 1rem;padding:.75rem 1rem;border:1px solid #000}
+  .hero-actions,.channel-actions,.menu-toggle,.skip-link,[data-share-copy],[data-share-native],[data-share-copy-summary]{display:none!important}
+  .partner-kit{break-inside:avoid;border:1px solid #000}
+  .partner-share,.partner-signal{background:#fff}
+  .partner-share textarea[readonly],.partner-summary textarea[readonly]{border:1px solid #000}
+  .partner-kits{grid-template-columns:1fr}
 }
