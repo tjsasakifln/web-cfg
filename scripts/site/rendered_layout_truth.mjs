@@ -309,7 +309,13 @@ export async function hoverLiftFindings(page, options = {}) {
     if (!element) return null;
     if (element.matches(":hover") !== hovered) return null;
     const box = element.getBoundingClientRect();
-    return { top: box.top + window.scrollY, left: box.left + window.scrollX };
+    const position = getComputedStyle(element).position;
+    return {
+      top: box.top,
+      left: box.left,
+      scrollY: window.scrollY,
+      position,
+    };
   }, selector, wantHover);
 
   for (let index = 0; index < signatures.length; index += 1) {
@@ -327,11 +333,20 @@ export async function hoverLiftFindings(page, options = {}) {
       // clipped by a scroller) carries no evidence either way — skip it rather
       // than invent a finding. A real lift stays reachable by definition.
       if (!hovered) continue;
+      // hover() may scroll the element into view. Pin that scroll before the
+      // resting sample: document-space Y of a position:fixed control otherwise
+      // tracks scrollY and reports a multi-thousand-pixel "lift".
+      const pinnedY = await page.evaluate(() => window.scrollY);
       await page.mouse.move(1, 1);
+      await page.evaluate((y) => window.scrollTo(0, y), pinnedY);
       await wait(settleMs);
       const resting = await geometry(selector, false);
       if (!resting) continue;
-      const dy = hovered.top - resting.top;
+      const fixed = hovered.position === "fixed" || hovered.position === "sticky"
+        || resting.position === "fixed" || resting.position === "sticky";
+      const dy = fixed
+        ? hovered.top - resting.top
+        : (hovered.top + hovered.scrollY) - (resting.top + resting.scrollY);
       if (Math.abs(dy) > tolerancePx) {
         findings.push(`hover_lift ${signatures[index]} ${dy.toFixed(1)}px`);
       }

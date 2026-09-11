@@ -870,15 +870,28 @@
       if (!target) return;
       event.preventDefault();
       if (window.location.hash !== url.hash) {
-        try { window.history.pushState(null, '', url.hash); } catch (_) { window.location.hash = url.hash; }
+        try {
+          if ('scrollRestoration' in window.history) window.history.scrollRestoration = 'manual';
+          const here = Object.assign({}, window.history.state || {});
+          here.confengeScrollY = window.scrollY;
+          window.history.replaceState(here, '');
+          window.history.pushState({ confengeScrollY: window.scrollY }, '', url.hash);
+        } catch (_) { window.location.hash = url.hash; }
       }
       focusAnchor(target);
       goToAnchor(target, true);
     });
-    window.addEventListener('popstate', () => {
+    window.addEventListener('popstate', (event) => {
       if (typeof cancelActiveAnchor === 'function') cancelActiveAnchor();
       const target = anchorFromHash(window.location.hash);
-      if (target) goToAnchor(target, false);
+      if (target) {
+        goToAnchor(target, false);
+        return;
+      }
+      const restored = event && event.state && Number.isFinite(event.state.confengeScrollY)
+        ? event.state.confengeScrollY
+        : 0;
+      jumpTo(restored);
     });
 
     let anchoredOnLoad = false;
