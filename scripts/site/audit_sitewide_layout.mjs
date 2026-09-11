@@ -102,11 +102,8 @@ function publicRoutes() {
 function authorityGatedCaptureFor(family) {
   const spec = family?.capture_availability;
   if (!spec) return null;
-  const allowedEndpoints = new Set([
-    "/.netlify/functions/adaptive-intake-config",
-    "/.netlify/functions/adaptive-intake-config?intake_context=quantities_budget",
-  ]);
-  if (!allowedEndpoints.has(spec.config_endpoint)) {
+  const allowedEndpoint = /^\/\.netlify\/functions\/adaptive-intake-config(?:\?intake_context=[a-z0-9_]+)?$/;
+  if (!allowedEndpoint.test(String(spec.config_endpoint || ""))) {
     throw new Error(`capture availability is not declared for ${family.id}`);
   }
   const expected = {

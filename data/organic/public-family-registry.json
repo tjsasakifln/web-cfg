@@ -1234,14 +1234,6 @@
         "label": "Conversar sobre a edificação",
         "href": "#contato-inspecao"
       },
-      "capture_availability": {
-        "mode": "external_authority_fail_closed",
-        "withheld_fallback": [
-          "whatsapp",
-          "email",
-          "telephone"
-        ]
-      },
       "gate_coverage": {
         "conversion": "full",
         "copy": "full",
