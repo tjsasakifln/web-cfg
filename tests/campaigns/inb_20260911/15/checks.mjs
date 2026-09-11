@@ -6,7 +6,9 @@ import fs from "node:fs";
 import path from "node:path";
 import {
   FAIL,
+  HARD_AT_RELEASE,
   MISSING_DEPENDENCY,
+  NOT_VERIFIED,
   OPTIONAL_ENRICHMENT,
   PASS,
   SEVERITY,
@@ -14,6 +16,7 @@ import {
   record,
   routeToFile,
 } from "./lib/harness.mjs";
+import { EXTERNAL_EVIDENCE, isPublishedRel } from "./lib/strict.mjs";
 import * as html from "./lib/html.mjs";
 import {
   familyMembership,
@@ -546,6 +549,9 @@ export async function checkJourneys(report, root) {
         "projetos-complementares-engenharia/index.html",
       ];
       const found = dedicated.find((rel) => existsInRoot(root, rel));
+      const published = dedicated.some((rel) =>
+        isPublishedRel(root, rel, `/${rel.replace(/index\.html$/, "")}`),
+      );
       if (!found) {
         record(report, {
           id: `journey.${journey.id}.dedicated_route`,
@@ -553,8 +559,8 @@ export async function checkJourneys(report, root) {
           owner: journey.core,
           url: `/${dedicated[0].replace(/index\.html$/, "")}`,
           status: MISSING_DEPENDENCY,
-          dependency_level: OPTIONAL_ENRICHMENT,
-          expected: "dedicated complementary landing from producer 12",
+          dependency_level: published || !journey.dedicated_missing_ok ? HARD_AT_RELEASE : OPTIONAL_ENRICHMENT,
+          expected: "dedicated complementary landing already published",
           observed: "hub + triage only on examined tree",
         });
       } else {
@@ -1018,6 +1024,18 @@ export async function checkHypotheticalPrice(report, root) {
   }
 }
 
+export async function checkExternalGsc(report) {
+  record(report, {
+    id: "gsc.live.external",
+    campaign: "10",
+    owner: "10",
+    status: NOT_VERIFIED,
+    dependency_level: EXTERNAL_EVIDENCE,
+    expected: "live GSC is NOT_VERIFIED; never PASS and never a generic required-resource failure",
+    observed: "suite does not hold live Search Console credentials",
+  });
+}
+
 export async function runAllChecks(report, root, options = {}) {
   const included = options.includedCampaigns || [];
   await checkCoreCampaigns(report, root);
@@ -1035,4 +1053,5 @@ export async function runAllChecks(report, root, options = {}) {
   await checkStructural(report, root);
   await checkCampaignPrivateContent(report, root);
   await checkHypotheticalPrice(report, root);
+  await checkExternalGsc(report);
 }

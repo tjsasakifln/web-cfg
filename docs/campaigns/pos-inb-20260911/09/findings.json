@@ -1,0 +1,238 @@
+{
+  "schema": "confenge.pos-inb-findings/1.0",
+  "campaign_set": "POS-INB-20260911",
+  "campaign_id": "09",
+  "examined_kind": "candidate",
+  "candidate_sha": "77d43727ad779fe7837db7d3212c16e7e876f7a0",
+  "overlay_hashes": [
+    "d0a984f615bf669e2f679eff9dc2dd4c4f9ae3493b7d5eb131f4d84308cf0f27"
+  ],
+  "note": "Findings on origin/main+cherry-pick #670. READY/handoff/test-file presence is not PASS. Independent parecer of the composed candidate is still pending CANDIDATE_READY from campaign 10.",
+  "summary": {
+    "pass": 34,
+    "fail": 16,
+    "MISSING_DEPENDENCY": 0,
+    "NOT_VERIFIED": 1,
+    "NOT_RUN": 1,
+    "publication_required_missing": 0,
+    "optional_or_external_missing": 0,
+    "strict_release": true,
+    "examined_kind": "candidate",
+    "result_count": 52,
+    "requirement_count": 8,
+    "empty_suite": false,
+    "publication_required_missing_ids": [],
+    "exit_code": 1
+  },
+  "findings": [
+    {
+      "id": "Q01.artifact.quantitativos.csv",
+      "severity": "quebra_jornada/indexacao",
+      "owner": "03",
+      "path": "casos/demonstrativo-projeto-privado/data/quantitativos.csv",
+      "expected": "CSV copied into the public artifact/package",
+      "observed": {
+        "ok": true,
+        "copy": false,
+        "observed": "skip:forbidden_dir",
+        "rel": "casos/demonstrativo-projeto-privado/data/quantitativos.csv"
+      },
+      "status": "FAIL"
+    },
+    {
+      "id": "Q01.http.quantitativos.csv",
+      "severity": "quebra_jornada/indexacao",
+      "owner": "03",
+      "path": null,
+      "expected": "HTTP 200 with CSV body from the published artifact, not HTML",
+      "observed": {
+        "status": 404,
+        "csvBody": false,
+        "htmlBody": false,
+        "preview": "not found"
+      },
+      "status": "FAIL"
+    },
+    {
+      "id": "Q01.artifact.orcamento.csv",
+      "severity": "quebra_jornada/indexacao",
+      "owner": "03",
+      "path": "casos/demonstrativo-projeto-privado/data/orcamento.csv",
+      "expected": "CSV copied into the public artifact/package",
+      "observed": {
+        "ok": true,
+        "copy": false,
+        "observed": "skip:forbidden_dir",
+        "rel": "casos/demonstrativo-projeto-privado/data/orcamento.csv"
+      },
+      "status": "FAIL"
+    },
+    {
+      "id": "Q01.http.orcamento.csv",
+      "severity": "quebra_jornada/indexacao",
+      "owner": "03",
+      "path": null,
+      "expected": "HTTP 200 with CSV body from the published artifact, not HTML",
+      "observed": {
+        "status": 404,
+        "csvBody": false,
+        "htmlBody": false,
+        "preview": "not found"
+      },
+      "status": "FAIL"
+    },
+    {
+      "id": "Q01.artifact.coordenacao.csv",
+      "severity": "quebra_jornada/indexacao",
+      "owner": "03",
+      "path": "casos/demonstrativo-projeto-privado/data/coordenacao.csv",
+      "expected": "CSV copied into the public artifact/package",
+      "observed": {
+        "ok": true,
+        "copy": false,
+        "observed": "skip:forbidden_dir",
+        "rel": "casos/demonstrativo-projeto-privado/data/coordenacao.csv"
+      },
+      "status": "FAIL"
+    },
+    {
+      "id": "Q01.http.coordenacao.csv",
+      "severity": "quebra_jornada/indexacao",
+      "owner": "03",
+      "path": null,
+      "expected": "HTTP 200 with CSV body from the published artifact, not HTML",
+      "observed": {
+        "status": 404,
+        "csvBody": false,
+        "htmlBody": false,
+        "preview": "not found"
+      },
+      "status": "FAIL"
+    },
+    {
+      "id": "Q01.artifact.revisao.csv",
+      "severity": "quebra_jornada/indexacao",
+      "owner": "03",
+      "path": "casos/demonstrativo-projeto-privado/data/revisao.csv",
+      "expected": "CSV copied into the public artifact/package",
+      "observed": {
+        "ok": true,
+        "copy": false,
+        "observed": "skip:forbidden_dir",
+        "rel": "casos/demonstrativo-projeto-privado/data/revisao.csv"
+      },
+      "status": "FAIL"
+    },
+    {
+      "id": "Q01.http.revisao.csv",
+      "severity": "quebra_jornada/indexacao",
+      "owner": "03",
+      "path": null,
+      "expected": "HTTP 200 with CSV body from the published artifact, not HTML",
+      "observed": {
+        "status": 404,
+        "csvBody": false,
+        "htmlBody": false,
+        "preview": "not found"
+      },
+      "status": "FAIL"
+    },
+    {
+      "id": "Q02.excerpt.not_awaiting",
+      "severity": "quebra_jornada/indexacao",
+      "owner": "02",
+      "path": "quantitativos-orcamento-obras/index.html",
+      "expected": "numeric excerpt from the published demonstrativo, not awaiting-canonical-excerpt",
+      "observed": "awaiting-canonical-excerpt or future promise",
+      "status": "FAIL"
+    },
+    {
+      "id": "Q02.excerpt.numeric",
+      "severity": "quebra_jornada/indexacao",
+      "owner": "02",
+      "path": "quantitativos-orcamento-obras/index.html",
+      "expected": "visible numeric excerpt containing source quantity 4.32",
+      "observed": "Quantitativos e orçamento de obras | CONFENGE Pular para o conteúdo Serviços e problemas Obras públicas Biblioteca Solicitar proposta de orçamento Serviços e problemas Obras públic",
+      "status": "FAIL"
+    },
+    {
+      "id": "Q03.map.compatibilizacao",
+      "severity": "quebra_jornada/indexacao",
+      "owner": "04",
+      "path": "ferramentas/prontidao-tecnica-obra-privada/index.html",
+      "expected": "compatibilizacao resolves to /compatibilizacao-projetos-engenharia/ via the published map",
+      "observed": {
+        "offer_id": "bim_coordination_clash_register",
+        "href": null,
+        "present": false,
+        "intent_family": null
+      },
+      "status": "FAIL"
+    },
+    {
+      "id": "Q03.map.revisao",
+      "severity": "quebra_jornada/indexacao",
+      "owner": "04",
+      "path": "ferramentas/prontidao-tecnica-obra-privada/index.html",
+      "expected": "revisao resolves to /revisao-tecnica-projetos-engenharia/ via the published map",
+      "observed": {
+        "offer_id": "complementary_engineering_project_review",
+        "href": null,
+        "present": false,
+        "intent_family": null
+      },
+      "status": "FAIL"
+    },
+    {
+      "id": "Q03.map.revisao_not_elaboracao",
+      "severity": "quebra_jornada/indexacao",
+      "owner": "04",
+      "path": "ferramentas/prontidao-tecnica-obra-privada/index.html",
+      "expected": "revisão is not swapped for elaboração hub",
+      "observed": null,
+      "status": "FAIL"
+    },
+    {
+      "id": "Q04.public.revisao-tecnica-projetos-engenharia/index.html",
+      "severity": "exposicao/seguranca/veracidade/recebimento",
+      "owner": "02",
+      "path": "revisao-tecnica-projetos-engenharia/index.html",
+      "expected": "no SELECT / resolved_in_R01 / founder-approval labels in public visible copy",
+      "observed": [
+        "SELECT",
+        "resolved_in_R01",
+        "founder_approval"
+      ],
+      "status": "FAIL"
+    },
+    {
+      "id": "Q05.kit.revisao-compatibilizacao",
+      "severity": "quebra_jornada/indexacao",
+      "owner": "05",
+      "path": "data/distribution/partner-reference-kits.v1.json",
+      "expected": [
+        "/revisao-tecnica-projetos-engenharia/",
+        "/compatibilizacao-projetos-engenharia/"
+      ],
+      "observed": "/servicos/#servico-projeto",
+      "status": "FAIL"
+    },
+    {
+      "id": "Q05.kit.complementares",
+      "severity": "quebra_jornada/indexacao",
+      "owner": "05",
+      "path": "data/distribution/partner-reference-kits.v1.json",
+      "expected": [
+        "/projetos-complementares-engenharia/"
+      ],
+      "observed": "/servicos/#servico-projeto",
+      "status": "FAIL"
+    }
+  ],
+  "not_verified": [
+    "gsc.live.external"
+  ],
+  "not_run": [
+    "browser.360_390_desktop"
+  ]
+}

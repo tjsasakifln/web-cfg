@@ -1,0 +1,117 @@
+{
+  "schema": "confenge.pos-inb-campaign-handoff/1.0",
+  "campaign_set": "POS-INB-20260911",
+  "campaign_id": "09",
+  "prompt_version": "1.0.0",
+  "state": "READY_FOR_COMPOSITION_REVIEW",
+  "base_sha": "cb6facfaaf50aa8f1834aba43d0245e04cbea672",
+  "imported_pr_head": "e45c016f5742ce3a5420371798b8979dfacdb5e0",
+  "imported_pr": 670,
+  "imported_via": "git cherry-pick -x e45c016f5742ce3a5420371798b8979dfacdb5e0",
+  "owned_paths": [
+    "tests/campaigns/inb_20260911/15/",
+    "tests/campaigns/pos_inb_20260911/09/",
+    "scripts/campaigns/pos-inb-20260911/09/",
+    "docs/campaigns/pos-inb-20260911/09/"
+  ],
+  "changed_paths": [
+    "tests/campaigns/inb_20260911/15/run.mjs",
+    "tests/campaigns/inb_20260911/15/checks.mjs",
+    "tests/campaigns/inb_20260911/15/matrix.mjs",
+    "tests/campaigns/inb_20260911/15/mutations.mjs",
+    "tests/campaigns/inb_20260911/15/lib/harness.mjs",
+    "tests/campaigns/inb_20260911/15/lib/strict.mjs",
+    "tests/campaigns/inb_20260911/15/test_strict_helpers.mjs",
+    "tests/campaigns/inb_20260911/15/fixtures/legacy-manifest.json",
+    "tests/campaigns/pos_inb_20260911/09/",
+    "scripts/campaigns/pos-inb-20260911/09/",
+    "docs/campaigns/pos-inb-20260911/09/"
+  ],
+  "requirements": [
+    {
+      "id": "Q01",
+      "state": "FAIL",
+      "evidence": "Four CSVs exist and are linked, but public_artifact FORBIDDEN_DIR_NAMES skips data/; HTTP on the simulated artifact is 404. Findings Q01.artifact.* and Q01.http.*."
+    },
+    {
+      "id": "Q02",
+      "state": "FAIL",
+      "evidence": "quantitativos-orcamento-obras still has awaiting-canonical-excerpt; visible copy has no numeric excerpt from quantitativos.csv (4.32)."
+    },
+    {
+      "id": "Q03",
+      "state": "FAIL",
+      "evidence": "Published pptr-destination-map only resolves quantity_takeoff_budgeting. resolveCommercialDestination returns present=false for revisão and compatibilização."
+    },
+    {
+      "id": "Q04",
+      "state": "FAIL",
+      "evidence": "revisao-tecnica-projetos-engenharia/index.html visible copy leaks SELECT, resolved_in_R01 and founder-approval. Other scanned public pages were clean."
+    },
+    {
+      "id": "Q05",
+      "state": "FAIL",
+      "evidence": "Kits revisao-compatibilizacao and complementares still destination /servicos/#servico-projeto while dedicated routes exist. orcamento kit and no-JS fallback to quantitativos pass."
+    },
+    {
+      "id": "Q06",
+      "state": "PASS",
+      "evidence": "Isolated MemoryStore: persist before receipt, analytics_consent false still 201, idempotent replay, no LIVE lead. Mutation of copied lead.cjs claiming 201 before persist is detected."
+    },
+    {
+      "id": "Q07",
+      "state": "PASS",
+      "evidence": "Hubs keep avaliação/perícia and obras públicas; robots/sitemap/canonical do not contradict publication."
+    },
+    {
+      "id": "Q08",
+      "state": "PASS",
+      "evidence": "New infrastructure demonstrativo omitted; scanned public pages have no promise/link of the absent 08 page."
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "campaign-10-ci-strict-release",
+      "state": "PENDING",
+      "evidence": "package.json and .github/workflows/site-ci.yml belong to campaign 10; requested in shared-changes.json"
+    },
+    {
+      "id": "campaign-10-candidate-ready",
+      "state": "PENDING",
+      "evidence": "Independent parecer waits for CANDIDATE_READY. See parecer-pending.json."
+    }
+  ],
+  "shared_changes": "docs/campaigns/pos-inb-20260911/09/shared-changes.json",
+  "commands_results": [
+    {
+      "command": "node --test tests/campaigns/inb_20260911/15/test_strict_helpers.mjs tests/campaigns/pos_inb_20260911/09/test_namespaces.mjs",
+      "exit_code": 0,
+      "runs": 2
+    },
+    {
+      "command": "node scripts/campaigns/pos-inb-20260911/09/run-acceptance.mjs --strict-release --examined-kind candidate --manifest tests/campaigns/pos_inb_20260911/09/fixtures/pos-manifest.json --root . --report <outside>",
+      "exit_code": 1,
+      "note": "Product FAILs F01–F05. Process exit matches report exit_code=1."
+    },
+    {
+      "command": "node tests/campaigns/pos_inb_20260911/09/run.mjs --examined-kind baseline --root . --mutations --report <outside>",
+      "exit_code": 1,
+      "mutation_detection_ok": true,
+      "note": "Each listed mutation copies shipped files, changes bytes, invokes the same gate; process and report exit_code are 1 and match."
+    },
+    {
+      "command": "node scripts/campaigns/pos-inb-20260911/09/visual-runner.mjs",
+      "exit_code": 0,
+      "status": "NOT_RUN",
+      "note": "chrome_binary_not_found. Runner is ready for campaign 10 CI."
+    }
+  ],
+  "unresolved": [
+    "Independent parecer of the composed candidate is pending CANDIDATE_READY from campaign 10. Resume: docs/campaigns/pos-inb-20260911/09/parecer-pending.json resume_command. This does not authorize 10 to declare independent review done.",
+    "Browser 360/390/desktop is NOT_RUN (no Chrome binary). String analysis is not visual proof.",
+    "Live GSC is NOT_VERIFIED, not PASS.",
+    "F01–F05 remain product FAILs for owners 02/03/04/05/10. Campaign 09 does not rewrite producer pages to obtain green.",
+    "CI --strict-release wiring is a shared-change for campaign 10."
+  ],
+  "rollback": "Drop this branch. Cherry-pick of #670 remains only on this campaign branch; do not push campaign/inb-20260911/16-closeout-strict-release. If #670 merges to main, reconcile the imported delta instead of reapplying it."
+}

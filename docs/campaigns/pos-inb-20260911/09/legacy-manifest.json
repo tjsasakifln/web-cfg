@@ -1,0 +1,5 @@
+{
+  "campaign_set": "INB-20260911",
+  "campaigns": ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16"],
+  "note": "Explicit legacy manifesto for the INB-20260911 runner. Numeric IDs are not POS-INB-20260911 missions. Token 01-15 is not a range expansion."
+}

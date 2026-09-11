@@ -1,0 +1,96 @@
+{
+  "schema": "confenge.pos-inb-shared-changes/1.0",
+  "campaign_set": "POS-INB-20260911",
+  "campaign_id": "09",
+  "changes": [
+    {
+      "change_id": "pos09-ci-strict-release-inb15",
+      "owner_campaign": "10",
+      "path": "package.json",
+      "key_or_anchor": "scripts.test:inb-20260911-15",
+      "expected_old": "node tests/campaigns/inb_20260911/15/run.mjs",
+      "desired_new": "node tests/campaigns/inb_20260911/15/run.mjs --strict-release --examined-kind candidate --manifest docs/campaigns/pos-inb-20260911/09/legacy-manifest.json --report ${RUNNER_TEMP}/inb15-strict.json",
+      "rationale": "--strict-release must be exercised by CI, not only exist as a CLI flag. Reports stay outside the examined tree.",
+      "acceptance_test": "CI invokes the script; missing manifesto or publication-required MISSING_DEPENDENCY exits 1; process exit_code matches the report.",
+      "level": "HARD_AT_RELEASE"
+    },
+    {
+      "change_id": "pos09-ci-pos-acceptance",
+      "owner_campaign": "10",
+      "path": "package.json",
+      "key_or_anchor": "scripts.test:pos-inb-20260911-09",
+      "expected_old": null,
+      "desired_new": "node scripts/campaigns/pos-inb-20260911/09/run-acceptance.mjs --strict-release --examined-kind candidate --manifest docs/campaigns/pos-inb-20260911/09/pos-manifest.json --report ${RUNNER_TEMP}/pos09-strict.json",
+      "rationale": "POS Q01–Q08 gate. Campaign 10 wires it; 09 does not edit package.json.",
+      "acceptance_test": "Candidate without --strict-release/--manifest exits 1. Product FAILs F01–F05 until producers repair them.",
+      "level": "HARD_AT_RELEASE"
+    },
+    {
+      "change_id": "pos09-ci-workflow",
+      "owner_campaign": "10",
+      "path": ".github/workflows/site-ci.yml",
+      "key_or_anchor": "jobs.gates.steps (after inbound-gates)",
+      "expected_old": null,
+      "desired_new": "run: npm run test:inb-20260911-15 && npm run test:pos-inb-20260911-09  (reports via RUNNER_TEMP, not committed)",
+      "rationale": "Small CI patch. Keep reports outside the examined tree. Visual runner remains NOT_RUN until Chrome is available in CI.",
+      "acceptance_test": "site-ci executes both scripts; artifact upload of RUNNER_TEMP reports is optional enrichment.",
+      "level": "HARD_AT_RELEASE"
+    },
+    {
+      "change_id": "pos09-f01-csv-package",
+      "owner_campaign": "02",
+      "also": ["03", "10"],
+      "path": "casos/demonstrativo-projeto-privado/data/*.csv",
+      "key_or_anchor": "public artifact copy of quantitativos.csv, orcamento.csv, coordenacao.csv, revisao.csv",
+      "expected_old": "directory named data/ is skipped by scripts/pseo/public_artifact.py FORBIDDEN_DIR_NAMES",
+      "desired_new": "the four CSVs are in the published package and HTTP-served as CSV, and the HTML links remain",
+      "rationale": "Q01/F01. Removing the HTML link to hide the omission does not satisfy the requirement. public_artifact.py is owned by 10; the demonstrativo is owned by 02; package verifier by 03.",
+      "acceptance_test": "POS-09 Q01.artifact.* and Q01.http.* pass; deleting a CSV still fails even if the href is removed.",
+      "level": "HARD_AT_RELEASE"
+    },
+    {
+      "change_id": "pos09-f02-orcamento-excerpt",
+      "owner_campaign": "02",
+      "path": "quantitativos-orcamento-obras/index.html",
+      "key_or_anchor": "data-sample-trail-state=awaiting-canonical-excerpt",
+      "expected_old": "awaiting-canonical-excerpt plus 'quando o demonstrativo canônico estiver publicado'",
+      "desired_new": "numeric excerpt from casos/demonstrativo-projeto-privado/data/quantitativos.csv; a dimension change updates or fails a divergent excerpt",
+      "rationale": "Q02/F02. The demonstrativo already exists.",
+      "acceptance_test": "POS-09 Q02.excerpt.not_awaiting and Q02.excerpt.numeric pass.",
+      "level": "HARD_AT_RELEASE"
+    },
+    {
+      "change_id": "pos09-f03-prontidao-map",
+      "owner_campaign": "04",
+      "path": "ferramentas/prontidao-tecnica-obra-privada/index.html",
+      "key_or_anchor": "script#pptr-destination-map",
+      "expected_old": "by_offer_id only quantity_takeoff_budgeting",
+      "desired_new": "published map resolves orçamento /quantitativos-orcamento-obras/, revisão /revisao-tecnica-projetos-engenharia/, compatibilização /compatibilizacao-projetos-engenharia/; swapping revisão for elaboração fails",
+      "rationale": "Q03/F03. Separate landings existing is not enough if the published map does not resolve them.",
+      "acceptance_test": "POS-09 Q03.map.orcamento, Q03.map.revisao, Q03.map.compatibilizacao pass via resolveCommercialDestination.",
+      "level": "HARD_AT_RELEASE"
+    },
+    {
+      "change_id": "pos09-f04-revisao-public-labels",
+      "owner_campaign": "02",
+      "path": "revisao-tecnica-projetos-engenharia/index.html",
+      "key_or_anchor": "visible copy SELECT / resolved_in_R01 / aprovação pelo fundador",
+      "expected_old": "visible SELECT, resolved_in_R01, founder-approval copy",
+      "desired_new": "buyer-facing language without those internal labels; keep IDs in data contracts",
+      "rationale": "Q04/F04. Do not regex the whole repository.",
+      "acceptance_test": "POS-09 Q04.public.revisao-tecnica-projetos-engenharia/index.html pass.",
+      "level": "HARD_AT_RELEASE"
+    },
+    {
+      "change_id": "pos09-f05-kit-destinations",
+      "owner_campaign": "05",
+      "path": "data/distribution/partner-reference-kits.v1.json",
+      "key_or_anchor": "kits[].destination.path for revisao-compatibilizacao and complementares",
+      "expected_old": "/servicos/#servico-projeto",
+      "desired_new": "revisao-compatibilizacao → /revisao-tecnica-projetos-engenharia/ or /compatibilizacao-projetos-engenharia/; complementares → /projetos-complementares-engenharia/; no-JS hrefs remain useful",
+      "rationale": "Q05/F05. Generic hub is wrong when a dedicated route exists.",
+      "acceptance_test": "POS-09 Q05.kit.revisao-compatibilizacao and Q05.kit.complementares pass.",
+      "level": "HARD_AT_RELEASE"
+    }
+  ]
+}

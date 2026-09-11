@@ -178,7 +178,7 @@ export const PURCHASE_PATHS = [
     contact_mode: "capture_form_or_whatsapp",
     requested_indexability: "index",
     dedicated_files: ["projetos-complementares-engenharia/index.html"],
-    dedicated_missing_ok: true,
+    dedicated_missing_ok: false,
     must_mention: ["projeto", "estrutural|hidrossanit|elétric|completar"],
   },
   {
