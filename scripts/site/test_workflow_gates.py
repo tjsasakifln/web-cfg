@@ -25,6 +25,9 @@ SITE_CI = ROOT / ".github" / "workflows" / "site-ci.yml"
 PSEO = ROOT / ".github" / "workflows" / "pseo.yml"
 CODEQL = ROOT / ".github" / "workflows" / "codeql.yml"
 LIGHTHOUSE_RUNNER = ROOT / "scripts" / "site" / "run_lighthouse.mjs"
+# Every measurement runs in a disposable child process, so the audits the
+# image regression gate depends on are collected there.
+LIGHTHOUSE_MEASURE_CHILD = ROOT / "scripts" / "site" / "lighthouse_measure_child.mjs"
 LIGHTHOUSE_THRESHOLDS = ROOT / "scripts" / "site" / "lighthouse_thresholds.mjs"
 INTERFACE_COVERAGE_POLICY = ROOT / "data" / "quality" / "interface-coverage-policy.json"
 WORKFLOWS_DIR = ROOT / ".github" / "workflows"
@@ -574,10 +577,15 @@ def test_lighthouse_covers_article_cover_regression_routes():
     for needle in (
         "coverage.lighthouse.pages",
         "coverage.lighthouse.image_gate_pages",
+    ):
+        if needle not in runner:
+            raise AssertionError(f"Lighthouse image regression gate missing {needle}")
+    measure_child = _read(LIGHTHOUSE_MEASURE_CHILD)
+    for needle in (
         'audits["image-aspect-ratio"]?.score',
         'audits["image-size-responsive"]?.score',
     ):
-        if needle not in runner:
+        if needle not in measure_child:
             raise AssertionError(f"Lighthouse image regression gate missing {needle}")
     for needle in (
         "imageGatePages.has(row.path)",

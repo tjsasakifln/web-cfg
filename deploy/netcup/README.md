@@ -117,6 +117,12 @@ Two measurements are deliberately made identical on both sides
   it is Lantern's simulated TTFB (~450 ms) and is identical in the lab. The
   budget number never moves; the allowance is evidence, visible in
   `netcup-runtime-acceptance-<sha>` and recomputable from the raw report.
+- **Infrastructure failures are not measurements**: when the browser or its
+  debugging session dies before a result exists (Lighthouse's own asynchronous
+  `Protocol error … Session with given id not found`, run 34532136335, killed
+  the runner after the first edge run had passed every budget), the attempt is
+  repeated with a fresh browser, at most three times, and logged. A measured
+  result is never re-sampled; a recorded row is never replaced.
 - **Protocol**: the runner's Chrome disables QUIC (`--disable-quic`). Lantern
   models multiplexing only for `h2`; an `h3` session is simulated as HTTP/1.1
   with a handshake per connection, which inflated the edge LCP by ~300 ms on
