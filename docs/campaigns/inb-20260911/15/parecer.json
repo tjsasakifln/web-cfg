@@ -1,0 +1,43 @@
+{
+  "schema": "confenge.inbound-parecer/2.0",
+  "campaign_id": "15",
+  "prompt_version": "2.0.0",
+  "release_unit": "CORE_QA_SUITE",
+  "examined_kind": "baseline",
+  "candidate_sha": "8f508544835490ec635d02517bce0207c6f8e426",
+  "origin_main_sha": "8f508544835490ec635d02517bce0207c6f8e426",
+  "historical_main_cited_in_prompt": "8f508544835490ec635d02517bce0207c6f8e426",
+  "test_suite_sha": null,
+  "test_suite_sha_note": "Preenchido no comentário HEAD_READY após o commit. Ausente deste arquivo para evitar hash autorreferente.",
+  "source_tree_digest": "e8541c896478bc2ed0124d833b23acad46855c61",
+  "build_artifact_digest": null,
+  "build_artifact_note": "15 não gera _site. Digest do candidato examinado é a árvore git de origin/main. Launcher Chrome/puppeteer-core indisponível neste ambiente; verificação visual ficou em HTML estrutural + predicados das unidades enviadas.",
+  "overlay_hashes": null,
+  "producer_heads": {
+    "01": "8f508544835490ec635d02517bce0207c6f8e426",
+    "02": "8f508544835490ec635d02517bce0207c6f8e426",
+    "03": "8f508544835490ec635d02517bce0207c6f8e426",
+    "04": "8f508544835490ec635d02517bce0207c6f8e426",
+    "05": "8f508544835490ec635d02517bce0207c6f8e426",
+    "06": "8f508544835490ec635d02517bce0207c6f8e426",
+    "07": "8f508544835490ec635d02517bce0207c6f8e426",
+    "08": "8f508544835490ec635d02517bce0207c6f8e426",
+    "09": "8f508544835490ec635d02517bce0207c6f8e426",
+    "10": "8f508544835490ec635d02517bce0207c6f8e426"
+  },
+  "producer_heads_note": "Worktrees existem; nenhum produtor tinha commit além de origin/main no momento do exame. Diffs não commitados de 01/02 não foram incorporados. Este parecer não cobre SHA composto futuro.",
+  "served_identity": {
+    "url": "https://confenge.com.br/",
+    "http": 200,
+    "last_modified": "Fri, 11 Sep 2026 03:15:35 GMT",
+    "etag": "W/\"6aa37257-ab30\"",
+    "host_architecture": "confenge-nginx-node/v2",
+    "not_proof_of_git_sha": true
+  },
+  "suite_state": "READY_FOR_INTEGRATION",
+  "candidate_verdict": "NOT_APPROVED",
+  "candidate_verdict_reason": "Suíte entregue contra baseline. HARD_AT_RELEASE de produtores vazia para 15; 10 handoffs de 01–10 ausentes (MISSING_DEPENDENCY). Não há APPROVED, merge ou deploy. INB-16 reexecuta no SHA composto.",
+  "product_findings": 0,
+  "mutation_detection_ok": true,
+  "chrome": "unavailable"
+}

@@ -1,0 +1,19 @@
+{
+  "schema": "confenge.inbound-shared-changes/2.0",
+  "campaign_id": "15",
+  "changes": [
+    {
+      "change_id": "inb15-optional-npm-script",
+      "owner_campaign": "16",
+      "path": "package.json",
+      "base_blob_sha": "6449c565138aa0794c31765d75079fe2cdbc3226",
+      "operation": "upsert_key",
+      "key_or_anchor": "scripts.test:inb-20260911-15",
+      "expected_old": null,
+      "desired_new": "node tests/campaigns/inb_20260911/15/run.mjs --mutations --examined-kind baseline",
+      "rationale": "A suíte já roda por invocação direta. Script npm é enriquecimento opcional; package.json é fonte de 16. Sem este script a integração continua válida.",
+      "acceptance_test": "node tests/campaigns/inb_20260911/15/run.mjs --help-or-run exits 0 on a candidate without product FAIL; MISSING_DEPENDENCY does not force exit 1.",
+      "level": "OPTIONAL_ENRICHMENT"
+    }
+  ]
+}
