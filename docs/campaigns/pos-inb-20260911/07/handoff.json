@@ -1,0 +1,175 @@
+{
+  "campaign_id": "07",
+  "campaign_set": "POS-INB-20260911",
+  "prompt_version": "1.0.0",
+  "state": "READY_FOR_INTEGRATION",
+  "base_sha": "cb6facfaaf50aa8f1834aba43d0245e04cbea672",
+  "branch": "campaign/pos-inb-20260911/07-navegacao-comercial",
+  "title": "[POS-INB-20260911][07] Navegação e comunicação comercial sem pontos cegos",
+  "owned_paths": [
+    "servicos/index.html",
+    "conteudos/index.html",
+    "casos/index.html",
+    "ferramentas/index.html",
+    "scripts/site/hub_link_composition.py",
+    "scripts/site/hub_link_matrix.json",
+    "scripts/site/inbound_first_remediate.py",
+    "projetos-complementares-engenharia/",
+    "conteudos/como-contratar-projetos-complementares/",
+    "inspecao-diagnostico-edificacoes/",
+    "assistencia-tecnica-pericial-engenharia/",
+    "seguranca-trabalho-apoio-tecnico/",
+    "assets/projetos-complementares-engenharia/",
+    "tests/pos-inb-20260911/07/",
+    "docs/campaigns/pos-inb-20260911/07/"
+  ],
+  "changed_paths": [
+    "servicos/index.html",
+    "conteudos/index.html",
+    "casos/index.html",
+    "ferramentas/index.html",
+    "scripts/site/hub_link_composition.py",
+    "scripts/site/hub_link_matrix.json",
+    "scripts/site/test_hub_link_matrix.py",
+    "projetos-complementares-engenharia/index.html",
+    "conteudos/como-contratar-projetos-complementares/index.html",
+    "inspecao-diagnostico-edificacoes/index.html",
+    "assistencia-tecnica-pericial-engenharia/index.html",
+    "seguranca-trabalho-apoio-tecnico/index.html",
+    "tests/pos-inb-20260911/07/test_navigation.py",
+    "tests/pos-inb-20260911/07/test_counterexamples.py",
+    "tests/pos-inb-20260911/07/test_browser.mjs",
+    "docs/campaigns/pos-inb-20260911/07/handoff.json",
+    "docs/campaigns/pos-inb-20260911/07/journey-matrix.md",
+    "docs/campaigns/pos-inb-20260911/07/findings.json",
+    "docs/campaigns/pos-inb-20260911/07/shared-changes.json"
+  ],
+  "not_changed_owned": [
+    "scripts/site/inbound_first_remediate.py",
+    "assets/projetos-complementares-engenharia/"
+  ],
+  "requirements": [
+    {
+      "id": "A-eight-offers",
+      "state": "DONE",
+      "evidence": "tests/pos-inb-20260911/07/test_navigation.py::test_eight_offers_from_servicos_and_conteudos"
+    },
+    {
+      "id": "B-two-hops-core-not-optional",
+      "state": "DONE",
+      "evidence": "scripts/site/hub_link_composition.py treats_as_required; test_core_optional_cannot_silently_drop_present_route; journey_table hops<=2"
+    },
+    {
+      "id": "C-casos-current-demonstrative",
+      "state": "DONE",
+      "evidence": "casos/index.html and hub_link_matrix.json href /casos/demonstrativo-projeto-privado/; test_old_private_proof_url_fails_audit"
+    },
+    {
+      "id": "D-five-answers-distinctions",
+      "state": "DONE",
+      "evidence": "owned pages ids situacao-atendida, entrega, amostra-disponivel, limites-materiais, pedido-proposta; assistência/perícia/inspeção and SST≠medicina ocupacional in test_owned_pages_five_answers_and_distinctions"
+    },
+    {
+      "id": "E-avaliacao-hub-path",
+      "state": "DONE",
+      "evidence": "servicos/#servico-avaliacao; no new landing; test_avaliacao_stays_on_hub_path"
+    },
+    {
+      "id": "F-contact-no-forbidden-gates",
+      "state": "DONE",
+      "evidence": "proposta/WhatsApp/e-mail on hubs and owned pages; contrapova CNPJ required"
+    },
+    {
+      "id": "G-a11y-browser",
+      "state": "DONE",
+      "evidence": "test_browser.mjs 360/390/desktop two rounds BROWSER_OK; heading order and skip-link in test_navigation.py"
+    },
+    {
+      "id": "H-no-02-04-05-08-edits",
+      "state": "DONE",
+      "evidence": "docs/campaigns/pos-inb-20260911/07/findings.json excerpts + owners"
+    }
+  ],
+  "dependencies": [
+    {
+      "provider": "01",
+      "item": "triagem-tecnica capture runtime",
+      "state": "CONSUMED",
+      "note": "Hubs and owned pages link /triagem-tecnica/ hashes already in use; 07 does not own capture HTML."
+    },
+    {
+      "provider": "02",
+      "item": "revisão/orçamento/compatibilização dedicated pages and F02/F04 copy",
+      "state": "PENDING_OWNER",
+      "note": "07 links the published URLs. F02 and F04 remain on 02 pages."
+    },
+    {
+      "provider": "04",
+      "item": "prontidão destination map F03",
+      "state": "PENDING_OWNER"
+    },
+    {
+      "provider": "05",
+      "item": "partner kits F05 still point to /servicos/#servico-projeto",
+      "state": "PENDING_OWNER"
+    },
+    {
+      "provider": "08",
+      "item": "new infrastructure demonstrative",
+      "state": "OUT_OF_SCOPE",
+      "note": "07 did not link or placeholder an 08 category."
+    }
+  ],
+  "shared_changes": [],
+  "commands_results": [
+    {
+      "command": "python3 scripts/site/test_hub_link_matrix.py",
+      "result": "15 passed",
+      "log": "/tmp/grok-goal-1e9c53760043/implementer/hub-links.log"
+    },
+    {
+      "command": "python3 tests/pos-inb-20260911/07/test_navigation.py",
+      "result": "9 passed",
+      "log": "/tmp/grok-goal-1e9c53760043/implementer/07-unit.log"
+    },
+    {
+      "command": "python3 tests/pos-inb-20260911/07/test_counterexamples.py",
+      "result": "8 passed",
+      "log": "/tmp/grok-goal-1e9c53760043/implementer/07-counterexamples.log"
+    },
+    {
+      "command": "node tests/pos-inb-20260911/07/test_browser.mjs",
+      "result": "BROWSER_OK two rounds 360/390/desktop",
+      "log": "/tmp/grok-goal-1e9c53760043/implementer/07-browser.log"
+    },
+    {
+      "command": "node tests/inb-20260911/12/test_page_contract_projetos_complementares.mjs",
+      "result": "165/165 ok"
+    },
+    {
+      "command": "node tests/commercial/test_inb14_pericias_sst.mjs",
+      "result": "114 passed"
+    },
+    {
+      "command": "node --test tests/intake/test_inspecao_diagnostico.mjs",
+      "result": "4 passed"
+    }
+  ],
+  "unresolved": [
+    "F02 orçamento page still says the canonical demonstrative is unpublished (owner 02).",
+    "F03 prontidão map still resolves only orçamento (owner 04).",
+    "F04 revisão public extract still contains SELECT / resolved_in_R01 / founder approval (owner 02; locked by test_inb05_revisao_projetos.mjs).",
+    "F05 partner kits still send some purchases to /servicos/#servico-projeto (owner 05).",
+    "Global header CTA remains display:none below 900px; in-page CTAs added so 07 does not take styles.css."
+  ],
+  "rollback": "Revert this branch/PR. Hub HTML and matrix return to OPTIONAL core routes and the retired casos/prova-tecnica-obra-privada matrix href. No production mutation was made by 07.",
+  "pr669": {
+    "state": "MERGED",
+    "merge_commit": "cb6facfaaf50aa8f1834aba43d0245e04cbea672"
+  },
+  "pr670": {
+    "state": "OPEN_UNMERGED",
+    "head": "e45c016f5742ce3a5420371798b8979dfacdb5e0",
+    "note": "07 did not write on that branch or reapply INB-15 delta."
+  }
+}
