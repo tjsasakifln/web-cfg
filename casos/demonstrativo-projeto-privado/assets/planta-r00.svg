@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 419 384" role="img" aria-labelledby="plan-R00-title plan-R00-desc">
+<title id="plan-R00-title">Planta do recorte · estado original · R00</title>
+<desc id="plan-R00-desc">Banheiro 2,40 m por 1,80 m. Porta D-01 na parede norte, janela WN-01 na parede leste, poço hidrossanitário HS-01 na parede oeste, viga B-01 na parede leste. R00: verga WN-01 em 2,30 m sobreposta à viga B-01. Exemplo demonstrativo, revisão R00.</desc>
+<rect x="48.0" y="66.0" width="324.0" height="252.0" fill="#e2e8f0" stroke="#0f172a" stroke-width="2"/>
+<rect x="66.0" y="66.0" width="288.0" height="216.0" fill="#fff" stroke="#0f172a" stroke-width="1.5"/>
+<!-- door opening north -->
+<rect x="126.0" y="48.0" width="96.0" height="18.0" fill="#fff" stroke="#0f172a"/>
+<text x="174.0" y="42.0" text-anchor="middle" font-size="11" fill="#0f172a">D-01</text>
+<!-- window east -->
+<rect x="354.0" y="126.0" width="18.0" height="96.0" fill="#bae6fd" stroke="#0369a1"/>
+<text x="376.0" y="174.0" font-size="11" fill="#0c4a6e">WN-01</text>
+<!-- beam along east interior -->
+<rect x="339.6" y="66.0" width="14.4" height="216.0" fill="none" stroke="#b45309" stroke-dasharray="4 3"/>
+<text x="332.4" y="174.0" font-size="11" fill="#b45309" transform="rotate(-90 332.4 174.0)">B-01</text>
+<!-- shaft west exterior -->
+<rect x="18.0" y="150.0" width="48.0" height="48.0" fill="#fde68a" stroke="#92400e"/>
+<text x="42.0" y="178.0" text-anchor="middle" font-size="11" fill="#78350f">HS-01</text>
+<text x="210.0" y="174.0" text-anchor="middle" font-size="12" fill="#334155">RM-01</text>
+<text x="210.0" y="328.0" text-anchor="middle" font-size="11" fill="#0f172a">2,40 m</text>
+<text x="40.0" y="174.0" text-anchor="middle" font-size="11" fill="#0f172a" transform="rotate(-90 40.0 174.0)">1,80 m</text>
+<text x="48" y="372" font-size="11" fill="#334155">R00: verga WN-01 em 2,30 m sobreposta à viga B-01. Exemplo demonstrativo.</text>
+</svg>

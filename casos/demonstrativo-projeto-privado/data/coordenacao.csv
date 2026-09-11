@@ -1,0 +1,4 @@
+# exemplo demonstrativo; revisao=R01
+id;tipo;estado;local;evidencia;encaminhamento;elementos;falha_comprovada;revisao
+CF-GEO-01;geometric;resolved_in_R01;Parede leste W-02, interface WN-01 × B-01;No estado original R00 a verga da janela está em 2,30 m e o fundo da viga B-01 em 2,20 m, com sobreposição de 0,10 m no eixo Z.;No recorte R01 a verga desce para 2,10 m, com folga de 0,10 m até o fundo da viga. Encaminhamento: autor do recorte arquitetônico demonstrativo.;WN-01 B-01 W-02;true;R01
+CF-INFO-01;missing_information;information_requested;Poço hidrossanitário HS-01 na parede oeste W-04;O recorte declara o contorno externo 0,40 m × 0,40 m e deixa em branco vão livre interno e diâmetros de tubulação.;Pedir ao projetista hidrossanitário de origem as dimensões internas e os diâmetros. Enquanto esses dados não chegam, o item permanece pedido de informação, não falha comprovada.;HS-01 W-04;false;R01

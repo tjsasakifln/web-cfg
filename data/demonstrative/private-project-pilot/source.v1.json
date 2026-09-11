@@ -1,0 +1,206 @@
+{
+  "schema": "confenge.demonstrative-sample-source/1.0",
+  "id": "demo-private-project-pilot-2026-09",
+  "origin": "demonstrative",
+  "revision": "R01",
+  "title": "Recorte de banheiro residencial",
+  "excerpt_kind": "wet_area_bathroom",
+  "date_modified": "2026-09-11",
+  "label_pt_br": "exemplo demonstrativo",
+  "client_name": null,
+  "address": null,
+  "art_number": null,
+  "signature": null,
+  "units": {
+    "length": "m",
+    "area": "m2",
+    "volume": "m3",
+    "count": "un",
+    "currency": "BRL"
+  },
+  "takeoff_criteria": {
+    "opening_deduction_min_m2": "0.50",
+    "opening_deduction_rule_pt_br": "Aberturas com área igual ou maior que 0,50 m² são descontadas integralmente das quantidades de revestimento de parede. Aberturas menores não são descontadas.",
+    "waterproofing_upstand_m": "0.30",
+    "screed_thickness_m": "0.03",
+    "quantity_basis_revision": "R01"
+  },
+  "room": {
+    "id": "RM-01",
+    "interior_length_m": "2.40",
+    "interior_width_m": "1.80",
+    "ceiling_height_m": "2.60"
+  },
+  "wall_thickness_m": "0.15",
+  "elements": [
+    {
+      "id": "W-01",
+      "type": "wall",
+      "label_pt_br": "Parede sul",
+      "axis": "south",
+      "length_m": "2.40",
+      "height_m": "2.60",
+      "thickness_m": "0.15",
+      "sheet_ref": "PR-ARQ-R01"
+    },
+    {
+      "id": "W-02",
+      "type": "wall",
+      "label_pt_br": "Parede leste",
+      "axis": "east",
+      "length_m": "1.80",
+      "height_m": "2.60",
+      "thickness_m": "0.15",
+      "sheet_ref": "PR-ARQ-R01"
+    },
+    {
+      "id": "W-03",
+      "type": "wall",
+      "label_pt_br": "Parede norte",
+      "axis": "north",
+      "length_m": "2.40",
+      "height_m": "2.60",
+      "thickness_m": "0.15",
+      "sheet_ref": "PR-ARQ-R01"
+    },
+    {
+      "id": "W-04",
+      "type": "wall",
+      "label_pt_br": "Parede oeste",
+      "axis": "west",
+      "length_m": "1.80",
+      "height_m": "2.60",
+      "thickness_m": "0.15",
+      "sheet_ref": "PR-ARQ-R01"
+    },
+    {
+      "id": "SL-01",
+      "type": "floor",
+      "label_pt_br": "Piso do recorte",
+      "length_m": "2.40",
+      "width_m": "1.80",
+      "sheet_ref": "PR-ARQ-R01"
+    },
+    {
+      "id": "CL-01",
+      "type": "ceiling",
+      "label_pt_br": "Forro do recorte",
+      "length_m": "2.40",
+      "width_m": "1.80",
+      "sheet_ref": "PR-ARQ-R01"
+    },
+    {
+      "id": "D-01",
+      "type": "door",
+      "label_pt_br": "Porta de giro",
+      "host_wall_id": "W-03",
+      "width_m": "0.80",
+      "height_m": "2.10",
+      "offset_m": "0.50",
+      "sheet_ref": "PR-ARQ-R01"
+    },
+    {
+      "id": "WN-01",
+      "type": "window",
+      "label_pt_br": "Janela de banheiro",
+      "host_wall_id": "W-02",
+      "width_m": "0.80",
+      "offset_m": "0.50",
+      "sill_m": "1.40",
+      "height_by_revision": {
+        "R00": "0.90",
+        "R01": "0.70"
+      },
+      "sheet_ref_by_revision": {
+        "R00": "PR-ARQ-R00",
+        "R01": "PR-ARQ-R01"
+      }
+    },
+    {
+      "id": "B-01",
+      "type": "beam",
+      "label_pt_br": "Viga na parede leste",
+      "host_wall_id": "W-02",
+      "length_m": "1.80",
+      "depth_m": "0.40",
+      "soffit_m": "2.20",
+      "sheet_ref": "PR-EST-R00"
+    },
+    {
+      "id": "HS-01",
+      "type": "shaft",
+      "label_pt_br": "Poço hidrossanitário",
+      "host_wall_id": "W-04",
+      "width_m": "0.40",
+      "depth_m": "0.40",
+      "offset_m": "0.70",
+      "internal_clear_width_m": null,
+      "internal_clear_depth_m": null,
+      "pipe_diameters_mm": null,
+      "sheet_ref": "PR-HID-R00"
+    }
+  ],
+  "states": {
+    "R00": {
+      "id": "R00",
+      "label_pt_br": "estado original",
+      "note_pt_br": "Estado de partida do recorte, com inconsistência geométrica proposital entre janela e viga e com informação hidrossanitária em branco."
+    },
+    "R01": {
+      "id": "R01",
+      "label_pt_br": "versão demonstrativa corrigida",
+      "note_pt_br": "Mesmo recorte, com a verga da janela rebaixada. O poço hidrossanitário continua sem vão livre interno declarado: isso permanece pedido de informação, não falha comprovada."
+    }
+  },
+  "prices": {
+    "class": "hypothetical",
+    "disclaimer_pt_br": "Valores hipotéticos para conferência aritmética. Não são SINAPI, cotação vigente, tabela oficial nem preço da CONFENGE.",
+    "source_verified": false,
+    "items": {
+      "Q-PISO-01": "85.00",
+      "Q-PAR-01": "92.00",
+      "Q-IMP-01": "48.00",
+      "Q-CTR-01": "420.00",
+      "Q-PRT-01": "890.00",
+      "Q-JAN-01": "640.00",
+      "Q-ROD-01": "22.00"
+    }
+  },
+  "service_rows": [
+    {
+      "id": "ORC-PISO-01",
+      "quantity_id": "Q-PISO-01",
+      "service_pt_br": "Revestimento cerâmico de piso, inclusive argamassa colante"
+    },
+    {
+      "id": "ORC-PAR-01",
+      "quantity_id": "Q-PAR-01",
+      "service_pt_br": "Revestimento cerâmico de parede, inclusive argamassa colante"
+    },
+    {
+      "id": "ORC-IMP-01",
+      "quantity_id": "Q-IMP-01",
+      "service_pt_br": "Impermeabilização de piso e rodapé molhado"
+    },
+    {
+      "id": "ORC-CTR-01",
+      "quantity_id": "Q-CTR-01",
+      "service_pt_br": "Contrpiso de regularização"
+    },
+    {
+      "id": "ORC-PRT-01",
+      "quantity_id": "Q-PRT-01",
+      "service_pt_br": "Porta de madeira, folha e batente, sem ferragem especial"
+    },
+    {
+      "id": "ORC-JAN-01",
+      "quantity_id": "Q-JAN-01",
+      "service_pt_br": "Janela de alumínio do recorte, sem vidro especial"
+    },
+    {
+      "id": "ORC-ROD-01",
+      "quantity_id": "Q-ROD-01",
+      "service_pt_br": "Rodapé cerâmico"
+    }
+  ]
+}
