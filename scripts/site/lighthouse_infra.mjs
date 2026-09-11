@@ -60,18 +60,115 @@ export const MEASUREMENT_TIMEOUT_MS = Number(process.env.LH_MEASUREMENT_TIMEOUT_
 /** Grace between SIGTERM and SIGKILL for a child that ignores the first. */
 export const KILL_GRACE_MS = 5000;
 
-/** Only these phases can be re-attempted: they are our own browser coming up,
- * before the artifact under test has been touched. */
+/** Phases that precede any contact with the artifact: our own browser coming
+ * up. A failure here is always the instrument. */
 const RETRYABLE_PHASES = new Set(["launch", "cdp"]);
 
 /**
+ * Lighthouse error codes that are EVIDENCE ABOUT THE ARTIFACT. A page that
+ * never painted, hung, was not HTML, crashed its renderer, or could not be
+ * fetched is telling us something about the release under test. None of these
+ * is ever an innocent instrument failure, no matter which CDP command surfaced
+ * it, and none is ever re-attempted for a better sample.
+ * (Codes taken from node_modules/lighthouse/core/lib/lh-error.js.)
+ */
+const ARTIFACT_EVIDENCE_CODES = new Set([
+  "NO_FCP", "NO_LCP", "NO_LCP_ALL_FRAMES", "NO_DCL", "NO_FMP", "NO_NAVSTART",
+  "NO_DOCUMENT_REQUEST", "FAILED_DOCUMENT_REQUEST", "ERRORED_DOCUMENT_REQUEST",
+  "INSECURE_DOCUMENT_REQUEST", "CHROME_INTERSTITIAL_ERROR", "PAGE_HUNG",
+  "NOT_HTML", "DNS_FAILURE", "INVALID_URL", "TARGET_CRASHED",
+  "NO_SPEEDLINE_FRAMES", "SPEEDINDEX_OF_ZERO", "NO_SCREENSHOTS",
+  "INVALID_SPEEDLINE", "NO_RESOURCE_REQUEST", "NO_TRACING_STARTED",
+  "NO_TTI_CPU_IDLE_PERIOD", "NO_TTI_NETWORK_IDLE_PERIOD", "PROTOCOL_TIMEOUT",
+]);
+
+/**
+ * The debugging SESSION itself is gone. This is the failure that ended
+ * netcup-release run 34532136335: Lighthouse's TargetManager issued
+ * Target.getTargetInfo against a session Chrome had already discarded. It says
+ * nothing about the page — the browser we own stopped being usable.
+ *
+ * Deliberately narrow. It is matched only together with a CDP protocol method
+ * and only when no measurement exists, so it cannot become a general licence to
+ * repeat the navigation phase.
+ */
+const SESSION_LOST = /Session with given id not found|Target closed|Session closed|Connection closed|WebSocket is not open|Browser closed/i;
+
+/**
+ * Classifies a measurement failure by ORIGIN, from metadata the instrument
+ * actually provides — not by matching words in a message.
+ *
+ * Returns the fields the outcome carries, so the decision can be audited after
+ * the fact and so `isRetryableOutcome` never has to re-derive it.
+ */
+export function classifyFailure({ error, lhrWritten = false, phase = "launch" } = {}) {
+  const code = error?.code || null;
+  const protocolMethod = error?.protocolMethod || null;
+  const protocolError = error?.protocolError || null;
+  const text = String(error?.message || protocolError || error || "");
+
+  // Once a measurement exists nothing may re-navigate, whatever failed after.
+  if (lhrWritten) {
+    return {
+      outcome: OUTCOME.INVALID_OR_INCOMPLETE,
+      instrument_origin: false,
+      protocol_method: protocolMethod,
+      lighthouse_code: code,
+    };
+  }
+
+  // Evidence about the artifact wins over every other signal.
+  if (code && ARTIFACT_EVIDENCE_CODES.has(code)) {
+    return {
+      outcome: OUTCOME.INVALID_OR_INCOMPLETE,
+      instrument_origin: false,
+      protocol_method: protocolMethod,
+      lighthouse_code: code,
+    };
+  }
+
+  // Bringing our own browser up: always the instrument.
+  if (RETRYABLE_PHASES.has(String(phase))) {
+    return {
+      outcome: OUTCOME.INFRA_ERROR,
+      instrument_origin: true,
+      protocol_method: protocolMethod,
+      lighthouse_code: code,
+    };
+  }
+
+  // During collection, only a proven loss of the local debugging session is the
+  // instrument. It must be a CDP command failure AND say the session is gone.
+  if (protocolMethod && SESSION_LOST.test(text)) {
+    return {
+      outcome: OUTCOME.INFRA_ERROR,
+      instrument_origin: true,
+      protocol_method: protocolMethod,
+      lighthouse_code: code,
+    };
+  }
+
+  // Anything else during collection is inconclusive evidence, never innocent.
+  return {
+    outcome: OUTCOME.INVALID_OR_INCOMPLETE,
+    instrument_origin: false,
+    protocol_method: protocolMethod,
+    lighthouse_code: code,
+  };
+}
+
+/**
  * True when an outcome may be attempted again. Requires an explicit
- * INFRA_ERROR, a phase that precedes any contact with the artifact, and the
- * absence of a measurement. A missing or malformed outcome is never eligible.
+ * INFRA_ERROR, the absence of a measurement, and a failure the classifier
+ * attributed to our own instrument. A missing or malformed outcome, and any
+ * outcome with no recorded origin outside the bring-up phases, is never
+ * eligible — an unexplained death is not evidence that a retry is safe.
  */
 export function isRetryableOutcome(outcome) {
   if (!outcome || outcome.outcome !== OUTCOME.INFRA_ERROR) return false;
   if (outcome.lhr_written) return false;
+  if (outcome.instrument_origin === true) return true;
+  if (outcome.instrument_origin === false) return false;
   return RETRYABLE_PHASES.has(String(outcome.phase || ""));
 }
 
@@ -97,6 +194,7 @@ export function runMeasurement({
 }) {
   return new Promise((resolve) => {
     rmSync(outcomePath, { force: true });
+    rmSync(`${outcomePath}.progress`, { force: true });
     const child = spawnFn(nodeExecutable, [childPath, specPath, outcomePath], {
       stdio: ["ignore", "inherit", "inherit"],
       env,
@@ -125,27 +223,44 @@ export function runMeasurement({
       if (killTimer) clearTimeout(killTimer);
       resolve(readOutcome({ outcomePath, lhrPath, fallback }));
     };
+    const reachedPhase = () => {
+      try {
+        return readFileSync(`${outcomePath}.progress`, "utf8").trim() || null;
+      } catch {
+        return null;
+      }
+    };
 
     child.on("error", (error) => {
       finish({
         outcome: OUTCOME.INFRA_ERROR,
         phase: "launch",
+        instrument_origin: true,
         error: `could not start the measurement subprocess: ${String(error?.message || error)}`,
         origin: "supervisor",
       });
     });
 
     child.on("close", (code, signal) => {
+      // A child that recorded no outcome left no diagnosis. How far it got is
+      // read from its own progress record — never assumed. Inventing a
+      // pre-initialisation phase here would manufacture a retry for a death we
+      // cannot explain, which is precisely what must not happen.
+      const progress = reachedPhase();
+      const beforeBrowser = progress === null || progress === "launch";
       finish({
-        // A child killed at the deadline produced no verdict. Whether that is
-        // an unusable instrument or an unusable page is not knowable from
-        // here, so it is inconclusive evidence, never innocent infrastructure
-        // and never a pass.
-        outcome: timedOut ? OUTCOME.INVALID_OR_INCOMPLETE : OUTCOME.INFRA_ERROR,
-        phase: timedOut ? "navigate" : "launch",
+        outcome: timedOut
+          ? OUTCOME.INVALID_OR_INCOMPLETE
+          : beforeBrowser
+            ? OUTCOME.INFRA_ERROR
+            : OUTCOME.INVALID_OR_INCOMPLETE,
+        phase: progress || "launch",
+        // Only a death before the browser was usable is attributed to the
+        // instrument; a death during collection is inconclusive.
+        instrument_origin: !timedOut && beforeBrowser,
         error: timedOut
-          ? `measurement exceeded ${timeoutMs}ms and was terminated`
-          : `measurement subprocess exited without recording an outcome (code=${code}, signal=${signal})`,
+          ? `measurement exceeded ${timeoutMs}ms and was terminated (reached ${progress || "launch"})`
+          : `measurement subprocess exited without recording an outcome (code=${code}, signal=${signal}, reached ${progress || "launch"})`,
         origin: "supervisor",
         timed_out: timedOut,
       });

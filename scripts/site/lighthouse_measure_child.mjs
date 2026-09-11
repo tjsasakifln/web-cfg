@@ -33,6 +33,7 @@ import { join } from "path";
 import { launch as launchChrome } from "chrome-launcher";
 import lighthouse from "lighthouse";
 import { headerByteWeight, lcpNetworkAllowanceMs, measureContentByteWeight } from "./lighthouse_payload.mjs";
+import { classifyFailure } from "./lighthouse_infra.mjs";
 
 const specPath = process.argv[2];
 const outcomePath = process.argv[3];
@@ -55,6 +56,22 @@ for (const signal of ["SIGTERM", "SIGINT"]) {
     process.exit(1);
   });
 }
+
+const progressPath = `${outcomePath}.progress`;
+/**
+ * Records how far this process got. When it dies without recording an outcome,
+ * this is the only thing that distinguishes "never started the browser" from
+ * "died in the middle of a measurement" — and the supervisor must not invent
+ * the difference in order to justify another attempt.
+ */
+function markProgress(value) {
+  try {
+    writeFileSync(progressPath, value);
+  } catch {
+    /* progress is diagnostic; never fail the attempt over it */
+  }
+}
+markProgress("launch");
 
 /** The outcome file is written once. The first writer wins, so a late failure
  * can never downgrade an outcome that was already established. */
@@ -107,8 +124,12 @@ function describe(error) {
 let phase = "launch";
 let lhrWritten = false;
 process.on("unhandledRejection", (reason) => {
+  // The originating incident arrives here: a rejection raised from inside
+  // Lighthouse's TargetManager, during the measurement call, outside the
+  // awaited chain. Its class is decided by where the failure came from, not by
+  // the phase we happened to be in.
   settle({
-    outcome: lhrWritten ? "INVALID_OR_INCOMPLETE" : "INFRA_ERROR",
+    ...classifyFailure({ error: reason, lhrWritten, phase }),
     phase,
     error: describe(reason),
     origin: "async_rejection",
@@ -119,7 +140,7 @@ process.on("unhandledRejection", (reason) => {
 });
 process.on("uncaughtException", (error) => {
   settle({
-    outcome: lhrWritten ? "INVALID_OR_INCOMPLETE" : "INFRA_ERROR",
+    ...classifyFailure({ error, lhrWritten, phase }),
     phase,
     error: describe(error),
     origin: "uncaught_exception",
@@ -229,6 +250,7 @@ try {
   );
 
   phase = "navigate";
+  markProgress("navigate");
   const runnerResult = await lighthouse(spec.url, {
     port: launched.chrome.port,
     hostname: "127.0.0.1",
@@ -253,6 +275,7 @@ try {
   writeFileSync(spec.out_json, JSON.stringify(runnerResult.lhr, null, 2));
   lhrWritten = true;
   phase = "payload";
+  markProgress("payload");
 
   const cats = runnerResult.lhr.categories || {};
   const audits = runnerResult.lhr.audits || {};
@@ -281,6 +304,7 @@ try {
   }
 
   phase = "postprocess";
+  markProgress("postprocess");
   const totalByteWeight = audits["total-byte-weight"]?.numericValue;
   const network = lcpNetworkAllowanceMs({ audits, runtimeMode: spec.runtime_mode });
   const row = {
@@ -318,12 +342,8 @@ try {
   settle({ outcome: "MEASURED", phase: "complete", row, lhr_written: true, lhr_path: spec.out_json });
   console.log(JSON.stringify(row));
 } catch (error) {
-  // A failure while we were still bringing our own browser up is the only
-  // thing eligible for another attempt; anything from `navigate` onwards is
-  // evidence about the artifact under test.
-  const eligible = phase === "launch" || phase === "cdp";
   settle({
-    outcome: eligible && !lhrWritten ? "INFRA_ERROR" : "INVALID_OR_INCOMPLETE",
+    ...classifyFailure({ error, lhrWritten, phase }),
     phase,
     error: describe(error),
     origin: "thrown",

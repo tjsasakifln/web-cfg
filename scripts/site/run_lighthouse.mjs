@@ -110,6 +110,21 @@ const MIME = {
 
 const baseArg = cliArgs.find((arg) => !arg.startsWith("--"));
 const expectedSha = option("expected-sha");
+/**
+ * Declares that this run measures the PUBLIC EDGE, so the observed server
+ * latency is granted as an LCP allowance.
+ *
+ * Until now that semantics was implied by the presence of a runtime route,
+ * which meant whether an opportunity happened to be published silently decided
+ * how the home was judged: with the family withdrawn, the same public page
+ * would have been measured with lab semantics and charged for real network
+ * latency it cannot control. The network semantics are now stated, not
+ * inferred.
+ */
+const publicEdge = cliArgs.includes("--public-edge");
+if (publicEdge && !baseArg) {
+  throw new Error("--public-edge requires an explicit public base URL; it must never describe the local lab server");
+}
 if (runtimeRoutes.length && !baseArg) {
   throw new Error("--runtime-route requires an explicit staged/production base URL");
 }
@@ -393,7 +408,7 @@ try {
             base: BASE,
             form_factor: coverage.lighthouse.form_factor,
             viewport: coverage.lighthouse.viewport,
-            runtime_mode: runtimeContracts.length > 0,
+            runtime_mode: runtimeContracts.length > 0 || publicEdge,
             seo_exempt: SEO_EXEMPT_PAGES.has(path),
             chrome_path: process.env.CHROME_PATH,
           },
@@ -463,6 +478,7 @@ const summary = {
     measured_pages: RUN_PAGES,
     critical_money_pages: [...CRITICAL_MONEY_PATHS],
     repeated_runs: REPEATED_RUNS,
+    public_edge: publicEdge,
     additional_pages: coverage.lighthouse.additional_pages,
     image_gate_pages: [...IMAGE_GATE_PAGES],
     seo_exempt_pages: [...SEO_EXEMPT_PAGES],
