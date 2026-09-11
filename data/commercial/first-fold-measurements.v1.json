@@ -45,7 +45,7 @@
     "entregas/index.html": "afbe5e3eba514ed81aec297b567a5b69bfe9a8bf21049fd0d05022825b41e10d",
     "entregas/styles.css": "7f2817c86d856247fe607b2961856073ce0ae163dcc51baa9f743d9b27255774",
     "index.html": "50decdd06e3de09da085f498f2f90c8b97bee5c17fd413fe5ee42deb7028ebab",
-    "medicoes-glosas-obras-publicas/index.html": "d186b31d4ee7ad498058998d3bf5c6a5dfbb370cee6fea0389feae52361b895c",
+    "medicoes-glosas-obras-publicas/index.html": "7659009dfc326139fe69d4cc12c30a3395fc1f96264663e1fc435d09843ffbc8",
     "problemas-que-resolvemos/index.html": "fbd929bd17c6890969ee4b0f5c3647dca7ee81bf75b3a8ae4e124c38aef0b280",
     "reequilibrio-obras-publicas/index.html": "11d0cf94f61308da770640898df3019f4cbdd0b3dcd42f9df8ad73a8aa79d6ca",
     "script.js": "9aec881cbde431c45b521e9342bc9a3119e65022a9de389060ebed68c21ae5d5",
@@ -1973,7 +1973,7 @@
     },
     {
       "route": "/medicoes-glosas-obras-publicas/",
-      "html_sha256": "d186b31d4ee7ad498058998d3bf5c6a5dfbb370cee6fea0389feae52361b895c",
+      "html_sha256": "7659009dfc326139fe69d4cc12c30a3395fc1f96264663e1fc435d09843ffbc8",
       "measured_on": "2026-09-10",
       "viewports": {
         "1366x768": {

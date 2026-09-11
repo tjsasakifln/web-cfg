@@ -140,10 +140,10 @@
         128,
         291
       ],
-      "expected_sha256": "d186b31d4ee7ad498058998d3bf5c6a5dfbb370cee6fea0389feae52361b895c",
-      "expected_sha256_note": "Linha de base de bytes efetivamente auditada em 2026-09-09 e reconciliada com data/bofu-dominance/frozen-specs/hashes.json. O hash preserva integridade e procedência; não cria espera nem veto editorial.",
+      "expected_sha256": "7659009dfc326139fe69d4cc12c30a3395fc1f96264663e1fc435d09843ffbc8",
+      "expected_sha256_note": "Linha de base de bytes efetivamente auditada em 2026-09-11 e reconciliada com data/bofu-dominance/frozen-specs/hashes.json. O hash preserva integridade e procedência; não cria espera nem veto editorial.",
       "expected_sha256_recaptured_at": "2026-09-11",
-      "expected_sha256_recapture_reason": "INB-20260911/08: HTML do pilar ganhou seções abaixo da dobra; recaptura alinhada a hashes.json."
+      "expected_sha256_recapture_reason": "INB-20260911/16: copy-lint substituiu o travessão por hífen ASCII no pilar de medições e normalizou o espaço residual; recaptura alinhada a hashes.json. Preço, prazo, checkout, robots e critério de medição inalterados."
     }
   ],
   "primary_cta_contract": {
