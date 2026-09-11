@@ -87,6 +87,16 @@
       "bridge_title": "Quando o problema é a carteira, não um contrato isolado",
       "bridge_body": "Se vários contratos públicos perdem margem por rotina frágil de gestão, o recorte deixa de ser um pleito pontual e passa a ser diagnóstico de operação B2G.",
       "cta_label": "Ver Diagnóstico B2G 360°"
+    },
+    {
+      "id": "quantitativos-orcamento-privado",
+      "tokens": ["levantamento-quantitativo", "refazer-orcamento", "documentos-para-levantamento"],
+      "service_path": "/quantitativos-orcamento-obras/",
+      "service_slug": "quantitativos-orcamento-obras",
+      "tools": [],
+      "bridge_title": "Quando o quantitativo ou o orçamento precisa virar planilha conferível",
+      "bridge_body": "Projeto parcial, planilha antiga ou critério de medição incerto deixa de ser só dúvida de desenho quando a decisão de comprar, comparar propostas ou executar depende de quantidade e memória.",
+      "cta_label": "Ver quantitativos e orçamento de obra"
     }
   ],
   "path_overrides": {
@@ -101,6 +111,7 @@
     "/conteudos/comprovacao-exequibilidade-proposta-obra/": "edital-proposta",
     "/conteudos/curva-abc-reequilibrio-contrato/": "reequilibrio",
     "/conteudos/data-base-orcamento-reajuste-obra-publica/": "orcamento-bdi",
+    "/conteudos/documentos-para-levantamento-quantitativos/": "quantitativos-orcamento-privado",
     "/conteudos/demolicao-nao-prevista-obra-publica/": "aditivos",
     "/conteudos/empreitada-preco-global-preco-unitario/": "edital-proposta",
     "/conteudos/fiscal-nao-assina-medicao-obra-publica/": "medicoes-pagamentos",
@@ -114,6 +125,7 @@
     "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/": "atrasos-prorrogacao",
     "/conteudos/prorrogacao-prazo-obra-publica-documentos/": "atrasos-prorrogacao",
     "/conteudos/resposta-notificacao-atraso-obra-publica/": "defesa-sancoes",
+    "/conteudos/revisar-ou-refazer-orcamento-obra/": "quantitativos-orcamento-privado",
     "/conteudos/sinapi-desonerado-nao-desonerado/": "orcamento-bdi",
     "/conteudos/sinapi-ou-sicro-obra-publica/": "orcamento-bdi"
   }
