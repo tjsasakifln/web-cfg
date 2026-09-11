@@ -213,9 +213,12 @@ class MapValidationReport:
     findings: list[MapFinding] = field(default_factory=list)
     stats: dict[str, Any] = field(default_factory=dict)
 
-    def add(self, path: str, reason: str, detail: str) -> None:
-        self.findings.append(MapFinding(path=path, reason=reason, detail=detail))
-        self.ok = False
+    def add(self, path: str, reason: str, detail: str, severity: str = "error") -> None:
+        self.findings.append(
+            MapFinding(path=path, reason=reason, detail=detail, severity=severity)
+        )
+        if severity == "error":
+            self.ok = False
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -1885,6 +1888,13 @@ def check_report(root: Path = ROOT) -> MapValidationReport:
         report.add(str(report_path.relative_to(root)), "generated_report_missing", "run --write")
     elif report_path.read_text(encoding="utf-8") != expected:
         report.add(str(report_path.relative_to(root)), "generated_report_drift", "run --write")
+    from scripts.bofu_dominance.core.purchase_route_map import validate_purchase_route_map
+
+    purchase = validate_purchase_route_map(root)
+    report.findings.extend(purchase.findings)
+    if any(item.severity == "error" for item in purchase.findings):
+        report.ok = False
+    report.stats["purchase_layer"] = purchase.stats
     return report
 
 
