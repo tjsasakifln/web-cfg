@@ -25,6 +25,7 @@ const FIRST_TOUCH_KEYS = Object.freeze([
   "utm_term",
 ]);
 const UTM_KEYS = Object.freeze(FIRST_TOUCH_KEYS.filter((key) => key.startsWith("utm_")));
+const ORIGIN_KEYS = Object.freeze(["origem", "origin_url", "landing_url", "landing_page"]);
 
 function canonicalizePath(value) {
   let s = String(value || "").trim();
@@ -230,12 +231,18 @@ function mergeAttributionSession(storedPrior, incoming, opts = {}) {
     ? incoming
     : {};
   const internal = opts.internalReferrer === true || isInternalReferrer(opts.referrer);
+  const hasOrigin = ORIGIN_KEYS.some((key) => prior[key]);
   const out = { ...prior };
   for (const [key, value] of Object.entries(next)) {
     if (value == null || value === "") continue;
+    if (ORIGIN_KEYS.includes(key) && hasOrigin) continue;
     if (FIRST_TOUCH_KEYS.includes(key) && prior[key]) continue;
     if (UTM_KEYS.includes(key) && internal) continue;
     out[key] = value;
+  }
+  if (!out.origem) {
+    const fallback = out.origin_url || out.landing_url || out.landing_page || "";
+    if (fallback) out.origem = fallback;
   }
   return out;
 }
@@ -247,6 +254,7 @@ module.exports = {
   CHROME_PREFIXES,
   FIRST_TOUCH_KEYS,
   UTM_KEYS,
+  ORIGIN_KEYS,
   canonicalizePath,
   canonicalizeDestination,
   classifyTransition,

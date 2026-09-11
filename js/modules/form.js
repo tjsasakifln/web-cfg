@@ -691,13 +691,10 @@
 
     // Persist body-level pSEO markers when on a leaf page
     if (isPseoPage && pseoRoot) {
-      const bodyAttr = {
+      writeStoredPseo(mergeFirstTouch(storedAttr, {
         pseo_page_id: pseoRoot.getAttribute('data-pseo-page-id') || '',
         page_type: pseoRoot.getAttribute('data-pseo-page-type') || '',
-      };
-      if (!storedAttr.origem) bodyAttr.origem = pagePath;
-      if (!storedAttr.origin_url) bodyAttr.origin_url = pagePath;
-      writeStoredPseo({ ...storedAttr, ...bodyAttr });
+      }, { internalReferrer: true }));
     }
 
     if (hasPseoContext) {
@@ -722,12 +719,17 @@
           if (!allowed[eventName]) return;
           // Persist CTA click context before navigation
           const ctaPos = el.getAttribute('data-cta-position') || 'inline';
-          writeStoredPseo({
-            ...readStoredPseo(),
-            ...pseoBase,
+          writeStoredPseo(mergeFirstTouch(readStoredPseo(), {
+            page_type: pseoBase.page_type,
+            pseo_page_id: pseoBase.pseo_page_id,
+            archetype: pseoBase.archetype,
+            segment: pseoBase.segment,
+            region: pseoBase.region,
+            intent: pseoBase.intent,
+            source_run_id: pseoBase.source_run_id,
+            dataset_hash: pseoBase.dataset_hash,
             cta_position: ctaPos,
-            origem: pseoBase.pseo_page_id ? pagePath : (storedAttr.origem || pagePath),
-          });
+          }, { internalReferrer: true }));
           track(eventName, {
             page_path: pseoBase.page_path,
             content_cluster: 'pseo',

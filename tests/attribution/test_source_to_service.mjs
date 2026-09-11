@@ -1073,6 +1073,13 @@ console.log("PASS whatsapp_without_message_is_contact_intent_not_receipt");
     fail("server_merge_origin_lost", merged);
   }
   if (merged.jornada !== "pericia") fail("server_merge_need_frozen", merged);
+  const fromLanding = sourceToService.mergeAttributionSession(
+    { landing_url: "/ferramentas/x/" },
+    { origem: "/inteligencia/y/", landing_url: "/inteligencia/y/" },
+    { internalReferrer: true },
+  );
+  if (fromLanding.landing_url !== "/ferramentas/x/") fail("server_merge_landing_family", fromLanding);
+  if (fromLanding.origem !== "/ferramentas/x/") fail("server_merge_origem_not_filled_from_landing", fromLanding);
   if (!sourceToService.isInternalReferrer("https://confenge.com.br/ferramentas/x/")) {
     fail("internal_referrer_miss");
   }
