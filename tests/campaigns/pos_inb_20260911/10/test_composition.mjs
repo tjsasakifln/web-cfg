@@ -172,13 +172,16 @@ function sha256(buf) {
 {
   const extract = read("scripts/campaigns/inb-20260911/05/project_review_extract.mjs");
   const readinessApp = read("ferramentas/prontidao-tecnica-obra-privada/app.js");
+  const readinessHtml = read("ferramentas/prontidao-tecnica-obra-privada/index.html");
   const partner = read("scripts/distribution/partner_reference.mjs");
   const resources = read("scripts/pseo/public_artifact.py");
   assert.match(extract, /revisao\.csv/);
   assert.match(readinessApp, /resolveCommercialDestination/);
-  assert.match(readinessApp, /ConfengeCanonicalDestinationMap/);
+  assert.match(readinessHtml, /pptr-destination-map/);
+  assert.match(readinessHtml, /compatibilizacao-projetos-engenharia/);
+  assert.match(readinessHtml, /revisao-tecnica-projetos-engenharia/);
   assert.match(partner, /KIT_CATALOG_REL/);
-  assert.match(resources, /PUBLIC_ALLOWED_NESTED_DATA_DIRS/);
+  assert.match(resources, /is_authorized_public_nested_data_dir/);
 }
 
 console.log("OK pos-inb-20260911-10 composition");
