@@ -1,0 +1,84 @@
+{
+  "schema": "confenge.inbound-campaign-shared-changes/2.0",
+  "campaign_id": "06",
+  "prompt_version": "2.0.0",
+  "owner_campaign": "06",
+  "applier": "16",
+  "base_sha": "8f508544835490ec635d02517bce0207c6f8e426",
+  "changes": [
+    {
+      "change_id": "06-sitemap-xml-loc",
+      "owner_campaign": "06",
+      "path": "sitemap.xml",
+      "base_blob_sha": "3c91a643271d02ea536f08a0378716d3e2aa34af",
+      "operation": "insert_after",
+      "key_or_anchor": "<loc>https://confenge.com.br/casos/aditivo-art125-demonstrativo/</loc>",
+      "expected_old": " <url>\n <loc>https://confenge.com.br/casos/aditivo-art125-demonstrativo/</loc>\n <lastmod>2026-08-03</lastmod>\n </url>\n <url>\n <loc>https://confenge.com.br/casos/medicao-glosa-demonstrativo/</loc>\n",
+      "desired_new": " <url>\n <loc>https://confenge.com.br/casos/aditivo-art125-demonstrativo/</loc>\n <lastmod>2026-08-03</lastmod>\n </url>\n <url>\n <loc>https://confenge.com.br/casos/demonstrativo-projeto-privado/</loc>\n <lastmod>2026-09-11</lastmod>\n </url>\n <url>\n <loc>https://confenge.com.br/casos/medicao-glosa-demonstrativo/</loc>\n",
+      "rationale": "Indexable demonstrative route owned by 06; sitemap is a central file.",
+      "acceptance_test": "sitemap.xml contains https://confenge.com.br/casos/demonstrativo-projeto-privado/ with lastmod 2026-09-11, between aditivo and medicao, and robots remain index,follow.",
+      "integration_patch": "docs/campaigns/inb-20260911/06/integration.patch"
+    },
+    {
+      "change_id": "06-sitemap-txt-loc",
+      "owner_campaign": "06",
+      "path": "sitemap.txt",
+      "base_blob_sha": "f8c2e2c31e3d859170e46617304345cc1d60d72e",
+      "operation": "insert_after",
+      "key_or_anchor": "https://confenge.com.br/casos/aditivo-art125-demonstrativo/",
+      "expected_old": "https://confenge.com.br/casos/aditivo-art125-demonstrativo/\nhttps://confenge.com.br/casos/medicao-glosa-demonstrativo/\n",
+      "desired_new": "https://confenge.com.br/casos/aditivo-art125-demonstrativo/\nhttps://confenge.com.br/casos/demonstrativo-projeto-privado/\nhttps://confenge.com.br/casos/medicao-glosa-demonstrativo/\n",
+      "rationale": "Keep the text sitemap aligned with sitemap.xml.",
+      "acceptance_test": "sitemap.txt lists the new loc once, in alphabetical order among /casos/ children.",
+      "integration_patch": "docs/campaigns/inb-20260911/06/integration.patch"
+    },
+    {
+      "change_id": "06-proof-registry-demonstrative-page",
+      "owner_campaign": "06",
+      "path": "data/commercial/real-proof-registry.v1.json",
+      "base_blob_sha": "b2d8dd26951b581337d67c41b829e2c70e19051a",
+      "operation": "upsert",
+      "key_or_anchor": "synthetic_surfaces.demonstrative_pages",
+      "expected_old": [
+        "casos/index.html",
+        "casos/aditivo-art125-demonstrativo/index.html",
+        "casos/medicao-glosa-demonstrativo/index.html"
+      ],
+      "desired_new": [
+        "casos/index.html",
+        "casos/aditivo-art125-demonstrativo/index.html",
+        "casos/demonstrativo-projeto-privado/index.html",
+        "casos/medicao-glosa-demonstrativo/index.html"
+      ],
+      "rationale": "The new page is a labelled demonstrative surface. Until this list includes it, label-integrity positions (title, h1, card, schema, relevant CTA) are not enforced on the route. Do not invent a PUBLISHED client proof_id.",
+      "acceptance_test": "npm run test:real-proof-registry passes with casos/demonstrativo-projeto-privado/index.html in demonstrative_pages and data-permission-class=demonstrativo on the page."
+    },
+    {
+      "change_id": "06-public-artifact-manifest-route",
+      "owner_campaign": "06",
+      "path": "seo/PUBLIC-ARTIFACT-MANIFEST.json",
+      "base_blob_sha": "1e913566ca339bbc08d70cd9cc2ea974d5dd7e36",
+      "operation": "insert_after",
+      "key_or_anchor": "html_routes:/casos/aditivo-art125-demonstrativo/",
+      "expected_old": "    \"/casos/aditivo-art125-demonstrativo/\",\n    \"/casos/\",\n",
+      "desired_new": "    \"/casos/aditivo-art125-demonstrativo/\",\n    \"/casos/demonstrativo-projeto-privado/\",\n    \"/casos/\",\n",
+      "rationale": "inventory_public_routes walks casos/*/index.html; the committed manifest must list the new route and increment html_route_count from 212 to 213.",
+      "acceptance_test": "html_routes contains /casos/demonstrativo-projeto-privado/ and html_route_count is previous plus one.",
+      "also_set": {
+        "html_route_count": 213
+      }
+    },
+    {
+      "change_id": "06-npm-directed-test",
+      "owner_campaign": "06",
+      "path": "package.json",
+      "base_blob_sha": null,
+      "operation": "upsert",
+      "key_or_anchor": "scripts.test:private-project-demonstrative",
+      "expected_old": null,
+      "desired_new": "python3 -m pytest tests/demonstrative/test_private_project_pilot.py -q",
+      "rationale": "Directed test owned by 06. Do not remove existing required checks; optionally wire this script into the suite at composition.",
+      "acceptance_test": "python3 -m pytest tests/demonstrative/test_private_project_pilot.py -q exits 0 on the 06 tree and fails the four isolated mutations."
+    }
+  ]
+}

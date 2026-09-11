@@ -1,0 +1,4 @@
+# exemplo demonstrativo; revisao=R01
+id;documento;constatacao;base;acao;tipo_conferencia;achado_relacionado;elementos;revisao
+RF-01;PR-ARQ-R00;A verga da janela WN-01 invade o volume da viga B-01 no estado original.;Conferência geométrica das faixas Z dos dois elementos no recorte, sem exame de norma de dimensionamento.;Rebaixar a verga para 2,10 m no recorte R01 e manter a viga na cota original.;arithmetic_documental_coherence;CF-GEO-01;WN-01 B-01;R01
+RF-02;PR-HID-R00;O poço hidrossanitário HS-01 não declara vão livre interno nem diâmetros.;Campo do recorte vazio. Ausência de informação, não conformidade com norma não examinada.;"Registrar pedido de informação; não converter a lacuna em falha comprovada.";documental_coherence;CF-INFO-01;HS-01;R01

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 282 370" role="img" aria-labelledby="elv-R01-title elv-R01-desc">
+<title id="elv-R01-title">Elevação leste W-02 · versão demonstrativa corrigida · R01</title>
+<desc id="elv-R01-desc">Parede de 1,80 m por 2,60 m. Janela WN-01 de peitoril 1,40 m até verga 2,10 m. Viga B-01 com fundo em 2,20 m. Folga de 0,10 m. Exemplo demonstrativo.</desc>
+<rect x="56.0" y="36.0" width="198.0" height="286.0" fill="#f8fafc" stroke="#0f172a" stroke-width="2"/>
+<rect x="56.0" y="36.0" width="198.0" height="44.0" fill="#f59e0b" fill-opacity="0.35" stroke="#b45309"/>
+<text x="155.0" y="62.0" text-anchor="middle" font-size="11" fill="#78350f">B-01 fundo 2,20 m</text>
+<rect x="111.0" y="91.0" width="88.0" height="77.0" fill="#bbf7d0" stroke="#0f172a"/>
+<text x="155.0" y="133.5" text-anchor="middle" font-size="11" fill="#0f172a">WN-01</text>
+<text x="48.0" y="95.0" text-anchor="end" font-size="10" fill="#0f172a">2,10</text>
+<text x="48.0" y="172.0" text-anchor="end" font-size="10" fill="#0f172a">1,40</text>
+<text x="48.0" y="84.0" text-anchor="end" font-size="10" fill="#b45309">2,20</text>
+<text x="48.0" y="326.0" text-anchor="end" font-size="10" fill="#0f172a">0,00</text>
+<text x="56" y="356" font-size="11" fill="#334155">Parede de 1,80 m por 2,60 m. Janela WN-01 de peitoril 1,40 m até verga 2,10 m. Viga B-01 com fundo em 2,20 m. Folga de 0,10 m. Exemplo demonstrativo.</text>
+</svg>

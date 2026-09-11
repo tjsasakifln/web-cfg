@@ -1,0 +1,130 @@
+{
+  "schema": "confenge.inbound-campaign-handoff/2.0",
+  "campaign_set": "INB-20260911",
+  "campaign_id": "06",
+  "prompt_version": "2.0.0",
+  "base_sha": "8f508544835490ec635d02517bce0207c6f8e426",
+  "state": "READY_FOR_INTEGRATION_WITH_DEPENDENCIES",
+  "owned_sources": [
+    "data/demonstrative/private-project-pilot/source.v1.json",
+    "data/demonstrative/private-project-pilot/consumption.v1.json",
+    "scripts/demonstrative/__init__.py",
+    "scripts/demonstrative/private_project/__init__.py",
+    "scripts/demonstrative/private_project/derive.py",
+    "scripts/demonstrative/private_project/render.py",
+    "scripts/demonstrative/private_project/generate.py",
+    "casos/demonstrativo-projeto-privado/index.html",
+    "casos/demonstrativo-projeto-privado/data/quantitativos.csv",
+    "casos/demonstrativo-projeto-privado/data/orcamento.csv",
+    "casos/demonstrativo-projeto-privado/data/coordenacao.csv",
+    "casos/demonstrativo-projeto-privado/data/revisao.csv",
+    "casos/demonstrativo-projeto-privado/assets/planta-r00.svg",
+    "casos/demonstrativo-projeto-privado/assets/planta-r01.svg",
+    "casos/demonstrativo-projeto-privado/assets/elevacao-leste-r00.svg",
+    "casos/demonstrativo-projeto-privado/assets/elevacao-leste-r01.svg",
+    "tests/demonstrative/__init__.py",
+    "tests/demonstrative/test_private_project_pilot.py",
+    "tests/demonstrative/fixtures/adversarial/as-client.json",
+    "docs/campaigns/inb-20260911/06/handoff.json",
+    "docs/campaigns/inb-20260911/06/shared-changes.json",
+    "docs/campaigns/inb-20260911/06/integration.patch",
+    "docs/campaigns/inb-20260911/06/scope-note.md"
+  ],
+  "changed_sources": [
+    "data/demonstrative/private-project-pilot/source.v1.json",
+    "data/demonstrative/private-project-pilot/consumption.v1.json",
+    "scripts/demonstrative/__init__.py",
+    "scripts/demonstrative/private_project/__init__.py",
+    "scripts/demonstrative/private_project/derive.py",
+    "scripts/demonstrative/private_project/render.py",
+    "scripts/demonstrative/private_project/generate.py",
+    "casos/demonstrativo-projeto-privado/index.html",
+    "casos/demonstrativo-projeto-privado/data/quantitativos.csv",
+    "casos/demonstrativo-projeto-privado/data/orcamento.csv",
+    "casos/demonstrativo-projeto-privado/data/coordenacao.csv",
+    "casos/demonstrativo-projeto-privado/data/revisao.csv",
+    "casos/demonstrativo-projeto-privado/assets/planta-r00.svg",
+    "casos/demonstrativo-projeto-privado/assets/planta-r01.svg",
+    "casos/demonstrativo-projeto-privado/assets/elevacao-leste-r00.svg",
+    "casos/demonstrativo-projeto-privado/assets/elevacao-leste-r01.svg",
+    "tests/demonstrative/__init__.py",
+    "tests/demonstrative/test_private_project_pilot.py",
+    "tests/demonstrative/fixtures/adversarial/as-client.json",
+    "docs/campaigns/inb-20260911/06/handoff.json",
+    "docs/campaigns/inb-20260911/06/shared-changes.json",
+    "docs/campaigns/inb-20260911/06/integration.patch",
+    "docs/campaigns/inb-20260911/06/scope-note.md"
+  ],
+  "routes": [
+    {
+      "path": "/casos/demonstrativo-projeto-privado/",
+      "kind": "demonstrative",
+      "intent_family": "projetar_revisar_compatibilizar",
+      "offer_id": "complementary_engineering_project_review",
+      "canonical": "https://confenge.com.br/casos/demonstrativo-projeto-privado/",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "contact_mode": "whatsapp_or_triagem",
+      "visitor_job": "Ver a qualidade das entregas de quantitativos, orçamento, revisão e compatibilização num recorte conferível, antes de pedir o mesmo no próprio projeto.",
+      "primary_question": "Como a CONFENGE levanta quantidades, orça, revisa e registra interferências num recorte privado?",
+      "proof": "demo-private-project-pilot-2026-09",
+      "cta": "Pedir proposta pelo WhatsApp",
+      "cta_destination": "https://wa.me/5548988344559",
+      "alternate_contact": "/triagem-tecnica/#projetos"
+    }
+  ],
+  "dependencies": [],
+  "shared_changes": "docs/campaigns/inb-20260911/06/shared-changes.json",
+  "tests": [
+    {
+      "command": "python3 -m pytest tests/demonstrative/test_private_project_pilot.py -q",
+      "exit_code": 0,
+      "subject_sha": null,
+      "overlay_hashes": {
+        "data/demonstrative/private-project-pilot/source.v1.json": "682fc317a15b344d894e8efb53eb232f3e66fe35dc734d5c258fc11c6dd67f33",
+        "data/demonstrative/private-project-pilot/consumption.v1.json": "72ada53aa99eb42fbb560538c01337712722c5b99f18221ffda567f23c4f940d",
+        "scripts/demonstrative/private_project/derive.py": "ad273f8f966e2e0304946543c1adb721642c1e77e79e5a6be93918d370015441",
+        "scripts/demonstrative/private_project/render.py": "87b602a7d753f6de3e0ad2702d8f526cc7a79a4154e5a4c9563db35d50d20b38",
+        "tests/demonstrative/test_private_project_pilot.py": "c4492fd0bb944e93be510ad5ba03dc5f555eac8adec5186ee799ad69cd7e3f73",
+        "casos/demonstrativo-projeto-privado/index.html": "3e2ee50ea31cf9c874d4443e97a2ee0bd369285e53d947ebd38a2286afe0fccc"
+      },
+      "notes": "subject_sha fica null neste recibo para não identificar o commit que o contém. HEAD_READY no PR traz head_sha. Duas execuções idênticas, 15 passed. Mutações isoladas: dimensão, ID quebrado, subtotal e demo-como-cliente falham no verify enviado."
+    },
+    {
+      "command": "python3 scripts/site/inbound_gates.py --out (scratch)",
+      "exit_code": 0,
+      "subject_sha": null,
+      "overlay_hashes": {},
+      "notes": "ok=true no candidato local. Família casos já cobre o prefixo /casos/. Ação terminal no main por WhatsApp. Sem nova dívida."
+    },
+    {
+      "command": "python3 scripts/site/test_self_deprecating_copy.py && python3 scripts/site/lint_editorial_copy.py",
+      "exit_code": 0,
+      "subject_sha": null,
+      "overlay_hashes": {},
+      "notes": "PASS copy lint; 0 autodepreciação na superfície pública."
+    }
+  ],
+  "evidence_paths": [
+    "casos/demonstrativo-projeto-privado/index.html",
+    "data/demonstrative/private-project-pilot/consumption.v1.json",
+    "tests/demonstrative/test_private_project_pilot.py",
+    "docs/campaigns/inb-20260911/06/scope-note.md"
+  ],
+  "unresolved": [
+    "16 aplicar docs/campaigns/inb-20260911/06/integration.patch em sitemap.xml, sitemap.txt, data/commercial/real-proof-registry.v1.json (demonstrative_pages) e seo/PUBLIC-ARTIFACT-MANIFEST.json (loc + html_route_count).",
+    "16 pode acrescentar scripts.test:private-project-demonstrative no package.json sem remover checks existentes.",
+    "03/04/05/11/12 devem ler data/demonstrative/private-project-pilot/consumption.v1.json e não copiar subtotais."
+  ],
+  "consumption_contract": "data/demonstrative/private-project-pilot/consumption.v1.json",
+  "proof_id": "demo-private-project-pilot-2026-09",
+  "origin": "demonstrative",
+  "revision": "R01",
+  "not_done": [
+    "merge",
+    "deploy",
+    "editar /casos/index.html",
+    "editar páginas comerciais",
+    "criar proof_id PUBLISHED de cliente"
+  ]
+}
