@@ -220,7 +220,9 @@ FORBIDDEN_BASENAMES = frozenset(
     }
 )
 
-# Paths under _site that must never exist (pipeline / internal surfaces)
+# Paths under _site that must never exist (pipeline / internal surfaces).
+# "data/" matches only the artifact root (repo-root data/, GSC, leads). Nested
+# demonstrative CSVs live at casos/<slug>/data/*.csv and are not this prefix.
 FORBIDDEN_PUBLIC_PATH_PREFIXES = (
     "data/",
     "seo/",
@@ -231,6 +233,29 @@ FORBIDDEN_PUBLIC_PATH_PREFIXES = (
     "node_modules/",
     "tests/",
 )
+
+# Explicit public demonstrative downloads. Not a license to copy repo-root
+# data/, ops/data, fixtures, GSC, logs, handoffs, or anything under tests/.
+_PUBLIC_NESTED_DATA_DIR = re.compile(r"^casos/[a-z0-9][a-z0-9-]{0,80}/data$")
+_PUBLIC_NESTED_DATA_FILE = re.compile(
+    r"^casos/[a-z0-9][a-z0-9-]{0,80}/data/[a-z0-9][a-z0-9._-]{0,80}\.csv$"
+)
+_PRIVATE_NESTED_DATA_BASENAME = re.compile(
+    r"(?:^|[._-])(?:leads?|secret|gsc|handoff|fixture)(?:[._-]|$)",
+    re.IGNORECASE,
+)
+ALLOWED_PUBLIC_NESTED_DATA_EXTENSIONS = frozenset({".csv"})
+
+
+def is_authorized_public_nested_data_dir(rel_posix: str) -> bool:
+    return bool(_PUBLIC_NESTED_DATA_DIR.fullmatch(rel_posix))
+
+
+def is_authorized_public_nested_data_file(rel_posix: str) -> bool:
+    if not _PUBLIC_NESTED_DATA_FILE.fullmatch(rel_posix):
+        return False
+    name = Path(rel_posix).name
+    return not _PRIVATE_NESTED_DATA_BASENAME.search(Path(name).stem)
 
 SECRET_PATTERNS = [
     re.compile(r"(?i)postgres(ql)?://[^\s\"']+"),
@@ -423,6 +448,7 @@ def assemble_public_artifact(
         # Safety: never follow into forbidden nested names during copy via ignore.
         # ops/data is NOT public — strategic GSC insights are served only via
         # authenticated ops?action=gsc_insights (robots Disallow is not security).
+        # casos/<slug>/data/*.csv are the only nested "data" names that may copy.
         def _ignore(directory: str, names: list[str]) -> set[str]:
             skip = set()
             try:
@@ -430,13 +456,21 @@ def assemble_public_artifact(
             except ValueError:
                 rel_dir = ""
             for n in names:
+                candidate = Path(directory) / n
+                nested = f"{rel_dir}/{n}".lstrip("/")
+                if candidate.is_symlink():
+                    skip.add(n)
+                    continue
                 if n in FORBIDDEN_DIR_NAMES:
-                    nested = f"{rel_dir}/{n}".lstrip("/")
-                    if not (
-                        n == "data" and nested in PUBLIC_ALLOWED_NESTED_DATA_DIRS
-                    ):
+                    if n == "data" and is_authorized_public_nested_data_dir(nested):
+                        continue
+                    skip.add(n)
+                    continue
+                if is_authorized_public_nested_data_dir(rel_dir):
+                    if not is_authorized_public_nested_data_file(nested):
                         skip.add(n)
-                elif n.startswith(".env"):
+                        continue
+                if n.startswith(".env"):
                     skip.add(n)
                 elif Path(n).suffix.lower() in FORBIDDEN_EXTENSIONS:
                     skip.add(n)
@@ -449,7 +483,7 @@ def assemble_public_artifact(
                     skip.add(n)
                 if rel_dir.startswith("ops") and n.endswith("gsc-insights.json"):
                     skip.add(n)
-                if f"{rel_dir}/{n}".lstrip("/") in PUBLIC_EXCLUDED_RELPATHS:
+                if nested in PUBLIC_EXCLUDED_RELPATHS:
                     skip.add(n)
             return skip
 
@@ -559,9 +593,21 @@ def audit_public_artifact(
     # Legacy netlify.toml preview alignment is checked by caller / CI.
     for p in sorted(dest.rglob("*")):
         rel = p.relative_to(dest).as_posix()
+        if p.is_symlink():
+            findings.append(
+                {
+                    "code": "symlink",
+                    "path": rel,
+                    "detail": "symlinks are not public resources",
+                }
+            )
+            continue
         if p.is_dir():
-            # No nested data/ dirs in the public artifact (strategic JSON is auth-only)
-            if p.name in FORBIDDEN_DIR_NAMES and rel not in PUBLIC_ALLOWED_NESTED_DATA_DIRS:
+            # Nested casos/<slug>/data is the public demonstrative exception.
+            # Repo-root data/, ops/data and every other "data" name stay forbidden.
+            if p.name in FORBIDDEN_DIR_NAMES:
+                if p.name == "data" and is_authorized_public_nested_data_dir(rel):
+                    continue
                 findings.append(
                     {
                         "code": "forbidden_dir",
@@ -574,6 +620,16 @@ def audit_public_artifact(
         file_count += 1
         name = p.name
         suf = p.suffix.lower()
+        parent_rel = Path(rel).parent.as_posix()
+        if is_authorized_public_nested_data_dir(parent_rel):
+            if not is_authorized_public_nested_data_file(rel):
+                findings.append(
+                    {
+                        "code": "unauthorized_nested_data_file",
+                        "path": rel,
+                        "detail": "only casos/<slug>/data/*.csv may be public nested data",
+                    }
+                )
 
         if name == "gsc-insights.json" or rel.endswith("gsc-insights.json"):
             findings.append(

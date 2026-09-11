@@ -440,9 +440,9 @@ def collect_input_shas(root: Path) -> dict[str, Any]:
     """
     from scripts.pseo.public_artifact import (
         FORBIDDEN_DIR_NAMES,
-        PUBLIC_ALLOWED_NESTED_DATA_DIRS,
         PUBLIC_ROOT_FILES,
         PUBLIC_TOP_DIRS,
+        is_authorized_public_nested_data_file,
     )
 
     files: dict[str, str] = {}
@@ -483,22 +483,15 @@ def collect_input_shas(root: Path) -> dict[str, Any]:
             continue
         tree_items: list[str] = []
         for path in sorted(directory.rglob("*")):
-            if not path.is_file():
-                continue
-            parts = path.relative_to(root).parts
-            forbidden = False
-            for index, part in enumerate(parts):
-                if part in FORBIDDEN_DIR_NAMES:
-                    nested = "/".join(parts[: index + 1])
-                    if nested not in PUBLIC_ALLOWED_NESTED_DATA_DIRS:
-                        forbidden = True
-                        break
-            if forbidden:
-                continue
-            if name == ".well-known" and path.name in GENERATED_WELL_KNOWN:
+            if not path.is_file() or path.is_symlink():
                 continue
             rel = _repo_rel(root, path)
             if not rel:
+                continue
+            if any(part in FORBIDDEN_DIR_NAMES for part in path.relative_to(root).parts):
+                if not is_authorized_public_nested_data_file(rel):
+                    continue
+            if name == ".well-known" and path.name in GENERATED_WELL_KNOWN:
                 continue
             digest = sha256_file(path)
             tree_items.append(f"{rel}:{digest}")
