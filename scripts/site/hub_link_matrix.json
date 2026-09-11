@@ -1,0 +1,457 @@
+{
+  "schema": "confenge.hub-link-matrix/1.0",
+  "campaign_id": "09",
+  "campaign_set": "INB-20260911",
+  "notes": "REQUIRED_LINK exige ficheiro presente. OPTIONAL_LINK some quando a rota não está no candidato. PRESERVE_ANCHOR fica na mesma página. Destinos opcionais não podem cair para a home.",
+  "purchase_map_path": "data/bofu-dominance/core/purchase-route-map.v1.json",
+  "internal_terms": [
+    "núcleo interno",
+    "nucleos internos",
+    "execute_now",
+    "hard_at_release",
+    "em breve",
+    "coming soon",
+    "inventário de maturidade",
+    "inventario de maturidade",
+    "smartlic"
+  ],
+  "hubs": [
+    {
+      "id": "servicos",
+      "path": "/servicos/",
+      "source": "servicos/index.html",
+      "kind": "serviço"
+    },
+    {
+      "id": "conteudos",
+      "path": "/conteudos/",
+      "source": "conteudos/index.html",
+      "kind": "hub"
+    },
+    {
+      "id": "casos",
+      "path": "/casos/",
+      "source": "casos/index.html",
+      "kind": "prova"
+    },
+    {
+      "id": "ferramentas",
+      "path": "/ferramentas/",
+      "source": "ferramentas/index.html",
+      "kind": "ferramenta"
+    }
+  ],
+  "links": [
+    {
+      "id": "servicos-orcamento",
+      "kind": "REQUIRED_LINK",
+      "hub": "/servicos/",
+      "href": "/quantitativos-orcamento-obras/",
+      "marker": "servicos-orcamento",
+      "label": "Quantitativos e orçamento de obra",
+      "intent_family": "orcar_planejar_decidir",
+      "offer_id": "quantity_takeoff_budgeting",
+      "provider_campaign": "03",
+      "satisfaction": "ALREADY_SATISFIED",
+      "release_unit": "CORE"
+    },
+    {
+      "id": "servicos-obras-publicas",
+      "kind": "REQUIRED_LINK",
+      "hub": "/servicos/",
+      "href": "/servicos-obras-publicas/",
+      "marker": "servicos-obras-publicas",
+      "label": "Serviços para obras públicas",
+      "intent_family": "executar_proteger_contrato_publico",
+      "offer_id": null,
+      "provider_campaign": "08",
+      "satisfaction": "ALREADY_SATISFIED",
+      "release_unit": "CORE"
+    },
+    {
+      "id": "servicos-medicao",
+      "kind": "REQUIRED_LINK",
+      "hub": "/servicos/",
+      "href": "/medicoes-glosas-obras-publicas/",
+      "marker": "servicos-medicao",
+      "label": "Medição, glosa e pagamento",
+      "intent_family": "executar_proteger_contrato_publico",
+      "offer_id": null,
+      "provider_campaign": "08",
+      "satisfaction": "ALREADY_SATISFIED",
+      "release_unit": "CORE"
+    },
+    {
+      "id": "servicos-aditivo",
+      "kind": "REQUIRED_LINK",
+      "hub": "/servicos/",
+      "href": "/aditivos-obras-publicas/",
+      "marker": "servicos-aditivo",
+      "label": "Aditivos em obras públicas",
+      "intent_family": "executar_proteger_contrato_publico",
+      "offer_id": null,
+      "provider_campaign": "08",
+      "satisfaction": "ALREADY_SATISFIED",
+      "release_unit": "CORE"
+    },
+    {
+      "id": "servicos-contato",
+      "kind": "REQUIRED_LINK",
+      "hub": "/servicos/",
+      "href": "/triagem-tecnica/",
+      "marker": "servicos-contato",
+      "label": "Solicitar proposta",
+      "intent_family": null,
+      "offer_id": null,
+      "provider_campaign": "02",
+      "satisfaction": "ALREADY_SATISFIED",
+      "release_unit": "CORE"
+    },
+    {
+      "id": "servicos-revisao-landing",
+      "kind": "OPTIONAL_LINK",
+      "hub": "/servicos/",
+      "href": "/revisao-projetos/",
+      "marker": "servicos-revisao-landing",
+      "label": "Revisão de projetos",
+      "intent_family": "projetar_revisar_compatibilizar",
+      "offer_id": "complementary_engineering_project_review",
+      "provider_campaign": "05",
+      "satisfaction": null,
+      "release_unit": "CORE",
+      "purchase_id": "revisao-projetos"
+    },
+    {
+      "id": "servicos-compat-landing",
+      "kind": "OPTIONAL_LINK",
+      "hub": "/servicos/",
+      "href": "/compatibilizacao-projetos/",
+      "marker": "servicos-compat-landing",
+      "label": "Compatibilização de disciplinas",
+      "intent_family": "projetar_revisar_compatibilizar",
+      "offer_id": "bim_coordination_clash_register",
+      "provider_campaign": "04",
+      "satisfaction": null,
+      "release_unit": "CORE",
+      "purchase_id": "compatibilizacao-projetos"
+    },
+    {
+      "id": "servicos-complementares-landing",
+      "kind": "OPTIONAL_LINK",
+      "hub": "/servicos/",
+      "href": "/projetos-complementares/",
+      "marker": "servicos-complementares-landing",
+      "label": "Projetos complementares",
+      "intent_family": "projetar_revisar_compatibilizar",
+      "offer_id": "complementary_engineering_project_review",
+      "provider_campaign": "12",
+      "satisfaction": null,
+      "release_unit": "EXPANSION",
+      "purchase_id": "projetos-complementares"
+    },
+    {
+      "id": "servicos-inspecao-landing",
+      "kind": "OPTIONAL_LINK",
+      "hub": "/servicos/",
+      "href": "/inspecao-edificacoes/",
+      "marker": "servicos-inspecao-landing",
+      "label": "Inspeção de edificações",
+      "intent_family": "inspecionar_diagnosticar",
+      "offer_id": "building_inspection_pathology",
+      "provider_campaign": "13",
+      "satisfaction": null,
+      "release_unit": "EXPANSION",
+      "purchase_id": "inspecao-edificacoes"
+    },
+    {
+      "id": "servicos-pericia-landing",
+      "kind": "OPTIONAL_LINK",
+      "hub": "/servicos/",
+      "href": "/pericia-engenharia/",
+      "marker": "servicos-pericia-landing",
+      "label": "Perícia de engenharia",
+      "intent_family": "produzir_prova_tecnica",
+      "offer_id": "civil_building_technical_assistance",
+      "provider_campaign": "14",
+      "satisfaction": null,
+      "release_unit": "EXPANSION",
+      "purchase_id": "pericia-engenharia"
+    },
+    {
+      "id": "conteudos-orcamento",
+      "kind": "REQUIRED_LINK",
+      "hub": "/conteudos/",
+      "href": "/quantitativos-orcamento-obras/",
+      "marker": "need-orcamento",
+      "label": "Quantitativos e orçamento",
+      "intent_family": "orcar_planejar_decidir",
+      "offer_id": "quantity_takeoff_budgeting",
+      "provider_campaign": "03",
+      "satisfaction": "ALREADY_SATISFIED",
+      "release_unit": "CORE"
+    },
+    {
+      "id": "conteudos-projeto",
+      "kind": "REQUIRED_LINK",
+      "hub": "/conteudos/",
+      "href": "/servicos/#servico-projeto",
+      "marker": "need-projeto",
+      "label": "Elaborar ou completar um projeto",
+      "intent_family": "projetar_revisar_compatibilizar",
+      "offer_id": "complementary_engineering_project_review",
+      "provider_campaign": "09",
+      "satisfaction": "ALREADY_SATISFIED",
+      "release_unit": "CORE"
+    },
+    {
+      "id": "conteudos-revisao",
+      "kind": "REQUIRED_LINK",
+      "hub": "/conteudos/",
+      "href": "/servicos/#servico-revisao",
+      "marker": "need-revisao",
+      "label": "Revisar um projeto existente",
+      "intent_family": "projetar_revisar_compatibilizar",
+      "offer_id": "complementary_engineering_project_review",
+      "provider_campaign": "09",
+      "satisfaction": "ALREADY_SATISFIED",
+      "release_unit": "CORE"
+    },
+    {
+      "id": "conteudos-compat",
+      "kind": "REQUIRED_LINK",
+      "hub": "/conteudos/",
+      "href": "/servicos/#servico-compatibilizacao",
+      "marker": "need-compat",
+      "label": "Compatibilizar disciplinas",
+      "intent_family": "projetar_revisar_compatibilizar",
+      "offer_id": "bim_coordination_clash_register",
+      "provider_campaign": "09",
+      "satisfaction": "ALREADY_SATISFIED",
+      "release_unit": "CORE"
+    },
+    {
+      "id": "conteudos-inspecao",
+      "kind": "REQUIRED_LINK",
+      "hub": "/conteudos/",
+      "href": "/servicos/#servico-diagnostico",
+      "marker": "need-inspecao",
+      "label": "Inspecionar obra ou imóvel",
+      "intent_family": "inspecionar_diagnosticar",
+      "offer_id": "building_inspection_pathology",
+      "provider_campaign": "09",
+      "satisfaction": "ALREADY_SATISFIED",
+      "release_unit": "CORE"
+    },
+    {
+      "id": "conteudos-medicao",
+      "kind": "REQUIRED_LINK",
+      "hub": "/conteudos/",
+      "href": "/medicoes-glosas-obras-publicas/",
+      "marker": "need-medicao",
+      "label": "Medição e glosa em obra pública",
+      "intent_family": "executar_proteger_contrato_publico",
+      "offer_id": null,
+      "provider_campaign": "08",
+      "satisfaction": "ALREADY_SATISFIED",
+      "release_unit": "CORE"
+    },
+    {
+      "id": "conteudos-aditivo",
+      "kind": "REQUIRED_LINK",
+      "hub": "/conteudos/",
+      "href": "/aditivos-obras-publicas/",
+      "marker": "need-aditivo",
+      "label": "Aditivo em obra pública",
+      "intent_family": "executar_proteger_contrato_publico",
+      "offer_id": null,
+      "provider_campaign": "08",
+      "satisfaction": "ALREADY_SATISFIED",
+      "release_unit": "CORE"
+    },
+    {
+      "id": "casos-aditivo-servico",
+      "kind": "REQUIRED_LINK",
+      "hub": "/casos/",
+      "href": "/aditivos-obras-publicas/",
+      "marker": "casos-aditivo-servico",
+      "label": "Serviço de aditivos",
+      "intent_family": "executar_proteger_contrato_publico",
+      "offer_id": null,
+      "provider_campaign": "08",
+      "satisfaction": "ALREADY_SATISFIED",
+      "release_unit": "CORE"
+    },
+    {
+      "id": "casos-medicao-servico",
+      "kind": "REQUIRED_LINK",
+      "hub": "/casos/",
+      "href": "/medicoes-glosas-obras-publicas/",
+      "marker": "casos-medicao-servico",
+      "label": "Serviço de medição e glosa",
+      "intent_family": "executar_proteger_contrato_publico",
+      "offer_id": null,
+      "provider_campaign": "08",
+      "satisfaction": "ALREADY_SATISFIED",
+      "release_unit": "CORE"
+    },
+    {
+      "id": "casos-orcamento-servico",
+      "kind": "REQUIRED_LINK",
+      "hub": "/casos/",
+      "href": "/quantitativos-orcamento-obras/",
+      "marker": "casos-orcamento-servico",
+      "label": "Quantitativos e orçamento",
+      "intent_family": "orcar_planejar_decidir",
+      "offer_id": "quantity_takeoff_budgeting",
+      "provider_campaign": "03",
+      "satisfaction": "ALREADY_SATISFIED",
+      "release_unit": "CORE"
+    },
+    {
+      "id": "casos-prova-privada",
+      "kind": "OPTIONAL_LINK",
+      "hub": "/casos/",
+      "href": "/casos/prova-tecnica-obra-privada/",
+      "marker": "casos-prova-privada",
+      "label": "Amostra técnica de obra privada",
+      "intent_family": "orcar_planejar_decidir",
+      "offer_id": null,
+      "provider_campaign": "06",
+      "satisfaction": null,
+      "release_unit": "CORE",
+      "purchase_id": "prova-tecnica-obra-privada"
+    },
+    {
+      "id": "ferramentas-prontidao",
+      "kind": "REQUIRED_LINK",
+      "hub": "/ferramentas/",
+      "href": "/ferramentas/prontidao-tecnica-obra-privada/",
+      "marker": "ferramentas-prontidao",
+      "label": "Prontidão técnica de obra privada",
+      "intent_family": "orcar_planejar_decidir",
+      "offer_id": "private_project_technical_readiness_assessment",
+      "provider_campaign": "07",
+      "satisfaction": "ALREADY_SATISFIED",
+      "release_unit": "CORE"
+    },
+    {
+      "id": "ferramentas-limite",
+      "kind": "REQUIRED_LINK",
+      "hub": "/ferramentas/",
+      "href": "/ferramentas/limite-acrescimos-supressoes/",
+      "marker": "ferramentas-limite",
+      "label": "Verificador de limite de acréscimos e supressões",
+      "intent_family": "executar_proteger_contrato_publico",
+      "offer_id": null,
+      "provider_campaign": "08",
+      "satisfaction": "ALREADY_SATISFIED",
+      "release_unit": "CORE"
+    }
+  ],
+  "anchors": [
+    {
+      "id": "servico-projeto",
+      "kind": "PRESERVE_ANCHOR",
+      "hub": "/servicos/",
+      "href": "/servicos/#servico-projeto"
+    },
+    {
+      "id": "servico-diagnostico",
+      "kind": "PRESERVE_ANCHOR",
+      "hub": "/servicos/",
+      "href": "/servicos/#servico-diagnostico"
+    },
+    {
+      "id": "servico-pericia",
+      "kind": "PRESERVE_ANCHOR",
+      "hub": "/servicos/",
+      "href": "/servicos/#servico-pericia"
+    },
+    {
+      "id": "servico-sst",
+      "kind": "PRESERVE_ANCHOR",
+      "hub": "/servicos/",
+      "href": "/servicos/#servico-sst"
+    },
+    {
+      "id": "servico-obras-publicas",
+      "kind": "PRESERVE_ANCHOR",
+      "hub": "/servicos/",
+      "href": "/servicos/#servico-obras-publicas"
+    },
+    {
+      "id": "servico-revisao",
+      "kind": "PRESERVE_ANCHOR",
+      "hub": "/servicos/",
+      "href": "/servicos/#servico-revisao"
+    },
+    {
+      "id": "servico-compatibilizacao",
+      "kind": "PRESERVE_ANCHOR",
+      "hub": "/servicos/",
+      "href": "/servicos/#servico-compatibilizacao"
+    },
+    {
+      "id": "servico-orcamento",
+      "kind": "PRESERVE_ANCHOR",
+      "hub": "/servicos/",
+      "href": "/servicos/#servico-orcamento"
+    }
+  ],
+  "journeys": [
+    {
+      "id": "public-medicao",
+      "start": "/servicos/",
+      "goal": "/medicoes-glosas-obras-publicas/",
+      "max_hops": 2
+    },
+    {
+      "id": "public-aditivo",
+      "start": "/servicos/",
+      "goal": "/aditivos-obras-publicas/",
+      "max_hops": 2
+    },
+    {
+      "id": "private-orcamento",
+      "start": "/servicos/",
+      "goal": "/quantitativos-orcamento-obras/",
+      "max_hops": 2
+    },
+    {
+      "id": "conteudo-orcamento",
+      "start": "/conteudos/",
+      "goal": "/quantitativos-orcamento-obras/",
+      "max_hops": 2
+    },
+    {
+      "id": "conteudo-servico-contato",
+      "start": "/conteudos/",
+      "goal": "/triagem-tecnica/",
+      "max_hops": 2
+    },
+    {
+      "id": "amostra-aditivo",
+      "start": "/casos/",
+      "goal": "/aditivos-obras-publicas/",
+      "max_hops": 2
+    },
+    {
+      "id": "amostra-medicao",
+      "start": "/casos/",
+      "goal": "/medicoes-glosas-obras-publicas/",
+      "max_hops": 2
+    },
+    {
+      "id": "ferramenta-prontidao",
+      "start": "/ferramentas/",
+      "goal": "/ferramentas/prontidao-tecnica-obra-privada/",
+      "max_hops": 1
+    },
+    {
+      "id": "servico-contato",
+      "start": "/servicos/",
+      "goal": "/triagem-tecnica/",
+      "max_hops": 1
+    }
+  ]
+}

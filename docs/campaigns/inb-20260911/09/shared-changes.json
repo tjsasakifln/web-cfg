@@ -1,0 +1,70 @@
+{
+  "schema": "confenge.inbound-shared-changes/1.0",
+  "campaign_set": "INB-20260911",
+  "campaign_id": "09",
+  "prompt_version": "2.0.0",
+  "owner_note": "09 não edita fontes de INB-16. 16 aplica upserts por chave. Sem home/header/footer: os destinos novos já entram pelos hubs de serviços e biblioteca.",
+  "changes": [
+    {
+      "change_id": "09-remediate-hub-mixed-catalog",
+      "owner_campaign": "16",
+      "path": "scripts/site/inbound_first_remediate.py",
+      "base_blob_sha": "04ebe7e9816f2186abd720191aec1c4d5016c9b2",
+      "operation": "patch",
+      "key_or_anchor": "remediate_hub.hero_block",
+      "expected_old": "<h1>Qual problema de licitação ou contrato você precisa resolver?</h1>",
+      "desired_new": "<h1>Qual problema de projeto, orçamento ou contrato você precisa resolver?</h1> plus #por-necessidade listing only present destinations and directory H2 'Análises de licitação e contrato público'.",
+      "patch_file": "docs/campaigns/inb-20260911/09/integration-inbound_first_remediate.patch",
+      "rationale": "conteudos/index.html é reconstruído por remediate_hub. Sem este patch o hub misto de 09 é sobrescrito no próximo --write.",
+      "acceptance_test": "python3 scripts/site/test_hub_link_matrix.py && npm run test:hub-truth; hub HTML retains #por-necessidade and mixed H1 after remediate_hub."
+    },
+    {
+      "change_id": "09-editorial-library-visitor-job",
+      "owner_campaign": "16",
+      "path": "data/organic/public-family-registry.json",
+      "base_blob_sha": "61e219892d5ad8c80f37dc18399f51f5df119ca1",
+      "operation": "upsert",
+      "key_or_anchor": "families[id=editorial-library].visitor_job",
+      "expected_old": "Entender um problema contratual concreto de obra pública antes de decidir pedir ajuda.",
+      "desired_new": "Encontrar a análise ou o serviço que responde um problema de projeto, orçamento, inspeção ou contrato, público ou privado, antes de pedir ajuda.",
+      "rationale": "A família /conteudos/ passou a descrever biblioteca mista. O visitor_job exclusivo de obra pública deixa de ser verdadeiro.",
+      "acceptance_test": "Hub /conteudos/ title, meta, JSON-LD and visitor_job all describe public and private destinations that exist; directory of public guides remains non-empty."
+    },
+    {
+      "change_id": "09-ferramentas-hub-visitor-job",
+      "owner_campaign": "16",
+      "path": "data/organic/public-family-registry.json",
+      "base_blob_sha": "61e219892d5ad8c80f37dc18399f51f5df119ca1",
+      "operation": "upsert",
+      "key_or_anchor": "families[id=ferramentas-hub].visitor_job",
+      "expected_old": "Escolher o cálculo aplicável e avançar para o diagnóstico de carteira quando a decisão ultrapassa uma ferramenta isolada.",
+      "desired_new": "Escolher o cálculo ou a checagem aplicável a um contrato público ou a uma obra privada, sem tornar nenhuma ferramenta etapa obrigatória.",
+      "rationale": "O hub de ferramentas já inclui prontidão de obra privada. O job não pode obrigar diagnóstico de carteira B2G.",
+      "acceptance_test": "ferramentas/index.html states prontidão is optional and still links existing B2G tools."
+    },
+    {
+      "change_id": "09-casos-visitor-job",
+      "owner_campaign": "16",
+      "path": "data/organic/public-family-registry.json",
+      "base_blob_sha": "61e219892d5ad8c80f37dc18399f51f5df119ca1",
+      "operation": "upsert",
+      "key_or_anchor": "families[id=casos].visitor_job",
+      "expected_old": "Distinguir exemplos de entrega (demonstrativos) de resultados de clientes, hoje em zero, antes de contratar.",
+      "desired_new": "Distinguir exemplos de entrega demonstrativos de trabalho real autorizado, publicado só com autorização, fonte e data.",
+      "rationale": "'hoje em zero' é inventário interno. A distinção visual já está no hub; o job público não deve autodepreciar.",
+      "acceptance_test": "casos/index.html has data-proof-kind=demonstrative, data-proof-state=none, and no authorized-real cards while INB-06 is absent."
+    },
+    {
+      "change_id": "09-npm-test-hub-links",
+      "owner_campaign": "16",
+      "path": "package.json",
+      "base_blob_sha": "6449c565138aa0794c31765d75079fe2cdbc3226",
+      "operation": "upsert",
+      "key_or_anchor": "scripts.test:hub-links",
+      "expected_old": null,
+      "desired_new": "python3 scripts/site/test_hub_link_matrix.py",
+      "rationale": "Registrar o teste da matriz de links no gráfico de scripts. 09 já executa o ficheiro diretamente.",
+      "acceptance_test": "npm run test:hub-links exits 0 on the composed candidate."
+    }
+  ]
+}

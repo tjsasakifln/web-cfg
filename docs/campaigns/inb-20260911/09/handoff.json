@@ -1,0 +1,183 @@
+{
+  "schema": "confenge.inbound-campaign-handoff/2.0",
+  "campaign_set": "INB-20260911",
+  "campaign_id": "09",
+  "prompt_version": "2.0.0",
+  "base_sha": "8f508544835490ec635d02517bce0207c6f8e426",
+  "state": "READY_FOR_INTEGRATION_WITH_DEPENDENCIES",
+  "owned_sources": [
+    "servicos/index.html",
+    "conteudos/index.html",
+    "casos/index.html",
+    "ferramentas/index.html",
+    "scripts/site/hub_link_composition.py",
+    "scripts/site/hub_link_matrix.json",
+    "scripts/site/test_hub_link_matrix.py"
+  ],
+  "changed_sources": [
+    "servicos/index.html",
+    "conteudos/index.html",
+    "casos/index.html",
+    "ferramentas/index.html",
+    "scripts/site/hub_link_composition.py",
+    "scripts/site/hub_link_matrix.json",
+    "scripts/site/test_hub_link_matrix.py",
+    "scripts/site/test_hub_truth.mjs",
+    "scripts/site/test_visitor_redesign.py",
+    "docs/campaigns/inb-20260911/09/handoff.json",
+    "docs/campaigns/inb-20260911/09/shared-changes.json",
+    "docs/campaigns/inb-20260911/09/integration-inbound_first_remediate.patch"
+  ],
+  "routes": [
+    {
+      "path": "/servicos/",
+      "kind": "serviço",
+      "intent_family": "projetar_revisar_compatibilizar",
+      "offer_id": null,
+      "canonical": "https://confenge.com.br/servicos/",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "contact_mode": "triagem_tecnica"
+    },
+    {
+      "path": "/conteudos/",
+      "kind": "hub",
+      "intent_family": null,
+      "offer_id": null,
+      "canonical": "https://confenge.com.br/conteudos/",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "contact_mode": "triagem_tecnica"
+    },
+    {
+      "path": "/casos/",
+      "kind": "prova",
+      "intent_family": null,
+      "offer_id": null,
+      "canonical": "https://confenge.com.br/casos/",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "contact_mode": "capture_form_or_whatsapp"
+    },
+    {
+      "path": "/ferramentas/",
+      "kind": "ferramenta",
+      "intent_family": null,
+      "offer_id": null,
+      "canonical": "https://confenge.com.br/ferramentas/",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "contact_mode": "service_transition"
+    }
+  ],
+  "dependencies": [
+    {
+      "provider_campaign": "01",
+      "artifact_path": "data/bofu-dominance/core/purchase-route-map.v1.json",
+      "level": "HARD_AT_RELEASE",
+      "fallback": "scripts/site/hub_link_matrix.json consumes current public-ia-map.json, intent-family-matrix.v1.json and on-disk routes; purchase map overlays optional hrefs when present"
+    },
+    {
+      "provider_campaign": "03",
+      "artifact_path": "quantitativos-orcamento-obras/index.html",
+      "level": "HARD_AT_RELEASE",
+      "fallback": "ALREADY_SATISFIED: /quantitativos-orcamento-obras/ exists on origin/main"
+    },
+    {
+      "provider_campaign": "04",
+      "artifact_path": "compatibilizacao-projetos/index.html",
+      "level": "HARD_AT_RELEASE",
+      "fallback": "Hub /servicos/#servico-compatibilizacao explains the purchase and contacts via /triagem-tecnica/#projetos; specialized landing is OPTIONAL_LINK and omitted while absent"
+    },
+    {
+      "provider_campaign": "05",
+      "artifact_path": "revisao-projetos/index.html",
+      "level": "HARD_AT_RELEASE",
+      "fallback": "Hub /servicos/#servico-revisao explains the purchase and contacts via /triagem-tecnica/#projetos; specialized landing is OPTIONAL_LINK and omitted while absent"
+    },
+    {
+      "provider_campaign": "06",
+      "artifact_path": "casos/prova-tecnica-obra-privada/index.html",
+      "level": "HARD_AT_RELEASE",
+      "fallback": "Authorized-real section omitted; demonstratives remain labelled; data-proof-state=none"
+    },
+    {
+      "provider_campaign": "07",
+      "artifact_path": "ferramentas/prontidao-tecnica-obra-privada/index.html",
+      "level": "HARD_AT_RELEASE",
+      "fallback": "ALREADY_SATISFIED: tool exists on origin/main; hub describes it as optional"
+    },
+    {
+      "provider_campaign": "08",
+      "artifact_path": "servicos-obras-publicas/index.html",
+      "level": "HARD_AT_RELEASE",
+      "fallback": "ALREADY_SATISFIED: public-works hub, medição and aditivo landings exist"
+    },
+    {
+      "provider_campaign": "11",
+      "artifact_path": null,
+      "level": "OPTIONAL_ENRICHMENT",
+      "fallback": "No partnership cards on the four hubs"
+    },
+    {
+      "provider_campaign": "12",
+      "artifact_path": "projetos-complementares/index.html",
+      "level": "OPTIONAL_ENRICHMENT",
+      "fallback": "OPTIONAL_LINK servicos-complementares-landing omitted while absent"
+    },
+    {
+      "provider_campaign": "13",
+      "artifact_path": "inspecao-edificacoes/index.html",
+      "level": "OPTIONAL_ENRICHMENT",
+      "fallback": "Inspection stays as /servicos/#servico-diagnostico plus triage; no specialized availability announced"
+    },
+    {
+      "provider_campaign": "14",
+      "artifact_path": "pericia-engenharia/index.html",
+      "level": "OPTIONAL_ENRICHMENT",
+      "fallback": "Perícia and SST stay as hub explanations plus triage"
+    }
+  ],
+  "shared_changes": "docs/campaigns/inb-20260911/09/shared-changes.json",
+  "tests": [
+    {
+      "command": "python3 scripts/site/test_hub_link_matrix.py",
+      "exit_code": 0,
+      "subject_sha": null,
+      "overlay_hashes": []
+    },
+    {
+      "command": "npm run test:hub-truth",
+      "exit_code": 0,
+      "subject_sha": null,
+      "overlay_hashes": []
+    },
+    {
+      "command": "npm run test:nav",
+      "exit_code": 0,
+      "subject_sha": null,
+      "overlay_hashes": []
+    },
+    {
+      "command": "npm run test:tools",
+      "exit_code": 0,
+      "subject_sha": null,
+      "overlay_hashes": []
+    },
+    {
+      "command": "npm run test:real-proof-registry",
+      "exit_code": 0,
+      "subject_sha": null,
+      "overlay_hashes": []
+    }
+  ],
+  "evidence_paths": [
+    "docs/campaigns/inb-20260911/09/shared-changes.json",
+    "docs/campaigns/inb-20260911/09/integration-inbound_first_remediate.patch"
+  ],
+  "unresolved": [
+    "INB-16 must apply remediate_hub patch so the mixed /conteudos/ hub is not overwritten.",
+    "OPTIONAL_LINK landings for revisão, compatibilização, complementares, inspeção especializada and prova privada remain omitted until those files exist in the release candidate.",
+    "Purchase-route map from INB-01 is not on origin/main; composition falls back to the 09 matrix and current contracts."
+  ]
+}
