@@ -4,7 +4,16 @@
  */
 import fs from "node:fs";
 import path from "node:path";
-import { FAIL, MISSING_DEPENDENCY, PASS, SEVERITY, existsInRoot, record, routeToFile } from "./lib/harness.mjs";
+import {
+  FAIL,
+  MISSING_DEPENDENCY,
+  OPTIONAL_ENRICHMENT,
+  PASS,
+  SEVERITY,
+  existsInRoot,
+  record,
+  routeToFile,
+} from "./lib/harness.mjs";
 import * as html from "./lib/html.mjs";
 import {
   familyMembership,
@@ -532,17 +541,32 @@ export async function checkJourneys(report, root) {
     if (journey.undefined_document) {
       if (!/documento|PGR|LTCAT|ainda/i.test(text)) problems.push("sst_undefined_document_not_framed");
     }
-    if (journey.dedicated_missing_ok) {
-      const dedicated = ["projetos-complementares/index.html", "complementares/index.html"];
-      if (!dedicated.some((rel) => existsInRoot(root, rel))) {
+    if (journey.dedicated_files || journey.dedicated_missing_ok) {
+      const dedicated = journey.dedicated_files || [
+        "projetos-complementares-engenharia/index.html",
+      ];
+      const found = dedicated.find((rel) => existsInRoot(root, rel));
+      if (!found) {
         record(report, {
           id: `journey.${journey.id}.dedicated_route`,
           campaign: journey.core,
           owner: journey.core,
-          url: "/projetos-complementares/",
+          url: `/${dedicated[0].replace(/index\.html$/, "")}`,
           status: MISSING_DEPENDENCY,
-          expected: "dedicated complementary route from producer 12",
+          dependency_level: OPTIONAL_ENRICHMENT,
+          expected: "dedicated complementary landing from producer 12",
           observed: "hub + triage only on examined tree",
+        });
+      } else {
+        record(report, {
+          id: `journey.${journey.id}.dedicated_route`,
+          campaign: journey.core,
+          owner: journey.core,
+          path: found,
+          url: `/${found.replace(/index\.html$/, "")}`,
+          status: PASS,
+          expected: "dedicated complementary landing from producer 12",
+          observed: found,
         });
       }
     }
