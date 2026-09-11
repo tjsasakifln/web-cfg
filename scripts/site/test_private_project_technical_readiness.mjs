@@ -490,6 +490,37 @@ const FIXTURE_MAP = {
 }
 
 {
+  const triple = diagnose({
+    ...presentAnswers(),
+    design_set: "nenhum",
+    quantities: "nenhum",
+    budget: "nenhum",
+    calc_memory: "nenhum",
+    coordination: "nenhum",
+    bim_or_constructability: "nenhum",
+    decision_on_table: "contratar_projeto",
+  });
+  expect("triple_primary_revisao", triple.routing.primary && triple.routing.primary.id === "revisao");
+  expect(
+    "triple_justification_follows_primary",
+    /recomendação principal é revisão/i.test(triple.routing.justification)
+      && !/recomendação principal é levantamento quantitativo/i.test(triple.routing.justification)
+      && !/recomendação principal é compatibilização/i.test(triple.routing.justification),
+    triple.routing.justification,
+  );
+  expect(
+    "triple_alts_cost_and_iface",
+    triple.routing.alternatives.map((row) => row.id).sort().join(",") === "compatibilizacao,orcamento",
+  );
+  expect("triple_no_two_contracts", triple.routing.force_two_contracts === false);
+  expect(
+    "triple_no_force_copy",
+    /não é necessário contratar os dois/i.test(triple.routing.justification),
+  );
+  expect("triple_summary_is_review", /revisão/i.test(triple.routing.summary_next));
+}
+
+{
   const unknownQty = diagnose({ ...presentAnswers(), quantities: UNKNOWN, budget: UNKNOWN, calc_memory: UNKNOWN });
   expect("unknown_qty_not_gap", domainById(unknownQty, "quantities_budget_bases_memory").status === UNKNOWN);
   expect("unknown_qty_not_route", unknownQty.routing.primary === null);
