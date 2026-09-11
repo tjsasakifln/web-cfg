@@ -148,27 +148,32 @@ def test_required_link_removed_from_html_fails() -> None:
 
 def test_optional_missing_route_omits_card_without_home_fallback() -> None:
     matrix = load_matrix()
-    overlay = Overlay()
-    markup = compose_optional_markup(ROOT, matrix, overlay)
-    assert markup == "" or "revisao-projetos" not in markup
-    composed = compose_links(ROOT, matrix, overlay)
+    composed = compose_links(ROOT, matrix)
     optional = [link for link in composed if link.spec.get("kind") == KIND_OPTIONAL]
     assert optional, "matrix must declare at least one OPTIONAL_LINK"
-    for link in optional:
-        assert not link.present, f"optional {link.spec['id']} unexpectedly present on this tree"
+    present = [link for link in optional if link.present]
+    missing = [link for link in optional if not link.present]
+    for link in missing:
         card = optional_card_html(link)
         assert card == ""
-        assert "/" not in card
-    # If the same optional is added to overlay, the composed card uses the real href, never home.
-    present_overlay = overlay.with_file("revisao-projetos/index.html", "<!doctype html><title>Revisão</title>")
-    present_links = compose_links(ROOT, matrix, present_overlay)
-    revisao = next(link for link in present_links if link.spec["id"] == "servicos-revisao-landing")
-    assert revisao.present
-    card = optional_card_html(revisao)
-    assert card
-    assert "/revisao-projetos/" in card
+        assert 'href="/"' not in card
+    # Omission: overlay-delete a present optional and the card must vanish, never home.
+    target = present[0] if present else optional[0]
+    deleted = Overlay().without_file(target.file_rel or "revisao-tecnica-projetos-engenharia/index.html")
+    deleted_links = compose_links(ROOT, matrix, deleted)
+    gone = next(link for link in deleted_links if link.spec["id"] == target.spec["id"])
+    assert gone.present is False
+    card = optional_card_html(gone)
+    assert card == ""
     assert 'href="/"' not in card
-    assert "em breve" not in card.lower()
+    # Presence uses the resolved href, never home or "em breve".
+    if present:
+        live = present[0]
+        card = optional_card_html(live)
+        assert card
+        assert live.href in card
+        assert 'href="/"' not in card
+        assert "em breve" not in card.lower()
 
 
 def test_optional_card_in_html_without_route_fails_audit() -> None:

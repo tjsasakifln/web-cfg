@@ -1749,12 +1749,12 @@
       "current_surface_kind": "ferramenta",
       "bofu_family_id": null,
       "reindex_proposal": {
-        "index_now": false,
-        "reason_code_observed": "commercial_surface_deferred",
+        "index_now": true,
+        "reason_code_observed": null,
         "robots_txt_disallow": false,
-        "meta_robots": "noindex,follow",
+        "meta_robots": "index,follow",
         "url_removal": false,
-        "condition": "Reindexar somente se a ferramenta for útil, completa e sem impedimento material (lógica de falso positivo corrigida). Não confundir robots.txt, noindex e remoção de URL."
+        "condition": "INB-07 corrigiu o falso positivo de planejamento e a landing tem método, limites e destinos. A retenção commercial_surface_deferred foi revogada. Não confundir robots.txt, noindex e remoção de URL."
       },
       "serp_sample": null,
       "purchase_id": "prontidao-tecnica-obra-privada",
@@ -1780,14 +1780,14 @@
         "/ferramentas/",
         "/triagem-tecnica/"
       ],
-      "required_proof": "noindex atual é commercial_surface_deferred (falso positivo de prontidão), não inventário de maturidade obsoleto nem Disallow em robots.txt.",
+      "required_proof": "Indexação da landing após correção da lógica e existência de /quantitativos-orcamento-obras/. Resultados pessoais continuam no cliente, sem URL parametrizada. Não é inventário de maturidade nem Disallow em robots.txt.",
       "terminal_contact": {
         "mode": "capture_form_or_whatsapp",
         "destination": "/ferramentas/prontidao-tecnica-obra-privada/"
       },
       "decision": "KEEP",
       "function_differentiation": "Ferramenta de leitura de lacunas; não é landing de quantitativos nem diagnóstico B2G.",
-      "requested_indexability": "noindex,follow",
+      "requested_indexability": "index,follow",
       "release_unit": "CORE",
       "publication_cohort": {
         "id": "existing-pre-inb-20260911",

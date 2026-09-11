@@ -811,18 +811,19 @@ def test_unmutated_purchase_map_stays_ok_while_mutation_fails():
     assert validate_purchase_route_map().ok is True
 
 
-def test_prontidao_noindex_is_commercial_surface_deferred_not_robots_disallow():
+def test_prontidao_index_is_not_robots_disallow_or_url_removal():
     document = _purchase_document()
     row = _purchase_row(document, "prontidao-tecnica-obra-privada")
     proposal = row["reindex_proposal"]
-    assert proposal["index_now"] is False
-    assert proposal["reason_code_observed"] == "commercial_surface_deferred"
+    assert proposal["index_now"] is True
+    assert proposal["reason_code_observed"] is None
     assert proposal["robots_txt_disallow"] is False
     assert proposal["url_removal"] is False
     html = (ROOT / "ferramentas/prontidao-tecnica-obra-privada/index.html").read_text(
         encoding="utf-8"
     )
-    assert 'content="noindex,follow"' in html
+    assert 'content="index,follow"' in html
+    assert 'content="noindex,follow"' not in html
     robots = (ROOT / "robots.txt").read_text(encoding="utf-8")
     assert "prontidao" not in robots.lower()
     assert "Disallow: /ferramentas/" not in robots

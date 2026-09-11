@@ -1189,7 +1189,7 @@
       "id": "como-contratar-projetos-complementares",
       "visitor_job": "Preparar insumos, definir interfaces e versoes e conferir o que deve constar da proposta de elaboracao complementar.",
       "profile": "commercial_content",
-      "terminal_action": "service_transition",
+      "terminal_action": "capture_form_or_whatsapp",
       "match": {
         "routes": [
           "/conteudos/como-contratar-projetos-complementares/"
