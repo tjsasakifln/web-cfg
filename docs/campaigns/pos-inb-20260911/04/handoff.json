@@ -1,0 +1,127 @@
+{
+  "schema": "confenge.inbound-campaign-handoff/2.0",
+  "campaign_set": "POS-INB-20260911",
+  "campaign_id": "04",
+  "prompt_version": "1.0.0",
+  "base_sha": "cb6facfaaf50aa8f1834aba43d0245e04cbea672",
+  "head_sha": null,
+  "state": "READY_FOR_INTEGRATION",
+  "decision_state": "EXECUTE_NOW",
+  "owned_paths": [
+    "ferramentas/prontidao-tecnica-obra-privada/",
+    "assets/js/private-project-technical-readiness.js",
+    "assets/js/private-project-technical-readiness.cjs",
+    "scripts/site/test_private_project_technical_readiness.mjs",
+    "scripts/campaigns/pos-inb-20260911/04/",
+    "tests/pos-inb-20260911/04/",
+    "docs/campaigns/pos-inb-20260911/04/"
+  ],
+  "changed_paths": [
+    "ferramentas/prontidao-tecnica-obra-privada/index.html",
+    "ferramentas/prontidao-tecnica-obra-privada/app.js",
+    "ferramentas/prontidao-tecnica-obra-privada/styles.css",
+    "assets/js/private-project-technical-readiness.js",
+    "assets/js/private-project-technical-readiness.cjs",
+    "scripts/site/test_private_project_technical_readiness.mjs",
+    "scripts/campaigns/pos-inb-20260911/04/derive-destination-map.mjs",
+    "tests/pos-inb-20260911/04/test_destination_map_composition.mjs",
+    "tests/pos-inb-20260911/04/test_scenario_matrix.mjs",
+    "tests/pos-inb-20260911/04/test_copy_and_static.mjs",
+    "tests/pos-inb-20260911/04/browser_prontidao.mjs",
+    "docs/campaigns/pos-inb-20260911/04/handoff.json",
+    "docs/campaigns/pos-inb-20260911/04/shared-changes.json",
+    "docs/campaigns/pos-inb-20260911/04/destination-map.json",
+    "docs/campaigns/pos-inb-20260911/04/scenario-matrix.json",
+    "docs/campaigns/pos-inb-20260911/04/map-producer-trace.md",
+    "docs/campaigns/pos-inb-20260911/04/plan.md"
+  ],
+  "requirements": [
+    {
+      "id": "F03-map",
+      "state": "CLOSED",
+      "evidence": "Shipped diagnose on origin/main SHA recommended clash/review while #pptr-destination-map only had quantity_takeoff_budgeting. After this delta, published map resolves the three released purchases by purchase_id. See tests/pos-inb-20260911/04/test_scenario_matrix.mjs and destination-map.json."
+    },
+    {
+      "id": "shared-offer-disambiguation",
+      "state": "CLOSED",
+      "evidence": "complementary_engineering_project_review omitted from unique by_offer_id; review uses purchase_id revisao-tecnica-projetos. Composition refuses /projetos-complementares-engenharia/ as the review dest by purchase_function_semantics."
+    },
+    {
+      "id": "composition-fail-closed",
+      "state": "CLOSED",
+      "evidence": "node tests/pos-inb-20260911/04/test_destination_map_composition.mjs mutates the published HTML map: delete clash key fails; delete review key fails; swap review→elaboration fails. Isolated diagnose and isolated money pages still pass."
+    },
+    {
+      "id": "buyer-copy",
+      "state": "CLOSED",
+      "evidence": "node tests/pos-inb-20260911/04/test_copy_and_static.mjs. Public surface has no vocabulário fechado, cálculo determinístico, Issue register rastreado, unpublished-page fallback, or window.ConfengeCanonicalDestinationMap."
+    },
+    {
+      "id": "browser",
+      "state": "CLOSED",
+      "evidence": "node tests/pos-inb-20260911/04/browser_prontidao.mjs exit 0. Dest hrefs match the three pages; 360/390 overflow 0; keyboard submit; JS-off shows method+dests and no processed result."
+    }
+  ],
+  "dependencies": [
+    {
+      "provider_campaign": "02",
+      "artifact_path": "/quantitativos-orcamento-obras/ /compatibilizacao-projetos-engenharia/ /revisao-tecnica-projetos-engenharia/",
+      "level": "HARD_AT_RELEASE",
+      "status": "ALREADY_SATISFIED",
+      "proof": "index.html for the three paths exists on origin/main cb6facfaaf50aa8f1834aba43d0245e04cbea672"
+    },
+    {
+      "provider_campaign": "01",
+      "artifact_path": "contact query IDs need_code|offer_candidate_id|intent_family|route_id|source_origin_asset_id|source_origin_route_family",
+      "level": "SOFT",
+      "status": "EMITTED",
+      "proof": "buildContactHref uses CONTACT_QUERY_KEYS only; answers never enter the query"
+    },
+    {
+      "provider_campaign": "10",
+      "artifact_path": "canonical map / npm script / production HTTP",
+      "level": "HARD_AT_RELEASE",
+      "status": "SHARED_CHANGE",
+      "proof": "docs/campaigns/pos-inb-20260911/04/shared-changes.json"
+    },
+    {
+      "provider_campaign": "09",
+      "artifact_path": "scenario matrix + nucleus/browser evidence",
+      "level": "REVIEW",
+      "status": "HANDED_OFF",
+      "proof": "docs/campaigns/pos-inb-20260911/04/scenario-matrix.json"
+    }
+  ],
+  "shared_changes": "docs/campaigns/pos-inb-20260911/04/shared-changes.json",
+  "commands_results": [
+    {
+      "command": "npm run test:private-readiness",
+      "exit_code": 0,
+      "runs": 2,
+      "subject_sha": "cb6facfaaf50aa8f1834aba43d0245e04cbea672 plus local 04 delta"
+    },
+    {
+      "command": "node tests/pos-inb-20260911/04/test_destination_map_composition.mjs",
+      "exit_code": 0
+    },
+    {
+      "command": "node tests/pos-inb-20260911/04/test_scenario_matrix.mjs",
+      "exit_code": 0
+    },
+    {
+      "command": "node tests/pos-inb-20260911/04/test_copy_and_static.mjs",
+      "exit_code": 0
+    },
+    {
+      "command": "node tests/pos-inb-20260911/04/browser_prontidao.mjs",
+      "exit_code": 0,
+      "note": "Chrome /home/tjsasakifln/.cache/ms-playwright/chromium-1234/chrome-linux64/chrome; 360/390/keyboard/JS-off passed"
+    }
+  ],
+  "unresolved": [
+    "package.json script and CI wiring remain a shared-change for 10. 04 tests run with node on owned files.",
+    "Production HTTP of resolved dests is 10, not claimed here.",
+    "head_sha is not stored in this file. See PR comment HEAD_READY."
+  ],
+  "rollback": "Revert this exclusive branch. The landing again embeds only quantity_takeoff_budgeting and the F03-locking assertions return. No production mutation was made by 04."
+}

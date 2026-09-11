@@ -1,0 +1,60 @@
+{
+  "campaign_id": "04",
+  "campaign_set": "POS-INB-20260911",
+  "for": "09",
+  "nucleus": "assets/js/private-project-technical-readiness.cjs",
+  "published_map_selector": "#pptr-destination-map",
+  "map_build_point": "scripts/campaigns/pos-inb-20260911/04/derive-destination-map.mjs",
+  "scenarios": [
+    {
+      "id": "orcamento_necessario",
+      "inputs": "quantities/budget/calc_memory = nenhum",
+      "expect_primary": "orcamento",
+      "expect_purchase_id": "quantitativos-orcamento",
+      "expect_href": "/quantitativos-orcamento-obras/"
+    },
+    {
+      "id": "interfaces_nao_conferidas",
+      "inputs": "coordination/bim_or_constructability = nenhum; decision_on_table = iniciar_execucao",
+      "expect_primary": "compatibilizacao",
+      "expect_purchase_id": "compatibilizacao-projetos",
+      "expect_href": "/compatibilizacao-projetos-engenharia/"
+    },
+    {
+      "id": "revisao_material_recebido",
+      "inputs": "design_set = parcial",
+      "expect_primary": "revisao",
+      "expect_purchase_id": "revisao-tecnica-projetos",
+      "expect_href": "/revisao-tecnica-projetos-engenharia/",
+      "must_not_href": "/projetos-complementares-engenharia/"
+    },
+    {
+      "id": "ids_compartilhados_nao_trocam_compra",
+      "inputs": "offer_id complementary_engineering_project_review without purchase_id",
+      "expect": "resolver present=false; with purchase_id revisao-tecnica-projetos → review URL"
+    },
+    {
+      "id": "respostas_desconhecidas",
+      "inputs": "{}",
+      "expect_primary": null,
+      "expect_gaps": 0,
+      "expect_scope_conversation": true
+    },
+    {
+      "id": "planejamento_nao_penaliza_entrega",
+      "inputs": "work_stage = planejamento",
+      "expect": "changes_execution_measurement and asbuilt_handover_operations are EVIDENCE_PRESENT with applicability not_required_at_declared_stage"
+    },
+    {
+      "id": "projeto_inexistente",
+      "inputs": "design_set = nenhum",
+      "expect_primary": null,
+      "expect": "not labelled projeto defeituoso; not routed to revisão or elaboração; scope conversation"
+    }
+  ],
+  "commands": [
+    "node tests/pos-inb-20260911/04/test_scenario_matrix.mjs",
+    "node tests/pos-inb-20260911/04/test_destination_map_composition.mjs",
+    "node tests/pos-inb-20260911/04/browser_prontidao.mjs"
+  ]
+}
