@@ -106,6 +106,32 @@ def parse_html(text: str) -> dict[str, Any]:
     }
 
 
+_SCRIPT_RE = re.compile(r"<script\b[^>]*>.*?</script>", re.I | re.S)
+_STYLE_RE = re.compile(r"<style\b[^>]*>.*?</style>", re.I | re.S)
+_TAG_RE = re.compile(r"<[^>]+>")
+_HREF_RE = re.compile(r"""href\s*=\s*["']([^"']+)["']""", re.I)
+
+
+def visible_text_without_js(html: str) -> str:
+    """Essential copy a visitor can read with scripts disabled."""
+    stripped = _SCRIPT_RE.sub(" ", html or "")
+    stripped = _STYLE_RE.sub(" ", stripped)
+    text = _TAG_RE.sub(" ", stripped)
+    return " ".join(text.split())
+
+
+def extract_internal_hrefs(html: str) -> list[str]:
+    seen: set[str] = set()
+    ordered: list[str] = []
+    for href in _HREF_RE.findall(html or ""):
+        if href.startswith("mailto:") or href.startswith("tel:") or href.startswith("javascript:"):
+            continue
+        if href not in seen:
+            seen.add(href)
+            ordered.append(href)
+    return ordered
+
+
 def local_path_for_canonical(canonical: str) -> str:
     parsed = urlparse(canonical)
     path = parsed.path or "/"
@@ -530,6 +556,9 @@ def inspect_asset(asset: dict[str, Any], *, root: Path) -> dict[str, Any]:
 
     sitemap_urls = load_sitemap_urls(root)
     result["sitemap"] = str(canonical) in sitemap_urls
+    result["sitemap_membership"] = result["sitemap"]
+    result["indexed"] = UNKNOWN
+    result["indexed_from_sitemap"] = False
 
     if not page.is_file():
         result["http"]["local_file"] = "absent"
@@ -554,4 +583,55 @@ def inspect_asset(asset: dict[str, Any], *, root: Path) -> dict[str, Any]:
     }
     result["declared_canonical"] = parsed_html["canonical"]
     result["structured_data_defects"] = structured_data_matches_visible(visible, parsed_html["jsonld"])
+    noscript = visible_text_without_js(html)
+    result["visible_without_js"] = noscript
+    result["essential_content_without_js"] = bool(
+        (parsed_html["title"] or parsed_html["h1"] or parsed_html["description"])
+        and len(noscript) > 40
+    )
+    result["internal_hrefs"] = extract_internal_hrefs(html)
+    result["indexed"] = UNKNOWN
+    result["indexed_from_sitemap"] = False
     return result
+
+
+def inspect_url_layers(canonical: str, *, root: Path) -> dict[str, Any]:
+    """Per-layer local inspect. A sitemap loc never sets indexed=true."""
+    asset = {
+        "id": canonical,
+        "canonical": canonical,
+        "index_intent": "index",
+        "local_path": local_path_for_canonical(canonical),
+    }
+    source = inspect_asset(asset, root=root)
+    site_root = root / "_site"
+    if site_root.is_dir():
+        artifact = inspect_asset(asset, root=site_root)
+        artifact_observation = "observed" if artifact.get("http", {}).get("local_file") == "present" else "UNOBSERVED"
+    else:
+        artifact = {
+            "http": {
+                "status": UNKNOWN,
+                "probed": False,
+                "local_file": "absent",
+                "note": "generated_artifact_dir_absent_is_not_public_404",
+            },
+            "indexed": UNKNOWN,
+            "indexed_from_sitemap": False,
+            "sitemap": False,
+        }
+        artifact_observation = "UNOBSERVED"
+    return {
+        "canonical": canonical,
+        "layers": {"source": source, "artifact": artifact},
+        "sitemap_membership": bool(source.get("sitemap")),
+        "indexed": UNKNOWN,
+        "indexed_from_sitemap": False,
+        "artifact_observation": artifact_observation,
+        "source_local_file": (source.get("http") or {}).get("local_file"),
+        "robots_meta": source.get("robots_meta"),
+        "declared_canonical": source.get("declared_canonical"),
+        "essential_content_without_js": source.get("essential_content_without_js"),
+        "internal_hrefs": source.get("internal_hrefs") or [],
+        "http_status": (source.get("http") or {}).get("status"),
+    }

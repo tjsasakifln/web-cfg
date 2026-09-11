@@ -122,6 +122,7 @@ SNAPSHOT_SOURCE_KINDS = (
     "search_analytics_api",
     "historical_csv_export",
     "fixture",
+    "provided_aggregate",
     "absence",
     "credential_failure",
     "search_analytics_top_row_truncation",
@@ -270,6 +271,15 @@ def classify_snapshot_source(payload: dict[str, Any] | None) -> str:
     """Exactly one of SNAPSHOT_SOURCE_KINDS. Fixture/CSV/history is never live API."""
     data = payload or {}
     explicit = data.get("source_kind")
+    provided = (
+        data.get("provided_aggregate") is True
+        or data.get("origin") == "founder_provided_baseline"
+        or explicit == "provided_aggregate"
+    )
+    if provided:
+        if explicit in LIVE_SOURCE_KINDS:
+            return "provided_aggregate"
+        return "provided_aggregate"
     if explicit in SNAPSHOT_SOURCE_KINDS:
         if explicit in LIVE_SOURCE_KINDS and (
             data.get("synthetic") is True or data.get("fixture") is True or data.get("historical") is True
@@ -315,7 +325,7 @@ def snapshot_freshness(
     kind = classify_snapshot_source(data)
     if kind == "credential_failure" or data.get("blocked") is True:
         return "BLOCKED"
-    if kind in {"fixture", "historical_csv_export", "absence"}:
+    if kind in {"fixture", "historical_csv_export", "provided_aggregate", "absence"}:
         return "NOT_CURRENT"
     today = today or property_today()
     provider_max = data.get("max_date") or data.get("as_of") or data.get("end")
@@ -1115,7 +1125,7 @@ def gsc_performance_status(pull_result: dict[str, Any] | None) -> str:
     kind = classify_snapshot_source(data)
     if kind == "credential_failure" or data.get("error") == "missing_credentials":
         return "UNKNOWN"
-    if kind in {"fixture", "historical_csv_export"}:
+    if kind in {"fixture", "historical_csv_export", "provided_aggregate"}:
         return "UNKNOWN"
     if data.get("ok") is True and data.get("ready_for_product_decisions") is True and data.get("synthetic") is not True:
         return "LIVE"
@@ -1320,11 +1330,24 @@ def stamp_non_live_snapshot(payload: dict[str, Any]) -> dict[str, Any]:
         out["source_kind"] = "credential_failure"
         out["synthetic"] = False
         out["fixture"] = False
+        out["provided_aggregate"] = False
         out["ready_for_product_decisions"] = False
         out["live_baseline_invented"] = False
         return out
+    if kind == "provided_aggregate":
+        out["source_kind"] = "provided_aggregate"
+        out["synthetic"] = False
+        out["fixture"] = False
+        out["provided_aggregate"] = True
+        out["historical"] = True
+        out["ready_for_product_decisions"] = False
+        out["live_baseline_invented"] = False
+        if not out.get("source"):
+            out["source"] = out.get("origin") or "founder_provided_baseline"
+        return out
     out["synthetic"] = True
     out["fixture"] = True
+    out["provided_aggregate"] = False
     out["historical"] = kind == "historical_csv_export" or bool(out.get("historical"))
     out["source_kind"] = kind if kind in SNAPSHOT_SOURCE_KINDS else "historical_csv_export"
     out["ready_for_product_decisions"] = False
@@ -1454,9 +1477,22 @@ def col(row: dict[str, str], *names: str) -> str:
     return ""
 
 
-def import_csv_dir(src: Path, as_of: str | None = None) -> dict[str, Any]:
+def import_csv_dir(
+    src: Path,
+    as_of: str | None = None,
+    *,
+    extracted_at: str | None = None,
+    site: str | None = None,
+    search_type: str | None = None,
+) -> dict[str, Any]:
     """Historical CSV import. Never CURRENT. Dimensions stay isolated."""
-    payload = import_gsc_export(src, as_of=as_of)
+    payload = import_gsc_export(
+        src,
+        as_of=as_of,
+        extracted_at=extracted_at,
+        site=site,
+        search_type=search_type,
+    )
     # Preserve cluster/intent enrichment used by the existing twelve analyses.
     for query in payload.get("queries") or []:
         text = str(query.get("query") or "")
@@ -2639,7 +2675,8 @@ def build_operational_baseline(
         "source": payload.get("source") or kind,
         "synthetic": payload.get("synthetic") is True or kind in {"fixture", "historical_csv_export"},
         "fixture": kind == "fixture",
-        "historical": kind == "historical_csv_export",
+        "provided_aggregate": kind == "provided_aggregate",
+        "historical": kind in {"historical_csv_export", "provided_aggregate"},
         "truncated": kind == "search_analytics_top_row_truncation" or bool(payload.get("truncated")),
         "ready_for_product_decisions": ready,
         "freshness": freshness,
@@ -2726,7 +2763,7 @@ def _technical_defects(kind: str, freshness: str, payload: dict[str, Any]) -> li
                 "action": "Re-run live pull after secrets are present. Do not treat the snapshot as current.",
             }
         )
-    if kind in {"fixture", "historical_csv_export"}:
+    if kind in {"fixture", "historical_csv_export", "provided_aggregate"}:
         defects.append(
             {
                 "id": "non_live_snapshot",
@@ -3170,13 +3207,13 @@ def main(argv: list[str] | None = None) -> int:
             if not src.exists():
                 print(json.dumps({"ok": False, "error": "dir_not_found", "dir": str(src)}))
                 return 1
-            payload = import_csv_dir(src, args.as_of)
-            if getattr(args, "extracted_at", None):
-                payload["extracted_at"] = args.extracted_at
-            if getattr(args, "site", None):
-                payload["site"] = args.site
-            if getattr(args, "search_type", None):
-                payload["search_type"] = args.search_type
+            payload = import_csv_dir(
+                src,
+                args.as_of,
+                extracted_at=getattr(args, "extracted_at", None),
+                site=getattr(args, "site", None),
+                search_type=getattr(args, "search_type", None),
+            )
         insights = analyze(payload)
         dims = isolate_dimension_totals(payload)
         print(

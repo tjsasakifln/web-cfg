@@ -1,0 +1,222 @@
+{
+  "schema": "confenge.inbound-campaign-handoff/2.0",
+  "campaign_set": "POS-INB-20260911",
+  "campaign_id": "06",
+  "prompt_version": "1.0.0",
+  "title": "Descoberta técnica e mensuração aproveitando o Search Console",
+  "base_sha": "cb6facfaaf50aa8f1834aba43d0245e04cbea672",
+  "origin_main_confirmed": "cb6facfaaf50aa8f1834aba43d0245e04cbea672",
+  "merge_669_confirmed": true,
+  "pr_670_open_head": "e45c016f5742ce3a5420371798b8979dfacdb5e0",
+  "pr_670_not_merged": true,
+  "state": "READY_FOR_INTEGRATION_WITH_DEPENDENCIES",
+  "branch": "campaign/pos-inb-20260911/06-descoberta-aprendizagem",
+  "owned_paths": [
+    "scripts/revops/gsc_import_learning.py",
+    "scripts/revops/search_demand_observatory.py",
+    "scripts/revops/test_search_demand.py",
+    "scripts/revops/fixtures/gsc-founder-baseline-2026-09-02-08/",
+    "scripts/discovery/inspect.py",
+    "scripts/campaigns/pos-inb-20260911/06/",
+    "tests/pos-inb-20260911/06/",
+    "docs/campaigns/pos-inb-20260911/06/"
+  ],
+  "changed_paths": [
+    "scripts/revops/gsc_import_learning.py",
+    "scripts/revops/search_demand_observatory.py",
+    "scripts/revops/test_search_demand.py",
+    "scripts/revops/fixtures/gsc-founder-baseline-2026-09-02-08/README.md",
+    "scripts/revops/fixtures/gsc-founder-baseline-2026-09-02-08/meta.json",
+    "scripts/discovery/inspect.py",
+    "scripts/campaigns/pos-inb-20260911/06/audit_discovery.py",
+    "scripts/campaigns/pos-inb-20260911/06/priority_urls.json",
+    "tests/pos-inb-20260911/06/test_gsc_provenance.py",
+    "tests/pos-inb-20260911/06/test_url_checklist.py",
+    "docs/campaigns/pos-inb-20260911/06/handoff.json",
+    "docs/campaigns/pos-inb-20260911/06/shared-changes.json",
+    "docs/campaigns/pos-inb-20260911/06/url-checklist-summary.json"
+  ],
+  "preserved": [
+    "Consultas.csv / Paginas.csv / Grafico.csv / Paises.csv / Filtros.csv original INB-10 bytes",
+    "Auth GSC, pull-api, history.json, publisher redaction, Netcup store",
+    "HTML owned by 02/04/05/07/08 not edited",
+    "package.json, workflows, sitemaps, registries (shared-changes only)"
+  ],
+  "requirements": [
+    {
+      "id": "A-provenance",
+      "state": "DONE",
+      "evidence": "source_kind=provided_aggregate; fixture=false; query text UNKNOWN; page grain not keyword; incomplete current day flagged; as_of=2026-09-08 not extracted_at; second import idempotent_replay=true"
+    },
+    {
+      "id": "B-url-checklist",
+      "state": "DONE",
+      "evidence": "docs/campaigns/pos-inb-20260911/06/url-checklist-summary.json — 15 URLs, source present, sitemap membership true, indexed=UNKNOWN, artifact UNOBSERVED because _site absent locally"
+    },
+    {
+      "id": "C-acquisition-path",
+      "state": "DONE",
+      "evidence": "acquisition_paths in url-checklist-summary.json; shared-changes for 04/05/07/10; queue max 3"
+    },
+    {
+      "id": "D-live-gsc",
+      "state": "EXTERNAL_EVIDENCE",
+      "evidence": "pull-api --days 7 --smoke → missing_credentials, source_kind=credential_failure, rows=none, exit 2. Not PASS."
+    },
+    {
+      "id": "E-release-annotation",
+      "state": "UNKNOWN",
+      "evidence": "first_verified_deploy_at absent. Domain-served date is not commit/merge. Seven days not causal."
+    },
+    {
+      "id": "F-capture-stages",
+      "state": "DONE",
+      "evidence": "join_capture_stages maps visitor/clique/solicitacao_persistida/encaminhamento_aceito/oportunidade_qualificada; Warmbly absent → UNKNOWN not zero; no lead_id field"
+    },
+    {
+      "id": "G-automation",
+      "state": "NOT_ACTIVE",
+      "evidence": "No new workflow. Operator command recorded. 10 owns package.json/workflow shared-changes."
+    },
+    {
+      "id": "H-url-inspection",
+      "state": "DONE",
+      "evidence": "inspect-urls smoke indexing_api_called=false; tests refuse indexing.googleapis.com and urlNotifications.publish"
+    }
+  ],
+  "dependencies": [
+    {
+      "provider_campaign": "01",
+      "artifact_path": "docs/campaigns/pos-inb-20260911/01/handoff.json",
+      "level": "SOFT",
+      "fallback": "scripts/revops/inbound_proof_contract.mjs FUNNEL_KEYS + join_capture_stages",
+      "status": "FALLBACK_USED"
+    },
+    {
+      "provider_campaign": "04",
+      "artifact_path": "ferramentas/prontidao-tecnica-obra-privada/index.html",
+      "level": "SHARED_CHANGE",
+      "status": "PENDING",
+      "change_ids": ["pos-inb-06-prontidao-destination-map"]
+    },
+    {
+      "provider_campaign": "05",
+      "artifact_path": "parcerias-engenharia/index.html",
+      "level": "SHARED_CHANGE",
+      "status": "PENDING",
+      "change_ids": [
+        "pos-inb-06-partner-kit-revisao-dest",
+        "pos-inb-06-partner-kit-complementares-dest",
+        "pos-inb-06-parcerias-html-kit-revisao-href",
+        "pos-inb-06-parcerias-html-kit-complementares-href"
+      ]
+    },
+    {
+      "provider_campaign": "07",
+      "artifact_path": "conteudos/como-contratar-projetos-complementares/index.html",
+      "level": "SHARED_CHANGE",
+      "status": "PENDING",
+      "change_ids": [
+        "pos-inb-06-conteudo-complementares-revisao-href",
+        "pos-inb-06-conteudo-compatibilizacao-sibling-href"
+      ]
+    },
+    {
+      "provider_campaign": "10",
+      "artifact_path": "docs/campaigns/pos-inb-20260911/06/shared-changes.json",
+      "level": "SHARED_CHANGE",
+      "status": "PENDING",
+      "change_ids": [
+        "pos-inb-06-purchase-map-page-grain-not-query",
+        "pos-inb-06-ops-doc-provided-aggregate",
+        "pos-inb-06-pkg-audit-script"
+      ]
+    }
+  ],
+  "shared_changes": "docs/campaigns/pos-inb-20260911/06/shared-changes.json",
+  "commands_results": [
+    {
+      "command": "python3 scripts/revops/test_search_demand.py",
+      "exit_code": 0,
+      "note": "ALL search demand tests passed including founder provided_aggregate assertions"
+    },
+    {
+      "command": "python3 -m pytest tests/pos-inb-20260911/06/ tests/discovery/ -q",
+      "exit_code": 0,
+      "note": "11 + 80 passed"
+    },
+    {
+      "command": "python3 scripts/revops/search_demand_observatory.py import-csv --dir scripts/revops/fixtures/gsc-founder-baseline-2026-09-02-08 --extracted-at 2026-09-11",
+      "exit_code": 0,
+      "observations": {
+        "source_kind": "provided_aggregate",
+        "property_clicks": 6,
+        "property_impressions": 176,
+        "page_impressions": 215,
+        "query_impressions": 16,
+        "query_clicks": 0,
+        "brazil_impressions": 147,
+        "brazil_clicks": 6,
+        "freshness": "NOT_CURRENT",
+        "as_of": "2026-09-08",
+        "extracted_at": "2026-09-11",
+        "second_run_idempotent_replay": true
+      }
+    },
+    {
+      "command": "python3 scripts/revops/search_demand_observatory.py pull-api --days 7 --smoke",
+      "exit_code": 2,
+      "observations": {
+        "error": "missing_credentials",
+        "source_kind": "credential_failure",
+        "rows": null,
+        "external_evidence": true,
+        "not_pass": true
+      }
+    },
+    {
+      "command": "python3 scripts/revops/search_demand_observatory.py inspect-urls --url https://confenge.com.br/quantitativos-orcamento-obras/ --smoke",
+      "exit_code": 0,
+      "observations": {
+        "error": "missing_credentials",
+        "indexing_api_called": false
+      }
+    }
+  ],
+  "unresolved": [
+    {
+      "id": "live-gsc-api",
+      "level": "EXTERNAL_EVIDENCE",
+      "status": "NOT_OBTAINED",
+      "next_action": "Operator: GSC_SITE_URL=sc-domain:confenge.com.br GSC_CREDENTIALS_JSON=/path/to/service-account.json python3 scripts/revops/search_demand_observatory.py pull-api --days 7 --smoke"
+    },
+    {
+      "id": "live-http-confenge",
+      "level": "EXTERNAL_EVIDENCE",
+      "status": "UNOBSERVED",
+      "detail": "GET https://confenge.com.br/quantitativos-orcamento-obras/ returned transport unavailable in this environment. Recorded as UNKNOWN/unobserved, not public 404."
+    },
+    {
+      "id": "first_verified_deploy_at",
+      "level": "EXTERNAL_EVIDENCE",
+      "status": "UNKNOWN",
+      "detail": "No domain-served date evidence. Commit/PR/merge are not publication."
+    },
+    {
+      "id": "shared-changes-04-05-07-10",
+      "level": "PENDING",
+      "status": "PENDING",
+      "detail": "Exact deltas in shared-changes.json. 06 did not edit HTML of 02/04/05/07."
+    }
+  ],
+  "rollback": "Revert this branch. Founder CSV bytes were not rewritten. Import of provided_aggregate never overwrites a live latest_import.json.",
+  "notes": {
+    "inb10_already_on_main": "gsc_import_learning.py and founder baseline were already on origin/main via #669. 06 audited and corrected provenance (fixture→provided_aggregate, query labels not keywords) without deleting original CSVs.",
+    "f05_reproduced": "Partner kits still point revisão and complementares to /servicos/#servico-projeto.",
+    "f03_reproduced": "Prontidão destination map still only resolves quantitativos/orçamento.",
+    "hub_07_already_links_dedicated_pages": "/servicos/#servico-revisao and #servico-compatibilizacao already button to dedicated landings. Residual wrong-hub links are kits and decision contents.",
+    "no_new_dashboard": true,
+    "no_indexing_api": true,
+    "no_workflow_duplicate": true
+  }
+}
