@@ -1,0 +1,6 @@
+{
+  "campaign_set": "INB-20260911",
+  "examined_kind": "candidate",
+  "campaigns": ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15"],
+  "note": "Explicit INB-20260911 regression manifesto. Numeric ids are not interchangeable with POS-INB-20260911. A textual 01-15 token is not this list."
+}

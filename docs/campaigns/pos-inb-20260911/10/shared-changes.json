@@ -1,0 +1,43 @@
+{
+  "schema": "confenge.inbound-campaign-shared-changes/2.0",
+  "campaign_set": "POS-INB-20260911",
+  "campaign_id": "10",
+  "prompt_version": "1.0.0",
+  "owner_campaign": "10",
+  "note": "Integrator application matrix lives in application-matrix.json. This file records 10-owned central deltas and producer-owned published-page composition applied because those branches were still at origin/main.",
+  "changes": [
+    {
+      "change_id": "10-public-artifact-demonstrative-csv",
+      "owner_campaign": "10",
+      "path": "scripts/pseo/public_artifact.py",
+      "operation": "allowlist",
+      "key_or_anchor": "PUBLIC_ALLOWED_NESTED_DATA_DIRS",
+      "expected_old": "casos/demonstrativo-projeto-privado/data skipped because FORBIDDEN_DIR_NAMES contains data",
+      "desired_new": "casos/demonstrativo-projeto-privado/data copied; repository data/ still forbidden",
+      "rationale": "F01: the four public demonstrative CSVs were omitted from the #669 package.",
+      "acceptance_test": "python3 -m pytest scripts/pseo/tests/test_demonstrative_csv_packaging.py -q"
+    },
+    {
+      "change_id": "10-purchase-route-published-pages",
+      "owner_campaign": "10",
+      "path": "data/bofu-dominance/core/purchase-route-map.v1.json",
+      "operation": "upsert",
+      "key_or_anchor": "purchases[revisao-tecnica-projetos|compatibilizacao-projetos|projetos-complementares].primary_url",
+      "expected_old": "/servicos/#servico-projeto",
+      "desired_new": "dedicated published landings; legacy offer_id preserved; purchases remain distinct",
+      "rationale": "Pages already exist on main. Map still pointed at the hub fragment.",
+      "acceptance_test": "python3 -m pytest tests/bofu_dominance/core/test_buyer_decision_map.py -q"
+    },
+    {
+      "change_id": "10-canonical-destination-map",
+      "owner_campaign": "10",
+      "path": "script.js",
+      "operation": "inject",
+      "key_or_anchor": "window.ConfengeCanonicalDestinationMap",
+      "expected_old": "absent; 04 HTML map only quantity_takeoff_budgeting",
+      "desired_new": "derived from purchase-route-map; 04 app.js already prefers the global map",
+      "rationale": "F03: readiness recommended revisão/compatibilização but the consumed map only resolved orçamento.",
+      "acceptance_test": "npm run test:pos-inb-20260911-10"
+    }
+  ]
+}

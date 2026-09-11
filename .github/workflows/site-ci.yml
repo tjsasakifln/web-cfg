@@ -153,6 +153,7 @@ jobs:
           npm run test:release-filters
           npm run test:runtime
           python3 -m pytest deploy/netcup/tests -q
+          npm run test:pos-inb-20260911-10
           npm run test:pseo-attribution
           npm run test:revops
           npm run test:privacy
@@ -165,6 +166,8 @@ jobs:
           npm run test:form-funnel
           npm run test:cta-form-next-state
           npm run test:lead-function
+      - name: INB-15 strict regression on the candidate tree
+        run: npm run test:inb-20260911-15-strict
       - name: Build public site
         env:
           # The release artifact must carry the production identity it will be

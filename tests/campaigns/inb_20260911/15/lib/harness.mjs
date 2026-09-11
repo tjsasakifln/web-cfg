@@ -153,8 +153,13 @@ export function finish(report, { strictRelease = false } = {}) {
   const publicationRequiredMissingRows = missingRows.filter((r) => isPublicationRequired(r));
   const publicationRequiredMissing = publicationRequiredMissingRows.length;
   const optionalOrExternalMissing = missing - publicationRequiredMissing;
+  const emptyExecution = !Array.isArray(report.results) || report.results.length === 0;
   const exitCode =
-    productFails > 0 || (strictRelease && publicationRequiredMissing > 0) ? 1 : 0;
+    productFails > 0 ||
+    (strictRelease && publicationRequiredMissing > 0) ||
+    (strictRelease && emptyExecution)
+      ? 1
+      : 0;
   report.summary = {
     pass: passes,
     fail: productFails,
@@ -162,6 +167,7 @@ export function finish(report, { strictRelease = false } = {}) {
     publication_required_missing: publicationRequiredMissing,
     optional_or_external_missing: optionalOrExternalMissing,
     strict_release: Boolean(strictRelease),
+    empty_execution: emptyExecution,
     publication_required_missing_ids: publicationRequiredMissingRows.map((r) => r.id),
     exit_code: exitCode,
   };

@@ -151,7 +151,7 @@ test("shipped landing does not present the test fixture as a real sample", () =>
   const html = read(LANDING);
   const main = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i)?.[1] || "";
   assert.match(main, /id="qty-sample-trail"/);
-  assert.match(main, /data-sample-trail-state="awaiting-canonical-excerpt"/);
+  assert.match(main, /data-sample-trail-state="canonical"/);
   assert.match(main, /Amostra demonstrativa/);
   assert.match(main, /Não é orçamento válido para executar obra/);
   for (const token of FIXTURE_TOKENS) {

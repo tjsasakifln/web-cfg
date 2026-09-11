@@ -179,6 +179,14 @@ FORBIDDEN_DIR_NAMES = frozenset(
     }
 )
 
+# Nested visitor `data/` trees that are not the repository's internal data/
+# directory. The private-project demonstrative CSVs are public samples.
+PUBLIC_ALLOWED_NESTED_DATA_DIRS = frozenset(
+    {
+        "casos/demonstrativo-projeto-privado/data",
+    }
+)
+
 FORBIDDEN_EXTENSIONS = frozenset(
     {
         ".py",
@@ -423,7 +431,11 @@ def assemble_public_artifact(
                 rel_dir = ""
             for n in names:
                 if n in FORBIDDEN_DIR_NAMES:
-                    skip.add(n)
+                    nested = f"{rel_dir}/{n}".lstrip("/")
+                    if not (
+                        n == "data" and nested in PUBLIC_ALLOWED_NESTED_DATA_DIRS
+                    ):
+                        skip.add(n)
                 elif n.startswith(".env"):
                     skip.add(n)
                 elif Path(n).suffix.lower() in FORBIDDEN_EXTENSIONS:
@@ -549,7 +561,7 @@ def audit_public_artifact(
         rel = p.relative_to(dest).as_posix()
         if p.is_dir():
             # No nested data/ dirs in the public artifact (strategic JSON is auth-only)
-            if p.name in FORBIDDEN_DIR_NAMES:
+            if p.name in FORBIDDEN_DIR_NAMES and rel not in PUBLIC_ALLOWED_NESTED_DATA_DIRS:
                 findings.append(
                     {
                         "code": "forbidden_dir",

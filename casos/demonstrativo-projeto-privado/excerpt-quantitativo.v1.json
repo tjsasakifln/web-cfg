@@ -1,0 +1,32 @@
+{
+  "schema": "confenge.quantity-takeoff-excerpt/1.0",
+  "source": "casos/demonstrativo-projeto-privado/data/quantitativos.csv",
+  "budget_source": "casos/demonstrativo-projeto-privado/data/orcamento.csv",
+  "disclaimer": "Amostra demonstrativa do recorte de banheiro R01 em /casos/demonstrativo-projeto-privado/. Não é orçamento válido para executar obra, não representa cliente e não fecha preço, prazo ou quantidade contratual.",
+  "element": {
+    "id": "Q-PAR-01",
+    "name": "Revestimento cerâmico de parede",
+    "source": "PR-ARQ-R01, recorte demonstrativo de banheiro R01"
+  },
+  "criterion": {
+    "unit": "m2",
+    "rule": "Aberturas com área igual ou maior que 0,50 m² são descontadas integralmente das quantidades de revestimento de parede. Aberturas menores não são descontadas."
+  },
+  "calculation": {
+    "formula": "sum(length*height)-openings>=0.50",
+    "memory": "Leitura no recorte R01 da PR-ARQ-R01 sobre as paredes W-01 a W-04, a porta D-01 e a janela WN-01.",
+    "inputs": [
+      { "label": "quantidade conferida", "value": 19.6, "unit": "m2" }
+    ]
+  },
+  "quantity": {
+    "value": 19.6,
+    "unit": "m2"
+  },
+  "spreadsheet_item": {
+    "code": "ORC-PAR-01",
+    "description": "Revestimento cerâmico de parede, inclusive argamassa colante",
+    "quantity": 19.6,
+    "unit": "m2"
+  }
+}

@@ -56,15 +56,15 @@
       "intent_family": "projetar_revisar_compatibilizar",
       "offer_id": "bim_coordination_clash_register",
       "destination": {
-        "path": "/servicos/#servico-projeto",
-        "label": "Elaborar, revisar e compatibilizar projetos",
+        "path": "/revisao-tecnica-projetos-engenharia/",
+        "label": "Revisão técnica de projetos de engenharia",
         "required": true
       },
       "sample": {
-        "path": "/entregas/",
-        "id": "entregas-exemplos-hub",
-        "label": "Esquema ilustrativo da entrega de projeto, revisão e compatibilização",
-        "kind": "illustrative_schema",
+        "path": "/casos/demonstrativo-projeto-privado/",
+        "id": "demonstrativo-projeto-privado",
+        "label": "Recorte demonstrativo de revisão",
+        "kind": "demonstrative",
         "required": true
       },
       "conversation": {
@@ -88,8 +88,8 @@
       "intent_family": "projetar_revisar_compatibilizar",
       "offer_id": "complementary_engineering_project_review",
       "destination": {
-        "path": "/servicos/#servico-projeto",
-        "label": "Elaborar, revisar e compatibilizar projetos",
+        "path": "/projetos-complementares-engenharia/",
+        "label": "Projetos complementares de engenharia",
         "required": true
       },
       "sample": {

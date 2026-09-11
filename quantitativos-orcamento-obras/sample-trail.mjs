@@ -10,7 +10,7 @@ import path from "node:path";
 
 export const EXCERPT_SCHEMA = "confenge.quantity-takeoff-excerpt/1.0";
 export const CANONICAL_EXCERPT_REL =
-  "casos/demonstrativo-quantitativos-orcamento/excerpt.v1.json";
+  "casos/demonstrativo-projeto-privado/excerpt-quantitativo.v1.json";
 export const TRAIL_STEPS = Object.freeze([
   "element",
   "criterion",
@@ -204,14 +204,27 @@ export function renderTrailForTest(excerpt) {
   ].join("");
 }
 
-const SLOT_RE = /<div\b[^>]*\bid=["']qty-sample-trail["'][^>]*>[\s\S]*?<\/div>/i;
+const SLOT_OPEN_RE = /<div\b[^>]*\bid=["']qty-sample-trail["'][^>]*>/i;
 
 export function injectSampleTrail(pageHtml, excerpt) {
   const fragment = renderSampleTrail(excerpt);
-  if (!SLOT_RE.test(pageHtml)) {
+  const open = pageHtml.match(SLOT_OPEN_RE);
+  if (!open || open.index == null) {
     throw new Error("page HTML is missing #qty-sample-trail slot");
   }
-  return pageHtml.replace(SLOT_RE, fragment);
+  const start = open.index;
+  const finder = /<\/?div\b[^>]*>/gi;
+  finder.lastIndex = start;
+  let depth = 0;
+  let match;
+  while ((match = finder.exec(pageHtml))) {
+    if (match[0].startsWith("</")) depth -= 1;
+    else depth += 1;
+    if (depth === 0) {
+      return pageHtml.slice(0, start) + fragment + pageHtml.slice(match.index + match[0].length);
+    }
+  }
+  throw new Error("page HTML has an unclosed #qty-sample-trail slot");
 }
 
 export function trailStepText(html, step) {

@@ -166,7 +166,7 @@ test("landing extract separates four honest classes and refuses invented errors"
   assert.match(main, /data-extract-kind="demonstrative"/);
   assert.match(main, /data-extract-canonical-source="inb-06"/);
   assert.match(main, /não é trabalho de cliente/);
-  assert.match(main, /não é conteúdo aprovado pelo fundador/);
+  assert.match(main, /não é parecer para executar obra/);
   assert.match(main, /RF-01/);
   assert.match(main, /WN-01/);
   assert.match(main, /HS-01/);

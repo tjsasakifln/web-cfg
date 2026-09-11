@@ -333,7 +333,7 @@
     {
       "canonical": "https://confenge.com.br/compatibilizacao-projetos-engenharia/",
       "b2g_protected": false,
-      "quality_state": "PASS_PENDING_PUBLICATION",
+      "quality_state": "EXISTING_COMPLETE",
       "gsc_impressions": 0,
       "blocked_by_zero_impressions": false,
       "equivalent_urls": [
@@ -341,7 +341,7 @@
       ],
       "commercial_surfaces": [],
       "support_destinations": [],
-      "current_surface_kind": "hub",
+      "current_surface_kind": "serviço",
       "bofu_family_id": null,
       "reindex_proposal": null,
       "serp_sample": {
@@ -366,10 +366,10 @@
       "page_kind": "serviço",
       "question_answered": "Como registrar e resolver choques entre disciplinas antes da obra?",
       "business_context": "mixed",
-      "primary_url": "/servicos/#servico-projeto",
+      "primary_url": "/compatibilizacao-projetos-engenharia/",
       "proposed_primary_url": "/compatibilizacao-projetos-engenharia/",
-      "source_of_truth": "/servicos/#servico-projeto",
-      "requested_alias": "/compatibilizacao-projetos-engenharia/",
+      "source_of_truth": "/compatibilizacao-projetos-engenharia/",
+      "requested_alias": null,
       "supporting_urls": [
         "/entregas/"
       ],
@@ -378,7 +378,7 @@
         "mode": "capture_form_or_whatsapp",
         "destination": "/triagem-tecnica/#projetos"
       },
-      "decision": "CREATE",
+      "decision": "KEEP",
       "function_differentiation": "Coordenação de interfaces e registro de interferências entre disciplinas, não revisão de critérios de um projeto isolado nem elaboração da disciplina.",
       "requested_indexability": "index,follow",
       "release_unit": "CORE",
@@ -392,15 +392,16 @@
     {
       "canonical": "https://confenge.com.br/revisao-tecnica-projetos-engenharia/",
       "b2g_protected": false,
-      "quality_state": "PASS_PENDING_PUBLICATION",
+      "quality_state": "EXISTING_COMPLETE",
       "gsc_impressions": 0,
       "blocked_by_zero_impressions": false,
       "equivalent_urls": [
-        "/servicos/#servico-projeto"
+        "/servicos/#servico-projeto",
+        "/servicos/#servico-revisao"
       ],
       "commercial_surfaces": [],
       "support_destinations": [],
-      "current_surface_kind": "hub",
+      "current_surface_kind": "serviço",
       "bofu_family_id": null,
       "reindex_proposal": null,
       "serp_sample": null,
@@ -419,10 +420,10 @@
       "page_kind": "serviço",
       "question_answered": "O projeto existente está coerente, executável e com critérios localizados para correção?",
       "business_context": "mixed",
-      "primary_url": "/servicos/#servico-projeto",
+      "primary_url": "/revisao-tecnica-projetos-engenharia/",
       "proposed_primary_url": "/revisao-tecnica-projetos-engenharia/",
-      "source_of_truth": "/servicos/#servico-projeto",
-      "requested_alias": "/revisao-tecnica-projetos-engenharia/",
+      "source_of_truth": "/revisao-tecnica-projetos-engenharia/",
+      "requested_alias": null,
       "supporting_urls": [
         "/entregas/"
       ],
@@ -431,7 +432,7 @@
         "mode": "capture_form_or_whatsapp",
         "destination": "/triagem-tecnica/#projetos"
       },
-      "decision": "CREATE",
+      "decision": "KEEP",
       "function_differentiation": "Revisão de um projeto já existente (critérios, dimensionamento, coerência), não registro de interferências entre disciplinas nem elaboração da peça.",
       "requested_indexability": "index,follow",
       "release_unit": "CORE",
@@ -445,7 +446,7 @@
     {
       "canonical": "https://confenge.com.br/projetos-complementares-engenharia/",
       "b2g_protected": false,
-      "quality_state": "PASS_PENDING_PUBLICATION",
+      "quality_state": "EXISTING_COMPLETE",
       "gsc_impressions": 0,
       "blocked_by_zero_impressions": false,
       "equivalent_urls": [
@@ -453,7 +454,7 @@
       ],
       "commercial_surfaces": [],
       "support_destinations": [],
-      "current_surface_kind": "hub",
+      "current_surface_kind": "serviço",
       "bofu_family_id": null,
       "reindex_proposal": null,
       "serp_sample": null,
@@ -472,10 +473,10 @@
       "page_kind": "serviço",
       "question_answered": "Quem elabora a disciplina que falta e entrega plantas, detalhes e memória na fase contratada?",
       "business_context": "mixed",
-      "primary_url": "/servicos/#servico-projeto",
+      "primary_url": "/projetos-complementares-engenharia/",
       "proposed_primary_url": "/projetos-complementares-engenharia/",
-      "source_of_truth": "/servicos/#servico-projeto",
-      "requested_alias": "/projetos-complementares-engenharia/",
+      "source_of_truth": "/projetos-complementares-engenharia/",
+      "requested_alias": null,
       "supporting_urls": [
         "/entregas/"
       ],
@@ -484,7 +485,7 @@
         "mode": "capture_form_or_whatsapp",
         "destination": "/triagem-tecnica/#projetos"
       },
-      "decision": "CREATE",
+      "decision": "KEEP",
       "function_differentiation": "Elaboração da disciplina complementar, não revisão de peça alheia nem compatibilização de interfaces.",
       "requested_indexability": "index,follow",
       "release_unit": "EXPANSÃO",

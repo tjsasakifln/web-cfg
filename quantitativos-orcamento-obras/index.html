@@ -166,17 +166,7 @@
 <h2 id="qty-trail-title">Do elemento da planta ao item da planilha.</h2>
 <p class="section-lead">A trilha abaixo é o caminho de conferência. Quantidade não é preço: o item só recebe custo depois, com a referência e a data-base declaradas.</p>
 </header>
-<div id="qty-sample-trail" data-sample-trail-slot="canonical" data-sample-trail-state="awaiting-canonical-excerpt">
-<p class="qty-trail-disclaimer">Amostra demonstrativa. Não é orçamento válido para executar obra, não representa cliente e não fecha preço, prazo ou quantidade contratual.</p>
-<ol class="qty-trail-steps">
-<li data-trail-step="element"><span class="qty-trail-n">01</span><h3>Elemento identificado</h3><p>O recorte do projeto  -  parede, laje, tubulação, serviço  -  fica identificado com a planta, o memorial ou o documento que o originou.</p></li>
-<li data-trail-step="criterion"><span class="qty-trail-n">02</span><h3>Critério de medição</h3><p>A unidade e a regra de medição usadas na leitura, inclusive o que entra e o que fica de fora.</p></li>
-<li data-trail-step="calculation"><span class="qty-trail-n">03</span><h3>Cálculo</h3><p>A memória conferível: fórmula, dimensões lidas e descontos aplicados.</p></li>
-<li data-trail-step="quantity"><span class="qty-trail-n">04</span><h3>Quantidade</h3><p>O resultado da memória, na unidade do critério, ainda sem preço.</p></li>
-<li data-trail-step="spreadsheet_item"><span class="qty-trail-n">05</span><h3>Item de planilha</h3><p>O item da planilha ou do orçamento que recebe essa quantidade, com código e descrição equivalentes ao recorte.</p></li>
-</ol>
-<p>Os números conferíveis desta trilha entram aqui quando o demonstrativo canônico da CONFENGE estiver publicado. Até lá, o método já é este: elemento, critério, cálculo, quantidade e item de planilha.</p>
-</div>
+<div id="qty-sample-trail" data-sample-trail-slot="canonical" data-sample-trail-state="canonical"><p class="qty-trail-disclaimer">Amostra demonstrativa do recorte de banheiro R01 em /casos/demonstrativo-projeto-privado/. Não é orçamento válido para executar obra, não representa cliente e não fecha preço, prazo ou quantidade contratual.</p><ol class="qty-trail-steps"><li data-trail-step="element"><span class="qty-trail-n">01</span><h3>Elemento identificado</h3><div class="qty-trail-body"><code data-trail-id="Q-PAR-01">Q-PAR-01</code> <strong>Revestimento cerâmico de parede</strong><span>Origem: PR-ARQ-R01, recorte demonstrativo de banheiro R01</span></div></li><li data-trail-step="criterion"><span class="qty-trail-n">02</span><h3>Critério de medição</h3><div class="qty-trail-body"><strong>Unidade: m2</strong><span>Aberturas com área igual ou maior que 0,50 m² são descontadas integralmente das quantidades de revestimento de parede. Aberturas menores não são descontadas.</span></div></li><li data-trail-step="calculation"><span class="qty-trail-n">03</span><h3>Cálculo</h3><div class="qty-trail-body"><strong>sum(length*height)-openings&gt;=0.50</strong><p class="qty-trail-inputs"><span>quantidade conferida <data value="19,6">19,6 m2</data></span></p><span data-trail-memory="true">Leitura no recorte R01 da PR-ARQ-R01 sobre as paredes W-01 a W-04, a porta D-01 e a janela WN-01.</span></div></li><li data-trail-step="quantity"><span class="qty-trail-n">04</span><h3>Quantidade</h3><div class="qty-trail-body"><data data-trail-quantity="19,6" value="19,6">19,6 m2</data></div></li><li data-trail-step="spreadsheet_item"><span class="qty-trail-n">05</span><h3>Item de planilha</h3><div class="qty-trail-body"><code data-trail-item-code="ORC-PAR-01">ORC-PAR-01</code> <span>Revestimento cerâmico de parede, inclusive argamassa colante</span> <data data-trail-item-quantity="19,6" value="19,6">19,6 m2</data></div></li></ol></div>
 </div>
 </section>
 
