@@ -131,13 +131,13 @@
     "state": "LEGACY_RASTER_RETAINED",
     "header_primary": "/assets/logo-confenge-500-f8a83f6d.png",
     "footer_primary": "/assets/logo-confenge-white-500-1677038e.png",
-    "source_html_files_scanned": 216,
-    "logo_image_occurrences": 416,
-    "header_lockup_occurrences": 213,
-    "footer_lockup_occurrences": 203,
+    "source_html_files_scanned": 232,
+    "logo_image_occurrences": 448,
+    "header_lockup_occurrences": 229,
+    "footer_lockup_occurrences": 219,
     "legacy_asset_occurrences": {
-      "/assets/logo-confenge-500-f8a83f6d.png": 207,
-      "/assets/logo-confenge-white-500-1677038e.png": 197,
+      "/assets/logo-confenge-500-f8a83f6d.png": 223,
+      "/assets/logo-confenge-white-500-1677038e.png": 213,
       "/assets/logo-confenge.png": 6,
       "/assets/logo-confenge-white.png": 6
     },
@@ -148,7 +148,7 @@
     "tagline_minimum_legibility": "NOT_APPROVED",
     "screenshot_regression": "MISSING",
     "production_svg_delivery": "BLOCKED_AWAITING_FOUNDER_ARTWORK",
-    "observation_note": "Recontagem real de 2026-09-09 por tests/brand/test_logo_contract.mjs no universo publico corrente: 216 HTML, 416 logos, 213 lockups de cabecalho e 203 de rodape. Retiradas de rascunhos e fixtures nao alteram os arquivos-mestres nem legitimam ausencia de logo em pagina mantida; as assercoes por elemento, proporcao e hash permanecem. Contagens anteriores, incluindo 276 arquivos de um coletor que incluia arvores internas, estao preservadas no historico Git."
+    "observation_note": "Recontagem real de 2026-09-11 por tests/brand/test_logo_contract.mjs no candidato INB-20260911/16: 232 HTML, 448 logos, 229 lockups de cabecalho e 219 de rodape. O delta frente a 216/416/213/203 e de 16 paginas publicas novas da composicao, cada uma com lockup de cabecalho e de rodape; os mestres raster, a proporcao 50:13 e os dois PNG nao-hashados de fallback (6+6) permanecem. Retiradas de rascunhos e fixtures nao alteram os arquivos-mestres nem legitimam ausencia de logo em pagina mantida. Contagens anteriores, incluindo 276 arquivos de um coletor que incluia arvores internas, estao preservadas no historico Git."
   },
   "promotion": {
     "current": "BLOCKED_AWAITING_FOUNDER_ARTWORK",
