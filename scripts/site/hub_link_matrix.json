@@ -164,6 +164,20 @@
       "purchase_id": "inspecionar-diagnosticar"
     },
     {
+      "id": "servicos-parcerias",
+      "kind": "OPTIONAL_LINK",
+      "hub": "/servicos/",
+      "href": "/parcerias-engenharia/",
+      "marker": "servicos-parcerias",
+      "label": "Encaminhar uma necessidade de cliente",
+      "intent_family": "projetar_revisar_compatibilizar",
+      "offer_id": null,
+      "provider_campaign": "11",
+      "satisfaction": null,
+      "release_unit": "EXPANSION",
+      "purchase_id": null
+    },
+    {
       "id": "servicos-pericia-landing",
       "kind": "OPTIONAL_LINK",
       "hub": "/servicos/",
