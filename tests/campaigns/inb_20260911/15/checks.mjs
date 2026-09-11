@@ -35,6 +35,15 @@ export function receiptImpliesPersist(res, storeHadRecord) {
   return { claims, persisted: Boolean(storeHadRecord), body, statusCode: res.statusCode };
 }
 
+export function retryDuplicated(first, second, storeCount) {
+  const b1 = typeof first.body === "string" ? JSON.parse(first.body) : first.body || {};
+  const b2 = typeof second.body === "string" ? JSON.parse(second.body) : second.body || {};
+  const sameId = Boolean(b1.lead_id && b1.lead_id === b2.lead_id);
+  const replay = second.statusCode === 200 && b2.idempotent === true;
+  const duplicated = storeCount > 1 || Boolean(b1.lead_id && b2.lead_id && b1.lead_id !== b2.lead_id);
+  return { sameId, replay, storeCount, duplicated, firstId: b1.lead_id, secondId: b2.lead_id };
+}
+
 export async function checkPersistBeforeReceipt(report, root) {
   process.env.NODE_ENV = "test";
   delete process.env.NTFY_URL;
@@ -139,6 +148,82 @@ export async function checkPersistBeforeReceipt(report, root) {
     }
   } finally {
     globalThis.fetch = originalFetch;
+  }
+}
+
+export async function checkDuplicateRetry(report, root) {
+  process.env.NODE_ENV = "test";
+  delete process.env.NTFY_URL;
+  delete process.env.RESEND_API_KEY;
+  delete process.env.TURNSTILE_SECRET_KEY;
+  delete process.env.LEAD_REQUIRE_TURNSTILE;
+  process.env.OPS_WEBHOOK_URL = "https://ops.example.test/hook";
+  process.env.OPS_WEBHOOK_ALLOWED_HOSTS = "ops.example.test";
+  const { handler, setStoreForTests, MemoryStore, _reset } = loadLead(root);
+  const mem = new MemoryStore();
+  setStoreForTests(mem);
+  _reset();
+
+  const originalFetch = globalThis.fetch;
+  let fetches = 0;
+  globalThis.fetch = async () => {
+    fetches += 1;
+    if (fetches === 1) {
+      const err = new Error("timeout");
+      err.name = "AbortError";
+      throw err;
+    }
+    return { ok: true, status: 200, text: async () => "{}", json: async () => ({}) };
+  };
+  try {
+    const payload = validLead({
+      nome: "Maria Construtora Norte",
+      telefone: "48999993301",
+      idempotency_key: "inb15-retry-timeout-001",
+    });
+    const headers = { ip: "198.51.100.31", "Idempotency-Key": "inb15-retry-timeout-001" };
+    const first = await handler(leadEvent(payload, "POST", headers));
+    const second = await handler(leadEvent(payload, "POST", headers));
+    const listed = await mem.list();
+    const verdict = retryDuplicated(first, second, listed.length);
+    const firstOk = first.statusCode === 201 && verdict.firstId;
+    const timeoutThenRetry = fetches >= 1;
+    if (!firstOk || verdict.duplicated || !verdict.sameId || !verdict.replay || !timeoutThenRetry) {
+      record(report, {
+        id: "duplicate_retry.shipped_lead",
+        campaign: "02",
+        owner: "02",
+        path: "netlify/functions/lead.cjs",
+        status: FAIL,
+        severity: SEVERITY.EXPOSURE,
+        steps: [
+          "POST lead with Idempotency-Key (delivery fetch times out)",
+          "POST same key again",
+          "count MemoryStore records",
+        ],
+        expected: "first 201, retry 200 idempotent, one durable record",
+        observed: {
+          first: first.statusCode,
+          second: second.statusCode,
+          ...verdict,
+          fetches,
+        },
+        impact: "erro/timeout/retry duplicado",
+      });
+    } else {
+      record(report, {
+        id: "duplicate_retry.shipped_lead",
+        campaign: "02",
+        owner: "02",
+        path: "netlify/functions/lead.cjs",
+        status: PASS,
+        detail: `lead_id=${verdict.firstId} store=${verdict.storeCount} fetches=${fetches}`,
+      });
+    }
+  } finally {
+    globalThis.fetch = originalFetch;
+    delete process.env.OPS_WEBHOOK_URL;
+    delete process.env.OPS_WEBHOOK_ALLOWED_HOSTS;
   }
 }
 
@@ -465,6 +550,17 @@ export async function checkJourneys(report, root) {
     if (html.utmOnInternal(combined).length) problems.push("internal_utm");
     if (html.claimsReceipt(combined) && !html.hasLeadForm(combined)) {
       problems.push("whatsapp_or_copy_claimed_as_receipt");
+    }
+    if (journey.preserve_b2g) {
+      for (const page of pages) {
+        const route = `/${page.rel.replace(/index\.html$/, "")}`;
+        const verdict = html.b2gPublicPreserved(page.html, route);
+        if (verdict.cannibalized) {
+          problems.push(
+            `b2g_cannibalized:${page.rel}:specialty=${verdict.specialty}:rewrite=${verdict.privateRewrite}:canonicalDrift=${verdict.canonicalDrift}:noindex=${verdict.noindex}`,
+          );
+        }
+      }
     }
 
     for (const page of pages) {
@@ -892,6 +988,7 @@ export async function runAllChecks(report, root, options = {}) {
   const included = options.includedCampaigns || [];
   await checkCoreCampaigns(report, root);
   await checkPersistBeforeReceipt(report, root);
+  await checkDuplicateRetry(report, root);
   await checkPiiInEvent(report, root);
   await checkUnknownAsDefect(report, root);
   await checkFamilyAndIndex(report, root, included);

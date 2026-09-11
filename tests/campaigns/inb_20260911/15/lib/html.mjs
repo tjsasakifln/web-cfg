@@ -155,3 +155,34 @@ export function requiredCnpj(html) {
 export function noscriptHonesty(html) {
   return /<noscript\b/i.test(html) || /class=["'][^"']*no-js/i.test(html);
 }
+
+/**
+ * B2G specialty must survive private expansion: indexable, canonical on the
+ * public-works route, public-contract language present, not rewritten as a
+ * private-only offer.
+ */
+export function b2gPublicPreserved(pageHtml, expectedRoute) {
+  const text = visibleText(pageHtml);
+  const canonical = canonicalOf(pageHtml);
+  const route = expectedRoute.endsWith("/") ? expectedRoute : `${expectedRoute}/`;
+  const expectedCanon = `https://confenge.com.br${route}`;
+  const specialty = /obras? p[uú]blic|licita[cç]|contrato p[uú]blic|Lei 14\.133|fiscaliza/i.test(
+    `${text} ${pageHtml}`,
+  );
+  const privateRewrite =
+    /n[aã]o atendemos (licita|obra p[uú]blica)|apenas obras privadas|substitu[ií]d[oa] por engenharia privada/i.test(
+      text,
+    );
+  const canonicalDrift = Boolean(
+    canonical && canonical.replace(/\/$/, "") !== expectedCanon.replace(/\/$/, ""),
+  );
+  const noindex = isNoindex(pageHtml);
+  return {
+    specialty,
+    privateRewrite,
+    canonicalDrift,
+    noindex,
+    canonical,
+    cannibalized: privateRewrite || canonicalDrift || noindex || !specialty,
+  };
+}

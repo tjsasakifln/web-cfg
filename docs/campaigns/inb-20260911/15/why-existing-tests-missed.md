@@ -12,5 +12,7 @@ Contraprova desta campanha. Não é catálogo público.
 | Conclusão errada para desconhecido | `test_private_project_technical_readiness.mjs` já impede UNKNOWN→GAP no motor; não prova que o runner independente falha um classificador adversarial. | Cobertura do motor ≠ cobertura do revisor. |
 | CORE omitido do manifest | Nenhum teste impede o integrador de dropar campanha 03–10 da lista de release. | A matriz desta suíte sempre inclui 01–10. |
 | WhatsApp como conversa persistida | `test_cta_whatsapp.mjs` exige `wa.me`; `test_contact_journeys.mjs` aceita WhatsApp como canal. | Ninguém falha “recibo” atribuído a clique em WhatsApp. |
+| Erro/timeout/retry duplicado no percurso de compra | `test_lead_function.mjs` cobre idempotência; `test_inbound_handoff.mjs` cobre timeout do handoff. Nenhum runner de jornada falha um handler local que grava segundo registro no retry. | A suíte de compra não era o consumidor; a mutação duplicada não existia. |
+| Quebra de público ao ampliar privado | Gates de família e copy não tratam `preserve_b2g` nas jornadas de medição/aditivo. | Ampliar oferta privada pode reescrever pilar B2G (canonical/noindex/copy) sem o cheque de jornada. |
 
 A suíte em `tests/campaigns/inb_20260911/15/` consome os mesmos unidades (`lead.cjs`, `event-contract.cjs`, `inbound_gates._match_family`, `diagnosePrivateProjectTechnicalReadiness`, `real_proof_registry`) e acrescenta só a contraprova das lacunas acima.
