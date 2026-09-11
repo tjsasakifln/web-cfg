@@ -1,0 +1,138 @@
+{
+  "schema": "confenge.inbound-campaign-handoff/2.0",
+  "campaign_set": "INB-20260911",
+  "campaign_id": "10",
+  "prompt_version": "2.0.0",
+  "release_unit": "CORE",
+  "base_sha": "8f508544835490ec635d02517bce0207c6f8e426",
+  "state": "READY_FOR_INTEGRATION_WITH_DEPENDENCIES",
+  "branch": "campaign/inb-20260911/10-gsc-aprendizagem",
+  "owned_sources": [
+    "scripts/revops/gsc_import_learning.py",
+    "scripts/revops/search_demand_observatory.py",
+    "scripts/revops/test_search_demand.py",
+    "scripts/revops/fixtures/gsc-founder-baseline-2026-09-02-08/",
+    "docs/campaigns/inb-20260911/10/"
+  ],
+  "changed_sources": [
+    "scripts/revops/gsc_import_learning.py",
+    "scripts/revops/search_demand_observatory.py",
+    "scripts/revops/test_search_demand.py",
+    "scripts/revops/fixtures/gsc-founder-baseline-2026-09-02-08/README.md",
+    "scripts/revops/fixtures/gsc-founder-baseline-2026-09-02-08/meta.json",
+    "scripts/revops/fixtures/gsc-founder-baseline-2026-09-02-08/Filtros.csv",
+    "scripts/revops/fixtures/gsc-founder-baseline-2026-09-02-08/Grafico.csv",
+    "scripts/revops/fixtures/gsc-founder-baseline-2026-09-02-08/Consultas.csv",
+    "scripts/revops/fixtures/gsc-founder-baseline-2026-09-02-08/Paginas.csv",
+    "scripts/revops/fixtures/gsc-founder-baseline-2026-09-02-08/Paises.csv",
+    "docs/campaigns/inb-20260911/10/handoff.json",
+    "docs/campaigns/inb-20260911/10/shared-changes.json"
+  ],
+  "routes": [],
+  "dependencies": [
+    {
+      "provider_campaign": "01",
+      "artifact_path": "docs/campaigns/inb-20260911/01/handoff.json",
+      "level": "HARD_AT_RELEASE",
+      "fallback": "data/corporate/intent-family-matrix.v1.json + data/organic/public-family-registry.json + data/organic/bofu-intent-matrix.json",
+      "status": "FALLBACK_USED"
+    },
+    {
+      "provider_campaign": "02",
+      "artifact_path": "docs/campaigns/inb-20260911/02/handoff.json",
+      "level": "HARD_AT_RELEASE",
+      "fallback": "contato recebido permanece UNKNOWN sem store autorizado; qualificação/proposta/contratação permanecem UNKNOWN sem warmbly",
+      "status": "FALLBACK_USED"
+    }
+  ],
+  "shared_changes": "docs/campaigns/inb-20260911/10/shared-changes.json",
+  "tests": [
+    {
+      "command": "python3 scripts/revops/test_search_demand.py",
+      "exit_code": 0,
+      "subject_sha": null,
+      "overlay_hashes": {
+        "scripts/revops/gsc_import_learning.py": "sha256:3628eb797a6e50091f1edf093abf4e4dd3f272e7b00ed62e420e554e816f3c41",
+        "scripts/revops/search_demand_observatory.py": "sha256:f220376594b5d758edfd843ee9d5490c470f3abf35f15a8de2e9be5c28c59e0f",
+        "scripts/revops/test_search_demand.py": "sha256:9ed408b00f93f4b1881aeff78c8c156b45f7b3590f27520a7276b03f8eae55ed"
+      },
+      "note": "subject_sha fica nulo neste recibo para não identificar o próprio commit; HEAD_READY no PR cita head_sha."
+    },
+    {
+      "command": "python3 scripts/revops/test_gsc_history.py",
+      "exit_code": 0,
+      "subject_sha": null,
+      "overlay_hashes": {}
+    },
+    {
+      "command": "python3 scripts/revops/search_demand_observatory.py import-csv --dir scripts/revops/fixtures/gsc-founder-baseline-2026-09-02-08 --extracted-at 2026-09-11",
+      "exit_code": 0,
+      "subject_sha": null,
+      "overlay_hashes": {},
+      "observations": {
+        "property_clicks": 6,
+        "property_impressions": 176,
+        "ctr": "6/176",
+        "page_impressions": 215,
+        "query_impressions": 16,
+        "query_clicks": 0,
+        "brazil_impressions": 147,
+        "brazil_clicks": 6,
+        "freshness": "NOT_CURRENT",
+        "ready_for_product_decisions": false,
+        "second_run_idempotent_replay": true
+      }
+    },
+    {
+      "command": "python3 scripts/revops/search_demand_observatory.py pull-api --days 7 --smoke",
+      "exit_code": 2,
+      "subject_sha": null,
+      "overlay_hashes": {},
+      "observations": {
+        "error": "missing_credentials",
+        "source_kind": "credential_failure",
+        "rows": null,
+        "external_evidence": true
+      }
+    }
+  ],
+  "evidence_paths": [
+    "scripts/revops/fixtures/gsc-founder-baseline-2026-09-02-08/",
+    "docs/campaigns/inb-20260911/10/shared-changes.json"
+  ],
+  "unresolved": [
+    {
+      "id": "inb01-artifact",
+      "level": "HARD_AT_RELEASE",
+      "status": "FALLBACK_USED",
+      "detail": "Artefato de 01 ainda não estava na main. Join usa contratos atuais de intenção/família. Não inventa offer_id."
+    },
+    {
+      "id": "inb02-warmbly",
+      "level": "HARD_AT_RELEASE",
+      "status": "FALLBACK_USED",
+      "detail": "Sem snapshot warmbly autorizado. Qualificação/proposta/contratação = UNKNOWN, não zero."
+    },
+    {
+      "id": "live-gsc-api",
+      "level": "EXTERNAL_EVIDENCE",
+      "status": "NOT_OBTAINED",
+      "detail": "GSC_CREDENTIALS_JSON ausente. pull-api registra missing_credentials. CORE local concluído."
+    },
+    {
+      "id": "first_verified_deploy_at",
+      "level": "EXTERNAL_EVIDENCE",
+      "status": "UNKNOWN",
+      "detail": "Não há evidência de release com first_verified_deploy_at. Coortes de publicação novas ficam UNKNOWN. Commit/PR/arquivo não provam publicação."
+    }
+  ],
+  "notes": {
+    "capabilities_preserved": [
+      "Auth GSC (service account / OAuth), pull-api paginado, history.json fail-closed, last_known_good, publisher redaction, Netcup durable store, twelve analyses, demand-control baseline/queue."
+    ],
+    "gaps_closed": [
+      "CSV pt-BR/en, ZIP seguro, dimensões isoladas, CTR de somas, posição ponderada, filtro Brasil não inventado, consulta omitida UNKNOWN, janelas 7/28 honestas, need_class public|private|mixed|unknown, coorte via first_verified_deploy_at, fila de hipóteses, timeout de API, import histórico não sobrescreve insights CURRENT."
+    ],
+    "observable_difference": "CLI import-csv do baseline 02–08/09/2026 reproduz 6/176 (CTR 6/176, posição ponderada 1667.2/176), páginas 215, consultas 16/0, Brasil 147/6, freshness NOT_CURRENT, reimportação idempotente, learn emite fila privada sem consulta bruta."
+  }
+}
