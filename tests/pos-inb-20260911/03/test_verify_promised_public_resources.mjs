@@ -9,6 +9,7 @@ import { test } from "node:test";
 
 import {
   SENTINEL_PATHS,
+  isPrivateCsvPath,
   looksLikeHtmlError,
   normalizePublicUri,
   parsePublicCsv,
@@ -22,6 +23,8 @@ import {
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const REPO = path.resolve(HERE, "../../..");
 const VERIFIER = path.join(REPO, "scripts/site/verify_promised_public_resources.mjs");
+const DATA_DESK_REL = "assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1";
+const DATA_DESK_CSV = `/${DATA_DESK_REL}/table.csv`;
 
 const QUANTITATIVOS = `# exemplo demonstrativo; revisao=R01
 id;descricao;unidade;quantidade;elementos;prancha;formula;desconto;revisao
@@ -91,6 +94,11 @@ function plant(root) {
     path.join(root, "data/demonstrative/private-project-pilot/consumption.v1.json"),
     `${JSON.stringify(DESCRIPTOR, null, 2)}\n`,
   );
+  const deskDir = path.join(site, DATA_DESK_REL);
+  fs.mkdirSync(deskDir, { recursive: true });
+  fs.copyFileSync(path.join(REPO, DATA_DESK_REL, "table.csv"), path.join(deskDir, "table.csv"));
+  fs.copyFileSync(path.join(REPO, DATA_DESK_REL, "index.html"), path.join(deskDir, "index.html"));
+  fs.copyFileSync(path.join(REPO, DATA_DESK_REL, "chart.svg"), path.join(deskDir, "chart.svg"));
   return site;
 }
 
@@ -135,6 +143,7 @@ test("CSV parser reads numbers/units and rejects HTML-as-csv", () => {
 test("artifact pass path unions page links, descriptor and sentinels", () => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "pos-inb-03-pass-"));
   const site = plant(root);
+  assert.equal(isPrivateCsvPath(DATA_DESK_CSV), false);
   const report = validateArtifact({ artifactDir: site, sourceRoot: root });
   assert.equal(report.ok, true, JSON.stringify(report.findings, null, 2));
   const expected = new Set(report.expected.map((item) => item.path));
@@ -143,6 +152,13 @@ test("artifact pass path unions page links, descriptor and sentinels", () => {
     const row = report.expected.find((item) => item.path === sentinel);
     assert.equal(row.origins.includes("sentinel"), true, row);
   }
+  assert.equal(report.findings.some((item) => item.code === "private_csv"), false);
+  assert.equal(expected.has(DATA_DESK_CSV), true, "data-desk table.csv is promised by its page");
+  const cli = spawnSync("node", [VERIFIER, "--mode", "artifact", "--artifact", site, "--source-root", root], {
+    encoding: "utf8",
+  });
+  assert.equal(cli.status, 0, cli.stdout + cli.stderr);
+  assert.equal(JSON.parse(cli.stdout).ok, true);
 });
 
 test("sentinels still fail after links and files are deleted", () => {
@@ -246,7 +262,7 @@ test("CLI refuses escape path and private csv name", async () => {
   const site = plant(root);
   write(
     path.join(site, "casos/demonstrativo-projeto-privado/index.html"),
-    `${PAGE}<a href="data/%2e%2e/%2e%2e/etc/passwd">escape</a>`,
+    `${PAGE}<a href="data/%2e%2e/secret.csv">escape</a>`,
   );
   const report = await run([
     "--mode",
