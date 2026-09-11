@@ -1,0 +1,46 @@
+{
+  "schema": "confenge.inbound-campaign-shared-changes/2.0",
+  "campaign_id": "04",
+  "campaign_set": "POS-INB-20260911",
+  "prompt_version": "1.0.0",
+  "owner_campaign": "04",
+  "note": "04 não edita package.json, lockfiles, workflows, sitemaps, robots, registries centrais, mapas globais, identidade ou CSS globais. 10 aplica, marca já atendida ou substitui com prova.",
+  "changes": [
+    {
+      "change_id": "pos-inb04-map-build-point",
+      "owner_campaign": "10",
+      "path": "data/bofu-dominance/core/purchase-route-map.v1.json",
+      "base_blob_sha": "446e7d806d505c787d6275c7d91507d0d7b6faf9",
+      "operation": "consume_derived_map",
+      "key_or_anchor": "purchases[purchase_id=quantitativos-orcamento|compatibilizacao-projetos|revisao-tecnica-projetos]",
+      "expected_old": "Landing #pptr-destination-map only quantity_takeoff_budgeting; unread window.ConfengeCanonicalDestinationMap",
+      "desired_new": "Canonical dest map, if 10 publishes one, must be derived by scripts/campaigns/pos-inb-20260911/04/derive-destination-map.mjs (purchase_id / function). Do not unique-map complementary_engineering_project_review by first catalog row. Do not make the tool depend on window.ConfengeCanonicalDestinationMap. The owned landing already embeds the derived map.",
+      "rationale": "F03: núcleo recomenda revisão e compatibilização, páginas existem, mapa publicado só resolvia orçamento. Offer_id compartilhado com elaboração.",
+      "acceptance_test": "node tests/pos-inb-20260911/04/test_destination_map_composition.mjs; deleting clash or review purchase keys fails composition while diagnose and isolated money pages still pass; pointing review at /projetos-complementares-engenharia/ fails with purchase_function_semantics."
+    },
+    {
+      "change_id": "pos-inb04-npm-script",
+      "owner_campaign": "10",
+      "path": "package.json",
+      "base_blob_sha": "b353c16116e6b2ff6addfc220ba531ffa7f28a4e",
+      "operation": "upsert",
+      "key_or_anchor": "scripts.test:pos-inb-04",
+      "expected_old": null,
+      "desired_new": "node tests/pos-inb-20260911/04/test_destination_map_composition.mjs && node tests/pos-inb-20260911/04/test_scenario_matrix.mjs && node tests/pos-inb-20260911/04/test_copy_and_static.mjs",
+      "rationale": "04 can run these files with node directly. 10 owns package.json and may wire the script and CI.",
+      "acceptance_test": "npm run test:pos-inb-04 exits 0 on the composed candidate. Browser evidence is node tests/pos-inb-20260911/04/browser_prontidao.mjs (Chrome required)."
+    },
+    {
+      "change_id": "pos-inb04-production-dest-http",
+      "owner_campaign": "10",
+      "path": "compatibilizacao-projetos-engenharia/index.html",
+      "base_blob_sha": null,
+      "operation": "verify_production_http",
+      "key_or_anchor": "/quantitativos-orcamento-obras/|/revisao-tecnica-projetos-engenharia/|/compatibilizacao-projetos-engenharia/",
+      "expected_old": "F03 snapshot: map omitted clash/review dests",
+      "desired_new": "Production GET of the three resolved paths returns the money pages. 04 verified local files and the embedded map; 10 verifies live HTTP.",
+      "rationale": "Protocol: resolved links are tested in production by 10.",
+      "acceptance_test": "Live confenge.com.br returns the three landings; tool primary dest hrefs match those paths."
+    }
+  ]
+}

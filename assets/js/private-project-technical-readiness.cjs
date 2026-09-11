@@ -7,7 +7,7 @@
   "use strict";
 
   var ENGINE_ID = "private_project_technical_readiness_v1";
-  var ENGINE_VERSION = "1.1.0";
+  var ENGINE_VERSION = "1.2.0";
   var ASSET_ID = "private_project_technical_readiness_v1";
   var NUCLEUS = "building_engineering_documentation";
   var OFFER_CANDIDATE = "private_project_technical_readiness_assessment";
@@ -136,7 +136,7 @@
     decision_scope_stage: "Matriz de decisão, escopo e estágio da obra",
     design_set_revisions_responsibility: "Levantamento do conjunto de projetos, revisões e responsabilidades",
     quantities_budget_bases_memory: "Reconciliação de quantitativos, orçamento, bases e memória de cálculo",
-    coordination_constructability_bim: "Registro de compatibilização e constructability com issue register",
+    coordination_constructability_bim: "Registro de compatibilização e construtibilidade com interferências",
     changes_execution_measurement: "Caderno de mudanças, medições e rastreabilidade de execução",
     asbuilt_handover_operations: "Pacote as-built, entrega e documentação operacional",
     technical_responsibility_art_inspections: "Conferência documental das condições declaradas de ART e inspeções (sem parecer de direito)",
@@ -156,6 +156,9 @@
       missing: "Conjunto de projetos na revisão atual, lista de revisões com data e responsável por disciplina.",
       consequence: "Orçar, contratar ou executar sobre desenho incompleto ou sem dono por disciplina aumenta retrabalho e conflito de interferência.",
       next: "Montar a lista do conjunto (disciplina, revisão, data, responsável) e marcar o que falta.",
+      missing_no_set: "Nenhum conjunto de projetos foi localizado. Isso pode pedir elaboração da disciplina ou a localização dos arquivos; não descreve um projeto recebido como defeituoso.",
+      consequence_no_set: "Sem o conjunto, orçar, revisar material recebido ou executar fica sem peça de origem. A ausência do arquivo não prova que um projeto existente esteja errado.",
+      next_no_set: "Localizar o conjunto que já existe ou esclarecer se a necessidade é elaborar a disciplina que falta. Esta leitura não indica um serviço único só por essa ausência.",
     }),
     quantities_budget_bases_memory: Object.freeze({
       label: "Quantitativos, orçamento, bases e memória",
@@ -166,10 +169,10 @@
     }),
     coordination_constructability_bim: Object.freeze({
       label: "Compatibilização, construtibilidade e BIM",
-      present_evidence: "Issue register rastreado e evidência de construtibilidade (modelo federado atual ou revisão registrada).",
-      missing: "Issue register com status e evidência de construtibilidade (modelo federado atual ou revisão registrada). Ausência de BIM isolada não preenche essa evidência.",
+      present_evidence: "Registro de interferências acompanhado e evidência de construtibilidade (modelo federado atual ou revisão registrada).",
+      missing: "Registro de interferências com status e evidência de construtibilidade (modelo federado atual ou revisão registrada). Ausência de BIM isolada não preenche essa evidência.",
       consequence: "Iniciar execução sem interferências registradas deixa choques de disciplina para o canteiro.",
-      next: "Abrir o issue register (ou criá-lo) e registrar se a construtibilidade foi revista no modelo ou em ata.",
+      next: "Abrir o registro de interferências (ou criá-lo) e registrar se a construtibilidade foi revista no modelo ou em ata.",
     }),
     changes_execution_measurement: Object.freeze({
       label: "Mudanças, execução, medição e rastreabilidade",
@@ -203,12 +206,21 @@
   var NEED_CODE = "obra_edificacao_ou_documentacao";
   var ROUTE_FAMILY = "prontidao-tecnica-obra-privada";
   var DESTINATION_MAP_SCHEMA = "confenge.canonical-destination-map/1.0";
+  var CONTACT_QUERY_KEYS = Object.freeze([
+    "need_code",
+    "offer_candidate_id",
+    "intent_family",
+    "route_id",
+    "source_origin_asset_id",
+    "source_origin_route_family",
+  ]);
 
   var ROUTING_TABLE = Object.freeze([
     Object.freeze({
       id: ROUTE_ORCAMENTO,
       domain_id: "quantities_budget_bases_memory",
       offer_id: "quantity_takeoff_budgeting",
+      purchase_id: "quantitativos-orcamento",
       intent_family: "orcar_planejar_decidir",
       public_name: "Levantamento quantitativo e orçamentação",
       why: "Faltam quantitativos ligados aos projetos ou base de custo com composições. Sem essa cadeia, comparar preço, medição ou aditivo fica sem âncora.",
@@ -218,6 +230,7 @@
       id: ROUTE_COMPAT,
       domain_id: "coordination_constructability_bim",
       offer_id: "bim_coordination_clash_register",
+      purchase_id: "compatibilizacao-projetos",
       intent_family: "projetar_revisar_compatibilizar",
       public_name: "Compatibilização e registro de interferências",
       why: "As interfaces entre disciplinas não estão conferidas com registro. Contratar ou iniciar execução assim deixa interferências para o canteiro.",
@@ -227,6 +240,7 @@
       id: ROUTE_REVISAO,
       domain_id: "design_set_revisions_responsibility",
       offer_id: "complementary_engineering_project_review",
+      purchase_id: "revisao-tecnica-projetos",
       intent_family: "projetar_revisar_compatibilizar",
       public_name: "Revisão de projeto recebido",
       why: "O conjunto de projetos recebido está incompleto, sem controle de revisão ou sem responsável por disciplina. Convém revisar o que chegou antes de orçar ou executar.",
@@ -246,6 +260,7 @@
       id: row.id,
       domain_id: row.domain_id,
       offer_id: row.offer_id,
+      purchase_id: row.purchase_id || null,
       intent_family: row.intent_family,
       public_name: row.public_name,
       why: row.why,
@@ -303,6 +318,7 @@
     for (i = 0; i < ROUTING_TABLE.length; i += 1) {
       var spec = ROUTING_TABLE[i];
       var domain = domainByIdFromList(domains, spec.domain_id);
+      if (spec.id === ROUTE_REVISAO && answers.design_set === "nenhum") continue;
       if (domain && domain.status === GAP) triggered.push(cloneRoute(spec, { priority: domain.priority }));
     }
     var triggeredIds = [];
@@ -335,11 +351,15 @@
 
     var scopeConversation = false;
     var summaryNext = "";
+    var designMissing = answers.design_set === "nenhum";
     if (primary) {
       summaryNext = primary.next;
     } else if (unknownCommercial > 0) {
       scopeConversation = true;
       summaryNext = "Ainda não há elementos suficientes para indicar um serviço. Uma conversa de escopo esclarece o recorte. Esta leitura não é um diagnóstico conclusivo.";
+    } else if (designMissing) {
+      scopeConversation = true;
+      summaryNext = "Não há conjunto de projetos localizado. Isso não classifica um projeto como defeituoso. Uma conversa de escopo esclarece se falta elaborar a disciplina ou localizar o que já existe.";
     } else {
       summaryNext = "As respostas não apontam lacuna nos caminhos de orçamento, revisão ou compatibilização. Nenhuma contratação é sugerida. O resultado completo continua disponível, sem contato.";
     }
@@ -368,38 +388,123 @@
     };
   }
 
-  function normalizeDestinationMap(raw) {
-    var empty = { schema: DESTINATION_MAP_SCHEMA, by_offer_id: {} };
-    if (!raw || typeof raw !== "object" || Array.isArray(raw)) return empty;
-    var source = raw.by_offer_id && typeof raw.by_offer_id === "object" ? raw.by_offer_id : raw;
-    var byOffer = {};
-    var keys = Object.keys(source);
-    for (var i = 0; i < keys.length; i += 1) {
-      var key = keys[i];
-      var value = source[key];
-      var path = null;
-      var intentFamily = null;
-      if (typeof value === "string") path = value;
-      else if (value && typeof value === "object") {
-        path = value.path || value.href || null;
-        intentFamily = value.intent_family || null;
-      }
-      if (typeof path === "string" && path.charAt(0) === "/" && path.indexOf("://") === -1) {
-        byOffer[key] = { path: path, intent_family: intentFamily };
-      }
+  function normalizePathEntry(value) {
+    var path = null;
+    var intentFamily = null;
+    var offerId = null;
+    var purchaseId = null;
+    var routeId = null;
+    var ambiguous = false;
+    if (typeof value === "string") path = value;
+    else if (value && typeof value === "object") {
+      path = value.path || value.href || null;
+      intentFamily = value.intent_family || null;
+      offerId = value.offer_id || null;
+      purchaseId = value.purchase_id || null;
+      routeId = value.route_id || null;
+      ambiguous = value.ambiguous === true;
     }
-    return { schema: DESTINATION_MAP_SCHEMA, by_offer_id: byOffer };
-  }
-
-  function resolveCommercialDestination(offerId, canonicalMap) {
-    var id = String(offerId || "");
-    var map = normalizeDestinationMap(canonicalMap);
-    var entry = map.by_offer_id[id];
-    if (!id || !entry || !entry.path) {
-      return { offer_id: id || null, href: null, present: false, intent_family: null };
+    if (ambiguous) {
+      return {
+        path: null,
+        intent_family: intentFamily,
+        offer_id: offerId,
+        purchase_id: purchaseId,
+        route_id: routeId,
+        ambiguous: true,
+      };
+    }
+    if (typeof path !== "string" || path.charAt(0) !== "/" || path.indexOf("://") !== -1 || path.indexOf("#") !== -1) {
+      return null;
     }
     return {
-      offer_id: id,
+      path: path,
+      intent_family: intentFamily,
+      offer_id: offerId,
+      purchase_id: purchaseId,
+      route_id: routeId,
+      ambiguous: false,
+    };
+  }
+
+  function normalizeKeyedEntries(source) {
+    var out = {};
+    if (!source || typeof source !== "object" || Array.isArray(source)) return out;
+    var keys = Object.keys(source);
+    for (var i = 0; i < keys.length; i += 1) {
+      var entry = normalizePathEntry(source[keys[i]]);
+      if (entry) out[keys[i]] = entry;
+    }
+    return out;
+  }
+
+  function normalizeDestinationMap(raw) {
+    var empty = {
+      schema: DESTINATION_MAP_SCHEMA,
+      by_offer_id: {},
+      by_purchase_id: {},
+      by_route_id: {},
+      shared_offer_ids: {},
+    };
+    if (!raw || typeof raw !== "object" || Array.isArray(raw)) return empty;
+    var structured = raw.by_offer_id || raw.by_purchase_id || raw.by_route_id || raw.schema;
+    var byOffer = normalizeKeyedEntries(structured ? raw.by_offer_id : raw);
+    var byPurchase = normalizeKeyedEntries(raw.by_purchase_id);
+    var byRoute = normalizeKeyedEntries(raw.by_route_id);
+    var shared = raw.shared_offer_ids && typeof raw.shared_offer_ids === "object" ? raw.shared_offer_ids : {};
+    return {
+      schema: DESTINATION_MAP_SCHEMA,
+      by_offer_id: byOffer,
+      by_purchase_id: byPurchase,
+      by_route_id: byRoute,
+      shared_offer_ids: shared,
+    };
+  }
+
+  function destinationSpec(offerOrSpec) {
+    if (typeof offerOrSpec === "string") {
+      return { offer_id: offerOrSpec, purchase_id: null, route_id: null };
+    }
+    if (!offerOrSpec || typeof offerOrSpec !== "object") {
+      return { offer_id: null, purchase_id: null, route_id: null };
+    }
+    return {
+      offer_id: offerOrSpec.offer_id ? String(offerOrSpec.offer_id) : null,
+      purchase_id: offerOrSpec.purchase_id ? String(offerOrSpec.purchase_id) : null,
+      route_id: offerOrSpec.route_id
+        ? String(offerOrSpec.route_id)
+        : (offerOrSpec.id ? String(offerOrSpec.id) : null),
+    };
+  }
+
+  function resolveCommercialDestination(offerOrSpec, canonicalMap) {
+    var spec = destinationSpec(offerOrSpec);
+    var map = normalizeDestinationMap(canonicalMap);
+    var entry = null;
+    if (spec.purchase_id && map.by_purchase_id[spec.purchase_id]) {
+      entry = map.by_purchase_id[spec.purchase_id];
+    } else if (spec.route_id && map.by_route_id[spec.route_id]) {
+      entry = map.by_route_id[spec.route_id];
+    } else if (spec.offer_id && map.by_offer_id[spec.offer_id] && !map.by_offer_id[spec.offer_id].ambiguous) {
+      entry = map.by_offer_id[spec.offer_id];
+    }
+    if (spec.offer_id && entry && entry.offer_id && entry.offer_id !== spec.offer_id) {
+      entry = null;
+    }
+    if (!entry || !entry.path) {
+      return {
+        offer_id: spec.offer_id,
+        purchase_id: spec.purchase_id,
+        route_id: spec.route_id,
+        href: null,
+        present: false,
+        intent_family: null,
+      };
+    }
+    return {
+      offer_id: entry.offer_id || spec.offer_id,
+      purchase_id: entry.purchase_id || spec.purchase_id,
+      route_id: entry.route_id || spec.route_id,
       href: entry.path,
       present: true,
       intent_family: entry.intent_family || null,
@@ -422,7 +527,7 @@
   function buildContactHref(context) {
     var ctx = context && typeof context === "object" ? context : {};
     var params = [];
-    var allowed = ["need_code", "offer_candidate_id", "intent_family", "route_id", "source_origin_asset_id", "source_origin_route_family"];
+    var allowed = CONTACT_QUERY_KEYS;
     for (var i = 0; i < allowed.length; i += 1) {
       var key = allowed[i];
       var value = ctx[key];
@@ -695,26 +800,34 @@
     var offer = null;
     if (applicability === "not_required_at_declared_stage") {
       missing = "Não exigido no estágio e na decisão declarados.";
-      consequence = "Este domínio não entra na decisão declarada neste estágio; a exigência muda se o estágio ou a decisão mudarem.";
-      next = "Reavaliar este domínio quando a obra entrar em execução, medição, entrega, operação ou retomada.";
+      consequence = "Este tema não entra na decisão declarada neste estágio; a exigência muda se o estágio ou a decisão mudarem.";
+      next = "Reavaliar este tema quando a obra entrar em execução, medição, entrega, operação ou retomada.";
     } else if (applicability === "unknown_until_stage_or_decision_declared") {
-      missing = "Estágio ou decisão não declarados; não dá para saber se evidência deste domínio se aplica.";
-      consequence = "Tratar o domínio como desconhecido, não como evidência presente, até o estágio ou a decisão serem declarados.";
+      missing = "Estágio ou decisão não declarados; não dá para saber se evidência deste tema se aplica.";
+      consequence = "Tratar este tema como desconhecido, não como evidência presente, até o estágio ou a decisão serem declarados.";
       next = "Declarar o estágio da obra e a decisão que está na mesa.";
     } else if (status === EVIDENCE_PRESENT) {
-      missing = "Nenhuma lacuna declarada neste domínio.";
+      missing = "Nenhuma lacuna declarada neste tema.";
       consequence = "A autoavaliação não substitui conferência dos documentos originais.";
-      next = "Manter os documentos deste domínio localizáveis na revisão citada.";
+      next = "Manter os documentos deste tema localizáveis na revisão citada.";
     } else if (status === GAP) {
-      missing = domainId === "technical_responsibility_art_inspections"
-        ? (domain7GapMissing(answers) || meta.missing)
-        : meta.missing;
-      consequence = meta.consequence;
-      next = meta.next;
+      if (domainId === "technical_responsibility_art_inspections") {
+        missing = domain7GapMissing(answers) || meta.missing;
+        consequence = meta.consequence;
+        next = meta.next;
+      } else if (domainId === "design_set_revisions_responsibility" && answers.design_set === "nenhum") {
+        missing = meta.missing_no_set || meta.missing;
+        consequence = meta.consequence_no_set || meta.consequence;
+        next = meta.next_no_set || meta.next;
+      } else {
+        missing = meta.missing;
+        consequence = meta.consequence;
+        next = meta.next;
+      }
       offer = OFFER_CANDIDATE;
     } else {
-      missing = "O usuário não soube informar este domínio; ausência de resposta não prova presença nem lacuna.";
-      consequence = "Não dá para apoiar a decisão neste domínio enquanto a informação permanecer desconhecida.";
+      missing = "O usuário não soube informar este tema; ausência de resposta não prova presença nem lacuna.";
+      consequence = "Não dá para apoiar a decisão neste tema enquanto a informação permanecer desconhecida.";
       next = meta.next;
     }
     var row = {
@@ -819,7 +932,7 @@
       source: SOURCE,
       outbound_eligible: OUTBOUND_ELIGIBLE,
       auto_send: AUTO_SEND,
-      method: "Autoavaliação de classes fechadas. Cada resposta é fato informado pelo usuário. O estado do domínio é cálculo determinístico. A consequência decisória é inferência. Ausência de resposta permanece desconhecida.",
+      method: "Autoavaliação com opções delimitadas. Cada resposta é um fato informado por você. O estado de cada tema segue regra explícita: evidência presente, lacuna ou desconhecido. A consequência para a decisão é inferência. Pergunta em branco ou marcada como desconhecida permanece desconhecida.",
       limits: "Não substitui conferência dos originais, não emite ART, não valida norma e não encerra responsabilidade técnica. Autoavaliação pública não é análise documental.",
       answers: answers,
       facts: facts,
@@ -906,6 +1019,7 @@
     summarizeReadiness: summarizeReadiness,
     ROUTING_TABLE: ROUTING_TABLE,
     DESTINATION_MAP_SCHEMA: DESTINATION_MAP_SCHEMA,
+    CONTACT_QUERY_KEYS: CONTACT_QUERY_KEYS,
     NEED_CODE: NEED_CODE,
     ROUTE_FAMILY: ROUTE_FAMILY,
     buildAnalyticsEvent: buildAnalyticsEvent,

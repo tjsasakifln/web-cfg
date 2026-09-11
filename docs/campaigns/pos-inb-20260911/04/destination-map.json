@@ -1,0 +1,78 @@
+{
+  "schema": "confenge.canonical-destination-map/1.0",
+  "derived_from": "CONFENGE_PURCHASE_ROUTE_MAP/1.0.0",
+  "authority_path": "data/bofu-dominance/core/purchase-route-map.v1.json",
+  "by_purchase_id": {
+    "quantitativos-orcamento": {
+      "path": "/quantitativos-orcamento-obras/",
+      "purchase_id": "quantitativos-orcamento",
+      "route_id": "orcamento",
+      "offer_id": "quantity_takeoff_budgeting",
+      "intent_family": "orcar_planejar_decidir",
+      "function_differentiation": "Levantamento de quantitativos e orçamento de obra pública ou privada, não auditoria da planilha do edital."
+    },
+    "compatibilizacao-projetos": {
+      "path": "/compatibilizacao-projetos-engenharia/",
+      "purchase_id": "compatibilizacao-projetos",
+      "route_id": "compatibilizacao",
+      "offer_id": "bim_coordination_clash_register",
+      "intent_family": "projetar_revisar_compatibilizar",
+      "function_differentiation": "Coordenação de interfaces e registro de interferências entre disciplinas, não revisão de critérios de um projeto isolado nem elaboração da disciplina."
+    },
+    "revisao-tecnica-projetos": {
+      "path": "/revisao-tecnica-projetos-engenharia/",
+      "purchase_id": "revisao-tecnica-projetos",
+      "route_id": "revisao",
+      "offer_id": "complementary_engineering_project_review",
+      "intent_family": "projetar_revisar_compatibilizar",
+      "function_differentiation": "Revisão de um projeto já existente (critérios, dimensionamento, coerência), não registro de interferências entre disciplinas nem elaboração da peça."
+    }
+  },
+  "by_route_id": {
+    "orcamento": {
+      "path": "/quantitativos-orcamento-obras/",
+      "purchase_id": "quantitativos-orcamento",
+      "route_id": "orcamento",
+      "offer_id": "quantity_takeoff_budgeting",
+      "intent_family": "orcar_planejar_decidir",
+      "function_differentiation": "Levantamento de quantitativos e orçamento de obra pública ou privada, não auditoria da planilha do edital."
+    },
+    "compatibilizacao": {
+      "path": "/compatibilizacao-projetos-engenharia/",
+      "purchase_id": "compatibilizacao-projetos",
+      "route_id": "compatibilizacao",
+      "offer_id": "bim_coordination_clash_register",
+      "intent_family": "projetar_revisar_compatibilizar",
+      "function_differentiation": "Coordenação de interfaces e registro de interferências entre disciplinas, não revisão de critérios de um projeto isolado nem elaboração da disciplina."
+    },
+    "revisao": {
+      "path": "/revisao-tecnica-projetos-engenharia/",
+      "purchase_id": "revisao-tecnica-projetos",
+      "route_id": "revisao",
+      "offer_id": "complementary_engineering_project_review",
+      "intent_family": "projetar_revisar_compatibilizar",
+      "function_differentiation": "Revisão de um projeto já existente (critérios, dimensionamento, coerência), não registro de interferências entre disciplinas nem elaboração da peça."
+    }
+  },
+  "by_offer_id": {
+    "quantity_takeoff_budgeting": {
+      "path": "/quantitativos-orcamento-obras/",
+      "purchase_id": "quantitativos-orcamento",
+      "route_id": "orcamento",
+      "intent_family": "orcar_planejar_decidir"
+    },
+    "bim_coordination_clash_register": {
+      "path": "/compatibilizacao-projetos-engenharia/",
+      "purchase_id": "compatibilizacao-projetos",
+      "route_id": "compatibilizacao",
+      "intent_family": "projetar_revisar_compatibilizar"
+    }
+  },
+  "shared_offer_ids": {
+    "complementary_engineering_project_review": [
+      "revisao-tecnica-projetos",
+      "projetos-complementares"
+    ]
+  },
+  "missing": []
+}

@@ -8,6 +8,12 @@ import { readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import vm from "node:vm";
+import {
+  loadPurchaseRouteMap,
+  deriveToolDestinationMap,
+  assertReleasedComposition,
+  parseEmbeddedMap,
+} from "../campaigns/pos-inb-20260911/04/derive-destination-map.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 const require = createRequire(import.meta.url);
@@ -69,7 +75,7 @@ const {
 
 expect("twins_identical", readFileSync(jsPath, "utf8") === readFileSync(enginePath, "utf8"));
 expect("engine_id", ENGINE_ID === "private_project_technical_readiness_v1");
-expect("engine_version", ENGINE_VERSION === "1.1.0");
+expect("engine_version", ENGINE_VERSION === "1.2.0");
 expect("asset_id", ASSET_ID === ENGINE_ID);
 expect("nucleus", NUCLEUS === "building_engineering_documentation");
 expect("offer", OFFER_CANDIDATE === "private_project_technical_readiness_assessment");
@@ -293,8 +299,14 @@ function domainById(result, id) {
 {
   const html = readFileSync(htmlPath, "utf8");
   expect("html_public_canonical", /rel=["']canonical["'][^>]*https:\/\/confenge\.com\.br\/ferramentas\/prontidao-tecnica-obra-privada\//i.test(html));
-  expect("html_h1_job", /<h1[^>]*>[\s\S]*evidências técnicas[\s\S]*obra privada/i.test(html) || /<h1[^>]*>[\s\S]*evidencias tecnicas[\s\S]*obra privada/i.test(html) || /<h1[^>]*>[\s\S]*presentes, ausentes ou desconhecidas/i.test(html));
-  expect("html_title_job", /<title>[\s\S]*prontidão técnica de obra privada/i.test(html) || /<title>[\s\S]*prontidao tecnica de obra privada/i.test(html));
+  expect(
+    "html_h1_job",
+    /<h1[^>]*>[\s\S]*Organize as informações da sua obra e veja o próximo passo/i.test(html),
+  );
+  expect(
+    "html_title_job",
+    /<title>[\s\S]*Organize as informações da sua obra e veja o próximo passo/i.test(html),
+  );
   for (const label of [
     "Decisão, escopo e estágio",
     "Projetos, revisões e responsabilidade",
@@ -438,13 +450,29 @@ const FIXTURE_MAP = {
 {
   const reviewOnly = diagnose({
     ...presentAnswers(),
-    design_set: "nenhum",
+    design_set: "parcial",
   });
   expect("review_primary", reviewOnly.routing.primary && reviewOnly.routing.primary.id === "revisao");
   expect(
     "review_offer",
     reviewOnly.routing.primary.offer_id === "complementary_engineering_project_review",
   );
+  expect(
+    "review_purchase",
+    reviewOnly.routing.primary.purchase_id === "revisao-tecnica-projetos",
+  );
+}
+
+{
+  const missingSet = diagnose({
+    ...presentAnswers(),
+    design_set: "nenhum",
+  });
+  expect("missing_set_not_review", missingSet.routing.primary === null);
+  expect("missing_set_scope", missingSet.routing.scope_conversation === true);
+  const blob = JSON.stringify(missingSet).toLowerCase();
+  expect("missing_set_not_defective", !blob.includes("projeto errado") && !blob.includes("projeto defeituoso"));
+  expect("missing_set_gap", domainById(missingSet, "design_set_revisions_responsibility").status === GAP);
 }
 
 {
@@ -492,7 +520,7 @@ const FIXTURE_MAP = {
 {
   const triple = diagnose({
     ...presentAnswers(),
-    design_set: "nenhum",
+    design_set: "parcial",
     quantities: "nenhum",
     budget: "nenhum",
     calc_memory: "nenhum",
@@ -626,9 +654,12 @@ const FIXTURE_MAP = {
   expect("html_result_before_contact_still", html.indexOf("id=\"resultado\"") < html.indexOf("id=\"cta-comercial\""));
   expect("html_no_cadastro", !/cadastre-se|crie uma conta|paywall/i.test(html));
   expect("html_direct_qty", html.includes('href="/quantitativos-orcamento-obras/"'));
+  expect("html_direct_compat", html.includes('href="/compatibilizacao-projetos-engenharia/"'));
+  expect("html_direct_revisao", html.includes('href="/revisao-tecnica-projetos-engenharia/"'));
   expect("html_direct_without_form", html.indexOf("id=\"acesso-direto\"") < html.indexOf("id=\"diagnostico\""));
   expect("html_no_withheld_compat", !html.includes("/compatibilizacao-revisao/"));
   expect("html_no_fixture_paths", !html.includes("/fixture/"));
+  expect("html_no_unpublished_notice", !/ainda não está nesta versão|até a página específica estar publicada/i.test(html));
   expect("html_noindex_landing", /content="index,follow"/.test(html) && !/content="noindex,follow"/.test(html));
   expect("html_not_webapplication", !/WebApplication/.test(html));
   expect("html_noscript_honest", /nenhum resultado personalizado é produzido/i.test(html));
@@ -644,20 +675,98 @@ const FIXTURE_MAP = {
   expect("app_no_answer_query", !/URLSearchParams/.test(app) && !/location\.search/.test(app));
   expect("app_edit_control", /btn-edit/.test(app));
   expect("app_guards_analytics", /T && T\.track/.test(app));
-  const mapMatch = html.match(/id="pptr-destination-map">([^<]+)</);
-  expect("html_map_present", Boolean(mapMatch));
-  if (mapMatch) {
-    const publishedMap = JSON.parse(mapMatch[1]);
-    const offers = Object.keys(publishedMap.by_offer_id || {});
-    expect("html_map_only_qty", offers.join(",") === "quantity_takeoff_budgeting");
-    expect(
-      "html_map_qty_real",
-      publishedMap.by_offer_id.quantity_takeoff_budgeting.path === "/quantitativos-orcamento-obras/",
-    );
-  }
-  const main = html.replace(/<header[\s\S]*?<\/header>/gi, " ").replace(/<footer[\s\S]*?<\/footer>/gi, " ");
-  expect("html_no_broken_compat", !/href="\/compatibilizacao[^"]*"/.test(main));
-  expect("html_no_broken_revisao", !/href="\/revisao[^"]*"/.test(main));
+  const publishedMap = parseEmbeddedMap(html);
+  expect("html_map_present", Boolean(publishedMap && publishedMap.by_purchase_id));
+  const authority = loadPurchaseRouteMap(root);
+  const derived = deriveToolDestinationMap(authority, root);
+  const compositionFailures = assertReleasedComposition(publishedMap, authority, root);
+  expect("html_map_composition", compositionFailures.length === 0, JSON.stringify(compositionFailures));
+  expect(
+    "html_map_matches_derived_qty",
+    publishedMap.by_purchase_id["quantitativos-orcamento"].path ===
+      derived.by_purchase_id["quantitativos-orcamento"].path,
+  );
+  expect(
+    "html_map_matches_derived_clash",
+    publishedMap.by_purchase_id["compatibilizacao-projetos"].path ===
+      derived.by_purchase_id["compatibilizacao-projetos"].path,
+  );
+  expect(
+    "html_map_matches_derived_review",
+    publishedMap.by_purchase_id["revisao-tecnica-projetos"].path ===
+      derived.by_purchase_id["revisao-tecnica-projetos"].path,
+  );
+  expect(
+    "html_map_shared_offer_not_unique",
+    !publishedMap.by_offer_id.complementary_engineering_project_review,
+  );
+
+  const qtyResult = diagnose({
+    ...presentAnswers(),
+    quantities: "nenhum",
+    budget: "nenhum",
+    calc_memory: "nenhum",
+  });
+  const clashResult = diagnose({
+    ...presentAnswers(),
+    coordination: "nenhum",
+    bim_or_constructability: "nenhum",
+    decision_on_table: "iniciar_execucao",
+  });
+  const reviewResult = diagnose({
+    ...presentAnswers(),
+    design_set: "parcial",
+  });
+  const qtyDest = resolveCommercialDestination(qtyResult.routing.primary, publishedMap);
+  const clashDest = resolveCommercialDestination(clashResult.routing.primary, publishedMap);
+  const reviewDest = resolveCommercialDestination(reviewResult.routing.primary, publishedMap);
+  expect(
+    "shipped_qty_dest",
+    qtyDest.present && qtyDest.href === publishedMap.by_purchase_id["quantitativos-orcamento"].path,
+  );
+  expect(
+    "shipped_clash_dest",
+    clashDest.present && clashDest.href === publishedMap.by_purchase_id["compatibilizacao-projetos"].path,
+  );
+  expect(
+    "shipped_review_dest",
+    reviewDest.present && reviewDest.href === publishedMap.by_purchase_id["revisao-tecnica-projetos"].path,
+  );
+  const reviewByOfferOnly = resolveCommercialDestination(
+    "complementary_engineering_project_review",
+    publishedMap,
+  );
+  expect("shared_offer_without_purchase_absent", reviewByOfferOnly.present === false);
+  const elabSwap = resolveCommercialDestination(reviewResult.routing.primary, {
+    ...publishedMap,
+    by_purchase_id: {
+      ...publishedMap.by_purchase_id,
+      "revisao-tecnica-projetos": {
+        ...publishedMap.by_purchase_id["revisao-tecnica-projetos"],
+        path: "/projetos-complementares-engenharia/",
+      },
+    },
+  });
+  expect("resolver_can_follow_mutated_path", elabSwap.href === "/projetos-complementares-engenharia/");
+  const swappedFailures = assertReleasedComposition(
+    {
+      ...publishedMap,
+      by_purchase_id: {
+        ...publishedMap.by_purchase_id,
+        "revisao-tecnica-projetos": {
+          ...publishedMap.by_purchase_id["revisao-tecnica-projetos"],
+          path: "/projetos-complementares-engenharia/",
+        },
+      },
+    },
+    authority,
+    root,
+  );
+  expect(
+    "composition_refuses_elaboration_as_review",
+    swappedFailures.some((row) => row.code === "purchase_function_semantics"),
+    JSON.stringify(swappedFailures),
+  );
 }
 
 {
