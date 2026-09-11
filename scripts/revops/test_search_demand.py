@@ -958,12 +958,31 @@ def main() -> int:
         ok("missing_secret_null_rows", missing.get("rows") is None)
         ok("missing_secret_external", missing.get("external_evidence") is True)
 
-        leaked = {"email": "pessoa@example.com", "query": "consulta privada", "path": "/x/"}
+        leaked = {
+            "email": "pessoa@example.com",
+            "phone": "11999999999",
+            "whatsapp": "11999999999",
+            "query": "consulta privada",
+            "path": "/x/",
+            "commercial_stages": {
+                "received_contact": {"status": "UNKNOWN", "value": None, "authority": "warmbly_absent"}
+            },
+        }
         ok("personal_detected", gil.artifact_contains_personal_field(leaked) is True)
         stripped = gil.redact_personal_fields(leaked)
         ok("personal_stripped", gil.artifact_contains_personal_field(stripped) is False)
-        ok("personal_email_gone", "pessoa@example.com" not in json.dumps(stripped))
+        ok("personal_email_gone", "pessoa@example.com" not in json.dumps(stripped) and "email" not in stripped)
+        ok("personal_phone_gone", "phone" not in stripped)
+        ok("personal_whatsapp_gone", "whatsapp" not in stripped)
         ok("personal_query_key_gone", "query" not in stripped)
+        ok(
+            "redact_keeps_received_contact",
+            (stripped.get("commercial_stages") or {}).get("received_contact", {}).get("status") == "UNKNOWN",
+        )
+        ok(
+            "contact_key_is_not_pii",
+            "contact" not in gil.PERSONAL_FIELD_KEYS,
+        )
 
         need_budget = gil.classify_need_class("https://confenge.com.br/quantitativos-orcamento-obras/")
         ok("budget_need_mixed", need_budget.get("need_class") == "mixed")
@@ -980,6 +999,8 @@ def main() -> int:
         ok("proposal_unknown_without_warmbly", stages["proposal"]["status"] == "UNKNOWN")
         ok("proposal_not_zero", stages["proposal"]["value"] is None)
         ok("hire_unknown", stages["hire"]["status"] == "UNKNOWN")
+        ok("received_contact_unknown_without_store", stages["received_contact"]["status"] == "UNKNOWN")
+        ok("received_contact_not_zero", stages["received_contact"]["value"] is None)
         ok("no_person_join", stages["anonymous_query_not_joined_to_person"] is True)
         ok("one_imp_no_failure_alert", gil.is_failure_alert_forbidden(1, 0) is True)
 
@@ -990,8 +1011,32 @@ def main() -> int:
         blob = json.dumps(learning)
         ok("learning_no_raw_query", "desonerado e não desonerado" not in blob)
         ok("learning_no_personal", gil.artifact_contains_personal_field(learning) is False)
+        learn_pages = learning.get("pages") or []
+        ok("learning_has_pages", len(learn_pages) >= 1)
+        rc = (learn_pages[0].get("commercial_stages") or {}).get("received_contact") or {}
+        ok("learn_received_contact_present", rc.get("status") == "UNKNOWN")
+        ok("learn_received_contact_not_zero", rc.get("value") is None)
         ok("learning_no_failure_from_one_imp", all(not c.get("commercial_failure_alert") for c in (learning.get("queue") or {}).get("candidates") or []))
         ok("learning_no_proven_lift", all(c.get("proven_lift") is False for c in (learning.get("queue") or {}).get("candidates") or []))
+
+        behind = json.loads(json.dumps(founder))
+        behind["last_data_date"] = "2026-09-05"
+        behind["as_of"] = "2026-09-05"
+        learn_behind = gil.build_operational_learning(
+            behind, search_analytics_today_date=sdo.date(2026, 9, 11)
+        )
+        delayed_learn = learn_behind.get("delayed") or {}
+        ok("learn_behind_delayed", delayed_learn.get("status") == "DELAYED")
+        ok("learn_behind_not_zero_filled", delayed_learn.get("zero_filled") is False)
+        ok(
+            "learn_behind_expected_end_is_pt_last_complete",
+            delayed_learn.get("expected_end")
+            == gil.search_analytics_last_complete_day(today=sdo.date(2026, 9, 11)).isoformat(),
+        )
+        ok("learn_behind_expected_end_2026_09_10", delayed_learn.get("expected_end") == "2026-09-10")
+        behind_prop = (learn_behind.get("dimensions") or {}).get("property") or {}
+        ok("learn_behind_does_not_zero_clicks", behind_prop.get("clicks") == 6)
+        ok("learn_behind_does_not_zero_imps", behind_prop.get("impressions") == 176)
         one_imp_page = {
             "pages": [{"page": "https://confenge.com.br/x/", "path": "/x/", "impressions": 1, "clicks": 0}],
             "queries": [],

@@ -52,9 +52,9 @@
       "exit_code": 0,
       "subject_sha": null,
       "overlay_hashes": {
-        "scripts/revops/gsc_import_learning.py": "sha256:3628eb797a6e50091f1edf093abf4e4dd3f272e7b00ed62e420e554e816f3c41",
+        "scripts/revops/gsc_import_learning.py": "sha256:690892f5b6ffd74efa236e36205cc6892be257a14f9623f1542cdb3e7b7acc1f",
         "scripts/revops/search_demand_observatory.py": "sha256:f220376594b5d758edfd843ee9d5490c470f3abf35f15a8de2e9be5c28c59e0f",
-        "scripts/revops/test_search_demand.py": "sha256:9ed408b00f93f4b1881aeff78c8c156b45f7b3590f27520a7276b03f8eae55ed"
+        "scripts/revops/test_search_demand.py": "sha256:ee813018d197817b1aadd9fb01349d4b9e87ca5feb5fadce90cf987e7fe87205"
       },
       "note": "subject_sha fica nulo neste recibo para não identificar o próprio commit; HEAD_READY no PR cita head_sha."
     },
