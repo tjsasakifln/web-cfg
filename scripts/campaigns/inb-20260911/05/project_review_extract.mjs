@@ -1,11 +1,12 @@
 /**
- * Consumer of a project-review extract.
- * Classifies each row as one of four honest classes and refuses to turn
- * missing documents, unanswered checks or unverified geometry/norm into
- * project errors, risk grades or non-compliance conclusions.
+ * SELECT-only consumer of the INB-06 private-project demonstrative.
  *
- * The canonical demonstrative source is owned by INB-06. This module does
- * not invent that proof.
+ * Canonical sources (owned by campaign 06):
+ *   data/demonstrative/private-project-pilot/consumption.v1.json
+ *   casos/demonstrativo-projeto-privado/data/revisao.csv
+ *
+ * Joins review_findings to coordination_findings and to revisao.csv.
+ * Does not invent a second building, subtotals, risk grades or norm claims.
  */
 
 export const EXTRACT_CLASSES = Object.freeze({
@@ -25,6 +26,14 @@ export const FORBIDDEN_CONCLUSIONS = Object.freeze([
   "conformidade_total",
 ]);
 
+export const CANONICAL_06_PATHS = Object.freeze({
+  consumption: "data/demonstrative/private-project-pilot/consumption.v1.json",
+  revisaoCsv: "casos/demonstrativo-projeto-privado/data/revisao.csv",
+  fixtureConsumption: "tests/fixtures/inb05/consumption.v1.json",
+  fixtureCsv: "tests/fixtures/inb05/revisao.csv",
+  sourceSha: "399a32c415171ccc9e26cae565ecf83f9ecd4c92",
+});
+
 const UNANSWERED = new Set([
   "",
   "unanswered",
@@ -36,26 +45,66 @@ const UNANSWERED = new Set([
   undefined,
 ]);
 
+const NORM_UNEXAMINED = /norma n[aã]o examinada|sem exame de norma/i;
+
 function asArray(value) {
   return Array.isArray(value) ? value : [];
 }
 
-function indexDocuments(documents) {
-  const byId = new Map();
-  for (const doc of asArray(documents)) {
-    if (doc && doc.id) byId.set(String(doc.id), doc);
+function indexById(list, key = "id") {
+  const map = new Map();
+  for (const item of asArray(list)) {
+    if (item && item[key]) map.set(String(item[key]), item);
   }
-  return byId;
+  return map;
 }
 
-function evidenceResolves(refs, documents) {
-  const list = asArray(refs).filter(Boolean);
-  if (list.length === 0) return false;
-  return list.every((ref) => {
-    const raw = String(ref);
-    const docId = raw.split("#")[0];
-    const doc = documents.get(docId);
-    return Boolean(doc && doc.present !== false);
+function splitCsvLine(line) {
+  const cells = [];
+  let current = "";
+  let quoted = false;
+  for (let i = 0; i < line.length; i += 1) {
+    const ch = line[i];
+    if (quoted) {
+      if (ch === '"' && line[i + 1] === '"') {
+        current += '"';
+        i += 1;
+      } else if (ch === '"') {
+        quoted = false;
+      } else {
+        current += ch;
+      }
+    } else if (ch === '"') {
+      quoted = true;
+    } else if (ch === ";") {
+      cells.push(current);
+      current = "";
+    } else {
+      current += ch;
+    }
+  }
+  cells.push(current);
+  return cells;
+}
+
+export function parseRevisaoCsv(text) {
+  const lines = String(text)
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter((line) => line && !line.startsWith("#"));
+  if (lines.length === 0) return [];
+  const header = splitCsvLine(lines[0]);
+  return lines.slice(1).map((line) => {
+    const cells = splitCsvLine(line);
+    const row = {};
+    header.forEach((key, index) => {
+      row[key] = cells[index] ?? "";
+    });
+    row.elementos = String(row.elementos || "")
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean);
+    return row;
   });
 }
 
@@ -72,13 +121,6 @@ function claimedForbiddenConclusion(item) {
   return candidates.find((value) => FORBIDDEN_CONCLUSIONS.includes(value)) || null;
 }
 
-function geometryOrNormUnverified(item, report) {
-  const geometry =
-    item.geometry_verified ?? report.geometry_verified ?? report.verifications?.geometry_verified;
-  const norm = item.norm_verified ?? report.norm_verified ?? report.verifications?.norm_verified;
-  return geometry !== true || norm !== true;
-}
-
 function classifyChecklist(raw) {
   const status = raw?.status;
   const unanswered = UNANSWERED.has(status);
@@ -86,8 +128,8 @@ function classifyChecklist(raw) {
     id: raw?.id || "checklist",
     kind: "checklist",
     class: EXTRACT_CLASSES.VERIFICACAO_NAO_REALIZADA,
-    document_id: raw?.document_id || null,
-    document_revision: raw?.document_revision || null,
+    document_id: raw?.document_id || raw?.documento || null,
+    document_revision: raw?.document_revision || raw?.revisao || null,
     element: raw?.prompt || raw?.element || null,
     finding_text: unanswered
       ? "Item de conferência ainda não realizado; não é erro do projeto."
@@ -105,107 +147,231 @@ function classifyChecklist(raw) {
   };
 }
 
-export function classifyItem(raw, documents, report = {}) {
-  if (raw?.kind === "checklist" || raw?.type === "checklist") {
-    return classifyChecklist(raw);
-  }
-
-  const notes = [];
-  const document = raw?.document_id ? documents.get(String(raw.document_id)) : null;
-  const documentMissing = !raw?.document_id || !document || document.present === false;
-  const revisionDiverges =
-    Boolean(raw?.document_revision) &&
-    Boolean(document?.revision) &&
-    String(raw.document_revision) !== String(document.revision);
-  const refs = asArray(raw?.evidence_refs);
-  const evidenceOk = evidenceResolves(refs, documents);
-  const forbidden = claimedForbiddenConclusion(raw);
-  const unverified = geometryOrNormUnverified(raw, report);
-  const isRecommendation =
-    raw?.kind === "recommendation" ||
-    raw?.kind === "recomendacao" ||
-    (!raw?.finding_text && Boolean(raw?.forwarding));
-
-  let cls;
-  let questionPreserved = false;
-
-  if (documentMissing) {
-    cls = EXTRACT_CLASSES.INFORMACAO_FALTANTE;
-    notes.push("document_absent");
-    questionPreserved = true;
-  } else if (revisionDiverges) {
-    cls = EXTRACT_CLASSES.INFORMACAO_FALTANTE;
-    notes.push("revision_diverges");
-    questionPreserved = true;
-  } else if (raw?.finding_text && !evidenceOk) {
-    cls = EXTRACT_CLASSES.INFORMACAO_FALTANTE;
-    notes.push("evidence_not_referenced");
-    questionPreserved = true;
-  } else if (forbidden && (unverified || !evidenceOk)) {
-    cls = EXTRACT_CLASSES.VERIFICACAO_NAO_REALIZADA;
-    notes.push("forbidden_conclusion_without_verified_basis");
-    questionPreserved = true;
-  } else if (unverified && raw?.requires_geometry_or_norm === true) {
-    cls = EXTRACT_CLASSES.VERIFICACAO_NAO_REALIZADA;
-    notes.push("geometry_or_norm_not_verified");
-    questionPreserved = true;
-  } else if (isRecommendation) {
-    cls = EXTRACT_CLASSES.RECOMENDACAO;
-    notes.push("recommendation_not_finding");
-  } else if (raw?.finding_text && evidenceOk && !documentMissing && !revisionDiverges) {
-    cls = EXTRACT_CLASSES.CONSTATACAO_SUSTENTADA;
-    notes.push("evidenced_finding");
-  } else {
-    cls = EXTRACT_CLASSES.VERIFICACAO_NAO_REALIZADA;
-    notes.push("verification_not_performed");
-    questionPreserved = true;
-  }
-
+function rowFrom06(rf, csv, cf) {
   return {
-    id: raw?.id || null,
-    kind: raw?.kind || "item",
-    class: cls,
-    document_id: raw?.document_id || null,
-    document_revision: raw?.document_revision || document?.revision || null,
-    document_name: document?.name || null,
-    element: raw?.element || null,
-    finding_text: cls === EXTRACT_CLASSES.CONSTATACAO_SUSTENTADA ? raw?.finding_text : raw?.finding_text || null,
-    implication: raw?.implication || null,
-    missing_information: raw?.missing_information || (documentMissing ? "documento ausente" : null),
-    forwarding: raw?.forwarding || null,
-    evidence_refs: refs,
-    concludes_noncompliance: false,
-    concludes_risk: false,
-    question_preserved: questionPreserved,
-    rejected_conclusion: forbidden,
-    honesty_notes: notes,
+    id: rf.id,
+    document_id: csv?.documento || rf.document_ref || null,
+    document_revision: csv?.revisao || null,
+    element_ids: asArray(rf.element_ids).length
+      ? asArray(rf.element_ids)
+      : asArray(csv?.elementos),
+    finding_text: csv?.constatacao || rf.finding_pt_br || null,
+    basis: csv?.base || rf.basis_pt_br || null,
+    forwarding: csv?.acao || rf.action_pt_br || null,
+    related_finding_id: rf.related_finding_id || csv?.achado_relacionado || null,
+    check_kind: rf.check_kind || csv?.tipo_conferencia || null,
+    coordination: cf || null,
   };
 }
 
-export function classifyExtract(report) {
+function classify06Finding(rf, { elements, findings, csvById, consumption }) {
+  const csv = csvById.get(rf.id);
+  const cf = findings.get(rf.related_finding_id);
+  const row = rowFrom06(rf, csv, cf);
+  const notes = [];
+  const elementIds = row.element_ids;
+  const elementsOk = elementIds.length > 0 && elementIds.every((id) => elements.has(id));
+  const relatedOk = Boolean(cf);
+  const packageRevision = consumption.revision || null;
+  const revisionDiverges =
+    Boolean(row.document_revision) &&
+    Boolean(packageRevision) &&
+    String(row.document_revision) !== String(packageRevision);
+  const forbidden = claimedForbiddenConclusion(rf);
+  const items = [];
+
+  if (!relatedOk) {
+    notes.push("evidence_not_referenced");
+    items.push({
+      ...row,
+      kind: "finding",
+      class: EXTRACT_CLASSES.INFORMACAO_FALTANTE,
+      element: elementIds.join(" "),
+      missing_information: `achado relacionado ${rf.related_finding_id || "ausente"} não referenciado`,
+      concludes_noncompliance: false,
+      concludes_risk: false,
+      question_preserved: true,
+      rejected_conclusion: forbidden,
+      honesty_notes: notes,
+    });
+    return items;
+  }
+
+  if (!elementsOk) {
+    notes.push("document_absent");
+    items.push({
+      ...row,
+      kind: "finding",
+      class: EXTRACT_CLASSES.INFORMACAO_FALTANTE,
+      element: elementIds.join(" "),
+      missing_information: "elemento ou documento ausente no recorte",
+      concludes_noncompliance: false,
+      concludes_risk: false,
+      question_preserved: true,
+      rejected_conclusion: forbidden,
+      honesty_notes: notes,
+    });
+    return items;
+  }
+
+  if (revisionDiverges) {
+    notes.push("revision_diverges");
+    items.push({
+      ...row,
+      kind: "finding",
+      class: EXTRACT_CLASSES.INFORMACAO_FALTANTE,
+      element: elementIds.join(" "),
+      missing_information: `revisão ${row.document_revision} diverge da revisão do recorte ${packageRevision}`,
+      concludes_noncompliance: false,
+      concludes_risk: false,
+      question_preserved: true,
+      rejected_conclusion: forbidden,
+      honesty_notes: notes,
+    });
+    return items;
+  }
+
+  const missingInfo =
+    cf.kind === "missing_information" || cf.proven_failure === false;
+  const evidencedGeometry = cf.kind === "geometric" && cf.proven_failure === true;
+
+  if (forbidden && !evidencedGeometry) {
+    items.push({
+      ...row,
+      kind: "finding",
+      class: EXTRACT_CLASSES.VERIFICACAO_NAO_REALIZADA,
+      element: elementIds.join(" "),
+      concludes_noncompliance: false,
+      concludes_risk: false,
+      question_preserved: true,
+      rejected_conclusion: forbidden,
+      honesty_notes: ["forbidden_conclusion_without_verified_basis"],
+    });
+    return items;
+  }
+
+  if (missingInfo) {
+    items.push({
+      ...row,
+      kind: "finding",
+      class: EXTRACT_CLASSES.INFORMACAO_FALTANTE,
+      element: elementIds.join(" "),
+      missing_information: row.finding_text,
+      concludes_noncompliance: false,
+      concludes_risk: false,
+      question_preserved: true,
+      rejected_conclusion: forbidden,
+      honesty_notes: ["missing_information_is_not_proven_failure"],
+    });
+  } else if (evidencedGeometry) {
+    items.push({
+      ...row,
+      kind: "finding",
+      class: EXTRACT_CLASSES.CONSTATACAO_SUSTENTADA,
+      element: elementIds.join(" "),
+      implication: cf.state ? `estado no recorte: ${cf.state}` : null,
+      concludes_noncompliance: false,
+      concludes_risk: false,
+      question_preserved: false,
+      rejected_conclusion: forbidden,
+      honesty_notes: ["evidenced_finding"],
+    });
+  } else {
+    items.push({
+      ...row,
+      kind: "finding",
+      class: EXTRACT_CLASSES.VERIFICACAO_NAO_REALIZADA,
+      element: elementIds.join(" "),
+      concludes_noncompliance: false,
+      concludes_risk: false,
+      question_preserved: true,
+      rejected_conclusion: forbidden,
+      honesty_notes: ["verification_not_performed"],
+    });
+  }
+
+  if (row.forwarding && evidencedGeometry) {
+    items.push({
+      id: `${rf.id}-acao`,
+      kind: "recommendation",
+      class: EXTRACT_CLASSES.RECOMENDACAO,
+      document_id: row.document_id,
+      document_revision: row.document_revision,
+      element: elementIds.join(" "),
+      finding_text: null,
+      basis: row.basis,
+      forwarding: row.forwarding,
+      related_finding_id: row.related_finding_id,
+      concludes_noncompliance: false,
+      concludes_risk: false,
+      question_preserved: false,
+      honesty_notes: ["recommendation_from_06_action"],
+    });
+  }
+
+  if (NORM_UNEXAMINED.test(row.basis || "")) {
+    items.push({
+      id: `${rf.id}-norma`,
+      kind: "verification",
+      class: EXTRACT_CLASSES.VERIFICACAO_NAO_REALIZADA,
+      document_id: row.document_id,
+      document_revision: row.document_revision,
+      element: elementIds.join(" "),
+      finding_text: row.basis,
+      forwarding:
+        "Manter a pergunta técnica: qual critério normativo, se algum, se aplica a este recorte? Sem norma examinada, não se conclui risco nem não conformidade.",
+      related_finding_id: row.related_finding_id,
+      concludes_noncompliance: false,
+      concludes_risk: false,
+      question_preserved: true,
+      honesty_notes: ["geometry_or_norm_not_verified"],
+    });
+  }
+
+  return items;
+}
+
+export function classifyExtract(report, options = {}) {
   if (!report || typeof report !== "object") {
     throw new Error("report_required");
   }
-  const documents = indexDocuments(report.documents || report.package?.documents || []);
-  const items = asArray(report.items).map((item) => classifyItem(item, documents, report));
-  const checklist = asArray(report.checklist).map((item) => classifyChecklist(item));
-  const classified = [...items, ...checklist];
-  return {
-    schema: "confenge.project-review-extract/1.0",
-    kind: report.kind || "demonstrative",
-    source_campaign: report.source_campaign || null,
-    founder_approved: false,
-    not_client_work: true,
-    package: report.package || null,
-    items: classified,
-    honesty: honestyReport(classified),
-  };
+  const revisaoRows = options.revisaoRows
+    || (options.revisaoCsv ? parseRevisaoCsv(options.revisaoCsv) : []);
+  if (Array.isArray(report.review_findings)) {
+    const elements = indexById(report.elements);
+    const findings = indexById(report.coordination_findings);
+    const csvById = indexById(revisaoRows);
+    const items = report.review_findings.flatMap((rf) =>
+      classify06Finding(rf, { elements, findings, csvById, consumption: report }),
+    );
+    const checklist = asArray(report.checklist).map((item) => classifyChecklist(item));
+    const classified = [...items, ...checklist];
+    return {
+      schema: "confenge.project-review-extract/1.0",
+      kind: report.origin || "demonstrative",
+      source_campaign: "06",
+      proof_id: report.proof_id || null,
+      founder_approved: false,
+      not_client_work: true,
+      package: {
+        revision: report.revision || null,
+        url: report.url || null,
+        label: report.label_pt_br || null,
+      },
+      named_totals: report.named_totals || null,
+      items: classified,
+      honesty: honestyReport(classified),
+    };
+  }
+  throw new Error("review_findings_required");
 }
 
 export function honestyReport(items) {
   const classes = new Set(asArray(items).map((item) => item.class));
   const concludesRisk = asArray(items).some((item) => item.concludes_risk === true);
-  const concludesNoncompliance = asArray(items).some((item) => item.concludes_noncompliance === true);
+  const concludesNoncompliance = asArray(items).some(
+    (item) => item.concludes_noncompliance === true,
+  );
   const inventedError = asArray(items).some((item) =>
     FORBIDDEN_CONCLUSIONS.includes(item.class),
   );
@@ -234,4 +400,37 @@ export function assertHonestExtract(classified) {
     throw new Error("extract_treats_gap_as_project_error");
   }
   return honesty;
+}
+
+export function classifyItem(raw, _documents, report = {}) {
+  if (raw?.kind === "checklist" || raw?.type === "checklist") {
+    return classifyChecklist(raw);
+  }
+  const consumption = {
+    revision: report.revision || raw.document_revision,
+    elements: report.elements || [],
+    coordination_findings: report.coordination_findings || [],
+    review_findings: [
+      {
+        id: raw.id,
+        document_ref: raw.document_id || raw.document_ref,
+        related_finding_id: raw.related_finding_id,
+        check_kind: raw.check_kind,
+        element_ids: raw.element_ids || [],
+        finding_pt_br: raw.finding_text,
+        basis_pt_br: raw.basis,
+        action_pt_br: raw.forwarding,
+        conclusion: raw.conclusion,
+      },
+    ],
+    checklist: [],
+  };
+  if (Array.isArray(report.elements)) consumption.elements = report.elements;
+  if (Array.isArray(report.coordination_findings)) {
+    consumption.coordination_findings = report.coordination_findings;
+  }
+  const classified = classifyExtract(consumption, {
+    revisaoRows: raw.csv_row ? [raw.csv_row] : [],
+  });
+  return classified.items[0];
 }

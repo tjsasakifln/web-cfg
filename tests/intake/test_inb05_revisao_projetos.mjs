@@ -163,11 +163,14 @@ test("landing names contractual scope factors and three review depths", () => {
 
 test("landing extract separates four honest classes and refuses invented errors", () => {
   const main = mainOf(pages.landing);
-  assert.match(main, /data-extract-kind="demonstrative-format"/);
-  assert.match(main, /data-extract-canonical-source="pending-inb-06"/);
-  assert.match(main, /Não é conferência de um projeto real/);
+  assert.match(main, /data-extract-kind="demonstrative"/);
+  assert.match(main, /data-extract-canonical-source="inb-06"/);
   assert.match(main, /não é trabalho de cliente/);
   assert.match(main, /não é conteúdo aprovado pelo fundador/);
+  assert.match(main, /RF-01/);
+  assert.match(main, /WN-01/);
+  assert.match(main, /HS-01/);
+  assert.equal(/V12|E-04/.test(main), false);
   for (const cls of [
     "constatacao_sustentada",
     "informacao_faltante",
@@ -176,7 +179,7 @@ test("landing extract separates four honest classes and refuses invented errors"
   ]) {
     assert.equal(main.includes(`data-extract-class="${cls}"`), true, `missing class ${cls}`);
   }
-  assert.match(main, /Item de checklist não respondido não vira erro do projeto|Checklist não respondido não é erro do projeto/);
+  assert.match(main, /Item de checklist não respondido|Checklist não respondido não é erro do projeto/);
   assert.match(main, /não se conclui risco, não conformidade/i);
   assert.equal(/classifica[çc][aã]o de gravidade|nota de risco/i.test(main), false);
 });

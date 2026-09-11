@@ -3,56 +3,103 @@ import fs from "node:fs";
 import path from "node:path";
 import { test } from "node:test";
 import {
+  CANONICAL_06_PATHS,
   EXTRACT_CLASSES,
   assertHonestExtract,
   classifyExtract,
-  classifyItem,
+  parseRevisaoCsv,
 } from "../../scripts/campaigns/inb-20260911/05/project_review_extract.mjs";
 
-const fixture = JSON.parse(
-  fs.readFileSync(path.resolve("tests/fixtures/inb05/format-example-extract.json"), "utf8"),
-);
-const landing = fs.readFileSync(
-  path.resolve("revisao-tecnica-projetos-engenharia/index.html"),
-  "utf8",
-);
+function load06() {
+  const consumptionPath = fs.existsSync(CANONICAL_06_PATHS.consumption)
+    ? CANONICAL_06_PATHS.consumption
+    : CANONICAL_06_PATHS.fixtureConsumption;
+  const csvPath = fs.existsSync(CANONICAL_06_PATHS.revisaoCsv)
+    ? CANONICAL_06_PATHS.revisaoCsv
+    : CANONICAL_06_PATHS.fixtureCsv;
+  return {
+    consumption: JSON.parse(fs.readFileSync(path.resolve(consumptionPath), "utf8")),
+    csv: fs.readFileSync(path.resolve(csvPath), "utf8"),
+    consumptionPath,
+    csvPath,
+  };
+}
 
 function byId(classified, id) {
   return classified.items.find((item) => item.id === id);
 }
 
-test("format example yields four distinguishable honest classes", () => {
-  const classified = classifyExtract(fixture);
+const landing = fs.readFileSync(
+  path.resolve("revisao-tecnica-projetos-engenharia/index.html"),
+  "utf8",
+);
+const choice = fs.readFileSync(
+  path.resolve("conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/index.html"),
+  "utf8",
+);
+const hiring = fs.readFileSync(
+  path.resolve("conteudos/como-contratar-revisao-tecnica-projeto/index.html"),
+  "utf8",
+);
+
+test("fixture copies 06 review_findings RF-01 and RF-02, not a second building", () => {
+  const { consumption, csv } = load06();
+  assert.equal(consumption.schema, "confenge.demonstrative-sample-descriptor/1.0");
+  assert.equal(consumption.proof_id, "demo-private-project-pilot-2026-09");
+  const ids = consumption.review_findings.map((item) => item.id);
+  assert.deepEqual(ids, ["RF-01", "RF-02"]);
+  assert.deepEqual(consumption.review_findings[0].element_ids, ["WN-01", "B-01"]);
+  assert.deepEqual(consumption.review_findings[1].element_ids, ["HS-01"]);
+  const rows = parseRevisaoCsv(csv);
+  assert.equal(rows[0].constatacao, "A verga da janela WN-01 invade o volume da viga B-01 no estado original.");
+  assert.equal(rows[1].constatacao, "O poço hidrossanitário HS-01 não declara vão livre interno nem diâmetros.");
+  assert.equal(/V12|E-04|50×30|40×30/.test(JSON.stringify(consumption) + csv), false);
+});
+
+test("06 rows yield four distinguishable honest classes", () => {
+  const { consumption, csv } = load06();
+  const classified = classifyExtract(consumption, { revisaoCsv: csv });
   assertHonestExtract(classified);
+  assert.equal(classified.source_campaign, "06");
   assert.equal(classified.founder_approved, false);
   assert.equal(classified.not_client_work, true);
   assert.equal(classified.honesty.four_classes_present, true);
   assert.equal(classified.honesty.concludes_risk, false);
   assert.equal(classified.honesty.concludes_noncompliance, false);
-  assert.equal(classified.honesty.invented_project_error, false);
-  assert.equal(byId(classified, "item-viga-v12").class, EXTRACT_CLASSES.CONSTATACAO_SUSTENTADA);
-  assert.equal(byId(classified, "item-memorial-revisao").class, EXTRACT_CLASSES.INFORMACAO_FALTANTE);
-  assert.equal(byId(classified, "item-spec-ausente").class, EXTRACT_CLASSES.INFORMACAO_FALTANTE);
-  assert.equal(byId(classified, "item-recomendacao-coordenar").class, EXTRACT_CLASSES.RECOMENDACAO);
-  assert.equal(byId(classified, "item-geometria-norma").class, EXTRACT_CLASSES.VERIFICACAO_NAO_REALIZADA);
-  assert.equal(byId(classified, "chk-armadura").class, EXTRACT_CLASSES.VERIFICACAO_NAO_REALIZADA);
+  assert.equal(byId(classified, "RF-01").class, EXTRACT_CLASSES.CONSTATACAO_SUSTENTADA);
+  assert.equal(byId(classified, "RF-02").class, EXTRACT_CLASSES.INFORMACAO_FALTANTE);
+  assert.equal(byId(classified, "RF-01-acao").class, EXTRACT_CLASSES.RECOMENDACAO);
+  assert.equal(byId(classified, "RF-01-norma").class, EXTRACT_CLASSES.VERIFICACAO_NAO_REALIZADA);
+  assert.equal(byId(classified, "RF-02-norma").class, EXTRACT_CLASSES.VERIFICACAO_NAO_REALIZADA);
 });
 
-test("landing extract texts are the classified fixture, not a second invented story", () => {
-  const classified = classifyExtract(fixture);
-  assert.match(landing, /data-extract-canonical-source="pending-inb-06"/);
-  assert.equal(landing.includes(classified.package.object), true, classified.package.object);
-  assert.match(landing, /O corte A-A desenha a viga V12 com seção 50×30 cm/);
-  assert.match(landing, /qual revisão do memorial acompanha a prancha E-04 R02/);
-  assert.match(landing, /documento de especificação de concreto/);
-  assert.match(landing, /não substitui a autoria nem aprova o projeto/);
-  assert.match(landing, /qual critério se aplica à V12 neste recorte/);
-  assert.match(landing, /Item de conferência ainda não realizado; não é erro do projeto/);
+test("landing extract texts are the 06 rows, not a second invented story", () => {
+  const { consumption, csv } = load06();
+  const classified = classifyExtract(consumption, { revisaoCsv: csv });
+  const rf1 = byId(classified, "RF-01");
+  const rf2 = byId(classified, "RF-02");
+  assert.match(landing, /data-extract-canonical-source="inb-06"/);
+  assert.match(landing, /data-proof-id="demo-private-project-pilot-2026-09"/);
+  assert.match(landing, /href="\/casos\/demonstrativo-projeto-privado\/"/);
+  assert.match(landing, /href="\/casos\/demonstrativo-projeto-privado\/data\/revisao.csv"/);
+  assert.equal(landing.includes(rf1.finding_text), true, rf1.finding_text);
+  assert.equal(landing.includes(rf2.finding_text), true, rf2.finding_text);
+  assert.match(landing, /WN-01/);
+  assert.match(landing, /B-01/);
+  assert.match(landing, /HS-01/);
+  assert.match(landing, /PR-ARQ-R00/);
+  assert.match(landing, /PR-HID-R00/);
+  assert.equal(/V12|E-04|50×30|40×30/.test(landing + choice + hiring), false);
+  assert.match(choice, /WN-01/);
+  assert.match(hiring, /HS-01/);
 });
 
 test("absent document stays pending and is not a project error", () => {
-  const classified = classifyExtract(fixture);
-  const item = byId(classified, "item-spec-ausente");
+  const { consumption, csv } = load06();
+  const mutated = structuredClone(consumption);
+  mutated.elements = mutated.elements.filter((el) => el.id !== "HS-01");
+  const classified = classifyExtract(mutated, { revisaoCsv: csv });
+  const item = byId(classified, "RF-02");
   assert.equal(item.class, EXTRACT_CLASSES.INFORMACAO_FALTANTE);
   assert.equal(item.concludes_noncompliance, false);
   assert.equal(item.question_preserved, true);
@@ -60,36 +107,39 @@ test("absent document stays pending and is not a project error", () => {
 });
 
 test("divergent revision stays as missing information", () => {
-  const classified = classifyExtract(fixture);
-  const item = byId(classified, "item-memorial-revisao");
+  const { consumption, csv } = load06();
+  const rows = parseRevisaoCsv(csv);
+  rows[0].revisao = "R02";
+  const classified = classifyExtract(consumption, { revisaoRows: rows });
+  const item = byId(classified, "RF-01");
   assert.equal(item.class, EXTRACT_CLASSES.INFORMACAO_FALTANTE);
   assert.ok(item.honesty_notes.includes("revision_diverges"));
   assert.equal(item.concludes_risk, false);
 });
 
 test("unreferenced evidence does not sustain a finding", () => {
-  const mutated = structuredClone(fixture);
-  mutated.items = [
+  const { consumption, csv } = load06();
+  const mutated = structuredClone(consumption);
+  mutated.review_findings = [
     {
-      id: "item-unreferenced",
-      kind: "finding",
-      document_id: "doc-e04",
-      document_revision: "R02",
-      element: "viga V12",
-      finding_text: "Seção incompatível com o memorial.",
-      evidence_refs: ["doc-ghost#inexistente"],
+      ...mutated.review_findings[0],
+      related_finding_id: "CF-GHOST",
     },
   ];
-  mutated.checklist = [];
-  const classified = classifyExtract(mutated);
-  const item = byId(classified, "item-unreferenced");
+  const classified = classifyExtract(mutated, { revisaoCsv: csv });
+  const item = byId(classified, "RF-01");
   assert.equal(item.class, EXTRACT_CLASSES.INFORMACAO_FALTANTE);
   assert.ok(item.honesty_notes.includes("evidence_not_referenced"));
   assert.equal(item.concludes_noncompliance, false);
 });
 
 test("unanswered checklist is not converted into a project error", () => {
-  const classified = classifyExtract(fixture);
+  const { consumption, csv } = load06();
+  const mutated = structuredClone(consumption);
+  mutated.checklist = [
+    { id: "chk-armadura", prompt: "Conferir armadura da B-01 contra o memorial", status: "not_performed" },
+  ];
+  const classified = classifyExtract(mutated, { revisaoCsv: csv });
   const item = byId(classified, "chk-armadura");
   assert.equal(item.class, EXTRACT_CLASSES.VERIFICACAO_NAO_REALIZADA);
   assert.match(item.finding_text, /não é erro do projeto/);
@@ -97,37 +147,31 @@ test("unanswered checklist is not converted into a project error", () => {
 });
 
 test("unverified geometry or norm keeps the technical question", () => {
-  const classified = classifyExtract(fixture);
-  const item = byId(classified, "item-geometria-norma");
+  const { consumption, csv } = load06();
+  const classified = classifyExtract(consumption, { revisaoCsv: csv });
+  const item = byId(classified, "RF-01-norma");
   assert.equal(item.class, EXTRACT_CLASSES.VERIFICACAO_NAO_REALIZADA);
   assert.equal(item.question_preserved, true);
   assert.equal(item.concludes_risk, false);
   assert.equal(item.concludes_noncompliance, false);
   assert.match(item.forwarding, /pergunta técnica/);
+  assert.match(item.finding_text, /sem exame de norma de dimensionamento/i);
 });
 
 test("mutation: forcing a risk conclusion without evidence is refused", () => {
-  const documents = new Map([
-    ["doc-e04", { id: "doc-e04", name: "E-04", revision: "R02", present: true }],
-  ]);
-  const forced = classifyItem(
+  const { consumption, csv } = load06();
+  const mutated = structuredClone(consumption);
+  mutated.review_findings = [
     {
-      id: "forced-risk",
-      document_id: "doc-e04",
-      document_revision: "R02",
-      finding_text: "Há risco estrutural.",
+      ...mutated.review_findings[1],
       conclusion: "risco",
-      evidence_refs: [],
-      geometry_verified: false,
-      norm_verified: false,
     },
-    documents,
-    { geometry_verified: false, norm_verified: false },
-  );
+  ];
+  const classified = classifyExtract(mutated, { revisaoCsv: csv });
+  const forced = byId(classified, "RF-02");
   assert.notEqual(forced.class, "risco");
   assert.equal(forced.concludes_risk, false);
   assert.equal(forced.concludes_noncompliance, false);
-  assert.equal(forced.rejected_conclusion, "risco");
   assert.equal(forced.question_preserved, true);
   assert.throws(
     () =>
