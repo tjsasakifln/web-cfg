@@ -1,0 +1,119 @@
+{
+  "schema": "confenge.inbound-campaign-handoff/2.0",
+  "campaign_set": "INB-20260911",
+  "campaign_id": "05",
+  "prompt_version": "2.0.0",
+  "base_sha": "8f508544835490ec635d02517bce0207c6f8e426",
+  "implementation_sha": "397a4390ba152f9b68d927425f03760c6851de0e",
+  "state": "READY_FOR_INTEGRATION_WITH_DEPENDENCIES",
+  "owned_sources": [
+    "revisao-tecnica-projetos-engenharia/index.html",
+    "conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/index.html",
+    "conteudos/como-contratar-revisao-tecnica-projeto/index.html",
+    "scripts/campaigns/inb-20260911/05/project_review_extract.mjs",
+    "tests/fixtures/inb05/format-example-extract.json",
+    "tests/intake/test_inb05_revisao_projetos.mjs",
+    "tests/intake/test_inb05_project_review_extract.mjs",
+    "docs/campaigns/inb-20260911/05/shared-changes.json",
+    "docs/campaigns/inb-20260911/05/integration.patch",
+    "docs/campaigns/inb-20260911/05/handoff.json"
+  ],
+  "changed_sources": [
+    "revisao-tecnica-projetos-engenharia/index.html",
+    "conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/index.html",
+    "conteudos/como-contratar-revisao-tecnica-projeto/index.html",
+    "scripts/campaigns/inb-20260911/05/project_review_extract.mjs",
+    "tests/fixtures/inb05/format-example-extract.json",
+    "tests/intake/test_inb05_revisao_projetos.mjs",
+    "tests/intake/test_inb05_project_review_extract.mjs",
+    "docs/campaigns/inb-20260911/05/README.md",
+    "docs/campaigns/inb-20260911/05/shared-changes.json",
+    "docs/campaigns/inb-20260911/05/integration.patch",
+    "docs/campaigns/inb-20260911/05/handoff.json"
+  ],
+  "routes": [
+    {
+      "path": "/revisao-tecnica-projetos-engenharia/",
+      "kind": "commercial_landing",
+      "intent_family": "projetar_revisar_compatibilizar",
+      "offer_id": "complementary_engineering_project_review",
+      "canonical": "https://confenge.com.br/revisao-tecnica-projetos-engenharia/",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "contact_mode": "direct_channels_withheld_form"
+    },
+    {
+      "path": "/conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/",
+      "kind": "decision_content",
+      "intent_family": "projetar_revisar_compatibilizar",
+      "offer_id": "complementary_engineering_project_review",
+      "canonical": "https://confenge.com.br/conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "contact_mode": "service_transition_plus_whatsapp"
+    },
+    {
+      "path": "/conteudos/como-contratar-revisao-tecnica-projeto/",
+      "kind": "decision_content",
+      "intent_family": "projetar_revisar_compatibilizar",
+      "offer_id": "complementary_engineering_project_review",
+      "canonical": "https://confenge.com.br/conteudos/como-contratar-revisao-tecnica-projeto/",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "contact_mode": "service_transition_plus_whatsapp"
+    }
+  ],
+  "dependencies": [
+    {
+      "provider_campaign": "01",
+      "artifact_path": "data/site/public-ia-map.json",
+      "level": "HARD_AT_RELEASE",
+      "fallback": "Rotas se ligam entre si; o upsert de breadcrumb/parent/active_header está em shared-changes.json (inb05-public-ia-map-breadcrumb-parent)."
+    },
+    {
+      "provider_campaign": "02",
+      "artifact_path": "netlify/functions/data/adaptive-intake-authority.json",
+      "level": "ALREADY_SATISFIED",
+      "fallback": null,
+      "proof": "Autoridade WITHHELD; a landing reusa os três canais diretos já funcionais (WhatsApp, e-mail, telefone) sem formulário morto. Testes em tests/intake/test_inb05_revisao_projetos.mjs."
+    },
+    {
+      "provider_campaign": "06",
+      "artifact_path": "data/proof/private-engineering-project-review-demonstrative.v1.json",
+      "level": "HARD_AT_RELEASE",
+      "fallback": "A landing publica extrato de formato didático rotulado data-extract-kind=demonstrative-format e data-extract-canonical-source=pending-inb-06. Não é prova canônica nem trabalho de cliente. Classificador em scripts/campaigns/inb-20260911/05/project_review_extract.mjs consome o contrato; fixture só em tests/fixtures/inb05/."
+    }
+  ],
+  "shared_changes": "docs/campaigns/inb-20260911/05/shared-changes.json",
+  "tests": [
+    {
+      "command": "node --test tests/intake/test_inb05_revisao_projetos.mjs",
+      "exit_code": 0,
+      "subject_sha": "397a4390ba152f9b68d927425f03760c6851de0e",
+      "overlay_hashes": {
+        "docs/campaigns/inb-20260911/05/shared-changes.json": "sha256:1c5825ee782dde9ce468e3063d87569dcf638943073b0186d32c434fb1bc4747"
+      }
+    },
+    {
+      "command": "node --test tests/intake/test_inb05_project_review_extract.mjs",
+      "exit_code": 0,
+      "subject_sha": "397a4390ba152f9b68d927425f03760c6851de0e",
+      "overlay_hashes": {
+        "scripts/campaigns/inb-20260911/05/project_review_extract.mjs": "sha256:320fd63e7ab742547889a715e008b85a4cbfbb7b29569ee934aa0138d486f9ef",
+        "tests/fixtures/inb05/format-example-extract.json": "sha256:020a6cd5b1dfe1fedcd0ffdd63a7449ccf1bb9ecae131add593613b672715336"
+      }
+    }
+  ],
+  "evidence_paths": [
+    "tests/intake/test_inb05_revisao_projetos.mjs",
+    "tests/intake/test_inb05_project_review_extract.mjs",
+    "revisao-tecnica-projetos-engenharia/index.html",
+    "conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/index.html",
+    "conteudos/como-contratar-revisao-tecnica-projeto/index.html"
+  ],
+  "unresolved": [
+    "INB-06 ainda não publicou a prova canônica; o extrato visível é formato didático rotulado, não fixture clandestina nem case.",
+    "16 precisa aplicar PUBLIC_TOP_DIRS, família, sitemap e mapa para a landing entrar no artefato público e no gate fail-closed.",
+    "Playwright/headless não estava disponível neste ambiente; verificação visual 360/390 ficou em HTML estático + curl 200 + testes de markup."
+  ]
+}
