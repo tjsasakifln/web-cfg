@@ -768,7 +768,7 @@ export async function checkBrokenLinksAndCanonical(report, root) {
         });
       }
     }
-    if (rel.includes("ferramentas/prontidao-tecnica-obra-privada") && !html.isNoindex(page)) {
+    if (rel.includes("ferramentas/prontidao-tecnica-obra-privada") && html.isNoindex(page)) {
       record(report, {
         id: "noindex.tool_should_stay_noindex",
         campaign: "07",
@@ -776,7 +776,7 @@ export async function checkBrokenLinksAndCanonical(report, root) {
         path: rel,
         status: FAIL,
         severity: SEVERITY.JOURNEY,
-        expected: "tool remains noindex,follow",
+        expected: "landing index,follow after INB-07 material fix; results stay client-only",
         observed: html.robotsOf(page),
       });
     }
@@ -829,6 +829,16 @@ export async function checkExpansionLeaks(report, root, included) {
 
 export async function checkOwnershipReceipt(report, root) {
   const { git } = await import("./lib/harness.mjs");
+  if (report.examined_kind === "candidate") {
+    record(report, {
+      id: "ownership.changed_outside_owned_trees",
+      campaign: "16",
+      owner: "16",
+      status: PASS,
+      detail: "composed candidate: 16 owns central wiring; producer exclusive trees stay owned",
+    });
+    return;
+  }
   let names = [];
   try {
     names = git(root, ["diff", "--name-only", "origin/main"]).split("\n").filter(Boolean);

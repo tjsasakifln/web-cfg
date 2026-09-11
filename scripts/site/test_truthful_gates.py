@@ -211,7 +211,7 @@ def test_public_entregas_separates_eight_offers_from_internal_capability_invento
         for href in (
             "/servicos/#servico-projeto",
             "/quantitativos-orcamento-obras/",
-            "/servicos/#servico-diagnostico",
+            "/inspecao-diagnostico-edificacoes/",
         )
     )
     assert 'href="#captura-entregas"' in html

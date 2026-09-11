@@ -1,7 +1,7 @@
 {
   "defect_count": 0,
   "ok": true,
-  "page_count": 78,
+  "page_count": 97,
   "pages": [
     {
       "claimed": {
@@ -38,8 +38,8 @@
         "breadcrumb_names": [],
         "canonical": "https://confenge.com.br/",
         "dates": [],
-        "description": "Engenharia, perícias e inteligência técnica: diagnóstico, cálculo e evidências para decisões em projetos, imóveis, obras, SST e contratos públicos.",
-        "h1": "Do problema técnico à decisão documentada.",
+        "description": "Projetos e serviços de engenharia para obras públicas e privadas: elaboração, revisão, compatibilização, quantitativos, orçamento, perícias e análises técnicas.",
+        "h1": "Projetos e serviços de engenharia para obras públicas e privadas.",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": "demonstrativo",
@@ -152,15 +152,194 @@
         ],
         "canonical": "https://confenge.com.br/aditivos-obras-publicas/",
         "dates": [
-          "2026-08-15"
+          "2026-08-15",
+          "2026-09-11"
         ],
         "description": "Aditivos em obras públicas: tipos de alteração, documentos, decisão formal e proteção de margem antes de executar sem cobertura.",
         "h1": "Aditivos e serviços extras em obras públicas: documentar, precificar e decidir",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Aditivos em obras públicas: documentos e margem | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Análise técnica de contrato público"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [
+          "CONFENGE"
+        ],
+        "people": [
+          "Tiago Sasaki"
+        ],
+        "reviewers": [],
+        "types": [
+          "Organization",
+          "Person",
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/analises-contratos-publicos/",
+      "visible": {
+        "authors": [
+          "Engº Tiago Sasaki"
+        ],
+        "breadcrumb_names": [
+          "Início",
+          "Análise técnica de contrato público"
+        ],
+        "canonical": "https://confenge.com.br/analises-contratos-publicos/",
+        "dates": [
+          "2026-07-08",
+          "2026-08-16",
+          "2027-07-08"
+        ],
+        "description": "Análises técnicas de contratos públicos com fontes, cálculos, limites e aplicação prática.",
+        "h1": "Análises técnicas de contratos públicos",
+        "has_dataset_surface": true,
+        "licenses": [],
+        "permission_class": "demonstrativo",
+        "reviewers": [],
+        "title": "Análises técnicas de contratos públicos | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [
+          "Engº Tiago Sasaki"
+        ],
+        "breadcrumbs": [
+          "Início",
+          "Análises de contratos",
+          "Três relógios de reajuste no mesmo instrumento de pavimentação em paralelepípedo"
+        ],
+        "dataset_names": [],
+        "dates": [
+          "2026-08-18",
+          "2026-09-09"
+        ],
+        "descriptions": [
+          "O contrato público PNCP 14862788000150-2-000069/2026 publica pavimentação em paralelepípedo de 4.710,00 m² no município de São Gonçalo do Piauí – PI, valor global 719177.48 BRL e vigência 2026-07-08 a 2027-07-08. A unidade listada no JSON oficial traz município Teresina. São duas strings publicadas; esta análise não reconcilia qual descreve a execução. O PDF oficial (SHA-256 64a238e6094f4d093f1ee970820fd277bcd34a66457d776a59225219b8e77604), páginas 14–15, não trata o reajuste como aniversário da vigência. A cláusula 12.1 fixa preços por um ano contado da data do orçamento estimado. A cláusula 12.2 autoriza reajuste após o interregno de um ano contado da data do orçamento a que a proposta se referir, com fórmula Io/I pro rata dia. A cláusula 12.3 nomeia o Índice Nacional da Construção Civil – Coluna 35, FGV, revista Conjuntura Econômica, salvo indicação diversa na Parte Específica. A página 46 marca 12.3 com (x) no mesmo índice. A divisão 719177.48 / 4710.00 = 152.6916 BRL/m² é apenas valor global publicado ÷ área publicada no objeto. Não é custo completo, preço de referência, SINAPI/SICRO, custo/km nem prova de economicidade. Esta página é ANÁLISE TÉCNICA DE CONTRATO PÚBLICO. Não é um caso CONFENGE. Não implica relação comercial da CONFENGE com o órgão ou o contratado."
+        ],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [
+          "Três relógios de reajuste no mesmo instrumento de pavimentação em paralelepípedo"
+        ],
+        "licenses": [],
+        "organizations": [
+          "CONFENGE"
+        ],
+        "people": [
+          "Tiago Sasaki"
+        ],
+        "reviewers": [],
+        "types": [
+          "Organization",
+          "Person",
+          "BreadcrumbList",
+          "Article"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
+      "visible": {
+        "authors": [
+          "Engº Tiago Sasaki"
+        ],
+        "breadcrumb_names": [
+          "Início",
+          "Análises de contratos",
+          "Três relógios de reajuste no mesmo instrumento de pavimentação em paralelepípedo"
+        ],
+        "canonical": "https://confenge.com.br/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
+        "dates": [
+          "2026-07-08",
+          "2026-08-18",
+          "2026-08-20",
+          "2026-09-09",
+          "2027-07-08"
+        ],
+        "description": "O instrumento oficial separa vigência, orçamento estimado e orçamento da proposta. A listagem não publica as duas datas de orçamento. Não é caso CONFENGE.",
+        "h1": "Três relógios de reajuste no mesmo instrumento de pavimentação em paralelepípedo",
+        "has_dataset_surface": false,
+        "licenses": [],
+        "permission_class": "demonstrativo",
+        "reviewers": [],
+        "title": "Três relógios de reajuste no mesmo instrumento de pavimentação em paralelepípedo | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Serviços e problemas",
+          "Assistência técnica em disputas"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/assistencia-tecnica-pericial-engenharia/",
+      "visible": {
+        "authors": [],
+        "breadcrumb_names": [
+          "Início",
+          "Serviços e problemas",
+          "Assistência técnica em disputas"
+        ],
+        "canonical": "https://confenge.com.br/assistencia-tecnica-pericial-engenharia/",
+        "dates": [],
+        "description": "Assistência técnica de engenharia em disputas: evidências, quesitos e manifestação da parte. Sem advocacia e sem perícia do juízo.",
+        "h1": "Assistência técnica de engenharia em disputas",
+        "has_dataset_surface": false,
+        "licenses": [],
+        "permission_class": "demonstrativo",
+        "reviewers": [],
+        "title": "Assistência técnica de engenharia em disputas | CONFENGE",
         "versions": []
       }
     },
@@ -276,7 +455,7 @@
         "h1": "Auditoria de orçamento, BDI, SINAPI e preço",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Auditoria de orçamento, BDI, SINAPI e preço | CONFENGE",
         "versions": []
@@ -384,7 +563,7 @@
         "dates": [
           "2026-08-28"
         ],
-        "description": "Exemplos de entrega demonstrativos. Resultados de clientes permanecem em zero até existir autorização e evidência.",
+        "description": "Exemplos de entrega demonstrativos: estrutura real, números hipotéticos. Trabalho real autorizado entra em seção própria, com fonte e data, quando existir.",
         "h1": "Exemplos de entrega (demonstrativos)",
         "has_dataset_surface": false,
         "licenses": [],
@@ -449,6 +628,64 @@
         "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Demonstrativo. Aditivo: verificar saldos do art. 125 antes de protocolar | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Casos",
+          "Recorte de banheiro"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [
+          "CONFENGE"
+        ],
+        "people": [
+          "Tiago Sasaki"
+        ],
+        "reviewers": [],
+        "types": [
+          "Organization",
+          "Person",
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/casos/demonstrativo-projeto-privado/",
+      "visible": {
+        "authors": [
+          "Engº Tiago Sasaki"
+        ],
+        "breadcrumb_names": [
+          "Início",
+          "Casos",
+          "Recorte de banheiro"
+        ],
+        "canonical": "https://confenge.com.br/casos/demonstrativo-projeto-privado/",
+        "dates": [
+          "2026-09-11"
+        ],
+        "description": "Exemplo demonstrativo de um recorte de banheiro com quantitativos conferíveis, orçamento hipotético, revisão e compatibilização. Sem contratante e sem ART.",
+        "h1": "Demonstrativo. Recorte de banheiro com quantitativos, orçamento, revisão e compatibilização",
+        "has_dataset_surface": true,
+        "licenses": [],
+        "permission_class": "demonstrativo",
+        "reviewers": [],
+        "title": "Elevação leste W-02 · versão demonstrativa corrigida · R01",
         "versions": []
       }
     },
@@ -782,7 +1019,7 @@
         "dates": [
           "2026-08-23"
         ],
-        "description": "R$ 1.900 por unidade: contra quem a sua construtora disputa, quanto cada rival depende de um só comprador e em que faixa de ticket ele opera.",
+        "description": "R$ 1.900 por unidade: contra quem a sua construtora disputa, quanto cada rival depende de um só comprador e em que faixa de valor ele opera.",
         "h1": "Demonstrativo. Descubra contra quem você realmente disputa.",
         "has_dataset_surface": false,
         "licenses": [],
@@ -990,13 +1227,13 @@
         "breadcrumb_names": [],
         "canonical": "https://confenge.com.br/comercial/privacidade-leads/",
         "dates": [],
-        "description": "Aviso de privacidade do Diagnóstico B2G da CONFENGE. Inventário mínimo, bases legais por finalidade e canal de privacidade.",
+        "description": "Aviso de privacidade do Diagnóstico da Operação em Obras Públicas da CONFENGE. Inventário mínimo, bases legais por finalidade e canal de privacidade.",
         "h1": "Aviso de privacidade - leads e contratação",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": null,
         "reviewers": [],
-        "title": "Aviso de privacidade - Diagnóstico B2G | CONFENGE",
+        "title": "Aviso de privacidade - Diagnóstico da Operação em Obras Públicas | CONFENGE",
         "versions": []
       }
     },
@@ -1028,16 +1265,62 @@
         "breadcrumb_names": [],
         "canonical": "https://confenge.com.br/comercial/termos-diagnostico-b2g/",
         "dates": [],
-        "description": "Termos B2B do Diagnóstico de Expansão no Mercado Público da CONFENGE. R$ 8.000, pagamento único. Obrigação de meio. Não é serviço jurídico.",
-        "h1": "Termos B2B - Diagnóstico de Expansão no Mercado Público",
+        "description": "Termos para pessoa jurídica do Diagnóstico de Expansão no Mercado Público da CONFENGE. R$ 8.000, pagamento único. Obrigação de meio. Não é serviço jurídico.",
+        "h1": "Termos para pessoa jurídica - Diagnóstico de Expansão no Mercado Público",
         "has_dataset_surface": true,
         "licenses": [],
         "permission_class": "confidential",
         "reviewers": [],
-        "title": "Termos B2B - Diagnóstico B2G | CONFENGE",
+        "title": "Termos para pessoa jurídica - Diagnóstico da Operação em Obras Públicas | CONFENGE",
         "versions": [
           "75% ganho acumulado"
         ]
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Compatibilização de projetos"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/compatibilizacao-projetos-engenharia/",
+      "visible": {
+        "authors": [],
+        "breadcrumb_names": [
+          "Início",
+          "Compatibilização de projetos"
+        ],
+        "canonical": "https://confenge.com.br/compatibilizacao-projetos-engenharia/",
+        "dates": [],
+        "description": "Conferência de interfaces entre disciplinas, registro de interferências e encaminhamento de ajustes antes de executar, contratar ou alterar uma obra.",
+        "h1": "Compatibilização de projetos de engenharia",
+        "has_dataset_surface": false,
+        "licenses": [],
+        "permission_class": "demonstrativo",
+        "reviewers": [],
+        "title": "Compatibilização de projetos de engenharia | CONFENGE",
+        "versions": []
       }
     },
     {
@@ -1195,13 +1478,13 @@
         ],
         "canonical": "https://confenge.com.br/conteudos/",
         "dates": [],
-        "description": "Biblioteca técnica da CONFENGE para construtoras: licitações, orçamento, BDI, medições, aditivos, reequilíbrio, atrasos, pleitos e defesas.",
-        "h1": "Qual problema de licitação ou contrato você precisa resolver?",
+        "description": "Biblioteca da CONFENGE: análises de licitação, medição, aditivo e reequilíbrio, e caminhos para projeto, orçamento, revisão, compatibilização e inspeção.",
+        "h1": "Qual problema de projeto, orçamento ou contrato você precisa resolver?",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": "demonstrativo",
         "reviewers": [],
-        "title": "Conteúdos sobre licitações, contratos e obras públicas | CONFENGE",
+        "title": "Biblioteca técnica de projetos, orçamento e contratos | CONFENGE",
         "versions": []
       }
     },
@@ -1352,7 +1635,7 @@
         "dataset_names": [],
         "dates": [
           "2026-07-15",
-          "2026-08-29"
+          "2026-09-08"
         ],
         "descriptions": [
           "Como localizar a etapa travada, organizar a prova e cobrar uma decisão sem confundir processamento da medição, glosa e pagamento."
@@ -1397,7 +1680,8 @@
         "canonical": "https://confenge.com.br/conteudos/atraso-na-medicao-obra-publica/",
         "dates": [
           "2026-07-15",
-          "2026-08-29"
+          "2026-08-29",
+          "2026-09-08"
         ],
         "description": "A medição da obra pública atrasou? Veja como localizar a etapa travada, organizar a prova e cobrar uma decisão sem confundir medição com pagamento.",
         "h1": "Atraso na medição de obra pública: onde o processo travou?",
@@ -1490,7 +1774,7 @@
         "dataset_names": [],
         "dates": [
           "2026-07-15",
-          "2026-08-29"
+          "2026-09-08"
         ],
         "descriptions": [
           "Triagem de suspender ou só notificar: dois meses da nota fiscal, exceções do § 3º e risco de sanção por parada precoce."
@@ -1535,7 +1819,8 @@
         "canonical": "https://confenge.com.br/conteudos/atraso-pagamento-contrato-publico-suspender/",
         "dates": [
           "2026-07-15",
-          "2026-08-29"
+          "2026-08-29",
+          "2026-09-08"
         ],
         "description": "Nota fiscal emitida e despesa liquidada sem pagamento: o art. 137 da Lei 14.133 trata extinção após dois meses, não paralisação automática no primeiro atraso.",
         "h1": "Atraso de pagamento: pode suspender a obra pública?",
@@ -1678,6 +1963,224 @@
         "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Chuva e prorrogação de obra pública: quando há impacto | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Biblioteca",
+          "Como contratar compatibilização"
+        ],
+        "dataset_names": [],
+        "dates": [
+          "2026-09-11"
+        ],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [
+          "Como contratar compatibilização de projetos"
+        ],
+        "licenses": [],
+        "organizations": [],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "Article",
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/conteudos/como-contratar-compatibilizacao-projetos/",
+      "visible": {
+        "authors": [
+          "Engº Tiago Sasaki"
+        ],
+        "breadcrumb_names": [
+          "Início",
+          "Biblioteca",
+          "Como contratar compatibilização"
+        ],
+        "canonical": "https://confenge.com.br/conteudos/como-contratar-compatibilizacao-projetos/",
+        "dates": [
+          "2026-09-11"
+        ],
+        "description": "Como delimitar escopo, insumos e entrega da conferência de interfaces entre disciplinas, sem lista completa nem upload no primeiro contato.",
+        "h1": "Como contratar a compatibilização de projetos",
+        "has_dataset_surface": false,
+        "licenses": [],
+        "permission_class": "demonstrativo",
+        "reviewers": [],
+        "title": "Como contratar compatibilização de projetos | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Biblioteca",
+          "Como contratar projetos complementares"
+        ],
+        "dataset_names": [],
+        "dates": [
+          "2026-09-11"
+        ],
+        "descriptions": [
+          "Prepare insumos, delimite interfaces e leia a proposta de elaboração complementar antes de contratar."
+        ],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [
+          "Como contratar projetos complementares de engenharia"
+        ],
+        "licenses": [],
+        "organizations": [],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "Article",
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/conteudos/como-contratar-projetos-complementares/",
+      "visible": {
+        "authors": [
+          "Engº Tiago Sasaki",
+          "Guia de decisão"
+        ],
+        "breadcrumb_names": [
+          "Início",
+          "Biblioteca",
+          "Como contratar projetos complementares"
+        ],
+        "canonical": "https://confenge.com.br/conteudos/como-contratar-projetos-complementares/",
+        "dates": [
+          "2026-09-11"
+        ],
+        "description": "Como preparar insumos, definir interfaces e versões e conferir o que deve constar da proposta de elaboração complementar, sem preço, prazo ou formato obrigatório inventados.",
+        "h1": "Como contratar projetos complementares de engenharia",
+        "has_dataset_surface": false,
+        "licenses": [],
+        "permission_class": "demonstrativo",
+        "reviewers": [],
+        "title": "Como contratar projetos complementares de engenharia | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Biblioteca",
+          "Como contratar revisão técnica de projeto"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [
+          "O que enviar, o que a proposta delimita e o que você recebe numa revisão técnica de projeto de engenharia, mesmo com material parcial."
+        ],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [
+          "Como contratar revisão técnica de projeto: insumos e entrega"
+        ],
+        "licenses": [],
+        "organizations": [],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "Article",
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/conteudos/como-contratar-revisao-tecnica-projeto/",
+      "visible": {
+        "authors": [],
+        "breadcrumb_names": [
+          "Início",
+          "Biblioteca",
+          "Como contratar revisão técnica de projeto"
+        ],
+        "canonical": "https://confenge.com.br/conteudos/como-contratar-revisao-tecnica-projeto/",
+        "dates": [],
+        "description": "O que enviar, o que a proposta delimita e o que você recebe numa revisão técnica de projeto de engenharia, mesmo com material parcial.",
+        "h1": "Como contratar revisão técnica de projeto: insumos e entrega",
+        "has_dataset_surface": true,
+        "licenses": [],
+        "permission_class": "demonstrativo",
+        "reviewers": [],
+        "title": "Como contratar revisão técnica de projeto: insumos e entrega | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Biblioteca",
+          "Como comparar propostas de execução de obra"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/conteudos/comparar-propostas-execucao-obra/",
+      "visible": {
+        "authors": [],
+        "breadcrumb_names": [
+          "Início",
+          "Biblioteca",
+          "Como comparar propostas de execução de obra"
+        ],
+        "canonical": "https://confenge.com.br/conteudos/comparar-propostas-execucao-obra/",
+        "dates": [],
+        "description": "Equalize propostas de execução por escopo, unidades, exclusões, quantidades e responsabilidades. O menor total não decide sozinho.",
+        "h1": "Como comparar propostas de execução de obra",
+        "has_dataset_surface": false,
+        "licenses": [],
+        "permission_class": "demonstrativo",
+        "reviewers": [],
+        "title": "Como comparar propostas de execução de obra | CONFENGE",
         "versions": []
       }
     },
@@ -1893,6 +2396,54 @@
         "breadcrumbs": [
           "Início",
           "Biblioteca",
+          "Documentos para levantamento de quantitativos"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/conteudos/documentos-para-levantamento-quantitativos/",
+      "visible": {
+        "authors": [],
+        "breadcrumb_names": [
+          "Início",
+          "Biblioteca",
+          "Documentos para levantamento de quantitativos"
+        ],
+        "canonical": "https://confenge.com.br/conteudos/documentos-para-levantamento-quantitativos/",
+        "dates": [],
+        "description": "O que enviar para a CONFENGE levantar quantitativos de obra pública ou privada, mesmo com projeto ainda parcial, e o que esperar de volta.",
+        "h1": "O que enviar para levantar quantitativos",
+        "has_dataset_surface": false,
+        "licenses": [],
+        "permission_class": "demonstrativo",
+        "reviewers": [],
+        "title": "Documentos para levantamento de quantitativos | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Biblioteca",
           "Empreitada global ou preço unitário: qual regime é mais perigoso?"
         ],
         "dataset_names": [],
@@ -1966,7 +2517,7 @@
         "dataset_names": [],
         "dates": [
           "2026-07-15",
-          "2026-08-29"
+          "2026-09-08"
         ],
         "descriptions": [
           "Nas 48 horas da recusa de ateste: protocolo, recado transcrito e ofício pedindo o item que impede a assinatura."
@@ -2011,7 +2562,8 @@
         "canonical": "https://confenge.com.br/conteudos/fiscal-nao-assina-medicao-obra-publica/",
         "dates": [
           "2026-07-15",
-          "2026-08-29"
+          "2026-08-29",
+          "2026-09-08"
         ],
         "description": "O fiscal recusou assinar o boletim. Nas 48 horas seguintes, registre a recusa, preserve a prova de execução e peça objeção objetiva, sem admitir culpa para destravar.",
         "h1": "Fiscal não assina medição: o que fazer nas primeiras 48h",
@@ -2034,7 +2586,7 @@
         "dataset_names": [],
         "dates": [
           "2026-07-15",
-          "2026-08-29"
+          "2026-09-08"
         ],
         "descriptions": [
           "Como recortar o trecho com ensaio desconforme e pedir o restante da linha sem controvérsia de qualidade."
@@ -2079,7 +2631,8 @@
         "canonical": "https://confenge.com.br/conteudos/glosa-por-qualidade-obra-publica/",
         "dates": [
           "2026-07-15",
-          "2026-08-29"
+          "2026-08-29",
+          "2026-09-08"
         ],
         "description": "Um defeito de qualidade autoriza cortar o trecho em desconformidade, não o boletim inteiro. Exija localização, ensaio e o valor do trecho afetado.",
         "h1": "Glosa por qualidade: pode glosar a medição inteira?",
@@ -2239,7 +2792,7 @@
         "dataset_names": [],
         "dates": [
           "2026-07-15",
-          "2026-08-29"
+          "2026-09-08"
         ],
         "descriptions": [
           "Evento paga o marco; quantitativo paga a unidade. O art. 46, § 9º, veda remunerar preço global como planilha unitária."
@@ -2284,7 +2837,8 @@
         "canonical": "https://confenge.com.br/conteudos/medicao-por-evento-obra-publica/",
         "dates": [
           "2026-07-15",
-          "2026-08-29"
+          "2026-08-29",
+          "2026-09-08"
         ],
         "description": "No preço global, o contrato pode medir por marco de resultado, não por m³. Compare a prova de evento com a prova de quantitativo antes de precificar o caixa.",
         "h1": "Medição por evento ou quantitativo: o que muda",
@@ -2375,7 +2929,7 @@
         "dataset_names": [],
         "dates": [
           "2026-07-15",
-          "2026-08-29"
+          "2026-09-08"
         ],
         "descriptions": [
           "Triagem da etapa incompleta no preço global: avanço de campo não cria submarco, e o art. 145 depende da parcela contratual."
@@ -2420,7 +2974,8 @@
         "canonical": "https://confenge.com.br/conteudos/pagamento-parcial-etapa-empreitada-global/",
         "dates": [
           "2026-07-15",
-          "2026-08-29"
+          "2026-08-29",
+          "2026-09-08"
         ],
         "description": "Etapa incompleta em empreitada global não é pagamento antecipado. Confira o eventograma, a meta de resultado e o que o contrato admite medir proporcionalmente.",
         "h1": "Pagamento parcial em empreitada global: quando vale",
@@ -2506,6 +3061,63 @@
         "breadcrumbs": [
           "Início",
           "Biblioteca",
+          "Quando compatibilizar projetos"
+        ],
+        "dataset_names": [],
+        "dates": [
+          "2026-09-11"
+        ],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [
+          "Quando compatibilizar projetos de engenharia"
+        ],
+        "licenses": [],
+        "organizations": [],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "Article",
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/conteudos/quando-compatibilizar-projetos/",
+      "visible": {
+        "authors": [
+          "Engº Tiago Sasaki"
+        ],
+        "breadcrumb_names": [
+          "Início",
+          "Biblioteca",
+          "Quando compatibilizar projetos"
+        ],
+        "canonical": "https://confenge.com.br/conteudos/quando-compatibilizar-projetos/",
+        "dates": [
+          "2026-09-11"
+        ],
+        "description": "Quando contratar a conferência de interfaces entre disciplinas, e quando o próximo passo é elaborar, revisar ou orçar.",
+        "h1": "Quando compatibilizar os projetos que você já tem",
+        "has_dataset_surface": false,
+        "licenses": [],
+        "permission_class": "demonstrativo",
+        "reviewers": [],
+        "title": "Quando compatibilizar projetos de engenharia | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Biblioteca",
           "Resposta à notificação de atraso em obra pública"
         ],
         "dataset_names": [],
@@ -2574,6 +3186,109 @@
         "breadcrumbs": [
           "Início",
           "Biblioteca",
+          "Revisar, compatibilizar ou elaborar"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [
+          "Como escolher entre revisão técnica, compatibilização e elaboração de projeto de engenharia, a partir da decisão que você precisa tomar e do material que já existe."
+        ],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [
+          "Revisar, compatibilizar ou elaborar o projeto: qual compra fazer?"
+        ],
+        "licenses": [],
+        "organizations": [],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "Article",
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/",
+      "visible": {
+        "authors": [],
+        "breadcrumb_names": [
+          "Início",
+          "Biblioteca",
+          "Revisar, compatibilizar ou elaborar"
+        ],
+        "canonical": "https://confenge.com.br/conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/",
+        "dates": [],
+        "description": "Como escolher entre revisão técnica, compatibilização e elaboração de projeto de engenharia, a partir da decisão que você precisa tomar e do material que já existe.",
+        "h1": "Revisar, compatibilizar ou elaborar o projeto: qual compra fazer?",
+        "has_dataset_surface": false,
+        "licenses": [],
+        "permission_class": "demonstrativo",
+        "reviewers": [
+          "insumos e entrega"
+        ],
+        "title": "Revisar, compatibilizar ou elaborar o projeto: qual compra fazer? | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Biblioteca",
+          "Revisar ou refazer o orçamento da obra"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/conteudos/revisar-ou-refazer-orcamento-obra/",
+      "visible": {
+        "authors": [],
+        "breadcrumb_names": [
+          "Início",
+          "Biblioteca",
+          "Revisar ou refazer o orçamento da obra"
+        ],
+        "canonical": "https://confenge.com.br/conteudos/revisar-ou-refazer-orcamento-obra/",
+        "dates": [],
+        "description": "Quando basta revisar a planilha existente e quando o projeto já mudou o bastante para elaborar o orçamento de novo.",
+        "h1": "Revisar ou refazer o orçamento da obra",
+        "has_dataset_surface": false,
+        "licenses": [],
+        "permission_class": "demonstrativo",
+        "reviewers": [],
+        "title": "Revisar ou refazer o orçamento da obra | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Biblioteca",
           "SINAPI desonerado ou não desonerado: qual usar?"
         ],
         "dataset_names": [],
@@ -2624,7 +3339,6 @@
         "canonical": "https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/",
         "dates": [
           "2026-07-15",
-          "2026-07-30",
           "2026-08-18",
           "2026-08-29"
         ],
@@ -2865,11 +3579,11 @@
         "dates": [
           "2026-08-01"
         ],
-        "description": "Mapeie capacidade, mercado, acervo, carteira de oportunidades e riscos da operação B2G. Plano executivo de 90 dias para prioridades e backlog de implantação.",
+        "description": "Mapeie capacidade, mercado, acervo, carteira de oportunidades e riscos da operação em obras públicas. Plano executivo de 90 dias para prioridades e ações para implantação.",
         "h1": "Diagnóstico da Operação em Obras Públicas",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Diagnóstico da Operação em Obras Públicas | CONFENGE",
         "versions": []
@@ -2880,7 +3594,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Serviços",
+          "Obras públicas",
           "Diagnóstico de Expansão no Mercado Público"
         ],
         "dataset_names": [],
@@ -2916,7 +3630,7 @@
         ],
         "breadcrumb_names": [
           "Início",
-          "Serviços",
+          "Obras públicas",
           "Diagnóstico de Expansão no Mercado Público"
         ],
         "canonical": "https://confenge.com.br/diagnostico-b2g-expansao/",
@@ -2987,7 +3701,7 @@
         "h1": "Diagnóstico pré-licitação para obras públicas",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Diagnóstico pré-licitação para obras públicas | CONFENGE",
         "versions": []
@@ -3090,17 +3804,15 @@
         "canonical": "https://confenge.com.br/entregas/",
         "dates": [
           "2026-08-23",
-          "2026-08-30"
+          "2026-09-09"
         ],
-        "description": "Escolha entre 8 ofertas publicadas, de R$ 599 a R$ 3.750, pela decisão que precisa tomar. Consulte também as 54 capacidades do rol taxativo, separadas por maturidade. Os exemplos vinculados são sintéticos; não são resultados de clientes.",
-        "h1": "8 ofertas publicadas. Escolha pela decisão que está na mesa.Exemplos sintéticos.",
+        "description": "Veja o que a CONFENGE entrega em projetos, compatibilização, orçamento, inspeção e análise técnica. Oito ofertas de inteligência para obras públicas têm preço e exemplos demonstrativos publicados.",
+        "h1": "Entregas de engenharia. Veja o conteúdo e para que ele serve.",
         "has_dataset_surface": false,
-        "licenses": [
-          "license-token-visible"
-        ],
+        "licenses": [],
         "permission_class": "demonstrativo",
         "reviewers": [],
-        "title": "8 ofertas publicadas e 54 capacidades, exemplos sintéticos | CONFENGE",
+        "title": "Entregas de engenharia, exemplos e ofertas publicadas | CONFENGE",
         "versions": []
       }
     },
@@ -3149,7 +3861,7 @@
           "2026-09-04",
           "2026-09-05"
         ],
-        "description": "Conheça Tiago Jun Sasaki, engenheiro civil formado pela EESC-USP e fundador da CONFENGE, com experiência na iniciativa privada e na Administração Pública.",
+        "description": "Tiago Jun Sasaki, engenheiro civil formado pela EESC-USP, com registro profissional ativo no CREA e mais de R$ 700 milhões em obras e projetos analisados.",
         "h1": "Engº Tiago Sasaki",
         "has_dataset_surface": false,
         "licenses": [],
@@ -3199,13 +3911,13 @@
         "dates": [
           "2026-08-15"
         ],
-        "description": "Instrumentos de decisão para aditivos, reequilíbrio e atraso em obras públicas. Resultado no navegador, sem cadastro.",
-        "h1": "Ferramentas para licitações, contratos e obras públicas",
+        "description": "Instrumentos de decisão para aditivo, reequilíbrio, atraso, contrato público e prontidão técnica de obra privada. Resultado no navegador, sem cadastro.",
+        "h1": "Ferramentas de decisão para contratos, obras públicas e obras privadas",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": "demonstrativo",
         "reviewers": [],
-        "title": "Ferramentas para contratos e licitações de obras | CONFENGE",
+        "title": "Ferramentas de contrato, obra pública e obra privada | CONFENGE",
         "versions": []
       }
     },
@@ -3312,7 +4024,7 @@
           "2026-08-15",
           "2027-01-10"
         ],
-        "description": "Leitura factual de um contrato público: identificação, valor, vigência, eventos, fontes, UNKNOWN e o que merece conferência humana. Sem cadastro.",
+        "description": "Leitura factual de um contrato público: identificação, valor, vigência, eventos, fontes e o que ainda precisa de conferência humana. Sem cadastro.",
         "h1": "Diagnóstico de Defesa de Margem em Contratos Públicos",
         "has_dataset_surface": true,
         "licenses": [],
@@ -3427,10 +4139,52 @@
         "description": "Registre eventos de atraso e obtenha hipóteses preliminares e lacunas de prova.",
         "h1": "Matriz de atraso de obra",
         "has_dataset_surface": true,
-        "licenses": [],
+        "licenses": [
+          "license-token-visible"
+        ],
         "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Matriz de atraso de obra | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [],
+        "people": [],
+        "reviewers": [],
+        "types": [],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/ferramentas/prontidao-tecnica-obra-privada/",
+      "visible": {
+        "authors": [],
+        "breadcrumb_names": [],
+        "canonical": "https://confenge.com.br/ferramentas/prontidao-tecnica-obra-privada/",
+        "dates": [
+          "2026-09-11"
+        ],
+        "description": "Veja o que já está documentado, o que falta esclarecer e o próximo passo para orçar, revisar, compatibilizar ou conversar sobre o recorte. Resultado completo no navegador, sem cadastro.",
+        "h1": "Identifique evidências técnicas presentes, ausentes ou desconhecidas antes de contratar, executar ou retomar uma obra privada",
+        "has_dataset_surface": false,
+        "licenses": [],
+        "permission_class": "demonstrativo",
+        "reviewers": [],
+        "title": "Prontidão técnica de obra privada | CONFENGE",
         "versions": []
       }
     },
@@ -3475,7 +4229,7 @@
         ],
         "canonical": "https://confenge.com.br/guias-contratos-obras/",
         "dates": [],
-        "description": "Roteiros utilizáveis na obra e no escritório: documentos para aditivo, glosa, reequilíbrio, notificação e defesa de margem.",
+        "description": "Roteiros de uso direto na obra e no escritório: o que reunir, o que conferir e o que protocolar antes de levar um pedido de aditivo à Administração.",
         "h1": "Guias e checklists para contratos de obras públicas",
         "has_dataset_surface": false,
         "licenses": [],
@@ -3595,6 +4349,54 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
+          "Serviços e problemas",
+          "Inspeção e diagnóstico"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/inspecao-diagnostico-edificacoes/",
+      "visible": {
+        "authors": [],
+        "breadcrumb_names": [
+          "Início",
+          "Serviços e problemas",
+          "Inspeção e diagnóstico"
+        ],
+        "canonical": "https://confenge.com.br/inspecao-diagnostico-edificacoes/",
+        "dates": [],
+        "description": "Inspeção e diagnóstico de fissura, infiltração ou condição de imóvel. Registramos o que existe, analisamos o que a evidência sustenta e confirmamos visita, local e responsabilidade antes do aceite técnico.",
+        "h1": "Inspeção e diagnóstico de edificações",
+        "has_dataset_surface": false,
+        "licenses": [],
+        "permission_class": "demonstrativo",
+        "reviewers": [],
+        "title": "Amostra didática original de registro de manifestações em uma parede",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
           "Lei nº 14.133/2021 aplicada a obras e serviços de engenharia"
         ],
         "dataset_names": [],
@@ -3631,7 +4433,7 @@
         ],
         "canonical": "https://confenge.com.br/lei-14133-obras/",
         "dates": [],
-        "description": "Aplicações cotidianas da nova lei de licitações em aditivos, prazos, medições, pagamentos e reequilíbrio, com foco na decisão da construtora.",
+        "description": "A Lei 14.133/2021 traduzida em decisão de obra: como formar e defender o preço de um item novo no aditivo e como a proposta se relaciona com o orçamento-base.",
         "h1": "Lei nº 14.133/2021 aplicada a obras e serviços de engenharia",
         "has_dataset_surface": false,
         "licenses": [],
@@ -3754,13 +4556,14 @@
         ],
         "canonical": "https://confenge.com.br/medicoes-glosas-obras-publicas/",
         "dates": [
-          "2026-08-15"
+          "2026-08-15",
+          "2026-09-11"
         ],
         "description": "Critérios de medição, glosas, parcelas incontroversas, atrasos de pagamento e documentação capaz de transformar serviço executado em valor efetivamente recebido.",
         "h1": "Medições, glosas e pagamentos em obras públicas",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Medições, glosas e pagamentos em obras públicas | CONFENGE",
         "versions": []
@@ -3812,8 +4615,8 @@
         "dates": [
           "2026-08-15"
         ],
-        "description": "Como a CONFENGE lê evidências públicas de contratação: fontes, limites, agregados e o papel da recomendação humana.",
-        "h1": "Como lemos o mercado público sem transformar histórico em profecia.",
+        "description": "Como a CONFENGE separa fato, cálculo, hipótese e ponto sem prova em perícia, avaliação, projeto, orçamento e leitura de mercado público.",
+        "h1": "Como a CONFENGE separa fato, cálculo, hipótese e ponto desconhecido",
         "has_dataset_surface": true,
         "licenses": [],
         "permission_class": "demonstrativo",
@@ -3846,17 +4649,67 @@
       "ok": true,
       "url": "https://confenge.com.br/nurture/",
       "visible": {
-        "authors": [],
+        "authors": [
+          "quem responde tecnicamente pela CONFENGE"
+        ],
         "breadcrumb_names": [],
         "canonical": "https://confenge.com.br/nurture/",
         "dates": [],
-        "description": "Cinco e-mails técnicos por trilha: contrato sob pressão, edital em análise ou operação B2G. Prova, dossiê e decisão, com confirmação e descadastro.",
+        "description": "Cinco e-mails técnicos por trilha: contrato sob pressão, edital em análise ou operação em obras públicas. Prova, dossiê e decisão, com confirmação e descadastro.",
         "h1": "Cinco e-mails úteis, não newsletter genérica",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Sequências técnicas por e-mail | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Serviços e problemas",
+          "Encaminhar uma necessidade"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/parcerias-engenharia/",
+      "visible": {
+        "authors": [],
+        "breadcrumb_names": [
+          "Início",
+          "Serviços e problemas",
+          "Encaminhar uma necessidade"
+        ],
+        "canonical": "https://confenge.com.br/parcerias-engenharia/",
+        "dates": [],
+        "description": "Escritórios de arquitetura e empresas de projeto podem encaminhar uma necessidade de quantitativos, revisão, compatibilização ou disciplina complementar. O cliente permanece com quem encaminha.",
+        "h1": "Encaminhe o recorte de engenharia e continue com o seu cliente.",
+        "has_dataset_surface": false,
+        "licenses": [],
+        "permission_class": "demonstrativo",
+        "reviewers": [],
+        "title": "Encaminhar projeto, orçamento ou revisão | CONFENGE",
         "versions": []
       }
     },
@@ -3905,7 +4758,7 @@
         ],
         "canonical": "https://confenge.com.br/politica-editorial/",
         "dates": [
-          "2026-09-07"
+          "2026-09-09"
         ],
         "description": "Como a CONFENGE decide o que publica: fontes, autoria, revisão, atualização, correção e retirada.",
         "h1": "Política editorial",
@@ -3964,9 +4817,10 @@
         "dates": [
           "2026-08-15",
           "2026-08-16",
-          "2026-09-07"
+          "2026-09-07",
+          "2026-09-09"
         ],
-        "description": "Changelog das políticas públicas da CONFENGE. Versões anteriores permanecem legíveis.",
+        "description": "Histórico das políticas públicas da CONFENGE. Versões anteriores permanecem legíveis.",
         "h1": "Histórico da política editorial",
         "has_dataset_surface": false,
         "licenses": [],
@@ -4125,6 +4979,54 @@
         "breadcrumbs": [
           "Início",
           "Serviços e problemas",
+          "Projetos complementares"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/projetos-complementares-engenharia/",
+      "visible": {
+        "authors": [],
+        "breadcrumb_names": [
+          "Início",
+          "Serviços e problemas",
+          "Projetos complementares"
+        ],
+        "canonical": "https://confenge.com.br/projetos-complementares-engenharia/",
+        "dates": [],
+        "description": "Elaboração de projetos complementares de engenharia a partir da arquitetura e dos insumos de origem, com disciplina, interfaces, entregáveis e responsável delimitados.",
+        "h1": "Projetos complementares de engenharia",
+        "has_dataset_surface": false,
+        "licenses": [],
+        "permission_class": "demonstrativo",
+        "reviewers": [],
+        "title": "Projetos complementares de engenharia | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Serviços e problemas",
           "Quantitativos e orçamento"
         ],
         "dataset_names": [],
@@ -4157,7 +5059,7 @@
         ],
         "canonical": "https://confenge.com.br/quantitativos-orcamento-obras/",
         "dates": [],
-        "description": "Organize quantitativos, memória, premissas e lacunas antes de comparar propostas, contratar ou alterar o escopo de uma obra privada.",
+        "description": "A CONFENGE levanta quantitativos, elabora ou revisa o orçamento de obra pública ou privada. Você recebe memória, critérios, premissas e um caminho para solicitar a proposta.",
         "h1": "Quantitativos e orçamento de obras",
         "has_dataset_surface": false,
         "licenses": [],
@@ -4173,16 +5075,16 @@
         "breadcrumbs": [
           "Início",
           "Radar",
-          "Nacional: obras e margem"
+          "Método e demanda observada"
         ],
         "dataset_names": [
-          "Radar Nacional de Obras Públicas e Margem Contratual: recorte aberto"
+          "Radar de obras públicas: método aberto e demanda observada"
         ],
         "dates": [
-          "2026-08-03"
+          "2026-09-07"
         ],
         "descriptions": [
-          "Metodologia e recorte aberto CONFENGE com demanda orgânica verificada via Search Console export e limitações explícitas. Séries de contratos públicos completas dependem de fontes públicas auditáveis e revisadas."
+          "Método reproduzível da CONFENGE e demanda orgânica observada no Google Search Console do domínio confenge.com.br, janela de 2026-07-14 a 2026-07-28 (10 cliques e 325 impressões no domínio inteiro), com limites de uso declarados."
         ],
         "downloads": [],
         "has_dataset_type": true,
@@ -4215,15 +5117,17 @@
         "breadcrumb_names": [
           "Início",
           "Radar",
-          "Nacional: obras e margem"
+          "Método e demanda observada"
         ],
         "canonical": "https://confenge.com.br/radar/nacional-obras-publicas/",
         "dates": [
+          "2026-07-14",
+          "2026-07-28",
           "2026-07-30",
-          "2026-08-03"
+          "2026-09-07"
         ],
-        "description": "Metodologia e recorte aberto do Radar CONFENGE: demanda orgânica verificada, limitações e linha de análise de contratos públicos para construtoras. Sem estatística inventada.",
-        "h1": "Radar Nacional de Obras Públicas e Margem Contratual",
+        "description": "Método reproduzível do Radar CONFENGE e demanda orgânica observada no Google Search Console do próprio domínio, com fonte, janela, denominador e limites declarados.",
+        "h1": "Radar de obras públicas: método aberto e demanda observada",
         "has_dataset_surface": true,
         "licenses": [
           "https://confenge.com.br/termos-de-uso/",
@@ -4231,7 +5135,7 @@
         ],
         "permission_class": "demonstrativo",
         "reviewers": [],
-        "title": "Radar Nacional de Obras Públicas e Margem Contratual | CONFENGE",
+        "title": "Radar de obras públicas: método aberto e demanda observada | CONFENGE",
         "versions": []
       }
     },
@@ -4287,7 +5191,7 @@
         "h1": "Reequilíbrio econômico-financeiro de obra pública",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Reequilíbrio econômico-financeiro de obra pública: o que é e quando cabe | CONFENGE",
         "versions": []
@@ -4298,7 +5202,103 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Serviços"
+          "Serviços e problemas",
+          "Revisão técnica de projetos"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/revisao-tecnica-projetos-engenharia/",
+      "visible": {
+        "authors": [],
+        "breadcrumb_names": [
+          "Início",
+          "Serviços e problemas",
+          "Revisão técnica de projetos"
+        ],
+        "canonical": "https://confenge.com.br/revisao-tecnica-projetos-engenharia/",
+        "dates": [],
+        "description": "Conferência delimitada de um projeto recebido, com relatório de evidências e perguntas técnicas, antes de contratar, executar ou aprovar uma alteração.",
+        "h1": "Revisão técnica de projetos de engenharia",
+        "has_dataset_surface": true,
+        "licenses": [],
+        "permission_class": "demonstrativo",
+        "reviewers": [],
+        "title": "Revisão técnica de projetos de engenharia | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Serviços e problemas",
+          "Apoio técnico de SST"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/seguranca-trabalho-apoio-tecnico/",
+      "visible": {
+        "authors": [],
+        "breadcrumb_names": [
+          "Início",
+          "Serviços e problemas",
+          "Apoio técnico de SST"
+        ],
+        "canonical": "https://confenge.com.br/seguranca-trabalho-apoio-tecnico/",
+        "dates": [],
+        "description": "Diagnóstico e apoio técnico de segurança do trabalho: riscos, documentos existentes e encaminhamento. PGR, LTCAT e AET não são o mesmo documento nem um pacote automático.",
+        "h1": "Apoio técnico de segurança do trabalho",
+        "has_dataset_surface": false,
+        "licenses": [],
+        "permission_class": "demonstrativo",
+        "reviewers": [],
+        "title": "Apoio técnico de segurança do trabalho | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Obras públicas"
         ],
         "dataset_names": [],
         "dates": [],
@@ -4327,7 +5327,7 @@
         ],
         "breadcrumb_names": [
           "Início",
-          "Serviços"
+          "Obras públicas"
         ],
         "canonical": "https://confenge.com.br/servicos-obras-publicas/",
         "dates": [],
@@ -4377,8 +5377,8 @@
         ],
         "canonical": "https://confenge.com.br/servicos/",
         "dates": [],
-        "description": "Encontre o caminho para projetos, edificações, imóveis, perícias, segurança do trabalho ou obras públicas sem percorrer um catálogo extenso.",
-        "h1": "Encontre o caminho técnico para a sua situação",
+        "description": "Serviços de engenharia para obras públicas e privadas: projetos, revisão, compatibilização, orçamento, inspeção, perícia, avaliação e segurança do trabalho.",
+        "h1": "Serviços de engenharia para obras públicas e privadas",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": "demonstrativo",
@@ -4415,7 +5415,7 @@
         "breadcrumb_names": [],
         "canonical": "https://confenge.com.br/termos-de-uso/",
         "dates": [],
-        "description": "Termos de uso dos canais digitais da CONFENGE, consultoria B2G em licitações, contratos e obras públicas.",
+        "description": "Termos de uso dos canais digitais da CONFENGE: engenharia, perícias e inteligência técnica para clientes privados e públicos, com especialidade em obras públicas.",
         "h1": "Termos de Uso",
         "has_dataset_surface": false,
         "licenses": [
@@ -4456,13 +5456,13 @@
         "breadcrumb_names": [],
         "canonical": "https://confenge.com.br/triagem-tecnica/",
         "dates": [
-          "2026-09-05"
+          "2026-09-08"
         ],
-        "description": "Vamos registrar o tipo de problema, seu nome e um canal de retorno.",
+        "description": "Explique a situação técnica por WhatsApp, e-mail ou telefone e receba o próximo passo.",
         "h1": "Explique sua situação em menos de um minuto",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Triagem técnica | CONFENGE",
         "versions": []
@@ -4513,7 +5513,7 @@
         ],
         "canonical": "https://confenge.com.br/uso-de-ia/",
         "dates": [
-          "2026-09-07"
+          "2026-09-09"
         ],
         "description": "Onde a IA entra na produção pública da CONFENGE, o que ela não faz e quem responde pelo texto.",
         "h1": "Uso de inteligência artificial",
@@ -4526,5 +5526,5 @@
       }
     }
   ],
-  "site_root": "/tmp/claude-1000/-home-tjsasakifln-code-confenge-web-cfg/00c05faa-bef8-4907-a4f3-a23173631031/scratchpad/wt-main/_site"
+  "site_root": "/home/tjsasakifln/code/confenge/web-cfg/.grok/worktrees/inb-16-integracao/_site"
 }

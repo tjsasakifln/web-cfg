@@ -704,7 +704,7 @@
           "gate": "archetype_editorial_ready",
           "path": "entregas/index.html",
           "reason": "archetype_cta_subordinate_failed",
-          "excerpt": "family=entregas 1/1 sampled pages fail: /entregas/: 29 CTAs in <main> for 3559 words (max 8)",
+          "excerpt": "family=entregas 1/1 sampled pages fail: /entregas/: 29 CTAs in <main> for 3561 words (max 8)",
           "severity": "warn"
         },
         {
@@ -928,7 +928,7 @@
           "gate": "archetype_editorial_ready",
           "path": "seguranca-trabalho-apoio-tecnico/index.html",
           "reason": "archetype_cta_subordinate_failed",
-          "excerpt": "family=seguranca-trabalho-apoio-tecnico 1/1 sampled pages fail: /seguranca-trabalho-apoio-tecnico/: 6 CTAs in <main> for 1177 words (max 3)",
+          "excerpt": "family=seguranca-trabalho-apoio-tecnico 1/1 sampled pages fail: /seguranca-trabalho-apoio-tecnico/: 6 CTAs in <main> for 1184 words (max 3)",
           "severity": "warn"
         }
       ],
