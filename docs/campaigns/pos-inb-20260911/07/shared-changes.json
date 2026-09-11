@@ -1,0 +1,6 @@
+{
+  "campaign_id": "07",
+  "campaign_set": "POS-INB-20260911",
+  "changes": [],
+  "notes": "Header CTA continues hidden below 900px by styles.css (.header-cta{display:none} with mobile-nav off-canvas). 07 did not take global CSS. In-page proposta/WhatsApp/e-mail were added on Biblioteca and Casos so the visitor does not depend on the shell menu. No shared-change filed: not a proven blockage after the in-page CTAs. 10 may keep or change the shell independently."
+}

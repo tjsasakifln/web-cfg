@@ -1,8 +1,8 @@
 {
   "schema": "confenge.hub-link-matrix/1.0",
-  "campaign_id": "09",
-  "campaign_set": "INB-20260911",
-  "notes": "REQUIRED_LINK exige ficheiro presente. OPTIONAL_LINK some quando a rota não está no candidato. PRESERVE_ANCHOR fica na mesma página. Destinos opcionais não podem cair para a home.",
+  "campaign_id": "07",
+  "campaign_set": "POS-INB-20260911",
+  "notes": "REQUIRED_LINK exige ficheiro presente. OPTIONAL_LINK só omite rota de expansão ausente. release_unit CORE nunca some por bandeira opcional, mesmo se o kind ainda disser OPTIONAL_LINK. PRESERVE_ANCHOR fica na mesma página. Destinos opcionais não podem cair para a home.",
   "purchase_map_path": "data/bofu-dominance/core/purchase-route-map.v1.json",
   "internal_terms": [
     "núcleo interno",
@@ -109,7 +109,7 @@
     },
     {
       "id": "servicos-revisao-landing",
-      "kind": "OPTIONAL_LINK",
+      "kind": "REQUIRED_LINK",
       "hub": "/servicos/",
       "href": "/revisao-tecnica-projetos-engenharia/",
       "marker": "servicos-revisao-landing",
@@ -117,13 +117,13 @@
       "intent_family": "projetar_revisar_compatibilizar",
       "offer_id": "complementary_engineering_project_review",
       "provider_campaign": "05",
-      "satisfaction": null,
+      "satisfaction": "ALREADY_SATISFIED",
       "release_unit": "CORE",
       "purchase_id": "revisao-tecnica-projetos"
     },
     {
       "id": "servicos-compat-landing",
-      "kind": "OPTIONAL_LINK",
+      "kind": "REQUIRED_LINK",
       "hub": "/servicos/",
       "href": "/compatibilizacao-projetos-engenharia/",
       "marker": "servicos-compat-landing",
@@ -131,13 +131,13 @@
       "intent_family": "projetar_revisar_compatibilizar",
       "offer_id": "bim_coordination_clash_register",
       "provider_campaign": "04",
-      "satisfaction": null,
+      "satisfaction": "ALREADY_SATISFIED",
       "release_unit": "CORE",
       "purchase_id": "compatibilizacao-projetos"
     },
     {
       "id": "servicos-complementares-landing",
-      "kind": "OPTIONAL_LINK",
+      "kind": "REQUIRED_LINK",
       "hub": "/servicos/",
       "href": "/projetos-complementares-engenharia/",
       "marker": "servicos-complementares-landing",
@@ -145,13 +145,13 @@
       "intent_family": "projetar_revisar_compatibilizar",
       "offer_id": "complementary_engineering_project_review",
       "provider_campaign": "12",
-      "satisfaction": null,
-      "release_unit": "EXPANSION",
+      "satisfaction": "ALREADY_SATISFIED",
+      "release_unit": "CORE",
       "purchase_id": "projetos-complementares"
     },
     {
       "id": "servicos-inspecao-landing",
-      "kind": "OPTIONAL_LINK",
+      "kind": "REQUIRED_LINK",
       "hub": "/servicos/",
       "href": "/inspecao-diagnostico-edificacoes/",
       "marker": "servicos-inspecao-landing",
@@ -159,8 +159,8 @@
       "intent_family": "inspecionar_diagnosticar",
       "offer_id": "building_inspection_pathology",
       "provider_campaign": "13",
-      "satisfaction": null,
-      "release_unit": "EXPANSION",
+      "satisfaction": "ALREADY_SATISFIED",
+      "release_unit": "CORE",
       "purchase_id": "inspecionar-diagnosticar"
     },
     {
@@ -179,7 +179,7 @@
     },
     {
       "id": "servicos-pericia-landing",
-      "kind": "OPTIONAL_LINK",
+      "kind": "REQUIRED_LINK",
       "hub": "/servicos/",
       "href": "/assistencia-tecnica-pericial-engenharia/",
       "marker": "servicos-pericia-landing",
@@ -187,9 +187,35 @@
       "intent_family": "produzir_prova_tecnica",
       "offer_id": "civil_building_technical_assistance",
       "provider_campaign": "14",
-      "satisfaction": null,
-      "release_unit": "EXPANSION",
+      "satisfaction": "ALREADY_SATISFIED",
+      "release_unit": "CORE",
       "purchase_id": "produzir-prova-tecnica"
+    },
+    {
+      "id": "servicos-sst-landing",
+      "kind": "REQUIRED_LINK",
+      "hub": "/servicos/",
+      "href": "/seguranca-trabalho-apoio-tecnico/",
+      "marker": "servicos-sst-landing",
+      "label": "Apoio técnico de segurança do trabalho",
+      "intent_family": "organizar_sst",
+      "offer_id": "sst_risk_documentation_diagnosis",
+      "provider_campaign": "14",
+      "satisfaction": "ALREADY_SATISFIED",
+      "release_unit": "CORE"
+    },
+    {
+      "id": "servicos-avaliacao",
+      "kind": "REQUIRED_LINK",
+      "hub": "/servicos/",
+      "href": "/servicos/#servico-avaliacao",
+      "marker": "servicos-avaliacao",
+      "label": "Avaliação de imóvel",
+      "intent_family": "produzir_prova_tecnica",
+      "offer_id": null,
+      "provider_campaign": "07",
+      "satisfaction": "ALREADY_SATISFIED",
+      "release_unit": "CORE"
     },
     {
       "id": "conteudos-orcamento",
@@ -208,7 +234,7 @@
       "id": "conteudos-projeto",
       "kind": "REQUIRED_LINK",
       "hub": "/conteudos/",
-      "href": "/servicos/#servico-projeto",
+      "href": "/projetos-complementares-engenharia/",
       "marker": "need-projeto",
       "label": "Elaborar ou completar um projeto",
       "intent_family": "projetar_revisar_compatibilizar",
@@ -221,7 +247,7 @@
       "id": "conteudos-revisao",
       "kind": "REQUIRED_LINK",
       "hub": "/conteudos/",
-      "href": "/servicos/#servico-revisao",
+      "href": "/revisao-tecnica-projetos-engenharia/",
       "marker": "need-revisao",
       "label": "Revisar um projeto existente",
       "intent_family": "projetar_revisar_compatibilizar",
@@ -234,7 +260,7 @@
       "id": "conteudos-compat",
       "kind": "REQUIRED_LINK",
       "hub": "/conteudos/",
-      "href": "/servicos/#servico-compatibilizacao",
+      "href": "/compatibilizacao-projetos-engenharia/",
       "marker": "need-compat",
       "label": "Compatibilizar disciplinas",
       "intent_family": "projetar_revisar_compatibilizar",
@@ -247,7 +273,7 @@
       "id": "conteudos-inspecao",
       "kind": "REQUIRED_LINK",
       "hub": "/conteudos/",
-      "href": "/servicos/#servico-diagnostico",
+      "href": "/inspecao-diagnostico-edificacoes/",
       "marker": "need-inspecao",
       "label": "Inspecionar obra ou imóvel",
       "intent_family": "inspecionar_diagnosticar",
@@ -279,6 +305,45 @@
       "intent_family": "executar_proteger_contrato_publico",
       "offer_id": null,
       "provider_campaign": "08",
+      "satisfaction": "ALREADY_SATISFIED",
+      "release_unit": "CORE"
+    },
+    {
+      "id": "conteudos-pericia",
+      "kind": "REQUIRED_LINK",
+      "hub": "/conteudos/",
+      "href": "/assistencia-tecnica-pericial-engenharia/",
+      "marker": "need-pericia",
+      "label": "Prova de engenharia em disputa",
+      "intent_family": "produzir_prova_tecnica",
+      "offer_id": "civil_building_technical_assistance",
+      "provider_campaign": "14",
+      "satisfaction": "ALREADY_SATISFIED",
+      "release_unit": "CORE"
+    },
+    {
+      "id": "conteudos-avaliacao",
+      "kind": "REQUIRED_LINK",
+      "hub": "/conteudos/",
+      "href": "/servicos/#servico-avaliacao",
+      "marker": "need-avaliacao",
+      "label": "Avaliar um imóvel",
+      "intent_family": "produzir_prova_tecnica",
+      "offer_id": null,
+      "provider_campaign": "07",
+      "satisfaction": "ALREADY_SATISFIED",
+      "release_unit": "CORE"
+    },
+    {
+      "id": "conteudos-sst",
+      "kind": "REQUIRED_LINK",
+      "hub": "/conteudos/",
+      "href": "/seguranca-trabalho-apoio-tecnico/",
+      "marker": "need-sst",
+      "label": "Apoio técnico de segurança do trabalho",
+      "intent_family": "organizar_sst",
+      "offer_id": "sst_risk_documentation_diagnosis",
+      "provider_campaign": "14",
       "satisfaction": "ALREADY_SATISFIED",
       "release_unit": "CORE"
     },
@@ -323,17 +388,17 @@
     },
     {
       "id": "casos-prova-privada",
-      "kind": "OPTIONAL_LINK",
+      "kind": "REQUIRED_LINK",
       "hub": "/casos/",
-      "href": "/casos/prova-tecnica-obra-privada/",
+      "href": "/casos/demonstrativo-projeto-privado/",
       "marker": "casos-prova-privada",
-      "label": "Amostra técnica de obra privada",
-      "intent_family": "orcar_planejar_decidir",
+      "label": "Demonstrativo de projeto privado",
+      "intent_family": "projetar_revisar_compatibilizar",
       "offer_id": null,
       "provider_campaign": "06",
-      "satisfaction": null,
+      "satisfaction": "ALREADY_SATISFIED",
       "release_unit": "CORE",
-      "purchase_id": "prova-tecnica-obra-privada"
+      "purchase_id": "demonstrativo-casos-inb06"
     },
     {
       "id": "ferramentas-prontidao",
@@ -410,6 +475,12 @@
       "kind": "PRESERVE_ANCHOR",
       "hub": "/servicos/",
       "href": "/servicos/#servico-orcamento"
+    },
+    {
+      "id": "servico-avaliacao",
+      "kind": "PRESERVE_ANCHOR",
+      "hub": "/servicos/",
+      "href": "/servicos/#servico-avaliacao"
     }
   ],
   "journeys": [
@@ -465,6 +536,96 @@
       "id": "servico-contato",
       "start": "/servicos/",
       "goal": "/triagem-tecnica/",
+      "max_hops": 1
+    },
+    {
+      "id": "servico-revisao",
+      "start": "/servicos/",
+      "goal": "/revisao-tecnica-projetos-engenharia/",
+      "max_hops": 1
+    },
+    {
+      "id": "servico-compat",
+      "start": "/servicos/",
+      "goal": "/compatibilizacao-projetos-engenharia/",
+      "max_hops": 1
+    },
+    {
+      "id": "servico-elaboracao",
+      "start": "/servicos/",
+      "goal": "/projetos-complementares-engenharia/",
+      "max_hops": 1
+    },
+    {
+      "id": "servico-inspecao",
+      "start": "/servicos/",
+      "goal": "/inspecao-diagnostico-edificacoes/",
+      "max_hops": 1
+    },
+    {
+      "id": "servico-pericia",
+      "start": "/servicos/",
+      "goal": "/assistencia-tecnica-pericial-engenharia/",
+      "max_hops": 1
+    },
+    {
+      "id": "servico-sst",
+      "start": "/servicos/",
+      "goal": "/seguranca-trabalho-apoio-tecnico/",
+      "max_hops": 1
+    },
+    {
+      "id": "servico-avaliacao",
+      "start": "/servicos/",
+      "goal": "/servicos/#servico-avaliacao",
+      "max_hops": 0
+    },
+    {
+      "id": "conteudo-revisao",
+      "start": "/conteudos/",
+      "goal": "/revisao-tecnica-projetos-engenharia/",
+      "max_hops": 1
+    },
+    {
+      "id": "conteudo-compat",
+      "start": "/conteudos/",
+      "goal": "/compatibilizacao-projetos-engenharia/",
+      "max_hops": 1
+    },
+    {
+      "id": "conteudo-elaboracao",
+      "start": "/conteudos/",
+      "goal": "/projetos-complementares-engenharia/",
+      "max_hops": 1
+    },
+    {
+      "id": "conteudo-inspecao",
+      "start": "/conteudos/",
+      "goal": "/inspecao-diagnostico-edificacoes/",
+      "max_hops": 1
+    },
+    {
+      "id": "conteudo-pericia",
+      "start": "/conteudos/",
+      "goal": "/assistencia-tecnica-pericial-engenharia/",
+      "max_hops": 1
+    },
+    {
+      "id": "conteudo-sst",
+      "start": "/conteudos/",
+      "goal": "/seguranca-trabalho-apoio-tecnico/",
+      "max_hops": 1
+    },
+    {
+      "id": "conteudo-avaliacao",
+      "start": "/conteudos/",
+      "goal": "/servicos/#servico-avaliacao",
+      "max_hops": 1
+    },
+    {
+      "id": "casos-demonstrativo-privado",
+      "start": "/casos/",
+      "goal": "/casos/demonstrativo-projeto-privado/",
       "max_hops": 1
     }
   ]

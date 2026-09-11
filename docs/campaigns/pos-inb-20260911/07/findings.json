@@ -1,0 +1,49 @@
+{
+  "examined_sha": "cb6facfaaf50aa8f1834aba43d0245e04cbea672",
+  "examined_at": "2026-09-11T23:40:00Z",
+  "findings": [
+    {
+      "id": "F01",
+      "state": "FIXED_ON_PRESENT_TREE",
+      "owner": "06/08-or-already-merged",
+      "excerpt": "casos/demonstrativo-projeto-privado/data/{coordenacao,orcamento,quantitativos,revisao}.csv all present on HEAD cb6facfaa",
+      "action": "preserve; 07 did not recreate"
+    },
+    {
+      "id": "F02",
+      "state": "STILL_TRUE",
+      "owner": "02",
+      "path": "quantitativos-orcamento-obras/index.html",
+      "line": 178,
+      "excerpt": "Os números conferíveis desta trilha entram aqui quando o demonstrativo canônico da CONFENGE estiver publicado. Até lá, o método já é este: elemento, critério, cálculo, quantidade e item de planilha.",
+      "action": "recorded; 07 did not edit 02 pages. Hub now links the existing demonstrative from Casos and Serviços."
+    },
+    {
+      "id": "F03",
+      "state": "STILL_TRUE",
+      "owner": "04",
+      "path": "ferramentas/prontidao-tecnica-obra-privada/index.html",
+      "excerpt": "pptr-destination-map by_offer_id only contains quantity_takeoff_budgeting → /quantitativos-orcamento-obras/",
+      "action": "recorded; 07 did not edit the prontidão tool. Ferramentas hub now names revisão, compatibilização, orçamento, inspeção and elaboração as direct service exits."
+    },
+    {
+      "id": "F04",
+      "state": "STILL_TRUE",
+      "owner": "02",
+      "path": "revisao-tecnica-projetos-engenharia/index.html",
+      "line": 141,
+      "excerpt": "SELECT do demonstrativo ... Exemplo demonstrativo, não é trabalho de cliente, não é conteúdo aprovado pelo fundador como case ...",
+      "note": "tests/intake/test_inb05_revisao_projetos.mjs currently requires the founder-approval denial phrase, so 02 must change test and copy together.",
+      "action": "recorded; 07 did not edit 02 pages"
+    },
+    {
+      "id": "F05",
+      "state": "STILL_TRUE",
+      "owner": "05",
+      "path": "parcerias-engenharia/index.html",
+      "line": 135,
+      "excerpt": "href=\"/servicos/#servico-projeto\">Abrir elaborar, revisar e compatibilizar projetos</a> also used for kit-complementares and kit-revisao share URLs",
+      "action": "recorded; 07 did not edit 05. Dedicated landings are now REQUIRED from Serviços and Biblioteca."
+    }
+  ]
+}

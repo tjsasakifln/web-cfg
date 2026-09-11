@@ -21,6 +21,7 @@ HOME_HREFS = frozenset({"/", "", "https://confenge.com.br/", "https://confenge.c
 KIND_REQUIRED = "REQUIRED_LINK"
 KIND_OPTIONAL = "OPTIONAL_LINK"
 KIND_ANCHOR = "PRESERVE_ANCHOR"
+RELEASE_CORE = "CORE"
 _ASSET_RE = re.compile(
     r"\.(css|js|mjs|png|jpe?g|webp|svg|gif|ico|woff2?|xml|webmanifest|txt|pdf|avif|map)(?:$|\?)",
     re.I,
@@ -180,6 +181,18 @@ def resolve_link_href(spec: dict[str, Any], purchase_map: dict[str, Any] | None)
     return normalize_href(str(spec.get("href") or ""))
 
 
+def release_unit_of(spec: dict[str, Any]) -> str:
+    return str(spec.get("release_unit") or "").strip().upper()
+
+
+def treats_as_required(spec: dict[str, Any]) -> bool:
+    """OPTIONAL may omit only expansion routes. A CORE route cannot drop silently."""
+    kind = spec.get("kind")
+    if kind == KIND_REQUIRED:
+        return True
+    return kind == KIND_OPTIONAL and release_unit_of(spec) == RELEASE_CORE
+
+
 def compose_links(
     root: Path | None = None,
     matrix: dict[str, Any] | None = None,
@@ -195,7 +208,12 @@ def compose_links(
         href = resolve_link_href(spec, resolved_map)
         present = destination_present(href, base, overlay, html_overrides)
         kind = spec.get("kind")
-        included = present if kind == KIND_OPTIONAL else present
+        if treats_as_required(spec):
+            included = present
+        elif kind == KIND_OPTIONAL:
+            included = present
+        else:
+            included = present
         composed.append(
             ComposedLink(
                 spec=spec,
@@ -341,7 +359,7 @@ def audit_hubs(
         for link in by_hub.get(hub_path, []):
             kind = link.spec.get("kind")
             marker = str(link.spec.get("marker") or "")
-            if kind == KIND_REQUIRED:
+            if treats_as_required(link.spec):
                 if not link.present:
                     failures.append(f"{KIND_REQUIRED} {link.spec.get('id')} destination missing: {link.href}")
                 elif not href_in_html(html, link.href):
@@ -402,8 +420,20 @@ def bfs_hops(
     """Click depth using static hrefs only. 0 if start==goal, 1 for a direct link."""
     start_path, _ = split_href(start)
     goal_path, goal_frag = split_href(goal)
-    if start_path == goal_path and (not goal_frag or start == goal):
-        return 0
+    if start_path == goal_path:
+        if not goal_frag or start == goal:
+            return 0
+        try:
+            start_html = hub_html(
+                start_path if start_path.endswith("/") else f"{start_path}/",
+                root,
+                overlay,
+                html_overrides,
+            )
+        except FileNotFoundError:
+            start_html = read_text(root, href_to_relpath(start_path), overlay) or ""
+        if start_html and anchor_exists(start_html, goal_frag):
+            return 0
     seen: set[str] = {start_path}
     queue: list[tuple[str, int]] = [(start_path, 0)]
     while queue:
@@ -451,7 +481,8 @@ def journey_table(
             overlay,
             html_overrides,
         )
-        max_hops = int(journey.get("max_hops") or 2)
+        raw_max = journey.get("max_hops")
+        max_hops = 2 if raw_max is None else int(raw_max)
         rows.append(
             {
                 "id": journey.get("id"),
