@@ -3,7 +3,7 @@
   "issue": "#327",
   "measured_at": "2026-09-11T18:32:00.000Z",
   "measured_on": "2026-09-10",
-  "commit_sha": "43be6cfde8095565a128aaae65e12984c9e10ca3",
+  "commit_sha": "cbd0e7e679aee7957afd9aba49d7e44f81fedae5",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "f168038814087e1b365d1de3042af9a3f3364743756e104711fecc0fb9fe7477",
@@ -54,7 +54,7 @@
     "styles-offers.css": "0c1efa4797709ae6d2b776aa58e863ef095a880646b5e4b158a7a47e0963ec2e",
     "styles-tokens.css": "15cc0770e76276b418c11493fa9e53827ae14bb8f854b0a63d8c6dd63afc02fc",
     "styles-tools.css": "8c42a4b5fadba13e4dae52bd7168c64b9f5548f3fd3f8d4f0707ce4e9463c7ba",
-    "styles.css": "e0308ce5bd1b6da4d4b7a4cb58c4717a9d3512b36b839fb35ca6be21bf03eaf3"
+    "styles.css": "d9bc1674904e690613192cd5d21502e5553b85043c40ed887acdb393615c6b62"
   },
   "surface": "source",
   "artifact_identity": null,
