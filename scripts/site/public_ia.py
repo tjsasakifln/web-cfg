@@ -684,19 +684,22 @@ def validate_contract(ia: dict[str, Any] | None = None) -> list[str]:
         elif row.get("id") == "building_diagnosis":
             if (
                 row.get("index_state") != "service_hub_index"
-                or row.get("href") != "/servicos/#servico-diagnostico"
+                or row.get("href")
+                not in ("/servicos/#servico-diagnostico", "/inspecao-diagnostico-edificacoes/")
             ):
                 errors.append("building situation must resolve to the diagnosis service explanation")
         elif row.get("id") == "expert_evidence_valuation":
             if (
                 row.get("index_state") != "service_hub_index"
-                or row.get("href") != "/servicos/#servico-pericia"
+                or row.get("href")
+                not in ("/servicos/#servico-pericia", "/assistencia-tecnica-pericial-engenharia/")
             ):
                 errors.append("expert-evidence situation must resolve to its service explanation")
         elif row.get("id") == "occupational_safety":
             if (
                 row.get("index_state") != "service_hub_index"
-                or row.get("href") != "/servicos/#servico-sst"
+                or row.get("href")
+                not in ("/servicos/#servico-sst", "/seguranca-trabalho-apoio-tecnico/")
             ):
                 errors.append("occupational-safety situation must resolve to its service explanation")
         elif _path_with_slash(_normalize_route(str(row.get("href") or ""))) != "/triagem-tecnica/":
