@@ -1,0 +1,184 @@
+{
+  "schema": "confenge.inbound-campaign-handoff/2.0",
+  "campaign_set": "POS-INB-20260911",
+  "campaign_id": "08",
+  "prompt_version": "1.0.0",
+  "base_sha": "cb6facfaaf50aa8f1834aba43d0245e04cbea672",
+  "state": "READY_FOR_INTEGRATION",
+  "owned_paths": [
+    "casos/demonstrativo-infraestrutura/",
+    "data/demonstrative/infrastructure-pilot/",
+    "scripts/demonstrative/infrastructure_pilot/",
+    "tests/demonstrative_infrastructure/",
+    "tests/pos-inb-20260911/08/",
+    "docs/campaigns/pos-inb-20260911/08/"
+  ],
+  "changed_paths": [
+    "data/demonstrative/infrastructure-pilot/source.v1.json",
+    "data/demonstrative/infrastructure-pilot/consumption.v1.json",
+    "scripts/demonstrative/infrastructure_pilot/__init__.py",
+    "scripts/demonstrative/infrastructure_pilot/derive.py",
+    "scripts/demonstrative/infrastructure_pilot/render.py",
+    "scripts/demonstrative/infrastructure_pilot/generate.py",
+    "casos/demonstrativo-infraestrutura/index.html",
+    "casos/demonstrativo-infraestrutura/data/quantitativos.csv",
+    "casos/demonstrativo-infraestrutura/data/orcamento.csv",
+    "casos/demonstrativo-infraestrutura/data/coordenacao.csv",
+    "casos/demonstrativo-infraestrutura/data/revisao.csv",
+    "casos/demonstrativo-infraestrutura/assets/planta-r00.svg",
+    "casos/demonstrativo-infraestrutura/assets/planta-r01.svg",
+    "casos/demonstrativo-infraestrutura/assets/perfil-drenagem-r00.svg",
+    "casos/demonstrativo-infraestrutura/assets/perfil-drenagem-r01.svg",
+    "casos/demonstrativo-infraestrutura/assets/secao-pavimento.svg",
+    "tests/demonstrative_infrastructure/__init__.py",
+    "tests/demonstrative_infrastructure/reference.py",
+    "tests/demonstrative_infrastructure/test_infrastructure_pilot.py",
+    "tests/demonstrative_infrastructure/fixtures/adversarial/as-client.json",
+    "tests/pos-inb-20260911/__init__.py",
+    "tests/pos-inb-20260911/08/__init__.py",
+    "tests/pos-inb-20260911/08/test_gates.py",
+    "docs/campaigns/pos-inb-20260911/08/handoff.json",
+    "docs/campaigns/pos-inb-20260911/08/shared-changes.json"
+  ],
+  "requirements": [
+    {
+      "id": "A-cut",
+      "state": "PASS",
+      "evidence": "Nenhum URL equivalente em casos/. Recorte único: PV-01 40 m x 7 m + DR-01 20 m. Pergunta de compra em source.purchase_question_pt_br."
+    },
+    {
+      "id": "B-source",
+      "state": "PASS",
+      "evidence": "data/demonstrative/infrastructure-pilot/source.v1.json separa chosen_input, derived e absent. Declive/área/volume geométricos. Sem cliente, terreno, sondagem, chuva, topografia ou ART."
+    },
+    {
+      "id": "C-extracts",
+      "state": "PASS",
+      "evidence": "SVG/HTML/CSV gerados da mesma fonte com IDs e revisão R01. Cadeia desenho→dimensão→fórmula→quantidade→planilha em Q-PAV-01 e Q-TUB-01. Preços hipotéticos rotulados."
+    },
+    {
+      "id": "D-finding",
+      "state": "PASS",
+      "evidence": "CF-GEO-01: cota desenhada MH-02 12,35 m versus planilha R00 12,50 m, local E0+030, encaminhado. CF-INFO-01: IN-01 sem diâmetro/cota, pedido de informação, proven_failure false."
+    },
+    {
+      "id": "E-independent-arith",
+      "state": "PASS",
+      "evidence": "tests/demonstrative_infrastructure/reference.py não importa o gerador. pytest 23 passed duas vezes. Mutações: unidade, revisão, recurso omitido, cliente."
+    },
+    {
+      "id": "F-label",
+      "state": "PASS",
+      "evidence": "H1 'Exemplo demonstrativo de quantitativos e revisão para infraestrutura'. Texto: dados/soluções ilustrativos e não servem para execução. Sem logo de cliente, ART, revisão humana fictícia ou economia."
+    },
+    {
+      "id": "G-descriptor",
+      "state": "PASS",
+      "evidence": "data/demonstrative/infrastructure-pilot/consumption.v1.json com origin demonstrative, revisão, URL, assets públicos exatos e consumer_sections para 02/05/07."
+    },
+    {
+      "id": "H-publication-requests",
+      "state": "PASS",
+      "evidence": "docs/campaigns/pos-inb-20260911/08/shared-changes.json pede sitemap, hub, registry, manifesto, package.json, pacote 03 e links irmãos 02/05. Sem editar centrais da 10."
+    }
+  ],
+  "routes": [
+    {
+      "path": "/casos/demonstrativo-infraestrutura/",
+      "kind": "demonstrative",
+      "intent_family": "projetar_revisar_compatibilizar",
+      "canonical": "https://confenge.com.br/casos/demonstrativo-infraestrutura/",
+      "requested_indexability": "index,follow",
+      "release_unit": "EXPANSION_READY",
+      "contact_mode": "whatsapp_or_triagem",
+      "visitor_job": "Ver a mesma rastreabilidade de quantitativos e revisão numa faixa de acesso e num trecho de drenagem, antes de contratar o recorte real.",
+      "primary_question": "Como a CONFENGE rastreia desenho, dimensão, fórmula, quantidade e item de planilha em infraestrutura e loteamento?",
+      "proof": "demo-infrastructure-pilot-2026-09",
+      "cta": "Pedir proposta pelo WhatsApp",
+      "cta_destination": "https://wa.me/5548988344559",
+      "alternate_contact": "/triagem-tecnica/#projetos"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "10-apply-shared-changes",
+      "state": "PENDING",
+      "owner": "10",
+      "action": "Aplicar docs/campaigns/pos-inb-20260911/08/shared-changes.json. Resolver cada pedido como aplicada, já atendida ou substituída com prova."
+    },
+    {
+      "id": "03-package-assets",
+      "state": "PENDING",
+      "owner": "03",
+      "action": "Incluir os dez arquivos públicos de consumption.assets no pacote. Não gerar amostras."
+    },
+    {
+      "id": "09-independent-review",
+      "state": "PENDING",
+      "owner": "09",
+      "action": "Exame independente do recurso candidato. Não escrever nesta branch."
+    },
+    {
+      "id": "02-private-demo-gap",
+      "state": "PENDING_NOT_08",
+      "owner": "02",
+      "action": "F02/F04 do demonstrativo privado e da página de revisão permanecem da 02. Este recorte não preenche o slot canônico de edificação."
+    }
+  ],
+  "shared_changes": "docs/campaigns/pos-inb-20260911/08/shared-changes.json",
+  "commands_results": [
+    {
+      "command": "python3 -m pytest tests/demonstrative_infrastructure/test_infrastructure_pilot.py tests/pos-inb-20260911/08/test_gates.py -q",
+      "exit_code": 0,
+      "runs": 2,
+      "notes": "23 passed em duas invocações limpas. subject_sha null neste recibo. HEAD_READY no PR traz head_sha. Mutações isoladas: dimensão, ID, subtotal, unidade, revisão, recurso omitido, demo-como-cliente."
+    },
+    {
+      "command": "python3 scripts/demonstrative/infrastructure_pilot/generate.py",
+      "exit_code": 0,
+      "runs": 2,
+      "notes": "Saída estável. pavement_area_m2=280.00 pipe_length_m=20.00 budget_subtotal=20118.00 revisão R01. SHA256 dos HTML/CSV/SVG idênticos nas duas corridas."
+    },
+    {
+      "command": "python3 scripts/site/lint_editorial_copy.py",
+      "exit_code": 0,
+      "notes": "ok=true no tree local, 0 travessões na página nova."
+    },
+    {
+      "command": "python3 scripts/site/test_self_deprecating_copy.py",
+      "exit_code": 0,
+      "notes": "PASS. 0 autodepreciação na superfície pública."
+    },
+    {
+      "command": "python3 playwright chromium screenshot http://127.0.0.1:18088/casos/demonstrativo-infraestrutura/",
+      "exit_code": 0,
+      "notes": "HTTP 200, 0 pageerror, H1 exigido presente. Evidência local, não produção verificada."
+    }
+  ],
+  "overlay_hashes": {
+    "data/demonstrative/infrastructure-pilot/source.v1.json": "f931ff7855e45e1c19857224480299ce688d6e4022500f2f297364b2bdee7f07",
+    "data/demonstrative/infrastructure-pilot/consumption.v1.json": "5ca8227b338d5a554e49f2e9e80ed33a2be3069f1810fc71fe290ac9c8cb431a",
+    "scripts/demonstrative/infrastructure_pilot/derive.py": "46d276a10d18718c3098f64bb2fe34058179eea7238fc5b6cff8742ac2c60a73",
+    "casos/demonstrativo-infraestrutura/index.html": "11d0311102590c1bafdb174a4d06a8ff69f086c8e70e33236e0416bd5cbf3f63"
+  },
+  "unresolved": [
+    "10 aplicar shared-changes (sitemap, hub, registry, manifesto, cases.json, npm script).",
+    "03 incluir os dez arquivos públicos no pacote; omitir CSV/SVG deve reprovar.",
+    "09 exame independente.",
+    "02 F02/F04 do demonstrativo privado: não bloqueiam esta entrega e não são cobertos por ela."
+  ],
+  "consumption_contract": "data/demonstrative/infrastructure-pilot/consumption.v1.json",
+  "proof_id": "demo-infrastructure-pilot-2026-09",
+  "origin": "demonstrative",
+  "revision": "R01",
+  "rollback": "Remover os owned_paths desta campanha. Reverter shared-changes se a 10 já os tiver aplicado. A rota não deve permanecer como placeholder. Sem este PR, origin/main não lista /casos/demonstrativo-infraestrutura/.",
+  "not_done": [
+    "merge",
+    "deploy",
+    "editar package.json",
+    "editar sitemap",
+    "editar /casos/index.html",
+    "alterar fontes do demonstrativo privado",
+    "criar proof_id PUBLISHED de cliente"
+  ]
+}

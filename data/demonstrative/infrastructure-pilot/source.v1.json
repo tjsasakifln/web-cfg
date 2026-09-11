@@ -1,0 +1,171 @@
+{
+  "schema": "confenge.demonstrative-sample-source/1.0",
+  "id": "demo-infrastructure-pilot-2026-09",
+  "origin": "demonstrative",
+  "revision": "R01",
+  "title": "Recorte de acesso viário e drenagem de loteamento",
+  "excerpt_kind": "loteamento_access_and_drainage",
+  "date_modified": "2026-09-11",
+  "label_pt_br": "exemplo demonstrativo",
+  "client_name": null,
+  "address": null,
+  "art_number": null,
+  "signature": null,
+  "purchase_question_pt_br": "Como a CONFENGE rastreia desenho, dimensão, fórmula, quantidade e item de planilha num acesso viário e num trecho de drenagem de loteamento, para eu avaliar a entrega antes de contratar orçamento, revisão ou compatibilização?",
+  "cut_pt_br": "Uma faixa de pavimento de 40 m e um trecho de rede de 20 m, com estaqueamento, camadas e cotas declarados. Não é projeto executivo, dimensionamento de pavimento, fundação nem verificação de capacidade hidráulica.",
+  "units": {
+    "length": "m",
+    "area": "m2",
+    "volume": "m3",
+    "count": "un",
+    "diameter": "mm",
+    "slope": "m/m",
+    "currency": "BRL"
+  },
+  "information_classes": {
+    "chosen_input": "Valor declarado neste recorte, escolhido para a demonstração.",
+    "derived": "Valor calculado a partir das entradas escolhidas.",
+    "absent": "Dado não fornecido. Permanece pedido de informação, não falha comprovada."
+  },
+  "absent_real_inputs": [
+    "cliente",
+    "terreno",
+    "sondagem",
+    "chuva_de_projeto",
+    "topografia",
+    "autorizacao_tecnica"
+  ],
+  "datums": {
+    "pavement_grade_pt_br": "Cotas de greide do acesso, datum local ilustrativo independente da rede.",
+    "pipe_invert_pt_br": "Cotas de invert da rede, datum local ilustrativo independente do greide."
+  },
+  "takeoff_criteria": {
+    "quantity_basis_revision": "R01",
+    "pavement_area_rule_pt_br": "Área da faixa = comprimento do estaqueamento vezes largura declarada. Não há desconto de boca de lobo na área de pavimento deste recorte.",
+    "layer_volume_rule_pt_br": "Volume de cada camada = área da faixa vezes espessura declarada. Espessura não é dimensionamento de pavimento.",
+    "pipe_length_rule_pt_br": "Comprimento do trecho = diferença de estaqueamento entre poços. Diâmetro identifica o item; não entra no volume hidráulico.",
+    "geometric_slope_rule_pt_br": "Declive geométrico = diferença de cota dividida pelo comprimento. Não é capacidade hidráulica nem chuva de projeto."
+  },
+  "elements": [
+    {
+      "id": "PV-01",
+      "type": "pavement_strip",
+      "label_pt_br": "Faixa de acesso viário",
+      "role": "chosen_input",
+      "station_start_m": "0.00",
+      "station_end_m": "40.00",
+      "width_m": "7.00",
+      "longitudinal_slope_m_per_m": "0.015",
+      "grade_start_m": "100.00",
+      "layers": {
+        "subbase_m": "0.15",
+        "base_m": "0.12",
+        "wearing_m": "0.04"
+      },
+      "sheet_ref": "INF-PV-R01"
+    },
+    {
+      "id": "MH-01",
+      "type": "manhole",
+      "label_pt_br": "Poço de visita de montante",
+      "role": "chosen_input",
+      "station_m": "10.00",
+      "invert_m": "12.80",
+      "sheet_ref": "INF-DR-R01"
+    },
+    {
+      "id": "MH-02",
+      "type": "manhole",
+      "label_pt_br": "Poço de visita de conexão de jusante",
+      "role": "chosen_input",
+      "station_m": "30.00",
+      "invert_drawn_m": "12.35",
+      "invert_spreadsheet_by_revision": {
+        "R00": "12.50",
+        "R01": "12.35"
+      },
+      "sheet_ref_by_revision": {
+        "R00": "INF-DR-R00",
+        "R01": "INF-DR-R01"
+      }
+    },
+    {
+      "id": "DR-01",
+      "type": "pipe_stretch",
+      "label_pt_br": "Trecho de rede de drenagem",
+      "role": "chosen_input",
+      "from_id": "MH-01",
+      "to_id": "MH-02",
+      "diameter_mm": "400",
+      "sheet_ref": "INF-DR-R01"
+    },
+    {
+      "id": "IN-01",
+      "type": "inlet",
+      "label_pt_br": "Boca de lobo no acesso",
+      "role": "absent",
+      "station_m": "20.00",
+      "host_strip_id": "PV-01",
+      "diameter_mm": null,
+      "invert_m": null,
+      "sheet_ref": "INF-DR-R00"
+    }
+  ],
+  "states": {
+    "R00": {
+      "id": "R00",
+      "label_pt_br": "estado original",
+      "note_pt_br": "Estado de partida do recorte: a cota de conexão de MH-02 no desenho não coincide com a cota na planilha, e a boca de lobo IN-01 permanece sem diâmetro nem cota."
+    },
+    "R01": {
+      "id": "R01",
+      "label_pt_br": "versão demonstrativa corrigida",
+      "note_pt_br": "A planilha passa a repetir a cota desenhada de MH-02. A boca de lobo IN-01 continua sem diâmetro nem cota: isso permanece pedido de informação, não falha comprovada."
+    }
+  },
+  "prices": {
+    "class": "hypothetical",
+    "disclaimer_pt_br": "Valores hipotéticos para conferência aritmética. Não são SINAPI, cotação vigente, tabela oficial, preço de mercado universal nem preço da CONFENGE.",
+    "source_verified": false,
+    "items": {
+      "Q-SUB-01": "85.00",
+      "Q-BASE-01": "120.00",
+      "Q-CAP-01": "280.00",
+      "Q-TUB-01": "180.00",
+      "Q-PV-01": "2400.00",
+      "Q-BOC-01": "980.00"
+    }
+  },
+  "service_rows": [
+    {
+      "id": "ORC-SUB-01",
+      "quantity_id": "Q-SUB-01",
+      "service_pt_br": "Sub-base da faixa de acesso, volume geométrico"
+    },
+    {
+      "id": "ORC-BASE-01",
+      "quantity_id": "Q-BASE-01",
+      "service_pt_br": "Base da faixa de acesso, volume geométrico"
+    },
+    {
+      "id": "ORC-CAP-01",
+      "quantity_id": "Q-CAP-01",
+      "service_pt_br": "Capa de rolamento da faixa de acesso, volume geométrico"
+    },
+    {
+      "id": "ORC-TUB-01",
+      "quantity_id": "Q-TUB-01",
+      "service_pt_br": "Tubulação do trecho DR-01, comprimento geométrico"
+    },
+    {
+      "id": "ORC-PV-01",
+      "quantity_id": "Q-PV-01",
+      "service_pt_br": "Poço de visita do recorte"
+    },
+    {
+      "id": "ORC-BOC-01",
+      "quantity_id": "Q-BOC-01",
+      "service_pt_br": "Boca de lobo do recorte, sem diâmetro declarado"
+    }
+  ]
+}

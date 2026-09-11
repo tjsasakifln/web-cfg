@@ -1,0 +1,9 @@
+# exemplo demonstrativo; revisao=R01
+id;quantidade_id;servico;unidade;quantidade;preco_unitario;valor;classe_preco;elementos;revisao
+ORC-SUB-01;Q-SUB-01;Sub-base da faixa de acesso, volume geométrico;m3;42.00;85.00;3570.00;hypothetical;PV-01;R01
+ORC-BASE-01;Q-BASE-01;Base da faixa de acesso, volume geométrico;m3;33.60;120.00;4032.00;hypothetical;PV-01;R01
+ORC-CAP-01;Q-CAP-01;Capa de rolamento da faixa de acesso, volume geométrico;m3;11.20;280.00;3136.00;hypothetical;PV-01;R01
+ORC-TUB-01;Q-TUB-01;Tubulação do trecho DR-01, comprimento geométrico;m;20.00;180.00;3600.00;hypothetical;DR-01 MH-01 MH-02;R01
+ORC-PV-01;Q-PV-01;Poço de visita do recorte;un;2;2400.00;4800.00;hypothetical;MH-01 MH-02;R01
+ORC-BOC-01;Q-BOC-01;Boca de lobo do recorte, sem diâmetro declarado;un;1;980.00;980.00;hypothetical;IN-01;R01
+ORC-SUBTOTAL;;Subtotal do recorte;BRL;;;20118.00;hypothetical;;R01

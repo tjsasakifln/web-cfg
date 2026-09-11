@@ -1,0 +1,4 @@
+# exemplo demonstrativo; revisao=R01
+id;documento;constatacao;base;acao;tipo_conferencia;achado_relacionado;elementos;revisao
+RF-01;INF-DR-R00;A cota de conexão de MH-02 desenhada não coincide com a cota da planilha no estado original.;Conferência geométrica e documental das cotas de invert no mesmo estaqueamento, sem exame de norma de drenagem e sem verificação de capacidade hidráulica.;Alinhar a planilha à cota desenhada 12,35 m no recorte R01.;arithmetic_documental_coherence;CF-GEO-01;MH-02 DR-01;R01
+RF-02;INF-DR-R00;A boca de lobo IN-01 não declara diâmetro nem cota de invert.;Campo do recorte vazio. Ausência de informação, não conformidade com norma não examinada.;"Registrar pedido de informação; não converter a lacuna em falha comprovada.";documental_coherence;CF-INFO-01;IN-01;R01
