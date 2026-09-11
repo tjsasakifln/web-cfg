@@ -1,0 +1,291 @@
+{
+  "schema": "confenge.inbound-campaign-shared-changes/2.0",
+  "campaign_set": "INB-20260911",
+  "campaign_id": "14",
+  "prompt_version": "2.0.0",
+  "owner_campaign": "14",
+  "applier_campaign": "16",
+  "base_sha": "8f508544835490ec635d02517bce0207c6f8e426",
+  "changes": [
+    {
+      "change_id": "14-family-assistencia-tecnica-pericial",
+      "owner_campaign": "16",
+      "path": "data/organic/public-family-registry.json",
+      "base_blob_sha": "61e219892d5ad8c80f37dc18399f51f5df119ca1",
+      "operation": "upsert_family",
+      "key_or_anchor": "families[id=assistencia-tecnica-pericial-engenharia]",
+      "expected_old": null,
+      "desired_new": {
+        "id": "assistencia-tecnica-pericial-engenharia",
+        "visitor_job": "Enquadrar assistência técnica de engenharia em uma disputa de edificação, distinguir assistência da parte, inspeção, advocacia e perícia do juízo, e solicitar retorno com dados mínimos, sem enviar o processo no primeiro contato.",
+        "profile": "commercial_content",
+        "terminal_action": "capture_form_or_whatsapp",
+        "match": {
+          "routes": [
+            "/assistencia-tecnica-pericial-engenharia/"
+          ]
+        },
+        "value_first_header_cta": {
+          "mode": "local_fragment_before_contact",
+          "label": "Conversar sobre a disputa",
+          "href": "#contato-assistencia"
+        },
+        "capture_availability": {
+          "mode": "external_authority_fail_closed",
+          "withheld_fallback": [
+            "whatsapp",
+            "email",
+            "telephone"
+          ],
+          "runtime_profile": "adaptive_intake_standalone_v1",
+          "config_endpoint": "/.netlify/functions/adaptive-intake-config",
+          "client_script": "/assets/js/adaptive-intake.js",
+          "authority_manifest": "netlify/functions/data/adaptive-intake-authority.json"
+        },
+        "gate_coverage": {
+          "conversion": "full",
+          "copy": "full",
+          "accessibility": "full"
+        },
+        "declared_at": "2026-09-11",
+        "owner_issue": "ASSIGN_ON_INTEGRATION_POSITIVE_INT",
+        "debt": [],
+        "index_evidence": {
+          "substrate": "first_party_publication",
+          "not_applicable": [
+            "official_live",
+            "citable_source"
+          ],
+          "reason": "Página comercial de primeira parte sobre assistência técnica de engenharia da própria CONFENGE; não representa registro externo, nomeação judicial, preço, prazo, caso ou habilitação não projetável.",
+          "authority": [
+            "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md",
+            "data/corporate/commercial-constitution.v1.json",
+            "data/corporate/intent-family-matrix.v1.json"
+          ],
+          "declared_at": "2026-09-11",
+          "owner_issue": "ASSIGN_ON_INTEGRATION_POSITIVE_INT"
+        }
+      },
+      "rationale": "Nova rota indexável de expansão INB-14A. inbound:gates é fail-closed sem família declarada. 16 substitui owner_issue pelo issue positivo da composição (inbound_gates._is_owner_issue exige int > 0). Não editar /servicos/.",
+      "acceptance_test": "Family id assistencia-tecnica-pericial-engenharia exists; match.routes contains /assistencia-tecnica-pericial-engenharia/; terminal_action is capture_form_or_whatsapp; owner_issue is a positive int; npm run inbound:gates no longer reports the route as undeclared."
+    },
+    {
+      "change_id": "14-family-sst-apoio-tecnico",
+      "owner_campaign": "16",
+      "path": "data/organic/public-family-registry.json",
+      "base_blob_sha": "61e219892d5ad8c80f37dc18399f51f5df119ca1",
+      "operation": "upsert_family",
+      "key_or_anchor": "families[id=seguranca-trabalho-apoio-tecnico]",
+      "expected_old": null,
+      "desired_new": {
+        "id": "seguranca-trabalho-apoio-tecnico",
+        "visitor_job": "Enquadrar diagnóstico e apoio técnico de segurança do trabalho, distinguir PGR, LTCAT, AET e laudos, e solicitar retorno com dados mínimos, sem dados de trabalhador no primeiro contato.",
+        "profile": "commercial_content",
+        "terminal_action": "capture_form_or_whatsapp",
+        "match": {
+          "routes": [
+            "/seguranca-trabalho-apoio-tecnico/"
+          ]
+        },
+        "value_first_header_cta": {
+          "mode": "local_fragment_before_contact",
+          "label": "Conversar sobre o apoio técnico",
+          "href": "#contato-sst"
+        },
+        "capture_availability": {
+          "mode": "external_authority_fail_closed",
+          "withheld_fallback": [
+            "whatsapp",
+            "email",
+            "telephone"
+          ],
+          "runtime_profile": "adaptive_intake_standalone_v1",
+          "config_endpoint": "/.netlify/functions/adaptive-intake-config",
+          "client_script": "/assets/js/adaptive-intake.js",
+          "authority_manifest": "netlify/functions/data/adaptive-intake-authority.json"
+        },
+        "gate_coverage": {
+          "conversion": "full",
+          "copy": "full",
+          "accessibility": "full"
+        },
+        "declared_at": "2026-09-11",
+        "owner_issue": "ASSIGN_ON_INTEGRATION_POSITIVE_INT",
+        "debt": [],
+        "index_evidence": {
+          "substrate": "first_party_publication",
+          "not_applicable": [
+            "official_live",
+            "citable_source"
+          ],
+          "reason": "Página comercial de primeira parte sobre diagnóstico e apoio técnico de SST da própria CONFENGE; não representa registro externo, ato médico, pacote PGR/LTCAT/AET, preço, prazo ou título profissional não projetável.",
+          "authority": [
+            "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md",
+            "data/corporate/commercial-constitution.v1.json",
+            "data/corporate/intent-family-matrix.v1.json"
+          ],
+          "declared_at": "2026-09-11",
+          "owner_issue": "ASSIGN_ON_INTEGRATION_POSITIVE_INT"
+        }
+      },
+      "rationale": "Nova rota indexável de expansão INB-14B. 16 substitui owner_issue pelo issue positivo da composição. Não editar /servicos/#servico-sst.",
+      "acceptance_test": "Family id seguranca-trabalho-apoio-tecnico exists; match.routes contains /seguranca-trabalho-apoio-tecnico/; terminal_action is capture_form_or_whatsapp; owner_issue is a positive int; inbound:gates does not report the route as undeclared."
+    },
+    {
+      "change_id": "14-sitemap-assistencia",
+      "owner_campaign": "16",
+      "path": "sitemap.xml",
+      "base_blob_sha": "3c91a643271d02ea536f08a0378716d3e2aa34af",
+      "operation": "upsert_url",
+      "key_or_anchor": "url.loc=https://confenge.com.br/assistencia-tecnica-pericial-engenharia/",
+      "expected_old": null,
+      "desired_new": {
+        "loc": "https://confenge.com.br/assistencia-tecnica-pericial-engenharia/"
+      },
+      "rationale": "Rota indexável nova. Sem lastmod fabricado. Inserir na ordem estável do sitemap; não regravar lastmod de URLs existentes.",
+      "acceptance_test": "sitemap.xml contains exactly one loc https://confenge.com.br/assistencia-tecnica-pericial-engenharia/ and no lastmod on that url unless a real publication date is recorded by 16."
+    },
+    {
+      "change_id": "14-sitemap-sst",
+      "owner_campaign": "16",
+      "path": "sitemap.xml",
+      "base_blob_sha": "3c91a643271d02ea536f08a0378716d3e2aa34af",
+      "operation": "upsert_url",
+      "key_or_anchor": "url.loc=https://confenge.com.br/seguranca-trabalho-apoio-tecnico/",
+      "expected_old": null,
+      "desired_new": {
+        "loc": "https://confenge.com.br/seguranca-trabalho-apoio-tecnico/"
+      },
+      "rationale": "Rota indexável nova. Sem lastmod fabricado. Não regravar lastmod de URLs existentes.",
+      "acceptance_test": "sitemap.xml contains exactly one loc https://confenge.com.br/seguranca-trabalho-apoio-tecnico/."
+    },
+    {
+      "change_id": "14-hygiene-assistencia",
+      "owner_campaign": "16",
+      "path": "data/organic/sitemap-hygiene.json",
+      "base_blob_sha": "9ca4f84ec634ba5142a222836bb580f17227fa2f",
+      "operation": "upsert_loc",
+      "key_or_anchor": "locs[]=https://confenge.com.br/assistencia-tecnica-pericial-engenharia/",
+      "expected_old": null,
+      "desired_new": "https://confenge.com.br/assistencia-tecnica-pericial-engenharia/",
+      "rationale": "Manter hygiene alinhada ao sitemap. 16 regenera url_count e unique_paths depois do insert; não editar contadores à mão.",
+      "acceptance_test": "locs includes https://confenge.com.br/assistencia-tecnica-pericial-engenharia/ and url_count equals locs.length."
+    },
+    {
+      "change_id": "14-hygiene-sst",
+      "owner_campaign": "16",
+      "path": "data/organic/sitemap-hygiene.json",
+      "base_blob_sha": "9ca4f84ec634ba5142a222836bb580f17227fa2f",
+      "operation": "upsert_loc",
+      "key_or_anchor": "locs[]=https://confenge.com.br/seguranca-trabalho-apoio-tecnico/",
+      "expected_old": null,
+      "desired_new": "https://confenge.com.br/seguranca-trabalho-apoio-tecnico/",
+      "rationale": "Manter hygiene alinhada ao sitemap. 16 regenera url_count e unique_paths depois do insert.",
+      "acceptance_test": "locs includes https://confenge.com.br/seguranca-trabalho-apoio-tecnico/ and url_count equals locs.length."
+    },
+    {
+      "change_id": "14-public-top-dirs",
+      "owner_campaign": "16",
+      "path": "scripts/pseo/public_artifact.py",
+      "base_blob_sha": "02fab887985de241dbc62d3c6f27b706200f359a",
+      "operation": "insert_in_frozenset",
+      "key_or_anchor": "PUBLIC_TOP_DIRS",
+      "expected_old": "        \"quantitativos-orcamento-obras\",\n        \"triagem-tecnica\",",
+      "desired_new": "        \"quantitativos-orcamento-obras\",\n        \"assistencia-tecnica-pericial-engenharia\",\n        \"seguranca-trabalho-apoio-tecnico\",\n        \"triagem-tecnica\",",
+      "rationale": "Sem estes diretórios as páginas novas não entram no artefato público Netcup. Não criar gerador paralelo.",
+      "acceptance_test": "PUBLIC_TOP_DIRS contains assistencia-tecnica-pericial-engenharia and seguranca-trabalho-apoio-tecnico; python3 scripts/pseo/public_artifact.py audit copies both index.html files into _site."
+    },
+    {
+      "change_id": "14-ia-map-breadcrumb-labels",
+      "owner_campaign": "16",
+      "path": "data/site/public-ia-map.json",
+      "base_blob_sha": "2621a2133b592b2a6560714c76fde902eecc2ebc",
+      "operation": "upsert_keys",
+      "key_or_anchor": "breadcrumb_labels",
+      "expected_old": {
+        "/quantitativos-orcamento-obras/": "Quantitativos e orçamento"
+      },
+      "desired_new": {
+        "/quantitativos-orcamento-obras/": "Quantitativos e orçamento",
+        "/assistencia-tecnica-pericial-engenharia/": "Assistência técnica em disputas",
+        "/seguranca-trabalho-apoio-tecnico/": "Apoio técnico de SST"
+      },
+      "rationale": "Labels de breadcrumb das duas rotas de expansão. Upsert por chave; não substituir o objeto inteiro.",
+      "acceptance_test": "breadcrumb_labels keeps existing keys and adds the two INB-14 paths with the labels above."
+    },
+    {
+      "change_id": "14-ia-map-prefix-assistencia",
+      "owner_campaign": "16",
+      "path": "data/site/public-ia-map.json",
+      "base_blob_sha": "2621a2133b592b2a6560714c76fde902eecc2ebc",
+      "operation": "upsert_object_in_array",
+      "key_or_anchor": "journeys_or_prefixes[prefix=/assistencia-tecnica-pericial-engenharia/]",
+      "expected_old": null,
+      "desired_new": {
+        "prefix": "/assistencia-tecnica-pericial-engenharia/",
+        "parent": "/servicos/",
+        "exact": true
+      },
+      "rationale": "Parent da rota 14A é o hub /servicos/, não a home. Inserir ao lado do prefixo de quantitativos. 16 confirma o nome real do array (prefixes) no arquivo vigente.",
+      "acceptance_test": "An object with prefix /assistencia-tecnica-pericial-engenharia/, parent /servicos/ and exact true exists in the ia-map prefix list used by breadcrumbs."
+    },
+    {
+      "change_id": "14-ia-map-prefix-sst",
+      "owner_campaign": "16",
+      "path": "data/site/public-ia-map.json",
+      "base_blob_sha": "2621a2133b592b2a6560714c76fde902eecc2ebc",
+      "operation": "upsert_object_in_array",
+      "key_or_anchor": "journeys_or_prefixes[prefix=/seguranca-trabalho-apoio-tecnico/]",
+      "expected_old": null,
+      "desired_new": {
+        "prefix": "/seguranca-trabalho-apoio-tecnico/",
+        "parent": "/servicos/",
+        "exact": true
+      },
+      "rationale": "Parent da rota 14B é o hub /servicos/. Upsert por prefixo estável.",
+      "acceptance_test": "An object with prefix /seguranca-trabalho-apoio-tecnico/, parent /servicos/ and exact true exists in the ia-map prefix list."
+    },
+    {
+      "change_id": "14-ia-map-active-header-assistencia",
+      "owner_campaign": "16",
+      "path": "data/site/public-ia-map.json",
+      "base_blob_sha": "2621a2133b592b2a6560714c76fde902eecc2ebc",
+      "operation": "upsert_object_in_array",
+      "key_or_anchor": "active_header[prefix=/assistencia-tecnica-pericial-engenharia/]",
+      "expected_old": null,
+      "desired_new": {
+        "prefix": "/assistencia-tecnica-pericial-engenharia/",
+        "href": "/servicos/"
+      },
+      "rationale": "Header ativo aponta para o hub de serviços, como quantitativos. Não reconstruir nav.",
+      "acceptance_test": "active_header contains prefix /assistencia-tecnica-pericial-engenharia/ with href /servicos/."
+    },
+    {
+      "change_id": "14-ia-map-active-header-sst",
+      "owner_campaign": "16",
+      "path": "data/site/public-ia-map.json",
+      "base_blob_sha": "2621a2133b592b2a6560714c76fde902eecc2ebc",
+      "operation": "upsert_object_in_array",
+      "key_or_anchor": "active_header[prefix=/seguranca-trabalho-apoio-tecnico/]",
+      "expected_old": null,
+      "desired_new": {
+        "prefix": "/seguranca-trabalho-apoio-tecnico/",
+        "href": "/servicos/"
+      },
+      "rationale": "Header ativo da rota 14B aponta para o hub de serviços.",
+      "acceptance_test": "active_header contains prefix /seguranca-trabalho-apoio-tecnico/ with href /servicos/."
+    },
+    {
+      "change_id": "14-package-test-script",
+      "owner_campaign": "16",
+      "path": "package.json",
+      "base_blob_sha": "6449c565138aa0794c31765d75079fe2cdbc3226",
+      "operation": "upsert_key",
+      "key_or_anchor": "scripts.test:inb14-pericias-sst",
+      "expected_old": null,
+      "desired_new": "node tests/commercial/test_inb14_pericias_sst.mjs",
+      "rationale": "O teste dirigido já vive em tests/commercial/ (fonte do produtor 14). 16 só registra o script npm e, se couber, o inclui na suíte do candidato. Não é condição para a página existir.",
+      "acceptance_test": "package.json scripts['test:inb14-pericias-sst'] equals 'node tests/commercial/test_inb14_pericias_sst.mjs' and npm run test:inb14-pericias-sst exits 0 on the composed candidate."
+    }
+  ]
+}
