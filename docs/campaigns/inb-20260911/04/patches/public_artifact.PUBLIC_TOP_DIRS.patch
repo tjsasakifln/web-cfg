@@ -1,0 +1,8 @@
+*** Begin Patch
+*** Update File: scripts/pseo/public_artifact.py
+@@
+         "servicos",
+         "quantitativos-orcamento-obras",
++        "compatibilizacao-projetos-engenharia",
+         "triagem-tecnica",
+*** End Patch

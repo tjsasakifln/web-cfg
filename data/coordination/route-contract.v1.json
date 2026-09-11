@@ -1,0 +1,56 @@
+{
+  "schema": "confenge.coordination-route-contract/1.0",
+  "owner_campaign": "04",
+  "prompt_version": "2.0.0",
+  "commercial": {
+    "path": "/compatibilizacao-projetos-engenharia/",
+    "kind": "commercial_destination",
+    "visitor_job": "Conferir interfaces entre projetos já existentes, registrar interferências e encaminhar ajustes antes de executar, contratar ou alterar uma obra.",
+    "primary_question": "O que vocês conferem entre as disciplinas, como registram o ajuste e como peço proposta?",
+    "intent_family": "projetar_revisar_compatibilizar",
+    "canonical_service_family": "engineering_projects_coordination",
+    "offer_id": "bim_coordination_clash_register",
+    "offer_id_note": "Oferta existente de registro de interferências. A compra pública não exige modelo; plantas e desenhos bastam para começar.",
+    "canonical": "https://confenge.com.br/compatibilizacao-projetos-engenharia/",
+    "requested_indexability": "index,follow",
+    "release_unit": "CORE",
+    "contact_mode": "direct_channels_withheld_form",
+    "terminal_action": "REQUEST_SCOPE_REVIEW",
+    "proof": "Registro demonstrativo com localização, documentos comparados, encaminhamento e estado; método e responsabilidade visíveis.",
+    "cta": {
+      "primary_href": "#pedido-compatibilizacao",
+      "primary_label": "Pedir proposta da compatibilização",
+      "alternative_href": "/conteudos/como-contratar-compatibilizacao-projetos/"
+    }
+  },
+  "contents": [
+    {
+      "path": "/conteudos/quando-compatibilizar-projetos/",
+      "kind": "decision_content",
+      "visitor_job": "Decidir se agora é o momento de contratar a conferência de interfaces, e não a elaboração ou a revisão de uma disciplina.",
+      "primary_question": "Quando contratar a compatibilização, e quando o próximo passo é outro serviço?",
+      "intent_family": "projetar_revisar_compatibilizar",
+      "canonical_service_family": "engineering_projects_coordination",
+      "offer_id": "bim_coordination_clash_register",
+      "canonical": "https://confenge.com.br/conteudos/quando-compatibilizar-projetos/",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "contact_mode": "service_destination_with_contextual_channel",
+      "next_step": "/compatibilizacao-projetos-engenharia/"
+    },
+    {
+      "path": "/conteudos/como-contratar-compatibilizacao-projetos/",
+      "kind": "decision_content",
+      "visitor_job": "Delimitar escopo, insumos e entrega da compatibilização antes de pedir proposta.",
+      "primary_question": "O que informar, o que enviar depois e o que a entrega inclui ou exclui?",
+      "intent_family": "projetar_revisar_compatibilizar",
+      "canonical_service_family": "engineering_projects_coordination",
+      "offer_id": "bim_coordination_clash_register",
+      "canonical": "https://confenge.com.br/conteudos/como-contratar-compatibilizacao-projetos/",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "contact_mode": "service_destination_with_contextual_channel",
+      "next_step": "/compatibilizacao-projetos-engenharia/#pedido-compatibilizacao"
+    }
+  ]
+}
