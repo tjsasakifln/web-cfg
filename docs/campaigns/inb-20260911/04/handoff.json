@@ -1,0 +1,135 @@
+{
+  "schema": "confenge.inbound-campaign-handoff/2.0",
+  "campaign_set": "INB-20260911",
+  "campaign_id": "04",
+  "prompt_version": "2.0.0",
+  "base_sha": "8f508544835490ec635d02517bce0207c6f8e426",
+  "state": "READY_FOR_INTEGRATION_WITH_DEPENDENCIES",
+  "owned_sources": [
+    "compatibilizacao-projetos-engenharia/index.html",
+    "conteudos/quando-compatibilizar-projetos/index.html",
+    "conteudos/como-contratar-compatibilizacao-projetos/index.html",
+    "data/coordination/interference-register.v1.json",
+    "data/coordination/route-contract.v1.json",
+    "scripts/coordination/interference_register.mjs",
+    "tests/coordination/",
+    "docs/campaigns/inb-20260911/04/"
+  ],
+  "changed_sources": [
+    "compatibilizacao-projetos-engenharia/index.html",
+    "conteudos/quando-compatibilizar-projetos/index.html",
+    "conteudos/como-contratar-compatibilizacao-projetos/index.html",
+    "data/coordination/interference-register.v1.json",
+    "data/coordination/route-contract.v1.json",
+    "scripts/coordination/interference_register.mjs",
+    "tests/coordination/test_page_contract.mjs",
+    "tests/coordination/test_register_status.mjs",
+    "tests/coordination/test_contents.mjs",
+    "tests/coordination/test_handoff.mjs",
+    "tests/coordination/test_ownership_diff.mjs",
+    "tests/coordination/fixtures/pending-finding.json",
+    "docs/campaigns/inb-20260911/04/handoff.json",
+    "docs/campaigns/inb-20260911/04/shared-changes.json",
+    "docs/campaigns/inb-20260911/04/patches/public_artifact.PUBLIC_TOP_DIRS.patch"
+  ],
+  "routes": [
+    {
+      "path": "/compatibilizacao-projetos-engenharia/",
+      "kind": "commercial_destination",
+      "intent_family": "projetar_revisar_compatibilizar",
+      "offer_id": "bim_coordination_clash_register",
+      "canonical": "https://confenge.com.br/compatibilizacao-projetos-engenharia/",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "contact_mode": "direct_channels_withheld_form"
+    },
+    {
+      "path": "/conteudos/quando-compatibilizar-projetos/",
+      "kind": "decision_content",
+      "intent_family": "projetar_revisar_compatibilizar",
+      "offer_id": "bim_coordination_clash_register",
+      "canonical": "https://confenge.com.br/conteudos/quando-compatibilizar-projetos/",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "contact_mode": "service_destination_with_contextual_channel"
+    },
+    {
+      "path": "/conteudos/como-contratar-compatibilizacao-projetos/",
+      "kind": "decision_content",
+      "intent_family": "projetar_revisar_compatibilizar",
+      "offer_id": "bim_coordination_clash_register",
+      "canonical": "https://confenge.com.br/conteudos/como-contratar-compatibilizacao-projetos/",
+      "requested_indexability": "index,follow",
+      "release_unit": "CORE",
+      "contact_mode": "service_destination_with_contextual_channel"
+    }
+  ],
+  "dependencies": [
+    {
+      "provider_campaign": "01",
+      "artifact_path": "data/corporate/intent-family-matrix.v1.json",
+      "level": "HARD_AT_RELEASE",
+      "fallback": "ALREADY_SATISFIED",
+      "note": "Intenção projetar_revisar_compatibilizar e família engineering_projects_coordination já existem na main consultada. 04 não inventa IDs."
+    },
+    {
+      "provider_campaign": "02",
+      "artifact_path": "assets/js/adaptive-intake.js",
+      "level": "HARD_AT_RELEASE",
+      "fallback": "ALREADY_SATISFIED",
+      "note": "Intake WITHHELD; landing usa WhatsApp, e-mail e telefone retrocompatíveis, sem formulário morto e sem upload. Extensão intake_context=project_coordination proposta a 02, não exigida para o primeiro contato."
+    },
+    {
+      "provider_campaign": "06",
+      "artifact_path": "docs/campaigns/inb-20260911/06/artifacts/interference-register.json",
+      "level": "HARD_AT_RELEASE",
+      "fallback": null,
+      "note": "Consumidor em scripts/coordination/interference_register.mjs. Enquanto o artefato de 06 não existir, a página publica exemplo demonstrativo de primeira parte, rotulado, sem obra de cliente. Fixture de teste não sobe como amostra."
+    }
+  ],
+  "shared_changes": "docs/campaigns/inb-20260911/04/shared-changes.json",
+  "tests": [
+    {
+      "command": "node --test tests/coordination/test_page_contract.mjs tests/coordination/test_register_status.mjs tests/coordination/test_contents.mjs tests/coordination/test_handoff.mjs tests/coordination/test_ownership_diff.mjs",
+      "exit_code": 0,
+      "subject_sha": null,
+      "overlay_hashes": []
+    }
+  ],
+  "evidence_paths": [
+    "compatibilizacao-projetos-engenharia/index.html",
+    "conteudos/quando-compatibilizar-projetos/index.html",
+    "conteudos/como-contratar-compatibilizacao-projetos/index.html",
+    "data/coordination/interference-register.v1.json",
+    "scripts/coordination/interference_register.mjs"
+  ],
+  "unresolved": [
+    {
+      "item": "INB-06 demonstrative overlay",
+      "state": "WAITING_PROVIDER",
+      "path": "docs/campaigns/inb-20260911/06/artifacts/interference-register.json"
+    },
+    {
+      "item": "INB-16 apply family/canonical/sitemap/artifact patches",
+      "state": "COMPOSITION",
+      "path": "docs/campaigns/inb-20260911/04/shared-changes.json"
+    },
+    {
+      "item": "INB-09 hub links from /conteudos/",
+      "state": "COMPOSITION",
+      "path": "conteudos/index.html"
+    }
+  ],
+  "preserved_capabilities": [
+    "Destino /servicos/#servico-projeto para elaboração e revisão",
+    "Destino /quantitativos-orcamento-obras/ para quantitativos",
+    "Canais WhatsApp/e-mail/telefone e recusa de upload no primeiro contato",
+    "IDs projetar_revisar_compatibilizar, engineering_projects_coordination, bim_coordination_clash_register"
+  ],
+  "real_gaps_closed": [
+    "Não havia destino comercial específico para conferir interfaces",
+    "Não havia registro concreto com estado falho-fechado",
+    "Não havia conteúdos de momento e delimitação de escopo"
+  ],
+  "observable_difference": "Três rotas novas, registro demonstrativo com estado pendente preso às revisões comparadas, CTA contextual sem lista completa nem upload."
+}

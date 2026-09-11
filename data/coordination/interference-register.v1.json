@@ -1,0 +1,90 @@
+{
+  "schema": "confenge.interference-register/1.0",
+  "source": "didactic_first_party",
+  "owner_campaign": "04",
+  "inb06_artifact_paths": [
+    "docs/campaigns/inb-20260911/06/artifacts/interference-register.json",
+    "data/coordination/overlays/inb06-demonstrative.json"
+  ],
+  "public_label": "Exemplo demonstrativo. Não é obra de cliente.",
+  "public_label_note": "Serve para mostrar o registro entregue. Detecção, projeto da correção e aceite dos autores permanecem atos distintos.",
+  "finding": {
+    "id": "INT-DEM-001",
+    "type": "geometric_interference",
+    "type_label": "Interferência geométrica",
+    "location": {
+      "space": "Sanitário do 2º pavimento",
+      "axis": "C/3",
+      "elevation": "+6,80 m",
+      "elements": [
+        {
+          "id": "PHS-ESGOTO-PRUM-02",
+          "discipline": "hidrossanitário",
+          "name": "Tubulação de esgoto Ø100 mm da prumada do sanitário"
+        },
+        {
+          "id": "EST-V12",
+          "discipline": "estrutural",
+          "name": "Viga V-12 20 × 50 cm no eixo C"
+        }
+      ]
+    },
+    "description": "A prumada de esgoto atravessa a alma da viga V-12 no cruzamento do eixo C/3, na cota +6,80 m.",
+    "evidence": "Sobreposição das plantas em PDF das revisões abaixo. A tubulação e a viga ocupam o mesmo espaço no cruzamento; não há furo, rebaixo ou desvio desenhado.",
+    "possible_consequence": "Na execução, a viga pode ser furada sem verificação, ou a prumada pode ser desviada no forro sem atualizar o hidrossanitário.",
+    "compared_documents": [
+      {
+        "document_id": "PHS-PRUM-02",
+        "discipline": "hidrossanitário",
+        "title": "Hidrossanitário — prumadas",
+        "revision": "R02",
+        "dated": "2026-04-18"
+      },
+      {
+        "document_id": "EST-VIG-01",
+        "discipline": "estrutural",
+        "title": "Estrutural — vigas do 2º pavimento",
+        "revision": "R03",
+        "dated": "2026-05-02"
+      }
+    ],
+    "conferred_against": [
+      { "document_id": "PHS-PRUM-02", "revision": "R02" },
+      { "document_id": "EST-VIG-01", "revision": "R03" }
+    ],
+    "detection": "detected",
+    "correction_designed": false,
+    "correction_status": "pending",
+    "author_acceptance": {
+      "accepted": false,
+      "by": null,
+      "at": null
+    },
+    "forwarding": {
+      "action": "Encaminhar o apontamento aos autores: estrutural avalia furo ou rebaixo; hidrossanitário avalia desvio da prumada.",
+      "adjustment_owner_role": "autores das disciplinas",
+      "coordinator_role": "registrar, localizar e encaminhar; não projetar a correção neste recorte"
+    }
+  },
+  "live_documents": [
+    { "document_id": "PHS-PRUM-02", "revision": "R02" },
+    { "document_id": "EST-VIG-01", "revision": "R03" }
+  ],
+  "type_catalog": [
+    {
+      "type": "geometric_interference",
+      "label": "Interferência geométrica",
+      "definition": "Dois elementos ocupam o mesmo espaço, ou um atravessa o outro, nas plantas ou no modelo comparados."
+    },
+    {
+      "type": "requirement_incompatibility",
+      "label": "Incompatibilidade de requisitos",
+      "definition": "As soluções podem não se cruzar no espaço e mesmo assim não caberem juntas: pé-direito, vazão, carga de incêndio, acesso de manutenção ou outro requisito declarado."
+    },
+    {
+      "type": "dimensioning_review",
+      "label": "Revisão de dimensionamento",
+      "definition": "Conferir se uma viga, um duto ou uma prumada está dimensionada. Isso é revisão da disciplina, não o registro de interface desta compra."
+    }
+  ]
+}

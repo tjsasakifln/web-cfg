@@ -1,0 +1,250 @@
+{
+  "schema": "confenge.inbound-campaign-shared-changes/2.0",
+  "campaign_id": "04",
+  "prompt_version": "2.0.0",
+  "base_sha": "8f508544835490ec635d02517bce0207c6f8e426",
+  "changes": [
+    {
+      "change_id": "04-family-commercial-clash",
+      "owner_campaign": "16",
+      "path": "data/organic/public-family-registry.json",
+      "base_blob_sha": "61e219892d5ad8c80f37dc18399f51f5df119ca1",
+      "operation": "upsert",
+      "key_or_anchor": "families[id=engineering-projects-coordination-clash]",
+      "expected_old": null,
+      "desired_new": {
+        "id": "engineering-projects-coordination-clash",
+        "visitor_job": "Conferir interfaces entre projetos já existentes, registrar interferências e encaminhar ajustes antes de executar, contratar ou alterar uma obra.",
+        "profile": "commercial_content",
+        "terminal_action": "capture_form_or_whatsapp",
+        "match": { "routes": ["/compatibilizacao-projetos-engenharia/"] },
+        "value_first_header_cta": {
+          "mode": "local_fragment_before_contact",
+          "label": "Pedir proposta da compatibilização",
+          "href": "#pedido-compatibilizacao"
+        },
+        "capture_availability": {
+          "mode": "external_authority_fail_closed",
+          "withheld_fallback": ["whatsapp", "email", "telephone"],
+          "runtime_profile": "adaptive_intake_standalone_v1",
+          "config_endpoint": "/.netlify/functions/adaptive-intake-config?intake_context=project_coordination",
+          "client_script": "/assets/js/adaptive-intake.js",
+          "authority_manifest": "netlify/functions/data/adaptive-intake-authority.json"
+        },
+        "gate_coverage": { "conversion": "full", "copy": "full", "accessibility": "full" },
+        "declared_at": "2026-09-11",
+        "owner_issue": "INB-20260911-04",
+        "debt": [],
+        "index_evidence": {
+          "substrate": "first_party_publication",
+          "not_applicable": ["official_live", "citable_source"],
+          "reason": "Página comercial de primeira parte sobre conferência de interfaces da própria CONFENGE; o registro demonstrativo é rotulado e não representa obra de cliente.",
+          "authority": [
+            "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md",
+            "data/corporate/intent-family-matrix.v1.json",
+            "data/coordination/route-contract.v1.json"
+          ],
+          "declared_at": "2026-09-11",
+          "owner_issue": "INB-20260911-04"
+        }
+      },
+      "rationale": "Rota indexável nova precisa de família fail-closed. Terminal WhatsApp/canais diretos enquanto o intake permanece WITHHELD. CTA de cabeçalho local só depois desta declaração.",
+      "acceptance_test": "gate_conversion aceita /compatibilizacao-projetos-engenharia/ na família engineering-projects-coordination-clash; header pode apontar para #pedido-compatibilizacao."
+    },
+    {
+      "change_id": "04-family-contents-clash",
+      "owner_campaign": "16",
+      "path": "data/organic/public-family-registry.json",
+      "base_blob_sha": "61e219892d5ad8c80f37dc18399f51f5df119ca1",
+      "operation": "upsert",
+      "key_or_anchor": "families[id=engineering-projects-coordination-contents]",
+      "expected_old": null,
+      "desired_new": {
+        "id": "engineering-projects-coordination-contents",
+        "visitor_job": "Decidir o momento e o recorte da compatibilização de projetos, distinto de elaborar, revisar ou orçar.",
+        "profile": "commercial_content",
+        "terminal_action": "capture_form_or_whatsapp",
+        "match": {
+          "routes": [
+            "/conteudos/quando-compatibilizar-projetos/",
+            "/conteudos/como-contratar-compatibilizacao-projetos/"
+          ]
+        },
+        "gate_coverage": { "conversion": "full", "copy": "full", "accessibility": "full" },
+        "declared_at": "2026-09-11",
+        "owner_issue": "INB-20260911-04",
+        "debt": [],
+        "index_evidence": {
+          "substrate": "first_party_publication",
+          "not_applicable": ["official_live", "citable_source"],
+          "reason": "Conteúdos decisórios de primeira parte sobre a compra de compatibilização; não são registros externos nem páginas B2G da biblioteca editorial.",
+          "authority": [
+            "data/coordination/route-contract.v1.json",
+            "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md"
+          ],
+          "declared_at": "2026-09-11",
+          "owner_issue": "INB-20260911-04"
+        }
+      },
+      "rationale": "Rotas exactas prevalecem sobre o prefixo editorial-library, cujo visitor_job é contratual de obra pública.",
+      "acceptance_test": "_match_family das duas rotas retorna engineering-projects-coordination-contents, não editorial-library."
+    },
+    {
+      "change_id": "04-ia-breadcrumb-label",
+      "owner_campaign": "16",
+      "path": "data/site/public-ia-map.json",
+      "base_blob_sha": "2621a2133b592b2a6560714c76fde902eecc2ebc",
+      "operation": "upsert",
+      "key_or_anchor": "breadcrumb_labels[/compatibilizacao-projetos-engenharia/]",
+      "expected_old": null,
+      "desired_new": "Compatibilização de projetos",
+      "rationale": "Rótulo visível do breadcrumb, paralelo a Quantitativos e orçamento.",
+      "acceptance_test": "breadcrumb_trail('/compatibilizacao-projetos-engenharia/') usa este rótulo."
+    },
+    {
+      "change_id": "04-ia-parent",
+      "owner_campaign": "16",
+      "path": "data/site/public-ia-map.json",
+      "base_blob_sha": "2621a2133b592b2a6560714c76fde902eecc2ebc",
+      "operation": "upsert",
+      "key_or_anchor": "parents[prefix=/compatibilizacao-projetos-engenharia/,exact=true]",
+      "expected_old": null,
+      "desired_new": {
+        "prefix": "/compatibilizacao-projetos-engenharia/",
+        "parent": "/servicos/",
+        "exact": true
+      },
+      "rationale": "Destino comercial irmão de quantitativos, sob o hub de serviços. Não alterar /servicos/ neste produtor.",
+      "acceptance_test": "parent_of da rota é /servicos/; breadcrumb fica Início / Serviços e problemas / Compatibilização de projetos."
+    },
+    {
+      "change_id": "04-public-artifact-top-dir",
+      "owner_campaign": "16",
+      "path": "scripts/pseo/public_artifact.py",
+      "base_blob_sha": "02fab887985de241dbc62d3c6f27b706200f359a",
+      "operation": "insert_hunk",
+      "key_or_anchor": "PUBLIC_TOP_DIRS.quantitativos-orcamento-obras",
+      "expected_old": "        \"quantitativos-orcamento-obras\",",
+      "desired_new": "        \"quantitativos-orcamento-obras\",\n        \"compatibilizacao-projetos-engenharia\",",
+      "integration_patch": "docs/campaigns/inb-20260911/04/patches/public_artifact.PUBLIC_TOP_DIRS.patch",
+      "rationale": "Sem este diretório o artefato público _site omite a landing. Conteúdos já entram pelo top-dir conteudos/.",
+      "acceptance_test": "audit do artefato copia compatibilizacao-projetos-engenharia/index.html."
+    },
+    {
+      "change_id": "04-manifest-dir",
+      "owner_campaign": "16",
+      "path": "seo/PUBLIC-ARTIFACT-MANIFEST.json",
+      "base_blob_sha": "1e913566ca339bbc08d70cd9cc2ea974d5dd7e36",
+      "operation": "upsert",
+      "key_or_anchor": "public_top_dirs contains compatibilizacao-projetos-engenharia/",
+      "expected_old": null,
+      "desired_new": "compatibilizacao-projetos-engenharia/",
+      "rationale": "Manifesto do artefato público precisa listar o diretório da landing.",
+      "acceptance_test": "manifest inclui o diretório; rotas /conteudos/quando-compatibilizar-projetos/ e /conteudos/como-contratar-compatibilizacao-projetos/ já cobertas por conteudos/."
+    },
+    {
+      "change_id": "04-sitemap-commercial",
+      "owner_campaign": "16",
+      "path": "sitemap.xml",
+      "base_blob_sha": "3c91a643271d02ea536f08a0378716d3e2aa34af",
+      "operation": "insert_url",
+      "key_or_anchor": "loc=https://confenge.com.br/compatibilizacao-projetos-engenharia/",
+      "expected_old": null,
+      "desired_new": "https://confenge.com.br/compatibilizacao-projetos-engenharia/",
+      "rationale": "Rota indexável nova. Não fabricar lastmod.",
+      "acceptance_test": "sitemap.xml contém a loc exatamente uma vez."
+    },
+    {
+      "change_id": "04-sitemap-when",
+      "owner_campaign": "16",
+      "path": "sitemap.xml",
+      "base_blob_sha": "3c91a643271d02ea536f08a0378716d3e2aa34af",
+      "operation": "insert_url",
+      "key_or_anchor": "loc=https://confenge.com.br/conteudos/quando-compatibilizar-projetos/",
+      "expected_old": null,
+      "desired_new": "https://confenge.com.br/conteudos/quando-compatibilizar-projetos/",
+      "rationale": "Conteúdo decisório indexável, fora do recorte noindex da biblioteca B2G.",
+      "acceptance_test": "sitemap.xml contém a loc exatamente uma vez."
+    },
+    {
+      "change_id": "04-sitemap-how",
+      "owner_campaign": "16",
+      "path": "sitemap.xml",
+      "base_blob_sha": "3c91a643271d02ea536f08a0378716d3e2aa34af",
+      "operation": "insert_url",
+      "key_or_anchor": "loc=https://confenge.com.br/conteudos/como-contratar-compatibilizacao-projetos/",
+      "expected_old": null,
+      "desired_new": "https://confenge.com.br/conteudos/como-contratar-compatibilizacao-projetos/",
+      "rationale": "Conteúdo decisório indexável de delimitação de escopo.",
+      "acceptance_test": "sitemap.xml contém a loc exatamente uma vez."
+    },
+    {
+      "change_id": "04-sitemap-hygiene-locs",
+      "owner_campaign": "16",
+      "path": "data/organic/sitemap-hygiene.json",
+      "base_blob_sha": "9ca4f84ec634ba5142a222836bb580f17227fa2f",
+      "operation": "upsert_list",
+      "key_or_anchor": "locs",
+      "expected_old": null,
+      "desired_new": [
+        "https://confenge.com.br/compatibilizacao-projetos-engenharia/",
+        "https://confenge.com.br/conteudos/quando-compatibilizar-projetos/",
+        "https://confenge.com.br/conteudos/como-contratar-compatibilizacao-projetos/"
+      ],
+      "rationale": "Higiene deve acompanhar as locs novas; regenerar o relatório, não editar contagens à mão se o gerador for a fonte.",
+      "acceptance_test": "as três locs aparecem em locs; url_count acompanha o gerador."
+    },
+    {
+      "change_id": "04-interface-coverage",
+      "owner_campaign": "16",
+      "path": "data/quality/interface-coverage-policy.json",
+      "base_blob_sha": "6a316292f509408e50345a1774b00459c9ea2adf",
+      "operation": "upsert",
+      "key_or_anchor": "lighthouse.pages representative for engineering-projects-coordination-clash",
+      "expected_old": null,
+      "desired_new": {
+        "family_id": "engineering-projects-coordination-clash",
+        "route": "/compatibilizacao-projetos-engenharia/",
+        "reason": "single-route commercial destination for interface conferral with withheld-form fallbacks"
+      },
+      "rationale": "Cobertura de interface da família nova, paralelo a quantitativos.",
+      "acceptance_test": "policy lista a rota; lighthouse.pages inclui /compatibilizacao-projetos-engenharia/ se essa lista for derivada da policy."
+    },
+    {
+      "change_id": "04-hub-conteudos-links",
+      "owner_campaign": "09",
+      "path": "conteudos/index.html",
+      "base_blob_sha": "ae9dd30258751f478352ccf51b95b5750a21df4f",
+      "operation": "insert_links",
+      "key_or_anchor": "hub listing for engineering coordination contents",
+      "expected_old": null,
+      "desired_new": {
+        "links": [
+          { "href": "/conteudos/quando-compatibilizar-projetos/", "label": "Quando compatibilizar projetos" },
+          { "href": "/conteudos/como-contratar-compatibilizacao-projetos/", "label": "Como contratar compatibilização de projetos" }
+        ],
+        "do_not_edit": ["/servicos/", "revisao page"]
+      },
+      "rationale": "INB-09 é dono dos hubs. As páginas já existem neste produtor; o hub precisa apontá-las sem UTM. Não editar /servicos/ nem a página de revisão.",
+      "acceptance_test": "conteudos/index.html aponta para as duas rotas; nenhum link usa utm_; /servicos/ intacto neste diff de 04."
+    },
+    {
+      "change_id": "04-intake-context-02",
+      "owner_campaign": "02",
+      "path": "netlify/functions/adaptive-intake-config.cjs",
+      "base_blob_sha": "5e5e3b0534ed86f81e74a5f3edb6fec04932fa54",
+      "operation": "upsert",
+      "key_or_anchor": "intake_context=project_coordination",
+      "expected_old": null,
+      "desired_new": {
+        "intake_context": "project_coordination",
+        "need_default": "obra_edificacao_ou_documentacao",
+        "optional_fields": ["disciplinas", "fase"],
+        "upload": false,
+        "incomplete_ok": true
+      },
+      "rationale": "Quando a autoridade deixar WITHHELD, o formulário pode nascer com contexto da rota. Até lá a landing usa os três canais diretos já funcionais. 04 não reconstrói o handler.",
+      "acceptance_test": "config?intake_context=project_coordination não exige lista completa nem upload; CTA atual de WhatsApp/e-mail/telefone permanece válido."
+    }
+  ]
+}
