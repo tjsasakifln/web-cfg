@@ -20,7 +20,17 @@
     "scripts/organic/tests/test_inb08_owned_routes.py",
     "docs/campaigns/inb-20260911/08/preserve-gap-delta.md",
     "docs/campaigns/inb-20260911/08/shared-changes.json",
-    "docs/campaigns/inb-20260911/08/handoff.json"
+    "docs/campaigns/inb-20260911/08/handoff.json",
+    "data/bofu-dominance/frozen-specs/hashes.json",
+    "data/bofu-dominance/frozen-specs/snapshots.json",
+    "data/bofu-dominance/frozen-specs/specs/medicoes-glosas-obras-publicas.json",
+    "data/bofu-dominance/frozen-specs/specs/aditivos-obras-publicas.json",
+    "data/bofu-dominance/frozen-specs/patches/medicoes-glosas-obras-publicas.patch.txt",
+    "data/bofu-dominance/frozen-specs/patches/aditivos-obras-publicas.patch.txt",
+    "docs/seo/bofu-dominance/frozen-specs/medicoes-glosas-obras-publicas.md",
+    "docs/seo/bofu-dominance/frozen-specs/aditivos-obras-publicas.md",
+    "data/commercial/first-fold-measurements.v1.json",
+    "data/organic/single-commercial-route.v1.json"
   ],
   "unchanged_related_guides": [
     "conteudos/custos-indiretos-atraso-administracao-obra/index.html",
@@ -76,9 +86,59 @@
     }
   ],
   "shared_changes": "docs/campaigns/inb-20260911/08/shared-changes.json",
-  "tests": [],
+  "tests": [
+    {
+      "command": "python3 -m pytest scripts/organic/tests/test_inb08_owned_routes.py -q",
+      "exit_code": 0,
+      "subject_sha": "e87a0abe0fc360411927ba088122d94449525742",
+      "overlay_hashes": null
+    },
+    {
+      "command": "npm run test:page-contract-contratos",
+      "exit_code": 0,
+      "subject_sha": "e87a0abe0fc360411927ba088122d94449525742",
+      "overlay_hashes": null
+    },
+    {
+      "command": "python3 -m pytest scripts/organic/tests/test_sinapi_ctr.py scripts/organic/tests/test_cluster_medicao_originality.py scripts/editorial/tests/test_cfg10x_09_aditivo_ownership.py scripts/organic/tests/test_orcamento_cluster.py -q",
+      "exit_code": 0,
+      "subject_sha": "e87a0abe0fc360411927ba088122d94449525742",
+      "overlay_hashes": null
+    },
+    {
+      "command": "npm run test:copy-contract",
+      "exit_code": 0,
+      "subject_sha": "e87a0abe0fc360411927ba088122d94449525742",
+      "overlay_hashes": null
+    },
+    {
+      "command": "npm run inbound:gates",
+      "exit_code": 0,
+      "subject_sha": "e87a0abe0fc360411927ba088122d94449525742",
+      "overlay_hashes": null
+    },
+    {
+      "command": "npm run test:first-fold-contract",
+      "exit_code": 0,
+      "subject_sha": "e87a0abe0fc360411927ba088122d94449525742",
+      "overlay_hashes": null
+    },
+    {
+      "command": "npm run test:single-commercial-route",
+      "exit_code": 0,
+      "subject_sha": "e87a0abe0fc360411927ba088122d94449525742",
+      "overlay_hashes": null
+    },
+    {
+      "command": "python3 -m pytest tests/bofu_dominance/frozen_specs/test_frozen_specs.py tests/bofu_dominance/safe_execution/test_bofu_safe_execution.py -q",
+      "exit_code": 0,
+      "subject_sha": "e87a0abe0fc360411927ba088122d94449525742",
+      "overlay_hashes": null
+    }
+  ],
   "evidence_paths": [
-    "docs/campaigns/inb-20260911/08/preserve-gap-delta.md"
+    "docs/campaigns/inb-20260911/08/preserve-gap-delta.md",
+    "docs/campaigns/inb-20260911/08/shared-changes.json"
   ],
   "unresolved": [
     {
