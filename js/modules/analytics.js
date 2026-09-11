@@ -98,7 +98,7 @@
     tool_view: 1, web_vital: 1, whatsapp_click: 1, xray_complete: 1, xray_error: 1,
     xray_start: 1, xray_timeout: 1,
   };
-  const OBSERVED_ONLY_EVENTS = { qualified_lead: 1, pipeline: 1 };
+  const OBSERVED_ONLY_EVENTS = { qualified_lead: 1, pipeline: 1, handoff_accepted: 1 };
   const RETIRED_EVENTS = { conversion: 1, journey_nav_click: 1 };
   const ENVELOPE_ID_KEYS = {
     correlation_id: 1,

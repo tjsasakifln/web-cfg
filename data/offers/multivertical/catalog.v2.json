@@ -853,11 +853,7 @@
       ],
       "readiness": "WITHHELD",
       "wave_class": "WITHHELD_PROOF",
-      "source_issue": "#602",
-      "public_purchase_surfaces": [
-        "/revisao-tecnica-projetos-engenharia/",
-        "/projetos-complementares-engenharia/"
-      ]
+      "source_issue": "#602"
     },
     {
       "offer_id": "bim_coordination_clash_register",

@@ -629,7 +629,7 @@ const FIXTURE_MAP = {
   expect("html_direct_without_form", html.indexOf("id=\"acesso-direto\"") < html.indexOf("id=\"diagnostico\""));
   expect("html_no_withheld_compat", !html.includes("/compatibilizacao-revisao/"));
   expect("html_no_fixture_paths", !html.includes("/fixture/"));
-  expect("html_noindex_landing", /content="noindex,follow"/.test(html));
+  expect("html_noindex_landing", /content="index,follow"/.test(html) && !/content="noindex,follow"/.test(html));
   expect("html_not_webapplication", !/WebApplication/.test(html));
   expect("html_noscript_honest", /nenhum resultado personalizado é produzido/i.test(html));
   expect("html_noscript_no_fake_success", /não há sucesso de processamento/i.test(html));
