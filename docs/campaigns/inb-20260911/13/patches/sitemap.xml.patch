@@ -1,0 +1,12 @@
+--- a/sitemap.xml
++++ b/sitemap.xml
+@@ -218,6 +218,9 @@
+  <url>
+  <loc>https://confenge.com.br/imprensa/</loc>
+  </url>
++ <url>
++ <loc>https://confenge.com.br/inspecao-diagnostico-edificacoes/</loc>
++ </url>
+  <url>
+  <loc>https://confenge.com.br/medicoes-glosas-obras-publicas/</loc>
+  </url>

@@ -1,0 +1,10 @@
+--- a/scripts/pseo/public_artifact.py
++++ b/scripts/pseo/public_artifact.py
+@@ -42,6 +42,7 @@
+         "confianca",
+         "servicos",
+         "quantitativos-orcamento-obras",
++        "inspecao-diagnostico-edificacoes",
+         "triagem-tecnica",
+         "acompanhamento-contratos-obras",
+         "aditivos-obras-publicas",
