@@ -1,0 +1,369 @@
+{
+  "schema": "confenge.demonstrative-sample-descriptor/1.0",
+  "proof_id": "demo-private-project-pilot-2026-09",
+  "url": "/casos/demonstrativo-projeto-privado/",
+  "canonical": "https://confenge.com.br/casos/demonstrativo-projeto-privado/",
+  "type": "private_project_demonstrative_excerpt",
+  "origin": "demonstrative",
+  "revision": "R01",
+  "date_modified": "2026-09-11",
+  "label_pt_br": "exemplo demonstrativo",
+  "source_paths": [
+    "data/demonstrative/private-project-pilot/source.v1.json"
+  ],
+  "elements": [
+    {
+      "id": "W-01",
+      "type": "wall",
+      "sheet_ref": "PR-ARQ-R01"
+    },
+    {
+      "id": "W-02",
+      "type": "wall",
+      "sheet_ref": "PR-ARQ-R01"
+    },
+    {
+      "id": "W-03",
+      "type": "wall",
+      "sheet_ref": "PR-ARQ-R01"
+    },
+    {
+      "id": "W-04",
+      "type": "wall",
+      "sheet_ref": "PR-ARQ-R01"
+    },
+    {
+      "id": "SL-01",
+      "type": "floor",
+      "sheet_ref": "PR-ARQ-R01"
+    },
+    {
+      "id": "CL-01",
+      "type": "ceiling",
+      "sheet_ref": "PR-ARQ-R01"
+    },
+    {
+      "id": "D-01",
+      "type": "door",
+      "sheet_ref": "PR-ARQ-R01"
+    },
+    {
+      "id": "WN-01",
+      "type": "window",
+      "sheet_ref": "PR-ARQ-R01"
+    },
+    {
+      "id": "B-01",
+      "type": "beam",
+      "sheet_ref": "PR-EST-R00"
+    },
+    {
+      "id": "HS-01",
+      "type": "shaft",
+      "sheet_ref": "PR-HID-R00"
+    }
+  ],
+  "units": {
+    "length": "m",
+    "area": "m2",
+    "volume": "m3",
+    "count": "un",
+    "currency": "BRL"
+  },
+  "quantity_rows": [
+    {
+      "id": "Q-PISO-01",
+      "unit": "m2",
+      "quantity": "4.32",
+      "element_ids": [
+        "SL-01"
+      ],
+      "formula": "2.40*1.80",
+      "sheet_ref": "PR-ARQ-R01"
+    },
+    {
+      "id": "Q-PAR-01",
+      "unit": "m2",
+      "quantity": "19.60",
+      "element_ids": [
+        "W-01",
+        "W-02",
+        "W-03",
+        "W-04",
+        "D-01",
+        "WN-01"
+      ],
+      "formula": "sum(length*height)-openings>=0.50",
+      "sheet_ref": "PR-ARQ-R01"
+    },
+    {
+      "id": "Q-IMP-01",
+      "unit": "m2",
+      "quantity": "6.84",
+      "element_ids": [
+        "SL-01",
+        "W-01",
+        "W-02",
+        "W-03",
+        "W-04"
+      ],
+      "formula": "4.32+8.40*0.30",
+      "sheet_ref": "PR-ARQ-R01"
+    },
+    {
+      "id": "Q-CTR-01",
+      "unit": "m3",
+      "quantity": "0.1296",
+      "element_ids": [
+        "SL-01"
+      ],
+      "formula": "4.32*0.03",
+      "sheet_ref": "PR-ARQ-R01"
+    },
+    {
+      "id": "Q-PRT-01",
+      "unit": "un",
+      "quantity": "1",
+      "element_ids": [
+        "D-01"
+      ],
+      "formula": "count(D-01)",
+      "sheet_ref": "PR-ARQ-R01"
+    },
+    {
+      "id": "Q-JAN-01",
+      "unit": "un",
+      "quantity": "1",
+      "element_ids": [
+        "WN-01"
+      ],
+      "formula": "count(WN-01)",
+      "sheet_ref": "PR-ARQ-R01"
+    },
+    {
+      "id": "Q-ROD-01",
+      "unit": "m",
+      "quantity": "7.60",
+      "element_ids": [
+        "D-01",
+        "W-01",
+        "W-02",
+        "W-03",
+        "W-04"
+      ],
+      "formula": "8.40-0.80",
+      "sheet_ref": "PR-ARQ-R01"
+    }
+  ],
+  "budget_rows": [
+    {
+      "id": "ORC-PISO-01",
+      "quantity_id": "Q-PISO-01",
+      "unit": "m2",
+      "quantity": "4.32",
+      "amount": "367.20",
+      "price_class": "hypothetical",
+      "element_ids": [
+        "SL-01"
+      ]
+    },
+    {
+      "id": "ORC-PAR-01",
+      "quantity_id": "Q-PAR-01",
+      "unit": "m2",
+      "quantity": "19.60",
+      "amount": "1803.20",
+      "price_class": "hypothetical",
+      "element_ids": [
+        "W-01",
+        "W-02",
+        "W-03",
+        "W-04",
+        "D-01",
+        "WN-01"
+      ]
+    },
+    {
+      "id": "ORC-IMP-01",
+      "quantity_id": "Q-IMP-01",
+      "unit": "m2",
+      "quantity": "6.84",
+      "amount": "328.32",
+      "price_class": "hypothetical",
+      "element_ids": [
+        "SL-01",
+        "W-01",
+        "W-02",
+        "W-03",
+        "W-04"
+      ]
+    },
+    {
+      "id": "ORC-CTR-01",
+      "quantity_id": "Q-CTR-01",
+      "unit": "m3",
+      "quantity": "0.1296",
+      "amount": "54.43",
+      "price_class": "hypothetical",
+      "element_ids": [
+        "SL-01"
+      ]
+    },
+    {
+      "id": "ORC-PRT-01",
+      "quantity_id": "Q-PRT-01",
+      "unit": "un",
+      "quantity": "1",
+      "amount": "890.00",
+      "price_class": "hypothetical",
+      "element_ids": [
+        "D-01"
+      ]
+    },
+    {
+      "id": "ORC-JAN-01",
+      "quantity_id": "Q-JAN-01",
+      "unit": "un",
+      "quantity": "1",
+      "amount": "640.00",
+      "price_class": "hypothetical",
+      "element_ids": [
+        "WN-01"
+      ]
+    },
+    {
+      "id": "ORC-ROD-01",
+      "quantity_id": "Q-ROD-01",
+      "unit": "m",
+      "quantity": "7.60",
+      "amount": "167.20",
+      "price_class": "hypothetical",
+      "element_ids": [
+        "D-01",
+        "W-01",
+        "W-02",
+        "W-03",
+        "W-04"
+      ]
+    }
+  ],
+  "budget_subtotal": "4250.35",
+  "price_class": "hypothetical",
+  "coordination_findings": [
+    {
+      "id": "CF-GEO-01",
+      "kind": "geometric",
+      "state": "resolved_in_R01",
+      "element_ids": [
+        "WN-01",
+        "B-01",
+        "W-02"
+      ],
+      "proven_failure": true
+    },
+    {
+      "id": "CF-INFO-01",
+      "kind": "missing_information",
+      "state": "information_requested",
+      "element_ids": [
+        "HS-01",
+        "W-04"
+      ],
+      "proven_failure": false
+    }
+  ],
+  "review_findings": [
+    {
+      "id": "RF-01",
+      "document_ref": "PR-ARQ-R00",
+      "related_finding_id": "CF-GEO-01",
+      "check_kind": "arithmetic_documental_coherence",
+      "element_ids": [
+        "WN-01",
+        "B-01"
+      ]
+    },
+    {
+      "id": "RF-02",
+      "document_ref": "PR-HID-R00",
+      "related_finding_id": "CF-INFO-01",
+      "check_kind": "documental_coherence",
+      "element_ids": [
+        "HS-01"
+      ]
+    }
+  ],
+  "named_totals": {
+    "floor_area_m2": "4.32",
+    "wall_net_m2": "19.60",
+    "waterproofing_m2": "6.84",
+    "screed_m3": "0.1296",
+    "skirting_m": "7.60",
+    "budget_subtotal_brl": "4250.35",
+    "r00_overlap_m": "0.10",
+    "r01_clearance_m": "0.10",
+    "window_head_r00_m": "2.30",
+    "window_head_r01_m": "2.10",
+    "beam_soffit_m": "2.20",
+    "window_area_r01_m2": "0.56",
+    "door_area_m2": "1.68"
+  },
+  "assets": [
+    {
+      "id": "html",
+      "path": "casos/demonstrativo-projeto-privado/index.html",
+      "url": "/casos/demonstrativo-projeto-privado/",
+      "type": "html"
+    },
+    {
+      "id": "quantitativos-csv",
+      "path": "casos/demonstrativo-projeto-privado/data/quantitativos.csv",
+      "url": "/casos/demonstrativo-projeto-privado/data/quantitativos.csv",
+      "type": "csv"
+    },
+    {
+      "id": "orcamento-csv",
+      "path": "casos/demonstrativo-projeto-privado/data/orcamento.csv",
+      "url": "/casos/demonstrativo-projeto-privado/data/orcamento.csv",
+      "type": "csv"
+    },
+    {
+      "id": "coordenacao-csv",
+      "path": "casos/demonstrativo-projeto-privado/data/coordenacao.csv",
+      "url": "/casos/demonstrativo-projeto-privado/data/coordenacao.csv",
+      "type": "csv"
+    },
+    {
+      "id": "revisao-csv",
+      "path": "casos/demonstrativo-projeto-privado/data/revisao.csv",
+      "url": "/casos/demonstrativo-projeto-privado/data/revisao.csv",
+      "type": "csv"
+    },
+    {
+      "id": "planta-r00",
+      "path": "casos/demonstrativo-projeto-privado/assets/planta-r00.svg",
+      "url": "/casos/demonstrativo-projeto-privado/assets/planta-r00.svg",
+      "type": "svg"
+    },
+    {
+      "id": "planta-r01",
+      "path": "casos/demonstrativo-projeto-privado/assets/planta-r01.svg",
+      "url": "/casos/demonstrativo-projeto-privado/assets/planta-r01.svg",
+      "type": "svg"
+    },
+    {
+      "id": "elevacao-leste-r00",
+      "path": "casos/demonstrativo-projeto-privado/assets/elevacao-leste-r00.svg",
+      "url": "/casos/demonstrativo-projeto-privado/assets/elevacao-leste-r00.svg",
+      "type": "svg"
+    },
+    {
+      "id": "elevacao-leste-r01",
+      "path": "casos/demonstrativo-projeto-privado/assets/elevacao-leste-r01.svg",
+      "url": "/casos/demonstrativo-projeto-privado/assets/elevacao-leste-r01.svg",
+      "type": "svg"
+    }
+  ],
+  "review_check_kind": "arithmetic_documental_coherence",
+  "consumer_rule_pt_br": "Ler quantity_rows, coordination_findings, review_findings e assets. Não inventar subtotais. Mudança geométrica exige regenerar os extratos."
+}

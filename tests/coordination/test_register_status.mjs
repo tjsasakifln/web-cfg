@@ -7,6 +7,7 @@ import {
   conferralState,
   displayEstado,
   loadPublicRegister,
+  mapInb06Consumption,
   renderFindingHtml,
   PUBLIC_ESTADO,
 } from "../../scripts/coordination/interference_register.mjs";
@@ -14,6 +15,7 @@ import {
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const PAGE = path.join(root, "compatibilizacao-projetos-engenharia/index.html");
 const FIXTURE = path.join(root, "tests/coordination/fixtures/pending-finding.json");
+const INB06 = path.join(root, "tests/coordination/fixtures/inb06-consumption.v1.json");
 
 function clone(value) {
   return JSON.parse(JSON.stringify(value));
@@ -23,25 +25,54 @@ function visible(html) {
   return String(html).replace(/<script[\s\S]*?<\/script>/gi, " ").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
 }
 
-test("shipped page finding stays pending after detection-only", () => {
+function shippedFinding(id) {
+  const html = fs.readFileSync(PAGE, "utf8");
+  const re = new RegExp(`<article class="coord-finding"[^>]*data-finding-id="${id}"[\\s\\S]*?</article>`);
+  return html.match(re)?.[0] || "";
+}
+
+test("shipped page consumes CF-GEO-01 from the INB-06 piloto and stays pending after detection", () => {
   const record = loadPublicRegister(root);
+  assert.equal(record.finding.id, "CF-GEO-01");
+  assert.equal(record.source, "inb06");
   assert.equal(record.finding.detection, "detected");
   assert.equal(record.finding.correction_status, "pending");
+  assert.equal(record.finding.provider_state, "resolved_in_R01");
   const estado = displayEstado(record.finding, record.live_documents);
   assert.equal(estado.code, "pending_author_adjustment");
   assert.equal(estado.resolved, false);
+  assert.equal(estado.withheld_invalid_resolution, true);
   assert.equal(estado.label, PUBLIC_ESTADO.pending_author_adjustment);
-  assert.match(estado.label, /pendente/i);
   assert.doesNotMatch(estado.label, /corrigid|resolvid/i);
 
+  const finding = shippedFinding("CF-GEO-01");
+  assert.ok(finding, "shipped page must contain CF-GEO-01");
+  assert.match(finding, /data-detection="detected"/);
+  assert.match(finding, /data-estado="pending_author_adjustment"/);
+  assert.match(finding, /data-resolved="false"/);
+  assert.match(finding, /Registrada — ajuste pendente do autor/);
+  assert.match(finding, /href="\/casos\/demonstrativo-projeto-privado\/#CF-GEO-01"/);
+  assert.doesNotMatch(finding, /Corrigid|correção resolvida|resolvido em R01/i);
   const html = fs.readFileSync(PAGE, "utf8");
-  const finding = html.match(/<article class="coord-finding"[\s\S]*?<\/article>/);
-  assert.ok(finding, "shipped page must contain the finding article");
-  assert.match(finding[0], /data-detection="detected"/);
-  assert.match(finding[0], /data-estado="pending_author_adjustment"/);
-  assert.match(finding[0], /data-resolved="false"/);
-  assert.match(finding[0], /Registrada — ajuste pendente do autor/);
-  assert.doesNotMatch(finding[0], /Corrigid|correção resolvida|resolvida/i);
+  assert.equal(html.includes("INT-DEM-001"), false);
+});
+
+test("INB-06 resolved_in_R01 does not resolve a finding conferred against R00", () => {
+  const consumption = JSON.parse(fs.readFileSync(INB06, "utf8"));
+  assert.equal(consumption.coordination_findings[0].id, "CF-GEO-01");
+  assert.equal(consumption.coordination_findings[0].state, "resolved_in_R01");
+  const mapped = mapInb06Consumption(consumption);
+  assert.equal(mapped.finding.id, "CF-GEO-01");
+  assert.equal(mapped.finding.correction_status, "pending");
+  assert.equal(mapped.finding.correction_designed, false);
+  assert.equal(mapped.finding.author_acceptance.accepted, false);
+  assert.deepEqual(mapped.finding.conferred_against, [
+    { document_id: "PR-ARQ", revision: "R00" },
+    { document_id: "PR-EST", revision: "R00" },
+  ]);
+  const estado = displayEstado(mapped.finding, mapped.live_documents);
+  assert.equal(estado.resolved, false);
+  assert.equal(estado.code, "pending_author_adjustment");
 });
 
 test("regenerating the finding html does not promote pending to resolved", () => {
@@ -52,40 +83,52 @@ test("regenerating the finding html does not promote pending to resolved", () =>
   assert.match(first, /data-estado="pending_author_adjustment"/);
   assert.match(second, /data-resolved="false"/);
   const html = fs.readFileSync(PAGE, "utf8");
-  assert.match(html, /data-finding-id="INT-DEM-001"/);
+  assert.match(html, /data-finding-id="CF-GEO-01"/);
   assert.match(html, /data-estado-label="pending_author_adjustment"/);
 });
 
-test("same element, new document revision is not conferred against the new revision", () => {
+test("same element, PR-ARQ R00 to R01 is not conferred against the new revision", () => {
   const record = loadPublicRegister(root);
   const live = clone(record.live_documents);
-  const structural = live.find((row) => row.document_id === "EST-VIG-01");
-  assert.ok(structural, "public register must include the structural document");
-  assert.equal(structural.revision, "R03");
-  structural.revision = "R04";
+  const arq = live.find((row) => row.document_id === "PR-ARQ");
+  assert.ok(arq, "public register must include PR-ARQ");
+  assert.equal(arq.revision, "R00");
+  arq.revision = "R01";
 
   const conferral = conferralState(record.finding, live);
   assert.equal(conferral.stale, true);
-  assert.equal(conferral.document_id, "EST-VIG-01");
-  assert.equal(conferral.conferred_revision, "R03");
-  assert.equal(conferral.live_revision, "R04");
+  assert.equal(conferral.document_id, "PR-ARQ");
+  assert.equal(conferral.conferred_revision, "R00");
+  assert.equal(conferral.live_revision, "R01");
 
   const estado = displayEstado(record.finding, live);
   assert.equal(estado.code, "stale_revision");
   assert.equal(estado.resolved, false);
-  assert.match(estado.detail, /EST-VIG-01/);
-  assert.match(estado.detail, /R03/);
-  assert.match(estado.detail, /R04/);
+  assert.match(estado.detail, /PR-ARQ/);
+  assert.match(estado.detail, /R00/);
+  assert.match(estado.detail, /R01/);
   assert.match(estado.label, /Não conferida contra a revisão atual/);
   assert.match(estado.detail, /não foi conferido contra a revisão nova/);
-  assert.doesNotMatch(estado.detail, /foi conferido contra a revisão R04/);
 
   const rendered = renderFindingHtml(record, live);
   assert.match(rendered, /data-estado="stale_revision"/);
   assert.match(rendered, /Não conferida contra a revisão atual/);
-  assert.match(rendered, /R03 → R04/);
+  assert.match(rendered, /R00 → R01/);
   assert.doesNotMatch(rendered, /data-resolved="true"/);
-  assert.doesNotMatch(visible(rendered), /Corrigid/i);
+  assert.doesNotMatch(visible(rendered), /Corrigid|resolvido em R01/i);
+});
+
+test("CF-INFO-01 stays information requested and is not a geometric correction", () => {
+  const record = loadPublicRegister(root);
+  const info = (record.secondary_findings || []).find((row) => row.id === "CF-INFO-01");
+  assert.ok(info);
+  const estado = displayEstado(info, record.live_documents);
+  assert.equal(estado.resolved, false);
+  assert.equal(estado.code, "information_requested");
+  const shipped = shippedFinding("CF-INFO-01");
+  assert.match(shipped, /data-estado="information_requested"/);
+  assert.match(shipped, /Informação pedida — ajuste pendente do autor/);
+  assert.doesNotMatch(shipped, /data-resolved="true"/);
 });
 
 test("claimed resolved without author acceptance stays pending", () => {
@@ -127,18 +170,7 @@ test("mutation: a renderer that labels detection as Corrigido is rejected", () =
   assert.notEqual(mutated, honest);
   const shipped = fs.readFileSync(PAGE, "utf8");
   assert.equal(shipped.includes("Corrigido"), false);
-  assert.equal(/data-resolved="true"/.test(shipped), false);
+  assert.equal(/data-finding-id="CF-GEO-01"[^>]*data-resolved="true"/.test(shipped), false);
   const estado = displayEstado(record.finding, record.live_documents);
   assert.notEqual(estado.label, "Corrigido");
-});
-
-test("public register is didactic until an INB-06 overlay exists", () => {
-  const record = loadPublicRegister(root);
-  const overlayPresent = record.loaded_from !== "data/coordination/interference-register.v1.json";
-  if (!overlayPresent) {
-    assert.equal(record.source, "didactic_first_party");
-    const html = fs.readFileSync(PAGE, "utf8");
-    assert.match(html, /Exemplo demonstrativo\. Não é obra de cliente\./);
-    assert.doesNotMatch(html, /Fixture de teste/);
-  }
 });

@@ -35,6 +35,7 @@
 .coord-channels .channel-actions{align-items:stretch}
 .coord-channels .text-link{padding-inline:.25rem}
 .coord-finding{padding:1.35rem;border:1px solid var(--line);background:#fff}
+.coord-finding+.coord-finding{margin-top:1rem}
 .coord-finding-kicker{margin:0 0 .65rem;color:var(--muted);font-size:.92rem}
 .coord-finding h3{margin-top:0}
 .coord-finding-dl{display:grid;grid-template-columns:minmax(8rem,14rem) minmax(0,1fr);gap:.65rem 1.25rem;margin:0}
@@ -144,9 +145,9 @@
 <p class="section-lead">Detectar a interface não corrige o projeto. Projetar a correção e obter o aceite dos autores são atos seguintes, de responsáveis distintos.</p>
 </header>
 <div class="coord-grid">
-<article class="coord-card" data-finding-type="geometric_interference"><h3>Interferência geométrica</h3><p>Dois elementos ocupam o mesmo espaço, ou um atravessa o outro, nas plantas ou no modelo comparados.</p></article>
-<article class="coord-card" data-finding-type="requirement_incompatibility"><h3>Incompatibilidade de requisitos</h3><p>As soluções podem não se cruzar no espaço e mesmo assim não caberem juntas: pé-direito, vazão, carga de incêndio, acesso de manutenção ou outro requisito declarado.</p></article>
-<article class="coord-card" data-finding-type="dimensioning_review"><h3>Revisão de dimensionamento</h3><p>Conferir se uma viga, um duto ou uma prumada está dimensionada. Isso é revisão da disciplina, não o registro de interface desta compra.</p></article>
+<article class="coord-card" data-finding-type="geometric_interference"><h3>Interferência geométrica</h3><p>Dois elementos ocupam o mesmo espaço, ou um atravessa o outro. No piloto: CF-GEO-01, janela WN-01 × viga B-01 em R00.</p></article>
+<article class="coord-card" data-finding-type="requirement_incompatibility"><h3>Incompatibilidade de requisitos</h3><p>As soluções podem não se cruzar no espaço e mesmo assim faltar dado declarado. No piloto: CF-INFO-01, poço HS-01 sem vão interno.</p></article>
+<article class="coord-card" data-finding-type="dimensioning_review"><h3>Revisão de dimensionamento</h3><p>Conferir se uma viga está dimensionada. No piloto, a conferência geométrica de CF-GEO-01 não examina norma de dimensionamento. Isso é outra compra.</p></article>
 </div>
 </div>
 </section>
@@ -156,28 +157,50 @@
 <header class="section-head">
 <p class="eyebrow">Registro entregue</p>
 <h2 id="coord-register-title">Um apontamento concreto, com estado honesto.</h2>
-<p class="section-lead">Localização, elementos, documentos comparados, evidência, encaminhamento e estado. Registrar a interferência não projeta a correção e não fala em nome dos autores.</p>
+<p class="section-lead">Localização, elementos, documentos comparados, evidência, encaminhamento e estado. CF-GEO-01 foi conferida contra R00. A revisão R01 do piloto altera a verga; essa revisão não herda a conferência. Registrar a interferência não projeta a correção e não fala em nome dos autores.</p>
 </header>
-<article class="coord-finding" data-finding-id="INT-DEM-001" data-finding-type="geometric_interference" data-estado="pending_author_adjustment" data-resolved="false" data-detection="detected">
-<p class="coord-finding-kicker">Exemplo demonstrativo. Não é obra de cliente.</p>
-<h3>INT-DEM-001 · Interferência geométrica</h3>
+<article class="coord-finding" data-finding-id="CF-GEO-01" data-finding-type="geometric_interference" data-estado="pending_author_adjustment" data-resolved="false" data-detection="detected">
+<p class="coord-finding-kicker">Exemplo demonstrativo do <a href="/casos/demonstrativo-projeto-privado/#CF-GEO-01">piloto técnico</a>. Não é obra de cliente. Conferência presa a R00.</p>
+<h3>CF-GEO-01 · Interferência geométrica</h3>
 <dl class="coord-finding-dl">
 <dt>Localização</dt>
-<dd>Sanitário do 2º pavimento, eixo C/3, cota +6,80 m</dd>
+<dd>Parede leste W-02 do recorte de banheiro demonstrativo, eixo leste, verga WN-01 2,30 m / fundo B-01 2,20 m</dd>
 <dt>Elementos</dt>
-<dd><ul><li><strong>Tubulação de esgoto Ø100 mm da prumada do sanitário</strong> (hidrossanitário)</li><li><strong>Viga V-12 20 × 50 cm no eixo C</strong> (estrutural)</li></ul></dd>
+<dd><ul><li><strong>Janela WN-01 na parede leste W-02</strong> (arquitetônico)</li><li><strong>Viga B-01 no mesmo alinhamento leste</strong> (estrutural)</li><li><strong>Parede leste W-02</strong> (arquitetônico)</li></ul></dd>
 <dt>Interface</dt>
-<dd>A prumada de esgoto atravessa a alma da viga V-12 no cruzamento do eixo C/3, na cota +6,80 m.</dd>
+<dd>No estado original R00 a verga da janela WN-01 está em 2,30 m e o fundo da viga B-01 em 2,20 m: sobreposição de 0,10 m no eixo Z.</dd>
 <dt>Documentos e revisões comparados</dt>
-<dd><ul><li>Hidrossanitário — prumadas — PHS-PRUM-02, revisão R02, 2026-04-18</li><li>Estrutural — vigas do 2º pavimento — EST-VIG-01, revisão R03, 2026-05-02</li></ul></dd>
+<dd><ul><li>Arquitetônico — planta e elevação leste — PR-ARQ, revisão R00</li><li>Estrutural — viga B-01 — PR-EST, revisão R00</li></ul></dd>
 <dt>Evidência</dt>
-<dd>Sobreposição das plantas em PDF das revisões abaixo. A tubulação e a viga ocupam o mesmo espaço no cruzamento; não há furo, rebaixo ou desvio desenhado.</dd>
+<dd>Elevação leste do recorte demonstrativo em R00: faixas Z de WN-01 e B-01 se cruzam. A conferência é geométrica, sem exame de dimensionamento da viga.</dd>
 <dt>Possível consequência</dt>
-<dd>Na execução, a viga pode ser furada sem verificação, ou a prumada pode ser desviada no forro sem atualizar o hidrossanitário.</dd>
+<dd>Na execução a viga pode ser cortada ou o vão da janela reduzido sem o autor redesenhar a verga.</dd>
 <dt>Encaminhamento</dt>
-<dd>Encaminhar o apontamento aos autores: estrutural avalia furo ou rebaixo; hidrossanitário avalia desvio da prumada. Responsável pelo ajuste: autores das disciplinas. Papel de quem registra: registrar, localizar e encaminhar; não projetar a correção neste recorte.</dd>
+<dd>Encaminhar ao autor do recorte arquitetônico demonstrativo: avaliar rebaixar a verga e manter B-01 na cota original. Responsável pelo ajuste: autor do recorte arquitetônico demonstrativo. Papel de quem registra: registrar, localizar e encaminhar; não projetar a correção neste recorte.</dd>
 <dt>Estado</dt>
 <dd><strong data-estado-label="pending_author_adjustment">Registrada — ajuste pendente do autor</strong></dd>
+</dl>
+</article>
+<article class="coord-finding" data-finding-id="CF-INFO-01" data-finding-type="requirement_incompatibility" data-estado="information_requested" data-resolved="false" data-detection="detected">
+<p class="coord-finding-kicker">Exemplo demonstrativo do <a href="/casos/demonstrativo-projeto-privado/#CF-INFO-01">piloto técnico</a>. Pedido de informação, não falha comprovada.</p>
+<h3>CF-INFO-01 · Incompatibilidade de requisitos</h3>
+<dl class="coord-finding-dl">
+<dt>Localização</dt>
+<dd>Poço hidrossanitário HS-01 na parede oeste W-04, eixo oeste</dd>
+<dt>Elementos</dt>
+<dd><ul><li><strong>Poço HS-01</strong> (hidrossanitário)</li><li><strong>Parede oeste W-04</strong> (arquitetônico)</li></ul></dd>
+<dt>Interface</dt>
+<dd>O recorte declara o contorno externo 0,40 m × 0,40 m e deixa em branco vão livre interno e diâmetros de tubulação.</dd>
+<dt>Documentos e revisões comparados</dt>
+<dd><ul><li>Hidrossanitário — poço HS-01 — PR-HID, revisão R00</li></ul></dd>
+<dt>Evidência</dt>
+<dd>Campo do recorte vazio. Ausência de informação, não conformidade com norma não examinada.</dd>
+<dt>Possível consequência</dt>
+<dd>Dimensionar ou furar o poço sem o vão e os diâmetros declarados.</dd>
+<dt>Encaminhamento</dt>
+<dd>Pedir ao projetista hidrossanitário de origem as dimensões internas e os diâmetros. Enquanto esses dados não chegam, o item permanece pedido de informação, não falha comprovada. Responsável pelo ajuste: projetista hidrossanitário de origem. Papel de quem registra: registrar o pedido de informação; não converter a lacuna em falha comprovada.</dd>
+<dt>Estado</dt>
+<dd><strong data-estado-label="information_requested">Informação pedida — ajuste pendente do autor</strong></dd>
 </dl>
 </article>
 </div>
