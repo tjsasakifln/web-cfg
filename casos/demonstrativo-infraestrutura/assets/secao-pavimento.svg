@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 574 162" role="img" aria-labelledby="sec-title sec-desc">
+<title id="sec-title">Seção da faixa PV-01 · revisão R01</title>
+<desc id="sec-desc">Largura 7,00 m. Capa 0,04 m, base 0,12 m, sub-base 0,15 m. Volumes geométricos, não dimensionamento de pavimento. Exemplo demonstrativo, revisão R01.</desc>
+<rect x="56.0" y="28.0" width="490.0" height="11.2" fill="#334155" stroke="#0f172a"/>
+<text x="301.0" y="37.6" text-anchor="middle" font-size="11" fill="#f8fafc">capa 0,04 m · Q-CAP-01</text>
+<rect x="56.0" y="39.2" width="490.0" height="33.6" fill="#a8a29e" stroke="#0f172a"/>
+<text x="301.0" y="60.0" text-anchor="middle" font-size="11" fill="#0f172a">base 0,12 m · Q-BASE-01</text>
+<rect x="56.0" y="72.8" width="490.0" height="42.0" fill="#d6d3d1" stroke="#0f172a"/>
+<text x="301.0" y="97.8" text-anchor="middle" font-size="11" fill="#0f172a">sub-base 0,15 m · Q-SUB-01</text>
+<text x="301.0" y="148" text-anchor="middle" font-size="11" fill="#334155">7,00 m · revisão R01 · exemplo demonstrativo</text>
+</svg>

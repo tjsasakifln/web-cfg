@@ -1,1 +1,2 @@
-# POS-INB-20260911 tests.
+"""POS-INB-20260911 campaign tests."""
+

@@ -1,0 +1,199 @@
+{
+  "schema": "confenge.inbound-campaign-shared-changes/2.0",
+  "campaign_id": "08",
+  "prompt_version": "1.0.0",
+  "owner_campaign": "08",
+  "applier": "10",
+  "base_sha": "cb6facfaaf50aa8f1834aba43d0245e04cbea672",
+  "publication_state_requested": "INCLUDE_IN_RELEASE",
+  "notes_pt_br": "O exemplo está apto: fonte única, extratos, testes e descritor. Não é EXPANSION_PENDING. Não editar o demonstrativo privado nem usar este recorte para preencher o slot canônico de edificação (F02). Família casos já cobre o prefixo /casos/; sem este sitemap/hub o HTML commitado ainda pode ser descoberto.",
+  "changes": [
+    {
+      "change_id": "08-sitemap-xml-loc",
+      "owner_campaign": "10",
+      "path": "sitemap.xml",
+      "base_blob_sha": "99db2fcb21c70bd502940264979400794ed0e7df",
+      "operation": "insert_after",
+      "key_or_anchor": "<loc>https://confenge.com.br/casos/aditivo-art125-demonstrativo/</loc>",
+      "expected_old": " <url>\n <loc>https://confenge.com.br/casos/aditivo-art125-demonstrativo/</loc>\n <lastmod>2026-08-03</lastmod>\n </url>\n <url>\n <loc>https://confenge.com.br/casos/demonstrativo-projeto-privado/</loc>\n",
+      "desired_new": " <url>\n <loc>https://confenge.com.br/casos/aditivo-art125-demonstrativo/</loc>\n <lastmod>2026-08-03</lastmod>\n </url>\n <url>\n <loc>https://confenge.com.br/casos/demonstrativo-infraestrutura/</loc>\n <lastmod>2026-09-11</lastmod>\n </url>\n <url>\n <loc>https://confenge.com.br/casos/demonstrativo-projeto-privado/</loc>\n",
+      "rationale": "Rota demonstrativa indexável de 08; sitemap é arquivo central da 10.",
+      "acceptance_test": "sitemap.xml contém https://confenge.com.br/casos/demonstrativo-infraestrutura/ com lastmod 2026-09-11, entre aditivo e o recorte privado, uma vez."
+    },
+    {
+      "change_id": "08-sitemap-txt-loc",
+      "owner_campaign": "10",
+      "path": "sitemap.txt",
+      "base_blob_sha": "57660b0bc2f21f5f2c44ea8a1dd750e308c4ae4d",
+      "operation": "insert_after",
+      "key_or_anchor": "https://confenge.com.br/casos/aditivo-art125-demonstrativo/",
+      "expected_old": "https://confenge.com.br/casos/aditivo-art125-demonstrativo/\nhttps://confenge.com.br/casos/demonstrativo-projeto-privado/\n",
+      "desired_new": "https://confenge.com.br/casos/aditivo-art125-demonstrativo/\nhttps://confenge.com.br/casos/demonstrativo-infraestrutura/\nhttps://confenge.com.br/casos/demonstrativo-projeto-privado/\n",
+      "rationale": "Manter sitemap.txt alinhado ao xml, ordem alfabética entre filhos de /casos/.",
+      "acceptance_test": "sitemap.txt lista a loc uma vez, entre aditivo e demonstrativo-projeto-privado."
+    },
+    {
+      "change_id": "08-casos-hub-link",
+      "owner_campaign": "10",
+      "path": "casos/index.html",
+      "base_blob_sha": "57791b9eb223d90a4a3e33fd9d0d90d73cb479e6",
+      "operation": "insert_after",
+      "key_or_anchor": "/casos/demonstrativo-projeto-privado/",
+      "expected_old": "<li><a href=\"/casos/demonstrativo-projeto-privado/\"><strong>Demonstrativo: recorte de projeto privado</strong></a>, planta, elevação, quantitativos, orçamento, coordenação e revisão rotulados como exemplo didático, não como obra de cliente. Serviço correspondente: <a href=\"/revisao-tecnica-projetos-engenharia/\">revisão técnica de projetos</a>.</li>\n<li><a href=\"/casos/aditivo-art125-demonstrativo/\">",
+      "desired_new": "<li><a href=\"/casos/demonstrativo-projeto-privado/\"><strong>Demonstrativo: recorte de projeto privado</strong></a>, planta, elevação, quantitativos, orçamento, coordenação e revisão rotulados como exemplo didático, não como obra de cliente. Serviço correspondente: <a href=\"/revisao-tecnica-projetos-engenharia/\">revisão técnica de projetos</a>.</li>\n<li><a href=\"/casos/demonstrativo-infraestrutura/\"><strong>Demonstrativo: quantitativos e revisão para infraestrutura</strong></a>, faixa de acesso e trecho de drenagem de loteamento, com desenho, memória e planilha da mesma fonte. Dados ilustrativos, não servem para execução. Serviço correspondente: <a href=\"/quantitativos-orcamento-obras/\">quantitativos e orçamento</a>.</li>\n<li><a href=\"/casos/aditivo-art125-demonstrativo/\">",
+      "rationale": "Hub de casos precisa de link para o novo exemplo. Não substitui o recorte privado.",
+      "acceptance_test": "casos/index.html tem exatamente um href /casos/demonstrativo-infraestrutura/ no <main>, rotulado como demonstrativo, sem logo de cliente."
+    },
+    {
+      "change_id": "08-proof-registry-demonstrative-page",
+      "owner_campaign": "10",
+      "path": "data/commercial/real-proof-registry.v1.json",
+      "base_blob_sha": "0d9519fe8c259dcb5a4ab7938c8b3df6423c0d66",
+      "operation": "upsert",
+      "key_or_anchor": "synthetic_surfaces.demonstrative_pages",
+      "expected_old": [
+        "casos/aditivo-art125-demonstrativo/index.html",
+        "casos/demonstrativo-projeto-privado/index.html",
+        "casos/index.html",
+        "casos/medicao-glosa-demonstrativo/index.html"
+      ],
+      "desired_new": [
+        "casos/aditivo-art125-demonstrativo/index.html",
+        "casos/demonstrativo-infraestrutura/index.html",
+        "casos/demonstrativo-projeto-privado/index.html",
+        "casos/index.html",
+        "casos/medicao-glosa-demonstrativo/index.html"
+      ],
+      "rationale": "A nova página é superfície demonstrativa rotulada. Sem esta lista, as posições de rótulo não são exigidas na rota. Não inventar proof_id PUBLISHED de cliente.",
+      "acceptance_test": "npm run test:real-proof-registry passa com casos/demonstrativo-infraestrutura/index.html em demonstrative_pages e data-permission-class=demonstrativo na página."
+    },
+    {
+      "change_id": "08-public-artifact-manifest-route",
+      "owner_campaign": "10",
+      "path": "seo/PUBLIC-ARTIFACT-MANIFEST.json",
+      "base_blob_sha": "739fb6743cec2b5406a6a31c5fb7ef20bd069dd9",
+      "operation": "insert_after",
+      "key_or_anchor": "html_routes:/casos/aditivo-art125-demonstrativo/",
+      "expected_old": "    \"/casos/aditivo-art125-demonstrativo/\",\n    \"/casos/demonstrativo-projeto-privado/\",\n",
+      "desired_new": "    \"/casos/aditivo-art125-demonstrativo/\",\n    \"/casos/demonstrativo-infraestrutura/\",\n    \"/casos/demonstrativo-projeto-privado/\",\n",
+      "also_set": {
+        "html_route_count": 229
+      },
+      "rationale": "O inventário público precisa listar a rota nova e incrementar html_route_count de 228 para 229.",
+      "acceptance_test": "html_routes contém /casos/demonstrativo-infraestrutura/ uma vez e html_route_count é o anterior mais um."
+    },
+    {
+      "change_id": "08-cases-json-surface",
+      "owner_campaign": "10",
+      "path": "data/site/cases.json",
+      "base_blob_sha": "205252e7618165b64b73728c9c11d533a3d5ef40",
+      "operation": "insert_after",
+      "key_or_anchor": "published_surfaces.path:/casos/aditivo-art125-demonstrativo/",
+      "expected_old": {
+        "path": "/casos/aditivo-art125-demonstrativo/",
+        "permission_class": "demonstrativo",
+        "client_authorized": false,
+        "public_status": "DEMONSTRATIVE"
+      },
+      "desired_new": [
+        {
+          "path": "/casos/aditivo-art125-demonstrativo/",
+          "permission_class": "demonstrativo",
+          "client_authorized": false,
+          "public_status": "DEMONSTRATIVE"
+        },
+        {
+          "path": "/casos/demonstrativo-infraestrutura/",
+          "permission_class": "demonstrativo",
+          "client_authorized": false,
+          "public_status": "DEMONSTRATIVE"
+        }
+      ],
+      "rationale": "Superfície demonstrativa, não case de cliente.",
+      "acceptance_test": "published_surfaces inclui /casos/demonstrativo-infraestrutura/ com permission_class demonstrativo e client_authorized false."
+    },
+    {
+      "change_id": "08-npm-directed-test",
+      "owner_campaign": "10",
+      "path": "package.json",
+      "base_blob_sha": "b353c16116e6b2ff6addfc220ba531ffa7f28a4e",
+      "operation": "upsert",
+      "key_or_anchor": "scripts.test:infrastructure-demonstrative",
+      "expected_old": null,
+      "desired_new": "python3 -m pytest tests/demonstrative_infrastructure/test_infrastructure_pilot.py tests/pos-inb-20260911/08/test_gates.py -q",
+      "rationale": "Teste dirigido da 08. Não remover checks existentes. Invocável hoje com pytest direto.",
+      "acceptance_test": "O comando sai 0 no tree da 08 e recusa unidade incompatível, revisão divergente e recurso omitido."
+    },
+    {
+      "change_id": "08-package-include-public-assets",
+      "owner_campaign": "03",
+      "path": "data/demonstrative/infrastructure-pilot/consumption.v1.json",
+      "base_blob_sha": null,
+      "operation": "consume",
+      "key_or_anchor": "assets",
+      "expected_old": null,
+      "desired_new": [
+        "casos/demonstrativo-infraestrutura/index.html",
+        "casos/demonstrativo-infraestrutura/data/quantitativos.csv",
+        "casos/demonstrativo-infraestrutura/data/orcamento.csv",
+        "casos/demonstrativo-infraestrutura/data/coordenacao.csv",
+        "casos/demonstrativo-infraestrutura/data/revisao.csv",
+        "casos/demonstrativo-infraestrutura/assets/planta-r00.svg",
+        "casos/demonstrativo-infraestrutura/assets/planta-r01.svg",
+        "casos/demonstrativo-infraestrutura/assets/perfil-drenagem-r00.svg",
+        "casos/demonstrativo-infraestrutura/assets/perfil-drenagem-r01.svg",
+        "casos/demonstrativo-infraestrutura/assets/secao-pavimento.svg"
+      ],
+      "rationale": "A página anuncia downloads. 03 inclui esses arquivos no pacote público. Não gerar amostras. Não copiar fixtures de teste. F01 do recorte privado permanece da 02/03; este pedido é só o recorte de infraestrutura.",
+      "acceptance_test": "Cada path de consumption.assets existe no artefato público; omitir um CSV ou SVG do pacote reprova o verificador de 03."
+    },
+    {
+      "change_id": "08-quantitativos-sibling-link",
+      "owner_campaign": "02",
+      "path": "quantitativos-orcamento-obras/index.html",
+      "base_blob_sha": "70046f8f0d390d12ac921e420593b036d0b2864e",
+      "operation": "insert_after",
+      "key_or_anchor": "id=amostra-quantitativos awaiting-canonical-excerpt",
+      "expected_old": "<p>Os números conferíveis desta trilha entram aqui quando o demonstrativo canônico da CONFENGE estiver publicado. Até lá, o método já é este: elemento, critério, cálculo, quantidade e item de planilha.</p>",
+      "desired_new": "<p>Os números conferíveis desta trilha entram aqui quando o demonstrativo canônico da CONFENGE estiver publicado. Até lá, o método já é este: elemento, critério, cálculo, quantidade e item de planilha.</p>\n<p>Há um segundo recorte ilustrativo de outra natureza de obra em <a href=\"/casos/demonstrativo-infraestrutura/\">exemplo demonstrativo de quantitativos e revisão para infraestrutura</a>. Ele não substitui o demonstrativo de edificação privada nem preenche o slot canônico desta trilha.</p>",
+      "rationale": "Pedido de link da 08. Não usar o exemplo de infraestrutura para encobrir a integração incompleta do demonstrativo privado (F02). A 02 continua dona do slot canônico.",
+      "acceptance_test": "A página tem href /casos/demonstrativo-infraestrutura/ e data-sample-trail-slot=canonical não aponta para o recorte de infraestrutura."
+    },
+    {
+      "change_id": "08-revisao-sibling-link",
+      "owner_campaign": "02",
+      "path": "revisao-tecnica-projetos-engenharia/index.html",
+      "base_blob_sha": "d5690e6007826ca8218a81c7b61d01d9961e9c8f",
+      "operation": "insert_after",
+      "key_or_anchor": "data-extract-canonical-source=inb-06",
+      "expected_old": "<p class=\"section-lead rv-note\" data-extract-kind=\"demonstrative\" data-extract-canonical-source=\"inb-06\">SELECT do demonstrativo <a href=\"/casos/demonstrativo-projeto-privado/\">recorte de banheiro R01</a> e do <a href=\"/casos/demonstrativo-projeto-privado/data/revisao.csv\">revisao.csv</a>. Exemplo demonstrativo, não é trabalho de cliente, não é conteúdo aprovado pelo fundador como case e não é parecer para executar obra. Item de checklist não respondido e norma não examinada não viram erro do projeto.</p>",
+      "desired_new": "<p class=\"section-lead rv-note\" data-extract-kind=\"demonstrative\" data-extract-canonical-source=\"inb-06\">SELECT do demonstrativo <a href=\"/casos/demonstrativo-projeto-privado/\">recorte de banheiro R01</a> e do <a href=\"/casos/demonstrativo-projeto-privado/data/revisao.csv\">revisao.csv</a>. Exemplo demonstrativo, não é trabalho de cliente, não é conteúdo aprovado pelo fundador como case e não é parecer para executar obra. Item de checklist não respondido e norma não examinada não viram erro do projeto.</p>\n<p>O recorte de infraestrutura em <a href=\"/casos/demonstrativo-infraestrutura/#revisao\">exemplo demonstrativo de quantitativos e revisão para infraestrutura</a> mostra a mesma conferência em acesso viário e drenagem. Não substitui o recorte de banheiro.</p>",
+      "rationale": "Link irmão. Não reescrever o parágrafo do recorte privado (F04 permanece da 02). A 08 só pede o segundo recorte. O texto novo não menciona SELECT nem fundador.",
+      "acceptance_test": "A página tem href /casos/demonstrativo-infraestrutura/#revisao além do recorte privado."
+    },
+    {
+      "change_id": "08-compatibilizacao-sibling-link",
+      "owner_campaign": "02",
+      "path": "compatibilizacao-projetos-engenharia/index.html",
+      "base_blob_sha": "35c6c8477c3511e5dd31839ace8d49068b0e697f",
+      "operation": "insert_after",
+      "key_or_anchor": "/casos/demonstrativo-projeto-privado/#CF-INFO-01",
+      "expected_old": "<p class=\"coord-finding-kicker\">Exemplo demonstrativo do <a href=\"/casos/demonstrativo-projeto-privado/#CF-INFO-01\">piloto técnico</a>. Pedido de informação, não falha comprovada.</p>",
+      "desired_new": "<p class=\"coord-finding-kicker\">Exemplo demonstrativo do <a href=\"/casos/demonstrativo-projeto-privado/#CF-INFO-01\">piloto técnico</a>. Pedido de informação, não falha comprovada.</p>\n<p class=\"coord-finding-kicker\">Há um segundo recorte em <a href=\"/casos/demonstrativo-infraestrutura/#CF-GEO-01\">cota de conexão de drenagem</a>. Não substitui o piloto de edificação.</p>",
+      "rationale": "Link irmão para o apontamento geométrico de infraestrutura. Não alterar as fontes do demonstrativo privado.",
+      "acceptance_test": "A página tem href /casos/demonstrativo-infraestrutura/#CF-GEO-01 e preserva os hrefs do recorte privado."
+    },
+    {
+      "change_id": "08-parcerias-kit-sample",
+      "owner_campaign": "05",
+      "path": "parcerias-engenharia/index.html",
+      "base_blob_sha": "aa7762f27a20908afdfb8fa47e5cb6a4df60ed77",
+      "operation": "insert_after",
+      "key_or_anchor": "data-cta-id=kit-orcamento-amostra",
+      "expected_old": "<p><a data-cta-id=\"kit-orcamento-amostra\" href=\"/casos/modelo-base-quantitativa-canonica/\">Ver o demonstrativo de base quantitativa</a></p>",
+      "desired_new": "<p><a data-cta-id=\"kit-orcamento-amostra\" href=\"/casos/modelo-base-quantitativa-canonica/\">Ver o demonstrativo de base quantitativa</a></p>\n<p><a data-cta-id=\"kit-orcamento-amostra-infra\" href=\"/casos/demonstrativo-infraestrutura/\">Ver o exemplo demonstrativo de infraestrutura e loteamentos</a></p>",
+      "rationale": "O kit de orçamento ganha amostra de outra natureza de obra. Não substituir a base quantitativa nem o recorte privado.",
+      "acceptance_test": "parcerias-engenharia/index.html tem kit-orcamento-amostra-infra apontando para /casos/demonstrativo-infraestrutura/ e preserva kit-orcamento-amostra."
+    }
+  ]
+}

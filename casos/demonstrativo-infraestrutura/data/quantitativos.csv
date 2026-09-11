@@ -1,0 +1,9 @@
+# exemplo demonstrativo; revisao=R01
+id;descricao;unidade;quantidade;elementos;prancha;formula;desconto;revisao
+Q-PAV-01;Área da faixa de acesso PV-01;m2;280.00;PV-01;INF-PV-R01;40.00*7.00;Área da faixa = comprimento do estaqueamento vezes largura declarada. Não há desconto de boca de lobo na área de pavimento deste recorte.;R01
+Q-SUB-01;Volume geométrico da sub-base;m3;42.00;PV-01;INF-PV-R01;280.00*0.15;Volume de cada camada = área da faixa vezes espessura declarada. Espessura não é dimensionamento de pavimento.;R01
+Q-BASE-01;Volume geométrico da base;m3;33.60;PV-01;INF-PV-R01;280.00*0.12;Volume de cada camada = área da faixa vezes espessura declarada. Espessura não é dimensionamento de pavimento.;R01
+Q-CAP-01;Volume geométrico da capa de rolamento;m3;11.20;PV-01;INF-PV-R01;280.00*0.04;Volume de cada camada = área da faixa vezes espessura declarada. Espessura não é dimensionamento de pavimento.;R01
+Q-TUB-01;Comprimento geométrico do trecho DR-01;m;20.00;DR-01 MH-01 MH-02;INF-DR-R01;30.00-10.00;"Comprimento do trecho = diferença de estaqueamento entre poços. Diâmetro identifica o item; não entra no volume hidráulico.";R01
+Q-PV-01;Poços de visita do recorte;un;2;MH-01 MH-02;INF-DR-R01;count(MH-01,MH-02);não se aplica;R01
+Q-BOC-01;Boca de lobo do recorte;un;1;IN-01;INF-DR-R00;count(IN-01);"contagem do elemento declarado; diâmetro e cota permanecem ausentes";R01
