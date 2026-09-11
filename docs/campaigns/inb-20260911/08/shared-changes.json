@@ -1,0 +1,82 @@
+{
+  "schema": "confenge.inbound-campaign-shared-changes/2.0",
+  "campaign_set": "INB-20260911",
+  "campaign_id": "08",
+  "prompt_version": "2.0.0",
+  "base_sha": "8f508544835490ec635d02517bce0207c6f8e426",
+  "notes": "08 recaptura no próprio branch os hashes dos dois HTML de pilar que possui, para os testes locais passarem. 16 reconcilia semanticamente se outro produtor recapturar o mesmo arquivo. Não aplicar proposed-replacements.json.",
+  "changes": [
+    {
+      "change_id": "inb08-frozen-hash-medicoes",
+      "owner_campaign": "08",
+      "path": "data/bofu-dominance/frozen-specs/hashes.json",
+      "base_blob_sha": "e8fbf1ee7d94c6d0c474a8206802ac432279fedd",
+      "operation": "upsert",
+      "key_or_anchor": "forbidden['medicoes-glosas-obras-publicas/index.html'] e pillars['medicoes-glosas-obras-publicas']",
+      "expected_old": "fe3d3c644ac158dae63f85369301da200b5f4de025b0db3364b9cb3e3d929c61",
+      "desired_new": "d186b31d4ee7ad498058998d3bf5c6a5dfbb370cee6fea0389feae52361b895c",
+      "rationale": "Recaptura honesta do HTML do pilar após seções de entrega/insumos/exemplo. Sem supressão de checksum. Sem patch experimental.",
+      "acceptance_test": "test_page_contract_contratos held_hash_18 e forbidden_drift vazio para este path."
+    },
+    {
+      "change_id": "inb08-frozen-hash-aditivos",
+      "owner_campaign": "08",
+      "path": "data/bofu-dominance/frozen-specs/hashes.json",
+      "base_blob_sha": "e8fbf1ee7d94c6d0c474a8206802ac432279fedd",
+      "operation": "upsert",
+      "key_or_anchor": "forbidden['aditivos-obras-publicas/index.html'] e pillars['aditivos-obras-publicas']",
+      "expected_old": "c9f37bdfa249ad3f0f2869774d48e33b6f5a3f921919df252b5a96eda96b6ac0",
+      "desired_new": "d6e15c42a1b7eadf494d6d65f8852b271cbe6840707e427edd08448d8061652d",
+      "rationale": "Recaptura honesta do HTML do pilar após seções de alteração/quantificação/exemplo.",
+      "acceptance_test": "test_page_contract_contratos held_hash_19 e forbidden_drift vazio para este path."
+    },
+    {
+      "change_id": "inb08-single-route-hash-medicoes",
+      "owner_campaign": "08",
+      "path": "data/organic/single-commercial-route.v1.json",
+      "base_blob_sha": "3c6126e3c52fe501006ff948bb4f2c0cb3d63e9b",
+      "operation": "upsert",
+      "key_or_anchor": "surfaces[role=canonical_destination].expected_sha256",
+      "expected_old": "fe3d3c644ac158dae63f85369301da200b5f4de025b0db3364b9cb3e3d929c61",
+      "desired_new": "d186b31d4ee7ad498058998d3bf5c6a5dfbb370cee6fea0389feae52361b895c",
+      "rationale": "O teste test_single_commercial_route.mjs exige igualdade com o HTML vivo e com hashes.json.",
+      "acceptance_test": "npm run test:single-commercial-route pillar_hash_matches_live."
+    },
+    {
+      "change_id": "inb08-first-fold-hash-bind",
+      "owner_campaign": "08",
+      "path": "data/commercial/first-fold-measurements.v1.json",
+      "base_blob_sha": "a3b50906237477e8e42b82f1a0dec430c674808f",
+      "operation": "upsert",
+      "key_or_anchor": "input_hashes e routes[].html_sha256 das duas rotas de pilar",
+      "expected_old": "hashes anteriores dos dois index.html",
+      "desired_new": "hashes vivos; coordenadas da dobra inalteradas (hero não mudou)",
+      "rationale": "O gate de identidade da primeira dobra compara o hash do HTML inteiro, não só o hero. A dobra visível foi deixada no lugar; não houve nova medição de geometria.",
+      "acceptance_test": "npm run test:first-fold-contract identityProblems.length === 0 para as duas rotas."
+    },
+    {
+      "change_id": "inb08-request-inb02-contact-context",
+      "owner_campaign": "02",
+      "path": "handlers de captura/atribuição de 02",
+      "base_blob_sha": null,
+      "operation": "request",
+      "key_or_anchor": "contexto de contato compatível com CFG-D18/CFG-D19",
+      "expected_old": "WhatsApp e formulário atuais, retrocompatíveis",
+      "desired_new": "mesmo destino funcional, com contexto de medição/glosa/aditivo quando 02 estender captura, sem reconstruir cada página",
+      "rationale": "HARD_AT_RELEASE 02. Destino atual já funciona (ALREADY_SATISFIED). Pedido de enriquecimento de contexto, não de novo formulário em cada pilar.",
+      "acceptance_test": "Páginas 08 continuam com wa.me e âncora de formulário sem UTM; extensão de 02 não exige rebuild."
+    },
+    {
+      "change_id": "inb08-request-inb10-observatory",
+      "owner_campaign": "10",
+      "path": "observatório GSC de 10",
+      "base_blob_sha": null,
+      "operation": "request",
+      "key_or_anchor": "anotar alteração de conteúdo das três URLs próprias, sem lastmod fabricado no sitemap",
+      "expected_old": "recorte GSC 02–08/09/2026",
+      "desired_new": "acompanhamento separado das três rotas após publicação; não tratar publicação como prova de CTR",
+      "rationale": "Mandato: anotar a alteração para o observatório. 10 é o dono.",
+      "acceptance_test": "08 não edita sitemap lastmod nem inventa volume GSC."
+    }
+  ]
+}
