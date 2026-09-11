@@ -14,7 +14,30 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
  * the upload and cannot be told apart from a run that never happened.
  */
 const IDENTITY_FETCH_TIMEOUT_MS = Number(process.env.RUNTIME_ACCEPTANCE_FETCH_TIMEOUT_MS || 30000);
-const LIGHTHOUSE_SUBPROCESS_TIMEOUT_MS = Number(process.env.RUNTIME_ACCEPTANCE_LH_TIMEOUT_MS || 900000);
+
+/**
+ * The measurement's own budget must expire BEFORE the supervision that kills
+ * it, or the graceful degradation is dead code: the child would be SIGKILLed
+ * while still measuring and could never write the summary that says the run was
+ * inconclusive. The earlier pairing had it backwards — a 15-minute kill over a
+ * 21-minute budget — so the promote path could only ever produce a hard failure
+ * or exhaust the 30-minute job, and a job that dies post-swap is never rolled
+ * back at all.
+ *
+ * This path measures the home three times plus at most one runtime route, which
+ * takes a couple of minutes; ten minutes is ample, and the ordering below
+ * leaves the job budget room for the promotion, the served-HTML reconciliation
+ * and the evidence upload.
+ */
+const LIGHTHOUSE_BUDGET_MS = Number(process.env.RUNTIME_ACCEPTANCE_LH_BUDGET_MS || 600000);
+const LIGHTHOUSE_SUBPROCESS_TIMEOUT_MS = Number(
+  process.env.RUNTIME_ACCEPTANCE_LH_TIMEOUT_MS || LIGHTHOUSE_BUDGET_MS + 120000,
+);
+if (LIGHTHOUSE_SUBPROCESS_TIMEOUT_MS <= LIGHTHOUSE_BUDGET_MS) {
+  throw new Error(
+    "the measurement budget must expire before the supervision that kills it, or an inconclusive run can never report itself",
+  );
+}
 const SCHEMA = "confenge.live-intelligence-overlay/v1";
 const WITHDRAWAL_PROBE = "/oportunidades/pe-2026-000188-reforma-ubs-londrina-pr/";
 
@@ -173,6 +196,7 @@ function measurePublicFamily({
       stdio: ["ignore", "inherit", "inherit"],
       timeout: LIGHTHOUSE_SUBPROCESS_TIMEOUT_MS,
       killSignal: "SIGKILL",
+      env: { ...process.env, LH_GLOBAL_BUDGET_MS: String(LIGHTHOUSE_BUDGET_MS) },
     },
   );
   const summaryPath = join(summaryDir, `summary-${expectedSha}.json`);
@@ -186,7 +210,13 @@ function measurePublicFamily({
   return { summary, summaryPath, home };
 }
 
-async function runAcceptance(args = process.argv.slice(2)) {
+/**
+ * `measurement` exists so the integrated wrapper can be rehearsed end to end
+ * against a controlled local candidate. It is an ordinary optional parameter:
+ * the CLI never passes it, `{}` spreads to nothing, and `measurePublicFamily`
+ * keeps its production defaults for the runner path and the summary directory.
+ */
+export async function runAcceptance(args = process.argv.slice(2), measurement = {}) {
   const baseArg = args.find((arg) => !arg.startsWith("--"));
   const expectedSha = option(args, "expected-sha");
   const reportPath = resolve(option(args, "report") || join(ROOT, "build", "reports", `runtime-public-acceptance-${expectedSha || "invalid"}.json`));
@@ -228,7 +258,7 @@ async function runAcceptance(args = process.argv.slice(2)) {
       if (!route.startsWith("/oportunidades/") || !route.endsWith("/")) {
         throw new Error(`runtime overlay selected an invalid opportunity route: ${route || "missing"}`);
       }
-      const { summary, summaryPath, home } = measurePublicFamily({ origin, expectedSha, route });
+      const { summary, summaryPath, home } = measurePublicFamily({ origin, expectedSha, route, ...measurement });
       const measured = (summary.results || []).filter((row) => row.path === route && !row.error);
       const accepted = summary.coverage?.runtime_evidence?.routes || [];
       if (
@@ -264,7 +294,7 @@ async function runAcceptance(args = process.argv.slice(2)) {
       // the release serves. It is measured with the same counts and the same
       // public semantics as in the active branch; none of the withdrawal
       // requirements above is relaxed to make room for it.
-      const withdrawnHome = measurePublicFamily({ origin, expectedSha, route: null });
+      const withdrawnHome = measurePublicFamily({ origin, expectedSha, route: null, ...measurement });
       report.evidence.lighthouse_summary = withdrawnHome.summaryPath.slice(ROOT.length + 1);
       report.evidence.lighthouse_evaluation = withdrawnHome.summary.evaluation;
       report.evidence.public_home_runs = withdrawnHome.home.length;

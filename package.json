@@ -192,7 +192,7 @@
     "test:production-cutover:local": "node scripts/site/test_production_cutover.mjs http://127.0.0.1:8765",
     "test:lighthouse": "node scripts/site/run_lighthouse.mjs",
     "test:lighthouse:nfr": "node scripts/site/run_lighthouse.mjs --only=/,/entregas/,/conteudos/documentos-reequilibrio-obra-publica/,/diretoria-b2g/,/ferramentas/diagnostico-defesa-margem/,/diagnostico-b2g-expansao/,/casos/,/especialista/tiago-jun-sasaki/ --runs=3 --label=nfr-critical",
-    "test:lighthouse-gates": "node scripts/site/test_lighthouse_payload.mjs && node scripts/site/test_lighthouse_infra.mjs && node scripts/site/test_lighthouse_real_fault_path.mjs && node scripts/site/test_release_qualification.mjs && node scripts/site/test_lighthouse_thresholds.mjs && node scripts/site/test_interface_coverage.mjs && node scripts/site/test_runtime_lighthouse_acceptance.mjs && node scripts/site/test_public_family_acceptance.mjs",
+    "test:lighthouse-gates": "node scripts/site/test_lighthouse_payload.mjs && node scripts/site/test_lighthouse_infra.mjs && node scripts/site/test_lighthouse_real_fault_path.mjs && node scripts/site/test_release_qualification.mjs && node scripts/site/test_lighthouse_thresholds.mjs && node scripts/site/test_interface_coverage.mjs && node scripts/site/test_runtime_lighthouse_acceptance.mjs && node scripts/site/test_public_family_acceptance.mjs && node scripts/site/test_runtime_acceptance_integrated.mjs",
     "audit:css-usage": "python3 scripts/site/test_audit_css_usage.py && python3 scripts/site/audit_css_usage.py",
     "test:redirects": "node scripts/site/test_redirects.mjs",
     "test:redirects:prod": "node scripts/site/test_redirects.mjs https://confenge.com.br",

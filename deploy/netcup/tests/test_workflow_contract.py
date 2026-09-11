@@ -149,6 +149,50 @@ def test_post_promote_reconciles_all_served_html_and_restores_a_failed_release()
         assert 0 <= post.index(prerequisite) < promote_at, f"must prepare {prerequisite} before promotion"
 
 
+def test_recovery_distinguishes_a_material_failure_from_an_accessory_one() -> None:
+    """An accepted, healthy release must not be withdrawn by a bookkeeping error.
+
+    Two steps run after acceptance has fully passed: naming the terminal state
+    and uploading the evidence. Under a job-wide ``failure()`` alone, either one
+    failing — an artifact-service error, throttling, a same-name conflict on a
+    re-run — withdrew a release that had just been proven healthy, and repeated
+    that on every attempt. Recovery therefore also requires a MATERIAL failure,
+    while staying fail-closed: every material step must have SUCCEEDED for
+    recovery to be skipped.
+    """
+    text = WORKFLOW.read_text(encoding="utf-8")
+    post = text.split("  promote:", 1)[1]
+    restore = post.index("Restore the predecessor after material public acceptance failure")
+    condition = post[restore : restore + 1800]
+    assert "failure()" in condition, "the broad failure predicate is preserved, not replaced"
+    for material in (
+        "steps.atomic_promote.outcome != 'success'",
+        "steps.served_coverage.outcome != 'success'",
+        "steps.runtime_acceptance.outcome != 'success'",
+        "steps.accepted_matches_main.outcome != 'success'",
+    ):
+        assert material in condition, f"recovery must consider {material}"
+    # The step it depends on must actually carry that id.
+    assert "id: accepted_matches_main" in post
+
+    # A promotion interrupted after the swap never reaches failure().
+    assert "Restore the predecessor after a cancelled or timed-out promotion" in post
+    assert "cancelled() && steps.atomic_promote.outcome == 'success'" in post
+    assert post.count("another release is current; refusing to replace it") == 2, (
+        "every recovery path must refuse to replace a newer release"
+    )
+
+    # Missing mandatory evidence is diagnosed, not silently uploaded away.
+    assert "NETCUP_EVIDENCE_MISSING" in post
+    assert "NETCUP_EVIDENCE_INCOMPLETE" in post
+    for required in (
+        "build/reports/server-inventory-$RELEASE_SHA.json",
+        "build/reports/runtime-public-acceptance-$RELEASE_SHA.json",
+        "docs/lighthouse-runs/summary-$RELEASE_SHA.json",
+    ):
+        assert required in post, f"evidence presence must be asserted for {required}"
+
+
 def test_promotion_requires_a_qualification_bound_to_this_exact_candidate() -> None:
     """A candidate reaches the visitors only with matching, passing evidence.
 
@@ -198,23 +242,51 @@ def test_promotion_requires_a_qualification_bound_to_this_exact_candidate() -> N
 
 
 def test_compensation_condition_preserves_a_failed_idempotent_retry() -> None:
-    workflow = WORKFLOW.read_text(encoding="utf-8")
-    block = workflow.split("- name: Restore the predecessor after material public acceptance failure", 1)[1]
-    condition = next(line.strip()[4:] for line in block.splitlines() if line.strip().startswith("if: "))
-    for failed, outcome, already_current, expected in (
-        (True, "failure", True, False),  # API/local validation failure, no swap
-        (True, "failure", False, True),  # new swap may precede lost SSH reply
-        (True, "success", True, True),  # fresh public proof failed
-        (True, "success", False, True),
-        (True, "skipped", False, False),
-        (False, "success", False, False),
-    ):
+    """Evaluate the recovery predicate itself, across the states that matter.
+
+    Recovery must fire on every material failure after a swap, and must NOT fire
+    because a step that runs after acceptance — naming the terminal state, or
+    uploading the evidence — failed for reasons that say nothing about the
+    release. It stays fail-closed: a material step that is anything other than
+    ``success`` still restores the predecessor.
+    """
+    import yaml
+
+    document = yaml.safe_load(WORKFLOW.read_text(encoding="utf-8"))
+    condition = next(
+        step["if"]
+        for step in document["jobs"]["promote"]["steps"]
+        if step.get("name") == "Restore the predecessor after material public acceptance failure"
+    )
+
+    def evaluate(failed, promote_outcome, already_current, coverage, acceptance, matches_main):
         expression = condition.replace("failure()", repr(failed))
-        expression = expression.replace("steps.atomic_promote.outcome", repr(outcome))
-        expression = expression.replace("needs.stage.outputs.expected_current", repr("b" if already_current else "a"))
+        expression = expression.replace("steps.atomic_promote.outcome", repr(promote_outcome))
+        expression = expression.replace("steps.served_coverage.outcome", repr(coverage))
+        expression = expression.replace("steps.runtime_acceptance.outcome", repr(acceptance))
+        expression = expression.replace("steps.accepted_matches_main.outcome", repr(matches_main))
+        expression = expression.replace(
+            "needs.stage.outputs.expected_current", repr("b" if already_current else "a")
+        )
         expression = expression.replace("github.sha", repr("b"))
         expression = expression.replace("&&", " and ").replace("||", " or ")
-        assert eval(expression, {"__builtins__": {}}, {}) is expected
+        return eval(expression, {"__builtins__": {}}, {})  # noqa: S307 - fixed workflow text
+
+    ok = ("success", "success", "success")
+    for failed, outcome, already_current, material, expected, why in (
+        (True, "failure", True, ok, False, "API/local validation failure, no swap"),
+        (True, "failure", False, ok, True, "a new swap may precede a lost SSH reply"),
+        (True, "success", True, ("failure", "success", "success"), True, "served HTML diverged"),
+        (True, "success", False, ("success", "failure", "success"), True, "public acceptance failed"),
+        (True, "success", False, ("success", "success", "failure"), True, "main advanced under us"),
+        (True, "success", False, ("success", "skipped", "success"), True, "a material step did not run"),
+        (True, "skipped", False, ok, False, "promotion never ran"),
+        (False, "success", False, ok, False, "nothing failed"),
+        # The defect this predicate exists to prevent: acceptance fully passed
+        # and a later bookkeeping step failed. The release stays.
+        (True, "success", False, ok, False, "an accessory failure must not withdraw an accepted release"),
+    ):
+        assert evaluate(failed, outcome, already_current, *material) is expected, why
 
 
 def test_promotion_rechecks_main_after_the_remote_swap_and_public_acceptance(tmp_path) -> None:
