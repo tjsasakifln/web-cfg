@@ -1,19 +1,38 @@
 /**
- * Independent CORE_QA_SUITE harness. Results are pass, fail, or
- * MISSING_DEPENDENCY — never a silent skip or a fabricated PASS.
+ * Independent CORE_QA_SUITE harness. Results are pass, fail,
+ * MISSING_DEPENDENCY, NOT_VERIFIED or NOT_RUN — never a silent skip
+ * or a fabricated PASS. POS-09 residual: dedicated_route is not
+ * blanket-optional; overlay hashes file contents; unknown levels fail closed.
  */
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
+import {
+  classifyDependencyLevel,
+  isPublicationRequired as publicationRequired,
+  overlayContentHash,
+  summarize,
+  HARD_AT_RELEASE as HARD,
+  OPTIONAL_ENRICHMENT as OPTIONAL,
+  EXTERNAL_EVIDENCE as EXTERNAL,
+  PASS as P,
+  FAIL as F,
+  MISSING_DEPENDENCY as MD,
+  NOT_VERIFIED as NV,
+  NOT_RUN as NR,
+  KNOWN_STATUS,
+} from "./strict.mjs";
 
-export const PASS = "pass";
-export const FAIL = "fail";
-export const MISSING_DEPENDENCY = "MISSING_DEPENDENCY";
+export const PASS = P;
+export const FAIL = F;
+export const MISSING_DEPENDENCY = MD;
+export const NOT_VERIFIED = NV;
+export const NOT_RUN = NR;
 
-export const HARD_AT_RELEASE = "HARD_AT_RELEASE";
-export const OPTIONAL_ENRICHMENT = "OPTIONAL_ENRICHMENT";
-export const EXTERNAL_EVIDENCE = "EXTERNAL_EVIDENCE";
+export const HARD_AT_RELEASE = HARD;
+export const OPTIONAL_ENRICHMENT = OPTIONAL;
+export const EXTERNAL_EVIDENCE = EXTERNAL;
 
 export const SEVERITY = Object.freeze({
   EXPOSURE: "exposicao/seguranca/veracidade/recebimento",
@@ -21,29 +40,12 @@ export const SEVERITY = Object.freeze({
   IMPROVEMENT: "melhoria_nao_bloqueante",
 });
 
-const CORE_CAMPAIGN_IDS = new Set(["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "15", "16"]);
-const EXPANSION_CAMPAIGN_IDS = new Set(["11", "12", "13", "14"]);
-
-/**
- * Classify a result row. Absence is never rewritten to PASS.
- * Live GSC / Perfil da Empresa stay EXTERNAL_EVIDENCE.
- * Expansion-only dedicated routes may be OPTIONAL_ENRICHMENT.
- * Unknown missing rows fail closed as HARD_AT_RELEASE.
- */
-export function dependencyLevel(row) {
-  if (row?.dependency_level) return row.dependency_level;
-  const id = String(row?.id || "");
-  if (/gsc|search.?console|perfil.?da.?empresa|google.?business/i.test(id) && /live|credential|external/i.test(id)) {
-    return EXTERNAL_EVIDENCE;
-  }
-  if (id.includes(".dedicated_route")) return OPTIONAL_ENRICHMENT;
-  if (CORE_CAMPAIGN_IDS.has(String(row?.campaign || ""))) return HARD_AT_RELEASE;
-  if (EXPANSION_CAMPAIGN_IDS.has(String(row?.campaign || ""))) return OPTIONAL_ENRICHMENT;
-  return HARD_AT_RELEASE;
+export function dependencyLevel(row, context = {}) {
+  return classifyDependencyLevel(row, context);
 }
 
-export function isPublicationRequired(row) {
-  return dependencyLevel(row) === HARD_AT_RELEASE;
+export function isPublicationRequired(row, context = {}) {
+  return publicationRequired(row, context);
 }
 
 export function nowIso() {
@@ -67,14 +69,15 @@ export function git(root, args, extra = {}) {
 }
 
 export function subjectSha(root) {
-  return git(root, ["rev-parse", "HEAD"]);
+  try {
+    return git(root, ["rev-parse", "HEAD"]);
+  } catch {
+    return null;
+  }
 }
 
 export function overlayHash(root) {
-  const staged = git(root, ["diff", "HEAD", "--stat"]);
-  const untracked = git(root, ["ls-files", "--others", "--exclude-standard"]);
-  if (!staged && !untracked) return null;
-  return sha256Text(`${staged}\n${untracked}`);
+  return overlayContentHash(root);
 }
 
 export function createReport({ root, examinedKind, overlays }) {
@@ -103,11 +106,12 @@ export function createReport({ root, examinedKind, overlays }) {
 }
 
 export function record(report, item) {
+  const status = KNOWN_STATUS.has(item.status) ? item.status : FAIL;
   const row = {
     id: item.id,
     subject: item.subject || null,
     campaign: item.campaign || null,
-    status: item.status,
+    status,
     severity: item.severity || null,
     owner: item.owner || null,
     path: item.path || null,
@@ -119,11 +123,27 @@ export function record(report, item) {
     impact: item.impact || null,
     evidence: item.evidence || null,
     detail: item.detail || null,
-    dependency_level: item.dependency_level || null,
+    dependency_level:
+      item.dependency_level ||
+      classifyDependencyLevel({ ...item, status }, { root: report.environment?.cwd }),
   };
+  if (!KNOWN_STATUS.has(item.status)) {
+    row.detail = {
+      ...(typeof row.detail === "object" && row.detail ? row.detail : {}),
+      invalid_status: item.status,
+    };
+  }
   report.results.push(row);
   const tag =
-    row.status === FAIL ? "FAIL" : row.status === MISSING_DEPENDENCY ? "MISSING_DEPENDENCY" : "PASS";
+    row.status === FAIL
+      ? "FAIL"
+      : row.status === MISSING_DEPENDENCY
+        ? "MISSING_DEPENDENCY"
+        : row.status === NOT_VERIFIED
+          ? "NOT_VERIFIED"
+          : row.status === NOT_RUN
+            ? "NOT_RUN"
+            : "PASS";
   const extra = row.detail ? ` ${typeof row.detail === "string" ? row.detail : JSON.stringify(row.detail)}` : "";
   console.log(tag, row.id, extra);
   if (row.status === FAIL) {
@@ -144,33 +164,10 @@ export function record(report, item) {
   return row;
 }
 
-export function finish(report, { strictRelease = false } = {}) {
+export function finish(report, { strictRelease = false, mode = null } = {}) {
   report.finished_at = nowIso();
-  const productFails = report.results.filter((r) => r.status === FAIL).length;
-  const missingRows = report.results.filter((r) => r.status === MISSING_DEPENDENCY);
-  const missing = missingRows.length;
-  const passes = report.results.filter((r) => r.status === PASS).length;
-  const publicationRequiredMissingRows = missingRows.filter((r) => isPublicationRequired(r));
-  const publicationRequiredMissing = publicationRequiredMissingRows.length;
-  const optionalOrExternalMissing = missing - publicationRequiredMissing;
-  const emptyExecution = !Array.isArray(report.results) || report.results.length === 0;
-  const exitCode =
-    productFails > 0 ||
-    (strictRelease && publicationRequiredMissing > 0) ||
-    (strictRelease && emptyExecution)
-      ? 1
-      : 0;
-  report.summary = {
-    pass: passes,
-    fail: productFails,
-    MISSING_DEPENDENCY: missing,
-    publication_required_missing: publicationRequiredMissing,
-    optional_or_external_missing: optionalOrExternalMissing,
-    strict_release: Boolean(strictRelease),
-    empty_execution: emptyExecution,
-    publication_required_missing_ids: publicationRequiredMissingRows.map((r) => r.id),
-    exit_code: exitCode,
-  };
+  const examinedKind = mode || report.examined_kind || "baseline";
+  report.summary = summarize(report, { strictRelease, mode: examinedKind });
   return report;
 }
 

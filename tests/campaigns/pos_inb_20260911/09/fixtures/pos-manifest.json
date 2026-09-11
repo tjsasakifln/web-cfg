@@ -1,0 +1,7 @@
+{
+  "campaign_set": "POS-INB-20260911",
+  "campaigns": ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10"],
+  "requirements": ["Q01", "Q02", "Q03", "Q04", "Q05", "Q06", "Q07", "Q08"],
+  "omit_demonstrativo_08": true,
+  "note": "POS cycle manifesto. Numeric IDs are not INB-20260911 missions."
+}
