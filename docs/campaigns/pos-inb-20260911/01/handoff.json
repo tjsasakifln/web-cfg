@@ -1,0 +1,226 @@
+{
+  "campaign_id": "POS-INB-20260911/01",
+  "state": "READY_FOR_INTEGRATION",
+  "base_sha": "cb6facfaaf50aa8f1834aba43d0245e04cbea672",
+  "base_tree": "2f01d803ae42460917c9ab556a5abae52f20b224",
+  "examined_origin_main": "cb6facfaaf50aa8f1834aba43d0245e04cbea672",
+  "examined_pr_670": {
+    "number": 670,
+    "state": "OPEN",
+    "head": "e45c016f5742ce3a5420371798b8979dfacdb5e0",
+    "merge_commit_sha": null,
+    "note": "open PR merge_commit_sha does not prove merge; 01 did not write that branch"
+  },
+  "netcup_release": {
+    "run_id": 34648772507,
+    "head_sha": "cb6facfaaf50aa8f1834aba43d0245e04cbea672",
+    "conclusion": "success"
+  },
+  "owned_paths": [
+    "js/modules/form.js",
+    "js/modules/nav.js",
+    "js/modules/analytics.js",
+    "assets/js/adaptive-intake.js",
+    "netlify/functions/lead.cjs",
+    "netlify/functions/lib/lead-core.cjs",
+    "netlify/functions/lib/adaptive-intake.cjs",
+    "netlify/functions/lib/source-to-service.cjs",
+    "netlify/functions/lib/inbound-handoff.cjs",
+    "netlify/functions/lib/analytics-agg.cjs",
+    "netlify/functions/ops.cjs",
+    "scripts/site/test_lead_function.mjs",
+    "scripts/site/test_attribution_allowlist.mjs",
+    "scripts/site/test_inbound_handoff.mjs",
+    "tests/attribution/",
+    "tests/pos-inb-20260911/01/",
+    "scripts/campaigns/pos-inb-20260911/01/",
+    "docs/campaigns/pos-inb-20260911/01/"
+  ],
+  "changed_paths": [
+    "docs/campaigns/pos-inb-20260911/01/cta-context-contract.json",
+    "docs/campaigns/pos-inb-20260911/01/cta-context-contract.md",
+    "docs/campaigns/pos-inb-20260911/01/netcup-proof-procedure.md",
+    "docs/campaigns/pos-inb-20260911/01/shared-changes.json",
+    "docs/campaigns/pos-inb-20260911/01/handoff.json",
+    "scripts/campaigns/pos-inb-20260911/01/netcup_proof_gate.mjs",
+    "scripts/site/test_lead_function.mjs",
+    "scripts/site/test_inbound_handoff.mjs",
+    "scripts/site/test_attribution_allowlist.mjs",
+    "tests/attribution/test_source_to_service.mjs",
+    "tests/pos-inb-20260911/01/helpers.mjs",
+    "tests/pos-inb-20260911/01/run_all.mjs",
+    "tests/pos-inb-20260911/01/test_attribution_context.mjs",
+    "tests/pos-inb-20260911/01/test_browser_journey.mjs",
+    "tests/pos-inb-20260911/01/test_local_capture.mjs",
+    "tests/pos-inb-20260911/01/test_local_handoff.mjs",
+    "tests/pos-inb-20260911/01/test_netcup_proof_gate.mjs"
+  ],
+  "preserved_no_op": {
+    "handler_source": "unchanged; defects not reproduced on origin/main",
+    "adaptive_intake": "WITHHELD",
+    "post_target": "/api/web/lead",
+    "compatibility_alias": "/.netlify/functions/lead",
+    "page_html_02_04_05_07": "not overwritten",
+    "runtime_server_mjs": "no routing defect; no shared-change",
+    "event_registry_package_ci": "owned by 10"
+  },
+  "examined_content_sha256": {
+    "js/modules/form.js": "521125e26586ea8a8e0532c9a175fb03b994026013931368c83159c6356b0b07",
+    "js/modules/nav.js": "9722d77181e76ce7b11c7b4ca27bf318d2856b9e604506d39132c0f6d004bd01",
+    "js/modules/analytics.js": "b49d60cf2eba2cb6b456e6393629297dba6e87e98529f560efafcdd9c60388b0",
+    "netlify/functions/lead.cjs": "7cf296a3d9ff478c6716c52cdf96fa6804ef2d922765d6c7b487b3e0d2e9c0e2",
+    "netlify/functions/lib/lead-core.cjs": "71062f8595bb1fda8f4f8b23fbc00878bd7a269d3aa85a7ada8989cebdc7c486",
+    "netlify/functions/lib/inbound-handoff.cjs": "2a281a365b0e91fc3de208cfb2523487c973f2a36c778d26c3808708927d76c6",
+    "netlify/functions/data/adaptive-intake-authority.json": "d161d578453335dc253f43f1ec0738706b51fb6a72ba4b75fda0d50ab8c23b01",
+    "runtime/lib/functions.mjs": "5506b91039a5eb84f5c35154bda92f6510562c43880eca60aa4b0265a2057b4a"
+  },
+  "layers": {
+    "LOCAL_CAPTURE": {
+      "result": "PASS",
+      "preconditions": [
+        "isolated LEAD_STORE_DIR mode 0700 outside release tree",
+        "NODE_ENV=test",
+        "outbound webhook/email/inbound env unset",
+        "shipped netlify/functions/lead.cjs handler",
+        "adaptive intake remains WITHHELD"
+      ],
+      "commands": [
+        "node tests/pos-inb-20260911/01/test_local_capture.mjs",
+        "node tests/pos-inb-20260911/01/run_all.mjs",
+        "npm run test:lead-function"
+      ],
+      "evidence": "scratch local-capture.log and npm-lead-suites.log; LEAD_FUNCTION_OK tests=87"
+    },
+    "LOCAL_HANDOFF": {
+      "result": "PASS",
+      "preconditions": [
+        "persist first then outbox then signed inbound",
+        "loopback Warmbly mock",
+        "zero historical requeue/backlog mutation"
+      ],
+      "commands": [
+        "node tests/pos-inb-20260911/01/test_local_handoff.mjs",
+        "npm run test:inbound-handoff"
+      ],
+      "evidence": "INBOUND_HANDOFF_OK tests=28; missing credential is BLOCKED/secret_missing or SKIPPED/not_configured; timeout is RETRYABLE; HTTP 201 is not handoff_accepted"
+    },
+    "LIVE_TRANSPORT": {
+      "result": "NOT_VERIFIED",
+      "preconditions": [
+        "campaign 01 must not POST a lead on confenge.com.br",
+        "gate default is BLOCKED_BEFORE_POST"
+      ],
+      "commands": [
+        "node scripts/campaigns/pos-inb-20260911/01/netcup_proof_gate.mjs"
+      ],
+      "evidence": "gate state BLOCKED_BEFORE_POST; procedure in docs/campaigns/pos-inb-20260911/01/netcup-proof-procedure.md for campaign 10 only"
+    },
+    "OPERATOR_AVAILABILITY": {
+      "result": "NOT_VERIFIED",
+      "preconditions": [
+        "human reading is not exposed by HTTP 201",
+        "no independent operator-availability API exercised in this session"
+      ],
+      "commands": [],
+      "evidence": "not deduced from persist 201 or handoff DELIVERED"
+    }
+  },
+  "requirements": [
+    {
+      "id": "A_local_capture",
+      "state": "PASS",
+      "evidence": "private PF without CNPJ; changed need vs frozen origin; request consent independent of analytics; persist fail has no protocol"
+    },
+    {
+      "id": "B_idempotency",
+      "state": "PASS",
+      "evidence": "Promise.all three POSTs + replay yield one durable lead_id"
+    },
+    {
+      "id": "C_attribution",
+      "state": "PASS",
+      "evidence": "first-touch survives internal UTM; storage unavailable still allowlists; absent context omitted; malicious params dropped"
+    },
+    {
+      "id": "D_operational_destination",
+      "state": "PASS",
+      "evidence": "persist-first; PENDING vs DELIVERED vs SKIPPED/not_configured vs BLOCKED/secret_missing vs RETRYABLE/timeout"
+    },
+    {
+      "id": "E_netcup_procedure",
+      "state": "PASS",
+      "evidence": "netcup_proof_gate.mjs refuses POST; campaign 10 procedure documented"
+    },
+    {
+      "id": "F_operator_availability",
+      "state": "NOT_VERIFIED",
+      "evidence": "no human-availability signal; not labelled FULL_CONVERSION_VERIFIED"
+    },
+    {
+      "id": "G_cta_context_contract",
+      "state": "PASS",
+      "evidence": "docs/campaigns/pos-inb-20260911/01/cta-context-contract.md; no HTML overwrite of 02/04/05/07"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "campaign_10_netcup_proof",
+      "state": "pending",
+      "next_action": "Campaign 10 consults sanitized ops inbound_handoff read-only, proves isolated identity, zero commercial action, zero dispatch, exclusion from commercial totals, then may run synthetic_lead_probe.mjs serially. Campaign 01 does not execute that POST."
+    },
+    {
+      "id": "package_json_script",
+      "state": "pending",
+      "next_action": "Campaign 10 may add scripts.test:pos-inb-01 as requested in shared-changes.json. npm run test:lead-function already covers the wired POS-INB-01 assertions."
+    }
+  ],
+  "shared_changes": [
+    {
+      "path": "package.json",
+      "key": "scripts.test:pos-inb-01",
+      "owner": "10",
+      "status": "requested"
+    }
+  ],
+  "commands_results": [
+    {
+      "command": "node tests/pos-inb-20260911/01/run_all.mjs",
+      "result": "PASS POS_INB_01_ALL_OK files=5",
+      "runs": 2
+    },
+    {
+      "command": "npm run test:lead-function",
+      "result": "PASS LEAD_FUNCTION_OK tests=87"
+    },
+    {
+      "command": "npm run test:inbound-handoff",
+      "result": "PASS INBOUND_HANDOFF_OK tests=28"
+    },
+    {
+      "command": "npm run test:attribution",
+      "result": "PASS ATTRIBUTION_OK"
+    },
+    {
+      "command": "npm run test:attribution-allowlist",
+      "result": "PASS OK attribution-allowlist"
+    },
+    {
+      "command": "npm run test:form-funnel",
+      "result": "PASS FORM_FUNNEL_OK"
+    },
+    {
+      "command": "node scripts/campaigns/pos-inb-20260911/01/netcup_proof_gate.mjs",
+      "result": "BLOCKED_BEFORE_POST post_authorized=false"
+    }
+  ],
+  "local_vs_real_ops": {
+    "local": "isolated FileStore, outbound env unset, origin header confenge.com.br, loopback Warmbly mock, chrome binary unavailable so browser journey used intercepted HTTP server plus shipped form/script",
+    "netcup": "host-owned store, EnvironmentFile, real visitor origin, campaign 10 serialized synthetic probe only after gate preconditions"
+  },
+  "unresolved": [
+    "LIVE_TRANSPORT NOT_VERIFIED: no production POST from campaign 01",
+    "OPERATOR_AVAILABILITY NOT_VERIFIED: no independent human-reading evidence",
+    "headless Chrome unavailable in this environment; form POST was exercised via intercepted local HTTP against shipped handler"
+  ],
+  "rollback": "Revert this branch/PR. Capture source was not modified. Tests and campaign docs only. Adaptive intake remains WITHHELD. No production mutation was performed."
+}
