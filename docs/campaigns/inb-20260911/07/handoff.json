@@ -1,0 +1,120 @@
+{
+  "schema": "confenge.inbound-campaign-handoff/2.0",
+  "campaign_set": "INB-20260911",
+  "campaign_id": "07",
+  "prompt_version": "2.0.0",
+  "base_sha": "8f508544835490ec635d02517bce0207c6f8e426",
+  "head_sha": null,
+  "state": "READY_FOR_INTEGRATION_WITH_DEPENDENCIES",
+  "decision_state": "EXECUTE_NOW",
+  "owned_sources": [
+    "ferramentas/prontidao-tecnica-obra-privada/index.html",
+    "ferramentas/prontidao-tecnica-obra-privada/app.js",
+    "ferramentas/prontidao-tecnica-obra-privada/styles.css",
+    "assets/js/private-project-technical-readiness.js",
+    "assets/js/private-project-technical-readiness.cjs",
+    "scripts/site/test_private_project_technical_readiness.mjs",
+    "docs/campaigns/inb-20260911/07/handoff.json",
+    "docs/campaigns/inb-20260911/07/shared-changes.json"
+  ],
+  "changed_sources": [
+    "ferramentas/prontidao-tecnica-obra-privada/index.html",
+    "ferramentas/prontidao-tecnica-obra-privada/app.js",
+    "ferramentas/prontidao-tecnica-obra-privada/styles.css",
+    "assets/js/private-project-technical-readiness.js",
+    "assets/js/private-project-technical-readiness.cjs",
+    "scripts/site/test_private_project_technical_readiness.mjs",
+    "docs/campaigns/inb-20260911/07/handoff.json",
+    "docs/campaigns/inb-20260911/07/shared-changes.json"
+  ],
+  "preserve": [
+    "Vocabulário fechado de 18 perguntas e sete domínios, sem expansão.",
+    "UNKNOWN é categoria própria e não soma lacuna nem ponto de risco.",
+    "Resultado completo no navegador, sem cadastro, paywall ou contato obrigatório.",
+    "Twins JS/CJS idênticos; diagnose é a entrada única; sem percentual.",
+    "Planejamento não trata execução/entrega inaplicáveis como lacuna.",
+    "Domínio de ART é condição declarada, sem conclusão de direito."
+  ],
+  "gaps_closed": [
+    "Tabela de encaminhamento para orçamento, compatibilização, revisão ou conversa de escopo.",
+    "Linguagem do resultado: disponível, esclarecer, por que importa, próximo passo.",
+    "Acesso direto aos destinos sem obrigar a ferramenta.",
+    "Resolver de destinos a partir do mapa canônico/fixture, sem href quebrado.",
+    "Contexto de contato só com IDs não sensíveis.",
+    "Eventos start/complete/follow/contact reutilizam nomes canônicos; complete não é qualified_lead."
+  ],
+  "routes": [
+    {
+      "path": "/ferramentas/prontidao-tecnica-obra-privada/",
+      "kind": "tool_landing",
+      "intent_family": "projetar_revisar_compatibilizar",
+      "offer_id": "private_project_technical_readiness_assessment",
+      "canonical": "https://confenge.com.br/ferramentas/prontidao-tecnica-obra-privada/",
+      "requested_indexability": "index,follow",
+      "current_robots": "noindex,follow",
+      "release_unit": "CORE",
+      "contact_mode": "optional_after_result"
+    }
+  ],
+  "dependencies": [
+    {
+      "provider_campaign": "01",
+      "artifact_path": "window.ConfengeCanonicalDestinationMap",
+      "level": "HARD_AT_RELEASE",
+      "fallback": "HTML #pptr-destination-map with only proven paths; resolver returns present=false when omitted"
+    },
+    {
+      "provider_campaign": "02",
+      "artifact_path": "/triagem-tecnica/#obra-imovel",
+      "level": "HARD_AT_RELEASE",
+      "fallback": null,
+      "status": "ALREADY_SATISFIED",
+      "proof": "assets/js/adaptive-intake.js hashNeeds.obra-imovel -> obra_edificacao_ou_documentacao; contact href is retrocompatible; query IDs are extra"
+    },
+    {
+      "provider_campaign": "03",
+      "artifact_path": "/quantitativos-orcamento-obras/",
+      "level": "HARD_AT_RELEASE",
+      "fallback": null,
+      "status": "ALREADY_SATISFIED",
+      "proof": "quantitativos-orcamento-obras/index.html exists on origin/main; published map and direct link use this path only"
+    },
+    {
+      "provider_campaign": "04",
+      "artifact_path": "bim_coordination_clash_register public path",
+      "level": "HARD_AT_RELEASE",
+      "fallback": "omit href; show honest human alternative; do not publish /compatibilizacao-revisao/ or fixture paths"
+    },
+    {
+      "provider_campaign": "05",
+      "artifact_path": "complementary_engineering_project_review public path",
+      "level": "HARD_AT_RELEASE",
+      "fallback": "omit href; show honest human alternative; do not invent a priced URL for a WITHHELD catalog offer"
+    }
+  ],
+  "shared_changes": "docs/campaigns/inb-20260911/07/shared-changes.json",
+  "tests": [
+    {
+      "command": "npm run test:private-readiness",
+      "exit_code": 0,
+      "subject_sha": null,
+      "overlay_hashes": {}
+    },
+    {
+      "command": "npm run test:adaptive-intake",
+      "exit_code": 0,
+      "subject_sha": null,
+      "overlay_hashes": {}
+    }
+  ],
+  "evidence_paths": [
+    "scripts/site/test_private_project_technical_readiness.mjs"
+  ],
+  "unresolved": [
+    "Landing permanece noindex,follow no HTML até 16 aplicar o conjunto registry+sitemap+robots. Pedido: index,follow só da landing, nunca de resultado pessoal.",
+    "Mapa canônico de 01 ainda não existe neste SHA; a página consome window.ConfengeCanonicalDestinationMap se presente.",
+    "Destinos públicos de 04 e 05 ainda não estão neste SHA; a UI omite href e não publica placeholder.",
+    "Query string de IDs para a triagem é retrocompatível; consumo explícito dos campos é de 02.",
+    "head_sha não é gravado neste arquivo. Ver comentário HEAD_READY no PR."
+  ]
+}

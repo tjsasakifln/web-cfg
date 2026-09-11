@@ -20,6 +20,7 @@
   max-width: 68ch;
 }
 .pptr-method,
+.pptr-direct,
 .pptr-result,
 .pptr-cta,
 .pptr-form fieldset {
@@ -89,10 +90,36 @@
 .pptr-status[data-status="EVIDENCE_PRESENT"] { color: #166534; }
 .pptr-status[data-status="GAP"] { color: #b91c1c; }
 .pptr-status[data-status="UNKNOWN"] { color: #4b5563; }
-.pptr-domain {
+.pptr-domain,
+.pptr-route {
   border-top: 1px solid #dce3e8;
   padding-top: 0.85rem;
   margin-top: 0.85rem;
+}
+.pptr-summary,
+.pptr-routing {
+  margin: 1rem 0;
+}
+.pptr-summary-list {
+  margin: 0.35rem 0 0.85rem;
+  padding-left: 1.2rem;
+}
+.pptr-route[data-route-kind="primary"] {
+  border-inline-start: 4px solid #2d6f2d;
+  padding-inline-start: 0.85rem;
+}
+.pptr-route-absent {
+  color: #4b5563;
+}
+.pptr-direct ul {
+  margin: 0.5rem 0 0;
+  padding-left: 1.2rem;
+}
+.pptr-direct a,
+.pptr-route a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
 }
 .pptr-runtime {
   border-inline-start: 4px solid #3d8238;
@@ -119,4 +146,9 @@
 @media (max-width: 640px) {
   .pptr-page { padding: 1rem 0.75rem 2.5rem; }
   .pptr-field select { max-width: 100%; }
+  .pptr-actions { flex-direction: column; align-items: stretch; }
+  .pptr-page button,
+  .pptr-page .button,
+  .pptr-direct a,
+  .pptr-route a { width: 100%; justify-content: center; }
 }
