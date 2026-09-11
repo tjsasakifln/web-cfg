@@ -27,6 +27,7 @@ export const SENTINEL_PATHS = Object.freeze([
 
 const AUTHORIZED_RESOURCE = /^\/casos\/[a-z0-9][a-z0-9-]{0,80}\/(?:data\/[a-z0-9][a-z0-9._-]{0,80}\.csv|assets\/[a-z0-9][a-z0-9._-]{0,80}\.svg)$/;
 const AUTHORIZED_CSV = /^\/casos\/[a-z0-9][a-z0-9-]{0,80}\/data\/[a-z0-9][a-z0-9._-]{0,80}\.csv$/;
+const PUBLIC_ASSET_DOWNLOAD = /^\/assets\/(?:[a-z0-9][a-z0-9._-]{0,80}\/)*[a-z0-9][a-z0-9._-]{0,80}\.(?:csv|svg)$/i;
 const SAFE_PAGE = /^\/casos\/[a-z0-9][a-z0-9-]{0,80}\/$/;
 const DESCRIPTOR_SCHEMA = "confenge.demonstrative-sample-descriptor/1.0";
 const ALLOWED_CSV_MIME = new Set([
@@ -427,18 +428,30 @@ export function deriveExpectedResources({ artifactDir, sourceRoot, htmlByRel = n
     const pagePath = pageUrlFromHtmlPath(rel);
     for (const raw of extractHrefValues(html)) {
       let normalized;
+      if (!/\.(csv|svg)(?:[?#]|$)/i.test(String(raw))) continue;
       try {
         normalized = normalizePublicUri(raw, pagePath);
       } catch (err) {
-        if (err.code === "external_uri") continue;
-        if (err.code === "empty_uri") continue;
+        if (err.code === "external_uri" || err.code === "empty_uri" || err.code === "refused_scheme") {
+          continue;
+        }
         findings.push(
           fail("unsafe_page_href", `${rel}: ${err.code}`, { href: raw, page: pagePath }),
         );
         continue;
       }
       if (!/\.(csv|svg)$/i.test(normalized)) continue;
-      if (!AUTHORIZED_RESOURCE.test(normalized)) {
+      if (isPrivateCsvPath(normalized)) {
+        findings.push(
+          fail("private_csv", `${rel} links ${normalized}`, {
+            href: raw,
+            page: pagePath,
+            path: normalized,
+          }),
+        );
+        continue;
+      }
+      if (!isPublicDownloadPath(normalized)) {
         findings.push(
           fail("unauthorized_promised_path", `${rel} links ${normalized}`, {
             href: raw,
@@ -509,7 +522,7 @@ function artifactFile(artifactDir, urlPath) {
 
 const PRIVATE_CSV_BASENAME = /(?:^|[._-])(?:leads?|secret|gsc|handoff|fixture)(?:[._-]|$)/i;
 
-function isPrivateCsvPath(urlPath) {
+export function isPrivateCsvPath(urlPath) {
   const normalized = urlPath.startsWith("/") ? urlPath : `/${urlPath}`;
   if (
     normalized.startsWith("/data/") ||
@@ -522,6 +535,13 @@ function isPrivateCsvPath(urlPath) {
   }
   const base = path.posix.basename(normalized);
   return PRIVATE_CSV_BASENAME.test(base.replace(/\.csv$/i, ""));
+}
+
+export function isPublicDownloadPath(urlPath) {
+  if (typeof urlPath !== "string" || !urlPath.startsWith("/")) return false;
+  if (isPrivateCsvPath(urlPath)) return false;
+  if (SENTINEL_PATHS.includes(urlPath) || AUTHORIZED_RESOURCE.test(urlPath)) return true;
+  return PUBLIC_ASSET_DOWNLOAD.test(urlPath);
 }
 
 function readExactFile(artifactDir, urlPath) {
@@ -739,15 +759,22 @@ export function validateArtifact({ artifactDir, sourceRoot }) {
         findings.push(fail("empty_bytes", item.path));
         continue;
       }
-      if (!AUTHORIZED_CSV.test(item.path) && item.path.endsWith(".csv")) {
-        findings.push(fail("unauthorized_promised_path", item.path));
-        continue;
-      }
       try {
-        const descriptor = descriptorForPath(sourceRoot, item.path);
-        const parsed = item.path.endsWith(".csv")
-          ? validateCsvAgainstContract(item.path, read.buf, descriptor)
-          : null;
+        let parsed = null;
+        if (item.path.endsWith(".csv")) {
+          if (looksLikeHtmlError(read.buf)) {
+            throw Object.assign(new Error("html error body under csv name"), {
+              code: "html_error_body",
+            });
+          }
+          if (SENTINEL_SCHEMAS[item.path] || SENTINEL_PATHS.includes(item.path)) {
+            parsed = validateCsvAgainstContract(
+              item.path,
+              read.buf,
+              descriptorForPath(sourceRoot, item.path),
+            );
+          }
+        }
         resources.push({
           path: item.path,
           origins: item.origins,
@@ -783,7 +810,7 @@ export function validateArtifact({ artifactDir, sourceRoot }) {
       if (entry.symlink || !entry.full.toLowerCase().endsWith(".csv")) continue;
       const rel = relPosix(artifactDir, entry.full);
       const urlPath = `/${rel}`;
-      if (isPrivateCsvPath(urlPath) || !AUTHORIZED_CSV.test(urlPath)) {
+      if (isPrivateCsvPath(urlPath)) {
         findings.push(fail("private_csv", urlPath, { path: urlPath }));
       }
     }
@@ -903,7 +930,7 @@ function requestOnce(urlString, { timeoutMs, maxBytes, maxRedirects, allowHosts,
       reject(Object.assign(new Error(`host not allowlisted: ${host}`), { code: "host_not_allowlisted", host }));
       return;
     }
-    if (!AUTHORIZED_RESOURCE.test(parsed.pathname) && !SENTINEL_PATHS.includes(parsed.pathname)) {
+    if (!isPublicDownloadPath(parsed.pathname)) {
       reject(Object.assign(new Error(`path not allowlisted: ${parsed.pathname}`), { code: "path_not_allowlisted" }));
       return;
     }
@@ -1145,10 +1172,10 @@ export async function run(argv = process.argv.slice(2)) {
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 if (isMain) {
   run().then((report) => {
-    process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
+    fs.writeSync(1, `${JSON.stringify(report, null, 2)}\n`);
     process.exit(report.ok ? 0 : 1);
   }).catch((err) => {
-    process.stderr.write(`${err.stack || err.message}\n`);
+    fs.writeSync(2, `${err.stack || err.message}\n`);
     process.exit(2);
   });
 }

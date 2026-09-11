@@ -146,6 +146,14 @@ def _plant_minimum(root: Path) -> None:
     _json(root / "ops" / "data" / "gsc-insights.json", {"queries": []})
     _write(root / "casos" / "demonstrativo-projeto-privado" / "data" / "notes.md", "interno\n")
     _write(root / "casos" / "demonstrativo-projeto-privado" / "data" / "leads.json", "{}\n")
+    desk_src = ROOT / "assets" / "data-desk" / "valor-tipico-contratos-pavimentacao-sc" / "v1"
+    desk_csv = desk_src / "table.csv"
+    if desk_csv.is_file():
+        dest = root / desk_csv.relative_to(ROOT)
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(desk_csv, dest)
+        shutil.copy2(desk_src / "index.html", dest.parent / "index.html")
+        shutil.copy2(desk_src / "chart.svg", dest.parent / "chart.svg")
 
 
 def _run_verifier(artifact: Path, source_root: Path, *extra: str) -> subprocess.CompletedProcess[str]:
@@ -244,6 +252,17 @@ class TestAssembleNestedDemonstrativeCsv(unittest.TestCase):
                 if "demonstrativo-projeto-privado/data" in item.get("path", "")
             ]
             self.assertEqual(data_findings, [], data_findings)
+            desk = dest / "assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/table.csv"
+            self.assertTrue(desk.is_file(), desk)
+            proc = _run_verifier(dest, ROOT)
+            payload = json.loads(proc.stdout or "{}")
+            self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+            self.assertTrue(payload.get("ok"), payload)
+            self.assertNotIn(
+                "private_csv",
+                {item.get("code") for item in payload.get("findings") or []},
+                payload.get("findings"),
+            )
         finally:
             shutil.rmtree(dest, ignore_errors=True)
 
@@ -265,6 +284,13 @@ class TestVerifierAgainstShippedAssemble(unittest.TestCase):
             }
             for rel in SENTINELS:
                 self.assertIn("/" + rel, expected)
+            desk = "/assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/table.csv"
+            self.assertTrue((root / "_site" / desk.lstrip("/")).is_file())
+            self.assertNotIn(
+                "private_csv",
+                {item.get("code") for report in payload.get("reports", []) for item in report.get("findings") or []},
+            )
+            self.assertIn(desk, expected)
 
     def test_sentinels_remain_required_after_links_and_files_deleted(self):
         with tempfile.TemporaryDirectory() as td:
