@@ -1,0 +1,119 @@
+{
+  "schema": "confenge.inbound-campaign-handoff/2.0",
+  "campaign_set": "INB-20260911",
+  "campaign_id": "14",
+  "prompt_version": "2.0.0",
+  "base_sha": "8f508544835490ec635d02517bce0207c6f8e426",
+  "state": "READY_FOR_INTEGRATION_WITH_DEPENDENCIES",
+  "release_unit": "EXPANSION",
+  "owned_sources": [
+    "assistencia-tecnica-pericial-engenharia/index.html",
+    "seguranca-trabalho-apoio-tecnico/index.html",
+    "tests/commercial/test_inb14_pericias_sst.mjs",
+    "docs/campaigns/inb-20260911/14/handoff.json",
+    "docs/campaigns/inb-20260911/14/shared-changes.json"
+  ],
+  "changed_sources": [
+    "assistencia-tecnica-pericial-engenharia/index.html",
+    "seguranca-trabalho-apoio-tecnico/index.html",
+    "tests/commercial/test_inb14_pericias_sst.mjs",
+    "docs/campaigns/inb-20260911/14/handoff.json",
+    "docs/campaigns/inb-20260911/14/shared-changes.json"
+  ],
+  "subunits": {
+    "14A": {
+      "status": "READY_FOR_INTEGRATION_WITH_DEPENDENCIES",
+      "route": "/assistencia-tecnica-pericial-engenharia/",
+      "offer_id": "civil_building_technical_assistance",
+      "intent_family": "produzir_prova_tecnica",
+      "residual": "Família, sitemap, PUBLIC_TOP_DIRS e ia-map ainda não aplicados por 16. Sem nomeação, inscrição de especialista ou êxito. Contato inicial sem upload; conflito via /conflitos/ existente."
+    },
+    "14B": {
+      "status": "READY_FOR_INTEGRATION_WITH_DEPENDENCIES",
+      "route": "/seguranca-trabalho-apoio-tecnico/",
+      "offer_id": "sst_risk_documentation_diagnosis",
+      "intent_family": "organizar_sst",
+      "residual": "Mesma dependência de overlays de 16. Título person-sst-engineer WITHHELD: página não afirma o título. SKUs sst_pgr_ltcat_aet_inputs e sst_insalubrity_perilousness_analysis WITHHELD_CAPACITY: não ofertados como entrega fechada. Assistência trabalhista (labor_sst_technical_assistance) não é esta página."
+    }
+  },
+  "routes": [
+    {
+      "path": "/assistencia-tecnica-pericial-engenharia/",
+      "kind": "purchase_front",
+      "intent_family": "produzir_prova_tecnica",
+      "offer_id": "civil_building_technical_assistance",
+      "canonical": "https://confenge.com.br/assistencia-tecnica-pericial-engenharia/",
+      "requested_indexability": "index,follow",
+      "release_unit": "EXPANSION",
+      "contact_mode": "whatsapp_email_telephone_withheld_form"
+    },
+    {
+      "path": "/seguranca-trabalho-apoio-tecnico/",
+      "kind": "purchase_front",
+      "intent_family": "organizar_sst",
+      "offer_id": "sst_risk_documentation_diagnosis",
+      "canonical": "https://confenge.com.br/seguranca-trabalho-apoio-tecnico/",
+      "requested_indexability": "index,follow",
+      "release_unit": "EXPANSION",
+      "contact_mode": "whatsapp_email_telephone_withheld_form"
+    }
+  ],
+  "dependencies": [
+    {
+      "provider_campaign": "01",
+      "artifact_path": "data/corporate/intent-family-matrix.v1.json",
+      "level": "HARD_AT_RELEASE",
+      "fallback": null,
+      "satisfaction": "ALREADY_SATISFIED",
+      "proof": "produzir_prova_tecnica already lists civil_building_technical_assistance; organizar_sst already lists sst_risk_documentation_diagnosis. No new family invented."
+    },
+    {
+      "provider_campaign": "02",
+      "artifact_path": "assets/js/adaptive-intake.js",
+      "level": "HARD_AT_RELEASE",
+      "fallback": null,
+      "satisfaction": "ALREADY_SATISFIED",
+      "proof": "Adaptive intake authority is WITHHELD. Both pages reuse existing wa.me/mailto/tel channel cards and /conflitos/ screening. No new form, upload, or intake_context."
+    }
+  ],
+  "shared_changes": "docs/campaigns/inb-20260911/14/shared-changes.json",
+  "tests": [
+    {
+      "command": "node tests/commercial/test_inb14_pericias_sst.mjs",
+      "exit_code": 0,
+      "subject_sha": "63f92622c49b6af3c31268d8957195fba98d572c077bf3ccac74ed6c18852326",
+      "overlay_hashes": [
+        "2078bdca7d25363b5231aca8db92507b77004fa1f1e7fea001e83b9cdf7249c6"
+      ],
+      "note": "subject_sha is sha256 of the sha256s of the two shipped HTML files and the test file, not the git commit. overlay_hashes[0] is sha256 of shared-changes.json. Ran twice, both exit 0."
+    },
+    {
+      "command": "node tests/commercial/test_inb14_pericias_sst.mjs --mutate",
+      "exit_code": 1,
+      "subject_sha": "63f92622c49b6af3c31268d8957195fba98d572c077bf3ccac74ed6c18852326",
+      "overlay_hashes": [
+        "2078bdca7d25363b5231aca8db92507b77004fa1f1e7fea001e83b9cdf7249c6"
+      ],
+      "note": "Isolated mutation injects perito nomeado / êxito garantido and PGR incluso no pacote com ato médico into JSON-LD names. Same scanner fails."
+    }
+  ],
+  "evidence_paths": [
+    "assistencia-tecnica-pericial-engenharia/index.html",
+    "seguranca-trabalho-apoio-tecnico/index.html",
+    "tests/commercial/test_inb14_pericias_sst.mjs",
+    "docs/campaigns/inb-20260911/14/shared-changes.json"
+  ],
+  "unresolved": [
+    "16 must apply shared-changes.json (families, sitemap, hygiene, PUBLIC_TOP_DIRS, ia-map) and replace ASSIGN_ON_INTEGRATION_POSITIVE_INT with a real owner_issue.",
+    "inbound:gates on this producer branch without overlay is expected to fail on undeclared routes; not a producer fail.",
+    "14B residual: no SST professional title; no closed PGR/LTCAT/AET package; labor SST dispute is not this page.",
+    "14A residual: no court appointment or specialist inscription claim."
+  ],
+  "preserved_capabilities": [
+    "/servicos/#servico-pericia and /servicos/#servico-sst remain INB-09 sources",
+    "/conflitos/ screening unchanged",
+    "WhatsApp, e-mail and telephone capture channels unchanged",
+    "civil_building_technical_assistance and sst_risk_documentation_diagnosis remain MODELED catalog records"
+  ],
+  "observable_delta": "Two indexable purchase fronts with distinct jobs, decision content on the same URL, demonstrative examples, conflict-before-documents on 14A, and family-distinct contact without upload."
+}
