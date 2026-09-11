@@ -1,0 +1,81 @@
+{
+  "schema": "confenge.inbound-campaign-handoff/2.0",
+  "campaign_set": "INB-20260911",
+  "campaign_id": "16",
+  "prompt_version": "2.0.0",
+  "role": "integrator",
+  "state": "COMPOSING",
+  "base_sha": "8f508544835490ec635d02517bce0207c6f8e426",
+  "historical_main_sha_not_reset": "8f508544835490ec635d02517bce0207c6f8e426",
+  "pr653_preserved": {
+    "number": 653,
+    "state": "MERGED",
+    "head": "9ded99a7230d92af7ec62e531355f21e71701713",
+    "merged_as_main": "8f508544835490ec635d02517bce0207c6f8e426"
+  },
+  "served_at_capture": {
+    "commit": "8f508544835490ec635d02517bce0207c6f8e426",
+    "artifact_hash": "0a9a2ae11c949ed6cfc4ab5112e0875787b50178a904dd5f29bf9eb8f302785b",
+    "build_time": "2026-09-11T03:15:35Z",
+    "environment": "production",
+    "netcup_success_run": 34557761993,
+    "in_flight_release": false
+  },
+  "note": "Private composition receipt. Not a public site catalog. candidate_sha is omitted from this file so it cannot self-identify the commit that adds it.",
+  "producer_head_ready": {
+    "01": { "pr": 654, "head_sha": "b88c136985d7e28ac59488e41ee66a5f851a2267", "handoff_state": "READY_FOR_INTEGRATION" },
+    "02": { "pr": 656, "head_sha": "2bb3eafe817e2608a37f3e260ffb5262c6498902", "handoff_state": "READY_FOR_INTEGRATION_WITH_DEPENDENCIES" },
+    "03": { "pr": 659, "head_sha": "eba7c7b18b978d79216f0c5a9cf2954d57c8ff2a", "handoff_state": "READY_FOR_INTEGRATION_WITH_DEPENDENCIES" },
+    "04": { "pr": 658, "head_sha": "d5c7fd4f7c9838bdb0d2ebd59cb4d738b93c10f2", "handoff_state": "READY_FOR_INTEGRATION_WITH_DEPENDENCIES" },
+    "05": { "pr": 655, "head_sha": "747259eba30545dfd5800ec7a15144b8b1cb264b", "handoff_state": "READY_FOR_INTEGRATION_WITH_DEPENDENCIES" },
+    "06": { "pr": 666, "head_sha": "399a32c415171ccc9e26cae565ecf83f9ecd4c92", "handoff_state": "READY_FOR_INTEGRATION_WITH_DEPENDENCIES" },
+    "07": { "pr": 667, "head_sha": "3f3469b7c9f4207460d48d5d9409b3a3617bbf69", "handoff_state": "READY_FOR_INTEGRATION_WITH_DEPENDENCIES" },
+    "08": { "pr": 660, "head_sha": "63081213be33a08cb523f87f9ed7e1b710ae6b3b", "handoff_state": "READY_FOR_INTEGRATION_WITH_DEPENDENCIES" },
+    "09": { "pr": 668, "head_sha": "2c312b5e78f8f57ea395b9aaa25928648f57a7f6", "handoff_state": "READY_FOR_INTEGRATION_WITH_DEPENDENCIES" },
+    "10": { "pr": 665, "head_sha": "87d59cb3b59e55420063135baffd066e28f6f10d", "handoff_state": "READY_FOR_INTEGRATION_WITH_DEPENDENCIES" },
+    "11": { "pr": 661, "head_sha": "0a745ffd99e9f35c9ef821c50760ca98b689802b", "handoff_state": "READY_FOR_INTEGRATION" },
+    "12": { "pr": 657, "head_sha": "ffb0d68d4628c42a060d0ba5b73949caf5496dfc", "handoff_state": "READY_FOR_INTEGRATION_WITH_DEPENDENCIES" },
+    "13": { "pr": 664, "head_sha": "28677a6fe3b544c47232bc96f0243e262421af8e", "handoff_state": "READY_FOR_INTEGRATION_WITH_DEPENDENCIES" },
+    "14": { "pr": 663, "head_sha": "643eb91087d02b6c8189d7c4502839655180a86a", "handoff_state": "READY_FOR_INTEGRATION_WITH_DEPENDENCIES" },
+    "15": { "pr": 662, "head_sha": "da8170a7c6103d15dfdade6c94cc737e8901eef7", "handoff_state": "READY_FOR_INTEGRATION" }
+  },
+  "diff_collision_actual_paths": [],
+  "shared_central_paths": [
+    "data/organic/public-family-registry.json",
+    "sitemap.xml",
+    "package.json",
+    "data/site/public-ia-map.json",
+    "data/organic/sitemap-hygiene.json",
+    "scripts/pseo/public_artifact.py",
+    "seo/PUBLIC-ARTIFACT-MANIFEST.json",
+    "data/quality/interface-coverage-policy.json",
+    "netlify/functions/lib/event-registry.json",
+    "conteudos/index.html",
+    "data/organic/content-service-map.json",
+    "data/offers/multivertical/catalog.v2.json",
+    "sitemap.txt",
+    "servicos/index.html",
+    "data/corporate/intent-family-matrix.v1.json"
+  ],
+  "family_id_resolution_rule": "Page owner family id wins for a new landing. INB-01 map ids that duplicate a page-owner family for the same route are not inserted as a second family. Intent-family-matrix disambiguation from 01 is applied because it does not invent a second taxonomy.",
+  "owned_sources": [
+    "docs/campaigns/inb-20260911/16/",
+    "data/organic/public-family-registry.json",
+    "data/corporate/intent-family-matrix.v1.json",
+    "package.json",
+    "sitemap.xml",
+    "sitemap.txt",
+    "scripts/pseo/public_artifact.py",
+    "seo/PUBLIC-ARTIFACT-MANIFEST.json"
+  ],
+  "changed_sources": [
+    "docs/campaigns/inb-20260911/16/composition-index.json",
+    "docs/campaigns/inb-20260911/16/shared-changes.json"
+  ],
+  "routes": [],
+  "dependencies": [],
+  "shared_changes": "docs/campaigns/inb-20260911/16/shared-changes.json",
+  "tests": [],
+  "evidence_paths": [],
+  "unresolved": []
+}
