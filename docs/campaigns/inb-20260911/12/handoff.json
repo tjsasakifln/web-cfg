@@ -140,7 +140,7 @@
       "subject_sha": null,
       "subject_sha_note": "Executado na arvore produtora sobre base 8f508544835490ec635d02517bce0207c6f8e426 com overlays exclusivos. O SHA do commit HEAD_READY nao e gravado neste arquivo.",
       "overlay_hashes": {
-        "tests/inb-20260911/12/test_page_contract_projetos_complementares.mjs": "sha256:3e2a374ac5e5b6341d6d4796c371efc3fe796d3d13b26b8ca6df51c4886bdba1",
+        "tests/inb-20260911/12/test_page_contract_projetos_complementares.mjs": "sha256:7ddd52164b0b172cf4fd4b69a0bb7877b59a3cff89f95e4da9a75a7bb7e449c3",
         "projetos-complementares-engenharia/index.html": "sha256:631aacdc4b090b1a544e4c52b3fdfc721f19b12a0cb22c1f1e06a6b80a99da8a",
         "conteudos/como-contratar-projetos-complementares/index.html": "sha256:a08b15b9ecf36394e3c79552457d9e038c5e12426cfd74abb60c0822bb011f41",
         "assets/projetos-complementares-engenharia/pacote-entrega.svg": "sha256:da023000fd4b3c9fdb43643d88a3f6c60f32d9b9fa2542d00088d9ee907a9c73",
@@ -148,7 +148,7 @@
         "assets/conteudos/como-contratar-projetos-complementares.svg": "sha256:d61a4843d51271bdcbcee2b6c923fda6e7bff1f684e4ee5468c675b41ba1b562"
       },
       "runs": 2,
-      "result_summary": "153/153 ok nas duas execucoes; contraprova isola oferta positiva de assinatura retroativa e habilitacao irrestrita, depois restaura a pagina enviada."
+      "result_summary": "153/153 ok nas duas execucoes. Contraprova grava copia temporaria da landing, reinsere habilitacao irrestrita, reexecuta assertPageContract (CONTRAPROVA_FAIL mutated_forbids_habilitacao_irrestrita), confirma arquivo enviado intacto e reexecuta o contrato na landing original (PASS)."
     }
   ],
   "evidence_paths": [
