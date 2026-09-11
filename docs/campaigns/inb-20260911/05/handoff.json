@@ -4,14 +4,16 @@
   "campaign_id": "05",
   "prompt_version": "2.0.0",
   "base_sha": "8f508544835490ec635d02517bce0207c6f8e426",
-  "implementation_sha": "397a4390ba152f9b68d927425f03760c6851de0e",
+  "implementation_sha": "51707a4a1c92049f4b57d7c6542194f4ab6d6e6e",
   "state": "READY_FOR_INTEGRATION_WITH_DEPENDENCIES",
   "owned_sources": [
     "revisao-tecnica-projetos-engenharia/index.html",
     "conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/index.html",
     "conteudos/como-contratar-revisao-tecnica-projeto/index.html",
     "scripts/campaigns/inb-20260911/05/project_review_extract.mjs",
-    "tests/fixtures/inb05/format-example-extract.json",
+    "tests/fixtures/inb05/consumption.v1.json",
+    "tests/fixtures/inb05/revisao.csv",
+    "tests/fixtures/inb05/SOURCE.txt",
     "tests/intake/test_inb05_revisao_projetos.mjs",
     "tests/intake/test_inb05_project_review_extract.mjs",
     "docs/campaigns/inb-20260911/05/shared-changes.json",
@@ -23,7 +25,9 @@
     "conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/index.html",
     "conteudos/como-contratar-revisao-tecnica-projeto/index.html",
     "scripts/campaigns/inb-20260911/05/project_review_extract.mjs",
-    "tests/fixtures/inb05/format-example-extract.json",
+    "tests/fixtures/inb05/consumption.v1.json",
+    "tests/fixtures/inb05/revisao.csv",
+    "tests/fixtures/inb05/SOURCE.txt",
     "tests/intake/test_inb05_revisao_projetos.mjs",
     "tests/intake/test_inb05_project_review_extract.mjs",
     "docs/campaigns/inb-20260911/05/README.md",
@@ -79,9 +83,17 @@
     },
     {
       "provider_campaign": "06",
-      "artifact_path": "data/proof/private-engineering-project-review-demonstrative.v1.json",
+      "artifact_path": "data/demonstrative/private-project-pilot/consumption.v1.json",
       "level": "HARD_AT_RELEASE",
-      "fallback": "A landing publica extrato de formato didático rotulado data-extract-kind=demonstrative-format e data-extract-canonical-source=pending-inb-06. Não é prova canônica nem trabalho de cliente. Classificador em scripts/campaigns/inb-20260911/05/project_review_extract.mjs consome o contrato; fixture só em tests/fixtures/inb05/."
+      "provider_sha": "399a32c415171ccc9e26cae565ecf83f9ecd4c92",
+      "fallback": "SELECT de review_findings RF-01 (WN-01×B-01) e RF-02 (HS-01) no SHA origin/campaign/inb-20260911/06-prova-tecnica-privada. Fixture tests/fixtures/inb05/consumption.v1.json copia as mesmas linhas."
+    },
+    {
+      "provider_campaign": "06",
+      "artifact_path": "casos/demonstrativo-projeto-privado/data/revisao.csv",
+      "level": "HARD_AT_RELEASE",
+      "provider_sha": "399a32c415171ccc9e26cae565ecf83f9ecd4c92",
+      "fallback": "SELECT das linhas RF-01 e RF-02. Fixture tests/fixtures/inb05/revisao.csv copia o CSV. A landing não inventa segundo edifício."
     }
   ],
   "shared_changes": "docs/campaigns/inb-20260911/05/shared-changes.json",
@@ -89,7 +101,7 @@
     {
       "command": "node --test tests/intake/test_inb05_revisao_projetos.mjs",
       "exit_code": 0,
-      "subject_sha": "397a4390ba152f9b68d927425f03760c6851de0e",
+      "subject_sha": "51707a4a1c92049f4b57d7c6542194f4ab6d6e6e",
       "overlay_hashes": {
         "docs/campaigns/inb-20260911/05/shared-changes.json": "sha256:1c5825ee782dde9ce468e3063d87569dcf638943073b0186d32c434fb1bc4747"
       }
@@ -97,10 +109,11 @@
     {
       "command": "node --test tests/intake/test_inb05_project_review_extract.mjs",
       "exit_code": 0,
-      "subject_sha": "397a4390ba152f9b68d927425f03760c6851de0e",
+      "subject_sha": "51707a4a1c92049f4b57d7c6542194f4ab6d6e6e",
       "overlay_hashes": {
-        "scripts/campaigns/inb-20260911/05/project_review_extract.mjs": "sha256:320fd63e7ab742547889a715e008b85a4cbfbb7b29569ee934aa0138d486f9ef",
-        "tests/fixtures/inb05/format-example-extract.json": "sha256:020a6cd5b1dfe1fedcd0ffdd63a7449ccf1bb9ecae131add593613b672715336"
+        "scripts/campaigns/inb-20260911/05/project_review_extract.mjs": "sha256:17519928548fee9ab2ee96a8208ec61cd3e45fb258a7e76a878d12f06c339de8",
+        "tests/fixtures/inb05/consumption.v1.json": "sha256:72ada53aa99eb42fbb560538c01337712722c5b99f18221ffda567f23c4f940d",
+        "tests/fixtures/inb05/revisao.csv": "sha256:f60f0b21d9bee7bff4e8f69d8c4a5e62f587c655be173a6ac41cf928dfaa7558"
       }
     }
   ],
@@ -109,10 +122,12 @@
     "tests/intake/test_inb05_project_review_extract.mjs",
     "revisao-tecnica-projetos-engenharia/index.html",
     "conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/index.html",
-    "conteudos/como-contratar-revisao-tecnica-projeto/index.html"
+    "conteudos/como-contratar-revisao-tecnica-projeto/index.html",
+    "tests/fixtures/inb05/consumption.v1.json",
+    "tests/fixtures/inb05/revisao.csv"
   ],
   "unresolved": [
-    "INB-06 ainda não publicou a prova canônica; o extrato visível é formato didático rotulado, não fixture clandestina nem case.",
+    "INB-06 publicou RF-01/RF-02; a landing faz SELECT desses fatos. 16 ainda precisa incorporar os arquivos de 06 no candidato.",
     "16 precisa aplicar PUBLIC_TOP_DIRS, família, sitemap e mapa para a landing entrar no artefato público e no gate fail-closed.",
     "Playwright/headless não estava disponível neste ambiente; verificação visual 360/390 ficou em HTML estático + curl 200 + testes de markup."
   ]
