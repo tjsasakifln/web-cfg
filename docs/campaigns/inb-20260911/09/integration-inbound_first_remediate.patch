@@ -1,0 +1,42 @@
+*** Begin Patch
+*** Update File: scripts/site/inbound_first_remediate.py
+@@
+     hero_block = f"""<nav aria-label="Navegação estrutural" class="breadcrumbs container"><ol><li><a href="/">Início</a><span aria-hidden="true">/</span></li><li aria-current="page">Conteúdos</li></ol></nav>
+ <header class="content-hero hub-hero hub-hero--problem">
+ <div class="container">
+ <p class="eyebrow">Biblioteca técnica</p>
+-<h1>Qual problema de licitação ou contrato você precisa resolver?</h1>
+-<p class="content-lead">Análises técnicas para construtoras e empresas de engenharia: edital, orçamento, medição, aditivo, reequilíbrio, atraso e defesa. Digite o que travou a obra (glosa, BDI, SINAPI, aditivo). A lista aponta a análise e o próximo passo.</p>
+-<p class="content-lead">As análises desta biblioteca tratam de licitações, contratos e obras públicas. Perícia, laudo, projeto e segurança do trabalho entram pela <a href="/triagem-tecnica/">triagem técnica</a>.</p>
++<h1>Qual problema de projeto, orçamento ou contrato você precisa resolver?</h1>
++<p class="content-lead">Caminhos para projeto, orçamento, revisão, compatibilização e inspeção, e análises de licitação, medição, aditivo, reequilíbrio, atraso e defesa. Digite o que travou a obra. A lista aponta o guia ou o serviço e o próximo passo.</p>
++<p class="content-lead">As análises do diretório abaixo tratam de licitação e contrato público. Projeto, orçamento e inspeção seguem pelos serviços correspondentes. Outras necessidades também são recebidas pela <a href="/triagem-tecnica/">triagem técnica</a>.</p>
+ <div class="hub-search-priority directory-search">
+ <label for="hub-search">Buscar por problema</label>
+-<input id="hub-search" name="q" type="search" autocomplete="off" placeholder="Ex.: aditivo, glosa, BDI, atraso, reequilíbrio" data-hub-search aria-controls="diretorio"/>
++<input id="hub-search" name="q" type="search" autocomplete="off" placeholder="Ex.: projeto, orçamento, aditivo, glosa, BDI" data-hub-search aria-controls="diretorio"/>
+ </div>
+-</div></header>"""
++</div></header>
++<section class="section section--tight" id="por-necessidade">
++<div class="container">
++<header class="section-head">
++<p class="eyebrow">Navegação por necessidade</p>
++<h2>Comece pelo que precisa avançar agora</h2>
++<p class="section-lead">Cada caminho abaixo já existe nesta publicação. Não há categoria vazia: se a entrega ainda não tem página própria, o serviço correspondente explica o trabalho e recebe o pedido.</p>
++</header>
++<ul class="problem-theme-list">
++<li class="problem-theme" data-hub-link="need-projeto"><a class="problem-theme-link" href="/servicos/#servico-projeto"><span class="problem-theme-title">Elaborar ou completar um projeto</span><span class="problem-theme-blurb">Transformar requisitos em documentação técnica na fase contratada.</span></a></li>
++<li class="problem-theme" data-hub-link="need-revisao"><a class="problem-theme-link" href="/servicos/#servico-revisao"><span class="problem-theme-title">Revisar um projeto existente</span><span class="problem-theme-blurb">Conferir critérios, coerência e executabilidade antes de orçar ou executar.</span></a></li>
++<li class="problem-theme" data-hub-link="need-compat"><a class="problem-theme-link" href="/servicos/#servico-compatibilizacao"><span class="problem-theme-title">Compatibilizar disciplinas</span><span class="problem-theme-blurb">Registrar interferências e consolidar soluções entre projetos.</span></a></li>
++<li class="problem-theme" data-hub-link="need-orcamento"><a class="problem-theme-link" href="/quantitativos-orcamento-obras/"><span class="problem-theme-title">Quantitativos e orçamento</span><span class="problem-theme-blurb">Levantar quantidades e deixar memória e premissas visíveis.</span></a></li>
++<li class="problem-theme" data-hub-link="need-inspecao"><a class="problem-theme-link" href="/servicos/#servico-diagnostico"><span class="problem-theme-title">Inspecionar obra ou imóvel</span><span class="problem-theme-blurb">Registrar condição, evidências e o que o documento sustenta.</span></a></li>
++<li class="problem-theme" data-hub-link="need-medicao"><a class="problem-theme-link" href="/medicoes-glosas-obras-publicas/"><span class="problem-theme-title">Medição e glosa em obra pública</span><span class="problem-theme-blurb">Critérios de medição, glosas e direito ao recebimento.</span></a></li>
++<li class="problem-theme" data-hub-link="need-aditivo"><a class="problem-theme-link" href="/aditivos-obras-publicas/"><span class="problem-theme-title">Aditivo em obra pública</span><span class="problem-theme-blurb">Alteração de escopo sem trabalho gratuito e sem limite inventado.</span></a></li>
++</ul>
++</div></section>"""
+@@
+ <p class="eyebrow">Diretório</p>
+-<h2>Todas as análises públicas</h2>
++<h2>Análises de licitação e contrato público</h2>
+*** End Patch

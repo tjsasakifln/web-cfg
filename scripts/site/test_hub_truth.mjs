@@ -189,8 +189,8 @@ ok(
 // Counts derived from the independent policy set (not from counting the same HTML robots)
 ok(
   "content_lead_problem_first",
-  /Qual problema de licitação ou contrato você precisa resolver\?/.test(hub),
-  "hub hero must ask the visitor problem",
+  /Qual problema de projeto, orçamento ou contrato você precisa resolver\?/.test(hub),
+  "hub hero must ask the visitor problem across private and public work",
 );
 ok(
   "no_public_indexable_jargon",
@@ -257,10 +257,11 @@ const rem = readFileSync(REMEDIATE_PY, "utf8");
 ok("remediate_no_partial_attr_regex", !/\(class="content-lead">\)\(\[\^<\]\+\)/.test(rem));
 ok(
   "remediate_hub_problem_first",
-  rem.includes("Qual problema de licitação ou contrato você precisa resolver") &&
-    rem.includes("problem-stages") &&
-    rem.includes("featured-lead"),
-  "remediate_hub must rebuild problem-first hub structure",
+  rem.includes("problem-stages") &&
+    rem.includes("featured-lead") &&
+    (rem.includes("Qual problema de projeto, orçamento ou contrato você precisa resolver") ||
+      rem.includes("Qual problema de licitação ou contrato você precisa resolver")),
+  "remediate_hub must rebuild problem-first hub structure (INB-16 applies mixed-catalog hero)",
 );
 // Must not globally rewrite every "N guias" string to the hub total
 ok(
