@@ -1,0 +1,171 @@
+{
+  "schema": "confenge.inbound-campaign-handoff/2.0",
+  "campaign_set": "INB-20260911",
+  "campaign_id": "13",
+  "prompt_version": "2.0.0",
+  "base_sha": "8f508544835490ec635d02517bce0207c6f8e426",
+  "state": "READY_FOR_INTEGRATION_WITH_DEPENDENCIES",
+  "release_unit": "EXPANSION",
+  "owned_sources": [
+    "inspecao-diagnostico-edificacoes/index.html",
+    "tests/intake/test_inspecao_diagnostico.mjs",
+    "tests/inspecao/test_inspecao_html_honesty.py",
+    "docs/campaigns/inb-20260911/13/"
+  ],
+  "changed_sources": [
+    "inspecao-diagnostico-edificacoes/index.html",
+    "tests/intake/test_inspecao_diagnostico.mjs",
+    "tests/inspecao/test_inspecao_html_honesty.py",
+    "docs/campaigns/inb-20260911/13/coverage-facts.json",
+    "docs/campaigns/inb-20260911/13/gbp-operator-checklist.md",
+    "docs/campaigns/inb-20260911/13/shared-changes.json",
+    "docs/campaigns/inb-20260911/13/patches/servicos.index.html.patch",
+    "docs/campaigns/inb-20260911/13/patches/public_artifact.py.patch",
+    "docs/campaigns/inb-20260911/13/patches/sitemap.xml.patch",
+    "docs/campaigns/inb-20260911/13/patches/entregas-and-catalog.patch",
+    "docs/campaigns/inb-20260911/13/handoff.json"
+  ],
+  "routes": [
+    {
+      "path": "/inspecao-diagnostico-edificacoes/",
+      "kind": "commercial_landing",
+      "intent_family": "inspecionar_diagnosticar",
+      "offer_id": "building_inspection_pathology",
+      "canonical": "https://confenge.com.br/inspecao-diagnostico-edificacoes/",
+      "requested_indexability": "index,follow",
+      "release_unit": "EXPANSION",
+      "contact_mode": "whatsapp_email_telephone",
+      "visitor_job": "Entender e registrar fissura, infiltração, condição do imóvel ou recebimento e solicitar inspeção ou diagnóstico.",
+      "primary_question": "O que existe neste recorte da edificação e o que a evidência sustenta?",
+      "proof": "método visível, amostra didática original rotulada, identidade em /especialista/tiago-jun-sasaki/",
+      "cta": "#contato-inspecao",
+      "destination": "https://wa.me/5548988344559"
+    },
+    {
+      "path": "/inspecao-diagnostico-edificacoes/#como-contratar",
+      "kind": "decision_support_consolidated",
+      "intent_family": "inspecionar_diagnosticar",
+      "offer_id": "building_inspection_pathology",
+      "canonical": "https://confenge.com.br/inspecao-diagnostico-edificacoes/",
+      "requested_indexability": "index,follow",
+      "release_unit": "EXPANSION",
+      "contact_mode": "whatsapp_email_telephone",
+      "visitor_job": "Escolher inspeção versus reparo ou perícia e preparar acesso sem diagnóstico por fotografia.",
+      "consolidation_reason": "/conteudos/ herda editorial-library B2G; a decisão de contratar inspeção não é problema contratual de obra pública."
+    }
+  ],
+  "dependencies": [
+    {
+      "provider_campaign": "01",
+      "artifact_path": null,
+      "level": "HARD_AT_RELEASE",
+      "fallback": "Contratos atuais de public-ia-map/brand.json. Upsert de href em shared-changes.json change_id 13-ia-map-building-diagnosis-href."
+    },
+    {
+      "provider_campaign": "02",
+      "artifact_path": null,
+      "level": "HARD_AT_RELEASE",
+      "fallback": "Canais WhatsApp/e-mail/telefone já públicos; intake adaptativo permanece WITHHELD. Nenhum formulário morto."
+    },
+    {
+      "provider_campaign": "09",
+      "artifact_path": "docs/campaigns/inb-20260911/13/patches/servicos.index.html.patch",
+      "level": "HARD_AT_RELEASE",
+      "fallback": null
+    },
+    {
+      "provider_campaign": "16",
+      "artifact_path": "docs/campaigns/inb-20260911/13/shared-changes.json",
+      "level": "HARD_AT_RELEASE",
+      "fallback": null
+    }
+  ],
+  "shared_changes": "docs/campaigns/inb-20260911/13/shared-changes.json",
+  "tests": [
+    {
+      "command": "node --test tests/intake/test_inspecao_diagnostico.mjs",
+      "exit_code": 0,
+      "subject_sha": "fe7ebfb1c09de6bd838f8907e95202b3f2ee1b67",
+      "overlay_hashes": []
+    },
+    {
+      "command": "python3 -m pytest tests/inspecao -q",
+      "exit_code": 0,
+      "subject_sha": "fe7ebfb1c09de6bd838f8907e95202b3f2ee1b67",
+      "overlay_hashes": []
+    },
+    {
+      "command": "npm run test:local-entity",
+      "exit_code": 0,
+      "subject_sha": "fe7ebfb1c09de6bd838f8907e95202b3f2ee1b67",
+      "overlay_hashes": []
+    },
+    {
+      "command": "npm run test:authority",
+      "exit_code": 0,
+      "subject_sha": "fe7ebfb1c09de6bd838f8907e95202b3f2ee1b67",
+      "overlay_hashes": []
+    },
+    {
+      "command": "npm run inbound:gates",
+      "exit_code": 1,
+      "subject_sha": "fe7ebfb1c09de6bd838f8907e95202b3f2ee1b67",
+      "overlay_hashes": [],
+      "material_failure": {
+        "gate": "conversion",
+        "reason": "public_family_not_declared",
+        "path": "/inspecao-diagnostico-edificacoes/",
+        "note": "Esperado até 16 aplicar 13-family-registry-upsert. Não é PASS."
+      }
+    }
+  ],
+  "evidence_paths": [
+    "inspecao-diagnostico-edificacoes/index.html",
+    "docs/campaigns/inb-20260911/13/coverage-facts.json",
+    "docs/campaigns/inb-20260911/13/gbp-operator-checklist.md"
+  ],
+  "page_sha256_at_subject": "aa485d7e17d19687a0a3dba7e19bf58efbf5d6c973df08f8239f7c854db3dabf",
+  "unresolved": [
+    {
+      "id": "family-registry",
+      "owner": "16",
+      "item": "Upsert da família inspecao-diagnostico-edificacoes e as_of >= 2026-09-11."
+    },
+    {
+      "id": "public-artifact-and-sitemap",
+      "owner": "16",
+      "item": "Incluir inspecao-diagnostico-edificacoes em PUBLIC_TOP_DIRS e sitemap.xml sem lastmod fabricado."
+    },
+    {
+      "id": "servicos-hub-link",
+      "owner": "09",
+      "item": "Aplicar patch do CTA em #servico-diagnostico."
+    },
+    {
+      "id": "chooser-href",
+      "owner": "16",
+      "item": "Aplicar href de building_diagnosis no mapa IA, brand.json e regenerar a home; atualizar testes de contrato que ainda exigem /servicos/#servico-diagnostico."
+    },
+    {
+      "id": "field-capacity",
+      "owner": "catalog",
+      "item": "building_inspection_pathology permanece CAPACITY_UNKNOWN. Cobertura presencial por município é pending, não disponibilidade pública."
+    },
+    {
+      "id": "gbp-presence",
+      "owner": "founder",
+      "item": "Perfil da Empresa não observado. Checklist somente leitura entregue. Nenhuma ação externa executada."
+    },
+    {
+      "id": "providers-01-02",
+      "owner": "16",
+      "item": "Incorporar artefatos reais de 01 e 02 no candidato. Fallback atual: contratos de mapa e canais de contato já públicos."
+    }
+  ],
+  "url_decisions": {
+    "rejected_conteudos_decision_url": "/conteudos/contratar-vistoria-inspecao-imovel/",
+    "rejected_city_doorways": true,
+    "rejected_recebimento_second_landing": true,
+    "reason": "Decisão consolidada no destino comercial. Recebimento entra como situação do mesmo offer_id, sem diferença de compra nesta rodada."
+  }
+}
