@@ -212,7 +212,17 @@ def test_services_hub_is_corporate_indexable_and_price_free() -> None:
     assert 'content="index,follow" name="robots"' in html
     assert 'href="https://confenge.com.br/servicos/" rel="canonical"' in html
     assert "Serviços organizados por situação" in html
-    assert html.count('class="corporate-service-row') == 5
+    rows = re.findall(r'<article class="corporate-service-row[^"]*" id="([^"]+)"', html)
+    assert rows == [
+        "servico-projeto",
+        "servico-revisao",
+        "servico-compatibilizacao",
+        "servico-orcamento",
+        "servico-diagnostico",
+        "servico-pericia",
+        "servico-sst",
+        "servico-obras-publicas",
+    ], rows
     assert "/servicos-obras-publicas/" in html
     assert not re.search(r"R\$\s*\d", html)
     assert "campanha" not in html.lower()
