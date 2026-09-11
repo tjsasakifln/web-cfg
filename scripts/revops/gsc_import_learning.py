@@ -40,6 +40,8 @@ SUPPRESSED_QUERY_MARKERS = (
     "hidden queries",
     "anonymized query",
 )
+# Strip identifiers and raw query text. Do not treat commercial stage keys
+# (received_contact, contact) as personal fields — those are UNKNOWN/observed counts.
 PERSONAL_FIELD_KEYS = frozenset(
     {
         "email",
@@ -49,7 +51,6 @@ PERSONAL_FIELD_KEYS = frozenset(
         "whatsapp",
         "cpf",
         "lead_id",
-        "contact",
         "nome",
         "name",
         "session_id",
@@ -109,6 +110,12 @@ def search_analytics_today(*, now: datetime | None = None) -> date:
     if clock.tzinfo is None:
         clock = clock.replace(tzinfo=timezone.utc)
     return clock.astimezone(SEARCH_ANALYTICS_CALENDAR_TZ).date()
+
+
+def search_analytics_last_complete_day(*, today: date | None = None) -> date:
+    """Last complete Search Analytics calendar day in PT. Today is never complete."""
+    day = today or search_analytics_today()
+    return day - timedelta(days=1)
 
 
 def executive_today(*, now: datetime | None = None) -> date:
@@ -667,12 +674,20 @@ def commercial_stages(
         "value": clicks,
         "authority": "gsc_search_analytics",
     }
-    contact = {
-        "status": "observed" if contacts is not None else "UNKNOWN",
-        "value": contacts if contacts is not None else None,
-        "authority": "host_lead_store" if contacts is not None else None,
-    }
     authorized = bool(warmbly) and warmbly.get("authorized") is True
+    if contacts is not None:
+        received_contact = {
+            "status": "observed",
+            "value": contacts,
+            "authority": "host_lead_store",
+        }
+    else:
+        received_contact = {
+            "status": "UNKNOWN",
+            "value": None,
+            "authority": "warmbly" if authorized else "warmbly_absent",
+        }
+
     def _stage(name: str) -> dict[str, Any]:
         if not authorized:
             return {"status": "UNKNOWN", "value": None, "authority": "warmbly_absent"}
@@ -684,7 +699,8 @@ def commercial_stages(
     return {
         "discovery": discovery,
         "click": click,
-        "contact": contact,
+        "received_contact": received_contact,
+        "contact": received_contact,
         "qualification": _stage("qualification"),
         "proposal": _stage("proposal"),
         "hire": _stage("hire"),
@@ -790,7 +806,7 @@ def build_learning_queue(
         stages = p.get("commercial_stages") or commercial_stages(
             impressions=imps, clicks=clicks, contacts=p.get("contacts"), warmbly=warmbly
         )
-        contact = (stages.get("contact") or {})
+        contact = stages.get("received_contact") or stages.get("contact") or {}
         if clicks and clicks > 0 and contact.get("status") == "observed" and (contact.get("value") or 0) == 0:
             candidates.append(
                 {
@@ -1364,9 +1380,11 @@ def build_operational_learning(
     contracts: Mapping[str, Any] | None = None,
     warmbly: Mapping[str, Any] | None = None,
     today: date | None = None,
+    search_analytics_today_date: date | None = None,
 ) -> dict[str, Any]:
     contracts = contracts or load_intent_contracts()
     today = today or executive_today()
+    sa_today = search_analytics_today_date or search_analytics_today()
     dims = isolate_dimension_totals(payload)
     available_dates = {
         str(r.get("date"))
@@ -1397,7 +1415,7 @@ def build_operational_learning(
             cur += timedelta(days=1)
     pulse = complete_window_assessment(days=pulse_days, available_dates=available_dates or None, exploratory=True)
     trend = compare_equivalent_windows(trend_days, prior_days, available_dates or None)
-    expected_end = last
+    expected_end = search_analytics_last_complete_day(today=sa_today)
     delayed = delayed_data_status(last, expected_end=expected_end)
     queue = build_learning_queue(payload, contracts=contracts, warmbly=warmbly)
     pages = []
