@@ -38,6 +38,8 @@ portable Node runtime behind nginx. It does not imply Netlify hosting.
 
 ## CURRENT contract
 
+The founder-exported GSC Web sample of 02–08/09/2026 (imported 11/09) is a historical fixture under `scripts/revops/fixtures/gsc-founder-baseline-2026-09-02-08/`. It is not a live Search Console credential, not current ranking, and not a conversion claim. Local observatory learning from that fixture does not publish raw GSC rows on the public site.
+
 The consumer is `CURRENT` only when all of these remain true at read time:
 
 - immutable snapshot, pointer, history and content hashes verify;

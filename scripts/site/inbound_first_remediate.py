@@ -1118,7 +1118,7 @@ def remediate_hub(brand: dict[str, Any]) -> dict[str, Any]:
 <header class="content-hero hub-hero hub-hero--problem">
 <div class="container">
 <p class="eyebrow">Biblioteca técnica</p>
-<h1>Qual problema de licitação ou contrato você precisa resolver?</h1>
+<h1>Qual problema de projeto, orçamento ou contrato você precisa resolver?</h1>
 <p class="content-lead">Análises técnicas para construtoras e empresas de engenharia: edital, orçamento, medição, aditivo, reequilíbrio, atraso e defesa. Digite o que travou a obra (glosa, BDI, SINAPI, aditivo). A lista aponta a análise e o próximo passo.</p>
 <p class="content-lead">As análises desta biblioteca tratam de licitações, contratos e obras públicas. Perícia, laudo, projeto e segurança do trabalho entram pela <a href="/triagem-tecnica/">triagem técnica</a>.</p>
 <div class="hub-search-priority directory-search">

@@ -1,7 +1,7 @@
 {
   "ok": true,
   "issues": [],
-  "url_count": 80,
+  "url_count": 97,
   "unique_paths": 80,
   "locs": [
     "https://confenge.com.br/",
@@ -83,7 +83,24 @@
     "https://confenge.com.br/lei-14133-obras/",
     "https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/",
     "https://confenge.com.br/analises-contratos-publicos/",
-    "https://confenge.com.br/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/"
+    "https://confenge.com.br/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
+    "https://confenge.com.br/conteudos/documentos-para-levantamento-quantitativos/",
+    "https://confenge.com.br/conteudos/comparar-propostas-execucao-obra/",
+    "https://confenge.com.br/conteudos/revisar-ou-refazer-orcamento-obra/",
+    "https://confenge.com.br/compatibilizacao-projetos-engenharia/",
+    "https://confenge.com.br/conteudos/quando-compatibilizar-projetos/",
+    "https://confenge.com.br/conteudos/como-contratar-compatibilizacao-projetos/",
+    "https://confenge.com.br/revisao-tecnica-projetos-engenharia/",
+    "https://confenge.com.br/conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/",
+    "https://confenge.com.br/conteudos/como-contratar-revisao-tecnica-projeto/",
+    "https://confenge.com.br/casos/demonstrativo-projeto-privado/",
+    "https://confenge.com.br/ferramentas/prontidao-tecnica-obra-privada/",
+    "https://confenge.com.br/parcerias-engenharia/",
+    "https://confenge.com.br/projetos-complementares-engenharia/",
+    "https://confenge.com.br/conteudos/como-contratar-projetos-complementares/",
+    "https://confenge.com.br/inspecao-diagnostico-edificacoes/",
+    "https://confenge.com.br/assistencia-tecnica-pericial-engenharia/",
+    "https://confenge.com.br/seguranca-trabalho-apoio-tecnico/"
   ],
   "families": {
     "core": 74,

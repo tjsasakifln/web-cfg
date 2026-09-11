@@ -496,7 +496,7 @@
       "contact_mode": "capture_form_or_whatsapp"
     },
     {
-      "canonical": "https://confenge.com.br/casos/",
+      "canonical": "https://confenge.com.br/casos/demonstrativo-projeto-privado/",
       "b2g_protected": false,
       "quality_state": "PASS_PENDING_PUBLICATION",
       "gsc_impressions": 0,
@@ -524,7 +524,7 @@
       "question_answered": "Como é o formato da entrega demonstrativa, com números hipotéticos identificados?",
       "business_context": "mixed",
       "primary_url": "/casos/",
-      "proposed_primary_url": "/casos/",
+      "proposed_primary_url": "/casos/demonstrativo-projeto-privado/",
       "source_of_truth": "/casos/",
       "requested_alias": null,
       "supporting_urls": [
@@ -547,7 +547,7 @@
       "contact_mode": "service_transition"
     },
     {
-      "canonical": "https://confenge.com.br/servicos/",
+      "canonical": "https://confenge.com.br/inspecao-diagnostico-edificacoes/",
       "b2g_protected": false,
       "quality_state": "EXISTING_COMPLETE",
       "gsc_impressions": null,
@@ -577,7 +577,7 @@
       "question_answered": "Qual é a condição observada e o que isso implica antes do reparo?",
       "business_context": "mixed",
       "primary_url": "/servicos/#servico-diagnostico",
-      "proposed_primary_url": "/servicos/#servico-diagnostico",
+      "proposed_primary_url": "/inspecao-diagnostico-edificacoes/",
       "source_of_truth": "/servicos/#servico-diagnostico",
       "requested_alias": null,
       "supporting_urls": [
@@ -755,7 +755,7 @@
       "contact_mode": "capture_form_or_whatsapp"
     },
     {
-      "canonical": "https://confenge.com.br/servicos/",
+      "canonical": "https://confenge.com.br/assistencia-tecnica-pericial-engenharia/",
       "b2g_protected": false,
       "quality_state": "EXISTING_COMPLETE",
       "gsc_impressions": null,
@@ -785,7 +785,7 @@
       "question_answered": "Qual prova técnica a parte precisa e qual o conflito de interesse?",
       "business_context": "mixed",
       "primary_url": "/servicos/#servico-pericia",
-      "proposed_primary_url": "/servicos/#servico-pericia",
+      "proposed_primary_url": "/assistencia-tecnica-pericial-engenharia/",
       "source_of_truth": "/servicos/#servico-pericia",
       "requested_alias": null,
       "supporting_urls": [
@@ -859,7 +859,7 @@
       "contact_mode": "capture_form_or_whatsapp"
     },
     {
-      "canonical": "https://confenge.com.br/servicos/",
+      "canonical": "https://confenge.com.br/seguranca-trabalho-apoio-tecnico/",
       "b2g_protected": false,
       "quality_state": "EXISTING_COMPLETE",
       "gsc_impressions": null,
@@ -889,7 +889,7 @@
       "question_answered": "Quais documentos de SST se aplicam a esta operação e o que falta atualizar?",
       "business_context": "mixed",
       "primary_url": "/servicos/#servico-sst",
-      "proposed_primary_url": "/servicos/#servico-sst",
+      "proposed_primary_url": "/seguranca-trabalho-apoio-tecnico/",
       "source_of_truth": "/servicos/#servico-sst",
       "requested_alias": null,
       "supporting_urls": [

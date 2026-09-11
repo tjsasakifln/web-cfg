@@ -10,57 +10,125 @@
   "clusters": [
     {
       "id": "reequilibrio",
-      "tokens": ["reequil", "repactua", "desequil", "curva-abc", "aumento-material", "matriz-de-riscos-reequil"],
+      "tokens": [
+        "reequil",
+        "repactua",
+        "desequil",
+        "curva-abc",
+        "aumento-material",
+        "matriz-de-riscos-reequil"
+      ],
       "service_path": "/reequilibrio-obras-publicas/",
       "service_slug": "reequilibrio-obras-publicas",
-      "tools": ["/ferramentas/diagnostico-defesa-margem/"],
+      "tools": [
+        "/ferramentas/diagnostico-defesa-margem/"
+      ],
       "bridge_title": "Quando o desequilíbrio deixa de ser só técnico",
       "bridge_body": "Se a variação de custo ou de escopo já pressiona margem ou caixa, o próximo passo deixa de ser só interpretação normativa: é estruturar o nexo fato–contrato–valor com memória de cálculo e cronologia defensável.",
       "cta_label": "Ver serviço de reequilíbrio"
     },
     {
       "id": "aditivos",
-      "tokens": ["aditivo", "acrescimo", "acréscimo", "supress", "item-novo", "qualitativo", "quantitativo", "empreitada-por-preco-global", "demolicao-nao-prevista", "servico-extra"],
+      "tokens": [
+        "aditivo",
+        "acrescimo",
+        "acréscimo",
+        "supress",
+        "item-novo",
+        "qualitativo",
+        "quantitativo",
+        "empreitada-por-preco-global",
+        "demolicao-nao-prevista",
+        "servico-extra"
+      ],
       "service_path": "/aditivos-obras-publicas/",
       "service_slug": "aditivos-obras-publicas",
-      "tools": ["/ferramentas/limite-acrescimos-supressoes/", "/ferramentas/diagnostico-defesa-margem/"],
+      "tools": [
+        "/ferramentas/limite-acrescimos-supressoes/",
+        "/ferramentas/diagnostico-defesa-margem/"
+      ],
       "bridge_title": "Quando o aditivo passa a afetar margem",
       "bridge_body": "Mudança de escopo, item novo ou limite de 25%/50% deixa de ser dúvida de planilha quando a decisão formal define preço, prazo e exposição. Aí vale enquadrar o fato antes de executar ou assinar.",
       "cta_label": "Ver serviço de aditivos"
     },
     {
       "id": "medicoes-pagamentos",
-      "tokens": ["medicao", "medição", "glosa", "parcela", "fiscal-nao-assina", "rejeitad", "pagamento-parcial", "atraso-pagamento", "atraso-na-medicao"],
+      "tokens": [
+        "medicao",
+        "medição",
+        "glosa",
+        "parcela",
+        "fiscal-nao-assina",
+        "rejeitad",
+        "pagamento-parcial",
+        "atraso-pagamento",
+        "atraso-na-medicao"
+      ],
       "service_path": "/medicoes-glosas-obras-publicas/",
       "service_slug": "medicoes-glosas-obras-publicas",
-      "tools": ["/ferramentas/diagnostico-defesa-margem/"],
+      "tools": [
+        "/ferramentas/diagnostico-defesa-margem/"
+      ],
       "bridge_title": "Quando a glosa ou a medição vira problema de caixa",
       "bridge_body": "Critério de medição contestado, glosa sem nexo ou parcela retida vira risco de fluxo se a equipe não organiza prova contemporânea e contesta no tempo certo.",
       "cta_label": "Ver serviço de medições e glosas"
     },
     {
       "id": "orcamento-bdi",
-      "tokens": ["sinapi", "sicro", "bdi", "orcamento", "orçamento", "desonerad", "composicao", "administracao-local", "mobilizacao", "data-base-orcamento"],
+      "tokens": [
+        "sinapi",
+        "sicro",
+        "bdi",
+        "orcamento",
+        "orçamento",
+        "desonerad",
+        "composicao",
+        "administracao-local",
+        "mobilizacao",
+        "data-base-orcamento"
+      ],
       "service_path": "/auditoria-orcamento-licitacao/",
       "service_slug": "auditoria-orcamento-licitacao",
-      "tools": ["/ferramentas/diagnostico-defesa-margem/"],
+      "tools": [
+        "/ferramentas/diagnostico-defesa-margem/"
+      ],
       "bridge_title": "Quando o orçamento do edital vira risco de proposta",
       "bridge_body": "Base de preço, BDI e encargos mal alinhados ao edital não são detalhe de planilha: definem se a vitória na licitação vira contrato exequível ou prejuízo estrutural.",
       "cta_label": "Ver auditoria de orçamento e edital"
     },
     {
       "id": "atrasos-prorrogacao",
-      "tokens": ["prorroga", "chuva", "paralis", "prazo-vigencia", "prazo-execucao", "ordem-servico", "atraso-obra", "culpa-administracao"],
+      "tokens": [
+        "prorroga",
+        "chuva",
+        "paralis",
+        "prazo-vigencia",
+        "prazo-execucao",
+        "ordem-servico",
+        "atraso-obra",
+        "culpa-administracao"
+      ],
       "service_path": "/atrasos-prorrogacao-obras-publicas/",
       "service_slug": "atrasos-prorrogacao-obras-publicas",
-      "tools": ["/ferramentas/matriz-atraso-obra/", "/ferramentas/diagnostico-defesa-margem/"],
+      "tools": [
+        "/ferramentas/matriz-atraso-obra/",
+        "/ferramentas/diagnostico-defesa-margem/"
+      ],
       "bridge_title": "Quando o atraso deixa de ser só cronograma",
       "bridge_body": "Atraso imputável, notificação ou pedido de prorrogação sem trilha documental vira sanção, multa ou renúncia de prazo. O valor está em provar nexo e caminho crítico a tempo.",
       "cta_label": "Ver serviço de prazos e prorrogações"
     },
     {
       "id": "edital-proposta",
-      "tokens": ["edital", "licita", "exequib", "empreitada-preco", "capacidade-tecnica", "diagnostico-pre", "comprovacao-exequibilidade"],
+      "tokens": [
+        "edital",
+        "licita",
+        "exequib",
+        "empreitada-preco",
+        "capacidade-tecnica",
+        "diagnostico-pre",
+        "comprovacao-exequibilidade"
+      ],
       "service_path": "/diagnostico-pre-licitacao/",
       "service_slug": "diagnostico-pre-licitacao",
       "tools": [],
@@ -70,7 +138,13 @@
     },
     {
       "id": "defesa-sancoes",
-      "tokens": ["defesa-tecnica", "sancion", "notificacao-atraso", "resposta-notificacao", "processo-sancionador"],
+      "tokens": [
+        "defesa-tecnica",
+        "sancion",
+        "notificacao-atraso",
+        "resposta-notificacao",
+        "processo-sancionador"
+      ],
       "service_path": "/defesa-tecnica-contratos-publicos/",
       "service_slug": "defesa-tecnica-contratos-publicos",
       "tools": [],
@@ -80,13 +154,35 @@
     },
     {
       "id": "carteira-operacao",
-      "tokens": ["carteira", "operacao", "operação", "b2g-360", "gestao-contratual", "acompanhamento"],
+      "tokens": [
+        "carteira",
+        "operacao",
+        "operação",
+        "b2g-360",
+        "gestao-contratual",
+        "acompanhamento"
+      ],
       "service_path": "/diagnostico-b2g-360/",
       "service_slug": "diagnostico-b2g-360",
       "tools": [],
       "bridge_title": "Quando o problema é a carteira, não um contrato isolado",
       "bridge_body": "Se vários contratos públicos perdem margem por rotina frágil de gestão, o recorte deixa de ser um pleito pontual e passa a ser diagnóstico de operação B2G.",
       "cta_label": "Ver Diagnóstico B2G 360°"
+    },
+    {
+      "id": "projetos-revisao",
+      "service_href": "/revisao-tecnica-projetos-engenharia/",
+      "paths": [
+        "/conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/",
+        "/conteudos/como-contratar-revisao-tecnica-projeto/"
+      ]
+    },
+    {
+      "id": "projetos-complementares",
+      "service_href": "/projetos-complementares-engenharia/",
+      "paths": [
+        "/conteudos/como-contratar-projetos-complementares/"
+      ]
     }
   ],
   "path_overrides": {
@@ -115,6 +211,9 @@
     "/conteudos/prorrogacao-prazo-obra-publica-documentos/": "atrasos-prorrogacao",
     "/conteudos/resposta-notificacao-atraso-obra-publica/": "defesa-sancoes",
     "/conteudos/sinapi-desonerado-nao-desonerado/": "orcamento-bdi",
-    "/conteudos/sinapi-ou-sicro-obra-publica/": "orcamento-bdi"
+    "/conteudos/sinapi-ou-sicro-obra-publica/": "orcamento-bdi",
+    "/conteudos/como-contratar-projetos-complementares/": {
+      "service_href": "/projetos-complementares-engenharia/"
+    }
   }
 }

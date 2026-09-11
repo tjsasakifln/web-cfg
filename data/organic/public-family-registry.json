@@ -1,6 +1,6 @@
 {
   "schema_version": "public-family-registry-v1",
-  "as_of": "2026-09-05",
+  "as_of": "2026-09-11",
   "owner_issue": 300,
   "fail_closed": true,
   "purpose": "Declaração versionada das famílias públicas indexáveis de confenge.com.br. O gate de conversão é fail-closed: toda rota indexável varrida por _conversion_files() precisa pertencer a uma família declarada aqui, e a ação terminal declarada é conferida contra o HTML renderizado. Rota indexável sem família reprova o CI.",
@@ -72,7 +72,7 @@
     },
     {
       "id": "prontidao-tecnica-obra-privada",
-      "visitor_job": "Identificar evidências presentes, lacunas e desconhecidos antes de contratar, executar ou retomar uma obra privada; ler o resultado completo sem contato.",
+      "visitor_job": "Identificar evidências presentes, lacunas e desconhecidos antes de contratar, executar ou retomar uma obra privada; ler o resultado completo sem contato; e, se couber, seguir para orçamento, revisão, compatibilização ou conversa de escopo.",
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
       "match": {
@@ -154,12 +154,15 @@
       "terminal_action": "capture_form_or_whatsapp",
       "match": {
         "routes": [
-          "/quantitativos-orcamento-obras/"
+          "/quantitativos-orcamento-obras/",
+          "/conteudos/documentos-para-levantamento-quantitativos/",
+          "/conteudos/comparar-propostas-execucao-obra/",
+          "/conteudos/revisar-ou-refazer-orcamento-obra/"
         ]
       },
       "value_first_header_cta": {
         "mode": "local_fragment_before_contact",
-        "label": "Conversar sobre minha obra",
+        "label": "Solicitar proposta de orçamento",
         "href": "#triagem-quantitativos"
       },
       "capture_availability": {
@@ -359,7 +362,7 @@
     },
     {
       "id": "editorial-library",
-      "visitor_job": "Entender um problema contratual concreto de obra pública antes de decidir pedir ajuda.",
+      "visitor_job": "Encontrar a análise ou o serviço que responde um problema de projeto, orçamento, inspeção ou contrato, público ou privado, antes de pedir ajuda.",
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
       "match": {
@@ -531,7 +534,7 @@
     },
     {
       "id": "casos",
-      "visitor_job": "Distinguir exemplos de entrega (demonstrativos) de resultados de clientes, hoje em zero, antes de contratar.",
+      "visitor_job": "Distinguir exemplos de entrega demonstrativos de trabalho real autorizado, publicado só com autorização, fonte e data.",
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
       "match": {
@@ -705,7 +708,7 @@
     },
     {
       "id": "ferramentas-hub",
-      "visitor_job": "Escolher o cálculo aplicável e avançar para o diagnóstico de carteira quando a decisão ultrapassa uma ferramenta isolada.",
+      "visitor_job": "Escolher o cálculo ou a checagem aplicável a um contrato público ou a uma obra privada, sem tornar nenhuma ferramenta etapa obrigatória.",
       "profile": "commercial_content",
       "terminal_action": "service_transition",
       "match": {
@@ -960,6 +963,410 @@
       "owner_issue": 245,
       "note": "Terceiro hub do Wave 1 inbound engine (e801200f9, 2026-08-02), irmao de /guias-contratos-obras/ e /lei-14133-obras/, que ja pertencem ao epico editorial #245. O unico artigo, /jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/, esta REJECTED em data/editorial/EDITORIAL-REGISTRY.json com publication_hold=true e hold_reason official_sumula_text_date_and_specific_url_not_verified; o hub fica noindex porque nao tem nenhum artigo publicavel. sitemap-jurisprudencia.xml esta vazio, coerente com esse estado. Nao e REJECT_WITHDRAW: a pagina tem dono (#245) e o defeito e remediavel (verificar o texto oficial da sumula no portal TCU e reaprovar).",
       "debt": []
+    },
+    {
+      "id": "engineering-projects-coordination-clash",
+      "visitor_job": "Conferir interfaces entre projetos já existentes, registrar interferências e encaminhar ajustes antes de executar, contratar ou alterar uma obra.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {
+        "routes": [
+          "/compatibilizacao-projetos-engenharia/"
+        ]
+      },
+      "value_first_header_cta": {
+        "mode": "local_fragment_before_contact",
+        "label": "Pedir proposta da compatibilização",
+        "href": "#pedido-compatibilizacao"
+      },
+      "capture_availability": {
+        "mode": "external_authority_fail_closed",
+        "withheld_fallback": [
+          "whatsapp",
+          "email",
+          "telephone"
+        ],
+        "runtime_profile": "adaptive_intake_standalone_v1",
+        "config_endpoint": "/.netlify/functions/adaptive-intake-config?intake_context=project_coordination",
+        "client_script": "/assets/js/adaptive-intake.js",
+        "authority_manifest": "netlify/functions/data/adaptive-intake-authority.json"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-09-11",
+      "owner_issue": 20260911,
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "official_live",
+          "citable_source"
+        ],
+        "reason": "Página comercial de primeira parte sobre conferência de interfaces da própria CONFENGE; o registro demonstrativo é rotulado e não representa obra de cliente.",
+        "authority": [
+          "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md",
+          "data/corporate/intent-family-matrix.v1.json",
+          "data/coordination/route-contract.v1.json"
+        ],
+        "declared_at": "2026-09-11",
+        "owner_issue": 20260911
+      }
+    },
+    {
+      "id": "engineering-projects-coordination-contents",
+      "visitor_job": "Decidir o momento e o recorte da compatibilização de projetos, distinto de elaborar, revisar ou orçar.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {
+        "routes": [
+          "/conteudos/quando-compatibilizar-projetos/",
+          "/conteudos/como-contratar-compatibilizacao-projetos/"
+        ]
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-09-11",
+      "owner_issue": 20260911,
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "official_live",
+          "citable_source"
+        ],
+        "reason": "Conteúdos decisórios de primeira parte sobre a compra de compatibilização; não são registros externos nem páginas B2G da biblioteca editorial.",
+        "authority": [
+          "data/coordination/route-contract.v1.json",
+          "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md"
+        ],
+        "declared_at": "2026-09-11",
+        "owner_issue": 20260911
+      }
+    },
+    {
+      "id": "private-engineering-project-review",
+      "visitor_job": "Conferir um projeto de engenharia recebido antes de contratar, executar ou aprovar uma alteração, entender o recorte da proposta e solicitar retorno com dados mínimos.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {
+        "routes": [
+          "/revisao-tecnica-projetos-engenharia/"
+        ]
+      },
+      "value_first_header_cta": {
+        "mode": "local_fragment_before_contact",
+        "label": "Conversar sobre a revisão do projeto",
+        "href": "#contato-revisao"
+      },
+      "capture_availability": {
+        "mode": "external_authority_fail_closed",
+        "withheld_fallback": [
+          "whatsapp",
+          "email",
+          "telephone"
+        ],
+        "runtime_profile": "adaptive_intake_standalone_v1",
+        "config_endpoint": "/.netlify/functions/adaptive-intake-config",
+        "client_script": "/assets/js/adaptive-intake.js",
+        "authority_manifest": "netlify/functions/data/adaptive-intake-authority.json"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-09-11",
+      "owner_issue": 20260911,
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "official_live",
+          "citable_source"
+        ],
+        "reason": "Página comercial de primeira parte sobre revisão técnica de projeto da própria CONFENGE; não representa registro externo, preço, prazo, caso de cliente ou habilitação profissional.",
+        "authority": [
+          "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md",
+          "data/corporate/commercial-constitution.v1.json",
+          "data/corporate/intent-family-matrix.v1.json"
+        ],
+        "declared_at": "2026-09-11",
+        "owner_issue": 20260911
+      }
+    },
+    {
+      "id": "parcerias-engenharia",
+      "visitor_job": "Entender como encaminhar uma necessidade de orçamento, revisão, compatibilização ou disciplina complementar mantendo o relacionamento com o cliente.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {
+        "routes": [
+          "/parcerias-engenharia/"
+        ]
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-09-11",
+      "owner_issue": 300,
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "official_live",
+          "citable_source"
+        ],
+        "reason": "Página comercial de primeira parte que explica uma forma real de colaboração e aponta a entregas já publicadas da CONFENGE; não representa registro externo.",
+        "authority": [
+          "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md",
+          "data/corporate/commercial-constitution.v1.json",
+          "data/distribution/partner-reference-kits.v1.json"
+        ],
+        "declared_at": "2026-09-11",
+        "owner_issue": 300
+      }
+    },
+    {
+      "id": "complementary-engineering-elaboration",
+      "visitor_job": "Contratar elaboracao de documentacao de engenharia complementar a partir da arquitetura e dos insumos de origem, com disciplina, interfaces, entregaveis e responsavel delimitados.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {
+        "routes": [
+          "/projetos-complementares-engenharia/"
+        ]
+      },
+      "value_first_header_cta": {
+        "mode": "local_fragment_before_contact",
+        "label": "Conversar sobre o projeto",
+        "href": "#escopo-projeto"
+      },
+      "capture_availability": {
+        "mode": "external_authority_fail_closed",
+        "withheld_fallback": [
+          "whatsapp",
+          "email",
+          "telephone"
+        ],
+        "runtime_profile": "adaptive_intake_standalone_v1",
+        "config_endpoint": "/.netlify/functions/adaptive-intake-config?intake_context=complementary_elaboration",
+        "client_script": "/assets/js/adaptive-intake.js",
+        "authority_manifest": "netlify/functions/data/adaptive-intake-authority.json"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-09-11",
+      "owner_issue": 20260911,
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "official_live",
+          "citable_source"
+        ],
+        "reason": "Pagina comercial de primeira parte sobre a compra de elaboracao complementar da propria CONFENGE; nao representa registro externo, preco, prazo, caso ou habilitacao irrestrita.",
+        "authority": [
+          "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md",
+          "data/corporate/commercial-constitution.v1.json",
+          "data/corporate/intent-family-matrix.v1.json"
+        ],
+        "declared_at": "2026-09-11",
+        "owner_issue": 20260911
+      }
+    },
+    {
+      "id": "como-contratar-projetos-complementares",
+      "visitor_job": "Preparar insumos, definir interfaces e versoes e conferir o que deve constar da proposta de elaboracao complementar.",
+      "profile": "commercial_content",
+      "terminal_action": "service_transition",
+      "match": {
+        "routes": [
+          "/conteudos/como-contratar-projetos-complementares/"
+        ]
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-09-11",
+      "owner_issue": 20260911,
+      "note": "Route-exact deve preceder o prefixo editorial-library /conteudos/. CTA dominante no main aponta para /projetos-complementares-engenharia/. WhatsApp no main permanece como canal direto.",
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "official_live",
+          "citable_source"
+        ],
+        "reason": "Conteudo de decisao de primeira parte da CONFENGE sobre como contratar elaboracao complementar; nao e registro externo.",
+        "authority": [
+          "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md",
+          "data/corporate/public-service-page-contract.v1.json"
+        ],
+        "declared_at": "2026-09-11",
+        "owner_issue": 20260911
+      }
+    },
+    {
+      "id": "inspecao-diagnostico-edificacoes",
+      "visitor_job": "Reconhecer fissura, infiltração, condição do imóvel ou recebimento, entender o que a inspeção entrega e solicitar proposta com local e necessidade como contexto.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {
+        "routes": [
+          "/inspecao-diagnostico-edificacoes/"
+        ]
+      },
+      "value_first_header_cta": {
+        "mode": "local_fragment_before_contact",
+        "label": "Conversar sobre a edificação",
+        "href": "#contato-inspecao"
+      },
+      "capture_availability": {
+        "mode": "external_authority_fail_closed",
+        "withheld_fallback": [
+          "whatsapp",
+          "email",
+          "telephone"
+        ]
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-09-11",
+      "owner_issue": 13,
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "official_live",
+          "citable_source"
+        ],
+        "reason": "Página comercial de primeira parte sobre inspeção e diagnóstico da própria CONFENGE; não representa registro externo, preço, prazo, cidade atendida, caso de cliente ou habilitação inventada.",
+        "authority": [
+          "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md",
+          "data/corporate/intent-family-matrix.v1.json",
+          "data/offers/multivertical/catalog.v2.json"
+        ],
+        "declared_at": "2026-09-11",
+        "owner_issue": 13
+      }
+    },
+    {
+      "id": "assistencia-tecnica-pericial-engenharia",
+      "visitor_job": "Enquadrar assistência técnica de engenharia em uma disputa de edificação, distinguir assistência da parte, inspeção, advocacia e perícia do juízo, e solicitar retorno com dados mínimos, sem enviar o processo no primeiro contato.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {
+        "routes": [
+          "/assistencia-tecnica-pericial-engenharia/"
+        ]
+      },
+      "value_first_header_cta": {
+        "mode": "local_fragment_before_contact",
+        "label": "Conversar sobre a disputa",
+        "href": "#contato-assistencia"
+      },
+      "capture_availability": {
+        "mode": "external_authority_fail_closed",
+        "withheld_fallback": [
+          "whatsapp",
+          "email",
+          "telephone"
+        ],
+        "runtime_profile": "adaptive_intake_standalone_v1",
+        "config_endpoint": "/.netlify/functions/adaptive-intake-config",
+        "client_script": "/assets/js/adaptive-intake.js",
+        "authority_manifest": "netlify/functions/data/adaptive-intake-authority.json"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-09-11",
+      "owner_issue": 20260911,
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "official_live",
+          "citable_source"
+        ],
+        "reason": "Página comercial de primeira parte sobre assistência técnica de engenharia da própria CONFENGE; não representa registro externo, nomeação judicial, preço, prazo, caso ou habilitação não projetável.",
+        "authority": [
+          "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md",
+          "data/corporate/commercial-constitution.v1.json",
+          "data/corporate/intent-family-matrix.v1.json"
+        ],
+        "declared_at": "2026-09-11",
+        "owner_issue": 20260911
+      }
+    },
+    {
+      "id": "seguranca-trabalho-apoio-tecnico",
+      "visitor_job": "Enquadrar diagnóstico e apoio técnico de segurança do trabalho, distinguir PGR, LTCAT, AET e laudos, e solicitar retorno com dados mínimos, sem dados de trabalhador no primeiro contato.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {
+        "routes": [
+          "/seguranca-trabalho-apoio-tecnico/"
+        ]
+      },
+      "value_first_header_cta": {
+        "mode": "local_fragment_before_contact",
+        "label": "Conversar sobre o apoio técnico",
+        "href": "#contato-sst"
+      },
+      "capture_availability": {
+        "mode": "external_authority_fail_closed",
+        "withheld_fallback": [
+          "whatsapp",
+          "email",
+          "telephone"
+        ],
+        "runtime_profile": "adaptive_intake_standalone_v1",
+        "config_endpoint": "/.netlify/functions/adaptive-intake-config",
+        "client_script": "/assets/js/adaptive-intake.js",
+        "authority_manifest": "netlify/functions/data/adaptive-intake-authority.json"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-09-11",
+      "owner_issue": 20260911,
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "official_live",
+          "citable_source"
+        ],
+        "reason": "Página comercial de primeira parte sobre diagnóstico e apoio técnico de SST da própria CONFENGE; não representa registro externo, ato médico, pacote PGR/LTCAT/AET, preço, prazo ou título profissional não projetável.",
+        "authority": [
+          "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md",
+          "data/corporate/commercial-constitution.v1.json",
+          "data/corporate/intent-family-matrix.v1.json"
+        ],
+        "declared_at": "2026-09-11",
+        "owner_issue": 20260911
+      }
     }
   ]
 }

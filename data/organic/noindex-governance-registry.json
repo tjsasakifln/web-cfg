@@ -239,13 +239,6 @@
       "note": "REMEDIABLE: /jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/ esta REJECTED em data/editorial/EDITORIAL-REGISTRY.json, publication_hold true, hold_reason official_sumula_text_date_and_specific_url_not_verified, com historico de reprovacao repetida desde 2026-08-02 e uma nota de 2026-08-03 revogando marcacoes HUMAN_APPROVED sem evidencia humana externa valida. O hub /jurisprudencia-contratos-obras/ fica noindex por consequencia: nao ha nenhum artigo publicavel para listar. Remediacao e verificar o texto, a data e a URL oficial da sumula no portal TCU e reaprovar por scripts/editorial/approve_cli.py."
     },
     {
-      "family_id": "prontidao-tecnica-obra-privada",
-      "reason_code": "commercial_surface_deferred",
-      "owner_issue": 589,
-      "review_at": "2026-10-05",
-      "note": "REMEDIABLE: MV-09 retirou a ferramenta do índice, sitemap e hub porque ela antecedeu as money pages e o red-team encontrou falso positivo de prontidão no estágio de planejamento. A rota permanece acessível para correção e nova revisão; só volta ao índice com lógica corrigida, oferta real e CTA compatível."
-    },
-    {
       "family_id": "panorama-mercado-obras-publicas",
       "reason_code": "pending_hash_bound_index_approval",
       "owner_issue": 225,

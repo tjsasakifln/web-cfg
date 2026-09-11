@@ -58,7 +58,7 @@ const {
   isCommercialReal,
   normalizeKind,
 } = require("./lib/record-kind.cjs");
-const { aggregateEvents, attributeLeads, summarizeMoneyAssetLoop } = require("./lib/analytics-agg.cjs");
+const { aggregateEvents, attributeLeads, summarizeMoneyAssetLoop, countPersistedContactsByServiceOrigin } = require("./lib/analytics-agg.cjs");
 const { deliverResendEmail } = require("./lib/lead-delivery.cjs");
 const { validateHistoryState } = require("./lib/gsc-history.cjs");
 const {
@@ -752,6 +752,7 @@ exports.handler = async (event) => {
       attribution = attributeLeads(filterCommercialLeads(leads), events);
     }
     const money_asset = summarizeMoneyAssetLoop(events, leads);
+    const persisted_contacts = countPersistedContactsByServiceOrigin(leads);
     return json(
       200,
       {
@@ -759,6 +760,7 @@ exports.handler = async (event) => {
         events_loaded: events.length,
         aggregate: agg,
         money_asset,
+        persisted_contacts,
         attribution_cohorts: attribution,
         note: agg.attribution_note,
       },
