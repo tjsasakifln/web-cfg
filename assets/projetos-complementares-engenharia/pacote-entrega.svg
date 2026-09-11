@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 640" role="img" aria-labelledby="pacoteTitle pacoteDesc">
+  <title id="pacoteTitle">Esquema ilustrativo do pacote de elaboração complementar</title>
+  <desc id="pacoteDesc">Organização da entrega de elaboração: plantas e cortes, detalhes, especificações e memória de cálculo, com a arquitetura de origem fora da autoria da CONFENGE. Esquema didático, sem cliente, sem obra e sem dimensionamento concluído.</desc>
+  <rect width="1200" height="640" fill="#f7f9f8"/>
+  <rect x="24" y="24" width="1152" height="592" fill="#ffffff" stroke="#dce3e8" stroke-width="2"/>
+  <text x="56" y="72" fill="#2d6f2d" font-family="ui-sans-serif, system-ui, sans-serif" font-size="18" font-weight="800" letter-spacing="2">ESQUEMA ILUSTRATIVO DA ENTREGA</text>
+  <text x="56" y="112" fill="#061a33" font-family="ui-sans-serif, system-ui, sans-serif" font-size="32" font-weight="760">O que a elaboração devolve, por peça</text>
+  <text x="56" y="148" fill="#5d6a7a" font-family="ui-sans-serif, system-ui, sans-serif" font-size="16">Modelo de organização do conteúdo. Não é obra executada, cliente identificado nem prova de todas as instalações.</text>
+
+  <g>
+    <rect x="56" y="188" width="250" height="280" fill="#f3f6f8" stroke="#dce3e8"/>
+    <text x="76" y="228" fill="#2d6f2d" font-family="ui-sans-serif, system-ui, sans-serif" font-size="14" font-weight="800">01</text>
+    <text x="76" y="262" fill="#061a33" font-family="ui-sans-serif, system-ui, sans-serif" font-size="20" font-weight="760">Plantas e cortes</text>
+    <text x="76" y="300" fill="#314256" font-family="ui-sans-serif, system-ui, sans-serif" font-size="15">Onde cada elemento fica e como a obra se lê no papel, na fase contratada.</text>
+  </g>
+  <g>
+    <rect x="334" y="188" width="250" height="280" fill="#f3f6f8" stroke="#dce3e8"/>
+    <text x="354" y="228" fill="#2d6f2d" font-family="ui-sans-serif, system-ui, sans-serif" font-size="14" font-weight="800">02</text>
+    <text x="354" y="262" fill="#061a33" font-family="ui-sans-serif, system-ui, sans-serif" font-size="20" font-weight="760">Detalhes</text>
+    <text x="354" y="300" fill="#314256" font-family="ui-sans-serif, system-ui, sans-serif" font-size="15">Ligações e pontos que a planta geral não resolve sozinha.</text>
+  </g>
+  <g>
+    <rect x="612" y="188" width="250" height="280" fill="#f3f6f8" stroke="#dce3e8"/>
+    <text x="632" y="228" fill="#2d6f2d" font-family="ui-sans-serif, system-ui, sans-serif" font-size="14" font-weight="800">03</text>
+    <text x="632" y="262" fill="#061a33" font-family="ui-sans-serif, system-ui, sans-serif" font-size="20" font-weight="760">Especificações</text>
+    <text x="632" y="300" fill="#314256" font-family="ui-sans-serif, system-ui, sans-serif" font-size="15">Materiais, critérios e limites nomeados para orçar e executar com a mesma referência.</text>
+  </g>
+  <g>
+    <rect x="890" y="188" width="254" height="280" fill="#f3f6f8" stroke="#dce3e8"/>
+    <text x="910" y="228" fill="#2d6f2d" font-family="ui-sans-serif, system-ui, sans-serif" font-size="14" font-weight="800">04</text>
+    <text x="910" y="262" fill="#061a33" font-family="ui-sans-serif, system-ui, sans-serif" font-size="20" font-weight="760">Memória de cálculo</text>
+    <text x="910" y="300" fill="#314256" font-family="ui-sans-serif, system-ui, sans-serif" font-size="15">Premissas, contas e recorte da disciplina contratada, conferíveis por terceiro.</text>
+  </g>
+
+  <rect x="56" y="492" width="1088" height="88" fill="#edf5ec" stroke="#cfe0cc"/>
+  <text x="76" y="528" fill="#173150" font-family="ui-sans-serif, system-ui, sans-serif" font-size="16" font-weight="700">Arquitetura de origem permanece com o autor. A CONFENGE responde pela disciplina de engenharia expressamente contratada.</text>
+  <text x="76" y="556" fill="#5d6a7a" font-family="ui-sans-serif, system-ui, sans-serif" font-size="14">Software e modelos são método ou insumo. Não ampliam atribuição profissional nem substituem ART.</text>
+</svg>

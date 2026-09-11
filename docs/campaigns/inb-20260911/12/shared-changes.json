@@ -1,0 +1,310 @@
+{
+  "schema": "confenge.inbound-shared-changes/2.0",
+  "campaign_set": "INB-20260911",
+  "campaign_id": "12",
+  "prompt_version": "2.0.0",
+  "producer_note": "INB-12 nao aplica estes arquivos centrais na propria branch. 16 aplica os de sua posse; 09 incorpora o hub /servicos/; 01 incorpora o mapa se ainda for dono da fonte.",
+  "changes": [
+    {
+      "change_id": "INB12-family-landing",
+      "owner_campaign": "16",
+      "path": "data/organic/public-family-registry.json",
+      "base_blob_sha": "61e219892d5ad8c80f37dc18399f51f5df119ca1",
+      "operation": "upsert",
+      "key_or_anchor": "families[id=complementary-engineering-elaboration]",
+      "expected_old": null,
+      "desired_new": {
+        "id": "complementary-engineering-elaboration",
+        "visitor_job": "Contratar elaboracao de documentacao de engenharia complementar a partir da arquitetura e dos insumos de origem, com disciplina, interfaces, entregaveis e responsavel delimitados.",
+        "profile": "commercial_content",
+        "terminal_action": "capture_form_or_whatsapp",
+        "match": {
+          "routes": [
+            "/projetos-complementares-engenharia/"
+          ]
+        },
+        "value_first_header_cta": {
+          "mode": "local_fragment_before_contact",
+          "label": "Conversar sobre o projeto",
+          "href": "#escopo-projeto"
+        },
+        "capture_availability": {
+          "mode": "external_authority_fail_closed",
+          "withheld_fallback": [
+            "whatsapp",
+            "email",
+            "telephone"
+          ],
+          "runtime_profile": "adaptive_intake_standalone_v1",
+          "config_endpoint": "/.netlify/functions/adaptive-intake-config?intake_context=complementary_elaboration",
+          "client_script": "/assets/js/adaptive-intake.js",
+          "authority_manifest": "netlify/functions/data/adaptive-intake-authority.json"
+        },
+        "gate_coverage": {
+          "conversion": "full",
+          "copy": "full",
+          "accessibility": "full"
+        },
+        "declared_at": "2026-09-11",
+        "owner_issue": null,
+        "debt": [],
+        "index_evidence": {
+          "substrate": "first_party_publication",
+          "not_applicable": [
+            "official_live",
+            "citable_source"
+          ],
+          "reason": "Pagina comercial de primeira parte sobre a compra de elaboracao complementar da propria CONFENGE; nao representa registro externo, preco, prazo, caso ou habilitacao irrestrita.",
+          "authority": [
+            "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md",
+            "data/corporate/commercial-constitution.v1.json",
+            "data/corporate/intent-family-matrix.v1.json"
+          ],
+          "declared_at": "2026-09-11",
+          "owner_issue": null
+        }
+      },
+      "rationale": "Rota indexavel nova. Sem familia o gate de conversao falha fechado. Nao reutilizar a familia de quantitativos nem o prefixo /conteudos/.",
+      "acceptance_test": "inbound:gates aceita /projetos-complementares-engenharia/ com terminal capture_form_or_whatsapp e WhatsApp/email/telefone no main."
+    },
+    {
+      "change_id": "INB12-family-content",
+      "owner_campaign": "16",
+      "path": "data/organic/public-family-registry.json",
+      "base_blob_sha": "61e219892d5ad8c80f37dc18399f51f5df119ca1",
+      "operation": "upsert",
+      "key_or_anchor": "families[id=como-contratar-projetos-complementares]",
+      "expected_old": null,
+      "desired_new": {
+        "id": "como-contratar-projetos-complementares",
+        "visitor_job": "Preparar insumos, definir interfaces e versoes e conferir o que deve constar da proposta de elaboracao complementar.",
+        "profile": "commercial_content",
+        "terminal_action": "service_transition",
+        "match": {
+          "routes": [
+            "/conteudos/como-contratar-projetos-complementares/"
+          ]
+        },
+        "gate_coverage": {
+          "conversion": "full",
+          "copy": "full",
+          "accessibility": "full"
+        },
+        "declared_at": "2026-09-11",
+        "owner_issue": null,
+        "note": "Route-exact deve preceder o prefixo editorial-library /conteudos/. CTA dominante no main aponta para /projetos-complementares-engenharia/. WhatsApp no main permanece como canal direto.",
+        "debt": [],
+        "index_evidence": {
+          "substrate": "first_party_publication",
+          "not_applicable": [
+            "official_live",
+            "citable_source"
+          ],
+          "reason": "Conteudo de decisao de primeira parte da CONFENGE sobre como contratar elaboracao complementar; nao e registro externo.",
+          "authority": [
+            "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md",
+            "data/corporate/public-service-page-contract.v1.json"
+          ],
+          "declared_at": "2026-09-11",
+          "owner_issue": null
+        }
+      },
+      "rationale": "O prefixo editorial-library descreve problema contratual de obra publica; o job desta pagina e outro. Route-exact evita classificar a decisao de elaboracao como guia B2G.",
+      "acceptance_test": "A rota de conteudo resolve para esta familia, nao para editorial-library; o CTA dominante no main aponta para /projetos-complementares-engenharia/."
+    },
+    {
+      "change_id": "INB12-catalog-purchase-surface",
+      "owner_campaign": "16",
+      "path": "data/offers/multivertical/catalog.v2.json",
+      "base_blob_sha": "14c0cfed73c6974b07b3f7bbe30caefba36b160f",
+      "operation": "upsert",
+      "key_or_anchor": "offers[offer_id=complementary_engineering_project_review].public_purchase_surfaces",
+      "expected_old": null,
+      "desired_new": {
+        "elaboracao": {
+          "route": "/projetos-complementares-engenharia/",
+          "content_route": "/conteudos/como-contratar-projetos-complementares/",
+          "job_pt_br": "Elaborar documentacao de engenharia complementar a partir da arquitetura e dos insumos de origem, com disciplina, interfaces e responsavel delimitados.",
+          "does_not_replace": [
+            "revisao",
+            "compatibilizacao",
+            "parceria_continua"
+          ]
+        }
+      },
+      "rationale": "O offer_id atual mistura revisao e elaboracao. Discriminacao minima por superficie de compra, sem criar offer_id novo por slug. Nao promover readiness WITHHELD.",
+      "acceptance_test": "O catalogo continua com offer_id complementary_engineering_project_review e readiness WITHHELD; a superficie elaboracao aponta para a rota exclusiva de INB-12."
+    },
+    {
+      "change_id": "INB12-manifest-top-dir",
+      "owner_campaign": "16",
+      "path": "seo/PUBLIC-ARTIFACT-MANIFEST.json",
+      "base_blob_sha": "1e913566ca339bbc08d70cd9cc2ea974d5dd7e36",
+      "operation": "upsert",
+      "key_or_anchor": "top_dirs[]=projetos-complementares-engenharia/",
+      "expected_old": null,
+      "desired_new": "projetos-complementares-engenharia/",
+      "rationale": "Diretorio publico novo precisa entrar no manifesto de artefato. Regenerar hash depois da insercao.",
+      "acceptance_test": "top_dirs e copied_dirs contem projetos-complementares-engenharia/; html_routes contem /projetos-complementares-engenharia/ e /conteudos/como-contratar-projetos-complementares/."
+    },
+    {
+      "change_id": "INB12-manifest-html-routes",
+      "owner_campaign": "16",
+      "path": "seo/PUBLIC-ARTIFACT-MANIFEST.json",
+      "base_blob_sha": "1e913566ca339bbc08d70cd9cc2ea974d5dd7e36",
+      "operation": "upsert",
+      "key_or_anchor": "html_routes",
+      "expected_old": null,
+      "desired_new": [
+        "/projetos-complementares-engenharia/",
+        "/conteudos/como-contratar-projetos-complementares/"
+      ],
+      "rationale": "Inserir em ordem alfabetica nas html_routes existentes; nao substituir o array inteiro.",
+      "acceptance_test": "As duas rotas aparecem em html_routes e html_route_count e recalculado."
+    },
+    {
+      "change_id": "INB12-sitemap-landing",
+      "owner_campaign": "16",
+      "path": "sitemap.xml",
+      "base_blob_sha": "3c91a643271d02ea536f08a0378716d3e2aa34af",
+      "operation": "upsert",
+      "key_or_anchor": "urlset.url.loc=https://confenge.com.br/projetos-complementares-engenharia/",
+      "expected_old": null,
+      "desired_new": "<url>\n <loc>https://confenge.com.br/projetos-complementares-engenharia/</loc>\n </url>",
+      "rationale": "Inserir entre problemas-que-resolvemos e quantitativos-orcamento-obras. Nao fabricar lastmod.",
+      "acceptance_test": "sitemap.xml lista a loc canonica da landing sem lastmod inventado."
+    },
+    {
+      "change_id": "INB12-sitemap-hygiene",
+      "owner_campaign": "16",
+      "path": "data/organic/sitemap-hygiene.json",
+      "base_blob_sha": "9ca4f84ec634ba5142a222836bb580f17227fa2f",
+      "operation": "upsert",
+      "key_or_anchor": "locs",
+      "expected_old": null,
+      "desired_new": [
+        "https://confenge.com.br/projetos-complementares-engenharia/",
+        "https://confenge.com.br/conteudos/como-contratar-projetos-complementares/"
+      ],
+      "rationale": "Inserir em ordem alfabetica em locs; recalcular url_count e unique_paths. Nao trocar o arquivo inteiro.",
+      "acceptance_test": "As duas locs existem; url_count coincide com unique_paths."
+    },
+    {
+      "change_id": "INB12-package-script",
+      "owner_campaign": "16",
+      "path": "package.json",
+      "base_blob_sha": "6449c565138aa0794c31765d75079fe2cdbc3226",
+      "operation": "upsert",
+      "key_or_anchor": "scripts.test:page-contract-projetos-complementares",
+      "expected_old": null,
+      "desired_new": "node tests/inb-20260911/12/test_page_contract_projetos_complementares.mjs",
+      "rationale": "O teste exclusivo ja existe na branch 12. 16 apenas liga o script e a cadeia test / test:commercial-contracts, sem retargetar test:page-contract-complementares (CFG-D45-48).",
+      "acceptance_test": "npm run test:page-contract-projetos-complementares sai 0 no candidato composto.",
+      "integration.patch": "docs/campaigns/inb-20260911/12/patches/package.json.patch"
+    },
+    {
+      "change_id": "INB12-affected-graph",
+      "owner_campaign": "16",
+      "path": "scripts/site/affected_graph.mjs",
+      "base_blob_sha": "f649fce3a6a55fc6bfc2cc02ca1ab8a61b40ef0f",
+      "operation": "upsert",
+      "key_or_anchor": "test:page-contract-projetos-complementares",
+      "expected_old": null,
+      "desired_new": {
+        "producers": [
+          "tests/inb-20260911/12/test_page_contract_projetos_complementares.mjs",
+          "projetos-complementares-engenharia/index.html",
+          "conteudos/como-contratar-projetos-complementares/index.html",
+          "assets/projetos-complementares-engenharia/pacote-entrega.svg",
+          "assets/projetos-complementares-engenharia/interfaces-versoes.svg",
+          "assets/conteudos/como-contratar-projetos-complementares.svg"
+        ],
+        "artifacts": [],
+        "surfaces": [
+          "/projetos-complementares-engenharia/",
+          "/conteudos/como-contratar-projetos-complementares/"
+        ]
+      },
+      "rationale": "O grafo de afetados e fonte central. Sem esta entrada o seletor ignora o teste exclusivo.",
+      "acceptance_test": "affected_graph declara o teste e as duas superficies."
+    },
+    {
+      "change_id": "INB12-servicos-hub-link",
+      "owner_campaign": "09",
+      "path": "servicos/index.html",
+      "base_blob_sha": "abae7e331cafc620db17d5ea7e139ff99eb335be",
+      "operation": "insert_adjacent",
+      "key_or_anchor": "article#servico-projeto a[href='/quantitativos-orcamento-obras/']",
+      "expected_old": "<a class=\"button button-primary\" href=\"/triagem-tecnica/#projetos\">Conversar sobre o projeto <svg class=\"icon\"><use href=\"#i-arrow\"></use></svg></a> <a class=\"text-link\" data-asset-id=\"corporate_services_hub_v1\" data-cta-id=\"services-private-quantities-budget\" data-route-family=\"servicos-corporativos\" href=\"/quantitativos-orcamento-obras/\">Ver quantitativos e orçamento de obra</a>",
+      "desired_new": "<a class=\"button button-primary\" href=\"/triagem-tecnica/#projetos\">Conversar sobre o projeto <svg class=\"icon\"><use href=\"#i-arrow\"></use></svg></a> <a class=\"text-link\" data-asset-id=\"corporate_services_hub_v1\" data-cta-id=\"services-private-elaboration\" data-route-family=\"servicos-corporativos\" href=\"/projetos-complementares-engenharia/\">Ver elaboração de projetos complementares</a> <a class=\"text-link\" data-asset-id=\"corporate_services_hub_v1\" data-cta-id=\"services-private-quantities-budget\" data-route-family=\"servicos-corporativos\" href=\"/quantitativos-orcamento-obras/\">Ver quantitativos e orçamento de obra</a>",
+      "rationale": "O hub descreve elaboracao, revisao e compatibilizacao juntos. INB-12 precisa de um destino exclusivo de elaboracao apontado pelo hub, sem reescrever /servicos/ nesta branch.",
+      "acceptance_test": "O hub #servico-projeto aponta para /projetos-complementares-engenharia/ e preserva o link de quantitativos.",
+      "integration.patch": "docs/campaigns/inb-20260911/12/patches/servicos-index.html.patch"
+    },
+    {
+      "change_id": "INB12-content-service-map-cluster",
+      "owner_campaign": "16",
+      "path": "data/organic/content-service-map.json",
+      "base_blob_sha": "b2e73c35e70839d2cf7cfb7859ac425166a5f4ac",
+      "operation": "upsert",
+      "key_or_anchor": "clusters[id=projetos-complementares]",
+      "expected_old": null,
+      "desired_new": {
+        "id": "projetos-complementares",
+        "tokens": [
+          "projetos-complementares",
+          "elaboracao-complementar",
+          "como-contratar-projetos-complementares"
+        ],
+        "service_path": "/projetos-complementares-engenharia/",
+        "service_slug": "projetos-complementares-engenharia",
+        "tools": [],
+        "bridge_title": "Quando a necessidade e produzir a disciplina complementar",
+        "bridge_body": "Insumos, interfaces e versoes deixam de ser duvida de processo quando o escritorio precisa de pecas de engenharia na fase combinada, com autoria de origem preservada.",
+        "cta_label": "Ver elaboracao de projetos complementares"
+      },
+      "rationale": "Mapa conteudo-servico e fonte central. Sem cluster, o conteudo de decisao cai no matching por token B2G.",
+      "acceptance_test": "path_overrides da rota de conteudo resolve para projetos-complementares e service_path e a landing de INB-12."
+    },
+    {
+      "change_id": "INB12-content-service-map-override",
+      "owner_campaign": "16",
+      "path": "data/organic/content-service-map.json",
+      "base_blob_sha": "b2e73c35e70839d2cf7cfb7859ac425166a5f4ac",
+      "operation": "upsert",
+      "key_or_anchor": "path_overrides[/conteudos/como-contratar-projetos-complementares/]",
+      "expected_old": null,
+      "desired_new": "projetos-complementares",
+      "rationale": "Override de caminho conhecido, nao matching por token.",
+      "acceptance_test": "A rota de conteudo mapeia para o cluster projetos-complementares."
+    },
+    {
+      "change_id": "INB12-public-ia-map-note",
+      "owner_campaign": "01",
+      "path": "data/site/public-ia-map.json",
+      "base_blob_sha": "2621a2133b592b2a6560714c76fde902eecc2ebc",
+      "operation": "upsert",
+      "key_or_anchor": "service_situations[id=project_delivery].exclusive_elaboration_route",
+      "expected_old": null,
+      "desired_new": "/projetos-complementares-engenharia/",
+      "rationale": "O mapa continua apontando o hub /servicos/#servico-projeto como situacao. A superficie exclusiva de elaboracao e desdobramento, nao segunda taxonomia. 01 decide se o href da situacao permanece no hub.",
+      "acceptance_test": "A situacao project_delivery nao some; a rota exclusiva de elaboracao fica enderecavel sem duplicar a familia de intencao."
+    },
+    {
+      "change_id": "INB12-interface-coverage",
+      "owner_campaign": "16",
+      "path": "data/quality/interface-coverage-policy.json",
+      "base_blob_sha": "6a316292f509408e50345a1774b00459c9ea2adf",
+      "operation": "upsert",
+      "key_or_anchor": "representatives[] route=/projetos-complementares-engenharia/",
+      "expected_old": null,
+      "desired_new": {
+        "family_id": "complementary-engineering-elaboration",
+        "route": "/projetos-complementares-engenharia/",
+        "reason": "single-route complementary engineering elaboration purchase with direct fallback channels"
+      },
+      "rationale": "Cobertura de interface e fonte central. Representante da familia nova, no mesmo padrao de quantitativos.",
+      "acceptance_test": "A politica lista /projetos-complementares-engenharia/ como representante da familia complementary-engineering-elaboration."
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 640" role="img" aria-labelledby="prepTitle prepDesc">
+  <title id="prepTitle">O que preparar, combinar e conferir antes de contratar elaboração complementar</title>
+  <desc id="prepDesc">Três colunas de decisão: insumos, interfaces e o que deve constar da proposta. Esquema didático para o comprador, sem preço, prazo ou formato proprietário obrigatório.</desc>
+  <rect width="1200" height="640" fill="#f7f9f8"/>
+  <rect x="24" y="24" width="1152" height="592" fill="#ffffff" stroke="#dce3e8" stroke-width="2"/>
+  <text x="56" y="72" fill="#2d6f2d" font-family="ui-sans-serif, system-ui, sans-serif" font-size="18" font-weight="800" letter-spacing="2">DECISÃO DE CONTRATAÇÃO</text>
+  <text x="56" y="112" fill="#061a33" font-family="ui-sans-serif, system-ui, sans-serif" font-size="32" font-weight="760">Preparar, delimitar e ler a proposta</text>
+  <text x="56" y="148" fill="#5d6a7a" font-family="ui-sans-serif, system-ui, sans-serif" font-size="16">Lista de conferência. Pacote incompleto não impede o primeiro contato.</text>
+
+  <g>
+    <rect x="56" y="188" width="346" height="320" fill="#fff" stroke="#dce3e8"/>
+    <text x="76" y="228" fill="#2d6f2d" font-family="ui-sans-serif, system-ui, sans-serif" font-size="14" font-weight="800">PREPARAR</text>
+    <text x="76" y="264" fill="#061a33" font-family="ui-sans-serif, system-ui, sans-serif" font-size="22" font-weight="760">Insumos</text>
+    <text x="76" y="304" fill="#314256" font-family="ui-sans-serif, system-ui, sans-serif" font-size="16">Finalidade e fase. Arquitetura disponível. O que falta. Autores conhecidos, mesmo que parciais.</text>
+  </g>
+  <g>
+    <rect x="426" y="188" width="346" height="320" fill="#fff" stroke="#dce3e8"/>
+    <text x="446" y="228" fill="#2d6f2d" font-family="ui-sans-serif, system-ui, sans-serif" font-size="14" font-weight="800">COMBINAR</text>
+    <text x="446" y="264" fill="#061a33" font-family="ui-sans-serif, system-ui, sans-serif" font-size="22" font-weight="760">Interfaces</text>
+    <text x="446" y="304" fill="#314256" font-family="ui-sans-serif, system-ui, sans-serif" font-size="16">Disciplina do recorte. Pontos de encontro. Quem devolve correção. Como se nomeia cada versão.</text>
+  </g>
+  <g>
+    <rect x="796" y="188" width="348" height="320" fill="#edf5ec" stroke="#cfe0cc"/>
+    <text x="816" y="228" fill="#2d6f2d" font-family="ui-sans-serif, system-ui, sans-serif" font-size="14" font-weight="800">CONFERIR</text>
+    <text x="816" y="264" fill="#061a33" font-family="ui-sans-serif, system-ui, sans-serif" font-size="22" font-weight="760">Proposta</text>
+    <text x="816" y="304" fill="#314256" font-family="ui-sans-serif, system-ui, sans-serif" font-size="16">Entregáveis, exclusões, formatos, responsável, ART quando couber, campo se houver, e o que permanece com os autores de origem.</text>
+  </g>
+
+  <text x="56" y="552" fill="#5d6a7a" font-family="ui-sans-serif, system-ui, sans-serif" font-size="14">Este esquema não fixa número de revisões, prazo, desconto nem atendimento de campo nacional. Isso só entra com autorização e evidência na proposta.</text>
+</svg>
