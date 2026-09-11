@@ -1,0 +1,66 @@
+{
+  "schema": "confenge.inbound-campaign-handoff/2.0",
+  "campaign_set": "INB-20260911",
+  "campaign_id": "15",
+  "prompt_version": "2.0.0",
+  "base_sha": "8f508544835490ec635d02517bce0207c6f8e426",
+  "state": "READY_FOR_INTEGRATION",
+  "release_unit": "CORE_QA_SUITE",
+  "owned_sources": [
+    "tests/campaigns/inb_20260911/15/",
+    "docs/campaigns/inb-20260911/15/"
+  ],
+  "changed_sources": [
+    "tests/campaigns/inb_20260911/15/run.mjs",
+    "tests/campaigns/inb_20260911/15/checks.mjs",
+    "tests/campaigns/inb_20260911/15/matrix.mjs",
+    "tests/campaigns/inb_20260911/15/mutations.mjs",
+    "tests/campaigns/inb_20260911/15/lib/harness.mjs",
+    "tests/campaigns/inb_20260911/15/lib/html.mjs",
+    "tests/campaigns/inb_20260911/15/lib/shipped.mjs",
+    "tests/campaigns/inb_20260911/15/python/family_membership.py",
+    "tests/campaigns/inb_20260911/15/fixtures/adversarial/receipt-before-persist.cjs",
+    "tests/campaigns/inb_20260911/15/fixtures/adversarial/pii-passthrough.cjs",
+    "tests/campaigns/inb_20260911/15/fixtures/adversarial/unknown-as-defect.cjs",
+    "tests/campaigns/inb_20260911/15/fixtures/adversarial/published-test-data.html",
+    "tests/campaigns/inb_20260911/15/fixtures/adversarial/missing-proof.html",
+    "tests/campaigns/inb_20260911/15/fixtures/adversarial/broken-required-link.html",
+    "tests/campaigns/inb_20260911/15/fixtures/adversarial/core-manifest-omit.json",
+    "tests/campaigns/inb_20260911/15/fixtures/control/sample-with-ids.html",
+    "docs/campaigns/inb-20260911/15/handoff.json",
+    "docs/campaigns/inb-20260911/15/shared-changes.json",
+    "docs/campaigns/inb-20260911/15/findings.json",
+    "docs/campaigns/inb-20260911/15/parecer.json",
+    "docs/campaigns/inb-20260911/15/runner.md",
+    "docs/campaigns/inb-20260911/15/why-existing-tests-missed.md",
+    "docs/campaigns/inb-20260911/15/evidence/browser-unavailable.log"
+  ],
+  "routes": [],
+  "dependencies": [],
+  "shared_changes": [
+    {
+      "path": "docs/campaigns/inb-20260911/15/shared-changes.json",
+      "level": "OPTIONAL_ENRICHMENT"
+    }
+  ],
+  "tests": [
+    {
+      "command": "node tests/campaigns/inb_20260911/15/run.mjs --root . --mutations --examined-kind baseline",
+      "exit_code": 0,
+      "subject_sha": "8f508544835490ec635d02517bce0207c6f8e426",
+      "overlay_hashes": null
+    }
+  ],
+  "evidence_paths": [
+    "docs/campaigns/inb-20260911/15/findings.json",
+    "docs/campaigns/inb-20260911/15/parecer.json",
+    "docs/campaigns/inb-20260911/15/why-existing-tests-missed.md",
+    "docs/campaigns/inb-20260911/15/evidence/browser-unavailable.log"
+  ],
+  "unresolved": [
+    "Handoffs 01–10 ausentes no candidato examinado (MISSING_DEPENDENCY). Não concede PASS de candidato completo.",
+    "Rota dedicada de projetos complementares (expansão 12) ausente; hub /servicos/ examinado.",
+    "Chrome/puppeteer-core indisponível; 360/390 ficou estrutural.",
+    "Parecer não cobre SHA composto. INB-16 reexecuta a suíte no freeze."
+  ]
+}
