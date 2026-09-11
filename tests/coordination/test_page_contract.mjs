@@ -133,12 +133,16 @@ test("incomplete initial context is accepted and essentials are in HTML without 
   assert.match(main, /Lista incompleta/);
   assert.match(main, /fase ainda indefinida|fase ainda indefinida ou ausência de modelo|ausência de modelo/i);
   assert.match(main, /id="pedido-compatibilizacao"/);
-  assert.match(main, /INT-DEM-001/);
+  assert.match(main, /CF-GEO-01/);
+  assert.match(main, /CF-INFO-01/);
+  assert.match(main, /href="\/casos\/demonstrativo-projeto-privado\/#CF-GEO-01"/);
+  assert.equal(html.includes("INT-DEM-001"), false);
   assert.equal(html.includes('class="no-js"'), true);
   const withoutScripts = html.replace(/<script[\s\S]*?<\/script>/gi, "");
   assert.match(withoutScripts, /Compatibilização de projetos de engenharia/);
   assert.match(withoutScripts, /Pedir proposta da compatibilização/);
   assert.match(withoutScripts, /Registrada — ajuste pendente do autor/);
+  assert.match(withoutScripts, /CF-GEO-01/);
 });
 
 test("shipped finding html matches the register renderer", () => {
@@ -147,8 +151,8 @@ test("shipped finding html matches the register renderer", () => {
   const rendered = renderFindingHtml(record);
   const shipped = html.match(/<article class="coord-finding"[\s\S]*?<\/article>/)?.[0];
   assert.ok(shipped);
-  assert.match(shipped, /data-finding-id="INT-DEM-001"/);
-  assert.match(rendered, /data-finding-id="INT-DEM-001"/);
+  assert.match(shipped, /data-finding-id="CF-GEO-01"/);
+  assert.match(rendered, /data-finding-id="CF-GEO-01"/);
   assert.equal(
     shipped.includes('data-estado="pending_author_adjustment"'),
     rendered.includes('data-estado="pending_author_adjustment"'),

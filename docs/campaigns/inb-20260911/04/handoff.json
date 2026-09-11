@@ -81,10 +81,10 @@
     },
     {
       "provider_campaign": "06",
-      "artifact_path": "docs/campaigns/inb-20260911/06/artifacts/interference-register.json",
+      "artifact_path": "data/demonstrative/private-project-pilot/consumption.v1.json",
       "level": "HARD_AT_RELEASE",
       "fallback": null,
-      "note": "Consumidor em scripts/coordination/interference_register.mjs. Enquanto o artefato de 06 não existir, a página publica exemplo demonstrativo de primeira parte, rotulado, sem obra de cliente. Fixture de teste não sobe como amostra."
+      "note": "Consumidor mapeia CF-GEO-01 e CF-INFO-01. Conferência presa a R00; resolved_in_R01 do piloto não promove detecção a correção. Link /casos/demonstrativo-projeto-privado/#CF-GEO-01. Provider HEAD 399a32c415171ccc9e26cae565ecf83f9ecd4c92."
     }
   ],
   "shared_changes": "docs/campaigns/inb-20260911/04/shared-changes.json",
@@ -105,9 +105,9 @@
   ],
   "unresolved": [
     {
-      "item": "INB-06 demonstrative overlay",
+      "item": "INB-06 consumption file in composed tree",
       "state": "WAITING_PROVIDER",
-      "path": "docs/campaigns/inb-20260911/06/artifacts/interference-register.json"
+      "path": "data/demonstrative/private-project-pilot/consumption.v1.json"
     },
     {
       "item": "INB-16 apply family/canonical/sitemap/artifact patches",
