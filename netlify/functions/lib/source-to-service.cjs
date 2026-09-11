@@ -12,6 +12,20 @@ const ORIGIN_PREFIXES = Object.freeze({ ...(SOURCE_TO_SERVICE.origin_prefixes ||
 const CHROME_PREFIXES = Object.freeze([...(SOURCE_TO_SERVICE.chrome_prefixes || [])]);
 const CONFENGE_HOSTS = new Set(["confenge.com.br", "www.confenge.com.br", "localhost", "127.0.0.1"]);
 
+/** First-touch acquisition keys. Current need/service may evolve; these must not. */
+const FIRST_TOUCH_KEYS = Object.freeze([
+  "origem",
+  "origin_url",
+  "landing_url",
+  "landing_page",
+  "utm_source",
+  "utm_medium",
+  "utm_campaign",
+  "utm_content",
+  "utm_term",
+]);
+const UTM_KEYS = Object.freeze(FIRST_TOUCH_KEYS.filter((key) => key.startsWith("utm_")));
+
 function canonicalizePath(value) {
   let s = String(value || "").trim();
   if (!s) return "";
@@ -186,16 +200,60 @@ function maps() {
   };
 }
 
+function isConfengeReferrerHost(host) {
+  if (!host) return false;
+  const h = String(host).toLowerCase().replace(/^www\./, "").replace(/:\d+$/, "");
+  return CONFENGE_HOSTS.has(h) || CONFENGE_HOSTS.has(`www.${h}`);
+}
+
+function isInternalReferrer(referrer) {
+  const raw = String(referrer || "").trim();
+  if (!raw) return false;
+  try {
+    const url = new URL(raw);
+    return isConfengeReferrerHost(url.hostname);
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Merge session attribution. First-touch origin/landing/UTM stay put.
+ * Internal navigation must not mint a new UTM campaign.
+ * Current need fields (jornada, tema, estagio, cta_id, …) may evolve.
+ */
+function mergeAttributionSession(storedPrior, incoming, opts = {}) {
+  const prior = storedPrior && typeof storedPrior === "object" && !Array.isArray(storedPrior)
+    ? storedPrior
+    : {};
+  const next = incoming && typeof incoming === "object" && !Array.isArray(incoming)
+    ? incoming
+    : {};
+  const internal = opts.internalReferrer === true || isInternalReferrer(opts.referrer);
+  const out = { ...prior };
+  for (const [key, value] of Object.entries(next)) {
+    if (value == null || value === "") continue;
+    if (FIRST_TOUCH_KEYS.includes(key) && prior[key]) continue;
+    if (UTM_KEYS.includes(key) && internal) continue;
+    out[key] = value;
+  }
+  return out;
+}
+
 module.exports = {
   UNKNOWN_SERVICE,
   CANONICAL_DESTINATIONS,
   ORIGIN_PREFIXES,
   CHROME_PREFIXES,
+  FIRST_TOUCH_KEYS,
+  UTM_KEYS,
   canonicalizePath,
   canonicalizeDestination,
   classifyTransition,
   lookupDestinationServiceId,
   originFamilyFromPath,
   normalizeTransitionProps,
+  isInternalReferrer,
+  mergeAttributionSession,
   maps,
 };

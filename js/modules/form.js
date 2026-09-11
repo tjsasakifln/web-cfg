@@ -567,6 +567,8 @@
           payload.idempotency_key = payload.idempotency_key
             || ensureReceiptIdempotency()
             || `fe-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+          // Request-processing consent is `consentimento`. Analytics/marketing
+          // denial, blocked storage, or missing cookies must not stop this POST.
           // Attribution already injected into hidden fields; ensure landing
           if (!payload.landing_page) payload.landing_page = pagePath;
           // Turnstile token if widget present
@@ -692,9 +694,9 @@
       const bodyAttr = {
         pseo_page_id: pseoRoot.getAttribute('data-pseo-page-id') || '',
         page_type: pseoRoot.getAttribute('data-pseo-page-type') || '',
-        origem: pagePath,
-        origin_url: pagePath,
       };
+      if (!storedAttr.origem) bodyAttr.origem = pagePath;
+      if (!storedAttr.origin_url) bodyAttr.origin_url = pagePath;
       writeStoredPseo({ ...storedAttr, ...bodyAttr });
     }
 

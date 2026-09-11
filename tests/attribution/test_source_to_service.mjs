@@ -1037,6 +1037,101 @@ for (const target of [
   }
 }
 
+{
+  const wa = sourceToService.classifyTransition({
+    href: "https://wa.me/5548988344559",
+    origin_path: "/ferramentas/checklist-reequilibrio/",
+  });
+  if (wa.kind !== "whatsapp" || wa.event !== "whatsapp_click") {
+    fail("whatsapp_without_text_not_click", wa);
+  }
+  if (wa.event === "lead_persisted" || wa.kind === "lead") {
+    fail("whatsapp_must_not_be_receipt", wa);
+  }
+  const mail = sourceToService.classifyTransition({
+    href: "mailto:tiago.sasaki@confenge.com.br",
+    origin_path: "/",
+  });
+  if (mail.event !== "email_click") fail("mailto_not_email_click", mail);
+}
+
+console.log("PASS whatsapp_without_message_is_contact_intent_not_receipt");
+
+{
+  const merged = sourceToService.mergeAttributionSession(
+    { origem: "/ferramentas/x/", utm_source: "gsc", landing_url: "/ferramentas/x/" },
+    {
+      origem: "/servicos/",
+      utm_source: "nav",
+      landing_url: "/servicos/",
+      estagio: "perícia, assistência técnica ou avaliação",
+      jornada: "pericia",
+    },
+    { internalReferrer: true },
+  );
+  if (merged.origem !== "/ferramentas/x/" || merged.utm_source !== "gsc") {
+    fail("server_merge_origin_lost", merged);
+  }
+  if (merged.jornada !== "pericia") fail("server_merge_need_frozen", merged);
+  if (!sourceToService.isInternalReferrer("https://confenge.com.br/ferramentas/x/")) {
+    fail("internal_referrer_miss");
+  }
+  if (sourceToService.isInternalReferrer("https://www.google.com/")) {
+    fail("external_referrer_treated_internal");
+  }
+  console.log("PASS mergeAttributionSession_first_touch");
+}
+
+{
+  const empty = agg.countPersistedContactsByServiceOrigin([]);
+  if (empty.persisted_count !== "UNKNOWN" || empty.by_service.UNKNOWN !== "UNKNOWN") {
+    fail("empty_counts_must_be_UNKNOWN", empty);
+  }
+  const counted = agg.countPersistedContactsByServiceOrigin([
+    {
+      lead_id: "lead-aaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      status: "persisted",
+      estagio: "projeto, revisão ou compatibilização",
+      origem: "/ferramentas/checklist-reequilibrio/",
+      record_kind: "real",
+    },
+    {
+      lead_id: "lead-bbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      status: "persisted_notified",
+      estagio: "projeto, revisão ou compatibilização",
+      origem: "/ferramentas/checklist-reequilibrio/",
+      record_kind: "real",
+    },
+    {
+      lead_id: "lead-ccccccccccccccccccccccccccc",
+      status: "persisted",
+      record_kind: "real",
+    },
+    {
+      lead_id: "lead-ddddddddddddddddddddddddddd",
+      status: "persisted",
+      estagio: "perícia, assistência técnica ou avaliação",
+      origem: "/conteudos/x/",
+      nome: "QA Probe",
+      record_kind: "qa",
+      test_mode: true,
+    },
+  ]);
+  if (counted.persisted_count !== 3) fail("persisted_count", counted);
+  if (counted.by_service["projeto, revisão ou compatibilização"] !== 2) {
+    fail("by_service", counted.by_service);
+  }
+  if (counted.by_service.UNKNOWN !== 1) fail("unknown_service_row", counted);
+  if (Object.prototype.hasOwnProperty.call(counted.by_service, "perícia, assistência técnica ou avaliação")) {
+    fail("qa_leaked_into_service_counts", counted.by_service);
+  }
+  if (counted.by_origin["/ferramentas/checklist-reequilibrio/"] !== 2) {
+    fail("by_origin", counted.by_origin);
+  }
+  if (counted.unknown_origin !== 1) fail("unknown_origin_row", counted);
+  console.log("PASS countPersistedContactsByServiceOrigin");
+}
+
 const primary = {
   journeys: journeyResults.map((j) => ({
     name: j.name,

@@ -2000,6 +2000,181 @@ _reset();
   } else pass("intent_kind_no_cnpj_in_handoff");
 }
 
+// --- INB-20260911/02: private persist, origin vs edited need, consent split,
+// privilege claims, persist-fail honesty, concurrent idempotency, no-JS path.
+{
+  const { FileStore } = require(path.join(root, "netlify/functions/lib/lead-store.cjs"));
+  const { publicSuccessBody } = require(path.join(root, "netlify/functions/lib/lead-core.cjs"));
+  const inbound = require(path.join(root, "netlify/functions/lib/inbound-handoff.cjs"));
+  const formSrc = fs.readFileSync(path.join(root, "js/modules/form.js"), "utf8");
+  if (!formSrc.includes("typeof window.fetch === 'function'") || !formSrc.includes("event.preventDefault()")) {
+    fail("form_js_missing_fetch_guard");
+  }
+  if (!/if \(typeof window\.fetch === 'function'[\s\S]*event\.preventDefault\(\)/.test(formSrc)) {
+    fail("form_js_preventdefault_unconditional");
+  }
+  if (/track\('lead_persisted'[\s\S]{0,200}wa\.me/.test(formSrc)) {
+    fail("form_js_whatsapp_fallback_emits_lead_persisted");
+  }
+  pass("nojs_native_submit_guard_and_whatsapp_not_receipt");
+
+  const privatePayload = {
+    nome: "Ana Privada",
+    telefone: "48988344559",
+    estagio: "projeto, revisão ou compatibilização",
+    jornada: "projeto",
+    consentimento: "on",
+    origem: "/ferramentas/checklist-reequilibrio/",
+    landing_url: "/ferramentas/checklist-reequilibrio/",
+    analytics_consent: false,
+    marketing_consent: false,
+    cookie_consent: "denied",
+    paid_priority: true,
+    authorized: true,
+    approved: "yes",
+    commercial_authorization: "VIP",
+    public_contract_id: "",
+    cnpj: "",
+    empresa: "",
+    mensagem: "",
+    idempotency_key: "inb02-private-001",
+  };
+  const priv = await handler(event(privatePayload, "POST", { ip: "203.0.113.201" }));
+  const privBody = JSON.parse(priv.body);
+  const privStored = privBody.lead_id ? await mem.get(privBody.lead_id) : null;
+  if (priv.statusCode !== 201 || !privStored) fail("private_without_b2g", { status: priv.statusCode, privBody, privStored });
+  if (privStored.estagio !== "projeto, revisão ou compatibilização") fail("private_stage", privStored.estagio);
+  if (privStored.origem !== "/ferramentas/checklist-reequilibrio/") fail("private_origem", privStored.origem);
+  if (privStored.public_contract_id || privStored.cnpj) fail("private_got_b2g_fields", privStored);
+  if (privStored.paid_priority || privStored.authorized || privStored.approved || privStored.commercial_authorization) {
+    fail("privilege_claims_persisted", privStored);
+  }
+  if (privBody.handoff || privBody.handoff_status === "DELIVERED") fail("public_claimed_handoff", privBody);
+  pass("private_persist_without_b2g_and_no_privilege");
+
+  const analyticsOnly = await handler(event({
+    nome: "Ana Privada",
+    email: "ana.privada@example.com",
+    estagio: "projeto, revisão ou compatibilização",
+    analytics_consent: true,
+    marketing_consent: true,
+  }, "POST", { ip: "203.0.113.202" }));
+  const analyticsOnlyBody = JSON.parse(analyticsOnly.body);
+  if (analyticsOnly.statusCode !== 400 || analyticsOnlyBody.error !== "consent") {
+    fail("analytics_consent_must_not_replace_request_consent", analyticsOnlyBody);
+  }
+  pass("analytics_consent_does_not_replace_request_consent");
+
+  const altered = await handler(event({
+    nome: "Ana Privada",
+    email: "ana.privada@example.com",
+    estagio: "perícia, assistência técnica ou avaliação",
+    jornada: "pericia",
+    consentimento: "on",
+    origem: "/ferramentas/checklist-reequilibrio/",
+    landing_url: "/ferramentas/checklist-reequilibrio/",
+    analytics_consent: false,
+    idempotency_key: "inb02-altered-need-001",
+  }, "POST", { ip: "203.0.113.203" }));
+  const alteredBody = JSON.parse(altered.body);
+  const alteredStored = alteredBody.lead_id ? await mem.get(alteredBody.lead_id) : null;
+  if (altered.statusCode !== 201 || !alteredStored) fail("altered_need_persist", alteredBody);
+  if (alteredStored.estagio !== "perícia, assistência técnica ou avaliação") {
+    fail("altered_need_not_current", alteredStored.estagio);
+  }
+  if (alteredStored.origem !== "/ferramentas/checklist-reequilibrio/") {
+    fail("altered_need_overwrote_origin", alteredStored.origem);
+  }
+  pass("edited_need_prevails_origin_frozen");
+
+  const missingNeed = await handler(event({
+    nome: "Ana Privada",
+    email: "ana.privada@example.com",
+    consentimento: "on",
+  }, "POST", { ip: "203.0.113.204" }));
+  if (missingNeed.statusCode !== 400 || JSON.parse(missingNeed.body).ok !== false) {
+    fail("need_required", missingNeed);
+  }
+  pass("need_still_required");
+
+  const successShape = publicSuccessBody({
+    lead_id: "lead-fffffffffffffffffffffffffff",
+    received_at: "2026-09-11T00:00:00.000Z",
+    journey: "outro",
+    stage_category: "projeto, revisão ou compatibilização",
+    status: "persisted",
+  });
+  if (!successShape.ok || !successShape.lead_id) fail("success_shape", successShape);
+  if (Object.prototype.hasOwnProperty.call(successShape, "handoff")) fail("success_shape_handoff", successShape);
+  pass("public_success_is_persist_not_handoff");
+
+  if (inbound.handoffAcceptedSemantic(null) !== "UNKNOWN") fail("handoff_semantic_null");
+  if (inbound.handoffAcceptedSemantic({ status: "DELIVERED" }) !== "handoff_accepted") {
+    fail("handoff_semantic_delivered");
+  }
+  if (inbound.handoffAcceptedSemantic({ status: "RETRYABLE" }) !== "RETRYABLE") {
+    fail("handoff_semantic_pending_claimed_accepted");
+  }
+  if (inbound.handoffAcceptedSemantic({ status: "SKIPPED", reason: "not_configured" }) !== "SKIPPED") {
+    fail("handoff_missing_dest_not_accepted");
+  }
+  pass("handoff_accepted_semantic");
+
+  const failingStore = {
+    ephemeral: false,
+    async getByIdempotency() { return null; },
+    async get() { return null; },
+    async put() { throw new Error("disk_full"); },
+    async update() { return null; },
+    async list() { return []; },
+  };
+  setStoreForTests(failingStore);
+  const failed = await handler(event({
+    nome: "Ana Privada",
+    email: "ana.privada@example.com",
+    estagio: "projeto, revisão ou compatibilização",
+    consentimento: "on",
+    idempotency_key: "inb02-persist-fail-001",
+  }, "POST", { ip: "203.0.113.205" }));
+  const failedBody = JSON.parse(failed.body);
+  if (failed.statusCode !== 503 || failedBody.ok !== false) fail("persist_fail_status", failedBody);
+  if (failedBody.lead_id || failedBody.receipt_id) fail("persist_fail_fictitious_protocol", failedBody);
+  setStoreForTests(mem);
+  pass("persist_failure_has_no_protocol");
+
+  const concDir = fs.mkdtempSync(path.join(os.tmpdir(), "confenge-inb02-"));
+  const concStore = new FileStore(concDir);
+  setStoreForTests(concStore);
+  const concPayload = {
+    nome: "Ana Privada",
+    email: "ana.privada@example.com",
+    estagio: "projeto, revisão ou compatibilização",
+    consentimento: "on",
+    origem: "/ferramentas/checklist-reequilibrio/",
+    idempotency_key: "inb02-concurrent-001",
+  };
+  const concHeaders = { ip: "203.0.113.206", "Idempotency-Key": "inb02-concurrent-001" };
+  const concResults = await Promise.all([
+    handler(event(concPayload, "POST", concHeaders)),
+    handler(event(concPayload, "POST", concHeaders)),
+    handler(event(concPayload, "POST", concHeaders)),
+  ]);
+  const concBodies = concResults.map((r) => JSON.parse(r.body));
+  const concIds = [...new Set(concBodies.map((b) => b.lead_id).filter(Boolean))];
+  const concList = await concStore.list();
+  if (concIds.length !== 1) fail("concurrent_ids", concBodies);
+  if (concList.length !== 1) fail("concurrent_store_rows", concList.length);
+  const retry = await handler(event(concPayload, "POST", concHeaders));
+  const retryBody = JSON.parse(retry.body);
+  if (retry.statusCode !== 200 || retryBody.idempotent !== true || retryBody.lead_id !== concIds[0]) {
+    fail("retry_same_key", retryBody);
+  }
+  if ((await concStore.list()).length !== 1) fail("retry_created_duplicate");
+  setStoreForTests(mem);
+  try { fs.rmSync(concDir, { recursive: true, force: true }); } catch { /* ignore */ }
+  pass("concurrent_and_retry_one_receipt", { lead_id: concIds[0] });
+}
+
 console.log("LEAD_FUNCTION_OK", JSON.stringify({ tests: results.length, storeDir }));
 // cleanup store dir
 try {
