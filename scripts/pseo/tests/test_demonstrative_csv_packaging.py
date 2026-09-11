@@ -13,8 +13,9 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from scripts.pseo.public_artifact import (  # noqa: E402
-    PUBLIC_ALLOWED_NESTED_DATA_DIRS,
     assemble_public_artifact,
+    is_authorized_public_nested_data_dir,
+    is_authorized_public_nested_data_file,
 )
 
 CSV_RELPATHS = (
@@ -26,9 +27,13 @@ CSV_RELPATHS = (
 
 
 def test_allowed_nested_data_dir_is_exact() -> None:
-    assert PUBLIC_ALLOWED_NESTED_DATA_DIRS == {
-        "casos/demonstrativo-projeto-privado/data"
-    }
+    assert is_authorized_public_nested_data_dir("casos/demonstrativo-projeto-privado/data")
+    assert is_authorized_public_nested_data_dir("casos/demonstrativo-infraestrutura/data")
+    assert not is_authorized_public_nested_data_dir("data")
+    assert not is_authorized_public_nested_data_dir("ops/data")
+    assert is_authorized_public_nested_data_file(
+        "casos/demonstrativo-projeto-privado/data/revisao.csv"
+    )
 
 
 def test_four_demonstrative_csvs_are_copied_with_matching_bodies(tmp_path: Path | None = None) -> None:

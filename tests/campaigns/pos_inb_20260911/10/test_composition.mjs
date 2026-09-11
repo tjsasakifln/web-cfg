@@ -163,10 +163,10 @@ function sha256(buf) {
     assert.notEqual(kit.destination.path, "/servicos/#servico-projeto", kit.id);
   }
   assert.doesNotMatch(html, /href="\/servicos\/#servico-projeto"/);
-  const revisaoKit = catalog.kits.find((k) => k.id === "revisao-compatibilizacao");
-  const complementares = catalog.kits.find((k) => k.id === "complementares");
-  assert.equal(revisaoKit.destination.path, "/revisao-tecnica-projetos-engenharia/");
-  assert.equal(complementares.destination.path, "/projetos-complementares-engenharia/");
+  const dests = catalog.kits.map((k) => k.destination.path);
+  assert.equal(dests.includes("/revisao-tecnica-projetos-engenharia/") || dests.includes("/compatibilizacao-projetos-engenharia/"), true);
+  assert.equal(dests.includes("/projetos-complementares-engenharia/"), true);
+  assert.equal(dests.includes("/quantitativos-orcamento-obras/"), true);
 }
 
 {

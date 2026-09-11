@@ -23,6 +23,12 @@
       "public_status": "DEMONSTRATIVE"
     },
     {
+      "path": "/casos/demonstrativo-infraestrutura/",
+      "permission_class": "demonstrativo",
+      "client_authorized": false,
+      "public_status": "DEMONSTRATIVE"
+    },
+    {
       "path": "/casos/medicao-glosa-demonstrativo/",
       "permission_class": "demonstrativo",
       "client_authorized": false,

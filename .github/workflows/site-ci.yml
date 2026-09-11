@@ -177,6 +177,11 @@ jobs:
           CONTEXT: ${{ inputs.export_public_artifact && 'production' || '' }}
           TURNSTILE_SITE_KEY: ${{ vars.TURNSTILE_SITE_KEY }}
         run: npm run build:site
+      - name: Promised public downloads are in the gated artifact
+        run: |
+          node scripts/site/verify_promised_public_resources.mjs --mode artifact --artifact _site --source-root .
+          python3 -m pytest tests/pos-inb-20260911/03/test_assemble_nested_public_data.py -q
+          node --test tests/pos-inb-20260911/03/test_verify_promised_public_resources.mjs
       - name: Final public-surface coverage and copy gate
         run: |
           ROBOTS_PACKAGE_REQUIRED=1 python3 -m pytest scripts/site/test_public_server_acceptance.py -q

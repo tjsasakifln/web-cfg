@@ -28,7 +28,17 @@ from scripts.site.fingerprint_css import (  # noqa: E402
 
 HEADERS = ROOT / "_headers"
 SITE = ROOT / "_site"
-DOWNLOADABLE = {"/radar/nacional-obras-publicas/gsc-demand-sample.json"}
+DOWNLOADABLE = {
+    "/radar/nacional-obras-publicas/gsc-demand-sample.json",
+    "/casos/demonstrativo-projeto-privado/data/quantitativos.csv",
+    "/casos/demonstrativo-projeto-privado/data/orcamento.csv",
+    "/casos/demonstrativo-projeto-privado/data/coordenacao.csv",
+    "/casos/demonstrativo-projeto-privado/data/revisao.csv",
+    "/casos/demonstrativo-infraestrutura/data/quantitativos.csv",
+    "/casos/demonstrativo-infraestrutura/data/orcamento.csv",
+    "/casos/demonstrativo-infraestrutura/data/coordenacao.csv",
+    "/casos/demonstrativo-infraestrutura/data/revisao.csv",
+}
 
 
 def hashed_source_assets() -> set[str]:

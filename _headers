@@ -103,6 +103,46 @@
   Content-Type: application/json
   Content-Disposition: attachment; filename="gsc-demand-sample.json"
 
+/casos/demonstrativo-projeto-privado/data/quantitativos.csv
+  Content-Type: text/csv; charset=utf-8
+  Content-Disposition: attachment; filename="quantitativos.csv"
+  Cache-Control: public, max-age=3600, must-revalidate, no-transform
+
+/casos/demonstrativo-projeto-privado/data/orcamento.csv
+  Content-Type: text/csv; charset=utf-8
+  Content-Disposition: attachment; filename="orcamento.csv"
+  Cache-Control: public, max-age=3600, must-revalidate, no-transform
+
+/casos/demonstrativo-projeto-privado/data/coordenacao.csv
+  Content-Type: text/csv; charset=utf-8
+  Content-Disposition: attachment; filename="coordenacao.csv"
+  Cache-Control: public, max-age=3600, must-revalidate, no-transform
+
+/casos/demonstrativo-projeto-privado/data/revisao.csv
+  Content-Type: text/csv; charset=utf-8
+  Content-Disposition: attachment; filename="revisao.csv"
+  Cache-Control: public, max-age=3600, must-revalidate, no-transform
+
+/casos/demonstrativo-infraestrutura/data/quantitativos.csv
+  Content-Type: text/csv; charset=utf-8
+  Content-Disposition: attachment; filename="quantitativos.csv"
+  Cache-Control: public, max-age=3600, must-revalidate, no-transform
+
+/casos/demonstrativo-infraestrutura/data/orcamento.csv
+  Content-Type: text/csv; charset=utf-8
+  Content-Disposition: attachment; filename="orcamento.csv"
+  Cache-Control: public, max-age=3600, must-revalidate, no-transform
+
+/casos/demonstrativo-infraestrutura/data/coordenacao.csv
+  Content-Type: text/csv; charset=utf-8
+  Content-Disposition: attachment; filename="coordenacao.csv"
+  Cache-Control: public, max-age=3600, must-revalidate, no-transform
+
+/casos/demonstrativo-infraestrutura/data/revisao.csv
+  Content-Type: text/csv; charset=utf-8
+  Content-Disposition: attachment; filename="revisao.csv"
+  Cache-Control: public, max-age=3600, must-revalidate, no-transform
+
 /assets/tiago-sasaki-foto-v11-sem-fundo-560.avif
   Content-Type: image/avif
 
