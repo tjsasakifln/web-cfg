@@ -770,10 +770,16 @@ body{font-size:var(--text-body-mobile);line-height:var(--lh-body)}
   .header-inner{min-height:60px}
   .brand,.brand img{width:160px}
   .mobile-nav{top:60px;max-height:calc(100dvh - 70px)}
-  .pillar-docs li:not(:has(.icon)){
-    display:block;
+  .pillar-docs li{
+    display:grid;
+    grid-template-columns:18px minmax(0,1fr);
     min-width:0;
     overflow-wrap:anywhere;
+  }
+  .pillar-docs li>strong{
+    flex:unset;
+    overflow-wrap:anywhere;
+    word-break:break-word;
   }
 }
 
