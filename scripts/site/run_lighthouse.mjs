@@ -27,6 +27,7 @@ import {
   deriveTerminalState,
   isRetryableOutcome,
   runMeasurement,
+  terminateActiveMeasurements,
 } from "./lighthouse_infra.mjs";
 import {
   deriveCoverage,
@@ -333,6 +334,18 @@ const WORK = mkdtempSync(join(tmpdir(), "confenge-lighthouse-supervisor-"));
  * run, so the terminal summary and its evidence are always persisted. */
 const GLOBAL_BUDGET_MS = Number(process.env.LH_GLOBAL_BUDGET_MS || 21 * 60 * 1000);
 const startedAt = Date.now();
+
+// The acceptance wrapper supervises this process and will SIGKILL it if it
+// overruns. SIGKILL cannot be trapped, so the signals we CAN trap must take the
+// measurement children — and their browsers — down with us; the child covers
+// the untrappable case by watching for being orphaned.
+for (const signal of ["SIGTERM", "SIGINT", "SIGHUP"]) {
+  process.on(signal, () => {
+    terminateActiveMeasurements();
+    if (server) server.close();
+    process.exit(1);
+  });
+}
 /** Whether a whole measurement still fits, so none is started only to be cut
  * short and blamed on the page it was measuring. */
 const affordsMeasurement = () =>

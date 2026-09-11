@@ -164,8 +164,15 @@ export function publicFamilyArgs({ origin, expectedSha, route, runnerPath }) {
  * release, or one that did not measure the home the required number of times.
  */
 export function assertPublicFamilySummary(summary) {
-  if (summary?.terminal_state && summary.terminal_state !== "MEASURED_PASS") {
-    throw new Error(`runtime Lighthouse terminal state is ${summary.terminal_state}`);
+  // The terminal state is REQUIRED, not merely checked when present. Guarding
+  // it with `&&` meant a summary carrying no state at all passed: exactly the
+  // shape of a report produced before this contract existed, or left behind by
+  // an earlier release. Evidence that does not state how its run ended cannot
+  // approve a promotion.
+  if (summary?.terminal_state !== "MEASURED_PASS") {
+    throw new Error(
+      `runtime Lighthouse terminal state is ${JSON.stringify(summary?.terminal_state ?? null)}; only MEASURED_PASS is evidence of a concluded run`,
+    );
   }
   if (summary?.evaluation?.ok !== true) {
     throw new Error("runtime Lighthouse summary did not meet the public budgets");

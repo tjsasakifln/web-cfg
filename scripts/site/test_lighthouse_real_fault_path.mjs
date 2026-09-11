@@ -248,5 +248,113 @@ pass("real_page_failures_during_measurement_are_never_recovered_as_infrastructur
   pass("a_clean_measurement_produces_a_complete_row_through_the_real_child");
 }
 
+// ---------------------------------------------------------------------------
+// 10. AN UNTRAPPABLE KILL OF THE SUPERVISOR MUST NOT LEAVE CHILDREN BEHIND.
+//
+//     The acceptance wrapper supervises the supervisor and SIGKILLs it on
+//     overrun; a job timeout does the same. SIGKILL cannot be trapped, so the
+//     supervisor gets no chance to clean up and its measurement child — holding
+//     a headless Chrome — would be orphaned, competing for CPU with whatever
+//     runs next and silently inflating its metrics.
+//
+//     The child watches for losing its parent. This drives the real thing: a
+//     parent that spawns the real child and is then SIGKILLed.
+// ---------------------------------------------------------------------------
+{
+  const { spawn } = await import("child_process");
+  const pidFile = join(WORK, "orphan-child.pid");
+  const specPath = join(WORK, "orphan-spec.json");
+  const outcomePath = join(WORK, "orphan-outcome.json");
+  writeFileSync(
+    specPath,
+    JSON.stringify({
+      url: "http://127.0.0.1:8766/",
+      path: "/",
+      slug: "home",
+      run: 1,
+      attempt: 1,
+      out_json: join(WORK, "orphan-lhr.json"),
+      base: "http://127.0.0.1:8766",
+      form_factor: "mobile",
+      viewport: { width: 390, height: 844, device_scale_factor: 3 },
+      runtime_mode: false,
+      seo_exempt: false,
+    }),
+  );
+  // A stand-in parent that spawns the REAL measurement child, exactly as the
+  // supervisor does, and then is killed untrappably.
+  const parentScript = join(WORK, "orphan-parent.mjs");
+  writeFileSync(
+    parentScript,
+    `import { spawn } from "node:child_process";
+     import { writeFileSync } from "node:fs";
+     const child = spawn(process.execPath, [${JSON.stringify(CHILD)}, ${JSON.stringify(specPath)}, ${JSON.stringify(outcomePath)}], {
+       stdio: "ignore",
+       env: { ...process.env, NODE_OPTIONS: "--import ${INJECT}", LH_FAULT: "hang" },
+     });
+     writeFileSync(${JSON.stringify(pidFile)}, String(child.pid));
+     setInterval(() => {}, 1000);`,
+  );
+  const parent = spawn(process.execPath, [parentScript], { stdio: "ignore" });
+  let childPid = null;
+  for (let i = 0; i < 40 && !childPid; i += 1) {
+    await new Promise((r) => setTimeout(r, 250));
+    if (existsSync(pidFile)) childPid = Number(readFileSync(pidFile, "utf8").trim());
+  }
+  assert.ok(childPid, "the real measurement child must have started");
+  const alive = (pid) => {
+    try {
+      process.kill(pid, 0);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+  assert.equal(alive(childPid), true, "the real child must be running before its supervisor is killed");
+
+  parent.kill("SIGKILL");
+  let gone = false;
+  for (let i = 0; i < 60 && !gone; i += 1) {
+    await new Promise((r) => setTimeout(r, 250));
+    gone = !alive(childPid);
+  }
+  assert.equal(
+    gone,
+    true,
+    "the REAL measurement child must terminate itself when its supervisor is killed untrappably",
+  );
+  pass("an_untrappable_kill_of_the_supervisor_leaves_no_measurement_child_behind");
+}
+
+// ---------------------------------------------------------------------------
+// 11. The supervisor takes its children down on the signals it CAN trap.
+// ---------------------------------------------------------------------------
+{
+  const infraSource = readFileSync(
+    fileURLToPath(new URL("./lighthouse_infra.mjs", import.meta.url)),
+    "utf8",
+  );
+  const runnerSource = readFileSync(
+    fileURLToPath(new URL("./run_lighthouse.mjs", import.meta.url)),
+    "utf8",
+  );
+  assert.match(infraSource, /export function terminateActiveMeasurements/);
+  assert.match(infraSource, /activeChildren\.add\(child\)/);
+  assert.match(infraSource, /activeChildren\.delete\(child\)/);
+  for (const signal of ["SIGTERM", "SIGINT", "SIGHUP"]) {
+    assert.ok(
+      runnerSource.includes(signal),
+      `the supervisor must take its children down on ${signal}`,
+    );
+  }
+  assert.match(runnerSource, /terminateActiveMeasurements\(\)/);
+  const childSource = readFileSync(
+    fileURLToPath(new URL("./lighthouse_measure_child.mjs", import.meta.url)),
+    "utf8",
+  );
+  assert.match(childSource, /process\.ppid !== bornTo/, "the child must detect being orphaned");
+  pass("the_supervisor_and_child_cover_both_trappable_and_untrappable_terminations");
+}
+
 rmSync(WORK, { recursive: true, force: true });
 console.log(`LIGHTHOUSE_REAL_FAULT_PATH_OK (${ok} counterproofs on the real path)`);

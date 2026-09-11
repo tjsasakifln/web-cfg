@@ -155,7 +155,7 @@ function startCandidate(config) {
  * injected directory, plus a sidecar with the argv it received — the only
  * other leg that could reach the network, so its origin is asserted too.
  */
-function writeStub(dir, patch = {}) {
+function writeStub(dir, patch = {}, mode = "ok", shaOverride = null) {
   const summaryDir = join(dir, "summaries");
   const sidecar = join(dir, "runner-argv.json");
   const stubPath = join(dir, "stub_runner.mjs");
@@ -167,7 +167,16 @@ import { join } from "node:path";
 const SUMMARY_DIR = ${JSON.stringify(summaryDir)};
 const SIDECAR = ${JSON.stringify(sidecar)};
 const PATCH = ${JSON.stringify(patch)};
+const MODE = ${JSON.stringify(mode)};
+const SHA_OVERRIDE = ${JSON.stringify(shaOverride)};
 const argv = process.argv.slice(2);
+if (MODE === "hang") {
+  // Never produces a measurement and never exits: the wrapper's supervision
+  // must terminate it rather than let it consume the job budget.
+  setInterval(() => {}, 1000);
+} else if (MODE === "die") {
+  process.exit(1);
+}
 writeFileSync(SIDECAR, JSON.stringify(argv, null, 2));
 const opt = (n) => argv.find((a) => a.startsWith("--" + n + "=")) ?.slice(n.length + 3) || "";
 const sha = opt("expected-sha");
@@ -189,8 +198,14 @@ const summary = {
   results,
   ...PATCH,
 };
+if (MODE === "stateless") delete summary.terminal_state;
 mkdirSync(SUMMARY_DIR, { recursive: true });
-writeFileSync(join(SUMMARY_DIR, "summary-" + sha + ".json"), JSON.stringify(summary, null, 2) + "\\n");
+if (MODE !== "hang") {
+  writeFileSync(
+    join(SUMMARY_DIR, "summary-" + (SHA_OVERRIDE || sha) + ".json"),
+    JSON.stringify(summary, null, 2) + "\\n",
+  );
+}
 `,
   );
   return { runnerPath: stubPath, summaryDir, sidecar };
@@ -200,17 +215,24 @@ writeFileSync(join(SUMMARY_DIR, "summary-" + sha + ".json"), JSON.stringify(summ
  * One rehearsal: real server, real `runAcceptance`, stub Lighthouse.
  * Returns everything an assertion could need, including the persisted report.
  */
-async function rehearse({ config = candidate(), summaryPatch = {}, expectedSha = SHA } = {}) {
+async function rehearse({
+  config = candidate(),
+  summaryPatch = {},
+  expectedSha = SHA,
+  stubMode = "ok",
+  stubShaOverride = null,
+  acceptance = runAcceptance,
+} = {}) {
   caseId += 1;
   const dir = join(WORK, `case-${caseId}`);
   mkdirSync(dir, { recursive: true });
-  const stub = writeStub(dir, summaryPatch);
+  const stub = writeStub(dir, summaryPatch, stubMode, stubShaOverride);
   const server = await startCandidate(config);
   const reportPath = join(dir, "report.json");
   let error = null;
   let returned = null;
   try {
-    returned = await runAcceptance(
+    returned = await acceptance(
       [server.origin, `--expected-sha=${expectedSha}`, `--report=${reportPath}`],
       { runnerPath: stub.runnerPath, summaryDir: stub.summaryDir },
     );
@@ -454,10 +476,57 @@ const failure = (run, pattern) => {
   pass("a_hub_whose_bytes_differ_from_the_overlay_digest_blocks_acceptance");
 }
 
+// 3.11b evidence that does not say how its run ended. This is the shape of a
+// report written before the terminal-state contract existed, or left behind by
+// an earlier release: it carries results and a passing evaluation, and says
+// nothing about whether the run concluded.
+{
+  // Genuinely absent: the key is not in the document at all.
+  const absent = await rehearse({ stubMode: "stateless" });
+  failure(absent, /terminal state is null/);
+  // And explicitly null, which JSON can express.
+  const nulled = await rehearse({ summaryPatch: { terminal_state: null } });
+  failure(nulled, /terminal state is null/);
+  pass("a_report_without_a_terminal_state_cannot_approve_a_promotion");
+}
+
+// 3.11c a report for ANOTHER release. The run produces a summary, but not the
+// one this promotion needs, so the expected evidence is simply absent.
+{
+  const run = await rehearse({ stubShaOverride: "f".repeat(40) });
+  failure(run, /runtime Lighthouse execution failed|terminal state/);
+  pass("a_report_from_an_incompatible_context_cannot_approve_a_promotion");
+}
+
+// 3.11d a runner that produces nothing and exits non-zero — the downstream
+// shape of a terminated measurement.
+{
+  const run = await rehearse({ stubMode: "die" });
+  failure(run, /runtime Lighthouse execution failed/);
+  pass("a_runner_that_produces_no_measurement_blocks_acceptance");
+}
+
+// 3.11e TERMINATION BY TIMEOUT, driven against a runner that genuinely hangs.
+// A fresh module instance is imported so the shortened budget is actually read;
+// the production defaults are untouched.
+{
+  process.env.RUNTIME_ACCEPTANCE_LH_BUDGET_MS = "1000";
+  process.env.RUNTIME_ACCEPTANCE_LH_TIMEOUT_MS = "3000";
+  const short = await import("./runtime_lighthouse_acceptance.mjs?short-timeout");
+  delete process.env.RUNTIME_ACCEPTANCE_LH_BUDGET_MS;
+  delete process.env.RUNTIME_ACCEPTANCE_LH_TIMEOUT_MS;
+  const started = Date.now();
+  const run = await rehearse({ stubMode: "hang", acceptance: short.runAcceptance });
+  const elapsed = Date.now() - started;
+  failure(run, /runtime Lighthouse execution failed/);
+  assert.ok(elapsed < 60000, `the wrapper must enforce its deadline, took ${elapsed}ms`);
+  pass("a_hanging_measurement_is_terminated_and_blocks_acceptance");
+}
+
 // 3.12 the measurement could not conclude.
 {
   const run = await rehearse({ summaryPatch: { terminal_state: "INVALID_OR_INCOMPLETE" } });
-  failure(run, /terminal state is INVALID_OR_INCOMPLETE/);
+  failure(run, /terminal state is "INVALID_OR_INCOMPLETE"/);
   pass("an_inconclusive_lighthouse_summary_blocks_acceptance");
 }
 

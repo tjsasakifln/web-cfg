@@ -104,12 +104,24 @@ const goodSummary = (extra = {}) => ({
 {
   assert.deepEqual(assertPublicFamilySummary(goodSummary()).length, 3);
 
-  // A run that could not conclude is not a verdict.
-  for (const state of ["INVALID_OR_INCOMPLETE", "MEASURED_FAIL"]) {
+  // The terminal state is REQUIRED. A summary that does not say how its run
+  // ended — one produced before this contract existed, or left over from an
+  // earlier release — is not evidence that the run concluded. Guarding the
+  // check with `&&` let exactly those through.
+  for (const [label, summary] of [
+    ["inconclusive", goodSummary({ terminal_state: "INVALID_OR_INCOMPLETE" })],
+    ["measured failure", goodSummary({ terminal_state: "MEASURED_FAIL" })],
+    ["absent", (() => { const s = goodSummary(); delete s.terminal_state; return s; })()],
+    ["null", goodSummary({ terminal_state: null })],
+    ["undefined", goodSummary({ terminal_state: undefined })],
+    ["empty", goodSummary({ terminal_state: "" })],
+    ["unknown", goodSummary({ terminal_state: "PASS" })],
+    ["lowercase", goodSummary({ terminal_state: "measured_pass" })],
+  ]) {
     assert.throws(
-      () => assertPublicFamilySummary(goodSummary({ terminal_state: state })),
+      () => assertPublicFamilySummary(summary),
       /terminal state/,
-      `${state} must not be accepted`,
+      `a ${label} terminal state must not be accepted`,
     );
   }
   // Lab semantics must never be accepted as a public measurement.
@@ -145,7 +157,10 @@ const goodSummary = (extra = {}) => ({
     () => assertPublicFamilySummary(goodSummary({ evaluation: { ok: false } })),
     /public budgets/,
   );
-  assert.throws(() => assertPublicFamilySummary(undefined), /public budgets/);
+  // No summary at all now fails on the mandatory terminal state, which is the
+  // first thing evidence must carry.
+  assert.throws(() => assertPublicFamilySummary(undefined), /terminal state/);
+  assert.throws(() => assertPublicFamilySummary(null), /terminal state/);
   pass("only_a_complete_passing_public_edge_summary_is_accepted");
 }
 

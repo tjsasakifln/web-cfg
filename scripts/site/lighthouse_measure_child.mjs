@@ -48,6 +48,23 @@ const spec = JSON.parse(readFileSync(specPath, "utf8"));
  * route can take the browser down with it. */
 let launched = null;
 
+/**
+ * Being orphaned is the one termination we cannot be told about: if the
+ * supervisor is SIGKILLed — by the acceptance wrapper's supervision or a job
+ * timeout — no signal reaches us, and a headless Chrome would be left competing
+ * for CPU with whatever runs next. Losing our parent is that event, so we act
+ * on it ourselves.
+ */
+const bornTo = process.ppid;
+const orphanWatch = setInterval(() => {
+  if (process.ppid !== bornTo) {
+    console.error("measurement orphaned by its supervisor; terminating the browser");
+    killBrowserNow();
+    process.exit(1);
+  }
+}, 1000);
+orphanWatch.unref();
+
 // The supervisor enforces its deadline with SIGTERM then SIGKILL. SIGTERM must
 // not leave the browser running for the attempts that follow.
 for (const signal of ["SIGTERM", "SIGINT"]) {

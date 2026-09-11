@@ -182,6 +182,28 @@ export function isRetryableOutcome(outcome) {
  * disk — whether a measurement was already produced — never from the wording
  * of a message.
  */
+/**
+ * Measurement children currently running under this supervisor.
+ *
+ * An external SIGKILL — the wrapper's own supervision, or a job timeout —
+ * cannot be trapped, so the supervisor gets no chance to clean up. Keeping the
+ * registry lets every signal we CAN trap take the children down, and the child
+ * itself watches for being orphaned to cover the signal we cannot.
+ */
+const activeChildren = new Set();
+
+/** Terminates every measurement child this supervisor owns. */
+export function terminateActiveMeasurements(signal = "SIGKILL") {
+  for (const child of activeChildren) {
+    try {
+      child.kill(signal);
+    } catch {
+      /* already gone */
+    }
+  }
+  activeChildren.clear();
+}
+
 export function runMeasurement({
   childPath,
   specPath,
@@ -200,6 +222,7 @@ export function runMeasurement({
       env,
     });
 
+    activeChildren.add(child);
     let timedOut = false;
     let killTimer = null;
     const deadline = setTimeout(() => {
@@ -219,6 +242,7 @@ export function runMeasurement({
     }, timeoutMs);
 
     const finish = (fallback) => {
+      activeChildren.delete(child);
       clearTimeout(deadline);
       if (killTimer) clearTimeout(killTimer);
       resolve(readOutcome({ outcomePath, lhrPath, fallback }));
