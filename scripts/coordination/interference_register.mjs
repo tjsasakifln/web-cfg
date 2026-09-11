@@ -1,14 +1,15 @@
 /**
- * Consumer of INB-06 coordination findings on
+ * Consumer of private-project coordination findings on
  * /compatibilizacao-projetos-engenharia/.
  *
  * Estado is a pure function of the finding plus the exact document revisions
  * it was conferred against. Detection does not resolve a pending adjustment.
- * 06's provider_state "resolved_in_R01" is a later piloto revision, not
- * conferral against R01. Regenerating HTML does not change estado.
+ * provider_state "resolved_in_R01" is presented as "Corrigido na revisão R01"
+ * without becoming author acceptance, safety certification or "aprovado".
  */
 import fs from "node:fs";
 import path from "node:path";
+import { publicStateLabel } from "../campaigns/pos-inb-20260911/02/public_state.mjs";
 
 export const OWNED_REGISTER_REL = "data/coordination/interference-register.v1.json";
 
@@ -17,12 +18,16 @@ export const INB06_CANDIDATE_RELS = Object.freeze([
 ]);
 
 export const PUBLIC_ESTADO = Object.freeze({
-  pending_author_adjustment: "Registrada — ajuste pendente do autor",
-  correction_proposed: "Correção proposta — aguarda aceite do autor",
+  pending_author_adjustment: "Registrada, ajuste pendente do autor",
+  correction_proposed: "Correção proposta, aguarda aceite do autor",
   author_accepted: "Ajuste aceito pelo autor",
   stale_revision: "Não conferida contra a revisão atual",
-  information_requested: "Informação pedida — ajuste pendente do autor",
+  information_requested: "Pedido de informação",
+  corrected_in_revision: "Corrigido na revisão R01",
 });
+
+export const COORD_SLOT_START = "<!--pos-inb-02:coord-register-->";
+export const COORD_SLOT_END = "<!--/pos-inb-02:coord-register-->";
 
 const RESOLVED_RE = /corrigid|resolvid|encerrad|conclu[ií]d/i;
 
@@ -63,8 +68,9 @@ function correctionWasDesigned(finding) {
 }
 
 /**
- * Display estado. Fail-closed: provider_state resolved_in_R01 does not
- * resolve a finding conferred against R00. Detection-only never promotes.
+ * Display estado. Unknown provider codes are not printed and never become
+ * "aprovado". resolved_in_R01 is presented as corrected in R01 without
+ * author acceptance or safety certification.
  */
 export function displayEstado(finding, liveDocuments = []) {
   const conferral = conferralState(finding, liveDocuments);
@@ -86,7 +92,16 @@ export function displayEstado(finding, liveDocuments = []) {
   const claimed = String(finding?.correction_status || "pending");
   const providerState = String(finding?.provider_state || "");
 
-  if ((claimed === "resolved" || providerState === "resolved_in_R01") && !(accepted && designed)) {
+  if (providerState === "resolved_in_R01") {
+    return {
+      code: "corrected_in_revision",
+      label: publicStateLabel("resolved_in_R01") || PUBLIC_ESTADO.corrected_in_revision,
+      resolved: false,
+      conferral,
+      provider_state: providerState,
+    };
+  }
+  if (claimed === "resolved" && !(accepted && designed)) {
     return {
       code: "pending_author_adjustment",
       label: PUBLIC_ESTADO.pending_author_adjustment,
@@ -114,9 +129,19 @@ export function displayEstado(finding, liveDocuments = []) {
   if (providerState === "information_requested" || finding?.type === "requirement_incompatibility") {
     return {
       code: "information_requested",
-      label: PUBLIC_ESTADO.information_requested,
+      label: publicStateLabel("information_requested") || PUBLIC_ESTADO.information_requested,
       resolved: false,
       conferral,
+    };
+  }
+  const known = publicStateLabel(providerState);
+  if (providerState && !known) {
+    return {
+      code: "pending_author_adjustment",
+      label: PUBLIC_ESTADO.pending_author_adjustment,
+      resolved: false,
+      conferral,
+      unpublished_provider_state: true,
     };
   }
   return {
@@ -131,8 +156,15 @@ export function assertHonestEstado(estado) {
   if (!estado || (estado.resolved === true && estado.code !== "author_accepted")) {
     throw new Error("resolved_without_author_acceptance");
   }
-  if (estado.code !== "author_accepted" && RESOLVED_RE.test(estado.label || "")) {
+  if (
+    estado.code !== "author_accepted"
+    && estado.code !== "corrected_in_revision"
+    && RESOLVED_RE.test(estado.label || "")
+  ) {
     throw new Error("pending_label_looks_resolved");
+  }
+  if (/\baprovad/i.test(estado.label || "")) {
+    throw new Error("estado_mapped_to_aprovado");
   }
   return true;
 }
@@ -153,9 +185,9 @@ export function mapInb06Consumption(consumption, extras = {}) {
   const info = (consumption.coordination_findings || []).find((row) => row.id === "CF-INFO-01");
   if (!geo) throw new Error("missing_CF-GEO-01");
   const totals = consumption.named_totals || {};
-  const overlap = totals.r00_overlap_m || "0.10";
-  const headR00 = totals.window_head_r00_m || "2.30";
-  const soffit = totals.beam_soffit_m || "2.20";
+  const overlap = String(totals.r00_overlap_m || "0.10").replace(".", ",");
+  const headR00 = String(totals.window_head_r00_m || "2.30").replace(".", ",");
+  const soffit = String(totals.beam_soffit_m || "2.20").replace(".", ",");
   return {
     schema: "confenge.interference-register/1.0",
     source: "inb06",
@@ -183,8 +215,8 @@ export function mapInb06Consumption(consumption, extras = {}) {
       evidence: "Elevação leste do recorte demonstrativo em R00: faixas Z de WN-01 e B-01 se cruzam. A conferência é geométrica, sem exame de dimensionamento da viga.",
       possible_consequence: "Na execução a viga pode ser cortada ou o vão da janela reduzido sem o autor redesenhar a verga.",
       compared_documents: [
-        { document_id: "PR-ARQ", discipline: "arquitetônico", title: "Arquitetônico — planta e elevação leste", revision: "R00" },
-        { document_id: "PR-EST", discipline: "estrutural", title: "Estrutural — viga B-01", revision: "R00" },
+        { document_id: "PR-ARQ", discipline: "arquitetônico", title: "Arquitetônico, planta e elevação leste", revision: "R00" },
+        { document_id: "PR-EST", discipline: "estrutural", title: "Estrutural, viga B-01", revision: "R00" },
       ],
       conferred_against: [
         { document_id: "PR-ARQ", revision: "R00" },
@@ -220,7 +252,7 @@ export function mapInb06Consumption(consumption, extras = {}) {
             evidence: "Campo do recorte vazio. Ausência de informação, não conformidade com norma não examinada.",
             possible_consequence: "Dimensionar ou furar o poço sem o vão e os diâmetros declarados.",
             compared_documents: [
-              { document_id: "PR-HID", discipline: "hidrossanitário", title: "Hidrossanitário — poço HS-01", revision: "R00" },
+              { document_id: "PR-HID", discipline: "hidrossanitário", title: "Hidrossanitário, poço HS-01", revision: "R00" },
             ],
             conferred_against: [{ document_id: "PR-HID", revision: "R00" }],
             detection: "detected",
@@ -278,12 +310,12 @@ export function renderFindingHtml(record, liveDocuments) {
     .map((el) => `<li><strong>${escapeHtml(el.name)}</strong> (${escapeHtml(el.discipline)})</li>`)
     .join("");
   const compared = (finding.compared_documents || [])
-    .map((doc) => `<li>${escapeHtml(doc.title)} — ${escapeHtml(doc.document_id)}, revisão ${escapeHtml(doc.revision)}${doc.dated ? `, ${escapeHtml(doc.dated)}` : ""}</li>`)
+    .map((doc) => `<li>${escapeHtml(doc.title)} (${escapeHtml(doc.document_id)}, revisão ${escapeHtml(doc.revision)}${doc.dated ? `, ${escapeHtml(doc.dated)}` : ""})</li>`)
     .join("");
   const pilotoHref = record.piloto_finding_href || record.piloto_url || "/casos/demonstrativo-projeto-privado/#CF-GEO-01";
   const sourceNote = record.source === "inb06"
-    ? `Exemplo demonstrativo do <a href="${escapeHtml(pilotoHref)}">piloto técnico</a>. Não é obra de cliente. Conferência presa a R00.`
-    : escapeHtml(record.public_label || "Exemplo demonstrativo. Não é obra de cliente.");
+    ? `Exemplo demonstrativo do <a href="${escapeHtml(pilotoHref)}">recorte de banheiro</a>. Não é obra de cliente e não é projeto executivo.`
+    : escapeHtml(record.public_label || "Exemplo demonstrativo. Não é obra de cliente e não é projeto executivo.");
   const staleNote = estado.code === "stale_revision"
     ? `<p class="coord-finding-stale">${escapeHtml(estado.detail)}</p>`
     : "";
@@ -314,6 +346,30 @@ ${staleNote}
 
 export function renderSecondaryFindingHtml(record, finding, liveDocuments) {
   return renderFindingHtml({ ...record, finding, piloto_finding_href: `${record.piloto_url || "/casos/demonstrativo-projeto-privado/"}#${finding.id}` }, liveDocuments);
+}
+
+export function renderRegisterHtml(record) {
+  const live = record.live_documents || [];
+  const primary = renderFindingHtml(record, live);
+  const secondary = (record.secondary_findings || [])
+    .map((finding) => renderSecondaryFindingHtml(record, finding, live))
+    .join("\n");
+  return `${COORD_SLOT_START}${primary}\n${secondary}${COORD_SLOT_END}`;
+}
+
+const COORD_SLOT_RE = /<!--pos-inb-02:coord-register-->[\s\S]*?<!--\/pos-inb-02:coord-register-->/i;
+
+export function injectCoordinationRegister(pageHtml, record) {
+  const fragment = renderRegisterHtml(record);
+  if (COORD_SLOT_RE.test(pageHtml)) {
+    return pageHtml.replace(COORD_SLOT_RE, fragment);
+  }
+  const matches = pageHtml.match(/<article class="coord-finding"[\s\S]*?<\/article>/g);
+  if (matches && matches.length) {
+    const block = matches.join("\n");
+    return pageHtml.replace(block, fragment);
+  }
+  throw new Error("page HTML is missing coordination register slot");
 }
 
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === path.resolve(new URL(import.meta.url).pathname);

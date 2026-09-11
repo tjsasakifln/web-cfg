@@ -488,6 +488,118 @@ def derive(source: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _as_number(value: str) -> float | int:
+    number = D(value)
+    if number == number.to_integral_value():
+        return int(number)
+    return float(number)
+
+
+def build_sample_trail(extracts: dict[str, Any]) -> dict[str, Any]:
+    """One conferable wall trail derived from the same extracts as the CSVs."""
+    qty = next(row for row in extracts["quantity_rows"] if row["id"] == "Q-PAR-01")
+    budget = next(row for row in extracts["budget_rows"] if row["quantity_id"] == "Q-PAR-01")
+    rf1 = next(item for item in extracts["review_findings"] if item["id"] == "RF-01")
+    named = extracts["named_totals"]
+    criteria = extracts["takeoff_criteria"]
+    walls = {row["element_id"]: row for row in extracts["wall_breakdown"]}
+    elements = {el["id"]: el for el in extracts["elements"]}
+    room = extracts["room"]
+
+    wall_order = ["W-01", "W-02", "W-03", "W-04"]
+    inputs = []
+    memory_parts = []
+    for wall_id in wall_order:
+        wall = elements[wall_id]
+        length = D(wall["length_m"])
+        height = D(wall["height_m"])
+        gross = D(walls[wall_id]["gross_m2"])
+        inputs.append(
+            {
+                "label": f"{wall['label_pt_br']} ({wall_id})",
+                "value": _as_number(_dec_str(length, 2)),
+                "unit": "m",
+            }
+        )
+        memory_parts.append(f"{wall_id} {_br(length)} × {_br(height)} = {_br(gross)} m²")
+    inputs.append(
+        {
+            "label": "vão da porta D-01",
+            "value": _as_number(named["door_area_m2"]),
+            "unit": "m2",
+        }
+    )
+    inputs.append(
+        {
+            "label": "vão da janela WN-01",
+            "value": _as_number(named["window_area_r01_m2"]),
+            "unit": "m2",
+        }
+    )
+    gross_sum = sum((D(walls[wid]["gross_m2"]) for wid in wall_order), Decimal("0"))
+    net = D(qty["quantity"])
+    door_area = D(named["door_area_m2"])
+    win_area = D(named["window_area_r01_m2"])
+    memory = (
+        f"{'; '.join(memory_parts)}. "
+        f"Bruto {_br(gross_sum)} m²; descontos D-01 {_br(door_area)} m² e "
+        f"WN-01 {_br(win_area)} m²; líquido {_br(net)} m²."
+    )
+    return {
+        "schema": "confenge.quantity-takeoff-excerpt/1.0",
+        "status": "canonical",
+        "quantity_id": qty["id"],
+        "budget_id": budget["id"],
+        "disclaimer": (
+            "Amostra demonstrativa do recorte de banheiro. Não é orçamento para "
+            "executar obra, não representa cliente, não é preço da CONFENGE e "
+            "não é SINAPI real."
+        ),
+        "demonstrative_url": extracts["url"],
+        "demonstrative_href": f"{extracts['url']}#quantitativos",
+        "element": {
+            "id": "W-02",
+            "name": qty["description_pt_br"],
+            "source": (
+                f"Planta {qty['sheet_ref']}, recorte {room['id']}, "
+                "paredes W-01 a W-04 com aberturas D-01 e WN-01"
+            ),
+            "location": (
+                f"Recorte de banheiro {room['id']}, planta PR-ARQ e elevação leste W-02"
+            ),
+        },
+        "criterion": {
+            "unit": "m²" if qty["unit"] == "m2" else qty["unit"],
+            "rule": criteria["opening_deduction_rule_pt_br"],
+        },
+        "calculation": {
+            "formula": qty["formula"],
+            "inputs": inputs,
+            "memory": memory,
+        },
+        "quantity": {
+            "value": _as_number(qty["quantity"]),
+            "unit": "m²" if qty["unit"] == "m2" else qty["unit"],
+        },
+        "spreadsheet_item": {
+            "code": budget["id"],
+            "description": budget["service_pt_br"],
+            "unit": "m²" if budget["unit"] == "m2" else budget["unit"],
+            "quantity": _as_number(budget["quantity"]),
+        },
+        "review_reference": {
+            "id": rf1["id"],
+            "label": "Referência de revisão",
+            "text": (
+                f"{rf1['id']}: {rf1['finding_pt_br']} "
+                "A janela WN-01 entra neste desconto de parede."
+            ),
+            "href": "/revisao-tecnica-projetos-engenharia/#extrato-demonstrativo",
+            "document_ref": rf1["document_ref"],
+        },
+    }
+
+
 def consumption_descriptor(extracts: dict[str, Any]) -> dict[str, Any]:
     """Stable contract for campaigns 03/04/05/11/12. Not a commercial schema."""
     return {
@@ -538,6 +650,9 @@ def consumption_descriptor(extracts: dict[str, Any]) -> dict[str, Any]:
                 "state": item["state"],
                 "element_ids": list(item["element_ids"]),
                 "proven_failure": item["proven_failure"],
+                "location_pt_br": item["location_pt_br"],
+                "evidence_pt_br": item["evidence_pt_br"],
+                "forwarding_pt_br": item["forwarding_pt_br"],
             }
             for item in extracts["coordination_findings"]
         ],
@@ -548,9 +663,13 @@ def consumption_descriptor(extracts: dict[str, Any]) -> dict[str, Any]:
                 "related_finding_id": item["related_finding_id"],
                 "check_kind": item["check_kind"],
                 "element_ids": list(item["element_ids"]),
+                "finding_pt_br": item["finding_pt_br"],
+                "basis_pt_br": item["basis_pt_br"],
+                "action_pt_br": item["action_pt_br"],
             }
             for item in extracts["review_findings"]
         ],
+        "sample_trail": build_sample_trail(extracts),
         "named_totals": dict(extracts["named_totals"]),
         "assets": list(extracts["assets"]),
         "review_check_kind": extracts["review_check_kind"],

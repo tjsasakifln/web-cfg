@@ -31,5 +31,12 @@
     "description": "Alvenaria de vedação em bloco cerâmico 14 cm",
     "unit": "m²",
     "quantity": 30.64
+  },
+  "review_reference": {
+    "id": "RF-TEST",
+    "label": "Referência de revisão",
+    "text": "Conferência de teste P-12 a P-18, não publicar.",
+    "href": "/casos/demonstrativo-projeto-privado/",
+    "document_ref": "PR-TEST"
   }
 }

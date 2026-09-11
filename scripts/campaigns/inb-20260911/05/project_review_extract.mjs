@@ -1,13 +1,15 @@
 /**
- * SELECT-only consumer of the INB-06 private-project demonstrative.
+ * Consumer of the private-project demonstrative for the review purchase page.
  *
- * Canonical sources (owned by campaign 06):
+ * Canonical sources:
  *   data/demonstrative/private-project-pilot/consumption.v1.json
  *   casos/demonstrativo-projeto-privado/data/revisao.csv
  *
  * Joins review_findings to coordination_findings and to revisao.csv.
  * Does not invent a second building, subtotals, risk grades or norm claims.
+ * Public labels are translated; internal codes stay in data attributes.
  */
+import { publicStateLabel } from "../../pos-inb-20260911/02/public_state.mjs";
 
 export const EXTRACT_CLASSES = Object.freeze({
   CONSTATACAO_SUSTENTADA: "constatacao_sustentada",
@@ -32,6 +34,16 @@ export const CANONICAL_06_PATHS = Object.freeze({
   fixtureConsumption: "tests/fixtures/inb05/consumption.v1.json",
   fixtureCsv: "tests/fixtures/inb05/revisao.csv",
   sourceSha: "399a32c415171ccc9e26cae565ecf83f9ecd4c92",
+});
+
+export const EXTRACT_SLOT_START = "<!--pos-inb-02:review-extract-->";
+export const EXTRACT_SLOT_END = "<!--/pos-inb-02:review-extract-->";
+
+const CLASS_LABELS = Object.freeze({
+  [EXTRACT_CLASSES.CONSTATACAO_SUSTENTADA]: "Constatação sustentada",
+  [EXTRACT_CLASSES.INFORMACAO_FALTANTE]: "Informação faltante",
+  [EXTRACT_CLASSES.RECOMENDACAO]: "Recomendação",
+  [EXTRACT_CLASSES.VERIFICACAO_NAO_REALIZADA]: "Verificação ainda não realizada",
 });
 
 const UNANSWERED = new Set([
@@ -264,12 +276,19 @@ function classify06Finding(rf, { elements, findings, csvById, consumption }) {
       honesty_notes: ["missing_information_is_not_proven_failure"],
     });
   } else if (evidencedGeometry) {
+    const stateLabel = publicStateLabel(cf.state);
+    const evidence = cf.evidence_pt_br || row.basis;
+    const implication = [evidence, stateLabel]
+      .filter(Boolean)
+      .map((part) => String(part).replace(/\.+$/, ""))
+      .join(". ") + ".";
     items.push({
       ...row,
       kind: "finding",
       class: EXTRACT_CLASSES.CONSTATACAO_SUSTENTADA,
       element: elementIds.join(" "),
-      implication: cf.state ? `estado no recorte: ${cf.state}` : null,
+      implication: implication || null,
+      public_state_label: stateLabel,
       concludes_noncompliance: false,
       concludes_risk: false,
       question_preserved: false,
@@ -433,4 +452,98 @@ export function classifyItem(raw, _documents, report = {}) {
     revisaoRows: raw.csv_row ? [raw.csv_row] : [],
   });
   return classified.items[0];
+}
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function field(term, definition) {
+  if (definition == null || definition === "") return "";
+  return `<dt>${escapeHtml(term)}</dt><dd>${definition}</dd>`;
+}
+
+function itemTitle(item) {
+  if (item.kind === "recommendation") {
+    const origin = String(item.id || "").replace(/-acao$/, "") || item.related_finding_id || item.id;
+    return `Ação de ${origin} no mesmo recorte`;
+  }
+  if (item.kind === "verification") {
+    return "Norma de dimensionamento não examinada";
+  }
+  const doc = item.document_id || "";
+  return `${item.id}${doc ? ` · ${doc}` : ""}`;
+}
+
+function itemRecommendation(item) {
+  return item.forwarding || null;
+}
+
+function itemImplication(item) {
+  if (item.implication) return item.implication;
+  if (item.class === EXTRACT_CLASSES.INFORMACAO_FALTANTE) {
+    return item.basis || item.missing_information || item.finding_text;
+  }
+  if (item.class === EXTRACT_CLASSES.VERIFICACAO_NAO_REALIZADA) {
+    return item.finding_text || item.basis;
+  }
+  return item.basis;
+}
+
+export function renderExtractItemHtml(item) {
+  const classLabel = CLASS_LABELS[item.class] || "Apontamento";
+  const documentText = item.document_id
+    ? (item.document_revision && !String(item.document_id).includes(String(item.document_revision))
+      ? `${item.document_id} (extrato em ${item.document_revision})`
+      : item.document_id)
+    : item.document_revision || "";
+  const constatacao = item.finding_text
+    || (item.kind === "recommendation" ? item.forwarding : null)
+    || item.basis;
+  const implication = itemImplication(item);
+  const recommendation = itemRecommendation(item);
+  const element = item.element || (Array.isArray(item.element_ids) ? item.element_ids.join(" ") : "");
+  return `<article class="rv-extract-item" data-extract-class="${escapeHtml(item.class)}" data-extract-id="${escapeHtml(item.id)}">
+<p class="rv-class">${escapeHtml(classLabel)}</p>
+<h3>${escapeHtml(itemTitle(item))}</h3>
+<dl>
+${field("Documento", escapeHtml(documentText || "Recorte demonstrativo"))}
+${field("Constatação", escapeHtml(constatacao || ""))}
+${field("Implicação", escapeHtml(implication || ""))}
+${field("Recomendação", escapeHtml(recommendation || ""))}
+${element ? field("Elementos no desenho", `<code>${escapeHtml(element)}</code>`) : ""}
+</dl>
+</article>`;
+}
+
+export function renderExtractHtml(classified) {
+  assertHonestExtract(classified);
+  const url = classified.package?.url || "/casos/demonstrativo-projeto-privado/";
+  const csvHref = `${url}data/revisao.csv`;
+  const proofId = classified.proof_id || "";
+  const items = (classified.items || []).map((item) => renderExtractItemHtml(item)).join("\n");
+  return `${EXTRACT_SLOT_START}<div class="rv-extract-slot" data-extract-kind="demonstrative" data-extract-canonical-source="inb-06" data-proof-id="${escapeHtml(proofId)}">
+<p class="section-lead rv-note">Exemplo demonstrativo do <a href="${escapeHtml(url)}">recorte de banheiro</a> e do <a href="${escapeHtml(csvHref)}">arquivo de revisão</a>: não é trabalho de cliente e não é parecer para executar obra. Item de checklist não respondido e norma não examinada não viram erro do projeto.</p>
+<div class="rv-extract">
+${items}
+</div>
+</div>${EXTRACT_SLOT_END}`;
+}
+
+const EXTRACT_SLOT_RE = /<!--pos-inb-02:review-extract-->[\s\S]*?<!--\/pos-inb-02:review-extract-->/i;
+const LEGACY_EXTRACT_RE = /<p class="section-lead rv-note"[^>]*>[\s\S]*?<div class="rv-extract">[\s\S]*?<\/div>\s*(?=<p>)/i;
+
+export function injectReviewExtract(pageHtml, classified) {
+  const fragment = renderExtractHtml(classified);
+  if (EXTRACT_SLOT_RE.test(pageHtml)) {
+    return pageHtml.replace(EXTRACT_SLOT_RE, fragment);
+  }
+  if (LEGACY_EXTRACT_RE.test(pageHtml)) {
+    return pageHtml.replace(LEGACY_EXTRACT_RE, `${fragment}\n`);
+  }
+  throw new Error("page HTML is missing review extract slot");
 }

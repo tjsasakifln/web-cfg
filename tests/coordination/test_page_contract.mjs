@@ -141,7 +141,8 @@ test("incomplete initial context is accepted and essentials are in HTML without 
   const withoutScripts = html.replace(/<script[\s\S]*?<\/script>/gi, "");
   assert.match(withoutScripts, /Compatibilização de projetos de engenharia/);
   assert.match(withoutScripts, /Pedir proposta da compatibilização/);
-  assert.match(withoutScripts, /Registrada — ajuste pendente do autor/);
+  assert.match(withoutScripts, /Corrigido na revisão R01/);
+  assert.match(withoutScripts, /Pedido de informação/);
   assert.match(withoutScripts, /CF-GEO-01/);
 });
 
@@ -154,10 +155,10 @@ test("shipped finding html matches the register renderer", () => {
   assert.match(shipped, /data-finding-id="CF-GEO-01"/);
   assert.match(rendered, /data-finding-id="CF-GEO-01"/);
   assert.equal(
-    shipped.includes('data-estado="pending_author_adjustment"'),
-    rendered.includes('data-estado="pending_author_adjustment"'),
+    shipped.includes('data-estado="corrected_in_revision"'),
+    rendered.includes('data-estado="corrected_in_revision"'),
   );
-  assert.equal(shipped.includes("Registrada — ajuste pendente do autor"), true);
+  assert.equal(shipped.includes("Corrigido na revisão R01"), true);
 });
 
 test("mutation: mixing revisão as this purchase or promising zero interference fails the contract helper", () => {

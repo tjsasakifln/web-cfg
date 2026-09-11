@@ -3,7 +3,6 @@ import fs from "node:fs";
 import path from "node:path";
 import { test } from "node:test";
 import {
-  CANONICAL_EXCERPT_REL,
   TRAIL_STEPS,
   injectSampleTrail,
   isTestFixture,
@@ -126,6 +125,7 @@ test("fixture trail renderer produces the five-step chain from the shared excerp
   const html = renderTrailForTest(excerpt);
   assertTrailMatchesExcerpt(html, excerpt);
   assert.match(html, /Não é orçamento válido para executar obra/);
+  assert.match(html, /data-trail-step="review_reference"/);
 });
 
 test("mutating one trail number makes the excerpt assertion fail", () => {
@@ -147,34 +147,35 @@ test("public renderer refuses to publish the test fixture", () => {
   );
 });
 
-test("shipped landing does not present the test fixture as a real sample", () => {
+test("shipped landing presents the canonical trail, not the test fixture or a future promise", () => {
   const html = read(LANDING);
   const main = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i)?.[1] || "";
   assert.match(main, /id="qty-sample-trail"/);
   assert.match(main, /data-sample-trail-state="canonical"/);
+  assert.equal(main.includes("awaiting-canonical-excerpt"), false);
+  assert.equal(main.includes("Os números conferíveis desta trilha entram aqui quando o demonstrativo canônico"), false);
   assert.match(main, /Amostra demonstrativa/);
-  assert.match(main, /Não é orçamento válido para executar obra/);
+  assert.match(main, /href="\/casos\/demonstrativo-projeto-privado\//);
   for (const token of FIXTURE_TOKENS) {
     assert.equal(html.includes(token), false, `public HTML leaked fixture token ${token}`);
   }
-  const pending = renderPendingTrail();
   assert.equal(main.includes('data-trail-step="element"'), true);
   assert.equal(main.includes('data-trail-step="criterion"'), true);
   assert.equal(main.includes('data-trail-step="calculation"'), true);
   assert.equal(main.includes('data-trail-step="quantity"'), true);
   assert.equal(main.includes('data-trail-step="spreadsheet_item"'), true);
+  assert.equal(main.includes('data-trail-step="review_reference"'), true);
+  const pending = renderPendingTrail();
   assert.equal(pending.includes('data-sample-trail-state="awaiting-canonical-excerpt"'), true);
 });
 
-test("canonical excerpt is absent or real, never the test fixture", () => {
+test("canonical excerpt is loaded from consumption and injects real numbers", () => {
   const excerpt = loadCanonicalExcerpt(ROOT);
-  if (excerpt === null) {
-    assert.equal(fs.existsSync(path.resolve(CANONICAL_EXCERPT_REL)), false);
-    return;
-  }
   assert.equal(isTestFixture(excerpt), false);
+  assert.equal(excerpt.status, "canonical");
   const injected = injectSampleTrail(read(LANDING), excerpt);
   assert.match(injected, /data-sample-trail-state="canonical"/);
+  assertTrailMatchesExcerpt(injected, excerpt);
 });
 
 test("each decision job has a rendered destination with example, criteria, send/expect and service link", () => {

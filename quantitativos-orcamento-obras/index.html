@@ -43,6 +43,9 @@
 .qty-trail-n{display:block;margin-bottom:.4rem;color:var(--green-700);font-weight:800}
 .qty-trail-steps h3{margin:0 0 .4rem}
 .qty-trail-disclaimer{padding:.9rem 1rem;border-left:4px solid var(--green-700);background:var(--soft)}
+.qty-trail-body span,.qty-trail-body data{display:block;margin-top:.35rem}
+.qty-trail-body code{font-size:.95em}
+.qty-trail-link{margin-top:1rem;max-width:70ch}
 .qty-split{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
 @media(max-width:800px){.qty-hero-grid,.qty-grid,.qty-flow,.qty-proof,.qty-triage-grid,.qty-factors,.qty-split{grid-template-columns:1fr}.qty-hero-grid>*,.qty-grid>*,.qty-flow>*,.qty-proof>*,.qty-triage-grid>*{min-width:0}.qty-hero-grid h1,.qty-hero-grid p,.qty-proof h2,.qty-proof p,.qty-proof li{overflow-wrap:break-word}.qty-hero{padding-block:2.5rem}.qty-hero h1{max-width:none}}
 </style>
@@ -96,7 +99,7 @@
 <p class="qty-lead">A CONFENGE levanta quantitativos, elabora o orçamento ou revisa a planilha que você já tem, para obra pública ou privada. Você recebe a origem de cada quantidade, o critério de medição, as composições e as premissas. Para começar, solicite a proposta do recorte de que precisa  -  projeto ainda parcial também entra.</p>
 <div class="hero-actions">
 <a class="button button-primary button-lg" data-cta-id="frame-quantities-budget-hero" data-cta-position="hero" href="#triagem-quantitativos">Solicitar proposta de orçamento <svg class="icon"><use href="#i-arrow"></use></svg></a>
-<a class="text-link" href="#metodo-quantitativos">Ver o método e a amostra</a>
+<a class="text-link" href="#amostra-quantitativos">Ver a amostra conferível</a>
 </div>
 </div>
 <aside class="qty-signal">
@@ -130,6 +133,17 @@
 </div>
 </section>
 
+<section aria-labelledby="qty-trail-title" class="section section--default" id="amostra-quantitativos">
+<div class="container">
+<header class="section-head">
+<p class="eyebrow">Amostra conferível</p>
+<h2 id="qty-trail-title">Do elemento da planta ao item da planilha.</h2>
+<p class="section-lead">A trilha abaixo é o caminho de conferência no recorte demonstrativo de banheiro. Quantidade não é preço: o item só recebe custo depois, com a referência e a data-base declaradas. Preços hipotéticos daquele recorte não são preço deste serviço nem SINAPI real.</p>
+</header>
+<!--pos-inb-02:qty-trail--><div id="qty-sample-trail" data-sample-trail-slot="canonical" data-sample-trail-state="canonical"><p class="qty-trail-disclaimer">Amostra demonstrativa do recorte de banheiro. Não é orçamento para executar obra, não representa cliente, não é preço da CONFENGE e não é SINAPI real.</p><ol class="qty-trail-steps"><li data-trail-step="element"><span class="qty-trail-n">01</span><h3>Elemento identificado</h3><div class="qty-trail-body"><code data-trail-id="W-02">W-02</code> <strong>Revestimento cerâmico de parede</strong><span>Origem: Planta PR-ARQ-R01, recorte RM-01, paredes W-01 a W-04 com aberturas D-01 e WN-01</span><span data-trail-location="true">Localização no desenho: Recorte de banheiro RM-01, planta PR-ARQ e elevação leste W-02</span></div></li><li data-trail-step="criterion"><span class="qty-trail-n">02</span><h3>Critério de medição</h3><div class="qty-trail-body"><strong>Unidade: m²</strong><span>Aberturas com área igual ou maior que 0,50 m² são descontadas integralmente das quantidades de revestimento de parede. Aberturas menores não são descontadas.</span></div></li><li data-trail-step="calculation"><span class="qty-trail-n">03</span><h3>Cálculo</h3><div class="qty-trail-body"><strong>sum(length*height)-openings&gt;=0.50</strong><p class="qty-trail-inputs"><span>Parede sul (W-01) <data value="2,4">2,4 m</data></span> · <span>Parede leste (W-02) <data value="1,8">1,8 m</data></span> · <span>Parede norte (W-03) <data value="2,4">2,4 m</data></span> · <span>Parede oeste (W-04) <data value="1,8">1,8 m</data></span> · <span>vão da porta D-01 <data value="1,68">1,68 m2</data></span> · <span>vão da janela WN-01 <data value="0,56">0,56 m2</data></span></p><span data-trail-memory="true">W-01 2,40 × 2,60 = 6,24 m²; W-02 1,80 × 2,60 = 4,68 m²; W-03 2,40 × 2,60 = 6,24 m²; W-04 1,80 × 2,60 = 4,68 m². Bruto 21,84 m²; descontos D-01 1,68 m² e WN-01 0,56 m²; líquido 19,60 m².</span></div></li><li data-trail-step="quantity"><span class="qty-trail-n">04</span><h3>Quantidade</h3><div class="qty-trail-body"><data data-trail-quantity="19,6" value="19,6">19,6 m²</data></div></li><li data-trail-step="spreadsheet_item"><span class="qty-trail-n">05</span><h3>Item de planilha</h3><div class="qty-trail-body"><code data-trail-item-code="ORC-PAR-01">ORC-PAR-01</code> <span>Revestimento cerâmico de parede, inclusive argamassa colante</span> <data data-trail-item-quantity="19,6" value="19,6">19,6 m²</data></div></li><li data-trail-step="review_reference"><span class="qty-trail-n">06</span><h3>Referência de revisão</h3><div class="qty-trail-body"><code data-trail-review-id="RF-01">RF-01</code> <a href="/revisao-tecnica-projetos-engenharia/#extrato-demonstrativo">RF-01: A verga da janela WN-01 invade o volume da viga B-01 no estado original. A janela WN-01 entra neste desconto de parede.</a><span>Documento PR-ARQ-R00</span></div></li></ol><p class="qty-trail-link">Os números desta trilha saem do <a href="/casos/demonstrativo-projeto-privado/#quantitativos">exemplo demonstrativo do recorte de banheiro</a>. Preços hipotéticos daquele recorte não são preço do serviço nem SINAPI real.</p></div><!--/pos-inb-02:qty-trail-->
+</div>
+</section>
+
 <section aria-labelledby="qty-output-title" class="section section--default">
 <div class="container">
 <header class="section-head">
@@ -156,17 +170,6 @@
 <article class="qty-step"><h3>Levantar e conferir</h3><p>Relacionamos cada quantidade à sua fonte e registramos divergências, omissões, fórmulas e premissas.</p></article>
 <article class="qty-step"><h3>Compor ou revisar o orçamento</h3><p>Aplicamos a referência adequada ao uso público ou privado, abrimos as composições e separamos quantidade, custo e data-base para permitir conferência. A entrega fica definida na proposta: recorte, disciplinas, se o trabalho é levantamento, elaboração ou revisão, e quais premissas o número carrega. Sem isso, o arquivo não é orçamento para executar obra.</p></article>
 </div>
-</div>
-</section>
-
-<section aria-labelledby="qty-trail-title" class="section section--default" id="amostra-quantitativos">
-<div class="container">
-<header class="section-head">
-<p class="eyebrow">Amostra conferível</p>
-<h2 id="qty-trail-title">Do elemento da planta ao item da planilha.</h2>
-<p class="section-lead">A trilha abaixo é o caminho de conferência. Quantidade não é preço: o item só recebe custo depois, com a referência e a data-base declaradas.</p>
-</header>
-<div id="qty-sample-trail" data-sample-trail-slot="canonical" data-sample-trail-state="canonical"><p class="qty-trail-disclaimer">Amostra demonstrativa do recorte de banheiro R01 em /casos/demonstrativo-projeto-privado/. Não é orçamento válido para executar obra, não representa cliente e não fecha preço, prazo ou quantidade contratual.</p><ol class="qty-trail-steps"><li data-trail-step="element"><span class="qty-trail-n">01</span><h3>Elemento identificado</h3><div class="qty-trail-body"><code data-trail-id="Q-PAR-01">Q-PAR-01</code> <strong>Revestimento cerâmico de parede</strong><span>Origem: PR-ARQ-R01, recorte demonstrativo de banheiro R01</span></div></li><li data-trail-step="criterion"><span class="qty-trail-n">02</span><h3>Critério de medição</h3><div class="qty-trail-body"><strong>Unidade: m2</strong><span>Aberturas com área igual ou maior que 0,50 m² são descontadas integralmente das quantidades de revestimento de parede. Aberturas menores não são descontadas.</span></div></li><li data-trail-step="calculation"><span class="qty-trail-n">03</span><h3>Cálculo</h3><div class="qty-trail-body"><strong>sum(length*height)-openings&gt;=0.50</strong><p class="qty-trail-inputs"><span>quantidade conferida <data value="19,6">19,6 m2</data></span></p><span data-trail-memory="true">Leitura no recorte R01 da PR-ARQ-R01 sobre as paredes W-01 a W-04, a porta D-01 e a janela WN-01.</span></div></li><li data-trail-step="quantity"><span class="qty-trail-n">04</span><h3>Quantidade</h3><div class="qty-trail-body"><data data-trail-quantity="19,6" value="19,6">19,6 m2</data></div></li><li data-trail-step="spreadsheet_item"><span class="qty-trail-n">05</span><h3>Item de planilha</h3><div class="qty-trail-body"><code data-trail-item-code="ORC-PAR-01">ORC-PAR-01</code> <span>Revestimento cerâmico de parede, inclusive argamassa colante</span> <data data-trail-item-quantity="19,6" value="19,6">19,6 m2</data></div></li></ol></div>
 </div>
 </section>
 
@@ -249,7 +252,7 @@
 <div>
 <ul class="qty-list">
 <li>O responsável é Engenheiro Civil formado pela EESC-USP, com registro profissional ativo no CREA e mais de R$ 700 milhões em obras e projetos analisados ao longo da atuação profissional; identidade, registro e o alcance de cada afirmação estão em <a href="/especialista/tiago-jun-sasaki/">quem responde</a>. Os serviços técnicos são emitidos com ART e nota fiscal, dentro do escopo e da atribuição profissional contratados.</li>
-<li>Quantitativos, premissas e lacunas ficam vinculados ao recorte documental definido na proposta.</li>
+<li>Quantitativos, premissas e lacunas ficam vinculados ao recorte documental definido na proposta. A amostra desta página usa o <a href="/casos/demonstrativo-projeto-privado/">recorte demonstrativo de banheiro</a>.</li>
 <li>Exemplo sintético: duas propostas usam o mesmo nome de serviço, mas incluem quantidades diferentes. Uma memória rastreável permite comparar o que cada uma considerou; isso não representa cliente, obra, prazo, preço ou resultado da CONFENGE. O caminho para equalizar está em <a href="/conteudos/comparar-propostas-execucao-obra/">comparar propostas de execução</a>.</li>
 </ul>
 <p><a class="text-link" href="/confianca/">Ver identidade, método e limites publicados</a></p>
@@ -277,7 +280,7 @@
 <p class="eyebrow">Próximo passo</p>
 <h2 id="qty-triage-title">Solicite uma proposta de levantamento, orçamento ou revisão.</h2>
 <p data-form-value>Diga se a obra é pública ou privada, se precisa de levantamento de quantitativos, elaboração de orçamento ou revisão de orçamento existente, a fase do projeto, as disciplinas e quais documentos já existem. Orçamento desconhecido ou documentação inicial incompleta não impede o contato. De comprador privado não pedimos campos de licitação, edital ou processo.</p>
-<p>O primeiro contato é direto com o Engº Tiago Sasaki, por WhatsApp, e-mail ou telefone. A resposta combina o canal seguro para os arquivos e informa quais dados ainda são necessários para preparar a proposta.</p>
+<p>O primeiro contato é direto com o Engº Tiago Sasaki, por WhatsApp, e-mail ou telefone. A resposta combina o canal seguro para os arquivos e informa quais dados ainda são necessários para preparar a proposta. O recorte, os formatos da entrega e o modo de combinar revisões e devolutivas ficam na proposta, depois da leitura do que você já tem.</p>
 </div>
 <div>
 <aside aria-labelledby="qty-channels-title" class="channel-card qty-channels">
