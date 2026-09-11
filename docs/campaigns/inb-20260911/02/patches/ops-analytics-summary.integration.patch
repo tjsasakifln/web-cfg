@@ -1,0 +1,23 @@
+--- a/netlify/functions/ops.cjs
++++ b/netlify/functions/ops.cjs
+@@ import of analytics-agg
+-const { aggregateEvents, attributeLeads, summarizeMoneyAssetLoop } = require("./lib/analytics-agg.cjs");
++const { aggregateEvents, attributeLeads, summarizeMoneyAssetLoop, countPersistedContactsByServiceOrigin } = require("./lib/analytics-agg.cjs");
+@@ analytics_summary response
+       attribution = attributeLeads(filterCommercialLeads(leads), events);
+     }
+     const money_asset = summarizeMoneyAssetLoop(events, leads);
++    const persisted_contacts = countPersistedContactsByServiceOrigin(leads);
+     return json(
+       200,
+       {
+         ok: true,
+         events_loaded: events.length,
+         aggregate: agg,
+         money_asset,
++        persisted_contacts,
+         attribution_cohorts: attribution,
+         note: agg.attribution_note,
+       },
+       origin
+     );

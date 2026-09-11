@@ -195,7 +195,7 @@ const hopSession = {
 };
 const GENERATED_UUID = "00000000-0000-4000-8000-000000000099";
 
-function loadShippedScript({ pathname, search, hash, dataset, withForm, session = hopSession }) {
+function loadShippedScript({ pathname, search, hash, dataset, withForm, session = hopSession, referrer = "" }) {
   const hidden = {};
   const formAttrs = {};
   const form = withForm
@@ -234,7 +234,7 @@ function loadShippedScript({ pathname, search, hash, dataset, withForm, session 
       classList: { remove() {}, add() {} },
       dataset: dataset || {},
     },
-    referrer: "",
+    referrer: referrer || "",
   };
   const windowObj = {
     dataLayer: [],
@@ -398,5 +398,59 @@ if (homeAfterClick.formAttrs.action !== "/obrigado-edital") {
   fail("click_form_action_not_edital", homeAfterClick.formAttrs);
 }
 pass("click_anchor_reaches_home_form_hiddens");
+
+const apiMerge = first.sandbox.window.confengeAttribution;
+if (!apiMerge || typeof apiMerge.mergeFirstTouch !== "function") {
+  fail("mergeFirstTouch_export", apiMerge);
+}
+const frozen = apiMerge.mergeFirstTouch(
+  { origem: "/ferramentas/x/", utm_source: "gsc", landing_url: "/ferramentas/x/" },
+  { origem: "/servicos/", utm_source: "internal", landing_url: "/servicos/", jornada: "projeto" },
+  { internalReferrer: true },
+);
+if (frozen.origem !== "/ferramentas/x/") fail("merge_origem_overwritten", frozen);
+if (frozen.utm_source !== "gsc") fail("merge_utm_restarted", frozen);
+if (frozen.landing_url !== "/ferramentas/x/") fail("merge_landing_overwritten", frozen);
+if (frozen.jornada !== "projeto") fail("merge_need_not_evolved", frozen);
+pass("mergeFirstTouch_freezes_origin_allows_need");
+
+const utmHopStore = {};
+const utmSession = {
+  getItem: (k) => utmHopStore[k] || null,
+  setItem: (k, v) => {
+    utmHopStore[k] = String(v);
+  },
+  removeItem: (k) => {
+    delete utmHopStore[k];
+  },
+};
+loadShippedScript({
+  pathname: "/ferramentas/checklist-reequilibrio/",
+  search: "?utm_source=gsc&utm_campaign=editorial",
+  hash: "",
+  dataset: {},
+  withForm: false,
+  session: utmSession,
+  referrer: "https://www.google.com/",
+});
+const afterTool = JSON.parse(utmHopStore.confenge_pseo_attribution || "{}");
+if (afterTool.utm_source !== "gsc") fail("utm_first_touch", afterTool);
+if (afterTool.landing_url !== "/ferramentas/checklist-reequilibrio/") fail("utm_landing", afterTool);
+loadShippedScript({
+  pathname: "/",
+  search: "?utm_source=nav-internal&utm_campaign=restart",
+  hash: "#contato",
+  dataset: {},
+  withForm: true,
+  session: utmSession,
+  referrer: "https://confenge.com.br/ferramentas/checklist-reequilibrio/",
+});
+const afterInternal = JSON.parse(utmHopStore.confenge_pseo_attribution || "{}");
+if (afterInternal.utm_source !== "gsc") fail("internal_utm_restarted", afterInternal);
+if (afterInternal.utm_campaign !== "editorial") fail("internal_utm_campaign_restarted", afterInternal);
+if (afterInternal.landing_url !== "/ferramentas/checklist-reequilibrio/") {
+  fail("internal_landing_restarted", afterInternal);
+}
+pass("internal_nav_does_not_restart_utm_or_origin");
 
 console.log("OK attribution-allowlist");

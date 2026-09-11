@@ -1398,6 +1398,19 @@ function percentile(sorted, p) {
   return sorted[idx];
 }
 
+/**
+ * Map store handoff status to the campaign semantic.
+ * DELIVERED is the only accepted handoff. Missing status is UNKNOWN, never inferred
+ * from a click, a 200 on an intermediate endpoint, or a visitor receipt.
+ */
+function handoffAcceptedSemantic(handoff) {
+  if (!handoff || typeof handoff !== "object") return "UNKNOWN";
+  const status = String(handoff.status || "").toUpperCase();
+  if (!status) return "UNKNOWN";
+  if (status === STATUS.DELIVERED) return "handoff_accepted";
+  return status;
+}
+
 function summarizeHandoffs(leads) {
   const counts = {
     persisted_leads: 0,
@@ -1482,6 +1495,7 @@ module.exports = {
   attemptInboundHandoff,
   drainPendingHandoffs,
   summarizeHandoffs,
+  handoffAcceptedSemantic,
   setFetchForTests,
   sanitizeError,
 };

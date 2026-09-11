@@ -1,0 +1,40 @@
+{
+  "schema": "confenge.inbound-campaign-shared-changes/1.0",
+  "campaign_id": "02",
+  "prompt_version": "2.0.0",
+  "changes": [
+    {
+      "change_id": "02-event-registry-handoff-accepted",
+      "owner_campaign": "16",
+      "path": "netlify/functions/lib/event-registry.json",
+      "base_blob_sha": "1d3ced0d7d5903a351b5a942d6eda9f38540985e",
+      "operation": "upsert",
+      "key_or_anchor": "events.handoff_accepted",
+      "expected_old": null,
+      "desired_new": {
+        "layer": "lead",
+        "owner": "web-cfg",
+        "schema_version": "1.0.0",
+        "admission": "observed_only",
+        "producers": ["netlify/functions/lib/inbound-handoff.cjs"],
+        "consumers": ["netlify/functions/lib/analytics-agg.cjs"],
+        "semantic": "Warmbly inbound accepted the CONFENGE_WEB handoff (store handoff.status=DELIVERED). Never admitted from collect or confengeTrack. Not a commercial result. Absent remains UNKNOWN."
+      },
+      "rationale": "Map the required handoff-accepted semantic to one canonical name without a browser alias. 02 already maps DELIVERED via handoffAcceptedSemantic(); the registry is 16-owned.",
+      "acceptance_test": "event-registry.json events.handoff_accepted.admission === observed_only; ADMITTED_EVENTS in js/modules/analytics.js still omits it; qualified_lead/pipeline remain Warmbly-only."
+    },
+    {
+      "change_id": "02-ops-persisted-contacts-query",
+      "owner_campaign": "16",
+      "path": "netlify/functions/ops.cjs",
+      "base_blob_sha": "a53b39b27ce7fc6ad0ebbbc2686ffbe21334d0ee",
+      "operation": "integration_patch",
+      "key_or_anchor": "action === \"analytics_summary\"",
+      "expected_old": "const { aggregateEvents, attributeLeads, summarizeMoneyAssetLoop } = require(\"./lib/analytics-agg.cjs\");",
+      "desired_new": "Import countPersistedContactsByServiceOrigin and include persisted_contacts in the analytics_summary JSON. Do not add a dashboard.",
+      "patch_path": "docs/campaigns/inb-20260911/02/patches/ops-analytics-summary.integration.patch",
+      "rationale": "Expose the 02 aggregator query through the existing authenticated ops path. Function already exists in analytics-agg.cjs.",
+      "acceptance_test": "GET ops?action=analytics_summary returns persisted_contacts.by_service/by_origin; empty batch uses UNKNOWN not 0; QA/synthetic excluded."
+    }
+  ]
+}

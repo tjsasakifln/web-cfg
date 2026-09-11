@@ -651,6 +651,75 @@ function summarizeMoneyAssetLoop(events, leads) {
   };
 }
 
+function serviceKeyForContact(lead) {
+  const raw = String(
+    (lead && (lead.estagio || lead.jornada || lead.deliverable_id)) || "",
+  ).trim();
+  return raw || "UNKNOWN";
+}
+
+function originKeyForContact(lead) {
+  const path = canonicalizePath(
+    (lead && (lead.origem || lead.origin_url || lead.landing_url || lead.landing_page)) || "",
+  );
+  return path || "UNKNOWN";
+}
+
+function isPersistedContact(lead) {
+  if (!lead || !lead.lead_id) return false;
+  const status = String(lead.status || "").toLowerCase();
+  return !status || status.startsWith("persist") || status === "received";
+}
+
+/**
+ * Minimal ops query: persisted commercial contacts by requested service and
+ * first-touch origin. Missing series are omitted / UNKNOWN — never numeric zero
+ * for a service or origin that did not appear. QA/synthetic stay out.
+ */
+function countPersistedContactsByServiceOrigin(leads) {
+  const { filterCommercialLeads } = require("./record-kind.cjs");
+  const commercial = filterCommercialLeads(leads);
+  const persisted = commercial.filter(isPersistedContact);
+
+  if (!persisted.length) {
+    return {
+      persisted_count: "UNKNOWN",
+      by_service: { UNKNOWN: "UNKNOWN" },
+      by_origin: { UNKNOWN: "UNKNOWN" },
+      by_pair: { "UNKNOWN|UNKNOWN": "UNKNOWN" },
+      unknown_service: "UNKNOWN",
+      unknown_origin: "UNKNOWN",
+      note: "No persisted commercial contacts in this batch. Missing series are UNKNOWN, never numeric zero.",
+    };
+  }
+
+  const by_service = {};
+  const by_origin = {};
+  const by_pair = {};
+  let unknown_service = 0;
+  let unknown_origin = 0;
+  for (const lead of persisted) {
+    const service = serviceKeyForContact(lead);
+    const origin = originKeyForContact(lead);
+    if (service === "UNKNOWN") unknown_service += 1;
+    if (origin === "UNKNOWN") unknown_origin += 1;
+    by_service[service] = (by_service[service] || 0) + 1;
+    by_origin[origin] = (by_origin[origin] || 0) + 1;
+    const pair = `${service}|${origin}`;
+    by_pair[pair] = (by_pair[pair] || 0) + 1;
+  }
+
+  return {
+    persisted_count: persisted.length,
+    by_service,
+    by_origin,
+    by_pair,
+    unknown_service,
+    unknown_origin,
+    note: "Durably persisted commercial contacts. Series not present are omitted, not zero. Rows without service or origin use UNKNOWN.",
+  };
+}
+
 module.exports = {
   FUNNEL_EVENTS,
   MONEY_ASSET_ID,
@@ -667,4 +736,7 @@ module.exports = {
   isMoneyAssetEvent,
   isMoneyAssetLead,
   summarizeMoneyAssetLoop,
+  countPersistedContactsByServiceOrigin,
+  serviceKeyForContact,
+  originKeyForContact,
 };
