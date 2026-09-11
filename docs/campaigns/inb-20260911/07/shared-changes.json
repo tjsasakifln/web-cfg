@@ -1,0 +1,113 @@
+{
+  "schema": "confenge.inbound-campaign-shared-changes/2.0",
+  "campaign_id": "07",
+  "campaign_set": "INB-20260911",
+  "prompt_version": "2.0.0",
+  "owner_campaign": "07",
+  "note": "07 não edita estes arquivos centrais. 16 aplica o conjunto atômico: robots da landing, registry, sitemap e producers. Não remover noindex de outras ferramentas.",
+  "changes": [
+    {
+      "change_id": "inb07-noindex-hold-superseded",
+      "owner_campaign": "07",
+      "path": "data/organic/noindex-governance-registry.json",
+      "base_blob_sha": "99f9413216e2303674aa3650f9e0dfd79841f7de",
+      "operation": "remove_object_in_array",
+      "key_or_anchor": "entries[family_id=prontidao-tecnica-obra-privada]",
+      "expected_old": {
+        "family_id": "prontidao-tecnica-obra-privada",
+        "reason_code": "commercial_surface_deferred",
+        "owner_issue": 589
+      },
+      "desired_new": null,
+      "rationale": "A retenção MV-09 (ferramenta antes das money pages + falso positivo de prontidão no planejamento) está superada: o estágio de planejamento já não trata domínio inaplicável como evidência presente, desconhecido não soma lacuna, /quantitativos-orcamento-obras/ existe, e a landing tem método, limites, destinos honestos e 3 concretos (2026, Lei nº 5.194, Lei nº 6.496). Não é remoção em lote.",
+      "acceptance_test": "inbound-gates instance_index_ready for /ferramentas/prontidao-tecnica-obra-privada/ no longer cites commercial_surface_deferred; no other family is removed from this registry."
+    },
+    {
+      "change_id": "inb07-landing-robots-index",
+      "owner_campaign": "07",
+      "path": "ferramentas/prontidao-tecnica-obra-privada/index.html",
+      "base_blob_sha": null,
+      "operation": "replace_attribute",
+      "key_or_anchor": "meta[name=robots] content",
+      "expected_old": "noindex,follow",
+      "desired_new": "index,follow",
+      "rationale": "A landing é conteúdo útil rastreável (método, sete domínios, destinos, limites). Resultados pessoais continuam só no cliente, sem rota parametrizada. 07 mantém noindex no HTML até 16 aplicar este flip junto com registry e sitemap, para não criar desacordo local.",
+      "acceptance_test": "Rendered landing robots is index,follow; no shareable result URL; no WebApplication schema; noindex remains on other tools."
+    },
+    {
+      "change_id": "inb07-sitemap-landing",
+      "owner_campaign": "07",
+      "path": "sitemap.xml",
+      "base_blob_sha": "3c91a643271d02ea536f08a0378716d3e2aa34af",
+      "operation": "insert_url_after",
+      "key_or_anchor": "https://confenge.com.br/ferramentas/matriz-atraso-obra/",
+      "expected_old": null,
+      "desired_new": {
+        "loc": "https://confenge.com.br/ferramentas/prontidao-tecnica-obra-privada/",
+        "lastmod": "2026-09-11"
+      },
+      "rationale": "Incluir só a landing da ferramenta, nunca estados pessoais de resultado.",
+      "acceptance_test": "sitemap.xml contains the landing loc exactly once and does not contain query-string result URLs."
+    },
+    {
+      "change_id": "inb07-seo-exempt-reason",
+      "owner_campaign": "07",
+      "path": "data/quality/interface-coverage-policy.json",
+      "base_blob_sha": "6a316292f509408e50345a1774b00459c9ea2adf",
+      "operation": "upsert",
+      "key_or_anchor": "families[family_id=prontidao-tecnica-obra-privada].seo_exempt_reason",
+      "expected_old": "tool remains noindex during the corporate launch so it cannot outrank or distract from the consulting path before promotion evidence",
+      "desired_new": null,
+      "rationale": "A isenção de indexação por lançamento corporativo não vale depois da correção da lógica e da money page de quantitativos. Manter a família na política de cobertura de interface.",
+      "acceptance_test": "The family remains listed for interface coverage; seo_exempt_reason is absent or no longer claims a launch hold."
+    },
+    {
+      "change_id": "inb07-event-complete-producer",
+      "owner_campaign": "07",
+      "path": "netlify/functions/lib/event-registry.json",
+      "base_blob_sha": "1d3ced0d7d5903a351b5a942d6eda9f38540985e",
+      "operation": "array_add_unique",
+      "key_or_anchor": "events.tool_complete.producers",
+      "expected_old": [
+        "assets/js/tools-common.js",
+        "ferramentas/limite-acrescimos-supressoes/index.html",
+        "ferramentas/checklist-reequilibrio/index.html",
+        "ferramentas/matriz-atraso-obra/index.html"
+      ],
+      "desired_new": [
+        "assets/js/tools-common.js",
+        "ferramentas/limite-acrescimos-supressoes/index.html",
+        "ferramentas/checklist-reequilibrio/index.html",
+        "ferramentas/matriz-atraso-obra/index.html",
+        "ferramentas/prontidao-tecnica-obra-privada/app.js",
+        "ferramentas/prontidao-tecnica-obra-privada/index.html"
+      ],
+      "rationale": "tool_complete já é o nome canônico de conclusão; não é qualified_lead. Registrar o produtor da prontidão. start/follow usam tools-common (tool_start, tool_to_offer, tool_to_form, tool_to_whatsapp). Contato recebido permanece lead_persisted no fluxo INB-02.",
+      "acceptance_test": "event dictionary still forbids deriving qualified_lead from tool_complete; producers include the prontidão app."
+    },
+    {
+      "change_id": "inb07-family-visitor-job",
+      "owner_campaign": "07",
+      "path": "data/organic/public-family-registry.json",
+      "base_blob_sha": "61e219892d5ad8c80f37dc18399f51f5df119ca1",
+      "operation": "upsert",
+      "key_or_anchor": "families[id=prontidao-tecnica-obra-privada].visitor_job",
+      "expected_old": "Identificar evidências presentes, lacunas e desconhecidos antes de contratar, executar ou retomar uma obra privada; ler o resultado completo sem contato.",
+      "desired_new": "Identificar evidências presentes, lacunas e desconhecidos antes de contratar, executar ou retomar uma obra privada; ler o resultado completo sem contato; e, se couber, seguir para orçamento, revisão, compatibilização ou conversa de escopo.",
+      "rationale": "O job do visitante agora inclui o encaminhamento contextual, sem tornar a ferramenta obrigatória.",
+      "acceptance_test": "Family visitor_job mentions the four paths and complete result without contact; terminal_action unchanged."
+    },
+    {
+      "change_id": "inb07-inb02-contact-query",
+      "owner_campaign": "02",
+      "path": "assets/js/adaptive-intake.js",
+      "base_blob_sha": null,
+      "operation": "consume_query_ids",
+      "key_or_anchor": "need_code|offer_candidate_id|source_origin_asset_id|source_origin_route_family",
+      "expected_old": "hash-only need mapping (#obra-imovel)",
+      "desired_new": "Prefill need_code from hash or query; accept offer_candidate_id, intent_family, source_origin_* as editable hidden/select values. Ignore unknown keys. Never read questionnaire answers.",
+      "rationale": "07 já envia só IDs não sensíveis para /triagem-tecnica/?...#obra-imovel. O hash atual já seleciona obra_edificacao_ou_documentacao. A query é retrocompatível: se 02 não a consumir, o contato humano continua funcional.",
+      "acceptance_test": "Opening the contact href from the tool prefills need_code=obra_edificacao_ou_documentacao, remains editable, and does not contain answer values."
+    }
+  ]
+}

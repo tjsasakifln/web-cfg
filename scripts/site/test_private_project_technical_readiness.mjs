@@ -39,6 +39,7 @@ function expect(name, cond, detail) {
 const {
   diagnosePrivateProjectTechnicalReadiness: diagnose,
   ENGINE_ID,
+  ENGINE_VERSION,
   ASSET_ID,
   NUCLEUS,
   OFFER_CANDIDATE,
@@ -59,10 +60,16 @@ const {
   causalDomainsForQuestion,
   emptyAnswers,
   normalizeAnswers,
+  routePrivateProjectReadiness,
+  resolveCommercialDestination,
+  buildContactContext,
+  buildContactHref,
+  ROUTING_TABLE,
 } = E;
 
 expect("twins_identical", readFileSync(jsPath, "utf8") === readFileSync(enginePath, "utf8"));
 expect("engine_id", ENGINE_ID === "private_project_technical_readiness_v1");
+expect("engine_version", ENGINE_VERSION === "1.1.0");
 expect("asset_id", ASSET_ID === ENGINE_ID);
 expect("nucleus", NUCLEUS === "building_engineering_documentation");
 expect("offer", OFFER_CANDIDATE === "private_project_technical_readiness_assessment");
@@ -292,7 +299,7 @@ function domainById(result, id) {
     "Decisão, escopo e estágio",
     "Projetos, revisões e responsabilidade",
     "Quantitativos, orçamento, bases e memória",
-    "Compatibilização, constructability e BIM",
+    "Compatibilização, construtibilidade e BIM",
     "Mudanças, execução, medição e rastreabilidade",
     "As-built, entrega, operação e documentação final",
     "Condições declaradas de ART e inspeções",
@@ -343,6 +350,297 @@ function domainById(result, id) {
   const browserResult = api.diagnosePrivateProjectTechnicalReadiness(presentAnswers());
   const nodeResult = diagnose(presentAnswers());
   expect("browser_node_hash", browserResult.result_hash === nodeResult.result_hash);
+  expect("browser_has_routing", Boolean(api.routePrivateProjectReadiness && api.resolveCommercialDestination));
+}
+
+const FIXTURE_MAP = {
+  schema: "confenge.canonical-destination-map/1.0",
+  by_offer_id: {
+    quantity_takeoff_budgeting: {
+      path: "/quantitativos-orcamento-obras/",
+      intent_family: "orcar_planejar_decidir",
+    },
+    bim_coordination_clash_register: {
+      path: "/fixture/compatibilizacao/",
+      intent_family: "projetar_revisar_compatibilizar",
+    },
+    complementary_engineering_project_review: {
+      path: "/fixture/revisao-projetos/",
+      intent_family: "projetar_revisar_compatibilizar",
+    },
+  },
+};
+
+{
+  expect("routing_table_three_paths", ROUTING_TABLE.length === 3);
+  expect(
+    "routing_ids",
+    ROUTING_TABLE.map((row) => row.id).join(",") === "orcamento,compatibilizacao,revisao",
+  );
+  expect(
+    "routing_offer_ids",
+    ROUTING_TABLE.map((row) => row.offer_id).join(",") ===
+      "quantity_takeoff_budgeting,bim_coordination_clash_register,complementary_engineering_project_review",
+  );
+}
+
+{
+  const allKnown = diagnose(presentAnswers());
+  expect("all_known_no_primary", allKnown.routing.primary === null);
+  expect("all_known_no_force", allKnown.routing.force_two_contracts === false);
+  expect("all_known_no_scope_required", allKnown.routing.scope_conversation === false);
+  expect("all_known_unknown_never_scores", allKnown.routing.unknown_never_scores === true);
+  expect(
+    "all_known_no_service",
+    /nenhuma contratação é sugerida/i.test(allKnown.routing.justification),
+  );
+}
+
+{
+  const allUnknown = diagnose({});
+  expect("all_unknown_gap_zero", allUnknown.gap_count === 0);
+  expect("all_unknown_no_primary", allUnknown.routing.primary === null);
+  expect("all_unknown_scope", allUnknown.routing.scope_conversation === true);
+  expect("all_unknown_not_wrong_project", !/projeto errado/i.test(JSON.stringify(allUnknown)));
+  expect("all_unknown_not_risk_score", !("risk" in allUnknown) && !("score" in allUnknown));
+}
+
+{
+  const qtyOnly = diagnose({
+    ...presentAnswers(),
+    quantities: "nenhum",
+    budget: "nenhum",
+    calc_memory: "nenhum",
+  });
+  expect("qty_primary_orcamento", qtyOnly.routing.primary && qtyOnly.routing.primary.id === "orcamento");
+  expect("qty_primary_offer", qtyOnly.routing.primary.offer_id === "quantity_takeoff_budgeting");
+  expect("qty_no_alts_required", qtyOnly.routing.alternatives.length === 0);
+  expect("qty_unknown_not_used", qtyOnly.routing.unknown_never_scores === true);
+}
+
+{
+  const ifaceOnly = diagnose({
+    ...presentAnswers(),
+    coordination: "nenhum",
+    bim_or_constructability: "nenhum",
+    decision_on_table: "iniciar_execucao",
+  });
+  expect(
+    "iface_primary_compat",
+    ifaceOnly.routing.primary && ifaceOnly.routing.primary.id === "compatibilizacao",
+  );
+  expect(
+    "iface_offer",
+    ifaceOnly.routing.primary.offer_id === "bim_coordination_clash_register",
+  );
+}
+
+{
+  const reviewOnly = diagnose({
+    ...presentAnswers(),
+    design_set: "nenhum",
+  });
+  expect("review_primary", reviewOnly.routing.primary && reviewOnly.routing.primary.id === "revisao");
+  expect(
+    "review_offer",
+    reviewOnly.routing.primary.offer_id === "complementary_engineering_project_review",
+  );
+}
+
+{
+  const bothExec = diagnose({
+    ...presentAnswers(),
+    quantities: "nenhum",
+    budget: "nenhum",
+    calc_memory: "nenhum",
+    coordination: "nenhum",
+    bim_or_constructability: "nenhum",
+    decision_on_table: "iniciar_execucao",
+  });
+  expect("both_primary_compat", bothExec.routing.primary && bothExec.routing.primary.id === "compatibilizacao");
+  expect(
+    "both_alt_orcamento",
+    bothExec.routing.alternatives.map((row) => row.id).join(",") === "orcamento",
+  );
+  expect("both_not_two_contracts", bothExec.routing.force_two_contracts === false);
+  expect(
+    "both_justifies",
+    /não é necessário contratar os dois/i.test(bothExec.routing.justification),
+  );
+}
+
+{
+  const bothCostFirst = diagnose({
+    ...presentAnswers(),
+    quantities: "nenhum",
+    budget: "nenhum",
+    calc_memory: "nenhum",
+    coordination: "nenhum",
+    bim_or_constructability: "nenhum",
+    decision_on_table: "aprovar_medicao",
+  });
+  expect(
+    "both_cost_primary_orcamento",
+    bothCostFirst.routing.primary && bothCostFirst.routing.primary.id === "orcamento",
+  );
+  expect(
+    "both_cost_alt_compat",
+    bothCostFirst.routing.alternatives.map((row) => row.id).join(",") === "compatibilizacao",
+  );
+}
+
+{
+  const unknownQty = diagnose({ ...presentAnswers(), quantities: UNKNOWN, budget: UNKNOWN, calc_memory: UNKNOWN });
+  expect("unknown_qty_not_gap", domainById(unknownQty, "quantities_budget_bases_memory").status === UNKNOWN);
+  expect("unknown_qty_not_route", unknownQty.routing.primary === null);
+  expect("unknown_qty_not_increment_gap", unknownQty.gap_count === 0);
+}
+
+{
+  const present = diagnose(presentAnswers());
+  const mutated = diagnose({ ...presentAnswers(), quantities: "nenhum" });
+  expect("mutation_primary_changes", present.routing.primary === null && mutated.routing.primary.id === "orcamento");
+  expect("mutation_gap_increments", mutated.gap_count === present.gap_count + 1);
+}
+
+{
+  let piiThrew = false;
+  try {
+    diagnose({ ...presentAnswers(), telefone: "48988344559" });
+  } catch (err) {
+    piiThrew = String(err.message).startsWith("forbidden_input:");
+  }
+  expect("mutation_pii_fail_closed", piiThrew);
+
+  let claimThrew = false;
+  const forbiddenBlob = "obra segura e art válida com conformidade normativa";
+  expect("mutation_forbidden_detected", collectForbiddenClaims(forbiddenBlob).length >= 2);
+  try {
+    const result = diagnose(presentAnswers());
+    result.limits = forbiddenBlob;
+    E.collectForbiddenClaims(JSON.stringify(result));
+    if (collectForbiddenClaims(JSON.stringify(result)).length) claimThrew = true;
+  } catch (err) {
+    claimThrew = true;
+  }
+  expect("mutation_forbidden_claim_visible", claimThrew);
+}
+
+{
+  const combinations = [
+    diagnose(presentAnswers()),
+    diagnose({}),
+    diagnose(gapAnswers()),
+    diagnose({ ...presentAnswers(), quantities: "nenhum" }),
+    diagnose({
+      ...presentAnswers(),
+      coordination: "nenhum",
+      bim_or_constructability: "nenhum",
+    }),
+    diagnose({ ...presentAnswers(), design_set: "parcial" }),
+  ];
+  const blob = JSON.stringify(combinations).toLowerCase();
+  expect("no_obra_segura", !blob.includes("obra segura"));
+  expect("no_obra_ilegal", !blob.includes("obra ilegal"));
+  expect("no_calculo_validado", !blob.includes("cálculo validado") && !blob.includes("calculo validado"));
+  expect("no_conformidade_normativa", !blob.includes("conformidade normativa"));
+  expect("no_art_valida", !blob.includes("art válida") && !blob.includes("art valida"));
+  expect("no_projeto_errado", !blob.includes("projeto errado"));
+}
+
+{
+  const empty = resolveCommercialDestination("quantity_takeoff_budgeting", {});
+  expect("resolver_empty_absent", empty.present === false && empty.href === null);
+  const mapped = resolveCommercialDestination("quantity_takeoff_budgeting", FIXTURE_MAP);
+  expect(
+    "resolver_fixture_qty",
+    mapped.present === true && mapped.href === "/quantitativos-orcamento-obras/",
+  );
+  const omitted = resolveCommercialDestination("bim_coordination_clash_register", {
+    quantity_takeoff_budgeting: "/quantitativos-orcamento-obras/",
+  });
+  expect("resolver_omitted_absent", omitted.present === false && omitted.href === null);
+  const invented = resolveCommercialDestination("quantity_takeoff_budgeting", {
+    quantity_takeoff_budgeting: "https://example.invalid/fake",
+  });
+  expect("resolver_rejects_external", invented.present === false);
+}
+
+{
+  const qty = diagnose({ ...presentAnswers(), quantities: "nenhum" });
+  const ctx = buildContactContext(qty);
+  const href = buildContactHref(ctx);
+  const ctxBlob = JSON.stringify(ctx);
+  expect("contact_need_code", ctx.need_code === "obra_edificacao_ou_documentacao");
+  expect("contact_offer_id_only", ctx.offer_candidate_id === "quantity_takeoff_budgeting");
+  expect("contact_no_answers", !ctxBlob.includes("takeoff_ligado") && !ctxBlob.includes("\"nenhum\"") && !ctxBlob.includes("work_stage"));
+  expect("contact_href_triagem", href.startsWith("/triagem-tecnica/"));
+  expect("contact_href_no_answers", !href.includes("takeoff_ligado") && !href.includes("work_stage") && !href.includes("nenhum"));
+  for (const id of QUESTION_IDS) {
+    expect("contact_no_qid_" + id, !Object.prototype.hasOwnProperty.call(ctx, id));
+  }
+}
+
+{
+  const event = buildAnalyticsEvent(diagnose(gapAnswers()));
+  expect("complete_not_qualified", !("qualified_lead" in event) && event.tool === ENGINE_ID);
+  expect("complete_no_answers", !JSON.stringify(event).includes("nenhum"));
+}
+
+{
+  const html = readFileSync(htmlPath, "utf8");
+  const app = readFileSync(appPath, "utf8");
+  const selects = html.match(/<select /g) || [];
+  expect("no_new_questions", selects.length === QUESTION_IDS.length);
+  expect("html_result_before_contact_still", html.indexOf("id=\"resultado\"") < html.indexOf("id=\"cta-comercial\""));
+  expect("html_no_cadastro", !/cadastre-se|crie uma conta|paywall/i.test(html));
+  expect("html_direct_qty", html.includes('href="/quantitativos-orcamento-obras/"'));
+  expect("html_direct_without_form", html.indexOf("id=\"acesso-direto\"") < html.indexOf("id=\"diagnostico\""));
+  expect("html_no_withheld_compat", !html.includes("/compatibilizacao-revisao/"));
+  expect("html_no_fixture_paths", !html.includes("/fixture/"));
+  expect("html_noindex_landing", /content="noindex,follow"/.test(html));
+  expect("html_not_webapplication", !/WebApplication/.test(html));
+  expect("html_noscript_honest", /nenhum resultado personalizado é produzido/i.test(html));
+  expect("html_noscript_no_fake_success", /não há sucesso de processamento/i.test(html));
+  expect("html_btn_edit", html.includes('id="btn-edit"'));
+  expect("html_destination_map", html.includes("id=\"pptr-destination-map\""));
+  expect("app_uses_resolver", /resolveCommercialDestination/.test(app));
+  expect("app_no_hardcoded_compat_url", !/\/compatibilizacao\//.test(app) && !/\/revisao-projetos\//.test(app));
+  expect("app_no_localstorage", !/localStorage/.test(app));
+  expect("app_no_qualified_lead", !/qualified_lead/.test(app));
+  expect("app_no_projeto_errado", !/projeto errado/.test(app));
+  expect("app_complete_event", /tool_complete/.test(app));
+  expect("app_no_answer_query", !/URLSearchParams/.test(app) && !/location\.search/.test(app));
+  expect("app_edit_control", /btn-edit/.test(app));
+  expect("app_guards_analytics", /T && T\.track/.test(app));
+  const mapMatch = html.match(/id="pptr-destination-map">([^<]+)</);
+  expect("html_map_present", Boolean(mapMatch));
+  if (mapMatch) {
+    const publishedMap = JSON.parse(mapMatch[1]);
+    const offers = Object.keys(publishedMap.by_offer_id || {});
+    expect("html_map_only_qty", offers.join(",") === "quantity_takeoff_budgeting");
+    expect(
+      "html_map_qty_real",
+      publishedMap.by_offer_id.quantity_takeoff_budgeting.path === "/quantitativos-orcamento-obras/",
+    );
+  }
+  const main = html.replace(/<header[\s\S]*?<\/header>/gi, " ").replace(/<footer[\s\S]*?<\/footer>/gi, " ");
+  expect("html_no_broken_compat", !/href="\/compatibilizacao[^"]*"/.test(main));
+  expect("html_no_broken_revisao", !/href="\/revisao[^"]*"/.test(main));
+}
+
+{
+  const html = readFileSync(htmlPath, "utf8");
+  const after = html
+    .replace(/<footer[\s\S]*?<\/footer>/gi, " ")
+    .replace(/<header[\s\S]*?<\/header>/gi, " ");
+  const hits = collectForbiddenClaims(after.replace(/prontidão/gi, "").replace(/prontidao/gi, ""));
+  expect("html_still_no_forbidden", hits.length === 0, hits.join(","));
+}
+
+{
+  const routed = routePrivateProjectReadiness(diagnose({ ...presentAnswers(), quantities: "nenhum" }));
+  expect("route_fn_matches_diagnose", routed.primary && routed.primary.id === "orcamento");
 }
 
 if (failed) {
