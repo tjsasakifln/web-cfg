@@ -1,9 +1,9 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-09-10T19:34:03.592Z",
+  "measured_at": "2026-09-11T18:32:00.000Z",
   "measured_on": "2026-09-10",
-  "commit_sha": "81a7fec2ef6eff3e777442e177edd5e78710e3d8",
+  "commit_sha": "43be6cfde8095565a128aaae65e12984c9e10ca3",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "f168038814087e1b365d1de3042af9a3f3364743756e104711fecc0fb9fe7477",
@@ -48,7 +48,7 @@
     "medicoes-glosas-obras-publicas/index.html": "7659009dfc326139fe69d4cc12c30a3395fc1f96264663e1fc435d09843ffbc8",
     "problemas-que-resolvemos/index.html": "fbd929bd17c6890969ee4b0f5c3647dca7ee81bf75b3a8ae4e124c38aef0b280",
     "reequilibrio-obras-publicas/index.html": "11d0cf94f61308da770640898df3019f4cbdd0b3dcd42f9df8ad73a8aa79d6ca",
-    "script.js": "d4e3d7594c7a5a1634918ee93ec5a61af02b8a65dede2d7cfe549868f78ec5c8",
+    "script.js": "dd645d022b0ef008ea292fd4edd1495c64d06f093ac5d0fd955abe9c058f025e",
     "servicos-obras-publicas/index.html": "7fb62cdb2a3c93e06ced52475551515a5ef9996c8d51075294e84939283de04b",
     "styles-hubs.css": "ed4668833ad8de5cef5acc5fc1e8f21e519870f0bf282247c3b4a9644a094592",
     "styles-offers.css": "0c1efa4797709ae6d2b776aa58e863ef095a880646b5e4b158a7a47e0963ec2e",
