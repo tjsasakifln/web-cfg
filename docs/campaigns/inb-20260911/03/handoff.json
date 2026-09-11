@@ -1,0 +1,158 @@
+{
+  "schema": "confenge.inbound-campaign-handoff/2.0",
+  "campaign_set": "INB-20260911",
+  "campaign_id": "03",
+  "prompt_version": "2.0.0",
+  "base_sha": "8f508544835490ec635d02517bce0207c6f8e426",
+  "state": "READY_FOR_INTEGRATION_WITH_DEPENDENCIES",
+  "owned_sources": [
+    "quantitativos-orcamento-obras/index.html",
+    "quantitativos-orcamento-obras/sample-trail.mjs",
+    "conteudos/documentos-para-levantamento-quantitativos/index.html",
+    "conteudos/comparar-propostas-execucao-obra/index.html",
+    "conteudos/revisar-ou-refazer-orcamento-obra/index.html",
+    "tests/intake/test_mv03_adaptive_intake.mjs",
+    "tests/intake/test_quantity_takeoff_path.mjs",
+    "tests/intake/fixtures/quantity-takeoff-trail.fixture.json",
+    "docs/campaigns/inb-20260911/03/handoff.json",
+    "docs/campaigns/inb-20260911/03/shared-changes.json"
+  ],
+  "changed_sources": [
+    "quantitativos-orcamento-obras/index.html",
+    "quantitativos-orcamento-obras/sample-trail.mjs",
+    "conteudos/documentos-para-levantamento-quantitativos/index.html",
+    "conteudos/comparar-propostas-execucao-obra/index.html",
+    "conteudos/revisar-ou-refazer-orcamento-obra/index.html",
+    "tests/intake/test_mv03_adaptive_intake.mjs",
+    "tests/intake/test_quantity_takeoff_path.mjs",
+    "tests/intake/fixtures/quantity-takeoff-trail.fixture.json",
+    "scripts/site/test_adaptive_intake.mjs",
+    "docs/campaigns/inb-20260911/03/handoff.json",
+    "docs/campaigns/inb-20260911/03/shared-changes.json"
+  ],
+  "routes": [
+    {
+      "path": "/quantitativos-orcamento-obras/",
+      "kind": "service_landing",
+      "intent_family": "orcar_planejar_decidir",
+      "offer_id": "quantity_takeoff_budgeting",
+      "canonical": "https://confenge.com.br/quantitativos-orcamento-obras/",
+      "requested_indexability": true,
+      "release_unit": "CORE",
+      "contact_mode": "whatsapp_email_telephone_fallback"
+    },
+    {
+      "path": "/conteudos/documentos-para-levantamento-quantitativos/",
+      "kind": "decision_content",
+      "intent_family": "orcar_planejar_decidir",
+      "offer_id": "quantity_takeoff_budgeting",
+      "canonical": "https://confenge.com.br/conteudos/documentos-para-levantamento-quantitativos/",
+      "requested_indexability": true,
+      "release_unit": "CORE",
+      "contact_mode": "whatsapp_to_service_landing"
+    },
+    {
+      "path": "/conteudos/comparar-propostas-execucao-obra/",
+      "kind": "decision_content",
+      "intent_family": "orcar_planejar_decidir",
+      "offer_id": "quantity_takeoff_budgeting",
+      "canonical": "https://confenge.com.br/conteudos/comparar-propostas-execucao-obra/",
+      "requested_indexability": true,
+      "release_unit": "CORE",
+      "contact_mode": "whatsapp_to_service_landing"
+    },
+    {
+      "path": "/conteudos/revisar-ou-refazer-orcamento-obra/",
+      "kind": "decision_content",
+      "intent_family": "orcar_planejar_decidir",
+      "offer_id": "budget_audit_feasibility",
+      "canonical": "https://confenge.com.br/conteudos/revisar-ou-refazer-orcamento-obra/",
+      "requested_indexability": true,
+      "release_unit": "CORE",
+      "contact_mode": "whatsapp_to_service_landing"
+    }
+  ],
+  "dependencies": [
+    {
+      "provider_campaign": "01",
+      "artifact_path": "data/site/public-ia-map.json",
+      "level": "HARD_AT_RELEASE",
+      "fallback": "Landing /quantitativos-orcamento-obras/ already in IA map and family registry. New decision routes need breadcrumb labels (shared-change 03-ia-breadcrumb-labels)."
+    },
+    {
+      "provider_campaign": "02",
+      "artifact_path": "assets/js/adaptive-intake.js",
+      "level": "HARD_AT_RELEASE",
+      "fallback": "Current withheld-authority path keeps WhatsApp, e-mail and telephone without capture form. 03 does not require rebuilding the landing when 02 extends attribution."
+    },
+    {
+      "provider_campaign": "06",
+      "artifact_path": "casos/demonstrativo-quantitativos-orcamento/excerpt.v1.json",
+      "level": "HARD_AT_RELEASE",
+      "fallback": "Public slot #qty-sample-trail ships the five-step method without fixture numbers. quantitativos-orcamento-obras/sample-trail.mjs injects the canonical excerpt at composition. Test fixture stays under tests/intake/fixtures/."
+    }
+  ],
+  "shared_changes": "docs/campaigns/inb-20260911/03/shared-changes.json",
+  "tests": [
+    {
+      "command": "npm run test:adaptive-intake",
+      "exit_code": 0,
+      "subject_sha": null,
+      "overlay_hashes": null,
+      "runs": 2
+    },
+    {
+      "command": "node --test tests/intake/test_quantity_takeoff_path.mjs",
+      "exit_code": 0,
+      "subject_sha": null,
+      "overlay_hashes": {
+        "tests/intake/fixtures/quantity-takeoff-trail.fixture.json": "sha256:9f5e7a826ca00a11d061f8e273348d87493104addd27c6540288546f95e357dd",
+        "quantitativos-orcamento-obras/sample-trail.mjs": "sha256:09fef4e383decdb81e27bd3ea89a08f71c34b102593cd8405ede1d48d5bed34c"
+      }
+    }
+  ],
+  "evidence_paths": [
+    "docs/campaigns/inb-20260911/03/handoff.json",
+    "docs/campaigns/inb-20260911/03/shared-changes.json"
+  ],
+  "unresolved": [
+    {
+      "id": "inb-06-canonical-excerpt",
+      "level": "HARD_AT_RELEASE",
+      "detail": "casos/demonstrativo-quantitativos-orcamento/excerpt.v1.json ausente. Slot público descreve o método; fixture de teste não é publicado."
+    },
+    {
+      "id": "family-routes-and-header-cta",
+      "owner_campaign": "16",
+      "detail": "shared-changes 03-family-routes-decision-pages e 03-family-header-hiring-cta. Sem o upsert, as três páginas decisórias ficam em editorial-library (prefixo /conteudos/) e o header da landing permanece Conversar sobre minha obra."
+    },
+    {
+      "id": "hub-conteudos-09",
+      "owner_campaign": "09",
+      "detail": "Três páginas indexáveis novas em /conteudos/ sobem count_indexable_conteudos. 09 precisa listar os cards e ajustar numberOfItems. Sem isso o hub fica defasado na composição."
+    },
+    {
+      "id": "inbound-gates-first-party-evidence",
+      "owner_campaign": "16",
+      "detail": "instance_index_ready marca as três páginas de /conteudos/ com blocking freshness,citable_source enquanto pertencem a editorial-library. O upsert para private-engineering-quantities-budget herda a dispensa first_party_publication da família da landing. A landing ainda pode reportar freshness; 03 não altera o gate central."
+    },
+    {
+      "id": "browser-visual",
+      "detail": "Playwright MCP indisponível e nenhum Chromium no PATH. Contraprovas de conteúdo, CTA, trilha e hrefs foram feitas no HTML estático."
+    }
+  ],
+  "preserved_capabilities": [
+    "URL canônica /quantitativos-orcamento-obras/",
+    "WhatsApp, e-mail e telefone sem upload, CPF ou processo",
+    "Sem preço ou prazo fechado novo",
+    "Credencial R$ 700 milhões intacta",
+    "Autoridade de intake WITHHELD não publica formulário morto"
+  ],
+  "observable_delta": [
+    "Primeira dobra nomeia o trabalho, a entrega e Solicitar proposta de orçamento",
+    "Levantamento, elaboração e revisão são pedidos distintos",
+    "Trilha elemento→critério→cálculo→quantidade→item no HTML, sem JavaScript",
+    "Três páginas decisórias com exemplo, critérios, enviar/esperar e ligação ao serviço",
+    "Obra privada sem campos de licitação; SINAPI negado como preço de mercado universal"
+  ]
+}

@@ -4,7 +4,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>Quantitativos e orçamento de obras | CONFENGE</title>
-<meta content="Levantamento de quantitativos e orçamento para obras públicas e privadas, com memória, premissas, composições e referências de preço identificadas." name="description"/>
+<meta content="A CONFENGE levanta quantitativos, elabora ou revisa o orçamento de obra pública ou privada. Você recebe memória, critérios, premissas e um caminho para solicitar a proposta." name="description"/>
 <meta content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" name="robots"/>
 <meta content="#061a33" name="theme-color"/>
 <link href="https://confenge.com.br/quantitativos-orcamento-obras/" rel="canonical"/>
@@ -24,6 +24,7 @@
 .qty-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}
 .qty-card{padding:1.35rem;border:1px solid var(--line);background:#fff}
 .qty-card h3{margin-top:0}
+.qty-card p:last-child{margin-bottom:0}
 .qty-flow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.5rem;counter-reset:qty-step}
 .qty-step{padding-top:1rem;border-top:3px solid var(--green-700)}
 .qty-step::before{counter-increment:qty-step;content:"0" counter(qty-step);display:block;margin-bottom:.65rem;color:var(--green-700);font-weight:800}
@@ -35,7 +36,15 @@
 .qty-channels{margin-top:1.25rem}
 .qty-channels .channel-actions{align-items:stretch}
 .qty-channels .text-link{padding-inline:.25rem}
-@media(max-width:800px){.qty-hero-grid,.qty-grid,.qty-flow,.qty-proof,.qty-triage-grid{grid-template-columns:1fr}.qty-hero-grid>*,.qty-grid>*,.qty-flow>*,.qty-proof>*,.qty-triage-grid>*{min-width:0}.qty-hero-grid h1,.qty-hero-grid p,.qty-proof h2,.qty-proof p,.qty-proof li{overflow-wrap:break-word}.qty-hero{padding-block:2.5rem}.qty-hero h1{max-width:none}}
+.qty-choice{border-top:4px solid var(--green-700)}
+.qty-factors{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+.qty-trail-steps{margin:0;padding:0;list-style:none;display:grid;gap:1rem}
+.qty-trail-steps li{padding:1.2rem;border:1px solid var(--line);background:#fff}
+.qty-trail-n{display:block;margin-bottom:.4rem;color:var(--green-700);font-weight:800}
+.qty-trail-steps h3{margin:0 0 .4rem}
+.qty-trail-disclaimer{padding:.9rem 1rem;border-left:4px solid var(--green-700);background:var(--soft)}
+.qty-split{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+@media(max-width:800px){.qty-hero-grid,.qty-grid,.qty-flow,.qty-proof,.qty-triage-grid,.qty-factors,.qty-split{grid-template-columns:1fr}.qty-hero-grid>*,.qty-grid>*,.qty-flow>*,.qty-proof>*,.qty-triage-grid>*{min-width:0}.qty-hero-grid h1,.qty-hero-grid p,.qty-proof h2,.qty-proof p,.qty-proof li{overflow-wrap:break-word}.qty-hero{padding-block:2.5rem}.qty-hero h1{max-width:none}}
 </style>
 <script defer="" src="/script.js?v=mv09"></script>
 <script defer="" src="/assets/js/adaptive-intake.js"></script>
@@ -43,9 +52,9 @@
 <meta content="pt_BR" property="og:locale"/>
 <meta content="CONFENGE" property="og:site_name"/>
 <meta content="Quantitativos e orçamento de obras" property="og:title"/>
-<meta content="Quantidades, memória e premissas visíveis antes de comparar propostas ou contratar." property="og:description"/>
+<meta content="Levantamento, elaboração ou revisão de orçamento, com memória conferível, para obra pública ou privada." property="og:description"/>
 <meta content="https://confenge.com.br/quantitativos-orcamento-obras/" property="og:url"/>
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://confenge.com.br/quantitativos-orcamento-obras/#webpage","url":"https://confenge.com.br/quantitativos-orcamento-obras/","name":"Quantitativos e orçamento de obras","description":"Levantamento de quantitativos e orçamento para obras públicas e privadas, com memória, premissas, composições e referências de preço identificadas.","isPartOf":{"@id":"https://confenge.com.br/#website"},"about":{"@id":"https://confenge.com.br/quantitativos-orcamento-obras/#service"}},{"@type":"Service","@id":"https://confenge.com.br/quantitativos-orcamento-obras/#service","name":"Quantitativos e orçamento de obras públicas e privadas","serviceType":"Levantamento quantitativo, orçamentação ou revisão de base de custos","provider":{"@id":"https://confenge.com.br/#organization"},"areaServed":{"@type":"Country","name":"Brasil"},"url":"https://confenge.com.br/quantitativos-orcamento-obras/"},{"@type":"BreadcrumbList","@id":"https://confenge.com.br/quantitativos-orcamento-obras/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Início","item":"https://confenge.com.br/"},{"@type":"ListItem","position":2,"name":"Serviços e problemas","item":"https://confenge.com.br/servicos/"},{"@type":"ListItem","position":3,"name":"Quantitativos e orçamento","item":"https://confenge.com.br/quantitativos-orcamento-obras/"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://confenge.com.br/quantitativos-orcamento-obras/#webpage","url":"https://confenge.com.br/quantitativos-orcamento-obras/","name":"Quantitativos e orçamento de obras","description":"A CONFENGE levanta quantitativos, elabora ou revisa o orçamento de obra pública ou privada. Você recebe memória, critérios, premissas e um caminho para solicitar a proposta.","isPartOf":{"@id":"https://confenge.com.br/#website"},"about":{"@id":"https://confenge.com.br/quantitativos-orcamento-obras/#service"}},{"@type":"Service","@id":"https://confenge.com.br/quantitativos-orcamento-obras/#service","name":"Quantitativos e orçamento de obras públicas e privadas","serviceType":"Levantamento de quantitativos, elaboração de orçamento ou revisão de orçamento existente","provider":{"@id":"https://confenge.com.br/#organization"},"areaServed":{"@type":"Country","name":"Brasil"},"url":"https://confenge.com.br/quantitativos-orcamento-obras/"},{"@type":"BreadcrumbList","@id":"https://confenge.com.br/quantitativos-orcamento-obras/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Início","item":"https://confenge.com.br/"},{"@type":"ListItem","position":2,"name":"Serviços e problemas","item":"https://confenge.com.br/servicos/"},{"@type":"ListItem","position":3,"name":"Quantitativos e orçamento","item":"https://confenge.com.br/quantitativos-orcamento-obras/"}]}]}</script>
 </head>
 <body data-content-cluster="private-engineering-quantities-budget" data-analytics-surface="private-quantities-budget">
 <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
@@ -82,18 +91,42 @@
 <section aria-labelledby="qty-title" class="qty-hero">
 <div class="container qty-hero-grid">
 <div>
-<p class="eyebrow">Antes de comparar, contratar ou alterar o escopo</p>
+<p class="eyebrow">Antes de comparar, contratar ou planejar a obra</p>
 <h1 id="qty-title">Quantitativos e orçamento de obras</h1>
-<p class="qty-lead">Levantamos ou revisamos quantidades e custos de obras públicas e privadas para comparar propostas, preparar a contratação e planejar a execução. Você recebe a origem de cada quantidade, o critério de medição, as composições de custo e as lacunas dos documentos.</p>
+<p class="qty-lead">A CONFENGE levanta quantitativos, elabora o orçamento ou revisa a planilha que você já tem, para obra pública ou privada. Você recebe a origem de cada quantidade, o critério de medição, as composições e as premissas. Para começar, solicite a proposta do recorte de que precisa — projeto ainda parcial também entra.</p>
 <div class="hero-actions">
-<a class="button button-primary button-lg" data-cta-id="frame-quantities-budget-hero" data-cta-position="hero" href="#triagem-quantitativos">Conversar sobre minha obra <svg class="icon"><use href="#i-arrow"></use></svg></a>
-<a class="text-link" data-cta-id="understand-quantities-method" href="#metodo-quantitativos">Ver como fazemos o levantamento</a>
+<a class="button button-primary button-lg" data-cta-id="frame-quantities-budget-hero" data-cta-position="hero" href="#triagem-quantitativos">Solicitar proposta de orçamento <svg class="icon"><use href="#i-arrow"></use></svg></a>
+<a class="text-link" href="#metodo-quantitativos">Ver o método e a amostra</a>
 </div>
 </div>
 <aside class="qty-signal">
 <strong>O orçamento acompanha a finalidade da obra</strong>
-<p>Em obras privadas, definimos as referências e cotações adequadas à contratação. Em obras públicas, preservamos orçamento de referência, edital, data-base e critérios aplicáveis, com acesso também aos <a href="/servicos-obras-publicas/">serviços especializados de licitações e contratos</a>.</p>
+<p>Em obra privada, as referências e as cotações seguem a contratação que você vai fazer. Em obra pública, o recorte preserva orçamento de referência, edital, data-base e critérios aplicáveis. SINAPI, quando couber, é referência de orçamento público — não é preço de mercado universal. Há também os <a href="/servicos-obras-publicas/">serviços especializados de licitações e contratos</a>.</p>
 </aside>
+</div>
+</section>
+
+<section aria-labelledby="qty-buy-title" class="section section--default" id="o-que-contratar">
+<div class="container">
+<header class="section-head">
+<p class="eyebrow">Três pedidos diferentes</p>
+<h2 id="qty-buy-title">Levantamento, elaboração e revisão não são o mesmo serviço.</h2>
+<p class="section-lead">Diga qual decisão está na mesa. A proposta descreve esse recorte; não misturamos os três só porque todos falam de quantidade e custo.</p>
+</header>
+<div class="qty-grid">
+<article class="qty-card qty-choice" id="levantamento-quantitativos">
+<h3>Levantamento de quantitativos</h3>
+<p>Transformar plantas, memoriais e o recorte disponível em serviços, unidades e quantidades conferíveis. Serve para orçar depois, comparar propostas de execução ou planejar compra de material. Não inclui, sozinho, o preço de cada item.</p>
+</article>
+<article class="qty-card qty-choice" id="elaboracao-orcamento">
+<h3>Elaboração de orçamento</h3>
+<p>Compor custos sobre as quantidades — ou levantá-las e compô-las no mesmo recorte — com premissas, encargos, data-base e referências identificadas. Serve para decidir investir, contratar ou preparar uma planilha de referência.</p>
+</article>
+<article class="qty-card qty-choice" id="revisao-orcamento">
+<h3>Revisão de orçamento existente</h3>
+<p>Testar a planilha ou o estudo que já está na mesa: consistência de quantitativos, unidades, exclusões, composições e data-base. Serve para aceitar, condicionar ou recusar o número apresentado, ou para decidir se é preciso elaborar de novo.</p>
+</article>
+</div>
 </div>
 </section>
 
@@ -102,7 +135,7 @@
 <header class="section-head">
 <p class="eyebrow">O que você recebe</p>
 <h2 id="qty-output-title">Números que você consegue conferir antes de gastar.</h2>
-<p class="section-lead">São três entregas, com a origem e o critério de cada número visíveis.</p>
+<p class="section-lead">A entrega acompanha o pedido. Em qualquer um dos três, a origem e o critério de cada número ficam visíveis.</p>
 </header>
 <div class="qty-grid">
 <article class="qty-card"><h3>Planilha de quantitativos</h3><p>Serviços, materiais, unidades e quantidades ligados às plantas, memoriais e documentos que originaram cada leitura.</p></article>
@@ -121,7 +154,101 @@
 <div class="qty-flow">
 <article class="qty-step"><h3>Delimitar o recorte</h3><p>Confirmamos finalidade, fase do projeto, documentos disponíveis, disciplinas, áreas, sistemas e itens que o orçamento deve cobrir.</p></article>
 <article class="qty-step"><h3>Levantar e conferir</h3><p>Relacionamos cada quantidade à sua fonte e registramos divergências, omissões, fórmulas e premissas.</p></article>
-<article class="qty-step"><h3>Compor o orçamento</h3><p>Aplicamos a referência adequada ao uso público ou privado, abrimos as composições e separamos quantidade, custo e data-base para permitir conferência.</p></article>
+<article class="qty-step"><h3>Compor ou revisar o orçamento</h3><p>Aplicamos a referência adequada ao uso público ou privado, abrimos as composições e separamos quantidade, custo e data-base para permitir conferência. A entrega fica definida na proposta: recorte, disciplinas, se o trabalho é levantamento, elaboração ou revisão, e quais premissas o número carrega. Sem isso, o arquivo não é orçamento para executar obra.</p></article>
+</div>
+</div>
+</section>
+
+<section aria-labelledby="qty-trail-title" class="section section--default" id="amostra-quantitativos">
+<div class="container">
+<header class="section-head">
+<p class="eyebrow">Amostra conferível</p>
+<h2 id="qty-trail-title">Do elemento da planta ao item da planilha.</h2>
+<p class="section-lead">A trilha abaixo é o caminho de conferência. Quantidade não é preço: o item só recebe custo depois, com a referência e a data-base declaradas.</p>
+</header>
+<div id="qty-sample-trail" data-sample-trail-slot="canonical" data-sample-trail-state="awaiting-canonical-excerpt">
+<p class="qty-trail-disclaimer">Amostra demonstrativa. Não é orçamento válido para executar obra, não representa cliente e não fecha preço, prazo ou quantidade contratual.</p>
+<ol class="qty-trail-steps">
+<li data-trail-step="element"><span class="qty-trail-n">01</span><h3>Elemento identificado</h3><p>O recorte do projeto — parede, laje, tubulação, serviço — fica identificado com a planta, o memorial ou o documento que o originou.</p></li>
+<li data-trail-step="criterion"><span class="qty-trail-n">02</span><h3>Critério de medição</h3><p>A unidade e a regra de medição usadas na leitura, inclusive o que entra e o que fica de fora.</p></li>
+<li data-trail-step="calculation"><span class="qty-trail-n">03</span><h3>Cálculo</h3><p>A memória conferível: fórmula, dimensões lidas e descontos aplicados.</p></li>
+<li data-trail-step="quantity"><span class="qty-trail-n">04</span><h3>Quantidade</h3><p>O resultado da memória, na unidade do critério, ainda sem preço.</p></li>
+<li data-trail-step="spreadsheet_item"><span class="qty-trail-n">05</span><h3>Item de planilha</h3><p>O item da planilha ou do orçamento que recebe essa quantidade, com código e descrição equivalentes ao recorte.</p></li>
+</ol>
+<p>Os números conferíveis desta trilha entram aqui quando o demonstrativo canônico da CONFENGE estiver publicado. Até lá, o método já é este: elemento, critério, cálculo, quantidade e item de planilha.</p>
+</div>
+</div>
+</section>
+
+<section aria-labelledby="qty-partial-title" class="section section--tight" id="projeto-parcial">
+<div class="container qty-proof">
+<div><p class="eyebrow">Projeto ainda incompleto</p><h2 id="qty-partial-title">Documentação inicial incompleta não encerra o pedido.</h2></div>
+<div>
+<p>Estudo preliminar, projeto arquitetônico sem as complementares, ou só a planilha que alguém já mandou: tudo isso entra. O recorte da proposta acompanha o que já existe. Se só há o arquitetônico, o levantamento cobre o que esse desenho permite medir e registra o que falta para fechar disciplinas, áreas ou sistemas.</p>
+<p>Insumos possíveis, quando existirem: plantas e cortes, memorial descritivo, especificações, caderno de encargos, planilha anterior, cotações, edital e orçamento de referência em obra pública, e a pergunta que a planilha precisa responder. Nada disso é barreira de entrada. A ausência muda o escopo, não dispensa o comprador.</p>
+<p>Quem desenha o projeto pode enviar o que já tem; a lista objetiva está em <a href="/conteudos/documentos-para-levantamento-quantitativos/">documentos para o levantamento de quantitativos</a>.</p>
+</div>
+</div>
+</section>
+
+<section aria-labelledby="qty-factors-title" class="section section--default" id="o-que-influencia">
+<div class="container">
+<header class="section-head">
+<p class="eyebrow">Proposta</p>
+<h2 id="qty-factors-title">O que influencia o esforço, sem tabela de preço inventada.</h2>
+<p class="section-lead">Não há preço fechado, prazo fechado nem desconto nesta página. A proposta sai depois da leitura do recorte. Estes fatores mudam o trabalho:</p>
+</header>
+<div class="qty-factors">
+<article class="qty-card"><h3>Disciplina</h3><p>Arquitetura, estrutura, instalações e outras disciplinas não se medem da mesma forma nem com os mesmos insumos.</p></article>
+<article class="qty-card"><h3>Extensão</h3><p>Uma reforma de um pavimento e um conjunto de blocos não geram o mesmo volume de leitura, conferência e planilha.</p></article>
+<article class="qty-card"><h3>Nível de detalhamento</h3><p>Quantitativo para comparar propostas de execução pede critério e memória. Estimativa de estudo preliminar cobre menos e declara mais premissas.</p></article>
+<article class="qty-card"><h3>Estágio do projeto</h3><p>Estudo preliminar, anteprojeto e projeto executivo mudam o que dá para medir com segurança e o que fica como lacuna.</p></article>
+<article class="qty-card"><h3>Quantidade de referências</h3><p>Uma planilha a revisar, três propostas a equalizar ou um conjunto de cotações mudam a conferência. Em 2026, a data-base continua sendo a data das referências e cotações usadas — não um preço genérico de mercado.</p></article>
+</div>
+</div>
+</section>
+
+<section aria-labelledby="qty-public-private-title" class="section section--tight" id="publico-e-privado">
+<div class="container">
+<header class="section-head">
+<p class="eyebrow">Finalidade</p>
+<h2 id="qty-public-private-title">Obra pública e obra privada compartilham o ofício, não as regras da contratação.</h2>
+</header>
+<div class="qty-split">
+<article class="qty-card">
+<h3>Obra privada</h3>
+<p>O pedido pode ser só o levantamento, só o orçamento ou só a revisão. Não pedimos campos de licitação, edital nem processo. Referências e cotações seguem o que a contratação privada exige. SINAPI não é, aqui, o preço de mercado da sua obra. Reforma de casa, pavimento de condomínio ou canteiro de construtora entram pelo mesmo ofício, no recorte que você descreve. O porte pequeno não é motivo para dispensar o pedido.</p>
+</article>
+<article class="qty-card">
+<h3>Obra pública</h3>
+<p>Quando a finalidade é licitar, contratar ou fiscalizar, o recorte preserva orçamento de referência, data-base, critérios de medição do instrumento e, quando couber, tabelas oficiais. A especialidade pública continua disponível em <a href="/servicos-obras-publicas/">licitações e contratos</a>.</p>
+</article>
+</div>
+</div>
+</section>
+
+<section aria-labelledby="qty-decisions-title" class="section section--default" id="decisoes">
+<div class="container">
+<header class="section-head">
+<p class="eyebrow">Antes de pedir</p>
+<h2 id="qty-decisions-title">Três decisões que costumam vir antes da proposta.</h2>
+</header>
+<div class="qty-grid">
+<article class="qty-card">
+<h3>O que enviar para o levantamento</h3>
+<p>Quais plantas, memoriais e lacunas bastam para começar, e o que a ausência de uma disciplina muda no recorte.</p>
+<p><a class="text-link" href="/conteudos/documentos-para-levantamento-quantitativos/">Ver documentos para o levantamento</a></p>
+</article>
+<article class="qty-card">
+<h3>Como comparar propostas de execução</h3>
+<p>Equalizar escopo, unidades, exclusões, quantidades e responsabilidades — não escolher só o menor total.</p>
+<p><a class="text-link" href="/conteudos/comparar-propostas-execucao-obra/">Ver como equalizar propostas</a></p>
+</article>
+<article class="qty-card">
+<h3>Revisar ou refazer o orçamento</h3>
+<p>Quando a planilha existente ainda responde à decisão, e quando o projeto já mudou o bastante para elaborar de novo.</p>
+<p><a class="text-link" href="/conteudos/revisar-ou-refazer-orcamento-obra/">Ver revisão e reorçamentação</a></p>
+</article>
 </div>
 </div>
 </section>
@@ -133,9 +260,9 @@
 <ul class="qty-list">
 <li>O responsável é Engenheiro Civil formado pela EESC-USP, com registro profissional ativo no CREA e mais de R$ 700 milhões em obras e projetos analisados ao longo da atuação profissional; identidade, registro e o alcance de cada afirmação estão em <a href="/especialista/tiago-jun-sasaki/">quem responde</a>. Os serviços técnicos são emitidos com ART e nota fiscal, dentro do escopo e da atribuição profissional contratados.</li>
 <li>Quantitativos, premissas e lacunas ficam vinculados ao recorte documental definido na proposta.</li>
-<li>Exemplo sintético: duas propostas usam o mesmo nome de serviço, mas incluem quantidades diferentes. Uma memória rastreável permite comparar o que cada uma considerou; isso não representa cliente, obra, prazo, preço ou resultado da CONFENGE.</li>
+<li>Exemplo sintético: duas propostas usam o mesmo nome de serviço, mas incluem quantidades diferentes. Uma memória rastreável permite comparar o que cada uma considerou; isso não representa cliente, obra, prazo, preço ou resultado da CONFENGE. O caminho para equalizar está em <a href="/conteudos/comparar-propostas-execucao-obra/">comparar propostas de execução</a>.</li>
 </ul>
-<p><a class="text-link" data-cta-id="quantities-trust-proof" href="/confianca/">Ver identidade, método e limites publicados</a></p>
+<p><a class="text-link" href="/confianca/">Ver identidade, método e limites publicados</a></p>
 </div>
 </div>
 </section>
@@ -145,9 +272,9 @@
 <div><p class="eyebrow">Limites materiais</p><h2 id="qty-limits-title">Primeiro entendemos o caso; a proposta vem depois.</h2></div>
 <div>
 <ul class="qty-list">
-<li>Preço, prazo, finalidade e disciplinas são fechados na proposta depois da leitura dos documentos disponíveis.</li>
+<li>Preço, prazo, finalidade e disciplinas são fechados na proposta depois da leitura dos documentos disponíveis. Esta página não publica tabela de honorários nem prazo de entrega.</li>
 <li>A leitura documental pode ser remota. Campo, local, atribuições, registro ou visto e ART são confirmados somente quando o escopo exigir.</li>
-<li>A CONFENGE não executa a obra nesta entrega e não substitui projetistas ou responsáveis técnicos de origem.</li>
+<li>A CONFENGE não executa a obra nesta entrega, não assina projeto de terceiros e não substitui projetistas ou responsáveis técnicos de origem.</li>
 <li>Plantas, planilhas, orçamentos e demais arquivos entram por canal seguro combinado logo depois do primeiro contato, que é feito em texto.</li>
 </ul>
 </div>
@@ -158,16 +285,16 @@
 <div class="container qty-triage-grid">
 <div>
 <p class="eyebrow">Próximo passo</p>
-<h2 id="qty-triage-title">Solicite uma proposta para o levantamento ou a revisão do orçamento.</h2>
-<p data-form-value>Diga se a obra é pública ou privada, a finalidade do orçamento, a fase do projeto, as disciplinas envolvidas e quais documentos já existem. Orçamento desconhecido ou documentação inicial incompleta não impede o contato.</p>
+<h2 id="qty-triage-title">Solicite uma proposta de levantamento, orçamento ou revisão.</h2>
+<p data-form-value>Diga se a obra é pública ou privada, se precisa de levantamento de quantitativos, elaboração de orçamento ou revisão de orçamento existente, a fase do projeto, as disciplinas e quais documentos já existem. Orçamento desconhecido ou documentação inicial incompleta não impede o contato. De comprador privado não pedimos campos de licitação, edital ou processo.</p>
 <p>O primeiro contato é direto com o Engº Tiago Sasaki, por WhatsApp, e-mail ou telefone. A resposta combina o canal seguro para os arquivos e informa quais dados ainda são necessários para preparar a proposta.</p>
 </div>
 <div>
 <aside aria-labelledby="qty-channels-title" class="channel-card qty-channels">
-<h3 id="qty-channels-title">Três canais diretos</h3><p>Escolha o que for mais rápido para você.</p><p class="form-hint" data-form-boundary>Este primeiro contato é uma conversa técnica, sem contratação, pagamento ou aceite. Descreva a situação em texto: este primeiro contato não recebe arquivo, planta, orçamento, endereço exato, CPF, processo ou texto livre com dados de terceiros; o que for sensível segue depois, por canal seguro combinado com você. Dados usados apenas para este retorno; retenção de até 730 dias, com exclusão pelos canais da <a href="/privacidade/">Política de Privacidade</a>.</p>
+<h3 id="qty-channels-title">Três canais diretos</h3><p>Escolha o que for mais rápido para você. Não é obrigatório passar por triagem ou diagnóstico antes deste contato.</p><p class="form-hint" data-form-boundary>Este primeiro contato é uma conversa técnica, sem contratação, pagamento ou aceite. Descreva a situação em texto: este primeiro contato não recebe arquivo, planta, orçamento, endereço exato, CPF, processo ou texto livre com dados de terceiros; o que for sensível segue depois, por canal seguro combinado com você. Dados usados apenas para este retorno; retenção de até 730 dias, com exclusão pelos canais da <a href="/privacidade/">Política de Privacidade</a>.</p>
 <div class="channel-actions">
-<a class="button button-primary" data-asset-id="private_quantities_budget_route_v1" data-cta-id="quantities-budget-alternative-whatsapp" data-fallback-channel="whatsapp" data-route-family="private-engineering-quantities-budget" href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20levantar%20quantitativos%20ou%20revisar%20o%20or%C3%A7amento%20de%20uma%20obra." rel="noopener" target="_blank">Conversar sobre os quantitativos</a>
-<a class="button button-secondary" data-asset-id="private_quantities_budget_route_v1" data-cta-id="quantities-budget-alternative-email" data-fallback-channel="email" data-route-family="private-engineering-quantities-budget" href="mailto:tiago.sasaki@confenge.com.br?subject=Quantitativos%20e%20or%C3%A7amento%20de%20obra">Enviar contexto por e-mail</a>
+<a class="button button-primary" data-asset-id="private_quantities_budget_route_v1" data-cta-id="quantities-budget-alternative-whatsapp" data-fallback-channel="whatsapp" data-route-family="private-engineering-quantities-budget" href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20solicitar%20proposta%20de%20levantamento%20de%20quantitativos%20ou%20or%C3%A7amento%20de%20uma%20obra." rel="noopener" target="_blank">Conversar sobre os quantitativos</a>
+<a class="button button-secondary" data-asset-id="private_quantities_budget_route_v1" data-cta-id="quantities-budget-alternative-email" data-fallback-channel="email" data-route-family="private-engineering-quantities-budget" href="mailto:tiago.sasaki@confenge.com.br?subject=Proposta%20de%20quantitativos%20e%20or%C3%A7amento">Enviar contexto por e-mail</a>
 <a class="text-link" data-asset-id="private_quantities_budget_route_v1" data-cta-id="quantities-budget-alternative-phone" data-fallback-channel="phone" data-route-family="private-engineering-quantities-budget" href="tel:+5548988344559">Ligar sobre o orçamento: (48) 98834-4559</a>
 </div>
 </aside>
