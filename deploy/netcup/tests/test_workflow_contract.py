@@ -241,6 +241,34 @@ def test_promotion_requires_a_qualification_bound_to_this_exact_candidate() -> N
     assert '--rollback-target "$PREVIOUS_SHA" --expected-current "$RELEASE_SHA"' in post
 
 
+
+def _folded_if_after(text: str, anchor: str) -> str:
+    """Return the ``if:`` expression of the step introduced by ``anchor``.
+
+    The condition is a folded block scalar (``>-``) spanning several lines.
+    Reading it with PyYAML would add an undeclared dependency to the gate job,
+    so it is joined here the way YAML folds it: continuation lines are the ones
+    indented deeper than the ``if:`` key, joined with single spaces.
+    """
+    lines = text[text.index(anchor):].splitlines()
+    for index, line in enumerate(lines):
+        stripped = line.strip()
+        if not stripped.startswith("if:"):
+            continue
+        inline = stripped[3:].strip()
+        if inline and inline not in (">-", ">", "|-", "|"):
+            return inline
+        key_indent = len(line) - len(line.lstrip())
+        folded = []
+        for continuation in lines[index + 1:]:
+            if not continuation.strip():
+                break
+            if len(continuation) - len(continuation.lstrip()) <= key_indent:
+                break
+            folded.append(continuation.strip())
+        return " ".join(folded)
+    raise AssertionError(f"no if: condition follows {anchor!r}")
+
 def test_compensation_condition_preserves_a_failed_idempotent_retry() -> None:
     """Evaluate the recovery predicate itself, across the states that matter.
 
@@ -250,13 +278,9 @@ def test_compensation_condition_preserves_a_failed_idempotent_retry() -> None:
     release. It stays fail-closed: a material step that is anything other than
     ``success`` still restores the predecessor.
     """
-    import yaml
-
-    document = yaml.safe_load(WORKFLOW.read_text(encoding="utf-8"))
-    condition = next(
-        step["if"]
-        for step in document["jobs"]["promote"]["steps"]
-        if step.get("name") == "Restore the predecessor after material public acceptance failure"
+    condition = _folded_if_after(
+        WORKFLOW.read_text(encoding="utf-8"),
+        "- name: Restore the predecessor after material public acceptance failure",
     )
 
     def evaluate(failed, promote_outcome, already_current, coverage, acceptance, matches_main):

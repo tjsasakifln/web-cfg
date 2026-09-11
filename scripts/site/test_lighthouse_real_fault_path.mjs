@@ -327,33 +327,199 @@ pass("real_page_failures_during_measurement_are_never_recovered_as_infrastructur
 }
 
 // ---------------------------------------------------------------------------
-// 11. The supervisor takes its children down on the signals it CAN trap.
+// 11. A TRACTABLE SIGNAL MUST TAKE THE WHOLE OWN PROCESS TREE DOWN.
+//
+//     This is the path the untrappable-kill case above does NOT cover. The
+//     supervisor traps SIGTERM, so it can shut down deliberately — but killing
+//     a measurement child outright terminates only that process. Its browser is
+//     launched DETACHED, in its own process group, and survives; the child is
+//     the only thing that knows the group. Verifying the child's pid is gone
+//     proves nothing about the browser.
+//
+//     So this drives the real implementation — the real installSupervisorShutdown,
+//     the real runMeasurement, the real measurement child, and a stand-in
+//     browser that is genuinely detached and has a child of its own — and then
+//     checks the entire tree after a SIGTERM to the supervisor.
 // ---------------------------------------------------------------------------
 {
-  const infraSource = readFileSync(
-    fileURLToPath(new URL("./lighthouse_infra.mjs", import.meta.url)),
-    "utf8",
+  const { spawn } = await import("child_process");
+  const browserPidFile = join(WORK, "tree-browser.pid");
+  const rendererPidFile = join(WORK, "tree-renderer.pid");
+  const childPidFile = join(WORK, "tree-child.pid");
+  const readyFile = join(WORK, "tree-ready");
+  const specPath = join(WORK, "tree-spec.json");
+  writeFileSync(
+    specPath,
+    JSON.stringify({
+      url: "http://127.0.0.1:8766/",
+      path: "/",
+      slug: "home",
+      run: 1,
+      attempt: 1,
+      out_json: join(WORK, "tree-lhr.json"),
+      base: "http://127.0.0.1:8766",
+      form_factor: "mobile",
+      viewport: { width: 390, height: 844, device_scale_factor: 3 },
+      runtime_mode: false,
+      seo_exempt: false,
+    }),
   );
-  const runnerSource = readFileSync(
-    fileURLToPath(new URL("./run_lighthouse.mjs", import.meta.url)),
-    "utf8",
+
+  const supervisorScript = join(WORK, "tree-supervisor.mjs");
+  writeFileSync(
+    supervisorScript,
+    `import { writeFileSync } from "node:fs";
+     import { installSupervisorShutdown, runMeasurement } from ${JSON.stringify(fileURLToPath(new URL("./lighthouse_infra.mjs", import.meta.url)))};
+     // The real shutdown, not a copy of it.
+     installSupervisorShutdown(() => {});
+     const original = process.execPath;
+     runMeasurement({
+       childPath: ${JSON.stringify(CHILD)},
+       specPath: ${JSON.stringify(specPath)},
+       outcomePath: ${JSON.stringify(join(WORK, "tree-outcome.json"))},
+       lhrPath: null,
+       timeoutMs: 600000,
+       nodeExecutable: original,
+       env: {
+         ...process.env,
+         NODE_OPTIONS: "--import ${INJECT}",
+         LH_FAULT: "hang",
+         LH_BROWSER_PIDFILE: ${JSON.stringify(browserPidFile)},
+         LH_RENDERER_PIDFILE: ${JSON.stringify(rendererPidFile)},
+       },
+     });
+     // Record the measurement child's pid, then hold the loop open.
+     setTimeout(() => writeFileSync(${JSON.stringify(readyFile)}, "ready"), 2500);
+     setInterval(() => {}, 1000);`,
   );
-  assert.match(infraSource, /export function terminateActiveMeasurements/);
-  assert.match(infraSource, /activeChildren\.add\(child\)/);
-  assert.match(infraSource, /activeChildren\.delete\(child\)/);
-  for (const signal of ["SIGTERM", "SIGINT", "SIGHUP"]) {
-    assert.ok(
-      runnerSource.includes(signal),
-      `the supervisor must take its children down on ${signal}`,
-    );
+
+  const alive = (pid) => {
+    if (!pid) return false;
+    try {
+      process.kill(pid, 0);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+  const readPid = (file) => (existsSync(file) ? Number(readFileSync(file, "utf8").trim()) : null);
+
+  const supervisor = spawn(process.execPath, [supervisorScript], { stdio: "ignore" });
+  let browserPid = null;
+  let rendererPid = null;
+  for (let i = 0; i < 60 && !(browserPid && rendererPid); i += 1) {
+    await new Promise((r) => setTimeout(r, 250));
+    browserPid = readPid(browserPidFile);
+    rendererPid = readPid(rendererPidFile);
   }
-  assert.match(runnerSource, /terminateActiveMeasurements\(\)/);
-  const childSource = readFileSync(
-    fileURLToPath(new URL("./lighthouse_measure_child.mjs", import.meta.url)),
-    "utf8",
+  assert.ok(browserPid, "the stand-in browser must have started");
+  assert.ok(rendererPid, "the browser must have a child of its own to prove the group is killed");
+  assert.equal(alive(browserPid), true, "the browser must be running before the signal");
+  assert.equal(alive(rendererPid), true, "the browser's own child must be running before the signal");
+
+  // The tractable signal.
+  supervisor.kill("SIGTERM");
+
+  let settled = false;
+  for (let i = 0; i < 80 && !settled; i += 1) {
+    await new Promise((r) => setTimeout(r, 250));
+    settled = !alive(supervisor.pid) && !alive(browserPid) && !alive(rendererPid);
+  }
+  assert.equal(alive(supervisor.pid), false, "the supervisor must exit");
+  assert.equal(
+    alive(browserPid),
+    false,
+    "a tractable signal must take the detached browser down, not only the measurement child",
   );
-  assert.match(childSource, /process\.ppid !== bornTo/, "the child must detect being orphaned");
-  pass("the_supervisor_and_child_cover_both_trappable_and_untrappable_terminations");
+  assert.equal(
+    alive(rendererPid),
+    false,
+    "the browser's own descendants must go with it; killing one pid is not killing the group",
+  );
+  pass("a_tractable_signal_terminates_the_whole_owned_process_tree");
+  writeFileSync(join(WORK, "tree-done"), String(readPid(childPidFile) || ""));
+}
+
+// ---------------------------------------------------------------------------
+// 11b. A CHILD THAT DIES WITHOUT REACHING ANY HANDLER must still not leak its
+//      browser. `process.exit()` from inside a dependency, a crash, or an OOM
+//      kill all bypass the child's teardown; only the supervisor is left, and
+//      it must reap the browser group the child recorded. This is the path
+//      that produced five surviving stand-in browsers during this suite's own
+//      development.
+// ---------------------------------------------------------------------------
+{
+  const browserPidFile = join(WORK, "silent-browser.pid");
+  const rendererPidFile = join(WORK, "silent-renderer.pid");
+  seq += 1;
+  const specPath = join(WORK, `spec-silent-tree-${seq}.json`);
+  const outcomePath = join(WORK, `outcome-silent-tree-${seq}.json`);
+  writeFileSync(
+    specPath,
+    JSON.stringify({
+      url: "http://127.0.0.1:8766/",
+      path: "/",
+      slug: "home",
+      run: 1,
+      attempt: 1,
+      out_json: join(WORK, "silent-lhr.json"),
+      base: "http://127.0.0.1:8766",
+      form_factor: "mobile",
+      viewport: { width: 390, height: 844, device_scale_factor: 3 },
+      runtime_mode: false,
+      seo_exempt: false,
+    }),
+  );
+  const alive = (pid) => {
+    if (!pid) return false;
+    try {
+      process.kill(pid, 0);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+  const outcome = await runMeasurement({
+    childPath: CHILD,
+    specPath,
+    outcomePath,
+    lhrPath: null,
+    timeoutMs: 60000,
+    env: {
+      ...process.env,
+      NODE_OPTIONS: `--import ${INJECT}`,
+      LH_FAULT: "silent_death",
+      LH_BROWSER_PIDFILE: browserPidFile,
+      LH_RENDERER_PIDFILE: rendererPidFile,
+    },
+  });
+  assert.equal(outcome.outcome, OUTCOME.INVALID_OR_INCOMPLETE);
+  const browserPid = Number(readFileSync(browserPidFile, "utf8").trim());
+  // The browser may be reaped before it finished spawning its own child; when
+  // it did get that far, the descendant must be gone too.
+  const rendererPid = existsSync(rendererPidFile)
+    ? Number(readFileSync(rendererPidFile, "utf8").trim())
+    : null;
+  let gone = false;
+  for (let i = 0; i < 20 && !gone; i += 1) {
+    await new Promise((r) => setTimeout(r, 100));
+    gone = !alive(browserPid) && !alive(rendererPid);
+  }
+  assert.equal(alive(browserPid), false, "the supervisor must reap a browser its dead child could not");
+  assert.equal(alive(rendererPid), false, "…including the browser's own descendants");
+  assert.equal(existsSync(`${outcomePath}.browser`), false, "the recorded pid is consumed with the attempt");
+  pass("a_child_dying_without_any_handler_still_leaks_no_browser");
+}
+
+// ---------------------------------------------------------------------------
+// 12. Shutdown escalates only as a fallback, and reports what it did.
+// ---------------------------------------------------------------------------
+{
+  const { shutdownActiveMeasurements, SHUTDOWN_GRACE_MS } = await import("./lighthouse_infra.mjs");
+  assert.ok(SHUTDOWN_GRACE_MS > 0, "children must get a bounded grace before escalation");
+  const idle = await shutdownActiveMeasurements({ graceMs: 200 });
+  assert.deepEqual(idle, { terminated: 0, escalated: 0 }, "an idle supervisor terminates nothing");
+  pass("shutdown_gives_a_bounded_grace_before_escalating");
 }
 
 rmSync(WORK, { recursive: true, force: true });

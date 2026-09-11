@@ -192,8 +192,11 @@ export function isRetryableOutcome(outcome) {
  */
 const activeChildren = new Set();
 
-/** Terminates every measurement child this supervisor owns. */
-export function terminateActiveMeasurements(signal = "SIGKILL") {
+/** Grace a measurement child gets to tear its browser down before escalation. */
+export const SHUTDOWN_GRACE_MS = Number(process.env.LH_SHUTDOWN_GRACE_MS || 5000);
+
+/** Signals every measurement child this supervisor owns. */
+export function terminateActiveMeasurements(signal = "SIGTERM") {
   for (const child of activeChildren) {
     try {
       child.kill(signal);
@@ -201,7 +204,85 @@ export function terminateActiveMeasurements(signal = "SIGKILL") {
       /* already gone */
     }
   }
+}
+
+/**
+ * Shuts the measurement children down so their BROWSERS go too.
+ *
+ * SIGKILLing a child terminates that one process and nothing else: Chrome is
+ * launched detached, in its own process group, so it survives — competing for
+ * CPU with whatever runs next and silently inflating its metrics. The child is
+ * the only thing that knows its browser's process group, so it must be given
+ * the chance to run its own teardown.
+ *
+ * So: SIGTERM first, which the child traps and answers by killing the browser
+ * group; wait a bounded grace for it to actually exit; then SIGKILL whatever is
+ * still there so a wedged child cannot hold the supervisor open. Escalation is
+ * the fallback, never the opening move.
+ */
+export async function shutdownActiveMeasurements({ graceMs = SHUTDOWN_GRACE_MS } = {}) {
+  const children = [...activeChildren];
+  if (children.length === 0) return { terminated: 0, escalated: 0 };
+
+  const exited = children.map(
+    (child) =>
+      new Promise((resolve) => {
+        if (child.exitCode !== null || child.signalCode !== null) return resolve(true);
+        child.once("close", () => resolve(true));
+      }),
+  );
+  terminateActiveMeasurements("SIGTERM");
+
+  let escalated = 0;
+  const settled = await Promise.race([
+    Promise.all(exited).then(() => true),
+    new Promise((resolve) => setTimeout(() => resolve(false), graceMs)),
+  ]);
+  if (!settled) {
+    for (const child of children) {
+      if (child.exitCode === null && child.signalCode === null) {
+        escalated += 1;
+        try {
+          child.kill("SIGKILL");
+        } catch {
+          /* already gone */
+        }
+      }
+    }
+    // Give the kernel a moment to reap before the supervisor leaves.
+    await new Promise((resolve) => setTimeout(resolve, 250));
+  }
   activeChildren.clear();
+  return { terminated: children.length, escalated };
+}
+
+/**
+ * Registers the supervisor's shutdown on the signals it can trap, so the
+ * measurement children and their browsers go down with it. Exported so the
+ * behaviour can be driven in a test against the real implementation rather
+ * than a copy of it.
+ */
+export function installSupervisorShutdown(cleanup = () => {}, target = process) {
+  let shuttingDown = false;
+  for (const signal of ["SIGTERM", "SIGINT", "SIGHUP"]) {
+    target.on(signal, () => {
+      if (shuttingDown) return;
+      shuttingDown = true;
+      shutdownActiveMeasurements()
+        .catch(() => {})
+        .then((result) => {
+          try {
+            cleanup();
+          } catch {
+            /* cleanup must never keep the supervisor alive */
+          }
+          console.error(
+            `lighthouse supervisor stopped by ${signal}; measurements terminated=${result?.terminated ?? 0} escalated=${result?.escalated ?? 0}`,
+          );
+          target.exit(1);
+        });
+    });
+  }
 }
 
 export function runMeasurement({
@@ -217,6 +298,7 @@ export function runMeasurement({
   return new Promise((resolve) => {
     rmSync(outcomePath, { force: true });
     rmSync(`${outcomePath}.progress`, { force: true });
+    rmSync(`${outcomePath}.browser`, { force: true });
     const child = spawnFn(nodeExecutable, [childPath, specPath, outcomePath], {
       stdio: ["ignore", "inherit", "inherit"],
       env,
@@ -244,6 +326,7 @@ export function runMeasurement({
     const finish = (fallback) => {
       activeChildren.delete(child);
       clearTimeout(deadline);
+      reapRecordedBrowser(outcomePath);
       if (killTimer) clearTimeout(killTimer);
       resolve(readOutcome({ outcomePath, lhrPath, fallback }));
     };
@@ -290,6 +373,37 @@ export function runMeasurement({
       });
     });
   });
+}
+
+/**
+ * Kills the browser process group a child recorded, if it is still alive.
+ *
+ * The child owns its browser and tears it down on every exit path it can see.
+ * This covers the paths it cannot: a crash, an OOM kill, or an exit issued from
+ * inside a dependency all bypass its handlers, and a detached browser would
+ * otherwise outlive the measurement and contaminate the next. Only the pid the
+ * child itself recorded is touched — never anything else on the machine.
+ */
+export function reapRecordedBrowser(outcomePath) {
+  const file = `${outcomePath}.browser`;
+  let pid = null;
+  try {
+    pid = Number(readFileSync(file, "utf8").trim()) || null;
+  } catch {
+    return false;
+  }
+  rmSync(file, { force: true });
+  if (!pid) return false;
+  let reaped = false;
+  for (const target of [-pid, pid]) {
+    try {
+      process.kill(target, "SIGKILL");
+      reaped = true;
+    } catch {
+      /* already gone, or not ours to signal */
+    }
+  }
+  return reaped;
 }
 
 /**

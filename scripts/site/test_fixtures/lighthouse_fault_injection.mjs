@@ -138,12 +138,36 @@ export default async function lighthouse(url) {
 }
 `;
 
+/**
+ * A stand-in browser that is REAL enough to prove the teardown: a detached
+ * process in its own group, with a child of its own, exactly like Chrome and
+ * its renderers. Verifying that the measurement child's pid is gone proves
+ * nothing about a browser launched detached — only killing the group does, and
+ * only a real group can show it.
+ *
+ * LH_BROWSER_PIDFILE, when set, receives the browser pid so a test can check
+ * the whole tree afterwards.
+ */
 const FAKE_CHROME_LAUNCHER = `
+import { spawn } from "node:child_process";
+import { writeFileSync } from "node:fs";
 export async function launch() {
+  const browser = spawn(
+    process.execPath,
+    ["-e", "const { spawn } = require('node:child_process'); const kid = spawn(process.execPath, ['-e', 'setInterval(() => {}, 1000)'], { stdio: 'ignore' }); if (process.env.LH_RENDERER_PIDFILE) require('node:fs').writeFileSync(process.env.LH_RENDERER_PIDFILE, String(kid.pid)); setInterval(() => {}, 1000);"],
+    { detached: true, stdio: "ignore" },
+  );
+  browser.unref();
+  if (process.env.LH_BROWSER_PIDFILE) {
+    writeFileSync(process.env.LH_BROWSER_PIDFILE, String(browser.pid));
+  }
   return {
     port: 9222,
-    pid: process.pid,
-    async kill() {},
+    pid: browser.pid,
+    process: browser,
+    async kill() {
+      try { process.kill(-browser.pid, "SIGKILL"); } catch { /* already gone */ }
+    },
   };
 }
 `;

@@ -26,8 +26,8 @@ import {
   OUTCOME,
   deriveTerminalState,
   isRetryableOutcome,
+  installSupervisorShutdown,
   runMeasurement,
-  terminateActiveMeasurements,
 } from "./lighthouse_infra.mjs";
 import {
   deriveCoverage,
@@ -339,13 +339,11 @@ const startedAt = Date.now();
 // overruns. SIGKILL cannot be trapped, so the signals we CAN trap must take the
 // measurement children — and their browsers — down with us; the child covers
 // the untrappable case by watching for being orphaned.
-for (const signal of ["SIGTERM", "SIGINT", "SIGHUP"]) {
-  process.on(signal, () => {
-    terminateActiveMeasurements();
-    if (server) server.close();
-    process.exit(1);
-  });
-}
+// SIGTERM first, then escalation: a child killed outright never gets to tear
+// down its own detached browser, which would then outlive the run.
+installSupervisorShutdown(() => {
+  if (server) server.close();
+});
 /** Whether a whole measurement still fits, so none is started only to be cut
  * short and blamed on the page it was measuring. */
 const affordsMeasurement = () =>

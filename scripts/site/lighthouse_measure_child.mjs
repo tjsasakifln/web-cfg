@@ -212,6 +212,18 @@ async function launchIsolatedChrome() {
       maxConnectionRetries: 50,
     });
     await waitForCdp(chrome.port);
+    // The supervisor cannot see this browser: it is detached, in its own
+    // process group, and only this process holds its pid. Recording it lets
+    // the supervisor reap the group if this process dies in a way no handler
+    // sees — a crash, an OOM kill, an exit from inside a dependency.
+    const pid = chrome.pid ?? chrome.process?.pid;
+    if (pid) {
+      try {
+        writeFileSync(`${outcomePath}.browser`, String(pid));
+      } catch {
+        /* diagnostic only */
+      }
+    }
     return { chrome, profileDir };
   } catch (error) {
     // The browser may already be up while the debugging endpoint never became
