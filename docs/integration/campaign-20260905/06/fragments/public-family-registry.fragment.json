@@ -1,0 +1,64 @@
+{
+  "target": "data/organic/public-family-registry.json#families",
+  "operation": "append_after_schema_validation",
+  "owner": "MV-09",
+  "entries": [
+    {
+      "id": "pericias-assistencia-tecnica",
+      "visitor_job": "Entender o papel da assistência técnica de engenharia no momento atual do processo e pedir um enquadramento sem enviar autos no primeiro contato.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form",
+      "match": {"routes": ["/pericias-assistencia-tecnica/"]},
+      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "declared_at": "2026-09-05",
+      "owner_issue": 583,
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": ["citable_source"],
+        "reason": "Página comercial de primeira parte que descreve o serviço e seus limites. Fontes oficiais sustentam fronteiras processuais e profissionais, mas a afirmação central é a oferta da própria CONFENGE, não um registro externo.",
+        "authority": ["docs/integration/campaign-20260905/06/research.md", "docs/integration/campaign-20260905/06/proof-boundary-matrix.md", "https://github.com/tjsasakifln/web-cfg/issues/583"],
+        "declared_at": "2026-09-05",
+        "owner_issue": 583
+      }
+    },
+    {
+      "id": "avaliacoes-imoveis",
+      "visitor_job": "Saber quais dados definem uma avaliação de imóvel para sua finalidade e solicitar o enquadramento antes de prometer formato ou aceitação.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form",
+      "match": {"routes": ["/avaliacoes-imoveis/"]},
+      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "declared_at": "2026-09-05",
+      "owner_issue": 583,
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": ["citable_source"],
+        "reason": "Página comercial de primeira parte que explica finalidade, método e limites da oferta. A página não representa um registro externo e não usa norma como prova de capacidade da CONFENGE.",
+        "authority": ["docs/integration/campaign-20260905/06/research.md", "docs/integration/campaign-20260905/06/proof-boundary-matrix.md", "https://github.com/tjsasakifln/web-cfg/issues/583"],
+        "declared_at": "2026-09-05",
+        "owner_issue": 583
+      }
+    },
+    {
+      "id": "seguranca-trabalho",
+      "visitor_job": "Separar a necessidade de PGR, LTCAT, ergonomia, exposição e eSocial e pedir um enquadramento que revele campo e especialidades necessárias.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form",
+      "match": {"routes": ["/seguranca-trabalho/"]},
+      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "declared_at": "2026-09-05",
+      "owner_issue": 583,
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": ["citable_source"],
+        "reason": "Página comercial de primeira parte. Fontes MTE/eSocial delimitam as finalidades dos documentos, enquanto credencial e capacidade permanecem em gate de prova separado.",
+        "authority": ["docs/integration/campaign-20260905/06/research.md", "docs/integration/campaign-20260905/06/proof-boundary-matrix.md", "https://github.com/tjsasakifln/web-cfg/issues/583"],
+        "declared_at": "2026-09-05",
+        "owner_issue": 583
+      }
+    }
+  ]
+}

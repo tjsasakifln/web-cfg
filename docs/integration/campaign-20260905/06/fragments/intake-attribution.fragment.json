@@ -1,0 +1,51 @@
+{
+  "schema_version": "mv06-intake-integration/v1",
+  "target_owner": ["MV-03", "MV-09"],
+  "source": "CONFENGE_WEB",
+  "auto_send": false,
+  "shared_requirements": {
+    "public_first_contact": "context_only_no_documents",
+    "essential_contact": "one_of_whatsapp_or_email_under_shared_form_contract",
+    "consent": "required_before_submit",
+    "receipt": "required",
+    "document_upload": "forbidden_before_protected_channel_and_conflict_screening",
+    "analytics_pii": "forbidden",
+    "commercial_action_owner": "warmbly"
+  },
+  "families": [
+    {
+      "route_family": "pericias-assistencia-tecnica",
+      "nucleus_id": "expert_evidence_assistance",
+      "next_action_context": "frame_process_technical_demand",
+      "visible_prompt": "Fase do caso, tipo de questão técnica, cidade e prazo conhecido. Não envie autos, partes ou número do processo.",
+      "allowed_public_context_fields": ["fase_geral", "questao_tecnica_geral", "cidade", "prazo_conhecido"],
+      "protected_later_fields": ["partes", "advogados", "peritos", "numero_processo", "autos", "laudos", "documentos"]
+    },
+    {
+      "route_family": "avaliacoes-imoveis",
+      "nucleus_id": "property_valuation",
+      "next_action_context": "frame_property_valuation",
+      "visible_prompt": "Finalidade, cidade, tipo de imóvel, data de referência e destinatário. Não envie matrícula ou dados pessoais.",
+      "allowed_public_context_fields": ["finalidade", "cidade", "tipo_imovel", "data_referencia", "destinatario_classe"],
+      "protected_later_fields": ["matricula", "endereco_completo", "proprietarios", "documentos_pessoais", "contratos", "dados_de_terceiros"]
+    },
+    {
+      "route_family": "seguranca-trabalho",
+      "nucleus_id": "occupational_safety",
+      "next_action_context": "frame_occupational_safety_need",
+      "visible_prompt": "Cidade, unidades, atividades, quantidade aproximada de pessoas e motivo da revisão. Não envie dados de trabalhadores.",
+      "allowed_public_context_fields": ["cidade", "quantidade_unidades", "atividades_gerais", "faixa_pessoas", "motivo_revisao"],
+      "protected_later_fields": ["cnpj", "nomes", "cpf", "exames", "aso", "prontuarios", "acidentes_individuais", "arquivos_de_trabalhadores"]
+    }
+  ],
+  "analytics_events": ["service_page_view", "cta_click", "whatsapp_click", "email_click", "lead_form_start", "lead_form_submit", "lead_persisted"],
+  "analytics_allowlist": ["source", "route_family", "nucleus_id", "next_action_context", "cta_id", "cta_position", "channel", "landing_page"],
+  "analytics_denylist": ["nome", "email", "telefone", "cnpj", "cpf", "processo", "partes", "documentos", "free_text", "dados_de_trabalhador"],
+  "required_proof": [
+    "lead body stores source CONFENGE_WEB and route family",
+    "receipt contract returns a protocol without leaking submitted values",
+    "analytics payload contains only allowlisted dimensions",
+    "no submission creates outbound eligibility or SMTP action",
+    "conflict-sensitive documents remain blocked until protected next state"
+  ]
+}
