@@ -325,6 +325,7 @@
     },
     "calculation": {
       "formula": "sum(length*height)-openings>=0.50",
+      "label_pt_br": "Área das paredes menos as aberturas descontáveis.",
       "inputs": [
         {
           "label": "Parede sul (W-01)",
@@ -357,7 +358,7 @@
           "unit": "m2"
         }
       ],
-      "memory": "W-01 2,40 × 2,60 = 6,24 m²; W-02 1,80 × 2,60 = 4,68 m²; W-03 2,40 × 2,60 = 6,24 m²; W-04 1,80 × 2,60 = 4,68 m². Bruto 21,84 m²; descontos D-01 1,68 m² e WN-01 0,56 m²; líquido 19,60 m²."
+      "memory": "W-01 2,40 × 2,60 = 6,24 m²; W-02 1,80 × 2,60 = 4,68 m²; W-03 2,40 × 2,60 = 6,24 m²; W-04 1,80 × 2,60 = 4,68 m². Aberturas medidas: D-01 1,68 m² e WN-01 0,56 m². Descontos aplicados: D-01 1,68 m² e WN-01 0,56 m². 21,84 m² - 1,68 m² - 0,56 m² = 19,60 m²."
     },
     "quantity": {
       "value": 19.6,

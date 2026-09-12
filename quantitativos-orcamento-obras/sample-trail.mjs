@@ -160,23 +160,23 @@ function renderCriterion(step) {
 }
 
 function renderCalculation(step) {
-  const formula = escapeHtml(step.formula);
+  const label = escapeHtml(step.label_pt_br || "Área das paredes menos as aberturas descontáveis.");
   const memory = escapeHtml(step.memory);
   const inputs = Array.isArray(step.inputs)
     ? `<p class="qty-trail-inputs">${step.inputs
         .map((input) => {
           const value = formatNumber(input.value);
-          return `<span>${escapeHtml(input.label)} <data value="${escapeHtml(value)}">${escapeHtml(value)} ${escapeHtml(input.unit || "")}</data></span>`;
+          return `<span>${escapeHtml(input.label)} <data value="${escapeHtml(input.value)}">${escapeHtml(value)} ${escapeHtml(({ m2: "m²", m3: "m³" })[input.unit] || input.unit || "")}</data></span>`;
         })
         .join(" · ")}</p>`
     : "";
-  return `<strong>${formula}</strong>${inputs}<span data-trail-memory="true">${memory}</span>`;
+  return `<strong>${label}</strong>${inputs}<span data-trail-memory="true">${memory}</span>`;
 }
 
 function renderQuantity(step) {
   const value = formatNumber(step.value);
   const unit = escapeHtml(step.unit);
-  return `<data data-trail-quantity="${escapeHtml(value)}" value="${escapeHtml(value)}">${escapeHtml(value)} ${unit}</data>`;
+  return `<data data-trail-quantity="${escapeHtml(step.value)}" value="${escapeHtml(step.value)}">${escapeHtml(value)} ${unit}</data>`;
 }
 
 function renderSpreadsheetItem(step) {
@@ -184,7 +184,7 @@ function renderSpreadsheetItem(step) {
   const description = escapeHtml(step.description);
   const unit = escapeHtml(step.unit);
   const quantity = formatNumber(step.quantity);
-  return `<code data-trail-item-code="${code}">${code}</code> <span>${description}</span> <data data-trail-item-quantity="${escapeHtml(quantity)}" value="${escapeHtml(quantity)}">${escapeHtml(quantity)} ${unit}</data>`;
+  return `<code data-trail-item-code="${code}">${code}</code> <span>${description}</span> <data data-trail-item-quantity="${escapeHtml(step.quantity)}" value="${escapeHtml(step.quantity)}">${escapeHtml(quantity)} ${unit}</data>`;
 }
 
 function renderReviewReference(step) {

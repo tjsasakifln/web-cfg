@@ -204,6 +204,11 @@ jobs:
       - name: Setup Chrome
         uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2
         id: setup-chrome
+      - name: Priority service sharing and sample presentation
+        env:
+          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+          PUBLIC_ARTIFACT_DIR: _site
+        run: npm run test:ativacao-03
       - name: Enforced CSP browser canary
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
