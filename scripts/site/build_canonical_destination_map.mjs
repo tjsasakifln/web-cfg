@@ -62,7 +62,8 @@ export function buildCanonicalDestinationMap(document) {
 function renderModule(map) {
   const json = JSON.stringify(map, null, 2);
   return `/* MODULE canonical-destination-map — POS-INB-10
- * Runtime: assembled into /script.js. Do not load alone.
+ * Derived JSON twin of data/site/canonical-destination-map.v1.json.
+ * Not assembled into frozen /script.js; 04 embeds the map in HTML.
  * Generated from ${MAP_REL}. Rebuild: node scripts/site/build_canonical_destination_map.mjs --write
  */
 (() => {

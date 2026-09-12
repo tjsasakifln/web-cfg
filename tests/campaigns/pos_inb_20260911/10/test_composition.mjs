@@ -130,8 +130,11 @@ function sha256(buf) {
   assert.equal(revisao.href, "/revisao-tecnica-projetos-engenharia/");
   assert.equal(shipped.by_purchase_id["projetos-complementares"].path, "/projetos-complementares-engenharia/");
   const script = read("script.js");
-  assert.match(script, /ConfengeCanonicalDestinationMap/);
-  assert.match(script, /compatibilizacao-projetos-engenharia/);
+  assert.doesNotMatch(script, /ConfengeCanonicalDestinationMap/);
+  const landingMap = read("ferramentas/prontidao-tecnica-obra-privada/index.html");
+  assert.match(landingMap, /id="pptr-destination-map"/);
+  assert.match(landingMap, /compatibilizacao-projetos-engenharia/);
+  assert.match(landingMap, /revisao-tecnica-projetos-engenharia/);
 }
 
 {
@@ -180,8 +183,15 @@ function sha256(buf) {
   assert.match(readinessHtml, /pptr-destination-map/);
   assert.match(readinessHtml, /compatibilizacao-projetos-engenharia/);
   assert.match(readinessHtml, /revisao-tecnica-projetos-engenharia/);
+  assert.doesNotMatch(readinessApp, /ConfengeCanonicalDestinationMap/);
   assert.match(partner, /KIT_CATALOG_REL/);
   assert.match(resources, /is_authorized_public_nested_data_dir/);
+  const complementary = read("projetos-complementares-engenharia/index.html");
+  const howToHire = read("conteudos/como-contratar-projetos-complementares/index.html");
+  assert.match(complementary, /href="\/servicos\/#servico-projeto"/);
+  assert.match(howToHire, /href="\/servicos\/#servico-projeto"/);
+  assert.doesNotMatch(complementary, /\bhubs?\b/i);
+  assert.doesNotMatch(howToHire, /\bhubs?\b/i);
 }
 
 console.log("OK pos-inb-20260911-10 composition");

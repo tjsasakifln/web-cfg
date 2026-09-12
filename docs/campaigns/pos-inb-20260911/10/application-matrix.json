@@ -21,10 +21,10 @@
     },
     {
       "shared_change": "F03 readiness map resolves revisão and compatibilização",
-      "path": "data/site/canonical-destination-map.v1.json and script.js",
+      "path": "data/site/canonical-destination-map.v1.json and ferramentas/prontidao-tecnica-obra-privada/index.html#pptr-destination-map",
       "expected_before": "#pptr-destination-map only quantity_takeoff_budgeting",
       "resolution": "applied",
-      "justification": "10 owns purchase-route-map; 04 app.js already reads window.ConfengeCanonicalDestinationMap first",
+      "justification": "10 owns purchase-route-map; 04 derives and embeds the map in HTML. Frozen script.js is not mutated.",
       "consumer_tested": "assets/js/private-project-technical-readiness.cjs resolveCommercialDestination"
     },
     {

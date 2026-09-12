@@ -31,12 +31,12 @@
     {
       "change_id": "10-canonical-destination-map",
       "owner_campaign": "10",
-      "path": "script.js",
-      "operation": "inject",
-      "key_or_anchor": "window.ConfengeCanonicalDestinationMap",
-      "expected_old": "absent; 04 HTML map only quantity_takeoff_budgeting",
-      "desired_new": "derived from purchase-route-map; 04 app.js already prefers the global map",
-      "rationale": "F03: readiness recommended revisão/compatibilização but the consumed map only resolved orçamento.",
+      "path": "data/site/canonical-destination-map.v1.json",
+      "operation": "derive",
+      "key_or_anchor": "by_offer_id / by_purchase_id",
+      "expected_old": "04 HTML map only quantity_takeoff_budgeting",
+      "desired_new": "derived from purchase-route-map; 04 embeds it in #pptr-destination-map; script.js frozen",
+      "rationale": "F03: readiness recommended revisão/compatibilização but the consumed map only resolved orçamento. 04 owns the derived HTML map; do not mutate frozen script.js.",
       "acceptance_test": "npm run test:pos-inb-20260911-10"
     }
   ]

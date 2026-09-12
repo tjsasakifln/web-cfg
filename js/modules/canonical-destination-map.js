@@ -1,5 +1,6 @@
 /* MODULE canonical-destination-map — POS-INB-10
- * Runtime: assembled into /script.js. Do not load alone.
+ * Derived JSON twin of data/site/canonical-destination-map.v1.json.
+ * Not assembled into frozen /script.js; 04 embeds the map in HTML.
  * Generated from data/bofu-dominance/core/purchase-route-map.v1.json. Rebuild: node scripts/site/build_canonical_destination_map.mjs --write
  */
 (() => {
