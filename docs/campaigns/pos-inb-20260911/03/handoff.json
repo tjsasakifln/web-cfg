@@ -1,0 +1,180 @@
+{
+  "schema": "confenge.inbound-campaign-handoff/2.0",
+  "campaign_set": "POS-INB-20260911",
+  "campaign_id": "03",
+  "prompt_version": "1.0.0",
+  "title": "Downloads corretos e completude dos recursos prometidos",
+  "state": "READY_FOR_INTEGRATION",
+  "base_sha": "cb6facfaaf50aa8f1834aba43d0245e04cbea672",
+  "branch": "campaign/pos-inb-20260911/03-recursos-publicados",
+  "examined": {
+    "origin_main": "cb6facfaaf50aa8f1834aba43d0245e04cbea672",
+    "pr_669_merge": "cb6facfaaf50aa8f1834aba43d0245e04cbea672",
+    "pr_670_open_head": "e45c016f5742ce3a5420371798b8979dfacdb5e0",
+    "pr_670_rewritten": false,
+    "f01_repro_tree": "cb6facfaaf50aa8f1834aba43d0245e04cbea672"
+  },
+  "owned_paths": [
+    "scripts/pseo/public_artifact.py",
+    "scripts/pseo/reproducible.py",
+    "scripts/site/verify_promised_public_resources.mjs",
+    "tests/pos-inb-20260911/03/",
+    "docs/campaigns/pos-inb-20260911/03/"
+  ],
+  "changed_paths": [
+    "scripts/pseo/public_artifact.py",
+    "scripts/pseo/reproducible.py",
+    "scripts/site/verify_promised_public_resources.mjs",
+    "tests/pos-inb-20260911/03/test_assemble_nested_public_data.py",
+    "tests/pos-inb-20260911/03/test_verify_promised_public_resources.mjs",
+    "docs/campaigns/pos-inb-20260911/03/handoff.json",
+    "docs/campaigns/pos-inb-20260911/03/shared-changes.json"
+  ],
+  "visitor_job": "Baixar os extratos CSV que a página do demonstrativo privado promete e conferir quantitativos, orçamento, coordenação e revisão no recorte.",
+  "acquisition_conversion_hypothesis": "Quem vê o recorte e consegue baixar os quatro CSV confere a amostra e pede proposta. Qualificação e contratação permanecem resultados a observar.",
+  "data_owner_contract": "Campanha 02 é dona dos quatro CSV e do demonstrativo. 03 só seleciona e verifica. extra-cli não entra. Descritor autoritativo: data/demonstrative/private-project-pilot/consumption.v1.json.",
+  "affected_adr": "ADR-STRAT-002 (superfície pública canônica). Sem nova taxonomia.",
+  "rollback": "Reverter o commit desta branch restaura a exclusão global de qualquer diretório chamado data. Os CSV de origem em casos/demonstrativo-projeto-privado/data/ permanecem (posse 02).",
+  "requirements": [
+    {
+      "id": "F01-select-nested-casos-data-csv",
+      "state": "PASS",
+      "evidence": "Assemble em cb6facfa omitia os quatro CSV (página 31516 B e SVG 1980 B presentes; nested_data_dir=false). Após o recorte, assemble do tree real copia os quatro com hash igual à fonte. Audit não marca casos/<slug>/data como forbidden_dir. Repo-root data/, tests/, docs/, ops/data, .env, notes.md e leads.json ficam fora."
+    },
+    {
+      "id": "derive-expected-from-pages-descriptors-sentinels",
+      "state": "PASS",
+      "evidence": "verify_promised_public_resources.mjs une hrefs da página, assets csv do descritor e as quatro sentinelas. Apagar links e arquivos ainda falha com missing_promised_resource."
+    },
+    {
+      "id": "pre-package-csv-parse-and-path-safety",
+      "state": "PASS",
+      "evidence": "Parser CSV (não grep) confere colunas, linhas, números, unidades e revisão R01 contra o descritor. HTML em .csv, CSV vazio, coluna ausente, revisão divergente, ../ e percent-escape são recusados no verificador real."
+    },
+    {
+      "id": "tarball-hash-match-no-rebuild",
+      "state": "PASS",
+      "evidence": "deploy.netcup.package_release.build_release no teste TestPackageReleaseTarball: HTML do site inalterado; membros _site/casos/.../data/*.csv com sha256 igual ao artefato."
+    },
+    {
+      "id": "http-readonly-verifier",
+      "state": "PASS",
+      "evidence": "validateHttp local: dois GETs consistentes com MIME text/csv e hash do artefato. 404.html servido como CSV com status 200 recusa html_error_body. Host/path allowlist, timeout, max-bytes, max-requests."
+    },
+    {
+      "id": "negative-exclusion",
+      "state": "PASS",
+      "evidence": "data/, tests/, docs/, .env, ops/data/gsc-insights.json, notes.md e secret-leads.csv fora do pacote. Audit recusa unauthorized_nested_data_file. Verifier recusa private_csv."
+    },
+    {
+      "id": "production-get",
+      "state": "FAIL",
+      "evidence": "GET real 2026-09-11T23:34:40Z para os quatro caminhos em https://confenge.com.br: HTTP/2 404, content-type text/html; charset=utf-8, body HTML 404 sha256 f3f6f5cbfb0bb4d5f90092e9f2bbacc24fdfaa77715ef6e7625a63f6246a7f0a. Site respondeu; downloads não verificados. Publicação cabe à 10."
+    }
+  ],
+  "expected_versus_included": {
+    "source_revision": "cb6facfaaf50aa8f1834aba43d0245e04cbea672",
+    "sentinels": [
+      {
+        "path": "/casos/demonstrativo-projeto-privado/data/quantitativos.csv",
+        "source_bytes": 1071,
+        "sha256": "d496fd5974ea928cfac39e44003f81d80183c20c464476e608ac41a3695d156e",
+        "pre_fix_in_artifact": false,
+        "post_fix_in_artifact": true
+      },
+      {
+        "path": "/casos/demonstrativo-projeto-privado/data/orcamento.csv",
+        "source_bytes": 1034,
+        "sha256": "859f6733536e17c360d34a5e4ab767953b05c3597f09d6fef65e5c021fc56f01",
+        "pre_fix_in_artifact": false,
+        "post_fix_in_artifact": true
+      },
+      {
+        "path": "/casos/demonstrativo-projeto-privado/data/coordenacao.csv",
+        "source_bytes": 929,
+        "sha256": "e828a2ec03c62958ca16561817eaa1a01bcefcba00c0bf8edb968cb806639137",
+        "pre_fix_in_artifact": false,
+        "post_fix_in_artifact": true
+      },
+      {
+        "path": "/casos/demonstrativo-projeto-privado/data/revisao.csv",
+        "source_bytes": 773,
+        "sha256": "f60f0b21d9bee7bff4e8f69d8c4a5e62f587c655be173a6ac41cf928dfaa7558",
+        "pre_fix_in_artifact": false,
+        "post_fix_in_artifact": true
+      }
+    ],
+    "excluded_verified": [
+      "data/",
+      "data/pseo/",
+      "data/leads.csv",
+      "tests/",
+      "docs/",
+      ".env",
+      "ops/data/gsc-insights.json",
+      "casos/.../data/notes.md",
+      "casos/.../data/leads.json",
+      "casos/.../data/secret-leads.csv"
+    ]
+  },
+  "dependencies": [
+    {
+      "provider_campaign": "02",
+      "artifact_path": "casos/demonstrativo-projeto-privado/data/*.csv",
+      "level": "SATISFIED_ON_MAIN",
+      "note": "Os quatro CSV e o descritor já estão em origin/main (cb6facfa). 03 não os gerou."
+    },
+    {
+      "provider_campaign": "08",
+      "artifact_path": "novo demonstrativo geométrico",
+      "level": "OPTIONAL_UNTIL_PAGE_PRESENT",
+      "note": "Omissão integral da expansão 08 é legítima. Download prometido por página presente nunca é opcional."
+    },
+    {
+      "provider_campaign": "10",
+      "artifact_path": "package.json, .github/workflows/**, _headers, deploy/netcup/package_release.py",
+      "level": "HARD_AT_RELEASE",
+      "note": "Deltas em shared-changes.json. 03 não edita esses arquivos."
+    }
+  ],
+  "shared_changes": "docs/campaigns/pos-inb-20260911/03/shared-changes.json",
+  "commands_results": [
+    {
+      "command": "python3 assemble_public_artifact(ROOT) on cb6facfa before fix",
+      "exit_code": 0,
+      "note": "F01_REPRODUCED true; four CSVs missing; page+svg present"
+    },
+    {
+      "command": "python3 -m pytest tests/pos-inb-20260911/03/test_assemble_nested_public_data.py -q",
+      "exit_code": 0,
+      "note": "9 passed in 24.03s including live-tree assemble and package_release tarball"
+    },
+    {
+      "command": "node --test tests/pos-inb-20260911/03/test_verify_promised_public_resources.mjs",
+      "exit_code": 0,
+      "note": "9 passed including HTTP local, tarball, sentinels, private csv, escape path"
+    },
+    {
+      "command": "python3 -m pytest scripts/pseo/tests/test_reproducible.py scripts/pseo/tests/test_wave0_closure.py::TestPublicArtifact -q",
+      "exit_code": 0,
+      "note": "18 passed"
+    },
+    {
+      "command": "GET https://confenge.com.br/casos/demonstrativo-projeto-privado/data/{quantitativos,orcamento,coordenacao,revisao}.csv",
+      "exit_code": 0,
+      "note": "HTTP/2 404 text/html; downloads_verified=false; site_down=false"
+    }
+  ],
+  "unresolved": [
+    {
+      "id": "ci-netcup-wiring",
+      "owner": "10",
+      "action": "Aplicar shared-changes.json (script npm, site-ci após build:site, tarball após package_release, _headers CSV, DOWNLOADABLE)."
+    },
+    {
+      "id": "production-downloads-404",
+      "owner": "10",
+      "action": "Publicar o artefato com os CSV e rodar o verificador HTTP. GET de 2026-09-11T23:34Z é 404 HTML, não download verificado."
+    }
+  ]
+}

@@ -1,0 +1,162 @@
+/* MODULE canonical-destination-map — POS-INB-10
+ * Derived JSON twin of data/site/canonical-destination-map.v1.json.
+ * Not assembled into frozen /script.js; 04 embeds the map in HTML.
+ * Generated from data/bofu-dominance/core/purchase-route-map.v1.json. Rebuild: node scripts/site/build_canonical_destination_map.mjs --write
+ */
+(() => {
+  const MAP = {
+  "schema": "confenge.canonical-destination-map/1.0",
+  "source": "data/bofu-dominance/core/purchase-route-map.v1.json",
+  "by_offer_id": {
+    "quantity_takeoff_budgeting": {
+      "path": "/quantitativos-orcamento-obras/",
+      "intent_family": "orcar_planejar_decidir",
+      "purchase_id": "quantitativos-orcamento"
+    },
+    "budget_audit_feasibility": {
+      "path": "/auditoria-orcamento-licitacao/",
+      "intent_family": "orcar_planejar_decidir",
+      "purchase_id": "auditoria-orcamento-edital"
+    },
+    "bim_coordination_clash_register": {
+      "path": "/compatibilizacao-projetos-engenharia/",
+      "intent_family": "projetar_revisar_compatibilizar",
+      "purchase_id": "compatibilizacao-projetos"
+    },
+    "private_project_technical_readiness_assessment": {
+      "path": "/ferramentas/prontidao-tecnica-obra-privada/",
+      "intent_family": "orcar_planejar_decidir",
+      "purchase_id": "prontidao-tecnica-obra-privada"
+    }
+  },
+  "by_purchase_id": {
+    "hub-servicos": {
+      "path": "/servicos/",
+      "intent_family": "outra_demanda_tecnica",
+      "offer_id": null
+    },
+    "hub-servicos-obras-publicas": {
+      "path": "/servicos-obras-publicas/",
+      "intent_family": "decidir_disputar_licitacao",
+      "offer_id": null
+    },
+    "hub-casos": {
+      "path": "/casos/",
+      "intent_family": "executar_proteger_contrato_publico",
+      "offer_id": null
+    },
+    "quantitativos-orcamento": {
+      "path": "/quantitativos-orcamento-obras/",
+      "intent_family": "orcar_planejar_decidir",
+      "offer_id": "quantity_takeoff_budgeting"
+    },
+    "auditoria-orcamento-edital": {
+      "path": "/auditoria-orcamento-licitacao/",
+      "intent_family": "orcar_planejar_decidir",
+      "offer_id": "budget_audit_feasibility"
+    },
+    "compatibilizacao-projetos": {
+      "path": "/compatibilizacao-projetos-engenharia/",
+      "intent_family": "projetar_revisar_compatibilizar",
+      "offer_id": "bim_coordination_clash_register"
+    },
+    "revisao-tecnica-projetos": {
+      "path": "/revisao-tecnica-projetos-engenharia/",
+      "intent_family": "projetar_revisar_compatibilizar",
+      "offer_id": "complementary_engineering_project_review"
+    },
+    "projetos-complementares": {
+      "path": "/projetos-complementares-engenharia/",
+      "intent_family": "projetar_revisar_compatibilizar",
+      "offer_id": "complementary_engineering_project_review"
+    },
+    "demonstrativo-casos-inb06": {
+      "path": "/casos/",
+      "intent_family": "projetar_revisar_compatibilizar",
+      "offer_id": null
+    },
+    "outra-demanda-tecnica": {
+      "path": "/triagem-tecnica/",
+      "intent_family": "outra_demanda_tecnica",
+      "offer_id": null
+    },
+    "diagnostico-pre-licitacao": {
+      "path": "/diagnostico-pre-licitacao/",
+      "intent_family": "decidir_disputar_licitacao",
+      "offer_id": null
+    },
+    "medicoes-glosas": {
+      "path": "/medicoes-glosas-obras-publicas/",
+      "intent_family": "executar_proteger_contrato_publico",
+      "offer_id": null
+    },
+    "aditivos-obras-publicas": {
+      "path": "/aditivos-obras-publicas/",
+      "intent_family": "executar_proteger_contrato_publico",
+      "offer_id": null
+    },
+    "reequilibrio-obras-publicas": {
+      "path": "/reequilibrio-obras-publicas/",
+      "intent_family": "executar_proteger_contrato_publico",
+      "offer_id": null
+    },
+    "diagnostico-b2g-360": {
+      "path": "/diagnostico-b2g-360/",
+      "intent_family": "decidir_disputar_licitacao",
+      "offer_id": null
+    },
+    "atrasos-prorrogacao": {
+      "path": "/atrasos-prorrogacao-obras-publicas/",
+      "intent_family": "executar_proteger_contrato_publico",
+      "offer_id": null
+    },
+    "defesa-margem": {
+      "path": "/defesa-margem-contratos-publicos/",
+      "intent_family": "executar_proteger_contrato_publico",
+      "offer_id": null
+    },
+    "defesa-sancoes": {
+      "path": "/defesa-tecnica-contratos-publicos/",
+      "intent_family": "executar_proteger_contrato_publico",
+      "offer_id": null
+    },
+    "gestao-contratual": {
+      "path": "/acompanhamento-contratos-obras/",
+      "intent_family": "executar_proteger_contrato_publico",
+      "offer_id": null
+    },
+    "bid-room": {
+      "path": "/bid-room-licitacoes-obras/",
+      "intent_family": "decidir_disputar_licitacao",
+      "offer_id": null
+    },
+    "diretoria-b2g": {
+      "path": "/diretoria-b2g/",
+      "intent_family": "decidir_disputar_licitacao",
+      "offer_id": null
+    },
+    "diagnostico-b2g-expansao": {
+      "path": "/diagnostico-b2g-expansao/",
+      "intent_family": "decidir_disputar_licitacao",
+      "offer_id": null
+    },
+    "sinapi-referencia-informacional": {
+      "path": "/conteudos/sinapi-desonerado-nao-desonerado/",
+      "intent_family": "orcar_planejar_decidir",
+      "offer_id": null
+    },
+    "prontidao-tecnica-obra-privada": {
+      "path": "/ferramentas/prontidao-tecnica-obra-privada/",
+      "intent_family": "orcar_planejar_decidir",
+      "offer_id": "private_project_technical_readiness_assessment"
+    }
+  },
+  "shared_offer_ids": {
+    "complementary_engineering_project_review": [
+      "revisao-tecnica-projetos",
+      "projetos-complementares"
+    ]
+  }
+};
+  window.ConfengeCanonicalDestinationMap = MAP;
+})();

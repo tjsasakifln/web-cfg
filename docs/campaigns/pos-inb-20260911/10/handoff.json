@@ -1,0 +1,63 @@
+{
+  "schema": "confenge.inbound-campaign-handoff/2.0",
+  "campaign_set": "POS-INB-20260911",
+  "campaign_id": "10",
+  "prompt_version": "1.0.0",
+  "role": "integrator",
+  "state": "COMPOSING",
+  "base_sha": "cb6facfaaf50aa8f1834aba43d0245e04cbea672",
+  "note": "Private composition receipt. candidate_sha is omitted so this file cannot self-identify the commit that adds it. HEAD_READY is a PR comment.",
+  "release_responsibility": {
+    "previous": "INB-20260911 campaign 16 via PR #669 merged as cb6facfaa and residual PR #670",
+    "current": "POS-INB-20260911 campaign 10 on campaign/pos-inb-20260911/10-integracao-publicacao",
+    "transfer": "This PR is the unique writer of main and netcup-release for POS-INB-20260911. #670 is not merged; its INB-15 delta is absorbed from campaign 09 commit 77d43727a (cherry-pick of e45c016f5).",
+    "netcup_predecessor": {
+      "run": 34648772507,
+      "sha": "cb6facfaaf50aa8f1834aba43d0245e04cbea672",
+      "conclusion": "success",
+      "in_flight": false
+    }
+  },
+  "producer_status_at_start": {
+    "01": "branch at origin/main, no HEAD_READY",
+    "02": "branch at origin/main, no HEAD_READY; 10 applied published-page F02/F04 composition",
+    "03": "no branch yet",
+    "04": "branch at origin/main, no HEAD_READY; 10 injected canonical destination map via script.js",
+    "05": "branch at origin/main, no HEAD_READY; 10 applied published-page F05 composition",
+    "06": "branch at origin/main, no HEAD_READY",
+    "07": "branch at origin/main, no HEAD_READY",
+    "08": "branch at origin/main, expansion omitted unless apt",
+    "09": "ahead 1 with #670 cherry-pick 77d43727a; absorbed; POS suite still in progress"
+  },
+  "owned_paths": [
+    "docs/campaigns/pos-inb-20260911/10/",
+    "package.json",
+    "package-lock.json",
+    ".github/workflows/",
+    "data/bofu-dominance/core/purchase-route-map.v1.json",
+    "data/site/canonical-destination-map.v1.json",
+    "js/modules/canonical-destination-map.js",
+    "script.js",
+    "scripts/pseo/public_artifact.py",
+    "scripts/pseo/reproducible.py",
+    "scripts/site/build_canonical_destination_map.mjs",
+    "scripts/site/build_script_modules.mjs",
+    "tests/campaigns/pos_inb_20260911/10/"
+  ],
+  "changed_paths": [],
+  "requirements": [
+    { "id": "F01", "state": "APPLIED", "evidence": "scripts/pseo/tests/test_demonstrative_csv_packaging.py" },
+    { "id": "F02", "state": "APPLIED", "evidence": "casos/demonstrativo-projeto-privado/excerpt-quantitativo.v1.json" },
+    { "id": "F03", "state": "APPLIED", "evidence": "data/site/canonical-destination-map.v1.json" },
+    { "id": "F04", "state": "APPLIED", "evidence": "revisao-tecnica-projetos-engenharia/index.html" },
+    { "id": "F05", "state": "APPLIED", "evidence": "data/distribution/partner-reference-kits.v1.json" }
+  ],
+  "dependencies": [],
+  "shared_changes": "docs/campaigns/pos-inb-20260911/10/shared-changes.json",
+  "unresolved": [
+    "Producers 01–08 have not published HEAD_READY. 08 omitted from núcleo.",
+    "Campaign 09 POS suite still in progress; INB-15 --strict-release is the current required regression.",
+    "GSC authenticated observation pending. Capture proof pending campaign 01 procedure.",
+    "PR #670 remains open until equivalent incorporation is recorded on the integrator PR."
+  ]
+}

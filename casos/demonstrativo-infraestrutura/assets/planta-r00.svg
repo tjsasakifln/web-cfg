@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 672 324" role="img" aria-labelledby="plan-R00-title plan-R00-desc">
+<title id="plan-R00-title">Planta do acesso PV-01 · estado original · R00</title>
+<desc id="plan-R00-desc">Faixa PV-01 de 40,00 m por 7,00 m. Poço MH-01 em E0+010, boca IN-01 em E0+020, poço MH-02 em E0+030, trecho DR-01 com 20,00 m. R00: cota desenhada de MH-02 12,35 m; planilha 12,50 m. Exemplo demonstrativo, revisão R00.</desc>
+<rect x="64.0" y="48.0" width="560.0" height="196.0" fill="#e2e8f0" stroke="#0f172a" stroke-width="2"/>
+<rect x="64.0" y="59.2" width="560.0" height="11.2" fill="#94a3b8"/>
+<rect x="64.0" y="232.8" width="560.0" height="11.2" fill="#94a3b8"/>
+<text x="344.0" y="150.0" text-anchor="middle" font-size="13" fill="#0f172a">PV-01 · 40,00 m × 7,00 m</text>
+<line x1="204.0" y1="146.0" x2="484.0" y2="146.0" stroke="#0369a1" stroke-width="4"/>
+<text x="344.0" y="132.0" text-anchor="middle" font-size="11" fill="#0c4a6e">DR-01 · 20,00 m · Ø 400,00 mm</text>
+<circle cx="204.0" cy="146.0" r="10" fill="#bae6fd" stroke="#0c4a6e"/>
+<text x="204.0" y="178.0" text-anchor="middle" font-size="11" fill="#0c4a6e">MH-01 E0+010</text>
+<rect x="336.0" y="218.8" width="16" height="25.2" fill="#fde68a" stroke="#92400e"/>
+<text x="344.0" y="252.2" text-anchor="middle" font-size="11" fill="#78350f">IN-01 E0+020</text>
+<circle cx="484.0" cy="146.0" r="10" fill="#fecaca" stroke="#0c4a6e"/>
+<text x="484.0" y="178.0" text-anchor="middle" font-size="11" fill="#0c4a6e">MH-02 E0+030</text>
+<text x="64.0" y="38.0" font-size="11" fill="#0f172a">E0+000</text>
+<text x="624.0" y="38.0" text-anchor="end" font-size="11" fill="#0f172a">E0+040</text>
+<text x="344.0" y="308" text-anchor="middle" font-size="11" fill="#334155">R00: cota desenhada de MH-02 12,35 m; planilha 12,50 m. Exemplo demonstrativo.</text>
+</svg>

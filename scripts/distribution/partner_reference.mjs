@@ -1,5 +1,5 @@
 /**
- * Partner reference kits and share-link builder for INB-11.
+ * Partner reference kits and share-link builder.
  * Pure resolution: no network, no send, no CRM.
  */
 import { createRequire } from "module";
@@ -15,6 +15,48 @@ export const KIT_CATALOG_REL = "data/distribution/partner-reference-kits.v1.json
 export const PUBLIC_PAGE_REL = "parcerias-engenharia/index.html";
 export const SHARE_SCRIPT_REL = "parcerias-engenharia/share.js";
 export const SITE_ORIGIN = "https://confenge.com.br";
+export const REQUIRED_KIT_COUNT = 4;
+
+export const REQUIRED_KIT_IDS = Object.freeze([
+  "orcamento-quantitativos",
+  "revisao-tecnica",
+  "compatibilizacao-interfaces",
+  "elaboracao-complementar",
+]);
+
+export const DEDICATED_PURCHASE_PATHS = Object.freeze({
+  "orcamento-quantitativos": "/quantitativos-orcamento-obras/",
+  "revisao-tecnica": "/revisao-tecnica-projetos-engenharia/",
+  "compatibilizacao-interfaces": "/compatibilizacao-projetos-engenharia/",
+  "elaboracao-complementar": "/projetos-complementares-engenharia/",
+});
+
+export const SUBSTITUTE_DESTINATION = "/servicos/#servico-projeto";
+
+export const KIT_SAMPLE_CONTRACT = Object.freeze({
+  "orcamento-quantitativos": {
+    purchase: "orcamento",
+    allowedKinds: ["quantitativos_planilha"],
+    forbiddenSamplePathPrefixes: ["/casos/modelo-base-quantitativa-canonica/"],
+  },
+  "revisao-tecnica": {
+    purchase: "revisao",
+    allowedKinds: ["review_findings"],
+    forbiddenSampleKinds: ["illustrative_schema", "clash_interfaces"],
+    mismatchAgainstKit: "elaboracao-complementar",
+  },
+  "compatibilizacao-interfaces": {
+    purchase: "compatibilizacao",
+    allowedKinds: ["clash_interfaces"],
+    forbiddenSampleKinds: ["quantitativos_planilha", "illustrative_schema"],
+  },
+  "elaboracao-complementar": {
+    purchase: "elaboracao",
+    allowedKinds: ["illustrative_schema"],
+    forbiddenSampleKinds: ["clash_interfaces", "quantitativos_planilha", "review_findings"],
+    illustrationLabelRequired: true,
+  },
+});
 
 export const ALLOWED_DESTINATION_ORIGINS = Object.freeze([
   "https://confenge.com.br",
@@ -51,6 +93,14 @@ export const FORBIDDEN_PUBLIC_PHRASES = Object.freeze([
   "exclusivo",
   "sigilo contratual",
   "depoimento",
+  "cada conjunto aponta à entrega",
+  "cada conjunto aponta a entrega",
+  "não à home",
+  "nao a home",
+  "garantia de não competição",
+  "garantia de nao competicao",
+  "não competição",
+  "nao competicao",
 ]);
 
 const HASH_SPLIT = /[#?]/;
@@ -74,8 +124,14 @@ export function loadKitCatalog(root = DEFAULT_ROOT) {
   if (catalog.send_forbidden !== true) {
     throw new Error("partner_reference_send_must_be_forbidden");
   }
-  if (!Array.isArray(catalog.kits) || catalog.kits.length !== 3) {
-    throw new Error("partner_reference_requires_three_kits");
+  if (!Array.isArray(catalog.kits) || catalog.kits.length !== REQUIRED_KIT_COUNT) {
+    throw new Error("partner_reference_requires_four_kits");
+  }
+  const ids = catalog.kits.map((kit) => kit.id);
+  for (const required of REQUIRED_KIT_IDS) {
+    if (!ids.includes(required)) {
+      throw new Error(`partner_reference_missing_kit:${required}`);
+    }
   }
   return catalog;
 }
@@ -95,79 +151,206 @@ export function routeExists(root, routePath) {
   return fs.existsSync(path.join(root, rel));
 }
 
-function discoverOptionalSample(root, catalog, kit) {
+export function pathOnly(routePath) {
+  const raw = String(routePath || "");
+  const hashIndex = raw.indexOf("#");
+  return (hashIndex === -1 ? raw : raw.slice(0, hashIndex)).split("?", 1)[0];
+}
+
+export function fragmentOf(routePath, explicit) {
+  if (explicit) {
+    const frag = String(explicit);
+    return frag.startsWith("#") ? frag : `#${frag}`;
+  }
+  const raw = String(routePath || "");
+  const hashIndex = raw.indexOf("#");
+  return hashIndex === -1 ? "" : raw.slice(hashIndex);
+}
+
+export function hrefWithFragment(routePath, fragment) {
+  const pathPart = pathOnly(routePath);
+  const frag = fragmentOf(routePath, fragment || undefined);
+  if (!pathPart.startsWith("/")) return null;
+  return `${pathPart}${frag}`;
+}
+
+function defaultFileExists(root, rel) {
+  return fs.existsSync(path.join(root, rel));
+}
+
+export function normalizeDestinationKey(routePath) {
+  return hrefWithFragment(pathOnly(routePath), fragmentOf(routePath)) || "";
+}
+
+export function isSubstituteDestination(routePath) {
+  const key = normalizeDestinationKey(routePath);
+  return key === SUBSTITUTE_DESTINATION || pathOnly(routePath) === "/servicos/" && fragmentOf(routePath) === "#servico-projeto";
+}
+
+export function pairingReason(kit, catalog) {
+  const contract = KIT_SAMPLE_CONTRACT[kit.id];
+  if (!contract) {
+    return { ok: false, reason: "unknown_kit_id" };
+  }
+  const destPath = pathOnly(kit.destination?.path);
+  const samplePath = pathOnly(kit.sample?.path);
+  const sampleKind = kit.sample?.kind || null;
+  const dedicated = DEDICATED_PURCHASE_PATHS[kit.id];
+
+  if (dedicated && isSubstituteDestination(kit.destination?.path)) {
+    return { ok: false, reason: "destination_is_substitute" };
+  }
+
+  if (contract.mismatchAgainstKit && catalog) {
+    const other = catalog.kits.find((item) => item.id === contract.mismatchAgainstKit);
+    if (other) {
+      const otherDest = pathOnly(other.destination?.path);
+      const otherSample = pathOnly(other.sample?.path);
+      if (destPath && destPath === otherDest) {
+        return { ok: false, reason: "kit_sample_mismatch" };
+      }
+      if (samplePath && otherSample && samplePath === otherSample && sampleKind === other.sample?.kind) {
+        return { ok: false, reason: "kit_sample_mismatch" };
+      }
+    }
+  }
+
+  if (contract.allowedKinds && sampleKind && !contract.allowedKinds.includes(sampleKind)) {
+    return { ok: false, reason: "kit_sample_mismatch" };
+  }
+  if (contract.forbiddenSampleKinds && sampleKind && contract.forbiddenSampleKinds.includes(sampleKind)) {
+    return { ok: false, reason: "kit_sample_mismatch" };
+  }
+  if (contract.forbiddenSamplePathPrefixes) {
+    const sampleHref = String(kit.sample?.path || "");
+    if (contract.forbiddenSamplePathPrefixes.some((prefix) => sampleHref === prefix || sampleHref.startsWith(prefix))) {
+      return { ok: false, reason: "kit_sample_mismatch" };
+    }
+  }
+  if (contract.illustrationLabelRequired) {
+    const labeled = kit.sample?.labeled_as_illustration === true
+      || /ilustra/i.test(String(kit.sample?.label || ""));
+    if (sampleKind === "illustrative_schema" && !labeled) {
+      return { ok: false, reason: "kit_sample_mismatch" };
+    }
+  }
+  return { ok: true, reason: null };
+}
+
+function discoverSample(root, catalog, kit, fileExists) {
   const sample = kit.sample || {};
+  const pairing = pairingReason(kit, catalog);
+  if (!pairing.ok) {
+    return {
+      path: sample.path || null,
+      fragment: fragmentOf(sample.path, sample.fragment) || "",
+      id: sample.id || null,
+      label: sample.label || null,
+      kind: sample.kind || null,
+      status: "refused",
+      reason: pairing.reason,
+      labeled_as_illustration: Boolean(sample.labeled_as_illustration),
+    };
+  }
+
+  const files = Array.isArray(sample.files) ? sample.files : [];
+  const missingFiles = files.filter((rel) => !fileExists(root, rel));
+  if (files.length && missingFiles.length) {
+    return {
+      path: sample.path || null,
+      fragment: fragmentOf(sample.path, sample.fragment) || "",
+      id: sample.id || null,
+      label: sample.label || null,
+      kind: sample.kind || null,
+      status: "missing",
+      reason: "sample_file_missing",
+      missing_files: missingFiles,
+      labeled_as_illustration: Boolean(sample.labeled_as_illustration),
+    };
+  }
+
   if (sample.path && routeExists(root, sample.path)) {
     return {
-      path: sample.path,
+      path: pathOnly(sample.path),
+      fragment: fragmentOf(sample.path, sample.fragment) || "",
+      href: hrefWithFragment(sample.path, sample.fragment),
       id: sample.id,
       label: sample.label,
       kind: sample.kind,
       status: "present",
+      labeled_as_illustration: Boolean(sample.labeled_as_illustration) || /ilustra/i.test(String(sample.label || "")),
     };
   }
-  if (sample.enrichment_campaign === "12" || kit.id === "complementares") {
-    const candidates = catalog.optional_enrichment?.candidate_paths || [];
-    for (const candidate of candidates) {
-      if (routeExists(root, candidate)) {
-        return {
-          path: candidate,
-          id: sample.id || "inb12-complementares",
-          label: sample.label || "Amostra da disciplina complementar",
-          kind: "optional_enrichment",
-          status: "present",
-          enrichment_campaign: "12",
-        };
-      }
-    }
+
+  if (!sample.required) {
     return {
       path: null,
+      fragment: "",
       id: null,
       label: null,
-      kind: "optional_enrichment",
+      kind: sample.kind || null,
       status: "not_included",
-      enrichment_campaign: "12",
     };
   }
-  if (!sample.required) {
-    return { path: null, id: null, label: null, kind: sample.kind || null, status: "not_included" };
-  }
+
   return {
     path: sample.path || null,
+    fragment: fragmentOf(sample.path, sample.fragment) || "",
     id: sample.id || null,
     label: sample.label || null,
     kind: sample.kind || null,
     status: sample.path ? "missing" : "not_included",
+    labeled_as_illustration: Boolean(sample.labeled_as_illustration),
   };
 }
 
-export function resolveKits(root = DEFAULT_ROOT) {
-  const catalog = loadKitCatalog(root);
+export function resolveKits(root = DEFAULT_ROOT, options = {}) {
+  const catalog = options.catalog || loadKitCatalog(root);
+  const fileExists = options.fileExists || defaultFileExists;
   return catalog.kits.map((kit) => {
     const destPath = kit.destination?.path;
     const destExists = routeExists(root, destPath);
-    const sample = discoverOptionalSample(root, catalog, kit);
-    if (kit.destination?.required && !destExists) {
-      throw new Error(`partner_kit_destination_missing:${kit.id}:${destPath}`);
+    const pairing = pairingReason(kit, catalog);
+    const sample = discoverSample(root, catalog, kit, fileExists);
+    const shareFragment = kit.share?.fragment
+      || (pathOnly(sample.path) === pathOnly(destPath) ? sample.fragment : "");
+    const shareHref = hrefWithFragment(destPath, shareFragment);
+    let status = "ok";
+    let reason = null;
+    if (!pairing.ok) {
+      status = "refused";
+      reason = pairing.reason;
+    } else if (kit.destination?.required && !destExists) {
+      status = "refused";
+      reason = "destination_missing";
     }
-    if (kit.sample?.required && sample.status !== "present") {
-      throw new Error(`partner_kit_sample_missing:${kit.id}:${kit.sample?.path}`);
-    }
+
     return {
       id: kit.id,
       title: kit.title,
       purchase: kit.purchase,
       intent_family: kit.intent_family,
       offer_id: kit.offer_id,
+      status,
+      reason,
       destination: {
         path: destPath,
         label: kit.destination.label,
         status: destExists ? "present" : "missing",
         canonical: canonicalDeliveryUrl(destPath, catalog.site_origin),
+        proposal_fragment: kit.destination.proposal_fragment || "",
+        proposal_href: hrefWithFragment(destPath, kit.destination.proposal_fragment || ""),
+        proposal_label: kit.destination.proposal_label || "Solicitar proposta",
       },
       sample,
       conversation: kit.conversation,
-      share: kit.share,
+      share: {
+        ...kit.share,
+        href: shareHref,
+        fragment: shareFragment || "",
+        title: kit.share?.title || kit.destination.label,
+        copyable_summary: kit.share?.copyable_summary || "",
+      },
     };
   });
 }
@@ -264,6 +447,48 @@ export function buildShareUrl(input = {}, root = DEFAULT_ROOT) {
   };
 }
 
+export function kitShareBundle(kit, catalog, root = DEFAULT_ROOT) {
+  const origin = catalog.site_origin || SITE_ORIGIN;
+  const shareHref = kit.share?.href || hrefWithFragment(kit.destination.path, kit.share?.fragment);
+  const sampleHref = kit.sample?.href || hrefWithFragment(kit.sample?.path, kit.sample?.fragment);
+  const internal = buildShareUrl({ destination: shareHref, mode: "internal" }, root);
+  const external = buildShareUrl({
+    destination: shareHref,
+    mode: "external",
+    params: {
+      utm_source: "partner_kit",
+      utm_medium: "referral",
+      utm_campaign: kit.share?.utm_campaign,
+      cta_id: kit.share?.cta_id,
+      asset_id: catalog.id,
+      route_family: "parcerias-engenharia",
+    },
+  }, root);
+  const destinationCanonical = canonicalDeliveryUrl(pathOnly(kit.destination.path), origin);
+  const shareCanonical = canonicalDeliveryUrl(shareHref, origin);
+  const sampleCanonical = sampleHref ? canonicalDeliveryUrl(sampleHref, origin) : null;
+  return {
+    id: kit.id,
+    title: kit.share?.title || kit.destination.label,
+    destinationHref: pathOnly(kit.destination.path),
+    sampleHref,
+    proposalHref: kit.destination.proposal_href,
+    shareHref,
+    internal,
+    external,
+    destinationCanonical,
+    shareCanonical,
+    sampleCanonical,
+    copyable_summary: kit.share?.copyable_summary || "",
+  };
+}
+
+export function publicSurfaces(root = DEFAULT_ROOT, options = {}) {
+  const catalog = options.catalog || loadKitCatalog(root);
+  const kits = resolveKits(root, { ...options, catalog });
+  return kits.map((kit) => kitShareBundle(kit, catalog, root));
+}
+
 export function classifyShareAction(root = DEFAULT_ROOT) {
   const registry = eventRegistry(root);
   const event = registry.events?.cta_click;
@@ -300,7 +525,9 @@ export function publicHtmlForbiddenPhrases(html) {
     .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, " ")
     .replace(/<[^>]+>/g, " ")
     .toLowerCase();
-  return FORBIDDEN_PUBLIC_PHRASES.filter((phrase) => text.includes(phrase));
+  const hits = FORBIDDEN_PUBLIC_PHRASES.filter((phrase) => text.includes(phrase));
+  if (/\bsla\b/i.test(text)) hits.push("sla");
+  return hits;
 }
 
 export function shareScriptSendsOutreach(source) {
@@ -314,15 +541,56 @@ export function send() {
 }
 
 export function draftsLeakIntoPublicArtifact(root = DEFAULT_ROOT) {
-  const docsDir = path.join(root, "docs/campaigns/inb-20260911/11");
-  if (!fs.existsSync(docsDir)) return true;
+  const docsDirs = [
+    path.join(root, "docs/campaigns/inb-20260911/11"),
+    path.join(root, "docs/campaigns/pos-inb-20260911/05"),
+  ];
   const site = path.join(root, "_site");
   if (!fs.existsSync(site)) return false;
   const leaked = [];
-  for (const name of fs.readdirSync(docsDir)) {
-    if (fs.existsSync(path.join(site, "docs/campaigns/inb-20260911/11", name))) {
-      leaked.push(name);
+  for (const docsDir of docsDirs) {
+    if (!fs.existsSync(docsDir)) continue;
+    for (const name of fs.readdirSync(docsDir)) {
+      const rel = path.relative(root, path.join(docsDir, name));
+      if (fs.existsSync(path.join(site, rel))) leaked.push(rel);
     }
   }
   return leaked;
+}
+
+export function htmlAgreesWithSurfaces(html, surfaces) {
+  const failures = [];
+  for (const surface of surfaces) {
+    if (!html.includes(`id="kit-${surface.id}"`)) {
+      failures.push(`missing_kit_article:${surface.id}`);
+    }
+    if (!html.includes(`href="${surface.destinationHref}"`)) {
+      failures.push(`missing_destination_href:${surface.id}:${surface.destinationHref}`);
+    }
+    if (surface.sampleHref && !html.includes(`href="${surface.sampleHref}"`)) {
+      failures.push(`missing_sample_href:${surface.id}:${surface.sampleHref}`);
+    }
+    if (surface.proposalHref && !html.includes(`href="${surface.proposalHref}"`)) {
+      failures.push(`missing_proposal_href:${surface.id}:${surface.proposalHref}`);
+    }
+    if (surface.title && !html.includes(surface.title)) {
+      failures.push(`missing_title:${surface.id}`);
+    }
+    if (surface.shareCanonical && !html.includes(surface.shareCanonical)) {
+      failures.push(`missing_share_canonical:${surface.id}`);
+    }
+    if (surface.copyable_summary) {
+      const snippet = surface.copyable_summary.split("\n")[0];
+      if (!html.includes(snippet)) {
+        failures.push(`missing_copyable_summary:${surface.id}`);
+      }
+    }
+    if (surface.external?.ok) {
+      const encoded = surface.external.url.replaceAll("&", "&amp;");
+      if (!html.includes(`data-share-attributed="${encoded}"`) && !html.includes(surface.external.url)) {
+        failures.push(`missing_attributed:${surface.id}`);
+      }
+    }
+  }
+  return failures;
 }

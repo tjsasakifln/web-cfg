@@ -587,10 +587,11 @@ def main() -> int:
         no_cta_map = sdo.detect_clicks_weak_cta([{"page": "/x/", "clicks": 1}])
         ok("weak_cta_needs_map", no_cta_map["status"] == "INSUFFICIENT_EVIDENCE")
 
-        ok("source_kinds_six", set(sdo.SNAPSHOT_SOURCE_KINDS) == {
+        ok("source_kinds_seven", set(sdo.SNAPSHOT_SOURCE_KINDS) == {
             "search_analytics_api",
             "historical_csv_export",
             "fixture",
+            "provided_aggregate",
             "absence",
             "credential_failure",
             "search_analytics_top_row_truncation",
@@ -606,6 +607,11 @@ def main() -> int:
             == "historical_csv_export",
         )
         ok("classify_fixture", sdo.classify_snapshot_source({"source": "fixture"}) == "fixture")
+        ok(
+            "classify_provided_aggregate",
+            sdo.classify_snapshot_source({"origin": "founder_provided_baseline", "fixture": True})
+            == "provided_aggregate",
+        )
         ok("classify_absence", sdo.classify_snapshot_source({}) == "absence")
         ok(
             "classify_creds",
@@ -787,8 +793,12 @@ def main() -> int:
         ok("founder_ok", founder.get("ok") is True)
         ok("founder_not_current", founder.get("freshness") == "NOT_CURRENT")
         ok("founder_not_product", founder.get("ready_for_product_decisions") is False)
-        ok("founder_historical", founder.get("source_kind") == "historical_csv_export")
-        ok("founder_fixture", founder.get("fixture") is True)
+        ok("founder_provided_kind", founder.get("source_kind") == "provided_aggregate")
+        ok("founder_not_fixture", founder.get("fixture") is False)
+        ok("founder_not_synthetic", founder.get("synthetic") is False)
+        ok("founder_provided_flag", founder.get("provided_aggregate") is True)
+        ok("founder_classify", sdo.classify_snapshot_source(founder) == "provided_aggregate")
+        ok("founder_freshness_not_current", sdo.snapshot_freshness(founder) == "NOT_CURRENT")
         ok("founder_site", founder.get("site") == "sc-domain:confenge.com.br")
         ok("founder_search_type", founder.get("search_type") == "web")
         ok("founder_extracted_at", founder.get("extracted_at") == "2026-09-11")
@@ -817,6 +827,28 @@ def main() -> int:
         ok("founder_country_not_invented_on_queries", all(q.get("country") is None for q in founder.get("queries") or []))
         ok("founder_omitted_unknown", (founder.get("omitted_queries") or {}).get("status") == "UNKNOWN")
         ok("founder_omitted_not_reconstructed", (founder.get("omitted_queries") or {}).get("reconstructed") is False)
+        ok("founder_query_labels_not_observed", founder.get("query_labels_are_not_observed_search_terms") is True)
+        ok("founder_page_grain_not_query", founder.get("page_grain_is_not_query") is True)
+        ok("founder_unknown_click_terms", founder.get("unknown_click_terms") is True)
+        ok(
+            "founder_query_text_unknown",
+            all(q.get("query") is None and q.get("query_label_status") == "UNKNOWN" for q in founder.get("queries") or []),
+        )
+        ok(
+            "founder_query_not_page_keyword",
+            not any(
+                "sinapi" in str(q.get("query") or "").lower() or "quantitativo" in str(q.get("query") or "").lower()
+                for q in founder.get("queries") or []
+            ),
+        )
+        ok("founder_as_of_is_last_data", founder.get("as_of") == "2026-09-08")
+        ok("founder_extracted_not_as_of", founder.get("extracted_at_is_not_as_of") is True)
+        ok("founder_as_of_not_release", founder.get("as_of_not_rewritten_as_release") is True)
+        ok("founder_current_day_not_zero_filled", founder.get("incomplete_current_day_zero_filled") is False)
+        ok(
+            "founder_not_live",
+            sdo.is_live_gsc_payload(founder) is False,
+        )
         ok(
             "founder_suppressed_not_in_disclosed",
             not any(gil.is_suppressed_query(str(q.get("query") or "")) is False and q.get("suppressed") for q in founder.get("queries") or []),
@@ -926,6 +958,19 @@ def main() -> int:
         delayed = gil.delayed_data_status(sdo.date(2026, 9, 5), expected_end=sdo.date(2026, 9, 8))
         ok("delayed_status", delayed["status"] == "DELAYED")
         ok("delayed_not_zero_filled", delayed["zero_filled"] is False)
+        current_day = gil.incomplete_current_day_status(
+            sdo.date(2026, 9, 11), today=sdo.date(2026, 9, 11)
+        )
+        ok("current_day_incomplete", current_day["incomplete"] is True)
+        ok("current_day_status", current_day["status"] == "INCOMPLETE")
+        ok("current_day_not_zero", current_day["zero_filled"] is False)
+        prior_day = gil.incomplete_current_day_status(
+            sdo.date(2026, 9, 8), today=sdo.date(2026, 9, 11)
+        )
+        ok("prior_day_complete", prior_day["incomplete"] is False)
+        missing_day = gil.incomplete_current_day_status(None, today=sdo.date(2026, 9, 11))
+        ok("missing_day_unknown", missing_day["status"] == "UNKNOWN")
+        ok("missing_day_not_zero", missing_day["zero_filled"] is False)
 
         with tempfile.TemporaryDirectory() as td:
             tpath = Path(td)
@@ -1003,6 +1048,16 @@ def main() -> int:
         ok("received_contact_not_zero", stages["received_contact"]["value"] is None)
         ok("no_person_join", stages["anonymous_query_not_joined_to_person"] is True)
         ok("one_imp_no_failure_alert", gil.is_failure_alert_forbidden(1, 0) is True)
+        capture = gil.join_capture_stages(clicks=6, funnel={"visitor": 3}, warmbly=None)
+        ok("capture_visita_observed", capture["visita"]["status"] == "observed" and capture["visita"]["value"] == 3)
+        ok("capture_clique_gsc", capture["clique"]["authority"] == "gsc_search_analytics" and capture["clique"]["value"] == 6)
+        ok("capture_persistida_unknown", capture["solicitacao_persistida"]["status"] == "UNKNOWN")
+        ok("capture_persistida_not_zero", capture["solicitacao_persistida"]["value"] is None)
+        ok("capture_qualificada_unknown", capture["oportunidade_qualificada"]["status"] == "UNKNOWN")
+        ok("capture_qualificada_not_zero", capture["oportunidade_qualificada"]["value"] is None)
+        ok("capture_no_lead_id", capture["lead_id_excluded"] is True)
+        ok("capture_no_person_join", capture["anonymous_query_not_joined_to_person"] is True)
+        ok("stages_include_capture", (stages.get("capture_stages") or {}).get("clique", {}).get("status") == "observed")
 
         learning = gil.build_operational_learning(founder)
         ok("learning_not_current", learning.get("freshness") == "NOT_CURRENT")

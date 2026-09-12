@@ -81,7 +81,7 @@
     "styles-tools.css",
     "styles.css"
   ],
-  "html_route_count": 228,
+  "html_route_count": 229,
   "html_routes": [
     "/",
     "/acompanhamento-contratos-obras/",
@@ -96,6 +96,7 @@
     "/auditoria-orcamento-licitacao/",
     "/bid-room-licitacoes-obras/",
     "/casos/aditivo-art125-demonstrativo/",
+    "/casos/demonstrativo-infraestrutura/",
     "/casos/demonstrativo-projeto-privado/",
     "/casos/",
     "/casos/medicao-glosa-demonstrativo/",
@@ -312,8 +313,8 @@
     "/triagem-tecnica/",
     "/uso-de-ia/"
   ],
-  "generated_at": "2026-09-11T16:42:43Z",
-  "public_artifact_hash": "301f566342df022c338a25c3fb92db1154bd8ee5db691f07d8b474b4297024d2",
+  "generated_at": "2026-09-11T23:49:04Z",
+  "public_artifact_hash": "4369d3ce140ffc4dc081580378594206ab33f43023d68899042b1385a82c2bbb",
   "copied_dirs": [
     ".well-known/",
     "acompanhamento-contratos-obras/",
@@ -395,15 +396,15 @@
     "styles-tools.css",
     "styles.css"
   ],
-  "promoted_navigation_files": 216,
+  "promoted_navigation_files": 211,
   "navigation_audit": {
-    "audited_files": 220,
-    "audited_blocks": 438,
+    "audited_files": 221,
+    "audited_blocks": 440,
     "frozen_files": 6
   },
   "structured_identity": {
-    "html_scanned": 233,
-    "html_rewritten": 185,
-    "fields_removed": 786
+    "html_scanned": 234,
+    "html_rewritten": 186,
+    "fields_removed": 790
   }
 }

@@ -1,0 +1,601 @@
+{
+  "schema": "confenge.pos-inb-06-url-checklist-summary/1.0",
+  "generated_from": "scripts/campaigns/pos-inb-20260911/06/audit_discovery.py",
+  "indexed_from_sitemap": false,
+  "count": 15,
+  "urls": [
+    {
+      "canonical": "https://confenge.com.br/quantitativos-orcamento-obras/",
+      "role": "compra_principal",
+      "owner_campaign": "02",
+      "layers": {
+        "source": {
+          "local_file": "present",
+          "status": "LOCAL_PRESENT",
+          "robots_meta": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+          "declared_canonical": "https://confenge.com.br/quantitativos-orcamento-obras/",
+          "sitemap_membership": true,
+          "essential_content_without_js": true,
+          "title": "Quantitativos e orçamento de obras | CONFENGE",
+          "h1": "Quantitativos e orçamento de obras"
+        },
+        "artifact": {
+          "observation": "UNOBSERVED",
+          "local_file": "absent",
+          "note": "generated_artifact_dir_absent_is_not_public_404"
+        },
+        "live": {
+          "observation": "UNOBSERVED",
+          "note": "transport_failure_is_not_public_404"
+        }
+      },
+      "indexed": "UNKNOWN",
+      "indexed_from_sitemap": false,
+      "sitemap_membership": true,
+      "generic_hub_hrefs": []
+    },
+    {
+      "canonical": "https://confenge.com.br/revisao-tecnica-projetos-engenharia/",
+      "role": "compra_principal",
+      "owner_campaign": "02",
+      "layers": {
+        "source": {
+          "local_file": "present",
+          "status": "LOCAL_PRESENT",
+          "robots_meta": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+          "declared_canonical": "https://confenge.com.br/revisao-tecnica-projetos-engenharia/",
+          "sitemap_membership": true,
+          "essential_content_without_js": true,
+          "title": "Revisão técnica de projetos de engenharia | CONFENGE",
+          "h1": "Revisão técnica de projetos de engenharia"
+        },
+        "artifact": {
+          "observation": "UNOBSERVED",
+          "local_file": "absent",
+          "note": "generated_artifact_dir_absent_is_not_public_404"
+        },
+        "live": {
+          "observation": "UNOBSERVED",
+          "note": "transport_failure_is_not_public_404"
+        }
+      },
+      "indexed": "UNKNOWN",
+      "indexed_from_sitemap": false,
+      "sitemap_membership": true,
+      "generic_hub_hrefs": []
+    },
+    {
+      "canonical": "https://confenge.com.br/compatibilizacao-projetos-engenharia/",
+      "role": "compra_principal",
+      "owner_campaign": "02",
+      "layers": {
+        "source": {
+          "local_file": "present",
+          "status": "LOCAL_PRESENT",
+          "robots_meta": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+          "declared_canonical": "https://confenge.com.br/compatibilizacao-projetos-engenharia/",
+          "sitemap_membership": true,
+          "essential_content_without_js": true,
+          "title": "Compatibilização de projetos de engenharia | CONFENGE",
+          "h1": "Compatibilização de projetos de engenharia"
+        },
+        "artifact": {
+          "observation": "UNOBSERVED",
+          "local_file": "absent",
+          "note": "generated_artifact_dir_absent_is_not_public_404"
+        },
+        "live": {
+          "observation": "UNOBSERVED",
+          "note": "transport_failure_is_not_public_404"
+        }
+      },
+      "indexed": "UNKNOWN",
+      "indexed_from_sitemap": false,
+      "sitemap_membership": true,
+      "generic_hub_hrefs": [
+        "/servicos/#servico-projeto"
+      ]
+    },
+    {
+      "canonical": "https://confenge.com.br/projetos-complementares-engenharia/",
+      "role": "complementares",
+      "owner_campaign": "07",
+      "layers": {
+        "source": {
+          "local_file": "present",
+          "status": "LOCAL_PRESENT",
+          "robots_meta": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+          "declared_canonical": "https://confenge.com.br/projetos-complementares-engenharia/",
+          "sitemap_membership": true,
+          "essential_content_without_js": true,
+          "title": "Projetos complementares de engenharia | CONFENGE",
+          "h1": "Projetos complementares de engenharia"
+        },
+        "artifact": {
+          "observation": "UNOBSERVED",
+          "local_file": "absent",
+          "note": "generated_artifact_dir_absent_is_not_public_404"
+        },
+        "live": {
+          "observation": "UNOBSERVED",
+          "note": "transport_failure_is_not_public_404"
+        }
+      },
+      "indexed": "UNKNOWN",
+      "indexed_from_sitemap": false,
+      "sitemap_membership": true,
+      "generic_hub_hrefs": [
+        "/servicos/#servico-projeto"
+      ]
+    },
+    {
+      "canonical": "https://confenge.com.br/parcerias-engenharia/",
+      "role": "parcerias",
+      "owner_campaign": "05",
+      "layers": {
+        "source": {
+          "local_file": "present",
+          "status": "LOCAL_PRESENT",
+          "robots_meta": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+          "declared_canonical": "https://confenge.com.br/parcerias-engenharia/",
+          "sitemap_membership": true,
+          "essential_content_without_js": true,
+          "title": "Encaminhar projeto, orçamento ou revisão | CONFENGE",
+          "h1": "Encaminhe o recorte de engenharia e continue com o seu cliente."
+        },
+        "artifact": {
+          "observation": "UNOBSERVED",
+          "local_file": "absent",
+          "note": "generated_artifact_dir_absent_is_not_public_404"
+        },
+        "live": {
+          "observation": "UNOBSERVED",
+          "note": "transport_failure_is_not_public_404"
+        }
+      },
+      "indexed": "UNKNOWN",
+      "indexed_from_sitemap": false,
+      "sitemap_membership": true,
+      "generic_hub_hrefs": []
+    },
+    {
+      "canonical": "https://confenge.com.br/casos/demonstrativo-projeto-privado/",
+      "role": "demonstrativo",
+      "owner_campaign": "02",
+      "layers": {
+        "source": {
+          "local_file": "present",
+          "status": "LOCAL_PRESENT",
+          "robots_meta": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+          "declared_canonical": "https://confenge.com.br/casos/demonstrativo-projeto-privado/",
+          "sitemap_membership": true,
+          "essential_content_without_js": true,
+          "title": "Demonstrativo. Recorte de banheiro: quantitativos, orçamento, revisão e compatibilização | CONFENGEPlanta do recorte · estado original · R00Planta do recorte · versão demonstrativa corrigida · R01Elevação leste W-02 · estado original · R00Elevação leste W-02 · versão demonstrativa corrigida · R01",
+          "h1": "Demonstrativo. Recorte de banheiro com quantitativos, orçamento, revisão e compatibilização"
+        },
+        "artifact": {
+          "observation": "UNOBSERVED",
+          "local_file": "absent",
+          "note": "generated_artifact_dir_absent_is_not_public_404"
+        },
+        "live": {
+          "observation": "UNOBSERVED",
+          "note": "transport_failure_is_not_public_404"
+        }
+      },
+      "indexed": "UNKNOWN",
+      "indexed_from_sitemap": false,
+      "sitemap_membership": true,
+      "generic_hub_hrefs": [
+        "/servicos/#servico-projeto"
+      ]
+    },
+    {
+      "canonical": "https://confenge.com.br/casos/modelo-base-quantitativa-canonica/",
+      "role": "demonstrativo",
+      "owner_campaign": "02",
+      "layers": {
+        "source": {
+          "local_file": "present",
+          "status": "LOCAL_PRESENT",
+          "robots_meta": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+          "declared_canonical": "https://confenge.com.br/casos/modelo-base-quantitativa-canonica/",
+          "sitemap_membership": true,
+          "essential_content_without_js": true,
+          "title": "Base de Mercado para Expansão | Demonstrativo CONFENGE",
+          "h1": "Demonstrativo. Confira cada número antes de acreditar nele."
+        },
+        "artifact": {
+          "observation": "UNOBSERVED",
+          "local_file": "absent",
+          "note": "generated_artifact_dir_absent_is_not_public_404"
+        },
+        "live": {
+          "observation": "UNOBSERVED",
+          "note": "transport_failure_is_not_public_404"
+        }
+      },
+      "indexed": "UNKNOWN",
+      "indexed_from_sitemap": false,
+      "sitemap_membership": true,
+      "generic_hub_hrefs": []
+    },
+    {
+      "canonical": "https://confenge.com.br/ferramentas/prontidao-tecnica-obra-privada/",
+      "role": "prontidao",
+      "owner_campaign": "04",
+      "layers": {
+        "source": {
+          "local_file": "present",
+          "status": "LOCAL_PRESENT",
+          "robots_meta": "index,follow",
+          "declared_canonical": "https://confenge.com.br/ferramentas/prontidao-tecnica-obra-privada/",
+          "sitemap_membership": true,
+          "essential_content_without_js": true,
+          "title": "Prontidão técnica de obra privada | CONFENGE",
+          "h1": "Identifique evidências técnicas presentes, ausentes ou desconhecidas antes de contratar, executar ou retomar uma obra privada"
+        },
+        "artifact": {
+          "observation": "UNOBSERVED",
+          "local_file": "absent",
+          "note": "generated_artifact_dir_absent_is_not_public_404"
+        },
+        "live": {
+          "observation": "UNOBSERVED",
+          "note": "transport_failure_is_not_public_404"
+        }
+      },
+      "indexed": "UNKNOWN",
+      "indexed_from_sitemap": false,
+      "sitemap_membership": true,
+      "generic_hub_hrefs": []
+    },
+    {
+      "canonical": "https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/",
+      "role": "conteudo_decisao",
+      "owner_campaign": "07",
+      "layers": {
+        "source": {
+          "local_file": "present",
+          "status": "LOCAL_PRESENT",
+          "robots_meta": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+          "declared_canonical": "https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/",
+          "sitemap_membership": true,
+          "essential_content_without_js": true,
+          "title": "Desonerado e não desonerado no SINAPI: o que o edital fixa | CONFENGE",
+          "h1": "SINAPI desonerado ou não desonerado: qual usar?"
+        },
+        "artifact": {
+          "observation": "UNOBSERVED",
+          "local_file": "absent",
+          "note": "generated_artifact_dir_absent_is_not_public_404"
+        },
+        "live": {
+          "observation": "UNOBSERVED",
+          "note": "transport_failure_is_not_public_404"
+        }
+      },
+      "indexed": "UNKNOWN",
+      "indexed_from_sitemap": false,
+      "sitemap_membership": true,
+      "generic_hub_hrefs": []
+    },
+    {
+      "canonical": "https://confenge.com.br/conteudos/como-contratar-compatibilizacao-projetos/",
+      "role": "conteudo_decisao",
+      "owner_campaign": "07",
+      "layers": {
+        "source": {
+          "local_file": "present",
+          "status": "LOCAL_PRESENT",
+          "robots_meta": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+          "declared_canonical": "https://confenge.com.br/conteudos/como-contratar-compatibilizacao-projetos/",
+          "sitemap_membership": true,
+          "essential_content_without_js": true,
+          "title": "Como contratar compatibilização de projetos | CONFENGE",
+          "h1": "Como contratar a compatibilização de projetos"
+        },
+        "artifact": {
+          "observation": "UNOBSERVED",
+          "local_file": "absent",
+          "note": "generated_artifact_dir_absent_is_not_public_404"
+        },
+        "live": {
+          "observation": "UNOBSERVED",
+          "note": "transport_failure_is_not_public_404"
+        }
+      },
+      "indexed": "UNKNOWN",
+      "indexed_from_sitemap": false,
+      "sitemap_membership": true,
+      "generic_hub_hrefs": [
+        "/servicos/#servico-projeto"
+      ]
+    },
+    {
+      "canonical": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
+      "role": "conteudo_decisao",
+      "owner_campaign": "07",
+      "layers": {
+        "source": {
+          "local_file": "present",
+          "status": "LOCAL_PRESENT",
+          "robots_meta": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+          "declared_canonical": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
+          "sitemap_membership": true,
+          "essential_content_without_js": true,
+          "title": "Limite de aditivo 25% e 50% em obra pública: o que conta | CONFENGE",
+          "h1": "Limite de aditivo 25% e 50% em obra pública: o que conta"
+        },
+        "artifact": {
+          "observation": "UNOBSERVED",
+          "local_file": "absent",
+          "note": "generated_artifact_dir_absent_is_not_public_404"
+        },
+        "live": {
+          "observation": "UNOBSERVED",
+          "note": "transport_failure_is_not_public_404"
+        }
+      },
+      "indexed": "UNKNOWN",
+      "indexed_from_sitemap": false,
+      "sitemap_membership": true,
+      "generic_hub_hrefs": []
+    },
+    {
+      "canonical": "https://confenge.com.br/medicoes-glosas-obras-publicas/",
+      "role": "pilar_publico",
+      "owner_campaign": "07",
+      "layers": {
+        "source": {
+          "local_file": "present",
+          "status": "LOCAL_PRESENT",
+          "robots_meta": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+          "declared_canonical": "https://confenge.com.br/medicoes-glosas-obras-publicas/",
+          "sitemap_membership": true,
+          "essential_content_without_js": true,
+          "title": "Medições, glosas e pagamentos em obras públicas | CONFENGE",
+          "h1": "Medições, glosas e pagamentos em obras públicas"
+        },
+        "artifact": {
+          "observation": "UNOBSERVED",
+          "local_file": "absent",
+          "note": "generated_artifact_dir_absent_is_not_public_404"
+        },
+        "live": {
+          "observation": "UNOBSERVED",
+          "note": "transport_failure_is_not_public_404"
+        }
+      },
+      "indexed": "UNKNOWN",
+      "indexed_from_sitemap": false,
+      "sitemap_membership": true,
+      "generic_hub_hrefs": []
+    },
+    {
+      "canonical": "https://confenge.com.br/aditivos-obras-publicas/",
+      "role": "pilar_publico",
+      "owner_campaign": "07",
+      "layers": {
+        "source": {
+          "local_file": "present",
+          "status": "LOCAL_PRESENT",
+          "robots_meta": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+          "declared_canonical": "https://confenge.com.br/aditivos-obras-publicas/",
+          "sitemap_membership": true,
+          "essential_content_without_js": true,
+          "title": "Aditivos em obras públicas: documentos e margem | CONFENGE",
+          "h1": "Aditivos e serviços extras em obras públicas: documentar, precificar e decidir"
+        },
+        "artifact": {
+          "observation": "UNOBSERVED",
+          "local_file": "absent",
+          "note": "generated_artifact_dir_absent_is_not_public_404"
+        },
+        "live": {
+          "observation": "UNOBSERVED",
+          "note": "transport_failure_is_not_public_404"
+        }
+      },
+      "indexed": "UNKNOWN",
+      "indexed_from_sitemap": false,
+      "sitemap_membership": true,
+      "generic_hub_hrefs": []
+    },
+    {
+      "canonical": "https://confenge.com.br/servicos/",
+      "role": "hub",
+      "owner_campaign": "07",
+      "layers": {
+        "source": {
+          "local_file": "present",
+          "status": "LOCAL_PRESENT",
+          "robots_meta": "index,follow",
+          "declared_canonical": "https://confenge.com.br/servicos/",
+          "sitemap_membership": true,
+          "essential_content_without_js": true,
+          "title": "Serviços de engenharia, perícias e inteligência técnica | CONFENGE",
+          "h1": "Serviços de engenharia para obras públicas e privadas"
+        },
+        "artifact": {
+          "observation": "UNOBSERVED",
+          "local_file": "absent",
+          "note": "generated_artifact_dir_absent_is_not_public_404"
+        },
+        "live": {
+          "observation": "UNOBSERVED",
+          "note": "transport_failure_is_not_public_404"
+        }
+      },
+      "indexed": "UNKNOWN",
+      "indexed_from_sitemap": false,
+      "sitemap_membership": true,
+      "generic_hub_hrefs": []
+    },
+    {
+      "canonical": "https://confenge.com.br/triagem-tecnica/",
+      "role": "contato",
+      "owner_campaign": "01",
+      "layers": {
+        "source": {
+          "local_file": "present",
+          "status": "LOCAL_PRESENT",
+          "robots_meta": "index,follow",
+          "declared_canonical": "https://confenge.com.br/triagem-tecnica/",
+          "sitemap_membership": true,
+          "essential_content_without_js": true,
+          "title": "Triagem técnica | CONFENGE",
+          "h1": "Explique sua situação em menos de um minuto"
+        },
+        "artifact": {
+          "observation": "UNOBSERVED",
+          "local_file": "absent",
+          "note": "generated_artifact_dir_absent_is_not_public_404"
+        },
+        "live": {
+          "observation": "UNOBSERVED",
+          "note": "transport_failure_is_not_public_404"
+        }
+      },
+      "indexed": "UNKNOWN",
+      "indexed_from_sitemap": false,
+      "sitemap_membership": true,
+      "generic_hub_hrefs": []
+    }
+  ],
+  "acquisition_paths": [
+    {
+      "need": "Levantar quantitativos ou orçar obra pública ou privada",
+      "decision_content": "/conteudos/sinapi-desonerado-nao-desonerado/",
+      "service": "/quantitativos-orcamento-obras/",
+      "sample": "/casos/modelo-base-quantitativa-canonica/",
+      "contact": "/quantitativos-orcamento-obras/#triagem-quantitativos"
+    },
+    {
+      "need": "Revisar um projeto já elaborado",
+      "decision_content": "/conteudos/como-contratar-compatibilizacao-projetos/",
+      "service": "/revisao-tecnica-projetos-engenharia/",
+      "sample": "/casos/demonstrativo-projeto-privado/",
+      "contact": "/triagem-tecnica/#projetos"
+    },
+    {
+      "need": "Registrar interferências entre disciplinas",
+      "decision_content": "/conteudos/como-contratar-compatibilizacao-projetos/",
+      "service": "/compatibilizacao-projetos-engenharia/",
+      "sample": "/casos/demonstrativo-projeto-privado/",
+      "contact": "/triagem-tecnica/#projetos"
+    },
+    {
+      "need": "Completar disciplina complementar",
+      "decision_content": "/conteudos/como-contratar-projetos-complementares/",
+      "service": "/projetos-complementares-engenharia/",
+      "sample": "/entregas/",
+      "contact": "/triagem-tecnica/#projetos"
+    },
+    {
+      "need": "Sustentar medição, glosa ou aditivo em obra pública",
+      "decision_content": "/conteudos/limite-aditivo-25-50-obra-publica/",
+      "service": "/aditivos-obras-publicas/",
+      "sample": "/casos/",
+      "contact": "/triagem-tecnica/"
+    }
+  ],
+  "wrong_hub_findings": [
+    {
+      "path": "parcerias-engenharia/index.html",
+      "owner_campaign": "05",
+      "status": "wrong_hub",
+      "marker": "kit-revisao-destino",
+      "current": "/servicos/#servico-projeto",
+      "correct": "/revisao-tecnica-projetos-engenharia/"
+    },
+    {
+      "path": "parcerias-engenharia/index.html",
+      "owner_campaign": "05",
+      "status": "wrong_hub",
+      "marker": "kit-complementares-destino",
+      "current": "/servicos/#servico-projeto",
+      "correct": "/projetos-complementares-engenharia/"
+    },
+    {
+      "path": "conteudos/como-contratar-projetos-complementares/index.html",
+      "owner_campaign": "07",
+      "status": "wrong_hub",
+      "marker": "href=\"/servicos/#servico-projeto\"",
+      "current": "/servicos/#servico-projeto",
+      "correct": "/revisao-tecnica-projetos-engenharia/"
+    },
+    {
+      "path": "conteudos/como-contratar-compatibilizacao-projetos/index.html",
+      "owner_campaign": "07",
+      "status": "wrong_hub",
+      "marker": "href=\"/servicos/#servico-projeto\"",
+      "current": "/servicos/#servico-projeto",
+      "correct": "/revisao-tecnica-projetos-engenharia/"
+    },
+    {
+      "path": "ferramentas/prontidao-tecnica-obra-privada/index.html",
+      "owner_campaign": "04",
+      "status": "map_only_orcamento",
+      "marker": "pptr-destination-map",
+      "current": "/quantitativos-orcamento-obras/",
+      "correct": [
+        "/revisao-tecnica-projetos-engenharia/",
+        "/compatibilizacao-projetos-engenharia/"
+      ]
+    }
+  ],
+  "queue": {
+    "count": 3,
+    "candidates": [
+      {
+        "rank": 1,
+        "diagnosis": "wrong_hub_when_dedicated_page_exists",
+        "hypothesis": "Kits de parceria e conteúdos de decisão ainda apontam revisão e complementares para /servicos/#servico-projeto embora as landings dedicadas já existam no fonte e no sitemap.",
+        "path": "/parcerias-engenharia/",
+        "observable_metric": "cliques internos do kit para a landing dedicada (não ranking)",
+        "minimal_change": "05 troca destino dos kits revisão/complementares; 07 troca âncoras dos conteúdos de decisão para as landings dedicadas.",
+        "commercial_failure_alert": false,
+        "new_page_zero_impressions_is_not_failure": true
+      },
+      {
+        "rank": 2,
+        "diagnosis": "prontidao_map_only_resolves_orcamento",
+        "hypothesis": "A ferramenta de prontidão recomenda revisão ou compatibilização no texto, mas o mapa de destino só resolve quantitativos/orçamento.",
+        "path": "/ferramentas/prontidao-tecnica-obra-privada/",
+        "observable_metric": "destino clicado a partir do resultado da ferramenta",
+        "minimal_change": "04 inclui no mapa as rotas /revisao-tecnica-projetos-engenharia/ e /compatibilizacao-projetos-engenharia/.",
+        "commercial_failure_alert": false,
+        "new_page_zero_impressions_is_not_failure": true
+      },
+      {
+        "rank": 3,
+        "diagnosis": "page_grain_not_query_and_weak_internal_path",
+        "hypothesis": "As 30 impressões de /aditivos-obras-publicas/ e as 17 de /conteudos/sinapi-desonerado-nao-desonerado/ são métricas de PÁGINA, não prova de consulta 'sinapi desonerado' ou 'aditivos obra pública'. Não classificar página nova com zero impressões como fracasso.",
+        "path": "/aditivos-obras-publicas/",
+        "observable_metric": "impressões e cliques de PÁGINA no próximo intervalo completo equivalente",
+        "minimal_change": "10 não promove page grain a keyword no purchase-route-map; 07 mantém o artigo SINAPI apontando para auditoria de orçamento, não para hub genérico.",
+        "commercial_failure_alert": false,
+        "new_page_zero_impressions_is_not_failure": true
+      }
+    ]
+  },
+  "founder": {
+    "source_kind": "provided_aggregate",
+    "as_of": "2026-09-08",
+    "extracted_at": "2026-09-11"
+  },
+  "gsc_operator": {
+    "status": "EXTERNAL_EVIDENCE",
+    "source_kind": "credential_failure",
+    "pass": false,
+    "command": "GSC_SITE_URL=sc-domain:confenge.com.br GSC_CREDENTIALS_JSON=/path/to/service-account.json python3 scripts/revops/search_demand_observatory.py pull-api --days 7 --smoke",
+    "inspect_command": "python3 scripts/revops/search_demand_observatory.py inspect-urls --url https://confenge.com.br/quantitativos-orcamento-obras/ --smoke",
+    "required_secret": "GSC_CREDENTIALS_JSON",
+    "rows": null,
+    "impressions": null,
+    "indexing_api_called": false,
+    "note": "Comando deixado para o operador. Não é operação ativa."
+  },
+  "indexing_api_called": false
+}

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 468 264" role="img" aria-labelledby="prf-R00-title prf-R00-desc">
+<title id="prf-R00-title">Perfil de invert DR-01 · estado original · R00</title>
+<desc id="prf-R00-desc">Trecho DR-01 de E0+010 a E0+030. Invert de montante 12,80 m. R00: desenho 12,35 m versus planilha 12,50 m em MH-02, diferença 0,15 m. Declive geométrico, não capacidade hidráulica. Exemplo demonstrativo.</desc>
+<line x1="72.0" y1="212.0" x2="432.0" y2="212.0" stroke="#0f172a" stroke-width="1"/>
+<line x1="72.0" y1="36.0" x2="72.0" y2="212.0" stroke="#0f172a" stroke-width="1"/>
+<line x1="72.0" y1="80.0" x2="432.0" y2="179.0" stroke="#0369a1" stroke-width="3"/>
+<circle cx="72.0" cy="80.0" r="6" fill="#bae6fd" stroke="#0c4a6e"/>
+<circle cx="432.0" cy="179.0" r="6" fill="#bbf7d0" stroke="#0c4a6e"/>
+<line x1="72.0" y1="80.0" x2="432.0" y2="146.0" stroke="#b91c1c" stroke-width="2" stroke-dasharray="6 4"/><circle cx="432.0" cy="146.0" r="5" fill="#fecaca" stroke="#b91c1c"/><text x="440.0" y="150.0" font-size="11" fill="#b91c1c">planilha 12,50 m</text>
+<text x="64.0" y="84.0" text-anchor="end" font-size="11" fill="#0f172a">12,80</text>
+<text x="440.0" y="195.0" font-size="11" fill="#0c4a6e">desenho 12,35 m</text>
+<text x="72.0" y="230.0" font-size="11" fill="#0f172a">E0+010 MH-01</text>
+<text x="432.0" y="230.0" text-anchor="end" font-size="11" fill="#0f172a">E0+030 MH-02</text>
+<text x="72" y="252" font-size="11" fill="#334155">R00: desenho 12,35 m versus planilha 12,50 m em MH-02, diferença 0,15 m. Exemplo demonstrativo.</text>
+</svg>

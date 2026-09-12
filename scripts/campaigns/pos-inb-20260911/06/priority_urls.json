@@ -1,0 +1,100 @@
+{
+  "schema": "confenge.pos-inb-06-priority-urls/1.0",
+  "campaign_set": "POS-INB-20260911",
+  "campaign_id": "06",
+  "as_of": "2026-09-11",
+  "authority": "data/bofu-dominance/core/purchase-route-map.v1.json",
+  "note": "Conjunto manejável das compras principais, complementares, parcerias, demonstrativo, prontidão, conteúdos de decisão e pilares públicos. Sitemap loc não prova indexação.",
+  "urls": [
+    {
+      "path": "/quantitativos-orcamento-obras/",
+      "role": "compra_principal",
+      "purchase_id": "quantitativos-orcamento",
+      "owner_campaign": "02"
+    },
+    {
+      "path": "/revisao-tecnica-projetos-engenharia/",
+      "role": "compra_principal",
+      "purchase_id": "revisao-tecnica-projetos",
+      "owner_campaign": "02"
+    },
+    {
+      "path": "/compatibilizacao-projetos-engenharia/",
+      "role": "compra_principal",
+      "purchase_id": "compatibilizacao-projetos",
+      "owner_campaign": "02"
+    },
+    {
+      "path": "/projetos-complementares-engenharia/",
+      "role": "complementares",
+      "purchase_id": "projetos-complementares",
+      "owner_campaign": "07"
+    },
+    {
+      "path": "/parcerias-engenharia/",
+      "role": "parcerias",
+      "purchase_id": "parcerias",
+      "owner_campaign": "05"
+    },
+    {
+      "path": "/casos/demonstrativo-projeto-privado/",
+      "role": "demonstrativo",
+      "purchase_id": "demonstrativo-casos-inb06",
+      "owner_campaign": "02"
+    },
+    {
+      "path": "/casos/modelo-base-quantitativa-canonica/",
+      "role": "demonstrativo",
+      "purchase_id": "quantitativos-orcamento",
+      "owner_campaign": "02"
+    },
+    {
+      "path": "/ferramentas/prontidao-tecnica-obra-privada/",
+      "role": "prontidao",
+      "purchase_id": "prontidao-tecnica-obra-privada",
+      "owner_campaign": "04"
+    },
+    {
+      "path": "/conteudos/sinapi-desonerado-nao-desonerado/",
+      "role": "conteudo_decisao",
+      "purchase_id": "sinapi-referencia-informacional",
+      "owner_campaign": "07"
+    },
+    {
+      "path": "/conteudos/como-contratar-compatibilizacao-projetos/",
+      "role": "conteudo_decisao",
+      "purchase_id": "compatibilizacao-projetos",
+      "owner_campaign": "07"
+    },
+    {
+      "path": "/conteudos/limite-aditivo-25-50-obra-publica/",
+      "role": "conteudo_decisao",
+      "purchase_id": "aditivos-obras-publicas",
+      "owner_campaign": "07"
+    },
+    {
+      "path": "/medicoes-glosas-obras-publicas/",
+      "role": "pilar_publico",
+      "purchase_id": "medicoes-glosas",
+      "owner_campaign": "07"
+    },
+    {
+      "path": "/aditivos-obras-publicas/",
+      "role": "pilar_publico",
+      "purchase_id": "aditivos-obras-publicas",
+      "owner_campaign": "07"
+    },
+    {
+      "path": "/servicos/",
+      "role": "hub",
+      "purchase_id": "hub-servicos",
+      "owner_campaign": "07"
+    },
+    {
+      "path": "/triagem-tecnica/",
+      "role": "contato",
+      "purchase_id": "outra-demanda-tecnica",
+      "owner_campaign": "01"
+    }
+  ]
+}

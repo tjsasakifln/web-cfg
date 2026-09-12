@@ -118,6 +118,87 @@ def search_analytics_last_complete_day(*, today: date | None = None) -> date:
     return day - timedelta(days=1)
 
 
+def incomplete_current_day_status(
+    row_date: date | None,
+    *,
+    today: date | None = None,
+) -> dict[str, Any]:
+    """Flag the current Search Analytics day as incomplete. Never fill it with zero."""
+    today = today or search_analytics_today()
+    if row_date is None:
+        return {
+            "status": "UNKNOWN",
+            "incomplete": None,
+            "zero_filled": False,
+            "note": "missing_date_is_not_zero",
+        }
+    if row_date > today:
+        return {
+            "status": "FUTURE",
+            "incomplete": True,
+            "zero_filled": False,
+            "date": row_date.isoformat(),
+            "search_analytics_today": today.isoformat(),
+            "note": "future_day_is_not_complete",
+        }
+    if row_date == today:
+        return {
+            "status": "INCOMPLETE",
+            "incomplete": True,
+            "zero_filled": False,
+            "date": row_date.isoformat(),
+            "search_analytics_today": today.isoformat(),
+            "note": "current_search_analytics_day_is_not_complete",
+        }
+    return {
+        "status": "complete",
+        "incomplete": False,
+        "zero_filled": False,
+        "date": row_date.isoformat(),
+        "search_analytics_today": today.isoformat(),
+    }
+
+
+def resolve_import_source_kind(meta: Mapping[str, Any] | None, *, origin: str | None = None) -> dict[str, Any]:
+    """Distinguish live API, fixture, provided aggregate and absence. Never invent live."""
+    meta = meta or {}
+    origin_value = origin or meta.get("origin")
+    provided = (
+        origin_value == "founder_provided_baseline"
+        or meta.get("provided_aggregate") is True
+        or meta.get("source_kind") == "provided_aggregate"
+    )
+    if provided:
+        return {
+            "source_kind": "provided_aggregate",
+            "origin": origin_value or "founder_provided_baseline",
+            "synthetic": False,
+            "fixture": False,
+            "provided_aggregate": True,
+            "historical": True,
+            "ready_for_product_decisions": False,
+        }
+    if meta.get("fixture") is True or meta.get("synthetic") is True or origin_value == "fixture":
+        return {
+            "source_kind": "fixture",
+            "origin": origin_value or "fixture",
+            "synthetic": True,
+            "fixture": True,
+            "provided_aggregate": False,
+            "historical": True,
+            "ready_for_product_decisions": False,
+        }
+    return {
+        "source_kind": "historical_csv_export",
+        "origin": origin_value or "csv_export",
+        "synthetic": True,
+        "fixture": True,
+        "provided_aggregate": False,
+        "historical": True,
+        "ready_for_product_decisions": False,
+    }
+
+
 def executive_today(*, now: datetime | None = None) -> date:
     clock = now or datetime.now(EXECUTIVE_REPORT_TZ)
     if clock.tzinfo is None:
@@ -656,12 +737,85 @@ def publication_cohort(
     }
 
 
+CAPTURE_STAGE_KEYS = (
+    "visita",
+    "clique",
+    "solicitacao_persistida",
+    "encaminhamento_aceito",
+    "oportunidade_qualificada",
+)
+FUNNEL_TO_CAPTURE = {
+    "visitor": "visita",
+    "cta_triggered": None,
+    "form_started": None,
+    "lead_persisted": "solicitacao_persistida",
+    "contacted": "encaminhamento_aceito",
+    "qualified": "oportunidade_qualificada",
+    "proposal": None,
+    "meeting": None,
+    "won": None,
+    "lost": None,
+}
+
+
+def _stage_cell(value: Any, *, authority: str, present: bool) -> dict[str, Any]:
+    if not present:
+        return {"status": "UNKNOWN", "value": None, "authority": authority}
+    return {"status": "observed", "value": value, "authority": authority}
+
+
+def join_capture_stages(
+    *,
+    visitor: float | None = None,
+    clicks: float | None = None,
+    lead_persisted: float | None = None,
+    contacted: float | None = None,
+    qualified: float | None = None,
+    warmbly: Mapping[str, Any] | None = None,
+    funnel: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Map POS-INB 01 / FUNNEL_KEYS onto visita→qualificada without PII or lead_id."""
+    funnel = funnel or {}
+    visitor_value = visitor if visitor is not None else funnel.get("visitor")
+    persisted = lead_persisted if lead_persisted is not None else funnel.get("lead_persisted")
+    accepted = contacted if contacted is not None else funnel.get("contacted")
+    qualified_value = qualified if qualified is not None else funnel.get("qualified")
+    authorized = bool(warmbly) and warmbly.get("authorized") is True
+    return {
+        "visita": _stage_cell(
+            visitor_value, authority="host_funnel", present=visitor_value is not None
+        ),
+        "clique": _stage_cell(
+            clicks, authority="gsc_search_analytics", present=clicks is not None
+        ),
+        "solicitacao_persistida": _stage_cell(
+            persisted, authority="host_lead_store", present=persisted is not None
+        ),
+        "encaminhamento_aceito": _stage_cell(
+            accepted, authority="host_lead_store", present=accepted is not None
+        ),
+        "oportunidade_qualificada": _stage_cell(
+            qualified_value,
+            authority="warmbly" if authorized else "warmbly_absent",
+            present=authorized and qualified_value is not None,
+        ),
+        "qualification_proposal_sale_unknown_without_warmbly": not authorized,
+        "anonymous_query_not_joined_to_person": True,
+        "lead_id_excluded": True,
+        "funnel_keys_not_copied_as_pii": True,
+        "keys": list(CAPTURE_STAGE_KEYS),
+    }
+
+
 def commercial_stages(
     *,
     impressions: float | None,
     clicks: float | None,
     contacts: float | None = None,
     warmbly: Mapping[str, Any] | None = None,
+    visitor: float | None = None,
+    lead_persisted: float | None = None,
+    funnel: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Qualification/proposal/hire only from warmbly or authorized commercial source."""
     discovery = {
@@ -696,6 +850,15 @@ def commercial_stages(
             return {"status": "UNKNOWN", "value": None, "authority": "warmbly"}
         return {"status": "observed", "value": value, "authority": "warmbly"}
 
+    capture = join_capture_stages(
+        visitor=visitor,
+        clicks=clicks,
+        lead_persisted=lead_persisted if lead_persisted is not None else contacts,
+        contacted=contacts,
+        qualified=(warmbly or {}).get("qualification") if authorized else None,
+        warmbly=warmbly,
+        funnel=funnel,
+    )
     return {
         "discovery": discovery,
         "click": click,
@@ -704,8 +867,10 @@ def commercial_stages(
         "qualification": _stage("qualification"),
         "proposal": _stage("proposal"),
         "hire": _stage("hire"),
+        "capture_stages": capture,
         "anonymous_query_not_joined_to_person": True,
         "zero_not_inferred": True,
+        "lead_id_excluded": True,
     }
 
 
@@ -1111,6 +1276,9 @@ def import_gsc_export(
     site = site or meta.get("site") or "sc-domain:confenge.com.br"
     search_type = (search_type or meta.get("search_type") or "web").lower()
     origin = origin or meta.get("origin") or ("zip_export" if zip_path else "csv_export")
+    source_flags = resolve_import_source_kind(meta, origin=origin)
+    labels_not_observed = bool(meta.get("query_labels_are_not_observed_search_terms"))
+    sa_today = search_analytics_today()
 
     csv_files = sorted(src.glob("*.csv")) if src.is_dir() else []
     grouped: dict[str, list[dict[str, Any]]] = {
@@ -1144,6 +1312,16 @@ def import_gsc_export(
     if filters.get("search_type"):
         search_type = str(filters["search_type"]).lower()
 
+    if labels_not_observed:
+        for row in grouped["query"]:
+            if row.get("suppressed"):
+                continue
+            row["query"] = None
+            row["query_text_observed"] = False
+            row["query_label_status"] = "UNKNOWN"
+            row["disclosed_metrics_only"] = True
+            row["page_grain_promoted_to_query"] = False
+            row["reconstructed"] = False
     disclosed_queries = [r for r in grouped["query"] if not r.get("suppressed")]
     suppressed_queries = [r for r in grouped["query"] if r.get("suppressed")]
     omitted = {
@@ -1178,8 +1356,17 @@ def import_gsc_export(
     dates_ok = [d for d in dates if d is not None]
     last_data_date = max(dates_ok).isoformat() if dates_ok else None
     start_date = min(dates_ok).isoformat() if dates_ok else None
-    file_stamp = as_of or last_data_date
-    as_of = last_data_date or as_of
+    # as_of is last complete data day of this export, never extraction or release.
+    requested_as_of = as_of
+    as_of = last_data_date or requested_as_of
+    file_stamp = last_data_date or requested_as_of
+    if extracted_at and as_of and str(extracted_at)[:10] != str(as_of)[:10]:
+        extracted_at_is_not_as_of = True
+    else:
+        extracted_at_is_not_as_of = bool(extracted_at) and bool(as_of)
+    for row in grouped["property"]:
+        row_day = parse_search_analytics_date(row.get("date"))
+        row["current_day"] = incomplete_current_day_status(row_day, today=sa_today)
     if zip_date and zip_date != last_data_date:
         zip_date_note = "zip_filename_date_is_not_last_data_date"
     else:
@@ -1208,6 +1395,11 @@ def import_gsc_export(
             "version": NEED_CLASS_VERSION,
         }
 
+    incomplete_days = [
+        r.get("current_day")
+        for r in grouped["property"]
+        if (r.get("current_day") or {}).get("incomplete")
+    ]
     payload: dict[str, Any] = {
         "schema": IMPORT_SCHEMA,
         "ok": True,
@@ -1218,17 +1410,26 @@ def import_gsc_export(
         "effective_interval": {"start": start_date, "end": last_data_date},
         "site": site,
         "search_type": search_type,
-        "origin": origin,
+        "origin": source_flags["origin"],
         "source": "csv_export",
-        "source_kind": "historical_csv_export",
+        "source_kind": source_flags["source_kind"],
         "source_dir": str(src.relative_to(root)) if src.is_relative_to(root) else str(src),
-        "synthetic": True,
-        "fixture": True,
-        "historical": True,
+        "synthetic": source_flags["synthetic"],
+        "fixture": source_flags["fixture"],
+        "provided_aggregate": source_flags["provided_aggregate"],
+        "historical": source_flags["historical"],
         "ready_for_product_decisions": False,
         "live_baseline_invented": False,
         "freshness": "NOT_CURRENT",
         "ingest_does_not_reset_freshness": True,
+        "as_of_not_rewritten_as_release": True,
+        "extracted_at_is_not_as_of": extracted_at_is_not_as_of,
+        "query_labels_are_not_observed_search_terms": labels_not_observed,
+        "page_grain_is_not_query": True,
+        "unknown_click_terms": True,
+        "current_day_incomplete": bool(incomplete_days),
+        "incomplete_current_days": incomplete_days,
+        "incomplete_current_day_zero_filled": False,
         "search_analytics_calendar_timezone": "America/Los_Angeles",
         "executive_report_timezone": "America/Sao_Paulo",
         "aggregate_date_not_shifted_as_utc": True,
@@ -1315,7 +1516,10 @@ def import_gsc_export(
         public = redact_personal_fields(sdo.git_safe_live_payload(payload) if hasattr(sdo, "git_safe_live_payload") else payload)
         public["ready_for_product_decisions"] = False
         public["freshness"] = "NOT_CURRENT"
-        public["source_kind"] = "historical_csv_export"
+        public["source_kind"] = source_flags["source_kind"]
+        public["provided_aggregate"] = source_flags["provided_aggregate"]
+        public["fixture"] = source_flags["fixture"]
+        public["synthetic"] = source_flags["synthetic"]
         dest_name = f"import-{file_stamp or 'undated'}.json"
         dest = data / "imports" / dest_name
         existing = None
@@ -1449,9 +1653,14 @@ def build_operational_learning(
         "source_kind": payload.get("source_kind") or "historical_csv_export",
         "freshness": "NOT_CURRENT",
         "ready_for_product_decisions": False,
-        "fixture": True,
+        "fixture": bool(payload.get("fixture")) and payload.get("source_kind") != "provided_aggregate",
+        "provided_aggregate": payload.get("source_kind") == "provided_aggregate" or bool(payload.get("provided_aggregate")),
         "historical": True,
-        "external_evidence": payload.get("source_kind") != "search_analytics_api",
+        "synthetic": bool(payload.get("synthetic")) and payload.get("source_kind") != "provided_aggregate",
+        "external_evidence": payload.get("source_kind") not in {"search_analytics_api", "search_analytics_top_row_truncation"},
+        "page_grain_is_not_query": True,
+        "query_labels_are_not_observed_search_terms": bool(payload.get("query_labels_are_not_observed_search_terms")),
+        "as_of_not_rewritten_as_release": True,
         "dimensions": dims,
         "omitted_queries": payload.get("omitted_queries"),
         "windows": {

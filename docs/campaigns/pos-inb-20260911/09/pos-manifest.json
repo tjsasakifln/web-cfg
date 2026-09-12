@@ -1,0 +1,7 @@
+{
+  "campaign_set": "POS-INB-20260911",
+  "campaigns": ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10"],
+  "requirements": ["Q01", "Q02", "Q03", "Q04", "Q05", "Q06", "Q07", "Q08"],
+  "omit_demonstrativo_08": false,
+  "note": "POS-INB-20260911 manifesto. Same numeric IDs as INB-20260911 are not the same mission. Demonstrativo 08 is omitted only if no public page promises it."
+}

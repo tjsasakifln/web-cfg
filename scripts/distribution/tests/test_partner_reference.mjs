@@ -9,17 +9,22 @@ import vm from "vm";
 import { fileURLToPath } from "url";
 import { createRequire } from "module";
 import {
+  REQUIRED_KIT_IDS,
+  DEDICATED_PURCHASE_PATHS,
+  SUBSTITUTE_DESTINATION,
+  SITE_ORIGIN,
   buildShareUrl,
   classifyShareAction,
   draftsLeakIntoPublicArtifact,
+  htmlAgreesWithSurfaces,
   loadKitCatalog,
   publicHtmlForbiddenPhrases,
   publicHtmlHasUtmOnInternalAnchors,
+  publicSurfaces,
   resolveKits,
   routeExists,
   send,
   shareScriptSendsOutreach,
-  SITE_ORIGIN,
 } from "../partner_reference.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -38,31 +43,60 @@ function pass(name, detail) {
 const catalog = loadKitCatalog(root);
 if (catalog.auto_send !== false) fail("catalog_auto_send", catalog.auto_send);
 if (catalog.send_forbidden !== true) fail("catalog_send_forbidden", catalog.send_forbidden);
+if (catalog.kits.length !== 4) fail("four_kits_catalog", catalog.kits.map((k) => k.id));
 pass("catalog_prepare_only");
 
 const kits = resolveKits(root);
-if (kits.length !== 3) fail("three_kits", kits.map((k) => k.id));
+if (kits.length !== 4) fail("four_kits", kits.map((k) => k.id));
 const byId = Object.fromEntries(kits.map((k) => [k.id, k]));
-for (const id of ["orcamento-quantitativos", "revisao-compatibilizacao", "complementares"]) {
+for (const id of REQUIRED_KIT_IDS) {
   if (!byId[id]) fail("missing_kit", id);
+  if (byId[id].status !== "ok") fail("kit_not_ok", { id, status: byId[id].status, reason: byId[id].reason });
   if (byId[id].destination.status !== "present") fail("destination_missing", id);
+  if (byId[id].destination.path !== DEDICATED_PURCHASE_PATHS[id]) {
+    fail("destination_not_dedicated", { id, path: byId[id].destination.path, expected: DEDICATED_PURCHASE_PATHS[id] });
+  }
   if (byId[id].destination.path === "/" || byId[id].destination.path === "") {
     fail("destination_is_home", id);
   }
-  if (!byId[id].conversation?.needed?.length) fail("conversation_missing", id);
-}
-if (byId["orcamento-quantitativos"].sample.status !== "present") {
-  fail("orcamento_sample", byId["orcamento-quantitativos"].sample);
-}
-if (byId["revisao-compatibilizacao"].sample.status !== "present") {
-  fail("revisao_sample", byId["revisao-compatibilizacao"].sample);
-}
-if (byId.complementares.sample.status === "present") {
-  if (!routeExists(root, byId.complementares.sample.path)) {
-    fail("complementares_sample_unresolved", byId.complementares.sample);
+  if (byId[id].destination.path === SUBSTITUTE_DESTINATION) {
+    fail("destination_is_substitute", id);
   }
-} else if (byId.complementares.sample.status !== "not_included") {
-  fail("complementares_sample_status", byId.complementares.sample);
+  if (!routeExists(root, byId[id].destination.path)) fail("destination_file_missing", id);
+  if (!byId[id].conversation?.needed?.length) fail("conversation_missing", id);
+  if (byId[id].sample.status !== "present") fail("sample_missing", { id, sample: byId[id].sample });
+  if (!byId[id].destination.proposal_href) fail("proposal_missing", id);
+}
+
+if (byId["orcamento-quantitativos"].sample.kind !== "quantitativos_planilha") {
+  fail("orcamento_sample_kind", byId["orcamento-quantitativos"].sample);
+}
+if (byId["orcamento-quantitativos"].sample.path === "/casos/modelo-base-quantitativa-canonica/") {
+  fail("orcamento_sample_legacy", byId["orcamento-quantitativos"].sample);
+}
+if (!byId["orcamento-quantitativos"].sample.href.includes("#quantitativos")) {
+  fail("orcamento_sample_fragment", byId["orcamento-quantitativos"].sample);
+}
+if (byId["revisao-tecnica"].sample.kind !== "review_findings") {
+  fail("revisao_sample_kind", byId["revisao-tecnica"].sample);
+}
+if (!byId["revisao-tecnica"].sample.href.includes("#extrato-demonstrativo")) {
+  fail("revisao_sample_fragment", byId["revisao-tecnica"].sample);
+}
+if (byId["compatibilizacao-interfaces"].sample.kind !== "clash_interfaces") {
+  fail("compat_sample_kind", byId["compatibilizacao-interfaces"].sample);
+}
+if (!byId["compatibilizacao-interfaces"].sample.href.includes("#registro-interferencias")) {
+  fail("compat_sample_fragment", byId["compatibilizacao-interfaces"].sample);
+}
+if (byId["elaboracao-complementar"].sample.kind !== "illustrative_schema") {
+  fail("elaboracao_sample_kind", byId["elaboracao-complementar"].sample);
+}
+if (byId["elaboracao-complementar"].sample.kind === "clash_interfaces") {
+  fail("elaboracao_uses_clash", byId["elaboracao-complementar"].sample);
+}
+if (!byId["elaboracao-complementar"].sample.labeled_as_illustration) {
+  fail("elaboracao_not_labeled_illustration", byId["elaboracao-complementar"].sample);
 }
 pass("kits_resolve_destination_sample_conversation");
 
@@ -71,90 +105,86 @@ const html = fs.readFileSync(htmlPath, "utf8");
 if (!html.includes('rel="canonical"') || !html.includes("https://confenge.com.br/parcerias-engenharia/")) {
   fail("canonical_missing", "page canonical");
 }
-for (const kit of kits) {
-  if (!html.includes(kit.destination.path)) fail("html_missing_destination", kit.id);
-  if (kit.sample.status === "present" && kit.sample.path && !html.includes(kit.sample.path)) {
-    fail("html_missing_sample", kit.id);
-  }
+if (html.includes(SUBSTITUTE_DESTINATION)) {
+  fail("html_still_uses_substitute", SUBSTITUTE_DESTINATION);
 }
+if (html.includes("/casos/modelo-base-quantitativa-canonica/")) {
+  fail("html_legacy_orcamento_sample");
+}
+const surfaces = publicSurfaces(root);
+const htmlMismatches = htmlAgreesWithSurfaces(html, surfaces);
+if (htmlMismatches.length) fail("html_vs_resolver", htmlMismatches);
 if (/em breve|quando estiver pront|entrega pendente|página em construção/i.test(html)) {
-  fail("pending_promise", "complementares announced a missing delivery");
+  fail("pending_promise", "announced a missing delivery");
 }
-if (!html.includes('id="share-url-orcamento"') || !html.includes("https://confenge.com.br/quantitativos-orcamento-obras/")) {
-  fail("share_fallback_canonical", "orcamento input");
-}
+if (!html.includes('id="share-url-orcamento"')) fail("share_fallback_canonical", "orcamento input");
 if (publicHtmlHasUtmOnInternalAnchors(html)) fail("internal_utm", "anchor href carries utm_");
 const forbidden = publicHtmlForbiddenPhrases(html);
 if (forbidden.length) fail("forbidden_public_phrases", forbidden);
 if (!html.includes("Descrever uma necessidade") || /agendar reuni[aã]o|marcar demonstra[cç][aã]o/i.test(html)) {
   fail("cta_imposes_meeting", "hero/contact cta");
 }
+if (!html.includes('property="og:image"') || !html.includes("https://confenge.com.br/assets/og-confenge.jpg")) {
+  fail("og_image_missing");
+}
+const ogImageRel = "assets/og-confenge.jpg";
+if (!fs.existsSync(path.join(root, ogImageRel))) fail("og_image_file_missing", ogImageRel);
+if (!html.includes('property="og:title"') || !html.includes('property="og:description"')) {
+  fail("og_title_description_missing");
+}
+if (!html.includes("<title>") || !html.includes('name="description"')) {
+  fail("title_description_missing");
+}
+for (const kit of kits) {
+  if (!html.includes(`id="share-summary-${kit.id === "orcamento-quantitativos" ? "orcamento" : kit.id === "revisao-tecnica" ? "revisao" : kit.id === "compatibilizacao-interfaces" ? "compatibilizacao" : "elaboracao"}"`)) {
+    fail("copyable_summary_missing", kit.id);
+  }
+}
 pass("public_html_kits_canonical_no_utm_no_forbidden");
 
 const internal = buildShareUrl({
-  destination: "/quantitativos-orcamento-obras/",
+  destination: byId["orcamento-quantitativos"].destination.path,
   mode: "internal",
-  params: { utm_source: "partner_kit", utm_campaign: "inb11_orcamento" },
+  params: { utm_source: "partner_kit", utm_campaign: "posinb05_orcamento" },
 }, root);
 if (!internal.ok) fail("internal_share_ok", internal);
-if (internal.url !== "/quantitativos-orcamento-obras/") fail("internal_share_path", internal.url);
+if (internal.url !== byId["orcamento-quantitativos"].destination.path) fail("internal_share_path", internal.url);
 if (/utm_/i.test(internal.url)) fail("internal_share_utm", internal.url);
 pass("internal_share_strips_utm");
 
-const external = buildShareUrl({
-  destination: "/quantitativos-orcamento-obras/",
-  mode: "external",
-  params: {
-    utm_source: "partner_kit",
-    utm_medium: "referral",
-    utm_campaign: "inb11_orcamento",
-    cta_id: "share-copy-kit-orcamento",
-    asset_id: "partner-reference-kits-v1",
-    route_family: "parcerias-engenharia",
-  },
-}, root);
-if (!external.ok) fail("external_share_ok", external);
-for (const key of ["utm_source", "utm_medium", "utm_campaign", "cta_id", "asset_id", "route_family"]) {
+const orcShare = surfaces.find((s) => s.id === "orcamento-quantitativos");
+if (!orcShare.external.ok) fail("external_share_ok", orcShare.external);
+for (const key of Object.keys(orcShare.external.params)) {
   if (!leadCore.ATTR_ALLOWLIST.includes(key)) fail("param_not_allowlisted", key);
-  if (external.params[key] == null) fail("external_missing_allowlisted", key);
 }
 pass("external_share_allowlisted_params");
 
-const attributedFromPage = html.match(/data-share-attributed="([^"]+)"/);
-if (!attributedFromPage) fail("html_attributed_missing");
-const decodedAttr = attributedFromPage[1].replaceAll("&amp;", "&");
-const rebuilt = buildShareUrl({
-  destination: "/quantitativos-orcamento-obras/",
-  mode: "external",
-  params: {
-    utm_source: "partner_kit",
-    utm_medium: "referral",
-    utm_campaign: "inb11_orcamento",
-    cta_id: "share-copy-kit-orcamento",
-    asset_id: "partner-reference-kits-v1",
-    route_family: "parcerias-engenharia",
-  },
-}, root);
-const rebuiltUrl = new URL(rebuilt.url);
-const htmlUrl = new URL(decodedAttr);
-if (rebuiltUrl.origin + rebuiltUrl.pathname !== htmlUrl.origin + htmlUrl.pathname) {
-  fail("html_attributed_path", { rebuilt: rebuilt.url, html: decodedAttr });
-}
-for (const key of rebuiltUrl.searchParams.keys()) {
-  if (htmlUrl.searchParams.get(key) !== rebuiltUrl.searchParams.get(key)) {
-    fail("html_attributed_param", { key, rebuilt: rebuiltUrl.searchParams.get(key), html: htmlUrl.searchParams.get(key) });
+const attributedAttrs = [...html.matchAll(/data-share-attributed="([^"]+)"/g)].map((m) => m[1].replaceAll("&amp;", "&"));
+if (attributedAttrs.length !== 4) fail("html_attributed_count", attributedAttrs.length);
+for (const surface of surfaces) {
+  const decoded = attributedAttrs.find((url) => url.includes(surface.destinationHref.replace(/\/$/, "")));
+  if (!decoded) fail("html_attributed_missing_kit", surface.id);
+  const rebuiltUrl = new URL(surface.external.url);
+  const htmlUrl = new URL(decoded);
+  if (rebuiltUrl.origin + rebuiltUrl.pathname !== htmlUrl.origin + htmlUrl.pathname) {
+    fail("html_attributed_path", { kit: surface.id, rebuilt: surface.external.url, html: decoded });
   }
-}
-for (const key of htmlUrl.searchParams.keys()) {
-  if (!leadCore.ATTR_ALLOWLIST.includes(key)) fail("html_attr_not_allowlisted", key);
-  if (htmlUrl.searchParams.get(key) !== rebuiltUrl.searchParams.get(key)) {
-    fail("html_extra_or_mismatch_param", key);
+  if (rebuiltUrl.hash !== htmlUrl.hash) {
+    fail("html_attributed_hash", { kit: surface.id, rebuilt: rebuiltUrl.hash, html: htmlUrl.hash });
+  }
+  for (const key of rebuiltUrl.searchParams.keys()) {
+    if (htmlUrl.searchParams.get(key) !== rebuiltUrl.searchParams.get(key)) {
+      fail("html_attributed_param", { kit: surface.id, key });
+    }
+  }
+  for (const key of htmlUrl.searchParams.keys()) {
+    if (!leadCore.ATTR_ALLOWLIST.includes(key)) fail("html_attr_not_allowlisted", key);
   }
 }
 pass("html_attributed_url_matches_builder");
 
 const piiAttempt = buildShareUrl({
-  destination: "/quantitativos-orcamento-obras/",
+  destination: byId["orcamento-quantitativos"].destination.path,
   mode: "external",
   params: {
     utm_source: "partner_kit",
@@ -179,7 +209,7 @@ if (/alice@|123\.456\.789-09|Alice Silva|Carla/i.test(piiAttempt.url)) {
   fail("pii_leaked_into_url", piiAttempt.url);
 }
 const restored = buildShareUrl({
-  destination: "/quantitativos-orcamento-obras/",
+  destination: byId["orcamento-quantitativos"].destination.path,
   mode: "external",
   params: { utm_source: "partner_kit", cta_id: "share-copy-kit-orcamento" },
 }, root);
@@ -200,11 +230,11 @@ if (javascriptUrl.ok) fail("javascript_destination_accepted", javascriptUrl);
 const protocolRelative = buildShareUrl({ destination: "//evil.example/x", mode: "external" }, root);
 if (protocolRelative.ok) fail("protocol_relative_accepted", protocolRelative);
 const restoredDest = buildShareUrl({
-  destination: `${SITE_ORIGIN}/servicos/#servico-projeto`,
+  destination: `${SITE_ORIGIN}${DEDICATED_PURCHASE_PATHS["orcamento-quantitativos"]}`,
   mode: "external",
   params: { utm_source: "partner_kit" },
 }, root);
-if (!restoredDest.ok || !restoredDest.url.startsWith("https://confenge.com.br/servicos/")) {
+if (!restoredDest.ok || !restoredDest.url.startsWith(`${SITE_ORIGIN}/quantitativos-orcamento-obras/`)) {
   fail("evil_mutation_restore", restoredDest);
 }
 pass("mutation_open_redirect_refused_then_restored");
@@ -221,12 +251,14 @@ pass("share_is_engagement_not_lead");
 const shareJs = fs.readFileSync(path.join(root, "parcerias-engenharia/share.js"), "utf8");
 if (shareScriptSendsOutreach(shareJs)) fail("share_js_outreach", "fetch/smtp detected");
 if (/\/\.netlify\/functions\/lead/.test(shareJs)) fail("share_js_lead_endpoint");
+if (/wa\.me|mailto:|location\.href\s*=/.test(shareJs)) fail("share_js_opens_app");
 const sandbox = {
   window: { dataLayer: [] },
   document: {
     readyState: "complete",
     querySelectorAll: () => [],
     addEventListener: () => {},
+    execCommand: () => false,
   },
   navigator: {},
   console,

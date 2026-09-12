@@ -153,6 +153,7 @@ jobs:
           npm run test:release-filters
           npm run test:runtime
           python3 -m pytest deploy/netcup/tests -q
+          npm run test:pos-inb-20260911-10
           npm run test:pseo-attribution
           npm run test:revops
           npm run test:privacy
@@ -165,6 +166,10 @@ jobs:
           npm run test:form-funnel
           npm run test:cta-form-next-state
           npm run test:lead-function
+      - name: INB-15 strict regression on the candidate tree
+        run: npm run test:inb-20260911-15-strict
+      - name: POS-INB-09 acceptance on the candidate tree
+        run: npm run test:pos-inb-20260911-09
       - name: Build public site
         env:
           # The release artifact must carry the production identity it will be
@@ -174,6 +179,8 @@ jobs:
           CONTEXT: ${{ inputs.export_public_artifact && 'production' || '' }}
           TURNSTILE_SITE_KEY: ${{ vars.TURNSTILE_SITE_KEY }}
         run: npm run build:site
+      - name: Promised public downloads are in the gated artifact
+        run: npm run test:promised-public-resources
       - name: Final public-surface coverage and copy gate
         run: |
           ROBOTS_PACKAGE_REQUIRED=1 python3 -m pytest scripts/site/test_public_server_acceptance.py -q

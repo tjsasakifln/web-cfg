@@ -2175,6 +2175,71 @@ _reset();
   pass("concurrent_and_retry_one_receipt", { lead_id: concIds[0] });
 }
 
+// --- POS-INB-20260911/01: browser cannot self-declare synthetic; adaptive stays
+// WITHHELD; malicious attribution dropped; FileStore persist without override.
+{
+  const authority = JSON.parse(fs.readFileSync(
+    path.join(root, "netlify/functions/data/adaptive-intake-authority.json"),
+    "utf8",
+  ));
+  if (authority.status !== "WITHHELD") fail("pos_inb_01_adaptive_withheld", authority.status);
+  const formSrc = fs.readFileSync(path.join(root, "js/modules/form.js"), "utf8");
+  if (!formSrc.includes("fetch('/api/web/lead'")) fail("pos_inb_01_canonical_post");
+  if (formSrc.includes("fetch('/.netlify/functions/lead'")) fail("pos_inb_01_endpoint_swap");
+
+  const claim = await handler(event({
+    nome: "Carla Mendes",
+    email: "carla.mendes@construtora-norte.com.br",
+    estagio: "projeto, revisão ou compatibilização",
+    consentimento: "on",
+    record_kind: "synthetic",
+    test_mode: true,
+    paid_priority: true,
+    qualified: true,
+    authorized: true,
+    idempotency_key: "pos-inb-01-wired-claim-001",
+  }, "POST", { ip: "203.0.113.221" }));
+  const claimBody = JSON.parse(claim.body);
+  const claimStored = claimBody.lead_id ? await mem.get(claimBody.lead_id) : null;
+  if (claim.statusCode !== 201 || !claimStored) fail("pos_inb_01_claim_persist", claimBody);
+  if (claimStored.record_kind !== "real") fail("pos_inb_01_browser_synthetic", claimStored.record_kind);
+  if (claimStored.synthetic_probe_authenticated === true) fail("pos_inb_01_browser_probe");
+  if (claimStored.paid_priority || claimStored.qualified) fail("pos_inb_01_privilege");
+  pass("pos_inb_01_browser_claims_ignored");
+
+  const malicious = await handler(event({
+    nome: "Carla Mendes",
+    telefone: "48988344559",
+    estagio: "projeto, revisão ou compatibilização",
+    consentimento: "on",
+    origem: "javascript:alert(1)",
+    landing_url: "https://evil.example/?email=leak@x.com",
+    utm_source: "<script>x</script>",
+    fbclid: "drop",
+    idempotency_key: "pos-inb-01-wired-malicious-001",
+  }, "POST", { ip: "203.0.113.222" }));
+  const malBody = JSON.parse(malicious.body);
+  const malStored = malBody.lead_id ? await mem.get(malBody.lead_id) : null;
+  if (malicious.statusCode !== 201 || !malStored) fail("pos_inb_01_malicious_persist", malBody);
+  if (malStored.origem || malStored.utm_source || malStored.fbclid) fail("pos_inb_01_malicious_kept", malStored);
+  if (malStored.landing_url && /email=/.test(malStored.landing_url)) fail("pos_inb_01_query_kept");
+  pass("pos_inb_01_malicious_dropped");
+
+  const adaptive = await handler(event({
+    nome: "Carla Mendes",
+    email: "carla.mendes@construtora-norte.com.br",
+    estagio: "projeto, revisão ou compatibilização",
+    consentimento: "on",
+    need_code: "licitacao_obra_ou_contrato_publico",
+    "form-name": "triagem-tecnica",
+    idempotency_key: "pos-inb-01-wired-adaptive-001",
+  }, "POST", { ip: "203.0.113.223" }));
+  const adaptiveBody = JSON.parse(adaptive.body);
+  if (adaptive.statusCode === 201 && adaptiveBody.ok === true) fail("pos_inb_01_adaptive_activated", adaptiveBody);
+  if (adaptiveBody.lead_id) fail("pos_inb_01_adaptive_protocol", adaptiveBody);
+  pass("pos_inb_01_adaptive_stays_withheld", { status: adaptive.statusCode });
+}
+
 console.log("LEAD_FUNCTION_OK", JSON.stringify({ tests: results.length, storeDir }));
 // cleanup store dir
 try {

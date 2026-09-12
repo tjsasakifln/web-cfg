@@ -1,0 +1,14 @@
+{
+  "campaign_id": "POS-INB-20260911/01",
+  "items": [
+    {
+      "path": "package.json",
+      "key": "scripts.test:pos-inb-01",
+      "expected_previous": null,
+      "change": "Add script \"test:pos-inb-01\": \"node tests/pos-inb-20260911/01/run_all.mjs\"",
+      "owner": "10",
+      "reason": "Campaign 01 owns the suite under tests/pos-inb-20260911/01/. package.json is written by campaign 10. Existing npm run test:lead-function already covers the POS-INB-01 assertions added to scripts/site/test_lead_function.mjs.",
+      "consumer_test": "node tests/pos-inb-20260911/01/run_all.mjs"
+    }
+  ]
+}

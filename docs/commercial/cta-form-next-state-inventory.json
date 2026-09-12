@@ -29,13 +29,13 @@
       "commercial_configuration"
     ],
     "baseline_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
-    "expected_declared_ctas": 125
+    "expected_declared_ctas": 128
   },
   "coverage": {
     "authority": "data/organic/public-family-registry.json",
     "manual_route_allowlist": false,
     "active_capture_routes": 25,
-    "declared_ctas": 125,
+    "declared_ctas": 128,
     "protected_routes_with_capture": [],
     "problems": []
   },
@@ -515,13 +515,58 @@
           "turnstile_token_forwarding": true,
           "receipt_required": true,
           "contact_constraints_ready": true,
-          "form_whatsapp_relationship": "form_only",
+          "form_whatsapp_relationship": "parallel_talk_path",
           "shared_runtime_selectors_ready": true,
           "shared_runtime_journey_ready": true,
           "standalone_runtime_ready": true
         }
       ],
       "actions": [
+        {
+          "cta_id": "",
+          "position": "",
+          "href": "/triagem-tecnica/",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Solicitar proposta",
+          "useful_next_state": "Abre o destino declarado por “Solicitar proposta” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "Os demonstrativos são sintéticos. O formulário não recebe arquivo, não cobra e não conclui contratação.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20um%20demonstrativo%20e%20quero%20pedir%20proposta.",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "WhatsApp",
+          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
+          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
+          "field_purpose": "not_applicable",
+          "boundary": "Os demonstrativos são sintéticos. O formulário não recebe arquivo, não cobra e não conclui contratação.",
+          "event_semantics": [
+            "whatsapp_click"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "",
+          "href": "mailto:tiago.sasaki@confenge.com.br?subject=Pedido%20de%20proposta",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "E-mail",
+          "useful_next_state": "Abre o cliente de e-mail com assunto e contexto para continuar o enquadramento.",
+          "actual_receipt": "Rascunho local de e-mail; não existe receipt do servidor antes do envio.",
+          "field_purpose": "not_applicable",
+          "boundary": "Os demonstrativos são sintéticos. O formulário não recebe arquivo, não cobra e não conclui contratação.",
+          "event_semantics": [
+            "email_click"
+          ]
+        },
         {
           "cta_id": "",
           "position": "",

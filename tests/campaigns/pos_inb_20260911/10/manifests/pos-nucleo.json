@@ -1,0 +1,8 @@
+{
+  "campaign_set": "POS-INB-20260911",
+  "examined_kind": "candidate",
+  "campaigns": ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10"],
+  "omit_demonstrativo_08": false,
+  "requirements": ["F01", "F02", "F03", "F04", "F05"],
+  "note": "POS-INB-20260911 núcleo. 08 is expansion and is omitted from this release unless campaign 08 is apt. Numeric ids are not INB-20260911 campaigns."
+}

@@ -259,7 +259,10 @@
         "B-01",
         "W-02"
       ],
-      "proven_failure": true
+      "proven_failure": true,
+      "location_pt_br": "Parede leste W-02, interface WN-01 × B-01",
+      "evidence_pt_br": "No estado original R00 a verga da janela está em 2,30 m e o fundo da viga B-01 em 2,20 m, com sobreposição de 0,10 m no eixo Z.",
+      "forwarding_pt_br": "No recorte R01 a verga desce para 2,10 m, com folga de 0,10 m até o fundo da viga. Encaminhamento: autor do recorte arquitetônico demonstrativo."
     },
     {
       "id": "CF-INFO-01",
@@ -269,7 +272,10 @@
         "HS-01",
         "W-04"
       ],
-      "proven_failure": false
+      "proven_failure": false,
+      "location_pt_br": "Poço hidrossanitário HS-01 na parede oeste W-04",
+      "evidence_pt_br": "O recorte declara o contorno externo 0,40 m × 0,40 m e deixa em branco vão livre interno e diâmetros de tubulação.",
+      "forwarding_pt_br": "Pedir ao projetista hidrossanitário de origem as dimensões internas e os diâmetros. Enquanto esses dados não chegam, o item permanece pedido de informação, não falha comprovada."
     }
   ],
   "review_findings": [
@@ -281,7 +287,10 @@
       "element_ids": [
         "WN-01",
         "B-01"
-      ]
+      ],
+      "finding_pt_br": "A verga da janela WN-01 invade o volume da viga B-01 no estado original.",
+      "basis_pt_br": "Conferência geométrica das faixas Z dos dois elementos no recorte, sem exame de norma de dimensionamento.",
+      "action_pt_br": "Rebaixar a verga para 2,10 m no recorte R01 e manter a viga na cota original."
     },
     {
       "id": "RF-02",
@@ -290,9 +299,84 @@
       "check_kind": "documental_coherence",
       "element_ids": [
         "HS-01"
-      ]
+      ],
+      "finding_pt_br": "O poço hidrossanitário HS-01 não declara vão livre interno nem diâmetros.",
+      "basis_pt_br": "Campo do recorte vazio. Ausência de informação, não conformidade com norma não examinada.",
+      "action_pt_br": "Registrar pedido de informação; não converter a lacuna em falha comprovada."
     }
   ],
+  "sample_trail": {
+    "schema": "confenge.quantity-takeoff-excerpt/1.0",
+    "status": "canonical",
+    "quantity_id": "Q-PAR-01",
+    "budget_id": "ORC-PAR-01",
+    "disclaimer": "Amostra demonstrativa do recorte de banheiro. Não é orçamento para executar obra, não representa cliente, não é preço da CONFENGE e não é SINAPI real.",
+    "demonstrative_url": "/casos/demonstrativo-projeto-privado/",
+    "demonstrative_href": "/casos/demonstrativo-projeto-privado/#quantitativos",
+    "element": {
+      "id": "W-02",
+      "name": "Revestimento cerâmico de parede",
+      "source": "Planta PR-ARQ-R01, recorte RM-01, paredes W-01 a W-04 com aberturas D-01 e WN-01",
+      "location": "Recorte de banheiro RM-01, planta PR-ARQ e elevação leste W-02"
+    },
+    "criterion": {
+      "unit": "m²",
+      "rule": "Aberturas com área igual ou maior que 0,50 m² são descontadas integralmente das quantidades de revestimento de parede. Aberturas menores não são descontadas."
+    },
+    "calculation": {
+      "formula": "sum(length*height)-openings>=0.50",
+      "inputs": [
+        {
+          "label": "Parede sul (W-01)",
+          "value": 2.4,
+          "unit": "m"
+        },
+        {
+          "label": "Parede leste (W-02)",
+          "value": 1.8,
+          "unit": "m"
+        },
+        {
+          "label": "Parede norte (W-03)",
+          "value": 2.4,
+          "unit": "m"
+        },
+        {
+          "label": "Parede oeste (W-04)",
+          "value": 1.8,
+          "unit": "m"
+        },
+        {
+          "label": "vão da porta D-01",
+          "value": 1.68,
+          "unit": "m2"
+        },
+        {
+          "label": "vão da janela WN-01",
+          "value": 0.56,
+          "unit": "m2"
+        }
+      ],
+      "memory": "W-01 2,40 × 2,60 = 6,24 m²; W-02 1,80 × 2,60 = 4,68 m²; W-03 2,40 × 2,60 = 6,24 m²; W-04 1,80 × 2,60 = 4,68 m². Bruto 21,84 m²; descontos D-01 1,68 m² e WN-01 0,56 m²; líquido 19,60 m²."
+    },
+    "quantity": {
+      "value": 19.6,
+      "unit": "m²"
+    },
+    "spreadsheet_item": {
+      "code": "ORC-PAR-01",
+      "description": "Revestimento cerâmico de parede, inclusive argamassa colante",
+      "unit": "m²",
+      "quantity": 19.6
+    },
+    "review_reference": {
+      "id": "RF-01",
+      "label": "Referência de revisão",
+      "text": "RF-01: A verga da janela WN-01 invade o volume da viga B-01 no estado original. A janela WN-01 entra neste desconto de parede.",
+      "href": "/revisao-tecnica-projetos-engenharia/#extrato-demonstrativo",
+      "document_ref": "PR-ARQ-R00"
+    }
+  },
   "named_totals": {
     "floor_area_m2": "4.32",
     "wall_net_m2": "19.60",

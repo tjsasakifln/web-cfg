@@ -1,0 +1,63 @@
+{
+  "schema": "confenge.pos-inb-application-matrix/1.0",
+  "campaign_set": "POS-INB-20260911",
+  "campaign_id": "10",
+  "rows": [
+    {
+      "shared_change": "F01 four CSVs in package",
+      "path": "casos/demonstrativo-projeto-privado/data/*.csv via scripts/pseo/public_artifact.py",
+      "expected_before": "nested data/ skipped; CSVs absent from _site",
+      "resolution": "applied",
+      "justification": "allowlist exact nested visitor data dir; do not open repository data/",
+      "consumer_tested": "scripts/pseo/tests/test_demonstrative_csv_packaging.py"
+    },
+    {
+      "shared_change": "F02 budget sample uses existing demonstrative",
+      "path": "quantitativos-orcamento-obras/sample-trail.mjs and index.html",
+      "expected_before": "awaiting-canonical-excerpt; CANONICAL_EXCERPT_REL pointed at a missing second demonstrative",
+      "resolution": "applied",
+      "justification": "excerpt generated from the published private-project CSV, not a new fixture path",
+      "consumer_tested": "tests/intake/test_quantity_takeoff_path.mjs and tests/campaigns/pos_inb_20260911/10/test_composition.mjs"
+    },
+    {
+      "shared_change": "F03 readiness map resolves revisão and compatibilização",
+      "path": "data/site/canonical-destination-map.v1.json and ferramentas/prontidao-tecnica-obra-privada/index.html#pptr-destination-map",
+      "expected_before": "#pptr-destination-map only quantity_takeoff_budgeting",
+      "resolution": "applied",
+      "justification": "10 owns purchase-route-map; 04 derives and embeds the map in HTML. Frozen script.js is not mutated.",
+      "consumer_tested": "assets/js/private-project-technical-readiness.cjs resolveCommercialDestination"
+    },
+    {
+      "shared_change": "F04 public revisão copy",
+      "path": "revisao-tecnica-projetos-engenharia/index.html",
+      "expected_before": "SELECT, resolved_in_R01, founder-approval wording",
+      "resolution": "applied",
+      "justification": "published page already existed; governance vocabulary removed from visitor copy",
+      "consumer_tested": "tests/intake/test_inb05_revisao_projetos.mjs and composition test"
+    },
+    {
+      "shared_change": "F05 partner kit destinations",
+      "path": "data/distribution/partner-reference-kits.v1.json and parcerias-engenharia/index.html",
+      "expected_before": "/servicos/#servico-projeto",
+      "resolution": "applied",
+      "justification": "dedicated landings already published; kits now discriminate revisão vs elaboração",
+      "consumer_tested": "tests/campaigns/pos_inb_20260911/10/test_composition.mjs"
+    },
+    {
+      "shared_change": "09 #670 delta",
+      "path": "tests/campaigns/inb_20260911/15/{run,checks,matrix,mutations,lib/harness}.mjs",
+      "expected_before": "MISSING_DEPENDENCY treated as success; complementares journey pointed at unpublished paths",
+      "resolution": "applied",
+      "justification": "cherry-pick 77d43727a from 09, itself cherry-pick of e45c016f5. File blobs identical to #670. Do not merge #670.",
+      "consumer_tested": "tests/campaigns/pos_inb_20260911/10/test_composition.mjs finish() and run_strict.mjs"
+    },
+    {
+      "shared_change": "09 empty execution fail-closed",
+      "path": "tests/campaigns/inb_20260911/15/lib/harness.mjs finish()",
+      "expected_before": "strictRelease with zero results exited 0",
+      "resolution": "applied",
+      "justification": "10 composition of 09 suite: empty execution is non-zero in strict mode",
+      "consumer_tested": "tests/campaigns/pos_inb_20260911/10/test_composition.mjs"
+    }
+  ]
+}

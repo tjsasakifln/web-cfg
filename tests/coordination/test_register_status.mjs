@@ -31,7 +31,7 @@ function shippedFinding(id) {
   return html.match(re)?.[0] || "";
 }
 
-test("shipped page consumes CF-GEO-01 from the INB-06 piloto and stays pending after detection", () => {
+test("shipped page consumes CF-GEO-01 and presents resolved_in_R01 as corrected in R01 without approval", () => {
   const record = loadPublicRegister(root);
   assert.equal(record.finding.id, "CF-GEO-01");
   assert.equal(record.source, "inb06");
@@ -39,25 +39,26 @@ test("shipped page consumes CF-GEO-01 from the INB-06 piloto and stays pending a
   assert.equal(record.finding.correction_status, "pending");
   assert.equal(record.finding.provider_state, "resolved_in_R01");
   const estado = displayEstado(record.finding, record.live_documents);
-  assert.equal(estado.code, "pending_author_adjustment");
+  assert.equal(estado.code, "corrected_in_revision");
   assert.equal(estado.resolved, false);
-  assert.equal(estado.withheld_invalid_resolution, true);
-  assert.equal(estado.label, PUBLIC_ESTADO.pending_author_adjustment);
-  assert.doesNotMatch(estado.label, /corrigid|resolvid/i);
+  assert.equal(estado.label, PUBLIC_ESTADO.corrected_in_revision);
+  assert.match(estado.label, /Corrigido na revisão R01/);
+  assert.doesNotMatch(estado.label, /aprovado/i);
 
   const finding = shippedFinding("CF-GEO-01");
   assert.ok(finding, "shipped page must contain CF-GEO-01");
   assert.match(finding, /data-detection="detected"/);
-  assert.match(finding, /data-estado="pending_author_adjustment"/);
+  assert.match(finding, /data-estado="corrected_in_revision"/);
   assert.match(finding, /data-resolved="false"/);
-  assert.match(finding, /Registrada — ajuste pendente do autor/);
+  assert.match(finding, /Corrigido na revisão R01/);
   assert.match(finding, /href="\/casos\/demonstrativo-projeto-privado\/#CF-GEO-01"/);
-  assert.doesNotMatch(finding, /Corrigid|correção resolvida|resolvido em R01/i);
+  assert.doesNotMatch(finding, /resolved_in_R01/);
+  assert.doesNotMatch(visible(finding), /\baprovado\b/i);
   const html = fs.readFileSync(PAGE, "utf8");
   assert.equal(html.includes("INT-DEM-001"), false);
 });
 
-test("INB-06 resolved_in_R01 does not resolve a finding conferred against R00", () => {
+test("INB-06 resolved_in_R01 is not author acceptance or safety certification", () => {
   const consumption = JSON.parse(fs.readFileSync(INB06, "utf8"));
   assert.equal(consumption.coordination_findings[0].id, "CF-GEO-01");
   assert.equal(consumption.coordination_findings[0].state, "resolved_in_R01");
@@ -72,19 +73,20 @@ test("INB-06 resolved_in_R01 does not resolve a finding conferred against R00", 
   ]);
   const estado = displayEstado(mapped.finding, mapped.live_documents);
   assert.equal(estado.resolved, false);
-  assert.equal(estado.code, "pending_author_adjustment");
+  assert.equal(estado.code, "corrected_in_revision");
+  assert.doesNotMatch(estado.label, /aprovado|certifica|valida[çc][aã]o estrutural/i);
 });
 
-test("regenerating the finding html does not promote pending to resolved", () => {
+test("regenerating the finding html does not promote to author-accepted", () => {
   const record = loadPublicRegister(root);
   const first = renderFindingHtml(record);
   const second = renderFindingHtml(clone(record));
   assert.equal(first, second);
-  assert.match(first, /data-estado="pending_author_adjustment"/);
+  assert.match(first, /data-estado="corrected_in_revision"/);
   assert.match(second, /data-resolved="false"/);
   const html = fs.readFileSync(PAGE, "utf8");
   assert.match(html, /data-finding-id="CF-GEO-01"/);
-  assert.match(html, /data-estado-label="pending_author_adjustment"/);
+  assert.match(html, /data-estado-label="corrected_in_revision"/);
 });
 
 test("same element, PR-ARQ R00 to R01 is not conferred against the new revision", () => {
@@ -127,7 +129,7 @@ test("CF-INFO-01 stays information requested and is not a geometric correction",
   assert.equal(estado.code, "information_requested");
   const shipped = shippedFinding("CF-INFO-01");
   assert.match(shipped, /data-estado="information_requested"/);
-  assert.match(shipped, /Informação pedida — ajuste pendente do autor/);
+  assert.match(shipped, /Pedido de informação/);
   assert.doesNotMatch(shipped, /data-resolved="true"/);
 });
 
@@ -144,7 +146,7 @@ test("claimed resolved without author acceptance stays pending", () => {
   assert.equal(estado.withheld_invalid_resolution, true);
   const rendered = renderFindingHtml({ ...fixture, finding }, fixture.live_documents);
   assert.match(rendered, /ajuste pendente do autor/);
-  assert.doesNotMatch(visible(rendered), /Corrigid|correção resolvida/i);
+  assert.doesNotMatch(visible(rendered), /aprovado|correção resolvida/i);
 });
 
 test("pending recommendation does not become correção resolvida", () => {
@@ -159,18 +161,18 @@ test("pending recommendation does not become correção resolvida", () => {
   assert.doesNotMatch(estado.label, /resolvid|corrigid/i);
 });
 
-test("mutation: a renderer that labels detection as Corrigido is rejected", () => {
+test("mutation: unknown provider state is not printed and is not mapped to aprovado", () => {
   const record = loadPublicRegister(root);
-  const honest = renderFindingHtml(record);
-  const mutated = honest
-    .replace(/data-estado="pending_author_adjustment"/g, 'data-estado="resolved"')
-    .replace(/data-resolved="false"/g, 'data-resolved="true"')
-    .replace(/Registrada — ajuste pendente do autor/g, "Corrigido");
-  assert.match(mutated, /Corrigido/);
-  assert.notEqual(mutated, honest);
+  const finding = clone(record.finding);
+  finding.provider_state = "unpublished_ok_to_build_v9";
+  const estado = displayEstado(finding, record.live_documents);
+  assert.equal(estado.resolved, false);
+  assert.doesNotMatch(estado.label || "", /unpublished_ok_to_build_v9/);
+  assert.doesNotMatch(estado.label || "", /aprovado/i);
+  const rendered = renderFindingHtml({ ...record, finding }, record.live_documents);
+  assert.doesNotMatch(visible(rendered), /unpublished_ok_to_build_v9/);
+  assert.doesNotMatch(visible(rendered), /\baprovado\b/i);
   const shipped = fs.readFileSync(PAGE, "utf8");
-  assert.equal(shipped.includes("Corrigido"), false);
   assert.equal(/data-finding-id="CF-GEO-01"[^>]*data-resolved="true"/.test(shipped), false);
-  const estado = displayEstado(record.finding, record.live_documents);
-  assert.notEqual(estado.label, "Corrigido");
+  assert.doesNotMatch(shipped, />\s*resolved_in_R01\s*</);
 });

@@ -442,6 +442,7 @@ def collect_input_shas(root: Path) -> dict[str, Any]:
         FORBIDDEN_DIR_NAMES,
         PUBLIC_ROOT_FILES,
         PUBLIC_TOP_DIRS,
+        is_authorized_public_nested_data_file,
     )
 
     files: dict[str, str] = {}
@@ -482,14 +483,15 @@ def collect_input_shas(root: Path) -> dict[str, Any]:
             continue
         tree_items: list[str] = []
         for path in sorted(directory.rglob("*")):
-            if not path.is_file():
-                continue
-            if any(part in FORBIDDEN_DIR_NAMES for part in path.relative_to(root).parts):
-                continue
-            if name == ".well-known" and path.name in GENERATED_WELL_KNOWN:
+            if not path.is_file() or path.is_symlink():
                 continue
             rel = _repo_rel(root, path)
             if not rel:
+                continue
+            if any(part in FORBIDDEN_DIR_NAMES for part in path.relative_to(root).parts):
+                if not is_authorized_public_nested_data_file(rel):
+                    continue
+            if name == ".well-known" and path.name in GENERATED_WELL_KNOWN:
                 continue
             digest = sha256_file(path)
             tree_items.append(f"{rel}:{digest}")

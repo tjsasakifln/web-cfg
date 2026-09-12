@@ -1,0 +1,354 @@
+{
+  "schema": "confenge.demonstrative-sample-descriptor/1.0",
+  "proof_id": "demo-infrastructure-pilot-2026-09",
+  "url": "/casos/demonstrativo-infraestrutura/",
+  "canonical": "https://confenge.com.br/casos/demonstrativo-infraestrutura/",
+  "type": "infrastructure_demonstrative_excerpt",
+  "origin": "demonstrative",
+  "revision": "R01",
+  "date_modified": "2026-09-11",
+  "label_pt_br": "exemplo demonstrativo",
+  "source_paths": [
+    "data/demonstrative/infrastructure-pilot/source.v1.json"
+  ],
+  "purchase_question_pt_br": "Como a CONFENGE rastreia desenho, dimensão, fórmula, quantidade e item de planilha num acesso viário e num trecho de drenagem de loteamento, para eu avaliar a entrega antes de contratar orçamento, revisão ou compatibilização?",
+  "cut_pt_br": "Uma faixa de pavimento de 40 m e um trecho de rede de 20 m, com estaqueamento, camadas e cotas declarados. Não é projeto executivo, dimensionamento de pavimento, fundação nem verificação de capacidade hidráulica.",
+  "elements": [
+    {
+      "id": "PV-01",
+      "type": "pavement_strip",
+      "sheet_ref": "INF-PV-R01"
+    },
+    {
+      "id": "MH-01",
+      "type": "manhole",
+      "sheet_ref": "INF-DR-R01"
+    },
+    {
+      "id": "MH-02",
+      "type": "manhole",
+      "sheet_ref": "INF-DR-R01"
+    },
+    {
+      "id": "DR-01",
+      "type": "pipe_stretch",
+      "sheet_ref": "INF-DR-R01"
+    },
+    {
+      "id": "IN-01",
+      "type": "inlet",
+      "sheet_ref": "INF-DR-R00"
+    }
+  ],
+  "units": {
+    "length": "m",
+    "area": "m2",
+    "volume": "m3",
+    "count": "un",
+    "diameter": "mm",
+    "slope": "m/m",
+    "currency": "BRL"
+  },
+  "quantity_rows": [
+    {
+      "id": "Q-PAV-01",
+      "unit": "m2",
+      "quantity": "280.00",
+      "element_ids": [
+        "PV-01"
+      ],
+      "formula": "40.00*7.00",
+      "sheet_ref": "INF-PV-R01",
+      "chain": "drawing_dimension_formula_quantity_spreadsheet"
+    },
+    {
+      "id": "Q-SUB-01",
+      "unit": "m3",
+      "quantity": "42.00",
+      "element_ids": [
+        "PV-01"
+      ],
+      "formula": "280.00*0.15",
+      "sheet_ref": "INF-PV-R01",
+      "chain": "drawing_dimension_formula_quantity_spreadsheet"
+    },
+    {
+      "id": "Q-BASE-01",
+      "unit": "m3",
+      "quantity": "33.60",
+      "element_ids": [
+        "PV-01"
+      ],
+      "formula": "280.00*0.12",
+      "sheet_ref": "INF-PV-R01",
+      "chain": "drawing_dimension_formula_quantity_spreadsheet"
+    },
+    {
+      "id": "Q-CAP-01",
+      "unit": "m3",
+      "quantity": "11.20",
+      "element_ids": [
+        "PV-01"
+      ],
+      "formula": "280.00*0.04",
+      "sheet_ref": "INF-PV-R01",
+      "chain": "drawing_dimension_formula_quantity_spreadsheet"
+    },
+    {
+      "id": "Q-TUB-01",
+      "unit": "m",
+      "quantity": "20.00",
+      "element_ids": [
+        "DR-01",
+        "MH-01",
+        "MH-02"
+      ],
+      "formula": "30.00-10.00",
+      "sheet_ref": "INF-DR-R01",
+      "chain": "drawing_dimension_formula_quantity_spreadsheet"
+    },
+    {
+      "id": "Q-PV-01",
+      "unit": "un",
+      "quantity": "2",
+      "element_ids": [
+        "MH-01",
+        "MH-02"
+      ],
+      "formula": "count(MH-01,MH-02)",
+      "sheet_ref": "INF-DR-R01",
+      "chain": "drawing_dimension_formula_quantity_spreadsheet"
+    },
+    {
+      "id": "Q-BOC-01",
+      "unit": "un",
+      "quantity": "1",
+      "element_ids": [
+        "IN-01"
+      ],
+      "formula": "count(IN-01)",
+      "sheet_ref": "INF-DR-R00",
+      "chain": "drawing_dimension_formula_quantity_spreadsheet"
+    }
+  ],
+  "budget_rows": [
+    {
+      "id": "ORC-SUB-01",
+      "quantity_id": "Q-SUB-01",
+      "unit": "m3",
+      "quantity": "42.00",
+      "amount": "3570.00",
+      "price_class": "hypothetical",
+      "element_ids": [
+        "PV-01"
+      ]
+    },
+    {
+      "id": "ORC-BASE-01",
+      "quantity_id": "Q-BASE-01",
+      "unit": "m3",
+      "quantity": "33.60",
+      "amount": "4032.00",
+      "price_class": "hypothetical",
+      "element_ids": [
+        "PV-01"
+      ]
+    },
+    {
+      "id": "ORC-CAP-01",
+      "quantity_id": "Q-CAP-01",
+      "unit": "m3",
+      "quantity": "11.20",
+      "amount": "3136.00",
+      "price_class": "hypothetical",
+      "element_ids": [
+        "PV-01"
+      ]
+    },
+    {
+      "id": "ORC-TUB-01",
+      "quantity_id": "Q-TUB-01",
+      "unit": "m",
+      "quantity": "20.00",
+      "amount": "3600.00",
+      "price_class": "hypothetical",
+      "element_ids": [
+        "DR-01",
+        "MH-01",
+        "MH-02"
+      ]
+    },
+    {
+      "id": "ORC-PV-01",
+      "quantity_id": "Q-PV-01",
+      "unit": "un",
+      "quantity": "2",
+      "amount": "4800.00",
+      "price_class": "hypothetical",
+      "element_ids": [
+        "MH-01",
+        "MH-02"
+      ]
+    },
+    {
+      "id": "ORC-BOC-01",
+      "quantity_id": "Q-BOC-01",
+      "unit": "un",
+      "quantity": "1",
+      "amount": "980.00",
+      "price_class": "hypothetical",
+      "element_ids": [
+        "IN-01"
+      ]
+    }
+  ],
+  "budget_subtotal": "20118.00",
+  "price_class": "hypothetical",
+  "coordination_findings": [
+    {
+      "id": "CF-GEO-01",
+      "kind": "geometric",
+      "state": "resolved_in_R01",
+      "element_ids": [
+        "MH-02",
+        "DR-01"
+      ],
+      "proven_failure": true
+    },
+    {
+      "id": "CF-INFO-01",
+      "kind": "missing_information",
+      "state": "information_requested",
+      "element_ids": [
+        "IN-01",
+        "PV-01"
+      ],
+      "proven_failure": false
+    }
+  ],
+  "review_findings": [
+    {
+      "id": "RF-01",
+      "document_ref": "INF-DR-R00",
+      "related_finding_id": "CF-GEO-01",
+      "check_kind": "arithmetic_documental_coherence",
+      "element_ids": [
+        "MH-02",
+        "DR-01"
+      ]
+    },
+    {
+      "id": "RF-02",
+      "document_ref": "INF-DR-R00",
+      "related_finding_id": "CF-INFO-01",
+      "check_kind": "documental_coherence",
+      "element_ids": [
+        "IN-01"
+      ]
+    }
+  ],
+  "named_totals": {
+    "pavement_length_m": "40.00",
+    "pavement_width_m": "7.00",
+    "pavement_area_m2": "280.00",
+    "subbase_m3": "42.00",
+    "base_m3": "33.60",
+    "wearing_m3": "11.20",
+    "pipe_length_m": "20.00",
+    "pipe_diameter_mm": "400.00",
+    "manhole_count": "2.00",
+    "inlet_count": "1.00",
+    "budget_subtotal_brl": "20118.00",
+    "mh02_invert_drawn_m": "12.35",
+    "mh02_invert_sheet_r00_m": "12.50",
+    "mh02_invert_sheet_r01_m": "12.35",
+    "mh02_mismatch_r00_m": "0.15",
+    "mh02_mismatch_r01_m": "0.00",
+    "pipe_slope_drawn_m_per_m": "0.0225",
+    "pipe_slope_sheet_r00_m_per_m": "0.0150",
+    "pipe_slope_sheet_r01_m_per_m": "0.0225",
+    "pavement_grade_drop_m": "0.60",
+    "pavement_grade_end_m": "99.40",
+    "mh01_invert_m": "12.80"
+  },
+  "assets": [
+    {
+      "id": "html",
+      "path": "casos/demonstrativo-infraestrutura/index.html",
+      "url": "/casos/demonstrativo-infraestrutura/",
+      "type": "html"
+    },
+    {
+      "id": "quantitativos-csv",
+      "path": "casos/demonstrativo-infraestrutura/data/quantitativos.csv",
+      "url": "/casos/demonstrativo-infraestrutura/data/quantitativos.csv",
+      "type": "csv"
+    },
+    {
+      "id": "orcamento-csv",
+      "path": "casos/demonstrativo-infraestrutura/data/orcamento.csv",
+      "url": "/casos/demonstrativo-infraestrutura/data/orcamento.csv",
+      "type": "csv"
+    },
+    {
+      "id": "coordenacao-csv",
+      "path": "casos/demonstrativo-infraestrutura/data/coordenacao.csv",
+      "url": "/casos/demonstrativo-infraestrutura/data/coordenacao.csv",
+      "type": "csv"
+    },
+    {
+      "id": "revisao-csv",
+      "path": "casos/demonstrativo-infraestrutura/data/revisao.csv",
+      "url": "/casos/demonstrativo-infraestrutura/data/revisao.csv",
+      "type": "csv"
+    },
+    {
+      "id": "planta-r00",
+      "path": "casos/demonstrativo-infraestrutura/assets/planta-r00.svg",
+      "url": "/casos/demonstrativo-infraestrutura/assets/planta-r00.svg",
+      "type": "svg"
+    },
+    {
+      "id": "planta-r01",
+      "path": "casos/demonstrativo-infraestrutura/assets/planta-r01.svg",
+      "url": "/casos/demonstrativo-infraestrutura/assets/planta-r01.svg",
+      "type": "svg"
+    },
+    {
+      "id": "perfil-r00",
+      "path": "casos/demonstrativo-infraestrutura/assets/perfil-drenagem-r00.svg",
+      "url": "/casos/demonstrativo-infraestrutura/assets/perfil-drenagem-r00.svg",
+      "type": "svg"
+    },
+    {
+      "id": "perfil-r01",
+      "path": "casos/demonstrativo-infraestrutura/assets/perfil-drenagem-r01.svg",
+      "url": "/casos/demonstrativo-infraestrutura/assets/perfil-drenagem-r01.svg",
+      "type": "svg"
+    },
+    {
+      "id": "secao-pavimento",
+      "path": "casos/demonstrativo-infraestrutura/assets/secao-pavimento.svg",
+      "url": "/casos/demonstrativo-infraestrutura/assets/secao-pavimento.svg",
+      "type": "svg"
+    }
+  ],
+  "consumer_sections": {
+    "02": [
+      "#quantitativos",
+      "#orcamento",
+      "#compatibilizacao",
+      "#revisao"
+    ],
+    "05": [
+      "#para-parceiros",
+      "#contratar"
+    ],
+    "07": [
+      "#o-que-e",
+      "#para-comprador"
+    ]
+  },
+  "review_check_kind": "arithmetic_documental_coherence",
+  "consumer_rule_pt_br": "Ler quantity_rows, coordination_findings, review_findings, consumer_sections e assets. Não inventar subtotais. Mudança geométrica exige regenerar os extratos. Declive, área e volume deste recorte são geométricos, não adequação de projeto."
+}

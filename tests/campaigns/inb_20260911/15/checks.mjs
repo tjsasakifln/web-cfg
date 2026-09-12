@@ -4,7 +4,19 @@
  */
 import fs from "node:fs";
 import path from "node:path";
-import { FAIL, MISSING_DEPENDENCY, PASS, SEVERITY, existsInRoot, record, routeToFile } from "./lib/harness.mjs";
+import {
+  FAIL,
+  HARD_AT_RELEASE,
+  MISSING_DEPENDENCY,
+  NOT_VERIFIED,
+  OPTIONAL_ENRICHMENT,
+  PASS,
+  SEVERITY,
+  existsInRoot,
+  record,
+  routeToFile,
+} from "./lib/harness.mjs";
+import { EXTERNAL_EVIDENCE, isPublishedRel } from "./lib/strict.mjs";
 import * as html from "./lib/html.mjs";
 import {
   familyMembership,
@@ -532,17 +544,35 @@ export async function checkJourneys(report, root) {
     if (journey.undefined_document) {
       if (!/documento|PGR|LTCAT|ainda/i.test(text)) problems.push("sst_undefined_document_not_framed");
     }
-    if (journey.dedicated_missing_ok) {
-      const dedicated = ["projetos-complementares/index.html", "complementares/index.html"];
-      if (!dedicated.some((rel) => existsInRoot(root, rel))) {
+    if (journey.dedicated_files || journey.dedicated_missing_ok) {
+      const dedicated = journey.dedicated_files || [
+        "projetos-complementares-engenharia/index.html",
+      ];
+      const found = dedicated.find((rel) => existsInRoot(root, rel));
+      const published = dedicated.some((rel) =>
+        isPublishedRel(root, rel, `/${rel.replace(/index\.html$/, "")}`),
+      );
+      if (!found) {
         record(report, {
           id: `journey.${journey.id}.dedicated_route`,
           campaign: journey.core,
           owner: journey.core,
-          url: "/projetos-complementares/",
+          url: `/${dedicated[0].replace(/index\.html$/, "")}`,
           status: MISSING_DEPENDENCY,
-          expected: "dedicated complementary route from producer 12",
+          dependency_level: published || !journey.dedicated_missing_ok ? HARD_AT_RELEASE : OPTIONAL_ENRICHMENT,
+          expected: "dedicated complementary landing already published",
           observed: "hub + triage only on examined tree",
+        });
+      } else {
+        record(report, {
+          id: `journey.${journey.id}.dedicated_route`,
+          campaign: journey.core,
+          owner: journey.core,
+          path: found,
+          url: `/${found.replace(/index\.html$/, "")}`,
+          status: PASS,
+          expected: "dedicated complementary landing from producer 12",
+          observed: found,
         });
       }
     }
@@ -994,6 +1024,18 @@ export async function checkHypotheticalPrice(report, root) {
   }
 }
 
+export async function checkExternalGsc(report) {
+  record(report, {
+    id: "gsc.live.external",
+    campaign: "10",
+    owner: "10",
+    status: NOT_VERIFIED,
+    dependency_level: EXTERNAL_EVIDENCE,
+    expected: "live GSC is NOT_VERIFIED; never PASS and never a generic required-resource failure",
+    observed: "suite does not hold live Search Console credentials",
+  });
+}
+
 export async function runAllChecks(report, root, options = {}) {
   const included = options.includedCampaigns || [];
   await checkCoreCampaigns(report, root);
@@ -1011,4 +1053,5 @@ export async function runAllChecks(report, root, options = {}) {
   await checkStructural(report, root);
   await checkCampaignPrivateContent(report, root);
   await checkHypotheticalPrice(report, root);
+  await checkExternalGsc(report);
 }

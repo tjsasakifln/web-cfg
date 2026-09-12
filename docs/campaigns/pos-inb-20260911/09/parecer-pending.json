@@ -1,0 +1,19 @@
+{
+  "schema": "confenge.pos-inb-independent-parecer/1.0",
+  "campaign_set": "POS-INB-20260911",
+  "campaign_id": "09",
+  "state": "PENDING_CANDIDATE_READY",
+  "verdict": null,
+  "note": "Authoring the suite is not approval of the composed candidate. Independent review runs only after campaign 10 posts CANDIDATE_READY, on that exact SHA in a detached read-only checkout, using the CI artifact when one exists. Integrator execution is not this parecer.",
+  "resume_command": "cd /home/tjsasakifln/code/confenge/web-cfg/.grok/worktrees/pos-inb-09-revisao && git fetch origin && node tests/campaigns/pos_inb_20260911/09/run.mjs --strict-release --examined-kind candidate --manifest docs/campaigns/pos-inb-20260911/09/pos-manifest.json --root <CANDIDATE_SHA_CHECKOUT> --report /tmp/pos09-independent.json",
+  "required_fields_when_run": [
+    "candidate_commit",
+    "candidate_tree",
+    "test_suite_commit",
+    "examined_artifact",
+    "commands",
+    "checks_not_run",
+    "findings_by_severity",
+    "verdict"
+  ]
+}

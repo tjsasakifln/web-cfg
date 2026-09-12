@@ -1,6 +1,7 @@
 {
   "schema": "confenge.gsc-fixture-meta/1.0",
   "origin": "founder_provided_baseline",
+  "source_kind": "provided_aggregate",
   "extracted_at": "2026-09-11",
   "extraction_timezone": "America/Sao_Paulo",
   "search_analytics_calendar_timezone": "America/Los_Angeles",
@@ -8,10 +9,16 @@
   "search_type": "web",
   "effective_interval": { "start": "2026-09-02", "end": "2026-09-08" },
   "zip_filename_date_is_not_last_data_date": true,
-  "synthetic": true,
-  "fixture": true,
+  "synthetic": false,
+  "fixture": false,
+  "provided_aggregate": true,
   "historical": true,
   "ready_for_product_decisions": false,
   "live_baseline_invented": false,
-  "note": "Aggregates supplied by the founder on 2026-09-11. Not an authenticated live download. Query strings are fixture labels that reproduce disclosed totals; they are not a claim about the six unknown click terms."
+  "query_labels_are_not_observed_search_terms": true,
+  "page_grain_is_not_query": true,
+  "unknown_click_terms": true,
+  "daily_series_invented_from_totals": false,
+  "original_csv_bytes_preserved": true,
+  "note": "Aggregates supplied by the founder on 2026-09-11. Not an authenticated live download and not a synthetic fixture. Consultas.csv keeps the INB-10 label rows as original history; the importer does not promote those labels to observed queries or keywords. The six click terms remain UNKNOWN. Page grain (Paginas.csv) is not a query. Grafico.csv is the property-by-date table of the provided export, not a reconstructed daily series from period totals."
 }

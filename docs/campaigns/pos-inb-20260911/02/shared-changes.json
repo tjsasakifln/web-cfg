@@ -1,0 +1,39 @@
+{
+  "schema": "confenge.campaign-shared-changes/1.0",
+  "campaign_set": "POS-INB-20260911",
+  "campaign_id": "02",
+  "requests": [
+    {
+      "id": "02-package-generate-hook",
+      "path": "package.json",
+      "key_or_selector": "scripts.generate:private-project-proof",
+      "previous_expected": null,
+      "exact_change": "Add script generate:private-project-proof with value python3 -m scripts.demonstrative.private_project.generate",
+      "reason": "Campaign 10 composition belt. Python generate already writes the demonstrative and then calls compose_purchase_proof.mjs. 02 does not edit package.json.",
+      "owner": "10",
+      "precondition": "data/demonstrative/private-project-pilot/source.v1.json exists; after generate, the four CSVs under casos/demonstrativo-projeto-privado/data/ exist.",
+      "test": "python3 -m scripts.demonstrative.private_project.generate ; node --test tests/pos-inb-20260911/02/test_purchase_proof.mjs. Removing source or a required CSV must fail (not publish awaiting-canonical-excerpt)."
+    },
+    {
+      "id": "02-package-compose-hook",
+      "path": "package.json",
+      "key_or_selector": "scripts.compose:purchase-proof",
+      "previous_expected": null,
+      "exact_change": "Add script compose:purchase-proof with value node scripts/campaigns/pos-inb-20260911/02/compose_purchase_proof.mjs",
+      "reason": "Allows campaign 10 to re-inject extracts without a full Python generate. Fail-closed if source, consumption or required CSVs are missing.",
+      "owner": "10",
+      "precondition": "source.v1.json, consumption.v1.json and casos/demonstrativo-projeto-privado/data/{quantitativos,orcamento,revisao,coordenacao}.csv exist.",
+      "test": "node scripts/campaigns/pos-inb-20260911/02/compose_purchase_proof.mjs ; test removing casos/demonstrativo-projeto-privado/data/quantitativos.csv fails with required_demonstrative_input_missing."
+    },
+    {
+      "id": "02-package-test-hook",
+      "path": "package.json",
+      "key_or_selector": "scripts.test:pos-inb-20260911-02",
+      "previous_expected": null,
+      "exact_change": "Add script test:pos-inb-20260911-02 with value node --test tests/pos-inb-20260911/02/test_purchase_proof.mjs",
+      "reason": "Directed suite for F02/F04 purchase-proof: trail, extract, fail-closed missing input, mutation, unknown status, two-compose identity.",
+      "owner": "10",
+      "test": "npm run test:pos-inb-20260911-02"
+    }
+  ]
+}

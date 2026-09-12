@@ -29,6 +29,7 @@ from scripts.site.hub_link_composition import (  # noqa: E402
     journey_table,
     load_matrix,
     optional_card_html,
+    treats_as_required,
 )
 
 
@@ -105,14 +106,36 @@ def test_casos_separates_demonstrative_and_omits_missing_real_work() -> None:
     assert "demonstrativo" in html.lower(), "demonstrative label"
     composed = compose_links(ROOT)
     privada = next(link for link in composed if link.spec["id"] == "casos-prova-privada")
-    assert not privada.present, "INB-06 route must be absent on this candidate"
+    assert privada.present, "current private demonstrative must be present"
+    assert privada.included
+    assert "/casos/demonstrativo-projeto-privado/" in privada.href
+    assert "/casos/demonstrativo-projeto-privado/" in html
+    assert "/casos/prova-tecnica-obra-privada/" not in html
+    assert 'data-hub-link="casos-prova-privada"' in html
     assert not re.search(r"<section[^>]*data-proof-kind=[\"']authorized-real[\"']", html, flags=re.I), (
         "omit real-work block when artifact is absent"
     )
-    assert 'data-hub-link="casos-prova-privada"' not in html, "do not render empty private-proof card"
     assert "não representam contrato, contratante, contratada ou resultado de cliente" in html.lower() or (
         "números hipotéticos" in html.lower() and "demonstrativo" in html.lower()
     ), "must not present demonstratives as client results"
+
+
+def test_old_private_proof_url_fails_audit() -> None:
+    original = hub_html("/casos/", ROOT)
+    broken = original.replace(
+        "/casos/demonstrativo-projeto-privado/",
+        "/casos/prova-tecnica-obra-privada/",
+    )
+    assert broken != original
+    failures = audit_hubs(ROOT, html_overrides={"/casos/": broken})
+    joined = "\n".join(failures)
+    assert failures, "expected audit to fail after reintroducing the retired private-proof URL"
+    assert (
+        "casos-prova-privada" in joined
+        or "/casos/demonstrativo-projeto-privado/" in joined
+        or "missing" in joined.lower()
+        or "/casos/prova-tecnica-obra-privada/" in joined
+    )
 
 
 def test_ferramentas_prontidao_is_optional_not_mandatory() -> None:
@@ -144,6 +167,30 @@ def test_required_link_removed_from_html_fails() -> None:
     joined = "\n".join(failures)
     assert failures, "expected REQUIRED_LINK audit to fail after href removal"
     assert "servicos-orcamento" in joined or "/quantitativos-orcamento-obras/" in joined or "missing" in joined.lower()
+
+
+def test_core_optional_cannot_silently_drop_present_route() -> None:
+    matrix = load_matrix()
+    for spec in matrix["links"]:
+        if spec.get("release_unit") == "CORE":
+            assert treats_as_required(spec), spec["id"]
+    core_optional = {
+        "id": "synthetic-core-optional",
+        "kind": KIND_OPTIONAL,
+        "hub": "/servicos/",
+        "href": "/revisao-tecnica-projetos-engenharia/",
+        "marker": "synthetic-core-optional",
+        "release_unit": "CORE",
+        "label": "Revisão",
+    }
+    assert treats_as_required(core_optional)
+    overlay = Overlay().without_file("revisao-tecnica-projetos-engenharia/index.html")
+    mutated = dict(matrix)
+    mutated["links"] = [core_optional]
+    failures = audit_hubs(ROOT, matrix=mutated, overlay=overlay)
+    joined = "\n".join(failures)
+    assert failures, "CORE OPTIONAL must fail audit when the published route is missing"
+    assert "synthetic-core-optional" in joined or "destination missing" in joined
 
 
 def test_optional_missing_route_omits_card_without_home_fallback() -> None:
@@ -220,8 +267,10 @@ def main() -> int:
         test_jsonld_and_meta_are_mixed_not_b2g_only,
         test_conteudos_has_no_empty_need_section,
         test_casos_separates_demonstrative_and_omits_missing_real_work,
+        test_old_private_proof_url_fails_audit,
         test_ferramentas_prontidao_is_optional_not_mandatory,
         test_servicos_explains_deliveries_and_welcomes_other_needs,
+        test_core_optional_cannot_silently_drop_present_route,
         test_required_link_removed_from_html_fails,
         test_optional_missing_route_omits_card_without_home_fallback,
         test_optional_card_in_html_without_route_fails_audit,

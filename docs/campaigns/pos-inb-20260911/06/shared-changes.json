@@ -1,0 +1,129 @@
+{
+  "schema": "confenge.inbound-shared-changes/1.0",
+  "campaign_id": "06",
+  "campaign_set": "POS-INB-20260911",
+  "owner_campaign": "06",
+  "prompt_version": "1.0.0",
+  "changes": [
+    {
+      "change_id": "pos-inb-06-partner-kit-revisao-dest",
+      "owner_campaign": "05",
+      "path": "data/distribution/partner-reference-kits.v1.json",
+      "base_blob_sha": "01fb7c0d61155c5917c803ca43100757d87a3732",
+      "operation": "replace",
+      "key_or_anchor": "kits[id=revisao-compatibilizacao].destination.path",
+      "expected_old": "/servicos/#servico-projeto",
+      "desired_new": "/revisao-tecnica-projetos-engenharia/",
+      "rationale": "F05 reproduzido: o kit de revisão cai no hub genérico embora a landing dedicada exista no fonte e no sitemap. 06 não edita HTML/dados da 05.",
+      "acceptance_test": "O JSON do kit revisao-compatibilizacao aponta path /revisao-tecnica-projetos-engenharia/; python3 scripts/campaigns/pos-inb-20260911/06/audit_discovery.py deixa de emitir wrong_hub para kit-revisao-destino."
+    },
+    {
+      "change_id": "pos-inb-06-partner-kit-complementares-dest",
+      "owner_campaign": "05",
+      "path": "data/distribution/partner-reference-kits.v1.json",
+      "base_blob_sha": "01fb7c0d61155c5917c803ca43100757d87a3732",
+      "operation": "replace",
+      "key_or_anchor": "kits[id=complementares].destination.path",
+      "expected_old": "/servicos/#servico-projeto",
+      "desired_new": "/projetos-complementares-engenharia/",
+      "rationale": "Mesmo F05 para disciplina complementar. Destino correto já publicado.",
+      "acceptance_test": "kits[id=complementares].destination.path == /projetos-complementares-engenharia/"
+    },
+    {
+      "change_id": "pos-inb-06-parcerias-html-kit-revisao-href",
+      "owner_campaign": "05",
+      "path": "parcerias-engenharia/index.html",
+      "base_blob_sha": "aa7762f27a20908afdfb8fa47e5cb6a4df60ed77",
+      "operation": "replace",
+      "key_or_anchor": "a[data-cta-id=kit-revisao-destino]@href",
+      "expected_old": "/servicos/#servico-projeto",
+      "desired_new": "/revisao-tecnica-projetos-engenharia/",
+      "rationale": "HTML público do kit ainda aponta o hub. 06 não escreve a página da 05.",
+      "acceptance_test": "grep kit-revisao-destino parcerias-engenharia/index.html contém /revisao-tecnica-projetos-engenharia/ e não /servicos/#servico-projeto."
+    },
+    {
+      "change_id": "pos-inb-06-parcerias-html-kit-complementares-href",
+      "owner_campaign": "05",
+      "path": "parcerias-engenharia/index.html",
+      "base_blob_sha": "aa7762f27a20908afdfb8fa47e5cb6a4df60ed77",
+      "operation": "replace",
+      "key_or_anchor": "a[data-cta-id=kit-complementares-destino]@href",
+      "expected_old": "/servicos/#servico-projeto",
+      "desired_new": "/projetos-complementares-engenharia/",
+      "rationale": "Âncora visível sem JS do kit complementares deve abrir a landing dedicada.",
+      "acceptance_test": "grep kit-complementares-destino parcerias-engenharia/index.html contém /projetos-complementares-engenharia/."
+    },
+    {
+      "change_id": "pos-inb-06-prontidao-destination-map",
+      "owner_campaign": "04",
+      "path": "ferramentas/prontidao-tecnica-obra-privada/index.html",
+      "base_blob_sha": "88889c11da3f56032e6cd6fe6a8ef7e70f4b124b",
+      "operation": "replace",
+      "key_or_anchor": "script#pptr-destination-map",
+      "expected_old": "{\"schema\":\"confenge.canonical-destination-map/1.0\",\"by_offer_id\":{\"quantity_takeoff_budgeting\":{\"path\":\"/quantitativos-orcamento-obras/\",\"intent_family\":\"orcar_planejar_decidir\"}}}",
+      "desired_new": "{\"schema\":\"confenge.canonical-destination-map/1.0\",\"by_offer_id\":{\"quantity_takeoff_budgeting\":{\"path\":\"/quantitativos-orcamento-obras/\",\"intent_family\":\"orcar_planejar_decidir\"},\"complementary_engineering_project_review\":{\"path\":\"/revisao-tecnica-projetos-engenharia/\",\"intent_family\":\"projetar_revisar_compatibilizar\"},\"bim_coordination_clash_register\":{\"path\":\"/compatibilizacao-projetos-engenharia/\",\"intent_family\":\"projetar_revisar_compatibilizar\"}}}",
+      "rationale": "F03 reproduzido: a ferramenta recomenda revisão/compatibilização no texto, mas o mapa só resolve orçamento. 06 não edita a página da 04.",
+      "acceptance_test": "O JSON #pptr-destination-map contém /revisao-tecnica-projetos-engenharia/ e /compatibilizacao-projetos-engenharia/ além de /quantitativos-orcamento-obras/."
+    },
+    {
+      "change_id": "pos-inb-06-conteudo-complementares-revisao-href",
+      "owner_campaign": "07",
+      "path": "conteudos/como-contratar-projetos-complementares/index.html",
+      "base_blob_sha": "62db2ec47e546647a313d6c755ba8ec8d5037e54",
+      "operation": "replace",
+      "key_or_anchor": "a[href=/servicos/#servico-projeto] (revisão)",
+      "expected_old": "/servicos/#servico-projeto",
+      "desired_new": "/revisao-tecnica-projetos-engenharia/",
+      "rationale": "Conteúdo de decisão manda revisão ao hub genérico embora a landing dedicada exista.",
+      "acceptance_test": "A página deixa de usar /servicos/#servico-projeto como destino de revisão; aponta /revisao-tecnica-projetos-engenharia/."
+    },
+    {
+      "change_id": "pos-inb-06-conteudo-compatibilizacao-sibling-href",
+      "owner_campaign": "07",
+      "path": "conteudos/como-contratar-compatibilizacao-projetos/index.html",
+      "base_blob_sha": "737efd0c79bf49f8ea9b4f4c98d20d64d9537114",
+      "operation": "replace",
+      "key_or_anchor": "a[href=/servicos/#servico-projeto] (elaborar/revisar)",
+      "expected_old": "/servicos/#servico-projeto",
+      "desired_new": "/revisao-tecnica-projetos-engenharia/ para revisão e /projetos-complementares-engenharia/ para elaborar disciplina; não o hub genérico.",
+      "rationale": "Âncoras de elaborar/revisar nesta página de decisão caem no hub quando há destinos corretos.",
+      "acceptance_test": "grep /servicos/#servico-projeto conteudos/como-contratar-compatibilizacao-projetos/index.html sai vazio."
+    },
+    {
+      "change_id": "pos-inb-06-purchase-map-page-grain-not-query",
+      "owner_campaign": "10",
+      "path": "data/bofu-dominance/core/purchase-route-map.v1.json",
+      "base_blob_sha": "446e7d806d505c787d6275c7d91507d0d7b6faf9",
+      "operation": "replace",
+      "key_or_anchor": "purchases[purchase_id=quantitativos-orcamento].seed_query_hypothesis",
+      "expected_old": "status GSC_CORROBORATION with impressions 1 / clicks 0 / position 1.0 copied from PAGE grain of /quantitativos-orcamento-obras/",
+      "desired_new": "status HYPOTHESIS; impressions/clicks/position null; note that Paginas.csv 1/0/1.00 is page grain, not query 'quantitativos orçamento'. Unknown click terms remain UNKNOWN.",
+      "rationale": "Dado de página não vira keyword. A 06 não reescreve o mapa central.",
+      "acceptance_test": "seed_query_hypothesis de quantitativos-orcamento não copia 1/0/1.00 como métrica de consulta; o mesmo para sinapi-referencia-informacional (17/1 são da página SINAPI)."
+    },
+    {
+      "change_id": "pos-inb-06-ops-doc-provided-aggregate",
+      "owner_campaign": "10",
+      "path": "docs/ops/GSC-INSIGHTS-SINGLE-SOURCE.md",
+      "base_blob_sha": "5345ef6ce09b7b35221f42194d8b5fa76a8920b1",
+      "operation": "replace",
+      "key_or_anchor": "## CURRENT contract first paragraph",
+      "expected_old": "The founder-exported GSC Web sample of 02–08/09/2026 (imported 11/09) is a historical fixture under `scripts/revops/fixtures/gsc-founder-baseline-2026-09-02-08/`. It is not a live Search Console credential, not current ranking, and not a conversion claim. Local observatory learning from that fixture does not publish raw GSC rows on the public site.",
+      "desired_new": "The founder-exported GSC Web sample of 02–08/09/2026 (extracted 11/09, last_data 08/09) is a `provided_aggregate` under `scripts/revops/fixtures/gsc-founder-baseline-2026-09-02-08/`. It is not a synthetic fixture, not live Search Analytics, not CURRENT, and not a conversion claim. Page, query and country tables are separate grains; Consultas.csv labels are not observed search terms; the six click terms remain UNKNOWN. Local observatory learning does not publish raw GSC rows on the public site.",
+      "rationale": "O contrato CURRENT ainda chama o baseline de fixture. A 06 já distingue provided_aggregate no importador.",
+      "acceptance_test": "O parágrafo após ## CURRENT contract contém provided_aggregate e não classifica o baseline como fixture sintético."
+    },
+    {
+      "change_id": "pos-inb-06-pkg-audit-script",
+      "owner_campaign": "10",
+      "path": "package.json",
+      "base_blob_sha": "b353c16116e6b2ff6addfc220ba531ffa7f28a4e",
+      "operation": "upsert",
+      "key_or_anchor": "scripts.pos-inb:06:audit",
+      "expected_old": null,
+      "desired_new": "python3 scripts/campaigns/pos-inb-20260911/06/audit_discovery.py",
+      "rationale": "Expor o audit local já implementado. Não cria workflow nem timer. A 10 é dona do package.json.",
+      "acceptance_test": "npm pkg get scripts.pos-inb:06:audit imprime o comando; a execução sai 0 com indexed_from_sitemap false."
+    }
+  ]
+}

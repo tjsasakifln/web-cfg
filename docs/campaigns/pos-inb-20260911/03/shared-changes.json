@@ -1,0 +1,87 @@
+{
+  "schema": "confenge.inbound-campaign-shared-changes/2.0",
+  "campaign_set": "POS-INB-20260911",
+  "campaign_id": "03",
+  "prompt_version": "1.0.0",
+  "changes": [
+    {
+      "change_id": "03-package-json-verify-script",
+      "owner_campaign": "10",
+      "path": "package.json",
+      "base_blob_sha": "b353c16116e6b2ff6addfc220ba531ffa7f28a4e",
+      "operation": "upsert",
+      "key_or_anchor": "scripts.audit:public-artifact",
+      "expected_old": "python3 scripts/pseo/public_artifact.py audit",
+      "desired_new": {
+        "audit:public-artifact": "python3 scripts/pseo/public_artifact.py audit",
+        "verify:promised-public-resources": "node scripts/site/verify_promised_public_resources.mjs",
+        "test:promised-public-resources": "python3 -m pytest tests/pos-inb-20260911/03/test_assemble_nested_public_data.py -q && node --test tests/pos-inb-20260911/03/test_verify_promised_public_resources.mjs"
+      },
+      "rationale": "A 10 liga o verificador de completude ao aceite. 03 não edita package.json nesta branch.",
+      "acceptance_test": "npm run test:promised-public-resources sai 0 no candidato composto; npm run verify:promised-public-resources -- --mode artifact --artifact _site --source-root . recusa CSV ausente."
+    },
+    {
+      "change_id": "03-site-ci-artifact-completeness",
+      "owner_campaign": "10",
+      "path": ".github/workflows/site-ci.yml",
+      "base_blob_sha": "cb137428250f09a4bf580374ac63fd337a7945b7",
+      "operation": "insert_after",
+      "key_or_anchor": "step: Build public site / run: npm run build:site",
+      "expected_old": "run: npm run build:site",
+      "desired_new": {
+        "name": "Promised public downloads are in the gated artifact",
+        "run": "node scripts/site/verify_promised_public_resources.mjs --mode artifact --artifact _site --source-root .\npython3 -m pytest tests/pos-inb-20260911/03/test_assemble_nested_public_data.py -q\nnode --test tests/pos-inb-20260911/03/test_verify_promised_public_resources.mjs"
+      },
+      "rationale": "F01: o artefato de CI do #669 tinha as páginas e os SVG, não os quatro CSV. Completude tem de falhar antes do upload do artefato, não só na integridade dos arquivos que por acaso entraram.",
+      "acceptance_test": "site-ci recusa candidato cuja _site omite qualquer sentinela /casos/demonstrativo-projeto-privado/data/{quantitativos,orcamento,coordenacao,revisao}.csv."
+    },
+    {
+      "change_id": "03-netcup-tarball-completeness",
+      "owner_campaign": "10",
+      "path": ".github/workflows/netcup-release.yml",
+      "base_blob_sha": "3ba60932dfd4dec0d2b48eeb6e12cfe830e5594c",
+      "operation": "insert_after",
+      "key_or_anchor": "python3 deploy/netcup/package_release.py ... && sha256sum --check",
+      "expected_old": "sha256sum --check \"confenge-web-$RELEASE_SHA.tar.gz.sha256\"",
+      "desired_new": "node scripts/site/verify_promised_public_resources.mjs --mode tarball --artifact _site --source-root . --tarball \"dist/netcup/$RELEASE_SHA/confenge-web-$RELEASE_SHA.tar.gz\"",
+      "rationale": "Inspecionar o tarball já gated, sem reconstruir o site. Os quatro CSV e os hashes do artefato têm de estar no pacote.",
+      "acceptance_test": "Remover um CSV do tarball faz o job de package sair diferente de 0 com missing_promised_resource."
+    },
+    {
+      "change_id": "03-headers-csv-download",
+      "owner_campaign": "10",
+      "path": "_headers",
+      "base_blob_sha": "3ab4ce1f9ce1305cb495f3f344030de95d17b2ee",
+      "operation": "insert_after",
+      "key_or_anchor": "/radar/nacional-obras-publicas/gsc-demand-sample.json",
+      "expected_old": "Content-Disposition: attachment; filename=\"gsc-demand-sample.json\"",
+      "desired_new": "\n/casos/demonstrativo-projeto-privado/data/quantitativos.csv\n  Content-Type: text/csv; charset=utf-8\n  Content-Disposition: attachment; filename=\"quantitativos.csv\"\n  Cache-Control: public, max-age=3600, must-revalidate, no-transform\n\n/casos/demonstrativo-projeto-privado/data/orcamento.csv\n  Content-Type: text/csv; charset=utf-8\n  Content-Disposition: attachment; filename=\"orcamento.csv\"\n  Cache-Control: public, max-age=3600, must-revalidate, no-transform\n\n/casos/demonstrativo-projeto-privado/data/coordenacao.csv\n  Content-Type: text/csv; charset=utf-8\n  Content-Disposition: attachment; filename=\"coordenacao.csv\"\n  Cache-Control: public, max-age=3600, must-revalidate, no-transform\n\n/casos/demonstrativo-projeto-privado/data/revisao.csv\n  Content-Type: text/csv; charset=utf-8\n  Content-Disposition: attachment; filename=\"revisao.csv\"\n  Cache-Control: public, max-age=3600, must-revalidate, no-transform\n",
+      "rationale": "CSV demonstrativo não é asset com hash no nome: cache revalidável, MIME text/csv e attachment. Não tornar immutable. Não afrouxar /* nem CSP.",
+      "acceptance_test": "scripts/site/test_cache_contract.py continua verde; cada um dos quatro caminhos tem Content-Disposition attachment e Cache-Control revalidável."
+    },
+    {
+      "change_id": "03-cache-contract-downloadable",
+      "owner_campaign": "10",
+      "path": "scripts/site/test_cache_contract.py",
+      "base_blob_sha": "5d3ef1359df2fc79f36dc2412670418af0184c06",
+      "operation": "upsert",
+      "key_or_anchor": "DOWNLOADABLE",
+      "expected_old": "{\"/radar/nacional-obras-publicas/gsc-demand-sample.json\"}",
+      "desired_new": "{\"/radar/nacional-obras-publicas/gsc-demand-sample.json\", \"/casos/demonstrativo-projeto-privado/data/quantitativos.csv\", \"/casos/demonstrativo-projeto-privado/data/orcamento.csv\", \"/casos/demonstrativo-projeto-privado/data/coordenacao.csv\", \"/casos/demonstrativo-projeto-privado/data/revisao.csv\"}",
+      "rationale": "O contrato de cache já exige Content-Disposition attachment para downloadable_paths. Incluir as sentinelas quando 10 aplicar o bloco em _headers.",
+      "acceptance_test": "python3 scripts/site/test_cache_contract.py falha se faltar attachment em qualquer um dos quatro CSV."
+    },
+    {
+      "change_id": "03-http-post-publish",
+      "owner_campaign": "10",
+      "path": ".github/workflows/netcup-release.yml",
+      "base_blob_sha": "3ba60932dfd4dec0d2b48eeb6e12cfe830e5594c",
+      "operation": "note",
+      "key_or_anchor": "post-publish HTTP verifier",
+      "expected_old": null,
+      "desired_new": "node scripts/site/verify_promised_public_resources.mjs --mode http --artifact _site --source-root . --http-base https://confenge.com.br --timeout-ms 10000 --max-bytes 1048576 --max-requests 32",
+      "rationale": "Verificador HTTP read-only para a 10 após publicação. Checa destino final, status, MIME permitido e corpo CSV; HTTP 200 sozinho não passa. Não seguir hosts privados.",
+      "acceptance_test": "Após publicar, o comando sai 0 só se os quatro CSV responderem 200, MIME csv/plain e hash igual ao artefato. 404.html com status 200 é recusa html_error_body."
+    }
+  ]
+}

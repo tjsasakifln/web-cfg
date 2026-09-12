@@ -545,7 +545,7 @@ def test_quantitativos_keep_mixed_context_and_zero_impressions_do_not_block_crea
     created = _purchase_row(document, "compatibilizacao-projetos")
     assert created["gsc_impressions"] == 0
     assert created["blocked_by_zero_impressions"] is False
-    assert created["quality_state"] == "PASS_PENDING_PUBLICATION"
+    assert created["quality_state"] == "EXISTING_COMPLETE"
     report = validate_purchase_route_map(document=document)
     assert report.ok, report.findings
     assert "zero_impressions_forbid_quality_route" not in {
@@ -559,13 +559,20 @@ def test_revisao_and_compatibilizacao_remain_distinct_purchases():
     revisao = _purchase_row(document, "revisao-tecnica-projetos")
     complementares = _purchase_row(document, "projetos-complementares")
     assert compat["intent_family"] == revisao["intent_family"] == complementares["intent_family"]
-    assert compat["requested_alias"] == "/compatibilizacao-projetos-engenharia/"
-    assert revisao["requested_alias"] == "/revisao-tecnica-projetos-engenharia/"
-    assert complementares["requested_alias"] == "/projetos-complementares-engenharia/"
-    assert compat["source_of_truth"] == "/servicos/#servico-projeto"
+    assert compat["primary_url"] == "/compatibilizacao-projetos-engenharia/"
+    assert revisao["primary_url"] == "/revisao-tecnica-projetos-engenharia/"
+    assert complementares["primary_url"] == "/projetos-complementares-engenharia/"
+    assert compat["source_of_truth"] == "/compatibilizacao-projetos-engenharia/"
+    assert revisao["source_of_truth"] == "/revisao-tecnica-projetos-engenharia/"
+    assert complementares["source_of_truth"] == "/projetos-complementares-engenharia/"
+    assert compat["offer_id"] == "bim_coordination_clash_register"
+    assert revisao["offer_id"] == "complementary_engineering_project_review"
+    assert complementares["offer_id"] == "complementary_engineering_project_review"
+    assert revisao["purchase_id"] != complementares["purchase_id"]
+    assert revisao["primary_url"] != complementares["primary_url"]
     assert compat["function_differentiation"] != revisao["function_differentiation"]
     assert revisao["function_differentiation"] != complementares["function_differentiation"]
-    assert compat["decision"] == revisao["decision"] == "CREATE"
+    assert compat["decision"] == revisao["decision"] == complementares["decision"] == "KEEP"
     report = validate_purchase_route_map(document=document)
     reasons = {item.reason for item in report.findings if item.severity == "error"}
     assert "undifferentiated_same_purchase" not in reasons
@@ -643,8 +650,14 @@ def test_intent_route_table_is_the_single_consumable_authority():
     by_id = {row["purchase_id"]: row for row in table}
     assert by_id["quantitativos-orcamento"]["business_context"] == "mixed"
     assert by_id["quantitativos-orcamento"]["path"] == "/quantitativos-orcamento-obras/"
-    assert by_id["compatibilizacao-projetos"]["requested_alias"] == (
+    assert by_id["compatibilizacao-projetos"]["path"] == (
         "/compatibilizacao-projetos-engenharia/"
+    )
+    assert by_id["revisao-tecnica-projetos"]["path"] == (
+        "/revisao-tecnica-projetos-engenharia/"
+    )
+    assert by_id["projetos-complementares"]["path"] == (
+        "/projetos-complementares-engenharia/"
     )
     assert by_id["auditoria-orcamento-edital"]["business_context"] == "public"
     assert table, "INB-10 reads this table from the owned map, not a campaign folder"

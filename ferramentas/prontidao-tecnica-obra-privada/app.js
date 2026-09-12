@@ -28,13 +28,12 @@
   }
 
   function readDestinationMap() {
-    if (window.ConfengeCanonicalDestinationMap) return window.ConfengeCanonicalDestinationMap;
     var el = document.getElementById("pptr-destination-map");
-    if (!el) return { by_offer_id: {} };
+    if (!el) return { by_offer_id: {}, by_purchase_id: {}, by_route_id: {} };
     try {
       return JSON.parse(el.textContent || "{}");
     } catch (err) {
-      return { by_offer_id: {} };
+      return { by_offer_id: {}, by_purchase_id: {}, by_route_id: {} };
     }
   }
 
@@ -58,7 +57,7 @@
     if (priority === api.PRIORITY_BLOCKING) return "bloqueia a decisão declarada";
     if (priority === api.PRIORITY_ATTENTION) return "atenção (não bloqueia a decisão declarada)";
     if (priority === api.PRIORITY_UNKNOWN) return "desconhecido (não melhora nem piora)";
-    return "sem lacuna neste domínio";
+    return "sem lacuna neste tema";
   }
 
   function add(parent, tag, className, text) {
@@ -80,8 +79,12 @@
     return el;
   }
 
-  function destinationFor(offerId) {
-    return api.resolveCommercialDestination(offerId, readDestinationMap());
+  function destinationFor(route) {
+    return api.resolveCommercialDestination({
+      offer_id: route.offer_id,
+      purchase_id: route.purchase_id,
+      route_id: route.id,
+    }, readDestinationMap());
   }
 
   function renderRoute(parent, route, kind, justification) {
@@ -93,13 +96,12 @@
     add(wrap, "p", "", route.why);
     add(wrap, "p", "", "Por que importa: " + (justification || route.why));
     add(wrap, "p", "", "Próximo passo: " + route.next);
-    var dest = destinationFor(route.offer_id);
+    var dest = destinationFor(route);
     if (dest.present && dest.href) {
       addLink(wrap, dest.href, "button", "Ver " + route.public_name, {
         "data-tool-to-offer": route.offer_id,
+        "data-tool-to-purchase": route.purchase_id || "",
       });
-    } else {
-      add(wrap, "p", "pptr-route-absent", "A página deste serviço ainda não está nesta versão do site. O caminho existe como trabalho possível; use a conversa de escopo se quiser continuar, sem obrigação.");
     }
   }
 
@@ -114,7 +116,7 @@
 
     var overview = add(resultBody, "section", "pptr-summary");
     add(overview, "h3", "", "Leitura resumida");
-    add(overview, "p", "", "Disponível (autoavaliação): " + summary.present.length + " domínio(s). Falta esclarecer: " + summary.gaps.length + " lacuna(s) e " + summary.unknowns.length + " desconhecido(s). Desconhecido não vira lacuna e não piora a leitura.");
+    add(overview, "p", "", "Disponível (autoavaliação): " + summary.present.length + " tema(s). Falta esclarecer: " + summary.gaps.length + " lacuna(s) e " + summary.unknowns.length + " desconhecido(s). Desconhecido não vira lacuna e não piora a leitura.");
     add(overview, "p", "", "Próximo passo: " + (routing.summary_next || ""));
 
     if (summary.present.length) {
@@ -175,7 +177,7 @@
       var st = add(wrap, "p", "pptr-status");
       st.setAttribute("data-status", domain.status);
       st.textContent = statusLabel(domain.status) + " · " + priorityLabel(domain.priority);
-      add(wrap, "p", "", "O que está disponível: " + (domain.declared_evidence || "Nada declarado como presente neste domínio."));
+      add(wrap, "p", "", "O que está disponível: " + (domain.declared_evidence || "Nada declarado como presente neste tema."));
       add(wrap, "p", "", "O que falta esclarecer: " + domain.missing_evidence);
       add(wrap, "p", "", "Por que importa: " + domain.decision_consequence);
       add(wrap, "p", "", "Próximo passo: " + domain.next_verification);

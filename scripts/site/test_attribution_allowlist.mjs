@@ -548,4 +548,40 @@ pass("tool_to_pseo_keeps_first_touch_origem", {
   landing_url: afterPseoClick.landing_url,
 });
 
+{
+  const throwing = {
+    getItem() { throw new Error("storage_unavailable"); },
+    setItem() { throw new Error("storage_unavailable"); },
+    removeItem() { throw new Error("storage_unavailable"); },
+  };
+  const loaded = loadShippedScript({
+    pathname: "/ferramentas/checklist-reequilibrio/",
+    search: "?utm_source=gsc&email=leak@x.com",
+    hash: "",
+    dataset: {},
+    withForm: true,
+    session: throwing,
+    referrer: "https://www.google.com/",
+  });
+  const api = loaded.sandbox.window.confengeAttribution;
+  const picked = api.pickFromSearch("?utm_source=gsc&email=leak@x.com&fbclid=DROP");
+  if (picked.email || picked.fbclid) fail("pos_inb_01_storage_down_query", picked);
+  if (picked.utm_source !== "gsc") fail("pos_inb_01_storage_down_utm", picked);
+  pass("pos_inb_01_storage_unavailable_still_allowlists");
+}
+
+{
+  const sparse = core.validateAndNormalize({
+    nome: "QA Attr",
+    telefone: "48988344559",
+    estagio: "projeto, revisão ou compatibilização",
+    consentimento: "on",
+  });
+  if (!sparse.ok) fail("pos_inb_01_sparse", sparse);
+  if (sparse.lead.origem || sparse.lead.utm_source || sparse.lead.cta_id) {
+    fail("pos_inb_01_invented_context", sparse.lead);
+  }
+  pass("pos_inb_01_absent_context_not_invented");
+}
+
 console.log("OK attribution-allowlist");

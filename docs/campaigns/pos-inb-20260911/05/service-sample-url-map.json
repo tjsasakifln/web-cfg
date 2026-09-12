@@ -1,0 +1,56 @@
+{
+  "schema": "confenge.partner-kit-url-map/1.0",
+  "campaign_id": "05",
+  "campaign_set": "POS-INB-20260911",
+  "catalog_id": "partner-reference-kits-v1",
+  "catalog_path": "data/distribution/partner-reference-kits.v1.json",
+  "resolver": "scripts/distribution/partner_reference.mjs",
+  "site_origin": "https://confenge.com.br",
+  "note": "Gerado a partir do resolver shipped. URL normal interna sem UTM. URL externa só com chaves da ATTR_ALLOWLIST. Nome ou CNPJ de parceiro ou cliente não entram na URL.",
+  "rows": [
+    {
+      "service_id": "orcamento-quantitativos",
+      "service_title": "Orçamento e quantitativos",
+      "sample_kind": "quantitativos_planilha",
+      "sample_href": "/casos/demonstrativo-projeto-privado/#quantitativos",
+      "sample_label": "Amostra de quantitativos e planilha no recorte privado",
+      "normal_url": "/quantitativos-orcamento-obras/",
+      "destination_href": "/quantitativos-orcamento-obras/",
+      "proposal_href": "/quantitativos-orcamento-obras/#triagem-quantitativos",
+      "external_shareable_url": "https://confenge.com.br/quantitativos-orcamento-obras/?utm_source=partner_kit&utm_medium=referral&utm_campaign=posinb05_orcamento&route_family=parcerias-engenharia&cta_id=share-copy-kit-orcamento&asset_id=partner-reference-kits-v1"
+    },
+    {
+      "service_id": "revisao-tecnica",
+      "service_title": "Revisão técnica de projeto",
+      "sample_kind": "review_findings",
+      "sample_href": "/revisao-tecnica-projetos-engenharia/#extrato-demonstrativo",
+      "sample_label": "Amostra de apontamentos de revisão",
+      "normal_url": "/revisao-tecnica-projetos-engenharia/#extrato-demonstrativo",
+      "destination_href": "/revisao-tecnica-projetos-engenharia/",
+      "proposal_href": "/revisao-tecnica-projetos-engenharia/#contato-revisao",
+      "external_shareable_url": "https://confenge.com.br/revisao-tecnica-projetos-engenharia/?utm_source=partner_kit&utm_medium=referral&utm_campaign=posinb05_revisao&route_family=parcerias-engenharia&cta_id=share-copy-kit-revisao&asset_id=partner-reference-kits-v1#extrato-demonstrativo"
+    },
+    {
+      "service_id": "compatibilizacao-interfaces",
+      "service_title": "Compatibilização de disciplinas",
+      "sample_kind": "clash_interfaces",
+      "sample_href": "/compatibilizacao-projetos-engenharia/#registro-interferencias",
+      "sample_label": "Amostra de conflito e interfaces",
+      "normal_url": "/compatibilizacao-projetos-engenharia/#registro-interferencias",
+      "destination_href": "/compatibilizacao-projetos-engenharia/",
+      "proposal_href": "/compatibilizacao-projetos-engenharia/#pedido-compatibilizacao",
+      "external_shareable_url": "https://confenge.com.br/compatibilizacao-projetos-engenharia/?utm_source=partner_kit&utm_medium=referral&utm_campaign=posinb05_compat&route_family=parcerias-engenharia&cta_id=share-copy-kit-compatibilizacao&asset_id=partner-reference-kits-v1#registro-interferencias"
+    },
+    {
+      "service_id": "elaboracao-complementar",
+      "service_title": "Elaboração complementar",
+      "sample_kind": "illustrative_schema",
+      "sample_href": "/projetos-complementares-engenharia/#entregaveis",
+      "sample_label": "Ilustração do esquema de entrega complementar",
+      "normal_url": "/projetos-complementares-engenharia/#entregaveis",
+      "destination_href": "/projetos-complementares-engenharia/",
+      "proposal_href": "/projetos-complementares-engenharia/#escopo-projeto",
+      "external_shareable_url": "https://confenge.com.br/projetos-complementares-engenharia/?utm_source=partner_kit&utm_medium=referral&utm_campaign=posinb05_elaboracao&route_family=parcerias-engenharia&cta_id=share-copy-kit-elaboracao&asset_id=partner-reference-kits-v1#entregaveis"
+    }
+  ]
+}

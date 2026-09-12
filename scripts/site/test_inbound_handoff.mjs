@@ -1312,4 +1312,21 @@ try {
   pass("handoff_service_family_context", { family: true, catalog: true });
 }
 
+{
+  const inbound = require(path.join(root, "netlify/functions/lib/inbound-handoff.cjs"));
+  if (inbound.handoffAcceptedSemantic(null) !== "UNKNOWN") fail("pos_inb_01_semantic_null");
+  if (inbound.handoffAcceptedSemantic({ status: "PENDING" }) !== "PENDING") fail("pos_inb_01_pending_not_human");
+  if (inbound.handoffAcceptedSemantic({ status: "DELIVERED" }) !== "handoff_accepted") fail("pos_inb_01_delivered");
+  const cfg = inbound.resolveInboundConfig({ NODE_ENV: "test" });
+  if (!cfg.skip || cfg.reason !== "not_configured") fail("pos_inb_01_missing_url", cfg);
+  const secretMissing = inbound.resolveInboundConfig({
+    NODE_ENV: "test",
+    CONFENGE_INBOUND_WEBHOOK_URL: "http://127.0.0.1:9/api/v1/webhooks/confenge/inbound",
+  });
+  if (!secretMissing.blocked || secretMissing.reason !== "secret_missing") {
+    fail("pos_inb_01_secret_missing", secretMissing);
+  }
+  pass("pos_inb_01_missing_credential_is_specific_state");
+}
+
 console.log("INBOUND_HANDOFF_OK", JSON.stringify({ tests: results.length }));
