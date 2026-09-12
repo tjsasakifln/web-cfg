@@ -192,6 +192,13 @@ function sha256(buf) {
   assert.match(howToHire, /href="\/servicos\/#servico-projeto"/);
   assert.doesNotMatch(complementary, /\bhubs?\b/i);
   assert.doesNotMatch(howToHire, /\bhubs?\b/i);
+  const services = read("servicos/index.html");
+  for (const id of ["servico-projeto", "servico-diagnostico", "servico-pericia", "servico-sst"]) {
+    const start = services.indexOf(`id="${id}"`);
+    assert.notEqual(start, -1, id);
+    const slice = services.slice(start, start + 2500);
+    assert.match(slice, /href="\/triagem-tecnica\//, id);
+  }
 }
 
 console.log("OK pos-inb-20260911-10 composition");
