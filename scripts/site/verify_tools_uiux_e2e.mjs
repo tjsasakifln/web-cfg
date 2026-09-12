@@ -150,6 +150,19 @@ function pass(msg) {
   console.log("PASS", msg);
 }
 
+async function submitToolAndWaitForOut(page, label) {
+  await page.$eval("#f button.tool-run", (btn) => {
+    btn.disabled = false;
+    btn.click();
+  });
+  try {
+    await page.waitForSelector("#out:not([hidden])", { timeout: 8000 });
+    pass(`${label}_out_visible`);
+  } catch {
+    fail(`${label}_out_timeout`);
+  }
+}
+
 // --- Static source checks first (no browser) ---
 for (const pilot of PILOTS) {
   const rel = pilot.path === "/" ? "index.html" : pilot.path.replace(/^\//, "") + (pilot.path.endsWith("/") ? "index.html" : "");
@@ -1120,8 +1133,7 @@ await page.setViewport({ width: 1440, height: 1000 });
   await page.type('[data-f="duracaoDias"]', "15");
   await page.select('[data-f="concorrencia"]', "sim");
   await page.type('[data-f="observacao"]', "Sobreposição com chuva no mesmo trecho");
-  await page.click('button[type="submit"]');
-  await page.waitForSelector("#out:not([hidden])", { timeout: 8000 });
+  await submitToolAndWaitForOut(page, "matriz_full");
   const mxFull = await page.evaluate(() => {
     const t = document.getElementById("out").innerText;
     return {
@@ -1196,8 +1208,7 @@ await page.setViewport({ width: 1440, height: 1000 });
   if (!/onerror|img|script/i.test(xssCard.causaVal + xssCard.obsVal)) fail("matriz_xss_input_value_ok", xssCard);
   else pass("matriz_xss_input_value_ok");
 
-  await page.click('button[type="submit"]');
-  await page.waitForSelector("#out:not([hidden])", { timeout: 8000 });
+  await submitToolAndWaitForOut(page, "matriz_xss");
   const xssOut = await page.evaluate(() => {
     const out = document.getElementById("out");
     const html = out ? out.innerHTML : "";
