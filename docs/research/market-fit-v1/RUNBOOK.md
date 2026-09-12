@@ -1,81 +1,49 @@
-# Runbook de execução do market fit
+# Runbook de execucao do protocolo unico #336
 
-## 1. Congelar a matriz
+## 1. Congelar
 
-1. Rodar os três comandos do README no SHA que será usado nas sessões.
-2. Registrar privadamente o SHA do commit e a URL HTTPS do estímulo.
-3. Calcular o SHA-256 de `market-fit-exposure-plan.v1.json` e copiá-lo para o
-   agregado da pesquisa.
-4. Não regenerar, trocar ou reordenar cartões depois da primeira sessão. Uma
-   mudança exige nova versão do plano e reinício da amostra comparável.
+1. Rodar os comandos do README no SHA que sera usado nas sessoes.
+2. Registrar privadamente o SHA do commit e a URL HTTPS do estimulo.
+3. Calcular o SHA-256 de `market-fit-exposure-plan.v1.json`.
+4. Nao regenerar, trocar ou reordenar tarefas depois da primeira sessao.
 
-## 2. Recrutar, consentir e associar slots
+A composicao 8/3/3/3/3 so pode ser revista uma vez, antes da primeira sessao,
+mantendo n=20 e com razao escrita. Depois da primeira sessao o protocolo nao
+muda para salvar a tese.
 
-Aplicar `docs/research/icp-trust-session-v1/RECRUITMENT.md` e
-`CONSENT-RETENTION.md`. Recrutar cinco conclusões para cada papel e pelo menos
-14 pessoas com licitação ou contrato ativo nos últimos 12 meses.
+## 2. Recrutar e consentir
 
-A associação entre pessoa e `MF-P**` fica apenas no store privado. Não copiar
-nome, empresa, contato, consentimento, citação ou nota bruta para o template,
-issue, PR ou analytics.
+Aplicar `CONSENT-MINIMIZATION.md` e o pacote `icp-trust-session-v1`. Recrutar
+oito representantes de empresas privadas de engenharia/construcao/incorporacao
+(canario), tres usuarios de pericia/assistencia, tres de avaliacao imobiliaria,
+tres de SST/gestao/contencioso e tres compradores B2G atuais.
+
+A associacao entre pessoa e `MF-P**` fica so no store privado. Esta campanha
+nao recruta, nao entrevista e nao submete formulario.
 
 ## 3. Executar as fases 1 e 2
 
-1. Reconstruir fatos recentes sem mostrar o catálogo e sem perguntar primeiro
+1. Reconstruir fatos recentes sem mostrar o catalogo e sem perguntar primeiro
    se a pessoa compraria.
-2. Mostrar exatamente os 18 cartões de `display_order` do slot atribuído.
-3. Classificar primeiro por situação ou tarefa sem preço.
-4. Revelar depois saída, preço e SLA.
-5. Guardar notas brutas privadamente; levar ao Git apenas contagens agregadas.
+2. Seguir `TASK-SCRIPT.md` na `display_order` do slot.
+3. Registrar fala anonimizavel, hesitacao, backtrack, escolha e
+   `REPEAT | CHANGE | STOP`.
+4. Reagir a preco somente quando real e publicado. WTP nao substitui #341.
+5. Guardar notas brutas privadamente.
 
-O agregado final reconcilia `screened >= eligible >= consented >= completed`,
-as quatro quotas somam exatamente 20 conclusões e o hash do plano precisa ser o
-SHA-256 real do arquivo congelado. Triggers, relevância e confusão são contados
-por `CFG-D01` a `CFG-D54`; chaves livres e texto bruto fazem o gate falhar.
+## 4. Importar QCOs reais
 
-Se uma sessão for retirada ou inelegível, usar outro participante no mesmo slot
-e papel. Não alterar o bloco de cartões.
-
-## 4. Importar QCOs reais do owner correto
-
-Warmbly registra e executa ação, proposta, decisão, prazo, entrega e outcome;
-Governance/Control Center supervisiona revisões e exceções. Este repositório não
-cria fila, cadência, aprovação, dispatch nem estado operacional de contato.
-Importe somente o contrato agregado e versionado necessário para decidir a
-apresentação e a promoção de uma entrega. Não registrar contato ou narrativa
-individual no repositório.
-
-O export agregado deve declarar `source: CONFENGE_WEB`, intervalo, SHA-256 e
-contagens por entregável. `ACEITOU` não equivale a `paid`; proposta não equivale
-a venda; ausência de outcome permanece `UNKNOWN`.
-
-Cada entrega deve reconciliar QCO, recomendação, proposta, decisão, pagamento,
-entrega e outcome. O agregado também registra propostas plausíveis no preço
-exibido, desvio de horas, margem positiva e ocorrência de claim proibido. Uma
-entrega concluída precisa terminar em outcome observado ou `UNKNOWN`, sem sobra.
+Warmbly registra acao, proposta, decisao, entrega e outcome. Este repositorio
+consome SELECT-only agregado. Client-side nao e fonte de verdade de QCO,
+proposta ou receita. Ausencia permanece UNKNOWN.
 
 ## 5. Agregar e decidir
 
-1. Copiar os três templates para uma pasta `runs/YYYY-MM-DD-NN/`.
-2. Preencher primeiro `research-aggregate.json` e `qco-aggregate.json`.
-3. Rodar `market_fit_evidence.mjs` apontando para os dois arquivos.
-4. Preencher `product-decisions.json` com escores 0 a 5 e referências agregadas.
-   O arquivo deve conter exatamente `CFG-D01` a `CFG-D54` e vincular os `run_id`
-   dos dois agregados usados.
-5. PROMOTE só pode aparecer quando o avaliador numérico confirmar todos os
-   critérios e reconciliar cada número com pesquisa e Warmbly. ADJUST e HOLD
-   mantêm o item no catálogo.
-6. Registrar operador, segunda função revisora distinta e instante UTC nos três
-   artefatos. Depois atualizar manualmente as issues filhas e
-   #88, sem palavra-chave de fechamento automático.
+Com menos de 20 entrevistas o estado continua `AMOSTRA_INSUFICIENTE`. n=20 nao
+prova market share. Quatro ou menos por nucleo e leitura qualitativa. CTR e
+elogio nao sao valor.
 
-Com menos de 20 entrevistas ou oito QCOs agregadas com recomendação unitária, o estado
-continua `AMOSTRA_INSUFICIENTE`. Nenhum gate converte zero ou ausência em
-evidência.
+## 6. Retencao e rollback
 
-## 6. Retenção e rollback
-
-Aplicar a retenção do pacote compartilhado. Rollback de código não restaura
-contato, consentimento ou nota apagada. Se o instrumento for invalidado,
-preservar o agregado como execução inválida, criar nova versão e não misturar as
-duas amostras.
+Aplicar a retencao do pacote compartilhado. Rollback de codigo nao restaura
+contato, consentimento ou nota apagada.

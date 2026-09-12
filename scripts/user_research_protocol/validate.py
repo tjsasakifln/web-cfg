@@ -19,9 +19,11 @@ from urllib.parse import urlsplit
 
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_PACKAGE = ROOT / "docs" / "research" / "icp-trust-session-v1"
-MINIMUM_SAMPLE = 5
+MINIMUM_SAMPLE = 20
 TRACKED_ISSUES = {"183", "184"}
 PROTOCOL_ISSUES = {183, 184}
+UNIQUE_OWNER_ISSUE = 336
+PROTOCOL_VERSION = "1.2.0"
 SUBMINIMUM_DISPOSITION = {
     "183": "OPEN_BLOCKED_HUMAN_EVIDENCE",
     "184": "OPEN_BLOCKED_HUMAN_EVIDENCE_AND_TRAFFIC_WINDOW",
@@ -46,13 +48,13 @@ STATIC_PACKAGE_FILES = {
     "templates/interpretation.template.md",
 }
 PINNED_INSTRUMENT_SHA256 = {
-    "protocol.json": "a88252b75b5a98593c27f1ffee8bc06e7048588505b0545d4970e547c49fdc3c",
-    "RECRUITMENT.md": "2df1dfe4ffeeafa825a404a11c7b318cd63459df636d7d1ecd5815eca06c984e",
-    "CONSENT-RETENTION.md": "aa46cf03a83c4f171243656d2ba1c225e40dce0609567c6929bc1e52a6dd3560",
-    "PROTOCOL-TREE-TEST.md": "65f40f409ed45e1095e265d06125346de9b441b8f629c43e6ac1d2d727a3309a",
-    "PROTOCOL-FIVE-SECOND.md": "622f9e1938aca95b3708b57035d43f185b892c856816087cb1674c52b570937d",
-    "PROTOCOL-COPY-COMPREHENSION.md": "ff42bf04db067d0ea9496426c8d06b5ffef40040b806ce7138a42a352aa0eb61",
-    "RUNBOOK.md": "ca02a4c09b438e9532f342a4b6a0a2e55bad80e35e99c859310224c69dfa6a24",
+    "protocol.json": "8fe82eab96210308039cc28ffbb15457bc8071d37da982a830591f19421c6b42",
+    "RECRUITMENT.md": "edc57ad0da6bb2a851e389ed1f45d07d6c08b73ad5b1b99ecc3004d4414705bc",
+    "CONSENT-RETENTION.md": "838b46c33ae6a24b33146f6424319c32b92fddb2b3212ba0c1e0734271d54884",
+    "PROTOCOL-TREE-TEST.md": "dc53e516d71cb019b067633a7adca2dac0ceadc3606314ebdec55b045f0e8b17",
+    "PROTOCOL-FIVE-SECOND.md": "47205abd9ac923b41cce5bbb06d98415e0f2fabb71271164a8477fdf787c29a6",
+    "PROTOCOL-COPY-COMPREHENSION.md": "059905cae6e10a3ce59a12094cd28e00246e4555f8cdb6045531b2aa7f955741",
+    "RUNBOOK.md": "e332502305df0e23710bb51182aac6ea5b6b8d8332f4c186c4f412f03e68a5c1",
 }
 
 FORBIDDEN_PII_KEYS = {
@@ -213,14 +215,24 @@ def _assert_interpretation_safe(path: Path, *, git_sha: str, expected_results: d
 def _validate_protocol(protocol: dict[str, Any]) -> None:
     _require_exact_keys(
         protocol,
-        {"schema", "protocol_version", "decision", "owner", "recruitment", "privacy", "protocols", "issue_policy", "rollback"},
+        {"schema", "protocol_version", "unique_human_protocol", "decision", "owner", "recruitment", "privacy", "protocols", "issue_policy", "rollback"},
         "protocol",
     )
     _require(
         protocol.get("schema") == "confenge.icp-trust-session-protocol.v1",
         "protocol schema mismatch",
     )
-    _require(protocol.get("protocol_version") == "1.1.0", "protocol version mismatch")
+    _require(protocol.get("protocol_version") == PROTOCOL_VERSION, "protocol version mismatch")
+    unique = protocol.get("unique_human_protocol") or {}
+    _require_exact_keys(
+        unique,
+        {"owner_issue", "second_study_forbidden", "this_package_role", "absorbed_issues", "sample_n"},
+        "protocol.unique_human_protocol",
+    )
+    _require(unique.get("owner_issue") == UNIQUE_OWNER_ISSUE, "unique human protocol owner must be #336")
+    _require(unique.get("second_study_forbidden") is True, "second study must be forbidden")
+    _require(unique.get("sample_n") == MINIMUM_SAMPLE, "unique protocol sample must be twenty")
+    _require(set(unique.get("absorbed_issues") or []) == PROTOCOL_ISSUES, "absorbed issues must remain #183 and #184")
     decision = protocol.get("decision") or {}
     _require_exact_keys(decision, {"state", "priority", "executive_front", "leverage", "time_to_evidence"}, "protocol.decision")
     _require(decision.get("state") == "VALIDATE", "decision must remain VALIDATE")
@@ -241,7 +253,7 @@ def _validate_protocol(protocol: dict[str, Any]) -> None:
     _require(bool(recruitment.get("named_source")), "named recruitment source missing")
     _require(
         recruitment.get("minimum_eligible_consented_completions") == MINIMUM_SAMPLE,
-        "minimum eligible consented completions must be five",
+        "minimum eligible consented completions must be twenty",
     )
     _require(len(recruitment.get("eligibility_all_of") or []) >= 4, "ICP eligibility incomplete")
     _require(len(recruitment.get("exclusions_any_of") or []) >= 3, "recruitment exclusions incomplete")
@@ -277,10 +289,11 @@ def _validate_protocol(protocol: dict[str, Any]) -> None:
     by_issue = {item.get("issue"): item for item in protocols if isinstance(item, dict)}
     _require(set(by_issue) == PROTOCOL_ISSUES, "exactly #183 and #184 protocols are required")
     for issue, item in by_issue.items():
-        _require(item.get("sample_minimum") == MINIMUM_SAMPLE, f"#{issue} sample must be five")
+        _require(item.get("sample_minimum") == MINIMUM_SAMPLE, f"#{issue} sample must be twenty")
         _require(item.get("moderator_may_explain") is False, f"#{issue} must forbid moderator explanation")
+        _require(item.get("absorbed_into_unique_protocol") == UNIQUE_OWNER_ISSUE, f"#{issue} must be absorbed into #336")
         rule = str(item.get("approval_rule") or "").lower()
-        _require("80%" in rule and "four of five" in rule, f"#{issue} approval rule must be >=80% (4/5 minimum)")
+        _require("80%" in rule and "sixteen of twenty" in rule, f"#{issue} approval rule must be >=80% (16/20 minimum)")
         _require(bool(item.get("rejection_rule")), f"#{issue} rejection rule missing")
 
     tree = by_issue[183]
@@ -310,9 +323,9 @@ def _validate_state(state: dict[str, Any]) -> None:
         "state",
     )
     _require(state.get("schema") == "confenge.icp-trust-session-state.v1", "state schema mismatch")
-    _require(state.get("protocol_version") == "1.1.0", "state protocol version mismatch")
+    _require(state.get("protocol_version") == PROTOCOL_VERSION, "state protocol version mismatch")
     _require(state.get("operational_package") == "READY", "operational package not ready")
-    _require(state.get("required_eligible_consented_completions") == MINIMUM_SAMPLE, "state sample must be five")
+    _require(state.get("required_eligible_consented_completions") == MINIMUM_SAMPLE, "state sample must be twenty")
     as_of = _valid_date(state.get("as_of"), "state.as_of")
     next_review = _valid_date(state.get("next_review_at"), "state.next_review_at")
     _require(next_review >= as_of, "state next review cannot precede as_of")
@@ -334,8 +347,8 @@ def _validate_state(state: dict[str, Any]) -> None:
     if completed < MINIMUM_SAMPLE:
         _require(state.get("human_execution") == "BLOCKED_HUMAN_PARTICIPANTS", "subminimum state must be blocked")
         _require(state.get("result_status") == "AMOSTRA_INSUFICIENTE", "subminimum result must be AMOSTRA_INSUFICIENTE")
-        _require(not any(claims.values()), "human results cannot be claimed below five completions")
-        _require(observed["aggregate_records"] == 0, "no aggregate result may exist below five completions")
+        _require(not any(claims.values()), "human results cannot be claimed below twenty completions")
+        _require(observed["aggregate_records"] == 0, "no aggregate result may exist below twenty completions")
         _require(residuals == SUBMINIMUM_DISPOSITION, "subminimum state residuals drifted")
 
 
@@ -429,7 +442,7 @@ def _validate_run(payload: dict[str, Any], path: Path) -> None:
     )
     _require(payload.get("schema") == "confenge.icp-trust-session-aggregate.v1", f"run schema mismatch: {path}")
     _require(payload.get("template") is False, f"run must set template=false: {path}")
-    _require(payload.get("protocol_version") == "1.1.0", f"run version mismatch: {path}")
+    _require(payload.get("protocol_version") == PROTOCOL_VERSION, f"run version mismatch: {path}")
     run_id = str(payload.get("run_id") or "")
     _require(bool(RUN_ID_RE.fullmatch(run_id)), f"invalid run_id: {path}")
     _require(path.parent.name == run_id, f"run_id must match directory name: {path}")
@@ -546,7 +559,7 @@ def validate_package(package_root: Path = DEFAULT_PACKAGE) -> dict[str, Any]:
     )
     _require(template.get("template") is True, "aggregate template marker missing")
     _require(template.get("schema") == "confenge.icp-trust-session-aggregate.v1", "aggregate template schema mismatch")
-    _require(template.get("protocol_version") == "1.1.0", "aggregate template version mismatch")
+    _require(template.get("protocol_version") == PROTOCOL_VERSION, "aggregate template version mismatch")
     _require_exact_keys(
         template.get("stimulus"),
         {"git_sha", "base_url", "captured_at", "home_first_viewport_sha256", "navigation_tree_sha256", "viewport_assignment"},
