@@ -3,38 +3,34 @@
   "campaign_set": "POS-INB-20260911",
   "campaign_id": "09",
   "state": "ISSUED",
-  "verdict": "REQUEST_CHANGES",
-  "issued_at": "2026-09-12T02:05:00Z",
-  "candidate_commit": "863c7a0dc0a103d48dc0d135887cec7f12bcf63e",
-  "candidate_tree": "b4cb61a7c08ed996b61804502c49d28680fa3048",
+  "verdict": "APPROVE",
+  "issued_at": "2026-09-12T02:15:00Z",
+  "supersedes": {
+    "verdict": "REQUEST_CHANGES",
+    "candidate_commit": "863c7a0dc0a103d48dc0d135887cec7f12bcf63e",
+    "parecer_commit": "c713bd715606245bcfbfcd063401b2eb26f0f185",
+    "pr_comment": "https://github.com/tjsasakifln/web-cfg/pull/679#issuecomment-5642729265"
+  },
+  "candidate_commit": "741003a76cda676d813525fb3ad74380eac1b836",
+  "candidate_tree": "bead8fc71653a63c8e34fd1344f3a974a2c691f6",
   "candidate_pr": 678,
   "candidate_base": "cb6facfaaf50aa8f1834aba43d0245e04cbea672",
-  "test_suite_commit": "e8ee1f558e5d9227cad37b432b3ede567fc28418",
+  "test_suite_commit": "c713bd715606245bcfbfcd063401b2eb26f0f185",
   "test_suite_branch": "campaign/pos-inb-20260911/09-revisao-independente",
+  "accepted_suite_commit": "741003a76cda676d813525fb3ad74380eac1b836",
   "parecer_pr": 679,
   "examined_artifact": {
     "kind": "detached_read_only_worktree",
-    "path": "/home/tjsasakifln/code/confenge/web-cfg/.grok/worktrees/pos-inb-09-examine-863c7a0dc",
-    "head": "863c7a0dc0a103d48dc0d135887cec7f12bcf63e",
-    "tree": "b4cb61a7c08ed996b61804502c49d28680fa3048",
-    "note": "Created with git worktree add --detach. Not campaign 10's writable checkout. Independent POS-09 ran on a clean tree (overlay_hashes null). Candidate-bundled observation later saw overlay 69fa837672f9e1b1b8c1d893591903b60222b81a4cb62dd1cf452e956bccd177 after assemble wrote seo/PUBLIC-ARTIFACT-MANIFEST.json into the candidate root; that dirt was restored; it is not part of the SHA."
-  },
-  "ci_observed_not_this_parecer": {
-    "site-ci": {
-      "run_id": 34664338397,
-      "conclusion": "SUCCESS"
-    },
-    "pseo-quality-gates": {
-      "run_id": 34664338394,
-      "conclusion": "SUCCESS"
-    },
-    "note": "GitHub checks on 863c7a0dc were already green. They are not this parecer. Integrator stdout was not copied."
+    "path": "/home/tjsasakifln/code/confenge/web-cfg/.grok/worktrees/pos-inb-09-examine-741003a76",
+    "head": "741003a76cda676d813525fb3ad74380eac1b836",
+    "tree": "bead8fc71653a63c8e34fd1344f3a974a2c691f6",
+    "note": "Created with git worktree add --detach. Not campaign 10's writable checkout. Candidate remained clean (overlay_hashes null) during bundled observation."
   },
   "commands": [
     {
       "id": "pos09-independent",
       "cwd": "/home/tjsasakifln/code/confenge/web-cfg/.grok/worktrees/pos-inb-09-revisao",
-      "command": "node tests/campaigns/pos_inb_20260911/09/run.mjs --strict-release --examined-kind candidate --manifest docs/campaigns/pos-inb-20260911/09/pos-manifest.json --root /home/tjsasakifln/code/confenge/web-cfg/.grok/worktrees/pos-inb-09-examine-863c7a0dc --mutations --report /home/tjsasakifln/code/confenge/web-cfg/.grok/worktrees/pos-inb-09-revisao/.aiox/pos09-independent-863c7a0dc.json",
+      "command": "node tests/campaigns/pos_inb_20260911/09/run.mjs --strict-release --examined-kind candidate --manifest docs/campaigns/pos-inb-20260911/09/pos-manifest.json --root /home/tjsasakifln/code/confenge/web-cfg/.grok/worktrees/pos-inb-09-examine-741003a76 --mutations --report .aiox/pos09-independent-741003a76.json --http-port 18092",
       "exit_code": 1,
       "fail": 11,
       "pass": 37,
@@ -42,102 +38,75 @@
       "empty_suite": false,
       "mutation_detection_ok": true,
       "mutation_control": "fail",
-      "report": ".aiox/pos09-independent-863c7a0dc.json"
+      "note": "e8ee1f558/c713bd715 probes (FORBIDDEN_DIR skip, Q-PISO-01 4.32, string offer_id, old kit ids). Not the accepted suite after consumer-fix acceptance.",
+      "report": ".aiox/pos09-independent-741003a76.json"
     },
     {
       "id": "inb15-independent",
       "cwd": "/home/tjsasakifln/code/confenge/web-cfg/.grok/worktrees/pos-inb-09-revisao",
-      "command": "node tests/campaigns/inb_20260911/15/run.mjs --strict-release --examined-kind candidate --manifest docs/campaigns/pos-inb-20260911/09/legacy-manifest.json --root /home/tjsasakifln/code/confenge/web-cfg/.grok/worktrees/pos-inb-09-examine-863c7a0dc --mutations --report /home/tjsasakifln/code/confenge/web-cfg/.grok/worktrees/pos-inb-09-revisao/.aiox/inb15-independent-863c7a0dc.json",
+      "command": "node tests/campaigns/inb_20260911/15/run.mjs --strict-release --examined-kind candidate --manifest docs/campaigns/pos-inb-20260911/09/legacy-manifest.json --root /home/tjsasakifln/code/confenge/web-cfg/.grok/worktrees/pos-inb-09-examine-741003a76 --mutations --report .aiox/inb15-independent-741003a76.json",
       "exit_code": 0,
       "fail": 0,
       "pass": 83,
       "publication_required_missing": 0,
       "empty_suite": false,
       "mutation_detection_ok": true,
-      "report": ".aiox/inb15-independent-863c7a0dc.json"
+      "report": ".aiox/inb15-independent-741003a76.json"
     },
     {
-      "id": "pos09-candidate-bundled",
-      "cwd": "/home/tjsasakifln/code/confenge/web-cfg/.grok/worktrees/pos-inb-09-examine-863c7a0dc",
-      "command": "npm run test:pos-inb-20260911-09 -- --report /home/tjsasakifln/code/confenge/web-cfg/.grok/worktrees/pos-inb-09-revisao/.aiox/pos09-candidate-bundled-863c7a0dc.json --http-port 19091",
+      "id": "pos09-candidate-bundled-accepted-suite",
+      "cwd": "/home/tjsasakifln/code/confenge/web-cfg/.grok/worktrees/pos-inb-09-examine-741003a76",
+      "command": "npm run test:pos-inb-20260911-09 -- --report /home/tjsasakifln/code/confenge/web-cfg/.grok/worktrees/pos-inb-09-revisao/.aiox/pos09-candidate-bundled-741003a76.json --http-port 19092",
       "exit_code": 0,
       "fail": 0,
-      "pass": 48,
+      "pass": 51,
       "publication_required_missing": 0,
       "empty_suite": false,
       "mutation_detection_ok": true,
-      "mutation_control": "fail",
-      "note": "Second observation of what CI ran. Not the independent parecer. control_unmutated process_exit=1 even though the full-tree gate is green.",
-      "report": ".aiox/pos09-candidate-bundled-863c7a0dc.json"
+      "mutation_control": "pass",
+      "control_unmutated": {
+        "process_exit": 0,
+        "report_exit": 0,
+        "control": "pass"
+      },
+      "note": "Accepted suite after accepting requested consumer fixes. Q05.kit.revisao-tecnica/compatibilizacao-interfaces/elaboracao-complementar all PASS. Q02.excerpt.numeric observed 19.60 for Q-PAR-01. All listed mutations detected.",
+      "report": ".aiox/pos09-candidate-bundled-741003a76.json"
     },
     {
       "id": "inb15-candidate-bundled",
-      "cwd": "/home/tjsasakifln/code/confenge/web-cfg/.grok/worktrees/pos-inb-09-examine-863c7a0dc",
-      "command": "npm run test:inb-20260911-15-strict -- --report /home/tjsasakifln/code/confenge/web-cfg/.grok/worktrees/pos-inb-09-revisao/.aiox/inb15-candidate-bundled-863c7a0dc.json",
+      "cwd": "/home/tjsasakifln/code/confenge/web-cfg/.grok/worktrees/pos-inb-09-examine-741003a76",
+      "command": "npm run test:inb-20260911-15-strict -- --report /home/tjsasakifln/code/confenge/web-cfg/.grok/worktrees/pos-inb-09-revisao/.aiox/inb15-candidate-bundled-741003a76.json",
       "exit_code": 0,
       "fail": 0,
       "pass": 83,
       "publication_required_missing": 0,
       "empty_suite": false,
       "mutation_detection_ok": true,
-      "report": ".aiox/inb15-candidate-bundled-863c7a0dc.json"
-    },
-    {
-      "id": "public-artifact-assemble-f01",
-      "cwd": "/tmp",
-      "command": "python3 scripts/pseo/public_artifact.py assemble --root <candidate> --dir /tmp/pos09-artifact-863c7a0dc",
-      "exit_code": 0,
-      "note": "Wrote outside the candidate. Four private-project CSVs and four infraestrutura CSVs copied with matching SHA-256 bodies. Repo-root data/ not leaked. HTTP 200 CSV from that artifact, not HTML."
+      "report": ".aiox/inb15-candidate-bundled-741003a76.json"
     }
   ],
-  "suite_owned_diff_e8ee1f558_vs_863c7a0dc": {
+  "suite_owned_diff_e8ee1f558_vs_741003a76": {
     "paths": [
       "docs/campaigns/pos-inb-20260911/09/pos-manifest.json",
       "tests/campaigns/pos_inb_20260911/09/checks.mjs",
+      "tests/campaigns/pos_inb_20260911/09/fixtures/pos-manifest.json",
       "tests/campaigns/pos_inb_20260911/09/lib/artifact.mjs",
-      "tests/campaigns/pos_inb_20260911/09/matrix.mjs"
+      "tests/campaigns/pos_inb_20260911/09/matrix.mjs",
+      "tests/campaigns/pos_inb_20260911/09/mutations.mjs"
     ],
     "inb15_owned_diff": "none",
     "accepted": [
-      {
-        "path": "tests/campaigns/pos_inb_20260911/09/lib/artifact.mjs",
-        "change": "probe is_authorized_public_nested_data_file",
-        "decision": "accepted_consumer_fix",
-        "why": "Independent Q01.artifact reported skip:forbidden_dir because the e8ee1f558 probe only reads FORBIDDEN_DIR_NAMES. Real assemble copies the CSVs."
-      },
-      {
-        "path": "tests/campaigns/pos_inb_20260911/09/checks.mjs",
-        "change": "Q01 simulated public copy no longer hard-skips data/ when nested CSV is authorized",
-        "decision": "accepted_consumer_fix",
-        "why": "Independent Q01.http 404 was the simulated skip, not the packaged artifact."
-      },
-      {
-        "path": "tests/campaigns/pos_inb_20260911/09/checks.mjs",
-        "change": "Q03 resolveCommercialDestination({offer_id, purchase_id, route_id})",
-        "decision": "accepted_consumer_fix",
-        "why": "Consumed #pptr-destination-map keeps complementary_engineering_project_review in shared_offer_ids; app.js resolves by purchase_id. String offer_id is supposed to return present=false."
-      },
-      {
-        "path": "tests/campaigns/pos_inb_20260911/09/matrix.mjs",
-        "change": "revisao purchase_id/route_id and not /projetos-complementares-engenharia/",
-        "decision": "accepted_consumer_fix",
-        "why": "Strengthens Q03 against swapping revisão for elaboração."
-      },
-      {
-        "path": "docs/campaigns/pos-inb-20260911/09/pos-manifest.json",
-        "change": "omit_demonstrativo_08 false",
-        "decision": "accepted_consumer_fix",
-        "why": "08 is included and advertised. Independent Q08.complete passed."
-      }
+      "artifact.mjs is_authorized_public_nested_data_file (Q01 consumer)",
+      "checks.mjs Q01 data/ copy when nested CSV authorized (Q01 consumer)",
+      "checks.mjs Q03 object-form resolveCommercialDestination (Q03 consumer)",
+      "matrix.mjs revisao purchase_id/route_id and not complementares hub (Q03 consumer)",
+      "pos-manifest omit_demonstrativo_08 false + fixtures twin (08 included)",
+      "checks.mjs Q02 binds EXCERPT_ITEM_ID Q-PAR-01 19.60 + data-trail-quantity numeric match (requested)",
+      "matrix.mjs KIT_EXPECTED revisao-tecnica / compatibilizacao-interfaces / elaboracao-complementar (requested)",
+      "matrix.mjs SLIM_COPY_PATHS casos/demonstrativo-infraestrutura (requested)",
+      "mutations.mjs wipe_excerpt wipes Q-PAR-01 quantity/localized/short/trail attrs; kit_generic_hub probes all four kit ids (requested)"
     ],
-    "not_accepted": [
-      {
-        "path": "tests/campaigns/pos_inb_20260911/09/checks.mjs",
-        "change": "Q02.excerpt.numeric matches any Q- CSV quantity, including 1, with comma localization",
-        "decision": "not_accepted",
-        "why": "On this tree the check binds to 19.60 via visible 19,60 (Q-PAR-01). Quantity cells Q-PRT-01/Q-JAN-01 are 1; visible.includes('1') would keep Q02 green if the excerpt numbers were wiped without restoring awaiting-canonical-excerpt. wipe_excerpt still only strips 4.32 and injects awaiting. Owner 10."
-      }
-    ]
+    "rejected_weakenings": []
   },
   "product_f01_f05": {
     "F01": {
@@ -146,48 +115,73 @@
         "03",
         "10"
       ],
-      "evidence": "assemble_public_artifact copies casos/demonstrativo-projeto-privado/data/{quantitativos,orcamento,coordenacao,revisao}.csv with SHA-256 match to source (d496fd5974ea928c / 859f6733536e17c3 / e828a2ec03c62958 / f60f0b21d9bee7bf prefixes). HTTP 200 CSV body from /tmp/pos09-artifact-863c7a0dc. HTML still links href=data/<file>. Independent Q01.artifact/http FAIL is a stale probe, not missing bytes."
+      "evidence": "Accepted-suite Q01.artifact/http/body PASS for all four private-project CSVs. Packaging code unchanged vs 863c7a0dc where assemble copied matching SHA-256 bodies and HTTP 200 CSV."
     },
     "F02": {
       "status": "HOLD",
       "owner": [
         "02"
       ],
-      "evidence": "quantitativos-orcamento-obras no longer has awaiting-canonical-excerpt. sample-trail.mjs consumes data/demonstrative/private-project-pilot/consumption.v1.json sample_trail Q-PAR-01 quantity 19.6 against quantity_rows 19.60. Visible copy contains 19,60 m² and 19,6 m². Independent Q02.excerpt.numeric FAIL is the e8ee1f558 hard-bind to Q-PISO-01 4.32, which is not on this landing."
+      "evidence": "Accepted-suite Q02.excerpt.numeric PASS observed 19.60 for Q-PAR-01; data-trail-quantity=19,6; awaiting marker absent. sample-trail consumes consumption.v1.json."
     },
     "F03": {
       "status": "HOLD_ON_CONSUMED_MAP",
       "owner": [
         "04"
       ],
-      "evidence": "ferramentas/prontidao-tecnica-obra-privada/index.html#pptr-destination-map has by_purchase_id revisao-tecnica-projetos → /revisao-tecnica-projetos-engenharia/ and compatibilizacao-projetos → /compatibilizacao-projetos-engenharia/. app.js destinationFor passes purchase_id. Static no-JS hrefs match. Independent Q03.map.revisao FAIL is string offer_id against shared_offer_ids (present=false), which is the correct fail-closed behavior for the consumed map."
+      "evidence": "Accepted-suite Q03.map.revisao and revisao_not_elaboracao PASS via purchase_id. #pptr-destination-map still omits complementary_engineering_project_review from by_offer_id (shared_offer_ids). Do not put that offer back into HTML by_offer_id."
     },
     "F04": {
       "status": "HOLD",
       "owner": [
         "02"
       ],
-      "evidence": "Independent Q04.public.revisao-tecnica-projetos-engenharia/index.html PASS. Visible copy has no SELECT, resolved_in_R01, or founder-approval labels."
+      "evidence": "Q04.public.* PASS including revisao-tecnica-projetos-engenharia."
     },
     "F05": {
-      "status": "HOLD_ON_PRODUCT_UNTESTED_BY_Q05_IDS",
+      "status": "HOLD",
       "owner": [
         "05"
       ],
-      "evidence": "partner-reference-kits.v1.json destinations: orcamento-quantitativos → /quantitativos-orcamento-obras/, revisao-tecnica → /revisao-tecnica-projetos-engenharia/, compatibilizacao-interfaces → /compatibilizacao-projetos-engenharia/, elaboracao-complementar → /projetos-complementares-engenharia/. parcerias-engenharia/index.html no-JS hrefs match. No kit destination is /servicos/#servico-projeto. KIT_EXPECTED still keys revisao-compatibilizacao and complementares, so those Q05 rows never run."
+      "evidence": "Accepted-suite Q05.kit.revisao-tecnica / compatibilizacao-interfaces / elaboracao-complementar / orcamento-quantitativos PASS dedicated routes, not /servicos/#servico-projeto."
     }
   },
   "q08": {
     "included": true,
-    "independent": "Q08.complete PASS",
-    "resources": "casos/demonstrativo-infraestrutura/index.html has h1, links four CSVs and five SVGs; those CSVs are also in the assembled package (hashes 9909f59c5494164c / 9f8c59a95dfd6fa7 / ebb41795d9552ca2 / 5859f447b3315c94 prefixes). Not an omitted-expansion PASS."
+    "accepted_suite": "Q08.complete PASS; mutation control_unmutated pass after SLIM_COPY_PATHS includes casos/demonstrativo-infraestrutura"
   },
+  "prior_findings": [
+    {
+      "id": "POS09-Q02-ANY-Q-INCLUDING-1",
+      "owner": "10",
+      "status": "CLOSED",
+      "evidence": "Q02 binds Q-PAR-01; observed 19.60; wipe_excerpt splits qty/localized/short and clears data-trail-quantity. No any-Q- including 1."
+    },
+    {
+      "id": "POS09-Q05-ORPHAN-KIT-IDS",
+      "owner": "05",
+      "status": "CLOSED",
+      "evidence": "KIT_EXPECTED keys match shipped kit ids; Q05.kit.* four rows PASS; kit_generic_hub mutation detected via any of those four."
+    },
+    {
+      "id": "POS09-MUTATION-CONTROL-08",
+      "owner": "10",
+      "status": "CLOSED",
+      "evidence": "control_unmutated control=pass process_exit=0 report_exit=0 on accepted suite."
+    },
+    {
+      "id": "POS09-MAP-TWIN-DRIFT",
+      "owner": "10",
+      "status": "CLOSED",
+      "evidence": "data/site/canonical-destination-map.v1.json and js/modules twin: complementary_engineering_project_review not in by_offer_id; shared_offer_ids lists revisao-tecnica-projetos and projetos-complementares. buildCanonicalDestinationMap derives shared from multiple owners. test_composition asserts string lookup present=false and purchase_id lookup → /revisao-tecnica-projetos-engenharia/. HTML #pptr-destination-map still has shared_offer_ids, not unique by_offer_id."
+    }
+  ],
   "checks_not_run": [
     {
       "id": "browser.360_390_desktop",
       "status": "NOT_RUN",
       "reason": "chrome_binary_not_found",
-      "note": "String analysis is not visual proof. Does not become PASS."
+      "note": "Does not become PASS."
     },
     {
       "id": "campaign-01-isolated-synthetic-capture",
@@ -203,91 +197,42 @@
       "note": "No live Search Console in this exam. Does not become PASS."
     }
   ],
-  "independent_suite_fail_ids": [
-    "Q01.artifact.quantitativos.csv",
-    "Q01.http.quantitativos.csv",
-    "Q01.artifact.orcamento.csv",
-    "Q01.http.orcamento.csv",
-    "Q01.artifact.coordenacao.csv",
-    "Q01.http.coordenacao.csv",
-    "Q01.artifact.revisao.csv",
-    "Q01.http.revisao.csv",
-    "Q02.excerpt.numeric",
-    "Q03.map.revisao",
-    "Q03.map.revisao_not_elaboracao"
-  ],
   "findings_by_severity": {
-    "quebra_jornada/indexacao": [
+    "quebra_jornada/indexacao": [],
+    "test_integrity": [],
+    "closed": [
+      {
+        "id": "POS09-Q02-ANY-Q-INCLUDING-1",
+        "owner": "10",
+        "status": "CLOSED"
+      },
       {
         "id": "POS09-Q05-ORPHAN-KIT-IDS",
         "owner": "05",
-        "also": [
-          "10"
-        ],
-        "status": "FAIL",
-        "path": "data/distribution/partner-reference-kits.v1.json",
-        "expected": "Q05.kit.revisao-compatibilizacao and Q05.kit.complementares still evaluate dedicated destinations vs /servicos/#servico-projeto",
-        "observed": "Kit ids renamed to revisao-tecnica, compatibilizacao-interfaces, elaboracao-complementar. KIT_EXPECTED in tests/campaigns/pos_inb_20260911/09/matrix.mjs was not updated (09-owned path). Both independent and candidate-bundled suites only emit Q05.kit.orcamento-quantitativos and Q05.kit.nojs_fallback. Product destinations currently hold; the gate no longer fails a generic-hub regression on those purchases.",
-        "reproduction": "Change kits[].id revisao-tecnica destination.path to /servicos/#servico-projeto. npm run test:pos-inb-20260911-09 still exits 0."
+        "status": "CLOSED"
       },
       {
         "id": "POS09-MUTATION-CONTROL-08",
         "owner": "10",
-        "status": "FAIL",
-        "path": "tests/campaigns/pos_inb_20260911/09/matrix.mjs",
-        "expected": "When omit_demonstrativo_08 is false and casos/index.html advertises /casos/demonstrativo-infraestrutura/, mutation control_unmutated is green on the same gate",
-        "observed": "Candidate-bundled mutations.control_unmutated control=fail process_exit=1 report_exit=1. SLIM_COPY_PATHS copies casos/index.html (which links the 08 page) but not casos/demonstrativo-infraestrutura/. Q08 then takes the omitted-promise branch. mutation_detection_ok remains true because control_unmutated.detected is hardcoded true.",
-        "reproduction": "Inspect .aiox/pos09-candidate-bundled-863c7a0dc.json mutations[0]. casos/index.html:74 links /casos/demonstrativo-infraestrutura/."
-      }
-    ],
-    "test_integrity": [
-      {
-        "id": "POS09-Q02-ANY-Q-INCLUDING-1",
-        "owner": "10",
-        "status": "FAIL",
-        "path": "tests/campaigns/pos_inb_20260911/09/checks.mjs",
-        "expected": "Q02.excerpt.numeric binds to the consumed excerpt quantity (Q-PAR-01 19.60 / data-trail-quantity) so a dimension wipe fails without relying on awaiting-canonical-excerpt",
-        "observed": "10 replaced the Q-PISO-01 4.32 bind with any /^Q-/ CSV cell. Q-PRT-01 and Q-JAN-01 quantity is 1. Candidate-bundled Q02.excerpt.numeric PASS observed 19.60 because 19,60 is present; that match is real. The broadened predicate is still how 10 obtained green against the 09-owned suite.",
-        "reproduction": "Remove 19,60 and 19,6 from quantitativos-orcamento-obras/index.html without adding awaiting-canonical-excerpt. Candidate-bundled Q02.excerpt.numeric still passes via includes('1')."
+        "status": "CLOSED"
       },
       {
         "id": "POS09-MAP-TWIN-DRIFT",
         "owner": "10",
-        "also": [
-          "04"
-        ],
-        "status": "FAIL",
-        "path": "data/site/canonical-destination-map.v1.json",
-        "expected": "A present schema is not proof the consumed map is the twin. #pptr-destination-map is what app.js reads.",
-        "observed": "data/site/canonical-destination-map.v1.json by_offer_id still maps complementary_engineering_project_review → /revisao-tecnica-projetos-engenharia/. tests/campaigns/pos_inb_20260911/10/test_composition.mjs asserts that string lookup. The consumed HTML map omits that offer_id and lists it in shared_offer_ids. js/modules/canonical-destination-map.js is documented as not assembled into frozen script.js.",
-        "impact": "Not a visitor-path fail on prontidão (consumed map + purchase_id hold). Do not treat the JSON twin as F03 evidence."
+        "status": "CLOSED"
       }
     ]
   },
   "approve_gate": {
-    "independent_fail": 11,
-    "independent_publication_required_missing": 0,
-    "independent_mutation_detection_ok": true,
-    "independent_empty_suite": false,
+    "accepted_suite_fail": 0,
+    "publication_required_missing": 0,
+    "mutation_detection_ok": true,
+    "empty_suite": false,
+    "control_unmutated": "pass",
     "product_f01_f05_hold": true,
-    "suite_mutations_accepted_or_absent": false,
-    "reason_not_approve": "Independent re-run at e8ee1f558 is fail=11. Q01/Q03 fails are stale probes whose consumer fixes are accepted, but 10's Q02 rewrite and the orphaned Q05 kit ids are not accepted. Candidate-bundled fail=0 is 10's mutated suite plus a red mutation control. APPROVE requires fail=0 on the accepted suite and accepted-or-absent 09-owned mutations."
+    "suite_mutations_accepted_or_absent": true,
+    "independent_old_probe_fail": 11,
+    "reason": "Accepted suite is the candidate-bundled POS-09 runner after accepting the requested Q02/Q05/Q08 consumer fixes plus previously accepted Q01/Q03/08-manifest fixes. Independent e8ee1f558 probes remain red by design (do not restore 4.32 or HTML by_offer_id revisão)."
   },
-  "request_changes": {
-    "owner_campaign": "10",
-    "also": [
-      "05"
-    ],
-    "required": [
-      "Bind Q02.excerpt.numeric to the consumed excerpt quantity (Q-PAR-01 19.60 / visible 19,60 or data-trail-quantity), not any Q- cell including 1. Update wipe_excerpt to that quantity.",
-      "Update KIT_EXPECTED to revisao-tecnica, compatibilizacao-interfaces, elaboracao-complementar (or equivalent) so Q05 still fails /servicos/#servico-projeto on those purchases.",
-      "When 08 is included, SLIM_COPY_PATHS must copy casos/demonstrativo-infraestrutura so mutation control_unmutated is green, or Q08 must not treat a slim tree as an omitted 08 with public promises."
-    ],
-    "not_required": [
-      "Do not un-package the CSVs. F01 holds on the real artifact.",
-      "Do not put Q-PISO-01 4.32 back on the orçamento landing just to satisfy the old bind. F02 holds with Q-PAR-01.",
-      "Do not put complementary_engineering_project_review back into #pptr-destination-map by_offer_id. Shared-offer fail-closed is correct; resolve by purchase_id."
-    ]
-  },
-  "note": "Authoring the suite is not approval. This parecer examines 863c7a0dc / tree b4cb61a7 with runner e8ee1f558. 08 is included; omitted-expansion PASS on origin/main is not a PASS here. Capture and live GSC remain NOT_VERIFIED. Browser 360/390/desktop is NOT_RUN."
+  "note": "Authoring the suite is not approval. This parecer examines 741003a76 / tree bead8fc7. 08 is included. Capture and live GSC remain NOT_VERIFIED. Browser 360/390/desktop is NOT_RUN. 09 does not merge PR 678 or dispatch netcup-release."
 }

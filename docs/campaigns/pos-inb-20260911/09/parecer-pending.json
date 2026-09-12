@@ -3,10 +3,11 @@
   "campaign_set": "POS-INB-20260911",
   "campaign_id": "09",
   "state": "ISSUED",
-  "verdict": "REQUEST_CHANGES",
+  "verdict": "APPROVE",
   "parecer": "docs/campaigns/pos-inb-20260911/09/parecer.json",
-  "candidate_commit": "863c7a0dc0a103d48dc0d135887cec7f12bcf63e",
-  "candidate_tree": "b4cb61a7c08ed996b61804502c49d28680fa3048",
-  "test_suite_commit": "e8ee1f558e5d9227cad37b432b3ede567fc28418",
-  "note": "Independent parecer issued. Integrator execution is not this parecer. Verdict is REQUEST_CHANGES; see parecer.json."
+  "candidate_commit": "741003a76cda676d813525fb3ad74380eac1b836",
+  "candidate_tree": "bead8fc71653a63c8e34fd1344f3a974a2c691f6",
+  "test_suite_commit": "c713bd715606245bcfbfcd063401b2eb26f0f185",
+  "accepted_suite_commit": "741003a76cda676d813525fb3ad74380eac1b836",
+  "note": "Independent parecer issued APPROVE for 741003a76 after REQUEST_CHANGES on 863c7a0dc. Integrator execution is not this parecer."
 }
