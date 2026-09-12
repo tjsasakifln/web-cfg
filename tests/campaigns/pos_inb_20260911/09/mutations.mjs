@@ -8,7 +8,7 @@ import os from "node:os";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
-import { CSVS, CSV_DIR, DEMO_PAGE, GENERIC_HUB, KITS_JSON, ORCAMENTO_PAGE, PRONTIDAO_PAGE, SLIM_COPY_PATHS } from "./matrix.mjs";
+import { CSVS, CSV_DIR, DEMO_PAGE, EXCERPT_ITEM_ID, GENERIC_HUB, KITS_JSON, ORCAMENTO_PAGE, PRONTIDAO_PAGE, SLIM_COPY_PATHS } from "./matrix.mjs";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const suiteRepo = path.resolve(here, "../../../..");
@@ -153,7 +153,18 @@ export async function runMutations(srcRoot, options = {}) {
     const page = path.join(dir, ORCAMENTO_PAGE);
     if (!fs.existsSync(page)) return;
     let html = fs.readFileSync(page, "utf8");
-    html = html.replace(/4\.32/g, "");
+    const csvPath = path.join(dir, CSV_DIR, "quantitativos.csv");
+    const csv = fs.existsSync(csvPath) ? fs.readFileSync(csvPath, "utf8") : "";
+    const qtyLine = csv.split(/\r?\n/).find((line) => line.startsWith(`${EXCERPT_ITEM_ID};`));
+    const qty = qtyLine ? qtyLine.split(";")[3] : null;
+    if (qty) {
+      const localized = String(qty).replace(".", ",");
+      const short = localized.replace(/0+$/, "").replace(/,$/, "");
+      html = html.split(qty).join("").split(localized).join("");
+      if (short && short !== localized) html = html.split(short).join("");
+    }
+    html = html.replace(/data-trail-quantity="[^"]*"/g, 'data-trail-quantity=""');
+    html = html.replace(/data-trail-item-quantity="[^"]*"/g, 'data-trail-item-quantity=""');
     if (!html.includes("awaiting-canonical-excerpt")) {
       html = html.replace("<main", '<div data-sample-trail-state="awaiting-canonical-excerpt"></div><main');
     }
@@ -178,7 +189,11 @@ export async function runMutations(srcRoot, options = {}) {
       if (kit.destination) kit.destination.path = GENERIC_HUB;
     }
     fs.writeFileSync(file, `${JSON.stringify(data, null, 2)}\n`);
-  }, (ctrl, mut) => rowStatus(mut.report, "Q05.kit.orcamento-quantitativos") === "fail");
+  }, (ctrl, mut) =>
+    ["orcamento-quantitativos", "revisao-tecnica", "compatibilizacao-interfaces", "elaboracao-complementar"].some(
+      (id) => rowStatus(mut.report, `Q05.kit.${id}`) === "fail",
+    ),
+  );
 
   mutate("leak_public_label", (dir) => {
     const page = path.join(dir, ORCAMENTO_PAGE);

@@ -7,15 +7,20 @@
       "intent_family": "orcar_planejar_decidir",
       "purchase_id": "quantitativos-orcamento"
     },
+    "budget_audit_feasibility": {
+      "path": "/auditoria-orcamento-licitacao/",
+      "intent_family": "orcar_planejar_decidir",
+      "purchase_id": "auditoria-orcamento-edital"
+    },
     "bim_coordination_clash_register": {
       "path": "/compatibilizacao-projetos-engenharia/",
       "intent_family": "projetar_revisar_compatibilizar",
       "purchase_id": "compatibilizacao-projetos"
     },
-    "complementary_engineering_project_review": {
-      "path": "/revisao-tecnica-projetos-engenharia/",
-      "intent_family": "projetar_revisar_compatibilizar",
-      "purchase_id": "revisao-tecnica-projetos"
+    "private_project_technical_readiness_assessment": {
+      "path": "/ferramentas/prontidao-tecnica-obra-privada/",
+      "intent_family": "orcar_planejar_decidir",
+      "purchase_id": "prontidao-tecnica-obra-privada"
     }
   },
   "by_purchase_id": {
@@ -139,5 +144,11 @@
       "intent_family": "orcar_planejar_decidir",
       "offer_id": "private_project_technical_readiness_assessment"
     }
+  },
+  "shared_offer_ids": {
+    "complementary_engineering_project_review": [
+      "revisao-tecnica-projetos",
+      "projetos-complementares"
+    ]
   }
 }

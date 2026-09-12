@@ -30,6 +30,7 @@ import {
   GENERIC_HUB,
   INFRA_DEMONSTRATIVO_HINTS,
   INSPECAO_PAGE,
+  EXCERPT_ITEM_ID,
   KIT_EXPECTED,
   KITS_JSON,
   OBRAS_PUBLICAS_PAGE,
@@ -234,14 +235,23 @@ export async function checkQ02(report, root) {
     return;
   }
   const csv = read(root, csvRel);
-  const quantities = csv
-    .split(/\r?\n/)
-    .filter((line) => /^Q-/.test(line))
-    .map((line) => line.split(";")[3])
-    .filter(Boolean);
+  const qtyLine = csv.split(/\r?\n/).find((line) => line.startsWith(`${EXCERPT_ITEM_ID};`));
+  const qty = qtyLine ? qtyLine.split(";")[3] : null;
+  const qtyNumber = qty ? Number(String(qty).replace(",", ".")) : NaN;
   const visible = html.visibleText(page);
-  const qty = quantities.find((value) => visible.includes(value) || visible.includes(String(value).replace(".", ","))) || quantities[0] || null;
-  const hasNumber = Boolean(qty && (visible.includes(qty) || visible.includes(String(qty).replace(".", ","))));
+  const localized = Number.isFinite(qtyNumber) ? String(qtyNumber).replace(".", ",") : null;
+  const dotted = Number.isFinite(qtyNumber) ? String(qtyNumber) : null;
+  const visibleHasQty = Boolean(
+    qty &&
+      Number.isFinite(qtyNumber) &&
+      (visible.includes(qty) ||
+        (localized && visible.includes(localized)) ||
+        (dotted && visible.includes(dotted))),
+  );
+  const trail = page.match(/data-trail-quantity="([^"]+)"/);
+  const trailNumber = trail ? Number(String(trail[1]).replace(",", ".")) : NaN;
+  const trailMatchesSource = Number.isFinite(qtyNumber) && Number.isFinite(trailNumber) && trailNumber === qtyNumber;
+  const hasNumber = visibleHasQty && (trailMatchesSource || !trail);
   passFail(
     report,
     {
@@ -249,7 +259,7 @@ export async function checkQ02(report, root) {
       campaign: "02",
       owner: "02",
       path: ORCAMENTO_PAGE,
-      expected: `visible numeric excerpt containing source quantity ${qty}`,
+      expected: `visible numeric excerpt containing ${EXCERPT_ITEM_ID} quantity ${qty}`,
       observed: hasNumber ? qty : visible.slice(0, 180),
       severity: SEVERITY.JOURNEY,
     },

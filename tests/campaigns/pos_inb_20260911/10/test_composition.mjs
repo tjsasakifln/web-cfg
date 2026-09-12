@@ -116,16 +116,29 @@ function sha256(buf) {
   const map = buildCanonicalDestinationMap(purchase);
   const shipped = JSON.parse(read("data/site/canonical-destination-map.v1.json"));
   assert.deepEqual(shipped.by_offer_id, map.by_offer_id);
+  assert.deepEqual(shipped.shared_offer_ids, map.shared_offer_ids);
+  assert.equal(
+    Object.prototype.hasOwnProperty.call(shipped.by_offer_id, "complementary_engineering_project_review"),
+    false,
+  );
   const qty = readiness.resolveCommercialDestination("quantity_takeoff_budgeting", shipped);
   const compat = readiness.resolveCommercialDestination("bim_coordination_clash_register", shipped);
-  const revisao = readiness.resolveCommercialDestination(
+  const revisaoBare = readiness.resolveCommercialDestination(
     "complementary_engineering_project_review",
+    shipped,
+  );
+  const revisao = readiness.resolveCommercialDestination(
+    {
+      offer_id: "complementary_engineering_project_review",
+      purchase_id: "revisao-tecnica-projetos",
+    },
     shipped,
   );
   assert.equal(qty.present, true);
   assert.equal(qty.href, "/quantitativos-orcamento-obras/");
   assert.equal(compat.present, true);
   assert.equal(compat.href, "/compatibilizacao-projetos-engenharia/");
+  assert.equal(revisaoBare.present, false);
   assert.equal(revisao.present, true);
   assert.equal(revisao.href, "/revisao-tecnica-projetos-engenharia/");
   assert.equal(shipped.by_purchase_id["projetos-complementares"].path, "/projetos-complementares-engenharia/");
@@ -135,6 +148,11 @@ function sha256(buf) {
   assert.match(landingMap, /id="pptr-destination-map"/);
   assert.match(landingMap, /compatibilizacao-projetos-engenharia/);
   assert.match(landingMap, /revisao-tecnica-projetos-engenharia/);
+  assert.match(landingMap, /shared_offer_ids/);
+  assert.doesNotMatch(
+    landingMap.match(/id="pptr-destination-map">([^<]+)</)[1],
+    /"by_offer_id":\{[^}]*complementary_engineering_project_review/,
+  );
 }
 
 {

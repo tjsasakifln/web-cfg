@@ -15,11 +15,10 @@ const JSON_REL = "data/site/canonical-destination-map.v1.json";
 
 const SCHEMA = "confenge.canonical-destination-map/1.0";
 
-/** offer_id used by both revisão and elaboração; 04's readiness table maps it to revisão. */
-const OFFER_TO_PURCHASE = Object.freeze({
+/** Unique F03 offers filled when the purchase list has exactly one owner. Shared offer_ids stay out of by_offer_id. */
+const UNIQUE_OFFER_TO_PURCHASE = Object.freeze({
   quantity_takeoff_budgeting: "quantitativos-orcamento",
   bim_coordination_clash_register: "compatibilizacao-projetos",
-  complementary_engineering_project_review: "revisao-tecnica-projetos",
 });
 
 function publicPath(url) {
@@ -30,7 +29,6 @@ function publicPath(url) {
 
 export function buildCanonicalDestinationMap(document) {
   const byPurchase = {};
-  const byOffer = {};
   for (const row of document.purchases || []) {
     const purchaseId = row?.purchase_id;
     const href = publicPath(row?.source_of_truth || row?.primary_url);
@@ -41,7 +39,28 @@ export function buildCanonicalDestinationMap(document) {
       offer_id: row.offer_id || null,
     };
   }
-  for (const [offerId, purchaseId] of Object.entries(OFFER_TO_PURCHASE)) {
+  const offerOwners = {};
+  for (const [purchaseId, entry] of Object.entries(byPurchase)) {
+    if (!entry.offer_id) continue;
+    (offerOwners[entry.offer_id] ||= []).push(purchaseId);
+  }
+  const byOffer = {};
+  const shared = {};
+  for (const [offerId, owners] of Object.entries(offerOwners)) {
+    if (owners.length > 1) {
+      shared[offerId] = owners;
+      continue;
+    }
+    const purchaseId = owners[0];
+    const entry = byPurchase[purchaseId];
+    byOffer[offerId] = {
+      path: entry.path,
+      intent_family: entry.intent_family,
+      purchase_id: purchaseId,
+    };
+  }
+  for (const [offerId, purchaseId] of Object.entries(UNIQUE_OFFER_TO_PURCHASE)) {
+    if (shared[offerId] || byOffer[offerId]) continue;
     const entry = byPurchase[purchaseId];
     if (entry) {
       byOffer[offerId] = {
@@ -56,6 +75,7 @@ export function buildCanonicalDestinationMap(document) {
     source: MAP_REL,
     by_offer_id: byOffer,
     by_purchase_id: byPurchase,
+    shared_offer_ids: shared,
   };
 }
 

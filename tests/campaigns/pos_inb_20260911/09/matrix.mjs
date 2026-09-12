@@ -45,16 +45,23 @@ export const REQUIRED_DESTINATIONS = {
   },
 };
 
+/** CSV item whose quantity is the consumed excerpt on the orçamento landing. Not Q-PISO-01. */
+export const EXCERPT_ITEM_ID = "Q-PAR-01";
+
 export const KIT_EXPECTED = {
   "orcamento-quantitativos": {
     path: "/quantitativos-orcamento-obras/",
     sample: "/casos/modelo-base-quantitativa-canonica/",
   },
-  "revisao-compatibilizacao": {
-    dedicated: ["/revisao-tecnica-projetos-engenharia/", "/compatibilizacao-projetos-engenharia/"],
+  "revisao-tecnica": {
+    dedicated: ["/revisao-tecnica-projetos-engenharia/"],
     forbidden: ["/servicos/#servico-projeto"],
   },
-  complementares: {
+  "compatibilizacao-interfaces": {
+    dedicated: ["/compatibilizacao-projetos-engenharia/"],
+    forbidden: ["/servicos/#servico-projeto"],
+  },
+  "elaboracao-complementar": {
     dedicated: ["/projetos-complementares-engenharia/"],
     forbidden: ["/servicos/#servico-projeto"],
   },
@@ -99,5 +106,6 @@ export const SLIM_COPY_PATHS = [
   "data/commercial",
   "triagem-tecnica/index.html",
   "casos/index.html",
+  "casos/demonstrativo-infraestrutura",
   "conteudos/index.html",
 ];
