@@ -538,12 +538,25 @@ def build_sample_trail(extracts: dict[str, Any]) -> dict[str, Any]:
     )
     gross_sum = sum((D(walls[wid]["gross_m2"]) for wid in wall_order), Decimal("0"))
     net = D(qty["quantity"])
-    door_area = D(named["door_area_m2"])
-    win_area = D(named["window_area_r01_m2"])
+    # Consume the rounded deductions already applied by the takeoff authority.
+    # Grouping by wall also preserves its rounding when openings share a host.
+    deductions = sorted(
+        (row for row in walls.values() if D(row["deduction_m2"]) > 0),
+        key=lambda row: row["opening_ids"],
+    )
+    discounts = " e ".join(
+        f"{' + '.join(row['opening_ids'])} {_br(D(row['deduction_m2']))} m²"
+        for row in deductions
+    ) or "nenhum"
+    equation = " - ".join(
+        [f"{_br(gross_sum)} m²"]
+        + [f"{_br(D(row['deduction_m2']))} m²" for row in deductions]
+    ) + f" = {_br(net)} m²."
     memory = (
         f"{'; '.join(memory_parts)}. "
-        f"Bruto {_br(gross_sum)} m²; descontos D-01 {_br(door_area)} m² e "
-        f"WN-01 {_br(win_area)} m²; líquido {_br(net)} m²."
+        f"Aberturas medidas: D-01 {_br(D(named['door_area_m2']))} m² e "
+        f"WN-01 {_br(D(named['window_area_r01_m2']))} m². "
+        f"Descontos aplicados: {discounts}. {equation}"
     )
     return {
         "schema": "confenge.quantity-takeoff-excerpt/1.0",
@@ -574,6 +587,7 @@ def build_sample_trail(extracts: dict[str, Any]) -> dict[str, Any]:
         },
         "calculation": {
             "formula": qty["formula"],
+            "label_pt_br": "Área das paredes menos as aberturas descontáveis.",
             "inputs": inputs,
             "memory": memory,
         },

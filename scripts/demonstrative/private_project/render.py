@@ -11,6 +11,7 @@ from typing import Any
 
 from scripts.demonstrative.private_project.derive import (
     CANONICAL_URL,
+    build_sample_trail,
     PUBLIC_DIR_REL,
     PUBLIC_URL,
 )
@@ -303,13 +304,15 @@ def render_html(extracts: dict[str, Any]) -> str:
     room = extracts["room"]
     criteria = extracts["takeoff_criteria"]
 
+    calculation = build_sample_trail(extracts)["calculation"]
     qty_rows = [
         [
             row["id"],
             row["description_pt_br"],
             row["unit"],
             br_number(row["quantity"], 4 if row["unit"] == "m3" else 2),
-            row["formula"].replace(".", ","),
+            (calculation["label_pt_br"] + " " + calculation["memory"])
+            if row["id"] == "Q-PAR-01" else row["formula"].replace(".", ","),
             " ".join(row["element_ids"]),
             row["sheet_ref"],
         ]

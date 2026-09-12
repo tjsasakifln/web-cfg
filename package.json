@@ -307,6 +307,7 @@
     "test:inb-20260911-15": "node tests/campaigns/inb_20260911/15/run.mjs --root . --examined-kind candidate --strict-release --manifest docs/campaigns/pos-inb-20260911/09/legacy-manifest.json --mutations",
     "test:inb-20260911-15-strict": "node tests/campaigns/inb_20260911/15/run.mjs --root . --examined-kind candidate --strict-release --manifest docs/campaigns/pos-inb-20260911/09/legacy-manifest.json --mutations",
     "test:pos-inb-20260911-09": "node tests/campaigns/pos_inb_20260911/09/run.mjs --root . --examined-kind candidate --strict-release --manifest docs/campaigns/pos-inb-20260911/09/pos-manifest.json --mutations",
+    "test:ativacao-03": "python3 -m pytest tests/ativacao_20260912/03/test_presentation_and_sharing.py -q && node tests/ativacao_20260912/03/test_social_image_decode.mjs",
     "test:pos-inb-20260911-10": "node tests/campaigns/pos_inb_20260911/10/test_composition.mjs && python3 -m pytest scripts/pseo/tests/test_demonstrative_csv_packaging.py -q && node scripts/site/build_canonical_destination_map.mjs --check",
     "test:private-readiness": "node scripts/site/test_private_project_technical_readiness.mjs",
     "test:convergence-browser": "node scripts/site/test_convergence_browser.mjs",
