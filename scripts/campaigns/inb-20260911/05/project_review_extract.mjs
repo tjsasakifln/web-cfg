@@ -526,7 +526,7 @@ export function renderExtractHtml(classified) {
   const csvHref = `${url}data/revisao.csv`;
   const proofId = classified.proof_id || "";
   const items = (classified.items || []).map((item) => renderExtractItemHtml(item)).join("\n");
-  return `${EXTRACT_SLOT_START}<div class="rv-extract-slot" data-extract-kind="demonstrative" data-extract-canonical-source="inb-06" data-proof-id="${escapeHtml(proofId)}">
+  return `${EXTRACT_SLOT_START}<div class="rv-extract-slot" data-extract-kind="demonstrative" data-extract-canonical-source="inb-06" data-demonstrative-id="${escapeHtml(proofId)}">
 <p class="section-lead rv-note">Exemplo demonstrativo do <a href="${escapeHtml(url)}">recorte de banheiro</a> e do <a href="${escapeHtml(csvHref)}">arquivo de revisão</a>: não é trabalho de cliente e não é parecer para executar obra. Item de checklist não respondido e norma não examinada não viram erro do projeto.</p>
 <div class="rv-extract">
 ${items}

@@ -10,9 +10,16 @@ export function artifactWouldCopy(root, rel) {
 from pathlib import Path
 import sys
 sys.path.insert(0, ${JSON.stringify(root)})
-from scripts.pseo.public_artifact import FORBIDDEN_DIR_NAMES, FORBIDDEN_EXTENSIONS
+from scripts.pseo.public_artifact import (
+    FORBIDDEN_DIR_NAMES,
+    FORBIDDEN_EXTENSIONS,
+    is_authorized_public_nested_data_file,
+)
 rel = Path(sys.argv[1])
-if any(part in FORBIDDEN_DIR_NAMES for part in rel.parts):
+posix = rel.as_posix()
+if is_authorized_public_nested_data_file(posix):
+    print("copy")
+elif any(part in FORBIDDEN_DIR_NAMES for part in rel.parts):
     print("skip:forbidden_dir")
 elif rel.suffix.lower() in FORBIDDEN_EXTENSIONS:
     print("skip:forbidden_ext")

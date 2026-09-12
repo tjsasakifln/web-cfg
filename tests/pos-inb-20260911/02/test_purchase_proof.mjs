@@ -94,7 +94,7 @@ test("shipped revisão extract is Portuguese, without SELECT, founder or raw res
   const withoutJs = stripScripts(html);
   const text = visible(withoutJs);
   assert.match(withoutJs, /data-extract-kind="demonstrative"/);
-  assert.match(withoutJs, /data-proof-id="demo-private-project-pilot-2026-09"/);
+  assert.match(withoutJs, /data-demonstrative-id="demo-private-project-pilot-2026-09"/);
   assert.match(text, /Constatação/);
   assert.match(text, /Documento/);
   assert.match(text, /Implicação/);

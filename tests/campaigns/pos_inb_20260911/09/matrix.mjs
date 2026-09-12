@@ -38,8 +38,10 @@ export const REQUIRED_DESTINATIONS = {
   },
   revisao: {
     offer_id: "complementary_engineering_project_review",
+    purchase_id: "revisao-tecnica-projetos",
+    route_id: "revisao",
     path: "/revisao-tecnica-projetos-engenharia/",
-    not: ["/servicos/#servico-projeto"],
+    not: ["/servicos/#servico-projeto", "/projetos-complementares-engenharia/"],
   },
 };
 

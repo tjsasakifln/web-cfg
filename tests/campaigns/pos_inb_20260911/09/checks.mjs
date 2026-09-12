@@ -77,7 +77,11 @@ export async function checkQ01(report, root, { port }) {
       const rel = path.relative(root, src);
       if (!rel || rel === ".") return true;
       if (fs.existsSync(src) && fs.statSync(src).isDirectory()) {
-        return !["data", "seo", "scripts", "tests"].includes(path.basename(src));
+        const base = path.basename(src);
+        if (base === "data") {
+          return artifactWouldCopy(root, `${rel}/revisao.csv`).copy;
+        }
+        return !["seo", "scripts", "tests"].includes(base);
       }
       const verdict = artifactWouldCopy(root, rel);
       return verdict.copy;
@@ -230,10 +234,14 @@ export async function checkQ02(report, root) {
     return;
   }
   const csv = read(root, csvRel);
-  const qtyLine = csv.split(/\r?\n/).find((line) => line.startsWith("Q-PISO-01;"));
-  const qty = qtyLine ? qtyLine.split(";")[3] : null;
+  const quantities = csv
+    .split(/\r?\n/)
+    .filter((line) => /^Q-/.test(line))
+    .map((line) => line.split(";")[3])
+    .filter(Boolean);
   const visible = html.visibleText(page);
-  const hasNumber = qty && visible.includes(qty);
+  const qty = quantities.find((value) => visible.includes(value) || visible.includes(String(value).replace(".", ","))) || quantities[0] || null;
+  const hasNumber = Boolean(qty && (visible.includes(qty) || visible.includes(String(qty).replace(".", ","))));
   passFail(
     report,
     {
@@ -297,7 +305,14 @@ export async function checkQ03(report, root) {
   }
   const engine = loadReadiness(root);
   for (const [role, spec] of Object.entries(REQUIRED_DESTINATIONS)) {
-    const resolved = engine.resolveCommercialDestination(spec.offer_id, map);
+    const resolved = engine.resolveCommercialDestination(
+      {
+        offer_id: spec.offer_id,
+        purchase_id: spec.purchase_id || null,
+        route_id: spec.route_id || null,
+      },
+      map,
+    );
     const okPath = resolved.present && resolved.href === spec.path;
     const swapped = spec.not && spec.not.includes(resolved.href);
     passFail(

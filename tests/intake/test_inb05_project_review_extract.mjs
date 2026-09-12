@@ -79,7 +79,7 @@ test("landing extract texts are the 06 rows, not a second invented story", () =>
   const rf1 = byId(classified, "RF-01");
   const rf2 = byId(classified, "RF-02");
   assert.match(landing, /data-extract-canonical-source="inb-06"/);
-  assert.match(landing, /data-proof-id="demo-private-project-pilot-2026-09"/);
+  assert.match(landing, /data-demonstrative-id="demo-private-project-pilot-2026-09"/);
   assert.match(landing, /href="\/casos\/demonstrativo-projeto-privado\/"/);
   assert.match(landing, /href="\/casos\/demonstrativo-projeto-privado\/data\/revisao.csv"/);
   assert.equal(landing.includes(rf1.finding_text), true, rf1.finding_text);

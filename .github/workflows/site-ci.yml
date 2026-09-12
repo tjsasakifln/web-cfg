@@ -168,6 +168,8 @@ jobs:
           npm run test:lead-function
       - name: INB-15 strict regression on the candidate tree
         run: npm run test:inb-20260911-15-strict
+      - name: POS-INB-09 acceptance on the candidate tree
+        run: npm run test:pos-inb-20260911-09
       - name: Build public site
         env:
           # The release artifact must carry the production identity it will be

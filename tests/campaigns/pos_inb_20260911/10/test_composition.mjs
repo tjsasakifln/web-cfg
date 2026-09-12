@@ -43,7 +43,7 @@ function sha256(buf) {
 {
   const empty = finish({ results: [] }, { strictRelease: true });
   assert.equal(empty.summary.exit_code, 1);
-  assert.equal(empty.summary.empty_execution, true);
+  assert.equal(empty.summary.empty_suite, true);
   const requiredMissing = finish(
     {
       results: [
