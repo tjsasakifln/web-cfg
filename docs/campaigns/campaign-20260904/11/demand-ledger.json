@@ -1,0 +1,146 @@
+{
+  "schema": "campaign-11-demand-ledger/1.0.0",
+  "campaign_id": 11,
+  "issue": 579,
+  "parent_issue": 577,
+  "as_of": "2026-09-04",
+  "canonical_route": "/grande-florianopolis/",
+  "publication_state": "PASS_NOINDEX",
+  "taxonomy_version": "CONFENGE_CORPORATE_TAXONOMY/1.0.0-draft.20260904",
+  "offer_catalog_version": "CONFENGE_OFFER_CATALOG/2.0.0-draft.20260904",
+  "intake_version": "CONFENGE_WEB_INTAKE/2.0.0-draft.20260904",
+  "source": "CONFENGE_WEB",
+  "invariants": {
+    "outbound_eligible": false,
+    "auto_send": false
+  },
+  "gsc_baseline": {
+    "status": "UNKNOWN",
+    "impressions": null,
+    "clicks": null,
+    "limitation": "Live GSC BLOCKED in data/local-entity/census.json; historical CSV is not current Search Analytics."
+  },
+  "columns": [
+    "query_visitor_job",
+    "icp",
+    "economic_relevance",
+    "local_specificity",
+    "current_owner",
+    "proof",
+    "canonical_route",
+    "terminal_action",
+    "measurement",
+    "kill_condition"
+  ],
+  "families": [
+    {
+      "id": "assistencia-tecnica-pericia",
+      "nucleus_id": "expert_evidence_assistance",
+      "query_visitor_job": "Enquadrar objeto, nexo e papel (assistente técnico vs perito do juízo) sem enviar autos ou dados sensíveis no primeiro contato.",
+      "icp": "Advogado, parte, síndico ou empresa com controvérsia técnica em edificação, imóvel ou contrato.",
+      "economic_relevance": "VALIDATE — economic value is hypothesized from dispute stakes, not measured local GSC. Volume UNKNOWN.",
+      "local_specificity": "Vistoria no sítio em Florianópolis, São José, Palhoça ou Biguaçu quando o objeto não puder ser caracterizado só por documentos. Acesso, segurança e conflito são condicionantes, não prova local inventada.",
+      "current_owner": "campaign-11 hub (this route). Credential projection: #243/#581. Capture: #580. Conflict: #585. Offers: #583.",
+      "proof": "None local. National norms named (NBR 13752) are document-class references, not CONFENGE cases.",
+      "canonical_route": "/grande-florianopolis/#nucleo-pericia",
+      "terminal_action": "Protected triage handoff with source=CONFENGE_WEB, landing_family=grande-florianopolis-hub, nucleus_id=expert_evidence_assistance. No file upload. outbound_eligible=false, auto_send=false.",
+      "measurement": "UNKNOWN until #580 records a qualified local inquiry. Do not treat page views as QCO.",
+      "kill_condition": "Retire the family section if 90 days after index authorization produce no qualified inquiry and no distinct-answer residual versus the nucleus hub. Do not mint a city URL as a remedy."
+    },
+    {
+      "id": "avaliacao-de-imovel",
+      "nucleus_id": "property_valuation",
+      "query_visitor_job": "Obter valor fundamentado para disputa, garantia, negociação ou decisão patrimonial, com finalidade explícita.",
+      "icp": "Titular, credor, inventariante, incorporador ou advogado que precisa de valor, não de vistoria de manutenção.",
+      "economic_relevance": "VALIDATE — hypothesized from urban housing stock (IBGE Censo 2022 populations). Volume UNKNOWN.",
+      "local_specificity": "Vistoria do bem avaliando é a regra da classe NBR 14653; exceção só com paradigma acordado. Mercado comparado é local; a URL permanece a do hub.",
+      "current_owner": "campaign-11 hub. Offers #583. Credentials #243/#581.",
+      "proof": "None local. No sample laudo, no sold-comparables dataset in this repo for the four cities.",
+      "canonical_route": "/grande-florianopolis/#nucleo-avaliacao",
+      "terminal_action": "Protected triage with nucleus_id=property_valuation. No PII in query string.",
+      "measurement": "UNKNOWN.",
+      "kill_condition": "If the section cannot name a purpose-of-value decision distinct from inspeção, fold it into building_engineering_documentation copy rather than create /avaliacao-florianopolis/."
+    },
+    {
+      "id": "laudo-reforma-condominio",
+      "nucleus_id": "building_engineering_documentation",
+      "query_visitor_job": "Decidir se uma reforma em condomínio ou unidade exige laudo, memorial e limites de interferência antes de contratar execução.",
+      "icp": "Síndico, administradora, condômino ou construtora de reforma.",
+      "economic_relevance": "VALIDATE. Volume UNKNOWN.",
+      "local_specificity": "Acesso a áreas comuns, ata e janela de visita são logística. Não cria /condominio-florianopolis/.",
+      "current_owner": "campaign-11 hub. Conflict #585 when another party already hired CONFENGE.",
+      "proof": "None. No permissioned condominium case.",
+      "canonical_route": "/grande-florianopolis/#nucleo-reforma",
+      "terminal_action": "Protected triage with nucleus_id=building_engineering_documentation and problem_type=renovation_report.",
+      "measurement": "UNKNOWN.",
+      "kill_condition": "Duplicate of inspeção/patologia without a distinct decision (reforma vs sintoma) → merge sections, keep one URL."
+    },
+    {
+      "id": "inspecao-patologia",
+      "nucleus_id": "building_engineering_documentation",
+      "query_visitor_job": "Classificar sintoma (infiltração, fissura, umidade, destacamento) como manutenção, uso ou vício, e saber se precisa visita.",
+      "icp": "Proprietário, síndico, construtora em garantia, seguradora.",
+      "economic_relevance": "VALIDATE. Volume UNKNOWN.",
+      "local_specificity": "Umidade costeira e acesso em encosta são condicionantes de campo da Grande Florianópolis, não um case. Inspeção NBR 16747 não é perícia NBR 13752.",
+      "current_owner": "campaign-11 hub.",
+      "proof": "None local.",
+      "canonical_route": "/grande-florianopolis/#nucleo-inspecao",
+      "terminal_action": "Protected triage with problem_type=inspection_pathology. No photos of identifiable people in the public form.",
+      "measurement": "UNKNOWN.",
+      "kill_condition": "If copy collapses into perícia, rewrite; do not split to /patologia-sao-jose/."
+    },
+    {
+      "id": "orcamento-quantitativos",
+      "nucleus_id": "building_engineering_documentation",
+      "query_visitor_job": "Quantificar serviço ou insumo para decidir contratar, glosar ou comparar proposta, sem enviar projeto completo no primeiro contato.",
+      "icp": "Construtora, síndico, dono de obra privada, equipe B2G já coberta pelos hubs nacionais.",
+      "economic_relevance": "VALIDATE for private work. B2G orçamento already has national routes; this family must not cannibalize them with location modifiers.",
+      "local_specificity": "Deslocamento para medição em campo quando o quantitativo não puder ser lido só em memorial. Não cria /orcamento-palhoca/.",
+      "current_owner": "campaign-11 hub for private/local. National B2G: /auditoria-orcamento-licitacao/ and siblings, unmodified.",
+      "proof": "None local. B2G proof stays on B2G hubs.",
+      "canonical_route": "/grande-florianopolis/#nucleo-orcamento",
+      "terminal_action": "If the job is public-contract, hand off to existing B2G hub without city suffix. If private, nucleus_id=building_engineering_documentation problem_type=quantities.",
+      "measurement": "UNKNOWN locally. B2G measurement remains on existing routes.",
+      "kill_condition": "Any draft that adds 'Florianópolis' to a B2G title is rejected. Prefer the national hub."
+    },
+    {
+      "id": "bim-compatibilizacao",
+      "nucleus_id": "building_engineering_documentation",
+      "query_visitor_job": "Detectar conflito entre disciplinas antes de executar ou de emitir documentação de obra.",
+      "icp": "Projetista, construtora, incorporador, dono de obra privada.",
+      "economic_relevance": "VALIDATE. Volume UNKNOWN.",
+      "local_specificity": "Presença local só quando o conflito exige conferência no sítio. Trabalho de modelo pode ser remoto.",
+      "current_owner": "campaign-11 hub. Canary 09 owns private technical readiness; this hub only links, does not host upload.",
+      "proof": "None.",
+      "canonical_route": "/grande-florianopolis/#nucleo-bim",
+      "terminal_action": "Protected triage; private models stay off the public first step (canary 09 / #580).",
+      "measurement": "UNKNOWN.",
+      "kill_condition": "No distinct answer versus orçamento → merge. Never /bim-florianopolis/."
+    },
+    {
+      "id": "sst",
+      "nucleus_id": "occupational_safety",
+      "query_visitor_job": "Obter documentação ou suporte técnico em segurança do trabalho, inclusive assistência em litígio, sem enviar lista de empregados ou prontuário.",
+      "icp": "Empresa, RH, advogado trabalhista, contratante de obra.",
+      "economic_relevance": "VALIDATE. Volume UNKNOWN.",
+      "local_specificity": "Visita ao posto de trabalho quando o risco não puder ser lido só em documentos. Não é walk-in clinic.",
+      "current_owner": "campaign-11 hub. Credentials for occupational-safety attribution: #243/#581 (not projected here).",
+      "proof": "None local. Do not copy CREA/SST titles from #243.",
+      "canonical_route": "/grande-florianopolis/#nucleo-sst",
+      "terminal_action": "Protected triage with nucleus_id=occupational_safety. Conflict check before reviewing another party's employees.",
+      "measurement": "UNKNOWN.",
+      "kill_condition": "If SST copy implies medical or legal representation, rewrite. No /sst-biguacu/."
+    }
+  ],
+  "b2g_national_additive": {
+    "nucleus_id": "public_works_b2g",
+    "canonical_routes": [
+      "/diagnostico-b2g-360/",
+      "/diretoria-b2g/",
+      "/bid-room-licitacoes-obras/",
+      "/defesa-margem-contratos-publicos/"
+    ],
+    "rule": "Link without location modifiers. Local hub is additive, not a territorial limit."
+  },
+  "distinct_answer_rule": "None of the seven families mints a new URL. Anchors on /grande-florianopolis/ are the only campaign-11 public slug candidate."
+}
