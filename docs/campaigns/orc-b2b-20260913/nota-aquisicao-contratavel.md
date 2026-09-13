@@ -95,3 +95,34 @@ Como avaliar depois, sem confundir camadas: descoberta é impressão e clique do
 orçamento a partir da data de publicação desta campanha; contato é solicitação efetivamente
 recebida, nunca clique em WhatsApp; contratação só a partir do sistema comercial. Falta de dado é
 desconhecido, nunca zero.
+
+## 6. O que foi implementado
+
+Diferenças observáveis entre `ea22bc9ce` e este candidato, na rota
+`/quantitativos-orcamento-obras/`:
+
+| Antes | Depois |
+| --- | --- |
+| 0 menção a infraestrutura, 0 link para `/casos/demonstrativo-infraestrutura/` | duas entradas de prova resumidas, edificação e infraestrutura, com desenho, critério, quantidade e item de planilha canônicos e os oito CSV abertos |
+| `terceiriz*`, `escritório`, `incorporador*`, `empresa de engenharia` ausentes; `construtora` só em exemplo lateral | um parágrafo nomeia quem contrata e a possibilidade de terceirizar a produção do orçamento, sem estreitar a marca |
+| nada distinguia serviço de software ou planilha gratuita | a primeira dobra declara serviço de engenharia contratado, com responsável técnico |
+| `comparar-propostas` listava critérios | matriz estática de equalização aplicando os cinco critérios às duas propostas do exemplo sintético |
+| `documentos-para-levantamento` não mostrava como pedir | exemplo de primeiro pedido, editável, sem CPF, CNPJ, endereço ou processo |
+| prontidão levava ao contato o recorte do encaminhamento principal mesmo no caminho alternativo | o contato nomeia o recorte que carrega e manda abrir a página do caminho escolhido |
+
+Nenhuma URL nova. Nenhuma ferramenta nova. Nenhum formulário novo: a rota segue
+sem captura ativa, com os três canais diretos publicados.
+
+## 7. Camadas, separadas
+
+- **IMPLEMENTAÇÃO**: feita e testada localmente. 17 asserções de cenário e
+  contraprova na suíte da campanha, `build:site` duas vezes com as 234 páginas
+  HTML byte a byte iguais, CSP real aplicada no navegador sem violação.
+- **PERCURSO PUBLICADO**: depende do merge pelo fluxo protegido de main e da
+  promoção Netcup. Até lá, verificado apenas no artefato local.
+- **RECEBIMENTO OPERACIONAL**: não comprovado. A rota não tem formulário ativo;
+  a autoridade de intake adaptativo segue WITHHELD. Clique em WhatsApp não é
+  mensagem recebida. O probe legado `money_asset_prod_proof.mjs` é objeto do
+  PR #682 e não foi executado nem alterado aqui.
+- **RESULTADO COMERCIAL**: nada a afirmar. Oportunidade qualificada, proposta e
+  contratação só a partir do sistema comercial.
