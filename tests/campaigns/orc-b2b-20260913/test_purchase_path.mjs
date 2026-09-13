@@ -305,10 +305,22 @@ test("contraprova: o removedor de script não pode ser enganado por uma tag de f
   const nested = '</head><body><style\n>a{}</style\t><p>ok</p></body>';
   assert.ok(!staticBody(nested).includes("a{}"), "estilo com fechamento tolerado também é removido");
 
-  const naive = evasive.replace(/<script[\s\S]*?<\/script>/gi, "");
+  // Por que o padrão estrito antigo falhava, demonstrado por busca literal.
+  // Reconstruir aqui um filtro de tags mal formado só criaria de novo o defeito
+  // que esta contraprova existe para documentar, então a diferença é mostrada
+  // pelo texto: a página fecha o script apenas na forma tolerada pelo
+  // navegador, que um padrão terminado em "</script>" não tem como casar.
   assert.ok(
-    naive.includes("INJETADO"),
-    "o padrão estrito antigo deixava passar: é essa a falha que a versão tolerante corrige",
+    evasive.includes("</script >"),
+    "a página usa o fechamento que o navegador aceita",
+  );
+  assert.ok(
+    !evasive.includes("</script>"),
+    "o fechamento estrito não ocorre, então o padrão antigo não casava e o script sobrevivia",
+  );
+  assert.ok(
+    stripped.includes(" ") && !stripped.includes("window.x"),
+    "o removedor tolerante casa esse fechamento e retira o script",
   );
 });
 
