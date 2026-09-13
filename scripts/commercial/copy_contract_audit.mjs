@@ -101,7 +101,12 @@ export function enumeratedScopeAdjacent(text, index, matched, contract) {
   const window = Number(rule.window_chars) || 420;
   const before = text.slice(Math.max(0, index - window), index);
   const sentenceStart = Math.max(before.lastIndexOf("."), before.lastIndexOf("!"), before.lastIndexOf("?"), before.lastIndexOf(":")) + 1;
-  const passage = before.slice(sentenceStart) + text.slice(index, index + matched.length + window);
+  // Forward: the sentence holding the term plus the next one, never further; a
+  // navigation list a few blocks later must not rescue a bare slogan.
+  let after = text.slice(index + matched.length, index + matched.length + window);
+  const stops = [...after.matchAll(/[.!?]/g)].map((m) => m.index + 1);
+  if (stops.length >= 2) after = after.slice(0, stops[1]);
+  const passage = before.slice(sentenceStart) + text.slice(index, index + matched.length) + after;
   const seen = new Set();
   for (const term of vocabulary) {
     if (new RegExp(`\\b${term.replace(/\s+/g, "\\s+")}`).test(passage)) seen.add(term.split(/\s+/)[0].slice(0, 6));

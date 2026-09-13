@@ -148,7 +148,13 @@ def enumerates_work(surface: str, index: int, matched_len: int, rule: dict) -> b
     text = _strip(surface)
     before = text[max(0, index - window) : index]
     start = max(before.rfind("."), before.rfind("!"), before.rfind("?"), before.rfind(":")) + 1
-    passage = before[start:] + text[index : index + matched_len + window]
+    # Forward: the sentence holding the term plus the next one, never further.
+    # A navigation list three blocks later must not rescue a bare slogan.
+    after = text[index + matched_len : index + matched_len + window]
+    stops = [m.end() for m in re.finditer(r"[.!?]", after)]
+    if len(stops) >= 2:
+        after = after[: stops[1]]
+    passage = before[start:] + text[index : index + matched_len] + after
     seen: set[str] = set()
     for term in rule.get("work_vocabulary", []):
         term_n = _strip(term)
@@ -209,12 +215,17 @@ def _scan_files(base: Path, *, require_artifact: bool) -> list[Path]:
     return visitor_facing_html_files(base)
 
 
-def coverage_problems(base: Path, scanned: list[str], *, require_artifact: bool) -> list[str]:
+def coverage_problems(
+    base: Path, scanned: list[str], *, require_artifact: bool, manifest: Path | None = None
+) -> list[str]:
     """The declared universe must be a subset of what was actually read."""
     problems: list[str] = []
     read = set(scanned)
     if require_artifact:
-        manifest = base / "seo" / "PUBLIC-ARTIFACT-MANIFEST.json"
+        # The manifest is written by scripts/pseo/public_artifact.py next to the
+        # source tree (seo/), describing the assembled _site; it is the
+        # independent inventory the scan is reconciled against.
+        manifest = manifest or (ROOT / "seo" / "PUBLIC-ARTIFACT-MANIFEST.json")
         if not manifest.is_file():
             return [f"artifact manifest missing: {manifest}"]
         data = json.loads(manifest.read_text(encoding="utf-8"))
@@ -236,7 +247,9 @@ def coverage_problems(base: Path, scanned: list[str], *, require_artifact: bool)
     return problems
 
 
-def scan(root: Path | None = None, *, require_artifact: bool = False) -> tuple[dict[str, dict[str, list[str]]], list[str], list[str]]:
+def scan(
+    root: Path | None = None, *, require_artifact: bool = False, manifest: Path | None = None
+) -> tuple[dict[str, dict[str, list[str]]], list[str], list[str]]:
     base = (root or ROOT).resolve()
     rule = load_enumeration_rule()
     exceptions = load_exceptions()
@@ -259,7 +272,7 @@ def scan(root: Path | None = None, *, require_artifact: bool = False) -> tuple[d
         for i, row in enumerate(exceptions):
             if row["route"] == route and row["text"] in surface:
                 used.add(i)
-    coverage = coverage_problems(base, scanned, require_artifact=require_artifact)
+    coverage = coverage_problems(base, scanned, require_artifact=require_artifact, manifest=manifest)
     for i, row in enumerate(exceptions):
         if i not in used:
             coverage.append(f"stale preservation: {row['route']} no longer contains {row['text']!r}; re-examine or remove it")
@@ -304,6 +317,9 @@ def test_detector_catches_fragmentation_backstage_and_empty_completeness() -> No
         ('<h1>Página</h1><details><summary>Limites</summary><p>Compatibilizar é uma compra distinta de elaborar.</p></details>', "fragmentacao_ou_abandono"),
         ("<h1>Página</h1><p>Solução completa para a sua obra. Fale com a gente.</p>", "completude_sem_trabalho"),
         ('<h1>Página</h1><img alt="soluções personalizadas em engenharia">', "completude_sem_trabalho"),
+        # a service list two sentences later, in another block, does not rescue a bare slogan
+        ("<h1>Erro</h1><p>Solução completa para a sua obra. Fale com a gente.</p><p>Confira o endereço.</p>"
+         "<ul><li>Projeto, revisão, compatibilização, orçamento e perícia.</li></ul>", "completude_sem_trabalho"),
     )
     for html, expected in swept:
         got = findings_for(html, rule)
@@ -361,6 +377,7 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--root", type=Path, default=ROOT)
     parser.add_argument("--require-artifact", action="store_true")
+    parser.add_argument("--manifest", type=Path, help="artifact inventory (default seo/PUBLIC-ARTIFACT-MANIFEST.json)")
     parser.add_argument("--json", type=Path, help="write the findings map here")
     args = parser.parse_args()
     for test in (
@@ -372,7 +389,7 @@ def main() -> int:
         test()
         print(f"OK {test.__name__}")
     try:
-        found, scanned, coverage = scan(args.root, require_artifact=args.require_artifact)
+        found, scanned, coverage = scan(args.root, require_artifact=args.require_artifact, manifest=args.manifest)
     except ValueError as exc:
         print(f"FAIL: {exc}", file=sys.stderr)
         return 1
