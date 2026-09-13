@@ -249,7 +249,10 @@ function renderEntrance(entrance) {
     `<p class="qty-proof-disclaimer">Este é um ${escapeHtml(entrance.label_pt_br)} de método. Não representa cliente, obra executada, prazo ou resultado da CONFENGE.${priceNote ? ` ${escapeHtml(priceNote)}` : ""}</p>`,
     `<p class="qty-proof-links"><a class="button button-secondary" href="${escapeHtml(entrance.quantitativos_anchor)}">Abrir o exemplo de ${escapeHtml(entrance.domain_pt_br.toLowerCase())}</a></p>`,
     `<p class="qty-proof-files">Arquivos abertos deste recorte: ${entrance.csv
-      .map((file) => `<a href="${escapeHtml(file.url)}">${escapeHtml(file.label)}</a>`)
+      .map(
+        (file) =>
+          `<a href="${escapeHtml(file.url)}" aria-label="${escapeHtml(file.label)} do recorte de ${escapeHtml(entrance.domain_pt_br.toLowerCase())}">${escapeHtml(file.label)}</a>`,
+      )
       .join(", ")}.</p>`,
     "</article>",
   ].join("");
