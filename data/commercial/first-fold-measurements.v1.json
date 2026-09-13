@@ -1,9 +1,9 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-09-13T21:38:11.776Z",
+  "measured_at": "2026-09-13T22:35:34.208Z",
   "measured_on": "2026-09-13",
-  "commit_sha": "a37095e6ae18851153b302a95d8be84ff6f73f20",
+  "commit_sha": "fb798cc10eea67a5ab26a682c82292805933ada7",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "f168038814087e1b365d1de3042af9a3f3364743756e104711fecc0fb9fe7477",
