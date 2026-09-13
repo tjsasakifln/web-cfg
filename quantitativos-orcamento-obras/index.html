@@ -4,7 +4,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>Quantitativos e orçamento de obras | CONFENGE</title>
-<meta content="A CONFENGE levanta quantitativos, elabora ou revisa o orçamento de obra pública ou privada. Você recebe memória, critérios, premissas e um caminho para solicitar a proposta." name="description"/>
+<meta content="Serviço de engenharia de custos: a CONFENGE levanta quantitativos, elabora ou revisa o orçamento de obra pública ou privada para construtoras, empresas de engenharia, escritórios de projeto e proprietários. Memória, critérios e premissas conferíveis, com proposta sob o recorte." name="description"/>
 <meta content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" name="robots"/>
 <meta content="#061a33" name="theme-color"/>
 <link href="https://confenge.com.br/quantitativos-orcamento-obras/" rel="canonical"/>
@@ -15,7 +15,7 @@
 <meta content="pt_BR" property="og:locale"/>
 <meta content="CONFENGE" property="og:site_name"/>
 <meta content="Quantitativos e orçamento de obras" property="og:title"/>
-<meta content="Levantamento, elaboração ou revisão de orçamento, com memória conferível, para obra pública ou privada." property="og:description"/>
+<meta content="Levantamento de quantitativos, elaboração ou revisão de orçamento de obra pública ou privada, com memória conferível. Serviço de engenharia contratado, para construtoras, escritórios de projeto e proprietários." property="og:description"/>
 <meta content="https://confenge.com.br/quantitativos-orcamento-obras/" property="og:url"/>
 <meta content="https://confenge.com.br/assets/og-confenge.jpg" property="og:image"/>
 <meta content="image/jpeg" property="og:image:type"/>
@@ -58,7 +58,18 @@
 .qty-trail-body code{font-size:.95em}
 .qty-trail-link{margin-top:1rem;max-width:70ch}
 .qty-split{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
-@media(max-width:800px){.qty-hero-grid,.qty-grid,.qty-flow,.qty-proof,.qty-triage-grid,.qty-factors,.qty-split{grid-template-columns:1fr}.qty-hero-grid>*,.qty-grid>*,.qty-flow>*,.qty-proof>*,.qty-triage-grid>*{min-width:0}.qty-hero-grid h1,.qty-hero-grid p,.qty-proof h2,.qty-proof p,.qty-proof li{overflow-wrap:break-word}.qty-hero{padding-block:2.5rem}.qty-hero h1{max-width:none}}
+.qty-proof-intro{max-width:74ch;color:var(--muted)}
+.qty-proof-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+.qty-proof-entrance{padding:1.35rem;border:1px solid var(--line);border-top:4px solid var(--green-700);background:#fff}
+.qty-proof-entrance h3{margin:.2rem 0 .6rem}
+.qty-proof-cut{color:var(--muted)}
+.qty-proof-chain{display:grid;grid-template-columns:minmax(7rem,auto) minmax(0,1fr);gap:.4rem .9rem;margin:1rem 0;padding:.9rem 1rem;background:var(--soft)}
+.qty-proof-chain dt{font-weight:700}
+.qty-proof-chain dd{margin:0;overflow-wrap:anywhere}
+.qty-proof-disclaimer{padding-left:.9rem;border-left:4px solid var(--green-700);font-size:.95rem;color:var(--muted)}
+.qty-proof-links{margin-top:1rem}
+.qty-proof-files{margin-bottom:0;font-size:.95rem}
+@media(max-width:800px){.qty-hero-grid,.qty-grid,.qty-flow,.qty-proof,.qty-proof-grid,.qty-triage-grid,.qty-factors,.qty-split{grid-template-columns:1fr}.qty-hero-grid>*,.qty-grid>*,.qty-flow>*,.qty-proof>*,.qty-triage-grid>*{min-width:0}.qty-hero-grid h1,.qty-hero-grid p,.qty-proof h2,.qty-proof p,.qty-proof li{overflow-wrap:break-word}.qty-hero{padding-block:2.5rem}.qty-hero h1{max-width:none}}
 </style>
 <script defer="" src="/script.js?v=mv09"></script>
 <script defer="" src="/assets/js/adaptive-intake.js"></script>
@@ -101,7 +112,7 @@
 <div>
 <p class="eyebrow">Antes de comparar, contratar ou planejar a obra</p>
 <h1 id="qty-title">Quantitativos e orçamento de obras</h1>
-<p class="qty-lead">A CONFENGE levanta quantitativos, elabora o orçamento ou revisa a planilha que você já tem, para obra pública ou privada. Você recebe a origem de cada quantidade, o critério de medição, as composições e as premissas. Para começar, solicite a proposta do recorte de que precisa  -  projeto ainda parcial também entra.</p>
+<p class="qty-lead">A CONFENGE levanta quantitativos, elabora o orçamento ou revisa a planilha que você já tem, para obra pública ou privada. É serviço de engenharia contratado, com responsável técnico identificado: não é software, planilha gratuita nem execução de obra. Você recebe a origem de cada quantidade, o critério de medição, as composições e as premissas. Para começar, solicite a proposta do recorte de que precisa  -  projeto ainda parcial também entra.</p>
 <div class="hero-actions">
 <a class="button button-primary button-lg" data-cta-id="frame-quantities-budget-hero" data-cta-position="hero" href="#triagem-quantitativos">Solicitar proposta de orçamento <svg class="icon"><use href="#i-arrow"></use></svg></a>
 <a class="text-link" href="#amostra-quantitativos">Ver a amostra conferível</a>
@@ -120,6 +131,7 @@
 <p class="eyebrow">Três pedidos diferentes</p>
 <h2 id="qty-buy-title">Levantamento, elaboração e revisão não são o mesmo serviço.</h2>
 <p class="section-lead">Diga qual decisão está na mesa. A proposta descreve esse recorte; não misturamos os três só porque todos falam de quantidade e custo.</p>
+<p class="section-lead" id="quem-contrata">Quem contrata costuma ser construtora, empresa de engenharia, escritório de projeto, incorporadora, loteador ou proprietário que precisa orçar uma obra, conferir a planilha que recebeu ou terceirizar a produção do orçamento sem montar equipe própria. Demanda pequena, reforma particular e obra pública entram pelo mesmo caminho.</p>
 </header>
 <div class="qty-grid">
 <article class="qty-card qty-choice" id="levantamento-quantitativos">
@@ -149,6 +161,17 @@
 </div>
 </section>
 
+<section aria-labelledby="qty-proof-entrances-title" class="section section--default" id="exemplos-conferiveis">
+<div class="container">
+<header class="section-head">
+<p class="eyebrow">Onde conferir a entrega</p>
+<h2 id="qty-proof-entrances-title">Edificação e infraestrutura, cada uma com o seu recorte aberto.</h2>
+<p class="section-lead">Antes de pedir a proposta, o comprador confere o método no objeto que reconhece. Edificação e infraestrutura urbana de loteamento compartilham a mesma cadeia de conferência; os dois recortes abaixo estão publicados com desenho, memória e arquivos abertos.</p>
+</header>
+<!--orc-b2b-20260913:proof-entrances--><div id="qty-proof-entrances" data-proof-entrances-slot="canonical" data-proof-entrances-state="canonical"><p class="qty-proof-intro">Dois recortes demonstrativos, um de edificação e um de infraestrutura, mostram a mesma cadeia de conferência: desenho, memória, quantidade e item de planilha. O resumo fica aqui; o exame completo, com desenhos e arquivos, fica na página de cada recorte.</p><div class="qty-proof-grid"><article class="qty-proof-entrance" data-proof-entrance="edificacao" data-proof-id="demo-private-project-pilot-2026-09"><p class="eyebrow">Edificação</p><h3>Recorte de banheiro residencial</h3><p>Construtora, escritório de projeto, incorporadora ou proprietário que vai orçar, comparar propostas ou conferir a planilha de uma edificação.</p><p class="qty-proof-cut">Um ambiente de 2,4 m por 1,8 m, com pé-direito de 2,6 m, paredes, aberturas e critério de medição declarados. Não é projeto executivo nem orçamento para executar obra.</p><dl class="qty-proof-chain"><dt>Desenho</dt><dd><code>PR-ARQ-R01</code></dd><dt>Memória</dt><dd><code data-proof-formula="sum(length*height)-openings&gt;=0.50">sum(length*height)-openings&gt;=0.50</code></dd><dt>Quantidade</dt><dd><code>Q-PAR-01</code> <data data-proof-quantity="19.60" value="19.60">19,6 m²</data></dd><dt>Item de planilha</dt><dd><code data-proof-item="ORC-PAR-01">ORC-PAR-01</code></dd></dl><p class="qty-proof-disclaimer">Este é um exemplo demonstrativo de método. Não representa cliente, obra executada, prazo ou resultado da CONFENGE. Os preços daquele recorte são hipotéticos, para conferência aritmética: não são preço da CONFENGE, cotação vigente nem SINAPI real.</p><p class="qty-proof-links"><a class="button button-secondary" href="/casos/demonstrativo-projeto-privado/#quantitativos">Abrir o exemplo de edificação</a></p><p class="qty-proof-files">Arquivos abertos deste recorte: <a href="/casos/demonstrativo-projeto-privado/data/quantitativos.csv">quantitativos.csv</a>, <a href="/casos/demonstrativo-projeto-privado/data/orcamento.csv">orcamento.csv</a>, <a href="/casos/demonstrativo-projeto-privado/data/coordenacao.csv">coordenacao.csv</a>, <a href="/casos/demonstrativo-projeto-privado/data/revisao.csv">revisao.csv</a>.</p></article><article class="qty-proof-entrance" data-proof-entrance="infraestrutura" data-proof-id="demo-infrastructure-pilot-2026-09"><p class="eyebrow">Infraestrutura</p><h3>Recorte de acesso viário e drenagem de loteamento</h3><p>Construtora, empresa de engenharia, loteador ou contratante público que vai orçar ou conferir pavimento, drenagem e obras lineares.</p><p class="qty-proof-cut">Uma faixa de pavimento de 40 m e um trecho de rede de 20 m, com estaqueamento, camadas e cotas declarados. Não é projeto executivo, dimensionamento de pavimento, fundação nem verificação de capacidade hidráulica.</p><dl class="qty-proof-chain"><dt>Desenho</dt><dd><code>INF-PV-R01</code></dd><dt>Memória</dt><dd><code data-proof-formula="280.00*0.15">280.00*0.15</code></dd><dt>Quantidade</dt><dd><code>Q-SUB-01</code> <data data-proof-quantity="42.00" value="42.00">42 m³</data></dd><dt>Item de planilha</dt><dd><code data-proof-item="ORC-SUB-01">ORC-SUB-01</code></dd></dl><p class="qty-proof-disclaimer">Este é um exemplo demonstrativo de método. Não representa cliente, obra executada, prazo ou resultado da CONFENGE. Os preços daquele recorte são hipotéticos, para conferência aritmética: não são preço da CONFENGE, cotação vigente nem SINAPI real.</p><p class="qty-proof-links"><a class="button button-secondary" href="/casos/demonstrativo-infraestrutura/#quantitativos">Abrir o exemplo de infraestrutura</a></p><p class="qty-proof-files">Arquivos abertos deste recorte: <a href="/casos/demonstrativo-infraestrutura/data/quantitativos.csv">quantitativos.csv</a>, <a href="/casos/demonstrativo-infraestrutura/data/orcamento.csv">orcamento.csv</a>, <a href="/casos/demonstrativo-infraestrutura/data/coordenacao.csv">coordenacao.csv</a>, <a href="/casos/demonstrativo-infraestrutura/data/revisao.csv">revisao.csv</a>.</p></article></div></div><!--/orc-b2b-20260913:proof-entrances-->
+</div>
+</section>
+
 <section aria-labelledby="qty-output-title" class="section section--default">
 <div class="container">
 <header class="section-head">
@@ -159,7 +182,7 @@
 <div class="qty-grid">
 <article class="qty-card"><h3>Planilha de quantitativos</h3><p>Serviços, materiais, unidades e quantidades ligados às plantas, memoriais e documentos que originaram cada leitura.</p></article>
 <article class="qty-card"><h3>Memória e premissas</h3><p>Critérios de medição, fórmulas, referências, exclusões e informações ausentes que podem alterar o resultado.</p></article>
-<article class="qty-card"><h3>Orçamento ou revisão</h3><p>Composições abertas, custos, encargos, data-base e referências identificadas para comparar, contratar, licitar ou revisar a estimativa.</p></article>
+<article class="qty-card"><h3>Orçamento ou revisão</h3><p>Planilha orçamentária com composições abertas, custos, encargos, data-base e referências identificadas, para comparar, contratar, licitar ou revisar a estimativa.</p></article>
 </div>
 </div>
 </section>
