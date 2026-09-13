@@ -18,6 +18,10 @@ import fs from "node:fs";
 import path from "node:path";
 
 export const ENTRANCES_SCHEMA = "confenge.quantity-proof-entrances/1.0";
+// `data-proof-id` is reserved for a REGISTERED REAL CLIENT PROOF and is policed
+// by tests/commercial/test_real_proof_registry.mjs. These entrances are
+// demonstrative method excerpts with no client behind them, so they carry
+// `data-demonstrative-id` and must never claim the reserved marker.
 export const SLOT_ID = "qty-proof-entrances";
 export const SLOT_MARK_START = "<!--orc-b2b-20260913:proof-entrances-->";
 export const SLOT_MARK_END = "<!--/orc-b2b-20260913:proof-entrances-->";
@@ -232,7 +236,7 @@ function renderEntrance(entrance) {
       ? "Os preços daquele recorte são hipotéticos, para conferência aritmética: não são preço da CONFENGE, cotação vigente nem SINAPI real."
       : "";
   return [
-    `<article class="qty-proof-entrance" data-proof-entrance="${escapeHtml(entrance.key)}" data-proof-id="${escapeHtml(entrance.proof_id)}">`,
+    `<article class="qty-proof-entrance" data-proof-entrance="${escapeHtml(entrance.key)}" data-demonstrative-id="${escapeHtml(entrance.proof_id)}">`,
     `<p class="eyebrow">${escapeHtml(entrance.domain_pt_br)}</p>`,
     `<h3>${escapeHtml(entrance.title)}</h3>`,
     `<p>${escapeHtml(entrance.buyer_pt_br)}</p>`,

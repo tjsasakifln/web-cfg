@@ -421,6 +421,58 @@ test("contraprova: reintroduzir pseudocódigo na saída é recusado pelo renderi
   assert.equal(readableFormula(""), null);
 });
 
+test("as entradas não reivindicam o marcador reservado de prova real de cliente", async () => {
+  const { unregisteredClientClaimProblems } = await import(
+    "../../../scripts/commercial/real_proof_registry.mjs"
+  );
+  const html = read(LANDING_REL);
+  for (const key of ["edificacao", "infraestrutura"]) {
+    const block = entranceBlock(html, key);
+    assert.ok(
+      /data-demonstrative-id="/.test(block),
+      `${key} precisa se identificar como demonstrativo`,
+    );
+    assert.ok(
+      !/data-proof-id=/.test(block),
+      `${key} não pode usar data-proof-id, reservado a prova real registrada`,
+    );
+  }
+  assert.deepEqual(
+    unregisteredClientClaimProblems(html, LANDING_REL),
+    [],
+    "a rota não pode publicar alegação de resultado de cliente sem registro",
+  );
+});
+
+test("contraprova: reivindicar o marcador reservado ou um resultado de cliente reprova", async () => {
+  const { unregisteredClientClaimProblems } = await import(
+    "../../../scripts/commercial/real_proof_registry.mjs"
+  );
+  const html = read(LANDING_REL);
+  assert.deepEqual(unregisteredClientClaimProblems(html, LANDING_REL), [], "controle passa");
+
+  const claimed = html.replace(
+    "</main>",
+    "<p>A construtora Horizonte economizou 20% após contratar a CONFENGE.</p></main>",
+  );
+  assert.ok(
+    unregisteredClientClaimProblems(claimed, LANDING_REL).length > 0,
+    "um resultado de cliente não registrado precisa reprovar",
+  );
+
+  const reserved = html.replaceAll("data-demonstrative-id=", "data-proof-id=");
+  assert.ok(
+    /data-proof-id=/.test(reserved) && !/data-demonstrative-id=/.test(reserved),
+    "a mutação precisa ter sido aplicada",
+  );
+  for (const key of ["edificacao", "infraestrutura"]) {
+    assert.ok(
+      /data-proof-id=/.test(entranceBlock(reserved, key)),
+      `a mutação reintroduz o marcador reservado em ${key}, o que o gate de prova real reprova`,
+    );
+  }
+});
+
 test("contraprova: esconder a natureza demonstrativa reprova as duas entradas", () => {
   const html = read(LANDING_REL);
   for (const key of ["edificacao", "infraestrutura"]) {
