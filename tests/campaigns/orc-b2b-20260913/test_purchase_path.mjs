@@ -440,7 +440,7 @@ test("contraprova: omitir a prova na composição reprova o cenário F", () => {
 // recorte levado ao contato: ele é sempre o do encaminhamento principal, então
 // um visitante que escolhia o caminho alternativo de orçamento chegava à
 // triagem rotulado como revisão de projeto. O contato passa a nomear o recorte
-// que carrega, e uma nota manda abrir a página do caminho escolhido.
+// que carrega, e uma nota acolhe o caminho alternativo na mesma conversa.
 
 const READINESS_APP_REL = "ferramentas/prontidao-tecnica-obra-privada/app.js";
 
@@ -455,10 +455,12 @@ export function contactCtaNamesItsRoute(appSource) {
 test("prontidão: o contato nomeia o recorte que carrega e aponta o caminho alternativo", () => {
   const app = read(READINESS_APP_REL);
   assert.ok(contactCtaNamesItsRoute(app), "o CTA precisa nomear o encaminhamento principal");
+  // SOLUCAO-INTEGRAL-20260913: the note keeps the visitor on one contact and lets the
+  // proposal combine the alternative path; it must not send them away to start over.
   assert.match(
     app,
-    /abra a página dele: o pedido começa lá, com a modalidade certa/,
-    "a nota precisa mandar o visitante do caminho alternativo abrir a página dele",
+    /Se você também precisar de um dos outros caminhos acima, diga na mensagem: a proposta combina as etapas/,
+    "a nota precisa acolher o caminho alternativo na mesma conversa, com a proposta combinando as etapas",
   );
   assert.match(
     app,
