@@ -7,13 +7,14 @@
     "glosa_medicao": "Olá, Tiago. Preciso de apoio em glosa ou medição retida em contrato de obra pública.",
     "aditivo": "Olá, Tiago. Preciso estruturar aditivo ou serviço extra com base técnica e econômica.",
     "reequilibrio": "Olá, Tiago. Preciso analisar reequilíbrio ou reajuste em contrato público.",
-    "atraso_pagamento": "Olá, Tiago. Temos atraso no pagamento de parcela em contrato público de obra e queremos enquadrar o risco.",
+    "atraso_pagamento": "Olá, Tiago. Temos atraso ou paralisação em obra pública e queremos enquadrar o pedido de prorrogação e o registro do impacto.",
     "sancao_notificacao": "Olá, Tiago. Recebemos notificação ou risco de sanção em contrato público e preciso de leitura técnica.",
     "edital": "Olá, Tiago. Tenho um edital em análise e quero solicitar um canal seguro para envio.",
     "orcamento_bdi": "Olá, Tiago. Preciso de auditoria de orçamento/BDI ou referência SINAPI/SICRO para proposta.",
     "proposta": "Olá, Tiago. Estou montando uma proposta de licitação de obras e quero avaliar a Operação de Proposta para Licitação Crítica.",
     "diagnostico_b2g": "Olá, Tiago. Quero diagnosticar a operação B2G da empresa (carteira, margem e rotina).",
     "pseo_conteudo": "Olá, Tiago. Li um conteúdo técnico no site da CONFENGE e quero enquadrar meu caso de licitação/contrato.",
-    "confirmacao_pos_form": "Olá, Tiago. Acabei de solicitar um canal seguro para envio pelo site. Protocolo: (cole aqui). Aguardo o canal seguro para o envio da documentação."
+    "confirmacao_pos_form": "Olá, Tiago. Acabei de solicitar um canal seguro para envio pelo site. Protocolo: (cole aqui). Aguardo o canal seguro para o envio da documentação.",
+    "acompanhamento_rotina": "Olá, Tiago. Quero estruturar o acompanhamento técnico contínuo de um contrato de obra pública e entender como a rotina funciona."
   }
 }

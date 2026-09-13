@@ -60,7 +60,7 @@
       'planejamento de órgão público': {
         journey: 'orgao',
         ladder: false,
-        next_step: 'Conte o que o órgão precisa preparar e em que etapa está. A resposta diz em que formato a CONFENGE pode ajudar nessa etapa.',
+        next_step: 'Conte o que o órgão precisa preparar e em que etapa está. A resposta diz o apoio técnico que cabe nessa etapa e o que você recebe.',
         detail: 'Nesta etapa basta o contexto da etapa de planejamento. Não envie documentos nem arquivos.',
         route: '/servicos/#servico-obras-publicas',
         route_label: 'Ver a frente de obras públicas',
@@ -80,11 +80,11 @@
       'outro': {
         journey: 'outro',
         ladder: false,
-        next_step: 'Conte a situação em poucas linhas. A resposta diz se ela se encaixa na atuação da CONFENGE e qual seria o próximo passo.',
+        next_step: 'Conte a situação em poucas linhas. A resposta diz qual trabalho de engenharia a resolve, o que você recebe e qual é o próximo passo.',
         detail: 'Nesta etapa basta o contexto. Não envie documentos nem arquivos.',
         route: '/servicos/',
         route_label: 'Ver as situações que a CONFENGE atende',
-        whatsapp: 'Olá, Tiago. Quero explicar uma situação técnica e saber se ela se encaixa na atuação da CONFENGE.',
+        whatsapp: 'Olá, Tiago. Quero explicar uma situação técnica e entender qual trabalho de engenharia a resolve.',
         placeholder: 'A situação em poucas linhas.',
       },
       'problema urgente em contrato': { journey: 'contrato', ladder: true },

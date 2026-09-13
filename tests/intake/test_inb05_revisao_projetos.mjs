@@ -12,6 +12,25 @@ function read(rel) {
   return fs.readFileSync(path.join(ROOT, rel), "utf8");
 }
 
+// Visible-ish text for property assertions. Script bodies are removed by
+// scanning for the closing tag (no HTML-parsing regex), then tags are dropped.
+function textOf(html) {
+  let out = "";
+  let cursor = 0;
+  const lower = html.toLowerCase();
+  while (cursor < html.length) {
+    const open = lower.indexOf("<script", cursor);
+    if (open === -1) {
+      out += html.slice(cursor);
+      break;
+    }
+    out += html.slice(cursor, open);
+    const close = lower.indexOf("</script>", open);
+    cursor = close === -1 ? html.length : close + "</script>".length;
+  }
+  return out.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
+}
+
 function mainOf(html) {
   return html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i)?.[1] || "";
 }
@@ -136,12 +155,18 @@ test("three URLs have distinct title, H1, meta, CTA and continuation", () => {
   assert.match(mainOf(pages.landing), /href="\/conteudos\/como-contratar-revisao-tecnica-projeto\/"/);
 });
 
-test("landing first fold states delivery, use and purchase distinction", () => {
+test("landing first fold states delivery, continuity and authorship without a fixed negative slogan", () => {
+  // SOLUCAO-INTEGRAL-20260913: the fold must say what the review delivers, that the
+  // work continues into the adjustments and sibling stages, and that the original
+  // authorship is preserved. The exact negative sentences are no longer required;
+  // the properties are checked independently of wording.
   const main = mainOf(pages.landing);
   const fold = main.slice(0, main.indexOf('id="escopo-revisao"'));
+  const foldText = textOf(fold);
   assert.match(fold, /relatório com o que a evidência sustenta/i);
-  assert.match(fold, /Não substituímos o autor original nem assinamos projeto de terceiro/i);
-  assert.match(fold, /Revisão não é elaboração nem compatibilização/i);
+  assert.match(foldText, /autoria[^.]{0,80}(permanece|continua|fica) com o autor|n[ãa]o (substitu[íi]mos|assinamos)[^.]{0,60}autor/i, "authorship stays with the original author");
+  assert.match(foldText, /revis[ãa]o[\s\S]{0,400}(elabora[çc][ãa]o|compatibiliza[çc][ãa]o)[\s\S]{0,200}(mesma proposta|proposta combina|entram na)/i, "sibling stages are articulated as continuity, not as another purchase");
+  assert.doesNotMatch(foldText, /outra compra|compras diferentes|compras distintas|n[ãa]o [ée] elabora[çc][ãa]o nem compatibiliza[çc][ãa]o/i, "no fragmentation slogan in the fold");
   assert.match(fold, /antes de contratar, executar ou aprovar/i);
 });
 
@@ -227,8 +252,12 @@ test("landing refuses unauthorized commercial claims and unbacked money", () => 
   const html = pages.landing;
   assert.deepEqual(unbackedMoneyProblems(html), []);
   assert.deepEqual(forbiddenCommercialClaims(html), []);
-  assert.match(html, /Não oferecemos assinatura de projeto de terceiro/);
-  assert.match(html, /Não publicamos laudo de segurança/);
+  // Authorship of third-party projects and unbacked safety claims stay protected as
+  // properties: the page may phrase them affirmatively, but may never claim them.
+  assert.match(textOf(html), /n[ãa]o (oferecemos|fazemos) assinatura de projeto de terceiro|autoria[^.]{0,80}permanece com o autor/i);
+  assert.match(textOf(html), /n[ãa]o publicamos laudo de segurança|laudo de segurança[^.]{0,80}n[ãa]o/i);
+  // An affirmative "assinamos projeto de terceiro" is forbidden unless negated right before it.
+  assert.doesNotMatch(textOf(html), /(?<!n[ãa]o |nem |nunca )assinamos (o )?projeto de terceiro\b/i);
 });
 
 test("mutation: invented third-party signature or price fails the page guard", () => {
@@ -250,7 +279,7 @@ test("choice and hiring pages keep WhatsApp in main and do not cannibalize the l
   assert.match(mainOf(pages.hiring), /wa\.me\/5548988344559/);
   assert.notEqual(titleOf(pages.choice), titleOf(pages.landing));
   assert.notEqual(titleOf(pages.hiring), titleOf(pages.landing));
-  assert.match(mainOf(pages.choice), /Três compras, três entregas/);
+  assert.match(mainOf(pages.choice), /Três compras, três entregas, uma proposta/);
   assert.match(mainOf(pages.hiring), /O que enviar no primeiro contato/);
   assert.equal(/utm_/.test(pages.choice + pages.hiring), false);
 });

@@ -51,7 +51,7 @@ test("shipped commercial destination answers the purchase", () => {
   for (const needle of [
     "Conferimos as interfaces",
     "registramos as interferências",
-    "encaminhamos o ajuste",
+    "conduzimos os ajustes com os autores",
     "O que entra",
     "O que será conferido",
     "O que você recebe",
@@ -164,16 +164,20 @@ test("shipped finding html matches the register renderer", () => {
 test("mutation: mixing revisão as this purchase or promising zero interference fails the contract helper", () => {
   const html = readPage();
   const poisonedZero = html.replace(
-    "não a promessa de obra sem interferência",
+    "não uma promessa de obra sem interferência",
     "garantimos a ausência de qualquer interferência",
   );
   assert.match(visible(poisonedZero), /ausência de qualquer interfer/);
-  assert.doesNotMatch(visible(html), /ausência de qualquer interfer/);
+  assert.doesNotMatch(visible(html), /ausência de qualquer interfer|garantimos/i);
 
+  // Property, not slogan: the page may say the proposal combines revisão with the
+  // compatibilização, but it must never claim to redimension an author's discipline
+  // silently. SOLUCAO-INTEGRAL-20260913 keeps this authorship boundary.
   const poisonedMix = html.replace(
-    "Compatibilizar não é elaborar, revisar, modelar nem executar.",
-    "A compatibilização também revisa o dimensionamento e elabora a disciplina.",
+    "Não redimensionamos a disciplina de um autor sem que a revisão dessa peça esteja na proposta e o autor participe.",
+    "A compatibilização redimensiona a disciplina do autor por conta própria.",
   );
-  assert.match(poisonedMix, /também revisa o dimensionamento/);
+  assert.match(poisonedMix, /redimensiona a disciplina do autor por conta própria/);
+  assert.doesNotMatch(visible(poisonedMix), /não redimensionamos a disciplina/i);
   assert.match(html, /não redimensionamos a disciplina/i);
 });

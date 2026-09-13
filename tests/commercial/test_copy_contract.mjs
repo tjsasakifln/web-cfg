@@ -21,6 +21,7 @@ import {
   auditCopyContract,
   catalogContractsFromClientData,
   classifyOccurrence,
+  enumeratedScopeAdjacent,
   deriveMoneyRoutes,
   explicitExclusionRanges,
   frozenRouteExemption,
@@ -384,7 +385,7 @@ if (triggerSections.length >= 2) {
 /* ---------- 5. excecoes de portao documentadas no proprio arquivo ---------- */
 const exceptions = contract.gate_exceptions || [];
 const exceptionById = new Map(exceptions.map((e) => [e.id, e]));
-assert("gate_exceptions_present", exceptions.length === 3, exceptions.length);
+assert("gate_exceptions_present", exceptions.length === 4, exceptions.length);
 for (const e of exceptions) {
   assert(`gate_exception_has_rule_${e.id}`, typeof e.rule === "string" && e.rule.length > 20, e);
   assert(`gate_exception_has_scope_${e.id}`, typeof e.scope === "string" && e.scope.length > 0, e);
@@ -425,6 +426,81 @@ assert(
     guarantee.market_institute_forms.includes("garantia de proposta") &&
     guarantee.market_institute_forms.includes("garantia contratual"),
   guarantee,
+);
+/* ---------- GX-06: completude enumerada (SOLUCAO-INTEGRAL-20260913) ---------- */
+const enumerated = exceptionById.get("GX-06");
+assert(
+  "gx06_enumerated_scope_declared",
+  enumerated &&
+    enumerated.implemented_as === "enumerated_scope_adjacency" &&
+    typeof enumerated.window_chars === "number" &&
+    typeof enumerated.minimum_work_terms === "number" &&
+    Array.isArray(enumerated.work_vocabulary) &&
+    enumerated.work_vocabulary.includes("revisao") &&
+    enumerated.work_vocabulary.includes("orcamento") &&
+    enumerated.work_vocabulary.includes("compatibilizacao"),
+  enumerated,
+);
+for (const id of ["FL-01", "FL-05"]) {
+  const entry = termEntries.find((item) => item.id === id);
+  assert(`${id}_uses_gx06`, entry && (entry.exemption_ids || []).includes("GX-06"), entry?.exemption_ids);
+}
+function classifyHtml(id, html) {
+  const entry = termEntries.find((item) => item.id === id);
+  const text = normalize(visibleText(html));
+  const match = new RegExp(entry.pattern, "g").exec(text);
+  if (!match) return "NO_MATCH";
+  return classifyOccurrence(entry, text, match.index, match[0], contract, [], explicitExclusionRanges(html, text)) || "VIOLATION";
+}
+assert(
+  "gx06_slogan_without_work_is_violation",
+  classifyHtml("FL-01", "<p>Solução completa para a sua obra. Fale com a gente.</p>") === "VIOLATION",
+  "slogan",
+);
+assert(
+  "gx06_enumerated_offer_is_accepted",
+  classifyHtml(
+    "FL-01",
+    "<p>Conduzimos uma solução completa e sob medida: elaboração das disciplinas que faltam, revisão do que já existe, compatibilização das interfaces, quantitativos e orçamento, com um responsável nomeado na proposta.</p>",
+  ) === "enumerated_scope",
+  "enumerada",
+);
+assert(
+  "gx06_equivalent_wording_is_accepted",
+  classifyHtml(
+    "FL-01",
+    "<p>Revisão, compatibilização e quantitativos entram na mesma proposta quando a necessidade pede uma solução completa.</p>",
+  ) === "enumerated_scope",
+  "equivalente",
+);
+assert(
+  "gx06_personalizado_without_work_is_violation",
+  classifyHtml("FL-05", "<p>Atendimento personalizado para cada cliente.</p>") === "VIOLATION",
+  "personalizado slogan",
+);
+assert(
+  "gx06_personalizado_with_work_is_accepted",
+  classifyHtml("FL-05", "<p>Proposta personalizada que combina inspeção, diagnóstico e laudo conforme a condição encontrada.</p>") === "enumerated_scope",
+  "personalizado enumerado",
+);
+assert(
+  "gx06_distant_enumeration_does_not_rescue_the_slogan",
+  classifyHtml(
+    "FL-01",
+    "<p>Solução completa.</p><p>" + "Texto institucional sem trabalho algum. ".repeat(14) + "</p><p>Elaboração, revisão e compatibilização.</p>",
+  ) === "VIOLATION",
+  "enumeração longe",
+);
+assert(
+  "gx06_client_inputs_do_not_count_as_work",
+  classifyHtml("FL-01", "<p>Solução completa para quem já tem projeto, edital e planilha.</p>") === "VIOLATION" &&
+    classifyHtml("FL-01", "<p>Solução completa: projeto, cronograma e relatório.</p>") === "VIOLATION",
+  "insumos do cliente",
+);
+assert(
+  "gx06_does_not_rescue_guarantee_promise",
+  classifyHtml("FL-08", "<p>Garantimos aprovação com elaboração, revisão e compatibilização.</p>") === "VIOLATION",
+  "garantia",
 );
 const fl360 = termEntries.find((entry) => entry.id === "FL-06");
 assert(
@@ -543,6 +619,8 @@ function classify(entry, normText, index, matched, ranges) {
     const before = normText.slice(Math.max(0, index - negationWindow), index);
     if (negationRe.test(before)) return "GX-01";
   }
+  // Same rule as the audit: an enumerated offer is not a slogan (SOLUCAO-INTEGRAL-20260913).
+  if (exemptionIds.includes("GX-06") && enumeratedScopeAdjacent(normText, index, matched, contract)) return "GX-06";
   return null;
 }
 

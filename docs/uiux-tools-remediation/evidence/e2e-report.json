@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-29T16:25:59.064Z",
+  "generated_at": "2026-09-13T21:31:00.383Z",
   "base": "http://127.0.0.1:8795",
   "site_root": "_site",
   "viewports": [
@@ -490,10 +490,12 @@
     {
       "flow": "limite",
       "hidden": false,
-      "text": "Resultado orientativo dos saldos\nCálculo numérico com os dados informados. Não equivale a validade jurídica do aditivo.\n\n% ACRÉSCIMO UTILIZADO\n27%\nSALDO ACRÉSCIMO\n-R$ 200.000,00\nSITUAÇÃO ACRÉSCIMO\nAcima do limite numérico calculado com os dados informados.\nSITUAÇÃO SUPRESSÃO\nDentro do limite numérico calculado com os dados informados.\nAcréscimos\nAnteriores\nR$ 1.800.000,00\nProposto\nR$ 900.000,00\nTotal\nR$ 2.700.000,00\nLimite\nR$ 2.500.000,00\nSaldo disponível\n-R$ 200.000,00\n% utilizado\n27%\n\nAcima do",
+      "text": "Recorte numérico excedido\nBranch: NUMERIC_SCOPE_EXCEEDED. A saída é uma triagem numérica, não uma conclusão jurídica.\n\nACRÉSCIMO UTILIZADO\n27%\nSALDO DE ACRÉSCIMO\n-R$ 200.000,00\nSITUAÇÃO DO ACRÉSCIMO\nAcima do limite numérico calculado com os dados informados.\nSITUAÇÃO DA SUPRESSÃO\nDentro do limite numérico calculado com os dados informados.\nAcréscimos\nAnteriores\nR$ 1.800.000,00\nProposto\nR$ 900.000,00\nTotal\nR$ 2.700.000,00\nLimite\nR$ 2.500.000,00\nSaldo\n-R$ 200.000,00\nPercentual utilizado\n27%\n\nAcima",
       "hasPanels": true,
       "hasNumeric": true,
-      "hasSteps": true
+      "hasSteps": true,
+      "branch": true,
+      "handoffVisible": true
     },
     {
       "flow": "reequilibrio",
@@ -510,7 +512,7 @@
     },
     {
       "flow": "diagnostico",
-      "t": "Identificação do contrato\nIDENTIFICADOR PÚBLICO\n83102277000152-2-000626/2026\nÓRGÃO\nPREFEITURA MUNICIPAL DE ITAJAÍ - SC\nOBJETO\nCONTRATAÇÃO DE EMPRESA PARA PRESTAÇÃO DE SERVIÇOS DE ENGENHARIA COMUM PARA EXECUÇÃO DA REFORMA DO AUDITÓRIO DO PRÉDIO DA PREFEITURA MUNICIPAL, COMPREENDENDO REFORMA DO TELHADO E REFORMA INTERNA DO AUDITÓRIO, COM FORNECIMENTO DE MATERIAIS, MÃO DE OBRA, EQUIPAMENTOS E DEMAIS ",
+      "t": "Identificação do contrato\n\nConfira estes campos contra o contrato que a sua empresa tem em mãos. Divergência de órgão, contratado, objeto ou vigência é o primeiro ponto a documentar antes de pedir aditivo, reajuste ou reequilíbrio.\n\nIDENTIFICADOR PÚBLICO\n83102277000152-2-000626/2026\nÓRGÃO\nPREFEITURA MUNICIPAL DE ITAJAÍ - SC\nOBJETO\nCONTRATAÇÃO DE EMPRESA PARA PRESTAÇÃO DE SERVIÇOS DE ENGENHARIA COM",
       "hasItajai": true,
       "nonEmpty": true,
       "hasId": true,

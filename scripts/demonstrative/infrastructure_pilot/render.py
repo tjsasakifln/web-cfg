@@ -546,7 +546,7 @@ def render_html(extracts: dict[str, Any]) -> str:
 
 <section aria-labelledby="contratar">
 <h2 id="contratar">Pedir o mesmo tipo de entrega no seu recorte</h2>
-<p>O recorte cabe em qualquer porte e aceita contexto inicial incompleto. Elaboração, revisão, compatibilização, quantitativos e orçamento são compras distintas: o pedido descreve a necessidade, a proposta recorta o serviço. Autoria, atribuição, visita, logística e ART, quando couberem, são confirmadas antes do aceite técnico.</p>
+<p>O recorte cabe em qualquer porte e aceita contexto inicial incompleto. Elaboração, revisão, compatibilização, quantitativos e orçamento são trabalhos com nome próprio que a proposta combina conforme a necessidade: o pedido descreve o problema, a proposta organiza as etapas. Autoria, atribuição, visita, logística e ART, quando couberem, são confirmadas antes do aceite técnico.</p>
 <p>Veja o escopo em <a href="/quantitativos-orcamento-obras/">quantitativos e orçamento</a> e em <a href="/revisao-tecnica-projetos-engenharia/">revisão técnica de projetos</a>. Traga o que você já tem.</p>
 <div class="demo-actions">
 <a class="button button-primary" data-journey="contrato" data-cta-position="inline_cta" href="{e(wa)}" rel="noopener" target="_blank">Pedir proposta pelo WhatsApp</a>

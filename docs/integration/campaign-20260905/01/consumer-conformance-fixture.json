@@ -10,7 +10,7 @@
     "intent_matrix_contract": "CONFENGE_PUBLIC_INTENT_MATRIX/1.0.0",
     "intent_matrix_hash": "sha256:d57d46612dfd86f6c95a01d546efbf2909f93e2c2b837e04c8efe32c8dd238b5",
     "page_contract": "CONFENGE_PUBLIC_SERVICE_PAGE/1.0.0",
-    "page_contract_hash": "sha256:9ba14c3aa50544091e54d1de11ed265673335fd7ad356a9b1492da248d994c0d",
+    "page_contract_hash": "sha256:695e6ce3018b9445a373cf48496936e6b53a5cc70a613de712f64b2a8c241764",
     "price_gate_projection": "CONFENGE_PRICE_GATE_PROJECTION/1.0.0",
     "price_gate_projection_hash": "sha256:106d701471be84f8810831faeb6750d8aec14afa1d00c55277f0307fd7c6c614",
     "canary_offer_id": "private_project_technical_readiness_assessment",

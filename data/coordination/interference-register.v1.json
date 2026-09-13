@@ -131,7 +131,7 @@
     {
       "type": "dimensioning_review",
       "label": "Revisão de dimensionamento",
-      "definition": "Conferir se uma viga, um duto ou uma prumada está dimensionada. No piloto, RF-01 declara que a conferência geométrica não examina norma de dimensionamento. Isso é outra compra."
+      "definition": "Conferir se uma viga, um duto ou uma prumada está dimensionada. No piloto, RF-01 declara que a conferência geométrica não examina norma de dimensionamento; quando a interferência pede essa conferência, a revisão da peça entra na proposta."
     }
   ]
 }

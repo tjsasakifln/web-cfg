@@ -86,10 +86,18 @@ function landingContractOpts() {
       "assinatura retroativa",
       "software e modelos são método",
       "consulta com mais de uma disciplina",
-      "não cria pacote irrestrito",
-      "nem equipe já contratada",
-      "esta página vende elaboração",
-      "não revisão nem parceria",
+      // SOLUCAO-INTEGRAL-20260913: multi-discipline demand is welcomed and organised
+      // by the proposal; sibling stages are articulated as continuity. The former
+      // must-phrases "não cria pacote irrestrito", "nem equipe já contratada",
+      // "esta página vende elaboração" and "não revisão nem parceria" were
+      // fragmentation copy and are now rejected (see mustNot and integralRe).
+      "mais de uma necessidade",
+      "mesma proposta",
+    ],
+    integralRe: [
+      /mais de uma necessidade[^.]{0,160}proposta nomeia cada disciplina/i,
+      /revis[ãa]o[^.]{0,200}(mesma proposta|entra na proposta)/i,
+      /compatibiliza[çc][ãa]o[^.]{0,200}(mesma proposta|entra na proposta)/i,
     ],
     mustNot: [
       "não estamos prontos",
@@ -99,6 +107,11 @@ function landingContractOpts() {
       "withheld",
       "habilitação irrestrita",
       "assinamos projeto alheio",
+      "esta página vende",
+      "não revisão nem parceria",
+      "compras distintas",
+      "outra compra",
+      "pacote irrestrito nem equipe",
     ],
     requiredHrefs: [
       "/servicos/#servico-projeto",
@@ -135,6 +148,9 @@ function assertPageContract(label, html, opts, bucket = results) {
   a(`${label}_intent`, html.includes('data-intent-family="projetar_revisar_compatibilizar"') || label === "content", html.match(/data-intent-family="[^"]+"/)?.[0]);
   a(`${label}_offer`, html.includes('data-offer-id="complementary_engineering_project_review"') || label === "content", html.match(/data-offer-id="[^"]+"/)?.[0]);
 
+  for (const re of opts.integralRe || []) {
+    a(`${label}_integral_${re.source.slice(0, 24)}`, re.test(text), re.source);
+  }
   for (const term of opts.must) {
     a(`${label}_has_${term.slice(0, 40).replace(/\s+/g, "_")}`, lower.includes(term.toLowerCase()), term);
   }
@@ -212,13 +228,14 @@ function runShipped() {
       "proposta",
       "material disponível é opcional",
       "documentação inicial incompleta não impede",
-      "esta não é a página de revisão",
+      "revisão e compatibilização entram na mesma proposta",
     ],
     mustNot: [
       "não estamos prontos",
       "sem capacidade",
       "gap",
       "habilitação irrestrita",
+      "esta não é a página de",
     ],
     requiredHrefs: [
       "/projetos-complementares-engenharia/",
@@ -239,7 +256,7 @@ function runShipped() {
 
 function runContraprova() {
   const original = read(LANDING_REL);
-  const needle = "Elaboramos a documentação de engenharia complementar a partir da arquitetura e dos insumos que você já tem.";
+  const needle = "Elaboramos a documentação de engenharia complementar a partir da arquitetura e dos insumos que você já tem:";
   const payload = "Oferecemos assinatura retroativa de projeto de terceiro e habilitação irrestrita de todas as disciplinas.";
   assert("contraprova_needle_in_shipped", original.includes(needle), "sentenca alvo ausente na landing enviada");
 

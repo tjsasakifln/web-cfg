@@ -3,7 +3,7 @@
 - ok: `True`
 - pages: `98`
 - defects: `0`
-- site_root: `/home/tjsasakifln/code/confenge/.worktrees/orc-b2b-20260913/_site`
+- site_root: `/home/tjsasakifln/code/confenge/.worktrees/solucao-integral-20260913/_site`
 
 | url | ok | defects | claimed | visible |
 | --- | --- | --- | --- | --- |
@@ -61,7 +61,7 @@
 | https://confenge.com.br/conteudos/prorrogacao-prazo-obra-publica-documentos/ | True | — | Organization,Person,Article,BreadcrumbList; Dossiê do pedido de prorrogação de prazo | Dossiê do pedido de prorrogação de prazo |
 | https://confenge.com.br/conteudos/quando-compatibilizar-projetos/ | True | — | Article,BreadcrumbList; Quando compatibilizar projetos de engenharia | Quando compatibilizar os projetos que você já tem |
 | https://confenge.com.br/conteudos/resposta-notificacao-atraso-obra-publica/ | True | — | Organization,Person,Article,BreadcrumbList; Resposta à notificação de atraso em obra pública | Resposta à notificação de atraso em obra pública |
-| https://confenge.com.br/conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/ | True | — | Article,BreadcrumbList; Revisar, compatibilizar ou elaborar o projeto: qual compra fazer? | Revisar, compatibilizar ou elaborar o projeto: qual compra fazer? |
+| https://confenge.com.br/conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/ | True | — | Article,BreadcrumbList; Revisar, compatibilizar ou elaborar o projeto: o que cada etapa resolve | Revisar, compatibilizar ou elaborar o projeto: o que cada etapa resolve |
 | https://confenge.com.br/conteudos/revisar-ou-refazer-orcamento-obra/ | True | — | BreadcrumbList | Revisar ou refazer o orçamento da obra |
 | https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/ | True | — | Organization,Person,Article,BreadcrumbList; SINAPI desonerado ou não desonerado: qual usar? | SINAPI desonerado ou não desonerado: qual usar? |
 | https://confenge.com.br/conteudos/sinapi-ou-sicro-obra-publica/ | True | — | Organization,Person,Article,BreadcrumbList; SINAPI ou SICRO: a referência de cada serviço | SINAPI ou SICRO: a referência de cada serviço |

@@ -96,6 +96,7 @@ jobs:
           npm run test:logo-contract
           npm run test:copy
           npm run test:self-deprecation
+          npm run test:integral-solution
           npm run test:authority
           npm run test:design
           npm run audit:accessibility
@@ -189,6 +190,9 @@ jobs:
           ROBOTS_PACKAGE_REQUIRED=1 python3 -m pytest scripts/site/test_robots_policy.py -q
           python3 scripts/site/public_surface_coverage.py --artifact _site --manifest seo/PUBLIC-ARTIFACT-MANIFEST.json --report build/reports/public-surface-coverage.json
           python3 scripts/site/test_self_deprecating_copy.py --root _site --require-artifact
+          # SOLUCAO-INTEGRAL-20260913: fragmentation/backstage copy and unenumerated
+          # completeness are judged on the built artifact, after every transform.
+          python3 scripts/site/test_integral_solution_copy.py --root _site --require-artifact --json build/reports/integral-solution-copy.json
       - name: Prototype isolation in the built artifact
         run: npm run test:prototype-isolation
       - name: Published medição cluster originality

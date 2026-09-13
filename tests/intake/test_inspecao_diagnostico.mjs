@@ -88,7 +88,10 @@ test("inspection page keeps local coverage honest and location as optional conte
 
   assert.match(main, /município entra como contexto, não como barreira/i);
   assert.match(main, /Visita, logística, atribuição profissional e ART/i);
-  assert.match(main, /Não há endereço de loja, mapa de unidades, tempo de chegada nem equipe de campo publicada/);
+  // No local-business claim: attendance is agreed per scope and place; the page must not
+  // invent a shop address, unit map, arrival time or published field team (property, not wording).
+  assert.match(main, /sem unidade física de atendimento ao público/i);
+  assert.doesNotMatch(main, /tempo de chegada|mapa de unidades|nossa loja|endere[çc]o da unidade/i);
   assert.match(main, /telefone com DDD 48 é canal de contato, não cobertura de uma cidade/);
   assert.match(main, /Atendimento no Brasil depende de escopo, local, logística/);
 

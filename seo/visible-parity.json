@@ -333,7 +333,7 @@
         ],
         "canonical": "https://confenge.com.br/assistencia-tecnica-pericial-engenharia/",
         "dates": [],
-        "description": "Assistência técnica de engenharia em disputas: evidências, quesitos e manifestação da parte. Sem advocacia e sem perícia do juízo.",
+        "description": "Assistência técnica de engenharia em disputas: organizamos as evidências, formulamos quesitos e sustentamos a manifestação técnica da parte até os esclarecimentos finais. O advogado conduz a estratégia; o perito do juízo é nomeado pelo juiz.",
         "h1": "Assistência técnica de engenharia em disputas",
         "has_dataset_surface": false,
         "licenses": [],
@@ -1373,7 +1373,7 @@
         ],
         "canonical": "https://confenge.com.br/compatibilizacao-projetos-engenharia/",
         "dates": [],
-        "description": "Conferência de interfaces entre disciplinas, registro de interferências e encaminhamento de ajustes antes de executar, contratar ou alterar uma obra.",
+        "description": "Conferimos as interfaces entre disciplinas, registramos as interferências e conduzimos os ajustes com os autores até a obra poder ser executada, contratada ou alterada com uma referência comum.",
         "h1": "Compatibilização de projetos de engenharia",
         "has_dataset_surface": false,
         "licenses": [],
@@ -3162,7 +3162,7 @@
         "dates": [
           "2026-09-11"
         ],
-        "description": "Quando contratar a conferência de interfaces entre disciplinas, e quando o próximo passo é elaborar, revisar ou orçar.",
+        "description": "Quando contratar a conferência de interfaces entre disciplinas, e como elaboração, revisão e orçamento entram na mesma proposta quando o caso pede.",
         "h1": "Quando compatibilizar os projetos que você já tem",
         "has_dataset_surface": false,
         "licenses": [],
@@ -3251,13 +3251,13 @@
         "dataset_names": [],
         "dates": [],
         "descriptions": [
-          "Como escolher entre revisão técnica, compatibilização e elaboração de projeto de engenharia, a partir da decisão que você precisa tomar e do material que já existe."
+          "O que revisão técnica, compatibilização e elaboração de projeto de engenharia entregam, a partir da decisão que você precisa tomar e do material que já existe, e como a proposta combina as etapas."
         ],
         "downloads": [],
         "has_dataset_type": false,
         "has_false_case_type": false,
         "headlines": [
-          "Revisar, compatibilizar ou elaborar o projeto: qual compra fazer?"
+          "Revisar, compatibilizar ou elaborar o projeto: o que cada etapa resolve"
         ],
         "licenses": [],
         "organizations": [],
@@ -3283,15 +3283,15 @@
         ],
         "canonical": "https://confenge.com.br/conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/",
         "dates": [],
-        "description": "Como escolher entre revisão técnica, compatibilização e elaboração de projeto de engenharia, a partir da decisão que você precisa tomar e do material que já existe.",
-        "h1": "Revisar, compatibilizar ou elaborar o projeto: qual compra fazer?",
+        "description": "O que revisão técnica, compatibilização e elaboração de projeto de engenharia entregam, a partir da decisão que você precisa tomar e do material que já existe, e como a proposta combina as etapas.",
+        "h1": "Revisar, compatibilizar ou elaborar o projeto: o que cada etapa resolve",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": "demonstrativo",
         "reviewers": [
           "insumos e entrega"
         ],
-        "title": "Revisar, compatibilizar ou elaborar o projeto: qual compra fazer? | CONFENGE",
+        "title": "Revisar, compatibilizar ou elaborar o projeto: o que cada etapa resolve | CONFENGE",
         "versions": []
       }
     },
@@ -4442,7 +4442,7 @@
         ],
         "canonical": "https://confenge.com.br/inspecao-diagnostico-edificacoes/",
         "dates": [],
-        "description": "Inspeção e diagnóstico de fissura, infiltração ou condição de imóvel. Registramos o que existe, analisamos o que a evidência sustenta e confirmamos visita, local e responsabilidade antes do aceite técnico.",
+        "description": "Inspeção e diagnóstico de fissura, infiltração ou condição de imóvel. Registramos o que existe, analisamos o que a evidência sustenta e orientamos a solução; quando a condição pede projeto de reparo, orçamento ou perícia, a proposta segue com essas etapas.",
         "h1": "Inspeção e diagnóstico de edificações",
         "has_dataset_surface": false,
         "licenses": [],
@@ -5295,7 +5295,7 @@
         ],
         "canonical": "https://confenge.com.br/revisao-tecnica-projetos-engenharia/",
         "dates": [],
-        "description": "Conferência delimitada de um projeto recebido, com relatório de evidências e perguntas técnicas, antes de contratar, executar ou aprovar uma alteração.",
+        "description": "Conferimos o projeto que você recebeu, entregamos relatório com evidências, achados e correções propostas e conduzimos os ajustes previstos na proposta, antes de contratar, executar ou aprovar uma alteração.",
         "h1": "Revisão técnica de projetos de engenharia",
         "has_dataset_surface": true,
         "licenses": [],
@@ -5343,7 +5343,7 @@
         ],
         "canonical": "https://confenge.com.br/seguranca-trabalho-apoio-tecnico/",
         "dates": [],
-        "description": "Diagnóstico e apoio técnico de segurança do trabalho: riscos, documentos existentes e encaminhamento. PGR, LTCAT e AET não são o mesmo documento nem um pacote automático.",
+        "description": "Diagnóstico e apoio técnico de segurança do trabalho: riscos, documentos existentes e a produção dos documentos que o caso pede, com o profissional habilitado para cada um. PGR, LTCAT e AET não são o mesmo documento nem um pacote automático.",
         "h1": "Apoio técnico de segurança do trabalho",
         "has_dataset_surface": false,
         "licenses": [],
@@ -5586,5 +5586,5 @@
       }
     }
   ],
-  "site_root": "/home/tjsasakifln/code/confenge/.worktrees/orc-b2b-20260913/_site"
+  "site_root": "/home/tjsasakifln/code/confenge/.worktrees/solucao-integral-20260913/_site"
 }
