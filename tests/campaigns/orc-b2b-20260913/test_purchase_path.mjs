@@ -19,6 +19,7 @@ import {
   injectProofEntrances,
   loadEntrances,
   missingRequiredInputs,
+  readableFormula,
   renderProofEntrances,
 } from "../../../quantitativos-orcamento-obras/proof-entrances.mjs";
 
@@ -349,6 +350,27 @@ test("contraprova: omitir a prova na composição reprova o cenário F", () => {
     "slot vazio precisa reprovar",
   );
   assert.match(emptied, /awaiting-canonical-descriptors/);
+});
+
+test("as entradas publicam critério legível, não notação de máquina", () => {
+  const html = read(LANDING_REL);
+  for (const key of ["edificacao", "infraestrutura"]) {
+    const block = entranceBlock(html, key);
+    assert.ok(/<dt>Critério<\/dt>/.test(block), `${key} precisa publicar o critério canônico`);
+    assert.ok(!/sum\(|count\(|&gt;=|&lt;=/.test(block), `${key} não pode publicar pseudocódigo`);
+    assert.ok(!/\d\*\d/.test(block), `${key} não pode publicar operador de máquina`);
+  }
+});
+
+test("contraprova: reintroduzir pseudocódigo na saída é recusado pelo renderizador", () => {
+  assert.equal(readableFormula("280.00*0.15"), "280,00 × 0,15", "aritmética simples é publicável");
+  assert.equal(
+    readableFormula("sum(length*height)-openings>=0.50"),
+    null,
+    "notação de máquina não pode virar memória pública",
+  );
+  assert.equal(readableFormula("count(MH-01,MH-02)"), null);
+  assert.equal(readableFormula(""), null);
 });
 
 test("contraprova: esconder a natureza demonstrativa reprova as duas entradas", () => {

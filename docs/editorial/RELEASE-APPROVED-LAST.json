@@ -1,6 +1,6 @@
 {
-  "ok": false,
-  "ts": "2026-09-09T14:56:51.450818+00:00",
+  "ok": true,
+  "ts": "2026-09-13T16:44:45.098360+00:00",
   "valid_human_approved": 2,
   "page_ids": [
     "guia-checklist-aditivo",
@@ -21,6 +21,7 @@
     "editorial_build",
     "migration_owners_added_to_gsc_submit_list",
     "robots_sitemaps_via_editorial_build",
+    "editorial_tests_ok",
     "gsc_submit_list_written"
   ],
   "gsc_submit_candidates": [
@@ -28,9 +29,7 @@
     "https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/",
     "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/"
   ],
-  "blocked": [
-    "tests_failed:Command '['python3', '-m', 'pytest', 'scripts/editorial/tests', '-q']' returned non-zero exit status 1."
-  ],
+  "blocked": [],
   "not_automated": [
     "git_merge_of_release_pr",
     "netcup_nginx_production_promote",

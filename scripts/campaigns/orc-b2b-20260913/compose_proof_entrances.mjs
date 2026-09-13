@@ -27,17 +27,29 @@ function resolveRoot(argv = process.argv.slice(2), cwd = process.cwd()) {
   return path.resolve(cwd);
 }
 
-export function composeProofEntrances(rootDir) {
+/**
+ * `check: true` recomposes in memory and reports drift instead of writing, so a
+ * descriptor change that was never recomposed cannot reach publication.
+ */
+export function composeProofEntrances(rootDir, { check = false } = {}) {
   const root = path.resolve(rootDir);
   const landingPath = path.join(root, LANDING_REL);
   if (!fs.existsSync(landingPath)) {
     throw new Error(`required_landing_html_missing:${LANDING_REL}`);
   }
   const entrances = loadEntrances(root);
-  const html = injectProofEntrances(fs.readFileSync(landingPath, "utf8"), entrances);
-  fs.writeFileSync(landingPath, html);
+  const current = fs.readFileSync(landingPath, "utf8");
+  const html = injectProofEntrances(current, entrances);
+  if (check) {
+    if (html !== current) {
+      throw new Error(`proof_entrances_out_of_date:${LANDING_REL}`);
+    }
+  } else {
+    fs.writeFileSync(landingPath, html);
+  }
   return {
-    written: [LANDING_REL],
+    checked: check,
+    written: check ? [] : [LANDING_REL],
     entrances: entrances.map((entrance) => ({
       key: entrance.key,
       proof_id: entrance.proof_id,
@@ -54,7 +66,8 @@ const isMain =
   process.argv[1] && path.resolve(process.argv[1]) === path.resolve(fileURLToPath(import.meta.url));
 if (isMain) {
   try {
-    const result = composeProofEntrances(resolveRoot());
+    const argv = process.argv.slice(2);
+    const result = composeProofEntrances(resolveRoot(argv), { check: argv.includes("--check") });
     process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
   } catch (error) {
     process.stderr.write(`${error.message || error}\n`);

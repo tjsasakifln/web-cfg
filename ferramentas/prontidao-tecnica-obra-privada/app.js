@@ -196,6 +196,27 @@
       var contactLink = document.getElementById("cta-triagem");
       if (contactLink && api.buildContactHref) {
         contactLink.href = api.buildContactHref(result.contact_context);
+        // O contexto levado para a triagem é o do encaminhamento principal.
+        // Dizer isso evita que um caminho alternativo chegue lá com o nome do
+        // pedido errado, por exemplo orçamento de obra virar revisão de projeto.
+        if (routing.primary && routing.primary.public_name) {
+          contactLink.textContent = "Pedir conversa de escopo sobre " + routing.primary.public_name.toLowerCase();
+        } else {
+          contactLink.textContent = "Pedir conversa de escopo";
+        }
+      }
+      var note = document.getElementById("cta-context-note");
+      if (!note) {
+        note = document.createElement("p");
+        note.id = "cta-context-note";
+        cta.insertBefore(note, contactLink || null);
+      }
+      if (routing.alternatives && routing.alternatives.length) {
+        note.hidden = false;
+        note.textContent = "Este contato leva o recorte do encaminhamento principal. Se o caminho que interessa for um dos outros acima, abra a página dele: o pedido começa lá, com a modalidade certa.";
+      } else {
+        note.hidden = true;
+        note.textContent = "";
       }
       cta.hidden = false;
     }

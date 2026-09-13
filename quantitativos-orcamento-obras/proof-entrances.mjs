@@ -41,6 +41,7 @@ export const ENTRANCE_SPECS = Object.freeze([
       "casos/demonstrativo-projeto-privado/data/revisao.csv",
     ]),
     quantity_id: "Q-PAR-01",
+    criterion_key: "opening_deduction_rule_pt_br",
   }),
   Object.freeze({
     key: "infraestrutura",
@@ -56,6 +57,7 @@ export const ENTRANCE_SPECS = Object.freeze([
       "casos/demonstrativo-infraestrutura/data/revisao.csv",
     ]),
     quantity_id: "Q-SUB-01",
+    criterion_key: "layer_volume_rule_pt_br",
   }),
 ]);
 
@@ -73,10 +75,45 @@ export function unitLabel(unit) {
   return UNIT_LABELS[unit] || String(unit ?? "");
 }
 
+/**
+ * Keep the decimal places the canonical descriptor declares: "42.00" is a
+ * measured volume, not the integer 42, and the engineering reading depends on
+ * that precision.
+ */
 export function formatNumber(value) {
-  const numeric = Number(value);
-  if (!Number.isFinite(numeric)) return String(value);
-  return new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 4 }).format(numeric);
+  const raw = String(value ?? "").trim();
+  const numeric = Number(raw);
+  if (!Number.isFinite(numeric)) return raw;
+  const decimals = raw.includes(".") ? raw.split(".")[1].length : 0;
+  return new Intl.NumberFormat("pt-BR", {
+    minimumFractionDigits: Math.min(decimals, 4),
+    maximumFractionDigits: Math.max(Math.min(decimals, 4), 0),
+  }).format(numeric);
+}
+
+/**
+ * A takeoff formula is only publishable when it is plain arithmetic. Anything
+ * with function calls or comparison operators is machine notation, not a
+ * memory a buyer can read, and must stay in the demonstrative page.
+ */
+export function readableFormula(formula) {
+  const raw = String(formula ?? "").trim();
+  if (!raw || !/^[0-9.*+\-/() ]+$/.test(raw)) return null;
+  return raw
+    .replace(/\*/g, " × ")
+    .replace(/\//g, " ÷ ")
+    .replace(/(\d+)\.(\d+)/g, "$1,$2")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+export function criterionText(source, criterionKey) {
+  const criteria = source && source.takeoff_criteria;
+  const value = criteria && criteria[criterionKey];
+  if (!value || typeof value !== "string") {
+    throw new Error(`proof_entrance_criterion_missing:${criterionKey}`);
+  }
+  return value;
 }
 
 export function requiredInputPaths(root = process.cwd()) {
@@ -156,7 +193,8 @@ export function buildEntrance(spec, root = process.cwd()) {
     quantitativos_anchor: `${consumption.url}#quantitativos`,
     orcamento_anchor: `${consumption.url}#orcamento`,
     sheet_ref: quantity.sheet_ref,
-    formula: quantity.formula,
+    criterion_pt_br: criterionText(source, spec.criterion_key),
+    formula: readableFormula(quantity.formula),
     quantity_id: quantity.id,
     quantity_value: quantity.quantity,
     quantity_unit: quantity.unit,
@@ -201,7 +239,10 @@ function renderEntrance(entrance) {
     `<p class="qty-proof-cut">${escapeHtml(entrance.cut_pt_br)}</p>`,
     '<dl class="qty-proof-chain">',
     `<dt>Desenho</dt><dd><code>${escapeHtml(entrance.sheet_ref)}</code></dd>`,
-    `<dt>Memória</dt><dd><code data-proof-formula="${escapeHtml(entrance.formula)}">${escapeHtml(entrance.formula)}</code></dd>`,
+    `<dt>Critério</dt><dd>${escapeHtml(entrance.criterion_pt_br)}</dd>`,
+    entrance.formula
+      ? `<dt>Memória</dt><dd><data data-proof-formula="${escapeHtml(entrance.formula)}">${escapeHtml(entrance.formula)} = ${escapeHtml(quantity)} ${escapeHtml(unit)}</data></dd>`
+      : "",
     `<dt>Quantidade</dt><dd><code>${escapeHtml(entrance.quantity_id)}</code> <data data-proof-quantity="${escapeHtml(entrance.quantity_value)}" value="${escapeHtml(entrance.quantity_value)}">${escapeHtml(quantity)} ${escapeHtml(unit)}</data></dd>`,
     `<dt>Item de planilha</dt><dd><code data-proof-item="${escapeHtml(entrance.budget_id)}">${escapeHtml(entrance.budget_id)}</code></dd>`,
     "</dl>",
@@ -225,7 +266,6 @@ export function renderProofEntrances(entrances) {
   }
   return [
     `${SLOT_MARK_START}<div id="${SLOT_ID}" data-proof-entrances-slot="canonical" data-proof-entrances-state="canonical">`,
-    '<p class="qty-proof-intro">Dois recortes demonstrativos, um de edificação e um de infraestrutura, mostram a mesma cadeia de conferência: desenho, memória, quantidade e item de planilha. O resumo fica aqui; o exame completo, com desenhos e arquivos, fica na página de cada recorte.</p>',
     '<div class="qty-proof-grid">',
     ...entrances.map((entrance) => renderEntrance(entrance)),
     "</div>",
