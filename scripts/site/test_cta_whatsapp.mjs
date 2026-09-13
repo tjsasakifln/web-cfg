@@ -35,7 +35,7 @@ const auditDate = process.env.BOFU_GATE_DATE || new Date().toISOString().slice(0
 const genericPrefill = "Olá, Tiago. Gostaria de analisar uma demanda relacionada a licitação, contrato ou obra pública.";
 const requiredCatalogKey = new Map([
   ["defesa-tecnica-contratos-publicos/index.html", "sancao_notificacao"],
-  ["acompanhamento-contratos-obras/index.html", "contrato_pressao"],
+  ["acompanhamento-contratos-obras/index.html", "acompanhamento_rotina"],
   ["atrasos-prorrogacao-obras-publicas/index.html", "atraso_pagamento"],
 ]);
 
@@ -78,6 +78,7 @@ for (const rel of pages) {
 // Catalog completeness
 for (const key of [
   "contrato_pressao",
+  "acompanhamento_rotina",
   "glosa_medicao",
   "aditivo",
   "reequilibrio",

@@ -645,7 +645,7 @@ def confenge_help(service_paths: list[str], text: str) -> str:
     links = "".join(items)
     return f"""<section id="como-ajudamos">
 <p class="eyebrow">Atuação adequada</p>
-<h2>Como a CONFENGE pode ajudar neste cenário</h2>
+<h2>O que a CONFENGE faz neste cenário</h2>
 <p>{e(text)}</p>
 <ul>{links}</ul>
 </section>"""

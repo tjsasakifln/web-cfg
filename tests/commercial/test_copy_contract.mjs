@@ -21,6 +21,7 @@ import {
   auditCopyContract,
   catalogContractsFromClientData,
   classifyOccurrence,
+  enumeratedScopeAdjacent,
   deriveMoneyRoutes,
   explicitExclusionRanges,
   frozenRouteExemption,
@@ -491,6 +492,12 @@ assert(
   "enumeração longe",
 );
 assert(
+  "gx06_client_inputs_do_not_count_as_work",
+  classifyHtml("FL-01", "<p>Solução completa para quem já tem projeto, edital e planilha.</p>") === "VIOLATION" &&
+    classifyHtml("FL-01", "<p>Solução completa: projeto, cronograma e relatório.</p>") === "VIOLATION",
+  "insumos do cliente",
+);
+assert(
   "gx06_does_not_rescue_guarantee_promise",
   classifyHtml("FL-08", "<p>Garantimos aprovação com elaboração, revisão e compatibilização.</p>") === "VIOLATION",
   "garantia",
@@ -612,6 +619,8 @@ function classify(entry, normText, index, matched, ranges) {
     const before = normText.slice(Math.max(0, index - negationWindow), index);
     if (negationRe.test(before)) return "GX-01";
   }
+  // Same rule as the audit: an enumerated offer is not a slogan (SOLUCAO-INTEGRAL-20260913).
+  if (exemptionIds.includes("GX-06") && enumeratedScopeAdjacent(normText, index, matched, contract)) return "GX-06";
   return null;
 }
 

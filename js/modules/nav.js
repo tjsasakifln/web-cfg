@@ -60,7 +60,7 @@
       'planejamento de órgão público': {
         journey: 'orgao',
         ladder: false,
-        next_step: 'Conte o que o órgão precisa preparar e em que etapa está. A resposta diz em que formato a CONFENGE pode ajudar nessa etapa.',
+        next_step: 'Conte o que o órgão precisa preparar e em que etapa está. A resposta diz o apoio técnico que cabe nessa etapa e o que você recebe.',
         detail: 'Nesta etapa basta o contexto da etapa de planejamento. Não envie documentos nem arquivos.',
         route: '/servicos/#servico-obras-publicas',
         route_label: 'Ver a frente de obras públicas',

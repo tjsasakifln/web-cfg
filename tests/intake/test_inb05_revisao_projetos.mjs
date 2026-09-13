@@ -256,7 +256,8 @@ test("landing refuses unauthorized commercial claims and unbacked money", () => 
   // properties: the page may phrase them affirmatively, but may never claim them.
   assert.match(textOf(html), /n[ãa]o (oferecemos|fazemos) assinatura de projeto de terceiro|autoria[^.]{0,80}permanece com o autor/i);
   assert.match(textOf(html), /n[ãa]o publicamos laudo de segurança|laudo de segurança[^.]{0,80}n[ãa]o/i);
-  assert.doesNotMatch(textOf(html), /assinamos (o )?projeto de terceiro\b(?![^.]*n[ãa]o)/i);
+  // An affirmative "assinamos projeto de terceiro" is forbidden unless negated right before it.
+  assert.doesNotMatch(textOf(html), /(?<!n[ãa]o |nem |nunca )assinamos (o )?projeto de terceiro\b/i);
 });
 
 test("mutation: invented third-party signature or price fails the page guard", () => {

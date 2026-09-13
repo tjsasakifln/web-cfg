@@ -124,7 +124,11 @@ COMPLETENESS = re.compile(
     re.I,
 )
 
-RULES = ("fragmentacao_ou_abandono", "bastidor_de_capacidade", "completude_sem_trabalho")
+# A completeness claim next to a promise form is never rescued by enumeration:
+# "solução completa garantida" / "garantimos aprovação" stay forbidden (FL-08).
+PROMISE = re.compile(r"\bgarant(?:imos|ia de|ias de|id[oa]s?)\b|\baprova[çc][aã]o garantida\b|\b[eê]xito garantido\b", re.I)
+
+RULES = ("fragmentacao_ou_abandono", "bastidor_de_capacidade", "completude_sem_trabalho", "completude_com_promessa")
 
 
 def _strip(text: str) -> str:
@@ -168,9 +172,15 @@ def load_exceptions() -> list[dict]:
         return []
     rows = json.loads(EXCEPTIONS.read_text(encoding="utf-8")).get("preserved", [])
     for row in rows:
-        for key in ("route", "rule", "text", "category", "reason"):
+        # Route-exact, dated, owned by an issue, with the legitimate category and
+        # the specific reason (AGENTS.md: commercial exceptions are never anonymous).
+        for key in ("route", "rule", "text", "category", "reason", "issue", "owner", "reviewed_at"):
             if not row.get(key):
                 raise ValueError(f"integral-solution exception without {key}: {row}")
+        if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(row["reviewed_at"])):
+            raise ValueError(f"integral-solution exception reviewed_at must be YYYY-MM-DD: {row}")
+        if len(str(row["reason"])) < 40:
+            raise ValueError(f"integral-solution exception reason too short to name offer, information and effect: {row}")
         if row["category"] not in ("C3", "C4", "C5", "C6", "C7"):
             raise ValueError(f"exception must name a legitimate category, got {row['category']}")
     return rows
@@ -199,10 +209,12 @@ def findings_for(html: str, rule: dict | None = None, rel: str = "", exceptions:
 
     stripped = _strip(surface)
     for match in COMPLETENESS.finditer(stripped):
+        snippet = surface[max(0, match.start() - 40) : match.end() + 80].strip()[:160]
         if not enumerates_work(surface, match.start(), len(match.group(0)), rule):
-            found.setdefault("completude_sem_trabalho", []).append(
-                surface[max(0, match.start() - 40) : match.end() + 80].strip()[:160]
-            )
+            found.setdefault("completude_sem_trabalho", []).append(snippet)
+        window = stripped[max(0, match.start() - 160) : match.end() + 160]
+        if PROMISE.search(window):
+            found.setdefault("completude_com_promessa", []).append(snippet)
     return found
 
 
@@ -317,6 +329,10 @@ def test_detector_catches_fragmentation_backstage_and_empty_completeness() -> No
         ('<h1>Página</h1><details><summary>Limites</summary><p>Compatibilizar é uma compra distinta de elaborar.</p></details>', "fragmentacao_ou_abandono"),
         ("<h1>Página</h1><p>Solução completa para a sua obra. Fale com a gente.</p>", "completude_sem_trabalho"),
         ('<h1>Página</h1><img alt="soluções personalizadas em engenharia">', "completude_sem_trabalho"),
+        # inputs the client already has are not work of ours
+        ("<h1>Página</h1><p>Solução completa para quem já tem projeto, edital e planilha.</p>", "completude_sem_trabalho"),
+        ("<h1>Página</h1><p>Solução completa garantida: elaboração, revisão e compatibilização com aprovação garantida.</p>", "completude_com_promessa"),
+        ("<h1>Página</h1><p>Solução completa: projeto, cronograma e relatório.</p>", "completude_sem_trabalho"),
         # a service list two sentences later, in another block, does not rescue a bare slogan
         ("<h1>Erro</h1><p>Solução completa para a sua obra. Fale com a gente.</p><p>Confira o endereço.</p>"
          "<ul><li>Projeto, revisão, compatibilização, orçamento e perícia.</li></ul>", "completude_sem_trabalho"),
