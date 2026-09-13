@@ -1,0 +1,6 @@
+{
+  "schema": "confenge.integral-solution-exceptions/1.0",
+  "campaign": "SOLUCAO-INTEGRAL-20260913",
+  "rule": "Preservação por trecho, nunca por rota inteira. Cada entrada nomeia a oferta ou o recurso protegido, a informação que a frase carrega e o efeito de omiti-la. Se o texto mudar, a entrada caduca e o gate reprova até o trecho ser reexaminado.",
+  "preserved": []
+}

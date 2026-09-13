@@ -90,6 +90,25 @@ export function explicitExclusionRanges(html, text) {
   return ranges;
 }
 
+// GX-06: "solução completa" / "personalizado" describe a true offer only when the
+// same passage enumerates the work that composes it. The window looks at the
+// sentence holding the term plus what follows it; a slogan alone stays a violation.
+export function enumeratedScopeAdjacent(text, index, matched, contract) {
+  const rule = contract.gate_exceptions.find((item) => item.id === "GX-06");
+  if (!rule || rule.implemented_as !== "enumerated_scope_adjacency") return false;
+  const vocabulary = (rule.work_vocabulary || []).map(normalize).filter(Boolean);
+  const minimum = Number(rule.minimum_work_terms) || 3;
+  const window = Number(rule.window_chars) || 420;
+  const before = text.slice(Math.max(0, index - window), index);
+  const sentenceStart = Math.max(before.lastIndexOf("."), before.lastIndexOf("!"), before.lastIndexOf("?"), before.lastIndexOf(":")) + 1;
+  const passage = before.slice(sentenceStart) + text.slice(index, index + matched.length + window);
+  const seen = new Set();
+  for (const term of vocabulary) {
+    if (new RegExp(`\\b${term.replace(/\s+/g, "\\s+")}`).test(passage)) seen.add(term.split(/\s+/)[0].slice(0, 6));
+  }
+  return seen.size >= minimum;
+}
+
 export function classifyOccurrence(entry, text, index, matched, contract, ranges, exclusionRanges = []) {
   const exceptionIds = entry.exemption_ids || [];
   if (exceptionIds.includes("GX-04") && ranges.some(([start, end]) => index >= start && index < end)) return "registered_name";
@@ -101,6 +120,7 @@ export function classifyOccurrence(entry, text, index, matched, contract, ranges
     const marker = new RegExp(`\\b(${negation.negation_markers.map((value) => normalize(value).replace(/\s/g, "\\s")).join("|")})\\b`);
     if (marker.test(before)) return "explicit_negation";
   }
+  if (exceptionIds.includes("GX-06") && enumeratedScopeAdjacent(text, index, matched, contract)) return "enumerated_scope";
   const guarantee = contract.gate_exceptions.find((item) => item.id === "GX-03");
   if (exceptionIds.includes("GX-03")) {
     const tail = text.slice(index, index + matched.length + 16);

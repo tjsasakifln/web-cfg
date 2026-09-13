@@ -40,8 +40,29 @@ def _brand_scope() -> list[Path]:
     return pages
 
 
+# Phrases that must stay on the brand banlist. The list is asserted by content,
+# not by count: a count floor once forced the banlist to keep "solução completa"
+# and "soluções personalizadas" after the founder authorised describing a
+# complete, tailored technical solution (campaign SOLUCAO-INTEGRAL-20260913).
+# Completeness claims are now judged by scripts/site/test_integral_solution_copy.py,
+# which rejects the slogan without enumerated work and accepts it with it.
+BRAND_PHRASES_THAT_MUST_STAY = (
+    "excelência",
+    "inovação",
+    "tecnologia de ponta",
+    "potencialize seus resultados",
+    "maximize oportunidades",
+    "conte conosco",
+    "fale conosco",
+    "parceiro estratégico",
+    "Arquitetura de ofertas",
+    "Sem cases fabricados",
+)
+BRAND_PHRASES_RELEASED_TO_CONTEXT_GATE = ("solução completa", "soluções personalizadas")
+
+
 def test_brand_forbidden_phrases_still_enforced():
-    """All 54 brand.json forbidden phrases, on every shipped visitor surface.
+    """Every brand.json forbidden phrase, on every shipped visitor surface.
 
     Issue #298: this used to check three phrases over four fixed files, so 51
     declared phrases were enforced nowhere and any page outside the quartet
@@ -49,9 +70,13 @@ def test_brand_forbidden_phrases_still_enforced():
     """
     brand = load_brand()
     phrases = brand["forbidden_phrases"]
-    assert "Arquitetura de ofertas" in phrases
-    assert "Sem cases fabricados" in phrases
-    assert len(phrases) >= 54, f"brand forbidden_phrases shrank to {len(phrases)}"
+    for phrase in BRAND_PHRASES_THAT_MUST_STAY:
+        assert phrase in phrases, f"brand forbidden_phrases lost {phrase!r}"
+    for phrase in BRAND_PHRASES_RELEASED_TO_CONTEXT_GATE:
+        assert phrase not in phrases, (
+            f"{phrase!r} is judged in context by test_integral_solution_copy.py; "
+            "a literal ban here would reject the authorised complete-solution copy"
+        )
     needles = [(p, p.lower()) for p in phrases]
     failures: list[str] = []
     scanned = 0
@@ -541,8 +566,8 @@ def test_brand_scanner_keeps_public_copy_channels_only():
         <meta name="keywords" content="conte conosco">
       </head>
       <body class="conte conosco" data-internal-copy="conte conosco">
-        <p>soluções personalizadas</p>
-        <img alt="solução completa" data-caption="conte conosco">
+        <p>parceiro estratégico</p>
+        <img alt="fale conosco" data-caption="conte conosco">
         <button aria-label="excelência"></button>
         <input placeholder="inovação" data-help="conte conosco">
       </body>
@@ -550,8 +575,8 @@ def test_brand_scanner_keeps_public_copy_channels_only():
     """
     failures = scan_brand_html(html)
     for phrase in (
-        "soluções personalizadas",
-        "solução completa",
+        "parceiro estratégico",
+        "fale conosco",
         "excelência",
         "inovação",
         "tecnologia de ponta",

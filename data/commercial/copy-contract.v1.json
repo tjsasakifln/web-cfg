@@ -1,6 +1,6 @@
 {
   "schema": "confenge.offer-copy-contract/1.0",
-  "contract_version": "CFG-COPY-2026-08-25-v2",
+  "contract_version": "CFG-COPY-2026-09-13-v3",
   "issue": "#338",
   "parent_issue": "#329",
   "complements_issues": [
@@ -125,7 +125,7 @@
       },
       {
         "order": 2,
-        "block": "H1 que promete escolha clara, não soluções completas"
+        "block": "H1 que nomeia a decisão do comprador e o conjunto de entregas, sem slogan"
       },
       {
         "order": 3,
@@ -232,10 +232,12 @@
       "pattern": "\\bsolucao completa\\b|\\bsolucoes completas\\b",
       "exemption_ids": [
         "GX-01",
-        "GX-02"
+        "GX-02",
+        "GX-06"
       ],
       "source": "#338 Linguagem proibida sem prova imediata",
-      "finding_kind": "violation"
+      "finding_kind": "violation",
+      "contextual_rule": "Campanha SOLUCAO-INTEGRAL-20260913 (decisão do fundador de 2026-09-13): o termo descreve uma oferta verdadeira quando a mesma passagem enumera o trabalho que a compõe (GX-06). Sem essa enumeração, continua slogan sem prova imediata."
     },
     {
       "id": "FL-02",
@@ -284,10 +286,12 @@
       "pattern": "\\bpersonalizad[oa]s?\\b|\\bpersonalizacao\\b|\\bpersonalizacoes\\b",
       "exemption_ids": [
         "GX-01",
-        "GX-02"
+        "GX-02",
+        "GX-06"
       ],
       "source": "#338 Linguagem proibida sem prova imediata",
-      "finding_kind": "violation"
+      "finding_kind": "violation",
+      "contextual_rule": "Campanha SOLUCAO-INTEGRAL-20260913 (decisão do fundador de 2026-09-13): o termo descreve uma oferta verdadeira quando a mesma passagem enumera o trabalho que a compõe (GX-06). Sem essa enumeração, continua slogan sem prova imediata."
     },
     {
       "id": "FL-06",
@@ -536,6 +540,60 @@
         "seguro-garantia"
       ],
       "source": "#338 promessa jurídica, regulatória, técnica ou financeira fora da competência"
+    },
+    {
+      "id": "GX-06",
+      "scope": "completude enumerada",
+      "rule": "Dizer solução completa, sob medida ou personalizada é descrição verdadeira quando a mesma passagem enumera os trabalhos que compõem a solução: elaboração, revisão, compatibilização, quantitativos, orçamento, inspeção, diagnóstico, perícia, assistência, avaliação, segurança do trabalho, planejamento, medição, glosa, aditivo e afins. Sem a enumeração adjacente o termo continua slogan sem prova imediata e reprova. A enumeração não autoriza prometer aprovação, êxito, prazo ou preço; essas alegações seguem FL-08, success_boundary e a política de preços.",
+      "implemented_as": "enumerated_scope_adjacency",
+      "window_chars": 420,
+      "minimum_work_terms": 3,
+      "work_vocabulary": [
+        "elaboracao",
+        "elaborar",
+        "elaboramos",
+        "revisao",
+        "revisar",
+        "revisamos",
+        "compatibilizacao",
+        "compatibilizar",
+        "compatibilizamos",
+        "quantitativos",
+        "levantamento",
+        "orcamento",
+        "orcar",
+        "inspecao",
+        "inspecionar",
+        "vistoria",
+        "diagnostico",
+        "diagnosticar",
+        "pericia",
+        "assistencia tecnica",
+        "laudo",
+        "parecer",
+        "relatorio",
+        "avaliacao",
+        "avaliar",
+        "seguranca do trabalho",
+        "pgr",
+        "ltcat",
+        "projeto",
+        "projetar",
+        "planejamento",
+        "medicao",
+        "medicoes",
+        "glosa",
+        "aditivo",
+        "reequilibrio",
+        "edital",
+        "planilha",
+        "memoria de calculo",
+        "cronograma",
+        "coordenacao",
+        "conducao",
+        "acompanhamento"
+      ],
+      "source": "Campanha SOLUCAO-INTEGRAL-20260913, decisão do fundador de 2026-09-13; substitui o veto literal de #338 para FL-01 e FL-05"
     }
   ],
   "structured_data_ban": {

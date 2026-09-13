@@ -213,7 +213,7 @@
       }
       if (routing.alternatives && routing.alternatives.length) {
         note.hidden = false;
-        note.textContent = "Este contato leva o recorte do encaminhamento principal. Se o caminho que interessa for um dos outros acima, abra a página dele: o pedido começa lá, com a modalidade certa.";
+        note.textContent = "Este contato já leva o encaminhamento principal. Se você também precisar de um dos outros caminhos acima, diga na mensagem: a proposta combina as etapas.";
       } else {
         note.hidden = true;
         note.textContent = "";
