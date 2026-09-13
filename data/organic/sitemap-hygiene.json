@@ -1,8 +1,8 @@
 {
   "ok": true,
   "issues": [],
-  "url_count": 97,
-  "unique_paths": 97,
+  "url_count": 98,
+  "unique_paths": 98,
   "locs": [
     "https://confenge.com.br/",
     "https://confenge.com.br/acompanhamento-contratos-obras/",
@@ -13,6 +13,7 @@
     "https://confenge.com.br/bid-room-licitacoes-obras/",
     "https://confenge.com.br/casos/",
     "https://confenge.com.br/casos/aditivo-art125-demonstrativo/",
+    "https://confenge.com.br/casos/demonstrativo-infraestrutura/",
     "https://confenge.com.br/casos/demonstrativo-projeto-privado/",
     "https://confenge.com.br/casos/medicao-glosa-demonstrativo/",
     "https://confenge.com.br/casos/modelo-apresentacao-executiva-resultados/",
@@ -103,7 +104,7 @@
     "https://confenge.com.br/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/"
   ],
   "families": {
-    "core": 91,
+    "core": 92,
     "editorial": 4,
     "contract_analysis": 2
   },

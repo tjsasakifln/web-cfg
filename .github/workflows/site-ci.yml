@@ -204,6 +204,8 @@ jobs:
       - name: Setup Chrome
         uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2
         id: setup-chrome
+      - name: Quantity takeoff and budgeting purchase path
+        run: npm run test:orc-b2b-20260913
       - name: Priority service sharing and sample presentation
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}

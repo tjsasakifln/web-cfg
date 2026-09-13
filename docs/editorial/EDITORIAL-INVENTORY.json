@@ -1,7 +1,7 @@
 {
   "schema_version": "3.0.0",
-  "derived_at": "2026-09-10T04:20:46Z",
-  "commit_sha": "56f0de2593590aced6fede6084d3a73f8b57691f",
+  "derived_at": "2026-09-13T16:57:34Z",
+  "commit_sha": "1168312363b970689bbf09589287528bdf734c67",
   "commit_sha_role": "informational_only",
   "terminal_status": "READY_FOR_RELEASE",
   "registry_counts": {
@@ -69,9 +69,9 @@
     "awaiting_page_ids": []
   },
   "public_inventory": {
-    "conteudos_indexable": 22,
-    "hub_claimed_guides": 22,
-    "legacy_indexable_public_surface": 22,
+    "conteudos_indexable": 30,
+    "hub_claimed_guides": 30,
+    "legacy_indexable_public_surface": 30,
     "first_cohort_awaiting_approval": 0,
     "first_cohort_published": 2,
     "editorial_backlog_awaiting_approval": 8,

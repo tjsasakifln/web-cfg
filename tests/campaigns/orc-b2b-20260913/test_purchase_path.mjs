@@ -1,0 +1,608 @@
+/**
+ * ORC-B2B-20260913: what the buyer can actually do on the quantity-takeoff and
+ * budgeting route.
+ *
+ * The suite starts from the six buyer behaviours, not from a file count. Each
+ * scenario reads the shipped source HTML. Counterproofs mutate an in-memory
+ * copy or a temporary root: a mutation must fail the same assertion that the
+ * clean control passes, otherwise the assertion proves nothing.
+ */
+import assert from "node:assert/strict";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import test from "node:test";
+import { fileURLToPath } from "node:url";
+import {
+  ENTRANCE_SPECS,
+  buildEntrance,
+  injectProofEntrances,
+  loadEntrances,
+  missingRequiredInputs,
+  readableFormula,
+  renderProofEntrances,
+} from "../../../quantitativos-orcamento-obras/proof-entrances.mjs";
+
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../..");
+
+const LANDING_REL = "quantitativos-orcamento-obras/index.html";
+const SUPPORT_RELS = Object.freeze([
+  "conteudos/documentos-para-levantamento-quantitativos/index.html",
+  "conteudos/comparar-propostas-execucao-obra/index.html",
+  "conteudos/revisar-ou-refazer-orcamento-obra/index.html",
+]);
+
+function read(rel) {
+  return fs.readFileSync(path.join(root, rel), "utf8");
+}
+
+/**
+ * Strip script, style and noscript so "present in static HTML" means visible
+ * without JS.
+ *
+ * The end-tag patterns are deliberately tolerant (`<\/script\b[^>]*>`), the way
+ * scripts/commercial/real_proof_registry.mjs writes them: a browser closes on
+ * `</script >` too, so a stricter `<\/script>` would leave script content in
+ * the "static" body and let a no-JS assertion pass for the wrong reason.
+ * Stripping repeats until the text stops changing, so one pass cannot leave a
+ * nested or re-formed opening tag behind.
+ */
+export function staticBody(html) {
+  const parts = String(html ?? "").split("</head>");
+  let body = parts.length > 1 ? parts.slice(1).join("</head>") : parts[0];
+  const strippers = [
+    /<script\b[^>]*>[\s\S]*?<\/script\b[^>]*>/gi,
+    /<style\b[^>]*>[\s\S]*?<\/style\b[^>]*>/gi,
+    /<noscript\b[^>]*>[\s\S]*?<\/noscript\b[^>]*>/gi,
+  ];
+  let previous;
+  do {
+    previous = body;
+    for (const stripper of strippers) body = body.replace(stripper, " ");
+  } while (body !== previous);
+  return body;
+}
+
+function text(html) {
+  return staticBody(html)
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function entranceBlock(html, key) {
+  const match = html.match(
+    new RegExp(`<article\\b[^>]*data-proof-entrance="${key}"[\\s\\S]*?</article>`, "i"),
+  );
+  return match ? match[0] : "";
+}
+
+// ---------------------------------------------------------------- predicates
+// Each predicate is used by a scenario and by at least one counterproof.
+
+export function declaresContractedService(html) {
+  const body = text(html);
+  return (
+    /serviço de engenharia contratado/i.test(body)
+    && /não é software/i.test(body)
+    && /planilha gratuita/i.test(body)
+  );
+}
+
+export function namesWhoContracts(html) {
+  const body = text(html);
+  return ["construtora", "empresa de engenharia", "escritório de projeto", "terceirizar"].every(
+    (term) => body.toLowerCase().includes(term),
+  );
+}
+
+export function keepsSmallAndPublicDemand(html) {
+  const body = text(html).toLowerCase();
+  return /demanda pequena/.test(body) && /obra pública/.test(body);
+}
+
+export function offersThreeModalities(html) {
+  return (
+    html.includes('id="levantamento-quantitativos"')
+    && html.includes('id="elaboracao-orcamento"')
+    && html.includes('id="revisao-orcamento"')
+  );
+}
+
+export function reachesProof(html, href) {
+  return html.includes(`href="${href}"`);
+}
+
+export function entranceIsCanonical(html, key, expected) {
+  const block = entranceBlock(html, key);
+  if (!block) return false;
+  return (
+    block.includes(`data-proof-quantity="${expected.quantity}"`)
+    && block.includes(`data-proof-item="${expected.budget_id}"`)
+    && block.includes(`href="${expected.url}#quantitativos"`)
+  );
+}
+
+export function entranceDeclaresDemonstrativeNature(html, key) {
+  const block = entranceBlock(html, key);
+  return (
+    /exemplo demonstrativo de método/i.test(block)
+    && /não representa cliente, obra executada/i.test(block)
+    && /hipotéticos/i.test(block)
+    && /não são preço da CONFENGE/i.test(block)
+  );
+}
+
+export function entranceFilesResolve(html, key, spec) {
+  const block = entranceBlock(html, key);
+  return spec.csv_rels.every(
+    (rel) => block.includes(`href="/${rel}"`) && fs.existsSync(path.join(root, rel)),
+  );
+}
+
+export function asksOnlyWhatIsNeeded(html) {
+  const body = text(html).toLowerCase();
+  const forbidden = ["informe o cnpj", "informe o cpf", "valor da obra", "endereço exato da obra"];
+  return !forbidden.some((term) => body.includes(term));
+}
+
+export function acceptsPartialProject(html) {
+  const body = text(html).toLowerCase();
+  return (
+    html.includes('id="projeto-parcial"')
+    && /documentação inicial incompleta não/.test(body)
+    && /insumos possíveis/.test(body)
+  );
+}
+
+export function doesNotForcePublicBidding(html) {
+  const body = text(html).toLowerCase();
+  return /não pedimos campos de licitação/.test(body);
+}
+
+export function contactChannelsAreStatic(html) {
+  const body = staticBody(html);
+  return (
+    /href="https:\/\/wa\.me\/[^"]+"/.test(body)
+    && /href="mailto:[^"]+"/.test(body)
+    && /href="tel:\+[0-9]+"/.test(body)
+  );
+}
+
+export function contactNamesTheService(html) {
+  const body = staticBody(html);
+  const whatsapp = body.match(/href="(https:\/\/wa\.me\/[^"]+)"/);
+  if (!whatsapp) return false;
+  const message = decodeURIComponent(whatsapp[1]);
+  return /quantitativos|orçamento/i.test(message);
+}
+
+export function supportLandsOnTheService(html) {
+  return html.includes('href="/quantitativos-orcamento-obras/');
+}
+
+export function equalizationMatrixIsStatic(html) {
+  const body = staticBody(html);
+  return (
+    body.includes('id="matriz-de-equalizacao"')
+    && /<table class="data-table">/.test(body)
+    && ["Escopo", "Unidades", "Quantidades", "Exclusões", "Responsabilidades"].every((row) =>
+      body.includes(`<th scope="row">${row}</th>`),
+    )
+  );
+}
+
+export function firstRequestExampleIsSafe(html) {
+  const body = staticBody(html);
+  if (!body.includes('id="exemplo-de-pedido"')) return false;
+  const quote = body.match(/<blockquote[\s\S]*?<\/blockquote>/i);
+  if (!quote) return false;
+  const sample = quote[0];
+  // The example must not teach the buyer to send identifying or sensitive data.
+  return !/\d{3}\.\d{3}\.\d{3}-\d{2}|\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}|rua |avenida /i.test(sample);
+}
+
+// ----------------------------------------------------------------- scenarios
+
+test("A. empresa que chega por levantamento entende que contrata um serviço, vê a amostra e fala da modalidade", () => {
+  const html = read(LANDING_REL);
+  assert.ok(declaresContractedService(html), "a página precisa dizer que é serviço contratado");
+  assert.ok(namesWhoContracts(html), "quem contrata precisa estar nomeado");
+  assert.ok(keepsSmallAndPublicDemand(html), "demanda pequena e obra pública seguem acolhidas");
+  assert.ok(offersThreeModalities(html), "as três modalidades seguem distintas");
+  assert.ok(
+    reachesProof(html, "/casos/demonstrativo-projeto-privado/#quantitativos"),
+    "a amostra de edificação precisa estar a um clique",
+  );
+  assert.ok(contactNamesTheService(html), "o primeiro contato precisa nomear o serviço");
+});
+
+test("B. escritório com projeto parcial encontra insumos e pede proposta sem CNPJ, valor ou projeto completo", () => {
+  const html = read(LANDING_REL);
+  assert.ok(acceptsPartialProject(html), "projeto parcial precisa ser acolhido explicitamente");
+  assert.ok(asksOnlyWhatIsNeeded(html), "a página não pode exigir CNPJ, CPF, valor ou endereço exato");
+  const documentos = read(SUPPORT_RELS[0]);
+  assert.ok(firstRequestExampleIsSafe(documentos), "o exemplo de pedido não pode ensinar dado sensível");
+  assert.ok(supportLandsOnTheService(documentos));
+});
+
+test("C. contratante que quer revisão de planilha não é mandado para projeto nem para pleito público", () => {
+  const html = read(LANDING_REL);
+  assert.ok(html.includes('id="revisao-orcamento"'), "a revisão de orçamento precisa existir como pedido");
+  assert.ok(doesNotForcePublicBidding(html), "o comprador privado não pode ser obrigado a campos de licitação");
+  const revisar = read(SUPPORT_RELS[2]);
+  assert.ok(supportLandsOnTheService(revisar));
+  const body = text(revisar).toLowerCase();
+  assert.ok(
+    /revisão testa o número/.test(body),
+    "o conteúdo de revisão precisa distinguir revisar de elaborar",
+  );
+  assert.ok(
+    !/revisão técnica de projetos/i.test(text(html).slice(0, 1200)),
+    "a primeira dobra não deve trocar revisão de orçamento por revisão de projeto",
+  );
+});
+
+test("D. comprador de infraestrutura encontra o demonstrativo certo, sua natureza e os arquivos", () => {
+  const html = read(LANDING_REL);
+  const spec = ENTRANCE_SPECS.find((candidate) => candidate.key === "infraestrutura");
+  const entrance = buildEntrance(spec, root);
+  assert.equal(entrance.url, "/casos/demonstrativo-infraestrutura/");
+  assert.ok(
+    entranceIsCanonical(html, "infraestrutura", {
+      quantity: entrance.quantity_value,
+      budget_id: entrance.budget_id,
+      url: entrance.url,
+    }),
+    "a entrada de infraestrutura precisa publicar quantidade, item e destino canônicos",
+  );
+  assert.ok(entranceDeclaresDemonstrativeNature(html, "infraestrutura"));
+  assert.ok(entranceFilesResolve(html, "infraestrutura", spec), "os CSV daquele recorte precisam existir");
+});
+
+test("D2. a entrada de edificação preserva a memória Q-PAR-01 e os arquivos publicados", () => {
+  const html = read(LANDING_REL);
+  const spec = ENTRANCE_SPECS.find((candidate) => candidate.key === "edificacao");
+  const entrance = buildEntrance(spec, root);
+  assert.equal(entrance.quantity_id, "Q-PAR-01");
+  assert.equal(entrance.budget_id, "ORC-PAR-01");
+  assert.equal(Number(entrance.quantity_value), 19.6);
+  assert.ok(entranceIsCanonical(html, "edificacao", {
+    quantity: entrance.quantity_value,
+    budget_id: entrance.budget_id,
+    url: entrance.url,
+  }));
+  assert.ok(entranceFilesResolve(html, "edificacao", spec));
+  assert.ok(
+    html.includes('data-trail-memory="true"'),
+    "a memória da trilha publicada não pode desaparecer",
+  );
+  assert.ok(html.includes("19,60 m²"), "a memória precisa mostrar a procedência da quantidade");
+});
+
+test("E. quem vem do conteúdo ou do kit chega à mesma oferta, sem recomeçar a seleção", () => {
+  for (const rel of SUPPORT_RELS) {
+    const html = read(rel);
+    assert.ok(supportLandsOnTheService(html), `${rel} precisa levar ao serviço`);
+  }
+  assert.ok(equalizationMatrixIsStatic(read(SUPPORT_RELS[1])), "a matriz de equalização é estática");
+  const kits = JSON.parse(read("data/distribution/partner-reference-kits.v1.json"));
+  const serialized = JSON.stringify(kits);
+  assert.ok(
+    serialized.includes("/quantitativos-orcamento-obras/"),
+    "o kit precisa apontar direto para a rota, sem escolha intermediária",
+  );
+});
+
+test("contraprova: o removedor de script não pode ser enganado por uma tag de fechamento tolerada", () => {
+  // Se o removedor falhasse aqui, conteúdo de script contaria como HTML
+  // estático e o cenário F passaria pelo motivo errado.
+  const evasive = '</head><body><p>real</p><script >window.x="INJETADO"</script ><span>fim</span></body>';
+  const stripped = staticBody(evasive);
+  assert.ok(stripped.includes("real") && stripped.includes("fim"), "o corpo estático é preservado");
+  assert.ok(!stripped.includes("INJETADO"), "conteúdo de script não pode sobreviver ao removedor");
+
+  const nested = '</head><body><style\n>a{}</style\t><p>ok</p></body>';
+  assert.ok(!staticBody(nested).includes("a{}"), "estilo com fechamento tolerado também é removido");
+
+  // Por que o padrão estrito antigo falhava, demonstrado por busca literal.
+  // Reconstruir aqui um filtro de tags mal formado só criaria de novo o defeito
+  // que esta contraprova existe para documentar, então a diferença é mostrada
+  // pelo texto: a página fecha o script apenas na forma tolerada pelo
+  // navegador, que um padrão terminado em "</script>" não tem como casar.
+  assert.ok(
+    evasive.includes("</script >"),
+    "a página usa o fechamento que o navegador aceita",
+  );
+  assert.ok(
+    !evasive.includes("</script>"),
+    "o fechamento estrito não ocorre, então o padrão antigo não casava e o script sobrevivia",
+  );
+  assert.ok(
+    stripped.includes(" ") && !stripped.includes("window.x"),
+    "o removedor tolerante casa esse fechamento e retira o script",
+  );
+});
+
+test("o removedor termina e preserva o conteúdo estático legítimo", () => {
+  // Termina: cada passada que altera o texto o encurta, porque toda ocorrência
+  // removida é maior que o único espaço que a substitui. Entradas adversariais
+  // com aninhamento e fechamentos tolerados precisam convergir, não travar.
+  const adversarial = [
+    "</head><body>",
+    "<p>antes</p>",
+    "<script ><script >a=1</script ></script >",
+    "<style\t>x{}</style\n>",
+    "<noscript ><p>sem js</p></noscript >",
+    "<p>depois</p>",
+    "</body>",
+  ].join("");
+  const started = Date.now();
+  const stripped = staticBody(adversarial);
+  assert.ok(Date.now() - started < 2000, "o removedor precisa convergir rapidamente");
+  assert.ok(!stripped.includes("a=1"), "script aninhado não sobrevive");
+  assert.ok(!stripped.includes("x{}"), "estilo não sobrevive");
+
+  // Preserva: o conteúdo estático legítimo permanece inteiro.
+  assert.ok(stripped.includes("antes") && stripped.includes("depois"), "o corpo real é preservado");
+
+  const real = read(LANDING_REL);
+  const realBody = staticBody(real);
+  for (const kept of [
+    'data-proof-entrance="edificacao"',
+    'data-proof-entrance="infraestrutura"',
+    'data-trail-step="quantity"',
+    'id="triagem-quantitativos"',
+    "19,60 m",
+  ]) {
+    assert.ok(realBody.includes(kept), `o removedor não pode descartar ${kept}`);
+  }
+});
+
+test("F. visitante sem JavaScript vê a oferta, a prova essencial e um canal de contato", () => {
+  const html = read(LANDING_REL);
+  const body = staticBody(html);
+  assert.ok(body.includes('data-proof-entrance="edificacao"'), "a prova não pode depender de JS");
+  assert.ok(body.includes('data-proof-entrance="infraestrutura"'));
+  assert.ok(body.includes('data-trail-step="quantity"'), "a trilha precisa estar no HTML");
+  assert.ok(contactChannelsAreStatic(html), "telefone e e-mail precisam funcionar sem script");
+  assert.ok(
+    !/data-proof-entrances-state="awaiting-canonical-descriptors"/.test(html),
+    "a composição precisa ter rodado; o estado de espera não pode ser publicado",
+  );
+});
+
+// -------------------------------------------------------------- counterproofs
+
+test("contraprova: remover um arquivo prometido reprova a composição", (t) => {
+  assert.deepEqual(missingRequiredInputs(root), [], "controle limpo passa");
+
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "orc-b2b-"));
+  t.after(() => fs.rmSync(tmp, { recursive: true, force: true }));
+  for (const spec of ENTRANCE_SPECS) {
+    for (const rel of [spec.source_rel, spec.consumption_rel, ...spec.csv_rels]) {
+      const target = path.join(tmp, rel);
+      fs.mkdirSync(path.dirname(target), { recursive: true });
+      fs.copyFileSync(path.join(root, rel), target);
+    }
+  }
+  assert.deepEqual(missingRequiredInputs(tmp), [], "a cópia completa também passa");
+
+  const removed = "casos/demonstrativo-infraestrutura/data/orcamento.csv";
+  fs.rmSync(path.join(tmp, removed));
+  assert.throws(
+    () => loadEntrances(tmp),
+    /required_proof_entrance_input_missing/,
+    "a falta de um CSV prometido precisa reprovar fechado",
+  );
+});
+
+test("contraprova: trocar a modalidade de orçamento por revisão de projeto reprova o cenário D", () => {
+  const html = read(LANDING_REL);
+  const spec = ENTRANCE_SPECS.find((candidate) => candidate.key === "infraestrutura");
+  const entrance = buildEntrance(spec, root);
+  const expected = {
+    quantity: entrance.quantity_value,
+    budget_id: entrance.budget_id,
+    url: entrance.url,
+  };
+  assert.ok(entranceIsCanonical(html, "infraestrutura", expected), "controle passa");
+
+  const mutated = html.replaceAll(
+    "/casos/demonstrativo-infraestrutura/",
+    "/revisao-tecnica-projetos-engenharia/",
+  );
+  assert.equal(
+    entranceIsCanonical(mutated, "infraestrutura", expected),
+    false,
+    "desviar o destino precisa reprovar",
+  );
+});
+
+test("contraprova: omitir a prova na composição reprova o cenário F", () => {
+  const html = read(LANDING_REL);
+  assert.ok(staticBody(html).includes('data-proof-entrance="infraestrutura"'), "controle passa");
+
+  const emptied = html.replace(
+    /<div id="qty-proof-entrances"[\s\S]*?<\/div><!--\/orc-b2b-20260913:proof-entrances-->/,
+    '<div id="qty-proof-entrances" data-proof-entrances-slot="canonical" data-proof-entrances-state="awaiting-canonical-descriptors"></div><!--/orc-b2b-20260913:proof-entrances-->',
+  );
+  assert.equal(
+    staticBody(emptied).includes('data-proof-entrance="infraestrutura"'),
+    false,
+    "slot vazio precisa reprovar",
+  );
+  assert.match(emptied, /awaiting-canonical-descriptors/);
+});
+
+// -------------------------------------------------- prontidão → triagem (§9)
+// O destino de cada caminho alternativo já era o correto. O que se perdia era o
+// recorte levado ao contato: ele é sempre o do encaminhamento principal, então
+// um visitante que escolhia o caminho alternativo de orçamento chegava à
+// triagem rotulado como revisão de projeto. O contato passa a nomear o recorte
+// que carrega, e uma nota manda abrir a página do caminho escolhido.
+
+const READINESS_APP_REL = "ferramentas/prontidao-tecnica-obra-privada/app.js";
+
+export function contactCtaNamesItsRoute(appSource) {
+  return (
+    /contactLink\.textContent\s*=\s*"Pedir conversa de escopo sobre "\s*\+\s*routing\.primary\.public_name/.test(
+      appSource,
+    ) && /cta-context-note/.test(appSource)
+  );
+}
+
+test("prontidão: o contato nomeia o recorte que carrega e aponta o caminho alternativo", () => {
+  const app = read(READINESS_APP_REL);
+  assert.ok(contactCtaNamesItsRoute(app), "o CTA precisa nomear o encaminhamento principal");
+  assert.match(
+    app,
+    /abra a página dele: o pedido começa lá, com a modalidade certa/,
+    "a nota precisa mandar o visitante do caminho alternativo abrir a página dele",
+  );
+  assert.match(
+    app,
+    /routing\.alternatives && routing\.alternatives\.length/,
+    "a nota só aparece quando existem caminhos alternativos",
+  );
+});
+
+test("contraprova: voltar a um rótulo fixo no contato da prontidão reprova", () => {
+  const app = read(READINESS_APP_REL);
+  assert.ok(contactCtaNamesItsRoute(app), "controle passa");
+
+  const mutated = app.replace(
+    /contactLink\.textContent = "Pedir conversa de escopo sobre " \+ routing\.primary\.public_name\.toLowerCase\(\);/,
+    'contactLink.textContent = "Pedir conversa de escopo";',
+  );
+  assert.notEqual(mutated, app, "a mutação precisa ter sido aplicada");
+  assert.equal(
+    contactCtaNamesItsRoute(mutated),
+    false,
+    "um rótulo fixo esconde o recorte levado e precisa reprovar",
+  );
+});
+
+test("as entradas publicam critério legível, não notação de máquina", () => {
+  const html = read(LANDING_REL);
+  for (const key of ["edificacao", "infraestrutura"]) {
+    const block = entranceBlock(html, key);
+    assert.ok(/<dt>Critério<\/dt>/.test(block), `${key} precisa publicar o critério canônico`);
+    assert.ok(!/sum\(|count\(|&gt;=|&lt;=/.test(block), `${key} não pode publicar pseudocódigo`);
+    assert.ok(!/\d\*\d/.test(block), `${key} não pode publicar operador de máquina`);
+  }
+});
+
+test("contraprova: reintroduzir pseudocódigo na saída é recusado pelo renderizador", () => {
+  assert.equal(readableFormula("280.00*0.15"), "280,00 × 0,15", "aritmética simples é publicável");
+  assert.equal(
+    readableFormula("sum(length*height)-openings>=0.50"),
+    null,
+    "notação de máquina não pode virar memória pública",
+  );
+  assert.equal(readableFormula("count(MH-01,MH-02)"), null);
+  assert.equal(readableFormula(""), null);
+});
+
+test("as entradas não reivindicam o marcador reservado de prova real de cliente", async () => {
+  const { unregisteredClientClaimProblems } = await import(
+    "../../../scripts/commercial/real_proof_registry.mjs"
+  );
+  const html = read(LANDING_REL);
+  for (const key of ["edificacao", "infraestrutura"]) {
+    const block = entranceBlock(html, key);
+    assert.ok(
+      /data-demonstrative-id="/.test(block),
+      `${key} precisa se identificar como demonstrativo`,
+    );
+    assert.ok(
+      !/data-proof-id=/.test(block),
+      `${key} não pode usar data-proof-id, reservado a prova real registrada`,
+    );
+  }
+  assert.deepEqual(
+    unregisteredClientClaimProblems(html, LANDING_REL),
+    [],
+    "a rota não pode publicar alegação de resultado de cliente sem registro",
+  );
+});
+
+test("contraprova: reivindicar o marcador reservado ou um resultado de cliente reprova", async () => {
+  const { unregisteredClientClaimProblems } = await import(
+    "../../../scripts/commercial/real_proof_registry.mjs"
+  );
+  const html = read(LANDING_REL);
+  assert.deepEqual(unregisteredClientClaimProblems(html, LANDING_REL), [], "controle passa");
+
+  const claimed = html.replace(
+    "</main>",
+    "<p>A construtora Horizonte economizou 20% após contratar a CONFENGE.</p></main>",
+  );
+  assert.ok(
+    unregisteredClientClaimProblems(claimed, LANDING_REL).length > 0,
+    "um resultado de cliente não registrado precisa reprovar",
+  );
+
+  const reserved = html.replaceAll("data-demonstrative-id=", "data-proof-id=");
+  assert.ok(
+    /data-proof-id=/.test(reserved) && !/data-demonstrative-id=/.test(reserved),
+    "a mutação precisa ter sido aplicada",
+  );
+  for (const key of ["edificacao", "infraestrutura"]) {
+    assert.ok(
+      /data-proof-id=/.test(entranceBlock(reserved, key)),
+      `a mutação reintroduz o marcador reservado em ${key}, o que o gate de prova real reprova`,
+    );
+  }
+});
+
+test("contraprova: esconder a natureza demonstrativa reprova as duas entradas", () => {
+  const html = read(LANDING_REL);
+  for (const key of ["edificacao", "infraestrutura"]) {
+    assert.ok(entranceDeclaresDemonstrativeNature(html, key), `controle passa em ${key}`);
+  }
+  const mutated = html.replace(/<p class="qty-proof-disclaimer">[\s\S]*?<\/p>/g, "");
+  for (const key of ["edificacao", "infraestrutura"]) {
+    assert.equal(
+      entranceDeclaresDemonstrativeNature(mutated, key),
+      false,
+      `remover a ressalva precisa reprovar em ${key}`,
+    );
+  }
+});
+
+test("contraprova: descritor fora do contrato não vira HTML público", () => {
+  const entrances = loadEntrances(root);
+  assert.ok(renderProofEntrances(entrances).includes('data-proof-entrances-state="canonical"'));
+
+  assert.throws(() => renderProofEntrances(entrances.slice(0, 1)), /proof_entrances_required/);
+  const fake = entrances.map((entrance) => ({ ...entrance, schema: "pseudo/0" }));
+  assert.throws(() => renderProofEntrances(fake), /proof_entrance_schema_invalid/);
+  assert.throws(
+    () => injectProofEntrances("<html><body>sem slot</body></html>", entrances),
+    /missing #qty-proof-entrances slot/,
+  );
+});
+
+test("contraprova: número divergente do descritor canônico reprova a entrada", (t) => {
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "orc-b2b-num-"));
+  t.after(() => fs.rmSync(tmp, { recursive: true, force: true }));
+  const spec = ENTRANCE_SPECS.find((candidate) => candidate.key === "edificacao");
+  for (const rel of [spec.source_rel, spec.consumption_rel, ...spec.csv_rels]) {
+    const target = path.join(tmp, rel);
+    fs.mkdirSync(path.dirname(target), { recursive: true });
+    fs.copyFileSync(path.join(root, rel), target);
+  }
+  assert.ok(buildEntrance(spec, tmp), "controle passa na cópia");
+
+  const consumptionPath = path.join(tmp, spec.consumption_rel);
+  const consumption = JSON.parse(fs.readFileSync(consumptionPath, "utf8"));
+  const row = consumption.budget_rows.find((candidate) => candidate.quantity_id === spec.quantity_id);
+  row.quantity = "30.64";
+  fs.writeFileSync(consumptionPath, JSON.stringify(consumption));
+  assert.throws(
+    () => buildEntrance(spec, tmp),
+    /proof_entrance_quantity_diverges/,
+    "quantidade divergente entre planilha e quantitativo precisa reprovar",
+  );
+});

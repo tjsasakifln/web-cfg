@@ -1,9 +1,9 @@
 {
   "schema_version": "3.0.0",
   "terminal_status": "READY_FOR_RELEASE",
-  "commit_sha": "56f0de2593590aced6fede6084d3a73f8b57691f",
+  "commit_sha": "1168312363b970689bbf09589287528bdf734c67",
   "commit_sha_role": "informational_only",
-  "derived_at": "2026-09-10T04:20:46Z",
+  "derived_at": "2026-09-13T16:57:34Z",
   "first_cohort_total": 2,
   "indexable_count": 2,
   "human_approved_count": 2,
@@ -18,8 +18,8 @@
     "lei-item-novo-desconto"
   ],
   "awaiting_page_ids": [],
-  "public_indexable_conteudos": 22,
-  "hub_claimed_guides": 22,
+  "public_indexable_conteudos": 30,
+  "hub_claimed_guides": 30,
   "editorial_sitemap_locs": 4,
   "contradictions": [],
   "will_not_impersonate_named_human": true,
