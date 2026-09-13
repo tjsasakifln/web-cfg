@@ -269,7 +269,7 @@
         {
           "cta_id": "pillar_bridge",
           "position": "pillar_bridge",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Temos%20atraso%20no%20pagamento%20de%20parcela%20em%20contrato%20p%C3%BAblico%20de%20obra%20e%20queremos%20enquadrar%20o%20risco.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Temos%20atraso%20ou%20paralisa%C3%A7%C3%A3o%20em%20obra%20p%C3%BAblica%20e%20queremos%20enquadrar%20o%20pedido%20de%20prorroga%C3%A7%C3%A3o%20e%20o%20registro%20do%20impacto.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Enquadrar o atraso agora",
@@ -314,7 +314,7 @@
         {
           "cta_id": "",
           "position": "",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Temos%20atraso%20no%20pagamento%20de%20parcela%20em%20contrato%20p%C3%BAblico%20de%20obra%20e%20queremos%20enquadrar%20o%20risco.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Temos%20atraso%20ou%20paralisa%C3%A7%C3%A3o%20em%20obra%20p%C3%BAblica%20e%20queremos%20enquadrar%20o%20pedido%20de%20prorroga%C3%A7%C3%A3o%20e%20o%20registro%20do%20impacto.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Falar pelo WhatsApp",
@@ -2495,7 +2495,7 @@
           "href": "#captura-entregas",
           "stage": "compare",
           "commitment": "medium",
-          "current_label": "Descrever a situação e receber a indicação",
+          "current_label": "Descrever a situação e receber a proposta organizada",
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
