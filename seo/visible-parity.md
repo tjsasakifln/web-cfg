@@ -1,9 +1,9 @@
 # Visible parity
 
 - ok: `True`
-- pages: `97`
+- pages: `98`
 - defects: `0`
-- site_root: `/home/tjsasakifln/code/confenge/web-cfg/.grok/worktrees/inb-16-integracao/_site`
+- site_root: `/home/tjsasakifln/code/confenge/.worktrees/orc-b2b-20260913/_site`
 
 | url | ok | defects | claimed | visible |
 | --- | --- | --- | --- | --- |
@@ -18,6 +18,7 @@
 | https://confenge.com.br/bid-room-licitacoes-obras/ | True | — | Organization,BreadcrumbList,Person | Operação de Proposta para Licitação Crítica |
 | https://confenge.com.br/casos/ | True | — | Organization,Person,BreadcrumbList | Exemplos de entrega (demonstrativos) |
 | https://confenge.com.br/casos/aditivo-art125-demonstrativo/ | True | — | Organization,Person,BreadcrumbList | Demonstrativo. Aditivo: verificar saldos do art. 125 antes de protocolar |
+| https://confenge.com.br/casos/demonstrativo-infraestrutura/ | True | — | Organization,Person,BreadcrumbList | Exemplo demonstrativo de quantitativos e revisão para infraestrutura |
 | https://confenge.com.br/casos/demonstrativo-projeto-privado/ | True | — | Organization,Person,BreadcrumbList | Demonstrativo. Recorte de banheiro com quantitativos, orçamento, revisão e compatibilização |
 | https://confenge.com.br/casos/medicao-glosa-demonstrativo/ | True | — | Organization,Person,BreadcrumbList | Demonstrativo. Medição glosada: do apontamento ao pedido certo |
 | https://confenge.com.br/casos/modelo-apresentacao-executiva-resultados/ | True | — | Organization,Person,BreadcrumbList | Demonstrativo. Transforme o diagnóstico em decisão assinada na reunião. |
@@ -77,7 +78,7 @@
 | https://confenge.com.br/ferramentas/diagnostico-defesa-margem/ | True | — | Organization,BreadcrumbList | Diagnóstico de Defesa de Margem em Contratos Públicos |
 | https://confenge.com.br/ferramentas/limite-acrescimos-supressoes/ | True | — | Person,BreadcrumbList | Verificador de limite de acréscimos e supressões |
 | https://confenge.com.br/ferramentas/matriz-atraso-obra/ | True | — | Person,BreadcrumbList | Matriz de atraso de obra |
-| https://confenge.com.br/ferramentas/prontidao-tecnica-obra-privada/ | True | — |  | Identifique evidências técnicas presentes, ausentes ou desconhecidas antes de contratar, executar ou retomar uma obra privada |
+| https://confenge.com.br/ferramentas/prontidao-tecnica-obra-privada/ | True | — |  | Organize as informações da sua obra e veja o próximo passo |
 | https://confenge.com.br/guias-contratos-obras/ | True | — | Organization,BreadcrumbList | Guias e checklists para contratos de obras públicas |
 | https://confenge.com.br/guias-contratos-obras/checklist-pedido-aditivo/ | True | — | Organization,BreadcrumbList,Article; Checklist de pedido de aditivo em obra pública | Checklist de pedido de aditivo em obra pública |
 | https://confenge.com.br/imprensa/ | True | — |  | Imprensa e pesquisa |

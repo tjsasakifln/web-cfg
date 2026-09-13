@@ -1446,6 +1446,19 @@ export const SUITE_GRAPH = Object.freeze({
     artifacts: ["data/organic/demand-engine-registry.json"],
     surfaces: [],
   },
+  "test:orc-b2b-20260913": {
+    producers: [
+      "quantitativos-orcamento-obras/",
+      "scripts/campaigns/orc-b2b-20260913/",
+      "tests/campaigns/orc-b2b-20260913/",
+      "data/demonstrative/",
+      "conteudos/documentos-para-levantamento-quantitativos/",
+      "conteudos/comparar-propostas-execucao-obra/",
+      "conteudos/revisar-ou-refazer-orcamento-obra/",
+    ],
+    artifacts: [],
+    surfaces: ["/quantitativos-orcamento-obras/"],
+  },
   "distribution:test": {
     producers: ["scripts/distribution/", "data/distribution/", "docs/ops/distribution/"],
     artifacts: ["data/distribution/"],
