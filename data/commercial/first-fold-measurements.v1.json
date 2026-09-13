@@ -1,15 +1,15 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-09-13T20:35:40.575Z",
+  "measured_at": "2026-09-13T21:27:00.226Z",
   "measured_on": "2026-09-13",
-  "commit_sha": "d6655c95d54a3fd89c8e89bfa2528f261fbec087",
+  "commit_sha": "a3db77cc332fdb577e7440f2abfb2401e302f8fa",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "f168038814087e1b365d1de3042af9a3f3364743756e104711fecc0fb9fe7477",
     "@control/scripts/site/first_fold_rules.mjs": "53d52810f7750795e96f2421248d8aa8f06ff4c4065c4ba6bc9ee92a11fca7fd",
     "@control/scripts/site/measure_first_fold.mjs": "8f7a93464d0c5f05a92d665c077eedeabd944a0ef038e7d2cf2b18377a87013b",
-    "acompanhamento-contratos-obras/index.html": "014a5a5d8fa2bff0a96091b429f5b04930f4f60ad0063295819de563b026e075",
+    "acompanhamento-contratos-obras/index.html": "801c701b0b9cf56bc67059bd5a4fad61ccaf1637ad5488e25029c1da82800804",
     "aditivos-obras-publicas/index.html": "ed592c02f78f9363be5424c12d0de211950d91fbe7801970d99cd949ddc1ec97",
     "assets/archivo-var-latin-bf6e041e.woff2": "bf6e041e98b0fa244d965027e9f2b6ed53470ed95f2227615510a08a67ea7f4a",
     "assets/eight-offer-contract.css": "d2aead054169392b26c739ab4d95c8b2f651a66c9d6ac27aa7fd98bdafc4f79d",
@@ -19,7 +19,7 @@
     "assets/report-model.css": "79e09ea8559deb4e01c78df860a00f0ff542659b3c2b9274bc8401444fab2447",
     "atrasos-prorrogacao-obras-publicas/index.html": "5ee239e1525ff0f9a202acfbd7e5f60d98b7a2a94f4eebea3a295c19822cefdc",
     "auditoria-orcamento-licitacao/index.html": "fb2fa86a4c47f7d0fe83a322c2157097a696f234bc5ca00732b900128eaedb78",
-    "bid-room-licitacoes-obras/index.html": "bcbe90836cc8cd8d6421809ac6a2d2726d92f3b8feab290d35967662ab43d72e",
+    "bid-room-licitacoes-obras/index.html": "8f774dfa1fbaa5a289e5d0592a23daa9d045f1d739a19bfbde009876ceedb8c0",
     "casos/modelo-apresentacao-executiva-resultados/index.html": "48d94d71d273741eb1bb887f472071d8623096b0d849c075d96b1ea83db66b7f",
     "casos/modelo-apresentacao-executiva-resultados/styles.css": "8ace8a9960dbc19f71c9f69e4908f39ac223991715a13707587d1d06f483048d",
     "casos/modelo-base-quantitativa-canonica/index.html": "b5630d2a1e1cb6fbbc552dba98b3292307b8f6100bd813f53e321dde1545302e",
@@ -48,7 +48,7 @@
     "medicoes-glosas-obras-publicas/index.html": "7659009dfc326139fe69d4cc12c30a3395fc1f96264663e1fc435d09843ffbc8",
     "problemas-que-resolvemos/index.html": "d5b84484c7e469713b32bf3bd171c7a1c39db87179cf92eea9d8ed98c4aca501",
     "reequilibrio-obras-publicas/index.html": "11d0cf94f61308da770640898df3019f4cbdd0b3dcd42f9df8ad73a8aa79d6ca",
-    "script.js": "b5340631694fcc10632e0be65ef9636fcb69722f89e9a4fac9b2678a21d5d558",
+    "script.js": "13adf8929c4d73f93a3f1a82cd6e39699df37c03478b55b061e2693576a913cb",
     "servicos-obras-publicas/index.html": "7fb62cdb2a3c93e06ced52475551515a5ef9996c8d51075294e84939283de04b",
     "styles-hubs.css": "ed4668833ad8de5cef5acc5fc1e8f21e519870f0bf282247c3b4a9644a094592",
     "styles-offers.css": "0c1efa4797709ae6d2b776aa58e863ef095a880646b5e4b158a7a47e0963ec2e",
@@ -1552,7 +1552,7 @@
     },
     {
       "route": "/bid-room-licitacoes-obras/",
-      "html_sha256": "bcbe90836cc8cd8d6421809ac6a2d2726d92f3b8feab290d35967662ab43d72e",
+      "html_sha256": "8f774dfa1fbaa5a289e5d0592a23daa9d045f1d739a19bfbde009876ceedb8c0",
       "measured_on": "2026-09-13",
       "viewports": {
         "1366x768": {
@@ -3222,7 +3222,7 @@
     },
     {
       "route": "/acompanhamento-contratos-obras/",
-      "html_sha256": "014a5a5d8fa2bff0a96091b429f5b04930f4f60ad0063295819de563b026e075",
+      "html_sha256": "801c701b0b9cf56bc67059bd5a4fad61ccaf1637ad5488e25029c1da82800804",
       "measured_on": "2026-09-13",
       "viewports": {
         "1366x768": {
