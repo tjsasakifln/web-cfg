@@ -36,13 +36,31 @@ function read(rel) {
   return fs.readFileSync(path.join(root, rel), "utf8");
 }
 
-/** Strip script and style so "present in static HTML" means visible without JS. */
-function staticBody(html) {
-  return html
-    .split("</head>")[1]
-    .replace(/<script[\s\S]*?<\/script>/gi, "")
-    .replace(/<style[\s\S]*?<\/style>/gi, "")
-    .replace(/<noscript[\s\S]*?<\/noscript>/gi, "");
+/**
+ * Strip script, style and noscript so "present in static HTML" means visible
+ * without JS.
+ *
+ * The end-tag patterns are deliberately tolerant (`<\/script\b[^>]*>`), the way
+ * scripts/commercial/real_proof_registry.mjs writes them: a browser closes on
+ * `</script >` too, so a stricter `<\/script>` would leave script content in
+ * the "static" body and let a no-JS assertion pass for the wrong reason.
+ * Stripping repeats until the text stops changing, so one pass cannot leave a
+ * nested or re-formed opening tag behind.
+ */
+export function staticBody(html) {
+  const parts = String(html ?? "").split("</head>");
+  let body = parts.length > 1 ? parts.slice(1).join("</head>") : parts[0];
+  const strippers = [
+    /<script\b[^>]*>[\s\S]*?<\/script\b[^>]*>/gi,
+    /<style\b[^>]*>[\s\S]*?<\/style\b[^>]*>/gi,
+    /<noscript\b[^>]*>[\s\S]*?<\/noscript\b[^>]*>/gi,
+  ];
+  let previous;
+  do {
+    previous = body;
+    for (const stripper of strippers) body = body.replace(stripper, " ");
+  } while (body !== previous);
+  return body;
 }
 
 function text(html) {
@@ -273,6 +291,24 @@ test("E. quem vem do conteúdo ou do kit chega à mesma oferta, sem recomeçar a
   assert.ok(
     serialized.includes("/quantitativos-orcamento-obras/"),
     "o kit precisa apontar direto para a rota, sem escolha intermediária",
+  );
+});
+
+test("contraprova: o removedor de script não pode ser enganado por uma tag de fechamento tolerada", () => {
+  // Se o removedor falhasse aqui, conteúdo de script contaria como HTML
+  // estático e o cenário F passaria pelo motivo errado.
+  const evasive = '</head><body><p>real</p><script >window.x="INJETADO"</script ><span>fim</span></body>';
+  const stripped = staticBody(evasive);
+  assert.ok(stripped.includes("real") && stripped.includes("fim"), "o corpo estático é preservado");
+  assert.ok(!stripped.includes("INJETADO"), "conteúdo de script não pode sobreviver ao removedor");
+
+  const nested = '</head><body><style\n>a{}</style\t><p>ok</p></body>';
+  assert.ok(!staticBody(nested).includes("a{}"), "estilo com fechamento tolerado também é removido");
+
+  const naive = evasive.replace(/<script[\s\S]*?<\/script>/gi, "");
+  assert.ok(
+    naive.includes("INJETADO"),
+    "o padrão estrito antigo deixava passar: é essa a falha que a versão tolerante corrige",
   );
 });
 
