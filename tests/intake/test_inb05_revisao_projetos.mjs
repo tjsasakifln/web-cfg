@@ -12,8 +12,23 @@ function read(rel) {
   return fs.readFileSync(path.join(ROOT, rel), "utf8");
 }
 
+// Visible-ish text for property assertions. Script bodies are removed by
+// scanning for the closing tag (no HTML-parsing regex), then tags are dropped.
 function textOf(html) {
-  return html.replace(/<script[\s\S]*?<\/script>/gi, " ").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
+  let out = "";
+  let cursor = 0;
+  const lower = html.toLowerCase();
+  while (cursor < html.length) {
+    const open = lower.indexOf("<script", cursor);
+    if (open === -1) {
+      out += html.slice(cursor);
+      break;
+    }
+    out += html.slice(cursor, open);
+    const close = lower.indexOf("</script>", open);
+    cursor = close === -1 ? html.length : close + "</script>".length;
+  }
+  return out.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
 }
 
 function mainOf(html) {
