@@ -1,9 +1,9 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-09-13T21:27:00.226Z",
+  "measured_at": "2026-09-13T21:38:11.776Z",
   "measured_on": "2026-09-13",
-  "commit_sha": "a3db77cc332fdb577e7440f2abfb2401e302f8fa",
+  "commit_sha": "a37095e6ae18851153b302a95d8be84ff6f73f20",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "f168038814087e1b365d1de3042af9a3f3364743756e104711fecc0fb9fe7477",
@@ -19,7 +19,7 @@
     "assets/report-model.css": "79e09ea8559deb4e01c78df860a00f0ff542659b3c2b9274bc8401444fab2447",
     "atrasos-prorrogacao-obras-publicas/index.html": "5ee239e1525ff0f9a202acfbd7e5f60d98b7a2a94f4eebea3a295c19822cefdc",
     "auditoria-orcamento-licitacao/index.html": "fb2fa86a4c47f7d0fe83a322c2157097a696f234bc5ca00732b900128eaedb78",
-    "bid-room-licitacoes-obras/index.html": "8f774dfa1fbaa5a289e5d0592a23daa9d045f1d739a19bfbde009876ceedb8c0",
+    "bid-room-licitacoes-obras/index.html": "35beafcef80bd6f44d2a835b4ab0fa5638a8472f07b93246180838922920c29c",
     "casos/modelo-apresentacao-executiva-resultados/index.html": "48d94d71d273741eb1bb887f472071d8623096b0d849c075d96b1ea83db66b7f",
     "casos/modelo-apresentacao-executiva-resultados/styles.css": "8ace8a9960dbc19f71c9f69e4908f39ac223991715a13707587d1d06f483048d",
     "casos/modelo-base-quantitativa-canonica/index.html": "b5630d2a1e1cb6fbbc552dba98b3292307b8f6100bd813f53e321dde1545302e",
@@ -1552,7 +1552,7 @@
     },
     {
       "route": "/bid-room-licitacoes-obras/",
-      "html_sha256": "8f774dfa1fbaa5a289e5d0592a23daa9d045f1d739a19bfbde009876ceedb8c0",
+      "html_sha256": "35beafcef80bd6f44d2a835b4ab0fa5638a8472f07b93246180838922920c29c",
       "measured_on": "2026-09-13",
       "viewports": {
         "1366x768": {

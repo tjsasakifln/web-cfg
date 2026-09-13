@@ -118,6 +118,16 @@ disciplina de um autor sem que a revisão dessa peça esteja na proposta" (C4).
 | "encaminhamos o ajuste" e slogan "não é elaborar…" como mutação | `tests/coordination/test_page_contract.mjs` | asserção literal | não redimensionar disciplina alheia; não prometer obra sem interferência | mutações sobre as propriedades |
 | Frozen specs (`script.js`, pilares) | `data/bofu-dominance/frozen-specs/hashes.json` | drift em `script.js` e `diagnostico-pre-licitacao` | preço, prazo, checkout, robots, canonical inalterados | recaptura honesta com motivo, `baseline_commit` alcançável |
 
+Alcance dos adjetivos soltos: ao retirar "soluções personalizadas" da banlist
+de marca, "personalizado(a)" e "sob medida" fora das 23 rotas B2G (onde FL-05
+continua) ficariam sem consumidor. `completude_sem_trabalho` cobre os dois
+adjetivos em todo o universo, sob a mesma regra de enumeração (caso varrido
+"Atendimento personalizado para a sua obra"; caso preservado "Proposta sob
+medida: elaboração, revisão e compatibilização…"). Fora do escopo desta
+campanha e preexistente: FL-08 ("garantimos…") só roda nas rotas B2G;
+`completude_com_promessa` reprova a promessa apenas quando adjacente a uma
+alegação de completude.
+
 Não alterados por não bloquearem a correção: `value-first-copy-contract`
 (shadow, aliado), `inbound_gates.py`, `real_proof_registry.mjs`,
 `test_self_deprecating_copy.py` (aliado, roda pré e pós-build).

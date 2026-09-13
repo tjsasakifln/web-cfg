@@ -19,8 +19,8 @@ O QUE ESTE GATE REPROVA:
    "quando ela já existe", "respondemos dizendo se podemos ajudar", "o que dá
    para fazer com o material disponível", identificadores operacionais como
    NEEDS_CONTEXT impressos para o visitante.
-3. COMPLETUDE SEM TRABALHO: "solução completa" ou "solução personalizada"
-   como slogan, sem que a mesma passagem enumere os trabalhos que compõem a
+3. COMPLETUDE SEM TRABALHO: "solução completa", "solução personalizada",
+   "personalizado" ou "sob medida" como slogan, sem que a mesma passagem enumere os trabalhos que compõem a
    solução. A regra e o vocabulário são os da exceção GX-06 do contrato de
    copy, lidos do JSON, para que fonte, scanner e auditoria concordem.
 
@@ -120,7 +120,10 @@ BACKSTAGE = re.compile(
 # ---------------------------------------------------------------------------
 COMPLETENESS = re.compile(
     r"\bsolu[çc][aã]o\s+completa\b|\bsolu[çc][oõ]es\s+completas\b"
-    r"|\bsolu[çc][aã]o\s+personalizada\b|\bsolu[çc][oõ]es\s+personalizadas\b",
+    r"|\bsolu[çc][aã]o\s+personalizada\b|\bsolu[çc][oõ]es\s+personalizadas\b"
+    # bare adjectives released from brand.json and, outside the 23 B2G routes,
+    # from FL-05: the campaign keeps them under the same enumeration rule
+    r"|\bpersonalizad[oa]s?\b|\bsob[\s-]medida\b",
     re.I,
 )
 
@@ -329,6 +332,8 @@ def test_detector_catches_fragmentation_backstage_and_empty_completeness() -> No
         ('<h1>Página</h1><details><summary>Limites</summary><p>Compatibilizar é uma compra distinta de elaborar.</p></details>', "fragmentacao_ou_abandono"),
         ("<h1>Página</h1><p>Solução completa para a sua obra. Fale com a gente.</p>", "completude_sem_trabalho"),
         ('<h1>Página</h1><img alt="soluções personalizadas em engenharia">', "completude_sem_trabalho"),
+        ("<h1>Página</h1><p>Atendimento personalizado para a sua obra. Fale com a gente.</p>", "completude_sem_trabalho"),
+        ("<h1>Página</h1><p>Engenharia sob medida para o seu empreendimento.</p>", "completude_sem_trabalho"),
         # inputs the client already has are not work of ours
         ("<h1>Página</h1><p>Solução completa para quem já tem projeto, edital e planilha.</p>", "completude_sem_trabalho"),
         ("<h1>Página</h1><p>Solução completa garantida: elaboração, revisão e compatibilização com aprovação garantida.</p>", "completude_com_promessa"),
@@ -354,6 +359,8 @@ def test_detector_leaves_material_truth_examples_and_enumerated_offers_alone() -
         "<h1>Ferramenta</h1><p>A saída é uma triagem numérica, não uma conclusão jurídica.</p>",
         "<h1>Contato</h1><p>O formulário não está disponível agora. Use WhatsApp, e-mail ou telefone.</p>",
         "<h1>Inspeção</h1><p>A vistoria é indispensável e o deslocamento entra na proposta.</p>",
+        "<h1>Serviços</h1><p>Proposta sob medida: elaboração, revisão e compatibilização das disciplinas, "
+        "com quantitativos e orçamento no mesmo escopo.</p>",
         "<h1>Serviços</h1><p>Conduzimos uma solução completa e sob medida: elaboração das disciplinas que faltam, "
         "revisão do que já existe, compatibilização das interfaces, quantitativos e orçamento.</p>",
         "<h1>Serviços</h1><p>Revisão, compatibilização e quantitativos entram na mesma proposta quando a "
