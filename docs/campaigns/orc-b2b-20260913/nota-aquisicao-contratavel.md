@@ -126,3 +126,56 @@ sem captura ativa, com os três canais diretos publicados.
   PR #682 e não foi executado nem alterado aqui.
 - **RESULTADO COMERCIAL**: nada a afirmar. Oportunidade qualificada, proposta e
   contratação só a partir do sistema comercial.
+
+## 8. Verificação do candidato: o que foi executado e o que não foi
+
+### Cenário F em navegador real, com JavaScript desativado
+
+Evidência independente do auxiliar `staticBody` da suíte. Chromium real,
+`setJavaScriptEnabled(false)` confirmado por `jsRan: false`, CSP de `_headers`
+aplicada pelo servidor, viewport 390x844, `/quantitativos-orcamento-obras/`:
+
+| Verificação | Resultado |
+| --- | --- |
+| HTTP | 200 |
+| JavaScript executou | não (`jsRan: false`) |
+| Entrada de edificação visível | sim |
+| Entrada de infraestrutura visível | sim |
+| Trilha conferível visível | sim |
+| Memória com 19,60 presente | sim |
+| Quem contrata visível | sim |
+| Âncora de contato visível | sim |
+| WhatsApp, e-mail e telefone presentes | sim |
+| Links CSV | 8 |
+| Itens ORC-PAR-01 e ORC-SUB-01 | presentes |
+| Pseudocódigo publicado | não |
+| Overflow horizontal | não |
+
+Problemas: nenhum. O auxiliar corrigido da suíte é uma segunda evidência, não a
+única.
+
+### CodeQL: comparação com a base
+
+| Referência | Alertas abertos |
+| --- | --- |
+| `refs/heads/main` (base) | 37 |
+| Introduzidos por este PR | 3 |
+| Agravados por este PR | 0 |
+
+Os três introduzidos estavam todos em `tests/campaigns/orc-b2b-20260913/test_purchase_path.mjs`,
+linhas 41 e 43, no removedor de script e estilo, e foram corrigidos na fonte,
+sem supressão e sem excluir o arquivo da análise.
+
+Os 37 da base são preexistentes, distribuídos por `tests/intake/`,
+`scripts/distribution/`, `tests/coordination/` e outros arquivos que este PR não
+toca. Não são agravados aqui e não constituem impedimento material à publicação
+desta rota. Permanecem fora desta campanha: uma limpeza geral do repositório
+seria outra entrega, com outro escopo e outra validação.
+
+### Verificações não executadas
+
+Na execução interrompida do candidato anterior, os passos de build, Chrome,
+axe, canária de CSP e medição de primeira dobra foram **pulados** depois da
+reprovação do gate de unidade. São tratados como **não executados**, nunca como
+aprovados. Nada de CSP, acessibilidade, Lighthouse ou identidade de publicação
+foi alterado para contornar ausência de evidência.

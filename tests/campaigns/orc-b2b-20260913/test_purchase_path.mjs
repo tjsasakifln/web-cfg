@@ -312,6 +312,41 @@ test("contraprova: o removedor de script não pode ser enganado por uma tag de f
   );
 });
 
+test("o removedor termina e preserva o conteúdo estático legítimo", () => {
+  // Termina: cada passada que altera o texto o encurta, porque toda ocorrência
+  // removida é maior que o único espaço que a substitui. Entradas adversariais
+  // com aninhamento e fechamentos tolerados precisam convergir, não travar.
+  const adversarial = [
+    "</head><body>",
+    "<p>antes</p>",
+    "<script ><script >a=1</script ></script >",
+    "<style\t>x{}</style\n>",
+    "<noscript ><p>sem js</p></noscript >",
+    "<p>depois</p>",
+    "</body>",
+  ].join("");
+  const started = Date.now();
+  const stripped = staticBody(adversarial);
+  assert.ok(Date.now() - started < 2000, "o removedor precisa convergir rapidamente");
+  assert.ok(!stripped.includes("a=1"), "script aninhado não sobrevive");
+  assert.ok(!stripped.includes("x{}"), "estilo não sobrevive");
+
+  // Preserva: o conteúdo estático legítimo permanece inteiro.
+  assert.ok(stripped.includes("antes") && stripped.includes("depois"), "o corpo real é preservado");
+
+  const real = read(LANDING_REL);
+  const realBody = staticBody(real);
+  for (const kept of [
+    'data-proof-entrance="edificacao"',
+    'data-proof-entrance="infraestrutura"',
+    'data-trail-step="quantity"',
+    'id="triagem-quantitativos"',
+    "19,60 m",
+  ]) {
+    assert.ok(realBody.includes(kept), `o removedor não pode descartar ${kept}`);
+  }
+});
+
 test("F. visitante sem JavaScript vê a oferta, a prova essencial e um canal de contato", () => {
   const html = read(LANDING_REL);
   const body = staticBody(html);
