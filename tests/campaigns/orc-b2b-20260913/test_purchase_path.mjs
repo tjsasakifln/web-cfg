@@ -352,6 +352,54 @@ test("contraprova: omitir a prova na composição reprova o cenário F", () => {
   assert.match(emptied, /awaiting-canonical-descriptors/);
 });
 
+// -------------------------------------------------- prontidão → triagem (§9)
+// O destino de cada caminho alternativo já era o correto. O que se perdia era o
+// recorte levado ao contato: ele é sempre o do encaminhamento principal, então
+// um visitante que escolhia o caminho alternativo de orçamento chegava à
+// triagem rotulado como revisão de projeto. O contato passa a nomear o recorte
+// que carrega, e uma nota manda abrir a página do caminho escolhido.
+
+const READINESS_APP_REL = "ferramentas/prontidao-tecnica-obra-privada/app.js";
+
+export function contactCtaNamesItsRoute(appSource) {
+  return (
+    /contactLink\.textContent\s*=\s*"Pedir conversa de escopo sobre "\s*\+\s*routing\.primary\.public_name/.test(
+      appSource,
+    ) && /cta-context-note/.test(appSource)
+  );
+}
+
+test("prontidão: o contato nomeia o recorte que carrega e aponta o caminho alternativo", () => {
+  const app = read(READINESS_APP_REL);
+  assert.ok(contactCtaNamesItsRoute(app), "o CTA precisa nomear o encaminhamento principal");
+  assert.match(
+    app,
+    /abra a página dele: o pedido começa lá, com a modalidade certa/,
+    "a nota precisa mandar o visitante do caminho alternativo abrir a página dele",
+  );
+  assert.match(
+    app,
+    /routing\.alternatives && routing\.alternatives\.length/,
+    "a nota só aparece quando existem caminhos alternativos",
+  );
+});
+
+test("contraprova: voltar a um rótulo fixo no contato da prontidão reprova", () => {
+  const app = read(READINESS_APP_REL);
+  assert.ok(contactCtaNamesItsRoute(app), "controle passa");
+
+  const mutated = app.replace(
+    /contactLink\.textContent = "Pedir conversa de escopo sobre " \+ routing\.primary\.public_name\.toLowerCase\(\);/,
+    'contactLink.textContent = "Pedir conversa de escopo";',
+  );
+  assert.notEqual(mutated, app, "a mutação precisa ter sido aplicada");
+  assert.equal(
+    contactCtaNamesItsRoute(mutated),
+    false,
+    "um rótulo fixo esconde o recorte levado e precisa reprovar",
+  );
+});
+
 test("as entradas publicam critério legível, não notação de máquina", () => {
   const html = read(LANDING_REL);
   for (const key of ["edificacao", "infraestrutura"]) {
