@@ -284,7 +284,9 @@ ok(
 // what the card says (a stale index kept "três compras distintas" after the
 // visible description was corrected on 2026-09-13).
 export function directoryIndexMismatches(html) {
-  const unesc = (t) => t.replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&#39;/g, "'");
+  // one pass over the five entities, so "&amp;lt;" is never unescaped twice
+  const ENTITIES = { "&lt;": "<", "&gt;": ">", "&quot;": '"', "&#39;": "'", "&amp;": "&" };
+  const unesc = (t) => t.replace(/&(?:lt|gt|quot|#39|amp);/g, (m) => ENTITIES[m]);
   const re = /<article class="content-directory-item"[^>]*data-search="([^"]*)"[^>]*>[\s\S]*?<h3><a href="([^"]+)">([^<]+)<\/a><\/h3><p class="dir-desc">([^<]*)<\/p>/g;
   const out = [];
   let m;
