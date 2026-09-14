@@ -280,6 +280,32 @@ ok(
   "policy set must remain non-empty even if live HTML were all noindex",
 );
 
+// The visitor filters the directory through data-search; that index must say
+// what the card says (a stale index kept "três compras distintas" after the
+// visible description was corrected on 2026-09-13).
+export function directoryIndexMismatches(html) {
+  // one pass over the five entities, so "&amp;lt;" is never unescaped twice
+  const ENTITIES = { "&lt;": "<", "&gt;": ">", "&quot;": '"', "&#39;": "'", "&amp;": "&" };
+  const unesc = (t) => t.replace(/&(?:lt|gt|quot|#39|amp);/g, (m) => ENTITIES[m]);
+  const re = /<article class="content-directory-item"[^>]*data-search="([^"]*)"[^>]*>[\s\S]*?<h3><a href="([^"]+)">([^<]+)<\/a><\/h3><p class="dir-desc">([^<]*)<\/p>/g;
+  const out = [];
+  let m;
+  while ((m = re.exec(html)) !== null) {
+    const index = unesc(m[1]).toLowerCase();
+    const title = unesc(m[3]).toLowerCase();
+    const desc = unesc(m[4]).toLowerCase();
+    if (!index.includes(title) || !index.includes(desc)) out.push(m[2]);
+  }
+  return out;
+}
+const indexMismatches = directoryIndexMismatches(readFileSync(HUB_PATH, "utf8"));
+ok("directory_search_index_matches_visible_card", indexMismatches.length === 0, `data-search diverges from card on: ${indexMismatches.join(", ")}`);
+ok(
+  "directory_search_index_check_catches_stale_index",
+  directoryIndexMismatches('<article class="content-directory-item" data-search="revisão três compras distintas: conferir"><div><h3><a href="/conteudos/x/">Revisão</a></h3><p class="dir-desc">Três etapas com nome próprio.</p></div></article>').length === 1,
+  "stale-index seed must be reported",
+);
+
 if (fail) {
   console.error("HUB_TRUTH_DETAIL", {
     policy_size: policySet.size,

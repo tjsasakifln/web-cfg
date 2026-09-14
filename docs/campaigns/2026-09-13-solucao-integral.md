@@ -158,3 +158,40 @@ Contraprovas executadas sobre cópia do artefato: frase de abandono injetada em
 Registrada em comentários do PR #684 e nos artefatos das execuções de
 `site-ci`, `pSEO quality gates` e `netcup-release` do candidato. Este arquivo
 não grava o SHA final do próprio candidato.
+
+## Resíduos e reconciliação dos não bloqueantes (2026-09-14)
+
+Após a publicação de `51b231883` e a verificação em produção, os itens que a
+revisão do PR #684 deixou como "não bloqueantes" foram reconciliados um a um
+contra a fonte de `8c6d231d0` (leitura + verificação cética independente):
+
+| Rota | Conclusão | Ação |
+|---|---|---|
+| `/conteudos/` convite final + WhatsApp flutuante | defeito confirmado (CTA só de obra pública; pedia documentos no primeiro contato) | convite geral acolhe necessidades públicas e privadas, sem documentos, com caminho próprio `/servicos-obras-publicas/`; flutuante neutro |
+| `/404.html` WhatsApp flutuante | defeito confirmado (mesmo prefill só de obra pública) | mensagem neutra da home |
+| `/triagem-tecnica/#obra-imovel` | defeito confirmado (nomeia orçamento, só saía com inspeção) | saída de quantitativos/orçamento com a mensagem da página de orçamento e link ao serviço; inspeção preservada; a prontidão chega a esse item pelo mesmo `#obra-imovel` |
+| `/parcerias-engenharia/` card de compatibilização | defeito confirmado | "por si; quando falta uma disciplina, a elaboração complementar entra na mesma proposta" |
+| `/conteudos/quando-compatibilizar-projetos/` | defeito confirmado (og já corrigida; frase do autor sem condução) | "ato do autor, e a coordenação acompanha esse ajuste até o aceite" |
+| `/conteudos/como-contratar-projetos-complementares/` | defeito confirmado ("misturam compras", "sem misturar") | rótulos reescritos; avisos materiais mantidos |
+| `/obrigado.html` | defeito confirmado (recibo só diagnóstico) | o que se recebe: leitura da necessidade, trabalho, entrega, informações para a proposta |
+| `/especialista/tiago-jun-sasaki/` | defeito confirmado (handle do GitHub repetido; produtor `credential_registry.py`) | gerador corrigido e superfície reprojetada; "pode ajudar" já não existia |
+| `/seguranca-trabalho-apoio-tecnico/` | defeito confirmado (condução da produção só no Método; "outra frente") | Entrega, lead e card nomeiam a produção conduzida pela CONFENGE quando a proposta nomear; ressalva mantida na resposta direta e nos limites |
+| `/inspecao-diagnostico-edificacoes/` | defeito confirmado (metade aplicada) | "a assistência técnica da parte entra na proposta, encadeada com a inspeção" |
+| `/auditoria-orcamento-licitacao/` (pilar congelado) | defeito confirmado ("não substituímos o orçamentista…") | continuidade com elaboração/revisão do orçamento na mesma proposta; "não garantimos vitória" preservado; recaptura honesta |
+| `/diretoria-b2g/` | defeito confirmado (capitalização da lista) | corrigido |
+| `/conteudos/atraso-na-medicao-obra-publica/` | defeito confirmado ("outra intenção e outro dossiê" sem nomear o trabalho irmão) | nomeia o Dossiê de Atraso e Prorrogação via guia de prorrogação; a proposta combina os dois trabalhos (link direto ao serviço reclassificaria o guia canário como hub de dobra) |
+| `/conteudos/medicao-por-evento-obra-publica/` lead-inline | defeito confirmado ("antes de abrir uma triagem" = lição de casa) | localizar o critério é o serviço; a triagem começa com o que se tem |
+| `/analise-cnpj/` sem JS (`live-intelligence-analyze.cjs`) | defeito confirmado (cópia sobrevivente de "capacidade de atendimento") | alinhado ao HTML autorado |
+| `/revisao-tecnica-projetos-engenharia/` extrato demonstrativo | defeito confirmado (campos duplicados; produtor `project_review_extract.mjs`) | renderizador não repete campo; composição regenerada |
+| `/quantitativos-orcamento-obras/`, `/servicos/`, `/conteudos/revisar-ou-refazer-orcamento-obra/`, `/conteudos/comparar-propostas-execucao-obra/`, `/bid-room-licitacoes-obras/`, `/diagnostico-b2g-360/`, pSEO template A | já corrigido em #684 | — |
+| `/assistencia-tecnica-pericial-engenharia/` (meta "até os esclarecimentos finais") | sem defeito: a meta afirma continuidade verdadeira; hedge proposto reintroduziria meio-serviço | mantido |
+| `/defesa-margem-contratos-publicos/`, `/atrasos-prorrogacao-obras-publicas/`, `/conteudos/limite-aditivo-25-50-obra-publica/`, pSEO template B | informação material legítima preservada (preço fixo, unidade de escopo) | mantido |
+| `/casos/demonstrativo-projeto-privado/` "Contrpiso" | estilo/ortografia fora do escopo editorial desta campanha (memória de 19,60 m² e CSV intocados) | registrado |
+
+Cobertura de teste ampliada só onde necessário: `test_integral_solution_copy.py`
+lê os caminhos de contato (convite geral e flutuante de `/conteudos/` e `404`,
+item `#obra-imovel` da triagem) com contraprovas das formas antigas;
+`test_hub_truth.mjs` exige `data-search` igual ao cartão visível (semente de
+índice antigo reprova). Produtor de `/conteudos/`: `inbound:remediate` é
+remediação manual que hoje falha na biblioteca atual e não roda no build; o
+hub é autoral, e o teste de alinhamento protege o índice.

@@ -442,9 +442,11 @@ def _visible_rows(surface: str, claims: list[dict[str, Any]]) -> list[tuple[str,
                 "consultar na Receita Federal</a>"
             )
         elif cid == "person-github" and url:
+            # the visible wording already prints the handle; the link must not
+            # repeat it ("github.com/tjsasakifln · github.com/tjsasakifln")
             extra = (
                 f' · <a href="{escape(url, quote=True)}" rel="noopener" target="_blank">'
-                "github.com/tjsasakifln</a>"
+                "abrir perfil</a>"
             )
         term = {
             "org-legal-name": "Razão social",

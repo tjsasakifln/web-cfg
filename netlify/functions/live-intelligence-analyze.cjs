@@ -368,7 +368,7 @@ ${result.as_of ? `<p class="form-note">Dados declarados até ${esc(result.as_of)
 <section class="section" id="pedido" data-section-archetype="contextual_next_action" hidden>
 <h2 id="pedido-titulo">Registrar o pedido</h2>
 <form class="contact-form" id="intel-lead-form" novalidate method="post" action="/api/web/lead" data-form-contract="next-state/v1" data-next-state-profile="service_fit_review" data-runtime-profile="inline_receipt_v1" data-receipt-required="true">
-<p class="form-hint" data-form-value>Registre a demanda e a decisão que está na mesa para a CONFENGE enquadrar a entrega, a prova necessária e a capacidade de atendimento.</p>
+<p class="form-hint" data-form-value>Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.</p>
 <p class="form-hint" data-field-purpose>Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados.</p>
 <input id="intel-intent-kind" name="intent_kind" type="hidden" value=""/>
 <input id="intel-analysis-id" name="analysis_id" type="hidden" value="${esc(result.analysis_id || "")}"/>

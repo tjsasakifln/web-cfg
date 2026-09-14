@@ -402,7 +402,11 @@ def load_jsonld(html: str) -> list[dict]:
 # changed, not a build clock: REVISION_BODY_SHA256 below pins the date-masked
 # body of each page, so editing the prose without moving this date fails the
 # gate, and moving this date without editing the prose fails it too.
-CLUSTER_REVISION = "2026-09-08"
+# 2026-09-14. SOLUCAO-INTEGRAL-20260913: o guia de atraso na medicao passa a
+# nomear o Dossie de Atraso e Prorrogacao (via guia de prorrogacao) em vez de
+# "outra intencao e outro dossie", e o lead-inline de medicao por evento deixa
+# de exigir "separar ... antes de abrir uma triagem". Fontes nao reconsultadas.
+CLUSTER_REVISION = "2026-09-14"
 
 # 2026-09-08. Antes, a data em que as fontes foram consultadas era exigida igual
 # a CLUSTER_REVISION. O acoplamento estava errado e era perigoso: qualquer
@@ -531,10 +535,10 @@ def content_fingerprint(html: str) -> str:
 # only together with a new CLUSTER_REVISION, because a changed body is a
 # changed revision date by definition.
 REVISION_BODY_SHA256: dict[str, str] = {
-    "atraso-na-medicao-obra-publica": "14e26b7522ad2e0ee61eae5122963ded3cd4e230917559200b35d0cecde8d9b6",
+    "atraso-na-medicao-obra-publica": "e9eb9c67874e40d21917ad981960af2d1e8b0f4002b4f6ccdd8bac7cb0763eb1",
     "fiscal-nao-assina-medicao-obra-publica": "64023e36c2d84ecd7976394e07ab30eb94c72656b33efa3ce757b736e5fd6233",
     "glosa-por-qualidade-obra-publica": "fc356105ef4ee6118c7a1fce3bb0e0c4c05df2963a124c352db24d3ea0a1e543",
-    "medicao-por-evento-obra-publica": "7c14f8ff418a07609e4fbc3a512adec6a131ec206d03746eb09514a0211e77f3",
+    "medicao-por-evento-obra-publica": "94dea650663b24bb0f6b2f82929ef8499055eb00044e79d55760a31acef49d53",
     "pagamento-parcial-etapa-empreitada-global": "e2df8173f111e49caf99a90ce6a02e6957b188f846a1a76d4a2a0fb1638217b6",
     "atraso-pagamento-contrato-publico-suspender": "376986b4ebbacceda21c939d2fb046dcaac1a9476e5cc00bc32f6d2d26e7108d",
 }
