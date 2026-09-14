@@ -507,14 +507,26 @@ export function renderExtractItemHtml(item) {
   const implication = itemImplication(item);
   const recommendation = itemRecommendation(item);
   const element = item.element || (Array.isArray(item.element_ids) ? item.element_ids.join(" ") : "");
+  // A recommendation has no finding of its own and a pending verification has
+  // no implication beyond its finding: a field is rendered once, never as a
+  // copy of the previous one (the four-class structure is the method proof).
+  const rows = [];
+  const seen = new Set();
+  const push = (label, text) => {
+    const value = (text || "").trim();
+    if (!value || seen.has(value)) return;
+    seen.add(value);
+    rows.push(field(label, escapeHtml(value)));
+  };
+  if (item.kind !== "recommendation") push("Constatação", constatacao);
+  push("Implicação", implication);
+  push("Recomendação", recommendation);
   return `<article class="rv-extract-item" data-extract-class="${escapeHtml(item.class)}" data-extract-id="${escapeHtml(item.id)}">
 <p class="rv-class">${escapeHtml(classLabel)}</p>
 <h3>${escapeHtml(itemTitle(item))}</h3>
 <dl>
 ${field("Documento", escapeHtml(documentText || "Recorte demonstrativo"))}
-${field("Constatação", escapeHtml(constatacao || ""))}
-${field("Implicação", escapeHtml(implication || ""))}
-${field("Recomendação", escapeHtml(recommendation || ""))}
+${rows.join("\n")}
 ${element ? field("Elementos no desenho", `<code>${escapeHtml(element)}</code>`) : ""}
 </dl>
 </article>`;

@@ -406,6 +406,106 @@ def test_coverage_refuses_a_smaller_universe(tmp_path: Path | None = None) -> No
     assert any(victim in problem for problem in problems), problems
 
 
+# --- contact paths (campaign v2: transversal communication and contact) -----
+
+B2G_ONLY_PREFILL = "demanda relacionada a licitação, contrato ou obra pública"
+WA_LINK = re.compile(r'href="https://wa\.me/\d+\?text=([^"]+)"', re.I)
+
+
+def _wa_texts(html: str) -> list[str]:
+    from urllib.parse import unquote
+
+    return [unquote(m.group(1)) for m in WA_LINK.finditer(html)]
+
+
+def contact_path_problems(rel: str, html: str) -> list[str]:
+    """Transversal contact surfaces must welcome public and private needs.
+
+    /conteudos/ lists private paths (projeto, orçamento, inspeção, SST...); its
+    general invitation and floating WhatsApp may not assume a public-works
+    demand, may not ask for documents on first contact, and must keep an
+    explicit public-works path. The 404 is reached from any URL. The triage
+    item that names quantitativos/orçamento must let the visitor leave with an
+    orçamento message, not only an inspection one.
+    """
+    problems: list[str] = []
+    if rel in ("conteudos/index.html", "404.html"):
+        for text in _wa_texts(html):
+            if B2G_ONLY_PREFILL in text:
+                problems.append(f"{rel}: WhatsApp pré-preenchido só de obra pública: {text!r}")
+    if rel == "conteudos/index.html":
+        start = html.find('<section class="content-cta">')
+        cta = html[start : html.find("</section>", start)] if start >= 0 else ""
+        if not cta:
+            problems.append(f"{rel}: convite geral (content-cta) ausente")
+        else:
+            plain = _strip(re.sub(r"<[^>]+>", " ", cta))
+            if re.search(r"\benvie\b[^.]{0,80}\b(contrato|planilha|medi[çc][õo]es|projeto|laudo)\b", plain, re.I):
+                problems.append(f"{rel}: convite geral pede documentos no primeiro contato")
+            if not re.search(r"projeto|revis[ãa]o|or[çc]amento|inspe[çc][ãa]o|seguran[çc]a do trabalho", plain, re.I):
+                problems.append(f"{rel}: convite geral não acolhe necessidades privadas")
+            if 'href="/servicos-obras-publicas/"' not in cta:
+                problems.append(f"{rel}: convite geral perdeu o caminho próprio de obra pública")
+    if rel == "triagem-tecnica/index.html":
+        start = html.find('<li id="obra-imovel">')
+        item = html[start : html.find("</li>", start)] if start >= 0 else ""
+        texts = _wa_texts(item)
+        plain = _strip(re.sub(r"<[^>]+>", " ", item))
+        if re.search(r"quantitativos|or[çc]amento", plain, re.I):
+            if not any(re.search(r"quantitativos|or[çc]amento", t, re.I) for t in texts):
+                problems.append(f"{rel}#obra-imovel: nomeia orçamento mas só sai com mensagem de inspeção")
+            if 'href="/quantitativos-orcamento-obras/"' not in item:
+                problems.append(f"{rel}#obra-imovel: sem caminho para a página de quantitativos e orçamento")
+        if not any(re.search(r"inspecionar|documentar", t, re.I) for t in texts):
+            problems.append(f"{rel}#obra-imovel: caminho de inspeção removido")
+    return problems
+
+
+CONTACT_PATH_FILES = ("conteudos/index.html", "404.html", "triagem-tecnica/index.html")
+
+
+def contact_path_findings(root: Path) -> list[str]:
+    out: list[str] = []
+    for rel in CONTACT_PATH_FILES:
+        path = root / rel
+        if not path.is_file():
+            out.append(f"{rel}: ausente em {root}")
+            continue
+        out.extend(contact_path_problems(rel, path.read_text(encoding="utf-8", errors="replace")))
+    return out
+
+
+def test_contact_paths_reject_public_only_invitation_and_budget_as_inspection() -> None:
+    """Contra-provas: as formas antigas reprovam; as atuais passam."""
+    wa = "https://wa.me/5548988344559?text="
+    old_hub = (
+        '<section class="content-cta"><div><h2>Envie contrato, planilha e medições e receba a leitura técnica do seu caso.</h2>'
+        f'<a href="{wa}Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20uma%20demanda%20relacionada%20a%20licita%C3%A7%C3%A3o%2C%20contrato%20ou%20obra%20p%C3%BAblica.">Analisar</a></div></section>'
+    )
+    got = contact_path_problems("conteudos/index.html", old_hub)
+    assert any("só de obra pública" in g for g in got) and any("pede documentos" in g for g in got) and any("obra pública" in g for g in got), got
+    old_404 = f'<aside class="contact-float"><a href="{wa}Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20uma%20demanda%20relacionada%20a%20licita%C3%A7%C3%A3o%2C%20contrato%20ou%20obra%20p%C3%BAblica.">W</a></aside>'
+    assert contact_path_problems("404.html", old_404), "404 com prefill só de obra pública deveria reprovar"
+    old_triage = (
+        '<li id="obra-imovel"><strong>Obra ou imóvel para inspecionar.</strong> Infiltração, laudo de estado, quantitativos ou orçamento. '
+        f'<a href="{wa}Ol%C3%A1%2C%20Tiago.%20Tenho%20uma%20obra%20ou%20im%C3%B3vel%20para%20inspecionar%20ou%20documentar.">Falar</a></li>'
+    )
+    got = contact_path_problems("triagem-tecnica/index.html", old_triage)
+    assert any("só sai com mensagem de inspeção" in g for g in got) and any("sem caminho" in g for g in got), got
+    new_triage = (
+        '<li id="obra-imovel"><strong>Obra ou imóvel para inspecionar, documentar ou orçar.</strong> Laudo de estado: '
+        f'<a href="{wa}Ol%C3%A1.%20Tenho%20uma%20obra%20para%20inspecionar%20ou%20documentar.">Falar</a>. Quantitativos ou orçamento: '
+        f'<a href="{wa}Ol%C3%A1.%20Quero%20proposta%20de%20quantitativos%20ou%20or%C3%A7amento.">Falar</a> ou <a href="/quantitativos-orcamento-obras/">ver</a>.</li>'
+    )
+    assert contact_path_problems("triagem-tecnica/index.html", new_triage) == [], contact_path_problems("triagem-tecnica/index.html", new_triage)
+    new_hub = (
+        '<section class="content-cta"><div><h2>Descreva a necessidade; a resposta indica o trabalho de engenharia que a resolve.</h2>'
+        '<p>Projeto, revisão, orçamento ou inspeção. Contrato ou planilha só entram depois, pelo canal seguro. <a href="/servicos-obras-publicas/">Obra pública</a>.</p>'
+        f'<a href="{wa}Ol%C3%A1.%20Quero%20conversar%20sobre%20um%20projeto%20ou%20servi%C3%A7o%20de%20engenharia.">Analisar</a></div></section>'
+    )
+    assert contact_path_problems("conteudos/index.html", new_hub) == [], contact_path_problems("conteudos/index.html", new_hub)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--root", type=Path, default=ROOT)
@@ -418,6 +518,7 @@ def main() -> int:
         test_detector_leaves_material_truth_examples_and_enumerated_offers_alone,
         test_enumeration_rule_is_the_contract_rule,
         test_coverage_refuses_a_smaller_universe,
+        test_contact_paths_reject_public_only_invitation_and_budget_as_inspection,
     ):
         test()
         print(f"OK {test.__name__}")
@@ -441,6 +542,7 @@ def main() -> int:
             encoding="utf-8",
         )
     bad = [f"coverage: {problem}" for problem in coverage]
+    bad.extend(f"contact: {problem}" for problem in contact_path_findings(args.root))
     for rel, hits in sorted(found.items()):
         for rule_id, snippets in sorted(hits.items()):
             for snippet in snippets:
