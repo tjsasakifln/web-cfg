@@ -173,8 +173,27 @@ def test_mutation_removing_quantitativos_cta_fails():
     assert extract_bridge_service(pages["/conteudos/sinapi-desonerado-nao-desonerado/"]) == AUDITORIA_HREF
 
 
+_REVISION_SURFACES = re.compile(
+    rb'(content=")\d{4}-\d{2}-\d{2}(" property="article:modified_time")'
+    rb'|("dateModified":")\d{4}-\d{2}-\d{2}(")'
+    rb'|(Revisado em <time datetime=")\d{4}-\d{2}-\d{2}(">)[^<]*(</time>)'
+)
+
+
+def _mask_revision_date(html: bytes) -> bytes:
+    """Blank the three revision-date surfaces only; every other byte counts."""
+    return _REVISION_SURFACES.sub(lambda m: b"".join(g for g in m.groups() if g), html)
+
+
 def test_click_origin_articles_match_origin_main():
-    """Non-regression: the three click-origin articles stay byte-identical to base."""
+    """Non-regression: the three click-origin articles keep the base content.
+
+    2026-09-14: /conteudos/fiscal-nao-assina-medicao-obra-publica/ belongs to
+    the medição cluster, whose revision date must move on every page when any
+    body in the cluster changes (cluster_medicao_originality.revision_failures).
+    That restamp is not a rewrite of the guide, so the comparison masks the
+    revision-date surfaces and keeps every other byte pinned to base.
+    """
     import subprocess
 
     for path in CLICK_ORIGIN:
@@ -183,10 +202,23 @@ def test_click_origin_articles_match_origin_main():
             ["git", "-C", str(ROOT), "show", f"origin/main:{rel}"]
         )
         live = path.read_bytes()
-        assert live == base, rel
+        assert _mask_revision_date(live) == _mask_revision_date(base), rel
         html = live.decode("utf-8")
         assert _canonical(html).startswith(SITE)
         assert _canonical(html).endswith("/" + rel.replace("index.html", ""))
         assert "href=\"/\"" in html or "href=\"https://confenge.com.br/\"" in html
         # Canonical of the article is itself, not the home page.
         assert _canonical(html) != f"{SITE}/"
+
+
+def test_click_origin_guard_still_rejects_a_body_change():
+    """Contra-prova: mascarar a data não abre a porta para reescrever o corpo."""
+    import subprocess
+
+    rel = CLICK_ORIGIN[2].relative_to(ROOT).as_posix()
+    base = subprocess.check_output(["git", "-C", str(ROOT), "show", f"origin/main:{rel}"])
+    mutated = base.replace(b"</h1>", b" (reescrito)</h1>", 1)
+    assert mutated != base
+    assert _mask_revision_date(mutated) != _mask_revision_date(base)
+    restamped = base.replace(b'"dateModified":"2026-09-08"', b'"dateModified":"2099-01-01"', 1)
+    assert _mask_revision_date(restamped) == _mask_revision_date(base)
