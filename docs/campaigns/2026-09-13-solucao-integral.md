@@ -54,7 +54,14 @@ O gate lê a superfície humana (texto visível, `title`, metas, OG, `alt`,
 fonte e de todos os HTML do artefato, e reprova quando uma rota do registro de
 famílias (fonte) ou do manifesto (artefato) não foi lida. Preservações são por
 trecho em `data/site/integral-solution-exceptions.json` e caducam se o texto
-mudar; nesta campanha a lista está vazia.
+mudar; nesta campanha a lista está vazia. Desde a verificação da release
+`51b231883` o gate também lê os índices `data-search` da biblioteca: o
+cartão de `/conteudos/` ainda dizia "três compras distintas" no atributo
+enquanto a descrição visível já estava corrigida (byte-grep da produção
+encontrou; a superfície humana não). Texto interno de contrato que não é
+renderizado (`intent-family-matrix.v1.json#disambiguation`,
+`purchase-route-map.v1.json#required_proof`) fala em "compras distintas" como
+regra de não fusão de famílias, não como comunicação; fica fora do universo.
 
 ## Diagnóstico diferencial e correções (antes → depois)
 
