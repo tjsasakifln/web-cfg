@@ -45,6 +45,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import html as html_lib
 import re
 import sys
 import unicodedata
@@ -134,6 +135,9 @@ PROMISE = re.compile(r"\bgarant(?:imos|ia de|ias de|id[oa]s?)\b|\baprova[çc][a�
 RULES = ("fragmentacao_ou_abandono", "bastidor_de_capacidade", "completude_sem_trabalho", "completude_com_promessa")
 
 
+SEARCH_INDEX = re.compile(r'\sdata-search="([^"]*)"', re.I)
+
+
 def _strip(text: str) -> str:
     return "".join(
         ch for ch in unicodedata.normalize("NFD", text) if unicodedata.category(ch) != "Mn"
@@ -203,6 +207,11 @@ def findings_for(html: str, rule: dict | None = None, rel: str = "", exceptions:
     exceptions = exceptions or []
     found: dict[str, list[str]] = {}
     surface = human_surface(html)
+    # the visitor searches the content directory through data-search; that index
+    # is read like copy (found stale on /conteudos/ after the 2026-09-13 release)
+    search_index = " ".join(html_lib.unescape(m.group(1)) for m in SEARCH_INDEX.finditer(html))
+    if search_index:
+        surface = surface + ". " + search_index
 
     for sentence in SENTENCE_SPLIT.split(surface):
         if FRAGMENTATION.search(sentence) and not _preserved(rel, "fragmentacao_ou_abandono", sentence, exceptions):
@@ -329,6 +338,7 @@ def test_detector_catches_fragmentation_backstage_and_empty_completeness() -> No
         ('<h1>Página</h1><script type="application/ld+json">{"@type":"Service","description":"Elaborar é outra compra."}</script>', "fragmentacao_ou_abandono"),
         ('<h1>Página</h1><script>status.textContent = "A resposta diz se ela se encaixa na atuação da CONFENGE.";</script>', "bastidor_de_capacidade"),
         ('<h1>Página</h1><p aria-hidden="true">Isso é outra compra.</p>', "fragmentacao_ou_abandono"),
+        ('<h1>Biblioteca</h1><article data-search="revisão e compatibilização três compras distintas: conferir"><p>Três etapas com nome próprio.</p></article>', "fragmentacao_ou_abandono"),
         ('<h1>Página</h1><details><summary>Limites</summary><p>Compatibilizar é uma compra distinta de elaborar.</p></details>', "fragmentacao_ou_abandono"),
         ("<h1>Página</h1><p>Solução completa para a sua obra. Fale com a gente.</p>", "completude_sem_trabalho"),
         ('<h1>Página</h1><img alt="soluções personalizadas em engenharia">', "completude_sem_trabalho"),
