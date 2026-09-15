@@ -644,19 +644,26 @@ _reset();
     record_kind: "qa",
     test_mode: true,
   };
-  for (const invalid of [
+  for (const [index, invalid] of [
     { opportunity_deadline: "2026-99-99" },
     { contract_value_band: "valor_livre" },
     { lot_count: "0" },
     { execution_regime: "regime_livre" },
     { decision_intent: "decisao_livre" },
     { public_contract_id: "" },
-  ]) {
+  ].entries()) {
+    // Chave explícita por caso: a lacuna deixa o material de idempotência
+    // idêntico entre casos, e a persistência tem de ser provada UMA vez por
+    // envio (size === before + 1), não tolerada por dedup.
     const before = mem.map.size;
-    const res = await handler(event({ ...base, ...invalid }, "POST", { ip: "192.0.2.92" }));
+    const res = await handler(event({
+      ...base,
+      ...invalid,
+      idempotency_key: `qa-licitacao-gap-${index}`,
+    }, "POST", { ip: "192.0.2.92" }));
     const data = JSON.parse(res.body);
-    if (res.statusCode >= 400 || mem.map.size < before) {
-      fail("licitacao_qualification_gap_is_received", { invalid, status: res.statusCode, data });
+    if (res.statusCode >= 400 || mem.map.size !== before + 1) {
+      fail("licitacao_qualification_gap_is_received", { invalid, status: res.statusCode, size: [before, mem.map.size], data });
     }
     if (data.qualification_state !== "NEEDS_CONTEXT") {
       fail("licitacao_qualification_gap_is_recorded", { invalid, data });
@@ -840,25 +847,71 @@ _reset();
     record_kind: "qa",
     test_mode: true,
   };
-  for (const invalid of [
+  for (const [index, invalid] of [
     { cnpj: "123" },
     { cnpj: "11111111111111" },
     { analysis_cutoff: "2026-99-99" },
     { opportunity_deadline: analysisCutoff },
     { decision_intent: "decisao_livre" },
-  ]) {
+  ].entries()) {
     // Propriedade da decisão vigente: uma lacuna de qualificação é REGISTRADA,
     // não usada para descartar o contato. O piso material continua publicado na
     // rota; o que acabou foi perder a pessoa que chega fora dele.
+    // Chave explícita por caso: os dois CNPJs inválidos viram null e deixariam
+    // o material de idempotência idêntico; a persistência é provada UMA vez
+    // por envio (size === before + 1), não tolerada por dedup.
     const before = mem.map.size;
-    const res = await handler(event({ ...invalidBase, ...invalid }, "POST", { ip: "203.0.113.99" }));
+    const res = await handler(event({
+      ...invalidBase,
+      ...invalid,
+      idempotency_key: `qa-priced-gap-${index}`,
+    }, "POST", { ip: "203.0.113.99" }));
     const data = JSON.parse(res.body);
-    if (res.statusCode >= 400 || mem.map.size < before) {
-      fail("priced_model_qualification_gap_is_received", { invalid, status: res.statusCode, data });
+    if (res.statusCode >= 400 || mem.map.size !== before + 1) {
+      fail("priced_model_qualification_gap_is_received", { invalid, status: res.statusCode, size: [before, mem.map.size], data });
     }
     if (data.qualification_state !== "NEEDS_CONTEXT") {
       fail("priced_model_qualification_gap_is_recorded", { invalid, data });
     }
+    // O campo estruturado cnpj só guarda CNPJ VALIDADO: texto livre e dígitos
+    // inválidos viram null (fora da chave de idempotência e do handoff);
+    // um CNPJ válido sobrevive mesmo com lacuna em outro campo.
+    const stored = data.lead_id ? await mem.get(data.lead_id) : null;
+    const expectedCnpj = "cnpj" in invalid ? null : "52407089000109";
+    if (!stored || stored.cnpj !== expectedCnpj) {
+      fail("priced_model_gap_keeps_only_validated_cnpj", { invalid, stored_cnpj: stored && stored.cnpj, expectedCnpj });
+    }
+  }
+  pass("priced_model_gap_keeps_only_validated_cnpj");
+
+  // Fora dos oito produtos o fallback era o MESMO clamp sem guarda, então a
+  // decisão vale para todos os formulários: texto livre nunca vira identidade
+  // estruturada; um CNPJ válido (mesmo pontuado) sobrevive normalizado.
+  {
+    const core = require(path.join(root, "netlify/functions/lib/lead-core.cjs"));
+    const generic = {
+      nome: "QA CNPJ Genérico",
+      email: "qa-cnpj-generico@example.com",
+      estagio: "orcamento",
+      jornada: "obra",
+      consentimento: "1",
+      origem: "/servicos/",
+    };
+    const freeText = core.validateAndNormalize({ ...generic, cnpj: "joao@x.com" });
+    const badDigits = core.validateAndNormalize({ ...generic, cnpj: "11111111111111" });
+    const punctuated = core.validateAndNormalize({ ...generic, cnpj: "52.407.089/0001-09" });
+    if (
+      !freeText.ok || freeText.lead.cnpj !== null ||
+      !badDigits.ok || badDigits.lead.cnpj !== null ||
+      !punctuated.ok || punctuated.lead.cnpj !== "52407089000109"
+    ) {
+      fail("generic_form_cnpj_only_validated", {
+        freeText: freeText.lead && freeText.lead.cnpj,
+        badDigits: badDigits.lead && badDigits.lead.cnpj,
+        punctuated: punctuated.lead && punctuated.lead.cnpj,
+      });
+    }
+    pass("generic_form_cnpj_only_validated");
   }
   pass("priced_model_forms_persisted_attribution", { routes: modelSlugs });
 }
@@ -889,18 +942,23 @@ _reset();
       fail("contract_product_server_contract", { number, check });
     }
   }
-  for (const invalid of [
+  for (const [index, invalid] of [
     { public_contract_id: "ab" },
     { contract_event: "evento_livre" },
     { opportunity_deadline: "2026-99-99" },
     { opportunity_deadline: "2020-01-01" },
     { contract_stage: "estagio_livre" },
-  ]) {
+  ].entries()) {
     const before = mem.map.size;
-    const res = await handler(event({ ...base, deliverable_id: "CFG-D18", ...invalid }, "POST", { ip: "203.0.113.98" }));
+    const res = await handler(event({
+      ...base,
+      deliverable_id: "CFG-D18",
+      ...invalid,
+      idempotency_key: `qa-contract-gap-${index}`,
+    }, "POST", { ip: "203.0.113.98" }));
     const data = JSON.parse(res.body);
-    if (res.statusCode >= 400 || mem.map.size < before) {
-      fail("contract_product_qualification_gap_is_received", { invalid, status: res.statusCode, data });
+    if (res.statusCode >= 400 || mem.map.size !== before + 1) {
+      fail("contract_product_qualification_gap_is_received", { invalid, status: res.statusCode, size: [before, mem.map.size], data });
     }
     if (data.qualification_state !== "NEEDS_CONTEXT") {
       fail("contract_product_qualification_gap_is_recorded", { invalid, data });

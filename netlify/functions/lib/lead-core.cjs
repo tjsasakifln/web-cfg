@@ -334,6 +334,11 @@ const EXPANSION_DECISION_INTENTS = new Set([
   "UNKNOWN",
 ]);
 
+function validatedCnpjOrNull(raw) {
+  const check = validateCnpj(clamp(raw, MAX_FIELD.cnpj));
+  return check.ok ? check.cnpj : null;
+}
+
 function assertEightProductQualification(data, deliverableId) {
   if (!EIGHT_PRODUCT_IDS.has(deliverableId)) return { ok: true, qualification: null };
   const cnpjCheck = validateCnpj(clamp(data.cnpj || data.cnpj14, MAX_FIELD.cnpj));
@@ -1068,7 +1073,14 @@ function validateAndNormalize(data) {
     public_contract_id: productQualification?.public_contract_id || clamp(data.public_contract_id, MAX_FIELD.public_contract_id) || null,
     public_entity_id: clamp(data.public_entity_id, MAX_FIELD.public_entity_id) || null,
     public_id_slug: clamp(data.public_id_slug, MAX_FIELD.public_id_slug) || null,
-    cnpj: eightCheck.qualification?.cnpj || clamp(data.cnpj || data.cnpj14, MAX_FIELD.cnpj) || null,
+    // Identidade estruturada só com CNPJ VALIDADO. Decisão explícita: isto vale
+    // para TODOS os caminhos (lacuna ou não), porque o fallback anterior era o
+    // mesmo `clamp(data.cnpj)` sem guarda em qualquer formulário; com a lacuna
+    // de qualificação passando a ser recebida (em vez de 422), ele passou a
+    // gravar texto livre no campo estruturado, na chave de idempotência e no
+    // handoff Warmbly. Texto livre e dígitos inválidos viram null; um CNPJ
+    // válido sobrevive normalizado (14 dígitos), mesmo fora dos oito produtos.
+    cnpj: eightCheck.qualification?.cnpj || validatedCnpjOrNull(data.cnpj || data.cnpj14),
     offer_id: offerCheck.offer_id || null,
     terms_id: offerCheck.terms_id || null,
     radar_params: radarParams,
