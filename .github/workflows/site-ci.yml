@@ -88,6 +88,7 @@ jobs:
       - name: Unit and brand/copy/design gates
         run: |
           npm run discovery:test
+          npm run test:runtime-authority
           npm run editorial:test
           npm run editorial:build
           npm run test:inbound-gates
@@ -405,6 +406,7 @@ jobs:
             --required-step "Workflow gate shape" \
             --required-step "Unit and brand/copy/design gates" \
             --required-step "Contact and lead pathway gates" \
+            --required-step "Money asset production inspection is read-only" \
             --required-step "Build public site" \
             --required-step "Final public-surface coverage and copy gate" \
             --required-step "Published HTML and FAQ integrity" \
