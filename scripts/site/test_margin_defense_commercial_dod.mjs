@@ -386,6 +386,10 @@ const [primaryLoop, secondLoop] = loopRegistry.loops.filter((loop) => loop.enabl
   assert.equal(review.real_loop.missing_prerequisites[0].prerequisite, "consented_real_contact");
   assert.equal(blobHasPii(review), false);
   assert.equal(review.next_command, buildNextCommand(primaryLoop));
+  // #682: the inspection is GET-only; the next command must not instruct the
+  // operator to export a credential for it.
+  assert.doesNotMatch(review.next_command, /OPS_TOKEN|LEAD_PROBE_SECRET|CONFENGE_AUTO_SEND_EVIDENCE/);
+  assert.match(review.next_command, /GET only, no token/);
   pass("committed_review", { learning: review.learning, exit: review.exit });
 }
 

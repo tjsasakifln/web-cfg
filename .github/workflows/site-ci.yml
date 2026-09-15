@@ -210,6 +210,8 @@ jobs:
         id: setup-chrome
       - name: Quantity takeoff and budgeting purchase path
         run: npm run test:orc-b2b-20260913
+      - name: Money asset production inspection is read-only
+        run: npm run test:ativacao-01
       - name: Priority service sharing and sample presentation
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}

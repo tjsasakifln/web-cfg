@@ -11,7 +11,7 @@ Handoff Warmbly: [WARMBLY-INBOUND.md](./WARMBLY-INBOUND.md). Não usar `OPS_WEBH
 
 Money-asset ops chain (auth, no PII): `asset_view` → `contract_analyzed` → `cta_view` → `cta_click` → `lead_persisted` (legacy alias `lead_created`) → handoff `delivered`/`blocked` (plus pending/retryable/skipped/dead). Query `ops?action=inbound_handoff` or `analytics_summary`. Unset inbound URL/secret skips handoff and does not fail capture.
 
-Proof harness (synthetic only): `npm run probe:money-asset:prod`. INBOUND NOW stays unproven until a real lead (or real rejection) meets a live destination with auto-send off.
+Published inspection (read-only, GET-only, no credential, never creates a lead): `npm run probe:money-asset:prod`. Authenticated synthetic capture/transport proof is `npm run probe:lead:prod` (`LEAD_PROBE_SECRET` required). INBOUND NOW stays unproven until a real lead (or real rejection) meets a live destination with auto-send off.
 
 ## Estados
 
