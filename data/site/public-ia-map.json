@@ -57,7 +57,7 @@
     },
     {
       "id": "public_works_b2g",
-      "label": "Minha medição foi glosada, ou tenho aditivo, atraso, reequilíbrio ou edital em contrato público",
+      "label": "Minha medição foi glosada ou o pagamento está travado em contrato público",
       "visitor_language": "Preciso decidir ou proteger margem em uma licitação ou contrato público",
       "href": "/servicos-obras-publicas/",
       "index_state": "index"

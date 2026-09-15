@@ -767,24 +767,56 @@ body[data-content-cluster="home"] .corporate-hero-note-lead{max-width:20ch;font-
   .hero-sample-line{font-size:.9rem}
 }
 
-/* Estimativas de altura por seção para content-visibility:auto (styles.css usa
-   900px genérico). Com a home reorganizada, o valor genérico deixava o
-   deslocamento de layout durante a rolagem grande o bastante para um toque
-   no formulário cair fora do botão. Valores medidos no artefato construído. */
+/* Estimativas de altura por seção para content-visibility:auto. styles.css
+   usa 900px genérico; com a home reorganizada, o deslocamento de layout ao
+   rolar até o formulário tirava o toque do botão (estimativa menor que o
+   real) ou colocava a âncora sob o cabeçalho fixo (estimativa maior que o
+   real). Valores medidos no artefato por faixa de largura: nunca acima do
+   real na faixa; exatos em 390 px, onde a jornada do formulário é testada. */
 @supports (content-visibility:auto){
-  html.js body[data-content-cluster="home"] main>#situacoes{contain-intrinsic-size:auto 2600px}
-  html.js body[data-content-cluster="home"] main>#descrever-situacao{contain-intrinsic-size:auto 320px}
-  html.js body[data-content-cluster="home"] main>section[data-section-archetype="authority_editorial"]{contain-intrinsic-size:auto 940px}
-  html.js body[data-content-cluster="home"] main>#obras-publicas{contain-intrinsic-size:auto 1000px}
-  html.js body[data-content-cluster="home"] main>#triagem-tecnica{contain-intrinsic-size:auto 540px}
-  html.js body[data-content-cluster="home"] main>#contato{contain-intrinsic-size:auto 1050px}
-  @media (max-width:700px){
-    html.js body[data-content-cluster="home"] main>#situacoes{contain-intrinsic-size:auto 3900px}
-    html.js body[data-content-cluster="home"] main>#descrever-situacao{contain-intrinsic-size:auto 550px}
+  /* As duas seções finais mudam de altura depois da hidratação (formulário em etapas, canais): ficam sempre renderizadas para a rolagem até o formulário não deslocar o alvo. */
+  html.js body[data-content-cluster="home"] main>#triagem-tecnica,
+  html.js body[data-content-cluster="home"] main>#contato{content-visibility:visible}
+  @media (max-width:375px){
+    html.js body[data-content-cluster="home"] main>#situacoes{contain-intrinsic-size:auto 4200px}
+    html.js body[data-content-cluster="home"] main>#descrever-situacao{contain-intrinsic-size:auto 600px}
     html.js body[data-content-cluster="home"] main>section[data-section-archetype="authority_editorial"]{contain-intrinsic-size:auto 1500px}
-    html.js body[data-content-cluster="home"] main>#obras-publicas{contain-intrinsic-size:auto 1360px}
-    html.js body[data-content-cluster="home"] main>#mercado-pncp{contain-intrinsic-size:auto 1450px}
-    html.js body[data-content-cluster="home"] main>#triagem-tecnica{contain-intrinsic-size:auto 640px}
-    html.js body[data-content-cluster="home"] main>#contato{contain-intrinsic-size:auto 1970px}
+    html.js body[data-content-cluster="home"] main>#obras-publicas{contain-intrinsic-size:auto 1400px}
+    html.js body[data-content-cluster="home"] main>#mercado-pncp{contain-intrinsic-size:auto 1500px}
+  }
+  @media (min-width:376px) and (max-width:414px){
+    html.js body[data-content-cluster="home"] main>#situacoes{contain-intrinsic-size:auto 3875px}
+    html.js body[data-content-cluster="home"] main>#descrever-situacao{contain-intrinsic-size:auto 544px}
+    html.js body[data-content-cluster="home"] main>section[data-section-archetype="authority_editorial"]{contain-intrinsic-size:auto 1493px}
+    html.js body[data-content-cluster="home"] main>#obras-publicas{contain-intrinsic-size:auto 1352px}
+    html.js body[data-content-cluster="home"] main>#mercado-pncp{contain-intrinsic-size:auto 1452px}
+  }
+  @media (min-width:415px) and (max-width:700px){
+    html.js body[data-content-cluster="home"] main>#situacoes{contain-intrinsic-size:auto 2780px}
+    html.js body[data-content-cluster="home"] main>#descrever-situacao{contain-intrinsic-size:auto 440px}
+    html.js body[data-content-cluster="home"] main>section[data-section-archetype="authority_editorial"]{contain-intrinsic-size:auto 1060px}
+    html.js body[data-content-cluster="home"] main>#obras-publicas{contain-intrinsic-size:auto 1080px}
+    html.js body[data-content-cluster="home"] main>#mercado-pncp{contain-intrinsic-size:auto 1140px}
+  }
+  @media (min-width:701px) and (max-width:900px){
+    html.js body[data-content-cluster="home"] main>#situacoes{contain-intrinsic-size:auto 2480px}
+    html.js body[data-content-cluster="home"] main>#descrever-situacao{contain-intrinsic-size:auto 440px}
+    html.js body[data-content-cluster="home"] main>section[data-section-archetype="authority_editorial"]{contain-intrinsic-size:auto 960px}
+    html.js body[data-content-cluster="home"] main>#obras-publicas{contain-intrinsic-size:auto 900px}
+    html.js body[data-content-cluster="home"] main>#mercado-pncp{contain-intrinsic-size:auto 1110px}
+  }
+  @media (min-width:901px) and (max-width:1100px){
+    html.js body[data-content-cluster="home"] main>#situacoes{contain-intrinsic-size:auto 2420px}
+    html.js body[data-content-cluster="home"] main>#descrever-situacao{contain-intrinsic-size:auto 260px}
+    html.js body[data-content-cluster="home"] main>section[data-section-archetype="authority_editorial"]{contain-intrinsic-size:auto 930px}
+    html.js body[data-content-cluster="home"] main>#obras-publicas{contain-intrinsic-size:auto 960px}
+    html.js body[data-content-cluster="home"] main>#mercado-pncp{contain-intrinsic-size:auto 760px}
+  }
+  @media (min-width:1101px){
+    html.js body[data-content-cluster="home"] main>#situacoes{contain-intrinsic-size:auto 2480px}
+    html.js body[data-content-cluster="home"] main>#descrever-situacao{contain-intrinsic-size:auto 280px}
+    html.js body[data-content-cluster="home"] main>section[data-section-archetype="authority_editorial"]{contain-intrinsic-size:auto 900px}
+    html.js body[data-content-cluster="home"] main>#obras-publicas{contain-intrinsic-size:auto 920px}
+    html.js body[data-content-cluster="home"] main>#mercado-pncp{contain-intrinsic-size:auto 760px}
   }
 }

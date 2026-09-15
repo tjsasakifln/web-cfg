@@ -333,9 +333,10 @@ def _services_situations() -> list[dict[str, Any]]:
                     "url": "/medicoes-glosas-obras-publicas/",
                     "title": f"Dossiê de Medição, Glosa e Pagamento: {_price_terms('CFG-D18')}",
                     "blurb": (
-                        "Cronologia com prova, diferença em reais entre medido e glosado, itens "
-                        "controvertidos e parcela incontroversa para protocolar a contestação. "
-                        "O órgão decide o ateste e o pagamento."
+                        "Um período de medição por unidade. Cronologia com prova, diferença em "
+                        "reais entre medido e glosado, itens controvertidos e parcela "
+                        "incontroversa para protocolar a contestação. O órgão decide o ateste e "
+                        "o pagamento."
                     ),
                 },
             ],
@@ -433,11 +434,11 @@ def _services_situations() -> list[dict[str, Any]]:
             ),
             "rows": [
                 {
-                    "url": "/triagem-tecnica/#planejamento-publico",
+                    "url": _whatsapp("orgao_planejamento"),
                     "title": "Conversar sobre a contratação que o órgão planeja",
                     "blurb": (
-                        "Sem formulário: descreva o objeto e a fase. A resposta nomeia o "
-                        "trabalho, o que o órgão recebe e o que falta reunir."
+                        "Sem formulário: descreva o objeto e a fase pelo WhatsApp. A resposta "
+                        "nomeia o trabalho, o que o órgão recebe e o que falta reunir."
                     ),
                 },
             ],
@@ -539,7 +540,7 @@ def _services_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
 <section class="lead-inline" data-commercial-route="medicoes-glosas" aria-label="Rota para medição, glosa e pagamento">
 <div class="lead-inline-copy"><span>Medição glosada ou retida</span>
 <strong>Dossiê de Medição, Glosa e Pagamento</strong>
-<p>{e(medicao)} após os documentos mínimos. Apuramos em reais o que está retido e escrevemos a posição que você apresenta ao fiscal. Não é petição jurídica nem promessa de recebimento.</p></div>
+<p>{e(medicao)} após os documentos mínimos, por medição ou glosa de um mesmo período. Apuramos em reais o que está retido, declaramos as lacunas e escrevemos a posição que você apresenta ao fiscal. Não é petição jurídica nem promessa de recebimento.</p></div>
 <div class="lead-inline-actions">
 <a class="button button-primary" data-asset-family="hub" data-asset-id="servicos-obras-publicas" data-cta-id="hub-servicos-medicoes-glosas" data-cta-position="hub_services" data-journey="contrato" data-route-family="medicoes-glosas" href="/medicoes-glosas-obras-publicas/">Avaliar o Dossiê de Medição, Glosa e Pagamento <svg class="icon"><use href="#i-arrow"></use></svg></a>
 </div>

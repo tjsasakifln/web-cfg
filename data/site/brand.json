@@ -27,15 +27,15 @@
     "eyebrow": "Engenharia, Perícias e Inteligência Técnica",
     "h1": "Assumimos a parte de engenharia que falta para você orçar, contratar ou decidir.",
     "h1_html": "Assumimos a parte de engenharia <span class=\"type-serif\">que falta para você orçar, contratar ou decidir.</span>",
-    "subheadline": "Comparar propostas de obra, completar ou conferir um projeto, entender uma infiltração, avaliar um imóvel ou responder a uma glosa: em obra pública ou privada, levantamos, calculamos, conferimos e assinamos o que falta.",
+    "subheadline": "Comparar propostas de obra, completar ou conferir um projeto, entender uma infiltração, avaliar um imóvel ou responder a uma glosa: em obra pública ou privada, levantamos, calculamos, conferimos e assumimos a responsabilidade técnica pelo que falta.",
     "cta_primary": "Ver serviços por situação",
     "cta_secondary": "Descrever a minha situação",
     "cta_secondary_wa": "Olá, Tiago. Quero conversar sobre um projeto ou serviço de engenharia e solicitar uma proposta.",
     "microcopy": "Conversa técnica no primeiro contato: a resposta nomeia o serviço, o que você recebe e o que falta reunir.",
     "meta_title": "CONFENGE | Engenharia, Perícias e Inteligência Técnica",
-    "meta_description": "Engenharia para orçar a obra, completar ou conferir o projeto, entender uma infiltração, avaliar um imóvel ou responder a uma glosa, em obra pública ou privada. Levantamos, calculamos, conferimos e assinamos o que falta.",
+    "meta_description": "Engenharia para orçar a obra, completar ou conferir o projeto, entender uma infiltração, avaliar um imóvel ou responder a uma glosa, em obra pública ou privada. Levantamos, calculamos, conferimos e assumimos a responsabilidade técnica pelo que falta.",
     "og_title": "Assumimos a parte de engenharia que falta para você orçar, contratar ou decidir.",
-    "og_description": "Comparar propostas de obra, completar ou conferir um projeto, entender uma infiltração, avaliar um imóvel ou responder a uma glosa: em obra pública ou privada, a CONFENGE levanta, calcula, confere e assina o que falta."
+    "og_description": "Comparar propostas de obra, completar ou conferir um projeto, entender uma infiltração, avaliar um imóvel ou responder a uma glosa: em obra pública ou privada, a CONFENGE levanta, calcula, confere e assume a responsabilidade técnica pelo que falta."
   },
   "journeys": [
     {
@@ -138,7 +138,7 @@
     },
     {
       "id": "public_works_b2g",
-      "label": "Minha medição foi glosada, ou tenho aditivo, atraso, reequilíbrio ou edital em contrato público",
+      "label": "Minha medição foi glosada ou o pagamento está travado em contrato público",
       "summary": "Quando edital, proposta, medição, glosa, aditivo, atraso ou margem exigem decisão técnica e registro contemporâneo.",
       "deliverables": "Dossiê técnico do evento, com cronologia, prova de cada número e parcela incontroversa; o órgão decide o ateste e o pagamento.",
       "href": "/servicos-obras-publicas/",
@@ -182,7 +182,7 @@
         "description": "Serviços da CONFENGE para construtoras em licitações e contratos de obras públicas: edital, medição e glosa, aditivo e atraso, reequilíbrio e margem, rotina de contratos, com preço e prazo publicados onde já existem.",
         "h1": "Serviços para licitações e contratos de obras públicas",
         "lead": "Glosa, aditivo, atraso, reequilíbrio ou edital: lemos o contrato e os registros, apuramos em reais o que está em jogo e escrevemos a posição técnica que você apresenta ao fiscal.",
-        "proof": "Onde o trabalho já tem preço e prazo publicados, eles aparecem aqui. Onde o preço depende do caso, a página diz o que a conversa inicial resolve. Serviços emitidos com ART e nota fiscal. Exemplos completos você consulta sem cadastro.",
+        "proof": "Onde o trabalho já tem preço e prazo publicados, eles aparecem aqui. Onde o preço depende do caso, a página diz o que a conversa inicial resolve. Serviços técnicos emitidos com ART e nota fiscal; a responsabilidade técnica é assumida na proposta, para o escopo contratado. Exemplos completos você consulta sem cadastro.",
         "eyebrow": "Edital, glosa ou aditivo",
         "proof_link": {
           "text": "Exemplos completos",
