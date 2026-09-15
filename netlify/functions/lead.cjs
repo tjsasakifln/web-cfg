@@ -28,7 +28,12 @@ const {
 const { createStore, buildLeadRecord } = require("./lib/lead-store.cjs");
 const { rateLimit } = require("./lib/lead-rate-limit.cjs");
 const { verifyTurnstile, deliverAll } = require("./lib/lead-delivery.cjs");
-const { initialHandoff, attemptInboundHandoff, postWebIntentToWarmbly } = require("./lib/inbound-handoff.cjs");
+const {
+  STATUS: HANDOFF_STATUS,
+  initialHandoff,
+  attemptInboundHandoff,
+  postWebIntentToWarmbly,
+} = require("./lib/inbound-handoff.cjs");
 const resultStore = require("./lib/live-intelligence-result-store.cjs");
 
 // Allow tests to inject store
@@ -434,6 +439,32 @@ exports.handler = async (event) => {
   }
   record.retention = retentionPolicy();
   record.handoff = initialHandoff(process.env, record);
+  // Persist-only probe: the operator asked for a durable record and nothing
+  // else. The row is born terminal (SKIPPED, next_attempt_at null) before it
+  // touches the store, so no crash window, restart or scheduled drain can ever
+  // transport it to Warmbly. Authenticated synthetic transport happens only
+  // synchronously at capture, under explicit operator action, and this header
+  // is the explicit action that withholds it.
+  const persistOnlyProbe = Boolean(
+    originCheck.probe &&
+      event.headers &&
+      String(
+        event.headers["x-confenge-probe-persist-only"] ||
+          event.headers["X-Confenge-Probe-Persist-Only"] ||
+          "",
+      ) === "1",
+  );
+  if (persistOnlyProbe) {
+    record.persist_only_probe = true;
+    record.handoff = {
+      target: "warmbly_inbound",
+      status: HANDOFF_STATUS.SKIPPED,
+      reason: "persist_only_probe",
+      attempts: 0,
+      last_error: null,
+      next_attempt_at: null,
+    };
+  }
 
   // Load establishment_digest from live-intelligence result if available.
   // This is server-side only and used for identity resolution in handoff.
@@ -564,16 +595,8 @@ exports.handler = async (event) => {
   });
 
   // Warmbly inbound after persist + outbox row. Failures never drop the lead
-  // or change the visitor capture response.
-  const persistOnlyProbe = Boolean(
-    originCheck.probe &&
-      event.headers &&
-      String(
-        event.headers["x-confenge-probe-persist-only"] ||
-          event.headers["X-Confenge-Probe-Persist-Only"] ||
-          "",
-      ) === "1",
-  );
+  // or change the visitor capture response. A persist-only probe was persisted
+  // already terminal (SKIPPED / persist_only_probe) and never crosses.
   if (persistOnlyProbe) {
     safeLog("info", "synthetic_probe_persist_only", { lead_id });
   } else {

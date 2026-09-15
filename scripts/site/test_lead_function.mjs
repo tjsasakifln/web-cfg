@@ -1778,6 +1778,72 @@ _reset();
     if (probedBody.ok !== true || !probedBody.lead_id) fail("authenticated_probe_body", probedBody);
     if (probedBody.status !== "persisted") fail("authenticated_probe_not_persisted", probedBody);
     pass("authenticated_probe_skips_turnstile_and_persists", { lead_id: probedBody.lead_id });
+
+    // Persist-only probe: with a live, resolvable inbound destination the row
+    // is still born terminal (SKIPPED / persist_only_probe, never due) and a
+    // scheduled drain never transports it. Zero POSTs reach Warmbly.
+    const inbound = require(path.join(root, "netlify/functions/lib/inbound-handoff.cjs"));
+    const { MemoryStore: ProbeMemoryStore } = require(path.join(root, "netlify/functions/lib/lead-store.cjs"));
+    const probeStore = new ProbeMemoryStore();
+    let POST_COUNT = 0;
+    process.env.CONFENGE_INBOUND_WEBHOOK_URL = "http://127.0.0.1:9/api/v1/webhooks/confenge/inbound";
+    process.env.CONFENGE_INBOUND_WEBHOOK_SECRET = "inbound-secret-fixture-with-at-least-32-chars";
+    inbound.setFetchForTests(async () => {
+      POST_COUNT += 1;
+      return { ok: true, status: 201, text: async () => "{}", json: async () => ({}) };
+    });
+    try {
+      if (inbound.resolveInboundConfig(process.env).ok !== true) {
+        fail("persist_only_fixture_destination_not_live", inbound.resolveInboundConfig(process.env));
+      }
+      reloaded.setStoreForTests(probeStore);
+      _reset();
+      const persistOnly = await reloaded.handler({
+        httpMethod: "POST",
+        headers: {
+          "content-type": "application/json",
+          "user-agent": "confenge-synthetic-probe/1.0",
+          "x-forwarded-for": "203.0.113.93",
+          "x-confenge-probe": probeSecret,
+          "x-confenge-probe-persist-only": "1",
+        },
+        body: JSON.stringify({ ...payload, email: "probe-persist-only@example.com", idempotency_key: "probe-persist-only-001" }),
+      });
+      const persistOnlyBody = JSON.parse(persistOnly.body);
+      if (persistOnly.statusCode !== 201 || !persistOnlyBody.lead_id) fail("persist_only_probe_capture", persistOnly);
+      const stored = await probeStore.get(persistOnlyBody.lead_id);
+      if (!stored || stored.synthetic_probe_authenticated !== true || stored.record_kind !== "synthetic") {
+        fail("persist_only_probe_classification", stored);
+      }
+      if (
+        stored.persist_only_probe !== true ||
+        !stored.handoff ||
+        stored.handoff.status !== "SKIPPED" ||
+        stored.handoff.reason !== "persist_only_probe" ||
+        stored.handoff.attempts !== 0 ||
+        stored.handoff.next_attempt_at !== null
+      ) fail("persist_only_probe_handoff_terminal", stored.handoff);
+      if (POST_COUNT !== 0) fail("persist_only_probe_posted_at_capture", POST_COUNT);
+      if (inbound.isDue(stored.handoff, new Date(Date.now() + 365 * 24 * 3600 * 1000))) {
+        fail("persist_only_probe_due", stored.handoff);
+      }
+      const drain = await inbound.drainPendingHandoffs(probeStore, { now: new Date(), env: process.env });
+      const afterDrain = await probeStore.get(persistOnlyBody.lead_id);
+      if (
+        !drain.ok ||
+        drain.attempted !== 0 ||
+        drain.delivered !== 0 ||
+        afterDrain.handoff.status !== "SKIPPED" ||
+        afterDrain.handoff.reason !== "persist_only_probe" ||
+        POST_COUNT !== 0
+      ) fail("persist_only_probe_drained", { drain, handoff: afterDrain.handoff, POST_COUNT });
+      pass("persist_only_probe_never_crosses", { lead_id: persistOnlyBody.lead_id, drain_attempted: drain.attempted });
+    } finally {
+      inbound.setFetchForTests(null);
+      delete process.env.CONFENGE_INBOUND_WEBHOOK_URL;
+      delete process.env.CONFENGE_INBOUND_WEBHOOK_SECRET;
+      reloaded.setStoreForTests(mem);
+    }
   } finally {
     for (const [key, value] of [
       ["TURNSTILE_SECRET_KEY", previous.secret],
