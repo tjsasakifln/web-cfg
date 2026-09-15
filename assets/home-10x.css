@@ -197,6 +197,7 @@ body[data-content-cluster="home"] .hero h1{
  * era carregado por uma serifa de sistema em verde escuro; agora e a mesma
  * familia numa linha propria,no verde que o campo escuro deixa respirar. */
 body[data-content-cluster="home"] .hero h1 .type-serif{display:block;color:var(--accent-live)}
+body[data-content-cluster="home"] .hero h1 .hero-br-mobile{display:none}
 body[data-content-cluster="home"] .hero-eyebrow{color:var(--accent-live)}
 body[data-content-cluster="home"] .hero-lead{
   max-width:50ch;margin:0 0 1.15rem;color:var(--field-muted);
@@ -747,6 +748,8 @@ body[data-content-cluster="home"] .corporate-hero-note-lead{max-width:20ch;font-
   body[data-content-cluster="home"] .hero{padding:1.1rem 0 1.1rem}
   body[data-content-cluster="home"] .hero-proof{gap:.2rem;padding-top:.6rem}
   body[data-content-cluster="home"] .hero h1{max-width:none;font-size:clamp(1.7rem,7.1vw,2.1rem);margin-bottom:.75rem}
+  /* Quebra fixa: a face de fallback e a Archivo dividem "Assumimos a parte / de engenharia" no mesmo ponto, sem deslocar o hero quando a fonte chega tarde. */
+  body[data-content-cluster="home"] .hero h1 .hero-br-mobile{display:inline}
   body[data-content-cluster="home"] .hero-lead{font-size:1rem;line-height:1.4;margin-bottom:.75rem}
   .hero-sample{margin-bottom:.65rem;padding:.5rem .7rem .55rem}
   .hero-sample-label{margin-bottom:.3rem}
@@ -762,4 +765,26 @@ body[data-content-cluster="home"] .corporate-hero-note-lead{max-width:20ch;font-
 @media (max-width:400px){
   body[data-content-cluster="home"] .hero h1{font-size:1.55rem}
   .hero-sample-line{font-size:.9rem}
+}
+
+/* Estimativas de altura por seção para content-visibility:auto (styles.css usa
+   900px genérico). Com a home reorganizada, o valor genérico deixava o
+   deslocamento de layout durante a rolagem grande o bastante para um toque
+   no formulário cair fora do botão. Valores medidos no artefato construído. */
+@supports (content-visibility:auto){
+  html.js body[data-content-cluster="home"] main>#situacoes{contain-intrinsic-size:auto 2600px}
+  html.js body[data-content-cluster="home"] main>#descrever-situacao{contain-intrinsic-size:auto 320px}
+  html.js body[data-content-cluster="home"] main>section[data-section-archetype="authority_editorial"]{contain-intrinsic-size:auto 940px}
+  html.js body[data-content-cluster="home"] main>#obras-publicas{contain-intrinsic-size:auto 1000px}
+  html.js body[data-content-cluster="home"] main>#triagem-tecnica{contain-intrinsic-size:auto 540px}
+  html.js body[data-content-cluster="home"] main>#contato{contain-intrinsic-size:auto 1050px}
+  @media (max-width:700px){
+    html.js body[data-content-cluster="home"] main>#situacoes{contain-intrinsic-size:auto 3900px}
+    html.js body[data-content-cluster="home"] main>#descrever-situacao{contain-intrinsic-size:auto 550px}
+    html.js body[data-content-cluster="home"] main>section[data-section-archetype="authority_editorial"]{contain-intrinsic-size:auto 1500px}
+    html.js body[data-content-cluster="home"] main>#obras-publicas{contain-intrinsic-size:auto 1360px}
+    html.js body[data-content-cluster="home"] main>#mercado-pncp{contain-intrinsic-size:auto 1450px}
+    html.js body[data-content-cluster="home"] main>#triagem-tecnica{contain-intrinsic-size:auto 640px}
+    html.js body[data-content-cluster="home"] main>#contato{contain-intrinsic-size:auto 1970px}
+  }
 }
