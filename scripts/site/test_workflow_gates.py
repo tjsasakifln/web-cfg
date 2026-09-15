@@ -108,6 +108,17 @@ def _assert_unfiltered_pull_request(path: Path, label: str) -> None:
         )
 
 
+def _step_block(job: str, step_name: str):
+    """Body of the named `- name:` step inside a job block, or None if absent."""
+    marker = f"- name: {step_name}\n"
+    start = job.find(marker)
+    if start < 0:
+        return None
+    rest = job[start + len(marker):]
+    end = rest.find("\n      - name:")
+    return rest if end < 0 else rest[:end]
+
+
 def test_site_ci_shape():
     text = _read(SITE_CI)
     errors: list[str] = []
@@ -182,9 +193,22 @@ def test_site_ci_shape():
         "npm run editorial:test",
         "npm run discovery:test",
         "npm run test:contact-journeys",
+        "npm run test:ativacao-01",
+        "npm run test:probe-inventory",
     ):
         if needle not in text:
             errors.append(f"site-ci missing required step command: {needle}")
+
+    # The read-only production inspection gate (#682) is a named step of the
+    # gates job whose body runs both fail-closed tests; the execution_evidence
+    # job requires it by that exact name (see the required-step list below).
+    inspection = _step_block(validation, "Money asset production inspection is read-only")
+    if inspection is None:
+        errors.append("site-ci gates job must keep the 'Money asset production inspection is read-only' step")
+    else:
+        for command in ("npm run test:ativacao-01", "npm run test:probe-inventory"):
+            if command not in inspection:
+                errors.append(f"'Money asset production inspection is read-only' step must run {command}")
 
     if text.find("npm run test:cluster-medicao-published") < text.find(
         "npm run build:site"
@@ -692,6 +716,7 @@ def test_required_execution_evidence_fails_closed_after_the_gate_job():
         "verify_required_execution.py",
         '--required-job site-validation',
         '--required-step "Contact and lead pathway gates"',
+        '--required-step "Money asset production inspection is read-only"',
         '--required-step "Final public-surface coverage and copy gate"',
         '--required-step "Build public site"',
         '--required-step "Playwright checklist on _site"',
