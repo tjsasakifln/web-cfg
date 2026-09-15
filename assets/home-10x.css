@@ -168,7 +168,6 @@ body[data-content-cluster="home"] .section-lead{
  * 1px --rule,largura do container. */
 body[data-content-cluster="home"] .section{padding:clamp(3.5rem,7vw,6rem) 0}
 body[data-content-cluster="home"] .section--tight{padding:0}
-body[data-content-cluster="home"] .section--loose{padding:clamp(4.25rem,8vw,7.5rem) 0}
 body[data-content-cluster="home"] .section-head{max-width:none;margin-bottom:clamp(2rem,4vw,3rem)}
 body[data-content-cluster="home"] .section-head h2{max-width:20ch}
 /* Cabecalho de secao em duas colunas: a tese a esquerda,a qualificacao a
@@ -231,9 +230,6 @@ body[data-content-cluster="home"] .hero-proof{
 }
 body[data-content-cluster="home"] .hero-proof li{color:var(--field-muted);font-size:.875rem;line-height:1.45}
 body[data-content-cluster="home"] .proof-mark{color:var(--accent-live)}
-body[data-content-cluster="home"] .hero-proof-line{margin:.7rem 0 0;color:var(--field-muted);font-size:var(--text-small)}
-body[data-content-cluster="home"] .hero-proof-line a{color:var(--field-ink);font-weight:400;text-decoration:underline;text-underline-offset:3px}
-body[data-content-cluster="home"] .hero-proof-line a:hover{color:var(--accent-live)}
 
 body[data-content-cluster="home"] .home-hero-grid{
   display:grid;grid-template-columns:minmax(0,1.12fr) minmax(272px,.68fr);
@@ -265,36 +261,9 @@ body[data-content-cluster="home"] .home-hero-grid{
  * argumento; 4,48 milhoes sem os 54.055 ao lado convida a leitura errada de
  * que ha 4,48 milhoes de contratos de engenharia. */
 .home-proof-strip{background:var(--soft);border-bottom:1px solid var(--rule)}
-.home-proof-strip-inner{
-  display:grid;grid-template-columns:minmax(0,1.2fr) repeat(2,minmax(0,.6fr));
-  gap:clamp(1.25rem,3vw,3rem);align-items:end;
-  padding-block:clamp(1.5rem,2.6vw,2.25rem);
-}
-.home-proof-strip-claim{
-  grid-row:1;margin:0;max-width:30ch;
-  color:var(--ink);font-size:clamp(1.02rem,1.5vw,1.2rem);font-weight:650;line-height:1.4;
-}
-.home-proof-strip-figures{display:contents;margin:0}
-.home-proof-strip-figures>div{display:grid;grid-template-rows:1fr auto;min-width:0}
-.home-proof-strip-figures dt{
-  color:#526275;font-stretch:var(--narrow);font-weight:750;
-  letter-spacing:.09em;text-transform:uppercase;font-size:var(--text-micro);line-height:1.35;
-}
-.home-proof-strip-figures dd{
-  margin:.4rem 0 0;color:var(--ink);font-stretch:var(--wide);font-weight:760;
-  letter-spacing:-.03em;line-height:1;font-size:clamp(1.5rem,2.4vw,2.1rem);
-}
-.home-proof-strip-base{
-  grid-column:1 / -1;max-width:82ch;margin:1rem 0 0;padding-top:.9rem;border-top:1px solid var(--rule);
-  color:#526275;font-size:var(--text-micro);line-height:1.5;
-}
-.home-proof-strip-base a{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
-.home-proof-strip-base a:hover{color:var(--accent)}
 
 /* ── 4. Tres portas: linha editorial{border-bottom:0}
 body[data-content-cluster="home"] #contrato-canal-seguro{max-width:58ch;color:var(--muted);font-size:.9rem;line-height:1.55}
-body[data-content-cluster="home"] .journey-alt-link{color:var(--muted);font-size:.9rem;text-underline-offset:3px}
-body[data-content-cluster="home"] .journey-alt-link:hover{color:var(--accent)}
 
 /* ── 5. Ofertas: uma tese dominante{
   display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);
@@ -364,8 +333,6 @@ cinza-azulado claro e lime pensados para esse fundo escuro.
 
 /* Vantagem proprietaria: beneficio primeiro,numero com procedencia depois. */
 .market-advantages{margin:1.5rem 0 0;padding-top:1.35rem;border-top:1px solid var(--rule)}
-.market-advantages-base{margin:1.1rem 0 0;color:var(--muted);font-size:.85rem;line-height:1.55;max-width:56ch}
-.market-advantages-base a{color:var(--ink);text-underline-offset:3px}
 
 /* ── 9. Autoridade e adequacao: sai o card{
   max-width:380px;padding:0;background:none;border:0;overflow:hidden;
@@ -374,12 +341,6 @@ cinza-azulado claro e lime pensados para esse fundo escuro.
  * placa usa a propria regua da home{
   width:100%;max-width:340px;background:var(--rule);
 }
-
-body[data-content-cluster="home"] .icp-contrast{border:0;border-top:2px solid var(--rule-strong);border-radius:0}
-body[data-content-cluster="home"] .icp-yes,body[data-content-cluster="home"] .icp-no{padding:1.5rem 0 0}
-body[data-content-cluster="home"] .icp-no{background:none;border-left:1px solid var(--rule);padding-left:clamp(1.25rem,3vw,2.5rem)}
-body[data-content-cluster="home"] .icp-yes{padding-right:clamp(1.25rem,3vw,2.5rem)}
-body[data-content-cluster="home"] .icp-contrast li{border-bottom:1px solid var(--rule)}
 
 /* Toda acao secundaria da home usa o mesmo contorno. Antes conviviam a pilula
  * do styles.css nas portas,outra no painel de evidencia e uma terceira no
@@ -448,10 +409,7 @@ body[data-content-cluster="home"] .site-footer{background:var(--navy-950)}
   body[data-content-cluster="home"] .hero-actions{margin-bottom:1rem}
   body[data-content-cluster="home"] .hero-proof{padding-top:.55rem}
 }
-@media (max-width:1100px){
-}
-@media (max-width:820px){
-}
+
 @media (max-width:700px){
   body[data-content-cluster="home"] .hero{padding:1.4rem 0 1.15rem}
   body[data-content-cluster="home"] .hero h1{font-size:clamp(1.95rem,7.5vw,2.4rem);max-width:none}
@@ -465,11 +423,6 @@ body[data-content-cluster="home"] .site-footer{background:var(--navy-950)}
    * nenhuma. Aqui esta a margem de seguranca,tirada do respiro e nao do
    * conteudo: nenhuma linha some. */
   .home-proof-strip-inner{grid-template-columns:repeat(2,minmax(0,1fr));gap:1.1rem 1.5rem}
-  .home-proof-strip-claim{grid-column:1 / -1;max-width:none;font-size:1.02rem}
-  .home-proof-strip-figures dd{font-size:1.45rem}
-  .home-proof-strip-base{margin-top:.55rem;padding-top:.75rem}
-  body[data-content-cluster="home"] .icp-no,body[data-content-cluster="home"] .icp-yes{padding-left:0;padding-right:0;border-left:0}
-  body[data-content-cluster="home"] .icp-no{border-top:1px solid var(--rule);margin-top:1.25rem;padding-top:1.25rem}
 }
 
 /* Abaixo de 400px (360px ainda e um terco do trafego movel brasileiro) a
@@ -535,7 +488,6 @@ body[data-content-cluster="home"] .hero-proof a{text-decoration:underline;text-u
 .situation-row--b2g .situation-index,.situation-row--b2g .situation-action .icon,.situation-kicker{color:var(--dark-accent)}
 .situation-row .situation-kicker{margin-bottom:.32rem;font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
 .chooser-more{margin:1.35rem 0 0;text-align:right}
-.home-deliverables{background:#fff}
 
 .trust-process-grid,.b2g-vertical-grid,.corporate-triage-grid,.corporate-boundary{
   display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:clamp(2.5rem,7vw,7rem);align-items:start;
@@ -565,26 +517,10 @@ body[data-content-cluster="home"] .hero-proof a{text-decoration:underline;text-u
 .triage-actions p{max-width:52ch;margin:.5rem 0 0;color:var(--muted);font-size:.88rem}
 
 body[data-content-cluster="corporate-services"]{font-family:"Archivo Var","Archivo Fallback",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
-.corporate-services-hero{padding-block:clamp(3.5rem,8vw,7rem);background:#fff;border-bottom:1px solid var(--line)}
-.corporate-services-hero h1{max-width:18ch;font-size:clamp(2.35rem,5vw,4.4rem)}
-.corporate-service-list{max-width:70rem}
-.corporate-service-row{display:grid;grid-template-columns:minmax(15rem,.7fr) minmax(0,1.3fr);gap:clamp(2rem,6vw,6rem);padding:2rem 0;border-top:1px solid var(--line)}
-.corporate-service-row>div:first-child{display:grid;grid-template-columns:2.5rem 1fr;gap:.75rem}
-.corporate-service-row h3{margin:0;font-size:clamp(1.15rem,2vw,1.55rem)}
-.corporate-service-row p{max-width:62ch;color:var(--muted)}
-.service-number{padding-top:.15rem;color:var(--green-700);font-size:.78rem;font-weight:800;letter-spacing:.08em}
-.service-output{padding-top:.85rem;border-top:1px solid var(--line);font-size:.92rem}
-.service-output strong{color:var(--ink)}
-.corporate-service-row--b2g{margin-inline:-1.5rem;padding-inline:1.5rem;color:#fff;background:#071a31;border-color:#071a31}
-.corporate-service-row--b2g h3,.corporate-service-row--b2g .service-output strong{color:#fff}
-.corporate-service-row--b2g p{color:#c1ccd6}
-.corporate-service-row--b2g .service-number{color:var(--lime)}
 /* The dark B2G variant recolours h3, p and the number but not links. `.text-link`
    inherits color:var(--ink) = #071a31, which is this row background, so the
    secondary CTA rendered at contrast 1.00 -- invisible, yet still focusable. */
 .corporate-service-row--b2g .text-link{color:#fff}
-.corporate-service-row--b2g .text-link:hover{color:var(--lime)}
-.corporate-boundary{padding-block:1rem}
 
 @media (max-width:900px){
   .corporate-section-head,.trust-process-grid,.b2g-vertical-grid,.corporate-triage-grid,.audience-layout,.corporate-boundary{grid-template-columns:1fr;gap:1.75rem}
@@ -609,8 +545,6 @@ body[data-content-cluster="corporate-services"]{font-family:"Archivo Var","Archi
   .chooser-more{text-align:left}
   .b2g-proof{grid-template-columns:1fr}
   .b2g-proof div:nth-child(even){padding-left:0;border-left:0}
-  .corporate-service-row{grid-template-columns:1fr;gap:1rem;padding:1.5rem 0}
-  .corporate-service-row--b2g{margin-inline:-1rem;padding-inline:1rem}
   .triage-actions,.triage-actions .button{width:100%}
 }
 /* No-JS honesty on the home capture form.
