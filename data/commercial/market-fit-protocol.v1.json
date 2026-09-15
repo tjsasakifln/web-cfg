@@ -1,109 +1,238 @@
 {
-  "schema": "confenge.market-fit-protocol/1.0",
-  "protocol_version": "CFG-MARKET-FIT-2026-08-25-v2",
+  "schema": "confenge.market-fit-protocol/1.1",
+  "protocol_version": "CFG-MARKET-FIT-2026-09-04-v3",
   "issue": "#336",
   "parent_issue": "#329",
+  "umbrella_issue": "#577",
+  "related_issues": ["#341", "#580", "#183", "#184"],
+  "campaign_id": 13,
   "state": "NOT_STARTED",
-  "principle": "Pesquisa documental prova que o problema existe no mercado. Não prova que o ICP da CONFENGE comprará esta embalagem, neste preço e agora. Nenhum preço-piloto é chamado de validado por opinião de modelo de linguagem, tráfego, entrevista elogiosa ou formulário sem proposta.",
+  "unique_human_protocol": true,
+  "second_study_forbidden": true,
+  "second_research_issue_forbidden": true,
+  "principle": "Pesquisa documental prova que o problema existe no mercado. Nao prova que o ICP da CONFENGE comprara esta embalagem, neste preco e agora. Nenhum preco-piloto e chamado de validado por opiniao de modelo de linguagem, trafego, entrevista elogiosa ou formulario sem proposta. Vinte entrevistas nao provam market share nem taxa universal. Quatro ou menos pessoas por nucleo e leitura qualitativa. CTR nao prova valor. Elogio nao prova disposicao a pagar. WTP nao substitui #341.",
   "reuses_human_session_machinery": "docs/research/icp-trust-session-v1",
+  "measurement_contract": "data/measurement/multivertical-event-metric-contract.v1.json",
+  "privacy_matrix": "data/measurement/privacy-matrix.v1.json",
+  "attribution_rules": "data/measurement/attribution-conservation.v1.json",
+  "sample_design": {
+    "n": 20,
+    "kind": "qualitative_predeclared_sample",
+    "not_market_share": true,
+    "not_statistical_significance": true,
+    "not_universal_rate": true,
+    "not_frozen_as_market_truth": true,
+    "single_revision_allowed_before_first_session": true,
+    "revision_must_keep_n": 20,
+    "revision_requires_documented_reason": true,
+    "protocol_immutable_after_first_session": true,
+    "recruitment_not_started": true,
+    "synthetic_human_evidence_forbidden": true,
+    "composition": [
+      {
+        "nucleus_id": "building_engineering_documentation",
+        "quota_id": "empresa_privada_engenharia",
+        "quota": 8,
+        "canary_priority": true,
+        "label_pt_br": "representantes de empresas privadas de engenharia, construcao ou incorporacao, prioridade do canario"
+      },
+      {
+        "nucleus_id": "expert_evidence_assistance",
+        "quota_id": "pericia_assistencia",
+        "quota": 3,
+        "canary_priority": false,
+        "label_pt_br": "usuarios de pericia ou assistencia tecnica, como advogado, empresa ou parte"
+      },
+      {
+        "nucleus_id": "property_valuation",
+        "quota_id": "avaliacao_imobiliaria",
+        "quota": 3,
+        "canary_priority": false,
+        "label_pt_br": "usuarios de avaliacao imobiliaria"
+      },
+      {
+        "nucleus_id": "occupational_safety",
+        "quota_id": "sst_gestao_contencioso",
+        "quota": 3,
+        "canary_priority": false,
+        "label_pt_br": "usuarios de SST, gestao ou contencioso trabalhista"
+      },
+      {
+        "nucleus_id": "public_works_b2g",
+        "quota_id": "comprador_b2g_atual",
+        "quota": 3,
+        "canary_priority": false,
+        "label_pt_br": "compradores B2G atuais"
+      }
+    ]
+  },
   "phases": [
     {
       "phase": 1,
-      "name": "Entrevistas de problema, sem mostrar o catálogo",
+      "name": "Entrevistas de problema, sem mostrar o catalogo",
       "status": "NOT_STARTED",
       "minimum_sample": 20,
       "quotas": [
-        { "role_id": "direcao", "role": "dono, sócio ou diretor", "minimum": 5, "focus_doors": ["GROW", "QUALIFY", "CLOSE"] },
-        { "role_id": "licitacoes_comercial", "role": "líder de licitações ou comercial", "minimum": 5, "focus_doors": ["GROW", "QUALIFY", "PROPOSE"] },
-        { "role_id": "engenharia_proposta", "role": "engenharia de proposta ou orçamento", "minimum": 5, "focus_doors": ["QUALIFY", "PROPOSE", "START"] },
-        { "role_id": "contratos_obra_financeiro", "role": "contratos, obra ou financeiro", "minimum": 5, "focus_doors": ["START", "PROTECT", "CLOSE"] }
+        {
+          "role_id": "empresa_privada_engenharia",
+          "nucleus_id": "building_engineering_documentation",
+          "role": "representante de empresa privada de engenharia, construcao ou incorporacao",
+          "minimum": 8,
+          "canary_priority": true,
+          "focus_doors": ["QUALIFY", "PROPOSE", "START"]
+        },
+        {
+          "role_id": "pericia_assistencia",
+          "nucleus_id": "expert_evidence_assistance",
+          "role": "usuario de pericia ou assistencia tecnica",
+          "minimum": 3,
+          "canary_priority": false,
+          "focus_doors": ["QUALIFY", "PROTECT", "CLOSE"]
+        },
+        {
+          "role_id": "avaliacao_imobiliaria",
+          "nucleus_id": "property_valuation",
+          "role": "usuario de avaliacao imobiliaria",
+          "minimum": 3,
+          "canary_priority": false,
+          "focus_doors": ["QUALIFY", "PROPOSE", "CLOSE"]
+        },
+        {
+          "role_id": "sst_gestao_contencioso",
+          "nucleus_id": "occupational_safety",
+          "role": "usuario de SST, gestao ou contencioso trabalhista",
+          "minimum": 3,
+          "canary_priority": false,
+          "focus_doors": ["QUALIFY", "PROTECT", "CLOSE"]
+        },
+        {
+          "role_id": "comprador_b2g_atual",
+          "nucleus_id": "public_works_b2g",
+          "role": "comprador B2G atual",
+          "minimum": 3,
+          "canary_priority": false,
+          "focus_doors": ["GROW", "QUALIFY", "CLOSE"]
+        }
       ],
       "maturity_requirement": {
-        "statement": "pelo menos 14 de 20 com licitação ou contrato ativo nos últimos 12 meses",
-        "minimum_participants": 14,
-        "of_sample": 20,
-        "lookback_months": 12
+        "statement": "cada nucleo exige atividade recente no dominio da quota; contrato publico e exigido somente para compradores B2G atuais",
+        "per_nucleus": true,
+        "lookback_months": 24,
+        "public_contract_required_only_for": ["public_works_b2g"]
       },
-      "icp_scope": "empresa média com carteira pública material",
+      "icp_scope": "amostra qualitativa predeclarada nos cinco nucleos, sem pretensao de market share",
       "consent_required": true,
       "raw_notes_required": true,
       "behavior_probes": [
-        "última oportunidade recusada ou ruim aceita",
-        "última inabilitação ou diligência",
-        "última erosão de margem, glosa, atraso, reajuste ou pleito",
-        "custo em horas, caixa, atraso e decisão",
-        "solução tentada, quem decidiu, orçamento e por que comprou ou não comprou",
-        "trigger que faria agir em até 30 dias"
+        "ultima oportunidade recusada ou ruim aceita",
+        "ultima inabilitacao, diligencia, laudo, avaliacao ou exigencia documental",
+        "ultima erosao de margem, glosa, atraso, reajuste, pleito ou impasse tecnico",
+        "custo em horas, caixa, atraso e decisao",
+        "solucao tentada, quem decidiu, orcamento e por que comprou ou nao comprou",
+        "trigger que faria agir em ate 30 dias"
       ],
       "forbidden": "não perguntar se compraria antes de reconstruir comportamento real"
     },
     {
       "phase": 2,
-      "name": "Card sort e compreensão",
+      "name": "Roteiro unico de tarefas multi-vertical",
       "status": "NOT_STARTED",
-      "shown_only_after": "entrevista de problema concluída",
-      "catalogue_size": 54,
-      "cards_per_participant": 18,
-      "boundary_cards_per_participant": 4,
-      "min_exposures_per_item": 6,
-      "min_joint_exposures_per_critical_boundary": 3,
-      "critical_boundaries": [
-        { "boundary_id": "disputar_habilitar", "deliverable_ids": ["CFG-D12", "CFG-D13"] },
-        { "boundary_id": "habilitar_orcamento", "deliverable_ids": ["CFG-D13", "CFG-D14"] },
-        { "boundary_id": "orcamento_proposta", "deliverable_ids": ["CFG-D14", "CFG-D16"] },
-        { "boundary_id": "risco_margem_medicao", "deliverable_ids": ["CFG-D17", "CFG-D18"] },
-        { "boundary_id": "medicao_atraso", "deliverable_ids": ["CFG-D18", "CFG-D19"] },
-        { "boundary_id": "medicao_reequilibrio", "deliverable_ids": ["CFG-D18", "CFG-D22"] },
-        { "boundary_id": "reequilibrio_aditivo", "deliverable_ids": ["CFG-D22", "CFG-D23"] },
-        { "boundary_id": "mobilizacao_matriz", "deliverable_ids": ["CFG-D33", "CFG-D34"] },
-        { "boundary_id": "encerramento_acervo", "deliverable_ids": ["CFG-D36", "CFG-D37"] },
-        { "boundary_id": "orcamento_habilitacao", "deliverable_ids": ["CFG-D49", "CFG-D51"] },
-        { "boundary_id": "habilitacao_proposta_tecnica", "deliverable_ids": ["CFG-D51", "CFG-D52"] },
-        { "boundary_id": "proposta_tecnica_revisao", "deliverable_ids": ["CFG-D52", "CFG-D53"] },
-        { "boundary_id": "revisao_sessao", "deliverable_ids": ["CFG-D53", "CFG-D54"] }
+      "shown_only_after": "entrevista de problema concluida",
+      "unique_task_script": "docs/research/market-fit-v1/TASK-SCRIPT.md",
+      "questions_must_be_non_inductive": true,
+      "recording": [
+        "fala anonimizavel",
+        "hesitacao",
+        "backtrack",
+        "escolha",
+        "REPEAT | CHANGE | STOP"
       ],
-      "randomize_card_order_within_block": true,
-      "price_revealed_after_task_sorting": true,
-      "exposure_matrix_frozen_before_sessions": true,
-      "cards_may_be_swapped_to_chase_result": false,
-      "exposure_rules": [
-        "cada um dos 54 entregáveis aparece para pelo menos 6 participantes",
-        "ofertas vizinhas e fronteiras críticas aparecem juntas para pelo menos 3 participantes",
-        "cada pessoa recebe as trilhas mais próximas do seu papel mais quatro cartões de fronteira",
-        "ordem dos cartões é randomizada dentro do bloco",
-        "primeiro classificar por situação ou tarefa sem preço; depois revelar saída, preço e SLA",
-        "o desenho e a matriz de exposição são salvos antes das sessões; não trocar cartões para perseguir resultado"
+      "repeat_change_stop": ["REPEAT", "CHANGE", "STOP"],
+      "tasks": [
+        {
+          "id": "explain_confenge_3_to_5s",
+          "prompt_pt_br": "Depois de ver a primeira tela por tres a cinco segundos, o que e a CONFENGE?"
+        },
+        {
+          "id": "choose_nucleus",
+          "prompt_pt_br": "Onde voce iria se o problema fosse o seu, nao o nosso?"
+        },
+        {
+          "id": "find_first_action",
+          "prompt_pt_br": "Qual seria o primeiro passo concreto daqui?"
+        },
+        {
+          "id": "use_canary_09",
+          "prompt_pt_br": "Use o canario local da campanha 09 como se fosse o seu caso. O que acontece?"
+        },
+        {
+          "id": "predict_triage_result",
+          "prompt_pt_br": "Se voce enviasse esta triagem, o que espera que aconteca em seguida?"
+        },
+        {
+          "id": "understand_credential_and_limit",
+          "prompt_pt_br": "O que esta pagina diz que a CONFENGE pode e nao pode assumir?"
+        },
+        {
+          "id": "distinguish_service_free_intel_formal_work",
+          "prompt_pt_br": "O que aqui e servico, o que e inteligencia gratuita e o que e trabalho formal?"
+        },
+        {
+          "id": "identify_b2g_without_feeling_removed",
+          "prompt_pt_br": "Obras publicas ainda existem neste site? Como voce sabe?"
+        },
+        {
+          "id": "evaluate_artifact_use",
+          "prompt_pt_br": "Se voce recebesse este artefato, o que faria com ele amanha?"
+        },
+        {
+          "id": "explain_internal_alternative",
+          "prompt_pt_br": "Se nao contratasse ninguem, o que faria internamente?"
+        },
+        {
+          "id": "react_to_price_only_when_published",
+          "prompt_pt_br": "Se houver preco publicado nesta tela, o que ele comunica? Se nao houver, nao invente um preco."
+        },
+        {
+          "id": "point_data_would_not_send_on_public_form",
+          "prompt_pt_br": "Que dado desta situacao voce nao enviaria em um formulario publico?"
+        }
       ],
-      "measures": [
-        "agrupamento espontâneo",
-        "nome confundido",
-        "tarefa escolhida",
-        "percepção de sobreposição",
-        "valor percebido",
-        "informação faltante",
-        "escolha entre fazer internamente, comprar pontual ou contratar rotina"
-      ],
-      "invariant": "preservar as oito entregas atuais; baixa prioridade muda destaque ou embalagem, nunca apaga"
+      "price_revealed_only_when_published": true,
+      "wtp_does_not_replace_issue_341": true,
+      "ctr_is_not_value": true,
+      "praise_is_not_wtp": true,
+      "b2g_catalog_instrument": {
+        "applies_to_nucleus": "public_works_b2g",
+        "catalogue_size": 54,
+        "coverage_claim": "qualitative_only",
+        "not_market_share_proof": true,
+        "not_required_for_unique_sample_validity": true,
+        "cards_may_be_swapped_to_chase_result": false
+      },
+      "invariant": "preservar B2G como nucleo de autoridade; baixa prioridade muda destaque ou embalagem, nunca apaga"
     },
     {
       "phase": 3,
-      "name": "Evidência comercial agregada do sistema proprietário",
+      "name": "Evidencia comercial agregada do sistema proprietario, por nucleo",
       "status": "NOT_STARTED",
       "system_of_action": "warmbly",
       "supervision_owner": "governance_control_center",
-      "web_cfg_role": "consumir contrato SELECT-only agregado para decisões de apresentação, preço e promoção; não operar contato, proposta, cadência ou outcome",
+      "web_cfg_role": "consumir contrato SELECT-only agregado para decisoes de apresentacao, preco e promocao; não operar contato, proposta, cadencia ou outcome",
+      "qco_source_of_truth": "warmbly_aggregate",
+      "client_side_qco_forbidden": true,
       "measurement_scope": [
-        { "rank": 1, "deliverable_id": "CFG-D01", "label": "Radar", "price_brl_label": "R$ 599", "amount_cents": 59900, "matches_published_unit_price": true },
-        { "rank": 2, "deliverable_id": "CFG-D12", "label": "decisão de disputar", "price_brl_label": "R$ 1.900", "amount_cents": 190000, "matches_published_unit_price": true },
-        { "rank": 3, "deliverable_id": "CFG-D14", "label": "Auditoria de Orçamento/BDI", "price_brl_label": "R$ 5.900", "amount_cents": 590000, "matches_published_unit_price": false },
-        { "rank": 4, "deliverable_id": "CFG-D17", "label": "Diagnóstico de Riscos à Margem", "price_brl_label": "R$ 2.900", "amount_cents": 290000, "matches_published_unit_price": false },
-        { "rank": 5, "deliverable_id": "CFG-D18", "label": "Dossiê de Medição/Glosa", "price_brl_label": "R$ 4.900", "amount_cents": 490000, "matches_published_unit_price": false },
-        { "rank": 6, "deliverable_id": "CFG-D22", "label": "Dossiê de Reequilíbrio", "price_brl_label": "R$ 7.900", "amount_cents": 790000, "matches_published_unit_price": false },
-        { "rank": 7, "deliverable_id": "CFG-D49", "label": "Orçamento Completo da Proposta", "price_brl_label": "R$ 9.800", "amount_cents": 980000, "matches_published_unit_price": false },
-        { "rank": 8, "deliverable_id": "CFG-D51", "label": "Dossiê de Habilitação Pronto para Envio", "price_brl_label": "R$ 4.900", "amount_cents": 490000, "matches_published_unit_price": false }
+        { "rank": 1, "deliverable_id": "CFG-D01", "label": "Radar", "price_brl_label": "R$ 599", "amount_cents": 59900, "matches_published_unit_price": true, "nucleus_id": "public_works_b2g" },
+        { "rank": 2, "deliverable_id": "CFG-D12", "label": "decisao de disputar", "price_brl_label": "R$ 1.900", "amount_cents": 190000, "matches_published_unit_price": true, "nucleus_id": "public_works_b2g" },
+        { "rank": 3, "deliverable_id": "CFG-D14", "label": "Auditoria de Orcamento/BDI", "price_brl_label": "R$ 5.900", "amount_cents": 590000, "matches_published_unit_price": false, "nucleus_id": "public_works_b2g" },
+        { "rank": 4, "deliverable_id": "CFG-D17", "label": "Diagnostico de Riscos a Margem", "price_brl_label": "R$ 2.900", "amount_cents": 290000, "matches_published_unit_price": false, "nucleus_id": "public_works_b2g" },
+        { "rank": 5, "deliverable_id": "CFG-D18", "label": "Dossie de Medicao/Glosa", "price_brl_label": "R$ 4.900", "amount_cents": 490000, "matches_published_unit_price": false, "nucleus_id": "public_works_b2g" },
+        { "rank": 6, "deliverable_id": "CFG-D22", "label": "Dossie de Reequilibrio", "price_brl_label": "R$ 7.900", "amount_cents": 790000, "matches_published_unit_price": false, "nucleus_id": "public_works_b2g" },
+        { "rank": 7, "deliverable_id": "CFG-D49", "label": "Orcamento Completo da Proposta", "price_brl_label": "R$ 9.800", "amount_cents": 980000, "matches_published_unit_price": false, "nucleus_id": "public_works_b2g" },
+        { "rank": 8, "deliverable_id": "CFG-D51", "label": "Dossie de Habilitacao Pronto para Envio", "price_brl_label": "R$ 4.900", "amount_cents": 490000, "matches_published_unit_price": false, "nucleus_id": "public_works_b2g" }
       ],
       "deliverable_registry_ref": {
-        "note": "os identificadores CFG-D** são definidos pelo registro do catálogo ampliado, que chega em #329; este protocolo não carrega o registro e não depende dele para valer",
+        "note": "os identificadores CFG-D** sao definidos pelo registro do catalogo ampliado, que chega em #329; este protocolo nao carrega o registro e nao depende dele para valer",
         "loaded_by_this_gate": false
       },
       "recommendation_rule": {
@@ -114,14 +243,14 @@
       "decision_states": ["ACEITOU", "NEGOCIOU", "RECUSOU", "SEM DECISÃO"],
       "individual_decision_reason_in_repository": false,
       "record_fields": [
-        "contagens agregadas por entregável e versão de preço",
-        "propostas e decisões agregadas",
+        "contagens agregadas por nucleo, entregavel e versao de preco",
+        "propostas e decisoes agregadas",
         "pagamentos, entregas e outcomes agregados ou UNKNOWN",
         "hash e janela do export do Warmbly",
         "desvio agregado de horas, margem e claims proibidos"
       ],
       "pricing_discipline": {
-        "statement": "sem desconto silencioso; teste de preço usa versões explícitas e sequência registrada, nunca preços diferentes para pessoas equivalentes sem registro",
+        "statement": "sem desconto silencioso; teste de preco usa versoes explicitas e sequencia registrada, nunca precos diferentes para pessoas equivalentes sem registro",
         "silent_discount_allowed": false,
         "price_versions_must_be_explicit": true
       }
@@ -131,18 +260,18 @@
     "source": "entregas/index.html",
     "count": 8,
     "cents": [59900, 69000, 89000, 120000, 145000, 190000, 240000, 375000],
-    "change_requires": "decisão posterior com evidência paga agregada do Warmbly e revisão de Governance"
+    "change_requires": "decisao posterior com evidência paga agregada do Warmbly e revisao de Governance"
   },
   "score_dimensions": [
-    "frequência do trigger",
-    "severidade econômica",
-    "urgência",
-    "sponsor ou budget owner identificável",
-    "suficiência de dados",
+    "frequencia do trigger",
+    "severidade economica",
+    "urgencia",
+    "sponsor ou budget owner identificavel",
+    "suficiencia de dados",
     "vantagem CONFENGE",
     "repetibilidade e reuso",
     "margem de entrega",
-    "ponte natural para a próxima oferta",
+    "ponte natural para a proxima oferta",
     "prova observada de compra"
   ],
   "score_range": { "min": 0, "max": 5 },
@@ -153,7 +282,7 @@
       "criteria": [
         { "id": "recent_concrete_triggers", "evidence_class": "problem", "kind": "min_count", "field": "recent_concrete_triggers", "min": 3, "statement": "pelo menos 3 triggers recentes e concretos no ICP" },
         { "id": "qualified_handraises", "evidence_class": "solution", "kind": "min_count", "field": "qualified_handraises", "min": 2, "statement": "pelo menos 2 handraises qualificados" },
-        { "id": "plausible_proposals", "evidence_class": "price", "kind": "min_count", "field": "plausible_proposals_at_published_price", "min": 1, "statement": "pelo menos 1 proposta plausível no preço publicado" },
+        { "id": "plausible_proposals", "evidence_class": "price", "kind": "min_count", "field": "plausible_proposals_at_published_price", "min": 1, "statement": "pelo menos 1 proposta plausivel no preco publicado" },
         { "id": "scope_hours_tolerance", "evidence_class": "delivery", "kind": "max_abs_pct", "field": "delivery_hours_deviation_pct", "max_abs": 25, "statement": "escopo entregue dentro de mais ou menos 25 por cento das horas previstas" },
         { "id": "positive_margin", "evidence_class": "delivery", "kind": "must_be_true", "field": "margin_positive", "statement": "margem positiva" },
         { "id": "no_forbidden_claim", "evidence_class": "delivery", "kind": "must_be_true", "field": "no_forbidden_claim", "statement": "sem claim proibido" }
@@ -165,10 +294,10 @@
       "requires_problem_evidence_at_promote_threshold": true,
       "repeated_negotiation_point_threshold": null,
       "signals": [
-        "problema forte, mas confusão de nome ou escopo",
-        "negociação recorrente do mesmo ponto",
+        "problema forte, mas confusao de nome ou escopo",
+        "negociacao recorrente do mesmo ponto",
         "entrega artesanal demais",
-        "dependência de dados com cobertura insuficiente"
+        "dependencia de dados com cobertura insuficiente"
       ]
     },
     "HOLD": {
@@ -179,10 +308,10 @@
         "curiosidade sem why-now",
         "comprador indefinido",
         "dados fundamentais UNKNOWN",
-        "zero proposta plausível após 5 oportunidades comerciais qualificadas elegíveis"
+        "zero proposta plausivel apos 5 oportunidades comerciais qualificadas elegiveis"
       ],
       "effect": {
-        "statement": "HOLD não remove item do catálogo cumulativo; impede promoção, checkout e automação",
+        "statement": "HOLD nao remove nucleo nem item do catalogo cumulativo; impede promocao, checkout e automacao",
         "removes_from_catalogue": false,
         "blocks_promotion": true,
         "blocks_checkout": true,
@@ -192,7 +321,23 @@
   },
   "instrumentation": {
     "funnel": ["view", "detail", "example", "handraise", "qco", "proposal", "paid", "delivered", "outcome", "expansion"],
-    "attributes": ["route_family", "deliverable_id", "price_version", "trigger", "deadline", "decision_state"],
+    "attributes": [
+      "source_landing_family",
+      "source_asset",
+      "nucleus_id",
+      "offer_candidate",
+      "city_service_area_class",
+      "urgency",
+      "decision_role",
+      "why_now_class",
+      "route_family",
+      "deliverable_id",
+      "price_version",
+      "trigger",
+      "deadline",
+      "decision_state"
+    ],
+    "qco_proposal_revenue_admission": "observed_only",
     "pii_in_analytics": false,
     "action_and_outcome_owner": "warmbly",
     "web_cfg_is_crm": false
@@ -201,16 +346,30 @@
     "client_or_case_exposure_requires": ["#249", "#328"],
     "inferred_sale_or_willingness_to_pay_allowed": false
   },
+  "decision_limits": {
+    "n20_does_not_prove_market_share": true,
+    "n20_does_not_prove_universal_rate": true,
+    "four_or_fewer_per_nucleus_is_qualitative": true,
+    "ctr_is_not_value": true,
+    "praise_is_not_wtp": true,
+    "wtp_does_not_replace_issue_341": true,
+    "protocol_not_mutated_after_seeing_results": true
+  },
   "execution_package": {
     "status": "INSTRUMENT_READY_HUMAN_EVIDENCE_PENDING",
     "root": "docs/research/market-fit-v1",
     "runbook": "docs/research/market-fit-v1/RUNBOOK.md",
+    "task_script": "docs/research/market-fit-v1/TASK-SCRIPT.md",
+    "consent": "docs/research/market-fit-v1/CONSENT-MINIMIZATION.md",
+    "analysis_template": "docs/research/market-fit-v1/ANALYSIS-TEMPLATE.md",
+    "decision_criteria": "docs/research/market-fit-v1/DECISION-CRITERIA.md",
     "exposure_plan": "data/commercial/market-fit-exposure-plan.v1.json",
     "exposure_plan_generator": "scripts/commercial/market_fit_exposure_plan.mjs",
     "evidence_validator": "scripts/commercial/market_fit_evidence.mjs",
     "research_aggregate_template": "docs/research/market-fit-v1/templates/research-aggregate.template.json",
     "qco_aggregate_template": "docs/research/market-fit-v1/templates/qco-aggregate.template.json",
     "decision_template": "docs/research/market-fit-v1/templates/product-decisions.template.json",
+    "session_log_template": "docs/research/market-fit-v1/templates/session-log.template.json",
     "private_data_destination": "armazenamento operacional privado",
     "commercial_action_owner": "warmbly",
     "repository_accepts_individual_records": false,
