@@ -22,6 +22,10 @@ delete process.env.CONFENGE_INBOUND_WEBHOOK_URL;
 delete process.env.CONFENGE_INBOUND_WEBHOOK_SECRET;
 delete process.env.RESEND_API_KEY;
 delete process.env.NTFY_URL;
+// The canary-disabled proof below must not depend on an ambient shell export:
+// the versioned flag (data/conversion/canary-flag.json, enabled:false) is the
+// only thing deciding the first hand-raise call.
+delete process.env.CONVERSION_CANARY;
 
 const { FileStore } = require("../../netlify/functions/lib/lead-store.cjs");
 const intake = require("../../netlify/functions/market-answer-intake.cjs");
@@ -131,6 +135,7 @@ process.stdout.write(JSON.stringify({
   context: process.env.CONTEXT,
   missing_token_http: missing.statusCode,
   wrong_probe_http: wrong.statusCode,
+  canary_disabled_http: gated.statusCode,
   authenticated_probe_http: correct.statusCode,
   record_kind: persisted.record_kind,
   commercial_next_action: persisted.next_action,
