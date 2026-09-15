@@ -122,7 +122,7 @@
         {
           "prerequisite": "CONFENGE_INBOUND_WEBHOOK_URL",
           "status": "UNSET",
-          "note": "Set on Netlify production to https://api.confenge.com.br/api/v1/webhooks/confenge/inbound"
+          "note": "Set in /etc/confenge-web/runtime.env to https://api.confenge.com.br/api/v1/webhooks/confenge/inbound"
         },
         {
           "prerequisite": "CONFENGE_INBOUND_WEBHOOK_SECRET",
@@ -135,7 +135,7 @@
           "note": "No matching Warmbly receipt/action was observed for a real persisted lead."
         }
       ],
-      "next_command": "# Netlify production\nCONFENGE_INBOUND_WEBHOOK_URL=https://api.confenge.com.br/api/v1/webhooks/confenge/inbound\nCONFENGE_INBOUND_WEBHOOK_SECRET=<shared>\n# Warmbly\nCONFENGE_AUTO_SEND_ENABLED=false\n# This shell, to read ops counters\nexport OPS_TOKEN='<production ops token>'\nexport CONFENGE_AUTO_SEND_EVIDENCE=OFF\nnode scripts/site/money_asset_prod_proof.mjs https://confenge.com.br\n# Then a consented real visitor uses /ferramentas/diagnostico-defesa-margem/.\n# Do not invent a person. Do not send WhatsApp/email from this repo.",
+      "next_command": "# Production EnvironmentFile /etc/confenge-web/runtime.env\nCONFENGE_INBOUND_WEBHOOK_URL=https://api.confenge.com.br/api/v1/webhooks/confenge/inbound\nCONFENGE_INBOUND_WEBHOOK_SECRET=<shared>\n# Warmbly\nCONFENGE_AUTO_SEND_ENABLED=false\n# This shell: read-only inspection of the published asset (GET only, no token)\nnode scripts/site/money_asset_prod_proof.mjs https://confenge.com.br\n# Then a consented real visitor uses /ferramentas/diagnostico-defesa-margem/.\n# Do not invent a person. Do not send WhatsApp/email from this repo.",
       "residual": [
         "consented_real_contact",
         "CONFENGE_INBOUND_WEBHOOK_URL",
@@ -178,7 +178,7 @@
       "CONFENGE_INBOUND_WEBHOOK_SECRET",
       "Warmbly receipt/action"
     ],
-    "next_command": "# Netlify production\nCONFENGE_INBOUND_WEBHOOK_URL=https://api.confenge.com.br/api/v1/webhooks/confenge/inbound\nCONFENGE_INBOUND_WEBHOOK_SECRET=<shared>\n# Warmbly\nCONFENGE_AUTO_SEND_ENABLED=false\n# This shell, to read ops counters\nexport OPS_TOKEN='<production ops token>'\nexport CONFENGE_AUTO_SEND_EVIDENCE=OFF\nnode scripts/site/money_asset_prod_proof.mjs https://confenge.com.br\n# Then a consented real visitor uses /ferramentas/diagnostico-defesa-margem/.\n# Do not invent a person. Do not send WhatsApp/email from this repo.",
+    "next_command": "# Production EnvironmentFile /etc/confenge-web/runtime.env\nCONFENGE_INBOUND_WEBHOOK_URL=https://api.confenge.com.br/api/v1/webhooks/confenge/inbound\nCONFENGE_INBOUND_WEBHOOK_SECRET=<shared>\n# Warmbly\nCONFENGE_AUTO_SEND_ENABLED=false\n# This shell: read-only inspection of the published asset (GET only, no token)\nnode scripts/site/money_asset_prod_proof.mjs https://confenge.com.br\n# Then a consented real visitor uses /ferramentas/diagnostico-defesa-margem/.\n# Do not invent a person. Do not send WhatsApp/email from this repo.",
     "kill_gate": {
       "reduces_risk": true,
       "reduces_time_to_evidence": true,
@@ -191,7 +191,7 @@
   "real_loop": {
     "status": "BLOCKED",
     "prerequisite": "consented_real_contact",
-    "next_command": "# Netlify production\nCONFENGE_INBOUND_WEBHOOK_URL=https://api.confenge.com.br/api/v1/webhooks/confenge/inbound\nCONFENGE_INBOUND_WEBHOOK_SECRET=<shared>\n# Warmbly\nCONFENGE_AUTO_SEND_ENABLED=false\n# This shell, to read ops counters\nexport OPS_TOKEN='<production ops token>'\nexport CONFENGE_AUTO_SEND_EVIDENCE=OFF\nnode scripts/site/money_asset_prod_proof.mjs https://confenge.com.br\n# Then a consented real visitor uses /ferramentas/diagnostico-defesa-margem/.\n# Do not invent a person. Do not send WhatsApp/email from this repo.",
+    "next_command": "# Production EnvironmentFile /etc/confenge-web/runtime.env\nCONFENGE_INBOUND_WEBHOOK_URL=https://api.confenge.com.br/api/v1/webhooks/confenge/inbound\nCONFENGE_INBOUND_WEBHOOK_SECRET=<shared>\n# Warmbly\nCONFENGE_AUTO_SEND_ENABLED=false\n# This shell: read-only inspection of the published asset (GET only, no token)\nnode scripts/site/money_asset_prod_proof.mjs https://confenge.com.br\n# Then a consented real visitor uses /ferramentas/diagnostico-defesa-margem/.\n# Do not invent a person. Do not send WhatsApp/email from this repo.",
     "note": "Did not POST a person. Did not send WhatsApp/email."
   }
 }
