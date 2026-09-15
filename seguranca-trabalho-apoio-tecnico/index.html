@@ -15,22 +15,35 @@
 <link href="/styles.css" rel="stylesheet"/>
 <link href="/triagem-tecnica/styles.css" rel="stylesheet"/>
 <style data-sst-critical="">
-.sst-hero{padding-block:clamp(3rem,7vw,6rem);background:#fff;border-bottom:1px solid var(--line)}
-.sst-hero-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(17rem,.65fr);gap:clamp(2rem,6vw,5rem);align-items:center}
-.sst-hero h1{max-width:20ch;margin-bottom:1rem;font-size:clamp(2.25rem,5vw,4.2rem)}
-.sst-lead{max-width:58ch;color:var(--muted);font-size:clamp(1rem,1.5vw,1.16rem)}
+.sst-hero{padding-block:clamp(1.6rem,3vw,2.8rem);background:#fff;border-bottom:1px solid var(--line)}
+.sst-hero-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(17rem,.65fr);gap:clamp(2rem,6vw,5rem);align-items:start}
+.sst-hero h1{max-width:20ch;margin-bottom:.7rem;font-size:clamp(1.9rem,3.6vw,3rem)}
+.sst-lead{max-width:60ch;margin-bottom:.9rem;color:var(--muted);font-size:clamp(.98rem,1.3vw,1.08rem);line-height:1.55}
+.sst-use{max-width:60ch;margin:0 0 1rem;color:var(--ink);font-size:clamp(.96rem,1.25vw,1.04rem);line-height:1.55}
+.sst-use strong{display:block;margin-bottom:.2rem;color:var(--green-700);font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.sst-sample-mini{max-width:60ch;margin:0 0 1.25rem;padding:.9rem 1rem;border:1px solid var(--line);border-left:4px solid var(--green-700);background:var(--soft)}
+.sst-sample-label{margin:0 0 .5rem;color:var(--muted);font-size:.76rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+.sst-sample-steps{display:grid;gap:.4rem;margin:0;padding:0;list-style:none;counter-reset:sstm}
+.sst-sample-steps li{display:grid;grid-template-columns:1.5rem 1fr;gap:.5rem;align-items:start;font-size:.93rem;line-height:1.5}
+.sst-sample-steps li::before{counter-increment:ism;content:counter(sstm);display:grid;place-items:center;width:1.35rem;height:1.35rem;margin-top:.1rem;background:var(--green-700);color:#fff;font-size:.72rem;font-weight:800}
 .sst-signal{padding:1.4rem;border:1px solid var(--line);border-top:4px solid var(--green-700);background:var(--soft)}
 .sst-signal p:last-child{margin-bottom:0}
+.sst-signal-sign{margin:.5rem 0 .9rem}
+.sst-signal-channels{display:grid;gap:.4rem;margin:0 0 .9rem;padding:0;list-style:none;font-size:.95rem}
+.sst-signal-channels a{color:var(--ink);font-weight:700;text-decoration:underline;text-underline-offset:3px}
+.sst-signal-note{margin:0;color:var(--muted);font-size:.9rem;line-height:1.5}
 .sst-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}
 .sst-grid-4{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
 .sst-card{padding:1.35rem;border:1px solid var(--line);background:#fff}
 .sst-card h3{margin-top:0}
+.sst-card p:last-child{margin-bottom:0}
+.sst-serve{margin:.75rem 0 0;padding-top:.6rem;border-top:1px solid var(--line);color:var(--muted);font-size:.93rem;line-height:1.5}
+.sst-serve strong{margin-right:.3rem;color:var(--green-700);font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
 .sst-flow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.5rem;counter-reset:sst-step}
 .sst-step{padding-top:1rem;border-top:3px solid var(--green-700)}
 .sst-step::before{counter-increment:sst-step;content:"0" counter(sst-step);display:block;margin-bottom:.65rem;color:var(--green-700);font-weight:800}
 .sst-proof{display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(2rem,6vw,5rem)}
 .sst-list{margin:0;padding-left:1.2rem}.sst-list li+li{margin-top:.75rem}
-dl.sst-list{padding-left:0}.sst-list dt{margin-top:1rem;font-weight:700}.sst-list dt:first-child{margin-top:0}.sst-list dd{margin:.35rem 0 0;max-width:62ch;color:var(--muted)}
 .sst-triage{background:#f3f6f8;border-top:1px solid var(--line)}
 .sst-triage-grid{display:grid;grid-template-columns:minmax(16rem,.7fr) minmax(0,1.3fr);gap:clamp(2rem,6vw,5rem);align-items:start}
 .sst-channels{margin-top:1.25rem}
@@ -40,7 +53,7 @@ dl.sst-list{padding-left:0}.sst-list dt{margin-top:1rem;font-weight:700}.sst-lis
 .sst-example table{width:100%;border-collapse:collapse;margin-top:1rem;font-size:.95rem}
 .sst-example th,.sst-example td{border:1px solid var(--line);padding:.65rem .75rem;text-align:left;vertical-align:top}
 .sst-example caption{caption-side:bottom;padding-top:.75rem;color:var(--muted);text-align:left}
-@media(max-width:800px){.sst-hero-grid,.sst-grid,.sst-grid-4,.sst-flow,.sst-proof,.sst-triage-grid{grid-template-columns:1fr}.sst-hero-grid>*,.sst-grid>*,.sst-grid-4>*,.sst-flow>*,.sst-proof>*,.sst-triage-grid>*{min-width:0}.sst-hero-grid h1,.sst-hero-grid p,.sst-proof h2,.sst-proof p,.sst-proof li,.sst-example td,.sst-example th{overflow-wrap:break-word}.sst-hero{padding-block:2.5rem}.sst-hero h1{max-width:none}}
+@media(max-width:800px){.sst-hero-grid,.sst-grid,.sst-grid-4,.sst-flow,.sst-proof,.sst-triage-grid{grid-template-columns:1fr}.sst-hero-grid>*,.sst-grid>*,.sst-grid-4>*,.sst-flow>*,.sst-proof>*,.sst-triage-grid>*{min-width:0}.sst-hero .eyebrow{font-size:.78rem;margin-bottom:.6rem}.sst-hero-grid h1,.sst-hero-grid p,.sst-proof h2,.sst-proof p,.sst-proof li,.sst-example td,.sst-example th{overflow-wrap:break-word}.sst-hero{padding-block:.9rem 1.6rem}.sst-hero h1{max-width:none;font-size:1.7rem;margin-bottom:.5rem}.sst-lead{font-size:.95rem;margin-bottom:.7rem}.sst-use{font-size:.93rem}.sst-sample-mini{padding:.7rem .8rem;margin-bottom:1rem}.sst-sample-steps li{font-size:.88rem}.sst-hero .hero-actions{gap:.35rem;margin-bottom:.9rem}}
 </style>
 <script defer="" src="/script.js?v=mv09"></script>
 <script defer="" src="/assets/js/adaptive-intake.js"></script>
@@ -84,56 +97,50 @@ dl.sst-list{padding-left:0}.sst-list dt{margin-top:1rem;font-weight:700}.sst-lis
 <main id="conteudo">
 <nav aria-label="Navegação estrutural" class="breadcrumbs container"><ol><li><a href="/">Início</a><span aria-hidden="true">/</span></li><li><a href="/servicos/">Serviços e problemas</a><span aria-hidden="true">/</span></li><li aria-current="page">Apoio técnico de SST</li></ol></nav>
 
-<section aria-labelledby="sst-title" class="sst-hero">
+<section aria-labelledby="sst-title" class="sst-hero" id="situacao-atendida">
 <div class="container sst-hero-grid">
 <div>
-<p class="eyebrow">Antes de produzir ou atualizar documentos de risco ocupacional</p>
+<p class="eyebrow">Exigência de documento, risco a controlar ou disputa trabalhista</p>
 <h1 id="sst-title">Apoio técnico de segurança do trabalho</h1>
-<p class="sst-lead">Diagnosticamos os documentos existentes e os riscos declarados de um estabelecimento ou frente para você saber o que já existe, o que falta e o que pode ser produzido com atribuição confirmada. Atendemos empresas, órgãos públicos e gestores de obra, de qualquer porte, mesmo quando o contexto inicial está incompleto.</p>
+<p class="sst-lead">Um cliente ou a fiscalização exigiu PGR, LTCAT ou laudo de insalubridade, uma frente ou um setor tem risco a reconhecer e controlar, ou uma reclamação trabalhista discute agente e exposição. Diagnosticamos documentos, atividades e agentes, indicamos o que se aplica e produzimos os documentos nomeados na proposta, com o profissional habilitado para cada um.</p>
+<p class="sst-use"><strong>O que você passa a ter em mãos</strong> você recebe o que existe, o que falta e por quê, para corrigir os controles, manter os registros em dia e responder à exigência com o documento certo, ou subsidiar a assistência técnica em disputa. PGR, LTCAT e AET não são o mesmo documento nem um pacote; exame e qualquer ato médico ficam com o médico do trabalho.</p>
 <div class="hero-actions">
 <a class="button button-primary button-lg" data-cta-id="frame-sst-support-hero" data-cta-position="hero" href="#contato-sst">Conversar sobre o apoio técnico <svg class="icon"><use href="#i-arrow"></use></svg></a>
-<a class="text-link" data-cta-id="understand-sst-documents" href="#documentos-sst">Ver finalidade de cada documento</a>
+<a class="text-link" data-cta-id="understand-sst-documents" href="#documentos-sst">Ver para que serve cada documento</a>
 </div>
+<figure class="sst-sample-mini" aria-label="Amostra demonstrativa: como o diagnóstico separa finalidade, insumo e responsabilidade">
+<figcaption class="sst-sample-label">Amostra demonstrativa e sintética · não é empresa nem documento assinado</figcaption>
+<ol class="sst-sample-steps">
+<li><span>O que já existe? Um programa antigo de riscos: registrado com data, sem completar a peça.</span></li>
+<li><span>A solda pede o quê? Indica-se se cabe gestão de risco, descrição ambiental ou análise do posto.</span></li>
+<li><span>Há ato médico? Exame e atestado ficam com o médico do trabalho, fora desta entrega.</span></li>
+</ol>
+</figure>
 </div>
 <aside class="sst-signal">
-<strong>Diagnóstico primeiro; peça nominada depois</strong>
-<p>PGR, LTCAT, AET e laudos não são sinônimos nem um pacote automático. Esta entrega organiza o que se aplica e o que falta. Cada peça só é produzida se a proposta a nomear e a atribuição profissional estiver confirmada; nomeada, a produção segue com a CONFENGE até a entrega.</p>
+<strong>Quem responde e como falar agora</strong>
+<p class="sst-signal-sign">Tiago Sasaki, Engenheiro Civil formado pela EESC-USP, com registro profissional ativo no CREA. Serviços técnicos emitidos com ART e nota fiscal, dentro do escopo contratado.</p>
+<ul class="sst-signal-channels" aria-label="Canais diretos">
+<li><a href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20de%20apoio%20t%C3%A9cnico%20de%20seguran%C3%A7a%20do%20trabalho." rel="noopener" target="_blank">WhatsApp (48) 98834-4559</a></li>
+<li><a href="mailto:tiago.sasaki@confenge.com.br?subject=Apoio%20t%C3%A9cnico%20de%20seguran%C3%A7a%20do%20trabalho">tiago.sasaki@confenge.com.br</a></li>
+<li><a href="tel:+5548988344559">Ligar: (48) 98834-4559</a></li>
+</ul>
+<p class="sst-signal-note">Conversa técnica, sem contratação nem pagamento. Sem formulário e sem arquivo ou dado de pessoa neste primeiro contato: diga o estabelecimento ou a frente, as atividades e quais documentos já existem. A resposta nomeia o serviço, o que você recebe e o que falta reunir; a atribuição para cada documento é confirmada antes do aceite técnico.</p>
 </aside>
 </div>
 </section>
 
-<section aria-labelledby="sst-answers-title" class="section section--tight" id="resposta-em-cinco-pontos">
+<section aria-labelledby="sst-output-title" class="section section--default" id="entrega">
 <div class="container">
 <header class="section-head">
-<p class="eyebrow">Resposta direta</p>
-<h2 id="sst-answers-title">Situação, entrega, amostra, limites e pedido.</h2>
-</header>
-<dl class="sst-list">
-<dt id="situacao-atendida">Situação atendida</dt>
-<dd>Estabelecimento ou frente de obra que precisa saber quais documentos de risco ocupacional existem, o que falta e o que pode ser produzido com atribuição confirmada.</dd>
-<dt id="entrega">Entrega</dt>
-<dd>Diagnóstico dos documentos existentes, levantamento de atividades e agentes, e relatório de encaminhamento; quando a proposta nomear, a produção dos documentos aplicáveis, com o profissional habilitado para cada módulo, conduzida pela CONFENGE até a entrega. PGR, LTCAT e AET não saem como pacote automático.</dd>
-<dt id="amostra-disponivel">Amostra disponível</dt>
-<dd>A tabela demonstrativa nesta página mostra como o diagnóstico separa finalidade, insumo e responsabilidade. Não é documento de SST assinado.</dd>
-<dt id="limites-materiais">Limites materiais</dt>
-<dd>Esta página não oferece exame médico ocupacional, ASO, PCMSO nem qualquer ato médico. Campo, local e ART só entram quando o recorte exigir, antes do aceite técnico.</dd>
-<dt id="pedido-proposta">Pedido de proposta</dt>
-<dd>Diga o estabelecimento ou a frente, as atividades e quais documentos já existem. <a href="#contato-sst">WhatsApp, e-mail ou telefone</a> abrem a conversa sem cadastro, sem upload, sem dado de trabalhador e sem pedir CNPJ se você for pessoa física.</dd>
-</dl>
-</div>
-</section>
-
-<section aria-labelledby="sst-output-title" class="section section--default">
-<div class="container">
-<header class="section-head">
-<p class="eyebrow">O que você recebe</p>
-<h2 id="sst-output-title">Um recorte claro dos documentos existentes e do próximo passo.</h2>
-<p class="section-lead">O trabalho começa pelo diagnóstico e pelo levantamento e segue, quando a proposta nomear, com a produção dos documentos aplicáveis. Não inclui ato médico.</p>
+<p class="eyebrow">O que você recebe e para que serve</p>
+<h2 id="sst-output-title">Um retrato claro dos documentos existentes e do próximo passo.</h2>
+<p class="section-lead">O trabalho começa pelo diagnóstico e pelo levantamento e segue, quando a proposta nomear, com a produção dos documentos aplicáveis, conduzida pela CONFENGE até a entrega. Não inclui ato médico.</p>
 </header>
 <div class="sst-grid">
-<article class="sst-card"><h3>Diagnóstico dos documentos existentes</h3><p>Relacionamos os documentos existentes, vencidos e ausentes no estabelecimento ou na frente informada, sem inventar peça que não esteja no material.</p></article>
-<article class="sst-card"><h3>Levantamento de atividades e agentes</h3><p>Lemos as atividades, os agentes e as medidas já descritas. Campo e medições só entram se a proposta incluir local e método; sem campo, o diagnóstico é documental.</p></article>
-<article class="sst-card"><h3>Relatório de encaminhamento</h3><p>Você recebe o que se aplica, o que falta, os insumos de cada peça e o profissional habilitado que responde por ela; a produção das peças nomeadas na proposta é conduzida pela CONFENGE até a entrega. O relatório não substitui exame ou atestado médico.</p></article>
+<article class="sst-card"><h3>Diagnóstico dos documentos existentes</h3><p>Relacionamos os documentos existentes, vencidos e ausentes no estabelecimento ou na frente informada, sem inventar peça que não esteja no material.</p><p class="sst-serve"><strong>Serve para</strong> responder com segurança à cobrança de cliente, fiscalização ou obra e saber o que atualizar primeiro.</p></article>
+<article class="sst-card"><h3>Levantamento de atividades e agentes</h3><p>Lemos as atividades, os agentes e as medidas já descritas. Campo e medições só entram se a proposta incluir local e método; sem campo, o diagnóstico é documental.</p><p class="sst-serve"><strong>Serve para</strong> reconhecer o risco onde ele está e corrigir os controles, não só o papel.</p></article>
+<article class="sst-card"><h3>Relatório de encaminhamento e documentos nomeados</h3><p>Você recebe o que se aplica, o que falta, os insumos de cada peça e o profissional habilitado que responde por ela; a produção das peças nomeadas na proposta é conduzida pela CONFENGE até a entrega.</p><p class="sst-serve"><strong>Serve para</strong> manter os registros em dia e subsidiar a assistência técnica em discussão trabalhista. O relatório não substitui exame ou atestado médico.</p></article>
 </div>
 </div>
 </section>
@@ -143,13 +150,13 @@ dl.sst-list{padding-left:0}.sst-list dt{margin-top:1rem;font-weight:700}.sst-lis
 <header class="section-head">
 <p class="eyebrow">Documentos distintos</p>
 <h2 id="sst-docs-title">Nome de documento não substitui finalidade, insumos e responsabilidade.</h2>
-<p class="section-lead">PGR, LTCAT, AET e laudos não são intercambiáveis. O diagnóstico indica o que cabe; não os entrega como pacote.</p>
+<p class="section-lead">PGR, LTCAT, AET e laudos não são sinônimos nem intercambiáveis. O diagnóstico indica o que cabe; a proposta nomeia o que será produzido, e não os entrega como pacote automático.</p>
 </header>
 <div class="sst-grid-4">
-<article class="sst-card"><h3>PGR</h3><p><strong>Finalidade:</strong> gerenciar riscos ocupacionais do recorte do estabelecimento. <strong>Insumos:</strong> atividades, layout, medidas existentes e o que a norma regulamentadora vigente exigir no recorte. <strong>Responsabilidade:</strong> de quem elabora o programa com atribuição confirmada; o diagnóstico desta página não é o PGR.</p></article>
-<article class="sst-card"><h3>LTCAT</h3><p><strong>Finalidade:</strong> descrever condições ambientais para o fim previdenciário quando o recorte o exigir. <strong>Insumos:</strong> exposição, histórico e medições quando cabíveis. <strong>Responsabilidade:</strong> da peça nominada na proposta; não substitui o PGR nem laudo pontual de outra pergunta.</p></article>
+<article class="sst-card"><h3>PGR</h3><p><strong>Finalidade:</strong> gerenciar riscos ocupacionais do escopo do estabelecimento. <strong>Insumos:</strong> atividades, layout, medidas existentes e o que a norma regulamentadora vigente exigir no escopo. <strong>Responsabilidade:</strong> de quem elabora o programa com atribuição confirmada; o diagnóstico desta página não é o PGR.</p></article>
+<article class="sst-card"><h3>LTCAT</h3><p><strong>Finalidade:</strong> descrever condições ambientais para o fim previdenciário quando o escopo o exigir. <strong>Insumos:</strong> exposição, histórico e medições quando cabíveis. <strong>Responsabilidade:</strong> da peça nomeada na proposta; não substitui o PGR nem laudo pontual de outra pergunta.</p></article>
 <article class="sst-card"><h3>AET</h3><p><strong>Finalidade:</strong> analisar o trabalho no posto e na função, quando aplicável. <strong>Insumos:</strong> funções, postos e organização do trabalho. <strong>Responsabilidade:</strong> pode exigir profissional de atribuição própria; não é emitida como anexo automático de outro documento.</p></article>
-<article class="sst-card"><h3>Laudo pontual</h3><p><strong>Finalidade:</strong> responder a uma pergunta delimitada de engenharia. <strong>Insumos:</strong> o recorte da pergunta e as evidências combinadas. <strong>Responsabilidade:</strong> do relatório contratado; não substitui programa, laudo previdenciário nem ato médico.</p></article>
+<article class="sst-card"><h3>Laudo pontual</h3><p><strong>Finalidade:</strong> responder a uma pergunta delimitada de engenharia, como insalubridade ou periculosidade de uma atividade. <strong>Insumos:</strong> o escopo da pergunta e as evidências combinadas. <strong>Responsabilidade:</strong> do relatório contratado; não substitui programa, laudo previdenciário nem ato médico.</p></article>
 </div>
 </div>
 </section>
@@ -157,36 +164,23 @@ dl.sst-list{padding-left:0}.sst-list dt{margin-top:1rem;font-weight:700}.sst-lis
 <section aria-labelledby="sst-method-title" class="section section--default" id="metodo-sst">
 <div class="container">
 <header class="section-head">
-<p class="eyebrow">Método</p>
+<p class="eyebrow">Como fazemos</p>
 <h2 id="sst-method-title">Do estabelecimento ao encaminhamento, sem misturar peças.</h2>
 </header>
 <div class="sst-flow">
-<article class="sst-step"><h3>Delimitar o recorte</h3><p>Confirmamos estabelecimento ou frente, atividades, documentos já existentes e se o pedido é diagnóstico, documentação ou apoio. Conflito entre empregador e empregado no mesmo caso é verificado antes de material sensível.</p></article>
-<article class="sst-step"><h3>Ler documentos existentes e lacunas</h3><p>Comparamos o que foi entregue com o que a situação pede. Peça ausente permanece ausente. Dependência de médico do trabalho ou de higienista fica explícita quando o recorte a exigir.</p></article>
+<article class="sst-step"><h3>Delimitar o escopo</h3><p>Confirmamos estabelecimento ou frente, atividades, documentos já existentes e se o pedido é diagnóstico, documentação ou apoio. Conflito entre empregador e empregado no mesmo caso é verificado antes de material sensível.</p></article>
+<article class="sst-step"><h3>Ler documentos existentes e lacunas</h3><p>Comparamos o que foi entregue com o que a situação pede. Peça ausente permanece ausente. Dependência de médico do trabalho ou de higienista fica explícita quando o escopo a exigir.</p></article>
 <article class="sst-step"><h3>Produzir com responsabilidade</h3><p>O relatório diz o que se aplica, os insumos e a atribuição. A partir dele, a proposta nomeia os documentos a produzir, cada um com o profissional habilitado para aquele módulo, e a CONFENGE conduz a produção até a entrega.</p></article>
 </div>
 </div>
 </section>
 
-<section aria-labelledby="sst-hire-title" class="section section--tight" id="como-delimitar">
-<div class="container sst-proof">
-<div><p class="eyebrow">Como delimitar o apoio</p><h2 id="sst-hire-title">Informe o recorte; não envie dados de trabalhador agora.</h2></div>
-<div>
-<ul class="sst-list">
-<li>No primeiro contato, descreva o estabelecimento ou a frente, as atividades principais e os nomes e datas dos documentos que já existem, se você os conhecer.</li>
-<li>Não envie nome de trabalhador, CPF, atestado, exame, ASO ou outro dado pessoal. Não anexe arquivo neste primeiro passo.</li>
-<li>Diga se parece necessário ver o local. A visita, quando o recorte a exige, é combinada na proposta com local e produto de campo; o diagnóstico pode começar só com os documentos existentes.</li>
-<li>Informação inicial incompleta é suficiente para começar. Qualquer porte é acolhido. Reclamação trabalhista com componente de SST é atendida pela assistência técnica da parte, combinada com este diagnóstico quando o caso pede; nesse caso, não envie peças do processo no primeiro contato.</li>
-</ul>
-</div>
-</div>
-</section>
-
-<section aria-labelledby="sst-example-title" class="section section--default">
+<section aria-labelledby="sst-example-title" class="section section--default" id="amostra-disponivel">
 <div class="container">
 <header class="section-head">
 <p class="eyebrow">Exemplo demonstrativo</p>
 <h2 id="sst-example-title">Como o diagnóstico separa finalidade, insumo e responsabilidade.</h2>
+<p class="section-lead">É a mesma oficina resumida na abertura desta página, agora com a tabela completa.</p>
 </header>
 <div class="sst-example" role="region" tabindex="0" aria-label="Exemplo demonstrativo de diagnóstico de SST">
 <p>Exemplo demonstrativo, original e sintético: uma oficina informa solda em metal e um programa antigo de riscos. A tabela abaixo mostra a estrutura do relatório de apoio; não representa empresa, empregado, endereço, prazo, preço ou resultado da CONFENGE, e não vale como documento de SST.</p>
@@ -205,41 +199,44 @@ dl.sst-list{padding-left:0}.sst-list dt{margin-top:1rem;font-weight:700}.sst-lis
 </div>
 </section>
 
-<section aria-labelledby="sst-proof-title" class="section section--tight">
+<section aria-labelledby="sst-hire-title" class="section section--tight" id="como-delimitar">
 <div class="container sst-proof">
-<div><p class="eyebrow">Prova disponível</p><h2 id="sst-proof-title">Método e responsabilidade visíveis.</h2></div>
+<div><p class="eyebrow">Como delimitar o apoio</p><h2 id="sst-hire-title">Informe o escopo; não envie dados de trabalhador agora.</h2></div>
+<div>
+<ul class="sst-list">
+<li>No primeiro contato, descreva o estabelecimento ou a frente, as atividades principais e os nomes e datas dos documentos que já existem, se você os conhecer.</li>
+<li>Não envie nome de trabalhador, CPF, atestado, exame, ASO ou outro dado pessoal. Não anexe arquivo neste primeiro passo.</li>
+<li>Diga se parece necessário ver o local. A visita, quando o escopo a exige, é combinada na proposta com local e produto de campo; o diagnóstico pode começar só com os documentos existentes.</li>
+<li>Informação inicial incompleta é suficiente para começar. Qualquer porte é acolhido. Reclamação trabalhista com componente de SST é atendida pela assistência técnica da parte, combinada com este diagnóstico quando o caso pede; nesse caso, não envie peças do processo no primeiro contato.</li>
+</ul>
+</div>
+</div>
+</section>
+
+<section aria-labelledby="sst-limits-title" class="section section--tight" id="limites-materiais">
+<div class="container sst-proof">
+<div><p class="eyebrow">Quem assina e o que fica fora</p><h2 id="sst-limits-title">Método e responsabilidade visíveis; nenhum ato médico e nenhum pacote.</h2></div>
 <div>
 <ul class="sst-list">
 <li>O responsável é Engenheiro Civil formado pela EESC-USP, com registro profissional ativo no CREA e mais de R$ 700 milhões em obras e projetos analisados ao longo da atuação profissional; identidade, registro e o alcance de cada afirmação estão em <a href="/especialista/tiago-jun-sasaki/">quem responde</a>. Os serviços técnicos são emitidos com ART e nota fiscal, dentro do escopo e da atribuição profissional contratados.</li>
-<li>Atribuição para o recorte de SST é confirmada antes do aceite técnico. Módulo que exigir médico do trabalho, higienista ou outro profissional de atribuição própria permanece com esse profissional.</li>
-<li>O exemplo acima é demonstrativo. Não usa empregado real e não apresenta o diagnóstico como PGR, LTCAT, AET ou laudo concluído.</li>
+<li>Atribuição para o escopo de SST é confirmada antes do aceite técnico. Módulo que exigir médico do trabalho, higienista ou outro profissional de atribuição própria permanece com esse profissional. O exemplo acima é demonstrativo: não usa empregado real e não apresenta o diagnóstico como PGR, LTCAT, AET ou laudo concluído.</li>
+<li>Esta página não oferece exame médico ocupacional, ASO, PCMSO, nexo médico nem qualquer ato médico.</li>
+<li>PGR, LTCAT e AET não saem como pacote incluso. Produção de módulo nomeado depende de proposta, insumos e atribuição confirmada.</li>
+<li>Campo, local, registro ou visto e ART são confirmados somente quando o escopo exigir, antes do aceite técnico.</li>
+<li>Disputa sobre a edificação em si segue pela <a href="/assistencia-tecnica-pericial-engenharia/">assistência técnica de engenharia em disputas</a>, combinada na proposta quando o caso pede. A visão institucional de SST permanece em <a href="/servicos/#servico-sst">serviços de engenharia</a>.</li>
 </ul>
 <p><a class="text-link" data-cta-id="sst-trust-proof" href="/confianca/">Ver identidade, método e limites publicados</a></p>
 </div>
 </div>
 </section>
 
-<section aria-labelledby="sst-limits-title" class="section section--tight">
-<div class="container sst-proof">
-<div><p class="eyebrow">Limites materiais</p><h2 id="sst-limits-title">Primeiro entendemos o recorte; a proposta vem depois.</h2></div>
-<div>
-<ul class="sst-list">
-<li>Esta página não oferece exame médico ocupacional, ASO, PCMSO, nexo médico nem qualquer ato médico.</li>
-<li>PGR, LTCAT e AET não saem como pacote incluso. Produção de módulo nominado depende de proposta, insumos e atribuição confirmada.</li>
-<li>Campo, local, registro ou visto e ART são confirmados somente quando o escopo exigir, antes do aceite técnico.</li>
-<li>Disputa sobre a edificação em si segue pela <a href="/assistencia-tecnica-pericial-engenharia/">assistência técnica de engenharia em disputas</a>, combinada na proposta quando o caso pede. A visão institucional de SST permanece em <a href="/servicos/#servico-sst">serviços de engenharia</a>.</li>
-</ul>
-</div>
-</div>
-</section>
-
 <section aria-labelledby="sst-triage-title" class="section section--default sst-triage" id="contato-sst">
 <div class="container sst-triage-grid">
-<div>
+<div id="pedido-proposta">
 <p class="eyebrow">Próximo passo</p>
-<h2 id="sst-triage-title">Solicite uma proposta para o diagnóstico ou o apoio técnico.</h2>
-<p data-form-value>Diga o estabelecimento ou a frente, as atividades e quais documentos já existem. Contexto incompleto não impede o contato. Não envie nome de trabalhador, CPF, atestado, exame ou arquivo neste primeiro passo.</p>
-<p>O primeiro contato é direto com o Engº Tiago Sasaki, por WhatsApp, e-mail ou telefone. A resposta combina a <a href="/conflitos/">verificação de conflito</a> quando o recorte exigir e, só depois, o canal para os documentos existentes.</p>
+<h2 id="sst-triage-title">Descreva o estabelecimento; a resposta nomeia o serviço, os documentos e o que falta reunir.</h2>
+<p data-form-value>Diga o estabelecimento ou a frente, as atividades e quais documentos já existem. Contexto incompleto não impede o contato, e pessoa física começa sem informar CNPJ. Não envie nome de trabalhador, CPF, atestado, exame ou arquivo neste primeiro passo.</p>
+<p>O primeiro contato é direto com o Engº Tiago Sasaki, por WhatsApp, e-mail ou telefone. A resposta combina a <a href="/conflitos/">verificação de conflito</a> quando o escopo exigir e, só depois, o canal para os documentos existentes.</p>
 </div>
 <div>
 <aside aria-labelledby="sst-channels-title" class="channel-card sst-channels">
