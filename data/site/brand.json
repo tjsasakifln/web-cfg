@@ -89,7 +89,7 @@
   "service_situations": [
     {
       "id": "project_delivery",
-      "label": "Preciso completar, conferir ou compatibilizar um projeto antes de aprovar, contratar ou executar",
+      "label": "Preciso completar, conferir ou compatibilizar um projeto",
       "summary": "Quando falta uma disciplina, o projeto recebido precisa ser conferido ou as disciplinas precisam conviver sem interferência antes de aprovar, contratar ou executar.",
       "deliverables": "Plantas, cálculos e memória da disciplina contratada; relatório do que está inconsistente e o que volta ao autor; registro das interferências com o ajuste combinado.",
       "href": "/servicos/#servico-projeto",
@@ -98,7 +98,7 @@
     },
     {
       "id": "quantities_budget",
-      "label": "Preciso comparar propostas, contratar a obra ou aceitar um número e não tenho base própria",
+      "label": "Preciso comparar propostas, contratar a obra ou aceitar um número sem base própria",
       "summary": "Quando a decisão depende de quantidades e custos com critério, composição, referência e data-base visíveis.",
       "deliverables": "Planilha de quantitativos, memória de cálculo e orçamento ou revisão de orçamento.",
       "href": "/quantitativos-orcamento-obras/",
@@ -106,7 +106,7 @@
     },
     {
       "id": "building_diagnosis",
-      "label": "Tenho infiltração, fissura, mofo ou preciso registrar a condição do imóvel",
+      "label": "Tenho infiltração, fissura, mofo ou dano no imóvel",
       "summary": "Quando há anomalia, dúvida sobre a condição do imóvel, recebimento ou necessidade de registrar o estado em uma data.",
       "deliverables": "Relatório da condição do imóvel, com manifestações localizadas, data, hipóteses sustentadas e o próximo exame indicado.",
       "href": "/inspecao-diagnostico-edificacoes/",
@@ -114,7 +114,7 @@
     },
     {
       "id": "property_valuation",
-      "label": "Preciso do valor de um imóvel para compra, venda, partilha, garantia ou registro",
+      "label": "Preciso do valor de um imóvel para negociar ou registrar",
       "summary": "Quando uma decisão patrimonial precisa de valor fundamentado em engenharia para uma finalidade e uma data definidas.",
       "deliverables": "Laudo ou parecer de avaliação com método, dados e conclusão delimitada; parecer preliminar não substitui a avaliação formal.",
       "href": "/servicos/#servico-avaliacao",
@@ -130,7 +130,7 @@
     },
     {
       "id": "occupational_safety",
-      "label": "Um cliente, uma obra ou a fiscalização pediu um documento de segurança do trabalho",
+      "label": "Preciso de um documento de segurança do trabalho",
       "summary": "Quando a empresa precisa saber quais documentos de risco ocupacional se aplicam, o que falta e quem pode produzir cada peça.",
       "deliverables": "Diagnóstico do que se aplica e o documento de SST nomeado na proposta, com profissional habilitado por módulo; exames e atos médicos ficam fora.",
       "href": "/seguranca-trabalho-apoio-tecnico/",
@@ -138,7 +138,7 @@
     },
     {
       "id": "public_works_b2g",
-      "label": "Minha medição foi glosada ou o pagamento está travado em contrato público",
+      "label": "Medição glosada ou pagamento travado em contrato público",
       "summary": "Quando edital, proposta, medição, glosa, aditivo, atraso ou margem exigem decisão técnica e registro contemporâneo.",
       "deliverables": "Dossiê técnico do evento, com cronologia, prova de cada número e parcela incontroversa; o órgão decide o ateste e o pagamento.",
       "href": "/servicos-obras-publicas/",
