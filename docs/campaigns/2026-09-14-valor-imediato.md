@@ -125,6 +125,90 @@ contratos de dados e os testes ao estado da base. Os pins de evidência
 (`first-fold-measurements`, `frozen-specs`) apontam para commits alcançáveis
 em ambos os estados.
 
+## Revisão adversarial sobre o candidato (2026-09-15)
+
+Protocolo congelado antes de existir candidato (perguntas Q1–Q7, cenários
+S1–S10, falhas A–I). Exame A cego: 36 revisores (11 rotas × cenários × duas
+versões com rótulos neutros P/Q sorteados por rota, só texto visível em
+fatias e capturas; sem briefing). Exame B: 11 revisores confrontando a
+impressão com a oferta autorizada (`proof.json`, `credential-registry`,
+preços por estado, destino e prefill de cada CTA, aprofundamento contra a
+base). Resultado: o candidato venceu a base nas 11 rotas; 10 vieram com
+correções obrigatórias, todas aplicadas antes do merge. A mais material: a
+amostra do hero da home atribuía à parede W-02 a conta das quatro paredes
+(21,84 m²); corrigida para "recorte de banheiro, paredes W-01 a W-04".
+Outras: "assinamos o que falta" → "assumimos a responsabilidade técnica pelo
+que falta, no escopo e na atribuição confirmados na proposta"; cartão de
+obra pública restrito à medição glosada; condições de autoria, conflito de
+interesse e atribuição por disciplina junto da oferta em revisão,
+compatibilização, complementares, assistência, SST e triagem; CTA do órgão no
+hub B2G deixou de voltar à triagem em laço; contadores CSS das amostras de
+assistência e SST corrigidos. Revisores são agentes, não compradores; nenhuma
+métrica humana foi produzida.
+
+### Antes → depois por rota (texto visível, DOM; base eddd918d2 → candidato)
+
+| Rota | palavras em `main` | abertura | palavras até o 1º contato em `main` | palavras até a 1ª prova |
+|---|---|---|---|---|
+| `/` | 1732 → 1876 | 127 → 194 | 73 → 132 | nenhuma → 83 |
+| `/servicos/` | 1173 → 1655 | 94 → 117 | 212 → 83 | 326 → 427 |
+| `/quantitativos-orcamento-obras/` | 2180 → 2541 | 158 → 266 | 2166 → 147 | 90 → 74 |
+| `/revisao-tecnica-projetos-engenharia/` | 1232 → 1604 | 178 → 306 | 1214 → 228 | 99 → 103 |
+| `/compatibilizacao-projetos-engenharia/` | 1614 → 1917 | 150 → 280 | 1600 → 218 | 636 → 91 |
+| `/projetos-complementares-engenharia/` | 1420 → 1732 | 151 → 305 | 96 → 257 | 153 → 131 |
+| `/inspecao-diagnostico-edificacoes/` | 1371 → 1534 | 119 → 293 | 1353 → 220 | 121 → 128 |
+| `/assistencia-tecnica-pericial-engenharia/` | 1394 → 1450 | 120 → 294 | 1376 → 237 | 122 → 143 |
+| `/seguranca-trabalho-apoio-tecnico/` | 1423 → 1570 | 137 → 310 | 1405 → 245 | 139 → 155 |
+| `/servicos-obras-publicas/` | 882 → 1603 | 181 → 132 | nenhum → 658 | 38 → 39 |
+| `/triagem-tecnica/` | 459 → 833 | 298 → 618 | 79 → 98 | – |
+
+Leitura honesta: o texto total cresceu na maioria das rotas (a abertura
+ganhou a frase de situação, a entrega ligada ao uso e a linha de canal com
+compromisso), e o que caiu foi o esforço de localização: o primeiro contato
+nas landings passou do rodapé (1.200 a 2.200 palavras) para a abertura
+(150 a 260 palavras), a prova não-âncora chegou antes e cada cartão tem um
+caminho principal. A home ficou dentro do teto de texto visível a 1440 px
+(7.279 de 7.500 caracteres, medido no `innerText` de `main`). Número de
+palavras é diagnóstico, não objetivo.
+
+### Gates migrados fora do núcleo
+
+| Regra antiga | Consumidor | Propriedade legítima | Substituição | Contraprova |
+|---|---|---|---|---|
+| "Ver os" proibido em página sem cartões de biblioteca | `test_visitor_redesign.py::test_global_no_zero_or_one_guias_plural_bugs` | sem "Ver os 0 guias" | rótulos reescritos (não era o bug de plural); regra intacta | — |
+| "qual destas situações se parece com a sua" + 5 rótulos literais | `test_copy_gates.py::test_microcopy_preferences` | bloco `#situacoes` com título visível e cada situação de `brand.json#service_situations` presente com destino distinto | fonte única | rótulo ausente ou destino repetido reprova |
+| "Entrar em obras públicas" literal | `test_copy_gates.py::test_public_surfaces_have_no_prose_em_dashes` | ação da situação de obra pública leva ao hub | regex de `situation-action` → `/servicos-obras-publicas/` | — |
+| `offer_dominant` antes do PNCP | `test_home_real_contract_case.py` | a oferta própria (`journey_paths`) precede o contexto de mercado | arquétipo das situações | — |
+| "menos de um minuto" e "não é contratação nem pagamento" literais | `tests/intake/test_mv03_adaptive_intake.mjs` | rota acolhe quem não sabe nomear o serviço; compromisso do primeiro contato escrito | regex de paráfrase | ausência do compromisso reprova |
+| link obrigatório a `/triagem-tecnica/` em quatro fragmentos de `/servicos/` | `tests/campaigns/pos_inb_20260911/10/test_composition.mjs` | próximo passo de contato dentro do cartão | triagem, bloco de contato da landing ou canal direto | fragmento sem contato reprova |
+| censo de CTAs = 128 | `data/commercial/cta-form-next-state.v1.json` | cada CTA com destino real e contrato next-state | 133 com nota factual (faixa de contato da home, canal do hub B2G, canais do hero de inspeção) | inventário regerado pelo escritor canônico |
+| `_headers`/`sitemap.xml` regenerados pela build; `frozen-specs` | `test_frozen_specs.py` | bytes protegidos só mudam com recaptura datada e motivo | recaptura sobre commit alcançável (só lastmod de `/triagem-tecnica/`) | drift sem recaptura reprova |
+
+### Correções técnicas surgidas nos gates pós-build
+
+Hero móvel com quebra fixa para a face de fallback e a Archivo dividirem a
+linha no mesmo ponto (deriva 26 px → 0); estimativas de
+`contain-intrinsic-size` por faixa de largura para as seções da home e as duas
+seções finais sempre renderizadas (a rolagem até o formulário deslocava o
+alvo do toque); `/entregas/` abaixo do teto de 17.900 px a 390 px; lead e
+prova do hub B2G encurtados para a ação primária caber na dobra de 390 px.
+
+## Estados de evidência
+
+- Implementação: concluída e commitada nesta branch.
+- Revisão editorial/visual: Exame A cego e Exame B executados por agentes;
+  correções aplicadas; não substitui compreensão com pessoas reais.
+- Integridade técnica: bateria pré-build do CI, gates pós-build sobre `_site`
+  (geometria, dobra, jornadas de contato, hub de entregas, acessibilidade,
+  payload), duas builds consecutivas idênticas.
+- Publicação: registrada no PR e na execução de `netcup-release` do
+  candidato (este arquivo não grava o SHA do próprio candidato).
+- Compreensão com pessoas reais: NOT_STARTED (protocolo humano existente,
+  sem participantes nesta campanha).
+- Recebimento operacional e resultado comercial: não observados nesta
+  execução; observar por página/origem → abertura de canal → conversa
+  recebida → contato qualificado → proposta, com as fontes já existentes.
+
 ## Pendências registradas
 
 - `assets/og-confenge.jpg` tem o H1 anterior gravado na imagem; sem produtor
