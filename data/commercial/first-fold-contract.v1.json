@@ -61,7 +61,7 @@
       "measurement": {
         "date": "2026-09-15",
         "viewport": "1366x768",
-        "finding": "H1 de y=153 a y=362; linha de prova de y=702 a y=736; ação primária inteira de y=630 a y=686 em 1366x768, e de y=615 a y=665 em 390x844, dentro da dobra nos dois"
+        "finding": "H1 de y=153 a y=286; linha de prova de y=721 a y=754; ação primária inteira de y=649 a y=705 em 1366x768, e de y=651 a y=699 em 390x844, dentro da dobra nos dois"
       }
     },
     {
@@ -71,7 +71,7 @@
       "measurement": {
         "date": "2026-09-15",
         "viewport": "1366x768",
-        "finding": "H1 de y=191 a y=323; linha de prova de y=422 a y=487; ação primária inteira de y=505 a y=549 em 1366x768, e de y=604 a y=648 em 390x844, dentro da dobra nos dois"
+        "finding": "H1 de y=191 a y=323; linha de prova de y=446 a y=511; ação primária inteira de y=529 a y=573 em 1366x768, e de y=653 a y=697 em 390x844, dentro da dobra nos dois"
       },
       "observed_2026_08_24": "documento com cerca de 11266 px de altura; hero promove Conhecer o primeiro exemplo"
     },
@@ -82,7 +82,7 @@
       "measurement": {
         "date": "2026-09-15",
         "viewport": "1366x768",
-        "finding": "H1 de y=243 a y=341; linha de prova de y=425 a y=512; ação primária inteira de y=622 a y=666 em 1366x768, e de y=796 a y=840 em 390x844, dentro da dobra nos dois"
+        "finding": "H1 de y=243 a y=341; linha de prova de y=425 a y=512; ação primária inteira de y=634 a y=678 em 1366x768, e de y=794 a y=838 em 390x844, dentro da dobra nos dois"
       }
     },
     {
@@ -92,7 +92,7 @@
       "measurement": {
         "date": "2026-09-15",
         "viewport": "1366x768",
-        "finding": "H1 de y=243 a y=390; linha de prova de y=474 a y=518; ação primária inteira de y=628 a y=672 em 1366x768, e de y=761 a y=805 em 390x844, dentro da dobra nos dois"
+        "finding": "H1 de y=243 a y=390; linha de prova de y=474 a y=518; ação primária inteira de y=628 a y=672 em 1366x768, e de y=765 a y=809 em 390x844, dentro da dobra nos dois"
       }
     },
     {
@@ -556,10 +556,10 @@
             "tecnica"
           ],
           "lead_adds": [
-            "analises",
-            "avancar",
-            "compatibilizacao",
-            "decisao"
+            "avaliar",
+            "calculamos",
+            "comparar",
+            "completar"
           ]
         },
         {
@@ -569,42 +569,39 @@
             "recebe"
           ],
           "lead_adds": [
-            "analises",
-            "atendem",
-            "avaliacoes",
-            "compatibilizacoes"
+            "avaliar",
+            "chega",
+            "comparar",
+            "completar"
           ]
         },
         {
           "route": "/servicos-obras-publicas/",
           "ok": true,
           "eyebrow_adds": [
-            "comece",
-            "decisao",
-            "esperar",
-            "pode"
+            "aditivo",
+            "edital",
+            "glosa"
           ],
           "lead_adds": [
-            "contratual",
-            "coordenar",
-            "crescer",
-            "critica"
+            "apresenta",
+            "apuramos",
+            "atraso",
+            "escrevemos"
           ]
         },
         {
           "route": "/problemas-que-resolvemos/",
           "ok": true,
           "eyebrow_adds": [
-            "comece",
             "evento",
-            "obra",
-            "travou"
+            "reconheca"
           ],
           "lead_adds": [
-            "abaixo",
-            "caminho",
-            "decisao",
-            "definido"
+            "aditivo",
+            "assumimos",
+            "atraso",
+            "edital"
           ]
         },
         {
