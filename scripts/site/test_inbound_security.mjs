@@ -65,6 +65,19 @@ const wrong = await intake.handler(event("security-wrong", {
 assert.equal(wrong.statusCode, 403);
 assert.equal((await store.list()).length, 0);
 
+// The conversion canary is off in production (data/conversion/canary-flag.json):
+// the hand-raise path fails closed for everyone, authenticated probe included,
+// exactly like the x-ray path. Nothing is persisted.
+_reset();
+const gated = await intake.handler(event("security-gated", {
+  "X-Confenge-Probe": process.env.LEAD_PROBE_SECRET,
+}));
+assert.equal(gated.statusCode, 404);
+assert.equal(JSON.parse(gated.body).error, "canary_disabled");
+assert.equal((await store.list()).length, 0);
+
+// With the canary explicitly enabled, the authenticated probe persists as synthetic.
+process.env.CONVERSION_CANARY = "1";
 _reset();
 const correct = await intake.handler(event("security-correct", {
   "X-Confenge-Probe": process.env.LEAD_PROBE_SECRET,
