@@ -68,7 +68,12 @@ export function validateCommercialLoopRegistry(registry = {}) {
   return { ok: errors.length === 0, errors };
 }
 
-/** Exact next command from docs/ops/WARMBLY-INBOUND.md plus the loop-specific consent residual. */
+/**
+ * Exact next command from docs/ops/WARMBLY-INBOUND.md plus the loop-specific
+ * consent residual. The inspection is GET-only (#682): it never POSTs, never
+ * creates a lead and needs no OPS_TOKEN / LEAD_PROBE_SECRET, so the command
+ * exports no credential.
+ */
 export function buildNextCommand(loop = {}) {
   const actionPath = loop.capture_contract?.page_path || loop.asset_path || "<registered-loop-path>";
   return [
@@ -77,9 +82,7 @@ export function buildNextCommand(loop = {}) {
     "CONFENGE_INBOUND_WEBHOOK_SECRET=<shared>",
     "# Warmbly",
     "CONFENGE_AUTO_SEND_ENABLED=false",
-    "# This shell, to read ops counters",
-    "export OPS_TOKEN='<production ops token>'",
-    "export CONFENGE_AUTO_SEND_EVIDENCE=OFF",
+    "# This shell: read-only inspection of the published asset (GET only, no token)",
     "node scripts/site/money_asset_prod_proof.mjs https://confenge.com.br",
     `# Then a consented real visitor uses ${actionPath}.`,
     "# Do not invent a person. Do not send WhatsApp/email from this repo.",

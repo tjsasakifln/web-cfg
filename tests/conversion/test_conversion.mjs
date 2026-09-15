@@ -477,6 +477,62 @@ const VALID = "11222333000181";
   } else pass("consent_required_handraise");
 }
 
+// --- "urgência sem dados" through the hand-raise path: identical semantics ---
+{
+  const store = new MemoryStore();
+  const urgent = {
+    nome: "QA Urgência",
+    telefone: "48988344559",
+    consentimento: true,
+    mensagem: "tenho urgência e quero falar mas ainda não tenho todos os dados",
+    idempotency_key: "hand-urgencia-sem-dados",
+  };
+  const r = await intake.handleHandraise({ store, body: { ...urgent }, env: { NODE_ENV: "test" } });
+  const listed = await store.list();
+  const stored = listed[0];
+  if (
+    r.statusCode !== 201 || !r.body.lead_id || !r.body.receipt_id || r.body.qualification_state !== "NEEDS_CONTEXT" ||
+    listed.length !== 1 || !stored || stored.qualification_state !== "NEEDS_CONTEXT" ||
+    stored.estagio !== "ainda não sei qual serviço" || stored.jornada !== "outro" || stored.auto_send !== false
+  ) {
+    fail("handraise_urgencia_sem_dados", { status: r.statusCode, body: r.body, stored });
+  } else pass("handraise_urgencia_sem_dados_received", { lead_id: r.body.lead_id, estagio: stored.estagio });
+}
+
+// --- hand-raise is gated by the same canary flag as the x-ray path (fail-closed) ---
+{
+  const store = new MemoryStore();
+  const { loadFlag } = require(path.join(root, "scripts/conversion/flag.cjs"));
+  if (loadFlag().enabled !== false) fail("canary_flag_expected_off", loadFlag());
+  const off = await intake.handleHandraise({
+    store,
+    body: {
+      nome: "QA Urgência",
+      telefone: "48988344559",
+      consentimento: true,
+      mensagem: "tenho urgência e quero falar mas ainda não tenho todos os dados",
+    },
+    env: { NODE_ENV: "production" },
+  });
+  if (off.statusCode !== 404 || off.body.error !== "canary_disabled" || (await store.list()).length !== 0) {
+    fail("handraise_canary_disabled_fail_closed", { status: off.statusCode, body: off.body });
+  }
+  const forced = await intake.handleHandraise({
+    store,
+    body: {
+      nome: "QA Urgência",
+      telefone: "48988344559",
+      consentimento: true,
+      mensagem: "tenho urgência e quero falar mas ainda não tenho todos os dados",
+    },
+    env: { NODE_ENV: "production", CONVERSION_CANARY: "1" },
+  });
+  if (forced.statusCode !== 201 || (await store.list()).length !== 1) {
+    fail("handraise_canary_override_persists", { status: forced.statusCode, body: forced.body });
+  }
+  pass("handraise_canary_gate_fail_closed", { off: off.statusCode, forced: forced.statusCode });
+}
+
 // --- attribution completeness ---
 {
   const a = attr.defaultCanaryAttribution({

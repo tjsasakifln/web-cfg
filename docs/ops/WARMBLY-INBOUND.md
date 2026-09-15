@@ -162,7 +162,7 @@ The authenticated synthetic record may reach Warmbly only as
 `record_kind=synthetic`; its 201 plus an idempotent retry proves capture and
 transport, but never proves a real commercial action, human consent or QCO.
 
-### Money-asset proof harness
+### Money-asset published inspection (read-only)
 
 ```text
 node scripts/site/money_asset_prod_proof.mjs https://confenge.com.br
@@ -170,12 +170,20 @@ node scripts/site/money_asset_prod_proof.mjs https://confenge.com.br
 npm run probe:money-asset:prod
 ```
 
-This is the #60 probe (not `probe:lead`, which is jornada=operacao). It writes
-PROVEN/BLOCKED/UNKNOWN per step. Synthetic capture and replay can pass, but the
-full loop remains blocked until one genuine consented lead is reconciled with a
-Warmbly receipt/action while auto-send is off.
+This is the #60 inspection (not `probe:lead`, which is jornada=operacao). It
+only GETs the published asset page and `sitemap.xml` over the canonical https
+origin and writes PROVEN/BLOCKED/UNKNOWN for `page_live` and
+`indexability_hygiene`. It never POSTs, never creates a lead (synthetic or
+real), never reads ops counters and needs no credential: `OPS_TOKEN`,
+`LEAD_PROBE_SECRET`, `CONFENGE_INBOUND_WEBHOOK_*` and
+`CONFENGE_AUTO_SEND_EVIDENCE` are ignored when present. `capture`, `transport`
+and `confirmacao_humana` are always `NOT_VERIFIED` in its report: authenticated
+capture/transport proof belongs to `probe:lead:prod` (`synthetic_lead_probe.mjs`,
+`LEAD_PROBE_SECRET` required), and the full loop remains blocked until one
+genuine consented lead is reconciled with a Warmbly receipt/action while
+auto-send is off.
 
-If env is missing here:
+Production environment this inspection cannot see (it does not read the host):
 
 ```text
 # Production EnvironmentFile /etc/confenge-web/runtime.env
@@ -183,9 +191,7 @@ CONFENGE_INBOUND_WEBHOOK_URL=https://api.confenge.com.br/api/v1/webhooks/confeng
 CONFENGE_INBOUND_WEBHOOK_SECRET=<shared>
 # Warmbly
 CONFENGE_AUTO_SEND_ENABLED=false
-# This shell, to read ops counters
-export OPS_TOKEN='<production ops token>'
-export CONFENGE_AUTO_SEND_EVIDENCE=OFF
+# This shell: no token is exported; the inspection is GET-only
 node scripts/site/money_asset_prod_proof.mjs https://confenge.com.br /tmp/prod-proof.json
 ```
 

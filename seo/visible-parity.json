@@ -38,8 +38,8 @@
         "breadcrumb_names": [],
         "canonical": "https://confenge.com.br/",
         "dates": [],
-        "description": "Projetos e serviços de engenharia para obras públicas e privadas: elaboração, revisão, compatibilização, quantitativos, orçamento, perícias e análises técnicas.",
-        "h1": "Projetos e serviços de engenharia para obras públicas e privadas.",
+        "description": "Engenharia para orçar a obra, completar ou conferir o projeto, entender uma infiltração, avaliar um imóvel ou responder a uma glosa, em obra pública ou privada. Levantamos, calculamos, conferimos e assumimos a responsabilidade técnica pelo que falta.",
+        "h1": "Assumimos a parte de engenharia que falta para você orçar, contratar ou decidir.",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": "demonstrativo",
@@ -333,7 +333,7 @@
         ],
         "canonical": "https://confenge.com.br/assistencia-tecnica-pericial-engenharia/",
         "dates": [],
-        "description": "Assistência técnica de engenharia em disputas: organizamos as evidências, formulamos quesitos e sustentamos a manifestação técnica da parte até os esclarecimentos finais. O advogado conduz a estratégia; o perito do juízo é nomeado pelo juiz.",
+        "description": "Assistência técnica de engenharia em disputas: organizamos as evidências, formulamos quesitos e entregamos a manifestação técnica da parte; quando contratado, acompanhamos os esclarecimentos ao longo do processo. O advogado conduz a estratégia; o perito do juízo é nomeado pelo juiz.",
         "h1": "Assistência técnica de engenharia em disputas",
         "has_dataset_surface": false,
         "licenses": [],
@@ -563,7 +563,7 @@
         "dates": [
           "2026-08-28"
         ],
-        "description": "Exemplos de entrega demonstrativos: estrutura real, números hipotéticos. Trabalho real autorizado entra em seção própria, com fonte e data, quando existir.",
+        "description": "Exemplos demonstrativos de entrega: planilha de quantitativos, apontamentos de revisão, registro de interferências e dossiês de contrato público, com estrutura real e números hipotéticos. Trabalho de cliente entra em seção própria, com fonte e data.",
         "h1": "Exemplos de entrega (demonstrativos)",
         "has_dataset_surface": false,
         "licenses": [],
@@ -1695,7 +1695,7 @@
         "dataset_names": [],
         "dates": [
           "2026-07-15",
-          "2026-09-08"
+          "2026-09-14"
         ],
         "descriptions": [
           "Como localizar a etapa travada, organizar a prova e cobrar uma decisão sem confundir processamento da medição, glosa e pagamento."
@@ -1741,7 +1741,7 @@
         "dates": [
           "2026-07-15",
           "2026-08-29",
-          "2026-09-08"
+          "2026-09-14"
         ],
         "description": "A medição da obra pública atrasou? Veja como localizar a etapa travada, organizar a prova e cobrar uma decisão sem confundir medição com pagamento.",
         "h1": "Atraso na medição de obra pública: onde o processo travou?",
@@ -1834,7 +1834,7 @@
         "dataset_names": [],
         "dates": [
           "2026-07-15",
-          "2026-09-08"
+          "2026-09-14"
         ],
         "descriptions": [
           "Triagem de suspender ou só notificar: dois meses da nota fiscal, exceções do § 3º e risco de sanção por parada precoce."
@@ -1880,7 +1880,7 @@
         "dates": [
           "2026-07-15",
           "2026-08-29",
-          "2026-09-08"
+          "2026-09-14"
         ],
         "description": "Nota fiscal emitida e despesa liquidada sem pagamento: o art. 137 da Lei 14.133 trata extinção após dois meses, não paralisação automática no primeiro atraso.",
         "h1": "Atraso de pagamento: pode suspender a obra pública?",
@@ -2577,7 +2577,7 @@
         "dataset_names": [],
         "dates": [
           "2026-07-15",
-          "2026-09-08"
+          "2026-09-14"
         ],
         "descriptions": [
           "Nas 48 horas da recusa de ateste: protocolo, recado transcrito e ofício pedindo o item que impede a assinatura."
@@ -2623,7 +2623,7 @@
         "dates": [
           "2026-07-15",
           "2026-08-29",
-          "2026-09-08"
+          "2026-09-14"
         ],
         "description": "O fiscal recusou assinar o boletim. Nas 48 horas seguintes, registre a recusa, preserve a prova de execução e peça objeção objetiva, sem admitir culpa para destravar.",
         "h1": "Fiscal não assina medição: o que fazer nas primeiras 48h",
@@ -2646,7 +2646,7 @@
         "dataset_names": [],
         "dates": [
           "2026-07-15",
-          "2026-09-08"
+          "2026-09-14"
         ],
         "descriptions": [
           "Como recortar o trecho com ensaio desconforme e pedir o restante da linha sem controvérsia de qualidade."
@@ -2692,7 +2692,7 @@
         "dates": [
           "2026-07-15",
           "2026-08-29",
-          "2026-09-08"
+          "2026-09-14"
         ],
         "description": "Um defeito de qualidade autoriza cortar o trecho em desconformidade, não o boletim inteiro. Exija localização, ensaio e o valor do trecho afetado.",
         "h1": "Glosa por qualidade: pode glosar a medição inteira?",
@@ -2852,7 +2852,7 @@
         "dataset_names": [],
         "dates": [
           "2026-07-15",
-          "2026-09-08"
+          "2026-09-14"
         ],
         "descriptions": [
           "Evento paga o marco; quantitativo paga a unidade. O art. 46, § 9º, veda remunerar preço global como planilha unitária."
@@ -2898,7 +2898,7 @@
         "dates": [
           "2026-07-15",
           "2026-08-29",
-          "2026-09-08"
+          "2026-09-14"
         ],
         "description": "No preço global, o contrato pode medir por marco de resultado, não por m³. Compare a prova de evento com a prova de quantitativo antes de precificar o caixa.",
         "h1": "Medição por evento ou quantitativo: o que muda",
@@ -2989,7 +2989,7 @@
         "dataset_names": [],
         "dates": [
           "2026-07-15",
-          "2026-09-08"
+          "2026-09-14"
         ],
         "descriptions": [
           "Triagem da etapa incompleta no preço global: avanço de campo não cria submarco, e o art. 145 depende da parcela contratual."
@@ -3035,7 +3035,7 @@
         "dates": [
           "2026-07-15",
           "2026-08-29",
-          "2026-09-08"
+          "2026-09-14"
         ],
         "description": "Etapa incompleta em empreitada global não é pagamento antecipado. Confira o eventograma, a meta de resultado e o que o contrato admite medir proporcionalmente.",
         "h1": "Pagamento parcial em empreitada global: quando vale",
@@ -4764,7 +4764,7 @@
         "canonical": "https://confenge.com.br/parcerias-engenharia/",
         "dates": [],
         "description": "Escritórios de arquitetura e empresas de projeto encaminham orçamento, revisão, compatibilização ou elaboração complementar. O cliente permanece com quem encaminha. Cada recorte tem amostra e caminho de proposta.",
-        "h1": "Encaminhe o recorte de engenharia e continue com o seu cliente.",
+        "h1": "Nós assumimos a engenharia que falta.",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": "demonstrativo",
@@ -5111,7 +5111,9 @@
       "ok": true,
       "url": "https://confenge.com.br/quantitativos-orcamento-obras/",
       "visible": {
-        "authors": [],
+        "authors": [
+          "não é software, planilha gratuita nem execução de obra."
+        ],
         "breadcrumb_names": [
           "Início",
           "Serviços e problemas",
@@ -5119,7 +5121,7 @@
         ],
         "canonical": "https://confenge.com.br/quantitativos-orcamento-obras/",
         "dates": [],
-        "description": "Serviço de engenharia de custos: a CONFENGE levanta quantitativos, elabora ou revisa o orçamento de obra pública ou privada para construtoras, empresas de engenharia, escritórios de projeto e proprietários. Memória, critérios e premissas conferíveis, com proposta sob o recorte.",
+        "description": "Propostas para comparar, obra para contratar ou número para aceitar: a CONFENGE levanta quantitativos, elabora ou revisa o orçamento de obra pública ou privada, com origem, critério, composições e data-base de cada número conferíveis. Serviço de engenharia contratado, com responsável técnico.",
         "h1": "Quantitativos e orçamento de obras",
         "has_dataset_surface": true,
         "licenses": [],
@@ -5391,7 +5393,7 @@
         ],
         "canonical": "https://confenge.com.br/servicos-obras-publicas/",
         "dates": [],
-        "description": "Serviços da CONFENGE para construtoras: Diagnóstico da Operação em Obras Públicas, Diretoria Fracionada para o Mercado Público, Operação de Proposta para Licitação Crítica e defesa de margem.",
+        "description": "Serviços da CONFENGE para construtoras em licitações e contratos de obras públicas: edital, medição e glosa, aditivo e atraso, reequilíbrio e margem, rotina de contratos, com preço e prazo publicados onde já existem.",
         "h1": "Serviços para licitações e contratos de obras públicas",
         "has_dataset_surface": false,
         "licenses": [],
@@ -5516,15 +5518,15 @@
         "breadcrumb_names": [],
         "canonical": "https://confenge.com.br/triagem-tecnica/",
         "dates": [
-          "2026-09-08"
+          "2026-09-14"
         ],
-        "description": "Explique a situação técnica por WhatsApp, e-mail ou telefone e receba o próximo passo.",
-        "h1": "Explique sua situação em menos de um minuto",
+        "description": "Conte a situação técnica do seu jeito por WhatsApp, e-mail ou telefone, sem formulário. A resposta nomeia o serviço, o que você recebe e o que falta para a proposta.",
+        "h1": "Conte a situação do seu jeito. Nós nomeamos o serviço.",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": "demonstrativo",
         "reviewers": [],
-        "title": "Triagem técnica | CONFENGE",
+        "title": "Contato e triagem técnica | CONFENGE",
         "versions": []
       }
     },
@@ -5586,5 +5588,5 @@
       }
     }
   ],
-  "site_root": "/home/tjsasakifln/code/confenge/.worktrees/solucao-integral-20260913/_site"
+  "site_root": "/home/tjsasakifln/code/confenge/.worktrees/campaign-web-cfg/_site"
 }

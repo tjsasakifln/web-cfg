@@ -5,7 +5,12 @@
  * without POSTing a person.
  *
  * Usage:
- *   node scripts/money_asset/audit_commercial_dod.mjs [--out file] [--facts file] [--skip-live]
+ *   node scripts/money_asset/audit_commercial_dod.mjs [--out file] [--facts file] [--skip-live] [--live-inbound]
+ *
+ * Without --skip-live the audit only GETs published surfaces. The unsigned
+ * POST to the Warmbly inbound webhook (a rejection probe of a third-party
+ * runtime) is opt-in via --live-inbound; by default no request leaves this
+ * process with a method other than GET.
  */
 import { createRequire } from "node:module";
 import fs from "node:fs";
@@ -47,10 +52,22 @@ function flagValue(name) {
 const outPath = flagValue("--out");
 const factsPath = flagValue("--facts");
 const skipLive = args.includes("--skip-live");
+const liveInbound = args.includes("--live-inbound");
 const base = (flagValue("--base") || "https://confenge.com.br").replace(/\/$/, "");
+const FETCH_TIMEOUT_MS = Number(process.env.COMMERCIAL_DOD_FETCH_TIMEOUT_MS || 8000);
+
+async function fetchWithDeadline(url, init = {}) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+  try {
+    return await fetch(url, { ...init, signal: controller.signal });
+  } finally {
+    clearTimeout(timer);
+  }
+}
 
 async function fetchText(url) {
-  const res = await fetch(url, {
+  const res = await fetchWithDeadline(url, {
     redirect: "manual",
     headers: { "User-Agent": "confenge-web-011-audit/1.0" },
   });
@@ -71,16 +88,26 @@ async function liveObservations() {
   const buildInfo = await fetchText(`${base}/.well-known/build-info.json`);
   const snapshot = await fetchText(`${base}${primaryLoop.asset_path}snapshot.json`);
 
-  let inbound = { http: null, body: null, error: null };
-  try {
-    const res = await fetch(CANONICAL_INBOUND_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "User-Agent": "confenge-web-011-audit/1.0" },
-      body: "{}",
-    });
-    inbound = { http: res.status, body: await res.text(), error: null };
-  } catch (err) {
-    inbound = { http: null, body: null, error: String(err && err.message ? err.message : err).slice(0, 160) };
+  // Opt-in only: an unsigned POST against the Warmbly inbound webhook is a
+  // request to a third-party runtime, never a default side effect of an audit.
+  // The response body is discarded; only the status code is evidence.
+  let inbound = { http: null, error: null, attempted: false };
+  if (liveInbound) {
+    try {
+      const res = await fetchWithDeadline(CANONICAL_INBOUND_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "User-Agent": "confenge-web-011-audit/1.0" },
+        body: "{}",
+      });
+      await res.body?.cancel?.();
+      inbound = { http: res.status, error: null, attempted: true };
+    } catch (err) {
+      inbound = {
+        http: null,
+        error: String(err && err.name === "AbortError" ? "timeout" : "request_failed").slice(0, 32),
+        attempted: true,
+      };
+    }
   }
 
   let usePath = { status: "BLOCKED", reason: "snapshot_unavailable" };
@@ -139,8 +166,8 @@ async function liveObservations() {
       robots_http: robots.http,
       x_robots_tag: diagnostico.headers["x-robots-tag"] || null,
       build_commit: build.commit || null,
+      inbound_unsigned_post_attempted: inbound.attempted,
       inbound_unsigned_post_http: inbound.http,
-      inbound_unsigned_post_body: String(inbound.body || "").slice(0, 200),
       inbound_error: inbound.error,
       robots_disallow_asset: /Disallow:\s*\/ferramentas\/diagnostico-defesa-margem/i.test(robots.text),
     },

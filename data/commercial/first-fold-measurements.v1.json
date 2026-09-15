@@ -1,9 +1,9 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-09-15T06:51:55.723Z",
+  "measured_at": "2026-09-15T15:11:51.165Z",
   "measured_on": "2026-09-15",
-  "commit_sha": "515bc64035772f7ad63d54f887e1c1ecf2a03ea0",
+  "commit_sha": "5e0701f86a6038ebe90f400136e872eab26ecea3",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "f168038814087e1b365d1de3042af9a3f3364743756e104711fecc0fb9fe7477",
@@ -17,7 +17,7 @@
     "assets/report-capture.css": "669b93f113f417ba6a8175d9d0ab0dd846a19e991245ad9f2f1ebea48d8c0552",
     "assets/report-model-a11y-v293.css": "148fb54ad084edad56eff48e6b635e2df177e8679a724d50e2e92a88421fddce",
     "assets/report-model.css": "79e09ea8559deb4e01c78df860a00f0ff542659b3c2b9274bc8401444fab2447",
-    "atrasos-prorrogacao-obras-publicas/index.html": "5ee239e1525ff0f9a202acfbd7e5f60d98b7a2a94f4eebea3a295c19822cefdc",
+    "atrasos-prorrogacao-obras-publicas/index.html": "9bbecf66624cb76f6cef3f5f665c9fa077e1a00b202f4f7e78656742b6bffa9d",
     "auditoria-orcamento-licitacao/index.html": "444298887697abe1b1bfc24a5e41836013753cc0f22b8db4f48b9df7f15fe397",
     "bid-room-licitacoes-obras/index.html": "35beafcef80bd6f44d2a835b4ab0fa5638a8472f07b93246180838922920c29c",
     "casos/modelo-apresentacao-executiva-resultados/index.html": "48d94d71d273741eb1bb887f472071d8623096b0d849c075d96b1ea83db66b7f",
@@ -36,8 +36,8 @@
     "casos/modelo-relatorio-executivo-consolidado/styles.css": "d2f580f6061be6c0bcafa966877693be469fa8a7171a7a3469c7ec967e11b63a",
     "casos/modelo-relatorio-inteligencia-licitacoes/index.html": "a48d9d1df3520993cff4ad646cbe6a5cca62728ad24bd9b8c78d90cb67ecbab9",
     "casos/modelo-relatorio-inteligencia-licitacoes/styles.css": "79e09ea8559deb4e01c78df860a00f0ff542659b3c2b9274bc8401444fab2447",
-    "defesa-margem-contratos-publicos/index.html": "b05a8aa130f79bca426e60b1f0bdf9af279576e7702243bf76625c2c2d0ad474",
-    "defesa-tecnica-contratos-publicos/index.html": "c910324e7487dfd4ee0fcb019f420c4e8f4cf32869426e4b9e53c605ab199f14",
+    "defesa-margem-contratos-publicos/index.html": "cd8c8e0489ef781863fff60dd06515e28dbbc10b4cbd4ff07d52f4d8e3d7d387",
+    "defesa-tecnica-contratos-publicos/index.html": "b9f3719bb4b3d06352f6538854e05003cd0af57bcaee7a6c3ad56044011836a3",
     "diagnostico-b2g-360/index.html": "101b019cb8113967cd7ffd50b07d1011af982ac22dd449aefcc868bff4b79409",
     "diagnostico-b2g-expansao/index.html": "fe60cef824e78beff5d03ec679f1e430cad33b7754a748069654bbb293f28835",
     "diagnostico-pre-licitacao/index.html": "67a5aee0638afbb7a9a55d07e06f59f4f91427f760a1c57636218ce1b000adc6",
@@ -49,7 +49,7 @@
     "problemas-que-resolvemos/index.html": "e0321783dbcec5c1609f043a5eb257ef6728846c63995553ba55bcab9f7e66c9",
     "reequilibrio-obras-publicas/index.html": "e30f2b2856a9301939fc422886e19e420b20169337b782ee589143836cd9c3f0",
     "script.js": "13adf8929c4d73f93a3f1a82cd6e39699df37c03478b55b061e2693576a913cb",
-    "servicos-obras-publicas/index.html": "9e750908f2f8791f7c40eda28e31f1979ce9488138e54b9213af91a818f71af1",
+    "servicos-obras-publicas/index.html": "e4b755293b3356834e0182d6521481ea5db9aa3776f28f107e5b96ff32eec342",
     "styles-hubs.css": "ed4668833ad8de5cef5acc5fc1e8f21e519870f0bf282247c3b4a9644a094592",
     "styles-offers.css": "0c1efa4797709ae6d2b776aa58e863ef095a880646b5e4b158a7a47e0963ec2e",
     "styles-tokens.css": "15cc0770e76276b418c11493fa9e53827ae14bb8f854b0a63d8c6dd63afc02fc",
@@ -527,7 +527,7 @@
     },
     {
       "route": "/servicos-obras-publicas/",
-      "html_sha256": "9e750908f2f8791f7c40eda28e31f1979ce9488138e54b9213af91a818f71af1",
+      "html_sha256": "e4b755293b3356834e0182d6521481ea5db9aa3776f28f107e5b96ff32eec342",
       "measured_on": "2026-09-15",
       "viewports": {
         "1366x768": {
@@ -1765,7 +1765,7 @@
     },
     {
       "route": "/defesa-margem-contratos-publicos/",
-      "html_sha256": "b05a8aa130f79bca426e60b1f0bdf9af279576e7702243bf76625c2c2d0ad474",
+      "html_sha256": "cd8c8e0489ef781863fff60dd06515e28dbbc10b4cbd4ff07d52f4d8e3d7d387",
       "measured_on": "2026-09-15",
       "viewports": {
         "1366x768": {
@@ -2401,7 +2401,7 @@
     },
     {
       "route": "/atrasos-prorrogacao-obras-publicas/",
-      "html_sha256": "5ee239e1525ff0f9a202acfbd7e5f60d98b7a2a94f4eebea3a295c19822cefdc",
+      "html_sha256": "9bbecf66624cb76f6cef3f5f665c9fa077e1a00b202f4f7e78656742b6bffa9d",
       "measured_on": "2026-09-15",
       "viewports": {
         "1366x768": {
@@ -2820,7 +2820,7 @@
     },
     {
       "route": "/defesa-tecnica-contratos-publicos/",
-      "html_sha256": "c910324e7487dfd4ee0fcb019f420c4e8f4cf32869426e4b9e53c605ab199f14",
+      "html_sha256": "b9f3719bb4b3d06352f6538854e05003cd0af57bcaee7a6c3ad56044011836a3",
       "measured_on": "2026-09-15",
       "viewports": {
         "1366x768": {

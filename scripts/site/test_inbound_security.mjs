@@ -22,6 +22,10 @@ delete process.env.CONFENGE_INBOUND_WEBHOOK_URL;
 delete process.env.CONFENGE_INBOUND_WEBHOOK_SECRET;
 delete process.env.RESEND_API_KEY;
 delete process.env.NTFY_URL;
+// The canary-disabled proof below must not depend on an ambient shell export:
+// the versioned flag (data/conversion/canary-flag.json, enabled:false) is the
+// only thing deciding the first hand-raise call.
+delete process.env.CONVERSION_CANARY;
 
 const { FileStore } = require("../../netlify/functions/lib/lead-store.cjs");
 const intake = require("../../netlify/functions/market-answer-intake.cjs");
@@ -65,6 +69,19 @@ const wrong = await intake.handler(event("security-wrong", {
 assert.equal(wrong.statusCode, 403);
 assert.equal((await store.list()).length, 0);
 
+// The conversion canary is off in production (data/conversion/canary-flag.json):
+// the hand-raise path fails closed for everyone, authenticated probe included,
+// exactly like the x-ray path. Nothing is persisted.
+_reset();
+const gated = await intake.handler(event("security-gated", {
+  "X-Confenge-Probe": process.env.LEAD_PROBE_SECRET,
+}));
+assert.equal(gated.statusCode, 404);
+assert.equal(JSON.parse(gated.body).error, "canary_disabled");
+assert.equal((await store.list()).length, 0);
+
+// With the canary explicitly enabled, the authenticated probe persists as synthetic.
+process.env.CONVERSION_CANARY = "1";
 _reset();
 const correct = await intake.handler(event("security-correct", {
   "X-Confenge-Probe": process.env.LEAD_PROBE_SECRET,
@@ -118,6 +135,7 @@ process.stdout.write(JSON.stringify({
   context: process.env.CONTEXT,
   missing_token_http: missing.statusCode,
   wrong_probe_http: wrong.statusCode,
+  canary_disabled_http: gated.statusCode,
   authenticated_probe_http: correct.statusCode,
   record_kind: persisted.record_kind,
   commercial_next_action: persisted.next_action,

@@ -774,6 +774,9 @@ function buildLeadRecord({ lead_id, lead, received_at, ip_hash, fingerprint, sta
     desired_decision: lead.desired_decision || null,
     document_availability_class: lead.document_availability_class || null,
     qualification_state: lead.qualification_state || null,
+    qualification_gaps: Array.isArray(lead.qualification_gaps) && lead.qualification_gaps.length
+      ? lead.qualification_gaps.map(String)
+      : null,
     conflict_status: lead.conflict_status || null,
     conflict_reference: lead.conflict_reference || null,
     intake_contract_version: lead.intake_contract_version || null,

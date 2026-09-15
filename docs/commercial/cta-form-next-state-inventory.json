@@ -193,7 +193,6 @@
             "visible": true,
             "required": [
               "contract_event",
-              "contract_stage",
               "nome",
               "consentimento",
               "email_or_whatsapp"
@@ -201,6 +200,7 @@
             "optional": [
               "public_contract_id",
               "opportunity_deadline",
+              "contract_stage",
               "empresa",
               "email",
               "telefone",
@@ -1778,7 +1778,6 @@
             "visible": true,
             "required": [
               "contract_event",
-              "contract_stage",
               "nome",
               "consentimento",
               "email_or_whatsapp"
@@ -1786,6 +1785,7 @@
             "optional": [
               "public_contract_id",
               "opportunity_deadline",
+              "contract_stage",
               "empresa",
               "email",
               "telefone",
@@ -1986,7 +1986,6 @@
             "visible": true,
             "required": [
               "contract_event",
-              "contract_stage",
               "nome",
               "consentimento",
               "email_or_whatsapp"
@@ -1994,6 +1993,7 @@
             "optional": [
               "public_contract_id",
               "opportunity_deadline",
+              "contract_stage",
               "empresa",
               "email",
               "telefone",
@@ -3406,7 +3406,6 @@
             "visible": true,
             "required": [
               "contract_event",
-              "contract_stage",
               "nome",
               "email",
               "consentimento"
@@ -3415,6 +3414,7 @@
               "deliverable_id",
               "public_contract_id",
               "opportunity_deadline",
+              "contract_stage",
               "mensagem"
             ]
           },

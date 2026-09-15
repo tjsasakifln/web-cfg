@@ -91,7 +91,14 @@ mode-0700 `/var/lib/confenge-web`; controls and evidence live outside releases.
 After `--operation promote`, the workflow reconciles every served HTML byte
 against the exact artifact and then runs Lighthouse **on the public origin**
 (`scripts/site/runtime_lighthouse_acceptance.mjs` →
-`scripts/site/run_lighthouse.mjs`). The same runner and the same evaluator
+`scripts/site/run_lighthouse.mjs`). The edge sample is exactly: the public
+home `/` measured three times (`--runs=3`; fewer than three home rows fails
+the acceptance) plus at most one runtime route, the accepted opportunity
+route selected from the live overlay (`/oportunidades/<slug>/`) when the
+family is published, and none when it is withdrawn (then the withdrawal probe
+`/oportunidades/pe-2026-000188-reforma-ubs-londrina-pr/` must answer 404/410
+and the home alone is measured). No other route is sampled post-promote:
+sitewide coverage is the lab run in `site-ci`. The same runner and the same evaluator
 (`scripts/site/lighthouse_thresholds.mjs`) judge the lab run in `site-ci` and
 the edge run here, with the same budgets read from
 `data/site/design-system.json` (`performance_budget`), which may only tighten

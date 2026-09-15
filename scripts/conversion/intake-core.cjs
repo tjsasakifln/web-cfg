@@ -246,6 +246,19 @@ async function handleHandraise({ store, body, env, fetchFn, timeoutMs, now, auth
   const logs = [];
   const data = body && typeof body === "object" ? body : {};
 
+  // Same fail-closed canary gate as handleXrayRequest: while the conversion
+  // canary is off, the hand-raise path is not a second public intake.
+  if (!canaryEnabled(env || process.env) && (env || process.env).CONVERSION_CANARY !== "1") {
+    if ((env || process.env).NODE_ENV !== "test") {
+      return {
+        statusCode: 404,
+        body: { ok: false, error: "canary_disabled", message: "Jornada indisponivel." },
+        trace,
+        logs,
+      };
+    }
+  }
+
   if (isHoneypot(data)) {
     return {
       statusCode: 200,
@@ -407,6 +420,7 @@ async function handleHandraise({ store, body, env, fetchFn, timeoutMs, now, auth
       sla: "UNKNOWN",
       handoff_status: handoff && handoff.status,
       consent_state: "granted",
+      ...(record.qualification_state ? { qualification_state: record.qualification_state } : {}),
       persist_before_handoff: persistBeforeHandoff(trace),
       attribution_complete: completeness.ok,
     },

@@ -219,6 +219,8 @@ function isGenericDeliverablesHandraise(data) {
 }
 
 const LICITACAO_PRODUCT_IDS = new Set(["CFG-D12", "CFG-D13", "CFG-D14", "CFG-D15", "CFG-D16"]);
+// Mesmo value do <option> "Ainda não sei qual serviço preciso" em index.html.
+const ESTAGIO_UNKNOWN_SERVICE = "ainda não sei qual serviço";
 const CONTRACT_VALUE_BANDS = new Set(["ate_5m", "5m_20m", "20m_100m", "acima_100m", "UNKNOWN"]);
 const EXECUTION_REGIMES = new Set([
   "empreitada_preco_global",
@@ -331,6 +333,11 @@ const EXPANSION_DECISION_INTENTS = new Set([
   "consolidar_plano",
   "UNKNOWN",
 ]);
+
+function validatedCnpjOrNull(raw) {
+  const check = validateCnpj(clamp(raw, MAX_FIELD.cnpj));
+  return check.ok ? check.cnpj : null;
+}
 
 function assertEightProductQualification(data, deliverableId) {
   if (!EIGHT_PRODUCT_IDS.has(deliverableId)) return { ok: true, qualification: null };
@@ -815,15 +822,48 @@ function validateAndNormalize(data) {
   let licitacaoCheck = { ok: true, qualification: null };
   let eightCheck = { ok: true, qualification: null };
   let contractCheck = { ok: true, qualification: null };
+  // A qualificação descreve a necessidade; ela NÃO decide se o contato é
+  // recebido. Documentação incompleta, contrato ainda sem número e prazo mais
+  // curto que o piso publicado passaram a ser LACUNA REGISTRADA, nunca veto de
+  // recebimento: antes devolviam 422 sem gravar nada, e o cliente apresentava
+  // isso ao visitante como pane de servidor. O piso material continua publicado
+  // na própria rota; o que acabou foi descartar a pessoa que chega fora dele.
+  // Isto vale SOMENTE para as três qualificações de produto. Rejeições
+  // estruturais e de segurança (payload, origem, honeypot, mídia) continuam
+  // fail-closed e inalteradas.
+  const qualificationGaps = [];
   if (!adaptiveFields) {
     licitacaoCheck = assertLicitacaoQualification(data, qualificationDeliverableId);
-    if (!licitacaoCheck.ok) return licitacaoCheck;
+    if (!licitacaoCheck.ok) qualificationGaps.push(licitacaoCheck.error);
     eightCheck = assertEightProductQualification(data, qualificationDeliverableId);
-    if (!eightCheck.ok) return eightCheck;
+    if (!eightCheck.ok) qualificationGaps.push(eightCheck.error);
     contractCheck = assertContractDefenseQualification(data, qualificationDeliverableId);
-    if (!contractCheck.ok) return contractCheck;
+    if (!contractCheck.ok) qualificationGaps.push(contractCheck.error);
   }
   const productQualification = licitacaoCheck.qualification || eightCheck.qualification || contractCheck.qualification;
+  // Fallback ao valor bruto: numa lacuna, productQualification é null e um
+  // prazo curto -- exatamente o caso que mais precisa de resposta rápida --
+  // desapareceria do registro. Só valores dentro do enum publicado (ou datas
+  // canônicas) sobrevivem; texto livre fora do enum continua descartado.
+  // Datas: rawIsoDate só exige o formato canônico. Um prazo já vencido ou um
+  // corte igual/posterior ao prazo (as condições que antes geravam 422)
+  // sobrevive como CONTEXTO BRUTO, por decisão do fundador (AGENTS.md:
+  // demanda não confirmada é NEEDS_CONTEXT, não promessa nem descarte). O
+  // motivo fica em qualification_gaps para a triagem humana ler; o piso de
+  // prazo publicado continua sendo confirmado antes do aceite técnico.
+  const rawEnum = (value, allowed, max) => {
+    const v = clamp(value, max);
+    return allowed.has(v) ? v : "";
+  };
+  const rawIsoDate = (value, max) => {
+    const v = clamp(value, max);
+    return isCanonicalIsoDate(v) ? v : "";
+  };
+  const rawLotCount = () => {
+    const v = clamp(data.lot_count, MAX_FIELD.lot_count);
+    return /^\d{1,3}$/.test(v) && Number(v) >= 1 ? Number(v) : null;
+  };
+  const gapFallback = qualificationGaps.length > 0;
 
   // Radar Decisório purchase parameters. Server-side, fail-closed: the browser
   // check is a convenience, this one is the contract.
@@ -863,9 +903,15 @@ function validateAndNormalize(data) {
   // On a Radar order the delivery e-mail is also the contact channel.
   const email = normalizedEmail || (radarParams ? radarParams.email_entrega : "");
   const familyStage = deliverableCheck.service_family_stage || "";
-  const estagio = adaptiveFields
+  const informedEstagio = adaptiveFields
     ? adaptiveFields.estagio
     : familyStage || clamp(data.estagio || data.tipo_demanda || data.demand_type, MAX_FIELD.estagio);
+  // Não saber qual serviço precisa nunca elimina uma pessoa válida: sem
+  // estágio, o registro recebe o mesmo valor que a home oferece a quem quer
+  // ser orientado e é marcado NEEDS_CONTEXT. Contato e consentimento continuam
+  // obrigatórios abaixo; a jornada é derivada do valor efetivo.
+  const estagioDefaulted = !adaptiveFields && !informedEstagio;
+  const estagio = estagioDefaulted ? ESTAGIO_UNKNOWN_SERVICE : informedEstagio;
   const jornada = adaptiveFields
     ? adaptiveFields.jornada
     : normalizeJourney(familyStage ? "" : data.jornada || data.journey, estagio);
@@ -991,14 +1037,38 @@ function validateAndNormalize(data) {
     asset_family: sanitizeAttributionValue(data.asset_family, MAX_FIELD.asset_family, "asset_family") || null,
     query_class: sanitizeAttributionValue(data.query_class, MAX_FIELD.query_class, "query_class") || null,
     deliverable_id: deliverableCheck.deliverable_id,
-    analysis_cutoff: productQualification?.analysis_cutoff || null,
-    opportunity_deadline: productQualification?.opportunity_deadline || null,
-    contract_event: productQualification?.contract_event || null,
-    contract_stage: productQualification?.contract_stage || null,
-    contract_value_band: productQualification?.contract_value_band || null,
-    lot_count: productQualification?.lot_count || null,
-    execution_regime: productQualification?.execution_regime || null,
-    decision_intent: productQualification?.decision_intent || null,
+    analysis_cutoff:
+      productQualification?.analysis_cutoff
+      || (gapFallback ? rawIsoDate(data.analysis_cutoff, MAX_FIELD.analysis_cutoff) : "")
+      || null,
+    opportunity_deadline:
+      productQualification?.opportunity_deadline
+      || (gapFallback ? rawIsoDate(data.opportunity_deadline, MAX_FIELD.opportunity_deadline) : "")
+      || null,
+    contract_event:
+      productQualification?.contract_event
+      || (gapFallback ? rawEnum(data.contract_event, CONTRACT_EVENTS, MAX_FIELD.contract_event) : "")
+      || null,
+    contract_stage:
+      productQualification?.contract_stage
+      || (gapFallback ? rawEnum(data.contract_stage, CONTRACT_STAGES, MAX_FIELD.contract_stage) : "")
+      || null,
+    contract_value_band:
+      productQualification?.contract_value_band
+      || (gapFallback ? rawEnum(data.contract_value_band, CONTRACT_VALUE_BANDS, MAX_FIELD.contract_value_band) : "")
+      || null,
+    lot_count: productQualification?.lot_count || (gapFallback ? rawLotCount() : null) || null,
+    execution_regime:
+      productQualification?.execution_regime
+      || (gapFallback ? rawEnum(data.execution_regime, EXECUTION_REGIMES, MAX_FIELD.execution_regime) : "")
+      || null,
+    decision_intent:
+      productQualification?.decision_intent
+      || (gapFallback
+        ? rawEnum(data.decision_intent, LICITACAO_DECISION_INTENTS, MAX_FIELD.decision_intent)
+          || rawEnum(data.decision_intent, EXPANSION_DECISION_INTENTS, MAX_FIELD.decision_intent)
+        : "")
+      || null,
     faixa_contrato: pickEnum(data.faixa_contrato, ICP_TICKET_BANDS, MAX_FIELD.faixa_contrato),
     risco_em_jogo: pickEnum(data.risco_em_jogo, ICP_RISK_BANDS, MAX_FIELD.risco_em_jogo),
     frequencia: pickEnum(data.frequencia, ICP_FREQUENCY, MAX_FIELD.frequencia),
@@ -1009,7 +1079,14 @@ function validateAndNormalize(data) {
     public_contract_id: productQualification?.public_contract_id || clamp(data.public_contract_id, MAX_FIELD.public_contract_id) || null,
     public_entity_id: clamp(data.public_entity_id, MAX_FIELD.public_entity_id) || null,
     public_id_slug: clamp(data.public_id_slug, MAX_FIELD.public_id_slug) || null,
-    cnpj: eightCheck.qualification?.cnpj || clamp(data.cnpj || data.cnpj14, MAX_FIELD.cnpj) || null,
+    // Identidade estruturada só com CNPJ VALIDADO. Decisão explícita: isto vale
+    // para TODOS os caminhos (lacuna ou não), porque o fallback anterior era o
+    // mesmo `clamp(data.cnpj)` sem guarda em qualquer formulário; com a lacuna
+    // de qualificação passando a ser recebida (em vez de 422), ele passou a
+    // gravar texto livre no campo estruturado, na chave de idempotência e no
+    // handoff Warmbly. Texto livre e dígitos inválidos viram null; um CNPJ
+    // válido sobrevive normalizado (14 dígitos), mesmo fora dos oito produtos.
+    cnpj: eightCheck.qualification?.cnpj || validatedCnpjOrNull(data.cnpj || data.cnpj14),
     offer_id: offerCheck.offer_id || null,
     terms_id: offerCheck.terms_id || null,
     radar_params: radarParams,
@@ -1079,6 +1156,23 @@ function validateAndNormalize(data) {
     lead.certame_stage = adaptiveFields.certame_stage || null;
     lead.contract_relation = adaptiveFields.contract_relation || null;
     lead.entity_class = adaptiveFields.entity_class || null;
+  }
+
+  // Uma lacuna de qualificação (ou um visitante que ainda não sabe qual
+  // serviço precisa) marca o registro para leitura humana; ela não impede o
+  // recebimento. NEEDS_CONTEXT já existe no contrato (ver deriveQualification
+  // em adaptive-intake): nenhum enum novo é criado aqui.
+  if (!lead.qualification_state && (qualificationGaps.length || estagioDefaulted)) {
+    lead.qualification_state = "NEEDS_CONTEXT";
+  }
+  // Por que NEEDS_CONTEXT: os códigos de erro das checagens de produto que
+  // falharam, mais `estagio_unknown_service` quando o visitante não informou
+  // o serviço (nunca o valor informado, nunca PII). Ausente num registro
+  // limpo. Fica fora do material de idempotência: a chave é estável mesmo
+  // quando a mesma lacuna é reenviada.
+  const gapReasons = [...new Set([...qualificationGaps, ...(estagioDefaulted ? ["estagio_unknown_service"] : [])])];
+  if (gapReasons.length) {
+    lead.qualification_gaps = gapReasons;
   }
 
   return { ok: true, honeypot: false, lead };
@@ -1299,12 +1393,16 @@ function publicSuccessBody({
   return body;
 }
 
-function publicErrorBody({ error, message }) {
-  return {
+function publicErrorBody({ error, message, field }) {
+  const body = {
     ok: false,
     error: error || "error",
     message: message || "Não foi possível processar a solicitação.",
   };
+  // Um 400 legítimo nomeia o campo (telefone, email) para o cliente destacar
+  // o que corrigir; nunca carrega o valor digitado.
+  if (field && /^[a-z_]{1,40}$/.test(String(field))) body.field = String(field);
+  return body;
 }
 
 const SENSITIVE_LOG_KEY = /(?:^|_)(?:authorization|bearer|cnpj|cpf|email|ip|mail|message|mensagem|name|nome|phone|secret|tel|token|whatsapp|file|arquivo|anexo|document|upload|eicar)(?:_|$)/i;
@@ -1365,6 +1463,7 @@ function retentionPolicy() {
 module.exports = {
   MAX_BODY_BYTES,
   MAX_FIELD,
+  ESTAGIO_UNKNOWN_SERVICE,
   INTENT_KIND_ALLOWED,
   ATTR_ALLOWLIST,
   ALLOWED_ORIGINS,
