@@ -98,7 +98,7 @@
     add(wrap, "p", "", "Próximo passo: " + route.next);
     var dest = destinationFor(route);
     if (dest.present && dest.href) {
-      addLink(wrap, dest.href, "button", "Ver " + route.public_name, {
+      addLink(wrap, dest.href, "button", "Abrir o serviço: " + route.public_name.toLowerCase(), {
         "data-tool-to-offer": route.offer_id,
         "data-tool-to-purchase": route.purchase_id || "",
       });
@@ -111,7 +111,7 @@
     var summary = result.summary || { present: [], gaps: [], unknowns: [] };
     var routing = result.routing || {};
 
-    add(resultBody, "p", "", "O que está disponível, o que falta esclarecer e o próximo passo concreto. Sem percentual e sem nota de risco. Contato não é exigido.");
+    add(resultBody, "p", "", "O que está disponível, o que falta esclarecer e o próximo passo concreto, com o trabalho de engenharia que responde a cada lacuna. Sem percentual e sem nota de risco. Contato não é exigido.");
     add(resultBody, "p", "", result.limits);
 
     var overview = add(resultBody, "section", "pptr-summary");
@@ -146,13 +146,13 @@
 
     var routeBox = add(resultBody, "section", "pptr-routing");
     routeBox.setAttribute("data-routing-table", routing.table_id || "private_project_readiness_routing_v1");
-    add(routeBox, "h3", "", "Encaminhamento");
+    add(routeBox, "h3", "", "O trabalho que dá continuidade ao seu caso");
     if (routing.primary) {
       add(routeBox, "p", "", routing.justification);
       renderRoute(routeBox, routing.primary, "primary", routing.justification);
       if (routing.alternatives && routing.alternatives.length) {
-        add(routeBox, "h4", "", "Outros caminhos possíveis");
-        add(routeBox, "p", "", "Não é necessário contratar dois serviços de uma vez. Os caminhos abaixo continuam coerentes com as lacunas declaradas.");
+        add(routeBox, "h4", "", "Outros trabalhos que respondem ao que você declarou");
+        add(routeBox, "p", "", "Se mais de uma lacuna pesa na decisão, a proposta combina as etapas em um só pedido. Os caminhos abaixo também respondem às lacunas declaradas.");
         var a;
         for (a = 0; a < routing.alternatives.length; a += 1) {
           renderRoute(routeBox, routing.alternatives[a], "alternative", routing.alternatives[a].why);
@@ -163,7 +163,7 @@
       if (routing.scope_conversation) {
         add(routeBox, "p", "", "Esta leitura não fecha um diagnóstico. Uma conversa de escopo é opcional e não substitui documentos originais.");
       } else {
-        add(routeBox, "p", "", "Nenhuma contratação é sugerida. O resultado completo permanece acima.");
+        add(routeBox, "p", "", "Pelo que você declarou, não há trabalho de engenharia a contratar agora. O resultado completo permanece acima.");
       }
     }
 

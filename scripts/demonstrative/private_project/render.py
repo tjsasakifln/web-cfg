@@ -480,11 +480,11 @@ def render_html(extracts: dict[str, Any]) -> str:
 </section>
 
 <section aria-labelledby="contratar">
-<h2 id="contratar">Pedir o mesmo tipo de entrega no seu projeto</h2>
-<p>O recorte cabe em qualquer porte e aceita contexto inicial incompleto. Elaboração, revisão, compatibilização, quantitativos e orçamento são trabalhos com nome próprio que a proposta combina conforme a necessidade: o pedido descreve o problema, a proposta organiza as etapas. Autoria, atribuição, visita, logística e ART, quando couberem, são confirmadas antes do aceite técnico.</p>
-<p>Peça a entrega que corresponde ao recorte: <a href="/quantitativos-orcamento-obras/">quantitativos e orçamento</a>, <a href="/revisao-tecnica-projetos-engenharia/">revisão técnica</a> ou <a href="/compatibilizacao-projetos-engenharia/">compatibilização</a>. Traga o que você já tem.</p>
+<h2 id="contratar">Levar o mesmo tipo de entrega para o seu projeto</h2>
+<p>Se você tem um projeto de terceiro para conferir, disciplinas para compatibilizar ou uma obra para orçar, este é o formato do que chega às suas mãos: planilha com memória, relatório de revisão com pontos localizados, registro de interferências com a solução acordada. A proposta combina elaboração, revisão, compatibilização, quantitativos e orçamento conforme a necessidade, e autoria, atribuição, visita, logística e ART, quando couberem, são confirmadas antes do aceite técnico.</p>
+<p>Abra o serviço que corresponde ao que você precisa: <a href="/quantitativos-orcamento-obras/">quantitativos e orçamento</a>, <a href="/revisao-tecnica-projetos-engenharia/">revisão técnica</a> ou <a href="/compatibilizacao-projetos-engenharia/">compatibilização</a>. Traga o que você já tem; o que for sensível segue depois, por canal seguro.</p>
 <div class="demo-actions">
-<a class="button button-primary" data-journey="contrato" data-cta-position="inline_cta" href="{e(wa)}" rel="noopener" target="_blank">Pedir proposta pelo WhatsApp</a>
+<a class="button button-primary" data-journey="contrato" data-cta-position="inline_cta" href="{e(wa)}" rel="noopener" target="_blank">Descrever o projeto pelo WhatsApp</a>
 <a class="button button-secondary" data-journey="contrato" href="/triagem-tecnica/#projetos">Pedir pela triagem técnica</a>
 <a class="text-link" href="/casos/">Ver outros exemplos demonstrativos</a>
 </div>

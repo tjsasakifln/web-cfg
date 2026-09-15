@@ -29,13 +29,13 @@
       "commercial_configuration"
     ],
     "baseline_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
-    "expected_declared_ctas": 128
+    "expected_declared_ctas": 132
   },
   "coverage": {
     "authority": "data/organic/public-family-registry.json",
     "manual_route_allowlist": false,
     "active_capture_routes": 25,
-    "declared_ctas": 128,
+    "declared_ctas": 132,
     "protected_routes_with_capture": [],
     "problems": []
   },
@@ -476,7 +476,7 @@
           "current_label": "Contar o que aconteceu",
           "useful_next_state": "O evento demonstrado fica registrado para identificar a prova faltante e o trabalho aplicável, sem tratar exemplo sintético como resultado de cliente.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
-          "pre_form_value": "Use o demonstrativo como referência e conte o que aconteceu na sua obra. A CONFENGE analisa os documentos disponíveis e indica o escopo de análise adequado ao caso.",
+          "pre_form_value": "Use o demonstrativo como referência e conte o que aconteceu na sua obra. A resposta nomeia o trabalho que assumimos, o que você recebe e o que ainda falta reunir; a proposta organiza as etapas.",
           "pre_form_value_visible": true,
           "field_purpose": {
             "visible_text": "Nome identifica o responsável; um canal válido permite retorno; empresa e descrição do evento ajudam a ligar a situação ao demonstrativo e são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
@@ -2408,14 +2408,14 @@
           "runtime_profile": "shared_lead_form_v1",
           "stage": "compare",
           "commitment": "medium",
-          "submit_label": "Ver a entrega indicada para o meu caso",
-          "current_label": "Ver a entrega indicada para o meu caso",
+          "submit_label": "Saber qual entrega resolve a minha pergunta",
+          "current_label": "Saber qual entrega resolve a minha pergunta",
           "useful_next_state": "A decisão fica registrada para a CONFENGE indicar a entrega aplicável, a ordem de execução e os insumos que ainda precisam ser confirmados.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
-          "pre_form_value": "Descreva a decisão; a resposta indica entrega, ordem e insumos. Obrigatórios: nome, consentimento e contato. Demais campos opcionais. WhatsApp: DDD + 10/11 dígitos; e-mail completo.",
+          "pre_form_value": "Descreva a decisão que está na mesa; a resposta nomeia a entrega, a ordem de contratação e o que você precisa reunir. Obrigatórios: nome, consentimento e contato. Demais campos opcionais. WhatsApp: DDD + 10/11 dígitos; e-mail completo.",
           "pre_form_value_visible": true,
           "field_purpose": {
-            "visible_text": "Descreva a decisão; a resposta indica entrega, ordem e insumos. Obrigatórios: nome, consentimento e contato. Demais campos opcionais. WhatsApp: DDD + 10/11 dígitos; e-mail completo.",
+            "visible_text": "Descreva a decisão que está na mesa; a resposta nomeia a entrega, a ordem de contratação e o que você precisa reunir. Obrigatórios: nome, consentimento e contato. Demais campos opcionais. WhatsApp: DDD + 10/11 dígitos; e-mail completo.",
             "visible": true,
             "required": [
               "nome",
@@ -2495,7 +2495,7 @@
           "href": "#captura-entregas",
           "stage": "compare",
           "commitment": "medium",
-          "current_label": "Descrever a situação e receber a proposta organizada",
+          "current_label": "Descrever a decisão e saber qual entrega a resolve",
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
@@ -3188,8 +3188,8 @@
           "href": "/servicos/",
           "stage": "compare",
           "commitment": "low",
-          "current_label": "Conhecer os serviços",
-          "useful_next_state": "Abre o destino declarado por “Conhecer os serviços” para continuar a decisão.",
+          "current_label": "Ver serviços por situação",
+          "useful_next_state": "Abre o destino declarado por “Ver serviços por situação” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
           "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem apenas por canal seguro combinado depois do protocolo.",
@@ -3215,12 +3215,57 @@
         {
           "cta_id": "home-private-quantities-budget",
           "position": "",
-          "href": "/servicos/#servico-projeto",
+          "href": "/quantitativos-orcamento-obras/",
           "stage": "compare",
           "commitment": "low",
-          "current_label": "Ver o que entregamos em projeto",
-          "useful_next_state": "Abre o destino declarado por “Ver o que entregamos em projeto” para continuar a decisão.",
+          "current_label": "Ver quantitativos e orçamento de obra",
+          "useful_next_state": "Abre o destino declarado por “Ver quantitativos e orçamento de obra” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem apenas por canal seguro combinado depois do protocolo.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "contact_band",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20explicar%20uma%20situa%C3%A7%C3%A3o%20t%C3%A9cnica%20e%20entender%20o%20pr%C3%B3ximo%20passo.",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Descrever pelo WhatsApp",
+          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
+          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
+          "field_purpose": "not_applicable",
+          "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem apenas por canal seguro combinado depois do protocolo.",
+          "event_semantics": [
+            "whatsapp_click"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "contact_band",
+          "href": "mailto:tiago.sasaki@confenge.com.br?subject=Situa%C3%A7%C3%A3o%20t%C3%A9cnica&amp;body=Ol%C3%A1%2C%20Tiago.%0A%0ASitua%C3%A7%C3%A3o%20t%C3%A9cnica%3A%0AO%20que%20preciso%20decidir%20ou%20resolver%3A%0APrazo%3A%0A",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Descrever por e-mail",
+          "useful_next_state": "Abre o cliente de e-mail com assunto e contexto para continuar o enquadramento.",
+          "actual_receipt": "Rascunho local de e-mail; não existe receipt do servidor antes do envio.",
+          "field_purpose": "not_applicable",
+          "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem apenas por canal seguro combinado depois do protocolo.",
+          "event_semantics": [
+            "email_click"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "",
+          "href": "#contato",
+          "stage": "register_context",
+          "commitment": "medium",
+          "current_label": "Use o formulário no fim da página",
+          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da página de confirmação",
           "field_purpose": "not_applicable",
           "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem apenas por canal seguro combinado depois do protocolo.",
           "event_semantics": [
@@ -3395,7 +3440,7 @@
           "turnstile_token_forwarding": true,
           "receipt_required": true,
           "contact_constraints_ready": true,
-          "form_whatsapp_relationship": "form_only",
+          "form_whatsapp_relationship": "parallel_talk_path",
           "shared_runtime_selectors_ready": true,
           "shared_runtime_journey_ready": true,
           "standalone_runtime_ready": true
@@ -3415,6 +3460,21 @@
           "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
           "event_semantics": [
             "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "hub_services_next",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20problema%20urgente%20em%20contrato%20p%C3%BAblico%20%28glosa%2C%20medi%C3%A7%C3%A3o%2C%20aditivo%2C%20reequil%C3%ADbrio%20ou%20atraso%29%20e%20preciso%20de%20an%C3%A1lise%20inicial.",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Falar pelo WhatsApp",
+          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
+          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "whatsapp_click"
           ]
         },
         {

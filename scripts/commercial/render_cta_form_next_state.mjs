@@ -220,7 +220,7 @@ function updateMainActions(html) {
 }
 
 function relocateDeliveryContract(html) {
-  const valueAndPurpose = "Descreva a decisão; a resposta indica entrega, ordem e insumos. Obrigatórios: nome, consentimento e contato. Demais campos opcionais. WhatsApp: DDD + 10/11 dígitos; e-mail completo.";
+  const valueAndPurpose = "Descreva a decisão que está na mesa; a resposta nomeia a entrega, a ordem de contratação e o que você precisa reunir. Obrigatórios: nome, consentimento e contato. Demais campos opcionais. WhatsApp: DDD + 10/11 dígitos; e-mail completo.";
   const boundary = "O pedido fica registrado, sem cobrança ou contratação. Preço e escopo exigem aceite. Uso só para retorno; retenção: 730 dias. Exclusão com protocolo pela";
   const replacement = `$1\n<p data-form-value data-field-purpose>${escapeHtml(valueAndPurpose)}</p>\n<p data-form-boundary>${escapeHtml(boundary)} <a href="/privacidade/">Política de Privacidade</a>.</p>\n$2`;
   return html.replace(
