@@ -150,13 +150,13 @@ function renderElement(step) {
     ? `<span data-trail-location="true">Localização no desenho: ${escapeHtml(step.location)}</span>`
     : "";
   const id = step.id ? `<code data-trail-id="${escapeHtml(step.id)}">${escapeHtml(step.id)}</code> ` : "";
-  return `${id}<strong>${name}</strong><span>Origem: ${source}</span>${location}`;
+  return `${id}<strong>${name}</strong> <span>Origem: ${source}</span>${location}`;
 }
 
 function renderCriterion(step) {
   const unit = escapeHtml(step.unit);
   const rule = escapeHtml(step.rule);
-  return `<strong>Unidade: ${unit}</strong><span>${rule}</span>`;
+  return `<strong>Unidade: ${unit}</strong> <span>${rule}</span>`;
 }
 
 function renderCalculation(step) {
@@ -187,14 +187,21 @@ function renderSpreadsheetItem(step) {
   return `<code data-trail-item-code="${code}">${code}</code> <span>${description}</span> <data data-trail-item-quantity="${escapeHtml(step.quantity)}" value="${escapeHtml(step.quantity)}">${escapeHtml(quantity)} ${unit}</data>`;
 }
 
+function stripLeadingIdPrefix(text, stepId) {
+  if (!text || !stepId) return text;
+  const prefix = `${stepId}: `;
+  return text.startsWith(prefix) ? text.slice(prefix.length) : text;
+}
+
 function renderReviewReference(step) {
   const id = step.id ? `<code data-trail-review-id="${escapeHtml(step.id)}">${escapeHtml(step.id)}</code> ` : "";
   const doc = step.document_ref
     ? `<span>Documento ${escapeHtml(step.document_ref)}</span>`
     : "";
+  const linkText = stripLeadingIdPrefix(step.text, step.id) || step.label || "Ver a revisão";
   const href = step.href
-    ? `<a href="${escapeHtml(step.href)}">${escapeHtml(step.text || step.label || "Ver a revisão")}</a>`
-    : `<span>${escapeHtml(step.text || "")}</span>`;
+    ? `<a href="${escapeHtml(step.href)}">${escapeHtml(linkText)}</a>`
+    : `<span>${escapeHtml(stripLeadingIdPrefix(step.text, step.id) || "")}</span>`;
   return `${id}${href}${doc}`;
 }
 
