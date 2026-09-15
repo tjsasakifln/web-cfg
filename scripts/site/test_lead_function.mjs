@@ -145,7 +145,8 @@ _reset();
     fail("urgencia_sem_dados_received", { status: res.statusCode, data, size: mem.map.size, before });
   }
   if (stored.estagio !== ESTAGIO_UNKNOWN_SERVICE || stored.jornada !== "outro" ||
-      stored.qualification_state !== "NEEDS_CONTEXT" || stored.mensagem !== urgent.mensagem) {
+      stored.qualification_state !== "NEEDS_CONTEXT" || stored.mensagem !== urgent.mensagem ||
+      !Array.isArray(stored.qualification_gaps) || !stored.qualification_gaps.includes("estagio_unknown_service")) {
     fail("urgencia_sem_dados_stored_shape", stored);
   }
   const byEmail = await handler(event({
@@ -691,6 +692,26 @@ _reset();
       fail("licitacao_gap_keeps_raw_qualification_fields", { status: gap.statusCode, gapData, gapStored });
     }
     pass("licitacao_gap_keeps_raw_qualification_fields", { lead_id: gapData.lead_id });
+
+    // Por que NEEDS_CONTEXT: o registro guarda os códigos das checagens que
+    // falharam (nunca o valor informado), e o handoff Warmbly continua
+    // mapeando o mesmo registro sem quebrar nem vazar o campo como texto.
+    const handoff = require(path.join(root, "netlify/functions/lib/inbound-handoff.cjs"));
+    if (
+      !Array.isArray(gapStored.qualification_gaps) || gapStored.qualification_gaps.length === 0 ||
+      !gapStored.qualification_gaps.includes("licitacao_qualification_invalid") ||
+      gapStored.qualification_gaps.some((code) => /regime_livre|EDITAL|@/.test(String(code)))
+    ) {
+      fail("licitacao_gap_reasons_are_stored", { qualification_gaps: gapStored.qualification_gaps });
+    }
+    const gapHandoff = handoff.mapLeadToInboundV1({ ...gapStored, consentimento: true });
+    if (
+      gapHandoff.source !== "CONFENGE_WEB" || gapHandoff.lead_id !== gapData.lead_id ||
+      !/qualificacao=NEEDS_CONTEXT/.test(gapHandoff.message || "")
+    ) {
+      fail("licitacao_gap_handoff_mapping_intact", { keys: Object.keys(gapHandoff), message: gapHandoff.message });
+    }
+    pass("licitacao_gap_reasons_are_stored", { qualification_gaps: gapStored.qualification_gaps });
   }
 
   for (const [index, deliverableId] of ["CFG-D12", "CFG-D13", "CFG-D14", "CFG-D15", "CFG-D16"].entries()) {
@@ -726,6 +747,10 @@ _reset();
     stored.decision_intent !== "avaliar_disputa"
   ) {
     fail("licitacao_qualification_persisted", { status: res.statusCode, data, stored });
+  }
+  // Registro limpo: nenhuma lacuna gravada (null/ausente, nunca []).
+  if (stored.qualification_state === "NEEDS_CONTEXT" || stored.qualification_gaps != null) {
+    fail("licitacao_clean_record_has_no_gaps", { qualification_state: stored.qualification_state, qualification_gaps: stored.qualification_gaps });
   }
   pass("licitacao_qualification_persisted", stored?.deliverable_id);
 }

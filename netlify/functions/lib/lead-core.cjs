@@ -845,6 +845,12 @@ function validateAndNormalize(data) {
   // prazo curto -- exatamente o caso que mais precisa de resposta rápida --
   // desapareceria do registro. Só valores dentro do enum publicado (ou datas
   // canônicas) sobrevivem; texto livre fora do enum continua descartado.
+  // Datas: rawIsoDate só exige o formato canônico. Um prazo já vencido ou um
+  // corte igual/posterior ao prazo (as condições que antes geravam 422)
+  // sobrevive como CONTEXTO BRUTO, por decisão do fundador (AGENTS.md:
+  // demanda não confirmada é NEEDS_CONTEXT, não promessa nem descarte). O
+  // motivo fica em qualification_gaps para a triagem humana ler; o piso de
+  // prazo publicado continua sendo confirmado antes do aceite técnico.
   const rawEnum = (value, allowed, max) => {
     const v = clamp(value, max);
     return allowed.has(v) ? v : "";
@@ -1158,6 +1164,15 @@ function validateAndNormalize(data) {
   // em adaptive-intake): nenhum enum novo é criado aqui.
   if (!lead.qualification_state && (qualificationGaps.length || estagioDefaulted)) {
     lead.qualification_state = "NEEDS_CONTEXT";
+  }
+  // Por que NEEDS_CONTEXT: os códigos de erro das checagens de produto que
+  // falharam, mais `estagio_unknown_service` quando o visitante não informou
+  // o serviço (nunca o valor informado, nunca PII). Ausente num registro
+  // limpo. Fica fora do material de idempotência: a chave é estável mesmo
+  // quando a mesma lacuna é reenviada.
+  const gapReasons = [...new Set([...qualificationGaps, ...(estagioDefaulted ? ["estagio_unknown_service"] : [])])];
+  if (gapReasons.length) {
+    lead.qualification_gaps = gapReasons;
   }
 
   return { ok: true, honeypot: false, lead };
