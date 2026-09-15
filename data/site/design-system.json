@@ -220,19 +220,23 @@
     "visual regression"
   ],
   "home_architecture": {
-    "max_narrative_sections": 7,
-    "max_primary_cta": 4,
+    "normative": false,
+    "note": "Descrição da home publicada (campanha VALOR-IMEDIATO-20260914). Os gates reais são test_design_gates.test_home_archetypes_diverse (5 a 8 blocos, >=5 distintos, journey_paths presente) e test_deliverables_hub (faixa 5 a 8); este bloco não é lido por script.",
+    "min_narrative_sections": 5,
+    "max_narrative_sections": 8,
+    "min_distinct_archetypes": 5,
+    "max_primary_cta": 5,
     "blocks": [
       "hero_split",
-      "tension_sequence",
-      "offer_dominant",
-      "journey_rail",
+      "journey_paths",
+      "contextual_next_action",
       "authority_editorial",
-      "icp_contrast",
+      "market_context",
+      "cta_formal",
       "cta_formal"
     ],
-    "primary_cta": "Analisar meu caso",
-    "secondary_cta": "Ver onde podemos ajudar"
+    "primary_cta": "Ver serviços por situação",
+    "secondary_cta": "Descrever a minha situação"
   },
   "motion": {
     "allowed": [
