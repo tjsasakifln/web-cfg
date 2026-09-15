@@ -217,6 +217,26 @@ function runShipped() {
   assert("landing_distinguishes_parceria", /data-purchase="parceria"/.test(landing) && /Colaboração contínua/.test(landing), "parceria");
   assert("landing_hub_servicos", landing.includes('href="/servicos/#servico-projeto"'), "hub 09");
   assert("landing_schematic_not_dimensioning", /Não representa cliente, obra executada nem dimensionamento concluído/i.test(landing), "esquema");
+  // VALOR-IMEDIATO-20260914: situation-first opening, use-bound delivery, labelled
+  // own sample and a channel line with its commitment inside the first section.
+  {
+    const main = mainOf(landing);
+    const firstSection = main.match(/<section\b[\s\S]*?<\/section>/i)?.[0] || "";
+    const firstText = textFromHtml(firstSection);
+    assert("landing_hero_situation_eyebrow", /class="eyebrow">Arquitetura pronta, faltam as disciplinas complementares</.test(firstSection), "eyebrow de situacao");
+    assert("landing_hero_use_clause", /Você passa a ter em mãos/.test(firstText), "entrega ligada a uso");
+    assert("landing_hero_sample_labelled", /Amostra demonstrativa da matriz de interfaces[^.]{0,40}não é obra de cliente/i.test(firstText), "amostra rotulada");
+    assert("landing_hero_channel_line", /wa\.me\/5548988344559/.test(firstSection) && /mailto:tiago\.sasaki@confenge\.com\.br/.test(firstSection) && /tel:\+5548988344559/.test(firstSection), "canais na abertura");
+    assert("landing_hero_channel_commitment", /sem contratação nem pagamento/.test(firstText) && /o que falta reunir/.test(firstText), "compromisso do canal");
+    assert("landing_hero_channels_without_fallback_attr", !/data-fallback-channel=/.test(firstSection), "canais da abertura nao duplicam os tres canais medidos");
+    assert("landing_hero_authorship_limit", /autoria arquitetônica permanece com o autor de origem/i.test(firstText), "limite de autoria junto da oferta");
+    assert("landing_hero_credential_authorized", /EESC-USP/.test(firstText) && /registro profissional ativo no CREA/.test(firstText) && /ART e nota fiscal/.test(firstText), "credencial autorizada");
+    assert("landing_single_primary_label", (main.match(/Solicitar proposta de elaboração/g) || []).length === 1, "um so rotulo para o pedido");
+    assert("landing_serve_para_per_deliverable", (main.match(/<strong>Serve para<\/strong>/g) || []).length >= 3, "serve para por entregavel");
+    assert("landing_contact_before_method", main.indexOf('id="escopo-projeto"') < main.indexOf('id="metodo-elaboracao"'), "contato antes do aprofundamento");
+    assert("landing_no_hub_word", !/\bhubs?\b/i.test(landing), "palavra hub");
+  }
+
   assert("landing_denies_forbidden_promises", /Não oferecemos autoria arquitetônica[\s\S]{0,280}obra segura[\s\S]{0,80}êxito jurídico[\s\S]{0,80}conformidade total/i.test(textFromHtml(mainOf(landing))), "promessas negadas");
 
   assertPageContract("content", content, {
