@@ -119,7 +119,6 @@ for (const p of critical) {
     "User-Agent": `confenge-daily-probe/1.0 (${stamp})`,
     "X-Confenge-Probe": "1",
     "Idempotency-Key": idem,
-    "X-Forwarded-For": `203.0.113.${1 + Math.floor(Math.random() * 200)}`,
   };
   const res = await fetch(`${BASE}/.netlify/functions/lead`, {
     method: "POST",

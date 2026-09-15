@@ -310,7 +310,7 @@
     "test:pos-inb-20260911-09": "node tests/campaigns/pos_inb_20260911/09/run.mjs --root . --examined-kind candidate --strict-release --manifest docs/campaigns/pos-inb-20260911/09/pos-manifest.json --mutations",
     "compose:proof-entrances": "node scripts/campaigns/orc-b2b-20260913/compose_proof_entrances.mjs",
     "test:orc-b2b-20260913": "node scripts/campaigns/orc-b2b-20260913/compose_proof_entrances.mjs --check && node --test tests/campaigns/orc-b2b-20260913/*.mjs",
-    "test:ativacao-01": "node tests/ativacao_20260912/01/test_money_asset_prod_proof_fail_closed.mjs",
+    "test:ativacao-01": "node tests/ativacao_20260912/01/test_money_asset_prod_proof_fail_closed.mjs && node tests/ativacao_20260912/01/test_audit_commercial_dod_inbound_opt_in.mjs",
     "test:ativacao-03": "python3 -m pytest tests/ativacao_20260912/03/test_presentation_and_sharing.py -q && node tests/ativacao_20260912/03/test_social_image_decode.mjs",
     "test:pos-inb-20260911-10": "node tests/campaigns/pos_inb_20260911/10/test_composition.mjs && python3 -m pytest scripts/pseo/tests/test_demonstrative_csv_packaging.py -q && node scripts/site/build_canonical_destination_map.mjs --check",
     "test:private-readiness": "node scripts/site/test_private_project_technical_readiness.mjs",

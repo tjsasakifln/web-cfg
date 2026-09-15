@@ -68,7 +68,6 @@ const probeHeaders = {
   "User-Agent": `confenge-daily-probe/1.0 (${probeStamp})`,
   "X-Confenge-Probe": "1",
   "Idempotency-Key": idemKey,
-  "X-Forwarded-For": `203.0.113.${1 + Math.floor(Math.random() * 200)}`,
 };
 
 {
