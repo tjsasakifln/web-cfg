@@ -1343,6 +1343,38 @@ async function drainPendingHandoffs(
   const due = (leads || []).filter((l) => isDue(l.handoff, now));
   for (const lead of due) {
     if (summary.attempted >= boundedLimit) break;
+    // Authenticated synthetic transport is only ever synchronous at capture,
+    // under explicit operator action. A scheduled drain never transports a
+    // synthetic probe row, including rows persisted PENDING before this guard
+    // existed: mark them terminal here so they stop being due, fail-closed.
+    if (lead && lead.synthetic_probe_authenticated === true) {
+      const next = {
+        ...(lead.handoff || {}),
+        target: "warmbly_inbound",
+        status: STATUS.SKIPPED,
+        reason: "synthetic_probe_not_drained",
+        last_error: null,
+        next_attempt_at: null,
+        skipped_at: now.toISOString(),
+      };
+      if (typeof next.attempts !== "number") next.attempts = 0;
+      safeLog("info", "inbound_handoff_synthetic_not_drained", {
+        lead_id: lead.lead_id,
+        previous_status: (lead.handoff && lead.handoff.status) || null,
+      });
+      if (typeof store.update === "function") {
+        try {
+          await store.update(lead.lead_id, { handoff: next });
+        } catch (err) {
+          safeLog("error", "inbound_handoff_status_update_failed", {
+            lead_id: lead.lead_id,
+            code: sanitizeError(err),
+          });
+        }
+      }
+      summary.skipped += 1;
+      continue;
+    }
     const isBacklog = lead?.handoff?.requeue_mode === "eligible_only" || lead?.handoff?.requeue_policy;
     if (isBacklog) {
       if (summary.backlog_attempted >= 1) {

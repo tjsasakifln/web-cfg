@@ -1192,9 +1192,10 @@ try {
     pass("non_real_skipped");
   }
 
-  // Only a server-authenticated probe may traverse the synthetic transport.
-  // The persist-only hook simulates process death at the exact outbox boundary;
-  // reopening the file store proves convergence after restart.
+  // Only a server-authenticated probe may traverse the synthetic transport,
+  // and only synchronously at capture. The persist-only hook withholds that
+  // transport: the row is born terminal (SKIPPED / persist_only_probe) and no
+  // restart or scheduled drain may ever carry it to Warmbly.
   {
     const probeSecret = "probe-secret-32-characters-minimum-2026";
     process.env.LEAD_PROBE_SECRET = probeSecret;
@@ -1224,16 +1225,177 @@ try {
       persisted.synthetic_probe_authenticated !== true ||
       persisted.next_action !== "exclude_from_commercial"
     ) fail("probe_server_classification", persisted);
-    if (persisted.handoff.status !== "PENDING" || mock.seen.length !== before) {
-      fail("probe_restart_boundary", { handoff: persisted.handoff, posts: mock.seen.length - before });
+    if (
+      persisted.persist_only_probe !== true ||
+      !persisted.handoff ||
+      persisted.handoff.status !== "SKIPPED" ||
+      persisted.handoff.reason !== "persist_only_probe" ||
+      persisted.handoff.next_attempt_at !== null ||
+      persisted.handoff.attempts !== 0 ||
+      mock.seen.length !== before
+    ) {
+      fail("persist_only_probe_born_terminal", { handoff: persisted.handoff, posts: mock.seen.length - before });
+    }
+    if (inbound.isDue(persisted.handoff, new Date(Date.now() + 365 * 24 * 3600 * 1000))) {
+      fail("persist_only_probe_becomes_due", persisted.handoff);
     }
 
+    // Reopening the file store simulates a restart followed by the scheduled
+    // drain: the persist-only row must stay terminal and never be attempted.
     const restartedStore = new FileStore(restartDir);
     const firstDrain = await inbound.drainPendingHandoffs(restartedStore, { now: new Date(), env: process.env });
     const after = await restartedStore.get(data.lead_id);
     const probePosts = mock.seen.filter((row) => row.body && row.body.lead_id === data.lead_id);
-    if (firstDrain.delivered !== 1 || after.handoff.status !== "DELIVERED" || probePosts.length !== 1) {
-      fail("probe_restart_convergence", { firstDrain, handoff: after.handoff, posts: probePosts.length });
+    if (
+      firstDrain.attempted !== 0 ||
+      firstDrain.delivered !== 0 ||
+      after.handoff.status !== "SKIPPED" ||
+      after.handoff.reason !== "persist_only_probe" ||
+      probePosts.length !== 0
+    ) {
+      fail("persist_only_probe_drained", { firstDrain, handoff: after.handoff, posts: probePosts.length });
+    }
+    setStoreForTests(mem);
+    pass("persist_only_probe_never_crosses", { lead_id: data.lead_id, posts: probePosts.length });
+  }
+
+  // A synthetic probe row persisted PENDING before the persist-only fix (or by
+  // any other path) is neutralized by the drain itself: marked SKIPPED with
+  // reason synthetic_probe_not_drained, never attempted, never posted. A real
+  // PENDING row in the same store is still drained, so the guard is not
+  // over-broad.
+  {
+    const legacyDir = fs.mkdtempSync(path.join(os.tmpdir(), "confenge-legacy-probe-"));
+    const legacyStore = new FileStore(legacyDir);
+    const past = new Date(Date.now() - 60 * 1000).toISOString();
+    const legacyProbe = {
+      lead_id: "legacyprobe000000000000001",
+      receipt_id: "legacyprobe000000000000001",
+      idempotency_key: "idk:legacy-probe-001",
+      nome: "Legacy Probe",
+      email: "legacy-probe@example.com",
+      estagio: "synthetic probe discard",
+      jornada: "operacao",
+      consentimento: true,
+      source: "CONFENGE_WEB",
+      status: "persisted",
+      received_at: past,
+      record_kind: "synthetic",
+      record_kind_signals: ["authenticated_probe"],
+      synthetic_probe_authenticated: true,
+      next_action: "exclude_from_commercial",
+      handoff: {
+        target: "warmbly_inbound",
+        status: "PENDING",
+        attempts: 0,
+        last_error: null,
+        next_attempt_at: past,
+      },
+    };
+    const realPending = {
+      ...moneyPayload({ idempotency_key: "legacy-real-001", email: "maria.legacy@construtora-norte.com.br" }),
+      lead_id: "legacyreal0000000000000001",
+      receipt_id: "legacyreal0000000000000001",
+      idempotency_key: "idk:legacy-real-001",
+      consentimento: true,
+      source: "CONFENGE_WEB",
+      status: "persisted",
+      received_at: past,
+      record_kind: "real",
+      handoff: {
+        target: "warmbly_inbound",
+        status: "PENDING",
+        attempts: 0,
+        last_error: null,
+        next_attempt_at: past,
+      },
+    };
+    await legacyStore.put(legacyProbe);
+    await legacyStore.put(realPending);
+    if (!inbound.isDue(legacyProbe.handoff, new Date()) || !inbound.isDue(realPending.handoff, new Date())) {
+      fail("legacy_fixture_not_due", { probe: legacyProbe.handoff, real: realPending.handoff });
+    }
+    const postsBefore = mock.seen.length;
+    const drain = await inbound.drainPendingHandoffs(legacyStore, { now: new Date(), env: process.env });
+    const probeAfter = await legacyStore.get(legacyProbe.lead_id);
+    const realAfter = await legacyStore.get(realPending.lead_id);
+    const probePosts = mock.seen.filter((row) => row.body && row.body.lead_id === legacyProbe.lead_id);
+    const realPosts = mock.seen.filter((row) => row.body && row.body.lead_id === realPending.lead_id);
+    if (
+      !drain.ok ||
+      drain.skipped !== 1 ||
+      probeAfter.handoff.status !== "SKIPPED" ||
+      probeAfter.handoff.reason !== "synthetic_probe_not_drained" ||
+      probeAfter.handoff.next_attempt_at !== null ||
+      probeAfter.handoff.attempts !== 0 ||
+      probePosts.length !== 0
+    ) {
+      fail("legacy_synthetic_probe_drained", { drain, handoff: probeAfter.handoff, posts: probePosts.length });
+    }
+    if (
+      drain.attempted !== 1 ||
+      drain.delivered !== 1 ||
+      realAfter.handoff.status !== "DELIVERED" ||
+      realPosts.length !== 1 ||
+      mock.seen.length - postsBefore !== 1
+    ) {
+      fail("real_pending_not_drained", { drain, handoff: realAfter.handoff, posts: realPosts.length });
+    }
+    pass("legacy_synthetic_probe_neutralized_by_drain", { drain });
+
+    // Idempotent: the neutralized row is no longer due; nothing else to do.
+    const second = await inbound.drainPendingHandoffs(legacyStore, { now: new Date(), env: process.env });
+    const probeAgain = await legacyStore.get(legacyProbe.lead_id);
+    if (
+      second.attempted !== 0 ||
+      second.skipped !== 0 ||
+      probeAgain.handoff.status !== "SKIPPED" ||
+      mock.seen.filter((row) => row.body && row.body.lead_id === legacyProbe.lead_id).length !== 0
+    ) {
+      fail("legacy_synthetic_probe_second_drain", { second, handoff: probeAgain.handoff });
+    }
+    pass("real_pending_still_drained_and_guard_idempotent", { second });
+    try {
+      fs.rmSync(legacyDir, { recursive: true, force: true });
+    } catch {
+      /* ignore */
+    }
+  }
+
+  // Without the persist-only header the authenticated probe still crosses,
+  // synchronously at capture and exactly once, carrying the Warmbly contract.
+  {
+    const probeSecret = "probe-secret-32-characters-minimum-2026";
+    process.env.LEAD_PROBE_SECRET = probeSecret;
+    const syncDir = fs.mkdtempSync(path.join(os.tmpdir(), "confenge-probe-sync-"));
+    const syncStore = new FileStore(syncDir);
+    setStoreForTests(syncStore);
+    _reset();
+    const before = mock.seen.length;
+    const res = await handler(
+      event(moneyPayload({
+        nome: "Human Looking Payload",
+        email: "looks-human-sync@example.com",
+        idempotency_key: "authenticated-probe-sync-001",
+        utm_source: "campaign-looking-value",
+      }), {
+        "Idempotency-Key": "authenticated-probe-sync-001",
+        "X-Confenge-Probe": probeSecret,
+        ip: "203.0.113.223",
+      }),
+    );
+    const data = JSON.parse(res.body);
+    const after = await syncStore.get(data.lead_id);
+    if (res.statusCode !== 201 || !after) fail("probe_sync_persist", { status: res.statusCode, data });
+    if (
+      after.record_kind !== "synthetic" ||
+      after.synthetic_probe_authenticated !== true ||
+      after.persist_only_probe === true ||
+      after.next_action !== "exclude_from_commercial"
+    ) fail("probe_sync_classification", after);
+    const probePosts = mock.seen.filter((row) => row.body && row.body.lead_id === data.lead_id);
+    if (after.handoff.status !== "DELIVERED" || probePosts.length !== 1 || mock.seen.length - before !== 1) {
+      fail("probe_sync_delivery", { handoff: after.handoff, posts: probePosts.length });
     }
     if (
       probePosts[0].body.source !== "CONFENGE_WEB" ||
@@ -1242,7 +1404,7 @@ try {
       after.handoff.downstream.downstream_receipt !== data.lead_id ||
       after.handoff.downstream.action_id
     ) fail("probe_warmbly_contract", { body: probePosts[0].body, downstream: after.handoff.downstream });
-    const secondDrain = await inbound.drainPendingHandoffs(new FileStore(restartDir), { now: new Date(), env: process.env });
+    const secondDrain = await inbound.drainPendingHandoffs(new FileStore(syncDir), { now: new Date(), env: process.env });
     if (secondDrain.attempted !== 0 || mock.seen.filter((row) => row.body && row.body.lead_id === data.lead_id).length !== 1) {
       fail("probe_exactly_one_receipt", secondDrain);
     }
@@ -1258,7 +1420,12 @@ try {
       fail("downstream_receipt_fail_closed", invalidReceipt);
     }
     setStoreForTests(mem);
-    pass("authenticated_probe_restart_exactly_one_receipt", { lead_id: data.lead_id, posts: probePosts.length });
+    pass("authenticated_probe_synchronous_exactly_one_receipt", { lead_id: data.lead_id, posts: probePosts.length });
+    try {
+      fs.rmSync(syncDir, { recursive: true, force: true });
+    } catch {
+      /* ignore */
+    }
   }
 
   // money-asset HTML carries public IDs already available; does not invent entity/CNPJ
