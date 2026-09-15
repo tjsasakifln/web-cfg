@@ -211,6 +211,10 @@ prova do hub B2G encurtados para a ação primária caber na dobra de 390 px.
 
 ## Pendências registradas
 
+- Orçamento crítico de bytes da home: 152.931 de 153.600 (folga de ~0,7 KB;
+  `home-10x.css` ainda serve ~15 KB de comentários sem minificação; um passo
+  de minificação no build devolveria folga sem tocar a copy).
+
 - `assets/og-confenge.jpg` tem o H1 anterior gravado na imagem; sem produtor
   no repositório. Regeneração pendente com ativo e fonte de licença livre.
 - `scripts/commercial/render_public_catalog.mjs` mantém a opção
