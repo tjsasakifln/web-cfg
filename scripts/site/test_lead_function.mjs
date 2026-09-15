@@ -105,6 +105,71 @@ _reset();
   pass("consent_required");
 }
 
+// 3b) legitimate 400s name the field, never the value typed
+{
+  const res = await handler(
+    event({ nome: "QA Campo", telefone: "123", estagio: "contrato sob pressao", consentimento: true }),
+  );
+  const data = JSON.parse(res.body);
+  if (res.statusCode !== 400 || data.error !== "validation" || data.field !== "telefone") {
+    fail("invalid_phone_names_field", { status: res.statusCode, data });
+  }
+  if (JSON.stringify(data).includes("123") && !/10 ou 11/.test(data.message)) fail("invalid_phone_leaks_value", data);
+  const mail = await handler(
+    event({ nome: "QA Campo", email: "sem-arroba", estagio: "contrato sob pressao", consentimento: true }),
+  );
+  const mailData = JSON.parse(mail.body);
+  if (mail.statusCode !== 400 || mailData.field !== "email") fail("invalid_email_names_field", mailData);
+  pass("validation_400_names_field", { telefone: data.field, email: mailData.field });
+}
+
+// 3c) "urgência sem dados": a valid person who does not yet know which service,
+// budget, deadline or contract they need is RECEIVED (201, one record,
+// receipt, NEEDS_CONTEXT). Not knowing never eliminates a valid contact.
+{
+  const { ESTAGIO_UNKNOWN_SERVICE } = require(path.join(root, "netlify/functions/lib/lead-core.cjs"));
+  const urgent = {
+    nome: "QA Urgência",
+    telefone: "48988344559",
+    consentimento: true,
+    mensagem: "tenho urgência e quero falar mas ainda não tenho todos os dados",
+  };
+  const before = mem.map.size;
+  const res = await handler(event(urgent, "POST", { ip: "203.0.113.77" }));
+  const data = JSON.parse(res.body);
+  const stored = data.lead_id ? await mem.get(data.lead_id) : null;
+  if (
+    res.statusCode !== 201 || data.ok !== true || !data.lead_id || !data.receipt_id ||
+    data.qualification_state !== "NEEDS_CONTEXT" || mem.map.size !== before + 1 || !stored
+  ) {
+    fail("urgencia_sem_dados_received", { status: res.statusCode, data, size: mem.map.size, before });
+  }
+  if (stored.estagio !== ESTAGIO_UNKNOWN_SERVICE || stored.jornada !== "outro" ||
+      stored.qualification_state !== "NEEDS_CONTEXT" || stored.mensagem !== urgent.mensagem) {
+    fail("urgencia_sem_dados_stored_shape", stored);
+  }
+  const byEmail = await handler(event({
+    nome: "QA Urgência E-mail",
+    email: "qa-urgencia@example.com",
+    consentimento: "true",
+    mensagem: urgent.mensagem,
+  }, "POST", { ip: "203.0.113.78" }));
+  const byEmailData = JSON.parse(byEmail.body);
+  if (byEmail.statusCode !== 201 || byEmailData.qualification_state !== "NEEDS_CONTEXT" || mem.map.size !== before + 2) {
+    fail("urgencia_sem_dados_email_received", { status: byEmail.statusCode, byEmailData });
+  }
+  // Pre-persistence rejections stay intact: no contact channel, no consent, honeypot.
+  const noContact = await handler(event({ nome: "QA Sem Canal", consentimento: true, mensagem: urgent.mensagem }));
+  const noConsent = await handler(event({ nome: "QA Sem Consentimento", telefone: "48988344559", mensagem: urgent.mensagem }));
+  const bot = await handler(event({ ...urgent, "empresa-site": "http://spam.example" }));
+  if (noContact.statusCode !== 400 || JSON.parse(noContact.body).error !== "validation") fail("urgencia_no_contact_still_400", noContact.body);
+  if (noConsent.statusCode !== 400 || JSON.parse(noConsent.body).error !== "consent") fail("urgencia_no_consent_still_400", noConsent.body);
+  if (bot.statusCode !== 200 || JSON.parse(bot.body).status !== "suppressed" || mem.map.size !== before + 2) {
+    fail("urgencia_honeypot_still_suppressed", { status: bot.statusCode, size: mem.map.size });
+  }
+  pass("urgencia_sem_dados_received", { lead_id: data.lead_id, estagio: stored.estagio });
+}
+
 // 4) honeypot — no real store write for bot fields
 {
   const before = (await mem.list()).length;
@@ -590,9 +655,35 @@ _reset();
     const before = mem.map.size;
     const res = await handler(event({ ...base, ...invalid }, "POST", { ip: "192.0.2.92" }));
     const data = JSON.parse(res.body);
-    if (res.statusCode !== 422 || data.error !== "licitacao_qualification_invalid" || mem.map.size !== before) {
-      fail("licitacao_qualification_fail_closed", { invalid, status: res.statusCode, data });
+    if (res.statusCode >= 400 || mem.map.size < before) {
+      fail("licitacao_qualification_gap_is_received", { invalid, status: res.statusCode, data });
     }
+    if (data.qualification_state !== "NEEDS_CONTEXT") {
+      fail("licitacao_qualification_gap_is_recorded", { invalid, data });
+    }
+  }
+
+  // Numa lacuna (edital sem numero), o que o visitante informou dentro do enum
+  // publicado sobrevive no registro: faixa, lotes, regime e decisao. Texto
+  // livre fora do enum continua descartado (null), nunca persistido.
+  {
+    const gap = await handler(event({
+      ...base,
+      public_contract_id: "",
+      execution_regime: "regime_livre",
+      idempotency_key: "qa-licitacao-gap-keeps-raw-fields",
+    }, "POST", { ip: "192.0.2.93" }));
+    const gapData = JSON.parse(gap.body);
+    const gapStored = gapData.lead_id ? await mem.get(gapData.lead_id) : null;
+    if (
+      gap.statusCode !== 201 || !gapStored || gapStored.qualification_state !== "NEEDS_CONTEXT" ||
+      gapStored.contract_value_band !== "20m_100m" || gapStored.lot_count !== 2 ||
+      gapStored.decision_intent !== "avaliar_disputa" || gapStored.opportunity_deadline !== qualificationDeadline ||
+      gapStored.execution_regime !== null || gapStored.public_contract_id !== null
+    ) {
+      fail("licitacao_gap_keeps_raw_qualification_fields", { status: gap.statusCode, gapData, gapStored });
+    }
+    pass("licitacao_gap_keeps_raw_qualification_fields", { lead_id: gapData.lead_id });
   }
 
   for (const [index, deliverableId] of ["CFG-D12", "CFG-D13", "CFG-D14", "CFG-D15", "CFG-D16"].entries()) {
@@ -601,11 +692,12 @@ _reset();
       deliverable_id: deliverableId,
       opportunity_deadline: new Date().toISOString().slice(0, 10),
     }, "POST", { ip: `192.0.2.${94 + index}` }));
-    if (
-      unsafeDeadline.statusCode !== 422 ||
-      JSON.parse(unsafeDeadline.body).error !== "licitacao_qualification_invalid"
-    ) {
-      fail("licitacao_safe_deadline_fail_closed", { deliverableId, response: unsafeDeadline });
+    // O caso que mais importa: prazo hoje. O piso material continua publicado
+    // na rota; quem chega fora dele passa a ser RECEBIDO e marcado, em vez de
+    // descartado e informado de que o servidor falhou.
+    const unsafeBody = JSON.parse(unsafeDeadline.body);
+    if (unsafeDeadline.statusCode >= 400 || unsafeBody.qualification_state !== "NEEDS_CONTEXT") {
+      fail("licitacao_urgent_deadline_is_received", { deliverableId, response: unsafeDeadline });
     }
   }
 
@@ -755,11 +847,17 @@ _reset();
     { opportunity_deadline: analysisCutoff },
     { decision_intent: "decisao_livre" },
   ]) {
+    // Propriedade da decisão vigente: uma lacuna de qualificação é REGISTRADA,
+    // não usada para descartar o contato. O piso material continua publicado na
+    // rota; o que acabou foi perder a pessoa que chega fora dele.
     const before = mem.map.size;
     const res = await handler(event({ ...invalidBase, ...invalid }, "POST", { ip: "203.0.113.99" }));
     const data = JSON.parse(res.body);
-    if (res.statusCode !== 422 || data.error !== "expansion_qualification_invalid" || mem.map.size !== before) {
-      fail("priced_model_qualification_fail_closed", { invalid, status: res.statusCode, data });
+    if (res.statusCode >= 400 || mem.map.size < before) {
+      fail("priced_model_qualification_gap_is_received", { invalid, status: res.statusCode, data });
+    }
+    if (data.qualification_state !== "NEEDS_CONTEXT") {
+      fail("priced_model_qualification_gap_is_recorded", { invalid, data });
     }
   }
   pass("priced_model_forms_persisted_attribution", { routes: modelSlugs });
@@ -801,8 +899,11 @@ _reset();
     const before = mem.map.size;
     const res = await handler(event({ ...base, deliverable_id: "CFG-D18", ...invalid }, "POST", { ip: "203.0.113.98" }));
     const data = JSON.parse(res.body);
-    if (res.statusCode !== 422 || data.error !== "contract_qualification_invalid" || mem.map.size !== before) {
-      fail("contract_product_qualification_fail_closed", { invalid, status: res.statusCode, data });
+    if (res.statusCode >= 400 || mem.map.size < before) {
+      fail("contract_product_qualification_gap_is_received", { invalid, status: res.statusCode, data });
+    }
+    if (data.qualification_state !== "NEEDS_CONTEXT") {
+      fail("contract_product_qualification_gap_is_recorded", { invalid, data });
     }
   }
   const res = await handler(event({
@@ -862,11 +963,16 @@ _reset();
       hubStored.public_contract_id !== "CONTRATO-HUB-2026-02" || hubStored.opportunity_deadline !== deadline) {
     fail("hub_unknown_deliverable_keeps_contract_fields", { status: hubUnknown.statusCode, hubData, hubStored });
   }
+  // Um evento fora do enum e uma lacuna de qualificacao: o contato e recebido
+  // e marcado NEEDS_CONTEXT; o texto livre nao e persistido como evento.
   const hubInvalid = await handler(event({
     ...base, deliverable_id: "", contract_event: "evento_livre",
   }, "POST", { ip: "203.0.113.94" }));
-  if (hubInvalid.statusCode !== 422 || JSON.parse(hubInvalid.body).error !== "contract_qualification_invalid") {
-    fail("hub_unknown_deliverable_still_validates_event", { status: hubInvalid.statusCode, body: hubInvalid.body });
+  const hubInvalidData = JSON.parse(hubInvalid.body);
+  const hubInvalidStored = hubInvalidData.lead_id ? await mem.get(hubInvalidData.lead_id) : null;
+  if (hubInvalid.statusCode !== 201 || hubInvalidData.qualification_state !== "NEEDS_CONTEXT" ||
+      !hubInvalidStored || hubInvalidStored.contract_event !== null) {
+    fail("hub_unknown_deliverable_still_validates_event", { status: hubInvalid.statusCode, body: hubInvalid.body, hubInvalidStored });
   }
   pass("hub_unknown_deliverable_keeps_contract_fields", { lead_id: hubData.lead_id });
 }
@@ -2087,15 +2193,21 @@ _reset();
   }
   pass("edited_need_prevails_origin_frozen");
 
+  // Missao do fundador: nao saber qual servico precisa nunca elimina uma
+  // pessoa valida. Sem estagio, o registro recebe o valor "ainda nao sei qual
+  // servico" (mesmo da home) e e marcado NEEDS_CONTEXT; antes era 400.
   const missingNeed = await handler(event({
     nome: "Ana Privada",
     email: "ana.privada@example.com",
     consentimento: "on",
   }, "POST", { ip: "203.0.113.204" }));
-  if (missingNeed.statusCode !== 400 || JSON.parse(missingNeed.body).ok !== false) {
-    fail("need_required", missingNeed);
+  const missingNeedBody = JSON.parse(missingNeed.body);
+  const missingNeedStored = missingNeedBody.lead_id ? await mem.get(missingNeedBody.lead_id) : null;
+  if (missingNeed.statusCode !== 201 || missingNeedBody.qualification_state !== "NEEDS_CONTEXT" ||
+      !missingNeedStored || missingNeedStored.estagio !== "ainda não sei qual serviço") {
+    fail("need_defaults_to_unknown_service", { status: missingNeed.statusCode, missingNeedBody, missingNeedStored });
   }
-  pass("need_still_required");
+  pass("need_defaults_to_unknown_service");
 
   const successShape = publicSuccessBody({
     lead_id: "lead-fffffffffffffffffffffffffff",

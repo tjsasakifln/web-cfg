@@ -147,7 +147,7 @@ exports.handler = async (event) => {
       statusCode: validated.status || 400,
       headers,
       body: JSON.stringify(
-        publicErrorBody({ error: validated.error, message: validated.message }),
+        publicErrorBody({ error: validated.error, message: validated.message, field: validated.field }),
       ),
     };
   }
