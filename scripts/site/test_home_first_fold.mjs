@@ -16,7 +16,17 @@ const MIN_TAP_TARGET_PX = 44;
 const MIN_CTA_CONTRAST = 4.5;
 const PRIMARY_CTA_PATH_PREFIX = "/servicos/";
 // Semantic concepts, not frozen sentences. The fold may be rewritten, but it
-// must still name the corporate scope, concrete work/output and real trust.
+// must still name the corporate scope, the buyer's situation, the work we
+// assume, a deliverable tied to a use and real trust.
+//
+// VALOR-IMEDIATO-20260914. A regra anterior exigia >=3 de 7 termos de
+// disciplina e >=3 de 7 formatos na dobra. O exame cego (21 revisores, tres
+// concepcoes) mostrou que a enumeracao nao produz pertinencia na primeira
+// tela (Q1 so na segunda ou terceira fatia) e faz a entrega virar formato. A
+// propriedade legitima -- a dobra responde "tem a ver comigo", "que parte
+// assumem", "o que passo a ter e para que", "por que acreditar" -- passa a
+// ser medida por situacao do comprador, verbo de trabalho, entrega nomeada,
+// uso da entrega e rotulo de demonstrativo, alem de escopo e credenciais.
 const CONTENT_CONCEPTS = [
   {
     id: "categoria_corporativa",
@@ -31,28 +41,45 @@ const CONTENT_CONCEPTS = [
     minMatches: 2,
   },
   {
-    id: "trabalho_executado",
-    label: "trabalho de engenharia concreto",
+    id: "situacao_do_comprador",
+    label: "situação no vocabulário do comprador",
     terms: [
-      "elaboração", "revisão", "compatibilização", "quantitativos",
-      "orçamentos", "perícias", "análises técnicas",
+      "comparar propostas", "conferir um projeto", "completar", "infiltração",
+      "fissura", "avaliar um imóvel", "glosa", "medição", "disputa",
+      "segurança do trabalho", "orçar a obra",
     ],
-    minMatches: 3,
+    minMatches: 1,
   },
   {
-    id: "entregas_tangiveis",
-    label: "entregas técnicas tangíveis",
+    id: "trabalho_assumido",
+    label: "trabalho de engenharia assumido",
     terms: [
-      "plantas", "detalhes", "memórias de cálculo", "planilhas",
-      "laudos", "pareceres", "relatórios",
+      "assumimos", "levantamos", "calculamos", "conferimos", "assinamos",
+      "projetamos", "elaboramos", "revisamos", "compatibilizamos",
+      "inspecionamos", "avaliamos",
     ],
-    minMatches: 3,
-  },
-  {
-    id: "utilidade_pratica",
-    label: "utilidade prática",
-    terms: ["obra", "decisão", "contratar", "coordenar", "orçar", "executar"],
     minMatches: 2,
+  },
+  {
+    id: "entrega_nomeada",
+    label: "entrega técnica nomeada",
+    terms: [
+      "planilha", "projeto", "laudo", "relatório", "parecer",
+      "memória de cálculo", "quantitativo",
+    ],
+    minMatches: 1,
+  },
+  {
+    id: "uso_da_entrega",
+    label: "uso da entrega",
+    terms: ["comparar", "contratar", "decidir", "orçar", "executar", "coordenar", "aprovar"],
+    minMatches: 1,
+  },
+  {
+    id: "prova_rotulada",
+    label: "amostra rotulada como demonstrativa",
+    terms: ["demonstrativ"],
+    minMatches: 1,
   },
   {
     id: "confianca_verificavel",
@@ -95,6 +122,19 @@ const counterproof = {
   })(),
   generic_hero_is_rejected: conceptResults(
     "Engenharia com solução personalizada. Solicite uma proposta.",
+  ).some((concept) => !concept.ok),
+  // Hero de slogan: nomeia "projeto" (entrega) e "engenharia", mas nao diz a
+  // situacao do comprador, o trabalho assumido, o uso, nem traz credencial ou
+  // amostra rotulada. Precisa reprovar em mais de um conceito.
+  generic_hero_transforma_is_rejected: conceptResults(
+    "Engenharia que transforma o seu projeto. Fale com a gente. CNPJ publicado.",
+  ).filter((concept) => !concept.ok).length >= 3,
+  // A enumeracao antiga, sozinha, tambem nao basta: lista disciplinas e
+  // formatos, mas nao diz o que o comprador esta tentando resolver nem o que
+  // assumimos por ele.
+  enumeration_alone_is_rejected: conceptResults(
+    "Projetos e serviços de engenharia para obras públicas e privadas. Elaboração, revisão, "
+    + "compatibilização, quantitativos, orçamentos, perícias. Plantas, planilhas, laudos. EESC-USP. CNPJ.",
   ).some((concept) => !concept.ok),
   obsolete_fragment_is_not_a_service_destination: !"#situacoes".startsWith(
     PRIMARY_CTA_PATH_PREFIX,

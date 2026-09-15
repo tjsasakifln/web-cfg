@@ -28,14 +28,18 @@ const viewports = [[360, 800], [390, 844], [768, 900], [1366, 900]];
 // These are visitor situations, rather than internal portfolio labels.  The
 // direct targets can converge on a shared explanatory page, but each must
 // still name an actionable contact path in the rendered result.
+// VALOR-IMEDIATO-20260914: inspecao, assistencia e SST entram direto na
+// landing publicada; quantitativos e avaliacao de imovel ganharam linha
+// propria na home (situacao-orcamento, situacao-avaliacao). Os destinos sao
+// os do contrato de situacoes (brand.json = public-ia-map.json).
 const journeys = [
-  ["pequena_reforma", "/servicos/#servico-diagnostico", "situacao-obra-imovel", ".situation-action[href]"],
-  ["condominio_anomalia", "/servicos/#servico-diagnostico", "situacao-obra-imovel", ".situation-action[href]"],
+  ["pequena_reforma", "/inspecao-diagnostico-edificacoes/", "situacao-obra-imovel", ".situation-action[href]"],
+  ["condominio_anomalia", "/inspecao-diagnostico-edificacoes/", "situacao-obra-imovel", ".situation-action[href]"],
   ["arquiteto_compatibilizacao", "/servicos/#servico-projeto", "situacao-projeto", ".situation-action[href]"],
   ["projeto_estrutural", "/servicos/#servico-projeto", "situacao-projeto", ".situation-action[href]"],
   ["instalacoes", "/servicos/#servico-projeto", "situacao-projeto", ".situation-action[href]"],
-  ["orcamento_publico", "/quantitativos-orcamento-obras/", "situacao-projeto", 'a[href="/quantitativos-orcamento-obras/"]'],
-  ["orcamento_privado", "/quantitativos-orcamento-obras/", "situacao-projeto", 'a[href="/quantitativos-orcamento-obras/"]'],
+  ["orcamento_publico", "/quantitativos-orcamento-obras/", "situacao-orcamento", ".situation-action[href]"],
+  ["orcamento_privado", "/quantitativos-orcamento-obras/", "situacao-orcamento", ".situation-action[href]"],
   ["disciplina_nao_listada", "/servicos/#servico-projeto", "situacao-projeto", ".situation-action[href]"],
   // The public-works hub is the explanatory destination for both the public
   // entity and procurement entries; it must not be mistaken for the generic
@@ -46,8 +50,9 @@ const journeys = [
   // Check that direct service destination, rather than treating the section's
   // general entry point as an erroneous mismatch.
   ["glosa_aditivo", "/medicoes-glosas-obras-publicas/", "jornada-contrato", "a[href]"],
-  ["pericia_avaliacao", "/servicos/#servico-pericia", "situacao-pericia", ".situation-action[href]"],
-  ["seguranca_trabalho", "/servicos/#servico-sst", "situacao-sst", ".situation-action[href]"],
+  ["pericia_assistencia", "/assistencia-tecnica-pericial-engenharia/", "situacao-pericia", ".situation-action[href]"],
+  ["avaliacao_imovel", "/servicos/#servico-avaliacao", "situacao-avaliacao", ".situation-action[href]"],
+  ["seguranca_trabalho", "/seguranca-trabalho-apoio-tecnico/", "situacao-sst", ".situation-action[href]"],
 ].map(([id, direct, homeAnchor, homeSelector]) => ({ id, direct, homeAnchor, homeSelector }));
 // Compact variation matrix for the real home form. This is deliberately not
 // a cartesian product: each row represents a visitor need and, together, the
@@ -250,7 +255,7 @@ try {
       required("journey_direct_status", response?.status() === 200, String(response?.status()), context);
       if (fragment) required("journey_direct_fragment", await page.$(fragment).then(Boolean), fragment, context);
       required("journey_direct_next_step", data.activeForm || data.triageLink || Object.values(data.channels).some(Boolean), JSON.stringify(data), context);
-      if (adaptiveWithheld && ["/triagem-tecnica/#obra-imovel", "/triagem-tecnica/#planejamento-publico", "/triagem-tecnica/#pericia-avaliacao", "/triagem-tecnica/#sst", "/triagem-tecnica/", "/quantitativos-orcamento-obras/"].includes(journey.direct)) {
+      if (adaptiveWithheld && ["/triagem-tecnica/#obra-imovel", "/triagem-tecnica/#planejamento-publico", "/triagem-tecnica/#pericia-avaliacao", "/triagem-tecnica/#sst", "/triagem-tecnica/", "/quantitativos-orcamento-obras/", "/inspecao-diagnostico-edificacoes/", "/assistencia-tecnica-pericial-engenharia/", "/seguranca-trabalho-apoio-tecnico/"].includes(journey.direct)) {
         required("journey_withheld_has_three_direct_channels", Object.values(data.channels).every(Boolean) && !data.activeForm, JSON.stringify(data), context);
       }
       required("journey_no_required_cnpj", data.cnpjRequired === 0, JSON.stringify(data), context);

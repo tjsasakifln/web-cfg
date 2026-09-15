@@ -486,8 +486,11 @@ for (const { route, expectedNav } of [
     if (metrics.nav.some(({ text }) => text === "Entregas")) errors.push("frozen_nav_mutated");
     if (metrics.nav.filter(({ href }) => href === "/ferramentas/").length !== 1) errors.push("frozen_tools_missing");
   }
-  if (route === "/" && (!metrics.corporateServicesPath || metrics.sections !== 8)) {
-    errors.push("home_corporate_path_contract");
+  // VALOR-IMEDIATO-20260914: a home tem entre 5 e 8 blocos narrativos (a
+  // contagem exata era numero magico e impedia retirar secoes genericas); o
+  // caminho para /servicos/ continua obrigatorio.
+  if (route === "/" && (!metrics.corporateServicesPath || metrics.sections < 5 || metrics.sections > 8)) {
+    errors.push(`home_corporate_path_contract sections=${metrics.sections}`);
   }
   if (route === "/" && screenshotDir) {
     const situations = await page.$('#situacoes');

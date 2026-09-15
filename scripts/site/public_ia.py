@@ -57,10 +57,16 @@ JOURNEY_PHRASES = (
     "obras públicas",
     "biblioteca",
 )
+# VALOR-IMEDIATO-20260914: quantitativos/orçamento e avaliação de imóvel
+# viraram situações próprias. O conjunto continua sendo o contrato (igualdade
+# estrita), porque uma única taxonomia de situações do visitante é a
+# propriedade protegida; o que mudou foi o número de entradas, não a regra.
 SERVICE_SITUATION_IDS = frozenset(
     {
         "project_delivery",
+        "quantities_budget",
         "building_diagnosis",
+        "property_valuation",
         "expert_evidence_valuation",
         "occupational_safety",
         "public_works_b2g",
@@ -665,9 +671,12 @@ def validate_contract(ia: dict[str, Any] | None = None) -> list[str]:
     situation_ids = {str(row.get("id") or "") for row in situations}
     if situation_ids != SERVICE_SITUATION_IDS:
         errors.append(
-            "service_situations must cover project, building, expert evidence, "
-            "occupational safety, and public works"
+            "service_situations must cover project, quantities and budget, building, "
+            "property valuation, expert evidence, occupational safety, and public works"
         )
+    hrefs = [str(row.get("href") or "") for row in situations]
+    if len(set(hrefs)) != len(hrefs):
+        errors.append("service_situations must not share a destination")
     for row in situations:
         if not row.get("label") or not row.get("visitor_language") or not row.get("href"):
             errors.append(f"incomplete service situation: {row.get('id')!r}")
@@ -681,6 +690,18 @@ def validate_contract(ia: dict[str, Any] | None = None) -> list[str]:
                 or not row.get("scope")
             ):
                 errors.append("project situation must resolve to the project service explanation")
+        elif row.get("id") == "quantities_budget":
+            if (
+                row.get("index_state") != "service_hub_index"
+                or row.get("href") != "/quantitativos-orcamento-obras/"
+            ):
+                errors.append("quantities situation must resolve to the quantities landing")
+        elif row.get("id") == "property_valuation":
+            if (
+                row.get("index_state") != "service_hub_index"
+                or row.get("href") != "/servicos/#servico-avaliacao"
+            ):
+                errors.append("valuation situation must resolve to the valuation service explanation")
         elif row.get("id") == "building_diagnosis":
             if (
                 row.get("index_state") != "service_hub_index"

@@ -90,8 +90,12 @@ const origin = createOriginClient({
   hostHeader: OPTIONS.host,
   resolveIp: OPTIONS.resolveIp,
 });
-/** Semantic fragments required in the corporate H1; wording may keep evolving. */
-const EXPECTED_H1_TERMS = ["projetos", "serviços de engenharia", "obras públicas", "privadas"];
+/** Semantic fragments required in the corporate H1; wording may keep evolving.
+ * VALOR-IMEDIATO-20260914: o H1 nomeia engenharia e um verbo de trabalho
+ * assumido (o que fazemos por quem chega), nao mais a enumeracao de servicos. */
+const EXPECTED_H1_TERMS = ["engenharia"];
+const EXPECTED_H1_WORK_VERB = /\b(?:assumimos|levantamos|conferimos|assinamos|calculamos|projetamos)\b/;
+const EXPECTED_SITUATIONS = JSON.parse(readFileSync(new URL("../../data/site/brand.json", import.meta.url), "utf8")).service_situations.length;
 const RETIRED = [
   "Oito momentos em que",
   "Todo o conteúdo permanece legível sem JavaScript",
@@ -235,13 +239,13 @@ const homeH1 = home.body.match(/<h1\b[^>]*id="hero-title"[^>]*>([\s\S]*?)<\/h1>/
 const homeH1Text = homeH1.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().toLocaleLowerCase("pt-BR");
 ok(
   "home_h1_service_scope",
-  EXPECTED_H1_TERMS.every((term) => homeH1Text.includes(term)),
-  "corporate H1 must name engineering services and public/private works",
+  EXPECTED_H1_TERMS.every((term) => homeH1Text.includes(term)) && EXPECTED_H1_WORK_VERB.test(homeH1Text),
+  "corporate H1 must name engineering and the work assumed",
 );
 const situationRows = (home.body.match(/class="[^"]*\bsituation-row\b/g) || []).length;
-ok("five_situation_paths", situationRows === 5, `situation rows=${situationRows}`);
+ok("situation_paths_match_contract", situationRows === EXPECTED_SITUATIONS, `situation rows=${situationRows} expected=${EXPECTED_SITUATIONS}`);
 const blocks = (home.body.match(/data-section-archetype="/g) || []).length;
-ok("eight_narrative_blocks", blocks === 8, `archetypes=${blocks}`);
+ok("narrative_blocks_within_range", blocks >= 5 && blocks <= 8, `archetypes=${blocks}`);
 for (const phrase of RETIRED) {
   ok(`retired_absent:${phrase.slice(0, 24)}`, !home.body.includes(phrase), "found retired string");
 }

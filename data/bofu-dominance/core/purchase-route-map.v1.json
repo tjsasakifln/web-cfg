@@ -577,14 +577,14 @@
       "page_kind": "serviço",
       "question_answered": "Qual é a condição observada e o que isso implica antes do reparo?",
       "business_context": "mixed",
-      "primary_url": "/servicos/#servico-diagnostico",
+      "primary_url": "/inspecao-diagnostico-edificacoes/",
       "proposed_primary_url": "/inspecao-diagnostico-edificacoes/",
       "source_of_truth": "/servicos/#servico-diagnostico",
       "requested_alias": null,
       "supporting_urls": [
         "/servicos/"
       ],
-      "required_proof": "Pergunta distinta da âncora de /servicos/; não criar slug novo enquanto o hub já atende a mesma compra.",
+      "required_proof": "2026-09-14 (VALOR-IMEDIATO-20260914): a landing /inspecao-diagnostico-edificacoes/ existe e responde a esta compra; passa a rota primária. /servicos/#servico-diagnostico permanece âncora preservada e URL de apoio, não é retirada.",
       "terminal_contact": {
         "mode": "capture_form_or_whatsapp",
         "destination": "/triagem-tecnica/#obra-imovel"

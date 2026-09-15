@@ -1,24 +1,24 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-09-14T01:58:30.254Z",
-  "measured_on": "2026-09-14",
-  "commit_sha": "bc0db319832f5e31a8cec5d9597244964f8e05f8",
+  "measured_at": "2026-09-15T06:51:55.723Z",
+  "measured_on": "2026-09-15",
+  "commit_sha": "515bc64035772f7ad63d54f887e1c1ecf2a03ea0",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "f168038814087e1b365d1de3042af9a3f3364743756e104711fecc0fb9fe7477",
     "@control/scripts/site/first_fold_rules.mjs": "53d52810f7750795e96f2421248d8aa8f06ff4c4065c4ba6bc9ee92a11fca7fd",
     "@control/scripts/site/measure_first_fold.mjs": "8f7a93464d0c5f05a92d665c077eedeabd944a0ef038e7d2cf2b18377a87013b",
     "acompanhamento-contratos-obras/index.html": "801c701b0b9cf56bc67059bd5a4fad61ccaf1637ad5488e25029c1da82800804",
-    "aditivos-obras-publicas/index.html": "ed592c02f78f9363be5424c12d0de211950d91fbe7801970d99cd949ddc1ec97",
+    "aditivos-obras-publicas/index.html": "320404c47916843c96bd060313d9c67afb0c9201cf18b286b0c7aa14cd11f7ef",
     "assets/archivo-var-latin-bf6e041e.woff2": "bf6e041e98b0fa244d965027e9f2b6ed53470ed95f2227615510a08a67ea7f4a",
     "assets/eight-offer-contract.css": "d2aead054169392b26c739ab4d95c8b2f651a66c9d6ac27aa7fd98bdafc4f79d",
-    "assets/home-10x.css": "2303b9f581dffecc303b8a61ea83820c870053b9c104bf3dabee8e943ca221c4",
+    "assets/home-10x.css": "f6cfdc80ebd8d4b38fefd4afa43876af9db51832e80c586a09d83179c67933d3",
     "assets/report-capture.css": "669b93f113f417ba6a8175d9d0ab0dd846a19e991245ad9f2f1ebea48d8c0552",
     "assets/report-model-a11y-v293.css": "148fb54ad084edad56eff48e6b635e2df177e8679a724d50e2e92a88421fddce",
     "assets/report-model.css": "79e09ea8559deb4e01c78df860a00f0ff542659b3c2b9274bc8401444fab2447",
     "atrasos-prorrogacao-obras-publicas/index.html": "5ee239e1525ff0f9a202acfbd7e5f60d98b7a2a94f4eebea3a295c19822cefdc",
-    "auditoria-orcamento-licitacao/index.html": "8c1b81efeeb2a5e2068bcbb724d2c2b8b5848d8c93741df8a7853ff2f8e3e66a",
+    "auditoria-orcamento-licitacao/index.html": "444298887697abe1b1bfc24a5e41836013753cc0f22b8db4f48b9df7f15fe397",
     "bid-room-licitacoes-obras/index.html": "35beafcef80bd6f44d2a835b4ab0fa5638a8472f07b93246180838922920c29c",
     "casos/modelo-apresentacao-executiva-resultados/index.html": "48d94d71d273741eb1bb887f472071d8623096b0d849c075d96b1ea83db66b7f",
     "casos/modelo-apresentacao-executiva-resultados/styles.css": "8ace8a9960dbc19f71c9f69e4908f39ac223991715a13707587d1d06f483048d",
@@ -40,16 +40,16 @@
     "defesa-tecnica-contratos-publicos/index.html": "c910324e7487dfd4ee0fcb019f420c4e8f4cf32869426e4b9e53c605ab199f14",
     "diagnostico-b2g-360/index.html": "101b019cb8113967cd7ffd50b07d1011af982ac22dd449aefcc868bff4b79409",
     "diagnostico-b2g-expansao/index.html": "fe60cef824e78beff5d03ec679f1e430cad33b7754a748069654bbb293f28835",
-    "diagnostico-pre-licitacao/index.html": "39482d0e3cd9107e6f351bd18a8f2d6510808986659c40116f0d3434912b1ae5",
+    "diagnostico-pre-licitacao/index.html": "67a5aee0638afbb7a9a55d07e06f59f4f91427f760a1c57636218ce1b000adc6",
     "diretoria-b2g/index.html": "3de4fee7f642e3f01d68aa567277711a839932a758674f1640a36342e3be7f7d",
-    "entregas/index.html": "7cd38b9b78b31b71b4a1d01569254993f7fc8274c759677fa61bac3cd5211cb0",
+    "entregas/index.html": "8d52cf1eda5eb701ab98638131ff4397460b3d8953dba9e828a98e524c52bd5d",
     "entregas/styles.css": "7f2817c86d856247fe607b2961856073ce0ae163dcc51baa9f743d9b27255774",
-    "index.html": "a5aa15552db85ce849475de55acf20469efa7bc151197de8fc338c07934b2299",
-    "medicoes-glosas-obras-publicas/index.html": "7659009dfc326139fe69d4cc12c30a3395fc1f96264663e1fc435d09843ffbc8",
-    "problemas-que-resolvemos/index.html": "d5b84484c7e469713b32bf3bd171c7a1c39db87179cf92eea9d8ed98c4aca501",
-    "reequilibrio-obras-publicas/index.html": "11d0cf94f61308da770640898df3019f4cbdd0b3dcd42f9df8ad73a8aa79d6ca",
+    "index.html": "c47d5b459a7438a69d61f4f25a44eec8f0dfef7a37d3909bc861a1b4c8b5f03f",
+    "medicoes-glosas-obras-publicas/index.html": "f689d2225ffab5927567eacbd2a6ad2e22bfc452ee05fbe2b35a93a3873ee29e",
+    "problemas-que-resolvemos/index.html": "e0321783dbcec5c1609f043a5eb257ef6728846c63995553ba55bcab9f7e66c9",
+    "reequilibrio-obras-publicas/index.html": "e30f2b2856a9301939fc422886e19e420b20169337b782ee589143836cd9c3f0",
     "script.js": "13adf8929c4d73f93a3f1a82cd6e39699df37c03478b55b061e2693576a913cb",
-    "servicos-obras-publicas/index.html": "7fb62cdb2a3c93e06ced52475551515a5ef9996c8d51075294e84939283de04b",
+    "servicos-obras-publicas/index.html": "9e750908f2f8791f7c40eda28e31f1979ce9488138e54b9213af91a818f71af1",
     "styles-hubs.css": "ed4668833ad8de5cef5acc5fc1e8f21e519870f0bf282247c3b4a9644a094592",
     "styles-offers.css": "0c1efa4797709ae6d2b776aa58e863ef095a880646b5e4b158a7a47e0963ec2e",
     "styles-tokens.css": "15cc0770e76276b418c11493fa9e53827ae14bb8f854b0a63d8c6dd63afc02fc",
@@ -101,8 +101,8 @@
   "routes": [
     {
       "route": "/",
-      "html_sha256": "a5aa15552db85ce849475de55acf20469efa7bc151197de8fc338c07934b2299",
-      "measured_on": "2026-09-14",
+      "html_sha256": "c47d5b459a7438a69d61f4f25a44eec8f0dfef7a37d3909bc861a1b4c8b5f03f",
+      "measured_on": "2026-09-15",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -123,61 +123,61 @@
               "selector": "h1",
               "box": {
                 "top": 153,
-                "bottom": 362,
+                "bottom": 286,
                 "left": 83,
-                "right": 772,
-                "width": 689,
-                "height": 209
+                "right": 791,
+                "width": 708,
+                "height": 134
               },
-              "text": "Projetos e serviços de engenharia para obras públicas e privadas."
+              "text": "Assumimos a parte de engenharia que falta para você orçar, contratar ou decidir."
             },
             "lead": {
               "selector": ".hero-lead",
               "box": {
-                "top": 374,
-                "bottom": 460,
+                "top": 299,
+                "bottom": 401,
                 "left": 83,
-                "right": 596,
-                "width": 513,
-                "height": 86
+                "right": 685,
+                "width": 602,
+                "height": 102
               },
-              "text": "Elaboração e revisão de projetos, compatibilização entre disciplinas, quantitativos, orçamentos, perícias e análises técnicas para fazer a obra ou a decisão avançar."
+              "text": "Comparar propostas de obra, completar ou conferir um projeto, entender uma infiltração, avaliar um imóvel ou responder a uma glosa: em obra pública ou privada, levantamos, calculamos, conferimos e assumimos a responsabilidade técnica."
             },
             "proof": {
               "selector": ".hero-proof",
               "box": {
-                "top": 702,
-                "bottom": 736,
+                "top": 650,
+                "bottom": 680,
                 "left": 83,
                 "right": 791,
                 "width": 708,
-                "height": 33
+                "height": 30
               },
               "text": "·Engenharia Civil pela EESC-USP ·CNPJ 52.407.089/0001-09 ·Como conferir credenciais e limites"
             },
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 630,
-                "bottom": 686,
+                "top": 578,
+                "bottom": 634,
                 "left": 83,
-                "right": 313,
-                "width": 230,
+                "right": 337,
+                "width": 254,
                 "height": 56
               },
-              "text": "Conhecer os serviços"
+              "text": "Ver serviços por situação"
             }
           },
           "primary_actions_in_fold": [
             {
-              "text": "Conhecer os serviços",
+              "text": "Ver serviços por situação",
               "href": "/servicos/",
               "box": {
-                "top": 630,
-                "bottom": 686,
+                "top": 578,
+                "bottom": 634,
                 "left": 83,
-                "right": 313,
-                "width": 230,
+                "right": 337,
+                "width": 254,
                 "height": 56
               }
             }
@@ -200,8 +200,8 @@
             "eyebrow": {
               "selector": ".hero-eyebrow",
               "box": {
-                "top": 91,
-                "bottom": 130,
+                "top": 87,
+                "bottom": 126,
                 "left": 20,
                 "right": 370,
                 "width": 350,
@@ -212,63 +212,63 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 144,
-                "bottom": 314,
+                "top": 140,
+                "bottom": 249,
                 "left": 20,
-                "right": 305,
-                "width": 285,
-                "height": 170
+                "right": 370,
+                "width": 350,
+                "height": 109
               },
-              "text": "Projetos e serviços de engenharia para obras públicas e privadas."
+              "text": "Assumimos a parte de engenharia que falta para você orçar, contratar ou decidir."
             },
             "lead": {
               "selector": ".hero-lead",
               "box": {
-                "top": 332,
-                "bottom": 434,
+                "top": 261,
+                "bottom": 395,
                 "left": 20,
                 "right": 370,
                 "width": 350,
-                "height": 102
+                "height": 134
               },
-              "text": "Elaboração e revisão de projetos, compatibilização entre disciplinas, quantitativos, orçamentos, perícias e análises técnicas para fazer a obra ou a decisão avançar."
+              "text": "Comparar propostas de obra, completar ou conferir um projeto, entender uma infiltração, avaliar um imóvel ou responder a uma glosa: em obra pública ou privada, levantamos, calculamos, conferimos e assumimos a responsabilidade técnica."
             },
             "proof": {
               "selector": ".hero-proof",
               "box": {
-                "top": 726,
-                "bottom": 808,
+                "top": 710,
+                "bottom": 788,
                 "left": 20,
                 "right": 370,
                 "width": 350,
-                "height": 82
+                "height": 78
               },
               "text": "·Engenharia Civil pela EESC-USP ·CNPJ 52.407.089/0001-09 ·Como conferir credenciais e limites"
             },
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 615,
-                "bottom": 665,
+                "top": 608,
+                "bottom": 656,
                 "left": 20,
                 "right": 370,
                 "width": 350,
-                "height": 50
+                "height": 48
               },
-              "text": "Conhecer os serviços"
+              "text": "Ver serviços por situação"
             }
           },
           "primary_actions_in_fold": [
             {
-              "text": "Conhecer os serviços",
+              "text": "Ver serviços por situação",
               "href": "/servicos/",
               "box": {
-                "top": 615,
-                "bottom": 665,
+                "top": 608,
+                "bottom": 656,
                 "left": 20,
                 "right": 370,
                 "width": 350,
-                "height": 50
+                "height": 48
               }
             }
           ],
@@ -294,24 +294,31 @@
           "tecnica"
         ],
         "lead_new": [
-          "analises",
-          "avancar",
-          "compatibilizacao",
-          "decisao",
-          "disciplinas",
-          "elaboracao",
+          "avaliar",
+          "calculamos",
+          "comparar",
+          "completar",
+          "conferimos",
+          "conferir",
+          "entender",
+          "glosa",
+          "imovel",
+          "infiltracao",
+          "levantamos",
           "obra",
-          "orcamentos",
-          "quantitativos",
-          "revisao",
-          "tecnicas"
+          "privada",
+          "projeto",
+          "propostas",
+          "publica",
+          "responder",
+          "responsabilidade"
         ]
       }
     },
     {
       "route": "/entregas/",
-      "html_sha256": "7cd38b9b78b31b71b4a1d01569254993f7fc8274c759677fa61bac3cd5211cb0",
-      "measured_on": "2026-09-14",
+      "html_sha256": "8d52cf1eda5eb701ab98638131ff4397460b3d8953dba9e828a98e524c52bd5d",
+      "measured_on": "2026-09-15",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -344,19 +351,19 @@
               "selector": ".deliverables-lead",
               "box": {
                 "top": 360,
-                "bottom": 410,
+                "bottom": 434,
                 "left": 83,
                 "right": 733,
                 "width": 650,
-                "height": 50
+                "height": 74
               },
-              "text": "Projetos, revisões, compatibilizações, orçamentos, inspeções, laudos, perícias, avaliações e análises técnicas atendem obras públicas e privadas."
+              "text": "Comparar propostas, completar ou conferir um projeto, entender uma infiltração, avaliar um imóvel ou responder a uma glosa: cada entrega diz o que chega às suas mãos e para que serve."
             },
             "proof": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 422,
-                "bottom": 487,
+                "top": 446,
+                "bottom": 511,
                 "left": 83,
                 "right": 653,
                 "width": 570,
@@ -367,8 +374,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 505,
-                "bottom": 549,
+                "top": 529,
+                "bottom": 573,
                 "left": 83,
                 "right": 357,
                 "width": 274,
@@ -382,8 +389,8 @@
               "text": "Ver entregas e exemplos",
               "href": "#servicos-e-entregas",
               "box": {
-                "top": 505,
-                "bottom": 549,
+                "top": 529,
+                "bottom": 573,
                 "left": 83,
                 "right": 357,
                 "width": 274,
@@ -433,20 +440,20 @@
             "lead": {
               "selector": ".deliverables-lead",
               "box": {
-                "top": 380,
-                "bottom": 490,
+                "top": 401,
+                "bottom": 539,
                 "left": 20,
                 "right": 370,
                 "width": 350,
-                "height": 110
+                "height": 138
               },
-              "text": "Projetos, revisões, compatibilizações, orçamentos, inspeções, laudos, perícias, avaliações e análises técnicas atendem obras públicas e privadas."
+              "text": "Comparar propostas, completar ou conferir um projeto, entender uma infiltração, avaliar um imóvel ou responder a uma glosa: cada entrega diz o que chega às suas mãos e para que serve."
             },
             "proof": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 508,
-                "bottom": 592,
+                "top": 557,
+                "bottom": 641,
                 "left": 20,
                 "right": 370,
                 "width": 350,
@@ -457,8 +464,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 604,
-                "bottom": 648,
+                "top": 653,
+                "bottom": 697,
                 "left": 20,
                 "right": 370,
                 "width": 350,
@@ -472,8 +479,8 @@
               "text": "Ver entregas e exemplos",
               "href": "#servicos-e-entregas",
               "box": {
-                "top": 604,
-                "bottom": 648,
+                "top": 653,
+                "bottom": 697,
                 "left": 20,
                 "right": 370,
                 "width": 350,
@@ -501,27 +508,27 @@
           "recebe"
         ],
         "lead_new": [
-          "analises",
-          "atendem",
-          "avaliacoes",
-          "compatibilizacoes",
-          "inspecoes",
-          "laudos",
-          "obras",
-          "orcamentos",
-          "pericias",
-          "privadas",
-          "projetos",
-          "publicas",
-          "revisoes",
-          "tecnicas"
+          "avaliar",
+          "chega",
+          "comparar",
+          "completar",
+          "conferir",
+          "entender",
+          "entrega",
+          "glosa",
+          "imovel",
+          "infiltracao",
+          "maos",
+          "projeto",
+          "propostas",
+          "responder"
         ]
       }
     },
     {
       "route": "/servicos-obras-publicas/",
-      "html_sha256": "7fb62cdb2a3c93e06ced52475551515a5ef9996c8d51075294e84939283de04b",
-      "measured_on": "2026-09-14",
+      "html_sha256": "9e750908f2f8791f7c40eda28e31f1979ce9488138e54b9213af91a818f71af1",
+      "measured_on": "2026-09-15",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -536,7 +543,7 @@
                 "width": 832,
                 "height": 23
               },
-              "text": "Comece pela decisão que não pode esperar"
+              "text": "Edital, glosa ou aditivo"
             },
             "h1": {
               "selector": "h1",
@@ -560,7 +567,7 @@
                 "width": 692,
                 "height": 54
               },
-              "text": "Escolha pelo uso: definir onde crescer, coordenar uma proposta crítica, organizar um evento contratual ou instalar uma rotina de decisão."
+              "text": "Glosa, aditivo, atraso, reequilíbrio ou edital: apuramos em reais o que está em jogo e escrevemos a posição técnica que você apresenta ao fiscal."
             },
             "proof": {
               "selector": ".section-proof",
@@ -572,13 +579,13 @@
                 "width": 463,
                 "height": 87
               },
-              "text": "Onde o trabalho já tem preço e prazo publicados, eles aparecem na página. Onde o preço depende do caso, a página diz o que a conversa inicial resolve. Exemplos completos você consulta sem cadastro."
+              "text": "Preço e prazo aparecem onde já estão publicados; nos demais casos, a conversa inicial define o escopo. ART e nota fiscal, responsabilidade assumida na proposta. Exemplos completos você consulta sem cadastro."
             },
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 622,
-                "bottom": 666,
+                "top": 634,
+                "bottom": 678,
                 "left": 800,
                 "right": 1253,
                 "width": 453,
@@ -592,8 +599,8 @@
               "text": "Avaliar o Dossiê de Medição, Glosa e Pagamento",
               "href": "/medicoes-glosas-obras-publicas/",
               "box": {
-                "top": 622,
-                "bottom": 666,
+                "top": 634,
+                "bottom": 678,
                 "left": 800,
                 "right": 1253,
                 "width": 453,
@@ -615,19 +622,19 @@
               "selector": "header .eyebrow",
               "box": {
                 "top": 122,
-                "bottom": 168,
+                "bottom": 145,
                 "left": 20,
                 "right": 370,
                 "width": 350,
-                "height": 46
+                "height": 23
               },
-              "text": "Comece pela decisão que não pode esperar"
+              "text": "Edital, glosa ou aditivo"
             },
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 176,
-                "bottom": 276,
+                "top": 153,
+                "bottom": 253,
                 "left": 20,
                 "right": 370,
                 "width": 350,
@@ -638,32 +645,32 @@
             "lead": {
               "selector": ".section-lead",
               "box": {
-                "top": 290,
-                "bottom": 398,
+                "top": 267,
+                "bottom": 375,
                 "left": 20,
                 "right": 370,
                 "width": 350,
                 "height": 109
               },
-              "text": "Escolha pelo uso: definir onde crescer, coordenar uma proposta crítica, organizar um evento contratual ou instalar uma rotina de decisão."
+              "text": "Glosa, aditivo, atraso, reequilíbrio ou edital: apuramos em reais o que está em jogo e escrevemos a posição técnica que você apresenta ao fiscal."
             },
             "proof": {
               "selector": ".section-proof",
               "box": {
-                "top": 410,
-                "bottom": 515,
+                "top": 387,
+                "bottom": 492,
                 "left": 20,
                 "right": 370,
                 "width": 350,
                 "height": 105
               },
-              "text": "Onde o trabalho já tem preço e prazo publicados, eles aparecem na página. Onde o preço depende do caso, a página diz o que a conversa inicial resolve. Exemplos completos você consulta sem cadastro."
+              "text": "Preço e prazo aparecem onde já estão publicados; nos demais casos, a conversa inicial define o escopo. ART e nota fiscal, responsabilidade assumida na proposta. Exemplos completos você consulta sem cadastro."
             },
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 796,
-                "bottom": 840,
+                "top": 794,
+                "bottom": 838,
                 "left": 38,
                 "right": 352,
                 "width": 314,
@@ -677,8 +684,8 @@
               "text": "Avaliar o Dossiê de Medição, Glosa e Pagamento",
               "href": "/medicoes-glosas-obras-publicas/",
               "box": {
-                "top": 796,
-                "bottom": 840,
+                "top": 794,
+                "bottom": 838,
                 "left": 38,
                 "right": 352,
                 "width": 314,
@@ -698,30 +705,28 @@
         "ok": true,
         "reason": "cada_campo_acrescenta_palavra_de_conteudo",
         "eyebrow_new": [
-          "comece",
-          "decisao",
-          "esperar",
-          "pode"
+          "aditivo",
+          "edital",
+          "glosa"
         ],
         "lead_new": [
-          "contratual",
-          "coordenar",
-          "crescer",
-          "critica",
-          "definir",
-          "escolha",
-          "evento",
-          "instalar",
-          "organizar",
-          "proposta",
-          "rotina"
+          "apresenta",
+          "apuramos",
+          "atraso",
+          "escrevemos",
+          "fiscal",
+          "jogo",
+          "posicao",
+          "reais",
+          "reequilibrio",
+          "tecnica"
         ]
       }
     },
     {
       "route": "/problemas-que-resolvemos/",
-      "html_sha256": "d5b84484c7e469713b32bf3bd171c7a1c39db87179cf92eea9d8ed98c4aca501",
-      "measured_on": "2026-09-14",
+      "html_sha256": "e0321783dbcec5c1609f043a5eb257ef6728846c63995553ba55bcab9f7e66c9",
+      "measured_on": "2026-09-15",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -736,7 +741,7 @@
                 "width": 832,
                 "height": 23
               },
-              "text": "Comece pelo evento que travou a obra"
+              "text": "Reconheça o seu evento"
             },
             "h1": {
               "selector": "h1",
@@ -760,7 +765,7 @@
                 "width": 692,
                 "height": 54
               },
-              "text": "Cada problema abaixo tem um caminho técnico definido: o que registrar, com qual documento e qual decisão vem depois."
+              "text": "Glosa, aditivo, atraso, reequilíbrio, notificação ou edital: cada evento leva à página que diz o que assumimos, o que você recebe e para que serve."
             },
             "proof": {
               "selector": ".section-proof",
@@ -779,24 +784,24 @@
               "box": {
                 "top": 628,
                 "bottom": 672,
-                "left": 877,
+                "left": 881,
                 "right": 1253,
-                "width": 376,
+                "width": 372,
                 "height": 44
               },
-              "text": "Abrir a defesa de margem em contrato"
+              "text": "Ver o Diagnóstico de Riscos à Margem"
             }
           },
           "primary_actions_in_fold": [
             {
-              "text": "Abrir a defesa de margem em contrato",
+              "text": "Ver o Diagnóstico de Riscos à Margem",
               "href": "/defesa-margem-contratos-publicos/",
               "box": {
                 "top": 628,
                 "bottom": 672,
-                "left": 877,
+                "left": 881,
                 "right": 1253,
-                "width": 376,
+                "width": 372,
                 "height": 44
               }
             }
@@ -815,19 +820,19 @@
               "selector": "header .eyebrow",
               "box": {
                 "top": 144,
-                "bottom": 190,
+                "bottom": 167,
                 "left": 20,
                 "right": 370,
                 "width": 350,
-                "height": 46
+                "height": 23
               },
-              "text": "Comece pelo evento que travou a obra"
+              "text": "Reconheça o seu evento"
             },
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 198,
-                "bottom": 331,
+                "top": 175,
+                "bottom": 308,
                 "left": 20,
                 "right": 370,
                 "width": 350,
@@ -838,20 +843,20 @@
             "lead": {
               "selector": ".section-lead",
               "box": {
-                "top": 345,
-                "bottom": 426,
+                "top": 322,
+                "bottom": 431,
                 "left": 20,
                 "right": 370,
                 "width": 350,
-                "height": 82
+                "height": 109
               },
-              "text": "Cada problema abaixo tem um caminho técnico definido: o que registrar, com qual documento e qual decisão vem depois."
+              "text": "Glosa, aditivo, atraso, reequilíbrio, notificação ou edital: cada evento leva à página que diz o que assumimos, o que você recebe e para que serve."
             },
             "proof": {
               "selector": ".section-proof",
               "box": {
-                "top": 438,
-                "bottom": 501,
+                "top": 443,
+                "bottom": 506,
                 "left": 20,
                 "right": 370,
                 "width": 350,
@@ -862,23 +867,23 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 761,
-                "bottom": 805,
+                "top": 765,
+                "bottom": 809,
                 "left": 38,
                 "right": 352,
                 "width": 314,
                 "height": 44
               },
-              "text": "Abrir a defesa de margem em contrato"
+              "text": "Ver o Diagnóstico de Riscos à Margem"
             }
           },
           "primary_actions_in_fold": [
             {
-              "text": "Abrir a defesa de margem em contrato",
+              "text": "Ver o Diagnóstico de Riscos à Margem",
               "href": "/defesa-margem-contratos-publicos/",
               "box": {
-                "top": 761,
-                "bottom": 805,
+                "top": 765,
+                "bottom": 809,
                 "left": 38,
                 "right": 352,
                 "width": 314,
@@ -898,28 +903,28 @@
         "ok": true,
         "reason": "cada_campo_acrescenta_palavra_de_conteudo",
         "eyebrow_new": [
-          "comece",
           "evento",
-          "obra",
-          "travou"
+          "reconheca"
         ],
         "lead_new": [
-          "abaixo",
-          "caminho",
-          "decisao",
-          "definido",
-          "documento",
-          "problema",
-          "qual",
-          "registrar",
-          "tecnico"
+          "aditivo",
+          "assumimos",
+          "atraso",
+          "edital",
+          "glosa",
+          "leva",
+          "notificacao",
+          "pagina",
+          "recebe",
+          "reequilibrio",
+          "serve"
         ]
       }
     },
     {
       "route": "/diagnostico-b2g-expansao/",
       "html_sha256": "fe60cef824e78beff5d03ec679f1e430cad33b7754a748069654bbb293f28835",
-      "measured_on": "2026-09-14",
+      "measured_on": "2026-09-15",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -1128,8 +1133,8 @@
     },
     {
       "route": "/diagnostico-pre-licitacao/",
-      "html_sha256": "39482d0e3cd9107e6f351bd18a8f2d6510808986659c40116f0d3434912b1ae5",
-      "measured_on": "2026-09-14",
+      "html_sha256": "67a5aee0638afbb7a9a55d07e06f59f4f91427f760a1c57636218ce1b000adc6",
+      "measured_on": "2026-09-15",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -1198,7 +1203,7 @@
           "primary_actions_in_fold": [
             {
               "text": "Analisar uma demanda",
-              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20uma%20demanda%20relacionada%20a%20licita%C3%A7%C3%A3o%2C%20contrato%20ou%20obra%20p%C3%BAblica.",
+              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20edital%20em%20an%C3%A1lise%20e%20quero%20avaliar%20se%20vale%20uma%20Opera%C3%A7%C3%A3o%20de%20Proposta%20para%20Licita%C3%A7%C3%A3o%20Cr%C3%ADtica%20ou%20diagn%C3%B3stico%20de%20participa%C3%A7%C3%A3o.",
               "box": {
                 "top": 641,
                 "bottom": 685,
@@ -1288,7 +1293,7 @@
           "primary_actions_in_fold": [
             {
               "text": "Analisar uma demanda",
-              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20uma%20demanda%20relacionada%20a%20licita%C3%A7%C3%A3o%2C%20contrato%20ou%20obra%20p%C3%BAblica.",
+              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20edital%20em%20an%C3%A1lise%20e%20quero%20avaliar%20se%20vale%20uma%20Opera%C3%A7%C3%A3o%20de%20Proposta%20para%20Licita%C3%A7%C3%A3o%20Cr%C3%ADtica%20ou%20diagn%C3%B3stico%20de%20participa%C3%A7%C3%A3o.",
               "box": {
                 "top": 620,
                 "bottom": 664,
@@ -1340,8 +1345,8 @@
     },
     {
       "route": "/auditoria-orcamento-licitacao/",
-      "html_sha256": "8c1b81efeeb2a5e2068bcbb724d2c2b8b5848d8c93741df8a7853ff2f8e3e66a",
-      "measured_on": "2026-09-14",
+      "html_sha256": "444298887697abe1b1bfc24a5e41836013753cc0f22b8db4f48b9df7f15fe397",
+      "measured_on": "2026-09-15",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -1410,7 +1415,7 @@
           "primary_actions_in_fold": [
             {
               "text": "Analisar uma demanda",
-              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20uma%20demanda%20relacionada%20a%20licita%C3%A7%C3%A3o%2C%20contrato%20ou%20obra%20p%C3%BAblica.",
+              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20revisar%20pre%C3%A7o%2C%20BDI%20e%20risco%20de%20uma%20licita%C3%A7%C3%A3o%20de%20obra.",
               "box": {
                 "top": 641,
                 "bottom": 685,
@@ -1500,7 +1505,7 @@
           "primary_actions_in_fold": [
             {
               "text": "Analisar uma demanda",
-              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20uma%20demanda%20relacionada%20a%20licita%C3%A7%C3%A3o%2C%20contrato%20ou%20obra%20p%C3%BAblica.",
+              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20revisar%20pre%C3%A7o%2C%20BDI%20e%20risco%20de%20uma%20licita%C3%A7%C3%A3o%20de%20obra.",
               "box": {
                 "top": 620,
                 "bottom": 664,
@@ -1553,7 +1558,7 @@
     {
       "route": "/bid-room-licitacoes-obras/",
       "html_sha256": "35beafcef80bd6f44d2a835b4ab0fa5638a8472f07b93246180838922920c29c",
-      "measured_on": "2026-09-14",
+      "measured_on": "2026-09-15",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -1761,7 +1766,7 @@
     {
       "route": "/defesa-margem-contratos-publicos/",
       "html_sha256": "b05a8aa130f79bca426e60b1f0bdf9af279576e7702243bf76625c2c2d0ad474",
-      "measured_on": "2026-09-14",
+      "measured_on": "2026-09-15",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -1973,8 +1978,8 @@
     },
     {
       "route": "/medicoes-glosas-obras-publicas/",
-      "html_sha256": "7659009dfc326139fe69d4cc12c30a3395fc1f96264663e1fc435d09843ffbc8",
-      "measured_on": "2026-09-14",
+      "html_sha256": "f689d2225ffab5927567eacbd2a6ad2e22bfc452ee05fbe2b35a93a3873ee29e",
+      "measured_on": "2026-09-15",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -2043,7 +2048,7 @@
           "primary_actions_in_fold": [
             {
               "text": "Analisar uma demanda",
-              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20uma%20demanda%20relacionada%20a%20licita%C3%A7%C3%A3o%2C%20contrato%20ou%20obra%20p%C3%BAblica.",
+              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20glosa%20ou%20medi%C3%A7%C3%A3o%20contestada%20e%20preciso%20enquadrar%20a%20posi%C3%A7%C3%A3o%20t%C3%A9cnica.",
               "box": {
                 "top": 641,
                 "bottom": 685,
@@ -2133,7 +2138,7 @@
           "primary_actions_in_fold": [
             {
               "text": "Analisar uma demanda",
-              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20uma%20demanda%20relacionada%20a%20licita%C3%A7%C3%A3o%2C%20contrato%20ou%20obra%20p%C3%BAblica.",
+              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20glosa%20ou%20medi%C3%A7%C3%A3o%20contestada%20e%20preciso%20enquadrar%20a%20posi%C3%A7%C3%A3o%20t%C3%A9cnica.",
               "box": {
                 "top": 643,
                 "bottom": 687,
@@ -2186,8 +2191,8 @@
     },
     {
       "route": "/aditivos-obras-publicas/",
-      "html_sha256": "ed592c02f78f9363be5424c12d0de211950d91fbe7801970d99cd949ddc1ec97",
-      "measured_on": "2026-09-14",
+      "html_sha256": "320404c47916843c96bd060313d9c67afb0c9201cf18b286b0c7aa14cd11f7ef",
+      "measured_on": "2026-09-15",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -2397,7 +2402,7 @@
     {
       "route": "/atrasos-prorrogacao-obras-publicas/",
       "html_sha256": "5ee239e1525ff0f9a202acfbd7e5f60d98b7a2a94f4eebea3a295c19822cefdc",
-      "measured_on": "2026-09-14",
+      "measured_on": "2026-09-15",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -2609,8 +2614,8 @@
     },
     {
       "route": "/reequilibrio-obras-publicas/",
-      "html_sha256": "11d0cf94f61308da770640898df3019f4cbdd0b3dcd42f9df8ad73a8aa79d6ca",
-      "measured_on": "2026-09-14",
+      "html_sha256": "e30f2b2856a9301939fc422886e19e420b20169337b782ee589143836cd9c3f0",
+      "measured_on": "2026-09-15",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -2816,7 +2821,7 @@
     {
       "route": "/defesa-tecnica-contratos-publicos/",
       "html_sha256": "c910324e7487dfd4ee0fcb019f420c4e8f4cf32869426e4b9e53c605ab199f14",
-      "measured_on": "2026-09-14",
+      "measured_on": "2026-09-15",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -3025,7 +3030,7 @@
     {
       "route": "/diagnostico-b2g-360/",
       "html_sha256": "101b019cb8113967cd7ffd50b07d1011af982ac22dd449aefcc868bff4b79409",
-      "measured_on": "2026-09-14",
+      "measured_on": "2026-09-15",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -3223,7 +3228,7 @@
     {
       "route": "/acompanhamento-contratos-obras/",
       "html_sha256": "801c701b0b9cf56bc67059bd5a4fad61ccaf1637ad5488e25029c1da82800804",
-      "measured_on": "2026-09-14",
+      "measured_on": "2026-09-15",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -3424,7 +3429,7 @@
     {
       "route": "/diretoria-b2g/",
       "html_sha256": "3de4fee7f642e3f01d68aa567277711a839932a758674f1640a36342e3be7f7d",
-      "measured_on": "2026-09-14",
+      "measured_on": "2026-09-15",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -3630,7 +3635,7 @@
     {
       "route": "/casos/modelo-relatorio-inteligencia-licitacoes/",
       "html_sha256": "a48d9d1df3520993cff4ad646cbe6a5cca62728ad24bd9b8c78d90cb67ecbab9",
-      "measured_on": "2026-09-14",
+      "measured_on": "2026-09-15",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -3840,7 +3845,7 @@
     {
       "route": "/casos/modelo-base-quantitativa-canonica/",
       "html_sha256": "b5630d2a1e1cb6fbbc552dba98b3292307b8f6100bd813f53e321dde1545302e",
-      "measured_on": "2026-09-14",
+      "measured_on": "2026-09-15",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -4050,7 +4055,7 @@
     {
       "route": "/casos/modelo-apresentacao-executiva-resultados/",
       "html_sha256": "48d94d71d273741eb1bb887f472071d8623096b0d849c075d96b1ea83db66b7f",
-      "measured_on": "2026-09-14",
+      "measured_on": "2026-09-15",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -4262,7 +4267,7 @@
     {
       "route": "/casos/modelo-mapa-compradores-publicos/",
       "html_sha256": "44029580ecea3f465b45d8235c3debd58af5a0a89c98bc4ee6aef4dd6cddde25",
-      "measured_on": "2026-09-14",
+      "measured_on": "2026-09-15",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -4474,7 +4479,7 @@
     {
       "route": "/casos/modelo-contratos-vincendos-relicitacao/",
       "html_sha256": "dd5303649ceaf04e615c56fd5f1c52bdc059d471dc9620652fc59fffb531e50c",
-      "measured_on": "2026-09-14",
+      "measured_on": "2026-09-15",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -4687,7 +4692,7 @@
     {
       "route": "/casos/modelo-mapeamento-concorrentes-publicos/",
       "html_sha256": "b2641f98e8446b4bbb19cff87164fc67f0a7f3aeed49e21bd35f4daf9de3f1d0",
-      "measured_on": "2026-09-14",
+      "measured_on": "2026-09-15",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -4895,7 +4900,7 @@
     {
       "route": "/casos/modelo-painel-precos-obras-publicas/",
       "html_sha256": "cee59248aebd602ee6172f237c3be84615b592e39deb2fb790281c242df82618",
-      "measured_on": "2026-09-14",
+      "measured_on": "2026-09-15",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -5109,7 +5114,7 @@
     {
       "route": "/casos/modelo-relatorio-executivo-consolidado/",
       "html_sha256": "e92ef97bcd06c9ec74e51219a25883644d2dd6e3c7b7ea82b814fec276cf0dcc",
-      "measured_on": "2026-09-14",
+      "measured_on": "2026-09-15",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",

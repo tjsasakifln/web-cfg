@@ -13,37 +13,51 @@
   "service_situations": [
     {
       "id": "project_delivery",
-      "label": "Projetar, revisar, orçar ou compatibilizar",
-      "visitor_language": "Preciso tirar um projeto do impasse ou conferir se ele pode avançar",
+      "label": "Preciso completar, conferir ou compatibilizar um projeto",
+      "visitor_language": "Preciso completar, conferir ou compatibilizar um projeto",
       "href": "/servicos/#servico-projeto",
       "index_state": "service_hub_index",
-      "scope": "Elaboração, revisão e compatibilização de projetos para obras públicas e privadas; quantitativos e orçamento mantêm destino específico.",
+      "scope": "Elaboração, revisão e compatibilização de projetos para obras públicas e privadas; quantitativos e orçamento têm situação e destino próprios.",
       "exclusive_elaboration_route": "/projetos-complementares-engenharia/"
     },
     {
+      "id": "quantities_budget",
+      "label": "Preciso comparar propostas, contratar a obra ou aceitar um número sem base própria",
+      "visitor_language": "Preciso comparar propostas, contratar a obra ou aceitar um número sem base própria",
+      "href": "/quantitativos-orcamento-obras/",
+      "index_state": "service_hub_index"
+    },
+    {
       "id": "building_diagnosis",
-      "label": "Inspecionar, diagnosticar ou documentar obra e imóvel",
-      "visitor_language": "Preciso entender e registrar uma condição da obra ou do imóvel",
+      "label": "Tenho infiltração, fissura, mofo ou dano no imóvel",
+      "visitor_language": "Preciso entender uma infiltração ou fissura, ou registrar a condição do imóvel",
       "href": "/inspecao-diagnostico-edificacoes/",
       "index_state": "service_hub_index"
     },
     {
+      "id": "property_valuation",
+      "label": "Preciso do valor de um imóvel para negociar ou registrar",
+      "visitor_language": "Preciso do valor de um imóvel para uma finalidade e uma data definidas",
+      "href": "/servicos/#servico-avaliacao",
+      "index_state": "service_hub_index"
+    },
+    {
       "id": "expert_evidence_valuation",
-      "label": "Perícia, assistência técnica ou avaliação",
-      "visitor_language": "Preciso produzir, examinar ou contestar uma prova ou um valor técnico",
+      "label": "Estou em uma disputa que depende de prova técnica de engenharia",
+      "visitor_language": "Preciso de prova técnica de engenharia em uma disputa",
       "href": "/assistencia-tecnica-pericial-engenharia/",
       "index_state": "service_hub_index"
     },
     {
       "id": "occupational_safety",
-      "label": "Segurança do trabalho",
-      "visitor_language": "Preciso reconhecer, documentar ou tratar uma situação de risco ocupacional",
+      "label": "Preciso de um documento de segurança do trabalho",
+      "visitor_language": "Preciso responder a uma exigência de documento de segurança do trabalho",
       "href": "/seguranca-trabalho-apoio-tecnico/",
       "index_state": "service_hub_index"
     },
     {
       "id": "public_works_b2g",
-      "label": "Licitação ou contrato de obra pública",
+      "label": "Medição glosada ou pagamento travado em contrato público",
       "visitor_language": "Preciso decidir ou proteger margem em uma licitação ou contrato público",
       "href": "/servicos-obras-publicas/",
       "index_state": "index"

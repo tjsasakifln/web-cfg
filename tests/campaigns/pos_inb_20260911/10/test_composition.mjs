@@ -211,11 +211,20 @@ function sha256(buf) {
   assert.doesNotMatch(complementary, /\bhubs?\b/i);
   assert.doesNotMatch(howToHire, /\bhubs?\b/i);
   const services = read("servicos/index.html");
+  // 2026-09-14 (VALOR-IMEDIATO-20260914): a regra exigia que cada fragmento
+  // do catálogo apontasse para /triagem-tecnica/. A propriedade legítima é o
+  // fragmento oferecer um próximo passo de contato dentro do próprio cartão;
+  // quando a landing existe, o pedido vai direto ao bloco de contato dela ou
+  // a um canal direto, sem reenviar o visitante a um hub de seleção.
   for (const id of ["servico-projeto", "servico-diagnostico", "servico-pericia", "servico-sst"]) {
     const start = services.indexOf(`id="${id}"`);
     assert.notEqual(start, -1, id);
     const slice = services.slice(start, start + 2500);
-    assert.match(slice, /href="\/triagem-tecnica\//, id);
+    assert.match(
+      slice,
+      /href="(?:\/triagem-tecnica\/|\/[a-z0-9-]+\/#(?:contato|pedido|escopo|triagem)[a-z0-9-]*|https:\/\/wa\.me\/|mailto:)/,
+      `${id}: próximo passo de contato no fragmento`,
+    );
   }
 }
 

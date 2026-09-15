@@ -25,17 +25,17 @@
   },
   "hero": {
     "eyebrow": "Engenharia, Perícias e Inteligência Técnica",
-    "h1": "Projetos e serviços de engenharia para obras públicas e privadas.",
-    "h1_html": "Projetos e serviços de engenharia <span class=\"type-serif\">para obras públicas e privadas.</span>",
-    "subheadline": "Elaboração e revisão de projetos, compatibilização entre disciplinas, quantitativos, orçamentos, perícias e análises técnicas para fazer a obra ou a decisão avançar.",
-    "cta_primary": "Conhecer os serviços",
-    "cta_secondary": "Conversar sobre seu projeto",
+    "h1": "Assumimos a parte de engenharia que falta para você orçar, contratar ou decidir.",
+    "h1_html": "Assumimos a parte de engenharia <span class=\"type-serif\">que falta para você orçar, contratar ou decidir.</span>",
+    "subheadline": "Comparar propostas de obra, completar ou conferir um projeto, entender uma infiltração, avaliar um imóvel ou responder a uma glosa: em obra pública ou privada, levantamos, calculamos, conferimos e assumimos a responsabilidade técnica.",
+    "cta_primary": "Ver serviços por situação",
+    "cta_secondary": "Descrever a minha situação",
     "cta_secondary_wa": "Olá, Tiago. Quero conversar sobre um projeto ou serviço de engenharia e solicitar uma proposta.",
-    "microcopy": "Triagem inicial para confirmar aderência, limites e próximo passo.",
+    "microcopy": "Conversa técnica no primeiro contato: a resposta nomeia o serviço, o que você recebe e o que falta reunir.",
     "meta_title": "CONFENGE | Engenharia, Perícias e Inteligência Técnica",
-    "meta_description": "Projetos e serviços de engenharia para obras públicas e privadas: elaboração, revisão, compatibilização, quantitativos, orçamento, perícias e análises técnicas.",
-    "og_title": "Projetos e serviços de engenharia para obras públicas e privadas.",
-    "og_description": "Elaboração e revisão de projetos, compatibilização, quantitativos, orçamentos, perícias e análises técnicas pela CONFENGE."
+    "meta_description": "Engenharia para orçar a obra, completar ou conferir o projeto, entender uma infiltração, avaliar um imóvel ou responder a uma glosa, em obra pública ou privada. Levantamos, calculamos, conferimos e assumimos a responsabilidade técnica pelo que falta.",
+    "og_title": "Assumimos a parte de engenharia que falta para você orçar, contratar ou decidir.",
+    "og_description": "Comparar propostas de obra, completar ou conferir um projeto, entender uma infiltração, avaliar um imóvel ou responder a uma glosa: em obra pública ou privada, a CONFENGE levanta, calcula, confere e assume a responsabilidade técnica pelo que falta."
   },
   "journeys": [
     {
@@ -89,42 +89,58 @@
   "service_situations": [
     {
       "id": "project_delivery",
-      "label": "Projetar, revisar, orçar ou compatibilizar",
-      "summary": "Quando um projeto precisa ganhar definição, coerência entre disciplinas ou base quantitativa para avançar.",
-      "deliverables": "Plantas, detalhes e memória de cálculo do projeto; relatório de revisão; registro de compatibilização; ou planilha orçamentária com quantitativos e composições.",
+      "label": "Preciso completar, conferir ou compatibilizar um projeto",
+      "summary": "Quando falta uma disciplina, o projeto recebido precisa ser conferido ou as disciplinas precisam conviver sem interferência antes de aprovar, contratar ou executar.",
+      "deliverables": "Plantas, cálculos e memória da disciplina contratada; relatório do que está inconsistente e o que volta ao autor; registro das interferências com o ajuste combinado.",
       "href": "/servicos/#servico-projeto",
       "index_state": "service_hub_index",
-      "scope": "Elaboração, revisão e compatibilização de projetos para obras públicas e privadas; quantitativos e orçamento mantêm destino específico."
+      "scope": "Elaboração, revisão e compatibilização de projetos para obras públicas e privadas; quantitativos e orçamento têm situação e destino próprios."
+    },
+    {
+      "id": "quantities_budget",
+      "label": "Preciso comparar propostas, contratar a obra ou aceitar um número sem base própria",
+      "summary": "Quando a decisão depende de quantidades e custos com critério, composição, referência e data-base visíveis.",
+      "deliverables": "Planilha de quantitativos, memória de cálculo e orçamento ou revisão de orçamento.",
+      "href": "/quantitativos-orcamento-obras/",
+      "index_state": "service_hub_index"
     },
     {
       "id": "building_diagnosis",
-      "label": "Inspecionar, diagnosticar ou documentar obra e imóvel",
-      "summary": "Quando há anomalia, dúvida sobre condição, necessidade de vistoria ou registro técnico da situação existente.",
-      "deliverables": "Inspeção, diagnóstico, laudo, relatório ou documentação técnica, conforme o escopo.",
-      "href": "/servicos/#servico-diagnostico",
+      "label": "Tenho infiltração, fissura, mofo ou dano no imóvel",
+      "summary": "Quando há anomalia, dúvida sobre a condição do imóvel, recebimento ou necessidade de registrar o estado em uma data.",
+      "deliverables": "Relatório da condição do imóvel, com manifestações localizadas, data, hipóteses sustentadas e o próximo exame indicado.",
+      "href": "/inspecao-diagnostico-edificacoes/",
+      "index_state": "service_hub_index"
+    },
+    {
+      "id": "property_valuation",
+      "label": "Preciso do valor de um imóvel para negociar ou registrar",
+      "summary": "Quando uma decisão patrimonial precisa de valor fundamentado em engenharia para uma finalidade e uma data definidas.",
+      "deliverables": "Laudo ou parecer de avaliação com método, dados e conclusão delimitada; parecer preliminar não substitui a avaliação formal.",
+      "href": "/servicos/#servico-avaliacao",
       "index_state": "service_hub_index"
     },
     {
       "id": "expert_evidence_valuation",
-      "label": "Perícia, assistência técnica ou avaliação",
-      "summary": "Quando um processo, negociação ou decisão patrimonial depende de prova, análise ou valor tecnicamente fundamentado.",
-      "deliverables": "Parecer, laudo, quesitos, análise crítica ou avaliação, conforme o papel e o escopo.",
-      "href": "/servicos/#servico-pericia",
+      "label": "Estou em uma disputa que depende de prova técnica de engenharia",
+      "summary": "Quando um processo ou uma negociação depende de evidências, quesitos e manifestação técnica da parte.",
+      "deliverables": "Manifestação técnica com evidências, quesitos e conclusão delimitada; não decide o processo nem substitui o perito do juízo.",
+      "href": "/assistencia-tecnica-pericial-engenharia/",
       "index_state": "service_hub_index"
     },
     {
       "id": "occupational_safety",
-      "label": "Segurança do trabalho",
-      "summary": "Quando a empresa precisa reconhecer, documentar ou tratar uma situação de risco ocupacional.",
-      "deliverables": "Diagnóstico, documentação ou apoio técnico, depois de confirmarmos que podemos assumir o caso.",
-      "href": "/servicos/#servico-sst",
+      "label": "Preciso de um documento de segurança do trabalho",
+      "summary": "Quando a empresa precisa saber quais documentos de risco ocupacional se aplicam, o que falta e quem pode produzir cada peça.",
+      "deliverables": "Diagnóstico do que se aplica e o documento de SST nomeado na proposta, com profissional habilitado por módulo; exames e atos médicos ficam fora.",
+      "href": "/seguranca-trabalho-apoio-tecnico/",
       "index_state": "service_hub_index"
     },
     {
       "id": "public_works_b2g",
-      "label": "Licitação ou contrato de obra pública",
+      "label": "Medição glosada ou pagamento travado em contrato público",
       "summary": "Quando edital, proposta, medição, glosa, aditivo, atraso ou margem exigem decisão técnica e registro contemporâneo.",
-      "deliverables": "Análise, cálculo, matriz de risco, relatório ou rotina de decisão para a frente pública.",
+      "deliverables": "Dossiê técnico do evento, com cronologia, prova de cada número e parcela incontroversa; o órgão decide o ateste e o pagamento.",
       "href": "/servicos-obras-publicas/",
       "index_state": "index"
     }
@@ -163,11 +179,11 @@
         "label": "Obras públicas",
         "url": "/servicos-obras-publicas/",
         "title": "Serviços para licitações e contratos de obras públicas",
-        "description": "Serviços da CONFENGE para construtoras: Diagnóstico da Operação em Obras Públicas, Diretoria Fracionada para o Mercado Público, Operação de Proposta para Licitação Crítica e defesa de margem.",
+        "description": "Serviços da CONFENGE para construtoras em licitações e contratos de obras públicas: edital, medição e glosa, aditivo e atraso, reequilíbrio e margem, rotina de contratos, com preço e prazo publicados onde já existem.",
         "h1": "Serviços para licitações e contratos de obras públicas",
-        "lead": "Escolha pelo uso: definir onde crescer, coordenar uma proposta crítica, organizar um evento contratual ou instalar uma rotina de decisão.",
-        "proof": "Onde o trabalho já tem preço e prazo publicados, eles aparecem na página. Onde o preço depende do caso, a página diz o que a conversa inicial resolve. Exemplos completos você consulta sem cadastro.",
-        "eyebrow": "Comece pela decisão que não pode esperar",
+        "lead": "Glosa, aditivo, atraso, reequilíbrio ou edital: apuramos em reais o que está em jogo e escrevemos a posição técnica que você apresenta ao fiscal.",
+        "proof": "Preço e prazo aparecem onde já estão publicados; nos demais casos, a conversa inicial define o escopo. ART e nota fiscal, responsabilidade assumida na proposta. Exemplos completos você consulta sem cadastro.",
+        "eyebrow": "Edital, glosa ou aditivo",
         "proof_link": {
           "text": "Exemplos completos",
           "href": "/casos/"
@@ -179,9 +195,9 @@
         "title": "Problemas que resolvemos em licitações e contratos de obras",
         "description": "Edital e orçamento, medição e glosa, aditivo, atraso, reequilíbrio e defesa técnica: escolha o problema do seu contrato e veja o caminho técnico.",
         "h1": "Problemas que resolvemos em licitações e contratos de obras",
-        "lead": "Cada problema abaixo tem um caminho técnico definido: o que registrar, com qual documento e qual decisão vem depois.",
+        "lead": "Glosa, aditivo, atraso, reequilíbrio, notificação ou edital: cada evento leva à página que diz o que assumimos, o que você recebe e para que serve.",
         "proof": "Quatro ferramentas públicas calculam limite de aditivo, atraso, reequilíbrio e risco de margem sem cadastro.",
-        "eyebrow": "Comece pelo evento que travou a obra",
+        "eyebrow": "Reconheça o seu evento",
         "proof_link": {
           "text": "Quatro ferramentas públicas",
           "href": "/ferramentas/"
@@ -421,56 +437,56 @@
       "label": "Edital e proposta",
       "url": "/diagnostico-pre-licitacao/",
       "stage": "antes",
-      "summary": "Leitura crítica do edital, habilitação, acervo e a decisão de participar ou recusar antes de comprometer capital."
+      "summary": "Você precisa decidir se entra e com que proposta. Lemos edital, habilitação, acervo e riscos e devolvemos a leitura que sustenta participar ou recusar antes de comprometer capital."
     },
     {
       "id": "orcamento-bdi",
       "label": "Orçamento e BDI",
       "url": "/auditoria-orcamento-licitacao/",
       "stage": "antes",
-      "summary": "Conferência de planilha, referência SINAPI e SICRO, composição de BDI e os erros que corroem margem antes da assinatura."
+      "summary": "A planilha precisa fechar sem corroer a margem. Conferimos preço unitário, referência SINAPI e SICRO, composição de BDI e exequibilidade antes da assinatura."
     },
     {
       "id": "gestao-contratual",
       "label": "Gestão contratual",
       "url": "/acompanhamento-contratos-obras/",
       "stage": "execucao",
-      "summary": "Rotina preventiva de registro, comunicação formal e controle de prazos para o contrato não chegar frágil ao conflito."
+      "summary": "Vários contratos e prazos ao mesmo tempo. Assumimos a rotina de registro, comunicação formal e controle de prazos para o contrato não chegar frágil ao conflito."
     },
     {
       "id": "medicoes-glosas",
       "label": "Medições e glosas",
       "url": "/medicoes-glosas-obras-publicas/",
       "stage": "execucao",
-      "summary": "Medição retida, glosa e atraso de pagamento: como contestar com memória de cálculo e evidência contemporânea."
+      "summary": "Medição retida, glosa ou pagamento atrasado. Apuramos em reais o que está glosado e escrevemos a posição técnica, com memória de cálculo e prova contemporânea, para a contestação."
     },
     {
       "id": "aditivos",
       "label": "Aditivos e serviços extras",
       "url": "/aditivos-obras-publicas/",
       "stage": "execucao",
-      "summary": "Serviço extra, quantitativo novo e limite de acréscimo: o que precisa estar documentado antes de executar."
+      "summary": "Serviço extra, quantitativo novo ou limite de acréscimo. Provamos a mudança de escopo, custo e prazo e escrevemos o que precisa estar documentado antes de executar."
     },
     {
       "id": "atrasos",
       "label": "Atrasos e prorrogação",
       "url": "/atrasos-prorrogacao-obras-publicas/",
       "stage": "execucao",
-      "summary": "Causa, responsabilidade, caminho crítico e o registro que sustenta o pedido de prorrogação."
+      "summary": "Prazo estourando por causa que não é sua. Separamos causa, responsabilidade e dias afetados no caminho crítico para instruir o pedido de prorrogação."
     },
     {
       "id": "reequilibrio",
       "label": "Reequilíbrio econômico-financeiro",
       "url": "/reequilibrio-obras-publicas/",
       "stage": "conflito",
-      "summary": "Fato, nexo e cálculo: como montar o pedido de reequilíbrio com os documentos que a Administração exige."
+      "summary": "Custo que saiu da equação original. Reconstruímos fato, nexo e cálculo e montamos o pedido com os documentos que a Administração exige; o deferimento é decisão dela."
     },
     {
       "id": "defesa-tecnica",
       "label": "Defesa técnica",
       "url": "/defesa-tecnica-contratos-publicos/",
       "stage": "conflito",
-      "summary": "Notificação, multa e sanção: subsídio técnico para a resposta, coordenado com o jurídico da empresa."
+      "summary": "Notificação, multa ou sanção para responder. Organizamos fatos e provas técnicas como subsídio para a resposta, coordenado com o jurídico da empresa."
     }
   ],
   "problem_stages": [

@@ -111,7 +111,12 @@ def test_home_contract_case_has_provenance_and_no_client_claim():
     assert "21/08/2026" in html
     assert "contexto de mercado" in html.lower()
     assert "Contexto de mercado." in html
-    offers_at = html.find('data-section-archetype="offer_dominant"')
+    # 2026-09-14 (VALOR-IMEDIATO-20260914). A regra exigia o arquétipo
+    # literal "offer_dominant" (o ledger genérico de documentos) antes do
+    # contexto PNCP. A propriedade é o visitante ler a oferta própria da
+    # CONFENGE (as situações que atendemos, com trabalho e entrega) antes dos
+    # números de mercado, para que o PNCP não seja lido como prova de cliente.
+    offers_at = html.find('data-section-archetype="journey_paths"')
     pncp_at = html.find('id="mercado-pncp"')
     assert 0 < offers_at < pncp_at
 

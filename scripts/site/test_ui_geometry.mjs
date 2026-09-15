@@ -21,6 +21,18 @@ const SITE_ROOT = resolveSiteRoot(ROOT);
 const CHROME = resolveChromePath();
 const PORT = Number(process.env.UI_TEST_PORT || 8791);
 const BASE = process.argv[2] || `http://127.0.0.1:${PORT}`;
+// VALOR-IMEDIATO-20260914. A home tem uma linha por situacao do contrato
+// (brand.json = public-ia-map.json); a contagem deixa de ser o numero magico
+// 5 e o destino de cada linha e o do contrato (hub ou landing publicada).
+const SERVICE_SITUATIONS = (() => {
+  const brand = JSON.parse(readFileSync(join(ROOT, "data/site/brand.json"), "utf8")).service_situations;
+  const ia = JSON.parse(readFileSync(join(ROOT, "data/site/public-ia-map.json"), "utf8")).service_situations;
+  if (JSON.stringify(brand.map((r) => [r.id, r.href])) !== JSON.stringify(ia.map((r) => [r.id, r.href]))) {
+    throw new Error("brand.json and public-ia-map.json disagree on service situations");
+  }
+  return brand;
+})();
+const EXPECTED_SITUATIONS = SERVICE_SITUATIONS.length;
 
 const MIME = {
   ".html": "text/html; charset=utf-8",
@@ -525,26 +537,31 @@ async function main() {
       const heroDelivery = (document.querySelector(".hero-deliverable")?.textContent || "")
         .replace(/\s+/g, " ")
         .trim();
+      // Cada linha de situacao aponta, sem JS, para uma explicacao interna do
+      // servico (hub ou landing), nunca para um contato generico.
+      const situationDestinations = [...document.querySelectorAll(".situation-row .situation-action[href]")]
+        .map((el) => el.getAttribute("href") || "")
+        .filter((href) => href.startsWith("/") && !href.startsWith("//") && !href.startsWith("/triagem-tecnica/"));
       return {
         h1: !!document.querySelector("#hero-title"),
         situations: document.querySelectorAll(".situation-row").length,
-        serviceDestinations: document.querySelectorAll(
-          '.hero a[href^="/servicos/"], .situation-row a[href^="/servicos/"]',
-        ).length,
+        heroServicesPath: !!document.querySelector('.hero a[href^="/servicos/"]'),
+        serviceDestinations: new Set(situationDestinations).size,
         directChannels: document.querySelectorAll(
           'a[href^="mailto:"], a[href^="tel:"], a[href^="https://wa.me/"]',
         ).length,
         deliveryExplained:
           heroDelivery.length >= 120
-          && /(planta|projeto|memória|planilha)/i.test(heroDelivery)
-          && /(orçamento|laudo|parecer|relatório)/i.test(heroDelivery),
+          && /(planta|projeto|memória|planilha|quantidade)/i.test(heroDelivery)
+          && /(orçamento|laudo|parecer|relatório|propostas)/i.test(heroDelivery),
       };
     });
     await page.setJavaScriptEnabled(true);
     if (
       !nojs.h1
-      || nojs.situations !== 5
-      || nojs.serviceDestinations < 4
+      || nojs.situations !== EXPECTED_SITUATIONS
+      || !nojs.heroServicesPath
+      || nojs.serviceDestinations !== EXPECTED_SITUATIONS
       || nojs.directChannels < 2
       || !nojs.deliveryExplained
     ) throw new Error(JSON.stringify(nojs));
@@ -567,15 +584,10 @@ async function main() {
         labels: [...paths].map((p) => (p.querySelector("h3")?.textContent || "").trim()).filter(Boolean),
       };
     });
-    if (matrix.cardCount !== 5) throw new Error(`expected 5 situation paths, got ${matrix.cardCount}`);
+    if (matrix.cardCount !== EXPECTED_SITUATIONS) throw new Error(`expected ${EXPECTED_SITUATIONS} situation paths, got ${matrix.cardCount}`);
     if (matrix.gridDisplay === "none") throw new Error("situation paths hidden on mobile");
-    const expected = [
-      "Projetar, revisar, orçar ou compatibilizar",
-      "Inspecionar, diagnosticar ou documentar obra e imóvel",
-      "Perícia, assistência técnica ou avaliação",
-      "Segurança do trabalho",
-      "Licitação ou contrato de obra pública",
-    ];
+    // Os rotulos sao os do contrato de situacoes, nao literais duplicados.
+    const expected = SERVICE_SITUATIONS.map((row) => row.label);
     for (const label of expected) {
       if (!matrix.labels.includes(label)) throw new Error(`missing door ${label}: ${JSON.stringify(matrix.labels)}`);
     }
@@ -626,8 +638,12 @@ async function main() {
     const hit = leaks.filter((p) => lower.includes(p));
     if (hit.length) throw new Error(hit.join(", "));
     if (/>\s*Jornada\s+[ABC]\s*</.test(html)) throw new Error("visible Jornada A/B/C label");
-    if (!/comece pelo que precisa avançar/i.test(html)) throw new Error("missing situation chooser eyebrow");
-    if (!/qual destas situações se parece com a sua/i.test(html)) throw new Error("missing situation chooser title");
+    // VALOR-IMEDIATO-20260914: o seletor de situacoes tem eyebrow e titulo
+    // que convidam o visitante a se reconhecer numa situacao (propriedade), em
+    // vez das duas frases literais da versao anterior.
+    const chooser = html.match(/<section\b[^>]*id="situacoes"[\s\S]*?<\/header>/i)?.[0] || "";
+    if (!/<p class="eyebrow">[^<]*(?:situa[çc][ãa]o|precisa)[^<]*<\/p>/i.test(chooser)) throw new Error("missing situation chooser eyebrow");
+    if (!/<h2 id="situations-title">[^<]*(?:situa[çc][õo]es|reconhece|parece com a sua)[^<]*<\/h2>/i.test(chooser)) throw new Error("missing situation chooser title");
     ok("no_internal_language_home");
   } catch (e) {
     fail("no_internal_language_home", e.message || e);
@@ -686,7 +702,7 @@ async function main() {
       });
       reports.push({ w, h, ...rep });
       if (rep.overflow) throw new Error(`${w}: horizontal overflow`);
-      if (rep.cardCount !== 5) throw new Error(`${w}: expected 5 situation rows`);
+      if (rep.cardCount !== EXPECTED_SITUATIONS) throw new Error(`${w}: expected ${EXPECTED_SITUATIONS} situation rows, saw ${rep.cardCount}`);
       if (rep.titleLines > 4) throw new Error(`${w}: situations title ${rep.titleLines} lines > 4`);
       if (rep.titleFs > 36) throw new Error(`${w}: situations title font ${rep.titleFs}px too large`);
       if (rep.bodyFs < 16 || rep.bodyFs > 20) throw new Error(`${w}: body font ${rep.bodyFs}px outside 16–20`);
@@ -703,66 +719,59 @@ async function main() {
 
   // 12c) Each situation must land on an explanation of the promised service;
   // the destination, not a generic form, owns the path to contextual contact.
+  //
+  // VALOR-IMEDIATO-20260914. A versao anterior exigia que as quatro primeiras
+  // situacoes apontassem para /servicos/#servico-* e que a quinta fosse obras
+  // publicas: obrigava quem chega com infiltracao, disputa ou exigencia de SST
+  // a passar pelo hub mesmo com a landing publicada. A propriedade legitima:
+  // cada situacao do contrato tem destino proprio (hub ou landing) que
+  // explica o trabalho e a entrega e oferece contato contextual; projeto
+  // continua alcancando quantitativos; obra publica mantem o hub canonico.
   try {
     await page.setViewport({ width: 1024, height: 900 });
     await page.goto(`${BASE}/`, { waitUntil: "networkidle0" });
     const routes = await page.evaluate(() =>
       [...document.querySelectorAll(".situation-row .situation-action")].map((el) => ({
+        id: el.closest(".situation-row")?.id || "",
         label: (el.textContent || "").replace(/\s+/g, " ").trim(),
         href: el.getAttribute("href") || "",
       })),
     );
-    if (routes.length !== 5) throw new Error(`expected five situation routes: ${JSON.stringify(routes)}`);
-    // 2026-09-08. Esta linha exigia que a situacao 01 -- "Projetar, revisar,
-    // orcar ou compatibilizar" -- apontasse para /quantitativos-orcamento-obras/.
-    // Era uma chamada que promete quatro servicos levando ao unico que e
-    // orcamento: quem chegou para projeto executivo ou compatibilizacao era
-    // conduzido a outra coisa. A trava congelava o defeito.
-    //
-    // A propriedade correta: o destino da situacao 01 tem de cobrir o que o
-    // rotulo promete, e a rota de quantitativos nao pode ficar orfa -- ela
-    // continua alcancavel a partir do destino, agora como um passo adiante.
-    if (!routes[0].href.startsWith("/servicos/") && routes[0].href !== "/quantitativos-orcamento-obras/") {
-      throw new Error(`situacao de projeto sem destino de projeto: ${JSON.stringify(routes[0])}`);
+    if (routes.length !== EXPECTED_SITUATIONS) throw new Error(`expected ${EXPECTED_SITUATIONS} situation routes: ${JSON.stringify(routes)}`);
+    const contractHrefs = SERVICE_SITUATIONS.map((row) => row.href);
+    if (JSON.stringify(routes.map((r) => r.href)) !== JSON.stringify(contractHrefs)) {
+      throw new Error(`situation routes diverge from the contract: ${JSON.stringify(routes.map((r) => r.href))} != ${JSON.stringify(contractHrefs)}`);
     }
-    {
-      const target = routes[0].href.split("#")[0];
-      if (target !== "/quantitativos-orcamento-obras/") {
-        await page.goto(`${BASE}${target}`, { waitUntil: "networkidle0" });
-        const reachesQuantities = await page.evaluate(() =>
-          [...document.querySelectorAll("a[href]")].some(
-            (el) => (el.getAttribute("href") || "").startsWith("/quantitativos-orcamento-obras/"),
-          ),
-        );
-        if (!reachesQuantities) {
-          throw new Error(`quantitativos ficou orfa a partir de ${target}`);
-        }
-        await page.goto(`${BASE}/`, { waitUntil: "networkidle0" });
-      }
+    if (new Set(routes.map((item) => item.href)).size !== routes.length) {
+      throw new Error(`distinct needs collapse to one destination: ${JSON.stringify(routes)}`);
     }
-    const privateRoutes = routes.slice(0, 4);
-    if (!privateRoutes.every((item) => /^\/servicos\/#servico-[a-z-]+$/.test(item.href))) {
-      throw new Error(`engineering situation lost its service explanation: ${JSON.stringify(privateRoutes)}`);
+    const projectRoute = routes.find((item) => item.id === "situacao-projeto");
+    if (!projectRoute || !projectRoute.href.startsWith("/servicos/#servico-projeto")) {
+      throw new Error(`situacao de projeto sem destino de projeto: ${JSON.stringify(projectRoute)}`);
     }
-    if (new Set(privateRoutes.map((item) => item.href)).size !== privateRoutes.length) {
-      throw new Error(`distinct engineering needs collapse to one destination: ${JSON.stringify(privateRoutes)}`);
+    const publicRoute = routes.find((item) => item.id === "situacao-obras-publicas");
+    if (!publicRoute || publicRoute.href !== "/servicos-obras-publicas/") {
+      throw new Error(`B2G route lost its canonical hub: ${JSON.stringify(publicRoute)}`);
     }
-    for (const item of privateRoutes) {
+    for (const item of routes) {
       const [pathname, fragment] = item.href.split("#");
       await page.goto(`${BASE}${pathname}`, { waitUntil: "networkidle0" });
       const destination = await page.evaluate((id) => {
-        const section = document.getElementById(id);
-        const text = (section?.textContent || "").replace(/\s+/g, " ").trim();
+        const scope = id ? document.getElementById(id) : document.querySelector("main");
+        const text = (scope?.textContent || "").replace(/\s+/g, " ").trim();
+        const contact = 'a[href^="/triagem-tecnica/"], a[href^="https://wa.me/"], a[href^="mailto:"]';
         return {
-          exists: Boolean(section),
-          substantial: text.length >= 300,
-          explainsWorkAndDelivery: /trabalho e entrega/i.test(text),
-          hasContextualContact: Boolean(section?.querySelector('a[href^="/triagem-tecnica/"]')),
+          exists: Boolean(scope),
+          substantial: id ? text.length >= 300 : text.length >= 1800,
+          explainsWorkAndDelivery: id
+            ? /o que assumimos/i.test(text) && /passa a ter/i.test(text)
+            : /(assumimos|levantamos|conferimos|elaboramos|inspecionamos|organizamos|diagnosticamos|avaliamos|lemos|analisamos)/i.test(text) && /(recebe|passa a ter|entrega)/i.test(text),
+          hasContextualContact: Boolean(scope?.querySelector(contact)),
           reachesQuantities: Boolean(
-            section?.querySelector('a[href^="/quantitativos-orcamento-obras/"]'),
+            scope?.querySelector('a[href^="/quantitativos-orcamento-obras/"]'),
           ),
         };
-      }, fragment);
+      }, fragment || "");
       if (
         !destination.exists
         || !destination.substantial
@@ -774,9 +783,6 @@ async function main() {
       if (fragment === "servico-projeto" && !destination.reachesQuantities) {
         throw new Error(`${item.href}: project path lost the distinct quantities destination`);
       }
-    }
-    if (routes[4].href !== "/servicos-obras-publicas/") {
-      throw new Error(`B2G route lost its canonical hub: ${JSON.stringify(routes[4])}`);
     }
     ok("journey_cta_binds_form");
   } catch (e) {
@@ -1297,7 +1303,7 @@ async function main() {
       };
     });
     await page.setJavaScriptEnabled(true);
-    if (journey.count !== 5 || journey.actions !== 5 || !journey.allVisible) throw new Error(JSON.stringify(journey));
+    if (journey.count !== EXPECTED_SITUATIONS || journey.actions !== EXPECTED_SITUATIONS || !journey.allVisible) throw new Error(JSON.stringify(journey));
     ok("journey_mobile_four_phases_visible");
   } catch (e) {
     await page.setJavaScriptEnabled(true);

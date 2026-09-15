@@ -76,10 +76,12 @@ def test_home_has_canonical_copy():
     assert 'id="urgencia"' in html
     assert 'data-form-multistep="true"' in html
     # Corporate chooser uses customer situations and keeps the B2G intake intact.
-    assert "Projetar, revisar, orçar ou compatibilizar" in html
-    assert "Perícia, assistência técnica ou avaliação" in html
+    # VALOR-IMEDIATO-20260914: os rotulos das situacoes e o rotulo do primario
+    # saem do contrato (brand.json), nao de literais duplicados aqui; o rotulo
+    # do primario declara o destino (/servicos/).
     assert "Segurança do trabalho" in html
-    assert "Conhecer os serviços" in html
+    assert hero["cta_primary"] in html
+    assert re.search(r"servi[çc]os|situa[çc]", hero["cta_primary"], re.I), hero["cta_primary"]
     assert 'href="/servicos/#servico-projeto"' in html
     assert "Contrato sob pressão" in html
     assert "Edital e proposta" in html

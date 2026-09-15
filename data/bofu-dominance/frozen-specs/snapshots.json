@@ -48,8 +48,8 @@
         "whatsapp_present": true,
         "form_count": 0
       },
-      "content_sha256": "ed592c02f78f9363be5424c12d0de211950d91fbe7801970d99cd949ddc1ec97",
-      "bytes": 31176,
+      "content_sha256": "320404c47916843c96bd060313d9c67afb0c9201cf18b286b0c7aa14cd11f7ef",
+      "bytes": 31148,
       "noindex": false
     },
     {
@@ -81,7 +81,7 @@
       ],
       "cta": {
         "hero_text": "Analisar uma demanda",
-        "hero_href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20uma%20demanda%20relacionada%20a%20licita%C3%A7%C3%A3o%2C%20contrato%20ou%20obra%20p%C3%BAblica.",
+        "hero_href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20glosa%20ou%20medi%C3%A7%C3%A3o%20contestada%20e%20preciso%20enquadrar%20a%20posi%C3%A7%C3%A3o%20t%C3%A9cnica.",
         "bridges": [
           {
             "position": "pillar_bridge",
@@ -98,8 +98,8 @@
         "whatsapp_present": true,
         "form_count": 0
       },
-      "content_sha256": "7659009dfc326139fe69d4cc12c30a3395fc1f96264663e1fc435d09843ffbc8",
-      "bytes": 33521,
+      "content_sha256": "f689d2225ffab5927567eacbd2a6ad2e22bfc452ee05fbe2b35a93a3873ee29e",
+      "bytes": 33506,
       "noindex": false
     },
     {
@@ -148,8 +148,8 @@
         "whatsapp_present": true,
         "form_count": 0
       },
-      "content_sha256": "11d0cf94f61308da770640898df3019f4cbdd0b3dcd42f9df8ad73a8aa79d6ca",
-      "bytes": 24941,
+      "content_sha256": "e30f2b2856a9301939fc422886e19e420b20169337b782ee589143836cd9c3f0",
+      "bytes": 24919,
       "noindex": false
     },
     {
@@ -181,7 +181,7 @@
       ],
       "cta": {
         "hero_text": "Analisar uma demanda",
-        "hero_href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20uma%20demanda%20relacionada%20a%20licita%C3%A7%C3%A3o%2C%20contrato%20ou%20obra%20p%C3%BAblica.",
+        "hero_href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20revisar%20pre%C3%A7o%2C%20BDI%20e%20risco%20de%20uma%20licita%C3%A7%C3%A3o%20de%20obra.",
         "bridges": [
           {
             "position": "pillar_bridge",
@@ -198,8 +198,8 @@
         "whatsapp_present": true,
         "form_count": 0
       },
-      "content_sha256": "8c1b81efeeb2a5e2068bcbb724d2c2b8b5848d8c93741df8a7853ff2f8e3e66a",
-      "bytes": 29536,
+      "content_sha256": "444298887697abe1b1bfc24a5e41836013753cc0f22b8db4f48b9df7f15fe397",
+      "bytes": 29461,
       "noindex": false
     },
     {
@@ -288,7 +288,7 @@
       ],
       "cta": {
         "hero_text": "Analisar uma demanda",
-        "hero_href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20uma%20demanda%20relacionada%20a%20licita%C3%A7%C3%A3o%2C%20contrato%20ou%20obra%20p%C3%BAblica.",
+        "hero_href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20edital%20em%20an%C3%A1lise%20e%20quero%20avaliar%20se%20vale%20uma%20Opera%C3%A7%C3%A3o%20de%20Proposta%20para%20Licita%C3%A7%C3%A3o%20Cr%C3%ADtica%20ou%20diagn%C3%B3stico%20de%20participa%C3%A7%C3%A3o.",
         "bridges": [
           {
             "position": "pillar_bridge",
@@ -305,8 +305,8 @@
         "whatsapp_present": true,
         "form_count": 0
       },
-      "content_sha256": "39482d0e3cd9107e6f351bd18a8f2d6510808986659c40116f0d3434912b1ae5",
-      "bytes": 23796,
+      "content_sha256": "67a5aee0638afbb7a9a55d07e06f59f4f91427f760a1c57636218ce1b000adc6",
+      "bytes": 24075,
       "noindex": false
     }
   ]

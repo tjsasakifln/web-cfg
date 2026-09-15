@@ -82,7 +82,7 @@
   "hub": {
     "route": "/servicos-obras-publicas/",
     "page_file": "servicos-obras-publicas/index.html",
-    "proof": "Onde o trabalho já tem preço e prazo publicados, eles aparecem na página. Onde o preço depende do caso, a página diz o que a conversa inicial resolve. Exemplos completos você consulta sem cadastro.",
+    "proof": "Preço e prazo aparecem onde já estão publicados; nos demais casos, a conversa inicial define o escopo. ART e nota fiscal, responsabilidade assumida na proposta. Exemplos completos você consulta sem cadastro.",
     "cited_offer_ids": [
       "CFG-D24",
       "diretoria_fracionada",
