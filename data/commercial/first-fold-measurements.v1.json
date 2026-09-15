@@ -1,9 +1,9 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-09-15T04:38:15.336Z",
+  "measured_at": "2026-09-15T05:20:13.150Z",
   "measured_on": "2026-09-15",
-  "commit_sha": "a8e5e885ac8a25c942f22a98bbb9d9e9ef36b7f5",
+  "commit_sha": "e3eefc56e9495d6cd410fbf5de4f3d85a5fb23d6",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "f168038814087e1b365d1de3042af9a3f3364743756e104711fecc0fb9fe7477",
@@ -13,7 +13,7 @@
     "aditivos-obras-publicas/index.html": "320404c47916843c96bd060313d9c67afb0c9201cf18b286b0c7aa14cd11f7ef",
     "assets/archivo-var-latin-bf6e041e.woff2": "bf6e041e98b0fa244d965027e9f2b6ed53470ed95f2227615510a08a67ea7f4a",
     "assets/eight-offer-contract.css": "d2aead054169392b26c739ab4d95c8b2f651a66c9d6ac27aa7fd98bdafc4f79d",
-    "assets/home-10x.css": "7b539d5bd6360cc204788fbcb68ae8123ae77bc88f2d1d0b28f2f2120e43f06d",
+    "assets/home-10x.css": "83c9ec9284d5485ddd2b3aeedbc026cd6178404d3ddbf9cf6dc5d7592b0e8b81",
     "assets/report-capture.css": "669b93f113f417ba6a8175d9d0ab0dd846a19e991245ad9f2f1ebea48d8c0552",
     "assets/report-model-a11y-v293.css": "148fb54ad084edad56eff48e6b635e2df177e8679a724d50e2e92a88421fddce",
     "assets/report-model.css": "79e09ea8559deb4e01c78df860a00f0ff542659b3c2b9274bc8401444fab2447",
@@ -44,7 +44,7 @@
     "diretoria-b2g/index.html": "3de4fee7f642e3f01d68aa567277711a839932a758674f1640a36342e3be7f7d",
     "entregas/index.html": "8d52cf1eda5eb701ab98638131ff4397460b3d8953dba9e828a98e524c52bd5d",
     "entregas/styles.css": "7f2817c86d856247fe607b2961856073ce0ae163dcc51baa9f743d9b27255774",
-    "index.html": "79ca61d938fa5253bfef998b7083a96156193048c57dd0b7575c2a047a8a0ee1",
+    "index.html": "c47d5b459a7438a69d61f4f25a44eec8f0dfef7a37d3909bc861a1b4c8b5f03f",
     "medicoes-glosas-obras-publicas/index.html": "f689d2225ffab5927567eacbd2a6ad2e22bfc452ee05fbe2b35a93a3873ee29e",
     "problemas-que-resolvemos/index.html": "e0321783dbcec5c1609f043a5eb257ef6728846c63995553ba55bcab9f7e66c9",
     "reequilibrio-obras-publicas/index.html": "e30f2b2856a9301939fc422886e19e420b20169337b782ee589143836cd9c3f0",
@@ -101,7 +101,7 @@
   "routes": [
     {
       "route": "/",
-      "html_sha256": "79ca61d938fa5253bfef998b7083a96156193048c57dd0b7575c2a047a8a0ee1",
+      "html_sha256": "c47d5b459a7438a69d61f4f25a44eec8f0dfef7a37d3909bc861a1b4c8b5f03f",
       "measured_on": "2026-09-15",
       "viewports": {
         "1366x768": {
@@ -141,25 +141,25 @@
                 "width": 602,
                 "height": 102
               },
-              "text": "Comparar propostas de obra, completar ou conferir um projeto, entender uma infiltração, avaliar um imóvel ou responder a uma glosa: em obra pública ou privada, levantamos, calculamos, conferimos e assumimos a responsabilidade técnica pelo q"
+              "text": "Comparar propostas de obra, completar ou conferir um projeto, entender uma infiltração, avaliar um imóvel ou responder a uma glosa: em obra pública ou privada, levantamos, calculamos, conferimos e assumimos a responsabilidade técnica."
             },
             "proof": {
               "selector": ".hero-proof",
               "box": {
-                "top": 721,
-                "bottom": 754,
+                "top": 650,
+                "bottom": 680,
                 "left": 83,
                 "right": 791,
                 "width": 708,
-                "height": 33
+                "height": 30
               },
               "text": "·Engenharia Civil pela EESC-USP ·CNPJ 52.407.089/0001-09 ·Como conferir credenciais e limites"
             },
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 649,
-                "bottom": 705,
+                "top": 578,
+                "bottom": 634,
                 "left": 83,
                 "right": 337,
                 "width": 254,
@@ -173,8 +173,8 @@
               "text": "Ver serviços por situação",
               "href": "/servicos/",
               "box": {
-                "top": 649,
-                "bottom": 705,
+                "top": 578,
+                "bottom": 634,
                 "left": 83,
                 "right": 337,
                 "width": 254,
@@ -231,13 +231,13 @@
                 "width": 350,
                 "height": 134
               },
-              "text": "Comparar propostas de obra, completar ou conferir um projeto, entender uma infiltração, avaliar um imóvel ou responder a uma glosa: em obra pública ou privada, levantamos, calculamos, conferimos e assumimos a responsabilidade técnica pelo q"
+              "text": "Comparar propostas de obra, completar ou conferir um projeto, entender uma infiltração, avaliar um imóvel ou responder a uma glosa: em obra pública ou privada, levantamos, calculamos, conferimos e assumimos a responsabilidade técnica."
             },
             "proof": {
               "selector": ".hero-proof",
               "box": {
-                "top": 754,
-                "bottom": 832,
+                "top": 710,
+                "bottom": 788,
                 "left": 20,
                 "right": 370,
                 "width": 350,
@@ -248,8 +248,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 651,
-                "bottom": 699,
+                "top": 608,
+                "bottom": 656,
                 "left": 20,
                 "right": 370,
                 "width": 350,
@@ -263,8 +263,8 @@
               "text": "Ver serviços por situação",
               "href": "/servicos/",
               "box": {
-                "top": 651,
-                "bottom": 699,
+                "top": 608,
+                "bottom": 656,
                 "left": 20,
                 "right": 370,
                 "width": 350,
