@@ -173,6 +173,14 @@ class _LeadInlineHierarchyParser(HTMLParser):
         self.lead_before_h1 = self.lead_before_h1 or not self.has_h1
 
 
+
+def _service_situations() -> list[dict]:
+    """Uma unica taxonomia de situacoes: brand.json e public-ia-map.json."""
+    brand = json.loads((ROOT / "data" / "site" / "brand.json").read_text(encoding="utf-8"))["service_situations"]
+    ia = json.loads((ROOT / "data" / "site" / "public-ia-map.json").read_text(encoding="utf-8"))["service_situations"]
+    assert [row["id"] for row in brand] == [row["id"] for row in ia]
+    return brand
+
 def _hub_html() -> str:
     return (ROOT / "conteudos" / "index.html").read_text(encoding="utf-8")
 
@@ -731,7 +739,8 @@ def test_home_nav_and_hierarchy():
     hero = re.search(r'class="hero[\s\S]*?</section>', home)
     assert hero and hero.group(0).count("button-primary") == 1
     assert 'class="situation-row' in home
-    assert home.count('class="situation-row') == 5
+    # VALOR-IMEDIATO-20260914: a contagem e a do contrato de situacoes.
+    assert home.count('class="situation-row') == len(_service_situations())
     assert "54.055" in home and "4,48 mi" in home
     assert "54.055" not in hero.group(0) and "4,48 mi" not in hero.group(0)
 
@@ -1076,8 +1085,12 @@ def test_home_form_anchor_reveals_fields():
     assert hero.group(1) == "/servicos/", hero.group(1)
     assert (ROOT / "servicos" / "index.html").is_file()
     hero_text = re.sub(r"<[^>]+>", " ", hero_section.group(0))
-    assert re.search(r"projetos?", hero_text, re.I)
-    assert re.search(r"obras? públicas? e privadas?", hero_text, re.I)
+    # VALOR-IMEDIATO-20260914: o hero explica a situacao e o trabalho antes de
+    # preservar os caminhos de contato; a enumeracao nao e mais exigida, a
+    # entrega nomeada e o alcance publico e privado continuam.
+    assert re.search(r"projetos?|propostas|infiltra[çc][ãa]o|im[óo]vel|glosa", hero_text, re.I)
+    assert re.search(r"públic\w*\s+(?:e|ou)\s+privad\w*", hero_text, re.I)
+    assert re.search(r"\b(?:assumimos|levantamos|calculamos|conferimos|assinamos)\b", hero_text, re.I)
     assert re.search(r"plantas|memórias? de cálculo|planilhas?|laudos?|pareceres?|relatórios?", hero_text, re.I)
     assert 'id="situacoes"' in html
     header_cta = re.search(
@@ -1124,8 +1137,9 @@ def test_home_form_anchor_reveals_fields():
     # uma tem destino proprio, nenhum destino se repete, e todos resolvem no
     # site. O destino de cada cartao pode mudar quando a rota certa mudar; o que
     # nao pode e sumir, repetir ou apontar para fora.
-    assert len(situation_hrefs) == 5, situation_hrefs
-    assert len(set(situation_hrefs)) == 5, situation_hrefs
+    expected = len(_service_situations())
+    assert len(situation_hrefs) == expected, situation_hrefs
+    assert len(set(situation_hrefs)) == expected, situation_hrefs
     for href in situation_hrefs:
         assert href.startswith("/"), href
         target = href.split("#", 1)[0]

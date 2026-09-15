@@ -49,10 +49,22 @@ def test_ia_contract_is_valid_without_html():
     assert "ferramentas" not in labels
     ia = load_ia_map()
     situations = ia["service_situations"]
-    assert len(situations) == 5
+    # VALOR-IMEDIATO-20260914: a taxonomia e uma so (brand.json = mapa de IA) e
+    # o conjunto de ids e o contrato de public_ia.py; a contagem deixa de ser
+    # um numero magico. Cada situacao tem destino distinto.
+    from scripts.site.public_ia import SERVICE_SITUATION_IDS
+
+    assert {row["id"] for row in situations} == set(SERVICE_SITUATION_IDS)
+    assert len(situations) == len(SERVICE_SITUATION_IDS)
+    brand_rows = load_brand()["service_situations"]
+    assert [row["id"] for row in brand_rows] == [row["id"] for row in situations]
+    assert [row["href"] for row in brand_rows] == [row["href"] for row in situations]
+    assert len({row["href"] for row in situations}) == len(situations)
     assert sum(row["href"] == "/servicos-obras-publicas/" for row in situations) == 1
     by_id = {row["id"]: row for row in situations}
     assert by_id["project_delivery"]["href"] == "/servicos/#servico-projeto"
+    assert by_id["quantities_budget"]["href"] == "/quantitativos-orcamento-obras/"
+    assert by_id["property_valuation"]["href"] == "/servicos/#servico-avaliacao"
     assert by_id["project_delivery"]["index_state"] == "service_hub_index"
     assert by_id["project_delivery"]["scope"]
     assert by_id["building_diagnosis"]["href"] in (

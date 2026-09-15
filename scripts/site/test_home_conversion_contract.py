@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import re
 from pathlib import Path
 
@@ -10,6 +11,51 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 HOME = ROOT / "index.html"
 SERVICES = ROOT / "servicos" / "index.html"
+BRAND = ROOT / "data" / "site" / "brand.json"
+IA_MAP = ROOT / "data" / "site" / "public-ia-map.json"
+
+# VALOR-IMEDIATO-20260914. A dobra deixou de ser medida por enumeracao de
+# disciplinas e formatos: o exame cego mostrou que a lista nao gera
+# pertinencia (Q1 so na segunda ou terceira tela) e transforma a entrega em
+# formato. A propriedade protegida passa a ser: a primeira dobra nomeia uma
+# situacao no vocabulario do comprador, um verbo de trabalho assumido, uma
+# entrega ligada a um uso e credenciais autorizadas, com um so primario para a
+# explicacao dos servicos. Um hero generico continua reprovando (ver
+# test_generic_hero_is_rejected_by_the_fold_properties).
+BUYER_SITUATION = re.compile(
+    r"comparar propostas|conferir um projeto|completar|infiltra[çc][ãa]o|fissura|"
+    r"avaliar um im[óo]vel|glosa|medi[çc][ãa]o|seguran[çc]a do trabalho|disputa|"
+    r"or[çc]ar a obra|contratar a obra",
+    re.I,
+)
+WORK_VERB = re.compile(
+    r"\b(?:assumimos|levantamos|calculamos|conferimos|assinamos|projetamos|"
+    r"elaboramos|revisamos|compatibilizamos|inspecionamos|avaliamos|or[çc]amos)\b",
+    re.I,
+)
+NAMED_DELIVERABLE = re.compile(
+    r"planilha|projeto|laudo|relat[óo]rio|parecer|mem[óo]ria de c[áa]lculo|quantitativo",
+    re.I,
+)
+DELIVERABLE_USE = re.compile(
+    r"\b(?:comparar|contratar|decidir|or[çc]ar|executar|coordenar|aprovar|licitar)\b",
+    re.I,
+)
+PUBLIC_AND_PRIVATE = re.compile(r"p[úu]blic\w*\s+(?:e|ou)\s+privad\w*", re.I)
+DEMONSTRATIVE_LABEL = re.compile(r"demonstrativ", re.I)
+
+
+def _situations() -> list[dict]:
+    brand = json.loads(BRAND.read_text(encoding="utf-8"))["service_situations"]
+    ia = json.loads(IA_MAP.read_text(encoding="utf-8"))["service_situations"]
+    assert [row["id"] for row in brand] == [row["id"] for row in ia], "brand and IA map disagree on situations"
+    assert [row["href"] for row in brand] == [row["href"] for row in ia], "brand and IA map disagree on destinations"
+    return brand
+
+
+def _visible(fragment: str) -> str:
+    fragment = re.sub(r"(?is)<(script|style|svg)[^>]*>.*?</\1>", " ", fragment)
+    return re.sub(r"<[^>]+>", " ", fragment)
 # 2026-09-07 (#611/A02). O hash e detector de mudanca nao revisada, nao
 # proibicao de mudar: a revisao desta vez abriu o formulario para as situacoes
 # que ele recusava (projeto, quantitativos, obra e imovel, pericia, seguranca
@@ -42,32 +88,16 @@ def _section(html: str, marker: str) -> str:
 
 def test_first_fold_answers_category_problem_result_trust_and_start() -> None:
     hero = _section(_home(), r'class="hero')
+    text = _visible(hero)
 
     assert "Engenharia, Perícias e Inteligência Técnica" in hero
-    assert "Projetos e serviços de engenharia" in hero
-    assert "obras públicas e privadas" in hero
-    assert all(term in hero.casefold() for term in ("elaboração", "revisão", "compatibilização", "orçamentos"))
-    # 2026-09-08. A lista antiga exigia "plano de acao" no hero. A primeira dobra
-    # dizia que o trabalho "pode resultar em" um daqueles formatos, e "plano de
-    # acao" era o unico que nao nomeia um documento assinado: tornava a entrega
-    # hipotetica no lugar de maior atencao da pagina. A propriedade protegida --
-    # a dobra nomeia os documentos que saem da mesa, e nao so a conversa --
-    # continua exigida, e com piso: pelo menos cinco documentos nomeados.
-    named = [
-        d
-        for d in (
-            "projeto",
-            "revisão",
-            "compatibilização",
-            "orçamento",
-            "laudo",
-            "parecer",
-            "avaliação",
-            "relatório",
-        )
-        if d in hero
-    ]
-    assert len(named) >= 5, named
+    assert "engenharia" in text.casefold()
+    assert PUBLIC_AND_PRIVATE.search(text), "hero must name the public and private scope"
+    assert BUYER_SITUATION.search(text), "hero must name at least one buyer situation"
+    assert len(set(v.casefold() for v in WORK_VERB.findall(text))) >= 2, "hero must say what work we assume"
+    assert NAMED_DELIVERABLE.search(text), "hero must name a concrete deliverable"
+    assert DELIVERABLE_USE.search(text), "hero must say what the deliverable is for"
+    assert DEMONSTRATIVE_LABEL.search(text), "the sample in the hero must be labelled as demonstrative"
     assert "Engenharia Civil pela EESC-USP" in hero
     assert "CNPJ 52.407.089/0001-09" in hero
     assert 'href="/servicos/"' in hero
@@ -75,36 +105,61 @@ def test_first_fold_answers_category_problem_result_trust_and_start() -> None:
     assert "PNCP" not in hero
 
 
-def test_situation_chooser_has_five_paths_without_catalog_wall() -> None:
+def test_generic_hero_is_rejected_by_the_fold_properties() -> None:
+    """Contraprova: um hero generico nao satisfaz as propriedades da dobra."""
+    for generic in (
+        "Engenharia que transforma o seu projeto.",
+        "Engenharia com solução personalizada. Solicite uma proposta.",
+    ):
+        checks = (
+            bool(PUBLIC_AND_PRIVATE.search(generic)),
+            bool(BUYER_SITUATION.search(generic)),
+            len(set(WORK_VERB.findall(generic))) >= 2,
+            bool(DELIVERABLE_USE.search(generic)),
+            bool(DEMONSTRATIVE_LABEL.search(generic)),
+        )
+        assert not all(checks), generic
+
+
+def test_situation_chooser_has_one_path_per_contract_situation_without_catalog_wall() -> None:
     chooser = _section(_home(), r'id="situacoes"')
-    expected = (
-        "Projetar, revisar, orçar ou compatibilizar",
-        "Inspecionar, diagnosticar ou documentar obra e imóvel",
-        "Perícia, assistência técnica ou avaliação",
-        "Segurança do trabalho",
-        "Licitação ou contrato de obra pública",
-    )
-    for label in expected:
-        assert label in chooser
-    assert chooser.count('class="situation-row') == 5
+    situations = _situations()
+    for row in situations:
+        assert row["label"] in chooser, row["label"]
+    assert chooser.count('class="situation-row') == len(situations)
     # 2026-09-08. Esta linha exigia que a situacao de projeto apontasse para
     # /quantitativos-orcamento-obras/: uma chamada que promete projetar,
     # revisar, orcar e compatibilizar levando ao unico item que e orcamento.
-    # A trava congelava o defeito. A propriedade correta: as cinco situacoes tem
-    # cinco destinos distintos, nenhum repetido e todos internos.
+    # A trava congelava o defeito. A propriedade correta: cada situacao tem
+    # destino proprio, nenhum repetido e todos internos.
+    # VALOR-IMEDIATO-20260914. A lista literal de seis hrefs (quatro deles
+    # obrigatoriamente no hub) tambem congelava um defeito: mandava quem tem
+    # infiltracao, disputa ou exigencia de SST passar pelo hub mesmo com a
+    # landing publicada. O destino agora e o do contrato de situacoes (hub ou
+    # landing), e a home tem de reproduzi-lo dentro da propria linha.
     hrefs = re.findall(r'class="situation-action"[^>]*href="([^"]+)"', chooser)
     if not hrefs:
         hrefs = re.findall(r'<a[^>]*class="situation-action"[^>]*href="([^"]+)"', chooser)
-    assert len(hrefs) == 5, hrefs
-    assert len(set(hrefs)) == 5, hrefs
-    assert all(h.startswith("/") for h in hrefs), hrefs
+    assert len(hrefs) == len(situations), hrefs
+    assert len(set(hrefs)) == len(situations), hrefs
+    assert all(h.startswith("/") and not h.startswith("//") for h in hrefs), hrefs
     assert chooser.count('href="/triagem-tecnica/#') == 0
+    for row in situations:
+        assert f'href="{row["href"]}"' in chooser, row["href"]
+        target, _, anchor = row["href"].partition("#")
+        page = ROOT / target.strip("/") / "index.html"
+        assert page.is_file(), row["href"]
+        if anchor:
+            assert f'id="{anchor}"' in page.read_text(encoding="utf-8"), row["href"]
     assert 'href="/servicos/#servico-projeto"' in chooser
-    assert 'href="/servicos/#servico-diagnostico"' in chooser
-    assert 'href="/servicos/#servico-pericia"' in chooser
-    assert 'href="/servicos/#servico-sst"' in chooser
     assert 'href="/quantitativos-orcamento-obras/"' in chooser
     assert 'href="/servicos-obras-publicas/"' in chooser
+    # Cada linha nomeia a entrega e o uso, em vez de so o formato.
+    rows = re.findall(r'<li class="situation-row[\s\S]*?</li>', chooser)
+    assert len(rows) == len(situations), len(rows)
+    for row in rows:
+        assert "<h3>" in row, row[:120]
+        assert 'class="situation-use"' in row and "passa a ter" in row, row[:120]
     assert "ICP" not in chooser
     assert "CTA" not in chooser
 
@@ -213,16 +268,24 @@ def test_services_hub_is_corporate_indexable_and_price_free() -> None:
     assert 'href="https://confenge.com.br/servicos/" rel="canonical"' in html
     assert "Serviços organizados por situação" in html
     rows = re.findall(r'<article class="corporate-service-row[^"]*" id="([^"]+)"', html)
-    assert rows == [
+    # VALOR-IMEDIATO-20260914. A igualdade ordenada de oito ids impedia que a
+    # avaliacao de imovel tivesse cartao proprio. A propriedade: o conjunto de
+    # ancoras publicas do hub sobrevive (cada uma como cartao), sem duplicata;
+    # a ordem e editorial.
+    assert len(rows) == len(set(rows)), rows
+    assert set(rows) >= {
         "servico-projeto",
         "servico-revisao",
         "servico-compatibilizacao",
         "servico-orcamento",
         "servico-diagnostico",
+        "servico-avaliacao",
         "servico-pericia",
         "servico-sst",
         "servico-obras-publicas",
-    ], rows
+    }, rows
+    for row in re.findall(r'<article class="corporate-service-row[\s\S]*?</article>', html):
+        assert "O que assumimos" in row and "passa a ter" in row, row[:160]
     assert "/servicos-obras-publicas/" in html
     assert not re.search(r"R\$\s*\d", html)
     assert "campanha" not in html.lower()

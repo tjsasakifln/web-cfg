@@ -136,12 +136,29 @@ def test_microcopy_preferences():
     ):
         assert phrase not in lower, f"public leak: {phrase}"
     # Client-facing situation chooser (not briefing metalinguage).
-    assert "qual destas situações se parece com a sua" in lower
-    assert "projetar, revisar, orçar ou compatibilizar" in lower
-    assert "inspecionar, diagnosticar ou documentar obra e imóvel" in lower
-    assert "perícia, assistência técnica ou avaliação" in lower
+    # 2026-09-14 (VALOR-IMEDIATO): a trava exigia os rótulos literais das
+    # cinco situações e o título "qual destas situações se parece com a sua".
+    # Eram inventário técnico ("Projetar, revisar, orçar ou compatibilizar"),
+    # não a situação do comprador. A propriedade protegida passa a ser
+    # afirmativa e com fonte única: o bloco #situacoes existe, tem um título
+    # visível, e cada situação de data/site/brand.json#service_situations
+    # aparece na home com o seu rótulo e um destino próprio. Rótulo de
+    # bastidor ou briefing continua proibido pela lista acima.
+    assert 'id="situacoes"' in home
+    situ_block = home.split('id="situacoes"', 1)[1]
+    assert re.search(r"<h2[^>]*>[^<]{12,}</h2>", situ_block), "situations block needs a visible title"
+    situations = load_brand()["service_situations"]
+    assert len(situations) >= 5
+    hrefs = set()
+    for situation in situations:
+        label = situation["label"].lower()
+        assert label in lower, f"situation label missing on home: {situation['label']}"
+        href = situation.get("href") or situation.get("url")
+        if href:
+            assert href in home, f"situation destination missing on home: {href}"
+            hrefs.add(href)
+    assert len(hrefs) == len([s for s in situations if s.get("href") or s.get("url")]), "situations must have distinct destinations"
     assert "segurança do trabalho" in lower
-    assert "licitação ou contrato de obra pública" in lower
     # B2G retains descriptive, canonical paths lower on the page.
     assert "contrato sob pressão" in lower
     assert "edital e proposta" in lower
@@ -367,7 +384,10 @@ def test_public_surfaces_have_no_prose_em_dashes():
         assert "data-lead-success" in t
         assert "Prazo" in t or "prazo" in t
         assert "wa.me" in t
-    assert "Entrar em obras públicas" in home
+    # 2026-09-14 (VALOR-IMEDIATO): o rótulo literal "Entrar em obras públicas"
+    # foi apontado pela revisão cega como estranho; a propriedade é a ação da
+    # situação de obra pública levar ao hub da especialidade.
+    assert re.search(r'class="situation-action"[^>]*href="/servicos-obras-publicas/"', home), "situation action to /servicos-obras-publicas/"
     assert "Solicitar canal seguro para envio" in home
     assert "enviar documentos para análise" not in home.lower()
     # Thank-you pages must not expose journey letter labels to visitors

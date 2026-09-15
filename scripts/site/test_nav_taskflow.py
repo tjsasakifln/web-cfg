@@ -26,6 +26,7 @@ if str(ROOT) not in sys.path:
 
 from scripts.site.public_ia import (  # noqa: E402
     HUB_ROLES,
+    SERVICE_SITUATION_IDS,
     audit_orphans,
     audit_primary_nav_hygiene,
     breadcrumb_trail,
@@ -474,8 +475,15 @@ def main() -> int:
         failures.append("header must expose the registered corporate services hub")
 
     situations = ia.get("service_situations") or []
-    if len(situations) != 5:
-        failures.append(f"expected five customer situations, saw {len(situations)}")
+    # VALOR-IMEDIATO-20260914: a contagem vem do contrato (public_ia.py), nao
+    # de um numero magico; brand.json e o mapa de IA sao a mesma taxonomia.
+    if {row.get("id") for row in situations} != set(SERVICE_SITUATION_IDS):
+        failures.append(f"customer situations diverge from the contract: {[row.get('id') for row in situations]}")
+    brand_rows = brand.get("service_situations") or []
+    if [row.get("id") for row in brand_rows] != [row.get("id") for row in situations]:
+        failures.append("brand.json and public-ia-map.json disagree on service situations")
+    if len({row.get("href") for row in situations}) != len(situations):
+        failures.append("service situations share a destination")
     for situation in situations:
         label = str(situation.get("label") or "")
         href = str(situation.get("href") or "")
@@ -483,8 +491,8 @@ def main() -> int:
             failures.append(f"home chooser misses {label!r}")
         if not public_target_exists(href):
             failures.append(f"situation target missing: {label!r} -> {href!r}")
-    if home.count('class="situation-row') != 5:
-        failures.append("home chooser must contain exactly five situation rows")
+    if home.count('class="situation-row') != len(situations):
+        failures.append("home chooser must contain one row per contract situation")
     if 'href="/servicos-obras-publicas/"' not in home:
         failures.append("public-works vertical lost its canonical entry")
 

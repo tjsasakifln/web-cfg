@@ -564,21 +564,33 @@ def test_home_keeps_deliverables_concrete_inside_the_corporate_journey() -> None
     assert ".home-hero-grid{" in critical_css
     assert ".hero-deliverable{" in critical_css
     home_css = (ROOT / "assets" / "home-10x.css").read_text(encoding="utf-8")
-    assert ".home-deliverables{" in home_css
-    assert "O que sai do trabalho" in home
-    assert "Projeto, revisão ou compatibilização" in home
-    assert "Orçamento ou memória de cálculo" in home
-    assert "Laudo, parecer ou relatório" in home
-    assert "Diagnóstico ou plano de ação" in home
+    assert ".situation-row{" in home_css
+    # VALOR-IMEDIATO-20260914. O ledger "O que sai do trabalho" (quatro h3
+    # genericos) saiu: os 21 revisores do exame cego o leram como formato sem
+    # finalidade nos tres rotulos. A propriedade que ele protegia -- a home
+    # nomeia entregas concretas dentro da jornada corporativa, e nao so a
+    # conversa -- passa a ser verificada onde o comprador decide: cada linha de
+    # situacao nomeia a entrega (h3 + clausula "passa a ter") e o hero traz uma
+    # entrega ligada a um uso (.hero-deliverable).
+    rows = re.findall(r'<li class="situation-row[\s\S]*?</li>', home)
+    assert len(rows) >= 5, len(rows)
+    for row in rows:
+        assert "<h3>" in row, row[:120]
+        assert 'class="situation-use"' in row and "passa a ter" in row, row[:120]
+    deliverable = re.search(r'<p class="hero-deliverable">([\s\S]*?)</p>', home)
+    assert deliverable, "hero must keep a use-linked deliverable line"
+    deliverable_text = re.sub(r"<[^>]+>", " ", deliverable.group(1))
+    assert len(deliverable_text) >= 120
+    assert re.search(r"planilha|projeto|laudo|relat[óo]rio|mem[óo]ria", deliverable_text, re.I)
+    assert re.search(r"compar|contrat|decid|or[çc]ar|executar", deliverable_text, re.I)
     assert 'href="/servicos/"' in home
     archetypes = re.findall(r'data-section-archetype="([^"]+)"', home)
-    assert len(archetypes) == 8
-    offers = re.search(
-        r'<section[^>]+data-section-archetype="offer_dominant".*?</section>',
-        home,
-        flags=re.DOTALL,
-    )
-    assert offers and "corporate-deliverables" in offers.group(0)
+    # Faixa, nao numero magico: 5 a 8 blocos narrativos com >=5 distintos,
+    # jornada por situacao presente e antes da vertical de obras publicas.
+    assert 5 <= len(archetypes) <= 8, archetypes
+    assert len(set(archetypes)) >= 5, archetypes
+    assert "journey_paths" in archetypes and "market_context" in archetypes, archetypes
+    assert archetypes.index("journey_paths") < archetypes.index("market_context"), archetypes
 
 
 def test_new_surfaces_do_not_mutate_the_frozen_runtime() -> None:

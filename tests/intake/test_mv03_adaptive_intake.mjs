@@ -70,9 +70,16 @@ const adaptiveEnv = () => ({
 test("public route is low-friction, transparent and free of sensitive inputs", () => {
   const html = fs.readFileSync(path.resolve("triagem-tecnica/index.html"), "utf8");
   const publicConfig = fs.readFileSync(path.resolve("netlify/functions/adaptive-intake-config.cjs"), "utf8");
+  // 2026-09-14 (VALOR-IMEDIATO-20260914): "menos de um minuto" e "não é
+  // contratação nem pagamento" eram literais do H1 e do aviso antigos. As
+  // propriedades são: a rota acolhe quem não sabe nomear o serviço (o texto
+  // diz que a CONFENGE nomeia o serviço a partir da situação contada, sem
+  // questionário obrigatório) e o compromisso do primeiro contato está
+  // escrito (conversa técnica, sem contratação nem pagamento). Paráfrases
+  // equivalentes passam; a ausência do compromisso continua reprovando.
+  assert.match(html, /(?:menos de um minuto|conte a situação do seu jeito|nós nomeamos o serviço|sem questionário)/i, "missing low-friction promise");
+  assert.match(html, /(?:não é|sem) contratação nem pagamento/i, "missing first-contact commitment");
   for (const expected of [
-    "menos de um minuto",
-    "não é contratação nem pagamento",
     "canal seguro",
     "Escopo, responsabilidade técnica",
     "Falar pelo WhatsApp",

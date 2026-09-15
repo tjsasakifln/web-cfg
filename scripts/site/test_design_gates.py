@@ -35,6 +35,17 @@ def load_ds() -> dict:
     return json.loads(DS_PATH.read_text(encoding="utf-8"))
 
 
+def _brand() -> dict:
+    return json.loads((ROOT / "data" / "site" / "brand.json").read_text(encoding="utf-8"))
+
+
+def _service_situations() -> list[dict]:
+    brand = _brand()["service_situations"]
+    ia = json.loads((ROOT / "data" / "site" / "public-ia-map.json").read_text(encoding="utf-8"))["service_situations"]
+    assert [row["id"] for row in brand] == [row["id"] for row in ia]
+    return brand
+
+
 def test_design_system_complete():
     ds = load_ds()
     for key in (
@@ -291,10 +302,15 @@ def test_home_card_grid_limit():
     # Situation-first hierarchy, followed by tangible outputs and a dedicated
     # public-works vertical rather than a wall of equal service cards.
     assert 'data-section-archetype="journey_paths"' in html
-    assert 'data-section-archetype="offer_dominant"' in html
-    assert html.find('data-section-archetype="journey_paths"') < html.find('data-section-archetype="offer_dominant"')
+    # VALOR-IMEDIATO-20260914. O ledger generico (offer_dominant) saiu; a
+    # entrega concreta e o seu uso ficam dentro de cada linha de situacao, que
+    # e onde o comprador decide. Propriedade: toda situation-row tem h3 e uma
+    # clausula de uso.
     assert 'class="situation-list"' in html
-    assert 'class="deliverable-ledger"' in html
+    rows = re.findall(r'<li class="situation-row[\s\S]*?</li>', html)
+    assert len(rows) >= 5, len(rows)
+    for row in rows:
+        assert "<h3>" in row and 'class="situation-use"' in row, row[:120]
     assert "Licitação ou contrato de obra pública" in html
     # Corporate narrative: hero, situations, outputs, trust, audiences, B2G,
     # corporate triage and the preserved B2G conversion form.
@@ -392,17 +408,21 @@ def test_offer_depth_and_distinct_layouts():
 
 def test_journey_accessible_without_js():
     html = HOME.read_text(encoding="utf-8")
-    # Five situation paths are ordinary links and content, never JS-only UI.
+    # Situation paths are ordinary links and content, never JS-only UI. The
+    # set of situations is the contract (brand.json = public-ia-map.json).
+    situations = _service_situations()
     for stage in (
         "situacao-projeto",
+        "situacao-orcamento",
         "situacao-obra-imovel",
+        "situacao-avaliacao",
         "situacao-pericia",
         "situacao-sst",
         "situacao-obras-publicas",
     ):
         assert f'id="{stage}"' in html
     assert '<ol class="situation-list">' in html
-    assert html.count('class="situation-action"') == 5
+    assert html.count('class="situation-action"') == len(situations)
     # As cinco situacoes continuam sendo links comuns; o heroi deixou de contar
     # como sexta ancora porque nao pre-classifica mais a disciplina.
     # Tres ancoras nomeadas sobrevivem (o heroi deixou de pre-classificar
@@ -416,9 +436,8 @@ def test_trace_matrix_and_tension_present():
     """The corporate chooser keeps B2G depth without making it the umbrella."""
     html = HOME.read_text(encoding="utf-8")
     assert "Engenharia, Perícias e Inteligência Técnica" in html
-    assert "Projetar, revisar, orçar ou compatibilizar" in html
-    assert "Inspecionar, diagnosticar ou documentar obra e imóvel" in html
-    assert "Perícia, assistência técnica ou avaliação" in html
+    for situation in _service_situations():
+        assert situation["label"] in html, situation["label"]
     assert "Segurança do trabalho" in html
     assert "Licitação ou contrato de obra pública" in html
     for href in (
@@ -448,7 +467,7 @@ def test_primary_cta_not_spam():
     # Header twins, hero, corporate triage and preserved B2G form — the viewport
     # gate separately proves that only one is visible in the first fold.
     assert primary <= 5, f"too many primary CTAs on home: {primary}"
-    assert "Conhecer os serviços" in html
+    assert _brand()["hero"]["cta_primary"] in html
     assert "Solicitar proposta por e-mail" in html
     assert "Descrever minha situação" in html
     # Secondary path must not share primary button class in hero
@@ -477,11 +496,16 @@ def test_home_five_second_clarity():
     fold = hero.group(0)
     fold_lower = fold.lower()
     lower = html.lower()
-    # What the company is, the outcome and the cross-service situations.
+    # What the company is, the scope and the buyer situations it names.
+    # VALOR-IMEDIATO-20260914: a enumeracao de disciplinas saiu da dobra; a
+    # propriedade e situacao do comprador + verbo de trabalho + entrega ligada
+    # a uso + alcance publico e privado (ver test_home_conversion_contract).
     assert "engenharia, perícias e inteligência técnica" in fold_lower
-    assert "obras públicas e privadas" in fold_lower
-    for token in ("projetos", "compatibilização", "orçamentos", "perícias", "análises técnicas"):
-        assert token in fold_lower
+    assert re.search(r"públic\w*\s+(?:e|ou)\s+privad\w*", fold_lower), fold_lower[:300]
+    assert re.search(r"comparar propostas|conferir um projeto|infiltra[çc][ãa]o|avaliar um im[óo]vel|glosa", fold_lower)
+    assert re.search(r"\b(?:assumimos|levantamos|calculamos|conferimos|assinamos)\b", fold_lower)
+    assert re.search(r"planilha|projeto|laudo|relat[óo]rio", fold_lower)
+    assert re.search(r"\b(?:comparar|contratar|decidir|or[çc]ar)\b", fold_lower)
     # True microproofs and an explicit limits path.
     assert "eesc-usp" in fold_lower
     assert "52.407.089/0001-09" in fold_lower
@@ -490,8 +514,9 @@ def test_home_five_second_clarity():
     # dobra traga fatos conferiveis e um caminho para conferi-los.
     assert "/confianca/" in fold, "a primeira dobra precisa do caminho de verificacao"
     assert "limites" in fold_lower or "credenciais" in fold_lower
-    # Comprehensible next actions.
-    assert "conhecer os serviços" in fold_lower
+    # Comprehensible next actions: the primary label is the canonical one and
+    # declares its destination.
+    assert _brand()["hero"]["cta_primary"].lower() in fold_lower
     assert 'href="/servicos/"' in fold
     # O rotulo do caminho secundario nao e mais congelado numa disciplina; o
     # que se exige e que ele convide a descrever a situacao e leve a triagem.
@@ -513,8 +538,12 @@ def test_home_decision_fold_hierarchy():
     hero = re.search(r'<section[^>]*class="hero[\s\S]*?</section>', html)
     assert hero, "hero missing"
     hero_html = hero.group(0)
-    assert "Projetos e serviços de engenharia" in hero_html
-    assert "obras públicas e privadas" in hero_html
+    h1 = re.search(r'<h1\b[^>]*id="hero-title"[^>]*>([\s\S]*?)</h1>', hero_html)
+    assert h1, "hero h1 missing"
+    h1_text = re.sub(r"<[^>]+>", " ", h1.group(1)).lower()
+    assert "engenharia" in h1_text
+    assert re.search(r"\b(?:assumimos|levantamos|conferimos|assinamos|projetamos|calculamos)\b", h1_text), h1_text
+    assert re.search(r"públic\w*\s+(?:e|ou)\s+privad\w*", hero_html, re.I)
     assert "data-evidence-selector" not in hero_html
     assert "hero-evidence" not in hero_html
     assert hero_html.count("button-primary") == 1
