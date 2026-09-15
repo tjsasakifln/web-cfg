@@ -3,11 +3,11 @@
 - ok: `True`
 - pages: `98`
 - defects: `0`
-- site_root: `/home/tjsasakifln/code/confenge/.worktrees/solucao-integral-20260913/_site`
+- site_root: `/home/tjsasakifln/code/confenge/.worktrees/campaign-web-cfg/_site`
 
 | url | ok | defects | claimed | visible |
 | --- | --- | --- | --- | --- |
-| https://confenge.com.br/ | True | — | Organization,Person | Projetos e serviços de engenharia para obras públicas e privadas. |
+| https://confenge.com.br/ | True | — | Organization,Person | Assumimos a parte de engenharia que falta para você orçar, contratar ou decidir. |
 | https://confenge.com.br/acompanhamento-contratos-obras/ | True | — | Organization,Person,BreadcrumbList | Acompanhamento de contratos de obras públicas: rotina preventiva e recorrente |
 | https://confenge.com.br/aditivos-obras-publicas/ | True | — | Organization,Person,BreadcrumbList | Aditivos e serviços extras em obras públicas: documentar, precificar e decidir |
 | https://confenge.com.br/analises-contratos-publicos/ | True | — | Organization,Person,BreadcrumbList | Análises técnicas de contratos públicos |
@@ -88,7 +88,7 @@
 | https://confenge.com.br/medicoes-glosas-obras-publicas/ | True | — | Organization,Person,BreadcrumbList | Medições, glosas e pagamentos em obras públicas |
 | https://confenge.com.br/metodologia-inteligencia/ | True | — | Organization,Person,BreadcrumbList | Como a CONFENGE separa fato, cálculo, hipótese e ponto desconhecido |
 | https://confenge.com.br/nurture/ | True | — |  | Cinco e-mails úteis, não newsletter genérica |
-| https://confenge.com.br/parcerias-engenharia/ | True | — | BreadcrumbList | Encaminhe o recorte de engenharia e continue com o seu cliente. |
+| https://confenge.com.br/parcerias-engenharia/ | True | — | BreadcrumbList | Nós assumimos a engenharia que falta. |
 | https://confenge.com.br/politica-editorial/ | True | — | Organization,Person,BreadcrumbList | Política editorial |
 | https://confenge.com.br/politica-editorial/historico/ | True | — | Organization,Person,BreadcrumbList | Histórico da política editorial |
 | https://confenge.com.br/politica-editorial/v/1.0.0/ | True | — | Organization,Person,BreadcrumbList | Política editorial 1.0.0 |
@@ -103,5 +103,5 @@
 | https://confenge.com.br/servicos-obras-publicas/ | True | — | BreadcrumbList | Serviços para licitações e contratos de obras públicas |
 | https://confenge.com.br/servicos/ | True | — | BreadcrumbList | Serviços de engenharia para obras públicas e privadas |
 | https://confenge.com.br/termos-de-uso/ | True | — |  | Termos de Uso |
-| https://confenge.com.br/triagem-tecnica/ | True | — |  | Explique sua situação em menos de um minuto |
+| https://confenge.com.br/triagem-tecnica/ | True | — |  | Conte a situação do seu jeito. Nós nomeamos o serviço. |
 | https://confenge.com.br/uso-de-ia/ | True | — | Organization,Person,BreadcrumbList | Uso de inteligência artificial |
