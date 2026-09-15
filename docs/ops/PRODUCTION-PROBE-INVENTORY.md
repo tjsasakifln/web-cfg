@@ -14,6 +14,9 @@ Classification:
   no network at all).
 - `SYNTHETIC_MUTATING_AUTHORIZED`: creates or dispatches a record on production
   that is tagged synthetic, and only under an explicit secret or flag.
+- `SYNTHETIC_MUTATING`: would create a synthetic-tagged record without any
+  secret or flag; production rejects it today, and it must not be treated as
+  authorized (AGENTS.md: authorization states are never inferred).
 - `REAL_MUTATING`: changes production state or sends to a person (lead queue
   drain, data ingest, email, host promotion).
 
@@ -30,7 +33,7 @@ and the RevOps run artifacts.
 | `probe:lead` | `scripts/site/synthetic_lead_probe.mjs` (default base `https://confenge.com.br`) | POST `/.netlify/functions/lead` twice (create + idempotent replay), static `X-Forwarded-For: 198.51.100.27` (documentation range, not rotated) | `LEAD_PROBE_SECRET` (>= 32 chars) as `X-Confenge-Probe`; exits early without it | SYNTHETIC_MUTATING_AUTHORIZED |
 | `probe:lead:prod` | `scripts/site/synthetic_lead_probe.mjs https://confenge.com.br` | same as above | `LEAD_PROBE_SECRET` | SYNTHETIC_MUTATING_AUTHORIZED |
 | `revops:scheduled-daily` (workflow `revops-scheduled.yml` job `daily`, step "Daily scheduled run") | `scripts/revops/scheduled_daily.mjs` | GET public pages and `build-info.json`; POST `/.netlify/functions/lead` twice (unauthenticated synthetic lead, `X-Confenge-Probe: 1`); GET ops counters; POST `ops?action=drain_inbound`; POST `ops?action=produce_search_observation`; POST `ops?action=drain_search_observation` | `OPS_TOKEN`/`REVOPS_TOKEN` (Bearer) for ops; none for the lead leg | REAL_MUTATING |
-| `revops:daily` | `scripts/revops/revenue_daily.mjs` | GET ops health/funnel/reports (Bearer); POST `/.netlify/functions/lead` twice (unauthenticated synthetic lead, `X-Confenge-Probe: 1`) | `OPS_TOKEN`/`REVOPS_TOKEN` for ops reads; none for the lead leg | SYNTHETIC_MUTATING_AUTHORIZED (not scheduled; the lead leg is unauthenticated and is rejected by production Turnstile since 2026-08-24) |
+| `revops:daily` | `scripts/revops/revenue_daily.mjs` | GET ops health/funnel/reports (Bearer); POST `/.netlify/functions/lead` twice (unauthenticated synthetic lead, `X-Confenge-Probe: 1`) | `OPS_TOKEN`/`REVOPS_TOKEN` for ops reads; none for the lead leg | SYNTHETIC_MUTATING (not scheduled; the lead leg is unauthenticated, so it is NOT authorized: rejected by production Turnstile since 2026-08-24) |
 | `revops:inbound-proof` (workflow step "Read-only authenticated inbound counters proof") | `scripts/revops/inbound_counters_proof.mjs` | GET ops `health`, `inbound_handoff`, `audit_inbound_requeue`, `funnel`; POST `ops?action=requeue_inbound` with `dry_run: true` (server returns before any write, `inbound-handoff.cjs`) | `OPS_TOKEN` (Bearer) | READ_ONLY |
 | workflow step "Nurture tick" | `scripts/revops/scheduled_nurture.mjs` | GET `nurture?action=health`; POST `nurture?action=tick` | `OPS_TOKEN` (Bearer) | REAL_MUTATING |
 | workflow steps "GSC incremental sync", "Persist private GSC history and redacted insights", "Restore authenticated durable GSC history" | `scripts/revops/publish_gsc_insights.mjs` | GET `ops?action=gsc_insights` / private history (Bearer); POST `ops?action=gsc_insights_ingest`; POST `ops?action=gsc_insights_rollback` (explicit rollback command only); Google Search Console API reads | `OPS_TOKEN` (Bearer, >= 16 chars), `GSC_*` OAuth read-only scope | REAL_MUTATING |

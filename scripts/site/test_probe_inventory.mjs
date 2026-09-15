@@ -12,7 +12,8 @@ import { fileURLToPath } from "node:url";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 // Same literal as the inventory header; keep both in sync.
 const PROBE_NAME = /prod|production|smoke|probe|canary|verify|proof|e2e/i;
-const CLASSIFICATIONS = ["READ_ONLY", "SYNTHETIC_MUTATING_AUTHORIZED", "REAL_MUTATING"];
+// Order matters for startsWith: the bare SYNTHETIC_MUTATING token is a prefix of the authorized one.
+const CLASSIFICATIONS = ["READ_ONLY", "SYNTHETIC_MUTATING_AUTHORIZED", "SYNTHETIC_MUTATING", "REAL_MUTATING"];
 
 const pkg = JSON.parse(fs.readFileSync(path.join(root, "package.json"), "utf8"));
 const inventory = fs.readFileSync(path.join(root, "docs/ops/PRODUCTION-PROBE-INVENTORY.md"), "utf8");
