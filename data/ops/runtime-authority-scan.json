@@ -188,13 +188,6 @@
       "sha256": "4f6cad00055f1ce8d15d4127e87dcb7958a94b4272b85a62e70dc1e791c1ef75"
     },
     {
-      "path": "docs/evidence/commercial-dod/loops.v1.json",
-      "kind": "historical_record",
-      "reason": "Frozen output of scripts/money_asset/commercial_dod.mjs from before the cutover; the generator now emits the EnvironmentFile command.",
-      "owner": "tjsasakifln",
-      "sha256": "a49b12308749c2a965d1e4741d58577c249734e451a90723eaa51ea96a04dc86"
-    },
-    {
       "path": "docs/evidence/inbound-10/rollback-evidence.md",
       "kind": "historical_record",
       "reason": "Rollback rehearsal performed on the Netlify plane; the click path is the evidence.",
@@ -207,13 +200,6 @@
       "reason": "Pre-cutover parity gate whose subject was comparing Netlify behaviour with the generated nginx contract.",
       "owner": "tjsasakifln",
       "sha256": "89eb6a12c66ed7e0c7e6f04cbbfc6686ce6894439b899fe7a28988e49da5d1ef"
-    },
-    {
-      "path": "docs/evidence/web-011/review.json",
-      "kind": "historical_record",
-      "reason": "Frozen WEB-011 review output from the same pre-cutover generator run.",
-      "owner": "tjsasakifln",
-      "sha256": "4d27a48d17da9f699724e9f3dc7ede49d38b78261f8551ec7695e52facb1f771"
     },
     {
       "path": "docs/ops/CONFENGE-INBOUND-RELEASE-CONVERGENCE-01.md",
