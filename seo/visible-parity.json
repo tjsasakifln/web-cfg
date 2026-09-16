@@ -44,7 +44,7 @@
         "licenses": [],
         "permission_class": "demonstrativo",
         "reviewers": [],
-        "title": "CONFENGE | Engenharia, Perícias e Inteligência Técnica",
+        "title": "Planta do recorte de banheiro RM-01, prancha PR-ARQ-R01",
         "versions": []
       }
     },
@@ -1379,7 +1379,7 @@
         "licenses": [],
         "permission_class": "demonstrativo",
         "reviewers": [],
-        "title": "Compatibilização de projetos de engenharia | CONFENGE",
+        "title": "Perfil de fundo do trecho DR-01 · estado original · R00",
         "versions": []
       }
     },
@@ -5127,7 +5127,7 @@
         "licenses": [],
         "permission_class": "demonstrativo",
         "reviewers": [],
-        "title": "Quantitativos e orçamento de obras | CONFENGE",
+        "title": "Planta do recorte de banheiro RM-01, prancha PR-ARQ-R01",
         "versions": []
       }
     },
@@ -5588,5 +5588,5 @@
       }
     }
   ],
-  "site_root": "/home/tjsasakifln/code/confenge/.worktrees/campaign-web-cfg/_site"
+  "site_root": "/tmp/claude-1000/-home-tjsasakifln-code-confenge-web-cfg/6fc4cd49-43ed-4ba2-95d6-c1067eebcb7e/scratchpad/clean/_site"
 }
