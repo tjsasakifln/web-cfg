@@ -1581,7 +1581,9 @@ async function main() {
     const routes = [
       { path: "/conteudos/documentos-reequilibrio-obra-publica/", frozen: false },
       { path: "/acompanhamento-contratos-obras/", frozen: false },
-      { path: "/reequilibrio-obras-publicas/", frozen: true },
+      // 2026-09-16: the six B2G pillars were released by the founder's capture
+      // decision and follow the OG-only rule like every other route.
+      { path: "/reequilibrio-obras-publicas/", frozen: false },
     ];
     const reports = [];
     for (const width of [320, 390, 768, 1024, 1440]) {
