@@ -140,10 +140,10 @@
         128,
         291
       ],
-      "expected_sha256": "f689d2225ffab5927567eacbd2a6ad2e22bfc452ee05fbe2b35a93a3873ee29e",
+      "expected_sha256": "53bb71bb3edaeae8a325e29d266020a89f5cff72c1be0486c07b19a276a8d3e1",
       "expected_sha256_note": "Linha de base de bytes efetivamente auditada em 2026-09-14 e reconciliada com data/bofu-dominance/frozen-specs/hashes.json. O hash preserva integridade e procedência; não cria espera nem veto editorial.",
       "expected_sha256_recaptured_at": "2026-09-14",
-      "expected_sha256_recapture_reason": "VALOR-IMEDIATO-20260914: o CTA de WhatsApp do bloco 'Próximo passo' e do botão flutuante deixa de repetir o prefill genérico e passa a usar a mesma mensagem contextual já usada no bloco pillar_bridge da página; recaptura alinhada a hashes.json. Preço, prazo, checkout, robots e critério de medição inalterados."
+      "expected_sha256_recapture_reason": "CAPTURA-PILARES-20260916 (#61, decisao do fundador EXECUTE_NOW): medicoes-glosas-obras-publicas/index.html recebe a secao de captura on-page (shared_lead_form_v1), a casca compartilhada sincronizada, o lockup canonico de logo, o preload da fonte e perde o cartao raster do titulo (og:image preservado); o CTA final 'Falar com Tiago' vira 'Abrir a medicao no WhatsApp' (mesmo destino e prefill). Alinhado a frozen-specs/hashes.json e ao canario 389. Anterior: VALOR-IMEDIATO-20260914: o CTA de WhatsApp do bloco 'Próximo passo' e do botão flutuante deixa de repetir o prefill genérico e passa a usar a mesma mensagem contextual já usada no bloco pillar_bridge da página; recaptura alinhada a hashes.json. Preço, prazo, checkout, robots e critério de medição inalterados."
     }
   ],
   "primary_cta_contract": {
