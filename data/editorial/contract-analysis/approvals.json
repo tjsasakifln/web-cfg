@@ -66,11 +66,11 @@
       "producer_root_hash": "5957e02b7982e000ca7dda2a9a06b88769085bc2a163eadcd8d59bd134b26b3e",
       "source_dossier_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
       "official_payload_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
-      "rendered_content_hash": "cab5cf196672ddb3ddf7b399b433431f4295b568c851f558951491b92d0f3873",
-      "rendered_content_hash_previous": "f1a33237f71ed63cff1be5cb3420a7e53d5d5b6a268f99b4c6ea5ee52b98a7a4",
+      "rendered_content_hash": "00804874ed72cee91c004b3325056d8b58e17f91191dead1676f1332140b8375",
+      "rendered_content_hash_previous": "cab5cf196672ddb3ddf7b399b433431f4295b568c851f558951491b92d0f3873",
       "rendered_hash_scope": "public_artifact_v2",
-      "rendered_hash_recaptured_at": "2026-09-16T06:07:34Z",
-      "rendered_hash_recapture_reason": "Decisão do fundador EXECUTE_NOW, campanha CONFENGE-DESIGN-AUTHORITY-AND-PRODUCTION-20260915 (2026-09-16, segunda recaptura): o shell compartilhado passou a preload da fonte de identidade (<link rel=\"preload\" as=\"font\" href=\"/assets/archivo-var-latin-bf6e041e.woff2\">) e a referência do CSS canônico mudou de /assets/css/styles.b51b6642c6e8.css para /assets/css/styles.c4d685b5eb19.css (faces de reserva calibradas por peso). O HTML-fonte renderizado difere do aprovado apenas por essa linha de preload (diff verificado). Material_hash, fatos, cálculos, fontes, tese, limites, autoria, datas de consulta e hashes do produtor permanecem idênticos. Executor: agente Claude Code; sem nova aprovação técnica nem revisão humana independente.",
+      "rendered_hash_recaptured_at": "2026-09-16T06:23:28Z",
+      "rendered_hash_recapture_reason": "Decisão do fundador EXECUTE_NOW, campanha CONFENGE-DESIGN-AUTHORITY-AND-PRODUCTION-20260915 (2026-09-16, terceira recaptura, CSS final): somente a referência do CSS canônico mudou (/assets/css/styles.c4d685b5eb19.css -> /assets/css/styles.ae6299564823.css; duas regras de quebra de linha em breadcrumb e códigos de tabela). HTML-fonte idêntico ao da recaptura anterior. Material_hash, fatos, cálculos, fontes, tese, limites, autoria, datas de consulta e hashes do produtor permanecem idênticos. Executor: agente Claude Code; sem nova aprovação técnica nem revisão humana independente.",
       "canonical_url": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
       "base_sha": "d1c7aaa66969cc63aa673f2c16a5df22a90bc7a9",
       "comparable_available": true,
@@ -288,6 +288,35 @@
         "styles_source_sha256": "c1be96c3acb8b680b1bff505f6082a88da364d4a4863bd0984177589f49212a8",
         "head_delta": "+ <link rel=\"preload\" as=\"font\" type=\"font/woff2\" href=\"/assets/archivo-var-latin-bf6e041e.woff2\" crossorigin=\"anonymous\"/> (scripts/pseo/html_shell.py)",
         "changed_rules": "css/identity.css: faces Archivo Fallback Wide/Narrow com fonte local em negrito e size-adjust 95,2 % / 81,9 %; breadcrumb sem quebra no item"
+      },
+      "byte_equivalence": {
+        "material_hash": "ff2a3862779f5e6c59f9a39f0a048e6f02b2bb61f6fcf08be064cab889e4a328",
+        "facts": true,
+        "calculations": true,
+        "sources": true,
+        "thesis": true,
+        "limitations": true,
+        "authorship": true,
+        "consultation_dates": true,
+        "content_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
+        "producer_root_hash": "5957e02b7982e000ca7dda2a9a06b88769085bc2a163eadcd8d59bd134b26b3e"
+      }
+    },
+    {
+      "action": "recapture_rendered_presentation",
+      "analysis_id": "13ec615146b3d348190a9b0b9148831e",
+      "actor": "CLAUDE_CODE_AGENT_EXECUTOR",
+      "authority": "Decisão do fundador EXECUTE_NOW, campanha CONFENGE-DESIGN-AUTHORITY-AND-PRODUCTION-20260915",
+      "at": "2026-09-16T06:23:28Z",
+      "reviewer": "comparação determinística pelo próprio agente (HTML-fonte idêntico; só o href do CSS); nenhuma nova aprovação técnica ou revisão humana independente alegada",
+      "rendered_content_hash_previous": "cab5cf196672ddb3ddf7b399b433431f4295b568c851f558951491b92d0f3873",
+      "rendered_content_hash": "00804874ed72cee91c004b3325056d8b58e17f91191dead1676f1332140b8375",
+      "presentation_delta": {
+        "stylesheet_href_previous": "/assets/css/styles.c4d685b5eb19.css",
+        "stylesheet_href": "/assets/css/styles.ae6299564823.css",
+        "styles_source_sha256_previous": "c1be96c3acb8b680b1bff505f6082a88da364d4a4863bd0984177589f49212a8",
+        "styles_source_sha256": "0f71c028fd0ab672d65f2fac5d6b0d0a998ece0983fc17f290c98639973f8cf2",
+        "changed_rules": ".breadcrumbs li[aria-current]{white-space:normal} e .data-table code{overflow-wrap:anywhere}"
       },
       "byte_equivalence": {
         "material_hash": "ff2a3862779f5e6c59f9a39f0a048e6f02b2bb61f6fcf08be064cab889e4a328",
