@@ -3233,7 +3233,7 @@
           "href": "#contato",
           "stage": "register_context",
           "commitment": "medium",
-          "current_label": "Use o formulário no fim da página",
+          "current_label": "use o formulário",
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da página de confirmação",
           "field_purpose": "not_applicable",

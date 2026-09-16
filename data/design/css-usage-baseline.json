@@ -36,7 +36,7 @@
   "unreferenced_css_files": [],
   "bundles": {
     "styles.css": {
-      "bytes": 111460,
+      "bytes": 111570,
       "class_selectors": 372,
       "used": 371,
       "unused": [
