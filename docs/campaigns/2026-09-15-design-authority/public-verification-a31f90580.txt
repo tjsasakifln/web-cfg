@@ -1,0 +1,29 @@
+== identidade
+-- /.well-known/build-info.json
+{'commit': 'a31f90580690751ea988c153d3b9c39fe3c74c1e', 'artifact_hash': 'a3f1076f7ddecac1aa2199923754702f29fed5f24bbc687d12c46ffdaf7d0e9d', 'build_time': '2026-09-16T11:40:30Z', 'environment': 'production'}
+-- /.well-known/runtime-info.json
+{'release_sha': 'a31f90580690751ea988c153d3b9c39fe3c74c1e', 'environment': 'production'}
+-- /healthz 200
+-- /ready 200
+== rotas críticas (status, content-type, css href, preload archivo)
+/ -> 200 text/html; charset=utf-8 css=/assets/css/styles.26055641a95b.css preload=1
+/servicos/ -> 200 text/html; charset=utf-8 css=/assets/css/styles.26055641a95b.css preload=1
+/quantitativos-orcamento-obras/ -> 200 text/html; charset=utf-8 css=/assets/css/styles.26055641a95b.css preload=1
+/compatibilizacao-projetos-engenharia/ -> 200 text/html; charset=utf-8 css=/assets/css/styles.26055641a95b.css preload=1
+/revisao-tecnica-projetos-engenharia/ -> 200 text/html; charset=utf-8 css=/assets/css/styles.26055641a95b.css preload=1
+/contato/ -> 301 text/plain; charset=utf-8 css= preload=0
+/triagem-tecnica/ -> 200 text/html; charset=utf-8 css=/assets/css/styles.26055641a95b.css preload=0
+/entregas/ -> 200 text/html; charset=utf-8 css=/assets/css/styles.26055641a95b.css preload=1
+== ativos reais
+/assets/css/styles.26055641a95b.css -> 200 text/css; charset=utf-8 111659B
+/assets/archivo-var-latin-bf6e041e.woff2 -> 200 font/woff2 60064B
+/assets/home-10x.css -> 200 text/css; charset=utf-8 17219B
+/styles.css -> 200 text/css; charset=utf-8 111635B
+== marcadores de identidade no CSS servido (/assets/css/styles.26055641a95b.css)
+      3 --sans-wide
+      1 .list-ruled{
+      1 .proof-figure{
+      1 font-display:optional
+26055641a95b1f18
+== fonte servida: magic bytes
+00000000: 774f 4632                                wOF2
