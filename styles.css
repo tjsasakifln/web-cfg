@@ -1196,6 +1196,9 @@ h4{font-size:1rem;font-weight:720;line-height:1.3;margin:0 0 var(--space-2)}
 .menu-toggle{flex:none}
 
 
+main section[id],main div[id].section,main h2[id],main h3[id],main [id].chooser-ask{scroll-margin-top:6rem}
+
+
 .breadcrumbs{padding:.85rem 0 0}
 .breadcrumbs ol{display:flex;flex-wrap:wrap;gap:.35rem .5rem;margin:0;padding:0;list-style:none;font-size:.875rem;color:var(--muted)}
 .breadcrumbs a{color:var(--muted)}
