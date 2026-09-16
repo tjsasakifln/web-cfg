@@ -27,7 +27,7 @@ Decidir participar, esclarecer, impugnar, ajustar estrutura ou abandonar um edit
 | robots | index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1 |
 | schema | Organization, Country, ContactPoint, Person, CollegeOrUniversity, CollectionPage, WebSite, ItemList, ListItem, Service, BreadcrumbList, FAQPage, Question, Answer |
 | og:title | Diagnóstico pré-licitação para obras públicas | CONFENGE |
-| content_sha256 | `4ad0312ecff62b4023592ba5f9f2e2815a87c1d28838c8d9783b89178a1ee088` |
+| content_sha256 | `485a44fedcd8ad02948a7a9fcc6b88113673e70b124a7c844ade3c5aba697412` |
 | hero CTA | Analisar uma demanda → `https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20edital%20em%20an%C3%A1lise%20e%20quero%20avaliar%20se%20vale%20uma%20Opera%C3%A7%C3%A3o%20de%20Proposta%20para%20Licita%C3%A7%C3%A3o%20Cr%C3%ADtica%20ou%20diagn%C3%B3stico%20de%20participa%C3%A7%C3%A3o.` |
 | when-not-to-hire | True |
 
