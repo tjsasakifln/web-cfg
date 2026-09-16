@@ -63,6 +63,10 @@ Três estudos com conteúdo real (abertura + seção principal + página interna
 - **Gates da esteira** (clone limpo, Node 22, produtor contratado): ver a PR para a lista executada e resultados; artefato exato construído com `SOURCE_DATE_EPOCH` fixado.
 - **Não medido:** percepção humana (nenhuma pesquisa autorizada com participantes; nenhum "teste de três segundos" alegado), resultado comercial, INP/LCP/CLS de campo, Safari/iPhone físico, leitores de tela reais.
 
+### Decisão pendente do fundador (fora do escopo desta campanha)
+
+O congelamento dos seis pilares B2G (`EARLIEST_SAFE_ACTION_AT = 2026-09-16`) expirou durante a campanha e a regra `missing_on_page_form` passou a reprovar em `origin/main` (verificado em clone limpo). #291 previa "DEFER até 2026-09-16, depois EXECUTE_NOW" para a captura on-page desses pilares e nenhuma campanha a executou. Esta campanha **não** adiciona formulário a pilar com preço publicado: registra débito route-exact, datado (`expires_at` 2026-09-30) e com dono (#61) na família `service-pillars`, e a regra passa a honrar débito registrado como aviso reportado em cada `inbound:gates` (débito expirado reprova). Decisão necessária até 2026-09-30: captura on-page nos seis pilares (com recaptura honesta dos hashes congelados) ou nova data com dono.
+
 ## 7. Publicação
 
 Ver a PR e a seção de encerramento no relatório da sessão: SHA do candidato, execução do `site-ci`, `netcup-release` (package → stage → qualify → promote), verificação pública de `/.well-known/build-info.json`, `/.well-known/runtime-info.json`, `/healthz`, `/ready`, rotas críticas e ativos com hash esperado, capturas do design servido.
