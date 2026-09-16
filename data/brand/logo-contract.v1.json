@@ -136,10 +136,8 @@
     "header_lockup_occurrences": 230,
     "footer_lockup_occurrences": 220,
     "legacy_asset_occurrences": {
-      "/assets/logo-confenge-500-f8a83f6d.png": 224,
-      "/assets/logo-confenge-white-500-1677038e.png": 214,
-      "/assets/logo-confenge.png": 6,
-      "/assets/logo-confenge-white.png": 6
+      "/assets/logo-confenge-500-f8a83f6d.png": 230,
+      "/assets/logo-confenge-white-500-1677038e.png": 220
     },
     "intrinsic_ratio": "50:13",
     "header_black_on_white": "NON_COMPLIANT",
@@ -148,7 +146,7 @@
     "tagline_minimum_legibility": "NOT_APPROVED",
     "screenshot_regression": "MISSING",
     "production_svg_delivery": "BLOCKED_AWAITING_FOUNDER_ARTWORK",
-    "observation_note": "Recontagem real de 2026-09-11 no candidato POS-INB-20260911/10: 233 HTML, 450 logos, 230 lockups de cabecalho e 220 de rodape. O delta frente a 232/448/229/219 e a pagina /casos/demonstrativo-infraestrutura/, com lockup de cabecalho e de rodape; os mestres raster, a proporcao 50:13 e os dois PNG nao-hashados de fallback (6+6) permanecem."
+    "observation_note": "2026-09-16 (CAPTURA-PILARES-20260916, #61): os seis pilares B2G protegidos por hash, que ainda serviam os rasters legados de 800x208 (38 KB cada) no cabecalho e no rodape, passaram ao lockup canonico de 224x58 ao receberem a casca sincronizada; as duas ocorrencias legadas restantes caem a zero e o censo por ativo e regravado a partir da observacao."
   },
   "promotion": {
     "current": "BLOCKED_AWAITING_FOUNDER_ARTWORK",
