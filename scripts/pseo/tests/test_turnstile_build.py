@@ -213,9 +213,13 @@ def _tracked_capture_html() -> list[tuple[str, str]]:
 # 25 rotas públicas de captura abaixo preservam a prova real do antiabuso.
 ISSUE_440_CAPTURE_ROUTES = {
     "acompanhamento-contratos-obras/index.html",
+    # 2026-09-16: os seis pilares B2G ganharam captura on-page (decisao do
+    # fundador, #61); passam a receber widget + sitekey como qualquer captura.
+    "aditivos-obras-publicas/index.html",
     "analise-cnpj/index.html",
     "analise-cnpj/r/index.html",
     "atrasos-prorrogacao-obras-publicas/index.html",
+    "auditoria-orcamento-licitacao/index.html",
     "bid-room-licitacoes-obras/index.html",
     "casos/index.html",
     "casos/modelo-apresentacao-executiva-resultados/index.html",
@@ -229,13 +233,17 @@ ISSUE_440_CAPTURE_ROUTES = {
     "comercial/radar-decisorio/index.html",
     "defesa-margem-contratos-publicos/index.html",
     "defesa-tecnica-contratos-publicos/index.html",
+    "diagnostico-b2g-360/index.html",
     "diagnostico-b2g-expansao/index.html",
+    "diagnostico-pre-licitacao/index.html",
     "diretoria-b2g/index.html",
     "entregas/index.html",
     "ferramentas/checklist-reequilibrio/index.html",
     "ferramentas/diagnostico-defesa-margem/index.html",
     "ferramentas/limite-acrescimos-supressoes/index.html",
     "index.html",
+    "medicoes-glosas-obras-publicas/index.html",
+    "reequilibrio-obras-publicas/index.html",
     "servicos-obras-publicas/index.html",
 }
 
