@@ -9,7 +9,12 @@
   font-weight:100 900;
   font-stretch:66% 110%;
   font-style:normal;
-  font-display:swap;
+  /* optional + preload: the face paints on first paint when the preload has
+   * landed (fast/repeat visits) and never swaps late, so the hero cannot shift
+   * after paint (CI measured CLS 0.088 on /acompanhamento-contratos-obras/ with
+   * swap). The metric-matched fallbacks below keep the layout identical on the
+   * rare first visit that renders without it. */
+  font-display:optional;
 }
 @font-face{
   font-family:"Archivo Fallback";

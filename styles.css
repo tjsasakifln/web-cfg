@@ -979,7 +979,8 @@ html.no-js body[data-content-cluster="home"] .site-header{position:static}
   font-weight:100 900;
   font-stretch:66% 110%;
   font-style:normal;
-  font-display:swap;
+  
+  font-display:optional;
 }
 @font-face{
   font-family:"Archivo Fallback";
