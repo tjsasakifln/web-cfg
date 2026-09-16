@@ -26,14 +26,15 @@ const required = process.env.UI_GEOMETRY_REQUIRED === "1" || Boolean(process.env
 const brand = JSON.parse(fs.readFileSync(path.join(root, "data/site/brand.json"), "utf8"));
 const promotedNav = (brand.navigation?.desktop || []).map((item) => item.label);
 const legacyNav = ["Serviços", "Problemas que resolvemos", "Conteúdos", "Ferramentas", "Especialista"];
-const frozenRoutes = [
-  "/aditivos-obras-publicas/",
-  "/medicoes-glosas-obras-publicas/",
-  "/reequilibrio-obras-publicas/",
-  "/auditoria-orcamento-licitacao/",
-  "/diagnostico-b2g-360/",
-  "/diagnostico-pre-licitacao/",
-];
+// 2026-09-16: the founder's capture decision (unlock-plan capture.authorization)
+// released the six B2G pillars from the shell freeze; they are held to the
+// promoted nav like every mutable route. Only pillars still frozen keep the
+// legacy contract, derived from the same plan shell_nav reads.
+const unlockPlan = JSON.parse(fs.readFileSync(path.join(root, "data/bofu-dominance/frozen-specs/unlock-plan.v1.json"), "utf8"));
+const capturePillars = (unlockPlan.protected_pillars || []).map((slug) => `/${slug}/`);
+const captureReleased = unlockPlan.capture?.authorization?.decision_state === "EXECUTE_NOW";
+const frozenRoutes = captureReleased ? [] : capturePillars;
+const releasedPillarRoutes = captureReleased ? capturePillars : [];
 const mutableCanonicalRoutes = [
   "/",
   "/ferramentas/",
@@ -456,6 +457,7 @@ for (const width of [390, 901, 960, 1000, 1120, 1240, 1366, 1661]) {
 
 for (const { route, expectedNav } of [
   ...mutableCanonicalRoutes.map((route) => ({ route, expectedNav: promotedNav })),
+  ...releasedPillarRoutes.map((route) => ({ route, expectedNav: promotedNav })),
   ...frozenRoutes.map((route) => ({ route, expectedNav: legacyNav })),
 ]) {
   await page.setViewport({ width: 1024, height: 900, deviceScaleFactor: 1 });
