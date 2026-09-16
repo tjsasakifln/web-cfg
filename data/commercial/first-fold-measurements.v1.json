@@ -1,16 +1,16 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-09-16T13:30:31.368Z",
+  "measured_at": "2026-09-16T13:52:13.642Z",
   "measured_on": "2026-09-16",
-  "commit_sha": "1882dbd986704f9717a60eb5fa0ef4e2e382f87b",
+  "commit_sha": "dd8029d8186024c20f75e6b7c55499d87a651d13",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "f168038814087e1b365d1de3042af9a3f3364743756e104711fecc0fb9fe7477",
     "@control/scripts/site/first_fold_rules.mjs": "53d52810f7750795e96f2421248d8aa8f06ff4c4065c4ba6bc9ee92a11fca7fd",
     "@control/scripts/site/measure_first_fold.mjs": "8f7a93464d0c5f05a92d665c077eedeabd944a0ef038e7d2cf2b18377a87013b",
     "acompanhamento-contratos-obras/index.html": "801c701b0b9cf56bc67059bd5a4fad61ccaf1637ad5488e25029c1da82800804",
-    "aditivos-obras-publicas/index.html": "05e4a418732e4888551ed030ec584434dedbca592743c7f46c6d5909dc8b2de9",
+    "aditivos-obras-publicas/index.html": "ec93b4921e5b3266b5966009af4c1fb17b9d82a1c39b0cf3c0e6cfff22f0e2ab",
     "assets/archivo-var-latin-bf6e041e.woff2": "bf6e041e98b0fa244d965027e9f2b6ed53470ed95f2227615510a08a67ea7f4a",
     "assets/eight-offer-contract.css": "d2aead054169392b26c739ab4d95c8b2f651a66c9d6ac27aa7fd98bdafc4f79d",
     "assets/home-10x.css": "4ff8e2b64e0f5ca8af4d20bf75f6bab4284ad9b00b0beb929c25df90717ba33f",
@@ -18,7 +18,7 @@
     "assets/report-model-a11y-v293.css": "148fb54ad084edad56eff48e6b635e2df177e8679a724d50e2e92a88421fddce",
     "assets/report-model.css": "22e499881491794e227ba5bf3ad5e42032410221bb749b631a5501601e6fc853",
     "atrasos-prorrogacao-obras-publicas/index.html": "9bbecf66624cb76f6cef3f5f665c9fa077e1a00b202f4f7e78656742b6bffa9d",
-    "auditoria-orcamento-licitacao/index.html": "fba0c9a153707b624db89604b38f19da991008a2daa2df45899aba67cac30d15",
+    "auditoria-orcamento-licitacao/index.html": "ef157a7cdbbc1ab1764e9af6a061eb18b9a9d053f5b10cb409a9779ba1d53a5b",
     "bid-room-licitacoes-obras/index.html": "bc481465c82bb11efd7e247d8e66c69d7ebf669e0609cd1a40f7bdc17de5253f",
     "casos/modelo-apresentacao-executiva-resultados/index.html": "f387d6df4b5b7cc81f98f188e509795d8a19e558e61074064c0e13e04323bd58",
     "casos/modelo-apresentacao-executiva-resultados/styles.css": "8ace8a9960dbc19f71c9f69e4908f39ac223991715a13707587d1d06f483048d",
@@ -47,7 +47,7 @@
     "index.html": "169749782db9af08f865c2e5a3a8994c94053640c1b3c306411e4f93ac8a25ad",
     "medicoes-glosas-obras-publicas/index.html": "4d1b245aa413084f8ecbb2a61c5f59c17efbf94b8b5f13591fb12d9fc2a5311d",
     "problemas-que-resolvemos/index.html": "b0d2f95d54e5248364e5a841bb5cbbf1215de6ff16b0b6551ba26e4f64b458a2",
-    "reequilibrio-obras-publicas/index.html": "a2536415e55a9ad895b9e6bc55433c79bdc6e6963907f47752a2897671ed746a",
+    "reequilibrio-obras-publicas/index.html": "9397d8dec6df923dcaee39fee53feccf7b241a39d01a28f769b282dffed027f8",
     "script.js": "13adf8929c4d73f93a3f1a82cd6e39699df37c03478b55b061e2693576a913cb",
     "servicos-obras-publicas/index.html": "ecf1aaca84269aa845614106e65fc0dd1311b893c0400b36f165bb72759016fc",
     "styles-hubs.css": "ed4668833ad8de5cef5acc5fc1e8f21e519870f0bf282247c3b4a9644a094592",
@@ -1022,23 +1022,23 @@
             "eyebrow": {
               "selector": "header .eyebrow",
               "box": {
-                "top": 174,
-                "bottom": 213,
-                "left": 18,
-                "right": 372,
-                "width": 353,
-                "height": 39
+                "top": 160,
+                "bottom": 205,
+                "left": 0,
+                "right": 390,
+                "width": 390,
+                "height": 45
               },
               "text": "Escolher onde crescer antes de dispersar capital"
             },
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 225,
-                "bottom": 335,
-                "left": 18,
-                "right": 372,
-                "width": 353,
+                "top": 217,
+                "bottom": 326,
+                "left": 0,
+                "right": 390,
+                "width": 390,
                 "height": 109
               },
               "text": "Diagnóstico de Expansão no Mercado Público"
@@ -1046,23 +1046,23 @@
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 351,
-                "bottom": 455,
-                "left": 18,
-                "right": 372,
-                "width": 353,
-                "height": 104
+                "top": 342,
+                "bottom": 438,
+                "left": 0,
+                "right": 390,
+                "width": 390,
+                "height": 96
               },
               "text": "Decida em quais compradores, territórios e segmentos concentrar a expansão antes de espalhar equipe comercial e esforço de proposta."
             },
             "proof": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 597,
-                "bottom": 681,
-                "left": 18,
-                "right": 372,
-                "width": 353,
+                "top": 570,
+                "bottom": 654,
+                "left": 0,
+                "right": 390,
+                "width": 390,
                 "height": 84
               },
               "text": "Confira o formato antes de contratar: o exemplo sintético do mapa de compradores abre sem cadastro, e preço, prazo e escopo estão publicados nesta página."
@@ -1070,12 +1070,12 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 701,
-                "bottom": 745,
-                "left": 18,
-                "right": 372,
-                "width": 353,
-                "height": 44
+                "top": 674,
+                "bottom": 713,
+                "left": 0,
+                "right": 390,
+                "width": 390,
+                "height": 39
               },
               "text": "Solicitar o diagnóstico"
             }
@@ -1085,12 +1085,12 @@
               "text": "Solicitar o diagnóstico",
               "href": "#pedido-diagnostico",
               "box": {
-                "top": 701,
-                "bottom": 745,
-                "left": 18,
-                "right": 372,
-                "width": 353,
-                "height": 44
+                "top": 674,
+                "bottom": 713,
+                "left": 0,
+                "right": 390,
+                "width": 390,
+                "height": 39
               }
             }
           ],
@@ -1345,7 +1345,7 @@
     },
     {
       "route": "/auditoria-orcamento-licitacao/",
-      "html_sha256": "fba0c9a153707b624db89604b38f19da991008a2daa2df45899aba67cac30d15",
+      "html_sha256": "ef157a7cdbbc1ab1764e9af6a061eb18b9a9d053f5b10cb409a9779ba1d53a5b",
       "measured_on": "2026-09-16",
       "viewports": {
         "1366x768": {
@@ -2195,7 +2195,7 @@
     },
     {
       "route": "/aditivos-obras-publicas/",
-      "html_sha256": "05e4a418732e4888551ed030ec584434dedbca592743c7f46c6d5909dc8b2de9",
+      "html_sha256": "ec93b4921e5b3266b5966009af4c1fb17b9d82a1c39b0cf3c0e6cfff22f0e2ab",
       "measured_on": "2026-09-16",
       "viewports": {
         "1366x768": {
@@ -2243,8 +2243,8 @@
                 "top": 451,
                 "bottom": 474,
                 "left": 83,
-                "right": 633,
-                "width": 550,
+                "right": 609,
+                "width": 526,
                 "height": 23
               },
               "text": "Engenharia por Engº Tiago Sasaki: documentos, cálculos e fontes conferíveis."
@@ -2255,8 +2255,8 @@
                 "top": 486,
                 "bottom": 530,
                 "left": 83,
-                "right": 568,
-                "width": 485,
+                "right": 564,
+                "width": 481,
                 "height": 44
               },
               "text": "Verificar o contrato no diagnóstico de defesa de margem"
@@ -2270,8 +2270,8 @@
                 "top": 486,
                 "bottom": 530,
                 "left": 83,
-                "right": 568,
-                "width": 485,
+                "right": 564,
+                "width": 481,
                 "height": 44
               }
             }
@@ -2295,19 +2295,19 @@
               "selector": "header .eyebrow",
               "box": {
                 "top": 190,
-                "bottom": 229,
+                "bottom": 210,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 39
+                "height": 20
               },
               "text": "Mudanças de escopo sem trabalho gratuito"
             },
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 241,
-                "bottom": 387,
+                "top": 222,
+                "bottom": 368,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2318,8 +2318,8 @@
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 411,
-                "bottom": 541,
+                "top": 392,
+                "bottom": 522,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2330,8 +2330,8 @@
             "proof": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 560,
-                "bottom": 602,
+                "top": 541,
+                "bottom": 583,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2342,8 +2342,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 602,
-                "bottom": 662,
+                "top": 583,
+                "bottom": 642,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2357,8 +2357,8 @@
               "text": "Verificar o contrato no diagnóstico de defesa de margem",
               "href": "/ferramentas/diagnostico-defesa-margem/",
               "box": {
-                "top": 602,
-                "bottom": 662,
+                "top": 583,
+                "bottom": 642,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2458,8 +2458,8 @@
                 "top": 443,
                 "bottom": 489,
                 "left": 83,
-                "right": 633,
-                "width": 550,
+                "right": 609,
+                "width": 526,
                 "height": 47
               },
               "text": "Teste o método antes de contratar: a matriz pública de atraso de obra abre sem cadastro e usa a mesma leitura de causa, responsabilidade e caminho crítico."
@@ -2470,8 +2470,8 @@
                 "top": 489,
                 "bottom": 533,
                 "left": 83,
-                "right": 296,
-                "width": 213,
+                "right": 295,
+                "width": 212,
                 "height": 44
               },
               "text": "Enviar meus dados"
@@ -2485,8 +2485,8 @@
                 "top": 489,
                 "bottom": 533,
                 "left": 83,
-                "right": 296,
-                "width": 213,
+                "right": 295,
+                "width": 212,
                 "height": 44
               }
             }
@@ -2623,7 +2623,7 @@
     },
     {
       "route": "/reequilibrio-obras-publicas/",
-      "html_sha256": "a2536415e55a9ad895b9e6bc55433c79bdc6e6963907f47752a2897671ed746a",
+      "html_sha256": "9397d8dec6df923dcaee39fee53feccf7b241a39d01a28f769b282dffed027f8",
       "measured_on": "2026-09-16",
       "viewports": {
         "1366x768": {
@@ -2671,8 +2671,8 @@
                 "top": 440,
                 "bottom": 464,
                 "left": 83,
-                "right": 633,
-                "width": 550,
+                "right": 609,
+                "width": 526,
                 "height": 23
               },
               "text": "Engenharia por Engº Tiago Sasaki: documentos, cálculos e fontes conferíveis."
@@ -2683,8 +2683,8 @@
                 "top": 464,
                 "bottom": 508,
                 "left": 83,
-                "right": 568,
-                "width": 485,
+                "right": 564,
+                "width": 481,
                 "height": 44
               },
               "text": "Verificar o contrato no diagnóstico de defesa de margem"
@@ -2698,8 +2698,8 @@
                 "top": 464,
                 "bottom": 508,
                 "left": 83,
-                "right": 568,
-                "width": 485,
+                "right": 564,
+                "width": 481,
                 "height": 44
               }
             }
@@ -2882,8 +2882,8 @@
                 "top": 443,
                 "bottom": 489,
                 "left": 83,
-                "right": 633,
-                "width": 550,
+                "right": 609,
+                "width": 526,
                 "height": 47
               },
               "text": "Confira o formato antes de contratar: o exemplo sintético de relatório executivo mostra como fato, prova e pedido chegam à direção, sem cadastro."
@@ -2894,8 +2894,8 @@
                 "top": 489,
                 "bottom": 533,
                 "left": 83,
-                "right": 296,
-                "width": 213,
+                "right": 295,
+                "width": 212,
                 "height": 44
               },
               "text": "Enviar meus dados"
@@ -2909,8 +2909,8 @@
                 "top": 489,
                 "bottom": 533,
                 "left": 83,
-                "right": 296,
-                "width": 213,
+                "right": 295,
+                "width": 212,
                 "height": 44
               }
             }
@@ -3065,22 +3065,22 @@
               "selector": "h1",
               "box": {
                 "top": 217,
-                "bottom": 309,
+                "bottom": 263,
                 "left": 83,
                 "right": 923,
                 "width": 840,
-                "height": 92
+                "height": 46
               },
               "text": "Diagnóstico da Operação em Obras Públicas"
             },
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 333,
-                "bottom": 362,
+                "top": 287,
+                "bottom": 316,
                 "left": 83,
-                "right": 831,
-                "width": 748,
+                "right": 798,
+                "width": 715,
                 "height": 29
               },
               "text": "Mapeie onde a frente pública perde tempo, margem e controle."
@@ -3088,8 +3088,8 @@
             "proof": {
               "selector": ".authority-byline",
               "box": {
-                "top": 590,
-                "bottom": 615,
+                "top": 544,
+                "bottom": 570,
                 "left": 83,
                 "right": 1283,
                 "width": 1200,
@@ -3100,11 +3100,11 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 649,
-                "bottom": 693,
+                "top": 603,
+                "bottom": 647,
                 "left": 83,
-                "right": 402,
-                "width": 319,
+                "right": 398,
+                "width": 315,
                 "height": 44
               },
               "text": "Solicitar diagnóstico da operação"
@@ -3115,11 +3115,11 @@
               "text": "Solicitar diagnóstico da operação",
               "href": "#captura-pilar",
               "box": {
-                "top": 649,
-                "bottom": 693,
+                "top": 603,
+                "bottom": 647,
                 "left": 83,
-                "right": 402,
-                "width": 319,
+                "right": 398,
+                "width": 315,
                 "height": 44
               }
             }
@@ -3178,8 +3178,8 @@
             "proof": {
               "selector": ".authority-byline",
               "box": {
-                "top": 635,
-                "bottom": 675,
+                "top": 614,
+                "bottom": 654,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3190,8 +3190,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 733,
-                "bottom": 777,
+                "top": 711,
+                "bottom": 755,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3205,8 +3205,8 @@
               "text": "Solicitar diagnóstico da operação",
               "href": "#captura-pilar",
               "box": {
-                "top": 733,
-                "bottom": 777,
+                "top": 711,
+                "bottom": 755,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3294,8 +3294,8 @@
                 "top": 443,
                 "bottom": 489,
                 "left": 83,
-                "right": 633,
-                "width": 550,
+                "right": 609,
+                "width": 526,
                 "height": 47
               },
               "text": "Confira o formato antes de contratar: quatro ferramentas públicas e o exemplo sintético de carteira de contratos abrem sem cadastro."
@@ -3306,8 +3306,8 @@
                 "top": 489,
                 "bottom": 533,
                 "left": 83,
-                "right": 296,
-                "width": 213,
+                "right": 295,
+                "width": 212,
                 "height": 44
               },
               "text": "Enviar meus dados"
@@ -3321,8 +3321,8 @@
                 "top": 489,
                 "bottom": 533,
                 "left": 83,
-                "right": 296,
-                "width": 213,
+                "right": 295,
+                "width": 212,
                 "height": 44
               }
             }
@@ -3353,19 +3353,19 @@
               "selector": "h1",
               "box": {
                 "top": 231,
-                "bottom": 359,
+                "bottom": 327,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 128
+                "height": 96
               },
               "text": "Acompanhamento de contratos de obras públicas: rotina preventiva e recorrente"
             },
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 377,
-                "bottom": 463,
+                "top": 345,
+                "bottom": 431,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3376,8 +3376,8 @@
             "proof": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 475,
-                "bottom": 538,
+                "top": 443,
+                "bottom": 506,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3388,8 +3388,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 538,
-                "bottom": 582,
+                "top": 506,
+                "bottom": 550,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3403,8 +3403,8 @@
               "text": "Enviar meus dados",
               "href": "#captura-pilar",
               "box": {
-                "top": 538,
-                "bottom": 582,
+                "top": 506,
+                "bottom": 550,
                 "left": 18,
                 "right": 372,
                 "width": 353,
