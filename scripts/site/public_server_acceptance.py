@@ -902,12 +902,49 @@ def verify_robots_policy(
                 })
 
     # As diretivas que nao controlam allow/disallow tambem exprimem politica.
+    # Desde 2026-09-16 a origem versionada as carrega; a borda pode antepor o
+    # bloco gerenciado com o mesmo valor (grupos "*" combinados, RFC 9309
+    # 2.2.1). Um valor DIFERENTE para a mesma diretiva no grupo "*" -- por
+    # exemplo ai-train=yes vindo de uma composicao futura -- e divergencia
+    # material de politica e reprova, em vez de passar porque o valor aprovado
+    # tambem esta presente.
     missing_policy = []
-    signals = parsed.group_policy.get("*", {}).get("content-signal") or []
-    for declared in baseline.get("managed_composition", {}).get("carries_policy", []):
-        value = declared.split(":", 1)[1].strip() if ":" in declared else declared
-        if value not in signals:
+    conflicting_policy = []
+    star_policy = parsed.group_policy.get("*", {})
+    for declared in baseline.get("robots_policy_directives", []) or baseline.get(
+        "managed_composition", {}
+    ).get("carries_policy", []):
+        field, _, value = declared.partition(":")
+        field = field.strip().lower()
+        value = value.strip()
+        if value not in (star_policy.get(field) or []):
             missing_policy.append(declared)
+        # O conflito e procurado em TODO o corpo: um valor diferente no grupo de
+        # outro agente (ex.: ai-train=yes para um buscador) ou fora de qualquer
+        # grupo tambem exprime politica que ninguem aprovou.
+        seen = [("*", v) for v in star_policy.get(field) or []]
+        seen += [
+            (agent, v)
+            for agent, directives in parsed.group_policy.items()
+            if agent != "*"
+            for v in directives.get(field) or []
+        ]
+        seen += [(None, v) for v in parsed.policy.get(field) or []]
+        for agent, other in seen:
+            if other != value:
+                conflicting_policy.append(
+                    {"directive": field, "expected": value, "served": other, "agent": agent}
+                )
+
+    # A negacao a um rastreador de IA e estrutural, nao so amostral: qualquer
+    # Allow no grupo que o atende (o proprio ou, combinado, o do prefixo da
+    # borda) e injecao, porque um Allow mais longo venceria o Disallow: / em
+    # caminhos que a amostra nao sonda (RFC 9309 2.2.2).
+    denied_allows = []
+    for agent in baseline.get("ai_crawlers_denied_everywhere", []):
+        for kind, pattern in parsed.groups.get(agent.lower(), []):
+            if kind == "allow" and pattern:
+                denied_allows.append({"agent": agent, "rule": f"allow:{pattern}"})
 
     errors: list[str] = []
     if divergences:
@@ -916,6 +953,10 @@ def verify_robots_policy(
         errors.append(f"robots_private_surface_allow_injected:{len(injected_allows)}")
     if missing_policy:
         errors.append(f"robots_policy_directive_absent:{len(missing_policy)}")
+    if conflicting_policy:
+        errors.append(f"robots_policy_directive_conflict:{len(conflicting_policy)}")
+    if denied_allows:
+        errors.append(f"robots_denied_crawler_allow_injected:{len(denied_allows)}")
     return {
         "schema": "confenge.robots-policy-acceptance/v1",
         "baseline": baseline_path.name,
@@ -923,6 +964,8 @@ def verify_robots_policy(
         "divergences": divergences,
         "injected_allows": injected_allows,
         "missing_policy_directives": missing_policy,
+        "conflicting_policy_directives": conflicting_policy,
+        "denied_crawler_allows": denied_allows,
         "errors": errors,
         "ok": not errors,
     }

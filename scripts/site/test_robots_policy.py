@@ -5,8 +5,10 @@ O contrato de bytes prova que a borda nao adulterou o arquivo. Estes testes
 provam a outra metade: que o arquivo continua exprimindo a politica vigente.
 As duas coisas reprovam por motivos diferentes e nenhuma substitui a outra.
 
-O corpo usado aqui e o CORPO REAL de producao -- o bloco gerenciado que o
-Cloudflare antepoe seguido do nosso arquivo -- e nao uma fixture conveniente.
+Os corpos usados aqui sao reais: a origem do PACOTE (que desde 2026-09-16
+carrega a politica de IA) sozinha, e a mesma origem precedida do bloco
+gerenciado que o Cloudflare antepunha ate 2026-09-15 -- o prefixo pode voltar e
+o resultado efetivo tem de ser o mesmo nos dois casos.
 """
 
 from __future__ import annotations
@@ -32,7 +34,7 @@ from scripts.site.robots_policy import (  # noqa: E402
     withdrawn_prefixes_from_redirects,
 )
 
-# Parcela REAL que o Cloudflare "Managed robots.txt" antepoe, capturada em
+# Parcela REAL que o Cloudflare "Managed robots.txt" antepunha (ate 2026-09-15), capturada em
 # confenge.com.br e guardada em testdata (1836 bytes, ja com o separador).
 # Nao e uma reproducao abreviada: e o prefixo servido, com os nove rastreadores
 # de IA que a politica aprovada nomeia. Atencao a caixa dos marcadores:
@@ -94,10 +96,13 @@ def test_managed_per_agent_block_survives_composition(agent):
 @needs_package
 def test_content_signal_is_preserved_as_policy_even_though_it_is_not_standardized():
     """Content-Signal nao controla allow/disallow, mas exprime politica vigente."""
-    parsed = parse_robots(SERVED)
-    assert parsed.group_policy["*"]["content-signal"] == [
-        "search=yes,ai-train=no,use=reference"
-    ]
+    for body in (ORIGIN, SERVED):
+        parsed = parse_robots(body)
+        # No corpo composto o valor aparece duas vezes (origem + prefixo); o que
+        # importa e que nenhum valor DIFERENTE coexista com o aprovado.
+        assert set(parsed.group_policy["*"]["content-signal"]) == {
+            "search=yes,ai-train=no,use=reference"
+        }
     assert parsed.policy["sitemap"] == ["https://confenge.com.br/sitemap-index.xml"]
 
 
@@ -202,18 +207,70 @@ def test_losing_a_non_standard_policy_directive_fails_closed():
 
 
 @needs_package
-def test_turning_off_managed_composition_is_detected_as_granting_ai_training():
-    """Contraprova da decisao de MANTER a composicao gerenciada.
+def test_the_origin_alone_carries_the_full_policy():
+    """Desde 2026-09-16 a origem versionada carrega a politica de IA.
 
-    Se alguem desligar o Managed robots.txt na zona e servir so a nossa origem,
-    o resultado nao e "limpeza": e conceder rastreio a GPTBot, ClaudeBot, CCBot,
-    Google-Extended e Amazonbot, e perder o Content-Signal ai-train=no.
+    A resposta publica deixou de trazer o prefixo gerenciado (medido em
+    2026-09-16) e a promocao foi revertida. Por decisao do fundador a politica
+    passou a viver no robots.txt do pacote: servir so a origem tem de manter
+    todas as restricoes e o Content-Signal do corpo composto conhecido.
     """
     report = policy_regression(served=SERVED, candidate=ORIGIN, probes=PROBES)
+    assert report["ok"] is True, report
+    assert report["lost_restrictions"] == []
+    assert report["dropped_policy_directives"] == []
+
+
+@needs_package
+def test_dropping_the_ai_groups_from_the_origin_is_detected_as_granting_ai_training():
+    """Contraprova que substitui 'desligar a composicao gerenciada'.
+
+    A garantia e a mesma de antes -- perder a negacao aos rastreadores de IA
+    reprova -- mas o alvo mudou: agora a perda so pode acontecer removendo os
+    grupos do proprio arquivo.
+    """
+    import re
+
+    stripped = re.sub(r"User-agent: (?!\*)[^\n]+\nDisallow: /\n", "", ORIGIN)
+    assert stripped != ORIGIN
+    baseline = json.loads(
+        (ROOT / "data" / "organic" / "robots-policy-baseline.v1.json").read_text(encoding="utf-8")
+    )
+    baseline_probes = [{"agent": r["agent"], "path": r["path"]} for r in baseline["expected_effective"]]
+    report = policy_regression(served=ORIGIN, candidate=stripped, probes=baseline_probes)
     assert report["ok"] is False
     granted = {r["agent"] for r in report["lost_restrictions"]}
-    assert {"GPTBot"} <= granted
+    assert set(baseline["ai_crawlers_denied_everywhere"]) & {r["agent"] for r in baseline_probes} <= granted
+    assert {"GPTBot", "ClaudeBot", "CCBot", "Google-Extended", "Amazonbot"} <= granted
+    without_signal = ORIGIN.replace("Content-Signal: search=yes,ai-train=no,use=reference\n", "")
+    report = policy_regression(served=ORIGIN, candidate=without_signal, probes=PROBES)
+    assert report["ok"] is False
     assert any(d["directive"] == "content-signal" for d in report["dropped_policy_directives"])
+
+
+@needs_package
+def test_the_origin_declares_every_group_the_baseline_derives():
+    """O arquivo e derivado das DECLARACOES da linha de base, nao copiado.
+
+    Cada rastreador em ai_crawlers_denied_everywhere tem um grupo proprio com
+    Disallow: / na origem; cada diretiva de robots_policy_directives esta no
+    grupo "*"; e os marcadores do bloco gerenciado NUNCA sao escritos na origem
+    (forja-los faria o contrato de borda aceitar o corpo pelo motivo errado).
+    """
+    baseline = json.loads(
+        (ROOT / "data" / "organic" / "robots-policy-baseline.v1.json").read_text(encoding="utf-8")
+    )
+    parsed = parse_robots(ORIGIN)
+    for agent in baseline["ai_crawlers_denied_everywhere"]:
+        assert ("disallow", "/") in parsed.groups.get(agent.lower(), []), agent
+    for declared in baseline["robots_policy_directives"]:
+        field, _, value = declared.partition(":")
+        assert value.strip() in parsed.group_policy["*"].get(field.strip().lower(), []), declared
+    composition = baseline["managed_composition"]
+    assert composition["mechanism"] == "origin-carries-policy"
+    assert composition["edge_prefix"]["required"] is False
+    for marker in (composition["edge_prefix"]["begin_marker"], composition["edge_prefix"]["end_marker"]):
+        assert marker not in ORIGIN
 
 
 @needs_package

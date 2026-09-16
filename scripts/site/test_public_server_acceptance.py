@@ -5,6 +5,7 @@ import http.client
 import io
 import json
 import os
+import re
 import sys
 import urllib.error
 from email.message import Message
@@ -1373,18 +1374,104 @@ def test_losing_a_live_private_surface_restriction_fails_closed():
 
 
 @pytest.mark.skipif(not _PACKAGE_ROBOTS.is_file(), reason="pacote nao construido")
-def test_turning_off_the_managed_composition_is_caught_as_granting_ai_training():
-    """Contraprova da decisao de MANTER a composicao gerenciada.
+def test_the_origin_alone_satisfies_the_policy_since_it_carries_it():
+    """Desde 2026-09-16 a politica vive na origem versionada.
 
-    Servir so a nossa origem nao e "fonte unica": e conceder rastreio a GPTBot,
-    ClaudeBot, CCBot, Google-Extended e Amazonbot, e perder o Content-Signal
-    ai-train=no, que existe apenas na parcela gerenciada.
+    A resposta publica nao pode depender da borda: sem nenhum prefixo gerenciado
+    (o estado observado em 2026-09-16) o robots.txt do pacote tem de exprimir,
+    sozinho, as 234 decisoes aprovadas e o Content-Signal.
     """
     report = acceptance.verify_robots_policy(_PACKAGE_ROBOTS.read_bytes())
+    assert report["ok"] is True, report
+    assert report["divergences"] == []
+    assert report["missing_policy_directives"] == []
+    assert report["conflicting_policy_directives"] == []
+
+
+@pytest.mark.skipif(not _PACKAGE_ROBOTS.is_file(), reason="pacote nao construido")
+def test_losing_the_ai_crawler_groups_in_the_origin_is_caught_as_granting_ai_training():
+    """Contraprova que substitui a antiga 'desligar a composicao gerenciada'.
+
+    Antes, servir so a origem concedia rastreio de IA porque a negacao existia
+    apenas na parcela gerenciada. Agora a origem a carrega, entao a perda que
+    tem de reprovar e a remocao dos grupos de IA (ou do Content-Signal) do
+    proprio arquivo -- mesma garantia, alvo novo.
+    """
+    origin = _PACKAGE_ROBOTS.read_bytes()
+    stripped = re.sub(rb"User-agent: (?!\*)[^\n]+\nDisallow: /\n", b"", origin)
+    assert stripped != origin
+    report = acceptance.verify_robots_policy(stripped)
     assert report["ok"] is False
     granted = {d["agent"] for d in report["divergences"] if d["served_allowed"]}
     assert {"GPTBot", "ClaudeBot", "CCBot", "Google-Extended", "Amazonbot"} <= granted
+    without_signal = origin.replace(b"Content-Signal: search=yes,ai-train=no,use=reference\n", b"")
+    report = acceptance.verify_robots_policy(without_signal)
+    assert report["ok"] is False
     assert report["missing_policy_directives"]
+
+
+@pytest.mark.skipif(not _PACKAGE_ROBOTS.is_file(), reason="pacote nao construido")
+def test_a_returning_managed_prefix_that_changes_the_policy_is_rejected():
+    """Se a borda voltar a antepor um bloco, ele so passa se disser o MESMO.
+
+    Grupos de mesmo user-agent sao combinados (RFC 9309 2.2.1): um Allow para um
+    rastreador negado empata com o nosso Disallow e vence (2.2.2), e um
+    Content-Signal com outro valor coexistiria com o aprovado. Os dois casos sao
+    divergencia material e reprovam; o prefixo identico ao conhecido passa.
+    """
+    same = acceptance.verify_robots_policy(_served_robots())
+    assert same["ok"] is True, same
+    frees_gptbot = _MANAGED_PREFIX.replace(
+        b"User-agent: GPTBot\nDisallow: /\n", b"User-agent: GPTBot\nAllow: /\n"
+    ) + _PACKAGE_ROBOTS.read_bytes()
+    report = acceptance.verify_robots_policy(frees_gptbot)
+    assert report["ok"] is False
+    assert ("GPTBot", "/") in {(d["agent"], d["path"]) for d in report["divergences"]}
+    grants_training = _MANAGED_PREFIX.replace(
+        b"ai-train=no", b"ai-train=yes"
+    ) + _PACKAGE_ROBOTS.read_bytes()
+    report = acceptance.verify_robots_policy(grants_training)
+    assert report["ok"] is False
+    assert any(e.startswith("robots_policy_directive_conflict") for e in report["errors"]), report["errors"]
+
+
+_MANAGED_END = b"# END Cloudflare Managed Content"
+
+
+def _inside_managed_block(extra: bytes) -> bytes:
+    """Prefixo conhecido com um grupo a mais DENTRO dos marcadores (o contrato de
+    bytes continua passando; so a politica pode reprovar)."""
+    return _MANAGED_PREFIX.replace(_MANAGED_END, extra + b"\n" + _MANAGED_END) + _PACKAGE_ROBOTS.read_bytes()
+
+
+@pytest.mark.skipif(not _PACKAGE_ROBOTS.is_file(), reason="pacote nao construido")
+def test_a_longer_allow_for_a_denied_crawler_is_structural_injection_not_a_sampling_gap():
+    """Amostra de 18 caminhos nao ve um Allow mais longo (RFC 9309 2.2.2 faria
+    'Allow: /*.html$' vencer 'Disallow: /' em todo HTML). A negacao e estrutural:
+    qualquer Allow no grupo de um rastreador negado reprova."""
+    body = _inside_managed_block(b"User-agent: GPTBot\nAllow: /*.html$\n")
+    assert acceptance.robots_edge_contract(body, _PACKAGE_ROBOTS.read_bytes())[0] is True
+    report = acceptance.verify_robots_policy(body)
+    assert report["ok"] is False
+    assert any(e.startswith("robots_denied_crawler_allow_injected") for e in report["errors"]), report["errors"]
+    assert report["denied_crawler_allows"] == [{"agent": "GPTBot", "rule": "allow:/*.html$"}]
+
+
+@pytest.mark.skipif(not _PACKAGE_ROBOTS.is_file(), reason="pacote nao construido")
+def test_a_conflicting_content_signal_anywhere_in_the_body_is_rejected():
+    """ai-train=yes no grupo de um buscador ou fora de qualquer grupo tambem e
+    politica que ninguem aprovou; o conflito nao fica restrito ao grupo '*'."""
+    in_other_group = _inside_managed_block(
+        b"User-agent: bingbot\nContent-Signal: search=yes,ai-train=yes,use=full\nAllow: /\n"
+    )
+    report = acceptance.verify_robots_policy(in_other_group)
+    assert report["ok"] is False
+    assert any(e.startswith("robots_policy_directive_conflict") for e in report["errors"]), report["errors"]
+    assert {c["agent"] for c in report["conflicting_policy_directives"]} == {"bingbot"}
+    top_level = b"Content-Signal: search=yes,ai-train=yes,use=full\n" + _served_robots()
+    report = acceptance.verify_robots_policy(top_level)
+    assert report["ok"] is False
+    assert any(e.startswith("robots_policy_directive_conflict") for e in report["errors"]), report["errors"]
 
 
 def test_robots_policy_fails_closed_when_the_published_file_has_no_body():

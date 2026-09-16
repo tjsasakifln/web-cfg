@@ -174,6 +174,20 @@ ambiguous_repositories:
   the target, reverse proxy, TLS, rollback and removal trigger are verified.
 - Railway/Supabase unavailability accelerates retirement. It never creates a
   request for a token, usage-limit increase or product redeploy.
+- The crawl policy of `robots.txt` (AI crawlers denied everywhere,
+  `Content-Signal: search=yes,ai-train=no,use=reference`, private surfaces,
+  withdrawn URLs left visible for the 410) is declared in
+  `data/organic/robots-policy-baseline.v1.json` and carried by the versioned
+  origin `robots.txt` since 2026-09-16 (founder decision EXECUTE_NOW after
+  release `aa12a951e` was rolled back: the public response had lost the
+  Cloudflare "Managed robots.txt" prefix that used to carry those directives;
+  the zone configuration was not consulted, so no cause is asserted). The edge
+  prefix is tolerated, never required, and its markers are never written to
+  the origin. The public acceptance evaluates the effective rules of the body
+  actually served, under either composition, against the baseline; a prefix
+  that frees a denied crawler or declares a different `Content-Signal` value
+  fails the promotion. Rollback: revert the origin change and the baseline
+  mechanism entry together; the policy table itself does not change.
 
 ## Operator path
 

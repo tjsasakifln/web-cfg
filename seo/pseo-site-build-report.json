@@ -1,10 +1,10 @@
 {
   "ok": true,
-  "web_cfg_sha": "e82fbe43af92d775823f5da654326fba3197ab34",
+  "web_cfg_sha": "d6bd08218e81a5fa82a31c75e0803e74bd551ccf",
   "manifest_public": ".well-known/pseo-build.json",
   "public_directory": "_site",
-  "public_artifact_hash": "077b2afb28bfbcf2c54d9f10046835419c8d550c62987a78ec311cbf1bb36a9d",
-  "manifest_hash": "32029d926423fe1b4abb96d26889faa27bfdc3aab564ecba13ad23c56128c859",
+  "public_artifact_hash": "6cf2d0f6507ab5d8b35dbc3aa5fb6f3b33f3406757174a800fb52f40bad58a4a",
+  "manifest_hash": "655779dd2841d9dee6a8381890d2223a105a6692e7b3f58ba7f83ab2b6fc5b9a",
   "reproducible_manifest": ".well-known/build-manifest.json",
   "build_summary": {
     "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
@@ -44,11 +44,11 @@
     "removed": []
   },
   "turnstile": {
-    "configured": false,
-    "context": "local",
+    "configured": true,
+    "context": "production",
     "target": "index.html",
     "capture_files": 25,
-    "injected_files": 0
+    "injected_files": 25
   },
   "responsive_html": {
     "files": 234,
@@ -59,7 +59,7 @@
   "public_artifact": {
     "assembled": true,
     "audit_ok": true,
-    "file_count": 518,
+    "file_count": 517,
     "finding_count": 0
   },
   "errors": []
