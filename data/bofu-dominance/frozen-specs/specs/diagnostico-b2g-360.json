@@ -179,11 +179,11 @@
     ],
     "cta": {
       "hero_text": "Solicitar diagnóstico da operação",
-      "hero_href": "/#contato?jornada=operacao",
+      "hero_href": "#captura-pilar",
       "bridges": [
         {
           "position": "offer_hero",
-          "href": "/#contato?jornada=operacao",
+          "href": "#captura-pilar",
           "text": "Solicitar diagnóstico da operação"
         },
         {
@@ -193,7 +193,7 @@
         },
         {
           "position": "pillar_bridge",
-          "href": "/?origem=/diagnostico-b2g-360#contato",
+          "href": "#captura-pilar",
           "text": "Pedir diagnóstico da operação"
         },
         {
@@ -209,10 +209,10 @@
       ],
       "when_not_to_hire": true,
       "whatsapp_present": true,
-      "form_count": 0
+      "form_count": 1
     },
-    "content_sha256": "101b019cb8113967cd7ffd50b07d1011af982ac22dd449aefcc868bff4b79409",
-    "bytes": 21389,
+    "content_sha256": "86eb586b2dfb51074dc37802bde62fa5978799b87f17dda9e7bd736a1e65bcd6",
+    "bytes": 25241,
     "noindex": false
   }
 }

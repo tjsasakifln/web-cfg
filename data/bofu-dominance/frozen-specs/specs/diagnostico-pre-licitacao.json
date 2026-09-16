@@ -204,10 +204,10 @@
       ],
       "when_not_to_hire": true,
       "whatsapp_present": true,
-      "form_count": 0
+      "form_count": 1
     },
-    "content_sha256": "67a5aee0638afbb7a9a55d07e06f59f4f91427f760a1c57636218ce1b000adc6",
-    "bytes": 24075,
+    "content_sha256": "30020e7d5155a029d864c8814cd5602c709590ed280502b494d6c97ecae6765a",
+    "bytes": 27987,
     "noindex": false
   }
 }
