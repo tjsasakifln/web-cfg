@@ -34,6 +34,7 @@ function page({ title, canonical, h1, lead, body }) {
 <meta name="robots" content="noindex,nofollow"/>
 <meta name="description" content="${lead}"/>
 <link rel="canonical" href="${canonical}"/>
+<link rel="preload" as="font" type="font/woff2" href="/assets/archivo-var-latin-bf6e041e.woff2" crossorigin="anonymous"/>
 <link rel="stylesheet" href="/styles.css"/>
 <link rel="stylesheet" href="/styles-tools.css"/>
 </head>

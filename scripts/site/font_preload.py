@@ -40,7 +40,7 @@ PRELOAD = (
     f'<link rel="preload" as="font" type="font/woff2" href="{FONT_HREF}" '
     'crossorigin="anonymous"/>'
 )
-STYLES_LINK_RE = re.compile(r'<link href="/styles\.css" rel="stylesheet"/>')
+STYLES_LINK_RE = re.compile(r'<link (?:href="/styles\.css" rel="stylesheet"|rel="stylesheet" href="/styles\.css")/>')
 PRELOAD_RE = re.compile(
     r'<link[^>]*rel="preload"[^>]*as="font"[^>]*href="' + re.escape(FONT_HREF) + r'"[^>]*/?>'
 )
