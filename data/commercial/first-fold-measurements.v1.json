@@ -1,9 +1,9 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-09-16T08:10:54.701Z",
+  "measured_at": "2026-09-16T08:46:19.403Z",
   "measured_on": "2026-09-16",
-  "commit_sha": "476b6f94e468c4115d3bd61c6b5a9fd39a021115",
+  "commit_sha": "d9ec0f9e598234d82750d666cfa2d6900747e2a7",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "f168038814087e1b365d1de3042af9a3f3364743756e104711fecc0fb9fe7477",
@@ -54,7 +54,7 @@
     "styles-offers.css": "c2f8df37099b9aec101e15a2fb1b0795ede23a7c2c36bd8adbdef0a191213e1d",
     "styles-tokens.css": "181b1f0e5027af847f9e31f86d7019c0efc209bac2d8a5012e97289c1a541288",
     "styles-tools.css": "8c42a4b5fadba13e4dae52bd7168c64b9f5548f3fd3f8d4f0707ce4e9463c7ba",
-    "styles.css": "f61067d5be5775e88cf92a7cbb39cd3fa52441a59b38d141bd195ed8e2089d73"
+    "styles.css": "e5e1f30d92f7b11176b04e718cea44a0c9c075c44362f835aadacf631a53ee80"
   },
   "surface": "source",
   "artifact_identity": null,
@@ -1193,8 +1193,8 @@
                 "top": 490,
                 "bottom": 534,
                 "left": 83,
-                "right": 325,
-                "width": 242,
+                "right": 322,
+                "width": 239,
                 "height": 44
               },
               "text": "Analisar uma demanda"
@@ -1208,8 +1208,8 @@
                 "top": 490,
                 "bottom": 534,
                 "left": 83,
-                "right": 325,
-                "width": 242,
+                "right": 322,
+                "width": 239,
                 "height": 44
               }
             }
@@ -1405,8 +1405,8 @@
                 "top": 490,
                 "bottom": 534,
                 "left": 83,
-                "right": 325,
-                "width": 242,
+                "right": 322,
+                "width": 239,
                 "height": 44
               },
               "text": "Analisar uma demanda"
@@ -1420,8 +1420,8 @@
                 "top": 490,
                 "bottom": 534,
                 "left": 83,
-                "right": 325,
-                "width": 242,
+                "right": 322,
+                "width": 239,
                 "height": 44
               }
             }
@@ -2042,8 +2042,8 @@
                 "top": 490,
                 "bottom": 534,
                 "left": 83,
-                "right": 325,
-                "width": 242,
+                "right": 322,
+                "width": 239,
                 "height": 44
               },
               "text": "Analisar uma demanda"
@@ -2057,8 +2057,8 @@
                 "top": 490,
                 "bottom": 534,
                 "left": 83,
-                "right": 325,
-                "width": 242,
+                "right": 322,
+                "width": 239,
                 "height": 44
               }
             }
@@ -2255,8 +2255,8 @@
                 "top": 493,
                 "bottom": 537,
                 "left": 83,
-                "right": 568,
-                "width": 485,
+                "right": 564,
+                "width": 481,
                 "height": 44
               },
               "text": "Verificar o contrato no diagnóstico de defesa de margem"
@@ -2270,8 +2270,8 @@
                 "top": 493,
                 "bottom": 537,
                 "left": 83,
-                "right": 568,
-                "width": 485,
+                "right": 564,
+                "width": 481,
                 "height": 44
               }
             }
@@ -2295,19 +2295,19 @@
               "selector": "header .eyebrow",
               "box": {
                 "top": 190,
-                "bottom": 229,
+                "bottom": 210,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 39
+                "height": 20
               },
               "text": "Mudanças de escopo sem trabalho gratuito"
             },
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 241,
-                "bottom": 387,
+                "top": 222,
+                "bottom": 368,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2318,8 +2318,8 @@
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 411,
-                "bottom": 541,
+                "top": 392,
+                "bottom": 522,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2330,8 +2330,8 @@
             "proof": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 560,
-                "bottom": 613,
+                "top": 541,
+                "bottom": 594,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2342,8 +2342,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 631,
-                "bottom": 690,
+                "top": 611,
+                "bottom": 671,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2357,8 +2357,8 @@
               "text": "Verificar o contrato no diagnóstico de defesa de margem",
               "href": "/ferramentas/diagnostico-defesa-margem/",
               "box": {
-                "top": 631,
-                "bottom": 690,
+                "top": 611,
+                "bottom": 671,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2458,8 +2458,8 @@
                 "top": 443,
                 "bottom": 489,
                 "left": 83,
-                "right": 633,
-                "width": 550,
+                "right": 609,
+                "width": 526,
                 "height": 47
               },
               "text": "Teste o método antes de contratar: a matriz pública de atraso de obra abre sem cadastro e usa a mesma leitura de causa, responsabilidade e caminho crítico."
@@ -2470,8 +2470,8 @@
                 "top": 489,
                 "bottom": 533,
                 "left": 83,
-                "right": 296,
-                "width": 213,
+                "right": 295,
+                "width": 212,
                 "height": 44
               },
               "text": "Enviar meus dados"
@@ -2485,8 +2485,8 @@
                 "top": 489,
                 "bottom": 533,
                 "left": 83,
-                "right": 296,
-                "width": 213,
+                "right": 295,
+                "width": 212,
                 "height": 44
               }
             }
@@ -2683,8 +2683,8 @@
                 "top": 490,
                 "bottom": 534,
                 "left": 83,
-                "right": 568,
-                "width": 485,
+                "right": 564,
+                "width": 481,
                 "height": 44
               },
               "text": "Verificar o contrato no diagnóstico de defesa de margem"
@@ -2698,8 +2698,8 @@
                 "top": 490,
                 "bottom": 534,
                 "left": 83,
-                "right": 568,
-                "width": 485,
+                "right": 564,
+                "width": 481,
                 "height": 44
               }
             }
@@ -2882,8 +2882,8 @@
                 "top": 443,
                 "bottom": 489,
                 "left": 83,
-                "right": 633,
-                "width": 550,
+                "right": 609,
+                "width": 526,
                 "height": 47
               },
               "text": "Confira o formato antes de contratar: o exemplo sintético de relatório executivo mostra como fato, prova e pedido chegam à direção, sem cadastro."
@@ -2894,8 +2894,8 @@
                 "top": 489,
                 "bottom": 533,
                 "left": 83,
-                "right": 296,
-                "width": 213,
+                "right": 295,
+                "width": 212,
                 "height": 44
               },
               "text": "Enviar meus dados"
@@ -2909,8 +2909,8 @@
                 "top": 489,
                 "bottom": 533,
                 "left": 83,
-                "right": 296,
-                "width": 213,
+                "right": 295,
+                "width": 212,
                 "height": 44
               }
             }
@@ -3065,22 +3065,22 @@
               "selector": "h1",
               "box": {
                 "top": 217,
-                "bottom": 309,
+                "bottom": 263,
                 "left": 83,
                 "right": 923,
                 "width": 840,
-                "height": 92
+                "height": 46
               },
               "text": "Diagnóstico da Operação em Obras Públicas"
             },
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 333,
-                "bottom": 362,
+                "top": 287,
+                "bottom": 316,
                 "left": 83,
-                "right": 831,
-                "width": 748,
+                "right": 798,
+                "width": 715,
                 "height": 29
               },
               "text": "Mapeie onde a frente pública perde tempo, margem e controle."
@@ -3088,8 +3088,8 @@
             "proof": {
               "selector": ".authority-byline",
               "box": {
-                "top": 590,
-                "bottom": 615,
+                "top": 544,
+                "bottom": 570,
                 "left": 83,
                 "right": 1283,
                 "width": 1200,
@@ -3100,11 +3100,11 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 649,
-                "bottom": 693,
+                "top": 603,
+                "bottom": 647,
                 "left": 83,
-                "right": 402,
-                "width": 319,
+                "right": 398,
+                "width": 315,
                 "height": 44
               },
               "text": "Solicitar diagnóstico da operação"
@@ -3115,11 +3115,11 @@
               "text": "Solicitar diagnóstico da operação",
               "href": "/#contato?jornada=operacao",
               "box": {
-                "top": 649,
-                "bottom": 693,
+                "top": 603,
+                "bottom": 647,
                 "left": 83,
-                "right": 402,
-                "width": 319,
+                "right": 398,
+                "width": 315,
                 "height": 44
               }
             }
@@ -3178,8 +3178,8 @@
             "proof": {
               "selector": ".authority-byline",
               "box": {
-                "top": 635,
-                "bottom": 675,
+                "top": 614,
+                "bottom": 654,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3190,8 +3190,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 733,
-                "bottom": 777,
+                "top": 711,
+                "bottom": 755,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3205,8 +3205,8 @@
               "text": "Solicitar diagnóstico da operação",
               "href": "/#contato?jornada=operacao",
               "box": {
-                "top": 733,
-                "bottom": 777,
+                "top": 711,
+                "bottom": 755,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3294,8 +3294,8 @@
                 "top": 443,
                 "bottom": 489,
                 "left": 83,
-                "right": 633,
-                "width": 550,
+                "right": 609,
+                "width": 526,
                 "height": 47
               },
               "text": "Confira o formato antes de contratar: quatro ferramentas públicas e o exemplo sintético de carteira de contratos abrem sem cadastro."
@@ -3306,8 +3306,8 @@
                 "top": 489,
                 "bottom": 533,
                 "left": 83,
-                "right": 296,
-                "width": 213,
+                "right": 295,
+                "width": 212,
                 "height": 44
               },
               "text": "Enviar meus dados"
@@ -3321,8 +3321,8 @@
                 "top": 489,
                 "bottom": 533,
                 "left": 83,
-                "right": 296,
-                "width": 213,
+                "right": 295,
+                "width": 212,
                 "height": 44
               }
             }
@@ -3353,19 +3353,19 @@
               "selector": "h1",
               "box": {
                 "top": 231,
-                "bottom": 359,
+                "bottom": 327,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 128
+                "height": 96
               },
               "text": "Acompanhamento de contratos de obras públicas: rotina preventiva e recorrente"
             },
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 377,
-                "bottom": 463,
+                "top": 345,
+                "bottom": 431,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3376,8 +3376,8 @@
             "proof": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 475,
-                "bottom": 538,
+                "top": 443,
+                "bottom": 506,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3388,8 +3388,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 538,
-                "bottom": 582,
+                "top": 506,
+                "bottom": 550,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3403,8 +3403,8 @@
               "text": "Enviar meus dados",
               "href": "#captura-pilar",
               "box": {
-                "top": 538,
-                "bottom": 582,
+                "top": 506,
+                "bottom": 550,
                 "left": 18,
                 "right": 372,
                 "width": 353,
