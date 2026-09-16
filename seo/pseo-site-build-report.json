@@ -1,10 +1,10 @@
 {
   "ok": true,
-  "web_cfg_sha": "d6bd08218e81a5fa82a31c75e0803e74bd551ccf",
+  "web_cfg_sha": "1882dbd986704f9717a60eb5fa0ef4e2e382f87b",
   "manifest_public": ".well-known/pseo-build.json",
   "public_directory": "_site",
-  "public_artifact_hash": "6cf2d0f6507ab5d8b35dbc3aa5fb6f3b33f3406757174a800fb52f40bad58a4a",
-  "manifest_hash": "655779dd2841d9dee6a8381890d2223a105a6692e7b3f58ba7f83ab2b6fc5b9a",
+  "public_artifact_hash": "817a8e2bc9721923d2abb30843b67541ab6f57165b1520a4ae1002524dfe0024",
+  "manifest_hash": "4bc1a37c217011065c65163d0e4fbe2a3bbd4d1acf141c3b09d930c965ed9641",
   "reproducible_manifest": ".well-known/build-manifest.json",
   "build_summary": {
     "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
@@ -47,8 +47,8 @@
     "configured": true,
     "context": "production",
     "target": "index.html",
-    "capture_files": 25,
-    "injected_files": 25
+    "capture_files": 31,
+    "injected_files": 31
   },
   "responsive_html": {
     "files": 234,
