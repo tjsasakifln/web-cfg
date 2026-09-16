@@ -207,7 +207,7 @@ def derive(source: dict[str, Any]) -> dict[str, Any]:
         },
         {
             "id": "Q-CTR-01",
-            "description_pt_br": "Contrpiso de regularização",
+            "description_pt_br": "Contrapiso de regularização",
             "unit": "m3",
             "quantity": _dec_str(screed_vol, 4),
             "formula": f"{_dec_str(floor_area, 2)}*{_dec_str(screed_t, 2)}",

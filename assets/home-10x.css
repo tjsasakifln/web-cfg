@@ -55,7 +55,7 @@ body[data-content-cluster="home"] .corporate-section-head{margin-bottom:clamp(1.
 .situation-row h3{margin:0 0 .4rem;max-width:30ch}
 .situation-row p{max-width:62ch;margin:0;color:var(--text)}
 .situation-row p+p{margin-top:.35rem}
-.situation-row .situation-use{font-size:var(--text-small);line-height:1.5}
+.situation-row .situation-use{font-size:1rem;line-height:1.5}
 .situation-row .situation-use strong{margin-right:.35rem;color:var(--green-700);font-stretch:var(--narrow);font-size:var(--text-small);letter-spacing:.06em;text-transform:uppercase}
 .situation-support{display:inline-block;margin-top:.5rem;font-size:var(--text-small);font-weight:720;color:var(--ink)}
 .situation-action{display:inline-flex;align-items:center;gap:.5rem;min-height:44px;align-self:center;color:var(--ink);font-weight:720;white-space:nowrap;text-decoration:none}
@@ -66,11 +66,13 @@ body[data-content-cluster="home"] .corporate-section-head{margin-bottom:clamp(1.
 .situation-row--b2g p{color:var(--dark-muted)}
 .situation-row--b2g .situation-index,.situation-row--b2g .situation-kicker,.situation-row--b2g .situation-use strong,.situation-row--b2g .situation-action .icon{color:var(--dark-accent)}
 .situation-row--b2g .situation-action:hover{color:var(--dark-accent)}
-.chooser-more{display:grid;gap:1rem;margin:1.5rem 0 0}
+.chooser-more{display:grid;gap:1.5rem;margin:1.5rem 0 0}
 .chooser-more>p{margin:0}
-.chooser-ask{max-width:68ch;padding:1rem 0 0;border-top:1px solid var(--rule);color:var(--text);font-size:var(--text-small);line-height:1.6}
-.chooser-ask strong{display:block;margin-bottom:.25rem;color:var(--ink);font-size:1rem}
-.chooser-ask a{color:var(--ink);font-weight:720}
+.chooser-ask{display:grid;grid-template-columns:minmax(0,1fr);gap:1rem 3rem;padding:1.5rem 0 0;border-top:1px solid var(--rule-strong);color:var(--text)}
+.chooser-ask h3{margin:0 0 .5rem;max-width:28ch}
+.chooser-ask p{margin:0;max-width:60ch;font-size:1rem;line-height:1.55}
+.chooser-ask__actions{display:flex;flex-wrap:wrap;align-items:center;gap:.75rem 1.5rem}
+@media (min-width:900px){.chooser-ask{grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);align-items:center}}
 @media (max-width:899px){
   .situation-row{grid-template-columns:2.25rem minmax(0,1fr);gap:.5rem 1rem;padding:1.15rem 0}
   .situation-row .situation-action{grid-column:2;justify-content:flex-start;white-space:normal}

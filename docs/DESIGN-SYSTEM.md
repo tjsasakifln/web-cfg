@@ -57,11 +57,11 @@ Registro em `data/site/design-system.json#direction` e na campanha `docs/campaig
 
 | Classe | Unidade de conteúdo |
 | --- | --- |
-| `.hero-grid`, `.split`, `.split--even`, `.grid-2`, `.grid-3`, `.capture-grid` | Grades de abertura, duas colunas e captura |
+| `.hero-grid`, `.split`, `.split--even`, `.grid-2`, `.capture-grid` | Grades de abertura, duas colunas e captura |
 | `.proof-figure` (+ `__sheet`, `figcaption`, `--pair`) e `.tag` | Desenho técnico como evidência, sempre rotulado |
-| `.aside-note` (+ `--soft`) | "Em 30 segundos", "Quem assina": uma caixa, sem sombra |
+| `.aside-note` | "Em 30 segundos", "Quem assina": uma caixa, sem sombra |
 | `.list-ruled` (+ `__index`, `__kicker`, `__use`, `__action`, `li.is-dark`) | Situações e serviços em linhas regradas |
-| `.steps` (+ `--dark`), `.phases` (+ `__when`) | Sequência numerada; antes / durante / entrega |
+| `.steps`, `.phases` (+ `__when`) | Sequência numerada; antes / durante / entrega |
 | `.keys` | Faixa de metadados da prova |
 | `.table-scroll` + `.data-table` + `.table-hint`, `.calc` | Tabela real com rolagem própria; memória de cálculo |
 | `.card`, `.panel`, `.dark-block`, `.section--soft` | Só onde há unidade de conteúdo real; um bloco escuro por página |

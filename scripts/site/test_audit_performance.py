@@ -392,7 +392,10 @@ def test_real_tree_ships_only_the_declared_webfont_and_stays_inside_every_budget
     declared_gzip = report["per_route"]["font_total_gzip_budget_kb"]
     assert report["per_route"]["font_files_total"] <= declared_files
     assert report["per_route"]["font_gzip_kb_max_route"] <= declared_gzip
-    assert len(report["font_routes"]) <= declared_files, report["font_routes"]
+    # Since 2026-09-16 the declared face ships in styles.css, so every route
+    # carries it: the census is bounded per route (files and gzip), never by
+    # how many routes may declare the font.
+    assert all(row["font_files"] <= declared_files for row in report["font_routes"]), report["font_routes"]
     for route in report["font_routes"]:
         assert route["font_files"] <= declared_files, route
         assert all(
