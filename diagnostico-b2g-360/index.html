@@ -13,6 +13,7 @@
 <link href="/manifest.webmanifest" rel="manifest"/>
 <script>document.documentElement.classList.replace('no-js','js');</script>
 <link href="/styles.css" rel="stylesheet"/>
+<link rel="stylesheet" href="/styles-offers.css">
 <script defer="" src="/script.js?v=fortune01"></script>
 <meta content="website" property="og:type"/>
 <meta content="pt_BR" property="og:locale"/>
@@ -66,7 +67,7 @@
 <p class="authority-byline">Responsável técnico: <a href="/especialista/tiago-jun-sasaki/">Engº Tiago Sasaki</a> · Atualizado em <time datetime="2026-08-01">1 de agosto de 2026</time> · <a href="/triagem-tecnica/#corrigir-o-site">Encontrou um erro?</a></p>
 <ul class="hero-proof" aria-label="Credenciais e posicionamento"><li><span class="proof-mark" aria-hidden="true">·</span><span>Plano executivo de 90 dias</span></li><li><span class="proof-mark" aria-hidden="true">·</span><span>Mapa de maturidade da operação</span></li></ul>
 <div class="hero-actions">
-<a class="button button-primary button-lg" data-offer-id="diagnostico-b2g-360" data-cta-position="offer_hero" data-event-name="offer_cta_click" data-journey="operacao" href="/#contato?jornada=operacao">Solicitar diagnóstico da operação <svg class="icon"><use href="#i-arrow"></use></svg></a>
+<a class="button button-primary button-lg" data-offer-id="diagnostico-b2g-360" data-cta-position="offer_hero" data-event-name="offer_cta_click" data-journey="operacao" href="#captura-pilar">Solicitar diagnóstico da operação <svg class="icon"><use href="#i-arrow"></use></svg></a>
 <a class="text-link" data-journey="operacao" href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20solicitar%20o%20Diagn%C3%B3stico%20da%20Opera%C3%A7%C3%A3o%20em%20Obras%20P%C3%BAblicas." rel="noopener" target="_blank">WhatsApp <svg class="icon"><use href="#i-whatsapp"></use></svg></a>
 </div>
 </div>
@@ -209,7 +210,7 @@
 <p>A conversa inicial define o escopo, os documentos necessários e o prazo do diagnóstico.</p>
 <div class="hero-actions">
 <a class="button button-primary button-lg" data-offer-id="diagnostico-b2g-360" data-cta-position="offer_final" data-event-name="offer_cta_click" href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20solicitar%20o%20Diagn%C3%B3stico%20da%20Opera%C3%A7%C3%A3o%20em%20Obras%20P%C3%BAblicas%20para%20mapear%20oportunidades%2C%20margem%20e%20controle%20da%20nossa%20opera%C3%A7%C3%A3o." rel="noopener" target="_blank">Solicitar diagnóstico da operação</a>
-<a class="button button-light button-lg" href="/#contato">Solicitar diagnóstico da operação</a>
+<a class="button button-light button-lg" href="#captura-pilar">Descrever a operação nesta página</a>
 </div>
 </div></section>
 
@@ -230,6 +231,11 @@
     </div>
   </div>
 </section>
+<section class="section pillar-capture" id="captura-pilar"><div class="container pillar-capture-grid"><div class="pillar-capture-copy"><p class="eyebrow">Próximo passo</p><h2>Descreva a operação em obras públicas sem sair desta página</h2><p>Envie o contexto mínimo: quantos contratos públicos a empresa opera, onde a margem se perde hoje e a decisão que está na mesa. A resposta diz que diagnóstico cabe e o que falta reunir. Este formulário não conclui contratação nem promete resultado.</p><p>Prefere falar direto? O WhatsApp e o e-mail desta página continuam abertos; o formulário só evita repetir o contexto.</p></div><form class="pillar-capture-form" name="diagnostico-confenge" method="post" action="/.netlify/functions/lead" data-offer-id="" data-cta-id="diagnostico-b2g-360-handraise" data-asset-id="diagnostico-b2g-360" data-route-family="diagnostico-b2g-360" data-cta-position="pillar_capture" data-form-contract="next-state/v1" data-next-state-profile="service_fit_review" data-runtime-profile="shared_lead_form_v1" data-receipt-required="true"><p class="form-hint" data-form-value>Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.</p>
+<p class="form-hint" data-field-purpose>Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.</p>
+<input type="hidden" name="offer_id" value=""><input type="hidden" name="terms_id" value=""><input type="hidden" id="jornada-hidden" name="jornada" value="operacao"><input type="hidden" id="estagio" name="estagio" value="diagnostico-b2g-360"><input type="hidden" name="origem" value="diagnostico-b2g-360"><input type="hidden" name="asset_id" value="diagnostico-b2g-360"><input type="hidden" name="cta_id" value="diagnostico-b2g-360-handraise"><input type="hidden" name="route_family" value="diagnostico-b2g-360"><input type="hidden" name="landing_page" value="https://confenge.com.br/diagnostico-b2g-360/"><label>Nome do representante <input id="nome" name="nome" required autocomplete="name"></label><label>Empresa <input id="empresa" name="empresa" autocomplete="organization"></label><label>E-mail profissional <input id="email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="180" pattern="[^@\s]+@[^@\s]+\.[A-Za-z]{2,}" title="Informe um e-mail completo, como nome@empresa.com.br."></label><label>WhatsApp <input id="telefone" name="telefone" inputmode="tel" autocomplete="tel" type="tel" maxlength="20" pattern="(\+?55[\s.\-]?)?\(?\d{2}\)?[\s.\-]?9?\d{4}[\s.\-]?\d{4}" title="Informe DDD e número, com 10 ou 11 dígitos."></label><label>Contexto <textarea id="mensagem" name="mensagem" rows="4" maxlength="2000" placeholder="Contratos públicos em carteira, onde a margem se perde hoje e a decisão em pauta."></textarea></label><label class="capture-consent"><input type="checkbox" name="consentimento" value="1" required> Autorizo o uso destes dados para retorno sobre o diagnóstico da operação.</label><button class="button button-primary" type="submit">Descrever a operação</button><p class="form-status" role="status" aria-live="polite"></p>
+<p class="form-hint" data-form-boundary>O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da <a href="/privacidade/">Política de Privacidade</a>, com o protocolo.</p>
+</form></div></section>
 <section class="authority-method container" id="metodo" data-surface-type="oferta">
 <p>Autor institucional: CONFENGE · Responsável técnico: <a href="/especialista/tiago-jun-sasaki/">Engº Tiago Sasaki</a> · Referência: <time datetime="2026-08-01">1 de agosto de 2026</time></p>
 <p>Método: mapear capacidade, carteira, decisão avançar/recusar, riscos e gargalos de evidência; entregar diagnóstico executivo e plano de 90 dias.</p>
@@ -243,7 +249,7 @@
   <h2>Quando o problema é a carteira, não um contrato isolado</h2>
   <p>Se vários contratos públicos perdem margem por rotina frágil de gestão, o Diagnóstico da Operação em Obras Públicas mapeia onde o risco se concentra antes de abrir pleitos pontuais sem prioridade.</p>
   <div class="hero-actions">
-    <a class="button button-primary" data-cta-position="pillar_bridge" href="/?origem=/diagnostico-b2g-360#contato">Pedir diagnóstico da operação</a>
+    <a class="button button-primary" data-cta-position="pillar_bridge" href="#captura-pilar">Pedir diagnóstico da operação</a>
     <a class="button button-secondary" data-cta-position="pillar_bridge" href="/conteudos/">Ver conteúdos de apoio</a>
   </div>
 </div>

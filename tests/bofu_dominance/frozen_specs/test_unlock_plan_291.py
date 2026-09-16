@@ -46,9 +46,13 @@ def test_plan_covers_exactly_the_six_protected_pillars():
     assert set(PLAN["protected_pillars"]) == expected == set(PROPOSED["pillars"])
     assert PLAN["capture"]["current_total"] == len(expected) == 6
     snapshots = snapshot_six(ROOT)
+    # 2026-09-16: decisao do fundador (EXECUTE_NOW, #61) -- os seis pilares
+    # passaram a publicar captura on-page; a cobertura registrada tem de
+    # continuar igual a observada nos snapshots (antes 0, agora 6).
     assert PLAN["capture"]["current_coverage"] == sum(
         item["cta"]["form_count"] > 0 for item in snapshots
-    ) == 0
+    ) == 6
+    assert PLAN["capture"]["authorization"]["decision_state"] == "EXECUTE_NOW"
     residual = PLAN["structured_data_residual"]
     residual_snapshot = next(
         item for item in snapshots if item["slug"] == residual["pillar"]
