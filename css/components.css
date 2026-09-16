@@ -121,7 +121,7 @@
 .data-table th{color:var(--ink);font-weight:750;font-stretch:var(--narrow);letter-spacing:.04em;text-transform:uppercase;font-size:var(--text-micro);background:var(--soft);border-bottom:1px solid var(--rule-strong)}
 .data-table td.num,.data-table th.num{text-align:right;white-space:nowrap}
 .data-table tr.is-highlight td{background:var(--green-100);font-weight:600}
-.data-table code{white-space:nowrap}
+.data-table code{overflow-wrap:anywhere}
 .calc{list-style:none;margin:0;padding:0;border-top:1px solid var(--rule);max-width:34rem;font-variant-numeric:tabular-nums}
 .calc li{display:flex;justify-content:space-between;gap:1rem;padding:.55rem 0;border-bottom:1px solid var(--rule);font-size:var(--text-small)}
 .calc li span:last-child{white-space:nowrap;font-weight:600;color:var(--ink)}
@@ -166,6 +166,7 @@
 .breadcrumbs a{color:var(--muted)}
 .breadcrumbs a:hover{color:var(--ink)}
 .breadcrumbs li{white-space:nowrap}
+.breadcrumbs li[aria-current]{white-space:normal;min-width:0;max-width:100%}
 .breadcrumbs [aria-current=page]{color:var(--ink);font-weight:500}
 
 /* Footer: four discovery blocks on wide screens, two on tablets ------------- */
