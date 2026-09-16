@@ -3229,6 +3229,21 @@
         },
         {
           "cta_id": "",
+          "position": "",
+          "href": "#contato",
+          "stage": "register_context",
+          "commitment": "medium",
+          "current_label": "Use o formulário no fim da página",
+          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da página de confirmação",
+          "field_purpose": "not_applicable",
+          "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem apenas por canal seguro combinado depois do protocolo.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "",
           "position": "contact_band",
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20explicar%20uma%20situa%C3%A7%C3%A3o%20t%C3%A9cnica%20e%20entender%20o%20pr%C3%B3ximo%20passo.",
           "stage": "talk",
@@ -3255,21 +3270,6 @@
           "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem apenas por canal seguro combinado depois do protocolo.",
           "event_semantics": [
             "email_click"
-          ]
-        },
-        {
-          "cta_id": "",
-          "position": "",
-          "href": "#contato",
-          "stage": "register_context",
-          "commitment": "medium",
-          "current_label": "Use o formulário no fim da página",
-          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
-          "actual_receipt": "lead_id ou receipt_id persistido antes da página de confirmação",
-          "field_purpose": "not_applicable",
-          "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem apenas por canal seguro combinado depois do protocolo.",
-          "event_semantics": [
-            "no_direct_event_declared"
           ]
         },
         {
