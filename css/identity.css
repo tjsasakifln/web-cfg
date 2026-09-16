@@ -20,23 +20,26 @@
   line-gap-override:0%;
 }
 /* The wdth axis has no local equivalent: headings run at 96% and labels at 78%
- * of the normal width, so their fallbacks scale the advance widths the same
- * way (size-adjust × stretch) and keep line breaks stable while the woff2 is
+ * of the normal width and render bold, so their fallbacks are calibrated
+ * against Liberation Sans Bold with fontTools (wght 760/wdth 96 = 97.8%,
+ * wght 750/wdth 78 = 81.9%) and keep line breaks stable while the woff2 is
  * late. Heights come from explicit unitless line-heights. */
 @font-face{
   font-family:"Archivo Fallback Wide";
-  src:local("Arial"),local("Liberation Sans"),local("Helvetica"),local("Helvetica Neue");
-  size-adjust:94.6%;
-  ascent-override:92.8%;
-  descent-override:22.2%;
+  src:local("Arial Bold"),local("Arial-BoldMT"),local("Liberation Sans Bold"),local("LiberationSans-Bold"),local("Helvetica Bold"),local("Helvetica-Bold");
+  font-weight:100 900;
+  size-adjust:95.2%;
+  ascent-override:89.77%;
+  descent-override:21.47%;
   line-gap-override:0%;
 }
 @font-face{
   font-family:"Archivo Fallback Narrow";
-  src:local("Arial"),local("Liberation Sans"),local("Helvetica"),local("Helvetica Neue");
-  size-adjust:76.9%;
-  ascent-override:114.2%;
-  descent-override:27.3%;
+  src:local("Arial Bold"),local("Arial-BoldMT"),local("Liberation Sans Bold"),local("LiberationSans-Bold"),local("Helvetica Bold"),local("Helvetica-Bold");
+  font-weight:100 900;
+  size-adjust:81.9%;
+  ascent-override:107.2%;
+  descent-override:25.6%;
   line-gap-override:0%;
 }
 body{font-family:var(--sans);font-variant-numeric:tabular-nums slashed-zero;color:var(--text);background:var(--white)}

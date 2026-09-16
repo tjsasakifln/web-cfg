@@ -165,7 +165,8 @@
 .breadcrumbs ol{display:flex;flex-wrap:wrap;gap:.35rem .5rem;margin:0;padding:0;list-style:none;font-size:.875rem;color:var(--muted)}
 .breadcrumbs a{color:var(--muted)}
 .breadcrumbs a:hover{color:var(--ink)}
-.breadcrumbs [aria-current=page]{color:var(--ink);font-weight:600}
+.breadcrumbs li{white-space:nowrap}
+.breadcrumbs [aria-current=page]{color:var(--ink);font-weight:500}
 
 /* Footer: four discovery blocks on wide screens, two on tablets ------------- */
 .footer-top{display:grid;grid-template-columns:minmax(0,1fr);gap:2rem}
