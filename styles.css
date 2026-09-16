@@ -1056,8 +1056,8 @@ h4{font-size:1rem;font-weight:720;line-height:1.3;margin:0 0 var(--space-2)}
 .hero-secondary{display:inline-flex;align-items:center;gap:.35rem;min-height:44px;font-weight:720;color:var(--ink);text-decoration:underline;text-underline-offset:.2em}
 .hero-secondary:hover{color:var(--green-700)}
 .hero-secondary .icon,.text-link .icon,.list-ruled__action .icon{width:1em;height:1em;color:var(--green-700)}
-.hero-proof{display:flex;flex-wrap:wrap;gap:.35rem 1.5rem;margin:0;padding:.75rem 0 0;border-top:1px solid var(--rule);list-style:none}
-.hero-proof li{font-size:var(--text-small);line-height:1.45;color:var(--muted)}
+.hero-proof{display:flex;flex-wrap:wrap;gap:.35rem 1.25rem;margin:0;padding:.75rem 0 0;border-top:1px solid var(--rule);list-style:none}
+.hero-proof li{display:flex;align-items:flex-start;gap:.35rem;padding:0;font-size:var(--text-small);line-height:1.45;color:var(--muted)}
 .hero-proof a,.hero p a,.hero-lead a,.hero-deliverable a,.section-lead a,.section-proof a,.chooser-ask a,.contact-copy a,.dark-block p a,.dark-block li a,.corporate-triage p a{color:inherit;font-weight:700;text-decoration:underline;text-underline-offset:.2em;text-decoration-thickness:1px}
 .hero-proof a:hover,.section-lead a:hover,.chooser-ask a:hover{color:var(--green-700)}
 .proof-mark{color:var(--green-700);margin-right:.35rem}

@@ -15,6 +15,9 @@ body[data-content-cluster="home"]{
 }
 body[data-content-cluster="home"] main{overflow-x:clip}
 body[data-content-cluster="home"] .hero-copy{padding:0}
+body[data-content-cluster="home"] .hero-actions{margin-bottom:.6rem}
+body[data-content-cluster="home"] .hero-proof{padding-top:.5rem;gap:.3rem 1.1rem}
+body[data-content-cluster="home"] .hero-proof li{gap:.3rem}
 
 /* ── 1. Primeira dobra: tese à esquerda, desenho demonstrativo à direita ── */
 body[data-content-cluster="home"] .hero{padding:clamp(1.5rem,3vw,3rem) 0 clamp(1.5rem,3vw,2.75rem)}
@@ -29,7 +32,7 @@ body[data-content-cluster="home"] .hero-figure svg{max-height:380px}
 body[data-content-cluster="home"] .hero-figure figcaption{max-width:none}
 body[data-content-cluster="home"] .hero-figure .tag{margin-bottom:.35rem}
 @media (min-width:900px){
-  body[data-content-cluster="home"] .home-hero-grid{grid-template-columns:minmax(0,1.12fr) minmax(320px,.88fr)}
+  body[data-content-cluster="home"] .home-hero-grid{grid-template-columns:minmax(0,1.22fr) minmax(300px,.78fr)}
   body[data-content-cluster="home"] .hero-figure{justify-self:end;width:100%}
 }
 @media (max-width:899px){
