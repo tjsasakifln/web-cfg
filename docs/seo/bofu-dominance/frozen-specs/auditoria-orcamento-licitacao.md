@@ -27,7 +27,7 @@ Encontrar itens que concentram risco de preço/BDI/referência e conhecer a marg
 | robots | index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1 |
 | schema | Organization, Country, ContactPoint, Person, CollegeOrUniversity, CollectionPage, WebSite, ItemList, ListItem, Service, BreadcrumbList, FAQPage, Question, Answer |
 | og:title | Auditoria de orçamento, BDI, SINAPI e preço | CONFENGE |
-| content_sha256 | `fba0c9a153707b624db89604b38f19da991008a2daa2df45899aba67cac30d15` |
+| content_sha256 | `ef157a7cdbbc1ab1764e9af6a061eb18b9a9d053f5b10cb409a9779ba1d53a5b` |
 | hero CTA | Analisar uma demanda → `https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20revisar%20pre%C3%A7o%2C%20BDI%20e%20risco%20de%20uma%20licita%C3%A7%C3%A3o%20de%20obra.` |
 | when-not-to-hire | True |
 
