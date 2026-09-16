@@ -1,9 +1,9 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-09-16T07:44:54.400Z",
+  "measured_at": "2026-09-16T08:10:54.701Z",
   "measured_on": "2026-09-16",
-  "commit_sha": "02eaff58bea60301fa2b5431fb8b8d209af4cf8c",
+  "commit_sha": "476b6f94e468c4115d3bd61c6b5a9fd39a021115",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "f168038814087e1b365d1de3042af9a3f3364743756e104711fecc0fb9fe7477",
@@ -13,7 +13,7 @@
     "aditivos-obras-publicas/index.html": "320404c47916843c96bd060313d9c67afb0c9201cf18b286b0c7aa14cd11f7ef",
     "assets/archivo-var-latin-bf6e041e.woff2": "bf6e041e98b0fa244d965027e9f2b6ed53470ed95f2227615510a08a67ea7f4a",
     "assets/eight-offer-contract.css": "d2aead054169392b26c739ab4d95c8b2f651a66c9d6ac27aa7fd98bdafc4f79d",
-    "assets/home-10x.css": "039de2217b46c91d1a338fbc4e265bc83bf2e0841723e8904242a7df2099781b",
+    "assets/home-10x.css": "4ff8e2b64e0f5ca8af4d20bf75f6bab4284ad9b00b0beb929c25df90717ba33f",
     "assets/report-capture.css": "669b93f113f417ba6a8175d9d0ab0dd846a19e991245ad9f2f1ebea48d8c0552",
     "assets/report-model-a11y-v293.css": "148fb54ad084edad56eff48e6b635e2df177e8679a724d50e2e92a88421fddce",
     "assets/report-model.css": "22e499881491794e227ba5bf3ad5e42032410221bb749b631a5501601e6fc853",
@@ -44,7 +44,7 @@
     "diretoria-b2g/index.html": "b708c947f0a04039dfb4571bf3197b8ceff50c30b3634db47cb646d615bffa46",
     "entregas/index.html": "a97308da3c5edbb2eeb15c8a1c66a5b93c31d3d64c3b94d7f06f5f245f57eb1d",
     "entregas/styles.css": "7886b4de52d324286c255ecfe9bf93e5ea43d5a692ee170e3e4f6a6d8b8915a0",
-    "index.html": "024c82718474d27a87adc011934a3eb633b286cefc5de6a598af3f52bfbd375e",
+    "index.html": "169749782db9af08f865c2e5a3a8994c94053640c1b3c306411e4f93ac8a25ad",
     "medicoes-glosas-obras-publicas/index.html": "f689d2225ffab5927567eacbd2a6ad2e22bfc452ee05fbe2b35a93a3873ee29e",
     "problemas-que-resolvemos/index.html": "b0d2f95d54e5248364e5a841bb5cbbf1215de6ff16b0b6551ba26e4f64b458a2",
     "reequilibrio-obras-publicas/index.html": "e30f2b2856a9301939fc422886e19e420b20169337b782ee589143836cd9c3f0",
@@ -54,7 +54,7 @@
     "styles-offers.css": "c2f8df37099b9aec101e15a2fb1b0795ede23a7c2c36bd8adbdef0a191213e1d",
     "styles-tokens.css": "181b1f0e5027af847f9e31f86d7019c0efc209bac2d8a5012e97289c1a541288",
     "styles-tools.css": "8c42a4b5fadba13e4dae52bd7168c64b9f5548f3fd3f8d4f0707ce4e9463c7ba",
-    "styles.css": "1dea85c2b3d2d1230eee2269cdd0b918a879cf05325034321b5b44654314df53"
+    "styles.css": "f61067d5be5775e88cf92a7cbb39cd3fa52441a59b38d141bd195ed8e2089d73"
   },
   "surface": "source",
   "artifact_identity": null,
@@ -101,7 +101,7 @@
   "routes": [
     {
       "route": "/",
-      "html_sha256": "024c82718474d27a87adc011934a3eb633b286cefc5de6a598af3f52bfbd375e",
+      "html_sha256": "169749782db9af08f865c2e5a3a8994c94053640c1b3c306411e4f93ac8a25ad",
       "measured_on": "2026-09-16",
       "viewports": {
         "1366x768": {
@@ -113,8 +113,8 @@
                 "top": 124,
                 "bottom": 144,
                 "left": 83,
-                "right": 724,
-                "width": 641,
+                "right": 782,
+                "width": 699,
                 "height": 20
               },
               "text": "Engenharia, Perícias e Inteligência Técnica"
@@ -137,8 +137,8 @@
                 "top": 362,
                 "bottom": 477,
                 "left": 83,
-                "right": 724,
-                "width": 641,
+                "right": 743,
+                "width": 660,
                 "height": 115
               },
               "text": "Comparar propostas de obra, completar ou conferir um projeto, entender uma infiltração, avaliar um imóvel ou responder a uma glosa: em obra pública ou privada, levantamos, calculamos, conferimos e assumimos a responsabilidade técnica."
@@ -146,12 +146,12 @@
             "proof": {
               "selector": ".hero-proof",
               "box": {
-                "top": 693,
-                "bottom": 752,
+                "top": 687,
+                "bottom": 741,
                 "left": 83,
-                "right": 724,
-                "width": 641,
-                "height": 59
+                "right": 782,
+                "width": 699,
+                "height": 54
               },
               "text": "·Engenharia Civil pela EESC-USP ·CNPJ 52.407.089/0001-09 ·Como conferir credenciais e limites"
             },
