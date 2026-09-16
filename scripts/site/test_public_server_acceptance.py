@@ -1435,6 +1435,45 @@ def test_a_returning_managed_prefix_that_changes_the_policy_is_rejected():
     assert any(e.startswith("robots_policy_directive_conflict") for e in report["errors"]), report["errors"]
 
 
+_MANAGED_END = b"# END Cloudflare Managed Content"
+
+
+def _inside_managed_block(extra: bytes) -> bytes:
+    """Prefixo conhecido com um grupo a mais DENTRO dos marcadores (o contrato de
+    bytes continua passando; so a politica pode reprovar)."""
+    return _MANAGED_PREFIX.replace(_MANAGED_END, extra + b"\n" + _MANAGED_END) + _PACKAGE_ROBOTS.read_bytes()
+
+
+@pytest.mark.skipif(not _PACKAGE_ROBOTS.is_file(), reason="pacote nao construido")
+def test_a_longer_allow_for_a_denied_crawler_is_structural_injection_not_a_sampling_gap():
+    """Amostra de 18 caminhos nao ve um Allow mais longo (RFC 9309 2.2.2 faria
+    'Allow: /*.html$' vencer 'Disallow: /' em todo HTML). A negacao e estrutural:
+    qualquer Allow no grupo de um rastreador negado reprova."""
+    body = _inside_managed_block(b"User-agent: GPTBot\nAllow: /*.html$\n")
+    assert acceptance.robots_edge_contract(body, _PACKAGE_ROBOTS.read_bytes())[0] is True
+    report = acceptance.verify_robots_policy(body)
+    assert report["ok"] is False
+    assert any(e.startswith("robots_denied_crawler_allow_injected") for e in report["errors"]), report["errors"]
+    assert report["denied_crawler_allows"] == [{"agent": "GPTBot", "rule": "allow:/*.html$"}]
+
+
+@pytest.mark.skipif(not _PACKAGE_ROBOTS.is_file(), reason="pacote nao construido")
+def test_a_conflicting_content_signal_anywhere_in_the_body_is_rejected():
+    """ai-train=yes no grupo de um buscador ou fora de qualquer grupo tambem e
+    politica que ninguem aprovou; o conflito nao fica restrito ao grupo '*'."""
+    in_other_group = _inside_managed_block(
+        b"User-agent: bingbot\nContent-Signal: search=yes,ai-train=yes,use=full\nAllow: /\n"
+    )
+    report = acceptance.verify_robots_policy(in_other_group)
+    assert report["ok"] is False
+    assert any(e.startswith("robots_policy_directive_conflict") for e in report["errors"]), report["errors"]
+    assert {c["agent"] for c in report["conflicting_policy_directives"]} == {"bingbot"}
+    top_level = b"Content-Signal: search=yes,ai-train=yes,use=full\n" + _served_robots()
+    report = acceptance.verify_robots_policy(top_level)
+    assert report["ok"] is False
+    assert any(e.startswith("robots_policy_directive_conflict") for e in report["errors"]), report["errors"]
+
+
 def test_robots_policy_fails_closed_when_the_published_file_has_no_body():
     report = acceptance.verify_robots_policy(None, published=True)
     assert report["ok"] is False
