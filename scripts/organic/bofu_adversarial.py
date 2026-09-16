@@ -20,6 +20,7 @@ from scripts.organic.service_map import (
     map_content_to_service,
 )
 from scripts.site.authority import CORRECTION_CHANNEL_HREF
+from scripts.site.robots_policy import is_allowed, parse_robots
 
 ROOT = Path(__file__).resolve().parents[2]
 MATRIX_PATH = ROOT / "data" / "organic" / "bofu-intent-matrix.json"
@@ -164,16 +165,16 @@ def parse_sitemap_locs(root: Path) -> set[str]:
 
 
 def robots_disallowed(root: Path, path: str) -> bool:
+    """True when the search crawler is blocked from ``path`` (RFC 9309).
+
+    Evaluated for Googlebot with the same engine the public acceptance uses.
+    The file carries per-agent groups (the AI crawlers are denied everywhere
+    since 2026-09-16), so a bare scan of every ``Disallow:`` line would read
+    another agent's ``Disallow: /`` as a block on the search crawler.
+    """
     robots = (root / "robots.txt").read_text(encoding="utf-8")
-    rules: list[str] = []
-    for line in robots.splitlines():
-        stripped = line.strip()
-        if stripped.lower().startswith("disallow:"):
-            rules.append(stripped.split(":", 1)[1].strip())
-    for rule in rules:
-        if rule and path.startswith(rule):
-            return True
-    return False
+    allowed, _rule = is_allowed(parse_robots(robots), "Googlebot", path)
+    return not allowed
 
 
 def catalog_offer_ids(root: Path) -> set[str]:

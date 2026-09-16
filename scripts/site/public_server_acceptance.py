@@ -902,12 +902,27 @@ def verify_robots_policy(
                 })
 
     # As diretivas que nao controlam allow/disallow tambem exprimem politica.
+    # Desde 2026-09-16 a origem versionada as carrega; a borda pode antepor o
+    # bloco gerenciado com o mesmo valor (grupos "*" combinados, RFC 9309
+    # 2.2.1). Um valor DIFERENTE para a mesma diretiva no grupo "*" -- por
+    # exemplo ai-train=yes vindo de uma composicao futura -- e divergencia
+    # material de politica e reprova, em vez de passar porque o valor aprovado
+    # tambem esta presente.
     missing_policy = []
-    signals = parsed.group_policy.get("*", {}).get("content-signal") or []
-    for declared in baseline.get("managed_composition", {}).get("carries_policy", []):
-        value = declared.split(":", 1)[1].strip() if ":" in declared else declared
-        if value not in signals:
+    conflicting_policy = []
+    star_policy = parsed.group_policy.get("*", {})
+    for declared in baseline.get("robots_policy_directives", []) or baseline.get(
+        "managed_composition", {}
+    ).get("carries_policy", []):
+        field, _, value = declared.partition(":")
+        field = field.strip().lower()
+        value = value.strip()
+        served_values = star_policy.get(field) or []
+        if value not in served_values:
             missing_policy.append(declared)
+        for other in served_values:
+            if other != value:
+                conflicting_policy.append({"directive": field, "expected": value, "served": other})
 
     errors: list[str] = []
     if divergences:
@@ -916,6 +931,8 @@ def verify_robots_policy(
         errors.append(f"robots_private_surface_allow_injected:{len(injected_allows)}")
     if missing_policy:
         errors.append(f"robots_policy_directive_absent:{len(missing_policy)}")
+    if conflicting_policy:
+        errors.append(f"robots_policy_directive_conflict:{len(conflicting_policy)}")
     return {
         "schema": "confenge.robots-policy-acceptance/v1",
         "baseline": baseline_path.name,
@@ -923,6 +940,7 @@ def verify_robots_policy(
         "divergences": divergences,
         "injected_allows": injected_allows,
         "missing_policy_directives": missing_policy,
+        "conflicting_policy_directives": conflicting_policy,
         "errors": errors,
         "ok": not errors,
     }

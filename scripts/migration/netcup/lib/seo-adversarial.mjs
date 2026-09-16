@@ -39,8 +39,35 @@ function privateSelectors(contract, robotsText) {
   const selectors = contract.headers
     .filter((rule) => rule.headers.some((header) => header.name.toLowerCase() === "x-robots-tag" && /\bnoindex\b/i.test(header.value)))
     .map((rule) => rule.path);
-  for (const match of robotsText.matchAll(/^\s*Disallow:\s*(\S+)/gim)) selectors.push(match[1].endsWith("/") ? `${match[1]}*` : match[1]);
+  for (const rule of wildcardDisallows(robotsText)) selectors.push(rule.endsWith("/") ? `${rule}*` : rule);
   return [...new Set(selectors)].sort();
+}
+
+// Only the "User-agent: *" groups describe surfaces private to the search
+// crawler. robots.txt also carries per-agent groups (the AI crawlers are denied
+// everywhere since 2026-09-16); reading their "Disallow: /" as a wildcard rule
+// would mark the whole site private.
+function wildcardDisallows(robotsText) {
+  const rules = [];
+  let agents = [];
+  let acceptingAgents = false;
+  for (const raw of robotsText.split(/\r?\n/)) {
+    const line = raw.split("#", 1)[0].trim();
+    if (!line || !line.includes(":")) continue;
+    const field = line.slice(0, line.indexOf(":")).trim().toLowerCase();
+    const value = line.slice(line.indexOf(":") + 1).trim();
+    if (field === "user-agent") {
+      if (!acceptingAgents) agents = [];
+      acceptingAgents = true;
+      agents.push(value.toLowerCase());
+      continue;
+    }
+    if (field === "allow" || field === "disallow") {
+      acceptingAgents = false;
+      if (field === "disallow" && value && agents.includes("*")) rules.push(value);
+    }
+  }
+  return rules;
 }
 
 function selectorMatchesUrl(selector, url) {

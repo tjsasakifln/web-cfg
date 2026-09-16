@@ -5,6 +5,7 @@ import http.client
 import io
 import json
 import os
+import re
 import sys
 import urllib.error
 from email.message import Message
@@ -1373,18 +1374,65 @@ def test_losing_a_live_private_surface_restriction_fails_closed():
 
 
 @pytest.mark.skipif(not _PACKAGE_ROBOTS.is_file(), reason="pacote nao construido")
-def test_turning_off_the_managed_composition_is_caught_as_granting_ai_training():
-    """Contraprova da decisao de MANTER a composicao gerenciada.
+def test_the_origin_alone_satisfies_the_policy_since_it_carries_it():
+    """Desde 2026-09-16 a politica vive na origem versionada.
 
-    Servir so a nossa origem nao e "fonte unica": e conceder rastreio a GPTBot,
-    ClaudeBot, CCBot, Google-Extended e Amazonbot, e perder o Content-Signal
-    ai-train=no, que existe apenas na parcela gerenciada.
+    A resposta publica nao pode depender da borda: sem nenhum prefixo gerenciado
+    (o estado observado em 2026-09-16) o robots.txt do pacote tem de exprimir,
+    sozinho, as 234 decisoes aprovadas e o Content-Signal.
     """
     report = acceptance.verify_robots_policy(_PACKAGE_ROBOTS.read_bytes())
+    assert report["ok"] is True, report
+    assert report["divergences"] == []
+    assert report["missing_policy_directives"] == []
+    assert report["conflicting_policy_directives"] == []
+
+
+@pytest.mark.skipif(not _PACKAGE_ROBOTS.is_file(), reason="pacote nao construido")
+def test_losing_the_ai_crawler_groups_in_the_origin_is_caught_as_granting_ai_training():
+    """Contraprova que substitui a antiga 'desligar a composicao gerenciada'.
+
+    Antes, servir so a origem concedia rastreio de IA porque a negacao existia
+    apenas na parcela gerenciada. Agora a origem a carrega, entao a perda que
+    tem de reprovar e a remocao dos grupos de IA (ou do Content-Signal) do
+    proprio arquivo -- mesma garantia, alvo novo.
+    """
+    origin = _PACKAGE_ROBOTS.read_bytes()
+    stripped = re.sub(rb"User-agent: (?!\*)[^\n]+\nDisallow: /\n", b"", origin)
+    assert stripped != origin
+    report = acceptance.verify_robots_policy(stripped)
     assert report["ok"] is False
     granted = {d["agent"] for d in report["divergences"] if d["served_allowed"]}
     assert {"GPTBot", "ClaudeBot", "CCBot", "Google-Extended", "Amazonbot"} <= granted
+    without_signal = origin.replace(b"Content-Signal: search=yes,ai-train=no,use=reference\n", b"")
+    report = acceptance.verify_robots_policy(without_signal)
+    assert report["ok"] is False
     assert report["missing_policy_directives"]
+
+
+@pytest.mark.skipif(not _PACKAGE_ROBOTS.is_file(), reason="pacote nao construido")
+def test_a_returning_managed_prefix_that_changes_the_policy_is_rejected():
+    """Se a borda voltar a antepor um bloco, ele so passa se disser o MESMO.
+
+    Grupos de mesmo user-agent sao combinados (RFC 9309 2.2.1): um Allow para um
+    rastreador negado empata com o nosso Disallow e vence (2.2.2), e um
+    Content-Signal com outro valor coexistiria com o aprovado. Os dois casos sao
+    divergencia material e reprovam; o prefixo identico ao conhecido passa.
+    """
+    same = acceptance.verify_robots_policy(_served_robots())
+    assert same["ok"] is True, same
+    frees_gptbot = _MANAGED_PREFIX.replace(
+        b"User-agent: GPTBot\nDisallow: /\n", b"User-agent: GPTBot\nAllow: /\n"
+    ) + _PACKAGE_ROBOTS.read_bytes()
+    report = acceptance.verify_robots_policy(frees_gptbot)
+    assert report["ok"] is False
+    assert ("GPTBot", "/") in {(d["agent"], d["path"]) for d in report["divergences"]}
+    grants_training = _MANAGED_PREFIX.replace(
+        b"ai-train=no", b"ai-train=yes"
+    ) + _PACKAGE_ROBOTS.read_bytes()
+    report = acceptance.verify_robots_policy(grants_training)
+    assert report["ok"] is False
+    assert any(e.startswith("robots_policy_directive_conflict") for e in report["errors"]), report["errors"]
 
 
 def test_robots_policy_fails_closed_when_the_published_file_has_no_body():

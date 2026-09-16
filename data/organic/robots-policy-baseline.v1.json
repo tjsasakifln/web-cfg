@@ -4,16 +4,28 @@
   "decision_state": "EXECUTE_NOW",
   "authority": "Politica de rastreio vigente em confenge.com.br. Esta tabela e a EXPECTATIVA aprovada, derivada da politica e da configuracao, nao copiada da resposta que se deseja validar. Mudar a politica exige mudar este arquivo, sob revisao.",
   "managed_composition": {
-    "enabled": true,
-    "provider": "cloudflare-managed-robots",
-    "begin_marker": "# BEGIN Cloudflare Managed content",
-    "end_marker": "# END Cloudflare Managed Content",
-    "note": "A caixa difere entre os marcadores: 'content' minusculo na abertura, 'Content' maiusculo no fechamento.",
-    "why_kept": "O bloco gerenciado carrega politica que nao existe neste repositorio: Content-Signal search=yes,ai-train=no,use=reference e Disallow: / para os rastreadores de IA. Desligar a composicao para obter 'fonte unica' concederia silenciosamente treinamento de IA hoje negado -- mudanca de politica disfarcada de limpeza. A composicao e mantida de proposito, e o contrato de borda exige os bytes de origem integros.",
-    "carries_policy": [
-      "Content-Signal: search=yes,ai-train=no,use=reference"
-    ]
+    "mechanism": "origin-carries-policy",
+    "decided_at": "2026-09-16",
+    "decision_state": "EXECUTE_NOW",
+    "why": "Ate 2026-09-15 a negacao aos rastreadores de IA e o Content-Signal chegavam a resposta publica somente pelo bloco gerenciado que a Cloudflare antepunha ('Managed robots.txt'); o repositorio nao os carregava. Em 2026-09-16 a resposta publica deixou de trazer esse prefixo (medido: 2303 -> 467 bytes, sem cache, em varios User-Agents) e a promocao do release aa12a951e foi revertida pelo aceite publico. A causa na zona nao foi consultada. Por decisao do fundador, a POLITICA (esta tabela) nao muda; o MECANISMO passa a ser a origem versionada: robots.txt carrega o Content-Signal no grupo '*' e um grupo 'Disallow: /' por rastreador de IA nomeado em ai_crawlers_denied_everywhere. A resposta publica deixa de depender da composicao da borda.",
+    "origin_directives_derived_from": [
+      "ai_crawlers_denied_everywhere",
+      "robots_policy_directives"
+    ],
+    "edge_prefix": {
+      "tolerated": true,
+      "required": false,
+      "provider": "cloudflare-managed-robots",
+      "begin_marker": "# BEGIN Cloudflare Managed content",
+      "end_marker": "# END Cloudflare Managed Content",
+      "note": "A caixa difere entre os marcadores: 'content' minusculo na abertura, 'Content' maiusculo no fechamento.",
+      "observed_last_at": "2026-09-15T20:50Z",
+      "rule": "Se o prefixo gerenciado voltar, os grupos de mesmo user-agent sao combinados (RFC 9309 2.2.1) e o resultado efetivo tem de continuar identico a esta tabela; um valor diferente para uma diretiva declarada em robots_policy_directives, ou um Allow que libere um rastreador negado, reprova o aceite publico (robots_policy_directive_conflict / robots_effective_rules_diverged). Os marcadores nunca sao escritos na origem."
+    }
   },
+  "robots_policy_directives": [
+    "Content-Signal: search=yes,ai-train=no,use=reference"
+  ],
   "ai_crawlers_denied_everywhere": [
     "Amazonbot",
     "Applebot-Extended",
