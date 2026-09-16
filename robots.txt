@@ -15,7 +15,6 @@ Disallow: /.netlify/
 Allow: /analises-contratos-publicos/
 Allow: /analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/
 # Contract-analysis family — end
-
 # Politica de rastreio de IA — derivada de data/organic/robots-policy-baseline.v1.json
 # (ai_crawlers_denied_everywhere). Mantida na origem desde 2026-09-16 por decisao do
 # fundador; nao depende da composicao gerenciada da borda.
