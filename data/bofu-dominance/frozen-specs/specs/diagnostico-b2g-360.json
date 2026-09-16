@@ -179,11 +179,41 @@
     ],
     "cta": {
       "hero_text": "Solicitar diagnóstico da operação",
-      "hero_href": "/#contato?jornada=operacao",
+      "hero_href": "#captura-pilar",
       "bridges": [
         {
+          "position": "header_nav",
+          "href": "/servicos/",
+          "text": "Serviços e problemas"
+        },
+        {
+          "position": "header_nav",
+          "href": "/servicos-obras-publicas/",
+          "text": "Obras públicas"
+        },
+        {
+          "position": "header_nav",
+          "href": "/conteudos/",
+          "text": "Biblioteca"
+        },
+        {
+          "position": "mobile_nav",
+          "href": "/servicos/",
+          "text": "Serviços e problemas"
+        },
+        {
+          "position": "mobile_nav",
+          "href": "/servicos-obras-publicas/",
+          "text": "Obras públicas"
+        },
+        {
+          "position": "mobile_nav",
+          "href": "/conteudos/",
+          "text": "Biblioteca"
+        },
+        {
           "position": "offer_hero",
-          "href": "/#contato?jornada=operacao",
+          "href": "#captura-pilar",
           "text": "Solicitar diagnóstico da operação"
         },
         {
@@ -193,7 +223,7 @@
         },
         {
           "position": "pillar_bridge",
-          "href": "/?origem=/diagnostico-b2g-360#contato",
+          "href": "#captura-pilar",
           "text": "Pedir diagnóstico da operação"
         },
         {
@@ -209,10 +239,10 @@
       ],
       "when_not_to_hire": true,
       "whatsapp_present": true,
-      "form_count": 0
+      "form_count": 1
     },
-    "content_sha256": "101b019cb8113967cd7ffd50b07d1011af982ac22dd449aefcc868bff4b79409",
-    "bytes": 21389,
+    "content_sha256": "80c4ea907f25339fd2e774d13194af9883e8c2cb6b1f601d11415e8256f89c5d",
+    "bytes": 25677,
     "noindex": false
   }
 }

@@ -46,6 +46,27 @@ def _service_situations() -> list[dict]:
     return brand
 
 
+def _capture_unfrozen(paths: set[str]) -> set[str]:
+    """Drop pillars whose on-page capture the founder authorized (2026-09-16).
+
+    The hash pin still records every byte, but the freeze that kept the raster
+    title card on these routes ended with that decision: they follow the same
+    coverless article hero as every other route.
+    """
+    import json
+
+    plan_path = ROOT / "data" / "bofu-dominance" / "frozen-specs" / "unlock-plan.v1.json"
+    try:
+        plan = json.loads(plan_path.read_text(encoding="utf-8"))
+    except Exception:  # noqa: BLE001 — absent plan means nothing is unfrozen
+        return paths
+    authorization = (plan.get("capture") or {}).get("authorization") or {}
+    if authorization.get("decision_state") != "EXECUTE_NOW":
+        return paths
+    released = {f"{slug}/index.html" for slug in plan.get("protected_pillars") or []}
+    return paths - released
+
+
 def test_design_system_complete():
     ds = load_ds()
     for key in (
@@ -744,14 +765,14 @@ def _meta_properties(html: str) -> dict[str, str]:
 
 def test_raster_title_covers_are_og_only_outside_frozen_bofu_routes():
     """Remove redundant inline cards without bypassing the #128/#226 freeze."""
-    frozen_bofu = {
+    frozen_bofu = _capture_unfrozen({
         "aditivos-obras-publicas/index.html",
         "auditoria-orcamento-licitacao/index.html",
         "diagnostico-b2g-360/index.html",
         "diagnostico-pre-licitacao/index.html",
         "medicoes-glosas-obras-publicas/index.html",
         "reequilibrio-obras-publicas/index.html",
-    }
+    })
     candidates: list[Path] = []
     frozen_candidates: set[str] = set()
     for path in ROOT.rglob("index.html"):
@@ -1007,7 +1028,10 @@ def test_shipped_pages_use_versioned_proportional_logos():
     """Every mutable page uses the content-addressed payload; frozen pages stay exact."""
     from scripts.bofu_dominance.frozen_specs.constants import FORBIDDEN_RELATIVE_PATHS
 
-    frozen = {rel for rel in FORBIDDEN_RELATIVE_PATHS if rel.endswith(".html")}
+    # Pillars released by the founder's capture decision (2026-09-16) carry the
+    # canonical lockup like every other route; the legacy 800x208 raster is
+    # tolerated only on pages that are still shell-frozen.
+    frozen = _capture_unfrozen({rel for rel in FORBIDDEN_RELATIVE_PATHS if rel.endswith(".html")})
     skip = {
         ".claude",
         ".git",

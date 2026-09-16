@@ -98,6 +98,24 @@ if (
   beforeWeekly.http !== 200 || beforeWeekly.data?.commercial_only !== true
 ) finishEarly("commercial_baseline_unavailable");
 
+// Optional page context (2026-09-16): a published capture form can be proved
+// with the attribution its hidden fields would send, so the durable synthetic
+// record carries the same origem/asset/cta/route_family/jornada/estagio as a
+// real submission from that page. Identity, marker and exclusion are unchanged.
+const pageContext = {};
+for (const [env, field] of [
+  ["PROBE_ORIGEM", "origem"],
+  ["PROBE_ASSET_ID", "asset_id"],
+  ["PROBE_CTA_ID", "cta_id"],
+  ["PROBE_ROUTE_FAMILY", "route_family"],
+  ["PROBE_JORNADA", "jornada"],
+  ["PROBE_ESTAGIO", "estagio"],
+  ["PROBE_LANDING_PAGE", "landing_page"],
+]) {
+  const value = String(process.env[env] || "").trim();
+  if (value && /^[\w./:-]{1,120}$/.test(value)) pageContext[field] = value;
+}
+
 const payload = {
   nome: "SYNTHETIC-PROBE",
   email: "probe@example.com",
@@ -113,6 +131,7 @@ const payload = {
   utm_campaign: "inbound-live-proof",
   landing_page: "/",
   mensagem: "synthetic probe do not contact",
+  ...pageContext,
   test_mode: true,
   record_kind: "synthetic",
   idempotency_key: idem,
@@ -190,6 +209,7 @@ console.log(JSON.stringify({
   state: ok ? "TRANSPORT_READY" : "TRANSPORT_PROOF_FAILED",
   base,
   live_sha: liveSha,
+  page_context: Object.keys(pageContext).length ? pageContext : null,
   receipt_sha256: leadId ? createHash("sha256").update(leadId).digest("hex") : null,
   warmbly: {
     destination_fingerprint: beforeInbound.data?.configuration?.destination_fingerprint || null,

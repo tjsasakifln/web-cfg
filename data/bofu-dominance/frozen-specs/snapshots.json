@@ -34,6 +34,36 @@
         "hero_href": "/ferramentas/diagnostico-defesa-margem/",
         "bridges": [
           {
+            "position": "header_nav",
+            "href": "/servicos/",
+            "text": "Serviços e problemas"
+          },
+          {
+            "position": "header_nav",
+            "href": "/servicos-obras-publicas/",
+            "text": "Obras públicas"
+          },
+          {
+            "position": "header_nav",
+            "href": "/conteudos/",
+            "text": "Biblioteca"
+          },
+          {
+            "position": "mobile_nav",
+            "href": "/servicos/",
+            "text": "Serviços e problemas"
+          },
+          {
+            "position": "mobile_nav",
+            "href": "/servicos-obras-publicas/",
+            "text": "Obras públicas"
+          },
+          {
+            "position": "mobile_nav",
+            "href": "/conteudos/",
+            "text": "Biblioteca"
+          },
+          {
             "position": "pillar_bridge",
             "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20estruturar%20aditivo%20ou%20servi%C3%A7o%20extra%20com%20base%20t%C3%A9cnica%20e%20econ%C3%B4mica.",
             "text": "Enquadrar o evento contratual"
@@ -46,10 +76,10 @@
         ],
         "when_not_to_hire": true,
         "whatsapp_present": true,
-        "form_count": 0
+        "form_count": 1
       },
-      "content_sha256": "320404c47916843c96bd060313d9c67afb0c9201cf18b286b0c7aa14cd11f7ef",
-      "bytes": 31148,
+      "content_sha256": "4de1b69bbd7ec7504c2054dd6f63a50099bd007b284084b3ee54e64c3b3bea64",
+      "bytes": 35142,
       "noindex": false
     },
     {
@@ -84,6 +114,36 @@
         "hero_href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20glosa%20ou%20medi%C3%A7%C3%A3o%20contestada%20e%20preciso%20enquadrar%20a%20posi%C3%A7%C3%A3o%20t%C3%A9cnica.",
         "bridges": [
           {
+            "position": "header_nav",
+            "href": "/servicos/",
+            "text": "Serviços e problemas"
+          },
+          {
+            "position": "header_nav",
+            "href": "/servicos-obras-publicas/",
+            "text": "Obras públicas"
+          },
+          {
+            "position": "header_nav",
+            "href": "/conteudos/",
+            "text": "Biblioteca"
+          },
+          {
+            "position": "mobile_nav",
+            "href": "/servicos/",
+            "text": "Serviços e problemas"
+          },
+          {
+            "position": "mobile_nav",
+            "href": "/servicos-obras-publicas/",
+            "text": "Obras públicas"
+          },
+          {
+            "position": "mobile_nav",
+            "href": "/conteudos/",
+            "text": "Biblioteca"
+          },
+          {
             "position": "pillar_bridge",
             "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20glosa%20ou%20medi%C3%A7%C3%A3o%20contestada%20e%20preciso%20enquadrar%20a%20posi%C3%A7%C3%A3o%20t%C3%A9cnica.",
             "text": "Enquadrar um risco contratual"
@@ -96,10 +156,10 @@
         ],
         "when_not_to_hire": true,
         "whatsapp_present": true,
-        "form_count": 0
+        "form_count": 1
       },
-      "content_sha256": "f689d2225ffab5927567eacbd2a6ad2e22bfc452ee05fbe2b35a93a3873ee29e",
-      "bytes": 33506,
+      "content_sha256": "53bb71bb3edaeae8a325e29d266020a89f5cff72c1be0486c07b19a276a8d3e1",
+      "bytes": 37551,
       "noindex": false
     },
     {
@@ -134,6 +194,36 @@
         "hero_href": "/ferramentas/diagnostico-defesa-margem/",
         "bridges": [
           {
+            "position": "header_nav",
+            "href": "/servicos/",
+            "text": "Serviços e problemas"
+          },
+          {
+            "position": "header_nav",
+            "href": "/servicos-obras-publicas/",
+            "text": "Obras públicas"
+          },
+          {
+            "position": "header_nav",
+            "href": "/conteudos/",
+            "text": "Biblioteca"
+          },
+          {
+            "position": "mobile_nav",
+            "href": "/servicos/",
+            "text": "Serviços e problemas"
+          },
+          {
+            "position": "mobile_nav",
+            "href": "/servicos-obras-publicas/",
+            "text": "Obras públicas"
+          },
+          {
+            "position": "mobile_nav",
+            "href": "/conteudos/",
+            "text": "Biblioteca"
+          },
+          {
             "position": "pillar_bridge",
             "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20enquadrar%20reequil%C3%ADbrio%20econ%C3%B4mico-financeiro%20de%20contrato%20de%20obra%20p%C3%BAblica.",
             "text": "Enquadrar o reequilíbrio"
@@ -146,10 +236,10 @@
         ],
         "when_not_to_hire": true,
         "whatsapp_present": true,
-        "form_count": 0
+        "form_count": 1
       },
-      "content_sha256": "e30f2b2856a9301939fc422886e19e420b20169337b782ee589143836cd9c3f0",
-      "bytes": 24919,
+      "content_sha256": "83485c51f1e86bdac9875e8a437ac2bceac8b83a665d874c5fafcce650205704",
+      "bytes": 28936,
       "noindex": false
     },
     {
@@ -184,6 +274,36 @@
         "hero_href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20revisar%20pre%C3%A7o%2C%20BDI%20e%20risco%20de%20uma%20licita%C3%A7%C3%A3o%20de%20obra.",
         "bridges": [
           {
+            "position": "header_nav",
+            "href": "/servicos/",
+            "text": "Serviços e problemas"
+          },
+          {
+            "position": "header_nav",
+            "href": "/servicos-obras-publicas/",
+            "text": "Obras públicas"
+          },
+          {
+            "position": "header_nav",
+            "href": "/conteudos/",
+            "text": "Biblioteca"
+          },
+          {
+            "position": "mobile_nav",
+            "href": "/servicos/",
+            "text": "Serviços e problemas"
+          },
+          {
+            "position": "mobile_nav",
+            "href": "/servicos-obras-publicas/",
+            "text": "Obras públicas"
+          },
+          {
+            "position": "mobile_nav",
+            "href": "/conteudos/",
+            "text": "Biblioteca"
+          },
+          {
             "position": "pillar_bridge",
             "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20revisar%20pre%C3%A7o%2C%20BDI%20e%20risco%20de%20uma%20licita%C3%A7%C3%A3o%20de%20obra.",
             "text": "Revisar esta oportunidade"
@@ -196,10 +316,10 @@
         ],
         "when_not_to_hire": true,
         "whatsapp_present": true,
-        "form_count": 0
+        "form_count": 1
       },
-      "content_sha256": "444298887697abe1b1bfc24a5e41836013753cc0f22b8db4f48b9df7f15fe397",
-      "bytes": 29461,
+      "content_sha256": "316839d15f48760c17c06510a26e2bf120fc1a80dee24fb6f5d873708d5001b7",
+      "bytes": 33551,
       "noindex": false
     },
     {
@@ -223,11 +343,41 @@
       ],
       "cta": {
         "hero_text": "Solicitar diagnóstico da operação",
-        "hero_href": "/#contato?jornada=operacao",
+        "hero_href": "#captura-pilar",
         "bridges": [
           {
+            "position": "header_nav",
+            "href": "/servicos/",
+            "text": "Serviços e problemas"
+          },
+          {
+            "position": "header_nav",
+            "href": "/servicos-obras-publicas/",
+            "text": "Obras públicas"
+          },
+          {
+            "position": "header_nav",
+            "href": "/conteudos/",
+            "text": "Biblioteca"
+          },
+          {
+            "position": "mobile_nav",
+            "href": "/servicos/",
+            "text": "Serviços e problemas"
+          },
+          {
+            "position": "mobile_nav",
+            "href": "/servicos-obras-publicas/",
+            "text": "Obras públicas"
+          },
+          {
+            "position": "mobile_nav",
+            "href": "/conteudos/",
+            "text": "Biblioteca"
+          },
+          {
             "position": "offer_hero",
-            "href": "/#contato?jornada=operacao",
+            "href": "#captura-pilar",
             "text": "Solicitar diagnóstico da operação"
           },
           {
@@ -237,7 +387,7 @@
           },
           {
             "position": "pillar_bridge",
-            "href": "/?origem=/diagnostico-b2g-360#contato",
+            "href": "#captura-pilar",
             "text": "Pedir diagnóstico da operação"
           },
           {
@@ -253,10 +403,10 @@
         ],
         "when_not_to_hire": true,
         "whatsapp_present": true,
-        "form_count": 0
+        "form_count": 1
       },
-      "content_sha256": "101b019cb8113967cd7ffd50b07d1011af982ac22dd449aefcc868bff4b79409",
-      "bytes": 21389,
+      "content_sha256": "80c4ea907f25339fd2e774d13194af9883e8c2cb6b1f601d11415e8256f89c5d",
+      "bytes": 25677,
       "noindex": false
     },
     {
@@ -291,6 +441,36 @@
         "hero_href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20edital%20em%20an%C3%A1lise%20e%20quero%20avaliar%20se%20vale%20uma%20Opera%C3%A7%C3%A3o%20de%20Proposta%20para%20Licita%C3%A7%C3%A3o%20Cr%C3%ADtica%20ou%20diagn%C3%B3stico%20de%20participa%C3%A7%C3%A3o.",
         "bridges": [
           {
+            "position": "header_nav",
+            "href": "/servicos/",
+            "text": "Serviços e problemas"
+          },
+          {
+            "position": "header_nav",
+            "href": "/servicos-obras-publicas/",
+            "text": "Obras públicas"
+          },
+          {
+            "position": "header_nav",
+            "href": "/conteudos/",
+            "text": "Biblioteca"
+          },
+          {
+            "position": "mobile_nav",
+            "href": "/servicos/",
+            "text": "Serviços e problemas"
+          },
+          {
+            "position": "mobile_nav",
+            "href": "/servicos-obras-publicas/",
+            "text": "Obras públicas"
+          },
+          {
+            "position": "mobile_nav",
+            "href": "/conteudos/",
+            "text": "Biblioteca"
+          },
+          {
             "position": "pillar_bridge",
             "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20edital%20em%20an%C3%A1lise%20e%20quero%20avaliar%20se%20vale%20uma%20Opera%C3%A7%C3%A3o%20de%20Proposta%20para%20Licita%C3%A7%C3%A3o%20Cr%C3%ADtica%20ou%20diagn%C3%B3stico%20de%20participa%C3%A7%C3%A3o.",
             "text": "Avaliar uma oportunidade"
@@ -303,10 +483,10 @@
         ],
         "when_not_to_hire": true,
         "whatsapp_present": true,
-        "form_count": 0
+        "form_count": 1
       },
-      "content_sha256": "67a5aee0638afbb7a9a55d07e06f59f4f91427f760a1c57636218ce1b000adc6",
-      "bytes": 24075,
+      "content_sha256": "cf4d194861f4eff49e0b7e35b79928107c6c83f9b1c83366fb1ae165332408b9",
+      "bytes": 28068,
       "noindex": false
     }
   ]

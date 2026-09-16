@@ -15,10 +15,22 @@ assert.equal(report.coverage.manual_route_allowlist, false);
 // visitante. A contagem e escrituracao; a propriedade protegida por este
 // arquivo e cada formulario publicado cumprir o contrato next-state/v1, e essa
 // verificacao continua inteira abaixo.
-assert.equal(report.coverage.active_capture_routes, 25);
+// 2026-09-16. Eram 25. Decisao do fundador (EXECUTE_NOW, #61): os seis pilares
+// B2G protegidos por hash passaram a publicar captura on-page com o mesmo
+// componente compartilhado (shared_lead_form_v1), encerrando o debito
+// route-exact que expiraria em 2026-09-30. A contagem e escrituracao; cada
+// formulario continua verificado pelo contrato next-state/v1 abaixo.
+assert.equal(report.coverage.active_capture_routes, 31);
 assert.equal(report.coverage.declared_ctas, report.contract.expected_declared_ctas, `declared CTAs: ${report.coverage.declared_ctas}`);
 assert.equal(report.coverage.problems.length, 0, JSON.stringify(report.coverage.problems));
-assert.deepEqual(report.coverage.protected_routes_with_capture, []);
+// Os seis pilares protegidos capturam on-page por decisao expressa; nenhum
+// outro pilar protegido pode ganhar formulario sem entrar nesta lista.
+const unlockPlan = JSON.parse(fs.readFileSync("data/bofu-dominance/frozen-specs/unlock-plan.v1.json", "utf8"));
+assert.equal(unlockPlan.capture.required_on_all_six, true);
+assert.deepEqual(
+  report.coverage.protected_routes_with_capture,
+  [...unlockPlan.protected_pillars].map((slug) => `/${slug}/`).sort(),
+);
 
 assert.equal(report.contract.schema, "confenge.cta-form-next-state/1.0");
 assert.equal(report.contract.source, "CONFENGE_WEB");
@@ -32,7 +44,7 @@ const forms = report.surfaces.flatMap((surface) => surface.forms.map((form) => (
   route: surface.route,
   ...form,
 })));
-assert.equal(forms.length, 25);
+assert.equal(forms.length, 31); // 25 + os seis pilares B2G (2026-09-16, #61)
 for (const form of forms) {
   assert.equal(form.form_contract, "next-state/v1", `${form.route}: form contract`);
   assert.ok(report.contract.allowed_stages.includes(form.stage), `${form.route}: ${form.stage}`);

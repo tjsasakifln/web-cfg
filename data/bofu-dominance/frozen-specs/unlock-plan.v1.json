@@ -9,11 +9,25 @@
     "authority": "express founder instruction",
     "editorial_freeze_revoked": true,
     "measurement_wait_required": false,
-    "required": ["truthful terms and responsibility", "contextual functional contact", "reviewed source and rendered output", "actual hash recapture", "required PR and release checks"],
-    "does_not_authorize": ["automatic application of legacy experimental patches", "invented measurement readiness", "changed prices or checkout permission", "checksum suppression"]
+    "required": [
+      "truthful terms and responsibility",
+      "contextual functional contact",
+      "reviewed source and rendered output",
+      "actual hash recapture",
+      "required PR and release checks"
+    ],
+    "does_not_authorize": [
+      "automatic application of legacy experimental patches",
+      "invented measurement readiness",
+      "changed prices or checkout permission",
+      "checksum suppression"
+    ]
   },
   "executive_front": "INBOUND ENGINE",
-  "leverage": ["revenue", "distribution"],
+  "leverage": [
+    "revenue",
+    "distribution"
+  ],
   "owner": "CONFENGE",
   "prepared_at": "2026-08-24",
   "earliest_safe_action_at": "2026-09-16",
@@ -39,25 +53,58 @@
     "diagnostico-pre-licitacao"
   ],
   "true_replacements": {
-    "aditivos-obras-publicas": ["h1"],
-    "reequilibrio-obras-publicas": ["title_og"],
-    "diagnostico-b2g-360": ["og_title"]
+    "aditivos-obras-publicas": [
+      "h1"
+    ],
+    "reequilibrio-obras-publicas": [
+      "title_og"
+    ],
+    "diagnostico-b2g-360": [
+      "og_title"
+    ]
   },
   "no_op_replacements_to_remove": {
-    "medicoes-glosas-obras-publicas": ["meta_og_schema_description"],
-    "auditoria-orcamento-licitacao": ["when_not_to_hire"],
-    "diagnostico-pre-licitacao": ["meta_og_schema_description"]
+    "medicoes-glosas-obras-publicas": [
+      "meta_og_schema_description"
+    ],
+    "auditoria-orcamento-licitacao": [
+      "when_not_to_hire"
+    ],
+    "diagnostico-pre-licitacao": [
+      "meta_og_schema_description"
+    ]
   },
   "capture": {
     "required_on_all_six": true,
     "contract": "Contextual contact for each real priced offer; an active form must persist its CONFENGE_WEB event faithfully. Opening a direct channel is not receipt.",
     "measurement": "Historical form count, not a current commercial acceptance threshold",
-    "current_coverage": 0,
-    "current_total": 6
+    "current_coverage": 6,
+    "current_total": 6,
+    "authorization": {
+      "decision_state": "EXECUTE_NOW",
+      "authorized_at": "2026-09-16",
+      "authority": "express founder instruction (2026-09-16), recorded on #61",
+      "scope": "on-page capture form on the six protected pillars using the shared lead component (shared_lead_form_v1, next-state/v1, inline receipt); WhatsApp and e-mail channels preserved",
+      "revokes": [
+        "freeze of these six routes for this scope",
+        "PREPARE-ONLY for this scope",
+        "wait for 2026-09-30 debt expiry",
+        "wait for founder decision"
+      ],
+      "does_not_authorize": [
+        "automatic application of the legacy experimental replacements (html_mutation_authorized stays false for that gate)",
+        "changed prices, conditions, offers or promises",
+        "relaxed security, privacy, persistence, truthfulness, review or public acceptance"
+      ],
+      "hash_recapture": "reviewed recapture of frozen hashes, specs, patches and snapshots with baseline_commit and reason"
+    }
   },
   "structured_data_residual": {
     "pillar": "diagnostico-b2g-360",
-    "required_types": ["FAQPage", "Person"],
+    "required_types": [
+      "FAQPage",
+      "Person"
+    ],
     "current_types_present": []
   },
   "preconditions_all_required": [

@@ -291,18 +291,24 @@ def main() -> int:
         FORBIDDEN_RELATIVE_PATHS,
     )
 
+    # 2026-09-16: the founder's capture decision (unlock-plan capture.authorization)
+    # lifts the shell freeze on the released pillars; shell_nav derives that release
+    # and the skip list must equal the campaign's frozen HTML minus the released set.
+    # Released pillars are then held to the mutable-shell contract like any route.
     campaign_frozen = {r for r in FORBIDDEN_RELATIVE_PATHS if r.endswith("/index.html")}
-    if set(FROZEN_SHELL_FILES) != campaign_frozen:
+    released = campaign_frozen - set(FROZEN_SHELL_FILES)
+    if set(FROZEN_SHELL_FILES) != campaign_frozen - released:
         failures.append(
             f"shell sync skip list {sorted(FROZEN_SHELL_FILES)} "
-            f"!= frozen campaign HTML {sorted(campaign_frozen)}"
+            f"!= frozen campaign HTML {sorted(campaign_frozen)} minus released {sorted(released)}"
         )
     for rel in sorted(campaign_frozen):
         html = (SHELL_ROOT / rel).read_text(encoding="utf-8", errors="replace")
         labels = [label for _, label in nav_links(html, "desktop-nav")]
-        if labels != FROZEN_NAV_LABELS:
+        wanted = [label for _, label in expected] if rel in released else FROZEN_NAV_LABELS
+        if labels != wanted:
             failures.append(
-                f"{rel}: frozen page labels {labels} != {FROZEN_NAV_LABELS}"
+                f"{rel}: {'released' if rel in released else 'frozen'} page labels {labels} != {wanted}"
             )
 
     # --- 3. Active state is visible and inherited by descendant/task routes -

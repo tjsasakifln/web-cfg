@@ -29,14 +29,21 @@
       "commercial_configuration"
     ],
     "baseline_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
-    "expected_declared_ctas": 133
+    "expected_declared_ctas": 163
   },
   "coverage": {
     "authority": "data/organic/public-family-registry.json",
     "manual_route_allowlist": false,
-    "active_capture_routes": 25,
-    "declared_ctas": 133,
-    "protected_routes_with_capture": [],
+    "active_capture_routes": 31,
+    "declared_ctas": 163,
+    "protected_routes_with_capture": [
+      "/aditivos-obras-publicas/",
+      "/auditoria-orcamento-licitacao/",
+      "/diagnostico-b2g-360/",
+      "/diagnostico-pre-licitacao/",
+      "/medicoes-glosas-obras-publicas/",
+      "/reequilibrio-obras-publicas/"
+    ],
     "problems": []
   },
   "surfaces": [
@@ -157,6 +164,148 @@
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Falar pelo WhatsApp",
+          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
+          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "whatsapp_click"
+          ]
+        }
+      ]
+    },
+    {
+      "route": "/aditivos-obras-publicas/",
+      "file": "aditivos-obras-publicas/index.html",
+      "family_id": "service-pillars",
+      "family_profile": "service_pillar",
+      "terminal_action": "capture_form",
+      "forms": [
+        {
+          "action": "/.netlify/functions/lead",
+          "cta_id": "aditivos-obras-publicas-handraise",
+          "form_contract": "next-state/v1",
+          "profile": "service_fit_review",
+          "runtime_profile": "shared_lead_form_v1",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "submit_label": "Descrever o aditivo",
+          "current_label": "Descrever o aditivo",
+          "useful_next_state": "O protocolo confirma o registro do contexto. A CONFENGE então analisa a necessidade e combina os documentos, o escopo e a disponibilidade para atendimento.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
+          "pre_form_value_visible": true,
+          "field_purpose": {
+            "visible_text": "Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
+            "visible": true,
+            "required": [
+              "nome",
+              "consentimento",
+              "email_or_whatsapp"
+            ],
+            "optional": [
+              "empresa",
+              "email",
+              "telefone",
+              "mensagem"
+            ]
+          },
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary_visible": true,
+          "privacy_link_visible": true,
+          "event_semantics": [
+            "lead_form_start",
+            "lead_form_submit",
+            "lead_form_success",
+            "lead_persisted"
+          ],
+          "runtime_states": {
+            "initial": "Formulário disponível com instruções, campos mínimos e limites visíveis.",
+            "validation_error": "Informe e-mail ou WhatsApp para retorno; valores preenchidos inválidos são recusados explicitamente.",
+            "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
+            "loading": "Enviando…",
+            "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
+            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
+          },
+          "turnstile_ready": true,
+          "turnstile_token_forwarding": true,
+          "receipt_required": true,
+          "contact_constraints_ready": true,
+          "form_whatsapp_relationship": "parallel_talk_path",
+          "shared_runtime_selectors_ready": true,
+          "shared_runtime_journey_ready": true,
+          "standalone_runtime_ready": true
+        }
+      ],
+      "actions": [
+        {
+          "cta_id": "diagnosticar-contrato",
+          "position": "",
+          "href": "/ferramentas/diagnostico-defesa-margem/",
+          "stage": "calculate",
+          "commitment": "low",
+          "current_label": "Verificar o contrato no diagnóstico de defesa de margem",
+          "useful_next_state": "Abre a ferramenta pública para calcular ou inspecionar a situação antes do contato.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "diagnosticar-contrato",
+          "position": "",
+          "href": "/ferramentas/diagnostico-defesa-margem/",
+          "stage": "calculate",
+          "commitment": "low",
+          "current_label": "Verificar o contrato no diagnóstico de defesa de margem",
+          "useful_next_state": "Abre a ferramenta pública para calcular ou inspecionar a situação antes do contato.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "pillar_bridge",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20estruturar%20aditivo%20ou%20servi%C3%A7o%20extra%20com%20base%20t%C3%A9cnica%20e%20econ%C3%B4mica.",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Enquadrar o evento contratual",
+          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
+          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "whatsapp_click"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "pillar_bridge",
+          "href": "/diagnostico-b2g-360/",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Solicitar diagnóstico da operação",
+          "useful_next_state": "Abre o destino declarado por “Solicitar diagnóstico da operação” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20estruturar%20aditivo%20ou%20servi%C3%A7o%20extra%20com%20base%20t%C3%A9cnica%20e%20econ%C3%B4mica.",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Abrir o diagnóstico no WhatsApp",
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
@@ -318,6 +467,148 @@
           "stage": "talk",
           "commitment": "medium",
           "current_label": "Falar pelo WhatsApp",
+          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
+          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "whatsapp_click"
+          ]
+        }
+      ]
+    },
+    {
+      "route": "/auditoria-orcamento-licitacao/",
+      "file": "auditoria-orcamento-licitacao/index.html",
+      "family_id": "service-pillars",
+      "family_profile": "service_pillar",
+      "terminal_action": "capture_form",
+      "forms": [
+        {
+          "action": "/.netlify/functions/lead",
+          "cta_id": "auditoria-orcamento-licitacao-handraise",
+          "form_contract": "next-state/v1",
+          "profile": "service_fit_review",
+          "runtime_profile": "shared_lead_form_v1",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "submit_label": "Descrever o orçamento",
+          "current_label": "Descrever o orçamento",
+          "useful_next_state": "O protocolo confirma o registro do contexto. A CONFENGE então analisa a necessidade e combina os documentos, o escopo e a disponibilidade para atendimento.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
+          "pre_form_value_visible": true,
+          "field_purpose": {
+            "visible_text": "Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
+            "visible": true,
+            "required": [
+              "nome",
+              "consentimento",
+              "email_or_whatsapp"
+            ],
+            "optional": [
+              "empresa",
+              "email",
+              "telefone",
+              "mensagem"
+            ]
+          },
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary_visible": true,
+          "privacy_link_visible": true,
+          "event_semantics": [
+            "lead_form_start",
+            "lead_form_submit",
+            "lead_form_success",
+            "lead_persisted"
+          ],
+          "runtime_states": {
+            "initial": "Formulário disponível com instruções, campos mínimos e limites visíveis.",
+            "validation_error": "Informe e-mail ou WhatsApp para retorno; valores preenchidos inválidos são recusados explicitamente.",
+            "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
+            "loading": "Enviando…",
+            "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
+            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
+          },
+          "turnstile_ready": true,
+          "turnstile_token_forwarding": true,
+          "receipt_required": true,
+          "contact_constraints_ready": true,
+          "form_whatsapp_relationship": "parallel_talk_path",
+          "shared_runtime_selectors_ready": true,
+          "shared_runtime_journey_ready": true,
+          "standalone_runtime_ready": true
+        }
+      ],
+      "actions": [
+        {
+          "cta_id": "",
+          "position": "",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20revisar%20pre%C3%A7o%2C%20BDI%20e%20risco%20de%20uma%20licita%C3%A7%C3%A3o%20de%20obra.",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Analisar uma demanda",
+          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
+          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "whatsapp_click"
+          ]
+        },
+        {
+          "cta_id": "diagnosticar-contrato",
+          "position": "",
+          "href": "/ferramentas/diagnostico-defesa-margem/",
+          "stage": "calculate",
+          "commitment": "low",
+          "current_label": "Diagnosticar contrato",
+          "useful_next_state": "Abre a ferramenta pública para calcular ou inspecionar a situação antes do contato.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "pillar_bridge",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20revisar%20pre%C3%A7o%2C%20BDI%20e%20risco%20de%20uma%20licita%C3%A7%C3%A3o%20de%20obra.",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Revisar esta oportunidade",
+          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
+          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "whatsapp_click"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "pillar_bridge",
+          "href": "/diretoria-b2g/",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Diretoria Fracionada para o Mercado Público",
+          "useful_next_state": "Abre o destino declarado por “Diretoria Fracionada para o Mercado Público” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20revisar%20pre%C3%A7o%2C%20BDI%20e%20risco%20de%20uma%20licita%C3%A7%C3%A3o%20de%20obra.",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Abrir a auditoria no WhatsApp",
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
@@ -2122,6 +2413,164 @@
       ]
     },
     {
+      "route": "/diagnostico-b2g-360/",
+      "file": "diagnostico-b2g-360/index.html",
+      "family_id": "service-pillars",
+      "family_profile": "service_pillar",
+      "terminal_action": "capture_form",
+      "forms": [
+        {
+          "action": "/.netlify/functions/lead",
+          "cta_id": "diagnostico-b2g-360-handraise",
+          "form_contract": "next-state/v1",
+          "profile": "service_fit_review",
+          "runtime_profile": "shared_lead_form_v1",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "submit_label": "Descrever a operação",
+          "current_label": "Descrever a operação",
+          "useful_next_state": "O protocolo confirma o registro do contexto. A CONFENGE então analisa a necessidade e combina os documentos, o escopo e a disponibilidade para atendimento.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
+          "pre_form_value_visible": true,
+          "field_purpose": {
+            "visible_text": "Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
+            "visible": true,
+            "required": [
+              "nome",
+              "consentimento",
+              "email_or_whatsapp"
+            ],
+            "optional": [
+              "empresa",
+              "email",
+              "telefone",
+              "mensagem"
+            ]
+          },
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary_visible": true,
+          "privacy_link_visible": true,
+          "event_semantics": [
+            "lead_form_start",
+            "lead_form_submit",
+            "lead_form_success",
+            "lead_persisted"
+          ],
+          "runtime_states": {
+            "initial": "Formulário disponível com instruções, campos mínimos e limites visíveis.",
+            "validation_error": "Informe e-mail ou WhatsApp para retorno; valores preenchidos inválidos são recusados explicitamente.",
+            "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
+            "loading": "Enviando…",
+            "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
+            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
+          },
+          "turnstile_ready": true,
+          "turnstile_token_forwarding": true,
+          "receipt_required": true,
+          "contact_constraints_ready": true,
+          "form_whatsapp_relationship": "parallel_talk_path",
+          "shared_runtime_selectors_ready": true,
+          "shared_runtime_journey_ready": true,
+          "standalone_runtime_ready": true
+        }
+      ],
+      "actions": [
+        {
+          "cta_id": "",
+          "position": "offer_hero",
+          "href": "#captura-pilar",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "current_label": "Solicitar diagnóstico da operação",
+          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "cta_click"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20solicitar%20o%20Diagn%C3%B3stico%20da%20Opera%C3%A7%C3%A3o%20em%20Obras%20P%C3%BAblicas.",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "WhatsApp",
+          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
+          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "whatsapp_click"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "offer_final",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20solicitar%20o%20Diagn%C3%B3stico%20da%20Opera%C3%A7%C3%A3o%20em%20Obras%20P%C3%BAblicas%20para%20mapear%20oportunidades%2C%20margem%20e%20controle%20da%20nossa%20opera%C3%A7%C3%A3o.",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Solicitar diagnóstico da operação",
+          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
+          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "cta_click",
+            "whatsapp_click"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "",
+          "href": "#captura-pilar",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "current_label": "Descrever a operação nesta página",
+          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "pillar_bridge",
+          "href": "#captura-pilar",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "current_label": "Pedir diagnóstico da operação",
+          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "pillar_bridge",
+          "href": "/conteudos/",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Ver conteúdos de apoio",
+          "useful_next_state": "Abre o destino declarado por “Ver conteúdos de apoio” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        }
+      ]
+    },
+    {
       "route": "/diagnostico-b2g-expansao/",
       "file": "diagnostico-b2g-expansao/index.html",
       "family_id": "service-pillars",
@@ -2239,6 +2688,133 @@
           "stage": "talk",
           "commitment": "medium",
           "current_label": "+55 48 98834-4559",
+          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
+          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "whatsapp_click"
+          ]
+        }
+      ]
+    },
+    {
+      "route": "/diagnostico-pre-licitacao/",
+      "file": "diagnostico-pre-licitacao/index.html",
+      "family_id": "service-pillars",
+      "family_profile": "service_pillar",
+      "terminal_action": "capture_form",
+      "forms": [
+        {
+          "action": "/.netlify/functions/lead",
+          "cta_id": "diagnostico-pre-licitacao-handraise",
+          "form_contract": "next-state/v1",
+          "profile": "service_fit_review",
+          "runtime_profile": "shared_lead_form_v1",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "submit_label": "Descrever a licitação",
+          "current_label": "Descrever a licitação",
+          "useful_next_state": "O protocolo confirma o registro do contexto. A CONFENGE então analisa a necessidade e combina os documentos, o escopo e a disponibilidade para atendimento.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
+          "pre_form_value_visible": true,
+          "field_purpose": {
+            "visible_text": "Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
+            "visible": true,
+            "required": [
+              "nome",
+              "consentimento",
+              "email_or_whatsapp"
+            ],
+            "optional": [
+              "empresa",
+              "email",
+              "telefone",
+              "mensagem"
+            ]
+          },
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary_visible": true,
+          "privacy_link_visible": true,
+          "event_semantics": [
+            "lead_form_start",
+            "lead_form_submit",
+            "lead_form_success",
+            "lead_persisted"
+          ],
+          "runtime_states": {
+            "initial": "Formulário disponível com instruções, campos mínimos e limites visíveis.",
+            "validation_error": "Informe e-mail ou WhatsApp para retorno; valores preenchidos inválidos são recusados explicitamente.",
+            "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
+            "loading": "Enviando…",
+            "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
+            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
+          },
+          "turnstile_ready": true,
+          "turnstile_token_forwarding": true,
+          "receipt_required": true,
+          "contact_constraints_ready": true,
+          "form_whatsapp_relationship": "parallel_talk_path",
+          "shared_runtime_selectors_ready": true,
+          "shared_runtime_journey_ready": true,
+          "standalone_runtime_ready": true
+        }
+      ],
+      "actions": [
+        {
+          "cta_id": "",
+          "position": "",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20edital%20em%20an%C3%A1lise%20e%20quero%20avaliar%20se%20vale%20uma%20Opera%C3%A7%C3%A3o%20de%20Proposta%20para%20Licita%C3%A7%C3%A3o%20Cr%C3%ADtica%20ou%20diagn%C3%B3stico%20de%20participa%C3%A7%C3%A3o.",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Analisar uma demanda",
+          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
+          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "whatsapp_click"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "pillar_bridge",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20edital%20em%20an%C3%A1lise%20e%20quero%20avaliar%20se%20vale%20uma%20Opera%C3%A7%C3%A3o%20de%20Proposta%20para%20Licita%C3%A7%C3%A3o%20Cr%C3%ADtica%20ou%20diagn%C3%B3stico%20de%20participa%C3%A7%C3%A3o.",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Avaliar uma oportunidade",
+          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
+          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "whatsapp_click"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "pillar_bridge",
+          "href": "/diretoria-b2g/",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Conhecer a Diretoria Fracionada para o Mercado Público",
+          "useful_next_state": "Abre o destino declarado por “Conhecer a Diretoria Fracionada para o Mercado Público” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20edital%20em%20an%C3%A1lise%20e%20quero%20avaliar%20se%20vale%20uma%20Opera%C3%A7%C3%A3o%20de%20Proposta%20para%20Licita%C3%A7%C3%A3o%20Cr%C3%ADtica%20ou%20diagn%C3%B3stico%20de%20participa%C3%A7%C3%A3o.",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Abrir a licitação no WhatsApp",
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
@@ -3376,6 +3952,290 @@
           "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem apenas por canal seguro combinado depois do protocolo.",
           "event_semantics": [
             "email_click"
+          ]
+        }
+      ]
+    },
+    {
+      "route": "/medicoes-glosas-obras-publicas/",
+      "file": "medicoes-glosas-obras-publicas/index.html",
+      "family_id": "service-pillars",
+      "family_profile": "service_pillar",
+      "terminal_action": "capture_form",
+      "forms": [
+        {
+          "action": "/.netlify/functions/lead",
+          "cta_id": "medicoes-glosas-obras-publicas-handraise",
+          "form_contract": "next-state/v1",
+          "profile": "service_fit_review",
+          "runtime_profile": "shared_lead_form_v1",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "submit_label": "Descrever a medição",
+          "current_label": "Descrever a medição",
+          "useful_next_state": "O protocolo confirma o registro do contexto. A CONFENGE então analisa a necessidade e combina os documentos, o escopo e a disponibilidade para atendimento.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
+          "pre_form_value_visible": true,
+          "field_purpose": {
+            "visible_text": "Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
+            "visible": true,
+            "required": [
+              "nome",
+              "consentimento",
+              "email_or_whatsapp"
+            ],
+            "optional": [
+              "empresa",
+              "email",
+              "telefone",
+              "mensagem"
+            ]
+          },
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary_visible": true,
+          "privacy_link_visible": true,
+          "event_semantics": [
+            "lead_form_start",
+            "lead_form_submit",
+            "lead_form_success",
+            "lead_persisted"
+          ],
+          "runtime_states": {
+            "initial": "Formulário disponível com instruções, campos mínimos e limites visíveis.",
+            "validation_error": "Informe e-mail ou WhatsApp para retorno; valores preenchidos inválidos são recusados explicitamente.",
+            "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
+            "loading": "Enviando…",
+            "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
+            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
+          },
+          "turnstile_ready": true,
+          "turnstile_token_forwarding": true,
+          "receipt_required": true,
+          "contact_constraints_ready": true,
+          "form_whatsapp_relationship": "parallel_talk_path",
+          "shared_runtime_selectors_ready": true,
+          "shared_runtime_journey_ready": true,
+          "standalone_runtime_ready": true
+        }
+      ],
+      "actions": [
+        {
+          "cta_id": "",
+          "position": "",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20glosa%20ou%20medi%C3%A7%C3%A3o%20contestada%20e%20preciso%20enquadrar%20a%20posi%C3%A7%C3%A3o%20t%C3%A9cnica.",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Analisar uma demanda",
+          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
+          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "whatsapp_click"
+          ]
+        },
+        {
+          "cta_id": "diagnosticar-contrato",
+          "position": "",
+          "href": "/ferramentas/diagnostico-defesa-margem/",
+          "stage": "calculate",
+          "commitment": "low",
+          "current_label": "Diagnosticar contrato",
+          "useful_next_state": "Abre a ferramenta pública para calcular ou inspecionar a situação antes do contato.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "pillar_bridge",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20glosa%20ou%20medi%C3%A7%C3%A3o%20contestada%20e%20preciso%20enquadrar%20a%20posi%C3%A7%C3%A3o%20t%C3%A9cnica.",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Enquadrar um risco contratual",
+          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
+          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "whatsapp_click"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "pillar_bridge",
+          "href": "/diretoria-b2g/",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Diretoria Fracionada para o Mercado Público na execução",
+          "useful_next_state": "Abre o destino declarado por “Diretoria Fracionada para o Mercado Público na execução” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20glosa%20ou%20medi%C3%A7%C3%A3o%20contestada%20e%20preciso%20enquadrar%20a%20posi%C3%A7%C3%A3o%20t%C3%A9cnica.",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Abrir a medição no WhatsApp",
+          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
+          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "whatsapp_click"
+          ]
+        }
+      ]
+    },
+    {
+      "route": "/reequilibrio-obras-publicas/",
+      "file": "reequilibrio-obras-publicas/index.html",
+      "family_id": "service-pillars",
+      "family_profile": "service_pillar",
+      "terminal_action": "capture_form",
+      "forms": [
+        {
+          "action": "/.netlify/functions/lead",
+          "cta_id": "reequilibrio-obras-publicas-handraise",
+          "form_contract": "next-state/v1",
+          "profile": "service_fit_review",
+          "runtime_profile": "shared_lead_form_v1",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "submit_label": "Descrever o pleito",
+          "current_label": "Descrever o pleito",
+          "useful_next_state": "O protocolo confirma o registro do contexto. A CONFENGE então analisa a necessidade e combina os documentos, o escopo e a disponibilidade para atendimento.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
+          "pre_form_value_visible": true,
+          "field_purpose": {
+            "visible_text": "Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
+            "visible": true,
+            "required": [
+              "nome",
+              "consentimento",
+              "email_or_whatsapp"
+            ],
+            "optional": [
+              "empresa",
+              "email",
+              "telefone",
+              "mensagem"
+            ]
+          },
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary_visible": true,
+          "privacy_link_visible": true,
+          "event_semantics": [
+            "lead_form_start",
+            "lead_form_submit",
+            "lead_form_success",
+            "lead_persisted"
+          ],
+          "runtime_states": {
+            "initial": "Formulário disponível com instruções, campos mínimos e limites visíveis.",
+            "validation_error": "Informe e-mail ou WhatsApp para retorno; valores preenchidos inválidos são recusados explicitamente.",
+            "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
+            "loading": "Enviando…",
+            "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
+            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
+          },
+          "turnstile_ready": true,
+          "turnstile_token_forwarding": true,
+          "receipt_required": true,
+          "contact_constraints_ready": true,
+          "form_whatsapp_relationship": "parallel_talk_path",
+          "shared_runtime_selectors_ready": true,
+          "shared_runtime_journey_ready": true,
+          "standalone_runtime_ready": true
+        }
+      ],
+      "actions": [
+        {
+          "cta_id": "diagnosticar-contrato",
+          "position": "",
+          "href": "/ferramentas/diagnostico-defesa-margem/",
+          "stage": "calculate",
+          "commitment": "low",
+          "current_label": "Verificar o contrato no diagnóstico de defesa de margem",
+          "useful_next_state": "Abre a ferramenta pública para calcular ou inspecionar a situação antes do contato.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "diagnosticar-contrato",
+          "position": "",
+          "href": "/ferramentas/diagnostico-defesa-margem/",
+          "stage": "calculate",
+          "commitment": "low",
+          "current_label": "Verificar o contrato no diagnóstico de defesa de margem",
+          "useful_next_state": "Abre a ferramenta pública para calcular ou inspecionar a situação antes do contato.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "pillar_bridge",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20enquadrar%20reequil%C3%ADbrio%20econ%C3%B4mico-financeiro%20de%20contrato%20de%20obra%20p%C3%BAblica.",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Enquadrar o reequilíbrio",
+          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
+          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "whatsapp_click"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "pillar_bridge",
+          "href": "/diretoria-b2g/",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Diretoria Fracionada para o Mercado Público",
+          "useful_next_state": "Abre o destino declarado por “Diretoria Fracionada para o Mercado Público” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20enquadrar%20reequil%C3%ADbrio%20econ%C3%B4mico-financeiro%20de%20contrato%20de%20obra%20p%C3%BAblica.",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Abrir a análise no WhatsApp",
+          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
+          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "whatsapp_click"
           ]
         }
       ]

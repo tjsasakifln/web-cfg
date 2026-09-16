@@ -4,7 +4,8 @@
 The 1200x630 assets under assets/conteudos and assets/clusters repeat the page
 title/category/brand as raster text. Public HTML is canonical in this static
 site, so this migration edits eligible files deterministically and is
-idempotent. The six BOFU pillars frozen by #128/#226 remain out of scope.
+idempotent. The six BOFU pillars frozen by #128/#226 stayed out of scope until
+the founder authorized their on-page capture (2026-09-16, unlock-plan).
 """
 
 from __future__ import annotations
@@ -16,7 +17,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 EXCLUDED_PARTS = {".git", ".claude", ".worktrees", "_site", "node_modules"}
 MIN_EXPECTED_ROUTES = 128
-FROZEN_BOFU_PATHS = {
+_FROZEN_BOFU_PATHS = {
     "aditivos-obras-publicas/index.html",
     "auditoria-orcamento-licitacao/index.html",
     "diagnostico-b2g-360/index.html",
@@ -24,6 +25,30 @@ FROZEN_BOFU_PATHS = {
     "medicoes-glosas-obras-publicas/index.html",
     "reequilibrio-obras-publicas/index.html",
 }
+
+
+def _capture_unfrozen(paths: set[str]) -> set[str]:
+    """Drop pillars whose on-page capture the founder authorized (2026-09-16).
+
+    The hash pin still records every byte, but the freeze that kept the raster
+    title card on these routes ended with that decision: they follow the same
+    coverless article hero as every other route.
+    """
+    import json
+
+    plan_path = ROOT / "data" / "bofu-dominance" / "frozen-specs" / "unlock-plan.v1.json"
+    try:
+        plan = json.loads(plan_path.read_text(encoding="utf-8"))
+    except Exception:  # noqa: BLE001 — absent plan means nothing is unfrozen
+        return paths
+    authorization = (plan.get("capture") or {}).get("authorization") or {}
+    if authorization.get("decision_state") != "EXECUTE_NOW":
+        return paths
+    released = {f"{slug}/index.html" for slug in plan.get("protected_pillars") or []}
+    return paths - released
+
+
+FROZEN_BOFU_PATHS = _capture_unfrozen(set(_FROZEN_BOFU_PATHS))
 
 META_RE = re.compile(r"<meta\b[^>]*>", re.I)
 ATTR_RE = re.compile(r"([:\w-]+)\s*=\s*([\"'])(.*?)\2", re.I | re.S)

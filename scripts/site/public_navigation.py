@@ -15,12 +15,15 @@ from pathlib import Path
 
 from scripts.bofu_dominance.frozen_specs.constants import PILLARS
 from scripts.site.public_ia import active_header_href
-from scripts.site.shell_nav import value_first_cta_contract
+from scripts.site.shell_nav import FROZEN_SHELL_FILES, value_first_cta_contract
 
 
 ROOT = Path(__file__).resolve().parents[2]
 BRAND_PATH = ROOT / "data/site/brand.json"
-FROZEN_NAV_HTML_PATHS = frozenset(item["html_rel"] for item in PILLARS)
+# The shell of these pillars stayed frozen until the founder authorized their
+# on-page capture (2026-09-16); shell_nav derives the same release from the
+# unlock plan, so the two contracts cannot diverge.
+FROZEN_NAV_HTML_PATHS = frozenset(item["html_rel"] for item in PILLARS) & FROZEN_SHELL_FILES
 
 _NAV_RE = re.compile(
     r'(<nav\b[^>]*\bclass="[^"]*\b(?:desktop-nav|mobile-nav)\b[^"]*"[^>]*>)'

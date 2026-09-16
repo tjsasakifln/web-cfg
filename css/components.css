@@ -222,3 +222,59 @@ main section[id],main div[id].section,main h2[id],main h3[id],main [id].chooser-
 .field input:focus-visible,.field select:focus-visible,.field textarea:focus-visible,.contact-form input:focus-visible,.contact-form select:focus-visible,.contact-form textarea:focus-visible,.offer-request-form input:focus-visible,.offer-request-form select:focus-visible,.offer-request-form textarea:focus-visible{outline:2px solid transparent;outline-offset:2px;box-shadow:var(--focus-ring);border-color:var(--ink)}
 /* Footer and breadcrumb links: touch-sized rows on phones ------------------- */
 @media (max-width:700px){.footer-links a,.footer-authority a,.breadcrumbs a{display:inline-block;padding-block:.55rem}}
+
+/* Service-pillar on-page capture (shared_lead_form_v1). Lived in styles-offers.css
+   until 2026-09-16; moved here so the six B2G pillars (and the unpriced pillars)
+   render the form without a second render-blocking stylesheet. */
+.pillar-capture{
+  background:#f7f9f8;
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+}
+.pillar-capture-grid{
+  display:grid;
+  grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);
+  gap:clamp(32px,6vw,72px);
+  align-items:start;
+}
+.pillar-capture-grid > *{min-width:0}
+.pillar-capture-copy{width:100%;max-width:38rem}
+.pillar-capture-form{
+  display:grid;
+  min-width:0;
+  gap:14px;
+  padding:clamp(22px,4vw,36px);
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:var(--radius-md);
+  box-shadow:var(--shadow);
+}
+.pillar-capture-form label{display:grid;min-width:0;gap:7px;font-weight:650;color:var(--text)}
+.pillar-capture-form input,
+.pillar-capture-form select,
+.pillar-capture-form textarea{
+  box-sizing:border-box;
+  display:block;
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  padding:12px 14px;
+  color:var(--text);
+  background:#fff;
+  border:1px solid #a9b6b0;
+  border-radius:var(--radius-sm);
+  font:inherit;
+}
+.pillar-capture-form input,
+.pillar-capture-form select{min-height:48px}
+.pillar-capture-form input:focus,
+.pillar-capture-form select:focus,
+.pillar-capture-form textarea:focus{outline:2px solid transparent;outline-offset:2px;box-shadow:var(--focus-ring);border-color:var(--green)}
+.pillar-capture-form .capture-consent{display:flex;gap:10px;align-items:flex-start;font-weight:500}
+.pillar-capture-form .capture-consent input{width:auto;margin-top:4px}
+.pillar-capture-form .form-status{min-height:1.5em;margin:0}
+.pillar-capture-alternative{margin-top:18px}
+@media (max-width:900px){
+  .pillar-capture-grid{grid-template-columns:minmax(0,1fr)}
+  .pillar-capture-form{padding:20px 18px;border-radius:var(--radius-md)}
+}

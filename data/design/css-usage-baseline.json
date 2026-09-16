@@ -36,9 +36,9 @@
   "unreferenced_css_files": [],
   "bundles": {
     "styles.css": {
-      "bytes": 111635,
-      "class_selectors": 372,
-      "used": 371,
+      "bytes": 113331,
+      "class_selectors": 378,
+      "used": 377,
       "unused": [
         "opaque-token"
       ]
@@ -127,8 +127,8 @@
       "gradient": 5
     },
     "css/components.css": {
-      "border_radius": 9,
-      "box_shadow": 2,
+      "border_radius": 12,
+      "box_shadow": 4,
       "gradient": 0
     },
     "css/contracts.css": {
@@ -177,8 +177,8 @@
       "gradient": 0
     },
     "styles-offers.css": {
-      "border_radius": 5,
-      "box_shadow": 2,
+      "border_radius": 2,
+      "box_shadow": 0,
       "gradient": 0
     },
     "styles-tokens.css": {
@@ -192,8 +192,8 @@
       "gradient": 1
     },
     "styles.css": {
-      "border_radius": 93,
-      "box_shadow": 40,
+      "border_radius": 96,
+      "box_shadow": 42,
       "gradient": 32
     },
     "triagem-tecnica/styles.css": {
@@ -203,8 +203,8 @@
     }
   },
   "decoration_totals": {
-    "border_radius": 151,
-    "box_shadow": 62,
+    "border_radius": 154,
+    "box_shadow": 64,
     "gradient": 46
   }
 }

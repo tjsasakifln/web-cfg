@@ -5,7 +5,7 @@
       "ok": true,
       "findings": [],
       "stats": {
-        "scanned": 97,
+        "scanned": 98,
         "pages_with_hits": 0,
         "error_count": 0
       }
@@ -14,7 +14,7 @@
       "ok": true,
       "findings": [],
       "stats": {
-        "sitemap_locs": 97
+        "sitemap_locs": 98
       }
     },
     "brand_shell": {
@@ -29,20 +29,6 @@
     "conversion": {
       "ok": true,
       "findings": [
-        {
-          "gate": "conversion",
-          "path": "aditivos-obras-publicas/index.html",
-          "reason": "missing_on_page_form",
-          "excerpt": "profile=service_pillar route=/aditivos-obras-publicas/",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "auditoria-orcamento-licitacao/index.html",
-          "reason": "missing_on_page_form",
-          "excerpt": "profile=service_pillar route=/auditoria-orcamento-licitacao/",
-          "severity": "warn"
-        },
         {
           "gate": "conversion",
           "path": "casos/aditivo-art125-demonstrativo/index.html",
@@ -108,20 +94,6 @@
         },
         {
           "gate": "conversion",
-          "path": "diagnostico-b2g-360/index.html",
-          "reason": "missing_on_page_form",
-          "excerpt": "profile=service_pillar route=/diagnostico-b2g-360/",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "diagnostico-pre-licitacao/index.html",
-          "reason": "missing_on_page_form",
-          "excerpt": "profile=service_pillar route=/diagnostico-pre-licitacao/",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
           "path": "diagnostico-pre-licitacao/index.html",
           "reason": "missing_journey_signal",
           "excerpt": "",
@@ -146,13 +118,6 @@
           "path": "ferramentas/matriz-atraso-obra/index.html",
           "reason": "missing_journey_signal",
           "excerpt": "",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "medicoes-glosas-obras-publicas/index.html",
-          "reason": "missing_on_page_form",
-          "excerpt": "profile=service_pillar route=/medicoes-glosas-obras-publicas/",
           "severity": "warn"
         },
         {
@@ -185,13 +150,6 @@
         },
         {
           "gate": "conversion",
-          "path": "reequilibrio-obras-publicas/index.html",
-          "reason": "missing_on_page_form",
-          "excerpt": "profile=service_pillar route=/reequilibrio-obras-publicas/",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
           "path": "revisao-tecnica-projetos-engenharia/index.html",
           "reason": "missing_journey_signal",
           "excerpt": "",
@@ -206,6 +164,13 @@
         },
         {
           "gate": "conversion",
+          "path": "servicos/index.html",
+          "reason": "missing_journey_signal",
+          "excerpt": "",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
           "path": "triagem-tecnica/index.html",
           "reason": "missing_journey_signal",
           "excerpt": "",
@@ -213,7 +178,7 @@
         }
       ],
       "stats": {
-        "scanned": 97,
+        "scanned": 98,
         "onpage_capture_scanned": 5,
         "journeys": [
           "contrato",
@@ -223,20 +188,20 @@
         "profiles": {
           "service_pillar": 13,
           "priced_offer": 10,
-          "commercial_content": 65,
+          "commercial_content": 66,
           "trust_or_legal": 9
         },
         "main_cta": {
-          "covered": 88,
-          "total": 88,
+          "covered": 89,
+          "total": 89,
           "coverage": 1.0,
           "exempt": 9,
-          "public_scanned": 97
+          "public_scanned": 98
         },
         "on_page_capture": {
-          "covered": 7,
+          "covered": 13,
           "total": 13,
-          "coverage": 0.5385
+          "coverage": 1.0
         },
         "priced_offer_capture": {
           "covered": 10,
@@ -251,9 +216,9 @@
           "undeclared_routes": 0
         },
         "terminal_action": {
-          "covered": 78,
-          "total": 88,
-          "coverage": 0.8864,
+          "covered": 85,
+          "total": 89,
+          "coverage": 0.9551,
           "exempt_trust_or_legal": 9,
           "registered_debt": 4
         },
@@ -373,10 +338,10 @@
         ],
         "freeze": {
           "earliest_safe_action_at": "2026-09-16",
-          "warn_before_date": true
+          "warn_before_date": false
         },
         "errors": 0,
-        "warnings": 26
+        "warnings": 21
       }
     },
     "legacy_entity": {
@@ -499,6 +464,13 @@
         },
         {
           "gate": "archetype_editorial_ready",
+          "path": "index.html",
+          "reason": "archetype_caveats_preserved_failed",
+          "excerpt": "family=home 1/1 sampled pages fail: /: shows a figure or epistemic label with no limitation disclosed — removing raw jargon must not remove the uncertainty it carried",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
           "path": "servicos/index.html",
           "reason": "archetype_specific_value_failed",
           "excerpt": "family=servicos-corporativos 1/1 sampled pages fail: /servicos/: 0 concrete specifics (min 3)",
@@ -522,7 +494,7 @@
           "gate": "archetype_editorial_ready",
           "path": "acompanhamento-contratos-obras/index.html",
           "reason": "archetype_cta_subordinate_failed",
-          "excerpt": "family=service-pillars 1/6 sampled pages fail: /atrasos-prorrogacao-obras-publicas/: 4 CTAs in <main> for 1387 words (max 3)",
+          "excerpt": "family=service-pillars 1/6 sampled pages fail: /atrasos-prorrogacao-obras-publicas/: 4 CTAs in <main> for 1406 words (max 3)",
           "severity": "warn"
         },
         {
@@ -704,21 +676,21 @@
           "gate": "archetype_editorial_ready",
           "path": "entregas/index.html",
           "reason": "archetype_cta_subordinate_failed",
-          "excerpt": "family=entregas 1/1 sampled pages fail: /entregas/: 29 CTAs in <main> for 3561 words (max 8)",
+          "excerpt": "family=entregas 1/1 sampled pages fail: /entregas/: 29 CTAs in <main> for 3590 words (max 8)",
           "severity": "warn"
         },
         {
           "gate": "archetype_editorial_ready",
-          "path": "problemas-que-resolvemos/index.html",
-          "reason": "archetype_answer_first_failed",
-          "excerpt": "family=problemas-que-resolvemos 1/1 sampled pages fail: /problemas-que-resolvemos/: first 3 paragraphs are shorter than 120 chars or open with a CTA",
+          "path": "servicos-obras-publicas/index.html",
+          "reason": "archetype_caveats_preserved_failed",
+          "excerpt": "family=servicos-obras-publicas 1/1 sampled pages fail: /servicos-obras-publicas/: shows a figure or epistemic label with no limitation disclosed — removing raw jargon must not remove the uncertainty it carried",
           "severity": "warn"
         },
         {
           "gate": "archetype_editorial_ready",
           "path": "problemas-que-resolvemos/index.html",
           "reason": "archetype_specific_value_failed",
-          "excerpt": "family=problemas-que-resolvemos 1/1 sampled pages fail: /problemas-que-resolvemos/: 0 concrete specifics (min 3)",
+          "excerpt": "family=problemas-que-resolvemos 1/1 sampled pages fail: /problemas-que-resolvemos/: 2 concrete specifics (min 3)",
           "severity": "warn"
         },
         {
@@ -753,21 +725,14 @@
           "gate": "archetype_editorial_ready",
           "path": "obrigado-contrato.html",
           "reason": "archetype_substantive_failed",
-          "excerpt": "family=obrigado-transacional 4/4 sampled pages fail: /obrigado-contrato.html: 178 words; /obrigado-edital.html: 171 words",
-          "severity": "warn"
-        },
-        {
-          "gate": "archetype_editorial_ready",
-          "path": "404.html",
-          "reason": "archetype_answer_first_failed",
-          "excerpt": "family=pagina-nao-encontrada 1/1 sampled pages fail: /404.html: first 3 paragraphs are shorter than 120 chars or open with a CTA",
+          "excerpt": "family=obrigado-transacional 4/4 sampled pages fail: /obrigado-contrato.html: 245 words; /obrigado-edital.html: 238 words",
           "severity": "warn"
         },
         {
           "gate": "archetype_editorial_ready",
           "path": "404.html",
           "reason": "archetype_substantive_failed",
-          "excerpt": "family=pagina-nao-encontrada 1/1 sampled pages fail: /404.html: 46 words",
+          "excerpt": "family=pagina-nao-encontrada 1/1 sampled pages fail: /404.html: 151 words",
           "severity": "warn"
         },
         {
@@ -830,7 +795,7 @@
           "gate": "archetype_editorial_ready",
           "path": "compatibilizacao-projetos-engenharia/index.html",
           "reason": "archetype_cta_subordinate_failed",
-          "excerpt": "family=engineering-projects-coordination-clash 1/1 sampled pages fail: /compatibilizacao-projetos-engenharia/: 6 CTAs in <main> for 1512 words (max 3)",
+          "excerpt": "family=engineering-projects-coordination-clash 1/1 sampled pages fail: /compatibilizacao-projetos-engenharia/: 9 CTAs in <main> for 2534 words (max 6)",
           "severity": "warn"
         },
         {
@@ -851,7 +816,7 @@
           "gate": "archetype_editorial_ready",
           "path": "revisao-tecnica-projetos-engenharia/index.html",
           "reason": "archetype_cta_subordinate_failed",
-          "excerpt": "family=private-engineering-project-review 1/1 sampled pages fail: /revisao-tecnica-projetos-engenharia/: 6 CTAs in <main> for 1218 words (max 3)",
+          "excerpt": "family=private-engineering-project-review 1/1 sampled pages fail: /revisao-tecnica-projetos-engenharia/: 9 CTAs in <main> for 1674 words (max 4)",
           "severity": "warn"
         },
         {
@@ -865,7 +830,7 @@
           "gate": "archetype_editorial_ready",
           "path": "parcerias-engenharia/index.html",
           "reason": "archetype_cta_subordinate_failed",
-          "excerpt": "family=parcerias-engenharia 1/1 sampled pages fail: /parcerias-engenharia/: 10 CTAs in <main> for 605 words (max 3)",
+          "excerpt": "family=parcerias-engenharia 1/1 sampled pages fail: /parcerias-engenharia/: 19 CTAs in <main> for 1286 words (max 3)",
           "severity": "warn"
         },
         {
@@ -879,7 +844,7 @@
           "gate": "archetype_editorial_ready",
           "path": "projetos-complementares-engenharia/index.html",
           "reason": "archetype_cta_subordinate_failed",
-          "excerpt": "family=complementary-engineering-elaboration 1/1 sampled pages fail: /projetos-complementares-engenharia/: 6 CTAs in <main> for 1163 words (max 3)",
+          "excerpt": "family=complementary-engineering-elaboration 1/1 sampled pages fail: /projetos-complementares-engenharia/: 6 CTAs in <main> for 1792 words (max 4)",
           "severity": "warn"
         },
         {
@@ -900,7 +865,7 @@
           "gate": "archetype_editorial_ready",
           "path": "inspecao-diagnostico-edificacoes/index.html",
           "reason": "archetype_cta_subordinate_failed",
-          "excerpt": "family=inspecao-diagnostico-edificacoes 1/1 sampled pages fail: /inspecao-diagnostico-edificacoes/: 4 CTAs in <main> for 1230 words (max 3)",
+          "excerpt": "family=inspecao-diagnostico-edificacoes 1/1 sampled pages fail: /inspecao-diagnostico-edificacoes/: 7 CTAs in <main> for 1643 words (max 4)",
           "severity": "warn"
         },
         {
@@ -914,7 +879,7 @@
           "gate": "archetype_editorial_ready",
           "path": "assistencia-tecnica-pericial-engenharia/index.html",
           "reason": "archetype_cta_subordinate_failed",
-          "excerpt": "family=assistencia-tecnica-pericial-engenharia 1/1 sampled pages fail: /assistencia-tecnica-pericial-engenharia/: 6 CTAs in <main> for 1156 words (max 3)",
+          "excerpt": "family=assistencia-tecnica-pericial-engenharia 1/1 sampled pages fail: /assistencia-tecnica-pericial-engenharia/: 6 CTAs in <main> for 1496 words (max 3)",
           "severity": "warn"
         },
         {
@@ -928,15 +893,15 @@
           "gate": "archetype_editorial_ready",
           "path": "seguranca-trabalho-apoio-tecnico/index.html",
           "reason": "archetype_cta_subordinate_failed",
-          "excerpt": "family=seguranca-trabalho-apoio-tecnico 1/1 sampled pages fail: /seguranca-trabalho-apoio-tecnico/: 6 CTAs in <main> for 1184 words (max 3)",
+          "excerpt": "family=seguranca-trabalho-apoio-tecnico 1/1 sampled pages fail: /seguranca-trabalho-apoio-tecnico/: 6 CTAs in <main> for 1605 words (max 4)",
           "severity": "warn"
         }
       ],
       "stats": {
         "schema": "indexation-evidence-v1",
         "families": 44,
-        "archetype_ready": 11,
-        "archetype_not_ready": 33,
+        "archetype_ready": 9,
+        "archetype_not_ready": 35,
         "materially_rejected": [
           "jurisprudencia-contratos-obras"
         ],
@@ -964,11 +929,13 @@
             "material": []
           },
           "home": {
-            "ready": true,
+            "ready": false,
             "sample": [
               "/"
             ],
-            "blocking": [],
+            "blocking": [
+              "caveats_preserved"
+            ],
             "material": []
           },
           "servicos-corporativos": {
@@ -1172,6 +1139,7 @@
             "sample": [
               "/casos/",
               "/casos/aditivo-art125-demonstrativo/",
+              "/casos/demonstrativo-infraestrutura/",
               "/casos/demonstrativo-projeto-privado/",
               "/casos/medicao-glosa-demonstrativo/"
             ],
@@ -1202,11 +1170,13 @@
             "material": []
           },
           "servicos-obras-publicas": {
-            "ready": true,
+            "ready": false,
             "sample": [
               "/servicos-obras-publicas/"
             ],
-            "blocking": [],
+            "blocking": [
+              "caveats_preserved"
+            ],
             "material": []
           },
           "problemas-que-resolvemos": {
@@ -1215,7 +1185,6 @@
               "/problemas-que-resolvemos/"
             ],
             "blocking": [
-              "answer_first",
               "specific_value"
             ],
             "material": []
@@ -1297,7 +1266,6 @@
               "/404.html"
             ],
             "blocking": [
-              "answer_first",
               "substantive"
             ],
             "material": []
@@ -1669,9 +1637,9 @@
       ],
       "stats": {
         "schema": "indexation-evidence-v1",
-        "scanned": 232,
+        "scanned": 233,
         "noindex": 135,
-        "instance_index_ready": 67,
+        "instance_index_ready": 68,
         "index_ready_but_noindex": [],
         "indexable_without_evidence": 30,
         "noindex_without_reason": [],

@@ -14,6 +14,7 @@ from scripts.bofu_dominance.frozen_specs.constants import PILLARS
 from scripts.site.public_ia import header_items
 from scripts.site.public_navigation import (
     CANONICAL_CTA,
+    FROZEN_NAV_HTML_PATHS,
     CANONICAL_NAV_ITEMS,
     audit_public_navigation_tree,
     promote_public_navigation,
@@ -609,12 +610,18 @@ def test_new_surfaces_do_not_mutate_the_frozen_runtime() -> None:
         )
     )
     assert script_hash == frozen_hashes["forbidden"]["script.js"]
+    # 2026-09-16: pillars released by the founder's capture decision carry the
+    # promoted nav like every mutable route and are no longer frozen for the
+    # navigation promotion; the ones still frozen keep the legacy contract.
     for pillar in PILLARS:
         frozen = ROOT / pillar["html_rel"]
-        assert _desktop_labels(frozen) == LEGACY_NAV, frozen
-        assert promote_public_navigation(
-            _html(frozen), relative_path=pillar["html_rel"]
-        ) == _html(frozen)
+        if pillar["html_rel"] in FROZEN_NAV_HTML_PATHS:
+            assert _desktop_labels(frozen) == LEGACY_NAV, frozen
+            assert promote_public_navigation(
+                _html(frozen), relative_path=pillar["html_rel"]
+            ) == _html(frozen)
+        else:
+            assert _desktop_labels(frozen) == EXPECTED_NAV, frozen
     for path in (ROOT / "index.html", PAGE):
         footer = _html(path).split('<footer class="site-footer">', 1)[1]
         assert 'href="/ferramentas/"' in footer
