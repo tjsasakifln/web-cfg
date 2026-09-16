@@ -1,0 +1,79 @@
+/* CONFENGE identity layer — one family, one scale, one rule weight, for every route.
+ * Promoted from assets/home-10x.css (2026-09-16): until then only the home loaded
+ * Archivo and the editorial scale; the other 259 routes rendered in system-ui with
+ * H1 up to 80px. Tokens live in styles-tokens.css; mirror in data/site/design-system.json.
+ */
+@font-face{
+  font-family:"Archivo Var";
+  src:url("/assets/archivo-var-latin-bf6e041e.woff2") format("woff2-variations");
+  font-weight:100 900;
+  font-stretch:66% 110%;
+  font-style:normal;
+  /* optional + preload: the face paints on first paint when the preload has
+   * landed (fast/repeat visits) and never swaps late, so the hero cannot shift
+   * after paint (CI measured CLS 0.088 on /acompanhamento-contratos-obras/ with
+   * swap). The metric-matched fallbacks below keep the layout identical on the
+   * rare first visit that renders without it. */
+  font-display:optional;
+}
+@font-face{
+  font-family:"Archivo Fallback";
+  src:local("Arial"),local("Liberation Sans"),local("Helvetica"),local("Helvetica Neue");
+  size-adjust:98.56%;
+  ascent-override:89.08%;
+  descent-override:21.31%;
+  line-gap-override:0%;
+}
+/* The wdth axis has no local equivalent: headings run at 96% and labels at 78%
+ * of the normal width and render bold, so their fallbacks are calibrated
+ * against Liberation Sans Bold with fontTools (wght 760/wdth 96 = 97.8%,
+ * wght 750/wdth 78 = 81.9%) and keep line breaks stable while the woff2 is
+ * late. Heights come from explicit unitless line-heights. */
+@font-face{
+  font-family:"Archivo Fallback Wide";
+  src:local("Arial Bold"),local("Arial-BoldMT"),local("Liberation Sans Bold"),local("LiberationSans-Bold"),local("Helvetica Bold"),local("Helvetica-Bold");
+  font-weight:100 900;
+  size-adjust:95.2%;
+  ascent-override:89.77%;
+  descent-override:21.47%;
+  line-gap-override:0%;
+}
+@font-face{
+  font-family:"Archivo Fallback Narrow";
+  src:local("Arial Bold"),local("Arial-BoldMT"),local("Liberation Sans Bold"),local("LiberationSans-Bold"),local("Helvetica Bold"),local("Helvetica-Bold");
+  font-weight:100 900;
+  size-adjust:81.9%;
+  ascent-override:107.2%;
+  descent-override:25.6%;
+  line-gap-override:0%;
+}
+body{font-family:var(--sans);font-variant-numeric:tabular-nums slashed-zero;color:var(--text);background:var(--white)}
+h1,h2,h3,h4{color:var(--ink);font-family:var(--sans-wide);font-stretch:var(--wide);text-wrap:balance}
+h1{font-size:var(--text-h1);font-weight:760;letter-spacing:-.03em;line-height:1.04;margin:0 0 var(--space-4)}
+h2{font-size:var(--text-h2);font-weight:740;letter-spacing:-.025em;line-height:1.1;margin:0 0 var(--space-3)}
+h3{font-size:var(--text-h3);font-weight:720;letter-spacing:-.015em;line-height:1.25;margin:0 0 var(--space-2)}
+h4{font-size:1rem;font-weight:720;line-height:1.3;margin:0 0 var(--space-2)}
+.type-serif{font-family:var(--sans-wide);font-stretch:var(--wide);font-weight:700;font-style:normal}
+.type-mono,code,kbd,samp{font-family:var(--sans-narrow);font-stretch:var(--narrow);font-weight:650;letter-spacing:.02em;font-variant-numeric:tabular-nums slashed-zero}
+.eyebrow,.hero-eyebrow{display:block;font-family:var(--sans-narrow);font-stretch:var(--narrow);font-weight:750;font-size:var(--text-small);letter-spacing:.1em;line-height:1.4;text-transform:uppercase;color:var(--green-700);margin:0 0 .75rem}
+.eyebrow-dot{display:none}
+.section-lead,.hero-lead,.content-lead,.lead{font-size:var(--text-lead);line-height:1.5;color:var(--text);max-width:var(--read-measure)}
+.section{padding:var(--section-default)}
+.section--tight{padding:var(--section-tight)}
+.section--loose{padding:var(--section-loose)}
+.section-head{margin-bottom:clamp(1.75rem,4vw,3rem)}
+.section-head h2{max-width:22ch}
+@media (min-width:1000px){
+  .section-head:has(.section-lead){display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);column-gap:clamp(2rem,5vw,4.5rem);align-items:start}
+  .section-head:has(.section-lead)>*{grid-column:1 / -1}
+  .section-head:has(.section-lead)>.eyebrow{grid-column:1;grid-row:1}
+  .section-head:has(.section-lead)>:is(h1,h2){grid-column:1;grid-row:2;max-width:18ch}
+  .section-head:has(.section-lead)>.section-lead{grid-column:2;grid-row:2;margin:.35rem 0 0;max-width:46ch}
+  .section-head:has(.section-lead)>.section-lead~*{margin-top:1rem}
+}
+.button,.button-primary,.button-secondary,.header-cta{font-family:var(--sans-wide);font-stretch:var(--wide);font-weight:720;letter-spacing:-.005em;border-radius:var(--radius-md)}
+.button-secondary{background:transparent;color:var(--ink);border:1px solid var(--rule-strong);box-shadow:none}
+.button-secondary:hover,.button-secondary:focus-visible{background:var(--ink);color:var(--white);border-color:var(--ink)}
+.text-link{font-weight:720;color:var(--ink);text-decoration:underline;text-underline-offset:.2em;text-decoration-thickness:1px}
+.text-link:hover{color:var(--green-700)}
+::selection{background:var(--green-100);color:var(--ink)}

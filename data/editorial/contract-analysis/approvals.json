@@ -66,11 +66,11 @@
       "producer_root_hash": "5957e02b7982e000ca7dda2a9a06b88769085bc2a163eadcd8d59bd134b26b3e",
       "source_dossier_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
       "official_payload_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
-      "rendered_content_hash": "975ed18105c8fc56e1ffe7424a11aec2f1b78f4f50778ee90994a6583937d6de",
-      "rendered_content_hash_previous": "da2b8a7ba59d11bcc93318f2c44ac5f6c1faddf92350901075103947983031ea",
+      "rendered_content_hash": "8ddd841b26d95516cba209773bebea44ae2fd76a8148cb0b5a104e6800a92c43",
+      "rendered_content_hash_previous": "761955501c095f8f47455a545e88f9c0becb60ca42f7229603aeae674fd1fedc",
       "rendered_hash_scope": "public_artifact_v2",
-      "rendered_hash_recaptured_at": "2026-09-09T18:50:42Z",
-      "rendered_hash_recapture_reason": "Decisão expressa do fundador EXECUTE_NOW em 2026-09-09: a transformação determinística do artefato público trocou somente a referência do CSS canônico de /assets/css/styles.af0516fc8f25.css para /assets/css/styles.daa268664c35.css após a remoção verificada de cinco regras sem consumidor do seletor .footer-clusters. A comparação do HTML montado antes/depois confirmou essa única diferença. O material_hash, fatos, cálculos, fontes, tese, limites, autoria, datas de consulta e hashes do produtor permanecem idênticos. Executor: agente Codex; não houve nova aprovação técnica nem revisão humana independente.",
+      "rendered_hash_recaptured_at": "2026-09-16T08:45:27Z",
+      "rendered_hash_recapture_reason": "Decisão do fundador EXECUTE_NOW, campanha CONFENGE-DESIGN-AUTHORITY-AND-PRODUCTION-20260915 (2026-09-16): somente a referência do CSS canônico mudou (/assets/css/styles.df7cf13d8dc6.css -> /assets/css/styles.26055641a95b.css; font-display optional na face Archivo). HTML-fonte idêntico ao da recaptura anterior. Material, fatos, cálculos, fontes, tese, limites, autoria, datas e hashes do produtor idênticos. Executor: agente Claude Code; sem nova aprovação técnica nem revisão humana independente.",
       "canonical_url": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
       "base_sha": "d1c7aaa66969cc63aa673f2c16a5df22a90bc7a9",
       "comparable_available": true,
@@ -229,6 +229,181 @@
         "styles_source_sha256_previous": "1adf1fce8dc20876b3e8192e5b28b3c0750cad5f48b2d2991fbc8bcec0a2ce51",
         "styles_source_sha256": "e0308ce5bd1b6da4d4b7a4cb58c4717a9d3512b36b839fb35ca6be21bf03eaf3",
         "removed_rules": "cinco regras sem consumidor do seletor .footer-clusters"
+      },
+      "byte_equivalence": {
+        "material_hash": "ff2a3862779f5e6c59f9a39f0a048e6f02b2bb61f6fcf08be064cab889e4a328",
+        "facts": true,
+        "calculations": true,
+        "sources": true,
+        "thesis": true,
+        "limitations": true,
+        "authorship": true,
+        "consultation_dates": true,
+        "content_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
+        "producer_root_hash": "5957e02b7982e000ca7dda2a9a06b88769085bc2a163eadcd8d59bd134b26b3e"
+      }
+    },
+    {
+      "action": "recapture_rendered_presentation",
+      "analysis_id": "13ec615146b3d348190a9b0b9148831e",
+      "actor": "CLAUDE_CODE_AGENT_EXECUTOR",
+      "authority": "Decisão do fundador EXECUTE_NOW, campanha CONFENGE-DESIGN-AUTHORITY-AND-PRODUCTION-20260915",
+      "at": "2026-09-16T05:52:38Z",
+      "reviewer": "comparação determinística pelo próprio agente (HTML-fonte byte-idêntico; hash anterior reproduzido sobre origin/main); nenhuma nova aprovação técnica ou revisão humana independente alegada",
+      "rendered_content_hash_previous": "975ed18105c8fc56e1ffe7424a11aec2f1b78f4f50778ee90994a6583937d6de",
+      "rendered_content_hash": "f1a33237f71ed63cff1be5cb3420a7e53d5d5b6a268f99b4c6ea5ee52b98a7a4",
+      "presentation_delta": {
+        "stylesheet_href_previous": "/assets/css/styles.daa268664c35.css",
+        "stylesheet_href": "/assets/css/styles.b51b6642c6e8.css",
+        "styles_source_sha256_previous": "e0308ce5bd1b6da4d4b7a4cb58c4717a9d3512b36b839fb35ca6be21bf03eaf3",
+        "styles_source_sha256": "a846b7453aab7bb57ecf371fc720e406c291259133f96b08556c5ad571fc57ee",
+        "changed_rules": "css/identity.css (font-face Archivo + fallback métrico, escala única, papéis base) e css/components.css concatenados em styles.css; clamps locais de h1/h2, raios e sombras normalizados"
+      },
+      "byte_equivalence": {
+        "material_hash": "ff2a3862779f5e6c59f9a39f0a048e6f02b2bb61f6fcf08be064cab889e4a328",
+        "facts": true,
+        "calculations": true,
+        "sources": true,
+        "thesis": true,
+        "limitations": true,
+        "authorship": true,
+        "consultation_dates": true,
+        "content_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
+        "producer_root_hash": "5957e02b7982e000ca7dda2a9a06b88769085bc2a163eadcd8d59bd134b26b3e"
+      }
+    },
+    {
+      "action": "recapture_rendered_presentation",
+      "analysis_id": "13ec615146b3d348190a9b0b9148831e",
+      "actor": "CLAUDE_CODE_AGENT_EXECUTOR",
+      "authority": "Decisão do fundador EXECUTE_NOW, campanha CONFENGE-DESIGN-AUTHORITY-AND-PRODUCTION-20260915",
+      "at": "2026-09-16T06:07:34Z",
+      "reviewer": "comparação determinística pelo próprio agente (única diferença no HTML-fonte: a linha de preload da fonte); nenhuma nova aprovação técnica ou revisão humana independente alegada",
+      "rendered_content_hash_previous": "f1a33237f71ed63cff1be5cb3420a7e53d5d5b6a268f99b4c6ea5ee52b98a7a4",
+      "rendered_content_hash": "cab5cf196672ddb3ddf7b399b433431f4295b568c851f558951491b92d0f3873",
+      "presentation_delta": {
+        "stylesheet_href_previous": "/assets/css/styles.b51b6642c6e8.css",
+        "stylesheet_href": "/assets/css/styles.c4d685b5eb19.css",
+        "styles_source_sha256_previous": "a846b7453aab7bb57ecf371fc720e406c291259133f96b08556c5ad571fc57ee",
+        "styles_source_sha256": "c1be96c3acb8b680b1bff505f6082a88da364d4a4863bd0984177589f49212a8",
+        "head_delta": "+ <link rel=\"preload\" as=\"font\" type=\"font/woff2\" href=\"/assets/archivo-var-latin-bf6e041e.woff2\" crossorigin=\"anonymous\"/> (scripts/pseo/html_shell.py)",
+        "changed_rules": "css/identity.css: faces Archivo Fallback Wide/Narrow com fonte local em negrito e size-adjust 95,2 % / 81,9 %; breadcrumb sem quebra no item"
+      },
+      "byte_equivalence": {
+        "material_hash": "ff2a3862779f5e6c59f9a39f0a048e6f02b2bb61f6fcf08be064cab889e4a328",
+        "facts": true,
+        "calculations": true,
+        "sources": true,
+        "thesis": true,
+        "limitations": true,
+        "authorship": true,
+        "consultation_dates": true,
+        "content_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
+        "producer_root_hash": "5957e02b7982e000ca7dda2a9a06b88769085bc2a163eadcd8d59bd134b26b3e"
+      }
+    },
+    {
+      "action": "recapture_rendered_presentation",
+      "analysis_id": "13ec615146b3d348190a9b0b9148831e",
+      "actor": "CLAUDE_CODE_AGENT_EXECUTOR",
+      "authority": "Decisão do fundador EXECUTE_NOW, campanha CONFENGE-DESIGN-AUTHORITY-AND-PRODUCTION-20260915",
+      "at": "2026-09-16T06:23:28Z",
+      "reviewer": "comparação determinística pelo próprio agente (HTML-fonte idêntico; só o href do CSS); nenhuma nova aprovação técnica ou revisão humana independente alegada",
+      "rendered_content_hash_previous": "cab5cf196672ddb3ddf7b399b433431f4295b568c851f558951491b92d0f3873",
+      "rendered_content_hash": "00804874ed72cee91c004b3325056d8b58e17f91191dead1676f1332140b8375",
+      "presentation_delta": {
+        "stylesheet_href_previous": "/assets/css/styles.c4d685b5eb19.css",
+        "stylesheet_href": "/assets/css/styles.ae6299564823.css",
+        "styles_source_sha256_previous": "c1be96c3acb8b680b1bff505f6082a88da364d4a4863bd0984177589f49212a8",
+        "styles_source_sha256": "0f71c028fd0ab672d65f2fac5d6b0d0a998ece0983fc17f290c98639973f8cf2",
+        "changed_rules": ".breadcrumbs li[aria-current]{white-space:normal} e .data-table code{overflow-wrap:anywhere}"
+      },
+      "byte_equivalence": {
+        "material_hash": "ff2a3862779f5e6c59f9a39f0a048e6f02b2bb61f6fcf08be064cab889e4a328",
+        "facts": true,
+        "calculations": true,
+        "sources": true,
+        "thesis": true,
+        "limitations": true,
+        "authorship": true,
+        "consultation_dates": true,
+        "content_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
+        "producer_root_hash": "5957e02b7982e000ca7dda2a9a06b88769085bc2a163eadcd8d59bd134b26b3e"
+      }
+    },
+    {
+      "action": "recapture_rendered_presentation",
+      "analysis_id": "13ec615146b3d348190a9b0b9148831e",
+      "actor": "CLAUDE_CODE_AGENT_EXECUTOR",
+      "authority": "Decisão do fundador EXECUTE_NOW, campanha CONFENGE-DESIGN-AUTHORITY-AND-PRODUCTION-20260915",
+      "at": "2026-09-16T06:57:09Z",
+      "reviewer": "comparação determinística pelo próprio agente (HTML-fonte idêntico; só o href do CSS); nenhuma nova aprovação técnica ou revisão humana independente alegada",
+      "rendered_content_hash_previous": "00804874ed72cee91c004b3325056d8b58e17f91191dead1676f1332140b8375",
+      "rendered_content_hash": "83312f46a6743f316883e64d2a8a43ad3eff4e2aee0f9c68eaba040f75bbedb2",
+      "presentation_delta": {
+        "stylesheet_href_previous": "/assets/css/styles.ae6299564823.css",
+        "stylesheet_href": "/assets/css/styles.909610e40263.css",
+        "styles_source_sha256_previous": "0f71c028fd0ab672d65f2fac5d6b0d0a998ece0983fc17f290c98639973f8cf2",
+        "styles_source_sha256": "1dea85c2b3d2d1230eee2269cdd0b918a879cf05325034321b5b44654314df53",
+        "changed_rules": "main section[id], main h2[id], main h3[id] {scroll-margin-top:6rem}"
+      },
+      "byte_equivalence": {
+        "material_hash": "ff2a3862779f5e6c59f9a39f0a048e6f02b2bb61f6fcf08be064cab889e4a328",
+        "facts": true,
+        "calculations": true,
+        "sources": true,
+        "thesis": true,
+        "limitations": true,
+        "authorship": true,
+        "consultation_dates": true,
+        "content_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
+        "producer_root_hash": "5957e02b7982e000ca7dda2a9a06b88769085bc2a163eadcd8d59bd134b26b3e"
+      }
+    },
+    {
+      "action": "recapture_rendered_presentation",
+      "analysis_id": "13ec615146b3d348190a9b0b9148831e",
+      "actor": "CLAUDE_CODE_AGENT_EXECUTOR",
+      "authority": "Decisão do fundador EXECUTE_NOW, campanha CONFENGE-DESIGN-AUTHORITY-AND-PRODUCTION-20260915",
+      "at": "2026-09-16T08:08:31Z",
+      "reviewer": "comparação determinística pelo próprio agente (HTML-fonte idêntico; só o href do CSS); nenhuma nova aprovação técnica ou revisão humana independente alegada",
+      "rendered_content_hash_previous": "83312f46a6743f316883e64d2a8a43ad3eff4e2aee0f9c68eaba040f75bbedb2",
+      "rendered_content_hash": "761955501c095f8f47455a545e88f9c0becb60ca42f7229603aeae674fd1fedc",
+      "presentation_delta": {
+        "stylesheet_href_previous": "/assets/css/styles.909610e40263.css",
+        "stylesheet_href": "/assets/css/styles.df7cf13d8dc6.css",
+        "styles_source_sha256_previous": "1dea85c2b3d2d1230eee2269cdd0b918a879cf05325034321b5b44654314df53",
+        "styles_source_sha256": "f61067d5be5775e88cf92a7cbb39cd3fa52441a59b38d141bd195ed8e2089d73",
+        "changed_rules": ".hero-proof li sem padding legado e gap menor"
+      },
+      "byte_equivalence": {
+        "material_hash": "ff2a3862779f5e6c59f9a39f0a048e6f02b2bb61f6fcf08be064cab889e4a328",
+        "facts": true,
+        "calculations": true,
+        "sources": true,
+        "thesis": true,
+        "limitations": true,
+        "authorship": true,
+        "consultation_dates": true,
+        "content_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
+        "producer_root_hash": "5957e02b7982e000ca7dda2a9a06b88769085bc2a163eadcd8d59bd134b26b3e"
+      }
+    },
+    {
+      "action": "recapture_rendered_presentation",
+      "analysis_id": "13ec615146b3d348190a9b0b9148831e",
+      "actor": "CLAUDE_CODE_AGENT_EXECUTOR",
+      "authority": "Decisão do fundador EXECUTE_NOW, campanha CONFENGE-DESIGN-AUTHORITY-AND-PRODUCTION-20260915",
+      "at": "2026-09-16T08:45:27Z",
+      "reviewer": "comparação determinística pelo próprio agente (HTML-fonte idêntico; só o href do CSS); nenhuma nova aprovação técnica ou revisão humana independente alegada",
+      "rendered_content_hash_previous": "761955501c095f8f47455a545e88f9c0becb60ca42f7229603aeae674fd1fedc",
+      "rendered_content_hash": "8ddd841b26d95516cba209773bebea44ae2fd76a8148cb0b5a104e6800a92c43",
+      "presentation_delta": {
+        "stylesheet_href_previous": "/assets/css/styles.df7cf13d8dc6.css",
+        "stylesheet_href": "/assets/css/styles.26055641a95b.css",
+        "styles_source_sha256_previous": "f61067d5be5775e88cf92a7cbb39cd3fa52441a59b38d141bd195ed8e2089d73",
+        "styles_source_sha256": "e5e1f30d92f7b11176b04e718cea44a0c9c075c44362f835aadacf631a53ee80",
+        "changed_rules": "font-display optional na face Archivo"
       },
       "byte_equivalence": {
         "material_hash": "ff2a3862779f5e6c59f9a39f0a048e6f02b2bb61f6fcf08be064cab889e4a328",

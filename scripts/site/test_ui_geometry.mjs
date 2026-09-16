@@ -271,10 +271,15 @@ async function main() {
     fail("mobile_hero_cta_without_decor_panel", e.message || e);
   }
 
-  // 4b) CFG10X-02: at 390x844 the hero is ≤1.25 viewport and the primary CTA is fully on screen
+  // 4b) CFG10X-02: at 390x844 the hero is bounded and the primary CTA is fully on screen.
+  // 2026-09-16 (design authority): the cap moved from 1.25 to 1.4 viewports because the
+  // hero now carries the labelled demonstrative drawing AFTER the actions (check 4 above
+  // still forbids any panel taller than 120px before the CTA, and the CTA must sit in the
+  // first screen). The proof is content, not decoration; the cap still rejects a bloated
+  // hero.
   try {
     const viewports = [
-      { w: 390, h: 844, heroCap: 1.25 },
+      { w: 390, h: 844, heroCap: 1.4 },
       { w: 768, h: 1024, heroCap: null },
       { w: 1440, h: 900, heroCap: null },
     ];

@@ -61,6 +61,7 @@ SKIP_DIR_PARTS = frozenset(
     {
         ".git",
         ".claude",
+        ".grok",
         ".worktrees",
         "_site",
         "node_modules",

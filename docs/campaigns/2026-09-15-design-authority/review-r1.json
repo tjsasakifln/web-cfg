@@ -1,0 +1,341 @@
+[
+ {
+  "reviewer": "Revisora de experiência e qualidade (UX, acessibilidade, legibilidade, conversão honesta) — Claude Opus, revisão independente por telas + DOM ao vivo (candidato em 127.0.0.1:8790, produção em confenge.com.br)",
+  "verdict": "APROVAR COM CORREÇÕES ANTES DO MERGE. O candidato é claramente superior à produção em identidade (Archivo carregada, produção caía em fallback DejaVu em /servicos/, /entregas/, /triagem-tecnica/ e /conteudos/), em prova editada (planta cotada + memória de cálculo que fecha aritmeticamente: 2×(2,40+1,80)×2,60 = 21,84; −1,68 −0,56 = 19,60 m²) e em propagação do sistema às rotas irmãs (card \"Em 30 segundos\" idêntico em quantitativos, compatibilização, revisão e inspeção). Mas há três regressões concretas em relação à produção que precisam ser corrigidas: (1) o hero de /servicos-obras-publicas/ quebrou no desktop (h1 empurrado para a coluna direita por um `.section-head` em grid de 2 colunas com 4 filhos), (2) o bloco de contato do meio da home (\"Conte a situação do seu jeito\" com botão WhatsApp e link e-mail, h2 próprio na produção) foi rebaixado a um parágrafo com links em negrito sem sublinhado, e (3) a tabela nova da planilha em /quantitativos-orcamento-obras/ tem colunas de 62px com cabeçalhos sobrepostos no mobile. Foco visível, menu móvel, hierarquia h1>h2>h3, ausência de overflow horizontal em 320px e rótulos demonstrativos estão corretos.",
+  "dimensions": [
+   {
+    "dimension": "Impressão profissional e identidade própria (não template de IA/consultoria)",
+    "before": 5,
+    "after": 8,
+    "evidence": "baseline-prod/servicos-1440x1000-fold.png, entregas, triagem e conteudos renderizam h1 em DejaVu Sans Bold (fallback: fontFamily 'ui-sans-serif, system-ui' medido em produção), quebrando qualquer identidade; candidate-r1/home-1440x1000-fold.png substitui o painel escuro genérico por planta cotada PR-ARQ com legenda 'escala indicativa · exemplo demonstrativo'.",
+    "notes": "A planta como prova é a única peça que não parece template. O hero de /entregas/ ainda carrega h1 de 43px + h2 de 54,72px e gradiente, herdado da produção, e destoa do resto."
+   },
+   {
+    "dimension": "Clareza da abertura e prioridade visual",
+    "before": 6,
+    "after": 7,
+    "evidence": "Home 1440: título + parágrafo + claim em negrito + par de CTAs + credenciais em ordem limpa; /servicos/ ganhou par de CTAs no fold (candidate-r1/servicos-1440x1000-fold.png) onde a produção tinha só links inline. Porém em /servicos-obras-publicas/ o h1 caiu na coluna direita (x=591) com o eyebrow órfão em x=120,y=176 e 216px de vazio até o parágrafo cinza (review-b2g.mjs: header.section-head grid '398.98px 361px' com 4 filhos).",
+    "notes": "No mobile o candidato removeu o exemplo demonstrativo do fold da home (produção mostrava a conta no fold); o desenho aparece só após CTAs e credenciais."
+   },
+   {
+    "dimension": "Tipografia, ritmo e densidade",
+    "before": 5,
+    "after": 7,
+    "evidence": "Candidato: corpo 18px desktop / 16px mobile em home, servicos, triagem, conteudos, compatibilizacao, quantitativos (review-fs.mjs). Mas /entregas/ mantém dd 11,84px ×83, dt 12,8px ×32 e dt 9,92px ×2 no mobile e h2 56,8px em obras públicas — idêntico à produção, logo o 'escala única em todas as rotas' do commit não se cumpre nessas duas rotas.",
+    "notes": "Servicos cresceu de 11255 para 13159px no mobile (+17%) enquanto todas as outras rotas encurtaram; a situação 09 (obras públicas) fica mais fundo no scroll."
+   },
+   {
+    "dimension": "Qualidade e honestidade da prova",
+    "before": 6,
+    "after": 9,
+    "evidence": "candidate-r1/quantitativos-orcamento-obras-1440x1000-full.png: planta + tabela 'Memória de cálculo do item Q-PAR-01' com 8 linhas conferíveis, critério de desconto declarado, faixa 'CLIENTE Exemplo demonstrativo · Não é obra de cliente', e 6 a 10 ocorrências de 'demonstrativ' por página (audit). Números do PNCP com 'LEITURA CORRETA: Números de mercado, não resultados de clientes' ao lado dos KPIs, não abaixo.",
+    "notes": "Pequena inconsistência: planta da home cita revisão R00 e a de quantitativos R01; a trilha diz 'Documento PR-ARQ-R00' e a tabela 'PR-ARQ-R01'. Não é mentira, mas quem confere vai perguntar."
+   },
+   {
+    "dimension": "Consistência entre home e páginas internas",
+    "before": 4,
+    "after": 7,
+    "evidence": "Card 'EM 30 SEGUNDOS' idêntico em quantitativos, compatibilizacao, revisao-tecnica e inspecao (C-revisao-00.png, C-inspecao-m-00.png); lista numerada 01/02/03 com eyebrow verde e 'VOCÊ PASSA A TER' repetida em home e servicos. Fora do sistema: /entregas/ (cards com descrições em 12-13px e links 'Ver inspeção…' sem sublinhado) e /servicos-obras-publicas/ (coluna esquerda de 450px com 60% da largura vazia, C-servicos-obras-publicas-1440x1000-01.png).",
+    "notes": "Metade migrada é pior do que não migrada para a percepção de sistema: Archivo entrou em /entregas/ mas a escala não."
+   },
+   {
+    "dimension": "Experiência móvel e acabamento interativo",
+    "before": 6,
+    "after": 6,
+    "evidence": "Sem overflow horizontal em 320px nas 6 rotas (scrollW == clientW). Menu móvel com aria-expanded=true/aria-controls=mobile-menu e botão 'Fechar' (menu-open-390.png). Foco: anel de 2px box-shadow branco+navy visível no header e em 'Ver projeto e revisão' (focus-nav.png, focus-situ.png) — igual à produção. Contra: tabela em .table-scroll com table-layout:fixed e min-width 560px gera 9 colunas de 62px com th.scrollWidth até 90px, cabeçalhos 'DESCRIÇÃOUNIDADE' sobrepostos e 'Revestimento' cortado em 'Revestimen|to' (table-390-live.png, c-quant-mobile-table.png); planta na home mobile com rótulos de ~7px ilegíveis (c-home-mobile-drawing.png).",
+    "notes": "O 'Pular para o conteúdo' visível no full-page do candidato é artefato de captura: com Tab ele aparece corretamente sem colidir com o breadcrumb em ambos os builds (skip-cand.png, skip-prod.png). Honeypot 'empresa-site' 28×44 é igual em produção."
+   },
+   {
+    "dimension": "Facilidade de encontrar o serviço e iniciar contato",
+    "before": 7,
+    "after": 6,
+    "evidence": "Produção: h2 'Conte a situação do seu jeito. Respondemos com o trabalho que a resolve.' (72 chars, B-home-1440x1000-01.png) com botão 'Descrever pelo WhatsApp' e link 'Descrever por e-mail' logo após a lista de situações. Candidato: h2 removido (lista de h2 caiu de 7 para 6), substituído por parágrafo 'Não se reconheceu em nenhuma…' com 'descrever pelo WhatsApp' em negrito, sem sublinhado, cor rgb(7,26,49) sobre pai rgb(38,55,74) (review-prod.mjs AFF). 'Como conferir credenciais e limites' perdeu o sublinhado (prod: underline; cand: none).",
+    "notes": "Contato principal por página continua claro (botão verde no fold + bloco escuro no fim); o que regrediu é o caminho para quem chega ao fim da lista sem se reconhecer — justamente o visitante NEEDS_CONTEXT."
+   }
+  ],
+  "regressions": [
+   {
+    "route": "/servicos-obras-publicas/",
+    "location": "Hero (header.section-head) em 1440 e 1280 de largura — candidate-r1/servicos-obras-publicas-1440x1000-fold.png e review-live/servicos-obras-publicas-1280x720-fold.png",
+    "evidence": "O componente compartilhado `.section-head` virou grid de 2 colunas ('398.98px 361px'). O header do hero tem 4 filhos (p.eyebrow, h1, p.section-lead, p.section-proof): o eyebrow ocupa a coluna 1 (x=120,y=176), o h1 vai para a coluna 2 (x=591,y=176,h=206), o lead fica embaixo do h1 e o parágrafo cinza cai em x=120,y=412 — 216px de vazio sob o eyebrow. Na produção o hero é uma coluna limpa (baseline-prod/servicos-obras-publicas-1440x1000-fold.png). No mobile está correto.",
+    "consequence": "A página da vertical protegida (public_works_b2g), a que mais fatura, abre com h1 deslocado e um buraco no fold em qualquer desktop; parece bug de layout para quem chega de licitação/glosa.",
+    "fix": "Dar ao header do hero uma classe própria (ex. `.page-hero`) fora do `.section-head`, ou em `.section-head` definir grid-template-areas / `> h1 { grid-column: 1 }` e mover eyebrow+h1+lead para um wrapper na coluna 1 e o `.section-proof` para a coluna 2. Recapturar 1280 e 1440."
+   },
+   {
+    "route": "/ (home)",
+    "location": "Bloco após a lista de situações — candidate-r1/home-1440x1000-full.png y≈1500 e c-home-mobile-contact-para.png",
+    "evidence": "Produção tinha seção com h2 'Conte a situação do seu jeito. Respondemos com o trabalho que a resolve.', fundo verde-claro, botão 'Descrever pelo WhatsApp' e link 'Descrever por e-mail' (B-home-1440x1000-01.png). Candidato: parágrafo 'Não se reconheceu em nenhuma, ou a sua mistura duas?' com links inline em negrito, text-decoration none, cor rgb(7,26,49) sobre texto rgb(38,55,74) — contraste entre link e texto quase nulo; a contagem de h2 da home caiu de 7 para 6.",
+    "consequence": "Quem termina a lista sem se reconhecer (o caso NEEDS_CONTEXT que a constituição comercial manda acolher) perde o convite visível ao contato; no desktop sobra metade da largura vazia à direita do parágrafo.",
+    "fix": "Restaurar o bloco como seção com título e um botão WhatsApp + link e-mail (pode ser mais discreto que na produção, mas com botão/underline), ou no mínimo sublinhar os links inline e dar-lhes cor de link."
+   },
+   {
+    "route": "/ (home)",
+    "location": "Linha de credenciais no hero, 'Como conferir credenciais e limites' — candidate-r1/home-1440x1000-fold.png e home-390x844-fold.png",
+    "evidence": "Produção: text-decoration underline. Candidato: text-decoration none, diferencia-se do texto ao lado só por cor (navy vs cinza) — nas telas parece texto corrido.",
+    "consequence": "O link para a página de confiança, que a home usa como argumento ('onde você confere antes de pedir'), deixa de ser reconhecível como link.",
+    "fix": "Aplicar o mesmo estilo de link sublinhado usado em 'Conferir a conta' ao item da lista de credenciais."
+   },
+   {
+    "route": "/quantitativos-orcamento-obras/",
+    "location": "Tabela 'A planilha de quantitativos do recorte, linha a linha' em 390 e 320 de largura — table-390-live.png e c-quant-mobile-table.png",
+    "evidence": "Tabela nova no candidato (produção não tem tabela nesta rota). `.table-scroll` tem overflow-x:auto, mas a tabela está com `table-layout: fixed` e `min-width: 560px` para 9 colunas → 62px por coluna; th.scrollWidth vai a 81–90px (DESCRIÇÃO, QUANTIDADE, ELEMENTOS) e os cabeçalhos se sobrepõem ('DESCRIÇÃOUNIDADE', 'QUANTIDADEEMENTOS'); 'Revestimento' quebra em 'Revestimen|to' sobre a célula vizinha.",
+    "consequence": "A prova mais forte da página fica ilegível no celular exatamente na linha destacada Q-PAR-01; parece erro de renderização.",
+    "fix": "Aumentar `min-width` da tabela para ~900px (ou `table-layout: auto` com `white-space: nowrap` nos th) e deixar o `.table-scroll` rolar; opcionalmente ocultar Prancha/Revisão abaixo de 600px, já que são constantes ('PR-ARQ-R01', 'R01')."
+   },
+   {
+    "route": "/ (home) em 390 e 320",
+    "location": "Claim em negrito do hero — candidate-r1/home-390x844-fold.png e review-live/home-320x844-fold.png",
+    "evidence": "O texto diz 'Com a quantidade levantada do desenho demonstrativo ao lado', mas no mobile a planta aparece abaixo dos CTAs e da lista de credenciais (candidate-r1/home-390x844-full.png y≈800), fora do fold. Na produção o exemplo demonstrativo estava no fold mobile.",
+    "consequence": "A frase aponta para uma prova que não está 'ao lado' nem visível; leitor mobile vê promessa sem evidência.",
+    "fix": "Trocar 'ao lado' por 'abaixo' via copy responsivo, ou reordenar no mobile para figura + exemplo demonstrativo antes do par de CTAs (order no grid)."
+   }
+  ],
+  "weak_choices": [
+   {
+    "route": "/entregas/ e /servicos-obras-publicas/",
+    "location": "Página inteira — C-entregas-1440x1000-00/01.png, C-servicos-obras-publicas-1440x1000-01.png",
+    "evidence": "Igual à produção (medido em confenge.com.br): /entregas/ tem 83 dd a 11,84px, 32 dt a 12,8px, dt a 9,92px no mobile, h2 de 54,72px maior que o h1 de 43,2px; obras públicas tem 11 p a 12,8px e h2 de 56,8px, lista de ofertas em coluna de 450px com 60% da largura vazia.",
+    "consequence": "O commit anuncia 'escala única em todas as rotas', mas as duas rotas com preço publicado ficaram meio-migradas (só a fonte trocou). É onde o visitante decide pagar, com o texto menor do site.",
+    "fix": "Aplicar a escala (corpo 16/18px, h2 ≤ 34,4px) e o componente de lista numerada às ofertas dessas rotas na próxima rodada, ou declarar explicitamente que ficaram fora do escopo."
+   },
+   {
+    "route": "/ (home) mobile",
+    "location": "Planta do hero — c-home-mobile-drawing.png",
+    "evidence": "SVG escalado para ~330px: rótulos 'W-03 · norte · 2,40', 'pé-direito 2,60 m' e 'W-04 · oeste · 1,80' (rotacionado, sobreposto pela caixa HS-01) ficam com ~7px.",
+    "consequence": "A prova vira ilustração decorativa no celular; o rótulo W-04 já colide com HS-01 até no desktop.",
+    "fix": "Versão mobile do SVG com menos rótulos (só cotas 2,40/1,80, W-01..W-04, D-01, WN-01) e fonte mínima de 11px; afastar HS-01 do rótulo W-04."
+   },
+   {
+    "route": "/quantitativos-orcamento-obras/ e / (home)",
+    "location": "Identificadores da prova",
+    "evidence": "Home: 'PR-ARQ · R00'; quantitativos: 'PR-ARQ · R01' na planta e na tabela, mas 'Documento PR-ARQ-R00' no passo 06 da trilha. Tabela também traz 'Contrpiso' (typo em dado).",
+    "consequence": "Quem confere (o público-alvo da prova) encontra a revisão mudando entre páginas sem explicação.",
+    "fix": "Unificar em R01 (ou explicar que R01 é a revisão que incorpora RF-01) e corrigir 'Contrapiso' no CSV/gerador."
+   },
+   {
+    "route": "/ (home)",
+    "location": "Lista 'Em qual destas você se reconhece?' — C-home-1440x1000-00.png",
+    "evidence": "'VOCÊ PASSA A TER …' caiu para ~14px enquanto a descrição de uma linha subiu para 18px; a frase que descreve a entrega (o argumento de venda da linha) ficou menor que a frase que descreve o serviço.",
+    "consequence": "Hierarquia invertida em relação ao objetivo declarado ('cada linha diz o que você passa a ter').",
+    "fix": "Igualar 'você passa a ter' ao corpo (16/18px) e deixar a descrição em peso normal."
+   },
+   {
+    "route": "/servicos/",
+    "location": "Mobile — altura total",
+    "evidence": "11255px → 13159px (+17%) enquanto home, entregas, quantitativos, compatibilização, triagem e conteúdos encurtaram 6–20%.",
+    "consequence": "A situação 09 (obras públicas) e os três passos ficam mais fundo no scroll.",
+    "fix": "Reduzir espaçamento vertical entre 'O que assumimos' e 'O que você passa a ter' no mobile ou colapsar 'Na mesma proposta' em details."
+   },
+   {
+    "route": "/ (home)",
+    "location": "Seção 'Próximo passo' + formulário no mesmo bloco escuro — C-home-1440x1000-02.png",
+    "evidence": "Botão 'Solicitar proposta por e-mail' e 'Conversar pelo WhatsApp' ficam 150px acima de um formulário de duas etapas, no mesmo fundo; 'Falar sobre obras públicas' e 'como conferir estas credenciais' no bloco escuro não têm sublinhado.",
+    "consequence": "Dois terminais concorrentes lado a lado; links no escuro só se distinguem por serem brancos como o texto.",
+    "fix": "Manter um único terminal no bloco escuro (formulário) e deixar os canais como linha de apoio, ou separar por fundo; sublinhar os links no escuro."
+   }
+  ],
+  "must_fix": [
+   "/servicos-obras-publicas/: hero em grid de 2 colunas coloca o h1 na coluna direita e deixa 216px de vazio sob o eyebrow em 1280 e 1440 (header.section-head com 4 filhos) — dar classe própria ao hero ou definir grid-areas.",
+   "/ (home): restaurar convite visível ao contato após a lista de situações (título + botão WhatsApp + link e-mail, ou ao menos links sublinhados com cor de link) — hoje é parágrafo com negrito sem sublinhado e a home perdeu um h2 em relação à produção.",
+   "/quantitativos-orcamento-obras/: tabela com table-layout:fixed e min-width 560px para 9 colunas gera cabeçalhos sobrepostos e palavras cortadas em 390/320px — subir min-width (~900px) ou usar layout auto com nowrap nos th; o .table-scroll já rola.",
+   "/ (home): 'Como conferir credenciais e limites' perdeu o sublinhado que tinha na produção — restaurar o estilo de link.",
+   "/ (home) mobile: copy 'desenho demonstrativo ao lado' com a planta abaixo do fold — ajustar copy ou ordem no mobile."
+  ],
+  "should_fix": [
+   "/entregas/ e /servicos-obras-publicas/: aplicar a escala tipográfica (corpo ≥16px, h2 ≤ h1) e o componente de lista às ofertas com preço; hoje só a fonte migrou (dd 11,84px, dt 9,92px, h2 54–57px, herdados da produção).",
+   "Planta do hero no mobile: rótulos de ~7px e colisão W-04/HS-01 — SVG simplificado para telas estreitas com fonte mínima 11px.",
+   "Unificar revisão da prova (R00 na home e no passo 06 vs R01 na planta/tabela de quantitativos) e corrigir 'Contrpiso'.",
+   "Lista de situações da home: 'VOCÊ PASSA A TER' menor (~14px) que a descrição (18px) — igualar ao corpo.",
+   "/servicos/ mobile cresceu 17% enquanto o resto encurtou — compactar espaçamento das duas colunas 'assumimos / passa a ter'.",
+   "Bloco escuro final da home: sublinhar links ('Falar sobre obras públicas', 'como conferir estas credenciais') e evitar dois terminais (botões + formulário) no mesmo bloco.",
+   "Links de rodapé com 23px de altura e 'Início' do breadcrumb com 23px (alvo <44px) — igual à produção, mas vale dar padding vertical no mobile."
+  ],
+  "strengths": [
+   "Fonte Archivo carregada em todas as rotas; a produção caía em fallback DejaVu em /servicos/, /entregas/, /triagem-tecnica/ e /conteudos/ (fontFamily medido em confenge.com.br: 'ui-sans-serif, system-ui').",
+   "Prova editada e honesta: planta cotada + memória de cálculo que fecha (21,84 − 1,68 − 0,56 = 19,60 m²), critério de desconto declarado, faixa 'CLIENTE: Exemplo demonstrativo · Não é obra de cliente', 6–10 ocorrências de 'demonstrativo' por página, 'LEITURA CORRETA: números de mercado, não resultados de clientes' ao lado dos KPIs do PNCP.",
+   "Sistema realmente propagado às rotas irmãs: card 'EM 30 SEGUNDOS' e lista numerada idênticos em quantitativos, compatibilização, revisão técnica e inspeção (rotas só no DEPOIS).",
+   "/servicos/ ganhou par de CTAs no fold (WhatsApp + triagem) e colunas 'O que assumimos / O que você passa a ter' com eyebrow — muito mais escaneável que os cartões da produção.",
+   "/triagem-tecnica/ mostra os dois botões de contato e o telefone acima do fold em 1440.",
+   "Acessibilidade estrutural mantida: um h1 por página, sem saltos h2→h4, anel de foco visível (box-shadow 2px branco + navy) no header e na lista de situações, menu móvel com aria-expanded/aria-controls e botão Fechar, skip link funcional ao Tab.",
+   "Sem overflow horizontal em 320px em nenhuma das 6 rotas capturadas (scrollW == clientW) e páginas mais curtas em quase todas as rotas (home −10%, quantitativos −13%, conteúdos −21%)."
+  ]
+ },
+ {
+  "reviewer": "Revisora de direcao de arte (independente), sessao candidate-r1 vs baseline-prod",
+  "verdict": "DIRECAO CORRETA, PUBLICACAO BLOQUEADA. O candidato reorganiza de verdade (Archivo unico, listas editoriais numeradas, planta cotada + memoria de calculo no lugar de bullets), mas introduz dois defeitos que bloqueiam: (1) o hero de /servicos-obras-publicas/ e /problemas-que-resolvemos/ quebra em >=1000px porque a regra .section-head:has(.section-lead) posiciona so h2, e essas rotas usam h1 (eyebrow sozinho num buraco de ~230px, H1 deslocado para a coluna direita); (2) perda de affordance de link em pontos de confianca e prova (hero-proof, 'Ver um apontamento do registro'), causada por a{text-decoration:none} sem regra compensatoria. Somam-se a isso a colisao de texto nas fichas de oferta com preco publicado em mobile (pre-existente, agravada pela caixa alta espacada) e o carimbo R00/R01 divergente para a mesma planta. Corrigidos esses pontos, o candidato e claramente superior a producao.",
+  "dimensions": [
+   {
+    "dimension": "Impressao profissional e identidade propria",
+    "before": 5,
+    "after": 7,
+    "evidence": "baseline-prod/servicos-1440x1000-fold.png, quantitativos, compatibilizacao, entregas, triagem e conteudos renderizam em DejaVu Sans (fonte nao carregada em producao); candidate-r1/*-1440x1000-fold.png todos em Archivo. candidate-r1/home-1440x1000-fold.png: planta cotada no lugar do cartao navy generico.",
+    "notes": "Nao chega a 8: hero de obras publicas quebrado (candidate-r1/servicos-obras-publicas-1440x1000-fold.png), summary 'Esquema ilustrativo da entrega.' em corte expandido/pesado destoante (review-crops/entregas-frentes-2x.png), e SVG da planta com rotulo 'W-04 · oeste · 1,80' rotacionado sobre a hachura e caixa HS-01 cortando a parede (review-crops/home-desktop-plan-2x.png)."
+   },
+   {
+    "dimension": "Clareza da abertura e prioridade visual",
+    "before": 6,
+    "after": 6,
+    "evidence": "Ganho: candidate-r1/home-1440x1000-fold.png (H1, lead, prova visual e CTAs numa leitura so). Perda: candidate-r1/servicos-obras-publicas-1440x1000-fold.png e review-crops/mid/servicos-obras-publicas-1024x768-fold.png (eyebrow isolado, vazio de ~230px, H1 na coluna direita a 470px do eyebrow). candidate-r1/home-390x844-fold.png: dobra movel sem nenhuma prova (baseline tinha a caixa 19,60 m2 na dobra).",
+    "notes": "candidate-r1/servicos-1440x1000-fold.png: H1 quebra em 'Servicos de / engenharia para obras / publicas e privadas' (primeira linha curta) e a metade direita do hero fica vazia. Home desktop: H1 em 4 linhas com 'de engenharia' isolada."
+   },
+   {
+    "dimension": "Tipografia, ritmo e densidade",
+    "before": 4,
+    "after": 6,
+    "evidence": "Escala unica e medida controlada em todas as rotas (candidate-r1/conteudos_*-1440x1000-fold.png, triagem). Contra: review-crops/C_quantitativos-orcamento-obras-1440x1000-02.png linha de calculo 'W-01 2,40 x 2,60 = ...' corre os 1200px do container; review-crops/C_servicos-1440x1000-04.png titulos dos passos 01-03 (~14px) menores que o corpo (17px); candidate-r1/quantitativos-orcamento-obras-1440x1000-fold.png link 'e-mail' em ~12px dentro de paragrafo de 17px.",
+    "notes": "Tabela Q-PAR-01: coluna Desconto com 12 linhas de texto (review-crops/C_quantitativos-orcamento-obras-1440x1000-02.png); em mobile celulas de uma palavra por linha ('Porta / de / giro') e typo 'Contrpiso'."
+   },
+   {
+    "dimension": "Qualidade e honestidade da prova",
+    "before": 5,
+    "after": 7,
+    "evidence": "candidate-r1/quantitativos-orcamento-obras-1440x1000-full.png y~1200-1700: planta + 'Memoria de calculo' parede a parede + descontos + total 19,60 m2. candidate-r1/compatibilizacao-projetos-engenharia-1440x1000-full.png y~1240-1800: elevacao R00 x R01 com sobreposicao/folga 0,10 m. Todos marcados 'exemplo demonstrativo'.",
+    "notes": "Descontos: mesma planta (SVG identico modulo ids) carimbada 'PR-ARQ · R00' na home e 'PR-ARQ · R01' em quantitativos, ambos sob o mesmo 19,60 m2; em 390px os rotulos da planta tem ~6-7px (review-crops/home-mobile-plan-2x.png); home diz 'desenho demonstrativo ao lado' mas em 390/768px o desenho fica abaixo dos CTAs e credenciais."
+   },
+   {
+    "dimension": "Consistencia entre home e paginas internas",
+    "before": 4,
+    "after": 6,
+    "evidence": "Fonte e componentes unificados (list-ruled, eyebrow, botoes). Divergencias: cartao lateral do hero = 'EM 30 SEGUNDOS' (quantitativos, compatibilizacao) vs 'QUEM ASSINA E COMO FALAR AGORA' (revisao) vs 'QUEM RESPONDE E COMO FALAR AGORA' (inspecao); em revisao o cartao flutua centralizado (candidate-r1/revisao-tecnica-projetos-engenharia-1440x1000-full.png y=385) enquanto nos outros alinha ao topo.",
+    "notes": "Tres estilos de link: ink sem sublinhado (hero-proof), ink sublinhado (hero-secondary/text-link), verde sublinhado (triagem). 'Como o trabalho passa para ca' tem layout diferente na home (2 colunas, sem H2, regua deslocada ~50px abaixo do eyebrow) e em /servicos/ (H2 + lista full-width). Triagem usa coluna centrada de 830px enquanto o resto alinha a esquerda em 120px."
+   },
+   {
+    "dimension": "Experiencia movel e acabamento interativo",
+    "before": 5,
+    "after": 5,
+    "evidence": "Sem overflow horizontal em 320/390/768/1024 (scrollW==clientW em review-crops/mid/*). Mobile de servicos, inspecao e home legiveis. Contra: review-crops/entregas-mobile-overlap-2x.png rotulo 'INFORMACOES NECESSARIAS' e 'INSPECIONAR' invadem a coluna de valor (pre-existente em baseline-prod/entregas-390x844, agravado pela caixa alta com tracking); links sem sublinhado (styles.css:1058 .hero-proof a{color:var(--ink)} + a{text-decoration:none}).",
+    "notes": "Planta ilegivel em 390px; tabela de quantitativos exige arraste lateral com celulas de uma palavra."
+   },
+   {
+    "dimension": "Facilidade de encontrar o servico e iniciar contato",
+    "before": 6,
+    "after": 5,
+    "evidence": "Home: banda 'Nao se reconheceu em nenhuma' com H2 grande + botao 'Descrever pelo WhatsApp' (baseline-prod/home-1440x1000-full.png y~2700) virou paragrafo de 14px com links inline sem sublinhado (review-crops/C_home-1440x1000-01.png y~1250). /servicos/: botao verde por item ('Ver elaboracao de projetos complementares') virou text-link de mesmo peso que o secundario; item 09 = botao bordado + 3 links sublinhados numa linha (review-crops/servicos-item09-ctas.png). Compatibilizacao: WhatsApp/e-mail/telefone deixaram de ter linhas proprias no cartao e viraram o ultimo sub-bloco em 13px.",
+    "notes": "Ganho pontual: /servicos/ passa a ter par de CTAs no hero. Header CTA e WhatsApp flutuante preservados."
+   }
+  ],
+  "regressions": [
+   {
+    "route": "/servicos-obras-publicas/ e /problemas-que-resolvemos/ (>=1000px)",
+    "location": "header.section-head (eyebrow, h1#hub-title, p.section-lead, p.section-proof); regra styles.css:1025-1030 `.section-head:has(.section-lead)` posiciona `.eyebrow` (1/1), `h2` (1/2) e `.section-lead` (2/2) mas nao `h1`",
+    "evidence": "candidate-r1/servicos-obras-publicas-1440x1000-fold.png e review-crops/mid/servicos-obras-publicas-1024x768-fold.png; getComputedStyle: eyebrow gridArea '1 / 1' top 175 left 120; H1 'auto' top 175 left 590; section-lead '2 / 2'; section-proof 'auto' top 412 left 120. Baseline (baseline-prod/servicos-obras-publicas-1440x1000-fold.png) tinha eyebrow+H1+lead empilhados.",
+    "consequence": "Na rota B2G protegida, o primeiro que se le e um eyebrow orfao sobre ~230px de vazio; o H1 fica na coluna direita, com medida de 4 linhas, a 470px do seu eyebrow; a nota de preco/prazo cai para a esquerda como se fosse o lead. Hierarquia invertida na dobra.",
+    "fix": "Incluir h1 na regra: `.section-head:has(.section-lead) :is(h1,h2){grid-column:1;grid-row:2;max-width:18ch}` e dar `grid-column:1;grid-row:3` (ou `grid-column:1/-1`) a `.section-proof`; ou remover `.section-lead` desse header e usar o padrao de hero das outras rotas. Recapturar 1024/1280/1440."
+   },
+   {
+    "route": "/ (home), /compatibilizacao-projetos-engenharia/",
+    "location": "ul.hero-proof a ('Como conferir credenciais e limites') e a[data-cta-id=understand-coordination-register] ('Ver um apontamento do registro') no paragrafo do hero; styles.css:2 `a{text-decoration:none}` + styles.css:1058 `.hero-proof a{color:var(--ink)}`",
+    "evidence": "candidate-r1/home-1440x1000-fold.png y=742: texto ink sem sublinhado entre itens cinza; baseline-prod/home-1440x1000-fold.png y=675: mesmo link sublinhado. candidate-r1/compatibilizacao-projetos-engenharia-1440x1000-fold.png y=730: 'Ver um apontamento do registro.' identico a prosa; baseline tinha 'Ver o apontamento completo' em negrito dentro da amostra.",
+    "consequence": "O unico caminho da dobra para a pagina de confianca e para a prova do registro deixa de ser reconhecivel como link (so cor, sem sublinhado: falha WCAG 1.4.1 e perde cliques no gate de confianca).",
+    "fix": "`.hero-proof a, .hero p a, .section-lead a, .section-proof a{text-decoration:underline;text-underline-offset:.2em;text-decoration-thickness:1px}`; padronizar um unico estilo de link inline (ink sublinhado) e aplicar tambem em triagem (hoje verde)."
+   },
+   {
+    "route": "/ (home) 320-1024px",
+    "location": "p.hero-deliverable ('Com a quantidade levantada do desenho demonstrativo ao lado...') vs figure.proof-figure.hero-figure",
+    "evidence": "candidate-r1/home-390x844-fold.png e review-crops/mid/home-768x1024-fold.png: a planta aparece so depois dos CTAs e das credenciais (y~800 em 390px); a dobra movel nao mostra nenhuma prova, enquanto baseline-prod/home-390x844-fold.png tinha a caixa 'Exemplo demonstrativo · 19,60 m2' dentro da dobra.",
+    "consequence": "Copy afirma uma relacao espacial falsa em toda largura <1000px e a dobra movel vira dois blocos de prosa quase redundantes sem evidencia concreta.",
+    "fix": "Reordenar em mobile: eyebrow > H1 > lead curto > figura (ou legenda 'Exemplo demonstrativo' compacta) > CTAs > credenciais; trocar 'ao lado' por 'abaixo' via texto neutro ('do desenho demonstrativo desta pagina')."
+   },
+   {
+    "route": "/ (home)",
+    "location": "p.chooser-ask#descrever-situacao (antiga banda contact_band)",
+    "evidence": "baseline-prod/home-1440x1000-full.png y~2700-3100: secao com H2 'Conte a situacao do seu jeito' + botao 'Descrever pelo WhatsApp' + link e-mail. review-crops/C_home-1440x1000-01.png y~1230-1350: paragrafo de 14px em coluna de 540px com 'descrever pelo WhatsApp' e 'por e-mail' em negrito sem sublinhado.",
+    "consequence": "O caminho de contato para quem nao se reconheceu em nenhuma situacao (o caso NEEDS_CONTEXT que a constituicao manda acolher) perde quase toda a visibilidade no meio da home.",
+    "fix": "Manter o paragrafo curto mas dar-lhe um botao secundario 'Descrever pelo WhatsApp' + text-link 'por e-mail' na mesma linha do 'Ver todas as situacoes', ou promover a um bloco ruled de duas colunas como os demais."
+   },
+   {
+    "route": "/servicos/",
+    "location": "lista de situacoes: .list-ruled__action + link secundario por item; item 09 (dark) com .button-secondary + 3 links sublinhados",
+    "evidence": "baseline-prod/servicos-1440x1000-full.png y~1700-2700: botao verde 'Ver revisao tecnica de projetos' por item + link demonstrativo. review-crops/C_servicos-1440x1000-01.png: 'Revisao de projetos ->' e 'Ver o extrato demonstrativo' com peso quase igual; review-crops/servicos-item09-ctas.png: quatro acoes numa linha sem dominante.",
+    "consequence": "A pagina que existe para encaminhar ao servico ficou sem peso de CTA; no item de obras publicas o visitante escolhe entre quatro destinos equivalentes.",
+    "fix": "Restaurar uma acao primaria visual por item (botao secundario bordado ou text-link com seta em 1rem e o demonstrativo em .875rem cinza); no item 09 deixar so 'Ver obras publicas' como botao e agrupar os tres links numa linha menor abaixo."
+   },
+   {
+    "route": "/ (home) e /quantitativos-orcamento-obras/",
+    "location": "svg planta RM-01: caption 'PR-ARQ · R00 · escala indicativa' (home) vs 'PR-ARQ · R01 · escala indicativa' (quantitativos); title 'estado original · R00' na home",
+    "evidence": "curl: home 1x 'PR-ARQ · R00', quantitativos 1x 'PR-ARQ · R01' + 11x 'PR-ARQ-R01' + 1x 'PR-ARQ-R00' (Referencia de revisao). Comparacao dos dois SVGs: geometria e cotas identicas, so ids/title diferem. Baseline nao carimbava revisao.",
+    "consequence": "A mesma planta com dois carimbos de revisao sob o mesmo 19,60 m2; quem confere (o que a pagina convida a fazer) encontra a contradicao no primeiro passo.",
+    "fix": "Carimbar a planta com uma unica revisao (R01, a que a memoria e a planilha citam) em todas as rotas, ou legendar explicitamente 'planta inalterada entre R00 e R01; a revisao afeta a elevacao leste'."
+   }
+  ],
+  "weak_choices": [
+   {
+    "route": "/entregas/ (390px; tambem 320px)",
+    "location": "fichas de oferta 01-08: coluna de rotulo (dt) 'INFORMACOES NECESSARIAS', 'O QUE VOCE PODE INSPECIONAR', 'QUANDO A CONTAGEM COMECA'",
+    "evidence": "review-crops/entregas-mobile-overlap-2x.png: 'INFORMACOES' sobrepoe 'CNPJ; territorio...' e 'INSPECIONAR' sai da celula. Pre-existente em baseline-prod/entregas-390x844-full.png (mono, colisao menor); agravado pela caixa alta Archivo com tracking.",
+    "consequence": "Texto ilegivel exatamente nas condicoes materiais de ofertas com preco publicado (R$ 599-890), o que fere o gate de precos truthful/legiveis.",
+    "fix": "Em <=600px empilhar dt/dd (grid-template-columns:1fr; dt em .75rem com letter-spacing .06em) ou dar `word-break:normal; hyphens:auto; min-width:0` e coluna de rotulo >=120px."
+   },
+   {
+    "route": "/entregas/ (desktop)",
+    "location": "secao 'Cinco frentes': cards 'Projetos, revisao e compatibilizacao' etc. + summary 'Esquema ilustrativo da entrega.' + link 'Entender o trabalho de projeto'",
+    "evidence": "review-crops/C_entregas-1440x1000-01.png e review-crops/entregas-frentes-2x.png: titulo colado na borda superior do card, corpo 13px correndo 1160px, summary em corte expandido/pesado diferente do resto, link em cinza 13px sem affordance. Pre-existente (baseline-prod/entregas-1440x1000-full.png y~1750), persiste sem receber o sistema novo.",
+    "consequence": "Bloco central da pagina de entregas parece de outro site; o caminho para cada servico e invisivel.",
+    "fix": "Aplicar o padrao list-ruled: numero, eyebrow, titulo 1.15rem, corpo com medida <=70ch, summary como text-link com seta, e link de destino como .list-ruled__action; remover font-stretch/wide do <strong> dentro de summary."
+   },
+   {
+    "route": "/servicos-obras-publicas/, /quantitativos-orcamento-obras/, /compatibilizacao-projetos-engenharia/, /revisao-tecnica-projetos-engenharia/, /inspecao-diagnostico-edificacoes/",
+    "location": "aside do hero (.hero-aside / cartao 'EM 30 SEGUNDOS' | 'QUEM ASSINA E COMO FALAR AGORA' | 'QUEM RESPONDE E COMO FALAR AGORA')",
+    "evidence": "Distribuicao verificada via curl: quantitativos e compatibilizacao = 'Em 30 segundos'; revisao = 'Quem assina e como falar agora'; inspecao = 'Quem responde e como falar agora'; obras publicas sem cartao. Em revisao o cartao flutua a y=385 (candidate-r1/revisao-tecnica-projetos-engenharia-1440x1000-full.png), nos outros alinha ao topo do H1.",
+    "consequence": "Tres modelos de hero entre paginas irmas que o visitante compara em sequencia; o conteudo de contato muda de posicao e de peso a cada pagina.",
+    "fix": "Um unico componente de aside com titulo fixo ('Em 30 segundos'), blocos na mesma ordem (Para quem / O que fazemos / Condicoes / Quem assina / Falar agora com canais em linhas proprias) e align-self:start em todas."
+   },
+   {
+    "route": "/quantitativos-orcamento-obras/ (desktop)",
+    "location": "secao 'Conferencia' passos 03 Calculo e tabela 'A planilha de quantitativos do recorte, linha a linha' (linha Q-PAR-01)",
+    "evidence": "review-crops/C_quantitativos-orcamento-obras-1440x1000-02.png: linha de formula ocupa 1200px; coluna Desconto de Q-PAR-01 com 12 linhas quebradas em coluna de ~110px.",
+    "consequence": "A prova mais forte da pagina fica cansativa de ler; a linha destacada vira um bloco vertical desproporcional.",
+    "fix": "Medida <=72ch para o passo 03 (quebrar em uma equacao por linha); na tabela, dar `min-width:260px` a Desconto e Formula ou mover o criterio longo para nota abaixo da tabela."
+   },
+   {
+    "route": "/ (home) e /quantitativos-orcamento-obras/ (svg da planta)",
+    "location": "svg RM-01: text 'W-04 · oeste · 1,80' rotacionado sobre a hachura da parede; rect HS-01 cortando a parede oeste; 'W-02'/'WN-01' verdes sobre o simbolo da janela; 'B-01' tracejado sem legenda",
+    "evidence": "review-crops/home-desktop-plan-2x.png e review-crops/home-mobile-plan-2x.png; em 390px os rotulos ficam com ~6-7px.",
+    "consequence": "A prova visual que da identidade a home tem colisoes que um engenheiro nota e rotulos que um leigo nao le no celular.",
+    "fix": "Deslocar o rotulo W-04 para fora da parede (como W-03/W-01), fechar a parede atras de HS-01 ou desenhar o poco como recorte, posicionar W-02 e WN-01 fora da faixa da janela, adicionar mini-legenda (W parede, WN janela, D porta, B viga, HS poco) e em <600px usar font-size >=11px ou ocultar rotulos secundarios."
+   },
+   {
+    "route": "/servicos/ e / (home)",
+    "location": "h1 do hero de /servicos/ ('Servicos de / engenharia para obras / publicas e privadas') e h1 da home ('Assumimos a parte / de engenharia / ...')",
+    "evidence": "candidate-r1/servicos-1440x1000-fold.png: primeira linha de 2 palavras; candidate-r1/home-1440x1000-fold.png: 4 linhas com 'de engenharia' isolada; metade direita do hero de /servicos/ vazia.",
+    "consequence": "Ritmo do titulo mais fraco que na producao (baseline em 3 e 2+2 linhas) e um hero 50% vazio na pagina-hub.",
+    "fix": "`text-wrap:balance` + max-width 20-22ch e quebra manual so onde a cor muda; em /servicos/ ocupar a coluna direita com o aside 'Em 30 segundos' ou com o mini-indice das 9 situacoes."
+   },
+   {
+    "route": "/ (home) e /servicos/",
+    "location": "bloco 'COMO O TRABALHO PASSA PARA CA' (home: coluna direita so com eyebrow + regua deslocada; /servicos/: H2 + lista com titulos de 14px)",
+    "evidence": "review-crops/C_home-1440x1000-02.png y~150-220: ~50px de vazio entre eyebrow e regua; review-crops/C_servicos-1440x1000-04.png: titulos '01 Voce descreve a situacao.' menores que o corpo abaixo.",
+    "consequence": "Mesmo componente com duas hierarquias diferentes; em /servicos/ o titulo do passo parece legenda.",
+    "fix": "Um componente: eyebrow + H2 curto + lista com titulo 1.05rem/720 e corpo .95rem; alinhar a regua ao eyebrow."
+   }
+  ],
+  "must_fix": [
+   "Grid do hero em /servicos-obras-publicas/ e /problemas-que-resolvemos/ (>=1000px): incluir h1 em `.section-head:has(.section-lead)` e posicionar `.section-proof`; recapturar 1024/1280/1440 antes de publicar (styles.css:1025-1030).",
+   "Affordance de link perdida: sublinhar links inline em hero-proof, paragrafo do hero e section-lead/proof (home 'Como conferir credenciais e limites'; compatibilizacao 'Ver um apontamento do registro'); unificar o estilo de link inline do site.",
+   "Colisao de texto nas fichas de oferta com preco publicado em /entregas/ em 320-390px ('INFORMACOES NECESSARIAS', 'INSPECIONAR'): empilhar dt/dd ou alargar a coluna de rotulo. Pre-existente, agravado pelo candidato; bloqueia por afetar condicoes materiais publicadas.",
+   "Carimbo de revisao da planta RM-01: a mesma planta aparece como R00 na home e R01 em quantitativos sob o mesmo 19,60 m2; adotar um carimbo unico (R01) ou legendar a diferenca.",
+   "Home <1000px: 'do desenho demonstrativo ao lado' com a figura abaixo dos CTAs; reordenar a figura para antes dos CTAs em mobile e neutralizar o 'ao lado'."
+  ],
+  "should_fix": [
+   "Unificar o aside do hero nas paginas de servico (titulo, ordem dos blocos, canais de contato em linhas proprias, align-self:start); hoje 'Em 30 segundos' / 'Quem assina...' / 'Quem responde...' e cartao flutuante em revisao.",
+   "Restaurar uma acao primaria visivel por item em /servicos/ e reduzir o item 09 a um botao + linha de links menores.",
+   "Home: devolver um botao secundario ao bloco 'Nao se reconheceu em nenhuma' (WhatsApp) em vez de links inline em 14px.",
+   "/entregas/ secao 'Cinco frentes': aplicar o padrao list-ruled, medida <=70ch, summary como text-link, remover corte expandido do <strong> em summary, link de destino com affordance (pre-existente, nao recebeu o sistema).",
+   "SVG da planta: reposicionar rotulos W-04/W-02/WN-01, fechar a parede atras de HS-01, adicionar mini-legenda, rotulos >=11px em <600px.",
+   "/quantitativos-orcamento-obras/: medida do passo 03 'Calculo' <=72ch; largura minima para colunas Formula/Desconto (linha Q-PAR-01 com 12 linhas); corrigir 'Contrpiso'; link 'e-mail' do hero no mesmo tamanho do paragrafo.",
+   "Titulos: text-wrap:balance e max-width 20-22ch em h1 de home e /servicos/; preencher a coluna direita do hero de /servicos/.",
+   "Componente 'Como o trabalho passa para ca' com uma so hierarquia entre home e /servicos/ (titulo do passo maior que o corpo; regua alinhada ao eyebrow).",
+   "Alinhar o container de /triagem-tecnica/ (coluna centrada de 830px) ao grid de 120px das demais rotas ou declarar explicitamente o layout de artigo.",
+   "Icone 'Atendimento' no bloco de contato da home desalinhado ~45px abaixo do rotulo (review-crops/C_home-1440x1000-04.png y~343-390)."
+  ],
+  "strengths": [
+   "Tipografia unificada de verdade: producao servia DejaVu Sans em seis das oito rotas comparadas (servicos, quantitativos, compatibilizacao, entregas, triagem, conteudos); o candidato renderiza Archivo com uma escala so em todas, incluindo as irmas revisao e inspecao.",
+   "Home desktop: o cartao navy 'Depois que voce escreve' (que duplicava 'Como o trabalho passa para ca') foi removido e o espaco recebeu uma planta cotada 2,40 x 1,80 com a legenda que fecha a conta de 19,60 m2; prova no lugar de promessa.",
+   "/quantitativos-orcamento-obras/: tres bullets viraram planta + memoria de calculo parede a parede + descontos de porta e janela + total, seguida da trilha passo a passo e da planilha aberta; e o melhor bloco de prova do site.",
+   "/compatibilizacao-projetos-engenharia/: elevacao R00 x R01 lado a lado com 'sobreposicao 0,10 m' vs 'folga 0,10 m', seguida das fichas CF-GEO-01 e CF-INFO-01; a interferencia fica visivel, nao so descrita.",
+   "Listas ruled numeradas (situacoes na home, nove situacoes em /servicos/, profundidades em revisao) com 'Voce passa a ter' / 'Serve para' em eyebrow: densidade editorial coerente com 'sobriedade institucional com evidencia editada'.",
+   "/servicos/ ganhou par de CTAs no hero (WhatsApp + triagem) e cada situacao ganhou as colunas 'O que assumimos' / 'O que voce passa a ter'.",
+   "Sem overflow horizontal em 320, 390, 768, 1024 e 1440; header, WhatsApp flutuante e formulario de duas etapas preservados."
+  ]
+ }
+]

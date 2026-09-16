@@ -1999,6 +1999,28 @@ def gate_conversion(
                 service_capture_count += 1
             else:
                 severity = "warn" if route in frozen_routes and today < EARLIEST_SAFE_ACTION_AT else "error"
+                # After the freeze, only a route-exact, dated, owned debt entry
+                # (debt_policy in the family registry) keeps the missing form as
+                # a reported warning; an expired or absent entry fails closed.
+                pillar_debt = next(
+                    (e for e in family.get("debt") or [] if str(e.get("route")) == route), None
+                )
+                if severity == "error" and pillar_debt is not None:
+                    expires = _as_date(pillar_debt.get("expires_at"))
+                    if expires is not None and today <= expires and pillar_debt.get("owner_issue") and pillar_debt.get("reason"):
+                        severity = "warn"
+                        findings.append(
+                            Finding(
+                                gate="conversion",
+                                path=str(p.relative_to(base)),
+                                reason="terminal_action_debt",
+                                excerpt=(
+                                    f"{route} required=on_page_form "
+                                    f"issue=#{pillar_debt.get('owner_issue')} expires_at={expires.isoformat()}"
+                                ),
+                                severity="warn",
+                            )
+                        )
                 findings.append(
                     Finding(
                         gate="conversion",

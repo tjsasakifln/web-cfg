@@ -461,6 +461,7 @@ def render_preview(pack: dict[str, Any]) -> Path:
 <meta name="description" content="Preview interno do research pack pré-nacional SC/PI/MG/RS. Sem indexação."/>
 <meta name="robots" content="{escape(robots)}"/>
 <link rel="canonical" href="https://confenge.com.br/radar/pesquisa/edicao-zero-4uf/"/>
+<link rel="preload" as="font" type="font/woff2" href="/assets/archivo-var-latin-bf6e041e.woff2" crossorigin="anonymous"/>
 <link rel="stylesheet" href="/styles.css"/>
 <link href="/assets/favicon-32.png" rel="icon" sizes="32x32" type="image/png"/>
 {jsonld_tag}

@@ -1,8 +1,14 @@
 {
   "schema_version": "1.0.0",
-  "campaign": "CONFENGE-PREMIUM-DESIGN-AND-CONVERSION-REMEDIATION-01",
-  "updated_at": "2026-08-27",
+  "campaign": "CONFENGE-DESIGN-AUTHORITY-AND-PRODUCTION-20260915",
+  "updated_at": "2026-09-16",
   "concept": "engenharia editorial premium",
+  "direction": {
+    "id": "engenharia-em-contexto-prova-editada",
+    "chosen_at": "2026-09-16",
+    "summary": "Sobriedade institucional com evidência técnica editada: uma família (Archivo) e uma escala em todas as rotas; abertura que nomeia a atuação, dois caminhos e um desenho técnico demonstrativo legível; situações em lista regrada com rótulo de categoria e a vertical de obras públicas em bloco escuro; páginas de serviço com caixa \"em 30 segundos\", prova antes do método (figura + conta refazível + tabela com rolagem própria) e um bloco de contato por página.",
+    "studies": "docs/campaigns/2026-09-15-design-authority.md"
+  },
   "design_principles": [
     "Cards are the exception, not the default section structure",
     "Every section has one dominant element (claim, evidence, consequence, or action)",
@@ -34,18 +40,19 @@
     }
   },
   "typography": {
-    "sans": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
-    "serif_display": "ui-serif, \"Iowan Old Style\", \"Palatino Linotype\", Palatino, Georgia, serif",
-    "mono": "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
+    "sans": "\"Archivo Var\",\"Archivo Fallback\",ui-sans-serif,system-ui,-apple-system,\"Segoe UI\",sans-serif",
+    "serif_display": "var(--sans) — a serifa de sistema saiu: a variante de display é a própria Archivo em wdth 96%",
+    "mono": "var(--sans) — códigos e IDs usam Archivo em wdth 78% com tabular-nums; nada de monoespaçada como fantasia técnica",
     "scale": {
-      "display": "clamp(2.75rem, 5.2vw, 4.75rem)",
-      "h1_hero": "clamp(2.65rem, 4.6vw, 4.5rem)",
-      "h2": "clamp(1.85rem, 3.2vw, 3.15rem)",
-      "h3": "1.05rem–1.35rem",
+      "display": "clamp(2.25rem, 1.5rem + 2.6vw, 3.25rem)",
+      "h1_hero": "clamp(2rem, 1.35rem + 2.2vw, 2.75rem) — 32px em 390, 44px em 1440; nenhuma clamp local de h1 sobrevive em styles.css",
+      "h2": "clamp(1.5rem, 1.1rem + 1.4vw, 2.15rem) — 24 a 34px",
+      "h3": "clamp(1.125rem, 1rem + .4vw, 1.25rem)",
+      "lead": "clamp(1.0625rem, 1rem + .35vw, 1.25rem)",
       "body": "1rem / 1.65 mobile; 1.125rem / 1.65 from 768px",
       "small": "0.875rem (14px functional)",
       "micro": "0.8rem (12.8px floor)",
-      "data": "0.8rem mono uppercase tracking"
+      "data": "0.875rem, wdth 78%, uppercase tracking .1em (eyebrow/kicker)"
     },
     "floors_px": {
       "body": 16,
@@ -57,12 +64,22 @@
       "Do not rely only on Inter size changes for hierarchy",
       "Measure body copy ~58–72ch on desktop",
       "No critical text below 12.8px; body copy stays at or above 16px"
-    ]
+    ],
+    "font_files": {
+      "archivo": "assets/archivo-var-latin-bf6e041e.woff2",
+      "license": "assets/archivo-OFL.txt (SIL OFL 1.1)",
+      "fallback": "Archivo Fallback (Arial/Liberation Sans/Helvetica) com size-adjust 98.56%, ascent-override 89.08%, descent-override 21.31%",
+      "delivered_by": "css/identity.css → styles.css (todas as rotas desde 2026-09-16; antes só a home via assets/home-10x.css)"
+    },
+    "axes": {
+      "wide": "96% (títulos, botões)",
+      "narrow": "78% (eyebrow, rótulo de dado, códigos)"
+    }
   },
   "spacing": {
-    "section_tight": "56px 0",
-    "section_default": "80px 0",
-    "section_loose": "104px 0",
+    "section_tight": "clamp(2.5rem,5vw,3.5rem) 0",
+    "section_default": "clamp(3.5rem,7vw,5.5rem) 0",
+    "section_loose": "clamp(4.5rem,9vw,7rem) 0",
     "container": "1200px",
     "scale": {
       "1": ".25rem",
@@ -76,18 +93,20 @@
       "12": "3rem"
     },
     "rule": "Never apply the same vertical padding to every consecutive section; alternate tight/default/loose and surface contrast",
-    "scale_note": "Escala em rem, que é a que os componentes usam. Antes desta versão o JSON declarava px (5=20, 6=24, 8=32) enquanto styles.css resolvia para rem (5=24, 6=32, 8=64), e o mesmo token valia coisas diferentes conforme a folha carregada. Os painéis foram desenhados contra a escala rem, então ela é a registrada; 10 e 12 seguem em rem equivalente aos 40px e 48px anteriores."
+    "scale_note": "Escala em rem, que é a que os componentes usam. Antes desta versão o JSON declarava px (5=20, 6=24, 8=32) enquanto styles.css resolvia para rem (5=24, 6=32, 8=64), e o mesmo token valia coisas diferentes conforme a folha carregada. Os painéis foram desenhados contra a escala rem, então ela é a registrada; 10 e 12 seguem em rem equivalente aos 40px e 48px anteriores.",
+    "page_gutter": "clamp(1.15rem,3.2vw,3rem)"
   },
   "radii": {
-    "sm": "8px",
-    "md": "12px",
-    "lg": "16px",
-    "rule": "Large radius is rare; editorial panels prefer 0–12px"
+    "sm": "4px",
+    "md": "8px",
+    "lg": "12px",
+    "default": "md",
+    "rule": "Raio é exceção: 8px em botões, campos e amostras; 12px só em painel de captura; nada de 16px+ em cartões"
   },
   "shadows": {
     "none_default": true,
-    "elevated": "0 20px 50px rgba(3,16,32,.10)",
-    "rule": "Shadows only on primary interactive or one featured panel per section"
+    "elevated": "0 1px 2px rgba(3,16,32,.08)",
+    "rule": "Sem sombra difusa. Hierarquia por régua de 1px (--rule), peso tipográfico e contraste de superfície; a única sombra é o toque de 1px em campo/botão"
   },
   "section_archetypes": {
     "hero_split": "Positioning + H1 + consequence + dual CTA + proprietary visual (not SaaS dashboard)",
@@ -324,5 +343,9 @@
     "entregas/index.html",
     "analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/index.html"
   ],
-  "archetype_gate_rollout": "data/site/archetype-gate-rollout.json"
+  "archetype_gate_rollout": "data/site/archetype-gate-rollout.json",
+  "rules": {
+    "rule": "#dfe4e6 (1px, entre linhas de lista e seções)",
+    "rule_strong": "#071a31 (1px, cabeçalho de lista e botão secundário)"
+  }
 }

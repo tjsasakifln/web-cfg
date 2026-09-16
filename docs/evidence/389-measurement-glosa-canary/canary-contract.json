@@ -24,9 +24,9 @@
     "commercial_destination": "/medicoes-glosas-obras-publicas/",
     "offer": "Dossiê de Medição, Glosa e Pagamento",
     "before_sha256": "455200070af5d118d3f564a9cf74de643d24a1511f058b61c30c070dfc708f8a",
-    "after_sha256": "58d68749b5aec210e6f20f84a5c0fecf29a9470869bcb56fea40dd6c742787e2",
-    "after_sha256_recaptured_at": "2026-09-14",
-    "after_sha256_recapture_reason": "SOLUCAO-INTEGRAL-20260913 (PR #687), recaptura: na secao de limites, 'Essa e outra intencao e outro dossie, nao atraso de processamento da medicao' passou a nomear o Dossie de Atraso e Prorrogacao (via guia de prorrogacao) e a dizer que a proposta combina os dois trabalhos quando as duas discussoes coexistem; a unidade de escopo do CFG-D18 (um periodo de medicao) permanece. A data de revisao do cluster de medicao moveu para 2026-09-14 (meta, JSON-LD, visivel e sitemap). Nenhum fato, calculo, citacao legal, canonical, robots, ponte comercial unica ou destino canonico mudou. Anterior: Campanha de comunicacao publica (PR #644), recaptura final. Alem do cromo institucional compartilhado, esta pagina teve os quatro rotulos epistemicos em ingles (FACT, CALCULATION, INFERENCE, UNKNOWN) substituidos por rotulos em portugues no exemplo demonstrativo: Premissa do exemplo, Calculo, Leitura tecnica e O que falta confirmar no caso real. Eram vocabulario de controle interno impresso para o comprador de engenharia. A classificacao linha a linha -- que era a propriedade protegida -- continua exigida, agora em portugues, e os termos em ingles passaram a ser proibidos na superficie visivel"
+    "after_sha256": "127e62107b2db5a11fd7b5410241a79c71c1d7eac1599af92e9bbe262d438c37",
+    "after_sha256_recaptured_at": "2026-09-16",
+    "after_sha256_recapture_reason": "DESIGN-AUTHORITY-20260915, recaptura: o <head> compartilhado ganhou uma unica linha, o <link rel=\"preload\" as=\"font\"> da fonte de identidade (Archivo), antes de /styles.css; diff contra origin/main tem exatamente uma linha adicionada e nenhuma removida. Nenhum fato, calculo, citacao legal, canonical, robots, ponte comercial unica ou destino canonico mudou. Anterior: SOLUCAO-INTEGRAL-20260913 (PR #687), recaptura: na secao de limites, 'Essa e outra intencao e outro dossie, nao atraso de processamento da medicao' passou a nomear o Dossie de Atraso e Prorrogacao (via guia de prorrogacao) e a dizer que a proposta combina os dois trabalhos quando as duas discussoes coexistem; a unidade de escopo do CFG-D18 (um periodo de medicao) permanece. A data de revisao do cluster de medicao moveu para 2026-09-14 (meta, JSON-LD, visivel e sitemap). Nenhum fato, calculo, citacao legal, canonical, robots, ponte comercial unica ou destino canonico mudou. Anterior: Campanha de comunicacao publica (PR #644), recaptura final. Alem do cromo institucional compartilhado, esta pagina teve os quatro rotulos epistemicos em ingles (FACT, CALCULATION, INFERENCE, UNKNOWN) substituidos por rotulos em portugues no exemplo demonstrativo: Premissa do exemplo, Calculo, Leitura tecnica e O que falta confirmar no caso real. Eram vocabulario de controle interno impresso para o comprador de engenharia. A classificacao linha a linha -- que era a propriedade protegida -- continua exigida, agora em portugues, e os termos em ingles passaram a ser proibidos na superficie visivel"
   },
   "selection_evidence": {
     "source": "seo/gsc-2026-08-09/Paginas.csv",
@@ -122,11 +122,11 @@
   "frozen_siblings": [
     {
       "path": "conteudos/glosa-de-medicao-obra-publica/index.html",
-      "sha256": "102834633d814ceb4e6bb9521fd2ac537c78cdf42941e637ee97199650539538"
+      "sha256": "6eb06569efbb53fac87a646cf0c8ecd1da5961942c28ede87700f05ae409dded"
     },
     {
       "path": "conteudos/medicao-de-obra-publica-rejeitada/index.html",
-      "sha256": "6ee13578e64cd6dc8e77abf9111b2016ed0d172ee35fe2462f2ede422ea40d6e"
+      "sha256": "b8a47dfb6bd4d628d0a067f8d3f2be3b8830957aae450e1ba048b3ce41f9f7a4"
     },
     {
       "path": "conteudos/fiscal-nao-assina-medicao-obra-publica/index.html",
@@ -186,8 +186,8 @@
     ]
   },
   "adr": "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md",
-  "sibling_sha256_recaptured_at": "2026-09-08",
-  "sibling_sha256_recapture_reason": "Campanha de comunicacao publica (PR #644). Verificado arquivo a arquivo que o diff destas paginas vs origin/main toca apenas cromo institucional compartilhado: a descricao Organization no JSON-LD e a frase de rodape. Nenhum corpo editorial, titulo, canonical, robots ou destino comercial mudou.",
+  "sibling_sha256_recaptured_at": "2026-09-16",
+  "sibling_sha256_recapture_reason": "DESIGN-AUTHORITY-20260915. Verificado arquivo a arquivo que o diff destas paginas vs origin/main adiciona, em glosa-de-medicao e medicao-rejeitada, exatamente uma linha de <head> compartilhado (fiscal-nao-assina permanece byte-identica a origin/main por ser artigo de origem de clique fixado por teste), o <link rel=\"preload\" as=\"font\"> da fonte de identidade, e nao remove nada. Nenhum corpo editorial, titulo, canonical, robots ou destino comercial mudou. Anterior: Campanha de comunicacao publica (PR #644). Verificado arquivo a arquivo que o diff destas paginas vs origin/main toca apenas cromo institucional compartilhado: a descricao Organization no JSON-LD e a frase de rodape. Nenhum corpo editorial, titulo, canonical, robots ou destino comercial mudou.",
   "frozen_siblings_recaptured_at": "2026-09-14",
   "frozen_siblings_recapture_reason": "VALOR-IMEDIATO-20260914: o sibling medicoes-glosas-obras-publicas/index.html troca o prefill generico de WhatsApp do bloco 'Proximo passo' e do botao flutuante pela mesma mensagem contextual ja usada no bloco pillar_bridge da pagina, alinhado a data/bofu-dominance/frozen-specs/hashes.json e data/organic/single-commercial-route.v1.json. Nenhum corpo editorial, titulo, canonical, robots, preco, prazo, checkout ou destino comercial mudou. Anterior: SOLUCAO-INTEGRAL-20260913 (PR #687): o sibling conteudos/fiscal-nao-assina-medicao-obra-publica/index.html mudou apenas a data de revisao do cluster de medicao (meta article:modified_time, JSON-LD dateModified e 'Revisado em'), movida para 2026-09-14 junto com o corpo dos dois guias editados do mesmo cluster, como exige cluster_medicao_originality. Nenhum corpo editorial, titulo, canonical, robots ou destino comercial mudou. Anterior: INB-20260911/16: o sibling medicoes-glosas-obras-publicas/index.html estava com hash pre-08 (fe3d3c64). Recaptura para o HTML vivo apos 08 (secoes abaixo da dobra) e a correcao de copy-lint que substituiu o travessao por hifen ASCII, com espaco residual normalizado. Preco, prazo, checkout, robots, canonical e criterio de medicao/glosa inalterados. Os tres artigos-sibling de conteudos permaneceram ",
   "metadata_only_recapture": {

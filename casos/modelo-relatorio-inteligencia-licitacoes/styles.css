@@ -112,9 +112,9 @@ main { overflow: clip; }
 .report-value-sequence { border-bottom: 1px solid var(--r-line); margin-top: 34px; }
 .report-value-sequence span,
 .report-value-sequence strong { align-items: center; border-top: 1px solid var(--r-line); display: flex; font-size: 1rem; min-height: 58px; padding: 10px 4px; }
-.report-value-sequence span::before { color: #8d9aa7; content: "↓"; margin-right: 12px; }
+.report-value-sequence span::before { color: #8d9aa7; content: "→"; margin-right: 12px; }
 .report-value-sequence strong { color: var(--r-green); font-size: 1.08rem; }
-.report-value-sequence strong::before { content: "✓"; margin-right: 12px; }
+.report-value-sequence strong::before { content: ""; display: inline-block; width: .45em; height: .8em; margin-right: 12px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(45deg) translate(-.1em,-.15em); }
 .report-fit { border-left: 3px solid var(--r-green); color: var(--r-muted); line-height: 1.55; margin: 30px 0 0; padding-left: 16px; }
 .report-fit strong { color: var(--r-ink); }
 .report-deliverables { display: grid; gap: 0 28px; grid-template-columns: repeat(2, minmax(0, 1fr)); list-style: none; margin: 28px 0 0; padding: 0; }

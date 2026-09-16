@@ -392,7 +392,10 @@ def test_real_tree_ships_only_the_declared_webfont_and_stays_inside_every_budget
     declared_gzip = report["per_route"]["font_total_gzip_budget_kb"]
     assert report["per_route"]["font_files_total"] <= declared_files
     assert report["per_route"]["font_gzip_kb_max_route"] <= declared_gzip
-    assert len(report["font_routes"]) <= declared_files, report["font_routes"]
+    # Since 2026-09-16 the declared face ships in styles.css, so every route
+    # carries it: the census is bounded per route (files and gzip), never by
+    # how many routes may declare the font.
+    assert all(row["font_files"] <= declared_files for row in report["font_routes"]), report["font_routes"]
     for route in report["font_routes"]:
         assert route["font_files"] <= declared_files, route
         assert all(
@@ -429,9 +432,15 @@ def test_committed_baseline_is_the_delta_anchor_and_is_still_true() -> None:
         "the font baseline moved: declare the delta and refresh the baseline"
     )
     assert committed["fonts"]["font_files_total"] <= current["budget"]["font_files_max"]
-    assert len(committed["fonts"]["routes_with_font_face_rules"]) <= current["budget"][
-        "font_files_max"
-    ], committed["fonts"]["routes_with_font_face_rules"]
+    # The budget is one file and 60 KB gzip *per route*. Since 2026-09-16 the
+    # face ships in styles.css, so every measured route declares @font-face;
+    # what stays bounded is the per-route weight, not the number of routes.
+    assert committed["fonts"]["font_gzip_kb_max_route"] <= current["budget"][
+        "font_total_gzip_kb_max"
+    ], committed["fonts"]["font_gzip_kb_max_route"]
+    assert set(committed["fonts"]["routes_with_font_face_rules"]) == set(
+        committed["fonts"]["routes_with_font_files"]
+    ), "a route declaring @font-face must resolve its font file"
     assert committed["cls"]["observed_max"] <= committed["budget"]["cls_max"]
     assert committed["cls"]["routes_measured"] >= 20
 
