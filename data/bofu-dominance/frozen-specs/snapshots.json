@@ -78,8 +78,8 @@
         "whatsapp_present": true,
         "form_count": 1
       },
-      "content_sha256": "2a7f8a4a0f027c97f5ffcd094b196b9e0f635917d4284e2973bb936c04dbeb8d",
-      "bytes": 35210,
+      "content_sha256": "4de1b69bbd7ec7504c2054dd6f63a50099bd007b284084b3ee54e64c3b3bea64",
+      "bytes": 35142,
       "noindex": false
     },
     {
@@ -158,8 +158,8 @@
         "whatsapp_present": true,
         "form_count": 1
       },
-      "content_sha256": "ac02d6cf66718a9c1b6765563bfceeb75068243b43edcdf2167fc2f7c4d698ca",
-      "bytes": 37622,
+      "content_sha256": "53bb71bb3edaeae8a325e29d266020a89f5cff72c1be0486c07b19a276a8d3e1",
+      "bytes": 37551,
       "noindex": false
     },
     {
@@ -238,8 +238,8 @@
         "whatsapp_present": true,
         "form_count": 1
       },
-      "content_sha256": "caa94cc478b822e61d98f275ff9ebf6f344b60235797b006780feb630870dbcb",
-      "bytes": 29009,
+      "content_sha256": "250203bba32af6824eaee71e32a0a80f9f35816351882f1f65c680398e8dc572",
+      "bytes": 28934,
       "noindex": false
     },
     {
@@ -318,8 +318,8 @@
         "whatsapp_present": true,
         "form_count": 1
       },
-      "content_sha256": "b4906c4a07a060d1084fad590f6ff944db5ba9a62e733b1603c3198ca903c412",
-      "bytes": 33616,
+      "content_sha256": "316839d15f48760c17c06510a26e2bf120fc1a80dee24fb6f5d873708d5001b7",
+      "bytes": 33551,
       "noindex": false
     },
     {
@@ -405,8 +405,8 @@
         "whatsapp_present": true,
         "form_count": 1
       },
-      "content_sha256": "0653ea83dc681f9a7b86989129e7622b590d9067d09b94e0de10c4ec80296ce9",
-      "bytes": 25555,
+      "content_sha256": "80c4ea907f25339fd2e774d13194af9883e8c2cb6b1f601d11415e8256f89c5d",
+      "bytes": 25677,
       "noindex": false
     },
     {
@@ -485,8 +485,8 @@
         "whatsapp_present": true,
         "form_count": 1
       },
-      "content_sha256": "485a44fedcd8ad02948a7a9fcc6b88113673e70b124a7c844ade3c5aba697412",
-      "bytes": 28134,
+      "content_sha256": "cf4d194861f4eff49e0b7e35b79928107c6c83f9b1c83366fb1ae165332408b9",
+      "bytes": 28068,
       "noindex": false
     }
   ]

@@ -27,7 +27,7 @@ Mapear onde a operação B2G de obras perde tempo, margem e controle, e sair com
 | robots | index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1 |
 | schema | Organization, WebPage, Service, Country, BreadcrumbList, ListItem |
 | og:title | Mapeie onde a frente pública perde tempo, margem e controle. |
-| content_sha256 | `0653ea83dc681f9a7b86989129e7622b590d9067d09b94e0de10c4ec80296ce9` |
+| content_sha256 | `80c4ea907f25339fd2e774d13194af9883e8c2cb6b1f601d11415e8256f89c5d` |
 | hero CTA | Solicitar diagnóstico da operação → `#captura-pilar` |
 | when-not-to-hire | True |
 
