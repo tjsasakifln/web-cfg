@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-09-06T02:02:50.850Z",
+  "generated_at": "2026-09-16T07:03:37.375Z",
   "issue": 293,
   "base": "http://127.0.0.1:8793",
   "site_root": "_site",
   "policy_path": "data/quality/interface-coverage-policy.json",
   "coverage": {
-    "public_route_count": 254,
-    "audited_route_count": 58,
+    "public_route_count": 234,
+    "audited_route_count": 45,
     "viewports": [
       {
         "id": "mobile",
@@ -25,9 +25,9 @@
         "has_touch": false
       }
     ],
-    "page_loads": 116,
-    "price_route_count": 47,
-    "capture_form_route_count": 29,
+    "page_loads": 90,
+    "price_route_count": 38,
+    "capture_form_route_count": 24,
     "sampling": {
       "enabled": false,
       "reason": "full price+capture coverage fits inside the 45-minute site-ci budget; no current risk route is sampled away",
@@ -47,6 +47,20 @@
         "family": "service-pillars",
         "reasons": [
           "capture_form"
+        ]
+      },
+      {
+        "route": "/assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/",
+        "family": "data-desk-citation-kit",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/assistencia-tecnica-pericial-engenharia/",
+        "family": "assistencia-tecnica-pericial-engenharia",
+        "reasons": [
+          "price"
         ]
       },
       {
@@ -73,6 +87,27 @@
       },
       {
         "route": "/casos/aditivo-art125-demonstrativo/",
+        "family": "casos",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/casos/demonstrativo-infraestrutura/",
+        "family": "casos",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/casos/demonstrativo-projeto-privado/",
+        "family": "casos",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/casos/medicao-glosa-demonstrativo/",
         "family": "casos",
         "reasons": [
           "price"
@@ -158,6 +193,20 @@
         ]
       },
       {
+        "route": "/compatibilizacao-projetos-engenharia/",
+        "family": "engineering-projects-coordination-clash",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/confianca/",
+        "family": "legal-and-trust",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
         "route": "/conteudos/atraso-na-medicao-obra-publica/",
         "family": "measurement-delay-canary",
         "reasons": [
@@ -176,13 +225,6 @@
         "family": "editorial-library",
         "reasons": [
           "price"
-        ]
-      },
-      {
-        "route": "/correcoes/",
-        "family": "legal-and-trust",
-        "reasons": [
-          "capture_form"
         ]
       },
       {
@@ -226,6 +268,13 @@
         ]
       },
       {
+        "route": "/especialista/tiago-jun-sasaki/",
+        "family": "especialista",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
         "route": "/ferramentas/checklist-reequilibrio/",
         "family": "ferramentas",
         "reasons": [
@@ -244,6 +293,13 @@
         "family": "ferramentas",
         "reasons": [
           "capture_form"
+        ]
+      },
+      {
+        "route": "/inspecao-diagnostico-edificacoes/",
+        "family": "inspecao-diagnostico-edificacoes",
+        "reasons": [
+          "price"
         ]
       },
       {
@@ -268,156 +324,8 @@
         ]
       },
       {
-        "route": "/oportunidades/pe-2026-000188-reforma-ubs-londrina-pr/",
-        "family": "live-intelligence-opportunity",
-        "reasons": [
-          "price"
-        ]
-      },
-      {
-        "route": "/oportunidades/pe-2026-000412-pav-urbana-chapeco-sc/",
-        "family": "live-intelligence-opportunity",
-        "reasons": [
-          "price"
-        ]
-      },
-      {
-        "route": "/oportunidades/pe-2026-000903-sinalizacao-viaria-caxias-rs/",
-        "family": "live-intelligence-opportunity",
-        "reasons": [
-          "price"
-        ]
-      },
-      {
-        "route": "/panorama-mercado-obras-publicas/obras-publicas-sc-2026-08/",
-        "family": "panorama-mercado-obras-publicas",
-        "reasons": [
-          "price"
-        ]
-      },
-      {
-        "route": "/piloto/conversao-xray/",
-        "family": "piloto-preview",
-        "reasons": [
-          "price",
-          "capture_form"
-        ]
-      },
-      {
-        "route": "/piloto/mercados/edificacoes-publicas-rs/",
-        "family": "piloto-preview",
-        "reasons": [
-          "price"
-        ]
-      },
-      {
-        "route": "/piloto/mercados/pavimentacao-infraestrutura-viaria-pr/",
-        "family": "piloto-preview",
-        "reasons": [
-          "price"
-        ]
-      },
-      {
-        "route": "/piloto/mercados/pavimentacao-infraestrutura-viaria-rs/",
-        "family": "piloto-preview",
-        "reasons": [
-          "price"
-        ]
-      },
-      {
-        "route": "/piloto/mercados/pavimentacao-infraestrutura-viaria-sc/",
-        "family": "piloto-preview",
-        "reasons": [
-          "price"
-        ]
-      },
-      {
-        "route": "/piloto/mercados/pavimentacao-infraestrutura-viaria-sp/",
-        "family": "piloto-preview",
-        "reasons": [
-          "price"
-        ]
-      },
-      {
-        "route": "/piloto/ofertas/",
-        "family": "piloto-ofertas",
-        "reasons": [
-          "price"
-        ]
-      },
-      {
-        "route": "/piloto/ofertas/contratar/",
-        "family": "piloto-ofertas",
-        "reasons": [
-          "capture_form"
-        ]
-      },
-      {
-        "route": "/piloto/ofertas/diagnostico-expansao/",
-        "family": "piloto-ofertas",
-        "reasons": [
-          "price"
-        ]
-      },
-      {
-        "route": "/piloto/ofertas/diretoria-180/",
-        "family": "piloto-ofertas",
-        "reasons": [
-          "price"
-        ]
-      },
-      {
-        "route": "/piloto/ofertas/diretoria-365/",
-        "family": "piloto-ofertas",
-        "reasons": [
-          "price"
-        ]
-      },
-      {
-        "route": "/piloto/ofertas/diretoria-flex/",
-        "family": "piloto-ofertas",
-        "reasons": [
-          "price"
-        ]
-      },
-      {
-        "route": "/piloto/ofertas/faq/",
-        "family": "piloto-ofertas",
-        "reasons": [
-          "price"
-        ]
-      },
-      {
-        "route": "/piloto/orgaos/base-administrativa-do-curado-pe-pe/engenharia/",
-        "family": "piloto-preview",
-        "reasons": [
-          "price"
-        ]
-      },
-      {
-        "route": "/piloto/orgaos/base-aerea-de-anapolis-go/engenharia/",
-        "family": "piloto-preview",
-        "reasons": [
-          "price"
-        ]
-      },
-      {
-        "route": "/piloto/orgaos/eem-euclides-pinheiro-de-andrade-ce/engenharia/",
-        "family": "piloto-preview",
-        "reasons": [
-          "price"
-        ]
-      },
-      {
-        "route": "/piloto/orgaos/esp-prestacao-de-servicos-fde-see-sp/engenharia/",
-        "family": "piloto-preview",
-        "reasons": [
-          "price"
-        ]
-      },
-      {
-        "route": "/piloto/orgaos/superintendencia-reg-pol-rodv-federal-go-go/engenharia/",
-        "family": "piloto-preview",
+        "route": "/projetos-complementares-engenharia/",
+        "family": "complementary-engineering-elaboration",
         "reasons": [
           "price"
         ]
@@ -426,7 +334,7 @@
         "route": "/quantitativos-orcamento-obras/",
         "family": "private-engineering-quantities-budget",
         "reasons": [
-          "capture_form"
+          "price"
         ]
       },
       {
@@ -437,8 +345,15 @@
         ]
       },
       {
-        "route": "/radar/pesquisa/edicao-zero-4uf/",
-        "family": "radar",
+        "route": "/revisao-tecnica-projetos-engenharia/",
+        "family": "private-engineering-project-review",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/seguranca-trabalho-apoio-tecnico/",
+        "family": "seguranca-trabalho-apoio-tecnico",
         "reasons": [
           "price"
         ]
@@ -450,16 +365,9 @@
           "price",
           "capture_form"
         ]
-      },
-      {
-        "route": "/triagem-tecnica/",
-        "family": "triagem-tecnica",
-        "reasons": [
-          "capture_form"
-        ]
       }
     ],
-    "not_audited_count": 196,
+    "not_audited_count": 189,
     "not_audited": [
       {
         "route": "/404.html",
@@ -492,44 +400,8 @@
         "matched_by": []
       },
       {
-        "route": "/analises-contratos-publicos/aditivo-saldo-art125-item-novo/",
-        "family": "analises-contratos-publicos",
-        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
-        "matched_by": []
-      },
-      {
-        "route": "/analises-contratos-publicos/atraso-eventos-sem-comunicacao-contemporanea/",
-        "family": "analises-contratos-publicos",
-        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
-        "matched_by": []
-      },
-      {
-        "route": "/analises-contratos-publicos/bdi-composicao-vs-referencia-sc/",
-        "family": "analises-contratos-publicos",
-        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
-        "matched_by": []
-      },
-      {
-        "route": "/analises-contratos-publicos/comparaveis-rejeitados-regime-distinto/",
-        "family": "analises-contratos-publicos",
-        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
-        "matched_by": []
-      },
-      {
-        "route": "/analises-contratos-publicos/reajuste-aniversario-serie-indice/",
-        "family": "analises-contratos-publicos",
-        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
-        "matched_by": []
-      },
-      {
         "route": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
         "family": "analises-contratos-publicos",
-        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
-        "matched_by": []
-      },
-      {
-        "route": "/assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/",
-        "family": "data-desk-citation-kit",
         "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
         "matched_by": []
       },
@@ -540,20 +412,8 @@
         "matched_by": []
       },
       {
-        "route": "/casos/medicao-glosa-demonstrativo/",
-        "family": "casos",
-        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
-        "matched_by": []
-      },
-      {
         "route": "/comercial/privacidade-leads/",
         "family": "comercial-condicoes",
-        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
-        "matched_by": []
-      },
-      {
-        "route": "/confianca/",
-        "family": "legal-and-trust",
         "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
         "matched_by": []
       },
@@ -678,8 +538,32 @@
         "matched_by": []
       },
       {
+        "route": "/conteudos/como-contratar-compatibilizacao-projetos/",
+        "family": "engineering-projects-coordination-contents",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/como-contratar-projetos-complementares/",
+        "family": "como-contratar-projetos-complementares",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/como-contratar-revisao-tecnica-projeto/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
         "route": "/conteudos/como-provar-atraso-obra-publica/",
         "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/comparar-propostas-execucao-obra/",
+        "family": "private-engineering-quantities-budget",
         "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
         "matched_by": []
       },
@@ -836,6 +720,12 @@
       {
         "route": "/conteudos/divergencia-quantitativo-medicao-as-built/",
         "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/documentos-para-levantamento-quantitativos/",
+        "family": "private-engineering-quantities-budget",
         "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
         "matched_by": []
       },
@@ -1140,6 +1030,12 @@
         "matched_by": []
       },
       {
+        "route": "/conteudos/quando-compatibilizar-projetos/",
+        "family": "engineering-projects-coordination-contents",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
         "route": "/conteudos/quantitativo-insuficiente-planilha-obra-publica/",
         "family": "editorial-library",
         "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
@@ -1208,6 +1104,18 @@
       {
         "route": "/conteudos/resposta-notificacao-atraso-obra-publica/",
         "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/revisar-ou-refazer-orcamento-obra/",
+        "family": "private-engineering-quantities-budget",
         "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
         "matched_by": []
       },
@@ -1298,12 +1206,6 @@
       {
         "route": "/diagnostico-pre-licitacao/",
         "family": "service-pillars",
-        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
-        "matched_by": []
-      },
-      {
-        "route": "/especialista/tiago-jun-sasaki/",
-        "family": "especialista",
         "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
         "matched_by": []
       },
@@ -1524,56 +1426,14 @@
         "matched_by": []
       },
       {
-        "route": "/oportunidades/cc-2026-000047-ponte-rio-do-sul-sc/",
-        "family": "live-intelligence-opportunity",
-        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
-        "matched_by": []
-      },
-      {
         "route": "/ops/",
         "family": "transaction-utilities-noindex",
         "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
         "matched_by": []
       },
       {
-        "route": "/panorama-mercado-obras-publicas/",
-        "family": "panorama-mercado-obras-publicas",
-        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
-        "matched_by": []
-      },
-      {
-        "route": "/piloto/",
-        "family": "piloto-preview",
-        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
-        "matched_by": []
-      },
-      {
-        "route": "/piloto/concorrencia/edificacoes-publicas-rs/",
-        "family": "piloto-preview",
-        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
-        "matched_by": []
-      },
-      {
-        "route": "/piloto/concorrencia/pavimentacao-infraestrutura-viaria-pr/",
-        "family": "piloto-preview",
-        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
-        "matched_by": []
-      },
-      {
-        "route": "/piloto/concorrencia/pavimentacao-infraestrutura-viaria-rs/",
-        "family": "piloto-preview",
-        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
-        "matched_by": []
-      },
-      {
-        "route": "/piloto/concorrencia/pavimentacao-infraestrutura-viaria-sc/",
-        "family": "piloto-preview",
-        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
-        "matched_by": []
-      },
-      {
-        "route": "/piloto/concorrencia/pavimentacao-infraestrutura-viaria-sp/",
-        "family": "piloto-preview",
+        "route": "/parcerias-engenharia/",
+        "family": "parcerias-engenharia",
         "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
         "matched_by": []
       },
@@ -1632,6 +1492,12 @@
         "matched_by": []
       },
       {
+        "route": "/triagem-tecnica/",
+        "family": "triagem-tecnica",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
         "route": "/uso-de-ia/",
         "family": "legal-and-trust",
         "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
@@ -1674,6 +1540,38 @@
       "violations": []
     },
     {
+      "path": "/assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/",
+      "viewport": "mobile",
+      "family": "data-desk-citation-kit",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/assistencia-tecnica-pericial-engenharia/",
+      "viewport": "mobile",
+      "family": "assistencia-tecnica-pericial-engenharia",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
       "path": "/atrasos-prorrogacao-obras-publicas/",
       "viewport": "mobile",
       "family": "service-pillars",
@@ -1724,6 +1622,54 @@
     },
     {
       "path": "/casos/aditivo-art125-demonstrativo/",
+      "viewport": "mobile",
+      "family": "casos",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/demonstrativo-infraestrutura/",
+      "viewport": "mobile",
+      "family": "casos",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/demonstrativo-projeto-privado/",
+      "viewport": "mobile",
+      "family": "casos",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/medicao-glosa-demonstrativo/",
       "viewport": "mobile",
       "family": "casos",
       "selected_by": [
@@ -1908,6 +1854,38 @@
       "violations": []
     },
     {
+      "path": "/compatibilizacao-projetos-engenharia/",
+      "viewport": "mobile",
+      "family": "engineering-projects-coordination-clash",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/confianca/",
+      "viewport": "mobile",
+      "family": "legal-and-trust",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
       "path": "/conteudos/atraso-na-medicao-obra-publica/",
       "viewport": "mobile",
       "family": "measurement-delay-canary",
@@ -1945,22 +1923,6 @@
       "family": "editorial-library",
       "selected_by": [
         "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/correcoes/",
-      "viewport": "mobile",
-      "family": "legal-and-trust",
-      "selected_by": [
-        "capture_form"
       ],
       "counts": {
         "critical": 0,
@@ -2057,6 +2019,22 @@
       "violations": []
     },
     {
+      "path": "/especialista/tiago-jun-sasaki/",
+      "viewport": "mobile",
+      "family": "especialista",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
       "path": "/ferramentas/checklist-reequilibrio/",
       "viewport": "mobile",
       "family": "ferramentas",
@@ -2066,23 +2044,11 @@
       "counts": {
         "critical": 0,
         "serious": 0,
-        "moderate": 1,
+        "moderate": 0,
         "minor": 0
       },
       "blocking": 0,
-      "violations": [
-        {
-          "id": "region",
-          "impact": "moderate",
-          "description": "Ensure all page content is contained by landmarks",
-          "nodes": 1,
-          "targets": [
-            [
-              "#metodo"
-            ]
-          ]
-        }
-      ]
+      "violations": []
     },
     {
       "path": "/ferramentas/diagnostico-defesa-margem/",
@@ -2106,6 +2072,22 @@
       "family": "ferramentas",
       "selected_by": [
         "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/inspecao-diagnostico-edificacoes/",
+      "viewport": "mobile",
+      "family": "inspecao-diagnostico-edificacoes",
+      "selected_by": [
+        "price"
       ],
       "counts": {
         "critical": 0,
@@ -2165,346 +2147,9 @@
       "violations": []
     },
     {
-      "path": "/oportunidades/pe-2026-000188-reforma-ubs-londrina-pr/",
+      "path": "/projetos-complementares-engenharia/",
       "viewport": "mobile",
-      "family": "live-intelligence-opportunity",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/oportunidades/pe-2026-000412-pav-urbana-chapeco-sc/",
-      "viewport": "mobile",
-      "family": "live-intelligence-opportunity",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/oportunidades/pe-2026-000903-sinalizacao-viaria-caxias-rs/",
-      "viewport": "mobile",
-      "family": "live-intelligence-opportunity",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/panorama-mercado-obras-publicas/obras-publicas-sc-2026-08/",
-      "viewport": "mobile",
-      "family": "panorama-mercado-obras-publicas",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/piloto/conversao-xray/",
-      "viewport": "mobile",
-      "family": "piloto-preview",
-      "selected_by": [
-        "price",
-        "capture_form"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/piloto/mercados/edificacoes-publicas-rs/",
-      "viewport": "mobile",
-      "family": "piloto-preview",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/piloto/mercados/pavimentacao-infraestrutura-viaria-pr/",
-      "viewport": "mobile",
-      "family": "piloto-preview",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/piloto/mercados/pavimentacao-infraestrutura-viaria-rs/",
-      "viewport": "mobile",
-      "family": "piloto-preview",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/piloto/mercados/pavimentacao-infraestrutura-viaria-sc/",
-      "viewport": "mobile",
-      "family": "piloto-preview",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/piloto/mercados/pavimentacao-infraestrutura-viaria-sp/",
-      "viewport": "mobile",
-      "family": "piloto-preview",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/piloto/ofertas/",
-      "viewport": "mobile",
-      "family": "piloto-ofertas",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/piloto/ofertas/contratar/",
-      "viewport": "mobile",
-      "family": "piloto-ofertas",
-      "selected_by": [
-        "capture_form"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/piloto/ofertas/diagnostico-expansao/",
-      "viewport": "mobile",
-      "family": "piloto-ofertas",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/piloto/ofertas/diretoria-180/",
-      "viewport": "mobile",
-      "family": "piloto-ofertas",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/piloto/ofertas/diretoria-365/",
-      "viewport": "mobile",
-      "family": "piloto-ofertas",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/piloto/ofertas/diretoria-flex/",
-      "viewport": "mobile",
-      "family": "piloto-ofertas",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/piloto/ofertas/faq/",
-      "viewport": "mobile",
-      "family": "piloto-ofertas",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/piloto/orgaos/base-administrativa-do-curado-pe-pe/engenharia/",
-      "viewport": "mobile",
-      "family": "piloto-preview",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/piloto/orgaos/base-aerea-de-anapolis-go/engenharia/",
-      "viewport": "mobile",
-      "family": "piloto-preview",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/piloto/orgaos/eem-euclides-pinheiro-de-andrade-ce/engenharia/",
-      "viewport": "mobile",
-      "family": "piloto-preview",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/piloto/orgaos/esp-prestacao-de-servicos-fde-see-sp/engenharia/",
-      "viewport": "mobile",
-      "family": "piloto-preview",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/piloto/orgaos/superintendencia-reg-pol-rodv-federal-go-go/engenharia/",
-      "viewport": "mobile",
-      "family": "piloto-preview",
+      "family": "complementary-engineering-elaboration",
       "selected_by": [
         "price"
       ],
@@ -2522,7 +2167,7 @@
       "viewport": "mobile",
       "family": "private-engineering-quantities-budget",
       "selected_by": [
-        "capture_form"
+        "price"
       ],
       "counts": {
         "critical": 0,
@@ -2550,9 +2195,25 @@
       "violations": []
     },
     {
-      "path": "/radar/pesquisa/edicao-zero-4uf/",
+      "path": "/revisao-tecnica-projetos-engenharia/",
       "viewport": "mobile",
-      "family": "radar",
+      "family": "private-engineering-project-review",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/seguranca-trabalho-apoio-tecnico/",
+      "viewport": "mobile",
+      "family": "seguranca-trabalho-apoio-tecnico",
       "selected_by": [
         "price"
       ],
@@ -2571,22 +2232,6 @@
       "family": "servicos-obras-publicas",
       "selected_by": [
         "price",
-        "capture_form"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/triagem-tecnica/",
-      "viewport": "mobile",
-      "family": "triagem-tecnica",
-      "selected_by": [
         "capture_form"
       ],
       "counts": {
@@ -2632,6 +2277,38 @@
       "violations": []
     },
     {
+      "path": "/assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/",
+      "viewport": "desktop",
+      "family": "data-desk-citation-kit",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/assistencia-tecnica-pericial-engenharia/",
+      "viewport": "desktop",
+      "family": "assistencia-tecnica-pericial-engenharia",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
       "path": "/atrasos-prorrogacao-obras-publicas/",
       "viewport": "desktop",
       "family": "service-pillars",
@@ -2682,6 +2359,54 @@
     },
     {
       "path": "/casos/aditivo-art125-demonstrativo/",
+      "viewport": "desktop",
+      "family": "casos",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/demonstrativo-infraestrutura/",
+      "viewport": "desktop",
+      "family": "casos",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/demonstrativo-projeto-privado/",
+      "viewport": "desktop",
+      "family": "casos",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/medicao-glosa-demonstrativo/",
       "viewport": "desktop",
       "family": "casos",
       "selected_by": [
@@ -2866,6 +2591,38 @@
       "violations": []
     },
     {
+      "path": "/compatibilizacao-projetos-engenharia/",
+      "viewport": "desktop",
+      "family": "engineering-projects-coordination-clash",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/confianca/",
+      "viewport": "desktop",
+      "family": "legal-and-trust",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
       "path": "/conteudos/atraso-na-medicao-obra-publica/",
       "viewport": "desktop",
       "family": "measurement-delay-canary",
@@ -2903,22 +2660,6 @@
       "family": "editorial-library",
       "selected_by": [
         "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/correcoes/",
-      "viewport": "desktop",
-      "family": "legal-and-trust",
-      "selected_by": [
-        "capture_form"
       ],
       "counts": {
         "critical": 0,
@@ -3015,6 +2756,22 @@
       "violations": []
     },
     {
+      "path": "/especialista/tiago-jun-sasaki/",
+      "viewport": "desktop",
+      "family": "especialista",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
       "path": "/ferramentas/checklist-reequilibrio/",
       "viewport": "desktop",
       "family": "ferramentas",
@@ -3024,23 +2781,11 @@
       "counts": {
         "critical": 0,
         "serious": 0,
-        "moderate": 1,
+        "moderate": 0,
         "minor": 0
       },
       "blocking": 0,
-      "violations": [
-        {
-          "id": "region",
-          "impact": "moderate",
-          "description": "Ensure all page content is contained by landmarks",
-          "nodes": 1,
-          "targets": [
-            [
-              "#metodo"
-            ]
-          ]
-        }
-      ]
+      "violations": []
     },
     {
       "path": "/ferramentas/diagnostico-defesa-margem/",
@@ -3064,6 +2809,22 @@
       "family": "ferramentas",
       "selected_by": [
         "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/inspecao-diagnostico-edificacoes/",
+      "viewport": "desktop",
+      "family": "inspecao-diagnostico-edificacoes",
+      "selected_by": [
+        "price"
       ],
       "counts": {
         "critical": 0,
@@ -3123,346 +2884,9 @@
       "violations": []
     },
     {
-      "path": "/oportunidades/pe-2026-000188-reforma-ubs-londrina-pr/",
+      "path": "/projetos-complementares-engenharia/",
       "viewport": "desktop",
-      "family": "live-intelligence-opportunity",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/oportunidades/pe-2026-000412-pav-urbana-chapeco-sc/",
-      "viewport": "desktop",
-      "family": "live-intelligence-opportunity",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/oportunidades/pe-2026-000903-sinalizacao-viaria-caxias-rs/",
-      "viewport": "desktop",
-      "family": "live-intelligence-opportunity",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/panorama-mercado-obras-publicas/obras-publicas-sc-2026-08/",
-      "viewport": "desktop",
-      "family": "panorama-mercado-obras-publicas",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/piloto/conversao-xray/",
-      "viewport": "desktop",
-      "family": "piloto-preview",
-      "selected_by": [
-        "price",
-        "capture_form"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/piloto/mercados/edificacoes-publicas-rs/",
-      "viewport": "desktop",
-      "family": "piloto-preview",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/piloto/mercados/pavimentacao-infraestrutura-viaria-pr/",
-      "viewport": "desktop",
-      "family": "piloto-preview",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/piloto/mercados/pavimentacao-infraestrutura-viaria-rs/",
-      "viewport": "desktop",
-      "family": "piloto-preview",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/piloto/mercados/pavimentacao-infraestrutura-viaria-sc/",
-      "viewport": "desktop",
-      "family": "piloto-preview",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/piloto/mercados/pavimentacao-infraestrutura-viaria-sp/",
-      "viewport": "desktop",
-      "family": "piloto-preview",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/piloto/ofertas/",
-      "viewport": "desktop",
-      "family": "piloto-ofertas",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/piloto/ofertas/contratar/",
-      "viewport": "desktop",
-      "family": "piloto-ofertas",
-      "selected_by": [
-        "capture_form"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/piloto/ofertas/diagnostico-expansao/",
-      "viewport": "desktop",
-      "family": "piloto-ofertas",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/piloto/ofertas/diretoria-180/",
-      "viewport": "desktop",
-      "family": "piloto-ofertas",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/piloto/ofertas/diretoria-365/",
-      "viewport": "desktop",
-      "family": "piloto-ofertas",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/piloto/ofertas/diretoria-flex/",
-      "viewport": "desktop",
-      "family": "piloto-ofertas",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/piloto/ofertas/faq/",
-      "viewport": "desktop",
-      "family": "piloto-ofertas",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/piloto/orgaos/base-administrativa-do-curado-pe-pe/engenharia/",
-      "viewport": "desktop",
-      "family": "piloto-preview",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/piloto/orgaos/base-aerea-de-anapolis-go/engenharia/",
-      "viewport": "desktop",
-      "family": "piloto-preview",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/piloto/orgaos/eem-euclides-pinheiro-de-andrade-ce/engenharia/",
-      "viewport": "desktop",
-      "family": "piloto-preview",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/piloto/orgaos/esp-prestacao-de-servicos-fde-see-sp/engenharia/",
-      "viewport": "desktop",
-      "family": "piloto-preview",
-      "selected_by": [
-        "price"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
-    },
-    {
-      "path": "/piloto/orgaos/superintendencia-reg-pol-rodv-federal-go-go/engenharia/",
-      "viewport": "desktop",
-      "family": "piloto-preview",
+      "family": "complementary-engineering-elaboration",
       "selected_by": [
         "price"
       ],
@@ -3480,7 +2904,7 @@
       "viewport": "desktop",
       "family": "private-engineering-quantities-budget",
       "selected_by": [
-        "capture_form"
+        "price"
       ],
       "counts": {
         "critical": 0,
@@ -3508,9 +2932,25 @@
       "violations": []
     },
     {
-      "path": "/radar/pesquisa/edicao-zero-4uf/",
+      "path": "/revisao-tecnica-projetos-engenharia/",
       "viewport": "desktop",
-      "family": "radar",
+      "family": "private-engineering-project-review",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/seguranca-trabalho-apoio-tecnico/",
+      "viewport": "desktop",
+      "family": "seguranca-trabalho-apoio-tecnico",
       "selected_by": [
         "price"
       ],
@@ -3539,27 +2979,11 @@
       },
       "blocking": 0,
       "violations": []
-    },
-    {
-      "path": "/triagem-tecnica/",
-      "viewport": "desktop",
-      "family": "triagem-tecnica",
-      "selected_by": [
-        "capture_form"
-      ],
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "blocking": 0,
-      "violations": []
     }
   ],
   "critical": 0,
   "serious": 0,
-  "moderate": 2,
+  "moderate": 0,
   "minor": 0,
-  "duration_seconds": 245
+  "duration_seconds": 138
 }

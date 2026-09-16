@@ -1,6 +1,6 @@
 {
   "schema_version": "public-family-registry-v1",
-  "as_of": "2026-09-11",
+  "as_of": "2026-09-16",
   "owner_issue": 300,
   "fail_closed": true,
   "purpose": "Declaração versionada das famílias públicas indexáveis de confenge.com.br. O gate de conversão é fail-closed: toda rota indexável varrida por _conversion_files() precisa pertencer a uma família declarada aqui, e a ação terminal declarada é conferida contra o HTML renderizado. Rota indexável sem família reprova o CI.",
@@ -217,8 +217,45 @@
       },
       "declared_at": "2026-08-23",
       "owner_issue": 227,
-      "note": "A cobertura de captura destes pilares é auditada pela regra dedicada missing_on_page_form, que honra o congelamento EARLIEST_SAFE_ACTION_AT de #291. Esta declaração não afrouxa aquela regra.",
-      "debt": [],
+      "note": "A cobertura de captura destes pilares é auditada pela regra dedicada missing_on_page_form, que honra o congelamento EARLIEST_SAFE_ACTION_AT de #291. Esta declaração não afrouxa aquela regra. Desde 2026-09-16 a regra honra débito route-exact, datado e com dono (debt_policy), reportado em cada npm run inbound:gates; débito expirado reprova.",
+      "debt": [
+        {
+          "route": "/aditivos-obras-publicas/",
+          "owner_issue": 61,
+          "reason": "Pilar congelado por hash (frozen-specs, #128/#226) sem formulário on-page. O congelamento expirou em 2026-09-16 e a decisão de captura prevista em #291 (DEFER até 2026-09-16, depois EXECUTE_NOW) não foi executada por nenhuma campanha: adicionar captura a um pilar com preço publicado é decisão comercial do fundador, não desta campanha de design. Débito nominal, route-exact e datado sob o épico #61 até a recaptura honesta com formulário; depois de expires_at o gate volta a reprovar.",
+          "expires_at": "2026-09-30"
+        },
+        {
+          "route": "/auditoria-orcamento-licitacao/",
+          "owner_issue": 61,
+          "reason": "Pilar congelado por hash (frozen-specs, #128/#226) sem formulário on-page. O congelamento expirou em 2026-09-16 e a decisão de captura prevista em #291 (DEFER até 2026-09-16, depois EXECUTE_NOW) não foi executada por nenhuma campanha: adicionar captura a um pilar com preço publicado é decisão comercial do fundador, não desta campanha de design. Débito nominal, route-exact e datado sob o épico #61 até a recaptura honesta com formulário; depois de expires_at o gate volta a reprovar.",
+          "expires_at": "2026-09-30"
+        },
+        {
+          "route": "/diagnostico-b2g-360/",
+          "owner_issue": 61,
+          "reason": "Pilar congelado por hash (frozen-specs, #128/#226) sem formulário on-page. O congelamento expirou em 2026-09-16 e a decisão de captura prevista em #291 (DEFER até 2026-09-16, depois EXECUTE_NOW) não foi executada por nenhuma campanha: adicionar captura a um pilar com preço publicado é decisão comercial do fundador, não desta campanha de design. Débito nominal, route-exact e datado sob o épico #61 até a recaptura honesta com formulário; depois de expires_at o gate volta a reprovar.",
+          "expires_at": "2026-09-30"
+        },
+        {
+          "route": "/diagnostico-pre-licitacao/",
+          "owner_issue": 61,
+          "reason": "Pilar congelado por hash (frozen-specs, #128/#226) sem formulário on-page. O congelamento expirou em 2026-09-16 e a decisão de captura prevista em #291 (DEFER até 2026-09-16, depois EXECUTE_NOW) não foi executada por nenhuma campanha: adicionar captura a um pilar com preço publicado é decisão comercial do fundador, não desta campanha de design. Débito nominal, route-exact e datado sob o épico #61 até a recaptura honesta com formulário; depois de expires_at o gate volta a reprovar.",
+          "expires_at": "2026-09-30"
+        },
+        {
+          "route": "/medicoes-glosas-obras-publicas/",
+          "owner_issue": 61,
+          "reason": "Pilar congelado por hash (frozen-specs, #128/#226) sem formulário on-page. O congelamento expirou em 2026-09-16 e a decisão de captura prevista em #291 (DEFER até 2026-09-16, depois EXECUTE_NOW) não foi executada por nenhuma campanha: adicionar captura a um pilar com preço publicado é decisão comercial do fundador, não desta campanha de design. Débito nominal, route-exact e datado sob o épico #61 até a recaptura honesta com formulário; depois de expires_at o gate volta a reprovar.",
+          "expires_at": "2026-09-30"
+        },
+        {
+          "route": "/reequilibrio-obras-publicas/",
+          "owner_issue": 61,
+          "reason": "Pilar congelado por hash (frozen-specs, #128/#226) sem formulário on-page. O congelamento expirou em 2026-09-16 e a decisão de captura prevista em #291 (DEFER até 2026-09-16, depois EXECUTE_NOW) não foi executada por nenhuma campanha: adicionar captura a um pilar com preço publicado é decisão comercial do fundador, não desta campanha de design. Débito nominal, route-exact e datado sob o épico #61 até a recaptura honesta com formulário; depois de expires_at o gate volta a reprovar.",
+          "expires_at": "2026-09-30"
+        }
+      ],
       "index_evidence": {
         "substrate": "first_party_publication",
         "not_applicable": [
