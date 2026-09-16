@@ -92,3 +92,6 @@ data/live_intelligence/official.private/
 # Official consumer projection and last-accepted rollback snapshot.
 data/live_intelligence/accepted/
 data/live_intelligence/accepted.last/
+
+# chrome-launcher scratch profiles created at the repo root under WSL (Windows LOCALAPPDATA path)
+/C:*
