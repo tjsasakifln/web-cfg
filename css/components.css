@@ -70,7 +70,8 @@
 @media (min-width:900px){.list-ruled__action{grid-column:3;align-self:center}}
 .list-ruled__action:hover{color:var(--green-700);text-decoration:underline;text-underline-offset:.2em}
 .list-ruled>li.is-dark{background:var(--navy-900);color:#fff;padding-inline:clamp(1rem,2.5vw,1.5rem);margin-top:-1px;border-bottom:0;border-radius:var(--radius-sm)}
-.list-ruled>li.is-dark h3,.list-ruled>li.is-dark .list-ruled__action{color:#fff}
+.list-ruled>li.is-dark h3,.list-ruled>li.is-dark .list-ruled__action,.list-ruled>li.is-dark a{color:#fff}
+.list-ruled>li.is-dark p a{text-decoration-color:var(--lime)}
 .list-ruled>li.is-dark p{color:#d5dde6}
 .list-ruled>li.is-dark .list-ruled__index,.list-ruled>li.is-dark .list-ruled__kicker,.list-ruled>li.is-dark .list-ruled__use strong{color:var(--lime)}
 .list-ruled>li.is-dark .list-ruled__action .icon{color:var(--lime)}
@@ -177,7 +178,7 @@
 .list-ruled h3{max-width:34ch}
 .list-ruled__use{font-size:1rem}
 .list-ruled>li>div>p+.grid-2,.corporate-service-row>p+.grid-2{margin-top:1rem}
-.list-ruled+.dark-block,.list-ruled+.proof-figure,.phases+.proof-figure,.steps+.proof-figure,.split+.keys,.proof-figure+.keys,.table-scroll+.keys{margin-top:clamp(1.5rem,3vw,2.5rem)}
+.lead-inline+h2,.dark-block+h2,.dark-block+.section-head,.list-ruled+.dark-block,.list-ruled+.proof-figure,.phases+.proof-figure,.steps+.proof-figure,.split+.keys,.proof-figure+.keys,.table-scroll+.keys{margin-top:clamp(1.5rem,3vw,2.5rem)}
 .proof-figure__sheet{min-width:0}
 .steps>li>div,.phases>li>div{min-width:0}
 .phases>li+li{margin-top:0}
@@ -211,3 +212,8 @@
 .coord-finding-dl ul{margin:.2rem 0 0;padding-left:1.15rem}
 .coord-finding-stale{margin:1rem 0 0;padding:.85rem 1rem;border-left:1px solid var(--rule-strong);background:var(--soft)}
 .rv-class{display:inline-block;margin:0 0 .5rem;font-stretch:var(--narrow);font-weight:750;font-size:var(--text-small);letter-spacing:.08em;text-transform:uppercase;color:var(--green-700)}
+
+/* Form focus: the same two-layer ring as links and buttons ------------------ */
+.field input:focus-visible,.field select:focus-visible,.field textarea:focus-visible,.contact-form input:focus-visible,.contact-form select:focus-visible,.contact-form textarea:focus-visible,.offer-request-form input:focus-visible,.offer-request-form select:focus-visible,.offer-request-form textarea:focus-visible{outline:2px solid transparent;outline-offset:2px;box-shadow:var(--focus-ring);border-color:var(--ink)}
+/* Footer and breadcrumb links: touch-sized rows on phones ------------------- */
+@media (max-width:700px){.footer-links a,.footer-authority a,.breadcrumbs a{display:inline-block;padding-block:.55rem}}

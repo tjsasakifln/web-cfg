@@ -3,8 +3,8 @@
 .deliverables-page .breadcrumbs{padding-top:24px;padding-bottom:0}
 .deliverables-page .breadcrumbs ol{display:flex;align-items:center;gap:9px;margin:0;padding:0;list-style:none;color:#657284;font-size:.8rem}
 .deliverables-page .breadcrumbs a{color:var(--green-700);font-weight:750}
-.deliverables-hero{position:relative;padding:48px 0 40px;background:linear-gradient(180deg,#fff 0%,#f4f7f5 100%);border-bottom:1px solid var(--line);overflow:hidden}
-.deliverables-hero::after{content:"";position:absolute;right:-260px;bottom:-410px;width:720px;height:720px;background:radial-gradient(circle,rgba(61,130,56,.13),transparent 68%);pointer-events:none}
+.deliverables-hero{position:relative;padding:48px 0 40px;background:var(--white);border-bottom:1px solid var(--line);overflow:hidden}
+.deliverables-hero::after{content:none}
 .deliverables-hero-grid{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1.12fr) minmax(340px,.68fr);gap:clamp(48px,7vw,108px);align-items:center}
 .deliverables-hero-copy h1{max-width:34rem;margin:0 0 25px;font-size:var(--text-h1);letter-spacing:-.03em}
 .deliverables-hero-copy h1 span{display:block;color:var(--green-700)}
@@ -225,6 +225,6 @@
   .capability-group__body{padding:0 12px 10px}
   .capability-group__body>p{margin:0 0 8px;padding:8px 0}
 }
-.vitrine-item__facts dt,.compare-ladder-figures dt{font-family:var(--sans);font-stretch:var(--narrow);letter-spacing:.05em;overflow-wrap:anywhere}
+.vitrine-item__facts dt,.compare-ladder-figures dt{font-family:var(--sans);font-stretch:var(--narrow);letter-spacing:.04em;overflow-wrap:normal;word-break:normal;hyphens:manual}
 .vitrine-item__facts dd{font-size:var(--text-small)}
-@media (max-width:700px){.vitrine-item__facts{grid-template-columns:1fr}.compare-ladder-figures{grid-template-columns:1fr}.compare-ladder-figures>div+div{padding-left:0;border-left:0}}
+@media (max-width:700px){.vitrine-item__facts{grid-template-columns:1fr}.vitrine-item__facts>div{grid-template-columns:minmax(0,1fr);gap:2px}.compare-ladder-figures{grid-template-columns:1fr}.compare-ladder-figures>div+div{padding-left:0;border-left:0}}
