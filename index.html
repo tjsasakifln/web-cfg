@@ -20,14 +20,11 @@
      declaram. Uma divergencia entre os dois arquivos passava a valer pelo
      bloco, nao pela folha. Agora a folha e a fonte unica. -->
 <style data-home-deliverables-critical="">
-body[data-content-cluster="home"] .hero{padding:clamp(2.8rem,6vw,5.4rem) 0 clamp(2.5rem,5vw,4.5rem);color:#071a31;background:#fff;border-bottom:1px solid #dce3e8}
-body[data-content-cluster="home"] .hero h1{max-width:18ch;margin:0 0 1.15rem;color:#071a31;font-size:clamp(2.25rem,4.6vw,4rem);line-height:.99;letter-spacing:-.04em}
-body[data-content-cluster="home"] .hero h1 .type-serif{display:block;color:#2d6f2d;font-family:inherit}
-body[data-content-cluster="home"] .hero-lead{max-width:62ch;margin:0 0 1.35rem;color:#4e5c6b;font-size:clamp(1.05rem,1.45vw,1.2rem);line-height:1.58}
-body[data-content-cluster="home"] .home-hero-grid{display:grid;grid-template-columns:minmax(0,1.18fr) minmax(260px,.62fr);gap:clamp(2rem,5vw,5rem);align-items:end;max-width:none}
-body[data-content-cluster="home"] .hero-deliverable{max-width:58ch;margin:0 0 1.35rem;padding:1rem 0 0;border-top:1px solid #dce3e8;color:#071a31;font-size:1rem;font-weight:600;line-height:1.55}
-@media(max-width:940px){body[data-content-cluster="home"] .home-hero-grid{grid-template-columns:minmax(0,1fr);gap:1.25rem}}
-@media(max-width:700px){body[data-content-cluster="home"] .hero{padding:1.35rem 0 1.2rem}body[data-content-cluster="home"] .hero-lead{font-size:1rem;margin-bottom:.85rem}body[data-content-cluster="home"] .hero h1{font-size:clamp(2rem,8.8vw,2.55rem);max-width:14ch}body[data-content-cluster="home"] .hero-deliverable{font-size:.94rem;margin-bottom:.9rem;padding-top:.72rem}}
+body[data-content-cluster="home"] .hero{padding:clamp(1.5rem,3vw,3rem) 0 clamp(1.5rem,3vw,2.75rem);background:#fff;border-bottom:1px solid #dfe4e6}
+body[data-content-cluster="home"] .home-hero-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(1.75rem,4vw,3.5rem);align-items:center;max-width:none}
+body[data-content-cluster="home"] .hero h1{max-width:34rem;margin:0 0 1rem}
+body[data-content-cluster="home"] .hero-deliverable{max-width:54ch;margin:0 0 1rem;padding:.8rem 0 0;border-top:1px solid #dfe4e6;font-weight:600;line-height:1.5}
+@media (min-width:900px){body[data-content-cluster="home"] .home-hero-grid{grid-template-columns:minmax(0,1.12fr) minmax(320px,.88fr)}}
 </style>
 <link href="/styles.css" rel="stylesheet"/>
 <link href="/assets/home-10x.css" rel="stylesheet"/>
@@ -89,11 +86,7 @@ body[data-content-cluster="home"] .hero-deliverable{max-width:58ch;margin:0 0 1.
 <p class="eyebrow hero-eyebrow"><span aria-hidden="true" class="eyebrow-dot"></span>Engenharia, Perícias e Inteligência Técnica</p>
 <h1 id="hero-title">Assumimos a parte<br class="hero-br-mobile"> de engenharia <span class="type-serif">que falta para você orçar, contratar ou decidir.</span></h1>
 <p class="hero-lead">Comparar propostas de obra, completar ou conferir um projeto, entender uma infiltração, avaliar um imóvel ou responder a uma glosa: em obra pública ou privada, levantamos, calculamos, conferimos e assumimos a responsabilidade técnica.</p>
-<div class="hero-sample" role="group" aria-labelledby="hero-sample-label">
-<p class="hero-sample-label" id="hero-sample-label">Exemplo demonstrativo</p>
-<p class="hero-sample-line">Recorte de banheiro, paredes <code>W-01</code> a <code>W-04</code>: 21,84 − 1,68 (porta) − 0,56 (janela) = <strong>19,60 m²</strong> de revestimento, item <code>ORC-PAR-01</code>. Sem obra de cliente. <a href="/quantitativos-orcamento-obras/#amostra-quantitativos">Conferir a conta</a></p>
-<p class="hero-deliverable">Assim duas propostas se comparam pela mesma quantidade. Projeto, laudo e relatório assinados com CREA ativo, ART e nota fiscal.</p>
-</div>
+<p class="hero-deliverable">Com a quantidade levantada do desenho demonstrativo ao lado, duas propostas se comparam pela mesma base. Planilha, projeto, laudo e relatório saem assinados, com ART e nota fiscal, para você orçar, contratar ou decidir.</p>
 <div class="hero-actions">
 <a class="button button-primary button-lg" data-cta-position="hero" data-event-name="cta_click" href="/servicos/">Ver serviços por situação <svg class="icon"><use href="#i-arrow"></use></svg></a>
 <a class="text-link hero-secondary" data-cta-position="hero" data-event-name="cta_click" href="/triagem-tecnica/">Descrever a minha situação <svg class="icon"><use href="#i-arrow"></use></svg></a>
@@ -104,15 +97,51 @@ body[data-content-cluster="home"] .hero-deliverable{max-width:58ch;margin:0 0 1.
 <li><span class="proof-mark" aria-hidden="true">·</span><span><a href="/confianca/">Como conferir credenciais e limites</a></span></li>
 </ul>
 </div>
-<aside class="corporate-hero-note" aria-labelledby="hero-note-title">
-<p class="eyebrow" id="hero-note-title">Depois que você escreve</p>
-<p class="corporate-hero-note-lead">Você conta o essencial em texto, sem documento sensível no primeiro contato.</p>
-<ol>
-<li><span>01</span> dizemos o trabalho que resolve e o que falta reunir</li>
-<li><span>02</span> a proposta fixa escopo, entrega e responsável</li>
-<li><span>03</span> a produção segue conosco até a entrega</li>
-</ol>
-</aside>
+<figure class="proof-figure hero-figure">
+<div class="proof-figure__sheet">
+<svg viewBox="0 0 440 372" role="img" aria-labelledby="hero-plan-title hero-plan-desc">
+<title id="hero-plan-title">Planta do recorte de banheiro · estado original · R00</title>
+<desc id="hero-plan-desc">Banheiro 2,40 m por 1,80 m. Porta D-01 na parede norte, janela WN-01 na parede leste, poço hidrossanitário HS-01 na parede oeste, viga B-01 na parede leste. Exemplo demonstrativo, revisão R00.</desc>
+<g fill="none" stroke="#071a31" stroke-width="1" font-size="12" font-weight="500">
+<rect x="60" y="70" width="324" height="252" fill="#dce3e8" stroke-width="2"/>
+<rect x="78" y="88" width="288" height="216" fill="#ffffff" stroke-width="1.5"/>
+<rect x="138" y="70" width="96" height="18" fill="#ffffff"/>
+<path d="M138 88 A96 96 0 0 1 234 184" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="138" y1="88" x2="138" y2="184"/>
+<rect x="366" y="138" width="18" height="96" fill="#edf5ec" stroke="#2d6f2d"/>
+<line x1="375" y1="138" x2="375" y2="234" stroke="#2d6f2d"/>
+<rect x="352" y="88" width="14" height="216" stroke="#2d6f2d" stroke-dasharray="4 3"/>
+<rect x="12" y="172" width="48" height="48" fill="#f3f4f5" stroke-width="1.5"/>
+<line x1="78" y1="46" x2="366" y2="46"/>
+<line x1="78" y1="40" x2="78" y2="52"/><line x1="366" y1="40" x2="366" y2="52"/>
+<line x1="410" y1="88" x2="410" y2="304"/>
+<line x1="404" y1="88" x2="416" y2="88"/><line x1="404" y1="304" x2="416" y2="304"/>
+</g>
+<g fill="#071a31" font-size="14" font-weight="500">
+<text x="222" y="40" text-anchor="middle">2,40 m</text>
+<text x="424" y="196" text-anchor="middle" transform="rotate(-90 424 196)">1,80 m</text>
+<text x="186" y="64" text-anchor="middle">D-01</text>
+<text x="36" y="164" text-anchor="middle">HS-01</text>
+<text x="222" y="200" text-anchor="middle" font-size="15" font-weight="600">RM-01</text>
+<text x="222" y="220" text-anchor="middle" font-size="12" fill="#5d6a7a">pé-direito 2,60 m</text>
+</g>
+<g fill="#5d6a7a" font-size="12" font-weight="500">
+<text x="222" y="317" text-anchor="middle">W-01 · sul · 2,40</text>
+<text x="300" y="83" text-anchor="middle">W-03 · norte · 2,40</text>
+<text x="69" y="196" text-anchor="middle" transform="rotate(-90 69 196)">W-04 · oeste · 1,80</text>
+</g>
+<g fill="#2d6f2d" font-size="13" font-weight="600">
+<text x="345" y="196" text-anchor="middle" transform="rotate(-90 345 196)">B-01</text>
+<text x="375" y="250" text-anchor="middle">WN-01</text>
+<text x="375" y="130" text-anchor="middle">W-02</text>
+</g>
+<g font-size="12" fill="#5d6a7a">
+<text x="60" y="352">PR-ARQ · R00 · escala indicativa · exemplo demonstrativo</text>
+</g>
+</svg>
+</div>
+<figcaption><span class="tag">Exemplo demonstrativo</span><br/>Recorte de banheiro, paredes <code>W-01</code> a <code>W-04</code>: 21,84 − 1,68 (porta) − 0,56 (janela) = <strong>19,60 m²</strong> de revestimento, item <code>ORC-PAR-01</code>. Sem obra de cliente. <a href="/quantitativos-orcamento-obras/#amostra-quantitativos">Conferir a conta</a>.</figcaption>
+</figure>
 </div>
 </section>
 
@@ -162,25 +191,13 @@ body[data-content-cluster="home"] .hero-deliverable{max-width:58ch;margin:0 0 1.
 <a class="situation-action" data-journey="contrato" data-set-journey="contrato" href="/servicos-obras-publicas/">Ver serviços para obras públicas <svg class="icon"><use href="#i-arrow"></use></svg></a>
 </li>
 </ol>
-<p class="chooser-more"><a class="text-link" href="/servicos/">Ver todas as situações <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
+<div class="chooser-more">
+<p><a class="text-link" href="/servicos/">Ver todas as situações <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
+<p class="chooser-ask" id="descrever-situacao"><strong>Não se reconheceu em nenhuma, ou a sua mistura duas?</strong> Conte a situação do seu jeito, sem contratação nem documento sensível: <a data-cta-position="contact_band" data-event-name="whatsapp_click" href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20explicar%20uma%20situa%C3%A7%C3%A3o%20t%C3%A9cnica%20e%20entender%20o%20pr%C3%B3ximo%20passo." rel="noopener" target="_blank">descrever pelo WhatsApp</a> ou <a data-cta-position="contact_band" data-event-name="email_click" href="mailto:tiago.sasaki@confenge.com.br?subject=Situa%C3%A7%C3%A3o%20t%C3%A9cnica&amp;body=Ol%C3%A1%2C%20Tiago.%0A%0ASitua%C3%A7%C3%A3o%20t%C3%A9cnica%3A%0AO%20que%20preciso%20decidir%20ou%20resolver%3A%0APrazo%3A%0A">por e-mail</a>. A resposta nomeia o serviço, o que você recebe e o que falta reunir; em obra pública, casos urgentes de contrato em até 1 dia útil, os demais em até 2 dias úteis. Prefere deixar por escrito? <a href="#contato">Use o formulário no fim da página</a>.</p>
+</div>
 </div>
 </section>
 
-<!-- 3. CONTATO CEDO: SITUACAO FORA DA LISTA OU MISTURADA -->
-<section aria-labelledby="contact-band-title" class="section section--tight corporate-contact-band" data-section-archetype="contextual_next_action" id="descrever-situacao">
-<div class="container contact-band-grid">
-<div>
-<p class="eyebrow">Não se reconheceu em nenhuma, ou a sua mistura duas?</p>
-<h2 id="contact-band-title">Conte a situação do seu jeito. Respondemos com o trabalho que a resolve.</h2>
-<p>Conversa técnica, sem contratação nem pagamento. Não precisa preencher nada nem enviar documento sensível neste primeiro contato: a resposta nomeia o serviço, o que você recebe e o que falta reunir para a proposta. Em obra pública, casos urgentes de contrato são respondidos em até 1 dia útil; os demais, em até 2 dias úteis.</p>
-</div>
-<div class="contact-band-actions">
-<a class="button button-secondary button-lg" data-cta-position="contact_band" data-event-name="whatsapp_click" href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20explicar%20uma%20situa%C3%A7%C3%A3o%20t%C3%A9cnica%20e%20entender%20o%20pr%C3%B3ximo%20passo." rel="noopener" target="_blank"><svg class="icon"><use href="#i-whatsapp"></use></svg> Descrever pelo WhatsApp</a>
-<a class="text-link" data-cta-position="contact_band" data-event-name="email_click" href="mailto:tiago.sasaki@confenge.com.br?subject=Situa%C3%A7%C3%A3o%20t%C3%A9cnica&amp;body=Ol%C3%A1%2C%20Tiago.%0A%0ASitua%C3%A7%C3%A3o%20t%C3%A9cnica%3A%0AO%20que%20preciso%20decidir%20ou%20resolver%3A%0APrazo%3A%0A">Descrever por e-mail <svg class="icon"><use href="#i-arrow"></use></svg></a>
-<p>O canal para plantas, planilhas e processos é combinado depois, com segurança. Prefere deixar por escrito? <a href="#contato">Use o formulário no fim da página</a>.</p>
-</div>
-</div>
-</section>
 
 <!-- 4. QUEM ASSINA, COMO TRABALHA E COMO O TRABALHO PASSA PARA CA -->
 <span class="anchor-alias" id="ofertas" aria-hidden="true"></span>

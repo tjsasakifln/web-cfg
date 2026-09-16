@@ -13,26 +13,6 @@
 <link href="/manifest.webmanifest" rel="manifest"/>
 <script>document.documentElement.classList.replace('no-js','js');</script>
 <link href="/styles.css" rel="stylesheet"/>
-<style data-corporate-services-critical="">
-.corporate-services-hero{padding-block:clamp(3.5rem,8vw,7rem);background:#fff;border-bottom:1px solid var(--line)}
-.corporate-services-hero h1{max-width:18ch;font-size:clamp(2.35rem,5vw,4.4rem)}
-.corporate-service-list{max-width:70rem}
-.corporate-service-row{display:grid;grid-template-columns:minmax(15rem,.7fr) minmax(0,1.3fr);gap:clamp(2rem,6vw,6rem);padding:2rem 0;border-top:1px solid var(--line)}
-.corporate-service-row>div:first-child{display:grid;grid-template-columns:2.5rem 1fr;gap:.75rem}
-.corporate-service-row h3{margin:0;font-size:clamp(1.15rem,2vw,1.55rem)}
-.corporate-service-row p{max-width:62ch;color:var(--muted)}
-.service-number{padding-top:.15rem;color:var(--green-700);font-size:.78rem;font-weight:800;letter-spacing:.08em}
-.service-kicker{grid-column:2;margin:.35rem 0 0;color:var(--muted);font-size:.92rem;line-height:1.45}
-.corporate-service-row--b2g .service-kicker{color:#c1ccd6}
-.services-hero-contact{max-width:62ch;margin:1.1rem 0 0;color:var(--muted);font-size:.95rem;line-height:1.6}.services-hero-contact a{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
-.service-output{padding-top:.85rem;border-top:1px solid var(--line);font-size:.92rem}.service-output strong{color:var(--ink)}
-.corporate-service-row--b2g{margin-inline:-1.5rem;padding-inline:1.5rem;color:#fff;background:#071a31;border-color:#071a31}
-.corporate-service-row--b2g h3,.corporate-service-row--b2g .service-output strong{color:#fff}.corporate-service-row--b2g p{color:#c1ccd6}.corporate-service-row--b2g .service-number{color:var(--lime)}
-.corporate-service-row--b2g .button-secondary{color:#071a31;background:#fff;border-color:#d5dde5}
-.corporate-boundary{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(2rem,6vw,6rem);padding-block:1rem}
-@media(max-width:800px){.corporate-service-row--b2g{margin-inline:-1rem;padding-inline:1rem}}
-@media(max-width:700px){.corporate-service-row,.corporate-boundary{grid-template-columns:1fr;gap:1rem}.corporate-service-row{padding:1.5rem 0}.corporate-service-row--b2g{margin-inline:-1rem;padding-inline:1rem}}
-</style>
 <script defer="" src="/script.js?v=mv04"></script>
 <meta content="website" property="og:type"/>
 <meta content="pt_BR" property="og:locale"/>
@@ -74,73 +54,204 @@
 <main id="conteudo">
 <nav aria-label="Navegação estrutural" class="breadcrumbs container"><ol><li><a href="/">Início</a><span aria-hidden="true">/</span></li><li aria-current="page">Serviços</li></ol></nav>
 
-<section aria-labelledby="services-title" class="section corporate-services-hero">
-<div class="container narrow">
+<section aria-labelledby="services-title" class="hero" data-section-archetype="hero_split">
+<div class="container">
 <p class="eyebrow">Serviços organizados por situação</p>
 <h1 id="services-title">Serviços de engenharia para obras públicas e privadas</h1>
-<p class="section-lead">Comparar propostas, completar ou conferir um projeto, entender uma infiltração, avaliar um imóvel, sustentar uma posição em disputa, responder a uma exigência de segurança do trabalho ou defender uma medição em contrato público. Cada cartão abaixo diz o que assumimos, o que você passa a ter em mãos e o caminho direto. Quando a necessidade combina mais de um serviço, a proposta organiza as etapas com um responsável nomeado.</p>
-<p class="services-hero-contact">Não sabe qual cartão é o seu? <a href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20explicar%20uma%20situa%C3%A7%C3%A3o%20t%C3%A9cnica%20e%20entender%20o%20pr%C3%B3ximo%20passo." rel="noopener" target="_blank">Descreva a situação pelo WhatsApp</a> ou <a href="/triagem-tecnica/">pela triagem técnica</a>: conversa sem contratação, sem documento sensível; a resposta nomeia o serviço, a entrega e o que falta reunir.</p>
+<p class="hero-lead">Comparar propostas, completar ou conferir um projeto, entender uma infiltração, avaliar um imóvel, sustentar uma posição em disputa, responder a uma exigência de segurança do trabalho ou defender uma medição em contrato público.</p>
+<p class="measure">Cada linha abaixo diz o que assumimos, o que você passa a ter em mãos e o caminho direto. Quando a necessidade combina mais de um serviço, a proposta organiza as etapas com um responsável nomeado.</p>
+<p class="hero-deliverable">Não sabe qual é a sua? Descreva a situação: conversa sem contratação, sem documento sensível; a resposta nomeia o serviço, a entrega e o que falta reunir.</p>
+<div class="hero-actions">
+<a class="button button-primary" href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20explicar%20uma%20situa%C3%A7%C3%A3o%20t%C3%A9cnica%20e%20entender%20o%20pr%C3%B3ximo%20passo." rel="noopener" target="_blank">Descrever a situação pelo WhatsApp</a>
+<a class="hero-secondary" href="/triagem-tecnica/">Ou pela triagem técnica <svg class="icon"><use href="#i-arrow"></use></svg></a>
+</div>
 </div>
 </section>
 
-<section aria-labelledby="services-list-title" class="section section--default">
-<div class="container corporate-service-list">
+<section aria-labelledby="services-list-title" class="section" data-section-archetype="catalog_index">
+<div class="container">
 <header class="section-head">
 <p class="eyebrow">Nove situações, cada uma com o que você passa a ter</p>
 <h2 id="services-list-title">Em qual destas você está?</h2>
 </header>
+<ol class="list-ruled">
 
+<li>
+<span class="list-ruled__index">01</span>
 <article class="corporate-service-row" id="servico-projeto" data-hub-link="need-projeto">
-<div><span class="service-number">01</span><h3>Elaborar ou completar projetos</h3><p class="service-kicker">Falta uma disciplina para aprovar, contratar ou executar</p></div>
-<div><p>Para obra pública ou privada em que a arquitetura ou os insumos de origem existem e falta a documentação de uma disciplina: estrutural, hidrossanitário, elétrico, prevenção e combate a incêndio, climatização, telecomunicações ou outra compatível com o objeto e com a atribuição profissional confirmada.</p><p class="service-output"><strong>O que assumimos:</strong> elaboramos cálculos, plantas, detalhes, especificações e memória, na fase e na disciplina contratadas, coordenados com as demais partes até a entrega fechar. Estudo preliminar continua identificado como estudo preliminar.</p><p class="service-output"><strong>O que você passa a ter:</strong> a disciplina completa e a matriz de quem é autor e responde por cada parte, para contratar, coordenar, orçar e executar com uma referência comum. A autoria do que já existe fica com o autor. <a href="#servico-revisao">Revisão</a>, <a href="#servico-compatibilizacao">compatibilização</a> e <a data-asset-id="corporate_services_hub_v1" data-cta-id="services-private-quantities-budget" data-route-family="servicos-corporativos" href="/quantitativos-orcamento-obras/">quantitativos e orçamento</a> têm cartões próprios e entram na mesma proposta quando o caso pede; escritórios que encaminham demanda de cliente têm <a data-asset-id="corporate_services_hub_v1" data-cta-id="services-partner-forward" data-hub-link="servicos-parcerias" data-route-family="servicos-corporativos" href="/parcerias-engenharia/">caminho próprio</a>.</p><a class="button button-primary" data-asset-id="corporate_services_hub_v1" data-cta-id="services-private-elaboration" data-hub-link="servicos-complementares-landing" data-route-family="servicos-corporativos" href="/projetos-complementares-engenharia/">Ver elaboração de projetos complementares <svg class="icon"><use href="#i-arrow"></use></svg></a> <a class="text-link" href="/triagem-tecnica/#projetos">Conversar sobre o projeto</a></div>
+<span class="list-ruled__kicker">Elaborar ou completar projetos</span>
+<h3>Falta uma disciplina para aprovar ou executar</h3>
+<p>Obra pública ou privada em que a arquitetura ou os insumos de origem existem e falta a documentação de uma disciplina: estrutural, hidrossanitário, elétrico, prevenção e combate a incêndio, climatização, telecomunicações ou outra compatível com o objeto e com a atribuição profissional confirmada.</p>
+<div class="grid-2">
+<div><span class="eyebrow">O que assumimos</span><p class="service-output">Cálculos, plantas, detalhes, especificações e memória, na fase e na disciplina contratadas, coordenados com as demais partes até a entrega fechar. Estudo preliminar continua identificado como estudo preliminar.</p></div>
+<div><span class="eyebrow">O que você passa a ter</span><p class="service-output">A disciplina completa e a matriz de quem é autor e responde por cada parte, para contratar, coordenar, orçar e executar com uma referência comum. A autoria do que já existe fica com o autor.</p></div>
+</div>
+<p class="list-ruled__use"><strong>Na mesma proposta</strong> <a href="#servico-revisao">Revisão</a>, <a href="#servico-compatibilizacao">compatibilização</a> e <a data-asset-id="corporate_services_hub_v1" data-cta-id="services-private-quantities-budget" data-route-family="servicos-corporativos" href="/quantitativos-orcamento-obras/">quantitativos e orçamento</a> têm linhas próprias e entram quando o caso pede. Escritórios que encaminham demanda de cliente têm <a data-asset-id="corporate_services_hub_v1" data-cta-id="services-partner-forward" data-hub-link="servicos-parcerias" data-route-family="servicos-corporativos" href="/parcerias-engenharia/">caminho próprio</a>.</p>
+<div class="contact-actions"><a class="list-ruled__action" data-asset-id="corporate_services_hub_v1" data-cta-id="services-private-elaboration" data-hub-link="servicos-complementares-landing" data-route-family="servicos-corporativos" href="/projetos-complementares-engenharia/">Elaboração de projetos <svg class="icon"><use href="#i-arrow"></use></svg></a> <a class="text-link" href="/triagem-tecnica/#projetos">Conversar sobre o projeto</a></div>
 </article>
+</li>
 
+<li>
+<span class="list-ruled__index">02</span>
 <article class="corporate-service-row" id="servico-revisao" data-hub-link="servicos-revisao-landing">
-<div><span class="service-number">02</span><h3>Revisar um projeto existente</h3><p class="service-kicker">Recebi um projeto e preciso conferir antes de orçar, licitar ou executar</p></div>
-<div><p>Para quem já tem o projeto e precisa saber o que a evidência sustenta, o que falta e o que pode avançar. A revisão não assina projeto de terceiros nem substitui a autoria original; se faltar uma disciplina ou uma interface, a elaboração e a compatibilização entram na mesma proposta.</p><p class="service-output"><strong>O que assumimos:</strong> conferimos o escopo contratado (revisão documental, revisão técnica de disciplina ou análise de cálculo) e conduzimos com você as devolutivas ao autor.</p><p class="service-output"><strong>O que você passa a ter:</strong> um relatório com constatações sustentadas, recomendações, verificações não realizadas e informações faltantes, separadas por classe, para decidir o que ajustar, o que reenviar ao autor e o que pode avançar.</p><a class="button button-primary" href="/revisao-tecnica-projetos-engenharia/">Ver revisão técnica de projetos <svg class="icon"><use href="#i-arrow"></use></svg></a> <a class="text-link" href="/revisao-tecnica-projetos-engenharia/#extrato-demonstrativo">Ver o extrato demonstrativo</a></div>
+<span class="list-ruled__kicker">Revisão de projetos</span>
+<h3>Recebi um projeto e preciso conferir</h3>
+<p>Você já tem o projeto e precisa saber, antes de orçar, licitar ou executar, o que a evidência sustenta, o que falta e o que pode avançar. A revisão não assina projeto de terceiros nem substitui a autoria original; se faltar uma disciplina ou uma interface, a elaboração e a compatibilização entram na mesma proposta.</p>
+<div class="grid-2">
+<div><span class="eyebrow">O que assumimos</span><p class="service-output">Conferimos o escopo contratado (revisão documental, revisão técnica de disciplina ou análise de cálculo) e conduzimos com você as devolutivas ao autor.</p></div>
+<div><span class="eyebrow">O que você passa a ter</span><p class="service-output">Relatório com constatações sustentadas, recomendações, verificações não realizadas e informações faltantes, separadas por classe, para decidir o que ajustar, o que reenviar ao autor e o que pode avançar.</p></div>
+</div>
+<div class="contact-actions"><a class="list-ruled__action" href="/revisao-tecnica-projetos-engenharia/">Revisão de projetos <svg class="icon"><use href="#i-arrow"></use></svg></a> <a class="text-link" href="/revisao-tecnica-projetos-engenharia/#extrato-demonstrativo">Ver o extrato demonstrativo</a></div>
 </article>
+</li>
 
+<li>
+<span class="list-ruled__index">03</span>
 <article class="corporate-service-row" id="servico-compatibilizacao" data-hub-link="servicos-compat-landing">
-<div><span class="service-number">03</span><h3>Compatibilizar disciplinas</h3><p class="service-kicker">Estrutura e instalações estão batendo e ninguém fechou o ajuste</p></div>
-<div><p>Para obras em que estrutura, instalações e demais disciplinas precisam conviver no mesmo objeto sem interferência descoberta no canteiro. Plantas em PDF e CAD bastam; modelo não é requisito. Quando o caso pede elaborar ou revisar uma disciplina, a proposta compõe as duas etapas.</p><p class="service-output"><strong>O que assumimos:</strong> sobrepomos e conferimos as interfaces, registramos cada interferência com localização, documentos e revisões comparados e conduzimos o ajuste com os autores até o ciclo fechar. Não redimensionamos disciplina alheia sem que essa revisão esteja na proposta e o autor participe.</p><p class="service-output"><strong>O que você passa a ter:</strong> o registro de interferências com responsável pelo ajuste e estado de cada item, para coordenar, orçar e executar com uma referência comum entre as disciplinas.</p><a class="button button-primary" href="/compatibilizacao-projetos-engenharia/">Ver compatibilização de projetos <svg class="icon"><use href="#i-arrow"></use></svg></a> <a class="text-link" href="/casos/demonstrativo-projeto-privado/#CF-GEO-01">Ver a interferência demonstrativa</a></div>
+<span class="list-ruled__kicker">Compatibilização de disciplinas</span>
+<h3>Estrutura e instalações estão batendo</h3>
+<p>Estrutura, instalações e demais disciplinas precisam conviver no mesmo objeto sem interferência descoberta no canteiro, e ninguém fechou o ajuste. Plantas em PDF e CAD bastam; modelo não é requisito. Quando o caso pede elaborar ou revisar uma disciplina, a proposta compõe as duas etapas.</p>
+<div class="grid-2">
+<div><span class="eyebrow">O que assumimos</span><p class="service-output">Sobrepomos e conferimos as interfaces, registramos cada interferência com localização, documentos e revisões comparados e conduzimos o ajuste com os autores até o ciclo fechar. Não redimensionamos disciplina alheia sem que essa revisão esteja na proposta e o autor participe.</p></div>
+<div><span class="eyebrow">O que você passa a ter</span><p class="service-output">O registro de interferências com responsável pelo ajuste e estado de cada item, para coordenar, orçar e executar com uma referência comum entre as disciplinas.</p></div>
+</div>
+<div class="contact-actions"><a class="list-ruled__action" href="/compatibilizacao-projetos-engenharia/">Compatibilização <svg class="icon"><use href="#i-arrow"></use></svg></a> <a class="text-link" href="/casos/demonstrativo-projeto-privado/#CF-GEO-01">Ver a interferência demonstrativa</a></div>
 </article>
+</li>
 
+<li>
+<span class="list-ruled__index">04</span>
 <article class="corporate-service-row" id="servico-orcamento" data-hub-link="servicos-orcamento">
-<div><span class="service-number">04</span><h3>Quantitativos e orçamento</h3><p class="service-kicker">Preciso comparar propostas, contratar ou aceitar um número sem base própria</p></div>
-<div><p>Para obra pública ou privada em que a decisão depende de quantidades e custos que alguém consiga conferir: comparar propostas de execução de igual para igual, contratar com escopo fechado, licitar ou revisar a estimativa recebida. Projeto parcial ou só arquitetônico entra; a ausência muda o escopo, não impede o pedido.</p><p class="service-output"><strong>O que assumimos:</strong> levantamos os quantitativos a partir das plantas e do memorial, compomos ou revisamos o orçamento e deixamos critério, composição, referência e data-base declarados em cada item.</p><p class="service-output"><strong>O que você passa a ter:</strong> planilha de quantitativos, memória de cálculo com premissas e exclusões, e orçamento ou revisão com composições abertas, para comparar, contratar, licitar ou revisar a estimativa. A página da entrega traz a amostra demonstrativa: 21,84 m² menos os vãos, 19,60 m², item ORC-PAR-01.</p><a class="button button-primary" href="/quantitativos-orcamento-obras/">Ver quantitativos e orçamento de obra <svg class="icon"><use href="#i-arrow"></use></svg></a> <a class="text-link" href="/quantitativos-orcamento-obras/#triagem-quantitativos">Pedir proposta de quantitativos</a></div>
+<span class="list-ruled__kicker">Quantitativos e orçamento</span>
+<h3>Preciso comparar propostas ou aceitar um número</h3>
+<p>Obra pública ou privada em que a decisão depende de quantidades e custos que alguém consiga conferir, sem base própria: comparar propostas de execução de igual para igual, contratar com escopo fechado, licitar ou revisar a estimativa recebida. Projeto parcial ou só arquitetônico entra; a ausência muda o escopo, não impede o pedido.</p>
+<div class="grid-2">
+<div><span class="eyebrow">O que assumimos</span><p class="service-output">Levantamos os quantitativos a partir das plantas e do memorial, compomos ou revisamos o orçamento e deixamos critério, composição, referência e data-base declarados em cada item.</p></div>
+<div><span class="eyebrow">O que você passa a ter</span><p class="service-output">Planilha de quantitativos, memória de cálculo com premissas e exclusões, e orçamento ou revisão com composições abertas, para comparar, contratar, licitar ou revisar a estimativa. A página da entrega traz a amostra demonstrativa: 21,84 m² menos os vãos, 19,60 m², item ORC-PAR-01.</p></div>
+</div>
+<div class="contact-actions"><a class="list-ruled__action" href="/quantitativos-orcamento-obras/">Quantitativos e orçamento <svg class="icon"><use href="#i-arrow"></use></svg></a> <a class="text-link" href="/quantitativos-orcamento-obras/#triagem-quantitativos">Pedir proposta de quantitativos</a></div>
 </article>
+</li>
 
+<li>
+<span class="list-ruled__index">05</span>
 <article class="corporate-service-row" id="servico-diagnostico" data-hub-link="servicos-inspecao-landing">
-<div><span class="service-number">05</span><h3>Inspecionar, diagnosticar ou documentar obra e imóvel</h3><p class="service-kicker">Infiltração, fissura, mofo, recebimento ou registro da condição do imóvel</p></div>
-<div><p>Para pessoa física, condomínio, empresa ou órgão público diante de fissura, infiltração, falha, recebimento, reforma ou necessidade de registrar a condição de uma edificação em uma data. Inspeção registra o que existe; não é perícia judicial nem assistência da parte em disputa.</p><p class="service-output"><strong>O que assumimos:</strong> inspecionamos o escopo definido, registramos localização e evidências e analisamos as causas que a evidência sustenta, separando fato, hipótese e lacuna. A visita é combinada na proposta; fotografia à distância não fecha a causa.</p><p class="service-output"><strong>O que você passa a ter:</strong> relatório da condição do imóvel, com manifestações localizadas, data, hipóteses sustentadas e o próximo exame indicado, para priorizar a manutenção, orçar o reparo, registrar o estado em uma data ou instruir a providência do responsável. Quando a condição pede projeto de reparo, orçamento ou assistência em disputa, a proposta segue com essas etapas.</p><a class="button button-primary" href="/inspecao-diagnostico-edificacoes/">Ver inspeção e diagnóstico de edificações <svg class="icon"><use href="#i-arrow"></use></svg></a> <a class="text-link" href="/inspecao-diagnostico-edificacoes/#contato-inspecao">Pedir proposta de inspeção</a></div>
+<span class="list-ruled__kicker">Inspeção e diagnóstico</span>
+<h3>Infiltração, fissura, mofo ou registro do imóvel</h3>
+<p>Pessoa física, condomínio, empresa ou órgão público diante de fissura, infiltração, mofo, falha, recebimento, reforma ou necessidade de registrar a condição de uma edificação em uma data. Inspeção registra o que existe; não é perícia judicial nem assistência da parte em disputa.</p>
+<div class="grid-2">
+<div><span class="eyebrow">O que assumimos</span><p class="service-output">Inspecionamos o escopo definido, registramos localização e evidências e analisamos as causas que a evidência sustenta, separando fato, hipótese e lacuna. A visita é combinada na proposta; fotografia à distância não fecha a causa.</p></div>
+<div><span class="eyebrow">O que você passa a ter</span><p class="service-output">Relatório da condição do imóvel, com manifestações localizadas, data, hipóteses sustentadas e o próximo exame indicado, para priorizar a manutenção, orçar o reparo, registrar o estado em uma data ou instruir a providência do responsável. Quando a condição pede projeto de reparo, orçamento ou assistência em disputa, a proposta segue com essas etapas.</p></div>
+</div>
+<div class="contact-actions"><a class="list-ruled__action" href="/inspecao-diagnostico-edificacoes/">Inspeção e diagnóstico <svg class="icon"><use href="#i-arrow"></use></svg></a> <a class="text-link" href="/inspecao-diagnostico-edificacoes/#contato-inspecao">Pedir proposta de inspeção</a></div>
 </article>
+</li>
 
+<li>
+<span class="list-ruled__index">06</span>
 <article class="corporate-service-row" id="servico-avaliacao" data-hub-link="servicos-avaliacao">
-<div><span class="service-number">06</span><h3>Avaliação de imóvel</h3><p class="service-kicker">Preciso do valor de um imóvel para negociar ou registrar</p></div>
-<div><p>Para pessoas, famílias, empresas e advogados quando uma decisão patrimonial precisa de valor fundamentado em engenharia para uma finalidade e uma data definidas. Pessoa física não precisa informar CNPJ para começar. Se a decisão também exigir inspeção da condição física ou assistência em disputa, a proposta combina as etapas.</p><p class="service-output"><strong>O que assumimos:</strong> avaliamos o imóvel urbano descrevendo o objeto, o método e os dados utilizados, e delimitamos o que o valor representa.</p><p class="service-output"><strong>O que você passa a ter:</strong> laudo ou parecer de avaliação com método, dados e conclusão delimitada, para negociar, partilhar, dar em garantia ou registrar com um valor fundamentado. Parecer preliminar não substitui a avaliação formal. O pedido entra aqui, com o que você já souber.</p><a class="button button-primary" href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20de%20avalia%C3%A7%C3%A3o%20de%20im%C3%B3vel." rel="noopener" target="_blank">Pedir proposta de avaliação pelo WhatsApp <svg class="icon"><use href="#i-arrow"></use></svg></a> <a class="text-link" href="mailto:tiago.sasaki@confenge.com.br?subject=Avalia%C3%A7%C3%A3o%20de%20im%C3%B3vel">Enviar contexto por e-mail</a> <a class="text-link" href="/triagem-tecnica/#pericia-avaliacao">Pedir proposta pela triagem</a></div>
+<span class="list-ruled__kicker">Avaliação de imóvel</span>
+<h3>Preciso do valor de um imóvel</h3>
+<p>Pessoas, famílias, empresas e advogados quando negociar, partilhar, dar em garantia ou registrar exige valor fundamentado em engenharia para uma finalidade e uma data definidas. Pessoa física não precisa informar CNPJ para começar. Se a decisão também exigir inspeção da condição física ou assistência em disputa, a proposta combina as etapas.</p>
+<div class="grid-2">
+<div><span class="eyebrow">O que assumimos</span><p class="service-output">Avaliamos o imóvel urbano descrevendo o objeto, o método e os dados utilizados, e delimitamos o que o valor representa.</p></div>
+<div><span class="eyebrow">O que você passa a ter</span><p class="service-output">Laudo ou parecer de avaliação com método, dados e conclusão delimitada, para negociar, partilhar, dar em garantia ou registrar com um valor fundamentado. Parecer preliminar não substitui a avaliação formal. O pedido entra aqui, com o que você já souber.</p></div>
+</div>
+<div class="contact-actions"><a class="list-ruled__action" href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20de%20avalia%C3%A7%C3%A3o%20de%20im%C3%B3vel." rel="noopener" target="_blank">Pedir pelo WhatsApp <svg class="icon"><use href="#i-arrow"></use></svg></a> <a class="text-link" href="mailto:tiago.sasaki@confenge.com.br?subject=Avalia%C3%A7%C3%A3o%20de%20im%C3%B3vel">Enviar contexto por e-mail</a> <a class="text-link" href="/triagem-tecnica/#pericia-avaliacao">Pedir pela triagem</a></div>
 </article>
+</li>
 
+<li>
+<span class="list-ruled__index">07</span>
 <article class="corporate-service-row" id="servico-pericia" data-hub-link="servicos-pericia-landing">
-<div><span class="service-number">07</span><h3>Perícia e assistência técnica em disputas</h3><p class="service-kicker">Estou em uma disputa que depende de prova técnica de engenharia</p></div>
-<div><p>Para pessoas, advogados, empresas, condomínios e órgãos públicos quando um processo ou uma negociação depende de prova de engenharia de edificações. Assistência da parte, perícia do juízo e inspeção da edificação não são o mesmo trabalho; a CONFENGE não vende a nomeação de perito do juízo. Quando a disputa é de valor, veja <a href="/servicos/#servico-avaliacao">avaliação de imóvel</a>.</p><p class="service-output"><strong>O que assumimos:</strong> organizamos as evidências, formulamos quesitos quando cabíveis e acompanhamos a discussão técnica para instruir a sua parte; a independência é verificada antes de receber qualquer documento.</p><p class="service-output"><strong>O que você passa a ter:</strong> manifestação técnica da parte com evidências, quesitos e conclusão delimitada, inclusive crítica de laudo de terceiro e acompanhamento de vistoria, para instruir a parte e o advogado. Não decide o processo.</p><a class="button button-primary" href="/assistencia-tecnica-pericial-engenharia/">Ver assistência técnica em disputas <svg class="icon"><use href="#i-arrow"></use></svg></a> <a class="text-link" href="/assistencia-tecnica-pericial-engenharia/#contato-assistencia">Pedir proposta de assistência</a></div>
+<span class="list-ruled__kicker">Perícia e assistência técnica</span>
+<h3>Uma disputa depende de prova técnica</h3>
+<p>Pessoas, advogados, empresas, condomínios e órgãos públicos quando um processo ou uma negociação depende de prova técnica de engenharia de edificações. Assistência da parte, perícia do juízo e inspeção da edificação não são o mesmo trabalho; a CONFENGE não vende a nomeação de perito do juízo. Quando a disputa é de valor, veja <a href="/servicos/#servico-avaliacao">avaliação de imóvel</a>.</p>
+<div class="grid-2">
+<div><span class="eyebrow">O que assumimos</span><p class="service-output">Organizamos as evidências, formulamos quesitos quando cabíveis e acompanhamos a discussão técnica para instruir a sua parte; a independência é verificada antes de receber qualquer documento.</p></div>
+<div><span class="eyebrow">O que você passa a ter</span><p class="service-output">Manifestação técnica da parte com evidências, quesitos e conclusão delimitada, inclusive crítica de laudo de terceiro e acompanhamento de vistoria, para instruir a parte e o advogado. Não decide o processo.</p></div>
+</div>
+<div class="contact-actions"><a class="list-ruled__action" href="/assistencia-tecnica-pericial-engenharia/">Assistência em disputas <svg class="icon"><use href="#i-arrow"></use></svg></a> <a class="text-link" href="/assistencia-tecnica-pericial-engenharia/#contato-assistencia">Pedir proposta de assistência</a></div>
 </article>
+</li>
 
+<li>
+<span class="list-ruled__index">08</span>
 <article class="corporate-service-row" id="servico-sst" data-hub-link="servicos-sst-landing">
-<div><span class="service-number">08</span><h3>Segurança do trabalho</h3><p class="service-kicker">Preciso de um documento de segurança do trabalho</p></div>
-<div><p>Para empresas, órgãos públicos, advogados e pessoas envolvidas em risco ocupacional que precisa ser reconhecido, documentado ou controlado, inclusive quando existe uma discussão trabalhista com componente técnico. SST aqui é apoio técnico de engenharia; não é medicina ocupacional nem pacote automático de PGR, LTCAT e AET.</p><p class="service-output"><strong>O que assumimos:</strong> diagnosticamos os documentos existentes, as atividades e os agentes, indicamos o que se aplica e produzimos os documentos nomeados na proposta com o profissional habilitado para cada um.</p><p class="service-output"><strong>O que você passa a ter:</strong> o diagnóstico do que se aplica e o documento de SST nomeado na proposta, para responder à exigência com a peça certa, corrigir controles e manter registros. Exames, ASO e atos médicos ficam fora.</p><a class="button button-primary" href="/seguranca-trabalho-apoio-tecnico/">Ver apoio técnico de segurança do trabalho <svg class="icon"><use href="#i-arrow"></use></svg></a> <a class="text-link" href="/seguranca-trabalho-apoio-tecnico/#contato-sst">Pedir proposta de SST</a></div>
+<span class="list-ruled__kicker">Segurança do trabalho</span>
+<h3>Preciso de um documento de segurança do trabalho</h3>
+<p>Empresas, órgãos públicos, advogados e pessoas envolvidas em risco ocupacional que precisa ser reconhecido, documentado ou controlado, inclusive quando existe uma discussão trabalhista com componente técnico. SST aqui é apoio técnico de engenharia; não é medicina ocupacional nem pacote automático de PGR, LTCAT e AET.</p>
+<div class="grid-2">
+<div><span class="eyebrow">O que assumimos</span><p class="service-output">Diagnosticamos os documentos existentes, as atividades e os agentes, indicamos o que se aplica e produzimos os documentos nomeados na proposta com o profissional habilitado para cada um.</p></div>
+<div><span class="eyebrow">O que você passa a ter</span><p class="service-output">O diagnóstico do que se aplica e o documento de SST nomeado na proposta, para responder à exigência com a peça certa, corrigir controles e manter registros. Exames, ASO e atos médicos ficam fora.</p></div>
+</div>
+<div class="contact-actions"><a class="list-ruled__action" href="/seguranca-trabalho-apoio-tecnico/">Segurança do trabalho <svg class="icon"><use href="#i-arrow"></use></svg></a> <a class="text-link" href="/seguranca-trabalho-apoio-tecnico/#contato-sst">Pedir proposta de SST</a></div>
 </article>
+</li>
 
-<article class="corporate-service-row corporate-service-row--b2g" id="servico-obras-publicas" data-hub-link="servicos-obras-publicas">
-<div><span class="service-number">09</span><h3>Licitação ou contrato de obra pública</h3><p class="service-kicker">Medição glosada, aditivo, atraso, reequilíbrio ou edital em contrato público</p></div>
-<div><p>Para empresas diante de edital, proposta, medição, glosa, aditivo, atraso, reequilíbrio ou risco de margem; e para órgãos que precisam estruturar tecnicamente uma contratação sem misturar os dois papéis no mesmo certame.</p><p class="service-output"><strong>O que assumimos:</strong> lemos os documentos do contrato ou do edital, reconstruímos fatos e cálculos, apuramos em reais o que está em jogo e escrevemos a posição técnica do lado atendido: a empresa diante do fiscal ou o órgão que estrutura a contratação.</p><p class="service-output"><strong>O que você passa a ter:</strong> matriz de risco, orçamento, memória, relatório ou dossiê técnico do evento, com a origem de cada número declarada (fato, cálculo, inferência ou lacuna), para planejar a contratação, decidir a participação, sustentar uma medição ou organizar a posição contratual, conforme o lado atendido. O órgão decide o ateste e o pagamento. Preço e prazo das entregas com valor publicado estão na página de serviços para obras públicas; o que não tem valor publicado é fechado depois da triagem.</p><a class="button button-secondary" href="/servicos-obras-publicas/">Ver serviços para obras públicas <svg class="icon"><use href="#i-arrow"></use></svg></a> <a class="text-link" data-hub-link="servicos-medicao" href="/medicoes-glosas-obras-publicas/">Medição, glosa e pagamento</a> <a class="text-link" data-hub-link="servicos-aditivo" href="/aditivos-obras-publicas/">Aditivos em obras públicas</a> <a class="text-link" href="/triagem-tecnica/#planejamento-publico">Conversar sobre planejamento de órgão público</a></div>
+
+</ol>
+<article class="corporate-service-row dark-block" id="servico-obras-publicas" data-hub-link="servicos-obras-publicas">
+<span class="eyebrow">09 · Obras públicas: especialidade com página própria</span>
+<h3>Medição glosada, aditivo, atraso ou edital</h3>
+<p class="measure">Empresas diante de edital, proposta, medição, glosa, aditivo, atraso, reequilíbrio ou risco de margem em contrato público; e órgãos que precisam estruturar tecnicamente uma contratação sem misturar os dois papéis no mesmo certame.</p>
+<div class="grid-2">
+<div><span class="eyebrow">O que assumimos</span><p class="service-output">Lemos os documentos do contrato ou do edital, reconstruímos fatos e cálculos, apuramos em reais o que está em jogo e escrevemos a posição técnica do lado atendido: a empresa diante do fiscal ou o órgão que estrutura a contratação.</p></div>
+<div><span class="eyebrow">O que você passa a ter</span><p class="service-output">Matriz de risco, orçamento, memória, relatório ou dossiê técnico do evento, com a origem de cada número declarada (fato, cálculo, inferência ou lacuna), para planejar a contratação, decidir a participação, sustentar uma medição ou organizar a posição contratual, conforme o lado atendido. O órgão decide o ateste e o pagamento. Preço e prazo das entregas com valor publicado estão na página de serviços para obras públicas; o que não tem valor publicado é fechado depois da triagem.</p></div>
+</div>
+<div class="contact-actions"><a class="button button-secondary" href="/servicos-obras-publicas/">Ver obras públicas <svg class="icon"><use href="#i-arrow"></use></svg></a> <a class="text-link" data-hub-link="servicos-medicao" href="/medicoes-glosas-obras-publicas/">Medição, glosa e pagamento</a> <a class="text-link" data-hub-link="servicos-aditivo" href="/aditivos-obras-publicas/">Aditivos em obras públicas</a> <a class="text-link" href="/triagem-tecnica/#planejamento-publico">Conversar sobre planejamento de órgão público</a></div>
 </article>
 </div>
 </section>
 
-<section aria-labelledby="services-boundary-title" class="section section--tight">
-<div class="container corporate-boundary">
-<div><p class="eyebrow">Antes da proposta</p><h2 id="services-boundary-title">Fase, disciplina e responsabilidade ficam explícitas.</h2></div>
-<div><p>A conversa inicial identifica o objetivo, a fase da obra ou do projeto, os documentos existentes e a entrega necessária. A proposta registra conteúdo, exclusões, informações de entrada, prazo e responsabilidade. Respondemos pelo documento técnico e pelo método contratado; aprovações, decisões administrativas e decisões judiciais permanecem com quem tem competência para tomá-las.</p><p>Atendemos clientes em todo o Brasil. Atividade de campo, responsável técnico, ART e eventuais registros ou vistos são confirmados para o objeto, a disciplina, o local e as atribuições aplicáveis antes de assumirmos a responsabilidade.</p><p>Se a sua necessidade não está listada, descreva o objetivo e os documentos que você já tem: a conversa inicial enquadra a entrega possível, inclusive quando o contexto ainda está incompleto.</p><a class="button button-primary" data-hub-link="servicos-contato" href="/triagem-tecnica/">Solicitar proposta <svg class="icon"><use href="#i-arrow"></use></svg></a> <a class="text-link" href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20explicar%20uma%20situa%C3%A7%C3%A3o%20t%C3%A9cnica%20e%20entender%20o%20pr%C3%B3ximo%20passo." rel="noopener" target="_blank">Falar pelo WhatsApp</a></div>
+<section aria-labelledby="services-flow-title" class="section section--soft" data-section-archetype="journey_rail">
+<div class="container">
+<header class="section-head">
+<p class="eyebrow">Como o trabalho passa para cá</p>
+<h2 id="services-flow-title">Três passos entre a sua descrição e o aceite técnico.</h2>
+<p class="section-lead">Se a sua necessidade não está listada, descreva o objetivo e os documentos que você já tem: a conversa inicial enquadra a entrega possível, inclusive quando o contexto ainda está incompleto.</p>
+</header>
+<ol class="steps">
+<li><div><h3>Você descreve a situação.</h3><p>Em texto, com o que já sabe. Documento sensível só depois, por canal seguro.</p></div></li>
+<li><div><h3>Nós dizemos o trabalho, a entrega e o que falta.</h3><p>Quando o caso pede mais de um serviço, a proposta combina as etapas com um responsável nomeado.</p></div></li>
+<li><div><h3>Escopo e responsabilidade ficam claros antes de começar.</h3><p>Local, atribuição, visita e ART, quando aplicáveis, são confirmados antes do aceite técnico. Daí em diante, a parte técnica é conduzida por nós.</p></div></li>
+</ol>
+</div>
+</section>
+
+<section aria-labelledby="services-boundary-title" class="section section--tight" data-section-archetype="author_identity">
+<div class="container split">
+<div>
+<p class="eyebrow">Antes da proposta</p>
+<h2 id="services-boundary-title">Fase, disciplina e responsabilidade ficam explícitas.</h2>
+<p class="measure">A conversa inicial identifica o objetivo, a fase da obra ou do projeto, os documentos existentes e a entrega necessária. A proposta registra conteúdo, exclusões, informações de entrada, prazo e responsabilidade. Respondemos pelo documento técnico e pelo método contratado; aprovações, decisões administrativas e decisões judiciais permanecem com quem tem competência para tomá-las.</p>
+<p class="measure">Atendemos clientes em todo o Brasil. Atividade de campo, responsável técnico, ART e eventuais registros ou vistos são confirmados para o objeto, a disciplina, o local e as atribuições aplicáveis antes de assumirmos a responsabilidade.</p>
+</div>
+<aside class="aside-note" aria-labelledby="services-signer-title">
+<h3 id="services-signer-title">Quem assina</h3>
+<p>Tiago Sasaki, Engenheiro Civil formado pela EESC-USP, com registro profissional ativo no CREA, responde tecnicamente pela CONFENGE, CNPJ 52.407.089/0001-09. Serviços técnicos são emitidos com ART e nota fiscal, no escopo e na atribuição contratados.</p>
+<p>Cada entrega separa fato, cálculo, hipótese e lacuna. Não assinamos projeto de terceiros nem prometemos aprovação, pagamento ou resultado de processo.</p>
+<p><a href="/especialista/tiago-jun-sasaki/">Conhecer quem responde</a> · <a href="/confianca/">Como conferir credenciais e limites</a></p>
+</aside>
+</div>
+</section>
+
+<section aria-labelledby="services-contact-title" class="section section--tight" data-section-archetype="cta_formal">
+<div class="container">
+<div class="dark-block">
+<p class="eyebrow">Contato</p>
+<h2 id="services-contact-title">Descreva a situação. A resposta nomeia o serviço, a entrega e o que falta reunir.</h2>
+<p class="measure">Conversa sem contratação e sem documento sensível. Vale para demanda de qualquer tamanho e para contexto ainda incompleto.</p>
+<div class="contact-actions">
+<a class="button button-primary" href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20explicar%20uma%20situa%C3%A7%C3%A3o%20t%C3%A9cnica%20e%20entender%20o%20pr%C3%B3ximo%20passo." rel="noopener" target="_blank">Falar pelo WhatsApp <svg class="icon"><use href="#i-arrow"></use></svg></a>
+<a class="button button-secondary" data-hub-link="servicos-contato" href="/triagem-tecnica/">Solicitar proposta</a>
+</div>
+<ul class="contact-channels" aria-label="Canais de contato">
+<li><div><strong>E-mail</strong><a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a></div></li>
+<li><div><strong>Telefone</strong><a href="tel:+5548988344559">(48) 98834-4559</a></div></li>
+</ul>
+<p class="contact-note">Atendimento em todo o Brasil, conforme escopo, local e modalidade definidos na proposta.</p>
+</div>
 </div>
 </section>
 </main>

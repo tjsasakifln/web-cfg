@@ -4,10 +4,12 @@
   "marker_begin": "BEGIN css-modules:cfg10x-12",
   "marker_end": "END css-modules:cfg10x-12",
   "modules": [
+    "css/identity.css",
+    "css/components.css",
     "css/contracts.css",
     "css/type-floor.css"
   ],
   "tokens": "styles-tokens.css",
   "framework": null,
-  "note": "Concatenated last into styles.css by scripts/site/build_css.py. No Tailwind/Bootstrap. Hash publish stays in fingerprint_css.py."
+  "note": "Concatenated last into styles.css by scripts/site/build_css.py. identity.css carries the font-face, scale and base roles for every route; contracts and type-floor stay last. No Tailwind/Bootstrap. Hash publish stays in fingerprint_css.py."
 }

@@ -228,7 +228,7 @@ def _plan_svg(extracts: dict[str, Any], revision: str) -> str:
 <rect x="{X(0):.1f}" y="{Y(0.4):.1f}" width="{px(length):.1f}" height="{px(0.4, 'y'):.1f}" fill="#94a3b8"/>
 <text x="{X(length / 2):.1f}" y="{Y(center) + 4:.1f}" text-anchor="middle" font-size="13" fill="#0f172a">PV-01 · {br_number(length)} m × {br_number(width)} m</text>
 <line x1="{X(mh1_s):.1f}" y1="{Y(center):.1f}" x2="{X(mh2_s):.1f}" y2="{Y(center):.1f}" stroke="#0369a1" stroke-width="4"/>
-<text x="{X((mh1_s + mh2_s) / 2):.1f}" y="{Y(center) - 14:.1f}" text-anchor="middle" font-size="11" fill="#0c4a6e">DR-01 · {br_number(totals['pipe_length_m'])} m · Ø {br_number(totals['pipe_diameter_mm'])} mm</text>
+<text x="{X((mh1_s + mh2_s) / 2):.1f}" y="{Y(center) - 14:.1f}" text-anchor="middle" font-size="11" fill="#0c4a6e">DR-01 · {br_number(totals['pipe_length_m'])} m · diâm. {br_number(totals['pipe_diameter_mm'])} mm</text>
 <circle cx="{X(mh1_s):.1f}" cy="{Y(center):.1f}" r="10" fill="#bae6fd" stroke="#0c4a6e"/>
 <text x="{X(mh1_s):.1f}" y="{Y(center) + 32:.1f}" text-anchor="middle" font-size="11" fill="#0c4a6e">MH-01 E0+010</text>
 <rect x="{X(in_s) - 8:.1f}" y="{Y(0.9):.1f}" width="16" height="{px(0.9, 'y'):.1f}" fill="#fde68a" stroke="#92400e"/>

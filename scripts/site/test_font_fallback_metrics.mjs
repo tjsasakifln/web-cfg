@@ -22,12 +22,14 @@ import puppeteer from "puppeteer-core";
 import { resolveChromePath } from "./resolve_chrome.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("../..", import.meta.url)));
-const css = readFileSync(join(ROOT, "assets/home-10x.css"), "utf8");
+// 2026-09-16: the face moved from assets/home-10x.css (home only) to css/identity.css,
+// concatenated into styles.css for every route. The stack is the --sans token.
+const css = readFileSync(join(ROOT, "styles.css"), "utf8") + readFileSync(join(ROOT, "styles-tokens.css"), "utf8");
 const FONT = "assets/archivo-var-latin-bf6e041e.woff2";
 
 // 1. Static contract.
 const face = css.match(/@font-face\{[^}]*font-family:"Archivo Fallback";[^}]*\}/);
-assert.ok(face, "home-10x.css must declare the metric-matched fallback face");
+assert.ok(face, "styles.css must declare the metric-matched fallback face");
 const descriptor = (name) => Number((face[0].match(new RegExp(`${name}:([0-9.]+)%`)) || [])[1]);
 const sizeAdjust = descriptor("size-adjust");
 const ascent = descriptor("ascent-override");
@@ -38,11 +40,12 @@ for (const [name, value] of Object.entries({ sizeAdjust, ascent, descent, lineGa
 }
 assert.match(face[0], /local\("Liberation Sans"\)/, "the CI runner has Liberation Sans; it must be a source");
 // Stacks only: the @font-face declaration itself also says font-family:"Archivo Var".
-const stacks = (css.match(/font-family:"Archivo Var"[^;]*;/g) || []).filter((stack) => stack !== 'font-family:"Archivo Var";');
-assert.ok(stacks.length >= 3, "expected the Archivo stacks in home-10x.css");
+const stacks = (css.match(/(?:font-family|--sans(?:-wide|-narrow)?):"Archivo Var"[^;]*;/g) || []).filter((stack) => stack !== 'font-family:"Archivo Var";');
+assert.ok(stacks.length >= 1, "expected the Archivo stack (--sans token) in styles-tokens.css");
 for (const stack of stacks) {
-  assert.match(stack, /^font-family:"Archivo Var","Archivo Fallback",/, `stack must name the fallback right after Archivo: ${stack}`);
+  assert.match(stack, /^(?:font-family|--sans(?:-wide|-narrow)?):"Archivo Var","Archivo Fallback(?: Wide| Narrow)?",/, `stack must name the fallback right after Archivo: ${stack}`);
 }
+assert.ok(/body\{[^}]*font-family:var\(--sans\)/.test(css), "body must consume the --sans stack");
 
 // 2. The numbers track the font file.
 const metrics = JSON.parse(execFileSync("python3", ["-c", `

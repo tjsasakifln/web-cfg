@@ -13,47 +13,6 @@
 <link href="/manifest.webmanifest" rel="manifest"/>
 <script>document.documentElement.classList.replace('no-js','js');</script>
 <link href="/styles.css" rel="stylesheet"/>
-<link href="/triagem-tecnica/styles.css" rel="stylesheet"/>
-<style data-inspection-critical="">
-.insp-hero{padding-block:clamp(1.6rem,3vw,2.8rem);background:#fff;border-bottom:1px solid var(--line)}
-.insp-hero-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(17rem,.65fr);gap:clamp(2rem,6vw,5rem);align-items:start}
-.insp-hero h1{max-width:20ch;margin-bottom:.7rem;font-size:clamp(1.9rem,3.6vw,3rem)}
-.insp-lead{max-width:60ch;margin-bottom:.9rem;color:var(--muted);font-size:clamp(.98rem,1.3vw,1.08rem);line-height:1.55}
-.insp-use{max-width:60ch;margin:0 0 1rem;color:var(--ink);font-size:clamp(.96rem,1.25vw,1.04rem);line-height:1.55}
-.insp-use strong{display:block;margin-bottom:.2rem;color:var(--green-700);font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
-.insp-sample-mini{max-width:60ch;margin:0 0 1.25rem;padding:.9rem 1rem;border:1px solid var(--line);border-left:4px solid var(--green-700);background:var(--soft)}
-.insp-sample-label{margin:0 0 .5rem;color:var(--muted);font-size:.8125rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
-.insp-sample-steps{display:grid;gap:.4rem;margin:0;padding:0;list-style:none;counter-reset:ism}
-.insp-sample-steps li{display:grid;grid-template-columns:1.5rem 1fr;gap:.5rem;align-items:start;font-size:.93rem;line-height:1.5}
-.insp-sample-steps li::before{counter-increment:ism;content:counter(ism);display:grid;place-items:center;width:1.35rem;height:1.35rem;margin-top:.1rem;background:var(--green-700);color:#fff;font-size:.72rem;font-weight:800}
-.insp-signal{padding:1.4rem;border:1px solid var(--line);border-top:4px solid var(--green-700);background:var(--soft)}
-.insp-signal p:last-child{margin-bottom:0}
-.insp-signal-sign{margin:.5rem 0 .9rem}
-.insp-signal-channels{display:grid;gap:.4rem;margin:0 0 .9rem;padding:0;list-style:none;font-size:.95rem}
-.insp-signal-channels a{color:var(--ink);font-weight:700;text-decoration:underline;text-underline-offset:3px}
-.insp-signal-note{margin:0;color:var(--muted);font-size:.9rem;line-height:1.5}
-.insp-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}
-.insp-card{padding:1.35rem;border:1px solid var(--line);background:#fff}
-.insp-card h3{margin-top:0}
-.insp-card p:last-child{margin-bottom:0}
-.insp-serve{margin:.75rem 0 0;padding-top:.6rem;border-top:1px solid var(--line);color:var(--muted);font-size:.93rem;line-height:1.5}
-.insp-serve strong{margin-right:.3rem;color:var(--green-700);font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
-.insp-flow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1.5rem;counter-reset:insp-step}
-.insp-step{padding-top:1rem;border-top:3px solid var(--green-700)}
-.insp-step::before{counter-increment:insp-step;content:"0" counter(insp-step);display:block;margin-bottom:.65rem;color:var(--green-700);font-weight:800}
-.insp-proof{display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(2rem,6vw,5rem)}
-.insp-list{margin:0;padding-left:1.2rem}.insp-list li+li{margin-top:.75rem}
-.insp-triage{background:#f3f6f8;border-top:1px solid var(--line)}
-.insp-triage-grid{display:grid;grid-template-columns:minmax(16rem,.7fr) minmax(0,1.3fr);gap:clamp(2rem,6vw,5rem);align-items:start}
-.insp-channels{margin-top:1.25rem}
-.insp-channels .channel-actions{align-items:stretch}
-.insp-channels .text-link{padding-inline:.25rem}
-.insp-sample{margin-top:1.25rem;padding:1rem;border:1px dashed var(--line);background:#fff}
-.insp-sample svg{display:block;width:100%;height:auto;max-width:32rem}
-.insp-sample figcaption{margin-top:.75rem;color:var(--muted);font-size:.95rem}
-.insp-risk{padding:1.2rem 1.4rem;border-left:4px solid var(--green-700);background:var(--soft)}
-@media(max-width:800px){.insp-hero-grid,.insp-grid,.insp-flow,.insp-proof,.insp-triage-grid{grid-template-columns:1fr}.insp-hero-grid>*,.insp-grid>*,.insp-flow>*,.insp-proof>*,.insp-triage-grid>*{min-width:0}.insp-hero .eyebrow{font-size:.78rem;margin-bottom:.6rem}.insp-hero-grid h1,.insp-hero-grid p,.insp-proof h2,.insp-proof p,.insp-proof li{overflow-wrap:break-word}.insp-hero{padding-block:.9rem 1.6rem}.insp-hero h1{max-width:none;font-size:1.7rem;margin-bottom:.5rem}.insp-lead{font-size:.95rem;margin-bottom:.7rem}.insp-use{font-size:.93rem}.insp-sample-mini{padding:.7rem .8rem;margin-bottom:1rem}.insp-sample-steps li{font-size:.88rem}.insp-hero .hero-actions{gap:.35rem;margin-bottom:.9rem}}
-</style>
 <script defer="" src="/script.js?v=mv09"></script>
 <meta content="website" property="og:type"/>
 <meta content="pt_BR" property="og:locale"/>
@@ -95,153 +54,161 @@
 <main id="conteudo">
 <nav aria-label="Navegação estrutural" class="breadcrumbs container"><ol><li><a href="/">Início</a><span aria-hidden="true">/</span></li><li><a href="/servicos/">Serviços e problemas</a><span aria-hidden="true">/</span></li><li aria-current="page">Inspeção e diagnóstico</li></ol></nav>
 
-<section aria-labelledby="insp-title" class="insp-hero" id="situacao-atendida">
-<div class="container insp-hero-grid">
+<section aria-labelledby="insp-title" class="hero" data-section-archetype="hero_split" id="situacao-atendida">
+<div class="container hero-grid">
 <div>
 <p class="eyebrow">Infiltração, fissura, recebimento ou condição do imóvel</p>
 <h1 id="insp-title">Inspeção e diagnóstico de edificações</h1>
-<p class="insp-lead">Mancha de umidade, trinca, imóvel a receber ou um pedido de documento sobre a condição do prédio: você não precisa saber o nome do serviço. Inspecionamos o escopo definido da edificação, pública ou privada, registramos onde está cada manifestação e a sua evidência, e analisamos as causas que a evidência sustenta.</p>
-<p class="insp-use"><strong>O que você passa a ter em mãos: </strong>um relatório de inspeção e condição para priorizar a manutenção, orçar o reparo, registrar o estado em uma data ou instruir a providência com quem responde pelo conserto. A visita, quando o escopo pedir, é combinada na proposta.</p>
+<p class="hero-lead">Mancha de umidade, trinca, imóvel a receber ou um pedido de documento sobre a condição do prédio: você não precisa saber o nome do serviço. Inspecionamos o escopo definido da edificação, pública ou privada, registramos onde está cada manifestação e a sua evidência, e analisamos as causas que a evidência sustenta.</p>
+<p class="hero-deliverable">O que você passa a ter em mãos: um relatório de inspeção e condição para priorizar a manutenção, orçar o reparo, registrar o estado em uma data ou instruir a providência com quem responde pelo conserto. A visita, quando o escopo pedir, é combinada na proposta.</p>
 <div class="hero-actions">
 <a class="button button-primary button-lg" data-cta-id="frame-inspection-diagnosis-hero" data-cta-position="hero" href="#contato-inspecao">Conversar sobre a edificação <svg class="icon"><use href="#i-arrow"></use></svg></a>
-<a class="text-link" href="#entrega">Ver o relatório e para que ele serve</a>
+<a class="hero-secondary" href="#entrega">Ver o relatório e para que ele serve <svg class="icon"><use href="#i-arrow"></use></svg></a>
 </div>
-<figure class="insp-sample-mini" aria-label="Amostra didática original: como o relatório registra cada manifestação">
-<figcaption class="insp-sample-label">Amostra didática original · não é inspeção realizada nem imóvel de cliente</figcaption>
-<ol class="insp-sample-steps">
-<li><span>Item 1, abertura inclinada no painel esquerdo da parede: vista, sim; aberta para exame, não.</span></li>
-<li><span>Item 2, mancha com borda no terço médio: causa não concluída; pede ensaio ou abertura.</span></li>
-<li><span>Cada item sai com localização, o que foi visto, o que ficou em aberto e o exame seguinte indicado.</span></li>
+<figure class="proof-figure" aria-label="Amostra didática original: como o relatório registra cada manifestação">
+<div class="proof-figure__sheet">
+<ol class="steps">
+<li><p>Item 1, abertura inclinada no painel esquerdo da parede: vista, sim; aberta para exame, não.</p></li>
+<li><p>Item 2, mancha com borda no terço médio: causa não concluída; pede ensaio ou abertura.</p></li>
+<li><p>Cada item sai com localização, o que foi visto, o que ficou em aberto e o exame seguinte indicado.</p></li>
 </ol>
+</div>
+<figcaption><span class="tag">Exemplo demonstrativo</span> Amostra didática original · não é inspeção realizada nem imóvel de cliente. O <a href="#amostra-disponivel">desenho completo da ficha</a> está mais abaixo.</figcaption>
 </figure>
 </div>
-<aside class="insp-signal">
-<strong>Quem responde e como falar agora</strong>
-<p class="insp-signal-sign">Tiago Sasaki, Engenheiro Civil formado pela EESC-USP, com registro profissional ativo no CREA. Serviços técnicos emitidos com ART e nota fiscal, dentro do escopo contratado.</p>
-<ul class="insp-signal-channels" aria-label="Canais diretos">
+<aside class="aside-note" aria-labelledby="insp-signal-title">
+<h2 id="insp-signal-title">Quem responde e como falar agora</h2>
+<p>Tiago Sasaki, Engenheiro Civil formado pela EESC-USP, com registro profissional ativo no CREA. Serviços técnicos emitidos com ART e nota fiscal, dentro do escopo contratado.</p>
+<ul aria-label="Canais diretos">
 <li><a data-cta-id="inspection-diagnosis-hero-whatsapp" data-cta-position="hero" data-asset-id="building_inspection_diagnosis_route_v1" data-route-family="inspecao-diagnostico-edificacoes" href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20de%20inspe%C3%A7%C3%A3o%20ou%20diagn%C3%B3stico%20de%20uma%20edifica%C3%A7%C3%A3o.%20Posso%20explicar%20a%20necessidade%20e%20o%20munic%C3%ADpio." rel="noopener" target="_blank">WhatsApp (48) 98834-4559</a></li>
 <li><a data-cta-id="inspection-diagnosis-hero-email" data-cta-position="hero" data-asset-id="building_inspection_diagnosis_route_v1" data-route-family="inspecao-diagnostico-edificacoes" href="mailto:tiago.sasaki@confenge.com.br?subject=Inspe%C3%A7%C3%A3o%20e%20diagn%C3%B3stico%20de%20edifica%C3%A7%C3%A3o">tiago.sasaki@confenge.com.br</a></li>
 <li><a data-cta-id="inspection-diagnosis-hero-phone" data-cta-position="hero" data-asset-id="building_inspection_diagnosis_route_v1" data-route-family="inspecao-diagnostico-edificacoes" href="tel:+5548988344559">Ligar: (48) 98834-4559</a></li>
 </ul>
-<p class="insp-signal-note">Conversa técnica, sem contratação nem pagamento. Sem formulário e sem arquivo, planta ou dado sensível neste primeiro contato: basta a necessidade, o município e o que você já observou. A resposta nomeia o serviço, o que você recebe e o que falta reunir. Escopo, local, atribuição profissional e ART, quando aplicáveis, são confirmados antes do aceite técnico; não há lista de cidades nem unidade de atendimento.</p>
+<p>Conversa técnica, sem contratação nem pagamento. Sem formulário e sem arquivo, planta ou dado sensível neste primeiro contato: basta a necessidade, o município e o que você já observou. A resposta nomeia o serviço, o que você recebe e o que falta reunir. Escopo, local, atribuição profissional e ART, quando aplicáveis, são confirmados antes do aceite técnico; não há lista de cidades nem unidade de atendimento.</p>
 </aside>
 </div>
 </section>
 
-<section aria-labelledby="insp-output-title" class="section section--default" id="entrega">
+<section aria-labelledby="insp-output-title" class="section" data-section-archetype="deliverable_feature" id="entrega">
 <div class="container">
 <header class="section-head">
 <p class="eyebrow">O que você recebe e para que serve</p>
 <h2 id="insp-output-title">Um relatório da condição, com o limite do que não foi visto.</h2>
 <p class="section-lead">O relatório localiza cada manifestação, separa fato de hipótese e diz o que ainda precisa ser examinado. Não é projeto de reparo, não é perícia de processo e não substitui a execução da obra nem a aprovação de terceiro.</p>
 </header>
-<div class="insp-grid">
-<article class="insp-card"><h3>Relatório de inspeção e condição</h3><p>Objeto, data, condições de acesso, manifestações localizadas com foto e croqui, e o escopo efetivamente examinado.</p><p class="insp-serve"><strong>Serve para</strong> registrar o estado do imóvel em uma data, na entrega, no recebimento ou antes de uma reforma.</p></article>
-<article class="insp-card"><h3>Hipóteses e aprofundamento</h3><p>Origens compatíveis com a evidência, o que permanece em aberto e se ensaio, monitoramento ou abertura seriam necessários para fechar a causa.</p><p class="insp-serve"><strong>Serve para</strong> decidir o próximo exame e evitar reparo no lugar errado. Hipótese não é causa única.</p></article>
-<article class="insp-card"><h3>Encaminhamento da solução</h3><p>Recomendações de monitoramento, manutenção ou leitura complementar e, quando a condição pede, a proposta das etapas seguintes: projeto de reparo, orçamento ou assistência técnica.</p><p class="insp-serve"><strong>Serve para</strong> priorizar a manutenção, orçar o conserto ou instruir a providência com quem responde por ele.</p></article>
-</div>
-<figure class="insp-sample" id="amostra-disponivel">
-<svg role="img" aria-labelledby="amostra-title amostra-desc" viewBox="0 0 640 320" xmlns="http://www.w3.org/2000/svg">
+<div class="split">
+<ol class="list-ruled">
+<li><span class="list-ruled__index">01</span><div><h3>Relatório de inspeção e condição</h3><p>Objeto, data, condições de acesso, manifestações localizadas com foto e croqui, e o escopo efetivamente examinado.</p><p class="list-ruled__use"><strong>Serve para</strong> registrar o estado do imóvel em uma data, na entrega, no recebimento ou antes de uma reforma.</p></div></li>
+<li><span class="list-ruled__index">02</span><div><h3>Hipóteses e aprofundamento</h3><p>Origens compatíveis com a evidência, o que permanece em aberto e se ensaio, monitoramento ou abertura seriam necessários para fechar a causa.</p><p class="list-ruled__use"><strong>Serve para</strong> decidir o próximo exame e evitar reparo no lugar errado. Hipótese não é causa única.</p></div></li>
+<li><span class="list-ruled__index">03</span><div><h3>Encaminhamento da solução</h3><p>Recomendações de monitoramento, manutenção ou leitura complementar e, quando a condição pede, a proposta das etapas seguintes: projeto de reparo, orçamento ou assistência técnica.</p><p class="list-ruled__use"><strong>Serve para</strong> priorizar a manutenção, orçar o conserto ou instruir a providência com quem responde por ele.</p></div></li>
+</ol>
+<figure class="proof-figure" id="amostra-disponivel">
+<div class="proof-figure__sheet">
+<div>
+<h3>Parede esquemática, vista frontal</h3>
+<svg role="img" aria-labelledby="amostra-title amostra-desc" viewBox="0 0 360 260" xmlns="http://www.w3.org/2000/svg">
 <title id="amostra-title">Amostra didática original de registro de manifestações em uma parede</title>
 <desc id="amostra-desc">Desenho esquemático original da CONFENGE. Não é inspeção realizada, não é foto de cliente e não é laudo.</desc>
-<rect width="640" height="320" fill="#f7faf8"/>
-<rect x="40" y="36" width="360" height="248" fill="#ffffff" stroke="#1f3d2a" stroke-width="2"/>
-<text x="56" y="60" fill="#1f3d2a" font-family="Georgia, serif" font-size="16">Parede esquemática  -  vista frontal</text>
-<path d="M88 96 L132 168 L118 214" fill="none" stroke="#2f6b45" stroke-width="3"/>
-<circle cx="88" cy="96" r="8" fill="#2f6b45"/>
-<text x="102" y="92" fill="#1f3d2a" font-family="Georgia, serif" font-size="14">1</text>
-<path d="M248 128 L310 128 L334 176" fill="none" stroke="#2f6b45" stroke-width="3"/>
-<circle cx="248" cy="128" r="8" fill="#2f6b45"/>
-<text x="262" y="124" fill="#1f3d2a" font-family="Georgia, serif" font-size="14">2</text>
-<rect x="420" y="48" width="188" height="224" fill="#ffffff" stroke="#1f3d2a" stroke-width="1.5"/>
-<text x="434" y="76" fill="#1f3d2a" font-family="Georgia, serif" font-size="14">Ficha de registro</text>
-<text x="434" y="112" fill="#345" font-family="Georgia, serif" font-size="13">1. Abertura inclinada</text>
-<text x="434" y="132" fill="#345" font-family="Georgia, serif" font-size="13">Local: painel esquerdo</text>
-<text x="434" y="152" fill="#345" font-family="Georgia, serif" font-size="13">Visto: sim · Aberto: não</text>
-<text x="434" y="188" fill="#345" font-family="Georgia, serif" font-size="13">2. Mancha com borda</text>
-<text x="434" y="208" fill="#345" font-family="Georgia, serif" font-size="13">Local: terço médio</text>
-<text x="434" y="228" fill="#345" font-family="Georgia, serif" font-size="13">Causa: não concluída</text>
-<text x="434" y="256" fill="#1f3d2a" font-family="Georgia, serif" font-size="12">Amostra didática original</text>
+<rect width="360" height="260" fill="#f3f4f5"/>
+<rect x="24" y="24" width="312" height="212" fill="#ffffff" stroke="#071a31" stroke-width="2"/>
+<line x1="24" y1="236" x2="336" y2="236" stroke="#071a31" stroke-width="4"/>
+<path d="M72 78 L118 150 L104 200" fill="none" stroke="#2d6f2d" stroke-width="3"/>
+<circle cx="72" cy="78" r="12" fill="#ced62a" stroke="#071a31" stroke-width="1.5"/>
+<text x="72" y="83" fill="#071a31" font-size="14" font-weight="700" text-anchor="middle">1</text>
+<path d="M214 106 L276 106 L300 158" fill="none" stroke="#2d6f2d" stroke-width="3"/>
+<ellipse cx="258" cy="140" rx="46" ry="26" fill="#dce3e8" stroke="#2d6f2d" stroke-width="1.5" stroke-dasharray="4 3"/>
+<circle cx="214" cy="106" r="12" fill="#ced62a" stroke="#071a31" stroke-width="1.5"/>
+<text x="214" y="111" fill="#071a31" font-size="14" font-weight="700" text-anchor="middle">2</text>
+<text x="36" y="226" fill="#5d6a7a" font-size="14">Amostra didática original</text>
 </svg>
-<figcaption><strong>Amostra didática original.</strong> Este desenho ensina como o registro localiza o que foi visto e o que ficou em aberto; é a mesma ficha resumida na abertura desta página. Não é inspeção realizada, não é foto de cliente, não é prova de campo e não é laudo.</figcaption>
+</div>
+<div>
+<h3>Ficha de registro</h3>
+<ul>
+<li><strong>1. Abertura inclinada.</strong> Local: painel esquerdo. Visto: sim. Aberto para exame: não.</li>
+<li><strong>2. Mancha com borda.</strong> Local: terço médio. Causa: não concluída; pede ensaio ou abertura.</li>
+</ul>
+</div>
+</div>
+<figcaption><span class="tag">Exemplo demonstrativo</span> <strong>Amostra didática original.</strong> Este desenho ensina como o registro localiza o que foi visto e o que ficou em aberto; é a mesma ficha resumida na abertura desta página. Não é inspeção realizada, não é foto de cliente, não é prova de campo e não é laudo.</figcaption>
 </figure>
+</div>
 </div>
 </section>
 
-<section aria-labelledby="insp-situations-title" class="section section--default">
+<section aria-labelledby="insp-situations-title" class="section section--soft" data-section-archetype="journey_paths">
 <div class="container">
 <header class="section-head">
 <p class="eyebrow">Situações em que este trabalho cabe</p>
 <h2 id="insp-situations-title">O que você vê não fecha sozinho a causa nem o reparo.</h2>
 <p class="section-lead">A sua descrição inicial delimita o escopo. Ela não autoriza concluir estabilidade, origem única ou solução pela conversa, e fotografia não substitui o exame.</p>
 </header>
-<div class="insp-grid">
-<article class="insp-card"><h3>Fissura ou trinca</h3><p>Apareceu uma abertura em parede, piso, fachada ou elemento aparente. O trabalho registra localização, geometria e o que pôde ser observado; a causa só entra quando a evidência a sustenta.</p></article>
-<article class="insp-card"><h3>Infiltração ou umidade</h3><p>Há mancha, descascamento, gotejamento ou umidade recorrente. O relatório separa o que foi visto, o que permanece hipótese e o que exigiria ensaio ou abertura.</p></article>
-<article class="insp-card"><h3>Condição do imóvel ou recebimento</h3><p>Você precisa registrar o estado em uma data, priorizar manutenção ou anotar o que deve ser corrigido na entrega ou no recebimento. Isso não é projeto de reforma nem perícia de um processo.</p></article>
-</div>
+<ol class="phases">
+<li><span class="phases__when">Situação 01</span><h3>Fissura ou trinca</h3><p>Apareceu uma abertura em parede, piso, fachada ou elemento aparente. O trabalho registra localização, geometria e o que pôde ser observado; a causa só entra quando a evidência a sustenta.</p></li>
+<li><span class="phases__when">Situação 02</span><h3>Infiltração ou umidade</h3><p>Há mancha, descascamento, gotejamento ou umidade recorrente. O relatório separa o que foi visto, o que permanece hipótese e o que exigiria ensaio ou abertura.</p></li>
+<li><span class="phases__when">Situação 03</span><h3>Condição do imóvel ou recebimento</h3><p>Você precisa registrar o estado em uma data, priorizar manutenção ou anotar o que deve ser corrigido na entrega ou no recebimento. Isso não é projeto de reforma nem perícia de um processo.</p></li>
+</ol>
 </div>
 </section>
 
-<section aria-labelledby="insp-diff-title" class="section section--tight">
-<div class="container insp-proof">
+<section aria-labelledby="insp-diff-title" class="section section--tight" data-section-archetype="compare_ladder">
+<div class="container split">
 <div><p class="eyebrow">Etapas que se encadeiam</p><h2 id="insp-diff-title">Inspeção, diagnóstico, reparo e perícia respondem perguntas diferentes; a proposta encadeia as que o seu caso pede.</h2></div>
 <div>
-<ul class="insp-list">
-<li><strong>Inspeção.</strong> Registrar o que existe no escopo definido: acesso, manifestações, evidências e o que não pôde ser visto.</li>
-<li><strong>Diagnóstico.</strong> Analisar, a partir dessas constatações, as origens tecnicamente sustentáveis e o que ainda precisa de ensaio ou aprofundamento. Hipótese não é causa única.</li>
-<li><strong>Projeto de reparo.</strong> Definir a intervenção a partir da condição diagnosticada. Entra na proposta como etapa seguinte quando você quiser que a CONFENGE conduza a solução, com quantitativos e orçamento se precisar contratar a obra.</li>
-<li><strong>Perícia ou assistência em disputa.</strong> Produzir prova para processo, negociação ou contestação. Quando a inspeção revela uma disputa, a assistência técnica da parte segue na proposta com o papel explícito; não misturamos inspeção privada com laudo judicial no mesmo documento. A perícia do juízo é do perito nomeado pelo juiz.</li>
-</ul>
-<p><a class="text-link" href="/assistencia-tecnica-pericial-engenharia/">Quando a pergunta for de prova da parte, ver assistência técnica</a>. <a class="text-link" href="/servicos/#servico-avaliacao">Quando a pergunta for de valor, ver avaliação de imóvel</a>.</p>
+<ol class="steps">
+<li><div><h3>Inspeção.</h3><p>Registrar o que existe no escopo definido: acesso, manifestações, evidências e o que não pôde ser visto.</p></div></li>
+<li><div><h3>Diagnóstico.</h3><p>Analisar, a partir dessas constatações, as origens tecnicamente sustentáveis e o que ainda precisa de ensaio ou aprofundamento. Hipótese não é causa única.</p></div></li>
+<li><div><h3>Projeto de reparo.</h3><p>Definir a intervenção a partir da condição diagnosticada. Entra na proposta como etapa seguinte quando você quiser que a CONFENGE conduza a solução, com quantitativos e orçamento se precisar contratar a obra.</p></div></li>
+<li><div><h3>Perícia ou assistência em disputa.</h3><p>Produzir prova para processo, negociação ou contestação. Quando a inspeção revela uma disputa, a assistência técnica da parte segue na proposta com o papel explícito; não misturamos inspeção privada com laudo judicial no mesmo documento. A perícia do juízo é do perito nomeado pelo juiz.</p></div></li>
+</ol>
+<p class="measure"><a class="text-link" href="/assistencia-tecnica-pericial-engenharia/">Quando a pergunta for de prova da parte, ver assistência técnica</a>. <a class="text-link" href="/servicos/#servico-avaliacao">Quando a pergunta for de valor, ver avaliação de imóvel</a>.</p>
 </div>
 </div>
 </section>
 
-<section aria-labelledby="insp-method-title" class="section section--default" id="metodo-inspecao">
+<section aria-labelledby="insp-method-title" class="section" data-section-archetype="journey_rail" id="metodo-inspecao">
 <div class="container">
 <header class="section-head">
 <p class="eyebrow">Como fazemos</p>
 <h2 id="insp-method-title">Da pergunta técnica ao registro que dá para conferir.</h2>
 </header>
-<div class="insp-flow">
-<article class="insp-step"><h3>Delimitar a pergunta</h3><p>Confirmamos o objetivo, o escopo da edificação, o que já existe de documento e se a leitura pode começar à distância ou exige visita.</p></article>
-<article class="insp-step"><h3>Acessar o que for necessário</h3><p>Documentos entram por canal seguro combinado. A visita, quando o escopo exigir, acontece no imóvel inspecionado, depois de confirmados local, acesso, logística e atribuição.</p></article>
-<article class="insp-step"><h3>Registrar constatações</h3><p>Localizamos cada manifestação observada, as condições de acesso e o que ficou fora do exame. Foto e croqui sustentam o registro; não fecham diagnóstico sozinhos.</p></article>
-<article class="insp-step"><h3>Analisar e encaminhar</h3><p>Separamos fato, hipótese e lacuna. O relatório indica o que monitorar, o que aprofundar e o que pode instruir manutenção ou reparo, dentro do escopo contratado.</p></article>
-</div>
+<ol class="list-ruled">
+<li><span class="list-ruled__index">01</span><div><h3>Delimitar a pergunta</h3><p>Confirmamos o objetivo, o escopo da edificação, o que já existe de documento e se a leitura pode começar à distância ou exige visita.</p></div></li>
+<li><span class="list-ruled__index">02</span><div><h3>Acessar o que for necessário</h3><p>Documentos entram por canal seguro combinado. A visita, quando o escopo exigir, acontece no imóvel inspecionado, depois de confirmados local, acesso, logística e atribuição.</p></div></li>
+<li><span class="list-ruled__index">03</span><div><h3>Registrar constatações</h3><p>Localizamos cada manifestação observada, as condições de acesso e o que ficou fora do exame. Foto e croqui sustentam o registro; não fecham diagnóstico sozinhos.</p></div></li>
+<li><span class="list-ruled__index">04</span><div><h3>Analisar e encaminhar</h3><p>Separamos fato, hipótese e lacuna. O relatório indica o que monitorar, o que aprofundar e o que pode instruir manutenção ou reparo, dentro do escopo contratado.</p></div></li>
+</ol>
 </div>
 </section>
 
-<section aria-labelledby="insp-decide-title" class="section section--default" id="como-contratar">
+<section aria-labelledby="insp-decide-title" class="section section--soft" data-section-archetype="icp_contrast" id="como-contratar">
 <div class="container">
 <header class="section-head">
 <p class="eyebrow">Como decidir o trabalho e se preparar</p>
 <h2 id="insp-decide-title">Escolha o escopo certo e reúna o acesso, sem improvisar intervenção.</h2>
 <p class="section-lead">Esta seção ajuda a contratar. Não ensina reparo, não diagnostica o seu caso por fotografia e não substitui avaliação presencial quando houver suspeita de risco imediato.</p>
 </header>
-<div class="insp-proof">
-<div>
-<ul class="insp-list">
+<div class="split">
+<ul class="measure">
 <li>Se a pergunta é “o que existe e o que isso indica?”, o caminho é inspeção e diagnóstico.</li>
 <li>Se a pergunta é “como executar o reparo?”, o projeto de intervenção entra na proposta depois da condição registrada.</li>
 <li>Se a pergunta é “quem responde em um processo ou em uma disputa?”, a assistência técnica da parte entra na proposta, encadeada com a inspeção.</li>
 <li>Para o primeiro contato bastam a necessidade, o município e o que você já observou. Documentos, plantas, chaves e autorização de acesso entram depois, por canal seguro.</li>
 <li>Fotografia ajuda a preparar a conversa. Fotografia não permite diagnosticar causa, estabilidade ou solução à distância.</li>
 </ul>
-</div>
-<div class="insp-risk">
+<aside class="aside-note" aria-labelledby="insp-risk-title">
+<h3 id="insp-risk-title">Se houver suspeita de risco imediato</h3>
 <p><strong>Se houver suspeita de risco imediato à segurança das pessoas</strong> (deslocamento visível de um elemento, desabamento parcial ou ordem de evacuação já emitida, por exemplo), procure avaliação presencial competente e os canais locais adequados. Esta página não conclui o seu caso concreto e não substitui atendimento de emergência.</p>
-</div>
+</aside>
 </div>
 </div>
 </section>
 
-<section aria-labelledby="insp-limits-title" class="section section--tight" id="limites-materiais">
-<div class="container insp-proof">
+<section aria-labelledby="insp-limits-title" class="section section--tight" data-section-archetype="limitation_notice" id="limites-materiais">
+<div class="container split">
 <div><p class="eyebrow">Local, visita e responsabilidade</p><h2 id="insp-limits-title">Visita, local e responsabilidade técnica são combinados na proposta.</h2></div>
 <div>
-<ul class="insp-list">
+<ul class="measure">
 <li>O município entra como contexto, não como barreira. A conversa inicial pode ser remota e documental; a inspeção de campo, quando necessária, ocorre no imóvel objeto do escopo, com acesso combinado.</li>
 <li>Visita, logística, atribuição profissional e ART, quando aplicáveis, são confirmadas antes do aceite técnico. Não publicamos lista de cidades nem unidade de atendimento.</li>
 <li>O atendimento é combinado por escopo e local, sem unidade física de atendimento ao público. O telefone com DDD 48 é canal de contato, não cobertura de uma cidade.</li>
@@ -254,8 +221,9 @@
 </div>
 </section>
 
-<section aria-labelledby="insp-contact-title" class="section section--default insp-triage" id="contato-inspecao">
-<div class="container insp-triage-grid">
+<section aria-labelledby="insp-contact-title" class="section section--tight" data-section-archetype="cta_formal" id="contato-inspecao">
+<div class="container">
+<div class="dark-block capture-grid">
 <div id="pedido-proposta">
 <p class="eyebrow">Próximo passo</p>
 <h2 id="insp-contact-title">Descreva a edificação; a resposta nomeia o serviço, o relatório e o que falta reunir.</h2>
@@ -263,15 +231,18 @@
 <p>O primeiro contato é direto com o Engº Tiago Sasaki, por WhatsApp, e-mail ou telefone. A resposta combina o canal seguro para documentos e informa se a visita será necessária antes da proposta.</p>
 </div>
 <div>
-<aside aria-labelledby="insp-channels-title" class="channel-card insp-channels">
-<h3 id="insp-channels-title">Três canais diretos</h3><p>Escolha o que for mais rápido para você.</p><p class="form-hint" data-form-boundary>Este primeiro contato é uma conversa técnica, sem contratação, pagamento ou aceite. Descreva a situação em texto: este primeiro contato não recebe arquivo, planta, endereço exato, CPF, processo ou texto livre com dados de terceiros; o que for sensível segue depois, por canal seguro combinado com você. Dados usados apenas para este retorno; retenção de até 730 dias, com exclusão pelos canais da <a href="/privacidade/">Política de Privacidade</a>.</p>
-<div class="channel-actions">
+<h3 id="insp-channels-title">Três canais diretos</h3>
+<p>Escolha o que for mais rápido para você.</p>
+<div class="contact-actions">
 <a class="button button-primary" data-asset-id="building_inspection_diagnosis_route_v1" data-cta-id="inspection-diagnosis-alternative-whatsapp" data-fallback-channel="whatsapp" data-route-family="inspecao-diagnostico-edificacoes" href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20de%20inspe%C3%A7%C3%A3o%20ou%20diagn%C3%B3stico%20de%20uma%20edifica%C3%A7%C3%A3o.%20Posso%20explicar%20a%20necessidade%20e%20o%20munic%C3%ADpio." rel="noopener" target="_blank">Conversar sobre a inspeção</a>
 <a class="button button-secondary" data-asset-id="building_inspection_diagnosis_route_v1" data-cta-id="inspection-diagnosis-alternative-email" data-fallback-channel="email" data-route-family="inspecao-diagnostico-edificacoes" href="mailto:tiago.sasaki@confenge.com.br?subject=Inspe%C3%A7%C3%A3o%20e%20diagn%C3%B3stico%20de%20edifica%C3%A7%C3%A3o">Enviar contexto por e-mail</a>
-<a class="text-link" data-asset-id="building_inspection_diagnosis_route_v1" data-cta-id="inspection-diagnosis-alternative-phone" data-fallback-channel="phone" data-route-family="inspecao-diagnostico-edificacoes" href="tel:+5548988344559">Ligar sobre a edificação: (48) 98834-4559</a>
-<a class="text-link" href="/triagem-tecnica/#obra-imovel">Pedir proposta pela triagem</a>
 </div>
-</aside>
+<ul class="contact-channels">
+<li><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg><span><strong>Telefone</strong><a data-asset-id="building_inspection_diagnosis_route_v1" data-cta-id="inspection-diagnosis-alternative-phone" data-fallback-channel="phone" data-route-family="inspecao-diagnostico-edificacoes" href="tel:+5548988344559">Ligar sobre a edificação: (48) 98834-4559</a></span></li>
+<li><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg><span><strong>Triagem</strong><a href="/triagem-tecnica/#obra-imovel">Pedir proposta pela triagem</a></span></li>
+</ul>
+<p class="contact-note" data-form-boundary>Este primeiro contato é uma conversa técnica, sem contratação, pagamento ou aceite. Descreva a situação em texto: este primeiro contato não recebe arquivo, planta, endereço exato, CPF, processo ou texto livre com dados de terceiros; o que for sensível segue depois, por canal seguro combinado com você. Dados usados apenas para este retorno; retenção de até 730 dias, com exclusão pelos canais da <a href="/privacidade/">Política de Privacidade</a>.</p>
+</div>
 </div>
 </div>
 </section>

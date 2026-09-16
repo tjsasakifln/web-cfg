@@ -649,8 +649,14 @@ def build_baseline(
             "font_files_total": len(
                 {source for row in rows for source in row["font_sources"]}
             ),
+            "font_gzip_kb_max_route": round(
+                max((row["font_gzip_kb"] for row in rows), default=0.0), 2
+            ),
             "font_gzip_kb_total": round(
-                sum(row["font_gzip_kb"] for row in rows if row["font_files"]), 2
+                sum(
+                    {source: row["font_gzip_kb"] for row in rows for source in row["font_sources"]}.values()
+                ),
+                2,
             ),
         },
         "cls": {

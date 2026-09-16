@@ -1,5 +1,10 @@
+/* Triagem tecnica: folha compartilhada por /triagem-tecnica/ e pelas rotas de
+ * servico que ainda carregam .channel-card/.channel-actions. Cores, raio,
+ * regua e escala vem dos tokens (styles-tokens.css) e da identidade
+ * (css/identity.css); esta folha guarda so o layout do shell da triagem e as
+ * regras funcionais do formulario de intake (campos, estados, erro, foco). */
 .triage-shell {
-  width: min(100% - 2rem, 52rem);
+  width: min(100% - 2 * var(--page-gutter), 52rem);
   margin: 0 auto;
   padding: 1.25rem 0 4rem;
 }
@@ -7,7 +12,7 @@
   display: inline-block;
   margin-bottom: 2.5rem;
   color: inherit;
-  font-weight: 800;
+  font-weight: 750;
   letter-spacing: .08em;
   text-decoration: none;
 }
@@ -21,30 +26,33 @@
 .triage-intro h1 {
   max-width: 18ch;
   margin: .35rem 0 .75rem;
-  font-size: clamp(2rem, 7vw, 3.6rem);
-  line-height: 1.05;
 }
 .triage-lead {
-  max-width: 62ch;
-  font-size: 1.08rem;
+  max-width: var(--read-measure);
+  font-size: var(--text-lead);
+  line-height: 1.55;
 }
 .triage-eyebrow,
 .step-progress {
-  color: #31556f;
-  font-size: .82rem;
-  font-weight: 800;
-  letter-spacing: .08em;
+  display: block;
+  margin: 0 0 .75rem;
+  color: var(--green-700);
+  font-stretch: var(--narrow);
+  font-size: var(--text-small);
+  font-weight: 750;
+  letter-spacing: .1em;
+  line-height: 1.4;
   text-transform: uppercase;
 }
 .next-state,
 .technical-intake-form,
 .receipt-card,
 .channel-card {
-  border: 1px solid #cbd5df;
-  border-radius: 1rem;
-  background: #fff;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-sm);
+  background: var(--white);
   padding: clamp(1.1rem, 4vw, 2rem);
-  box-shadow: 0 .5rem 1.5rem rgb(25 48 65 / 7%);
+  box-shadow: none;
 }
 .next-state h2,
 .channel-card h2,
@@ -65,8 +73,9 @@
 }
 .technical-intake-form legend {
   margin-bottom: .45rem;
-  font-size: clamp(1.35rem, 4vw, 1.8rem);
-  font-weight: 750;
+  font-size: var(--text-h3);
+  font-weight: 720;
+  color: var(--ink);
 }
 .technical-intake-form label,
 .field-heading {
@@ -76,8 +85,8 @@
 }
 .technical-intake-form label span,
 .field-help {
-  color: #526575;
-  font-size: .92rem;
+  color: var(--muted);
+  font-size: var(--text-small);
   font-weight: 400;
 }
 .technical-intake-form input[type="text"],
@@ -86,11 +95,11 @@
 .technical-intake-form select {
   width: 100%;
   min-height: 3rem;
-  border: 1px solid #8799a8;
-  border-radius: .55rem;
-  background: #fff;
+  border: 1px solid var(--muted);
+  border-radius: var(--radius-sm);
+  background: var(--white);
   padding: .65rem .75rem;
-  color: #172a38;
+  color: var(--ink);
   font: inherit;
 }
 .technical-intake-form input:focus,
@@ -98,7 +107,7 @@
   outline: 2px solid transparent;
   outline-offset: 2px;
   box-shadow: var(--focus-ring);
-  border-color: #1e71a6;
+  border-color: var(--ink);
 }
 .check-row {
   display: grid !important;
@@ -117,7 +126,7 @@
 }
 .location-fields {
   margin-top: 1.25rem;
-  border-left: .25rem solid #7aa6c2;
+  border-left: 1px solid var(--rule-strong);
   padding: .1rem 0 .5rem 1rem;
 }
 .form-actions,
@@ -132,26 +141,26 @@
   margin: 1rem 0 0;
 }
 .intake-status.is-error {
-  border-left: .25rem solid #b42318;
-  background: #fff2f0;
+  border-left: 1px solid #7a1f1f;
+  background: #fdecec;
   padding: .8rem 1rem;
-  color: #7a271a;
+  color: #7a1f1f;
 }
 .intake-status.is-ok {
-  color: #176b45;
+  color: var(--green-700);
 }
 .receipt-card {
-  border-color: #58a27d;
-  background: #f3fbf7;
+  border-color: var(--green-700);
+  background: var(--green-100);
 }
 .channel-card {
-  background: #f6f8fa;
+  background: var(--soft);
+  border-color: var(--rule);
 }
 .text-link {
-  min-height: 2.75rem;
+  min-height: var(--touch-min);
   display: inline-flex;
   align-items: center;
-  font-weight: 700;
 }
 button:disabled {
   cursor: not-allowed;
@@ -161,7 +170,6 @@ button:disabled {
   display: none !important;
 }
 @media (max-width: 36rem) {
-  .triage-shell { width: min(100% - 1rem, 52rem); }
   .brand-link { margin-left: .5rem; }
   .form-actions .button,
   .channel-actions .button,
@@ -188,7 +196,7 @@ button:disabled {
 }
 .site-correction-note {
   margin-top: .75rem;
-  color: #4a5b6b;
+  color: var(--muted);
 }
 
 /* Situacoes: cada item e alvo de um fragmento vindo do resto do site
