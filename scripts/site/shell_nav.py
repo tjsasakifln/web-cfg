@@ -92,19 +92,40 @@ _FROZEN_FALLBACK = (
 )
 
 
+_UNLOCK_PLAN = ROOT / "data" / "bofu-dominance" / "frozen-specs" / "unlock-plan.v1.json"
+
+
+def _capture_unfrozen_pillars() -> frozenset[str]:
+    """Pillars whose on-page capture the founder authorized (2026-09-16).
+
+    The hash pin stays (every byte drift is still a reviewed recapture), but the
+    shared shell no longer stays behind on these pages: a page that carries its
+    own form must not keep a header that sends the visitor to the home form.
+    """
+    try:
+        plan = json.loads(_UNLOCK_PLAN.read_text(encoding="utf-8"))
+    except Exception:  # noqa: BLE001 — absent plan means nothing is unfrozen
+        return frozenset()
+    authorization = (plan.get("capture") or {}).get("authorization") or {}
+    if authorization.get("decision_state") != "EXECUTE_NOW":
+        return frozenset()
+    return frozenset(f"{slug}/index.html" for slug in plan.get("protected_pillars") or [])
+
+
 def _frozen_shell_files() -> frozenset[str]:
     """Read the freeze from the campaign itself so the two can never diverge."""
+    frozen: set[str] = set()
     try:
         from scripts.bofu_dominance.frozen_specs.constants import (  # noqa: PLC0415
             FORBIDDEN_RELATIVE_PATHS,
         )
 
         frozen = {rel for rel in FORBIDDEN_RELATIVE_PATHS if rel.endswith("/index.html")}
-        if frozen:
-            return frozenset(frozen)
     except Exception:  # noqa: BLE001 — never let the sync depend on that package
         pass
-    return frozenset(_FROZEN_FALLBACK)
+    if not frozen:
+        frozen = set(_FROZEN_FALLBACK)
+    return frozenset(frozen - _capture_unfrozen_pillars())
 
 
 FROZEN_SHELL_FILES = _frozen_shell_files()
