@@ -19,6 +19,7 @@ the swap fallback only.
 from __future__ import annotations
 
 import argparse
+import json
 import re
 import sys
 from pathlib import Path
@@ -28,6 +29,11 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from scripts.site.shell_nav import shipped_html_files  # noqa: E402
+
+# Pages whose visitor HTML is bound to a human approval hash (editorial
+# striking-distance canary). Their bytes may not change without a new
+# approval, so they keep the swap fallback without the preload.
+HASH_BOUND_DECISIONS = ROOT / "data" / "editorial" / "striking-distance-noindex.v1.json"
 
 FONT_HREF = "/assets/archivo-var-latin-bf6e041e.woff2"
 PRELOAD = (
@@ -40,8 +46,21 @@ PRELOAD_RE = re.compile(
 )
 
 
+def hash_bound_pages() -> set[str]:
+    if not HASH_BOUND_DECISIONS.is_file():
+        return set()
+    data = json.loads(HASH_BOUND_DECISIONS.read_text(encoding="utf-8"))
+    return {str(row.get("html") or "") for row in data.get("urls") or [] if row.get("approval")}
+
+
 def pages() -> list[Path]:
-    return [p for p in shipped_html_files() if STYLES_LINK_RE.search(p.read_text(encoding="utf-8"))]
+    bound = hash_bound_pages()
+    return [
+        p
+        for p in shipped_html_files()
+        if p.relative_to(ROOT).as_posix() not in bound
+        and STYLES_LINK_RE.search(p.read_text(encoding="utf-8"))
+    ]
 
 
 def ensure_preload(text: str) -> str:
