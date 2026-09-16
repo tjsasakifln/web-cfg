@@ -193,6 +193,36 @@
       "hero_href": "/ferramentas/diagnostico-defesa-margem/",
       "bridges": [
         {
+          "position": "header_nav",
+          "href": "/servicos/",
+          "text": "Serviços e problemas"
+        },
+        {
+          "position": "header_nav",
+          "href": "/servicos-obras-publicas/",
+          "text": "Obras públicas"
+        },
+        {
+          "position": "header_nav",
+          "href": "/conteudos/",
+          "text": "Biblioteca"
+        },
+        {
+          "position": "mobile_nav",
+          "href": "/servicos/",
+          "text": "Serviços e problemas"
+        },
+        {
+          "position": "mobile_nav",
+          "href": "/servicos-obras-publicas/",
+          "text": "Obras públicas"
+        },
+        {
+          "position": "mobile_nav",
+          "href": "/conteudos/",
+          "text": "Biblioteca"
+        },
+        {
           "position": "pillar_bridge",
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20enquadrar%20reequil%C3%ADbrio%20econ%C3%B4mico-financeiro%20de%20contrato%20de%20obra%20p%C3%BAblica.",
           "text": "Enquadrar o reequilíbrio"
@@ -207,8 +237,8 @@
       "whatsapp_present": true,
       "form_count": 1
     },
-    "content_sha256": "9397d8dec6df923dcaee39fee53feccf7b241a39d01a28f769b282dffed027f8",
-    "bytes": 28856,
+    "content_sha256": "7de8ff0b2bc944d80d5ba52af8845a58a28b48dfff1988e024082d4aa0b47472",
+    "bytes": 28953,
     "noindex": false
   }
 }

@@ -205,6 +205,36 @@
       "hero_href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20glosa%20ou%20medi%C3%A7%C3%A3o%20contestada%20e%20preciso%20enquadrar%20a%20posi%C3%A7%C3%A3o%20t%C3%A9cnica.",
       "bridges": [
         {
+          "position": "header_nav",
+          "href": "/servicos/",
+          "text": "Serviços e problemas"
+        },
+        {
+          "position": "header_nav",
+          "href": "/servicos-obras-publicas/",
+          "text": "Obras públicas"
+        },
+        {
+          "position": "header_nav",
+          "href": "/conteudos/",
+          "text": "Biblioteca"
+        },
+        {
+          "position": "mobile_nav",
+          "href": "/servicos/",
+          "text": "Serviços e problemas"
+        },
+        {
+          "position": "mobile_nav",
+          "href": "/servicos-obras-publicas/",
+          "text": "Obras públicas"
+        },
+        {
+          "position": "mobile_nav",
+          "href": "/conteudos/",
+          "text": "Biblioteca"
+        },
+        {
           "position": "pillar_bridge",
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20glosa%20ou%20medi%C3%A7%C3%A3o%20contestada%20e%20preciso%20enquadrar%20a%20posi%C3%A7%C3%A3o%20t%C3%A9cnica.",
           "text": "Enquadrar um risco contratual"
@@ -219,8 +249,8 @@
       "whatsapp_present": true,
       "form_count": 1
     },
-    "content_sha256": "4d1b245aa413084f8ecbb2a61c5f59c17efbf94b8b5f13591fb12d9fc2a5311d",
-    "bytes": 37469,
+    "content_sha256": "e5fcabc99f3e788a02e0963b1ae576df4b2108a6124c44ee6a2a4f05c2e8b51e",
+    "bytes": 37566,
     "noindex": false
   }
 }

@@ -192,6 +192,36 @@
       "hero_href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20revisar%20pre%C3%A7o%2C%20BDI%20e%20risco%20de%20uma%20licita%C3%A7%C3%A3o%20de%20obra.",
       "bridges": [
         {
+          "position": "header_nav",
+          "href": "/servicos/",
+          "text": "Serviços e problemas"
+        },
+        {
+          "position": "header_nav",
+          "href": "/servicos-obras-publicas/",
+          "text": "Obras públicas"
+        },
+        {
+          "position": "header_nav",
+          "href": "/conteudos/",
+          "text": "Biblioteca"
+        },
+        {
+          "position": "mobile_nav",
+          "href": "/servicos/",
+          "text": "Serviços e problemas"
+        },
+        {
+          "position": "mobile_nav",
+          "href": "/servicos-obras-publicas/",
+          "text": "Obras públicas"
+        },
+        {
+          "position": "mobile_nav",
+          "href": "/conteudos/",
+          "text": "Biblioteca"
+        },
+        {
           "position": "pillar_bridge",
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20revisar%20pre%C3%A7o%2C%20BDI%20e%20risco%20de%20uma%20licita%C3%A7%C3%A3o%20de%20obra.",
           "text": "Revisar esta oportunidade"
@@ -206,8 +236,8 @@
       "whatsapp_present": true,
       "form_count": 1
     },
-    "content_sha256": "ef157a7cdbbc1ab1764e9af6a061eb18b9a9d053f5b10cb409a9779ba1d53a5b",
-    "bytes": 33463,
+    "content_sha256": "916af0fbf8ef79ac8293dd69de64b58eae1b7efb9a6bc014fb14fa61d13bdde2",
+    "bytes": 33560,
     "noindex": false
   }
 }

@@ -66,11 +66,11 @@
       "producer_root_hash": "5957e02b7982e000ca7dda2a9a06b88769085bc2a163eadcd8d59bd134b26b3e",
       "source_dossier_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
       "official_payload_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
-      "rendered_content_hash": "8ddd841b26d95516cba209773bebea44ae2fd76a8148cb0b5a104e6800a92c43",
-      "rendered_content_hash_previous": "761955501c095f8f47455a545e88f9c0becb60ca42f7229603aeae674fd1fedc",
+      "rendered_content_hash": "c169d1d836a0f394874324a55a51b06c7bc27ba50bf765ea109c9e8ab7af8e16",
+      "rendered_content_hash_previous": "8ddd841b26d95516cba209773bebea44ae2fd76a8148cb0b5a104e6800a92c43",
       "rendered_hash_scope": "public_artifact_v2",
-      "rendered_hash_recaptured_at": "2026-09-16T08:45:27Z",
-      "rendered_hash_recapture_reason": "Decisão do fundador EXECUTE_NOW, campanha CONFENGE-DESIGN-AUTHORITY-AND-PRODUCTION-20260915 (2026-09-16): somente a referência do CSS canônico mudou (/assets/css/styles.df7cf13d8dc6.css -> /assets/css/styles.26055641a95b.css; font-display optional na face Archivo). HTML-fonte idêntico ao da recaptura anterior. Material, fatos, cálculos, fontes, tese, limites, autoria, datas e hashes do produtor idênticos. Executor: agente Claude Code; sem nova aprovação técnica nem revisão humana independente.",
+      "rendered_hash_recaptured_at": "2026-09-16T14:36:11Z",
+      "rendered_hash_recapture_reason": "Decisão do fundador EXECUTE_NOW, captura on-page nos seis pilares B2G, CAPTURA-PILARES-20260916 (#61): somente a referência do CSS canônico mudou (/assets/css/styles.26055641a95b.css -> /assets/css/styles.93863fcc71c5.css; componente .pillar-capture movido de styles-offers.css para css/components.css (formulario de captura dos seis pilares B2G sem segunda folha bloqueante); nenhuma regra usada pela pagina de analise mudou). HTML-fonte idêntico ao da recaptura anterior. Material, fatos, cálculos, fontes, tese, limites, autoria, datas e hashes do produtor idênticos. Executor: agente Claude Code; sem nova aprovação técnica nem revisão humana independente.",
       "canonical_url": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
       "base_sha": "d1c7aaa66969cc63aa673f2c16a5df22a90bc7a9",
       "comparable_available": true,
@@ -404,6 +404,35 @@
         "styles_source_sha256_previous": "f61067d5be5775e88cf92a7cbb39cd3fa52441a59b38d141bd195ed8e2089d73",
         "styles_source_sha256": "e5e1f30d92f7b11176b04e718cea44a0c9c075c44362f835aadacf631a53ee80",
         "changed_rules": "font-display optional na face Archivo"
+      },
+      "byte_equivalence": {
+        "material_hash": "ff2a3862779f5e6c59f9a39f0a048e6f02b2bb61f6fcf08be064cab889e4a328",
+        "facts": true,
+        "calculations": true,
+        "sources": true,
+        "thesis": true,
+        "limitations": true,
+        "authorship": true,
+        "consultation_dates": true,
+        "content_hash": "f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b",
+        "producer_root_hash": "5957e02b7982e000ca7dda2a9a06b88769085bc2a163eadcd8d59bd134b26b3e"
+      }
+    },
+    {
+      "action": "recapture_rendered_presentation",
+      "analysis_id": "13ec615146b3d348190a9b0b9148831e",
+      "actor": "CLAUDE_CODE_AGENT_EXECUTOR",
+      "authority": "Decisão do fundador EXECUTE_NOW, captura on-page nos seis pilares B2G (CAPTURA-PILARES-20260916, #61)",
+      "at": "2026-09-16T14:36:11Z",
+      "reviewer": "comparação determinística pelo próprio agente (HTML-fonte idêntico; só o href do CSS); nenhuma nova aprovação técnica ou revisão humana independente alegada",
+      "rendered_content_hash_previous": "8ddd841b26d95516cba209773bebea44ae2fd76a8148cb0b5a104e6800a92c43",
+      "rendered_content_hash": "c169d1d836a0f394874324a55a51b06c7bc27ba50bf765ea109c9e8ab7af8e16",
+      "presentation_delta": {
+        "stylesheet_href_previous": "/assets/css/styles.26055641a95b.css",
+        "stylesheet_href": "/assets/css/styles.93863fcc71c5.css",
+        "styles_source_sha256_previous": "e5e1f30d92f7b11176b04e718cea44a0c9c075c44362f835aadacf631a53ee80",
+        "styles_source_sha256": "82a23934a6274cb8ed8a9b54470707dd48417278e709b294374c93c6beb46af8",
+        "changed_rules": "componente .pillar-capture movido de styles-offers.css para css/components.css (formulario de captura dos seis pilares B2G sem segunda folha bloqueante); nenhuma regra usada pela pagina de analise mudou"
       },
       "byte_equivalence": {
         "material_hash": "ff2a3862779f5e6c59f9a39f0a048e6f02b2bb61f6fcf08be064cab889e4a328",

@@ -205,6 +205,36 @@
       "hero_href": "/ferramentas/diagnostico-defesa-margem/",
       "bridges": [
         {
+          "position": "header_nav",
+          "href": "/servicos/",
+          "text": "Serviços e problemas"
+        },
+        {
+          "position": "header_nav",
+          "href": "/servicos-obras-publicas/",
+          "text": "Obras públicas"
+        },
+        {
+          "position": "header_nav",
+          "href": "/conteudos/",
+          "text": "Biblioteca"
+        },
+        {
+          "position": "mobile_nav",
+          "href": "/servicos/",
+          "text": "Serviços e problemas"
+        },
+        {
+          "position": "mobile_nav",
+          "href": "/servicos-obras-publicas/",
+          "text": "Obras públicas"
+        },
+        {
+          "position": "mobile_nav",
+          "href": "/conteudos/",
+          "text": "Biblioteca"
+        },
+        {
           "position": "pillar_bridge",
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20estruturar%20aditivo%20ou%20servi%C3%A7o%20extra%20com%20base%20t%C3%A9cnica%20e%20econ%C3%B4mica.",
           "text": "Enquadrar o evento contratual"
@@ -219,8 +249,8 @@
       "whatsapp_present": true,
       "form_count": 1
     },
-    "content_sha256": "ec93b4921e5b3266b5966009af4c1fb17b9d82a1c39b0cf3c0e6cfff22f0e2ab",
-    "bytes": 35057,
+    "content_sha256": "8cf253ea3706a96fa6e89dbbf8791d120791f1d3ef532364ead1437d7e9a97b4",
+    "bytes": 35154,
     "noindex": false
   }
 }

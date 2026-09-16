@@ -182,6 +182,36 @@
       "hero_href": "#captura-pilar",
       "bridges": [
         {
+          "position": "header_nav",
+          "href": "/servicos/",
+          "text": "Serviços e problemas"
+        },
+        {
+          "position": "header_nav",
+          "href": "/servicos-obras-publicas/",
+          "text": "Obras públicas"
+        },
+        {
+          "position": "header_nav",
+          "href": "/conteudos/",
+          "text": "Biblioteca"
+        },
+        {
+          "position": "mobile_nav",
+          "href": "/servicos/",
+          "text": "Serviços e problemas"
+        },
+        {
+          "position": "mobile_nav",
+          "href": "/servicos-obras-publicas/",
+          "text": "Obras públicas"
+        },
+        {
+          "position": "mobile_nav",
+          "href": "/conteudos/",
+          "text": "Biblioteca"
+        },
+        {
           "position": "offer_hero",
           "href": "#captura-pilar",
           "text": "Solicitar diagnóstico da operação"
@@ -211,8 +241,8 @@
       "whatsapp_present": true,
       "form_count": 1
     },
-    "content_sha256": "86eb586b2dfb51074dc37802bde62fa5978799b87f17dda9e7bd736a1e65bcd6",
-    "bytes": 25241,
+    "content_sha256": "bb2a32d78895fe17684a9adbe1e2e270aeb409e97e2044acd24918f51587170c",
+    "bytes": 25500,
     "noindex": false
   }
 }
