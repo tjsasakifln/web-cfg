@@ -130,7 +130,7 @@
     },
     {
       "path": "conteudos/fiscal-nao-assina-medicao-obra-publica/index.html",
-      "sha256": "6dbc669e9ecbfa620a0b0f7709600fa8ac17dacf6626ef5fc2678f249a064895"
+      "sha256": "902d5dd407f0801d5430f785708f132d498e461785d089f9a3a0558c30b6c53e"
     },
     {
       "path": "medicoes-glosas-obras-publicas/index.html",
@@ -187,7 +187,7 @@
   },
   "adr": "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md",
   "sibling_sha256_recaptured_at": "2026-09-16",
-  "sibling_sha256_recapture_reason": "DESIGN-AUTHORITY-20260915. Verificado arquivo a arquivo que o diff destas paginas vs origin/main adiciona exatamente uma linha de <head> compartilhado, o <link rel=\"preload\" as=\"font\"> da fonte de identidade, e nao remove nada. Nenhum corpo editorial, titulo, canonical, robots ou destino comercial mudou. Anterior: Campanha de comunicacao publica (PR #644). Verificado arquivo a arquivo que o diff destas paginas vs origin/main toca apenas cromo institucional compartilhado: a descricao Organization no JSON-LD e a frase de rodape. Nenhum corpo editorial, titulo, canonical, robots ou destino comercial mudou.",
+  "sibling_sha256_recapture_reason": "DESIGN-AUTHORITY-20260915. Verificado arquivo a arquivo que o diff destas paginas vs origin/main adiciona, em glosa-de-medicao e medicao-rejeitada, exatamente uma linha de <head> compartilhado (fiscal-nao-assina permanece byte-identica a origin/main por ser artigo de origem de clique fixado por teste), o <link rel=\"preload\" as=\"font\"> da fonte de identidade, e nao remove nada. Nenhum corpo editorial, titulo, canonical, robots ou destino comercial mudou. Anterior: Campanha de comunicacao publica (PR #644). Verificado arquivo a arquivo que o diff destas paginas vs origin/main toca apenas cromo institucional compartilhado: a descricao Organization no JSON-LD e a frase de rodape. Nenhum corpo editorial, titulo, canonical, robots ou destino comercial mudou.",
   "frozen_siblings_recaptured_at": "2026-09-14",
   "frozen_siblings_recapture_reason": "VALOR-IMEDIATO-20260914: o sibling medicoes-glosas-obras-publicas/index.html troca o prefill generico de WhatsApp do bloco 'Proximo passo' e do botao flutuante pela mesma mensagem contextual ja usada no bloco pillar_bridge da pagina, alinhado a data/bofu-dominance/frozen-specs/hashes.json e data/organic/single-commercial-route.v1.json. Nenhum corpo editorial, titulo, canonical, robots, preco, prazo, checkout ou destino comercial mudou. Anterior: SOLUCAO-INTEGRAL-20260913 (PR #687): o sibling conteudos/fiscal-nao-assina-medicao-obra-publica/index.html mudou apenas a data de revisao do cluster de medicao (meta article:modified_time, JSON-LD dateModified e 'Revisado em'), movida para 2026-09-14 junto com o corpo dos dois guias editados do mesmo cluster, como exige cluster_medicao_originality. Nenhum corpo editorial, titulo, canonical, robots ou destino comercial mudou. Anterior: INB-20260911/16: o sibling medicoes-glosas-obras-publicas/index.html estava com hash pre-08 (fe3d3c64). Recaptura para o HTML vivo apos 08 (secoes abaixo da dobra) e a correcao de copy-lint que substituiu o travessao por hifen ASCII, com espaco residual normalizado. Preco, prazo, checkout, robots, canonical e criterio de medicao/glosa inalterados. Os tres artigos-sibling de conteudos permaneceram ",
   "metadata_only_recapture": {

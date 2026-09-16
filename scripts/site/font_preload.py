@@ -46,11 +46,23 @@ PRELOAD_RE = re.compile(
 )
 
 
+# Click-origin articles pinned byte-for-byte to origin/main by
+# scripts/organic/tests/test_inb08_owned_routes.py (only revision dates masked).
+BYTE_PINNED_ARTICLES = frozenset(
+    {
+        "conteudos/custos-indiretos-atraso-administracao-obra/index.html",
+        "conteudos/jogo-de-planilha-aditivo-obra-publica/index.html",
+        "conteudos/fiscal-nao-assina-medicao-obra-publica/index.html",
+    }
+)
+
+
 def hash_bound_pages() -> set[str]:
-    if not HASH_BOUND_DECISIONS.is_file():
-        return set()
-    data = json.loads(HASH_BOUND_DECISIONS.read_text(encoding="utf-8"))
-    return {str(row.get("html") or "") for row in data.get("urls") or [] if row.get("approval")}
+    bound = set(BYTE_PINNED_ARTICLES)
+    if HASH_BOUND_DECISIONS.is_file():
+        data = json.loads(HASH_BOUND_DECISIONS.read_text(encoding="utf-8"))
+        bound |= {str(row.get("html") or "") for row in data.get("urls") or [] if row.get("approval")}
+    return bound
 
 
 def pages() -> list[Path]:

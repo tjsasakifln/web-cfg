@@ -300,7 +300,10 @@ for (const width of widths) {
   // folga, a mesma ordem de grandeza das calibracoes anteriores, e continua
   // pegando deriva de comprimento nao relacionada. decisionNavTop caiu para
   // 1,060 px na mesma medicao, longe do proprio limite de 1,800 px.
-  if (width === 390 && metrics.documentHeight > 17900) errors.push(`document_height=${metrics.documentHeight}`);
+  // 2026-09-16 (design authority): 17900 -> 18600. The offer facts (dt/dd with
+  // material conditions) moved from 12.8px two-column to 14px stacked rows on
+  // phones so the labels stop breaking mid-word; no content was added.
+  if (width === 390 && metrics.documentHeight > 18600) errors.push(`document_height=${metrics.documentHeight}`);
   if (width === 390 && metrics.decisionNavTop > 1800) errors.push(`decision_nav_top=${metrics.decisionNavTop}`);
   if (width <= 360 && metrics.decisionNavColumns !== 2) {
     errors.push(`decision_nav_columns=${metrics.decisionNavColumns}`);
