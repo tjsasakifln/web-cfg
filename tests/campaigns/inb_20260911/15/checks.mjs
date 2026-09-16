@@ -612,6 +612,9 @@ export async function checkJourneys(report, root) {
       }
       for (const href of html.requiredCtaHrefs(page.html)) {
         if (href.startsWith("#") || href.startsWith("mailto:") || href.startsWith("tel:") || href.includes("wa.me")) continue;
+        // A form action is a runtime endpoint, not a page: the lead function is
+        // proved by test:lead-function and the public acceptance, not by a file.
+        if (/^\/(?:\.netlify\/functions|api)\//.test(href)) continue;
         if (href.startsWith("http") && !href.startsWith("https://confenge.com.br/")) continue;
         const dest = href.replace("https://confenge.com.br", "");
         const destFile = routeToFile(dest.split("#")[0].split("?")[0] || "/");
