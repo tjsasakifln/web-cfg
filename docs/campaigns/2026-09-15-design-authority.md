@@ -1,0 +1,68 @@
+# CONFENGE-DESIGN-AUTHORITY-AND-PRODUCTION-20260915
+
+Decisão: **EXECUTE_NOW** (fundador, 2026-09-15). Frente executiva: experiência do visitante e confiança. Tempo para evidência: publicação verificada no domínio + comparações antes/depois nesta campanha; percepção humana e resultado comercial ficam **não medidos** até haver amostra. Alavancas: confiança, clareza comercial, experiência do visitante, manutenção escalável.
+
+- **Visitor job:** reconhecer em poucos segundos o que a CONFENGE assume (projeto, orçamento, compatibilização, inspeção, avaliação, perícia, SST, obras públicas), encontrar a situação e iniciar contato sem esforço.
+- **Hipótese de aquisição/conversão:** um sistema visual único e prova técnica legível reduzem a impressão de "template" e a fricção até o contato. Não se promete aumento de conversão; a medição continua nos eventos existentes (`cta_click`, `whatsapp_click`, `email_click`, recibo do formulário), sem PII.
+- **Dono do dado / contratos:** conteúdo e prova demonstrativa de `data/demonstrative/*` (render determinístico); IA e situações de `data/site/public-ia-map.json` e `CONFENGE_PUBLIC_INTENT_MATRIX/1.0.0`; nenhum contrato SELECT do extra-cli ou do warmbly foi alterado.
+- **ADR afetado:** nenhuma fronteira do ADR-STRAT-002/004 ou do RUNTIME-AUTHORITY cruzada (mesmo domínio, mesma esteira, mesma captura). Sistema de design: `docs/DESIGN-SYSTEM.md` e `data/site/design-system.json#direction`.
+- **Rollback:** `docs/ops/ROLLBACK.md`; alvo saudável conhecido `dce15f9e60a184fea14598448d0c6d559a228c3a` (produção em 2026-09-15T20:50Z, idêntica ao ponto de partida do ramo).
+
+## 1. Diagnóstico (produção em 2026-09-15, `dce15f9e6`)
+
+Capturas em `evidence/*-antes.jpg` (1440×1000 e 390×844, dobra e página inteira; Chromium headless, fontes e imagens carregadas).
+
+| Problema | Localização | Evidência | Consequência | Tratamento |
+| --- | --- | --- | --- | --- |
+| A identidade existia só na home | `assets/home-10x.css` (41 KB, 1 rota) carregava Archivo, escala e régua; as outras 260 rotas usavam `styles.css` com sans do sistema | `home-1440x1000-fold-antes.jpg` vs `servicos-1440x1000-fold-antes.jpg` (computado: home H1 43 px Archivo; `/servicos/` H1 70 px `system-ui`, zero webfont) | o visitante muda de "site" ao clicar; nenhuma campanha anterior atacou as 259 rotas | `css/identity.css` concatenado em `styles.css` |
+| H1 de 66–90 px e páginas-catálogo | `--text-h1` teto 72 px; `.content-hero h1` 80 px; `entregas` 89,6 px; 13 seções em quantitativos (13.879 px de altura), 10 em compatibilização | `quantitativos-orcamento-obras-1440x1000-full-antes.jpg` | abertura gasta a dobra com o título; leitura longa antes de qualquer prova | escala única em tokens; 13 → 8 e 10 → 7 seções |
+| Cartões com borda verde no topo, caixas cinza, grades 3×iguais | `<style>` inline dos 7 pilares privados (18 `border-top:3-4px`, 26 caixas cinza, 13 grades `repeat(3,…)`), 8 namespaces (`qty-`, `coord-`, `rv-`…) | `quantitativos … full-antes.jpg`, `compatibilizacao … full-antes.jpg` | "template de consultoria"; cada página reinventava os componentes | `css/components.css` + migração atômica por página (zero `<style>` inline) |
+| Prova só em texto | nenhuma das rotas prioritárias tinha desenho, tabela ou `role="img"`; a amostra do banheiro era uma caixa cinza | `home-1440x1000-fold-antes.jpg` | a amostra parecia ruído, não evidência | planta e elevações demonstrativas como figura legível, memória de cálculo e tabela real |
+| Chamadas concorrentes | home: banda de contato + próximo passo + formulário + bolha; `/servicos/`: 9 botões primários | `servicos-1440x1000-full-antes.jpg` | gritaria; hierarquia de contato confusa | um contato principal por página, ações por linha em texto |
+| CSS acumulado | `styles.css` 1.008 regras, 31 `!important`, 18 clamps locais de h1, 80 raios literais, 25 sombras difusas; `home-10x.css` com comentários corrompidos e ≥12 seletores mortos | `scratch/research/css-archaeology.md` (resumo na PR) | ordem de cascata não vence especificidade: nenhum componente global valia até apagar o inline | normalização por script + reescrita de `home-10x.css` só com composição |
+
+Linha de base de laboratório (Lighthouse mobile, produção, 3 rodadas, mediana): `/` perf 99 (98–99), LCP 1,86 s, CLS 0; `/servicos/` 100 (91–100), LCP 1,59 s; `/quantitativos-orcamento-obras/` 100 (99–100), LCP 1,55 s; `/compatibilizacao-projetos-engenharia/` 100, LCP 1,15 s. Orçamento fixado antes da implementação: perf ≥ 95 mediana, LCP ≤ 2,0 s, CLS ≤ 0,02, ≤ 130 KB por rota interna com a fonte (60 KB) incluída.
+
+## 2. Referências e skills (2026-09-15)
+
+Inspecionadas em navegador real (home + uma página de serviço/projeto, 1440 e 390): Arup (`/services/structural-engineering/`), Ramboll (`/engineering-and-design`), AFRY (`/en/services/project-management/construction-management`), THEMAG (`/energia-eletrica-2/`), TYPSA (`/proyectos/canal-laja-diguillin/`). Principais escolhidas: **Ramboll** (caixa lateral "em 30 segundos", uma família com ~6 degraus, cartão de prova com número concreto, especialista nomeado), **Arup** (ordem da página de serviço: prova → nome → o que fazemos → como ajudamos → responsável; rótulo pequeno + título + "ver todos"), **THEMAG** (brasileira; piso: container ~1140, grade de 2 colunas de subserviços com rótulo + traço, rodapé com CNPJ/endereço; contraexemplo de foto muda e menu com itens internos). AFRY como complemento (listas por fase, uma única cor de ação). Rejeitado em todas: hero fotográfico/slogan abstrato que esconde a atuação por 1000 px, fotos de banco, mega menu, tipografia proprietária, carrossel. Montagem em `evidence/referencias-ramboll-arup-servico.jpg`.
+
+Skills: `frontend-design` (Apache 2.0, plugin oficial) usada como critério anti-template; **Impeccable** (Apache 2.0, `pbakaus/impeccable@0a4e72a`) aplicado como método (shape → new-work → craft-floor → critique → polish), **sem instalar**: o instalador grava hook em `.claude/settings.local.json` e baixa binário remoto, o que a campanha não autoriza; **Vercel web-interface-guidelines** (MIT, `e3d624b`) como checklist de interação/acessibilidade. UI UX Pro Max não foi necessário. Nada foi vendorizado.
+
+## 3. Estudos de composição e decisão
+
+Três estudos com conteúdo real (abertura + seção principal + página interna + hub), 1440 e 390: **A** institucional técnico, **B** editorial com prova, **C** engenharia em contexto (`evidence/estudos-mobile-abc.jpg`, `evidence/estudos-c-b-desktop.jpg`). Painel de dois revisores independentes (direção de arte; UX/qualidade), que viram produção e referências antes das justificativas: ambos ranquearam **C > B > A** e recomendaram "esqueleto de C com a prova de B", restaurando eyebrow, verde da marca, rótulos de categoria e o bloco escuro da situação 07 (B2G), e descartando o formulário sem persistência do estudo A.
+
+**Direção escolhida: engenharia em contexto, prova editada.** Registro em `data/site/design-system.json#direction` e `docs/DESIGN-SYSTEM.md`.
+
+## 4. Implementação
+
+- `styles-tokens.css`: `--sans`/`--sans-wide`/`--sans-narrow`, `--wide` 96 % / `--narrow` 78 %, `--rule`/`--rule-strong`, escala única (`--text-h1` 32→44 px, `--text-h2` 24→34 px, `--text-h3`, `--text-lead`), ritmo de seção em `clamp`, raio 4/8/12, sombra 0 1px 2px.
+- `css/identity.css`: `@font-face` Archivo Var + três faces de reserva com métricas casadas por largura (deriva zero do hero com a woff2 bloqueada); papéis base; grid do `section-head` com lead em duas colunas (também com h1).
+- `css/components.css`: hero-grid/split, proof-figure + tag, aside-note, list-ruled (+ linha escura), steps, phases, keys, table-scroll/data-table/calc, card/panel/dark-block, contact-*, botões únicos, breadcrumbs, rodapé em 4 colunas, anel de foco nos campos, slots gerados (`qty-trail-*`, `coord-finding*`, `rv-extract*`).
+- `styles.css`: família do body por token; 17 clamps locais de h1/h2 → tokens; 65 raios literais e 16 sombras difusas → tokens; legenda do formulário com contraste AA; hover do primário sem sombra. `styles-offers.css`, `styles-hubs.css`, `entregas/styles.css`, `triagem-tecnica/styles.css`: escala compartilhada, sem cores fora da paleta, fichas de oferta empilhadas no celular.
+- `assets/home-10x.css` reescrita (composição da home apenas). Home: planta demonstrativa com legenda na dobra (depois das ações), lista de situações com rótulo de categoria e 07 escuro, convite "não se reconheceu?" com botão WhatsApp e e-mail, um bloco escuro (próximo passo + formulário inalterado, hash congelado).
+- `/servicos/`, `/quantitativos-orcamento-obras/`, `/compatibilizacao-projetos-engenharia/`, `/revisao-tecnica-projetos-engenharia/`, `/projetos-complementares-engenharia/`, `/inspecao-diagnostico-edificacoes/`, `/assistencia-tecnica-pericial-engenharia/`, `/seguranca-trabalho-apoio-tecnico/`: `<style>` inline e `/triagem-tecnica/styles.css` removidos; ids, `data-*`, hrefs de WhatsApp/e-mail, breadcrumb, JSON-LD e slots gerados byte-idênticos; prova antes do método (planta + memória de cálculo + tabela real de `quantitativos.csv`; elevações R00/R01 + perfil de drenagem demonstrativo de infraestrutura); caixa "Em 30 segundos"; faixa Cliente: exemplo demonstrativo / Revisão / Entregáveis / Responsável técnico.
+- Testes atualizados com justificativa (cobertura equivalente ou maior): hero móvel 1,25 → 1,4 viewport (desenho depois das ações; painel-antes-do-CTA e CTA-na-primeira-tela continuam proibidos); censo de fonte por rota (`test_audit_performance.py`); `test_font_fallback_metrics.mjs` lê `styles.css`; glifos fora do subconjunto Archivo substituídos (`↓ ✓ ≠ Ø`). Baselines recapturados com razão: desempenho, uso de CSS (raio 137→151 declarações por tokens; sombras 67→62; gradientes 51→48), inventário de CTA, hash de apresentação da análise aprovada (`data/editorial/contract-analysis/approvals.json`, apenas a referência do CSS canônico muda), frozen specs e medições de primeira dobra.
+
+## 5. Matriz de cobertura
+
+| Família / URL | Tratamento |
+| --- | --- |
+| `/`, `/servicos/`, `/quantitativos-orcamento-obras/`, `/compatibilizacao-projetos-engenharia/` | **redesenhada** |
+| `/revisao-tecnica-projetos-engenharia/`, `/projetos-complementares-engenharia/`, `/inspecao-diagnostico-edificacoes/`, `/assistencia-tecnica-pericial-engenharia/`, `/seguranca-trabalho-apoio-tecnico/` | **redesenhada** (componentes; zero inline) |
+| `/servicos-obras-publicas/`, `/problemas-que-resolvemos/`, `/entregas/`, 7 pilares B2G não congelados, `/conteudos/*`, `/especialista/*`, legal/trust, `/ferramentas/`, `/casos/`, famílias geradas (editorial, pSEO, análises, oportunidades, políticas), 404, obrigado, nurture | **herdou sistema validado** (identidade, escala, botões, rodapé, foco; capturas conferidas em 1440/390 para hubs, entregas, conteúdos, especialista, triagem) |
+| 6 pilares B2G congelados por hash (aditivos, medições, reequilíbrio, auditoria, diagnóstico 360, pré-licitação) | **preservada com justificativa** (HTML congelado; herdam só o CSS; recaptura honesta dos hashes de `styles*.css`) |
+| `/triagem-tecnica/` (captura fail-closed), `/casos/modelo-*` (priced_offer com folhas próprias), ferramentas interativas, `/analise-cnpj/*`, `/comercial/*`, estados de `/diagnostico-b2g-expansao/` | **preservada com justificativa** (só tokens/escala) |
+| `/conteudos/` esqueleto de artigo (122 arquivos sem gerador), `/entregas/` seção "Cinco frentes", aside do hero de `/servicos/`, SVG da planta simplificado para <480 px, `/triagem-tecnica/` no grid de 1200 px | **pendente** (segunda campanha; listado pelos revisores como acabamento, não bloqueio) |
+
+## 6. Validação
+
+- **Revisão visual assistida por agentes** (não é pesquisa humana): rodada 1 estrutural e rodada 2 de acabamento, cada uma com dois revisores em contextos separados que viram antes/depois e referências antes da justificativa. Relatórios: `review-r1.json`, `review-r2.json` (nesta pasta). Todos os `must_fix` das duas rodadas foram corrigidos (grid do hero B2G, affordance de link, fichas de oferta no celular, carimbo R01 único, copy "ao lado", link invisível em linha escura, H2 encostado, ponto duplo). Dimensões (antes → depois, mediana dos dois revisores na rodada 2): impressão profissional 5 → 7,5; clareza da abertura 6 → 7,5; tipografia/ritmo 4,5 → 7; prova 5,5 → 8; consistência 4 → 7; mobile/interação 5,5 → 6,5; encontrar serviço/contato 6,5 → 7. Nota agregada não é critério de aceite; as evidências por dimensão estão nos relatórios.
+- **Estados verificados no candidato:** foco visível em header, menu móvel (Enter/Esc, foco preso e devolvido), lista de situações e formulário; zoom 200 % (683×384) e 320/360/390/768/1280/1440/1920 sem rolagem horizontal em 12 rotas; JavaScript desativado (menu, contatos e formulário acessíveis); fonte bloqueada (fallback métrico, deriva 0 em 390); `prefers-reduced-motion`; imagens ausentes; tabelas com rolagem própria e dica; alvos principais ≥ 44 px.
+- **Gates da esteira** (clone limpo, Node 22, produtor contratado): ver a PR para a lista executada e resultados; artefato exato construído com `SOURCE_DATE_EPOCH` fixado.
+- **Não medido:** percepção humana (nenhuma pesquisa autorizada com participantes; nenhum "teste de três segundos" alegado), resultado comercial, INP/LCP/CLS de campo, Safari/iPhone físico, leitores de tela reais.
+
+## 7. Publicação
+
+Ver a PR e a seção de encerramento no relatório da sessão: SHA do candidato, execução do `site-ci`, `netcup-release` (package → stage → qualify → promote), verificação pública de `/.well-known/build-info.json`, `/.well-known/runtime-info.json`, `/healthz`, `/ready`, rotas críticas e ativos com hash esperado, capturas do design servido.

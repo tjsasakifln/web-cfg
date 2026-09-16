@@ -1,0 +1,378 @@
+[
+ {
+  "reviewer": "Revisora de experiência e qualidade (UX, acessibilidade, estados interativos) — rodada 2, revisão independente por telas candidate-r2 + puppeteer ao vivo em 127.0.0.1:8790 (scripts em scripts/_tmp/r2ux/, saídas em scratchpad/review-r2/out/)",
+  "verdict": "APROVAR COM DUAS CORREÇÕES PONTUAIS ANTES DO MERGE. Os cinco must_fix da rodada 1 foram resolvidos com evidência: hero de /servicos-obras-publicas/ em coluna única com h1 sob o eyebrow (servicos-obras-publicas-1440x1000-fold.png), bloco 'Não se reconheceu em nenhuma' de volta com título + botão 'Descrever pelo WhatsApp' + link 'Descrever por e-mail' sublinhado (crops/home-contact-mid.png), tabela de quantitativos com min-width 900px, th sem sobreposição, dica 'Arraste a tabela para o lado' e tabindex=0 (matrix.json), 'Como conferir credenciais e limites' sublinhado, copy 'deste desenho demonstrativo' sem 'ao lado'. A bateria interativa passou: foco visível (anel branco 2px + navy 5px) em skip link, header, menu móvel, lista de situações e botões; menu móvel abre por Enter, prende o foco, fecha por Esc devolvendo o foco ao toggle; zoom 200% (683x384) e 320px sem rolagem horizontal em 12 rotas; sem JavaScript o menu móvel fica aberto, contatos e formulário visíveis; fonte bloqueada cai em 'Archivo Fallback Wide' com size-adjust e geometria idêntica em 390 (+83px em 1440); prefers-reduced-motion zera transições e scroll-behavior; imagens ausentes só afetam os dois logos com alt e dimensões. Restam dois defeitos concretos: (1) em /compatibilizacao-projetos-engenharia/ o link 'projeto de engenharia' dentro de li.is-dark herda cor ink sobre navy (contraste 1:1, invisível — único caso em 92 rotas do sitemap); (2) em /entregas/ os rótulos dt em 390px quebram no meio da palavra ('INSPECIONA|R', 'INFORMAÇÕ|ES NECESSÁRIA|S') por overflow-wrap:anywhere. Ambos são correções de uma linha de CSS.",
+  "r1_must_fix_status": [
+   {
+    "item": "/servicos-obras-publicas/: hero em grid de 2 colunas coloca o h1 na coluna direita e deixa 216px de vazio sob o eyebrow",
+    "resolved": true,
+    "evidence": "candidate-r2/servicos-obras-publicas-1440x1000-fold.png e -1280x720-fold.png: eyebrow 'EDITAL, GLOSA OU ADITIVO' em x=120,y=185 com h1 imediatamente abaixo (y=210-400) e lead na coluna direita alinhado ao topo; sem vazio. Mesmo padrão em /problemas-que-resolvemos/."
+   },
+   {
+    "item": "/ (home): restaurar convite visível ao contato após a lista de situações (título + botão WhatsApp + link e-mail)",
+    "resolved": true,
+    "evidence": "review-r2/crops/home-contact-mid.png: h3 'Não se reconheceu em nenhuma, ou a sua mistura duas?' + botão secundário 'Descrever pelo WhatsApp' + link sublinhado 'Descrever por e-mail →' + 'Use o formulário no fim da página' sublinhado. É h3 (subordinado ao h2 'Em qual destas você se reconhece?'), hierarquia correta; a home tem 6 h2 + este h3."
+   },
+   {
+    "item": "/quantitativos-orcamento-obras/: tabela com table-layout:fixed e min-width 560px gera cabeçalhos sobrepostos e palavras cortadas em 390/320px",
+    "resolved": true,
+    "evidence": "matrix.json quantitativos 390x844: tableW 900, wrapW 353, overflowX auto, scrolls true, thOverflow 0 (9 th de 100px sem scrollWidth excedente), hint 'Arraste a tabela para o lado para ver todas as colunas.', tabindex=0. Residual em 320px (out/table-320.png): célula 'Impermeabilização' invade 'm²' e a linha Q-PAR-01 fica ~370px alta pela coluna Desconto de 100px — listado em should_fix."
+   },
+   {
+    "item": "/ (home): 'Como conferir credenciais e limites' perdeu o sublinhado",
+    "resolved": true,
+    "evidence": "candidate-r2/home-1440x1000-fold.png e home-390x844-fold.png: link sublinhado na linha de credenciais; 'Conferir a conta' no hero-proof também sublinhado."
+   },
+   {
+    "item": "/ (home) mobile: copy 'desenho demonstrativo ao lado' com a planta abaixo do fold",
+    "resolved": true,
+    "evidence": "candidate-r2/home-390x844-fold.png: claim agora diz 'Com a quantidade levantada deste desenho demonstrativo…' e a borda superior da planta (cota 2,40 m) entra na dobra em 390x844 logo após as credenciais. A planta continua depois dos CTAs no mobile, mas a copy não aponta mais para um lado inexistente."
+   }
+  ],
+  "dimensions": [
+   {
+    "dimension": "Impressão profissional e identidade própria",
+    "before": 5,
+    "after": 8,
+    "evidence": "Archivo carregada em todas as 12 rotas (matrix.json fontLoaded true; fallback métrico 'Archivo Fallback Wide' quando bloqueada — out/nofont-1440-fold.png mantém h1 em 4 linhas e CTA em y=635). Planta cotada PR-ARQ·R01 com legenda 'escala indicativa · exemplo demonstrativo' na home e em quantitativos; carimbo unificado em R01 (r1 divergia R00/R01).",
+    "notes": "Não chega a 9 porque /entregas/ ainda tem gradiente de fundo no hero e dt em mono 12,8px que destoam; a planta em 390px tem rótulos de 9px (out/plan-390.png) legíveis só em tela 2x."
+   },
+   {
+    "dimension": "Clareza da abertura e prioridade visual",
+    "before": 6,
+    "after": 8,
+    "evidence": "Home 1440: eyebrow, h1 em duas cores, lead, claim, par de CTAs e credenciais numa leitura; 683x384 (200%) idem sem overflow (out/home-683x384-fold.png). B2G hero corrigido. Rotas de serviço mostram cartão 'Em 30 segundos' com WhatsApp e telefone na dobra (foldContacts 1440: 'WhatsApp (48) 98834-4559', 'Ligar', e-mail, botão de proposta).",
+    "notes": "Em 390 as rotas revisão/inspeção mostram só um CTA na dobra (o cartão desce); /conteudos/ não tem CTA na dobra móvel, aceitável para artigo."
+   },
+   {
+    "dimension": "Tipografia, ritmo e densidade",
+    "before": 5,
+    "after": 8,
+    "evidence": "Escala única confirmada: home H1 44/H2 34/H3 20 (1440) e 32/24/18 (390); entregas H1 44/H2 34/H3 20; obras públicas H1 46/H2 34/H3 22 (matrix.json headings) — r1 tinha h2 56,8px em B2G e dd 11,84px em entregas. Corpo 16-18px em todas as rotas (pMode).",
+    "notes": "Residual: /entregas/ dt mono 12,8px em caixa alta com overflow-wrap:anywhere quebra 'INSPECIONA|R' (out/entregas-dl-390.png); /quantitativos/ em 320px tem célula 'Impermeabilização' invadindo a coluna vizinha (out/table-320.png)."
+   },
+   {
+    "dimension": "Qualidade e honestidade da prova",
+    "before": 6,
+    "after": 9,
+    "evidence": "Rótulos demonstrativos visíveis e contados por rota (matrix.json demoCount: quantitativos 15, compatibilização 13, entregas 11, B2G 7, home 5); 'Não é obra de cliente' 11,7px e 'PR-ARQ · R01 · escala indicativa · exemplo demonstrativo' 12px acompanham 'EXEMPLO DEMONSTRATIVO' 14px em eyebrow. SVG da planta tem role=img e <title>; conta fecha 21,84 − 1,68 − 0,56 = 19,60 m².",
+    "notes": "Sem regressão. A legenda de 12px/11,7px é o menor texto da prova; passa por estar duplicada em eyebrow maior."
+   },
+   {
+    "dimension": "Consistência entre home e páginas internas",
+    "before": 4,
+    "after": 8,
+    "evidence": "Header/menu/rodapé, botões (44px), text-link sublinhado, eyebrow verde e lista numerada iguais nas 12 rotas; anel de foco idêntico em todas (states.json). /entregas/ e /servicos-obras-publicas/ agora seguem a escala (ver dimensão tipografia); fichas de oferta com preço em 390 sem colisão (crops/b2g-m-offers2.png).",
+    "notes": "Links de oferta 'Ver escopo e exemplo' são verdes em negrito sem sublinhado (padrão próprio dos cartões), enquanto o corpo usa sublinhado — pequeno terceiro estilo de link. /entregas/ ainda usa dl mono próprio."
+   },
+   {
+    "dimension": "Experiência móvel e acabamento interativo",
+    "before": 6,
+    "after": 7,
+    "evidence": "Puppeteer: Tab → skip link → marca → toggle (44x44) com anel visível (out/focus-mobile-toggle.png); Enter abre menu (aria-expanded=true, aria-label 'Fechar menu', body overflow hidden, foco no botão Fechar 44px, itens 50px), Tab cicla dentro do menu, Esc fecha e devolve foco ao toggle (states.json menuEsc). 320/360/390/683/768/1440/1920: scrollW == clientW em 12 rotas. Alvos principais ≥44px (menu-toggle 44, botões 44, inputs/selects 44). Reduced-motion: 3 blocos @media zeram transições/animação e scroll-behavior smooth→auto. Sem JS: nav móvel aberta por padrão, 3 links wa.me e telefone visíveis, formulário inteiro visível. Hover: botões mudam bg 0,15s.",
+    "notes": "Contra: validação de padrão do telefone só mostra o balão nativo do navegador ('Please match the requested format.' em inglês no headless) sem aria-invalid nem mensagem inline (out/form-error-1440.png); vazio total funciona (aria-invalid + live 'Informe e-mail ou WhatsApp para retorno.'). Foco nos inputs é um anel cinza-claro sutil sobre cartão branco. Menu móvel sem scrim: conteúdo da página continua visível abaixo do painel. Rodapé/breadcrumb com links de 23px (pré-existente). Float do WhatsApp oculto em <500px."
+   },
+   {
+    "dimension": "Facilidade de encontrar o serviço e iniciar contato",
+    "before": 7,
+    "after": 8,
+    "evidence": "Todas as 12 rotas têm contato principal e caminho em ≤2 toques: header 'Solicitar proposta' → /triagem-tecnica/ (ou #triagem-quantitativos existente em quantitativos e conteúdos) e no mobile menu → 'Solicitar proposta'. Home: fold com 'Descrever a minha situação' → triagem (1 toque) e bloco meio com WhatsApp/e-mail restaurado; 5 wa.me, 2 tel, 5 mailto. Triagem mostra WhatsApp, telefone e e-mail na dobra em 390 e 1440.",
+    "notes": "/entregas/ não tem link WhatsApp (só header → triagem, 2 toques). Em /triagem-tecnica/ o header 'Solicitar proposta' aponta para a própria página."
+   }
+  ],
+  "must_fix": [
+   {
+    "route": "/compatibilizacao-projetos-engenharia/",
+    "location": "lista .list-ruled, item 03 'Revisão de dimensionamento' (li.is-dark), parágrafo 'Encaminhamento': link 'projeto de engenharia' → /servicos/#servico-projeto (y≈4454 em 1440)",
+    "evidence": "review-r2/out/compat-link.png mostra a frase terminando em 'dentro de' seguida de espaço vazio e ponto; medido color rgb(7,26,49) sobre bg rgb(6,26,51) em LI.is-dark, contraste 1,00:1 (links.mjs em 92 rotas do sitemap: único caso). styles.css:1105-1109 recolore h3, p, kicker e action de li.is-dark, mas não 'a'.",
+    "consequence": "Link invisível: o visitante que precisa de projeto de engenharia perde o encaminhamento ao serviço; falha WCAG 1.4.3 e 1.4.1 (o sublinhado existe mas sobre texto invisível).",
+    "fix": "Em styles.css:1106 incluir 'a' no seletor (.list-ruled>li.is-dark a{color:#fff;text-decoration-color:var(--lime)}) ou usar cor herdada de p (#d5dde6); reprocessar a rota e conferir com links.mjs."
+   },
+   {
+    "route": "/entregas/",
+    "location": "dl .vitrine-item__facts (dt) e .compare-ladder-figures dt em ≤390px",
+    "evidence": "review-r2/out/entregas-dl-390.png: 'O QUE VOCÊ PODE INSPECIONA|R', 'INFORMAÇÕ|ES NECESSÁRIA|S' quebrados no meio da palavra; entregas/styles.css:228 aplica overflow-wrap:anywhere aos dt em mono 12,8px caixa alta com letter-spacing .05em numa coluna estreita.",
+    "consequence": "Rótulos ilegíveis nas fichas de oferta com preço publicado — a rota que sustenta a confiança do preço parece quebrada em telefone.",
+    "fix": "Trocar overflow-wrap:anywhere por normal e, abaixo de 480px, empilhar dt sobre dd (grid-template-columns:1fr) ou dar min-width ~120px à coluna dt; alternativa: reduzir letter-spacing e permitir hyphens:manual."
+   }
+  ],
+  "should_fix": [
+   {
+    "route": "/ (home) e demais rotas com o formulário compartilhado",
+    "location": "#formulario-contato, validação de padrão de #telefone/#email ao clicar 'Adicionar mais detalhes'",
+    "evidence": "review-r2/out/form-error-1440.png: com 'Fulano' + telefone '123' aparece só o balão nativo 'Please match the requested format.' (idioma do navegador) sobre o título em pt-BR; aria-invalid permanece null e #form-status vazio. Com tudo vazio a validação própria funciona (aria-invalid=true nos 4 campos, live polite 'Informe e-mail ou WhatsApp para retorno.', foco em #nome).",
+    "consequence": "Mensagem transitória, no idioma do navegador e sem estado persistente para leitores de tela quando o padrão falha.",
+    "fix": "Tratar validity.patternMismatch no mesmo caminho da validação própria: aria-invalid=true, mensagem inline em pt-BR ligada por aria-describedby, sem depender de reportValidity."
+   },
+   {
+    "route": "/quantitativos-orcamento-obras/",
+    "location": "tabela 'Memória de cálculo' em .table-scroll (320-390px)",
+    "evidence": "review-r2/out/table-320.png: 9 colunas fixas de 100px; 'Impermeabilização' invade a célula 'm²'; linha Q-PAR-01 com ~370px de altura por causa da coluna Desconto de 100px.",
+    "consequence": "Tabela rola e tem dica, mas parte do conteúdo fica sobreposto e a leitura exige rolagem vertical longa dentro de uma linha.",
+    "fix": "Usar table-layout:auto com white-space:nowrap nos th e larguras mínimas específicas (ID 90px, Descrição 180px, Desconto 220px) ou min-width 1100px no mobile."
+   },
+   {
+    "route": "/ (home), /quantitativos-orcamento-obras/",
+    "location": "SVG da planta (role=img) em 320-390px",
+    "evidence": "svg.mjs: 13 rótulos com altura mínima 9px em 390 e 7px em 320 (out/plan-390.png); 'W-04 · oeste · 1,80' rotacionado toca o bloco HS-01.",
+    "consequence": "Cotas ilegíveis em telefone sem zoom; a informação é redundante no texto, então não bloqueia.",
+    "fix": "Versão simplificada do SVG abaixo de 480px (só cotas 2,40/1,80, RM-01 e a legenda) com fonte ≥11px, ou ocultar rótulos de parede via media query no SVG inline."
+   },
+   {
+    "route": "todas as rotas",
+    "location": "header móvel: painel #mobile-menu aberto",
+    "evidence": "review-r2/out/menu-open-focus-390.png: painel branco sobre página branca sem scrim; dois controles de fechar (X no toggle e botão 'Fechar').",
+    "consequence": "Limite do painel pouco perceptível e conteúdo da página compete pela atenção; redundância de controle.",
+    "fix": "Adicionar backdrop semitransparente (fecha ao toque) e manter um só controle de fechar, ou pelo menos borda/sombra mais forte no painel."
+   },
+   {
+    "route": "todas as rotas",
+    "location": "formulário: estado :focus-visible dos inputs/selects",
+    "evidence": "review-r2/out/form-focus-1440.png: foco no campo Nome muda a borda para cinza médio com anel cinza-claro sobre cartão branco; medido outline none, borda rgb(203,212,220).",
+    "consequence": "Indicador de foco de baixo contraste (<3:1 com o fundo) para quem navega por teclado no formulário.",
+    "fix": "Aplicar aos inputs o mesmo anel usado nos links (box-shadow 0 0 0 2px #fff, 0 0 0 5px var(--navy)) ou outline 2px navy com offset."
+   },
+   {
+    "route": "todas as rotas",
+    "location": "rodapé (site-footer) e breadcrumb 'Início'",
+    "evidence": "matrix.json home 390: 20 links do rodapé com 23px de altura (353x23); pré-existente na produção.",
+    "consequence": "Alvos de toque abaixo de 44px na área de contato do rodapé (e-mail e telefone incluídos).",
+    "fix": "padding-block 10px nos links do rodapé e do breadcrumb no mobile."
+   },
+   {
+    "route": "/entregas/",
+    "location": "hero",
+    "evidence": "candidate-r2/entregas-1440x1000-fold.png: parágrafo 'Consulte sem cadastro…' colado no botão 'Ver entregas e exemplos' (sem margem) e gradiente de fundo residual; rota sem link WhatsApp (contacts wa=0).",
+    "consequence": "Acabamento inferior às rotas irmãs e caminho ao WhatsApp só via header → triagem.",
+    "fix": "Adicionar margin-bottom ao parágrafo, remover o gradiente e incluir o contato de WhatsApp no bloco final como nas rotas de serviço."
+   },
+   {
+    "route": "/triagem-tecnica/",
+    "location": "header 'Solicitar proposta'",
+    "evidence": "header-cta href=/triagem-tecnica/ na própria página de triagem.",
+    "consequence": "Clique sem efeito visível na página de conversão.",
+    "fix": "Apontar o CTA para #formulario-contato ou para o WhatsApp nessa rota, ou usar aria-current e estilo de estado ativo."
+   }
+  ],
+  "strengths": [
+   "Os cinco must_fix da rodada 1 foram resolvidos com evidência em captura e DOM (hero B2G, bloco de contato do meio da home, tabela com 900px + dica + tabindex, sublinhado das credenciais, copy do desenho).",
+   "Teclado e menu móvel corretos: anel de foco de dois níveis visível em todos os controles medidos (states.json), menu abre por Enter, prende foco, fecha por Esc e devolve o foco ao toggle; skip link funcional.",
+   "Resiliência: sem JavaScript o menu móvel fica aberto e contatos/formulário aparecem; com a fonte bloqueada (1 requisição .woff2 abortada, Archivo Var:error) o fallback com size-adjust mantém a geometria idêntica em 390px e +83px em 1440; prefers-reduced-motion zera transições e scroll suave; imagens ausentes só afetam os dois logos com alt e width/height.",
+   "Sem rolagem horizontal em 320, 360, 390, 683 (200%), 768, 1440 e 1920 em todas as 12 rotas; alvos principais (toggle, botões, inputs, selects) com 44px.",
+   "Escala tipográfica realmente única agora, inclusive em /entregas/ e /servicos-obras-publicas/ (h1 44-46 / h2 34 / h3 20-22, corpo 16-18px), e carimbo da planta unificado em R01.",
+   "Prova honesta e rotulada em todas as rotas (5 a 15 marcações 'demonstrativo/exemplo/não é obra de cliente' por página), SVG com role=img e title, memória de cálculo que fecha.",
+   "Contraste de texto sobre fundo sólido sem falhas nas 12 rotas além do link em li.is-dark; varredura de links em 92 rotas do sitemap encontrou um único caso."
+  ],
+  "not_measured": [
+   "iPhone/Safari físico (VoiceOver, zoom por pinça, safe-area) — só Chromium headless com isMobile/hasTouch.",
+   "INP, CLS e LCP de campo; a estabilidade com fonte bloqueada foi medida por geometria, não por CLS real.",
+   "Anúncio real de leitores de tela (NVDA/VoiceOver) para o menu, o live region do formulário e o role=img da planta; só atributos ARIA verificados no DOM.",
+   "Persistência e recibo do formulário (POST /obrigado) — o candidato está em SimpleHTTP estático; a persistência real pertence ao gate inbound e ao runtime de produção.",
+   "Comportamento do balão de validação nativo em navegadores pt-BR (o headless renderiza em inglês).",
+   "Modo escuro/forced-colors (Windows High Contrast) e navegação por switch."
+  ]
+ },
+ {
+  "reviewer": "Revisora de direcao de arte (independente), rodada 2 (acabamento): candidate-r2 vs baseline-prod, com recapturas 320/768/1920 e sondas de estado em review-r2/",
+  "verdict": "QUASE PRONTO; PUBLICACAO AINDA BLOQUEADA POR DOIS DEFEITOS DE CSS PEQUENOS. Dos cinco must_fix da rodada 1, tres fecharam limpos (grid do hero B2G, carimbo R01 unico, copy 'ao lado' neutralizada), um fechou na parte bloqueante (sublinhado nos links de confianca da dobra) e um foi trocado por outro defeito (a colisao de rotulos em /entregas/ virou quebra no meio da palavra: 'INFORMACO/ES/NECESSARIA/S', 'INSPECIONA/R' em 320 e 390 px, nas fichas com preco publicado). Surgiu um defeito novo em rota indexavel: em /problemas-que-resolvemos/ o H2 'Onde voce esta no ciclo do contrato?' encosta na faixa navy com 0 px de folga em todas as larguras. Corrigidos esses dois pontos (uma regra cada), o candidato supera a producao em todas as sete dimensoes; o restante e acabamento de segunda campanha (SVG da planta, H2 longos em 5 linhas, aside do hero com dois modelos, triagem fora do sistema, item 09 de /servicos/).",
+  "r1_must_fix_status": [
+   {
+    "item": "Grid do hero em /servicos-obras-publicas/ e /problemas-que-resolvemos/ (>=1000px): incluir h1 na regra e posicionar .section-proof",
+    "resolved": true,
+    "evidence": "candidate-r2/servicos-obras-publicas-1440x1000-fold.png e problemas-que-resolvemos-1440x1000-fold.png: eyebrow > H1 (4 linhas, coluna esquerda) > nota de preco abaixo, lead na coluna do meio; confirmado tambem em review-r2/extra/*-1280/768/1920 folds (montage-1280.png, montage-768x1024.png, montage-1920x1080.png). Residuo nao bloqueante: terco direito do hero vazio (x 950-1320) porque o lead fica limitado a ~350px."
+   },
+   {
+    "item": "Affordance de link perdida (hero-proof 'Como conferir credenciais e limites'; compatibilizacao 'Ver um apontamento do registro'); unificar o estilo de link inline do site",
+    "resolved": true,
+    "evidence": "Parte bloqueante fechada: candidate-r2/home-1440x1000-fold.png y=742 link sublinhado; compatibilizacao-projetos-engenharia-1440x1000-fold.png y=731 'Ver um apontamento do registro' sublinhado; 'Conferir a conta' sublinhado com anel de foco visivel (review-r2/crops/focus10.png). Parte 'unificar' NAO feita e rebaixada a should_fix: sonda review-r2-probe3 lista links de prosa sem sublinhado em home ('ver as entregas e os precos' em p.market-context-base), quantitativos (csv e 'exemplo demonstrativo do recorte' em cinza), entregas ('Entender o trabalho de projeto' etc. cinza 13px), triagem ('Escrever por e-mail', 'Avisar pelo WhatsApp' como texto comum) e os seis links de triagem ainda verdes rgb(45,111,45) peso 400."
+   },
+   {
+    "item": "Colisao de texto nas fichas de oferta com preco publicado em /entregas/ em 320-390px ('INFORMACOES NECESSARIAS', 'INSPECIONAR')",
+    "resolved": false,
+    "evidence": "A sobreposicao sumiu, mas foi trocada por quebra no meio da palavra: review-r2/crops/entregas-mob-dt-2x.png (390px) e review-r2/crops/ent320-4600.png (320px) mostram 'INFORMACO / ES / NECESSARIA / S' e 'O QUE VOCE PODE INSPECIONA / R'. Causa: entregas/styles.css:148 coluna de rotulo de 78px + entregas/styles.css:228 overflow-wrap:anywhere. Nenhum dos dois remedios da rodada 1 (empilhar dt/dd ou coluna >=120px) foi aplicado."
+   },
+   {
+    "item": "Carimbo de revisao da planta RM-01 (R00 na home vs R01 em quantitativos)",
+    "resolved": true,
+    "evidence": "grep nas paginas servidas: home 1x 'PR-ARQ · R01', quantitativos 1x 'PR-ARQ · R01', nenhum 'PR-ARQ · R00'; candidate-r2/home-1440x1000-fold.png legenda 'PR-ARQ · R01 · escala indicativa'; review-r2/crops/qty-1000.png ficha 'REVISAO R01'. O 'Documento PR-ARQ-R00' que sobrevive no passo 06 'Referencia de revisao' (review-r2/crops/qty-3000.png) e a referencia deliberada ao estado original que gerou o RF-01, nao a planta carimbada; nao e defeito."
+   },
+   {
+    "item": "Home <1000px: 'do desenho demonstrativo ao lado' com a figura abaixo dos CTAs; reordenar e neutralizar o 'ao lado'",
+    "resolved": true,
+    "evidence": "grep 'desenho demonstrativo ao lado' = 0; texto agora 'deste desenho demonstrativo' (candidate-r2/home-390x844-fold.png). A relacao espacial falsa, que era o motivo do bloqueio, sumiu. Residuo nao bloqueante: a figura continua depois dos CTAs e das credenciais em 390 e 768 (crops/home-mobile-tiles.png col.1 y~670; extra/home-768x1024-fold.png), com so a cota '2,40 m' entrando na dobra de 844px."
+   }
+  ],
+  "dimensions": [
+   {
+    "dimension": "Impressao profissional e identidade propria",
+    "before": 5,
+    "after": 7,
+    "evidence": "Producao: seis de oito rotas em DejaVu Sans (baseline-prod/servicos, quantitativos, compatibilizacao, entregas, triagem, conteudos 1440 folds). Candidato: Archivo em todas as 13 rotas (crops/montage-1280.png, montage-390.png), planta cotada como ancora da home em 1440/1920/768 (extra/home-1920x1080-fold.png), hero B2G consertado, fallback de fonte com metricas compativeis (states/home-1440-nofont.png).",
+    "notes": "Nao chega a 8 porque a planta que virou identidade da home mantem as colisoes da rodada 1 (crops/qty-1000.png: 'W-04 · oeste · 1,80' rotacionado sobre a hachura, HS-01 cortando a parede oeste, W-02/WN-01 verdes sobre a janela, sem mini-legenda) e a secao 'Cinco frentes' de /entregas/ continua fora do sistema (crops/ent-2.png: titulo colado na borda, corpo 13px em 1160px, summary em corte expandido)."
+   },
+   {
+    "dimension": "Clareza da abertura e prioridade visual",
+    "before": 6,
+    "after": 7,
+    "evidence": "candidate-r2/home-1440x1000-fold.png: H1 em 4 linhas, lead, prova visual, CTAs e credenciais numa leitura. servicos-obras-publicas e problemas 1440/1280/1920: eyebrow > H1 > lead sem buraco (era o pior defeito da r1). Mobile: 12 folds em crops/montage-390.png com eyebrow, H1, lead e CTA primario visiveis; 320px sem overflow (extra manifest scrollW==clientW).",
+    "notes": "/servicos/ continua com metade direita do hero vazia em 1280/1440/1920 (candidate-r2/servicos-1440x1000-fold.png; extra/servicos-1920x1080-fold.png). Dobra movel da home ainda sem a prova (figura apos CTAs e credenciais). H1 de problemas em 1920 quebra em 5 linhas ('Problemas que / resolvemos / em licitacoes / e contratos / de obras') por max-width de ~492px."
+   },
+   {
+    "dimension": "Tipografia, ritmo e densidade",
+    "before": 4,
+    "after": 6,
+    "evidence": "text-wrap:balance presente no h1 das quatro rotas sondadas (review-r2-probe2: home 4 linhas, /servicos/ 3 linhas). 'Contrpiso' corrigido (grep = 0). Listas ruled com escala consistente na home (crops/home-desk-950.png).",
+    "notes": "Contra: /problemas-que-resolvemos/ H2 'Onde voce esta no ciclo do contrato?' com gap 0px apos a faixa navy (probe3: prevBottom == h2Top == 728.9); H2 longos em coluna de ~470px em 5 linhas com quebras ruins (crops/qty-2000.png 'A mesma conta / na trilha tecnica, / na planilha / aberta e em dois / exemplos publicados.'; crops/ent-2.png 'Projetos para orientar a / execucao, orcamentos / ...'); passo 03 'Calculo' ainda corre 1200px (crops/qty-2000.png y~985); tabela Q-PAR-01 com coluna Desconto de 12 linhas (crops/qty-3000.png); 'apresentada..' com ponto duplo no primeiro cartao PNCP da home (crops/home-desk-3950.png y~938; grep 'apresentada..' = 1); link 'e-mail' de ~12px dentro do paragrafo de 17px em quantitativos (candidate-r2/quantitativos-orcamento-obras-1440x1000-fold.png y=711)."
+   },
+   {
+    "dimension": "Qualidade e honestidade da prova",
+    "before": 5,
+    "after": 7,
+    "evidence": "Carimbo unico R01 na home e em quantitativos; memoria de calculo parede a parede + descontos + 19,60 m2 (crops/qty-1000.png); elevacao R00 x R01 em compatibilizacao (candidate-r2/compatibilizacao-projetos-engenharia-1440x1000-full.png y~1240-1800); extrato numerado 01-03 nos heros de revisao e inspecao (candidate-r2/revisao-*-fold.png, inspecao-*-fold.png); copy 'deste desenho demonstrativo' honesta em toda largura.",
+    "notes": "Planta com os mesmos rotulos colidindo da r1 e com ~6-7px em 390px (crops/home-mobile-tiles.png col.1 y~690-870); ainda nao ha mini-legenda (W, WN, D, B, HS)."
+   },
+   {
+    "dimension": "Consistencia entre home e paginas internas",
+    "before": 4,
+    "after": 6,
+    "evidence": "Header, breadcrumb, eyebrow, H1, botao primario verde 8px e WhatsApp flutuante iguais nas 13 rotas (crops/montage-1280.png). Aside do hero agora alinha ao topo em revisao (candidate-r2/revisao-*-1440x1000-fold.png y=163, antes flutuava a y=385). Sonda de botoes: um so radius (8px) e min-height 44px em todas as variantes.",
+    "notes": "Ainda dois modelos de aside: 'EM 30 SEGUNDOS' (quantitativos, compatibilizacao) vs 'QUEM ASSINA E COMO FALAR AGORA' (revisao, inspecao), com blocos em ordem diferente. Dois tratamentos de borda em .button-secondary (rgb(7,26,49) na home/servicos vs rgb(197,208,217) no form-next da mesma home; sonda states.mjs). Hero de /entregas/ e /especialista/ com fundo degrade verde e H1 verde-primeiro (inverso da home), unicas rotas assim (crops/ent-1.png; montage-1280.png). 'Como o trabalho passa para ca' segue com duas hierarquias: home com regua 53px abaixo do eyebrow (probe2 ebBottom 3058 / listTop 3111) e /servicos/ com titulos de passo menores que o corpo (crops/serv-4.png). Triagem: coluna centrada de 832px a 304px da borda (probe2) e links verdes 400."
+   },
+   {
+    "dimension": "Experiencia movel e acabamento interativo",
+    "before": 5,
+    "after": 6,
+    "evidence": "Sem overflow horizontal em 320/390/768/1280/1440/1920 (manifests). Zoom 200% (720px @2x) reflui para o layout movel sem scroll lateral (states/home-zoom200.png; scrollW 720 == clientW). Anel de foco duplo visivel em links e botoes (crops/focus10.png). Sem JS: nav inline e formulario com aviso honesto (states/home-390-nojs.png, home-1440-nojs-form.png). Fonte bloqueada: fallback 'Archivo Fallback Wide' sem salto de layout perceptivel (states/home-1440-nofont.png). Logo do rodape carrega (naturalWidth 500; o vazio nas capturas full e artefato do lazy-load).",
+    "notes": "Contra: rotulos das fichas de /entregas/ quebrados no meio da palavra em 320/390 (bloqueante); menu movel aberto com dois controles de fechar (X no header + botao 'Fechar' dentro do painel) e sem escurecer a pagina atras (states/home-390-menu-open.png); hover do botao primario ganha sombra difusa esverdeada 0 10px 24px num sistema plano (crops/hover.png; sonda: rgba(45,111,45,.24)); planta ilegivel em 390px; tabela de quantitativos com celulas de uma palavra em mobile."
+   },
+   {
+    "dimension": "Facilidade de encontrar o servico e iniciar contato",
+    "before": 6,
+    "after": 7,
+    "evidence": "Home: bloco 'Nao se reconheceu em nenhuma' recuperou botao bordado 'Descrever pelo WhatsApp' + text-link 'Descrever por e-mail' (crops/home-desk-1950.png y~830). /servicos/: acao primaria por item com peso proprio ('Elaboracao de projetos ->' 1rem com regua) e secundaria menor (crops/serv-1.png y=481). Pares de CTA no hero de todas as rotas de servico (montage-1280.png). Asides de revisao/inspecao com WhatsApp, e-mail e telefone em linhas proprias.",
+    "notes": "Item 09 de /servicos/ ainda oferece botao + tres links sublinhados de mesmo peso numa linha (crops/serv-4.png y=192). Em /entregas/ o link de cada 'frente' para o servico ('Entender o trabalho de projeto') continua cinza 13px sem sublinhado (crops/ent-2.png y=567). Em /triagem-tecnica/ os canais de correcao 'Escrever por e-mail' e 'Avisar pelo WhatsApp' renderizam como texto comum (probe3: textDecoration none, cor de corpo)."
+   }
+  ],
+  "must_fix": [
+   {
+    "route": "/entregas/ (320-620px)",
+    "location": "dl.vitrine-item__facts dt nas oito fichas de oferta com preco publicado (R$ 599 a R$ 1.450); entregas/styles.css:148 (.vitrine-item__facts>div{grid-template-columns:78px minmax(0,1fr)}) e entregas/styles.css:228 (dt{overflow-wrap:anywhere})",
+    "evidence": "review-r2/crops/entregas-mob-dt-2x.png (390px): 'INFORMACO / ES / NECESSARIA / S'; review-r2/crops/ent320-4600.png (320px): 'O QUE VOCE PODE INSPECIONA / R' e 'INFORMACO / ES / NECESSARIA / S'. A sobreposicao da r1 foi trocada por quebra no meio da palavra.",
+    "consequence": "Os rotulos das condicoes materiais das ofertas com preco publicado ficam ilegiveis no viewport movel principal; e o mesmo bloqueio da rodada 1 (gate de precos truthful e legiveis) com outra forma.",
+    "fix": "Em <=620px trocar `.vitrine-item__facts>div{grid-template-columns:78px minmax(0,1fr)}` por `grid-template-columns:1fr` (dt em cima do dd, dt com margin-bottom 2px) OU coluna `minmax(118px,auto)`; remover `overflow-wrap:anywhere` do dt (usar `overflow-wrap:normal;hyphens:manual`). Recapturar entregas em 320 e 390 e conferir 'INFORMACOES NECESSARIAS', 'O QUE VOCE PODE INSPECIONAR' e 'QUANDO A CONTAGEM COMECA' inteiros."
+   },
+   {
+    "route": "/problemas-que-resolvemos/ (todas as larguras)",
+    "location": "section.lead-inline (faixa navy 'Mais de um evento aberto') seguida de h2.hub-section-title 'Onde voce esta no ciclo do contrato?'",
+    "evidence": "Sonda review-r2-probe3: prevBottom == h2Top == 728.9px, gap 0, margin-top 0, font-size 34.4px. Visivel em candidate-r2/problemas-que-resolvemos-1440x1000-fold.png y=728-748, extra/problemas-que-resolvemos-1920x1080-fold.png, extra/problemas-que-resolvemos-768x1024-fold.png e crops/montage-390.png (col.1, linha 2). Rota-especifica: em /servicos-obras-publicas/ a mesma .lead-inline nao tem irmao seguinte e o proximo bloco 'Em que ponto do contrato voce esta?' abre com folga normal.",
+    "consequence": "Em rota indexavel do vertical B2G, o titulo da secao principal encosta na borda da faixa escura e se le como legenda do cartao, com ritmo de CSS quebrado; contrasta com o espacamento de secao de todas as outras rotas.",
+    "fix": "Dar `margin-top: var(--space-section, 64px)` (ou o mesmo padding-top usado entre secoes em /servicos-obras-publicas/) a `.lead-inline + .hub-section-title`, ou envolver o ciclo do contrato numa `section` com o padding padrao. Recapturar 390/1280/1440."
+   }
+  ],
+  "should_fix": [
+   {
+    "route": "todas (home, quantitativos, compatibilizacao, entregas, triagem)",
+    "location": "links inline dentro de p/li/dd sem sublinhado e triagem em verde 400",
+    "evidence": "review-r2-probe3: home 'ver as entregas e os precos' (p.market-context-base, sem sublinhado); quantitativos 'exemplo demonstrativo do recorte', quantitativos.csv/orcamento.csv/coordenacao.csv/revisao.csv (cinza rgb(93,106,122) sem sublinhado); entregas 'Entender o trabalho de projeto', 'Ver quantitativos e orcamento de obras' etc. (cinza rgb(67,83,105) 13px sem sublinhado); triagem 'Escrever por e-mail', 'Avisar pelo WhatsApp' (cor de corpo, sem sublinhado) e os seis 'Falar sobre ...' em rgb(45,111,45) peso 400 enquanto o site usa ink 700 sublinhado.",
+    "consequence": "A parte 'unificar o estilo de link inline' do must_fix 2 da r1 ficou aberta; fora da dobra o visitante ainda encontra links que parecem prosa, inclusive os unicos caminhos de cada 'frente' de /entregas/ para o servico.",
+    "fix": "Uma regra global `main :is(p,li,dd) a:not(.button):not([class*=action]){color:var(--ink);text-decoration:underline;text-underline-offset:.2em;text-decoration-thickness:1px;font-weight:700}` e remover as sobrescritas verdes de triagem e cinzas de qty-proof-files/entregas."
+   },
+   {
+    "route": "/ (home) e /quantitativos-orcamento-obras/",
+    "location": "svg da planta RM-01: rotulo 'W-04 · oeste · 1,80' rotacionado sobre a hachura; rect HS-01 cortando a parede oeste; 'W-02'/'WN-01' verdes sobre o simbolo da janela; sem mini-legenda; rotulos ~6-7px em 390px",
+    "evidence": "candidate-r2/home-1440x1000-fold.png x=905-930 y=350-450; review-r2/crops/qty-1000.png; crops/home-mobile-tiles.png col.1 y~690-870. Identico a r1 (should_fix nao acionado).",
+    "consequence": "A prova que virou ancora visual da home e a unica figura que um engenheiro confere no primeiro olhar mantem colisoes que ele nota e rotulos que um leigo nao le no celular.",
+    "fix": "Deslocar W-04 para fora da parede (como W-03/W-01), fechar a parede atras de HS-01 ou desenhar o poco como recorte, tirar W-02/WN-01 da faixa da janela, adicionar mini-legenda (W parede, WN janela, D porta, B viga, HS poco) e, em <600px, font-size >=11px ou ocultar rotulos secundarios."
+   },
+   {
+    "route": "/quantitativos-orcamento-obras/, /entregas/, /problemas-que-resolvemos/ (1920)",
+    "location": "h2 de secao em coluna de ~470px sem text-wrap:balance e sem max-width em ch; h1 de problemas/obras publicas com max-width 492px",
+    "evidence": "crops/qty-2000.png: 'A mesma conta / na trilha tecnica, / na planilha / aberta e em dois / exemplos publicados.' (5 linhas, 'na planilha' isolada); crops/ent-2.png: 'Projetos para orientar a / execucao, orcamentos / para contratar com / criterio e analises para / decidir com respaldo.' (5 linhas); extra/problemas-que-resolvemos-1920x1080-fold.png: H1 em 5 linhas. probe2: text-wrap:balance so no h1 (max-width 544px na home/servicos, 492px em problemas/obras).",
+    "consequence": "Titulos de secao com ritmo pior que o corpo e palavras isoladas; o defeito e sistemico (medida do h2), nao pontual.",
+    "fix": "`.section-head h2, .hub-section-title{text-wrap:balance;max-width:20ch}` e revisar o max-width do h1 em problemas/obras publicas para 22ch; encurtar o H2 de quantitativos ('A mesma conta na trilha, na planilha e em dois exemplos')."
+   },
+   {
+    "route": "/quantitativos-orcamento-obras/, /compatibilizacao-projetos-engenharia/, /revisao-tecnica-projetos-engenharia/, /inspecao-diagnostico-edificacoes/",
+    "location": "aside do hero: 'EM 30 SEGUNDOS' (Escopo / O que voce recebe / O que confirmamos / Quem assina) vs 'QUEM ASSINA E COMO FALAR AGORA' (Quem assina / canais / condicoes)",
+    "evidence": "candidate-r2/quantitativos-*-1440x1000-fold.png e compatibilizacao-*-fold.png vs revisao-*-fold.png e inspecao-*-fold.png. Melhorou de tres para dois modelos e o cartao de revisao alinhou ao topo.",
+    "consequence": "Paginas irmas que o visitante compara em sequencia trocam titulo, ordem dos blocos e posicao dos canais de contato.",
+    "fix": "Um componente: titulo fixo, ordem Para quem / O que fazemos / Condicoes / Quem assina / Falar agora (canais em linhas proprias), align-self:start."
+   },
+   {
+    "route": "/entregas/ (desktop e mobile)",
+    "location": "secao 'Cinco frentes' (cards 'Projetos, revisao e compatibilizacao' etc.), summary 'Esquema ilustrativo da entrega.' e link 'Entender o trabalho de projeto'",
+    "evidence": "crops/ent-2.png: titulo colado na borda superior do card, corpo 13px correndo 1160px, summary em corte expandido/pesado, link cinza 13px sem affordance; crops/entregas-mob-a.png col.2 idem em 390. Inalterado desde a r1 (pre-existente).",
+    "consequence": "Bloco central da pagina de entregas segue fora do sistema novo; o caminho de cada frente para o servico e invisivel.",
+    "fix": "Aplicar list-ruled: numero, eyebrow, titulo 1.15rem, medida <=70ch, summary como text-link com seta, link de destino como .list-ruled__action; remover font-stretch do <strong> em summary."
+   },
+   {
+    "route": "/servicos/",
+    "location": "item 09 (faixa navy): .button-secondary 'Ver obras publicas' + tres links sublinhados na mesma linha; bloco 'Como o trabalho passa para ca' com titulos de passo menores que o corpo; metade direita do hero vazia",
+    "evidence": "crops/serv-4.png y=192 (quatro acoes numa linha) e y=689-980 (titulo '01 Voce descreve a situacao.' ~15px sobre corpo 17px); candidate-r2/servicos-1440x1000-fold.png e extra/servicos-1920x1080-fold.png (hero 50% vazio).",
+    "consequence": "No item de obras publicas o visitante escolhe entre quatro destinos equivalentes; o componente de passos tem hierarquia invertida so nesta rota; a pagina-hub abre com metade da dobra em branco.",
+    "fix": "Item 09: so o botao na linha e os tres links numa linha menor abaixo (.875rem). Passos: titulo 1.05rem/720 e corpo .95rem, igual a home. Hero: ocupar a coluna direita com o aside 'Em 30 segundos' ou com o mini-indice das nove situacoes."
+   },
+   {
+    "route": "/ (home) 390px e todas as rotas em mobile",
+    "location": "menu movel aberto (.mobile-nav): botao 'Fechar' dentro do painel + X no header; sem backdrop",
+    "evidence": "review-r2/states/home-390-menu-open.png: dois controles de fechar a 60px um do outro; conteudo da pagina visivel e nao escurecido abaixo do painel.",
+    "consequence": "Redundancia de affordance e painel que parece flutuar solto sobre a pagina; acabamento inferior ao restante do sistema.",
+    "fix": "Manter so o X do header (aria-expanded) e dar ao painel fundo de pagina inteira ou um backdrop rgba(7,26,49,.4); ou, se o 'Fechar' e exigido por acessibilidade sem JS, esconde-lo quando JS estiver ativo."
+   },
+   {
+    "route": "/ (home)",
+    "location": "bloco 'Especialidade em obras publicas': coluna direita de estatisticas termina a ~y=3900 enquanto a esquerda segue ate ~y=4380; cartoes 'Contratos reais' com borda e raio de card; 'apresentada..' no primeiro cartao; icone 'Atendimento' no bloco de contato",
+    "evidence": "crops/home-desk-3950.png: ~400px de vazio a direita abaixo de 'PNCP · 01/08/2026'; y~938 'medicao e apresentada..'; crops/home-desk-5950.png: icone de local a y=133 centrado no bloco de tres linhas enquanto os icones de WhatsApp/E-mail alinham ao rotulo (y=24/86).",
+    "consequence": "Vazio assimetrico no meio da home em 1280-1920, um ponto duplo na prova de mercado e um icone desalinhado no bloco de contato.",
+    "fix": "Levar as tres estatisticas para uma linha horizontal acima do texto (ou incluir 'Leitura correta'/'Fonte e corte' como notas do texto); corrigir 'apresentada.'; `align-self:start` no icone de Atendimento."
+   },
+   {
+    "route": "/triagem-tecnica/",
+    "location": ".triage-shell (coluna centrada de 832px a 304px da borda) e canais de correcao",
+    "evidence": "probe2: width 832, left 304, max-width none; crops/triagem-tiles.png: coluna centrada com cards de borda cinza e links verdes; 'Escrever por e-mail' / 'Avisar pelo WhatsApp' como texto simples.",
+    "consequence": "Rota de contato (destino de 'Ou pela triagem tecnica') com grid, cor de link e peso diferentes de todas as outras.",
+    "fix": "Alinhar ao container de 1200px/120px (ou declarar layout de artigo com max-width 72ch alinhado a esquerda), links ink sublinhados, botao secundario para 'Avisar pelo WhatsApp'."
+   },
+   {
+    "route": "/entregas/ e /especialista/tiago-jun-sasaki/",
+    "location": "hero com fundo degrade verde e H1 verde-primeiro (entregas); .button-secondary com borda rgb(197,208,217) no form-next da home; sombra de hover do botao primario",
+    "evidence": "crops/ent-1.png e crops/montage-1280.png (unicas rotas com degrade); sonda states.mjs: 'button button-secondary button-lg form-next|...|rgb(197, 208, 217)' vs 'button button-secondary|...|rgb(7, 26, 49)'; crops/hover.png e sonda: box-shadow rgba(45,111,45,.24) 0 10px 24px no hover.",
+    "consequence": "Tres residuos do sistema anterior (degrade, borda cinza, sombra) num candidato que se define como plano e ink/verde.",
+    "fix": "Fundo branco e H1 ink-primeiro/verde-segundo em entregas (como a home); uma so borda ink em .button-secondary; hover do primario sem sombra (so mudanca de cor)."
+   },
+   {
+    "route": "/quantitativos-orcamento-obras/",
+    "location": "passo 03 'Calculo' e tabela 'A planilha de quantitativos do recorte' (linha Q-PAR-01); link 'e-mail' do hero",
+    "evidence": "crops/qty-2000.png y~985 linha de formula em 1200px; crops/qty-3000.png coluna Desconto com 12 linhas em ~110px; candidate-r2/quantitativos-*-1440x1000-fold.png y=711 'e-mail' ~12px.",
+    "consequence": "A prova mais forte do site cansa de ler no passo de calculo e vira bloco vertical na tabela; o link de e-mail parece nota de rodape.",
+    "fix": "Medida <=72ch no passo 03 (uma equacao por linha); min-width 260px em Formula/Desconto ou criterio longo em nota abaixo; link 'e-mail' em font-size inherit."
+   },
+   {
+    "route": "/servicos-obras-publicas/ e /problemas-que-resolvemos/ (>=1280px)",
+    "location": "lista 'Em que ponto do contrato voce esta?' / 'Onde voce esta no ciclo do contrato?' (li.problem-theme, a.problem-theme-link) em coluna de ~500px a esquerda",
+    "evidence": "crops/b2g-tiles.png colunas 1-2 e crops/problemas-desk-tiles.png colunas 1-2: metade direita vazia por ~3500px em obras publicas e ~1400px em problemas; titulos como links sublinhados sem seta nem eyebrow. Pre-existente (crops/b2g-prod-tiles.png).",
+    "consequence": "A maior parte da rolagem do vertical B2G protegido e um bloco de meia pagina com hierarquia diferente do list-ruled do resto do site.",
+    "fix": "Aplicar list-ruled em duas colunas (fase a esquerda, itens a direita) ou grade de duas colunas de itens; acao com seta e eyebrow de fase, mantendo as URLs."
+   }
+  ],
+  "strengths": [
+   "Os tres defeitos mais visiveis da rodada 1 fecharam limpos e com evidencia em quatro larguras: hero B2G empilhado (eyebrow > H1 > lead), carimbo R01 unico na planta e link de confianca da dobra sublinhado com anel de foco.",
+   "Robustez de estado acima da media: sem overflow em 320/390/768/1280/1440/1920, zoom 200% refluindo para o layout movel, fallback de fonte com metricas compativeis, nav e formulario utilizaveis sem JS, anel de foco duplo em links e botoes.",
+   "Home recuperou o caminho NEEDS_CONTEXT com botao bordado 'Descrever pelo WhatsApp' + 'Descrever por e-mail' em vez de links inline de 14px.",
+   "/servicos/ ganhou uma acao primaria visual por item ('Elaboracao de projetos ->' com regua) e a secundaria em peso menor; 'Contrpiso' corrigido.",
+   "Asides de revisao e inspecao agora alinham ao topo e trazem WhatsApp, e-mail e telefone em linhas proprias; o cartao flutuante de revisao sumiu.",
+   "Um so raio (8px), uma so altura minima (44px) e uma so cor de primario em todos os botoes das 13 rotas; header, breadcrumb e WhatsApp flutuante identicos em todas.",
+   "Memoria de calculo + planta + planilha aberta em quantitativos e elevacao R00 x R01 em compatibilizacao continuam sendo os melhores blocos de prova do site, agora sem a contradicao de revisao."
+  ],
+  "not_measured": [
+   "Hover dos botoes secundarios, dos botoes em faixa navy e dos text-links (so o .button-primary da home foi sondado).",
+   "prefers-reduced-motion: emulado na captura de zoom, mas sem comparacao com animacoes ligadas; nao ha evidencia de que existam animacoes a reduzir.",
+   "Capturas em 320/768/1920 so para home, servicos, obras publicas, problemas, entregas e quantitativos; conteudos, especialista, triagem, revisao, inspecao e compatibilizacao so em 390/1280/1440.",
+   "Fonte bloqueada e imagens ausentes verificadas so na home (e imagens em especialista); JS desativado so na home.",
+   "Razoes numericas de contraste (WCAG) das cores cinza usadas em legendas e links secundarios.",
+   "Estados de erro, validacao e envio do formulario de duas etapas; receipt real.",
+   "Renderizacao em Safari/Firefox e em dispositivo real; capturas sao Chromium headless com deviceScaleFactor 1 (2 no zoom).",
+   "Producao para /problemas-que-resolvemos/, /revisao/, /inspecao/ e /especialista/ nao consta em baseline-prod; o 'antes' dessas rotas foi inferido das rotas irmas."
+  ]
+ }
+]
