@@ -178,12 +178,11 @@
     {
       "route": "/reequilibrio-obras-publicas/",
       "surface_class": "money_offer",
-      "evidence_state": "MEASURED_FAIL",
+      "evidence_state": "MEASURED_PASS",
       "measurement": {
         "date": "2026-09-16",
         "viewport": "1366x768",
-        "finding": "H1 de y=203 a y=304 em 1366x768",
-        "blocker": "EXECUTE_NOW 2026-09-09: corrigir e medir; o congelamento editorial não autoriza manter uma falha pública"
+        "finding": "H1 de y=203 a y=304; linha de prova de y=387 a y=416; ação primária inteira de y=436 a y=480 em 1366x768, e de y=486 a y=546 em 390x844, dentro da dobra nos dois"
       }
     },
     {
@@ -448,7 +447,7 @@
         {
           "route": "/reequilibrio-obras-publicas/",
           "primary_actions_in_fold": {
-            "1366x768": 2,
+            "1366x768": 1,
             "390x844": 1
           }
         },

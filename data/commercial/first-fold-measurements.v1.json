@@ -1,9 +1,9 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-09-16T14:56:38.078Z",
+  "measured_at": "2026-09-16T15:05:29.438Z",
   "measured_on": "2026-09-16",
-  "commit_sha": "c5631cfdd229f7a6687f714ad1f35c993cde21f3",
+  "commit_sha": "a5df6ee5b034fdc45efe59827d235bcea09c82cb",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "f168038814087e1b365d1de3042af9a3f3364743756e104711fecc0fb9fe7477",
@@ -47,7 +47,7 @@
     "index.html": "169749782db9af08f865c2e5a3a8994c94053640c1b3c306411e4f93ac8a25ad",
     "medicoes-glosas-obras-publicas/index.html": "53bb71bb3edaeae8a325e29d266020a89f5cff72c1be0486c07b19a276a8d3e1",
     "problemas-que-resolvemos/index.html": "b0d2f95d54e5248364e5a841bb5cbbf1215de6ff16b0b6551ba26e4f64b458a2",
-    "reequilibrio-obras-publicas/index.html": "250203bba32af6824eaee71e32a0a80f9f35816351882f1f65c680398e8dc572",
+    "reequilibrio-obras-publicas/index.html": "83485c51f1e86bdac9875e8a437ac2bceac8b83a665d874c5fafcce650205704",
     "script.js": "13adf8929c4d73f93a3f1a82cd6e39699df37c03478b55b061e2693576a913cb",
     "servicos-obras-publicas/index.html": "ecf1aaca84269aa845614106e65fc0dd1311b893c0400b36f165bb72759016fc",
     "styles-hubs.css": "ed4668833ad8de5cef5acc5fc1e8f21e519870f0bf282247c3b4a9644a094592",
@@ -2623,7 +2623,7 @@
     },
     {
       "route": "/reequilibrio-obras-publicas/",
-      "html_sha256": "250203bba32af6824eaee71e32a0a80f9f35816351882f1f65c680398e8dc572",
+      "html_sha256": "83485c51f1e86bdac9875e8a437ac2bceac8b83a665d874c5fafcce650205704",
       "measured_on": "2026-09-16",
       "viewports": {
         "1366x768": {
@@ -2700,18 +2700,6 @@
                 "left": 83,
                 "right": 568,
                 "width": 485,
-                "height": 44
-              }
-            },
-            {
-              "text": "Verificar o contrato no diagnóstico de defesa de margem",
-              "href": "/ferramentas/diagnostico-defesa-margem/",
-              "box": {
-                "top": 672,
-                "bottom": 716,
-                "left": 883,
-                "right": 1336,
-                "width": 453,
                 "height": 44
               }
             }
