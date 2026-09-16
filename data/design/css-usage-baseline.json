@@ -36,7 +36,7 @@
   "unreferenced_css_files": [],
   "bundles": {
     "styles.css": {
-      "bytes": 110530,
+      "bytes": 111460,
       "class_selectors": 372,
       "used": 371,
       "unused": [
@@ -44,7 +44,7 @@
       ]
     },
     "entregas/styles.css": {
-      "bytes": 19233,
+      "bytes": 19142,
       "class_selectors": 49,
       "used": 49,
       "unused": []
@@ -128,7 +128,7 @@
     },
     "css/components.css": {
       "border_radius": 9,
-      "box_shadow": 1,
+      "box_shadow": 2,
       "gradient": 0
     },
     "css/contracts.css": {
@@ -149,7 +149,7 @@
     "entregas/styles.css": {
       "border_radius": 9,
       "box_shadow": 3,
-      "gradient": 4
+      "gradient": 2
     },
     "ferramentas/diagnostico-defesa-margem/styles.css": {
       "border_radius": 0,
@@ -193,7 +193,7 @@
     },
     "styles.css": {
       "border_radius": 93,
-      "box_shadow": 41,
+      "box_shadow": 40,
       "gradient": 32
     },
     "triagem-tecnica/styles.css": {
@@ -205,6 +205,6 @@
   "decoration_totals": {
     "border_radius": 151,
     "box_shadow": 62,
-    "gradient": 48
+    "gradient": 46
   }
 }
