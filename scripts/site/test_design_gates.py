@@ -625,10 +625,16 @@ def test_mobile_matrix_composition():
     assert 'class="situation-list"' in html
     assert '<li class="situation-row' in html
     assert ".situation-list{" in home_css and ".situation-row{" in home_css
-    # Narrow viewports recompose rows without hiding any of the five paths.
-    assert "@media (max-width:700px)" in home_css
-    assert ".situation-row{grid-template-columns:2rem minmax(0,1fr)" in home_css
-    assert ".situation-row .situation-action{grid-column:2" in home_css
+    # Narrow viewports recompose rows without hiding any of the paths.
+    # 2026-09-17 (salto institucional): the index became a grid of areas (three
+    # columns on wide screens, one on phones); the old assertion pinned the
+    # 2rem index column of the ruled list, which was the drawing, not the
+    # intent. What matters: a narrow breakpoint exists, it collapses the list
+    # to one column, and no rule hides a situation row.
+    narrow_blocks = re.findall(r"@media \(max-width:(?:699|700)px\)\{(?:[^{}]*\{[^}]*\})+\}", home_css)
+    assert narrow_blocks, "narrow breakpoint for the situation index is missing"
+    assert any(".situation-list{grid-template-columns:minmax(0,1fr)}" in b for b in narrow_blocks)
+    assert not re.search(r"\.situation-row[^{]*\{[^}]*display:none", home_css)
 
 
 def test_css_modules_are_concatenated_without_a_framework():

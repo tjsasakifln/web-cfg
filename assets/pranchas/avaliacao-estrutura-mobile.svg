@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 420" role="img" aria-labelledby="avaliacao-estrutura-mobile-title avaliacao-estrutura-mobile-desc" font-family="Archivo Var, Arial, Helvetica, sans-serif" fill="#071a31">
+<title id="avaliacao-estrutura-mobile-title">Prancha P4 (móvel) · Estrutura da análise de avaliação · exemplo demonstrativo</title>
+<desc id="avaliacao-estrutura-mobile-desc">Fluxo de cima para baixo em cinco etapas: Objeto → Finalidade e data → Método → Dados e fontes → Conclusão delimitada. Método comparativo ou evolutivo, conforme o caso. Sem valor monetário. Exemplo demonstrativo, sem obra de cliente. Procedência: data/demonstrative/plates/avaliacao-estrutura.v1.json.</desc>
+<rect x="0" y="0" width="360" height="420" fill="#ffffff"/>
+<rect x="8" y="8" width="344" height="404" fill="#ffffff" stroke="#dfe4e6"/>
+<text x="28" y="40" font-size="16" font-weight="650">Estrutura da análise de avaliação</text>
+<rect x="24" y="52" width="276" height="42" fill="#ffffff" stroke="#071a31" stroke-width="1.2"/>
+<text x="36" y="69" font-size="12.5" font-weight="650">AV-01 · Objeto</text>
+<text x="36" y="86" font-size="12.5" fill="#5d6a7a">O que está sendo avaliado</text>
+<g stroke="#5d6a7a" stroke-width="0.6" fill="none"><line x1="162" y1="96" x2="162" y2="106"/><path d="M158 100L162 106L166 100"/></g>
+<rect x="24" y="108" width="276" height="42" fill="#ffffff" stroke="#071a31" stroke-width="1.2"/>
+<text x="36" y="125" font-size="12.5" font-weight="650">AV-02 · Finalidade e data</text>
+<text x="36" y="142" font-size="12.5" fill="#5d6a7a">Para que serve e quando vale</text>
+<g stroke="#5d6a7a" stroke-width="0.6" fill="none"><line x1="162" y1="152" x2="162" y2="162"/><path d="M158 156L162 162L166 156"/></g>
+<rect x="24" y="164" width="276" height="42" fill="#ffffff" stroke="#071a31" stroke-width="1.2"/>
+<text x="36" y="181" font-size="12.5" font-weight="650">AV-03 · Método</text>
+<text x="36" y="198" font-size="12.5" fill="#5d6a7a">Comparativo ou evolutivo</text>
+<g stroke="#5d6a7a" stroke-width="0.6" fill="none"><line x1="162" y1="208" x2="162" y2="218"/><path d="M158 212L162 218L166 212"/></g>
+<g transform="translate(314 185)"><circle r="11" fill="#071a31"/><text y="4.5" text-anchor="middle" font-size="12.5" font-weight="700" fill="#ffffff">1</text></g>
+<rect x="24" y="220" width="276" height="42" fill="#ffffff" stroke="#071a31" stroke-width="1.2"/>
+<text x="36" y="237" font-size="12.5" font-weight="650">AV-04 · Dados e fontes</text>
+<text x="36" y="254" font-size="12.5" fill="#5d6a7a">Amostra, documentos, vistoria</text>
+<g stroke="#5d6a7a" stroke-width="0.6" fill="none"><line x1="162" y1="264" x2="162" y2="274"/><path d="M158 268L162 274L166 268"/></g>
+<rect x="24" y="276" width="276" height="42" fill="#ffffff" stroke="#2d6f2d" stroke-width="2"/>
+<text x="36" y="293" font-size="12.5" fill="#2d6f2d" font-weight="650">AV-05 · Conclusão delimitada</text>
+<text x="36" y="310" font-size="12.5" fill="#5d6a7a">Limites, data e ressalvas</text>
+<g transform="translate(314 297)"><circle r="11" fill="#071a31"/><text y="4.5" text-anchor="middle" font-size="12.5" font-weight="700" fill="#ffffff">2</text></g>
+<text x="20" y="340" font-size="12.5" fill="#5d6a7a">1 método escolhido pelo caso</text>
+<text x="20" y="356" font-size="12.5" fill="#5d6a7a">2 conclusão com limites declarados</text>
+<g id="avaliacao-estrutura-m-carimbo"><rect x="8" y="384" width="344" height="28" fill="#ffffff" stroke="#dfe4e6"/><line x1="72" y1="384" x2="72" y2="412" stroke="#dfe4e6"/><line x1="192" y1="384" x2="192" y2="412" stroke="#dfe4e6"/><text x="16" y="395" font-size="12.5" fill="#5d6a7a">P4-M</text><text x="16" y="408" font-size="12.5" fill="#5d6a7a">rev. R00</text><text x="80" y="395" font-size="12.5" fill="#5d6a7a">Sem escala</text><text x="80" y="408" font-size="12.5" fill="#5d6a7a">diagrama</text><text x="200" y="395" font-size="12.5" fill="#5d6a7a">Exemplo demonstrativo</text><text x="200" y="408" font-size="12.5" fill="#5d6a7a">sem obra de cliente</text></g>
+</svg>

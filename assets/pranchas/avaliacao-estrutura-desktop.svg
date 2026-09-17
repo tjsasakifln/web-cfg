@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 460" role="img" aria-labelledby="avaliacao-estrutura-desktop-title avaliacao-estrutura-desktop-desc" font-family="Archivo Var, Arial, Helvetica, sans-serif" fill="#071a31">
+<title id="avaliacao-estrutura-desktop-title">Prancha P4 · Estrutura da análise de avaliação · exemplo demonstrativo</title>
+<desc id="avaliacao-estrutura-desktop-desc">Diagrama de fluxo em cinco etapas: Objeto → Finalidade e data → Método → Dados e fontes → Conclusão delimitada. Método comparativo ou evolutivo, conforme o caso. Sem valor monetário. Parecer preliminar não substitui a avaliação formal. Exemplo demonstrativo, sem obra de cliente. Procedência: data/demonstrative/plates/avaliacao-estrutura.v1.json.</desc>
+<rect x="0" y="0" width="1200" height="460" fill="#ffffff"/>
+<rect x="8" y="8" width="1184" height="444" fill="#ffffff" stroke="#dfe4e6"/>
+<text x="28" y="40" font-size="16" font-weight="650">Estrutura da análise de avaliação: do objeto à conclusão delimitada</text>
+<text x="1172" y="40" font-size="11" fill="#5d6a7a" text-anchor="end">Dados demonstrativos · revisão R00</text>
+<text x="28" y="72" font-size="12" font-weight="650">Cinco etapas encadeadas · cada uma delimita a seguinte · sem valor monetário nesta prancha</text>
+<rect x="46" y="112" width="196" height="140" fill="#ffffff" stroke="#071a31" stroke-width="1.2"/>
+<text x="60" y="134" font-size="11" fill="#5d6a7a">AV-01</text>
+<text x="60" y="156" font-size="12" font-weight="650">Objeto</text>
+<text x="60" y="180" font-size="11">Imóvel ou bem identificado:</text>
+<text x="60" y="196" font-size="11">localização, área, uso e</text>
+<text x="60" y="212" font-size="11">estado de conservação.</text>
+<g stroke="#5d6a7a" stroke-width="0.6" fill="none"><line x1="246" y1="182" x2="270" y2="182"/><path d="M264 178L270 182L264 186"/></g>
+<rect x="274" y="112" width="196" height="140" fill="#ffffff" stroke="#071a31" stroke-width="1.2"/>
+<text x="288" y="134" font-size="11" fill="#5d6a7a">AV-02</text>
+<text x="288" y="156" font-size="12" font-weight="650">Finalidade e data</text>
+<text x="288" y="180" font-size="11">Para que serve a análise e</text>
+<text x="288" y="196" font-size="11">a data de referência.</text>
+<text x="288" y="212" font-size="11">Outra finalidade, outra leitura.</text>
+<g stroke="#5d6a7a" stroke-width="0.6" fill="none"><line x1="474" y1="182" x2="498" y2="182"/><path d="M492 178L498 182L492 186"/></g>
+<g transform="translate(468 114)"><circle r="11" fill="#071a31"/><text y="4" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">1</text></g>
+<rect x="502" y="112" width="196" height="140" fill="#ffffff" stroke="#071a31" stroke-width="1.2"/>
+<text x="516" y="134" font-size="11" fill="#5d6a7a">AV-03</text>
+<text x="516" y="156" font-size="12" font-weight="650">Método</text>
+<text x="516" y="180" font-size="11">Método comparativo ou</text>
+<text x="516" y="196" font-size="11">evolutivo, conforme o caso,</text>
+<text x="516" y="212" font-size="11">com premissas declaradas.</text>
+<g stroke="#5d6a7a" stroke-width="0.6" fill="none"><line x1="702" y1="182" x2="726" y2="182"/><path d="M720 178L726 182L720 186"/></g>
+<g transform="translate(696 114)"><circle r="11" fill="#071a31"/><text y="4" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">2</text></g>
+<rect x="730" y="112" width="196" height="140" fill="#ffffff" stroke="#071a31" stroke-width="1.2"/>
+<text x="744" y="134" font-size="11" fill="#5d6a7a">AV-04</text>
+<text x="744" y="156" font-size="12" font-weight="650">Dados e fontes</text>
+<text x="744" y="180" font-size="11">Amostra de mercado ou custos,</text>
+<text x="744" y="196" font-size="11">documentos e vistoria; cada</text>
+<text x="744" y="212" font-size="11">fonte citada e datada.</text>
+<g stroke="#5d6a7a" stroke-width="0.6" fill="none"><line x1="930" y1="182" x2="954" y2="182"/><path d="M948 178L954 182L948 186"/></g>
+<rect x="958" y="112" width="196" height="140" fill="#ffffff" stroke="#2d6f2d" stroke-width="2"/>
+<text x="972" y="134" font-size="11" fill="#5d6a7a">AV-05</text>
+<text x="972" y="156" font-size="12" fill="#2d6f2d" font-weight="650">Conclusão delimitada</text>
+<text x="972" y="180" font-size="11">Valor de referência com limites</text>
+<text x="972" y="196" font-size="11">de uso, data e ressalvas.</text>
+<text x="972" y="212" font-size="11">Parecer preliminar não substitui</text>
+<text x="972" y="228" font-size="11">a avaliação formal.</text>
+<g transform="translate(1152 114)"><circle r="11" fill="#071a31"/><text y="4" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">3</text></g>
+<text x="46" y="288" font-size="11" fill="#5d6a7a">Percurso da análise: o objeto define o que se avalia; finalidade e data definem para quê e quando; o método e os dados sustentam a conclusão, que sai com os próprios limites.</text>
+<text x="46" y="326" font-size="12" font-weight="650">Chamadas</text><text x="46" y="344" font-size="11"><tspan font-weight="700">1</tspan><tspan x="62">A finalidade e a data de referência delimitam a resposta.</tspan></text><text x="46" y="362" font-size="11"><tspan font-weight="700">2</tspan><tspan x="62">O método é escolhido pelo caso; a premissa fica escrita.</tspan></text><text x="46" y="380" font-size="11"><tspan font-weight="700">3</tspan><tspan x="62">A conclusão sai com os próprios limites; parecer preliminar não substitui a avaliação formal.</tspan></text>
+<g id="avaliacao-estrutura-d-carimbo"><rect x="8" y="424" width="1184" height="28" fill="#ffffff" stroke="#dfe4e6"/><line x1="402.7" y1="424" x2="402.7" y2="452" stroke="#dfe4e6"/><line x1="797.3" y1="424" x2="797.3" y2="452" stroke="#dfe4e6"/><text x="16" y="442" font-size="11" fill="#5d6a7a">P4 · avaliacao-estrutura · rev. R00</text><text x="410.7" y="442" font-size="11" fill="#5d6a7a">Sem escala · diagrama de estrutura</text><text x="805.3" y="442" font-size="11" fill="#5d6a7a">Exemplo demonstrativo · sem obra de cliente</text></g>
+</svg>
