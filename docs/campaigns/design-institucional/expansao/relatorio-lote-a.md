@@ -219,7 +219,7 @@ sem prazo). Todas as páginas passaram a carregar `assets/editorial.css` depois 
 | `npm run test:first-fold-contract` (suíte da revisão) | `first-fold-contract: 3 check(s) failed` (1929/1932; idêntico no commit base; pedido 7) |
 | `npm run build:site` + `npm run test:html-integrity:site` (clone limpo de c312cf4e8, Node 22) | build exit 0; `CACHE_CONTRACT_OK fallback_max_age=3600 immutable_assets=3 …` |
 | `node scripts/site/test_ui_geometry.mjs` (clone limpo de c312cf4e8, `_site` construído, `CHROME_PATH` do Chromium local) | `All UI geometry tests passed` |
-| `npm run test:contact-journeys` (clone limpo, entrega anterior) | não repetido nesta rodada; a única falha da entrega anterior (`journey_harness_runtime`, etapa do formulário da home) é do integrador e idêntica no commit base (pedido 8) |
+| `npm run test:contact-journeys` (clone limpo de c312cf4e8, `_site` construído, `CHROME_PATH`) | `CONTACT_JOURNEYS_FAIL [{"name":"journey_harness_runtime"…"home form step transition did not activate"…}]`: 447 verificações, 446 passam; a única falha é a etapa do formulário da home (integrador, idêntica no commit base, pedido 8). As 14 jornadas rodaram; as quatro que terminam em rotas do lote A (`condominio_anomalia` e `pequena_reforma` → inspeção, `pericia_assistencia` → assistência, `seguranca_trabalho` → SST) somam 104 verificações de rota + 16 na home, todas OK, inclusive com o link da triagem movido para `p.contact-note` (`build/reports/contact-journeys/report.json`). |
 
 ## Testes ajustados (estética, rota exata)
 
@@ -253,10 +253,12 @@ Nenhum teste de veracidade, preço, responsabilidade, privacidade, formulário o
   inventário `archetype-gate-rollout.json` a partir das anotações): em `/projetos-complementares-engenharia/`
   o `analysis_abstract` (`#resposta-em-cinco-pontos`) foi dissolvido, e os cinco ids
   (`situacao-atendida`, `entrega`, `amostra-disponivel`, `limites-materiais`, `pedido-proposta`) passaram
-  para a abertura, a seção da amostra, "O que pedir", as condições e o bloco escuro; em
-  `/inspecao-diagnostico-edificacoes/` o `compare_ladder` (inspeção/diagnóstico/reparo/perícia) passou a
-  ser um `div.delivery` dentro da seção `journey_paths` "Situações". Os demais arquétipos foram levados
-  para a seção que descreve a mesma função; `contextual_next_action` e `evidence_record` entraram como no piloto.
+  para a abertura, a seção da amostra, "O que pedir", as condições e o bloco escuro. Em
+  `/inspecao-diagnostico-edificacoes/` o `compare_ladder` (inspeção/diagnóstico/reparo/perícia) tinha
+  virado um `div.delivery` dentro de `journey_paths`; na rodada de correção voltou a ser seção própria
+  (`#etapas-encadeadas`, `data-section-archetype="compare_ladder"`), então só o `analysis_abstract` de
+  projetos complementares continua dissolvido. Os demais arquétipos foram levados para a seção que
+  descreve a mesma função; `contextual_next_action` e `evidence_record` entraram como no piloto.
 
 - Lighthouse por rota não foi medido neste lote (o caderno §4 não o exige por lote); cada página de
   serviço ganhou uma `<picture>` externa por prancha (≤ 10 KB por SVG) e a folha `assets/editorial.css`.
@@ -273,6 +275,10 @@ Nenhum teste de veracidade, preço, responsabilidade, privacidade, formulário o
   perfil nas páginas de serviço.
 - Tabelas de 3 colunas no 390 (evidência, matriz de interfaces, diagnóstico de SST) continuam com
   rolagem lateral e dica; o empilhamento pede CSS compartilhado (pedido 9).
+- `seo/PUBLIC-ARTIFACT-MANIFEST.json` foi alterado pelo `generate` do exemplo de infraestrutura e
+  revertido (`git checkout --`) pela regra do lote (relatório gerado por build); o `build:site` do
+  clone limpo o regenera (exit 0, `CACHE_CONTRACT_OK`), e `organic:test`/`test:html-integrity:site`
+  passam com a árvore tal como commitada.
 
 ## Correções após revisão (achado → ação → prova)
 
