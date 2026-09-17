@@ -395,16 +395,35 @@ CTA, `data-cta-id`/`data-cta-position`/`data-asset-id`/`data-offer-*`, ids `entr
 | depois (`--label=onda2-entregas`) | 99 | 1.953–1.957 | 1.504–1.510 | 826 | 148.743 | html 14.699 · fonte 60.064 · styles 21.017 · editorial 7.667 · entregas/styles 2.245 · script 24.308 · logo 10.605 · tokens 1.247 · ícones 6.891 |
 
 `MEASURED_PASS` nas duas medições (tetos: LCP 2.000 ms, 153.600 B, DOM 1.100, perf ≥ 95), mas o LCP
-passou a 45 ms do teto. Diagnóstico (Lighthouse direto, mesma emulação): o elemento LCP é o h1
-(`elementRenderDelay` 136 ms, TTFB 10 ms); trocar `editorial.css` por `styles-offers.css` no HTML
-novo não muda o FCP (1.518), trocá-la por `editorial-tool.css` (9,4 KB brutos) devolve o FCP a
-1.366 ms e sem a folha da rota o FCP cai a 1.213 ms; em todos os casos o LCP fica em ~1.960 ms, e
-o HTML **antigo** com `editorial.css` acrescentada também vai a 1.961 ms sem mover o FCP. Ou seja:
-o FCP responde ao total de bytes de CSS no caminho crítico (a folha editorial completa tem 42 KB
-brutos / 7,7 KB gzip para uma página que usa uma fração dela), e o LCP simulado passa a depender
-do download da fonte sempre que a folha editorial está presente. Os artefatos de
-`docs/lighthouse-runs/` foram apagados (não commitados). Pedido 11 registra o subconjunto de folha
-para hubs como alavanca medida (−145 ms de FCP).
+passou a 45 ms do teto. Diagnóstico com Lighthouse direto (mesma emulação do runner, árvore fonte com
+gzip, 1 run por variante, valores estáveis entre repetições):
+
+| Variante | FCP (ms) | LCP (ms) | Elemento LCP |
+| --- | --- | --- | --- |
+| base `2da310422` (HTML e folhas antigos) | 1.365 | 1.810 | `p.deliverables-lead` |
+| base + `editorial.css` acrescentada | 1.367 | 1.961 | — |
+| onda 2 (HTML novo, `editorial.css` + folha da rota) | 1.516 | 1.960 | `h1.t-service` (render delay 136 ms, TTFB 10 ms) |
+| onda 2 sem `editorial.css` | 1.216 | 1.961 | — |
+| onda 2 com `styles-offers.css` no lugar de `editorial.css` | 1.518 | 1.962 | — |
+| onda 2 com `editorial-tool.css` (9,4 KB brutos) no lugar de `editorial.css` | 1.366 | 1.960 | — |
+| onda 2 com a folha da rota vazia | 1.510 | 1.956 | — |
+| onda 2 sem a folha da rota (3 CSS) | 1.213 | 1.959 | — |
+| onda 2 sem o preload da fonte | 1.968 | 1.968 | — |
+| onda 2 com o h1 sem `t-service` | 1.517 | 1.961 | — |
+| onda 2 com o h1 sem o eixo largo (`font-stretch:normal`, `--sans`) | 1.367 | 1.961 | — |
+
+Leitura: o LCP simulado **não responde** a bytes de CSS em nenhuma das dez variantes; o elemento LCP
+passou de `p.deliverables-lead` para `h1.t-service` e a pintura simulada desse elemento cai em
+~1.960 ms em qualquer configuração, inclusive no HTML antigo com `editorial.css` (1.961) e no HTML novo
+sem folha editorial alguma (1.961). Trabalho de thread principal é igual nos dois estados (style/layout
+139 vs 153 ms). O FCP, sim, responde: a folha editorial completa (42 KB brutos / 7,7 KB gzip) custa
++145 ms sobre um subconjunto de 9,4 KB, e o eixo largo do h1 sozinho responde pelos mesmos 145 ms.
+Os subconjuntos são gerados por `scripts/site/build_css.py` (integrador; `test:design` roda
+`build_css.py --check`), então não há alavanca de LCP dentro do lote; a folga residual de 45 ms
+precisa ser medida sobre `_site` no CI antes da promoção (a nota `aceite-runtime-lighthouse-borda`
+registra que a borda mediu ~300 ms acima do laboratório e que três releases foram revertidos por
+diferenças laboratório→borda). Os artefatos de `docs/lighthouse-runs/` foram apagados (não
+commitados). Pedido 11.
 
 ### Testes executados (resultado real)
 
