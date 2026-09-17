@@ -30,13 +30,14 @@ main { overflow: clip; }
 }
 .eyebrow-light { color: var(--r-lime); }
 
+/* Superfície sólida (mesma decisão de assets/report-model.css). */
 .report-hero {
-  background: radial-gradient(circle at 78% 18%, rgba(206, 214, 42, .12), transparent 25%), linear-gradient(125deg, #f8faf8 0 56%, #edf1ee 56% 100%);
+  background: var(--r-soft);
   border-bottom: 1px solid var(--r-line);
   position: relative;
 }
 .report-hero::before {
-  background: linear-gradient(90deg, var(--r-green) 0 62%, var(--r-lime) 62% 100%);
+  background: var(--r-green);
   content: "";
   height: 5px;
   inset: 0 0 auto;
@@ -335,7 +336,6 @@ main { overflow: clip; }
 
 @media (max-width: 620px) {
   .breadcrumbs { display: none; }
-  .report-hero { background: linear-gradient(145deg, #f8faf8, #edf1ee); }
   .report-hero-grid { display: block; min-height: 0; padding-bottom: 30px; padding-top: 29px; }
   .report-hero-copy { max-width: none; }
   .report-kicker { font-size: .8rem; margin-bottom: 10px; }
