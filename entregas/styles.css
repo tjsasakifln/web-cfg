@@ -6,10 +6,9 @@
    de valor, o esquema ilustrativo dos servicos e o bloco escuro de captura.
    Sem degrade, sem sombra, sem raio decorativo, sem !important. */
 
-/* Abertura: a nota de dados sinteticos fecha a coluna de texto */
-.deliverables-hero .hero-h1-note{margin-top:.25rem}
-
-/* Servicos: linha regrada com esquema ilustrativo em divulgacao progressiva */
+/* Servicos: prancha PG (conteudo de uma entrega) antes das cinco linhas
+   regradas; cada linha tem o esquema ilustrativo em divulgacao progressiva */
+.capability-roll .plate{margin-bottom:clamp(1.5rem,3vw,2.5rem)}
 .capability-group__schema{margin:.85rem 0 0;max-width:62ch;border-top:1px solid var(--rule)}
 .capability-group__schema-details>summary{position:relative;display:block;box-sizing:border-box;min-height:44px;padding:.6rem 1.75rem .6rem 0;line-height:1.4;cursor:pointer;list-style:none;font-weight:720;color:var(--ink)}
 .capability-group__schema-details>summary::-webkit-details-marker{display:none}
@@ -46,20 +45,31 @@
 .vitrine-item__facts>div{display:grid;grid-template-columns:minmax(7rem,11rem) minmax(0,1fr);gap:.2rem 1rem;padding:.6rem 0;border-bottom:1px solid var(--rule);min-width:0}
 .vitrine-item__facts dt{font-stretch:var(--narrow);font-weight:750;font-size:var(--text-small);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding-top:.15rem}
 .vitrine-item__facts dd{margin:0;max-width:62ch;color:var(--ink);line-height:1.5}
-.vitrine-item__credit{margin:1rem 0 0;max-width:62ch;font-size:var(--text-caption);line-height:1.5;color:var(--text)}
-.vitrine-item__credit>strong{display:block;margin-bottom:.2rem;font-stretch:var(--narrow);font-weight:750;font-size:var(--text-small);letter-spacing:.06em;text-transform:uppercase;color:var(--ink)}
+.vitrine-item__credit{margin:0;max-width:62ch;color:var(--ink);line-height:1.5}
 .vitrine-item__actions .text-link{display:inline-flex;align-items:center;min-height:44px}
 @media (max-width:480px){
-  /* No celular o rotulo fica numa coluna estreita mas inteira (6,25rem: nenhum
-     rotulo quebra no meio da palavra em Archivo estreito a 14 px) e o valor
-     desce para o corpo de legenda: a comparacao continua empilhada por
-     criterio, sem esconder campo, e a pagina nao dobra de altura. */
+  /* No celular cada criterio empilha o rotulo sobre o valor, na largura toda
+     (decisao de 2026-09-16 registrada em test_deliverables_hub_ui.mjs e
+     regra lida por test_task_doors.mjs::style_uses_stacked_mobile_comparison):
+     nenhum rotulo quebra, nenhum campo se esconde e o valor fica no corpo. */
   .vitrine-item__head{grid-template-columns:minmax(0,1fr)}
   .vitrine-item__price{text-align:left}
-  .vitrine-item__facts>div{grid-template-columns:6rem minmax(0,1fr);gap:.1rem .6rem;padding:.35rem 0}
-  .vitrine-item__facts dt{font-size:var(--text-small);padding-top:.1rem}
-  .vitrine-item__facts dd{font-size:var(--text-caption);line-height:1.45}
+  .vitrine-item__facts>div{grid-template-columns:minmax(0,1fr)}
+  .vitrine-item__facts>div{gap:.1rem;padding:.4rem 0}
+  .vitrine-item__facts dt{padding-top:0}
+  .vitrine-item__facts dd{line-height:1.45}
   .list-ruled--offers>li{padding:1.25rem 0}
+  /* Indice pela decisao: um item por linha, como o indice do piloto a 390 px */
+  .offer-decision-nav li{flex-basis:100%}
+}
+@media (min-width:900px){
+  /* Em tela larga os criterios formam pares (Decisao | Trabalho realizado,
+     Como sera usada | O que inspecionar, ...) em duas colunas da mesma lista,
+     cada um ainda como rotulo | valor; todos os campos continuam visiveis e a
+     oferta ocupa cerca de metade da altura. */
+  .vitrine-item__facts{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:clamp(1.5rem,3vw,3rem)}
+  .vitrine-item__facts>div{grid-template-columns:minmax(6.5rem,8.5rem) minmax(0,1fr)}
+  .vitrine-item__facts dd{max-width:none}
 }
 
 /* Escada de valor: tres passos regrados e tres numeros, na mesma superficie */

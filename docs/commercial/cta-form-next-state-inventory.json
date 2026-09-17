@@ -29,13 +29,13 @@
       "commercial_configuration"
     ],
     "baseline_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
-    "expected_declared_ctas": 184
+    "expected_declared_ctas": 185
   },
   "coverage": {
     "authority": "data/organic/public-family-registry.json",
     "manual_route_allowlist": false,
     "active_capture_routes": 31,
-    "declared_ctas": 184,
+    "declared_ctas": 185,
     "protected_routes_with_capture": [
       "/aditivos-obras-publicas/",
       "/auditoria-orcamento-licitacao/",
@@ -3242,6 +3242,21 @@
           "boundary": "Sem cobrança; preço e escopo exigem aceite.",
           "event_semantics": [
             "cta_click"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "",
+          "href": "mailto:tiago.sasaki@confenge.com.br?subject=Entregas%20de%20engenharia",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "e-mail",
+          "useful_next_state": "Abre o cliente de e-mail com assunto e contexto para continuar o enquadramento.",
+          "actual_receipt": "Rascunho local de e-mail; não existe receipt do servidor antes do envio.",
+          "field_purpose": "not_applicable",
+          "boundary": "Sem cobrança; preço e escopo exigem aceite.",
+          "event_semantics": [
+            "email_click"
           ]
         },
         {

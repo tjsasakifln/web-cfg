@@ -376,9 +376,12 @@ function vitrineCard(entry, contractItem) {
   const value = contractItem.value_first;
   if (!value) throw new Error(`EIGHT_VALUE_FIRST_MISSING: ${entry.deliverable_id}`);
   const bundle = entry.offer_container === "expansion_package"
-    ? `<p class="vitrine-item__credit"><strong>Pacote e crédito</strong> O valor é abatido do <a data-asset-id="entregas-exemplos-hub" data-cta-id="deliverables-bundle-from-${slug}" data-cta-position="example_${entry.catalog_number}_price" data-event-name="cta_click" href="/diagnostico-b2g-expansao/">Diagnóstico de Expansão no Mercado Público</a> se ele for contratado em até 60 dias; créditos não se acumulam.</p>`
-    : `<p class="vitrine-item__credit"><strong>Pacote e crédito</strong> Relatório avulso, à parte e fora do Diagnóstico; é o único sem o crédito de 60 dias. Adaptado: R$ 599 por unidade. A CONFENGE busca os editais abertos no raio informado. A quantidade depende das licitações publicadas; a profundidade é a máxima permitida pelas informações da empresa. Bases: editais abertos localizados pela CONFENGE e realidade da construtora. Compare com o <a data-asset-id="entregas-exemplos-hub" data-cta-id="deliverables-bundle-from-${slug}" data-cta-position="example_${entry.catalog_number}_price" data-event-name="cta_click" href="/diagnostico-b2g-expansao/">Diagnóstico de Expansão no Mercado Público</a>.</p>`;
+    ? `<p class="vitrine-item__credit">O valor é abatido do <a data-asset-id="entregas-exemplos-hub" data-cta-id="deliverables-bundle-from-${slug}" data-cta-position="example_${entry.catalog_number}_price" data-event-name="cta_click" href="/diagnostico-b2g-expansao/">Diagnóstico de Expansão no Mercado Público</a> se ele for contratado em até 60 dias; créditos não se acumulam.</p>`
+    : `<p class="vitrine-item__credit">Relatório avulso, à parte e fora do Diagnóstico; é o único sem o crédito de 60 dias. Adaptado: R$ 599 por unidade. A CONFENGE busca os editais abertos no raio informado. A quantidade depende das licitações publicadas; a profundidade é a máxima permitida pelas informações da empresa. Bases: editais abertos localizados pela CONFENGE e realidade da construtora. Compare com o <a data-asset-id="entregas-exemplos-hub" data-cta-id="deliverables-bundle-from-${slug}" data-cta-position="example_${entry.catalog_number}_price" data-event-name="cta_click" href="/diagnostico-b2g-expansao/">Diagnóstico de Expansão no Mercado Público</a>.</p>`;
   const anchorClass = entry.catalog_number === "01" ? " vitrine-item--anchor" : "";
+  // Correcao apos revisao (onda 2): "Pacote e credito" e a ultima linha da
+  // mesma lista de definicao (rotulo em dt, copy identica em p.vitrine-item__credit
+  // dentro do dd; test_deliverables_hub.py:373/502 leem `class="vitrine-item__credit">...</p>`).
   // Onda 2 da campanha 02 (2026-09-17): cada oferta e uma linha regrada do
   // indice (list-ruled), nao um cartao com borda e sombra. Os ganchos que os
   // gates leem (article.vitrine-item, data-*, id, __price, __facts, __credit,
@@ -399,8 +402,8 @@ function vitrineCard(entry, contractItem) {
 <div><dt>Por que este preço</dt><dd>${escapeHtml(publicText(value.price_anchor))}</dd></div>
 <div><dt>Prazo</dt><dd>${escapeHtml(publicText(contractItem.sla.text))}</dd></div>
 <div><dt>Quando a contagem começa</dt><dd>${escapeHtml(deadlineStart(contractItem))}</dd></div>
+<div class="vitrine-item__credit-row"><dt>Pacote e crédito</dt><dd>${bundle}</dd></div>
 </dl>
-${bundle}
 <div class="vitrine-item__actions contact-actions">
 <a aria-label="Ver o demonstrativo sintético de ${escapeHtml(entry.public_name_pt_br)}: ${escapeHtml(value.cta_inspect)}" class="button button-secondary" data-asset-id="entregas-exemplos-hub" data-cta-id="${exampleCtaId}" data-cta-position="${examplePosition}" data-event-name="cta_click" href="${escapeHtml(entry.route)}">${escapeHtml(value.cta_inspect)} <svg class="icon"><use href="#i-arrow"></use></svg></a>
 <a aria-label="Pedir análise de ${escapeHtml(entry.public_name_pt_br)}: ${escapeHtml(value.cta_configure)}" class="text-link" data-asset-id="entregas-exemplos-hub" data-cta-id="${scopeCtaId}" data-cta-position="${scopePosition}" data-event-name="cta_click" href="#captura-entregas">${escapeHtml(value.cta_configure)}</a>
@@ -415,7 +418,7 @@ function renderOfferLadder(contract) {
   return `<section class="offer-value-ladder" data-offer-ladder="unit-diagnosis-recurring" aria-labelledby="offer-value-ladder-title">
 <header class="sec-head sec-head--split"><span class="t-kicker">Próxima camada pelo tipo de decisão</span><h3 class="t-editorial" id="offer-value-ladder-title">Unidade, Diagnóstico ou direção recorrente?</h3><p>A escolha começa pela situação e pelo escopo da decisão, não apenas pelo preço.</p></header>
 <ol class="steps"><li data-ladder-step="unit"><div><strong class="steps__title">Uma unidade basta</strong><span>Quando há uma pergunta delimitada e o escopo cabe no que a oferta declara.</span></div></li>
-<li data-ladder-step="diagnosis"><div><strong class="steps__title">Diagnóstico integrado</strong><span>Quando ${escapeHtml(ladder.diagnosis_trigger)}, o <a data-asset-id="entregas-exemplos-hub" data-cta-id="deliverables-bundle-from-offer-summary" data-cta-position="offer_summary" data-event-name="cta_click" href="${escapeHtml(ladder.diagnosis_route)}">${escapeHtml(pkg.public_name_pt_br)}</a> reúne ${escapeHtml(ladder.diagnosis_scope)} por ${escapeHtml(pkg.package_price_display)}.</span></div></li>
+<li data-ladder-step="diagnosis"><div><strong class="steps__title">Diagnóstico integrado</strong><span>Quando ${escapeHtml(ladder.diagnosis_trigger)}, o <a data-asset-id="entregas-exemplos-hub" data-cta-id="deliverables-bundle-from-offer-summary" data-cta-position="offer_summary" data-event-name="cta_click" href="${escapeHtml(ladder.diagnosis_route)}">${escapeHtml(pkg.public_name_pt_br)}</a> reúne ${escapeHtml(ladder.diagnosis_scope)} por ${escapeHtml(pkg.package_price_display)}, pagamento único, e abate o valor de qualquer unidade contratada nos ${pkg.credit_window_days} dias anteriores, ${escapeHtml(pkg.credit_stacking_note)}.</span></div></li>
 <li data-ladder-step="recurring"><div><strong class="steps__title">Direção recorrente</strong><span>Quando ${escapeHtml(ladder.recurring_direction_trigger)}, a <a href="${escapeHtml(ladder.recurring_direction_route)}">${escapeHtml(ladder.recurring_direction_name_pt_br)}</a> assume ${escapeHtml(ladder.recurring_direction_scope)}.</span></div></li></ol>
 <dl class="compare-ladder-figures">
 <div><dt>Faixa por unidade</dt><dd class="t-data">R$ 599 a R$ 3.750</dd></div>
@@ -490,11 +493,39 @@ function publicCatalogDates(registry) {
   return dates;
 }
 
+// Correcao apos revisao (onda 2): a prancha PG (pacote-entrega, registrada em
+// docs/campaigns/design-institucional/expansao/assets-lote-a.json) mostra o
+// conteudo de uma entrega logo onde a acao dominante da abertura aterrissa. O
+// <picture> e emitido exatamente como scripts/demonstrative/plates/inline.py o
+// materializa (desktop de 700 px para cima, movel abaixo, dimensoes do viewBox,
+// alt = <title> do SVG), entre os mesmos comentarios de slot, para que
+// `inline --check` e `render_public_catalog --check` concordem byte a byte.
+function platePicture(slug) {
+  const read = (variant) => fs.readFileSync(path.join(root, "assets/pranchas", `${slug}-${variant}.svg`), "utf8");
+  const dims = (svg) => {
+    const match = /viewBox="0 0 (\d+) (\d+)"/.exec(svg);
+    if (!match) throw new Error(`PLATE_VIEWBOX_MISSING: ${slug}`);
+    return [match[1], match[2]];
+  };
+  const desk = read("desktop");
+  const mob = read("mobile");
+  const [dw, dh] = dims(desk);
+  const [mw, mh] = dims(mob);
+  const title = (/<title[^>]*>(.*?)<\/title>/s.exec(desk)?.[1] || "").replace(/\s+/g, " ").trim();
+  return `<!-- plate:${slug} -->
+<picture class="plate__picture"><source media="(min-width:700px)" srcset="/assets/pranchas/${slug}-desktop.svg" width="${dw}" height="${dh}"/><img alt="${escapeHtml(title)}" decoding="async" loading="lazy" src="/assets/pranchas/${slug}-mobile.svg" width="${mw}" height="${mh}"/></picture>
+<!-- /plate -->`;
+}
+
 function renderServiceDeliveryOverview(registry) {
   const dates = publicCatalogDates(registry);
   return `<section class="capability-roll sec" id="servicos-e-entregas" data-section-archetype="reading_method" aria-labelledby="service-deliveries-title">
 <div class="container">
 <header class="capability-roll__intro sec-head sec-head--split"><p class="eyebrow t-kicker">Serviços de engenharia</p><h2 class="t-editorial" id="service-deliveries-title">Projetos para orientar a execução, orçamentos para contratar com critério e análises para decidir com respaldo.</h2><p>Cinco frentes de trabalho, em obra pública ou privada; a proposta nomeia escopo, responsável técnico e valor depois da leitura da necessidade. Mais abaixo, oito análises para licitações já têm preço e prazo publicados.</p></header>
+<figure class="plate plate--dominant" aria-labelledby="entregas-plate-cap">
+<div class="plate__sheet">${platePicture("pacote-entrega")}</div>
+<figcaption class="plate__caption" id="entregas-plate-cap"><span class="tag">Exemplo demonstrativo</span>Prancha PG, esquema ilustrativo de uma entrega de projeto: <b>PE-01</b> plantas e cortes, <b>PE-02</b> detalhes, <b>PE-03</b> especificações e <b>PE-04</b> memória de cálculo saem da disciplina contratada; a arquitetura de origem permanece com o autor. Cada frente abaixo tem o próprio esquema. Não representa cliente nem obra executada.</figcaption>
+</figure>
 <ol class="list-ruled capability-groups">
 <li><span class="list-ruled__index">01</span><article class="capability-group"><h3>Projetos, revisão e compatibilização</h3><p>Cálculos, plantas, detalhes, especificações e memória de cálculo; relatório de revisão com pontos localizados; ou registro das interferências e soluções entre estruturas e instalações hidrossanitárias, elétricas, de incêndio, climatização e telecomunicações. Serve para completar o projeto ou conferir o de terceiro antes de executar.</p><div class="capability-group__schema"><details class="capability-group__schema-details"><summary class="capability-group__schema-title"><strong>Esquema ilustrativo da entrega.</strong> Como o conteúdo do projeto se organiza</summary><p class="capability-group__schema-label">A estrutura do que você recebe e para que serve cada peça. Modelo de organização do conteúdo, sem obra executada e sem dados de cliente.</p><ol class="capability-group__schema-list"><li><strong>Plantas e cortes</strong> onde cada elemento fica e como a obra se lê no papel.</li><li><strong>Detalhes</strong> as ligações e os pontos que a planta não consegue mostrar na mesma escala.</li><li><strong>Especificações</strong> o que cada material e serviço precisa atender para ser aceito.</li><li><strong>Memória de cálculo</strong> os critérios e as verificações que sustentam o que foi dimensionado.</li><li><strong>Registro de compatibilização</strong> as interferências encontradas entre disciplinas e a solução acordada para cada uma.</li></ol><p class="capability-group__schema-note">Cada peça responde a uma pergunta diferente na obra: a planta orienta a execução, o detalhe resolve a ligação, a especificação define o aceite e a memória sustenta a decisão técnica.</p></details></div><p class="capability-group__link"><a href="/servicos/#servico-projeto">Entender o trabalho de projeto <svg class="icon"><use href="#i-arrow"></use></svg></a></p></article></li>
 <li><span class="list-ruled__index">02</span><article class="capability-group"><h3>Quantitativos e orçamento</h3><p>Planilha de serviços e quantidades, memória dos critérios, composições abertas, referências e data-base para comparar propostas, preparar contratação ou revisar a estimativa de obra pública ou privada.</p><div class="capability-group__schema"><details class="capability-group__schema-details"><summary class="capability-group__schema-title"><strong>Esquema ilustrativo da entrega.</strong> Como o orçamento se forma</summary><p class="capability-group__schema-label">A estrutura do que você recebe e para que serve cada peça. Modelo de organização do conteúdo, sem obra executada e sem dados de cliente.</p><ol class="capability-group__schema-list"><li><strong>Levantamento de quantidades</strong> o que será executado e quanto, item a item, com o critério de medição declarado.</li><li><strong>Composições de custo</strong> mão de obra, material e equipamento de cada serviço, abertos para conferência.</li><li><strong>Referências e data-base</strong> a fonte de preço adotada e a data a que ela se refere.</li><li><strong>Planilha orçamentária</strong> o total por item e por etapa, na estrutura em que a proposta será comparada.</li><li><strong>Memória dos critérios</strong> o que foi incluído, o que foi excluído e por quê.</li></ol><p class="capability-group__schema-note">É essa cadeia que permite comparar propostas pelo mesmo critério, em vez de comparar apenas o preço final.</p></details></div><p class="capability-group__link"><a href="/quantitativos-orcamento-obras/">Ver quantitativos e orçamento de obras <svg class="icon"><use href="#i-arrow"></use></svg></a></p></article></li>
