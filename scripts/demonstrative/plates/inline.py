@@ -24,12 +24,23 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
 PLATES_DIR = ROOT / "assets" / "pranchas"
-PAGES = [
-    "index.html",
-    "servicos/index.html",
-    "quantitativos-orcamento-obras/index.html",
-    "medicoes-glosas-obras-publicas/index.html",
-]
+def _pages(root: Path = ROOT) -> list[str]:
+    """Every tracked source page that carries a plate slot. Discovered from the
+    markup (not a hand list) so a family can add a plate to its page without
+    editing this module; docs, prototypes, node_modules and _site are never
+    sources."""
+    skip = {"_site", "docs", "node_modules", "build", "seo", ".git"}
+    found: list[str] = []
+    for path in sorted(root.rglob("*.html")):
+        rel = path.relative_to(root)
+        if rel.parts[0] in skip:
+            continue
+        if "<!-- plate:" in path.read_text(encoding="utf-8", errors="ignore"):
+            found.append(rel.as_posix())
+    return found
+
+
+PAGES = _pages()
 SLOT = re.compile(r"<!-- plate:([a-z0-9-]+)( eager)? -->.*?<!-- /plate -->", re.S)
 
 

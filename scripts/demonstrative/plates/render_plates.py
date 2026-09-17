@@ -821,6 +821,35 @@ RENDERERS = {
 }
 
 
+def _register_family_modules() -> None:
+    """Fold in the plates of each family module (``family_*.py`` next to this
+    file). A module declares ``SOURCES`` (key -> JSON path relative to the repo
+    root), ``PLATE_SOURCES`` (plate id -> source keys) and ``RENDERERS``
+    ((plate id, variant) -> callable(data)). Ids and source keys must not
+    collide with the pilot's; the merge is deterministic (sorted by file name)
+    so ``--check`` and the manifest stay reproducible."""
+    import importlib
+
+    here = Path(__file__).resolve().parent
+    for mod_path in sorted(here.glob("family_*.py")):
+        mod = importlib.import_module(f"scripts.demonstrative.plates.{mod_path.stem}")
+        for key, rel in getattr(mod, "SOURCES", {}).items():
+            if key in SOURCES and SOURCES[key] != Path(rel):
+                raise SystemExit(f"plate_source_key_collision:{mod_path.stem}:{key}")
+            SOURCES[key] = Path(rel)
+        for pid, keys in getattr(mod, "PLATE_SOURCES", {}).items():
+            if pid in PLATE_SOURCES:
+                raise SystemExit(f"plate_id_collision:{mod_path.stem}:{pid}")
+            PLATE_SOURCES[pid] = tuple(keys)
+        for (pid, variant), fn in getattr(mod, "RENDERERS", {}).items():
+            if (pid, variant) in RENDERERS:
+                raise SystemExit(f"plate_renderer_collision:{mod_path.stem}:{pid}-{variant}")
+            RENDERERS[(pid, variant)] = fn
+
+
+_register_family_modules()
+
+
 def render_all(root: Path = ROOT) -> dict[str, str]:
     data = load(root)
     out: dict[str, str] = {}

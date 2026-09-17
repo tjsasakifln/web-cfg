@@ -114,7 +114,7 @@ def test_visible_numbers_come_from_the_sources(rendered, sources):
         joined = "\n".join(_texts(svg))
         stray = sorted({tok for tok in NUM_RE.findall(joined) if tok not in allowed})
         assert not stray, f"{name}: numerals not traceable to a source JSON: {stray}"
-        for expected in EXPECTED_NUMBERS[pid][variant]:
+        for expected in EXPECTED_NUMBERS.get(pid, {}).get(variant, ()):
             assert expected in joined, f"{name}: expected '{expected}' in sheet text"
 
 
