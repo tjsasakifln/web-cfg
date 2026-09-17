@@ -9,11 +9,11 @@ pedidos ao integrador em `pedidos-lote-a.md`.
 
 ## Pranchas novas (família `scripts/demonstrative/plates/family_private.py`)
 
-Seis pranchas, desktop e móvel como composições distintas, geradas de JSON, determinísticas
-(`render_plates --check`: `plates_ok: 20 files match assets/pranchas`) e aprovadas pelo gate de
+Oito pranchas, desktop e móvel como composições distintas, geradas de JSON, determinísticas
+(`render_plates --check`: `plates_ok: 24 files match assets/pranchas`) e aprovadas pelo gate de
 numerais (`python3 -m pytest scripts/demonstrative/plates -q`: `16 passed`). Nenhum número fora do
-JSON de origem; `sheet.py` inalterado. Códigos PA–PF (o gate rejeita "P5" a "P10" como numerais
-não rastreáveis).
+JSON de origem; `sheet.py` inalterado. Códigos PA–PH (o gate rejeita "P5" a "P10" como numerais
+não rastreáveis). PG e PH entraram na rodada de correção (achado MEDIA sobre os esquemas antigos).
 
 | Id | Origem | Página |
 | --- | --- | --- |
@@ -23,8 +23,12 @@ não rastreáveis).
 | `inspecao-fachada` (PD) | novo `data/demonstrative/plates/inspecao-fachada.v1.json` (fachada sintética, 4 manifestações) | inspeção e diagnóstico |
 | `pericia-fachada` (PE) | mesmo JSON (quesitos Q-01 a Q-03, evidência, conclusão delimitada) | assistência técnica em disputas |
 | `sst-canteiro` (PF) | novo `data/demonstrative/plates/sst-canteiro.v1.json` (canteiro sintético, 4 proteções, checklist) | SST |
+| `pacote-entrega` (PG) | novo `data/demonstrative/plates/elaboracao-complementar.v1.json` (quatro peças da entrega; diagrama de estrutura, sem número) | projetos complementares (`#entregaveis`); a composição desktop é copiada byte a byte para `assets/projetos-complementares-engenharia/pacote-entrega.svg`, caminho exigido pelo contrato da rota e pelo kit de parceiros |
+| `interfaces-versoes` (PH) | mesmo JSON (insumos → disciplina → interfaces → versão devolvida; diagrama de fluxo) | projetos complementares (`#escopo-interfaces`); idem, copiada para `assets/projetos-complementares-engenharia/interfaces-versoes.svg` |
 
 ## Por rota
+
+Rodada de correção (2026-09-17, após revisores independentes): ver "Correções após revisão" no fim.
 
 Esqueleto aplicado em todos os seis serviços: breadcrumbs → `section.svc-open` (kicker, `h1.t-service`,
 lead = necessidade, `.measure` = trabalho, `.hero-deliverable` = documento, uma ação dominante +
@@ -54,16 +58,20 @@ sem prazo). Todas as páginas passaram a carregar `assets/editorial.css` depois 
   (a forma "O que não oferecemos. Assinatura…" era lida como oferta).
 
 ### `/projetos-complementares-engenharia/` — COMPOSICAO_REDESENHADA
-- Prancha PC dominante (rede de drenagem e pavimento); a matriz de interfaces e os dois esquemas
-  SVG exigidos (`pacote-entrega.svg`, `interfaces-versoes.svg`) continuam no HTML como
-  `<img src>`; `data-purchase` (4 itens), fases, método e limites preservados; o único bloco escuro
-  `#escopo-projeto` fecha a página; ação contextual "Pedir a proposta agora" antes do método.
+- Prancha PC dominante (rede de drenagem e pavimento); os dois esquemas exigidos pelo contrato
+  (`pacote-entrega.svg`, `interfaces-versoes.svg`) passaram a ser as pranchas PG e PH (rodada de
+  correção): `<picture>` com a composição móvel de `assets/pranchas/` e `<img src>` no caminho legado,
+  que recebe a composição desktop byte a byte; `data-purchase` (4 itens), fases, método e limites
+  preservados; o único bloco escuro `#escopo-projeto` fecha a página; ação contextual "Pedir a
+  proposta agora" antes do método.
 - Testes: `tests/inb-20260911/12/test_page_contract_projetos_complementares.mjs`
   (`page-contract-projetos-complementares-elaboracao 183/183 ok`; a linha
   `CONTRAPROVA_FAIL mutated_forbids_habilitação_irrestrita` já existia no commit base e é informativa).
 - Teste ajustado (estética, rota exata): `landing_contact_before_method` passa a verificar
   `href="#escopo-projeto"` antes de `id="metodo-elaboracao"` (ação contextual), porque o esqueleto
-  do caderno fecha a página com o bloco escuro único.
+  do caderno fecha a página com o bloco escuro único. Na rodada de correção o mesmo teste ganhou duas
+  verificações novas (`legacy_asset_is_desktop_plate_*`, `mobile_plate_in_picture_*`): o arquivo no
+  caminho legado tem de ser idêntico à prancha desktop e a `<picture>` tem de apontar a móvel.
 
 ### `/inspecao-diagnostico-edificacoes/` — COMPOSICAO_REDESENHADA
 - Prancha PD dominante (mapa de manifestações e registro por item); relatório como "O que pedir";
@@ -89,6 +97,11 @@ sem prazo). Todas as páginas passaram a carregar `assets/editorial.css` depois 
   (55 OK; único FAIL é o canary 389 do pilar de medições, pré-existente no commit base).
 
 ### `/casos/demonstrativo-infraestrutura/` — COMPOSICAO_REDESENHADA (via gerador)
+- Rodada de correção: `_plan_svg`, `_profile_svg` e `_section_svg` redesenhados em viewBox compacto
+  (360 de largura; fonte 12,5 e 13), com o rótulo PV-01 fora da faixa (abaixo dela), as camadas da
+  seção rotuladas por leader à direita (a capa de 0,04 m deixou de conter texto) e o perfil com linha
+  mais forte; na coluna de 470 px os desenhos escalam para cima e no 390 rendem 1:1. Nenhum número
+  novo: tudo vem dos extratos derivados do JSON (`consumption.v1.json` inalterado).
 - `scripts/demonstrative/infrastructure_pilot/render.py` reescrito no modelo de
   `private_project/render.py`: `svc-open` com cadeia necessidade/trabalho/documento, perfil R00 como
   `plate--side`, `page-index`, seções `sec` com `t-editorial`, achados em `coord-finding`/`rv-extract`,
@@ -105,6 +118,13 @@ sem prazo). Todas as páginas passaram a carregar `assets/editorial.css` depois 
 - Abertura no esqueleto (percurso de quem encaminha: escritórios, construtoras, advogados), três passos,
   os quatro conjuntos `partner-kit` com blocos `partner-share` preservados byte a byte, condições
   consolidadas e bloco escuro único com os três canais medidos; sem promessa comercial nova.
+- Rodada de correção: `parcerias-engenharia/styles.css` reescrita (folha da rota, já existente):
+  kits como linhas regradas em coluna única (texto à esquerda, compartilhamento à direita no desktop),
+  ações em linha, `textarea` e botões na tipografia e nas réguas do site, botões `[hidden]` continuam
+  ocultos; regras órfãs da identidade antiga podadas; zero raio, sombra ou degradê (auditoria de
+  decoração da folha: 0/0/0). O `style="min-height:44px;min-width:44px"` dos botões é anterior ao lote
+  e ficou intacto (DOM byte a byte). O `!important` do bloco `@media print` anterior foi removido
+  (seletores com especificidade suficiente).
 - Testes: `scripts/distribution/tests/test_partner_reference.mjs` (`OK partner_reference`; no commit
   base falhava `cta_imposes_meeting` por falta da frase "Descrever uma necessidade", agora presente),
   `tests/pos-inb-20260911/05/test_partner_kits_contract.mjs` (`OK pos-inb-20260911/05 partner kits`).
@@ -112,8 +132,14 @@ sem prazo). Todas as páginas passaram a carregar `assets/editorial.css` depois 
 ### `404.html` — COMPOSICAO_REDESENHADA
 - `section.state` com código, título, ação única para `/triagem-tecnica/`, alternativas em texto e
   `ul.state__paths` com oito situações (cada uma com o que entrega); estilos inline do conteúdo
-  removidos; `class="no-js"` mantida (página sem script de comportamento); prefill do WhatsApp
-  flutuante inalterado.
+  removidos; prefill do WhatsApp flutuante inalterado.
+- Correção da frase do relatório anterior ("`class=\"no-js\"` mantida"): a fonte **não** trazia a
+  classe; ela entrava só no build (`scripts/pseo/build_site.py:520-545` acrescenta `no-js` a toda
+  página e só troca por `js` quando há `/script.js`). Na rodada de correção a fonte passou a trazer
+  `class="no-js"`, como as demais páginas-fonte, e o rodapé inferior ficou igual ao das outras rotas
+  (`nav.footer-authority`). Sem script de comportamento, o `.menu-toggle` fica oculto e a navegação
+  móvel é estática (`.no-js .mobile-nav{display:flex;position:static}`): não há menu a abrir, por isso
+  não existe captura de menu para esta rota.
 - Testes: `scripts/site/test_integral_solution_copy.py` (`6 passed`), `html_integrity failures=0`,
   `test_skip_link_coverage` (`OK test:skip-link`).
 
@@ -128,59 +154,72 @@ sem prazo). Todas as páginas passaram a carregar `assets/editorial.css` depois 
   (`FORM_FUNNEL_OK`), `test_copy_gates`/`test_design_gates` via `test:copy`/`test:design` (OK).
 
 ### `comercial/privacidade-leads/`, `comercial/termos-diagnostico-b2g/` — HERANCA_VISUAL_VALIDADA
-- Sem alteração de arquivo; capturas confirmam tipografia herdada (`Archivo Var` no h1), sem overflow.
+- Capturas confirmam tipografia herdada (`Archivo Var` no h1), sem overflow. Única edição (rodada de
+  correção): o hífen solto do h1 virou dois-pontos ("Termos para pessoa jurídica: Diagnóstico…",
+  "Aviso de privacidade: leads e contratação"); `scripts/revops/test_privacy.mjs` e
+  `test_interface_coverage` passam. O cabeçalho reduzido (só logotipo, sem nav, CTA ou `menu-toggle`)
+  é intencional e idêntico a `origin/main`: instrumento contratual/aviso lido a partir do fluxo de
+  contratação; por isso não há captura de menu (anotado em `matriz-lote-a.json`).
 
 ### `comercial/radar-decisorio/` — PRESERVADA_COM_JUSTIFICATIVA
 - Oferta paga com formulário, preço e medição de primeira dobra; tipografia já herda Archivo. O heroi
   em degradê vem de `styles-offers.css` (integrador): pedido 4.
 
-## Testes do §4 (última linha real de cada execução)
+## Testes do §4 (última linha real de cada execução, rodada de correção, HEAD do lote)
 
 | Teste | Resultado |
 | --- | --- |
 | `python3 scripts/site/html_integrity.py --root . --surface source` | `HTML_INTEGRITY surface=source html_files=235 faq_pages=145 faq_questions=422 failures=0` |
-| `npm run test:design` | exit 0 (última linha `HTML_INTEGRITY … failures=0`) |
+| `npm run test:design` | exit 0 (últimas linhas `HTML_INTEGRITY_TESTS_OK` / `HTML_INTEGRITY … failures=0`) |
 | `npm run test:copy` | `OK test_shipped_check_still_fails_on_em_dash` (exit 0) |
 | `npm run test:brand` | `OK test_home_jsonld_matches_corporate_positioning_and_preserves_b2g_services` |
 | `npm run test:authority` | `OK 8 correction checks` |
 | `npm run test:integral-solution` | `PASS: the public surface presents an integral solution` |
 | `npm run test:self-deprecation` | `PASS: no self-deprecating communication on the public surface` |
-| `npm run organic:test` | `279 passed in 23.38s` (após a correção do breadcrumb de SST) |
-| `npm run test:inbound-gates` | 55 OK; `FAIL test_measurement_delay_canary_389_is_single_url_and_fail_closed medicoes-glosas-obras-publicas/index.html` (pré-existente no commit base 8860f5577; pedido 7) |
+| `npm run organic:test` | `279 passed in 15.72s` |
+| `npm run test:inbound-gates` | exit 1; único FAIL: `FAIL test_measurement_delay_canary_389_is_single_url_and_fail_closed medicoes-glosas-obras-publicas/index.html` (herdado do commit base 8860f5577; pedido 7); demais OK |
 | `npm run test:deliverables-registry` | `deliverables-registry: 3650/3650 checks passed` |
 | `npm run test:real-proof-registry` | `real-proof-registry: canonical_records=0 public_pages=268 problems=0` |
 | `npm run test:commercial-contract-consistency` | `commercial-contract-consistency: 521/521 checks passed` |
 | `npm run test:public-offer-truth` | `public-offer-truth: 132/132 checks passed` |
 | `npm run test:page-contract-complementares` | `page-contract-complementares: 273/273 checks passed` |
-| `npm run test:page-contract-projetos-complementares` | `PASS page-contract-projetos-complementares-elaboracao` |
+| `npm run test:page-contract-projetos-complementares` | `PASS page-contract-projetos-complementares-elaboracao` (187/187 ok; a linha `CONTRAPROVA_FAIL mutated_forbids_habilitação_irrestrita` é informativa e já existia no commit base) |
 | `npm run test:page-contract-eight` | `page-contract-eight: 735/735 checks passed` |
 | `npm run test:cta-form-next-state` | `CTA_FORM_NEXT_STATE_OK routes=31` |
 | `npm run test:form-funnel` | `FORM_FUNNEL_OK {…"submit_journey":"contrato","home_multistep":true}` |
-| `node --test tests/intake/test_mv03_adaptive_intake.mjs` | `# pass 17 # fail 0` |
-| `npm run test:inspecao-diagnostico` | `4 passed in 0.19s` |
-| `npm run test:inb14-pericias-sst` | `PASS inb14 pericias sst` |
+| `node --test tests/intake/test_mv03_adaptive_intake.mjs` | `# fail 0` |
+| `npm run test:inspecao-diagnostico` | `4 passed in 0.23s` |
+| `npm run test:inb14-pericias-sst` | `PASS inb14 pericias sst` (`114 passed, 0 failed`) |
 | `npm run test:private-readiness` | `ALL private_project_technical_readiness checks passed` |
 | `npm run test:hub-links` | `15 passed` |
-| `npm run test:infrastructure-demonstrative` | `23 passed in 0.36s` |
-| `npm run test:private-project-demonstrative` | `15 passed in 0.45s` |
-| `python3 -m pytest scripts/demonstrative/plates -q` | `16 passed in 0.35s` |
-| `python3 -m scripts.demonstrative.plates.render_plates --check` | `plates_ok: 20 files match assets/pranchas` |
+| `npm run test:infrastructure-demonstrative` | `23 passed in 0.37s` |
+| `npm run test:private-project-demonstrative` | `15 passed in 0.39s` |
+| `python3 -m pytest scripts/demonstrative/plates -q` | `16 passed in 0.36s` |
+| `python3 -m scripts.demonstrative.plates.render_plates --check` | `plates_ok: 24 files match assets/pranchas` |
 | `python3 -m scripts.demonstrative.plates.inline --check` | `OK plates inline` |
 | `node --test tests/coordination/test_*.mjs` (por arquivo) | 4/2/2/8/8 pass, 0 fail |
-| `node --test tests/intake/test_inb05_*.mjs` | `# pass 19 # fail 0` |
-| `pytest tests/pos-inb-20260911/07/test_navigation.py` | `9 passed` |
+| `node --test tests/intake/test_inb05_revisao_projetos.mjs tests/intake/test_inb05_project_review_extract.mjs` | `# fail 0` |
+| `python3 -m pytest tests/inspecao tests/pos-inb-20260911/07/test_navigation.py -q` | `13 passed in 0.37s` |
 | `node tests/pos-inb-20260911/05/test_partner_kits_contract.mjs` | `OK pos-inb-20260911/05 partner kits` |
 | `node scripts/distribution/tests/test_partner_reference.mjs` | `OK partner_reference` |
-| `node --test tests/pos-inb-20260911/02/test_purchase_proof.mjs` | `# pass 10 # fail 0` |
-| `node --test tests/pos-inb-20260911/04/test_copy_and_static.mjs` | `# pass 1 # fail 0` |
-| `pytest tests/pos-inb-20260911/06/test_url_checklist.py` | `6 passed` |
-| `node --test tests/campaigns/orc-b2b-20260913/test_purchase_path.mjs` | `# pass 21 # fail 0` |
-| `pytest scripts/site/test_document_intake_honesty.py` | `9 passed` |
-| `node seo/scripts/test_event_dictionary.mjs` | `EVENT_DICTIONARY_OK` |
+| `node --test tests/pos-inb-20260911/02/test_purchase_proof.mjs` | `# fail 0` |
+| `node --test tests/pos-inb-20260911/04/test_copy_and_static.mjs` | `# fail 0` |
+| `python3 -m pytest tests/pos-inb-20260911/06/test_url_checklist.py -q` | `6 passed in 5.31s` |
+| `node --test tests/campaigns/orc-b2b-20260913/test_purchase_path.mjs` | `# fail 0` |
+| `node --test tests/campaigns/pos_inb_20260911/10/test_composition.mjs` | `# fail 0` |
+| `python3 -m pytest scripts/site/test_document_intake_honesty.py -q` | `9 passed in 0.36s` |
+| `python3 -m pytest scripts/pseo/tests/test_responsive_public_html.py -q` | `6 passed in 0.23s` |
+| `node seo/scripts/test_event_dictionary.mjs` | `EVENT_DICTIONARY_OK …` |
 | `python3 scripts/site/test_skip_link_coverage.py` | `OK test:skip-link` |
-| `npm run build:site` + `npm run test:html-integrity:site` (clone limpo do ramo, Node 22) | build exit 0; `CACHE_CONTRACT_OK …` |
-| `node scripts/site/test_ui_geometry.mjs` (clone limpo do HEAD do lote, `_site` construído, `CHROME_PATH`) | `All UI geometry tests passed` (inclui os rótulos de CTA e o estado neutro das quatro páginas `obrigado*`) |
-| `npm run test:contact-journeys` (clone limpo, `_site` construído, `CHROME_PATH` do Chromium local) | `CONTACT_JOURNEYS_FAIL [{"name":"journey_harness_runtime"…"home form step transition did not activate"…}]` — 423 verificações, 1 falha na etapa do formulário da home; as 154 verificações das 14 jornadas nas rotas do lote A passam. A mesma falha ocorre no clone limpo do commit base 8860f5577 (pedido 8). |
+| `node scripts/revops/test_privacy.mjs` | `ALL privacy checks passed` |
+| `node scripts/site/test_interface_coverage.mjs` | `INTERFACE_COVERAGE_OK routes=234 axe=51x2 lighthouse_families=45 pages=47` |
+| `npm run audit:css-usage` (suíte da revisão) | exit 1: `FAIL new_unused_class styles.css .is-dark` / `.proof-figure--pair` / `.sla-box` / `.split--even` / `FAIL decoration_regression border_radius 162>158` (o último já falha no commit base). **Bloqueia `site-ci` até a recaptura do baseline pelo integrador: pedido 3.** |
+| `npm run test:page-contract-contratos` (suíte da revisão) | `CONTRACT_DEFENSE_FROZEN_DRIFT: medicoes-glosas-obras-publicas/index.html expected=124e31f2… actual=7288c195…` (idêntico no commit base 8860f5577, reproduzido em worktree isolada; pedido 7) |
+| `npm run test:bofu-dominance` (suíte da revisão) | `9 failed, 108 passed` (idêntico no commit base; pedido 7) |
+| `npm run test:first-fold-contract` (suíte da revisão) | `first-fold-contract: 3 check(s) failed` (1929/1932; idêntico no commit base; pedido 7) |
+| `npm run build:site` + `npm run test:html-integrity:site` (clone limpo de c312cf4e8, Node 22) | build exit 0; `CACHE_CONTRACT_OK fallback_max_age=3600 immutable_assets=3 …` |
+| `node scripts/site/test_ui_geometry.mjs` (clone limpo de c312cf4e8, `_site` construído, `CHROME_PATH` do Chromium local) | `All UI geometry tests passed` |
+| `npm run test:contact-journeys` (clone limpo, entrega anterior) | não repetido nesta rodada; a única falha da entrega anterior (`journey_harness_runtime`, etapa do formulário da home) é do integrador e idêntica no commit base (pedido 8) |
 
 ## Testes ajustados (estética, rota exata)
 
@@ -189,6 +228,11 @@ sem prazo). Todas as páginas passaram a carregar `assets/editorial.css` depois 
    exigir o bloco de contato antes do método; o esqueleto do caderno fecha a página com o bloco escuro único.
 2. `tests/demonstrative_infrastructure/test_infrastructure_pilot.py::test_page_is_demonstrative_not_client_and_has_required_title`
    — aceita atributos no `<h1>` (classe `t-service`), texto exato de `PAGE_H1` mantido.
+
+3. `tests/inb-20260911/12/test_page_contract_projetos_complementares.mjs::runShipped` (rodada de correção)
+   — duas verificações **acrescentadas**: `legacy_asset_is_desktop_plate_{pacote-entrega,interfaces-versoes}`
+   (o arquivo no caminho legado é byte a byte a prancha desktop) e `mobile_plate_in_picture_*` (a
+   `<picture>` aponta a composição móvel). Nada foi afrouxado; `requiredSrc` e `asset_exists` continuam.
 
 Nenhum teste de veracidade, preço, responsabilidade, privacidade, formulário ou persistência foi alterado.
 
@@ -218,4 +262,48 @@ Nenhum teste de veracidade, preço, responsabilidade, privacidade, formulário o
   serviço ganhou uma `<picture>` externa por prancha (≤ 10 KB por SVG) e a folha `assets/editorial.css`.
 - Alturas em 390 px ficaram entre 11.661 (parcerias) e 15.571 px (compatibilização), abaixo do piloto
   (quantitativos 19.739 px); nenhuma rota tem overflow em 320 px.
-- Os pedidos 1–8 (`pedidos-lote-a.md`) ficam com o integrador; nenhum bloqueia a publicação do lote.
+- Os pedidos 1–10 (`pedidos-lote-a.md`) ficam com o integrador. **O pedido 3 (baseline de uso de CSS)
+  bloqueia o `site-ci` do ramo de integração** até a recaptura; o pedido 7 (quatro suítes do pilar de
+  medições) já reprovava no commit base. Nenhum dos dois é resolvível dentro dos arquivos do lote.
+- Desenhos do exemplo de infraestrutura: corrigidos no gerador (legíveis no 390, rótulos fora dos
+  elementos finos), mas continuam uma composição por figura (SVG inline, sem variante móvel própria),
+  como no caso demonstrativo privado do piloto. A migração para o módulo de pranchas (JSON →
+  desktop/móvel, `family_private.py`, fontes `infra`/`infra_consumption` já registradas) fica como
+  pendência do lote; a prancha PC (`drenagem-rede`) e a P2 (`drenagem-perfil`) já cobrem planta e
+  perfil nas páginas de serviço.
+- Tabelas de 3 colunas no 390 (evidência, matriz de interfaces, diagnóstico de SST) continuam com
+  rolagem lateral e dica; o empilhamento pede CSS compartilhado (pedido 9).
+
+## Correções após revisão (achado → ação → prova)
+
+Revisores independentes (visual e contratos), 2026-09-17. Sem ALTA aberto dentro do lote; os dois
+ALTA apontam para arquivos do integrador e estão registrados com evidência (pedidos 3 e 7).
+
+| # | Sev. | Achado | Ação | Prova |
+| --- | --- | --- | --- | --- |
+| 1 | ALTA | `audit:css-usage` reprova com quatro classes de `styles.css` sem uso (`.is-dark`, `.proof-figure--pair`, `.sla-box`, `.split--even`), ausentes da tabela de testes. | Não corrigível no lote: o baseline (`data/design/css-usage-baseline.json`) é a última etapa da cadeia de recaptura de CSS e as classes não foram reinseridas no HTML só para satisfazer o contador. Pedido 3 reescrito com o comando, a linha de CI e os FAIL finais; a suíte entrou na tabela de testes. | tabela acima (`npm run audit:css-usage`); `pedidos-lote-a.md` item 3. |
+| 2 | ALTA | Pilar de medições reprova quatro suítes (canary 389, page-contract-contratos, bofu-dominance, first-fold-contract); o pedido 7 citava só uma. | Pedido 7 reescrito com as quatro suítes, os hashes e a prova de que reprovam identicamente no commit base 8860f5577 (worktree isolada) e que o lote não toca nos arquivos (`git diff 8860f5577..HEAD --name-only -- medicoes-glosas-obras-publicas/ tests/bofu_dominance/ data/bofu-dominance/ scripts/commercial/ tests/commercial/` vazio). | tabela acima; `pedidos-lote-a.md` item 7. |
+| 3 | MEDIA | `.text-link` em parágrafo corrido quebra a leitura (6 rotas). | Refutação parcial: o piloto usa `.text-link` em prosa (`quantitativos-orcamento-obras/index.html` L136, L303, L321, L349, L357), logo "reservar para ações isoladas" colocaria o lote fora do piloto; o defeito real é `display:inline-flex;min-height:48px;font-size:.91rem` (`styles.css` L2) num link com texto irmão. Regra aplicada: link com texto irmão no mesmo parágrafo → `<a>` simples (herda `.sec p a`/`.svc-open p a` de `styles.css:1317`: sublinhado, peso 700); link sozinho no parágrafo → mantém `.text-link` (o inline-flex é o correto para alinhar o ícone). Trocas: compat L246; revisão L178, L257; assistência L185; complementares L138, L206, L237, L261; inspeção L164. Mantidos: compat L175/L208, revisão L203/L258, complementares L177/L263/L264, inspeção L142, SST L165. | capturas `*-1440x1000-full-lote-a.jpg` (compat "Dois guias", revisão "Duas leituras", assistência "Discussão trabalhista"). |
+| 4 | MEDIA | Ressalvas repetidas 3–6× por tela em "Prova antes do método". | Deduplicadas fora dos blocos injetados (o kicker de cada `article.coord-finding` é gerado por `scripts/coordination/interference_register.mjs:317` e reescrito por `compose:purchase-proof`; é rótulo de veracidade com o link de procedência, mantido uma vez por bloco). Removidas: frase final da legenda da prancha (compat, complementares, SST, revisão, inspeção), subfrase da ficha "Cliente" (agora descritiva: recorte/fachada/canteiro sintéticos), legenda da tabela ("Não é caso real nem validação assinada") em SST. O carimbo da prancha (dentro do SVG) e "Amostras desta página" nas condições permanecem. `grep -c 'obra de cliente'`: compat 6 → 3 (dois kickers + condições), complementares 4 → 1, revisão 3 → 2. | diff dos commits `80f02498a`, `9b0076739`. |
+| 5 | MEDIA | Revisão: mesmo texto publicado duas vezes (intro e `div.panel.measure`). | Painel removido; a intro ganhou a ponte "Abaixo, o extrato completo, na forma em que o relatório separa…". `grep -c 'entra 0,10 m no volume'` → 1. | `revisao…-1440x1000-full-lote-a.jpg`. |
+| 6 | MEDIA | Complementares: dois esquemas antigos (1200×640, fonte 14–16) em coluna de 470 px, mesma composição escalada. | Pranchas PG e PH geradas de `data/demonstrative/plates/elaboracao-complementar.v1.json` (`family_private.py`, desktop 1200×400/460 e móvel 360×420, fonte mínima 12,5), em `figure.plate--dominant` de largura total: PG em `#entregaveis` (o kit de parceiros aponta para lá), PH em `#escopo-interfaces`. O contrato (`requiredSrc`) e o kit (`partner-reference-kits.v1.json:149`) exigem os caminhos legados: eles recebem a composição desktop byte a byte e a `<picture>` escrita à mão traz a móvel por `<source media="(max-width:699px)">`; o teste da família prova a igualdade. Gates de numerais/paleta/recomposição: `16 passed`. | `projetos-complementares…-1440x1000-full` (y≈3660–4130 e 5250–5730) e `-390x844-full` (col. PG legível); `assets-lote-a.json`. |
+| 7 | MEDIA | Parcerias: kits em cartões 2×2 com widgets nativos, três links empilhados. | Só CSS na folha da rota (`parcerias-engenharia/styles.css`): coluna única regrada, texto à esquerda e compartilhamento à direita no desktop, ações em linha, `textarea`/botões na tipografia e nas réguas do site (altura suficiente para URL e resumo, inclusive no 390), `[hidden]` respeitado; DOM dos kits intacto (`test_partner_kits_contract` OK). Rota continua COMPOSICAO_REDESENHADA. | `parcerias…-1440x1000-full` (y≈2300–2900), `-390x844-full`. |
+| 8 | MEDIA | 404: menu inerte no 390; relatório afirmava `class="no-js"` mantida. | Refutação parcial com correção: o artefato construído já recebe `no-js` (`build_site.py:520-545`) e só troca por `js` quando há `/script.js`, logo o 404 publicado nunca teve controle inerte (o toggle fica oculto e a navegação móvel é estática); a fonte, porém, divergia e a frase do relatório era falsa. Fonte passou a trazer `class="no-js"` (como as demais páginas-fonte e como `tests/coordination/test_page_contract.mjs:140` espera), rodapé igualado ao padrão e frase corrigida aqui. A captura de menu foi retirada da evidência (não existe menu a abrir). | `404.html-390x844-fold-lote-a.jpg` (nav estática sob o cabeçalho); `scripts/pseo/tests/test_responsive_public_html.py` `6 passed`. |
+| 9 | MEDIA | Botão dominante fora da dobra no 390 (assistência, complementares) e entre 700–815 nas demais. | Copy da abertura encurtada (frases movidas para blocos onde já existiam: aside "Em 30 segundos", "O que pedir", condições); contratos preservados (`landing_hero_*`, needle da contraprova, `foldText` do inb05). Medido no Chromium a 390×844 (`getBoundingClientRect().top` do `main .button-primary`): compat 697, revisão 671, complementares 673, inspeção 688, assistência 690, SST 664 (piloto quantitativos: 738). | `*-390x844-fold-lote-a.jpg` das seis rotas (botão visível). |
+| 10 | MEDIA | Infraestrutura: rótulo PV-01 atravessado por DR-01, "capa" cortada, fontes 7–9 px no 1440 e ~4 px no 390, perfil lateral fraco. | `render.py`: planta, perfil e seção em viewBox de 360 de largura (fonte 12,5/13), PV-01 abaixo da faixa, camadas rotuladas por leader fora da capa, perfil com linha 2,4 e rótulos empilhados; na coluna de 470 px o desenho escala para cima, no 390 rende 1:1. Regenerado com `generate`; `consumption.v1.json` inalterado; `test:infrastructure-demonstrative` `23 passed`. Migração ao módulo de pranchas registrada como pendência (acima). | `casos…-1440x1000-full` (y≈0–1000 e 2100–3400), `-390x844-full`. |
+| 11 | MEDIA | Inspeção: colisão entre "Situações" e "Etapas" (`div.delivery` dentro de `journey_paths`). | "Etapas que se encadeiam" virou `section.sec` própria (`#etapas-encadeadas`, `data-section-archetype="compare_ladder"`, h2 `.t-editorial`) e entrou no índice de página; resolve também a pendência do arquétipo `compare_ladder` dissolvido. | `inspecao…-1440x1000-full` (y≈3700–5000). |
+| 12 | BAIXA | Inspeção: aside de risco esticado. | `div.grid-2` → `div.split` (`.split>.aside-note{align-self:start}` já existe em `css/components.css`). | `inspecao…-1440x1000-full` (y≈6000–7000). |
+| 13 | BAIXA | "Três canais diretos" com quatro itens (6 rotas). | O link da triagem saiu de `ul.contact-alt` para `p.contact-note` ("Se preferir escrever com calma…", como já era na compatibilização); em parcerias o título virou "Canais diretos com o Engº Tiago Sasaki" (a frase "Descrever uma necessidade" exigida por `test_partner_reference` permanece). `data-fallback-channel` continua = 3 por rota. | `test:cta-form-next-state` `routes=31`; `test_partner_reference` OK. |
+| 14 | BAIXA | Complementares: eyebrow embutido em parágrafo corrido com negrito solto. | Tabela em `figure.proof-figure` de largura total com `figcaption` curta (tag + uma frase) e o parágrafo de uso separado, sem negrito. | `projetos-complementares…-1440x1000-full` (y≈1900–3000). |
+| 15 | BAIXA | Tabelas de 3 colunas rolam no 390 e escondem a coluna-chave. | Pede CSS compartilhado (empilhamento ≤ 620 px): pedido 9. Não feito no lote. | — |
+| 16 | BAIXA | Pedido 4 tratava `styles-offers.css` como rota exata. | Reescrito com as 11 rotas e a cadeia de recaptura; rota segue PRESERVADA_COM_JUSTIFICATIVA. | `pedidos-lote-a.md` item 4. |
+| 17 | BAIXA | Termos/privacidade: cabeçalho reduzido sem registro de intenção; hífen no h1. | Intenção anotada na matriz (`review_round_1`: instrumento contratual, idêntico a `origin/main`); h1 com dois-pontos nas duas rotas; `test_privacy` e `test_interface_coverage` OK. | `matriz-lote-a.json`; commit `c312cf4e8`. |
+| 18 | BAIXA | 404 com rodapé diferente. | `nav.footer-authority` padrão. | `404.html-1440x1000-full-lote-a.jpg`. |
+| 19 | PREF. | Complementares: rótulo do CTA do cabeçalho ≠ herói. | Refutado como fora do lote: o rótulo vem de `data/organic/public-family-registry.json:1148` (`value_first_header_cta.label`) e é normalizado no build por `scripts/site/shell_nav.py:340-375` (`declared_value_first_cta`), ambos do integrador; editar à mão seria sobrescrito. | caminhos citados. |
+| 20 | PREF. | Pranchas PA/PB/PF com branco entre desenho e carimbo; ficha em ~9–10 px. | Não feito nesta rodada (coerente com o piloto: P1–P4 têm a mesma altura de folha); anotado como melhoria para a campanha de fechamento. | — |
+| 21 | PREF. | Tabela de evidência: primeira coluna larga. | Pede CSS compartilhado: pedido 9 (c). | — |
+
+Ferramenta de captura: `/404.html` não pôde ser capturada com `capture.mjs` porque o passo do menu
+clica num `.menu-toggle` oculto e aborta (`Node is either not clickable`); a rota foi capturada com uma
+cópia temporária da ferramenta cuja única diferença é `if (toggle && toggleVisible)` (diff no pedido 6b).
+As outras rotas usaram a ferramenta original; `manifest-lote-a.json` regravado.

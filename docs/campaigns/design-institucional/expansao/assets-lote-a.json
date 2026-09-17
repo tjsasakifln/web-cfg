@@ -184,8 +184,8 @@
       "files": {
         "svg": {
           "path": "casos/demonstrativo-infraestrutura/assets/planta-r00.svg",
-          "sha256": "1597c6f818d244d2332a5b29a20c82cf05cfb292b0a334d0eee3dbda34fc65e2",
-          "bytes": 2247
+          "sha256": "35eeb30a1d54255689fff416e4a57be63b3667aa2950264524f37786ef4cbbd5",
+          "bytes": 2259
         }
       }
     },
@@ -205,8 +205,8 @@
       "files": {
         "svg": {
           "path": "casos/demonstrativo-infraestrutura/assets/planta-r01.svg",
-          "sha256": "e40563803bff283b2a7581a388dd3bab03c03056800a54f6572c83e38e1d1619",
-          "bytes": 2281
+          "sha256": "63a5d3a744f8bcfcf38d00defd32f0354356a4b35e166b482d3e5797b7fdca4b",
+          "bytes": 2293
         }
       }
     },
@@ -226,8 +226,8 @@
       "files": {
         "svg": {
           "path": "casos/demonstrativo-infraestrutura/assets/perfil-drenagem-r00.svg",
-          "sha256": "604645d43e1f7bbeec78599a17834591e5531358433d5fc96857a66bdc0cf18e",
-          "bytes": 1772
+          "sha256": "d8d5fc1ecf1443eef8116c9db2638a1aa20ccb9e034baf1d71401e23b444645a",
+          "bytes": 2120
         }
       }
     },
@@ -247,8 +247,8 @@
       "files": {
         "svg": {
           "path": "casos/demonstrativo-infraestrutura/assets/perfil-drenagem-r01.svg",
-          "sha256": "d94beba13743b55c7ea156a9fac8dda2e03c0a2f852f4c03ae3d55789c4e65ff",
-          "bytes": 1486
+          "sha256": "c3e9a644565ebf7cb4709477a63895cb16380c4967bdbaf07d0602943590f111",
+          "bytes": 1754
         }
       }
     },
@@ -268,10 +268,109 @@
       "files": {
         "svg": {
           "path": "casos/demonstrativo-infraestrutura/assets/secao-pavimento.svg",
-          "sha256": "a75ee5fc6b019da03605f174d6ad32ab25f9f58b310995869cb96819a36f9520",
-          "bytes": 1385
+          "sha256": "38d0e3564ee769f50ec521a79eb239f05f9bc0b8e5aa7032fa51a9fc0b65a7cd",
+          "bytes": 1994
         }
       }
+    },
+    {
+      "id": "pacote-entrega",
+      "code": "PG",
+      "kind": "prancha",
+      "description_pt_br": "Peças da entrega de elaboração complementar (PE-01 plantas e cortes, PE-02 detalhes, PE-03 especificações, PE-04 memória de cálculo) com a arquitetura de origem fora da autoria; diagrama de estrutura, sem número",
+      "sources": [
+        "data/demonstrative/plates/elaboracao-complementar.v1.json"
+      ],
+      "generator": "scripts/demonstrative/plates/family_private.py (python3 -m scripts.demonstrative.plates.render_plates)",
+      "license": "gerado pela CONFENGE a partir de dados demonstrativos",
+      "classification": "demonstrativo",
+      "usage": [
+        "/projetos-complementares-engenharia/",
+        "/parcerias-engenharia/ (kit elaboracao-complementar, arquivo assets/projetos-complementares-engenharia/pacote-entrega.svg = composição desktop)"
+      ],
+      "files": {
+        "desktop": {
+          "path": "assets/pranchas/pacote-entrega-desktop.svg",
+          "sha256": "d00adc9b58b51ce6472ddd21802d44c9d19de75e719a9138cbd7b0e2afaeef36",
+          "bytes": 5517
+        },
+        "mobile": {
+          "path": "assets/pranchas/pacote-entrega-mobile.svg",
+          "sha256": "8d57ebc6c0f215dcc6dd30df0444aa635fe5a19b22c316bd15bf6f86a42ae481",
+          "bytes": 3329
+        },
+        "legacy_desktop_copy": {
+          "path": "assets/projetos-complementares-engenharia/pacote-entrega.svg",
+          "sha256": "d00adc9b58b51ce6472ddd21802d44c9d19de75e719a9138cbd7b0e2afaeef36",
+          "bytes": 5517
+        }
+      }
+    },
+    {
+      "id": "interfaces-versoes",
+      "code": "PH",
+      "kind": "prancha",
+      "description_pt_br": "Controle de interfaces e versões em um ciclo (IV-A insumos de origem, IV-B disciplina delimitada, IV-C interfaces, IV-D versão devolvida); diagrama de fluxo, sem prazo, preço ou número de ciclos",
+      "sources": [
+        "data/demonstrative/plates/elaboracao-complementar.v1.json"
+      ],
+      "generator": "scripts/demonstrative/plates/family_private.py (python3 -m scripts.demonstrative.plates.render_plates)",
+      "license": "gerado pela CONFENGE a partir de dados demonstrativos",
+      "classification": "demonstrativo",
+      "usage": [
+        "/projetos-complementares-engenharia/ (arquivo assets/projetos-complementares-engenharia/interfaces-versoes.svg = composição desktop)"
+      ],
+      "files": {
+        "desktop": {
+          "path": "assets/pranchas/interfaces-versoes-desktop.svg",
+          "sha256": "4dcfe7b8b7812ddd8eedfeb119b57e634ce1b44c6ceb4c5f1bcf2fc3e075c7a0",
+          "bytes": 5456
+        },
+        "mobile": {
+          "path": "assets/pranchas/interfaces-versoes-mobile.svg",
+          "sha256": "b10ffc695990715fa879949b1934cc64db4c29b4be253229c3c28d1f522581d3",
+          "bytes": 3650
+        },
+        "legacy_desktop_copy": {
+          "path": "assets/projetos-complementares-engenharia/interfaces-versoes.svg",
+          "sha256": "4dcfe7b8b7812ddd8eedfeb119b57e634ce1b44c6ceb4c5f1bcf2fc3e075c7a0",
+          "bytes": 5456
+        }
+      }
+    }
+  ],
+  "regenerated_figures": [
+    {
+      "route": "/casos/demonstrativo-infraestrutura/",
+      "generator": "scripts/demonstrative/infrastructure_pilot/render.py (python3 -m scripts.demonstrative.infrastructure_pilot.generate)",
+      "files": [
+        {
+          "path": "casos/demonstrativo-infraestrutura/assets/perfil-drenagem-r00.svg",
+          "sha256": "d8d5fc1ecf1443eef8116c9db2638a1aa20ccb9e034baf1d71401e23b444645a",
+          "bytes": 2120
+        },
+        {
+          "path": "casos/demonstrativo-infraestrutura/assets/perfil-drenagem-r01.svg",
+          "sha256": "c3e9a644565ebf7cb4709477a63895cb16380c4967bdbaf07d0602943590f111",
+          "bytes": 1754
+        },
+        {
+          "path": "casos/demonstrativo-infraestrutura/assets/planta-r00.svg",
+          "sha256": "35eeb30a1d54255689fff416e4a57be63b3667aa2950264524f37786ef4cbbd5",
+          "bytes": 2259
+        },
+        {
+          "path": "casos/demonstrativo-infraestrutura/assets/planta-r01.svg",
+          "sha256": "63a5d3a744f8bcfcf38d00defd32f0354356a4b35e166b482d3e5797b7fdca4b",
+          "bytes": 2293
+        },
+        {
+          "path": "casos/demonstrativo-infraestrutura/assets/secao-pavimento.svg",
+          "sha256": "38d0e3564ee769f50ec521a79eb239f05f9bc0b8e5aa7032fa51a9fc0b65a7cd",
+          "bytes": 1994
+        }
+      ],
+      "note": "viewBox compacto (360 de largura), fonte 12,5/13, rotulos fora dos elementos finos; numeros so dos extratos derivados do JSON"
     }
   ]
 }

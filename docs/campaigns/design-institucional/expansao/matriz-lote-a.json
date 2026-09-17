@@ -21,7 +21,8 @@
         "docs/campaigns/design-institucional/expansao/evidence/lote-a/compatibilizacao-projetos-engenharia-390x844-menu-lote-a.jpg"
       ],
       "impediment": null,
-      "plate": "interferencia-verga-viga"
+      "plate": "interferencia-verga-viga",
+      "review_round_1": "Correção após revisão: links de prosa sem .text-link; ressalvas consolidadas (legenda, ficha e carimbo sem repetição fora dos blocos injetados); recapturada."
     },
     {
       "route": "/revisao-tecnica-projetos-engenharia/",
@@ -41,7 +42,8 @@
         "docs/campaigns/design-institucional/expansao/evidence/lote-a/revisao-tecnica-projetos-engenharia-390x844-menu-lote-a.jpg"
       ],
       "impediment": null,
-      "plate": "revisao-conferencia"
+      "plate": "revisao-conferencia",
+      "review_round_1": "Correção após revisão: painel RF-01/RF-02 duplicado removido (ponte na intro), links de prosa, três canais + triagem em nota, abertura encurtada (ação dominante a 671 px no 390); recapturada."
     },
     {
       "route": "/projetos-complementares-engenharia/",
@@ -61,7 +63,8 @@
         "docs/campaigns/design-institucional/expansao/evidence/lote-a/projetos-complementares-engenharia-390x844-menu-lote-a.jpg"
       ],
       "impediment": null,
-      "plate": "drenagem-rede"
+      "plate": "drenagem-rede",
+      "review_round_1": "Correção após revisão: esquemas antigos substituídos pelas pranchas PG/PH (JSON, desktop e móvel) em largura total; abertura encurtada (ação a 673 px no 390); matriz em largura total com legenda curta; links de prosa; três canais; recapturada."
     },
     {
       "route": "/inspecao-diagnostico-edificacoes/",
@@ -81,7 +84,8 @@
         "docs/campaigns/design-institucional/expansao/evidence/lote-a/inspecao-diagnostico-edificacoes-390x844-menu-lote-a.jpg"
       ],
       "impediment": null,
-      "plate": "inspecao-fachada"
+      "plate": "inspecao-fachada",
+      "review_round_1": "Correção após revisão: 'Etapas que se encadeiam' promovida a seção própria (compare_ladder, #etapas-encadeadas) no índice de página; aside de risco alinhado ao topo (.split); ressalva da prancha consolidada nas condições; três canais; recapturada."
     },
     {
       "route": "/assistencia-tecnica-pericial-engenharia/",
@@ -101,7 +105,8 @@
         "docs/campaigns/design-institucional/expansao/evidence/lote-a/assistencia-tecnica-pericial-engenharia-390x844-menu-lote-a.jpg"
       ],
       "impediment": null,
-      "plate": "pericia-fachada"
+      "plate": "pericia-fachada",
+      "review_round_1": "Correção após revisão: abertura encurtada (ação dominante a 690 px no 390; frases movidas para blocos onde já existiam); links de prosa; três canais; recapturada."
     },
     {
       "route": "/seguranca-trabalho-apoio-tecnico/",
@@ -121,7 +126,8 @@
         "docs/campaigns/design-institucional/expansao/evidence/lote-a/seguranca-trabalho-apoio-tecnico-390x844-menu-lote-a.jpg"
       ],
       "impediment": null,
-      "plate": "sst-canteiro"
+      "plate": "sst-canteiro",
+      "review_round_1": "Correção após revisão: abertura encurtada (ação a 664 px no 390); ressalvas consolidadas; três canais; recapturada."
     },
     {
       "route": "/casos/demonstrativo-infraestrutura/",
@@ -141,7 +147,8 @@
         "docs/campaigns/design-institucional/expansao/evidence/lote-a/casos-demonstrativo-infraestrutura-390x844-menu-lote-a.jpg"
       ],
       "impediment": null,
-      "plate": null
+      "plate": null,
+      "review_round_1": "Correção após revisão: cinco desenhos em viewBox compacto (360 de largura, fonte 12,5/13), rótulo PV-01 fora da faixa, camadas da seção com leader; recapturada. Pendência: migração para o módulo de pranchas (JSON → desktop/móvel) registrada."
     },
     {
       "route": "/parcerias-engenharia/",
@@ -161,7 +168,8 @@
         "docs/campaigns/design-institucional/expansao/evidence/lote-a/parcerias-engenharia-390x844-menu-lote-a.jpg"
       ],
       "impediment": "parcerias-engenharia/styles.css (integrador) ainda serve os conjuntos partner-kit; classes partner-hero/partner-steps/partner-contact ficaram sem uso (pedido registrado)",
-      "plate": null
+      "plate": null,
+      "review_round_1": "Correção após revisão: kits restilizados só em parcerias-engenharia/styles.css (linhas regradas, coluna única, ações em linha, controles na tipografia do site); DOM dos kits inalterado; 'Canais diretos'; recapturada."
     },
     {
       "route": "/404.html",
@@ -177,11 +185,11 @@
         "docs/campaigns/design-institucional/expansao/evidence/lote-a/404.html-1440x1000-fold-lote-a.jpg",
         "docs/campaigns/design-institucional/expansao/evidence/lote-a/404.html-1440x1000-full-lote-a.jpg",
         "docs/campaigns/design-institucional/expansao/evidence/lote-a/404.html-390x844-fold-lote-a.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-a/404.html-390x844-full-lote-a.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-a/404.html-390x844-menu-lote-a.jpg"
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/404.html-390x844-full-lote-a.jpg"
       ],
       "impediment": null,
-      "plate": null
+      "plate": null,
+      "review_round_1": "Correção após revisão: class=\"no-js\" na fonte (o build já a aplica; navegação móvel estática, sem controle inerte), rodapé padrão, texto sem 'ao lado'; recapturada sem captura de menu (o toggle não existe visualmente nesta página, por desenho)."
     },
     {
       "route": "/obrigado.html",
@@ -281,7 +289,8 @@
         "docs/campaigns/design-institucional/expansao/evidence/lote-a/comercial-privacidade-leads-390x844-full-lote-a.jpg"
       ],
       "impediment": null,
-      "plate": null
+      "plate": null,
+      "review_round_1": "Cabeçalho reduzido (só logotipo, sem nav, CTA ou menu-toggle) é intencional: instrumento contratual/aviso lido a partir do fluxo de contratação, igual em origin/main; sem captura de menu por isso. h1 com dois-pontos no lugar do hífen solto."
     },
     {
       "route": "/comercial/termos-diagnostico-b2g/",
@@ -300,7 +309,8 @@
         "docs/campaigns/design-institucional/expansao/evidence/lote-a/comercial-termos-diagnostico-b2g-390x844-full-lote-a.jpg"
       ],
       "impediment": null,
-      "plate": null
+      "plate": null,
+      "review_round_1": "Cabeçalho reduzido (só logotipo) intencional para instrumento contratual, igual em origin/main; sem captura de menu por isso. h1 com dois-pontos no lugar do hífen solto."
     },
     {
       "route": "/comercial/radar-decisorio/",
@@ -320,7 +330,8 @@
         "docs/campaigns/design-institucional/expansao/evidence/lote-a/comercial-radar-decisorio-390x844-menu-lote-a.jpg"
       ],
       "impediment": "Rota de oferta paga com formulario, preco publicado e medicao de primeira dobra (data/commercial/first-fold-measurements.v1.json, test_page_contract_eight, cta-form-next-state); tipografia ja herda Archivo. O heroi com degrade vem de styles-offers.css (integrador): pedido registrado.",
-      "plate": null
+      "plate": null,
+      "review_round_1": "PRESERVADA_COM_JUSTIFICATIVA: herói em degradê vem de styles-offers.css, folha carregada por 11 rotas (pedido 4 reescrito com o escopo real e a cadeia de recaptura)."
     }
   ]
 }
