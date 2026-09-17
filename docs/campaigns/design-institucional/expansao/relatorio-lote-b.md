@@ -360,7 +360,7 @@ recapturado, um único `sec--dark`, nada a mudar.
 | `npm run test:page-contract-integridade` | `176/176` |
 | `npm run test:page-contract-complementares` | `273/273` |
 | `npm run test:page-contract-eight` | `735/735` |
-| `npm run test:offer-fit` | exit 1: `offer-fit-copy: 81/83` — `reequilibrio-obras-publicas_headline/_body` (pré-existente desde a onda 1; rota fora dos arquivos permitidos desta frente: pedido 15). `diagnostico-pre-licitacao` corrigida nesta onda |
+| `npm run test:offer-fit` | exit 1: `offer-fit-copy: 81/83` — `reequilibrio-obras-publicas_headline/_body` (pré-existente: `git show 2da310422:reequilibrio-obras-publicas/index.html | grep -c "Quando o dossiê de reequilíbrio cabe"` = 0; rota fora dos arquivos permitidos desta frente: pedido 15). `diagnostico-pre-licitacao` corrigida nesta onda |
 | `npm run test:pricing-policy` | `pricing-policy: 196/196 checks passed` |
 | `npm run test:checkout-negatives` | exit 0 (`CONTRACT_PROVEN passed=66`) |
 | `npm run test:cta-form-next-state` | `CTA_FORM_NEXT_STATE_OK routes=31` (censo 183 → 198, nota no contrato, inventário regerado) |
@@ -394,6 +394,21 @@ recapturado, um único `sec--dark`, nada a mudar.
 (hash em `first-fold-measurements.v1.json`; não entra no `rendered_content_hash` da análise
 aprovada, conferido com `scripts.contract_analysis.approval.rendered_content_hash` antes e depois),
 e as rotas do lote em `first-fold-measurements.v1.json` (`input_hashes`).
+
+Escopo de `styles-offers.css`, conferido antes de editar: a folha é carregada por onze rotas
+(`acompanhamento`, `atrasos`, `bid-room`, `casos/`, `comercial/radar-decisorio/`, `defesa-margem`,
+`defesa-tecnica`, `diagnostico-b2g-expansao`, `diretoria-b2g`, `entregas/`, `servicos-obras-publicas`),
+mas todos os seletores alterados são `.contract-product*` / `.contract-products-hub*` (lockup,
+grade, cartões, regras, `h2` do hub, breakpoints desses blocos), usados só por
+`defesa-margem`, `defesa-tecnica`, `atrasos` e `servicos-obras-publicas` (`grep -c contract-product`
+= 0 nas outras sete). As regras de `.offer-hero`, `.offer-detail-disclosure` e `.offer-proof-line`
+não mudaram.
+
+Nota operacional: o worktree carrega `stash@{0}` ("WIP on campaign/salto-institucional-02-expansao",
+288 arquivos, drift de saídas rastreadas da base), anterior a esta frente e não pertencente ao lote.
+Um `git stash`/`pop` de conferência durante a onda 2 o aplicou por engano sobre a árvore; a árvore
+foi restaurada com `git reset --hard HEAD` (todo o trabalho já estava commitado) e a entrada do
+stash foi mantida intacta para o integrador decidir.
 
 ### 8.5 O que ficou de fora e por quê
 

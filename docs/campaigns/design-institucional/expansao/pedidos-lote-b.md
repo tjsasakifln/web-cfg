@@ -86,7 +86,7 @@ Cada pedido diz o arquivo do integrador, o motivo e a página afetada. Nada aqui
 ## 15. Cópia de encaixe de `/reequilibrio-obras-publicas/` (`test:offer-fit`)
 
 - **Arquivo**: `reequilibrio-obras-publicas/index.html` (rota da onda 1, fora dos arquivos permitidos da frente residual).
-- **Motivo**: `tests/commercial/test_offer_fit_copy.mjs` exige o título e o corpo exatos de `data/commercial/offer-fit-matrix.v1.json#route_copy.reequilibrio-obras-publicas` ("Quando o dossiê de reequilíbrio cabe, e quando não" + corpo); a recomposição da onda 1 parafraseou o corpo. Reprova desde a onda 1 (`offer-fit-copy: 81/83`). Em `/diagnostico-pre-licitacao/` a onda 2 restaurou o texto exato; fazer o mesmo em reequilíbrio (h3 + `p[data-offer-fit="1"]` com o corpo do JSON) e recapturar o hash.
+- **Motivo**: `tests/commercial/test_offer_fit_copy.mjs` exige o título e o corpo exatos de `data/commercial/offer-fit-matrix.v1.json#route_copy.reequilibrio-obras-publicas` ("Quando o dossiê de reequilíbrio cabe, e quando não" + corpo); a recomposição da onda 1 parafraseou o corpo. Reprova desde a onda 1 (`offer-fit-copy: 81/83`; no HEAD da integração `2da310422` o título não existe na rota: `git show 2da310422:reequilibrio-obras-publicas/index.html | grep -c "Quando o dossiê de reequilíbrio cabe"` = 0). Em `/diagnostico-pre-licitacao/` a onda 2 restaurou o texto exato; fazer o mesmo em reequilíbrio (h3 + `p[data-offer-fit="1"]` com o corpo do JSON) e recapturar o hash.
 
 ## 16. Tamanho do h1 de serviço dentro da casca `content-hero`
 
@@ -96,3 +96,7 @@ Cada pedido diz o arquivo do integrador, o motivo e a página afetada. Nada aqui
 ## 17. Recaptura de hashes após a onda 2 (complementa o pedido 1)
 
 - Além dos seis pilares: `styles-offers.css` mudou (lockup, hub) e entra em `data/commercial/first-fold-measurements.v1.json`; `diagnostico-pre-licitacao/index.html` mudou de novo (nowrap + cópia de encaixe); as quatro rotas de execução segura, as ofertas (diretoria, bid-room), o hub e os estados mudaram (`input_hashes` da primeira dobra). `test:first-fold-contract` reprova 17 checks só por isso. O `rendered_content_hash` da análise aprovada não depende de `styles-offers.css` (conferido antes e depois, mesmo valor).
+
+## 18. `stash@{0}` no worktree do lote B
+
+- O worktree `.worktrees/salto-02-lote-b` carrega `stash@{0}` ("WIP on campaign/salto-institucional-02-expansao: 2da310422", 288 arquivos, drift de `_site`/saídas rastreadas da base), anterior à onda 2 e não pertencente ao lote. Foi aplicado por engano por um `git stash`/`pop` de conferência e revertido com `git reset --hard HEAD` (trabalho já commitado); a entrada foi mantida. Decisão de descartar ou não é do integrador.
