@@ -52,25 +52,6 @@
     },
     {
       "route": "/reequilibrio-obras-publicas/",
-      "viewport": "390x844",
-      "status": 200,
-      "height": 12564,
-      "h1_font": "\"Archivo Var\"",
-      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/reequilibrio-obras-publicas-390x844-fold-lote-b.jpg",
-      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/reequilibrio-obras-publicas-390x844-full-lote-b.jpg",
-      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-b/reequilibrio-obras-publicas-390x844-menu-lote-b.jpg"
-    },
-    {
-      "route": "/reequilibrio-obras-publicas/",
-      "viewport": "1440x1000",
-      "status": 200,
-      "height": 8598,
-      "h1_font": "\"Archivo Var\"",
-      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/reequilibrio-obras-publicas-1440x1000-fold-lote-b.jpg",
-      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/reequilibrio-obras-publicas-1440x1000-full-lote-b.jpg"
-    },
-    {
-      "route": "/reequilibrio-obras-publicas/",
       "viewport": "320x700",
       "overflow_px": 0
     },
@@ -288,25 +269,6 @@
     },
     {
       "route": "/diagnostico-b2g-360/",
-      "viewport": "390x844",
-      "status": 200,
-      "height": 12012,
-      "h1_font": "\"Archivo Var\"",
-      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-360-390x844-fold-lote-b.jpg",
-      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-360-390x844-full-lote-b.jpg",
-      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-360-390x844-menu-lote-b.jpg"
-    },
-    {
-      "route": "/diagnostico-b2g-360/",
-      "viewport": "1440x1000",
-      "status": 200,
-      "height": 8371,
-      "h1_font": "\"Archivo Var\"",
-      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-360-1440x1000-fold-lote-b.jpg",
-      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-360-1440x1000-full-lote-b.jpg"
-    },
-    {
-      "route": "/diagnostico-b2g-360/",
       "viewport": "320x700",
       "overflow_px": 0
     },
@@ -467,6 +429,54 @@
     },
     {
       "route": "/casos/medicao-glosa-demonstrativo/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/reequilibrio-obras-publicas/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 12205,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/reequilibrio-obras-publicas-390x844-fold-lote-b.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/reequilibrio-obras-publicas-390x844-full-lote-b.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-b/reequilibrio-obras-publicas-390x844-menu-lote-b.jpg"
+    },
+    {
+      "route": "/reequilibrio-obras-publicas/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 8291,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/reequilibrio-obras-publicas-1440x1000-fold-lote-b.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/reequilibrio-obras-publicas-1440x1000-full-lote-b.jpg"
+    },
+    {
+      "route": "/reequilibrio-obras-publicas/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/diagnostico-b2g-360/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 12012,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-360-390x844-fold-lote-b.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-360-390x844-full-lote-b.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-360-390x844-menu-lote-b.jpg"
+    },
+    {
+      "route": "/diagnostico-b2g-360/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 8371,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-360-1440x1000-fold-lote-b.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-360-1440x1000-full-lote-b.jpg"
+    },
+    {
+      "route": "/diagnostico-b2g-360/",
       "viewport": "320x700",
       "overflow_px": 0
     }
