@@ -314,6 +314,83 @@ clica num `.menu-toggle` oculto e aborta (`Node is either not clickable`); a rot
 cópia temporária da ferramenta cuja única diferença é `if (toggle && toggleVisible)` (diff no pedido 6b).
 As outras rotas usaram a ferramenta original; `manifest-lote-a.json` regravado.
 
+## Correções após o aceite (síntese de 2026-09-17, integração a7068f671)
+
+Frente de correção do aceite do lote A sobre o ramo de integração (três lotes, duas ondas e as correções de
+CSS do integrador já aplicadas em `a7068f671`). Escopo: serviços privados, parcerias, caso de infraestrutura,
+404/obrigado*, contato. Evidência nova com tag `aceite-fix` em `evidence/lote-a/` (`manifest-aceite-fix.json`:
+nove rotas, overflow 320 = 0 em todas, `Archivo Var` no h1). Porta 8811 sobre a árvore fonte.
+
+### Achado → ação → prova
+
+| Id | Sev. | Rota(s) | Ação | Prova |
+| --- | --- | --- | --- | --- |
+| M-02 | MEDIA | `/parcerias-engenharia/` | Kicker "Encaminhamento de engenharia em nome do seu cliente" e h1 "Encaminhe a parte de engenharia que falta no seu pacote e siga com o seu cliente." (nomeiam a oferta de encaminhamento, distinta do h1 da home; `<title>`, description e JSON-LD intactos). Prancha PH (`interfaces-versoes`, já gerada por `family_private` e registrada em `assets-lote-a.json`) entra em "Como funciona" como `figure.plate.plate--dominant` pelo slot `<!-- plate:interfaces-versoes -->` (`inline.py`, sem `<picture>` à mão); legenda com `span.tag` "Exemplo demonstrativo" e os quatro blocos IV-A a IV-D. `usage` da prancha atualizado. | `parcerias-engenharia-1440x1000-full-aceite-fix.jpg` (prancha a y≈1.400–2.500), `-390x844-fold-aceite-fix.jpg` (kicker em duas linhas curtas); `python3 -m scripts.demonstrative.plates.inline --check` → `OK plates inline`; `node --test tests/pos-inb-20260911/05/test_partner_kits_contract.mjs` → pass 1. |
+| M-06 | MEDIA | 7 rotas do lote (compatibilização, revisão, complementares, inspeção, assistência, SST, parcerias) | Ordem do bloco escuro refeita sem CSS: na primeira coluna do `.capture-grid` ficam `t-kicker`, `h2`, `h3` dos canais e `div.contact-primary` (ação dominante + `ul.contact-alt`); a segunda coluna vira `<aside aria-label="O que informar e o que acontece depois">` com a prosa, `ol.after` e os `p.contact-note`. Nenhum `id`, `href`, `data-*`, texto de canal ou `data-form-value/-boundary` mudou (`cta_form_next_state_audit` lê por marcador, não por ordem). Quantitativos (integrador): pedido 28 com a mesma estrutura. | Sonda `probe-anchors.mjs` (scratchpad) a 390×844, topo da ação dominante após o salto (scroll-margin 6 rem): compatibilização 282, revisão 311, complementares 282, inspeção 311, assistência 339, SST 338, parcerias 339 px (antes: 929/958/737/660/635/688/609; quantitativos 1.037 continua no integrador). Capturas `*-390x844-full-aceite-fix.jpg` (bloco escuro) e `compatibilizacao-…-1440x1000-full-aceite-fix.jpg` (y≈8.300: título e ação à esquerda, prosa e passos à direita). |
+| M-07 | MEDIA | `/projetos-complementares-engenharia/` | CTA do meio "Pedir a proposta agora" → "Conversar sobre o projeto" (mesmo rótulo do cabeçalho, fixado em `data/organic/public-family-registry.json:1148`); o herói mantém "Solicitar proposta de elaboração" porque `landing_cta_elaboration`, `landing_js_not_required` e `landing_single_primary_label` (exatamente uma ocorrência em `main`) e `partner-reference-kits.v1.json:137` o exigem. Resultado: dois rótulos em vez de três, sem "agora"; um só rótulo depende de mudar o registro (integrador). | `grep -c 'Conversar sobre o projeto' projetos-complementares-engenharia/index.html` = 3, `grep -c agora` no CTA = 0; `npm run test:page-contract-projetos-complementares` → `187/187 ok`; `test:value-first-copy` 65/65. |
+| M-04 | MEDIA (parte do lote) | `/projetos-complementares-engenharia/` (+ assistência e SST) | `div.table-scroll` da matriz ganha `role="region"` (já tinha `tabindex=0` e `aria-label`); nas três rotas a `<table>` recebe `aria-labelledby` apontando para a `figcaption` (que ganhou `id`), em vez de `<caption>` dentro do wrapper rolável (a caption ficaria cortada, como o B-13 aponta nos casos B2G). A dica "Deslize a tabela…" já existia abaixo de 700 px. Quantitativos: pedido 27. | `grep -n 'role="region"' projetos-complementares-engenharia/index.html` L131; `audit:axe` sobre a árvore fonte: 0 critical/serious/moderate/minor nas 7 rotas do lote auditadas (mobile e desktop). |
+| B-07 | BAIXA | compatibilização, revisão, complementares, assistência (+ inspeção e SST, mesmo padrão) | Na dica da abertura o link de telefone passa a "telefone" (o `href="tel:…"` e a mensagem do WhatsApp não mudam); o número aparece uma vez, no `hero-secondary` "WhatsApp (48) 98834-4559". | `compatibilizacao-…-390x844-full-aceite-fix.jpg` (abertura: "Também por e-mail ou telefone."); `test:page-contract-projetos-complementares::landing_hero_channel_line` (wa.me + mailto + tel na primeira seção) → ok. |
+| B-06 | BAIXA | `/404.html` | `404.html` carrega `/script.js?v=fortune02` e o bootstrap `no-js→js` (o mesmo `_NO_JS_BOOTSTRAP` que `build_site.py:404` injeta quando há script; cabeçalho idêntico ao de `obrigado.html`, que já funciona com o script). Cabeçalho fixo de 61 px, menu móvel com ciclo de teclado, `capture.mjs` volta a capturar a rota sem cópia local. | `404.html-390x844-fold-aceite-fix.jpg` (cabeçalho compacto), `404.html-390x844-menu-aceite-fix.jpg` (menu aberto com "Fechar"); `html_integrity` failures=0; layout audit 7 larguras ok. |
+| B-09 | BAIXA | `/inspecao-diagnostico-edificacoes/` (PD-M) | O contrato das pranchas limita a composição móvel a duas chamadas (`test_mobile_is_a_recomposition_not_a_scale`: `circle r=11 ≤ 2`; `callouts=4` reprovou). PD-M mantém 1 e 2 como chamadas e numera as outras duas no rótulo do desenho ("3 M-03", "4 M-04", M-04 dentro da fachada) e na legenda, agora com quatro linhas e os números do JSON (0,90 × 0,40 m; 3,20 m · 0,20 mm). Título da rota inalterado. | `scratchpad/fix/pd-m-after.png`; `inspecao-…-390x844-full-aceite-fix.jpg` (y≈1.500); `python3 -m pytest scripts/demonstrative/plates -q` → 16 passed; `render_plates --check` → `plates_ok: 40 files`. |
+| B-03 | BAIXA | `/assistencia-tecnica-pericial-engenharia/` (PE-M) | Fachada 6 px acima (Y0 256) e notas em 308/323/338/353/370 (antes 316…382, atravessando o topo do carimbo em 384 = MOBILE_H − FRAME_PAD − TITLE_BLOCK_H); itens 3 e 4 numerados como em PD-M. | `scratchpad/fix/pe-m-after.png`; `assistencia-…-390x844-full-aceite-fix.jpg`; mesmos gates de pranchas. |
+| B-02 | BAIXA | `/casos/demonstrativo-infraestrutura/` | `infrastructure_pilot/render.py::_section_svg`: nota em duas linhas ("Espessuras declaradas; volume geométrico," / "não dimensionamento."), folha 17 px mais alta (viewBox 360×296); caso regenerado (`generate`), SVG e HTML inline atualizados, hash em `assets-lote-a.json`. | `scratchpad/fix/secao-after.png` (nada cortado); `casos-demonstrativo-infraestrutura-390x844-full-aceite-fix.jpg`; `npm run test:infrastructure-demonstrative` → 23 passed. |
+| P-04 | PREF. | `/parcerias-engenharia/` | Os doze `style="min-height:44px;min-width:44px"` saem dos botões de copiar/compartilhar; a folha da rota já dava `min-height:44px` e ganha `min-width:44px`. Mantido o estilo da folha (borda fina, fundo branco, 44 px) em vez de `.button-secondary`: é o vocabulário regrado da rota decidido na rodada anterior. `_headers` perde o hash sozinho no próximo `csp:refresh` (pedido 32). | `grep -c 'style="min-height' parcerias-engenharia/index.html` = 0; `parcerias-…-1440x1000-full-aceite-fix.jpg` (y≈2.900–3.700). |
+| P-06 (mesmo padrão) | PREF. | 7 rotas do lote | O `contact-alt` de telefone do bloco escuro passa a `<span>Ligar…: <span class="nowrap">(48) 98834-4559</span></span>` (span externo único porque o `<a>` é `inline-flex`; sem ele o número virava um item de flex à direita). Triagem é do integrador: pedido 29. | `compatibilizacao-…-390x844-full-aceite-fix.jpg` (y≈12.460: "Ligar sobre a compatibilização:" / "(48) 98834-4559" sem quebra no número). |
+
+### Conferido nas capturas (correções do integrador em a7068f671)
+
+- A-01: `mark_visible_opaque_tokens` sobre `parcerias-engenharia/index.html` → 0 `<textarea>` com `<span data-opaque-token>` (1 span na página, fora das textareas).
+- A-02 (compatibilização): `#registro-interferencias` usa `plate__picture--narrow` (variante 360×420 no slot de 456 px a 1440: escala 1,27, texto ≥ 12,5 px; a prancha dominante segue a folha 1200 a 1.166 px).
+- M-03/M-16/M-28/B-04/B-05/B-08: tabelas dos serviços e do caso de infraestrutura com layout automático a 390, `.svc-open__note` e carimbos `dl.keys` conforme as capturas `aceite-fix`; nada reaberto.
+
+### Refutados ou fora do contrato do lote (com evidência)
+
+- **M-04 em assistência e SST**: o achado diz "sem role=region"; as duas rotas já tinham `role="region" tabindex="0" aria-label` (grep nas linhas 126). Faltava só o nome acessível da `<table>`, adicionado.
+- **M-07 "um rótulo por página"**: parcialmente refutado — o rótulo do cabeçalho é dado de contrato (`public-family-registry.json:1148`) e o do herói é exigido por três testes e pelo kit de parceiros; o lote só podia mudar o CTA do meio. Feito.
+- **B-09 "numerar as quatro chamadas"**: o gate `test_mobile_is_a_recomposition_not_a_scale` proíbe mais de duas chamadas na composição móvel; numeração feita por rótulo + legenda, não por chamada.
+
+### Decisões do proprietário (PRESERVADA_COM_JUSTIFICATIVA / pendente)
+
+- **A-04 (prazo de resposta)**: `obrigado.html` continua publicando "retorno em até 2 dias úteis…"; a home (`#descrever-situacao`) e a caixa do formulário são do integrador; a triagem também. O lote não alinha as três rotas sem a decisão (a) restaurar os dois prazos ou (b) retirá-los; nenhum prazo foi alterado.
+- **M-25** (faixas do formulário da home), **M-26** (URL própria de avaliações), **M-27** (formulário on-page nas rotas privadas / link "Prefere escrever?" para `/?jornada=<x>#contato`), **M-19** (modelo precificado): sem alteração de preço, formulário, robots, canonical ou oferta; registrados aqui como pendentes.
+- **P-01** (vocabulário antigo das pranchas do caso de infraestrutura; explicação Q-/ORC- em quantitativos): não feito nesta rodada — as pranchas do caso são geradas por `infrastructure_pilot/render.py` com testes próprios e o custo de regenerar planta/perfil no vocabulário `sheet.py` excede o aceite; PG/PH já levam carimbo "Sem escala · diagrama de fluxo". **P-02/P-03**: decisão de design (dobra, blocos escuros, `estado.json#design_contract.limits`), não do lote.
+
+### Fora do escopo desta frente (família B / integrador)
+
+B-01 (pedido 30), B-10 (26), B-11, B-13, B-15, M-24, B-28 (24), B-34 (25), B-35 (já no pedido 21), B-36 (23), P-06 na triagem (29), M-04/M-06 em quantitativos (27/28).
+
+### Testes (última linha real, HEAD desta frente)
+
+| Suíte | Resultado |
+| --- | --- |
+| `python3 scripts/site/html_integrity.py --root . --surface source` | `failures=0` |
+| `test:design`, `test:copy`, `test:brand`, `test:authority`, `test:integral-solution`, `test:self-deprecation` | exit 0 |
+| `organic:test` | `279 passed` |
+| `test:inbound-gates` | `9 passed` |
+| `test:deliverables-registry` / `real-proof-registry` / `commercial-contract-consistency` / `public-offer-truth` | 3650/3650 · problems=0 · 521/521 · 132/132 |
+| `test:cta-form-next-state` | `CTA_FORM_NEXT_STATE_OK routes=31` |
+| `test:form-funnel` | `FORM_FUNNEL_OK` |
+| `test:page-contract-projetos-complementares` | `187/187 ok` |
+| `test:page-contract-complementares` / `-disputas` / `-contratos` / `-eight` | 273/273 · 273/273 · 498/498 · 735/735 |
+| `test:inb14-pericias-sst`, `test:attribution`, `test:lead-function`, `test:value-first-copy`, `test:task-doors`, `test:pos-inb-20260911-10` | PASS / ATTRIBUTION_OK / ALL checks passed / 65/65 / 240/240 / CHECK_OK |
+| `tests/coordination/*`, `tests/intake/test_inb05_revisao_projetos.mjs`, `tests/pos-inb-20260911/05/…`, `tests/intake/test_mv03_adaptive_intake.mjs` | pass 23 fail 0 · pass 17 fail 0 |
+| `test:infrastructure-demonstrative` | `23 passed` |
+| `python3 -m pytest scripts/demonstrative/plates -q`; `render_plates --check`; `inline --check` | `16 passed`; `plates_ok: 40 files`; `OK plates inline` |
+| `audit:layout-sitewide` (9 rotas tocadas × 7 larguras, base 8811) | `63/63; failures=0` |
+| `audit:axe` (base 8811) | `zero critical/serious`; as 7 rotas do lote auditadas com 0 em todos os níveis |
+
+Nenhum teste foi ajustado nesta rodada. `seo/PUBLIC-ARTIFACT-MANIFEST.json`, regravado por uma suíte,
+foi devolvido com `git checkout --`.
+
+### Mudanças que tocam hashes protegidos (para a recaptura do integrador)
+
+Nenhum pilar B2G, canário, primeira dobra da home ou de `/entregas/` foi tocado. Mudam de propósito:
+`assets/pranchas/inspecao-fachada-mobile.svg`, `assets/pranchas/pericia-fachada-mobile.svg`,
+`casos/demonstrativo-infraestrutura/assets/secao-pavimento.svg` (+ `index.html` do caso) — hashes já
+refeitos em `assets-lote-a.json`; rótulos de CTA/links (censo de CTAs) em `projetos-complementares-engenharia`
+("Conversar sobre o projeto" no CTA do meio) e nas dicas das seis rotas de serviço ("telefone"); `_headers`
+perde um hash de estilo inline no próximo `csp:refresh`.
+
 ## Onda 2 — escopo residual A: `/entregas/` (hub de entregas, rota crítica do gate de Lighthouse)
 
 Ramo `campaign/salto-02/lote-a` avançado para a integração `2da310422` (três lotes da onda 1 e folha
