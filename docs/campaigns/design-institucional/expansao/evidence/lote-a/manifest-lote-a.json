@@ -78,6 +78,35 @@
       "route": "/projetos-complementares-engenharia/",
       "viewport": "320x700",
       "overflow_px": 0
+    },
+    {
+      "route": "/inspecao-diagnostico-edificacoes/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/inspecao-diagnostico-edificacoes/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 13143,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/inspecao-diagnostico-edificacoes-390x844-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/inspecao-diagnostico-edificacoes-390x844-full-lote-a.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-a/inspecao-diagnostico-edificacoes-390x844-menu-lote-a.jpg"
+    },
+    {
+      "route": "/inspecao-diagnostico-edificacoes/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 8811,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/inspecao-diagnostico-edificacoes-1440x1000-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/inspecao-diagnostico-edificacoes-1440x1000-full-lote-a.jpg"
+    },
+    {
+      "route": "/inspecao-diagnostico-edificacoes/",
+      "viewport": "320x700",
+      "overflow_px": 0
     }
   ]
 }
