@@ -25,6 +25,270 @@
       "route": "/ferramentas/diagnostico-defesa-margem/",
       "viewport": "320x700",
       "overflow_px": 0
+    },
+    {
+      "route": "/casos/modelo-painel-precos-obras-publicas/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 32515,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-painel-precos-obras-publicas-390x844-fold-onda2.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-painel-precos-obras-publicas-390x844-full-onda2.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-painel-precos-obras-publicas-390x844-menu-onda2.jpg"
+    },
+    {
+      "route": "/casos/modelo-painel-precos-obras-publicas/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 21423,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-painel-precos-obras-publicas-1440x1000-fold-onda2.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-painel-precos-obras-publicas-1440x1000-full-onda2.jpg"
+    },
+    {
+      "route": "/casos/modelo-painel-precos-obras-publicas/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/conteudos/glosa-de-medicao-obra-publica/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 10849,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-glosa-de-medicao-obra-publica-390x844-fold-onda2.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-glosa-de-medicao-obra-publica-390x844-full-onda2.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-glosa-de-medicao-obra-publica-390x844-menu-onda2.jpg"
+    },
+    {
+      "route": "/conteudos/glosa-de-medicao-obra-publica/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 8121,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-glosa-de-medicao-obra-publica-1440x1000-fold-onda2.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-glosa-de-medicao-obra-publica-1440x1000-full-onda2.jpg"
+    },
+    {
+      "route": "/conteudos/glosa-de-medicao-obra-publica/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/conteudos/atraso-na-medicao-obra-publica/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 12453,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-atraso-na-medicao-obra-publica-390x844-fold-onda2.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-atraso-na-medicao-obra-publica-390x844-full-onda2.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-atraso-na-medicao-obra-publica-390x844-menu-onda2.jpg"
+    },
+    {
+      "route": "/conteudos/atraso-na-medicao-obra-publica/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 9237,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-atraso-na-medicao-obra-publica-1440x1000-fold-onda2.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-atraso-na-medicao-obra-publica-1440x1000-full-onda2.jpg"
+    },
+    {
+      "route": "/conteudos/atraso-na-medicao-obra-publica/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/analises-contratos-publicos/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 4531,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/analises-contratos-publicos-390x844-fold-onda2.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/analises-contratos-publicos-390x844-full-onda2.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/analises-contratos-publicos-390x844-menu-onda2.jpg"
+    },
+    {
+      "route": "/analises-contratos-publicos/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 3125,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/analises-contratos-publicos-1440x1000-fold-onda2.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/analises-contratos-publicos-1440x1000-full-onda2.jpg"
+    },
+    {
+      "route": "/analises-contratos-publicos/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/inteligencia/cenarios/aditivos-e-risco-de-margem/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 6903,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-aditivos-e-risco-de-margem-390x844-fold-onda2.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-aditivos-e-risco-de-margem-390x844-full-onda2.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-aditivos-e-risco-de-margem-390x844-menu-onda2.jpg"
+    },
+    {
+      "route": "/inteligencia/cenarios/aditivos-e-risco-de-margem/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 5333,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-aditivos-e-risco-de-margem-1440x1000-fold-onda2.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-aditivos-e-risco-de-margem-1440x1000-full-onda2.jpg"
+    },
+    {
+      "route": "/inteligencia/cenarios/aditivos-e-risco-de-margem/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/inteligencia/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 4009,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-390x844-fold-onda2.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-390x844-full-onda2.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-390x844-menu-onda2.jpg"
+    },
+    {
+      "route": "/inteligencia/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 2688,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-1440x1000-fold-onda2.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-1440x1000-full-onda2.jpg"
+    },
+    {
+      "route": "/inteligencia/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/radar/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 2932,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/radar-390x844-fold-onda2.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/radar-390x844-full-onda2.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/radar-390x844-menu-onda2.jpg"
+    },
+    {
+      "route": "/radar/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 2091,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/radar-1440x1000-fold-onda2.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/radar-1440x1000-full-onda2.jpg"
+    },
+    {
+      "route": "/radar/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/imprensa/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 4286,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/imprensa-390x844-fold-onda2.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/imprensa-390x844-full-onda2.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/imprensa-390x844-menu-onda2.jpg"
+    },
+    {
+      "route": "/imprensa/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 2998,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/imprensa-1440x1000-fold-onda2.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/imprensa-1440x1000-full-onda2.jpg"
+    },
+    {
+      "route": "/imprensa/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/ferramentas/checklist-reequilibrio/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 6022,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-checklist-reequilibrio-390x844-fold-onda2.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-checklist-reequilibrio-390x844-full-onda2.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-checklist-reequilibrio-390x844-menu-onda2.jpg"
+    },
+    {
+      "route": "/ferramentas/checklist-reequilibrio/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 3604,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-checklist-reequilibrio-1440x1000-fold-onda2.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-checklist-reequilibrio-1440x1000-full-onda2.jpg"
+    },
+    {
+      "route": "/ferramentas/checklist-reequilibrio/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/ferramentas/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 6545,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-390x844-fold-onda2.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-390x844-full-onda2.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-390x844-menu-onda2.jpg"
+    },
+    {
+      "route": "/ferramentas/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 4693,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-1440x1000-fold-onda2.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-1440x1000-full-onda2.jpg"
+    },
+    {
+      "route": "/ferramentas/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/metodologia-inteligencia/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 4795,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/metodologia-inteligencia-390x844-fold-onda2.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/metodologia-inteligencia-390x844-full-onda2.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/metodologia-inteligencia-390x844-menu-onda2.jpg"
+    },
+    {
+      "route": "/metodologia-inteligencia/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 2864,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/metodologia-inteligencia-1440x1000-fold-onda2.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/metodologia-inteligencia-1440x1000-full-onda2.jpg"
+    },
+    {
+      "route": "/metodologia-inteligencia/",
+      "viewport": "320x700",
+      "overflow_px": 0
     }
   ]
 }
