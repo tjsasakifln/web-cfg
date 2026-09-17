@@ -292,8 +292,14 @@
 .article-aside .aside-card a:not(.button):not(.button-primary):not(.button-secondary){color:var(--ink);font-weight:720;text-decoration:underline;text-underline-offset:.2em}
 .article-aside .aside-compact{padding-top:.75rem}
 @media (min-width:1000px){.article-aside{position:sticky;top:6rem}}
-.article-main .lead-inline,.article-layout .lead-inline,main>.lead-inline.section{margin:2.5rem 0 0;padding:1.25rem 0 0;border-top:1px solid var(--rule-strong);background:transparent;border-radius:0}
+.article-main .lead-inline,.article-layout .lead-inline,main>.lead-inline.section,.article-hero~.lead-inline,.article-hero~*>.lead-inline,.article-hero~* .lead-inline{margin:2.5rem 0 0;padding:1.25rem 0 0;border-top:1px solid var(--rule-strong);background:transparent;border-radius:0}
 .article-main .lead-inline h2,.article-main .lead-inline h3{margin-top:0}
+.article-hero~.lead-inline,.article-hero~* .lead-inline{color:var(--ink);width:auto;display:grid;grid-template-columns:minmax(0,1fr);gap:1rem 2rem;align-items:start}
+@media (min-width:800px){.article-hero~.lead-inline,.article-hero~* .lead-inline{grid-template-columns:minmax(0,1.2fr) minmax(220px,auto)}}
+.article-hero~.lead-inline .lead-inline-copy>span,.article-hero~* .lead-inline .lead-inline-copy>span{display:block;font-family:var(--sans-narrow);font-stretch:var(--narrow);font-weight:750;font-size:var(--text-small);letter-spacing:.08em;text-transform:uppercase;color:var(--green-700);margin:0 0 .35rem}
+.article-hero~.lead-inline h2,.article-hero~* .lead-inline h2,.article-hero~.lead-inline h3,.article-hero~* .lead-inline h3{color:var(--ink);margin:0 0 .5rem}
+.article-hero~.lead-inline p,.article-hero~* .lead-inline p{color:var(--text);margin:0 0 .75rem;max-width:56ch}
+.article-hero~.lead-inline .button-secondary,.article-hero~* .lead-inline .button-secondary{color:var(--ink);border-color:var(--rule-strong)}
 
 .content-cta{padding:var(--section-default);color:#fff;background:var(--navy-900)}
 .content-cta .container{display:grid;grid-template-columns:minmax(0,1fr);gap:1.5rem 3rem;align-items:start}
@@ -329,6 +335,9 @@
 .tool-page-hero,.tool-hero{padding:clamp(1.25rem,3vw,2.5rem) 0 clamp(1rem,2vw,1.5rem);background:var(--white);border-bottom:1px solid var(--rule)}
 .tool-page-hero h1,.tool-hero h1{font-family:var(--sans-wide);font-stretch:var(--wide);font-size:var(--text-service);font-weight:760;letter-spacing:-.03em;line-height:1.04;max-width:20ch;margin:0 0 .85rem;text-wrap:balance}
 .tool-page-hero p,.tool-hero p{max-width:56ch;color:var(--text);margin:0 0 .75rem}
+.container.tool-shell{width:min(calc(100% - 48px),var(--tool-workbench,var(--container)));margin-inline:auto}
+@media (max-width:900px){.container.tool-shell{width:min(calc(100% - 38px),var(--tool-workbench,var(--container)))}}
+@media (max-width:620px){.container.tool-shell{width:min(calc(100% - 40px),var(--tool-workbench,var(--container)))}}
 .tool-form{display:grid;gap:1rem;margin:1.25rem 0;padding:1.25rem 0;border-top:1px solid var(--rule-strong);border-bottom:1px solid var(--rule)}
 @media (min-width:800px){.tool-form{grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));align-items:end}}
 .tool-form fieldset{border:0;margin:0;padding:0;min-width:0;display:grid;gap:.35rem}
@@ -356,6 +365,9 @@
 .profile-hero h1{font-family:var(--sans-wide);font-stretch:var(--wide);font-size:var(--text-service);font-weight:760;letter-spacing:-.03em;line-height:1.04;max-width:18ch;margin:0 0 .75rem}
 .profile-hero .content-lead{font-size:var(--text-callout);font-weight:500;line-height:1.5;color:var(--text);max-width:48ch;margin:0 0 1rem}
 .profile-hero .profile-mark{margin:0}
+.profile-list{display:grid;grid-template-columns:minmax(0,1fr);gap:0;margin:1.25rem 0 0;padding:0;list-style:none;border-top:1px solid var(--rule-strong)}
+.profile-list li{display:grid;grid-template-columns:1.25rem minmax(0,1fr);gap:.75rem;padding:.75rem 0;background:transparent;border:0;border-bottom:1px solid var(--rule);border-radius:0;color:var(--text);font-size:1rem;font-weight:500}
+.profile-list li .icon,.profile-list li svg{width:1.1em;height:1.1em;color:var(--green-700);margin-top:.2rem}
 .credential-block{padding:clamp(1.5rem,3vw,2.5rem) 0;border-top:1px solid var(--rule-strong)}
 .credential-block h2{margin-top:0;max-width:22ch}
 .credential-list{list-style:none;margin:1rem 0 0;padding:0;display:grid;gap:0;border-top:1px solid var(--rule-strong)}

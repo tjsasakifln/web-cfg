@@ -62,6 +62,9 @@
 .tool-page-hero,.tool-hero{padding:clamp(1.25rem,3vw,2.5rem) 0 clamp(1rem,2vw,1.5rem);background:var(--white);border-bottom:1px solid var(--rule)}
 .tool-page-hero h1,.tool-hero h1{font-family:var(--sans-wide);font-stretch:var(--wide);font-size:var(--text-service);font-weight:760;letter-spacing:-.03em;line-height:1.04;max-width:20ch;margin:0 0 .85rem;text-wrap:balance}
 .tool-page-hero p,.tool-hero p{max-width:56ch;color:var(--text);margin:0 0 .75rem}
+.container.tool-shell{width:min(calc(100% - 48px),var(--tool-workbench,var(--container)));margin-inline:auto}
+@media (max-width:900px){.container.tool-shell{width:min(calc(100% - 38px),var(--tool-workbench,var(--container)))}}
+@media (max-width:620px){.container.tool-shell{width:min(calc(100% - 40px),var(--tool-workbench,var(--container)))}}
 .tool-form{display:grid;gap:1rem;margin:1.25rem 0;padding:1.25rem 0;border-top:1px solid var(--rule-strong);border-bottom:1px solid var(--rule)}
 @media (min-width:800px){.tool-form{grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));align-items:end}}
 .tool-form fieldset{border:0;margin:0;padding:0;min-width:0;display:grid;gap:.35rem}

@@ -118,8 +118,14 @@
 .article-aside .aside-card a:not(.button):not(.button-primary):not(.button-secondary){color:var(--ink);font-weight:720;text-decoration:underline;text-underline-offset:.2em}
 .article-aside .aside-compact{padding-top:.75rem}
 @media (min-width:1000px){.article-aside{position:sticky;top:6rem}}
-.article-main .lead-inline,.article-layout .lead-inline,main>.lead-inline.section{margin:2.5rem 0 0;padding:1.25rem 0 0;border-top:1px solid var(--rule-strong);background:transparent;border-radius:0}
+.article-main .lead-inline,.article-layout .lead-inline,main>.lead-inline.section,.article-hero~.lead-inline,.article-hero~*>.lead-inline,.article-hero~* .lead-inline{margin:2.5rem 0 0;padding:1.25rem 0 0;border-top:1px solid var(--rule-strong);background:transparent;border-radius:0}
 .article-main .lead-inline h2,.article-main .lead-inline h3{margin-top:0}
+.article-hero~.lead-inline,.article-hero~* .lead-inline{color:var(--ink);width:auto;display:grid;grid-template-columns:minmax(0,1fr);gap:1rem 2rem;align-items:start}
+@media (min-width:800px){.article-hero~.lead-inline,.article-hero~* .lead-inline{grid-template-columns:minmax(0,1.2fr) minmax(220px,auto)}}
+.article-hero~.lead-inline .lead-inline-copy>span,.article-hero~* .lead-inline .lead-inline-copy>span{display:block;font-family:var(--sans-narrow);font-stretch:var(--narrow);font-weight:750;font-size:var(--text-small);letter-spacing:.08em;text-transform:uppercase;color:var(--green-700);margin:0 0 .35rem}
+.article-hero~.lead-inline h2,.article-hero~* .lead-inline h2,.article-hero~.lead-inline h3,.article-hero~* .lead-inline h3{color:var(--ink);margin:0 0 .5rem}
+.article-hero~.lead-inline p,.article-hero~* .lead-inline p{color:var(--text);margin:0 0 .75rem;max-width:56ch}
+.article-hero~.lead-inline .button-secondary,.article-hero~* .lead-inline .button-secondary{color:var(--ink);border-color:var(--rule-strong)}
 
 .content-cta{padding:var(--section-default);color:#fff;background:var(--navy-900)}
 .content-cta .container{display:grid;grid-template-columns:minmax(0,1fr);gap:1.5rem 3rem;align-items:start}
