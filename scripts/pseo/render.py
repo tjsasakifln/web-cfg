@@ -35,11 +35,11 @@ EDITORIAL_FULL_SHEET_LINK = '<link href="/assets/editorial.css" rel="stylesheet"
 
 # Ação nomeada por tipo de item no hub (o visitante sabe o que abre).
 HUB_ACTION_LABELS = {
-    "Mercados": "Ver os mercados",
-    "Órgãos": "Ver os órgãos",
-    "Preços": "Ver as referências",
-    "Concorrência": "Ver a concorrência",
-    "Cenários": "Ver os cenários",
+    "Mercados": "Explorar mercados",
+    "Órgãos": "Explorar órgãos",
+    "Preços": "Ver referências",
+    "Concorrência": "Ver concorrência",
+    "Cenários": "Ler cenários",
     "Método": "Ler o método",
     "Mercado": "Ver o mercado",
     "Órgão comprador": "Ver o dossiê",

@@ -822,13 +822,14 @@ def render_hub_html(items: list[tuple[dict[str, Any], PublicationDecision]], *, 
         '<a class="text-link" href="/defesa-margem-contratos-publicos/">'
         "Conhecer o serviço de defesa de margem</a></div></section>"
     )
+    # Trilha antes da abertura (ordem estrutural do site: onde estou, depois o quê).
     body = (
-        f'<header class="article-hero container"{archetype_attr("masthead")}>'
+        breadcrumbs_html([("Início", "/"), (ANALYSIS_LABEL_PT, None)])
+        + f'<header class="article-hero container"{archetype_attr("masthead")}>'
         f'<p class="eyebrow">{e(ANALYSIS_LABEL_PT)}</p>'
         "<h1>Análises técnicas de contratos públicos</h1>"
         f'<p class="ca-disclaimer">{e(DISCLAIMER_PT)}</p>'
         "</header>"
-        + breadcrumbs_html([("Início", "/"), (ANALYSIS_LABEL_PT, None)])
         + '<div class="container">'
         '<p class="authority-byline">Autoria: <a rel="author" href="/especialista/tiago-jun-sasaki/">Engº Tiago Sasaki</a>'
         ' · Atualizado em <time datetime="2026-08-16">2026-08-16</time>'

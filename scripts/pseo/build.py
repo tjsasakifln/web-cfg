@@ -476,12 +476,12 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
             "com a capacidade, o risco e a estratégia da empresa. Esta área organiza evidências públicas "
             "para apoiar decisões comerciais e técnicas, sem confundir frequência histórica com certeza futura.",
             [
-                ("/inteligencia/mercados/", "Mercados", "Onde a demanda se concentra", "Demanda e órgãos"),
-                ("/inteligencia/orgaos/", "Órgãos", "Quem contrata o que importa", "Dossiês compradores"),
-                ("/inteligencia/precos/", "Preços", "Referências antes de precificar", "Medianas e faixas"),
-                ("/inteligencia/concorrencia/", "Concorrência", "Quem aparece com frequência", "Observado, não ranking"),
-                ("/inteligencia/cenarios/", "Cenários", "Problema + decisão técnica", "Enquadramento aplicado"),
-                ("/metodologia-inteligencia/", "Método", "Como lemos as evidências", "Limites e fontes"),
+                ("/inteligencia/mercados/", "Mercados", "Onde a demanda se concentra", "Segmentos e regiões com massa de contratos e compradores, para decidir onde alocar esforço comercial."),
+                ("/inteligencia/orgaos/", "Órgãos", "Quem contrata o que importa", "Dossiês de órgãos com histórico de contratação em engenharia, fornecedores e limitações explícitas."),
+                ("/inteligencia/precos/", "Preços", "Referências antes de precificar", "Medianas e faixas de valor contratual por segmento, com data-base e fonte declaradas."),
+                ("/inteligencia/concorrencia/", "Concorrência", "Quem aparece com frequência", "Fornecedores recorrentes nos registros públicos: frequência observada, não ranking de qualidade."),
+                ("/inteligencia/cenarios/", "Cenários", "Problema + decisão técnica", "Problemas recorrentes de proposta, preço e contrato, ligados à decisão técnica e ao serviço que responde."),
+                ("/metodologia-inteligencia/", "Método", "Como lemos as evidências", "Fontes oficiais, janela de leitura e limites da amostra, para conferir cada número."),
             ],
             [("Início", "/"), ("Inteligência", None)],
             None,

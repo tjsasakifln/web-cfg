@@ -1319,7 +1319,10 @@ def test_thankyou_specialist_cta_family():
     # diagnostico e o destino entregava uma triagem: rotulo e destino tem de
     # coincidir. A propriedade preservada -- a pagina de quem assina leva a
     # um caminho de atendimento nomeado -- passa a ser verificada assim.
-    assert "Descrever a situação para o Engº Tiago" in specialist
+    # 2026-09-17 (salto institucional 02, lote C): o rotulo encurta para
+    # "Descrever a situação" (o botao quebrava em duas linhas a 390 px, 60 px
+    # contra 44 no piloto); mesmo destino /triagem-tecnica/, mesma propriedade.
+    assert "Descrever a situação" in specialist
     assert 'href="/triagem-tecnica/"' in specialist
     lower = specialist.lower()
     assert "analisar meu cenário" not in lower
