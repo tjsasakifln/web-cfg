@@ -1,0 +1,976 @@
+{
+  "base": "http://127.0.0.1:8743",
+  "tag": "lote-c",
+  "captures": [
+    {
+      "route": "/conteudos/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 14602,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-390x844-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-390x844-full-lote-c.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-390x844-menu-lote-c.jpg"
+    },
+    {
+      "route": "/conteudos/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 10722,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-1440x1000-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-1440x1000-full-lote-c.jpg"
+    },
+    {
+      "route": "/conteudos/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/conteudos/sinapi-desonerado-nao-desonerado/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 21477,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-sinapi-desonerado-nao-desonerado-390x844-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-sinapi-desonerado-nao-desonerado-390x844-full-lote-c.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-sinapi-desonerado-nao-desonerado-390x844-menu-lote-c.jpg"
+    },
+    {
+      "route": "/conteudos/sinapi-desonerado-nao-desonerado/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 16348,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-sinapi-desonerado-nao-desonerado-1440x1000-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-sinapi-desonerado-nao-desonerado-1440x1000-full-lote-c.jpg"
+    },
+    {
+      "route": "/conteudos/sinapi-desonerado-nao-desonerado/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/conteudos/comparar-propostas-execucao-obra/",
+      "viewport": "320x700",
+      "overflow_px": 57
+    },
+    {
+      "route": "/conteudos/como-contratar-projetos-complementares/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 8752,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-como-contratar-projetos-complementares-390x844-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-como-contratar-projetos-complementares-390x844-full-lote-c.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-como-contratar-projetos-complementares-390x844-menu-lote-c.jpg"
+    },
+    {
+      "route": "/conteudos/como-contratar-projetos-complementares/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 6523,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-como-contratar-projetos-complementares-1440x1000-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-como-contratar-projetos-complementares-1440x1000-full-lote-c.jpg"
+    },
+    {
+      "route": "/conteudos/como-contratar-projetos-complementares/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/conteudos/matriz-de-riscos-obra-publica/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 10378,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-matriz-de-riscos-obra-publica-390x844-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-matriz-de-riscos-obra-publica-390x844-full-lote-c.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-matriz-de-riscos-obra-publica-390x844-menu-lote-c.jpg"
+    },
+    {
+      "route": "/conteudos/matriz-de-riscos-obra-publica/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 7746,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-matriz-de-riscos-obra-publica-1440x1000-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-matriz-de-riscos-obra-publica-1440x1000-full-lote-c.jpg"
+    },
+    {
+      "route": "/conteudos/matriz-de-riscos-obra-publica/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/conteudos/como-contratar-revisao-tecnica-projeto/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/conteudos/limite-aditivo-25-50-obra-publica/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 14010,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-limite-aditivo-25-50-obra-publica-390x844-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-limite-aditivo-25-50-obra-publica-390x844-full-lote-c.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-limite-aditivo-25-50-obra-publica-390x844-menu-lote-c.jpg"
+    },
+    {
+      "route": "/conteudos/limite-aditivo-25-50-obra-publica/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 10354,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-limite-aditivo-25-50-obra-publica-1440x1000-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-limite-aditivo-25-50-obra-publica-1440x1000-full-lote-c.jpg"
+    },
+    {
+      "route": "/conteudos/limite-aditivo-25-50-obra-publica/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/conteudos/glosa-por-qualidade-obra-publica/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 12426,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-glosa-por-qualidade-obra-publica-390x844-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-glosa-por-qualidade-obra-publica-390x844-full-lote-c.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-glosa-por-qualidade-obra-publica-390x844-menu-lote-c.jpg"
+    },
+    {
+      "route": "/conteudos/glosa-por-qualidade-obra-publica/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 9202,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-glosa-por-qualidade-obra-publica-1440x1000-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-glosa-por-qualidade-obra-publica-1440x1000-full-lote-c.jpg"
+    },
+    {
+      "route": "/conteudos/glosa-por-qualidade-obra-publica/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/lei-14133-obras/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/lei-14133-obras/limite-25-50-aditivo-obra/",
+      "viewport": "320x700",
+      "overflow_px": 58
+    },
+    {
+      "route": "/guias-contratos-obras/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 3665,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/guias-contratos-obras-390x844-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/guias-contratos-obras-390x844-full-lote-c.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/guias-contratos-obras-390x844-menu-lote-c.jpg"
+    },
+    {
+      "route": "/guias-contratos-obras/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 2491,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/guias-contratos-obras-1440x1000-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/guias-contratos-obras-1440x1000-full-lote-c.jpg"
+    },
+    {
+      "route": "/guias-contratos-obras/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/guias-contratos-obras/checklist-pedido-aditivo/",
+      "viewport": "320x700",
+      "overflow_px": 10
+    },
+    {
+      "route": "/jurisprudencia-contratos-obras/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 2286,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/jurisprudencia-contratos-obras-390x844-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/jurisprudencia-contratos-obras-390x844-full-lote-c.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/jurisprudencia-contratos-obras-390x844-menu-lote-c.jpg"
+    },
+    {
+      "route": "/jurisprudencia-contratos-obras/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 1261,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/jurisprudencia-contratos-obras-1440x1000-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/jurisprudencia-contratos-obras-1440x1000-full-lote-c.jpg"
+    },
+    {
+      "route": "/jurisprudencia-contratos-obras/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/inteligencia/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/inteligencia/cenarios/aditivos-e-risco-de-margem/",
+      "viewport": "320x700",
+      "overflow_px": 54
+    },
+    {
+      "route": "/radar/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 2846,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/radar-390x844-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/radar-390x844-full-lote-c.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/radar-390x844-menu-lote-c.jpg"
+    },
+    {
+      "route": "/radar/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 1731,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/radar-1440x1000-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/radar-1440x1000-full-lote-c.jpg"
+    },
+    {
+      "route": "/radar/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/casos/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 9965,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-390x844-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-390x844-full-lote-c.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-390x844-menu-lote-c.jpg"
+    },
+    {
+      "route": "/casos/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 6748,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-1440x1000-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-1440x1000-full-lote-c.jpg"
+    },
+    {
+      "route": "/casos/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/casos/modelo-painel-precos-obras-publicas/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 32515,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-painel-precos-obras-publicas-390x844-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-painel-precos-obras-publicas-390x844-full-lote-c.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-painel-precos-obras-publicas-390x844-menu-lote-c.jpg"
+    },
+    {
+      "route": "/casos/modelo-painel-precos-obras-publicas/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 21423,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-painel-precos-obras-publicas-1440x1000-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-painel-precos-obras-publicas-1440x1000-full-lote-c.jpg"
+    },
+    {
+      "route": "/casos/modelo-painel-precos-obras-publicas/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/especialista/tiago-jun-sasaki/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 8158,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/especialista-tiago-jun-sasaki-390x844-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/especialista-tiago-jun-sasaki-390x844-full-lote-c.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/especialista-tiago-jun-sasaki-390x844-menu-lote-c.jpg"
+    },
+    {
+      "route": "/especialista/tiago-jun-sasaki/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 5577,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/especialista-tiago-jun-sasaki-1440x1000-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/especialista-tiago-jun-sasaki-1440x1000-full-lote-c.jpg"
+    },
+    {
+      "route": "/especialista/tiago-jun-sasaki/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/confianca/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 6639,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/confianca-390x844-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/confianca-390x844-full-lote-c.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/confianca-390x844-menu-lote-c.jpg"
+    },
+    {
+      "route": "/confianca/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 4789,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/confianca-1440x1000-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/confianca-1440x1000-full-lote-c.jpg"
+    },
+    {
+      "route": "/confianca/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/ferramentas/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 6545,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-390x844-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-390x844-full-lote-c.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-390x844-menu-lote-c.jpg"
+    },
+    {
+      "route": "/ferramentas/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 4693,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-1440x1000-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-1440x1000-full-lote-c.jpg"
+    },
+    {
+      "route": "/ferramentas/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/ferramentas/limite-acrescimos-supressoes/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 4416,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-limite-acrescimos-supressoes-390x844-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-limite-acrescimos-supressoes-390x844-full-lote-c.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-limite-acrescimos-supressoes-390x844-menu-lote-c.jpg"
+    },
+    {
+      "route": "/ferramentas/limite-acrescimos-supressoes/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 2686,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-limite-acrescimos-supressoes-1440x1000-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-limite-acrescimos-supressoes-1440x1000-full-lote-c.jpg"
+    },
+    {
+      "route": "/ferramentas/limite-acrescimos-supressoes/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/ferramentas/matriz-atraso-obra/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 6105,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-matriz-atraso-obra-390x844-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-matriz-atraso-obra-390x844-full-lote-c.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-matriz-atraso-obra-390x844-menu-lote-c.jpg"
+    },
+    {
+      "route": "/ferramentas/matriz-atraso-obra/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 3663,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-matriz-atraso-obra-1440x1000-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-matriz-atraso-obra-1440x1000-full-lote-c.jpg"
+    },
+    {
+      "route": "/ferramentas/matriz-atraso-obra/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/ferramentas/prontidao-tecnica-obra-privada/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 5405,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-prontidao-tecnica-obra-privada-390x844-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-prontidao-tecnica-obra-privada-390x844-full-lote-c.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-prontidao-tecnica-obra-privada-390x844-menu-lote-c.jpg"
+    },
+    {
+      "route": "/ferramentas/prontidao-tecnica-obra-privada/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 4020,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-prontidao-tecnica-obra-privada-1440x1000-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-prontidao-tecnica-obra-privada-1440x1000-full-lote-c.jpg"
+    },
+    {
+      "route": "/ferramentas/prontidao-tecnica-obra-privada/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/ferramentas/diagnostico-defesa-margem/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 8148,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-diagnostico-defesa-margem-390x844-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-diagnostico-defesa-margem-390x844-full-lote-c.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-diagnostico-defesa-margem-390x844-menu-lote-c.jpg"
+    },
+    {
+      "route": "/ferramentas/diagnostico-defesa-margem/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 5389,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-diagnostico-defesa-margem-1440x1000-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-diagnostico-defesa-margem-1440x1000-full-lote-c.jpg"
+    },
+    {
+      "route": "/ferramentas/diagnostico-defesa-margem/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/ferramentas/checklist-reequilibrio/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 6282,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-checklist-reequilibrio-390x844-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-checklist-reequilibrio-390x844-full-lote-c.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-checklist-reequilibrio-390x844-menu-lote-c.jpg"
+    },
+    {
+      "route": "/ferramentas/checklist-reequilibrio/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 3807,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-checklist-reequilibrio-1440x1000-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-checklist-reequilibrio-1440x1000-full-lote-c.jpg"
+    },
+    {
+      "route": "/ferramentas/checklist-reequilibrio/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/entregas/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 18159,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/entregas-390x844-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/entregas-390x844-full-lote-c.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/entregas-390x844-menu-lote-c.jpg"
+    },
+    {
+      "route": "/entregas/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 12007,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/entregas-1440x1000-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/entregas-1440x1000-full-lote-c.jpg"
+    },
+    {
+      "route": "/entregas/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/conteudos/comparar-propostas-execucao-obra/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 5322,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-comparar-propostas-execucao-obra-390x844-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-comparar-propostas-execucao-obra-390x844-full-lote-c.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-comparar-propostas-execucao-obra-390x844-menu-lote-c.jpg"
+    },
+    {
+      "route": "/conteudos/comparar-propostas-execucao-obra/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 3793,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-comparar-propostas-execucao-obra-1440x1000-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-comparar-propostas-execucao-obra-1440x1000-full-lote-c.jpg"
+    },
+    {
+      "route": "/conteudos/comparar-propostas-execucao-obra/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/conteudos/como-contratar-revisao-tecnica-projeto/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 4233,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-como-contratar-revisao-tecnica-projeto-390x844-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-como-contratar-revisao-tecnica-projeto-390x844-full-lote-c.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-como-contratar-revisao-tecnica-projeto-390x844-menu-lote-c.jpg"
+    },
+    {
+      "route": "/conteudos/como-contratar-revisao-tecnica-projeto/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 2881,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-como-contratar-revisao-tecnica-projeto-1440x1000-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-como-contratar-revisao-tecnica-projeto-1440x1000-full-lote-c.jpg"
+    },
+    {
+      "route": "/conteudos/como-contratar-revisao-tecnica-projeto/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/lei-14133-obras/limite-25-50-aditivo-obra/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 10604,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/lei-14133-obras-limite-25-50-aditivo-obra-390x844-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/lei-14133-obras-limite-25-50-aditivo-obra-390x844-full-lote-c.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/lei-14133-obras-limite-25-50-aditivo-obra-390x844-menu-lote-c.jpg"
+    },
+    {
+      "route": "/lei-14133-obras/limite-25-50-aditivo-obra/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 7669,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/lei-14133-obras-limite-25-50-aditivo-obra-1440x1000-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/lei-14133-obras-limite-25-50-aditivo-obra-1440x1000-full-lote-c.jpg"
+    },
+    {
+      "route": "/lei-14133-obras/limite-25-50-aditivo-obra/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/guias-contratos-obras/checklist-pedido-aditivo/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 17379,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/guias-contratos-obras-checklist-pedido-aditivo-390x844-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/guias-contratos-obras-checklist-pedido-aditivo-390x844-full-lote-c.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/guias-contratos-obras-checklist-pedido-aditivo-390x844-menu-lote-c.jpg"
+    },
+    {
+      "route": "/guias-contratos-obras/checklist-pedido-aditivo/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 10909,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/guias-contratos-obras-checklist-pedido-aditivo-1440x1000-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/guias-contratos-obras-checklist-pedido-aditivo-1440x1000-full-lote-c.jpg"
+    },
+    {
+      "route": "/guias-contratos-obras/checklist-pedido-aditivo/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/inteligencia/cenarios/aditivos-e-risco-de-margem/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 6924,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-aditivos-e-risco-de-margem-390x844-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-aditivos-e-risco-de-margem-390x844-full-lote-c.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-aditivos-e-risco-de-margem-390x844-menu-lote-c.jpg"
+    },
+    {
+      "route": "/inteligencia/cenarios/aditivos-e-risco-de-margem/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 5320,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-aditivos-e-risco-de-margem-1440x1000-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-aditivos-e-risco-de-margem-1440x1000-full-lote-c.jpg"
+    },
+    {
+      "route": "/inteligencia/cenarios/aditivos-e-risco-de-margem/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/inteligencia/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 3142,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-390x844-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-390x844-full-lote-c.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-390x844-menu-lote-c.jpg"
+    },
+    {
+      "route": "/inteligencia/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 2013,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-1440x1000-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-1440x1000-full-lote-c.jpg"
+    },
+    {
+      "route": "/inteligencia/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/lei-14133-obras/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 3767,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/lei-14133-obras-390x844-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/lei-14133-obras-390x844-full-lote-c.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/lei-14133-obras-390x844-menu-lote-c.jpg"
+    },
+    {
+      "route": "/lei-14133-obras/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 2461,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/lei-14133-obras-1440x1000-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/lei-14133-obras-1440x1000-full-lote-c.jpg"
+    },
+    {
+      "route": "/lei-14133-obras/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/metodologia-inteligencia/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 4844,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/metodologia-inteligencia-390x844-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/metodologia-inteligencia-390x844-full-lote-c.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/metodologia-inteligencia-390x844-menu-lote-c.jpg"
+    },
+    {
+      "route": "/metodologia-inteligencia/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 2894,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/metodologia-inteligencia-1440x1000-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/metodologia-inteligencia-1440x1000-full-lote-c.jpg"
+    },
+    {
+      "route": "/metodologia-inteligencia/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/imprensa/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 3723,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/imprensa-390x844-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/imprensa-390x844-full-lote-c.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/imprensa-390x844-menu-lote-c.jpg"
+    },
+    {
+      "route": "/imprensa/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 2294,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/imprensa-1440x1000-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/imprensa-1440x1000-full-lote-c.jpg"
+    },
+    {
+      "route": "/imprensa/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/politica-editorial/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 5756,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/politica-editorial-390x844-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/politica-editorial-390x844-full-lote-c.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/politica-editorial-390x844-menu-lote-c.jpg"
+    },
+    {
+      "route": "/politica-editorial/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 3833,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/politica-editorial-1440x1000-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/politica-editorial-1440x1000-full-lote-c.jpg"
+    },
+    {
+      "route": "/politica-editorial/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/uso-de-ia/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 3308,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/uso-de-ia-390x844-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/uso-de-ia-390x844-full-lote-c.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/uso-de-ia-390x844-menu-lote-c.jpg"
+    },
+    {
+      "route": "/uso-de-ia/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 2207,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/uso-de-ia-1440x1000-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/uso-de-ia-1440x1000-full-lote-c.jpg"
+    },
+    {
+      "route": "/uso-de-ia/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/privacidade/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 9777,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/privacidade-390x844-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/privacidade-390x844-full-lote-c.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/privacidade-390x844-menu-lote-c.jpg"
+    },
+    {
+      "route": "/privacidade/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 5292,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/privacidade-1440x1000-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/privacidade-1440x1000-full-lote-c.jpg"
+    },
+    {
+      "route": "/privacidade/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/termos-de-uso/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 5188,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/termos-de-uso-390x844-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/termos-de-uso-390x844-full-lote-c.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/termos-de-uso-390x844-menu-lote-c.jpg"
+    },
+    {
+      "route": "/termos-de-uso/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 3042,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/termos-de-uso-1440x1000-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/termos-de-uso-1440x1000-full-lote-c.jpg"
+    },
+    {
+      "route": "/termos-de-uso/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/nurture/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 5379,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/nurture-390x844-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/nurture-390x844-full-lote-c.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/nurture-390x844-menu-lote-c.jpg"
+    },
+    {
+      "route": "/nurture/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 3420,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/nurture-1440x1000-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/nurture-1440x1000-full-lote-c.jpg"
+    },
+    {
+      "route": "/nurture/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/analise-cnpj/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 2772,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/analise-cnpj-390x844-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/analise-cnpj-390x844-full-lote-c.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/analise-cnpj-390x844-menu-lote-c.jpg"
+    },
+    {
+      "route": "/analise-cnpj/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 2561,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/analise-cnpj-1440x1000-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/analise-cnpj-1440x1000-full-lote-c.jpg"
+    },
+    {
+      "route": "/analise-cnpj/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/oportunidades/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 2825,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/oportunidades-390x844-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/oportunidades-390x844-full-lote-c.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/oportunidades-390x844-menu-lote-c.jpg"
+    },
+    {
+      "route": "/oportunidades/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 2538,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/oportunidades-1440x1000-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/oportunidades-1440x1000-full-lote-c.jpg"
+    },
+    {
+      "route": "/oportunidades/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/piloto/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 1740,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/piloto-390x844-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/piloto-390x844-full-lote-c.jpg"
+    },
+    {
+      "route": "/piloto/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 1000,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/piloto-1440x1000-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/piloto-1440x1000-full-lote-c.jpg"
+    },
+    {
+      "route": "/piloto/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/analises-contratos-publicos/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 4291,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/analises-contratos-publicos-390x844-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/analises-contratos-publicos-390x844-full-lote-c.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/analises-contratos-publicos-390x844-menu-lote-c.jpg"
+    },
+    {
+      "route": "/analises-contratos-publicos/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 2586,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/analises-contratos-publicos-1440x1000-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/analises-contratos-publicos-1440x1000-full-lote-c.jpg"
+    },
+    {
+      "route": "/analises-contratos-publicos/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/radar/nacional-obras-publicas/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 7806,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/radar-nacional-obras-publicas-390x844-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/radar-nacional-obras-publicas-390x844-full-lote-c.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/radar-nacional-obras-publicas-390x844-menu-lote-c.jpg"
+    },
+    {
+      "route": "/radar/nacional-obras-publicas/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 4559,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/radar-nacional-obras-publicas-1440x1000-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/radar-nacional-obras-publicas-1440x1000-full-lote-c.jpg"
+    },
+    {
+      "route": "/radar/nacional-obras-publicas/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    }
+  ]
+}
