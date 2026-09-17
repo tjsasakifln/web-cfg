@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" role="img" aria-labelledby="risco-margem-desktop-title risco-margem-desktop-desc" font-family="Archivo Var, Arial, Helvetica, sans-serif" fill="#071a31">
+<title id="risco-margem-desktop-title">Prancha P10 · Matriz de risco por evento · exemplo demonstrativo</title>
+<desc id="risco-margem-desktop-desc">Matriz de 5 eventos de um contrato hipotético: prazo, impacto potencial em R$ mil, prova e decisão por evento. Frente liberada com atraso (R$ 186 mil, com registro) é priorizado; R$ 395 mil têm registro contemporâneo, R$ 94 mil registro parcial e R$ 12 mil nenhum. Valores sintéticos; exemplo demonstrativo, sem obra de cliente. Procedência: data/demonstrative/plates/risco-margem.v1.json.</desc>
+<rect x="0" y="0" width="1200" height="560" fill="#ffffff"/>
+<rect x="8" y="8" width="1184" height="544" fill="#ffffff" stroke="#dfe4e6"/>
+<text x="28" y="40" font-size="16" font-weight="650">Matriz de risco por evento: o que priorizar, registrar, quantificar ou não pleitear</text>
+<text x="1172" y="40" font-size="11" fill="#5d6a7a" text-anchor="end">Dados demonstrativos · revisão R00</text>
+<defs><pattern id="risco-margem-d-h5d6a" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0V6" stroke="#5d6a7a" stroke-width="0.5"/></pattern></defs>
+<text x="28" y="72" font-size="12" font-weight="650">5 eventos de um contrato hipotético · prazo em dias corridos · impacto potencial em R$ mil · prova = registro contemporâneo</text>
+<text x="78" y="104" font-size="12" fill="#5d6a7a" font-weight="650">Evento</text>
+<text x="330" y="104" font-size="12" fill="#5d6a7a" font-weight="650">Prazo</text>
+<text x="420" y="104" font-size="12" fill="#5d6a7a" font-weight="650">Impacto potencial (R$ mil)</text>
+<text x="780" y="104" font-size="12" fill="#5d6a7a" font-weight="650">Prova e lacuna</text>
+<text x="990" y="104" font-size="12" fill="#5d6a7a" font-weight="650">Decisão</text>
+<line x1="28" y1="112" x2="1172" y2="112" stroke="#071a31" stroke-width="1.2"/>
+<rect x="20" y="114" width="1160" height="52" fill="#ced62a" fill-opacity=".35"/>
+<rect x="40" y="126" width="16" height="16" fill="#2d6f2d"/>
+<text x="78" y="138" font-size="12" fill="#2d6f2d" font-weight="650">Frente liberada com atraso</text>
+<text x="78" y="154" font-size="11" fill="#5d6a7a">E-01</text>
+<text x="330" y="138" font-size="12" font-weight="650">12 dias</text>
+<rect x="420" y="128" width="300" height="10" fill="#f3f4f5" stroke="#071a31" stroke-width="1.2"/>
+<rect x="420" y="128" width="300" height="10" fill="#2d6f2d"/>
+<text x="732" y="138" font-size="12" font-weight="650">186</text>
+<text x="780" y="138" font-size="12" font-weight="650">Registro contemporâneo</text>
+<text x="780" y="154" font-size="11" fill="#5d6a7a">Lacuna: nenhuma</text>
+<text x="990" y="138" font-size="12" fill="#2d6f2d" font-weight="650">PRIORIZAR</text>
+<line x1="28" y1="168" x2="1172" y2="168" stroke="#dfe4e6" stroke-width="1"/>
+<rect x="40" y="182" width="16" height="16" fill="url(#risco-margem-d-h5d6a)" stroke="#5d6a7a" stroke-width="0.6"/>
+<text x="78" y="194" font-size="12" font-weight="650">Serviço extra sem ordem escrita</text>
+<text x="78" y="210" font-size="11" fill="#5d6a7a">E-02</text>
+<text x="330" y="194" font-size="12" fill="#2d6f2d" font-weight="650">5 dias</text>
+<rect x="420" y="184" width="300" height="10" fill="#f3f4f5" stroke="#071a31" stroke-width="1.2"/>
+<rect x="420" y="184" width="151.6" height="10" fill="url(#risco-margem-d-h5d6a)"/>
+<text x="732" y="194" font-size="12" font-weight="650">94</text>
+<text x="780" y="194" font-size="12" font-weight="650">Registro parcial</text>
+<text x="780" y="210" font-size="11" fill="#5d6a7a">Lacuna: ordem de serviço ou ata</text>
+<text x="990" y="194" font-size="12" font-weight="650">REGISTRAR</text>
+<line x1="28" y1="224" x2="1172" y2="224" stroke="#dfe4e6" stroke-width="1"/>
+<rect x="40" y="238" width="16" height="16" fill="#2d6f2d"/>
+<text x="78" y="250" font-size="12" font-weight="650">Glosa na medição do período</text>
+<text x="78" y="266" font-size="11" fill="#5d6a7a">E-03</text>
+<text x="330" y="250" font-size="12" font-weight="650">8 dias</text>
+<rect x="420" y="240" width="300" height="10" fill="#f3f4f5" stroke="#071a31" stroke-width="1.2"/>
+<rect x="420" y="240" width="98.4" height="10" fill="#2d6f2d"/>
+<text x="732" y="250" font-size="12" font-weight="650">61</text>
+<text x="780" y="250" font-size="12" font-weight="650">Registro contemporâneo</text>
+<text x="780" y="266" font-size="11" fill="#5d6a7a">Lacuna: memória de quantitativos</text>
+<text x="990" y="250" font-size="12" font-weight="650">QUANTIFICAR</text>
+<line x1="28" y1="280" x2="1172" y2="280" stroke="#dfe4e6" stroke-width="1"/>
+<rect x="40" y="294" width="16" height="16" fill="#2d6f2d"/>
+<text x="78" y="306" font-size="12" font-weight="650">Reajuste não aplicado na fatura</text>
+<text x="78" y="322" font-size="11" fill="#5d6a7a">E-04</text>
+<text x="330" y="306" font-size="12" font-weight="650">30 dias</text>
+<rect x="420" y="296" width="300" height="10" fill="#f3f4f5" stroke="#071a31" stroke-width="1.2"/>
+<rect x="420" y="296" width="238.7" height="10" fill="#2d6f2d"/>
+<text x="732" y="306" font-size="12" font-weight="650">148</text>
+<text x="780" y="306" font-size="12" font-weight="650">Registro contemporâneo</text>
+<text x="780" y="322" font-size="11" fill="#5d6a7a">Lacuna: nenhuma</text>
+<text x="990" y="306" font-size="12" font-weight="650">JURÍDICO</text>
+<line x1="28" y1="336" x2="1172" y2="336" stroke="#dfe4e6" stroke-width="1"/>
+<rect x="40" y="350" width="16" height="16" fill="#ffffff" stroke="#071a31" stroke-width="1.2" stroke-dasharray="4 3"/>
+<text x="78" y="362" font-size="12" font-weight="650">Chuva sem critério contratual</text>
+<text x="78" y="378" font-size="11" fill="#5d6a7a">E-05</text>
+<text x="330" y="362" font-size="12" font-weight="650">18 dias</text>
+<rect x="420" y="352" width="300" height="10" fill="#f3f4f5" stroke="#071a31" stroke-width="1.2"/>
+<rect x="420" y="352" width="19.4" height="10" fill="#ffffff"/>
+<text x="732" y="362" font-size="12" font-weight="650">12</text>
+<text x="780" y="362" font-size="12" font-weight="650">Sem registro</text>
+<text x="780" y="378" font-size="11" fill="#5d6a7a">Lacuna: critério contratual e diário</text>
+<text x="990" y="362" font-size="12" font-weight="650">NÃO PLEITEAR</text>
+<line x1="28" y1="392" x2="1172" y2="392" stroke="#dfe4e6" stroke-width="1"/>
+<g stroke="#5d6a7a" stroke-width="0.6"><line x1="1129" y1="132.4" x2="1080" y2="134"/><circle cx="1080" cy="134" r="1.6" fill="#5d6a7a"/></g>
+<g transform="translate(1140 132)"><circle r="11" fill="#071a31"/><text y="4" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">1</text></g>
+<g stroke="#5d6a7a" stroke-width="0.6"><line x1="379.1" y1="189.4" x2="374" y2="190"/><circle cx="374" cy="190" r="1.6" fill="#5d6a7a"/></g>
+<g transform="translate(390 188)"><circle r="11" fill="#071a31"/><text y="4" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">2</text></g>
+<g stroke="#5d6a7a" stroke-width="0.6"><line x1="48" y1="377" x2="48" y2="368"/><circle cx="48" cy="368" r="1.6" fill="#5d6a7a"/></g>
+<g transform="translate(48 388)"><circle r="11" fill="#071a31"/><text y="4" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">3</text></g>
+<text x="28" y="424" font-size="12" font-weight="650">Chamadas</text><text x="28" y="442" font-size="11"><tspan font-weight="700">1</tspan><tspan x="44">Evento priorizado: Frente liberada com atraso concentra R$ 186 mil com registro contemporâneo; a direção decide primeiro por ele. Com prova: R$ 395 mil (186 + 61 + 148 = 395).</tspan></text><text x="28" y="460" font-size="11"><tspan font-weight="700">2</tspan><tspan x="44">Prazo mais curto: Serviço extra sem ordem escrita tem 5 dias e registro parcial; a decisão é registrar (falta ordem de serviço ou ata), não quantificar antes da prova.</tspan></text><text x="28" y="478" font-size="11"><tspan font-weight="700">3</tspan><tspan x="44">Não pleitear: Chuva sem critério contratual soma R$ 12 mil sem registro e sem critério; entra como lacuna declarada, não como estimativa. Total potencial: R$ 501 mil.</tspan></text>
+<g id="risco-margem-d-carimbo"><rect x="8" y="524" width="1184" height="28" fill="#ffffff" stroke="#dfe4e6"/><line x1="402.7" y1="524" x2="402.7" y2="552" stroke="#dfe4e6"/><line x1="797.3" y1="524" x2="797.3" y2="552" stroke="#dfe4e6"/><text x="16" y="542" font-size="11" fill="#5d6a7a">P10 · risco-margem · rev. R00</text><text x="410.7" y="542" font-size="11" fill="#5d6a7a">Matriz eventos × decisão · barra proporcional em R$ mil</text><text x="805.3" y="542" font-size="11" fill="#5d6a7a">Exemplo demonstrativo · sem obra de cliente</text></g>
+</svg>

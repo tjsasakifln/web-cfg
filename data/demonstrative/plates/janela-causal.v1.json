@@ -1,0 +1,94 @@
+{
+  "schema": "confenge.demonstrative-plate-source/1.0",
+  "origin": "demonstrative",
+  "revision": "R00",
+  "label_pt_br": "exemplo demonstrativo",
+  "client_name": null,
+  "address": null,
+  "contract_number": null,
+  "art_number": null,
+  "signature": null,
+  "date_modified": "2026-09-17",
+  "id": "plate-janela-causal-2026-09",
+  "plate_id": "janela-causal",
+  "sheet_code": "P12",
+  "title": "Janela causal do atraso no caminho crítico",
+  "public_source_pt_br": "Seção /atrasos-prorrogacao-obras-publicas/ (obra hipotética; datas em dias corridos desde a ordem de serviço, sintéticas).",
+  "units": {
+    "day": "dia corrido contado da ordem de serviço",
+    "duration": "dias corridos"
+  },
+  "contract": {
+    "term_days": "240",
+    "observed_delay_days": "34"
+  },
+  "activities": [
+    {
+      "id": "AT-01",
+      "label_pt_br": "Terraplenagem",
+      "baseline_start": "1",
+      "baseline_end": "40",
+      "actual_start": "1",
+      "actual_end": "40",
+      "critical": true
+    },
+    {
+      "id": "AT-02",
+      "label_pt_br": "Fundações",
+      "baseline_start": "41",
+      "baseline_end": "95",
+      "actual_start": "69",
+      "actual_end": "129",
+      "critical": true
+    },
+    {
+      "id": "AT-03",
+      "label_pt_br": "Estrutura",
+      "baseline_start": "96",
+      "baseline_end": "170",
+      "actual_start": "130",
+      "actual_end": "204",
+      "critical": true
+    },
+    {
+      "id": "AT-04",
+      "label_pt_br": "Acabamentos",
+      "baseline_start": "171",
+      "baseline_end": "240",
+      "actual_start": "205",
+      "actual_end": "274",
+      "critical": true
+    }
+  ],
+  "causes": [
+    {
+      "id": "C-01",
+      "label_pt_br": "Frente indisponível: desapropriação pendente",
+      "short_pt_br": "Frente indisponível",
+      "owner": "orgao",
+      "start_day": "41",
+      "end_day": "69",
+      "days": "28",
+      "record_pt_br": "ofícios e diário datados"
+    },
+    {
+      "id": "C-02",
+      "label_pt_br": "Mobilização parcial da contratada",
+      "short_pt_br": "Mobilização parcial",
+      "owner": "contratada",
+      "start_day": "55",
+      "end_day": "62",
+      "days": "7",
+      "record_pt_br": "folha de mobilização"
+    }
+  ],
+  "result": {
+    "window_days": "28",
+    "concurrent_days": "7",
+    "attributable_days": "21",
+    "remaining_delay_days": "6",
+    "formula": "28 − 7 = 21",
+    "observed_formula": "34 − 28 = 6"
+  },
+  "disclaimer_pt_br": "Obra hipotética e datas sintéticas; não é obra de cliente. Dias imputáveis são leitura técnica para a decisão da direção, não conclusão jurídica nem promessa de prorrogação."
+}
