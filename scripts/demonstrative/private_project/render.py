@@ -251,7 +251,7 @@ def _elevation_svg(extracts: dict[str, Any], revision: str) -> str:
     soffit = float(extracts["named_totals"]["beam_soffit_m"])
     beam_depth = 0.40
     scale = 110
-    pad_l, pad_t, pad_r, pad_b = 56, 36, 28, 48
+    pad_l, pad_t, pad_r, pad_b = 56, 36, 28, 60
     svg_w = int(wall_len * scale + pad_l + pad_r)
     svg_h = int(wall_h * scale + pad_t + pad_b)
 
@@ -288,7 +288,8 @@ def _elevation_svg(extracts: dict[str, Any], revision: str) -> str:
 <text x="{X(0) - 8:.1f}" y="{Y(sill) + 4:.1f}" text-anchor="end" font-size="10" fill="#5d6a7a">{br_number(sill)}</text>
 <text x="{X(0) - 8:.1f}" y="{Y(soffit) + 4:.1f}" text-anchor="end" font-size="10" fill="#071a31">{br_number(soffit)}</text>
 <text x="{X(0) - 8:.1f}" y="{Y(0) + 4:.1f}" text-anchor="end" font-size="10" fill="#5d6a7a">0,00</text>
-<text x="{pad_l}" y="{svg_h - 14}" font-size="11" fill="#5d6a7a">EL-LESTE · {e(revision)} · escala indicativa · exemplo demonstrativo</text>
+<text x="{pad_l}" y="{svg_h - 26}" font-size="10" fill="#5d6a7a">EL-LESTE · {e(revision)} · escala indicativa</text>
+<text x="{pad_l}" y="{svg_h - 12}" font-size="10" fill="#5d6a7a">exemplo demonstrativo</text>
 </svg>
 """
 

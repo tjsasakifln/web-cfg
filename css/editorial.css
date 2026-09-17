@@ -253,3 +253,11 @@
 
 /* Links inside prose are underlined, never colour-only (axe link-in-text-block) */
 .sec p a:not(.button):not(.button-primary):not(.button-secondary),.svc-open p a:not(.button):not(.button-primary):not(.button-secondary),.contact-note a,[data-form-boundary] a,.conditions a,.after p a,.sec li a:not(.button):not(.button-primary):not(.button-secondary):not(.list-ruled__action){text-decoration:underline;text-underline-offset:.2em;text-decoration-thickness:1px;font-weight:700}
+
+/* Generated tables (.table-wrap from html_shell.table_html) scroll locally on
+ * phones instead of crushing their columns; same contract as .table-scroll. */
+.table-wrap{display:block;width:100%;max-width:100%;min-width:0;overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
+.table-wrap:focus-visible{outline:2px solid transparent;outline-offset:2px;box-shadow:var(--focus-ring)}
+.table-wrap .data-table{min-width:640px}
+.table-wrap .data-table td,.table-wrap .data-table th{overflow-wrap:normal;word-break:normal;hyphens:manual}
+@media (max-width:699px){.table-wrap::after{content:"Role a tabela para o lado para ver todas as colunas.";display:block;padding:.5rem 0 0;font-size:var(--text-small);color:var(--muted)}}
