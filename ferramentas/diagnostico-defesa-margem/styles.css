@@ -1,3 +1,5 @@
 .consent {
   min-height: var(--touch-min);
 }
+#diagnostic-result > section { margin-top: 2.25rem; padding-top: 1.25rem; border-top: 1px solid var(--tool-line); }
+#diagnostic-result > section > h2 { margin: 0 0 .75rem; }
