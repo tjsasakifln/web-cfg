@@ -187,16 +187,24 @@ def revisao_csv(extracts: dict[str, Any]) -> str:
     )
 
 
+# The figures are drawn in a compact viewBox (360 wide, the width of a phone column):
+# in the ~470 px desktop column they scale up, on a 390 px phone they render at 1:1, so
+# every label (font 12.5 and 13) stays legible. Labels sit outside the element they name
+# whenever the element is thinner than the type (the wearing course, the DR-01 line).
+FS = 12.5
+FS_LABEL = 13
+
+
 def _plan_svg(extracts: dict[str, Any], revision: str) -> str:
     """Plan of the 40 m access strip and the 20 m drainage stretch, metres."""
     totals = extracts["named_totals"]
     length = float(totals["pavement_length_m"])
     width = float(totals["pavement_width_m"])
-    scale_x = 14
-    scale_y = 28
-    pad_l, pad_t, pad_r, pad_b = 64, 48, 48, 56
+    scale_x = 7
+    scale_y = 18
+    pad_l, pad_t, pad_r = 40, 44, 40
     svg_w = int(length * scale_x + pad_l + pad_r)
-    svg_h = int(width * scale_y + pad_t + pad_b + 24)
+    svg_h = 252
 
     def X(m: float) -> float:
         return pad_l + m * scale_x
@@ -210,48 +218,45 @@ def _plan_svg(extracts: dict[str, Any], revision: str) -> str:
     state = extracts["states"][revision]
     title = f"Planta do acesso PV-01 · {state['label_pt_br']} · {revision}"
     if revision == "R00":
-        note = (
-            f"R00: cota desenhada de MH-02 {br_number(totals['mh02_invert_drawn_m'])} m; "
-            f"planilha {br_number(totals['mh02_invert_sheet_r00_m'])} m."
-        )
+        note_1 = f"R00: cota de MH-02 desenhada {br_number(totals['mh02_invert_drawn_m'])} m;"
+        note_2 = f"planilha {br_number(totals['mh02_invert_sheet_r00_m'])} m. Exemplo demonstrativo."
         mh2_fill, mh2_stroke = LIME, INK
     else:
-        note = (
-            f"R01: cota de MH-02 alinhada em {br_number(totals['mh02_invert_drawn_m'])} m "
-            "no desenho e na planilha."
-        )
+        note_1 = f"R01: cota de MH-02 alinhada em {br_number(totals['mh02_invert_drawn_m'])} m"
+        note_2 = "no desenho e na planilha. Exemplo demonstrativo."
         mh2_fill, mh2_stroke = GREEN_100, GREEN
 
     desc = (
         f"Faixa PV-01 de {br_number(length)} m por {br_number(width)} m. "
         f"Poço MH-01 em E0+010, boca IN-01 em E0+020, poço MH-02 em E0+030, "
-        f"trecho DR-01 com {br_number(totals['pipe_length_m'])} m. {note} "
-        f"Exemplo demonstrativo, revisão {revision}."
+        f"trecho DR-01 com {br_number(totals['pipe_length_m'])} m. {note_1} {note_2} Revisão {revision}."
     )
     # stations
     mh1_s, in_s, mh2_s = 10.0, 20.0, 30.0
     center = width / 2
     hid = f"plan-{revision}-hatch"
+    y_bottom = Y(0)
 
     return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {svg_w} {svg_h}" role="img" font-family="{FONT}" aria-labelledby="plan-{revision}-title plan-{revision}-desc">
 <title id="plan-{revision}-title">{e(title)}</title>
 <desc id="plan-{revision}-desc">{e(desc)}</desc>
 <defs><pattern id="{hid}" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0V6" stroke="{MUTED}" stroke-width="0.5"/></pattern></defs>
-<rect x="{X(0):.1f}" y="{Y(width):.1f}" width="{px(length):.1f}" height="{px(width, 'y'):.1f}" fill="{SOFT}" stroke="{INK}" stroke-width="2"/>
+<text x="{X(0):.1f}" y="{Y(width) - 10:.1f}" font-size="{FS}" fill="{MUTED}">E0+000</text>
+<text x="{X(length):.1f}" y="{Y(width) - 10:.1f}" text-anchor="end" font-size="{FS}" fill="{MUTED}">E0+040</text>
+<rect x="{X(0):.1f}" y="{Y(width):.1f}" width="{px(length):.1f}" height="{px(width, 'y'):.1f}" fill="{SOFT}" stroke="{INK}" stroke-width="1.6"/>
 <rect x="{X(0):.1f}" y="{Y(width):.1f}" width="{px(length):.1f}" height="{px(0.4, 'y'):.1f}" fill="url(#{hid})"/>
 <rect x="{X(0):.1f}" y="{Y(0.4):.1f}" width="{px(length):.1f}" height="{px(0.4, 'y'):.1f}" fill="url(#{hid})"/>
-<text x="{X(length / 2):.1f}" y="{Y(center) + 4:.1f}" text-anchor="middle" font-size="13" font-weight="650" fill="{INK}">PV-01 · {br_number(length)} m × {br_number(width)} m</text>
+<text x="{X((mh1_s + mh2_s) / 2):.1f}" y="{Y(center) - 12:.1f}" text-anchor="middle" font-size="{FS}" font-weight="650" fill="{GREEN}">DR-01 · {br_number(totals['pipe_length_m'])} m · diâm. {br_number(totals['pipe_diameter_mm'])} mm</text>
 <line x1="{X(mh1_s):.1f}" y1="{Y(center):.1f}" x2="{X(mh2_s):.1f}" y2="{Y(center):.1f}" stroke="{GREEN}" stroke-width="2"/>
-<text x="{X((mh1_s + mh2_s) / 2):.1f}" y="{Y(center) - 14:.1f}" text-anchor="middle" font-size="11" font-weight="650" fill="{GREEN}">DR-01 · {br_number(totals['pipe_length_m'])} m · diâm. {br_number(totals['pipe_diameter_mm'])} mm</text>
-<circle cx="{X(mh1_s):.1f}" cy="{Y(center):.1f}" r="10" fill="{WHITE}" stroke="{INK}" stroke-width="1.2"/>
-<text x="{X(mh1_s):.1f}" y="{Y(center) + 32:.1f}" text-anchor="middle" font-size="11" fill="{INK}">MH-01 E0+010</text>
-<rect x="{X(in_s) - 8:.1f}" y="{Y(0.9):.1f}" width="16" height="{px(0.9, 'y'):.1f}" fill="{WHITE}" stroke="{MUTED}" stroke-width="1.2" stroke-dasharray="3 2"/>
-<text x="{X(in_s):.1f}" y="{Y(-0.15) + 4:.1f}" text-anchor="middle" font-size="11" fill="{MUTED}">IN-01 E0+020</text>
-<circle cx="{X(mh2_s):.1f}" cy="{Y(center):.1f}" r="10" fill="{mh2_fill}" stroke="{mh2_stroke}" stroke-width="1.2"/>
-<text x="{X(mh2_s):.1f}" y="{Y(center) + 32:.1f}" text-anchor="middle" font-size="11" fill="{INK}">MH-02 E0+030</text>
-<text x="{X(0):.1f}" y="{Y(width) - 10:.1f}" font-size="11" fill="{MUTED}">E0+000</text>
-<text x="{X(length):.1f}" y="{Y(width) - 10:.1f}" text-anchor="end" font-size="11" fill="{MUTED}">E0+040</text>
-<text x="{X(length / 2):.1f}" y="{svg_h - 16}" text-anchor="middle" font-size="11" fill="{MUTED}">{e(note)} Exemplo demonstrativo.</text>
+<circle cx="{X(mh1_s):.1f}" cy="{Y(center):.1f}" r="8" fill="{WHITE}" stroke="{INK}" stroke-width="1.2"/>
+<text x="{X(mh1_s):.1f}" y="{Y(center) + 24:.1f}" text-anchor="middle" font-size="{FS}" fill="{INK}">MH-01 E0+010</text>
+<circle cx="{X(mh2_s):.1f}" cy="{Y(center):.1f}" r="8" fill="{mh2_fill}" stroke="{mh2_stroke}" stroke-width="1.2"/>
+<text x="{X(mh2_s):.1f}" y="{Y(center) + 24:.1f}" text-anchor="middle" font-size="{FS}" fill="{INK}">MH-02 E0+030</text>
+<rect x="{X(in_s) - 7:.1f}" y="{Y(0.9):.1f}" width="14" height="{px(0.9, 'y'):.1f}" fill="{WHITE}" stroke="{MUTED}" stroke-width="1.2" stroke-dasharray="3 2"/>
+<text x="{X(in_s) + 12:.1f}" y="{Y(0.35):.1f}" font-size="{FS}" fill="{MUTED}">IN-01 E0+020</text>
+<text x="{X(0):.1f}" y="{y_bottom + 18:.1f}" font-size="{FS_LABEL}" font-weight="650" fill="{INK}">PV-01 · {br_number(length)} m × {br_number(width)} m</text>
+<text x="{X(0):.1f}" y="{y_bottom + 40:.1f}" font-size="{FS}" fill="{MUTED}">{e(note_1)}</text>
+<text x="{X(0):.1f}" y="{y_bottom + 57:.1f}" font-size="{FS}" fill="{MUTED}">{e(note_2)}</text>
 </svg>
 """
 
@@ -264,11 +269,11 @@ def _profile_svg(extracts: dict[str, Any], revision: str) -> str:
     y_drawn = float(totals["mh02_invert_drawn_m"])
     y_sheet = float(totals["mh02_invert_sheet_r00_m"] if revision == "R00" else totals["mh02_invert_sheet_r01_m"])
     y_min, y_max = 12.20, 13.00
-    scale_x = 18
-    scale_y = 220
-    pad_l, pad_t, pad_r, pad_b = 72, 36, 150, 52
+    scale_x = 11
+    scale_y = 200
+    pad_l, pad_t, pad_r = 56, 30, 84
     svg_w = int((x1 - x0) * scale_x + pad_l + pad_r)
-    svg_h = int((y_max - y_min) * scale_y + pad_t + pad_b)
+    svg_h = 268
 
     def X(sta: float) -> float:
         return pad_l + (sta - x0) * scale_x
@@ -280,17 +285,14 @@ def _profile_svg(extracts: dict[str, Any], revision: str) -> str:
     title = f"Perfil de invert DR-01 · {state['label_pt_br']} · {revision}"
     clash = revision == "R00"
     if clash:
-        note = (
-            f"R00: desenho {br_number(y_drawn)} m versus planilha {br_number(y_sheet)} m "
-            f"em MH-02, diferença {br_number(totals['mh02_mismatch_r00_m'])} m."
-        )
+        note_1 = f"R00: desenho {br_number(y_drawn)} m versus planilha {br_number(y_sheet)} m"
+        note_2 = f"em MH-02, diferença {br_number(totals['mh02_mismatch_r00_m'])} m. Exemplo demonstrativo."
     else:
-        note = (
-            f"R01: desenho e planilha em {br_number(y_drawn)} m na conexão MH-02."
-        )
+        note_1 = f"R01: desenho e planilha em {br_number(y_drawn)} m"
+        note_2 = "na conexão MH-02. Exemplo demonstrativo."
     desc = (
-        f"Trecho DR-01 de E0+010 a E0+030. Invert de montante {br_number(y_up)} m. {note} "
-        "Declive geométrico, não capacidade hidráulica. Exemplo demonstrativo."
+        f"Trecho DR-01 de E0+010 a E0+030. Invert de montante {br_number(y_up)} m. {note_1} {note_2} "
+        "Declive geométrico, não capacidade hidráulica."
     )
 
     if clash:
@@ -299,11 +301,16 @@ def _profile_svg(extracts: dict[str, Any], revision: str) -> str:
             f'<line x1="{X(x0):.1f}" y1="{Y(y_up):.1f}" x2="{X(x1):.1f}" y2="{Y(y_sheet):.1f}" '
             f'stroke="{MUTED}" stroke-width="1.2" stroke-dasharray="6 4"/>'
             f'<circle cx="{X(x1):.1f}" cy="{Y(y_sheet):.1f}" r="5" fill="{WHITE}" stroke="{MUTED}" stroke-width="1.2"/>'
-            f'<text x="{X(x1) + 8:.1f}" y="{Y(y_sheet) + 4:.1f}" font-size="11" fill="{MUTED}">planilha {br_number(y_sheet)} m</text>'
+            f'<text x="{X(x1) + 9:.1f}" y="{Y(y_sheet) - 4:.1f}" font-size="{FS}" fill="{MUTED}">planilha</text>'
+            f'<text x="{X(x1) + 9:.1f}" y="{Y(y_sheet) + 11:.1f}" font-size="{FS}" fill="{MUTED}">{br_number(y_sheet)} m</text>'
+            f'<text x="{X(x1) + 9:.1f}" y="{Y(y_drawn) + 12:.1f}" font-size="{FS}" fill="{GREEN}">desenho</text>'
+            f'<text x="{X(x1) + 9:.1f}" y="{Y(y_drawn) + 27:.1f}" font-size="{FS}" fill="{GREEN}">{br_number(y_drawn)} m</text>'
         )
     else:
         sheet_line = (
-            f'<text x="{X(x1) + 8:.1f}" y="{Y(y_drawn) - 10:.1f}" font-size="11" fill="{GREEN}">desenho e planilha {br_number(y_drawn)} m</text>'
+            f'<text x="{X(x1) + 9:.1f}" y="{Y(y_drawn) - 4:.1f}" font-size="{FS}" fill="{GREEN}">desenho e</text>'
+            f'<text x="{X(x1) + 9:.1f}" y="{Y(y_drawn) + 11:.1f}" font-size="{FS}" fill="{GREEN}">planilha</text>'
+            f'<text x="{X(x1) + 9:.1f}" y="{Y(y_drawn) + 26:.1f}" font-size="{FS}" fill="{GREEN}">{br_number(y_drawn)} m</text>'
         )
 
     return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {svg_w} {svg_h}" role="img" font-family="{FONT}" aria-labelledby="prf-{revision}-title prf-{revision}-desc">
@@ -312,14 +319,15 @@ def _profile_svg(extracts: dict[str, Any], revision: str) -> str:
 <line x1="{X(x0):.1f}" y1="{Y(y_min):.1f}" x2="{X(x1):.1f}" y2="{Y(y_min):.1f}" stroke="{RULE}" stroke-width="1"/>
 <line x1="{X(x0):.1f}" y1="{Y(y_max):.1f}" x2="{X(x0):.1f}" y2="{Y(y_min):.1f}" stroke="{RULE}" stroke-width="1"/>
 {sheet_line}
-<line x1="{X(x0):.1f}" y1="{Y(y_up):.1f}" x2="{X(x1):.1f}" y2="{Y(y_drawn):.1f}" stroke="{INK}" stroke-width="2"/>
-<circle cx="{X(x0):.1f}" cy="{Y(y_up):.1f}" r="6" fill="{WHITE}" stroke="{INK}" stroke-width="1.2"/>
-<circle cx="{X(x1):.1f}" cy="{Y(y_drawn):.1f}" r="6" fill="{GREEN_100}" stroke="{GREEN}" stroke-width="1.2"/>
-<text x="{X(x0) - 8:.1f}" y="{Y(y_up) + 4:.1f}" text-anchor="end" font-size="11" fill="{INK}">{br_number(y_up)}</text>
-<text x="{X(x1) + 8:.1f}" y="{Y(y_drawn) + 16:.1f}" font-size="11" fill="{GREEN}">desenho {br_number(y_drawn)} m</text>
-<text x="{X(x0):.1f}" y="{Y(y_min) + 18:.1f}" font-size="11" fill="{INK}">E0+010 MH-01</text>
-<text x="{X(x1):.1f}" y="{Y(y_min) + 18:.1f}" text-anchor="end" font-size="11" fill="{INK}">E0+030 MH-02</text>
-<text x="{pad_l}" y="{svg_h - 12}" font-size="11" fill="{MUTED}">{e(note)} Exemplo demonstrativo.</text>
+<line x1="{X(x0):.1f}" y1="{Y(y_up):.1f}" x2="{X(x1):.1f}" y2="{Y(y_drawn):.1f}" stroke="{INK}" stroke-width="2.4"/>
+<circle cx="{X(x0):.1f}" cy="{Y(y_up):.1f}" r="6" fill="{WHITE}" stroke="{INK}" stroke-width="1.4"/>
+<circle cx="{X(x1):.1f}" cy="{Y(y_drawn):.1f}" r="6" fill="{GREEN_100}" stroke="{GREEN}" stroke-width="1.4"/>
+<text x="{X(x0) - 8:.1f}" y="{Y(y_up) + 4:.1f}" text-anchor="end" font-size="{FS}" fill="{INK}">{br_number(y_up)}</text>
+<text x="{X((x0 + x1) / 2):.1f}" y="{Y(y_up) - 18:.1f}" text-anchor="middle" font-size="{FS_LABEL}" font-weight="650" fill="{INK}">DR-01 · invert de montante a jusante</text>
+<text x="{X(x0):.1f}" y="{Y(y_min) + 18:.1f}" font-size="{FS}" fill="{INK}">E0+010 MH-01</text>
+<text x="{X(x1):.1f}" y="{Y(y_min) + 18:.1f}" text-anchor="end" font-size="{FS}" fill="{INK}">E0+030 MH-02</text>
+<text x="{X(x0) - 8:.1f}" y="{Y(y_min) + 40:.1f}" font-size="{FS}" fill="{MUTED}">{e(note_1)}</text>
+<text x="{X(x0) - 8:.1f}" y="{Y(y_min) + 57:.1f}" font-size="{FS}" fill="{MUTED}">{e(note_2)}</text>
 </svg>
 """
 
@@ -332,11 +340,11 @@ def _section_svg(extracts: dict[str, Any]) -> str:
     t_base = 0.12
     t_wear = 0.04
     total_t = t_sub + t_base + t_wear
-    scale_x = 70
-    scale_y = 280
-    pad_l, pad_t, pad_r, pad_b = 56, 28, 28, 48
-    svg_w = int(width * scale_x + pad_l + pad_r)
-    svg_h = int(total_t * scale_y + pad_t + pad_b)
+    scale_x = 30
+    scale_y = 560
+    pad_l, pad_t = 24, 40
+    svg_w = 360
+    svg_h = int(total_t * scale_y + pad_t + 66)
 
     def X(m: float) -> float:
         return pad_l + m * scale_x
@@ -354,17 +362,26 @@ def _section_svg(extracts: dict[str, Any]) -> str:
         f"sub-base {br_number(t_sub)} m. Volumes geométricos, não dimensionamento de pavimento. "
         f"Exemplo demonstrativo, revisão {rev}."
     )
+    lx = X(width) + 12  # labels to the right of the layers, with a short leader each
     return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {svg_w} {svg_h}" role="img" font-family="{FONT}" aria-labelledby="sec-title sec-desc">
 <title id="sec-title">{e(title)}</title>
 <desc id="sec-desc">{e(desc)}</desc>
 <defs><pattern id="sec-hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0V6" stroke="{MUTED}" stroke-width="0.5"/></pattern></defs>
+<text x="{X(width / 2):.1f}" y="{Y(0) - 12:.1f}" text-anchor="middle" font-size="{FS_LABEL}" font-weight="650" fill="{INK}">PV-01 · {br_number(width)} m</text>
 <rect x="{X(0):.1f}" y="{Y(0):.1f}" width="{px(width):.1f}" height="{px(t_wear, 'y'):.1f}" fill="{MUTED}" stroke="{INK}" stroke-width="1.2"/>
-<text x="{X(width / 2):.1f}" y="{Y(t_wear / 2) + 4:.1f}" text-anchor="middle" font-size="11" fill="{WHITE}">capa {br_number(t_wear)} m · Q-CAP-01</text>
+<line x1="{X(width):.1f}" y1="{Y(t_wear / 2):.1f}" x2="{lx - 3:.1f}" y2="{Y(t_wear / 2):.1f}" stroke="{MUTED}" stroke-width="0.6"/>
+<text x="{lx:.1f}" y="{Y(t_wear / 2) + 4:.1f}" font-size="{FS}" fill="{INK}">capa {br_number(t_wear)} m</text>
+<text x="{lx:.1f}" y="{Y(t_wear / 2) + 20:.1f}" font-size="{FS}" fill="{MUTED}">Q-CAP-01</text>
 <rect x="{X(0):.1f}" y="{Y(t_wear):.1f}" width="{px(width):.1f}" height="{px(t_base, 'y'):.1f}" fill="{SOFT}" stroke="{INK}" stroke-width="1.2"/>
-<text x="{X(width / 2):.1f}" y="{Y(t_wear + t_base / 2) + 4:.1f}" text-anchor="middle" font-size="11" fill="{INK}">base {br_number(t_base)} m · Q-BASE-01</text>
+<line x1="{X(width):.1f}" y1="{Y(t_wear + t_base / 2):.1f}" x2="{lx - 3:.1f}" y2="{Y(t_wear + t_base / 2):.1f}" stroke="{MUTED}" stroke-width="0.6"/>
+<text x="{lx:.1f}" y="{Y(t_wear + t_base / 2) + 4:.1f}" font-size="{FS}" fill="{INK}">base {br_number(t_base)} m</text>
+<text x="{lx:.1f}" y="{Y(t_wear + t_base / 2) + 20:.1f}" font-size="{FS}" fill="{MUTED}">Q-BASE-01</text>
 <rect x="{X(0):.1f}" y="{Y(t_wear + t_base):.1f}" width="{px(width):.1f}" height="{px(t_sub, 'y'):.1f}" fill="url(#sec-hatch)" stroke="{INK}" stroke-width="1.2"/>
-<text x="{X(width / 2):.1f}" y="{Y(t_wear + t_base + t_sub / 2) + 4:.1f}" text-anchor="middle" font-size="11" fill="{INK}">sub-base {br_number(t_sub)} m · Q-SUB-01</text>
-<text x="{X(width / 2):.1f}" y="{svg_h - 14}" text-anchor="middle" font-size="11" fill="{MUTED}">{br_number(width)} m · revisão {e(rev)} · exemplo demonstrativo</text>
+<line x1="{X(width):.1f}" y1="{Y(t_wear + t_base + t_sub / 2):.1f}" x2="{lx - 3:.1f}" y2="{Y(t_wear + t_base + t_sub / 2):.1f}" stroke="{MUTED}" stroke-width="0.6"/>
+<text x="{lx:.1f}" y="{Y(t_wear + t_base + t_sub / 2) + 4:.1f}" font-size="{FS}" fill="{INK}">sub-base {br_number(t_sub)} m</text>
+<text x="{lx:.1f}" y="{Y(t_wear + t_base + t_sub / 2) + 20:.1f}" font-size="{FS}" fill="{MUTED}">Q-SUB-01</text>
+<text x="{X(0):.1f}" y="{svg_h - 30:.1f}" font-size="{FS}" fill="{MUTED}">Espessuras declaradas; volume geométrico, não dimensionamento.</text>
+<text x="{X(0):.1f}" y="{svg_h - 13:.1f}" font-size="{FS}" fill="{MUTED}">Exemplo demonstrativo · revisão {e(rev)}</text>
 </svg>
 """
 

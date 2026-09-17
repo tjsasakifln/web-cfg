@@ -1,20 +1,21 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 672 324" role="img" font-family="Archivo Var, Arial, Helvetica, sans-serif" aria-labelledby="plan-R00-title plan-R00-desc">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 252" role="img" font-family="Archivo Var, Arial, Helvetica, sans-serif" aria-labelledby="plan-R00-title plan-R00-desc">
 <title id="plan-R00-title">Planta do acesso PV-01 · estado original · R00</title>
-<desc id="plan-R00-desc">Faixa PV-01 de 40,00 m por 7,00 m. Poço MH-01 em E0+010, boca IN-01 em E0+020, poço MH-02 em E0+030, trecho DR-01 com 20,00 m. R00: cota desenhada de MH-02 12,35 m; planilha 12,50 m. Exemplo demonstrativo, revisão R00.</desc>
+<desc id="plan-R00-desc">Faixa PV-01 de 40,00 m por 7,00 m. Poço MH-01 em E0+010, boca IN-01 em E0+020, poço MH-02 em E0+030, trecho DR-01 com 20,00 m. R00: cota de MH-02 desenhada 12,35 m; planilha 12,50 m. Exemplo demonstrativo. Revisão R00.</desc>
 <defs><pattern id="plan-R00-hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0V6" stroke="#5d6a7a" stroke-width="0.5"/></pattern></defs>
-<rect x="64.0" y="48.0" width="560.0" height="196.0" fill="#f3f4f5" stroke="#071a31" stroke-width="2"/>
-<rect x="64.0" y="48.0" width="560.0" height="11.2" fill="url(#plan-R00-hatch)"/>
-<rect x="64.0" y="232.8" width="560.0" height="11.2" fill="url(#plan-R00-hatch)"/>
-<text x="344.0" y="150.0" text-anchor="middle" font-size="13" font-weight="650" fill="#071a31">PV-01 · 40,00 m × 7,00 m</text>
-<line x1="204.0" y1="146.0" x2="484.0" y2="146.0" stroke="#2d6f2d" stroke-width="2"/>
-<text x="344.0" y="132.0" text-anchor="middle" font-size="11" font-weight="650" fill="#2d6f2d">DR-01 · 20,00 m · diâm. 400,00 mm</text>
-<circle cx="204.0" cy="146.0" r="10" fill="#ffffff" stroke="#071a31" stroke-width="1.2"/>
-<text x="204.0" y="178.0" text-anchor="middle" font-size="11" fill="#071a31">MH-01 E0+010</text>
-<rect x="336.0" y="218.8" width="16" height="25.2" fill="#ffffff" stroke="#5d6a7a" stroke-width="1.2" stroke-dasharray="3 2"/>
-<text x="344.0" y="252.2" text-anchor="middle" font-size="11" fill="#5d6a7a">IN-01 E0+020</text>
-<circle cx="484.0" cy="146.0" r="10" fill="#ced62a" stroke="#071a31" stroke-width="1.2"/>
-<text x="484.0" y="178.0" text-anchor="middle" font-size="11" fill="#071a31">MH-02 E0+030</text>
-<text x="64.0" y="38.0" font-size="11" fill="#5d6a7a">E0+000</text>
-<text x="624.0" y="38.0" text-anchor="end" font-size="11" fill="#5d6a7a">E0+040</text>
-<text x="344.0" y="308" text-anchor="middle" font-size="11" fill="#5d6a7a">R00: cota desenhada de MH-02 12,35 m; planilha 12,50 m. Exemplo demonstrativo.</text>
+<text x="40.0" y="34.0" font-size="12.5" fill="#5d6a7a">E0+000</text>
+<text x="320.0" y="34.0" text-anchor="end" font-size="12.5" fill="#5d6a7a">E0+040</text>
+<rect x="40.0" y="44.0" width="280.0" height="126.0" fill="#f3f4f5" stroke="#071a31" stroke-width="1.6"/>
+<rect x="40.0" y="44.0" width="280.0" height="7.2" fill="url(#plan-R00-hatch)"/>
+<rect x="40.0" y="162.8" width="280.0" height="7.2" fill="url(#plan-R00-hatch)"/>
+<text x="180.0" y="95.0" text-anchor="middle" font-size="12.5" font-weight="650" fill="#2d6f2d">DR-01 · 20,00 m · diâm. 400,00 mm</text>
+<line x1="110.0" y1="107.0" x2="250.0" y2="107.0" stroke="#2d6f2d" stroke-width="2"/>
+<circle cx="110.0" cy="107.0" r="8" fill="#ffffff" stroke="#071a31" stroke-width="1.2"/>
+<text x="110.0" y="131.0" text-anchor="middle" font-size="12.5" fill="#071a31">MH-01 E0+010</text>
+<circle cx="250.0" cy="107.0" r="8" fill="#ced62a" stroke="#071a31" stroke-width="1.2"/>
+<text x="250.0" y="131.0" text-anchor="middle" font-size="12.5" fill="#071a31">MH-02 E0+030</text>
+<rect x="173.0" y="153.8" width="14" height="16.2" fill="#ffffff" stroke="#5d6a7a" stroke-width="1.2" stroke-dasharray="3 2"/>
+<text x="192.0" y="163.7" font-size="12.5" fill="#5d6a7a">IN-01 E0+020</text>
+<text x="40.0" y="188.0" font-size="13" font-weight="650" fill="#071a31">PV-01 · 40,00 m × 7,00 m</text>
+<text x="40.0" y="210.0" font-size="12.5" fill="#5d6a7a">R00: cota de MH-02 desenhada 12,35 m;</text>
+<text x="40.0" y="227.0" font-size="12.5" fill="#5d6a7a">planilha 12,50 m. Exemplo demonstrativo.</text>
 </svg>
