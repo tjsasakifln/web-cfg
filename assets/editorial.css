@@ -277,6 +277,9 @@
 .hub-list h3,.hub-list h2{max-width:40ch}
 .article-callout,.article-decision{margin:1.5rem 0;padding:1rem 0 1rem 1.25rem;border-left:3px solid var(--green-700);background:transparent;border-radius:0}
 .article-callout .eyebrow,.article-decision .eyebrow{margin:0 0 .35rem}
+.article-callout,.article-callout p,.article-callout li,.article-decision,.article-decision p,.article-decision li{color:var(--text)}
+.article-callout h2,.article-callout h3,.article-callout strong,.article-decision h2,.article-decision h3,.article-decision strong{color:var(--ink)}
+.article-callout a,.article-decision a{color:var(--ink);text-decoration:underline;text-underline-offset:.2em}
 .article-callout h2,.article-decision h2{margin-top:0;font-size:clamp(1.25rem,1.1rem + .5vw,1.5rem)}
 .article-faq,.sources-section,.related-section{margin:2.5rem 0 0;padding:1.25rem 0 0;border-top:1px solid var(--rule-strong);background:transparent;border-radius:0}
 .article-faq h2,.sources-section h2,.related-section h2{margin-top:0}
