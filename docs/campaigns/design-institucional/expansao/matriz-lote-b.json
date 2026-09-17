@@ -51,16 +51,16 @@
       "priority": "P0",
       "treatment": "COMPOSICAO_REDESENHADA",
       "owner": "lote B",
-      "state": "CAPTURADA_E_VISTA (390 e 1440, dobra; pagina inteira nas recompostas)",
+      "state": "CAPTURADA_E_VISTA (onda 2: 390 e 1440, dobra e pagina inteira; menu em 390; 320 sem rolagem horizontal)",
       "evidence": [
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-pre-licitacao-390x844-fold-lote-b.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-pre-licitacao-390x844-full-lote-b.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-pre-licitacao-1440x1000-fold-lote-b.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-pre-licitacao-1440x1000-full-lote-b.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-pre-licitacao-390x844-menu-lote-b.jpg"
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-pre-licitacao-390x844-fold-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-pre-licitacao-390x844-full-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-pre-licitacao-1440x1000-fold-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-pre-licitacao-1440x1000-full-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-pre-licitacao-390x844-menu-onda2.jpg"
       ],
       "impediment": "",
-      "note": "hash congelado desatualizado ate a recaptura (tambem em render_licitacao_products.mjs); prancha P8 nova; revisao 2026-09-17: ressalvas consolidadas; P8 com coluna Leitura afastada da margem; quebra do h1 no hifen em 390 nao tratada (sem primitivo nowrap e h1 literal em snapshots congelados; pedido 14)"
+      "note": "hash congelado desatualizado ate a recaptura (tambem em render_licitacao_products.mjs); prancha P8 nova; revisao 2026-09-17: ressalvas consolidadas; P8 com coluna Leitura afastada da margem; quebra do h1 no hifen em 390 nao tratada (sem primitivo nowrap e h1 literal em snapshots congelados; pedido 14) | onda 2: \"pre-licitacao\" em span.nowrap no h1 (sem quebra no hifen em 390) e bloco de encaixe com titulo e corpo exatos de offer-fit-matrix (test:offer-fit); rota protegida por hash"
     },
     {
       "route": "/reequilibrio-obras-publicas/",
@@ -111,16 +111,16 @@
       "priority": "P0",
       "treatment": "COMPOSICAO_REDESENHADA",
       "owner": "lote B",
-      "state": "CAPTURADA_E_VISTA (390 e 1440, dobra; pagina inteira nas recompostas)",
+      "state": "CAPTURADA_E_VISTA (onda 2: 390 e 1440, dobra e pagina inteira; menu em 390; 320 sem rolagem horizontal)",
       "evidence": [
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/servicos-obras-publicas-390x844-fold-lote-b.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/servicos-obras-publicas-390x844-full-lote-b.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/servicos-obras-publicas-1440x1000-fold-lote-b.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/servicos-obras-publicas-1440x1000-full-lote-b.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/servicos-obras-publicas-390x844-menu-lote-b.jpg"
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/servicos-obras-publicas-390x844-fold-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/servicos-obras-publicas-390x844-full-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/servicos-obras-publicas-1440x1000-fold-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/servicos-obras-publicas-1440x1000-full-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/servicos-obras-publicas-390x844-menu-onda2.jpg"
       ],
       "impediment": "",
-      "note": "gerador partilhado editado no corpo dos dois hubs (registrado em pedidos); o bloco gerado de produtos traz um segundo momento escuro (integrador); revisao 2026-09-17: rota dominante sem degrade (button-primary na abertura + aside-note claro), preco e prazo publicados uma so vez (bloco gerado), fecho com button-primary; o bloco GENERATED (grade 3x3, faixa de regras navy, h2 18ch, opcao do select cortada) e do integrador (pedidos 3 e 13)"
+      "note": "gerador partilhado editado no corpo dos dois hubs (registrado em pedidos); o bloco gerado de produtos traz um segundo momento escuro (integrador); revisao 2026-09-17: rota dominante sem degrade (button-primary na abertura + aside-note claro), preco e prazo publicados uma so vez (bloco gerado), fecho com button-primary; o bloco GENERATED (grade 3x3, faixa de regras navy, h2 18ch, opcao do select cortada) e do integrador (pedidos 3 e 13) | onda 2: bloco gerado CONTRACT-DEFENSE-HUB em superficie clara (lista regrada, regras claras, h2 sem 18ch, select legivel em 390) via render_contract_defense_products.mjs + styles-offers.css; pagina sem bloco escuro"
     },
     {
       "route": "/problemas-que-resolvemos/",
@@ -131,16 +131,16 @@
       "priority": "P0",
       "treatment": "COMPOSICAO_REDESENHADA",
       "owner": "lote B",
-      "state": "CAPTURADA_E_VISTA (390 e 1440, dobra; pagina inteira nas recompostas)",
+      "state": "CAPTURADA_E_VISTA (onda 2: 390 e 1440, dobra e pagina inteira; menu em 390; 320 sem rolagem horizontal)",
       "evidence": [
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/problemas-que-resolvemos-390x844-fold-lote-b.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/problemas-que-resolvemos-390x844-full-lote-b.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/problemas-que-resolvemos-1440x1000-fold-lote-b.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/problemas-que-resolvemos-1440x1000-full-lote-b.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/problemas-que-resolvemos-390x844-menu-lote-b.jpg"
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/problemas-que-resolvemos-390x844-fold-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/problemas-que-resolvemos-390x844-full-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/problemas-que-resolvemos-1440x1000-fold-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/problemas-que-resolvemos-1440x1000-full-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/problemas-que-resolvemos-390x844-menu-onda2.jpg"
       ],
       "impediment": "",
-      "note": "revisao 2026-09-17: rota dominante sem degrade, kicker distinto na secao do ciclo, fecho em sec--dark unico com contact-primary; legenda das ferramentas como svc-open__note"
+      "note": "revisao 2026-09-17: rota dominante sem degrade, kicker distinto na secao do ciclo, fecho em sec--dark unico com contact-primary; legenda das ferramentas como svc-open__note | onda 2: recapturada e vista; sem bloco gerado (o gerador so escreve o hub em servicos-obras-publicas); um unico sec--dark de fecho; nada a mudar"
     },
     {
       "route": "/casos/aditivo-art125-demonstrativo/",
@@ -189,18 +189,18 @@
       "source": "diretoria-b2g/index.html",
       "generator": "manual (script de componentes)",
       "priority": "P1",
-      "treatment": "HERANCA_VISUAL_VALIDADA",
+      "treatment": "COMPONENTES_ADEQUADOS",
       "owner": "lote B",
-      "state": "CAPTURADA_E_VISTA (390 e 1440, dobra; pagina inteira nas recompostas)",
+      "state": "CAPTURADA_E_VISTA (onda 2: 390 e 1440, dobra e pagina inteira; menu em 390; 320 sem rolagem horizontal)",
       "evidence": [
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diretoria-b2g-390x844-fold-lote-b.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diretoria-b2g-390x844-full-lote-b.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diretoria-b2g-1440x1000-fold-lote-b.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diretoria-b2g-1440x1000-full-lote-b.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diretoria-b2g-390x844-menu-lote-b.jpg"
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diretoria-b2g-390x844-fold-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diretoria-b2g-390x844-full-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diretoria-b2g-1440x1000-fold-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diretoria-b2g-1440x1000-full-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diretoria-b2g-390x844-menu-onda2.jpg"
       ],
       "impediment": "",
-      "note": "folha editorial (+7,1 KB gz) e indice de pagina; folhas legadas nao removidas porque styles-offers.css ainda ordena o offer-hero; bytes no relatorio; revisao 2026-09-17: reclassificada de COMPONENTES_ADEQUADOS para HERANCA_VISUAL_VALIDADA (hero em degrade, bloco operating-system e final-cta escuros permanecem: styles.css do integrador, pedidos 10 e 11); indice so com ancoras visiveis (entrada 'Rotina, capacidade e mensalidade' aponta para o disclosure, cujo summary renderiza), h2 sem ponto final, alternativa da abertura alinhada ao formulario ('Avaliar na sua empresa, nesta pagina'); sonda de clique no relatorio"
+      "note": "folha editorial (+7,1 KB gz) e indice de pagina; folhas legadas nao removidas porque styles-offers.css ainda ordena o offer-hero; bytes no relatorio; revisao 2026-09-17: reclassificada de COMPONENTES_ADEQUADOS para HERANCA_VISUAL_VALIDADA (hero em degrade, bloco operating-system e final-cta escuros permanecem: styles.css do integrador, pedidos 10 e 11); indice so com ancoras visiveis (entrada 'Rotina, capacidade e mensalidade' aponta para o disclosure, cujo summary renderiza), h2 sem ponto final, alternativa da abertura alinhada ao formulario ('Avaliar na sua empresa, nesta pagina'); sonda de clique no relatorio | onda 2: um unico bloco escuro (a cadencia com ol.operating-flow, exigida pelo gate; classe operating-system removida por causa do degrade decorativo ::after); fecho \"Proximo passo\" em superficie clara com contact-primary e alternativas; hero, offer-context, details e formulario intactos"
     },
     {
       "route": "/bid-room-licitacoes-obras/",
@@ -209,18 +209,18 @@
       "source": "bid-room-licitacoes-obras/index.html",
       "generator": "manual (script de componentes)",
       "priority": "P1",
-      "treatment": "HERANCA_VISUAL_VALIDADA",
+      "treatment": "COMPONENTES_ADEQUADOS",
       "owner": "lote B",
-      "state": "CAPTURADA_E_VISTA (390 e 1440, dobra; pagina inteira nas recompostas)",
+      "state": "CAPTURADA_E_VISTA (onda 2: 390 e 1440, dobra e pagina inteira; menu em 390; 320 sem rolagem horizontal)",
       "evidence": [
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/bid-room-licitacoes-obras-390x844-fold-lote-b.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/bid-room-licitacoes-obras-390x844-full-lote-b.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/bid-room-licitacoes-obras-1440x1000-fold-lote-b.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/bid-room-licitacoes-obras-1440x1000-full-lote-b.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/bid-room-licitacoes-obras-390x844-menu-lote-b.jpg"
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/bid-room-licitacoes-obras-390x844-fold-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/bid-room-licitacoes-obras-390x844-full-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/bid-room-licitacoes-obras-1440x1000-fold-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/bid-room-licitacoes-obras-1440x1000-full-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/bid-room-licitacoes-obras-390x844-menu-onda2.jpg"
       ],
       "impediment": "",
-      "note": "revisao 2026-09-17: reclassificada para HERANCA_VISUAL_VALIDADA (hero em degrade e painel G1-G6 escuro permanecem: CSS do integrador, pedidos 10 e 11); indice so com ancoras visiveis ('Etapas, preco e responsabilidades' aponta para o disclosure), h2 sem ponto final"
+      "note": "revisao 2026-09-17: reclassificada para HERANCA_VISUAL_VALIDADA (hero em degrade e painel G1-G6 escuro permanecem: CSS do integrador, pedidos 10 e 11); indice so com ancoras visiveis ('Etapas, preco e responsabilidades' aponta para o disclosure), h2 sem ponto final | onda 2: painel G1-G6 (navy) vira ol.steps claro; fecho \"Alternativa direta\" vira o unico sec--dark com contact-primary; hero, details e formulario intactos"
     },
     {
       "route": "/diagnostico-b2g-expansao/",
@@ -231,16 +231,16 @@
       "priority": "P1",
       "treatment": "HERANCA_VISUAL_VALIDADA",
       "owner": "lote B",
-      "state": "CAPTURADA_E_VISTA (390 e 1440, dobra; pagina inteira nas recompostas)",
+      "state": "CAPTURADA_E_VISTA (onda 2: 390 e 1440, dobra e pagina inteira; menu em 390; 320 sem rolagem horizontal)",
       "evidence": [
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-expansao-390x844-fold-lote-b.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-expansao-390x844-full-lote-b.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-expansao-1440x1000-fold-lote-b.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-expansao-1440x1000-full-lote-b.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-expansao-390x844-menu-lote-b.jpg"
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-expansao-390x844-fold-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-expansao-390x844-full-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-expansao-1440x1000-fold-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-expansao-1440x1000-full-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-expansao-390x844-menu-onda2.jpg"
       ],
       "impediment": "",
-      "note": "estados obrigado/expirado/cancelado nao tocados; revisao 2026-09-17: reclassificada para HERANCA_VISUAL_VALIDADA (hero em degrade permanece); indice de quatro entradas, todas visiveis ('Pacote, dados e condicoes' aponta para o disclosure); h2 sem ponto final; o codigo CFG-DIAG-EXP-v1 fica na copy por ser condicao material da oferta e exigencia de teste (refutado no relatorio)"
+      "note": "estados obrigado/expirado/cancelado nao tocados; revisao 2026-09-17: reclassificada para HERANCA_VISUAL_VALIDADA (hero em degrade permanece); indice de quatro entradas, todas visiveis ('Pacote, dados e condicoes' aponta para o disclosure); h2 sem ponto final; o codigo CFG-DIAG-EXP-v1 fica na copy por ser condicao material da oferta e exigencia de teste (refutado no relatorio) | onda 2: recapturada e vista; sem bloco escuro nem degrade (o CSS do integrador ja e solido); indice so com secoes visiveis (onda 1); nada a mudar"
     },
     {
       "route": "/conflitos/",
@@ -251,16 +251,16 @@
       "priority": "P2",
       "treatment": "HERANCA_VISUAL_VALIDADA",
       "owner": "lote B",
-      "state": "CAPTURADA_E_VISTA (390 e 1440, dobra; pagina inteira nas recompostas)",
+      "state": "CAPTURADA_E_VISTA (onda 2: 390 e 1440, dobra e pagina inteira; menu em 390; 320 sem rolagem horizontal)",
       "evidence": [
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/conflitos-390x844-fold-lote-b.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/conflitos-390x844-full-lote-b.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/conflitos-1440x1000-fold-lote-b.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/conflitos-1440x1000-full-lote-b.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/conflitos-390x844-menu-lote-b.jpg"
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/conflitos-390x844-fold-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/conflitos-390x844-full-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/conflitos-1440x1000-fold-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/conflitos-1440x1000-full-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/conflitos-390x844-menu-onda2.jpg"
       ],
       "impediment": "",
-      "note": "formulario #conflict-gate-form intacto; revisao 2026-09-17: reclassificada para HERANCA_VISUAL_VALIDADA; a pagina e gerada por scripts/site/render_authority_pages.py (a edicao manual do lote seria perdida na regeneracao), entao a folha editorial e o indice de cinco secoes (ids que conflict_gate.py ja escreve) passaram para o gerador; o respiro de ~110 px entre indice e cartao e padding do article-layout (styles.css, pedido 12)"
+      "note": "formulario #conflict-gate-form intacto; revisao 2026-09-17: reclassificada para HERANCA_VISUAL_VALIDADA; a pagina e gerada por scripts/site/render_authority_pages.py (a edicao manual do lote seria perdida na regeneracao), entao a folha editorial e o indice de cinco secoes (ids que conflict_gate.py ja escreve) passaram para o gerador; o respiro de ~110 px entre indice e cartao e padding do article-layout (styles.css, pedido 12) | onda 2: recapturada e vista; sem bloco escuro; o respiro entre indice e artigo e padding-top de .article-layout (pedido 12, integrador); pagina gerada por render_authority_pages.py"
     },
     {
       "route": "/defesa-margem-contratos-publicos/",
@@ -269,120 +269,144 @@
       "source": "defesa-margem-contratos-publicos/index.html",
       "generator": "manual",
       "priority": "P1",
-      "treatment": "PRESERVADA_COM_JUSTIFICATIVA",
+      "treatment": "COMPONENTES_ADEQUADOS",
       "owner": "lote B",
-      "state": "CAPTURADA_E_VISTA (390 e 1440, dobra; pagina inteira nas recompostas)",
+      "state": "CAPTURADA_E_VISTA (onda 2: 390 e 1440, dobra e pagina inteira; menu em 390; 320 sem rolagem horizontal)",
       "evidence": [
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-margem-contratos-publicos-390x844-fold-lote-b.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-margem-contratos-publicos-390x844-full-lote-b.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-margem-contratos-publicos-1440x1000-fold-lote-b.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-margem-contratos-publicos-1440x1000-full-lote-b.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-margem-contratos-publicos-390x844-menu-lote-b.jpg"
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-margem-contratos-publicos-390x844-fold-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-margem-contratos-publicos-390x844-full-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-margem-contratos-publicos-1440x1000-fold-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-margem-contratos-publicos-1440x1000-full-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-margem-contratos-publicos-390x844-menu-onda2.jpg"
       ],
-      "impediment": "tests/bofu_dominance/safe_execution/test_existing_css_js_only proibe folha fora de /styles*.css; sem folha editorial nao ha indice; so o estilo inline saiu",
-      "note": "revisao 2026-09-17: familia dividida enquanto test_existing_css_js_only vetar a folha editorial nestas quatro rotas (pedido 2): irmas recompostas no mesmo hub usam a composicao do piloto e estas mantem hero em degrade, faixa navy e CTA generico"
+      "impediment": "",
+      "note": "revisao 2026-09-17: familia dividida enquanto test_existing_css_js_only vetar a folha editorial nestas quatro rotas (pedido 2): irmas recompostas no mesmo hub usam a composicao do piloto e estas mantem hero em degrade, faixa navy e CTA generico | onda 2: abertura svc-open dentro da casca header.content-hero.offer-hero (o contrato safe-execution pina o header e o offer-context na dobra), aside \"Em 30 segundos\", indice de pagina, entrega em grid, proximo passo unico, quando pedir em listas claras, metodo em dl.keys, condicoes consolidadas, fecho sec--dark unico; #captura-pilar e bloco gerado byte-identicos"
     },
     {
       "route": "/defesa-tecnica-contratos-publicos/",
       "family": "oferta (safe-execution)",
       "function": "subsidio tecnico para notificacao ou sancao",
       "source": "defesa-tecnica-contratos-publicos/index.html",
-      "generator": "-",
+      "generator": "manual (script de componentes; bloco GENERATED:CONTRACT-DEFENSE-PRODUCT preservado)",
       "priority": "P1",
-      "treatment": "PRESERVADA_COM_JUSTIFICATIVA",
+      "treatment": "COMPONENTES_ADEQUADOS",
       "owner": "lote B",
-      "state": "CAPTURADA_E_VISTA (390 e 1440, dobra; pagina inteira nas recompostas)",
+      "state": "CAPTURADA_E_VISTA (onda 2: 390 e 1440, dobra e pagina inteira; menu em 390; 320 sem rolagem horizontal)",
       "evidence": [
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-tecnica-contratos-publicos-390x844-fold-lote-b.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-tecnica-contratos-publicos-390x844-full-lote-b.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-tecnica-contratos-publicos-1440x1000-fold-lote-b.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-tecnica-contratos-publicos-1440x1000-full-lote-b.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-tecnica-contratos-publicos-390x844-menu-lote-b.jpg"
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-tecnica-contratos-publicos-390x844-fold-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-tecnica-contratos-publicos-390x844-full-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-tecnica-contratos-publicos-1440x1000-fold-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-tecnica-contratos-publicos-1440x1000-full-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-tecnica-contratos-publicos-390x844-menu-onda2.jpg"
       ],
-      "impediment": "idem: folha editorial vetada pelo teste de area exclusiva; primeira dobra com frases de job/fronteira pinadas",
-      "note": "revisao 2026-09-17: familia dividida enquanto test_existing_css_js_only vetar a folha editorial nestas quatro rotas (pedido 2): irmas recompostas no mesmo hub usam a composicao do piloto e estas mantem hero em degrade, faixa navy e CTA generico"
+      "impediment": "",
+      "note": "revisao 2026-09-17: familia dividida enquanto test_existing_css_js_only vetar a folha editorial nestas quatro rotas (pedido 2): irmas recompostas no mesmo hub usam a composicao do piloto e estas mantem hero em degrade, faixa navy e CTA generico | onda 2: mesma composicao das rotas de execucao segura; pillar-evidence (navy) e content-cta (navy) sairam: nenhum bloco escuro; guia em library-item; ponte comercial mantida como cartao claro com botao secundario"
     },
     {
       "route": "/acompanhamento-contratos-obras/",
       "family": "oferta (safe-execution)",
       "function": "acompanhamento preventivo",
       "source": "acompanhamento-contratos-obras/index.html",
-      "generator": "-",
+      "generator": "manual (script de componentes; bloco GENERATED:CONTRACT-DEFENSE-PRODUCT preservado)",
       "priority": "P1",
-      "treatment": "PRESERVADA_COM_JUSTIFICATIVA",
+      "treatment": "COMPONENTES_ADEQUADOS",
       "owner": "lote B",
-      "state": "CAPTURADA_E_VISTA (390 e 1440, dobra; pagina inteira nas recompostas)",
+      "state": "CAPTURADA_E_VISTA (onda 2: 390 e 1440, dobra e pagina inteira; menu em 390; 320 sem rolagem horizontal)",
       "evidence": [
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/acompanhamento-contratos-obras-390x844-fold-lote-b.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/acompanhamento-contratos-obras-390x844-full-lote-b.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/acompanhamento-contratos-obras-1440x1000-fold-lote-b.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/acompanhamento-contratos-obras-1440x1000-full-lote-b.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/acompanhamento-contratos-obras-390x844-menu-lote-b.jpg"
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/acompanhamento-contratos-obras-390x844-fold-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/acompanhamento-contratos-obras-390x844-full-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/acompanhamento-contratos-obras-1440x1000-fold-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/acompanhamento-contratos-obras-1440x1000-full-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/acompanhamento-contratos-obras-390x844-menu-onda2.jpg"
       ],
-      "impediment": "idem",
-      "note": "revisao 2026-09-17: familia dividida enquanto test_existing_css_js_only vetar a folha editorial nestas quatro rotas (pedido 2): irmas recompostas no mesmo hub usam a composicao do piloto e estas mantem hero em degrade, faixa navy e CTA generico"
+      "impediment": "",
+      "note": "revisao 2026-09-17: familia dividida enquanto test_existing_css_js_only vetar a folha editorial nestas quatro rotas (pedido 2): irmas recompostas no mesmo hub usam a composicao do piloto e estas mantem hero em degrade, faixa navy e CTA generico | onda 2: mesma composicao, com a prancha P7 (carteira por evento) como exemplo demonstrativo; sem biblioteca (pagina sem guias); paragrafo data-offer-fit preservado"
     },
     {
       "route": "/atrasos-prorrogacao-obras-publicas/",
       "family": "oferta (safe-execution)",
       "function": "dossie de atraso e prorrogacao",
       "source": "atrasos-prorrogacao-obras-publicas/index.html",
-      "generator": "-",
+      "generator": "manual (script de componentes; bloco GENERATED:CONTRACT-DEFENSE-PRODUCT preservado)",
       "priority": "P1",
-      "treatment": "PRESERVADA_COM_JUSTIFICATIVA",
+      "treatment": "COMPONENTES_ADEQUADOS",
       "owner": "lote B",
-      "state": "CAPTURADA_E_VISTA (390 e 1440, dobra; pagina inteira nas recompostas)",
+      "state": "CAPTURADA_E_VISTA (onda 2: 390 e 1440, dobra e pagina inteira; menu em 390; 320 sem rolagem horizontal)",
       "evidence": [
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/atrasos-prorrogacao-obras-publicas-390x844-fold-lote-b.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/atrasos-prorrogacao-obras-publicas-390x844-full-lote-b.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/atrasos-prorrogacao-obras-publicas-1440x1000-fold-lote-b.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/atrasos-prorrogacao-obras-publicas-1440x1000-full-lote-b.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-b/atrasos-prorrogacao-obras-publicas-390x844-menu-lote-b.jpg"
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/atrasos-prorrogacao-obras-publicas-390x844-fold-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/atrasos-prorrogacao-obras-publicas-390x844-full-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/atrasos-prorrogacao-obras-publicas-1440x1000-fold-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/atrasos-prorrogacao-obras-publicas-1440x1000-full-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/atrasos-prorrogacao-obras-publicas-390x844-menu-onda2.jpg"
       ],
-      "impediment": "idem; passou a ser a sonda de capa OG-only em test_ui_geometry",
-      "note": "revisao 2026-09-17: familia dividida enquanto test_existing_css_js_only vetar a folha editorial nestas quatro rotas (pedido 2): irmas recompostas no mesmo hub usam a composicao do piloto e estas mantem hero em degrade, faixa navy e CTA generico"
+      "impediment": "",
+      "note": "revisao 2026-09-17: familia dividida enquanto test_existing_css_js_only vetar a folha editorial nestas quatro rotas (pedido 2): irmas recompostas no mesmo hub usam a composicao do piloto e estas mantem hero em degrade, faixa navy e CTA generico | onda 2: mesma composicao; lead-inline mantido como unico bloco escuro (rota medida pelo guard #181); sonda de capa OG-only do test_ui_geometry mantida (content-hero-grid presente, sem cartao raster, og:image preservado)"
     },
     {
       "route": "/diagnostico-b2g-expansao/obrigado/",
       "family": "estado",
       "function": "estado pos-envio",
       "source": "diagnostico-b2g-expansao/obrigado/index.html",
-      "generator": "-",
+      "generator": "manual (script de componentes, casca de obrigado.html)",
       "priority": "P3",
-      "treatment": "PRESERVADA_COM_JUSTIFICATIVA",
+      "treatment": "COMPONENTES_ADEQUADOS",
       "owner": "lote B",
-      "state": "SEM_CAPTURA",
-      "evidence": [],
-      "impediment": "estados minimos (menos de 2 KB) sem casca; fora do alcance util do lote",
-      "note": ""
+      "state": "CAPTURADA_E_VISTA (onda 2: 390 e 1440, dobra e pagina inteira; menu em 390; 320 sem rolagem horizontal)",
+      "evidence": [
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-expansao-obrigado-390x844-fold-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-expansao-obrigado-390x844-full-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-expansao-obrigado-1440x1000-fold-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-expansao-obrigado-1440x1000-full-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-expansao-obrigado-390x844-menu-onda2.jpg"
+      ],
+      "impediment": "",
+      "note": "onda 2: casca compartilhada de obrigado.html, section.state (codigo, h1 t-service, o que acontece agora sem prazo inventado, caminhos uteis, e-mail alternativo); textos originais, noindex,nofollow e canonical preservados"
     },
     {
       "route": "/diagnostico-b2g-expansao/expirado/",
       "family": "estado",
       "function": "estado",
       "source": "diagnostico-b2g-expansao/expirado/index.html",
-      "generator": "-",
+      "generator": "manual (script de componentes, casca de obrigado.html)",
       "priority": "P3",
-      "treatment": "PRESERVADA_COM_JUSTIFICATIVA",
+      "treatment": "COMPONENTES_ADEQUADOS",
       "owner": "lote B",
-      "state": "SEM_CAPTURA",
-      "evidence": [],
-      "impediment": "idem",
-      "note": ""
+      "state": "CAPTURADA_E_VISTA (onda 2: 390 e 1440, dobra e pagina inteira; menu em 390; 320 sem rolagem horizontal)",
+      "evidence": [
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-expansao-expirado-390x844-fold-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-expansao-expirado-390x844-full-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-expansao-expirado-1440x1000-fold-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-expansao-expirado-1440x1000-full-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-expansao-expirado-390x844-menu-onda2.jpg"
+      ],
+      "impediment": "",
+      "note": "onda 2: idem obrigado; <style> inline do skip-link substituido pela casca"
     },
     {
       "route": "/diagnostico-b2g-expansao/cancelado/",
       "family": "estado",
       "function": "estado",
       "source": "diagnostico-b2g-expansao/cancelado/index.html",
-      "generator": "-",
+      "generator": "manual (script de componentes, casca de obrigado.html)",
       "priority": "P3",
-      "treatment": "PRESERVADA_COM_JUSTIFICATIVA",
+      "treatment": "COMPONENTES_ADEQUADOS",
       "owner": "lote B",
-      "state": "SEM_CAPTURA",
-      "evidence": [],
-      "impediment": "idem",
-      "note": ""
+      "state": "CAPTURADA_E_VISTA (onda 2: 390 e 1440, dobra e pagina inteira; menu em 390; 320 sem rolagem horizontal)",
+      "evidence": [
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-expansao-cancelado-390x844-fold-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-expansao-cancelado-390x844-full-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-expansao-cancelado-1440x1000-fold-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-expansao-cancelado-1440x1000-full-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-expansao-cancelado-390x844-menu-onda2.jpg"
+      ],
+      "impediment": "",
+      "note": "onda 2: idem obrigado"
     }
-  ]
+  ],
+  "onda_2": {
+    "date": "2026-09-17",
+    "port": 8752,
+    "tag": "onda2",
+    "manifest": "docs/campaigns/design-institucional/expansao/evidence/lote-b/manifest-onda2.json"
+  }
 }

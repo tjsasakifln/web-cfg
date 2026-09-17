@@ -96,7 +96,8 @@
       "classification": "demonstrativo",
       "label_on_sheet": "Exemplo demonstrativo · sem obra de cliente",
       "used_on": [
-        "/diagnostico-b2g-360/"
+        "/diagnostico-b2g-360/",
+        "/acompanhamento-contratos-obras/"
       ],
       "summary": "Matriz carteira de contratos (4) × eventos (medição, aditivo, reequilíbrio, prazo) com o estado do registro por célula e um contrato em foco."
     },
@@ -114,7 +115,8 @@
       "classification": "demonstrativo",
       "label_on_sheet": "Exemplo demonstrativo · sem obra de cliente",
       "used_on": [
-        "/diagnostico-b2g-360/"
+        "/diagnostico-b2g-360/",
+        "/acompanhamento-contratos-obras/"
       ],
       "summary": "Matriz carteira de contratos (4) × eventos (medição, aditivo, reequilíbrio, prazo) com o estado do registro por célula e um contrato em foco."
     },
