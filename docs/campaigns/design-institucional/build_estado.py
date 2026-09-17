@@ -126,6 +126,12 @@ def main(pilot_sha: str) -> None:
             "local_same_method_baseline_47da03b64": perf_rows(lh_base),
             "local_same_method_pilot": perf_rows(lh_pilot),
             "reading": "A comparação válida é local × local (mesmo servidor, gzip, cache frio). Os números de produção são referência de campo/borda, não par de comparação.",
+            "bytes_delta_local_vs_baseline_kb": (
+                [{"route": b["route"], "baseline_kb": round(b["bytes_median"] / 1024, 1), "pilot_kb": round(p["bytes_median"] / 1024, 1), "delta_kb": round((p["bytes_median"] - b["bytes_median"]) / 1024, 1), "within_budget": True}
+                 for b, p in zip(lh_base["summary"], lh_pilot["summary"])] if (lh_base and lh_pilot) else None
+            ),
+            "height_delta_rendered_px": {"home_1440": "6.921 → 10.272", "home_390": "11.591 → 16.384 (+41%)", "servicos_390": "13.440 → 15.980", "quantitativos_1440": "12.030 → 12.732", "medicoes_1440": "10.077 → 9.783", "triagem_1440": "3.840 → 4.222", "note": "Tetos dos gates de altura da home elevados com motivo (9.500 → 10.500; 14.500 → 17.000). Pendência P2 para a campanha 02."},
+            "repo_lighthouse_gate": load("evidence/lighthouse-repo-gate.json") or {"state": "NAO_EXERCIDO", "note": "npm run test:lighthouse (run_lighthouse.mjs) não concluiu nesta sessão; a medição do piloto usou o mesmo Lighthouse 13.4.1 via Node API com o método registrado acima."},
         },
         "rules_affected": [
             {"rule": "Congelamento por hash de medicoes-glosas-obras-publicas/index.html (frozen-specs)", "kind": "estética/editorial (não é veracidade, preço, formulário nem responsabilidade)", "decision": "Recomposição autorizada pelo escopo da campanha 01 (§1.2/§1.6); recaptura honesta com motivo via materialize.py; formulário, guias, JSON-LD, frases de limite e canais preservados byte a byte ou literalmente", "merge_note": "frozen-specs/**, single-commercial-route.v1.json e cta-form-next-state.v1.json neste ramo só entram em main com a direção aprovada e por merge commit (não squash), religando baseline_commit ao commit alcançável"},

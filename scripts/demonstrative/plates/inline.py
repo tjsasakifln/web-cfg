@@ -4,10 +4,10 @@ A source page marks a slot with two comments:
 
     <!-- plate:recorte-banheiro --> ... <!-- /plate -->
 
-and this script replaces everything between them with the desktop and mobile
-SVGs of that plate (``assets/pranchas/<slug>-desktop.svg`` and ``-mobile.svg``),
-tagged ``class="plate__desktop"`` / ``class="plate__mobile"`` so css/editorial.css
-shows one of them per breakpoint. The comments stay, so the step is idempotent
+(``eager`` marks the one plate that sits in the first fold) and this script
+replaces everything between them with a <picture> that points at the desktop
+SVG from 700px up and at the mobile SVG below (``assets/pranchas/<slug>-desktop.svg``
+and ``-mobile.svg``), with explicit dimensions so nothing shifts. The comments stay, so the step is idempotent
 and ``--check`` can prove the HTML matches the versioned SVGs.
 
 Usage:
@@ -17,6 +17,7 @@ Usage:
 
 from __future__ import annotations
 
+import html
 import re
 import sys
 from pathlib import Path
@@ -29,28 +30,54 @@ PAGES = [
     "quantitativos-orcamento-obras/index.html",
     "medicoes-glosas-obras-publicas/index.html",
 ]
-SLOT = re.compile(r"<!-- plate:([a-z0-9-]+) -->.*?<!-- /plate -->", re.S)
+SLOT = re.compile(r"<!-- plate:([a-z0-9-]+)( eager)? -->.*?<!-- /plate -->", re.S)
 
 
-def _svg(slug: str, variant: str) -> str:
-    path = PLATES_DIR / f"{slug}-{variant}.svg"
-    text = path.read_text(encoding="utf-8").strip()
-    if not text.startswith("<svg"):
-        raise SystemExit(f"plate_not_svg:{path}")
-    # The root element carries the breakpoint class; nothing else is touched.
-    return text.replace("<svg ", f'<svg class="plate__{variant}" ', 1)
+def _dims(svg_text: str) -> tuple[int, int]:
+    m = re.search(r'viewBox="0 0 (\d+) (\d+)"', svg_text)
+    if not m:
+        raise SystemExit("plate_viewbox_missing")
+    return int(m.group(1)), int(m.group(2))
 
 
-def render(html: str) -> str:
+def _title(svg_text: str) -> str:
+    m = re.search(r"<title[^>]*>(.*?)</title>", svg_text, re.S)
+    return html.unescape(re.sub(r"\s+", " ", m.group(1)).strip()) if m else ""
+
+
+def picture(slug: str, *, eager: bool = False) -> str:
+    """One <picture> per plate: desktop file from 700px up, mobile file below.
+
+    The plates were inlined until 2026-09-17; the repository's Lighthouse gate
+    then measured the home at 1.343 DOM elements (cap 800) and 163 KB of
+    payload (cap 150 KB) because every slot carried two SVG documents. As
+    external images each plate costs one element and one request, only the
+    variant that matches the breakpoint is fetched, and below-the-fold plates
+    are lazy. Inside <img> the sheet text renders with the system font (Arial /
+    Liberation Sans, the same family the site's metric fallback uses), not
+    Archivo; the drawing, dimensions and title block are unchanged.
+    """
+    desk = (PLATES_DIR / f"{slug}-desktop.svg").read_text(encoding="utf-8")
+    mob = (PLATES_DIR / f"{slug}-mobile.svg").read_text(encoding="utf-8")
+    dw, dh = _dims(desk)
+    mw, mh = _dims(mob)
+    alt = html.escape(_title(desk))
+    loading = 'loading="eager" fetchpriority="high"' if eager else 'loading="lazy"'
+    return (
+        f'<picture class="plate__picture">'
+        f'<source media="(min-width:700px)" srcset="/assets/pranchas/{slug}-desktop.svg" width="{dw}" height="{dh}"/>'
+        f'<img alt="{alt}" decoding="async" {loading} src="/assets/pranchas/{slug}-mobile.svg" width="{mw}" height="{mh}"/>'
+        f'</picture>'
+    )
+
+
+def render(html_text: str) -> str:
     def repl(match: re.Match[str]) -> str:
         slug = match.group(1)
-        return (
-            f"<!-- plate:{slug} -->\n"
-            f"{_svg(slug, 'desktop')}\n{_svg(slug, 'mobile')}\n"
-            f"<!-- /plate -->"
-        )
+        eager = match.group(2) == " eager"
+        return f"<!-- plate:{slug}{(match.group(2) or "")} -->\n{picture(slug, eager=eager)}\n<!-- /plate -->"
 
-    return SLOT.sub(repl, html)
+    return SLOT.sub(repl, html_text)
 
 
 def main(argv: list[str]) -> int:

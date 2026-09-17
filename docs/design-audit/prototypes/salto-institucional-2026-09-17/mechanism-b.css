@@ -47,8 +47,7 @@ body[data-content-cluster="home"] .hero-figure .proof-figure__sheet{border:0;pad
 @media (min-width:900px){.deliveries{grid-template-columns:repeat(3,minmax(0,1fr));gap:2.5rem}}
 .delivery{grid-template-columns:minmax(0,1fr)!important;gap:1rem;border-top:1px solid var(--rule-strong)}
 .delivery--flip>.plate,.delivery--flip>.delivery__text{order:initial}
-.delivery .plate__sheet .plate__desktop{display:none}
-.delivery .plate__sheet .plate__mobile{display:block;max-width:22rem;margin-inline:auto}
+.delivery .plate__sheet .plate__picture img{max-width:22rem;margin-inline:auto}
 .delivery__text h3{font-size:1.25rem}
 .delivery__chain{grid-template-columns:minmax(0,1fr)}
 
