@@ -19,6 +19,7 @@
     "casos/modelo-relatorio-inteligencia-licitacoes/styles.css",
     "css/components.css",
     "css/contracts.css",
+    "css/editorial.css",
     "css/identity.css",
     "css/type-floor.css",
     "entregas/styles.css",
@@ -36,9 +37,9 @@
   "unreferenced_css_files": [],
   "bundles": {
     "styles.css": {
-      "bytes": 113331,
-      "class_selectors": 378,
-      "used": 377,
+      "bytes": 133288,
+      "class_selectors": 459,
+      "used": 458,
       "unused": [
         "opaque-token"
       ]
@@ -62,7 +63,7 @@
       "gradient": 0
     },
     "assets/home-10x.css": {
-      "border_radius": 4,
+      "border_radius": 2,
       "box_shadow": 0,
       "gradient": 0
     },
@@ -136,6 +137,11 @@
       "box_shadow": 0,
       "gradient": 0
     },
+    "css/editorial.css": {
+      "border_radius": 3,
+      "box_shadow": 1,
+      "gradient": 0
+    },
     "css/identity.css": {
       "border_radius": 1,
       "box_shadow": 0,
@@ -192,8 +198,8 @@
       "gradient": 1
     },
     "styles.css": {
-      "border_radius": 96,
-      "box_shadow": 42,
+      "border_radius": 99,
+      "box_shadow": 43,
       "gradient": 32
     },
     "triagem-tecnica/styles.css": {
@@ -203,8 +209,8 @@
     }
   },
   "decoration_totals": {
-    "border_radius": 154,
-    "box_shadow": 64,
+    "border_radius": 158,
+    "box_shadow": 66,
     "gradient": 46
   }
 }
