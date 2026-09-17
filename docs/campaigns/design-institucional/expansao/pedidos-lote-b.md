@@ -83,7 +83,7 @@ Cada pedido diz o arquivo do integrador, o motivo e a página afetada. Nada aqui
 - **Arquivo**: `css/components.css` (primitivo) ou `styles.css`.
 - **Motivo**: "Diagnóstico pré- / licitação para / obras públicas". Não há primitivo `nowrap` no sistema e `br.hero-br-mobile` só tem regra em `assets/home-10x.css`; o h1 literal está gravado em `data/bofu-dominance/frozen-specs/snapshots.json` e em `first-fold-measurements`, então o lote não trocou o hífen por U+2011. Pedido: um utilitário `.nowrap{white-space:nowrap}` (ou a regra de `hero-br-mobile` no sitewide) para envolver "pré-licitação".
 
-## 15. Cópia de encaixe de `/reequilibrio-obras-publicas/` (`test:offer-fit`)
+## 15. Cópia de encaixe de `/reequilibrio-obras-publicas/` (`test:offer-fit`) — RESOLVIDO (lote B, correções após revisão da onda 2)
 
 - **Arquivo**: `reequilibrio-obras-publicas/index.html` (rota da onda 1, fora dos arquivos permitidos da frente residual).
 - **Motivo**: `tests/commercial/test_offer_fit_copy.mjs` exige o título e o corpo exatos de `data/commercial/offer-fit-matrix.v1.json#route_copy.reequilibrio-obras-publicas` ("Quando o dossiê de reequilíbrio cabe, e quando não" + corpo); a recomposição da onda 1 parafraseou o corpo. Reprova desde a onda 1 (`offer-fit-copy: 81/83`; no HEAD da integração `2da310422` o título não existe na rota: `git show 2da310422:reequilibrio-obras-publicas/index.html | grep -c "Quando o dossiê de reequilíbrio cabe"` = 0). Em `/diagnostico-pre-licitacao/` a onda 2 restaurou o texto exato; fazer o mesmo em reequilíbrio (h3 + `p[data-offer-fit="1"]` com o corpo do JSON) e recapturar o hash.
@@ -100,3 +100,14 @@ Cada pedido diz o arquivo do integrador, o motivo e a página afetada. Nada aqui
 ## 18. `stash@{0}` no worktree do lote B
 
 - O worktree `.worktrees/salto-02-lote-b` carrega `stash@{0}` ("WIP on campaign/salto-institucional-02-expansao: 2da310422", 288 arquivos, drift de `_site`/saídas rastreadas da base), anterior à onda 2 e não pertencente ao lote. Foi aplicado por engano por um `git stash`/`pop` de conferência e revertido com `git reset --hard HEAD` (trabalho já commitado); a entrada foi mantida. Decisão de descartar ou não é do integrador.
+
+## 19. Rodapé dos estados de checkout (casca `obrigado.html`)
+
+- **Arquivo**: casca compartilhada dos estados (`diagnostico-b2g-expansao/obrigado/index.html`, lote A) e `styles.css` (`.site-footer`).
+- **Motivo**: os três estados (`obrigado`, `expirado`, `cancelado`) só carregam `footer-bottom`; o `padding` de `.site-footer` deixa ~120 px (1440) / ~100 px (390) navy vazios acima do copyright. Sugestão: modificador `.site-footer--compact` na casca de estados ou `padding-top` reduzido quando não há `footer-top`. Não bloqueante.
+
+## 20. Registro: correções após revisão (onda 2)
+
+- `scripts/commercial/render_contract_defense_products.mjs` (bloco PRODUCT em `dl.contract-product__terms`, linhas de veracidade sem caixa, ação em link de texto; rótulo da opção vazia do select do hub restaurado) e `styles-offers.css` (superfície editorial do produto/hub, links de prosa, `keys--prose`, índice na abertura das rotas safe-execution, botão secundário em `sec--dark`, fecho da diretoria). O gerador só regenera localmente com `hashes.json` igual à árvore (pedido 1); os blocos committed são os bytes do gerador.
+- `scripts/demonstrative/plates/family_b2g_execucao.py` (P10–P12) e `scripts/demonstrative/plates/family_b2g.py` (P7): `docs/campaigns/design-institucional/assets-manifest.json` precisa ser regerado (pedido 4).
+- `/reequilibrio-obras-publicas/` corrigido nesta rodada (pedido 15 atendido pelo lote; recaptura do hash segue no pedido 1).
