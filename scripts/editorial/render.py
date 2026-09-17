@@ -112,26 +112,29 @@ def _plain(text: str) -> str:
     return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", "", text)).strip()
 
 
-INDEX_LABEL_MAX = 32
-
-
 def _index_label(text: str) -> str:
-    """Rótulo curto do índice: a primeira oração do h2 (antes de ':' ou '(').
+    """Rótulo do índice: a primeira oração do h2 (antes de ':' ou '('), inteira.
 
-    Uma entrada do índice não quebra linha; acima de INDEX_LABEL_MAX caracteres
-    ela transbordaria os 320 px, então o rótulo é cortado na última palavra
-    inteira e recebe reticências (a âncora continua apontando para o h2 completo).
+    Não se trunca o rótulo: um título cortado é um defeito visível. Se a entrada
+    não couber em 320 px, a correção é da folha (`.article-toc li{flex:none}`
+    e `white-space`), pedida ao integrador em pedidos-lote-c.md.
     """
-    short = re.split(r"\s*[:(]", text, maxsplit=1)[0].strip() or text
-    if len(short) > INDEX_LABEL_MAX:
-        cut = short[:INDEX_LABEL_MAX].rsplit(" ", 1)[0].rstrip(",;")
-        short = f"{cut}…"
-    return short
+    return re.split(r"\s*[:(]", text, maxsplit=1)[0].strip() or text
+
+
+# Largura útil de 320 px menos o gutter: acima disto uma entrada do índice
+# transborda, porque a folha não deixa a entrada quebrar linha
+# (`.article-toc li{flex:none}`, pedido ao integrador). Enquanto a folha não
+# mudar, a página com um rótulo maior fica sem índice em vez de ganhar rolagem
+# horizontal ou um rótulo truncado.
+INDEX_LABEL_FITS = 36
 
 
 def page_index_html(entries: list[tuple[str, str]]) -> str:
     """nav.article-toc 'Nesta página': uma entrada por h2 de leitura, quando há três ou mais."""
     if len(entries) < MIN_H2_FOR_PAGE_INDEX:
+        return ""
+    if any(len(_index_label(t)) > INDEX_LABEL_FITS for _a, t in entries):
         return ""
     items = "".join(f'<li><a href="#{e(a)}">{e(_index_label(t))}</a></li>' for a, t in entries)
     return (

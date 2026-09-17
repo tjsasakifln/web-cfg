@@ -19,7 +19,7 @@ O visitante da biblioteca lê sem converter: o artigo abre com kicker, título e
 Abertura `svc-open` (kicker, `h1.t-service` com o texto exigido, lead, busca `data-hub-search` intacta, nota com triagem, `aside-note` "Responsabilidade técnica" com o byline); `nav.page-index` (5 entradas); "Por necessidade" em `ol.hub-list` com os 10 marcadores `data-hub-link` e hrefs; destaque (`featured-decision/featured-lead`), estágios (`problem-stages`) e diretório (busca/filtros/contagem/vazio/script) preservados; um bloco escuro (`section.content-cta`, literal exigido pelo teste) com ação dominante + alternativas; ferramentas/radar/nurture como links. `hub-inline-contact` (três CTAs no meio) removido em favor do bloco de contato único. Aviso: `inbound:remediate` sobrescreveria (pedido 9).
 
 ### `lei-14133-obras/**`, `guias-contratos-obras/**`, `jurisprudencia-contratos-obras/**` — COMPONENTES_ADEQUADOS (regenerados)
-`scripts/editorial/render.py`: folha editorial via `extra_head`; toda `## seção` recebe id estável (slug único) e o índice `nav.article-toc` entra após a resposta direta quando há ≥3 h2 (+ "Fontes"), rótulo = primeira oração do h2 com teto de 32 caracteres; hubs em `ol.hub-list` (tag do arquétipo, título, resumo, ação) e `article-hero`. Sem author-box novo: as páginas não declaram `author_is_tiago`, então nenhuma autoria foi acrescentada. Regenerado com `npm run editorial:build` (`{"ok": true, "indexable": 2, …}`); relatórios/registries revertidos.
+`scripts/editorial/render.py`: folha editorial via `extra_head`; toda `## seção` recebe id estável (slug único) e o índice `nav.article-toc` entra após a resposta direta quando há ≥3 h2 (+ "Fontes"), rótulo = primeira oração do h2, inteira (nunca truncada); enquanto a folha não deixar a entrada quebrar linha (pedido 1), a página cujo rótulo mais longo passa de 36 caracteres fica **sem índice** em vez de ganhar rolagem horizontal (6 de 12 páginas com índice: art-124, parcela-incontroversa, contestar-glosa, documentos-reequilibrio, responder-notificacao, tcu-sumula-260; sem índice: atraso-imputavel, limite-25-50, preco-item-novo, reequilibrio-reajuste, servico-executado, checklist-pedido-aditivo); hubs em `ol.hub-list` (tag do arquétipo, título, resumo, ação) e `article-hero`. Sem author-box novo: as páginas não declaram `author_is_tiago`, então nenhuma autoria foi acrescentada. Regenerado com `npm run editorial:build` (`{"ok": true, "indexable": 2, …}`); relatórios/registries revertidos.
 
 ### `inteligencia/**`, `radar/**` — COMPONENTES_ADEQUADOS (regenerados de `data/pseo/snapshot.json`, sem página nova)
 `scripts/pseo/render.py`: folha em todos os `page_shell`; `inject_page_index` pós-processa `article-main` (uma entrada por `section[id]` com h2, rótulo = kicker da seção); hubs em `ol.hub-list` com nota inline entre parênteses (o gate de vocabulário lê o trecho inteiro); seção `id="guias"` → `id="guias-relacionados"` (a heurística `href=#guias` sem `library-item` do teste global reprovava). `npm run pseo:build` sem diff além dos HTML do lote.
@@ -60,7 +60,7 @@ HERANCA_VISUAL_VALIDADA (captura 390/1440 conferida): imprensa, metodologia-inte
 | `npm run test:integral-solution` | `PASS: the public surface presents an integral solution` |
 | `npm run test:self-deprecation` | `PASS: no self-deprecating communication on the public surface` |
 | `npm run organic:test` | `279 passed in 17.92s` |
-| `npm run test:inbound-gates` | **exit 1**: `FAIL test_measurement_delay_canary_389_is_single_url_and_fail_closed medicoes-glosas-obras-publicas/index.html` — pré-existente na base do ramo (pilar do piloto recomposto após a recaptura do canário; `git diff 8860f5577 HEAD -- medicoes-glosas-obras-publicas/index.html` vazio). Pedido 10. |
+| `npm run test:inbound-gates` | **exit 1**: `FAIL test_measurement_delay_canary_389_is_single_url_and_fail_closed medicoes-glosas-obras-publicas/index.html` — pré-existente: a mesma falha ocorre em `git checkout 8860f5577` (base do ramo); `git diff 8860f5577 HEAD -- medicoes-glosas-obras-publicas/index.html` vazio. Pedido 10. |
 | `npm run test:deliverables-registry` | `deliverables-registry: 3650/3650 checks passed` |
 | `npm run test:real-proof-registry` | `real-proof-registry: canonical_records=0 public_pages=268 problems=0` |
 | `npm run test:commercial-contract-consistency` | `commercial-contract-consistency: 521/521 checks passed` |
@@ -68,7 +68,7 @@ HERANCA_VISUAL_VALIDADA (captura 390/1440 conferida): imprensa, metodologia-inte
 | `npm run test:cta-form-next-state` | `CTA_FORM_NEXT_STATE_OK routes=31` |
 | `npm run test:form-funnel` | `FORM_FUNNEL_OK {"events":[…],"submit_journey":"contrato","home_multistep":true}` |
 | `npm run test:page-contract-eight` | `page-contract-eight: 735/735 checks passed` |
-| `npm run test:page-contract-contratos` | **exit 1**: `FAIL held_hash_18` / `CONTRACT_DEFENSE_FROZEN_DRIFT: medicoes-glosas-obras-publicas/index.html` — mesmo pilar, pré-existente, não tocado pelo lote. |
+| `npm run test:page-contract-contratos` | **exit 1**: `FAIL held_hash_18` / `CONTRACT_DEFENSE_FROZEN_DRIFT: medicoes-glosas-obras-publicas/index.html` — mesmo pilar; a mesma falha ocorre em `git checkout 8860f5577` (base do ramo). Não tocado pelo lote. |
 | `npm run test:page-contract-execucao` | `page-contract-execucao: 702/702 checks passed` |
 | `npm run test:deliverable-models` | `16 passed in 0.32s` |
 | `npm run test:report-model` | `129 passed in 0.50s` |
@@ -88,7 +88,7 @@ Nenhum. Testes de veracidade/preço/responsabilidade/privacidade/formulário/per
 ## Pendências e o que NÃO foi feito
 - `/entregas/` não recomposta (pedido 7); `/ferramentas/diagnostico-defesa-margem/` e `/ferramentas/checklist-reequilibrio/` sem a folha (pedidos 2 e 8).
 - 11 artigos protegidos por hash (7 intactos, 4 folha-somente) esperam recaptura pelos donos dos contratos (pedido 11).
-- CSS: `.article-toc` flex/nowrap, `.content-hero::after`, `.credential-list>div`, `.content-cta` degradê (pedidos 1, 3, 4, 5).
+- CSS: `.article-toc` flex/nowrap (6 páginas editoriais geradas ficam sem índice até a correção), `.content-hero::after`, `.credential-list>div`, `.content-cta` degradê (pedidos 1, 3, 4, 5).
 - Ordem "método antes da ferramenta" nas páginas de ferramenta mantida (o `data-tool-job` e o e2e medem a dobra atual); recompor a ordem é decisão para o integrador com o e2e.
 - Menu móvel com dois controles de fechar (P4 do estado) permanece (nav.js, integrador).
 - `inbound:remediate` desincroniza o hub `/conteudos/` (pedido 9).
