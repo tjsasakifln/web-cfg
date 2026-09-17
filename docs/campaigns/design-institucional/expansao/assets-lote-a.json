@@ -1,0 +1,277 @@
+{
+  "schema": "confenge.design-institucional.expansao-assets/1.0",
+  "lote": "A",
+  "palette": "sheet.py INK/MUTED/RULE/SOFT/WHITE/GREEN/LIME/GREEN_100",
+  "assets": [
+    {
+      "id": "interferencia-verga-viga",
+      "code": "PA",
+      "kind": "prancha",
+      "description_pt_br": "Interferência WN-01 × B-01 na parede leste W-02, estados R00 e R01, com o registro CF-GEO-01",
+      "sources": [
+        "data/demonstrative/private-project-pilot/source.v1.json",
+        "data/demonstrative/private-project-pilot/consumption.v1.json"
+      ],
+      "generator": "scripts/demonstrative/plates/family_private.py (python3 -m scripts.demonstrative.plates.render_plates)",
+      "license": "gerado pela CONFENGE a partir de dados demonstrativos",
+      "classification": "demonstrativo",
+      "usage": [
+        "/compatibilizacao-projetos-engenharia/"
+      ],
+      "files": {
+        "desktop": {
+          "path": "assets/pranchas/interferencia-verga-viga-desktop.svg",
+          "sha256": "e7f6fbf7745af563694fa16c234f3f496b9f7746fbe9c6a08c26df532fb737cd",
+          "bytes": 9634
+        },
+        "mobile": {
+          "path": "assets/pranchas/interferencia-verga-viga-mobile.svg",
+          "sha256": "65f8a5826ec4608ed0b0ee67fc6172d03eb7fc544ef51892c74d3d8b79ccb7ef",
+          "bytes": 5150
+        }
+      }
+    },
+    {
+      "id": "revisao-conferencia",
+      "code": "PB",
+      "kind": "prancha",
+      "description_pt_br": "Conferência RF-01 (verga × viga) e RF-02 (poço HS-01 sem vão livre) sobre a elevação leste e o detalhe do poço",
+      "sources": [
+        "data/demonstrative/private-project-pilot/source.v1.json",
+        "data/demonstrative/private-project-pilot/consumption.v1.json"
+      ],
+      "generator": "scripts/demonstrative/plates/family_private.py (python3 -m scripts.demonstrative.plates.render_plates)",
+      "license": "gerado pela CONFENGE a partir de dados demonstrativos",
+      "classification": "demonstrativo",
+      "usage": [
+        "/revisao-tecnica-projetos-engenharia/"
+      ],
+      "files": {
+        "desktop": {
+          "path": "assets/pranchas/revisao-conferencia-desktop.svg",
+          "sha256": "3d231077ce9034cdb42fad21b9572bb9c8a1b43c9889d30f814dbdce956bea1f",
+          "bytes": 8241
+        },
+        "mobile": {
+          "path": "assets/pranchas/revisao-conferencia-mobile.svg",
+          "sha256": "05dffd22faefc011f92c61b3a7db0ce5f0fd1c5a4500c584b499a12d6bc35b07",
+          "bytes": 4476
+        }
+      }
+    },
+    {
+      "id": "drenagem-rede",
+      "code": "PC",
+      "kind": "prancha",
+      "description_pt_br": "Planta da rede MH-01, DR-01, MH-02, IN-01 e faixa PV-01 com cotas, diâmetro e camadas",
+      "sources": [
+        "data/demonstrative/infrastructure-pilot/source.v1.json",
+        "data/demonstrative/infrastructure-pilot/consumption.v1.json"
+      ],
+      "generator": "scripts/demonstrative/plates/family_private.py (python3 -m scripts.demonstrative.plates.render_plates)",
+      "license": "gerado pela CONFENGE a partir de dados demonstrativos",
+      "classification": "demonstrativo",
+      "usage": [
+        "/projetos-complementares-engenharia/"
+      ],
+      "files": {
+        "desktop": {
+          "path": "assets/pranchas/drenagem-rede-desktop.svg",
+          "sha256": "d0e956e5b227200947ebc2fe40b4b638db0126adb2b1fb84e25c6d32b7db09fb",
+          "bytes": 7722
+        },
+        "mobile": {
+          "path": "assets/pranchas/drenagem-rede-mobile.svg",
+          "sha256": "2ac2fa9cb3641a6b1c7f12090f524fbd7e6fe43919d1b47549dbfe8667ce392a",
+          "bytes": 4810
+        }
+      }
+    },
+    {
+      "id": "inspecao-fachada",
+      "code": "PD",
+      "kind": "prancha",
+      "description_pt_br": "Mapa de quatro manifestações numeradas na fachada leste FA-L com registro por item",
+      "sources": [
+        "data/demonstrative/plates/inspecao-fachada.v1.json"
+      ],
+      "generator": "scripts/demonstrative/plates/family_private.py (python3 -m scripts.demonstrative.plates.render_plates)",
+      "license": "gerado pela CONFENGE a partir de dados demonstrativos",
+      "classification": "demonstrativo",
+      "usage": [
+        "/inspecao-diagnostico-edificacoes/"
+      ],
+      "files": {
+        "desktop": {
+          "path": "assets/pranchas/inspecao-fachada-desktop.svg",
+          "sha256": "49a0e2e01ecc75655ea0337068d3a53e901b6beaadca1380e81f0a105b382753",
+          "bytes": 9487
+        },
+        "mobile": {
+          "path": "assets/pranchas/inspecao-fachada-mobile.svg",
+          "sha256": "9999bed9ba38fb95dc50b71726a93b445d0220e3cae7ff5b44b12bfbe08a88b9",
+          "bytes": 5155
+        }
+      }
+    },
+    {
+      "id": "pericia-fachada",
+      "code": "PE",
+      "kind": "prancha",
+      "description_pt_br": "O mesmo mapa da fachada com quesito, evidência e conclusão delimitada (Q-01 a Q-03)",
+      "sources": [
+        "data/demonstrative/plates/inspecao-fachada.v1.json"
+      ],
+      "generator": "scripts/demonstrative/plates/family_private.py (python3 -m scripts.demonstrative.plates.render_plates)",
+      "license": "gerado pela CONFENGE a partir de dados demonstrativos",
+      "classification": "demonstrativo",
+      "usage": [
+        "/assistencia-tecnica-pericial-engenharia/"
+      ],
+      "files": {
+        "desktop": {
+          "path": "assets/pranchas/pericia-fachada-desktop.svg",
+          "sha256": "7d6fc98ebaf5d71f922d7860b7a6d6fe3ae636fabe65883f34c886e58947ffc7",
+          "bytes": 9250
+        },
+        "mobile": {
+          "path": "assets/pranchas/pericia-fachada-mobile.svg",
+          "sha256": "2506340754e7ea22813ac3d03ee131da37082912ffd96cb2dbfbe5b1e9736e2a",
+          "bytes": 5131
+        }
+      }
+    },
+    {
+      "id": "sst-canteiro",
+      "code": "PF",
+      "kind": "prancha",
+      "description_pt_br": "Planta do canteiro CT-01 com quatro proteções coletivas e checklist de itens conferidos",
+      "sources": [
+        "data/demonstrative/plates/sst-canteiro.v1.json"
+      ],
+      "generator": "scripts/demonstrative/plates/family_private.py (python3 -m scripts.demonstrative.plates.render_plates)",
+      "license": "gerado pela CONFENGE a partir de dados demonstrativos",
+      "classification": "demonstrativo",
+      "usage": [
+        "/seguranca-trabalho-apoio-tecnico/"
+      ],
+      "files": {
+        "desktop": {
+          "path": "assets/pranchas/sst-canteiro-desktop.svg",
+          "sha256": "c8625c8d18ed1ea4f5d473a6e954b64bcf404e3da1d85aa00d60b05221746d68",
+          "bytes": 7297
+        },
+        "mobile": {
+          "path": "assets/pranchas/sst-canteiro-mobile.svg",
+          "sha256": "7d804005965e7c306e777648f443351fe7671c614a8e31f76288aa20dc1d2681",
+          "bytes": 4640
+        }
+      }
+    },
+    {
+      "id": "infra-planta-r00",
+      "kind": "desenho-do-caso",
+      "description_pt_br": "Desenho do caso demonstrativo de infraestrutura recolorido no vocabulário da prancha (pendência P5)",
+      "sources": [
+        "data/demonstrative/infrastructure-pilot/source.v1.json"
+      ],
+      "generator": "python3 -m scripts.demonstrative.infrastructure_pilot.generate (render.py)",
+      "license": "gerado pela CONFENGE a partir de dados demonstrativos",
+      "classification": "demonstrativo",
+      "usage": [
+        "/casos/demonstrativo-infraestrutura/"
+      ],
+      "files": {
+        "svg": {
+          "path": "casos/demonstrativo-infraestrutura/assets/planta-r00.svg",
+          "sha256": "1597c6f818d244d2332a5b29a20c82cf05cfb292b0a334d0eee3dbda34fc65e2",
+          "bytes": 2247
+        }
+      }
+    },
+    {
+      "id": "infra-planta-r01",
+      "kind": "desenho-do-caso",
+      "description_pt_br": "Desenho do caso demonstrativo de infraestrutura recolorido no vocabulário da prancha (pendência P5)",
+      "sources": [
+        "data/demonstrative/infrastructure-pilot/source.v1.json"
+      ],
+      "generator": "python3 -m scripts.demonstrative.infrastructure_pilot.generate (render.py)",
+      "license": "gerado pela CONFENGE a partir de dados demonstrativos",
+      "classification": "demonstrativo",
+      "usage": [
+        "/casos/demonstrativo-infraestrutura/"
+      ],
+      "files": {
+        "svg": {
+          "path": "casos/demonstrativo-infraestrutura/assets/planta-r01.svg",
+          "sha256": "e40563803bff283b2a7581a388dd3bab03c03056800a54f6572c83e38e1d1619",
+          "bytes": 2281
+        }
+      }
+    },
+    {
+      "id": "infra-perfil-drenagem-r00",
+      "kind": "desenho-do-caso",
+      "description_pt_br": "Desenho do caso demonstrativo de infraestrutura recolorido no vocabulário da prancha (pendência P5)",
+      "sources": [
+        "data/demonstrative/infrastructure-pilot/source.v1.json"
+      ],
+      "generator": "python3 -m scripts.demonstrative.infrastructure_pilot.generate (render.py)",
+      "license": "gerado pela CONFENGE a partir de dados demonstrativos",
+      "classification": "demonstrativo",
+      "usage": [
+        "/casos/demonstrativo-infraestrutura/"
+      ],
+      "files": {
+        "svg": {
+          "path": "casos/demonstrativo-infraestrutura/assets/perfil-drenagem-r00.svg",
+          "sha256": "604645d43e1f7bbeec78599a17834591e5531358433d5fc96857a66bdc0cf18e",
+          "bytes": 1772
+        }
+      }
+    },
+    {
+      "id": "infra-perfil-drenagem-r01",
+      "kind": "desenho-do-caso",
+      "description_pt_br": "Desenho do caso demonstrativo de infraestrutura recolorido no vocabulário da prancha (pendência P5)",
+      "sources": [
+        "data/demonstrative/infrastructure-pilot/source.v1.json"
+      ],
+      "generator": "python3 -m scripts.demonstrative.infrastructure_pilot.generate (render.py)",
+      "license": "gerado pela CONFENGE a partir de dados demonstrativos",
+      "classification": "demonstrativo",
+      "usage": [
+        "/casos/demonstrativo-infraestrutura/"
+      ],
+      "files": {
+        "svg": {
+          "path": "casos/demonstrativo-infraestrutura/assets/perfil-drenagem-r01.svg",
+          "sha256": "d94beba13743b55c7ea156a9fac8dda2e03c0a2f852f4c03ae3d55789c4e65ff",
+          "bytes": 1486
+        }
+      }
+    },
+    {
+      "id": "infra-secao-pavimento",
+      "kind": "desenho-do-caso",
+      "description_pt_br": "Desenho do caso demonstrativo de infraestrutura recolorido no vocabulário da prancha (pendência P5)",
+      "sources": [
+        "data/demonstrative/infrastructure-pilot/source.v1.json"
+      ],
+      "generator": "python3 -m scripts.demonstrative.infrastructure_pilot.generate (render.py)",
+      "license": "gerado pela CONFENGE a partir de dados demonstrativos",
+      "classification": "demonstrativo",
+      "usage": [
+        "/casos/demonstrativo-infraestrutura/"
+      ],
+      "files": {
+        "svg": {
+          "path": "casos/demonstrativo-infraestrutura/assets/secao-pavimento.svg",
+          "sha256": "a75ee5fc6b019da03605f174d6ad32ab25f9f58b310995869cb96819a36f9520",
+          "bytes": 1385
+        }
+      }
+    }
+  ]
+}

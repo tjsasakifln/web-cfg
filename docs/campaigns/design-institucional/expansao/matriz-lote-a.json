@@ -1,0 +1,326 @@
+{
+  "schema": "confenge.design-institucional.expansao-lote/1.0",
+  "lote": "A",
+  "branch": "campaign/salto-02/lote-a",
+  "routes": [
+    {
+      "route": "/compatibilizacao-projetos-engenharia/",
+      "family": "servico-privado",
+      "function": "servico",
+      "source": "compatibilizacao-projetos-engenharia/index.html",
+      "generator": null,
+      "priority": "P1",
+      "treatment": "COMPOSICAO_REDESENHADA",
+      "owner": "lote-a",
+      "state": "DONE",
+      "evidence": [
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/compatibilizacao-projetos-engenharia-1440x1000-fold-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/compatibilizacao-projetos-engenharia-1440x1000-full-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/compatibilizacao-projetos-engenharia-390x844-fold-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/compatibilizacao-projetos-engenharia-390x844-full-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/compatibilizacao-projetos-engenharia-390x844-menu-lote-a.jpg"
+      ],
+      "impediment": null,
+      "plate": "interferencia-verga-viga"
+    },
+    {
+      "route": "/revisao-tecnica-projetos-engenharia/",
+      "family": "servico-privado",
+      "function": "servico",
+      "source": "revisao-tecnica-projetos-engenharia/index.html",
+      "generator": "scripts/campaigns/pos-inb-20260911/02/compose_purchase_proof.mjs (bloco review-extract, preservado)",
+      "priority": "P1",
+      "treatment": "COMPOSICAO_REDESENHADA",
+      "owner": "lote-a",
+      "state": "DONE",
+      "evidence": [
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/revisao-tecnica-projetos-engenharia-1440x1000-fold-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/revisao-tecnica-projetos-engenharia-1440x1000-full-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/revisao-tecnica-projetos-engenharia-390x844-fold-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/revisao-tecnica-projetos-engenharia-390x844-full-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/revisao-tecnica-projetos-engenharia-390x844-menu-lote-a.jpg"
+      ],
+      "impediment": null,
+      "plate": "revisao-conferencia"
+    },
+    {
+      "route": "/projetos-complementares-engenharia/",
+      "family": "servico-privado",
+      "function": "servico",
+      "source": "projetos-complementares-engenharia/index.html",
+      "generator": null,
+      "priority": "P1",
+      "treatment": "COMPOSICAO_REDESENHADA",
+      "owner": "lote-a",
+      "state": "DONE",
+      "evidence": [
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/projetos-complementares-engenharia-1440x1000-fold-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/projetos-complementares-engenharia-1440x1000-full-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/projetos-complementares-engenharia-390x844-fold-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/projetos-complementares-engenharia-390x844-full-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/projetos-complementares-engenharia-390x844-menu-lote-a.jpg"
+      ],
+      "impediment": null,
+      "plate": "drenagem-rede"
+    },
+    {
+      "route": "/inspecao-diagnostico-edificacoes/",
+      "family": "servico-privado",
+      "function": "servico",
+      "source": "inspecao-diagnostico-edificacoes/index.html",
+      "generator": null,
+      "priority": "P1",
+      "treatment": "COMPOSICAO_REDESENHADA",
+      "owner": "lote-a",
+      "state": "DONE",
+      "evidence": [
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/inspecao-diagnostico-edificacoes-1440x1000-fold-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/inspecao-diagnostico-edificacoes-1440x1000-full-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/inspecao-diagnostico-edificacoes-390x844-fold-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/inspecao-diagnostico-edificacoes-390x844-full-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/inspecao-diagnostico-edificacoes-390x844-menu-lote-a.jpg"
+      ],
+      "impediment": null,
+      "plate": "inspecao-fachada"
+    },
+    {
+      "route": "/assistencia-tecnica-pericial-engenharia/",
+      "family": "servico-privado",
+      "function": "servico",
+      "source": "assistencia-tecnica-pericial-engenharia/index.html",
+      "generator": null,
+      "priority": "P1",
+      "treatment": "COMPOSICAO_REDESENHADA",
+      "owner": "lote-a",
+      "state": "DONE",
+      "evidence": [
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/assistencia-tecnica-pericial-engenharia-1440x1000-fold-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/assistencia-tecnica-pericial-engenharia-1440x1000-full-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/assistencia-tecnica-pericial-engenharia-390x844-fold-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/assistencia-tecnica-pericial-engenharia-390x844-full-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/assistencia-tecnica-pericial-engenharia-390x844-menu-lote-a.jpg"
+      ],
+      "impediment": null,
+      "plate": "pericia-fachada"
+    },
+    {
+      "route": "/seguranca-trabalho-apoio-tecnico/",
+      "family": "servico-privado",
+      "function": "servico",
+      "source": "seguranca-trabalho-apoio-tecnico/index.html",
+      "generator": null,
+      "priority": "P1",
+      "treatment": "COMPOSICAO_REDESENHADA",
+      "owner": "lote-a",
+      "state": "DONE",
+      "evidence": [
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/seguranca-trabalho-apoio-tecnico-1440x1000-fold-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/seguranca-trabalho-apoio-tecnico-1440x1000-full-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/seguranca-trabalho-apoio-tecnico-390x844-fold-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/seguranca-trabalho-apoio-tecnico-390x844-full-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/seguranca-trabalho-apoio-tecnico-390x844-menu-lote-a.jpg"
+      ],
+      "impediment": null,
+      "plate": "sst-canteiro"
+    },
+    {
+      "route": "/casos/demonstrativo-infraestrutura/",
+      "family": "casos",
+      "function": "exemplo",
+      "source": "data/demonstrative/infrastructure-pilot/source.v1.json",
+      "generator": "python3 -m scripts.demonstrative.infrastructure_pilot.generate (scripts/demonstrative/infrastructure_pilot/render.py)",
+      "priority": "P1",
+      "treatment": "COMPOSICAO_REDESENHADA",
+      "owner": "lote-a",
+      "state": "DONE",
+      "evidence": [
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/casos-demonstrativo-infraestrutura-1440x1000-fold-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/casos-demonstrativo-infraestrutura-1440x1000-full-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/casos-demonstrativo-infraestrutura-390x844-fold-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/casos-demonstrativo-infraestrutura-390x844-full-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/casos-demonstrativo-infraestrutura-390x844-menu-lote-a.jpg"
+      ],
+      "impediment": null,
+      "plate": null
+    },
+    {
+      "route": "/parcerias-engenharia/",
+      "family": "parcerias",
+      "function": "percurso-de-encaminhamento",
+      "source": "parcerias-engenharia/index.html",
+      "generator": null,
+      "priority": "P2",
+      "treatment": "COMPOSICAO_REDESENHADA",
+      "owner": "lote-a",
+      "state": "DONE",
+      "evidence": [
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/parcerias-engenharia-1440x1000-fold-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/parcerias-engenharia-1440x1000-full-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/parcerias-engenharia-390x844-fold-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/parcerias-engenharia-390x844-full-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/parcerias-engenharia-390x844-menu-lote-a.jpg"
+      ],
+      "impediment": "parcerias-engenharia/styles.css (integrador) ainda serve os conjuntos partner-kit; classes partner-hero/partner-steps/partner-contact ficaram sem uso (pedido registrado)",
+      "plate": null
+    },
+    {
+      "route": "/404.html",
+      "family": "estados",
+      "function": "estado",
+      "source": "404.html",
+      "generator": null,
+      "priority": "P2",
+      "treatment": "COMPOSICAO_REDESENHADA",
+      "owner": "lote-a",
+      "state": "DONE",
+      "evidence": [
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/404.html-1440x1000-fold-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/404.html-1440x1000-full-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/404.html-390x844-fold-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/404.html-390x844-full-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/404.html-390x844-menu-lote-a.jpg"
+      ],
+      "impediment": null,
+      "plate": null
+    },
+    {
+      "route": "/obrigado.html",
+      "family": "estados",
+      "function": "estado",
+      "source": "obrigado.html",
+      "generator": null,
+      "priority": "P2",
+      "treatment": "COMPOSICAO_REDESENHADA",
+      "owner": "lote-a",
+      "state": "DONE",
+      "evidence": [
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado.html-1440x1000-fold-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado.html-1440x1000-full-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado.html-390x844-fold-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado.html-390x844-full-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado.html-390x844-menu-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado.html-1440x1000-confirmed-lote-a.jpg"
+      ],
+      "impediment": null,
+      "plate": null
+    },
+    {
+      "route": "/obrigado-contrato.html",
+      "family": "estados",
+      "function": "estado",
+      "source": "obrigado-contrato.html",
+      "generator": null,
+      "priority": "P2",
+      "treatment": "COMPOSICAO_REDESENHADA",
+      "owner": "lote-a",
+      "state": "DONE",
+      "evidence": [
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado-contrato.html-1440x1000-fold-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado-contrato.html-1440x1000-full-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado-contrato.html-390x844-fold-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado-contrato.html-390x844-full-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado-contrato.html-390x844-menu-lote-a.jpg"
+      ],
+      "impediment": null,
+      "plate": null
+    },
+    {
+      "route": "/obrigado-edital.html",
+      "family": "estados",
+      "function": "estado",
+      "source": "obrigado-edital.html",
+      "generator": null,
+      "priority": "P2",
+      "treatment": "COMPOSICAO_REDESENHADA",
+      "owner": "lote-a",
+      "state": "DONE",
+      "evidence": [
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado-edital.html-1440x1000-fold-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado-edital.html-1440x1000-full-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado-edital.html-390x844-fold-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado-edital.html-390x844-full-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado-edital.html-390x844-menu-lote-a.jpg"
+      ],
+      "impediment": null,
+      "plate": null
+    },
+    {
+      "route": "/obrigado-operacao.html",
+      "family": "estados",
+      "function": "estado",
+      "source": "obrigado-operacao.html",
+      "generator": null,
+      "priority": "P2",
+      "treatment": "COMPOSICAO_REDESENHADA",
+      "owner": "lote-a",
+      "state": "DONE",
+      "evidence": [
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado-operacao.html-1440x1000-fold-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado-operacao.html-1440x1000-full-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado-operacao.html-390x844-fold-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado-operacao.html-390x844-full-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado-operacao.html-390x844-menu-lote-a.jpg"
+      ],
+      "impediment": null,
+      "plate": null
+    },
+    {
+      "route": "/comercial/privacidade-leads/",
+      "family": "comercial",
+      "function": "termos-legais",
+      "source": "comercial/privacidade-leads/index.html",
+      "generator": null,
+      "priority": "P3",
+      "treatment": "HERANCA_VISUAL_VALIDADA",
+      "owner": "lote-a",
+      "state": "DONE",
+      "evidence": [
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/comercial-privacidade-leads-1440x1000-fold-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/comercial-privacidade-leads-1440x1000-full-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/comercial-privacidade-leads-390x844-fold-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/comercial-privacidade-leads-390x844-full-lote-a.jpg"
+      ],
+      "impediment": null,
+      "plate": null
+    },
+    {
+      "route": "/comercial/termos-diagnostico-b2g/",
+      "family": "comercial",
+      "function": "termos-legais",
+      "source": "comercial/termos-diagnostico-b2g/index.html",
+      "generator": null,
+      "priority": "P3",
+      "treatment": "HERANCA_VISUAL_VALIDADA",
+      "owner": "lote-a",
+      "state": "DONE",
+      "evidence": [
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/comercial-termos-diagnostico-b2g-1440x1000-fold-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/comercial-termos-diagnostico-b2g-1440x1000-full-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/comercial-termos-diagnostico-b2g-390x844-fold-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/comercial-termos-diagnostico-b2g-390x844-full-lote-a.jpg"
+      ],
+      "impediment": null,
+      "plate": null
+    },
+    {
+      "route": "/comercial/radar-decisorio/",
+      "family": "comercial",
+      "function": "parametros-de-oferta-paga",
+      "source": "comercial/radar-decisorio/index.html",
+      "generator": null,
+      "priority": "P3",
+      "treatment": "PRESERVADA_COM_JUSTIFICATIVA",
+      "owner": "lote-a",
+      "state": "DONE",
+      "evidence": [
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/comercial-radar-decisorio-1440x1000-fold-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/comercial-radar-decisorio-1440x1000-full-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/comercial-radar-decisorio-390x844-fold-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/comercial-radar-decisorio-390x844-full-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/comercial-radar-decisorio-390x844-menu-lote-a.jpg"
+      ],
+      "impediment": "Rota de oferta paga com formulario, preco publicado e medicao de primeira dobra (data/commercial/first-fold-measurements.v1.json, test_page_contract_eight, cta-form-next-state); tipografia ja herda Archivo. O heroi com degrade vem de styles-offers.css (integrador): pedido registrado.",
+      "plate": null
+    }
+  ]
+}
