@@ -1,6 +1,6 @@
 # Lote C — relatório (biblioteca, hubs, responsável, ferramentas, secundárias)
 
-Ramo `campaign/salto-02/lote-c`, rebaseado em 2026-09-17 sobre a ponta da integração `campaign/salto-institucional-02-expansao@25c579584` (rodada de correção; antes: `8860f5577`). Direção do piloto (A-prancha-e-percurso), sem reabrir estética. Matriz: `matriz-lote-c.json` (187 rotas; após a onda 2: 5 COMPOSICAO_REDESENHADA, 162 COMPONENTES_ADEQUADOS, 8 HERANCA_VISUAL_VALIDADA, 12 PRESERVADA_COM_JUSTIFICATIVA; na onda 1: 4/152/8/23). Pranchas novas: nenhuma (`assets-lote-c.json`). Evidência: `evidence/lote-c/*.jpg` + `manifest-lote-c.json` (390×844 e 1440×1000, dobra e inteira, menu em 390, overflow em 320 = 0 px em todas as rotas capturadas).
+Ramo `campaign/salto-02/lote-c`, rebaseado em 2026-09-17 sobre a ponta da integração `campaign/salto-institucional-02-expansao@25c579584` (rodada de correção; antes: `8860f5577`). Direção do piloto (A-prancha-e-percurso), sem reabrir estética. Matriz: `matriz-lote-c.json` (187 rotas; após as correções da onda 2: 5 COMPOSICAO_REDESENHADA, 164 COMPONENTES_ADEQUADOS, 6 HERANCA_VISUAL_VALIDADA, 12 PRESERVADA_COM_JUSTIFICATIVA; na onda 2: 5/162/8/12; na onda 1: 4/152/8/23). Pranchas novas: nenhuma (`assets-lote-c.json`). Evidência: `evidence/lote-c/*.jpg` + `manifest-lote-c.json` (390×844 e 1440×1000, dobra e inteira, menu em 390, overflow em 320 = 0 px em todas as rotas capturadas).
 
 ## Jornada de aceite D
 
