@@ -189,8 +189,8 @@
       "Answer"
     ],
     "cta": {
-      "hero_text": "Verificar o contrato no diagnóstico de defesa de margem",
-      "hero_href": "/ferramentas/diagnostico-defesa-margem/",
+      "hero_text": "",
+      "hero_href": "",
       "bridges": [
         {
           "position": "header_nav",
@@ -223,9 +223,24 @@
           "text": "Biblioteca"
         },
         {
-          "position": "pillar_bridge",
+          "position": "pillar_hero",
+          "href": "#captura-pilar",
+          "text": "Descrever o pleito"
+        },
+        {
+          "position": "pillar_hero",
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20enquadrar%20reequil%C3%ADbrio%20econ%C3%B4mico-financeiro%20de%20contrato%20de%20obra%20p%C3%BAblica.",
-          "text": "Enquadrar o reequilíbrio"
+          "text": "Falar pelo WhatsApp"
+        },
+        {
+          "position": "pillar_inline",
+          "href": "#captura-pilar",
+          "text": "Descrever o pleito"
+        },
+        {
+          "position": "pillar_inline",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20enquadrar%20reequil%C3%ADbrio%20econ%C3%B4mico-financeiro%20de%20contrato%20de%20obra%20p%C3%BAblica.",
+          "text": "Falar pelo WhatsApp"
         },
         {
           "position": "pillar_bridge",
@@ -237,8 +252,8 @@
       "whatsapp_present": true,
       "form_count": 1
     },
-    "content_sha256": "83485c51f1e86bdac9875e8a437ac2bceac8b83a665d874c5fafcce650205704",
-    "bytes": 28936,
+    "content_sha256": "d3c946a5d0a81d9e2b59760f5c35396dd887de5055a11e441134dee84fd120f3",
+    "bytes": 33449,
     "noindex": false
   }
 }

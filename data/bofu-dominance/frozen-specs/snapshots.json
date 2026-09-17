@@ -30,8 +30,8 @@
         "Answer"
       ],
       "cta": {
-        "hero_text": "Verificar o contrato no diagnóstico de defesa de margem",
-        "hero_href": "/ferramentas/diagnostico-defesa-margem/",
+        "hero_text": "",
+        "hero_href": "",
         "bridges": [
           {
             "position": "header_nav",
@@ -64,22 +64,37 @@
             "text": "Biblioteca"
           },
           {
-            "position": "pillar_bridge",
+            "position": "pillar_hero",
+            "href": "#captura-pilar",
+            "text": "Descrever o aditivo"
+          },
+          {
+            "position": "pillar_hero",
             "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20estruturar%20aditivo%20ou%20servi%C3%A7o%20extra%20com%20base%20t%C3%A9cnica%20e%20econ%C3%B4mica.",
-            "text": "Enquadrar o evento contratual"
+            "text": "Falar pelo WhatsApp"
+          },
+          {
+            "position": "pillar_inline",
+            "href": "#captura-pilar",
+            "text": "Descrever o aditivo"
+          },
+          {
+            "position": "pillar_inline",
+            "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20estruturar%20aditivo%20ou%20servi%C3%A7o%20extra%20com%20base%20t%C3%A9cnica%20e%20econ%C3%B4mica.",
+            "text": "Falar pelo WhatsApp"
           },
           {
             "position": "pillar_bridge",
             "href": "/diagnostico-b2g-360/",
-            "text": "Solicitar diagnóstico da operação"
+            "text": "Diagnóstico da Operação em Obras Públicas"
           }
         ],
         "when_not_to_hire": true,
         "whatsapp_present": true,
         "form_count": 1
       },
-      "content_sha256": "4de1b69bbd7ec7504c2054dd6f63a50099bd007b284084b3ee54e64c3b3bea64",
-      "bytes": 35142,
+      "content_sha256": "bcfbe8fc5fd6e37fde9c857991c0bc23f86c5dde9bda1f265f0f8ea3ffd11156",
+      "bytes": 36214,
       "noindex": false
     },
     {
@@ -178,8 +193,8 @@
         "whatsapp_present": true,
         "form_count": 1
       },
-      "content_sha256": "124e31f29b3b98e91cb457943fdaa448c8e52121dc62a68ddd0e3d054f4fca3c",
-      "bytes": 36271,
+      "content_sha256": "821168975038c60fc478ff69515be52edb636b5e06dd94eb910414e245321910",
+      "bytes": 36286,
       "noindex": false
     },
     {
@@ -210,8 +225,8 @@
         "Answer"
       ],
       "cta": {
-        "hero_text": "Verificar o contrato no diagnóstico de defesa de margem",
-        "hero_href": "/ferramentas/diagnostico-defesa-margem/",
+        "hero_text": "",
+        "hero_href": "",
         "bridges": [
           {
             "position": "header_nav",
@@ -244,9 +259,24 @@
             "text": "Biblioteca"
           },
           {
-            "position": "pillar_bridge",
+            "position": "pillar_hero",
+            "href": "#captura-pilar",
+            "text": "Descrever o pleito"
+          },
+          {
+            "position": "pillar_hero",
             "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20enquadrar%20reequil%C3%ADbrio%20econ%C3%B4mico-financeiro%20de%20contrato%20de%20obra%20p%C3%BAblica.",
-            "text": "Enquadrar o reequilíbrio"
+            "text": "Falar pelo WhatsApp"
+          },
+          {
+            "position": "pillar_inline",
+            "href": "#captura-pilar",
+            "text": "Descrever o pleito"
+          },
+          {
+            "position": "pillar_inline",
+            "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20enquadrar%20reequil%C3%ADbrio%20econ%C3%B4mico-financeiro%20de%20contrato%20de%20obra%20p%C3%BAblica.",
+            "text": "Falar pelo WhatsApp"
           },
           {
             "position": "pillar_bridge",
@@ -258,8 +288,8 @@
         "whatsapp_present": true,
         "form_count": 1
       },
-      "content_sha256": "83485c51f1e86bdac9875e8a437ac2bceac8b83a665d874c5fafcce650205704",
-      "bytes": 28936,
+      "content_sha256": "d3c946a5d0a81d9e2b59760f5c35396dd887de5055a11e441134dee84fd120f3",
+      "bytes": 33449,
       "noindex": false
     },
     {
@@ -290,8 +320,8 @@
         "Answer"
       ],
       "cta": {
-        "hero_text": "Analisar uma demanda",
-        "hero_href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20revisar%20pre%C3%A7o%2C%20BDI%20e%20risco%20de%20uma%20licita%C3%A7%C3%A3o%20de%20obra.",
+        "hero_text": "",
+        "hero_href": "",
         "bridges": [
           {
             "position": "header_nav",
@@ -324,9 +354,24 @@
             "text": "Biblioteca"
           },
           {
-            "position": "pillar_bridge",
+            "position": "pillar_hero",
+            "href": "#captura-pilar",
+            "text": "Descrever o orçamento"
+          },
+          {
+            "position": "pillar_hero",
             "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20revisar%20pre%C3%A7o%2C%20BDI%20e%20risco%20de%20uma%20licita%C3%A7%C3%A3o%20de%20obra.",
-            "text": "Revisar esta oportunidade"
+            "text": "Falar pelo WhatsApp"
+          },
+          {
+            "position": "pillar_inline",
+            "href": "#captura-pilar",
+            "text": "Descrever o orçamento"
+          },
+          {
+            "position": "pillar_inline",
+            "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20revisar%20pre%C3%A7o%2C%20BDI%20e%20risco%20de%20uma%20licita%C3%A7%C3%A3o%20de%20obra.",
+            "text": "Falar pelo WhatsApp"
           },
           {
             "position": "pillar_bridge",
@@ -338,8 +383,8 @@
         "whatsapp_present": true,
         "form_count": 1
       },
-      "content_sha256": "316839d15f48760c17c06510a26e2bf120fc1a80dee24fb6f5d873708d5001b7",
-      "bytes": 33551,
+      "content_sha256": "69dcc3c5df42d837fb979fb481939b5e582a3915851e030319de89b6651f5225",
+      "bytes": 37061,
       "noindex": false
     },
     {
@@ -362,8 +407,8 @@
         "ListItem"
       ],
       "cta": {
-        "hero_text": "Solicitar diagnóstico da operação",
-        "hero_href": "#captura-pilar",
+        "hero_text": "",
+        "hero_href": "",
         "bridges": [
           {
             "position": "header_nav",
@@ -402,18 +447,33 @@
           },
           {
             "position": "offer_final",
-            "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20solicitar%20o%20Diagn%C3%B3stico%20da%20Opera%C3%A7%C3%A3o%20em%20Obras%20P%C3%BAblicas%20para%20mapear%20oportunidades%2C%20margem%20e%20controle%20da%20nossa%20opera%C3%A7%C3%A3o.",
+            "href": "#captura-pilar",
             "text": "Solicitar diagnóstico da operação"
           },
           {
+            "position": "offer_final",
+            "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20solicitar%20o%20Diagn%C3%B3stico%20da%20Opera%C3%A7%C3%A3o%20em%20Obras%20P%C3%BAblicas%20para%20mapear%20oportunidades%2C%20margem%20e%20controle%20da%20nossa%20opera%C3%A7%C3%A3o.",
+            "text": "Falar pelo WhatsApp"
+          },
+          {
             "position": "pillar_bridge",
-            "href": "#captura-pilar",
-            "text": "Pedir diagnóstico da operação"
+            "href": "/diretoria-b2g/",
+            "text": "Diretoria Fracionada para o Mercado Público"
+          },
+          {
+            "position": "pillar_bridge",
+            "href": "/bid-room-licitacoes-obras/",
+            "text": "Operação de Proposta para Licitação Crítica"
+          },
+          {
+            "position": "pillar_bridge",
+            "href": "/defesa-margem-contratos-publicos/",
+            "text": "Defesa de margem em contrato público"
           },
           {
             "position": "pillar_bridge",
             "href": "/conteudos/",
-            "text": "Ver conteúdos de apoio"
+            "text": "conteúdos de apoio"
           },
           {
             "position": "float",
@@ -425,8 +485,8 @@
         "whatsapp_present": true,
         "form_count": 1
       },
-      "content_sha256": "80c4ea907f25339fd2e774d13194af9883e8c2cb6b1f601d11415e8256f89c5d",
-      "bytes": 25677,
+      "content_sha256": "888dc7f716f1dd524bfd1b06d55fe23bb48a2bc507602f7528a17a77066db1cd",
+      "bytes": 28265,
       "noindex": false
     },
     {
@@ -457,8 +517,8 @@
         "Answer"
       ],
       "cta": {
-        "hero_text": "Analisar uma demanda",
-        "hero_href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20edital%20em%20an%C3%A1lise%20e%20quero%20avaliar%20se%20vale%20uma%20Opera%C3%A7%C3%A3o%20de%20Proposta%20para%20Licita%C3%A7%C3%A3o%20Cr%C3%ADtica%20ou%20diagn%C3%B3stico%20de%20participa%C3%A7%C3%A3o.",
+        "hero_text": "",
+        "hero_href": "",
         "bridges": [
           {
             "position": "header_nav",
@@ -491,22 +551,37 @@
             "text": "Biblioteca"
           },
           {
-            "position": "pillar_bridge",
+            "position": "pillar_hero",
+            "href": "#captura-pilar",
+            "text": "Descrever a licitação"
+          },
+          {
+            "position": "pillar_hero",
             "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20edital%20em%20an%C3%A1lise%20e%20quero%20avaliar%20se%20vale%20uma%20Opera%C3%A7%C3%A3o%20de%20Proposta%20para%20Licita%C3%A7%C3%A3o%20Cr%C3%ADtica%20ou%20diagn%C3%B3stico%20de%20participa%C3%A7%C3%A3o.",
-            "text": "Avaliar uma oportunidade"
+            "text": "Falar pelo WhatsApp"
+          },
+          {
+            "position": "pillar_inline",
+            "href": "#captura-pilar",
+            "text": "Descrever a licitação"
+          },
+          {
+            "position": "pillar_inline",
+            "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20edital%20em%20an%C3%A1lise%20e%20quero%20avaliar%20se%20vale%20uma%20Opera%C3%A7%C3%A3o%20de%20Proposta%20para%20Licita%C3%A7%C3%A3o%20Cr%C3%ADtica%20ou%20diagn%C3%B3stico%20de%20participa%C3%A7%C3%A3o.",
+            "text": "Falar pelo WhatsApp"
           },
           {
             "position": "pillar_bridge",
             "href": "/diretoria-b2g/",
-            "text": "Conhecer a Diretoria Fracionada para o Mercado Público"
+            "text": "Diretoria Fracionada para o Mercado Público"
           }
         ],
         "when_not_to_hire": true,
         "whatsapp_present": true,
         "form_count": 1
       },
-      "content_sha256": "cf4d194861f4eff49e0b7e35b79928107c6c83f9b1c83366fb1ae165332408b9",
-      "bytes": 28068,
+      "content_sha256": "74402dff44f8981829c91e8bac07c3ef5e122f345cf4e27991b0dfa921588f7a",
+      "bytes": 33914,
       "noindex": false
     }
   ]

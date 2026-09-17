@@ -1,7 +1,7 @@
 format: frozen_patch_v1
 slug: auditoria-orcamento-licitacao
 path: auditoria-orcamento-licitacao/index.html
-content_sha256: 316839d15f48760c17c06510a26e2bf120fc1a80dee24fb6f5d873708d5001b7
+content_sha256: 69dcc3c5df42d837fb979fb481939b5e582a3915851e030319de89b6651f5225
 earliest_safe_action_at: 2026-09-16
 corresponding_issue: 128
 html_mutation_authorized: false
@@ -9,6 +9,6 @@ do_not_git_apply: true
 ---DIFF---
 ---REPLACEMENT---
 <<<BEFORE
-<section class="container" data-organic-taya="1" id="quando-nao-contratar" data-when-not-hire="1" aria-label="Perguntas que costumam ficar sem resposta">
+<p id="quando-nao-contratar" data-when-not-hire="1" data-organic-taya="1">
 ===AFTER
-<section class="container" data-organic-taya="1" id="quando-nao-contratar" data-when-not-hire="1" aria-label="Perguntas que costumam ficar sem resposta">
+<p id="quando-nao-contratar" data-when-not-hire="1" data-organic-taya="1">

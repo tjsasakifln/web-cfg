@@ -188,8 +188,8 @@
       "Answer"
     ],
     "cta": {
-      "hero_text": "Analisar uma demanda",
-      "hero_href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20revisar%20pre%C3%A7o%2C%20BDI%20e%20risco%20de%20uma%20licita%C3%A7%C3%A3o%20de%20obra.",
+      "hero_text": "",
+      "hero_href": "",
       "bridges": [
         {
           "position": "header_nav",
@@ -222,9 +222,24 @@
           "text": "Biblioteca"
         },
         {
-          "position": "pillar_bridge",
+          "position": "pillar_hero",
+          "href": "#captura-pilar",
+          "text": "Descrever o orçamento"
+        },
+        {
+          "position": "pillar_hero",
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20revisar%20pre%C3%A7o%2C%20BDI%20e%20risco%20de%20uma%20licita%C3%A7%C3%A3o%20de%20obra.",
-          "text": "Revisar esta oportunidade"
+          "text": "Falar pelo WhatsApp"
+        },
+        {
+          "position": "pillar_inline",
+          "href": "#captura-pilar",
+          "text": "Descrever o orçamento"
+        },
+        {
+          "position": "pillar_inline",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20revisar%20pre%C3%A7o%2C%20BDI%20e%20risco%20de%20uma%20licita%C3%A7%C3%A3o%20de%20obra.",
+          "text": "Falar pelo WhatsApp"
         },
         {
           "position": "pillar_bridge",
@@ -236,8 +251,8 @@
       "whatsapp_present": true,
       "form_count": 1
     },
-    "content_sha256": "316839d15f48760c17c06510a26e2bf120fc1a80dee24fb6f5d873708d5001b7",
-    "bytes": 33551,
+    "content_sha256": "69dcc3c5df42d837fb979fb481939b5e582a3915851e030319de89b6651f5225",
+    "bytes": 37061,
     "noindex": false
   }
 }
