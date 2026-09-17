@@ -62,7 +62,7 @@ def picture(slug: str, *, eager: bool = False) -> str:
     dw, dh = _dims(desk)
     mw, mh = _dims(mob)
     alt = html.escape(_title(desk))
-    loading = 'loading="eager" fetchpriority="high"' if eager else 'loading="lazy"'
+    loading = 'loading="eager"' if eager else 'loading="lazy"'
     return (
         f'<picture class="plate__picture">'
         f'<source media="(min-width:700px)" srcset="/assets/pranchas/{slug}-desktop.svg" width="{dw}" height="{dh}"/>'
