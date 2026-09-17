@@ -581,3 +581,124 @@ próximas da matriz, em 12,5 px, balão 2 fora da célula (hash recapturado em `
 - `_site` e Lighthouse: cadeia de fechamento do integrador (build FAIL-CLOSED sem `approvals.json`).
 - Rodapé dos estados com faixa vazia acima do copyright: casca `obrigado.html` (lote A / integrador); pedido 19.
 - Tamanho do `h1` de serviço dentro da casca `content-hero`: pedido 16 (folha editorial do integrador).
+
+## 10. Correções após o aceite (2026-09-17, síntese das seis lentes; base a7068f671)
+
+Frente de correção do aceite, escopo obras públicas. As correções do integrador em a7068f671
+(A-01, A-02, A-03, M-01, M-03, M-05, M-14, M-16, M-28, B-04, B-05, B-08, B-18, B-19, B-20,
+B-25, B-29, B-31, P-05) foram conferidas nas capturas `*-aceite-fix.jpg`: nos dois casos B2G a
+prancha lateral usa a variante móvel (`aditivo-limite-mobile.svg` e `medicao-parede-mobile.svg`
+em 513 px, sonda `probe_plates.mjs`), e o índice de bid-room/diretoria/expansão continua só com
+âncoras visíveis (`test_page_index_anchors_land_on_visible_targets`).
+Servidor `python3 -m http.server 8812` sobre a árvore fonte; capturas em
+`evidence/lote-b/<rota>-{390x844,1440x1000}-{fold,full}-aceite-fix.jpg` (13 rotas, 320 px sem
+rolagem horizontal, `manifest-aceite-fix.json`).
+
+### 10.1 Achado → ação → prova
+
+| Achado | Ação | Prova |
+| --- | --- | --- |
+| M-08 índice a 605 px (defesa-margem, defesa-técnica, acompanhamento, atrasos) | `nav.page-index` saiu de `.svc-open__copy` e passou a fechar a abertura em largura total, depois da faixa 01–04 (`styles-offers.css`: `.offer-hero:has(.offer-context) > .container > .page-index{order:6}`) | `defesa-margem-…-1440x1000-full-aceite-fix.jpg` (índice a 1200 px, y≈1215); `test_bofu_safe_execution` 12/13 (a única reprovação é o hash de aditivos, §10.3); `offer_context_geometry`/`offer_context_computed` OK |
+| M-08 item 04 "O que você recebe" em linha própria | **Refutado** (ver §10.2) | — |
+| M-09 pilha de parágrafos antes do índice (bid-room, diretoria, expansão) | Índice entra no `.container` da abertura logo depois da faixa 01–03 (`order:6`); `hero-micro` (condição comercial, texto intacto) vai para a seção de preço (`#preco`, `#mensalidade`) ou, na expansão, para "Como conferir"; `ul.hero-proof` e `p.authority-byline` vão para "Como conferir" (`[data-offer-section="proof"]`); `offer-hero-desc` do bid-room vira lead de "Entregáveis"; `offer-result` sobe para logo após o lead (`order:3`), como o `.hero-deliverable` do serviço | índice a y≈880 (bid-room), ≈830 (diretoria), ≈1010 (expansão) contra ≈1100/1050/1150 no aceite; `bid-room-…-1440x1000-full-aceite-fix.jpg`; `first_fold_rules` continua com prova na dobra (`.offer-proof-line`); `tests/bofu_dominance/safe_strategy` 12/12 (a diretoria manteve `offer-hero-desc` na abertura porque `test_first_fold_jobs_are_distinct` exige "operação de proposta", "defesa de margem" e "quatro oportunidades" na dobra) |
+| M-09 "incluir uma prancha" | Não feito: a instrução do aceite veda inventar prancha | — |
+| M-10 corpo de /conflitos/ no layout legado | `render_authority_pages.py`: com `page_index` o corpo é `section.sec.sec--tight > .container > article.article-main` (medida de leitura da folha editorial, sem `article-layout` nem `simple-card privacy-card`); as demais páginas geradas saem byte-idênticas (`git status` só muda `conflitos/index.html`). `conflict_gate.py`: legenda "Use apenas estas opções…" antes do botão, `#conflict-gate-result` como único `role=status` com a classe `form-status`; textos intactos | `conflitos-1440x1000-full-aceite-fix.jpg` (sem vão nem cartão, h2 nos papéis de `.article-main`); `test_trust_surfaces_responsive.mjs` PASS nas 6 combinações (estados REVIEW_REQUIRED/DECLINE do gate); `test:authority` OK |
+| M-11 bloco escuro da diretoria é a timeline | **Adiado** com justificativa (§10.2) | — |
+| M-12 componentes de captura | Expansão: `#pedido-diagnostico` vira `section.pillar-capture > .container.pillar-capture-grid > .pillar-capture-copy + form#handraise-diag` (formulário byte-idêntico, id e runtime inline intactos; frase órfã entra na coluna de copy). Hub: `.contract-product__capture` ganha a mesma grade copy + cartão a partir de 901 px (`styles-offers.css`; bloco gerado intacto, `render_nav_hubs.py --check` PASS). Diretoria já usa `section.pillar-capture` | `diagnostico-b2g-expansao-1440x1000-full-aceite-fix.jpg`, `servicos-obras-publicas-1440x1000-full-aceite-fix.jpg`; `test:cta-form-next-state` OK (198 CTAs, censo regerado); `test:inbound-gates` 9/9 |
+| M-12 ids `#captura-pilar` nas três | **Refutado** (§10.2) | — |
+| M-13 duas/três ações de mesmo peso | Aditivos: segundo botão do `lead-inline` vira `ul.contact-alt` (branco sobre navy, atributos `data-*` e href intactos). Defesa-técnica: WhatsApp `pillar_bridge` fica como botão; defesa-margem e diag-360 viram `.text-link`. Mesma regra em atrasos (diretoria) e acompanhamento (defesa-margem) | `stack1.jpg` da sessão; `test_existing_153_attributes_preserved_and_primary_cta_complete` OK (nenhum href perdido) |
+| M-15 condição de preço colada ao bloco escuro | Parágrafo `data-offer-fit="1"` (texto intacto) em seção própria `#custo-rotina` com kicker "Condição de preço" e h2 "Mensalidade fixa, confirmada na primeira conversa"; índice ganha "04 Como é cobrada" | `acompanhamento-…-1440x1000-full-aceite-fix.jpg`; `test:offer-fit` 4/4 |
+| B-12 bloco escuro do hub encosta no rodapé | `render_nav_hubs.py::_problems_body`: `section.authority-method#metodo` claro depois de `#hub-next` (autor institucional, método, limitação, "Encontrou um erro?") | `problemas-que-resolvemos-1440x1000-full-aceite-fix.jpg`; `test:nav` 15/15 |
+| B-13 caption cortada dentro do `.table-scroll` | Legenda vira `p.t-caption#tabela-legenda` antes do contentor; `<caption>` removida e a tabela passa a `aria-describedby="tabela-legenda"` (o contentor já tem `role=group` + `aria-label`) | `casos-medicao-glosa-demonstrativo-390x844-full-aceite-fix.jpg` (legenda inteira acima da tabela) |
+| B-14 sufixo "(opcional)" em linha própria; botão colado ao lead em 390 | `styles-offers.css`: `.pillar-capture-form label .field-optional{display:contents;font-weight:400;color:var(--muted)}` (o rótulo é grid; o sufixo volta à linha do texto) e `.content-hero.svc-open .svc-open__actions{margin-top:1.25rem}`; formulários intactos | `defesa-margem-…-1440x1000-full-aceite-fix.jpg` (formulário), `defesa-margem-…-390x844-full-aceite-fix.jpg` |
+| D-01 texto das pranchas 1200 a 11 px | Medido (§10.2): refutada a comparação com o piloto; tamanho absoluto é constante do gerador (`sheet.py`, integrador) | `probe_plates.mjs` |
+
+### 10.2 Refutados, adiados e decisões que não são desta frente
+
+- **M-08 (item 04)**: a faixa 01–03 + item 04 em largura total é o contrato vigente:
+  `scripts/site/test_design_gates.py::test_offer_context_component_css` exige
+  `repeat(3,minmax(0,1fr))` e proíbe uma regra 2×2 para quatro itens ("Four items stay a 3-column
+  band + conclusion strip"); `test_ui_geometry.mjs::offer_context_computed` mede
+  `/defesa-margem-contratos-publicos/` e reprova com `fourth-not-conclusion-strip` se o 4.º item não
+  ficar abaixo do 1.º; `class="offer-context"` é exigida nas sete rotas (sem "lista regrada"). Já
+  registrado em §9.4.
+- **M-11**: `test_operating_flow_has_sitewide_fallback` pina `<ol class="operating-flow">` na
+  rota, o CSS em `styles.css` e proíbe `.operating-flow` em `styles-offers.css`; as regras
+  (`color:#fff`, `box-shadow:0 0 0 6px #071a31`) assumem fundo escuro, e uma sobreposição por id na
+  folha de ofertas contrariaria a intenção do gate (fallback sem a folha de ofertas ficaria branco
+  sobre branco). Adiado: pedido 21 (variante clara do `operating-flow` em `styles.css`).
+- **M-12 (ids)**: `#handraise-diag` é lido pelo script inline da rota
+  (`getElementById("handraise-diag")`, chave de idempotência) e por
+  `render_cta_form_next_state.mjs:71` (`inline_receipt_v1`); `#pedido-enquadramento` consta em
+  `first-fold-measurements.v1.json` e no censo de CTAs; o caderno §3 permite mover o bloco inteiro,
+  não trocar `offer-request-form` por `pillar-capture-form`. Componente/wrapper unificado; ids e
+  formulários preservados. A lente contratos já classificou como pré-existente (forms byte-idênticos
+  em 234/234).
+- **M-17**: `/conteudos/chuva-prorrogacao-prazo-obra-publica/` é família C e está no bucket
+  `css_integrator` da síntese. Fora desta frente.
+- **M-24** (`novalidate`, rótulos obrigatório/opcional): edição por dentro do `#captura-pilar`,
+  byte-idêntico por contrato; pré-existente em produção. Pedido 22 ao integrador/proprietário.
+- **B-11**: refutado. A FAQ diz que o site não cobra *antes* do aceite ("O pedido é analisado
+  primeiro. Depois do aceite, enviamos as instruções de pagamento"); `/diagnostico-b2g-expansao/obrigado/`
+  é a página de retorno do provedor *depois* dessa etapa e diz isso ("Esta página de retorno não
+  comprova que o pagamento foi enviado"). Não há contradição; renomear o estado de um retorno de
+  checkout é decisão do proprietário (autorização de checkout é estado separado, AGENTS.md).
+- **B-15**: refutado como regressão. Reutilizar a mesma prancha entre pilar, hub e caso é o
+  padrão do próprio piloto (`medicao-parede` abre a home, o pilar de medições, o hub e o caso: 5
+  usos; `grep -rho 'plate:[a-z0-9-]*'`); a legenda de cada uso já é própria da rota. A duplicação
+  P7 (diag-360 + acompanhamento) fica registrada como preferência; variante por rota exige nova
+  composição no gerador e não é correção de aceite.
+- **B-16**: decisão comercial do proprietário (publicar preço no pilar ou retirar do hub); nada
+  mudou em preço.
+- **B-17**: a dupla pontuação existe **só** em `medicoes-glosas-obras-publicas/index.html`
+  (`grep -rl 'Encontrou um erro?</a>\.' --include=index.html .` → 1 arquivo; nenhum gerador em
+  `scripts/site/*.py` a emite). Página do integrador, protegida por hash: pedido 23.
+- **D-01**: medido a 1440 nas quatro rotas: `img` da prancha dominante a 1166 px para `viewBox`
+  1200 (escala 0,972) → 11 px renderiza a 10,7 px, 12 px a 11,7 px, 16 px a 15,5 px. A P3 do
+  piloto (`medicao-parede-desktop.svg`) usa a mesma escala (11/12/16 no mesmo `viewBox 0 0 1200 560`)
+  e o mesmo slot `.plate--dominant`, então "bem menor que a P3 do piloto" não procede: são
+  idênticas. O piso absoluto é `FS_DIM = 11` em `scripts/demonstrative/plates/sheet.py`
+  (integrador); subir para 12,5 é decisão de sistema (pedido 24), não desta rota.
+- **A-04, M-25, M-26, M-27, M-19**: decisões editoriais/comerciais do proprietário; preservadas
+  sem mudança de preço, formulário, robots, canonical ou oferta.
+- **B-01, B-02, B-09, B-22, B-26, B-27, B-32, B-33, B-36**: rotas de outras famílias ou do
+  integrador (fora da `matriz-lote-b.json`).
+
+### 10.3 Testes executados (última linha real, árvore final)
+
+- `python3 scripts/site/html_integrity.py --root . --surface source` → `failures=0` (235 arquivos)
+- `npm run test:design` → exit 0 (inclui `test_page_index_anchors_land_on_visible_targets`)
+- `npm run test:copy` / `test:brand` / `test:authority` (`OK 8 correction checks`) /
+  `test:integral-solution` (PASS) / `test:self-deprecation` (PASS) → exit 0
+- `npm run organic:test` → `279 passed`
+- `npm run test:inbound-gates` → `9 passed`
+- `npm run test:cta-form-next-state` → `CTA_FORM_NEXT_STATE_OK routes=31` (198 CTAs; inventário
+  regerado por `npm run report:cta-form-next-state`, só o rótulo "07 Descrever a carteira")
+- `npm run test:form-funnel` → `FORM_FUNNEL_OK`
+- `test:deliverables-registry` 3650/3650 · `test:real-proof-registry` problems=0 ·
+  `test:commercial-contract-consistency` 521/521 · `test:public-offer-truth` 132/132 ·
+  `test:offer-fit` 4 passed · `test:offer-naming` 101/101 · `test:nav` 15 passed ·
+  `test:page-contract-licitacao` 243/243
+- `node scripts/site/test_ui_geometry.mjs http://127.0.0.1:8812` → `All UI geometry tests passed`
+  (`offer_context_computed 3col=3 4items=4`)
+- `node scripts/site/test_trust_surfaces_responsive.mjs` (com `_site` apontado para a árvore
+  fonte, link removido depois) → PASS ×6
+- `node --test tests/intake/test_mv03_adaptive_intake.mjs` → pass 17 / fail 0
+- `python3 -m pytest tests/bofu_dominance/safe_execution -q` → 12 passed, 1 failed
+  (`test_git_diff_is_exclusive_area`: hash de `aditivos-obras-publicas/index.html`, ver 10.4)
+- `python3 -m pytest tests/bofu_dominance -q` → 104 passed, 13 failed: os 5 já vermelhos em
+  a7068f671 (`styles.css`/`script.js` do integrador, `unlock_plan_291`) + 8 pela recaptura pendente
+  de aditivos; `npm run test:page-contract-contratos` → `held_hash_19` e
+  `public_renderer_has_no_drift` (mesmo hash de aditivos; 496/498 no restante)
+- `npm run test:first-fold-contract` → 11 falhas, todas `html_bytes_match`/`input_changed` das rotas
+  tocadas (em a7068f671 já reprovava em `/` e `assets/editorial-article.css`)
+
+### 10.4 Arquivos protegidos por hash alterados de propósito (recaptura do integrador)
+
+- `aditivos-obras-publicas/index.html` (M-13): frozen spec (`materialize.py`, pedido 1) e
+  `hashes.json#forbidden`.
+- Primeira dobra (`first-fold-measurements.v1.json`): `defesa-margem-contratos-publicos`,
+  `defesa-tecnica-contratos-publicos`, `acompanhamento-contratos-obras`,
+  `atrasos-prorrogacao-obras-publicas`, `bid-room-licitacoes-obras`, `diretoria-b2g`,
+  `diagnostico-b2g-expansao`, `problemas-que-resolvemos`, `styles-offers.css`.
+- Censo de CTAs: regerado (198, sem mudança de contagem).

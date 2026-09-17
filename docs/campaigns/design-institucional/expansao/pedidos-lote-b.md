@@ -111,3 +111,27 @@ Cada pedido diz o arquivo do integrador, o motivo e a página afetada. Nada aqui
 - `scripts/commercial/render_contract_defense_products.mjs` (bloco PRODUCT em `dl.contract-product__terms`, linhas de veracidade sem caixa, ação em link de texto; rótulo da opção vazia do select do hub restaurado) e `styles-offers.css` (superfície editorial do produto/hub, links de prosa, `keys--prose`, índice na abertura das rotas safe-execution, botão secundário em `sec--dark`, fecho da diretoria). O gerador só regenera localmente com `hashes.json` igual à árvore (pedido 1); os blocos committed são os bytes do gerador.
 - `scripts/demonstrative/plates/family_b2g_execucao.py` (P10–P12) e `scripts/demonstrative/plates/family_b2g.py` (P7): `docs/campaigns/design-institucional/assets-manifest.json` precisa ser regerado (pedido 4).
 - `/reequilibrio-obras-publicas/` corrigido nesta rodada (pedido 15 atendido pelo lote; recaptura do hash segue no pedido 1).
+
+## 21. Variante clara do `ol.operating-flow` (M-11, `/diretoria-b2g/`)
+
+- **Arquivo**: `styles.css` (`.operating-flow h3{color:#fff}`, `.operating-flow p{color:#c3cfda}`, `.operating-marker{box-shadow:0 0 0 6px #071a31}`, `.model-section{background:#071a31}`).
+- **Motivo**: o aceite pede que o único bloco escuro da página seja o próximo passo, não a timeline A–D. `test_operating_flow_has_sitewide_fallback` pina `<ol class="operating-flow">`, o CSS em `styles.css` e proíbe `.operating-flow` em `styles-offers.css`; as regras assumem fundo escuro, então tirar `model-section` da seção sem CSS novo deixa texto branco sobre branco. Pedido: variante `.operating-flow--light` (ou regras sob `.section:not(.model-section) .operating-flow`) com `h3` em `var(--ink)`, `p` em `var(--text)`, marcador com anel `var(--soft)` e filete `var(--rule)`. Com isso o lote troca `model-section` por `section-soft` em `#cadencia` e reserva o escuro ao `pillar-capture`/fecho.
+
+## 22. `novalidate` e rótulos obrigatório/opcional no `#captura-pilar` (M-24)
+
+- **Arquivo**: componente `section.pillar-capture` (12 rotas, formulário byte-idêntico por contrato; decisão do proprietário/integrador).
+- **Motivo**: sem `novalidate` o envio vazio bloqueia só com o balão nativo (em inglês no headless) e as mensagens pt-BR do runtime nunca aparecem; a dica cita "campos marcados como obrigatórios" mas nenhum rótulo é marcado. Pré-existente em produção (lente contratos). O lote não edita por dentro do formulário.
+
+## 23. Dupla pontuação no bloco de autor de `/medicoes-glosas-obras-publicas/` (B-17)
+
+- **Arquivo**: `medicoes-glosas-obras-publicas/index.html` linha do `authority-method` ("Encontrou um erro?</a>." → sem o ponto). Única ocorrência no repositório (`grep -rl 'Encontrou um erro?</a>\.' --include=index.html .`); nenhum gerador em `scripts/site/*.py` emite o ponto. Página do integrador, hash congelado.
+
+## 24. Piso tipográfico das pranchas desktop (D-01)
+
+- **Arquivo**: `scripts/demonstrative/plates/sheet.py` (`FS_DIM = 11`, `CALLOUT_R = 11`).
+- **Motivo**: a 1440 a prancha dominante renderiza a 1166 px para `viewBox` 1200 (11 px → 10,7 px). Igual ao piloto (P3 usa a mesma escala), então não é regressão; se o proprietário quiser a legenda mínima de 12,5 px também no desktop, é mudança de sistema no gerador e recompõe todas as pranchas (hashes SVG, `assets-lote-*.json`, `inline`, primeira dobra).
+
+## 25. Resíduos legados no corpo de `/conflitos/` depois de M-10
+
+- **Arquivos**: `styles.css` (`.form-note{text-align:center}`, `.article-main p{font-size:1rem}` legado) e `assets/editorial.css` (`.article-main p,.article-main li` sem `font-size`).
+- **Motivo**: com o corpo no modelo de leitura, a legenda do formulário continua centrada dentro de um formulário alinhado à esquerda e os parágrafos do artigo rodam a 16 px enquanto os itens de lista herdam 18 px (contrato: corpo 18 px no desktop). Sugestão: `.article-main .form-note{text-align:left}` e `.article-main p{font-size:inherit}` na folha editorial.
