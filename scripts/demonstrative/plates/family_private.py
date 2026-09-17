@@ -716,9 +716,12 @@ def p8_mobile(data: dict) -> str:
     pid = "inspecao-fachada"
     fs = FS_M
     s = 22.0
-    X0, Y0 = 48.0, 282.0
+    X0, Y0 = 48.0, 278.0
     m = {x["id"]: x for x in n["m"]}
     body = [text(X0, 66, "Fachada leste FA-L · 4 itens", size=fs, weight=S.FW_LABEL)]
+    # Aceite 2026-09-17 (B-09): o título da rota promete quatro manifestações
+    # numeradas. A composição móvel guarda duas chamadas (contrato: recomposição,
+    # não escala) e numera as outras duas no rótulo e na legenda.
     body.append(_facade(n, X0, Y0, s, size=fs, label_size=fs, callouts=2, labels=False))
     body.append(dim_group(
         dim_h(X0, X0 + float(n["W"]) * s, Y0 + 18, f"{br(n['W'])} m", y_obj=Y0, above=False, size=fs),
@@ -727,10 +730,12 @@ def p8_mobile(data: dict) -> str:
     for mid in ("M-03", "M-04"):
         mm = m[mid]
         x, y = float(mm["x_m"]), float(mm["y_m"])
-        body.append(text(X0 + x * s - 38, Y0 - y * s - 5, mid, size=fs, weight=S.FW_LABEL, fill=GREEN))
-    body.append(text(20, 338, f"1 M-01 fissura {br(m['M-01']['length_m'])} m · {br(m['M-01']['opening_mm'])} mm · não aberta", size=fs))
-    body.append(text(20, 354, f"2 M-02 mancha {br(m['M-02']['width_m'])} × {br(m['M-02']['height_m'])} m · sem ensaio", size=fs))
-    body.append(text(20, 370, f"M-03 desplacamento · M-04 fissura {br(m['M-04']['length_m'])} m", size=fs))
+        dx = -50 if mid == "M-03" else 6  # M-04 (fissura horizontal): rótulo dentro da fachada, acima do traço
+        body.append(text(X0 + x * s + dx, Y0 - y * s - 5, f"{mm['n']} {mid}", size=fs, weight=S.FW_LABEL, fill=GREEN))
+    body.append(text(20, 326, f"1 M-01 fissura {br(m['M-01']['length_m'])} m · {br(m['M-01']['opening_mm'])} mm · não aberta", size=fs))
+    body.append(text(20, 341, f"2 M-02 mancha {br(m['M-02']['width_m'])} × {br(m['M-02']['height_m'])} m · sem ensaio", size=fs))
+    body.append(text(20, 356, f"3 M-03 desplacamento {br(m['M-03']['width_m'])} × {br(m['M-03']['height_m'])} m", size=fs))
+    body.append(text(20, 371, f"4 M-04 fissura {br(m['M-04']['length_m'])} m · {br(m['M-04']['opening_mm'])} mm", size=fs))
     title = f"Prancha PD (móvel) · {n['title']} · exemplo demonstrativo"
     desc = (
         f"Elevação da fachada leste de {br(n['W'])} por {br(n['H'])} m com quatro manifestações numeradas; M-01 fissura de {br(m['M-01']['length_m'])} m e M-02 mancha de "
@@ -782,20 +787,24 @@ def p9_mobile(data: dict) -> str:
     pid = "pericia-fachada"
     fs = FS_M
     s = 20.0
-    X0, Y0 = 48.0, 262.0
+    X0, Y0 = 48.0, 256.0
     q = {x["id"]: x for x in n["q"]}
     m = {x["id"]: x for x in n["m"]}
     body = [text(X0, 66, "FA-L · quesitos sobre 4 itens", size=fs, weight=S.FW_LABEL)]
+    # Aceite 2026-09-17 (B-03): as notas terminam com respiro antes do carimbo
+    # (topo em MOBILE_H - FRAME_PAD - TITLE_BLOCK_H = 384); duas chamadas e os
+    # outros dois itens numerados no rótulo, como em PD-M.
     body.append(_facade(n, X0, Y0, s, size=fs, label_size=fs, callouts=2, labels=False))
     body.append(dim_group(dim_h(X0, X0 + float(n["W"]) * s, Y0 + 18, f"{br(n['W'])} m", y_obj=Y0, above=False, size=fs)))
     for mid in ("M-03", "M-04"):
         mm = m[mid]
-        body.append(text(X0 + float(mm["x_m"]) * s - 38, Y0 - float(mm["y_m"]) * s - 5, mid, size=fs, weight=S.FW_LABEL, fill=GREEN))
-    body.append(text(20, 316, "Q-01 · M-01, M-04 · geometria registrada;", size=fs))
-    body.append(text(20, 332, "origem não afirmada sem monitoramento", size=fs, fill=MUTED))
-    body.append(text(20, 348, "Q-02 · M-02 · fonte não afirmada sem ensaio", size=fs))
-    body.append(text(20, 364, "Q-03 · M-03 · extensão não afirmada sem percussão", size=fs))
-    body.append(text(20, 382, "Laudo: perito do juízo · quesito: assistente da parte", size=fs, weight=S.FW_LABEL))
+        dx = -50 if mid == "M-03" else 6
+        body.append(text(X0 + float(mm["x_m"]) * s + dx, Y0 - float(mm["y_m"]) * s - 5, f"{mm['n']} {mid}", size=fs, weight=S.FW_LABEL, fill=GREEN))
+    body.append(text(20, 308, "Q-01 · M-01, M-04 · geometria registrada;", size=fs))
+    body.append(text(20, 323, "origem não afirmada sem monitoramento", size=fs, fill=MUTED))
+    body.append(text(20, 338, "Q-02 · M-02 · fonte não afirmada sem ensaio", size=fs))
+    body.append(text(20, 353, "Q-03 · M-03 · extensão não afirmada sem percussão", size=fs))
+    body.append(text(20, 370, "Laudo: perito do juízo · quesito: assistente da parte", size=fs, weight=S.FW_LABEL))
     title = f"Prancha PE (móvel) · {n['title']}: quesitos · exemplo demonstrativo"
     desc = (
         f"Elevação da fachada leste de {br(n['W'])} por {br(n['H'])} m com as manifestações M-01 a M-04 e os quesitos Q-01 ({q['Q-01']['conclusion_pt_br']}), "

@@ -109,8 +109,8 @@
         },
         "mobile": {
           "path": "assets/pranchas/inspecao-fachada-mobile.svg",
-          "sha256": "9999bed9ba38fb95dc50b71726a93b445d0220e3cae7ff5b44b12bfbe08a88b9",
-          "bytes": 5155
+          "sha256": "6bcfe016f3256668dc87f34e7eda29f3e3e87ffc0d30c06de639ce182a0f6097",
+          "bytes": 5231
         }
       }
     },
@@ -136,8 +136,8 @@
         },
         "mobile": {
           "path": "assets/pranchas/pericia-fachada-mobile.svg",
-          "sha256": "2506340754e7ea22813ac3d03ee131da37082912ffd96cb2dbfbe5b1e9736e2a",
-          "bytes": 5131
+          "sha256": "2d6729195d8f420af50ee0d466787eb26f6e763bd5a66894af3e5a94c63dca27",
+          "bytes": 5135
         }
       }
     },
