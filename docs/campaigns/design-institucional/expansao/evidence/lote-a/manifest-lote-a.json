@@ -160,6 +160,142 @@
       "route": "/seguranca-trabalho-apoio-tecnico/",
       "viewport": "320x700",
       "overflow_px": 0
+    },
+    {
+      "route": "/obrigado.html",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/obrigado-contrato.html",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/obrigado.html",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/obrigado-contrato.html",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/obrigado.html",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/obrigado-contrato.html",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/obrigado-edital.html",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/obrigado-operacao.html",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/obrigado.html",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 1465,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado.html-390x844-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado.html-390x844-full-lote-a.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado.html-390x844-menu-lote-a.jpg"
+    },
+    {
+      "route": "/obrigado.html",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 1000,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado.html-1440x1000-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado.html-1440x1000-full-lote-a.jpg"
+    },
+    {
+      "route": "/obrigado.html",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/obrigado-contrato.html",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 1476,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado-contrato.html-390x844-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado-contrato.html-390x844-full-lote-a.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado-contrato.html-390x844-menu-lote-a.jpg"
+    },
+    {
+      "route": "/obrigado-contrato.html",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 1018,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado-contrato.html-1440x1000-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado-contrato.html-1440x1000-full-lote-a.jpg"
+    },
+    {
+      "route": "/obrigado-contrato.html",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/obrigado-edital.html",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 1502,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado-edital.html-390x844-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado-edital.html-390x844-full-lote-a.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado-edital.html-390x844-menu-lote-a.jpg"
+    },
+    {
+      "route": "/obrigado-edital.html",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 1000,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado-edital.html-1440x1000-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado-edital.html-1440x1000-full-lote-a.jpg"
+    },
+    {
+      "route": "/obrigado-edital.html",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/obrigado-operacao.html",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 1433,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado-operacao.html-390x844-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado-operacao.html-390x844-full-lote-a.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado-operacao.html-390x844-menu-lote-a.jpg"
+    },
+    {
+      "route": "/obrigado-operacao.html",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 1000,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado-operacao.html-1440x1000-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado-operacao.html-1440x1000-full-lote-a.jpg"
+    },
+    {
+      "route": "/obrigado-operacao.html",
+      "viewport": "320x700",
+      "overflow_px": 0
     }
   ]
 }

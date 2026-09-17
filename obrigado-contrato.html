@@ -9,12 +9,14 @@
 <link href="/assets/favicon-32.png" rel="icon" sizes="32x32" type="image/png"/>
 <link rel="preload" as="font" type="font/woff2" href="/assets/archivo-var-latin-bf6e041e.woff2" crossorigin="anonymous"/>
 <link href="/styles.css" rel="stylesheet"/>
+<link href="/assets/editorial.css" rel="stylesheet"/>
 <script defer="" src="/script.js?v=fortune02"></script>
 <meta content="Consulte a referência da solicitação sobre um contrato sob pressão e veja os próximos canais." name="description"/>
 </head>
 <body class="simple-page" data-journey="contrato">
 <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 <svg aria-hidden="true" class="svg-sprite" height="0" width="0">
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></symbol>
 <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"></path></symbol>
 <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"></path></symbol>
 </svg>
@@ -38,30 +40,40 @@
 <a class="button button-primary" href="/triagem-tecnica/">Solicitar proposta</a>
 </nav>
 </header>
-<main class="simple-main" id="conteudo">
-<article class="simple-card">
-<p class="eyebrow">Contrato sob pressão</p>
+<main id="conteudo">
+<section class="state" aria-labelledby="confirmation-title">
+<div class="container">
+<div class="state__grid">
+<div>
+<span class="state__code">Contrato sob pressão</span>
 <h1 id="confirmation-title" data-confirmed-title="Solicitação sobre o contrato registrada.">Confira a referência da solicitação sobre o contrato.</h1>
-<p id="confirmation-summary" data-confirmed-copy="O servidor registrou sua solicitação. O próximo contato enquadra o problema (glosa, medição, aditivo, reequilíbrio, atraso ou notificação), a urgência e o próximo passo processual.">Se você acabou de enviar a solicitação pelo site, o protocolo aparece aqui em seguida. Se chegou por um link salvo, o envio não fica confirmado nesta página: peça o canal seguro pelo WhatsApp ou pelo e-mail abaixo e a conversa segue do mesmo jeito.</p>
-
-<p class="sla-box" id="receipt-id" hidden><strong>Protocolo de recebimento:</strong> <code></code></p>
-
-<div class="sla-box" data-confirmed-only hidden>
-<strong>O que vem a seguir:</strong> lemos o evento (glosa, medição, aditivo, reequilíbrio, atraso ou notificação), a urgência e o que a sua empresa precisa responder ao órgão contratante.<br/>
-<strong>Prazo esperado:</strong> retorno inicial em até <strong>1 dia útil</strong> nos casos urgentes; demais em até 2 dias úteis.<br/>
-<strong>O que você recebe:</strong> a leitura técnica do evento, o dossiê ou parecer que apura em reais o que está em jogo e sustenta a posição da sua empresa, o que ainda falta reunir e as informações para a proposta. A decisão sobre o pleito, o aditivo ou a disputa permanece com o órgão contratante e, quando houver disputa judicial, com o Poder Judiciário.
-</div>
-<div class="sla-box" data-confirmed-only hidden>
-<strong>Documentos:</strong> após esta confirmação, a CONFENGE abre um canal seguro para o envio do contrato, da planilha e das notificações relevantes, canal escolhido posteriormente; tipos, tamanho e finalidade são combinados nesse momento. Quem acessa: operação CONFENGE. Retenção: até 730 dias. Exclusão: e-mail de privacidade com o protocolo.
-</div>
-<div class="journey-next">
+<p class="state__lead" id="confirmation-summary" data-confirmed-copy="O servidor registrou sua solicitação. O próximo contato enquadra o problema (glosa, medição, aditivo, reequilíbrio, atraso ou notificação), a urgência e o próximo passo processual.">Se você acabou de enviar a solicitação pelo site, o protocolo aparece aqui em seguida. Se chegou por um link salvo, o envio não fica confirmado nesta página: peça o canal seguro pelo WhatsApp ou pelo e-mail abaixo e a conversa segue do mesmo jeito.</p>
+<p class="state__receipt" id="receipt-id" hidden><b>Protocolo de recebimento:</b> <code></code></p>
+<div class="contact-primary">
 <a class="button button-primary" data-event-name="whatsapp_click" data-journey="contrato" href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20conversar%20sobre%20um%20contrato%20sob%20press%C3%A3o%20e%20solicitar%20um%20canal%20seguro%20para%20os%20documentos." rel="noopener" target="_blank">Solicitar canal seguro para envio</a>
-<a class="button button-secondary" data-event-name="email_click" href="mailto:tiago.sasaki@confenge.com.br?subject=Contrato%20sob%20press%C3%A3o%20-%20contato%20CONFENGE">Alternativa por e-mail</a>
-<p class="form-hint">E-mail copiável: <button type="button" class="text-link" data-copy-email="tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</button></p>
-<a class="button button-secondary" href="/defesa-margem-contratos-publicos/">Ver defesa técnica e proteção de margem</a>
-<a class="text-link" href="/">Voltar ao início</a>
+<ul class="contact-alt">
+<li><a class="text-link" data-event-name="email_click" href="mailto:tiago.sasaki@confenge.com.br?subject=Contrato%20sob%20press%C3%A3o%20-%20contato%20CONFENGE">Alternativa por e-mail</a></li>
+<li><span class="t-caption">E-mail copiável: <button type="button" class="text-link" data-copy-email="tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</button></span></li>
+</ul>
 </div>
-</article>
+<p class="state__receipt" data-confirmed-only hidden><strong>O que vem a seguir:</strong> lemos o evento (glosa, medição, aditivo, reequilíbrio, atraso ou notificação), a urgência e o que a sua empresa precisa responder ao órgão contratante.<br/> <strong>Prazo esperado:</strong> retorno inicial em até <strong>1 dia útil</strong> nos casos urgentes; demais em até 2 dias úteis.<br/> <strong>O que você recebe:</strong> a leitura técnica do evento, o dossiê ou parecer que apura em reais o que está em jogo e sustenta a posição da sua empresa, o que ainda falta reunir e as informações para a proposta. A decisão sobre o pleito, o aditivo ou a disputa permanece com o órgão contratante e, quando houver disputa judicial, com o Poder Judiciário.</p>
+<p class="state__receipt" data-confirmed-only hidden><strong>Documentos:</strong> após esta confirmação, a CONFENGE abre um canal seguro para o envio do contrato, da planilha e das notificações relevantes, canal escolhido posteriormente; tipos, tamanho e finalidade são combinados nesse momento. Quem acessa: operação CONFENGE. Retenção: até 730 dias. Exclusão: e-mail de privacidade com o protocolo.</p>
+</div>
+<aside aria-label="O que acontece depois e outros caminhos">
+<ol class="after after--light" aria-label="O que acontece depois">
+<li><div><strong>Leitura do evento</strong><p>Glosa, medição, aditivo, reequilíbrio, atraso ou notificação: lemos a urgência e o que a sua empresa precisa responder ao órgão contratante.</p></div></li>
+<li><div><strong>Canal seguro para os documentos</strong><p>Contrato, planilha e notificações entram depois, por canal escolhido posteriormente com você.</p></div></li>
+<li><div><strong>Dossiê ou parecer</strong><p>A leitura técnica do evento e o documento que sustenta a posição da sua empresa; a decisão permanece com o órgão contratante e, se houver disputa, com o Poder Judiciário.</p></div></li>
+</ol>
+<ul class="state__paths">
+<li><a href="/defesa-margem-contratos-publicos/"><span>Ver defesa técnica e proteção de margem<small>O trabalho que responde ao contrato sob pressão</small></span><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></a></li>
+<li><a href="/especialista/tiago-jun-sasaki/"><span>Conhecer quem vai analisar o caso<small>Identidade, registro e como conferir</small></span><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></a></li>
+<li><a href="/"><span>Voltar ao início</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></a></li>
+</ul>
+</aside>
+</div>
+</div>
+</section>
 </main>
 <footer class="site-footer">
 <div class="container footer-bottom"><span>© <span id="year">2026</span> CONFENGE. CNPJ 52.407.089/0001-09.</span><a href="/privacidade/">Política de Privacidade</a></div>
