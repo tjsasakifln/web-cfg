@@ -1516,6 +1516,7 @@ main section[id],main div[id].section,main h2[id],main h3[id],main [id].chooser-
 .conditions li b{color:var(--ink)}
 
 
+.after__title{margin-top:1.25rem}
 .after{list-style:none;margin:1rem 0 0;padding:0;counter-reset:after;display:grid;gap:0;border-top:1px solid rgba(255,255,255,.25)}
 .after>li{counter-increment:after;display:grid;grid-template-columns:2rem minmax(0,1fr);gap:.2rem .9rem;padding:.85rem 0;border-bottom:1px solid rgba(255,255,255,.14)}
 .after>li::before{content:counter(after,decimal-leading-zero);font-family:var(--sans-narrow);font-stretch:var(--narrow);font-weight:750;font-size:var(--text-small);letter-spacing:.06em;color:var(--lime);padding-top:.25rem}
