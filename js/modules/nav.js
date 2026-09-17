@@ -797,8 +797,20 @@
     };
     // Focus the landing zone so the keyboard continues from the form, not from
     // the WhatsApp/e-mail alternatives that precede it in the DOM.
+    // Um indice "Nesta pagina" pode apontar para um bloco dentro de <details>
+    // fechado (condicoes de contratacao nas ofertas B2G): o fragmento existe,
+    // mas o que ele renderiza fica escondido. Abrir o details antes de focar e
+    // rolar e o que faz a ancora cumprir o que promete (aceite 2026-09-17).
+    const revealDetails = (target) => {
+      let node = target;
+      while (node && node !== document.body) {
+        if (node.tagName === 'DETAILS' && !node.open) node.open = true;
+        node = node.parentElement;
+      }
+    };
     const focusAnchor = (el) => {
       if (!el || typeof el.focus !== 'function' || typeof el.setAttribute !== 'function') return;
+      revealDetails(el);
       if (el.contains && el.contains(document.activeElement)) return;
       const hadTabindex = el.hasAttribute('tabindex');
       if (!hadTabindex) el.setAttribute('tabindex', '-1');
@@ -825,6 +837,7 @@
     };
     const goToAnchor = (target, smooth) => {
       if (!target) return;
+      revealDetails(target);
       const arrive = () => trackAnchorArrival(target);
       if (!measurable(target)) {
         if (typeof target.scrollIntoView === 'function') {
@@ -921,7 +934,10 @@
       // The browser already jumped to the fragment; realign once the deferred
       // sections above it have rendered and stopped changing the document.
       const landed = anchorFromHash(window.location.hash);
-      if (landed) settleAnchor(landed, () => trackAnchorArrival(landed));
+      if (landed) {
+        revealDetails(landed);
+        settleAnchor(landed, () => trackAnchorArrival(landed));
+      }
     }
 
     // Journey preselect from CTA links

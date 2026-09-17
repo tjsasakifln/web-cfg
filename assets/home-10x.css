@@ -344,7 +344,7 @@ html.js body[data-content-cluster="home"] main>#triagem-tecnica,html.js body[dat
   .situation-row{padding:1rem 0 1.15rem;gap:.3rem}
   .situation-row .situation-action{min-height:44px;margin-top:.1rem}
   .area__sub{gap:.1rem .75rem;margin-top:.2rem}
-  .area__sub a{min-height:28px}
+  .area__sub a{min-height:44px}
   .deliveries{gap:2rem}
   .delivery{gap:.85rem;padding-top:1rem}
   .delivery__chain{gap:.35rem .75rem;margin-bottom:.6rem}
@@ -356,3 +356,6 @@ html.js body[data-content-cluster="home"] main>#triagem-tecnica,html.js body[dat
   .contracts-list .service-card{padding:.85rem 0;gap:.25rem}
   body[data-content-cluster="home"] #entregas-demonstrativas,body[data-content-cluster="home"] #responsabilidade{padding:var(--section-tight)}
 }
+
+@media (max-width:620px){.situation-use{font-size:1rem}}
+.area{align-content:start}

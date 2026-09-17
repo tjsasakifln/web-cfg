@@ -81,7 +81,7 @@
 .keys div{min-width:0}
 .keys dt{font-stretch:var(--narrow);font-weight:750;font-size:var(--text-small);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 .3rem}
 .keys dd{margin:0;font-size:var(--text-small);line-height:1.5;color:var(--ink);font-weight:600}
-.keys dd small{display:block;font-weight:400;color:var(--muted)}
+.keys dd small{display:block;font-weight:400;color:var(--muted);font-size:max(var(--text-caption),12px)}
 
 /* Card and panel: only where a real content unit exists -------------------- */
 .card{border:1px solid var(--rule);border-radius:var(--radius-sm);padding:clamp(1rem,2.5vw,1.5rem);background:var(--white)}
@@ -104,7 +104,8 @@
 .table-scroll{display:block;width:100%;max-width:100%;min-width:0;overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;border:1px solid var(--rule);border-radius:var(--radius-sm)}
 .table-scroll:focus-visible{outline:2px solid transparent;outline-offset:2px;box-shadow:var(--focus-ring)}
 .table-scroll table{margin:0;min-width:560px}
-.table-scroll .data-table--wide{min-width:900px}
+.table-scroll .data-table--wide{min-width:1100px}
+@media (max-width:700px){.data-table th,.data-table td{overflow-wrap:normal;word-break:normal}.data-table td:last-child,.data-table th:last-child{white-space:nowrap}}
 .data-table th{white-space:nowrap}
 .table-hint{margin:.5rem 0 0;font-size:var(--text-small);color:var(--muted)}
 @media (min-width:700px){.table-hint{display:none}}
@@ -263,9 +264,14 @@ main section[id],main div[id].section,main h2[id],main h3[id],main [id].chooser-
 .pillar-capture-form select:focus,
 .pillar-capture-form textarea:focus{outline:2px solid transparent;outline-offset:2px;box-shadow:var(--focus-ring);border-color:var(--green)}
 .pillar-capture-form .capture-consent{display:flex;gap:10px;align-items:flex-start;font-weight:500}
-.pillar-capture-form .capture-consent input{width:auto;margin-top:4px}
+.pillar-capture-form .capture-consent input[type=checkbox]{width:1.25rem;height:1.25rem;min-height:0;flex:0 0 auto;margin-top:.2rem}
 .pillar-capture-form .form-status{min-height:1.5em;margin:0}
 @media (max-width:900px){
   .pillar-capture-grid{grid-template-columns:minmax(0,1fr)}
   .pillar-capture-form{padding:20px 18px;border-radius:var(--radius-md)}
 }
+
+p .text-link,li .text-link,p .journey-alt-link{font-size:inherit;line-height:inherit}
+.data-table th[scope=row],.data-table td{border-bottom:1px solid var(--rule)}
+.data-table th[scope=row]{padding-right:.75rem}
+.breadcrumbs{padding-inline:0}

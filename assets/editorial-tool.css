@@ -32,7 +32,11 @@
 .page-index a:hover,.page-index a[aria-current=true]{border-color:var(--green-700);color:var(--green-700)}
 
 
-.svc-open+.page-index,.svc-open+.container>.page-index,.profile-hero+.page-index,.profile-hero+.container>.page-index,.article-hero+.page-index{margin-top:clamp(1rem,2vw,1.5rem)}
+.svc-open+.page-index,.svc-open+.container>.page-index,.svc-open .page-index,.svc-open__grid+.page-index,.profile-hero+.page-index,.profile-hero+.container>.page-index,.article-hero+.page-index{margin-top:clamp(1rem,2vw,1.5rem)}
+.svc-open__note{margin-bottom:clamp(.75rem,1.5vw,1.25rem)}
+.plate__picture--narrow img{max-width:34rem;margin-inline:auto}
+.authority-method p,.authority-method li{max-width:70ch}
+.opening__meta{margin-bottom:1rem}
 .nowrap{white-space:nowrap}
 .page-index+.article-layout,.page-index+.container>.article-layout,.container>.page-index+.article-layout{padding-top:.5rem}
 .phases+.plate,.list-ruled+.plate,.steps+.plate,.svc-chain+.plate{margin-top:clamp(1.5rem,3vw,2.5rem)}
@@ -87,6 +91,8 @@
 .tool-result dd small{display:block;font-size:var(--text-small);font-weight:400;color:var(--muted);letter-spacing:0}
 .tool-result .is-total dd{color:var(--green-700)}
 .tool-note{margin:1rem 0 0;font-size:var(--text-caption);color:var(--text);max-width:64ch}
+.tool-method a,.tool-layers a{color:var(--ink);font-weight:700;text-decoration:underline;text-underline-offset:.2em}
+.tool-method p,.tool-method li,.tool-layers p,.tool-layers li,.tool-cta-contextual p{max-width:70ch}
 .tool-method,.tool-layers{padding:clamp(1.5rem,3vw,2.5rem) 0}
 .tool-method h2,.tool-layers h2{margin-top:0}
 .tool-cta-contextual{padding:clamp(1.5rem,3vw,2.5rem) 0;border-top:1px solid var(--rule-strong)}

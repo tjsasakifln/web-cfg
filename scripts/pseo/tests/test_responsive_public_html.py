@@ -73,9 +73,16 @@ def test_opaque_tokens_are_marked_only_in_visible_text() -> None:
 <p>Superintendencia: https://pncp.gov.br/api/contratos/69 publication_authorization=false</p>
 <a title="https://example.test/raw">Fonte</a>
 <script>{"url":"https://example.test/raw"}</script>
+<textarea readonly>https://confenge.com.br/quantitativos-orcamento-obras/</textarea>
+<title>https://example.test/title</title>
 </body></html>"""
 
     rendered = mark_visible_opaque_tokens(html)
+
+    # O valor de uma <textarea> e copiado pelo visitante e o <title> vai para a
+    # aba: nenhum dos dois pode receber marcacao (parcerias-engenharia, 2026-09-17).
+    assert "<textarea readonly>https://confenge.com.br/quantitativos-orcamento-obras/</textarea>" in rendered
+    assert "<title>https://example.test/title</title>" in rendered
 
     assert '<span data-opaque-token>Superintendencia</span>' not in rendered
     assert '<span data-opaque-token>https://pncp.gov.br/api/contratos/69</span>' in rendered

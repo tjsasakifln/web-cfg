@@ -455,7 +455,10 @@ def _map_visible_html_text(html: str, transform, *, skip_opaque: bool = False) -
             continue
         tag_end = _html_tag_end(html, tag_start)
         tag = html[tag_start:tag_end]
-        raw_match = re.match(r"(?is)<\s*(script|style)\b", tag)
+        # <textarea> e <title> carregam texto literal (valor copiado pelo visitante /
+        # titulo da aba): marcar tokens ali entregava marcacao crua em
+        # /parcerias-engenharia/ (2026-09-17). Tratados como blocos brutos.
+        raw_match = re.match(r"(?is)<\s*(script|style|textarea|title)\b", tag)
         if raw_match:
             raw_name = raw_match.group(1).lower()
             close_start = lower.find(f"</{raw_name}", tag_end)

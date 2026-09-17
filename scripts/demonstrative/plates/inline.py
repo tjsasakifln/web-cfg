@@ -41,7 +41,7 @@ def _pages(root: Path = ROOT) -> list[str]:
 
 
 PAGES = _pages()
-SLOT = re.compile(r"<!-- plate:([a-z0-9-]+)( eager)? -->.*?<!-- /plate -->", re.S)
+SLOT = re.compile(r"<!-- plate:([a-z0-9-]+)((?: eager| narrow)*) -->.*?<!-- /plate -->", re.S)
 
 
 def _dims(svg_text: str) -> tuple[int, int]:
@@ -56,7 +56,7 @@ def _title(svg_text: str) -> str:
     return html.unescape(re.sub(r"\s+", " ", m.group(1)).strip()) if m else ""
 
 
-def picture(slug: str, *, eager: bool = False) -> str:
+def picture(slug: str, *, eager: bool = False, narrow: bool = False) -> str:
     """One <picture> per plate: desktop file from 700px up, mobile file below.
 
     The plates were inlined until 2026-09-17; the repository's Lighthouse gate
@@ -74,6 +74,16 @@ def picture(slug: str, *, eager: bool = False) -> str:
     mw, mh = _dims(mob)
     alt = html.escape(_title(desk))
     loading = 'loading="eager"' if eager else 'loading="lazy"'
+    if narrow:
+        # Slot de coluna estreita (entregas da home, prancha secundaria, abertura
+        # lateral): a composicao de 1200 px escalada a ~50% deixa cotas e carimbo
+        # ilegiveis (aceite 2026-09-17). A variante reenquadrada (360x420, fonte
+        # minima 12,5) e servida em todas as larguras.
+        return (
+            f'<picture class="plate__picture plate__picture--narrow">'
+            f'<img alt="{alt}" decoding="async" {loading} src="/assets/pranchas/{slug}-mobile.svg" width="{mw}" height="{mh}"/>'
+            f'</picture>'
+        )
     return (
         f'<picture class="plate__picture">'
         f'<source media="(min-width:700px)" srcset="/assets/pranchas/{slug}-desktop.svg" width="{dw}" height="{dh}"/>'
@@ -85,8 +95,10 @@ def picture(slug: str, *, eager: bool = False) -> str:
 def render(html_text: str) -> str:
     def repl(match: re.Match[str]) -> str:
         slug = match.group(1)
-        eager = match.group(2) == " eager"
-        return f"<!-- plate:{slug}{(match.group(2) or "")} -->\n{picture(slug, eager=eager)}\n<!-- /plate -->"
+        flags = match.group(2) or ""
+        eager = " eager" in flags
+        narrow = " narrow" in flags
+        return f"<!-- plate:{slug}{flags} -->\n{picture(slug, eager=eager, narrow=narrow)}\n<!-- /plate -->"
 
     return SLOT.sub(repl, html_text)
 
