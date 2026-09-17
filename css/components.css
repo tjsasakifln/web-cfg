@@ -265,7 +265,6 @@ main section[id],main div[id].section,main h2[id],main h3[id],main [id].chooser-
 .pillar-capture-form .capture-consent{display:flex;gap:10px;align-items:flex-start;font-weight:500}
 .pillar-capture-form .capture-consent input{width:auto;margin-top:4px}
 .pillar-capture-form .form-status{min-height:1.5em;margin:0}
-.pillar-capture-alternative{margin-top:18px}
 @media (max-width:900px){
   .pillar-capture-grid{grid-template-columns:minmax(0,1fr)}
   .pillar-capture-form{padding:20px 18px;border-radius:var(--radius-md)}
