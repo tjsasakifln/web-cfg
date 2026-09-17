@@ -1,0 +1,256 @@
+{
+  "base": "https://confenge.com.br",
+  "label": "prod",
+  "captured_at": "2026-09-17T03:19:09.805Z",
+  "tool": "puppeteer-core 25 / chromium-1234",
+  "entries": [
+    {
+      "route": "/",
+      "viewport": "390x844",
+      "status": 200,
+      "title": "CONFENGE | Engenharia, Perícias e Inteligência Técnica",
+      "h1": "Assumimos a parte de engenharia que falta para você orçar, contratar ou decidir.",
+      "h1Font": "\"Archivo Var\", \"Archivo Fallback Wide\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+      "h1Size": "32px",
+      "fontsLoaded": [
+        "Archivo Var 100 900"
+      ],
+      "css": [
+        "https://confenge.com.br/assets/css/styles.93863fcc71c5.css",
+        "https://confenge.com.br/assets/css/assets/home-10x.4ff8e2b64e0f.css"
+      ],
+      "imgs": [
+        "/assets/logo-confenge-500-f8a83f6d.png"
+      ],
+      "docHeight": 11772,
+      "overflowX": false
+    },
+    {
+      "route": "/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "title": "CONFENGE | Engenharia, Perícias e Inteligência Técnica",
+      "h1": "Assumimos a parte de engenharia que falta para você orçar, contratar ou decidir.",
+      "h1Font": "\"Archivo Var\", \"Archivo Fallback Wide\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+      "h1Size": "44px",
+      "fontsLoaded": [
+        "Archivo Var 100 900"
+      ],
+      "css": [
+        "https://confenge.com.br/assets/css/styles.93863fcc71c5.css",
+        "https://confenge.com.br/assets/css/assets/home-10x.4ff8e2b64e0f.css"
+      ],
+      "imgs": [
+        "/assets/logo-confenge-500-f8a83f6d.png"
+      ],
+      "docHeight": 7306,
+      "overflowX": false
+    },
+    {
+      "route": "/servicos/",
+      "viewport": "390x844",
+      "status": 200,
+      "title": "Serviços de engenharia, perícias e inteligência técnica | CONFENGE",
+      "h1": "Serviços de engenharia para obras públicas e privadas",
+      "h1Font": "\"Archivo Var\", \"Archivo Fallback Wide\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+      "h1Size": "32px",
+      "fontsLoaded": [
+        "Archivo Var 100 900"
+      ],
+      "css": [
+        "https://confenge.com.br/assets/css/styles.93863fcc71c5.css"
+      ],
+      "imgs": [
+        "/assets/logo-confenge-500-f8a83f6d.png"
+      ],
+      "docHeight": 13440,
+      "overflowX": false
+    },
+    {
+      "route": "/servicos/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "title": "Serviços de engenharia, perícias e inteligência técnica | CONFENGE",
+      "h1": "Serviços de engenharia para obras públicas e privadas",
+      "h1Font": "\"Archivo Var\", \"Archivo Fallback Wide\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+      "h1Size": "44px",
+      "fontsLoaded": [
+        "Archivo Var 100 900"
+      ],
+      "css": [
+        "https://confenge.com.br/assets/css/styles.93863fcc71c5.css"
+      ],
+      "imgs": [
+        "/assets/logo-confenge-500-f8a83f6d.png"
+      ],
+      "docHeight": 8133,
+      "overflowX": false
+    },
+    {
+      "route": "/quantitativos-orcamento-obras/",
+      "viewport": "390x844",
+      "status": 200,
+      "title": "Quantitativos e orçamento de obras | CONFENGE",
+      "h1": "Quantitativos e orçamento de obras",
+      "h1Font": "\"Archivo Var\", \"Archivo Fallback Wide\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+      "h1Size": "32px",
+      "fontsLoaded": [
+        "Archivo Var 100 900"
+      ],
+      "css": [
+        "https://confenge.com.br/assets/css/styles.93863fcc71c5.css"
+      ],
+      "imgs": [
+        "/assets/logo-confenge-500-f8a83f6d.png"
+      ],
+      "docHeight": 19739,
+      "overflowX": false
+    },
+    {
+      "route": "/quantitativos-orcamento-obras/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "title": "Quantitativos e orçamento de obras | CONFENGE",
+      "h1": "Quantitativos e orçamento de obras",
+      "h1Font": "\"Archivo Var\", \"Archivo Fallback Wide\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+      "h1Size": "44px",
+      "fontsLoaded": [
+        "Archivo Var 100 900"
+      ],
+      "css": [
+        "https://confenge.com.br/assets/css/styles.93863fcc71c5.css"
+      ],
+      "imgs": [
+        "/assets/logo-confenge-500-f8a83f6d.png"
+      ],
+      "docHeight": 12030,
+      "overflowX": false
+    },
+    {
+      "route": "/medicoes-glosas-obras-publicas/",
+      "viewport": "390x844",
+      "status": 200,
+      "title": "Medições, glosas e pagamentos em obras públicas | CONFENGE",
+      "h1": "Medições, glosas e pagamentos em obras públicas",
+      "h1Font": "\"Archivo Var\", \"Archivo Fallback Wide\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+      "h1Size": "28.08px",
+      "fontsLoaded": [
+        "Archivo Var 100 900"
+      ],
+      "css": [
+        "https://confenge.com.br/assets/css/styles.93863fcc71c5.css"
+      ],
+      "imgs": [
+        "/assets/logo-confenge-500-f8a83f6d.png"
+      ],
+      "docHeight": 13836,
+      "overflowX": false
+    },
+    {
+      "route": "/medicoes-glosas-obras-publicas/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "title": "Medições, glosas e pagamentos em obras públicas | CONFENGE",
+      "h1": "Medições, glosas e pagamentos em obras públicas",
+      "h1Font": "\"Archivo Var\", \"Archivo Fallback Wide\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+      "h1Size": "44px",
+      "fontsLoaded": [
+        "Archivo Var 100 900"
+      ],
+      "css": [
+        "https://confenge.com.br/assets/css/styles.93863fcc71c5.css"
+      ],
+      "imgs": [
+        "/assets/logo-confenge-500-f8a83f6d.png"
+      ],
+      "docHeight": 10077,
+      "overflowX": false
+    },
+    {
+      "route": "/entregas/",
+      "viewport": "390x844",
+      "status": 200,
+      "title": "Entregas de engenharia, exemplos e ofertas publicadas | CONFENGE",
+      "h1": "Entregas de engenharia. Veja o conteúdo e para que ele serve.",
+      "h1Font": "\"Archivo Var\", \"Archivo Fallback Wide\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+      "h1Size": "32px",
+      "fontsLoaded": [
+        "Archivo Var 100 900"
+      ],
+      "css": [
+        "https://confenge.com.br/assets/css/styles.93863fcc71c5.css",
+        "https://confenge.com.br/assets/css/styles-offers.d0c6595ce628.css",
+        "https://confenge.com.br/assets/css/entregas/styles.7886b4de52d3.css"
+      ],
+      "imgs": [
+        "/assets/logo-confenge-500-f8a83f6d.png"
+      ],
+      "docHeight": 18190,
+      "overflowX": false
+    },
+    {
+      "route": "/entregas/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "title": "Entregas de engenharia, exemplos e ofertas publicadas | CONFENGE",
+      "h1": "Entregas de engenharia. Veja o conteúdo e para que ele serve.",
+      "h1Font": "\"Archivo Var\", \"Archivo Fallback Wide\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+      "h1Size": "44px",
+      "fontsLoaded": [
+        "Archivo Var 100 900"
+      ],
+      "css": [
+        "https://confenge.com.br/assets/css/styles.93863fcc71c5.css",
+        "https://confenge.com.br/assets/css/styles-offers.d0c6595ce628.css",
+        "https://confenge.com.br/assets/css/entregas/styles.7886b4de52d3.css"
+      ],
+      "imgs": [
+        "/assets/logo-confenge-500-f8a83f6d.png"
+      ],
+      "docHeight": 12038,
+      "overflowX": false
+    },
+    {
+      "route": "/triagem-tecnica/",
+      "viewport": "390x844",
+      "status": 200,
+      "title": "Contato e triagem técnica | CONFENGE",
+      "h1": "Conte a situação do seu jeito. Nós nomeamos o serviço.",
+      "h1Font": "\"Archivo Var\", \"Archivo Fallback Wide\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+      "h1Size": "32px",
+      "fontsLoaded": [
+        "Archivo Var 100 900"
+      ],
+      "css": [
+        "https://confenge.com.br/assets/css/styles.93863fcc71c5.css",
+        "https://confenge.com.br/assets/css/triagem-tecnica/styles.6c6b77355f6b.css"
+      ],
+      "imgs": [
+        "/assets/logo-confenge-500-f8a83f6d.png"
+      ],
+      "docHeight": 6312,
+      "overflowX": false
+    },
+    {
+      "route": "/triagem-tecnica/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "title": "Contato e triagem técnica | CONFENGE",
+      "h1": "Conte a situação do seu jeito. Nós nomeamos o serviço.",
+      "h1Font": "\"Archivo Var\", \"Archivo Fallback Wide\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+      "h1Size": "44px",
+      "fontsLoaded": [
+        "Archivo Var 100 900"
+      ],
+      "css": [
+        "https://confenge.com.br/assets/css/styles.93863fcc71c5.css",
+        "https://confenge.com.br/assets/css/triagem-tecnica/styles.6c6b77355f6b.css"
+      ],
+      "imgs": [
+        "/assets/logo-confenge-500-f8a83f6d.png"
+      ],
+      "docHeight": 3840,
+      "overflowX": false
+    }
+  ]
+}

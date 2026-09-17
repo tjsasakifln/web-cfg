@@ -62,5 +62,19 @@
   --space-8:4rem;
   --space-10:2.5rem;
   --space-12:3rem;
+  /* Papéis tipográficos (salto institucional, 2026-09-17): um papel por função,
+   * não uma escala única aplicada a tudo. Institucional = abertura da home;
+   * serviço = H1 de página de serviço/pilar; editorial = H2 de seção; chamada =
+   * frase de utilidade; legenda e dado técnico = figuras, carimbos e tabelas. */
+  --text-institutional:clamp(2.5rem,1.55rem + 3.1vw,4rem);
+  --text-service:clamp(2rem,1.4rem + 2vw,3rem);
+  --text-editorial:clamp(1.625rem,1.2rem + 1.45vw,2.5rem);
+  --text-callout:clamp(1.125rem,1.05rem + .4vw,1.35rem);
+  --text-caption:.875rem;
+  --text-data:.9375rem;
+  --lh-tight:1.02;
+  --plate-line:#071a31;
+  --plate-dim:#5d6a7a;
+  --plate-band:rgba(206,214,42,.35);
 }
 html{font-size:100%}
