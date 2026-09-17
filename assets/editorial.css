@@ -271,8 +271,10 @@
 .article-toc a:hover,.article-toc a[aria-current=true]{border-color:var(--green-700);color:var(--green-700)}
 .article-toc a span,.article-toc a .article-toc__n{font-family:var(--sans-narrow);font-stretch:var(--narrow);font-weight:750;font-size:var(--text-small);letter-spacing:.06em;color:var(--green-700)}
 .article-meta li{list-style:none}
-.article-meta li+li::before,.article-meta span+span::before{content:"·";margin-right:1rem;color:var(--muted)}
-.article-meta span+span{margin-left:-.75rem}
+.article-meta span::before,.article-meta li::before{content:none}
+.article-meta li+li::before,.article-meta span+span::before{content:"·";margin-right:.75rem;color:var(--muted)}
+.authority-byline a{color:var(--ink);text-decoration:underline;text-underline-offset:.2em}
+.hub-list h3,.hub-list h2{max-width:40ch}
 .article-callout,.article-decision{margin:1.5rem 0;padding:1rem 0 1rem 1.25rem;border-left:3px solid var(--green-700);background:transparent;border-radius:0}
 .article-callout .eyebrow,.article-decision .eyebrow{margin:0 0 .35rem}
 .article-callout h2,.article-decision h2{margin-top:0;font-size:clamp(1.25rem,1.1rem + .5vw,1.5rem)}

@@ -126,6 +126,7 @@
       "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
       "veracity": "demonstração",
       "pages": [
+        "/acompanhamento-contratos-obras/",
         "/diagnostico-b2g-360/"
       ],
       "slot": "slot <!-- plate:carteira-eventos --> (materializado por scripts/demonstrative/plates/inline.py); registro do lote em docs/campaigns/design-institucional/expansao/assets-lote-b.json",
@@ -137,8 +138,8 @@
       "exported_version": "rev. R00",
       "family_module": "family_b2g",
       "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/carteira-eventos-desktop-1200.png",
-      "sha256": "e79730e8c3fdcead1603dc52e3215e86482afcac30b78e1898dc63b6d6592885",
-      "bytes": 7337
+      "sha256": "08cf78bd6e404a07e403b7812746afdb1b205d985eb952f1d90ae631fc4dfa92",
+      "bytes": 7345
     },
     {
       "path": "assets/pranchas/carteira-eventos-mobile.svg",
@@ -149,6 +150,7 @@
       "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
       "veracity": "demonstração",
       "pages": [
+        "/acompanhamento-contratos-obras/",
         "/diagnostico-b2g-360/"
       ],
       "slot": "slot <!-- plate:carteira-eventos --> (materializado por scripts/demonstrative/plates/inline.py); registro do lote em docs/campaigns/design-institucional/expansao/assets-lote-b.json",
@@ -444,6 +446,98 @@
       "bytes": 5150
     },
     {
+      "path": "assets/pranchas/janela-causal-desktop.svg",
+      "kind": "prancha",
+      "code": "P12",
+      "variant": "desktop",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [
+        "/atrasos-prorrogacao-obras-publicas/"
+      ],
+      "slot": "slot <!-- plate:janela-causal --> (materializado por scripts/demonstrative/plates/inline.py); registro do lote em docs/campaigns/design-institucional/expansao/assets-lote-b.json",
+      "editable_source": [
+        "data/demonstrative/plates/janela-causal.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R00",
+      "family_module": "family_b2g_execucao",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/janela-causal-desktop-1200.png",
+      "sha256": "d3dba3eae51e71987902252ade08ec77594d37176356af724af70c944dbdb4f3",
+      "bytes": 7723
+    },
+    {
+      "path": "assets/pranchas/janela-causal-mobile.svg",
+      "kind": "prancha",
+      "code": "P12-M",
+      "variant": "mobile",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [
+        "/atrasos-prorrogacao-obras-publicas/"
+      ],
+      "slot": "slot <!-- plate:janela-causal --> (materializado por scripts/demonstrative/plates/inline.py); registro do lote em docs/campaigns/design-institucional/expansao/assets-lote-b.json",
+      "editable_source": [
+        "data/demonstrative/plates/janela-causal.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R00",
+      "family_module": "family_b2g_execucao",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/janela-causal-mobile-360.png",
+      "sha256": "475d7549714c1830661da9760988fe8d817928599f472326cac099c1a622632e",
+      "bytes": 4077
+    },
+    {
+      "path": "assets/pranchas/matriz-alegacoes-desktop.svg",
+      "kind": "prancha",
+      "code": "P11",
+      "variant": "desktop",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [
+        "/defesa-tecnica-contratos-publicos/"
+      ],
+      "slot": "slot <!-- plate:matriz-alegacoes --> (materializado por scripts/demonstrative/plates/inline.py); registro do lote em docs/campaigns/design-institucional/expansao/assets-lote-b.json",
+      "editable_source": [
+        "data/demonstrative/plates/matriz-alegacoes.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R00",
+      "family_module": "family_b2g_execucao",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/matriz-alegacoes-desktop-1200.png",
+      "sha256": "005ecb7609313b10f54e156d3cfbb05939afdfaf0f23b8d4aafe7049fcdc4ee7",
+      "bytes": 8564
+    },
+    {
+      "path": "assets/pranchas/matriz-alegacoes-mobile.svg",
+      "kind": "prancha",
+      "code": "P11-M",
+      "variant": "mobile",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [
+        "/defesa-tecnica-contratos-publicos/"
+      ],
+      "slot": "slot <!-- plate:matriz-alegacoes --> (materializado por scripts/demonstrative/plates/inline.py); registro do lote em docs/campaigns/design-institucional/expansao/assets-lote-b.json",
+      "editable_source": [
+        "data/demonstrative/plates/matriz-alegacoes.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R00",
+      "family_module": "family_b2g_execucao",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/matriz-alegacoes-mobile-360.png",
+      "sha256": "b83fbf62dc44cd6a79343d5ce3a25eade837efec155e60f41835b9f679fefb67",
+      "bytes": 4058
+    },
+    {
       "path": "assets/pranchas/medicao-parede-desktop.svg",
       "kind": "prancha",
       "code": "P3",
@@ -543,7 +637,9 @@
       "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
       "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
       "veracity": "demonstração",
-      "pages": [],
+      "pages": [
+        "/entregas/"
+      ],
       "slot": "slot <!-- plate:pacote-entrega --> (materializado por scripts/demonstrative/plates/inline.py); registro do lote em docs/campaigns/design-institucional/expansao/assets-lote-a.json",
       "editable_source": [
         "data/demonstrative/plates/elaboracao-complementar.v1.json",
@@ -564,7 +660,9 @@
       "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
       "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
       "veracity": "demonstração",
-      "pages": [],
+      "pages": [
+        "/entregas/"
+      ],
       "slot": "slot <!-- plate:pacote-entrega --> (materializado por scripts/demonstrative/plates/inline.py); registro do lote em docs/campaigns/design-institucional/expansao/assets-lote-a.json",
       "editable_source": [
         "data/demonstrative/plates/elaboracao-complementar.v1.json",
@@ -768,6 +866,52 @@
       "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/revisao-conferencia-mobile-360.png",
       "sha256": "05dffd22faefc011f92c61b3a7db0ce5f0fd1c5a4500c584b499a12d6bc35b07",
       "bytes": 4476
+    },
+    {
+      "path": "assets/pranchas/risco-margem-desktop.svg",
+      "kind": "prancha",
+      "code": "P10",
+      "variant": "desktop",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [
+        "/defesa-margem-contratos-publicos/"
+      ],
+      "slot": "slot <!-- plate:risco-margem --> (materializado por scripts/demonstrative/plates/inline.py); registro do lote em docs/campaigns/design-institucional/expansao/assets-lote-b.json",
+      "editable_source": [
+        "data/demonstrative/plates/risco-margem.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R00",
+      "family_module": "family_b2g_execucao",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/risco-margem-desktop-1200.png",
+      "sha256": "e6ae95d42868d58cb0bab0e1d4bedbed738cbd3b840f207942849b6fbb781d40",
+      "bytes": 8856
+    },
+    {
+      "path": "assets/pranchas/risco-margem-mobile.svg",
+      "kind": "prancha",
+      "code": "P10-M",
+      "variant": "mobile",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [
+        "/defesa-margem-contratos-publicos/"
+      ],
+      "slot": "slot <!-- plate:risco-margem --> (materializado por scripts/demonstrative/plates/inline.py); registro do lote em docs/campaigns/design-institucional/expansao/assets-lote-b.json",
+      "editable_source": [
+        "data/demonstrative/plates/risco-margem.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R00",
+      "family_module": "family_b2g_execucao",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/risco-margem-mobile-360.png",
+      "sha256": "bfb582d283435917a76a58701c6eb4c42af0b49603eddf1e30ce1703364accf6",
+      "bytes": 4926
     },
     {
       "path": "assets/pranchas/sst-canteiro-desktop.svg",
