@@ -1,0 +1,143 @@
+{
+  "schema": "confenge.demonstrative-plate-source/1.0",
+  "id": "plate-inspecao-fachada-2026-09",
+  "plate_id": "inspecao-fachada",
+  "plate_ids": ["inspecao-fachada", "pericia-fachada"],
+  "origin": "demonstrative",
+  "revision": "R00",
+  "title": "Mapa de manifestações na fachada leste",
+  "label_pt_br": "exemplo demonstrativo",
+  "client_name": null,
+  "address": null,
+  "contract_number": null,
+  "process_number": null,
+  "art_number": null,
+  "signature": null,
+  "date_modified": "2026-09-17",
+  "public_source_pt_br": "Amostra demonstrativa de /inspecao-diagnostico-edificacoes/ (mapa e registro) e de /assistencia-tecnica-pericial-engenharia/ (mesmo mapa com quesito, evidência e conclusão delimitada). Edificação sintética; não é imóvel de cliente, inspeção realizada, processo nem laudo.",
+  "units": {
+    "length": "m",
+    "opening": "mm"
+  },
+  "facade": {
+    "id": "FA-L",
+    "label_pt_br": "Fachada leste",
+    "width_m": "12.00",
+    "height_m": "9.00",
+    "floor_height_m": "3.00",
+    "floor_levels_m": ["0.00", "3.00", "6.00", "9.00"],
+    "floor_labels_pt_br": ["pav. 1", "pav. 2", "pav. 3"],
+    "axes": [
+      {"id": "A", "x_m": "0.60"},
+      {"id": "B", "x_m": "6.00"},
+      {"id": "C", "x_m": "11.40"}
+    ]
+  },
+  "openings": {
+    "width_m": "1.20",
+    "height_m": "1.20",
+    "sill_m": "1.10",
+    "x_offsets_m": ["2.00", "5.40", "8.80"],
+    "ids": ["J-01", "J-02", "J-03", "J-04", "J-05", "J-06", "J-07", "J-08", "J-09"]
+  },
+  "survey": {
+    "method_pt_br": "Inspeção visual da fachada a partir do nível do solo e do terraço, com trena e fissurômetro; sem abertura, sem ensaio e sem monitoramento.",
+    "date_note_pt_br": "Registro de uma data; a fachada pode mudar depois dela."
+  },
+  "manifestations": [
+    {
+      "id": "M-01",
+      "n": 1,
+      "kind": "fissura_inclinada",
+      "label_pt_br": "Fissura inclinada",
+      "location_pt_br": "Painel entre J-05 e J-06, pav. 2",
+      "x_m": "6.90",
+      "y_m": "3.40",
+      "length_m": "1.20",
+      "angle_deg": "45",
+      "opening_mm": "0.40",
+      "seen": true,
+      "opened_for_exam": false,
+      "record_pt_br": "Vista, medida e fotografada; não aberta para exame.",
+      "cause_state_pt_br": "Causa não concluída",
+      "next_exam_pt_br": "Monitoramento da abertura em datas sucessivas."
+    },
+    {
+      "id": "M-02",
+      "n": 2,
+      "kind": "mancha_umidade",
+      "label_pt_br": "Mancha de umidade com borda",
+      "location_pt_br": "Painel sob J-01, pav. 1",
+      "x_m": "1.80",
+      "y_m": "0.30",
+      "width_m": "1.60",
+      "height_m": "0.70",
+      "seen": true,
+      "opened_for_exam": false,
+      "record_pt_br": "Vista e medida; borda definida, sem ensaio de umidade.",
+      "cause_state_pt_br": "Causa não concluída",
+      "next_exam_pt_br": "Ensaio de umidade ou abertura localizada."
+    },
+    {
+      "id": "M-03",
+      "n": 3,
+      "kind": "desplacamento",
+      "label_pt_br": "Desplacamento de revestimento",
+      "location_pt_br": "Junto à laje de cobertura, entre J-08 e J-09",
+      "x_m": "7.20",
+      "y_m": "8.30",
+      "width_m": "0.90",
+      "height_m": "0.40",
+      "seen": true,
+      "opened_for_exam": false,
+      "record_pt_br": "Vista; som cavo ao redor não delimitado; revestimento não removido.",
+      "cause_state_pt_br": "Causa não concluída",
+      "next_exam_pt_br": "Percussão da área ao redor e remoção controlada."
+    },
+    {
+      "id": "M-04",
+      "n": 4,
+      "kind": "fissura_horizontal",
+      "label_pt_br": "Fissura horizontal junto à laje",
+      "location_pt_br": "Alinhamento da laje do pav. 3, do eixo A ao eixo B",
+      "x_m": "0.60",
+      "y_m": "6.00",
+      "length_m": "3.20",
+      "angle_deg": "0",
+      "opening_mm": "0.20",
+      "seen": true,
+      "opened_for_exam": false,
+      "record_pt_br": "Vista e medida ao longo do alinhamento da laje; sem abertura.",
+      "cause_state_pt_br": "Causa não concluída",
+      "next_exam_pt_br": "Monitoramento e leitura do projeto estrutural, se existir."
+    }
+  ],
+  "quesitos": [
+    {
+      "id": "Q-01",
+      "manifestation_ids": ["M-01", "M-04"],
+      "question_pt_br": "As fissuras M-01 e M-04 têm geometria compatível com movimentação da estrutura?",
+      "evidence_pt_br": "Fotos datadas; comprimento e abertura medidos; sem monitoramento.",
+      "conclusion_pt_br": "Geometria registrada. Origem não afirmada sem monitoramento e sem o projeto."
+    },
+    {
+      "id": "Q-02",
+      "manifestation_ids": ["M-02"],
+      "question_pt_br": "A mancha M-02 decorre de infiltração pela fachada ou por instalação interna?",
+      "evidence_pt_br": "Foto datada e dimensão; sem ensaio de umidade.",
+      "conclusion_pt_br": "Umidade registrada. Fonte não afirmada sem ensaio ou abertura."
+    },
+    {
+      "id": "Q-03",
+      "manifestation_ids": ["M-03"],
+      "question_pt_br": "O desplacamento M-03 indica falha de aderência generalizada?",
+      "evidence_pt_br": "Foto datada e área medida; percussão não realizada ao redor.",
+      "conclusion_pt_br": "Área registrada. Extensão não afirmada sem percussão."
+    }
+  ],
+  "roles_pt_br": {
+    "inspection": "Registro do que foi visto, medido e do que ficou em aberto, em uma data.",
+    "assistance": "Mesmo registro lido como evidência da parte: quesito, evidência e conclusão delimitada. O laudo é do perito do juízo."
+  },
+  "disclaimer_pt_br": "Fachada sintética para mostrar a estrutura do registro. Não é inspeção realizada, não é imóvel de cliente, não é processo, não é prova de campo e não é laudo."
+}
