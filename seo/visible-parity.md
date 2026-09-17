@@ -3,7 +3,7 @@
 - ok: `True`
 - pages: `98`
 - defects: `0`
-- site_root: `/tmp/claude-1000/-home-tjsasakifln-code-confenge-web-cfg/6fc4cd49-43ed-4ba2-95d6-c1067eebcb7e/scratchpad/clean/_site`
+- site_root: `/home/tjsasakifln/code/confenge/.worktrees/salto-01-piloto/_site`
 
 | url | ok | defects | claimed | visible |
 | --- | --- | --- | --- | --- |

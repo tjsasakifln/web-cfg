@@ -1,0 +1,107 @@
+{
+  "reviewer": "acabamento, agente independente (Sonnet)",
+  "files_seen": [
+    "piloto/home-390x844-fold-pilot.jpg",
+    "piloto/home-390x844-full-pilot.jpg",
+    "piloto/home-390x844-menu-pilot.jpg",
+    "piloto/home-1440x1000-fold-pilot.jpg",
+    "piloto/home-1440x1000-full-pilot.jpg",
+    "piloto/servicos-390x844-fold-pilot.jpg",
+    "piloto/servicos-390x844-full-pilot.jpg",
+    "piloto/servicos-1440x1000-fold-pilot.jpg",
+    "piloto/servicos-1440x1000-full-pilot.jpg",
+    "piloto/quantitativos-orcamento-obras-390x844-fold-pilot.jpg",
+    "piloto/quantitativos-orcamento-obras-390x844-full-pilot.jpg",
+    "piloto/quantitativos-orcamento-obras-1440x1000-fold-pilot.jpg",
+    "piloto/quantitativos-orcamento-obras-1440x1000-full-pilot.jpg",
+    "piloto/medicoes-glosas-obras-publicas-390x844-fold-pilot.jpg",
+    "piloto/medicoes-glosas-obras-publicas-390x844-full-pilot.jpg",
+    "piloto/medicoes-glosas-obras-publicas-1440x1000-fold-pilot.jpg",
+    "piloto/medicoes-glosas-obras-publicas-1440x1000-full-pilot.jpg",
+    "piloto/casos-demonstrativo-projeto-privado-390x844-fold-pilot.jpg",
+    "piloto/casos-demonstrativo-projeto-privado-390x844-full-pilot.jpg",
+    "piloto/casos-demonstrativo-projeto-privado-1440x1000-fold-pilot.jpg",
+    "piloto/casos-demonstrativo-projeto-privado-1440x1000-full-pilot.jpg",
+    "piloto/triagem-tecnica-390x844-fold-pilot.jpg",
+    "piloto/triagem-tecnica-390x844-full-pilot.jpg",
+    "piloto/triagem-tecnica-1440x1000-fold-pilot.jpg",
+    "piloto/triagem-tecnica-1440x1000-full-pilot.jpg"
+  ],
+  "method_note": "As 9 imagens 'full' de página inteira (390px de largura chegam a ~6.500-20.400px de altura; 1440px chega a ~4.200-12.700px) foram lidas em segmentos verticais recortados programaticamente (PIL, ~2000px por recorte, sem redução de escala) para evitar a compactação que o visualizador aplicaria a uma imagem inteira; nenhuma parte de nenhuma das 26 capturas ficou sem leitura em resolução native.",
+  "findings": [
+    {
+      "severity": "ALTA",
+      "route": "home",
+      "viewport": "390x844 e 1440x1000",
+      "file": "home-390x844-full-pilot.jpg; home-1440x1000-full-pilot.jpg",
+      "where": "Seção 'Quem assina, como trabalha e onde você confere antes de pedir'",
+      "problem": "O espaço reservado ao retrato do Eng° Tiago Sasaki, acima da legenda 'Eng° Tiago Sasaki / Engenheiro Civil, responsável técnico pela CONFENGE', é um retângulo cinza vazio, sem foto, ícone, iniciais ou qualquer conteúdo — lê exatamente como placeholder esquecido, no mobile e no desktop.",
+      "suggested_fix": "Publicar a foto (ou substituto deliberado, como monograma/selo) antes do congelamento; se a foto ainda não existe, usar um preenchimento que não pareça caixa vazia (ex.: iniciais 'TS' centralizadas em fundo sólido) até a foto chegar."
+    },
+    {
+      "severity": "ALTA",
+      "route": "casos-demonstrativo-projeto-privado",
+      "viewport": "390x844 e 1440x1000",
+      "file": "casos-demonstrativo-projeto-privado-1440x1000-fold-pilot.jpg; casos-demonstrativo-projeto-privado-390x844-full-pilot.jpg; casos-demonstrativo-projeto-privado-1440x1000-full-pilot.jpg",
+      "where": "Legenda inferior das duas pranchas de elevação leste (estado R00 e revisão R01), nas seções 'O recorte' e 'Planta e elevação'",
+      "problem": "A legenda 'EL-LESTE · R00 · escala indicativa · exemplo d[emonstrativo]' é cortada no limite direito da caixa da prancha, sempre na mesma palavra ('exemplo d'), nas duas versões do desenho (R00 e R01) e nos dois viewports — não é reflow de texto, é a caixa de legenda estreita demais para o próprio conteúdo.",
+      "suggested_fix": "Aumentar a largura da caixa de legenda ou reduzir/quebrar o texto da legenda em duas linhas para caber 'exemplo demonstrativo' por completo, replicando o padrão correto usado nas pranchas da home (que não cortam)."
+    },
+    {
+      "severity": "ALTA",
+      "route": "quantitativos-orcamento-obras e casos-demonstrativo-projeto-privado",
+      "viewport": "390x844",
+      "file": "quantitativos-orcamento-obras-390x844-full-pilot.jpg; casos-demonstrativo-projeto-privado-390x844-full-pilot.jpg",
+      "where": "Tabelas 'A planilha de quantitativos do recorte, linha a linha' (quantitativos) e 'Quantitativos' / 'Orçamento' / 'Compatibilização' (casos demonstrativo)",
+      "problem": "No mobile, essas tabelas de muitas colunas (ID, DESCRIÇÃO, UNIDADE, QUANTIDADE, ELEMENTOS, PRANCHA, FÓRMULA, DESCONTO, REVISÃO) estouram a largura da tela sem tratamento responsivo: o cabeçalho aparece cortado ('QUANT'), os valores numéricos da coluna de quantidade não aparecem em nenhuma linha, e em outras tabelas (casos-demonstrativo) o texto de colunas vizinhas se sobrepõe dentro da mesma célula (ex. 'Corrigido/na revisão R01' colado ao texto da coluna seguinte). No desktop as mesmas tabelas estão perfeitamente legíveis e completas — confirmando que é falha de acabamento responsivo, não de conteúdo.",
+      "suggested_fix": "Dar scroll horizontal com affordance visível (sombra/seta) a essas tabelas no mobile, ou trocar por um layout de cartão empilhado por linha abaixo do breakpoint, garantindo que quantidade, fórmula e demais colunas fiquem sempre visíveis e sem sobreposição."
+    },
+    {
+      "severity": "MÉDIA",
+      "route": "medicoes-glosas-obras-publicas",
+      "viewport": "390x844 e 1440x1000",
+      "file": "medicoes-glosas-obras-publicas-390x844-full-pilot.jpg; medicoes-glosas-obras-publicas-1440x1000-full-pilot.jpg",
+      "where": "Bloco de rodapé editorial, frase final ('Atualizado em 11 de setembro de 2026. Encontrou um erro?.')",
+      "problem": "Pontuação duplicada: ponto final sobrando logo após o ponto de interrogação de 'Encontrou um erro?.', nos dois viewports.",
+      "suggested_fix": "Remover o ponto final redundante, deixando 'Encontrou um erro?'."
+    },
+    {
+      "severity": "MÉDIA",
+      "route": "medicoes-glosas-obras-publicas",
+      "viewport": "390x844 e 1440x1000",
+      "file": "medicoes-glosas-obras-publicas-390x844-full-pilot.jpg; medicoes-glosas-obras-publicas-1440x1000-full-pilot.jpg",
+      "where": "Rodapé do site (barra final, abaixo dos links institucionais)",
+      "problem": "Nesta página o rodapé mostra só o link 'Política de Privacidade', enquanto em todas as outras páginas revisadas (home, serviços, quantitativos, casos demonstrativo, triagem técnica) a mesma barra mostra o conjunto completo 'Política editorial · Encontrou um erro? · Uso de IA · Conflitos · Privacidade'. Inconsistência de esqueleto entre páginas.",
+      "suggested_fix": "Igualar o conjunto de links do rodapé desta página ao padrão das demais rotas do piloto."
+    },
+    {
+      "severity": "MÉDIA",
+      "route": "servicos, medicoes-glosas-obras-publicas e casos-demonstrativo-projeto-privado",
+      "viewport": "390x844",
+      "file": "servicos-390x844-full-pilot.jpg; medicoes-glosas-obras-publicas-390x844-full-pilot.jpg; casos-demonstrativo-projeto-privado-390x844-full-pilot.jpg",
+      "where": "Faixa de navegação interna no topo de seção ('ÁREAS' em serviços; 'NESTA PÁGINA' em medições e em casos demonstrativo)",
+      "problem": "No mobile essa lista numerada de atalhos é cortada na borda direita da tela sem reticências nem indício visual de rolagem (nenhuma sombra/seta), deixando os últimos itens escondidos (ex. em serviços corta em '02 Quanti...'; em casos demonstrativo corta em '03 Q...' faltando 4 dos 7 itens). No desktop a mesma lista aparece inteira. Padrão repetido em três rotas.",
+      "suggested_fix": "Ativar rolagem horizontal com affordance visível para essa faixa no mobile, ou quebrar os itens em duas linhas como já ocorre em outras páginas do próprio piloto (ex. triagem técnica usa layout vertical), evitando esconder itens sem aviso."
+    },
+    {
+      "severity": "MÉDIA",
+      "route": "home",
+      "viewport": "390x844",
+      "file": "home-390x844-menu-pilot.jpg",
+      "where": "Painel do menu mobile aberto",
+      "problem": "Dois controles redundantes para a mesma ação de fechar o menu: o ícone 'X' no cabeçalho e o botão 'Fechar' logo abaixo, lado a lado com o mesmo alvo funcional — repetição de esqueleto evitável.",
+      "suggested_fix": "Manter apenas um controle de fechar (o ícone no cabeçalho, padrão do restante do site) e remover o botão 'Fechar' duplicado, ou substituí-lo por uma ação diferente se houver necessidade real de dois controles."
+    },
+    {
+      "severity": "PREFERÊNCIA",
+      "route": "triagem-tecnica",
+      "viewport": "1440x1000",
+      "file": "triagem-tecnica-1440x1000-fold-pilot.jpg; triagem-tecnica-1440x1000-full-pilot.jpg",
+      "where": "Coluna direita (cartão 'Fale agora, sem formulário') ao longo de toda a página",
+      "problem": "O cartão da coluna direita termina por volta de 1/3 da altura da página, mas a coluna esquerda continua por mais duas seções inteiras ('Se preferir, comece pela situação parecida com a sua' e 'O que dizer no primeiro contato'); no desktop isso deixa um vazio em branco muito grande na metade direita da tela por milhares de pixels, um espaçamento incoerente entre colunas.",
+      "suggested_fix": "Prolongar o cartão lateral com conteúdo relevante (ex. FAQ curto, links de atalho) até acompanhar a altura da coluna esquerda, ou tornar o cartão 'sticky' para que não sobre vazio abaixo dele."
+    }
+  ],
+  "summary": "A estrutura aprovada no R1 se mantém, mas o acabamento tem três falhas de severidade alta: um placeholder de foto vazio na home, uma legenda de prancha técnica cortada em ambas as revisões e viewports da página de casos demonstrativos, e tabelas de muitas colunas que perdem dados (quantidade, fórmula) no mobile por falta de tratamento responsivo. Há também pontuação duplicada e um rodapé com conjunto de links diferente do padrão numa única rota, além de um padrão repetido de navegação interna cortada sem aviso em três páginas no mobile e um vazio de layout grande na coluna direita da triagem técnica no desktop. Nenhum desses itens é de composição ou direção de arte (já aprovadas no R1); todos são problemas de acabamento e podem ser corrigidos sem redesenhar a página.",
+  "ready_for_owner_decision": false
+}

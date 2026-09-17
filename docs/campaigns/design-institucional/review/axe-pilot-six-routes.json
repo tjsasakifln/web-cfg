@@ -1,0 +1,66 @@
+{
+  "measured_at": "2026-09-17T07:16:43.414Z",
+  "tool": "axe-core 4.13.0 via puppeteer-core/chromium-1234, tags wcag2a/2aa/21a/21aa/22aa/best-practice",
+  "pages": [
+    {
+      "route": "/",
+      "viewport": "mobile",
+      "violations": []
+    },
+    {
+      "route": "/",
+      "viewport": "desktop",
+      "violations": []
+    },
+    {
+      "route": "/servicos/",
+      "viewport": "mobile",
+      "violations": []
+    },
+    {
+      "route": "/servicos/",
+      "viewport": "desktop",
+      "violations": []
+    },
+    {
+      "route": "/quantitativos-orcamento-obras/",
+      "viewport": "mobile",
+      "violations": []
+    },
+    {
+      "route": "/quantitativos-orcamento-obras/",
+      "viewport": "desktop",
+      "violations": []
+    },
+    {
+      "route": "/medicoes-glosas-obras-publicas/",
+      "viewport": "mobile",
+      "violations": []
+    },
+    {
+      "route": "/medicoes-glosas-obras-publicas/",
+      "viewport": "desktop",
+      "violations": []
+    },
+    {
+      "route": "/casos/demonstrativo-projeto-privado/",
+      "viewport": "mobile",
+      "violations": []
+    },
+    {
+      "route": "/casos/demonstrativo-projeto-privado/",
+      "viewport": "desktop",
+      "violations": []
+    },
+    {
+      "route": "/triagem-tecnica/",
+      "viewport": "mobile",
+      "violations": []
+    },
+    {
+      "route": "/triagem-tecnica/",
+      "viewport": "desktop",
+      "violations": []
+    }
+  ]
+}

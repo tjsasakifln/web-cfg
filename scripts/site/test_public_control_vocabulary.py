@@ -538,7 +538,10 @@ _PHYSICAL_NOUN = (
     r"lajes?|paredes?|alvenarias?|guarda-corpos?|barras?|circula[çc][ãa]o|"
     r"transportes?|eleva[çc][ãa]o|proje[çc][ãa]o|dist[âa]ncias?|dimens[õo]es|"
     r"geometria|sinaliza[çc][ãa]o|sinaliza[çc][õo]es|regu[al]s?|superf[íi]cies?|"
-    r"horizontal|horizontais|inclinad[oa]s?|plac[ao]s|selagem|impermeabiliza[çc][ãa]o"
+    r"horizontal|horizontais|inclinad[oa]s?|plac[ao]s|selagem|impermeabiliza[çc][ãa]o|"
+    # 2026-09-17: escala de desenho ("escala vertical exagerada" num perfil
+    # longitudinal) é operando físico de prancha, não recorte de segmento.
+    r"escalas?"
 )
 _VERTICAL_PHYSICAL_BEFORE = re.compile(
     rf"\b(?:{_PHYSICAL_NOUN})\b(?:\s+(?:e|ou|d[eoa]s?|do|da|em|no|na)?\s*\w+){{0,2}}\s+$",

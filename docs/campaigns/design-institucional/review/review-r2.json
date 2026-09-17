@@ -1,0 +1,63 @@
+{
+  "state": "CONCLUIDA",
+  "method": "revisao visual assistida por agentes independentes (Sonnet), telas vistas antes de qualquer justificativa, rotulos neutros; nao e pesquisa humana",
+  "round_1": {
+    "reviewers": [
+      "direção de arte, agente independente (Sonnet)",
+      "UX e qualidade, agente independente (Sonnet)"
+    ],
+    "ranking_overall": {
+      "direcao_de_arte": "V3 > V1 > V2",
+      "ux_qualidade": "V3 > V2 ~ V1"
+    },
+    "verdict_v3_vs_v1": {
+      "direcao_de_arte": {
+        "veredito": "superior de forma reconhecível",
+        "motivo": "A diferença entre V3 e V1 não é só fonte/borda/padding: V3 introduz um padrão de índice de página (âncoras) ausente em V1, agrupa os serviços por categoria em /servicos/, adianta a prova técnica dentro da própria dobra do hero, amplia a mesma prancha demonstrativa em uma segunda versão grande dentro de quantitativos, acrescenta uma rota inteiramente nova (casos-demonstrativo-projeto-privado) que demonstra o produto de ponta a ponta, e oferece dois CTAs completos na dobra mobile de medições. Isso é composição de página inteira, não acabamento visual. Ao mesmo tempo V3 herda parte do custo de V2 (páginas mais longas, credenciais/CTA secundário ainda abaixo da dobra mobile na home), então a superioridade é real mas não total — os dois pontos MÉDIA/ALTA de leitura móvel na home continuam a valer como pendência mesmo em V3, em grau mais leve que em V2."
+      },
+      "ux_qualidade": {
+        "veredito": "superior de forma reconhecível",
+        "motivo": "A superioridade não é uma impressão geral de acabamento: são duas mudanças concretas e verificáveis, cada uma ligada a uma das tarefas atribuídas. (1) Na tarefa 'o boletim de medição voltou glosado', a dobra de /medicoes-glosas-obras-publicas/ em V1 usa um título de categoria genérico ('Medições, glosas e pagamentos em obras públicas') com CTA 'Analisar uma demanda', enquanto V3 usa um título que já é quase a frase do visitante ('O boletim voltou glosado, a medição parou...') com CTA 'Descrever a medição' e um botão de WhatsApp já na dobra — o visitante reconhece a página sem precisar ler a introdução. (2) Na tarefa 'quero falar agora / o que acontece depois', V1 responde em parágrafo corrido dentro de /triagem-tecnica/; V3 substitui isso por uma caixa numerada de três passos com prazos explícitos, repetida de forma consistente nos estados do formulário. Essas duas mudanças são objetivamente melhores para as tarefas testadas, não uma preferência estética. Ressalvas que impedem uma superioridade sem qualificação: V3 herda de V2 uma etiqueta de situação duplicada na home ('Inspeções e perícias' em dois cartões diferentes) que V1 não tem; a seção de contexto de mercado PNCP continua sendo três blocos idênticos nas três versões; e, nas duas rotas onde há dado comparável (home e serviços), V3 é mensuravelmente mais longa que V1 no celular (+5% e +17% de docHeight), então o ganho de reconhecimento tem um custo de rolagem que não foi eliminado."
+      }
+    },
+    "alta_on_pilot": 0,
+    "fixed": [
+      "titulo da home em duas linhas por frase",
+      "kickers distintos nas linhas de inspecao e disputa",
+      "contratos PNCP como linhas de livro-razao"
+    ],
+    "files": [
+      "review/review-r1-direcao-de-arte.json",
+      "review/review-r1-ux-qualidade.json"
+    ]
+  },
+  "round_2": {
+    "reviewer": "acabamento, agente independente (Sonnet)",
+    "counts": {
+      "ALTA": 3,
+      "MEDIA": 4,
+      "PREFERENCIA": 1
+    },
+    "fixed": [
+      "retrato: artefato de captura (imagem lazy nao decodificada); capturas refeitas com decode",
+      "carimbo da elevacao cortado: duas linhas",
+      "tabelas geradas no celular: rolagem local com dica",
+      "indice de pagina quebra em linhas no celular"
+    ],
+    "pre_existing_not_fixed": [
+      "'Encontrou um erro?.' e rodape dos pilares congelados",
+      "botao 'Fechar' duplicado do menu movel"
+    ],
+    "file": "review/review-r2-acabamento.json"
+  },
+  "dimensions_before_after": {
+    "foco_da_abertura": "antes: titulo + planta miniatura; depois: declaracao em duas colunas e prancha legivel em toda a largura (r1 direcao 7->9; ux 6->8)",
+    "hierarquia": "antes: sete linhas iguais + tres cartoes; depois: seis areas em grade, entregas alternadas, responsabilidade, faixa escura de obras publicas",
+    "material_tecnico": "antes: uma planta pequena; depois: quatro pranchas com carimbo e versao movel reenquadrada",
+    "reconhecimento_da_oferta": "indice por areas na home e em /servicos/; avaliacao tratada com figura",
+    "identidade": "engenharia seria; nenhum revisor leu como software, infoproduto ou construtora",
+    "leitura_movel": "legivel, porem paginas mais longas (ressalva)",
+    "esforco_ate_contato": "acao dominante por contexto e 'o que acontece depois' em tres passos"
+  },
+  "ranking": "V3 (piloto) > V1 (producao) > V2 (estudo B) na direcao de arte; V3 > V2 ~ V1 em UX"
+}

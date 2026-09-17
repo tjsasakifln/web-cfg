@@ -1,0 +1,214 @@
+{
+  "reviewer": "UX e qualidade, agente independente (Sonnet)",
+  "method_note": "Capturas lidas via crop programático (PIL) em segmentos verticais para permitir leitura de páginas inteiras muito longas; a compressão de exibição não reflete o tamanho real de fonte no dispositivo. V2 (estudo-b) só cobre home (index.html) e a página de quantitativos (servico.html, confirmado pelo manifesto: h1 'Quantitativos e orçamento de obras'), não o restante do site; onde isso limita a comparação, está registrado explicitamente.",
+  "saw_before_reading_docs": {
+    "resumo": "Antes de ler o caderno.md, minha leitura das capturas foi: (1) as três versões compartilham a mesma proposta central — abertura por 'situação' (não por persona), com 6-7 cartões numerados na home que espelham quase 1:1 os cinco/seis rótulos do intent-matrix; (2) o material técnico é genuíno em todas as versões (memórias de cálculo com IDs tipo Q-PAR-01/ORC-PAR-01, tabelas com colunas reais, diagramas com cotas), sempre rotulado 'exemplo demonstrativo/sem obra de cliente' — nenhuma das três parece inflar capacidade; (3) V2 e V3 adicionam mais exemplos demonstrativos embutidos diretamente na home (drenagem, boletim de medição, estrutura de avaliação) do que V1, que tem só o exemplo do banheiro; (4) V3 tem duas diferenças que batem em cheio nas tarefas atribuídas: a página de medições tem título de dobra que already nomeia o cenário ('O boletim voltou glosado, a medição parou...') em vez do título genérico de V1 ('Critérios de medição, glosas...'), e a página de triagem tem uma caixa numerada explícita 'O QUE ACONTECE DEPOIS' que V1 não tem (só parágrafo corrido); (5) V3 e V2 adicionam um índice interno 'NESTA PÁGINA' em páginas longas (quantitativos) que V1 não tem; (6) todas as páginas são muito longas no celular, e a página de serviços em particular repete um esqueleto idêntico (título/O QUE ASSUMIMOS/O QUE VOCÊ PASSA A TER/CTA) nove vezes seguidas nas três versões, com V3 adicionando apenas sub-cabeçalhos de agrupamento ('ÁREAS') como atenuante parcial; (7) notei uma etiqueta duplicada 'INSPEÇÕES E PERÍCIAS' em dois cartões de situação diferentes (03 e 05) na home de V2 e V3, ausente em V1 (que usa rótulos distintos 'IMÓVEL OU OBRA' e 'DISPUTA'); (8) a rota /entregas/ de V1 (produção) é uma página de 8 blocos quase idênticos de produtos de inteligência de mercado com preço publicado (R$599 a R$3.750), com um registro e tom bem diferente do resto do site; não encontrei equivalente dela nas capturas de V3 (que no mesmo slot de navegação tem /casos/demonstrativo-projeto-privado/, um estudo de caso técnico único, sem preço), então tratei como comparação não equivalente.",
+    "impressao_por_versao": {
+      "V1_producao": "Sólida, consistente, mas mais genérica na abertura de páginas de conversão (medições, triagem); menos material demonstrativo na home; sem índice interno em páginas longas; sem placeholder de retrato.",
+      "V2_estudo_b": "Mesma linguagem visual e de conteúdo de V1/V3 nas duas páginas cobertas, com tipografia de herói maior, mais exemplos demonstrativos na home e índice interno na página de serviço; é a página mais longa das três na home (390px).",
+      "V3_piloto": "Mesma direção de V2, mas implementada em todas as rotas testadas; duas melhorias claramente ligadas às tarefas atribuídas (título da dobra de medições e caixa 'o que acontece depois' da triagem); herda a etiqueta duplicada de V2; páginas mais longas que V1 nas rotas onde há docHeight comparável."
+    }
+  },
+  "tasks": {
+    "a_duas_propostas_quantidades_diferentes": {
+      "descricao_tarefa": "Tenho duas propostas de reforma com quantidades diferentes.",
+      "V1": {
+        "onde_clicaria": "Home, cartão '02 QUANTITATIVOS E ORÇAMENTO' -> 'Ver quantitativos', ou nav 'Serviços e problemas'.",
+        "o_que_esperaria": "Uma comparação lado a lado das duas propostas pela mesma base de quantidades.",
+        "atrito_observado": "Chega certo na página, mas a página é longa (19.739 px no celular, medido no caderno) e o bloco que nomeia exatamente esse cenário ('COMPARAR PROPOSTAS OU COMPRAR MATERIAL / Levantamento de quantitativos') só aparece depois de rolar por boa parte da explicação de método; não há atalho direto da home para esse sub-bloco."
+      },
+      "V2": {
+        "onde_clicaria": "Mesmo bloco de decisão em servico.html, agora com índice 'NESTA PÁGINA' (01 Amostra...06 Pedir proposta) no topo.",
+        "o_que_esperaria": "Igual a V1, mais a possibilidade de pular direto para a seção relevante pelo índice.",
+        "atrito_observado": "Reduz a rolagem cega, mas o índice não tem uma entrada específica para 'comparar propostas' — leva a seções amplas (Método, Demonstrações), exigindo ainda leitura para achar o bloco certo."
+      },
+      "V3": {
+        "onde_clicaria": "Igual a V1/V2: cartão '02' na home -> quantitativos, com o mesmo índice 'NESTA PÁGINA' de V2.",
+        "o_que_esperaria": "Mesmo resultado de V1.",
+        "atrito_observado": "Praticamente idêntico a V2 nesta tarefa; nenhuma diferença que mude o resultado da tarefa."
+      },
+      "diferenca_pratica": "Nenhuma diferença relevante de resultado; V2/V3 reduzem levemente o esforço de navegação dentro da página longa."
+    },
+    "b_valor_imovel_partilha": {
+      "descricao_tarefa": "Preciso do valor de um imóvel para uma partilha.",
+      "V1": {
+        "onde_clicaria": "Home, cartão '04 VALOR DE IMÓVEL' -> 'Ver avaliação', ou /servicos/ item '06 AVALIAÇÃO DE IMÓVEL'.",
+        "o_que_esperaria": "Um laudo/parecer de avaliação com método e dados, explicitamente utilizável para negociar, partilhar ou registrar.",
+        "atrito_observado": "Nenhum atrito relevante: o texto já usa a palavra 'partilhar' e avisa 'pessoa física começa sem CNPJ' e 'parecer preliminar não substitui a avaliação formal' — expectativa bem calibrada."
+      },
+      "V2": {
+        "onde_clicaria": "Não coberto pelas capturas de V2 (só home e página de quantitativos); a home de V2 tem o mesmo cartão '04 AVALIAÇÕES IMOBILIÁRIAS' e, a mais, um exemplo demonstrativo de 'Estrutura da análise de avaliação' direto na home.",
+        "o_que_esperaria": "Igual a V1, com reforço de prova técnica (a figura da estrutura de avaliação) antes mesmo de clicar.",
+        "atrito_observado": "Não avaliável na página de destino (não capturada)."
+      },
+      "V3": {
+        "onde_clicaria": "Home, cartão '04 AVALIAÇÕES IMOBILIÁRIAS' -> 'Ver avaliação'; mesma home também mostra a figura de estrutura de avaliação (como V2) antes do clique.",
+        "o_que_esperaria": "Mesmo resultado de V1.",
+        "atrito_observado": "Nenhum atrito adicional; a home de V3 antecipa prova técnica (a figura da estrutura de avaliação) que em V1 só aparecia dentro da página de serviços."
+      },
+      "diferenca_pratica": "Sem diferença de resultado; V2/V3 mostram um pedaço de prova técnica sobre avaliação já na home, o que reforça confiança antes do clique."
+    },
+    "c_boletim_medicao_glosado": {
+      "descricao_tarefa": "O boletim de medição voltou glosado.",
+      "V1": {
+        "onde_clicaria": "Home cartão '07 LICITAÇÃO OU CONTRATO DE OBRA PÚBLICA' -> 'Ver serviços para obras públicas', ou nav 'Obras públicas' -> /medicoes-glosas-obras-publicas/.",
+        "o_que_esperaria": "Uma página que reconheça a palavra 'glosa' e diga o que fazer a seguir.",
+        "atrito_observado": "A dobra da página usa um título genérico de categoria ('Medições, glosas e pagamentos em obras públicas' / eyebrow 'FLUXO DE CAIXA E DIREITO AO RECEBIMENTO') e CTA genérico 'Analisar uma demanda'; o WhatsApp só aparece como link secundário abaixo do botão, não como botão próprio na dobra."
+      },
+      "V2": {
+        "onde_clicaria": "Não coberto (rota fora do escopo de V2).",
+        "o_que_esperaria": "N/A",
+        "atrito_observado": "N/A"
+      },
+      "V3": {
+        "onde_clicaria": "Mesmo caminho de V1.",
+        "o_que_esperaria": "Reconhecimento imediato de que a página fala do meu problema específico.",
+        "atrito_observado": "Praticamente nenhum: o H1 da dobra já é 'O boletim voltou glosado, a medição parou ou o fiscal lê o critério de um jeito e a obra de outro, e o caixa da empresa está financiando o contrato enquanto isso' — usa quase literalmente a frase da tarefa. O CTA primário passa a ser 'Descrever a medição' (específico) e há um botão secundário próprio 'Falar pelo WhatsApp' já na dobra, ao lado do CTA principal."
+      },
+      "diferenca_pratica": "Diferença real e mensurável: V3 elimina a necessidade de ler a introdução para confirmar que chegou ao lugar certo, e oferece um canal de conversa direto já na dobra, não só um link secundário."
+    },
+    "d_falar_agora_e_o_que_acontece_depois": {
+      "descricao_tarefa": "Quero falar com alguém agora / o que acontece depois que eu envio?",
+      "V1": {
+        "onde_clicaria": "Bolha flutuante de WhatsApp (desktop, canto inferior direito, persistente); ou nav -> /triagem-tecnica/ -> caixa 'Fale agora, sem formulário' com botão WhatsApp, e-mail e telefone.",
+        "o_que_esperaria": "Contato imediato e uma explicação do que vem depois.",
+        "atrito_observado": "O canal de contato é rápido (1-2 cliques), mas a resposta a 'o que acontece depois' vem em parágrafo corrido dentro de 'O que dizer no primeiro contato' / 'O que você recebe em seguida' — exige leitura completa do parágrafo para extrair prazo e passos."
+      },
+      "V2": {
+        "onde_clicaria": "Não coberto (rota fora do escopo de V2); a home de V2 mantém o mesmo formulário de 2 etapas de V1/V3.",
+        "o_que_esperaria": "N/A para a página de triagem.",
+        "atrito_observado": "N/A"
+      },
+      "V3": {
+        "onde_clicaria": "Mesma bolha/rota de V1; a página /triagem-tecnica/ mantém a mesma caixa 'Fale agora, sem formulário'.",
+        "o_que_esperaria": "Mesmo contato rápido, mais uma resposta objetiva sobre os próximos passos.",
+        "atrito_observado": "Praticamente nenhum: logo abaixo do bloco de contato há uma caixa numerada 'O QUE ACONTECE DEPOIS' com três passos curtos (01 Leitura e resposta - prazo; 02 Canal seguro, se precisar; 03 Proposta) em vez do parágrafo corrido de V1. O mesmo padrão numerado reaparece nos estados do formulário (inicial, sucesso, erro) capturados em issue-532, sempre com prazos explícitos (até 2 dias úteis; obra pública urgente, até 1 dia útil)."
+      },
+      "diferenca_pratica": "Diferença real: V3 responde a pergunta 'o que acontece depois' em formato escaneável (lista numerada com prazos) em vez de texto corrido, tanto na página de triagem quanto nos estados do formulário."
+    }
+  },
+  "dimensions": {
+    "foco_da_abertura": {
+      "V1": { "nota": 7, "evidencia": "Herói claro (headline + subhead + CTA duplo + selos EESC-USP/CNPJ) com um único exemplo demonstrativo (banheiro) ao lado.", "ressalva": "Título genérico nas páginas de conversão (medições) não nomeia o cenário do visitante." },
+      "V2": { "nota": 7, "evidencia": "Mesmo herói de V1 com tipografia maior; três exemplos demonstrativos adicionais logo abaixo da dobra.", "ressalva": "Cobertura limitada a home/quantitativos; nota não generaliza ao site." },
+      "V3": { "nota": 8, "evidencia": "Herói igual a V1 na home, mas nas páginas de conversão testadas (medições, triagem) o título e o CTA da dobra já nomeiam o cenário do visitante.", "ressalva": "Ganho concentrado nas páginas de tarefa; a home em si não mudou de foco." }
+    },
+    "hierarquia": {
+      "V1": { "nota": 6, "evidencia": "Sete situações em linhas idênticas, sem agrupamento; página de quantitativos sem índice interno.", "ressalva": "Rótulos de eyebrow distintos para cada uma das 7 situações (sem colisão)." },
+      "V2": { "nota": 7, "evidencia": "Índice 'NESTA PÁGINA' na página de quantitativos ajuda a orientação em página longa.", "ressalva": "Na home, 03 e 05 compartilham o eyebrow 'INSPEÇÕES E PERÍCIAS' sem nenhum agrupamento visual que explique a repetição." },
+      "V3": { "nota": 7, "evidencia": "Mesmo índice interno de V2 em quantitativos/medições; /servicos/ ganhou sub-cabeçalhos 'ÁREAS' que agrupam os 9 itens em 6 categorias.", "ressalva": "A mesma lógica de agrupamento de /servicos/ não foi aplicada à lista de situações da home, onde a etiqueta duplicada (03/05 'Inspeções e perícias') aparece sem explicação." }
+    },
+    "material_tecnico": {
+      "V1": { "nota": 8, "evidencia": "Memória de cálculo real com IDs (Q-PAR-01, ORC-PAR-01), tabela de quantidades, todas com rótulo 'exemplo demonstrativo/sem obra de cliente'.", "ressalva": "Só um exemplo (banheiro) exposto fora da página de quantitativos." },
+      "V2": { "nota": 9, "evidencia": "Mesmo exemplo do banheiro, mais três exemplos adicionais (drenagem/perfil viário, boletim de medição com barras comparativas, estrutura de análise de avaliação) expostos diretamente na home.", "ressalva": "Avaliado só em home/quantitativos." },
+      "V3": { "nota": 9, "evidencia": "Mesmos três exemplos adicionais de V2 na home; página /casos/demonstrativo-projeto-privado/ tem um estudo de caso completo com desenhos, memória, orçamento, compatibilização e CSVs para baixar.", "ressalva": "Nenhuma; material tecnicamente honesto e mais visível que em V1." }
+    },
+    "reconhecimento_da_oferta": {
+      "V1": { "nota": 7, "evidencia": "Framing 'em qual destas você se reconhece' bate com o intent-matrix; mas título de medições é genérico.", "ressalva": "-" },
+      "V2": { "nota": 7, "evidencia": "Mesmo framing de V1 na home.", "ressalva": "Avaliado só em home/quantitativos." },
+      "V3": { "nota": 8, "evidencia": "Mesmo framing de V1, mais o título da dobra de medições que espelha quase literalmente a queixa do visitante (glosa/pagamento parado).", "ressalva": "-" }
+    },
+    "identidade": {
+      "V1": { "nota": 7, "evidencia": "Registro consistente de 'engenharia com responsável técnico' (CREA/ART/CNPJ) nas 5 rotas testadas; nenhuma linguagem de software/infoproduto nelas.", "ressalva": "A rota /entregas/ (fora das 6 rotas pedidas, mas visitada por conter o exemplo mais próximo de 'casos') usa um registro de produto de dados com preço (8 blocos: Radar de Licitações R$599 até Plano Executivo R$3.750), num tom mais próximo de SaaS/relatório de mercado do que de 'assumimos a parte de engenharia que falta'. Isso não é avaliação de política comercial (preço publicado e datado), mas de tom de voz percebido por um visitante que chegue a essa página." },
+      "V2": { "nota": 7, "evidencia": "Mesmo registro de V1 nas duas páginas cobertas.", "ressalva": "Avaliado só em home/quantitativos." },
+      "V3": { "nota": 8, "evidencia": "Mesmo registro sério nas 6 rotas testadas; a página equivalente de 'casos' (demonstrativo-projeto-privado) é um estudo de caso técnico único, sem preço, mais alinhado ao restante do site que a página de V1 no mesmo lugar do menu.", "ressalva": "/casos/demonstrativo-projeto-privado/ não é uma comparação direta com /entregas/: são páginas de propósito diferente, não uma unica página redesenhada." }
+    },
+    "leitura_movel": {
+      "V1": { "nota": 6, "evidencia": "docHeight 390px: home 11.772; servicos 13.440 (medido nos manifestos). /servicos/ repete um esqueleto idêntico (título/O que assumimos/O que você passa a ter/CTA) 9 vezes seguidas sem nenhum agrupamento visual.", "ressalva": "Parágrafos curtos e listas ajudam a leitura mesmo em páginas longas." },
+      "V2": { "nota": 5, "evidencia": "Página de quantitativos/servico.html é a mais longa das comparáveis (docHeight 19.979 no home; a página de serviço também é mais longa que a de V1 no mesmo template).", "ressalva": "Mais exemplos demonstrativos aumentam o valor por rolagem, mas aumentam a rolagem." },
+      "V3": { "nota": 5, "evidencia": "docHeight 390px medido: home 12.353 (vs. 11.772 em V1, +5%); servicos 15.760 (vs. 13.440 em V1, +17%). /servicos/ ganhou sub-cabeçalhos 'ÁREAS' mas manteve os 9 blocos repetidos.", "ressalva": "O ganho de reconhecimento (tarefas a/c/d) não compensa sozinho o aumento de rolagem nas páginas onde há dado comparável." }
+    },
+    "esforco_ate_o_contato": {
+      "V1": { "nota": 7, "evidencia": "WhatsApp/e-mail/telefone acessíveis em 1-2 cliques a partir de qualquer página testada (bolha flutuante no desktop, bloco de contato na home, página de triagem dedicada); formulários embutidos em quantitativos/medições evitam navegação para fora da página.", "ressalva": "Explicação de 'o que acontece depois' é texto corrido, não escaneável." },
+      "V2": { "nota": 7, "evidencia": "Mesmo padrão de V1 nas páginas cobertas.", "ressalva": "Avaliado só em home/quantitativos." },
+      "V3": { "nota": 8, "evidencia": "Mesmos canais de V1, mais botão de WhatsApp já na dobra de medições e caixa numerada 'o que acontece depois' na triagem e nos estados do formulário (inicial/sucesso/erro), com prazos explícitos.", "ressalva": "-" }
+    }
+  },
+  "findings": [
+    {
+      "severity": "MEDIA",
+      "version": "V2 e V3",
+      "route": "home",
+      "viewport": "390x844 e 1440x1000",
+      "file": "piloto/home-390x844-full-pilot.jpg (situações 03 e 05); piloto/home-1440x1000-full-pilot.jpg; estudo-b/...index.html-1440x1000-full-estB.jpg",
+      "problem": "Os cartões de situação 03 ('Tenho infiltração, fissura, mofo ou dano no imóvel') e 05 ('Estou em uma disputa que depende de prova técnica de engenharia') usam o mesmo eyebrow 'INSPEÇÕES E PERÍCIAS' em V2 e V3, enquanto V1 usa rótulos distintos para essas duas situações ('IMÓVEL OU OBRA' e 'DISPUTA'). Isso é consequência de um modelo de agrupamento em 6 áreas para 7 linhas de situação sem nenhuma pista visual de agrupamento na home (diferente de /servicos/ em V3, que já usa sub-cabeçalhos 'ÁREAS' para separar grupos). Para um visitante que rola a lista, o rótulo repetido lê como erro de copiar-e-colar.",
+      "suggested_fix": "Aplicar na home o mesmo padrão de agrupamento visual já usado em /servicos/ de V3 (sub-cabeçalho 'ÁREAS' ou similar antes de cada grupo), em vez de apenas renomear um dos dois eyebrows — evita colidir com os hrefs/testes de contrato citados no caderno (`test_home_conversion_contract::test_situation_chooser`, `public-ia-map`)."
+    },
+    {
+      "severity": "MEDIA",
+      "version": "V1, V2 e V3",
+      "route": "home",
+      "viewport": "1440x1000 e 390x844",
+      "file": "producao-47da03b64/home-1440x1000-full-prod.jpg; piloto/home-1440x1000-full-pilot.jpg; piloto/home-390x844-full-pilot.jpg",
+      "problem": "A seção 'Contratos reais, diferentes portes' (contexto de mercado PNCP) é um grid de três blocos visualmente idênticos ('Até R$ 250 mil' / 'R$ 250 mil a R$ 1 milhão' / 'Acima de R$ 1 milhão', cada um com o mesmo esqueleto título/'Contrato observado:'/parágrafo/link 'Conferir o contrato no PNCP') e permanece assim, sem alteração perceptível, nas três versões. É mais uma instância do padrão de repetição de esqueleto que a revisão pediu para sinalizar.",
+      "suggested_fix": "Diferenciar visualmente os três blocos (ex.: variação de largura/peso conforme o porte, ou apresentação em tabela regrada em vez de cartões) para reduzir a sensação de bloco repetido."
+    },
+    {
+      "severity": "MEDIA",
+      "version": "V1 e V3",
+      "route": "servicos",
+      "viewport": "390x844",
+      "file": "producao-47da03b64/servicos-390x844-full-prod.jpg; piloto/servicos-390x844-full-pilot.jpg",
+      "problem": "A página de serviços repete um esqueleto idêntico (título/eyebrow, 'O QUE ASSUMIMOS', 'O QUE VOCÊ PASSA A TER', CTA) nove vezes seguidas em ambas as versões. Medido nos manifestos, a página é mais longa em V3 (docHeight 15.760 px) do que em V1 (13.440 px), um aumento de ~17%; a home também cresceu (12.353 vs. 11.772 px, +5%). V3 adiciona sub-cabeçalhos 'ÁREAS' que agrupam os 9 itens em 6 categorias, o que ajuda a escaneabilidade, mas não reduz a rolagem.",
+      "suggested_fix": "Considerar lista recolhível/filtrável por área no celular, ou variação visual mais forte entre categorias, já que o agrupamento textual sozinho não encurta a página."
+    },
+    {
+      "severity": "PREFERENCIA",
+      "version": "V1 (sem par equivalente em V3)",
+      "route": "entregas (V1) / casos-demonstrativo-projeto-privado (V3, página de propósito diferente)",
+      "viewport": "390x844",
+      "file": "producao-47da03b64/entregas-390x844-full-prod.jpg",
+      "problem": "A rota /entregas/ de V1 (fora das 6 rotas pedidas nesta revisão, mas visitada por ser o único par disponível no mesmo lugar de navegação de 'casos') é uma lista de 8 blocos quase idênticos de ofertas de dados de mercado com preço publicado (R$ 599 a R$ 3.750, ex.: 'Radar de Licitações Prioritárias', 'Mapa de Concorrentes Relevantes'), cada um com ~10 campos repetidos (DECISÃO/TRABALHO REALIZADO/COMO A ENTREGA AJUDA/O QUE VOCÊ RECEBE/.../PACOTE E CRÉDITO). Não avalio aqui se o preço está autorizado (isso é política comercial fora do meu escopo de visitante); registro apenas que, como experiência de leitura, é a página mais repetitiva e longa das capturadas, e não tem par nas capturas de V3 — não é uma comparação de mesma página.",
+      "suggested_fix": "Se esta rota for mantida no site final, avaliar o mesmo tratamento de agrupamento/redução de esqueleto sugerido para /servicos/; e, se a intenção for que /casos/demonstrativo-projeto-privado/ substitua este slot de navegação, confirmar explicitamente essa migração de URL (não presumida aqui)."
+    },
+    {
+      "severity": "PREFERENCIA",
+      "version": "V3",
+      "route": "home",
+      "viewport": "390x844 e 1440x1000",
+      "file": "piloto/home-390x844-full-pilot.jpg; piloto/home-1440x1000-full-pilot.jpg",
+      "problem": "O bloco 'Quem assina' em V3 tem um espaço de retrato que aparece como um retângulo cinza vazio nas capturas (V1 não tem esse espaço). Verifiquei o worktree: o arquivo de imagem existe (assets/tiago-sasaki-foto-v11-sem-fundo-560.{avif,webp,png}) e está referenciado corretamente no index.html do piloto, com `loading=\"lazy\"`. Isso sugere fortemente um artefato da captura (a imagem lazy não foi rolada para dentro da viewport antes do screenshot), do mesmo tipo que o caderno já registrou e descartou uma vez para a captura de produção ('faixas em branco... artefato de captura, não defeito da página'), e não um defeito confirmado da página.",
+      "suggested_fix": "Recapturar forçando o carregamento de imagens lazy (como já foi feito para content-visibility) antes de tratar este ponto como resolvido ou como regressão."
+    },
+    {
+      "severity": "PREFERENCIA",
+      "version": "V3",
+      "route": "home (estado de sucesso do formulário)",
+      "viewport": "390x844",
+      "file": "docs/uiux-evidence/issue-532-cta-form-next-state/home-success-receipt-390x844.png",
+      "problem": "O número de protocolo mostrado no estado de sucesso ('lead-532000000000000000000000') parece um valor de fixture determinístico (o '532' corresponde ao número da issue), não um identificador de produção plausível.",
+      "suggested_fix": "Nenhuma ação necessária além de não tratar este valor como representativo do formato real de protocolo em produção."
+    }
+  ],
+  "ranking": {
+    "geral": [
+      { "posicao": 1, "versao": "V3 (piloto)", "motivo": "Única versão testada em todas as 6 rotas; concentra as duas melhorias que batem diretamente nas tarefas atribuídas (título/CTA de medições para a tarefa c; caixa 'o que acontece depois' da triagem para a tarefa d) e adiciona mais material demonstrativo na home sem regressão de identidade." },
+      { "posicao": 2, "versao": "V2 (estudo B)", "motivo": "Onde comparável (home, quantitativos), é equivalente a V3 em quase tudo — mesmo índice interno, mesmos exemplos demonstrativos extras — mas não pode ser ranqueado nas 4 rotas não cobertas." },
+      { "posicao": 3, "versao": "V1 (produção)", "motivo": "Base sólida e honesta, mas com títulos mais genéricos nas páginas de conversão testadas, sem índice interno em páginas longas, e sem a resposta escaneável de 'o que acontece depois' que V3 adiciona." }
+    ],
+    "por_dimensao": {
+      "foco_da_abertura": ["V3", "V2 (empatado, cobertura parcial)", "V1"],
+      "hierarquia": ["V3", "V2 (cobertura parcial)", "V1"],
+      "material_tecnico": ["V3 (empatado com V2 onde comparável)", "V2 (cobertura parcial)", "V1"],
+      "reconhecimento_da_oferta": ["V3", "V1", "V2 (cobertura parcial, empatado com V1 onde comparável)"],
+      "identidade": ["V3", "V1 e V2 (empatados; ressalva sobre /entregas/ em V1 fora das 6 rotas)"],
+      "leitura_movel": ["V1", "V3", "V2 (mais longa onde comparável)"],
+      "esforco_ate_o_contato": ["V3", "V1 e V2 (empatados onde comparável)"]
+    }
+  },
+  "verdict_v3_vs_v1": {
+    "veredito": "superior de forma reconhecível",
+    "motivo": "A superioridade não é uma impressão geral de acabamento: são duas mudanças concretas e verificáveis, cada uma ligada a uma das tarefas atribuídas. (1) Na tarefa 'o boletim de medição voltou glosado', a dobra de /medicoes-glosas-obras-publicas/ em V1 usa um título de categoria genérico ('Medições, glosas e pagamentos em obras públicas') com CTA 'Analisar uma demanda', enquanto V3 usa um título que já é quase a frase do visitante ('O boletim voltou glosado, a medição parou...') com CTA 'Descrever a medição' e um botão de WhatsApp já na dobra — o visitante reconhece a página sem precisar ler a introdução. (2) Na tarefa 'quero falar agora / o que acontece depois', V1 responde em parágrafo corrido dentro de /triagem-tecnica/; V3 substitui isso por uma caixa numerada de três passos com prazos explícitos, repetida de forma consistente nos estados do formulário. Essas duas mudanças são objetivamente melhores para as tarefas testadas, não uma preferência estética. Ressalvas que impedem uma superioridade sem qualificação: V3 herda de V2 uma etiqueta de situação duplicada na home ('Inspeções e perícias' em dois cartões diferentes) que V1 não tem; a seção de contexto de mercado PNCP continua sendo três blocos idênticos nas três versões; e, nas duas rotas onde há dado comparável (home e serviços), V3 é mensuravelmente mais longa que V1 no celular (+5% e +17% de docHeight), então o ganho de reconhecimento tem um custo de rolagem que não foi eliminado."
+  },
+  "changed_after_reading_docs": {
+    "resumo": "A leitura de docs/campaigns/design-institucional/caderno.md não mudou nenhuma das minhas observações primárias (todas foram feitas diretamente nas capturas antes de abrir o documento), mas mudou a interpretação de causa e a calibração de severidade de várias delas.",
+    "pontos": [
+      "O caderno nomeia o mesmo problema que eu vi como 'sete situações em linhas idênticas' (diagnóstico #2) e propõe como correção um 'índice compacto por área de apresentação (6 grupos)' para 7 linhas de situação. Isso me fez reinterpretar a etiqueta duplicada 'Inspeções e perícias' (cartões 03 e 05): não é um erro de copiar-e-colar isolado, é o efeito visível de aplicar um modelo de 6 áreas a 7 linhas sem dar nenhuma pista visual de agrupamento na home — o mesmo agrupamento já existe, sem colisão de rótulo, em /servicos/ de V3. Rebaixei a severidade de ALTA (hipótese inicial de 'parece erro') para MÉDIA e troquei a correção sugerida de 'renomear o cartão' para 'aplicar o mesmo padrão de agrupamento visual de /servicos/', já que o caderno (§3) lista os hrefs/textos desses cartões como contrato preservado (`test_home_conversion_contract::test_situation_chooser`, `public-ia-map`) — uma renomeação simples arriscaria colidir com esse contrato.",
+      "O caderno (diagnóstico #4) já nomeia a seção 'Contratos reais, diferentes portes' como 'grade de três cartões iguais (padrão listado como proibido)' e diz que a correção pretendida é apresentá-los como 'tabela regrada'. Ao comparar diretamente V1 (home-1440x1000-full-prod.jpg, parte 3) com V3 (home-1440x1000-full-pilot.jpg, parte 4) e com a versão 390px de V3, confirmei que essa seção não mudou visivelmente nas capturas — continua três blocos com o mesmo esqueleto. Isso é uma lacuna entre a intenção registrada no caderno e o que a captura do piloto realmente mostra; registrei como achado de experiência (repetição de esqueleto) e não apenas como não-conformidade de plano.",
+      "O caderno (diagnóstico #5, #6, #7) confirma que os dois deltas que encontrei nas tarefas c e d (título da dobra de medições; caixa 'o que acontece depois' da triagem) foram mudanças pretendidas deliberadamente, não acidentes de redesenho — isso reforça a confiança de que são melhorias reais e intencionais, não coincidências da captura.",
+      "O caderno registra que a primeira captura de produção mostrou 'faixas em branco (artefato de captura, não defeito da página)' e foi descartada. Esse precedente, mais a confirmação de que o asset do retrato existe e está referenciado com `loading=\"lazy\"` no index.html do piloto, me fez rebaixar o retrato cinza vazio em 'Quem assina' de um achado de severidade média/alta para uma nota de verificação (PREFERÊNCIA), em vez de tratá-lo como defeito confirmado.",
+      "O caderno confirma que a página 'servico.html' de V2 é de fato o template de quantitativos (h1 'Quantitativos e orçamento de obras'), o que já havia deduzido do manifesto antes de ler o documento — não mudou a interpretação, apenas confirmou.",
+      "Não encontrei no caderno nenhuma menção a /entregas/ ou a uma migração explícita de URL para /casos/demonstrativo-projeto-privado/; mantive esse ponto como observação registrada (as duas páginas têm propósitos diferentes), não como suposição de rename."
+    ]
+  }
+}

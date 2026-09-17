@@ -20,6 +20,7 @@
   </script>
   <link rel="preload" as="font" type="font/woff2" href="/assets/archivo-var-latin-bf6e041e.woff2" crossorigin="anonymous"/>
 <link rel="stylesheet" href="/styles.css">
+<link href="/assets/editorial.css" rel="stylesheet"/>
   <link rel="stylesheet" href="/triagem-tecnica/styles.css">
   <script defer src="/script.js"></script>
 </head>
@@ -56,23 +57,30 @@
 
     <header class="triage-intro">
       <p class="triage-eyebrow">Contato e triagem técnica</p>
-      <h1>Conte a situação do seu jeito. Nós nomeamos o serviço.</h1>
+      <h1 class="t-service">Conte a situação do seu jeito. Nós nomeamos o serviço.</h1>
       <p class="triage-lead" data-form-value>Infiltração no prédio, propostas de obra para comparar, projeto para completar ou conferir, valor de imóvel, disputa técnica, segurança do trabalho ou glosa em obra pública: conte sem questionário e sem precisar saber o nome do serviço. A resposta diz o trabalho que assumimos, o que você recebe e o que falta para a proposta.</p>
     </header>
 
     <aside class="channel-card" aria-labelledby="canais-titulo">
       <h2 id="canais-titulo">Fale agora, sem formulário</h2>
-      <p>O contato é direto com o Engº Tiago Sasaki, Engenharia Civil pela EESC-USP, registro profissional ativo no CREA. Escolha o canal mais rápido para você.</p>
-      <div class="channel-actions">
+      <p>O contato é direto com o Engº Tiago Sasaki, Engenharia Civil pela EESC-USP, registro profissional ativo no CREA. Uma ação principal; as outras valem o mesmo.</p>
+      <div class="channel-actions contact-primary">
         <a class="button button-primary" data-fallback-channel="whatsapp" data-asset-id="technical_triage_v1" data-route-family="triagem-tecnica" data-cta-id="technical-triage-alternative-whatsapp" data-cta-position="triage_primary" data-event-name="whatsapp_click" href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20explicar%20uma%20demanda%20t%C3%A9cnica%20e%20entender%20o%20pr%C3%B3ximo%20passo." rel="noopener" target="_blank">Falar pelo WhatsApp</a>
-        <a class="button button-secondary" data-fallback-channel="email" data-asset-id="technical_triage_v1" data-route-family="triagem-tecnica" data-cta-id="technical-triage-alternative-email" data-cta-position="triage_primary" data-event-name="email_click" href="mailto:tiago.sasaki@confenge.com.br?subject=Triagem%20t%C3%A9cnica%20CONFENGE&amp;body=Situa%C3%A7%C3%A3o%20t%C3%A9cnica%3A%0AO%20que%20precisa%20ser%20decidido%20ou%20produzido%3A%0AUrg%C3%AAncia%3A%0ACidade%20e%20UF%2C%20se%20houver%20vistoria%3A%0A">Enviar o contexto por e-mail</a>
+        <a class="text-link channel-alt" data-fallback-channel="email" data-asset-id="technical_triage_v1" data-route-family="triagem-tecnica" data-cta-id="technical-triage-alternative-email" data-cta-position="triage_primary" data-event-name="email_click" href="mailto:tiago.sasaki@confenge.com.br?subject=Triagem%20t%C3%A9cnica%20CONFENGE&amp;body=Situa%C3%A7%C3%A3o%20t%C3%A9cnica%3A%0AO%20que%20precisa%20ser%20decidido%20ou%20produzido%3A%0AUrg%C3%AAncia%3A%0ACidade%20e%20UF%2C%20se%20houver%20vistoria%3A%0A">Enviar o contexto por e-mail</a>
         <a class="text-link" data-fallback-channel="phone" data-asset-id="technical_triage_v1" data-route-family="triagem-tecnica" data-cta-id="technical-triage-alternative-phone" data-cta-position="triage_primary" href="tel:+5548988344559">Ligar para explicar a demanda: (48) 98834-4559</a>
       </div>
-      <p class="form-hint" style="margin-top:1rem"><strong>Este contato é uma conversa técnica, sem contratação nem pagamento.</strong> Não envie documento, planta, CPF ou dados de terceiros nesta etapa; o canal seguro é combinado depois.</p>
+      <p class="form-hint channel-note"><strong>Este contato é uma conversa técnica, sem contratação nem pagamento.</strong> Não envie documento, planta, CPF ou dados de terceiros nesta etapa; o canal seguro é combinado depois.</p>
+      <p class="t-kicker channel-after-title">O que acontece depois</p>
+      <ol class="after after--light channel-after">
+        <li><div><strong>Leitura e resposta.</strong><p>Em até 2 dias úteis; contrato ou obra pública urgente, até 1 dia útil. A resposta nomeia o serviço, a entrega e o que falta reunir.</p></div></li>
+        <li><div><strong>Canal seguro, se precisar.</strong><p>Planta, contrato, laudo ou planilha só entram depois, por canal combinado com você.</p></div></li>
+        <li><div><strong>Proposta.</strong><p>Escopo, responsabilidade técnica, prazo e preço, depois de confirmarmos local, atribuição e ART quando couber.</p></div></li>
+      </ol>
     </aside>
 
     <section class="next-state" aria-labelledby="situacoes-titulo">
-      <h2 id="situacoes-titulo">Se preferir, comece pela situação parecida com a sua</h2>
+      <p class="t-kicker">Comece pela situação</p>
+      <h2 class="t-editorial" id="situacoes-titulo">Se preferir, comece pela situação parecida com a sua</h2>
       <p>Cada item diz o que assumimos e o que você passa a ter em mãos. O link abre o WhatsApp já com a mensagem escrita, ou a página do serviço; você pode contar do seu jeito.</p>
       <ol class="triage-situations">
         <li id="projetos"><strong>Projeto para elaborar, completar, conferir ou compatibilizar.</strong> Elaboramos a disciplina contratada, com atribuição profissional confirmada na proposta, conferimos o projeto de terceiro ou registramos as interferências entre disciplinas, sempre com responsável técnico nomeado. Você recebe o projeto complementar, o relatório de apontamentos ou o registro de interferências para aprovar, orçar ou executar. Não assinamos projeto de terceiros: o autor original decide e corrige. <a href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20elaborar%2C%20revisar%20ou%20compatibilizar%20um%20projeto." rel="noopener" target="_blank">Falar sobre projeto</a></li>
@@ -84,7 +92,8 @@
     </section>
 
     <section class="next-state" aria-labelledby="depois-titulo">
-      <h2 id="depois-titulo">O que dizer no primeiro contato</h2>
+      <p class="t-kicker">Primeiro contato</p>
+      <h2 class="t-editorial" id="depois-titulo">O que dizer no primeiro contato</h2>
       <ol>
         <li>Qual é a situação: projeto, obra, imóvel, perícia, avaliação, segurança do trabalho ou contrato público.</li>
         <li>O que precisa ser decidido, produzido, revisado ou documentado, e para quando.</li>

@@ -625,10 +625,16 @@ def test_mobile_matrix_composition():
     assert 'class="situation-list"' in html
     assert '<li class="situation-row' in html
     assert ".situation-list{" in home_css and ".situation-row{" in home_css
-    # Narrow viewports recompose rows without hiding any of the five paths.
-    assert "@media (max-width:700px)" in home_css
-    assert ".situation-row{grid-template-columns:2rem minmax(0,1fr)" in home_css
-    assert ".situation-row .situation-action{grid-column:2" in home_css
+    # Narrow viewports recompose rows without hiding any of the paths.
+    # 2026-09-17 (salto institucional): the index became a grid of areas (three
+    # columns on wide screens, one on phones); the old assertion pinned the
+    # 2rem index column of the ruled list, which was the drawing, not the
+    # intent. What matters: a narrow breakpoint exists, it collapses the list
+    # to one column, and no rule hides a situation row.
+    narrow_blocks = re.findall(r"@media \(max-width:(?:699|700)px\)\{(?:[^{}]*\{[^}]*\})+\}", home_css)
+    assert narrow_blocks, "narrow breakpoint for the situation index is missing"
+    assert any(".situation-list{grid-template-columns:minmax(0,1fr)}" in b for b in narrow_blocks)
+    assert not re.search(r"\.situation-row[^{]*\{[^}]*display:none", home_css)
 
 
 def test_css_modules_are_concatenated_without_a_framework():
@@ -763,6 +769,16 @@ def _meta_properties(html: str) -> dict[str, str]:
     return properties
 
 
+# Rotas recompostas na direcao editorial "prancha e percurso"
+# (CONFENGE-SALTO-INSTITUCIONAL-01, 2026-09-17, ramo isolado, dono: fundador).
+# Route-exact, nunca glob: uma rota entra aqui quando a sua composicao foi
+# recomposta e recapturada com motivo; a presenca de uma classe no HTML nao
+# basta para sair de um congelamento.
+EDITORIAL_RECOMPOSED_ROUTES = frozenset({
+    "medicoes-glosas-obras-publicas/index.html",
+})
+
+
 def test_raster_title_covers_are_og_only_outside_frozen_bofu_routes():
     """Remove redundant inline cards without bypassing the #128/#226 freeze."""
     frozen_bofu = _capture_unfrozen({
@@ -804,7 +820,16 @@ def test_raster_title_covers_are_og_only_outside_frozen_bofu_routes():
             html,
             re.I,
         )
-        if relative in frozen_bofu:
+        # 2026-09-17 (salto institucional): a route recomposed in the editorial
+        # direction opens with `.svc-open` and carries a technical plate; the
+        # rasterised title card is OG-only there too, on frozen and unfrozen
+        # routes alike (the inventory classed assets/clusters/*.jpg as
+        # unsuitable for the page body).
+        recomposed = relative in EDITORIAL_RECOMPOSED_ROUTES and 'class="svc-open"' in html
+        if relative in frozen_bofu and recomposed:
+            frozen_candidates.add(relative)
+            assert not figures, f"{relative}: recomposed pillar keeps the title card OG-only"
+        elif relative in frozen_bofu:
             frozen_candidates.add(relative)
             assert len(figures) == 1, f"{relative}: frozen cover changed"
             image = re.search(r"<img\b[^>]*>", figures[0], re.I)
@@ -825,7 +850,7 @@ def test_raster_title_covers_are_og_only_outside_frozen_bofu_routes():
                 html,
                 re.I,
             )
-            assert hero and "article-hero" in hero.group(0), (
+            assert recomposed or (hero and "article-hero" in hero.group(0)), (
                 f"{relative}: coverless route must reuse the one-column article hero"
             )
 
@@ -1234,7 +1259,12 @@ def test_pillar_evidence_contrast_on_navy():
     assert len(pillars) == 8
     for path in pillars:
         html = path.read_text(encoding="utf-8")
-        assert 'class="pillar-evidence"' in html, f"{path.relative_to(ROOT)} missing pillar-evidence"
+        # A pillar recomposed in the editorial direction (2026-09-17) states its
+        # evidence in the opening chain and the plate instead of the navy card.
+        recomposed = path.relative_to(ROOT).as_posix() in EDITORIAL_RECOMPOSED_ROUTES
+        assert 'class="pillar-evidence"' in html or (recomposed and 'class="svc-open"' in html), (
+            f"{path.relative_to(ROOT)} missing pillar-evidence"
+        )
 
 
 def test_offer_context_component_css():

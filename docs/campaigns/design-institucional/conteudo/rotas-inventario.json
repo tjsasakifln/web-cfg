@@ -1,0 +1,1061 @@
+{
+  "schema": "confenge.design-institucional.rotas-inventario/1.0",
+  "campaign": "CONFENGE-SALTO-INSTITUCIONAL-01",
+  "provenance": {
+    "date": "2026-09-17",
+    "base_commit": "47da03b64ba701016eec296234b1d14225ebe588",
+    "worktree": "/home/tjsasakifln/code/confenge/.worktrees/salto-01-piloto",
+    "branch": "campaign/salto-institucional-01-piloto",
+    "sources_read": [
+      "AGENTS.md",
+      "docs/campaigns/design-institucional/caderno.md",
+      "data/corporate/intent-family-matrix.v1.json",
+      "data/site/public-ia-map.json",
+      "data/site/brand.json",
+      "data/organic/public-family-registry.json",
+      "data/organic/bofu-intent-matrix.json",
+      "data/bofu-dominance/frozen-specs/hashes.json",
+      "data/bofu-dominance/frozen-specs/unlock-plan.v1.json",
+      "scripts/site/hub_link_matrix.json",
+      "scripts/site/document_intake.py",
+      "js/modules/form.js",
+      "index.html",
+      "servicos/index.html",
+      "quantitativos-orcamento-obras/index.html",
+      "casos/demonstrativo-projeto-privado/index.html",
+      "medicoes-glosas-obras-publicas/index.html",
+      "triagem-tecnica/index.html",
+      "obrigado.html",
+      "scripts/site/test_home_conversion_contract.py",
+      "scripts/site/test_copy_gates.py",
+      "scripts/site/test_integral_solution_copy.py",
+      "scripts/site/test_design_gates.py",
+      "tests/campaigns/orc-b2b-20260913/test_purchase_path.mjs",
+      "tests/commercial/test_cta_form_next_state.mjs"
+    ],
+    "method": "ids extraídos com (?<![-\\w])id=\"...\" (exclui data-asset-id, data-cta-id etc.); hrefs de contato = <a href> começando por https://wa.me, mailto:, tel: ou /triagem-tecnica/#; \"main\" = entre <main e </main>; chrome = header, rodapé, sprite SVG e bolha.",
+    "write_scope": "Somente docs/campaigns/design-institucional/conteudo/. Nenhum HTML, CSS, token ou dado de contrato foi alterado."
+  },
+  "pilot_functions": {
+    "F1": "Abertura e reconhecimento da situação (home)",
+    "F2": "Serviço privado de referência: quantitativos e orçamento",
+    "F3": "Exemplo demonstrativo ligado ao serviço privado",
+    "F4": "Avaliação imobiliária tratada como seção própria",
+    "F5": "Pilar de obras públicas (medição, glosa e pagamento)",
+    "F6": "Contato: formulário, estados, o que acontece depois"
+  },
+  "routes": [
+    {
+      "route": "/",
+      "source_file": "index.html",
+      "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+      "canonical": "https://confenge.com.br/",
+      "indexable": true,
+      "jsonld_types": [
+        "CollegeOrUniversity",
+        "ContactPoint",
+        "Country",
+        "Offer",
+        "Organization",
+        "Person",
+        "Service",
+        "WebPage",
+        "WebSite"
+      ],
+      "body_tag": "<body data-content-cluster=\"home\">",
+      "forms": [
+        "<form action=\"/obrigado\" class=\"contact-form\" data-capture-form data-form-multistep=\"true\" data-ajax=\"true\" id=\"formulario-contato\" method=\"POST\" name=\"diagnostico-b2g\" novalidate data-form-contract=\"next-state/v1\" data-next-state-profile=\"general_triage\" data-runtime-profile=\"shared_lead_form_v1\" data-receipt-required=\"true\">"
+      ],
+      "preserve": {
+        "ids_in_main": [
+          "conteudo",
+          "hero-title",
+          "hero-plan-title",
+          "hero-plan-desc",
+          "jornadas",
+          "situacoes",
+          "situations-title",
+          "situacao-projeto",
+          "situacao-orcamento",
+          "situacao-obra-imovel",
+          "situacao-avaliacao",
+          "situacao-pericia",
+          "situacao-sst",
+          "situacao-obras-publicas",
+          "descrever-situacao",
+          "ofertas",
+          "trust-title",
+          "obras-publicas",
+          "b2g-title",
+          "jornada-contrato",
+          "mercado-pncp",
+          "market-title",
+          "triagem-tecnica",
+          "triage-title",
+          "contato",
+          "formulario-contato",
+          "contact-title",
+          "jornada-hidden",
+          "empresa-site",
+          "form-step-1",
+          "nome",
+          "telefone",
+          "email",
+          "contato-hint",
+          "estagio",
+          "form-step-2",
+          "empresa",
+          "urgencia",
+          "faixa_contrato",
+          "risco_em_jogo",
+          "frequencia",
+          "maturidade_documental",
+          "capacidade_interna",
+          "offer-fit-hint",
+          "mensagem",
+          "canal_seguro",
+          "consentimento",
+          "turnstile-slot",
+          "form-status"
+        ],
+        "ids_outside_main_non_chrome": [],
+        "chrome_and_sprite_ids": [
+          "i-arrow",
+          "i-check",
+          "i-menu",
+          "i-close",
+          "i-whatsapp",
+          "i-mail",
+          "i-pin",
+          "inicio",
+          "mobile-menu",
+          "year"
+        ],
+        "contact_hrefs_in_main": [
+          "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20explicar%20uma%20situa%C3%A7%C3%A3o%20t%C3%A9cnica%20e%20entender%20o%20pr%C3%B3ximo%20passo.",
+          "mailto:tiago.sasaki@confenge.com.br?subject=Situa%C3%A7%C3%A3o%20t%C3%A9cnica&body=Ol%C3%A1%2C%20Tiago.%0A%0ASitua%C3%A7%C3%A3o%20t%C3%A9cnica%3A%0AO%20que%20preciso%20decidir%20ou%20resolver%3A%0APrazo%3A%0A",
+          "/triagem-tecnica/#corrigir-o-site",
+          "/triagem-tecnica/#planejamento-publico",
+          "mailto:tiago.sasaki@confenge.com.br?subject=Solicita%C3%A7%C3%A3o%20de%20proposta%20de%20engenharia&body=Ol%C3%A1%2C%20Tiago.%0A%0AServi%C3%A7o%20ou%20necessidade%3A%0AFase%20da%20obra%20ou%20do%20projeto%3A%0ADocumentos%20dispon%C3%ADveis%3A%0APrazo%20da%20decis%C3%A3o%3A%0A",
+          "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20conversar%20sobre%20um%20projeto%20ou%20servi%C3%A7o%20de%20engenharia%20e%20solicitar%20uma%20proposta.",
+          "mailto:tiago.sasaki@confenge.com.br?subject=Contato%20CONFENGE&body=Ol%C3%A1%2C%20Tiago.%0A%0ASitua%C3%A7%C3%A3o%20t%C3%A9cnica%3A%0AO%20que%20preciso%20decidir%20ou%20resolver%3A%0APrazo%3A%0A",
+          "https://wa.me/5548988344559",
+          "mailto:tiago.sasaki@confenge.com.br",
+          "tel:+5548988344559"
+        ],
+        "contact_hrefs_outside_main": [
+          "mailto:tiago.sasaki@confenge.com.br",
+          "tel:+5548988344559",
+          "/triagem-tecnica/#corrigir-o-site",
+          "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20conversar%20sobre%20um%20projeto%20ou%20servi%C3%A7o%20de%20engenharia%20e%20solicitar%20uma%20proposta."
+        ],
+        "fragment_hrefs_in_main": [
+          "#contato"
+        ]
+      },
+      "tests": {
+        "binding": [
+          "scripts/site/test_home_conversion_contract.py",
+          "scripts/site/test_home_first_fold.mjs",
+          "scripts/site/test_home_real_contract_case.py",
+          "scripts/site/test_copy_gates.py",
+          "scripts/site/test_integral_solution_copy.py",
+          "scripts/site/test_design_gates.py",
+          "scripts/site/test_ui_geometry.mjs",
+          "tests/commercial/test_first_fold_contract.mjs",
+          "tests/commercial/test_cta_form_next_state.mjs",
+          "scripts/site/test_inbound_gates.py",
+          "scripts/site/test_public_ia.py",
+          "scripts/site/test_brand_contract.py",
+          "scripts/site/test_document_intake_honesty.py",
+          "scripts/site/test_contact_journeys.mjs",
+          "scripts/site/test_lead_function.mjs",
+          "scripts/site/test_capture_states.mjs",
+          "scripts/site/test_html_integrity.py",
+          "scripts/site/test_scrub_em_dashes.py",
+          "scripts/site/test_site_excellence.py",
+          "scripts/site/test_visitor_redesign.py",
+          "scripts/site/test_structured_identity.py",
+          "scripts/site/test_authority_contract.py",
+          "scripts/site/test_credential_registry.py",
+          "scripts/site/test_nav_taskflow.py",
+          "tests/attribution/test_source_to_service.mjs",
+          "tests/pos-inb-20260911/07/test_browser.mjs",
+          "scripts/site/test_lighthouse_thresholds.mjs",
+          "scripts/site/test_runtime_acceptance_integrated.mjs"
+        ],
+        "sweep_only": [
+          "scripts/pseo/tests/test_commercial_media_versioning.py",
+          "scripts/pseo/tests/test_contract_analysis_build.py",
+          "scripts/pseo/tests/test_cross_repo_integration.py",
+          "scripts/pseo/tests/test_geo_locale_and_reject_withdrawal.py",
+          "scripts/pseo/tests/test_production_audit.py",
+          "scripts/pseo/tests/test_prototype_isolation.py",
+          "scripts/pseo/tests/test_reproducible.py",
+          "scripts/pseo/tests/test_responsive_public_html.py",
+          "scripts/pseo/tests/test_turnstile_build.py",
+          "scripts/pseo/tests/test_wave0_closure.py",
+          "scripts/site/test_affected_selector.mjs",
+          "scripts/site/test_attribution_allowlist.mjs",
+          "scripts/site/test_audit_performance.py",
+          "scripts/site/test_cache_contract.py",
+          "scripts/site/test_conflict_gate.py",
+          "scripts/site/test_convergence_browser.mjs",
+          "scripts/site/test_csp_browser.mjs",
+          "scripts/site/test_deliverable_models.py",
+          "scripts/site/test_deliverables_hub.py",
+          "scripts/site/test_deliverables_hub_ui.mjs",
+          "scripts/site/test_deliverables_live_audit.mjs",
+          "scripts/site/test_design_direction.mjs",
+          "scripts/site/test_epic_td_suite.mjs",
+          "scripts/site/test_ferramentas_brand_footer.py",
+          "scripts/site/test_fingerprint_css.py",
+          "scripts/site/test_font_fallback_metrics.mjs",
+          "scripts/site/test_hub_truth.mjs",
+          "scripts/site/test_interface_coverage.mjs",
+          "scripts/site/test_intranet_gateway.py",
+          "scripts/site/test_lighthouse_infra.mjs",
+          "scripts/site/test_lighthouse_payload.mjs",
+          "scripts/site/test_lighthouse_real_fault_path.mjs",
+          "scripts/site/test_margin_cluster_inventory.mjs",
+          "scripts/site/test_margin_defense_commercial_dod.mjs",
+          "scripts/site/test_margin_defense_select_only.py",
+          "scripts/site/test_money_asset_canary_e2e.mjs",
+          "scripts/site/test_organic_striking_distance_cro_01.py",
+          "scripts/site/test_permissioned_proof.py",
+          "scripts/site/test_public_family_acceptance.mjs",
+          "scripts/site/test_public_server_acceptance.py",
+          "scripts/site/test_raster_conversion.py",
+          "scripts/site/test_redirects.mjs",
+          "scripts/site/test_report_model_599.py",
+          "scripts/site/test_report_model_ui.mjs",
+          "scripts/site/test_responsive_matrix.mjs",
+          "scripts/site/test_robots_policy.py",
+          "scripts/site/test_search_observation.mjs",
+          "scripts/site/test_secrets_scan.mjs",
+          "scripts/site/test_self_deprecating_copy.py",
+          "scripts/site/test_trust_surfaces_responsive.mjs",
+          "scripts/site/test_truthful_gates.py",
+          "scripts/site/test_visible_parity.py",
+          "scripts/site/test_wave1_review_fields.mjs",
+          "scripts/site/test_xray_turnstile_e2e.mjs",
+          "tests/ativacao_20260912/03/test_presentation_and_sharing.py",
+          "tests/bofu_dominance/safe_execution/test_bofu_safe_execution.py",
+          "tests/commercial/test_deliverables_registry.mjs",
+          "tests/commercial/test_offer_fit_copy.mjs",
+          "tests/commercial/test_page_contract_contratos.mjs",
+          "tests/commercial/test_page_contract_execucao.mjs",
+          "tests/commercial/test_page_contract_licitacao.mjs",
+          "tests/commercial/test_page_contract_operacao.mjs",
+          "tests/commercial/test_public_offer_truth.mjs",
+          "tests/commercial/test_real_proof_registry.mjs",
+          "tests/commercial/test_single_commercial_route.mjs",
+          "tests/commercial/test_task_doors.mjs",
+          "tests/data_desk/test_data_desk.py",
+          "tests/data_desk/test_real_asset.py",
+          "tests/demand_radar/test_public_sample.py",
+          "tests/demonstrative/test_private_project_pilot.py",
+          "tests/demonstrative_infrastructure/test_infrastructure_pilot.py",
+          "tests/discovery/test_probe.py",
+          "tests/inb-20260911/12/test_page_contract_projetos_complementares.mjs",
+          "tests/inspecao/test_inspecao_html_honesty.py",
+          "tests/intake/test_quantity_takeoff_path.mjs",
+          "tests/knowledge_funnel/test_visitor_path.py",
+          "tests/local_entity/test_gates.py",
+          "tests/local_entity/test_graph.py",
+          "tests/local_entity/test_run.py",
+          "tests/pos-inb-20260911/01/test_attribution_context.mjs",
+          "tests/pos-inb-20260911/01/test_browser_journey.mjs",
+          "tests/pos-inb-20260911/03/test_assemble_nested_public_data.py",
+          "tests/pos-inb-20260911/03/test_verify_promised_public_resources.mjs",
+          "tests/pos-inb-20260911/04/test_destination_map_composition.mjs",
+          "tests/pos-inb-20260911/08/test_gates.py"
+        ],
+        "grep_note": "binding = asserta sobre marcação ou cópia desta rota; sweep_only = a rota só entra por universo derivado (manifesto, sitemap, varredura de HTML público). Grep em scripts/site, tests/ e scripts/pseo/tests em 2026-09-17. binding_via_derived_scope = gate que cobre a rota sem citar o caminho literal (varredura de todo HTML público, universo do registro de famílias, inventário de formulários ou FROZEN_RELATIVE_PATHS de document_intake.py).",
+        "binding_via_derived_scope": []
+      },
+      "visitor": "Comprador público ou privado que ainda não sabe o nome do serviço: quer reconhecer a própria situação, ver o que a CONFENGE assume e entrega, e escolher a próxima ação.",
+      "task": "Reconhecer a situação, entender trabalho e entrega, confiar em quem assina e iniciar contato (formulário, WhatsApp ou e-mail).",
+      "generated": "Escrito à mão (fonte rastreada). scripts/pseo/build_site.py normaliza a cópia, injeta CSP e copia para _site/; o bloco crítico da primeira dobra vive inline no head; assets/home-10x.css só nesta rota. Sem gerador por dados.",
+      "family": {
+        "id": "home",
+        "profile": "commercial_content",
+        "visitor_job": "Entender em 5 segundos como a CONFENGE transforma problemas de engenharia, perícias, segurança do trabalho e obras públicas em decisões documentadas, reconhecer a própria situação e escolher a próxima ação.",
+        "terminal_action": "capture_form_or_whatsapp",
+        "gate_coverage": {
+          "conversion": "full",
+          "copy": "full",
+          "accessibility": "full"
+        },
+        "owner_issue": 577
+      },
+      "pilot_functions": [
+        "F1",
+        "F6"
+      ],
+      "contract_notes": [
+        "Sete situation-row com h3, situation-use e \"passa a ter\" dentro de #situacoes; hrefs exatos de public-ia-map.service_situations; nenhum href=\"/triagem-tecnica/#\" dentro do chooser.",
+        "Hero: um único button-primary para /servicos/; eyebrow \"Engenharia, Perícias e Inteligência Técnica\"; \"Engenharia Civil pela EESC-USP\"; \"CNPJ 52.407.089/0001-09\"; rótulo demonstrativ no parágrafo; sem PNCP/54.055/4,48 mi.",
+        "#obras-publicas com \"PNCP · 01/08/2026\", \"54.055\", \"4,48 mi\", href=\"/servicos-obras-publicas/\"; #situacoes antes de #obras-publicas.",
+        "#formulario-contato byte-idêntico (CAPTURE_FORM_SHA256 798d9b47..., 23 controles, 3 obrigatórios, action=\"/obrigado\", name=\"diagnostico-b2g\", document_intent=secure_channel_request); #form-status e #turnstile-slot ficam dentro do form congelado.",
+        "#triagem-tecnica precisa conter mailto:tiago.sasaki@confenge.com.br, wa.me/5548988344559 e \"Não envie documentos sensíveis\".",
+        "Arquétipos: 5 a 8 blocos data-section-archetype no main, >=5 distintos, journey_paths obrigatório, class=\"situation-list\" com >=5 linhas, no máximo 2 grades legadas.",
+        "Literais exigidos por test_copy_gates em qualquer parte do arquivo: \"contrato sob pressão\", \"edital e proposta\", \"operação recorrente\", \"solicitar canal seguro para envio\", \"operação de proposta para licitação crítica\" (hoje só no JSON-LD), \"defesa técnica\" ou \"proteção de margem\". Sem travessão no arquivo.",
+        "Âncoras legadas #jornadas e #ofertas (anchor-alias) continuam existindo."
+      ]
+    },
+    {
+      "route": "/servicos/",
+      "source_file": "servicos/index.html",
+      "robots": "index,follow",
+      "canonical": "https://confenge.com.br/servicos/",
+      "indexable": true,
+      "jsonld_types": [
+        "BreadcrumbList",
+        "ItemList",
+        "ListItem",
+        "WebPage"
+      ],
+      "body_tag": "<body data-content-cluster=\"corporate-services\">",
+      "forms": [],
+      "preserve": {
+        "ids_in_main": [
+          "conteudo",
+          "services-title",
+          "services-list-title",
+          "servico-projeto",
+          "servico-revisao",
+          "servico-compatibilizacao",
+          "servico-orcamento",
+          "servico-diagnostico",
+          "servico-avaliacao",
+          "servico-pericia",
+          "servico-sst",
+          "servico-obras-publicas",
+          "services-flow-title",
+          "services-boundary-title",
+          "services-signer-title",
+          "services-contact-title"
+        ],
+        "ids_outside_main_non_chrome": [],
+        "chrome_and_sprite_ids": [
+          "i-arrow",
+          "i-menu",
+          "i-close",
+          "inicio",
+          "mobile-menu",
+          "year"
+        ],
+        "contact_hrefs_in_main": [
+          "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20explicar%20uma%20situa%C3%A7%C3%A3o%20t%C3%A9cnica%20e%20entender%20o%20pr%C3%B3ximo%20passo.",
+          "/triagem-tecnica/#projetos",
+          "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20de%20avalia%C3%A7%C3%A3o%20de%20im%C3%B3vel.",
+          "mailto:tiago.sasaki@confenge.com.br?subject=Avalia%C3%A7%C3%A3o%20de%20im%C3%B3vel",
+          "/triagem-tecnica/#pericia-avaliacao",
+          "/triagem-tecnica/#planejamento-publico",
+          "mailto:tiago.sasaki@confenge.com.br",
+          "tel:+5548988344559"
+        ],
+        "contact_hrefs_outside_main": [
+          "mailto:tiago.sasaki@confenge.com.br",
+          "tel:+5548988344559",
+          "/triagem-tecnica/#corrigir-o-site"
+        ],
+        "fragment_hrefs_in_main": [
+          "#servico-revisao",
+          "#servico-compatibilizacao"
+        ]
+      },
+      "tests": {
+        "binding": [
+          "scripts/site/test_home_conversion_contract.py",
+          "scripts/site/test_hub_link_matrix.py",
+          "scripts/site/test_nav_taskflow.py",
+          "scripts/site/test_design_gates.py",
+          "scripts/site/test_ui_geometry.mjs",
+          "scripts/site/test_indexation_evidence.py",
+          "scripts/site/test_robots_policy.py",
+          "scripts/site/test_contact_journeys.mjs",
+          "scripts/site/test_visitor_redesign.py",
+          "tests/pos-inb-20260911/07/test_navigation.py",
+          "tests/pos-inb-20260911/07/test_counterexamples.py",
+          "tests/pos-inb-20260911/07/test_browser.mjs",
+          "tests/attribution/test_source_to_service.mjs"
+        ],
+        "sweep_only": [
+          "scripts/site/test_attribution_allowlist.mjs",
+          "scripts/site/test_deliverables_hub.py",
+          "scripts/site/test_deliverables_hub_ui.mjs",
+          "scripts/site/test_home_first_fold.mjs",
+          "scripts/site/test_home_real_contract_case.py",
+          "scripts/site/test_interface_coverage.mjs",
+          "scripts/site/test_lead_function.mjs",
+          "scripts/site/test_production_cutover.mjs",
+          "scripts/site/test_redirects.mjs",
+          "tests/bofu_dominance/core/test_buyer_decision_map.py",
+          "tests/campaigns/pos_inb_20260911/10/test_composition.mjs",
+          "tests/pos-inb-20260911/01/test_attribution_context.mjs"
+        ],
+        "grep_note": "binding = asserta sobre marcação ou cópia desta rota; sweep_only = a rota só entra por universo derivado (manifesto, sitemap, varredura de HTML público). Grep em scripts/site, tests/ e scripts/pseo/tests em 2026-09-17. binding_via_derived_scope = gate que cobre a rota sem citar o caminho literal (varredura de todo HTML público, universo do registro de famílias, inventário de formulários ou FROZEN_RELATIVE_PATHS de document_intake.py).",
+        "binding_via_derived_scope": [
+          "scripts/site/test_copy_gates.py",
+          "scripts/site/test_integral_solution_copy.py"
+        ]
+      },
+      "visitor": "Comprador que reconheceu a situação na home ou chegou pela navegação e quer ver o que assumimos, o que passa a ter e o caminho direto para cada serviço.",
+      "task": "Escolher a linha correspondente à situação e seguir para a página do serviço ou para o contato; a seção #servico-avaliacao é o destino contratual de avaliação de imóvel.",
+      "generated": "Escrito à mão (fonte rastreada); build_site.py normaliza e copia. Sem gerador por dados.",
+      "family": {
+        "id": "servicos-corporativos",
+        "profile": "commercial_content",
+        "visitor_job": "Reconhecer a situação técnica, entender entregas e limites possíveis e seguir para uma triagem funcional sem precisar conhecer a estrutura interna da CONFENGE.",
+        "terminal_action": "capture_form_or_whatsapp",
+        "gate_coverage": {
+          "conversion": "full",
+          "copy": "full",
+          "accessibility": "full"
+        },
+        "owner_issue": 582,
+        "index_evidence": "first_party_publication"
+      },
+      "pilot_functions": [
+        "F4",
+        "F1"
+      ],
+      "contract_notes": [
+        "robots exatamente content=\"index,follow\"; canonical https://confenge.com.br/servicos/; \"Serviços organizados por situação\" presente.",
+        "Conjunto de ids de article.corporate-service-row sem duplicata: servico-projeto, servico-revisao, servico-compatibilizacao, servico-orcamento, servico-diagnostico, servico-avaliacao, servico-pericia, servico-sst, servico-obras-publicas; ordem editorial livre; cada linha com \"O que assumimos\" e \"passa a ter\".",
+        "Nenhum R$ seguido de dígito; sem \"campanha\"; sem \"família pública\".",
+        "#servico-avaliacao mantém data-hub-link=\"servicos-avaliacao\" (hub_link_matrix REQUIRED_LINK) e os três canais atuais.",
+        "Fragmentos internos #servico-revisao e #servico-compatibilizacao são alvos de links no próprio arquivo; /triagem-tecnica/#projetos, #pericia-avaliacao e #planejamento-publico existem na triagem."
+      ],
+      "section_servico_avaliacao": {
+        "id": "servico-avaliacao",
+        "data_hub_link": "servicos-avaliacao",
+        "hub_link_matrix_entry": {
+          "kind": "REQUIRED_LINK",
+          "href": "/servicos/#servico-avaliacao",
+          "label": "Avaliação de imóvel",
+          "intent_family_declared_in_matrix_json": "produzir_prova_tecnica",
+          "note": "Divergência registrada: a matriz de intenção tem a família avaliar_imovel (property_valuation); ver conflitos em index-areas.json."
+        },
+        "preserve_literals": [
+          "Parecer preliminar não substitui a avaliação formal",
+          "O que assumimos",
+          "O que você passa a ter"
+        ],
+        "channels": [
+          "https://wa.me/5548988344559?text=Olá, Tiago. Preciso de avaliação de imóvel. (codificado no HTML)",
+          "mailto:tiago.sasaki@confenge.com.br?subject=Avaliação de imóvel (codificado no HTML)",
+          "/triagem-tecnica/#pericia-avaliacao"
+        ]
+      }
+    },
+    {
+      "route": "/quantitativos-orcamento-obras/",
+      "source_file": "quantitativos-orcamento-obras/index.html",
+      "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+      "canonical": "https://confenge.com.br/quantitativos-orcamento-obras/",
+      "indexable": true,
+      "jsonld_types": [
+        "BreadcrumbList",
+        "Country",
+        "ListItem",
+        "Service",
+        "WebPage"
+      ],
+      "body_tag": "<body data-content-cluster=\"private-engineering-quantities-budget\" data-analytics-surface=\"private-quantities-budget\">",
+      "forms": [],
+      "preserve": {
+        "ids_in_main": [
+          "conteudo",
+          "qty-title",
+          "qty-check-title",
+          "amostra-quantitativos",
+          "qty-sample-title",
+          "qty-plan-t",
+          "qty-plan-d",
+          "exemplos-conferiveis",
+          "qty-proof-entrances-title",
+          "qty-trail-title",
+          "qty-sample-trail",
+          "qty-proof-entrances",
+          "o-que-contratar",
+          "qty-buy-title",
+          "quem-contrata",
+          "levantamento-quantitativos",
+          "elaboracao-orcamento",
+          "revisao-orcamento",
+          "qty-output-title",
+          "metodo-quantitativos",
+          "qty-method-title",
+          "condicoes-da-proposta",
+          "qty-conditions-title",
+          "projeto-parcial",
+          "qty-partial-title",
+          "o-que-influencia",
+          "qty-factors-title",
+          "publico-e-privado",
+          "qty-public-private-title",
+          "decisoes",
+          "qty-decisions-title",
+          "qty-proof-title",
+          "qty-limits-title",
+          "triagem-quantitativos",
+          "qty-triage-title",
+          "qty-channels-title"
+        ],
+        "ids_outside_main_non_chrome": [],
+        "chrome_and_sprite_ids": [
+          "i-arrow",
+          "i-menu",
+          "i-close",
+          "inicio",
+          "mobile-menu",
+          "year"
+        ],
+        "contact_hrefs_in_main": [
+          "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20solicitar%20proposta%20de%20levantamento%20de%20quantitativos%20ou%20or%C3%A7amento%20de%20uma%20obra.",
+          "mailto:tiago.sasaki@confenge.com.br?subject=Proposta%20de%20quantitativos%20e%20or%C3%A7amento",
+          "tel:+5548988344559"
+        ],
+        "contact_hrefs_outside_main": [
+          "mailto:tiago.sasaki@confenge.com.br",
+          "tel:+5548988344559",
+          "/triagem-tecnica/#corrigir-o-site"
+        ],
+        "fragment_hrefs_in_main": [
+          "#triagem-quantitativos"
+        ]
+      },
+      "tests": {
+        "binding": [
+          "tests/campaigns/orc-b2b-20260913/test_purchase_path.mjs",
+          "tests/pos-inb-20260911/02/test_purchase_proof.mjs",
+          "tests/intake/test_quantity_takeoff_path.mjs",
+          "tests/intake/test_mv03_adaptive_intake.mjs",
+          "tests/ativacao_20260912/03/test_presentation_and_sharing.py",
+          "scripts/site/test_copy_gates.py",
+          "scripts/site/test_integral_solution_copy.py",
+          "scripts/site/test_home_conversion_contract.py",
+          "scripts/site/test_hub_link_matrix.py",
+          "scripts/site/test_public_ia.py",
+          "scripts/site/test_brand_contract.py",
+          "scripts/site/test_truthful_gates.py",
+          "scripts/site/test_ui_geometry.mjs",
+          "scripts/site/test_contact_journeys.mjs",
+          "tests/commercial/test_cta_form_next_state.mjs",
+          "tests/pos-inb-20260911/04/test_copy_and_static.mjs",
+          "tests/pos-inb-20260911/04/test_destination_map_composition.mjs",
+          "tests/pos-inb-20260911/07/test_navigation.py",
+          "tests/pos-inb-20260911/07/test_counterexamples.py",
+          "tests/coordination/test_page_contract.mjs"
+        ],
+        "sweep_only": [
+          "scripts/pseo/tests/test_turnstile_build.py",
+          "scripts/site/test_convergence_browser.mjs",
+          "scripts/site/test_deliverables_hub.py",
+          "scripts/site/test_interface_coverage.mjs",
+          "scripts/site/test_private_project_technical_readiness.mjs",
+          "scripts/site/test_visitor_redesign.py",
+          "tests/bofu_dominance/core/test_buyer_decision_map.py",
+          "tests/campaigns/pos_inb_20260911/10/test_composition.mjs",
+          "tests/commercial/test_deliverables_registry.mjs",
+          "tests/commercial/test_task_doors.mjs",
+          "tests/coordination/test_contents.mjs",
+          "tests/inb-20260911/12/test_page_contract_projetos_complementares.mjs",
+          "tests/pos-inb-20260911/04/test_scenario_matrix.mjs",
+          "tests/pos-inb-20260911/06/test_url_checklist.py"
+        ],
+        "grep_note": "binding = asserta sobre marcação ou cópia desta rota; sweep_only = a rota só entra por universo derivado (manifesto, sitemap, varredura de HTML público). Grep em scripts/site, tests/ e scripts/pseo/tests em 2026-09-17. binding_via_derived_scope = gate que cobre a rota sem citar o caminho literal (varredura de todo HTML público, universo do registro de famílias, inventário de formulários ou FROZEN_RELATIVE_PATHS de document_intake.py).",
+        "binding_via_derived_scope": []
+      },
+      "visitor": "Construtora, empresa de engenharia, escritório de projeto, incorporadora, loteador ou proprietário com propostas para comparar, obra para contratar ou número para aceitar, sem base própria; obra pública ou privada.",
+      "task": "Entender que contrata um serviço de engenharia (não software), conferir a amostra, escolher levantamento, elaboração ou revisão e pedir proposta por WhatsApp, e-mail ou telefone.",
+      "generated": "Escrito à mão com dois blocos gerados e delimitados por comentário: <!--pos-inb-02:qty-trail--> ... (#qty-sample-trail, composto por scripts/campaigns/pos-inb-20260911/02/compose_purchase_proof.mjs a partir de quantitativos-orcamento-obras/sample-trail.mjs) e <!--orc-b2b-20260913:proof-entrances--> ... <!--/orc-b2b-20260913:proof-entrances--> (#qty-proof-entrances, composto por scripts/campaigns/orc-b2b-20260913/compose_proof_entrances.mjs a partir de quantitativos-orcamento-obras/proof-entrances.mjs). Os dois derivam de data/demonstrative/* e reprovam se editados no HTML. Formulário: não há form no HTML; assets/js/adaptive-intake.js (runtime adaptive_intake_standalone_v1, config /.netlify/functions/adaptive-intake-config?intake_context=quantities_budget) decide em runtime; fallback declarado: WhatsApp, e-mail, telefone.",
+      "family": {
+        "id": "private-engineering-quantities-budget",
+        "profile": "commercial_content",
+        "visitor_job": "Enquadrar uma base documental de quantitativos ou orçamento de obra privada, entender artefatos, método e limites e solicitar retorno com dados mínimos.",
+        "terminal_action": "capture_form_or_whatsapp",
+        "gate_coverage": {
+          "conversion": "full",
+          "copy": "full",
+          "accessibility": "full"
+        },
+        "owner_issue": 611,
+        "value_first_header_cta": {
+          "mode": "local_fragment_before_contact",
+          "label": "Solicitar proposta de orçamento",
+          "href": "#triagem-quantitativos"
+        },
+        "index_evidence": "first_party_publication"
+      },
+      "pilot_functions": [
+        "F2",
+        "F3"
+      ],
+      "contract_notes": [
+        "H1 \"Quantitativos e orçamento de obras\"; primeiros 1200 caracteres de texto sem \"revisão técnica de projetos\".",
+        "Frases que precisam sobreviver em algum lugar da página: \"serviço de engenharia contratado\", \"não é software\", \"planilha gratuita\", \"demanda pequena\", \"obra pública\", \"documentação inicial incompleta não\", \"insumos possíveis\", \"não pedimos campos de licitação\", \"Amostra demonstrativa\", \"Preços hipotéticos daquele recorte não são preço do serviço\", \"nem preço da CONFENGE\", \"Área das paredes menos as aberturas descontáveis.\", \"exemplo demonstrativo\", \"construtora\", \"empresa de engenharia\", \"escritório de projeto\", \"terceirizar\".",
+        "Proibidos no texto: \"informe o cnpj\", \"informe o cpf\", \"valor da obra\", \"endereço exato da obra\".",
+        "Ids cobrados por teste: levantamento-quantitativos, elaboracao-orcamento, revisao-orcamento, projeto-parcial, amostra-quantitativos, triagem-quantitativos, qty-sample-trail, qty-proof-entrances; atributos data-proof-entrance=\"edificacao\"/\"infraestrutura\", data-trail-step=\"quantity\", data-trail-memory=\"true\", data-proof-quantity, data-proof-item; \"19,60 m²\" na memória; os 8 CSVs linkados precisam existir.",
+        "Contato: pelo menos um href wa.me, um mailto: e um tel:+ no corpo; a mensagem do WhatsApp precisa citar quantitativos ou orçamento.",
+        "JSON-LD: WebPage, Service, BreadcrumbList (Início > Serviços e problemas > Quantitativos e orçamento).",
+        "Faixa dl.keys (Cliente / Revisão / Entregáveis / Responsável técnico) dentro de #amostra-quantitativos; tabela real quantitativos.csv (7 linhas) em #exemplos-conferiveis."
+      ]
+    },
+    {
+      "route": "/casos/demonstrativo-projeto-privado/",
+      "source_file": "casos/demonstrativo-projeto-privado/index.html",
+      "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+      "canonical": "https://confenge.com.br/casos/demonstrativo-projeto-privado/",
+      "indexable": true,
+      "jsonld_types": [
+        "BreadcrumbList",
+        "ListItem",
+        "Organization",
+        "Person",
+        "TechArticle"
+      ],
+      "body_tag": "<body data-route-family=\"casos\" data-source=\"CONFENGE_WEB\" data-asset-id=\"demo-private-project-pilot-2026-09\">",
+      "forms": [],
+      "preserve": {
+        "ids_in_main": [
+          "conteudo",
+          "o-que-e",
+          "plantas",
+          "plan-R00-title",
+          "plan-R00-desc",
+          "plan-R01-title",
+          "plan-R01-desc",
+          "elv-R00-title",
+          "elv-R00-desc",
+          "elv-R01-title",
+          "elv-R01-desc",
+          "quantitativos",
+          "orcamento",
+          "compatibilizacao",
+          "CF-GEO-01",
+          "CF-INFO-01",
+          "revisao",
+          "RF-01",
+          "RF-02",
+          "contratar"
+        ],
+        "ids_outside_main_non_chrome": [],
+        "chrome_and_sprite_ids": [
+          "i-arrow",
+          "i-check",
+          "i-chart",
+          "i-shield",
+          "i-building",
+          "i-file",
+          "i-menu",
+          "i-close",
+          "i-whatsapp",
+          "inicio",
+          "mobile-menu",
+          "year"
+        ],
+        "contact_hrefs_in_main": [
+          "/triagem-tecnica/#corrigir-o-site",
+          "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20vi%20o%20exemplo%20demonstrativo%20de%20recorte%20de%20projeto%20privado%20e%20quero%20pedir%20quantitativos%2C%20or%C3%A7amento%2C%20revis%C3%A3o%20ou%20compatibiliza%C3%A7%C3%A3o%20do%20meu%20projeto.",
+          "/triagem-tecnica/#projetos"
+        ],
+        "contact_hrefs_outside_main": [
+          "mailto:tiago.sasaki@confenge.com.br",
+          "tel:+5548988344559",
+          "/triagem-tecnica/#corrigir-o-site",
+          "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20vi%20o%20exemplo%20demonstrativo%20de%20recorte%20de%20projeto%20privado%20e%20quero%20pedir%20quantitativos%2C%20or%C3%A7amento%2C%20revis%C3%A3o%20ou%20compatibiliza%C3%A7%C3%A3o%20do%20meu%20projeto."
+        ],
+        "fragment_hrefs_in_main": []
+      },
+      "tests": {
+        "binding": [
+          "tests/demonstrative/test_private_project_pilot.py",
+          "scripts/pseo/tests/test_demonstrative_csv_packaging.py",
+          "tests/pos-inb-20260911/02/test_purchase_proof.mjs",
+          "tests/pos-inb-20260911/03/test_verify_promised_public_resources.mjs",
+          "tests/campaigns/orc-b2b-20260913/test_purchase_path.mjs",
+          "tests/intake/test_quantity_takeoff_path.mjs",
+          "tests/intake/test_inb05_project_review_extract.mjs",
+          "tests/coordination/test_page_contract.mjs",
+          "tests/coordination/test_register_status.mjs",
+          "tests/ativacao_20260912/03/test_presentation_and_sharing.py",
+          "scripts/site/test_hub_link_matrix.py",
+          "scripts/site/test_cache_contract.py",
+          "tests/pos-inb-20260911/07/test_navigation.py"
+        ],
+        "sweep_only": [
+          "tests/campaigns/pos_inb_20260911/10/test_composition.mjs",
+          "tests/pos-inb-20260911/03/test_assemble_nested_public_data.py",
+          "tests/pos-inb-20260911/05/test_partner_kits_contract.mjs",
+          "tests/pos-inb-20260911/07/test_counterexamples.py"
+        ],
+        "grep_note": "binding = asserta sobre marcação ou cópia desta rota; sweep_only = a rota só entra por universo derivado (manifesto, sitemap, varredura de HTML público). Grep em scripts/site, tests/ e scripts/pseo/tests em 2026-09-17. binding_via_derived_scope = gate que cobre a rota sem citar o caminho literal (varredura de todo HTML público, universo do registro de famílias, inventário de formulários ou FROZEN_RELATIVE_PATHS de document_intake.py).",
+        "binding_via_derived_scope": []
+      },
+      "visitor": "Quem quer conferir o método antes de pedir: escritório, construtora ou proprietário que precisa ver planilha com memória, revisão e registro de interferências em um recorte aberto.",
+      "task": "Refazer a conta na página, no CSV ou na planta; distinguir exemplo demonstrativo de trabalho de cliente; seguir para o serviço correspondente.",
+      "generated": "Gerado: scripts/demonstrative/private_project/render.py (dados em data/demonstrative/private_project via derive.py; CSVs em casos/demonstrativo-projeto-privado/data/, SVGs em assets/). Qualquer mudança de cópia entra pelo gerador, nunca no HTML.",
+      "family": {
+        "id": "casos",
+        "profile": "commercial_content",
+        "visitor_job": "Distinguir exemplos de entrega demonstrativos de trabalho real autorizado, publicado só com autorização, fonte e data.",
+        "terminal_action": "capture_form_or_whatsapp",
+        "match": "prefix /casos/",
+        "gate_coverage": {
+          "conversion": "full",
+          "copy": "full",
+          "accessibility": "full"
+        },
+        "owner_issue": 61,
+        "index_evidence": "first_party_publication (demonstrativo rotulado)"
+      },
+      "pilot_functions": [
+        "F3"
+      ],
+      "contract_notes": [
+        "Números da amostra (2,40 × 1,80, 2,60 de pé-direito, 21,84, 1,68, 0,56, 19,60, Q-PAR-01, ORC-PAR-01, R$ 4.250,35 hipotético) são fonte única para a home e para /quantitativos-orcamento-obras/; não alterar.",
+        "Âncoras consumidas de fora: #quantitativos (quantitativos e home), #CF-GEO-01 (/servicos/), #orcamento, #compatibilizacao, #revisao, #contratar.",
+        "Rótulos \"exemplo demonstrativo\", \"hipotético\", \"Não é obra de cliente\" obrigatórios; a família /casos/ tem débito route-exact em duas outras rotas (até 2026-09-30), não nesta.",
+        "JSON-LD TechArticle + BreadcrumbList + Organization + Person."
+      ]
+    },
+    {
+      "route": "/medicoes-glosas-obras-publicas/",
+      "source_file": "medicoes-glosas-obras-publicas/index.html",
+      "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+      "canonical": "https://confenge.com.br/medicoes-glosas-obras-publicas/",
+      "indexable": true,
+      "jsonld_types": [
+        "Answer",
+        "BreadcrumbList",
+        "CollectionPage",
+        "CollegeOrUniversity",
+        "ContactPoint",
+        "Country",
+        "FAQPage",
+        "ItemList",
+        "ListItem",
+        "Organization",
+        "Person",
+        "Question",
+        "Service",
+        "WebSite"
+      ],
+      "body_tag": "<body data-route-family=\"medicoes-glosas\" data-asset-id=\"medicoes-glosas-obras-publicas\" data-cta-id=\"pillar_hero\" data-journey=\"contrato\">",
+      "forms": [
+        "<form class=\"pillar-capture-form\" name=\"diagnostico-confenge\" method=\"post\" action=\"/.netlify/functions/lead\" data-offer-id=\"\" data-cta-id=\"medicoes-glosas-obras-publicas-handraise\" data-asset-id=\"medicoes-glosas-obras-publicas\" data-route-family=\"medicoes-glosas\" data-cta-position=\"pillar_capture\" data-form-contract=\"next-state/v1\" data-next-state-profile=\"service_fit_review\" data-runtime-profile=\"shared_lead_form_v1\" data-receipt-required=\"true\">"
+      ],
+      "preserve": {
+        "ids_in_main": [
+          "conteudo",
+          "quando-ajuda",
+          "executado-medido-contratado-evidenciado",
+          "entrega-dossie",
+          "exemplo-demonstrativo",
+          "guias",
+          "quando-nao-contratar",
+          "captura-pilar",
+          "jornada-hidden",
+          "estagio",
+          "nome",
+          "empresa",
+          "email",
+          "telefone",
+          "mensagem",
+          "metodo"
+        ],
+        "ids_outside_main_non_chrome": [],
+        "chrome_and_sprite_ids": [
+          "i-arrow",
+          "i-check",
+          "i-search",
+          "i-file",
+          "i-chart",
+          "i-shield",
+          "i-building",
+          "i-scale",
+          "i-route",
+          "i-users",
+          "i-mail",
+          "i-pin",
+          "i-menu",
+          "i-close",
+          "i-whatsapp",
+          "inicio",
+          "mobile-menu",
+          "year"
+        ],
+        "contact_hrefs_in_main": [
+          "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20glosa%20ou%20medi%C3%A7%C3%A3o%20contestada%20e%20preciso%20enquadrar%20a%20posi%C3%A7%C3%A3o%20t%C3%A9cnica.",
+          "/triagem-tecnica/#corrigir-o-site"
+        ],
+        "contact_hrefs_outside_main": [
+          "mailto:tiago.sasaki@confenge.com.br",
+          "tel:+5548988344559",
+          "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20glosa%20ou%20medi%C3%A7%C3%A3o%20contestada%20e%20preciso%20enquadrar%20a%20posi%C3%A7%C3%A3o%20t%C3%A9cnica."
+        ],
+        "fragment_hrefs_in_main": [
+          "#guias"
+        ]
+      },
+      "tests": {
+        "binding": [
+          "tests/bofu_dominance/frozen_specs/test_frozen_specs.py",
+          "tests/bofu_dominance/core/test_frozen.py",
+          "scripts/site/test_inbound_gates.py",
+          "tests/commercial/test_single_commercial_route.mjs",
+          "tests/commercial/test_offer_fit_copy.mjs",
+          "scripts/site/test_public_ia.py",
+          "scripts/site/test_nav_taskflow.py",
+          "scripts/site/test_brand_contract.py",
+          "scripts/site/test_design_gates.py",
+          "scripts/site/test_contact_journeys.mjs",
+          "tests/attribution/test_source_to_service.mjs",
+          "tests/pos-inb-20260911/06/test_url_checklist.py"
+        ],
+        "sweep_only": [
+          "scripts/pseo/tests/test_turnstile_build.py",
+          "scripts/site/test_visitor_redesign.py",
+          "tests/bofu_dominance/core/test_buyer_decision_map.py"
+        ],
+        "grep_note": "binding = asserta sobre marcação ou cópia desta rota; sweep_only = a rota só entra por universo derivado (manifesto, sitemap, varredura de HTML público). Grep em scripts/site, tests/ e scripts/pseo/tests em 2026-09-17. binding_via_derived_scope = gate que cobre a rota sem citar o caminho literal (varredura de todo HTML público, universo do registro de famílias, inventário de formulários ou FROZEN_RELATIVE_PATHS de document_intake.py).",
+        "binding_via_derived_scope": [
+          "scripts/site/test_document_intake_honesty.py",
+          "tests/commercial/test_cta_form_next_state.mjs",
+          "scripts/site/test_copy_gates.py",
+          "scripts/site/test_integral_solution_copy.py"
+        ]
+      },
+      "visitor": "Empresa contratada em obra pública com boletim glosado, medição parada ou critério de medição em disputa, que precisa organizar prova, calcular o que está em jogo e escrever a posição técnica ao fiscal.",
+      "task": "Entender o que o dossiê entrega, ver que executado, medido, contratado e evidenciado são números diferentes, e descrever a medição pelo formulário da página ou pelo WhatsApp.",
+      "generated": "Escrito à mão e congelado por hash (data/bofu-dominance/frozen-specs/hashes.json, forbidden[\"medicoes-glosas-obras-publicas/index.html\"] = 53bb71bb3edaeae8a325e29d266020a89f5cff72c1be0486c07b19a276a8d3e1, baseline f1bf6da68ecd69bb090f810f90a13f9604aa65a3, recaptura 2026-09-16). Formulário on-page publicado por #695 (componente shared_lead_form_v1). Rota em FROZEN_RELATIVE_PATHS de scripts/site/document_intake.py e em scripts/site/scrub_em_dashes.py. Qualquer mudança exige recaptura revisada via scripts/bofu_dominance/frozen_specs/materialize.py com motivo.",
+      "family": {
+        "id": "service-pillars",
+        "profile": "service_pillar",
+        "visitor_job": "Resolver um evento contratual específico (aditivo, glosa, reequilíbrio, atraso) com a CONFENGE.",
+        "terminal_action": "capture_form",
+        "match": "data/organic/bofu-intent-matrix.json#rows[].canonical_service_route (intent_cluster medicoes-pagamentos)",
+        "gate_coverage": {
+          "conversion": "full",
+          "copy": "full",
+          "accessibility": "full"
+        },
+        "owner_issue": 227,
+        "index_evidence": "first_party_publication (citable_source não aplicável)",
+        "note": "terminal_action capture_form é estrita: o form precisa continuar dentro de <main>; missing_on_page_form é regra dedicada do inbound:gates."
+      },
+      "pilot_functions": [
+        "F5",
+        "F6"
+      ],
+      "contract_notes": [
+        "Sem preço publicado (zero ocorrências de R$) e sem campo document_intent no formulário (zero ocorrências); não inventar nenhum dos dois.",
+        "Formulário: name=\"diagnostico-confenge\", method=post, action=\"/.netlify/functions/lead\", data-form-contract=\"next-state/v1\", data-next-state-profile=\"service_fit_review\", data-runtime-profile=\"shared_lead_form_v1\", data-receipt-required=\"true\", data-cta-id=\"medicoes-glosas-obras-publicas-handraise\", data-route-family=\"medicoes-glosas\", data-cta-position=\"pillar_capture\"; hidden offer_id, terms_id, jornada=contrato, estagio=medicoes-glosas-obras-publicas, origem, asset_id, cta_id, route_family, landing_page; obrigatórios: nome e consentimento; recibo inline \"Protocolo CONFENGE:\".",
+        "JSON-LD: CollectionPage #collection com ItemList numberOfItems 6 (posições 1, 4, 7, 8, 11, 13), Service #service \"Dossiê de Medição, Glosa e Pagamento\", FAQPage (3 perguntas), BreadcrumbList (Início > Contrato sob pressão > Medições...), Organization, Person, WebSite.",
+        "Biblioteca: exatamente 6 guias, os mesmos de bofu-intent-matrix.supporting_indexable_routes: /conteudos/atraso-pagamento-contrato-publico-suspender/, /conteudos/atraso-na-medicao-obra-publica/, /conteudos/pagamento-parcial-etapa-empreitada-global/, /conteudos/medicao-por-evento-obra-publica/, /conteudos/fiscal-nao-assina-medicao-obra-publica/, /conteudos/glosa-por-qualidade-obra-publica/. O \"6\" aparece na cópia, na seção e no JSON-LD.",
+        "body: data-route-family=\"medicoes-glosas\" data-asset-id=\"medicoes-glosas-obras-publicas\" data-cta-id=\"pillar_hero\" data-journey=\"contrato\". Seção #quando-nao-contratar com data-when-not-hire=\"1\"; #metodo com data-surface-type=\"oferta\"; aside lead-inline data-stage-cta=\"exploracao\" para /ferramentas/diagnostico-defesa-margem/.",
+        "Links de saída no corpo: /especialista/tiago-jun-sasaki/, /ferramentas/diagnostico-defesa-margem/, /diretoria-b2g/, /privacidade/, /triagem-tecnica/#corrigir-o-site, /conteudos/fiscal-nao-assina-medicao-obra-publica/ (duas vezes).",
+        "Frase de honestidade que sustenta o gate: \"O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.\""
+      ]
+    },
+    {
+      "route": "/triagem-tecnica/",
+      "source_file": "triagem-tecnica/index.html",
+      "robots": "index,follow",
+      "canonical": "https://confenge.com.br/triagem-tecnica/",
+      "indexable": true,
+      "jsonld_types": [],
+      "body_tag": "<body data-content-cluster=\"triagem-tecnica\">",
+      "forms": [],
+      "preserve": {
+        "ids_in_main": [
+          "conteudo",
+          "canais-titulo",
+          "situacoes-titulo",
+          "projetos",
+          "obra-imovel",
+          "pericia-avaliacao",
+          "sst",
+          "planejamento-publico",
+          "depois-titulo",
+          "corrigir-o-site",
+          "corrigir-o-site-titulo"
+        ],
+        "ids_outside_main_non_chrome": [],
+        "chrome_and_sprite_ids": [
+          "i-arrow",
+          "i-menu",
+          "i-close",
+          "inicio",
+          "mobile-menu",
+          "year"
+        ],
+        "contact_hrefs_in_main": [
+          "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20explicar%20uma%20demanda%20t%C3%A9cnica%20e%20entender%20o%20pr%C3%B3ximo%20passo.",
+          "mailto:tiago.sasaki@confenge.com.br?subject=Triagem%20t%C3%A9cnica%20CONFENGE&body=Situa%C3%A7%C3%A3o%20t%C3%A9cnica%3A%0AO%20que%20precisa%20ser%20decidido%20ou%20produzido%3A%0AUrg%C3%AAncia%3A%0ACidade%20e%20UF%2C%20se%20houver%20vistoria%3A%0A",
+          "tel:+5548988344559",
+          "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20elaborar%2C%20revisar%20ou%20compatibilizar%20um%20projeto.",
+          "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20uma%20obra%20ou%20im%C3%B3vel%20para%20inspecionar%20ou%20documentar.",
+          "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20solicitar%20proposta%20de%20levantamento%20de%20quantitativos%20ou%20or%C3%A7amento%20de%20uma%20obra.",
+          "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20de%20per%C3%ADcia%2C%20assist%C3%AAncia%20t%C3%A9cnica%20ou%20avalia%C3%A7%C3%A3o.",
+          "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20tratar%20seguran%C3%A7a%20do%20trabalho.",
+          "mailto:tiago.sasaki@confenge.com.br?subject=Erro%20no%20site%20da%20CONFENGE&body=Link%20da%20p%C3%A1gina%3A%20%0A%0AO%20que%20precisa%20ser%20corrigido%3A%20",
+          "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Encontrei%20um%20erro%20no%20site%20da%20CONFENGE."
+        ],
+        "contact_hrefs_outside_main": [
+          "mailto:tiago.sasaki@confenge.com.br",
+          "tel:+5548988344559",
+          "/triagem-tecnica/#corrigir-o-site"
+        ],
+        "fragment_hrefs_in_main": []
+      },
+      "tests": {
+        "binding": [
+          "scripts/site/test_integral_solution_copy.py",
+          "scripts/site/test_adaptive_authority.mjs",
+          "tests/intake/test_mv03_adaptive_intake.mjs",
+          "tests/commercial/test_cta_form_next_state.mjs",
+          "scripts/site/test_contact_journeys.mjs",
+          "scripts/site/test_home_conversion_contract.py",
+          "scripts/site/test_public_ia.py",
+          "scripts/site/test_brand_contract.py",
+          "scripts/site/test_design_gates.py",
+          "scripts/site/test_ui_geometry.mjs",
+          "scripts/site/test_runtime_lighthouse_acceptance.mjs",
+          "scripts/site/test_runtime_acceptance_integrated.mjs",
+          "tests/pos-inb-20260911/04/test_copy_and_static.mjs",
+          "tests/pos-inb-20260911/07/test_browser.mjs"
+        ],
+        "sweep_only": [
+          "scripts/pseo/tests/test_turnstile_build.py",
+          "scripts/site/test_convergence_browser.mjs",
+          "scripts/site/test_deliverable_models.py",
+          "scripts/site/test_home_first_fold.mjs",
+          "scripts/site/test_interface_coverage.mjs",
+          "scripts/site/test_lead_function.mjs",
+          "scripts/site/test_permissioned_proof.py",
+          "scripts/site/test_private_project_technical_readiness.mjs",
+          "tests/bofu_dominance/safe_execution/test_bofu_safe_execution.py",
+          "tests/brand/test_logo_contract.mjs",
+          "tests/campaigns/pos_inb_20260911/10/test_composition.mjs",
+          "tests/data_desk/test_real_asset.py",
+          "tests/demonstrative/test_private_project_pilot.py",
+          "tests/demonstrative_infrastructure/test_infrastructure_pilot.py",
+          "tests/inb-20260911/12/test_page_contract_projetos_complementares.mjs",
+          "tests/pos-inb-20260911/01/test_local_capture.mjs"
+        ],
+        "grep_note": "binding = asserta sobre marcação ou cópia desta rota; sweep_only = a rota só entra por universo derivado (manifesto, sitemap, varredura de HTML público). Grep em scripts/site, tests/ e scripts/pseo/tests em 2026-09-17. binding_via_derived_scope = gate que cobre a rota sem citar o caminho literal (varredura de todo HTML público, universo do registro de famílias, inventário de formulários ou FROZEN_RELATIVE_PATHS de document_intake.py).",
+        "binding_via_derived_scope": [
+          "scripts/site/test_copy_gates.py"
+        ]
+      },
+      "visitor": "Quem não sabe o nome do serviço, ou prefere falar direto: quer contar a situação e receber o próximo passo.",
+      "task": "Escolher o canal (WhatsApp, e-mail, telefone) ou a situação parecida, saber o que dizer no primeiro contato e o que recebe em seguida; avisar erro no site.",
+      "generated": "Escrito à mão (fonte rastreada). Sem form no HTML: assets/js/adaptive-intake.js (adaptive_intake_standalone_v1, config /.netlify/functions/adaptive-intake-config) decide em runtime; fallback declarado WhatsApp, e-mail, telefone. Rodapé de autoridade tratado por scripts/site/patch_authority_footers.py e scripts/site/authority.py.",
+      "family": {
+        "id": "triagem-tecnica",
+        "profile": "commercial_content",
+        "visitor_job": "Enquadrar a necessidade técnica em um dos cinco núcleos e solicitar retorno com dados mínimos, quando o recebimento estiver disponível.",
+        "terminal_action": "capture_form_or_whatsapp",
+        "gate_coverage": {
+          "conversion": "full",
+          "copy": "full",
+          "accessibility": "full"
+        },
+        "owner_issue": 577,
+        "capture_availability": "external_authority_fail_closed; withheld_fallback whatsapp, email, telephone"
+      },
+      "pilot_functions": [
+        "F6"
+      ],
+      "contract_notes": [
+        "Âncoras consumidas de fora: #projetos, #obra-imovel, #pericia-avaliacao, #sst, #planejamento-publico, #corrigir-o-site (rodapé de todo o site aponta para #corrigir-o-site).",
+        "robots content=\"index,follow\"; canonical /triagem-tecnica/.",
+        "test_integral_solution_copy::contact_path_problems reprova prefill de WhatsApp só de obra pública e \"orçamento como inspeção\" nesta rota.",
+        "O prazo \"sem prazo prometido em dias\" vale só para o canal de correção do site, não para o contato comercial."
+      ]
+    },
+    {
+      "route": "/obrigado",
+      "source_file": "obrigado.html",
+      "robots": "noindex,follow",
+      "canonical": null,
+      "indexable": false,
+      "jsonld_types": [],
+      "body_tag": "<body class=\"simple-page\" data-journey=\"operacao\">",
+      "forms": [],
+      "preserve": {
+        "ids_in_main": [
+          "conteudo",
+          "confirmation-title",
+          "confirmation-summary",
+          "receipt-id"
+        ],
+        "ids_outside_main_non_chrome": [],
+        "chrome_and_sprite_ids": [
+          "i-menu",
+          "i-close",
+          "i-whatsapp",
+          "inicio",
+          "mobile-menu",
+          "year"
+        ],
+        "contact_hrefs_in_main": [
+          "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20conversar%20sobre%20uma%20necessidade%20de%20projeto%2C%20servi%C3%A7o%20ou%20an%C3%A1lise%20t%C3%A9cnica%20pelo%20site.",
+          "mailto:tiago.sasaki@confenge.com.br?subject=Necessidade%20de%20engenharia%20-%20contato%20CONFENGE"
+        ],
+        "contact_hrefs_outside_main": [
+          "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20conversar%20sobre%20uma%20necessidade%20de%20projeto%2C%20servi%C3%A7o%20ou%20an%C3%A1lise%20t%C3%A9cnica%20pelo%20site."
+        ],
+        "fragment_hrefs_in_main": []
+      },
+      "tests": {
+        "binding": [
+          "scripts/site/test_copy_gates.py",
+          "scripts/site/test_document_intake_honesty.py",
+          "scripts/site/test_contact_journeys.mjs",
+          "scripts/site/test_design_gates.py",
+          "scripts/site/test_ui_geometry.mjs",
+          "scripts/site/test_home_conversion_contract.py",
+          "scripts/pseo/tests/test_turnstile_build.py"
+        ],
+        "sweep_only": [],
+        "grep_note": "binding = asserta sobre marcação ou cópia desta rota; sweep_only = a rota só entra por universo derivado (manifesto, sitemap, varredura de HTML público). Grep em scripts/site, tests/ e scripts/pseo/tests em 2026-09-17. binding_via_derived_scope = gate que cobre a rota sem citar o caminho literal (varredura de todo HTML público, universo do registro de famílias, inventário de formulários ou FROZEN_RELATIVE_PATHS de document_intake.py).",
+        "binding_via_derived_scope": [
+          "tests/commercial/test_cta_form_next_state.mjs"
+        ]
+      },
+      "visitor": "Quem acabou de enviar o formulário da home e quer confirmar o recebimento, saber o prazo de resposta e ter um canal direto.",
+      "task": "Ler o protocolo (via ?receipt=), saber o que vem a seguir e o que ainda não está definido; continuar por WhatsApp ou e-mail se for urgente.",
+      "generated": "Escrito à mão (arquivo de raiz obrigado.html, servido como /obrigado). Destino de action=\"/obrigado\" do form da home; o runtime js/modules/form.js redireciona com ?receipt=<protocolo>. Irmãos: obrigado-contrato.html, obrigado-edital.html, obrigado-operacao.html.",
+      "family": {
+        "id": "obrigado-transacional",
+        "profile": "trust_or_legal",
+        "visitor_job": "Confirmar que a solicitacao enviada pelo formulario foi recebida, saber em quanto tempo a CONFENGE responde e ter um canal direto caso o assunto seja urgente.",
+        "terminal_action": "none",
+        "classification": "TRANSACTIONAL_THANK_YOU",
+        "match": "prefix /obrigado",
+        "gate_coverage": {
+          "conversion": "full",
+          "copy": "full",
+          "accessibility": "full"
+        },
+        "owner_issue": 61,
+        "exemption_reason": "Recibo de conversão já concluída; WhatsApp no main é continuidade, não ação terminal exigida."
+      },
+      "pilot_functions": [
+        "F6"
+      ],
+      "contract_notes": [
+        "noindex,follow; sem canonical; body class=\"simple-page\" data-journey=\"operacao\".",
+        "Prazo publicado aqui: \"retorno em até 2 dias úteis; em contrato ou obra pública urgente, em até 1 dia útil\". É a fonte para o texto \"o que acontece depois\".",
+        "Sem travessão (arquivo listado em test_copy_gates::test_no_em_dash).",
+        "ids: confirmation-title, confirmation-summary, receipt-id (preenchido pelo runtime)."
+      ]
+    }
+  ]
+}
