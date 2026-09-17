@@ -8,6 +8,7 @@ Cada pedido diz o arquivo do integrador, o motivo e a página afetada. Nada aqui
 - **Arquivos**: `data/bofu-dominance/frozen-specs/{hashes,snapshots}.json`, `frozen-specs/specs/*.json`, `frozen-specs/patches/*.patch.txt`, `docs/seo/bofu-dominance/frozen-specs/*.md`.
 - **Motivo**: os cinco pilares restantes (`aditivos-obras-publicas`, `auditoria-orcamento-licitacao`, `diagnostico-pre-licitacao`, `reequilibrio-obras-publicas`, `diagnostico-b2g-360`) foram recompostos no modelo do piloto; o formulário `#captura-pilar` é byte-idêntico, mas o HTML mudou. O `unlock-plan` autoriza a revisão comercial com recaptura honesta (motivo, `baseline_commit`). Enquanto a recaptura não acontece, reprovam por hash: `npm run test:bofu-dominance` (11 testes em `frozen_specs/` e `safe_execution/test_git_diff_is_exclusive_area`), `test:page-contract-contratos` (`held_hash_18/19/22`, `public_renderer_has_no_drift` em `render_contract_defense_products.mjs`), `test:page-contract-licitacao` (`dedicated_route_remains_frozen`, `LICITACAO_FROZEN_DRIFT` em `render_licitacao_products.mjs` para `diagnostico-pre-licitacao`) e `test:inbound-gates` (`test_measurement_delay_canary_389…`, já vermelho no ramo de integração por causa de `medicoes-glosas-obras-publicas`). Nenhuma dessas reprovações é de veracidade, preço, formulário ou responsabilidade: são comparações de hash/snapshot.
 - **Também**: `data/commercial/first-fold-measurements.v1.json` (`test:first-fold-contract`) grava `input_hashes` de todas as rotas do lote; recapturar com `scripts/site/measure_first_fold.mjs` na cadeia obrigatória (análise aprovada → frozen specs → primeira dobra → baselines), só com o CSS congelado.
+- **Dono e prazo** (revisão 2026-09-17): integrador, **antes do PR de publicação** do ramo de integração. Sem dono e prazo a reprovação não pode ser lida como "esperada". Ordem obrigatória: (1) `python3 scripts/bofu_dominance/frozen_specs/materialize.py` com motivo e `baseline_commit` para os seis pilares (`aditivos-obras-publicas`, `auditoria-orcamento-licitacao`, `diagnostico-pre-licitacao`, `reequilibrio-obras-publicas`, `diagnostico-b2g-360`, `medicoes-glosas-obras-publicas`); (2) `node scripts/site/measure_first_fold.mjs` na cadeia análise aprovada → frozen specs → primeira dobra → baselines, só com o CSS congelado; (3) os quatro comandos voltam a `exit 0`: `npm run test:bofu-dominance`, `npm run test:page-contract-contratos`, `npm run test:page-contract-licitacao`, `npm run test:inbound-gates` (mais `npm run test:first-fold-contract`). Registrar o SHA no relatório do integrador. Bloqueia a publicação; não bloqueia o aceite de design do lote.
 
 ## 2. Folha editorial nas quatro rotas da área safe-execution
 
@@ -43,8 +44,35 @@ Cada pedido diz o arquivo do integrador, o motivo e a página afetada. Nada aqui
 - `scripts/site/test_design_gates.py`: `EDITORIAL_RECOMPOSED_ROUTES` recebe as cinco rotas dos pilares (isenção por rota exata, mesma regra do piloto).
 - `scripts/site/test_ui_geometry.mjs`: a sonda de capa OG-only (`editorial_cover_scope_geometry`) passa de `/reequilibrio-obras-publicas/` (recomposto, sem `content-hero-grid`) para `/atrasos-prorrogacao-obras-publicas/`, que mantém a abertura de artigo em uma coluna. Regra inalterada.
 - `data/commercial/cta-form-next-state.v1.json` + `docs/commercial/cta-form-next-state-inventory.json`: censo 167 → 182 com motivo, regerado pelo escritor canônico.
+- Revisão 2026-09-17: `scripts/site/test_design_gates.py` ganha `test_page_index_anchors_land_on_visible_targets` (toda âncora de `nav.page-index` precisa resolver para um id que renderiza sem abrir `<details>`; o próprio disclosure e seu `summary` contam como visíveis) e o autoteste `test_page_index_guard_catches_a_hidden_anchor`. É um aperto, não um afrouxamento. Censo de CTAs 182 → 183 com motivo (link "Registrar o evento" em `/servicos-obras-publicas/`).
+- Revisão 2026-09-17: `scripts/site/render_authority_pages.py` (gerador de `/conflitos/`, `/politica-editorial/`, `/uso-de-ia/`) recebe o parâmetro opcional `page_index` em `_page` (folha editorial + `nav.page-index`), usado só na página de conflitos. Mesma lógica do registro 7: a página é gerada, a edição manual seria perdida; as demais páginas geradas saem byte-idênticas.
 
 ## 9. Margem da rota dominante no hub em 390 px
 
 - **Arquivo**: `css/contracts.css` (linha `body[data-content-cluster="servicos"] main>.section:first-of-type .lead-inline{margin-top:16px}`).
 - **Motivo**: a abertura dos hubs passou a ser `section.svc-open`, então o seletor deixou de casar e o `lead-inline` volta ao `margin-top:56px` de `styles.css`; em 390×844 o botão da rota dominante entrava na dobra só parcialmente. O lote contornou movendo a linha de prova para depois do cartão (botão inteiro na dobra nos dois hubs, recapturado); estender o seletor a `.svc-open .lead-inline` continua desejável para recuperar os 40 px de respiro entre o lead e o cartão. Não bloqueante.
+
+## 10. Degradês e brilho radial nas cascas herdadas (styles.css)
+
+- **Arquivo**: `styles.css` (fonte em `css/**`).
+- **Seletores**: `.content-hero{background:linear-gradient(180deg,#fff 0%,#f4f7f5 100%)}` e `.content-hero::after{radial-gradient(...)}` (afetam `header.offer-hero` em `/diretoria-b2g/`, `/bid-room-licitacoes-obras/`, `/diagnostico-b2g-expansao/`, `/conflitos/` e as quatro rotas safe-execution); `.lead-inline{background:linear-gradient(135deg,#071a31,#0a294b)}` (ainda usado nos `aside.lead-inline` dos pilares e em ~136 páginas); `.final-cta-section{background:linear-gradient(135deg,#031020,#0a294b)}`; `.article-callout`, `.answer-box`, `.article-decision`, `.lead-inline-soft` (degradês claros).
+- **Motivo**: o caderno (§2) proíbe degradê; a revisão apontou o brilho radial visível no canto superior direito das quatro páginas de oferta e o cartão navy em degradê. Pedido: fundo sólido (`var(--white)`/`var(--soft)` no hero, sem `::after`; `var(--navy-900)` nos blocos escuros). Os hubs deixaram de usar `.lead-inline`; as demais rotas dependem deste pedido.
+
+## 11. Dois blocos escuros nas ofertas B2G (styles.css)
+
+- **Arquivo**: `styles.css` (`.operating-system` navy com ícones em círculo A–D em `/diretoria-b2g/`; painel escuro G1–G6 "Etapas da proposta" em `/bid-room-licitacoes-obras/`; `.final-cta-section` em ambas).
+- **Motivo**: um bloco escuro por página. `test_design_gates::test_operating_flow_has_sitewide_fallback` exige `<ol class="operating-flow">` e o CSS correspondente em `styles.css`, então a troca por `ol.steps` claro não cabe no lote. Enquanto o CSS ficar, as quatro rotas estão classificadas como HERANCA_VISUAL_VALIDADA na matriz.
+
+## 12. Respiro entre o índice de página e o artigo em `/conflitos/`
+
+- **Arquivo**: `styles.css` (`.article-layout{padding-top:72px}` somado ao `margin-bottom` do `.page-index`).
+- **Motivo**: ~110 px vazios entre o índice e o cartão do artigo nas páginas de política que carregam `nav.page-index` (só `/conflitos/` hoje). Sugestão: `.page-index + .section .article-layout{padding-top:var(--space-6)}` ou equivalente.
+
+## 13. Bloco GENERATED:CONTRACT-DEFENSE-HUB (`render_contract_defense_products.mjs`, `styles-offers.css`)
+
+- Complementa o pedido 3: além da faixa de regras navy, a revisão apontou a grade 3×3 de cartões de preço (`.contract-products-hub__grid`), o `h2` com `max-width:18ch` (quebra em quatro linhas a 1440: "Sete eventos contratuais, cada um com um documento para agir.") e a opção padrão do select "Ainda não sei qual entrega, quero orientação", cortada no select nativo em 390 px. Sugestão: lista `list-ruled` com preço/prazo em `.t-data`, `h2` sem `18ch`, regras como `div.conditions` claro, opção "Ainda não sei · quero orientação". O lote retirou preço e prazo das linhas por situação, então o bloco gerado é o único lugar da página que os publica; o formulário `#captura-contrato` é protegido.
+
+## 14. Quebra do h1 no hífen em 390 px (`/diagnostico-pre-licitacao/`)
+
+- **Arquivo**: `css/components.css` (primitivo) ou `styles.css`.
+- **Motivo**: "Diagnóstico pré- / licitação para / obras públicas". Não há primitivo `nowrap` no sistema e `br.hero-br-mobile` só tem regra em `assets/home-10x.css`; o h1 literal está gravado em `data/bofu-dominance/frozen-specs/snapshots.json` e em `first-fold-measurements`, então o lote não trocou o hífen por U+2011. Pedido: um utilitário `.nowrap{white-space:nowrap}` (ou a regra de `hero-br-mobile` no sitewide) para envolver "pré-licitação".
