@@ -461,7 +461,7 @@ CLICK_ORIGIN_PINNED = (
 )
 
 
-def protected_pages() -> dict[str, str]:
+def protected_pages(*, include_protected: bool = False) -> dict[str, str]:
     """Páginas cujo corpo é vinculado por hash a uma revisão humana ou a um contrato.
 
     Valor: "intacta" (nenhum byte muda) ou "so-folha" (só o <link> da folha
@@ -469,6 +469,13 @@ def protected_pages() -> dict[str, str]:
     gate do cluster de medição fixa a impressão digital do corpo à data de
     revisão publicada, e restampar a revisão é decisão editorial, não de
     composição).
+
+    `include_protected=True` levanta SÓ o congelamento derivado do contrato do
+    canário 389 (`canary-contract.json`: fonte e `frozen_siblings`), cujos
+    sha256 o integrador recaptura depois da recomposição. Nunca levanta os
+    bytes de origin/main (CLICK_ORIGIN), a aprovação humana por hash
+    (striking-distance) nem a impressão digital do cluster de medição: uma
+    página do canário que também está no cluster continua "so-folha".
     """
     out: dict[str, str] = {}
     for rel in CLICK_ORIGIN_PINNED:
@@ -481,16 +488,17 @@ def protected_pages() -> dict[str, str]:
                 out[str(row["html"])] = "intacta"
     except (OSError, json.JSONDecodeError):
         pass
-    try:
-        contract = json.loads(CANARY_389_CONTRACT.read_text(encoding="utf-8"))
-        source = (contract.get("canary") or {}).get("source")
-        if source:
-            out[str(source)] = "intacta"
-        for sibling in contract.get("frozen_siblings") or []:
-            if sibling.get("path"):
-                out[str(sibling["path"])] = "intacta"
-    except (OSError, json.JSONDecodeError):
-        pass
+    if not include_protected:
+        try:
+            contract = json.loads(CANARY_389_CONTRACT.read_text(encoding="utf-8"))
+            source = (contract.get("canary") or {}).get("source")
+            if source:
+                out[str(source)] = "intacta"
+            for sibling in contract.get("frozen_siblings") or []:
+                if sibling.get("path"):
+                    out[str(sibling["path"])] = "intacta"
+        except (OSError, json.JSONDecodeError):
+            pass
     try:
         from scripts.organic.cluster_medicao_originality import CLUSTER_SLUGS  # noqa: PLC0415
 
@@ -564,6 +572,11 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--check", action="store_true", help="não escreve; falha se alguma página mudaria")
     ap.add_argument("--parity", action="store_true", help="compara o texto visível de <main> com HEAD")
     ap.add_argument("--report", action="store_true", help="imprime o registro de casos por página")
+    ap.add_argument(
+        "--include-protected",
+        action="store_true",
+        help="levanta só o congelamento do canário 389 (fonte e siblings); o integrador recaptura os sha256",
+    )
     ap.add_argument("paths", nargs="*", help="páginas específicas (padrão: conteudos/*/index.html)")
     args = ap.parse_args(argv)
 
@@ -584,13 +597,16 @@ def main(argv: list[str] | None = None) -> int:
 
     changed = 0
     report: dict[str, list[str]] = {}
-    protected = protected_pages()
+    protected = protected_pages(include_protected=args.include_protected)
     for p in paths:
         original = p.read_text(encoding="utf-8")
         rel = p.relative_to(ROOT).as_posix()
         mode = protected.get(rel)
         if mode == "intacta":
-            report[rel] = ["intacta: hash do HTML vinculado a aprovação humana, canário 389 ou bytes de origin/main"]
+            report[rel] = [
+                "intacta: hash do HTML vinculado a aprovação humana ou bytes de origin/main"
+                + ("" if args.include_protected else " (ou canário 389; ver --include-protected)")
+            ]
             continue
         if mode == "so-folha":
             log = []
