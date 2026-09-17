@@ -1794,7 +1794,7 @@
    "priority": "P2",
    "treatment": "COMPONENTES_ADEQUADOS",
    "owner": "lote-c",
-   "state": "pronto (subconjunto editorial-article.css; índice em todas as páginas)",
+   "state": "pronto (folha inteira: bloco Tool do checklist interativo; índice)",
    "evidence": [
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/guias-contratos-obras-checklist-pedido-aditivo-1440x1000-fold-lote-c.jpg",
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/guias-contratos-obras-checklist-pedido-aditivo-1440x1000-full-lote-c.jpg",
@@ -2000,8 +2000,14 @@
    "priority": "P3",
    "treatment": "COMPONENTES_ADEQUADOS",
    "owner": "lote-c",
-   "state": "pronto (hub-list, folha)",
-   "evidence": [],
+   "state": "pronto (hub sem filhos publicados, noindex pelo gerador: abertura + bloco escuro único; folha inteira)",
+   "evidence": [
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-orgaos-1440x1000-fold-lote-c.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-orgaos-1440x1000-full-lote-c.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-orgaos-390x844-fold-lote-c.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-orgaos-390x844-full-lote-c.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-orgaos-390x844-menu-lote-c.jpg"
+   ],
    "impediment": ""
   },
   {
@@ -2013,8 +2019,14 @@
    "priority": "P3",
    "treatment": "COMPONENTES_ADEQUADOS",
    "owner": "lote-c",
-   "state": "pronto (hub-list, folha)",
-   "evidence": [],
+   "state": "pronto (hub sem filhos publicados, noindex pelo gerador: abertura + bloco escuro único; folha inteira)",
+   "evidence": [
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-precos-1440x1000-fold-lote-c.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-precos-1440x1000-full-lote-c.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-precos-390x844-fold-lote-c.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-precos-390x844-full-lote-c.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-precos-390x844-menu-lote-c.jpg"
+   ],
    "impediment": ""
   },
   {
@@ -2026,8 +2038,14 @@
    "priority": "P3",
    "treatment": "COMPONENTES_ADEQUADOS",
    "owner": "lote-c",
-   "state": "pronto (hub-list, folha)",
-   "evidence": [],
+   "state": "pronto (hub sem filhos publicados, noindex pelo gerador: abertura + bloco escuro único; folha inteira)",
+   "evidence": [
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-concorrencia-1440x1000-fold-lote-c.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-concorrencia-1440x1000-full-lote-c.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-concorrencia-390x844-fold-lote-c.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-concorrencia-390x844-full-lote-c.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-concorrencia-390x844-menu-lote-c.jpg"
+   ],
    "impediment": ""
   },
   {

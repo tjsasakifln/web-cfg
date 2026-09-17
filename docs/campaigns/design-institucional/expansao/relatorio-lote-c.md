@@ -69,6 +69,9 @@ Base da rodada: rebase sobre `25c579584`, onde o integrador já aplicou os pedid
 | BAIXA diretório de `/conteudos/` truncado; link para `/entregas/` | Link renomeado "Ver entregas e condições". Diretório: descrições e filtros vêm do template do remediador/JS existente e das meta descriptions dos artigos (protegidas); não tratado. | — |
 | BAIXA índice sem número, rótulos "Resposta …", separadores da meta | `<span>NN</span>` só com a regra `.article-toc a span` (pedido 19); "Resposta executiva" → "Resposta direta" no pSEO (5 templates); "Resposta curta" só nos 5 artigos protegidos por hash; separadores: pedido 19. | `scripts/pseo/tests 210 passed`. |
 | PREFERENCIA ação dominante de `/casos/`, barra lima dos modelos | Mantido: inventário de CTAs por igualdade profunda (pedido 13); `report-model.css` é do integrador. | `CTA_FORM_NEXT_STATE_OK routes=31`. |
+| `/imprensa/`: dado estruturado acrescentado (eixo protegido) | A página ganhou trilha (`nav.breadcrumbs`); a casca é sincronizada por `scripts/site/shell_nav.py --write` (integrador), que deriva o `BreadcrumbList` da trilha, como em toda página com breadcrumb. Nenhum schema escrito à mão; `title`, `description`, canonical, robots e o `WebPage` existente intactos. | `test:nav 15 passed`; `validate:seo` → `errors=0 warnings=0 / VALIDATION_OK`. |
+| Conferência mecânica dos subconjuntos | Para cada página que liga `editorial-article.css`/`editorial-tool.css`, as classes usadas foram cruzadas com os blocos fora do subconjunto: 138 páginas no subconjunto Article e 3 no Tool sem seletor de bloco excluído, exceto `guias-contratos-obras/checklist-pedido-aditivo/` (bloco Tool do checklist interativo) → o gerador dá a folha inteira a página com `tool-shell`. `.tool-page-hero::after{content:none}` fica no bloco Article, mas não há regra `::after` em `styles-tools.css`/`styles.css` para a ferramenta (sem efeito). | Script de cruzamento no scratchpad; `guias-contratos-obras/checklist-pedido-aditivo/index.html` → `/assets/editorial.css`. |
+| Resumo vazio em linha do hub pSEO | `_hub_summary` cortava na última frase inteira e devolvia vazio quando a description truncada era uma oração só (`/inteligencia/cenarios/reequilibrio-e-dispersao-de-precos/`); agora corta na oração principal (travessão, ponto e vírgula, dois-pontos) e só omite se nada couber. | `inteligencia/index.html rows=6 summaries=6`; `inteligencia/cenarios/index.html rows=5 summaries=5`. |
 | Revisor 2: "proteger `/conteudos/` contra `inbound:remediate`" | `remediate_hub` devolve `skipped` quando encontra `svc-open` + `data-hub-search` + `hub-list` (`c2fe5434a`); o script não roda no CI. | `remediate_hub(load_brand())` → `{'skipped': …}` e bytes do hub inalterados; `test_visitor_redesign`/`test_inbound_gates` sem falha nova. |
 
 ### Refutações (com evidência)
@@ -111,6 +114,11 @@ Base da rodada: rebase sobre `25c579584`, onde o integrador já aplicou os pedid
 | `npm run test:contract-analysis` | `222 passed in 9.71s` |
 | `npm run test:demand-radar` | `84 passed in 1.14s` |
 | `npm run test:live-intelligence` | exit 0 |
+| `npm run test:tools` | `ALL tool/organic activation checks passed` |
+| `node scripts/site/test_tools_structure.mjs` | `ALL tools structure checks passed` |
+| `npm run test:hub-truth` | exit 0 (`PASS points_to_tools_or_radar`, `still_published_consolidar` informativo) |
+| `npm run validate:seo` | `errors=0 warnings=0` / `VALIDATION_OK` |
+| `python3 -m pytest scripts/site/test_indexation_evidence.py -q` | `2 failed, 30 passed` (`test_instance_verdict_ignores_the_governance_registry`, `test_archetype_verdict_is_composite…`: "no shipped route matches the predicate") — **idêntico na ponta da integração `25c579584` sem o lote** (worktree temporária), herdado. |
 | `node --test tests/intake/test_mv03_adaptive_intake.mjs` | `# pass 17 # fail 0` |
 | `npm run test:tools-uiux-e2e` | `ALL tools UIUX e2e checks passed` |
 | `npm run test:money-asset-canary-e2e` | `MONEY_ASSET_CANARY_E2E_OK` |
@@ -133,3 +141,5 @@ Base da rodada: rebase sobre `25c579584`, onde o integrador já aplicou os pedid
 - Diretório de `/conteudos/` (descrições truncadas, filtros fechados no celular) não tratado: descrições vêm das meta descriptions dos artigos e o bloco é o template existente com busca por JS.
 - Ação dominante de `/casos/` segue "Solicitar proposta" (inventário de CTAs, pedido 13).
 - Gates herdados da integração continuam vermelhos e são condição de merge do integrador, não do lote: canário 389 / `held_hash_18` (medições), `first-fold` (3 entradas), `audit:css-usage` (`border_radius`).
+- `docs/campaigns/design-institucional/expansao/tools/overflow-probe.mjs` é arquivo **adicionado** pelo lote na primeira rodada (`339d44467`), não alteração do `capture.mjs` do integrador.
+- Hubs pSEO sem filhos publicados (`/inteligencia/orgaos/`, `/precos/`, `/concorrencia/`; `noindex,follow` pelo gerador) renderizam abertura + bloco escuro, sem lista; capturas em `evidence/lote-c/inteligencia-{orgaos,precos,concorrencia}-*`.

@@ -752,30 +752,6 @@
       "overflow_px": 0
     },
     {
-      "route": "/inteligencia/cenarios/",
-      "viewport": "390x844",
-      "status": 200,
-      "height": 3757,
-      "h1_font": "\"Archivo Var\"",
-      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-390x844-fold-lote-c.jpg",
-      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-390x844-full-lote-c.jpg",
-      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-390x844-menu-lote-c.jpg"
-    },
-    {
-      "route": "/inteligencia/cenarios/",
-      "viewport": "1440x1000",
-      "status": 200,
-      "height": 2491,
-      "h1_font": "\"Archivo Var\"",
-      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-1440x1000-fold-lote-c.jpg",
-      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-1440x1000-full-lote-c.jpg"
-    },
-    {
-      "route": "/inteligencia/cenarios/",
-      "viewport": "320x700",
-      "overflow_px": 0
-    },
-    {
       "route": "/guias-contratos-obras/",
       "viewport": "390x844",
       "status": 200,
@@ -1060,6 +1036,102 @@
     },
     {
       "route": "/inteligencia/mercados/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/inteligencia/cenarios/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 3836,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-390x844-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-390x844-full-lote-c.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-390x844-menu-lote-c.jpg"
+    },
+    {
+      "route": "/inteligencia/cenarios/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 2550,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-1440x1000-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-1440x1000-full-lote-c.jpg"
+    },
+    {
+      "route": "/inteligencia/cenarios/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/inteligencia/orgaos/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 2476,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-orgaos-390x844-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-orgaos-390x844-full-lote-c.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-orgaos-390x844-menu-lote-c.jpg"
+    },
+    {
+      "route": "/inteligencia/orgaos/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 1586,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-orgaos-1440x1000-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-orgaos-1440x1000-full-lote-c.jpg"
+    },
+    {
+      "route": "/inteligencia/orgaos/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/inteligencia/precos/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 2365,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-precos-390x844-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-precos-390x844-full-lote-c.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-precos-390x844-menu-lote-c.jpg"
+    },
+    {
+      "route": "/inteligencia/precos/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 1478,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-precos-1440x1000-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-precos-1440x1000-full-lote-c.jpg"
+    },
+    {
+      "route": "/inteligencia/precos/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/inteligencia/concorrencia/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 2365,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-concorrencia-390x844-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-concorrencia-390x844-full-lote-c.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-concorrencia-390x844-menu-lote-c.jpg"
+    },
+    {
+      "route": "/inteligencia/concorrencia/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 1478,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-concorrencia-1440x1000-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-concorrencia-1440x1000-full-lote-c.jpg"
+    },
+    {
+      "route": "/inteligencia/concorrencia/",
       "viewport": "320x700",
       "overflow_px": 0
     }
