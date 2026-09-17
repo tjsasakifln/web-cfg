@@ -1,0 +1,82 @@
+/* Route subset of assets/editorial.css, written by scripts/site/build_css.py; edit the source sheet. */
+/* Type roles ----------------------------------------------------------------- */
+.t-institutional{font-family:var(--sans-wide);font-stretch:var(--wide);font-size:var(--text-institutional);font-weight:760;letter-spacing:-.035em;line-height:var(--lh-tight);color:var(--ink);text-wrap:balance;margin:0 0 1rem}
+.t-institutional .t-accent{color:var(--green-700)}
+.t-service{font-family:var(--sans-wide);font-stretch:var(--wide);font-size:var(--text-service);font-weight:760;letter-spacing:-.03em;line-height:1.04;color:var(--ink);text-wrap:balance;margin:0 0 .85rem}
+.t-editorial{font-family:var(--sans-wide);font-stretch:var(--wide);font-size:var(--text-editorial);font-weight:740;letter-spacing:-.025em;line-height:1.08;color:var(--ink);text-wrap:balance;margin:0 0 .75rem}
+.t-callout{font-size:var(--text-callout);font-weight:600;line-height:1.45;color:var(--ink);max-width:40ch;margin:0 0 1rem}
+.t-caption{font-size:var(--text-caption);line-height:1.5;color:var(--text)}
+.t-data{font-family:var(--sans-narrow);font-stretch:var(--narrow);font-weight:650;font-size:var(--text-data);letter-spacing:.02em;font-variant-numeric:tabular-nums slashed-zero;color:var(--ink)}
+.t-kicker{display:block;font-family:var(--sans-narrow);font-stretch:var(--narrow);font-weight:750;font-size:var(--text-small);letter-spacing:.1em;line-height:1.4;text-transform:uppercase;color:var(--green-700);margin:0 0 .75rem}
+/* Section rhythm by function ------------------------------------------------ */
+.sec{padding:var(--section-default)}
+.sec--tight{padding:var(--section-tight)}
+.sec--soft{background:var(--soft)}
+.sec--dark{background:var(--navy-900);color:#fff}
+.sec--dark h2,.sec--dark h3,.sec--dark .t-editorial,.sec--dark .t-callout{color:#fff}
+.sec--dark p,.sec--dark li,.sec--dark dd{color:#d5dde6}
+.sec--dark .t-kicker{color:var(--lime)}
+.sec--dark a:not(.button):not(.button-primary):not(.button-secondary){color:#fff}
+.sec--rule-top{border-top:1px solid var(--rule)}
+.sec-head{display:grid;gap:.5rem 3rem;margin-bottom:clamp(1.75rem,4vw,3rem);align-items:end}
+.sec-head>p{margin:0;max-width:52ch;color:var(--text)}
+@media (min-width:1000px){.sec-head--split{grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr)}.sec-head--split>.t-kicker{grid-column:1 / -1}}
+/* Page index (service pages): where am I, what comes next -------------------- */
+.page-index{margin:0 0 clamp(1.5rem,3vw,2.5rem);padding:0;border-top:1px solid var(--rule-strong);border-bottom:1px solid var(--rule)}
+.page-index__label{display:block;padding:.65rem 0 0;font-family:var(--sans-narrow);font-stretch:var(--narrow);font-weight:750;font-size:var(--text-small);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.page-index ol{list-style:none;margin:0;padding:.25rem 0 .1rem;display:flex;flex-wrap:wrap;gap:0 1.5rem}
+.page-index li{flex:0 1 auto;min-width:0;max-width:100%}
+.page-index a{display:inline-flex;align-items:center;gap:.5rem;min-height:44px;font-weight:720;color:var(--ink);text-decoration:none;white-space:normal;text-align:left;border-bottom:2px solid transparent}
+.page-index a span{font-family:var(--sans-narrow);font-stretch:var(--narrow);font-weight:750;font-size:var(--text-small);letter-spacing:.06em;color:var(--green-700)}
+.page-index a:hover,.page-index a[aria-current=true]{border-color:var(--green-700);color:var(--green-700)}
+/* Conditions and limits: one consolidated block, visible, two columns ------- */
+.conditions{border-top:1px solid var(--rule-strong);padding-top:1rem}
+.conditions h2,.conditions h3{margin:0 0 .75rem}
+.conditions ul{list-style:none;margin:0;padding:0;display:grid;gap:.5rem 2rem}
+@media (min-width:800px){.conditions ul{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.conditions li{position:relative;padding:.35rem 0 .35rem 1.1rem;font-size:var(--text-caption);line-height:1.5;color:var(--text);border-bottom:1px solid var(--rule)}
+.conditions li::before{content:"";position:absolute;left:0;top:.95rem;width:.45rem;height:1px;background:var(--ink)}
+.conditions li b{color:var(--ink)}
+/* After send: what happens next, in three steps ---------------------------- */
+.after__title{margin-top:1.25rem}
+.after{list-style:none;margin:1rem 0 0;padding:0;counter-reset:after;display:grid;gap:0;border-top:1px solid rgba(255,255,255,.25)}
+.after>li{counter-increment:after;display:grid;grid-template-columns:2rem minmax(0,1fr);gap:.2rem .9rem;padding:.85rem 0;border-bottom:1px solid rgba(255,255,255,.14)}
+.after>li::before{content:counter(after,decimal-leading-zero);font-family:var(--sans-narrow);font-stretch:var(--narrow);font-weight:750;font-size:var(--text-small);letter-spacing:.06em;color:var(--lime);padding-top:.25rem}
+.after strong{display:block;color:#fff;font-weight:720;margin:0 0 .15rem}
+.after p{margin:0;font-size:var(--text-caption);color:#d5dde6;max-width:44ch}
+.after--light{border-top-color:var(--rule-strong)}
+.after--light>li{border-bottom-color:var(--rule)}
+.after--light>li::before{color:var(--green-700)}
+.after--light strong{color:var(--ink)}
+.after--light p{color:var(--text)}
+/* Contact hierarchy: one dominant action, subordinate alternatives ---------- */
+.contact-primary{display:grid;gap:.75rem;justify-items:start}
+.contact-primary .button-primary{width:min(100%,26rem);min-height:52px}
+.contact-alt{display:flex;flex-wrap:wrap;gap:.5rem 1.5rem;margin:.25rem 0 0;padding:0;list-style:none}
+.contact-alt a{display:inline-flex;align-items:center;gap:.4rem;min-height:44px;font-weight:720;color:inherit;text-decoration:underline;text-underline-offset:.2em}
+.contact-alt a .icon{width:1em;height:1em}
+.contact-alt small{display:block;font-weight:400;font-size:var(--text-small);opacity:.85}
+/* Motion: none that carries information; respect reduced motion ------------- */
+@media (prefers-reduced-motion:reduce){.page-index a,.situation-action,.delivery__doc{transition:none}}
+/* Tool: operational surface, same shell and type, function first -------------- */
+.tool-page-hero,.tool-hero{padding:clamp(1.25rem,3vw,2.5rem) 0 clamp(1rem,2vw,1.5rem);background:var(--white);border-bottom:1px solid var(--rule)}
+.tool-page-hero h1,.tool-hero h1{font-family:var(--sans-wide);font-stretch:var(--wide);font-size:var(--text-service);font-weight:760;letter-spacing:-.03em;line-height:1.04;max-width:20ch;margin:0 0 .85rem;text-wrap:balance}
+.tool-page-hero p,.tool-hero p{max-width:56ch;color:var(--text);margin:0 0 .75rem}
+.tool-form{display:grid;gap:1rem;margin:1.25rem 0;padding:1.25rem 0;border-top:1px solid var(--rule-strong);border-bottom:1px solid var(--rule)}
+@media (min-width:800px){.tool-form{grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));align-items:end}}
+.tool-form fieldset{border:0;margin:0;padding:0;min-width:0;display:grid;gap:.35rem}
+.tool-form legend,.tool-form label{font-family:var(--sans-narrow);font-stretch:var(--narrow);font-weight:750;font-size:var(--text-small);letter-spacing:.06em;text-transform:uppercase;color:var(--ink)}
+.tool-form input:not([type=checkbox]):not([type=radio]),.tool-form select,.tool-form textarea{width:100%;min-height:48px;padding:.6rem .75rem;border:1px solid var(--rule-strong);border-radius:var(--radius-sm);background:var(--white);font:inherit;font-variant-numeric:tabular-nums;color:var(--ink)}
+.tool-form input:focus-visible,.tool-form select:focus-visible,.tool-form textarea:focus-visible{outline:3px solid var(--green-600);outline-offset:2px}
+.tool-form .field-hint,.tool-form small{font-size:var(--text-small);color:var(--muted);letter-spacing:0;text-transform:none;font-weight:400}
+.tool-form .button-primary{min-height:48px;align-self:end}
+.tool-result{margin:1.25rem 0 0;display:grid;gap:0;border-top:1px solid var(--rule-strong)}
+.tool-result div,.tool-result>li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.25rem 1rem;align-items:baseline;padding:.85rem 0;border-bottom:1px solid var(--rule)}
+.tool-result dt{font-weight:600;color:var(--text);max-width:40ch}
+.tool-result dd{margin:0;font-family:var(--sans-narrow);font-stretch:var(--narrow);font-weight:700;font-size:clamp(1.25rem,1.1rem + .6vw,1.5rem);letter-spacing:-.01em;font-variant-numeric:tabular-nums slashed-zero;color:var(--ink);text-align:right;white-space:nowrap}
+.tool-result dd small{display:block;font-size:var(--text-small);font-weight:400;color:var(--muted);letter-spacing:0}
+.tool-result .is-total dd{color:var(--green-700)}
+.tool-note{margin:1rem 0 0;font-size:var(--text-caption);color:var(--text);max-width:64ch}
+.tool-method,.tool-layers{padding:clamp(1.5rem,3vw,2.5rem) 0}
+.tool-method h2,.tool-layers h2{margin-top:0}
+.tool-cta-contextual{padding:clamp(1.5rem,3vw,2.5rem) 0;border-top:1px solid var(--rule-strong)}
