@@ -29,7 +29,7 @@
 .grid-2{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(1.25rem,3vw,2.5rem)}
 @media (min-width:700px){.grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .split{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(1.5rem,4vw,4rem);align-items:start}
-@media (min-width:900px){.split{grid-template-columns:minmax(0,1.15fr) minmax(280px,.85fr)}.split--even{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (min-width:900px){.split{grid-template-columns:minmax(0,1.15fr) minmax(280px,.85fr)}}
 .measure{max-width:var(--read-measure)}
 
 /* Proof figure: a technical drawing as legible evidence, always labelled ------ */
@@ -38,8 +38,6 @@
 .proof-figure__sheet svg,.proof-figure__sheet img{display:block;width:100%;height:auto;max-height:420px}
 .proof-figure figcaption{font-size:var(--text-small);line-height:1.5;color:var(--text);max-width:60ch}
 .proof-figure figcaption b,.proof-figure figcaption strong{color:var(--ink)}
-.proof-figure--pair .proof-figure__sheet{display:grid;gap:1rem}
-@media (min-width:700px){.proof-figure--pair .proof-figure__sheet{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .proof-figure__sheet h3,.proof-figure__sheet h4{margin:0 0 .5rem;font-size:var(--text-small);font-stretch:var(--narrow);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 .tag{display:inline-block;font-stretch:var(--narrow);font-weight:750;font-size:var(--text-small);letter-spacing:.08em;text-transform:uppercase;color:var(--green-700);line-height:1.4}
 .tag::after{content:"";display:inline-block;width:1.5rem;height:1px;background:currentColor;vertical-align:middle;margin-left:.6rem}
@@ -69,12 +67,6 @@
 .list-ruled__action{display:inline-flex;align-items:center;gap:.4rem;min-height:44px;font-size:1.05rem;font-weight:750;color:var(--ink);text-decoration:none;white-space:nowrap;grid-column:2;border-bottom:1px solid var(--rule-strong)}
 @media (min-width:900px){.list-ruled__action{grid-column:3;align-self:center}}
 .list-ruled__action:hover{color:var(--green-700);text-decoration:underline;text-underline-offset:.2em}
-.list-ruled>li.is-dark{background:var(--navy-900);color:#fff;padding-inline:clamp(1rem,2.5vw,1.5rem);margin-top:-1px;border-bottom:0;border-radius:var(--radius-sm)}
-.list-ruled>li.is-dark h3,.list-ruled>li.is-dark .list-ruled__action,.list-ruled>li.is-dark a{color:#fff}
-.list-ruled>li.is-dark p a{text-decoration-color:var(--lime)}
-.list-ruled>li.is-dark p{color:#d5dde6}
-.list-ruled>li.is-dark .list-ruled__index,.list-ruled>li.is-dark .list-ruled__kicker,.list-ruled>li.is-dark .list-ruled__use strong{color:var(--lime)}
-.list-ruled>li.is-dark .list-ruled__action .icon{color:var(--lime)}
 
 /* Steps: numbered sequence, no cards ---------------------------------------- */
 .steps{list-style:none;margin:0;padding:0;counter-reset:steps;border-top:1px solid var(--rule)}

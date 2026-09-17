@@ -29,6 +29,11 @@
 .page-index a{display:inline-flex;align-items:center;gap:.5rem;min-height:44px;font-weight:720;color:var(--ink);text-decoration:none;white-space:normal;text-align:left;border-bottom:2px solid transparent}
 .page-index a span{font-family:var(--sans-narrow);font-stretch:var(--narrow);font-weight:750;font-size:var(--text-small);letter-spacing:.06em;color:var(--green-700)}
 .page-index a:hover,.page-index a[aria-current=true]{border-color:var(--green-700);color:var(--green-700)}
+
+
+.svc-open+.page-index,.svc-open+.container>.page-index,.profile-hero+.page-index,.profile-hero+.container>.page-index,.article-hero+.page-index{margin-top:clamp(1rem,2vw,1.5rem)}
+.nowrap{white-space:nowrap}
+.phases+.plate,.list-ruled+.plate,.steps+.plate,.svc-chain+.plate{margin-top:clamp(1.5rem,3vw,2.5rem)}
 /* Conditions and limits: one consolidated block, visible, two columns ------- */
 .conditions{border-top:1px solid var(--rule-strong);padding-top:1rem}
 .conditions h2,.conditions h3{margin:0 0 .75rem}

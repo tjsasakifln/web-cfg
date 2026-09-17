@@ -29,6 +29,11 @@
 .page-index a{display:inline-flex;align-items:center;gap:.5rem;min-height:44px;font-weight:720;color:var(--ink);text-decoration:none;white-space:normal;text-align:left;border-bottom:2px solid transparent}
 .page-index a span{font-family:var(--sans-narrow);font-stretch:var(--narrow);font-weight:750;font-size:var(--text-small);letter-spacing:.06em;color:var(--green-700)}
 .page-index a:hover,.page-index a[aria-current=true]{border-color:var(--green-700);color:var(--green-700)}
+
+
+.svc-open+.page-index,.svc-open+.container>.page-index,.profile-hero+.page-index,.profile-hero+.container>.page-index,.article-hero+.page-index{margin-top:clamp(1rem,2vw,1.5rem)}
+.nowrap{white-space:nowrap}
+.phases+.plate,.list-ruled+.plate,.steps+.plate,.svc-chain+.plate{margin-top:clamp(1.5rem,3vw,2.5rem)}
 /* Conditions and limits: one consolidated block, visible, two columns ------- */
 .conditions{border-top:1px solid var(--rule-strong);padding-top:1rem}
 .conditions h2,.conditions h3{margin:0 0 .75rem}
@@ -89,6 +94,10 @@
 .article-toc li{flex:0 1 auto;min-width:0;max-width:100%;margin:0}
 .article-toc a{display:inline-flex;align-items:center;gap:.5rem;min-height:44px;font-weight:720;color:var(--ink);text-decoration:none;border-bottom:2px solid transparent;white-space:normal;text-align:left}
 .article-toc a:hover,.article-toc a[aria-current=true]{border-color:var(--green-700);color:var(--green-700)}
+.article-toc a span,.article-toc a .article-toc__n{font-family:var(--sans-narrow);font-stretch:var(--narrow);font-weight:750;font-size:var(--text-small);letter-spacing:.06em;color:var(--green-700)}
+.article-meta li{list-style:none}
+.article-meta li+li::before,.article-meta span+span::before{content:"·";margin-right:1rem;color:var(--muted)}
+.article-meta span+span{margin-left:-.75rem}
 .article-callout,.article-decision{margin:1.5rem 0;padding:1rem 0 1rem 1.25rem;border-left:3px solid var(--green-700);background:transparent;border-radius:0}
 .article-callout .eyebrow,.article-decision .eyebrow{margin:0 0 .35rem}
 .article-callout h2,.article-decision h2{margin-top:0;font-size:clamp(1.25rem,1.1rem + .5vw,1.5rem)}

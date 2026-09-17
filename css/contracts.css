@@ -41,7 +41,7 @@ html{scroll-padding-top:96px}
 /* Natural-language copy wraps only between words. Opaque identifiers opt in
    explicitly so intrinsic sizing cannot starve ordinary labels again. */
 h1,h2,h3,h4,p,li,dt,dd,figcaption,caption,th,td,label,small,strong{overflow-wrap:normal;word-break:normal;hyphens:none}
-code,pre,kbd,samp,[data-opaque-token],.opaque-token{overflow-wrap:anywhere;word-break:break-word}
+code,pre,kbd,samp,[data-opaque-token]{overflow-wrap:anywhere;word-break:break-word}
 @media (max-width:900px){
   html{scroll-padding-top:82px}
   html.no-js .site-header{position:static}
