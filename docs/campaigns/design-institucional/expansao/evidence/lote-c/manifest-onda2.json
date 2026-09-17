@@ -1,0 +1,30 @@
+{
+  "base": "http://127.0.0.1:8753",
+  "tag": "onda2",
+  "captures": [
+    {
+      "route": "/ferramentas/diagnostico-defesa-margem/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 8712,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-diagnostico-defesa-margem-390x844-fold-onda2.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-diagnostico-defesa-margem-390x844-full-onda2.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-diagnostico-defesa-margem-390x844-menu-onda2.jpg"
+    },
+    {
+      "route": "/ferramentas/diagnostico-defesa-margem/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 5744,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-diagnostico-defesa-margem-1440x1000-fold-onda2.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-diagnostico-defesa-margem-1440x1000-full-onda2.jpg"
+    },
+    {
+      "route": "/ferramentas/diagnostico-defesa-margem/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    }
+  ]
+}
