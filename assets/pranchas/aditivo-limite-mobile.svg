@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 420" role="img" aria-labelledby="aditivo-limite-mobile-title aditivo-limite-mobile-desc" font-family="Archivo Var, Arial, Helvetica, sans-serif" fill="#071a31">
+<title id="aditivo-limite-mobile-title">Prancha P5 (móvel) · Linha do tempo do contrato e o limite do art. 125 · exemplo demonstrativo</title>
+<desc id="aditivo-limite-mobile-desc">Percentual acumulado de aditivos ao longo de 24 meses: 12%, 18% e um aditivo proposto que chegaria a 27%, 2% acima do limite de 25% para obra nova. Exemplo demonstrativo, sem obra de cliente. Procedência: data/demonstrative/plates/aditivo-limite.v1.json.</desc>
+<rect x="0" y="0" width="360" height="420" fill="#ffffff"/>
+<rect x="8" y="8" width="344" height="404" fill="#ffffff" stroke="#dfe4e6"/>
+<text x="28" y="40" font-size="14" font-weight="650">Contrato e o limite do art. 125</text>
+<defs><pattern id="aditivo-limite-m-h5d6a" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0V6" stroke="#5d6a7a" stroke-width="0.5"/></pattern></defs>
+<rect x="52" y="92" width="278" height="85" fill="#ced62a" fill-opacity=".35"/>
+<line x1="52" y1="177" x2="330" y2="177" stroke="#071a31" stroke-width="1.2"/>
+<line x1="52" y1="92" x2="330" y2="92" stroke="#5d6a7a" stroke-width="0.6" stroke-dasharray="4 3"/>
+<text x="326" y="191" font-size="12.5" font-weight="650" text-anchor="end">25% obra nova</text>
+<text x="56" y="106" font-size="12.5" fill="#5d6a7a">50% reforma</text>
+<line x1="52" y1="262" x2="330" y2="262" stroke="#071a31" stroke-width="1.2"/>
+<line x1="52" y1="262" x2="52" y2="267" stroke="#071a31" stroke-width="0.6"/>
+<text x="52" y="280" font-size="12.5" fill="#5d6a7a" text-anchor="middle">0</text>
+<line x1="121.5" y1="262" x2="121.5" y2="267" stroke="#071a31" stroke-width="0.6"/>
+<text x="121.5" y="280" font-size="12.5" fill="#5d6a7a" text-anchor="middle">6</text>
+<line x1="191" y1="262" x2="191" y2="267" stroke="#071a31" stroke-width="0.6"/>
+<text x="191" y="280" font-size="12.5" fill="#5d6a7a" text-anchor="middle">12</text>
+<line x1="260.5" y1="262" x2="260.5" y2="267" stroke="#071a31" stroke-width="0.6"/>
+<text x="260.5" y="280" font-size="12.5" fill="#5d6a7a" text-anchor="middle">18</text>
+<line x1="330" y1="262" x2="330" y2="267" stroke="#071a31" stroke-width="0.6"/>
+<text x="330" y="280" font-size="12.5" fill="#5d6a7a" text-anchor="middle">24</text>
+<text x="46" y="266" font-size="12.5" fill="#5d6a7a" text-anchor="end">0%</text>
+<text x="46" y="181" font-size="12.5" fill="#5d6a7a" text-anchor="end">25%</text>
+<text x="46" y="96" font-size="12.5" fill="#5d6a7a" text-anchor="end">50%</text>
+<rect x="225.8" y="170.2" width="104.2" height="6.8" fill="url(#aditivo-limite-m-h5d6a)" stroke="#5d6a7a" stroke-width="0.6"/>
+<path d="M52 262L121.5 262L121.5 221.2L179.4 221.2L179.4 200.8" fill="none" stroke="#071a31" stroke-width="2"/>
+<path d="M179.4 200.8L225.8 200.8L225.8 170.2L330 170.2" fill="none" stroke="#2d6f2d" stroke-width="2" stroke-dasharray="6 4"/>
+<circle cx="121.5" cy="221.2" r="3.5" fill="#071a31"/>
+<text x="115.5" y="215.2" font-size="12.5" font-weight="650" text-anchor="end">TA-01 12%</text>
+<circle cx="179.4" cy="200.8" r="3.5" fill="#071a31"/>
+<text x="173.4" y="194.8" font-size="12.5" font-weight="650" text-anchor="end">TA-02 18%</text>
+<circle cx="225.8" cy="170.2" r="3.5" fill="#2d6f2d"/>
+<text x="219.8" y="164.2" font-size="12.5" fill="#2d6f2d" font-weight="650" text-anchor="end">TA-03 27%</text>
+<g stroke="#5d6a7a" stroke-width="0.6"><line x1="249.2" y1="139" x2="225.8" y2="170.2"/><circle cx="225.8" cy="170.2" r="1.6" fill="#5d6a7a"/></g>
+<g transform="translate(255.8 130.2)"><circle r="11" fill="#071a31"/><text y="4.5" text-anchor="middle" font-size="12.5" font-weight="700" fill="#ffffff">1</text></g>
+<g stroke="#5d6a7a" stroke-width="0.6"><line x1="285" y1="146.6" x2="277.9" y2="173.6"/><circle cx="277.9" cy="173.6" r="1.6" fill="#5d6a7a"/></g>
+<g transform="translate(287.9 136)"><circle r="11" fill="#071a31"/><text y="4.5" text-anchor="middle" font-size="12.5" font-weight="700" fill="#ffffff">2</text></g>
+<text x="20" y="310" font-size="12.5">1 Aditivo proposto: 18 + 9 = 27% do valor inicial</text>
+<text x="20" y="328" font-size="12.5">2 Excesso sobre 25%: 2% · R$ 200.000 · sem direito a termo</text>
+<text x="20" y="346" font-size="12.5" fill="#5d6a7a">Meses desde a assinatura · art. 125 da Lei 14.133/2021</text>
+<text x="20" y="364" font-size="12.5" fill="#5d6a7a">Premissas sintéticas · o órgão decide o termo</text>
+<g id="aditivo-limite-m-carimbo"><rect x="8" y="384" width="344" height="28" fill="#ffffff" stroke="#dfe4e6"/><line x1="72" y1="384" x2="72" y2="412" stroke="#dfe4e6"/><line x1="192" y1="384" x2="192" y2="412" stroke="#dfe4e6"/><text x="16" y="395" font-size="12.5" fill="#5d6a7a">P5-M</text><text x="16" y="408" font-size="12.5" fill="#5d6a7a">rev. R00</text><text x="80" y="395" font-size="12.5" fill="#5d6a7a">Meses × percentual</text><text x="80" y="408" font-size="12.5" fill="#5d6a7a">acumulado</text><text x="200" y="395" font-size="12.5" fill="#5d6a7a">Exemplo demonstrativo</text><text x="200" y="408" font-size="12.5" fill="#5d6a7a">sem obra de cliente</text></g>
+</svg>

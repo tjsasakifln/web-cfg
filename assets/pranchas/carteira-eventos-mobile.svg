@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 420" role="img" aria-labelledby="carteira-eventos-mobile-title carteira-eventos-mobile-desc" font-family="Archivo Var, Arial, Helvetica, sans-serif" fill="#071a31">
+<title id="carteira-eventos-mobile-title">Prancha P7 (móvel) · Carteira de contratos por evento · exemplo demonstrativo</title>
+<desc id="carteira-eventos-mobile-desc">Matriz de 4 contratos por 4 eventos: 10 em dia, 4 abertos, 2 lacunas, ambas no Contrato C (46% da carteira). Exemplo demonstrativo, sem obra de cliente. Procedência: data/demonstrative/plates/carteira-eventos.v1.json.</desc>
+<rect x="0" y="0" width="360" height="420" fill="#ffffff"/>
+<rect x="8" y="8" width="344" height="404" fill="#ffffff" stroke="#dfe4e6"/>
+<text x="28" y="40" font-size="14" font-weight="650">Carteira de contratos por evento</text>
+<defs><pattern id="carteira-eventos-m-h5d6a" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0V6" stroke="#5d6a7a" stroke-width="0.5"/></pattern></defs>
+<text x="140" y="84" font-size="12.5" font-weight="650" text-anchor="middle">Med.</text>
+<text x="192" y="84" font-size="12.5" font-weight="650" text-anchor="middle">Adit.</text>
+<text x="244" y="84" font-size="12.5" font-weight="650" text-anchor="middle">Reeq.</text>
+<text x="296" y="84" font-size="12.5" font-weight="650" text-anchor="middle">Prazo</text>
+<text x="108" y="110" font-size="12.5" font-weight="650" text-anchor="end">Contrato A</text>
+<text x="108" y="125" font-size="12.5" fill="#5d6a7a" text-anchor="end">R$ 4,2 mi</text>
+<rect x="118" y="96" width="44" height="34" fill="#2d6f2d"/>
+<rect x="170" y="96" width="44" height="34" fill="#2d6f2d"/>
+<rect x="222" y="96" width="44" height="34" fill="#2d6f2d"/>
+<rect x="274" y="96" width="44" height="34" fill="url(#carteira-eventos-m-h5d6a)" stroke="#5d6a7a" stroke-width="0.6"/>
+<text x="108" y="156" font-size="12.5" font-weight="650" text-anchor="end">Contrato B</text>
+<text x="108" y="171" font-size="12.5" fill="#5d6a7a" text-anchor="end">R$ 7,8 mi</text>
+<rect x="118" y="142" width="44" height="34" fill="#2d6f2d"/>
+<rect x="170" y="142" width="44" height="34" fill="url(#carteira-eventos-m-h5d6a)" stroke="#5d6a7a" stroke-width="0.6"/>
+<rect x="222" y="142" width="44" height="34" fill="#2d6f2d"/>
+<rect x="274" y="142" width="44" height="34" fill="#2d6f2d"/>
+<rect x="14" y="182" width="332" height="46" fill="#ced62a" fill-opacity=".35"/>
+<text x="108" y="202" font-size="12.5" fill="#2d6f2d" font-weight="650" text-anchor="end">Contrato C</text>
+<text x="108" y="217" font-size="12.5" fill="#5d6a7a" text-anchor="end">R$ 12,5 mi</text>
+<rect x="118" y="188" width="44" height="34" fill="#ffffff" stroke="#071a31" stroke-width="1.2" stroke-dasharray="4 3"/>
+<rect x="170" y="188" width="44" height="34" fill="#ffffff" stroke="#071a31" stroke-width="1.2" stroke-dasharray="4 3"/>
+<rect x="222" y="188" width="44" height="34" fill="url(#carteira-eventos-m-h5d6a)" stroke="#5d6a7a" stroke-width="0.6"/>
+<rect x="274" y="188" width="44" height="34" fill="url(#carteira-eventos-m-h5d6a)" stroke="#5d6a7a" stroke-width="0.6"/>
+<text x="108" y="248" font-size="12.5" font-weight="650" text-anchor="end">Contrato D</text>
+<text x="108" y="263" font-size="12.5" fill="#5d6a7a" text-anchor="end">R$ 2,9 mi</text>
+<rect x="118" y="234" width="44" height="34" fill="#2d6f2d"/>
+<rect x="170" y="234" width="44" height="34" fill="#2d6f2d"/>
+<rect x="222" y="234" width="44" height="34" fill="#2d6f2d"/>
+<rect x="274" y="234" width="44" height="34" fill="#2d6f2d"/>
+<g stroke="#5d6a7a" stroke-width="0.6"><line x1="329" y1="205" x2="318" y2="205"/><circle cx="318" cy="205" r="1.6" fill="#5d6a7a"/></g>
+<g transform="translate(340 205)"><circle r="11" fill="#071a31"/><text y="4.5" text-anchor="middle" font-size="12.5" font-weight="700" fill="#ffffff">1</text></g>
+<text x="20" y="300" font-size="12.5">1 Contrato C: 46% da carteira, 2 lacunas de registro</text>
+<rect x="20" y="310" width="18" height="12" fill="#2d6f2d"/>
+<text x="44" y="320" font-size="12.5" fill="#5d6a7a">Registro contemporâneo em dia</text>
+<rect x="20" y="328" width="18" height="12" fill="url(#carteira-eventos-m-h5d6a)" stroke="#5d6a7a" stroke-width="0.6"/>
+<text x="44" y="338" font-size="12.5" fill="#5d6a7a">Evento aberto sem decisão</text>
+<rect x="20" y="346" width="18" height="12" fill="#ffffff" stroke="#071a31" stroke-width="1.2" stroke-dasharray="4 3"/>
+<text x="44" y="356" font-size="12.5" fill="#5d6a7a">Lacuna de registro</text>
+<g id="carteira-eventos-m-carimbo"><rect x="8" y="384" width="344" height="28" fill="#ffffff" stroke="#dfe4e6"/><line x1="72" y1="384" x2="72" y2="412" stroke="#dfe4e6"/><line x1="192" y1="384" x2="192" y2="412" stroke="#dfe4e6"/><text x="16" y="395" font-size="12.5" fill="#5d6a7a">P7-M</text><text x="16" y="408" font-size="12.5" fill="#5d6a7a">rev. R00</text><text x="80" y="395" font-size="12.5" fill="#5d6a7a">Matriz contratos</text><text x="80" y="408" font-size="12.5" fill="#5d6a7a">× eventos</text><text x="200" y="395" font-size="12.5" fill="#5d6a7a">Exemplo demonstrativo</text><text x="200" y="408" font-size="12.5" fill="#5d6a7a">sem obra de cliente</text></g>
+</svg>

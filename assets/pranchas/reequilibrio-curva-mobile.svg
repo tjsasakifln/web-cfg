@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 420" role="img" aria-labelledby="reequilibrio-curva-mobile-title reequilibrio-curva-mobile-desc" font-family="Archivo Var, Arial, Helvetica, sans-serif" fill="#071a31">
+<title id="reequilibrio-curva-mobile-title">Prancha P9 (móvel) · Índice de custo, data-base e o desequilíbrio a demonstrar · exemplo demonstrativo</title>
+<desc id="reequilibrio-curva-mobile-desc">Índice de custo base 100: evento no mês 7 (índice 107), 130 no mês 12 contra tendência 112; desequilíbrio hachurado de até 18 pontos. Exemplo demonstrativo, sem obra de cliente. Procedência: data/demonstrative/plates/reequilibrio-curva.v1.json.</desc>
+<rect x="0" y="0" width="360" height="420" fill="#ffffff"/>
+<rect x="8" y="8" width="344" height="404" fill="#ffffff" stroke="#dfe4e6"/>
+<text x="28" y="40" font-size="14" font-weight="650">Índice de custo × data-base</text>
+<defs><pattern id="reequilibrio-curva-m-h5d6a" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0V6" stroke="#5d6a7a" stroke-width="0.5"/></pattern></defs>
+<path d="M208.7 209.8L231.3 183.7L254 157.6L276.7 135.9L299.3 118.5L322 109.8L322 188.1L208.7 209.8Z" fill="#ced62a" fill-opacity=".35"/>
+<path d="M208.7 209.8L231.3 183.7L254 157.6L276.7 135.9L299.3 118.5L322 109.8L322 188.1L208.7 209.8Z" fill="url(#reequilibrio-curva-m-h5d6a)" stroke="none"/>
+<line x1="50" y1="262" x2="322" y2="262" stroke="#071a31" stroke-width="1.2"/>
+<line x1="50" y1="262" x2="50" y2="267" stroke="#071a31" stroke-width="0.6"/>
+<text x="50" y="280" font-size="12.5" fill="#5d6a7a" text-anchor="middle">0</text>
+<line x1="118" y1="262" x2="118" y2="267" stroke="#071a31" stroke-width="0.6"/>
+<text x="118" y="280" font-size="12.5" fill="#5d6a7a" text-anchor="middle">3</text>
+<line x1="186" y1="262" x2="186" y2="267" stroke="#071a31" stroke-width="0.6"/>
+<text x="186" y="280" font-size="12.5" fill="#5d6a7a" text-anchor="middle">6</text>
+<line x1="254" y1="262" x2="254" y2="267" stroke="#071a31" stroke-width="0.6"/>
+<text x="254" y="280" font-size="12.5" fill="#5d6a7a" text-anchor="middle">9</text>
+<line x1="322" y1="262" x2="322" y2="267" stroke="#071a31" stroke-width="0.6"/>
+<text x="322" y="280" font-size="12.5" fill="#5d6a7a" text-anchor="middle">12</text>
+<text x="44" y="244.2" font-size="12.5" fill="#5d6a7a" text-anchor="end">100</text>
+<line x1="50" y1="240.2" x2="322" y2="240.2" stroke="#dfe4e6" stroke-width="1"/>
+<text x="44" y="200.8" font-size="12.5" fill="#5d6a7a" text-anchor="end">110</text>
+<line x1="50" y1="196.8" x2="322" y2="196.8" stroke="#dfe4e6" stroke-width="1"/>
+<text x="44" y="157.2" font-size="12.5" fill="#5d6a7a" text-anchor="end">120</text>
+<line x1="50" y1="153.2" x2="322" y2="153.2" stroke="#dfe4e6" stroke-width="1"/>
+<text x="44" y="113.8" font-size="12.5" fill="#5d6a7a" text-anchor="end">130</text>
+<line x1="50" y1="109.8" x2="322" y2="109.8" stroke="#dfe4e6" stroke-width="1"/>
+<line x1="208.7" y1="84" x2="208.7" y2="262" stroke="#5d6a7a" stroke-width="0.6" stroke-dasharray="4 3"/>
+<line x1="322" y1="84" x2="322" y2="262" stroke="#5d6a7a" stroke-width="0.6" stroke-dasharray="4 3"/>
+<path d="M208.7 209.8L322 188.1" fill="none" stroke="#5d6a7a" stroke-width="1.2" stroke-dasharray="6 4"/>
+<path d="M50 240.2L72.7 235.9L95.3 231.6L118 227.2L140.7 222.8L163.3 218.5L186 214.2L208.7 209.8L231.3 183.7L254 157.6L276.7 135.9L299.3 118.5L322 109.8" fill="none" stroke="#071a31" stroke-width="2"/>
+<circle cx="208.7" cy="209.8" r="3.5" fill="#071a31"/>
+<circle cx="322" cy="109.8" r="3.5" fill="#071a31"/>
+<text x="316" y="103.8" font-size="12.5" font-weight="650" text-anchor="end">índice 130</text>
+<text x="316" y="220.1" font-size="12.5" fill="#5d6a7a" text-anchor="end">tendência 112</text>
+<g stroke="#5d6a7a" stroke-width="0.6"><line x1="185.9" y1="184" x2="208.7" y2="209.8"/><circle cx="208.7" cy="209.8" r="1.6" fill="#5d6a7a"/></g>
+<g transform="translate(178.7 175.8)"><circle r="11" fill="#071a31"/><text y="4.5" text-anchor="middle" font-size="12.5" font-weight="700" fill="#ffffff">1</text></g>
+<g stroke="#5d6a7a" stroke-width="0.6"><line x1="290.3" y1="226.5" x2="265.3" y2="178.3"/><circle cx="265.3" cy="178.3" r="1.6" fill="#5d6a7a"/></g>
+<g transform="translate(295.3 236.3)"><circle r="11" fill="#071a31"/><text y="4.5" text-anchor="middle" font-size="12.5" font-weight="700" fill="#ffffff">2</text></g>
+<text x="20" y="306" font-size="12.5">1 Evento no mês 7: alta atípica do insumo (índice 107)</text>
+<text x="20" y="324" font-size="12.5">2 Desequilíbrio a demonstrar: até 18 pontos no mês 12</text>
+<text x="20" y="342" font-size="12.5" fill="#5d6a7a">Aniversário no mês 12: reajuste não recompõe o antes</text>
+<text x="20" y="360" font-size="12.5" fill="#5d6a7a">Série sintética · base 100 · sem promessa de deferimento</text>
+<g id="reequilibrio-curva-m-carimbo"><rect x="8" y="384" width="344" height="28" fill="#ffffff" stroke="#dfe4e6"/><line x1="72" y1="384" x2="72" y2="412" stroke="#dfe4e6"/><line x1="192" y1="384" x2="192" y2="412" stroke="#dfe4e6"/><text x="16" y="395" font-size="12.5" fill="#5d6a7a">P9-M</text><text x="16" y="408" font-size="12.5" fill="#5d6a7a">rev. R00</text><text x="80" y="395" font-size="12.5" fill="#5d6a7a">Meses × índice</text><text x="80" y="408" font-size="12.5" fill="#5d6a7a">base 100</text><text x="200" y="395" font-size="12.5" fill="#5d6a7a">Exemplo demonstrativo</text><text x="200" y="408" font-size="12.5" fill="#5d6a7a">sem obra de cliente</text></g>
+</svg>
