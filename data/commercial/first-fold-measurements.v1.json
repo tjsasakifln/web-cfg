@@ -1,9 +1,9 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-09-17T07:52:20.094Z",
+  "measured_at": "2026-09-17T08:06:11.096Z",
   "measured_on": "2026-09-17",
-  "commit_sha": "152632ed56c2e6fa40e9a92b96fa88374fca6648",
+  "commit_sha": "f342b2d1f64e8b8d28757fc7ba406f1d1a1171c1",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "f168038814087e1b365d1de3042af9a3f3364743756e104711fecc0fb9fe7477",
@@ -14,7 +14,7 @@
     "assets/archivo-var-latin-bf6e041e.woff2": "bf6e041e98b0fa244d965027e9f2b6ed53470ed95f2227615510a08a67ea7f4a",
     "assets/editorial.css": "b8da14849ccb25379e5e7bd7e00cdc964032eff3f6de0960be212b116cb7252a",
     "assets/eight-offer-contract.css": "d2aead054169392b26c739ab4d95c8b2f651a66c9d6ac27aa7fd98bdafc4f79d",
-    "assets/home-10x.css": "3088e2e0d8ed041d3235f9f3e4e0dac4f3ced1dff960a7ce1e8d0de99085176b",
+    "assets/home-10x.css": "10d9e60cacb36ade094133f8b32e6aa5a88065cd4298eb950fd405bbed0951b7",
     "assets/report-capture.css": "669b93f113f417ba6a8175d9d0ab0dd846a19e991245ad9f2f1ebea48d8c0552",
     "assets/report-model-a11y-v293.css": "148fb54ad084edad56eff48e6b635e2df177e8679a724d50e2e92a88421fddce",
     "assets/report-model.css": "22e499881491794e227ba5bf3ad5e42032410221bb749b631a5501601e6fc853",
@@ -45,7 +45,7 @@
     "diretoria-b2g/index.html": "b708c947f0a04039dfb4571bf3197b8ceff50c30b3634db47cb646d615bffa46",
     "entregas/index.html": "a97308da3c5edbb2eeb15c8a1c66a5b93c31d3d64c3b94d7f06f5f245f57eb1d",
     "entregas/styles.css": "7886b4de52d324286c255ecfe9bf93e5ea43d5a692ee170e3e4f6a6d8b8915a0",
-    "index.html": "0eddb2c49f124eb9de665720c25074c7274cdb37437cad6c948a914099f07dd0",
+    "index.html": "82726b9947953307a9905edeff490950bc445bceb8472ea09d7c6379892c3326",
     "medicoes-glosas-obras-publicas/index.html": "124e31f29b3b98e91cb457943fdaa448c8e52121dc62a68ddd0e3d054f4fca3c",
     "problemas-que-resolvemos/index.html": "b0d2f95d54e5248364e5a841bb5cbbf1215de6ff16b0b6551ba26e4f64b458a2",
     "reequilibrio-obras-publicas/index.html": "83485c51f1e86bdac9875e8a437ac2bceac8b83a665d874c5fafcce650205704",
@@ -102,7 +102,7 @@
   "routes": [
     {
       "route": "/",
-      "html_sha256": "0eddb2c49f124eb9de665720c25074c7274cdb37437cad6c948a914099f07dd0",
+      "html_sha256": "82726b9947953307a9905edeff490950bc445bceb8472ea09d7c6379892c3326",
       "measured_on": "2026-09-17",
       "viewports": {
         "1366x768": {

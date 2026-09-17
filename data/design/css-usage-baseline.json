@@ -69,7 +69,7 @@
       "gradient": 0
     },
     "assets/home-10x.css": {
-      "border_radius": 2,
+      "border_radius": 5,
       "box_shadow": 0,
       "gradient": 0
     },
@@ -215,7 +215,7 @@
     }
   },
   "decoration_totals": {
-    "border_radius": 155,
+    "border_radius": 158,
     "box_shadow": 66,
     "gradient": 46
   }
