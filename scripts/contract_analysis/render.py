@@ -97,7 +97,8 @@ HUB_METHOD_HTML = (
     "interpretação técnica ou informação não localizada. A fonte pública, o trecho "
     "consultado e a data de referência acompanham o texto.</p>"
     "<p>Os instrumentos analisados são registros públicos. A publicação não afirma "
-    "que a CONFENGE tenha trabalhado para o órgão, a contratada ou qualquer das partes.</p>"
+    "que a CONFENGE tenha trabalhado para o órgão, a contratada ou qualquer das partes. "
+    f"{e(DISCLAIMER_PT)}</p>"
     "<p>Limitação: não é parecer jurídico, não julga irregularidade e não transforma "
     "“atípico” em “irregular”.</p>"
     f"{AI_DISCLOSURE_HTML}"
@@ -849,20 +850,38 @@ def render_hub_html(items: list[tuple[dict[str, Any], PublicationDecision]], *, 
         '<li><a href="#proximo-passo"><span>03</span>Contrato próprio</a></li>'
         "</ol></nav></div>"
     )
+    # Aside "Em 30 segundos" (mesmo primitivo do piloto): o que a biblioteca é,
+    # quantas análises estão publicadas (contagem real), quem assina e como citar.
+    published = len(cards)
+    hub_aside = (
+        '<aside class="aside-note" aria-labelledby="hub-30s-title">'
+        '<h2 id="hub-30s-title">Em 30 segundos</h2><dl>'
+        "<div><dt>O que é</dt><dd>Leitura editorial de instrumentos públicos: cada afirmação vem "
+        "marcada como fato, cálculo, interpretação técnica ou informação não localizada, "
+        "com fonte e data de referência.</dd></div>"
+        f'<div><dt>Publicadas</dt><dd>{published} análise{"s" if published != 1 else ""} aprovada'
+        f'{"s" if published != 1 else ""} para publicação, em <a href="#analises">Análises publicadas</a>.</dd></div>'
+        '<div><dt>Quem assina</dt><dd><a rel="author" href="/especialista/tiago-jun-sasaki/">Engº Tiago Sasaki</a>; '
+        f'correções pelo canal <a href="{CORRECTION_CHANNEL_HREF}">Como corrigir</a>.</dd></div>'
+        '<div><dt>Contrato próprio</dt><dd>A análise não substitui a leitura do seu instrumento: '
+        '<a href="#proximo-passo">leve a questão para uma conversa</a>.</dd></div>'
+        "</dl></aside>"
+    )
     body = (
         breadcrumbs_html([("Início", "/"), (ANALYSIS_LABEL_PT, None)])
         + f'<header class="content-hero article-hero"{archetype_attr("masthead")}>'
-        '<div class="container content-hero-grid"><div>'
+        '<div class="container hero-grid"><div>'
         f'<p class="eyebrow t-kicker">{e(ANALYSIS_LABEL_PT)}</p>'
         '<h1 class="t-service">Análises técnicas de contratos públicos</h1>'
         '<p class="content-lead measure">Aqui a CONFENGE examina instrumentos e registros públicos para mostrar '
         "como uma decisão contratual pode ser documentada. Cada publicação informa "
         "fontes, método, limites e uma aplicação prática.</p>"
-        f'<p class="ca-disclaimer">{e(DISCLAIMER_PT)}</p>'
         '<p class="authority-byline">Autoria: <a rel="author" href="/especialista/tiago-jun-sasaki/">Engº Tiago Sasaki</a>'
         ' · Atualizado em <time datetime="2026-08-16">2026-08-16</time>'
         f' · <a href="{CORRECTION_CHANNEL_HREF}">Encontrou um erro nesta página?</a></p>'
-        "</div></div></header>"
+        "</div>"
+        + hub_aside
+        + "</div></header>"
         + page_index
         + f"{HUB_METHOD_HTML}"
         + '<section class="sec" id="analises"><div class="container">'
