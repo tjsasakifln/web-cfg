@@ -515,9 +515,9 @@ def first_step_form_html(contract: dict[str, Any] | None = None) -> str:
 {tri_field("mitigation_requires_disclosure", "Existe uma medida concreta que exige informar a outra parte?")}
 {tri_field("client_requests_public_influence", "Há pedido para usar cargo, acesso ou influência pública?")}
 {tri_field("distinct_matter_no_signal", "A matéria é distinta e, neste recorte, não há sinal de conflito?")}
-<button class="button button-primary" type="submit" disabled="" data-conflict-submit="">Ver o resultado desta etapa</button>
 <p class="form-note">Use apenas estas opções. Nomes, detalhes e documentos entram só na etapa seguinte, combinada diretamente com a CONFENGE.</p>
-<div id="conflict-gate-result" role="status" aria-live="polite" data-conflict-gate-result="idle">Responda às perguntas para ver o próximo passo. Nenhum documento será enviado.</div>
+<button class="button button-primary" type="submit" disabled="" data-conflict-submit="">Ver o resultado desta etapa</button>
+<div id="conflict-gate-result" class="form-status" role="status" aria-live="polite" data-conflict-gate-result="idle">Responda às perguntas para ver o próximo passo. Nenhum documento será enviado.</div>
 </form>
 """
 

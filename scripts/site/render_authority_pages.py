@@ -140,8 +140,8 @@ def _page(
 {_byline(updated, version, role_label)}
 {_nav()}
 </div></header>
-{_page_index(page_index)}<section class="section"><div class="container article-layout">
-<article class="article-main simple-card privacy-card" data-policy-version="{_esc(version)}">
+{_page_index(page_index)}{_body_open(page_index)}
+<article class="article-main{'' if page_index else ' simple-card privacy-card'}" data-policy-version="{_esc(version)}">
 {_version_banner(version, historical=historical) if show_version_banner else ""}
 {body}
 </article>
@@ -159,6 +159,17 @@ def _page(
         author_name=author_name,
         data_attrs={"surface-type": "policy", "policy-version": version},
     )
+
+
+def _body_open(page_index: list[tuple[str, str]] | None) -> str:
+    """With a page index (only /conflitos/ today) the body follows the editorial
+    reading model: a plain section and the ``article-main`` measure from
+    ``assets/editorial.css``, no legacy two-column ``article-layout`` grid and
+    no boxed card (SALTO-INSTITUCIONAL-02, aceite M-10). The other policy pages
+    keep the legacy shell byte for byte."""
+    if page_index:
+        return '<section class="sec sec--tight"><div class="container">'
+    return '<section class="section"><div class="container article-layout">'
 
 
 def _page_index(entries: list[tuple[str, str]] | None) -> str:

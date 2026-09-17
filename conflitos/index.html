@@ -74,8 +74,8 @@
 <nav class="authority-policy-nav" aria-label="Políticas de autoridade"><a href="/politica-editorial/">Editorial</a><a href="/uso-de-ia/">Uso de IA</a><a href="/conflitos/">Conflitos</a><a href="/metodologia-inteligencia/">Metodologia</a><a href="/politica-editorial/historico/">Histórico</a></nav>
 </div></header>
 <div class="container"><nav class="page-index" aria-label="Nesta página"><span class="page-index__label">Nesta página</span><ol><li><a href="#triagem-operacional"><span>01</span>Como é protegida</a></li><li><a href="#nucleos"><span>02</span>Demandas cobertas</a></li><li><a href="#dados-minimos"><span>03</span>Privacidade</a></li><li><a href="#resultados"><span>04</span>Resultados</a></li><li><a href="#primeira-etapa"><span>05</span>Primeira etapa</a></li></ol></nav></div>
-<section class="section"><div class="container article-layout">
-<article class="article-main simple-card privacy-card" data-policy-version="1.1.0">
+<section class="sec sec--tight"><div class="container">
+<article class="article-main" data-policy-version="1.1.0">
 
 
 <h2 id="triagem-operacional">Como a independência é protegida</h2>
@@ -130,9 +130,9 @@
 <div class="field"><label for="mitigation_requires_disclosure">Existe uma medida concreta que exige informar a outra parte?</label><select id="mitigation_requires_disclosure" name="mitigation_requires_disclosure" required="" disabled="" data-conflict-input=""><option value="">Selecione</option><option value="yes">Sim</option><option value="no">Não</option><option value="unsure">Não sei informar</option></select></div>
 <div class="field"><label for="client_requests_public_influence">Há pedido para usar cargo, acesso ou influência pública?</label><select id="client_requests_public_influence" name="client_requests_public_influence" required="" disabled="" data-conflict-input=""><option value="">Selecione</option><option value="yes">Sim</option><option value="no">Não</option><option value="unsure">Não sei informar</option></select></div>
 <div class="field"><label for="distinct_matter_no_signal">A matéria é distinta e, neste recorte, não há sinal de conflito?</label><select id="distinct_matter_no_signal" name="distinct_matter_no_signal" required="" disabled="" data-conflict-input=""><option value="">Selecione</option><option value="yes">Sim</option><option value="no">Não</option><option value="unsure">Não sei informar</option></select></div>
-<button class="button button-primary" type="submit" disabled="" data-conflict-submit="">Ver o resultado desta etapa</button>
 <p class="form-note">Use apenas estas opções. Nomes, detalhes e documentos entram só na etapa seguinte, combinada diretamente com a CONFENGE.</p>
-<div id="conflict-gate-result" role="status" aria-live="polite" data-conflict-gate-result="idle">Responda às perguntas para ver o próximo passo. Nenhum documento será enviado.</div>
+<button class="button button-primary" type="submit" disabled="" data-conflict-submit="">Ver o resultado desta etapa</button>
+<div id="conflict-gate-result" class="form-status" role="status" aria-live="polite" data-conflict-gate-result="idle">Responda às perguntas para ver o próximo passo. Nenhum documento será enviado.</div>
 </form>
 <p class="policy-version-disclosure" data-policy-version="1.3.0">Texto e dados desta página seguem a <a href="/politica-editorial/">política editorial 1.3.0</a>. <a href="/triagem-tecnica/#corrigir-o-site">Encontrou um erro? Fale com a gente</a>.</p><script src="/conflitos/conflict-gate.js" defer=""></script>
 
