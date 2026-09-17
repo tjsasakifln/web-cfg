@@ -1,0 +1,90 @@
+/* Estudo B "coluna e margem" (CONFENGE-SALTO-INSTITUCIONAL-01, 2026-09-17).
+ * Mesmo conteúdo e mesmos materiais do estudo A (o piloto). O que muda é a
+ * relação entre texto, prova, imagem e espaço: leitura em coluna única
+ * com margem técnica à direita, prancha de abertura em faixa suave sob a
+ * declaração institucional, índice de situações em lista vertical regrada
+ * com subserviços na margem, entregas em faixa de três colunas iguais,
+ * responsabilidade em banda horizontal, obras públicas em superfície clara
+ * com só os números em escuro. Carregada depois de styles.css e home-10x.css.
+ */
+:root{--b-margin:19rem}
+
+/* Abertura: declaração em toda a largura, prancha em faixa suave -------------- */
+body[data-content-cluster="home"] .home-hero-grid{display:block}
+body[data-content-cluster="home"] .opening__copy{display:block;max-width:none}
+body[data-content-cluster="home"] .opening__title{max-width:60rem}
+body[data-content-cluster="home"] .hero h1{max-width:20ch;font-size:clamp(2.75rem,2rem + 3vw,4.5rem)}
+body[data-content-cluster="home"] .opening__body{display:grid;grid-template-columns:minmax(0,1fr);gap:1rem 3rem;margin-top:1.25rem}
+@media (min-width:1000px){body[data-content-cluster="home"] .opening__body{grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr)}
+  body[data-content-cluster="home"] .opening__body>.hero-lead{grid-column:1;grid-row:1 / span 2}
+  body[data-content-cluster="home"] .opening__body>.hero-deliverable{grid-column:2;grid-row:1;border-top:0;padding-top:0}
+  body[data-content-cluster="home"] .opening__body>.hero-actions{grid-column:2;grid-row:2}
+  body[data-content-cluster="home"] .opening__body>.hero-proof{grid-column:1 / -1}}
+body[data-content-cluster="home"] .hero{border-bottom:0}
+body[data-content-cluster="home"] .hero-figure{margin:2rem calc(50% - 50vw) 0;padding:clamp(1.5rem,3vw,2.5rem) max(var(--page-gutter),calc(50vw - var(--container) / 2));background:var(--soft);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+body[data-content-cluster="home"] .hero-figure .proof-figure__sheet{border:0;padding:0;background:transparent}
+@media (min-width:900px){body[data-content-cluster="home"] .hero-figure{grid-template-columns:minmax(0,1fr) var(--b-margin)}
+  body[data-content-cluster="home"] .hero-figure .plate__sheet{grid-column:1}
+  body[data-content-cluster="home"] .hero-figure figcaption{grid-column:2;grid-row:1;align-self:end}}
+
+/* Situações: lista vertical regrada, subserviços na margem ------------------- */
+.situation-list{display:block!important;border-top:1px solid var(--rule-strong)}
+.situation-row{display:grid!important;grid-template-columns:3rem minmax(0,1fr)!important;gap:.35rem 1.5rem;padding:1.5rem 0;border-bottom:1px solid var(--rule)}
+@media (min-width:1000px){.situation-row{grid-template-columns:3rem minmax(0,1fr) var(--b-margin)!important}
+  .situation-row>.situation-index{grid-column:1;grid-row:1 / span 4;font-size:1.5rem;letter-spacing:-.02em;padding-top:.1rem}
+  .situation-row>.situation-kicker{grid-column:2}
+  .situation-row>h3{grid-column:2;max-width:26ch}
+  .situation-row>.area__situation,.situation-row>.situation-use{grid-column:2;max-width:56ch}
+  .situation-row>.area__sub{grid-column:3;grid-row:2 / span 3;flex-direction:column;align-items:flex-start;gap:.2rem;margin:0;padding-left:1.5rem;border-left:1px solid var(--rule)}
+  .situation-row>.situation-action{grid-column:2}}
+.situation-row--b2g{background:transparent!important;color:var(--ink)!important;padding-inline:0!important;border-radius:0!important;border-left:4px solid var(--navy-900);padding-left:1rem!important;margin-top:0!important}
+.situation-row--b2g h3,.situation-row--b2g .situation-action,.situation-row--b2g .area__sub a{color:var(--ink)!important}
+.situation-row--b2g p,.situation-row--b2g .situation-use{color:var(--text)!important}
+.situation-row--b2g .situation-kicker,.situation-row--b2g .situation-index,.situation-row--b2g .situation-use strong,.situation-row--b2g .situation-action .icon{color:var(--green-700)!important}
+
+/* Entregas: faixa de três colunas iguais, prancha em cima, texto embaixo ------ */
+.deliveries{grid-template-columns:minmax(0,1fr)}
+@media (min-width:900px){.deliveries{grid-template-columns:repeat(3,minmax(0,1fr));gap:2.5rem}}
+.delivery{grid-template-columns:minmax(0,1fr)!important;gap:1rem;border-top:1px solid var(--rule-strong)}
+.delivery--flip>.plate,.delivery--flip>.delivery__text{order:initial}
+.delivery .plate__sheet .plate__desktop{display:none}
+.delivery .plate__sheet .plate__mobile{display:block;max-width:22rem;margin-inline:auto}
+.delivery__text h3{font-size:1.25rem}
+.delivery__chain{grid-template-columns:minmax(0,1fr)}
+
+/* Responsabilidade: banda horizontal, retrato pequeno à esquerda ------------- */
+.resp{grid-template-columns:minmax(0,1fr)}
+@media (min-width:900px){.resp{grid-template-columns:10rem minmax(0,1fr) minmax(0,1fr);align-items:start}}
+.portrait__frame{aspect-ratio:1;border-radius:50%}
+.portrait figcaption{font-size:var(--text-small)}
+
+/* Obras públicas: superfície clara; só os números ficam escuros --------------- */
+.b2g-vertical,.pw{background:var(--soft)!important;color:var(--ink)!important;border-top:1px solid var(--rule)}
+.pw h2,.pw__market h2,.pw .pw__path li b{color:var(--ink)!important}
+.pw p,.pw__market>p{color:var(--text)!important}
+.pw .t-kicker{color:var(--green-700)!important}
+.pw__path{border-top-color:var(--rule-strong)}
+.pw__path li{border-bottom-color:var(--rule)}
+.pw__path li>span:first-child,.pw__path li a .icon{color:var(--green-700)!important}
+.pw__path li a,.pw p a,.pw .text-link{color:var(--ink)!important;text-decoration-color:var(--rule-strong)!important}
+.pw .button-secondary{color:var(--ink)!important;border-color:var(--rule-strong)!important}
+.stat-row{background:var(--navy-900);padding:1.25rem 1.5rem;border-radius:var(--radius-sm);border-top:0}
+.pw__market{border-top-color:var(--rule-strong)}
+.contracts-list{border-top-color:var(--rule-strong)}
+.contracts-list .service-card{border-bottom-color:var(--rule)}
+.contracts-list .service-card h3{color:var(--green-700)!important}
+.contracts-list .service-card p,.market-context-base{color:var(--text)!important}
+.contracts-list .service-card p strong,.contracts-list .service-card a,.market-context-base a{color:var(--ink)!important}
+.contracts-list .service-card a .icon{color:var(--green-700)!important}
+
+/* Página de serviço: coluna de leitura com margem técnica fixa ---------------- */
+@media (min-width:1000px){
+  .svc-open__grid{grid-template-columns:minmax(0,1fr) var(--b-margin)}
+  .svc-open .aside-note{position:sticky;top:6rem}
+  .plate--dominant{grid-template-columns:minmax(0,1fr) var(--b-margin)}
+  .plate--dominant .plate__sheet{grid-column:1}
+  .plate--dominant .plate__caption{grid-column:2;grid-row:1;align-self:end;max-width:none}
+  .page-index ol{flex-direction:column;gap:0}
+  .page-index{border-bottom:0}
+  .svc-open .page-index{grid-column:1}
+}
