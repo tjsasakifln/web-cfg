@@ -44,7 +44,7 @@
         "licenses": [],
         "permission_class": "demonstrativo",
         "reviewers": [],
-        "title": "Planta do recorte de banheiro RM-01, prancha PR-ARQ-R01",
+        "title": "Prancha P4 (móvel) · Estrutura da análise de avaliação · exemplo demonstrativo",
         "versions": []
       }
     },
@@ -4627,7 +4627,7 @@
         "licenses": [],
         "permission_class": "demonstrativo",
         "reviewers": [],
-        "title": "Medições, glosas e pagamentos em obras públicas | CONFENGE",
+        "title": "Prancha P3 (móvel) · Mesma parede, quatro números · exemplo demonstrativo",
         "versions": []
       }
     },
@@ -5447,7 +5447,7 @@
         "licenses": [],
         "permission_class": "demonstrativo",
         "reviewers": [],
-        "title": "Serviços de engenharia, perícias e inteligência técnica | CONFENGE",
+        "title": "Prancha P4 (móvel) · Estrutura da análise de avaliação · exemplo demonstrativo",
         "versions": []
       }
     },
@@ -5590,5 +5590,5 @@
       }
     }
   ],
-  "site_root": "/tmp/claude-1000/-home-tjsasakifln-code-confenge-web-cfg/6fc4cd49-43ed-4ba2-95d6-c1067eebcb7e/scratchpad/clean/_site"
+  "site_root": "/home/tjsasakifln/code/confenge/.worktrees/salto-01-piloto/_site"
 }
