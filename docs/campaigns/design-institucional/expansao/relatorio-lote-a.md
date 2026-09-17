@@ -337,29 +337,38 @@ gerado não foi editado à mão):
   (necessidade), `p.hero-deliverable` (o que chega às mãos), `p.offer-proof-line.t-caption` (prova
   conferível, texto idêntico), `svc-open__actions` com **uma** ação dominante `button-primary
   button-lg` "Ver entregas e exemplos" → `#servicos-e-entregas` e "Solicitar proposta" →
-  `#captura-entregas` como alternativa em texto, `svc-open__note` ("Exemplos com dados sintéticos,
-  sempre identificados." — o antigo `hero-h1-note`, gancho do live audit), `aside.aside-note` "Em 30
-  segundos" (Serviços · Análises com preço · Antes do aceite técnico · Quem assina) e `nav.page-index`
-  com quatro âncoras. O antigo bloco navy "Comece pelo que você precisa" saiu (o índice o substitui).
-  Botão dominante medido no Chromium: 669 px no 390×844, 670 px no 1366×768.
+  `#captura-entregas` como alternativa em texto, `svc-open__note` com o e-mail contextual (como no
+  piloto; após a revisão — antes carregava uma segunda ressalva de dados sintéticos), `aside.aside-note`
+  "Em 30 segundos" (Serviços · Análises com preço · Antes do aceite técnico · Quem assina) e
+  `nav.page-index` com quatro âncoras. A ressalva de dados sintéticos fica uma vez na dobra, na
+  `offer-proof-line`, que carrega também o gancho `hero-h1-note` do live audit. O antigo bloco navy
+  "Comece pelo que você precisa" saiu (o índice o substitui). Botão dominante medido no Chromium:
+  669 px no 390×844, 670 px no 1366×768.
 - **Serviços de engenharia** (`section.capability-roll.sec#servicos-e-entregas`, `reading_method`):
   `sec-head--split` (kicker, h2 `t-editorial` com o texto exigido pelo gate, parágrafo) e
-  `ol.list-ruled` com cinco linhas `01–05` (`article.capability-group` preservado com h3, parágrafo e
-  `<a href="/…">`), esquema ilustrativo em `details` regrado na segunda coluna a partir de 900 px, link
-  de saída com seta. Sem grade de cartões.
+  prancha PG `figure.plate.plate--dominant` (`pacote-entrega`, já registrada em `assets-lote-a.json`;
+  slot `<!-- plate:pacote-entrega -->` e `<picture>` emitidos pelo gerador exatamente como
+  `plates/inline.py` os materializa, `inline --check` limpo; legenda com `span.tag` "Exemplo
+  demonstrativo"), e `ol.list-ruled` com cinco linhas `01–05` (`article.capability-group` preservado
+  com h3, parágrafo e `<a href="/…">`), esquema ilustrativo em `details` regrado na segunda coluna a
+  partir de 900 px, link de saída com seta. Sem grade de cartões.
 - **Ofertas com preço publicado** (`section.deliverables-vitrine.sec.sec--soft#enquadrar`,
   `catalog_index`): `sec-head--split`, índice pela decisão `nav.offer-decision-nav.page-index`
   ("Escolha pela decisão que está na mesa", 01–08 → `#entrega-NN`, sem caixa navy), e
   `div.vitrine-items > ol.list-ruled.list-ruled--offers` com as oito linhas: índice, kicker "Oferta
   publicada", h2 (ids `first-deliverable-title` … preservados) e preço à direita (`strong` bare, lido
   por `test_brand_contract`), `dl.vitrine-item__facts` como lista de definição regrada (rótulo | valor;
-  11 critérios, entrega antes do preço; abaixo de 480 px rótulo em coluna de 6 rem e valor em corpo
-  de legenda, sem quebra no meio da palavra), `p.vitrine-item__credit` (condições, byte-idênticas na
-  copy), ações com `button-secondary` (demonstrativo) e `text-link` (pedir). `data-*`, `aria-label`,
-  `data-cta-id`/`position` e `id` iguais.
+  12 linhas, entrega antes do preço, "Pacote e crédito" como última linha com a copy byte-idêntica em
+  `p.vitrine-item__credit` dentro do `dd`; abaixo de 480 px cada linha empilha rótulo sobre valor na
+  largura toda, valor no corpo de 16 px; a partir de 900 px as linhas formam pares em duas colunas da
+  mesma lista), ações com `button-secondary` (demonstrativo) e `text-link` (pedir). `data-*`,
+  `aria-label`, `data-cta-id`/`position` e `id` iguais.
 - **Escada de valor** (`section.offer-value-ladder[data-offer-ladder]`, dentro da seção das ofertas):
-  `sec-head`, `ol.steps` (três passos numerados), `dl.compare-ladder-figures` (classe literal
-  preservada; três números em coluna regrada) e `p.compare-note.t-caption`. Sem caixa escura.
+  `sec-head`, `ol.steps` (três passos numerados; o passo 02 traz a condição integral do pacote que
+  o `aside.deliverables-next` retirado publicava: "por R$ 8.000, pagamento único, e abate o valor de
+  qualquer unidade contratada nos 60 dias anteriores, sem acúmulo"), `dl.compare-ladder-figures`
+  (classe literal preservada; três números em coluna regrada) e `p.compare-note.t-caption`. Sem caixa
+  escura.
 - **Condições e limites** (nova `section.sec.sec--tight#condicoes-e-limites`, `limitation_notice`):
   `div.published-offers__common > div.conditions` com kicker, h2 e quatro itens: informações comuns,
   preço/condições/exemplos (frase exigida pelos gates, idêntica), limites comuns (com "Cobertura, data
@@ -375,17 +384,19 @@ gerado não foi editado à mão):
   local); `div.pillar-capture-after` com `ol.after` (três passos escritos a partir do próprio texto do
   formulário, sem prazo de resposta) e `ul.contact-alt`. Formulário em cartão branco sobre navy, como
   em `index.html#contato`.
-- Ordem **serviços → ofertas** mantida (decisão do fundador 2026-09-09, `test_services_precede…`), e
-  ação dominante da abertura mantida em "Ver entregas e exemplos" (`task-doors.v1.json#first_fold`,
-  `first-fold-contract` e o UI gate a exigem); o formulário é a ação dominante do bloco escuro.
+- Ordem **serviços → ofertas** mantida (`test_services_precede…`), e ação dominante da abertura
+  mantida em "Ver entregas e exemplos" (`task-doors.v1.json#first_fold`, `first-fold-contract` e o UI
+  gate a exigem); o formulário é a ação dominante do bloco escuro. O índice pela decisão é o primeiro
+  bloco da seção das ofertas (pedido 17 registra a decisão de conversão; o gate mede a posição em
+  relação à seção e à entrada do índice da página).
 
 Conteúdo protegido conferido: `<title>`/description/OG, canonical, robots, JSON-LD (só
 `dateModified` sincronizado pelo gerador, sem mudança), preços, prazos, condições, créditos, textos de
 CTA, `data-cta-id`/`data-cta-position`/`data-asset-id`/`data-offer-*`, ids `entrega-01..08` e dos h2,
 `#servicos-e-entregas`, `#enquadrar`, `#captura-entregas`, rótulos de veracidade ("exemplo sintético",
-"não representam cliente", "Dados identificados como sintéticos"). `main a` = 52, `button-primary`
+"não representam cliente", "Dados identificados como sintéticos"). `main a` = 53, `button-primary`
 = 4 (dois no cabeçalho, um na abertura, um no formulário), um `<form>` depois de `#entrega-08`,
-5 `details` = 5 `summary`.
+5 `details` = 5 `summary`, 1 `figure.plate`.
 
 ### Desempenho (gate do repositório, `run_lighthouse.mjs --only=/,/entregas/ --runs=3`, Chromium 1234, árvore fonte servida com gzip, mesma máquina)
 
@@ -393,9 +404,12 @@ CTA, `data-cta-id`/`data-cta-position`/`data-asset-id`/`data-offer-*`, ids `entr
 | --- | --- | --- | --- | --- | --- | --- |
 | antes (`2da310422`, worktree isolada, `--label=onda2-entregas-base`) | 99 | 1.803–1.805 | 1.354–1.358 | 769 | 144.989 | html 13.938 · fonte 60.064 · styles 21.017 · styles-offers 2.502 · entregas/styles 4.417 · script 24.308 · logo 10.605 · tokens 1.247 · ícones 6.891 |
 | depois (`--label=onda2-entregas`) | 99 | 1.953–1.957 | 1.504–1.510 | 826 | 148.743 | html 14.699 · fonte 60.064 · styles 21.017 · editorial 7.667 · entregas/styles 2.245 · script 24.308 · logo 10.605 · tokens 1.247 · ícones 6.891 |
+| após a revisão (`--label=onda2-entregas-fix`, `CHROME_PATH` = Chromium 1234 do Playwright) | 99 | 1.953–1.967 | 1.356–1.504 | 854 | 150.487 | html 15.437 · fonte 60.257 · styles 21.232 · editorial 7.882 · entregas/styles 2.660 · script 24.537 · logo 10.797 · tokens 1.461 · prancha PG móvel 1.255 · ícones 6.871 |
 
-`MEASURED_PASS` nas duas medições (tetos: LCP 2.000 ms, 153.600 B, DOM 1.100, perf ≥ 95), mas o LCP
-passou a 45 ms do teto. Diagnóstico com Lighthouse direto (mesma emulação do runner, árvore fonte com
+`MEASURED_PASS` nas três medições (tetos: LCP 2.000 ms, 153.600 B, DOM 1.100, perf ≥ 95), mas o LCP
+passou a 45 ms do teto (33 ms na pior corrida após a revisão) e o conteúdo a 3.113 B do teto: a prancha
+PG entra na carga medida mesmo com `loading="lazy"` (1.255 B gzip, o SVG móvel), e a vitrine
+empilhada custa +738 B de HTML gzip. O `summary-onda2-entregas-fix.json` foi apagado (não commitado). Diagnóstico com Lighthouse direto (mesma emulação do runner, árvore fonte com
 gzip, 1 run por variante, valores estáveis entre repetições):
 
 | Variante | FCP (ms) | LCP (ms) | Elemento LCP |
@@ -440,22 +454,25 @@ commitados). Pedido 11.
 | `npm run test:deliverables-registry` | `3650/3650` |
 | `npm run test:real-proof-registry`, `test:commercial-contract-consistency`, `test:public-offer-truth` | exit 0 |
 | `npm run test:page-contract-eight` | `735/735` |
-| `npm run test:task-doors` | `240/240` |
+| `npm run test:task-doors` | **`239/240` no HEAD `de1984156`** (`FAIL style_uses_stacked_mobile_comparison`; o relatório anterior declarava 240/240 — falso) → `240/240` após a correção `7fecede3a` |
 | `npm run test:deliverables-hub` | `27 passed` |
-| `node scripts/site/test_deliverables_hub_ui.mjs` (árvore fonte, 11 larguras) | `DELIVERABLES_HUB_UI {"ok":true}`; altura 21.485 px a 390, índice pela decisão a 4.361 px, 52 links, 2 primários, sem estouro |
-| `npm run test:cta-form-next-state` | `CTA_FORM_NEXT_STATE_OK routes=31` (censo regerado: 184) |
+| `node scripts/site/test_deliverables_hub_ui.mjs` (árvore fonte, 11 larguras) | `DELIVERABLES_HUB_UI {"ok":true}`; a 390: altura 24.037 px, índice pela decisão a 346 px do topo de `#enquadrar`, entrada 02 do índice da página a 1.439 px, 53 links, 2 primários, sem estouro; a 1440: 13.591 px |
+| `npm run test:cta-form-next-state` | `CTA_FORM_NEXT_STATE_OK routes=31` (censo regerado: 185) |
 | `npm run test:form-funnel` | `FORM_FUNNEL_OK` |
 | `npm run test:report-model`, `test:deliverable-models`, `test:deliverables-live-audit` | exit 0 |
 | `npm run test:value-first-copy`, `test:offer-naming`, `test:page-contract-operacao/execucao/ciclo/pre-edital`, `test:pricing-policy`, `test:market-fit-protocol`, `test:query-ownership` | exit 0 |
 | `node --test tests/intake/test_mv03_adaptive_intake.mjs` | `pass 17, fail 0` |
 | `node tests/inb-20260911/12/…`, `tests/attribution/test_source_to_service.mjs`, `scripts/site/test_lead_function.mjs` | `PASS` / `ATTRIBUTION_OK` / `LEAD_FUNCTION_OK tests=94` |
-| `python3 scripts/site/audit_css_usage.py` | `CSS_USAGE_OK` (entregas/styles.css 30/30 em uso; decoração 144/60/14 abaixo do baseline) |
+| `python3 scripts/site/audit_css_usage.py` | `CSS_USAGE_OK` |
+| `python3 -m scripts.demonstrative.plates.inline --check` | `OK plates inline` (slot da prancha PG em `/entregas/` emitido pelo gerador) |
+| `npm run test:lighthouse-gates` | exit 0 (contrato/rehearsal; a primeira execução da rodada terminou em exit 1 sem `FAIL` nomeado, com o rehearsal de infra em `/tmp`, e a segunda, na mesma árvore, passou: `25 cases OK`) |
+| `npm run test:visible-parity` | exit 0 |
 | `node scripts/site/test_ui_geometry.mjs` (árvore fonte) | `All UI geometry tests passed` (`entregas_deliverable_option_drives_journey` OK) |
 | `npm run test:copy-contract` | FAIL `forbidden_language:/diagnostico-b2g-360/:FL-08` — idêntico na base (fora do lote) |
 | `npm run test:page-contract-licitacao` | FAIL `dedicated_route_remains_frozen`, `public_renderer_has_no_drift` — idênticos na base (rota congelada do integrador) |
 | `npm run test:bofu-dominance` | 11 failed / 106 passed — conjunto **idêntico** ao da base (diff vazio entre as listas) |
 | `npm run test:first-fold-contract` | FAIL `evidence_/entregas/_html_bytes_match` (esperado: hash `a97308da…` de `entregas/index.html` e `entregas/styles.css` nos `input_hashes`) + as falhas já presentes na base (home, pilares, `styles.css`, `editorial.css`) |
-| `node scripts/site/run_lighthouse.mjs --only=/,/entregas/ --runs=3 --label=onda2-entregas` | `MEASURED_PASS`; números na tabela acima |
+| `node scripts/site/run_lighthouse.mjs --only=/,/entregas/ --runs=3 --label=onda2-entregas` (e `--label=onda2-entregas-fix` após a revisão) | `MEASURED_PASS`; números na tabela acima |
 | `npm run build:site` | **exit 2 na worktree e na base `2da310422`**: `FAIL-CLOSED contract-analysis build: contract_analysis_build_missing` (`approval_rendered_hash_mismatch` em `docs/editorial/CONTRACT_ANALYSIS_CANARY_STATUS`), cadeia de fechamento do integrador (`approvals.json` antes do build). Saídas rastreadas revertidas por caminho nomeado; `_site` apagado. Por isso `test:deliverables-hub-ui`, `test:ui` e Lighthouse rodaram sobre a árvore fonte, e `test:responsive-matrix`/`test:html-integrity:site` (exigem `_site`) não rodaram. |
 
 ### Testes ajustados (estéticos, por rota exata, com motivo no commit `eeca0e814`)
@@ -464,8 +481,8 @@ commitados). Pedido 11.
 | --- | --- | --- |
 | `scripts/site/test_deliverables_hub.py::test_progressive_catalog_controls_keep_a_mobile_touch_target` e `::test_progressive_catalog_css_does_not_block_first_paint` | `.capability-group>summary` (64 px; seletor morto desde que os grupos viraram `article`) → `.capability-group__schema-details>summary` (44 px); `.offer-decision-nav a` 52 px mantido | os alvos de toque continuam declarados na folha da rota, nos seletores que a composição usa |
 | `::test_services_precede_the_eight_decidable_offers_without_internal_roll` | `class="offer-decision-nav"` literal → prefixo (`offer-decision-nav page-index`) | o índice pela decisão carrega também a classe do componente do piloto; ordem serviços → índice → ofertas continua verificada |
-| `scripts/site/test_deliverables_hub_ui.mjs` | índice pela decisão medido como lista regrada (alvos ≥ 44 px, sem estouro, sem palavra quebrada, largura ≥ 110 px a 320, fonte ≥ 12,8) em vez de grade de duas colunas; altura do documento 18.600 → 21.700 (medido 21.485), posição do índice 1.800 → 4.600 (medido 4.361; fica depois dos serviços), altura do índice ≤ 560 a ≤ 360; `main a` 50 → 54 (medido 52) | composição regrada com filete por critério e índice de página; nenhum campo acrescentado ou escondido |
-| `tests/commercial/test_task_doors.mjs` | `hero_explains_engineering_value`: `<header class="deliverables-hero"` → `class="deliverables-hero[^"]*"`; `style_uses_stacked_mobile_comparison`: da grade `78px` antiga para a regra nova (`minmax(7rem,11rem) minmax(0,1fr)` + coluna de rótulo abaixo de 480 px) | mesmas propriedades (texto do herói ≥ 160 chars com entreg/engenharia/serv; comparação empilhada por critério no celular) |
+| `scripts/site/test_deliverables_hub_ui.mjs` | índice pela decisão medido como lista regrada (alvos ≥ 44 px, sem estouro, sem palavra quebrada, largura ≥ 110 px a 320, fonte ≥ 12,8) em vez de grade de duas colunas; altura do documento 18.600 → 21.700 → **24.300 após a revisão** (medido 24.037); o guarda absoluto da posição do índice (1.800, afrouxado para 4.600 na onda 2) foi **substituído** por dois invariantes relativos (índice a ≤ 500 px do topo de `#enquadrar`, medido 346; entrada 02 do índice da página a ≤ 1.800 px, medido 1.439); altura do índice ≤ 560 a ≤ 360; `main a` 50 → 54 (medido 53) | composição regrada com filete por critério e índice de página; nenhum campo acrescentado ou escondido; a geometria de conversão passa a ser medida em relação à seção, não por um número solto |
+| `tests/commercial/test_task_doors.mjs` | `hero_explains_engineering_value`: `<header class="deliverables-hero"` → `class="deliverables-hero[^"]*"`; `style_uses_stacked_mobile_comparison`: da grade `78px` antiga para a regra nova (`minmax(7rem,11rem) minmax(0,1fr)` na base + `grid-template-columns:minmax(0,1fr)` literal abaixo de 480 px) | mesmas propriedades (texto do herói ≥ 160 chars com entreg/engenharia/serv; comparação empilhada por critério no celular). **A onda 2 ajustou a asserção mas não implementou o CSS que ela exige** (a folha mantinha `6rem minmax(0,1fr)`): 239/240 no HEAD `de1984156`; corrigido no CSS, não na regex, em `7fecede3a` |
 | `tests/commercial/test_page_contract_eight.mjs` | `hub_css_local`: `.capability-roll` na folha da rota → `.capability-group`, e exige `/assets/editorial.css` ligada | a folha da rota deixou de estilizar a seção (é `.sec`) e ficou com as linhas |
 
 Não ajustados: nenhum teste de veracidade, preço, responsabilidade, privacidade, formulário,
@@ -487,3 +504,33 @@ persistência ou revisão obrigatória. `data/commercial/cta-form-next-state.v1.
 - Subconjunto de folha editorial para hubs (alavanca de FCP medida): arquivo do integrador; pedido 11.
 - `test:responsive-matrix` e `test:html-integrity:site`: exigem `_site`, que não constrói nesta
   árvore nem na base (cadeia de fechamento do integrador).
+
+### Correções após revisão — onda 2 (`/entregas/`)
+
+Dois revisores independentes (R1 e R2) sobre o HEAD `de1984156`. Veredito de R1: "NÃO ACEITAR como
+está". Commits da rodada: `7fecede3a` (rota, gerador, censo), `ecefa5664` (gate do hub) e este
+relatório. Recaptura 390/1440 com a tag `onda2` (imagens abertas e conferidas; manifesto
+`manifest-onda2.json`: 24.037 / 13.591 px, overflow 320 = 0).
+
+| # | Achado (severidade, fonte) | Ação | Prova |
+| --- | --- | --- | --- |
+| 1 | **ALTA** (R1, R2): `test:task-doors` reprovava no HEAD (239/240, `style_uses_stacked_mobile_comparison`) e o relatório declarava 240/240; a asserção ajustada exigia empilhar rótulo sobre valor abaixo de 480 px e o CSS mantinha duas colunas (`6rem minmax(0,1fr)`). | Procedente. Corrigido **no CSS**, não na regex: `@media (max-width:480px){.vitrine-item__facts>div{grid-template-columns:minmax(0,1fr)}}` (regra literal que o gate lê), `gap`/`padding` em regra separada, `dd` no corpo (16 px; o override de legenda saiu). Comentários do CSS e do teste passaram a descrever o que existe. Tabela de testes corrigida com o resultado real do HEAD anterior. | `node tests/commercial/test_task_doors.mjs` → `240/240`; medição Chromium a 390: `ddFont=16px`, `ddW=301` (largura toda da coluna de conteúdo); `entregas-390x844-full-onda2.jpg`. |
+| 2 | **MÉDIA** (R1): catálogo ilegível a 390 (rótulo 96 px, valor 196 px a 14 px, rótulos em 3 linhas). | Mesma correção do #1; nenhum rótulo quebra, valor a 16 px na largura toda. | Idem; `m390` fatias 3–4 da captura. |
+| 3 | **MÉDIA** (R1, R2): LCP a 45 ms do teto na rota crítica do gate de Lighthouse; bloqueia a promoção, alavanca (subconjunto de `editorial.css`) do integrador. | Fora do alcance do lote (ambos os revisores escopam à promoção). Remedido após a rodada: LCP 1.953–1.967 ms, FCP 1.356–1.504, conteúdo 150.487 B (prancha PG móvel entra na carga medida mesmo `lazy`: +1.255 B; HTML +738 B). Pedido 11 reescrito com os números novos; se a borda medir > 2.000 ms, a reversão do eixo largo do `h1` (ganho de FCP de 145 ms demonstrado) é a alavanca de rota que sobra. | `run_lighthouse.mjs --only=/,/entregas/ --runs=3 --label=onda2-entregas-fix` → `MEASURED_PASS` (tabela de desempenho). |
+| 4 | **MÉDIA** (R1): página mais longa que a produção e o hub piloto (21.485 / 18.159 / 15.959 a 390; 14.909 / 12.007 / 9.931 a 1440); tetos do gate movidos. | Parcialmente procedente. A 1440 os critérios formam **pares em duas colunas** da mesma lista (`@media (min-width:900px)`, todos os campos visíveis): oferta 735–753 px (era 1.166; cartão antigo ~850), página **14.909 → 13.591**. A 390 a página **cresceu** para 24.037: é o custo de 8 ofertas × 12 critérios empilhados na largura toda com o valor no corpo (#1 e #2, exigidos pela mesma revisão) mais a prancha PG (#7); paddings reduzidos (`.4rem`), primeiro esquema mantido fechado para não somar ~600 px. A alternativa de voltar o valor a 14 px (como a produção, `--text-small`) foi descartada porque contraria a legibilidade das condições materiais pedida no #2. Teto do gate recalibrado com o medido + 1,1 % (24.300), não deixado folgado. | `measure.mjs` (Chromium): `vitrines` 390 = [1986, 1517, 1563, 1517, 1563, 1517, 1494, 1446]; 1440 = [1050, 735, 753, 735, 735, 735, 735, 753]; `#enquadrar` 15.135 / 8.313 px. |
+| 5 | **MÉDIA** (R1, R2): condição "pagamento único" do pacote de R$ 8.000 sumiu da rota com o `aside.deliverables-next`. | Procedente. A condição integral do aside entrou no passo 02 da escada, via gerador, com a copy da base: "reúne … por R$ 8.000, **pagamento único, e abate o valor de qualquer unidade contratada nos 60 dias anteriores, sem acúmulo**" (`pkg.credit_window_days`, `pkg.credit_stacking_note`). Não é derivável do contrato (`page-contract-eight.v1.json#package` não tem campo de forma de pagamento) — registrado no pedido 18 para o dono do dado. | `grep -c 'pagamento único' entregas/index.html` = 1; `test:public-offer-truth 132/132`, `test:commercial-contract-consistency 521/521`, `test:page-contract-eight 735/735`. |
+| 6 | **MÉDIA** (R1): ressalva de dados sintéticos repetida na dobra (`offer-proof-line` + `svc-open__note`). | Procedente. Uma frase de veracidade na abertura (`offer-proof-line`, que passou a carregar também o gancho `hero-h1-note` lido por `audit_deliverables_live.mjs:339`); o slot `svc-open__note` recebeu o e-mail contextual, como no piloto ("O primeiro contato é em texto, sem anexo; a resposta nomeia a entrega…", derivado do próprio texto do formulário). A ressalva completa segue só em Condições e limites e na nota da escada (esta última é copy protegida do gerador). Censo de CTAs 184 → 185 com motivo. | `grep -c 'sempre identificados'` = 0; `hero_synthetic_disclosure` OK; `test:cta-form-next-state` OK. |
+| 7 | **MÉDIA** (R1): ação dominante leva a esquemas fechados, coluna direita vazia em ≥ 900 px, nenhuma prancha na rota. | Procedente na parte da prancha: a prancha PG `pacote-entrega` (registrada no lote A, mesma família de conteúdo do esquema 01) entra como `figure.plate.plate--dominant` logo após a cabeça da seção de serviços, onde o botão "Ver entregas e exemplos" aterrissa, com `span.tag` "Exemplo demonstrativo" e legenda derivada da própria prancha. Emitida pelo gerador com o slot e o `<picture>` byte-idênticos aos de `plates/inline.py` (ambos os `--check` passam). Os cinco `details` continuam fechados (divulgação progressiva decidida em 2026-09-10 e exigida pelos gates de `summary`; abrir o primeiro custaria ~600 px a 390). A coluna direita em ≥ 900 px segue com o `summary` de uma linha: não há como abrir um `details` por CSS, e trocar a grade por bloco corrido deixaria a linha inteira só com texto. | `git grep -c 'figure class="plate' entregas/index.html` = 1; `inline --check` OK; `d-plate` na captura 1440. |
+| 8 | **MÉDIA** (R2): índice pela decisão movido para depois dos serviços (1.017 → 4.361 px) com o guarda afrouxado 1.800 → 4.600; justificativa pela decisão do fundador não cobre a mudança. | Procedente quanto à justificativa e ao limiar: a frase sobre o fundador saiu do gate, da matriz e do relatório. A posição foi **mantida** com decisão explícita registrada (pedido 17, para o integrador/fundador confirmar): o índice pela decisão é o primeiro bloco da seção das ofertas, e a entrada "02 Análises com preço publicado" do índice da página, na abertura, leva até ele em um toque. O gate deixou de usar um número solto e passou a cobrir a posição **relativa**: índice a ≤ 500 px do topo de `#enquadrar` (medido 346) e entrada do índice da página a ≤ 1.800 px (medido 1.439), reprovando se o índice se afastar da cabeça da seção ou a entrada sair da abertura. Não restaurei a emissão antecipada: dois índices em sequência na abertura (página + decisão) repetiria a caixa navy que a campanha retira. | `ecefa5664`; `DELIVERABLES_HUB_UI ok:true`; métricas `offersSectionTop`/`pageIndexOffersLinkTop` no relatório do gate. |
+| 9 | **BAIXA** (R1): índice pela decisão com quebra irregular a 390. | Procedente. `.offer-decision-nav li{flex-basis:100%}` abaixo de 480 px: um item por linha. | `navLis` 390 = [18 × 8]. |
+| 10 | **BAIXA** (R1): "Pacote e crédito" órfão fora do ritmo da lista. | Procedente com **refutação parcial** da forma proposta: `<dd class="vitrine-item__credit">` quebraria `test_deliverables_hub.py:373` (veracidade: sem "sintético" no crédito) e `:502`, que leem `class="vitrine-item__credit">…</p>`. Forma adotada: `<div class="vitrine-item__credit-row"><dt>Pacote e crédito</dt><dd><p class="vitrine-item__credit">…</p></dd></div>`, copy idêntica sem o `<strong>` inicial (nenhum gate o referencia). | `test:deliverables-hub 27 passed`; `d1440-3` na captura. |
+| 11 | **BAIXA** (R1): sem WhatsApp em `contact-alt`. | Decisão registrada, sem alteração: a base também não tinha `wa.me` (não é regressão); o formulário é a ação dominante e o e-mail a alternativa subordinada; um `wa.me` novo com texto pré-preenchido seria link de contato novo (§3) e mais um salto no censo de CTAs. Fica no pedido 19 para o dono da rota decidir. | `grep -c wa.me entregas/index.html` = 0 (base e HEAD). |
+| 12 | **BAIXA** (R2): copy nova de condição hard-coded no gerador ("Serviços de engenharia por proposta…") e título do bloco alterado. | Mantida e registrada como copy autorizada: a frase deriva do AGENTS.md ("before technical acceptance confirm scope, location, field/logistics, proven professional attribution … and ART when applicable") e o `aside-note` da abertura aponta para "Condições e limites" justamente por ela. Pedido 20 propõe levá-la ao contrato de copy do hub. | — |
+| 13 | **PREFERÊNCIA** (R1): valores em minúscula e par PRAZO / QUANDO A CONTAGEM COMEÇA repetido nas ofertas 01 e 08. | Herdado da base, copy protegida do contrato de dados; pedido 18 ao dono do dado. | `grep -c '<dd>uma empresa'` = 1 na base e no HEAD. |
+| 14 | **PREFERÊNCIA** (R1): menu móvel com dois controles de fechar. | Casca do integrador (`scripts/site/shell_nav.py`); pedido 21. | `entregas-390x844-menu-onda2.jpg`. |
+| 15 | R2, último achado (BAIXA) truncado na entrega da revisão ("ramo campaign/salto-02/lote-a (HEAD de1984156, merge-base 2da3104…"). | Sem texto para agir; registrado (pedido 22) para que o integrador o recupere da revisão original. | — |
+
+Refutações com evidência: nenhuma total. Parciais: #10 (forma proposta quebra gate de veracidade;
+adotada forma equivalente) e #4 (a 390 a página não encurta sem contrariar #1/#2; encurtou a 1440).
+Notas de R1 por dimensão que esta rodada ataca: densidade/legibilidade móvel (#1, #2, #9),
+composição (#4, #7, #10), hierarquia (#6, #8).
