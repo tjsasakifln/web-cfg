@@ -659,7 +659,9 @@ def render_page(page: dict[str, Any]) -> str:
             '<meta name="editorial-material-hash" content="'
             + e(current_material_hash)
             + '"/><link href="/assets/editorial-a11y-v293.css" rel="stylesheet"/>'
-            + EDITORIAL_SHEET_LINK
+            # A página com bloco de ferramenta (checklist interativo) usa o bloco
+            # Tool da folha, que o subconjunto Article não traz.
+            + (EDITORIAL_FULL_SHEET_LINK if "tool-shell" in main else EDITORIAL_SHEET_LINK)
         ),
     )
 

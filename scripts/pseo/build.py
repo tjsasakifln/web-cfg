@@ -438,8 +438,18 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
         # na linha do hub vai só a oração inteira, nunca um fragmento cortado.
         text = (description or "").strip()
         if text.endswith(("…", "...")):
-            head, dot, _tail = text.rstrip("….").rpartition(". ")
-            text = f"{head}." if dot else ""
+            body = text.rstrip("….").strip()
+            head, dot, _tail = body.rpartition(". ")
+            if dot:
+                return f"{head}."
+            # Sem ponto final: a oração principal até o primeiro travessão,
+            # ponto e vírgula ou dois-pontos; se não houver, a linha fica sem
+            # resumo em vez de exibir um fragmento cortado.
+            for sep in (" — ", "; ", ": "):
+                clause = body.split(sep, 1)[0].strip()
+                if sep in body and len(clause) >= 40:
+                    return f"{clause}."
+            return ""
         return text
 
     def items_for(ptype: str) -> list[tuple]:
