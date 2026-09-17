@@ -1622,7 +1622,11 @@ async function main() {
       { path: "/acompanhamento-contratos-obras/", frozen: false },
       // 2026-09-16: the six B2G pillars were released by the founder's capture
       // decision and follow the OG-only rule like every other route.
-      { path: "/reequilibrio-obras-publicas/", frozen: false },
+      // 2026-09-17 (SALTO-INSTITUCIONAL-02, lote B): /reequilibrio-obras-publicas/
+      // was recomposed in the editorial direction (section.svc-open, no
+      // content-hero grid), so the pillar probe moves to a pillar that still
+      // carries the one-column article hero; the OG-only rule is unchanged.
+      { path: "/atrasos-prorrogacao-obras-publicas/", frozen: false },
     ];
     const reports = [];
     for (const width of [320, 390, 768, 1024, 1440]) {
