@@ -776,6 +776,13 @@ def _meta_properties(html: str) -> dict[str, str]:
 # basta para sair de um congelamento.
 EDITORIAL_RECOMPOSED_ROUTES = frozenset({
     "medicoes-glosas-obras-publicas/index.html",
+    # 2026-09-17 (SALTO-INSTITUCIONAL-02, lote B): the five remaining B2G
+    # pillars follow the same editorial composition as the pilot pillar.
+    "aditivos-obras-publicas/index.html",
+    "auditoria-orcamento-licitacao/index.html",
+    "diagnostico-b2g-360/index.html",
+    "diagnostico-pre-licitacao/index.html",
+    "reequilibrio-obras-publicas/index.html",
 })
 
 
