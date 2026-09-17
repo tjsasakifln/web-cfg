@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import re
+import unicodedata
 from functools import lru_cache
 from pathlib import Path
 from typing import Any
@@ -94,7 +95,42 @@ def _is_checklist_page(page):
     return resolve_interaction_type(page) == "checklist"
 
 
+# Folha editorial da campanha "prancha e percurso" (lote C): modelo de leitura
+# do bloco Article (índice de página, tabelas roláveis, autor, fontes).
+EDITORIAL_SHEET_LINK = '<link href="/assets/editorial.css" rel="stylesheet"/>'
+MIN_H2_FOR_PAGE_INDEX = 3
+
+
+def _slug(text: str) -> str:
+    text = re.sub(r"<[^>]+>", "", text)
+    text = unicodedata.normalize("NFKD", text).encode("ascii", "ignore").decode("ascii")
+    text = re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")
+    return text[:60].rstrip("-") or "secao"
+
+
+def _plain(text: str) -> str:
+    return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", "", text)).strip()
+
+
+def page_index_html(entries: list[tuple[str, str]]) -> str:
+    """nav.article-toc 'Nesta página': uma entrada por h2 de leitura, quando há três ou mais."""
+    if len(entries) < MIN_H2_FOR_PAGE_INDEX:
+        return ""
+    items = "".join(f'<li><a href="#{e(a)}">{e(t)}</a></li>' for a, t in entries)
+    return (
+        '<nav aria-label="Nesta página" class="article-toc"><strong>Nesta página</strong>'
+        f"<ol>{items}</ol></nav>"
+    )
+
+
 def markdown_to_html(md: str, *, checklist: bool = False) -> str:
+    html, _entries = markdown_to_html_with_index(md, checklist=checklist)
+    return html
+
+
+def markdown_to_html_with_index(
+    md: str, *, checklist: bool = False
+) -> tuple[str, list[tuple[str, str]]]:
     """Convert editorial markdown to HTML.
 
     When checklist=True, bullet lines become interactive checkbox items
@@ -108,6 +144,8 @@ def markdown_to_html(md: str, *, checklist: bool = False) -> str:
     in_check = False
     in_section = False
     check_i = 0
+    index_entries: list[tuple[str, str]] = []
+    taken_ids: set[str] = set()
 
     def close_lists() -> None:
         nonlocal in_ul, in_ol, in_check
@@ -179,10 +217,19 @@ def markdown_to_html(md: str, *, checklist: bool = False) -> str:
             title = line[3:] if line.startswith("## ") else line[2:]
             close_section()
             html, hid = heading_html("h2", title)
-            sid = f' id="{hid}"' if hid else ""
-            out.append(f'<section class="editorial-section"{sid}>')
+            # id estável a partir do texto quando o markdown não declara {#id};
+            # nunca duplica um id já usado na página.
+            base = hid or _slug(re.sub(r"\s*\{#[a-z0-9-]+\}\s*$", "", title))
+            base = re.sub(r"^\d+-", "", base) or base
+            candidate, n = base, 2
+            while candidate in taken_ids:
+                candidate, n = f"{base}-{n}", n + 1
+            taken_ids.add(candidate)
+            out.append(f'<section class="editorial-section" id="{candidate}">')
             in_section = True
             out.append(html)
+            label = re.sub(r"^\d+\.\s+", "", re.sub(r"\s*\{#[a-z0-9-]+\}\s*$", "", title.strip()))
+            index_entries.append((candidate, _plain(_md_inline(label))))
         elif re.match(r"^\d+\.\s+", line):
             if not in_ol:
                 close_lists()
@@ -224,7 +271,7 @@ def markdown_to_html(md: str, *, checklist: bool = False) -> str:
             "</div>"
         )
         body = progress + "\n" + body
-    return body
+    return body, index_entries
 
 
 
@@ -394,10 +441,13 @@ def render_page(page: dict[str, Any]) -> str:
         (title, None),
     ]
     structured_html = render_structured_checklist(page) if page.get("checklist_items") else ""
-    body_html = markdown_to_html(
+    body_html, index_entries = markdown_to_html_with_index(
         page.get("body_markdown") or "",
         checklist=(resolve_interaction_type(page)=="checklist" and not page.get("checklist_items")),
     )
+    if page.get("sources"):
+        index_entries = index_entries + [("fontes", "Fontes")]
+    page_index = page_index_html(index_entries)
     answer = page.get("direct_answer") or ""
     published = page.get("date_published") or "2026-08-02"
     modified = page.get("date_modified") or published
@@ -546,6 +596,7 @@ def render_page(page: dict[str, Any]) -> str:
 <span class="answer-box-kicker">Resposta direta</span>
 <p class="answer-box-body">{e(answer)}</p>
 </div>
+{page_index}
 {structured_html}
 <div class="editorial-body">
 {body_html}
@@ -595,6 +646,7 @@ def render_page(page: dict[str, Any]) -> str:
             '<meta name="editorial-material-hash" content="'
             + e(current_material_hash)
             + '"/><link href="/assets/editorial-a11y-v293.css" rel="stylesheet"/>'
+            + EDITORIAL_SHEET_LINK
         ),
     )
 
@@ -619,11 +671,11 @@ def render_hub(hub: dict[str, Any], pages: list[dict[str, Any]]) -> str:
         if p.get("status") not in {"INDEXABLE", "PUBLISHED"}:
             continue
         cards.append(
-            f'<article class="library-item"><div class="library-rank"></div><div>'
-            f'<span class="content-badge guide-badge">{e(_archetype_badge(p.get("archetype")))}</span>'
+            f'<li><span class="hub-list__index">{len(cards) + 1:02d}</span><div>'
+            f'<span class="tag">{e(_archetype_badge(p.get("archetype")))}</span>'
             f'<h2><a href="{e(p["url"])}">{e(p["title"])}</a></h2>'
             f'<p>{e(p.get("meta_description") or p.get("direct_answer","")[:160])}</p>'
-            f"</div></article>"
+            f'</div><div class="hub-list__action"><a href="{e(p["url"])}">Ler <svg class="icon"><use href="#i-arrow"></use></svg></a></div></li>'
         )
     wa_msg = hub.get("cta_whatsapp") or (
         f"Olá, Tiago. Estou na seção {title} da CONFENGE e quero orientação sobre contratos de obras públicas."
@@ -635,8 +687,8 @@ def render_hub(hub: dict[str, Any], pages: list[dict[str, Any]]) -> str:
     # Never publish an empty library section or "0 guias" / empty-index copy.
     if cards:
         library_block = (
-            '<section class="section library-section"><div class="container">'
-            f'<div class="library-list">{"".join(cards)}</div>'
+            '<section class="sec sec--tight" aria-label="Páginas desta seção"><div class="container">'
+            f'<ol class="hub-list">{"".join(cards)}</ol>'
             "</div></section>"
         )
     else:
@@ -647,18 +699,18 @@ def render_hub(hub: dict[str, Any], pages: list[dict[str, Any]]) -> str:
     related_items = hub.get("related") or []
     if related_items:
         related_cards = "".join(
-            f'<article class="library-item"><div class="library-rank"></div><div>'
-            f'<h2><a href="{e(r["url"])}">{e(r["title"])}</a></h2>'
+            f'<li><span class="hub-list__index">{i:02d}</span><div>'
+            f'<h3><a href="{e(r["url"])}">{e(r["title"])}</a></h3>'
             f'<p>{e(r["blurb"])}</p>'
-            f"</div></article>"
-            for r in related_items
+            f'</div><div class="hub-list__action"><a href="{e(r["url"])}">Ler <svg class="icon"><use href="#i-arrow"></use></svg></a></div></li>'
+            for i, r in enumerate(related_items, 1)
         )
         related_block = (
-            '<section class="section section--tight"><div class="container">'
-            '<header class="section-head"><p class="eyebrow">Na biblioteca</p>'
-            f'<h2>{e(hub.get("related_title") or "Leituras que continuam este tema")}</h2>'
-            f'<p class="section-lead">{e(hub.get("related_lead") or "")}</p></header>'
-            f'<div class="library-list">{related_cards}</div>'
+            '<section class="sec sec--soft"><div class="container">'
+            '<header class="sec-head"><span class="t-kicker">Na biblioteca</span>'
+            f'<h2 class="t-editorial">{e(hub.get("related_title") or "Leituras que continuam este tema")}</h2>'
+            f'<p>{e(hub.get("related_lead") or "")}</p></header>'
+            f'<ol class="hub-list">{related_cards}</ol>'
             "</div></section>"
         )
     else:
@@ -676,11 +728,11 @@ def render_hub(hub: dict[str, Any], pages: list[dict[str, Any]]) -> str:
 """
     body = f"""
 {breadcrumbs_html(crumbs)}
-<header class="content-hero"><div class="container">
-<p class="eyebrow">Biblioteca técnica</p>
+<header class="content-hero article-hero"><div class="container content-hero-grid"><div>
+<p class="eyebrow t-kicker">Biblioteca técnica</p>
 <h1>{e(title)}</h1>
 <p class="content-lead">{e(desc)}</p>
-</div></header>
+</div></div></header>
 {library_block}
 {related_block}
 {case_cta}
@@ -704,6 +756,7 @@ def render_hub(hub: dict[str, Any], pages: list[dict[str, Any]]) -> str:
         body_main=body,
         wa_message=wa_msg,
         author_name="Biblioteca técnica CONFENGE",
+        extra_head=EDITORIAL_SHEET_LINK,
         data_attrs={
             "content-type": "hub",
             "editorial-topic": hub.get("topic") or hub.get("id") or "",
