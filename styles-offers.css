@@ -4,13 +4,83 @@
   flex-direction:column;
 }
 
-/* Contract-defense product and hub components (#333). */
-.contract-product,.contract-products-hub{padding:72px 0;background:var(--soft);border-block:1px solid var(--rule)}.contract-product header,.contract-products-hub>div>header{max-width:840px;margin-bottom:28px}.contract-product header h2{max-width:18ch;margin:.35rem 0;font-size:var(--text-h2)}.contract-products-hub h2{max-width:26ch;margin:.35rem 0;font-size:var(--text-h2)}.contract-product header>p:last-child,.contract-products-hub>div>header>p:last-child{color:#435369;line-height:1.65}.contract-product__lockup{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:0;background:var(--white);color:var(--ink);border:1px solid var(--rule-strong)}.contract-product__lockup>div{padding:18px;min-width:0}.contract-product__lockup>div+div{border-left:1px solid var(--rule)}.contract-product__lockup dt,.contract-products-hub dt{font-family:var(--mono);font-size:.8rem;font-weight:800;text-transform:uppercase}.contract-product__lockup dt{color:var(--green-700)}.contract-product__lockup dd{margin:5px 0 0;color:var(--ink);font-weight:760;line-height:1.45}.contract-product__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}.contract-product__grid>section{padding:22px;background:#fff;border:1px solid #c7d1d8}.contract-product__grid h3{margin:0 0 9px;font-size:1rem}.contract-product__grid p,.contract-product__grid ul{margin:0;color:#435369;font-size:.82rem;line-height:1.6}.contract-product__grid ul{padding-left:18px}.contract-product__example{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;margin-top:12px;background:#c7d1d8;border:1px solid #c7d1d8}.contract-product__example p{margin:0;padding:16px;background:#e8f1e5;color:#34465a;font-size:.8rem;line-height:1.55}.contract-product__example strong{display:block;color:#071a31}.contract-product__action{margin:22px 0 0}.contract-product__capture{display:grid;grid-template-columns:minmax(0,.7fr) minmax(0,1fr);gap:32px;margin-top:28px;padding:28px;background:#fff;border:1px solid #b8c6cd}.contract-product__capture h3{margin:0 0 8px}.contract-product__capture form{display:grid;min-width:0;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.contract-product__capture label{display:grid;min-width:0;gap:6px;color:#223447;font-size:.8rem;font-weight:720}.contract-product__capture input,.contract-product__capture select,.contract-product__capture textarea{box-sizing:border-box;display:block;width:100%;max-width:100%;min-width:0;padding:11px 12px;border:1px solid #9daeb7;border-radius:var(--radius-sm);background:#fff;color:#071a31;font:inherit}.contract-product__capture input,.contract-product__capture select{min-height:48px}.contract-product__capture textarea,.contract-product__capture .contract-product__consent,.contract-product__capture button,.contract-product__capture .form-status,.contract-product__capture form>.contract-product-form__row{grid-column:1/-1}.contract-product-form__row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}.contract-product__consent{display:flex!important;grid-template-columns:none!important;align-items:flex-start}.contract-product__consent input{width:auto;margin-top:3px}.contract-products-hub__grid{display:grid;grid-template-columns:minmax(0,1fr);gap:0;margin:0 0 28px;border-top:1px solid var(--rule-strong)}.contract-products-hub__card{display:grid;grid-template-columns:minmax(0,1fr);grid-template-areas:"t" "d" "m" "a";gap:.35rem 1.5rem;padding:1.1rem 0;background:transparent;border:0;border-bottom:1px solid var(--rule)}.contract-products-hub__card h3{grid-area:t;margin:0;font-size:1.08rem}.contract-products-hub__card>p{grid-area:d;margin:0;color:var(--text);font-size:.9rem;line-height:1.5;max-width:52ch}.contract-products-hub__card dl{grid-area:m;display:grid;grid-template-columns:1fr 1fr;gap:8px 16px;margin:.35rem 0 0}.contract-products-hub__card dd{margin:3px 0 0;font-weight:800;color:var(--ink)}.contract-products-hub__card a{grid-area:a;display:inline-flex;align-items:center;min-height:44px;padding:0;color:var(--green-700);font-weight:800;white-space:nowrap}
+/* Contract-defense product and hub components (#333). Editorial surface
+   (SALTO-INSTITUCIONAL-02, lote B): ruled rows instead of card grids, one
+   dominant action per page (the on-page form), no boxed cells. */
+.contract-product,.contract-products-hub{padding:72px 0;background:var(--soft);border-block:1px solid var(--rule)}
+.contract-product header,.contract-products-hub>div>header{max-width:840px;margin-bottom:28px}
+.contract-product header h2{margin:.35rem 0;font-size:var(--text-h2)}
+.contract-products-hub h2{max-width:26ch;margin:.35rem 0;font-size:var(--text-h2)}
+.contract-product header>p:last-child,.contract-products-hub>div>header>p:last-child{color:#435369;line-height:1.65}
+.contract-product__lockup{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:0;background:var(--white);color:var(--ink);border:1px solid var(--rule-strong)}
+.contract-product__lockup>div{padding:18px;min-width:0}
+.contract-product__lockup>div+div{border-left:1px solid var(--rule)}
+.contract-product__lockup dt,.contract-products-hub dt{font-family:var(--mono);font-size:.8rem;font-weight:800;text-transform:uppercase}
+.contract-product__lockup dt{color:var(--green-700)}
+.contract-product__lockup dd{margin:5px 0 0;color:var(--ink);font-weight:760;line-height:1.45}
+.contract-product__terms{margin:1.5rem 0 0;border-top:1px solid var(--rule-strong)}
+.contract-product__terms>div{display:grid;grid-template-columns:minmax(0,1fr);gap:.25rem 1.5rem;padding:.9rem 0;border-bottom:1px solid var(--rule);min-width:0}
+.contract-product__terms dt{margin:0;font-family:var(--sans-narrow);font-stretch:var(--narrow);font-weight:750;font-size:var(--text-small);letter-spacing:.08em;line-height:1.4;text-transform:uppercase;color:var(--green-700)}
+.contract-product__terms dd{margin:0;color:var(--text);line-height:1.55;max-width:64ch}
+.contract-product__terms dd p,.contract-product__terms dd ul{margin:0}
+.contract-product__terms dd p+p{margin-top:.4rem}
+.contract-product__terms dd ul{padding-left:1.1rem}
+.contract-product__lockup+p{margin:1rem 0 0}
+.contract-product__example{margin:2rem 0 0;padding:0}
+.contract-product__example .t-kicker{margin:.9rem 0 .35rem}
+.contract-product__example p{display:grid;grid-template-columns:minmax(0,1fr);gap:.2rem 1.5rem;margin:0;padding:.75rem 0;border-top:1px solid var(--rule);color:var(--text);font-size:var(--text-caption);line-height:1.5}
+.contract-product__example p:last-child{border-bottom:1px solid var(--rule)}
+.contract-product__example strong{font-family:var(--sans-narrow);font-stretch:var(--narrow);font-weight:750;font-size:var(--text-small);letter-spacing:.08em;line-height:1.4;text-transform:uppercase;color:var(--ink)}
+.contract-product__action{margin:1.5rem 0 0}
+@media(min-width:900px){.contract-product__terms>div,.contract-product__example p{grid-template-columns:14rem minmax(0,1fr)}}
+.contract-product__capture{display:grid;grid-template-columns:minmax(0,1fr);gap:1.25rem 3rem;margin-top:2.5rem;padding:2rem 0 0;border-top:1px solid var(--rule-strong)}
+.contract-product__capture>div{max-width:38rem}
+.contract-product__capture h3{margin:0 0 .5rem;font-family:var(--sans-wide);font-stretch:var(--wide);font-size:var(--text-h2);font-weight:740;letter-spacing:-.02em;line-height:1.1;color:var(--ink)}
+.contract-product__capture>div>p{margin:0;color:var(--text);line-height:1.55}
+.contract-product__capture form{display:grid;min-width:0;grid-template-columns:minmax(0,1fr);gap:14px;max-width:44rem}
+.contract-product__capture label{display:block;min-width:0;color:var(--ink);font-size:1rem;font-weight:700;line-height:1.4}
+.contract-product__capture .field-optional{font-weight:400;color:var(--muted)}
+.contract-product__capture input,.contract-product__capture select,.contract-product__capture textarea{box-sizing:border-box;display:block;width:100%;max-width:100%;min-width:0;margin-top:6px;padding:11px 12px;border:1px solid #9daeb7;border-radius:var(--radius-sm);background:#fff;color:#071a31;font:inherit;font-weight:400}
+.contract-product__capture input,.contract-product__capture select{min-height:48px}
+.contract-product__capture select{text-overflow:ellipsis}
+@media(max-width:420px){.contract-product__capture select{font-size:.9rem;padding-inline:8px}}
+.contract-product-form__row{display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
+.contract-product__capture .contract-product__consent{display:flex;align-items:flex-start;gap:.6rem;font-weight:500;color:var(--text)}
+.contract-product__capture .contract-product__consent input{width:auto;min-height:0;margin:4px 0 0}
+.contract-product__capture button{justify-self:start}
+.contract-product__capture .form-status{min-height:1.5em;margin:0}
+.contract-product__capture .form-hint{margin:0;color:var(--text);font-size:var(--text-caption);line-height:1.5}
+.contract-products-hub__grid{display:grid;grid-template-columns:minmax(0,1fr);gap:0;margin:0 0 28px;border-top:1px solid var(--rule-strong)}
+.contract-products-hub__card{display:grid;grid-template-columns:minmax(0,1fr);grid-template-areas:"t" "d" "m" "a";gap:.35rem 1.5rem;padding:1.1rem 0;background:transparent;border:0;border-bottom:1px solid var(--rule)}
+.contract-products-hub__card h3{grid-area:t;margin:0;font-size:1.08rem}
+.contract-products-hub__card>p{grid-area:d;margin:0;color:var(--text);font-size:.9rem;line-height:1.5;max-width:52ch}
+.contract-products-hub__card dl{grid-area:m;display:grid;grid-template-columns:1fr 1fr;gap:8px 16px;margin:.35rem 0 0}
+.contract-products-hub__card dd{margin:3px 0 0;font-weight:800;color:var(--ink)}
+.contract-products-hub__card a{grid-area:a;display:inline-flex;align-items:center;min-height:44px;padding:0;color:var(--green-700);font-weight:800;white-space:nowrap}
 @media(min-width:851px){.contract-products-hub__card{grid-template-columns:minmax(0,1.35fr) minmax(220px,.75fr) auto;grid-template-areas:"t m a" "d m a";align-items:start}.contract-products-hub__card dl{margin:0}}
-@media(max-width:850px){.contract-product__capture{grid-template-columns:1fr}}
-@media(max-width:620px){.contract-product,.contract-products-hub{padding:56px 0}.contract-product__lockup,.contract-product__grid,.contract-product__example,.contract-product__capture form,.contract-product-form__row{grid-template-columns:1fr}.contract-product__lockup>div+div{border-left:0;border-top:1px solid var(--rule)}.contract-product__capture textarea,.contract-product__capture .contract-product__consent,.contract-product__capture button,.contract-product__capture .form-status,.contract-product__capture form>.contract-product-form__row{grid-column:auto}}
-.contract-products-hub__rules{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;margin:0 0 18px;background:var(--rule);border:1px solid var(--rule)}.contract-products-hub__rules p{margin:0;padding:14px;background:var(--white);color:var(--text);font-size:.875rem;line-height:1.5}
-@media(max-width:620px){.contract-products-hub__rules{grid-template-columns:1fr}}
+@media(min-width:620px){.contract-product-form__row{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+@media(max-width:620px){.contract-product,.contract-products-hub{padding:56px 0}.contract-product__lockup{grid-template-columns:1fr}.contract-product__lockup>div+div{border-left:0;border-top:1px solid var(--rule)}}
+.contract-products-hub__rules{margin:0 0 18px;padding:0;border-top:1px solid var(--rule-strong)}
+.contract-products-hub__rules p{margin:0;padding:.75rem 0;border-bottom:1px solid var(--rule);color:var(--text);font-size:var(--text-caption);line-height:1.5;max-width:72ch}
+/* Prose links inside the offer shells (byline, method, capture copy, FAQ,
+   inputs) read as links: the site default is color:inherit without underline. */
+.offer-hero .authority-byline a,.offer-hero .hero-micro a,.pillar-docs a,.pillar-capture-copy a:not(.button),.pillar-capture-alternative a,.authority-method a,.journey-stage p a,.faq-list a,.contract-product__terms a,.svc-open .authority-byline a,.aside-note dd a,[data-offer-section="handraise"]>.container>p a{color:var(--green-700);font-weight:700;text-decoration:underline;text-underline-offset:.15em}
+/* Method keys (Fato, Cálculo, Inferência, Lacuna) read as prose, and the
+   verifiable-proof caption breathes below them. */
+.keys--prose dd{font-weight:400}
+.keys+.t-caption{display:block;margin:var(--space-5,1.5rem) 0 0}
+/* Safe-execution pillars: the page index sits inside the opening copy, right
+   after the actions, so it is reached before the aside and the context strip. */
+.content-hero.svc-open .svc-open__copy .page-index{margin:1.25rem 0 0}
+.content-hero.svc-open .svc-open__copy .page-index ol{gap:0 1.25rem}
+.content-hero.svc-open .svc-open__grid{align-items:start}
+.content-hero.svc-open .authority-byline{margin-top:.75rem}
+/* Subordinate WhatsApp on the dark closing block: white outline button, the
+   same reading as the lead-inline actions. */
+.sec--dark .button-secondary{background:#fff;color:var(--ink);border-color:#fff}
+.sec--dark .button-secondary:hover,.sec--dark .button-secondary:focus-visible{background:var(--lime);color:var(--ink);border-color:var(--lime)}
+/* Diretoria: the contracted closing label wraps on a centred, auto-height button. */
+body[data-offer-id="diretoria-b2g"] .contact-primary .button-primary{width:auto;max-width:100%;height:auto;padding-block:.8rem;white-space:normal;text-align:center;line-height:1.25}
 .offer-hero:has(.offer-context) > .container > .eyebrow{order:1}
 .offer-hero:has(.offer-context) > .container > h1{order:2;max-width:18ch}
 .offer-hero:has(.offer-context) > .container > .content-lead{order:3}
