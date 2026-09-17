@@ -1342,11 +1342,14 @@ def _render_problem(c: Candidate, manifest: dict[str, Any]) -> str:
         f"{p.get('problem_label')}: {p.get('observed_pattern')} "
         f"Trilha CONFENGE relacionada: {svc_label}."
 )
+    # Guias da biblioteca em lista regrada com âncora marcada como link
+    # (text-link: sublinhado, peso 720), não como texto corrido.
     guides = "".join(
-        f'<li><a href="{e(g if str(g).startswith("/") else "/" + str(g).strip("/") + "/")}" '
+        f'<li><span class="list-ruled__index">{i:02d}</span>'
+        f'<div><a class="text-link" href="{e(g if str(g).startswith("/") else "/" + str(g).strip("/") + "/")}" '
         f'data-pseo-event="pseo_related_page_click">'
-        f'{e(guide_path_label(str(g)))}</a></li>'
-        for g in (p.get("technical_guide_paths") or [])
+        f'{e(guide_path_label(str(g)))}</a></div></li>'
+        for i, g in enumerate(p.get("technical_guide_paths") or [], start=1)
 )
     # Official normative/methodology references, auditável, not invented contract deep-links
     ref_items = []
@@ -1441,7 +1444,7 @@ def _render_problem(c: Candidate, manifest: dict[str, Any]) -> str:
 Guias CONFENGE abaixo detalham o enquadramento prático.</p></section>
 <section id="guias-relacionados"><p class="eyebrow t-kicker">Biblioteca</p><h2>Guias técnicos relacionados</h2>
 <p>Estas páginas aprofundam o critério; esta página de inteligência organiza a decisão do cenário.</p>
-<ul>{guides}</ul></section>
+<ol class="list-ruled">{guides}</ol></section>
 <section id="implicacoes"><p class="eyebrow t-kicker">Decisão</p><h2>O que a empresa precisa decidir neste cenário</h2>
 <p>{e(_problem_decision_copy(p))}</p>
 <p>{e(_problem_mass_copy(p))}</p>
