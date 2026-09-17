@@ -30,6 +30,30 @@
       "route": "/compatibilizacao-projetos-engenharia/",
       "viewport": "320x700",
       "overflow_px": 0
+    },
+    {
+      "route": "/revisao-tecnica-projetos-engenharia/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 13877,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/revisao-tecnica-projetos-engenharia-390x844-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/revisao-tecnica-projetos-engenharia-390x844-full-lote-a.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-a/revisao-tecnica-projetos-engenharia-390x844-menu-lote-a.jpg"
+    },
+    {
+      "route": "/revisao-tecnica-projetos-engenharia/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 9300,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/revisao-tecnica-projetos-engenharia-1440x1000-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/revisao-tecnica-projetos-engenharia-1440x1000-full-lote-a.jpg"
+    },
+    {
+      "route": "/revisao-tecnica-projetos-engenharia/",
+      "viewport": "320x700",
+      "overflow_px": 0
     }
   ]
 }
