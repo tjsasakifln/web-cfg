@@ -29,7 +29,7 @@
       "commercial_configuration"
     ],
     "baseline_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
-    "expected_declared_ctas": 196
+    "expected_declared_ctas": 198
   },
   "coverage": {
     "authority": "data/organic/public-family-registry.json",
