@@ -499,14 +499,22 @@ def protected_pages(*, include_protected: bool = False) -> dict[str, str]:
                     out[str(sibling["path"])] = "intacta"
         except (OSError, json.JSONDecodeError):
             pass
+    cluster_rels: list[str] = []
     try:
         from scripts.organic.cluster_medicao_originality import CLUSTER_SLUGS  # noqa: PLC0415
 
-        for slug in CLUSTER_SLUGS:
-            rel = f"conteudos/{slug}/index.html"
-            out.setdefault(rel, "so-folha")
+        cluster_rels = [f"conteudos/{slug}/index.html" for slug in CLUSTER_SLUGS]
     except Exception:  # noqa: BLE001
         pass
+    for rel in cluster_rels:
+        out.setdefault(rel, "so-folha")
+    if include_protected:
+        # Guarda estrutural: levantar o canário nunca pode deixar uma página do
+        # cluster de medição sem proteção de corpo, seja qual for a ordem dos
+        # blocos acima ou um sibling futuro do contrato.
+        unguarded = [rel for rel in cluster_rels if out.get(rel) not in {"intacta", "so-folha"}]
+        if unguarded:
+            raise RuntimeError(f"cluster de medição sem proteção com --include-protected: {unguarded}")
     return out
 
 
