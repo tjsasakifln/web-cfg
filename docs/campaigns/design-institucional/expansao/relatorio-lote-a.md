@@ -179,6 +179,7 @@ sem prazo). Todas as páginas passaram a carregar `assets/editorial.css` depois 
 | `node seo/scripts/test_event_dictionary.mjs` | `EVENT_DICTIONARY_OK` |
 | `python3 scripts/site/test_skip_link_coverage.py` | `OK test:skip-link` |
 | `npm run build:site` + `npm run test:html-integrity:site` (clone limpo do ramo, Node 22) | build exit 0; `CACHE_CONTRACT_OK …` |
+| `node scripts/site/test_ui_geometry.mjs` (clone limpo do HEAD do lote, `_site` construído, `CHROME_PATH`) | `All UI geometry tests passed` (inclui os rótulos de CTA e o estado neutro das quatro páginas `obrigado*`) |
 | `npm run test:contact-journeys` (clone limpo, `_site` construído, `CHROME_PATH` do Chromium local) | `CONTACT_JOURNEYS_FAIL [{"name":"journey_harness_runtime"…"home form step transition did not activate"…}]` — 423 verificações, 1 falha na etapa do formulário da home; as 154 verificações das 14 jornadas nas rotas do lote A passam. A mesma falha ocorre no clone limpo do commit base 8860f5577 (pedido 8). |
 
 ## Testes ajustados (estética, rota exata)
@@ -202,6 +203,16 @@ Nenhum teste de veracidade, preço, responsabilidade, privacidade, formulário o
   páginas o bloco "O que pedir" abre com a orientação de descrever a decisão. Sem rejeição em nenhuma rota.
 
 ## Pendências e o que não foi feito
+
+- Dois valores de `data-section-archetype` deixaram de existir como seção própria, porque o conteúdo foi
+  redistribuído (nenhuma das rotas está em `archetype_gated_surfaces`, mas o integrador refaz o
+  inventário `archetype-gate-rollout.json` a partir das anotações): em `/projetos-complementares-engenharia/`
+  o `analysis_abstract` (`#resposta-em-cinco-pontos`) foi dissolvido, e os cinco ids
+  (`situacao-atendida`, `entrega`, `amostra-disponivel`, `limites-materiais`, `pedido-proposta`) passaram
+  para a abertura, a seção da amostra, "O que pedir", as condições e o bloco escuro; em
+  `/inspecao-diagnostico-edificacoes/` o `compare_ladder` (inspeção/diagnóstico/reparo/perícia) passou a
+  ser um `div.delivery` dentro da seção `journey_paths` "Situações". Os demais arquétipos foram levados
+  para a seção que descreve a mesma função; `contextual_next_action` e `evidence_record` entraram como no piloto.
 
 - Lighthouse por rota não foi medido neste lote (o caderno §4 não o exige por lote); cada página de
   serviço ganhou uma `<picture>` externa por prancha (≤ 10 KB por SVG) e a folha `assets/editorial.css`.
