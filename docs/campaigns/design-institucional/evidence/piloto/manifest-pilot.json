@@ -1,7 +1,7 @@
 {
   "base": "http://127.0.0.1:8731",
   "label": "pilot",
-  "captured_at": "2026-09-17T07:13:34.798Z",
+  "captured_at": "2026-09-17T08:19:20.225Z",
   "tool": "puppeteer-core 25 / chromium-1234",
   "entries": [
     {
@@ -21,6 +21,10 @@
       ],
       "imgs": [
         "/assets/logo-confenge-500-f8a83f6d.png",
+        "/assets/pranchas/recorte-banheiro-mobile.svg",
+        "/assets/pranchas/drenagem-perfil-mobile.svg",
+        "/assets/pranchas/medicao-parede-mobile.svg",
+        "/assets/pranchas/avaliacao-estrutura-mobile.svg",
         "/assets/tiago-sasaki-foto-v11-sem-fundo-560.avif",
         "/assets/logo-confenge-white-500-1677038e.png"
       ],
@@ -44,6 +48,10 @@
       ],
       "imgs": [
         "/assets/logo-confenge-500-f8a83f6d.png",
+        "/assets/pranchas/recorte-banheiro-desktop.svg",
+        "/assets/pranchas/drenagem-perfil-desktop.svg",
+        "/assets/pranchas/medicao-parede-desktop.svg",
+        "/assets/pranchas/avaliacao-estrutura-desktop.svg",
         "/assets/tiago-sasaki-foto-v11-sem-fundo-560.avif",
         "/assets/logo-confenge-white-500-1677038e.png"
       ],
@@ -62,13 +70,15 @@
         "Archivo Var 100 900"
       ],
       "css": [
-        "http://127.0.0.1:8731/styles.css"
+        "http://127.0.0.1:8731/styles.css",
+        "http://127.0.0.1:8731/assets/editorial.css"
       ],
       "imgs": [
         "/assets/logo-confenge-500-f8a83f6d.png",
+        "/assets/pranchas/avaliacao-estrutura-mobile.svg",
         "/assets/logo-confenge-white-500-1677038e.png"
       ],
-      "docHeight": 15980,
+      "docHeight": 15959,
       "overflowX": false
     },
     {
@@ -83,10 +93,12 @@
         "Archivo Var 100 900"
       ],
       "css": [
-        "http://127.0.0.1:8731/styles.css"
+        "http://127.0.0.1:8731/styles.css",
+        "http://127.0.0.1:8731/assets/editorial.css"
       ],
       "imgs": [
         "/assets/logo-confenge-500-f8a83f6d.png",
+        "/assets/pranchas/avaliacao-estrutura-desktop.svg",
         "/assets/logo-confenge-white-500-1677038e.png"
       ],
       "docHeight": 9931,
@@ -104,13 +116,15 @@
         "Archivo Var 100 900"
       ],
       "css": [
-        "http://127.0.0.1:8731/styles.css"
+        "http://127.0.0.1:8731/styles.css",
+        "http://127.0.0.1:8731/assets/editorial.css"
       ],
       "imgs": [
         "/assets/logo-confenge-500-f8a83f6d.png",
+        "/assets/pranchas/recorte-banheiro-mobile.svg",
         "/assets/logo-confenge-white-500-1677038e.png"
       ],
-      "docHeight": 20497,
+      "docHeight": 20432,
       "overflowX": false
     },
     {
@@ -125,10 +139,12 @@
         "Archivo Var 100 900"
       ],
       "css": [
-        "http://127.0.0.1:8731/styles.css"
+        "http://127.0.0.1:8731/styles.css",
+        "http://127.0.0.1:8731/assets/editorial.css"
       ],
       "imgs": [
         "/assets/logo-confenge-500-f8a83f6d.png",
+        "/assets/pranchas/recorte-banheiro-desktop.svg",
         "/assets/logo-confenge-white-500-1677038e.png"
       ],
       "docHeight": 12732,
@@ -146,13 +162,15 @@
         "Archivo Var 100 900"
       ],
       "css": [
-        "http://127.0.0.1:8731/styles.css"
+        "http://127.0.0.1:8731/styles.css",
+        "http://127.0.0.1:8731/assets/editorial.css"
       ],
       "imgs": [
         "/assets/logo-confenge-500-f8a83f6d.png",
+        "/assets/pranchas/medicao-parede-mobile.svg",
         "/assets/logo-confenge-white-500-1677038e.png"
       ],
-      "docHeight": 13395,
+      "docHeight": 13353,
       "overflowX": false
     },
     {
@@ -167,10 +185,12 @@
         "Archivo Var 100 900"
       ],
       "css": [
-        "http://127.0.0.1:8731/styles.css"
+        "http://127.0.0.1:8731/styles.css",
+        "http://127.0.0.1:8731/assets/editorial.css"
       ],
       "imgs": [
         "/assets/logo-confenge-500-f8a83f6d.png",
+        "/assets/pranchas/medicao-parede-desktop.svg",
         "/assets/logo-confenge-white-500-1677038e.png"
       ],
       "docHeight": 9783,
@@ -188,7 +208,8 @@
         "Archivo Var 100 900"
       ],
       "css": [
-        "http://127.0.0.1:8731/styles.css"
+        "http://127.0.0.1:8731/styles.css",
+        "http://127.0.0.1:8731/assets/editorial.css"
       ],
       "imgs": [
         "/assets/logo-confenge-500-f8a83f6d.png",
@@ -209,13 +230,14 @@
         "Archivo Var 100 900"
       ],
       "css": [
-        "http://127.0.0.1:8731/styles.css"
+        "http://127.0.0.1:8731/styles.css",
+        "http://127.0.0.1:8731/assets/editorial.css"
       ],
       "imgs": [
         "/assets/logo-confenge-500-f8a83f6d.png",
         "/assets/logo-confenge-white-500-1677038e.png"
       ],
-      "docHeight": 9528,
+      "docHeight": 9484,
       "overflowX": false
     },
     {
@@ -231,6 +253,7 @@
       ],
       "css": [
         "http://127.0.0.1:8731/styles.css",
+        "http://127.0.0.1:8731/assets/editorial.css",
         "http://127.0.0.1:8731/triagem-tecnica/styles.css"
       ],
       "imgs": [
@@ -253,6 +276,7 @@
       ],
       "css": [
         "http://127.0.0.1:8731/styles.css",
+        "http://127.0.0.1:8731/assets/editorial.css",
         "http://127.0.0.1:8731/triagem-tecnica/styles.css"
       ],
       "imgs": [

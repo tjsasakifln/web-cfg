@@ -47,5 +47,19 @@
     "owner": "integrador",
     "impact_on_expansion": "condicao de merge",
     "item": "frozen-specs/**, single-commercial-route.v1.json, canary-contract.json (389), cta-form-next-state.v1.json e approvals.json (analise aprovada) foram recapturados neste ramo; so entram em main com a direcao aprovada, por merge commit (nao squash)."
+  },
+  {
+    "id": "P8",
+    "severity": "MEDIA",
+    "owner": "integrador (campanha 02)",
+    "impact_on_expansion": "nao bloqueia; monitorar no gate",
+    "item": "LCP de laboratorio da home 1,95-1,96 s no gate do repositorio (teto 2,0 s; base 1,80 s). Ganhar margem: reduzir CSS critico da home (styles.css legado) ou HTML da dobra; nao afrouxar o teto."
+  },
+  {
+    "id": "P9",
+    "severity": "INFO",
+    "owner": "integrador",
+    "impact_on_expansion": "nao bloqueia",
+    "item": "Dentro de <img>, o texto das pranchas usa a fonte de sistema (Arial/Liberation), nao Archivo; a geometria, cotas e carimbo sao os mesmos. Alternativa futura: <object> com @font-face no SVG, se a identidade tipografica da prancha for exigida."
   }
 ]

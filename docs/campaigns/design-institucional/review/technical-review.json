@@ -49,7 +49,8 @@
       "tests/ativacao_20260912/03 (15)",
       "build:site exit 0 com produtor contratado"
     ],
-    "performance": "ver estado.json#performance_budget: local x local (gzip), perf 99-100, LCP <= 1,96 s, CLS 0, +4 a +14 KB por rota"
+    "performance": "ver estado.json#performance_budget: local x local (gzip), perf 99-100, LCP <= 1,96 s, CLS 0, +4 a +14 KB por rota",
+    "repo_lighthouse_gate": "npm run test:lighthouse (run_lighthouse.mjs, gate do repositorio) MEASURED_PASS nas seis rotas criticas de dinheiro (/, /casos/, /entregas/, /ferramentas/diagnostico-defesa-margem/, /diretoria-b2g/, /especialista/tiago-jun-sasaki/): perf 99-100, LCP <= 1,96 s, TBT <= 30 ms, DOM 669 (home), carga 148,8 KB (home; base 149,0). Primeira execucao reprovou (DOM 1343, 163 KB) e foi corrigida sem afrouxar teto (evidence/lighthouse-repo-gate.json)."
   },
   "not_measured": [
     "leitor de tela real",
@@ -62,6 +63,7 @@
     "A home ficou mais longa que a producao (1440: 6.921 -> 10.272 px; 390: 11.591 -> 16.384 px rendered) por causa das quatro pranchas e do bloco de responsabilidade; tetos dos gates ajustados com motivo. Reduzir mais exige decisao de conteudo (campanha 02).",
     "/servicos/ repete o mesmo esqueleto nas nove linhas (agrupamento por area e indice ajudam, mas o celular continua longo: 15.980 px).",
     "Pontuacao duplicada 'Encontrou um erro?.' e rodape reduzido nos seis pilares congelados sao pre-existentes (gerador de autoria/casca dos pilares), fora do escopo.",
-    "Botao 'Fechar' duplicado no menu movel e pre-existente (nav.js)."
+    "Botao 'Fechar' duplicado no menu movel e pre-existente (nav.js).",
+    "LCP de laboratorio da home no gate do repositorio: 1,95-1,96 s contra 1,80-1,81 s da base; passa o teto de 2,0 s com ~40 ms de margem. Causa: mais bytes criticos antes da primeira pintura (HTML +1,2 KB gz, CSS da home +3 KB gz). Registrado como pendencia P8."
   ]
 }

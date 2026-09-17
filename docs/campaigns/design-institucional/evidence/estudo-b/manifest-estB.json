@@ -1,7 +1,7 @@
 {
   "base": "http://127.0.0.1:8731",
   "label": "estB",
-  "captured_at": "2026-09-17T07:13:51.413Z",
+  "captured_at": "2026-09-17T08:19:36.971Z",
   "tool": "puppeteer-core 25 / chromium-1234",
   "entries": [
     {
@@ -22,6 +22,10 @@
       ],
       "imgs": [
         "/assets/logo-confenge-500-f8a83f6d.png",
+        "/assets/pranchas/recorte-banheiro-mobile.svg",
+        "/assets/pranchas/drenagem-perfil-mobile.svg",
+        "/assets/pranchas/medicao-parede-mobile.svg",
+        "/assets/pranchas/avaliacao-estrutura-mobile.svg",
         "/assets/tiago-sasaki-foto-v11-sem-fundo-560.avif",
         "/assets/logo-confenge-white-500-1677038e.png"
       ],
@@ -46,6 +50,10 @@
       ],
       "imgs": [
         "/assets/logo-confenge-500-f8a83f6d.png",
+        "/assets/pranchas/recorte-banheiro-desktop.svg",
+        "/assets/pranchas/drenagem-perfil-desktop.svg",
+        "/assets/pranchas/medicao-parede-desktop.svg",
+        "/assets/pranchas/avaliacao-estrutura-desktop.svg",
         "/assets/tiago-sasaki-foto-v11-sem-fundo-560.avif",
         "/assets/logo-confenge-white-500-1677038e.png"
       ],
@@ -65,13 +73,15 @@
       ],
       "css": [
         "http://127.0.0.1:8731/styles.css",
+        "http://127.0.0.1:8731/assets/editorial.css",
         "http://127.0.0.1:8731/docs/design-audit/prototypes/salto-institucional-2026-09-17/mechanism-b.css"
       ],
       "imgs": [
         "/assets/logo-confenge-500-f8a83f6d.png",
+        "/assets/pranchas/recorte-banheiro-mobile.svg",
         "/assets/logo-confenge-white-500-1677038e.png"
       ],
-      "docHeight": 20489,
+      "docHeight": 20424,
       "overflowX": false
     },
     {
@@ -87,10 +97,12 @@
       ],
       "css": [
         "http://127.0.0.1:8731/styles.css",
+        "http://127.0.0.1:8731/assets/editorial.css",
         "http://127.0.0.1:8731/docs/design-audit/prototypes/salto-institucional-2026-09-17/mechanism-b.css"
       ],
       "imgs": [
         "/assets/logo-confenge-500-f8a83f6d.png",
+        "/assets/pranchas/recorte-banheiro-desktop.svg",
         "/assets/logo-confenge-white-500-1677038e.png"
       ],
       "docHeight": 13750,

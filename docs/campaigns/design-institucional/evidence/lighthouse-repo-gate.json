@@ -1,0 +1,219 @@
+{
+  "state": "MEASURED_PASS",
+  "measured_at": "2026-09-17T08:10:20.818Z",
+  "tool": "scripts/site/run_lighthouse.mjs (gate do repositorio, servidor de laboratorio proprio com gzip; scripts/site/lighthouse_thresholds.mjs: perf >= 95, LCP <= 2000 ms, TBT <= 200 ms, DOM <= 800, carga <= 150 KB)",
+  "routes": [
+    {
+      "path": "/",
+      "run": 1,
+      "performance": 99,
+      "lcp_ms": 1960,
+      "cls": 0,
+      "tbt_ms": 30,
+      "dom_elements": 669,
+      "content_byte_weight": 148839
+    },
+    {
+      "path": "/",
+      "run": 2,
+      "performance": 99,
+      "lcp_ms": 1953,
+      "cls": 0,
+      "tbt_ms": 15,
+      "dom_elements": 669,
+      "content_byte_weight": 148839
+    },
+    {
+      "path": "/",
+      "run": 3,
+      "performance": 99,
+      "lcp_ms": 1953,
+      "cls": 0,
+      "tbt_ms": 16,
+      "dom_elements": 669,
+      "content_byte_weight": 148839
+    },
+    {
+      "path": "/casos/",
+      "run": 1,
+      "performance": 99,
+      "lcp_ms": 1806,
+      "cls": 0,
+      "tbt_ms": 28,
+      "dom_elements": 213,
+      "content_byte_weight": 129777
+    },
+    {
+      "path": "/casos/",
+      "run": 2,
+      "performance": 99,
+      "lcp_ms": 1804,
+      "cls": 0,
+      "tbt_ms": 11,
+      "dom_elements": 213,
+      "content_byte_weight": 129777
+    },
+    {
+      "path": "/casos/",
+      "run": 3,
+      "performance": 99,
+      "lcp_ms": 1804,
+      "cls": 0,
+      "tbt_ms": 8,
+      "dom_elements": 213,
+      "content_byte_weight": 129777
+    },
+    {
+      "path": "/entregas/",
+      "run": 1,
+      "performance": 99,
+      "lcp_ms": 1805,
+      "cls": 0,
+      "tbt_ms": 0,
+      "dom_elements": 772,
+      "content_byte_weight": 146747
+    },
+    {
+      "path": "/entregas/",
+      "run": 2,
+      "performance": 99,
+      "lcp_ms": 1803,
+      "cls": 0,
+      "tbt_ms": 0,
+      "dom_elements": 772,
+      "content_byte_weight": 146747
+    },
+    {
+      "path": "/entregas/",
+      "run": 3,
+      "performance": 99,
+      "lcp_ms": 1805,
+      "cls": 0,
+      "tbt_ms": 0,
+      "dom_elements": 772,
+      "content_byte_weight": 146747
+    },
+    {
+      "path": "/ferramentas/diagnostico-defesa-margem/",
+      "run": 1,
+      "performance": 99,
+      "lcp_ms": 1957,
+      "cls": 0,
+      "tbt_ms": 0,
+      "dom_elements": 264,
+      "content_byte_weight": 152149
+    },
+    {
+      "path": "/ferramentas/diagnostico-defesa-margem/",
+      "run": 2,
+      "performance": 99,
+      "lcp_ms": 1957,
+      "cls": 0,
+      "tbt_ms": 0,
+      "dom_elements": 264,
+      "content_byte_weight": 152149
+    },
+    {
+      "path": "/ferramentas/diagnostico-defesa-margem/",
+      "run": 3,
+      "performance": 99,
+      "lcp_ms": 1957,
+      "cls": 0,
+      "tbt_ms": 0,
+      "dom_elements": 264,
+      "content_byte_weight": 152149
+    },
+    {
+      "path": "/diretoria-b2g/",
+      "run": 1,
+      "performance": 99,
+      "lcp_ms": 1803,
+      "cls": 0,
+      "tbt_ms": 21,
+      "dom_elements": 472,
+      "content_byte_weight": 138210
+    },
+    {
+      "path": "/diretoria-b2g/",
+      "run": 2,
+      "performance": 99,
+      "lcp_ms": 1803,
+      "cls": 0,
+      "tbt_ms": 32,
+      "dom_elements": 472,
+      "content_byte_weight": 138210
+    },
+    {
+      "path": "/diretoria-b2g/",
+      "run": 3,
+      "performance": 99,
+      "lcp_ms": 1803,
+      "cls": 0,
+      "tbt_ms": 31,
+      "dom_elements": 472,
+      "content_byte_weight": 138210
+    },
+    {
+      "path": "/especialista/tiago-jun-sasaki/",
+      "run": 1,
+      "performance": 100,
+      "lcp_ms": 1804,
+      "cls": 0,
+      "tbt_ms": 28,
+      "dom_elements": 264,
+      "content_byte_weight": 138479
+    },
+    {
+      "path": "/especialista/tiago-jun-sasaki/",
+      "run": 2,
+      "performance": 100,
+      "lcp_ms": 1803,
+      "cls": 0,
+      "tbt_ms": 1,
+      "dom_elements": 264,
+      "content_byte_weight": 138479
+    },
+    {
+      "path": "/especialista/tiago-jun-sasaki/",
+      "run": 3,
+      "performance": 100,
+      "lcp_ms": 1804,
+      "cls": 0,
+      "tbt_ms": 15,
+      "dom_elements": 264,
+      "content_byte_weight": 138479
+    }
+  ],
+  "evaluation": {
+    "ok": true,
+    "errors": [],
+    "home": {
+      "expected_runs": 3,
+      "observed_runs": 3,
+      "minimum_performance": 99,
+      "p75_tbt_ms": 30,
+      "maximum_own_long_task_ms": 80,
+      "minimum_lcp_ms": 1952.697,
+      "maximum_lcp_ms": 1959.5764,
+      "maximum_lcp_net_ms": 1959.5764,
+      "maximum_lcp_network_allowance_ms": 0,
+      "maximum_cls": 0
+    }
+  },
+  "baseline_47da03b64_same_gate": {
+    "/": {
+      "dom_elements": 579,
+      "content_byte_weight": 148970,
+      "lcp_ms": "1803-1809",
+      "performance": 99
+    },
+    "/entregas/": {
+      "content_byte_weight": 152817
+    },
+    "/ferramentas/diagnostico-defesa-margem/": {
+      "content_byte_weight": 151595
+    },
+    "note": "medido com o mesmo gate na worktree da producao 47da03b64 construida com o produtor contratado (scratchpad, nao versionado)"
+  },
+  "note": "Primeira execucao do gate no piloto reprovou (DOM 1343, carga 163 KB na home) por causa das oito pranchas SVG inline; corrigido com pranchas como <picture>/<img> por breakpoint, folha editorial por rota (styles.css volta ao tamanho base), icones do manifesto em PNG de paleta sem perda e a home carregando so os blocos editoriais que usa. Resultado: DOM 669, carga 148,8 KB (abaixo da base), LCP 1,95-1,96 s no gate (base 1,80-1,81 s; margem de ~40 ms ate o teto de 2,0 s)."
+}
