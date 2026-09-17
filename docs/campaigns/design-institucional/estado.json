@@ -1,6 +1,6 @@
 {
   "schema": "confenge.design-institucional/1.0",
-  "generated_at": "2026-09-17T07:18:03+00:00",
+  "generated_at": "2026-09-17T08:20:11+00:00",
   "campaigns": {
     "this": "CONFENGE-SALTO-INSTITUCIONAL-01-DIRECAO-PILOTO",
     "next": "CONFENGE-SALTO-INSTITUCIONAL-02-EXPANSAO-PRODUCAO",
@@ -14,9 +14,9 @@
   "production_sha_observed": "47da03b64ba701016eec296234b1d14225ebe588",
   "production_observed_at": "2026-09-16T17:21:03Z (build_time em /.well-known/build-info.json; capturas em 2026-09-16/17)",
   "branch": "campaign/salto-institucional-01-piloto",
-  "pilot_source_sha": "0021a27d0fb446e1252dc33c6daa3d1f75414c91",
+  "pilot_source_sha": "e5f7bdee6063a9e9a2945483977fe78742debb96",
   "build_preview": {
-    "checkout": "git fetch origin campaign/salto-institucional-01-piloto && git checkout 0021a27d0fb446e1252dc33c6daa3d1f75414c91",
+    "checkout": "git fetch origin campaign/salto-institucional-01-piloto && git checkout e5f7bdee6063a9e9a2945483977fe78742debb96",
     "css": "python3 scripts/site/build_css.py",
     "plates": "python3 -m scripts.demonstrative.plates.render_plates --check && python3 -m scripts.demonstrative.plates.inline --check",
     "case_page": "python3 -m scripts.demonstrative.private_project.generate",
@@ -284,7 +284,8 @@
         "tests/ativacao_20260912/03 (15)",
         "build:site exit 0 com produtor contratado"
       ],
-      "performance": "ver estado.json#performance_budget: local x local (gzip), perf 99-100, LCP <= 1,96 s, CLS 0, +4 a +14 KB por rota"
+      "performance": "ver estado.json#performance_budget: local x local (gzip), perf 99-100, LCP <= 1,96 s, CLS 0, +4 a +14 KB por rota",
+      "repo_lighthouse_gate": "npm run test:lighthouse (run_lighthouse.mjs, gate do repositorio) MEASURED_PASS nas seis rotas criticas de dinheiro (/, /casos/, /entregas/, /ferramentas/diagnostico-defesa-margem/, /diretoria-b2g/, /especialista/tiago-jun-sasaki/): perf 99-100, LCP <= 1,96 s, TBT <= 30 ms, DOM 669 (home), carga 148,8 KB (home; base 149,0). Primeira execucao reprovou (DOM 1343, 163 KB) e foi corrigida sem afrouxar teto (evidence/lighthouse-repo-gate.json)."
     },
     "not_measured": [
       "leitor de tela real",
@@ -297,7 +298,8 @@
       "A home ficou mais longa que a producao (1440: 6.921 -> 10.272 px; 390: 11.591 -> 16.384 px rendered) por causa das quatro pranchas e do bloco de responsabilidade; tetos dos gates ajustados com motivo. Reduzir mais exige decisao de conteudo (campanha 02).",
       "/servicos/ repete o mesmo esqueleto nas nove linhas (agrupamento por area e indice ajudam, mas o celular continua longo: 15.980 px).",
       "Pontuacao duplicada 'Encontrou um erro?.' e rodape reduzido nos seis pilares congelados sao pre-existentes (gerador de autoria/casca dos pilares), fora do escopo.",
-      "Botao 'Fechar' duplicado no menu movel e pre-existente (nav.js)."
+      "Botao 'Fechar' duplicado no menu movel e pre-existente (nav.js).",
+      "LCP de laboratorio da home no gate do repositorio: 1,95-1,96 s contra 1,80-1,81 s da base; passa o teto de 2,0 s com ~40 ms de margem. Causa: mais bytes criticos antes da primeira pintura (HTML +1,2 KB gz, CSS da home +3 KB gz). Registrado como pendencia P8."
     ]
   },
   "human_research": {
@@ -565,7 +567,279 @@
         "runs": 3
       }
     ],
-    "reading": "A comparação válida é local × local (mesmo servidor, gzip, cache frio). Os números de produção são referência de campo/borda, não par de comparação."
+    "reading": "A comparação válida é local × local (mesmo servidor, gzip, cache frio). Os números de produção são referência de campo/borda, não par de comparação.",
+    "bytes_delta_local_vs_baseline_kb": [
+      {
+        "route": "/",
+        "baseline_kb": 147.4,
+        "pilot_kb": 161.2,
+        "delta_kb": 13.8,
+        "within_budget": true
+      },
+      {
+        "route": "/servicos/",
+        "baseline_kb": 138.4,
+        "pilot_kb": 145.0,
+        "delta_kb": 6.5,
+        "within_budget": true
+      },
+      {
+        "route": "/quantitativos-orcamento-obras/",
+        "baseline_kb": 149.0,
+        "pilot_kb": 156.3,
+        "delta_kb": 7.2,
+        "within_budget": true
+      },
+      {
+        "route": "/medicoes-glosas-obras-publicas/",
+        "baseline_kb": 140.6,
+        "pilot_kb": 146.4,
+        "delta_kb": 5.8,
+        "within_budget": true
+      },
+      {
+        "route": "/casos/demonstrativo-projeto-privado/",
+        "baseline_kb": 138.7,
+        "pilot_kb": 142.4,
+        "delta_kb": 3.7,
+        "within_budget": true
+      },
+      {
+        "route": "/triagem-tecnica/",
+        "baseline_kb": 123.6,
+        "pilot_kb": 127.6,
+        "delta_kb": 4.0,
+        "within_budget": true
+      }
+    ],
+    "height_delta_rendered_px": {
+      "home_1440": "6.921 → 10.272",
+      "home_390": "11.591 → 16.384 (+41%)",
+      "servicos_390": "13.440 → 15.980",
+      "quantitativos_1440": "12.030 → 12.732",
+      "medicoes_1440": "10.077 → 9.783",
+      "triagem_1440": "3.840 → 4.222",
+      "note": "Tetos dos gates de altura da home elevados com motivo (9.500 → 10.500; 14.500 → 17.000). Pendência P2 para a campanha 02."
+    },
+    "repo_lighthouse_gate": {
+      "state": "MEASURED_PASS",
+      "measured_at": "2026-09-17T08:10:20.818Z",
+      "tool": "scripts/site/run_lighthouse.mjs (gate do repositorio, servidor de laboratorio proprio com gzip; scripts/site/lighthouse_thresholds.mjs: perf >= 95, LCP <= 2000 ms, TBT <= 200 ms, DOM <= 800, carga <= 150 KB)",
+      "routes": [
+        {
+          "path": "/",
+          "run": 1,
+          "performance": 99,
+          "lcp_ms": 1960,
+          "cls": 0,
+          "tbt_ms": 30,
+          "dom_elements": 669,
+          "content_byte_weight": 148839
+        },
+        {
+          "path": "/",
+          "run": 2,
+          "performance": 99,
+          "lcp_ms": 1953,
+          "cls": 0,
+          "tbt_ms": 15,
+          "dom_elements": 669,
+          "content_byte_weight": 148839
+        },
+        {
+          "path": "/",
+          "run": 3,
+          "performance": 99,
+          "lcp_ms": 1953,
+          "cls": 0,
+          "tbt_ms": 16,
+          "dom_elements": 669,
+          "content_byte_weight": 148839
+        },
+        {
+          "path": "/casos/",
+          "run": 1,
+          "performance": 99,
+          "lcp_ms": 1806,
+          "cls": 0,
+          "tbt_ms": 28,
+          "dom_elements": 213,
+          "content_byte_weight": 129777
+        },
+        {
+          "path": "/casos/",
+          "run": 2,
+          "performance": 99,
+          "lcp_ms": 1804,
+          "cls": 0,
+          "tbt_ms": 11,
+          "dom_elements": 213,
+          "content_byte_weight": 129777
+        },
+        {
+          "path": "/casos/",
+          "run": 3,
+          "performance": 99,
+          "lcp_ms": 1804,
+          "cls": 0,
+          "tbt_ms": 8,
+          "dom_elements": 213,
+          "content_byte_weight": 129777
+        },
+        {
+          "path": "/entregas/",
+          "run": 1,
+          "performance": 99,
+          "lcp_ms": 1805,
+          "cls": 0,
+          "tbt_ms": 0,
+          "dom_elements": 772,
+          "content_byte_weight": 146747
+        },
+        {
+          "path": "/entregas/",
+          "run": 2,
+          "performance": 99,
+          "lcp_ms": 1803,
+          "cls": 0,
+          "tbt_ms": 0,
+          "dom_elements": 772,
+          "content_byte_weight": 146747
+        },
+        {
+          "path": "/entregas/",
+          "run": 3,
+          "performance": 99,
+          "lcp_ms": 1805,
+          "cls": 0,
+          "tbt_ms": 0,
+          "dom_elements": 772,
+          "content_byte_weight": 146747
+        },
+        {
+          "path": "/ferramentas/diagnostico-defesa-margem/",
+          "run": 1,
+          "performance": 99,
+          "lcp_ms": 1957,
+          "cls": 0,
+          "tbt_ms": 0,
+          "dom_elements": 264,
+          "content_byte_weight": 152149
+        },
+        {
+          "path": "/ferramentas/diagnostico-defesa-margem/",
+          "run": 2,
+          "performance": 99,
+          "lcp_ms": 1957,
+          "cls": 0,
+          "tbt_ms": 0,
+          "dom_elements": 264,
+          "content_byte_weight": 152149
+        },
+        {
+          "path": "/ferramentas/diagnostico-defesa-margem/",
+          "run": 3,
+          "performance": 99,
+          "lcp_ms": 1957,
+          "cls": 0,
+          "tbt_ms": 0,
+          "dom_elements": 264,
+          "content_byte_weight": 152149
+        },
+        {
+          "path": "/diretoria-b2g/",
+          "run": 1,
+          "performance": 99,
+          "lcp_ms": 1803,
+          "cls": 0,
+          "tbt_ms": 21,
+          "dom_elements": 472,
+          "content_byte_weight": 138210
+        },
+        {
+          "path": "/diretoria-b2g/",
+          "run": 2,
+          "performance": 99,
+          "lcp_ms": 1803,
+          "cls": 0,
+          "tbt_ms": 32,
+          "dom_elements": 472,
+          "content_byte_weight": 138210
+        },
+        {
+          "path": "/diretoria-b2g/",
+          "run": 3,
+          "performance": 99,
+          "lcp_ms": 1803,
+          "cls": 0,
+          "tbt_ms": 31,
+          "dom_elements": 472,
+          "content_byte_weight": 138210
+        },
+        {
+          "path": "/especialista/tiago-jun-sasaki/",
+          "run": 1,
+          "performance": 100,
+          "lcp_ms": 1804,
+          "cls": 0,
+          "tbt_ms": 28,
+          "dom_elements": 264,
+          "content_byte_weight": 138479
+        },
+        {
+          "path": "/especialista/tiago-jun-sasaki/",
+          "run": 2,
+          "performance": 100,
+          "lcp_ms": 1803,
+          "cls": 0,
+          "tbt_ms": 1,
+          "dom_elements": 264,
+          "content_byte_weight": 138479
+        },
+        {
+          "path": "/especialista/tiago-jun-sasaki/",
+          "run": 3,
+          "performance": 100,
+          "lcp_ms": 1804,
+          "cls": 0,
+          "tbt_ms": 15,
+          "dom_elements": 264,
+          "content_byte_weight": 138479
+        }
+      ],
+      "evaluation": {
+        "ok": true,
+        "errors": [],
+        "home": {
+          "expected_runs": 3,
+          "observed_runs": 3,
+          "minimum_performance": 99,
+          "p75_tbt_ms": 30,
+          "maximum_own_long_task_ms": 80,
+          "minimum_lcp_ms": 1952.697,
+          "maximum_lcp_ms": 1959.5764,
+          "maximum_lcp_net_ms": 1959.5764,
+          "maximum_lcp_network_allowance_ms": 0,
+          "maximum_cls": 0
+        }
+      },
+      "baseline_47da03b64_same_gate": {
+        "/": {
+          "dom_elements": 579,
+          "content_byte_weight": 148970,
+          "lcp_ms": "1803-1809",
+          "performance": 99
+        },
+        "/entregas/": {
+          "content_byte_weight": 152817
+        },
+        "/ferramentas/diagnostico-defesa-margem/": {
+          "content_byte_weight": 151595
+        },
+        "note": "medido com o mesmo gate na worktree da producao 47da03b64 construida com o produtor contratado (scratchpad, nao versionado)"
+      },
+      "note": "Primeira execucao do gate no piloto reprovou (DOM 1343, carga 163 KB na home) por causa das oito pranchas SVG inline; corrigido com pranchas como <picture>/<img> por breakpoint, folha editorial por rota (styles.css volta ao tamanho base), icones do manifesto em PNG de paleta sem perda e a home carregando so os blocos editoriais que usa. Resultado: DOM 669, carga 148,8 KB (abaixo da base), LCP 1,95-1,96 s no gate (base 1,80-1,81 s; margem de ~40 ms ate o teto de 2,0 s)."
+    }
   },
   "rules_affected": [
     {
@@ -644,6 +918,20 @@
       "owner": "integrador",
       "impact_on_expansion": "condicao de merge",
       "item": "frozen-specs/**, single-commercial-route.v1.json, canary-contract.json (389), cta-form-next-state.v1.json e approvals.json (analise aprovada) foram recapturados neste ramo; so entram em main com a direcao aprovada, por merge commit (nao squash)."
+    },
+    {
+      "id": "P8",
+      "severity": "MEDIA",
+      "owner": "integrador (campanha 02)",
+      "impact_on_expansion": "nao bloqueia; monitorar no gate",
+      "item": "LCP de laboratorio da home 1,95-1,96 s no gate do repositorio (teto 2,0 s; base 1,80 s). Ganhar margem: reduzir CSS critico da home (styles.css legado) ou HTML da dobra; nao afrouxar o teto."
+    },
+    {
+      "id": "P9",
+      "severity": "INFO",
+      "owner": "integrador",
+      "impact_on_expansion": "nao bloqueia",
+      "item": "Dentro de <img>, o texto das pranchas usa a fonte de sistema (Arial/Liberation), nao Archivo; a geometria, cotas e carimbo sao os mesmos. Alternativa futura: <object> com @font-face no SVG, se a identidade tipografica da prancha for exigida."
     }
   ],
   "must_not_regress": [
@@ -701,9 +989,9 @@
     "comparativo": "comparativo.html"
   },
   "content_hashes": {
-    "css/editorial.css": "5bb81f80edbb7282f3dce18132fa0361bcbb6d6ea3cbb09a351a0fb8931dd4f5",
+    "css/editorial.css": "07c48cadd25a5f25e929bd77ce35bd70474ead64d37ffdf4425199e07e5e9016",
     "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
-    "assets/home-10x.css": "3ab009401563de0c58ee1ed5f6a8b006b395c50a80c35e62e148f25efffa5a3f",
+    "assets/home-10x.css": "10d9e60cacb36ade094133f8b32e6aa5a88065cd4298eb950fd405bbed0951b7",
     "assets/pranchas/avaliacao-estrutura-desktop.svg": "ea1934e035b5ca4fbe74fe3aebd6eee289454395a7738f5382e86c724a99d792",
     "assets/pranchas/avaliacao-estrutura-mobile.svg": "251417e5f7c84740a0df9115f6f4a547285197d4a3404cce8a223143987b6835",
     "assets/pranchas/drenagem-perfil-desktop.svg": "7436813799a0ce7cb14d33b9639d0c2da733d4181c982b189a2975ee5ba66423",
