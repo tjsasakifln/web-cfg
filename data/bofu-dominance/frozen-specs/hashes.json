@@ -1,9 +1,9 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "39f6bea2da78fe2c71a966b20ce95b1cc1f630bb",
-  "recaptured_at": "2026-09-17T19:19:44Z",
-  "recapture_reason": "SALTO-INSTITUCIONAL-02 (expansao da direcao 'prancha e percurso' autorizada pelo encaminhamento do proprietario em 2026-09-17, EXECUTE_NOW; ramo campaign/salto-institucional-02-expansao, bytes finais em 39f6bea2da78fe2c71a966b20ce95b1cc1f630bb): os seis pilares B2G foram recompostos no esqueleto de servico do piloto (abertura em uma coluna, indice de pagina, prancha demonstrativa propria por evento, entrega nomeada, 'Duvidas, condicoes e limites', bloco unico de proximo passo com o formulario #captura-pilar byte-identico e a secao de autoria preservada); styles.css/styles-tokens.css/styles-offers.css mudaram porque a folha global trocou degrades decorativos por superficies solidas, podou 18 seletores mortos e a folha editorial por rota ganhou os blocos de artigo, hub, ferramenta, responsavel e estados; a pagina da analise aprovada nao mudou um byte (so o CSS que a veste). Nenhum preco, prazo, checkout, robots, canonical, sitemap, JSON-LD, formulario ou permissao mudou. Executor: agente Claude Code; nenhuma nova aprovacao tecnica ou revisao humana independente alegada.",
+  "baseline_commit": "f33114aa1a6c458b44a3a74af392401e19bbc088",
+  "recaptured_at": "2026-09-17T19:27:50Z",
+  "recapture_reason": "SALTO-INSTITUCIONAL-02 (expansao da direcao 'prancha e percurso' autorizada pelo encaminhamento do proprietario em 2026-09-17, EXECUTE_NOW; ramo campaign/salto-institucional-02-expansao, bytes finais em f33114aa1a6c458b44a3a74af392401e19bbc088): os seis pilares B2G foram recompostos no esqueleto de servico do piloto (abertura em uma coluna, indice de pagina, prancha demonstrativa propria por evento, entrega nomeada, 'Duvidas, condicoes e limites', bloco unico de proximo passo com o formulario #captura-pilar byte-identico e a secao de autoria preservada); styles.css/styles-tokens.css/styles-offers.css mudaram porque a folha global trocou degrades decorativos por superficies solidas, podou seletores mortos apos a recomposicao e a folha editorial por rota ganhou os blocos de artigo, hub, ferramenta, responsavel e estados; a pagina da analise aprovada nao mudou um byte (so o CSS que a veste). Nenhum preco, prazo, checkout, robots, canonical, sitemap, JSON-LD, formulario ou permissao mudou. Executor: agente Claude Code; nenhuma nova aprovacao tecnica ou revisao humana independente alegada.",
   "html_mutation": true,
   "pillars": {
     "aditivos-obras-publicas": "bcfbe8fc5fd6e37fde9c857991c0bc23f86c5dde9bda1f265f0f8ea3ffd11156",
@@ -21,7 +21,7 @@
     "diagnostico-b2g-360/index.html": "888dc7f716f1dd524bfd1b06d55fe23bb48a2bc507602f7528a17a77066db1cd",
     "diagnostico-pre-licitacao/index.html": "74402dff44f8981829c91e8bac07c3ef5e122f345cf4e27991b0dfa921588f7a",
     "script.js": "1c0429738a094c73e738152d2275ac8cd34b905e43c2139423b388ae75affe1a",
-    "styles.css": "c18f3bcf21625adbaa382a0e5e208c2858cd4229aa382d3490fcfd46397a8311",
+    "styles.css": "734b62f6b4842a5dcbbac5dc5424a405c774ac11d88ba23dc502b18f49b670dc",
     "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
     "styles-tools.css": "7112012d31d7a3a1b43a6fbd8b939598d7a6f1b8ea41b0ec850eaa6d8cde4377",
     "robots.txt": "aa58f365ca9d63bad59c6bd95349b3d027c95571ea061c349af9721ffbadd5a0",
