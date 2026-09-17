@@ -27,7 +27,7 @@ Recuperar medição, contestar glosa e transformar serviço executado em valor r
 | robots | index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1 |
 | schema | Organization, Country, ContactPoint, Person, CollegeOrUniversity, CollectionPage, WebSite, ItemList, ListItem, Service, BreadcrumbList, FAQPage, Question, Answer |
 | og:title | Medições, glosas e pagamentos em obras públicas | CONFENGE |
-| content_sha256 | `1255fe4cbeab0feb0fc04c1cf0398097b56c6f58c8e0bea0e1659727375db000` |
+| content_sha256 | `124e31f29b3b98e91cb457943fdaa448c8e52121dc62a68ddd0e3d054f4fca3c` |
 | hero CTA |  → `` |
 | when-not-to-hire | True |
 
