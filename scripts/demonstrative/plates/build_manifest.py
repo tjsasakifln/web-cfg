@@ -140,11 +140,51 @@ def _sha(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def _lot_registers() -> dict[str, dict]:
+    """Plates declared by the expansion lots (docs/campaigns/design-institucional/expansao/assets-lote-*.json)."""
+    out: dict[str, dict] = {}
+    for reg in sorted((ROOT / "docs/campaigns/design-institucional/expansao").glob("assets-lote-*.json")):
+        doc = json.loads(reg.read_text(encoding="utf-8"))
+        for item in doc.get("assets", []):
+            pid = item.get("plate_id") or item.get("id")
+            if not pid or item.get("kind", "prancha") != "prancha" and "plate_id" not in item:
+                continue
+            pid = pid.replace("-desktop", "").replace("-mobile", "")
+            out.setdefault(pid, {"code": item.get("code") or item.get("sheet_code") or pid, "register": str(reg.relative_to(ROOT))})
+    return out
+
+
+def _pages_using(pid: str) -> list[str]:
+    skip = {"_site", "docs", "node_modules", "build", "seo", ".git"}
+    pages = []
+    for path in sorted(ROOT.rglob("*.html")):
+        rel = path.relative_to(ROOT)
+        if rel.parts[0] in skip:
+            continue
+        if f"<!-- plate:{pid}" in path.read_text(encoding="utf-8", errors="ignore"):
+            route = "/" + rel.as_posix().removesuffix("index.html")
+            pages.append(route if route != "/index.html" else "/")
+    return pages
+
+
+def _meta(pid: str, registers: dict[str, dict]) -> dict:
+    if pid in PLATE_META:
+        return PLATE_META[pid]
+    reg = registers.get(pid, {})
+    return {
+        "code": reg.get("code", pid),
+        "sources": [str(R.SOURCES[key]) for key in R.PLATE_SOURCES.get(pid, ())],
+        "pages": _pages_using(pid),
+        "slot": "slot <!-- plate:" + pid + " --> (materializado por scripts/demonstrative/plates/inline.py); registro do lote em " + reg.get("register", "(sem registro)"),
+    }
+
+
 def build() -> dict:
     entries = []
+    registers = _lot_registers()
     for name in sorted(R.render_all()):
         pid, variant = name[:-4].rsplit("-", 1)
-        meta = PLATE_META[pid]
+        meta = _meta(pid, registers)
         path = R.OUT_DIR_REL / name
         entries.append({
             "path": str(path),
@@ -158,6 +198,7 @@ def build() -> dict:
             "slot": meta["slot"],
             "editable_source": meta["sources"] + ["scripts/demonstrative/plates/render_plates.py", "scripts/demonstrative/plates/sheet.py"],
             "exported_version": "rev. " + ("R01" if pid in ("recorte-banheiro", "drenagem-perfil") else "R00"),
+            "family_module": next((m.stem for m in (ROOT / "scripts/demonstrative/plates").glob("family_*.py") if f'"{pid}"' in m.read_text(encoding="utf-8")), "render_plates"),
             "evidence_png": f"docs/campaigns/design-institucional/evidence/pranchas/{pid}-{variant}-{1200 if variant == 'desktop' else 360}.png",
             "sha256": _sha(ROOT / path),
             "bytes": (ROOT / path).stat().st_size,
