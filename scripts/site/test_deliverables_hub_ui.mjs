@@ -162,6 +162,11 @@ for (const width of widths) {
       firstReportVisible: Boolean(firstReport && firstReport.width > 0 && firstReport.height >= 44),
       documentHeight: Math.round(document.documentElement.scrollHeight),
       decisionNavTop: Math.round((decisionNav?.getBoundingClientRect().top || 0) + window.scrollY),
+      // Correcao apos revisao (onda 2): a geometria de conversao do indice pela
+      // decisao e medida em relacao a secao das ofertas (#enquadrar) e a
+      // entrada do indice da pagina que leva ate ela, nao por um numero solto.
+      offersSectionTop: Math.round((document.querySelector("#enquadrar")?.getBoundingClientRect().top || 0) + window.scrollY),
+      pageIndexOffersLinkTop: Math.round((document.querySelector('.page-index a[href="#enquadrar"]')?.getBoundingClientRect().top || 0) + window.scrollY),
       decisionNavHeight: Math.round(decisionNav?.getBoundingClientRect().height || 0),
       decisionNavShortTargets: [...(decisionNav?.querySelectorAll("a") || [])]
         .filter((link) => link.getBoundingClientRect().height < 44).length,
@@ -310,14 +315,27 @@ for (const width of widths) {
   // regrada com indice, rotulo | valor por criterio e filete entre criterios,
   // em vez do cartao com grade de tres colunas; os servicos ganharam indice e
   // linha propria; "Condicoes e limites" virou secao; o bloco escuro traz a
-  // sequencia do envio. Nenhum campo foi acrescentado nem escondido. Medido
-  // 21485 px a 390 px (Chromium headless local); 21700 deixa ~215 px (1%) de
-  // folga e continua pegando deriva de comprimento nao relacionada.
-  if (width === 390 && metrics.documentHeight > 21700) errors.push(`document_height=${metrics.documentHeight}`);
-  // O indice pela decisao vive na secao das ofertas, depois dos cinco servicos
-  // (decisao do fundador: servicos de engenharia antes das ofertas com preco);
-  // o indice da pagina, no topo, leva ate ele. Medido 4361 px a 390 px.
-  if (width === 390 && metrics.decisionNavTop > 4600) errors.push(`decision_nav_top=${metrics.decisionNavTop}`);
+  // sequencia do envio. Nenhum campo foi acrescentado nem escondido.
+  // Correcao apos revisao (2026-09-17, onda 2): 21700 -> 24300. A revisao
+  // reprovou a vitrine a 390 px com rotulo em coluna de 96 px e valor a 14 px;
+  // cada criterio voltou a empilhar rotulo sobre valor na largura toda, com o
+  // valor no corpo (16 px), e "Pacote e credito" entrou como ultima linha da
+  // mesma lista. Sao 8 ofertas x 12 criterios legiveis, mais a prancha PG na
+  // secao de servicos: medido 24037 px a 390 px (Chromium headless local);
+  // 24300 deixa ~260 px (1,1%) de folga e continua pegando deriva nao
+  // relacionada. A 1440 px a mesma pagina caiu de 14909 para 13591 (pares de
+  // criterios em duas colunas).
+  if (width === 390 && metrics.documentHeight > 24300) errors.push(`document_height=${metrics.documentHeight}`);
+  // Geometria de conversao do indice pela decisao (correcao apos revisao,
+  // onda 2): o indice e o primeiro bloco da secao das ofertas (#enquadrar),
+  // logo depois da cabeca da secao, e a entrada "Analises com preco publicado"
+  // do indice da pagina, na abertura, leva ate ele em um toque. O guarda
+  // absoluto de 1800 px da composicao antiga (indice em caixa navy antes dos
+  // servicos) foi substituido por dois invariantes relativos, que reprovam se
+  // o indice se afastar da cabeca da secao ou se a entrada sair da abertura.
+  // Medido a 390 px: indice a 346 px do topo de #enquadrar; entrada a 1439 px.
+  if (width === 390 && metrics.decisionNavTop - metrics.offersSectionTop > 500) errors.push(`decision_nav_offset=${metrics.decisionNavTop - metrics.offersSectionTop}`);
+  if (width === 390 && (!metrics.pageIndexOffersLinkTop || metrics.pageIndexOffersLinkTop > 1800)) errors.push(`page_index_offers_link_top=${metrics.pageIndexOffersLinkTop}`);
   if (width <= 360 && metrics.decisionNavHeight > 560) errors.push(`decision_nav_height=${metrics.decisionNavHeight}`);
   if (metrics.decisionNavShortTargets) errors.push(`decision_nav_touch_targets=${metrics.decisionNavShortTargets}`);
   if (metrics.decisionNavOverflow) errors.push("decision_nav_overflow");
@@ -332,7 +350,8 @@ for (const width of widths) {
   }
   // 50 -> 54 na onda 2: o indice da pagina (quatro ancoras internas) e a
   // alternativa por e-mail do bloco escuro substituem o bloco "Onde comecar"
-  // (tres ancoras) e o aside de fechamento; medido 52.
+  // (tres ancoras) e o aside de fechamento; medido 52. Apos a revisao, o
+  // e-mail contextual da abertura (slot svc-open__note do piloto) leva a 53.
   if (metrics.mainLinks > 54) errors.push(`main_links=${metrics.mainLinks}`);
   if (metrics.longestArchetypeRun > 2) errors.push(`archetype_run=${metrics.longestArchetypeRun}`);
   // One primary leads to the progressive framing and the other submits the
