@@ -293,7 +293,7 @@ if (localCss) {
   );
   ok(
     "css_reduced_data_targets_published_profile",
-    css.body.includes("@media (prefers-reduced-data:reduce){.profile-mark img{display:none}"),
+    css.body.includes("@media (prefers-reduced-data:reduce){.portrait__frame img,.author-photo img{display:none}"),
     "reduced-data profile fallback missing"
   );
 } else {
