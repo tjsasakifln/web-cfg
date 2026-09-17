@@ -539,7 +539,9 @@ próximas da matriz, em 12,5 px, balão 2 fora da célula (hash recapturado em `
 | `npm run test:cta-form-next-state` | `CTA_FORM_NEXT_STATE_OK routes=31` (censo 198 → 196) |
 | `npm run test:form-funnel` | `FORM_FUNNEL_OK` |
 | `npm run test:nav` / `test:hub-truth` / `test:bofu-audit` | `15 passed` / `ALL hub truth checks passed` / `18 passed` |
-| `npm run test:bofu-dominance` | `11 failed, 106 passed`: os mesmos 11 de hash/snapshot dos pilares congelados (`frozen_specs`, `unlock_plan_291`, `test_git_diff_is_exclusive_area`); `safe_execution` estrutural e `safe_strategy` passam |
+| `npm run test:bofu-dominance` | `11 failed, 106 passed`: 10 de hash/snapshot dos pilares congelados (`frozen_specs/test_frozen_specs.py` ×9, `test_unlock_plan_291.py` ×1; pedido 1) e `safe_execution::test_git_diff_is_exclusive_area`, que **não é hash**: compara o diff do ramo com a área exclusiva do PR 159 e agora vê, além de `aditivos-obras-publicas/`, os arquivos desta rodada fora dessa área (`diretoria-b2g/`, `bid-room-licitacoes-obras/`, `diagnostico-b2g-expansao/`, `servicos-obras-publicas/`, `reequilibrio-obras-publicas/`, `diagnostico-pre-licitacao/`, `styles-offers.css`, `assets/pranchas/`, `data/demonstrative/plates/`, `scripts/demonstrative/plates/`); o escopo autorizado da frente é mais largo que essa área e o teste é intocável. `safe_execution` estrutural (12/13) e `safe_strategy` passam |
+| `npm run test:layout-primitives` (árvore fonte) | `OK layout audit: 19 routes × 7 widths (133 checks)` (`.compare-split` saiu das três ofertas; seletor ausente não reprova) |
+| `npm run test:lead-function` | exit 0 (`ALL private_project_technical_readiness checks passed`) |
 | `node --test tests/intake/test_mv03_adaptive_intake.mjs` | `# pass 17 # fail 0` |
 | `UI_GEOMETRY_SITE_ROOT=. UI_TEST_PORT=8753 node scripts/site/test_ui_geometry.mjs` | `All UI geometry tests passed` (inclusive `offer_context_geometry`, `offer_context_computed`, `offer_cta_first_viewport_and_progressive_detail`, `editorial_cover_scope_geometry`) |
 | `npm run test:first-fold-contract` | exit 1: `17 check(s) failed`, todos `input_hashes` (recaptura do integrador, pedido 17) |
@@ -547,9 +549,11 @@ próximas da matriz, em 12,5 px, balão 2 fora da célula (hash recapturado em `
 
 ### 9.3 Testes ajustados e motivo
 
-- Nenhum teste foi editado nesta rodada. `data/commercial/cta-form-next-state.v1.json`
-  (`expected_declared_ctas` 198 → 196, nota) e `docs/commercial/cta-form-next-state-inventory.json`
-  regerado por `npm run report:cta-form-next-state`.
+- Nenhum arquivo de teste foi editado nesta rodada; nenhum gate foi afrouxado.
+- Ajustado: `data/commercial/cta-form-next-state.v1.json` (`expected_declared_ctas` 198 → 196, com a nota
+  do motivo: dois controles da diretoria que apontavam para onde já estavam) e
+  `docs/commercial/cta-form-next-state-inventory.json` regerado por `npm run report:cta-form-next-state`
+  (duas vezes: após o fecho da diretoria e após os itens de índice das pranchas).
 - Arquivos protegidos por hash alterados de propósito (recaptura do integrador, pedidos 1 e 17):
   `defesa-margem-contratos-publicos/index.html`, `defesa-tecnica-contratos-publicos/index.html`,
   `atrasos-prorrogacao-obras-publicas/index.html`, `acompanhamento-contratos-obras/index.html`,

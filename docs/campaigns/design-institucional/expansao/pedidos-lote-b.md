@@ -99,7 +99,7 @@ Cada pedido diz o arquivo do integrador, o motivo e a página afetada. Nada aqui
 
 ## 18. `stash@{0}` no worktree do lote B
 
-- O worktree `.worktrees/salto-02-lote-b` carrega `stash@{0}` ("WIP on campaign/salto-institucional-02-expansao: 2da310422", 288 arquivos, drift de `_site`/saídas rastreadas da base), anterior à onda 2 e não pertencente ao lote. Foi aplicado por engano por um `git stash`/`pop` de conferência e revertido com `git reset --hard HEAD` (trabalho já commitado); a entrada foi mantida. Decisão de descartar ou não é do integrador.
+- A lista de stashes do repositório (compartilhada entre worktrees) carrega uma entrada "WIP on campaign/salto-institucional-02-expansao: 2da310422" (288 arquivos, drift de `_site`/saídas rastreadas da base), anterior à onda 2 e não pertencente ao lote; a posição na lista muda conforme outras sessões empilham stashes (na rodada de correção ela já não era a `stash@{0}`), então identificar pela mensagem, não pelo índice. Foi aplicado por engano por um `git stash`/`pop` de conferência e revertido com `git reset --hard HEAD` (trabalho já commitado); a entrada foi mantida. Decisão de descartar ou não é do integrador.
 
 ## 19. Rodapé dos estados de checkout (casca `obrigado.html`)
 

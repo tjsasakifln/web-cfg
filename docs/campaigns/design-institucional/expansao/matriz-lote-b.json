@@ -309,7 +309,7 @@
       "source": "acompanhamento-contratos-obras/index.html",
       "generator": "manual (script de componentes; bloco GENERATED:CONTRACT-DEFENSE-PRODUCT preservado)",
       "priority": "P1",
-      "treatment": "COMPONENTES_ADEQUADOS",
+      "treatment": "COMPOSICAO_REDESENHADA",
       "owner": "lote B",
       "state": "CAPTURADA_E_VISTA (onda 2, correcoes apos revisao: 390 e 1440, dobra e pagina inteira; menu em 390; 320 sem rolagem horizontal)",
       "evidence": [
@@ -320,7 +320,7 @@
         "docs/campaigns/design-institucional/expansao/evidence/lote-b/acompanhamento-contratos-obras-390x844-menu-onda2.jpg"
       ],
       "impediment": "",
-      "note": "revisao 2026-09-17: familia dividida enquanto test_existing_css_js_only vetar a folha editorial nestas quatro rotas (pedido 2): irmas recompostas no mesmo hub usam a composicao do piloto e estas mantem hero em degrade, faixa navy e CTA generico | onda 2: mesma composicao, com a prancha P7 (carteira por evento) como exemplo demonstrativo; sem biblioteca (pagina sem guias); paragrafo data-offer-fit preservado | correcoes apos revisao (onda 2): indice na abertura, aside sem Entrega, alternativa em texto na abertura (botao da abertura e inline eram consecutivos), aside.lead-inline de exploracao (ferramentas publicas) como unico bloco escuro, dl.keys em prosa; P7 com chamadas mais proximas"
+      "note": "revisao 2026-09-17: familia dividida enquanto test_existing_css_js_only vetar a folha editorial nestas quatro rotas (pedido 2): irmas recompostas no mesmo hub usam a composicao do piloto e estas mantem hero em degrade, faixa navy e CTA generico | onda 2: mesma composicao, com a prancha P7 (carteira por evento) como exemplo demonstrativo; sem biblioteca (pagina sem guias); paragrafo data-offer-fit preservado | correcoes apos revisao (onda 2): indice na abertura, aside sem Entrega, alternativa em texto na abertura (botao da abertura e inline eram consecutivos), aside.lead-inline de exploracao (ferramentas publicas) como unico bloco escuro, dl.keys em prosa; P7 com chamadas mais proximas | mesma composicao das tres irmas (svc-open na casca pinada, indice na copy, prancha dominante P7 reutilizada, listas regradas, condicoes consolidadas, um bloco escuro), recapturada"
     },
     {
       "route": "/atrasos-prorrogacao-obras-publicas/",
