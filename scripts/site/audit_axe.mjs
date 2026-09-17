@@ -124,6 +124,12 @@ for (const viewport of VIEWPORTS) {
   for (const entry of coverage.axe.routes) {
     const path = entry.route;
     await page.goto(`${BASE}${path}`, { waitUntil: "networkidle0", timeout: 60000 });
+    // A mesma aba atravessa rotas e viewports: o cursor fica onde a rota
+    // anterior o deixou e um botao sob ele entra em :hover no meio da
+    // transicao de cor, o que fez o axe medir contraste de um estado
+    // intermediario (2026-09-17, home desktop). O estado de repouso e a
+    // propriedade auditada; o cursor sai da pagina antes da medicao.
+    await page.mouse.move(0, 0);
     await page.addScriptTag({ content: axeSource });
     const results = await page.evaluate(async () => {
       // eslint-disable-next-line no-undef
