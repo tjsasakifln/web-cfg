@@ -459,6 +459,16 @@ CLICK_ORIGIN_PINNED = (
     "conteudos/jogo-de-planilha-aditivo-obra-publica/index.html",
     "conteudos/fiscal-nao-assina-medicao-obra-publica/index.html",
 )
+# Únicas páginas do contrato do canário 389 que --include-protected pode
+# levantar (fonte + siblings de conteudos/ recompostos na onda 2 do lote C).
+# Um sibling do contrato fora desta lista fica "intacta" nos dois modos.
+CANARY_LIFTABLE = frozenset(
+    {
+        "conteudos/atraso-na-medicao-obra-publica/index.html",
+        "conteudos/glosa-de-medicao-obra-publica/index.html",
+        "conteudos/medicao-de-obra-publica-rejeitada/index.html",
+    }
+)
 
 
 def protected_pages(*, include_protected: bool = False) -> dict[str, str]:
@@ -471,11 +481,16 @@ def protected_pages(*, include_protected: bool = False) -> dict[str, str]:
     composição).
 
     `include_protected=True` levanta SÓ o congelamento derivado do contrato do
-    canário 389 (`canary-contract.json`: fonte e `frozen_siblings`), cujos
-    sha256 o integrador recaptura depois da recomposição. Nunca levanta os
-    bytes de origin/main (CLICK_ORIGIN), a aprovação humana por hash
-    (striking-distance) nem a impressão digital do cluster de medição: uma
-    página do canário que também está no cluster continua "so-folha".
+    canário 389 (`canary-contract.json`) e SÓ para os artigos da biblioteca que
+    este transformador sabe recompor: a fonte do canário e os `frozen_siblings`
+    sob `conteudos/` (CANARY_LIFTABLE). Qualquer outro sibling do contrato (por
+    exemplo o pilar `medicoes-glosas-obras-publicas/index.html`, arquivo do
+    integrador com blocos Service que o subconjunto editorial não cobre)
+    continua "intacta" nos dois modos, e um sibling futuro do contrato fora
+    da allowlist também (fail-closed). Nunca levanta os bytes de origin/main (CLICK_ORIGIN), a
+    aprovação humana por hash (striking-distance) nem a impressão digital do
+    cluster de medição: uma página do canário que também está no cluster
+    continua "so-folha".
     """
     out: dict[str, str] = {}
     for rel in CLICK_ORIGIN_PINNED:
@@ -488,17 +503,24 @@ def protected_pages(*, include_protected: bool = False) -> dict[str, str]:
                 out[str(row["html"])] = "intacta"
     except (OSError, json.JSONDecodeError):
         pass
-    if not include_protected:
-        try:
-            contract = json.loads(CANARY_389_CONTRACT.read_text(encoding="utf-8"))
-            source = (contract.get("canary") or {}).get("source")
-            if source:
-                out[str(source)] = "intacta"
-            for sibling in contract.get("frozen_siblings") or []:
-                if sibling.get("path"):
-                    out[str(sibling["path"])] = "intacta"
-        except (OSError, json.JSONDecodeError):
-            pass
+    try:
+        contract = json.loads(CANARY_389_CONTRACT.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        contract = {}
+    canary_paths: list[str] = []
+    source = (contract.get("canary") or {}).get("source")
+    if source:
+        canary_paths.append(str(source))
+    for sibling in contract.get("frozen_siblings") or []:
+        if sibling.get("path"):
+            canary_paths.append(str(sibling["path"]))
+    for rel in canary_paths:
+        if include_protected and rel in CANARY_LIFTABLE:
+            continue  # levantado: o integrador recaptura o sha256 (relatório do lote)
+        # Fora da allowlist (pilar de medições, CLICK_ORIGIN, sibling futuro):
+        # "intacta" nos dois modos; levantar exige acrescentar à allowlist de
+        # propósito, com o sha256 novo no relatório do lote.
+        out[rel] = "intacta"
     cluster_rels: list[str] = []
     try:
         from scripts.organic.cluster_medicao_originality import CLUSTER_SLUGS  # noqa: PLC0415
