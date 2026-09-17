@@ -9,7 +9,9 @@ fora dos pontos de inserção ficam idênticos.
 
 Operações (todas idempotentes):
 
-1. `<link href="/assets/editorial.css" rel="stylesheet"/>` logo após a folha
+1. `<link href="/assets/editorial-article.css" rel="stylesheet"/>` logo após a folha
+   (subconjunto do bloco Article cortado por scripts/site/build_css.py; a folha
+   inteira só nos hubs, que usam Service, Hub e Trust)
    `/styles.css`, quando ausente.
 2. Índice de página: `nav.article-toc` com o rótulo "Nesta página" e uma
    entrada por h2 de leitura dentro de `article-main`, quando o artigo tem
@@ -61,7 +63,8 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 ARTICLES_DIR = ROOT / "conteudos"
-EDITORIAL_LINK = '<link href="/assets/editorial.css" rel="stylesheet"/>'
+EDITORIAL_LINK = '<link href="/assets/editorial-article.css" rel="stylesheet"/>'
+FULL_SHEET_LINK = '<link href="/assets/editorial.css" rel="stylesheet"/>'
 TABLE_HINT = '<p class="table-hint">Deslize a tabela para ver todas as colunas.</p>'
 TOC_LABEL = "Nesta página"
 MIN_H2_FOR_TOC = 3
@@ -136,8 +139,13 @@ def unique_id(base: str, taken: set[str]) -> str:
 # --- 1. folha editorial -------------------------------------------------------
 
 def ensure_editorial_link(html: str, log: list[str]) -> str:
-    if "/assets/editorial.css" in html:
+    if EDITORIAL_LINK in html:
         return html
+    if FULL_SHEET_LINK in html:
+        # Um artigo não usa os blocos Service, Hub nem Trust: troca a folha
+        # inteira pelo subconjunto de leitura (orçamento de carga por rota).
+        log.append("folha inteira trocada pelo subconjunto editorial-article.css")
+        return html.replace(FULL_SHEET_LINK, EDITORIAL_LINK, 1)
     m = STYLES_LINK_RE.search(html)
     if not m:
         log.append("sem link /styles.css: folha editorial não inserida")

@@ -96,8 +96,11 @@ def _is_checklist_page(page):
 
 
 # Folha editorial da campanha "prancha e percurso" (lote C): modelo de leitura
-# do bloco Article (índice de página, tabelas roláveis, autor, fontes).
-EDITORIAL_SHEET_LINK = '<link href="/assets/editorial.css" rel="stylesheet"/>'
+# do bloco Article (índice de página, tabelas roláveis, autor, fontes). A página
+# de leitura carrega só o subconjunto Article (cortado por
+# scripts/site/build_css.py); o hub carrega a folha inteira porque usa o bloco Hub.
+EDITORIAL_SHEET_LINK = '<link href="/assets/editorial-article.css" rel="stylesheet"/>'
+EDITORIAL_FULL_SHEET_LINK = '<link href="/assets/editorial.css" rel="stylesheet"/>'
 MIN_H2_FOR_PAGE_INDEX = 3
 
 
@@ -115,26 +118,16 @@ def _plain(text: str) -> str:
 def _index_label(text: str) -> str:
     """Rótulo do índice: a primeira oração do h2 (antes de ':' ou '('), inteira.
 
-    Não se trunca o rótulo: um título cortado é um defeito visível. Se a entrada
-    não couber em 320 px, a correção é da folha (`.article-toc li{flex:none}`
-    e `white-space`), pedida ao integrador em pedidos-lote-c.md.
+    Não se trunca o rótulo: um título cortado é um defeito visível. A folha
+    (`.article-toc li{flex:0 1 auto;min-width:0}` + `a{white-space:normal}`,
+    integrador, 2026-09-17) deixa a entrada quebrar linha em 320 px.
     """
     return re.split(r"\s*[:(]", text, maxsplit=1)[0].strip() or text
-
-
-# Largura útil de 320 px menos o gutter: acima disto uma entrada do índice
-# transborda, porque a folha não deixa a entrada quebrar linha
-# (`.article-toc li{flex:none}`, pedido ao integrador). Enquanto a folha não
-# mudar, a página com um rótulo maior fica sem índice em vez de ganhar rolagem
-# horizontal ou um rótulo truncado.
-INDEX_LABEL_FITS = 36
 
 
 def page_index_html(entries: list[tuple[str, str]]) -> str:
     """nav.article-toc 'Nesta página': uma entrada por h2 de leitura, quando há três ou mais."""
     if len(entries) < MIN_H2_FOR_PAGE_INDEX:
-        return ""
-    if any(len(_index_label(t)) > INDEX_LABEL_FITS for _a, t in entries):
         return ""
     items = "".join(f'<li><a href="#{e(a)}">{e(_index_label(t))}</a></li>' for a, t in entries)
     return (
@@ -718,12 +711,13 @@ def render_hub(hub: dict[str, Any], pages: list[dict[str, Any]]) -> str:
     # titulo, nao apenas ao unico arquetipo publicado nele.
     related_items = hub.get("related") or []
     if related_items:
+        # A numeração continua a da lista anterior: é um índice só, em dois grupos.
         related_cards = "".join(
             f'<li><span class="hub-list__index">{i:02d}</span><div>'
             f'<h3><a href="{e(r["url"])}">{e(r["title"])}</a></h3>'
             f'<p>{e(r["blurb"])}</p>'
             f'</div><div class="hub-list__action"><a href="{e(r["url"])}">Ler <svg class="icon"><use href="#i-arrow"></use></svg></a></div></li>'
-            for i, r in enumerate(related_items, 1)
+            for i, r in enumerate(related_items, len(cards) + 1)
         )
         related_block = (
             '<section class="sec sec--soft"><div class="container">'
@@ -735,15 +729,17 @@ def render_hub(hub: dict[str, Any], pages: list[dict[str, Any]]) -> str:
         )
     else:
         related_block = ""
+    # Um bloco escuro por página (esqueleto do caderno): próximo passo com uma
+    # ação dominante e a alternativa em texto. Mesmos destinos e rótulos de antes.
     case_cta = f"""
-<section class="section section--tight" data-hub-case-cta><div class="container">
-<div class="lead-inline" data-cta-position="hub-footer">
-<div class="lead-inline-copy"><span>Próximo passo</span><strong>Levou uma dúvida da biblioteca para o seu contrato?</strong>
-<p>Envie o tema e os documentos principais. Você recebe uma leitura inicial do caso: o que os documentos sustentam, o que falta reunir e qual o próximo passo.</p></div>
-<div class="lead-inline-actions">
-<a class="button button-primary" data-cta-position="hub-footer" data-cta-channel="whatsapp" href="{e(wa_link(wa_msg))}" rel="noopener" target="_blank">Enviar pelo WhatsApp</a>
-<a class="button button-secondary" data-cta-position="hub-footer" data-cta-channel="email" href="{e(mailto_href('tiago.sasaki@confenge.com.br', mail_subject, mail_body))}">Solicitar análise por e-mail</a>
-</div></div>
+<section class="sec sec--dark" data-hub-case-cta aria-labelledby="hub-proximo-passo"><div class="container">
+<span class="t-kicker">Próximo passo</span>
+<h2 class="t-editorial" id="hub-proximo-passo">Levou uma dúvida da biblioteca para o seu contrato?</h2>
+<p class="measure">Descreva o tema e diga quais documentos você já tem. Você recebe uma leitura inicial do caso: o que os documentos sustentam, o que falta reunir e qual o próximo passo. Conversa técnica, sem contratação nem pagamento; documentos só depois, pelo canal seguro combinado.</p>
+<div class="contact-primary">
+<a class="button button-primary button-lg" data-cta-position="hub-footer" data-cta-channel="whatsapp" href="{e(wa_link(wa_msg))}" rel="noopener" target="_blank">Enviar pelo WhatsApp <svg class="icon"><use href="#i-arrow"></use></svg></a>
+<ul class="contact-alt"><li><a data-cta-position="hub-footer" data-cta-channel="email" href="{e(mailto_href('tiago.sasaki@confenge.com.br', mail_subject, mail_body))}">Solicitar análise por e-mail</a></li></ul>
+</div>
 </div></section>
 """
     body = f"""
@@ -776,7 +772,7 @@ def render_hub(hub: dict[str, Any], pages: list[dict[str, Any]]) -> str:
         body_main=body,
         wa_message=wa_msg,
         author_name="Biblioteca técnica CONFENGE",
-        extra_head=EDITORIAL_SHEET_LINK,
+        extra_head=EDITORIAL_FULL_SHEET_LINK,
         data_attrs={
             "content-type": "hub",
             "editorial-topic": hub.get("topic") or hub.get("id") or "",

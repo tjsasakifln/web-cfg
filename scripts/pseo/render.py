@@ -21,13 +21,33 @@ from scripts.pseo.html_shell import (
     methodology_block,
     page_shell,
     table_html,
+    wa_link,
 )
 from scripts.pseo import geo_locale
 from scripts.pseo.score import Candidate
 
 # Folha editorial da campanha "prancha e percurso" (lote C): modelo de leitura
-# do bloco Article (índice de página, tabelas roláveis, autor, fontes).
-EDITORIAL_SHEET_LINK = '<link href="/assets/editorial.css" rel="stylesheet"/>'
+# do bloco Article (índice de página, tabelas roláveis, autor, fontes). A página
+# de leitura carrega só o subconjunto Article (cortado por
+# scripts/site/build_css.py); o hub carrega a folha inteira porque usa o bloco Hub.
+EDITORIAL_SHEET_LINK = '<link href="/assets/editorial-article.css" rel="stylesheet"/>'
+EDITORIAL_FULL_SHEET_LINK = '<link href="/assets/editorial.css" rel="stylesheet"/>'
+
+# Ação nomeada por tipo de item no hub (o visitante sabe o que abre).
+HUB_ACTION_LABELS = {
+    "Mercados": "Ver os mercados",
+    "Órgãos": "Ver os órgãos",
+    "Preços": "Ver as referências",
+    "Concorrência": "Ver a concorrência",
+    "Cenários": "Ver os cenários",
+    "Método": "Ler o método",
+    "Mercado": "Ver o mercado",
+    "Órgão comprador": "Ver o dossiê",
+    "Benchmark de preços": "Ver as referências",
+    "Concorrência observada": "Ver o recorte",
+    "Radar de oportunidades": "Ver o radar",
+    "Cenário problema → serviço": "Ler o cenário",
+}
 MIN_H2_FOR_PAGE_INDEX = 3
 _ARTICLE_MAIN_RE = re.compile(r'(<article class="article-main"[^>]*>)(.*?)(</article>)', re.S)
 _INDEX_SECTION_RE = re.compile(r'<section id="([^"]+)"[^>]*>\s*(?:<p class="eyebrow">([^<]*)</p>\s*)?<h2[^>]*>(.*?)</h2>', re.S)
@@ -1557,47 +1577,65 @@ def render_hub(
     cards = ""
     for i, it in enumerate(items or [], 1):
         url, kind, label = it[0], it[1], it[2]
-        meta = it[3] if len(it) > 3 else ""
-        # A nota curta fica no mesmo bloco do título (inline), como no cartão
-        # anterior: o gate de vocabulário lê o trecho inteiro, não a nota isolada.
-        meta_html = f' <small class="t-caption">({e(meta)})</small>' if meta else ""
+        # it[3]: nota curta (hub raiz) ou o sentinela de estado editorial
+        # ("publicada"/"leitura de caso", filtro do hub /radar/); it[4]: resumo
+        # da página (description do snapshot). O visitante lê o resumo, não o
+        # sentinela.
+        note = it[3] if len(it) > 3 else ""
+        summary = it[4] if len(it) > 4 else ""
+        if not summary and note and note not in {"publicada", "leitura de caso"}:
+            summary = note
+        summary_html = f"<p>{e(summary)}</p>" if summary else ""
+        action = HUB_ACTION_LABELS.get(kind, "Abrir a página")
         cards += (
             f'<li><span class="hub-list__index">{i:02d}</span><div><span class="tag">{e(kind)}</span>'
-            f'<h2><a href="{e(url)}">{e(label)}</a>{meta_html}</h2></div>'
-            f'<div class="hub-list__action"><a href="{e(url)}">Abrir <svg class="icon"><use href="#i-arrow"></use></svg></a></div></li>'
+            f'<h2><a href="{e(url)}">{e(label)}</a></h2>{summary_html}</div>'
+            f'<div class="hub-list__action"><a href="{e(url)}">{e(action)} <svg class="icon"><use href="#i-arrow"></use></svg></a></div></li>'
 )
-    if cards:
-        grid = f'<ol class="hub-list">{cards}</ol>'
-    elif empty_cta:
+    # Um bloco escuro por página: o próximo passo. No hub vazio ele carrega a
+    # única ação; no hub com itens, fecha a lista.
+    if empty_cta:
         primary_href = empty_cta.get("primary_href") or "/#contato"
-        secondary = ""
+        primary_label = empty_cta.get("primary_label") or "Próximo passo"
+        title_dark = empty_cta.get("title") or "Configure o recorte da sua operação"
+        body_dark = empty_cta.get("body") or ""
+        alt_items = ""
         if empty_cta.get("secondary_label") and empty_cta.get("secondary_href"):
-            secondary = (
-                f'<a class="button button-secondary" href="{e(empty_cta["secondary_href"])}">'
-                f'{e(empty_cta["secondary_label"])}</a>'
+            alt_items = (
+                f'<li><a href="{e(empty_cta["secondary_href"])}">{e(empty_cta["secondary_label"])}</a></li>'
 )
-        is_wa = "wa.me" in primary_href
-        target = ' rel="noopener" target="_blank"' if is_wa else ""
-        grid = f"""<div class="commercial-bridge" style="margin:2rem 0">
-<h2>{e(empty_cta.get("title") or "Configure o recorte da sua operação")}</h2>
-<p>{e(empty_cta.get("body") or "")}</p>
-<div class="hero-actions">
-<a class="button button-primary" href="{e(primary_href)}"{target}>{e(empty_cta.get("primary_label") or "Próximo passo")}</a>
-{secondary}
-</div>
-</div>"""
     else:
-        # Durable fallback, never "nenhum item publicado nesta onda"
-        grid = (
-            '<div class="commercial-bridge" style="margin:2rem 0">'
-            "<h2>Evidência pública só vira valor com a capacidade da empresa.</h2>"
-            "<p>Quando houver recortes publicáveis, eles aparecem aqui com data, fonte e limites. "
-            "Até lá, o próximo passo é aplicar os dados à atuação da sua empresa no mercado público.</p>"
-            '<div class="hero-actions">'
-            '<a class="button button-primary" href="/diretoria-b2g/">Como funciona a Diretoria Fracionada para o Mercado Público</a>'
-            '<a class="button button-secondary" href="/diagnostico-b2g-360/">Solicitar diagnóstico da operação</a>'
-            "</div></div>"
+        primary_href = wa_link(
+            wa_message
+            or "Olá, Tiago. Quero aplicar a inteligência de mercado da CONFENGE à decisão da minha empresa."
 )
+        primary_label = "Descrever a operação pelo WhatsApp"
+        title_dark = "Evidência pública só vira valor com a capacidade da empresa."
+        body_dark = (
+            "Descreva a operação (objeto, região, acervo e faixa de contrato): a resposta diz "
+            "o que os dados públicos sustentam para a sua decisão, o que chega às suas mãos e o próximo passo. "
+            "Conversa técnica, sem contratação nem pagamento."
+            if cards
+            else "Quando houver recortes publicáveis, eles aparecem aqui com data, fonte e limites. "
+            "Até lá, o próximo passo é aplicar os dados à atuação da sua empresa no mercado público."
+)
+        alt_items = (
+            '<li><a href="/diagnostico-b2g-360/">Diagnóstico da operação em obras públicas</a></li>'
+            '<li><a href="/diretoria-b2g/">Como funciona a Diretoria Fracionada para o Mercado Público</a></li>'
+)
+    is_wa = "wa.me" in primary_href
+    target = ' rel="noopener" target="_blank"' if is_wa else ""
+    dark = (
+        '<section class="sec sec--dark" aria-label="Próximo passo"><div class="container">'
+        '<span class="t-kicker">Próximo passo</span>'
+        f'<h2 class="t-editorial">{e(title_dark)}</h2>'
+        f'<p class="measure">{e(body_dark)}</p>'
+        '<div class="contact-primary">'
+        f'<a class="button button-primary button-lg" href="{e(primary_href)}"{target}>{e(primary_label)} <svg class="icon"><use href="#i-arrow"></use></svg></a>'
+        f'<ul class="contact-alt">{alt_items}</ul>'
+        "</div></div></section>"
+)
+    grid = f'<ol class="hub-list">{cards}</ol>' if cards else ""
     back = (
         '<p><a class="text-link" href="/">Voltar ao início</a></p>'
         if path.rstrip("/") == "/inteligencia"
@@ -1616,6 +1654,7 @@ def render_hub(
 <section class="sec sec--tight"><div class="container">{grid}
 {extra_html}
 {back}</div></section>
+{dark}
 """
     graph = [
         ORG_JSONLD,
@@ -1637,7 +1676,7 @@ def render_hub(
         body_main=body,
         wa_message=wa_message
         or "Olá, Tiago. Quero aplicar a inteligência de mercado da CONFENGE à decisão da minha empresa.",
-        extra_head=EDITORIAL_SHEET_LINK,
+        extra_head=EDITORIAL_FULL_SHEET_LINK,
         data_attrs={"content-cluster": "pseo", "pseo-page-type": "hub"},
 )
 

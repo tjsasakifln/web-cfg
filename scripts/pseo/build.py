@@ -433,6 +433,15 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
         "problem_service": "Cenário problema → serviço",
     }
 
+    def _hub_summary(description: str | None) -> str:
+        # A description pode terminar em reticências (corte de meta description);
+        # na linha do hub vai só a oração inteira, nunca um fragmento cortado.
+        text = (description or "").strip()
+        if text.endswith(("…", "...")):
+            head, dot, _tail = text.rstrip("….").rpartition(". ")
+            text = f"{head}." if dot else ""
+        return text
+
     def items_for(ptype: str) -> list[tuple]:
         out = []
         kind = type_labels.get(ptype, "Inteligência")
@@ -445,7 +454,9 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
             badge = "publicada" if c.status == "publish" else "leitura de caso"
             # Never expose pipeline page_type as visitor copy
             meta = badge
-            out.append((c.url, kind, c.h1[:90], meta))
+            # O resumo da página (description do snapshot) é o que o visitante lê
+            # na linha do hub; o sentinela fica na quarta posição para o filtro.
+            out.append((c.url, kind, c.h1[:90], meta, _hub_summary(c.description)))
         return out
 
     def hub_robots(ptype: str | None) -> str:
@@ -577,15 +588,16 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
             # can never appear in `items`. Without this the hub never linked down to
             # its own child, and editing the built HTML did not survive a rebuild.
             extra_html = (
-                '<section aria-labelledby="radar-publicado" style="margin:2.5rem 0">'
-                '<h2 id="radar-publicado">Método e demanda observada</h2>'
-                '<p><a class="text-link" href="/radar/nacional-obras-publicas/">'
+                '<section aria-labelledby="radar-publicado" class="sec sec--tight sec--rule-top">'
+                '<span class="t-kicker">Publicado</span>'
+                '<h2 id="radar-publicado" class="t-editorial">Método e demanda observada</h2>'
+                '<p class="measure"><a class="text-link" href="/radar/nacional-obras-publicas/">'
                 "Radar de obras públicas: método aberto e demanda observada</a> apresenta o "
                 "método reproduzível de leitura de contratos públicos e a demanda orgânica "
                 "medida no próprio domínio pelo Google Search Console, na janela de "
                 "2026-07-14 a 2026-07-28 (15 dias, 10 cliques e 325 impressões em "
                 "confenge.com.br inteiro).</p>"
-                "<p>A leitura ajuda a localizar temas de orçamento e contratos que já atraem "
+                '<p class="measure">A leitura ajuda a localizar temas de orçamento e contratos que já atraem '
                 "buscas e explica os limites da amostra. Para uma decisão sobre oportunidades, "
                 "o recorte é configurado com perfil da empresa, região, segmentos e acervo.</p>"
                 "</section>"
