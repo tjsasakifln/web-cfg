@@ -567,7 +567,8 @@ def test_casos_pages_label_synthetic_or_demonstrative_in_title_h1_schema_and_cta
     for page in pages:
         html = page.read_text(encoding="utf-8")
         title = re.search(r"<title>(.*?)</title>", html, flags=re.I | re.S)
-        h1 = re.search(r"<h1>(.*?)</h1>", html, flags=re.I | re.S)
+        # The h1 may carry class/id attributes (typographic roles, 2026-09-17).
+        h1 = re.search(r"<h1\b[^>]*>(.*?)</h1>", html, flags=re.I | re.S)
         assert title and explicit_label.search(title.group(1)), page
         assert h1 and explicit_label.search(re.sub(r"<[^>]+>", "", h1.group(1))), page
         assert explicit_label.search(html)

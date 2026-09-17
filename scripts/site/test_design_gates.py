@@ -810,7 +810,16 @@ def test_raster_title_covers_are_og_only_outside_frozen_bofu_routes():
             html,
             re.I,
         )
-        if relative in frozen_bofu:
+        # 2026-09-17 (salto institucional): a route recomposed in the editorial
+        # direction opens with `.svc-open` and carries a technical plate; the
+        # rasterised title card is OG-only there too, on frozen and unfrozen
+        # routes alike (the inventory classed assets/clusters/*.jpg as
+        # unsuitable for the page body).
+        recomposed = 'class="svc-open"' in html
+        if relative in frozen_bofu and recomposed:
+            frozen_candidates.add(relative)
+            assert not figures, f"{relative}: recomposed pillar keeps the title card OG-only"
+        elif relative in frozen_bofu:
             frozen_candidates.add(relative)
             assert len(figures) == 1, f"{relative}: frozen cover changed"
             image = re.search(r"<img\b[^>]*>", figures[0], re.I)
@@ -831,7 +840,7 @@ def test_raster_title_covers_are_og_only_outside_frozen_bofu_routes():
                 html,
                 re.I,
             )
-            assert hero and "article-hero" in hero.group(0), (
+            assert recomposed or (hero and "article-hero" in hero.group(0)), (
                 f"{relative}: coverless route must reuse the one-column article hero"
             )
 
@@ -1240,7 +1249,11 @@ def test_pillar_evidence_contrast_on_navy():
     assert len(pillars) == 8
     for path in pillars:
         html = path.read_text(encoding="utf-8")
-        assert 'class="pillar-evidence"' in html, f"{path.relative_to(ROOT)} missing pillar-evidence"
+        # A pillar recomposed in the editorial direction (2026-09-17) states its
+        # evidence in the opening chain and the plate instead of the navy card.
+        assert 'class="pillar-evidence"' in html or 'class="svc-open"' in html, (
+            f"{path.relative_to(ROOT)} missing pillar-evidence"
+        )
 
 
 def test_offer_context_component_css():
