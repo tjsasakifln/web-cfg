@@ -367,6 +367,7 @@
 .state__paths>li{border-bottom:1px solid var(--rule)}
 .state__paths a{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:1rem;min-height:52px;padding:.6rem 0;color:var(--ink);font-weight:720;text-decoration:none}
 .state__paths a small{display:block;font-weight:400;color:var(--text);font-size:var(--text-caption)}
+.state__paths a>small{grid-column:1}
 .state__paths a .icon{width:1em;height:1em;color:var(--green-700)}
 .state__paths a:hover{color:var(--green-700)}
 .state__receipt{margin:1.25rem 0 0;padding:1rem 0 0;border-top:1px solid var(--rule-strong);font-size:var(--text-caption);color:var(--text)}

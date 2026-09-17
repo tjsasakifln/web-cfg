@@ -59,6 +59,7 @@ for (const route of ROUTES) {
   await p.goto(BASE + route, { waitUntil: "networkidle0", timeout: 60000 });
   await settle(p);
   const overflow = await p.evaluate(() => Math.max(0, document.documentElement.scrollWidth - document.documentElement.clientWidth));
+  manifest.captures = manifest.captures.filter((c) => !(c.route === route && c.viewport === "320x700"));
   manifest.captures.push({ route, viewport: "320x700", overflow_px: overflow });
   await p.close();
   console.log(`${route} ok (overflow320=${overflow}px)`);
