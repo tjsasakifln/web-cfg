@@ -1413,7 +1413,7 @@ def _render_problem(c: Candidate, manifest: dict[str, Any]) -> str:
 <ul class="document-list">{refs_html}</ul>
 <p><small>Links apontam para textos oficiais ou portais públicos; não são fichas de contrato individual.
 Guias CONFENGE abaixo detalham o enquadramento prático.</small></p></section>
-<section id="guias"><p class="eyebrow">Biblioteca</p><h2>Guias técnicos relacionados</h2>
+<section id="guias-relacionados"><p class="eyebrow">Biblioteca</p><h2>Guias técnicos relacionados</h2>
 <p>Estas páginas aprofundam o critério; esta página de inteligência organiza a decisão do cenário.</p>
 <ul>{guides}</ul></section>
 <section id="implicacoes"><p class="eyebrow">Decisão</p><h2>O que a empresa precisa decidir neste cenário</h2>
@@ -1552,10 +1552,12 @@ def render_hub(
     for i, it in enumerate(items or [], 1):
         url, kind, label = it[0], it[1], it[2]
         meta = it[3] if len(it) > 3 else ""
-        meta_html = f'<ul class="hub-list__meta"><li>{e(meta)}</li></ul>' if meta else ""
+        # A nota curta fica no mesmo bloco do título (inline), como no cartão
+        # anterior: o gate de vocabulário lê o trecho inteiro, não a nota isolada.
+        meta_html = f' <small class="t-caption">({e(meta)})</small>' if meta else ""
         cards += (
             f'<li><span class="hub-list__index">{i:02d}</span><div><span class="tag">{e(kind)}</span>'
-            f'<h2><a href="{e(url)}">{e(label)}</a></h2>{meta_html}</div>'
+            f'<h2><a href="{e(url)}">{e(label)}</a>{meta_html}</h2></div>'
             f'<div class="hub-list__action"><a href="{e(url)}">Abrir <svg class="icon"><use href="#i-arrow"></use></svg></a></div></li>'
 )
     if cards:

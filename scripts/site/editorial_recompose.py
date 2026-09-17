@@ -25,9 +25,12 @@ Operações (todas idempotentes):
    removido (a folha editorial rege a margem).
 5. `author-box` e `sources-section`: verificação da estrutura esperada pela
    folha; nada é reescrito quando já conformes (o texto nunca muda).
-6. Página com aprovação humana vinculada ao hash do HTML renderizado
-   (`data/editorial/striking-distance-noindex.v1.json`) fica intacta e é
-   registrada: qualquer byte novo invalidaria a aprovação (fail-closed).
+6. Páginas protegidas por hash ficam de fora e são registradas: aprovação
+   humana vinculada ao HTML (`striking-distance-noindex.v1.json`), canário 389 e
+   seus siblings congelados (`canary-contract.json`) e bytes fixados em origin/main (CLICK_ORIGIN de
+   test_inb08_owned_routes) ficam intactas; o cluster de medição
+   (`cluster_medicao_originality.CLUSTER_SLUGS`) recebe só o `<link>` da
+   folha, com o corpo `<article>` byte a byte.
 7. Os cinco artigos fora do modelo (`article.container` ou
    `section.section--default > div.container[style]`) são envolvidos no
    esqueleto `header.content-hero.article-hero` + `div.container.article-layout`
@@ -55,6 +58,8 @@ from html.parser import HTMLParser
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 ARTICLES_DIR = ROOT / "conteudos"
 EDITORIAL_LINK = '<link href="/assets/editorial.css" rel="stylesheet"/>'
 TABLE_HINT = '<p class="table-hint">Deslize a tabela para ver todas as colunas.</p>'
@@ -424,23 +429,54 @@ def recompose(html: str) -> tuple[str, list[str]]:
 
 
 APPROVAL_BOUND_REGISTRY = ROOT / "data" / "editorial" / "striking-distance-noindex.v1.json"
+CANARY_389_CONTRACT = ROOT / "docs" / "evidence" / "389-measurement-glosa-canary" / "canary-contract.json"
+# Bytes fixados em origin/main por scripts/organic/tests/test_inb08_owned_routes.py
+# (CLICK_ORIGIN): a comparação mascara só a data de revisão.
+CLICK_ORIGIN_PINNED = (
+    "conteudos/custos-indiretos-atraso-administracao-obra/index.html",
+    "conteudos/jogo-de-planilha-aditivo-obra-publica/index.html",
+    "conteudos/fiscal-nao-assina-medicao-obra-publica/index.html",
+)
 
 
-def approval_bound_pages() -> set[str]:
-    """Páginas cuja aprovação humana está vinculada ao hash do HTML renderizado.
+def protected_pages() -> dict[str, str]:
+    """Páginas cujo corpo é vinculado por hash a uma revisão humana ou a um contrato.
 
-    Qualquer byte novo invalidaria a aprovação (approval_material_hash_mismatch,
-    fail-closed para noindex). A recomposição as deixa intactas e registra.
+    Valor: "intacta" (nenhum byte muda) ou "so-folha" (só o <link> da folha
+    editorial entra no <head>; o corpo <article> fica byte a byte, porque o
+    gate do cluster de medição fixa a impressão digital do corpo à data de
+    revisão publicada, e restampar a revisão é decisão editorial, não de
+    composição).
     """
+    out: dict[str, str] = {}
+    for rel in CLICK_ORIGIN_PINNED:
+        out[rel] = "intacta"
     try:
         data = json.loads(APPROVAL_BOUND_REGISTRY.read_text(encoding="utf-8"))
+        for row in data.get("urls") or []:
+            approval = row.get("approval") or {}
+            if row.get("html") and approval.get("material_hash"):
+                out[str(row["html"])] = "intacta"
     except (OSError, json.JSONDecodeError):
-        return set()
-    out = set()
-    for row in data.get("urls") or []:
-        approval = row.get("approval") or {}
-        if row.get("html") and approval.get("material_hash"):
-            out.add(str(row["html"]))
+        pass
+    try:
+        contract = json.loads(CANARY_389_CONTRACT.read_text(encoding="utf-8"))
+        source = (contract.get("canary") or {}).get("source")
+        if source:
+            out[str(source)] = "intacta"
+        for sibling in contract.get("frozen_siblings") or []:
+            if sibling.get("path"):
+                out[str(sibling["path"])] = "intacta"
+    except (OSError, json.JSONDecodeError):
+        pass
+    try:
+        from scripts.organic.cluster_medicao_originality import CLUSTER_SLUGS  # noqa: PLC0415
+
+        for slug in CLUSTER_SLUGS:
+            rel = f"conteudos/{slug}/index.html"
+            out.setdefault(rel, "so-folha")
+    except Exception:  # noqa: BLE001
+        pass
     return out
 
 
@@ -526,14 +562,20 @@ def main(argv: list[str] | None = None) -> int:
 
     changed = 0
     report: dict[str, list[str]] = {}
-    bound = approval_bound_pages()
+    protected = protected_pages()
     for p in paths:
         original = p.read_text(encoding="utf-8")
         rel = p.relative_to(ROOT).as_posix()
-        if rel in bound:
-            report[rel] = ["intacta: aprovação humana vinculada ao hash do HTML (striking-distance-noindex.v1.json)"]
+        mode = protected.get(rel)
+        if mode == "intacta":
+            report[rel] = ["intacta: hash do HTML vinculado a aprovação humana, canário 389 ou bytes de origin/main"]
             continue
-        new, log = recompose(original)
+        if mode == "so-folha":
+            log = []
+            new = ensure_editorial_link(original, log)
+            log.append("só a folha editorial: corpo <article> fixado por impressão digital do cluster de medição")
+        else:
+            new, log = recompose(original)
         if new != original:
             changed += 1
             if not args.check:
