@@ -29,13 +29,13 @@
       "commercial_configuration"
     ],
     "baseline_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
-    "expected_declared_ctas": 183
+    "expected_declared_ctas": 184
   },
   "coverage": {
     "authority": "data/organic/public-family-registry.json",
     "manual_route_allowlist": false,
     "active_capture_routes": 31,
-    "declared_ctas": 183,
+    "declared_ctas": 184,
     "protected_routes_with_capture": [
       "/aditivos-obras-publicas/",
       "/auditoria-orcamento-licitacao/",
@@ -3250,7 +3250,7 @@
           "href": "#captura-entregas",
           "stage": "compare",
           "commitment": "medium",
-          "current_label": "Descrever a decisão e saber qual entrega a resolve",
+          "current_label": "04 Solicitar proposta",
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
@@ -3632,6 +3632,21 @@
           "boundary": "Sem cobrança; preço e escopo exigem aceite.",
           "event_semantics": [
             "cta_click"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "",
+          "href": "mailto:tiago.sasaki@confenge.com.br?subject=Entregas%20de%20engenharia",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Enviar a decisão por e-mail",
+          "useful_next_state": "Abre o cliente de e-mail com assunto e contexto para continuar o enquadramento.",
+          "actual_receipt": "Rascunho local de e-mail; não existe receipt do servidor antes do envio.",
+          "field_purpose": "not_applicable",
+          "boundary": "Sem cobrança; preço e escopo exigem aceite.",
+          "event_semantics": [
+            "email_click"
           ]
         },
         {

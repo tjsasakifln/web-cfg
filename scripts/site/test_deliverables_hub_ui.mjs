@@ -114,9 +114,10 @@ for (const width of widths) {
     const decisionNavBrokenWords = [];
     const decisionNavTextWidths = [];
     for (const link of decisionNav?.querySelectorAll("a") || []) {
-      const style = getComputedStyle(link);
-      const tracks = style.gridTemplateColumns.match(/[\d.]+px/g) || [];
-      if (tracks.length) decisionNavTextWidths.push(Number.parseFloat(tracks.at(-1)));
+      // Onda 2 da campanha 02 (2026-09-17): o indice pela decisao e um
+      // page-index regrado (links em linha, sem caixa em grade); mede-se a
+      // largura real do link e a altura do alvo de toque.
+      decisionNavTextWidths.push(link.getBoundingClientRect().width);
       const walker = document.createTreeWalker(link, NodeFilter.SHOW_TEXT);
       for (let node = walker.nextNode(); node; node = walker.nextNode()) {
         // Include terminal punctuation in the measured range. Otherwise a
@@ -162,9 +163,9 @@ for (const width of widths) {
       documentHeight: Math.round(document.documentElement.scrollHeight),
       decisionNavTop: Math.round((decisionNav?.getBoundingClientRect().top || 0) + window.scrollY),
       decisionNavHeight: Math.round(decisionNav?.getBoundingClientRect().height || 0),
-      decisionNavColumns: decisionNavList
-        ? getComputedStyle(decisionNavList).gridTemplateColumns.trim().split(/\s+/).filter(Boolean).length
-        : 0,
+      decisionNavShortTargets: [...(decisionNav?.querySelectorAll("a") || [])]
+        .filter((link) => link.getBoundingClientRect().height < 44).length,
+      decisionNavOverflow: Boolean(decisionNavList && decisionNavList.scrollWidth > decisionNavList.clientWidth + 1),
       decisionNavBrokenWords,
       decisionNavMinTextWidth: decisionNavTextWidths.length
         ? Math.round(Math.min(...decisionNavTextWidths) * 10) / 10
@@ -304,12 +305,22 @@ for (const width of widths) {
   // 2026-09-16 (design authority): 17900 -> 18600. The offer facts (dt/dd with
   // material conditions) moved from 12.8px two-column to 14px stacked rows on
   // phones so the labels stop breaking mid-word; no content was added.
-  if (width === 390 && metrics.documentHeight > 18600) errors.push(`document_height=${metrics.documentHeight}`);
-  if (width === 390 && metrics.decisionNavTop > 1800) errors.push(`decision_nav_top=${metrics.decisionNavTop}`);
-  if (width <= 360 && metrics.decisionNavColumns !== 2) {
-    errors.push(`decision_nav_columns=${metrics.decisionNavColumns}`);
-  }
-  if (width <= 360 && metrics.decisionNavHeight > 330) errors.push(`decision_nav_height=${metrics.decisionNavHeight}`);
+  // 2026-09-17 (SALTO-INSTITUCIONAL-02, lote A, onda 2): 18600 -> 21700. A
+  // pagina passou ao esqueleto de hub do piloto: cada oferta e uma linha
+  // regrada com indice, rotulo | valor por criterio e filete entre criterios,
+  // em vez do cartao com grade de tres colunas; os servicos ganharam indice e
+  // linha propria; "Condicoes e limites" virou secao; o bloco escuro traz a
+  // sequencia do envio. Nenhum campo foi acrescentado nem escondido. Medido
+  // 21485 px a 390 px (Chromium headless local); 21700 deixa ~215 px (1%) de
+  // folga e continua pegando deriva de comprimento nao relacionada.
+  if (width === 390 && metrics.documentHeight > 21700) errors.push(`document_height=${metrics.documentHeight}`);
+  // O indice pela decisao vive na secao das ofertas, depois dos cinco servicos
+  // (decisao do fundador: servicos de engenharia antes das ofertas com preco);
+  // o indice da pagina, no topo, leva ate ele. Medido 4361 px a 390 px.
+  if (width === 390 && metrics.decisionNavTop > 4600) errors.push(`decision_nav_top=${metrics.decisionNavTop}`);
+  if (width <= 360 && metrics.decisionNavHeight > 560) errors.push(`decision_nav_height=${metrics.decisionNavHeight}`);
+  if (metrics.decisionNavShortTargets) errors.push(`decision_nav_touch_targets=${metrics.decisionNavShortTargets}`);
+  if (metrics.decisionNavOverflow) errors.push("decision_nav_overflow");
   if (width === 320 && metrics.decisionNavMinTextWidth < 110) {
     errors.push(`decision_nav_text_width=${metrics.decisionNavMinTextWidth}`);
   }
@@ -319,7 +330,10 @@ for (const width of widths) {
   if (metrics.decisionNavBrokenWords.length) {
     errors.push(`decision_nav_broken_words=${metrics.decisionNavBrokenWords.join(",")}`);
   }
-  if (metrics.mainLinks > 50) errors.push(`main_links=${metrics.mainLinks}`);
+  // 50 -> 54 na onda 2: o indice da pagina (quatro ancoras internas) e a
+  // alternativa por e-mail do bloco escuro substituem o bloco "Onde comecar"
+  // (tres ancoras) e o aside de fechamento; medido 52.
+  if (metrics.mainLinks > 54) errors.push(`main_links=${metrics.mainLinks}`);
   if (metrics.longestArchetypeRun > 2) errors.push(`archetype_run=${metrics.longestArchetypeRun}`);
   // One primary leads to the progressive framing and the other submits the
   // terminal hand-raise added by #290; neither replaces a priced offer path.
