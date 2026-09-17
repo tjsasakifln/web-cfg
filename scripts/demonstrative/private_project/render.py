@@ -409,7 +409,7 @@ def render_html(extracts: dict[str, Any]) -> str:
 
     # Composition comes from css/editorial.css and css/components.css (plate,
     # page index, ruled findings, table-scroll); no inline stylesheet.
-    extra_head = ""
+    extra_head = '<link href="/assets/editorial.css" rel="stylesheet"/>'
 
     body = f"""
 {html_shell.breadcrumbs_html([("Início", "/"), ("Casos", "/casos/"), ("Recorte de banheiro", None)])}

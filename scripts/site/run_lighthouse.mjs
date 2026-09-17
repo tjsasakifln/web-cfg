@@ -107,6 +107,10 @@ const MIME = {
   ".webmanifest": "application/manifest+json",
   ".xml": "application/xml",
   ".txt": "text/plain",
+  // 2026-09-17: the plates are external SVG files; nginx lists image/svg+xml in
+  // gzip_types, so the lab server must serve (and compress) them the same way.
+  ".svg": "image/svg+xml",
+  ".woff2": "font/woff2",
 };
 
 const baseArg = cliArgs.find((arg) => !arg.startsWith("--"));
