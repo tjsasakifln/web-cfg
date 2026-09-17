@@ -296,6 +296,30 @@
       "route": "/obrigado-operacao.html",
       "viewport": "320x700",
       "overflow_px": 0
+    },
+    {
+      "route": "/404.html",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 2901,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/404.html-390x844-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/404.html-390x844-full-lote-a.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-a/404.html-390x844-menu-lote-a.jpg"
+    },
+    {
+      "route": "/404.html",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 1362,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/404.html-1440x1000-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/404.html-1440x1000-full-lote-a.jpg"
+    },
+    {
+      "route": "/404.html",
+      "viewport": "320x700",
+      "overflow_px": 0
     }
   ]
 }
