@@ -77,3 +77,5 @@ h4{font-size:1rem;font-weight:720;line-height:1.3;margin:0 0 var(--space-2)}
 .text-link{font-weight:720;color:var(--ink);text-decoration:underline;text-underline-offset:.2em;text-decoration-thickness:1px}
 .text-link:hover{color:var(--green-700)}
 ::selection{background:var(--green-100);color:var(--ink)}
+/* Reduced data: the portrait and lazy plates are not fetched when the visitor asks for less data. */
+@media (prefers-reduced-data:reduce){.portrait__frame img,.author-photo img{display:none}}

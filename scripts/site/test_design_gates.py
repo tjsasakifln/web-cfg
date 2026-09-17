@@ -721,7 +721,10 @@ def test_functional_type_floor_in_css():
     assert re.search(r"\.consent\{[^}]*font-size:\.875rem", css)
     assert re.search(r"\.footer-links\{[^}]*font-size:\.875rem", css)
     assert re.search(r"\.breadcrumbs ol\{[^}]*font-size:\.875rem", css)
-    assert re.search(r"\.profile-list li\{[^}]*font-size:\.875rem", css)
+    # 2026-09-17 (SALTO-INSTITUCIONAL-02): .profile-list deixou de existir (a
+    # pagina do responsavel usa credential-list/conduct regrados); a regra morta
+    # foi podada junto com o seletor, e o piso de 14px continua coberto pelos
+    # padroes negativos acima.
     assert re.search(r"\.related-card span\{[^}]*font-size:\.875rem", css)
 
 
