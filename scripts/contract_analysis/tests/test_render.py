@@ -173,7 +173,9 @@ def test_hub_and_analysis_expose_honest_authority_without_editorial_deficit():
     assert "não há segundo revisor nomeado" not in hub
     assert 'id="ai-disclosure"' in hub
     assert 'id="metodo"' in hub
-    assert "ANÁLISE TÉCNICA DE CONTRATO PÚBLICO" in hub
+    # Rótulo da família presente na abertura do hub (kicker); caixa alta vem do
+    # papel tipográfico .t-kicker (CSS), não do texto (campanha SALTO-02, lote C).
+    assert "análise técnica de contrato público" in hub.casefold()
     assert "A publicação não afirma" in hub
     assert "PUBLISHABLE_INDEX" not in hub
     assert "FACT" not in hub

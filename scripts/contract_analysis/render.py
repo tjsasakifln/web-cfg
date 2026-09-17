@@ -86,10 +86,13 @@ AI_DISCLOSURE_HTML = (
     "assina o que está publicado. Política: "
     '<a href="/uso-de-ia/">Uso de IA</a>.</p>'
 )
+# Hub: bloco de método em ritmo editorial (kicker com papel + h2), sem repetir o
+# rótulo da família que já abre a página; id="metodo" e authority-method são os
+# marcadores lidos por scripts/site/authority.has_visible_method.
 HUB_METHOD_HTML = (
-    '<section class="section authority-method" id="metodo">'
-    "<h2>Como analisamos</h2>"
-    '<p class="case-badge eyebrow">ANÁLISE TÉCNICA DE CONTRATO PÚBLICO</p>'
+    '<section class="sec sec--soft authority-method" id="metodo"><div class="container">'
+    '<span class="t-kicker">Método</span>'
+    '<h2 class="t-editorial">Como analisamos</h2>'
     "<p>Cada afirmação é distinguida entre fato documentado, cálculo reproduzível, "
     "interpretação técnica ou informação não localizada. A fonte pública, o trecho "
     "consultado e a data de referência acompanham o texto.</p>"
@@ -100,8 +103,11 @@ HUB_METHOD_HTML = (
     f"{AI_DISCLOSURE_HTML}"
     "<p>Como citar: CONFENGE. Análise técnica de contrato público. "
     f"https://confenge.com.br{FAMILY_PATH} (consulta em 2026-08-16).</p>"
-    "</section>"
+    "</div></section>"
 )
+# Folha editorial inteira no hub (bloco Hub: hub-list, page-index, sec--dark);
+# a página da análise aprovada não a carrega (hash de aprovação).
+HUB_EDITORIAL_SHEET_LINK = '<link href="/assets/editorial.css" rel="stylesheet"/>'
 KIND_LABEL = {
     "FACT": "Fato",
     "CALCULATION": "Cálculo",
@@ -790,55 +796,79 @@ def render_hub_html(items: list[tuple[dict[str, Any], PublicationDecision]], *, 
             href = _canonical_path(decision.slug)
             summary = _text(record.get("executive_summary"))
             if len(summary) > 220:
-                summary = summary[:217].rstrip() + "…"
+                # Corta na última oração inteira que cabe (nunca no meio de uma
+                # frase); só recorre às reticências quando nenhuma frase cabe.
+                head = summary[:220]
+                cut = max(head.rfind(". "), head.rfind("; "))
+                summary = head[: cut + 1] if cut > 60 else summary[:217].rstrip() + "…"
             cards.append(
-                '<article class="n-card">'
-                f'<p class="eyebrow">{e(ANALYSIS_LABEL_PT)} · publicado</p>'
-                f'<h2><a href="{e(href)}">{e(_text(record.get("title")))}</a></h2>'
-                f"<p>{e(summary)}</p>"
-                "</article>"
+                f'<li><span class="hub-list__index">{len(cards) + 1:02d}</span><div>'
+                f'<span class="tag">{e(ANALYSIS_LABEL_PT)} · publicado</span>'
+                f'<h3><a href="{e(href)}">{e(_text(record.get("title")))}</a></h3>'
+                f"<p>{e(summary)}</p></div>"
+                f'<div class="hub-list__action"><a href="{e(href)}">Ler a análise '
+                '<svg class="icon"><use href="#i-arrow"></use></svg></a></div></li>'
             )
-    listing = "".join(cards) or (
-        "<p>Nenhuma análise aprovada para publicação. "
+    listing = (
+        f'<ol class="hub-list">{"".join(cards)}</ol>'
+        if cards
+        else "<p>Nenhuma análise aprovada para publicação. "
         "Os materiais em revisão permanecem no ambiente editorial interno.</p>"
     )
     contact_href = wa_link(
         "Olá, Tiago. Consultei as análises técnicas de contratos públicos e quero "
         "conversar sobre um contrato da minha empresa."
     )
+    # Um bloco escuro por página: o próximo passo, com a ação dominante e a
+    # alternativa em texto (mesmos destinos e data-cta-* do lead-inline anterior).
     hub_next_step = (
-        f'<section class="section lead-inline" id="proximo-passo"{archetype_attr("proximo-passo")} '
-        'aria-label="Próximo passo"><div class="lead-inline-copy">'
-        "<span>Contrato próprio</span><strong>Leve a questão do seu contrato para uma conversa contextual.</strong>"
-        "<p>Informe o evento, a decisão necessária e o documento disponível. "
-        "A análise editorial desta biblioteca não substitui a leitura do seu instrumento.</p></div>"
-        '<div class="lead-inline-actions">'
-        f'<a class="button button-primary" href="{e(contact_href)}" target="_blank" rel="noopener" '
+        f'<section class="sec sec--dark" id="proximo-passo"{archetype_attr("proximo-passo")} '
+        'aria-label="Próximo passo"><div class="container">'
+        '<span class="t-kicker">Contrato próprio</span>'
+        '<h2 class="t-editorial">Leve a questão do seu contrato para uma conversa contextual.</h2>'
+        '<p class="measure">Informe o evento, a decisão necessária e o documento disponível. '
+        "A análise editorial desta biblioteca não substitui a leitura do seu instrumento.</p>"
+        '<div class="contact-primary">'
+        f'<a class="button button-primary button-lg" href="{e(contact_href)}" target="_blank" rel="noopener" '
         'data-cta-id="hub-analises-contrato-proprio-whatsapp" data-cta-position="hub_next_step" '
         'data-asset-id="analises-contratos-publicos" '
         'data-asset-family="analise-tecnica-contrato-publico" '
         'data-route-family="analise-tecnica-contrato" data-journey="contrato">'
-        "Conversar sobre um contrato próprio</a>"
-        '<a class="text-link" href="/defesa-margem-contratos-publicos/">'
-        "Conhecer o serviço de defesa de margem</a></div></section>"
+        'Conversar sobre um contrato próprio <svg class="icon"><use href="#i-arrow"></use></svg></a>'
+        '<ul class="contact-alt"><li><a href="/defesa-margem-contratos-publicos/">'
+        "Conhecer o serviço de defesa de margem</a></li></ul>"
+        "</div></div></section>"
     )
-    # Trilha antes da abertura (ordem estrutural do site: onde estou, depois o quê).
+    # Ordem estrutural: trilha → abertura (kicker, h1, lead, ressalva, autoria)
+    # → índice "Nesta página" → método → análises publicadas → próximo passo → autor.
+    page_index = (
+        '<div class="container"><nav class="page-index" aria-label="Nesta página">'
+        '<span class="page-index__label">Nesta página</span><ol>'
+        '<li><a href="#metodo"><span>01</span>Como analisamos</a></li>'
+        '<li><a href="#analises"><span>02</span>Análises publicadas</a></li>'
+        '<li><a href="#proximo-passo"><span>03</span>Contrato próprio</a></li>'
+        "</ol></nav></div>"
+    )
     body = (
         breadcrumbs_html([("Início", "/"), (ANALYSIS_LABEL_PT, None)])
-        + f'<header class="article-hero container"{archetype_attr("masthead")}>'
-        f'<p class="eyebrow">{e(ANALYSIS_LABEL_PT)}</p>'
-        "<h1>Análises técnicas de contratos públicos</h1>"
+        + f'<header class="content-hero article-hero"{archetype_attr("masthead")}>'
+        '<div class="container content-hero-grid"><div>'
+        f'<p class="eyebrow t-kicker">{e(ANALYSIS_LABEL_PT)}</p>'
+        '<h1 class="t-service">Análises técnicas de contratos públicos</h1>'
+        '<p class="content-lead measure">Aqui a CONFENGE examina instrumentos e registros públicos para mostrar '
+        "como uma decisão contratual pode ser documentada. Cada publicação informa "
+        "fontes, método, limites e uma aplicação prática.</p>"
         f'<p class="ca-disclaimer">{e(DISCLAIMER_PT)}</p>'
-        "</header>"
-        + '<div class="container">'
         '<p class="authority-byline">Autoria: <a rel="author" href="/especialista/tiago-jun-sasaki/">Engº Tiago Sasaki</a>'
         ' · Atualizado em <time datetime="2026-08-16">2026-08-16</time>'
         f' · <a href="{CORRECTION_CHANNEL_HREF}">Encontrou um erro nesta página?</a></p>'
-        "<p>Aqui a CONFENGE examina instrumentos e registros públicos para mostrar "
-        "como uma decisão contratual pode ser documentada. Cada publicação informa "
-        "fontes, método, limites e uma aplicação prática.</p>"
-        f"{HUB_METHOD_HTML}"
-        f"{listing}</div>"
+        "</div></div></header>"
+        + page_index
+        + f"{HUB_METHOD_HTML}"
+        + '<section class="sec" id="analises"><div class="container">'
+        '<span class="t-kicker">Publicadas</span>'
+        '<h2 class="t-editorial">Análises publicadas</h2>'
+        f"{listing}</div></section>"
         f"{hub_next_step}"
         + author_box(archetype=ARCHETYPE_BY_SECTION_ID["author-box"])
     )
@@ -874,6 +904,7 @@ def render_hub_html(items: list[tuple[dict[str, Any], PublicationDecision]], *, 
             "editorial-topic": "analises-contratos",
         },
         author_name="Engº Tiago Sasaki",
+        extra_head=HUB_EDITORIAL_SHEET_LINK,
     )
 
 
