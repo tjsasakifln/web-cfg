@@ -286,7 +286,8 @@
       "classification": "demonstrativo",
       "usage": [
         "/projetos-complementares-engenharia/",
-        "/parcerias-engenharia/ (kit elaboracao-complementar, arquivo assets/projetos-complementares-engenharia/pacote-entrega.svg = composição desktop)"
+        "/parcerias-engenharia/ (kit elaboracao-complementar, arquivo assets/projetos-complementares-engenharia/pacote-entrega.svg = composição desktop)",
+        "/entregas/ (secao de servicos, figure.plate.plate--dominant emitida por scripts/commercial/render_public_catalog.mjs; correcao apos revisao da onda 2)"
       ],
       "files": {
         "desktop": {

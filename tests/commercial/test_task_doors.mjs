@@ -276,7 +276,9 @@ const catalogDataMatch = /^window\.CONFENGE_CATALOG_DATA=(\{.*\});\s*$/.exec(cat
 const catalogData = catalogDataMatch ? JSON.parse(catalogDataMatch[1]) : null;
 const catalogStyle = fs.readFileSync(catalogStylePath, "utf8");
 const implementation = doc.public_implementation || {};
-const heroHtml = entregas.match(/<header class="deliverables-hero"[\s\S]*?<\/header>/)?.[0] || "";
+// Onda 2 da campanha 02 (2026-09-17): o herói carrega também as classes da
+// abertura editorial (svc-open); o gancho .deliverables-hero continua.
+const heroHtml = entregas.match(/<header class="deliverables-hero[^"]*"[\s\S]*?<\/header>/)?.[0] || "";
 const heroText = heroHtml.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().toLocaleLowerCase("pt-BR");
 assert("implementation_route", implementation.route === "/entregas/", implementation.route);
 assert("implementation_artifacts_exist", [implementation.renderer, implementation.stylesheet, ...(implementation.internal_catalog_assets || [])].every((file) => fs.existsSync(path.join(root, file))), implementation);
@@ -324,7 +326,11 @@ assert("catalog_data_exposes_framing_dimensions", [...catalogRecords.values()].e
 assert("catalog_data_exposes_8_complete_copy_contracts", [...catalogRecords.values()].every((record) => typeof record.contractHtml === "string" && (record.contractHtml.match(/data-copy-clause=/g) || []).length === 15), "copy contracts");
 assert("public_page_does_not_load_backlog_catalog_js", !entregas.includes("/entregas/catalog-bootstrap.js") && !entregas.includes('src="/entregas/catalog-data.js"') && !entregas.includes('src="/entregas/catalog.js"'), "no public catalog js");
 assert("catalog_base_html_omits_deferred_contract_markup", !entregas.includes("data-copy-contract-id") && !entregas.includes("data-copy-clause"), "compact initial HTML");
-assert("style_uses_stacked_mobile_comparison", catalogStyle.includes(".vitrine-item__facts{display:block}") && catalogStyle.includes(".vitrine-item__facts>div{display:grid;grid-template-columns:78px minmax(0,1fr)"), "mobile comparison");
+// Onda 2 da campanha 02 (2026-09-17): os fatos de cada oferta sao uma lista
+// de definicao regrada (rotulo | valor) que empilha rotulo sobre valor abaixo
+// de 480 px; a propriedade protegida e a mesma (comparacao empilhada no
+// celular, sem esconder campo), so muda a regra que a implementa.
+assert("style_uses_stacked_mobile_comparison", catalogStyle.includes(".vitrine-item__facts>div{display:grid;grid-template-columns:minmax(7rem,11rem) minmax(0,1fr)") && /@media \(max-width:480px\)\{[^}]*\}?[\s\S]*?\.vitrine-item__facts>div\{grid-template-columns:minmax\(0,1fr\)\}/.test(catalogStyle), "mobile comparison");
 assert("base_style_excludes_progressive_catalog", !catalogStyle.includes(".catalog-recommendation__items") && !catalogStyle.includes(".catalog-compare-tray"), "blocking CSS boundary");
 
 /* 13. Conteineres fora da contagem 01 a 54 ------------------------- */

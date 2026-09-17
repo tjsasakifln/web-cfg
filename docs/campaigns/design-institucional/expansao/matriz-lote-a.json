@@ -332,6 +332,31 @@
       "impediment": "Rota de oferta paga com formulario, preco publicado e medicao de primeira dobra (data/commercial/first-fold-measurements.v1.json, test_page_contract_eight, cta-form-next-state); tipografia ja herda Archivo. O heroi com degrade vem de styles-offers.css (integrador): pedido registrado.",
       "plate": null,
       "review_round_1": "PRESERVADA_COM_JUSTIFICATIVA: herói em degradê vem de styles-offers.css, folha carregada por 11 rotas (pedido 4 reescrito com o escopo real e a cadeia de recaptura)."
+    },
+    {
+      "route": "/entregas/",
+      "family": "money_hub",
+      "function": "hub",
+      "source": "entregas/index.html",
+      "generator": "scripts/commercial/render_public_catalog.mjs",
+      "priority": "P0",
+      "treatment": "COMPOSICAO_REDESENHADA",
+      "owner": "lote-a",
+      "state": "DONE",
+      "wave": "onda-2",
+      "evidence": [
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/entregas-1440x1000-fold-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/entregas-1440x1000-full-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/entregas-390x844-fold-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/entregas-390x844-full-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/entregas-390x844-menu-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/manifest-onda2.json"
+      ],
+      "impediment": null,
+      "hash_bound": [
+        "data/commercial/first-fold-measurements.v1.json#routes[route=/entregas/].html_sha256 e input_hashes de entregas/index.html e entregas/styles.css (recaptura do integrador, pedido 12)"
+      ],
+      "notes": "Esqueleto de hub do piloto: svc-open + aside-note + page-index; servicos e ofertas em list-ruled; prancha PG (pacote-entrega) na secao de servicos; indice pela decisao como page-index no topo da secao das ofertas (#enquadrar), alcancado em um toque pela entrada 02 do indice da pagina (geometria medida pelo gate em relacao a secao, pedido 17 registra a decisao); escada em steps com a condicao integral do pacote (R$ 8.000, pagamento unico, abatimento nos 60 dias anteriores, sem acumulo); Condicoes e limites em secao propria (limitation_notice); um bloco escuro com o formulario #captura-entregas byte-identico, ol.after e contact-alt (e-mail + Diagnostico; sem WhatsApp por decisao registrada no relatorio). Correcao apos revisao (onda 2): vitrine empilhada no celular (rotulo sobre valor, corpo 16 px) e pareada em duas colunas a partir de 900 px; 'Pacote e credito' como ultima linha da lista; uma so ressalva de dados sinteticos na dobra e e-mail contextual no slot svc-open__note. Ordem servicos -> ofertas mantida (test_services_precede_the_eight_decidable_offers). Acao dominante da abertura mantida em 'Ver entregas e exemplos' -> #servicos-e-entregas (task-doors.v1.json#first_fold e first-fold-contract); 'Solicitar proposta' -> #captura-entregas como alternativa em texto."
     }
   ]
 }

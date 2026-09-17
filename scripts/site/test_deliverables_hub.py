@@ -155,9 +155,13 @@ def test_progressive_catalog_never_serializes_false_integrity_conclusions() -> N
 
 def test_progressive_catalog_controls_keep_a_mobile_touch_target() -> None:
     css = (PAGE.with_name("styles.css")).read_text(encoding="utf-8")
+    # Onda 2 da campanha 02 (2026-09-17): o indice pela decisao e um page-index
+    # regrado e o esquema ilustrativo de cada servico abre por um summary
+    # aninhado em details; os alvos de toque continuam declarados na folha da
+    # rota, nos seletores que a composicao realmente usa.
     for selector, minimum in (
         (r"\.offer-decision-nav a", 52),
-        (r"\.capability-group>summary", 64),
+        (r"\.capability-group__schema-details>summary", 44),
     ):
         rule = re.search(rf"{selector}\{{([^}}]+)\}}", css)
         assert rule, selector
@@ -291,7 +295,7 @@ def test_progressive_catalog_css_does_not_block_first_paint() -> None:
     assert "/entregas/catalog.js" not in html
     base_css = (PAGE.with_name("styles.css")).read_text(encoding="utf-8")
     assert ".offer-decision-nav a" in base_css
-    assert ".capability-group>summary" in base_css
+    assert ".capability-group__schema-details>summary" in base_css
     assert "min-height:44px" in base_css
 
 
@@ -398,8 +402,9 @@ def test_services_precede_the_eight_decidable_offers_without_internal_roll() -> 
     assert showcase, "no published-offer showcase"
     surface = showcase.group(0)
     assert html.index('id="servicos-e-entregas"') < html.index('id="enquadrar"')
-    assert html.index('class="offer-decision-nav"') < html.index('id="entrega-01"')
-    decision_nav = re.search(r'<nav class="offer-decision-nav".*?</nav>', html, re.DOTALL)
+    # O indice pela decisao carrega tambem a classe page-index (onda 2).
+    assert html.index('class="offer-decision-nav') < html.index('id="entrega-01"')
+    decision_nav = re.search(r'<nav class="offer-decision-nav[^"]*".*?</nav>', html, re.DOTALL)
     assert decision_nav, "early offer decision navigation missing"
     # These anchors land on authorized public offer cards, not on the separate
     # /casos/ demonstrative examples. Their framing must not imply synthetic data.
