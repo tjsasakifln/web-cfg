@@ -206,3 +206,28 @@ button:disabled {
 .triage-situations li{line-height:1.6}
 .triage-situations li:target{background:var(--green-100);border-radius:var(--radius-sm);padding:.5rem .65rem;margin-left:-.65rem}
 .triage-situations a{color:var(--green-700);text-decoration:underline;text-underline-offset:3px;display:inline-block;padding-block:.35rem}
+
+
+/* 2026-09-17 (salto institucional): the triage page reads in two columns on
+ * wide screens, with the channel card as the dominant action beside the
+ * intro and the situation list; sections are ruled, not boxed. */
+.triage-shell { width: min(100% - 2 * var(--page-gutter), var(--page-max)); }
+@media (min-width: 1000px) {
+  .triage-shell { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(300px, .9fr); column-gap: clamp(2rem, 5vw, 4.5rem); align-items: start; }
+  .triage-shell > .triage-intro { grid-column: 1; }
+  .triage-shell > .channel-card { grid-column: 2; grid-row: 1 / span 3; position: sticky; top: 6rem; }
+  .triage-shell > .next-state { grid-column: 1; }
+  .triage-shell > #corrigir-o-site { grid-column: 1 / -1; }
+}
+.triage-shell > .next-state { border: 0; border-top: 1px solid var(--rule-strong); border-radius: 0; padding: 1.5rem 0 0; background: transparent; }
+.triage-shell > .next-state h2 { max-width: 22ch; }
+.triage-shell > .channel-card { border-color: var(--rule-strong); }
+.channel-card .channel-actions { display: grid; gap: .6rem; justify-items: start; }
+.channel-card .channel-actions .button-primary { width: 100%; min-height: 52px; }
+.channel-card .channel-alt { font-weight: 720; text-decoration: underline; text-underline-offset: .2em; }
+.channel-card .channel-note { margin-top: 1rem; }
+.channel-card .channel-after-title { margin: 1.25rem 0 0; }
+.channel-card .channel-after { margin-top: .25rem; }
+.channel-card .channel-after > li { padding: .65rem 0; }
+.triage-situations > li { padding: .9rem 0; border-bottom: 1px solid var(--rule); }
+.triage-situations > li strong { display: block; color: var(--ink); margin-bottom: .25rem; }
