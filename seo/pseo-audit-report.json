@@ -21,10 +21,10 @@
       }
     },
     "determinism": {
-      "first_hash": "764ee02ce738dcd85079100c246a16f4fa0c8a4def2325f925f872be4122b46c",
-      "second_hash": "764ee02ce738dcd85079100c246a16f4fa0c8a4def2325f925f872be4122b46c",
+      "first_hash": "b314204f76b2c2cd9827368fcbdfbaaf01062f91186e4c70fc53378691edac61",
+      "second_hash": "b314204f76b2c2cd9827368fcbdfbaaf01062f91186e4c70fc53378691edac61",
       "deterministic": true,
-      "page_count": 15
+      "page_count": 14
     },
     "tracking": {
       "events_declared_or_handled": [
@@ -41,9 +41,9 @@
       "confengeTrack_exported": true
     },
     "regression": {
-      "conteudos_pages": 120,
+      "conteudos_pages": 128,
       "missing_pillars": [],
-      "main_sitemap_urls": 72,
+      "main_sitemap_urls": 92,
       "ok": true
     },
     "data_forbidden": {
