@@ -680,7 +680,9 @@ rolagem horizontal, `manifest-aceite-fix.json`).
   `test:offer-fit` 4 passed · `test:offer-naming` 101/101 · `test:nav` 15 passed ·
   `test:page-contract-licitacao` 243/243
 - `node scripts/site/test_ui_geometry.mjs http://127.0.0.1:8812` → `All UI geometry tests passed`
-  (`offer_context_computed 3col=3 4items=4`)
+  (`offer_context_computed 3col=3 4items=4`); reexecutado na árvore final (`offer_cta_first_viewport_and_progressive_detail` OK com a
+  entrega da diretoria na dobra; dobras 390 das três ofertas vistas: botão primário dentro do viewport)
+- `npm run test:page-contract-eight` → `735/735 checks passed`
 - `node scripts/site/test_trust_surfaces_responsive.mjs` (com `_site` apontado para a árvore
   fonte, link removido depois) → PASS ×6
 - `node --test tests/intake/test_mv03_adaptive_intake.mjs` → pass 17 / fail 0
@@ -696,7 +698,14 @@ rolagem horizontal, `manifest-aceite-fix.json`).
 ### 10.4 Arquivos protegidos por hash alterados de propósito (recaptura do integrador)
 
 - `aditivos-obras-publicas/index.html` (M-13): frozen spec (`materialize.py`, pedido 1) e
-  `hashes.json#forbidden`.
+  `hashes.json#forbidden`. Editar o HTML foi o único caminho: a rota não carrega
+  `styles-offers.css` (só nove rotas o fazem; `grep -c styles-offers aditivos-obras-publicas/index.html` → 0),
+  então uma demoção só por CSS exigiria `styles.css`, do integrador. **Verde → vermelho por esta
+  frente**: `test:page-contract-contratos` (498/498 na base a7068f671 → `held_hash_19` +
+  `public_renderer_has_no_drift`), `test_bofu_safe_execution::test_git_diff_is_exclusive_area` e 8
+  testes de `frozen_specs`; todos comparam o hash de aditivos. **Já vermelhos na base**: os 5 de
+  `frozen_specs`/`unlock_plan_291` (`styles.css`, `script.js`) e `first-fold-contract` em `/` e
+  `assets/editorial-article.css`.
 - Primeira dobra (`first-fold-measurements.v1.json`): `defesa-margem-contratos-publicos`,
   `defesa-tecnica-contratos-publicos`, `acompanhamento-contratos-obras`,
   `atrasos-prorrogacao-obras-publicas`, `bid-room-licitacoes-obras`, `diretoria-b2g`,
