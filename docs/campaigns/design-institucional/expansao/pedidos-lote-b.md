@@ -47,4 +47,4 @@ Cada pedido diz o arquivo do integrador, o motivo e a página afetada. Nada aqui
 ## 9. Margem da rota dominante no hub em 390 px
 
 - **Arquivo**: `css/contracts.css` (linha `body[data-content-cluster="servicos"] main>.section:first-of-type .lead-inline{margin-top:16px}`).
-- **Motivo**: a abertura dos hubs passou a ser `section.svc-open`, então o seletor deixou de casar e o `lead-inline` volta ao `margin-top:56px` de `styles.css`; em 390×844 o botão da rota dominante entra na dobra só parcialmente (topo a ~795 px). Estender o seletor a `.svc-open .lead-inline` (ou `main>.svc-open .lead-inline{margin-top:16px}`) fecha a dobra sem tocar no HTML.
+- **Motivo**: a abertura dos hubs passou a ser `section.svc-open`, então o seletor deixou de casar e o `lead-inline` volta ao `margin-top:56px` de `styles.css`; em 390×844 o botão da rota dominante entrava na dobra só parcialmente. O lote contornou movendo a linha de prova para depois do cartão (botão inteiro na dobra nos dois hubs, recapturado); estender o seletor a `.svc-open .lead-inline` continua desejável para recuperar os 40 px de respiro entre o lead e o cartão. Não bloqueante.

@@ -74,7 +74,8 @@ Os dois hubs são gerados por `scripts/site/render_nav_hubs.py` ("never hand-edi
 reprova qualquer edição manual, verificado com uma linha). A composição do piloto foi portada para
 o gerador: `svc-open` em uma coluna com a rota dominante original (`lead-inline` com o mesmo
 botão `data-cta-id="hub-servicos-medicoes-glosas"` / `hub-problemas-defesa-margem`, exigidos por
-`single-commercial-route.v1.json` e `test_inbound_gates`), `page-index`, prancha de abertura
+`single-commercial-route.v1.json` e `test_inbound_gates`; a linha de prova `section-proof` vem logo
+depois do cartão, para o botão caber na dobra de 390), `page-index`, prancha de abertura
 (P3 no hub de serviços, P5 no de problemas), `ol.list-ruled.list-ruled--areas` por evento
 contratual (grupo = situação + trabalho; linha = título/preço publicado/caminho), `ol.hub-list` para
 "Outras necessidades", `fit-economico` mantido (`data-offer-fit`), próximo passo único
@@ -194,11 +195,12 @@ o JSON-LD e o `<head>` foram conferidos byte a byte contra `47da03b64`. `test:fi
   (dois próximos passos), fora do contrato "um bloco escuro / uma ação dominante".
 - Hub de obras públicas: o aside de regras do bloco gerado `CONTRACT-DEFENSE-HUB` é um segundo
   momento escuro (pedido 3).
-- Hub de obras públicas em 390: o botão da rota dominante (`lead-inline`) entra na dobra só
-  parcialmente (topo a ~795 px de 844); a distância vem de `.lead-inline{margin-top:56px}` em
-  `styles.css` (a regra `body[data-content-cluster="servicos"] main>.section:first-of-type .lead-inline{margin-top:16px}`
-  de `css/contracts.css` deixou de casar porque a abertura é `.svc-open`). Pedido pequeno de CSS ao
-  integrador: estender o seletor a `.svc-open .lead-inline`.
+- Hubs em 390: na primeira captura o botão da rota dominante de `/servicos-obras-publicas/`
+  entrava na dobra só parcialmente (topo a ~795 px de 844). Corrigido no gerador: a linha de prova
+  (`section-proof`) passou para depois do cartão da rota dominante nos dois hubs; recapturado e
+  conferido em 390 (botão inteiro dentro da dobra em `/servicos-obras-publicas/` e em
+  `/problemas-que-resolvemos/`). O pedido 9 (seletor de `margin-top` do `lead-inline` em
+  `css/contracts.css`) deixa de ser bloqueante e fica como refinamento.
 - Estados `/diagnostico-b2g-expansao/{obrigado,expirado,cancelado}/`: páginas mínimas sem casca,
   não tratadas.
 - P4 (menu móvel com dois "fechar") e o `None` nos slots de prancha do piloto: pedidos 5 e 6.

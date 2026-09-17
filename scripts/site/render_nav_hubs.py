@@ -570,7 +570,6 @@ def _services_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
 <p class="eyebrow t-kicker">{e(meta["eyebrow"])}</p>
 <h1 class="t-service" id="hub-title">{e(meta["h1"])}</h1>
 <p class="section-lead svc-open__lead">{e(meta["lead"])}</p>
-<p class="section-proof t-caption">{_proof_html(meta)}</p>
 </div>
 <section class="lead-inline" data-commercial-route="medicoes-glosas" aria-label="Rota para medição, glosa e pagamento">
 <div class="lead-inline-copy"><span>Medição glosada ou retida</span>
@@ -580,6 +579,7 @@ def _services_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
 <a class="button button-primary" data-asset-family="hub" data-asset-id="servicos-obras-publicas" data-cta-id="hub-servicos-medicoes-glosas" data-cta-position="hub_services" data-journey="contrato" data-route-family="medicoes-glosas" href="/medicoes-glosas-obras-publicas/">Avaliar o Dossiê de Medição, Glosa e Pagamento <svg class="icon"><use href="#i-arrow"></use></svg></a>
 </div>
 </section>
+<p class="section-proof t-caption">{_proof_html(meta)}</p>
 <nav class="page-index" aria-label="Eventos desta página">
 <span class="page-index__label">Em que ponto do contrato você está?</span>
 <ol>
@@ -685,7 +685,6 @@ def _problems_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
 <p class="eyebrow t-kicker">{e(meta["eyebrow"])}</p>
 <h1 class="t-service" id="hub-title">{e(meta["h1"])}</h1>
 <p class="section-lead svc-open__lead">{e(meta["lead"])}</p>
-<p class="section-proof t-caption">{_proof_html(meta)}</p>
 </div>
 <section class="lead-inline" data-commercial-route="defesa-margem" aria-label="Rota para contrato em execução">
 <div class="lead-inline-copy"><span>Mais de um evento aberto</span>
@@ -695,6 +694,7 @@ def _problems_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
 <a class="button button-primary" data-asset-family="hub" data-asset-id="problemas-que-resolvemos" data-cta-id="hub-problemas-defesa-margem" data-cta-position="hub_problems" data-journey="contrato" data-route-family="problemas-que-resolvemos" href="/defesa-margem-contratos-publicos/">Ver o Diagnóstico de Riscos à Margem <svg class="icon"><use href="#i-arrow"></use></svg></a>
 </div>
 </section>
+<p class="section-proof t-caption">{_proof_html(meta)}</p>
 <nav class="page-index" aria-label="Onde você está no ciclo do contrato?">
 <span class="page-index__label">Onde você está no ciclo do contrato?</span>
 <ol>
