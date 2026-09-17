@@ -1,0 +1,126 @@
+{
+  "schema": "confenge.demonstrative-plate-source/1.0",
+  "id": "plate-elaboracao-complementar-2026-09",
+  "plate_ids": ["pacote-entrega", "interfaces-versoes"],
+  "origin": "demonstrative",
+  "revision": "R00",
+  "label_pt_br": "exemplo demonstrativo",
+  "client_name": null,
+  "address": null,
+  "contract_number": null,
+  "art_number": null,
+  "signature": null,
+  "date_modified": "2026-09-17",
+  "public_source_pt_br": "Esquemas de /projetos-complementares-engenharia/ (peças da entrega de elaboração complementar e controle de interfaces e versões). Diagramas de estrutura: sem cliente, obra, prazo, preço, número de ciclos ou dimensionamento.",
+  "pacote": {
+    "title": "O que a elaboração devolve, por peça",
+    "pieces": [
+      {
+        "id": "PE-01",
+        "n": 1,
+        "label_pt_br": "Plantas e cortes",
+        "short_pt_br": "Onde cada elemento fica",
+        "lines_pt_br": [
+          "Onde cada elemento fica e",
+          "como a obra se lê no papel,",
+          "na fase contratada."
+        ]
+      },
+      {
+        "id": "PE-02",
+        "n": 2,
+        "label_pt_br": "Detalhes",
+        "short_pt_br": "Ligações e pontos singulares",
+        "lines_pt_br": [
+          "Ligações e pontos que a",
+          "planta geral não resolve",
+          "sozinha."
+        ]
+      },
+      {
+        "id": "PE-03",
+        "n": 3,
+        "label_pt_br": "Especificações",
+        "short_pt_br": "Materiais, critérios e limites",
+        "lines_pt_br": [
+          "Materiais, critérios e limites",
+          "nomeados para orçar e executar",
+          "com a mesma referência."
+        ]
+      },
+      {
+        "id": "PE-04",
+        "n": 4,
+        "label_pt_br": "Memória de cálculo",
+        "short_pt_br": "Premissas e contas conferíveis",
+        "lines_pt_br": [
+          "Premissas, contas e recorte da",
+          "disciplina contratada,",
+          "conferíveis por terceiro."
+        ]
+      }
+    ],
+    "origin_pt_br": "Arquitetura de origem: permanece com o autor",
+    "note_lines_pt_br": [
+      "A CONFENGE responde pela disciplina de engenharia expressamente contratada; a arquitetura de origem permanece com o autor.",
+      "Software e modelos são método ou insumo: não ampliam atribuição profissional nem substituem ART."
+    ],
+    "mobile_note_lines_pt_br": [
+      "Arquitetura de origem: permanece com o autor.",
+      "Software e modelos: método ou insumo."
+    ]
+  },
+  "interfaces": {
+    "title": "Como a produção conversa com a origem",
+    "stages": [
+      {
+        "id": "IV-A",
+        "label_pt_br": "Insumos de origem",
+        "short_pt_br": "Arquitetura, fase, finalidade",
+        "lines_pt_br": [
+          "Arquitetura, fase, finalidade",
+          "e o que já existe do pacote."
+        ]
+      },
+      {
+        "id": "IV-B",
+        "label_pt_br": "Disciplina delimitada",
+        "short_pt_br": "Recorte e responsável",
+        "lines_pt_br": [
+          "Recorte, responsável e o que",
+          "não entra neste ciclo."
+        ]
+      },
+      {
+        "id": "IV-C",
+        "label_pt_br": "Interfaces",
+        "short_pt_br": "Um dono de cada lado",
+        "lines_pt_br": [
+          "Pontos de encontro com as",
+          "demais partes, com dono de",
+          "cada lado."
+        ]
+      },
+      {
+        "id": "IV-D",
+        "label_pt_br": "Versão devolvida",
+        "short_pt_br": "Data, responsável, o que mudou",
+        "lines_pt_br": [
+          "Data, responsável e o que",
+          "mudou nas interfaces."
+        ]
+      }
+    ],
+    "focus_stage_id": "IV-D",
+    "callouts": [
+      {"n": 1, "stage_id": "IV-A", "text_pt_br": "O autor da arquitetura decide o que altera no próprio projeto; nada é copiado ou adulterado."},
+      {"n": 2, "stage_id": "IV-C", "text_pt_br": "Cada encontro entre disciplinas tem um dono de cada lado; a pendência volta a quem responde."},
+      {"n": 3, "stage_id": "IV-D", "text_pt_br": "Cada ciclo registra versão, data e responsável; ciclos, prazo e preço ficam na proposta."}
+    ],
+    "mobile_callouts_pt_br": [
+      "autor de origem decide o que altera",
+      "pendência volta a quem responde"
+    ],
+    "mobile_callout_stage_ids": ["IV-A", "IV-C"]
+  }
+}

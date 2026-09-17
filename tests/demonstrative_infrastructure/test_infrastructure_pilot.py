@@ -234,7 +234,9 @@ def test_page_is_demonstrative_not_client_and_has_required_title() -> None:
     generate(ROOT)
     html = (ROOT / PUBLIC_DIR_REL / "index.html").read_text(encoding="utf-8")
     assert PAGE_H1 in html
-    assert f"<h1>{PAGE_H1}</h1>" in html
+    # SALTO-INSTITUCIONAL-02 (lote A): o h1 recebe o papel tipografico de servico
+    # (class t-service) da composicao "prancha e percurso"; o texto continua exato.
+    assert re.search(rf"<h1[^>]*>{re.escape(PAGE_H1)}</h1>", html)
     assert "não servem para execução" in html.lower()
     assert 'rel="canonical"' in html
     assert "https://confenge.com.br/casos/demonstrativo-infraestrutura/" in html

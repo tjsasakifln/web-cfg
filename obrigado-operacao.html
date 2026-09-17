@@ -9,12 +9,14 @@
 <link href="/assets/favicon-32.png" rel="icon" sizes="32x32" type="image/png"/>
 <link rel="preload" as="font" type="font/woff2" href="/assets/archivo-var-latin-bf6e041e.woff2" crossorigin="anonymous"/>
 <link href="/styles.css" rel="stylesheet"/>
+<link href="/assets/editorial.css" rel="stylesheet"/>
 <script defer="" src="/script.js?v=fortune02"></script>
 <meta content="Consulte a referência do pedido de diagnóstico da operação em obras públicas e veja os próximos canais." name="description"/>
 </head>
 <body class="simple-page" data-journey="operacao">
 <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 <svg aria-hidden="true" class="svg-sprite" height="0" width="0">
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></symbol>
 <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"></path></symbol>
 <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"></path></symbol>
 </svg>
@@ -38,32 +40,40 @@
 <a class="button button-primary" href="/triagem-tecnica/">Solicitar proposta</a>
 </nav>
 </header>
-<main class="simple-main" id="conteudo">
-<article class="simple-card">
-<p class="eyebrow">Operação em Obras Públicas</p>
+<main id="conteudo">
+<section class="state" aria-labelledby="confirmation-title">
+<div class="container">
+<div class="state__grid">
+<div>
+<span class="state__code">Operação em Obras Públicas</span>
 <h1 id="confirmation-title" data-confirmed-title="Pedido de diagnóstico da operação registrado.">Confira a referência do pedido de diagnóstico da operação.</h1>
-<p id="confirmation-summary" data-confirmed-copy="O servidor registrou seu pedido. O próximo contato serve para entender quem decide a frente pública, o estágio da carteira de licitações e se o encaixe é diagnóstico pontual (90 dias) ou rotina contínua (Diretoria Fracionada para o Mercado Público).">Se você acabou de enviar o pedido pelo site, o protocolo aparece aqui em seguida. Se chegou por um link salvo, o envio não fica confirmado nesta página: fale pelo WhatsApp ou pelo e-mail abaixo e a conversa segue do mesmo jeito.</p>
-
-<p class="sla-box" id="receipt-id" hidden><strong>Protocolo de recebimento:</strong> <code></code></p>
-
-<div class="sla-box" data-confirmed-only hidden>
-<strong>Quem deve participar:</strong> direção ou sócio responsável pelo público; se possível, liderança de licitação ou contratos.<br/>
-<strong>Duração aproximada da conversa inicial:</strong> 30 a 45 minutos.<br/>
-<strong>O que vem a seguir:</strong> a CONFENGE entra em contato para combinar o escopo do diagnóstico pontual ou do apoio contínuo à operação; você recebe a leitura da situação da frente pública, o trabalho que a atende, o que será entregue e as informações para a proposta.<br/>
-<strong>Prazo:</strong> agendamento ou retorno em até <strong>2 dias úteis</strong>.<br/>
-<strong>Quando esse formato não é indicado:</strong> se a única necessidade é alerta de editais, ou se a expectativa é vitória assegurada em disputa.
-</div>
-<div class="sla-box" data-confirmed-only hidden>
-<strong>Documentos:</strong> depois do protocolo, a CONFENGE abre um canal seguro para o envio de carteiras completas e planilhas com dados de terceiros; até lá, descreva o contexto por aqui.
-</div>
-<div class="journey-next">
+<p class="state__lead" id="confirmation-summary" data-confirmed-copy="O servidor registrou seu pedido. O próximo contato serve para entender quem decide a frente pública, o estágio da carteira de licitações e se o encaixe é diagnóstico pontual (90 dias) ou rotina contínua (Diretoria Fracionada para o Mercado Público).">Se você acabou de enviar o pedido pelo site, o protocolo aparece aqui em seguida. Se chegou por um link salvo, o envio não fica confirmado nesta página: fale pelo WhatsApp ou pelo e-mail abaixo e a conversa segue do mesmo jeito.</p>
+<p class="state__receipt" id="receipt-id" hidden><b>Protocolo de recebimento:</b> <code></code></p>
+<div class="contact-primary">
 <a class="button button-primary" data-event-name="whatsapp_click" data-journey="operacao" href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20conversar%20sobre%20o%20Diagn%C3%B3stico%20da%20Opera%C3%A7%C3%A3o%20em%20Obras%20P%C3%BAblicas%20e%20entender%20o%20pr%C3%B3ximo%20passo." rel="noopener" target="_blank">Continuar pelo WhatsApp</a>
-<a class="button button-secondary" data-event-name="email_click" href="mailto:tiago.sasaki@confenge.com.br?subject=Diagn%C3%B3stico%20da%20opera%C3%A7%C3%A3o%20-%20contato%20CONFENGE">Alternativa por e-mail</a>
-<p class="form-hint">E-mail copiável: <button type="button" class="text-link" data-copy-email="tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</button></p>
-<a class="button button-secondary" href="/diagnostico-b2g-360/">Ver o que o Diagnóstico da Operação em Obras Públicas cobre</a>
-<a class="text-link" href="/diretoria-b2g/">Ver Diretoria Fracionada para o Mercado Público</a>
+<ul class="contact-alt">
+<li><a class="text-link" data-event-name="email_click" href="mailto:tiago.sasaki@confenge.com.br?subject=Diagn%C3%B3stico%20da%20opera%C3%A7%C3%A3o%20-%20contato%20CONFENGE">Alternativa por e-mail</a></li>
+<li><span class="t-caption">E-mail copiável: <button type="button" class="text-link" data-copy-email="tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</button></span></li>
+</ul>
 </div>
-</article>
+<p class="state__receipt" data-confirmed-only hidden><strong>Quem deve participar:</strong> direção ou sócio responsável pelo público; se possível, liderança de licitação ou contratos.<br/> <strong>Duração aproximada da conversa inicial:</strong> 30 a 45 minutos.<br/> <strong>O que vem a seguir:</strong> a CONFENGE entra em contato para combinar o escopo do diagnóstico pontual ou do apoio contínuo à operação; você recebe a leitura da situação da frente pública, o trabalho que a atende, o que será entregue e as informações para a proposta.<br/> <strong>Prazo:</strong> agendamento ou retorno em até <strong>2 dias úteis</strong>.<br/> <strong>Quando esse formato não é indicado:</strong> se a única necessidade é alerta de editais, ou se a expectativa é vitória assegurada em disputa.</p>
+<p class="state__receipt" data-confirmed-only hidden><strong>Documentos:</strong> depois do protocolo, a CONFENGE abre um canal seguro para o envio de carteiras completas e planilhas com dados de terceiros; até lá, descreva o contexto por aqui.</p>
+</div>
+<aside aria-label="O que acontece depois e outros caminhos">
+<ol class="after after--light" aria-label="O que acontece depois">
+<li><div><strong>Contato para combinar o escopo</strong><p>Diagnóstico pontual ou apoio contínuo à operação, com quem decide a frente pública.</p></div></li>
+<li><div><strong>Leitura da situação</strong><p>A situação da frente pública, o trabalho que a atende e o que será entregue.</p></div></li>
+<li><div><strong>Canal seguro e proposta</strong><p>Carteiras completas e planilhas com dados de terceiros só entram depois, por canal seguro; até lá, o contexto é descrito em texto.</p></div></li>
+</ol>
+<ul class="state__paths">
+<li><a href="/diagnostico-b2g-360/"><span>Ver o que o Diagnóstico da Operação em Obras Públicas cobre</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></a></li>
+<li><a href="/diretoria-b2g/"><span>Ver Diretoria Fracionada para o Mercado Público<small>Rotina contínua</small></span><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></a></li>
+<li><a href="/"><span>Voltar ao início</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></a></li>
+</ul>
+</aside>
+</div>
+</div>
+</section>
 </main>
 <footer class="site-footer">
 <div class="container footer-bottom"><span>© <span id="year">2026</span> CONFENGE. CNPJ 52.407.089/0001-09.</span><a href="/privacidade/">Política de Privacidade</a></div>

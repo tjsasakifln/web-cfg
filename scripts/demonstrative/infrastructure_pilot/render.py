@@ -33,6 +33,18 @@ PAGE_DESCRIPTION = (
 )
 
 
+# Plate vocabulary (styles-tokens.css; same palette as scripts/demonstrative/plates/sheet.py).
+INK = "#071a31"
+MUTED = "#5d6a7a"
+RULE = "#dfe4e6"
+SOFT = "#f3f4f5"
+WHITE = "#ffffff"
+GREEN = "#2d6f2d"
+LIME = "#ced62a"
+GREEN_100 = "#edf5ec"
+FONT = "Archivo Var, Arial, Helvetica, sans-serif"
+
+
 def br_number(value: str | Decimal, places: int = 2) -> str:
     quant = Decimal("0.01") if places == 2 else Decimal("0.0001")
     number = Decimal(str(value)).quantize(quant)
@@ -175,16 +187,24 @@ def revisao_csv(extracts: dict[str, Any]) -> str:
     )
 
 
+# The figures are drawn in a compact viewBox (360 wide, the width of a phone column):
+# in the ~470 px desktop column they scale up, on a 390 px phone they render at 1:1, so
+# every label (font 12.5 and 13) stays legible. Labels sit outside the element they name
+# whenever the element is thinner than the type (the wearing course, the DR-01 line).
+FS = 12.5
+FS_LABEL = 13
+
+
 def _plan_svg(extracts: dict[str, Any], revision: str) -> str:
     """Plan of the 40 m access strip and the 20 m drainage stretch, metres."""
     totals = extracts["named_totals"]
     length = float(totals["pavement_length_m"])
     width = float(totals["pavement_width_m"])
-    scale_x = 14
-    scale_y = 28
-    pad_l, pad_t, pad_r, pad_b = 64, 48, 48, 56
+    scale_x = 7
+    scale_y = 18
+    pad_l, pad_t, pad_r = 40, 44, 40
     svg_w = int(length * scale_x + pad_l + pad_r)
-    svg_h = int(width * scale_y + pad_t + pad_b + 24)
+    svg_h = 252
 
     def X(m: float) -> float:
         return pad_l + m * scale_x
@@ -198,46 +218,45 @@ def _plan_svg(extracts: dict[str, Any], revision: str) -> str:
     state = extracts["states"][revision]
     title = f"Planta do acesso PV-01 · {state['label_pt_br']} · {revision}"
     if revision == "R00":
-        note = (
-            f"R00: cota desenhada de MH-02 {br_number(totals['mh02_invert_drawn_m'])} m; "
-            f"planilha {br_number(totals['mh02_invert_sheet_r00_m'])} m."
-        )
-        mh2_fill = "#fecaca"
+        note_1 = f"R00: cota de MH-02 desenhada {br_number(totals['mh02_invert_drawn_m'])} m;"
+        note_2 = f"planilha {br_number(totals['mh02_invert_sheet_r00_m'])} m. Exemplo demonstrativo."
+        mh2_fill, mh2_stroke = LIME, INK
     else:
-        note = (
-            f"R01: cota de MH-02 alinhada em {br_number(totals['mh02_invert_drawn_m'])} m "
-            "no desenho e na planilha."
-        )
-        mh2_fill = "#bbf7d0"
+        note_1 = f"R01: cota de MH-02 alinhada em {br_number(totals['mh02_invert_drawn_m'])} m"
+        note_2 = "no desenho e na planilha. Exemplo demonstrativo."
+        mh2_fill, mh2_stroke = GREEN_100, GREEN
 
     desc = (
         f"Faixa PV-01 de {br_number(length)} m por {br_number(width)} m. "
         f"Poço MH-01 em E0+010, boca IN-01 em E0+020, poço MH-02 em E0+030, "
-        f"trecho DR-01 com {br_number(totals['pipe_length_m'])} m. {note} "
-        f"Exemplo demonstrativo, revisão {revision}."
+        f"trecho DR-01 com {br_number(totals['pipe_length_m'])} m. {note_1} {note_2} Revisão {revision}."
     )
     # stations
     mh1_s, in_s, mh2_s = 10.0, 20.0, 30.0
     center = width / 2
+    hid = f"plan-{revision}-hatch"
+    y_bottom = Y(0)
 
-    return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {svg_w} {svg_h}" role="img" aria-labelledby="plan-{revision}-title plan-{revision}-desc">
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {svg_w} {svg_h}" role="img" font-family="{FONT}" aria-labelledby="plan-{revision}-title plan-{revision}-desc">
 <title id="plan-{revision}-title">{e(title)}</title>
 <desc id="plan-{revision}-desc">{e(desc)}</desc>
-<rect x="{X(0):.1f}" y="{Y(width):.1f}" width="{px(length):.1f}" height="{px(width, 'y'):.1f}" fill="#e2e8f0" stroke="#0f172a" stroke-width="2"/>
-<rect x="{X(0):.1f}" y="{Y(width - 0.4):.1f}" width="{px(length):.1f}" height="{px(0.4, 'y'):.1f}" fill="#94a3b8"/>
-<rect x="{X(0):.1f}" y="{Y(0.4):.1f}" width="{px(length):.1f}" height="{px(0.4, 'y'):.1f}" fill="#94a3b8"/>
-<text x="{X(length / 2):.1f}" y="{Y(center) + 4:.1f}" text-anchor="middle" font-size="13" fill="#0f172a">PV-01 · {br_number(length)} m × {br_number(width)} m</text>
-<line x1="{X(mh1_s):.1f}" y1="{Y(center):.1f}" x2="{X(mh2_s):.1f}" y2="{Y(center):.1f}" stroke="#0369a1" stroke-width="4"/>
-<text x="{X((mh1_s + mh2_s) / 2):.1f}" y="{Y(center) - 14:.1f}" text-anchor="middle" font-size="11" fill="#0c4a6e">DR-01 · {br_number(totals['pipe_length_m'])} m · diâm. {br_number(totals['pipe_diameter_mm'])} mm</text>
-<circle cx="{X(mh1_s):.1f}" cy="{Y(center):.1f}" r="10" fill="#bae6fd" stroke="#0c4a6e"/>
-<text x="{X(mh1_s):.1f}" y="{Y(center) + 32:.1f}" text-anchor="middle" font-size="11" fill="#0c4a6e">MH-01 E0+010</text>
-<rect x="{X(in_s) - 8:.1f}" y="{Y(0.9):.1f}" width="16" height="{px(0.9, 'y'):.1f}" fill="#fde68a" stroke="#92400e"/>
-<text x="{X(in_s):.1f}" y="{Y(-0.15) + 4:.1f}" text-anchor="middle" font-size="11" fill="#78350f">IN-01 E0+020</text>
-<circle cx="{X(mh2_s):.1f}" cy="{Y(center):.1f}" r="10" fill="{mh2_fill}" stroke="#0c4a6e"/>
-<text x="{X(mh2_s):.1f}" y="{Y(center) + 32:.1f}" text-anchor="middle" font-size="11" fill="#0c4a6e">MH-02 E0+030</text>
-<text x="{X(0):.1f}" y="{Y(width) - 10:.1f}" font-size="11" fill="#0f172a">E0+000</text>
-<text x="{X(length):.1f}" y="{Y(width) - 10:.1f}" text-anchor="end" font-size="11" fill="#0f172a">E0+040</text>
-<text x="{X(length / 2):.1f}" y="{svg_h - 16}" text-anchor="middle" font-size="11" fill="#334155">{e(note)} Exemplo demonstrativo.</text>
+<defs><pattern id="{hid}" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0V6" stroke="{MUTED}" stroke-width="0.5"/></pattern></defs>
+<text x="{X(0):.1f}" y="{Y(width) - 10:.1f}" font-size="{FS}" fill="{MUTED}">E0+000</text>
+<text x="{X(length):.1f}" y="{Y(width) - 10:.1f}" text-anchor="end" font-size="{FS}" fill="{MUTED}">E0+040</text>
+<rect x="{X(0):.1f}" y="{Y(width):.1f}" width="{px(length):.1f}" height="{px(width, 'y'):.1f}" fill="{SOFT}" stroke="{INK}" stroke-width="1.6"/>
+<rect x="{X(0):.1f}" y="{Y(width):.1f}" width="{px(length):.1f}" height="{px(0.4, 'y'):.1f}" fill="url(#{hid})"/>
+<rect x="{X(0):.1f}" y="{Y(0.4):.1f}" width="{px(length):.1f}" height="{px(0.4, 'y'):.1f}" fill="url(#{hid})"/>
+<text x="{X((mh1_s + mh2_s) / 2):.1f}" y="{Y(center) - 12:.1f}" text-anchor="middle" font-size="{FS}" font-weight="650" fill="{GREEN}">DR-01 · {br_number(totals['pipe_length_m'])} m · diâm. {br_number(totals['pipe_diameter_mm'])} mm</text>
+<line x1="{X(mh1_s):.1f}" y1="{Y(center):.1f}" x2="{X(mh2_s):.1f}" y2="{Y(center):.1f}" stroke="{GREEN}" stroke-width="2"/>
+<circle cx="{X(mh1_s):.1f}" cy="{Y(center):.1f}" r="8" fill="{WHITE}" stroke="{INK}" stroke-width="1.2"/>
+<text x="{X(mh1_s):.1f}" y="{Y(center) + 24:.1f}" text-anchor="middle" font-size="{FS}" fill="{INK}">MH-01 E0+010</text>
+<circle cx="{X(mh2_s):.1f}" cy="{Y(center):.1f}" r="8" fill="{mh2_fill}" stroke="{mh2_stroke}" stroke-width="1.2"/>
+<text x="{X(mh2_s):.1f}" y="{Y(center) + 24:.1f}" text-anchor="middle" font-size="{FS}" fill="{INK}">MH-02 E0+030</text>
+<rect x="{X(in_s) - 7:.1f}" y="{Y(0.9):.1f}" width="14" height="{px(0.9, 'y'):.1f}" fill="{WHITE}" stroke="{MUTED}" stroke-width="1.2" stroke-dasharray="3 2"/>
+<text x="{X(in_s) + 12:.1f}" y="{Y(0.35):.1f}" font-size="{FS}" fill="{MUTED}">IN-01 E0+020</text>
+<text x="{X(0):.1f}" y="{y_bottom + 18:.1f}" font-size="{FS_LABEL}" font-weight="650" fill="{INK}">PV-01 · {br_number(length)} m × {br_number(width)} m</text>
+<text x="{X(0):.1f}" y="{y_bottom + 40:.1f}" font-size="{FS}" fill="{MUTED}">{e(note_1)}</text>
+<text x="{X(0):.1f}" y="{y_bottom + 57:.1f}" font-size="{FS}" fill="{MUTED}">{e(note_2)}</text>
 </svg>
 """
 
@@ -250,11 +269,11 @@ def _profile_svg(extracts: dict[str, Any], revision: str) -> str:
     y_drawn = float(totals["mh02_invert_drawn_m"])
     y_sheet = float(totals["mh02_invert_sheet_r00_m"] if revision == "R00" else totals["mh02_invert_sheet_r01_m"])
     y_min, y_max = 12.20, 13.00
-    scale_x = 18
-    scale_y = 220
-    pad_l, pad_t, pad_r, pad_b = 72, 36, 36, 52
+    scale_x = 11
+    scale_y = 200
+    pad_l, pad_t, pad_r = 56, 30, 84
     svg_w = int((x1 - x0) * scale_x + pad_l + pad_r)
-    svg_h = int((y_max - y_min) * scale_y + pad_t + pad_b)
+    svg_h = 268
 
     def X(sta: float) -> float:
         return pad_l + (sta - x0) * scale_x
@@ -266,48 +285,49 @@ def _profile_svg(extracts: dict[str, Any], revision: str) -> str:
     title = f"Perfil de invert DR-01 · {state['label_pt_br']} · {revision}"
     clash = revision == "R00"
     if clash:
-        note = (
-            f"R00: desenho {br_number(y_drawn)} m versus planilha {br_number(y_sheet)} m "
-            f"em MH-02, diferença {br_number(totals['mh02_mismatch_r00_m'])} m."
-        )
-        sheet_stroke = "#b91c1c"
+        note_1 = f"R00: desenho {br_number(y_drawn)} m versus planilha {br_number(y_sheet)} m"
+        note_2 = f"em MH-02, diferença {br_number(totals['mh02_mismatch_r00_m'])} m. Exemplo demonstrativo."
     else:
-        note = (
-            f"R01: desenho e planilha em {br_number(y_drawn)} m na conexão MH-02."
-        )
-        sheet_stroke = "#15803d"
+        note_1 = f"R01: desenho e planilha em {br_number(y_drawn)} m"
+        note_2 = "na conexão MH-02. Exemplo demonstrativo."
     desc = (
-        f"Trecho DR-01 de E0+010 a E0+030. Invert de montante {br_number(y_up)} m. {note} "
-        "Declive geométrico, não capacidade hidráulica. Exemplo demonstrativo."
+        f"Trecho DR-01 de E0+010 a E0+030. Invert de montante {br_number(y_up)} m. {note_1} {note_2} "
+        "Declive geométrico, não capacidade hidráulica."
     )
 
-    sheet_line = ""
     if clash:
         sheet_line = (
+            f'<path d="M{X(x0):.1f} {Y(y_up):.1f}L{X(x1):.1f} {Y(y_sheet):.1f}V{Y(y_drawn):.1f}Z" fill="{LIME}" fill-opacity="0.35"/>'
             f'<line x1="{X(x0):.1f}" y1="{Y(y_up):.1f}" x2="{X(x1):.1f}" y2="{Y(y_sheet):.1f}" '
-            f'stroke="{sheet_stroke}" stroke-width="2" stroke-dasharray="6 4"/>'
-            f'<circle cx="{X(x1):.1f}" cy="{Y(y_sheet):.1f}" r="5" fill="#fecaca" stroke="{sheet_stroke}"/>'
-            f'<text x="{X(x1) + 8:.1f}" y="{Y(y_sheet) + 4:.1f}" font-size="11" fill="{sheet_stroke}">planilha {br_number(y_sheet)} m</text>'
+            f'stroke="{MUTED}" stroke-width="1.2" stroke-dasharray="6 4"/>'
+            f'<circle cx="{X(x1):.1f}" cy="{Y(y_sheet):.1f}" r="5" fill="{WHITE}" stroke="{MUTED}" stroke-width="1.2"/>'
+            f'<text x="{X(x1) + 9:.1f}" y="{Y(y_sheet) - 4:.1f}" font-size="{FS}" fill="{MUTED}">planilha</text>'
+            f'<text x="{X(x1) + 9:.1f}" y="{Y(y_sheet) + 11:.1f}" font-size="{FS}" fill="{MUTED}">{br_number(y_sheet)} m</text>'
+            f'<text x="{X(x1) + 9:.1f}" y="{Y(y_drawn) + 12:.1f}" font-size="{FS}" fill="{GREEN}">desenho</text>'
+            f'<text x="{X(x1) + 9:.1f}" y="{Y(y_drawn) + 27:.1f}" font-size="{FS}" fill="{GREEN}">{br_number(y_drawn)} m</text>'
         )
     else:
         sheet_line = (
-            f'<text x="{X(x1) + 8:.1f}" y="{Y(y_drawn) - 10:.1f}" font-size="11" fill="{sheet_stroke}">desenho e planilha {br_number(y_drawn)} m</text>'
+            f'<text x="{X(x1) + 9:.1f}" y="{Y(y_drawn) - 4:.1f}" font-size="{FS}" fill="{GREEN}">desenho e</text>'
+            f'<text x="{X(x1) + 9:.1f}" y="{Y(y_drawn) + 11:.1f}" font-size="{FS}" fill="{GREEN}">planilha</text>'
+            f'<text x="{X(x1) + 9:.1f}" y="{Y(y_drawn) + 26:.1f}" font-size="{FS}" fill="{GREEN}">{br_number(y_drawn)} m</text>'
         )
 
-    return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {svg_w} {svg_h}" role="img" aria-labelledby="prf-{revision}-title prf-{revision}-desc">
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {svg_w} {svg_h}" role="img" font-family="{FONT}" aria-labelledby="prf-{revision}-title prf-{revision}-desc">
 <title id="prf-{revision}-title">{e(title)}</title>
 <desc id="prf-{revision}-desc">{e(desc)}</desc>
-<line x1="{X(x0):.1f}" y1="{Y(y_min):.1f}" x2="{X(x1):.1f}" y2="{Y(y_min):.1f}" stroke="#0f172a" stroke-width="1"/>
-<line x1="{X(x0):.1f}" y1="{Y(y_max):.1f}" x2="{X(x0):.1f}" y2="{Y(y_min):.1f}" stroke="#0f172a" stroke-width="1"/>
-<line x1="{X(x0):.1f}" y1="{Y(y_up):.1f}" x2="{X(x1):.1f}" y2="{Y(y_drawn):.1f}" stroke="#0369a1" stroke-width="3"/>
-<circle cx="{X(x0):.1f}" cy="{Y(y_up):.1f}" r="6" fill="#bae6fd" stroke="#0c4a6e"/>
-<circle cx="{X(x1):.1f}" cy="{Y(y_drawn):.1f}" r="6" fill="#bbf7d0" stroke="#0c4a6e"/>
+<line x1="{X(x0):.1f}" y1="{Y(y_min):.1f}" x2="{X(x1):.1f}" y2="{Y(y_min):.1f}" stroke="{RULE}" stroke-width="1"/>
+<line x1="{X(x0):.1f}" y1="{Y(y_max):.1f}" x2="{X(x0):.1f}" y2="{Y(y_min):.1f}" stroke="{RULE}" stroke-width="1"/>
 {sheet_line}
-<text x="{X(x0) - 8:.1f}" y="{Y(y_up) + 4:.1f}" text-anchor="end" font-size="11" fill="#0f172a">{br_number(y_up)}</text>
-<text x="{X(x1) + 8:.1f}" y="{Y(y_drawn) + 16:.1f}" font-size="11" fill="#0c4a6e">desenho {br_number(y_drawn)} m</text>
-<text x="{X(x0):.1f}" y="{Y(y_min) + 18:.1f}" font-size="11" fill="#0f172a">E0+010 MH-01</text>
-<text x="{X(x1):.1f}" y="{Y(y_min) + 18:.1f}" text-anchor="end" font-size="11" fill="#0f172a">E0+030 MH-02</text>
-<text x="{pad_l}" y="{svg_h - 12}" font-size="11" fill="#334155">{e(note)} Exemplo demonstrativo.</text>
+<line x1="{X(x0):.1f}" y1="{Y(y_up):.1f}" x2="{X(x1):.1f}" y2="{Y(y_drawn):.1f}" stroke="{INK}" stroke-width="2.4"/>
+<circle cx="{X(x0):.1f}" cy="{Y(y_up):.1f}" r="6" fill="{WHITE}" stroke="{INK}" stroke-width="1.4"/>
+<circle cx="{X(x1):.1f}" cy="{Y(y_drawn):.1f}" r="6" fill="{GREEN_100}" stroke="{GREEN}" stroke-width="1.4"/>
+<text x="{X(x0) - 8:.1f}" y="{Y(y_up) + 4:.1f}" text-anchor="end" font-size="{FS}" fill="{INK}">{br_number(y_up)}</text>
+<text x="{X((x0 + x1) / 2):.1f}" y="{Y(y_up) - 18:.1f}" text-anchor="middle" font-size="{FS_LABEL}" font-weight="650" fill="{INK}">DR-01 · invert de montante a jusante</text>
+<text x="{X(x0):.1f}" y="{Y(y_min) + 18:.1f}" font-size="{FS}" fill="{INK}">E0+010 MH-01</text>
+<text x="{X(x1):.1f}" y="{Y(y_min) + 18:.1f}" text-anchor="end" font-size="{FS}" fill="{INK}">E0+030 MH-02</text>
+<text x="{X(x0) - 8:.1f}" y="{Y(y_min) + 40:.1f}" font-size="{FS}" fill="{MUTED}">{e(note_1)}</text>
+<text x="{X(x0) - 8:.1f}" y="{Y(y_min) + 57:.1f}" font-size="{FS}" fill="{MUTED}">{e(note_2)}</text>
 </svg>
 """
 
@@ -320,11 +340,11 @@ def _section_svg(extracts: dict[str, Any]) -> str:
     t_base = 0.12
     t_wear = 0.04
     total_t = t_sub + t_base + t_wear
-    scale_x = 70
-    scale_y = 280
-    pad_l, pad_t, pad_r, pad_b = 56, 28, 28, 48
-    svg_w = int(width * scale_x + pad_l + pad_r)
-    svg_h = int(total_t * scale_y + pad_t + pad_b)
+    scale_x = 30
+    scale_y = 560
+    pad_l, pad_t = 24, 40
+    svg_w = 360
+    svg_h = int(total_t * scale_y + pad_t + 66)
 
     def X(m: float) -> float:
         return pad_l + m * scale_x
@@ -342,16 +362,26 @@ def _section_svg(extracts: dict[str, Any]) -> str:
         f"sub-base {br_number(t_sub)} m. Volumes geométricos, não dimensionamento de pavimento. "
         f"Exemplo demonstrativo, revisão {rev}."
     )
-    return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {svg_w} {svg_h}" role="img" aria-labelledby="sec-title sec-desc">
+    lx = X(width) + 12  # labels to the right of the layers, with a short leader each
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {svg_w} {svg_h}" role="img" font-family="{FONT}" aria-labelledby="sec-title sec-desc">
 <title id="sec-title">{e(title)}</title>
 <desc id="sec-desc">{e(desc)}</desc>
-<rect x="{X(0):.1f}" y="{Y(0):.1f}" width="{px(width):.1f}" height="{px(t_wear, 'y'):.1f}" fill="#334155" stroke="#0f172a"/>
-<text x="{X(width / 2):.1f}" y="{Y(t_wear / 2) + 4:.1f}" text-anchor="middle" font-size="11" fill="#f8fafc">capa {br_number(t_wear)} m · Q-CAP-01</text>
-<rect x="{X(0):.1f}" y="{Y(t_wear):.1f}" width="{px(width):.1f}" height="{px(t_base, 'y'):.1f}" fill="#a8a29e" stroke="#0f172a"/>
-<text x="{X(width / 2):.1f}" y="{Y(t_wear + t_base / 2) + 4:.1f}" text-anchor="middle" font-size="11" fill="#0f172a">base {br_number(t_base)} m · Q-BASE-01</text>
-<rect x="{X(0):.1f}" y="{Y(t_wear + t_base):.1f}" width="{px(width):.1f}" height="{px(t_sub, 'y'):.1f}" fill="#d6d3d1" stroke="#0f172a"/>
-<text x="{X(width / 2):.1f}" y="{Y(t_wear + t_base + t_sub / 2) + 4:.1f}" text-anchor="middle" font-size="11" fill="#0f172a">sub-base {br_number(t_sub)} m · Q-SUB-01</text>
-<text x="{X(width / 2):.1f}" y="{svg_h - 14}" text-anchor="middle" font-size="11" fill="#334155">{br_number(width)} m · revisão {e(rev)} · exemplo demonstrativo</text>
+<defs><pattern id="sec-hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0V6" stroke="{MUTED}" stroke-width="0.5"/></pattern></defs>
+<text x="{X(width / 2):.1f}" y="{Y(0) - 12:.1f}" text-anchor="middle" font-size="{FS_LABEL}" font-weight="650" fill="{INK}">PV-01 · {br_number(width)} m</text>
+<rect x="{X(0):.1f}" y="{Y(0):.1f}" width="{px(width):.1f}" height="{px(t_wear, 'y'):.1f}" fill="{MUTED}" stroke="{INK}" stroke-width="1.2"/>
+<line x1="{X(width):.1f}" y1="{Y(t_wear / 2):.1f}" x2="{lx - 3:.1f}" y2="{Y(t_wear / 2):.1f}" stroke="{MUTED}" stroke-width="0.6"/>
+<text x="{lx:.1f}" y="{Y(t_wear / 2) + 4:.1f}" font-size="{FS}" fill="{INK}">capa {br_number(t_wear)} m</text>
+<text x="{lx:.1f}" y="{Y(t_wear / 2) + 20:.1f}" font-size="{FS}" fill="{MUTED}">Q-CAP-01</text>
+<rect x="{X(0):.1f}" y="{Y(t_wear):.1f}" width="{px(width):.1f}" height="{px(t_base, 'y'):.1f}" fill="{SOFT}" stroke="{INK}" stroke-width="1.2"/>
+<line x1="{X(width):.1f}" y1="{Y(t_wear + t_base / 2):.1f}" x2="{lx - 3:.1f}" y2="{Y(t_wear + t_base / 2):.1f}" stroke="{MUTED}" stroke-width="0.6"/>
+<text x="{lx:.1f}" y="{Y(t_wear + t_base / 2) + 4:.1f}" font-size="{FS}" fill="{INK}">base {br_number(t_base)} m</text>
+<text x="{lx:.1f}" y="{Y(t_wear + t_base / 2) + 20:.1f}" font-size="{FS}" fill="{MUTED}">Q-BASE-01</text>
+<rect x="{X(0):.1f}" y="{Y(t_wear + t_base):.1f}" width="{px(width):.1f}" height="{px(t_sub, 'y'):.1f}" fill="url(#sec-hatch)" stroke="{INK}" stroke-width="1.2"/>
+<line x1="{X(width):.1f}" y1="{Y(t_wear + t_base + t_sub / 2):.1f}" x2="{lx - 3:.1f}" y2="{Y(t_wear + t_base + t_sub / 2):.1f}" stroke="{MUTED}" stroke-width="0.6"/>
+<text x="{lx:.1f}" y="{Y(t_wear + t_base + t_sub / 2) + 4:.1f}" font-size="{FS}" fill="{INK}">sub-base {br_number(t_sub)} m</text>
+<text x="{lx:.1f}" y="{Y(t_wear + t_base + t_sub / 2) + 20:.1f}" font-size="{FS}" fill="{MUTED}">Q-SUB-01</text>
+<text x="{X(0):.1f}" y="{svg_h - 30:.1f}" font-size="{FS}" fill="{MUTED}">Espessuras declaradas; volume geométrico, não dimensionamento.</text>
+<text x="{X(0):.1f}" y="{svg_h - 13:.1f}" font-size="{FS}" fill="{MUTED}">Exemplo demonstrativo · revisão {e(rev)}</text>
 </svg>
 """
 
@@ -428,133 +458,188 @@ def render_html(extracts: dict[str, Any]) -> str:
     ]
 
     coord_html = "".join(
-        f"""<article class="n-card" id="{e(item['id'])}">
-<h3>{e(item['id'])} · {"Interface geométrica" if item["kind"] == "geometric" else "Informação faltante"}</h3>
-<p><strong>Local:</strong> {e(item["location_pt_br"])}</p>
-<p><strong>Evidência:</strong> {e(item["evidence_pt_br"])}</p>
-<p><strong>Encaminhamento:</strong> {e(item["forwarding_pt_br"])}</p>
-<p><strong>Estado:</strong> {e(state_pt.get(item["state"], item["state"]))} · elementos {e(" ".join(item["element_ids"]))}</p>
+        f"""<article class="coord-finding" id="{e(item['id'])}">
+<p class="coord-finding-kicker">{e(item['id'])} · {"Interface geométrica" if item["kind"] == "geometric" else "Informação faltante"}</p>
+<h3>{e(item["location_pt_br"])}</h3>
+<dl class="coord-finding-dl">
+<dt>Evidência</dt><dd>{e(item["evidence_pt_br"])}</dd>
+<dt>Encaminhamento</dt><dd>{e(item["forwarding_pt_br"])}</dd>
+<dt>Estado</dt><dd>{e(state_pt.get(item["state"], item["state"]))} · elementos {e(" ".join(item["element_ids"]))}</dd>
+</dl>
 </article>"""
         for item in extracts["coordination_findings"]
     )
     review_html = "".join(
-        f"""<article class="n-card" id="{e(item['id'])}">
-<h3>{e(item['id'])} · {e(item["document_ref"])}</h3>
-<p><strong>Constatação:</strong> {e(item["finding_pt_br"])}</p>
-<p><strong>Base:</strong> {e(item["basis_pt_br"])}</p>
-<p><strong>Ação:</strong> {e(item["action_pt_br"])}</p>
+        f"""<article class="rv-extract-item" id="{e(item['id'])}">
+<span class="rv-class">{e(item['id'])} · {e(item["document_ref"])}</span>
+<h3>{e(item["finding_pt_br"])}</h3>
+<dl>
+<dt>Base</dt><dd>{e(item["basis_pt_br"])}</dd>
+<dt>Ação</dt><dd>{e(item["action_pt_br"])}</dd>
+</dl>
 </article>"""
         for item in extracts["review_findings"]
     )
 
-    extra_head = """<style>
-.n-wrap{max-width:46rem;margin:0 auto;padding:2rem 1rem 4rem}
-.n-card{border:1px solid rgba(15,23,42,.1);border-radius:12px;padding:1.25rem;margin:1rem 0;background:#f8fafc}
-.case-badge{display:inline-block;background:#fef3c7;color:#92400e;font-size:.75rem;font-weight:700;padding:.2rem .5rem;border-radius:4px}
-.demo-figure{margin:1rem 0}
-.demo-figure svg{width:100%;height:auto;max-width:40rem;border:1px solid #e2e8f0;border-radius:8px;background:#fff}
-.demo-actions{display:flex;flex-wrap:wrap;gap:.75rem;margin:1.25rem 0}
-.demo-actions a{min-height:44px}
-</style>"""
+    # Composition comes from assets/editorial.css and css/components.css (plate,
+    # page index, ruled findings, table-scroll); no inline stylesheet.
+    extra_head = '<link href="/assets/editorial.css" rel="stylesheet"/>'
 
     body = f"""
 {html_shell.breadcrumbs_html([("Início", "/"), ("Casos", "/casos/"), ("Infraestrutura e loteamentos", None)])}
-<div class="container n-wrap">
-<p class="case-badge" data-permission-class="demonstrativo">exemplo demonstrativo · revisão {e(rev)}</p>
-<h1>{PAGE_H1}</h1>
+<section class="svc-open" aria-labelledby="case-title">
+<div class="container">
+<div class="svc-open__grid">
+<div class="svc-open__copy">
+<p class="case-badge t-kicker" data-permission-class="demonstrativo">exemplo demonstrativo · revisão {e(rev)}</p>
+<h1 class="t-service" id="case-title">{PAGE_H1}</h1>
 <p class="authority-byline">Responsável técnico pelo conteúdo: <a href="/especialista/tiago-jun-sasaki/">Engº Tiago Sasaki</a> · Atualizado em <time datetime="{e(extracts["date_modified"])}">11 de setembro de 2026</time> · <a href="/casos/">Outros exemplos demonstrativos</a> · <a href="/triagem-tecnica/#corrigir-o-site">Como corrigir</a></p>
 <p class="content-lead">Este recorte ilustrativo de acesso viário e drenagem de loteamento mostra a mesma cadeia de rastreabilidade usada em edificação: desenho, dimensão, fórmula, quantidade e item de planilha, com IDs e revisão únicos. Os dados e as soluções são ilustrativos e não servem para execução. Não há contratante, terreno, sondagem, chuva de projeto, topografia, assinatura nem número de ART.</p>
-
-<section aria-labelledby="para-comprador">
-<h2 id="para-comprador">O que o comprador confere aqui</h2>
-<p>Problema: a construtora, o loteador ou a equipe de infraestrutura precisa ver, antes de contratar, se quantitativos, orçamento, revisão e compatibilização de um acesso e de uma rede saem da mesma fonte e podem ser refeitos.</p>
-<p>Entrega deste exemplo: uma faixa PV-01 de {br_number(totals["pavement_length_m"])} m por {br_number(totals["pavement_width_m"])} m e um trecho DR-01 de {br_number(totals["pipe_length_m"])} m, com estaqueamento, camadas, cotas e unidades declarados.</p>
-<p>Benefício concreto: o mesmo método de rastreabilidade fica visível numa natureza de obra diferente de uma pequena edificação, para você julgar a entrega antes de pedir proposta.</p>
-<p>Próximo passo: traga o que você já tem, mesmo incompleto. A proposta recorta o serviço real depois da conferência de escopo e de responsabilidade técnica.</p>
+<dl class="svc-chain">
+<div><dt>Necessidade</dt><dd>Orçar ou conferir pavimento, drenagem e obras lineares antes de contratar, com base própria.</dd></div>
+<div><dt>Trabalho</dt><dd>Levantar, orçar, compatibilizar e revisar o mesmo recorte, com memória aberta e revisão única.</dd></div>
+<div><dt>Documento</dt><dd><b>Planilha com memória, extrato de orçamento, registro de interferências e extrato de revisão</b>, na mesma revisão {e(rev)}.</dd></div>
+</dl>
+</div>
+<figure class="plate plate--side" aria-labelledby="case-plate-cap">
+<div class="plate__sheet">
+{_profile_svg(extracts, "R00")}
+</div>
+<figcaption class="plate__caption" id="case-plate-cap"><span class="t-kicker">Exemplo demonstrativo</span>Perfil R00: o invert desenhado de MH-02 em {br_number(totals["mh02_invert_drawn_m"])} m e a planilha em {br_number(totals["mh02_invert_sheet_r00_m"])} m, diferença de {br_number(totals["mh02_mismatch_r00_m"])} m. É a interferência CF-GEO-01, resolvida em R01.</figcaption>
+</figure>
+</div>
+<nav class="page-index" aria-label="Nesta página">
+<span class="page-index__label">Nesta página</span>
+<ol>
+<li><a href="#o-que-e"><span>01</span>O recorte</a></li>
+<li><a href="#desenhos"><span>02</span>Desenhos</a></li>
+<li><a href="#quantitativos"><span>03</span>Quantitativos</a></li>
+<li><a href="#orcamento"><span>04</span>Orçamento</a></li>
+<li><a href="#compatibilizacao"><span>05</span>Compatibilização</a></li>
+<li><a href="#revisao"><span>06</span>Revisão</a></li>
+<li><a href="#contratar"><span>07</span>Levar para o seu recorte</a></li>
+</ol>
+</nav>
+</div>
 </section>
 
-<section aria-labelledby="para-parceiros">
-<h2 id="para-parceiros">O que o parceiro confere aqui</h2>
-<p>O exemplo ajuda a avaliar a entrega porque cada ID do desenho reaparece na memória, na planilha e no apontamento. A revisão {e(rev)} está escrita em todos os extratos públicos. Um parceiro pode reabrir o CSV e o SVG sem pedir uma planilha paralela e sem tratar este recorte como obra de cliente.</p>
-</section>
-
-<section aria-labelledby="o-que-e">
-<h2 id="o-que-e">O recorte</h2>
+<section class="sec sec--tight" aria-labelledby="o-que-e">
+<div class="container">
+<span class="t-kicker">Objeto</span>
+<h2 class="t-editorial" id="o-que-e">O recorte</h2>
+<div class="grid-2">
+<div>
 <p>{e(extracts["cut_pt_br"])} Pergunta de compra atendida: {e(extracts["purchase_question_pt_br"])}</p>
 <p>Identificadores: faixa PV-01 (E0+000 a E0+040), poços MH-01 (E0+010) e MH-02 (E0+030), trecho DR-01 e boca de lobo IN-01 (E0+020). {e(extracts["datums"]["pavement_grade_pt_br"])} {e(extracts["datums"]["pipe_invert_pt_br"])}</p>
-<p><strong>Entrada escolhida:</strong> {e(extracts["information_classes"]["chosen_input"])} Comprimentos de estaqueamento, largura, espessuras de camada, diâmetro de DR-01 e cotas declaradas.</p>
-<p><strong>Cálculo derivado:</strong> {e(extracts["information_classes"]["derived"])} Área, volumes de camada, comprimento do trecho, declive geométrico e subtotal aritmético.</p>
-<p><strong>Informação ausente:</strong> {e(extracts["information_classes"]["absent"])} Diâmetro e cota de IN-01; cliente, terreno, sondagem, chuva de projeto, topografia e autorização técnica.</p>
 <p><strong>Estado original (R00):</strong> {e(extracts["states"]["R00"]["note_pt_br"])}</p>
 <p><strong>Versão demonstrativa corrigida (R01):</strong> {e(extracts["states"]["R01"]["note_pt_br"])} A revisão publicada desta página é {e(rev)}.</p>
+</div>
+<dl class="svc-chain svc-chain--uses">
+<div><dt>Entrada escolhida</dt><dd>{e(extracts["information_classes"]["chosen_input"])} Comprimentos de estaqueamento, largura, espessuras de camada, diâmetro de DR-01 e cotas declaradas.</dd></div>
+<div><dt>Cálculo derivado</dt><dd>{e(extracts["information_classes"]["derived"])} Área, volumes de camada, comprimento do trecho, declive geométrico e subtotal aritmético.</dd></div>
+<div><dt>Informação ausente</dt><dd>{e(extracts["information_classes"]["absent"])} Diâmetro e cota de IN-01; cliente, terreno, sondagem, chuva de projeto, topografia e autorização técnica.</dd></div>
+</dl>
+</div>
+<div class="grid-2" id="para-comprador">
+<div>
+<h3>O que o comprador confere aqui</h3>
+<p>Problema: a construtora, o loteador ou a equipe de infraestrutura precisa ver, antes de contratar, se quantitativos, orçamento, revisão e compatibilização de um acesso e de uma rede saem da mesma fonte e podem ser refeitos. Entrega deste exemplo: uma faixa PV-01 de {br_number(totals["pavement_length_m"])} m por {br_number(totals["pavement_width_m"])} m e um trecho DR-01 de {br_number(totals["pipe_length_m"])} m, com estaqueamento, camadas, cotas e unidades declarados. O mesmo método de rastreabilidade fica visível numa natureza de obra diferente de uma pequena edificação, para você julgar a entrega antes de pedir proposta. Traga o que você já tem, mesmo incompleto: a proposta recorta o serviço real depois da conferência de escopo e de responsabilidade técnica.</p>
+</div>
+<div id="para-parceiros">
+<h3>O que o parceiro confere aqui</h3>
+<p>O exemplo ajuda a avaliar a entrega porque cada ID do desenho reaparece na memória, na planilha e no apontamento. A revisão {e(rev)} está escrita em todos os extratos públicos. Um parceiro pode reabrir o CSV e o SVG sem pedir uma planilha paralela e sem tratar este recorte como obra de cliente.</p>
+</div>
+</div>
+</div>
 </section>
 
-<section aria-labelledby="desenhos">
-<h2 id="desenhos">Desenhos</h2>
-<figure class="demo-figure">
-{_plan_svg(extracts, "R00")}
-<figcaption>Planta R00. Faixa PV-01, trecho DR-01, poços MH-01 e MH-02, boca IN-01. A cota de MH-02 ainda diverge da planilha.</figcaption>
+<section class="sec sec--tight sec--soft" aria-labelledby="desenhos">
+<div class="container">
+<span class="t-kicker">Desenhos</span>
+<h2 class="t-editorial" id="desenhos">Planta, perfil e seção</h2>
+<div class="grid-2">
+<figure class="plate">
+<div class="plate__sheet">{_plan_svg(extracts, "R00")}</div>
+<figcaption class="plate__caption">Planta R00. Faixa PV-01, trecho DR-01, poços MH-01 e MH-02, boca IN-01. A cota de MH-02 ainda diverge da planilha.</figcaption>
 </figure>
-<figure class="demo-figure">
-{_plan_svg(extracts, "R01")}
-<figcaption>Planta R01. A geometria em planta é a mesma; o alinhamento de cota aparece no perfil e na planilha.</figcaption>
+<figure class="plate">
+<div class="plate__sheet">{_plan_svg(extracts, "R01")}</div>
+<figcaption class="plate__caption">Planta R01. A geometria em planta é a mesma; o alinhamento de cota aparece no perfil e na planilha.</figcaption>
 </figure>
-<figure class="demo-figure">
-{_profile_svg(extracts, "R00")}
-<figcaption>Perfil R00: invert desenhada de MH-02 em {br_number(totals["mh02_invert_drawn_m"])} m e planilha em {br_number(totals["mh02_invert_sheet_r00_m"])} m. Diferença {br_number(totals["mh02_mismatch_r00_m"])} m (CF-GEO-01).</figcaption>
+<figure class="plate">
+<div class="plate__sheet">{_profile_svg(extracts, "R00")}</div>
+<figcaption class="plate__caption">Perfil R00: invert desenhada de MH-02 em {br_number(totals["mh02_invert_drawn_m"])} m e planilha em {br_number(totals["mh02_invert_sheet_r00_m"])} m. Diferença {br_number(totals["mh02_mismatch_r00_m"])} m (CF-GEO-01).</figcaption>
 </figure>
-<figure class="demo-figure">
-{_profile_svg(extracts, "R01")}
-<figcaption>Perfil R01: desenho e planilha na mesma cota {br_number(totals["mh02_invert_drawn_m"])} m.</figcaption>
+<figure class="plate">
+<div class="plate__sheet">{_profile_svg(extracts, "R01")}</div>
+<figcaption class="plate__caption">Perfil R01: desenho e planilha na mesma cota {br_number(totals["mh02_invert_drawn_m"])} m.</figcaption>
 </figure>
-<figure class="demo-figure">
-{_section_svg(extracts)}
-<figcaption>Seção da faixa PV-01: capa, base e sub-base com espessuras declaradas. Volume = área × espessura, sem dimensionar pavimento.</figcaption>
+<figure class="plate">
+<div class="plate__sheet">{_section_svg(extracts)}</div>
+<figcaption class="plate__caption">Seção da faixa PV-01: capa, base e sub-base com espessuras declaradas. Volume = área × espessura, sem dimensionar pavimento.</figcaption>
 </figure>
 <p>Arquivos da mesma revisão {e(rev)}: <a href="assets/planta-r00.svg">planta R00</a>, <a href="assets/planta-r01.svg">planta R01</a>, <a href="assets/perfil-drenagem-r00.svg">perfil R00</a>, <a href="assets/perfil-drenagem-r01.svg">perfil R01</a>, <a href="assets/secao-pavimento.svg">seção da faixa</a>.</p>
+</div>
+</div>
 </section>
 
-<section aria-labelledby="quantitativos">
-<h2 id="quantitativos">Quantitativos</h2>
+<section class="sec sec--tight" aria-labelledby="quantitativos">
+<div class="container">
+<span class="t-kicker">Memória</span>
+<h2 class="t-editorial" id="quantitativos">Quantitativos</h2>
 <p>Base: revisão {e(criteria["quantity_basis_revision"])}. Faixa PV-01: {br_number(totals["pavement_length_m"])} × {br_number(totals["pavement_width_m"])} = {br_number(totals["pavement_area_m2"])} m² (Q-PAV-01). Sub-base = {br_number(totals["pavement_area_m2"])} × 0,15 = {br_number(totals["subbase_m3"])} m³. Base = {br_number(totals["pavement_area_m2"])} × 0,12 = {br_number(totals["base_m3"])} m³. Capa = {br_number(totals["pavement_area_m2"])} × 0,04 = {br_number(totals["wearing_m3"])} m³. Trecho DR-01: 30,00 − 10,00 = {br_number(totals["pipe_length_m"])} m (Q-TUB-01). {e(criteria["pavement_area_rule_pt_br"])} {e(criteria["layer_volume_rule_pt_br"])} {e(criteria["pipe_length_rule_pt_br"])} {e(criteria["geometric_slope_rule_pt_br"])}</p>
 {_table(["ID", "Serviço", "Un.", "Qtd.", "Fórmula", "Elementos", "Prancha"], qty_rows, "Memória de quantitativos, revisão " + rev)}
 <p><a href="data/quantitativos.csv">Baixar quantitativos.csv</a>, mesma revisão {e(rev)}.</p>
+</div>
 </section>
 
-<section aria-labelledby="orcamento">
-<h2 id="orcamento">Orçamento</h2>
+<section class="sec sec--tight sec--rule-top" aria-labelledby="orcamento">
+<div class="container">
+<span class="t-kicker">Extrato</span>
+<h2 class="t-editorial" id="orcamento">Orçamento</h2>
 <p>{e(extracts["price_disclaimer_pt_br"])} Classe de preço: hipotético. Subtotal aritmético: R$ {br_number(extracts["budget_subtotal"])}. Estimativa aritmética do recorte; o valor contratado depende do caso.</p>
 {_table(["ID", "Serviço", "Un.", "Qtd.", "Preço un.", "Valor", "Classe", "Qtd. ID"], budget_rows, "Extrato de orçamento hipotético, revisão " + rev)}
 <p><a href="data/orcamento.csv">Baixar orcamento.csv</a>, mesma revisão {e(rev)}.</p>
+</div>
 </section>
 
-<section aria-labelledby="compatibilizacao">
-<h2 id="compatibilizacao">Compatibilização</h2>
+<section class="sec sec--tight sec--soft" aria-labelledby="compatibilizacao">
+<div class="container">
+<span class="t-kicker">Interferências</span>
+<h2 class="t-editorial" id="compatibilizacao">Compatibilização</h2>
 <p>Dois achados didáticos no mesmo recorte: uma incompatibilidade conferível entre cota desenhada e planilha, e uma informação que simplesmente não foi declarada. Falta de cota ou diâmetro não vira falha comprovada nem risco comprovado.</p>
-{coord_html}
+<div class="rv-extract">{coord_html}</div>
 {_table(["ID", "Tipo", "Estado", "Local", "Evidência", "Encaminhamento", "Elementos"], coord_rows, "Registro de compatibilização, revisão " + rev)}
 <p><a href="data/coordenacao.csv">Baixar coordenacao.csv</a>, mesma revisão {e(rev)}.</p>
+</div>
 </section>
 
-<section aria-labelledby="revisao">
-<h2 id="revisao">Revisão</h2>
+<section class="sec sec--tight" aria-labelledby="revisao">
+<div class="container">
+<span class="t-kicker">Conferência</span>
+<h2 class="t-editorial" id="revisao">Revisão</h2>
 <p>{e(extracts["review_attribution_pt_br"])} Este recorte não é parecer para executar obra.</p>
-{review_html}
+<div class="rv-extract">{review_html}</div>
 {_table(["ID", "Documento", "Constatação", "Base", "Ação", "Tipo"], review_rows, "Extrato de revisão, revisão " + rev)}
 <p><a href="data/revisao.csv">Baixar revisao.csv</a>, mesma revisão {e(rev)}.</p>
+</div>
 </section>
 
-<section aria-labelledby="contratar">
-<h2 id="contratar">Pedir o mesmo tipo de entrega no seu recorte</h2>
+<section class="sec sec--dark" aria-labelledby="contratar">
+<div class="container">
+<span class="t-kicker">Próximo passo</span>
+<h2 class="t-editorial" id="contratar">Pedir o mesmo tipo de entrega no seu recorte</h2>
 <p>O recorte cabe em qualquer porte e aceita contexto inicial incompleto. Elaboração, revisão, compatibilização, quantitativos e orçamento são trabalhos com nome próprio que a proposta combina conforme a necessidade: o pedido descreve o problema, a proposta organiza as etapas. Autoria, atribuição, visita, logística e ART, quando couberem, são confirmadas antes do aceite técnico.</p>
-<p>Veja o escopo em <a href="/quantitativos-orcamento-obras/">quantitativos e orçamento</a> e em <a href="/revisao-tecnica-projetos-engenharia/">revisão técnica de projetos</a>. Traga o que você já tem.</p>
-<div class="demo-actions">
+<p>Veja o escopo em <a href="/quantitativos-orcamento-obras/">quantitativos e orçamento</a>, em <a href="/revisao-tecnica-projetos-engenharia/">revisão técnica de projetos</a> e em <a href="/projetos-complementares-engenharia/">projetos complementares</a>. Traga o que você já tem; o que for sensível segue depois, por canal seguro.</p>
+<div class="contact-primary">
 <a class="button button-primary" data-journey="contrato" data-cta-position="inline_cta" href="{e(wa)}" rel="noopener" target="_blank">Pedir proposta pelo WhatsApp</a>
-<a class="button button-secondary" data-journey="contrato" href="/triagem-tecnica/#projetos">Pedir pela triagem técnica</a>
-<a class="text-link" href="/casos/">Ver outros exemplos demonstrativos</a>
+<ul class="contact-alt">
+<li><a data-journey="contrato" href="/triagem-tecnica/#projetos">Pedir pela triagem técnica</a></li>
+<li><a href="/casos/">Ver outros exemplos demonstrativos</a></li>
+</ul>
+</div>
 </div>
 </section>
-</div>
 """
 
     jsonld = [

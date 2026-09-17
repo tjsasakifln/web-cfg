@@ -200,6 +200,16 @@ function runShipped() {
     const p = path.join(root, rel);
     assert(`asset_exists_${path.basename(rel)}`, fs.existsSync(p) && fs.statSync(p).size > 200, p);
   }
+  // SALTO-INSTITUCIONAL-02 (lote A): os dois esquemas sao pranchas geradas de JSON
+  // (scripts/demonstrative/plates/family_private.py, PG e PH). O arquivo no caminho
+  // legado (exigido pelo kit de parceiros e por requiredSrc) e a composicao desktop,
+  // byte a byte; a composicao movel entra pelo <source> da <picture>.
+  for (const id of ["pacote-entrega", "interfaces-versoes"]) {
+    const legacy = path.join(root, `assets/projetos-complementares-engenharia/${id}.svg`);
+    const plate = path.join(root, `assets/pranchas/${id}-desktop.svg`);
+    assert(`legacy_asset_is_desktop_plate_${id}`, fs.existsSync(plate) && fs.readFileSync(legacy, "utf8") === fs.readFileSync(plate, "utf8"), `${legacy} != ${plate}`);
+    assert(`mobile_plate_in_picture_${id}`, landing.includes(`srcset="/assets/pranchas/${id}-mobile.svg"`), id);
+  }
 
   assertPageContract("landing", landing, landingContractOpts());
 
@@ -233,7 +243,11 @@ function runShipped() {
     assert("landing_hero_credential_authorized", /EESC-USP/.test(firstText) && /registro profissional ativo no CREA/.test(firstText) && /ART e nota fiscal/.test(firstText), "credencial autorizada");
     assert("landing_single_primary_label", (main.match(/Solicitar proposta de elaboração/g) || []).length === 1, "um so rotulo para o pedido");
     assert("landing_serve_para_per_deliverable", (main.match(/<strong>Serve para<\/strong>/g) || []).length >= 3, "serve para por entregavel");
-    assert("landing_contact_before_method", main.indexOf('id="escopo-projeto"') < main.indexOf('id="metodo-elaboracao"'), "contato antes do aprofundamento");
+    // SALTO-INSTITUCIONAL-02 (lote A): o esqueleto de servico fecha a pagina com
+    // um unico bloco escuro de proximo passo (#escopo-projeto); a propriedade
+    // "contato antes do aprofundamento" passa a ser verificada pela acao
+    // contextual que aponta para o pedido antes do metodo.
+    assert("landing_contact_before_method", main.indexOf('href="#escopo-projeto"') < main.indexOf('id="metodo-elaboracao"'), "contato antes do aprofundamento");
     assert("landing_no_hub_word", !/\bhubs?\b/i.test(landing), "palavra hub");
   }
 

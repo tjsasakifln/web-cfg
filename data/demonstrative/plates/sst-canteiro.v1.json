@@ -1,0 +1,88 @@
+{
+  "schema": "confenge.demonstrative-plate-source/1.0",
+  "id": "plate-sst-canteiro-2026-09",
+  "plate_id": "sst-canteiro",
+  "origin": "demonstrative",
+  "revision": "R00",
+  "title": "Planta do canteiro: proteções coletivas conferidas",
+  "label_pt_br": "exemplo demonstrativo",
+  "client_name": null,
+  "address": null,
+  "contract_number": null,
+  "art_number": null,
+  "signature": null,
+  "date_modified": "2026-09-17",
+  "public_source_pt_br": "Amostra demonstrativa de /seguranca-trabalho-apoio-tecnico/ (planta de canteiro com pontos de proteção coletiva e checklist de itens conferidos). Canteiro sintético; não é empresa, obra nem documento de SST.",
+  "units": {
+    "length": "m"
+  },
+  "site": {
+    "id": "CT-01",
+    "label_pt_br": "Canteiro de obra",
+    "width_m": "36.00",
+    "depth_m": "24.00",
+    "north_pt_br": "norte para cima"
+  },
+  "areas": [
+    {"id": "ED-01", "label_pt_br": "Edificação em execução, pav. 2", "x_m": "8.00", "y_m": "6.00", "width_m": "18.00", "depth_m": "12.00"},
+    {"id": "CI-01", "label_pt_br": "Circulação de pedestres", "x_m": "8.00", "y_m": "2.00", "width_m": "18.00", "depth_m": "2.00"},
+    {"id": "GR-01", "label_pt_br": "Grua", "x_m": "31.00", "y_m": "12.00", "radius_m": "9.00"},
+    {"id": "TA-01", "label_pt_br": "Torre de acesso", "x_m": "26.00", "y_m": "6.00", "width_m": "2.00", "depth_m": "2.00"}
+  ],
+  "protections": [
+    {
+      "id": "P-01",
+      "n": 1,
+      "kind": "guarda_corpo",
+      "label_pt_br": "Guarda-corpo de periferia",
+      "location_pt_br": "Bordas da laje do pav. 2, lados norte, leste e oeste",
+      "extent_m": "42.00",
+      "checked": true,
+      "status_pt_br": "Conferido",
+      "note_pt_br": "Altura, travessa intermediária, rodapé e fixação registrados."
+    },
+    {
+      "id": "P-02",
+      "n": 2,
+      "kind": "bandeja",
+      "label_pt_br": "Bandeja de proteção",
+      "location_pt_br": "Fachada sul, sobre a circulação de pedestres",
+      "extent_m": "18.00",
+      "checked": false,
+      "status_pt_br": "Pendente",
+      "note_pt_br": "Ausente no trecho sobre a circulação; item aberto para o responsável pela obra."
+    },
+    {
+      "id": "P-03",
+      "n": 3,
+      "kind": "isolamento",
+      "label_pt_br": "Isolamento da área de içamento",
+      "location_pt_br": "Raio de giro da grua, lado leste",
+      "extent_m": "9.00",
+      "checked": true,
+      "status_pt_br": "Conferido",
+      "note_pt_br": "Sinalização e barreira física no raio; acesso controlado."
+    },
+    {
+      "id": "P-04",
+      "n": 4,
+      "kind": "escada",
+      "label_pt_br": "Torre de acesso com guarda-corpo",
+      "location_pt_br": "Torre de acesso, canto sudeste da edificação",
+      "extent_m": "2.00",
+      "checked": true,
+      "status_pt_br": "Conferido",
+      "note_pt_br": "Guarda-corpo, patamares e fixação à estrutura registrados."
+    }
+  ],
+  "checklist_summary": {
+    "checked": "3",
+    "pending": "1",
+    "total": "4"
+  },
+  "scope_pt_br": {
+    "what": "Conferência documental e de campo das proteções coletivas do escopo informado, em uma data.",
+    "not": "Não é PGR, LTCAT, AET nem laudo; não substitui o programa da obra nem qualquer ato médico."
+  },
+  "disclaimer_pt_br": "Canteiro sintético para mostrar a estrutura da conferência. Não representa empresa, obra, empregado, endereço, prazo, preço ou resultado da CONFENGE, e não vale como documento de SST."
+}
