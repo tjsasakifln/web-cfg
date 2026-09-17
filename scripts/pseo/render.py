@@ -626,7 +626,7 @@ def _render_market(c: Candidate, manifest: dict[str, Any]) -> str:
 </div></div></header>
 <div class="container article-layout">
 <article class="article-main">
-<div class="answer-box" id="resposta"><span>Resposta executiva</span><p>{e(summary)}</p></div>
+<div class="answer-box" id="resposta"><span>Resposta direta</span><p>{e(summary)}</p></div>
 <section id="indicadores"><p class="eyebrow">Indicadores</p><h2>Números do recorte</h2>{inds}</section>
 <section id="compradores"><p class="eyebrow">Demanda</p><h2>Órgãos que concentram contratação</h2>{buyer_table}</section>
 <section id="objetos"><p class="eyebrow">Objetos</p><h2>O que mais se contrata</h2>{obj_table}</section>
@@ -824,7 +824,7 @@ def _render_agency(c: Candidate, manifest: dict[str, Any]) -> str:
 <span><time datetime="{e(a.get('period_start'))}">{e(br_date(a.get('period_start')))}</time> – <time datetime="{e(a.get('period_end'))}">{e(br_date(a.get('period_end')))}</time></span>
 </div></div></div></header>
 <div class="container article-layout"><article class="article-main">
-<div class="answer-box" id="resposta"><span>Resposta executiva</span><p>{e(summary)}</p></div>
+<div class="answer-box" id="resposta"><span>Resposta direta</span><p>{e(summary)}</p></div>
 <section id="indicadores"><p class="eyebrow">Indicadores</p><h2>Retrato do órgão no recorte</h2>{inds}</section>
 <section id="segmentos"><p class="eyebrow">Segmentos</p><h2>Mix de segmentos</h2>{mix_table}</section>
 <section id="objetos"><p class="eyebrow">Objetos</p><h2>Objetos mais frequentes</h2>{obj_table}</section>
@@ -985,7 +985,7 @@ def _render_price(c: Candidate, manifest: dict[str, Any]) -> str:
 <span>{e(p.get('period_start'))} – {e(p.get('period_end'))}</span></div>
 </div></div></header>
 <div class="container article-layout"><article class="article-main">
-<div class="answer-box" id="resposta"><span>Resposta executiva</span><p>{e(summary)}</p></div>
+<div class="answer-box" id="resposta"><span>Resposta direta</span><p>{e(summary)}</p></div>
 <section class="article-callout"><svg class="icon"><use href="#i-shield"></use></svg>
 <div><strong>Advertência</strong><p>{e(p.get('warning'))}</p></div></section>
 <section id="indicadores"><p class="eyebrow">Indicadores</p><h2>Estatísticas do recorte</h2>{inds}{conf_note}</section>
@@ -1123,7 +1123,7 @@ def _render_competition(c: Candidate, manifest: dict[str, Any]) -> str:
 <span>{e(d.get('period_start'))} – {e(d.get('period_end'))}</span></div>
 </div></div></header>
 <div class="container article-layout"><article class="article-main">
-<div class="answer-box" id="resposta"><span>Resposta executiva</span><p>{e(summary)}</p></div>
+<div class="answer-box" id="resposta"><span>Resposta direta</span><p>{e(summary)}</p></div>
 <section id="indicadores"><p class="eyebrow">Indicadores</p><h2>Concentração e escala</h2>{inds}</section>
 <section id="fornecedores"><p class="eyebrow">Observado</p><h2>Fornecedores no recorte</h2>{sup_table}</section>
 <section id="faixas"><p class="eyebrow">Valores</p><h2>Faixas de contratos</h2>{bands}</section>
@@ -1282,7 +1282,7 @@ def _render_radar(c: Candidate, manifest: dict[str, Any]) -> str:
  Confirme prazo, documentos e condições no portal oficial antes de preparar a proposta.</p>
 </div></div></header>
 <div class="container article-layout"><article class="article-main">
-<div class="answer-box" id="resposta"><span>Resposta executiva</span><p>{e(summary)}</p></div>
+<div class="answer-box" id="resposta"><span>Resposta direta</span><p>{e(summary)}</p></div>
 <section id="indicadores"><p class="eyebrow">Indicadores</p><h2>Recorte atual</h2>{inds}</section>
 {market_html}
 <section id="lista"><p class="eyebrow">Vigentes no recorte</p><h2>Oportunidades classificadas</h2>{tbl}
@@ -1431,7 +1431,7 @@ def _render_problem(c: Candidate, manifest: dict[str, Any]) -> str:
 <span>Segmentos: {e(arches)}</span></div>
 </div></div></header>
 <div class="container article-layout"><article class="article-main">
-<div class="answer-box" id="resposta"><span>Resposta executiva</span><p>{e(summary)}</p></div>
+<div class="answer-box" id="resposta"><span>Resposta direta</span><p>{e(summary)}</p></div>
 <section id="padrao"><p class="eyebrow">Padrão</p><h2>O que se observa nos documentos e na prática</h2>
 <p>{e(p.get('observed_pattern'))}</p>
 {mass_extra}</section>
