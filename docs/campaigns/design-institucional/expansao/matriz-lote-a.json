@@ -332,6 +332,31 @@
       "impediment": "Rota de oferta paga com formulario, preco publicado e medicao de primeira dobra (data/commercial/first-fold-measurements.v1.json, test_page_contract_eight, cta-form-next-state); tipografia ja herda Archivo. O heroi com degrade vem de styles-offers.css (integrador): pedido registrado.",
       "plate": null,
       "review_round_1": "PRESERVADA_COM_JUSTIFICATIVA: herói em degradê vem de styles-offers.css, folha carregada por 11 rotas (pedido 4 reescrito com o escopo real e a cadeia de recaptura)."
+    },
+    {
+      "route": "/entregas/",
+      "family": "money_hub",
+      "function": "hub",
+      "source": "entregas/index.html",
+      "generator": "scripts/commercial/render_public_catalog.mjs",
+      "priority": "P0",
+      "treatment": "COMPOSICAO_REDESENHADA",
+      "owner": "lote-a",
+      "state": "DONE",
+      "wave": "onda-2",
+      "evidence": [
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/entregas-1440x1000-fold-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/entregas-1440x1000-full-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/entregas-390x844-fold-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/entregas-390x844-full-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/entregas-390x844-menu-onda2.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/manifest-onda2.json"
+      ],
+      "impediment": null,
+      "hash_bound": [
+        "data/commercial/first-fold-measurements.v1.json#routes[route=/entregas/].html_sha256 (recaptura do integrador)"
+      ],
+      "notes": "Esqueleto de hub do piloto: svc-open + aside-note + page-index; servicos e ofertas em list-ruled; indice pela decisao como page-index na secao das ofertas; escada em steps; Condicoes e limites em secao propria (limitation_notice); um bloco escuro com o formulario #captura-entregas byte-identico, ol.after e contact-alt. Ordem servicos -> ofertas mantida (decisao do fundador 2026-09-09, test_services_precede_the_eight_decidable_offers). Acao dominante da abertura mantida em 'Ver entregas e exemplos' -> #servicos-e-entregas (task-doors.v1.json#first_fold e first-fold-contract); 'Solicitar proposta' -> #captura-entregas como alternativa em texto."
     }
   ]
 }

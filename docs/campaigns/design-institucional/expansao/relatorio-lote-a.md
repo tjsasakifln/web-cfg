@@ -313,3 +313,158 @@ Ferramenta de captura: `/404.html` não pôde ser capturada com `capture.mjs` po
 clica num `.menu-toggle` oculto e aborta (`Node is either not clickable`); a rota foi capturada com uma
 cópia temporária da ferramenta cuja única diferença é `if (toggle && toggleVisible)` (diff no pedido 6b).
 As outras rotas usaram a ferramenta original; `manifest-lote-a.json` regravado.
+
+## Onda 2 — escopo residual A: `/entregas/` (hub de entregas, rota crítica do gate de Lighthouse)
+
+Ramo `campaign/salto-02/lote-a` avançado para a integração `2da310422` (três lotes da onda 1 e folha
+editorial completa). Porta 8751. Evidência em `evidence/lote-a/entregas-*-onda2.jpg` e
+`manifest-onda2.json` (390×844 e 1440×1000, dobra, página inteira e menu; h1 em `Archivo Var`;
+overflow 320 = 0). Matriz: entrada `/entregas/` COMPOSICAO_REDESENHADA.
+
+### O que mudou (uma rota)
+
+`/entregas/` — COMPOSICAO_REDESENHADA, no esqueleto de hub do piloto, com o gerador
+`scripts/commercial/render_public_catalog.mjs` emitindo a composição nova (`--check` limpo; o HTML
+gerado não foi editado à mão):
+
+- **Cabeça**: `+ /assets/editorial.css`, `− /styles-offers.css` (a página usava só `.offer-proof-line`,
+  que agora é `t-caption` como no pilar de medições). `entregas/styles.css` continua ligada (é
+  `implementation.stylesheet` em `task-doors.v1.json`, piso do gate de foco e do `css_type_floor`), mas
+  foi reduzida de 19.094 para 7.159 bytes brutos (49 → 30 classes, todas em uso: `audit:css-usage`
+  `CSS_USAGE_OK`; 9 raios, 3 sombras e 2 degradês a menos nos totais de decoração).
+- **Abertura** (`header.deliverables-hero.svc-open`, `hero_split`): `p.eyebrow` bare (o gate de jargão
+  lê o primeiro eyebrow), `h1.t-service` com o mesmo texto, `p.deliverables-lead.svc-open__lead`
+  (necessidade), `p.hero-deliverable` (o que chega às mãos), `p.offer-proof-line.t-caption` (prova
+  conferível, texto idêntico), `svc-open__actions` com **uma** ação dominante `button-primary
+  button-lg` "Ver entregas e exemplos" → `#servicos-e-entregas` e "Solicitar proposta" →
+  `#captura-entregas` como alternativa em texto, `svc-open__note` ("Exemplos com dados sintéticos,
+  sempre identificados." — o antigo `hero-h1-note`, gancho do live audit), `aside.aside-note` "Em 30
+  segundos" (Serviços · Análises com preço · Antes do aceite técnico · Quem assina) e `nav.page-index`
+  com quatro âncoras. O antigo bloco navy "Comece pelo que você precisa" saiu (o índice o substitui).
+  Botão dominante medido no Chromium: 669 px no 390×844, 670 px no 1366×768.
+- **Serviços de engenharia** (`section.capability-roll.sec#servicos-e-entregas`, `reading_method`):
+  `sec-head--split` (kicker, h2 `t-editorial` com o texto exigido pelo gate, parágrafo) e
+  `ol.list-ruled` com cinco linhas `01–05` (`article.capability-group` preservado com h3, parágrafo e
+  `<a href="/…">`), esquema ilustrativo em `details` regrado na segunda coluna a partir de 900 px, link
+  de saída com seta. Sem grade de cartões.
+- **Ofertas com preço publicado** (`section.deliverables-vitrine.sec.sec--soft#enquadrar`,
+  `catalog_index`): `sec-head--split`, índice pela decisão `nav.offer-decision-nav.page-index`
+  ("Escolha pela decisão que está na mesa", 01–08 → `#entrega-NN`, sem caixa navy), e
+  `div.vitrine-items > ol.list-ruled.list-ruled--offers` com as oito linhas: índice, kicker "Oferta
+  publicada", h2 (ids `first-deliverable-title` … preservados) e preço à direita (`strong` bare, lido
+  por `test_brand_contract`), `dl.vitrine-item__facts` como lista de definição regrada (rótulo | valor;
+  11 critérios, entrega antes do preço; abaixo de 480 px rótulo em coluna de 6 rem e valor em corpo
+  de legenda, sem quebra no meio da palavra), `p.vitrine-item__credit` (condições, byte-idênticas na
+  copy), ações com `button-secondary` (demonstrativo) e `text-link` (pedir). `data-*`, `aria-label`,
+  `data-cta-id`/`position` e `id` iguais.
+- **Escada de valor** (`section.offer-value-ladder[data-offer-ladder]`, dentro da seção das ofertas):
+  `sec-head`, `ol.steps` (três passos numerados), `dl.compare-ladder-figures` (classe literal
+  preservada; três números em coluna regrada) e `p.compare-note.t-caption`. Sem caixa escura.
+- **Condições e limites** (nova `section.sec.sec--tight#condicoes-e-limites`, `limitation_notice`):
+  `div.published-offers__common > div.conditions` com kicker, h2 e quatro itens: informações comuns,
+  preço/condições/exemplos (frase exigida pelos gates, idêntica), limites comuns (com "Cobertura, data
+  de corte, método e o rótulo NÃO INFORMADO…") e serviços por proposta (escopo, responsável técnico,
+  local, campo e ART confirmados antes do aceite técnico). Quinto bloco narrativo do gate de
+  arquétipos.
+- **Bloco escuro único** (`section.sec.sec--dark.pillar-capture#captura-entregas`, `cta_formal`):
+  o antigo `aside.deliverables-next` (segundo bloco navy) foi retirado; seu link
+  `deliverables-final-bundle` (mesmos `data-*`, `page_close`) passou para a lista `ul.contact-alt` do
+  bloco escuro, ao lado do e-mail contextual. Coluna de texto com kicker, h2 `t-editorial` e os dois
+  parágrafos (`data-form-value`/`data-form-boundary`) que `render_cta_form_next_state` reescreve;
+  `form.pillar-capture-form` **byte-idêntico** (diff vazio, incluindo o `select` gerado e o script
+  local); `div.pillar-capture-after` com `ol.after` (três passos escritos a partir do próprio texto do
+  formulário, sem prazo de resposta) e `ul.contact-alt`. Formulário em cartão branco sobre navy, como
+  em `index.html#contato`.
+- Ordem **serviços → ofertas** mantida (decisão do fundador 2026-09-09, `test_services_precede…`), e
+  ação dominante da abertura mantida em "Ver entregas e exemplos" (`task-doors.v1.json#first_fold`,
+  `first-fold-contract` e o UI gate a exigem); o formulário é a ação dominante do bloco escuro.
+
+Conteúdo protegido conferido: `<title>`/description/OG, canonical, robots, JSON-LD (só
+`dateModified` sincronizado pelo gerador, sem mudança), preços, prazos, condições, créditos, textos de
+CTA, `data-cta-id`/`data-cta-position`/`data-asset-id`/`data-offer-*`, ids `entrega-01..08` e dos h2,
+`#servicos-e-entregas`, `#enquadrar`, `#captura-entregas`, rótulos de veracidade ("exemplo sintético",
+"não representam cliente", "Dados identificados como sintéticos"). `main a` = 52, `button-primary`
+= 4 (dois no cabeçalho, um na abertura, um no formulário), um `<form>` depois de `#entrega-08`,
+5 `details` = 5 `summary`.
+
+### Desempenho (gate do repositório, `run_lighthouse.mjs --only=/,/entregas/ --runs=3`, Chromium 1234, árvore fonte servida com gzip, mesma máquina)
+
+| Estado | perf | LCP (ms) | FCP (ms) | DOM | conteúdo (B, teto 153.600) | pedidos |
+| --- | --- | --- | --- | --- | --- | --- |
+| antes (`2da310422`, worktree isolada, `--label=onda2-entregas-base`) | 99 | 1.803–1.805 | 1.354–1.358 | 769 | 144.989 | html 13.938 · fonte 60.064 · styles 21.017 · styles-offers 2.502 · entregas/styles 4.417 · script 24.308 · logo 10.605 · tokens 1.247 · ícones 6.891 |
+| depois (`--label=onda2-entregas`) | 99 | 1.953–1.957 | 1.504–1.510 | 826 | 148.743 | html 14.699 · fonte 60.064 · styles 21.017 · editorial 7.667 · entregas/styles 2.245 · script 24.308 · logo 10.605 · tokens 1.247 · ícones 6.891 |
+
+`MEASURED_PASS` nas duas medições (tetos: LCP 2.000 ms, 153.600 B, DOM 1.100, perf ≥ 95), mas o LCP
+passou a 45 ms do teto. Diagnóstico (Lighthouse direto, mesma emulação): o elemento LCP é o h1
+(`elementRenderDelay` 136 ms, TTFB 10 ms); trocar `editorial.css` por `styles-offers.css` no HTML
+novo não muda o FCP (1.518), trocá-la por `editorial-tool.css` (9,4 KB brutos) devolve o FCP a
+1.366 ms e sem a folha da rota o FCP cai a 1.213 ms; em todos os casos o LCP fica em ~1.960 ms, e
+o HTML **antigo** com `editorial.css` acrescentada também vai a 1.961 ms sem mover o FCP. Ou seja:
+o FCP responde ao total de bytes de CSS no caminho crítico (a folha editorial completa tem 42 KB
+brutos / 7,7 KB gzip para uma página que usa uma fração dela), e o LCP simulado passa a depender
+do download da fonte sempre que a folha editorial está presente. Os artefatos de
+`docs/lighthouse-runs/` foram apagados (não commitados). Pedido 11 registra o subconjunto de folha
+para hubs como alavanca medida (−145 ms de FCP).
+
+### Testes executados (resultado real)
+
+| Comando | Resultado |
+| --- | --- |
+| `node scripts/commercial/render_public_catalog.mjs --check` | `PUBLIC_CATALOG_OK internal=54 public=8` |
+| `python3 scripts/site/html_integrity.py --root . --surface source` | `failures=0` |
+| `npm run test:design` | exit 0 (arquétipos: hero_split, reading_method, catalog_index, limitation_notice, cta_formal; `CACHE_CONTRACT_OK`) |
+| `npm run test:copy` | exit 0 |
+| `npm run test:brand` | exit 0 (após devolver o `<strong>` bare ao preço: `test_llms_positioning` lê `<strong>(R\$…)</strong>`) |
+| `npm run test:authority`, `test:integral-solution`, `test:self-deprecation` | exit 0 / `PASS` / `PASS` |
+| `npm run organic:test` | exit 0 |
+| `npm run test:inbound-gates` | FAIL `test_measurement_delay_canary_389…` no pilar de medições — idêntico na base `2da310422` (pedido 7 da onda 1); nada de `/entregas/` |
+| `npm run test:deliverables-registry` | `3650/3650` |
+| `npm run test:real-proof-registry`, `test:commercial-contract-consistency`, `test:public-offer-truth` | exit 0 |
+| `npm run test:page-contract-eight` | `735/735` |
+| `npm run test:task-doors` | `240/240` |
+| `npm run test:deliverables-hub` | `27 passed` |
+| `node scripts/site/test_deliverables_hub_ui.mjs` (árvore fonte, 11 larguras) | `DELIVERABLES_HUB_UI {"ok":true}`; altura 21.485 px a 390, índice pela decisão a 4.361 px, 52 links, 2 primários, sem estouro |
+| `npm run test:cta-form-next-state` | `CTA_FORM_NEXT_STATE_OK routes=31` (censo regerado: 184) |
+| `npm run test:form-funnel` | `FORM_FUNNEL_OK` |
+| `npm run test:report-model`, `test:deliverable-models`, `test:deliverables-live-audit` | exit 0 |
+| `npm run test:value-first-copy`, `test:offer-naming`, `test:page-contract-operacao/execucao/ciclo/pre-edital`, `test:pricing-policy`, `test:market-fit-protocol`, `test:query-ownership` | exit 0 |
+| `node --test tests/intake/test_mv03_adaptive_intake.mjs` | `pass 17, fail 0` |
+| `node tests/inb-20260911/12/…`, `tests/attribution/test_source_to_service.mjs`, `scripts/site/test_lead_function.mjs` | `PASS` / `ATTRIBUTION_OK` / `LEAD_FUNCTION_OK tests=94` |
+| `python3 scripts/site/audit_css_usage.py` | `CSS_USAGE_OK` (entregas/styles.css 30/30 em uso; decoração 144/60/14 abaixo do baseline) |
+| `node scripts/site/test_ui_geometry.mjs` (árvore fonte) | `All UI geometry tests passed` (`entregas_deliverable_option_drives_journey` OK) |
+| `npm run test:copy-contract` | FAIL `forbidden_language:/diagnostico-b2g-360/:FL-08` — idêntico na base (fora do lote) |
+| `npm run test:page-contract-licitacao` | FAIL `dedicated_route_remains_frozen`, `public_renderer_has_no_drift` — idênticos na base (rota congelada do integrador) |
+| `npm run test:bofu-dominance` | 11 failed / 106 passed — conjunto **idêntico** ao da base (diff vazio entre as listas) |
+| `npm run test:first-fold-contract` | FAIL `evidence_/entregas/_html_bytes_match` (esperado: hash `a97308da…` de `entregas/index.html` e `entregas/styles.css` nos `input_hashes`) + as falhas já presentes na base (home, pilares, `styles.css`, `editorial.css`) |
+| `node scripts/site/run_lighthouse.mjs --only=/,/entregas/ --runs=3 --label=onda2-entregas` | `MEASURED_PASS`; números na tabela acima |
+| `npm run build:site` | **exit 2 na worktree e na base `2da310422`**: `FAIL-CLOSED contract-analysis build: contract_analysis_build_missing` (`approval_rendered_hash_mismatch` em `docs/editorial/CONTRACT_ANALYSIS_CANARY_STATUS`), cadeia de fechamento do integrador (`approvals.json` antes do build). Saídas rastreadas revertidas por caminho nomeado; `_site` apagado. Por isso `test:deliverables-hub-ui`, `test:ui` e Lighthouse rodaram sobre a árvore fonte, e `test:responsive-matrix`/`test:html-integrity:site` (exigem `_site`) não rodaram. |
+
+### Testes ajustados (estéticos, por rota exata, com motivo no commit `eeca0e814`)
+
+| Teste | O que mudou | Motivo |
+| --- | --- | --- |
+| `scripts/site/test_deliverables_hub.py::test_progressive_catalog_controls_keep_a_mobile_touch_target` e `::test_progressive_catalog_css_does_not_block_first_paint` | `.capability-group>summary` (64 px; seletor morto desde que os grupos viraram `article`) → `.capability-group__schema-details>summary` (44 px); `.offer-decision-nav a` 52 px mantido | os alvos de toque continuam declarados na folha da rota, nos seletores que a composição usa |
+| `::test_services_precede_the_eight_decidable_offers_without_internal_roll` | `class="offer-decision-nav"` literal → prefixo (`offer-decision-nav page-index`) | o índice pela decisão carrega também a classe do componente do piloto; ordem serviços → índice → ofertas continua verificada |
+| `scripts/site/test_deliverables_hub_ui.mjs` | índice pela decisão medido como lista regrada (alvos ≥ 44 px, sem estouro, sem palavra quebrada, largura ≥ 110 px a 320, fonte ≥ 12,8) em vez de grade de duas colunas; altura do documento 18.600 → 21.700 (medido 21.485), posição do índice 1.800 → 4.600 (medido 4.361; fica depois dos serviços), altura do índice ≤ 560 a ≤ 360; `main a` 50 → 54 (medido 52) | composição regrada com filete por critério e índice de página; nenhum campo acrescentado ou escondido |
+| `tests/commercial/test_task_doors.mjs` | `hero_explains_engineering_value`: `<header class="deliverables-hero"` → `class="deliverables-hero[^"]*"`; `style_uses_stacked_mobile_comparison`: da grade `78px` antiga para a regra nova (`minmax(7rem,11rem) minmax(0,1fr)` + coluna de rótulo abaixo de 480 px) | mesmas propriedades (texto do herói ≥ 160 chars com entreg/engenharia/serv; comparação empilhada por critério no celular) |
+| `tests/commercial/test_page_contract_eight.mjs` | `hub_css_local`: `.capability-roll` na folha da rota → `.capability-group`, e exige `/assets/editorial.css` ligada | a folha da rota deixou de estilizar a seção (é `.sec`) e ficou com as linhas |
+
+Não ajustados: nenhum teste de veracidade, preço, responsabilidade, privacidade, formulário,
+persistência ou revisão obrigatória. `data/commercial/cta-form-next-state.v1.json` (183 → 184) e
+`docs/commercial/cta-form-next-state-inventory.json` regerados com motivo, como os lotes anteriores.
+
+### Arquivos protegidos por hash alterados de propósito (recaptura do integrador)
+
+- `entregas/index.html` e `entregas/styles.css` → `data/commercial/first-fold-measurements.v1.json`
+  (`routes[/entregas/].html_sha256` e `input_hashes`; `test:first-fold-contract`
+  `evidence_/entregas/_html_bytes_match`). Os cinco papéis da dobra continuam com os seletores das
+  regras: `header .eyebrow`, `h1`, `.deliverables-lead`, `.offer-proof-line`, `a.button-primary`
+  (uma só na dobra), ação dominante a 669 px (390) e 670 px (1366).
+
+### O que ficou de fora e por quê
+
+- `styles-offers.css` não foi tocada: `/entregas/` deixou de carregá-la, mas os outros 10 usuários
+  continuam (pedido 4 da onda 1 permanece com o integrador).
+- Subconjunto de folha editorial para hubs (alavanca de FCP medida): arquivo do integrador; pedido 11.
+- `test:responsive-matrix` e `test:html-integrity:site`: exigem `_site`, que não constrói nesta
+  árvore nem na base (cadeia de fechamento do integrador).
