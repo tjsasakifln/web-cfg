@@ -23,7 +23,7 @@
 .partner-summary button{margin-top:.5rem}
 .partner-summary textarea[readonly]{min-height:8.75rem}
 @media (max-width:699px){.partner-summary textarea[readonly]{min-height:13.5rem}}
-.partner-share button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 1rem;border:1px solid var(--rule-strong);background:var(--white);color:var(--ink);font:inherit;font-size:var(--text-small);font-weight:720;line-height:1.15;cursor:pointer}
+.partner-share button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;min-width:44px;padding:0 1rem;border:1px solid var(--rule-strong);background:var(--white);color:var(--ink);font:inherit;font-size:var(--text-small);font-weight:720;line-height:1.15;cursor:pointer}
 .partner-share button:hover,.partner-share button:focus-visible{border-color:var(--ink);color:var(--green-700)}
 .partner-share button[hidden]{display:none}
 .partner-share-row>a{display:inline-flex;align-items:center;min-height:44px;font-weight:720;color:var(--ink);text-decoration:underline;text-underline-offset:.2em}

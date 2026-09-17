@@ -319,7 +319,8 @@
       "license": "gerado pela CONFENGE a partir de dados demonstrativos",
       "classification": "demonstrativo",
       "usage": [
-        "/projetos-complementares-engenharia/ (arquivo assets/projetos-complementares-engenharia/interfaces-versoes.svg = composição desktop)"
+        "/projetos-complementares-engenharia/ (arquivo assets/projetos-complementares-engenharia/interfaces-versoes.svg = composição desktop)",
+        "/parcerias-engenharia/"
       ],
       "files": {
         "desktop": {
