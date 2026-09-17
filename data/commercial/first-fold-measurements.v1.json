@@ -1,9 +1,9 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-09-17T19:28:32.121Z",
+  "measured_at": "2026-09-17T20:00:08.184Z",
   "measured_on": "2026-09-17",
-  "commit_sha": "7015cf0d817b72cca7ff79ae052f63e13115ff36",
+  "commit_sha": "a8f5d9dd7402fb97477bcd66091e203083a15282",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "f168038814087e1b365d1de3042af9a3f3364743756e104711fecc0fb9fe7477",
@@ -12,8 +12,8 @@
     "acompanhamento-contratos-obras/index.html": "051c7864c9f8c5e1842176eecbb10e36bbc6f63071d3e61990371b2a2fd794a7",
     "aditivos-obras-publicas/index.html": "bcfbe8fc5fd6e37fde9c857991c0bc23f86c5dde9bda1f265f0f8ea3ffd11156",
     "assets/archivo-var-latin-bf6e041e.woff2": "bf6e041e98b0fa244d965027e9f2b6ed53470ed95f2227615510a08a67ea7f4a",
-    "assets/editorial-article.css": "f7a078362ad1386547397e047e3058960ccd0ddcc25845bfd2ed118505f73b7e",
-    "assets/editorial.css": "b1712b516dc7d75f75eea437566cfc1a12e316cbecfeb3749394b83e9b953aa6",
+    "assets/editorial-article.css": "a76d8b044eedff41d7507e72a29d3139b8928d3be566b43981455eeeaf61cc54",
+    "assets/editorial.css": "0d7bdc14c7de23e1ea95d50545740aa03cf29ce8437c8e6389c756e5c4238884",
     "assets/eight-offer-contract.css": "d2aead054169392b26c739ab4d95c8b2f651a66c9d6ac27aa7fd98bdafc4f79d",
     "assets/home-10x.css": "1fc39fff9c67b0c1e01d1c7d98675fe9bc9b13b8dc6336d4a60dbb33170f090d",
     "assets/report-capture.css": "669b93f113f417ba6a8175d9d0ab0dd846a19e991245ad9f2f1ebea48d8c0552",
