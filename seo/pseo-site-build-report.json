@@ -1,10 +1,10 @@
 {
   "ok": true,
-  "web_cfg_sha": "07eeeda483c6b249a7d49d2ac1d4b0b089cf0c5e",
+  "web_cfg_sha": "97d22acf80c095f0988abc125d46fa443a0543bb",
   "manifest_public": ".well-known/pseo-build.json",
   "public_directory": "_site",
-  "public_artifact_hash": "4595158d8b85d6a7a65b2d2d14771fac1a9dfd2120090e080a4924280bbcde0e",
-  "manifest_hash": "8f5d91471a75e3fbce055bb33befe1a5a4af0fa898f63dfa6b16fab2d49cde06",
+  "public_artifact_hash": "4b17cf10ff826725a5f57d6af9ba816c5806524b149c19345d939fc41cdbb6b7",
+  "manifest_hash": "f5130960d54bd6112888cb47ec2a54060a42016d3cb62174a582379d9bbc45b8",
   "reproducible_manifest": ".well-known/build-manifest.json",
   "build_summary": {
     "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
@@ -59,7 +59,7 @@
   "public_artifact": {
     "assembled": true,
     "audit_ok": true,
-    "file_count": 526,
+    "file_count": 528,
     "finding_count": 0
   },
   "errors": []
