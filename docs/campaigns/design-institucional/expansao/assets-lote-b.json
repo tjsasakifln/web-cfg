@@ -1,0 +1,224 @@
+{
+  "schema": "confenge.design-assets-lote/1.0",
+  "lote": "B",
+  "campaign": "CONFENGE-SALTO-INSTITUCIONAL-02-EXPANSAO-PRODUCAO",
+  "generator": "scripts/demonstrative/plates/family_b2g.py (agregado por render_plates.py; python3 -m scripts.demonstrative.plates.render_plates --check: plates_ok 18; pytest scripts/demonstrative/plates: 16 passed)",
+  "license": "gerado pela CONFENGE a partir de dados demonstrativos; sem foto de banco, sem ícone genérico, sem dado de cliente",
+  "classification": "demonstrativo",
+  "assets": [
+    {
+      "id": "aditivo-limite-desktop",
+      "plate_id": "aditivo-limite",
+      "sheet_code": "P5",
+      "variant": "desktop",
+      "viewbox": "1200x560",
+      "file": "assets/pranchas/aditivo-limite-desktop.svg",
+      "bytes": 7389,
+      "sha256": "849955a85b72c3e1648c8f8b71c5997dd9fc67a71b0daf51ddb328e22820939b",
+      "data_source": "data/demonstrative/plates/aditivo-limite.v1.json",
+      "license": "gerado pela CONFENGE a partir de dados demonstrativos",
+      "classification": "demonstrativo",
+      "label_on_sheet": "Exemplo demonstrativo · sem obra de cliente",
+      "used_on": [
+        "/aditivos-obras-publicas/",
+        "/problemas-que-resolvemos/",
+        "/casos/aditivo-art125-demonstrativo/"
+      ],
+      "summary": "Linha do tempo de um contrato hipotético (24 meses) com os limites de 25%/50% do art. 125 como faixa e um aditivo proposto que ultrapassa o limite de obra nova; excesso hachurado."
+    },
+    {
+      "id": "aditivo-limite-mobile",
+      "plate_id": "aditivo-limite",
+      "sheet_code": "P5",
+      "variant": "mobile",
+      "viewbox": "360x420",
+      "file": "assets/pranchas/aditivo-limite-mobile.svg",
+      "bytes": 5242,
+      "sha256": "ee07d3b90dd0626c4bca3ec55e8493643e0d723b7da0718d0eb756ced701dc09",
+      "data_source": "data/demonstrative/plates/aditivo-limite.v1.json",
+      "license": "gerado pela CONFENGE a partir de dados demonstrativos",
+      "classification": "demonstrativo",
+      "label_on_sheet": "Exemplo demonstrativo · sem obra de cliente",
+      "used_on": [
+        "/aditivos-obras-publicas/",
+        "/problemas-que-resolvemos/",
+        "/casos/aditivo-art125-demonstrativo/"
+      ],
+      "summary": "Linha do tempo de um contrato hipotético (24 meses) com os limites de 25%/50% do art. 125 como faixa e um aditivo proposto que ultrapassa o limite de obra nova; excesso hachurado."
+    },
+    {
+      "id": "orcamento-comparativo-desktop",
+      "plate_id": "orcamento-comparativo",
+      "sheet_code": "P6",
+      "variant": "desktop",
+      "viewbox": "1200x560",
+      "file": "assets/pranchas/orcamento-comparativo-desktop.svg",
+      "bytes": 6982,
+      "sha256": "f8de40dfe3dfead304377a27830571e0811067fb9982a106c731aa3f0ef19cb8",
+      "data_source": "data/demonstrative/plates/orcamento-comparativo.v1.json",
+      "license": "gerado pela CONFENGE a partir de dados demonstrativos",
+      "classification": "demonstrativo",
+      "label_on_sheet": "Exemplo demonstrativo · sem obra de cliente",
+      "used_on": [
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "summary": "Orçamento de referência e proposta item a item (três itens), barras regradas em R$ mil, diferença por item hachurada e o item de risco em foco."
+    },
+    {
+      "id": "orcamento-comparativo-mobile",
+      "plate_id": "orcamento-comparativo",
+      "sheet_code": "P6",
+      "variant": "mobile",
+      "viewbox": "360x420",
+      "file": "assets/pranchas/orcamento-comparativo-mobile.svg",
+      "bytes": 4083,
+      "sha256": "687fc84729388751fc4b8f9b2f5ccbf070339dd48c2f471c8971bda47b9a164d",
+      "data_source": "data/demonstrative/plates/orcamento-comparativo.v1.json",
+      "license": "gerado pela CONFENGE a partir de dados demonstrativos",
+      "classification": "demonstrativo",
+      "label_on_sheet": "Exemplo demonstrativo · sem obra de cliente",
+      "used_on": [
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "summary": "Orçamento de referência e proposta item a item (três itens), barras regradas em R$ mil, diferença por item hachurada e o item de risco em foco."
+    },
+    {
+      "id": "carteira-eventos-desktop",
+      "plate_id": "carteira-eventos",
+      "sheet_code": "P7",
+      "variant": "desktop",
+      "viewbox": "1200x560",
+      "file": "assets/pranchas/carteira-eventos-desktop.svg",
+      "bytes": 7337,
+      "sha256": "e79730e8c3fdcead1603dc52e3215e86482afcac30b78e1898dc63b6d6592885",
+      "data_source": "data/demonstrative/plates/carteira-eventos.v1.json",
+      "license": "gerado pela CONFENGE a partir de dados demonstrativos",
+      "classification": "demonstrativo",
+      "label_on_sheet": "Exemplo demonstrativo · sem obra de cliente",
+      "used_on": [
+        "/diagnostico-b2g-360/"
+      ],
+      "summary": "Matriz carteira de contratos (4) × eventos (medição, aditivo, reequilíbrio, prazo) com o estado do registro por célula e um contrato em foco."
+    },
+    {
+      "id": "carteira-eventos-mobile",
+      "plate_id": "carteira-eventos",
+      "sheet_code": "P7",
+      "variant": "mobile",
+      "viewbox": "360x420",
+      "file": "assets/pranchas/carteira-eventos-mobile.svg",
+      "bytes": 5211,
+      "sha256": "dad2306654a6247d4581acb6d8a542a8358435b8a29ba4a158eb07c4cecd985f",
+      "data_source": "data/demonstrative/plates/carteira-eventos.v1.json",
+      "license": "gerado pela CONFENGE a partir de dados demonstrativos",
+      "classification": "demonstrativo",
+      "label_on_sheet": "Exemplo demonstrativo · sem obra de cliente",
+      "used_on": [
+        "/diagnostico-b2g-360/"
+      ],
+      "summary": "Matriz carteira de contratos (4) × eventos (medição, aditivo, reequilíbrio, prazo) com o estado do registro por célula e um contrato em foco."
+    },
+    {
+      "id": "edital-checklist-desktop",
+      "plate_id": "edital-checklist",
+      "sheet_code": "P8",
+      "variant": "desktop",
+      "viewbox": "1200x560",
+      "file": "assets/pranchas/edital-checklist-desktop.svg",
+      "bytes": 7378,
+      "sha256": "2453e506990fcc50877c8d6e08b1668681b2ef24141f83063e1e5ae78a862d61",
+      "data_source": "data/demonstrative/plates/edital-checklist.v1.json",
+      "license": "gerado pela CONFENGE a partir de dados demonstrativos",
+      "classification": "demonstrativo",
+      "label_on_sheet": "Exemplo demonstrativo · sem obra de cliente",
+      "used_on": [
+        "/diagnostico-pre-licitacao/"
+      ],
+      "summary": "Edital sintético lido como checklist técnico (habilitação, acervo, orçamento, prazo) com o item crítico destacado e a barra proporcional do acervo."
+    },
+    {
+      "id": "edital-checklist-mobile",
+      "plate_id": "edital-checklist",
+      "sheet_code": "P8",
+      "variant": "mobile",
+      "viewbox": "360x420",
+      "file": "assets/pranchas/edital-checklist-mobile.svg",
+      "bytes": 4110,
+      "sha256": "8d665c39a4f9ef1ce3c5eb47e1ba47f8be562eccecc3607059930e7bd0716097",
+      "data_source": "data/demonstrative/plates/edital-checklist.v1.json",
+      "license": "gerado pela CONFENGE a partir de dados demonstrativos",
+      "classification": "demonstrativo",
+      "label_on_sheet": "Exemplo demonstrativo · sem obra de cliente",
+      "used_on": [
+        "/diagnostico-pre-licitacao/"
+      ],
+      "summary": "Edital sintético lido como checklist técnico (habilitação, acervo, orçamento, prazo) com o item crítico destacado e a barra proporcional do acervo."
+    },
+    {
+      "id": "reequilibrio-curva-desktop",
+      "plate_id": "reequilibrio-curva",
+      "sheet_code": "P9",
+      "variant": "desktop",
+      "viewbox": "1200x560",
+      "file": "assets/pranchas/reequilibrio-curva-desktop.svg",
+      "bytes": 8413,
+      "sha256": "8899908f3bd25615d623adc90546f265ce842c5dea5eaaf8e7328c122d1e42d3",
+      "data_source": "data/demonstrative/plates/reequilibrio-curva.v1.json",
+      "license": "gerado pela CONFENGE a partir de dados demonstrativos",
+      "classification": "demonstrativo",
+      "label_on_sheet": "Exemplo demonstrativo · sem obra de cliente",
+      "used_on": [
+        "/reequilibrio-obras-publicas/"
+      ],
+      "summary": "Curva sintética de índice de custo × data-base, evento, tendência anterior e o desequilíbrio hachurado entre a proposta e o aniversário."
+    },
+    {
+      "id": "reequilibrio-curva-mobile",
+      "plate_id": "reequilibrio-curva",
+      "sheet_code": "P9",
+      "variant": "mobile",
+      "viewbox": "360x420",
+      "file": "assets/pranchas/reequilibrio-curva-mobile.svg",
+      "bytes": 5539,
+      "sha256": "4886d29c50488929a41be2fce893b7317c77f3727a5beb4bca50143bf7efb73b",
+      "data_source": "data/demonstrative/plates/reequilibrio-curva.v1.json",
+      "license": "gerado pela CONFENGE a partir de dados demonstrativos",
+      "classification": "demonstrativo",
+      "label_on_sheet": "Exemplo demonstrativo · sem obra de cliente",
+      "used_on": [
+        "/reequilibrio-obras-publicas/"
+      ],
+      "summary": "Curva sintética de índice de custo × data-base, evento, tendência anterior e o desequilíbrio hachurado entre a proposta e o aniversário."
+    },
+    {
+      "id": "medicao-parede-desktop",
+      "plate_id": "medicao-parede",
+      "sheet_code": "P3",
+      "variant": "desktop",
+      "file": "assets/pranchas/medicao-parede-desktop.svg",
+      "bytes": 7118,
+      "sha256": "1145d2644b161a1bc7deb7505868232774a91393f542ac05cd09892b4341cdee",
+      "reused_from_pilot": true,
+      "used_on": [
+        "/servicos-obras-publicas/",
+        "/casos/medicao-glosa-demonstrativo/"
+      ],
+      "note": "prancha do piloto reutilizada como peça de abertura do hub; sem alteração"
+    },
+    {
+      "id": "medicao-parede-mobile",
+      "plate_id": "medicao-parede",
+      "sheet_code": "P3",
+      "variant": "mobile",
+      "file": "assets/pranchas/medicao-parede-mobile.svg",
+      "bytes": 4847,
+      "sha256": "ecd1b271ed2494c79cdd30d667d312eed10ed878a17ab6fc77465c8a56ecde0d",
+      "reused_from_pilot": true,
+      "used_on": [
+        "/servicos-obras-publicas/",
+        "/casos/medicao-glosa-demonstrativo/"
+      ],
+      "note": "prancha do piloto reutilizada como peça de abertura do hub; sem alteração"
+    }
+  ]
+}

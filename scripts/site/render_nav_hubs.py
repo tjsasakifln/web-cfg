@@ -37,6 +37,7 @@ from scripts.pseo.html_shell import (  # noqa: E402
     breadcrumbs_html,
     wa_link,
 )
+from scripts.demonstrative.plates.inline import render as inline_plates  # noqa: E402
 from scripts.site.public_ia import breadcrumb_trail, load_ia_map  # noqa: E402
 from scripts.site.shell_nav import (  # noqa: E402
     hub,
@@ -123,24 +124,39 @@ def _whatsapp(key: str) -> str:
     return wa_link(message)
 
 
-def _need_rows(rows: list[dict[str, str]]) -> str:
-    """One need per row: the need in the visitor's words, then the work and its use."""
+def _need_rows(rows: list[dict[str, str]], *, start: int = 1) -> str:
+    """One need per ruled row: index, the need in the visitor's words, then the
+    work and its use, and the one path (SALTO-INSTITUCIONAL-02: hub index)."""
     return "".join(
-        '<li class="problem-theme"><a class="problem-theme-link" href="{url}">'
-        '<span class="problem-theme-title">{title}</span>'
-        '<span class="problem-theme-blurb">{blurb}</span></a></li>'.format(
-            url=e(row["url"]), title=e(row["title"]), blurb=e(row["blurb"])
+        '<li><span class="hub-list__index">{n:02d}</span><div><h3><a href="{url}">{title}</a></h3>'
+        '<p>{blurb}</p></div><div class="hub-list__action"><a href="{url}">{action} '
+        '<svg class="icon"><use href="#i-arrow"></use></svg></a></div></li>'.format(
+            n=start + i,
+            url=e(row["url"]),
+            title=e(row["title"]),
+            blurb=e(row["blurb"]),
+            action="Descrever pelo WhatsApp" if row["url"].startswith("https://wa.me/") else ("Registrar o evento" if row["url"].startswith("#") else "Ver a página"),
         )
-        for row in rows
+        for i, row in enumerate(rows)
     )
 
 
-def _situation_block(situation: dict[str, Any]) -> str:
+def _situation_block(situation: dict[str, Any], *, start: int) -> str:
+    """One contract event as a group of the ruled index: the situation, the work
+    assumed, and one ruled row per path."""
     return (
-        f'<section class="problem-stage" aria-labelledby="{e(situation["id"])}">'
-        f'<header class="problem-stage-head"><h3 id="{e(situation["id"])}">'
-        f'{e(situation["title"])}</h3><p>{e(situation["work"])}</p></header>'
-        f'<ul class="problem-theme-list">{_need_rows(situation["rows"])}</ul></section>'
+        f'<li class="list-ruled__group" id="{e(situation["id"])}">'
+        f'<span class="t-kicker">{e(situation["title"])}</span>'
+        f'<p>{e(situation["work"])}</p></li>'
+        + "".join(
+            f'<li><span class="list-ruled__index">{start + i:02d}</span>'
+            f'<article class="corporate-service-row"><h3>{e(row["title"])}</h3>'
+            f'<p>{e(row["blurb"])}</p>'
+            f'<div class="contact-actions"><a class="list-ruled__action" href="{e(row["url"])}">'
+            + ("Descrever pelo WhatsApp" if row["url"].startswith("https://wa.me/") else "Ver a página")
+            + ' <svg class="icon"><use href="#i-arrow"></use></svg></a></div></article></li>'
+            for i, row in enumerate(situation["rows"])
+        )
     )
 
 
@@ -216,6 +232,7 @@ def _document(
 <link rel="preload" as="font" type="font/woff2" href="/assets/archivo-var-latin-bf6e041e.woff2" crossorigin="anonymous"/>
 <link href="/styles.css" rel="stylesheet"/>
 <link href="/styles-hubs.css" rel="stylesheet"/>
+<link href="/assets/editorial.css" rel="stylesheet"/>
 <script defer="" src="{SCRIPT_SRC}"></script>
 <meta content="Engº Tiago Sasaki" name="author"/>
 {_jsonld(url, title, description, crumb, items)}
@@ -233,7 +250,9 @@ def _document(
 </html>
 """
     # One shell source: the same normalizer that keeps every shipped page aligned.
-    return sync_text(document, load_brand(), url)
+    # The demonstrative plate slots are materialised here so `--check` and
+    # `scripts.demonstrative.plates.inline --check` agree on the same bytes.
+    return sync_text(inline_plates(document), load_brand(), url)
 
 
 def _preserve_managed_extensions(rendered: str, current: str | None) -> str:
@@ -285,16 +304,18 @@ def _preserve_staged_shell(rendered: str, current: str | None, url: str) -> str:
 
 def _services_situations() -> list[dict[str, Any]]:
     """Buyer situations of the public-works vertical, each with the work assumed,
-    the delivery and its use, the published price where this page already publishes
-    it, and one main path (plus one support path only when the destination differs).
+    the delivery and its use, and one main path (plus one support path only when
+    the destination differs).
 
-    Prices come from the registry, never from a literal, so the situation rows and the
-    generated contract-products block cannot disagree. Pages that do not publish a
-    price on their own route get no price here.
+    Price and deadline are published once on this page, in the generated
+    contract-products block; the rows name the deliverable and the path only
+    (SALTO-INSTITUCIONAL-02, lote B, revisão: the row list must not read as a
+    second catalogue).
     """
     return [
         {
             "id": "situacao-edital",
+            "short": "Edital",
             "title": "Edital publicado e a decisão de entrar",
             "work": (
                 "Lemos o edital, a habilitação, o acervo e a planilha e escrevemos o que a "
@@ -323,6 +344,7 @@ def _services_situations() -> list[dict[str, Any]]:
         },
         {
             "id": "situacao-medicao",
+            "short": "Medição e glosa",
             "title": "Medição glosada ou pagamento retido",
             "work": (
                 "Lemos o critério contratual de medição, o boletim contestado e a memória de "
@@ -332,7 +354,7 @@ def _services_situations() -> list[dict[str, Any]]:
             "rows": [
                 {
                     "url": "/medicoes-glosas-obras-publicas/",
-                    "title": f"Dossiê de Medição, Glosa e Pagamento: {_price_terms('CFG-D18')}",
+                    "title": "Dossiê de Medição, Glosa e Pagamento",
                     "blurb": (
                         "Um período de medição por unidade. Cronologia com prova, diferença em "
                         "reais entre medido e glosado, itens controvertidos e parcela "
@@ -344,6 +366,7 @@ def _services_situations() -> list[dict[str, Any]]:
         },
         {
             "id": "situacao-aditivo",
+            "short": "Aditivo e prazo",
             "title": "Serviço extra, aditivo ou prazo estourando",
             "work": (
                 "Separamos o que mudou de escopo, custo ou prazo, ligamos cada mudança ao "
@@ -353,14 +376,14 @@ def _services_situations() -> list[dict[str, Any]]:
             "rows": [
                 {
                     "url": "/aditivos-obras-publicas/",
-                    "title": f"Dossiê de Aditivo e Serviço Extra: {_price_terms('CFG-D19')}",
+                    "title": "Dossiê de Aditivo e Serviço Extra",
                     "blurb": (
                         "Prova da mudança de escopo, custo e prazo, na forma que instrui o aditivo."
                     ),
                 },
                 {
                     "url": "/atrasos-prorrogacao-obras-publicas/",
-                    "title": f"Dossiê de Atraso e Prorrogação: {_price_terms('CFG-D20')}",
+                    "title": "Dossiê de Atraso e Prorrogação",
                     "blurb": (
                         "Causa, responsabilidade e dias afetados no caminho crítico para instruir "
                         "o pedido de prorrogação."
@@ -370,6 +393,7 @@ def _services_situations() -> list[dict[str, Any]]:
         },
         {
             "id": "situacao-reequilibrio",
+            "short": "Reequilíbrio e margem",
             "title": "Custo que saiu da curva e margem ameaçada",
             "work": (
                 "Reconstruímos fato, nexo e cálculo do desequilíbrio, ou localizamos os eventos "
@@ -379,10 +403,7 @@ def _services_situations() -> list[dict[str, Any]]:
             "rows": [
                 {
                     "url": "/reequilibrio-obras-publicas/",
-                    "title": (
-                        "Dossiê de Reequilíbrio Econômico-Financeiro: "
-                        f"{_price_terms('CFG-D22')}"
-                    ),
+                    "title": "Dossiê de Reequilíbrio Econômico-Financeiro",
                     "blurb": (
                         "Fato, nexo, impacto e cálculo ligados aos documentos que a Administração "
                         "exige no pedido."
@@ -390,7 +411,7 @@ def _services_situations() -> list[dict[str, Any]]:
                 },
                 {
                     "url": "/defesa-margem-contratos-publicos/",
-                    "title": f"Diagnóstico de Riscos à Margem: {_price_terms('CFG-D17')}",
+                    "title": "Diagnóstico de Riscos à Margem",
                     "blurb": (
                         "Eventos localizados e ordenados por prioridade antes de virarem perda; "
                         "o valor vira crédito em um dossiê contratado em 30 dias."
@@ -400,6 +421,7 @@ def _services_situations() -> list[dict[str, Any]]:
         },
         {
             "id": "situacao-rotina",
+            "short": "Rotina de contratos",
             "title": "Vários contratos e eventos o ano inteiro",
             "work": (
                 "Assumimos a rotina de registro, comunicação formal e controle de prazos de "
@@ -427,6 +449,7 @@ def _services_situations() -> list[dict[str, Any]]:
         },
         {
             "id": "situacao-orgao",
+            "short": "Órgão público",
             "title": "Órgão público planejando a contratação de uma obra",
             "work": (
                 "Do lado do órgão, estruturamos tecnicamente a contratação: escopo, orçamento e "
@@ -454,16 +477,16 @@ def _other_needs() -> list[dict[str, str]]:
             "url": "/defesa-tecnica-contratos-publicos/",
             "title": "Notificação, multa ou sanção para responder",
             "blurb": (
-                f"Subsídio Técnico para Notificação ou Sanção: {_price_terms('CFG-D23')}. "
-                "Fatos e provas técnicas para a resposta, coordenada com o jurídico da empresa."
+                "Subsídio Técnico para Notificação ou Sanção: fatos e provas técnicas para a "
+                "resposta, coordenada com o jurídico da empresa."
             ),
         },
         {
             "url": "#entrega-21",
             "title": "Reajuste pela cláusula e pela data-base do contrato",
             "blurb": (
-                f"Cálculo de Reajuste Contratual: {_price_terms('CFG-D21')}. "
-                "Pedido pelo formulário desta página."
+                "Cálculo de Reajuste Contratual: pedido pelo formulário desta página, onde o "
+                "preço e o prazo estão publicados."
             ),
         },
         {
@@ -527,56 +550,97 @@ def _services_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
             "url": "/analises-contratos-publicos/",
         }
     )
-    situations_html = "".join(_situation_block(s) for s in situations)
+    parts: list[str] = []
+    counter = 1
+    for situation in situations:
+        parts.append(_situation_block(situation, start=counter))
+        counter += len(situation["rows"])
+    situations_html = "".join(parts)
+    index_html = "".join(
+        f'<li><a href="#{e(s_["id"])}"><span>{i:02d}</span>{e(s_["short"])}</a></li>'
+        for i, s_ in enumerate(situations, start=1)
+    )
     medicao = _price_terms("CFG-D18")
     return (
-        f"""<section aria-labelledby="hub-title" class="section section--tight">
+        f"""<section aria-labelledby="hub-title" class="svc-open">
 <div class="container">
-<header class="section-head">
-<p class="eyebrow">{e(meta["eyebrow"])}</p>
-<h1 id="hub-title">{e(meta["h1"])}</h1>
-<p class="section-lead">{e(meta["lead"])}</p>
-<p class="section-proof">{_proof_html(meta)}</p>
-</header>
-<section class="lead-inline" data-commercial-route="medicoes-glosas" aria-label="Rota para medição, glosa e pagamento">
-<div class="lead-inline-copy"><span>Medição glosada ou retida</span>
-<strong>Dossiê de Medição, Glosa e Pagamento</strong>
-<p>{e(medicao)} após os documentos mínimos, por medição ou glosa de um mesmo período. Apuramos em reais o que está retido, declaramos as lacunas e escrevemos a posição que você apresenta ao fiscal. Não é petição jurídica nem promessa de recebimento.</p></div>
-<div class="lead-inline-actions">
+<div class="svc-open__grid">
+<div class="svc-open__copy">
+<p class="eyebrow t-kicker">{e(meta["eyebrow"])}</p>
+<h1 class="t-service" id="hub-title">{e(meta["h1"])}</h1>
+<p class="section-lead svc-open__lead">{e(meta["lead"])}</p>
+<div class="svc-open__actions" data-commercial-route="medicoes-glosas">
 <a class="button button-primary" data-asset-family="hub" data-asset-id="servicos-obras-publicas" data-cta-id="hub-servicos-medicoes-glosas" data-cta-position="hub_services" data-journey="contrato" data-route-family="medicoes-glosas" href="/medicoes-glosas-obras-publicas/">Avaliar o Dossiê de Medição, Glosa e Pagamento <svg class="icon"><use href="#i-arrow"></use></svg></a>
 </div>
-</section>
+<p class="section-proof svc-open__note">{_proof_html(meta)}</p>
+</div>
+<aside class="aside-note" aria-labelledby="hub-route-title">
+<h2 id="hub-route-title">Medição glosada ou retida</h2>
+<dl>
+<div><dt>Dossiê de Medição, Glosa e Pagamento</dt><dd>{e(medicao)} após os documentos mínimos, por medição ou glosa de um mesmo período. Apuramos em reais o que está retido, declaramos as lacunas e escrevemos a posição que você apresenta ao fiscal. Não é petição jurídica nem promessa de recebimento.</dd></div>
+<div><dt>Outro evento?</dt><dd>O índice abaixo leva à página de cada situação: o que assumimos, o que chega às suas mãos e o caminho.</dd></div>
+</dl>
+</aside>
+</div>
+<nav class="page-index" aria-label="Eventos desta página">
+<span class="page-index__label">Em que ponto do contrato você está?</span>
+<ol>
+{index_html}
+<li><a href="#hub-outras"><span>{len(situations) + 1:02d}</span>Outras necessidades</a></li>
+<li><a href="#captura-contrato"><span>{len(situations) + 2:02d}</span>Registrar o evento</a></li>
+</ol>
+</nav>
 </div>
 </section>
-<section aria-labelledby="hub-situacoes" class="section section--default">
+<section aria-labelledby="hub-exemplo" class="sec sec--tight sec--soft" id="exemplo-demonstrativo">
 <div class="container">
-<header class="section-head">
-<h2 class="hub-section-title" id="hub-situacoes">Em que ponto do contrato você está?</h2>
-<p class="section-lead">Cada situação diz o que assumimos, o que chega às suas mãos e para que serve. Preço e prazo aparecem onde já estão publicados; nos demais, a proposta nomeia o valor depois da leitura do caso.</p>
-</header>
-<div class="problem-stages">{situations_html}</div>
+<span class="t-kicker">Exemplo demonstrativo</span>
+<h2 class="t-editorial" id="hub-exemplo">O que um dossiê separa: mesma parede, quatro números</h2>
+<p class="measure">Premissas sintéticas, não obra de cliente. Antes do contato, veja como o trabalho chega às suas mãos: a mesma alvenaria lida como executado declarado, medido no boletim, evidenciado por fotos datadas e a régua do critério contratual. A diferença e a lacuna de prova saem escritas; o ateste continua com o órgão contratante. O exemplo completo está na página de <a href="/medicoes-glosas-obras-publicas/#exemplo-demonstrativo">medições, glosas e pagamentos</a>.</p>
+<figure class="plate plate--dominant" aria-labelledby="hub-exemplo-cap">
+<div class="plate__sheet"><!-- plate:medicao-parede --><!-- /plate --></div>
+<figcaption class="plate__caption" id="hub-exemplo-cap"><span class="t-kicker">Exemplo demonstrativo · Obra pública</span>Exemplo demonstrativo, com premissas sintéticas; não é obra de cliente. <b>120 m²</b> executados declarados, <b>90 m²</b> medidos no boletim, <b>80 m²</b> evidenciados por fotos datadas, e o critério contratual como régua. Cada dossiê desta página separa os quatro recortes do seu evento e diz o que a prova sustenta.</figcaption>
+</figure>
 </div>
 </section>
-<section aria-labelledby="hub-outras" class="section section--default">
+<section aria-labelledby="hub-situacoes" class="sec sec--tight" id="situacoes">
 <div class="container">
-<header class="section-head">
-<h2 class="hub-section-title" id="hub-outras">Outras necessidades de contrato</h2>
-<p class="section-lead">Necessidades que não cabem nas situações acima e já têm trabalho, entrega e caminho definidos.</p>
-</header>
-<ul class="problem-theme-list">{_need_rows(others)}</ul>
+<div class="sec-head sec-head--split">
+<span class="t-kicker">Serviços por evento contratual</span>
+<div>
+<h2 class="t-editorial" id="hub-situacoes">Em que ponto do contrato você está?</h2>
+<p>Cada situação diz o que assumimos, o que chega às suas mãos e para que serve. Preço e prazo de cada dossiê estão publicados uma vez, em <a href="#captura-contrato">Registrar o evento</a>; nos demais, a proposta nomeia o valor depois da leitura do caso.</p>
+</div>
+</div>
+<ol class="list-ruled list-ruled--areas">{situations_html}</ol>
 </div>
 </section>
-<section aria-labelledby="hub-next" class="section section--default">
+<section aria-labelledby="hub-outras" class="sec sec--tight sec--soft" id="hub-outras">
 <div class="container">
-<header class="section-head">
-<h2 class="hub-section-title" id="hub-next">Ainda não sabe nomear o evento?</h2>
-<p class="section-lead">Descreva o contrato e o que aconteceu. É uma conversa técnica, sem contratação nem pagamento; sem formulário e sem documento sensível neste primeiro contato. A resposta nomeia o serviço, o que você recebe e o que falta reunir. Casos urgentes de contrato: resposta em até 1 dia útil; demais, em até 2 dias úteis.</p>
-</header>
-<p><a class="button button-secondary" data-cta-position="hub_services_next" data-event-name="whatsapp_click" href="{e(_whatsapp("contrato_pressao"))}" rel="noopener" target="_blank">Falar pelo WhatsApp <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
-<p><a class="text-link" href="{e(problems["url"])}">Reconhecer o problema pelo ciclo do contrato <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
-<p><a class="text-link" href="/ferramentas/">Calcular limite de aditivo, atraso, reequilíbrio ou margem nas ferramentas públicas <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
-<p><a class="text-link" href="/analises-contratos-publicos/">Examinar análises técnicas documentadas <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
-<p><small>As análises examinam fontes públicas, método, cálculos e limites. Não são casos de cliente e não afirmam relação comercial com as partes dos contratos.</small></p>
+<div class="sec-head sec-head--split">
+<span class="t-kicker">Outras necessidades de contrato</span>
+<div>
+<h2 class="t-editorial" id="hub-outras-title">Necessidades que não cabem nas situações acima</h2>
+<p>Cada uma já tem trabalho, entrega e caminho definidos.</p>
+</div>
+</div>
+<ol class="hub-list">{_need_rows(others)}</ol>
+</div>
+</section>
+<section aria-labelledby="hub-next" class="sec sec--tight sec--rule-top">
+<div class="container narrow">
+<span class="t-kicker">Ainda não sabe nomear o evento?</span>
+<h2 class="t-editorial" id="hub-next">Descreva o contrato e o que aconteceu.</h2>
+<p class="t-callout">É uma conversa técnica, sem contratação nem pagamento; sem formulário e sem documento sensível neste primeiro contato. A resposta nomeia o serviço, o que você recebe e o que falta reunir. Casos urgentes de contrato: resposta em até 1 dia útil; demais, em até 2 dias úteis.</p>
+<div class="contact-primary">
+<a class="button button-primary" data-cta-position="hub_services_next" data-event-name="whatsapp_click" href="{e(_whatsapp("contrato_pressao"))}" rel="noopener" target="_blank">Descrever o contrato pelo WhatsApp <svg class="icon"><use href="#i-arrow"></use></svg></a>
+<ul class="contact-alt">
+<li><a href="{e(problems["url"])}">Reconhecer o problema pelo ciclo do contrato</a></li>
+<li><a href="/ferramentas/">Calcular limite de aditivo, atraso, reequilíbrio ou margem nas ferramentas públicas</a></li>
+<li><a href="/analises-contratos-publicos/">Examinar análises técnicas documentadas</a></li>
+</ul>
+</div>
+<p class="t-caption">As análises examinam fontes públicas, método, cálculos e limites. Não são casos de cliente e não afirmam relação comercial com as partes dos contratos.</p>
 </div>
 </section>""",
         items,
@@ -591,68 +655,107 @@ def _problems_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
     stages = problem_stages(brand)
     fit = _offer_fit_copy("problemas-que-resolvemos")
     blocks = []
+    index = []
     items = []
+    counter = 1
     for stage in stages:
         rows = [c for c in clusters if c.get("stage") == stage["id"]]
         if not rows:
             continue
         entries = "".join(
-            '<li class="problem-theme"><a class="problem-theme-link" href="{url}">'
-            '<span class="problem-theme-title">{label}</span>'
-            '<span class="problem-theme-blurb">{summary}</span></a></li>'.format(
-                url=e(row["url"]), label=e(row["label"]), summary=e(row["summary"])
-            )
-            for row in rows
+            f'<li><span class="list-ruled__index">{counter + i:02d}</span>'
+            f'<article class="corporate-service-row"><h3>{e(row["label"])}</h3>'
+            f'<p>{e(row["summary"])}</p>'
+            f'<div class="contact-actions"><a class="list-ruled__action" href="{e(row["url"])}">Ver a página do evento '
+            f'<svg class="icon"><use href="#i-arrow"></use></svg></a></div></article></li>'
+            for i, row in enumerate(rows)
         )
+        counter += len(rows)
         for row in rows:
             items.append({"name": row["label"], "url": row["url"]})
         blocks.append(
-            f'<section class="problem-stage" aria-labelledby="stage-{e(stage["id"])}">'
-            f'<header class="problem-stage-head"><h3 id="stage-{e(stage["id"])}">'
-            f'{e(stage["label"])}</h3><p>{e(stage["hint"])}</p></header>'
-            f'<ul class="problem-theme-list">{entries}</ul></section>'
+            f'<li class="list-ruled__group" id="stage-{e(stage["id"])}">'
+            f'<span class="t-kicker">{e(stage["label"])}</span><p>{e(stage["hint"])}</p></li>{entries}'
         )
+        index.append(f'<li><a href="#stage-{e(stage["id"])}"><span>{len(index) + 1:02d}</span>{e(stage["label"])}</a></li>')
     stages_html = "".join(blocks)
+    index_html = "".join(index)
     return (
-        f"""<section aria-labelledby="hub-title" class="section section--tight">
+        f"""<section aria-labelledby="hub-title" class="svc-open">
 <div class="container">
-<header class="section-head">
-<p class="eyebrow">{e(meta["eyebrow"])}</p>
-<h1 id="hub-title">{e(meta["h1"])}</h1>
-<p class="section-lead">{e(meta["lead"])}</p>
-<p class="section-proof">{_proof_html(meta)}</p>
-</header>
-<section class="lead-inline" data-commercial-route="defesa-margem" aria-label="Rota para contrato em execução">
-<div class="lead-inline-copy"><span>Mais de um evento aberto</span>
-<strong>Diagnóstico de Riscos à Margem</strong>
-<p>Localizamos os eventos do contrato que ainda podem virar perda e devolvemos a lista por prioridade, com o documento que sustenta cada um, enquanto o registro ainda existe.</p></div>
-<div class="lead-inline-actions">
+<div class="svc-open__grid">
+<div class="svc-open__copy">
+<p class="eyebrow t-kicker">{e(meta["eyebrow"])}</p>
+<h1 class="t-service" id="hub-title">{e(meta["h1"])}</h1>
+<p class="section-lead svc-open__lead">{e(meta["lead"])}</p>
+<div class="svc-open__actions" data-commercial-route="defesa-margem">
 <a class="button button-primary" data-asset-family="hub" data-asset-id="problemas-que-resolvemos" data-cta-id="hub-problemas-defesa-margem" data-cta-position="hub_problems" data-journey="contrato" data-route-family="problemas-que-resolvemos" href="/defesa-margem-contratos-publicos/">Ver o Diagnóstico de Riscos à Margem <svg class="icon"><use href="#i-arrow"></use></svg></a>
 </div>
-</section>
-<h2 class="hub-section-title" id="hub-stages">Onde você está no ciclo do contrato?</h2>
-<div class="problem-stages" aria-labelledby="hub-stages">{stages_html}</div>
+<p class="section-proof svc-open__note">{_proof_html(meta)}</p>
+</div>
+<aside class="aside-note" aria-labelledby="hub-route-title">
+<h2 id="hub-route-title">Mais de um evento aberto</h2>
+<dl>
+<div><dt>Diagnóstico de Riscos à Margem</dt><dd>Localizamos os eventos do contrato que ainda podem virar perda e devolvemos a lista por prioridade, com o documento que sustenta cada um, enquanto o registro ainda existe.</dd></div>
+<div><dt>Um evento só?</dt><dd>O índice abaixo leva à página do evento: o que assumimos, o que você recebe e para que serve.</dd></div>
+</dl>
+</aside>
+</div>
+<nav class="page-index" aria-label="Onde você está no ciclo do contrato?">
+<span class="page-index__label">Onde você está no ciclo do contrato?</span>
+<ol>
+{index_html}
+<li><a href="#fit-economico"><span>{len(index) + 1:02d}</span>Qual formato cabe</a></li>
+<li><a href="#hub-next"><span>{len(index) + 2:02d}</span>Descrever o contrato</a></li>
+</ol>
+</nav>
 </div>
 </section>
-<section class="section" id="fit-economico" data-offer-fit="1">
+<section aria-labelledby="hub-exemplo" class="sec sec--tight sec--soft" id="exemplo-demonstrativo">
+<div class="container">
+<span class="t-kicker">Exemplo demonstrativo</span>
+<h2 class="t-editorial" id="hub-exemplo">O evento no tempo do contrato: aditivo contra o limite</h2>
+<p class="measure">Premissas sintéticas, não contrato de cliente. Um contrato hipotético de obra nova, dois termos aditivos formalizados e um aditivo proposto que ultrapassa o limite de 25% do art. 125: é assim que cada evento desta página é lido, no tempo do contrato e contra a régua legal, antes de virar pedido. O exemplo completo está na página de <a href="/aditivos-obras-publicas/#exemplo-demonstrativo">aditivos e serviços extras</a>.</p>
+<figure class="plate plate--dominant" aria-labelledby="hub-exemplo-cap">
+<div class="plate__sheet"><!-- plate:aditivo-limite --><!-- /plate --></div>
+<figcaption class="plate__caption" id="hub-exemplo-cap"><span class="t-kicker">Exemplo demonstrativo · Obra pública</span>Exemplo demonstrativo, com premissas sintéticas; não é contrato de cliente. Dois termos formalizados somam <b>18%</b> do valor inicial atualizado; o aditivo proposto levaria o acumulado a <b>27%</b>, <b>2%</b> acima do limite de 25% para obra nova. O dossiê registra o excesso e pede revisão de escopo ou de enquadramento; a decisão sobre o termo é do órgão contratante.</figcaption>
+</figure>
+</div>
+</section>
+<section aria-labelledby="hub-stages" class="sec sec--tight" id="ciclo">
+<div class="container">
+<div class="sec-head sec-head--split">
+<span class="t-kicker">Ciclo do contrato</span>
+<div>
+<h2 class="t-editorial" id="hub-stages">Onde você está no ciclo do contrato?</h2>
+<p>Cada evento leva à página que diz o que assumimos, o que você recebe e para que serve. Você pode descrever o caso mesmo sem saber nomear o evento.</p>
+</div>
+</div>
+<ol class="list-ruled list-ruled--areas">{stages_html}</ol>
+</div>
+</section>
+<section class="sec sec--tight sec--soft" id="fit-economico" data-offer-fit="1" aria-labelledby="fit-title">
 <div class="container narrow">
-<p class="eyebrow">Qual formato cabe no seu caso</p>
-<h2>{e(fit["headline"])}</h2>
+<span class="t-kicker">Qual formato cabe no seu caso</span>
+<h2 class="t-editorial" id="fit-title">{e(fit["headline"])}</h2>
 <p>Antes de escolher entre um dossiê do evento, um diagnóstico ou uma rotina mensal, vale saber o que muda de um para outro: o dossiê responde a um evento com número e prova; o diagnóstico ordena o que atacar primeiro; a rotina mantém o registro em dia o ano inteiro.</p>
 <p>{e(fit["body"])}</p>
-<p><a class="text-link" href="{e(services["url"])}#hub-situacoes">Ver preço e prazo publicados por situação em Obras públicas <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
+<p><a class="text-link" href="{e(services["url"])}#situacoes">Ver preço e prazo publicados por situação em Obras públicas <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
 </div>
 </section>
-<section aria-labelledby="hub-next" class="section section--default">
-<div class="container">
-<header class="section-head">
-<h2 class="hub-section-title" id="hub-next">Ainda não sabe nomear o evento?</h2>
-<p class="section-lead">Descreva o contrato e o que aconteceu. É uma conversa técnica, sem contratação nem pagamento; sem formulário e sem documento sensível neste primeiro contato. A resposta nomeia o serviço, o que você recebe e o que falta reunir. Casos urgentes de contrato: resposta em até 1 dia útil; demais, em até 2 dias úteis.</p>
-</header>
-<p><a class="button button-secondary" data-cta-position="hub_problems_next" data-event-name="whatsapp_click" href="{e(_whatsapp("contrato_pressao"))}" rel="noopener" target="_blank">Falar pelo WhatsApp <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
-<p><a class="text-link" href="{e(services["url"])}">Serviços para obras públicas por situação <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
-<p><a class="text-link" href="{e(corporate["url"])}">Outra situação: projeto, imóvel, perícia ou segurança do trabalho <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
-<p><a class="text-link" href="/ferramentas/">Calcular o seu caso nas ferramentas públicas <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
+<section aria-labelledby="hub-next-title" class="sec sec--tight sec--dark" id="hub-next">
+<div class="container narrow">
+<span class="t-kicker">Ainda não sabe nomear o evento?</span>
+<h2 class="t-editorial" id="hub-next-title">Descreva o contrato e o que aconteceu.</h2>
+<p class="t-callout">É uma conversa técnica, sem contratação nem pagamento; sem formulário e sem documento sensível neste primeiro contato. A resposta nomeia o serviço, o que você recebe e o que falta reunir. Casos urgentes de contrato: resposta em até 1 dia útil; demais, em até 2 dias úteis.</p>
+<div class="contact-primary">
+<a class="button button-primary" data-cta-position="hub_problems_next" data-event-name="whatsapp_click" href="{e(_whatsapp("contrato_pressao"))}" rel="noopener" target="_blank">Descrever o contrato pelo WhatsApp <svg class="icon"><use href="#i-arrow"></use></svg></a>
+<ul class="contact-alt">
+<li><a href="{e(services["url"])}">Serviços para obras públicas por situação</a></li>
+<li><a href="{e(corporate["url"])}">Outra situação: projeto, imóvel, perícia ou segurança do trabalho</a></li>
+<li><a href="/ferramentas/">Calcular o seu caso nas ferramentas públicas</a></li>
+</ul>
+</div>
 </div>
 </section>""",
         items,

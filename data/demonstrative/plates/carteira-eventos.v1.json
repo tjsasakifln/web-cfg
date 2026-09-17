@@ -1,0 +1,121 @@
+{
+  "schema": "confenge.demonstrative-plate-source/1.0",
+  "id": "plate-carteira-eventos-2026-09",
+  "plate_id": "carteira-eventos",
+  "sheet_code": "P7",
+  "origin": "demonstrative",
+  "revision": "R00",
+  "title": "Carteira de contratos por evento",
+  "label_pt_br": "exemplo demonstrativo",
+  "client_name": null,
+  "address": null,
+  "contract_number": null,
+  "art_number": null,
+  "signature": null,
+  "date_modified": "2026-09-17",
+  "public_source_pt_br": "Seção /diagnostico-b2g-360/#exemplo-demonstrativo (carteira sintética, sem órgão nem empresa real).",
+  "units": {
+    "value": "valor contratado em R$ milhões",
+    "cell": "estado do registro do evento no contrato"
+  },
+  "states": [
+    {
+      "id": "OK",
+      "label_pt_br": "Registro contemporâneo em dia",
+      "mark": "cheio"
+    },
+    {
+      "id": "PEND",
+      "label_pt_br": "Evento aberto sem decisão",
+      "mark": "hachura"
+    },
+    {
+      "id": "LAC",
+      "label_pt_br": "Lacuna de registro",
+      "mark": "vazio"
+    }
+  ],
+  "events": [
+    {
+      "id": "MED",
+      "label_pt_br": "Medição",
+      "short_pt_br": "Med."
+    },
+    {
+      "id": "ADI",
+      "label_pt_br": "Aditivo",
+      "short_pt_br": "Adit."
+    },
+    {
+      "id": "REQ",
+      "label_pt_br": "Reequilíbrio",
+      "short_pt_br": "Reeq."
+    },
+    {
+      "id": "PRZ",
+      "label_pt_br": "Prazo",
+      "short_pt_br": "Prazo"
+    }
+  ],
+  "contracts": [
+    {
+      "id": "C-01",
+      "label_pt_br": "Contrato A",
+      "value_brl_million": "4,2",
+      "cells": {
+        "MED": "OK",
+        "ADI": "OK",
+        "REQ": "OK",
+        "PRZ": "PEND"
+      },
+      "focus": false
+    },
+    {
+      "id": "C-02",
+      "label_pt_br": "Contrato B",
+      "value_brl_million": "7,8",
+      "cells": {
+        "MED": "OK",
+        "ADI": "PEND",
+        "REQ": "OK",
+        "PRZ": "OK"
+      },
+      "focus": false
+    },
+    {
+      "id": "C-03",
+      "label_pt_br": "Contrato C",
+      "value_brl_million": "12,5",
+      "cells": {
+        "MED": "LAC",
+        "ADI": "LAC",
+        "REQ": "PEND",
+        "PRZ": "PEND"
+      },
+      "focus": true
+    },
+    {
+      "id": "C-04",
+      "label_pt_br": "Contrato D",
+      "value_brl_million": "2,9",
+      "cells": {
+        "MED": "OK",
+        "ADI": "OK",
+        "REQ": "OK",
+        "PRZ": "OK"
+      },
+      "focus": false
+    }
+  ],
+  "totals": {
+    "contracts": "4",
+    "events_per_contract": "4",
+    "cells": "16",
+    "cells_ok": "10",
+    "cells_pending": "4",
+    "cells_gap": "2",
+    "focus_share_of_portfolio_percent": "46",
+    "focus_formula": "12,5 / (4,2+7,8+12,5+2,9)"
+  },
+  "disclaimer_pt_br": "Carteira sintética para mostrar a estrutura do mapa. O contrato em foco concentra a maior parte do valor e as únicas lacunas de registro: é por ele que o plano de 90 dias começa. Não é carteira de cliente."
+}

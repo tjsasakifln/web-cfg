@@ -1,0 +1,388 @@
+{
+  "schema": "confenge.design-matriz-lote/1.0",
+  "lote": "B",
+  "routes": [
+    {
+      "route": "/aditivos-obras-publicas/",
+      "family": "service-pillars",
+      "function": "pilar B2G (aditivos)",
+      "source": "aditivos-obras-publicas/index.html",
+      "generator": "manual (scratch assembler; secao #captura-pilar byte-identica)",
+      "priority": "P0",
+      "treatment": "COMPOSICAO_REDESENHADA",
+      "owner": "lote B",
+      "state": "CAPTURADA_E_VISTA (390 e 1440, dobra; pagina inteira nas recompostas)",
+      "evidence": [
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/aditivos-obras-publicas-390x844-fold-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/aditivos-obras-publicas-390x844-full-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/aditivos-obras-publicas-1440x1000-fold-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/aditivos-obras-publicas-1440x1000-full-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/aditivos-obras-publicas-390x844-menu-lote-b.jpg"
+      ],
+      "impediment": "",
+      "note": "hash congelado desatualizado ate a recaptura do integrador (materialize.py); prancha P5 nova; revisao 2026-09-17: ressalvas consolidadas (fecho dos recortes e entrega sem repetir o Limite); P5 sem a cota ilegivel"
+    },
+    {
+      "route": "/auditoria-orcamento-licitacao/",
+      "family": "service-pillars",
+      "function": "pilar B2G (auditoria de orcamento)",
+      "source": "auditoria-orcamento-licitacao/index.html",
+      "generator": "manual (scratch assembler)",
+      "priority": "P0",
+      "treatment": "COMPOSICAO_REDESENHADA",
+      "owner": "lote B",
+      "state": "CAPTURADA_E_VISTA (390 e 1440, dobra; pagina inteira nas recompostas)",
+      "evidence": [
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/auditoria-orcamento-licitacao-390x844-fold-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/auditoria-orcamento-licitacao-390x844-full-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/auditoria-orcamento-licitacao-1440x1000-fold-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/auditoria-orcamento-licitacao-1440x1000-full-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/auditoria-orcamento-licitacao-390x844-menu-lote-b.jpg"
+      ],
+      "impediment": "",
+      "note": "hash congelado desatualizado ate a recaptura; prancha P6 nova; revisao 2026-09-17: ressalvas consolidadas ('nao redige impugnacao nem recurso' no Limite da abertura)"
+    },
+    {
+      "route": "/diagnostico-pre-licitacao/",
+      "family": "service-pillars",
+      "function": "pilar B2G (pre-licitacao)",
+      "source": "diagnostico-pre-licitacao/index.html",
+      "generator": "manual (scratch assembler)",
+      "priority": "P0",
+      "treatment": "COMPOSICAO_REDESENHADA",
+      "owner": "lote B",
+      "state": "CAPTURADA_E_VISTA (390 e 1440, dobra; pagina inteira nas recompostas)",
+      "evidence": [
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-pre-licitacao-390x844-fold-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-pre-licitacao-390x844-full-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-pre-licitacao-1440x1000-fold-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-pre-licitacao-1440x1000-full-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-pre-licitacao-390x844-menu-lote-b.jpg"
+      ],
+      "impediment": "",
+      "note": "hash congelado desatualizado ate a recaptura (tambem em render_licitacao_products.mjs); prancha P8 nova; revisao 2026-09-17: ressalvas consolidadas; P8 com coluna Leitura afastada da margem; quebra do h1 no hifen em 390 nao tratada (sem primitivo nowrap e h1 literal em snapshots congelados; pedido 14)"
+    },
+    {
+      "route": "/reequilibrio-obras-publicas/",
+      "family": "service-pillars",
+      "function": "pilar B2G (reequilibrio)",
+      "source": "reequilibrio-obras-publicas/index.html",
+      "generator": "manual (scratch assembler)",
+      "priority": "P0",
+      "treatment": "COMPOSICAO_REDESENHADA",
+      "owner": "lote B",
+      "state": "CAPTURADA_E_VISTA (390 e 1440, dobra; pagina inteira nas recompostas)",
+      "evidence": [
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/reequilibrio-obras-publicas-390x844-fold-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/reequilibrio-obras-publicas-390x844-full-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/reequilibrio-obras-publicas-1440x1000-fold-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/reequilibrio-obras-publicas-1440x1000-full-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/reequilibrio-obras-publicas-390x844-menu-lote-b.jpg"
+      ],
+      "impediment": "",
+      "note": "hash congelado desatualizado ate a recaptura; prancha P9 nova; revisao 2026-09-17: secao Biblioteca (um guia) fundida na Resposta direta; ressalvas consolidadas"
+    },
+    {
+      "route": "/diagnostico-b2g-360/",
+      "family": "service-pillars / oferta",
+      "function": "pilar B2G em forma de oferta (diagnostico da operacao)",
+      "source": "diagnostico-b2g-360/index.html",
+      "generator": "manual (scratch assembler; secoes data-offer-section e atributos de oferta preservados)",
+      "priority": "P0",
+      "treatment": "COMPOSICAO_REDESENHADA",
+      "owner": "lote B",
+      "state": "CAPTURADA_E_VISTA (390 e 1440, dobra; pagina inteira nas recompostas)",
+      "evidence": [
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-360-390x844-fold-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-360-390x844-full-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-360-1440x1000-fold-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-360-1440x1000-full-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-360-390x844-menu-lote-b.jpg"
+      ],
+      "impediment": "",
+      "note": "hash congelado desatualizado ate a recaptura; prancha P7 nova; sem preco publicado (registro); revisao 2026-09-17: kicker situacional, listas pontuadas, h2 sem ponto final, indice com o rotulo contratado 'Solicitar diagnostico' (o botao do formulario byte-identico segue 'Descrever a operacao')"
+    },
+    {
+      "route": "/servicos-obras-publicas/",
+      "family": "hub",
+      "function": "hub de servicos de obras publicas",
+      "source": "servicos-obras-publicas/index.html",
+      "generator": "scripts/site/render_nav_hubs.py (gerador; bloco GENERATED:CONTRACT-DEFENSE-HUB preservado)",
+      "priority": "P0",
+      "treatment": "COMPOSICAO_REDESENHADA",
+      "owner": "lote B",
+      "state": "CAPTURADA_E_VISTA (390 e 1440, dobra; pagina inteira nas recompostas)",
+      "evidence": [
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/servicos-obras-publicas-390x844-fold-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/servicos-obras-publicas-390x844-full-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/servicos-obras-publicas-1440x1000-fold-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/servicos-obras-publicas-1440x1000-full-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/servicos-obras-publicas-390x844-menu-lote-b.jpg"
+      ],
+      "impediment": "",
+      "note": "gerador partilhado editado no corpo dos dois hubs (registrado em pedidos); o bloco gerado de produtos traz um segundo momento escuro (integrador); revisao 2026-09-17: rota dominante sem degrade (button-primary na abertura + aside-note claro), preco e prazo publicados uma so vez (bloco gerado), fecho com button-primary; o bloco GENERATED (grade 3x3, faixa de regras navy, h2 18ch, opcao do select cortada) e do integrador (pedidos 3 e 13)"
+    },
+    {
+      "route": "/problemas-que-resolvemos/",
+      "family": "hub",
+      "function": "hub de problemas por ciclo do contrato",
+      "source": "problemas-que-resolvemos/index.html",
+      "generator": "scripts/site/render_nav_hubs.py (gerador)",
+      "priority": "P0",
+      "treatment": "COMPOSICAO_REDESENHADA",
+      "owner": "lote B",
+      "state": "CAPTURADA_E_VISTA (390 e 1440, dobra; pagina inteira nas recompostas)",
+      "evidence": [
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/problemas-que-resolvemos-390x844-fold-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/problemas-que-resolvemos-390x844-full-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/problemas-que-resolvemos-1440x1000-fold-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/problemas-que-resolvemos-1440x1000-full-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/problemas-que-resolvemos-390x844-menu-lote-b.jpg"
+      ],
+      "impediment": "",
+      "note": "revisao 2026-09-17: rota dominante sem degrade, kicker distinto na secao do ciclo, fecho em sec--dark unico com contact-primary; legenda das ferramentas como svc-open__note"
+    },
+    {
+      "route": "/casos/aditivo-art125-demonstrativo/",
+      "family": "casos",
+      "function": "exemplo demonstrativo (aditivo)",
+      "source": "casos/aditivo-art125-demonstrativo/index.html",
+      "generator": "manual",
+      "priority": "P1",
+      "treatment": "COMPOSICAO_REDESENHADA",
+      "owner": "lote B",
+      "state": "CAPTURADA_E_VISTA (390 e 1440, dobra; pagina inteira nas recompostas)",
+      "evidence": [
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/casos-aditivo-art125-demonstrativo-390x844-fold-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/casos-aditivo-art125-demonstrativo-390x844-full-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/casos-aditivo-art125-demonstrativo-1440x1000-fold-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/casos-aditivo-art125-demonstrativo-1440x1000-full-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/casos-aditivo-art125-demonstrativo-390x844-menu-lote-b.jpg"
+      ],
+      "impediment": "",
+      "note": "rota de debito comercial (excecao route-exact) preservada: mesmo CTA /#contato; revisao 2026-09-17: prancha P5 lateral na abertura (eager), estilo inline removido, tabela Linha/Valor/%/Origem, ressalva do lead consolidada"
+    },
+    {
+      "route": "/casos/medicao-glosa-demonstrativo/",
+      "family": "casos",
+      "function": "exemplo demonstrativo (medicao glosada)",
+      "source": "casos/medicao-glosa-demonstrativo/index.html",
+      "generator": "manual",
+      "priority": "P1",
+      "treatment": "COMPOSICAO_REDESENHADA",
+      "owner": "lote B",
+      "state": "CAPTURADA_E_VISTA (390 e 1440, dobra; pagina inteira nas recompostas)",
+      "evidence": [
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/casos-medicao-glosa-demonstrativo-390x844-fold-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/casos-medicao-glosa-demonstrativo-390x844-full-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/casos-medicao-glosa-demonstrativo-1440x1000-fold-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/casos-medicao-glosa-demonstrativo-1440x1000-full-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/casos-medicao-glosa-demonstrativo-390x844-menu-lote-b.jpg"
+      ],
+      "impediment": "",
+      "note": "revisao 2026-09-17: prancha P3 lateral na abertura (eager), estilo inline removido, tabela Parcela/Valor/Pedido/Natureza/Prova, ressalva do lead consolidada"
+    },
+    {
+      "route": "/diretoria-b2g/",
+      "family": "oferta",
+      "function": "oferta recorrente (Lighthouse 150 KB / LCP 2,0 s)",
+      "source": "diretoria-b2g/index.html",
+      "generator": "manual (script de componentes)",
+      "priority": "P1",
+      "treatment": "HERANCA_VISUAL_VALIDADA",
+      "owner": "lote B",
+      "state": "CAPTURADA_E_VISTA (390 e 1440, dobra; pagina inteira nas recompostas)",
+      "evidence": [
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diretoria-b2g-390x844-fold-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diretoria-b2g-390x844-full-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diretoria-b2g-1440x1000-fold-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diretoria-b2g-1440x1000-full-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diretoria-b2g-390x844-menu-lote-b.jpg"
+      ],
+      "impediment": "",
+      "note": "folha editorial (+7,1 KB gz) e indice de pagina; folhas legadas nao removidas porque styles-offers.css ainda ordena o offer-hero; bytes no relatorio; revisao 2026-09-17: reclassificada de COMPONENTES_ADEQUADOS para HERANCA_VISUAL_VALIDADA (hero em degrade, bloco operating-system e final-cta escuros permanecem: styles.css do integrador, pedidos 10 e 11); indice so com ancoras visiveis (entrada 'Rotina, capacidade e mensalidade' aponta para o disclosure, cujo summary renderiza), h2 sem ponto final, alternativa da abertura alinhada ao formulario ('Avaliar na sua empresa, nesta pagina'); sonda de clique no relatorio"
+    },
+    {
+      "route": "/bid-room-licitacoes-obras/",
+      "family": "oferta",
+      "function": "operacao de proposta",
+      "source": "bid-room-licitacoes-obras/index.html",
+      "generator": "manual (script de componentes)",
+      "priority": "P1",
+      "treatment": "HERANCA_VISUAL_VALIDADA",
+      "owner": "lote B",
+      "state": "CAPTURADA_E_VISTA (390 e 1440, dobra; pagina inteira nas recompostas)",
+      "evidence": [
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/bid-room-licitacoes-obras-390x844-fold-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/bid-room-licitacoes-obras-390x844-full-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/bid-room-licitacoes-obras-1440x1000-fold-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/bid-room-licitacoes-obras-1440x1000-full-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/bid-room-licitacoes-obras-390x844-menu-lote-b.jpg"
+      ],
+      "impediment": "",
+      "note": "revisao 2026-09-17: reclassificada para HERANCA_VISUAL_VALIDADA (hero em degrade e painel G1-G6 escuro permanecem: CSS do integrador, pedidos 10 e 11); indice so com ancoras visiveis ('Etapas, preco e responsabilidades' aponta para o disclosure), h2 sem ponto final"
+    },
+    {
+      "route": "/diagnostico-b2g-expansao/",
+      "family": "oferta",
+      "function": "diagnostico de expansao",
+      "source": "diagnostico-b2g-expansao/index.html",
+      "generator": "manual (script de componentes)",
+      "priority": "P1",
+      "treatment": "HERANCA_VISUAL_VALIDADA",
+      "owner": "lote B",
+      "state": "CAPTURADA_E_VISTA (390 e 1440, dobra; pagina inteira nas recompostas)",
+      "evidence": [
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-expansao-390x844-fold-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-expansao-390x844-full-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-expansao-1440x1000-fold-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-expansao-1440x1000-full-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-expansao-390x844-menu-lote-b.jpg"
+      ],
+      "impediment": "",
+      "note": "estados obrigado/expirado/cancelado nao tocados; revisao 2026-09-17: reclassificada para HERANCA_VISUAL_VALIDADA (hero em degrade permanece); indice de quatro entradas, todas visiveis ('Pacote, dados e condicoes' aponta para o disclosure); h2 sem ponto final; o codigo CFG-DIAG-EXP-v1 fica na copy por ser condicao material da oferta e exigencia de teste (refutado no relatorio)"
+    },
+    {
+      "route": "/conflitos/",
+      "family": "institucional",
+      "function": "politica de conflitos com gate",
+      "source": "conflitos/index.html",
+      "generator": "manual (script de componentes)",
+      "priority": "P2",
+      "treatment": "HERANCA_VISUAL_VALIDADA",
+      "owner": "lote B",
+      "state": "CAPTURADA_E_VISTA (390 e 1440, dobra; pagina inteira nas recompostas)",
+      "evidence": [
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/conflitos-390x844-fold-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/conflitos-390x844-full-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/conflitos-1440x1000-fold-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/conflitos-1440x1000-full-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/conflitos-390x844-menu-lote-b.jpg"
+      ],
+      "impediment": "",
+      "note": "formulario #conflict-gate-form intacto; revisao 2026-09-17: reclassificada para HERANCA_VISUAL_VALIDADA; a pagina e gerada por scripts/site/render_authority_pages.py (a edicao manual do lote seria perdida na regeneracao), entao a folha editorial e o indice de cinco secoes (ids que conflict_gate.py ja escreve) passaram para o gerador; o respiro de ~110 px entre indice e cartao e padding do article-layout (styles.css, pedido 12)"
+    },
+    {
+      "route": "/defesa-margem-contratos-publicos/",
+      "family": "oferta (safe-execution)",
+      "function": "diagnostico de riscos a margem",
+      "source": "defesa-margem-contratos-publicos/index.html",
+      "generator": "manual",
+      "priority": "P1",
+      "treatment": "PRESERVADA_COM_JUSTIFICATIVA",
+      "owner": "lote B",
+      "state": "CAPTURADA_E_VISTA (390 e 1440, dobra; pagina inteira nas recompostas)",
+      "evidence": [
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-margem-contratos-publicos-390x844-fold-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-margem-contratos-publicos-390x844-full-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-margem-contratos-publicos-1440x1000-fold-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-margem-contratos-publicos-1440x1000-full-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-margem-contratos-publicos-390x844-menu-lote-b.jpg"
+      ],
+      "impediment": "tests/bofu_dominance/safe_execution/test_existing_css_js_only proibe folha fora de /styles*.css; sem folha editorial nao ha indice; so o estilo inline saiu",
+      "note": "revisao 2026-09-17: familia dividida enquanto test_existing_css_js_only vetar a folha editorial nestas quatro rotas (pedido 2): irmas recompostas no mesmo hub usam a composicao do piloto e estas mantem hero em degrade, faixa navy e CTA generico"
+    },
+    {
+      "route": "/defesa-tecnica-contratos-publicos/",
+      "family": "oferta (safe-execution)",
+      "function": "subsidio tecnico para notificacao ou sancao",
+      "source": "defesa-tecnica-contratos-publicos/index.html",
+      "generator": "-",
+      "priority": "P1",
+      "treatment": "PRESERVADA_COM_JUSTIFICATIVA",
+      "owner": "lote B",
+      "state": "CAPTURADA_E_VISTA (390 e 1440, dobra; pagina inteira nas recompostas)",
+      "evidence": [
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-tecnica-contratos-publicos-390x844-fold-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-tecnica-contratos-publicos-390x844-full-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-tecnica-contratos-publicos-1440x1000-fold-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-tecnica-contratos-publicos-1440x1000-full-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-tecnica-contratos-publicos-390x844-menu-lote-b.jpg"
+      ],
+      "impediment": "idem: folha editorial vetada pelo teste de area exclusiva; primeira dobra com frases de job/fronteira pinadas",
+      "note": "revisao 2026-09-17: familia dividida enquanto test_existing_css_js_only vetar a folha editorial nestas quatro rotas (pedido 2): irmas recompostas no mesmo hub usam a composicao do piloto e estas mantem hero em degrade, faixa navy e CTA generico"
+    },
+    {
+      "route": "/acompanhamento-contratos-obras/",
+      "family": "oferta (safe-execution)",
+      "function": "acompanhamento preventivo",
+      "source": "acompanhamento-contratos-obras/index.html",
+      "generator": "-",
+      "priority": "P1",
+      "treatment": "PRESERVADA_COM_JUSTIFICATIVA",
+      "owner": "lote B",
+      "state": "CAPTURADA_E_VISTA (390 e 1440, dobra; pagina inteira nas recompostas)",
+      "evidence": [
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/acompanhamento-contratos-obras-390x844-fold-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/acompanhamento-contratos-obras-390x844-full-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/acompanhamento-contratos-obras-1440x1000-fold-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/acompanhamento-contratos-obras-1440x1000-full-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/acompanhamento-contratos-obras-390x844-menu-lote-b.jpg"
+      ],
+      "impediment": "idem",
+      "note": "revisao 2026-09-17: familia dividida enquanto test_existing_css_js_only vetar a folha editorial nestas quatro rotas (pedido 2): irmas recompostas no mesmo hub usam a composicao do piloto e estas mantem hero em degrade, faixa navy e CTA generico"
+    },
+    {
+      "route": "/atrasos-prorrogacao-obras-publicas/",
+      "family": "oferta (safe-execution)",
+      "function": "dossie de atraso e prorrogacao",
+      "source": "atrasos-prorrogacao-obras-publicas/index.html",
+      "generator": "-",
+      "priority": "P1",
+      "treatment": "PRESERVADA_COM_JUSTIFICATIVA",
+      "owner": "lote B",
+      "state": "CAPTURADA_E_VISTA (390 e 1440, dobra; pagina inteira nas recompostas)",
+      "evidence": [
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/atrasos-prorrogacao-obras-publicas-390x844-fold-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/atrasos-prorrogacao-obras-publicas-390x844-full-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/atrasos-prorrogacao-obras-publicas-1440x1000-fold-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/atrasos-prorrogacao-obras-publicas-1440x1000-full-lote-b.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-b/atrasos-prorrogacao-obras-publicas-390x844-menu-lote-b.jpg"
+      ],
+      "impediment": "idem; passou a ser a sonda de capa OG-only em test_ui_geometry",
+      "note": "revisao 2026-09-17: familia dividida enquanto test_existing_css_js_only vetar a folha editorial nestas quatro rotas (pedido 2): irmas recompostas no mesmo hub usam a composicao do piloto e estas mantem hero em degrade, faixa navy e CTA generico"
+    },
+    {
+      "route": "/diagnostico-b2g-expansao/obrigado/",
+      "family": "estado",
+      "function": "estado pos-envio",
+      "source": "diagnostico-b2g-expansao/obrigado/index.html",
+      "generator": "-",
+      "priority": "P3",
+      "treatment": "PRESERVADA_COM_JUSTIFICATIVA",
+      "owner": "lote B",
+      "state": "SEM_CAPTURA",
+      "evidence": [],
+      "impediment": "estados minimos (menos de 2 KB) sem casca; fora do alcance util do lote",
+      "note": ""
+    },
+    {
+      "route": "/diagnostico-b2g-expansao/expirado/",
+      "family": "estado",
+      "function": "estado",
+      "source": "diagnostico-b2g-expansao/expirado/index.html",
+      "generator": "-",
+      "priority": "P3",
+      "treatment": "PRESERVADA_COM_JUSTIFICATIVA",
+      "owner": "lote B",
+      "state": "SEM_CAPTURA",
+      "evidence": [],
+      "impediment": "idem",
+      "note": ""
+    },
+    {
+      "route": "/diagnostico-b2g-expansao/cancelado/",
+      "family": "estado",
+      "function": "estado",
+      "source": "diagnostico-b2g-expansao/cancelado/index.html",
+      "generator": "-",
+      "priority": "P3",
+      "treatment": "PRESERVADA_COM_JUSTIFICATIVA",
+      "owner": "lote B",
+      "state": "SEM_CAPTURA",
+      "evidence": [],
+      "impediment": "idem",
+      "note": ""
+    }
+  ]
+}

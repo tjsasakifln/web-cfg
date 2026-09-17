@@ -776,6 +776,13 @@ def _meta_properties(html: str) -> dict[str, str]:
 # basta para sair de um congelamento.
 EDITORIAL_RECOMPOSED_ROUTES = frozenset({
     "medicoes-glosas-obras-publicas/index.html",
+    # 2026-09-17 (SALTO-INSTITUCIONAL-02, lote B): the five remaining B2G
+    # pillars follow the same editorial composition as the pilot pillar.
+    "aditivos-obras-publicas/index.html",
+    "auditoria-orcamento-licitacao/index.html",
+    "diagnostico-b2g-360/index.html",
+    "diagnostico-pre-licitacao/index.html",
+    "reequilibrio-obras-publicas/index.html",
 })
 
 
@@ -1560,6 +1567,87 @@ def test_focus_ring_survives_reduced_motion_and_js_off():
                 assert not (prop in ("outline", "box-shadow") and value.strip().lower() == "none"), (
                     f"prefers-reduced-motion removes the focus ring: {selector}"
                 )
+
+
+class _AnchorVisibilityParser(HTMLParser):
+    """Records, for every ``id``, whether the element sits inside a closed
+    ``<details>`` (ignoring the disclosure element itself and its ``summary``,
+    which stay visible), plus every ``href="#..."`` inside ``nav.page-index``."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self._stack: list[tuple[str, bool]] = []  # (tag, is_closed_details)
+        self.hidden_ids: set[str] = set()
+        self.ids: set[str] = set()
+        self._in_index = 0
+        self.index_hrefs: list[str] = []
+        self._pending_details = False
+
+    def handle_starttag(self, tag, attrs):  # noqa: ANN001
+        a = dict(attrs)
+        closed_details = tag == "details" and "open" not in a
+        if tag not in {"br", "img", "meta", "link", "input", "source", "hr", "use", "path", "wbr"}:
+            self._stack.append((tag, closed_details))
+        ident = a.get("id")
+        if ident:
+            self.ids.add(ident)
+            ancestors = self._stack[:-1]
+            if tag == "summary" and ancestors and ancestors[-1][0] == "details":
+                ancestors = ancestors[:-1]
+            if any(closed for _t, closed in ancestors):
+                self.hidden_ids.add(ident)
+        if tag == "nav" and "page-index" in (a.get("class") or "").split():
+            self._in_index = len(self._stack)
+        if self._in_index and tag == "a":
+            href = a.get("href") or ""
+            if href.startswith("#"):
+                self.index_hrefs.append(href[1:])
+
+    def handle_endtag(self, tag):  # noqa: ANN001
+        while self._stack:
+            top, _closed = self._stack.pop()
+            if top == tag:
+                break
+        if self._in_index and len(self._stack) < self._in_index:
+            self._in_index = 0
+
+
+def test_page_index_anchors_land_on_visible_targets():
+    """2026-09-17 (SALTO-INSTITUCIONAL-02, lote B, revisão): an index entry whose
+    target sits inside a closed ``<details>`` does not open it; the browser lands
+    on the next visible element (on the offer pages, the form) and the visitor
+    never sees the section named in the index. Every ``nav.page-index`` href must
+    resolve to an id that renders without opening a disclosure. The disclosure
+    element itself and its summary are visible targets."""
+    failures: list[str] = []
+    for path in sorted(ROOT.rglob("index.html")):
+        parts = path.relative_to(ROOT).parts
+        if any(p in {".git", ".claude", ".worktrees", "_site", "node_modules", "docs"} for p in parts):
+            continue
+        html = path.read_text(encoding="utf-8", errors="replace")
+        if 'class="page-index"' not in html:
+            continue
+        parser = _AnchorVisibilityParser()
+        parser.feed(html)
+        rel = path.relative_to(ROOT).as_posix()
+        for anchor in parser.index_hrefs:
+            if anchor not in parser.ids:
+                failures.append(f"{rel}: #{anchor} has no target")
+            elif anchor in parser.hidden_ids:
+                failures.append(f"{rel}: #{anchor} sits inside a closed <details>")
+    assert not failures, "page-index anchors hidden or missing:\n" + "\n".join(failures)
+
+
+def test_page_index_guard_catches_a_hidden_anchor():
+    parser = _AnchorVisibilityParser()
+    parser.feed(
+        '<nav class="page-index"><ol><li><a href="#a">A</a></li><li><a href="#d">D</a></li>'
+        '<li><a href="#s">S</a></li></ol></nav><section id="a"></section>'
+        '<details id="d"><summary id="s">x</summary><section id="b"></section></details>'
+    )
+    assert parser.index_hrefs == ["a", "d", "s"]
+    assert "b" in parser.hidden_ids
+    assert not ({"a", "d", "s"} & parser.hidden_ids)
 
 
 def run_all() -> int:

@@ -1,0 +1,534 @@
+{
+  "base": "http://127.0.0.1:8742",
+  "tag": "lote-b",
+  "captures": [
+    {
+      "route": "/aditivos-obras-publicas/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/auditoria-orcamento-licitacao/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/reequilibrio-obras-publicas/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/servicos-obras-publicas/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/problemas-que-resolvemos/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/casos/aditivo-art125-demonstrativo/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/casos/medicao-glosa-demonstrativo/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/diretoria-b2g/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/defesa-margem-contratos-publicos/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 11107,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-margem-contratos-publicos-390x844-fold-lote-b.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-margem-contratos-publicos-390x844-full-lote-b.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-margem-contratos-publicos-390x844-menu-lote-b.jpg"
+    },
+    {
+      "route": "/defesa-margem-contratos-publicos/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 7460,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-margem-contratos-publicos-1440x1000-fold-lote-b.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-margem-contratos-publicos-1440x1000-full-lote-b.jpg"
+    },
+    {
+      "route": "/defesa-margem-contratos-publicos/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/defesa-tecnica-contratos-publicos/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 13195,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-tecnica-contratos-publicos-390x844-fold-lote-b.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-tecnica-contratos-publicos-390x844-full-lote-b.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-tecnica-contratos-publicos-390x844-menu-lote-b.jpg"
+    },
+    {
+      "route": "/defesa-tecnica-contratos-publicos/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 8488,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-tecnica-contratos-publicos-1440x1000-fold-lote-b.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-tecnica-contratos-publicos-1440x1000-full-lote-b.jpg"
+    },
+    {
+      "route": "/defesa-tecnica-contratos-publicos/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/acompanhamento-contratos-obras/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 10047,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/acompanhamento-contratos-obras-390x844-fold-lote-b.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/acompanhamento-contratos-obras-390x844-full-lote-b.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-b/acompanhamento-contratos-obras-390x844-menu-lote-b.jpg"
+    },
+    {
+      "route": "/acompanhamento-contratos-obras/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 6565,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/acompanhamento-contratos-obras-1440x1000-fold-lote-b.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/acompanhamento-contratos-obras-1440x1000-full-lote-b.jpg"
+    },
+    {
+      "route": "/acompanhamento-contratos-obras/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/atrasos-prorrogacao-obras-publicas/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 13864,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/atrasos-prorrogacao-obras-publicas-390x844-fold-lote-b.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/atrasos-prorrogacao-obras-publicas-390x844-full-lote-b.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-b/atrasos-prorrogacao-obras-publicas-390x844-menu-lote-b.jpg"
+    },
+    {
+      "route": "/atrasos-prorrogacao-obras-publicas/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 8846,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/atrasos-prorrogacao-obras-publicas-1440x1000-fold-lote-b.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/atrasos-prorrogacao-obras-publicas-1440x1000-full-lote-b.jpg"
+    },
+    {
+      "route": "/atrasos-prorrogacao-obras-publicas/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/bid-room-licitacoes-obras/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/conflitos/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/diagnostico-b2g-expansao/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/diagnostico-b2g-360/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/diagnostico-pre-licitacao/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/casos/aditivo-art125-demonstrativo/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/casos/medicao-glosa-demonstrativo/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/servicos-obras-publicas/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/problemas-que-resolvemos/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/servicos-obras-publicas/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/problemas-que-resolvemos/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/servicos-obras-publicas/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 14616,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/servicos-obras-publicas-390x844-fold-lote-b.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/servicos-obras-publicas-390x844-full-lote-b.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-b/servicos-obras-publicas-390x844-menu-lote-b.jpg"
+    },
+    {
+      "route": "/servicos-obras-publicas/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 10305,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/servicos-obras-publicas-1440x1000-fold-lote-b.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/servicos-obras-publicas-1440x1000-full-lote-b.jpg"
+    },
+    {
+      "route": "/servicos-obras-publicas/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/problemas-que-resolvemos/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/casos/aditivo-art125-demonstrativo/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/casos/medicao-glosa-demonstrativo/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/casos/aditivo-art125-demonstrativo/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/casos/medicao-glosa-demonstrativo/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 6988,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/casos-medicao-glosa-demonstrativo-390x844-fold-lote-b.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/casos-medicao-glosa-demonstrativo-390x844-full-lote-b.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-b/casos-medicao-glosa-demonstrativo-390x844-menu-lote-b.jpg"
+    },
+    {
+      "route": "/casos/medicao-glosa-demonstrativo/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 4572,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/casos-medicao-glosa-demonstrativo-1440x1000-fold-lote-b.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/casos-medicao-glosa-demonstrativo-1440x1000-full-lote-b.jpg"
+    },
+    {
+      "route": "/casos/medicao-glosa-demonstrativo/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/reequilibrio-obras-publicas/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/diagnostico-b2g-360/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 12012,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-360-390x844-fold-lote-b.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-360-390x844-full-lote-b.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-360-390x844-menu-lote-b.jpg"
+    },
+    {
+      "route": "/diagnostico-b2g-360/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 8371,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-360-1440x1000-fold-lote-b.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-360-1440x1000-full-lote-b.jpg"
+    },
+    {
+      "route": "/diagnostico-b2g-360/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/aditivos-obras-publicas/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 13654,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/aditivos-obras-publicas-390x844-fold-lote-b.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/aditivos-obras-publicas-390x844-full-lote-b.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-b/aditivos-obras-publicas-390x844-menu-lote-b.jpg"
+    },
+    {
+      "route": "/aditivos-obras-publicas/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 9307,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/aditivos-obras-publicas-1440x1000-fold-lote-b.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/aditivos-obras-publicas-1440x1000-full-lote-b.jpg"
+    },
+    {
+      "route": "/aditivos-obras-publicas/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/diagnostico-pre-licitacao/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 12252,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-pre-licitacao-390x844-fold-lote-b.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-pre-licitacao-390x844-full-lote-b.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-pre-licitacao-390x844-menu-lote-b.jpg"
+    },
+    {
+      "route": "/diagnostico-pre-licitacao/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 8667,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-pre-licitacao-1440x1000-fold-lote-b.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-pre-licitacao-1440x1000-full-lote-b.jpg"
+    },
+    {
+      "route": "/diagnostico-pre-licitacao/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/auditoria-orcamento-licitacao/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 13502,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/auditoria-orcamento-licitacao-390x844-fold-lote-b.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/auditoria-orcamento-licitacao-390x844-full-lote-b.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-b/auditoria-orcamento-licitacao-390x844-menu-lote-b.jpg"
+    },
+    {
+      "route": "/auditoria-orcamento-licitacao/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 9403,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/auditoria-orcamento-licitacao-1440x1000-fold-lote-b.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/auditoria-orcamento-licitacao-1440x1000-full-lote-b.jpg"
+    },
+    {
+      "route": "/auditoria-orcamento-licitacao/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/problemas-que-resolvemos/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 7619,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/problemas-que-resolvemos-390x844-fold-lote-b.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/problemas-que-resolvemos-390x844-full-lote-b.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-b/problemas-que-resolvemos-390x844-menu-lote-b.jpg"
+    },
+    {
+      "route": "/problemas-que-resolvemos/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 6011,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/problemas-que-resolvemos-1440x1000-fold-lote-b.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/problemas-que-resolvemos-1440x1000-full-lote-b.jpg"
+    },
+    {
+      "route": "/problemas-que-resolvemos/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/casos/aditivo-art125-demonstrativo/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 7487,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/casos-aditivo-art125-demonstrativo-390x844-fold-lote-b.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/casos-aditivo-art125-demonstrativo-390x844-full-lote-b.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-b/casos-aditivo-art125-demonstrativo-390x844-menu-lote-b.jpg"
+    },
+    {
+      "route": "/casos/aditivo-art125-demonstrativo/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 4765,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/casos-aditivo-art125-demonstrativo-1440x1000-fold-lote-b.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/casos-aditivo-art125-demonstrativo-1440x1000-full-lote-b.jpg"
+    },
+    {
+      "route": "/casos/aditivo-art125-demonstrativo/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/diretoria-b2g/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 9915,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/diretoria-b2g-390x844-fold-lote-b.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/diretoria-b2g-390x844-full-lote-b.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-b/diretoria-b2g-390x844-menu-lote-b.jpg"
+    },
+    {
+      "route": "/diretoria-b2g/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 7394,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/diretoria-b2g-1440x1000-fold-lote-b.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/diretoria-b2g-1440x1000-full-lote-b.jpg"
+    },
+    {
+      "route": "/diretoria-b2g/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/bid-room-licitacoes-obras/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 9613,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/bid-room-licitacoes-obras-390x844-fold-lote-b.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/bid-room-licitacoes-obras-390x844-full-lote-b.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-b/bid-room-licitacoes-obras-390x844-menu-lote-b.jpg"
+    },
+    {
+      "route": "/bid-room-licitacoes-obras/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 7013,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/bid-room-licitacoes-obras-1440x1000-fold-lote-b.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/bid-room-licitacoes-obras-1440x1000-full-lote-b.jpg"
+    },
+    {
+      "route": "/bid-room-licitacoes-obras/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/diagnostico-b2g-expansao/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 7295,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-expansao-390x844-fold-lote-b.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-expansao-390x844-full-lote-b.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-expansao-390x844-menu-lote-b.jpg"
+    },
+    {
+      "route": "/diagnostico-b2g-expansao/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 5370,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-expansao-1440x1000-fold-lote-b.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-expansao-1440x1000-full-lote-b.jpg"
+    },
+    {
+      "route": "/diagnostico-b2g-expansao/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/conflitos/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 6812,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/conflitos-390x844-fold-lote-b.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/conflitos-390x844-full-lote-b.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-b/conflitos-390x844-menu-lote-b.jpg"
+    },
+    {
+      "route": "/conflitos/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 4823,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/conflitos-1440x1000-fold-lote-b.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/conflitos-1440x1000-full-lote-b.jpg"
+    },
+    {
+      "route": "/conflitos/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/reequilibrio-obras-publicas/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 12179,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/reequilibrio-obras-publicas-390x844-fold-lote-b.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/reequilibrio-obras-publicas-390x844-full-lote-b.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-b/reequilibrio-obras-publicas-390x844-menu-lote-b.jpg"
+    },
+    {
+      "route": "/reequilibrio-obras-publicas/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 8262,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/reequilibrio-obras-publicas-1440x1000-fold-lote-b.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/reequilibrio-obras-publicas-1440x1000-full-lote-b.jpg"
+    },
+    {
+      "route": "/reequilibrio-obras-publicas/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    }
+  ]
+}

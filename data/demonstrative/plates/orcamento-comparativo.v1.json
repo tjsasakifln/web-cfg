@@ -1,0 +1,78 @@
+{
+  "schema": "confenge.demonstrative-plate-source/1.0",
+  "id": "plate-orcamento-comparativo-2026-09",
+  "plate_id": "orcamento-comparativo",
+  "sheet_code": "P6",
+  "origin": "demonstrative",
+  "revision": "R00",
+  "title": "Referência e proposta, item a item",
+  "label_pt_br": "exemplo demonstrativo",
+  "client_name": null,
+  "address": null,
+  "contract_number": null,
+  "art_number": null,
+  "signature": null,
+  "date_modified": "2026-09-17",
+  "public_source_pt_br": "Seção /auditoria-orcamento-licitacao/#exemplo-demonstrativo (premissas sintéticas, não edital nem proposta de cliente).",
+  "units": {
+    "value": "R$ mil por item (quantidade × preço unitário)",
+    "difference": "percentual da proposta sobre a referência"
+  },
+  "columns": [
+    {
+      "id": "REF",
+      "label_pt_br": "Orçamento de referência",
+      "short_pt_br": "Referência"
+    },
+    {
+      "id": "PROP",
+      "label_pt_br": "Proposta da empresa",
+      "short_pt_br": "Proposta"
+    }
+  ],
+  "items": [
+    {
+      "id": "IT-01",
+      "label_pt_br": "Escavação mecânica",
+      "unit_pt_br": "m³",
+      "reference_brl_thousand": "240",
+      "proposal_brl_thousand": "194",
+      "difference_percent": "19",
+      "difference_brl_thousand": "46",
+      "reading_pt_br": "desconto compatível com produtividade própria",
+      "focus": false
+    },
+    {
+      "id": "IT-02",
+      "label_pt_br": "Concreto estrutural",
+      "unit_pt_br": "m³",
+      "reference_brl_thousand": "864",
+      "proposal_brl_thousand": "846",
+      "difference_percent": "2",
+      "difference_brl_thousand": "18",
+      "reading_pt_br": "próximo da referência, sem risco de exequibilidade",
+      "focus": false
+    },
+    {
+      "id": "IT-03",
+      "label_pt_br": "Administração local",
+      "unit_pt_br": "mês",
+      "reference_brl_thousand": "180",
+      "proposal_brl_thousand": "96",
+      "difference_percent": "47",
+      "difference_brl_thousand": "84",
+      "reading_pt_br": "desconto que a equipe mínima da obra não sustenta",
+      "focus": true
+    }
+  ],
+  "axis": {
+    "max_brl_thousand": "900",
+    "ticks_brl_thousand": [
+      "0",
+      "300",
+      "600",
+      "900"
+    ]
+  },
+  "disclaimer_pt_br": "Premissas sintéticas para mostrar como a auditoria lê a planilha: o deságio global esconde o item que concentra o risco. Não é edital nem proposta de cliente e não promete resultado de licitação."
+}
