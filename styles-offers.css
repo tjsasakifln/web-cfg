@@ -33,6 +33,13 @@
 .contract-product__example strong{font-family:var(--sans-narrow);font-stretch:var(--narrow);font-weight:750;font-size:var(--text-small);letter-spacing:.08em;line-height:1.4;text-transform:uppercase;color:var(--ink)}
 .contract-product__action{margin:1.5rem 0 0}
 @media(min-width:900px){.contract-product__terms>div,.contract-product__example p{grid-template-columns:14rem minmax(0,1fr)}}
+/* Capture blocks share one composition (aceite M-12): copy column beside the
+   form card, as section.pillar-capture does on the pillars. The forms keep
+   their own markup, ids and runtime; only the wrapper changes. */
+.pillar-capture-grid>.offer-request-form{margin:0;padding:clamp(22px,4vw,36px);background:#fff;box-shadow:var(--shadow)}
+.pillar-capture-grid>.offer-request-form h2{margin:.25rem 0 .5rem;font-size:clamp(1.25rem,1.1rem + .5vw,1.5rem);line-height:1.15}
+.pillar-capture-grid>.offer-request-form .form-hint{margin:0;color:var(--text);font-size:var(--text-caption);line-height:1.5}
+.pillar-capture-grid>.offer-request-form #status:empty{display:none}
 .contract-product__capture{display:grid;grid-template-columns:minmax(0,1fr);gap:1.25rem 3rem;margin-top:2.5rem;padding:2rem 0 0;border-top:1px solid var(--rule-strong)}
 .contract-product__capture>div{max-width:38rem}
 .contract-product__capture h3{margin:0 0 .5rem;font-family:var(--sans-wide);font-stretch:var(--wide);font-size:var(--text-h2);font-weight:740;letter-spacing:-.02em;line-height:1.1;color:var(--ink)}
@@ -50,6 +57,8 @@
 .contract-product__capture button{justify-self:start}
 .contract-product__capture .form-status{min-height:1.5em;margin:0}
 .contract-product__capture .form-hint{margin:0;color:var(--text);font-size:var(--text-caption);line-height:1.5}
+/* Hub capture: copy beside the form card at desktop, as the pillars do (aceite M-12). */
+@media(min-width:901px){.contract-product__capture{grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(32px,6vw,72px)}.contract-product__capture form{max-width:none;padding:clamp(22px,4vw,36px);background:#fff;border:1px solid var(--line);border-radius:var(--radius-md);box-shadow:var(--shadow)}}
 .contract-products-hub__grid{display:grid;grid-template-columns:minmax(0,1fr);gap:0;margin:0 0 28px;border-top:1px solid var(--rule-strong)}
 .contract-products-hub__card{display:grid;grid-template-columns:minmax(0,1fr);grid-template-areas:"t" "d" "m" "a";gap:.35rem 1.5rem;padding:1.1rem 0;background:transparent;border:0;border-bottom:1px solid var(--rule)}
 .contract-products-hub__card h3{grid-area:t;margin:0;font-size:1.08rem}
@@ -69,12 +78,18 @@
    verifiable-proof caption breathes below them. */
 .keys--prose dd{font-weight:400}
 .keys+.t-caption{display:block;margin:var(--space-5,1.5rem) 0 0}
-/* Safe-execution pillars: the page index sits inside the opening copy, right
-   after the actions, so it is reached before the aside and the context strip. */
-.content-hero.svc-open .svc-open__copy .page-index{margin:1.25rem 0 0}
-.content-hero.svc-open .svc-open__copy .page-index ol{gap:0 1.25rem}
+/* Safe-execution pillars and offers: the page index closes the opening at full
+   width, right after the context strip (aceite SALTO-02, M-08/M-09). The
+   container is a flex column with explicit orders, so the index declares its
+   own; the detail paragraphs that stay in the opening follow it. */
+.offer-hero:has(.offer-context) > .container > .page-index{order:6;margin:1.5rem 0 0}
 .content-hero.svc-open .svc-open__grid{align-items:start}
+.content-hero.svc-open .svc-open__actions{margin-top:1.25rem}
 .content-hero.svc-open .authority-byline{margin-top:.75rem}
+/* Optional-field suffix inside the shared pillar form: the label is a grid, so
+   the span would fall to its own row with the label's weight; joined to the
+   label text and demoted (aceite B-14). The form markup is untouched. */
+.pillar-capture-form label .field-optional{display:contents;font-weight:400;color:var(--muted)}
 /* Subordinate WhatsApp on the dark closing block: white outline button, the
    same reading as the lead-inline actions. */
 .sec--dark .button-secondary{background:#fff;color:var(--ink);border-color:#fff}
@@ -96,11 +111,15 @@ body[data-offer-id="diretoria-b2g"] .contact-primary .button-primary{width:auto;
   order:5;
   margin:24px 0 20px;
 }
-.offer-hero:has(.offer-context) > .container > .offer-hero-desc{order:6}
-.offer-hero:has(.offer-context) > .container > .offer-result{order:7}
-.offer-hero:has(.offer-context) > .container > .hero-proof{order:8}
-.offer-hero:has(.offer-context) > .container > .hero-micro{order:9}
-.offer-hero:has(.offer-context) > .container > .authority-byline{order:10}
+/* Diretoria keeps its deliverable sentence in the opening (first-fold job
+   tokens); it reads with the deliverable line, before the actions. */
+.offer-hero:has(.offer-context) > .container > .offer-hero-desc{order:3;margin-top:12px}
+/* The deliverable line reads right after the lead, as .hero-deliverable does in
+   the service opening; ties with the lead resolve by DOM order (aceite M-09). */
+.offer-hero:has(.offer-context) > .container > .offer-result{order:3}
+.offer-hero:has(.offer-context) > .container > .hero-proof{order:9}
+.offer-hero:has(.offer-context) > .container > .hero-micro{order:10}
+.offer-hero:has(.offer-context) > .container > .authority-byline{order:11}
 .offer-hero:has(.offer-context) .offer-result{
   max-width:58ch;
   margin:10px 0 0;
@@ -117,6 +136,11 @@ body[data-offer-id="diretoria-b2g"] .contact-primary .button-primary{width:auto;
   max-width:86ch;
   margin:10px 0 0;
 }
+/* Credentials and byline relocated from the opening to the proof section
+   (aceite M-09): the chips row loses its own top rule, which the list above
+   already draws. */
+[data-offer-section="proof"] .hero-proof{margin-top:1.5rem;padding-top:0;border-top:0}
+[data-offer-section="proof"] .authority-byline{margin-top:1rem}
 
 /* Secondary contracting detail stays available without dominating the first read. */
 .offer-detail-disclosure{
