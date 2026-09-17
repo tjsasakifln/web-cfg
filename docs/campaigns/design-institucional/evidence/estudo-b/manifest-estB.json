@@ -1,0 +1,94 @@
+{
+  "base": "http://127.0.0.1:8731",
+  "label": "estB",
+  "captured_at": "2026-09-17T05:13:08.231Z",
+  "tool": "puppeteer-core 25 / chromium-1234",
+  "entries": [
+    {
+      "route": "/docs/design-audit/prototypes/salto-institucional-2026-09-17/b-coluna-e-margem/index.html",
+      "viewport": "390x844",
+      "status": 200,
+      "title": "[Estudo B] CONFENGE | Engenharia, Perícias e Inteligência Técnica",
+      "h1": "Assumimos a parte de engenharia que falta para você orçar, contratar ou decidir.",
+      "h1Font": "\"Archivo Var\", \"Archivo Fallback Wide\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+      "h1Size": "44px",
+      "fontsLoaded": [
+        "Archivo Var 100 900"
+      ],
+      "css": [
+        "http://127.0.0.1:8731/styles.css",
+        "http://127.0.0.1:8731/assets/home-10x.css",
+        "http://127.0.0.1:8731/docs/design-audit/prototypes/salto-institucional-2026-09-17/mechanism-b.css"
+      ],
+      "imgs": [
+        "/assets/logo-confenge-500-f8a83f6d.png"
+      ],
+      "docHeight": 15291,
+      "overflowX": false
+    },
+    {
+      "route": "/docs/design-audit/prototypes/salto-institucional-2026-09-17/b-coluna-e-margem/index.html",
+      "viewport": "1440x1000",
+      "status": 200,
+      "title": "[Estudo B] CONFENGE | Engenharia, Perícias e Inteligência Técnica",
+      "h1": "Assumimos a parte de engenharia que falta para você orçar, contratar ou decidir.",
+      "h1Font": "\"Archivo Var\", \"Archivo Fallback Wide\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+      "h1Size": "72px",
+      "fontsLoaded": [
+        "Archivo Var 100 900"
+      ],
+      "css": [
+        "http://127.0.0.1:8731/styles.css",
+        "http://127.0.0.1:8731/assets/home-10x.css",
+        "http://127.0.0.1:8731/docs/design-audit/prototypes/salto-institucional-2026-09-17/mechanism-b.css"
+      ],
+      "imgs": [
+        "/assets/logo-confenge-500-f8a83f6d.png"
+      ],
+      "docHeight": 8908,
+      "overflowX": false
+    },
+    {
+      "route": "/docs/design-audit/prototypes/salto-institucional-2026-09-17/b-coluna-e-margem/servico.html",
+      "viewport": "390x844",
+      "status": 200,
+      "title": "[Estudo B] Quantitativos e orçamento de obras | CONFENGE",
+      "h1": "Quantitativos e orçamento de obras",
+      "h1Font": "\"Archivo Var\", \"Archivo Fallback Wide\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+      "h1Size": "32px",
+      "fontsLoaded": [
+        "Archivo Var 100 900"
+      ],
+      "css": [
+        "http://127.0.0.1:8731/styles.css",
+        "http://127.0.0.1:8731/docs/design-audit/prototypes/salto-institucional-2026-09-17/mechanism-b.css"
+      ],
+      "imgs": [
+        "/assets/logo-confenge-500-f8a83f6d.png"
+      ],
+      "docHeight": 20357,
+      "overflowX": false
+    },
+    {
+      "route": "/docs/design-audit/prototypes/salto-institucional-2026-09-17/b-coluna-e-margem/servico.html",
+      "viewport": "1440x1000",
+      "status": 200,
+      "title": "[Estudo B] Quantitativos e orçamento de obras | CONFENGE",
+      "h1": "Quantitativos e orçamento de obras",
+      "h1Font": "\"Archivo Var\", \"Archivo Fallback Wide\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+      "h1Size": "48px",
+      "fontsLoaded": [
+        "Archivo Var 100 900"
+      ],
+      "css": [
+        "http://127.0.0.1:8731/styles.css",
+        "http://127.0.0.1:8731/docs/design-audit/prototypes/salto-institucional-2026-09-17/mechanism-b.css"
+      ],
+      "imgs": [
+        "/assets/logo-confenge-500-f8a83f6d.png"
+      ],
+      "docHeight": 13750,
+      "overflowX": false
+    }
+  ]
+}

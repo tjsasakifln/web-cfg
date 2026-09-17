@@ -1,0 +1,252 @@
+{
+  "base": "http://127.0.0.1:8731",
+  "label": "pilot",
+  "captured_at": "2026-09-17T05:12:29.390Z",
+  "tool": "puppeteer-core 25 / chromium-1234",
+  "entries": [
+    {
+      "route": "/",
+      "viewport": "390x844",
+      "status": 200,
+      "title": "CONFENGE | Engenharia, Perícias e Inteligência Técnica",
+      "h1": "Assumimos a parte de engenharia que falta para você orçar, contratar ou decidir.",
+      "h1Font": "\"Archivo Var\", \"Archivo Fallback Wide\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+      "h1Size": "32.58px",
+      "fontsLoaded": [
+        "Archivo Var 100 900"
+      ],
+      "css": [
+        "http://127.0.0.1:8731/styles.css",
+        "http://127.0.0.1:8731/assets/home-10x.css"
+      ],
+      "imgs": [
+        "/assets/logo-confenge-500-f8a83f6d.png"
+      ],
+      "docHeight": 12353,
+      "overflowX": false
+    },
+    {
+      "route": "/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "title": "CONFENGE | Engenharia, Perícias e Inteligência Técnica",
+      "h1": "Assumimos a parte de engenharia que falta para você orçar, contratar ou decidir.",
+      "h1Font": "\"Archivo Var\", \"Archivo Fallback Wide\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+      "h1Size": "60px",
+      "fontsLoaded": [
+        "Archivo Var 100 900"
+      ],
+      "css": [
+        "http://127.0.0.1:8731/styles.css",
+        "http://127.0.0.1:8731/assets/home-10x.css"
+      ],
+      "imgs": [
+        "/assets/logo-confenge-500-f8a83f6d.png"
+      ],
+      "docHeight": 8065,
+      "overflowX": false
+    },
+    {
+      "route": "/servicos/",
+      "viewport": "390x844",
+      "status": 200,
+      "title": "Serviços de engenharia, perícias e inteligência técnica | CONFENGE",
+      "h1": "Serviços de engenharia para obras públicas e privadas",
+      "h1Font": "\"Archivo Var\", \"Archivo Fallback Wide\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+      "h1Size": "32px",
+      "fontsLoaded": [
+        "Archivo Var 100 900"
+      ],
+      "css": [
+        "http://127.0.0.1:8731/styles.css"
+      ],
+      "imgs": [
+        "/assets/logo-confenge-500-f8a83f6d.png"
+      ],
+      "docHeight": 15760,
+      "overflowX": false
+    },
+    {
+      "route": "/servicos/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "title": "Serviços de engenharia, perícias e inteligência técnica | CONFENGE",
+      "h1": "Serviços de engenharia para obras públicas e privadas",
+      "h1Font": "\"Archivo Var\", \"Archivo Fallback Wide\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+      "h1Size": "48px",
+      "fontsLoaded": [
+        "Archivo Var 100 900"
+      ],
+      "css": [
+        "http://127.0.0.1:8731/styles.css"
+      ],
+      "imgs": [
+        "/assets/logo-confenge-500-f8a83f6d.png"
+      ],
+      "docHeight": 9931,
+      "overflowX": false
+    },
+    {
+      "route": "/quantitativos-orcamento-obras/",
+      "viewport": "390x844",
+      "status": 200,
+      "title": "Quantitativos e orçamento de obras | CONFENGE",
+      "h1": "Quantitativos e orçamento de obras",
+      "h1Font": "\"Archivo Var\", \"Archivo Fallback Wide\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+      "h1Size": "32px",
+      "fontsLoaded": [
+        "Archivo Var 100 900"
+      ],
+      "css": [
+        "http://127.0.0.1:8731/styles.css"
+      ],
+      "imgs": [
+        "/assets/logo-confenge-500-f8a83f6d.png"
+      ],
+      "docHeight": 20365,
+      "overflowX": false
+    },
+    {
+      "route": "/quantitativos-orcamento-obras/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "title": "Quantitativos e orçamento de obras | CONFENGE",
+      "h1": "Quantitativos e orçamento de obras",
+      "h1Font": "\"Archivo Var\", \"Archivo Fallback Wide\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+      "h1Size": "48px",
+      "fontsLoaded": [
+        "Archivo Var 100 900"
+      ],
+      "css": [
+        "http://127.0.0.1:8731/styles.css"
+      ],
+      "imgs": [
+        "/assets/logo-confenge-500-f8a83f6d.png"
+      ],
+      "docHeight": 12732,
+      "overflowX": false
+    },
+    {
+      "route": "/medicoes-glosas-obras-publicas/",
+      "viewport": "390x844",
+      "status": 200,
+      "title": "Medições, glosas e pagamentos em obras públicas | CONFENGE",
+      "h1": "Medições, glosas e pagamentos em obras públicas",
+      "h1Font": "\"Archivo Var\", \"Archivo Fallback Wide\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+      "h1Size": "32px",
+      "fontsLoaded": [
+        "Archivo Var 100 900"
+      ],
+      "css": [
+        "http://127.0.0.1:8731/styles.css"
+      ],
+      "imgs": [
+        "/assets/logo-confenge-500-f8a83f6d.png"
+      ],
+      "docHeight": 13309,
+      "overflowX": false
+    },
+    {
+      "route": "/medicoes-glosas-obras-publicas/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "title": "Medições, glosas e pagamentos em obras públicas | CONFENGE",
+      "h1": "Medições, glosas e pagamentos em obras públicas",
+      "h1Font": "\"Archivo Var\", \"Archivo Fallback Wide\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+      "h1Size": "48px",
+      "fontsLoaded": [
+        "Archivo Var 100 900"
+      ],
+      "css": [
+        "http://127.0.0.1:8731/styles.css"
+      ],
+      "imgs": [
+        "/assets/logo-confenge-500-f8a83f6d.png"
+      ],
+      "docHeight": 9784,
+      "overflowX": false
+    },
+    {
+      "route": "/casos/demonstrativo-projeto-privado/",
+      "viewport": "390x844",
+      "status": 200,
+      "title": "Demonstrativo. Recorte de banheiro: quantitativos, orçamento, revisão e compatibilização | CONFENGE",
+      "h1": "Demonstrativo. Recorte de banheiro com quantitativos, orçamento, revisão e compatibilização",
+      "h1Font": "\"Archivo Var\", \"Archivo Fallback Wide\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+      "h1Size": "32px",
+      "fontsLoaded": [
+        "Archivo Var 100 900"
+      ],
+      "css": [
+        "http://127.0.0.1:8731/styles.css"
+      ],
+      "imgs": [
+        "/assets/logo-confenge-500-f8a83f6d.png"
+      ],
+      "docHeight": 15499,
+      "overflowX": false
+    },
+    {
+      "route": "/casos/demonstrativo-projeto-privado/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "title": "Demonstrativo. Recorte de banheiro: quantitativos, orçamento, revisão e compatibilização | CONFENGE",
+      "h1": "Demonstrativo. Recorte de banheiro com quantitativos, orçamento, revisão e compatibilização",
+      "h1Font": "\"Archivo Var\", \"Archivo Fallback Wide\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+      "h1Size": "48px",
+      "fontsLoaded": [
+        "Archivo Var 100 900"
+      ],
+      "css": [
+        "http://127.0.0.1:8731/styles.css"
+      ],
+      "imgs": [
+        "/assets/logo-confenge-500-f8a83f6d.png"
+      ],
+      "docHeight": 9483,
+      "overflowX": false
+    },
+    {
+      "route": "/triagem-tecnica/",
+      "viewport": "390x844",
+      "status": 200,
+      "title": "Contato e triagem técnica | CONFENGE",
+      "h1": "Conte a situação do seu jeito. Nós nomeamos o serviço.",
+      "h1Font": "\"Archivo Var\", \"Archivo Fallback Wide\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+      "h1Size": "32px",
+      "fontsLoaded": [
+        "Archivo Var 100 900"
+      ],
+      "css": [
+        "http://127.0.0.1:8731/styles.css",
+        "http://127.0.0.1:8731/triagem-tecnica/styles.css"
+      ],
+      "imgs": [
+        "/assets/logo-confenge-500-f8a83f6d.png"
+      ],
+      "docHeight": 6537,
+      "overflowX": false
+    },
+    {
+      "route": "/triagem-tecnica/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "title": "Contato e triagem técnica | CONFENGE",
+      "h1": "Conte a situação do seu jeito. Nós nomeamos o serviço.",
+      "h1Font": "\"Archivo Var\", \"Archivo Fallback Wide\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+      "h1Size": "48px",
+      "fontsLoaded": [
+        "Archivo Var 100 900"
+      ],
+      "css": [
+        "http://127.0.0.1:8731/styles.css",
+        "http://127.0.0.1:8731/triagem-tecnica/styles.css"
+      ],
+      "imgs": [
+        "/assets/logo-confenge-500-f8a83f6d.png"
+      ],
+      "docHeight": 4222,
+      "overflowX": false
+    }
+  ]
+}
