@@ -163,10 +163,28 @@ body[data-content-cluster="home"] .form-legal p:last-child{margin:0}
  * e mudam de altura depois da hidratação do formulário. */
 @supports (content-visibility:auto){
 html.js body[data-content-cluster="home"] main>#triagem-tecnica,html.js body[data-content-cluster="home"] main>#contato{content-visibility:visible}
-@media (max-width:359px){html.js body[data-content-cluster="home"] main>#situacoes{contain-intrinsic-size:auto 3671px}html.js body[data-content-cluster="home"] main>#entregas-demonstrativas{contain-intrinsic-size:auto 3547px}html.js body[data-content-cluster="home"] main>#responsabilidade{contain-intrinsic-size:auto 2069px}html.js body[data-content-cluster="home"] main>#obras-publicas{contain-intrinsic-size:auto 3007px}}
-@media (min-width:360px) and (max-width:389px){html.js body[data-content-cluster="home"] main>#situacoes{contain-intrinsic-size:auto 3529px}html.js body[data-content-cluster="home"] main>#entregas-demonstrativas{contain-intrinsic-size:auto 3434px}html.js body[data-content-cluster="home"] main>#responsabilidade{contain-intrinsic-size:auto 2013px}html.js body[data-content-cluster="home"] main>#obras-publicas{contain-intrinsic-size:auto 2959px}}
-@media (min-width:390px) and (max-width:429px){html.js body[data-content-cluster="home"] main>#situacoes{contain-intrinsic-size:auto 3481px}html.js body[data-content-cluster="home"] main>#entregas-demonstrativas{contain-intrinsic-size:auto 3411px}html.js body[data-content-cluster="home"] main>#responsabilidade{contain-intrinsic-size:auto 2015px}html.js body[data-content-cluster="home"] main>#obras-publicas{contain-intrinsic-size:auto 2750px}}
-@media (min-width:430px) and (max-width:699px){html.js body[data-content-cluster="home"] main>#situacoes{contain-intrinsic-size:auto 3301px}html.js body[data-content-cluster="home"] main>#entregas-demonstrativas{contain-intrinsic-size:auto 3516px}html.js body[data-content-cluster="home"] main>#responsabilidade{contain-intrinsic-size:auto 2018px}html.js body[data-content-cluster="home"] main>#obras-publicas{contain-intrinsic-size:auto 2480px}}
+@media (max-width:359px){html.js body[data-content-cluster="home"] main>#situacoes{contain-intrinsic-size:auto 3408px}html.js body[data-content-cluster="home"] main>#entregas-demonstrativas{contain-intrinsic-size:auto 3433px}html.js body[data-content-cluster="home"] main>#responsabilidade{contain-intrinsic-size:auto 1759px}html.js body[data-content-cluster="home"] main>#obras-publicas{contain-intrinsic-size:auto 2921px}}
+@media (min-width:360px) and (max-width:389px){html.js body[data-content-cluster="home"] main>#situacoes{contain-intrinsic-size:auto 3327px}html.js body[data-content-cluster="home"] main>#entregas-demonstrativas{contain-intrinsic-size:auto 3320px}html.js body[data-content-cluster="home"] main>#responsabilidade{contain-intrinsic-size:auto 1715px}html.js body[data-content-cluster="home"] main>#obras-publicas{contain-intrinsic-size:auto 2873px}}
+@media (min-width:390px) and (max-width:429px){html.js body[data-content-cluster="home"] main>#situacoes{contain-intrinsic-size:auto 3279px}html.js body[data-content-cluster="home"] main>#entregas-demonstrativas{contain-intrinsic-size:auto 3298px}html.js body[data-content-cluster="home"] main>#responsabilidade{contain-intrinsic-size:auto 1692px}html.js body[data-content-cluster="home"] main>#obras-publicas{contain-intrinsic-size:auto 2664px}}
+@media (min-width:430px) and (max-width:699px){html.js body[data-content-cluster="home"] main>#situacoes{contain-intrinsic-size:auto 3113px}html.js body[data-content-cluster="home"] main>#entregas-demonstrativas{contain-intrinsic-size:auto 3406px}html.js body[data-content-cluster="home"] main>#responsabilidade{contain-intrinsic-size:auto 1605px}html.js body[data-content-cluster="home"] main>#obras-publicas{contain-intrinsic-size:auto 2394px}}
 @media (min-width:700px) and (max-width:1199px){html.js body[data-content-cluster="home"] main>#situacoes{contain-intrinsic-size:auto 1880px}html.js body[data-content-cluster="home"] main>#entregas-demonstrativas{contain-intrinsic-size:auto 1818px}html.js body[data-content-cluster="home"] main>#responsabilidade{contain-intrinsic-size:auto 1002px}html.js body[data-content-cluster="home"] main>#obras-publicas{contain-intrinsic-size:auto 1916px}}
 @media (min-width:1200px){html.js body[data-content-cluster="home"] main>#situacoes{contain-intrinsic-size:auto 1880px}html.js body[data-content-cluster="home"] main>#entregas-demonstrativas{contain-intrinsic-size:auto 1818px}html.js body[data-content-cluster="home"] main>#responsabilidade{contain-intrinsic-size:auto 945px}html.js body[data-content-cluster="home"] main>#obras-publicas{contain-intrinsic-size:auto 1917px}}
+}
+
+/* ── 9. Celular: ritmo mais curto sem esconder conteúdo (medido 2026-09-17) ── */
+@media (max-width:699px){
+  .situation-row{padding:1rem 0 1.15rem;gap:.3rem}
+  .situation-row .situation-action{min-height:40px;margin-top:.1rem}
+  .area__sub{gap:.1rem .75rem;margin-top:.2rem}
+  .area__sub a{min-height:28px}
+  .deliveries{gap:2rem}
+  .delivery{gap:.85rem;padding-top:1rem}
+  .delivery__chain{gap:.35rem .75rem;margin-bottom:.6rem}
+  .delivery__text h3{margin-bottom:.5rem}
+  .portrait{max-width:14rem}
+  .creds div{grid-template-columns:minmax(0,1fr);gap:.1rem;padding-bottom:.5rem}
+  .conduct>li{padding:.65rem 0}
+  .pw__path li{padding:.6rem 0}
+  .contracts-list .service-card{padding:.85rem 0;gap:.25rem}
+  body[data-content-cluster="home"] #entregas-demonstrativas,body[data-content-cluster="home"] #responsabilidade{padding:var(--section-tight)}
 }
