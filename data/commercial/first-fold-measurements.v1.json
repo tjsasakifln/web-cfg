@@ -1,61 +1,62 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-09-17T08:06:11.096Z",
+  "measured_at": "2026-09-17T19:22:30.084Z",
   "measured_on": "2026-09-17",
-  "commit_sha": "f342b2d1f64e8b8d28757fc7ba406f1d1a1171c1",
+  "commit_sha": "96456d47fb3da884005fdc5b4316d315d5a3d5ef",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "f168038814087e1b365d1de3042af9a3f3364743756e104711fecc0fb9fe7477",
     "@control/scripts/site/first_fold_rules.mjs": "53d52810f7750795e96f2421248d8aa8f06ff4c4065c4ba6bc9ee92a11fca7fd",
     "@control/scripts/site/measure_first_fold.mjs": "8f7a93464d0c5f05a92d665c077eedeabd944a0ef038e7d2cf2b18377a87013b",
-    "acompanhamento-contratos-obras/index.html": "e24b293cb23dd9cd3ec16ec87441a5fb6427de466a33e7e0cfdce0bb52845e92",
-    "aditivos-obras-publicas/index.html": "4de1b69bbd7ec7504c2054dd6f63a50099bd007b284084b3ee54e64c3b3bea64",
+    "acompanhamento-contratos-obras/index.html": "051c7864c9f8c5e1842176eecbb10e36bbc6f63071d3e61990371b2a2fd794a7",
+    "aditivos-obras-publicas/index.html": "bcfbe8fc5fd6e37fde9c857991c0bc23f86c5dde9bda1f265f0f8ea3ffd11156",
     "assets/archivo-var-latin-bf6e041e.woff2": "bf6e041e98b0fa244d965027e9f2b6ed53470ed95f2227615510a08a67ea7f4a",
-    "assets/editorial.css": "b8da14849ccb25379e5e7bd7e00cdc964032eff3f6de0960be212b116cb7252a",
+    "assets/editorial-article.css": "f7a078362ad1386547397e047e3058960ccd0ddcc25845bfd2ed118505f73b7e",
+    "assets/editorial.css": "b1712b516dc7d75f75eea437566cfc1a12e316cbecfeb3749394b83e9b953aa6",
     "assets/eight-offer-contract.css": "d2aead054169392b26c739ab4d95c8b2f651a66c9d6ac27aa7fd98bdafc4f79d",
-    "assets/home-10x.css": "10d9e60cacb36ade094133f8b32e6aa5a88065cd4298eb950fd405bbed0951b7",
+    "assets/home-10x.css": "1fc39fff9c67b0c1e01d1c7d98675fe9bc9b13b8dc6336d4a60dbb33170f090d",
     "assets/report-capture.css": "669b93f113f417ba6a8175d9d0ab0dd846a19e991245ad9f2f1ebea48d8c0552",
     "assets/report-model-a11y-v293.css": "148fb54ad084edad56eff48e6b635e2df177e8679a724d50e2e92a88421fddce",
-    "assets/report-model.css": "22e499881491794e227ba5bf3ad5e42032410221bb749b631a5501601e6fc853",
-    "atrasos-prorrogacao-obras-publicas/index.html": "fa0c659d5f6e2b5fe6cd4827bc0ec4e97f068de88a079bc1123f9e4431b56d65",
-    "auditoria-orcamento-licitacao/index.html": "316839d15f48760c17c06510a26e2bf120fc1a80dee24fb6f5d873708d5001b7",
-    "bid-room-licitacoes-obras/index.html": "bc481465c82bb11efd7e247d8e66c69d7ebf669e0609cd1a40f7bdc17de5253f",
-    "casos/modelo-apresentacao-executiva-resultados/index.html": "f387d6df4b5b7cc81f98f188e509795d8a19e558e61074064c0e13e04323bd58",
+    "assets/report-model.css": "b4b5e638341d7531e4f6059618c202890e269a695cb28dddb545d9a520726839",
+    "atrasos-prorrogacao-obras-publicas/index.html": "17ffc9d49c33fc3e8f0c1946cd78b31a26ac739ce0d6620fcbbc58ad6aecc175",
+    "auditoria-orcamento-licitacao/index.html": "69dcc3c5df42d837fb979fb481939b5e582a3915851e030319de89b6651f5225",
+    "bid-room-licitacoes-obras/index.html": "5ead50a790144ca1d02ca07deba14133b8b27bdf592f51fcb985344a98b2f31b",
+    "casos/modelo-apresentacao-executiva-resultados/index.html": "97b8202a1b834a9f316ea29e613f02d4ddbfbc1b948ec82267429f5f985e9c75",
     "casos/modelo-apresentacao-executiva-resultados/styles.css": "8ace8a9960dbc19f71c9f69e4908f39ac223991715a13707587d1d06f483048d",
-    "casos/modelo-base-quantitativa-canonica/index.html": "95e4eea8d36e374da0f3aec9ce95da5687eafe05815ba1670de2d336137783ee",
+    "casos/modelo-base-quantitativa-canonica/index.html": "4fe87709d0601a92f72ff8578cb38476a7580ec33db8b3b464e788d62a8724a2",
     "casos/modelo-base-quantitativa-canonica/styles.css": "c8d0c0fcc67bb3ff7368e313a7eb7978728dd012668bbd57c6d4584fd3331d83",
-    "casos/modelo-contratos-vincendos-relicitacao/index.html": "7ae1f85a7bc1bee523bbd0f37692725d2c36ec1c50028ef404602a28d27e458e",
+    "casos/modelo-contratos-vincendos-relicitacao/index.html": "04df1a9a5e48fe41b73a7b0086a968913762985cc1ee134fa78a2722c9103e4f",
     "casos/modelo-contratos-vincendos-relicitacao/styles.css": "5092ad1880bb2170a9de801c7a865ff2259dd0716210b13c5fe44569e603fe1e",
-    "casos/modelo-mapa-compradores-publicos/index.html": "0eaf43f9b459e2d74adc70786ca3c89c5be112bb0a1e35ea172470a80f8f5282",
+    "casos/modelo-mapa-compradores-publicos/index.html": "90caa21245f278947e3b4a6d7d779026b9c562e3d7dd11a65fd2a81071790b70",
     "casos/modelo-mapa-compradores-publicos/styles.css": "f6eda4b508c8e46e4a5274bd0ac16046c053791ffe13efd82c75cfa9d272e815",
-    "casos/modelo-mapeamento-concorrentes-publicos/index.html": "b06f770ae840e093df02581d4722bf9745d3a3b2ce3acec837eb668ecee58373",
+    "casos/modelo-mapeamento-concorrentes-publicos/index.html": "99a2206ce741c98b27d1ac7305dc917f4040f7a7e506a1b0dd52a6c2636cf7d5",
     "casos/modelo-mapeamento-concorrentes-publicos/styles.css": "3739f8d4ed9a2b20308629bd19ea3a5a21a0e9f1574992009edd455ff44135ac",
-    "casos/modelo-painel-precos-obras-publicas/index.html": "05f7c0a8c43dd17352597821c7f5cdabefaba2bacdb5b862ad2580b9d14069f5",
+    "casos/modelo-painel-precos-obras-publicas/index.html": "c43d379a0d38159ff2e441a9732bcb687903325c8a173ba4b07cbbc7163e2184",
     "casos/modelo-painel-precos-obras-publicas/styles.css": "eddc3b734030a33898728fe41affb4c3bce7ccee5338d13ff05a8cbf7d669e6a",
-    "casos/modelo-relatorio-executivo-consolidado/index.html": "5bfe1e2dea8694adc0b85e6377388651970a286d9eeac0400ba2a70474219b49",
+    "casos/modelo-relatorio-executivo-consolidado/index.html": "bd9737ca9c92309f83634e26a01bfe62c88a3fad96bf3715d87cc41d45204340",
     "casos/modelo-relatorio-executivo-consolidado/styles.css": "d2f580f6061be6c0bcafa966877693be469fa8a7171a7a3469c7ec967e11b63a",
-    "casos/modelo-relatorio-inteligencia-licitacoes/index.html": "79a22254a321aa74f241f4daf8d3efea52dfc8a8f6284128db4a9ab17e1b710c",
-    "casos/modelo-relatorio-inteligencia-licitacoes/styles.css": "22e499881491794e227ba5bf3ad5e42032410221bb749b631a5501601e6fc853",
-    "defesa-margem-contratos-publicos/index.html": "17dc62cd7abdb99a23671cd71f346d460c9047a2316f3144a029d401d8f855e4",
-    "defesa-tecnica-contratos-publicos/index.html": "be041f750ae094e0dbc09e3b628031e29f728b4e96a73888c51b7f4223c5add2",
-    "diagnostico-b2g-360/index.html": "80c4ea907f25339fd2e774d13194af9883e8c2cb6b1f601d11415e8256f89c5d",
-    "diagnostico-b2g-expansao/index.html": "efc1f0eea3c5003bfc64ba4a8459eb987cbf0e8baf47539cd99f3f37b539203f",
-    "diagnostico-pre-licitacao/index.html": "cf4d194861f4eff49e0b7e35b79928107c6c83f9b1c83366fb1ae165332408b9",
-    "diretoria-b2g/index.html": "b708c947f0a04039dfb4571bf3197b8ceff50c30b3634db47cb646d615bffa46",
-    "entregas/index.html": "a97308da3c5edbb2eeb15c8a1c66a5b93c31d3d64c3b94d7f06f5f245f57eb1d",
-    "entregas/styles.css": "7886b4de52d324286c255ecfe9bf93e5ea43d5a692ee170e3e4f6a6d8b8915a0",
-    "index.html": "82726b9947953307a9905edeff490950bc445bceb8472ea09d7c6379892c3326",
-    "medicoes-glosas-obras-publicas/index.html": "124e31f29b3b98e91cb457943fdaa448c8e52121dc62a68ddd0e3d054f4fca3c",
-    "problemas-que-resolvemos/index.html": "b0d2f95d54e5248364e5a841bb5cbbf1215de6ff16b0b6551ba26e4f64b458a2",
-    "reequilibrio-obras-publicas/index.html": "83485c51f1e86bdac9875e8a437ac2bceac8b83a665d874c5fafcce650205704",
+    "casos/modelo-relatorio-inteligencia-licitacoes/index.html": "d9ed33ba8ec9d19cfe7c69638c8e39c21af4c673859549f030024c8f532fa895",
+    "casos/modelo-relatorio-inteligencia-licitacoes/styles.css": "54a412e66160736aa7d8c757bd6bd9752eb1d41fac2996864c9575aeaa27c260",
+    "defesa-margem-contratos-publicos/index.html": "1d630c0e6ca68945d41567d543162224ddd9deaa39d3f735b83939cef6026e9a",
+    "defesa-tecnica-contratos-publicos/index.html": "6a1bfb343204d541c0ab127219777f7f77778f20fe90644880dae789fb44e86f",
+    "diagnostico-b2g-360/index.html": "888dc7f716f1dd524bfd1b06d55fe23bb48a2bc507602f7528a17a77066db1cd",
+    "diagnostico-b2g-expansao/index.html": "b32d5fe2fe6718f7321ac75b445bd7e43070a04628b2176c1d57702449feb9a3",
+    "diagnostico-pre-licitacao/index.html": "74402dff44f8981829c91e8bac07c3ef5e122f345cf4e27991b0dfa921588f7a",
+    "diretoria-b2g/index.html": "467fe7daabdf6a935b7c7f77dcee0f2b43c4902aaadb0ffa7f454e11135e827b",
+    "entregas/index.html": "38dac83c7a4092edcf17250b246cff50cd670b753b87b8a99713a262aacb2ab3",
+    "entregas/styles.css": "4df6c06befb99bf6ce09db19d81e7353cdda80a7a802868600b88033ca78aa1c",
+    "index.html": "c28692dd8ff16c83d1a0cc74583154416e6fe3259ef57575cd695cf0077c52d6",
+    "medicoes-glosas-obras-publicas/index.html": "821168975038c60fc478ff69515be52edb636b5e06dd94eb910414e245321910",
+    "problemas-que-resolvemos/index.html": "1bb27e6665127d9dca95c70f5c9cfe2161c4ab7890903e05ac2bf76233d9ccba",
+    "reequilibrio-obras-publicas/index.html": "d3c946a5d0a81d9e2b59760f5c35396dd887de5055a11e441134dee84fd120f3",
     "script.js": "1c0429738a094c73e738152d2275ac8cd34b905e43c2139423b388ae75affe1a",
-    "servicos-obras-publicas/index.html": "ecf1aaca84269aa845614106e65fc0dd1311b893c0400b36f165bb72759016fc",
+    "servicos-obras-publicas/index.html": "599f3003d48ea8a809e05462683d799723ac469c75f4802e8ae93ea04b484986",
     "styles-hubs.css": "ed4668833ad8de5cef5acc5fc1e8f21e519870f0bf282247c3b4a9644a094592",
-    "styles-offers.css": "d0c6595ce62892715030f833593bd2ab4b410394e8da023b1a41f8aeba29d639",
+    "styles-offers.css": "4851dd21768c063aeb02a69289e84dd20065a17b0deb9418bf8242f5a616e10b",
     "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
-    "styles-tools.css": "8c42a4b5fadba13e4dae52bd7168c64b9f5548f3fd3f8d4f0707ce4e9463c7ba",
-    "styles.css": "cf21e2f087f25b4dd0c6fe6e19b23cad10875ba7100e34e545f2c1601b1d1cb4"
+    "styles-tools.css": "7112012d31d7a3a1b43a6fbd8b939598d7a6f1b8ea41b0ec850eaa6d8cde4377",
+    "styles.css": "c18f3bcf21625adbaa382a0e5e208c2858cd4229aa382d3490fcfd46397a8311"
   },
   "surface": "source",
   "artifact_identity": null,
@@ -102,7 +103,7 @@
   "routes": [
     {
       "route": "/",
-      "html_sha256": "82726b9947953307a9905edeff490950bc445bceb8472ea09d7c6379892c3326",
+      "html_sha256": "c28692dd8ff16c83d1a0cc74583154416e6fe3259ef57575cd695cf0077c52d6",
       "measured_on": "2026-09-17",
       "viewports": {
         "1366x768": {
@@ -318,7 +319,7 @@
     },
     {
       "route": "/entregas/",
-      "html_sha256": "a97308da3c5edbb2eeb15c8a1c66a5b93c31d3d64c3b94d7f06f5f245f57eb1d",
+      "html_sha256": "38dac83c7a4092edcf17250b246cff50cd670b753b87b8a99713a262aacb2ab3",
       "measured_on": "2026-09-17",
       "viewports": {
         "1366x768": {
@@ -327,11 +328,11 @@
             "eyebrow": {
               "selector": "header .eyebrow",
               "box": {
-                "top": 154,
-                "bottom": 174,
+                "top": 160,
+                "bottom": 179,
                 "left": 83,
-                "right": 796,
-                "width": 713,
+                "right": 688,
+                "width": 605,
                 "height": 20
               },
               "text": "O que você recebe"
@@ -339,44 +340,44 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 186,
-                "bottom": 323,
+                "top": 191,
+                "bottom": 341,
                 "left": 83,
-                "right": 605,
-                "width": 522,
-                "height": 137
+                "right": 688,
+                "width": 605,
+                "height": 150
               },
               "text": "Entregas de engenharia. Veja o conteúdo e para que ele serve."
             },
             "lead": {
               "selector": ".deliverables-lead",
               "box": {
-                "top": 359,
-                "bottom": 434,
+                "top": 355,
+                "bottom": 444,
                 "left": 83,
-                "right": 733,
-                "width": 650,
-                "height": 74
+                "right": 619,
+                "width": 536,
+                "height": 89
               },
               "text": "Comparar propostas, completar ou conferir um projeto, entender uma infiltração, avaliar um imóvel ou responder a uma glosa: cada entrega diz o que chega às suas mãos e para que serve."
             },
             "proof": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 446,
-                "bottom": 511,
+                "top": 569,
+                "bottom": 611,
                 "left": 83,
-                "right": 596,
-                "width": 513,
-                "height": 65
+                "right": 688,
+                "width": 605,
+                "height": 42
               },
               "text": "Consulte sem cadastro os exemplos demonstrativos e as ferramentas públicas. Dados identificados como sintéticos mostram o formato e o método; não representam cliente."
             },
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 529,
-                "bottom": 573,
+                "top": 626,
+                "bottom": 670,
                 "left": 83,
                 "right": 337,
                 "width": 254,
@@ -390,8 +391,8 @@
               "text": "Ver entregas e exemplos",
               "href": "#servicos-e-entregas",
               "box": {
-                "top": 529,
-                "bottom": 573,
+                "top": 626,
+                "bottom": 670,
                 "left": 83,
                 "right": 337,
                 "width": 254,
@@ -417,8 +418,8 @@
             "eyebrow": {
               "selector": "header .eyebrow",
               "box": {
-                "top": 138,
-                "bottom": 157,
+                "top": 135,
+                "bottom": 155,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -429,32 +430,32 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 169,
-                "bottom": 302,
+                "top": 167,
+                "bottom": 267,
                 "left": 18,
-                "right": 284,
-                "width": 266,
-                "height": 133
+                "right": 372,
+                "width": 353,
+                "height": 100
               },
               "text": "Entregas de engenharia. Veja o conteúdo e para que ele serve."
             },
             "lead": {
               "selector": ".deliverables-lead",
               "box": {
-                "top": 358,
-                "bottom": 468,
+                "top": 280,
+                "bottom": 386,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 110
+                "height": 106
               },
               "text": "Comparar propostas, completar ou conferir um projeto, entender uma infiltração, avaliar um imóvel ou responder a uma glosa: cada entrega diz o que chega às suas mãos e para que serve."
             },
             "proof": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 486,
-                "bottom": 570,
+                "top": 526,
+                "bottom": 610,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -465,11 +466,11 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 582,
-                "bottom": 626,
+                "top": 625,
+                "bottom": 669,
                 "left": 18,
-                "right": 372,
-                "width": 353,
+                "right": 272,
+                "width": 254,
                 "height": 44
               },
               "text": "Ver entregas e exemplos"
@@ -480,11 +481,11 @@
               "text": "Ver entregas e exemplos",
               "href": "#servicos-e-entregas",
               "box": {
-                "top": 582,
-                "bottom": 626,
+                "top": 625,
+                "bottom": 669,
                 "left": 18,
-                "right": 372,
-                "width": 353,
+                "right": 272,
+                "width": 254,
                 "height": 44
               }
             }
@@ -528,20 +529,20 @@
     },
     {
       "route": "/servicos-obras-publicas/",
-      "html_sha256": "ecf1aaca84269aa845614106e65fc0dd1311b893c0400b36f165bb72759016fc",
+      "html_sha256": "599f3003d48ea8a809e05462683d799723ac469c75f4802e8ae93ea04b484986",
       "measured_on": "2026-09-17",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
           "roles": {
             "eyebrow": {
-              "selector": "header .eyebrow",
+              "selector": ".eyebrow",
               "box": {
-                "top": 176,
-                "bottom": 195,
+                "top": 160,
+                "bottom": 179,
                 "left": 83,
-                "right": 484,
-                "width": 401,
+                "right": 688,
+                "width": 605,
                 "height": 20
               },
               "text": "Edital, glosa ou aditivo"
@@ -549,35 +550,35 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 207,
-                "bottom": 403,
+                "top": 191,
+                "bottom": 291,
                 "left": 83,
-                "right": 484,
-                "width": 401,
-                "height": 196
+                "right": 688,
+                "width": 605,
+                "height": 100
               },
               "text": "Serviços para licitações e contratos de obras públicas"
             },
             "lead": {
               "selector": ".section-lead",
               "box": {
-                "top": 213,
-                "bottom": 328,
-                "left": 552,
-                "right": 915,
-                "width": 363,
-                "height": 115
+                "top": 305,
+                "bottom": 391,
+                "left": 83,
+                "right": 655,
+                "width": 572,
+                "height": 86
               },
               "text": "Glosa, aditivo, atraso, reequilíbrio ou edital: apuramos em reais o que está em jogo e escrevemos a posição técnica que você apresenta ao fiscal."
             },
             "proof": {
               "selector": ".section-proof",
               "box": {
-                "top": 435,
-                "bottom": 522,
+                "top": 469,
+                "bottom": 555,
                 "left": 83,
-                "right": 500,
-                "width": 417,
+                "right": 532,
+                "width": 449,
                 "height": 87
               },
               "text": "Preço e prazo aparecem onde já estão publicados; nos demais casos, a conversa inicial define o escopo. ART e nota fiscal, responsabilidade assumida na proposta. Exemplos completos você consulta sem cadastro."
@@ -585,10 +586,10 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 655,
-                "bottom": 699,
-                "left": 831,
-                "right": 1253,
+                "top": 411,
+                "bottom": 455,
+                "left": 83,
+                "right": 505,
                 "width": 422,
                 "height": 44
               },
@@ -600,10 +601,10 @@
               "text": "Avaliar o Dossiê de Medição, Glosa e Pagamento",
               "href": "/medicoes-glosas-obras-publicas/",
               "box": {
-                "top": 655,
-                "bottom": 699,
-                "left": 831,
-                "right": 1253,
+                "top": 411,
+                "bottom": 455,
+                "left": 83,
+                "right": 505,
                 "width": 422,
                 "height": 44
               }
@@ -620,10 +621,10 @@
           "viewport": "390x844",
           "roles": {
             "eyebrow": {
-              "selector": "header .eyebrow",
+              "selector": ".eyebrow",
               "box": {
-                "top": 133,
-                "bottom": 153,
+                "top": 135,
+                "bottom": 155,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -634,20 +635,20 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 161,
-                "bottom": 260,
+                "top": 167,
+                "bottom": 267,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 99
+                "height": 100
               },
               "text": "Serviços para licitações e contratos de obras públicas"
             },
             "lead": {
               "selector": ".section-lead",
               "box": {
-                "top": 274,
-                "bottom": 378,
+                "top": 280,
+                "bottom": 384,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -658,8 +659,8 @@
             "proof": {
               "selector": ".section-proof",
               "box": {
-                "top": 390,
-                "bottom": 474,
+                "top": 478,
+                "bottom": 562,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -670,11 +671,11 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 755,
-                "bottom": 815,
-                "left": 36,
-                "right": 354,
-                "width": 317,
+                "top": 404,
+                "bottom": 464,
+                "left": 18,
+                "right": 372,
+                "width": 353,
                 "height": 60
               },
               "text": "Avaliar o Dossiê de Medição, Glosa e Pagamento"
@@ -685,11 +686,11 @@
               "text": "Avaliar o Dossiê de Medição, Glosa e Pagamento",
               "href": "/medicoes-glosas-obras-publicas/",
               "box": {
-                "top": 755,
-                "bottom": 815,
-                "left": 36,
-                "right": 354,
-                "width": 317,
+                "top": 404,
+                "bottom": 464,
+                "left": 18,
+                "right": 372,
+                "width": 353,
                 "height": 60
               }
             }
@@ -726,20 +727,20 @@
     },
     {
       "route": "/problemas-que-resolvemos/",
-      "html_sha256": "b0d2f95d54e5248364e5a841bb5cbbf1215de6ff16b0b6551ba26e4f64b458a2",
+      "html_sha256": "1bb27e6665127d9dca95c70f5c9cfe2161c4ab7890903e05ac2bf76233d9ccba",
       "measured_on": "2026-09-17",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
           "roles": {
             "eyebrow": {
-              "selector": "header .eyebrow",
+              "selector": ".eyebrow",
               "box": {
-                "top": 176,
-                "bottom": 195,
+                "top": 160,
+                "bottom": 179,
                 "left": 83,
-                "right": 484,
-                "width": 401,
+                "right": 688,
+                "width": 605,
                 "height": 20
               },
               "text": "Reconheça o seu evento"
@@ -747,35 +748,35 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 207,
-                "bottom": 403,
+                "top": 191,
+                "bottom": 341,
                 "left": 83,
-                "right": 484,
-                "width": 401,
-                "height": 196
+                "right": 688,
+                "width": 605,
+                "height": 150
               },
               "text": "Problemas que resolvemos em licitações e contratos de obras"
             },
             "lead": {
               "selector": ".section-lead",
               "box": {
-                "top": 213,
-                "bottom": 328,
-                "left": 552,
-                "right": 915,
-                "width": 363,
-                "height": 115
+                "top": 355,
+                "bottom": 441,
+                "left": 83,
+                "right": 655,
+                "width": 572,
+                "height": 86
               },
               "text": "Glosa, aditivo, atraso, reequilíbrio, notificação ou edital: cada evento leva à página que diz o que assumimos, o que você recebe e para que serve."
             },
             "proof": {
               "selector": ".section-proof",
               "box": {
-                "top": 435,
-                "bottom": 478,
+                "top": 519,
+                "bottom": 562,
                 "left": 83,
-                "right": 500,
-                "width": 417,
+                "right": 532,
+                "width": 449,
                 "height": 43
               },
               "text": "Quatro ferramentas públicas calculam limite de aditivo, atraso, reequilíbrio e risco de margem sem cadastro."
@@ -783,10 +784,10 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 600,
-                "bottom": 644,
-                "left": 907,
-                "right": 1253,
+                "top": 461,
+                "bottom": 505,
+                "left": 83,
+                "right": 429,
                 "width": 346,
                 "height": 44
               },
@@ -798,10 +799,10 @@
               "text": "Ver o Diagnóstico de Riscos à Margem",
               "href": "/defesa-margem-contratos-publicos/",
               "box": {
-                "top": 600,
-                "bottom": 644,
-                "left": 907,
-                "right": 1253,
+                "top": 461,
+                "bottom": 505,
+                "left": 83,
+                "right": 429,
                 "width": 346,
                 "height": 44
               }
@@ -818,10 +819,10 @@
           "viewport": "390x844",
           "roles": {
             "eyebrow": {
-              "selector": "header .eyebrow",
+              "selector": ".eyebrow",
               "box": {
-                "top": 155,
-                "bottom": 175,
+                "top": 135,
+                "bottom": 155,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -832,20 +833,20 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 183,
-                "bottom": 282,
+                "top": 167,
+                "bottom": 300,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 99
+                "height": 133
               },
               "text": "Problemas que resolvemos em licitações e contratos de obras"
             },
             "lead": {
               "selector": ".section-lead",
               "box": {
-                "top": 296,
-                "bottom": 400,
+                "top": 314,
+                "bottom": 418,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -856,8 +857,8 @@
             "proof": {
               "selector": ".section-proof",
               "box": {
-                "top": 412,
-                "bottom": 454,
+                "top": 495,
+                "bottom": 537,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -868,12 +869,12 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 661,
-                "bottom": 721,
-                "left": 36,
-                "right": 354,
-                "width": 317,
-                "height": 60
+                "top": 438,
+                "bottom": 482,
+                "left": 18,
+                "right": 364,
+                "width": 346,
+                "height": 44
               },
               "text": "Ver o Diagnóstico de Riscos à Margem"
             }
@@ -883,12 +884,12 @@
               "text": "Ver o Diagnóstico de Riscos à Margem",
               "href": "/defesa-margem-contratos-publicos/",
               "box": {
-                "top": 661,
-                "bottom": 721,
-                "left": 36,
-                "right": 354,
-                "width": 317,
-                "height": 60
+                "top": 438,
+                "bottom": 482,
+                "left": 18,
+                "right": 364,
+                "width": 346,
+                "height": 44
               }
             }
           ],
@@ -924,7 +925,7 @@
     },
     {
       "route": "/diagnostico-b2g-expansao/",
-      "html_sha256": "efc1f0eea3c5003bfc64ba4a8459eb987cbf0e8baf47539cd99f3f37b539203f",
+      "html_sha256": "b32d5fe2fe6718f7321ac75b445bd7e43070a04628b2176c1d57702449feb9a3",
       "measured_on": "2026-09-17",
       "viewports": {
         "1366x768": {
@@ -1134,17 +1135,17 @@
     },
     {
       "route": "/diagnostico-pre-licitacao/",
-      "html_sha256": "cf4d194861f4eff49e0b7e35b79928107c6c83f9b1c83366fb1ae165332408b9",
+      "html_sha256": "74402dff44f8981829c91e8bac07c3ef5e122f345cf4e27991b0dfa921588f7a",
       "measured_on": "2026-09-17",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
           "roles": {
             "eyebrow": {
-              "selector": "header .eyebrow",
+              "selector": ".eyebrow",
               "box": {
-                "top": 168,
-                "bottom": 187,
+                "top": 160,
+                "bottom": 179,
                 "left": 83,
                 "right": 1283,
                 "width": 1200,
@@ -1155,62 +1156,62 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 203,
-                "bottom": 304,
+                "top": 191,
+                "bottom": 241,
                 "left": 83,
-                "right": 723,
-                "width": 640,
-                "height": 100
+                "right": 1283,
+                "width": 1200,
+                "height": 50
               },
               "text": "Diagnóstico pré-licitação para obras públicas"
             },
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 322,
-                "bottom": 407,
+                "top": 255,
+                "bottom": 341,
                 "left": 83,
-                "right": 691,
-                "width": 608,
+                "right": 655,
+                "width": 572,
                 "height": 86
               },
-              "text": "Edital, regime de execução, matriz de riscos, atestados, projeto, cronograma e exequibilidade analisados antes de transformar uma vitória na licitação em um contrato ruim."
+              "text": "O edital saiu, a sessão tem data e a equipe já começou a precificar sem saber se o acervo habilita, se o regime cabe e se o orçamento de referência fecha; a decisão de entrar precisa vir antes do preço."
             },
             "proof": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 415,
-                "bottom": 445,
+                "top": 419,
+                "bottom": 440,
                 "left": 83,
                 "right": 1283,
                 "width": 1200,
-                "height": 30
+                "height": 21
               },
               "text": "Engenharia por Engº Tiago Sasaki: documentos, cálculos e fontes conferíveis."
             },
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 465,
-                "bottom": 509,
+                "top": 361,
+                "bottom": 405,
                 "left": 83,
-                "right": 325,
-                "width": 242,
+                "right": 311,
+                "width": 228,
                 "height": 44
               },
-              "text": "Analisar uma demanda"
+              "text": "Descrever a licitação"
             }
           },
           "primary_actions_in_fold": [
             {
-              "text": "Analisar uma demanda",
-              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20edital%20em%20an%C3%A1lise%20e%20quero%20avaliar%20se%20vale%20uma%20Opera%C3%A7%C3%A3o%20de%20Proposta%20para%20Licita%C3%A7%C3%A3o%20Cr%C3%ADtica%20ou%20diagn%C3%B3stico%20de%20participa%C3%A7%C3%A3o.",
+              "text": "Descrever a licitação",
+              "href": "#captura-pilar",
               "box": {
-                "top": 465,
-                "bottom": 509,
+                "top": 361,
+                "bottom": 405,
                 "left": 83,
-                "right": 325,
-                "width": 242,
+                "right": 311,
+                "width": 228,
                 "height": 44
               }
             }
@@ -1231,10 +1232,10 @@
           "viewport": "390x844",
           "roles": {
             "eyebrow": {
-              "selector": "header .eyebrow",
+              "selector": ".eyebrow",
               "box": {
-                "top": 176,
-                "bottom": 196,
+                "top": 164,
+                "bottom": 184,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1245,59 +1246,59 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 212,
-                "bottom": 276,
+                "top": 196,
+                "bottom": 295,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 64
+                "height": 100
               },
               "text": "Diagnóstico pré-licitação para obras públicas"
             },
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 294,
-                "bottom": 436,
+                "top": 309,
+                "bottom": 439,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 143
+                "height": 130
               },
-              "text": "Edital, regime de execução, matriz de riscos, atestados, projeto, cronograma e exequibilidade analisados antes de transformar uma vitória na licitação em um contrato ruim."
+              "text": "O edital saiu, a sessão tem data e a equipe já começou a precificar sem saber se o acervo habilita, se o regime cabe e se o orçamento de referência fecha; a decisão de entrar precisa vir antes do preço."
             },
             "proof": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 444,
-                "bottom": 497,
+                "top": 633,
+                "bottom": 675,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 53
+                "height": 42
               },
               "text": "Engenharia por Engº Tiago Sasaki: documentos, cálculos e fontes conferíveis."
             },
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 515,
-                "bottom": 559,
+                "top": 459,
+                "bottom": 503,
                 "left": 18,
                 "right": 372,
                 "width": 353,
                 "height": 44
               },
-              "text": "Analisar uma demanda"
+              "text": "Descrever a licitação"
             }
           },
           "primary_actions_in_fold": [
             {
-              "text": "Analisar uma demanda",
-              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20edital%20em%20an%C3%A1lise%20e%20quero%20avaliar%20se%20vale%20uma%20Opera%C3%A7%C3%A3o%20de%20Proposta%20para%20Licita%C3%A7%C3%A3o%20Cr%C3%ADtica%20ou%20diagn%C3%B3stico%20de%20participa%C3%A7%C3%A3o.",
+              "text": "Descrever a licitação",
+              "href": "#captura-pilar",
               "box": {
-                "top": 515,
-                "bottom": 559,
+                "top": 459,
+                "bottom": 503,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1327,36 +1328,40 @@
           "risco"
         ],
         "lead_new": [
-          "analisados",
-          "atestados",
-          "contrato",
-          "cronograma",
+          "acervo",
+          "cabe",
+          "comecou",
+          "data",
+          "decisao",
           "edital",
-          "execucao",
-          "exequibilidade",
-          "matriz",
-          "projeto",
+          "entrar",
+          "equipe",
+          "fecha",
+          "habilita",
+          "orcamento",
+          "precificar",
+          "precisa",
+          "referencia",
           "regime",
-          "riscos",
-          "ruim",
-          "transformar",
-          "vitoria"
+          "saber",
+          "saiu",
+          "sessao"
         ]
       }
     },
     {
       "route": "/auditoria-orcamento-licitacao/",
-      "html_sha256": "316839d15f48760c17c06510a26e2bf120fc1a80dee24fb6f5d873708d5001b7",
+      "html_sha256": "69dcc3c5df42d837fb979fb481939b5e582a3915851e030319de89b6651f5225",
       "measured_on": "2026-09-17",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
           "roles": {
             "eyebrow": {
-              "selector": "header .eyebrow",
+              "selector": ".eyebrow",
               "box": {
-                "top": 168,
-                "bottom": 187,
+                "top": 160,
+                "bottom": 179,
                 "left": 83,
                 "right": 1283,
                 "width": 1200,
@@ -1367,62 +1372,62 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 203,
-                "bottom": 304,
+                "top": 191,
+                "bottom": 241,
                 "left": 83,
-                "right": 723,
-                "width": 640,
-                "height": 100
+                "right": 1283,
+                "width": 1200,
+                "height": 50
               },
               "text": "Auditoria de orçamento, BDI, SINAPI e preço"
             },
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 322,
-                "bottom": 407,
+                "top": 255,
+                "bottom": 341,
                 "left": 83,
-                "right": 691,
-                "width": 608,
+                "right": 655,
+                "width": 572,
                 "height": 86
               },
-              "text": "BDI, deságio, exequibilidade, SINAPI, SICRO, composições próprias, cotações e data-base tratados como sistema econômico, não como preenchimento mecânico de planilha."
+              "text": "O edital parece atraente, o deságio fechou a proposta e ninguém sabe qual item vai pagar a diferença; a planilha precisa dizer onde o risco se concentra antes de imobilizar a equipe."
             },
             "proof": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 415,
-                "bottom": 445,
+                "top": 419,
+                "bottom": 440,
                 "left": 83,
                 "right": 1283,
                 "width": 1200,
-                "height": 30
+                "height": 21
               },
               "text": "Engenharia por Engº Tiago Sasaki: documentos, cálculos e fontes conferíveis."
             },
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 465,
-                "bottom": 509,
+                "top": 361,
+                "bottom": 405,
                 "left": 83,
-                "right": 325,
-                "width": 242,
+                "right": 328,
+                "width": 245,
                 "height": 44
               },
-              "text": "Analisar uma demanda"
+              "text": "Descrever o orçamento"
             }
           },
           "primary_actions_in_fold": [
             {
-              "text": "Analisar uma demanda",
-              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20revisar%20pre%C3%A7o%2C%20BDI%20e%20risco%20de%20uma%20licita%C3%A7%C3%A3o%20de%20obra.",
+              "text": "Descrever o orçamento",
+              "href": "#captura-pilar",
               "box": {
-                "top": 465,
-                "bottom": 509,
+                "top": 361,
+                "bottom": 405,
                 "left": 83,
-                "right": 325,
-                "width": 242,
+                "right": 328,
+                "width": 245,
                 "height": 44
               }
             }
@@ -1443,10 +1448,10 @@
           "viewport": "390x844",
           "roles": {
             "eyebrow": {
-              "selector": "header .eyebrow",
+              "selector": ".eyebrow",
               "box": {
-                "top": 176,
-                "bottom": 196,
+                "top": 164,
+                "bottom": 184,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1457,59 +1462,59 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 212,
-                "bottom": 276,
+                "top": 196,
+                "bottom": 262,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 64
+                "height": 67
               },
               "text": "Auditoria de orçamento, BDI, SINAPI e preço"
             },
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 294,
-                "bottom": 408,
+                "top": 276,
+                "bottom": 406,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 114
+                "height": 130
               },
-              "text": "BDI, deságio, exequibilidade, SINAPI, SICRO, composições próprias, cotações e data-base tratados como sistema econômico, não como preenchimento mecânico de planilha."
+              "text": "O edital parece atraente, o deságio fechou a proposta e ninguém sabe qual item vai pagar a diferença; a planilha precisa dizer onde o risco se concentra antes de imobilizar a equipe."
             },
             "proof": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 416,
-                "bottom": 469,
+                "top": 600,
+                "bottom": 642,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 53
+                "height": 42
               },
               "text": "Engenharia por Engº Tiago Sasaki: documentos, cálculos e fontes conferíveis."
             },
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 486,
-                "bottom": 530,
+                "top": 426,
+                "bottom": 470,
                 "left": 18,
                 "right": 372,
                 "width": 353,
                 "height": 44
               },
-              "text": "Analisar uma demanda"
+              "text": "Descrever o orçamento"
             }
           },
           "primary_actions_in_fold": [
             {
-              "text": "Analisar uma demanda",
-              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20revisar%20pre%C3%A7o%2C%20BDI%20e%20risco%20de%20uma%20licita%C3%A7%C3%A3o%20de%20obra.",
+              "text": "Descrever o orçamento",
+              "href": "#captura-pilar",
               "box": {
-                "top": 486,
-                "bottom": 530,
+                "top": 426,
+                "bottom": 470,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1539,26 +1544,31 @@
           "verificavel"
         ],
         "lead_new": [
-          "base",
-          "composicoes",
-          "cotacoes",
-          "data",
+          "atraente",
+          "concentra",
           "desagio",
-          "economico",
-          "exequibilidade",
-          "mecanico",
+          "diferenca",
+          "dizer",
+          "edital",
+          "equipe",
+          "fechou",
+          "imobilizar",
+          "item",
+          "ninguem",
+          "pagar",
+          "parece",
           "planilha",
-          "preenchimento",
-          "proprias",
-          "sicro",
-          "sistema",
-          "tratados"
+          "precisa",
+          "proposta",
+          "qual",
+          "risco",
+          "sabe"
         ]
       }
     },
     {
       "route": "/bid-room-licitacoes-obras/",
-      "html_sha256": "bc481465c82bb11efd7e247d8e66c69d7ebf669e0609cd1a40f7bdc17de5253f",
+      "html_sha256": "5ead50a790144ca1d02ca07deba14133b8b27bdf592f51fcb985344a98b2f31b",
       "measured_on": "2026-09-17",
       "viewports": {
         "1366x768": {
@@ -1766,7 +1776,7 @@
     },
     {
       "route": "/defesa-margem-contratos-publicos/",
-      "html_sha256": "17dc62cd7abdb99a23671cd71f346d460c9047a2316f3144a029d401d8f855e4",
+      "html_sha256": "1d630c0e6ca68945d41567d543162224ddd9deaa39d3f735b83939cef6026e9a",
       "measured_on": "2026-09-17",
       "viewports": {
         "1366x768": {
@@ -1778,8 +1788,8 @@
                 "top": 168,
                 "bottom": 187,
                 "left": 83,
-                "right": 1283,
-                "width": 1200,
+                "right": 688,
+                "width": 605,
                 "height": 20
               },
               "text": "Decidir antes que o custo vire perda absorvida"
@@ -1788,19 +1798,19 @@
               "selector": "h1",
               "box": {
                 "top": 199,
-                "bottom": 428,
+                "bottom": 399,
                 "left": 83,
-                "right": 553,
-                "width": 470,
-                "height": 229
+                "right": 688,
+                "width": 605,
+                "height": 200
               },
               "text": "Defesa de margem em contratos públicos: detecção, documentação, cálculo e decisão"
             },
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 444,
-                "bottom": 502,
+                "top": 415,
+                "bottom": 473,
                 "left": 83,
                 "right": 655,
                 "width": 572,
@@ -1811,8 +1821,8 @@
             "proof": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 516,
-                "bottom": 562,
+                "top": 531,
+                "bottom": 577,
                 "left": 83,
                 "right": 633,
                 "width": 550,
@@ -1823,8 +1833,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 586,
-                "bottom": 630,
+                "top": 473,
+                "bottom": 517,
                 "left": 83,
                 "right": 395,
                 "width": 312,
@@ -1838,8 +1848,8 @@
               "text": "Solicitar canal seguro para envio",
               "href": "#captura-pilar",
               "box": {
-                "top": 586,
-                "bottom": 630,
+                "top": 473,
+                "bottom": 517,
                 "left": 83,
                 "right": 395,
                 "width": 312,
@@ -1851,10 +1861,6 @@
             {
               "text": "Falar pelo WhatsApp",
               "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20contrato%20p%C3%BAblico%20sob%20press%C3%A3o%20e%20quero%20solicitar%20um%20canal%20seguro%20para%20envio."
-            },
-            {
-              "text": "Usar a ferramenta gratuita de diagnóstico de margem",
-              "href": "/ferramentas/diagnostico-defesa-margem/"
             }
           ],
           "verifiable_proof": {
@@ -1882,19 +1888,19 @@
               "selector": "h1",
               "box": {
                 "top": 196,
-                "bottom": 379,
+                "bottom": 363,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 182
+                "height": 166
               },
               "text": "Defesa de margem em contratos públicos: detecção, documentação, cálculo e decisão"
             },
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 395,
-                "bottom": 473,
+                "top": 379,
+                "bottom": 457,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1905,8 +1911,8 @@
             "proof": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 485,
-                "bottom": 548,
+                "top": 573,
+                "bottom": 636,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1917,8 +1923,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 568,
-                "bottom": 612,
+                "top": 457,
+                "bottom": 501,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1932,8 +1938,8 @@
               "text": "Solicitar canal seguro para envio",
               "href": "#captura-pilar",
               "box": {
-                "top": 568,
-                "bottom": 612,
+                "top": 457,
+                "bottom": 501,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1945,10 +1951,6 @@
             {
               "text": "Falar pelo WhatsApp",
               "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20contrato%20p%C3%BAblico%20sob%20press%C3%A3o%20e%20quero%20solicitar%20um%20canal%20seguro%20para%20envio."
-            },
-            {
-              "text": "Usar a ferramenta gratuita de diagnóstico de margem",
-              "href": "/ferramentas/diagnostico-defesa-margem/"
             }
           ],
           "verifiable_proof": {
@@ -1983,7 +1985,7 @@
     },
     {
       "route": "/medicoes-glosas-obras-publicas/",
-      "html_sha256": "124e31f29b3b98e91cb457943fdaa448c8e52121dc62a68ddd0e3d054f4fca3c",
+      "html_sha256": "821168975038c60fc478ff69515be52edb636b5e06dd94eb910414e245321910",
       "measured_on": "2026-09-17",
       "viewports": {
         "1366x768": {
@@ -2196,17 +2198,17 @@
     },
     {
       "route": "/aditivos-obras-publicas/",
-      "html_sha256": "4de1b69bbd7ec7504c2054dd6f63a50099bd007b284084b3ee54e64c3b3bea64",
+      "html_sha256": "bcfbe8fc5fd6e37fde9c857991c0bc23f86c5dde9bda1f265f0f8ea3ffd11156",
       "measured_on": "2026-09-17",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
           "roles": {
             "eyebrow": {
-              "selector": "header .eyebrow",
+              "selector": ".eyebrow",
               "box": {
-                "top": 144,
-                "bottom": 163,
+                "top": 160,
+                "bottom": 179,
                 "left": 83,
                 "right": 1283,
                 "width": 1200,
@@ -2217,70 +2219,70 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 179,
-                "bottom": 330,
+                "top": 191,
+                "bottom": 291,
                 "left": 83,
-                "right": 723,
-                "width": 640,
-                "height": 150
+                "right": 1283,
+                "width": 1200,
+                "height": 100
               },
               "text": "Aditivos e serviços extras em obras públicas: documentar, precificar e decidir"
             },
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 348,
-                "bottom": 433,
+                "top": 305,
+                "bottom": 398,
                 "left": 83,
-                "right": 691,
-                "width": 608,
-                "height": 86
+                "right": 655,
+                "width": 572,
+                "height": 93
               },
-              "text": "Tipos de alteração, serviços extras, documentação e decisão formal para proteger a margem antes de a obra absorver custo sem cobertura. A pergunta específica sobre o teto de 25% e 50% está no guia de limite."
+              "text": "A fiscalização pediu um serviço que não está na planilha, o projeto mudou no canteiro ou o acréscimo se aproxima do limite, e a obra está executando sem cobertura enquanto o termo não sai."
             },
             "proof": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 445,
-                "bottom": 475,
+                "top": 480,
+                "bottom": 501,
                 "left": 83,
                 "right": 1283,
                 "width": 1200,
-                "height": 30
+                "height": 21
               },
               "text": "Engenharia por Engº Tiago Sasaki: documentos, cálculos e fontes conferíveis."
             },
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 487,
-                "bottom": 531,
+                "top": 418,
+                "bottom": 462,
                 "left": 83,
-                "right": 568,
-                "width": 485,
+                "right": 298,
+                "width": 215,
                 "height": 44
               },
-              "text": "Verificar o contrato no diagnóstico de defesa de margem"
+              "text": "Descrever o aditivo"
             }
           },
           "primary_actions_in_fold": [
             {
-              "text": "Verificar o contrato no diagnóstico de defesa de margem",
-              "href": "/ferramentas/diagnostico-defesa-margem/",
+              "text": "Descrever o aditivo",
+              "href": "#captura-pilar",
               "box": {
-                "top": 487,
-                "bottom": 531,
+                "top": 418,
+                "bottom": 462,
                 "left": 83,
-                "right": 568,
-                "width": 485,
+                "right": 298,
+                "width": 215,
                 "height": 44
               }
             }
           ],
           "secondary_actions_in_fold": [
             {
-              "text": "Ler o que conta no limite de aditivo 25% e 50%",
-              "href": "/conteudos/limite-aditivo-25-50-obra-publica/"
+              "text": "Ver os 3 guias",
+              "href": "#guias"
             }
           ],
           "verifiable_proof": {
@@ -2293,10 +2295,10 @@
           "viewport": "390x844",
           "roles": {
             "eyebrow": {
-              "selector": "header .eyebrow",
+              "selector": ".eyebrow",
               "box": {
-                "top": 176,
-                "bottom": 215,
+                "top": 164,
+                "bottom": 203,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2307,70 +2309,70 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 231,
-                "bottom": 359,
+                "top": 215,
+                "bottom": 348,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 128
+                "height": 133
               },
               "text": "Aditivos e serviços extras em obras públicas: documentar, precificar e decidir"
             },
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 377,
-                "bottom": 520,
+                "top": 362,
+                "bottom": 492,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 143
+                "height": 130
               },
-              "text": "Tipos de alteração, serviços extras, documentação e decisão formal para proteger a margem antes de a obra absorver custo sem cobertura. A pergunta específica sobre o teto de 25% e 50% está no guia de limite."
+              "text": "A fiscalização pediu um serviço que não está na planilha, o projeto mudou no canteiro ou o acréscimo se aproxima do limite, e a obra está executando sem cobertura enquanto o termo não sai."
             },
             "proof": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 528,
-                "bottom": 581,
+                "top": 686,
+                "bottom": 728,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 53
+                "height": 42
               },
               "text": "Engenharia por Engº Tiago Sasaki: documentos, cálculos e fontes conferíveis."
             },
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 598,
-                "bottom": 658,
+                "top": 512,
+                "bottom": 556,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 60
+                "height": 44
               },
-              "text": "Verificar o contrato no diagnóstico de defesa de margem"
+              "text": "Descrever o aditivo"
             }
           },
           "primary_actions_in_fold": [
             {
-              "text": "Verificar o contrato no diagnóstico de defesa de margem",
-              "href": "/ferramentas/diagnostico-defesa-margem/",
+              "text": "Descrever o aditivo",
+              "href": "#captura-pilar",
               "box": {
-                "top": 598,
-                "bottom": 658,
+                "top": 512,
+                "bottom": 556,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 60
+                "height": 44
               }
             }
           ],
           "secondary_actions_in_fold": [
             {
-              "text": "Ler o que conta no limite de aditivo 25% e 50%",
-              "href": "/conteudos/limite-aditivo-25-50-obra-publica/"
+              "text": "Ver os 3 guias",
+              "href": "#guias"
             }
           ],
           "verifiable_proof": {
@@ -2390,28 +2392,27 @@
           "trabalho"
         ],
         "lead_new": [
-          "absorver",
-          "alteracao",
+          "acrescimo",
+          "aproxima",
+          "canteiro",
           "cobertura",
-          "custo",
-          "decisao",
-          "documentacao",
-          "especifica",
-          "formal",
-          "guia",
+          "enquanto",
+          "executando",
+          "fiscalizacao",
           "limite",
-          "margem",
+          "mudou",
           "obra",
-          "pergunta",
-          "proteger",
-          "teto",
-          "tipos"
+          "pediu",
+          "planilha",
+          "projeto",
+          "servico",
+          "termo"
         ]
       }
     },
     {
       "route": "/atrasos-prorrogacao-obras-publicas/",
-      "html_sha256": "fa0c659d5f6e2b5fe6cd4827bc0ec4e97f068de88a079bc1123f9e4431b56d65",
+      "html_sha256": "17ffc9d49c33fc3e8f0c1946cd78b31a26ac739ce0d6620fcbbc58ad6aecc175",
       "measured_on": "2026-09-17",
       "viewports": {
         "1366x768": {
@@ -2420,11 +2421,11 @@
             "eyebrow": {
               "selector": "header .eyebrow",
               "box": {
-                "top": 168,
-                "bottom": 187,
+                "top": 160,
+                "bottom": 179,
                 "left": 83,
-                "right": 1283,
-                "width": 1200,
+                "right": 688,
+                "width": 605,
                 "height": 20
               },
               "text": "Separar dias imputáveis antes de pedir prazo"
@@ -2432,32 +2433,32 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 203,
-                "bottom": 354,
+                "top": 191,
+                "bottom": 391,
                 "left": 83,
-                "right": 723,
-                "width": 640,
-                "height": 150
+                "right": 688,
+                "width": 605,
+                "height": 200
               },
               "text": "Atrasos e prorrogações: causa, responsabilidade, caminho crítico e registro contemporâneo"
             },
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 372,
-                "bottom": 429,
+                "top": 415,
+                "bottom": 501,
                 "left": 83,
-                "right": 691,
-                "width": 608,
-                "height": 57
+                "right": 655,
+                "width": 572,
+                "height": 86
               },
               "text": "Descubra quantos dias uma causa alheia à contratada realmente atingiu antes que o desvio vire custo absorvido, multa ou pedido frágil."
             },
             "proof": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 443,
-                "bottom": 489,
+                "top": 579,
+                "bottom": 626,
                 "left": 83,
                 "right": 633,
                 "width": 550,
@@ -2468,8 +2469,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 489,
-                "bottom": 533,
+                "top": 521,
+                "bottom": 565,
                 "left": 83,
                 "right": 296,
                 "width": 213,
@@ -2483,8 +2484,8 @@
               "text": "Enviar meus dados",
               "href": "#captura-pilar",
               "box": {
-                "top": 489,
-                "bottom": 533,
+                "top": 521,
+                "bottom": 565,
                 "left": 83,
                 "right": 296,
                 "width": 213,
@@ -2510,8 +2511,8 @@
             "eyebrow": {
               "selector": "header .eyebrow",
               "box": {
-                "top": 176,
-                "bottom": 215,
+                "top": 164,
+                "bottom": 203,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2522,32 +2523,32 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 231,
-                "bottom": 359,
+                "top": 215,
+                "bottom": 381,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 128
+                "height": 166
               },
               "text": "Atrasos e prorrogações: causa, responsabilidade, caminho crítico e registro contemporâneo"
             },
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 377,
-                "bottom": 491,
+                "top": 405,
+                "bottom": 510,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 114
+                "height": 104
               },
               "text": "Descubra quantos dias uma causa alheia à contratada realmente atingiu antes que o desvio vire custo absorvido, multa ou pedido frágil."
             },
             "proof": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 503,
-                "bottom": 566,
+                "top": 646,
+                "bottom": 709,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2558,8 +2559,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 566,
-                "bottom": 610,
+                "top": 530,
+                "bottom": 574,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2573,8 +2574,8 @@
               "text": "Enviar meus dados",
               "href": "#captura-pilar",
               "box": {
-                "top": 566,
-                "bottom": 610,
+                "top": 530,
+                "bottom": 574,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2624,17 +2625,17 @@
     },
     {
       "route": "/reequilibrio-obras-publicas/",
-      "html_sha256": "83485c51f1e86bdac9875e8a437ac2bceac8b83a665d874c5fafcce650205704",
+      "html_sha256": "d3c946a5d0a81d9e2b59760f5c35396dd887de5055a11e441134dee84fd120f3",
       "measured_on": "2026-09-17",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
           "roles": {
             "eyebrow": {
-              "selector": "header .eyebrow",
+              "selector": ".eyebrow",
               "box": {
-                "top": 168,
-                "bottom": 187,
+                "top": 160,
+                "bottom": 179,
                 "left": 83,
                 "right": 1283,
                 "width": 1200,
@@ -2645,62 +2646,62 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 203,
-                "bottom": 304,
+                "top": 191,
+                "bottom": 241,
                 "left": 83,
-                "right": 723,
-                "width": 640,
-                "height": 100
+                "right": 1283,
+                "width": 1200,
+                "height": 50
               },
               "text": "Reequilíbrio econômico-financeiro de obra pública"
             },
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 322,
-                "bottom": 379,
+                "top": 255,
+                "bottom": 370,
                 "left": 83,
-                "right": 691,
-                "width": 608,
-                "height": 57
+                "right": 655,
+                "width": 572,
+                "height": 115
               },
-              "text": "O que é, quando pode existir e o que precisa estar demonstrado: evento, matriz de riscos, nexo e impacto. Não é o mesmo instituto do reajuste ordinário."
+              "text": "O insumo disparou depois da proposta, o reajuste do aniversário não cobre a diferença e o contrato está consumindo a margem enquanto o pedido ainda é uma narrativa de aumento de custo, sem evento, nexo e cálculo."
             },
             "proof": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 387,
-                "bottom": 416,
+                "top": 448,
+                "bottom": 469,
                 "left": 83,
                 "right": 1283,
                 "width": 1200,
-                "height": 30
+                "height": 21
               },
               "text": "Engenharia por Engº Tiago Sasaki: documentos, cálculos e fontes conferíveis."
             },
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 436,
-                "bottom": 480,
+                "top": 390,
+                "bottom": 434,
                 "left": 83,
-                "right": 568,
-                "width": 485,
+                "right": 290,
+                "width": 207,
                 "height": 44
               },
-              "text": "Verificar o contrato no diagnóstico de defesa de margem"
+              "text": "Descrever o pleito"
             }
           },
           "primary_actions_in_fold": [
             {
-              "text": "Verificar o contrato no diagnóstico de defesa de margem",
-              "href": "/ferramentas/diagnostico-defesa-margem/",
+              "text": "Descrever o pleito",
+              "href": "#captura-pilar",
               "box": {
-                "top": 436,
-                "bottom": 480,
+                "top": 390,
+                "bottom": 434,
                 "left": 83,
-                "right": 568,
-                "width": 485,
+                "right": 290,
+                "width": 207,
                 "height": 44
               }
             }
@@ -2721,10 +2722,10 @@
           "viewport": "390x844",
           "roles": {
             "eyebrow": {
-              "selector": "header .eyebrow",
+              "selector": ".eyebrow",
               "box": {
-                "top": 176,
-                "bottom": 196,
+                "top": 164,
+                "bottom": 184,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2735,63 +2736,63 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 212,
-                "bottom": 276,
+                "top": 196,
+                "bottom": 295,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 64
+                "height": 100
               },
               "text": "Reequilíbrio econômico-financeiro de obra pública"
             },
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 294,
-                "bottom": 408,
+                "top": 309,
+                "bottom": 465,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 114
+                "height": 156
               },
-              "text": "O que é, quando pode existir e o que precisa estar demonstrado: evento, matriz de riscos, nexo e impacto. Não é o mesmo instituto do reajuste ordinário."
+              "text": "O insumo disparou depois da proposta, o reajuste do aniversário não cobre a diferença e o contrato está consumindo a margem enquanto o pedido ainda é uma narrativa de aumento de custo, sem evento, nexo e cálculo."
             },
             "proof": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 416,
-                "bottom": 469,
+                "top": 660,
+                "bottom": 702,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 53
+                "height": 42
               },
               "text": "Engenharia por Engº Tiago Sasaki: documentos, cálculos e fontes conferíveis."
             },
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 486,
-                "bottom": 546,
+                "top": 485,
+                "bottom": 529,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 60
+                "height": 44
               },
-              "text": "Verificar o contrato no diagnóstico de defesa de margem"
+              "text": "Descrever o pleito"
             }
           },
           "primary_actions_in_fold": [
             {
-              "text": "Verificar o contrato no diagnóstico de defesa de margem",
-              "href": "/ferramentas/diagnostico-defesa-margem/",
+              "text": "Descrever o pleito",
+              "href": "#captura-pilar",
               "box": {
-                "top": 486,
-                "bottom": 546,
+                "top": 485,
+                "bottom": 529,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 60
+                "height": 44
               }
             }
           ],
@@ -2817,25 +2818,30 @@
           "prova"
         ],
         "lead_new": [
-          "demonstrado",
-          "estar",
+          "aniversario",
+          "aumento",
+          "calculo",
+          "cobre",
+          "consumindo",
+          "contrato",
+          "custo",
+          "diferenca",
+          "disparou",
+          "enquanto",
           "evento",
-          "existir",
-          "instituto",
-          "matriz",
-          "mesmo",
+          "insumo",
+          "margem",
+          "narrativa",
           "nexo",
-          "ordinario",
-          "pode",
-          "precisa",
-          "reajuste",
-          "riscos"
+          "pedido",
+          "proposta",
+          "reajuste"
         ]
       }
     },
     {
       "route": "/defesa-tecnica-contratos-publicos/",
-      "html_sha256": "be041f750ae094e0dbc09e3b628031e29f728b4e96a73888c51b7f4223c5add2",
+      "html_sha256": "6a1bfb343204d541c0ab127219777f7f77778f20fe90644880dae789fb44e86f",
       "measured_on": "2026-09-17",
       "viewports": {
         "1366x768": {
@@ -2844,11 +2850,11 @@
             "eyebrow": {
               "selector": "header .eyebrow",
               "box": {
-                "top": 168,
-                "bottom": 187,
+                "top": 160,
+                "bottom": 179,
                 "left": 83,
-                "right": 1283,
-                "width": 1200,
+                "right": 688,
+                "width": 605,
                 "height": 20
               },
               "text": "Responder no prazo com fato técnico organizado"
@@ -2856,32 +2862,32 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 203,
-                "bottom": 354,
+                "top": 191,
+                "bottom": 391,
                 "left": 83,
-                "right": 723,
-                "width": 640,
-                "height": 150
+                "right": 688,
+                "width": 605,
+                "height": 200
               },
               "text": "Defesa técnica em contratos públicos: fatos e provas como subsídio técnico, não advocacia"
             },
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 372,
-                "bottom": 429,
+                "top": 415,
+                "bottom": 501,
                 "left": 83,
-                "right": 691,
-                "width": 608,
-                "height": 57
+                "right": 655,
+                "width": 572,
+                "height": 86
               },
               "text": "Dê ao jurídico uma base verificável antes que o prazo termine e uma acusação sem contraponto evolua para multa, impedimento ou extinção."
             },
             "proof": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 443,
-                "bottom": 489,
+                "top": 579,
+                "bottom": 626,
                 "left": 83,
                 "right": 633,
                 "width": 550,
@@ -2892,8 +2898,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 489,
-                "bottom": 533,
+                "top": 521,
+                "bottom": 565,
                 "left": 83,
                 "right": 296,
                 "width": 213,
@@ -2907,8 +2913,8 @@
               "text": "Enviar meus dados",
               "href": "#captura-pilar",
               "box": {
-                "top": 489,
-                "bottom": 533,
+                "top": 521,
+                "bottom": 565,
                 "left": 83,
                 "right": 296,
                 "width": 213,
@@ -2934,8 +2940,8 @@
             "eyebrow": {
               "selector": "header .eyebrow",
               "box": {
-                "top": 176,
-                "bottom": 215,
+                "top": 164,
+                "bottom": 203,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2946,32 +2952,32 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 231,
-                "bottom": 359,
+                "top": 215,
+                "bottom": 348,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 128
+                "height": 133
               },
               "text": "Defesa técnica em contratos públicos: fatos e provas como subsídio técnico, não advocacia"
             },
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 377,
-                "bottom": 491,
+                "top": 372,
+                "bottom": 476,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 114
+                "height": 104
               },
               "text": "Dê ao jurídico uma base verificável antes que o prazo termine e uma acusação sem contraponto evolua para multa, impedimento ou extinção."
             },
             "proof": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 503,
-                "bottom": 566,
+                "top": 612,
+                "bottom": 675,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2982,8 +2988,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 566,
-                "bottom": 610,
+                "top": 496,
+                "bottom": 540,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -2997,8 +3003,8 @@
               "text": "Enviar meus dados",
               "href": "#captura-pilar",
               "box": {
-                "top": 566,
-                "bottom": 610,
+                "top": 496,
+                "bottom": 540,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3044,65 +3050,65 @@
     },
     {
       "route": "/diagnostico-b2g-360/",
-      "html_sha256": "80c4ea907f25339fd2e774d13194af9883e8c2cb6b1f601d11415e8256f89c5d",
+      "html_sha256": "888dc7f716f1dd524bfd1b06d55fe23bb48a2bc507602f7528a17a77066db1cd",
       "measured_on": "2026-09-17",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
           "roles": {
             "eyebrow": {
-              "selector": "header .eyebrow",
+              "selector": ".eyebrow",
               "box": {
-                "top": 186,
-                "bottom": 205,
+                "top": 160,
+                "bottom": 179,
                 "left": 83,
                 "right": 1283,
                 "width": 1200,
                 "height": 20
               },
-              "text": "Entrada"
+              "text": "Frente pública sem mapa de prioridades"
             },
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 217,
-                "bottom": 309,
+                "top": 191,
+                "bottom": 241,
                 "left": 83,
-                "right": 923,
-                "width": 840,
-                "height": 92
+                "right": 1283,
+                "width": 1200,
+                "height": 50
               },
               "text": "Diagnóstico da Operação em Obras Públicas"
             },
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 333,
-                "bottom": 362,
+                "top": 255,
+                "bottom": 370,
                 "left": 83,
-                "right": 831,
-                "width": 748,
-                "height": 29
+                "right": 655,
+                "width": 572,
+                "height": 115
               },
-              "text": "Mapeie onde a frente pública perde tempo, margem e controle."
+              "text": "Mapeie onde a frente pública perde tempo, margem e controle. A empresa participa de editais e executa contratos, mas a direção não enxerga o mapa completo: quem decide avançar ou recusar, onde o registro falha e qual contrato concentra o ri"
             },
             "proof": {
               "selector": ".authority-byline",
               "box": {
-                "top": 590,
-                "bottom": 615,
+                "top": 450,
+                "bottom": 471,
                 "left": 83,
                 "right": 1283,
                 "width": 1200,
-                "height": 25
+                "height": 21
               },
               "text": "Responsável técnico: Engº Tiago Sasaki · Atualizado em 1 de agosto de 2026 · Encontrou um erro?"
             },
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 649,
-                "bottom": 693,
+                "top": 390,
+                "bottom": 434,
                 "left": 83,
                 "right": 402,
                 "width": 319,
@@ -3116,8 +3122,8 @@
               "text": "Solicitar diagnóstico da operação",
               "href": "#captura-pilar",
               "box": {
-                "top": 649,
-                "bottom": 693,
+                "top": 390,
+                "bottom": 434,
                 "left": 83,
                 "right": 402,
                 "width": 319,
@@ -3127,8 +3133,8 @@
           ],
           "secondary_actions_in_fold": [
             {
-              "text": "WhatsApp",
-              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20solicitar%20o%20Diagn%C3%B3stico%20da%20Opera%C3%A7%C3%A3o%20em%20Obras%20P%C3%BAblicas."
+              "text": "Conhecer o escopo do diagnóstico",
+              "href": "#fit"
             }
           ],
           "verifiable_proof": {
@@ -3141,46 +3147,46 @@
           "viewport": "390x844",
           "roles": {
             "eyebrow": {
-              "selector": "header .eyebrow",
+              "selector": ".eyebrow",
               "box": {
-                "top": 172,
-                "bottom": 192,
+                "top": 164,
+                "bottom": 184,
                 "left": 18,
                 "right": 372,
                 "width": 353,
                 "height": 20
               },
-              "text": "Entrada"
+              "text": "Frente pública sem mapa de prioridades"
             },
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 204,
-                "bottom": 311,
+                "top": 196,
+                "bottom": 295,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 107
+                "height": 100
               },
               "text": "Diagnóstico da Operação em Obras Públicas"
             },
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 327,
-                "bottom": 381,
+                "top": 309,
+                "bottom": 470,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 54
+                "height": 161
               },
-              "text": "Mapeie onde a frente pública perde tempo, margem e controle."
+              "text": "Mapeie onde a frente pública perde tempo, margem e controle. A empresa participa de editais e executa contratos, mas a direção não enxerga o mapa completo: quem decide avançar ou recusar, onde o registro falha e qual contrato concentra o ri"
             },
             "proof": {
               "selector": ".authority-byline",
               "box": {
-                "top": 663,
-                "bottom": 704,
+                "top": 644,
+                "bottom": 685,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3191,8 +3197,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 761,
-                "bottom": 805,
+                "top": 482,
+                "bottom": 526,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3206,8 +3212,8 @@
               "text": "Solicitar diagnóstico da operação",
               "href": "#captura-pilar",
               "box": {
-                "top": 761,
-                "bottom": 805,
+                "top": 482,
+                "bottom": 526,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3215,7 +3221,12 @@
               }
             }
           ],
-          "secondary_actions_in_fold": [],
+          "secondary_actions_in_fold": [
+            {
+              "text": "Conhecer o escopo do diagnóstico",
+              "href": "#fit"
+            }
+          ],
           "verifiable_proof": {
             "text": "Engº Tiago Sasaki",
             "href": "/especialista/tiago-jun-sasaki/"
@@ -3227,22 +3238,40 @@
         "ok": true,
         "reason": "cada_campo_acrescenta_palavra_de_conteudo",
         "eyebrow_new": [
-          "entrada"
+          "frente",
+          "mapa",
+          "prioridades",
+          "publica"
         ],
         "lead_new": [
+          "avancar",
+          "completo",
+          "concentra",
+          "contrato",
+          "contratos",
           "controle",
-          "frente",
+          "decide",
+          "direcao",
+          "editais",
+          "empresa",
+          "enxerga",
+          "executa",
+          "falha",
           "mapeie",
           "margem",
+          "participa",
           "perde",
-          "publica",
+          "qual",
+          "quem",
+          "recusar",
+          "registro",
           "tempo"
         ]
       }
     },
     {
       "route": "/acompanhamento-contratos-obras/",
-      "html_sha256": "e24b293cb23dd9cd3ec16ec87441a5fb6427de466a33e7e0cfdce0bb52845e92",
+      "html_sha256": "051c7864c9f8c5e1842176eecbb10e36bbc6f63071d3e61990371b2a2fd794a7",
       "measured_on": "2026-09-17",
       "viewports": {
         "1366x768": {
@@ -3251,11 +3280,11 @@
             "eyebrow": {
               "selector": "header .eyebrow",
               "box": {
-                "top": 168,
-                "bottom": 187,
+                "top": 160,
+                "bottom": 179,
                 "left": 83,
-                "right": 1283,
-                "width": 1200,
+                "right": 688,
+                "width": 605,
                 "height": 20
               },
               "text": "Decidir durante a execução, não reconstruir depois"
@@ -3263,32 +3292,32 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 203,
-                "bottom": 354,
+                "top": 191,
+                "bottom": 391,
                 "left": 83,
-                "right": 723,
-                "width": 640,
-                "height": 150
+                "right": 688,
+                "width": 605,
+                "height": 200
               },
               "text": "Acompanhamento de contratos de obras públicas: rotina preventiva e recorrente"
             },
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 372,
-                "bottom": 429,
+                "top": 415,
+                "bottom": 473,
                 "left": 83,
-                "right": 691,
-                "width": 608,
-                "height": 57
+                "right": 655,
+                "width": 572,
+                "height": 58
               },
               "text": "Converta diário, medições, mudanças e comunicações em decisões antes que o desvio vire custo absorvido ou defesa tardia."
             },
             "proof": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 443,
-                "bottom": 489,
+                "top": 551,
+                "bottom": 597,
                 "left": 83,
                 "right": 633,
                 "width": 550,
@@ -3299,8 +3328,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 489,
-                "bottom": 533,
+                "top": 493,
+                "bottom": 537,
                 "left": 83,
                 "right": 296,
                 "width": 213,
@@ -3314,8 +3343,8 @@
               "text": "Enviar meus dados",
               "href": "#captura-pilar",
               "box": {
-                "top": 489,
-                "bottom": 533,
+                "top": 493,
+                "bottom": 537,
                 "left": 83,
                 "right": 296,
                 "width": 213,
@@ -3323,7 +3352,12 @@
               }
             }
           ],
-          "secondary_actions_in_fold": [],
+          "secondary_actions_in_fold": [
+            {
+              "text": "Testar as ferramentas públicas",
+              "href": "/ferramentas/"
+            }
+          ],
           "verifiable_proof": {
             "text": "quatro ferramentas públicas",
             "href": "/ferramentas/"
@@ -3336,8 +3370,8 @@
             "eyebrow": {
               "selector": "header .eyebrow",
               "box": {
-                "top": 176,
-                "bottom": 215,
+                "top": 164,
+                "bottom": 203,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3348,32 +3382,32 @@
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 231,
-                "bottom": 359,
+                "top": 215,
+                "bottom": 348,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 128
+                "height": 133
               },
               "text": "Acompanhamento de contratos de obras públicas: rotina preventiva e recorrente"
             },
             "lead": {
               "selector": ".content-lead",
               "box": {
-                "top": 377,
-                "bottom": 463,
+                "top": 372,
+                "bottom": 450,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 86
+                "height": 78
               },
               "text": "Converta diário, medições, mudanças e comunicações em decisões antes que o desvio vire custo absorvido ou defesa tardia."
             },
             "proof": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 475,
-                "bottom": 538,
+                "top": 586,
+                "bottom": 649,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3384,8 +3418,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 538,
-                "bottom": 582,
+                "top": 470,
+                "bottom": 514,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3399,8 +3433,8 @@
               "text": "Enviar meus dados",
               "href": "#captura-pilar",
               "box": {
-                "top": 538,
-                "bottom": 582,
+                "top": 470,
+                "bottom": 514,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3408,7 +3442,12 @@
               }
             }
           ],
-          "secondary_actions_in_fold": [],
+          "secondary_actions_in_fold": [
+            {
+              "text": "Testar as ferramentas públicas",
+              "href": "/ferramentas/"
+            }
+          ],
           "verifiable_proof": {
             "text": "quatro ferramentas públicas",
             "href": "/ferramentas/"
@@ -3443,7 +3482,7 @@
     },
     {
       "route": "/diretoria-b2g/",
-      "html_sha256": "b708c947f0a04039dfb4571bf3197b8ceff50c30b3634db47cb646d615bffa46",
+      "html_sha256": "467fe7daabdf6a935b7c7f77dcee0f2b43c4902aaadb0ffa7f454e11135e827b",
       "measured_on": "2026-09-17",
       "viewports": {
         "1366x768": {
@@ -3526,7 +3565,7 @@
           ],
           "secondary_actions_in_fold": [
             {
-              "text": "Pedir uma avaliação do seu caso nesta página",
+              "text": "Avaliar na sua empresa, nesta página",
               "href": "#pedido-enquadramento"
             }
           ],
@@ -3616,7 +3655,7 @@
           ],
           "secondary_actions_in_fold": [
             {
-              "text": "Pedir uma avaliação do seu caso nesta página",
+              "text": "Avaliar na sua empresa, nesta página",
               "href": "#pedido-enquadramento"
             }
           ],
@@ -3649,7 +3688,7 @@
     },
     {
       "route": "/casos/modelo-relatorio-inteligencia-licitacoes/",
-      "html_sha256": "79a22254a321aa74f241f4daf8d3efea52dfc8a8f6284128db4a9ab17e1b710c",
+      "html_sha256": "d9ed33ba8ec9d19cfe7c69638c8e39c21af4c673859549f030024c8f532fa895",
       "measured_on": "2026-09-17",
       "viewports": {
         "1366x768": {
@@ -3859,7 +3898,7 @@
     },
     {
       "route": "/casos/modelo-base-quantitativa-canonica/",
-      "html_sha256": "95e4eea8d36e374da0f3aec9ce95da5687eafe05815ba1670de2d336137783ee",
+      "html_sha256": "4fe87709d0601a92f72ff8578cb38476a7580ec33db8b3b464e788d62a8724a2",
       "measured_on": "2026-09-17",
       "viewports": {
         "1366x768": {
@@ -4069,7 +4108,7 @@
     },
     {
       "route": "/casos/modelo-apresentacao-executiva-resultados/",
-      "html_sha256": "f387d6df4b5b7cc81f98f188e509795d8a19e558e61074064c0e13e04323bd58",
+      "html_sha256": "97b8202a1b834a9f316ea29e613f02d4ddbfbc1b948ec82267429f5f985e9c75",
       "measured_on": "2026-09-17",
       "viewports": {
         "1366x768": {
@@ -4281,7 +4320,7 @@
     },
     {
       "route": "/casos/modelo-mapa-compradores-publicos/",
-      "html_sha256": "0eaf43f9b459e2d74adc70786ca3c89c5be112bb0a1e35ea172470a80f8f5282",
+      "html_sha256": "90caa21245f278947e3b4a6d7d779026b9c562e3d7dd11a65fd2a81071790b70",
       "measured_on": "2026-09-17",
       "viewports": {
         "1366x768": {
@@ -4493,7 +4532,7 @@
     },
     {
       "route": "/casos/modelo-contratos-vincendos-relicitacao/",
-      "html_sha256": "7ae1f85a7bc1bee523bbd0f37692725d2c36ec1c50028ef404602a28d27e458e",
+      "html_sha256": "04df1a9a5e48fe41b73a7b0086a968913762985cc1ee134fa78a2722c9103e4f",
       "measured_on": "2026-09-17",
       "viewports": {
         "1366x768": {
@@ -4706,7 +4745,7 @@
     },
     {
       "route": "/casos/modelo-mapeamento-concorrentes-publicos/",
-      "html_sha256": "b06f770ae840e093df02581d4722bf9745d3a3b2ce3acec837eb668ecee58373",
+      "html_sha256": "99a2206ce741c98b27d1ac7305dc917f4040f7a7e506a1b0dd52a6c2636cf7d5",
       "measured_on": "2026-09-17",
       "viewports": {
         "1366x768": {
@@ -4914,7 +4953,7 @@
     },
     {
       "route": "/casos/modelo-painel-precos-obras-publicas/",
-      "html_sha256": "05f7c0a8c43dd17352597821c7f5cdabefaba2bacdb5b862ad2580b9d14069f5",
+      "html_sha256": "c43d379a0d38159ff2e441a9732bcb687903325c8a173ba4b07cbbc7163e2184",
       "measured_on": "2026-09-17",
       "viewports": {
         "1366x768": {
@@ -5128,7 +5167,7 @@
     },
     {
       "route": "/casos/modelo-relatorio-executivo-consolidado/",
-      "html_sha256": "5bfe1e2dea8694adc0b85e6377388651970a286d9eeac0400ba2a70474219b49",
+      "html_sha256": "bd9737ca9c92309f83634e26a01bfe62c88a3fad96bf3715d87cc41d45204340",
       "measured_on": "2026-09-17",
       "viewports": {
         "1366x768": {
