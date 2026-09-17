@@ -1,0 +1,25 @@
+{
+  "operational_state": "EM_EXECUCAO",
+  "phase_done": "PILOTO_COMPLETO_E_REVISADO",
+  "phase_next": "EXPANSAO_EM_EXECUCAO",
+  "authorized_direction": {
+    "state": "AUTORIZADA_POR_ENCAMINHAMENTO",
+    "direction_id": "A-prancha-e-percurso",
+    "basis": "Encaminhamento da campanha 02 pelo proprietário em 2026-09-17 (EXECUTE_NOW) após receber o piloto PILOTO_APTO_PARA_DECISAO_VISUAL; sem outra indicação, vale a direção recomendada e identificada na entrega 01 (§1.3 da ordem).",
+    "owner_visual_decision": {
+      "state": "AUTORIZADA_POR_ENCAMINHAMENTO",
+      "who": "proprietário (Tiago Sasaki)",
+      "when": "2026-09-17",
+      "note": "Autorização de execução registrada a partir do encaminhamento da campanha 02; não é pesquisa humana, teste com compradores nem aprovação estatística. human_research permanece NAO_MEDIDA."
+    }
+  },
+  "implementation": {"state": "EM_EXECUCAO"},
+  "visual_review": {"state": "PENDENTE"},
+  "technical_review": {"state": "PENDENTE"},
+  "integration": {"state": "PENDENTE", "branch": "campaign/salto-institucional-02-expansao", "pilot_merge_commit": "a4680a364"},
+  "publication": {"state": "PENDENTE"},
+  "public_verification": {"state": "PENDENTE"},
+  "capture_proof": {"state": "PENDENTE"},
+  "human_research": {"state": "NAO_MEDIDA", "note": "Sem participantes autorizados; a decisão do proprietário não é pesquisa."},
+  "commercial_result": {"state": "NAO_MEDIDO", "note": "Observado quando houver dados; nenhuma promessa de receita ou taxa de conversão."}
+}
