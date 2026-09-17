@@ -434,19 +434,19 @@ def p7_desktop(data: dict) -> str:
     c1 = (CX0 - 190, yf - 30)
     body.append(leader(*c1, CX0 - 140, yf + 4))
     body.append(callout(*c1, 1))
-    c2 = (CX0 + CW + CG / 2, yf + RH / 2)
-    body.append(leader(*c2, CX0 + CW, yf + RH / 2))
+    c2 = (CX0 - 190, yf + RH + 2)
+    body.append(leader(*c2, CX0 - 2, yf + RH - 2))
     body.append(callout(*c2, 2))
     pend_row = next(k for k, c in enumerate(n["contracts"]) if c["cells"]["PRZ"] == "PEND")
     px, py = CX0 + 3 * (CW + CG) + CW / 2, RY0 + pend_row * (RH + RG)
     c3 = (px + 40, py - 30)
     body.append(leader(*c3, px, py))
     body.append(callout(*c3, 3))
-    body.append(_legend(28, 446, "Chamadas", [
+    body.append(_legend(28, 412, "Chamadas", [
         ("1", f"Contrato em foco: {ct['label_pt_br']} concentra {t['focus_share_of_portfolio_percent']}% do valor contratado ({t['focus_formula']}) e as únicas células sem registro. É por ele que o plano de 90 dias começa."),
         ("2", f"Lacuna de registro: medição e aditivo do {ct['label_pt_br']} não têm registro contemporâneo. Lacuna entra no diagnóstico como lacuna, não como estimativa."),
         ("3", "Evento aberto sem decisão: prazo ou aditivo identificado, sem posição formal da empresa. O mapa ordena o que decidir primeiro."),
-    ]))
+    ], step=20, size=12.5))
     title = f"Prancha {n['code']} · {src['title']} · exemplo demonstrativo"
     desc = (
         f"Matriz de {t['contracts']} contratos hipotéticos por {t['events_per_contract']} eventos contratuais (medição, aditivo, reequilíbrio, prazo): {t['cells_ok']} células com registro em dia, {t['cells_pending']} eventos abertos sem decisão e {t['cells_gap']} lacunas de registro, "

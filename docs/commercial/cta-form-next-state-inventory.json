@@ -29,13 +29,13 @@
       "commercial_configuration"
     ],
     "baseline_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
-    "expected_declared_ctas": 185
+    "expected_declared_ctas": 196
   },
   "coverage": {
     "authority": "data/organic/public-family-registry.json",
     "manual_route_allowlist": false,
     "active_capture_routes": 31,
-    "declared_ctas": 185,
+    "declared_ctas": 196,
     "protected_routes_with_capture": [
       "/aditivos-obras-publicas/",
       "/auditoria-orcamento-licitacao/",
@@ -128,6 +128,51 @@
           ]
         },
         {
+          "cta_id": "",
+          "position": "",
+          "href": "#captura-pilar",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "current_label": "06 Descrever a carteira",
+          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "pillar_hero",
+          "position": "pillar_inline",
+          "href": "#captura-pilar",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "current_label": "Enviar meus dados",
+          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "cta_click"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "pillar_inline",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20estruturar%20o%20acompanhamento%20t%C3%A9cnico%20cont%C3%ADnuo%20de%20um%20contrato%20de%20obra%20p%C3%BAblica%20e%20entender%20como%20a%20rotina%20funciona.",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Falar pelo WhatsApp",
+          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
+          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "whatsapp_click"
+          ]
+        },
+        {
           "cta_id": "pillar_bridge",
           "position": "pillar_bridge",
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20estruturar%20o%20acompanhamento%20t%C3%A9cnico%20cont%C3%ADnuo%20de%20um%20contrato%20de%20obra%20p%C3%BAblica%20e%20entender%20como%20a%20rotina%20funciona.",
@@ -155,21 +200,6 @@
           "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
           "event_semantics": [
             "no_direct_event_declared"
-          ]
-        },
-        {
-          "cta_id": "",
-          "position": "",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20estruturar%20o%20acompanhamento%20t%C3%A9cnico%20cont%C3%ADnuo%20de%20um%20contrato%20de%20obra%20p%C3%BAblica%20e%20entender%20como%20a%20rotina%20funciona.",
-          "stage": "talk",
-          "commitment": "medium",
-          "current_label": "Falar pelo WhatsApp",
-          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
-          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
-          "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
-          "event_semantics": [
-            "whatsapp_click"
           ]
         }
       ]
@@ -431,6 +461,21 @@
           ]
         },
         {
+          "cta_id": "",
+          "position": "",
+          "href": "#captura-pilar",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "current_label": "07 Enviar o evento",
+          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
           "cta_id": "diagnosticar-contrato",
           "position": "",
           "href": "/ferramentas/diagnostico-defesa-margem/",
@@ -443,6 +488,36 @@
           "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
           "event_semantics": [
             "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "pillar_hero",
+          "position": "pillar_inline",
+          "href": "#captura-pilar",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "current_label": "Enviar meus dados",
+          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "cta_click"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "pillar_inline",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Temos%20atraso%20ou%20paralisa%C3%A7%C3%A3o%20em%20obra%20p%C3%BAblica%20e%20queremos%20enquadrar%20o%20pedido%20de%20prorroga%C3%A7%C3%A3o%20e%20o%20registro%20do%20impacto.",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Falar pelo WhatsApp",
+          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
+          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "whatsapp_click"
           ]
         },
         {
@@ -488,21 +563,6 @@
           "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
           "event_semantics": [
             "no_direct_event_declared"
-          ]
-        },
-        {
-          "cta_id": "",
-          "position": "",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Temos%20atraso%20ou%20paralisa%C3%A7%C3%A3o%20em%20obra%20p%C3%BAblica%20e%20queremos%20enquadrar%20o%20pedido%20de%20prorroga%C3%A7%C3%A3o%20e%20o%20registro%20do%20impacto.",
-          "stage": "talk",
-          "commitment": "medium",
-          "current_label": "Falar pelo WhatsApp",
-          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
-          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
-          "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
-          "event_semantics": [
-            "whatsapp_click"
           ]
         }
       ]
@@ -781,7 +841,7 @@
           "href": "#captura-pilar",
           "stage": "request_fit_review",
           "commitment": "medium",
-          "current_label": "06 Enviar o edital",
+          "current_label": "07 Enviar o edital",
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
@@ -796,7 +856,7 @@
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20uma%20oportunidade%20cr%C3%ADtica%20de%20licita%C3%A7%C3%A3o%20e%20quero%20avaliar%20se%20vale%20montar%20uma%20Opera%C3%A7%C3%A3o%20de%20Proposta%20para%20Licita%C3%A7%C3%A3o%20Cr%C3%ADtica.",
           "stage": "talk",
           "commitment": "medium",
-          "current_label": "Avaliar proposta crítica",
+          "current_label": "Falar pelo WhatsApp sobre o edital",
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
@@ -2219,6 +2279,51 @@
           ]
         },
         {
+          "cta_id": "",
+          "position": "",
+          "href": "#captura-pilar",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "current_label": "07 Enviar o evento",
+          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "contato-direto",
+          "position": "pillar_inline",
+          "href": "#captura-pilar",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "current_label": "Solicitar canal seguro para envio",
+          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "cta_click"
+          ]
+        },
+        {
+          "cta_id": "contato-direto",
+          "position": "pillar_inline",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20contrato%20p%C3%BAblico%20sob%20press%C3%A3o%20e%20quero%20solicitar%20um%20canal%20seguro%20para%20envio.",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Falar pelo WhatsApp",
+          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
+          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "whatsapp_click"
+          ]
+        },
+        {
           "cta_id": "diagnosticar-contrato",
           "position": "",
           "href": "/ferramentas/diagnostico-defesa-margem/",
@@ -2239,7 +2344,7 @@
           "href": "/ferramentas/diagnostico-defesa-margem/",
           "stage": "calculate",
           "commitment": "low",
-          "current_label": "Ainda estou verificando: usar a ferramenta gratuita",
+          "current_label": "Usar a ferramenta gratuita",
           "useful_next_state": "Abre a ferramenta pública para calcular ou inspecionar a situação antes do contato.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
@@ -2254,7 +2359,7 @@
           "href": "/ferramentas/diagnostico-defesa-margem/#segunda-leitura",
           "stage": "request_fit_review",
           "commitment": "medium",
-          "current_label": "Já encontrei um problema: solicitar análise do caso",
+          "current_label": "Solicitar análise do caso",
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
@@ -2269,7 +2374,82 @@
           "href": "/#contato",
           "stage": "request_fit_review",
           "commitment": "medium",
-          "current_label": "Preciso decidir agora: enviar o caso",
+          "current_label": "Enviar o caso",
+          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "",
+          "href": "#captura-pilar",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "current_label": "solicitar o canal seguro nesta página",
+          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "pillar_bridge",
+          "href": "/diretoria-b2g/",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Diretoria Fracionada para o Mercado Público",
+          "useful_next_state": "Abre o destino declarado por “Diretoria Fracionada para o Mercado Público” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "pillar_bridge",
+          "href": "/diagnostico-b2g-360/",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Diagnóstico da Operação em Obras Públicas",
+          "useful_next_state": "Abre o destino declarado por “Diagnóstico da Operação em Obras Públicas” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "pillar_bridge",
+          "href": "/bid-room-licitacoes-obras/",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Operação de Proposta para Licitação Crítica",
+          "useful_next_state": "Abre o destino declarado por “Operação de Proposta para Licitação Crítica” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "pillar_bridge",
+          "href": "/#contato",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "current_label": "solicitar diagnóstico da operação",
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
@@ -2299,7 +2479,7 @@
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20enquadrar%20um%20risco%20contratual%20e%20proteger%20a%20margem%20de%20um%20contrato%20p%C3%BAblico.",
           "stage": "talk",
           "commitment": "medium",
-          "current_label": "Avaliar contrato sob pressão",
+          "current_label": "Falar pelo WhatsApp sobre o contrato",
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
@@ -2312,16 +2492,16 @@
         {
           "cta_id": "",
           "position": "",
-          "href": "/#contato",
-          "stage": "request_fit_review",
+          "href": "mailto:tiago.sasaki@confenge.com.br?subject=Contrato%20p%C3%BAblico%20sob%20press%C3%A3o",
+          "stage": "talk",
           "commitment": "medium",
-          "current_label": "Solicitar diagnóstico da operação",
-          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
-          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "current_label": "Alternativa por e-mail",
+          "useful_next_state": "Abre o cliente de e-mail com assunto e contexto para continuar o enquadramento.",
+          "actual_receipt": "Rascunho local de e-mail; não existe receipt do servidor antes do envio.",
           "field_purpose": "not_applicable",
           "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
           "event_semantics": [
-            "no_direct_event_declared"
+            "email_click"
           ]
         }
       ]
@@ -2411,6 +2591,51 @@
           ]
         },
         {
+          "cta_id": "",
+          "position": "",
+          "href": "#captura-pilar",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "current_label": "07 Enviar o contexto",
+          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "pillar_hero",
+          "position": "pillar_inline",
+          "href": "#captura-pilar",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "current_label": "Enviar meus dados",
+          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "cta_click"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "pillar_inline",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Recebemos%20notifica%C3%A7%C3%A3o%20ou%20risco%20de%20san%C3%A7%C3%A3o%20em%20contrato%20p%C3%BAblico%20e%20preciso%20de%20leitura%20t%C3%A9cnica.",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Falar pelo WhatsApp",
+          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
+          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "whatsapp_click"
+          ]
+        },
+        {
           "cta_id": "pillar_bridge",
           "position": "pillar_bridge",
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Recebemos%20notifica%C3%A7%C3%A3o%20ou%20risco%20de%20san%C3%A7%C3%A3o%20em%20contrato%20p%C3%BAblico%20e%20preciso%20de%20leitura%20t%C3%A9cnica.",
@@ -2468,21 +2693,6 @@
           "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
           "event_semantics": [
             "no_direct_event_declared"
-          ]
-        },
-        {
-          "cta_id": "",
-          "position": "",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Recebemos%20notifica%C3%A7%C3%A3o%20ou%20risco%20de%20san%C3%A7%C3%A3o%20em%20contrato%20p%C3%BAblico%20e%20preciso%20de%20leitura%20t%C3%A9cnica.",
-          "stage": "talk",
-          "commitment": "medium",
-          "current_label": "Falar pelo WhatsApp",
-          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
-          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
-          "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
-          "event_semantics": [
-            "whatsapp_click"
           ]
         }
       ]
@@ -2791,7 +3001,7 @@
           "href": "#pedido-diagnostico",
           "stage": "request_fit_review",
           "commitment": "medium",
-          "current_label": "04 Conversar",
+          "current_label": "05 Conversar",
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
@@ -3091,7 +3301,7 @@
           "href": "#pedido-enquadramento",
           "stage": "request_fit_review",
           "commitment": "medium",
-          "current_label": "07 Avaliar na sua empresa",
+          "current_label": "08 Avaliar na sua empresa",
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
@@ -3129,21 +3339,6 @@
           "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
           "event_semantics": [
             "no_direct_event_declared"
-          ]
-        },
-        {
-          "cta_id": "",
-          "position": "",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20conhecer%20a%20Diretoria%20Fracionada%20para%20o%20Mercado%20P%C3%BAblico%20e%20entender%20se%20encaixa%20na%20nossa%20opera%C3%A7%C3%A3o.",
-          "stage": "talk",
-          "commitment": "medium",
-          "current_label": "Falar pelo WhatsApp",
-          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
-          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
-          "field_purpose": "not_applicable",
-          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
-          "event_semantics": [
-            "whatsapp_click"
           ]
         }
       ]
@@ -3247,25 +3442,10 @@
         {
           "cta_id": "",
           "position": "",
-          "href": "mailto:tiago.sasaki@confenge.com.br?subject=Entregas%20de%20engenharia",
-          "stage": "talk",
-          "commitment": "medium",
-          "current_label": "e-mail",
-          "useful_next_state": "Abre o cliente de e-mail com assunto e contexto para continuar o enquadramento.",
-          "actual_receipt": "Rascunho local de e-mail; não existe receipt do servidor antes do envio.",
-          "field_purpose": "not_applicable",
-          "boundary": "Sem cobrança; preço e escopo exigem aceite.",
-          "event_semantics": [
-            "email_click"
-          ]
-        },
-        {
-          "cta_id": "",
-          "position": "",
           "href": "#captura-entregas",
           "stage": "compare",
           "commitment": "medium",
-          "current_label": "04 Solicitar proposta",
+          "current_label": "Descrever a decisão e saber qual entrega a resolve",
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
@@ -3647,21 +3827,6 @@
           "boundary": "Sem cobrança; preço e escopo exigem aceite.",
           "event_semantics": [
             "cta_click"
-          ]
-        },
-        {
-          "cta_id": "",
-          "position": "",
-          "href": "mailto:tiago.sasaki@confenge.com.br?subject=Entregas%20de%20engenharia",
-          "stage": "talk",
-          "commitment": "medium",
-          "current_label": "Enviar a decisão por e-mail",
-          "useful_next_state": "Abre o cliente de e-mail com assunto e contexto para continuar o enquadramento.",
-          "actual_receipt": "Rascunho local de e-mail; não existe receipt do servidor antes do envio.",
-          "field_purpose": "not_applicable",
-          "boundary": "Sem cobrança; preço e escopo exigem aceite.",
-          "event_semantics": [
-            "email_click"
           ]
         },
         {

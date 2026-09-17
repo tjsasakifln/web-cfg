@@ -786,7 +786,28 @@ EDITORIAL_RECOMPOSED_ROUTES = frozenset({
     "diagnostico-b2g-360/index.html",
     "diagnostico-pre-licitacao/index.html",
     "reequilibrio-obras-publicas/index.html",
+    # 2026-09-17 (SALTO-INSTITUCIONAL-02, lote B, onda 2): the three
+    # safe-execution pillars open with the same editorial composition. Their
+    # first fold stays a `header.content-hero` (the safe-execution contract in
+    # tests/bofu_dominance/safe_execution pins that element), so `svc-open`
+    # is carried as a second class token on the header, not as a bare class.
+    "acompanhamento-contratos-obras/index.html",
+    "atrasos-prorrogacao-obras-publicas/index.html",
+    "defesa-tecnica-contratos-publicos/index.html",
 })
+
+SVC_OPEN_RE = re.compile(r'class="[^"]*\bsvc-open\b[^"]*"')
+
+
+def _opens_with_svc_open(html: str) -> bool:
+    """True when the page opens with the editorial `svc-open` composition.
+
+    The class may be alone (`section.svc-open`, the pilot) or combined with the
+    shell the route's own contract pins (`header.content-hero.svc-open` on the
+    safe-execution pillars); what matters is the rendered opening, not the
+    literal attribute value.
+    """
+    return bool(SVC_OPEN_RE.search(html))
 
 
 def test_raster_title_covers_are_og_only_outside_frozen_bofu_routes():
@@ -835,7 +856,7 @@ def test_raster_title_covers_are_og_only_outside_frozen_bofu_routes():
         # rasterised title card is OG-only there too, on frozen and unfrozen
         # routes alike (the inventory classed assets/clusters/*.jpg as
         # unsuitable for the page body).
-        recomposed = relative in EDITORIAL_RECOMPOSED_ROUTES and 'class="svc-open"' in html
+        recomposed = relative in EDITORIAL_RECOMPOSED_ROUTES and _opens_with_svc_open(html)
         if relative in frozen_bofu and recomposed:
             frozen_candidates.add(relative)
             assert not figures, f"{relative}: recomposed pillar keeps the title card OG-only"
@@ -1272,7 +1293,7 @@ def test_pillar_evidence_contrast_on_navy():
         # A pillar recomposed in the editorial direction (2026-09-17) states its
         # evidence in the opening chain and the plate instead of the navy card.
         recomposed = path.relative_to(ROOT).as_posix() in EDITORIAL_RECOMPOSED_ROUTES
-        assert 'class="pillar-evidence"' in html or (recomposed and 'class="svc-open"' in html), (
+        assert 'class="pillar-evidence"' in html or (recomposed and _opens_with_svc_open(html)), (
             f"{path.relative_to(ROOT)} missing pillar-evidence"
         )
 

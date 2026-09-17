@@ -258,3 +258,326 @@ ofertas foram conferidos byte a byte antes de cada gravação (assert no script 
 ### Testes executados na rodada de correção (última linha real)
 
 `test:html-integrity` `failures=0`; `test:design` exit 0 (42 passed em `test_design_gates`); `test:copy` `OK test_shipped_check_still_fails_on_em_dash`; `test:brand` OK; `test:authority` `OK 8 correction checks`; `test:integral-solution` PASS; `test:self-deprecation` PASS; `organic:test` `279 passed in 16.06s`; `test:inbound-gates` exit 1 (só `test_measurement_delay_canary_389…`, pré-existente; 55 OK); `test:deliverables-registry` `3650/3650`; `test:real-proof-registry` `problems=0`; `test:commercial-contract-consistency` `521/521`; `test:public-offer-truth` `132/132`; `test:page-contract-contratos` `494/498` (hash); `test:page-contract-eight` `735/735`; `test:page-contract-execucao` `702/702`; `test:page-contract-licitacao` `241/243` (hash); `test:page-contract-operacao` `638/638`; `test:cta-form-next-state` `CTA_FORM_NEXT_STATE_OK routes=31`; `test:form-funnel` `FORM_FUNNEL_OK`; `test:nav` `15 passed`; `test:hub-truth` `ALL hub truth checks passed`; `test:bofu-audit` `18 passed`; `test:bofu-dominance` `11 failed, 106 passed` (hash); `test:first-fold-contract` `14 check(s) failed` (`input_hashes`); `tests/intake/test_mv03_adaptive_intake.mjs` `# pass 17 # fail 0`; `test_ui_geometry.mjs` `All UI geometry tests passed` (73); `render_plates --check` `plates_ok: 18`; `inline --check` `OK plates inline`; `pytest scripts/demonstrative/plates` `16 passed`; `tests/attribution/test_source_to_service.mjs` `# pass 1`; `test_visitor_redesign` `33 passed`.
+
+## 8. Onda 2 (2026-09-17): escopo residual B, obras públicas
+
+Frente residual do lote B sobre o HEAD da integração `2da310422` (folha editorial completa do
+integrador, `test_existing_css_js_only` já aceitando `/assets/editorial*.css`). Porta de
+pré-visualização 8752, tag de captura `onda2`, manifesto `evidence/lote-b/manifest-onda2.json`
+(13 rotas, 320 px sem rolagem horizontal em todas). Cada captura foi aberta e conferida antes de
+dar a rota por pronta. Commits pequenos no ramo `campaign/salto-02/lote-b` (ver `git log`).
+
+### 8.1 O que mudou, por rota
+
+**Quatro rotas de execução segura** (`/defesa-margem-contratos-publicos/`,
+`/defesa-tecnica-contratos-publicos/`, `/atrasos-prorrogacao-obras-publicas/`,
+`/acompanhamento-contratos-obras/`) — `COMPONENTES_ADEQUADOS`, não `COMPOSICAO_REDESENHADA`:
+`tests/bofu_dominance/safe_execution` (intocável) pina a primeira dobra como
+`header.content-hero` com o `dl.offer-context` (as quatro chaves "O que resolvemos / Para quem é /
+Quando faz sentido / O que você recebe"), o `h1` e um `.button-primary` com `data-cta-id` e
+`data-route-family` dentro dele; `test_ui_geometry` mede `.content-hero-grid` em atrasos e
+acompanhamento e `.offer-hero .button-primary` em defesa de margem. Por isso a abertura `svc-open`
+entra como segundo token de classe do próprio `header` (`header.content-hero[.offer-hero].svc-open`),
+com `div.content-hero-grid.svc-open__grid` (copy + `aside.aside-note` "Em 30 segundos": pedido,
+entrega, antes do aceite técnico, quem assina; tudo texto que a página já publicava) e o
+`dl.offer-context` byte-idêntico como faixa de largura total. Índice de página fora do hero
+(`.offer-hero > .container` tem `order` explícito por filho). Depois: entrega em `grid-2` com
+`ol.steps` (documento entregue / documentos do cliente), chamada inline de próximo passo
+(`contact-primary` → `#captura-pilar` + WhatsApp e ferramenta/guia em `contact-alt`), "Quando pedir"
+em duas listas claras (`grid-2#quando-nao-contratar[data-when-not-hire]`; o `compare-split` tinha
+o painel navy `compare-human`), método em `dl.keys` (Fato, Cálculo, Inferência, Lacuna),
+biblioteca em `library-item` quando há guias, `div.conditions` "Dúvidas, condições e limites"
+(as três perguntas do FAQPage com o texto exato do JSON-LD, fronteira técnica/jurídica,
+responsável na empresa, ponte `pillar_bridge`), o cartão `commercial-bridge` inteiro (texto de
+preço/prazo protegido; botão de WhatsApp demovido a `button-secondary` porque a ação dominante é o
+formulário; a string `commercial-bridge` é exigida por `test_pillars_keep_commercial_bridge…`),
+bloco `GENERATED:CONTRACT-DEFENSE-PRODUCT` e `#captura-pilar` byte-idênticos, `authority-method`
+intacto. Blocos escuros: defesa de margem mantém um `sec--dark` de fecho ("Alternativa direta",
+WhatsApp `offer_final` + e-mail); atrasos mantém o `aside.lead-inline` (rota medida por
+`LEAD_INLINE_MEASURED_ROUTES`); defesa técnica e acompanhamento ficam sem bloco escuro
+(`pillar-evidence` navy e `content-cta` navy saíram). Acompanhamento ganha a prancha P7
+`carteira-eventos` como "Exemplo demonstrativo" (legenda só com números do JSON da prancha;
+`used_on` atualizado em `assets-lote-b.json`). `styles-offers.css` (regras usadas só por estas
+rotas e pelo hub): lockup de preço do bloco gerado passa de navy a superfície branca com filete.
+
+**Estados** `/diagnostico-b2g-expansao/{obrigado,expirado,cancelado}/`: casca de `obrigado.html`
+(cabeçalho, rodapé, folha editorial, `script.js`; `shell_nav --write` marcou a navegação ativa),
+`section.state` com código de estado, `h1.t-service`, `state__lead` com os textos originais,
+`ol.after--light` "O que acontece agora" (sem prazo inventado), `ul.state__paths` (voltar à
+oferta, Termos B2B, início) e e-mail como contato alternativo. `noindex,nofollow`, canonical do
+obrigado e as frases exigidas por `test_checkout_return_does_not_claim_payment…` preservados.
+Nenhuma ação terminal no `main` (família `diagnostico-b2g-expansao-estados`). Os dois estados
+sem folha passaram a carregar a webfont única: baseline de desempenho regerada com o delta declarado.
+
+**`/diagnostico-pre-licitacao/`**: `<span class="nowrap">pré-licitação</span>` no h1 (o utilitário
+já existe na folha; visto em 390 sem quebra no hífen) e o bloco "Quando o diagnóstico cabe, e
+quando não" restaurado com título e corpo exatos de `offer-fit-matrix.v1.json` (`test:offer-fit`
+reprovava desde a onda 1 nesta rota). Rota protegida por hash (frozen spec, `LICITACAO_FROZEN_DRIFT`).
+
+**Ofertas B2G**: `/diretoria-b2g/` fica com um único bloco escuro (a cadência, `model-section`
+com `ol.operating-flow`, exigido por `test_operating_flow_has_sitewide_fallback`; a classe
+`operating-system` saiu porque desenhava o degradê decorativo `::after`); o fecho vira
+`sec--soft` com `contact-primary` (rótulo contratado "Diagnosticar encaixe…") e alternativas em
+texto (`/#contato`, formulário da página). `/bid-room-licitacoes-obras/`: painel G1–G6 (navy) vira
+`ol.steps` claro ("Solo, consórcio, sub" grafado como "Solo, consórcio ou subcontratação"); o fecho
+"Alternativa direta" vira o único `sec--dark`. `/diagnostico-b2g-expansao/` e `/conflitos/`:
+recapturadas e vistas; sem degradê nem bloco escuro; nada a mudar (o respiro do artigo de
+conflitos é `padding-top` do `.article-layout`, pedido 12). Hrefs, `data-*`, `details` fechados,
+formulários e JSON-LD intactos (`test_hash153_attributes_preserved` passa).
+
+**Hubs**: bloco `GENERATED:CONTRACT-DEFENSE-HUB` de `/servicos-obras-publicas/` em superfície
+clara: cartões viram linhas regradas (nome, entrega, preço, prazo, ação), faixa de regras clara,
+`h2` sem ponto final e sem `18ch` (duas linhas a 1440), opção vazia do select "Ainda não sei: quero
+orientação" (cabe em 390; `name`, `value`, `required` e consentimento intactos). Mudança no
+gerador (`render_contract_defense_products.mjs`) e em `styles-offers.css`; bloco regerado pelo
+gerador (`--check` OK com o drift pré-existente do piloto contornado só na conferência local).
+`/problemas-que-resolvemos/` não recebe o bloco gerado (o gerador só escreve o hub de serviços);
+recapturado, um único `sec--dark`, nada a mudar.
+
+### 8.2 Testes executados (última linha real, árvore final)
+
+| Suite | Resultado |
+| --- | --- |
+| `npm run test:html-integrity` | `HTML_INTEGRITY surface=source html_files=235 faq_pages=145 faq_questions=422 failures=0` (exit 0) |
+| `npm run test:design` | exit 0 (`test_design_gates` 42 OK; `test_visitor_redesign` 33 passed; `test_audit_performance` 23 passed após a baseline regerada) |
+| `npm run test:copy` | exit 0 |
+| `npm run test:brand` | exit 0 |
+| `npm run test:authority` | exit 0 |
+| `npm run test:integral-solution` | `PASS: the public surface presents an integral solution` |
+| `npm run test:self-deprecation` | `PASS: no self-deprecating communication on the public surface` |
+| `npm run organic:test` | `279 passed in 17.97s` |
+| `npm run test:inbound-gates` | exit 1: só `FAIL test_measurement_delay_canary_389_is_single_url_and_fail_closed medicoes-glosas-obras-publicas/index.html` (pré-existente, hash do piloto) |
+| `npm run test:deliverables-registry` | `deliverables-registry: 3650/3650 checks passed` |
+| `npm run test:real-proof-registry` | `real-proof-registry: canonical_records=0 public_pages=268 problems=0` |
+| `npm run test:commercial-contract-consistency` | `commercial-contract-consistency: 521/521 checks passed` |
+| `npm run test:public-offer-truth` | `public-offer-truth: 132/132 checks passed` |
+| `npm run test:page-contract-contratos` | `494/498`: `held_hash_18`, `held_hash_19`, `held_hash_22`, `public_renderer_has_no_drift` (hash dos pilares congelados; os blocos das três rotas ativas conferem com o gerador) |
+| `npm run test:page-contract-licitacao` | `241/243`: `dedicated_route_remains_frozen`, `public_renderer_has_no_drift` (hash de `diagnostico-pre-licitacao`) |
+| `npm run test:page-contract-operacao` | `638/638` |
+| `npm run test:page-contract-execucao` | `702/702` |
+| `npm run test:page-contract-disputas` | `273/273` |
+| `npm run test:page-contract-ciclo` | `1569/1569` |
+| `npm run test:page-contract-integridade` | `176/176` |
+| `npm run test:page-contract-complementares` | `273/273` |
+| `npm run test:page-contract-eight` | `735/735` |
+| `npm run test:offer-fit` | exit 1: `offer-fit-copy: 81/83` — `reequilibrio-obras-publicas_headline/_body` (pré-existente: `git show 2da310422:reequilibrio-obras-publicas/index.html | grep -c "Quando o dossiê de reequilíbrio cabe"` = 0; rota fora dos arquivos permitidos desta frente: pedido 15). `diagnostico-pre-licitacao` corrigida nesta onda |
+| `npm run test:pricing-policy` | `pricing-policy: 196/196 checks passed` |
+| `npm run test:checkout-negatives` | exit 0 (`CONTRACT_PROVEN passed=66`) |
+| `npm run test:cta-form-next-state` | `CTA_FORM_NEXT_STATE_OK routes=31` (censo 183 → 198, nota no contrato, inventário regerado) |
+| `npm run test:form-funnel` | `FORM_FUNNEL_OK {...,"submit_journey":"contrato","home_multistep":true}` |
+| `npm run test:nav` | `15 passed`; `shell_nav --check` PASS; `render_nav_hubs --check` PASS |
+| `npm run test:hub-truth` | `ALL hub truth checks passed` |
+| `npm run test:bofu-audit` | `18 passed` |
+| `npm run test:bofu-dominance` | `11 failed, 106 passed`: `frozen_specs/test_frozen_specs.py` (9), `frozen_specs/test_unlock_plan_291.py` (1), `safe_execution::test_git_diff_is_exclusive_area` ("aditivos-obras-publicas/index.html changed without frozen-spec recapture"): os mesmos 11 da linha de base do ramo, comparação de hash/snapshot dos seis pilares; `safe_execution` estrutural 12/13 e `safe_strategy` 12/12 passam nas quatro rotas recompostas |
+| `node --test tests/intake/test_mv03_adaptive_intake.mjs` | `# pass 17 # fail 0` |
+| `UI_TEST_PORT=8753 node scripts/site/test_ui_geometry.mjs` (árvore fonte, `UI_GEOMETRY_SITE_ROOT .`) | `All UI geometry tests passed` (73 OK, inclusive `offer_context_geometry`, `offer_context_computed`, `offer_cta_first_viewport_and_progressive_detail`, `editorial_cover_scope_geometry`). `_site` não foi construído nesta frente (o build fecha em FAIL-CLOSED sem a recaptura de `approvals.json`, que é do integrador) |
+| `npm run test:first-fold-contract` | exit 1: `17 check(s) failed`, todos `first_fold_input_changed:*` / `evidence_*_html_bytes_match` (`input_hashes`; recaptura do integrador) |
+| `python3 -m pytest scripts/demonstrative/plates -q` / `render_plates --check` / `inline --check` | `16 passed` / `plates_ok: 34 files match assets/pranchas` / `OK plates inline` |
+
+### 8.3 Testes ajustados e motivo
+
+- `scripts/site/test_design_gates.py`: `EDITORIAL_RECOMPOSED_ROUTES` += as três rotas de execução
+  segura (isenção por rota exata da capa OG-only e do cartão `pillar-evidence`, mesma regra do
+  piloto e da onda 1); o reconhecedor da abertura passa de `'class="svc-open"' in html` para o token
+  de classe (`_opens_with_svc_open`), porque nessas rotas o `svc-open` convive com
+  `header.content-hero` pinado pelo contrato safe-execution. Aperto de escopo, não afrouxamento.
+- `data/commercial/cta-form-next-state.v1.json` (`expected_declared_ctas` 183 → 198, nota) e
+  `docs/commercial/cta-form-next-state-inventory.json` regerado por `npm run report:cta-form-next-state`.
+- `docs/performance/PERFORMANCE-BUDGET-BASELINE.json` regerada por `npm run audit:performance -- --write-baseline`
+  com o delta declarado no commit (dois estados passam a carregar a webfont única; `font_files_max` segue 1).
+- Nenhum teste de veracidade, preço, responsabilidade, privacidade, formulário ou persistência foi
+  alterado. `tests/bofu_dominance/**` não foi tocado.
+
+### 8.4 Arquivos protegidos por hash alterados de propósito (recaptura do integrador)
+
+`diagnostico-pre-licitacao/index.html` (frozen spec; `LICITACAO_FROZEN_DRIFT`), `styles-offers.css`
+(hash em `first-fold-measurements.v1.json`; não entra no `rendered_content_hash` da análise
+aprovada, conferido com `scripts.contract_analysis.approval.rendered_content_hash` antes e depois),
+e as rotas do lote em `first-fold-measurements.v1.json` (`input_hashes`).
+
+Escopo de `styles-offers.css`, conferido antes de editar: a folha é carregada por onze rotas
+(`acompanhamento`, `atrasos`, `bid-room`, `casos/`, `comercial/radar-decisorio/`, `defesa-margem`,
+`defesa-tecnica`, `diagnostico-b2g-expansao`, `diretoria-b2g`, `entregas/`, `servicos-obras-publicas`),
+mas todos os seletores alterados são `.contract-product*` / `.contract-products-hub*` (lockup,
+grade, cartões, regras, `h2` do hub, breakpoints desses blocos), usados só por
+`defesa-margem`, `defesa-tecnica`, `atrasos` e `servicos-obras-publicas` (`grep -c contract-product`
+= 0 nas outras sete). As regras de `.offer-hero`, `.offer-detail-disclosure` e `.offer-proof-line`
+não mudaram.
+
+Nota operacional: o worktree carrega `stash@{0}` ("WIP on campaign/salto-institucional-02-expansao",
+288 arquivos, drift de saídas rastreadas da base), anterior a esta frente e não pertencente ao lote.
+Um `git stash`/`pop` de conferência durante a onda 2 o aplicou por engano sobre a árvore; a árvore
+foi restaurada com `git reset --hard HEAD` (todo o trabalho já estava commitado) e a entrada do
+stash foi mantida intacta para o integrador decidir.
+
+### 8.5 O que ficou de fora e por quê
+
+- `svc-open` como `section` própria nas quatro rotas de execução segura: impossível sem editar
+  `tests/bofu_dominance/safe_execution` (proibido); a composição foi feita dentro do `header`.
+- `h1.t-service` nessas rotas herda `font-size:var(--text-h1)` de `.content-hero h1` (44 px a
+  1440, contra 48 px de `--text-service`): pedido 16.
+- `/reequilibrio-obras-publicas/` (`test:offer-fit`): fora dos arquivos permitidos; pedido 15.
+- `/conflitos/`: respiro entre índice e artigo (pedido 12, CSS do integrador).
+- `_site` e Lighthouse não foram medidos nesta frente (cadeia de fechamento do integrador).
+
+## 9. Correções após revisão — onda 2 (2026-09-17)
+
+Rodada de correção sobre o HEAD `5717b33c6` da frente residual. Os achados ALTA e MEDIA dos dois
+revisores foram corrigidos; os BAIXA baratos também; três achados foram refutados com o teste que
+os impede (§9.4). Recapturas com a tag `onda2` (porta 8752) para as rotas alteradas e para
+`/reequilibrio-obras-publicas/`; cada captura foi aberta (folhas de contato em 390 e 1440).
+
+### 9.1 O que mudou, por achado
+
+**ALTA · bloco `GENERATED:CONTRACT-DEFENSE-PRODUCT` em grade** (defesa de margem, defesa técnica,
+atrasos). No gerador `scripts/commercial/render_contract_defense_products.mjs`: os quatro cartões
+viram `dl.contract-product__terms` (uma coluna; rótulo | texto a partir de 900 px), as seis linhas
+de veracidade ficam sem caixa e ganham o kicker visível "Exemplo sintético do método", e a ação
+"Solicitar proposta para este caso" passa a link de texto (o formulário `#captura-pilar` é a ação
+dominante; a página fica com três `button-primary`: abertura, inline e o `submit`). Marcação
+pinada por `test:page-contract-contratos` preservada: `data-evidence-grade`,
+`<strong>Uso prático</strong>`, "Evento demonstrativo", "Quando o prazo começa", "Solicitar
+proposta" e todos os valores do contrato. Superfície em `styles-offers.css` (seletores
+`.contract-product__terms`, `.contract-product__example`, `.contract-product__action`,
+`.contract-product__lockup+p`). O gerador só roda localmente contornando o drift de hash dos três
+pilares congelados (pedido 1): o bloco committed é exatamente o que o gerador produz (`--check` OK
+com `hashes.json` temporariamente igual à árvore, restaurado em seguida).
+
+**ALTA · abertura duplicada enterrando o índice** (quatro rotas de execução segura).
+`nav.page-index` entra na coluna de copy do `header.content-hero.svc-open`, logo após as ações e a
+linha de prova (regra `.content-hero.svc-open .svc-open__copy .page-index` em `styles-offers.css`).
+Medido na árvore fonte: índice a 390 em 990 / 745 / 781 / 660 px (antes 2244 / 2030 / 2019 / 1924;
+piloto 1154) e a 1440 em 803 / 629 / 629 / 555 px (antes 1232 / 1074 / 1074 / 1016; piloto 643).
+A aside "Em 30 segundos" perde a linha "Entrega" (repetia "O que você recebe" do `dl` pinado); em
+defesa de margem a seção "Documento para decidir" deixa de republicar a lista "O que você recebe"
+(agora: o que precisa entrar / o que sai por evento) e o item do índice que aponta para a entrega
+passa a nomear o documento ("O diagnóstico", "A matriz", "O dossiê", "A rotina"). O
+`dl.offer-context` segue byte-idêntico dentro do header; `test_first_fold_states_icp_trigger…`,
+`test_distinct_first_fold_jobs_match_frontiers` e `offer_context_geometry/computed` passam.
+
+**MEDIA · três rotas sem prancha.** Três pranchas novas, geradas de JSON demonstrativo por
+`scripts/demonstrative/plates/family_b2g_execucao.py` (módulo novo, descoberto por
+`render_plates.py`): P10 `risco-margem` (matriz de cinco eventos: prazo, impacto potencial em
+R$ mil com barra proporcional, prova e decisão), P11 `matriz-alegacoes` (quatro alegações de uma
+notificação hipotética: obrigação, fato, medida, prova, lacuna e situação; barra de dias
+documentados) e P12 `janela-causal` (cronograma de base × executado, janela causal do órgão em
+lima, causa concorrente hachurada, cotas de dias). Desktop 1200×560 e móvel 360×420 em composições
+distintas; `pytest scripts/demonstrative/plates` 16 passed (todo numeral rastreável ao JSON),
+`render_plates --check` plates_ok 40, `inline --check` OK. Cada rota ganha
+`section#exemplo-demonstrativo` com `figure.plate.plate--dominant`, legenda só com números do JSON
+e o item "Exemplo" no índice. Registro em `assets-lote-b.json` (sha256 das seis folhas).
+
+**MEDIA · índice apontando para conteúdo escondido** (diretoria, bid-room, expansão). A seção de
+preço/condições sai do `<details>` para a superfície visível, inteira e com o `data-offer-section`
+original, e o índice passa a apontar para ela: `#mensalidade` em diretoria (planos em
+`dl.svc-chain`, texto idêntico, preço em `<b>`), `#preco` em bid-room, `#pacote` em expansão. O
+`<details>` continua fechado (exigido por `offer_cta_first_viewport_and_progressive_detail`) e o
+índice mantém um item para ele. Dentro do details, o `compare-split` com painel navy vira `grid-2`
+de `ol.steps` nas três rotas: um bloco escuro por página mesmo com o details aberto. Numeração das
+seções (`section-num`) refeita em ordem de leitura.
+
+**MEDIA · defesa técnica e acompanhamento sem âncora escura.** As duas rotas ganham o
+`aside.lead-inline` de exploração do piloto (o mesmo que atrasos já tinha) dentro de "Quando
+pedir": exemplo sintético de relatório executivo em defesa técnica e as quatro ferramentas
+públicas (nomeadas) em acompanhamento. Um único bloco escuro por rota; `test_lead_inline_not_before_main_or_h1`
+e `test_no_consecutive_duplicate_cta` passam (em acompanhamento a abertura ganhou a alternativa em
+texto "Testar as ferramentas públicas", porque o botão da abertura e o inline eram consecutivos).
+
+**MEDIA · fecho WhatsApp sem canal e como quinto/terceiro `button-primary`** (defesa de margem,
+bid-room). O botão do fecho escuro vira `button-secondary` (branco sobre navy, regra
+`.sec--dark .button-secondary` em `styles-offers.css`) com o canal no rótulo: "Falar pelo WhatsApp
+sobre o contrato" / "… sobre o edital"; `href`, `data-offer-id`, `data-cta-position="offer_final"`
+e `data-event-name` inalterados; o parágrafo diz que o formulário acima é o caminho principal.
+
+**MEDIA · formulário do hub comprimido** (`/servicos-obras-publicas/`). `.contract-product__capture`
+em uma coluna larga (máx. 44 rem), rótulos em corpo (16 px) com "(opcional)" em linha, consentimento
+alinhado, `h3` em escala editorial, regras como lista regrada sem caixa. **MEDIA (revisor 2) ·
+formulário do hub não byte-idêntico**: o rótulo da opção vazia do select volta a "Ainda não sei
+qual entrega, quero orientação" no gerador; o `<form>` do hub confere byte a byte com `origin/main`
+(sha256 igual), como os quatro `#captura-pilar`. A legibilidade em 390 fica por CSS
+(`select` com `text-overflow:ellipsis` e 0,9 rem abaixo de 420 px).
+
+**MEDIA (revisor 2) · `/reequilibrio-obras-publicas/` reprovando `test:offer-fit`.** A rota é
+arquivo do lote B (não está na lista de escritas exclusivas do integrador) e a regressão era da
+onda 1; corrigido como em pré-licitação: `h3` + `p[data-offer-fit="1"]` com título e corpo exatos
+de `offer-fit-matrix.v1.json`. `test:offer-fit` 83/83. A ressalva "narrar aumento de custo não é
+fato novo" fica uma vez (o corpo protegido).
+
+**BAIXA corrigidos.** Pontuação órfã: o conteúdo dos `li` de `.pillar-docs` que começam com
+`<strong>` fica num único `<span>` (o `li` é flex com gap de 12 px), em diretoria, bid-room e
+expansão. Links de prosa nas cascas de oferta (byline, `pillar-docs`, copy do formulário, FAQ,
+seção de contato da expansão, método) com cor e sublinhado (`styles-offers.css`). Diretoria: o
+fecho "Próximo passo" foi fundido ao bloco do formulário (WhatsApp `offer_final` na coluna de
+copy, botão centrado com altura automática, alternativa `/#contato`); o link para o próprio
+formulário e a linha "Alternativa sem formulário obrigatório" saíram (censo 198 → 196 com motivo).
+Legenda "Prova verificável" com respiro após `dl.keys` e `dd` em peso de prosa (`keys--prose`).
+Estados: "e-mail desta página" e "O retorno do provedor de pagamento não é pagamento"
+(`test_checkout_return_does_not_claim_payment…` lê só `obrigado/`, que não mudou). Pré-licitação:
+frase de encaixe duplicada removida do parágrafo não protegido. P7 (PREFERÊNCIA): chamadas mais
+próximas da matriz, em 12,5 px, balão 2 fora da célula (hash recapturado em `assets-lote-b.json`).
+
+### 9.2 Testes executados (última linha real, árvore final)
+
+| Suite | Resultado |
+| --- | --- |
+| `npm run test:html-integrity` | `HTML_INTEGRITY surface=source html_files=235 faq_pages=145 faq_questions=422 failures=0` |
+| `npm run test:design` | exit 0 |
+| `npm run test:copy` / `test:brand` / `test:authority` | exit 0 |
+| `npm run test:integral-solution` / `test:self-deprecation` | PASS / PASS |
+| `npm run organic:test` | `279 passed` |
+| `npm run test:inbound-gates` | exit 1: só `test_measurement_delay_canary_389…` (`medicoes-glosas-obras-publicas`, hash do piloto, pré-existente) |
+| `npm run test:deliverables-registry` | `3650/3650` |
+| `npm run test:real-proof-registry` | `canonical_records=0 public_pages=268 problems=0` |
+| `npm run test:commercial-contract-consistency` | `521/521` |
+| `npm run test:public-offer-truth` | `132/132` |
+| `npm run test:page-contract-contratos` | `494/498`: `held_hash_18/19/22`, `public_renderer_has_no_drift` (hash dos pilares congelados; pedido 1) |
+| `npm run test:page-contract-licitacao` | `241/243`: `dedicated_route_remains_frozen`, `public_renderer_has_no_drift` (hash de pré-licitação; pedido 1) |
+| `npm run test:page-contract-{operacao,execucao,disputas,ciclo,integridade,complementares,eight}` | `638/638`, `702/702`, `273/273`, `1569/1569`, `176/176`, `273/273`, `735/735` |
+| `npm run test:offer-fit` | `offer-fit-matrix: 192/192`, `offer-fit-copy: 83/83` (reequilíbrio corrigido) |
+| `npm run test:pricing-policy` | `196/196` |
+| `npm run test:checkout-negatives` | `CONTRACT_PROVEN passed=66` |
+| `npm run test:cta-form-next-state` | `CTA_FORM_NEXT_STATE_OK routes=31` (censo 198 → 196) |
+| `npm run test:form-funnel` | `FORM_FUNNEL_OK` |
+| `npm run test:nav` / `test:hub-truth` / `test:bofu-audit` | `15 passed` / `ALL hub truth checks passed` / `18 passed` |
+| `npm run test:bofu-dominance` | `11 failed, 106 passed`: 10 de hash/snapshot dos pilares congelados (`frozen_specs/test_frozen_specs.py` ×9, `test_unlock_plan_291.py` ×1; pedido 1) e `safe_execution::test_git_diff_is_exclusive_area`, que **não é hash**: compara o diff do ramo com a área exclusiva do PR 159 e agora vê, além de `aditivos-obras-publicas/`, os arquivos desta rodada fora dessa área (`diretoria-b2g/`, `bid-room-licitacoes-obras/`, `diagnostico-b2g-expansao/`, `servicos-obras-publicas/`, `reequilibrio-obras-publicas/`, `diagnostico-pre-licitacao/`, `styles-offers.css`, `assets/pranchas/`, `data/demonstrative/plates/`, `scripts/demonstrative/plates/`); o escopo autorizado da frente é mais largo que essa área e o teste é intocável. `safe_execution` estrutural (12/13) e `safe_strategy` passam |
+| `npm run test:layout-primitives` (árvore fonte) | `OK layout audit: 19 routes × 7 widths (133 checks)` (`.compare-split` saiu das três ofertas; seletor ausente não reprova) |
+| `npm run test:lead-function` | exit 0 (`ALL private_project_technical_readiness checks passed`) |
+| `node --test tests/intake/test_mv03_adaptive_intake.mjs` | `# pass 17 # fail 0` |
+| `UI_GEOMETRY_SITE_ROOT=. UI_TEST_PORT=8753 node scripts/site/test_ui_geometry.mjs` | `All UI geometry tests passed` (inclusive `offer_context_geometry`, `offer_context_computed`, `offer_cta_first_viewport_and_progressive_detail`, `editorial_cover_scope_geometry`) |
+| `npm run test:first-fold-contract` | exit 1: `17 check(s) failed`, todos `input_hashes` (recaptura do integrador, pedido 17) |
+| `python3 -m pytest scripts/demonstrative/plates -q` / `render_plates --check` / `inline --check` | `16 passed` / `plates_ok: 40` / `OK plates inline` |
+
+### 9.3 Testes ajustados e motivo
+
+- Nenhum arquivo de teste foi editado nesta rodada; nenhum gate foi afrouxado.
+- Ajustado: `data/commercial/cta-form-next-state.v1.json` (`expected_declared_ctas` 198 → 196, com a nota
+  do motivo: dois controles da diretoria que apontavam para onde já estavam) e
+  `docs/commercial/cta-form-next-state-inventory.json` regerado por `npm run report:cta-form-next-state`
+  (duas vezes: após o fecho da diretoria e após os itens de índice das pranchas).
+- Arquivos protegidos por hash alterados de propósito (recaptura do integrador, pedidos 1 e 17):
+  `defesa-margem-contratos-publicos/index.html`, `defesa-tecnica-contratos-publicos/index.html`,
+  `atrasos-prorrogacao-obras-publicas/index.html`, `acompanhamento-contratos-obras/index.html`,
+  `diretoria-b2g/index.html`, `bid-room-licitacoes-obras/index.html`,
+  `diagnostico-b2g-expansao/index.html`, `diagnostico-pre-licitacao/index.html` (frozen spec),
+  `reequilibrio-obras-publicas/index.html` (frozen spec), `servicos-obras-publicas/index.html`,
+  `styles-offers.css` (`first-fold-measurements.v1.json`).
+
+### 9.4 Achados refutados (com a evidência)
+
+- **"em 1440 usar 4 colunas ou 2x2 no dl.offer-context"**: `scripts/site/test_ui_geometry.mjs::offer_context_computed`
+  mede `/defesa-margem-contratos-publicos/` a 1440 e exige `colTracks >= 3` e o quarto item abaixo
+  do primeiro (`fourth-not-conclusion-strip`); a regra `.offer-context > .offer-context-item:nth-child(4)`
+  em `styles.css` (integrador) desenha a faixa de conclusão de propósito. O item 04 não é órfão.
+- **"abrir o details por padrão"** (diretoria, bid-room, expansão): `offer_cta_first_viewport_and_progressive_detail`
+  exige `details.length >= 1` e todos fechados nessas rotas. Adotada a segunda opção do achado
+  (resumo visível apontado pelo índice).
+- **"Ver a página do evento" sem affordance em `/problemas-que-resolvemos/`**: é o primitivo
+  `.list-ruled__action` (`css/components.css`: filete `border-bottom` + seta), o mesmo do hub
+  `/servicos/` do piloto; a rota não carrega `styles-offers.css` e o gerador `render_nav_hubs.py`
+  não foi tocado.
+
+### 9.5 O que ficou de fora e por quê
+
+- `_site` e Lighthouse: cadeia de fechamento do integrador (build FAIL-CLOSED sem `approvals.json`).
+- Rodapé dos estados com faixa vazia acima do copyright: casca `obrigado.html` (lote A / integrador); pedido 19.
+- Tamanho do `h1` de serviço dentro da casca `content-hero`: pedido 16 (folha editorial do integrador).

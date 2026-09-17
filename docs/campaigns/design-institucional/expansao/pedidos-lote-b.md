@@ -10,12 +10,16 @@ Cada pedido diz o arquivo do integrador, o motivo e a página afetada. Nada aqui
 - **Também**: `data/commercial/first-fold-measurements.v1.json` (`test:first-fold-contract`) grava `input_hashes` de todas as rotas do lote; recapturar com `scripts/site/measure_first_fold.mjs` na cadeia obrigatória (análise aprovada → frozen specs → primeira dobra → baselines), só com o CSS congelado.
 - **Dono e prazo** (revisão 2026-09-17): integrador, **antes do PR de publicação** do ramo de integração. Sem dono e prazo a reprovação não pode ser lida como "esperada". Ordem obrigatória: (1) `python3 scripts/bofu_dominance/frozen_specs/materialize.py` com motivo e `baseline_commit` para os seis pilares (`aditivos-obras-publicas`, `auditoria-orcamento-licitacao`, `diagnostico-pre-licitacao`, `reequilibrio-obras-publicas`, `diagnostico-b2g-360`, `medicoes-glosas-obras-publicas`); (2) `node scripts/site/measure_first_fold.mjs` na cadeia análise aprovada → frozen specs → primeira dobra → baselines, só com o CSS congelado; (3) os quatro comandos voltam a `exit 0`: `npm run test:bofu-dominance`, `npm run test:page-contract-contratos`, `npm run test:page-contract-licitacao`, `npm run test:inbound-gates` (mais `npm run test:first-fold-contract`). Registrar o SHA no relatório do integrador. Bloqueia a publicação; não bloqueia o aceite de design do lote.
 
-## 2. Folha editorial nas quatro rotas da área safe-execution
+## 2. Folha editorial nas quatro rotas da área safe-execution — RESOLVIDO (integrador, 2026-09-17)
+
+- `test_existing_css_js_only` passou a aceitar `/assets/editorial*.css`; a onda 2 do lote recompôs as quatro rotas (ver relatório §8).
 
 - **Arquivo**: `scripts/site/build_css.py` / nome público da folha (`assets/editorial.css`).
 - **Motivo**: `tests/bofu_dominance/safe_execution/test_bofu_safe_execution.py::test_existing_css_js_only` só aceita folhas cujo `href` comece por `/styles`. Por isso `defesa-margem-contratos-publicos`, `atrasos-prorrogacao-obras-publicas`, `defesa-tecnica-contratos-publicos` e `acompanhamento-contratos-obras` ficaram sem a folha editorial e sem índice de página (`PRESERVADA_COM_JUSTIFICATIVA`). Opções: publicar a camada editorial também como `/styles-editorial.css` (mesmo conteúdo, nome dentro da regra) ou mover `.page-index`, `.conditions`, `.contact-primary/.contact-alt` e `.t-*` para `css/contracts.css`. Depois disso, aplicar a essas quatro rotas o mesmo tratamento das ofertas (`docs/…/expansao` do lote B: índice de página após a abertura, ids por seção).
 
-## 3. Segundo momento escuro no hub de obras públicas
+## 3. Segundo momento escuro no hub de obras públicas — RESOLVIDO (lote B, onda 2)
+
+- O aside de regras e os cartões do bloco gerado passaram a superfície clara em `styles-offers.css` (regras exclusivas do hub); ver relatório §8.
 
 - **Arquivo**: `scripts/commercial/render_contract_defense_products.mjs` (bloco `GENERATED:CONTRACT-DEFENSE-HUB`) e `styles-offers.css` (`.contract-products-hub__rules`).
 - **Motivo**: o hub `/servicos-obras-publicas/` recomposto tem um único bloco escuro editorial (a rota dominante do dossiê de medição, `lead-inline`), mas o bloco gerado de produtos no fim da página desenha o aside de regras em navy. A regra "um bloco escuro por página" só fecha se o aside gerado passar a superfície clara (`sec--soft`) ou se a rota dominante deixar de ser escura. Decisão do integrador; o lote não toca no bloco gerado.
@@ -68,11 +72,42 @@ Cada pedido diz o arquivo do integrador, o motivo e a página afetada. Nada aqui
 - **Arquivo**: `styles.css` (`.article-layout{padding-top:72px}` somado ao `margin-bottom` do `.page-index`).
 - **Motivo**: ~110 px vazios entre o índice e o cartão do artigo nas páginas de política que carregam `nav.page-index` (só `/conflitos/` hoje). Sugestão: `.page-index + .section .article-layout{padding-top:var(--space-6)}` ou equivalente.
 
-## 13. Bloco GENERATED:CONTRACT-DEFENSE-HUB (`render_contract_defense_products.mjs`, `styles-offers.css`)
+## 13. Bloco GENERATED:CONTRACT-DEFENSE-HUB (`render_contract_defense_products.mjs`, `styles-offers.css`) — RESOLVIDO (lote B, onda 2)
+
+- Lista regrada, regras claras, `h2` sem `18ch` e sem ponto, opção vazia do select "Ainda não sei: quero orientação" (rótulo visível; `name`, `value`, `required` e consentimento intactos). O bloco continua gerado pelo gerador.
 
 - Complementa o pedido 3: além da faixa de regras navy, a revisão apontou a grade 3×3 de cartões de preço (`.contract-products-hub__grid`), o `h2` com `max-width:18ch` (quebra em quatro linhas a 1440: "Sete eventos contratuais, cada um com um documento para agir.") e a opção padrão do select "Ainda não sei qual entrega, quero orientação", cortada no select nativo em 390 px. Sugestão: lista `list-ruled` com preço/prazo em `.t-data`, `h2` sem `18ch`, regras como `div.conditions` claro, opção "Ainda não sei · quero orientação". O lote retirou preço e prazo das linhas por situação, então o bloco gerado é o único lugar da página que os publica; o formulário `#captura-contrato` é protegido.
 
-## 14. Quebra do h1 no hífen em 390 px (`/diagnostico-pre-licitacao/`)
+## 14. Quebra do h1 no hífen em 390 px (`/diagnostico-pre-licitacao/`) — RESOLVIDO (utilitário `.nowrap` do integrador + onda 2 do lote)
 
 - **Arquivo**: `css/components.css` (primitivo) ou `styles.css`.
 - **Motivo**: "Diagnóstico pré- / licitação para / obras públicas". Não há primitivo `nowrap` no sistema e `br.hero-br-mobile` só tem regra em `assets/home-10x.css`; o h1 literal está gravado em `data/bofu-dominance/frozen-specs/snapshots.json` e em `first-fold-measurements`, então o lote não trocou o hífen por U+2011. Pedido: um utilitário `.nowrap{white-space:nowrap}` (ou a regra de `hero-br-mobile` no sitewide) para envolver "pré-licitação".
+
+## 15. Cópia de encaixe de `/reequilibrio-obras-publicas/` (`test:offer-fit`) — RESOLVIDO (lote B, correções após revisão da onda 2)
+
+- **Arquivo**: `reequilibrio-obras-publicas/index.html` (rota da onda 1, fora dos arquivos permitidos da frente residual).
+- **Motivo**: `tests/commercial/test_offer_fit_copy.mjs` exige o título e o corpo exatos de `data/commercial/offer-fit-matrix.v1.json#route_copy.reequilibrio-obras-publicas` ("Quando o dossiê de reequilíbrio cabe, e quando não" + corpo); a recomposição da onda 1 parafraseou o corpo. Reprova desde a onda 1 (`offer-fit-copy: 81/83`; no HEAD da integração `2da310422` o título não existe na rota: `git show 2da310422:reequilibrio-obras-publicas/index.html | grep -c "Quando o dossiê de reequilíbrio cabe"` = 0). Em `/diagnostico-pre-licitacao/` a onda 2 restaurou o texto exato; fazer o mesmo em reequilíbrio (h3 + `p[data-offer-fit="1"]` com o corpo do JSON) e recapturar o hash.
+
+## 16. Tamanho do h1 de serviço dentro da casca `content-hero`
+
+- **Arquivo**: `assets/editorial.css` (integrador).
+- **Motivo**: nas quatro rotas de execução segura o `h1.t-service` fica dentro de `header.content-hero` (pinado pelo contrato safe-execution) e `.content-hero h1{font-size:var(--text-h1)}` (0,1,1) vence `.t-service` (0,1,0): 44 px a 1440 em vez de 48 px, e `line-height:1.08` no móvel. Sugestão: `.content-hero h1.t-service{font-size:var(--text-service);line-height:1.04;max-width:none}` ou equivalente na folha editorial.
+
+## 17. Recaptura de hashes após a onda 2 (complementa o pedido 1)
+
+- Além dos seis pilares: `styles-offers.css` mudou (lockup, hub) e entra em `data/commercial/first-fold-measurements.v1.json`; `diagnostico-pre-licitacao/index.html` mudou de novo (nowrap + cópia de encaixe); as quatro rotas de execução segura, as ofertas (diretoria, bid-room), o hub e os estados mudaram (`input_hashes` da primeira dobra). `test:first-fold-contract` reprova 17 checks só por isso. O `rendered_content_hash` da análise aprovada não depende de `styles-offers.css` (conferido antes e depois, mesmo valor).
+
+## 18. `stash@{0}` no worktree do lote B
+
+- A lista de stashes do repositório (compartilhada entre worktrees) carrega uma entrada "WIP on campaign/salto-institucional-02-expansao: 2da310422" (288 arquivos, drift de `_site`/saídas rastreadas da base), anterior à onda 2 e não pertencente ao lote; a posição na lista muda conforme outras sessões empilham stashes (na rodada de correção ela já não era a `stash@{0}`), então identificar pela mensagem, não pelo índice. Foi aplicado por engano por um `git stash`/`pop` de conferência e revertido com `git reset --hard HEAD` (trabalho já commitado); a entrada foi mantida. Decisão de descartar ou não é do integrador.
+
+## 19. Rodapé dos estados de checkout (casca `obrigado.html`)
+
+- **Arquivo**: casca compartilhada dos estados (`diagnostico-b2g-expansao/obrigado/index.html`, lote A) e `styles.css` (`.site-footer`).
+- **Motivo**: os três estados (`obrigado`, `expirado`, `cancelado`) só carregam `footer-bottom`; o `padding` de `.site-footer` deixa ~120 px (1440) / ~100 px (390) navy vazios acima do copyright. Sugestão: modificador `.site-footer--compact` na casca de estados ou `padding-top` reduzido quando não há `footer-top`. Não bloqueante.
+
+## 20. Registro: correções após revisão (onda 2)
+
+- `scripts/commercial/render_contract_defense_products.mjs` (bloco PRODUCT em `dl.contract-product__terms`, linhas de veracidade sem caixa, ação em link de texto; rótulo da opção vazia do select do hub restaurado) e `styles-offers.css` (superfície editorial do produto/hub, links de prosa, `keys--prose`, índice na abertura das rotas safe-execution, botão secundário em `sec--dark`, fecho da diretoria). O gerador só regenera localmente com `hashes.json` igual à árvore (pedido 1); os blocos committed são os bytes do gerador.
+- `scripts/demonstrative/plates/family_b2g_execucao.py` (P10–P12) e `scripts/demonstrative/plates/family_b2g.py` (P7): `docs/campaigns/design-institucional/assets-manifest.json` precisa ser regerado (pedido 4).
+- `/reequilibrio-obras-publicas/` corrigido nesta rodada (pedido 15 atendido pelo lote; recaptura do hash segue no pedido 1).

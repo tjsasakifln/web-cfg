@@ -2,7 +2,7 @@
   "schema": "confenge.design-assets-lote/1.0",
   "lote": "B",
   "campaign": "CONFENGE-SALTO-INSTITUCIONAL-02-EXPANSAO-PRODUCAO",
-  "generator": "scripts/demonstrative/plates/family_b2g.py (agregado por render_plates.py; python3 -m scripts.demonstrative.plates.render_plates --check: plates_ok 18; pytest scripts/demonstrative/plates: 16 passed)",
+  "generator": "scripts/demonstrative/plates/family_b2g.py (agregado por render_plates.py; python3 -m scripts.demonstrative.plates.render_plates --check: plates_ok 40; pytest scripts/demonstrative/plates: 16 passed) + scripts/demonstrative/plates/family_b2g_execucao.py (P10–P12, onda 2)",
   "license": "gerado pela CONFENGE a partir de dados demonstrativos; sem foto de banco, sem ícone genérico, sem dado de cliente",
   "classification": "demonstrativo",
   "assets": [
@@ -89,14 +89,15 @@
       "variant": "desktop",
       "viewbox": "1200x560",
       "file": "assets/pranchas/carteira-eventos-desktop.svg",
-      "bytes": 7337,
-      "sha256": "e79730e8c3fdcead1603dc52e3215e86482afcac30b78e1898dc63b6d6592885",
+      "bytes": 7345,
+      "sha256": "08cf78bd6e404a07e403b7812746afdb1b205d985eb952f1d90ae631fc4dfa92",
       "data_source": "data/demonstrative/plates/carteira-eventos.v1.json",
       "license": "gerado pela CONFENGE a partir de dados demonstrativos",
       "classification": "demonstrativo",
       "label_on_sheet": "Exemplo demonstrativo · sem obra de cliente",
       "used_on": [
-        "/diagnostico-b2g-360/"
+        "/diagnostico-b2g-360/",
+        "/acompanhamento-contratos-obras/"
       ],
       "summary": "Matriz carteira de contratos (4) × eventos (medição, aditivo, reequilíbrio, prazo) com o estado do registro por célula e um contrato em foco."
     },
@@ -114,7 +115,8 @@
       "classification": "demonstrativo",
       "label_on_sheet": "Exemplo demonstrativo · sem obra de cliente",
       "used_on": [
-        "/diagnostico-b2g-360/"
+        "/diagnostico-b2g-360/",
+        "/acompanhamento-contratos-obras/"
       ],
       "summary": "Matriz carteira de contratos (4) × eventos (medição, aditivo, reequilíbrio, prazo) com o estado do registro por célula e um contrato em foco."
     },
@@ -219,6 +221,114 @@
         "/casos/medicao-glosa-demonstrativo/"
       ],
       "note": "prancha do piloto reutilizada como peça de abertura do hub; sem alteração"
+    },
+    {
+      "bytes": 8856,
+      "classification": "demonstrativo",
+      "data_source": "data/demonstrative/plates/risco-margem.v1.json",
+      "file": "assets/pranchas/risco-margem-desktop.svg",
+      "id": "risco-margem-desktop",
+      "label_on_sheet": "Exemplo demonstrativo · sem obra de cliente",
+      "license": "gerado pela CONFENGE a partir de dados demonstrativos",
+      "plate_id": "risco-margem",
+      "sha256": "e6ae95d42868d58cb0bab0e1d4bedbed738cbd3b840f207942849b6fbb781d40",
+      "sheet_code": "P10",
+      "summary": "Matriz de cinco eventos de um contrato hipotético: prazo, impacto potencial em R$ mil (barra proporcional), estado do registro contemporâneo e decisão por evento; evento priorizado em foco.",
+      "used_on": [
+        "/defesa-margem-contratos-publicos/"
+      ],
+      "variant": "desktop",
+      "viewbox": "1200x560"
+    },
+    {
+      "bytes": 4926,
+      "classification": "demonstrativo",
+      "data_source": "data/demonstrative/plates/risco-margem.v1.json",
+      "file": "assets/pranchas/risco-margem-mobile.svg",
+      "id": "risco-margem-mobile",
+      "label_on_sheet": "Exemplo demonstrativo · sem obra de cliente",
+      "license": "gerado pela CONFENGE a partir de dados demonstrativos",
+      "plate_id": "risco-margem",
+      "sha256": "bfb582d283435917a76a58701c6eb4c42af0b49603eddf1e30ce1703364accf6",
+      "sheet_code": "P10",
+      "summary": "Matriz de cinco eventos de um contrato hipotético: prazo, impacto potencial em R$ mil (barra proporcional), estado do registro contemporâneo e decisão por evento; evento priorizado em foco.",
+      "used_on": [
+        "/defesa-margem-contratos-publicos/"
+      ],
+      "variant": "mobile",
+      "viewbox": "360x420"
+    },
+    {
+      "bytes": 8564,
+      "classification": "demonstrativo",
+      "data_source": "data/demonstrative/plates/matriz-alegacoes.v1.json",
+      "file": "assets/pranchas/matriz-alegacoes-desktop.svg",
+      "id": "matriz-alegacoes-desktop",
+      "label_on_sheet": "Exemplo demonstrativo · sem obra de cliente",
+      "license": "gerado pela CONFENGE a partir de dados demonstrativos",
+      "plate_id": "matriz-alegacoes",
+      "sha256": "005ecb7609313b10f54e156d3cfbb05939afdfaf0f23b8d4aafe7049fcdc4ee7",
+      "sheet_code": "P11",
+      "summary": "Matriz de quatro alegações de uma notificação hipotética: obrigação, fato registrado, medida, prova, lacuna e situação; barra proporcional de dias documentados na alegação principal.",
+      "used_on": [
+        "/defesa-tecnica-contratos-publicos/"
+      ],
+      "variant": "desktop",
+      "viewbox": "1200x560"
+    },
+    {
+      "bytes": 4058,
+      "classification": "demonstrativo",
+      "data_source": "data/demonstrative/plates/matriz-alegacoes.v1.json",
+      "file": "assets/pranchas/matriz-alegacoes-mobile.svg",
+      "id": "matriz-alegacoes-mobile",
+      "label_on_sheet": "Exemplo demonstrativo · sem obra de cliente",
+      "license": "gerado pela CONFENGE a partir de dados demonstrativos",
+      "plate_id": "matriz-alegacoes",
+      "sha256": "b83fbf62dc44cd6a79343d5ce3a25eade837efec155e60f41835b9f679fefb67",
+      "sheet_code": "P11",
+      "summary": "Matriz de quatro alegações de uma notificação hipotética: obrigação, fato registrado, medida, prova, lacuna e situação; barra proporcional de dias documentados na alegação principal.",
+      "used_on": [
+        "/defesa-tecnica-contratos-publicos/"
+      ],
+      "variant": "mobile",
+      "viewbox": "360x420"
+    },
+    {
+      "bytes": 7723,
+      "classification": "demonstrativo",
+      "data_source": "data/demonstrative/plates/janela-causal.v1.json",
+      "file": "assets/pranchas/janela-causal-desktop.svg",
+      "id": "janela-causal-desktop",
+      "label_on_sheet": "Exemplo demonstrativo · sem obra de cliente",
+      "license": "gerado pela CONFENGE a partir de dados demonstrativos",
+      "plate_id": "janela-causal",
+      "sha256": "d3dba3eae51e71987902252ade08ec77594d37176356af724af70c944dbdb4f3",
+      "sheet_code": "P12",
+      "summary": "Cronograma de base e executado de uma obra hipotética: janela causal do órgão hachurada em lima, causa concorrente da contratada hachurada, cotas de dias e dias imputáveis.",
+      "used_on": [
+        "/atrasos-prorrogacao-obras-publicas/"
+      ],
+      "variant": "desktop",
+      "viewbox": "1200x560"
+    },
+    {
+      "bytes": 4077,
+      "classification": "demonstrativo",
+      "data_source": "data/demonstrative/plates/janela-causal.v1.json",
+      "file": "assets/pranchas/janela-causal-mobile.svg",
+      "id": "janela-causal-mobile",
+      "label_on_sheet": "Exemplo demonstrativo · sem obra de cliente",
+      "license": "gerado pela CONFENGE a partir de dados demonstrativos",
+      "plate_id": "janela-causal",
+      "sha256": "475d7549714c1830661da9760988fe8d817928599f472326cac099c1a622632e",
+      "sheet_code": "P12",
+      "summary": "Cronograma de base e executado de uma obra hipotética: janela causal do órgão hachurada em lima, causa concorrente da contratada hachurada, cotas de dias e dias imputáveis.",
+      "used_on": [
+        "/atrasos-prorrogacao-obras-publicas/"
+      ],
+      "variant": "mobile",
+      "viewbox": "360x420"
     }
   ]
 }

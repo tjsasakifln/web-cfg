@@ -1,0 +1,110 @@
+{
+  "schema": "confenge.demonstrative-plate-source/1.0",
+  "origin": "demonstrative",
+  "revision": "R00",
+  "label_pt_br": "exemplo demonstrativo",
+  "client_name": null,
+  "address": null,
+  "contract_number": null,
+  "art_number": null,
+  "signature": null,
+  "date_modified": "2026-09-17",
+  "id": "plate-matriz-alegacoes-2026-09",
+  "plate_id": "matriz-alegacoes",
+  "sheet_code": "P11",
+  "title": "Matriz de alegações da notificação",
+  "public_source_pt_br": "Seção /defesa-tecnica-contratos-publicos/ (notificação hipotética; alegações, dias e registros sintéticos).",
+  "units": {
+    "days": "dias corridos",
+    "status": "situação de cada alegação diante do registro contemporâneo"
+  },
+  "statuses": [
+    {
+      "id": "CONTROVERTIDO",
+      "label_pt_br": "Controvertido com prova",
+      "mark": "cheio"
+    },
+    {
+      "id": "ADMITIDO_PARTE",
+      "label_pt_br": "Admitido em parte",
+      "mark": "hachura"
+    },
+    {
+      "id": "SEM_REGISTRO",
+      "label_pt_br": "Sem registro localizado",
+      "mark": "vazio"
+    }
+  ],
+  "deadline": {
+    "response_business_days": "10",
+    "remaining_business_days": "7",
+    "minimum_accept_business_days": "5"
+  },
+  "allegations": [
+    {
+      "id": "A-01",
+      "label_pt_br": "Atraso de 45 dias na frente 2",
+      "short_pt_br": "Atraso na frente 2",
+      "obligation_pt_br": "prazo parcial do cronograma",
+      "fact_pt_br": "frente bloqueada pelo órgão por 28 dias",
+      "measure_pt_br": "ofício de liberação protocolado",
+      "proof_pt_br": "diário e ofício datados",
+      "gap_pt_br": "nenhuma",
+      "status": "CONTROVERTIDO",
+      "days_alleged": "45",
+      "days_documented": "28",
+      "focus": true
+    },
+    {
+      "id": "A-02",
+      "label_pt_br": "Equipe abaixo do mínimo contratual",
+      "short_pt_br": "Equipe abaixo do mínimo",
+      "obligation_pt_br": "12 profissionais mobilizados",
+      "fact_pt_br": "9 mobilizados por 6 dias",
+      "measure_pt_br": "reforço de equipe em 4 dias",
+      "proof_pt_br": "folha de ponto",
+      "gap_pt_br": "nenhuma",
+      "status": "ADMITIDO_PARTE",
+      "days_alleged": null,
+      "days_documented": "6",
+      "focus": false
+    },
+    {
+      "id": "A-03",
+      "label_pt_br": "Material fora da especificação",
+      "short_pt_br": "Material fora da especificação",
+      "obligation_pt_br": "ensaio por lote recebido",
+      "fact_pt_br": "lote recebido sem ensaio arquivado",
+      "measure_pt_br": "ensaio solicitado ao fornecedor",
+      "proof_pt_br": "nota fiscal do lote",
+      "gap_pt_br": "laudo de ensaio do lote",
+      "status": "SEM_REGISTRO",
+      "days_alleged": null,
+      "days_documented": null,
+      "focus": false
+    },
+    {
+      "id": "A-04",
+      "label_pt_br": "Sinalização de segurança ausente",
+      "short_pt_br": "Sinalização ausente",
+      "obligation_pt_br": "sinalização conforme o PGR",
+      "fact_pt_br": "sinalização instalada na data apontada",
+      "measure_pt_br": "registro fotográfico diário",
+      "proof_pt_br": "fotos datadas e geolocalizadas",
+      "gap_pt_br": "nenhuma",
+      "status": "CONTROVERTIDO",
+      "days_alleged": null,
+      "days_documented": null,
+      "focus": false
+    }
+  ],
+  "summary": {
+    "allegations": "4",
+    "controverted": "2",
+    "admitted_in_part": "1",
+    "without_record": "1",
+    "days_gap_focus": "17",
+    "formula": "45 − 28 = 17"
+  },
+  "disclaimer_pt_br": "Notificação hipotética; não é caso de cliente. A matriz é subsídio técnico para o jurídico, não defesa jurídica nem promessa de afastamento de sanção."
+}

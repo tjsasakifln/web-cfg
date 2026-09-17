@@ -1,0 +1,131 @@
+{
+  "schema": "confenge.demonstrative-plate-source/1.0",
+  "origin": "demonstrative",
+  "revision": "R00",
+  "label_pt_br": "exemplo demonstrativo",
+  "client_name": null,
+  "address": null,
+  "contract_number": null,
+  "art_number": null,
+  "signature": null,
+  "date_modified": "2026-09-17",
+  "id": "plate-risco-margem-2026-09",
+  "plate_id": "risco-margem",
+  "sheet_code": "P10",
+  "title": "Matriz de risco por evento",
+  "public_source_pt_br": "Seção /defesa-margem-contratos-publicos/ (contrato hipotético; eventos, prazos e valores sintéticos).",
+  "units": {
+    "deadline": "dias corridos até o prazo de registro ou resposta",
+    "impact": "impacto potencial em R$ mil",
+    "proof": "estado do registro contemporâneo"
+  },
+  "proof_states": [
+    {
+      "id": "SIM",
+      "label_pt_br": "Registro contemporâneo",
+      "mark": "cheio"
+    },
+    {
+      "id": "PARCIAL",
+      "label_pt_br": "Registro parcial",
+      "mark": "hachura"
+    },
+    {
+      "id": "NAO",
+      "label_pt_br": "Sem registro",
+      "mark": "vazio"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "PRIORIZAR",
+      "label_pt_br": "Priorizar"
+    },
+    {
+      "id": "REGISTRAR",
+      "label_pt_br": "Registrar"
+    },
+    {
+      "id": "QUANTIFICAR",
+      "label_pt_br": "Quantificar"
+    },
+    {
+      "id": "JURIDICO",
+      "label_pt_br": "Jurídico"
+    },
+    {
+      "id": "NAO_PLEITEAR",
+      "label_pt_br": "Não pleitear"
+    }
+  ],
+  "events": [
+    {
+      "id": "E-01",
+      "label_pt_br": "Frente liberada com atraso",
+      "short_pt_br": "Frente liberada tarde",
+      "deadline_days": "12",
+      "impact_brl_thousand": "186",
+      "proof": "SIM",
+      "gap_pt_br": "nenhuma",
+      "decision": "PRIORIZAR",
+      "focus": true
+    },
+    {
+      "id": "E-02",
+      "label_pt_br": "Serviço extra sem ordem escrita",
+      "short_pt_br": "Serviço extra sem ordem",
+      "deadline_days": "5",
+      "impact_brl_thousand": "94",
+      "proof": "PARCIAL",
+      "gap_pt_br": "ordem de serviço ou ata",
+      "decision": "REGISTRAR",
+      "focus": false
+    },
+    {
+      "id": "E-03",
+      "label_pt_br": "Glosa na medição do período",
+      "short_pt_br": "Glosa na medição",
+      "deadline_days": "8",
+      "impact_brl_thousand": "61",
+      "proof": "SIM",
+      "gap_pt_br": "memória de quantitativos",
+      "decision": "QUANTIFICAR",
+      "focus": false
+    },
+    {
+      "id": "E-04",
+      "label_pt_br": "Reajuste não aplicado na fatura",
+      "short_pt_br": "Reajuste não aplicado",
+      "deadline_days": "30",
+      "impact_brl_thousand": "148",
+      "proof": "SIM",
+      "gap_pt_br": "nenhuma",
+      "decision": "JURIDICO",
+      "focus": false
+    },
+    {
+      "id": "E-05",
+      "label_pt_br": "Chuva sem critério contratual",
+      "short_pt_br": "Chuva sem critério",
+      "deadline_days": "18",
+      "impact_brl_thousand": "12",
+      "proof": "NAO",
+      "gap_pt_br": "critério contratual e diário",
+      "decision": "NAO_PLEITEAR",
+      "focus": false
+    }
+  ],
+  "totals": {
+    "events": "5",
+    "impact_total_brl_thousand": "501",
+    "impact_with_proof_brl_thousand": "395",
+    "impact_partial_brl_thousand": "94",
+    "impact_without_proof_brl_thousand": "12",
+    "events_with_proof": "3",
+    "events_partial": "1",
+    "events_without_proof": "1",
+    "shortest_deadline_days": "5",
+    "formula": "186 + 61 + 148 = 395"
+  },
+  "disclaimer_pt_br": "Contrato hipotético e valores sintéticos; não é contrato de cliente. Impacto potencial não é valor devido nem promessa de recuperação."
+}
