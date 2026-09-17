@@ -2,6 +2,7 @@
 /* Type roles ----------------------------------------------------------------- */
 .t-institutional{font-family:var(--sans-wide);font-stretch:var(--wide);font-size:var(--text-institutional);font-weight:760;letter-spacing:-.035em;line-height:var(--lh-tight);color:var(--ink);text-wrap:balance;margin:0 0 1rem}
 .t-institutional .t-accent{color:var(--green-700)}
+.content-hero h1.t-service,.offer-hero h1.t-service{font-size:var(--text-service);line-height:1.04}
 .t-service{font-family:var(--sans-wide);font-stretch:var(--wide);font-size:var(--text-service);font-weight:760;letter-spacing:-.03em;line-height:1.04;color:var(--ink);text-wrap:balance;margin:0 0 .85rem}
 .t-editorial{font-family:var(--sans-wide);font-stretch:var(--wide);font-size:var(--text-editorial);font-weight:740;letter-spacing:-.025em;line-height:1.08;color:var(--ink);text-wrap:balance;margin:0 0 .75rem}
 .t-callout{font-size:var(--text-callout);font-weight:600;line-height:1.45;color:var(--ink);max-width:40ch;margin:0 0 1rem}
@@ -33,6 +34,7 @@
 
 .svc-open+.page-index,.svc-open+.container>.page-index,.profile-hero+.page-index,.profile-hero+.container>.page-index,.article-hero+.page-index{margin-top:clamp(1rem,2vw,1.5rem)}
 .nowrap{white-space:nowrap}
+.page-index+.article-layout,.page-index+.container>.article-layout,.container>.page-index+.article-layout{padding-top:.5rem}
 .phases+.plate,.list-ruled+.plate,.steps+.plate,.svc-chain+.plate{margin-top:clamp(1.5rem,3vw,2.5rem)}
 /* Conditions and limits: one consolidated block, visible, two columns ------- */
 .conditions{border-top:1px solid var(--rule-strong);padding-top:1rem}
