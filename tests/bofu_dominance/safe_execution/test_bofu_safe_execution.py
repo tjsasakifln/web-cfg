@@ -458,8 +458,14 @@ def test_existing_css_js_only():
             if m:
                 hrefs.append(m.group(1))
         assert any(h.startswith("/styles.css") for h in hrefs), slug
+        # 2026-09-17 (SALTO-INSTITUCIONAL-02): the institutional direction's
+        # route sheet (assets/editorial.css and its subsets cut by
+        # scripts/site/build_css.py) is a first-party sheet of the same canon
+        # as /styles-*.css; the property protected here is "no third-party or
+        # ad-hoc stylesheet", not the file path.
         assert all(
-            h.startswith("/styles.css") or h.startswith("/styles-") for h in hrefs
+            h.startswith("/styles.css") or h.startswith("/styles-") or h.startswith("/assets/editorial")
+            for h in hrefs
         ), f"{slug} unexpected stylesheet {hrefs}"
         scripts = re.findall(r'<script[^>]+src=["\']([^"\']+)["\']', html, flags=re.I)
         assert any(s.startswith("/script.js") for s in scripts), slug
