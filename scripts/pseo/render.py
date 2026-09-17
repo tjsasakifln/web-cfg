@@ -50,7 +50,7 @@ HUB_ACTION_LABELS = {
 }
 MIN_H2_FOR_PAGE_INDEX = 3
 _ARTICLE_MAIN_RE = re.compile(r'(<article class="article-main"[^>]*>)(.*?)(</article>)', re.S)
-_INDEX_SECTION_RE = re.compile(r'<section id="([^"]+)"[^>]*>\s*(?:<p class="eyebrow">([^<]*)</p>\s*)?<h2[^>]*>(.*?)</h2>', re.S)
+_INDEX_SECTION_RE = re.compile(r'<section id="([^"]+)"[^>]*>\s*(?:<p class="eyebrow[^"]*">([^<]*)</p>\s*)?<h2[^>]*>(.*?)</h2>', re.S)
 
 
 def inject_page_index(html: str) -> str:
@@ -617,9 +617,9 @@ def _render_market(c: Candidate, manifest: dict[str, Any]) -> str:
     body = f"""
 {breadcrumbs_html(crumbs)}
 <header class="content-hero article-hero"><div class="container content-hero-grid"><div>
-<p class="eyebrow">Inteligência de mercado</p>
-<h1>{e(c.h1)}</h1>
-<p class="content-lead">Decisão: onde há demanda pública recorrente e como priorizar esforços comerciais com evidência.</p>
+<p class="eyebrow t-kicker">Inteligência de mercado</p>
+<h1 class="t-editorial">{e(c.h1)}</h1>
+<p class="content-lead measure">Decisão: onde há demanda pública recorrente e como priorizar esforços comerciais com evidência.</p>
 <div class="article-meta"><a href="/especialista/tiago-jun-sasaki/" rel="author">Engº Tiago Sasaki</a>
 <span>Dados: <time datetime="{e(m.get('period_start'))}">{e(br_date(m.get('period_start')))}</time> – <time datetime="{e(m.get('period_end'))}">{e(br_date(m.get('period_end')))}</time></span>
 <span>Escopo: {e(geo_locale.display_name(m.get('region') or m.get('region_label')))}</span></div>
@@ -627,11 +627,11 @@ def _render_market(c: Candidate, manifest: dict[str, Any]) -> str:
 <div class="container article-layout">
 <article class="article-main">
 <div class="answer-box" id="resposta"><span>Resposta direta</span><p>{e(summary)}</p></div>
-<section id="indicadores"><p class="eyebrow">Indicadores</p><h2>Números do recorte</h2>{inds}</section>
-<section id="compradores"><p class="eyebrow">Demanda</p><h2>Órgãos que concentram contratação</h2>{buyer_table}</section>
-<section id="objetos"><p class="eyebrow">Objetos</p><h2>O que mais se contrata</h2>{obj_table}</section>
-<section id="evolucao"><p class="eyebrow">Temporal</p><h2>Evolução no período</h2>{year_table or '<p>Série anual insuficiente no recorte.</p>'}</section>
-<section id="interpretacao"><p class="eyebrow">Leitura</p><h2>O que os dados indicam</h2><p>{e(interpretation)}</p>
+<section id="indicadores"><p class="eyebrow t-kicker">Indicadores</p><h2>Números do recorte</h2>{inds}</section>
+<section id="compradores"><p class="eyebrow t-kicker">Demanda</p><h2>Órgãos que concentram contratação</h2>{buyer_table}</section>
+<section id="objetos"><p class="eyebrow t-kicker">Objetos</p><h2>O que mais se contrata</h2>{obj_table}</section>
+<section id="evolucao"><p class="eyebrow t-kicker">Temporal</p><h2>Evolução no período</h2>{year_table or '<p>Série anual insuficiente no recorte.</p>'}</section>
+<section id="interpretacao"><p class="eyebrow t-kicker">Leitura</p><h2>O que os dados indicam</h2><p>{e(interpretation)}</p>
 <p>{e(implications)}</p></section>
 {confenge_help(
     ["/diagnostico-pre-licitacao/", "/auditoria-orcamento-licitacao/", "/acompanhamento-contratos-obras/"],
@@ -816,24 +816,24 @@ def _render_agency(c: Candidate, manifest: dict[str, Any]) -> str:
     body = f"""
 {breadcrumbs_html(crumbs)}
 <header class="content-hero article-hero"><div class="container content-hero-grid"><div>
-<p class="eyebrow">Dossiê de comprador público</p>
-<h1>{e(c.h1)}</h1>
-<p class="content-lead">Histórico de contratação em engenharia, evidência pública, sem score comercial.</p>
+<p class="eyebrow t-kicker">Dossiê de comprador público</p>
+<h1 class="t-editorial">{e(c.h1)}</h1>
+<p class="content-lead measure">Histórico de contratação em engenharia, evidência pública, sem score comercial.</p>
 <div class="article-meta"><a href="/especialista/tiago-jun-sasaki/" rel="author">Engº Tiago Sasaki</a>
 <span>{e(a.get('municipio'))} / {e(a.get('uf'))}</span>
 <span><time datetime="{e(a.get('period_start'))}">{e(br_date(a.get('period_start')))}</time> – <time datetime="{e(a.get('period_end'))}">{e(br_date(a.get('period_end')))}</time></span>
 </div></div></div></header>
 <div class="container article-layout"><article class="article-main">
 <div class="answer-box" id="resposta"><span>Resposta direta</span><p>{e(summary)}</p></div>
-<section id="indicadores"><p class="eyebrow">Indicadores</p><h2>Retrato do órgão no recorte</h2>{inds}</section>
-<section id="segmentos"><p class="eyebrow">Segmentos</p><h2>Mix de segmentos</h2>{mix_table}</section>
-<section id="objetos"><p class="eyebrow">Objetos</p><h2>Objetos mais frequentes</h2>{obj_table}</section>
-<section id="sazonalidade"><p class="eyebrow">Temporal</p><h2>Sazonalidade</h2>{season_table or '<p>Sem série mensal suficiente.</p>'}</section>
-<section id="oportunidades"><p class="eyebrow">Agora</p><h2>Oportunidades abertas (quando houver)</h2>{open_table}
+<section id="indicadores"><p class="eyebrow t-kicker">Indicadores</p><h2>Retrato do órgão no recorte</h2>{inds}</section>
+<section id="segmentos"><p class="eyebrow t-kicker">Segmentos</p><h2>Mix de segmentos</h2>{mix_table}</section>
+<section id="objetos"><p class="eyebrow t-kicker">Objetos</p><h2>Objetos mais frequentes</h2>{obj_table}</section>
+<section id="sazonalidade"><p class="eyebrow t-kicker">Temporal</p><h2>Sazonalidade</h2>{season_table or '<p>Sem série mensal suficiente.</p>'}</section>
+<section id="oportunidades"><p class="eyebrow t-kicker">Agora</p><h2>Oportunidades abertas (quando houver)</h2>{open_table}
 {open_links_html}
-<p><small>Links de oportunidade são deep-links de portal quando o snapshot traz URL; caso contrário registramos indisponibilidade sem inventar endereço.</small></p>
+<p class="technical-note">Links de oportunidade são deep-links de portal quando o snapshot traz URL; caso contrário registramos indisponibilidade sem inventar endereço.</p>
 </section>
-<section id="cuidados"><p class="eyebrow">Prática</p><h2>Cuidados para empresas interessadas</h2><ul>{notes}</ul>
+<section id="cuidados"><p class="eyebrow t-kicker">Prática</p><h2>Cuidados para empresas interessadas</h2><ul>{notes}</ul>
 <p>Portais de consulta (não substituem ficha de contrato):</p><ul>{channels}</ul></section>
 {confenge_help(
     ["/diagnostico-pre-licitacao/", "/auditoria-orcamento-licitacao/", "/acompanhamento-contratos-obras/"],
@@ -978,9 +978,9 @@ def _render_price(c: Candidate, manifest: dict[str, Any]) -> str:
     body = f"""
 {breadcrumbs_html(crumbs)}
 <header class="content-hero article-hero"><div class="container content-hero-grid"><div>
-<p class="eyebrow">Benchmark de contratação</p>
-<h1>{e(c.h1)}</h1>
-<p class="content-lead">Mediana, quartis e dispersão, com advertência explícita contra comparação cega.</p>
+<p class="eyebrow t-kicker">Benchmark de contratação</p>
+<h1 class="t-editorial">{e(c.h1)}</h1>
+<p class="content-lead measure">Mediana, quartis e dispersão, com advertência explícita contra comparação cega.</p>
 <div class="article-meta"><a href="/especialista/tiago-jun-sasaki/" rel="author">Engº Tiago Sasaki</a>
 <span>{e(p.get('period_start'))} – {e(p.get('period_end'))}</span></div>
 </div></div></header>
@@ -988,15 +988,15 @@ def _render_price(c: Candidate, manifest: dict[str, Any]) -> str:
 <div class="answer-box" id="resposta"><span>Resposta direta</span><p>{e(summary)}</p></div>
 <section class="article-callout"><svg class="icon"><use href="#i-shield"></use></svg>
 <div><strong>Advertência</strong><p>{e(p.get('warning'))}</p></div></section>
-<section id="indicadores"><p class="eyebrow">Indicadores</p><h2>Estatísticas do recorte</h2>{inds}{conf_note}</section>
-<section id="exemplos"><p class="eyebrow">Evidência</p><h2>Exemplos públicos verificáveis</h2>{ex_table}
+<section id="indicadores"><p class="eyebrow t-kicker">Indicadores</p><h2>Estatísticas do recorte</h2>{inds}{conf_note}</section>
+<section id="exemplos"><p class="eyebrow t-kicker">Evidência</p><h2>Exemplos públicos verificáveis</h2>{ex_table}
 <ul class="document-list">{example_links}</ul>
-<p><small>Links apontam para a ficha pública do contrato no PNCP quando o ID permite deep-link; caso contrário registramos indisponibilidade sem inventar URL.</small></p>
+<p class="technical-note">Links apontam para a ficha pública do contrato no PNCP quando o ID permite deep-link; caso contrário registramos indisponibilidade sem inventar URL.</p>
 <p><strong>Este benchmark não substitui orçamento técnico.</strong></p></section>
-<section id="criterios"><p class="eyebrow">Critérios</p><h2>Inclusão e exclusão</h2>
+<section id="criterios"><p class="eyebrow t-kicker">Critérios</p><h2>Inclusão e exclusão</h2>
 <p><strong>Inclusão</strong></p><ul>{inc}</ul>
 <p><strong>Exclusão</strong></p><ul>{exc}</ul></section>
-<section id="interpretacao"><p class="eyebrow">Leitura</p><h2>Implicações para margem</h2>
+<section id="interpretacao"><p class="eyebrow t-kicker">Leitura</p><h2>Implicações para margem</h2>
 <p>Dispersão elevada (IQR) costuma refletir mistura de portes e escopos. Antes da proposta,
 decomponha quantitativos, produtividade, BDI e logística. A CONFENGE apoia auditoria de planilha
 e teste de exequibilidade quando o deságio implícito ameaça a margem.</p></section>
@@ -1116,19 +1116,19 @@ def _render_competition(c: Candidate, manifest: dict[str, Any]) -> str:
     body = f"""
 {breadcrumbs_html(crumbs)}
 <header class="content-hero article-hero"><div class="container content-hero-grid"><div>
-<p class="eyebrow">Concorrência observada</p>
-<h1>{e(c.h1)}</h1>
-<p class="content-lead">{e(d.get('language_note'))}</p>
+<p class="eyebrow t-kicker">Concorrência observada</p>
+<h1 class="t-editorial">{e(c.h1)}</h1>
+<p class="content-lead measure">{e(d.get('language_note'))}</p>
 <div class="article-meta"><a href="/especialista/tiago-jun-sasaki/" rel="author">Engº Tiago Sasaki</a>
 <span>{e(d.get('period_start'))} – {e(d.get('period_end'))}</span></div>
 </div></div></header>
 <div class="container article-layout"><article class="article-main">
 <div class="answer-box" id="resposta"><span>Resposta direta</span><p>{e(summary)}</p></div>
-<section id="indicadores"><p class="eyebrow">Indicadores</p><h2>Concentração e escala</h2>{inds}</section>
-<section id="fornecedores"><p class="eyebrow">Observado</p><h2>Fornecedores no recorte</h2>{sup_table}</section>
-<section id="faixas"><p class="eyebrow">Valores</p><h2>Faixas de contratos</h2>{bands}</section>
-<section id="mudancas"><p class="eyebrow">Dinâmica</p><h2>Mudanças recentes</h2><ul>{changes}</ul></section>
-<section id="interpretacao"><p class="eyebrow">Leitura</p><h2>Uso legítimo desta página</h2>
+<section id="indicadores"><p class="eyebrow t-kicker">Indicadores</p><h2>Concentração e escala</h2>{inds}</section>
+<section id="fornecedores"><p class="eyebrow t-kicker">Observado</p><h2>Fornecedores no recorte</h2>{sup_table}</section>
+<section id="faixas"><p class="eyebrow t-kicker">Valores</p><h2>Faixas de contratos</h2>{bands}</section>
+<section id="mudancas"><p class="eyebrow t-kicker">Dinâmica</p><h2>Mudanças recentes</h2><ul>{changes}</ul></section>
+<section id="interpretacao"><p class="eyebrow t-kicker">Leitura</p><h2>Uso legítimo desta página</h2>
 <p>Serve para mapear quem já aparece em contratos públicos do segmento/UF e em quantos órgãos.
 Não autoriza inferir capacidade técnica, intenção de disputa futura ou risco reputacional.</p></section>
 {confenge_help(
@@ -1275,19 +1275,19 @@ def _render_radar(c: Candidate, manifest: dict[str, Any]) -> str:
     body = f"""
 {breadcrumbs_html(crumbs)}
 <header class="content-hero article-hero"><div class="container content-hero-grid"><div>
-<p class="eyebrow">Radar de oportunidades</p>
-<h1>{e(c.h1)}</h1>
-<p class="content-lead">Última verificação: <time datetime="{e(verified)}">{e(verified_br)}</time> (horário de Brasília).
+<p class="eyebrow t-kicker">Radar de oportunidades</p>
+<h1 class="t-editorial">{e(c.h1)}</h1>
+<p class="content-lead measure">Última verificação: <time datetime="{e(verified)}">{e(verified_br)}</time> (horário de Brasília).
  A lista reúne as oportunidades classificadas como abertas nessa data, com prazo igual ou posterior a ela.
  Confirme prazo, documentos e condições no portal oficial antes de preparar a proposta.</p>
 </div></div></header>
 <div class="container article-layout"><article class="article-main">
 <div class="answer-box" id="resposta"><span>Resposta direta</span><p>{e(summary)}</p></div>
-<section id="indicadores"><p class="eyebrow">Indicadores</p><h2>Recorte atual</h2>{inds}</section>
+<section id="indicadores"><p class="eyebrow t-kicker">Indicadores</p><h2>Recorte atual</h2>{inds}</section>
 {market_html}
-<section id="lista"><p class="eyebrow">Vigentes no recorte</p><h2>Oportunidades classificadas</h2>{tbl}
+<section id="lista"><p class="eyebrow t-kicker">Vigentes no recorte</p><h2>Oportunidades classificadas</h2>{tbl}
 <ul class="document-list">{links}</ul></section>
-<section id="historico"><p class="eyebrow">Histórico</p><h2>Separação histórico × vigente</h2>
+<section id="historico"><p class="eyebrow t-kicker">Histórico</p><h2>Separação histórico × vigente</h2>
 <p>Esta lista é atualizada a cada verificação: itens encerrados saem dela e novos entram.
  Cada oportunidade tem endereço próprio no portal oficial, que é onde a versão vigente do edital deve ser lida.
 {hist_sentence}</p></section>
@@ -1424,30 +1424,30 @@ def _render_problem(c: Candidate, manifest: dict[str, Any]) -> str:
     body = f"""
 {breadcrumbs_html(crumbs)}
 <header class="content-hero article-hero"><div class="container content-hero-grid"><div>
-<p class="eyebrow">Cenário técnico</p>
-<h1>{e(c.h1)}</h1>
-<p class="content-lead">Orientação para decidir com base em padrões de contratação pública e no serviço técnico da CONFENGE.</p>
+<p class="eyebrow t-kicker">Cenário técnico</p>
+<h1 class="t-editorial">{e(c.h1)}</h1>
+<p class="content-lead measure">Orientação para decidir com base em padrões de contratação pública e no serviço técnico da CONFENGE.</p>
 <div class="article-meta"><a href="/especialista/tiago-jun-sasaki/" rel="author">Engº Tiago Sasaki</a>
 <span>Segmentos: {e(arches)}</span></div>
 </div></div></header>
 <div class="container article-layout"><article class="article-main">
 <div class="answer-box" id="resposta"><span>Resposta direta</span><p>{e(summary)}</p></div>
-<section id="padrao"><p class="eyebrow">Padrão</p><h2>O que se observa nos documentos e na prática</h2>
+<section id="padrao"><p class="eyebrow t-kicker">Padrão</p><h2>O que se observa nos documentos e na prática</h2>
 <p>{e(p.get('observed_pattern'))}</p>
 {mass_extra}</section>
-<section id="fontes"><p class="eyebrow">Fontes auditáveis</p><h2>Referências oficiais e normativos</h2>
+<section id="fontes"><p class="eyebrow t-kicker">Fontes auditáveis</p><h2>Referências oficiais e normativos</h2>
 <ul class="document-list">{refs_html}</ul>
-<p><small>Links apontam para textos oficiais ou portais públicos; não são fichas de contrato individual.
-Guias CONFENGE abaixo detalham o enquadramento prático.</small></p></section>
-<section id="guias-relacionados"><p class="eyebrow">Biblioteca</p><h2>Guias técnicos relacionados</h2>
+<p class="technical-note">Links apontam para textos oficiais ou portais públicos; não são fichas de contrato individual.
+Guias CONFENGE abaixo detalham o enquadramento prático.</p></section>
+<section id="guias-relacionados"><p class="eyebrow t-kicker">Biblioteca</p><h2>Guias técnicos relacionados</h2>
 <p>Estas páginas aprofundam o critério; esta página de inteligência organiza a decisão do cenário.</p>
 <ul>{guides}</ul></section>
-<section id="implicacoes"><p class="eyebrow">Decisão</p><h2>O que a empresa precisa decidir neste cenário</h2>
+<section id="implicacoes"><p class="eyebrow t-kicker">Decisão</p><h2>O que a empresa precisa decidir neste cenário</h2>
 <p>{e(_problem_decision_copy(p))}</p>
 <p>{e(_problem_mass_copy(p))}</p>
-<p><strong>Limites da conclusão:</strong> {e(limit0)}</p>
+<p class="technical-note"><strong>Limites da conclusão:</strong> {e(limit0)}</p>
 </section>
-<section id="acao"><p class="eyebrow">Ação</p><h2>Próximo passo prático</h2>
+<section id="acao"><p class="eyebrow t-kicker">Ação</p><h2>Próximo passo prático</h2>
 <p>{e(_problem_action_copy(p))}</p></section>
 {confenge_help(
     [p.get('confenge_service_slug') or ''] + list(p.get("technical_guide_paths") or [])[:2],
@@ -1548,7 +1548,7 @@ def _related_section(urls: list[str]) -> str:
 )
     if not cards:
         return ""
-    return f"""<section class="related-section"><p class="eyebrow">Malha</p><h2>Páginas relacionadas</h2>
+    return f"""<section class="related-section"><p class="eyebrow t-kicker">Malha</p><h2>Páginas relacionadas</h2>
 <div class="related-grid">{"".join(cards)}</div></section>"""
 
 
@@ -1649,7 +1649,7 @@ def render_hub(
     body = f"""
 {breadcrumbs_html(crumbs)}
 <header class="content-hero article-hero"><div class="container content-hero-grid"><div><p class="eyebrow t-kicker">{e(eyebrow)}</p>
-<h1>{e(h1)}</h1><p class="content-lead">{e(intro)}</p>
+<h1 class="t-service">{e(h1)}</h1><p class="content-lead measure">{e(intro)}</p>
 {disclosure}</div></div></header>
 <section class="sec sec--tight"><div class="container">{grid}
 {extra_html}
