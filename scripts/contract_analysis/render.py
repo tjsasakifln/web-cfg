@@ -89,7 +89,7 @@ AI_DISCLOSURE_HTML = (
 HUB_METHOD_HTML = (
     '<section class="section authority-method" id="metodo">'
     "<h2>Como analisamos</h2>"
-    '<p class="case-badge">ANÁLISE TÉCNICA DE CONTRATO PÚBLICO</p>'
+    '<p class="case-badge eyebrow">ANÁLISE TÉCNICA DE CONTRATO PÚBLICO</p>'
     "<p>Cada afirmação é distinguida entre fato documentado, cálculo reproduzível, "
     "interpretação técnica ou informação não localizada. A fonte pública, o trecho "
     "consultado e a data de referência acompanham o texto.</p>"
