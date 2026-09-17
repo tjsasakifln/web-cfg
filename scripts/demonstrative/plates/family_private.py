@@ -10,6 +10,9 @@ with a desktop and a mobile composition, all drawn with ``sheet.py`` only:
     pericia-fachada           assistência pericial: mesmo mapa com quesito,
                               evidência e conclusão delimitada
     sst-canteiro              SST: planta do canteiro com proteções conferidas
+    pacote-entrega            projetos complementares: as quatro peças da entrega
+    interfaces-versoes        projetos complementares: insumos → disciplina →
+                              interfaces → versão devolvida
 
 Every visible numeral comes from the JSON sources named in ``PLATE_SOURCES``.
 No number is typed here. This module never imports ``render_plates`` (it is
@@ -47,6 +50,7 @@ from scripts.demonstrative.plates.sheet import (
 SOURCES = {
     "inspecao_fachada": Path("data/demonstrative/plates/inspecao-fachada.v1.json"),
     "sst_canteiro": Path("data/demonstrative/plates/sst-canteiro.v1.json"),
+    "elaboracao": Path("data/demonstrative/plates/elaboracao-complementar.v1.json"),
 }
 PLATE_SOURCES = {
     "interferencia-verga-viga": ("private", "private_consumption"),
@@ -55,6 +59,8 @@ PLATE_SOURCES = {
     "inspecao-fachada": ("inspecao_fachada",),
     "pericia-fachada": ("inspecao_fachada",),
     "sst-canteiro": ("sst_canteiro",),
+    "pacote-entrega": ("elaboracao",),
+    "interfaces-versoes": ("elaboracao",),
 }
 # Paths of the pilot sources, only for the provenance sentence in <desc>.
 _PROVENANCE = {
@@ -64,6 +70,7 @@ _PROVENANCE = {
     "infra_consumption": "data/demonstrative/infrastructure-pilot/consumption.v1.json",
     "inspecao_fachada": str(SOURCES["inspecao_fachada"]),
     "sst_canteiro": str(SOURCES["sst_canteiro"]),
+    "elaboracao": str(SOURCES["elaboracao"]),
 }
 MOBILE_W, MOBILE_H = 360, 420
 FS_M = 12.5
@@ -943,6 +950,150 @@ def p10_mobile(data: dict) -> str:
     )
 
 
+# ---------------------------------------------------------------------------
+# PG · pacote-entrega and PH · interfaces-versoes (projetos complementares):
+# structure diagrams, same vocabulary as the pilot's P4 (boxes, open arrows,
+# callouts, no number outside the JSON). Desktop = one row; mobile = one column.
+# ---------------------------------------------------------------------------
+
+
+def _flow_row(items: list[dict], *, x0: float, y0: float, bw: float, bh: float, gap: float, focus_id: str | None, callouts: dict[str, int]) -> str:
+    parts = []
+    for i, it in enumerate(items):
+        x = x0 + i * (bw + gap)
+        focus = it["id"] == focus_id
+        parts.append(rect(x, y0, bw, bh, fill=WHITE, stroke=GREEN if focus else INK, stroke_width=fmt(S.SW_CUT if focus else S.SW_OUTLINE)))
+        parts.append(text(x + 14, y0 + 22, it["id"], fill=MUTED))
+        parts.append(text(x + 14, y0 + 46, it["label_pt_br"], size=S.FS_LABEL + 1, weight=S.FW_LABEL, fill=GREEN if focus else INK))
+        for j, ln in enumerate(it["lines_pt_br"]):
+            parts.append(text(x + 14, y0 + 72 + j * 17, ln, size=S.FS_LABEL))
+        if i < len(items) - 1:
+            parts.append(S.arrow_h(x + bw + 4, x + bw + gap - 4, y0 + bh / 2))
+        if it["id"] in callouts:
+            parts.append(callout(x + bw - 2, y0 + 2, callouts[it["id"]]))
+    return "\n".join(parts)
+
+
+def _flow_column(items: list[dict], *, bx: float, y0: float, bw: float, bh: float, gap: float, focus_id: str | None, callouts: dict[str, int]) -> str:
+    fs = FS_M
+    parts = []
+    for i, it in enumerate(items):
+        y = y0 + i * (bh + gap)
+        focus = it["id"] == focus_id
+        parts.append(rect(bx, y, bw, bh, fill=WHITE, stroke=GREEN if focus else INK, stroke_width=fmt(S.SW_CUT if focus else S.SW_OUTLINE)))
+        parts.append(text(bx + 12, y + bh * 0.4, f"{it['id']} · {it['label_pt_br']}", size=fs, weight=S.FW_LABEL, fill=GREEN if focus else INK))
+        parts.append(text(bx + 12, y + bh * 0.4 + 18, it["short_pt_br"], size=fs, fill=MUTED))
+        if i < len(items) - 1:
+            parts.append(S.arrow_v(y + bh + 2, y + bh + gap - 2, bx + bw / 2))
+        if it["id"] in callouts:
+            parts.append(callout(bx + bw + 14, y + bh / 2, callouts[it["id"]], size=fs))
+    return "\n".join(parts)
+
+
+def pg_desktop(data: dict) -> str:
+    src = data["elaboracao"]
+    n = src["pacote"]
+    W_, H_ = 1200, 400
+    pid = "pacote-entrega"
+    pieces = n["pieces"]
+    bw, gap, bh, y0 = 240.0, 32.0, 150.0, 104.0
+    x0 = (W_ - (len(pieces) * bw + (len(pieces) - 1) * gap)) / 2
+    body = [text(28, 72, "Quatro peças da disciplina contratada · a arquitetura de origem fica fora da autoria · sem dimensionamento nesta prancha", size=S.FS_LABEL, weight=S.FW_LABEL)]
+    body.append(_flow_row(pieces, x0=x0, y0=y0, bw=bw, bh=bh, gap=gap, focus_id=None, callouts={p["id"]: p["n"] for p in pieces}))
+    # the origin, drawn outside the four pieces: it feeds the row and stays with its author
+    ox, oy, ow, oh = x0, y0 + bh + 34, 300.0, 44.0
+    body.append(rect(ox, oy, ow, oh, fill=SOFT, stroke=RULE))
+    body.append(text(ox + 14, oy + 27, n["origin_pt_br"], size=S.FS_LABEL, weight=S.FW_LABEL, fill=MUTED))
+    body.append(S.arrow_v(oy - 4, y0 + bh + 4, x0 + bw / 2))
+    for j, ln in enumerate(n["note_lines_pt_br"]):
+        body.append(text(ox + ow + 36, oy + 18 + j * 18, ln, fill=MUTED))
+    title = f"Prancha PG · {n['title']} · exemplo demonstrativo"
+    desc = (
+        "Diagrama de estrutura com quatro peças: " + ", ".join(p["label_pt_br"] for p in pieces) + ". "
+        + " ".join(n["note_lines_pt_br"]) + " Não representa cliente, obra executada nem dimensionamento concluído. Exemplo demonstrativo, sem obra de cliente."
+    )
+    return S.sheet(
+        plate_id=pid, variant="desktop", width=W_, height=H_, title=title, desc=desc + _prov("elaboracao"),
+        heading=n["title"], source_note=_note(src["revision"]), body="\n".join(body),
+        carimbo=_desktop_carimbo(W_, H_, "PG", pid, src["revision"], "Sem escala · diagrama de estrutura"),
+    )
+
+
+def pg_mobile(data: dict) -> str:
+    src = data["elaboracao"]
+    n = src["pacote"]
+    pid = "pacote-entrega"
+    fs = FS_M
+    pieces = n["pieces"]
+    bx, bw, bh, gap, y0 = 24.0, 276.0, 54.0, 16.0, 60.0
+    body = [_flow_column(pieces, bx=bx, y0=y0, bw=bw, bh=bh, gap=gap, focus_id=None, callouts={})]
+    y_leg = y0 + len(pieces) * (bh + gap) - gap + 26
+    for ln in n["mobile_note_lines_pt_br"]:
+        body.append(text(20, y_leg, ln, size=fs, fill=MUTED))
+        y_leg += 17
+    title = f"Prancha PG (móvel) · {n['title']} · exemplo demonstrativo"
+    desc = (
+        "Quatro peças de cima para baixo: " + ", ".join(p["label_pt_br"] for p in pieces) + ". "
+        + " ".join(n["mobile_note_lines_pt_br"]) + " Exemplo demonstrativo, sem obra de cliente."
+    )
+    return S.sheet(
+        plate_id=pid, variant="mobile", width=MOBILE_W, height=MOBILE_H, title=title, desc=desc + _prov("elaboracao"),
+        heading="Peças da entrega complementar", source_note="", body="\n".join(body),
+        carimbo=_mobile_carimbo("PG-M", src["revision"], pid, ("Sem escala", "diagrama")),
+    )
+
+
+def ph_desktop(data: dict) -> str:
+    src = data["elaboracao"]
+    n = src["interfaces"]
+    W_, H_ = 1200, 460
+    pid = "interfaces-versoes"
+    stages = n["stages"]
+    bw, gap, bh, y0 = 240.0, 32.0, 140.0, 104.0
+    x0 = (W_ - (len(stages) * bw + (len(stages) - 1) * gap)) / 2
+    callouts = {c["stage_id"]: c["n"] for c in n["callouts"]}
+    body = [text(28, 72, "Cada seta é uma combinação explícita · nenhuma etapa copia ou adultera o projeto de terceiro · ciclos, prazo e preço ficam na proposta", size=S.FS_LABEL, weight=S.FW_LABEL)]
+    body.append(_flow_row(stages, x0=x0, y0=y0, bw=bw, bh=bh, gap=gap, focus_id=n["focus_stage_id"], callouts=callouts))
+    body.append(text(x0, y0 + bh + 36, "Percurso de um ciclo: os insumos delimitam a disciplina; a disciplina nomeia as interfaces; a versão devolvida registra o que mudou e para quem cada pendência volta.", fill=MUTED))
+    body.append(_legend(x0, y0 + bh + 72, "Chamadas", [(str(c["n"]), c["text_pt_br"]) for c in n["callouts"]]))
+    title = f"Prancha PH · {n['title']} · exemplo demonstrativo"
+    desc = (
+        "Diagrama de fluxo em quatro etapas: " + " → ".join(st["label_pt_br"] for st in stages) + ". "
+        + " ".join(c["text_pt_br"] for c in n["callouts"]) + " Não fixa prazo, preço, quantidade de ciclos nem cobertura de campo. Exemplo demonstrativo, sem obra de cliente."
+    )
+    return S.sheet(
+        plate_id=pid, variant="desktop", width=W_, height=H_, title=title, desc=desc + _prov("elaboracao"),
+        heading=n["title"], source_note=_note(src["revision"]), body="\n".join(body),
+        carimbo=_desktop_carimbo(W_, H_, "PH", pid, src["revision"], "Sem escala · diagrama de fluxo"),
+    )
+
+
+def ph_mobile(data: dict) -> str:
+    src = data["elaboracao"]
+    n = src["interfaces"]
+    pid = "interfaces-versoes"
+    fs = FS_M
+    stages = n["stages"]
+    bx, bw, bh, gap, y0 = 24.0, 276.0, 46.0, 16.0, 56.0
+    mobile_ids = n["mobile_callout_stage_ids"]
+    callouts = {sid: i for i, sid in enumerate(mobile_ids, start=1)}
+    body = [_flow_column(stages, bx=bx, y0=y0, bw=bw, bh=bh, gap=gap, focus_id=n["focus_stage_id"], callouts=callouts)]
+    y_leg = y0 + len(stages) * (bh + gap) - gap + 26
+    for i, ln in enumerate(n["mobile_callouts_pt_br"], start=1):
+        body.append(text(20, y_leg, f"{i} {ln}", size=fs, fill=MUTED))
+        y_leg += 17
+    title = f"Prancha PH (móvel) · {n['title']} · exemplo demonstrativo"
+    desc = (
+        "Fluxo de cima para baixo em quatro etapas: " + " → ".join(st["label_pt_br"] for st in stages) + ". "
+        "Ciclos, prazo e preço ficam na proposta. Exemplo demonstrativo, sem obra de cliente."
+    )
+    return S.sheet(
+        plate_id=pid, variant="mobile", width=MOBILE_W, height=MOBILE_H, title=title, desc=desc + _prov("elaboracao"),
+        heading="Insumos, disciplina, interfaces, versão", source_note="", body="\n".join(body),
+        carimbo=_mobile_carimbo("PH-M", src["revision"], pid, ("Sem escala", "fluxo")),
+    )
+
+
 RENDERERS = {
     ("interferencia-verga-viga", "desktop"): p5_desktop,
     ("interferencia-verga-viga", "mobile"): p5_mobile,
@@ -956,4 +1107,8 @@ RENDERERS = {
     ("pericia-fachada", "mobile"): p9_mobile,
     ("sst-canteiro", "desktop"): p10_desktop,
     ("sst-canteiro", "mobile"): p10_mobile,
+    ("pacote-entrega", "desktop"): pg_desktop,
+    ("pacote-entrega", "mobile"): pg_mobile,
+    ("interfaces-versoes", "desktop"): ph_desktop,
+    ("interfaces-versoes", "mobile"): ph_mobile,
 }

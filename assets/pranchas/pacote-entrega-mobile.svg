@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 420" role="img" aria-labelledby="pacote-entrega-mobile-title pacote-entrega-mobile-desc" font-family="Archivo Var, Arial, Helvetica, sans-serif" fill="#071a31">
+<title id="pacote-entrega-mobile-title">Prancha PG (móvel) · O que a elaboração devolve, por peça · exemplo demonstrativo</title>
+<desc id="pacote-entrega-mobile-desc">Quatro peças de cima para baixo: Plantas e cortes, Detalhes, Especificações, Memória de cálculo. Arquitetura de origem: permanece com o autor. Software e modelos: método ou insumo. Exemplo demonstrativo, sem obra de cliente. Procedência: data/demonstrative/plates/elaboracao-complementar.v1.json.</desc>
+<rect x="0" y="0" width="360" height="420" fill="#ffffff"/>
+<rect x="8" y="8" width="344" height="404" fill="#ffffff" stroke="#dfe4e6"/>
+<text x="28" y="40" font-size="16" font-weight="650">Peças da entrega complementar</text>
+<rect x="24" y="60" width="276" height="54" fill="#ffffff" stroke="#071a31" stroke-width="1.2"/>
+<text x="36" y="81.6" font-size="12.5" font-weight="650">PE-01 · Plantas e cortes</text>
+<text x="36" y="99.6" font-size="12.5" fill="#5d6a7a">Onde cada elemento fica</text>
+<g stroke="#5d6a7a" stroke-width="0.6" fill="none"><line x1="162" y1="116" x2="162" y2="128"/><path d="M158 122L162 128L166 122"/></g>
+<rect x="24" y="130" width="276" height="54" fill="#ffffff" stroke="#071a31" stroke-width="1.2"/>
+<text x="36" y="151.6" font-size="12.5" font-weight="650">PE-02 · Detalhes</text>
+<text x="36" y="169.6" font-size="12.5" fill="#5d6a7a">Ligações e pontos singulares</text>
+<g stroke="#5d6a7a" stroke-width="0.6" fill="none"><line x1="162" y1="186" x2="162" y2="198"/><path d="M158 192L162 198L166 192"/></g>
+<rect x="24" y="200" width="276" height="54" fill="#ffffff" stroke="#071a31" stroke-width="1.2"/>
+<text x="36" y="221.6" font-size="12.5" font-weight="650">PE-03 · Especificações</text>
+<text x="36" y="239.6" font-size="12.5" fill="#5d6a7a">Materiais, critérios e limites</text>
+<g stroke="#5d6a7a" stroke-width="0.6" fill="none"><line x1="162" y1="256" x2="162" y2="268"/><path d="M158 262L162 268L166 262"/></g>
+<rect x="24" y="270" width="276" height="54" fill="#ffffff" stroke="#071a31" stroke-width="1.2"/>
+<text x="36" y="291.6" font-size="12.5" font-weight="650">PE-04 · Memória de cálculo</text>
+<text x="36" y="309.6" font-size="12.5" fill="#5d6a7a">Premissas e contas conferíveis</text>
+<text x="20" y="350" font-size="12.5" fill="#5d6a7a">Arquitetura de origem: permanece com o autor.</text>
+<text x="20" y="367" font-size="12.5" fill="#5d6a7a">Software e modelos: método ou insumo.</text>
+<g id="pacote-entrega-m-carimbo"><rect x="8" y="384" width="344" height="28" fill="#ffffff" stroke="#dfe4e6"/><line x1="72" y1="384" x2="72" y2="412" stroke="#dfe4e6"/><line x1="192" y1="384" x2="192" y2="412" stroke="#dfe4e6"/><text x="16" y="395" font-size="12.5" fill="#5d6a7a">PG-M</text><text x="16" y="408" font-size="12.5" fill="#5d6a7a">rev. R00</text><text x="80" y="395" font-size="12.5" fill="#5d6a7a">Sem escala</text><text x="80" y="408" font-size="12.5" fill="#5d6a7a">diagrama</text><text x="200" y="395" font-size="12.5" fill="#5d6a7a">Exemplo demonstrativo</text><text x="200" y="408" font-size="12.5" fill="#5d6a7a">sem obra de cliente</text></g>
+</svg>

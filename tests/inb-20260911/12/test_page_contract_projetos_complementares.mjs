@@ -200,6 +200,16 @@ function runShipped() {
     const p = path.join(root, rel);
     assert(`asset_exists_${path.basename(rel)}`, fs.existsSync(p) && fs.statSync(p).size > 200, p);
   }
+  // SALTO-INSTITUCIONAL-02 (lote A): os dois esquemas sao pranchas geradas de JSON
+  // (scripts/demonstrative/plates/family_private.py, PG e PH). O arquivo no caminho
+  // legado (exigido pelo kit de parceiros e por requiredSrc) e a composicao desktop,
+  // byte a byte; a composicao movel entra pelo <source> da <picture>.
+  for (const id of ["pacote-entrega", "interfaces-versoes"]) {
+    const legacy = path.join(root, `assets/projetos-complementares-engenharia/${id}.svg`);
+    const plate = path.join(root, `assets/pranchas/${id}-desktop.svg`);
+    assert(`legacy_asset_is_desktop_plate_${id}`, fs.existsSync(plate) && fs.readFileSync(legacy, "utf8") === fs.readFileSync(plate, "utf8"), `${legacy} != ${plate}`);
+    assert(`mobile_plate_in_picture_${id}`, landing.includes(`srcset="/assets/pranchas/${id}-mobile.svg"`), id);
+  }
 
   assertPageContract("landing", landing, landingContractOpts());
 
