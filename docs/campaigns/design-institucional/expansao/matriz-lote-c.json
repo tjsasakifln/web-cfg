@@ -1057,7 +1057,13 @@
    "treatment": "COMPONENTES_ADEQUADOS",
    "owner": "lote-c",
    "state": "folha editorial-article + índice ol/li (editorial_recompose.py --include-protected); texto visível idêntico",
-   "evidence": [],
+   "evidence": [
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-medicao-de-obra-publica-rejeitada-1440x1000-fold-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-medicao-de-obra-publica-rejeitada-1440x1000-full-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-medicao-de-obra-publica-rejeitada-390x844-fold-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-medicao-de-obra-publica-rejeitada-390x844-full-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-medicao-de-obra-publica-rejeitada-390x844-menu-onda2.jpg"
+   ],
    "impediment": "sibling congelado do canário 389: sha256 novo 5657b33b82c4ff95415fba228673475a2ecc625b19893ddd0fb761e83ec5df4e a recapturar em canary-contract.json pelo integrador",
    "wave": "onda2"
   },
@@ -1983,12 +1989,7 @@
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-1440x1000-full-onda2.jpg",
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-390x844-fold-onda2.jpg",
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-390x844-full-onda2.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-390x844-menu-onda2.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-aditivos-e-risco-de-margem-1440x1000-fold-onda2.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-aditivos-e-risco-de-margem-1440x1000-full-onda2.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-aditivos-e-risco-de-margem-390x844-fold-onda2.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-aditivos-e-risco-de-margem-390x844-full-onda2.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-aditivos-e-risco-de-margem-390x844-menu-onda2.jpg"
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-390x844-menu-onda2.jpg"
    ],
    "impediment": "",
    "wave": "onda2"
@@ -2004,11 +2005,11 @@
    "owner": "lote-c",
    "state": "papéis tipográficos e notas em linha própria pelo template scripts/pseo/render.py (onda 2); regenerado por pseo:build",
    "evidence": [
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-mercados-1440x1000-fold-lote-c.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-mercados-1440x1000-full-lote-c.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-mercados-390x844-fold-lote-c.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-mercados-390x844-full-lote-c.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-mercados-390x844-menu-lote-c.jpg"
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-mercados-1440x1000-fold-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-mercados-1440x1000-full-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-mercados-390x844-fold-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-mercados-390x844-full-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-mercados-390x844-menu-onda2.jpg"
    ],
    "impediment": "",
    "wave": "onda2"
@@ -2024,11 +2025,11 @@
    "owner": "lote-c",
    "state": "papéis tipográficos e notas em linha própria pelo template scripts/pseo/render.py (onda 2); regenerado por pseo:build",
    "evidence": [
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-orgaos-1440x1000-fold-lote-c.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-orgaos-1440x1000-full-lote-c.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-orgaos-390x844-fold-lote-c.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-orgaos-390x844-full-lote-c.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-orgaos-390x844-menu-lote-c.jpg"
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-orgaos-1440x1000-fold-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-orgaos-1440x1000-full-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-orgaos-390x844-fold-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-orgaos-390x844-full-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-orgaos-390x844-menu-onda2.jpg"
    ],
    "impediment": "",
    "wave": "onda2"
@@ -2044,11 +2045,11 @@
    "owner": "lote-c",
    "state": "papéis tipográficos e notas em linha própria pelo template scripts/pseo/render.py (onda 2); regenerado por pseo:build",
    "evidence": [
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-precos-1440x1000-fold-lote-c.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-precos-1440x1000-full-lote-c.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-precos-390x844-fold-lote-c.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-precos-390x844-full-lote-c.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-precos-390x844-menu-lote-c.jpg"
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-precos-1440x1000-fold-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-precos-1440x1000-full-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-precos-390x844-fold-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-precos-390x844-full-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-precos-390x844-menu-onda2.jpg"
    ],
    "impediment": "",
    "wave": "onda2"
@@ -2064,11 +2065,11 @@
    "owner": "lote-c",
    "state": "papéis tipográficos e notas em linha própria pelo template scripts/pseo/render.py (onda 2); regenerado por pseo:build",
    "evidence": [
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-concorrencia-1440x1000-fold-lote-c.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-concorrencia-1440x1000-full-lote-c.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-concorrencia-390x844-fold-lote-c.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-concorrencia-390x844-full-lote-c.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-concorrencia-390x844-menu-lote-c.jpg"
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-concorrencia-1440x1000-fold-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-concorrencia-1440x1000-full-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-concorrencia-390x844-fold-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-concorrencia-390x844-full-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-concorrencia-390x844-menu-onda2.jpg"
    ],
    "impediment": "",
    "wave": "onda2"
@@ -2084,11 +2085,11 @@
    "owner": "lote-c",
    "state": "papéis tipográficos e notas em linha própria pelo template scripts/pseo/render.py (onda 2); regenerado por pseo:build",
    "evidence": [
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-1440x1000-fold-lote-c.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-1440x1000-full-lote-c.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-390x844-fold-lote-c.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-390x844-full-lote-c.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-390x844-menu-lote-c.jpg"
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-1440x1000-fold-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-1440x1000-full-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-390x844-fold-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-390x844-full-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-390x844-menu-onda2.jpg"
    ],
    "impediment": "",
    "wave": "onda2"
@@ -2122,7 +2123,7 @@
    "priority": "P3",
    "treatment": "COMPONENTES_ADEQUADOS",
    "owner": "lote-c",
-   "state": "papéis tipográficos (t-kicker, t-editorial/t-service, measure) e notas em linha própria (technical-note) pelo template scripts/pseo/render.py; regenerado por pseo:build",
+   "state": "onda 2 + correções após revisão: papéis tipográficos, notas em linha própria e \"Guias técnicos relacionados\" em ol.list-ruled com âncoras text-link (pseo:build); recapturado",
    "evidence": [
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-aditivos-e-risco-de-margem-1440x1000-fold-onda2.jpg",
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-aditivos-e-risco-de-margem-1440x1000-full-onda2.jpg",
@@ -2142,8 +2143,14 @@
    "priority": "P3",
    "treatment": "COMPONENTES_ADEQUADOS",
    "owner": "lote-c",
-   "state": "papéis tipográficos e notas em linha própria pelo template scripts/pseo/render.py (onda 2); regenerado por pseo:build",
-   "evidence": [],
+   "state": "onda 2 + correções após revisão: papéis tipográficos, notas em linha própria e \"Guias técnicos relacionados\" em ol.list-ruled com âncoras text-link (pseo:build); recapturado",
+   "evidence": [
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-inconsistencia-orcamento-edital-1440x1000-fold-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-inconsistencia-orcamento-edital-1440x1000-full-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-inconsistencia-orcamento-edital-390x844-fold-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-inconsistencia-orcamento-edital-390x844-full-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-inconsistencia-orcamento-edital-390x844-menu-onda2.jpg"
+   ],
    "impediment": "",
    "wave": "onda2"
   },
@@ -2156,8 +2163,14 @@
    "priority": "P3",
    "treatment": "COMPONENTES_ADEQUADOS",
    "owner": "lote-c",
-   "state": "papéis tipográficos e notas em linha própria pelo template scripts/pseo/render.py (onda 2); regenerado por pseo:build",
-   "evidence": [],
+   "state": "onda 2 + correções após revisão: papéis tipográficos, notas em linha própria e \"Guias técnicos relacionados\" em ol.list-ruled com âncoras text-link (pseo:build); recapturado",
+   "evidence": [
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-medicao-glosa-contratos-recorrentes-1440x1000-fold-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-medicao-glosa-contratos-recorrentes-1440x1000-full-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-medicao-glosa-contratos-recorrentes-390x844-fold-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-medicao-glosa-contratos-recorrentes-390x844-full-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-medicao-glosa-contratos-recorrentes-390x844-menu-onda2.jpg"
+   ],
    "impediment": "",
    "wave": "onda2"
   },
@@ -2170,8 +2183,14 @@
    "priority": "P3",
    "treatment": "COMPONENTES_ADEQUADOS",
    "owner": "lote-c",
-   "state": "papéis tipográficos e notas em linha própria pelo template scripts/pseo/render.py (onda 2); regenerado por pseo:build",
-   "evidence": [],
+   "state": "onda 2 + correções após revisão: papéis tipográficos, notas em linha própria e \"Guias técnicos relacionados\" em ol.list-ruled com âncoras text-link (pseo:build); recapturado",
+   "evidence": [
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-reequilibrio-e-dispersao-de-precos-1440x1000-fold-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-reequilibrio-e-dispersao-de-precos-1440x1000-full-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-reequilibrio-e-dispersao-de-precos-390x844-fold-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-reequilibrio-e-dispersao-de-precos-390x844-full-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-reequilibrio-e-dispersao-de-precos-390x844-menu-onda2.jpg"
+   ],
    "impediment": "",
    "wave": "onda2"
   },
@@ -2184,8 +2203,14 @@
    "priority": "P3",
    "treatment": "COMPONENTES_ADEQUADOS",
    "owner": "lote-c",
-   "state": "papéis tipográficos e notas em linha própria pelo template scripts/pseo/render.py (onda 2); regenerado por pseo:build",
-   "evidence": [],
+   "state": "onda 2 + correções após revisão: papéis tipográficos, notas em linha própria e \"Guias técnicos relacionados\" em ol.list-ruled com âncoras text-link (pseo:build); recapturado",
+   "evidence": [
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-referencia-sinapi-sicro-margem-1440x1000-fold-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-referencia-sinapi-sicro-margem-1440x1000-full-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-referencia-sinapi-sicro-margem-390x844-fold-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-referencia-sinapi-sicro-margem-390x844-full-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-cenarios-referencia-sinapi-sicro-margem-390x844-menu-onda2.jpg"
+   ],
    "impediment": "",
    "wave": "onda2"
   },
@@ -2236,8 +2261,14 @@
    "priority": "P2",
    "treatment": "COMPONENTES_ADEQUADOS",
    "owner": "lote-c",
-   "state": "folha /assets/editorial-article.css + nav.page-index (c7bc6b61c reaplicado; subconjunto em vez da folha inteira)",
-   "evidence": [],
+   "state": "onda 2 + correções após revisão: folha editorial-article.css + índice \"Nesta página\"; herói em superfície sólida (degradê e brilho removidos em assets/report-model.css); capa escura do documento mantida (rótulo DADOS SINTÉTICOS, proof da dobra); measure_first_fold OK; hash em first-fold-measurements aguarda recaptura do integrador (pedido 16); recapturado",
+   "evidence": [
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-apresentacao-executiva-resultados-1440x1000-fold-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-apresentacao-executiva-resultados-1440x1000-full-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-apresentacao-executiva-resultados-390x844-fold-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-apresentacao-executiva-resultados-390x844-full-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-apresentacao-executiva-resultados-390x844-menu-onda2.jpg"
+   ],
    "impediment": "money_example pinada por html_sha256 em data/commercial/first-fold-measurements.v1.json: medidor de dobra OK sem --write; test:first-fold-contract falha por hash até a recaptura pelo integrador (pedido 16)",
    "wave": "onda2"
   },
@@ -2250,8 +2281,14 @@
    "priority": "P2",
    "treatment": "COMPONENTES_ADEQUADOS",
    "owner": "lote-c",
-   "state": "folha /assets/editorial-article.css + nav.page-index (c7bc6b61c reaplicado; subconjunto em vez da folha inteira)",
-   "evidence": [],
+   "state": "onda 2 + correções após revisão: folha editorial-article.css + índice \"Nesta página\"; herói em superfície sólida (degradê e brilho removidos em assets/report-model.css); capa escura do documento mantida (rótulo DADOS SINTÉTICOS, proof da dobra); measure_first_fold OK; hash em first-fold-measurements aguarda recaptura do integrador (pedido 16); recapturado",
+   "evidence": [
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-base-quantitativa-canonica-1440x1000-fold-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-base-quantitativa-canonica-1440x1000-full-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-base-quantitativa-canonica-390x844-fold-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-base-quantitativa-canonica-390x844-full-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-base-quantitativa-canonica-390x844-menu-onda2.jpg"
+   ],
    "impediment": "money_example pinada por html_sha256 em data/commercial/first-fold-measurements.v1.json: medidor de dobra OK sem --write; test:first-fold-contract falha por hash até a recaptura pelo integrador (pedido 16)",
    "wave": "onda2"
   },
@@ -2264,8 +2301,14 @@
    "priority": "P2",
    "treatment": "COMPONENTES_ADEQUADOS",
    "owner": "lote-c",
-   "state": "folha /assets/editorial-article.css + nav.page-index (c7bc6b61c reaplicado; subconjunto em vez da folha inteira)",
-   "evidence": [],
+   "state": "onda 2 + correções após revisão: folha editorial-article.css + índice \"Nesta página\"; herói em superfície sólida (degradê e brilho removidos em assets/report-model.css); capa escura do documento mantida (rótulo DADOS SINTÉTICOS, proof da dobra); measure_first_fold OK; hash em first-fold-measurements aguarda recaptura do integrador (pedido 16); recapturado",
+   "evidence": [
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-contratos-vincendos-relicitacao-1440x1000-fold-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-contratos-vincendos-relicitacao-1440x1000-full-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-contratos-vincendos-relicitacao-390x844-fold-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-contratos-vincendos-relicitacao-390x844-full-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-contratos-vincendos-relicitacao-390x844-menu-onda2.jpg"
+   ],
    "impediment": "money_example pinada por html_sha256 em data/commercial/first-fold-measurements.v1.json: medidor de dobra OK sem --write; test:first-fold-contract falha por hash até a recaptura pelo integrador (pedido 16)",
    "wave": "onda2"
   },
@@ -2278,8 +2321,14 @@
    "priority": "P2",
    "treatment": "COMPONENTES_ADEQUADOS",
    "owner": "lote-c",
-   "state": "folha /assets/editorial-article.css + nav.page-index (c7bc6b61c reaplicado; subconjunto em vez da folha inteira)",
-   "evidence": [],
+   "state": "onda 2 + correções após revisão: folha editorial-article.css + índice \"Nesta página\"; herói em superfície sólida (degradê e brilho removidos em assets/report-model.css); capa escura do documento mantida (rótulo DADOS SINTÉTICOS, proof da dobra); measure_first_fold OK; hash em first-fold-measurements aguarda recaptura do integrador (pedido 16); recapturado",
+   "evidence": [
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-mapa-compradores-publicos-1440x1000-fold-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-mapa-compradores-publicos-1440x1000-full-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-mapa-compradores-publicos-390x844-fold-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-mapa-compradores-publicos-390x844-full-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-mapa-compradores-publicos-390x844-menu-onda2.jpg"
+   ],
    "impediment": "money_example pinada por html_sha256 em data/commercial/first-fold-measurements.v1.json: medidor de dobra OK sem --write; test:first-fold-contract falha por hash até a recaptura pelo integrador (pedido 16)",
    "wave": "onda2"
   },
@@ -2292,8 +2341,14 @@
    "priority": "P2",
    "treatment": "COMPONENTES_ADEQUADOS",
    "owner": "lote-c",
-   "state": "folha /assets/editorial-article.css + nav.page-index (c7bc6b61c reaplicado; subconjunto em vez da folha inteira)",
-   "evidence": [],
+   "state": "onda 2 + correções após revisão: folha editorial-article.css + índice \"Nesta página\"; herói em superfície sólida (degradê e brilho removidos em assets/report-model.css); capa escura do documento mantida (rótulo DADOS SINTÉTICOS, proof da dobra); measure_first_fold OK; hash em first-fold-measurements aguarda recaptura do integrador (pedido 16); recapturado",
+   "evidence": [
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-mapeamento-concorrentes-publicos-1440x1000-fold-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-mapeamento-concorrentes-publicos-1440x1000-full-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-mapeamento-concorrentes-publicos-390x844-fold-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-mapeamento-concorrentes-publicos-390x844-full-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-mapeamento-concorrentes-publicos-390x844-menu-onda2.jpg"
+   ],
    "impediment": "money_example pinada por html_sha256 em data/commercial/first-fold-measurements.v1.json: medidor de dobra OK sem --write; test:first-fold-contract falha por hash até a recaptura pelo integrador (pedido 16)",
    "wave": "onda2"
   },
@@ -2306,7 +2361,7 @@
    "priority": "P2",
    "treatment": "COMPONENTES_ADEQUADOS",
    "owner": "lote-c",
-   "state": "folha /assets/editorial-article.css + nav.page-index (c7bc6b61c reaplicado; subconjunto em vez da folha inteira)",
+   "state": "onda 2 + correções após revisão: folha editorial-article.css + índice \"Nesta página\"; herói em superfície sólida (degradê e brilho removidos em assets/report-model.css); capa escura do documento mantida (rótulo DADOS SINTÉTICOS, proof da dobra); measure_first_fold OK; hash em first-fold-measurements aguarda recaptura do integrador (pedido 16); recapturado",
    "evidence": [
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-painel-precos-obras-publicas-1440x1000-fold-onda2.jpg",
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-painel-precos-obras-publicas-1440x1000-full-onda2.jpg",
@@ -2326,8 +2381,14 @@
    "priority": "P2",
    "treatment": "COMPONENTES_ADEQUADOS",
    "owner": "lote-c",
-   "state": "folha /assets/editorial-article.css + nav.page-index (c7bc6b61c reaplicado; subconjunto em vez da folha inteira)",
-   "evidence": [],
+   "state": "onda 2 + correções após revisão: folha editorial-article.css + índice \"Nesta página\"; herói em superfície sólida (degradê e brilho removidos em assets/report-model.css); capa escura do documento mantida (rótulo DADOS SINTÉTICOS, proof da dobra); measure_first_fold OK; hash em first-fold-measurements aguarda recaptura do integrador (pedido 16); recapturado",
+   "evidence": [
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-relatorio-executivo-consolidado-1440x1000-fold-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-relatorio-executivo-consolidado-1440x1000-full-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-relatorio-executivo-consolidado-390x844-fold-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-relatorio-executivo-consolidado-390x844-full-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-relatorio-executivo-consolidado-390x844-menu-onda2.jpg"
+   ],
    "impediment": "money_example pinada por html_sha256 em data/commercial/first-fold-measurements.v1.json: medidor de dobra OK sem --write; test:first-fold-contract falha por hash até a recaptura pelo integrador (pedido 16)",
    "wave": "onda2"
   },
@@ -2340,8 +2401,14 @@
    "priority": "P2",
    "treatment": "COMPONENTES_ADEQUADOS",
    "owner": "lote-c",
-   "state": "folha /assets/editorial-article.css + nav.page-index (c7bc6b61c reaplicado; subconjunto em vez da folha inteira)",
-   "evidence": [],
+   "state": "onda 2 + correções após revisão: folha editorial-article.css + índice \"Nesta página\"; herói em superfície sólida (degradê e brilho removidos em assets/report-model.css e na folha própria da rota); capa escura do documento mantida (rótulo DADOS SINTÉTICOS, proof da dobra); measure_first_fold OK; hash em first-fold-measurements aguarda recaptura do integrador (pedido 16); recapturado",
+   "evidence": [
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-relatorio-inteligencia-licitacoes-1440x1000-fold-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-relatorio-inteligencia-licitacoes-1440x1000-full-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-relatorio-inteligencia-licitacoes-390x844-fold-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-relatorio-inteligencia-licitacoes-390x844-full-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/casos-modelo-relatorio-inteligencia-licitacoes-390x844-menu-onda2.jpg"
+   ],
    "impediment": "money_example pinada por html_sha256 em data/commercial/first-fold-measurements.v1.json: medidor de dobra OK sem --write; test:first-fold-contract falha por hash até a recaptura pelo integrador (pedido 16)",
    "wave": "onda2"
   },
@@ -2390,25 +2457,15 @@
    "source": "ferramentas/index.html",
    "generator": "manual",
    "priority": "P2",
-   "treatment": "HERANCA_VISUAL_VALIDADA",
+   "treatment": "COMPONENTES_ADEQUADOS",
    "owner": "lote-c",
-   "state": "recapturado na onda 2; sem alteração",
+   "state": "correções após revisão (onda 2): lista de ferramentas logo após a abertura; método, ressalva e alternativa de serviço num único bloco depois da lista (texto intacto, um tool-disclaimer); separador na trilha",
    "evidence": [
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-1440x1000-fold-onda2.jpg",
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-1440x1000-full-onda2.jpg",
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-390x844-fold-onda2.jpg",
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-390x844-full-onda2.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-390x844-menu-onda2.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-checklist-reequilibrio-1440x1000-fold-onda2.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-checklist-reequilibrio-1440x1000-full-onda2.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-checklist-reequilibrio-390x844-fold-onda2.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-checklist-reequilibrio-390x844-full-onda2.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-checklist-reequilibrio-390x844-menu-onda2.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-diagnostico-defesa-margem-1440x1000-fold-onda2.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-diagnostico-defesa-margem-1440x1000-full-onda2.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-diagnostico-defesa-margem-390x844-fold-onda2.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-diagnostico-defesa-margem-390x844-full-onda2.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-diagnostico-defesa-margem-390x844-menu-onda2.jpg"
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-390x844-menu-onda2.jpg"
    ],
    "impediment": "",
    "wave": "onda2"
@@ -2422,15 +2479,16 @@
    "priority": "P2",
    "treatment": "COMPONENTES_ADEQUADOS",
    "owner": "lote-c",
-   "state": "pronto (subconjunto editorial-tool.css; gutter do .tool-shell pela folha do integrador)",
+   "state": "onda 2 (correções após revisão): separadores na trilha; recapturado",
    "evidence": [
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-limite-acrescimos-supressoes-1440x1000-fold-lote-c.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-limite-acrescimos-supressoes-1440x1000-full-lote-c.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-limite-acrescimos-supressoes-390x844-fold-lote-c.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-limite-acrescimos-supressoes-390x844-full-lote-c.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-limite-acrescimos-supressoes-390x844-menu-lote-c.jpg"
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-limite-acrescimos-supressoes-1440x1000-fold-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-limite-acrescimos-supressoes-1440x1000-full-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-limite-acrescimos-supressoes-390x844-fold-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-limite-acrescimos-supressoes-390x844-full-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-limite-acrescimos-supressoes-390x844-menu-onda2.jpg"
    ],
-   "impediment": ""
+   "impediment": "",
+   "wave": "onda2"
   },
   {
    "route": "/ferramentas/matriz-atraso-obra/",
@@ -2441,15 +2499,16 @@
    "priority": "P2",
    "treatment": "COMPONENTES_ADEQUADOS",
    "owner": "lote-c",
-   "state": "pronto (subconjunto editorial-tool.css; gutter do .tool-shell pela folha do integrador)",
+   "state": "onda 2 (correções após revisão): separadores na trilha; recapturado",
    "evidence": [
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-matriz-atraso-obra-1440x1000-fold-lote-c.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-matriz-atraso-obra-1440x1000-full-lote-c.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-matriz-atraso-obra-390x844-fold-lote-c.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-matriz-atraso-obra-390x844-full-lote-c.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-matriz-atraso-obra-390x844-menu-lote-c.jpg"
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-matriz-atraso-obra-1440x1000-fold-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-matriz-atraso-obra-1440x1000-full-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-matriz-atraso-obra-390x844-fold-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-matriz-atraso-obra-390x844-full-onda2.jpg",
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-matriz-atraso-obra-390x844-menu-onda2.jpg"
    ],
-   "impediment": ""
+   "impediment": "",
+   "wave": "onda2"
   },
   {
    "route": "/ferramentas/prontidao-tecnica-obra-privada/",
@@ -2479,7 +2538,7 @@
    "priority": "P2",
    "treatment": "COMPONENTES_ADEQUADOS",
    "owner": "lote-c",
-   "state": "/assets/editorial-tool.css dentro do orçamento: 152.898 bytes de conteúdo (<= 153.600), LCP 1.959 ms (3 runs, run_lighthouse --label=onda2-tools); cálculo, campos, ids e resultados intactos",
+   "state": "correções após revisão (onda 2): formulário de busca logo após a abertura (bloco inteiro), método depois do resultado, seções do resultado com régua e respiro, valor contratual em moeda pt-BR, separadores na trilha; 153.217 bytes de conteúdo, LCP 1.956–1.959 ms, CLS 0, MEASURED_PASS (3 runs); ids, data-*, cálculo e #lead-form intactos",
    "evidence": [
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-diagnostico-defesa-margem-1440x1000-fold-onda2.jpg",
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-diagnostico-defesa-margem-1440x1000-full-onda2.jpg",
@@ -2499,7 +2558,7 @@
    "priority": "P2",
    "treatment": "COMPONENTES_ADEQUADOS",
    "owner": "lote-c",
-   "state": "/assets/editorial-tool.css (já na rodada de correção); recapturado na onda 2",
+   "state": "onda 2: separadores na trilha; folha editorial-tool.css desde a rodada de correção; recapturado",
    "evidence": [
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-checklist-reequilibrio-1440x1000-fold-onda2.jpg",
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-checklist-reequilibrio-1440x1000-full-onda2.jpg",
@@ -2519,7 +2578,7 @@
    "priority": "P3",
    "treatment": "COMPOSICAO_REDESENHADA",
    "owner": "lote-c",
-   "state": "herança da rodada de correção validada por captura na onda 2; nada quebrado",
+   "state": "correções após revisão (onda 2): abertura no padrão do hub de serviços (section.hero + h1.t-service + hero-lead), h1 32/48 px contra h2 26/40 px medidos; texto intacto",
    "evidence": [
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/imprensa-1440x1000-fold-onda2.jpg",
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/imprensa-1440x1000-full-onda2.jpg",
@@ -2537,9 +2596,9 @@
    "source": "metodologia-inteligencia/index.html",
    "generator": "manual",
    "priority": "P3",
-   "treatment": "HERANCA_VISUAL_VALIDADA",
+   "treatment": "COMPONENTES_ADEQUADOS",
    "owner": "lote-c",
-   "state": "meta da abertura (responsável, uso de IA, política, citação) no mesmo papel .authority-byline; resto intacto",
+   "state": "onda 2: meta da abertura (responsável, uso de IA, política, citação) no mesmo papel .authority-byline (marcação editada, por isso COMPONENTES_ADEQUADOS e não herança); texto, ids e data-* intactos; recapturado",
    "evidence": [
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/metodologia-inteligencia-1440x1000-fold-onda2.jpg",
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/metodologia-inteligencia-1440x1000-full-onda2.jpg",
@@ -2654,7 +2713,7 @@
    "priority": "P3",
    "treatment": "COMPOSICAO_REDESENHADA",
    "owner": "lote-c",
-   "state": "trilha → abertura (kicker, h1, lead, ressalva, autoria) → índice → método (sem kicker repetido) → análises em hub-list → um bloco escuro → autor; página da análise aprovada byte-idêntica (sha256 761d341a…)",
+   "state": "correções após revisão (onda 2): ressalva consolidada no bloco de método; coluna direita da abertura com aside \"Em 30 segundos\" (contagem real); recapturado a partir do HEAD (a captura anterior era de estado intermediário)",
    "evidence": [
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/analises-contratos-publicos-1440x1000-fold-onda2.jpg",
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/analises-contratos-publicos-1440x1000-full-onda2.jpg",

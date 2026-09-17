@@ -697,6 +697,54 @@
       "route": "/casos/modelo-relatorio-inteligencia-licitacoes/",
       "viewport": "320x700",
       "overflow_px": 0
+    },
+    {
+      "route": "/ferramentas/limite-acrescimos-supressoes/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 4503,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-limite-acrescimos-supressoes-390x844-fold-onda2.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-limite-acrescimos-supressoes-390x844-full-onda2.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-limite-acrescimos-supressoes-390x844-menu-onda2.jpg"
+    },
+    {
+      "route": "/ferramentas/limite-acrescimos-supressoes/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 2686,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-limite-acrescimos-supressoes-1440x1000-fold-onda2.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-limite-acrescimos-supressoes-1440x1000-full-onda2.jpg"
+    },
+    {
+      "route": "/ferramentas/limite-acrescimos-supressoes/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/ferramentas/matriz-atraso-obra/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 6185,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-matriz-atraso-obra-390x844-fold-onda2.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-matriz-atraso-obra-390x844-full-onda2.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-matriz-atraso-obra-390x844-menu-onda2.jpg"
+    },
+    {
+      "route": "/ferramentas/matriz-atraso-obra/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 3663,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-matriz-atraso-obra-1440x1000-fold-onda2.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-matriz-atraso-obra-1440x1000-full-onda2.jpg"
+    },
+    {
+      "route": "/ferramentas/matriz-atraso-obra/",
+      "viewport": "320x700",
+      "overflow_px": 0
     }
   ]
 }
