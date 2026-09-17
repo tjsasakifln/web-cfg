@@ -37,9 +37,9 @@
   "unreferenced_css_files": [],
   "bundles": {
     "styles.css": {
-      "bytes": 133288,
-      "class_selectors": 459,
-      "used": 458,
+      "bytes": 133229,
+      "class_selectors": 458,
+      "used": 457,
       "unused": [
         "opaque-token"
       ]
