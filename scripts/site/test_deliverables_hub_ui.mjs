@@ -351,8 +351,9 @@ for (const width of widths) {
   // 50 -> 54 na onda 2: o indice da pagina (quatro ancoras internas) e a
   // alternativa por e-mail do bloco escuro substituem o bloco "Onde comecar"
   // (tres ancoras) e o aside de fechamento; medido 52. Apos a revisao, o
-  // e-mail contextual da abertura (slot svc-open__note do piloto) leva a 53.
-  if (metrics.mainLinks > 54) errors.push(`main_links=${metrics.mainLinks}`);
+  // e-mail contextual da abertura (slot svc-open__note do piloto) leva a 53,
+  // e o teto acompanha o medido (53), sem folga sem explicacao.
+  if (metrics.mainLinks > 53) errors.push(`main_links=${metrics.mainLinks}`);
   if (metrics.longestArchetypeRun > 2) errors.push(`archetype_run=${metrics.longestArchetypeRun}`);
   // One primary leads to the progressive framing and the other submits the
   // terminal hand-raise added by #290; neither replaces a priced offer path.

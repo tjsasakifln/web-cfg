@@ -381,7 +381,8 @@ function vitrineCard(entry, contractItem) {
   const anchorClass = entry.catalog_number === "01" ? " vitrine-item--anchor" : "";
   // Correcao apos revisao (onda 2): "Pacote e credito" e a ultima linha da
   // mesma lista de definicao (rotulo em dt, copy identica em p.vitrine-item__credit
-  // dentro do dd; test_deliverables_hub.py:373/502 leem `class="vitrine-item__credit">...</p>`).
+  // dentro do dd; test_deliverables_hub.py:373/502 leem `class="vitrine-item__credit">...</p>`;
+  // a linha nao precisa de gancho proprio).
   // Onda 2 da campanha 02 (2026-09-17): cada oferta e uma linha regrada do
   // indice (list-ruled), nao um cartao com borda e sombra. Os ganchos que os
   // gates leem (article.vitrine-item, data-*, id, __price, __facts, __credit,
@@ -402,7 +403,7 @@ function vitrineCard(entry, contractItem) {
 <div><dt>Por que este preço</dt><dd>${escapeHtml(publicText(value.price_anchor))}</dd></div>
 <div><dt>Prazo</dt><dd>${escapeHtml(publicText(contractItem.sla.text))}</dd></div>
 <div><dt>Quando a contagem começa</dt><dd>${escapeHtml(deadlineStart(contractItem))}</dd></div>
-<div class="vitrine-item__credit-row"><dt>Pacote e crédito</dt><dd>${bundle}</dd></div>
+<div><dt>Pacote e crédito</dt><dd>${bundle}</dd></div>
 </dl>
 <div class="vitrine-item__actions contact-actions">
 <a aria-label="Ver o demonstrativo sintético de ${escapeHtml(entry.public_name_pt_br)}: ${escapeHtml(value.cta_inspect)}" class="button button-secondary" data-asset-id="entregas-exemplos-hub" data-cta-id="${exampleCtaId}" data-cta-position="${examplePosition}" data-event-name="cta_click" href="${escapeHtml(entry.route)}">${escapeHtml(value.cta_inspect)} <svg class="icon"><use href="#i-arrow"></use></svg></a>
