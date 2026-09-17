@@ -233,7 +233,11 @@ function runShipped() {
     assert("landing_hero_credential_authorized", /EESC-USP/.test(firstText) && /registro profissional ativo no CREA/.test(firstText) && /ART e nota fiscal/.test(firstText), "credencial autorizada");
     assert("landing_single_primary_label", (main.match(/Solicitar proposta de elaboração/g) || []).length === 1, "um so rotulo para o pedido");
     assert("landing_serve_para_per_deliverable", (main.match(/<strong>Serve para<\/strong>/g) || []).length >= 3, "serve para por entregavel");
-    assert("landing_contact_before_method", main.indexOf('id="escopo-projeto"') < main.indexOf('id="metodo-elaboracao"'), "contato antes do aprofundamento");
+    // SALTO-INSTITUCIONAL-02 (lote A): o esqueleto de servico fecha a pagina com
+    // um unico bloco escuro de proximo passo (#escopo-projeto); a propriedade
+    // "contato antes do aprofundamento" passa a ser verificada pela acao
+    // contextual que aponta para o pedido antes do metodo.
+    assert("landing_contact_before_method", main.indexOf('href="#escopo-projeto"') < main.indexOf('id="metodo-elaboracao"'), "contato antes do aprofundamento");
     assert("landing_no_hub_word", !/\bhubs?\b/i.test(landing), "palavra hub");
   }
 
