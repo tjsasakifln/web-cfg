@@ -320,6 +320,35 @@
       "route": "/404.html",
       "viewport": "320x700",
       "overflow_px": 0
+    },
+    {
+      "route": "/casos/demonstrativo-infraestrutura/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/casos/demonstrativo-infraestrutura/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 14319,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/casos-demonstrativo-infraestrutura-390x844-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/casos-demonstrativo-infraestrutura-390x844-full-lote-a.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-a/casos-demonstrativo-infraestrutura-390x844-menu-lote-a.jpg"
+    },
+    {
+      "route": "/casos/demonstrativo-infraestrutura/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 9127,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/casos-demonstrativo-infraestrutura-1440x1000-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/casos-demonstrativo-infraestrutura-1440x1000-full-lote-a.jpg"
+    },
+    {
+      "route": "/casos/demonstrativo-infraestrutura/",
+      "viewport": "320x700",
+      "overflow_px": 0
     }
   ]
 }
