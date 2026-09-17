@@ -25,7 +25,10 @@ Operações (todas idempotentes):
    removido (a folha editorial rege a margem).
 5. `author-box` e `sources-section`: verificação da estrutura esperada pela
    folha; nada é reescrito quando já conformes (o texto nunca muda).
-6. Os cinco artigos fora do modelo (`article.container` ou
+6. Página com aprovação humana vinculada ao hash do HTML renderizado
+   (`data/editorial/striking-distance-noindex.v1.json`) fica intacta e é
+   registrada: qualquer byte novo invalidaria a aprovação (fail-closed).
+7. Os cinco artigos fora do modelo (`article.container` ou
    `section.section--default > div.container[style]`) são envolvidos no
    esqueleto `header.content-hero.article-hero` + `div.container.article-layout`
    + `article.article-main`, removendo o `style` inline do contêiner. O texto
@@ -420,6 +423,27 @@ def recompose(html: str) -> tuple[str, list[str]]:
     return html, log
 
 
+APPROVAL_BOUND_REGISTRY = ROOT / "data" / "editorial" / "striking-distance-noindex.v1.json"
+
+
+def approval_bound_pages() -> set[str]:
+    """Páginas cuja aprovação humana está vinculada ao hash do HTML renderizado.
+
+    Qualquer byte novo invalidaria a aprovação (approval_material_hash_mismatch,
+    fail-closed para noindex). A recomposição as deixa intactas e registra.
+    """
+    try:
+        data = json.loads(APPROVAL_BOUND_REGISTRY.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return set()
+    out = set()
+    for row in data.get("urls") or []:
+        approval = row.get("approval") or {}
+        if row.get("html") and approval.get("material_hash"):
+            out.add(str(row["html"]))
+    return out
+
+
 def article_paths() -> list[Path]:
     return sorted(p for p in ARTICLES_DIR.glob("*/index.html"))
 
@@ -502,8 +526,13 @@ def main(argv: list[str] | None = None) -> int:
 
     changed = 0
     report: dict[str, list[str]] = {}
+    bound = approval_bound_pages()
     for p in paths:
         original = p.read_text(encoding="utf-8")
+        rel = p.relative_to(ROOT).as_posix()
+        if rel in bound:
+            report[rel] = ["intacta: aprovação humana vinculada ao hash do HTML (striking-distance-noindex.v1.json)"]
+            continue
         new, log = recompose(original)
         if new != original:
             changed += 1
