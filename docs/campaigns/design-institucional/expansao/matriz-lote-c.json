@@ -1764,7 +1764,12 @@
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/lei-14133-obras-1440x1000-full-lote-c.jpg",
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/lei-14133-obras-390x844-fold-lote-c.jpg",
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/lei-14133-obras-390x844-full-lote-c.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/lei-14133-obras-390x844-menu-lote-c.jpg"
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/lei-14133-obras-390x844-menu-lote-c.jpg",
+    "evidence/lote-c/lei-14133-obras-preco-item-novo-desconto-proposta-1440x1000-fold-aceite-fix.jpg",
+    "evidence/lote-c/lei-14133-obras-preco-item-novo-desconto-proposta-1440x1000-full-aceite-fix.jpg",
+    "evidence/lote-c/lei-14133-obras-preco-item-novo-desconto-proposta-390x844-fold-aceite-fix.jpg",
+    "evidence/lote-c/lei-14133-obras-preco-item-novo-desconto-proposta-390x844-full-aceite-fix.jpg",
+    "evidence/lote-c/lei-14133-obras-preco-item-novo-desconto-proposta-390x844-menu-aceite-fix.jpg"
    ],
    "impediment": ""
   },
@@ -1783,7 +1788,12 @@
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/guias-contratos-obras-1440x1000-full-lote-c.jpg",
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/guias-contratos-obras-390x844-fold-lote-c.jpg",
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/guias-contratos-obras-390x844-full-lote-c.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/guias-contratos-obras-390x844-menu-lote-c.jpg"
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/guias-contratos-obras-390x844-menu-lote-c.jpg",
+    "evidence/lote-c/guias-contratos-obras-documentos-pedido-reequilibrio-1440x1000-fold-aceite-fix.jpg",
+    "evidence/lote-c/guias-contratos-obras-documentos-pedido-reequilibrio-1440x1000-full-aceite-fix.jpg",
+    "evidence/lote-c/guias-contratos-obras-documentos-pedido-reequilibrio-390x844-fold-aceite-fix.jpg",
+    "evidence/lote-c/guias-contratos-obras-documentos-pedido-reequilibrio-390x844-full-aceite-fix.jpg",
+    "evidence/lote-c/guias-contratos-obras-documentos-pedido-reequilibrio-390x844-menu-aceite-fix.jpg"
    ],
    "impediment": ""
   },
@@ -1815,7 +1825,7 @@
    "priority": "P2",
    "treatment": "COMPONENTES_ADEQUADOS",
    "owner": "lote-c",
-   "state": "pronto (folha inteira: bloco Tool do checklist interativo; índice)",
+   "state": "pronto (folha inteira: bloco Tool do checklist interativo; índice); aceite M-22: um único bloco Próximo passo, lateral em texto",
    "evidence": [
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/guias-contratos-obras-checklist-pedido-aditivo-1440x1000-fold-lote-c.jpg",
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/guias-contratos-obras-checklist-pedido-aditivo-1440x1000-full-lote-c.jpg",
@@ -1834,7 +1844,7 @@
    "priority": "P2",
    "treatment": "COMPONENTES_ADEQUADOS",
    "owner": "lote-c",
-   "state": "pronto (subconjunto editorial-article.css; índice em todas as páginas)",
+   "state": "pronto (subconjunto editorial-article.css; índice em todas as páginas); aceite M-22: um único bloco Próximo passo, lateral em texto",
    "evidence": [],
    "impediment": ""
   },
@@ -1847,8 +1857,14 @@
    "priority": "P2",
    "treatment": "COMPONENTES_ADEQUADOS",
    "owner": "lote-c",
-   "state": "pronto (subconjunto editorial-article.css; índice em todas as páginas)",
-   "evidence": [],
+   "state": "pronto (subconjunto editorial-article.css; índice em todas as páginas); aceite M-22: um único bloco Próximo passo, lateral em texto",
+   "evidence": [
+    "evidence/lote-c/guias-contratos-obras-documentos-pedido-reequilibrio-1440x1000-fold-aceite-fix.jpg",
+    "evidence/lote-c/guias-contratos-obras-documentos-pedido-reequilibrio-1440x1000-full-aceite-fix.jpg",
+    "evidence/lote-c/guias-contratos-obras-documentos-pedido-reequilibrio-390x844-fold-aceite-fix.jpg",
+    "evidence/lote-c/guias-contratos-obras-documentos-pedido-reequilibrio-390x844-full-aceite-fix.jpg",
+    "evidence/lote-c/guias-contratos-obras-documentos-pedido-reequilibrio-390x844-menu-aceite-fix.jpg"
+   ],
    "impediment": ""
   },
   {
@@ -1860,7 +1876,7 @@
    "priority": "P2",
    "treatment": "COMPONENTES_ADEQUADOS",
    "owner": "lote-c",
-   "state": "pronto (subconjunto editorial-article.css; índice em todas as páginas)",
+   "state": "pronto (subconjunto editorial-article.css; índice em todas as páginas); aceite M-22: um único bloco Próximo passo, lateral em texto",
    "evidence": [],
    "impediment": ""
   },
@@ -1873,7 +1889,7 @@
    "priority": "P2",
    "treatment": "COMPONENTES_ADEQUADOS",
    "owner": "lote-c",
-   "state": "pronto (subconjunto editorial-article.css; índice em todas as páginas)",
+   "state": "pronto (subconjunto editorial-article.css; índice em todas as páginas); aceite M-22: um único bloco Próximo passo, lateral em texto",
    "evidence": [],
    "impediment": ""
   },
@@ -1886,7 +1902,7 @@
    "priority": "P2",
    "treatment": "COMPONENTES_ADEQUADOS",
    "owner": "lote-c",
-   "state": "pronto (subconjunto editorial-article.css; índice em todas as páginas)",
+   "state": "pronto (subconjunto editorial-article.css; índice em todas as páginas); aceite M-22: um único bloco Próximo passo, lateral em texto",
    "evidence": [],
    "impediment": ""
   },
@@ -1899,7 +1915,7 @@
    "priority": "P2",
    "treatment": "COMPONENTES_ADEQUADOS",
    "owner": "lote-c",
-   "state": "pronto (subconjunto editorial-article.css; índice em todas as páginas)",
+   "state": "pronto (subconjunto editorial-article.css; índice em todas as páginas); aceite M-22: um único bloco Próximo passo, lateral em texto",
    "evidence": [],
    "impediment": ""
   },
@@ -1912,7 +1928,7 @@
    "priority": "P2",
    "treatment": "COMPONENTES_ADEQUADOS",
    "owner": "lote-c",
-   "state": "pronto (subconjunto editorial-article.css; índice em todas as páginas)",
+   "state": "pronto (subconjunto editorial-article.css; índice em todas as páginas); aceite M-22: um único bloco Próximo passo, lateral em texto",
    "evidence": [
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/lei-14133-obras-limite-25-50-aditivo-obra-1440x1000-fold-lote-c.jpg",
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/lei-14133-obras-limite-25-50-aditivo-obra-1440x1000-full-lote-c.jpg",
@@ -1931,7 +1947,7 @@
    "priority": "P2",
    "treatment": "COMPONENTES_ADEQUADOS",
    "owner": "lote-c",
-   "state": "pronto (subconjunto editorial-article.css; índice em todas as páginas)",
+   "state": "pronto (subconjunto editorial-article.css; índice em todas as páginas); aceite M-22: um único bloco Próximo passo, lateral em texto",
    "evidence": [],
    "impediment": ""
   },
@@ -1944,8 +1960,14 @@
    "priority": "P2",
    "treatment": "COMPONENTES_ADEQUADOS",
    "owner": "lote-c",
-   "state": "pronto (subconjunto editorial-article.css; índice em todas as páginas)",
-   "evidence": [],
+   "state": "pronto (subconjunto editorial-article.css; índice em todas as páginas); aceite M-22: um único bloco Próximo passo, lateral em texto",
+   "evidence": [
+    "evidence/lote-c/lei-14133-obras-preco-item-novo-desconto-proposta-1440x1000-fold-aceite-fix.jpg",
+    "evidence/lote-c/lei-14133-obras-preco-item-novo-desconto-proposta-1440x1000-full-aceite-fix.jpg",
+    "evidence/lote-c/lei-14133-obras-preco-item-novo-desconto-proposta-390x844-fold-aceite-fix.jpg",
+    "evidence/lote-c/lei-14133-obras-preco-item-novo-desconto-proposta-390x844-full-aceite-fix.jpg",
+    "evidence/lote-c/lei-14133-obras-preco-item-novo-desconto-proposta-390x844-menu-aceite-fix.jpg"
+   ],
    "impediment": ""
   },
   {
@@ -1957,7 +1979,7 @@
    "priority": "P2",
    "treatment": "COMPONENTES_ADEQUADOS",
    "owner": "lote-c",
-   "state": "pronto (subconjunto editorial-article.css; índice em todas as páginas)",
+   "state": "pronto (subconjunto editorial-article.css; índice em todas as páginas); aceite M-22: um único bloco Próximo passo, lateral em texto",
    "evidence": [],
    "impediment": ""
   },
@@ -1970,7 +1992,7 @@
    "priority": "P2",
    "treatment": "COMPONENTES_ADEQUADOS",
    "owner": "lote-c",
-   "state": "pronto (subconjunto editorial-article.css; índice em todas as páginas)",
+   "state": "pronto (subconjunto editorial-article.css; índice em todas as páginas); aceite M-22: um único bloco Próximo passo, lateral em texto",
    "evidence": [],
    "impediment": ""
   },
@@ -2421,13 +2443,18 @@
    "priority": "P1",
    "treatment": "COMPOSICAO_REDESENHADA",
    "owner": "lote-c",
-   "state": "pronto (áreas em list-ruled, região de credenciais como único título, condução sem ressalva ao lado, Condições e limites consolidado no fim, ação curta)",
+   "state": "pronto (áreas em list-ruled, região de credenciais como único título, condução sem ressalva ao lado, Condições e limites consolidado no fim, ação curta); aceite B-22: volume analisado uma vez, na tabela de credenciais com a fonte",
    "evidence": [
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/especialista-tiago-jun-sasaki-1440x1000-fold-lote-c.jpg",
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/especialista-tiago-jun-sasaki-1440x1000-full-lote-c.jpg",
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/especialista-tiago-jun-sasaki-390x844-fold-lote-c.jpg",
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/especialista-tiago-jun-sasaki-390x844-full-lote-c.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/especialista-tiago-jun-sasaki-390x844-menu-lote-c.jpg"
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/especialista-tiago-jun-sasaki-390x844-menu-lote-c.jpg",
+    "evidence/lote-c/especialista-tiago-jun-sasaki-1440x1000-fold-aceite-fix.jpg",
+    "evidence/lote-c/especialista-tiago-jun-sasaki-1440x1000-full-aceite-fix.jpg",
+    "evidence/lote-c/especialista-tiago-jun-sasaki-390x844-fold-aceite-fix.jpg",
+    "evidence/lote-c/especialista-tiago-jun-sasaki-390x844-full-aceite-fix.jpg",
+    "evidence/lote-c/especialista-tiago-jun-sasaki-390x844-menu-aceite-fix.jpg"
    ],
    "impediment": ""
   },
@@ -2440,13 +2467,18 @@
    "priority": "P2",
    "treatment": "COMPONENTES_ADEQUADOS",
    "owner": "lote-c",
-   "state": "pronto",
+   "state": "pronto; aceite B-22/B-23: sem section legada (vão 130→40 px), kicker no lugar do h2 vazio, próximo passo na coluna direita, volume analisado só na tabela de credenciais",
    "evidence": [
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/confianca-1440x1000-fold-lote-c.jpg",
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/confianca-1440x1000-full-lote-c.jpg",
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/confianca-390x844-fold-lote-c.jpg",
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/confianca-390x844-full-lote-c.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/confianca-390x844-menu-lote-c.jpg"
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/confianca-390x844-menu-lote-c.jpg",
+    "evidence/lote-c/confianca-1440x1000-fold-aceite-fix.jpg",
+    "evidence/lote-c/confianca-1440x1000-full-aceite-fix.jpg",
+    "evidence/lote-c/confianca-390x844-fold-aceite-fix.jpg",
+    "evidence/lote-c/confianca-390x844-full-aceite-fix.jpg",
+    "evidence/lote-c/confianca-390x844-menu-aceite-fix.jpg"
    ],
    "impediment": ""
   },
@@ -2459,13 +2491,28 @@
    "priority": "P2",
    "treatment": "COMPONENTES_ADEQUADOS",
    "owner": "lote-c",
-   "state": "correções após revisão (onda 2): lista de ferramentas logo após a abertura; método, ressalva e alternativa de serviço num único bloco depois da lista (texto intacto, um tool-disclaimer); separador na trilha",
+   "state": "correções após revisão (onda 2): lista de ferramentas logo após a abertura; método, ressalva e alternativa de serviço num único bloco depois da lista (texto intacto, um tool-disclaimer); separador na trilha; aceite M-20: método, fonte e limites antes da lista; atalho aos serviços no lead; subconjunto Tool",
    "evidence": [
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-1440x1000-fold-onda2.jpg",
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-1440x1000-full-onda2.jpg",
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-390x844-fold-onda2.jpg",
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-390x844-full-onda2.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-390x844-menu-onda2.jpg"
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-390x844-menu-onda2.jpg",
+    "evidence/lote-c/ferramentas-1440x1000-fold-aceite-fix.jpg",
+    "evidence/lote-c/ferramentas-1440x1000-full-aceite-fix.jpg",
+    "evidence/lote-c/ferramentas-390x844-fold-aceite-fix.jpg",
+    "evidence/lote-c/ferramentas-390x844-full-aceite-fix.jpg",
+    "evidence/lote-c/ferramentas-390x844-menu-aceite-fix.jpg",
+    "evidence/lote-c/ferramentas-checklist-reequilibrio-1440x1000-fold-aceite-fix.jpg",
+    "evidence/lote-c/ferramentas-checklist-reequilibrio-1440x1000-full-aceite-fix.jpg",
+    "evidence/lote-c/ferramentas-checklist-reequilibrio-390x844-fold-aceite-fix.jpg",
+    "evidence/lote-c/ferramentas-checklist-reequilibrio-390x844-full-aceite-fix.jpg",
+    "evidence/lote-c/ferramentas-checklist-reequilibrio-390x844-menu-aceite-fix.jpg",
+    "evidence/lote-c/ferramentas-diagnostico-defesa-margem-1440x1000-fold-aceite-fix.jpg",
+    "evidence/lote-c/ferramentas-diagnostico-defesa-margem-1440x1000-full-aceite-fix.jpg",
+    "evidence/lote-c/ferramentas-diagnostico-defesa-margem-390x844-fold-aceite-fix.jpg",
+    "evidence/lote-c/ferramentas-diagnostico-defesa-margem-390x844-full-aceite-fix.jpg",
+    "evidence/lote-c/ferramentas-diagnostico-defesa-margem-390x844-menu-aceite-fix.jpg"
    ],
    "impediment": "",
    "wave": "onda2"
@@ -2538,13 +2585,18 @@
    "priority": "P2",
    "treatment": "COMPONENTES_ADEQUADOS",
    "owner": "lote-c",
-   "state": "correções após revisão (onda 2): formulário de busca logo após a abertura (bloco inteiro), método depois do resultado, seções do resultado com régua e respiro, valor contratual em moeda pt-BR, separadores na trilha; 153.217 bytes de conteúdo, LCP 1.956–1.959 ms, CLS 0, MEASURED_PASS (3 runs); ids, data-*, cálculo e #lead-form intactos",
+   "state": "correções após revisão (onda 2): formulário de busca logo após a abertura (bloco inteiro), método depois do resultado, seções do resultado com régua e respiro, valor contratual em moeda pt-BR, separadores na trilha; 153.217 bytes de conteúdo, LCP 1.956–1.959 ms, CLS 0, MEASURED_PASS (3 runs); ids, data-*, cálculo e #lead-form intactos; aceite M-20: método entre a busca e o resultado; 152.720 bytes, LCP 1.956–1.960 ms, MEASURED_PASS",
    "evidence": [
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-diagnostico-defesa-margem-1440x1000-fold-onda2.jpg",
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-diagnostico-defesa-margem-1440x1000-full-onda2.jpg",
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-diagnostico-defesa-margem-390x844-fold-onda2.jpg",
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-diagnostico-defesa-margem-390x844-full-onda2.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-diagnostico-defesa-margem-390x844-menu-onda2.jpg"
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-diagnostico-defesa-margem-390x844-menu-onda2.jpg",
+    "evidence/lote-c/ferramentas-diagnostico-defesa-margem-1440x1000-fold-aceite-fix.jpg",
+    "evidence/lote-c/ferramentas-diagnostico-defesa-margem-1440x1000-full-aceite-fix.jpg",
+    "evidence/lote-c/ferramentas-diagnostico-defesa-margem-390x844-fold-aceite-fix.jpg",
+    "evidence/lote-c/ferramentas-diagnostico-defesa-margem-390x844-full-aceite-fix.jpg",
+    "evidence/lote-c/ferramentas-diagnostico-defesa-margem-390x844-menu-aceite-fix.jpg"
    ],
    "impediment": "",
    "wave": "onda2"
@@ -2598,13 +2650,18 @@
    "priority": "P3",
    "treatment": "COMPONENTES_ADEQUADOS",
    "owner": "lote-c",
-   "state": "onda 2: meta da abertura (responsável, uso de IA, política, citação) no mesmo papel .authority-byline (marcação editada, por isso COMPONENTES_ADEQUADOS e não herança); texto, ids e data-* intactos; recapturado",
+   "state": "onda 2: meta da abertura (responsável, uso de IA, política, citação) no mesmo papel .authority-byline (marcação editada, por isso COMPONENTES_ADEQUADOS e não herança); texto, ids e data-* intactos; recapturado; aceite B-27: metadados em Condições e limites; exemplo com medida; subconjunto Article",
    "evidence": [
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/metodologia-inteligencia-1440x1000-fold-onda2.jpg",
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/metodologia-inteligencia-1440x1000-full-onda2.jpg",
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/metodologia-inteligencia-390x844-fold-onda2.jpg",
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/metodologia-inteligencia-390x844-full-onda2.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/metodologia-inteligencia-390x844-menu-onda2.jpg"
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/metodologia-inteligencia-390x844-menu-onda2.jpg",
+    "evidence/lote-c/metodologia-inteligencia-1440x1000-fold-aceite-fix.jpg",
+    "evidence/lote-c/metodologia-inteligencia-1440x1000-full-aceite-fix.jpg",
+    "evidence/lote-c/metodologia-inteligencia-390x844-fold-aceite-fix.jpg",
+    "evidence/lote-c/metodologia-inteligencia-390x844-full-aceite-fix.jpg",
+    "evidence/lote-c/metodologia-inteligencia-390x844-menu-aceite-fix.jpg"
    ],
    "impediment": "",
    "wave": "onda2"
@@ -2750,17 +2807,22 @@
    "source": "privacidade/index.html",
    "generator": "manual",
    "priority": "P3",
-   "treatment": "PRESERVADA_COM_JUSTIFICATIVA",
+   "treatment": "COMPONENTES_ADEQUADOS",
    "owner": "lote-c",
-   "state": "estável; texto legal; captura conferida",
+   "state": "estável; texto legal; captura conferida; aceite M-21: casca compartilhada (no-js→js, manifest, script.js), cabeçalho fixo e menu móvel; <main> byte-idêntico",
    "evidence": [
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/privacidade-1440x1000-fold-lote-c.jpg",
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/privacidade-1440x1000-full-lote-c.jpg",
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/privacidade-390x844-fold-lote-c.jpg",
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/privacidade-390x844-full-lote-c.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/privacidade-390x844-menu-lote-c.jpg"
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/privacidade-390x844-menu-lote-c.jpg",
+    "evidence/lote-c/privacidade-1440x1000-fold-aceite-fix.jpg",
+    "evidence/lote-c/privacidade-1440x1000-full-aceite-fix.jpg",
+    "evidence/lote-c/privacidade-390x844-fold-aceite-fix.jpg",
+    "evidence/lote-c/privacidade-390x844-full-aceite-fix.jpg",
+    "evidence/lote-c/privacidade-390x844-menu-aceite-fix.jpg"
    ],
-   "impediment": "página legal estável, sem redesenho por decisão do caderno"
+   "impediment": ""
   },
   {
    "route": "/termos-de-uso/",
@@ -2769,17 +2831,22 @@
    "source": "termos-de-uso/index.html",
    "generator": "manual",
    "priority": "P3",
-   "treatment": "PRESERVADA_COM_JUSTIFICATIVA",
+   "treatment": "COMPONENTES_ADEQUADOS",
    "owner": "lote-c",
-   "state": "estável; texto legal; captura conferida",
+   "state": "estável; texto legal; captura conferida; aceite M-21: casca compartilhada (no-js→js, manifest, script.js), cabeçalho fixo e menu móvel; <main> byte-idêntico",
    "evidence": [
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/termos-de-uso-1440x1000-fold-lote-c.jpg",
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/termos-de-uso-1440x1000-full-lote-c.jpg",
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/termos-de-uso-390x844-fold-lote-c.jpg",
     "docs/campaigns/design-institucional/expansao/evidence/lote-c/termos-de-uso-390x844-full-lote-c.jpg",
-    "docs/campaigns/design-institucional/expansao/evidence/lote-c/termos-de-uso-390x844-menu-lote-c.jpg"
+    "docs/campaigns/design-institucional/expansao/evidence/lote-c/termos-de-uso-390x844-menu-lote-c.jpg",
+    "evidence/lote-c/termos-de-uso-1440x1000-fold-aceite-fix.jpg",
+    "evidence/lote-c/termos-de-uso-1440x1000-full-aceite-fix.jpg",
+    "evidence/lote-c/termos-de-uso-390x844-fold-aceite-fix.jpg",
+    "evidence/lote-c/termos-de-uso-390x844-full-aceite-fix.jpg",
+    "evidence/lote-c/termos-de-uso-390x844-menu-aceite-fix.jpg"
    ],
-   "impediment": "página legal estável, sem redesenho por decisão do caderno"
+   "impediment": ""
   },
   {
    "route": "/piloto/",
