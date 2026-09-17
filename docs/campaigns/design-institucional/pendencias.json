@@ -1,0 +1,51 @@
+[
+  {
+    "id": "P1",
+    "severity": "MEDIA",
+    "owner": "integrador (campanha 02)",
+    "impact_on_expansion": "nao bloqueia",
+    "item": "/servicos/ no celular: nove linhas com o mesmo esqueleto (15.980 px). Decidir composicao mais curta por area (expansao acessivel por linha ou variacao entre categorias) sem esconder conteudo."
+  },
+  {
+    "id": "P2",
+    "severity": "MEDIA",
+    "owner": "integrador (campanha 02)",
+    "impact_on_expansion": "nao bloqueia",
+    "item": "Altura da home no celular (16.384 px rendered, producao 11.591). Avaliar reduzir o bloco de entregas a duas amostras no celular ou encurtar textos das linhas; tetos dos gates foram elevados com motivo e devem voltar a cair."
+  },
+  {
+    "id": "P3",
+    "severity": "BAIXA",
+    "owner": "campanha 02 (familia service-pillars)",
+    "impact_on_expansion": "nao bloqueia",
+    "item": "'Encontrou um erro?.' (ponto duplicado) e rodape reduzido nos seis pilares congelados: pre-existentes no gerador de autoria/casca; corrigir junto da recomposicao de cada pilar."
+  },
+  {
+    "id": "P4",
+    "severity": "BAIXA",
+    "owner": "campanha 02",
+    "impact_on_expansion": "nao bloqueia",
+    "item": "Menu movel com dois controles de fechar (icone e botao 'Fechar', pre-existente em nav.js)."
+  },
+  {
+    "id": "P5",
+    "severity": "BAIXA",
+    "owner": "integrador",
+    "impact_on_expansion": "nao bloqueia",
+    "item": "Os desenhos antigos de /casos/demonstrativo-infraestrutura/ (fora do piloto) ainda usam a paleta anterior (laranja/vermelho); recolorir no vocabulario da prancha ao tratar a familia /casos/."
+  },
+  {
+    "id": "P6",
+    "severity": "INFO",
+    "owner": "proprietario",
+    "impact_on_expansion": "decide",
+    "item": "owner_visual_decision PENDENTE; pesquisa qualitativa NAO_MEDIDA (roteiro em pesquisa-qualitativa.md)."
+  },
+  {
+    "id": "P7",
+    "severity": "INFO",
+    "owner": "integrador",
+    "impact_on_expansion": "condicao de merge",
+    "item": "frozen-specs/**, single-commercial-route.v1.json, canary-contract.json (389), cta-form-next-state.v1.json e approvals.json (analise aprovada) foram recapturados neste ramo; so entram em main com a direcao aprovada, por merge commit (nao squash)."
+  }
+]

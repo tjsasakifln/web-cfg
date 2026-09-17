@@ -1,7 +1,7 @@
 {
   "base": "http://127.0.0.1:8731",
   "label": "estB",
-  "captured_at": "2026-09-17T06:20:35.129Z",
+  "captured_at": "2026-09-17T07:13:51.413Z",
   "tool": "puppeteer-core 25 / chromium-1234",
   "entries": [
     {
@@ -25,7 +25,7 @@
         "/assets/tiago-sasaki-foto-v11-sem-fundo-560.avif",
         "/assets/logo-confenge-white-500-1677038e.png"
       ],
-      "docHeight": 15291,
+      "docHeight": 19579,
       "overflowX": false
     },
     {
@@ -49,7 +49,7 @@
         "/assets/tiago-sasaki-foto-v11-sem-fundo-560.avif",
         "/assets/logo-confenge-white-500-1677038e.png"
       ],
-      "docHeight": 8908,
+      "docHeight": 11158,
       "overflowX": false
     },
     {
@@ -71,7 +71,7 @@
         "/assets/logo-confenge-500-f8a83f6d.png",
         "/assets/logo-confenge-white-500-1677038e.png"
       ],
-      "docHeight": 20357,
+      "docHeight": 20489,
       "overflowX": false
     },
     {

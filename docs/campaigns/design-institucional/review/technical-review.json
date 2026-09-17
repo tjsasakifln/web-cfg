@@ -1,0 +1,67 @@
+{
+  "state": "APROVADO_COM_RESSALVAS",
+  "measured_at": "2026-09-17",
+  "environment": "worktree do ramo servida localmente (Node 24.19 local; CI usa Node 22), Chromium 1234 via puppeteer-core; artefato construido com o produtor contratado 704975a7 (EXTRA_CLI_ROOT); numeros de produção = referencia de campo/borda",
+  "viewports_checked": [
+    320,
+    390,
+    768,
+    1024,
+    1280,
+    1440
+  ],
+  "checks": {
+    "horizontal_overflow": "0 px em 320/390/768/1024/1280/1440 nas seis rotas (evidence/estados/matrix.json)",
+    "zoom_200": "0 px de transbordo em 720 CSS px com DPR 2 (equivalente a 200% em 1440)",
+    "keyboard": "60 passos de Tab por rota com anel de foco visivel; nenhum foco encoberto pelo cabecalho fixo apos o scroll suave (keyboard_settled em matrix.json); regioes de tabela roláveis sao focaveis",
+    "js_off": "menu e canais visiveis nas seis rotas; formulario da home visivel com aviso de indisponibilidade; pilar de medicoes com formulario visivel",
+    "reduced_motion": "0 animacoes em execucao; nenhum bloco .reveal oculto",
+    "font_blocked": "H1 cai para 'Archivo Fallback Wide' com metricas casadas; identidade tipografica nao prometida no fallback",
+    "axe": "0 criticas/graves/moderadas/menores nas seis rotas x 2 viewports (review/axe-pilot-six-routes.json) e na politica do repositorio (review/axe-pilot.json); nao equivale a conformidade integral WCAG 2.2 AA",
+    "screen_reader": "NAO TESTADO com leitor de tela real (sem acesso nesta sessao); estrutura verificada por axe e por role/aria nas pranchas (role=img, title, desc)",
+    "touch_targets": "acoes principais >= 44x44 CSS px (gate journeys_mobile_hierarchy); links de subservico 28-32 px de altura em linha (secundarios)",
+    "form_states": "initial, validation-error, turnstile-error, submit-loading, success-receipt capturados em docs/uiux-evidence/issue-532-cta-form-next-state (fixture, nao persistencia real)",
+    "html_integrity": "npm run test:html-integrity e test:html-integrity:site verdes",
+    "chains_green": [
+      "test:design",
+      "test:ui",
+      "test:nav",
+      "test:hub-links",
+      "test:brand",
+      "test:authority",
+      "test:copy",
+      "test:contact-journeys",
+      "test:inbound-gates",
+      "test:first-fold-contract",
+      "audit:css-usage",
+      "test:cta-form-next-state",
+      "test:single-commercial-route",
+      "test:form-funnel",
+      "test:visible-parity",
+      "test:prototype-isolation",
+      "test:integral-solution",
+      "test:secrets-scan",
+      "tests/bofu_dominance/frozen_specs",
+      "scripts/demonstrative/plates (16)",
+      "tests/demonstrative (15)",
+      "tests/coordination (8)",
+      "tests/pos-inb-20260911/02 (10)",
+      "tests/ativacao_20260912/03 (15)",
+      "build:site exit 0 com produtor contratado"
+    ],
+    "performance": "ver estado.json#performance_budget: local x local (gzip), perf 99-100, LCP <= 1,96 s, CLS 0, +4 a +14 KB por rota"
+  },
+  "not_measured": [
+    "leitor de tela real",
+    "Safari/iPhone fisico",
+    "INP/LCP/CLS de campo",
+    "percepcao humana",
+    "resultado comercial"
+  ],
+  "reservations": [
+    "A home ficou mais longa que a producao (1440: 6.921 -> 10.272 px; 390: 11.591 -> 16.384 px rendered) por causa das quatro pranchas e do bloco de responsabilidade; tetos dos gates ajustados com motivo. Reduzir mais exige decisao de conteudo (campanha 02).",
+    "/servicos/ repete o mesmo esqueleto nas nove linhas (agrupamento por area e indice ajudam, mas o celular continua longo: 15.980 px).",
+    "Pontuacao duplicada 'Encontrou um erro?.' e rodape reduzido nos seis pilares congelados sao pre-existentes (gerador de autoria/casca dos pilares), fora do escopo.",
+    "Botao 'Fechar' duplicado no menu movel e pre-existente (nav.js)."
+  ]
+}

@@ -1,7 +1,7 @@
 {
   "base": "http://127.0.0.1:8731",
   "label": "pilot",
-  "captured_at": "2026-09-17T06:20:18.920Z",
+  "captured_at": "2026-09-17T07:13:34.798Z",
   "tool": "puppeteer-core 25 / chromium-1234",
   "entries": [
     {
@@ -24,7 +24,7 @@
         "/assets/tiago-sasaki-foto-v11-sem-fundo-560.avif",
         "/assets/logo-confenge-white-500-1677038e.png"
       ],
-      "docHeight": 12353,
+      "docHeight": 16475,
       "overflowX": false
     },
     {
@@ -47,7 +47,7 @@
         "/assets/tiago-sasaki-foto-v11-sem-fundo-560.avif",
         "/assets/logo-confenge-white-500-1677038e.png"
       ],
-      "docHeight": 8022,
+      "docHeight": 10272,
       "overflowX": false
     },
     {
@@ -68,7 +68,7 @@
         "/assets/logo-confenge-500-f8a83f6d.png",
         "/assets/logo-confenge-white-500-1677038e.png"
       ],
-      "docHeight": 15760,
+      "docHeight": 15980,
       "overflowX": false
     },
     {
@@ -110,7 +110,7 @@
         "/assets/logo-confenge-500-f8a83f6d.png",
         "/assets/logo-confenge-white-500-1677038e.png"
       ],
-      "docHeight": 20365,
+      "docHeight": 20497,
       "overflowX": false
     },
     {
@@ -152,7 +152,7 @@
         "/assets/logo-confenge-500-f8a83f6d.png",
         "/assets/logo-confenge-white-500-1677038e.png"
       ],
-      "docHeight": 13309,
+      "docHeight": 13395,
       "overflowX": false
     },
     {
@@ -173,7 +173,7 @@
         "/assets/logo-confenge-500-f8a83f6d.png",
         "/assets/logo-confenge-white-500-1677038e.png"
       ],
-      "docHeight": 9784,
+      "docHeight": 9783,
       "overflowX": false
     },
     {
@@ -194,7 +194,7 @@
         "/assets/logo-confenge-500-f8a83f6d.png",
         "/assets/logo-confenge-white-500-1677038e.png"
       ],
-      "docHeight": 15499,
+      "docHeight": 14022,
       "overflowX": false
     },
     {
@@ -215,7 +215,7 @@
         "/assets/logo-confenge-500-f8a83f6d.png",
         "/assets/logo-confenge-white-500-1677038e.png"
       ],
-      "docHeight": 9483,
+      "docHeight": 9528,
       "overflowX": false
     },
     {
