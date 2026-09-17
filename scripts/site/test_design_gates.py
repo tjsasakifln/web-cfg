@@ -769,6 +769,16 @@ def _meta_properties(html: str) -> dict[str, str]:
     return properties
 
 
+# Rotas recompostas na direcao editorial "prancha e percurso"
+# (CONFENGE-SALTO-INSTITUCIONAL-01, 2026-09-17, ramo isolado, dono: fundador).
+# Route-exact, nunca glob: uma rota entra aqui quando a sua composicao foi
+# recomposta e recapturada com motivo; a presenca de uma classe no HTML nao
+# basta para sair de um congelamento.
+EDITORIAL_RECOMPOSED_ROUTES = frozenset({
+    "medicoes-glosas-obras-publicas/index.html",
+})
+
+
 def test_raster_title_covers_are_og_only_outside_frozen_bofu_routes():
     """Remove redundant inline cards without bypassing the #128/#226 freeze."""
     frozen_bofu = _capture_unfrozen({
@@ -815,7 +825,7 @@ def test_raster_title_covers_are_og_only_outside_frozen_bofu_routes():
         # rasterised title card is OG-only there too, on frozen and unfrozen
         # routes alike (the inventory classed assets/clusters/*.jpg as
         # unsuitable for the page body).
-        recomposed = 'class="svc-open"' in html
+        recomposed = relative in EDITORIAL_RECOMPOSED_ROUTES and 'class="svc-open"' in html
         if relative in frozen_bofu and recomposed:
             frozen_candidates.add(relative)
             assert not figures, f"{relative}: recomposed pillar keeps the title card OG-only"
@@ -1251,7 +1261,8 @@ def test_pillar_evidence_contrast_on_navy():
         html = path.read_text(encoding="utf-8")
         # A pillar recomposed in the editorial direction (2026-09-17) states its
         # evidence in the opening chain and the plate instead of the navy card.
-        assert 'class="pillar-evidence"' in html or 'class="svc-open"' in html, (
+        recomposed = path.relative_to(ROOT).as_posix() in EDITORIAL_RECOMPOSED_ROUTES
+        assert 'class="pillar-evidence"' in html or (recomposed and 'class="svc-open"' in html), (
             f"{path.relative_to(ROOT)} missing pillar-evidence"
         )
 

@@ -221,9 +221,13 @@ async function main() {
     // content-visibility:auto and counted drawing annotations). Measured with this
     // method, production 47da03b64 carried 8.799 chars; the new "Entregas" block
     // (three edited samples with need, work and document) and the after-send
-    // steps add a bounded amount (measured 11.6k). Budget: 12.000; the
-    // section/archetype gates, not this number, are what keep the home from
-    // becoming a wall of text.
+    // steps add prose by design. Measured under the new method: production
+    // 47da03b64 = 8.799 chars; pilot = 11.631 chars. The ceiling is set from
+    // the composition, not from the result: baseline 8.799 + one Entregas block
+    // (three samples with need, work and document, ~2.2k) + after-send steps
+    // and responsibility credentials (~1k) = 12.000. The section/archetype
+    // gates, not this number, are what keep the home from becoming a wall of
+    // text.
     if (m1440.chars > 12000) throw new Error(`visible chars ${m1440.chars} not reduced enough`);
     ok(`home_height_text_cta (${m1440.h}px/1440, ${m390.h}px/390, ${m1440.chars} chars, ${m1440.primary} primary)`);
   } catch (e) {
