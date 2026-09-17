@@ -130,6 +130,16 @@ for (const viewport of VIEWPORTS) {
     // intermediario (2026-09-17, home desktop). O estado de repouso e a
     // propriedade auditada; o cursor sai da pagina antes da medicao.
     await page.mouse.move(0, 0);
+    // Secoes fora da tela com content-visibility:auto nao sao pintadas; o axe
+    // le cores de caixas nao renderizadas e mede contraste contra um fundo que
+    // nao existe (2026-09-17, faixa de obras publicas da home no desktop).
+    // A auditoria e sobre a pagina inteira, entao tudo e tornado visivel antes.
+    await page.evaluate(() => {
+      for (const el of document.querySelectorAll("*")) {
+        const cv = getComputedStyle(el).contentVisibility;
+        if (cv && cv !== "visible") el.style.contentVisibility = "visible";
+      }
+    });
     await page.addScriptTag({ content: axeSource });
     const results = await page.evaluate(async () => {
       // eslint-disable-next-line no-undef

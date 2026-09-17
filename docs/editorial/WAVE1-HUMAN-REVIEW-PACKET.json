@@ -2,9 +2,9 @@
   "schema_version": "3.0.0",
   "decision_schema_version": "3.0.0",
   "title": "Primeira coorte editorial: revisão humana individual no deploy preview",
-  "commit_sha": "ef6fb55949a5d55d12ee860bd8697aa44ed9f19b",
+  "commit_sha": "4acbf1efd885b404d169239149b110d8a7bb6591",
   "commit_sha_role": "informational_only",
-  "derived_at": "2026-09-17T20:00:26Z",
+  "derived_at": "2026-09-17T20:35:27Z",
   "terminal_status": "READY_FOR_RELEASE",
   "review_target": {
     "preview_base_url": "https://deploy-preview-54--confenge.netlify.app",
