@@ -25,6 +25,35 @@ from scripts.pseo.html_shell import (
 from scripts.pseo import geo_locale
 from scripts.pseo.score import Candidate
 
+# Folha editorial da campanha "prancha e percurso" (lote C): modelo de leitura
+# do bloco Article (índice de página, tabelas roláveis, autor, fontes).
+EDITORIAL_SHEET_LINK = '<link href="/assets/editorial.css" rel="stylesheet"/>'
+MIN_H2_FOR_PAGE_INDEX = 3
+_ARTICLE_MAIN_RE = re.compile(r'(<article class="article-main"[^>]*>)(.*?)(</article>)', re.S)
+_INDEX_SECTION_RE = re.compile(r'<section id="([^"]+)"[^>]*>\s*(?:<p class="eyebrow">[^<]*</p>\s*)?<h2[^>]*>(.*?)</h2>', re.S)
+
+
+def inject_page_index(html: str) -> str:
+    """nav.article-toc 'Nesta página' no início de article-main, uma entrada por
+    seção com id e h2 de leitura, quando há três ou mais. Determinístico."""
+    m = _ARTICLE_MAIN_RE.search(html)
+    if not m or 'class="article-toc"' in m.group(2):
+        return html
+    entries = []
+    for sid, title in _INDEX_SECTION_RE.findall(m.group(2)):
+        label = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", "", title)).strip()
+        if label:
+            entries.append((sid, label))
+    if len(entries) < MIN_H2_FOR_PAGE_INDEX:
+        return html
+    nav = (
+        '<nav aria-label="Nesta página" class="article-toc"><strong>Nesta página</strong><ol>'
+        + "".join(f'<li><a href="#{sid}">{label}</a></li>' for sid, label in entries)
+        + "</ol></nav>\n"
+    )
+    return html[: m.start(2)] + "\n" + nav + html[m.start(2):]
+
+
 def br_date(iso: str | None) -> str:
     """Visible Brazilian date; empty if missing."""
     if not iso:
@@ -445,19 +474,18 @@ def _exec_summary(text: str, max_words: int = 80) -> str:
 
 
 def render_candidate(c: Candidate, manifest: dict[str, Any]) -> str:
-    if c.page_type == "market":
-        return _render_market(c, manifest)
-    if c.page_type == "agency":
-        return _render_agency(c, manifest)
-    if c.page_type == "price":
-        return _render_price(c, manifest)
-    if c.page_type == "competition":
-        return _render_competition(c, manifest)
-    if c.page_type == "radar":
-        return _render_radar(c, manifest)
-    if c.page_type == "problem_service":
-        return _render_problem(c, manifest)
-    raise ValueError(f"unknown page_type {c.page_type}")
+    renderers = {
+        "market": _render_market,
+        "agency": _render_agency,
+        "price": _render_price,
+        "competition": _render_competition,
+        "radar": _render_radar,
+        "problem_service": _render_problem,
+    }
+    render = renderers.get(c.page_type)
+    if render is None:
+        raise ValueError(f"unknown page_type {c.page_type}")
+    return inject_page_index(render(c, manifest))
 
 
 def _render_market(c: Candidate, manifest: dict[str, Any]) -> str:
@@ -636,6 +664,7 @@ def _render_market(c: Candidate, manifest: dict[str, Any]) -> str:
         jsonld_graph=graph,
         body_main=body,
         wa_message=wa,
+        extra_head=EDITORIAL_SHEET_LINK,
         data_attrs={
             "pseo-page-id": c.page_id,
             "pseo-page-type": c.page_type,
@@ -836,6 +865,7 @@ def _render_agency(c: Candidate, manifest: dict[str, Any]) -> str:
         jsonld_graph=graph,
         body_main=body,
         wa_message=wa,
+        extra_head=EDITORIAL_SHEET_LINK,
         data_attrs={"pseo-page-id": c.page_id, "pseo-page-type": "agency", "content-cluster": "pseo"},
 )
 
@@ -1001,6 +1031,7 @@ e teste de exequibilidade quando o deságio implícito ameaça a margem.</p></se
         jsonld_graph=graph,
         body_main=body,
         wa_message=wa,
+        extra_head=EDITORIAL_SHEET_LINK,
         data_attrs={"pseo-page-id": c.page_id, "pseo-page-type": "price", "content-cluster": "pseo"},
 )
 
@@ -1110,6 +1141,7 @@ Não autoriza inferir capacidade técnica, intenção de disputa futura ou risco
         jsonld_graph=graph,
         body_main=body,
         wa_message=wa,
+        extra_head=EDITORIAL_SHEET_LINK,
         data_attrs={"pseo-page-id": c.page_id, "pseo-page-type": "competition", "content-cluster": "pseo"},
 )
 
@@ -1270,6 +1302,7 @@ def _render_radar(c: Candidate, manifest: dict[str, Any]) -> str:
         jsonld_graph=graph,
         body_main=body,
         wa_message=wa,
+        extra_head=EDITORIAL_SHEET_LINK,
         data_attrs={"pseo-page-id": c.page_id, "pseo-page-type": "radar", "content-cluster": "pseo"},
 )
 
@@ -1424,6 +1457,7 @@ Guias CONFENGE abaixo detalham o enquadramento prático.</small></p></section>
         jsonld_graph=graph,
         body_main=body,
         wa_message=wa,
+        extra_head=EDITORIAL_SHEET_LINK,
         data_attrs={"pseo-page-id": c.page_id, "pseo-page-type": "problem_service", "content-cluster": "pseo"},
 )
 
@@ -1515,15 +1549,17 @@ def render_hub(
     link down to one and a rebuild silently dropped any hand-edit.
     """
     cards = ""
-    for it in items or []:
+    for i, it in enumerate(items or [], 1):
         url, kind, label = it[0], it[1], it[2]
         meta = it[3] if len(it) > 3 else ""
+        meta_html = f'<ul class="hub-list__meta"><li>{e(meta)}</li></ul>' if meta else ""
         cards += (
-            f'<a class="related-card" href="{e(url)}"><span>{e(kind)}</span><strong>{e(label)}</strong>'
-            f"<small>{e(meta)}</small></a>"
+            f'<li><span class="hub-list__index">{i:02d}</span><div><span class="tag">{e(kind)}</span>'
+            f'<h2><a href="{e(url)}">{e(label)}</a></h2>{meta_html}</div>'
+            f'<div class="hub-list__action"><a href="{e(url)}">Abrir <svg class="icon"><use href="#i-arrow"></use></svg></a></div></li>'
 )
     if cards:
-        grid = f'<div class="related-grid" style="margin:2rem 0">{cards}</div>'
+        grid = f'<ol class="hub-list">{cards}</ol>'
     elif empty_cta:
         primary_href = empty_cta.get("primary_href") or "/#contato"
         secondary = ""
@@ -1566,12 +1602,12 @@ def render_hub(
         disclosure = policy_version_disclosure()
     body = f"""
 {breadcrumbs_html(crumbs)}
-<header class="content-hero"><div class="container"><p class="eyebrow">{e(eyebrow)}</p>
+<header class="content-hero article-hero"><div class="container content-hero-grid"><div><p class="eyebrow t-kicker">{e(eyebrow)}</p>
 <h1>{e(h1)}</h1><p class="content-lead">{e(intro)}</p>
-{disclosure}</div></header>
-<div class="container" style="padding-bottom:3rem">{grid}
+{disclosure}</div></div></header>
+<section class="sec sec--tight"><div class="container">{grid}
 {extra_html}
-{back}</div>
+{back}</div></section>
 """
     graph = [
         ORG_JSONLD,
@@ -1593,6 +1629,7 @@ def render_hub(
         body_main=body,
         wa_message=wa_message
         or "Olá, Tiago. Quero aplicar a inteligência de mercado da CONFENGE à decisão da minha empresa.",
+        extra_head=EDITORIAL_SHEET_LINK,
         data_attrs={"content-cluster": "pseo", "pseo-page-type": "hub"},
 )
 
