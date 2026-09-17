@@ -250,3 +250,6 @@
 .conditions--compact h4{margin:0 0 .5rem;font-family:var(--sans-narrow);font-stretch:var(--narrow);font-weight:750;font-size:var(--text-small);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .conditions--compact ul{grid-template-columns:minmax(0,1fr)}
 @media (min-width:900px){.valuation{grid-template-columns:minmax(0,1fr)}.valuation .plate{grid-template-columns:minmax(0,1fr) minmax(16rem,24rem);gap:.75rem 2rem}.valuation .plate__sheet{grid-column:1 / -1}}
+
+/* Links inside prose are underlined, never colour-only (axe link-in-text-block) */
+.sec p a:not(.button):not(.button-primary):not(.button-secondary),.svc-open p a:not(.button):not(.button-primary):not(.button-secondary),.contact-note a,[data-form-boundary] a,.conditions a,.after p a,.sec li a:not(.button):not(.button-primary):not(.button-secondary):not(.list-ruled__action){text-decoration:underline;text-underline-offset:.2em;text-decoration-thickness:1px;font-weight:700}
