@@ -1,7 +1,7 @@
 {
   "base": "http://127.0.0.1:8731",
   "label": "pilot",
-  "captured_at": "2026-09-17T05:12:29.390Z",
+  "captured_at": "2026-09-17T06:20:18.920Z",
   "tool": "puppeteer-core 25 / chromium-1234",
   "entries": [
     {
@@ -20,7 +20,9 @@
         "http://127.0.0.1:8731/assets/home-10x.css"
       ],
       "imgs": [
-        "/assets/logo-confenge-500-f8a83f6d.png"
+        "/assets/logo-confenge-500-f8a83f6d.png",
+        "/assets/tiago-sasaki-foto-v11-sem-fundo-560.avif",
+        "/assets/logo-confenge-white-500-1677038e.png"
       ],
       "docHeight": 12353,
       "overflowX": false
@@ -41,9 +43,11 @@
         "http://127.0.0.1:8731/assets/home-10x.css"
       ],
       "imgs": [
-        "/assets/logo-confenge-500-f8a83f6d.png"
+        "/assets/logo-confenge-500-f8a83f6d.png",
+        "/assets/tiago-sasaki-foto-v11-sem-fundo-560.avif",
+        "/assets/logo-confenge-white-500-1677038e.png"
       ],
-      "docHeight": 8065,
+      "docHeight": 8022,
       "overflowX": false
     },
     {
@@ -61,7 +65,8 @@
         "http://127.0.0.1:8731/styles.css"
       ],
       "imgs": [
-        "/assets/logo-confenge-500-f8a83f6d.png"
+        "/assets/logo-confenge-500-f8a83f6d.png",
+        "/assets/logo-confenge-white-500-1677038e.png"
       ],
       "docHeight": 15760,
       "overflowX": false
@@ -81,7 +86,8 @@
         "http://127.0.0.1:8731/styles.css"
       ],
       "imgs": [
-        "/assets/logo-confenge-500-f8a83f6d.png"
+        "/assets/logo-confenge-500-f8a83f6d.png",
+        "/assets/logo-confenge-white-500-1677038e.png"
       ],
       "docHeight": 9931,
       "overflowX": false
@@ -101,7 +107,8 @@
         "http://127.0.0.1:8731/styles.css"
       ],
       "imgs": [
-        "/assets/logo-confenge-500-f8a83f6d.png"
+        "/assets/logo-confenge-500-f8a83f6d.png",
+        "/assets/logo-confenge-white-500-1677038e.png"
       ],
       "docHeight": 20365,
       "overflowX": false
@@ -121,7 +128,8 @@
         "http://127.0.0.1:8731/styles.css"
       ],
       "imgs": [
-        "/assets/logo-confenge-500-f8a83f6d.png"
+        "/assets/logo-confenge-500-f8a83f6d.png",
+        "/assets/logo-confenge-white-500-1677038e.png"
       ],
       "docHeight": 12732,
       "overflowX": false
@@ -141,7 +149,8 @@
         "http://127.0.0.1:8731/styles.css"
       ],
       "imgs": [
-        "/assets/logo-confenge-500-f8a83f6d.png"
+        "/assets/logo-confenge-500-f8a83f6d.png",
+        "/assets/logo-confenge-white-500-1677038e.png"
       ],
       "docHeight": 13309,
       "overflowX": false
@@ -161,7 +170,8 @@
         "http://127.0.0.1:8731/styles.css"
       ],
       "imgs": [
-        "/assets/logo-confenge-500-f8a83f6d.png"
+        "/assets/logo-confenge-500-f8a83f6d.png",
+        "/assets/logo-confenge-white-500-1677038e.png"
       ],
       "docHeight": 9784,
       "overflowX": false
@@ -181,7 +191,8 @@
         "http://127.0.0.1:8731/styles.css"
       ],
       "imgs": [
-        "/assets/logo-confenge-500-f8a83f6d.png"
+        "/assets/logo-confenge-500-f8a83f6d.png",
+        "/assets/logo-confenge-white-500-1677038e.png"
       ],
       "docHeight": 15499,
       "overflowX": false
@@ -201,7 +212,8 @@
         "http://127.0.0.1:8731/styles.css"
       ],
       "imgs": [
-        "/assets/logo-confenge-500-f8a83f6d.png"
+        "/assets/logo-confenge-500-f8a83f6d.png",
+        "/assets/logo-confenge-white-500-1677038e.png"
       ],
       "docHeight": 9483,
       "overflowX": false
@@ -222,9 +234,10 @@
         "http://127.0.0.1:8731/triagem-tecnica/styles.css"
       ],
       "imgs": [
-        "/assets/logo-confenge-500-f8a83f6d.png"
+        "/assets/logo-confenge-500-f8a83f6d.png",
+        "/assets/logo-confenge-white-500-1677038e.png"
       ],
-      "docHeight": 6537,
+      "docHeight": 6538,
       "overflowX": false
     },
     {
@@ -243,7 +256,8 @@
         "http://127.0.0.1:8731/triagem-tecnica/styles.css"
       ],
       "imgs": [
-        "/assets/logo-confenge-500-f8a83f6d.png"
+        "/assets/logo-confenge-500-f8a83f6d.png",
+        "/assets/logo-confenge-white-500-1677038e.png"
       ],
       "docHeight": 4222,
       "overflowX": false

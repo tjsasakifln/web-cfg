@@ -1,7 +1,7 @@
 {
   "base": "http://127.0.0.1:8731",
   "label": "estB",
-  "captured_at": "2026-09-17T05:13:08.231Z",
+  "captured_at": "2026-09-17T06:20:35.129Z",
   "tool": "puppeteer-core 25 / chromium-1234",
   "entries": [
     {
@@ -21,7 +21,9 @@
         "http://127.0.0.1:8731/docs/design-audit/prototypes/salto-institucional-2026-09-17/mechanism-b.css"
       ],
       "imgs": [
-        "/assets/logo-confenge-500-f8a83f6d.png"
+        "/assets/logo-confenge-500-f8a83f6d.png",
+        "/assets/tiago-sasaki-foto-v11-sem-fundo-560.avif",
+        "/assets/logo-confenge-white-500-1677038e.png"
       ],
       "docHeight": 15291,
       "overflowX": false
@@ -43,7 +45,9 @@
         "http://127.0.0.1:8731/docs/design-audit/prototypes/salto-institucional-2026-09-17/mechanism-b.css"
       ],
       "imgs": [
-        "/assets/logo-confenge-500-f8a83f6d.png"
+        "/assets/logo-confenge-500-f8a83f6d.png",
+        "/assets/tiago-sasaki-foto-v11-sem-fundo-560.avif",
+        "/assets/logo-confenge-white-500-1677038e.png"
       ],
       "docHeight": 8908,
       "overflowX": false
@@ -64,7 +68,8 @@
         "http://127.0.0.1:8731/docs/design-audit/prototypes/salto-institucional-2026-09-17/mechanism-b.css"
       ],
       "imgs": [
-        "/assets/logo-confenge-500-f8a83f6d.png"
+        "/assets/logo-confenge-500-f8a83f6d.png",
+        "/assets/logo-confenge-white-500-1677038e.png"
       ],
       "docHeight": 20357,
       "overflowX": false
@@ -85,7 +90,8 @@
         "http://127.0.0.1:8731/docs/design-audit/prototypes/salto-institucional-2026-09-17/mechanism-b.css"
       ],
       "imgs": [
-        "/assets/logo-confenge-500-f8a83f6d.png"
+        "/assets/logo-confenge-500-f8a83f6d.png",
+        "/assets/logo-confenge-white-500-1677038e.png"
       ],
       "docHeight": 13750,
       "overflowX": false
