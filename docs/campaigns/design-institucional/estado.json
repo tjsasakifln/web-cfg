@@ -1,6 +1,6 @@
 {
   "schema": "confenge.design-institucional/1.0",
-  "generated_at": "2026-09-17T08:20:11+00:00",
+  "generated_at": "2026-09-17T08:23:53+00:00",
   "campaigns": {
     "this": "CONFENGE-SALTO-INSTITUCIONAL-01-DIRECAO-PILOTO",
     "next": "CONFENGE-SALTO-INSTITUCIONAL-02-EXPANSAO-PRODUCAO",
@@ -14,9 +14,9 @@
   "production_sha_observed": "47da03b64ba701016eec296234b1d14225ebe588",
   "production_observed_at": "2026-09-16T17:21:03Z (build_time em /.well-known/build-info.json; capturas em 2026-09-16/17)",
   "branch": "campaign/salto-institucional-01-piloto",
-  "pilot_source_sha": "e5f7bdee6063a9e9a2945483977fe78742debb96",
+  "pilot_source_sha": "3afa55a249428eb54850318ef15209a637b920ff",
   "build_preview": {
-    "checkout": "git fetch origin campaign/salto-institucional-01-piloto && git checkout e5f7bdee6063a9e9a2945483977fe78742debb96",
+    "checkout": "git fetch origin campaign/salto-institucional-01-piloto && git checkout 3afa55a249428eb54850318ef15209a637b920ff",
     "css": "python3 scripts/site/build_css.py",
     "plates": "python3 -m scripts.demonstrative.plates.render_plates --check && python3 -m scripts.demonstrative.plates.inline --check",
     "case_page": "python3 -m scripts.demonstrative.private_project.generate",
@@ -495,36 +495,36 @@
           99,
           99
         ],
-        "lcp_median_ms": 1955,
+        "lcp_median_ms": 1975,
         "cls_median": 0,
-        "tbt_median_ms": 21,
-        "bytes_median": 165024,
+        "tbt_median_ms": 18,
+        "bytes_median": 150997,
         "runs": 3
       },
       {
         "route": "/servicos/",
         "perf_median": 100,
         "perf_range": [
-          100,
+          99,
           100
         ],
-        "lcp_median_ms": 1803,
+        "lcp_median_ms": 1808,
         "cls_median": 0,
-        "tbt_median_ms": 22,
-        "bytes_median": 148449,
+        "tbt_median_ms": 4,
+        "bytes_median": 141635,
         "runs": 3
       },
       {
         "route": "/quantitativos-orcamento-obras/",
-        "perf_median": 99,
+        "perf_median": 100,
         "perf_range": [
           99,
-          99
+          100
         ],
-        "lcp_median_ms": 1954,
+        "lcp_median_ms": 1881,
         "cls_median": 0,
         "tbt_median_ms": 0,
-        "bytes_median": 160003,
+        "bytes_median": 153742,
         "runs": 3
       },
       {
@@ -534,10 +534,10 @@
           99,
           99
         ],
-        "lcp_median_ms": 1802,
+        "lcp_median_ms": 1812,
         "cls_median": 0,
-        "tbt_median_ms": 19,
-        "bytes_median": 149908,
+        "tbt_median_ms": 0,
+        "bytes_median": 144197,
         "runs": 3
       },
       {
@@ -547,23 +547,23 @@
           100,
           100
         ],
-        "lcp_median_ms": 1802,
+        "lcp_median_ms": 1806,
         "cls_median": 0,
         "tbt_median_ms": 23,
-        "bytes_median": 145804,
+        "bytes_median": 141055,
         "runs": 3
       },
       {
         "route": "/triagem-tecnica/",
-        "perf_median": 100,
+        "perf_median": 99,
         "perf_range": [
-          100,
-          100
+          99,
+          99
         ],
-        "lcp_median_ms": 1806,
+        "lcp_median_ms": 1810,
         "cls_median": 0,
-        "tbt_median_ms": 11,
-        "bytes_median": 130682,
+        "tbt_median_ms": 16,
+        "bytes_median": 132551,
         "runs": 3
       }
     ],
@@ -572,43 +572,43 @@
       {
         "route": "/",
         "baseline_kb": 147.4,
-        "pilot_kb": 161.2,
-        "delta_kb": 13.8,
+        "pilot_kb": 147.5,
+        "delta_kb": 0.1,
         "within_budget": true
       },
       {
         "route": "/servicos/",
         "baseline_kb": 138.4,
-        "pilot_kb": 145.0,
-        "delta_kb": 6.5,
+        "pilot_kb": 138.3,
+        "delta_kb": -0.1,
         "within_budget": true
       },
       {
         "route": "/quantitativos-orcamento-obras/",
         "baseline_kb": 149.0,
-        "pilot_kb": 156.3,
-        "delta_kb": 7.2,
+        "pilot_kb": 150.1,
+        "delta_kb": 1.1,
         "within_budget": true
       },
       {
         "route": "/medicoes-glosas-obras-publicas/",
         "baseline_kb": 140.6,
-        "pilot_kb": 146.4,
-        "delta_kb": 5.8,
+        "pilot_kb": 140.8,
+        "delta_kb": 0.2,
         "within_budget": true
       },
       {
         "route": "/casos/demonstrativo-projeto-privado/",
         "baseline_kb": 138.7,
-        "pilot_kb": 142.4,
-        "delta_kb": 3.7,
+        "pilot_kb": 137.7,
+        "delta_kb": -0.9,
         "within_budget": true
       },
       {
         "route": "/triagem-tecnica/",
         "baseline_kb": 123.6,
-        "pilot_kb": 127.6,
-        "delta_kb": 4.0,
+        "pilot_kb": 129.4,
+        "delta_kb": 5.8,
         "within_budget": true
       }
     ],
