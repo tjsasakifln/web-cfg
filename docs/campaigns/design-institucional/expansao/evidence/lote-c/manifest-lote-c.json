@@ -968,30 +968,6 @@
       "overflow_px": 0
     },
     {
-      "route": "/analises-contratos-publicos/",
-      "viewport": "390x844",
-      "status": 200,
-      "height": 4291,
-      "h1_font": "\"Archivo Var\"",
-      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/analises-contratos-publicos-390x844-fold-lote-c.jpg",
-      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/analises-contratos-publicos-390x844-full-lote-c.jpg",
-      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/analises-contratos-publicos-390x844-menu-lote-c.jpg"
-    },
-    {
-      "route": "/analises-contratos-publicos/",
-      "viewport": "1440x1000",
-      "status": 200,
-      "height": 2586,
-      "h1_font": "\"Archivo Var\"",
-      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/analises-contratos-publicos-1440x1000-fold-lote-c.jpg",
-      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/analises-contratos-publicos-1440x1000-full-lote-c.jpg"
-    },
-    {
-      "route": "/analises-contratos-publicos/",
-      "viewport": "320x700",
-      "overflow_px": 0
-    },
-    {
       "route": "/conteudos/matriz-de-riscos-obra-publica/",
       "viewport": "390x844",
       "status": 200,
@@ -1036,6 +1012,54 @@
     },
     {
       "route": "/inteligencia/cenarios/aditivos-e-risco-de-margem/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/analises-contratos-publicos/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 4284,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/analises-contratos-publicos-390x844-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/analises-contratos-publicos-390x844-full-lote-c.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/analises-contratos-publicos-390x844-menu-lote-c.jpg"
+    },
+    {
+      "route": "/analises-contratos-publicos/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 2576,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/analises-contratos-publicos-1440x1000-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/analises-contratos-publicos-1440x1000-full-lote-c.jpg"
+    },
+    {
+      "route": "/analises-contratos-publicos/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/inteligencia/mercados/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 2421,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-mercados-390x844-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-mercados-390x844-full-lote-c.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-mercados-390x844-menu-lote-c.jpg"
+    },
+    {
+      "route": "/inteligencia/mercados/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 1554,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-mercados-1440x1000-fold-lote-c.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/inteligencia-mercados-1440x1000-full-lote-c.jpg"
+    },
+    {
+      "route": "/inteligencia/mercados/",
       "viewport": "320x700",
       "overflow_px": 0
     }
