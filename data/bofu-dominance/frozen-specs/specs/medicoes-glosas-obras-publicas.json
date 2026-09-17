@@ -201,8 +201,8 @@
       "Answer"
     ],
     "cta": {
-      "hero_text": "Analisar uma demanda",
-      "hero_href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20glosa%20ou%20medi%C3%A7%C3%A3o%20contestada%20e%20preciso%20enquadrar%20a%20posi%C3%A7%C3%A3o%20t%C3%A9cnica.",
+      "hero_text": "",
+      "hero_href": "",
       "bridges": [
         {
           "position": "header_nav",
@@ -235,9 +235,29 @@
           "text": "Biblioteca"
         },
         {
-          "position": "pillar_bridge",
+          "position": "pillar_hero",
+          "href": "#captura-pilar",
+          "text": "Descrever a medição"
+        },
+        {
+          "position": "pillar_hero",
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20glosa%20ou%20medi%C3%A7%C3%A3o%20contestada%20e%20preciso%20enquadrar%20a%20posi%C3%A7%C3%A3o%20t%C3%A9cnica.",
-          "text": "Enquadrar um risco contratual"
+          "text": "Falar pelo WhatsApp"
+        },
+        {
+          "position": "pillar_inline",
+          "href": "#captura-pilar",
+          "text": "Descrever a medição"
+        },
+        {
+          "position": "pillar_inline",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20glosa%20ou%20medi%C3%A7%C3%A3o%20contestada%20e%20preciso%20enquadrar%20a%20posi%C3%A7%C3%A3o%20t%C3%A9cnica.",
+          "text": "Falar pelo WhatsApp"
+        },
+        {
+          "position": "pillar_capture_alt",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20glosa%20ou%20medi%C3%A7%C3%A3o%20contestada%20e%20preciso%20enquadrar%20a%20posi%C3%A7%C3%A3o%20t%C3%A9cnica.",
+          "text": "Falar pelo WhatsApp"
         },
         {
           "position": "pillar_bridge",
@@ -249,8 +269,8 @@
       "whatsapp_present": true,
       "form_count": 1
     },
-    "content_sha256": "53bb71bb3edaeae8a325e29d266020a89f5cff72c1be0486c07b19a276a8d3e1",
-    "bytes": 37551,
+    "content_sha256": "09b65a4ff3f02533134922dc3fe8b7e39c3c86873aff5482322dcbe29ea509f1",
+    "bytes": 47879,
     "noindex": false
   }
 }
