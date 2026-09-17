@@ -187,7 +187,9 @@ def p5_desktop(data: dict) -> str:
         body.append(f'<circle cx="{fmt(x)}" cy="{fmt(y)}" r="4" fill="{GREEN if e["state"] != "formalizado" else INK}"/>')
         body.append(text(x + 8, y - 24, f"{e['id']} · +{e['increment_percent']}% = {e['cumulative_percent']}%", size=S.FS_LABEL, weight=S.FW_LABEL, fill=GREEN if e["state"] != "formalizado" else INK))
         body.append(text(x + 8, y - 9, f"mês {e['month']} · {e['value_brl_text']}", fill=MUTED))
-    body.append(dim_group(dim_v(Y(prop["cumulative_percent"]), Y(lim25["percent"]), X(n["contract"]["term_months"]) + 14, f"{n['excess']['percent']}%", left=False)))
+    # The excess band (27% - 25%) is 11 px tall on this scale: a vertical
+    # dimension there is illegible, so callout 2 carries the number (revisão
+    # do lote B, preferência do revisor).
     # callouts
     c1 = (X(prop["month"]) - 40, Y(prop["cumulative_percent"]) - 30)
     body.append(leader(*c1, X(prop["month"]), Y(prop["cumulative_percent"])))
@@ -521,7 +523,7 @@ def p8_desktop(data: dict) -> str:
     hid = S.hatch_id(f"{pid}-d")
     body = [S.hatch_defs(f"{pid}-d")]
     body.append(text(28, 72, "Edital sintético lido em quatro itens · o que o edital exige, o que a empresa tem, o que decide antes do preço", size=S.FS_LABEL, weight=S.FW_LABEL))
-    XM, XI, XR, XC, XV = 40.0, 78.0, 400.0, 720.0, 1040.0
+    XM, XI, XR, XC, XV = 40.0, 78.0, 400.0, 720.0, 985.0
     yh = 104
     for x, lab in ((XI, "Item"), (XR, "O edital exige"), (XC, "A empresa tem"), (XV, "Leitura")):
         body.append(text(x, yh, lab, size=S.FS_LABEL, weight=S.FW_LABEL, fill=MUTED))

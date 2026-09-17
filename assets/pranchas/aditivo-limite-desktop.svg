@@ -49,7 +49,6 @@
 <circle cx="695" cy="248.8" r="4" fill="#2d6f2d"/>
 <text x="703" y="224.8" font-size="12" fill="#2d6f2d" font-weight="650">TA-03 · +9% = 27%</text>
 <text x="703" y="239.8" font-size="11" fill="#5d6a7a">mês 15 · R$ 900.000</text>
-<g stroke="#5d6a7a" stroke-width="0.6" fill="#5d6a7a"><line x1="1054" y1="248.8" x2="1054" y2="260"/><path d="M1051 251.8L1057 245.8"/><path d="M1051 263L1057 257"/><text x="1067" y="254.4" font-size="11" text-anchor="middle" transform="rotate(-90 1067 254.4)">2%</text></g>
 <g stroke="#5d6a7a" stroke-width="0.6"><line x1="663.8" y1="225.4" x2="695" y2="248.8"/><circle cx="695" cy="248.8" r="1.6" fill="#5d6a7a"/></g>
 <g transform="translate(655 218.8)"><circle r="11" fill="#071a31"/><text y="4" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">1</text></g>
 <g stroke="#5d6a7a" stroke-width="0.6"><line x1="901.1" y1="207.7" x2="867.5" y2="254.4"/><circle cx="867.5" cy="254.4" r="1.6" fill="#5d6a7a"/></g>
