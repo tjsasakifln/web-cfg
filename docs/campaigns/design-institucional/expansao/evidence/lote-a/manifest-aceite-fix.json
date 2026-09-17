@@ -1,0 +1,222 @@
+{
+  "base": "http://127.0.0.1:8811",
+  "tag": "aceite-fix",
+  "captures": [
+    {
+      "route": "/parcerias-engenharia/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 11702,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/parcerias-engenharia-390x844-fold-aceite-fix.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/parcerias-engenharia-390x844-full-aceite-fix.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-a/parcerias-engenharia-390x844-menu-aceite-fix.jpg"
+    },
+    {
+      "route": "/parcerias-engenharia/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 7253,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/parcerias-engenharia-1440x1000-fold-aceite-fix.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/parcerias-engenharia-1440x1000-full-aceite-fix.jpg"
+    },
+    {
+      "route": "/parcerias-engenharia/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/compatibilizacao-projetos-engenharia/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 15580,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/compatibilizacao-projetos-engenharia-390x844-fold-aceite-fix.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/compatibilizacao-projetos-engenharia-390x844-full-aceite-fix.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-a/compatibilizacao-projetos-engenharia-390x844-menu-aceite-fix.jpg"
+    },
+    {
+      "route": "/compatibilizacao-projetos-engenharia/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 10128,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/compatibilizacao-projetos-engenharia-1440x1000-fold-aceite-fix.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/compatibilizacao-projetos-engenharia-1440x1000-full-aceite-fix.jpg"
+    },
+    {
+      "route": "/compatibilizacao-projetos-engenharia/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/revisao-tecnica-projetos-engenharia/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 13367,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/revisao-tecnica-projetos-engenharia-390x844-fold-aceite-fix.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/revisao-tecnica-projetos-engenharia-390x844-full-aceite-fix.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-a/revisao-tecnica-projetos-engenharia-390x844-menu-aceite-fix.jpg"
+    },
+    {
+      "route": "/revisao-tecnica-projetos-engenharia/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 9349,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/revisao-tecnica-projetos-engenharia-1440x1000-fold-aceite-fix.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/revisao-tecnica-projetos-engenharia-1440x1000-full-aceite-fix.jpg"
+    },
+    {
+      "route": "/revisao-tecnica-projetos-engenharia/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/projetos-complementares-engenharia/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 15441,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/projetos-complementares-engenharia-390x844-fold-aceite-fix.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/projetos-complementares-engenharia-390x844-full-aceite-fix.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-a/projetos-complementares-engenharia-390x844-menu-aceite-fix.jpg"
+    },
+    {
+      "route": "/projetos-complementares-engenharia/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 10835,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/projetos-complementares-engenharia-1440x1000-fold-aceite-fix.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/projetos-complementares-engenharia-1440x1000-full-aceite-fix.jpg"
+    },
+    {
+      "route": "/projetos-complementares-engenharia/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/inspecao-diagnostico-edificacoes/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 13219,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/inspecao-diagnostico-edificacoes-390x844-fold-aceite-fix.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/inspecao-diagnostico-edificacoes-390x844-full-aceite-fix.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-a/inspecao-diagnostico-edificacoes-390x844-menu-aceite-fix.jpg"
+    },
+    {
+      "route": "/inspecao-diagnostico-edificacoes/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 9294,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/inspecao-diagnostico-edificacoes-1440x1000-fold-aceite-fix.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/inspecao-diagnostico-edificacoes-1440x1000-full-aceite-fix.jpg"
+    },
+    {
+      "route": "/inspecao-diagnostico-edificacoes/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/assistencia-tecnica-pericial-engenharia/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 12820,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/assistencia-tecnica-pericial-engenharia-390x844-fold-aceite-fix.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/assistencia-tecnica-pericial-engenharia-390x844-full-aceite-fix.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-a/assistencia-tecnica-pericial-engenharia-390x844-menu-aceite-fix.jpg"
+    },
+    {
+      "route": "/assistencia-tecnica-pericial-engenharia/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 9130,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/assistencia-tecnica-pericial-engenharia-1440x1000-fold-aceite-fix.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/assistencia-tecnica-pericial-engenharia-1440x1000-full-aceite-fix.jpg"
+    },
+    {
+      "route": "/assistencia-tecnica-pericial-engenharia/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/seguranca-trabalho-apoio-tecnico/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 13519,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/seguranca-trabalho-apoio-tecnico-390x844-fold-aceite-fix.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/seguranca-trabalho-apoio-tecnico-390x844-full-aceite-fix.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-a/seguranca-trabalho-apoio-tecnico-390x844-menu-aceite-fix.jpg"
+    },
+    {
+      "route": "/seguranca-trabalho-apoio-tecnico/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 9601,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/seguranca-trabalho-apoio-tecnico-1440x1000-fold-aceite-fix.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/seguranca-trabalho-apoio-tecnico-1440x1000-full-aceite-fix.jpg"
+    },
+    {
+      "route": "/seguranca-trabalho-apoio-tecnico/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/casos/demonstrativo-infraestrutura/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 14559,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/casos-demonstrativo-infraestrutura-390x844-fold-aceite-fix.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/casos-demonstrativo-infraestrutura-390x844-full-aceite-fix.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-a/casos-demonstrativo-infraestrutura-390x844-menu-aceite-fix.jpg"
+    },
+    {
+      "route": "/casos/demonstrativo-infraestrutura/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 9118,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/casos-demonstrativo-infraestrutura-1440x1000-fold-aceite-fix.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/casos-demonstrativo-infraestrutura-1440x1000-full-aceite-fix.jpg"
+    },
+    {
+      "route": "/casos/demonstrativo-infraestrutura/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/404.html",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 2922,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/404.html-390x844-fold-aceite-fix.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/404.html-390x844-full-aceite-fix.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-a/404.html-390x844-menu-aceite-fix.jpg"
+    },
+    {
+      "route": "/404.html",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 1489,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/404.html-1440x1000-fold-aceite-fix.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/404.html-1440x1000-full-aceite-fix.jpg"
+    },
+    {
+      "route": "/404.html",
+      "viewport": "320x700",
+      "overflow_px": 0
+    }
+  ]
+}
