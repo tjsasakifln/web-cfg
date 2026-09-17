@@ -30,7 +30,7 @@ from scripts.pseo.score import Candidate
 EDITORIAL_SHEET_LINK = '<link href="/assets/editorial.css" rel="stylesheet"/>'
 MIN_H2_FOR_PAGE_INDEX = 3
 _ARTICLE_MAIN_RE = re.compile(r'(<article class="article-main"[^>]*>)(.*?)(</article>)', re.S)
-_INDEX_SECTION_RE = re.compile(r'<section id="([^"]+)"[^>]*>\s*(?:<p class="eyebrow">[^<]*</p>\s*)?<h2[^>]*>(.*?)</h2>', re.S)
+_INDEX_SECTION_RE = re.compile(r'<section id="([^"]+)"[^>]*>\s*(?:<p class="eyebrow">([^<]*)</p>\s*)?<h2[^>]*>(.*?)</h2>', re.S)
 
 
 def inject_page_index(html: str) -> str:
@@ -40,8 +40,14 @@ def inject_page_index(html: str) -> str:
     if not m or 'class="article-toc"' in m.group(2):
         return html
     entries = []
-    for sid, title in _INDEX_SECTION_RE.findall(m.group(2)):
-        label = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", "", title)).strip()
+    for sid, eyebrow, title in _INDEX_SECTION_RE.findall(m.group(2)):
+        # Rótulo curto: o kicker da seção quando existe (é o nome da etapa);
+        # senão a primeira oração do h2 (antes de ':' ou '('), para caber na
+        # largura de 320 px sem quebrar a entrada.
+        label = re.sub(r"\s+", " ", eyebrow).strip()
+        if not label:
+            label = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", "", title)).strip()
+            label = re.split(r"\s*[:(]", label, maxsplit=1)[0].strip() or label
         if label:
             entries.append((sid, label))
     if len(entries) < MIN_H2_FOR_PAGE_INDEX:

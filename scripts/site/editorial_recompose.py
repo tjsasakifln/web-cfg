@@ -79,6 +79,20 @@ NON_READING_CLASSES = (
     "answer-box",
 )
 
+# Rótulos curtos do índice gerado, como nos 123 índices curados à mão: a
+# entrada aponta para o h2 inteiro, mas o rótulo cabe na largura de 320 px
+# (o índice não quebra linha dentro de uma entrada). Chave: id da âncora.
+TOC_SHORT_LABELS = {
+    "triagem-quantitativos": "Falar com a CONFENGE",
+    "o-que-enviar-no-primeiro-contato": "O que enviar",
+    "enviar-contexto-revisao": "Enviar o contexto",
+    "tres-compras-tres-entregas-uma-proposta": "Três compras, uma proposta",
+    "continuar-compra-revisao": "Continuar pela revisão",
+    "quando-e-preciso-elaborar-de-novo": "Quando elaborar de novo",
+    "exemplo-de-insumos-parciais": "Insumos parciais",
+    "exemplo-de-pedido": "Exemplo de pedido",
+}
+
 STYLES_LINK_RE = re.compile(r'<link(?=[^>]*rel="stylesheet")(?=[^>]*href="/styles\.css")[^>]*>')
 TOC_RE = re.compile(r'<nav aria-label="Nesta página" class="article-toc">(.*?)</nav>', re.S)
 ANCHOR_RE = re.compile(r"<a\b[^>]*>.*?</a>", re.S)
@@ -308,7 +322,7 @@ def ensure_toc(html: str, log: list[str]) -> str:
                 anchor = unique_id(slugify(text), taken)
                 new_attrs = f' id="{anchor}"' + attrs
                 edits.append((pos, pos + len("<h2") + len(attrs), f"<h2{new_attrs}"))
-        entries.append((anchor, strip_tags(text)))
+        entries.append((anchor, TOC_SHORT_LABELS.get(anchor) or strip_tags(text)))
     for start, end, repl in reversed(edits):
         article = article[:start] + repl + article[end:]
     toc = (
