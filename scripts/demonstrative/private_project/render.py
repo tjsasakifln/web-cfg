@@ -383,113 +383,164 @@ def render_html(extracts: dict[str, Any]) -> str:
     ]
 
     coord_html = "".join(
-        f"""<article class="n-card" id="{e(item['id'])}">
-<h3>{e(item['id'])} · {"Interface geométrica" if item["kind"] == "geometric" else "Informação faltante"}</h3>
-<p><strong>Local:</strong> {e(item["location_pt_br"])}</p>
-<p><strong>Evidência:</strong> {e(item["evidence_pt_br"])}</p>
-<p><strong>Encaminhamento:</strong> {e(item["forwarding_pt_br"])}</p>
-<p><strong>Estado:</strong> {e(public_state(item["state"]))} · elementos {e(" ".join(item["element_ids"]))}</p>
+        f"""<article class="coord-finding" id="{e(item['id'])}">
+<p class="coord-finding-kicker">{e(item['id'])} · {"Interface geométrica" if item["kind"] == "geometric" else "Informação faltante"}</p>
+<h3>{e(item["location_pt_br"])}</h3>
+<dl class="coord-finding-dl">
+<dt>Evidência</dt><dd>{e(item["evidence_pt_br"])}</dd>
+<dt>Encaminhamento</dt><dd>{e(item["forwarding_pt_br"])}</dd>
+<dt>Estado</dt><dd>{e(public_state(item["state"]))} · elementos {e(" ".join(item["element_ids"]))}</dd>
+</dl>
 </article>"""
         for item in extracts["coordination_findings"]
     )
     review_html = "".join(
-        f"""<article class="n-card" id="{e(item['id'])}">
-<h3>{e(item['id'])} · {e(item["document_ref"])}</h3>
-<p><strong>Constatação:</strong> {e(item["finding_pt_br"])}</p>
-<p><strong>Base:</strong> {e(item["basis_pt_br"])}</p>
-<p><strong>Ação:</strong> {e(item["action_pt_br"])}</p>
+        f"""<article class="rv-extract-item" id="{e(item['id'])}">
+<span class="rv-class">{e(item['id'])} · {e(item["document_ref"])}</span>
+<h3>{e(item["finding_pt_br"])}</h3>
+<dl>
+<dt>Base</dt><dd>{e(item["basis_pt_br"])}</dd>
+<dt>Ação</dt><dd>{e(item["action_pt_br"])}</dd>
+</dl>
 </article>"""
         for item in extracts["review_findings"]
     )
 
-    extra_head = """<style>
-.n-wrap{max-width:46rem;margin:0 auto;padding:2rem 1rem 4rem}
-.n-card{border:1px solid rgba(15,23,42,.1);border-radius:12px;padding:1.25rem;margin:1rem 0;background:#f8fafc}
-.case-badge{display:inline-block;background:#fef3c7;color:#92400e;font-size:.75rem;font-weight:700;padding:.2rem .5rem;border-radius:4px}
-.demo-figure{margin:1rem 0}
-.demo-figure svg{width:100%;height:auto;max-width:36rem;border:1px solid #e2e8f0;border-radius:8px;background:#fff}
-.demo-actions{display:flex;flex-wrap:wrap;gap:.75rem;margin:1.25rem 0}
-.demo-actions a{min-height:44px}
-</style>"""
+    # Composition comes from css/editorial.css and css/components.css (plate,
+    # page index, ruled findings, table-scroll); no inline stylesheet.
+    extra_head = ""
 
     body = f"""
 {html_shell.breadcrumbs_html([("Início", "/"), ("Casos", "/casos/"), ("Recorte de banheiro", None)])}
-<div class="container n-wrap">
-<p class="case-badge" data-permission-class="demonstrativo">exemplo demonstrativo · revisão {e(rev)}</p>
-<h1>Demonstrativo. Recorte de banheiro com quantitativos, orçamento, revisão e compatibilização</h1>
+<section class="svc-open" aria-labelledby="case-title">
+<div class="container">
+<div class="svc-open__grid">
+<div class="svc-open__copy">
+<p class="case-badge t-kicker" data-permission-class="demonstrativo">exemplo demonstrativo · revisão {e(rev)}</p>
+<h1 class="t-service" id="case-title">Demonstrativo. Recorte de banheiro com quantitativos, orçamento, revisão e compatibilização</h1>
 <p class="authority-byline">Responsável técnico pelo conteúdo: <a href="/especialista/tiago-jun-sasaki/">Engº Tiago Sasaki</a> · Atualizado em <time datetime="{e(extracts["date_modified"])}">11 de setembro de 2026</time> · <a href="/casos/">Outros exemplos demonstrativos</a> · <a href="/triagem-tecnica/#corrigir-o-site">Como corrigir</a></p>
 <p class="content-lead">Este recorte didático de um banheiro residencial mostra como a CONFENGE levanta quantidades, monta um extrato de orçamento, registra interferências e documenta uma revisão. Os números saem de uma fonte só: você pode refazer a conta na página, no CSV ou na planta. Não há contratante, endereço, assinatura nem número de ART.</p>
+<dl class="svc-chain">
+<div><dt>Necessidade</dt><dd>Comparar propostas, contratar ou aceitar um número com base própria.</dd></div>
+<div><dt>Trabalho</dt><dd>Levantar, orçar, compatibilizar e revisar o mesmo recorte, com memória aberta.</dd></div>
+<div><dt>Documento</dt><dd><b>Planilha com memória, extrato de orçamento, registro de interferências e extrato de revisão</b>, na mesma revisão.</dd></div>
+</dl>
+</div>
+<figure class="plate plate--side" aria-labelledby="case-plate-cap">
+<div class="plate__sheet">
+{_elevation_svg(extracts, "R00")}
+</div>
+<figcaption class="plate__caption" id="case-plate-cap"><span class="t-kicker">Exemplo demonstrativo</span>Elevação leste R00: a verga de WN-01 em {br_number(totals["window_head_r00_m"])} m invade o fundo da viga B-01 em {br_number(totals["beam_soffit_m"])} m. É a interferência CF-GEO-01, corrigida em R01.</figcaption>
+</figure>
+</div>
+<nav class="page-index" aria-label="Nesta página">
+<span class="page-index__label">Nesta página</span>
+<ol>
+<li><a href="#o-que-e"><span>01</span>O recorte</a></li>
+<li><a href="#plantas"><span>02</span>Planta e elevação</a></li>
+<li><a href="#quantitativos"><span>03</span>Quantitativos</a></li>
+<li><a href="#orcamento"><span>04</span>Orçamento</a></li>
+<li><a href="#compatibilizacao"><span>05</span>Compatibilização</a></li>
+<li><a href="#revisao"><span>06</span>Revisão</a></li>
+<li><a href="#contratar"><span>07</span>Levar para o seu projeto</a></li>
+</ol>
+</nav>
+</div>
+</section>
 
-<section aria-labelledby="o-que-e">
-<h2 id="o-que-e">O recorte</h2>
+<section class="sec sec--tight" aria-labelledby="o-que-e">
+<div class="container narrow">
+<span class="t-kicker">Objeto</span>
+<h2 class="t-editorial" id="o-que-e">O recorte</h2>
 <p>Interior {br_number(room["interior_length_m"])} m × {br_number(room["interior_width_m"])} m, pé-direito {br_number(room["ceiling_height_m"])} m. Identificadores: RM-01, paredes W-01 a W-04, piso SL-01, forro CL-01, porta D-01, janela WN-01, viga B-01 e poço hidrossanitário HS-01.</p>
 <p><strong>Estado original (R00):</strong> {e(extracts["states"]["R00"]["note_pt_br"])}</p>
 <p><strong>Versão demonstrativa corrigida (R01):</strong> {e(extracts["states"]["R01"]["note_pt_br"])} A revisão publicada desta página é {e(rev)}.</p>
+</div>
 </section>
 
-<section aria-labelledby="plantas">
-<h2 id="plantas">Planta e elevação</h2>
-<figure class="demo-figure">
-{_plan_svg(extracts, "R00")}
-<figcaption>Planta R00, estado original. Janela WN-01 na parede leste, viga B-01 no mesmo alinhamento, poço HS-01 a oeste.</figcaption>
+<section class="sec sec--tight sec--soft" aria-labelledby="plantas">
+<div class="container">
+<span class="t-kicker">Desenhos</span>
+<h2 class="t-editorial" id="plantas">Planta e elevação</h2>
+<div class="grid-2">
+<figure class="plate">
+<div class="plate__sheet">{_plan_svg(extracts, "R00")}</div>
+<figcaption class="plate__caption">Planta R00, estado original. Janela WN-01 na parede leste, viga B-01 no mesmo alinhamento, poço HS-01 a oeste.</figcaption>
 </figure>
-<figure class="demo-figure">
-{_plan_svg(extracts, "R01")}
-<figcaption>Planta R01, versão demonstrativa corrigida. A planta baixa é a mesma; a correção aparece na elevação.</figcaption>
+<figure class="plate">
+<div class="plate__sheet">{_plan_svg(extracts, "R01")}</div>
+<figcaption class="plate__caption">Planta R01, versão demonstrativa corrigida. A planta baixa é a mesma; a correção aparece na elevação.</figcaption>
 </figure>
-<figure class="demo-figure">
-{_elevation_svg(extracts, "R00")}
-<figcaption>Elevação leste R00: a verga de WN-01 em {br_number(totals["window_head_r00_m"])} m invade o fundo da viga B-01 em {br_number(totals["beam_soffit_m"])} m. Sobreposição {br_number(totals["r00_overlap_m"])} m.</figcaption>
+<figure class="plate">
+<div class="plate__sheet">{_elevation_svg(extracts, "R00")}</div>
+<figcaption class="plate__caption">Elevação leste R00: a verga de WN-01 em {br_number(totals["window_head_r00_m"])} m invade o fundo da viga B-01 em {br_number(totals["beam_soffit_m"])} m. Sobreposição {br_number(totals["r00_overlap_m"])} m.</figcaption>
 </figure>
-<figure class="demo-figure">
-{_elevation_svg(extracts, "R01")}
-<figcaption>Elevação leste R01: verga em {br_number(totals["window_head_r01_m"])} m, folga {br_number(totals["r01_clearance_m"])} m até B-01.</figcaption>
+<figure class="plate">
+<div class="plate__sheet">{_elevation_svg(extracts, "R01")}</div>
+<figcaption class="plate__caption">Elevação leste R01: verga em {br_number(totals["window_head_r01_m"])} m, folga {br_number(totals["r01_clearance_m"])} m até B-01.</figcaption>
 </figure>
 <p>Arquivos da mesma revisão: <a href="assets/planta-r00.svg">planta R00</a>, <a href="assets/planta-r01.svg">planta R01</a>, <a href="assets/elevacao-leste-r00.svg">elevação R00</a>, <a href="assets/elevacao-leste-r01.svg">elevação R01</a>.</p>
+</div>
 </section>
 
-<section aria-labelledby="quantitativos">
-<h2 id="quantitativos">Quantitativos</h2>
+<section class="sec sec--tight" aria-labelledby="quantitativos">
+<div class="container">
+<span class="t-kicker">Memória</span>
+<h2 class="t-editorial" id="quantitativos">Quantitativos</h2>
 <p>Base: revisão {e(criteria["quantity_basis_revision"])}. Piso: {br_number(room["interior_length_m"])} × {br_number(room["interior_width_m"])} = {br_number(totals["floor_area_m2"])} m² (SL-01). Paredes: soma dos vãos internos menos aberturas ≥ {br_number(criteria["opening_deduction_min_m2"])} m². {e(criteria["opening_deduction_rule_pt_br"])} Porta D-01 = {br_number(totals["door_area_m2"])} m²; janela WN-01 em R01 = {br_number(totals["window_area_r01_m2"])} m². Parede líquida = {br_number(totals["wall_net_m2"])} m². Impermeabilização = piso + perímetro × {br_number(criteria["waterproofing_upstand_m"])} m = {br_number(totals["waterproofing_m2"])} m². Contrapiso = {br_number(totals["floor_area_m2"])} × {br_number(criteria["screed_thickness_m"])} = {br_number(totals["screed_m3"], 4)} m³.</p>
 {_table(["Parede", "Bruto m²", "Desconto m²", "Líquido m²", "Aberturas"], wall_rows, "Descontos de abertura por parede, revisão " + rev)}
 {_table(["ID", "Serviço", "Un.", "Qtd.", "Fórmula", "Elementos", "Prancha"], qty_rows, "Memória de quantitativos, revisão " + rev)}
 <p><a href="data/quantitativos.csv">Baixar quantitativos.csv</a>, mesma revisão {e(rev)}.</p>
+</div>
 </section>
 
-<section aria-labelledby="orcamento">
-<h2 id="orcamento">Orçamento</h2>
+<section class="sec sec--tight sec--rule-top" aria-labelledby="orcamento">
+<div class="container">
+<span class="t-kicker">Extrato</span>
+<h2 class="t-editorial" id="orcamento">Orçamento</h2>
 <p>{e(extracts["price_disclaimer_pt_br"])} Classe de preço: hipotético. Subtotal aritmético: R$ {br_number(extracts["budget_subtotal"])}. Estimativa aritmética do recorte; o valor contratado depende do caso.</p>
 {_table(["ID", "Serviço", "Un.", "Qtd.", "Preço un.", "Valor", "Classe", "Qtd. ID"], budget_rows, "Extrato de orçamento hipotético, revisão " + rev)}
 <p><a href="data/orcamento.csv">Baixar orcamento.csv</a>, mesma revisão {e(rev)}.</p>
+</div>
 </section>
 
-<section aria-labelledby="compatibilizacao">
-<h2 id="compatibilizacao">Compatibilização</h2>
+<section class="sec sec--tight sec--soft" aria-labelledby="compatibilizacao">
+<div class="container">
+<span class="t-kicker">Interferências</span>
+<h2 class="t-editorial" id="compatibilizacao">Compatibilização</h2>
 <p>Dois achados didáticos no mesmo recorte: uma interferência geométrica conferível e uma informação que simplesmente não foi declarada. Falta de dado não vira falha comprovada.</p>
-{coord_html}
+<div class="rv-extract">{coord_html}</div>
 {_table(["ID", "Tipo", "Estado", "Local", "Evidência", "Encaminhamento", "Elementos"], coord_rows, "Registro de compatibilização, revisão " + rev)}
 <p><a href="data/coordenacao.csv">Baixar coordenacao.csv</a>, mesma revisão {e(rev)}.</p>
+</div>
 </section>
 
-<section aria-labelledby="revisao">
-<h2 id="revisao">Revisão</h2>
+<section class="sec sec--tight" aria-labelledby="revisao">
+<div class="container">
+<span class="t-kicker">Conferência</span>
+<h2 class="t-editorial" id="revisao">Revisão</h2>
 <p>{e(extracts["review_attribution_pt_br"])} Este recorte não é parecer para executar obra.</p>
-{review_html}
+<div class="rv-extract">{review_html}</div>
 {_table(["ID", "Documento", "Constatação", "Base", "Ação", "Tipo"], review_rows, "Extrato de revisão, revisão " + rev)}
 <p><a href="data/revisao.csv">Baixar revisao.csv</a>, mesma revisão {e(rev)}.</p>
+</div>
 </section>
 
-<section aria-labelledby="contratar">
-<h2 id="contratar">Levar o mesmo tipo de entrega para o seu projeto</h2>
+<section class="sec sec--dark" aria-labelledby="contratar">
+<div class="container">
+<span class="t-kicker">Próximo passo</span>
+<h2 class="t-editorial" id="contratar">Levar o mesmo tipo de entrega para o seu projeto</h2>
 <p>Se você tem um projeto de terceiro para conferir, disciplinas para compatibilizar ou uma obra para orçar, este é o formato do que chega às suas mãos: planilha com memória, relatório de revisão com pontos localizados, registro de interferências com a solução acordada. A proposta combina elaboração, revisão, compatibilização, quantitativos e orçamento conforme a necessidade, e autoria, atribuição, visita, logística e ART, quando couberem, são confirmadas antes do aceite técnico.</p>
 <p>Abra o serviço que corresponde ao que você precisa: <a href="/quantitativos-orcamento-obras/">quantitativos e orçamento</a>, <a href="/revisao-tecnica-projetos-engenharia/">revisão técnica</a> ou <a href="/compatibilizacao-projetos-engenharia/">compatibilização</a>. Traga o que você já tem; o que for sensível segue depois, por canal seguro.</p>
-<div class="demo-actions">
+<div class="contact-primary">
 <a class="button button-primary" data-journey="contrato" data-cta-position="inline_cta" href="{e(wa)}" rel="noopener" target="_blank">Descrever o projeto pelo WhatsApp</a>
-<a class="button button-secondary" data-journey="contrato" href="/triagem-tecnica/#projetos">Pedir pela triagem técnica</a>
-<a class="text-link" href="/casos/">Ver outros exemplos demonstrativos</a>
+<ul class="contact-alt">
+<li><a data-journey="contrato" href="/triagem-tecnica/#projetos">Pedir pela triagem técnica</a></li>
+<li><a href="/casos/">Ver outros exemplos demonstrativos</a></li>
+</ul>
+</div>
 </div>
 </section>
-</div>
 """
 
     jsonld = [
