@@ -21,7 +21,8 @@
       "label_on_sheet": "Exemplo demonstrativo · sem obra de cliente",
       "used_on": [
         "/aditivos-obras-publicas/",
-        "/problemas-que-resolvemos/"
+        "/problemas-que-resolvemos/",
+        "/casos/aditivo-art125-demonstrativo/"
       ],
       "summary": "Linha do tempo de um contrato hipotético (24 meses) com os limites de 25%/50% do art. 125 como faixa e um aditivo proposto que ultrapassa o limite de obra nova; excesso hachurado."
     },
@@ -40,7 +41,8 @@
       "label_on_sheet": "Exemplo demonstrativo · sem obra de cliente",
       "used_on": [
         "/aditivos-obras-publicas/",
-        "/problemas-que-resolvemos/"
+        "/problemas-que-resolvemos/",
+        "/casos/aditivo-art125-demonstrativo/"
       ],
       "summary": "Linha do tempo de um contrato hipotético (24 meses) com os limites de 25%/50% do art. 125 como faixa e um aditivo proposto que ultrapassa o limite de obra nova; excesso hachurado."
     },
@@ -198,7 +200,8 @@
       "sha256": "1145d2644b161a1bc7deb7505868232774a91393f542ac05cd09892b4341cdee",
       "reused_from_pilot": true,
       "used_on": [
-        "/servicos-obras-publicas/"
+        "/servicos-obras-publicas/",
+        "/casos/medicao-glosa-demonstrativo/"
       ],
       "note": "prancha do piloto reutilizada como peça de abertura do hub; sem alteração"
     },
@@ -212,7 +215,8 @@
       "sha256": "ecd1b271ed2494c79cdd30d667d312eed10ed878a17ab6fc77465c8a56ecde0d",
       "reused_from_pilot": true,
       "used_on": [
-        "/servicos-obras-publicas/"
+        "/servicos-obras-publicas/",
+        "/casos/medicao-glosa-demonstrativo/"
       ],
       "note": "prancha do piloto reutilizada como peça de abertura do hub; sem alteração"
     }
