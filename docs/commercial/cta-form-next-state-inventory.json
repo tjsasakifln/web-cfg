@@ -29,13 +29,13 @@
       "commercial_configuration"
     ],
     "baseline_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
-    "expected_declared_ctas": 182
+    "expected_declared_ctas": 183
   },
   "coverage": {
     "authority": "data/organic/public-family-registry.json",
     "manual_route_allowlist": false,
     "active_capture_routes": 31,
-    "declared_ctas": 182,
+    "declared_ctas": 183,
     "protected_routes_with_capture": [
       "/aditivos-obras-publicas/",
       "/auditoria-orcamento-licitacao/",
@@ -2791,7 +2791,7 @@
           "href": "#pedido-diagnostico",
           "stage": "request_fit_review",
           "commitment": "medium",
-          "current_label": "06 Conversar",
+          "current_label": "04 Conversar",
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
@@ -3076,7 +3076,7 @@
           "href": "#pedido-enquadramento",
           "stage": "request_fit_review",
           "commitment": "medium",
-          "current_label": "Pedir uma avaliação do seu caso nesta página",
+          "current_label": "Avaliar na sua empresa, nesta página",
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
@@ -3091,7 +3091,7 @@
           "href": "#pedido-enquadramento",
           "stage": "request_fit_review",
           "commitment": "medium",
-          "current_label": "08 Avaliar na sua empresa",
+          "current_label": "07 Avaliar na sua empresa",
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
@@ -4609,6 +4609,21 @@
         {
           "cta_id": "",
           "position": "",
+          "href": "#captura-contrato",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "current_label": "Registrar o evento",
+          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "",
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Sou%20de%20um%20%C3%B3rg%C3%A3o%20p%C3%BAblico%20planejando%20a%20contrata%C3%A7%C3%A3o%20de%20uma%20obra%20e%20quero%20estruturar%20escopo%2C%20or%C3%A7amento%20e%20crit%C3%A9rios%20de%20medi%C3%A7%C3%A3o.",
           "stage": "talk",
           "commitment": "medium",
@@ -4627,7 +4642,7 @@
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20problema%20urgente%20em%20contrato%20p%C3%BAblico%20%28glosa%2C%20medi%C3%A7%C3%A3o%2C%20aditivo%2C%20reequil%C3%ADbrio%20ou%20atraso%29%20e%20preciso%20de%20an%C3%A1lise%20inicial.",
           "stage": "talk",
           "commitment": "medium",
-          "current_label": "Falar pelo WhatsApp",
+          "current_label": "Descrever o contrato pelo WhatsApp",
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
