@@ -1,9 +1,9 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-09-17T07:50:28.732Z",
+  "measured_at": "2026-09-17T07:52:20.094Z",
   "measured_on": "2026-09-17",
-  "commit_sha": "27149a5b911944090ed9748df06ff7b826a801aa",
+  "commit_sha": "152632ed56c2e6fa40e9a92b96fa88374fca6648",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "f168038814087e1b365d1de3042af9a3f3364743756e104711fecc0fb9fe7477",
@@ -45,7 +45,7 @@
     "diretoria-b2g/index.html": "b708c947f0a04039dfb4571bf3197b8ceff50c30b3634db47cb646d615bffa46",
     "entregas/index.html": "a97308da3c5edbb2eeb15c8a1c66a5b93c31d3d64c3b94d7f06f5f245f57eb1d",
     "entregas/styles.css": "7886b4de52d324286c255ecfe9bf93e5ea43d5a692ee170e3e4f6a6d8b8915a0",
-    "index.html": "d7ad9f2bccdfa171e60116a4e2f6521376b253c52d3d6f27cd800bae2dbb6b50",
+    "index.html": "0eddb2c49f124eb9de665720c25074c7274cdb37437cad6c948a914099f07dd0",
     "medicoes-glosas-obras-publicas/index.html": "124e31f29b3b98e91cb457943fdaa448c8e52121dc62a68ddd0e3d054f4fca3c",
     "problemas-que-resolvemos/index.html": "b0d2f95d54e5248364e5a841bb5cbbf1215de6ff16b0b6551ba26e4f64b458a2",
     "reequilibrio-obras-publicas/index.html": "83485c51f1e86bdac9875e8a437ac2bceac8b83a665d874c5fafcce650205704",
@@ -102,7 +102,7 @@
   "routes": [
     {
       "route": "/",
-      "html_sha256": "d7ad9f2bccdfa171e60116a4e2f6521376b253c52d3d6f27cd800bae2dbb6b50",
+      "html_sha256": "0eddb2c49f124eb9de665720c25074c7274cdb37437cad6c948a914099f07dd0",
       "measured_on": "2026-09-17",
       "viewports": {
         "1366x768": {
