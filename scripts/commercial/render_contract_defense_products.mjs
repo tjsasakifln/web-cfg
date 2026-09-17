@@ -66,7 +66,7 @@ function isHeldProtected(item, current) {
 
 function qualificationFields(item, select = false) {
   const deliverable = select
-    ? `<label>Entrega mais próxima <select name="deliverable_id"><option value="">Ainda não sei qual entrega, quero orientação</option>${contract.items.map((entry) => `<option value="${entry.deliverable_id}">${esc(entry.public_name_pt_br)}</option>`).join("")}</select></label>`
+    ? `<label>Entrega mais próxima <select name="deliverable_id"><option value="">Ainda não sei: quero orientação</option>${contract.items.map((entry) => `<option value="${entry.deliverable_id}">${esc(entry.public_name_pt_br)}</option>`).join("")}</select></label>`
     : `<input name="deliverable_id" type="hidden" value="${item.deliverable_id}"/>`;
   return `${FIELDS_START}
 ${deliverable}
@@ -107,7 +107,7 @@ function hubBlock() {
     return `<article class="contract-products-hub__card" id="entrega-${item.item}"><h3>${esc(item.public_name_pt_br)}</h3><p>${esc(item.value_line_pt_br)}</p><dl><div><dt>${esc(item.public_price_label_pt_br || "Preço")}</dt><dd>${price(item.pilot_price_cents)}</dd></div><div><dt>Prazo de entrega</dt><dd>${item.sla_business_days} dias úteis</dd></div></dl>${action}</article>`;
   }).join("");
   return `${HUB_START}
-<section class="contract-products-hub" aria-labelledby="contract-products-title"><div class="container"><header><p class="eyebrow">Escolha pelo evento que exige decisão</p><h2 id="contract-products-title">Sete eventos contratuais, cada um com um documento para agir.</h2><p>O dossiê concentra contrato, registros e cálculo numa saída delimitada para a direção, a engenharia e o jurídico usarem sem reconstruir o caso do zero.</p></header><div class="contract-products-hub__grid">${cards}</div><aside class="contract-products-hub__rules" aria-label="Crédito, urgência e limites"><p>${esc(contract.common_rules.credit_rule.statement_pt_br)}</p><p>${esc(contract.common_rules.urgency_rule.statement_pt_br)}</p><p>${esc(contract.common_rules.public_sources_rule.statement_pt_br)}</p><p>${esc(contract.common_rules.obligation_rule.statement_pt_br)}</p></aside>${standaloneForm(null, { hub: true })}</div></section>
+<section class="contract-products-hub" aria-labelledby="contract-products-title"><div class="container"><header><p class="eyebrow">Escolha pelo evento que exige decisão</p><h2 id="contract-products-title">Sete eventos contratuais, cada um com um documento para agir</h2><p>O dossiê concentra contrato, registros e cálculo numa saída delimitada para a direção, a engenharia e o jurídico usarem sem reconstruir o caso do zero.</p></header><div class="contract-products-hub__grid">${cards}</div><aside class="contract-products-hub__rules" aria-label="Crédito, urgência e limites"><p>${esc(contract.common_rules.credit_rule.statement_pt_br)}</p><p>${esc(contract.common_rules.urgency_rule.statement_pt_br)}</p><p>${esc(contract.common_rules.public_sources_rule.statement_pt_br)}</p><p>${esc(contract.common_rules.obligation_rule.statement_pt_br)}</p></aside>${standaloneForm(null, { hub: true })}</div></section>
 ${HUB_END}`;
 }
 
