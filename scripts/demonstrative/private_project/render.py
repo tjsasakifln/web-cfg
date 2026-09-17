@@ -214,27 +214,27 @@ def _plan_svg(extracts: dict[str, Any], revision: str) -> str:
             f"folga de {br_number(extracts['named_totals']['r01_clearance_m'])} m até B-01."
         )
 
-    return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {svg_w} {svg_h}" role="img" aria-labelledby="plan-{revision}-title plan-{revision}-desc">
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {svg_w} {svg_h}" role="img" font-family="Archivo Var, Arial, Helvetica, sans-serif" aria-labelledby="plan-{revision}-title plan-{revision}-desc">
 <title id="plan-{revision}-title">{e(title)}</title>
 <desc id="plan-{revision}-desc">Banheiro {br_number(L)} m por {br_number(W)} m. Porta D-01 na parede norte, janela WN-01 na parede leste, poço hidrossanitário HS-01 na parede oeste, viga B-01 na parede leste. {e(clash_note)} Exemplo demonstrativo, revisão {e(revision)}.</desc>
-<rect x="{X(-t):.1f}" y="{Y(W):.1f}" width="{px(outer_w):.1f}" height="{px(outer_h):.1f}" fill="#e2e8f0" stroke="#0f172a" stroke-width="2"/>
-<rect x="{X(0):.1f}" y="{Y(W):.1f}" width="{px(L):.1f}" height="{px(W):.1f}" fill="#fff" stroke="#0f172a" stroke-width="1.5"/>
+<rect x="{X(-t):.1f}" y="{Y(W):.1f}" width="{px(outer_w):.1f}" height="{px(outer_h):.1f}" fill="#dfe4e6" stroke="#071a31" stroke-width="2"/>
+<rect x="{X(0):.1f}" y="{Y(W):.1f}" width="{px(L):.1f}" height="{px(W):.1f}" fill="#fff" stroke="#071a31" stroke-width="1.2"/>
 <!-- door opening north -->
-<rect x="{X(door_off):.1f}" y="{Y(W + t):.1f}" width="{px(door_w):.1f}" height="{px(t):.1f}" fill="#fff" stroke="#0f172a"/>
-<text x="{X(door_off + door_w / 2):.1f}" y="{Y(W + t) - 6:.1f}" text-anchor="middle" font-size="11" fill="#0f172a">D-01</text>
+<rect x="{X(door_off):.1f}" y="{Y(W + t):.1f}" width="{px(door_w):.1f}" height="{px(t):.1f}" fill="#fff" stroke="#071a31" stroke-width="1.2"/>
+<text x="{X(door_off + door_w / 2):.1f}" y="{Y(W + t) - 6:.1f}" text-anchor="middle" font-size="11" fill="#071a31">D-01</text>
 <!-- window east -->
-<rect x="{X(L):.1f}" y="{Y(win_off + win_w):.1f}" width="{px(t):.1f}" height="{px(win_w):.1f}" fill="#bae6fd" stroke="#0369a1"/>
-<text x="{X(L + t) + 4:.1f}" y="{Y(win_off + win_w / 2):.1f}" font-size="11" fill="#0c4a6e">WN-01</text>
+<rect x="{X(L):.1f}" y="{Y(win_off + win_w):.1f}" width="{px(t):.1f}" height="{px(win_w):.1f}" fill="#edf5ec" stroke="#2d6f2d" stroke-width="1.2"/>
+<text x="{X(L + t) + 4:.1f}" y="{Y(win_off + win_w / 2):.1f}" font-size="11" font-weight="650" fill="#2d6f2d">WN-01</text>
 <!-- beam along east interior -->
-<rect x="{X(L - 0.12):.1f}" y="{Y(W):.1f}" width="{px(0.12):.1f}" height="{px(W):.1f}" fill="none" stroke="#b45309" stroke-dasharray="4 3"/>
-<text x="{X(L - 0.18):.1f}" y="{Y(W / 2):.1f}" font-size="11" fill="#b45309" transform="rotate(-90 {X(L - 0.18):.1f} {Y(W / 2):.1f})">B-01</text>
+<rect x="{X(L - 0.12):.1f}" y="{Y(W):.1f}" width="{px(0.12):.1f}" height="{px(W):.1f}" fill="none" stroke="#2d6f2d" stroke-width="1.2" stroke-dasharray="4 3"/>
+<text x="{X(L - 0.18):.1f}" y="{Y(W / 2):.1f}" font-size="11" font-weight="650" fill="#2d6f2d" transform="rotate(-90 {X(L - 0.18):.1f} {Y(W / 2):.1f})">B-01</text>
 <!-- shaft west exterior -->
-<rect x="{X(-shaft_d):.1f}" y="{Y(shaft_off + shaft_w):.1f}" width="{px(shaft_d):.1f}" height="{px(shaft_w):.1f}" fill="#fde68a" stroke="#92400e"/>
-<text x="{X(-shaft_d / 2):.1f}" y="{Y(shaft_off + shaft_w / 2) + 4:.1f}" text-anchor="middle" font-size="11" fill="#78350f">HS-01</text>
-<text x="{X(L / 2):.1f}" y="{Y(W / 2):.1f}" text-anchor="middle" font-size="12" fill="#334155">RM-01</text>
-<text x="{X(L / 2):.1f}" y="{Y(-t) + 28:.1f}" text-anchor="middle" font-size="11" fill="#0f172a">{br_number(L)} m</text>
-<text x="{X(-t) - 8:.1f}" y="{Y(W / 2):.1f}" text-anchor="middle" font-size="11" fill="#0f172a" transform="rotate(-90 {X(-t) - 8:.1f} {Y(W / 2):.1f})">{br_number(W)} m</text>
-<text x="{pad}" y="{svg_h - 12}" font-size="11" fill="#334155">{e(clash_note)} Exemplo demonstrativo.</text>
+<rect x="{X(-shaft_d):.1f}" y="{Y(shaft_off + shaft_w):.1f}" width="{px(shaft_d):.1f}" height="{px(shaft_w):.1f}" fill="#f3f4f5" stroke="#071a31" stroke-width="1.2"/>
+<text x="{X(-shaft_d / 2):.1f}" y="{Y(shaft_off + shaft_w / 2) + 4:.1f}" text-anchor="middle" font-size="11" fill="#071a31">HS-01</text>
+<text x="{X(L / 2):.1f}" y="{Y(W / 2):.1f}" text-anchor="middle" font-size="12" font-weight="650" fill="#071a31">RM-01</text>
+<text x="{X(L / 2):.1f}" y="{Y(-t) + 28:.1f}" text-anchor="middle" font-size="11" fill="#5d6a7a">{br_number(L)} m</text>
+<text x="{X(-t) - 8:.1f}" y="{Y(W / 2):.1f}" text-anchor="middle" font-size="11" fill="#5d6a7a" transform="rotate(-90 {X(-t) - 8:.1f} {Y(W / 2):.1f})">{br_number(W)} m</text>
+<text x="{pad}" y="{svg_h - 12}" font-size="11" fill="#5d6a7a">PR-ARQ · {e(revision)} · escala indicativa · exemplo demonstrativo</text>
 </svg>
 """
 
@@ -265,7 +265,7 @@ def _elevation_svg(extracts: dict[str, Any], revision: str) -> str:
         return m * scale
 
     overlap = revision == "R00"
-    win_fill = "#fecaca" if overlap else "#bbf7d0"
+    win_fill = "#ffffff" if overlap else "#edf5ec"
     title = f"Elevação leste W-02 · {extracts['states'][revision]['label_pt_br']} · {revision}"
     desc = (
         f"Parede de {br_number(wall_len)} m por {br_number(wall_h)} m. Janela WN-01 de peitoril "
@@ -276,19 +276,19 @@ def _elevation_svg(extracts: dict[str, Any], revision: str) -> str:
     else:
         desc += f" Folga de {br_number(extracts['named_totals']['r01_clearance_m'])} m."
 
-    return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {svg_w} {svg_h}" role="img" aria-labelledby="elv-{revision}-title elv-{revision}-desc">
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {svg_w} {svg_h}" role="img" font-family="Archivo Var, Arial, Helvetica, sans-serif" aria-labelledby="elv-{revision}-title elv-{revision}-desc">
 <title id="elv-{revision}-title">{e(title)}</title>
 <desc id="elv-{revision}-desc">{e(desc)} Exemplo demonstrativo.</desc>
-<rect x="{X(0):.1f}" y="{Y(wall_h):.1f}" width="{px(wall_len):.1f}" height="{px(wall_h):.1f}" fill="#f8fafc" stroke="#0f172a" stroke-width="2"/>
-<rect x="{X(0):.1f}" y="{Y(wall_h):.1f}" width="{px(wall_len):.1f}" height="{px(beam_depth):.1f}" fill="#f59e0b" fill-opacity="0.35" stroke="#b45309"/>
-<text x="{X(wall_len / 2):.1f}" y="{Y(soffit + beam_depth / 2) + 4:.1f}" text-anchor="middle" font-size="11" fill="#78350f">B-01 fundo {br_number(soffit)} m</text>
-<rect x="{X(win_off):.1f}" y="{Y(head):.1f}" width="{px(win_w):.1f}" height="{px(head - sill):.1f}" fill="{win_fill}" stroke="#0f172a"/>
-<text x="{X(win_off + win_w / 2):.1f}" y="{Y((head + sill) / 2) + 4:.1f}" text-anchor="middle" font-size="11" fill="#0f172a">WN-01</text>
-<text x="{X(0) - 8:.1f}" y="{Y(head) + 4:.1f}" text-anchor="end" font-size="10" fill="#0f172a">{br_number(head)}</text>
-<text x="{X(0) - 8:.1f}" y="{Y(sill) + 4:.1f}" text-anchor="end" font-size="10" fill="#0f172a">{br_number(sill)}</text>
-<text x="{X(0) - 8:.1f}" y="{Y(soffit) + 4:.1f}" text-anchor="end" font-size="10" fill="#b45309">{br_number(soffit)}</text>
-<text x="{X(0) - 8:.1f}" y="{Y(0) + 4:.1f}" text-anchor="end" font-size="10" fill="#0f172a">0,00</text>
-<text x="{pad_l}" y="{svg_h - 14}" font-size="11" fill="#334155">{e(desc)} Exemplo demonstrativo.</text>
+<rect x="{X(0):.1f}" y="{Y(wall_h):.1f}" width="{px(wall_len):.1f}" height="{px(wall_h):.1f}" fill="#ffffff" stroke="#071a31" stroke-width="2"/>
+<rect x="{X(0):.1f}" y="{Y(wall_h):.1f}" width="{px(wall_len):.1f}" height="{px(beam_depth):.1f}" fill="#ced62a" fill-opacity="0.35" stroke="#071a31" stroke-width="0.6"/>
+<text x="{X(wall_len / 2):.1f}" y="{Y(soffit + beam_depth / 2) + 4:.1f}" text-anchor="middle" font-size="11" font-weight="650" fill="#071a31">B-01 fundo {br_number(soffit)} m</text>
+<rect x="{X(win_off):.1f}" y="{Y(head):.1f}" width="{px(win_w):.1f}" height="{px(head - sill):.1f}" fill="{win_fill}" stroke="#2d6f2d" stroke-width="1.2"/>
+<text x="{X(win_off + win_w / 2):.1f}" y="{Y((head + sill) / 2) + 4:.1f}" text-anchor="middle" font-size="11" font-weight="650" fill="#2d6f2d">WN-01</text>
+<text x="{X(0) - 8:.1f}" y="{Y(head) + 4:.1f}" text-anchor="end" font-size="10" fill="#5d6a7a">{br_number(head)}</text>
+<text x="{X(0) - 8:.1f}" y="{Y(sill) + 4:.1f}" text-anchor="end" font-size="10" fill="#5d6a7a">{br_number(sill)}</text>
+<text x="{X(0) - 8:.1f}" y="{Y(soffit) + 4:.1f}" text-anchor="end" font-size="10" fill="#071a31">{br_number(soffit)}</text>
+<text x="{X(0) - 8:.1f}" y="{Y(0) + 4:.1f}" text-anchor="end" font-size="10" fill="#5d6a7a">0,00</text>
+<text x="{pad_l}" y="{svg_h - 14}" font-size="11" fill="#5d6a7a">EL-LESTE · {e(revision)} · escala indicativa · exemplo demonstrativo</text>
 </svg>
 """
 
