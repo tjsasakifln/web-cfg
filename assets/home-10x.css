@@ -103,12 +103,13 @@ body[data-content-cluster="home"] .pw p a{color:#fff;text-decoration:underline;t
 .pw__market h2{color:#fff;max-width:22ch}
 .pw__market>p{max-width:60ch;color:#d5dde6}
 .contracts-list{display:grid;grid-template-columns:minmax(0,1fr);gap:0;margin:1.5rem 0 0;border-top:1px solid rgba(255,255,255,.25)}
-@media (min-width:800px){.contracts-list{grid-template-columns:repeat(3,minmax(0,1fr));column-gap:2rem}}
-.contracts-list .service-card{border:0;border-bottom:1px solid rgba(255,255,255,.14);border-radius:0;padding:1.25rem 0;background:transparent;min-width:0}
-.contracts-list .service-card h3{margin:0 0 .35rem;color:var(--lime);font-family:var(--sans-narrow);font-stretch:var(--narrow);font-size:var(--text-small);letter-spacing:.08em;text-transform:uppercase;font-weight:750}
-.contracts-list .service-card p{margin:0 0 .5rem;font-size:var(--text-small);line-height:1.55;color:#d5dde6}
-.contracts-list .service-card p strong{color:#fff;font-size:1.25rem;font-weight:760;letter-spacing:-.02em;display:block;margin-bottom:.35rem}
-.contracts-list .service-card a{display:inline-flex;align-items:center;gap:.4rem;min-height:44px;color:#fff;font-weight:720;font-size:var(--text-small);text-decoration:underline;text-underline-offset:.2em;text-decoration-color:rgba(255,255,255,.5)}
+.contracts-list .service-card{display:grid;grid-template-columns:minmax(0,1fr);gap:.35rem 2rem;border:0;border-bottom:1px solid rgba(255,255,255,.14);border-radius:0;padding:1.1rem 0;background:transparent;min-width:0;align-items:start}
+@media (min-width:800px){.contracts-list .service-card{grid-template-columns:11rem 13rem minmax(0,1fr) auto}.contracts-list .service-card>*{min-width:0}}
+.contracts-list .service-card h3{margin:0;color:var(--lime);font-family:var(--sans-narrow);font-stretch:var(--narrow);font-size:var(--text-small);letter-spacing:.08em;text-transform:uppercase;font-weight:750;padding-top:.35rem}
+.contracts-list .service-card p{margin:0;font-size:var(--text-small);line-height:1.55;color:#d5dde6}
+.contracts-list .service-card p strong{color:#fff;font-size:1.35rem;font-weight:760;letter-spacing:-.02em;display:block;margin-bottom:.1rem;font-variant-numeric:tabular-nums}
+.contracts-list .service-card p:first-of-type{font-size:var(--text-micro);color:#c1ccd6}
+.contracts-list .service-card a{display:inline-flex;align-items:center;gap:.4rem;min-height:44px;color:#fff;font-weight:720;font-size:var(--text-small);text-decoration:underline;text-underline-offset:.2em;text-decoration-color:rgba(255,255,255,.5);white-space:nowrap}
 .contracts-list .service-card a .icon{color:var(--lime)}
 .market-context-base{max-width:68ch;margin:1rem 0 0;color:#c1ccd6;font-size:var(--text-small);line-height:1.55}
 .market-context-base a{color:#fff}
