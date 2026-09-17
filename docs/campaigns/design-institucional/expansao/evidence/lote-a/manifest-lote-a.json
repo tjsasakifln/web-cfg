@@ -373,6 +373,76 @@
       "route": "/parcerias-engenharia/",
       "viewport": "320x700",
       "overflow_px": 0
+    },
+    {
+      "route": "/comercial/privacidade-leads/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 4954,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/comercial-privacidade-leads-390x844-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/comercial-privacidade-leads-390x844-full-lote-a.jpg"
+    },
+    {
+      "route": "/comercial/privacidade-leads/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 3453,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/comercial-privacidade-leads-1440x1000-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/comercial-privacidade-leads-1440x1000-full-lote-a.jpg"
+    },
+    {
+      "route": "/comercial/privacidade-leads/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/comercial/termos-diagnostico-b2g/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 5396,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/comercial-termos-diagnostico-b2g-390x844-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/comercial-termos-diagnostico-b2g-390x844-full-lote-a.jpg"
+    },
+    {
+      "route": "/comercial/termos-diagnostico-b2g/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 3724,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/comercial-termos-diagnostico-b2g-1440x1000-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/comercial-termos-diagnostico-b2g-1440x1000-full-lote-a.jpg"
+    },
+    {
+      "route": "/comercial/termos-diagnostico-b2g/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/comercial/radar-decisorio/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 6371,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/comercial-radar-decisorio-390x844-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/comercial-radar-decisorio-390x844-full-lote-a.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-a/comercial-radar-decisorio-390x844-menu-lote-a.jpg"
+    },
+    {
+      "route": "/comercial/radar-decisorio/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 4842,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/comercial-radar-decisorio-1440x1000-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/comercial-radar-decisorio-1440x1000-full-lote-a.jpg"
+    },
+    {
+      "route": "/comercial/radar-decisorio/",
+      "viewport": "320x700",
+      "overflow_px": 0
     }
   ]
 }
