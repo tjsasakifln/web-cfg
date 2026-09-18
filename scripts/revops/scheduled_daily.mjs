@@ -42,10 +42,11 @@ function check(name, ok, detail = "", { critical = true } = {}) {
 }
 
 // A named external dependency the repository cannot satisfy by itself. It is
-// recorded as a non-critical check, an alert and a blocked_external entry so
-// the report never hides it, but it does not fail the schedule.
+// recorded as a non-critical check that is NOT ok (a blocker is never converted
+// to PASS), plus an alert and a blocked_external entry, so the report never
+// hides it; it does not fail the schedule because no code change can clear it.
 function blockedExternal(name, dependency, detail) {
-  out.checks.push({ name, ok: true, detail: `BLOCKED_EXTERNAL dependency=${dependency} ${detail}`, critical: false, blocked_external: true, dependency });
+  out.checks.push({ name, ok: false, detail: `BLOCKED_EXTERNAL dependency=${dependency} ${detail}`, critical: false, blocked_external: true, dependency });
   out.blocked_external.push({ name, dependency, detail });
   out.alerts.push({ name: `${name}_blocked_external`, dependency, detail });
   console.log("BLOCKED_EXTERNAL", name, `dependency=${dependency}`, detail);

@@ -106,7 +106,11 @@ const PROBE_SECRET_FIXTURE = "unit-test-lead-probe-secret-0123456789abcdef";
   const blocked = (report?.blocked_external || []).find((b) => b.dependency === "LEAD_PROBE_SECRET");
   if (!report || report.completed !== true) fail("daily_completes_without_probe_secret", report || reports);
   else pass("daily_completes_without_probe_secret");
-  if (!blocked || probeChecks.length !== 1 || probeChecks.some((c) => c.ok !== true || c.critical !== false)) {
+  if (
+    !blocked ||
+    probeChecks.length !== 1 ||
+    probeChecks.some((c) => c.ok !== false || c.critical !== false || c.blocked_external !== true)
+  ) {
     fail("daily_probe_blocked_external_without_secret", { probeChecks, blocked });
   } else pass("daily_probe_blocked_external_without_secret", blocked.name);
   if (!(report?.alerts || []).some((a) => a.dependency === "LEAD_PROBE_SECRET")) {
