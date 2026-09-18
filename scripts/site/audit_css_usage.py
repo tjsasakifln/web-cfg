@@ -185,6 +185,9 @@ def unused_classes(css: str, used: dict[str, set[str]]) -> list[str]:
     return [name for name in class_selectors(css) if name not in used]
 
 
+DERIVED_SUBSETS = frozenset({"assets/home-base.css"})
+
+
 def public_css_files(root: Path) -> list[str]:
     out = []
     for path in walk(root, (".css",)):
@@ -245,7 +248,13 @@ def audit(root: Path = ROOT) -> dict:
     files = public_css_files(root)
     decoration = {}
     for rel in files:
-        decoration[rel] = decoration_counts((root / rel).read_text(encoding="utf-8"))
+        counts = decoration_counts((root / rel).read_text(encoding="utf-8"))
+        # assets/home-base.css e styles.css podada para a home por scripts/site/build_css.py:
+        # cada declaracao dela ja foi contada em styles.css. Contar de novo nao mede
+        # decoracao nova, mede a existencia do subconjunto (2026-09-18).
+        if rel in DERIVED_SUBSETS:
+            counts = {key: 0 for key in counts}
+        decoration[rel] = counts
     unreferenced = [rel for rel in files if stylesheet_references(root, rel) == 0]
     return {
         "schema_version": "1.0.0",
