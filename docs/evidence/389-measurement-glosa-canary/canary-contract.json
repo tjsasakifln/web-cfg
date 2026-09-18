@@ -135,10 +135,10 @@
     },
     {
       "path": "medicoes-glosas-obras-publicas/index.html",
-      "sha256": "ab5b5eff1f4f5f76168ae0e29c46fcc7faa999c331a355259025b4bbfac0c183",
-      "sha256_previous": "a265f90370894eccbeebfb375f4821b622dd9954d6685de62af837996a1814cf",
+      "sha256": "472be19801077382929eeb132b7b018b51aad4eea449d548150ccc4caefb17f0",
+      "sha256_previous": "ab5b5eff1f4f5f76168ae0e29c46fcc7faa999c331a355259025b4bbfac0c183",
       "sha256_recaptured_at": "2026-09-18",
-      "sha256_recapture_reason": "LAPIDACAO-COMERCIAL-20260918: duas frases redundantes removidas na secao #exemplo-demonstrativo ('Premissas sinteticas, nao obra de cliente.' e a legenda que repetia 'nao e obra de cliente'); o kicker 'Exemplo demonstrativo · Obra publica' e a limitacao 'nao e parecer juridico' permanecem. Nenhum fato, numero, citacao legal, canonical, robots, preco, formulario ou destino canonico mudou. Decisao editorial expressa do proprietario de 2026-09-18. Executor: agente Claude Code; nenhuma revisao humana independente alegada."
+      "sha256_recapture_reason": "LAPIDACAO-COMERCIAL-20260918 (propagacao): o formulario #captura-pilar passa a nomear os obrigatorios (nome, um canal de retorno e o consentimento) e a marcar os opcionais, no lugar de 'campos marcados como obrigatorios' sem marca; a secao #exemplo-demonstrativo ja havia perdido duas frases redundantes na recaptura anterior do mesmo dia. Nenhum fato, numero, citacao legal, canonical, robots, preco ou destino canonico mudou. Executor: agente Claude Code; nenhuma revisao humana independente alegada."
     }
   ],
   "second_wave": {
