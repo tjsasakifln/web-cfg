@@ -1377,6 +1377,208 @@ _reset();
   }
 }
 
+// 7a) G03-02: the Resend message id and HTTP status are persisted in the store
+// (delivery.email.provider_id / .http) so an operator can correlate lead_id ->
+// GET /emails/{id} from the host, and never appear in the public body.
+{
+  process.env.RESEND_API_KEY = "re_test_key";
+  process.env.LEAD_NOTIFY_EMAIL = "ops@confenge.com.br";
+  const originalFetch = globalThis.fetch;
+  const providerId = "resend-msg-id-1234567890abcdef";
+  globalThis.fetch = async (url) => {
+    if (String(url).includes("resend.com")) {
+      return { ok: true, status: 200, text: async () => "{}", json: async () => ({ id: providerId }) };
+    }
+    return { ok: true, status: 200, text: async () => "{}", json: async () => ({}) };
+  };
+  try {
+    const res = await handler(
+      event({
+        nome: "Helena Diretora",
+        email: "helena.diretora@construtora.com.br",
+        estagio: "diagnostico operacao",
+        jornada: "operacao",
+        consentimento: "on",
+      }, "POST", { ip: "203.0.113.71" }),
+    );
+    const data = JSON.parse(res.body);
+    if (res.statusCode !== 201 || !data.lead_id) fail("email_provider_id_persist", data);
+    if (data.email_status !== "ok") fail("email_provider_id_status", data);
+    const bodyStr = JSON.stringify(data);
+    if (bodyStr.includes(providerId) || bodyStr.includes("provider_id") || /"http"/.test(bodyStr)) {
+      fail("email_provider_id_in_public_body", data);
+    }
+    const stored = await mem.get(data.lead_id);
+    if (!stored || !stored.delivery || !stored.delivery.email) fail("email_provider_id_store_missing", stored);
+    if (stored.delivery.email.provider_id !== providerId) fail("email_provider_id_store_value", stored.delivery.email);
+    if (stored.delivery.email.http !== 200) fail("email_http_store_value", stored.delivery.email);
+    if (stored.status !== "persisted_notified") fail("email_provider_id_store_status", stored.status);
+    pass("email_provider_id_store_only", { lead_id: data.lead_id, http: stored.delivery.email.http });
+  } finally {
+    globalThis.fetch = originalFetch;
+    delete process.env.RESEND_API_KEY;
+    delete process.env.LEAD_NOTIFY_EMAIL;
+  }
+}
+
+// 7c) G03-04: a hanging Resend (and a hanging ops webhook) never consumes the
+// visitor's 15 s budget. The delivery channels share LEAD_DELIVERY_TIMEOUT_MS
+// across all retries, the abort is not retried, and the record stays durable
+// with email/notify status "error" (reason timeout) while the visitor gets 201.
+{
+  process.env.RESEND_API_KEY = "re_test_key";
+  process.env.LEAD_NOTIFY_EMAIL = "ops@confenge.com.br";
+  process.env.OPS_WEBHOOK_URL = "https://example.com/hooks/ops";
+  process.env.OPS_WEBHOOK_ALLOWED_HOSTS = "example.com";
+  process.env.LEAD_DELIVERY_TIMEOUT_MS = "150";
+  const originalFetch = globalThis.fetch;
+  let hangingCalls = 0;
+  let abortedCalls = 0;
+  let unsignaledCalls = 0;
+  globalThis.fetch = (url, opts) => new Promise((_resolve, reject) => {
+    hangingCalls += 1;
+    if (!opts || !opts.signal) {
+      unsignaledCalls += 1;
+      return; // hangs forever: exactly the failure this case guards against
+    }
+    opts.signal.addEventListener("abort", () => {
+      abortedCalls += 1;
+      reject(Object.assign(new Error("aborted"), { name: "AbortError" }));
+    });
+  });
+  try {
+    const started = performance.now();
+    const res = await handler(
+      event({
+        nome: "Paulo Diretor",
+        email: "paulo.diretor@construtora.com.br",
+        estagio: "diagnostico operacao",
+        jornada: "operacao",
+        consentimento: "on",
+      }, "POST", { ip: "203.0.113.72" }),
+    );
+    const elapsed = Math.round(performance.now() - started);
+    const data = JSON.parse(res.body);
+    if (res.statusCode !== 201 || !data.lead_id) fail("delivery_hang_persist", data);
+    if (data.email_status !== "error" || data.notify_status !== "error") fail("delivery_hang_status", data);
+    // Two channels hang concurrently: the step costs one budget, not two, and
+    // far less than the 15 s browser abort. 1500 ms leaves room for the store.
+    if (elapsed > 1500) fail("delivery_hang_budget", { elapsed, budget_ms: 150 });
+    if (unsignaledCalls !== 0) fail("delivery_fetch_without_signal", { unsignaledCalls });
+    // One aborted attempt per channel: a timed-out send is never retried.
+    if (hangingCalls !== 2 || abortedCalls !== 2) fail("delivery_hang_retry", { hangingCalls, abortedCalls });
+    const stored = await mem.get(data.lead_id);
+    if (!stored || stored.delivery?.email?.status !== "error" || stored.delivery?.email?.reason !== "timeout") {
+      fail("delivery_hang_store", stored && stored.delivery);
+    }
+    if (stored.status !== "persisted") fail("delivery_hang_store_status", stored.status);
+    pass("delivery_hang_within_budget", { elapsed_ms: elapsed, lead_id: data.lead_id });
+  } finally {
+    globalThis.fetch = originalFetch;
+    delete process.env.RESEND_API_KEY;
+    delete process.env.LEAD_NOTIFY_EMAIL;
+    delete process.env.OPS_WEBHOOK_URL;
+    delete process.env.OPS_WEBHOOK_ALLOWED_HOSTS;
+    delete process.env.LEAD_DELIVERY_TIMEOUT_MS;
+  }
+}
+
+// 7d) The channel budget covers the BODY, not only the headers: a Resend that
+// answers 200 and then stalls the body (half-open connection) must end within
+// LEAD_DELIVERY_TIMEOUT_MS with reason=timeout, record durable, 201 returned.
+// A second variant: the body stream ignores the abort signal entirely — the
+// bound must still hold (the read is raced against the deadline).
+for (const bodyHonoursAbort of [true, false]) {
+  process.env.RESEND_API_KEY = "re_test_key";
+  process.env.LEAD_NOTIFY_EMAIL = "ops@confenge.com.br";
+  process.env.LEAD_DELIVERY_TIMEOUT_MS = "150";
+  const originalFetch = globalThis.fetch;
+  let bodyReads = 0;
+  globalThis.fetch = async (_url, opts) => ({
+    ok: true,
+    status: 200,
+    json: () => new Promise((_resolve, reject) => {
+      bodyReads += 1;
+      if (bodyHonoursAbort && opts && opts.signal) {
+        opts.signal.addEventListener("abort", () => {
+          reject(Object.assign(new Error("aborted"), { name: "AbortError" }));
+        });
+      }
+      // otherwise: never settles — the body is stalled for good
+    }),
+    text: async () => "",
+  });
+  try {
+    const started = performance.now();
+    const res = await handler(
+      event({
+        nome: bodyHonoursAbort ? "Sandra Diretora" : "Sonia Diretora",
+        email: bodyHonoursAbort ? "sandra.diretora@construtora.com.br" : "sonia.diretora@construtora.com.br",
+        estagio: "diagnostico operacao",
+        jornada: "operacao",
+        consentimento: "on",
+      }, "POST", { ip: bodyHonoursAbort ? "203.0.113.73" : "203.0.113.74" }),
+    );
+    const elapsed = Math.round(performance.now() - started);
+    const data = JSON.parse(res.body);
+    if (res.statusCode !== 201 || !data.lead_id) fail("delivery_body_hang_persist", { bodyHonoursAbort, data });
+    if (data.email_status !== "error") fail("delivery_body_hang_status", { bodyHonoursAbort, data });
+    if (elapsed > 1500) fail("delivery_body_hang_budget", { bodyHonoursAbort, elapsed, budget_ms: 150 });
+    if (bodyReads !== 1) fail("delivery_body_hang_retry", { bodyHonoursAbort, bodyReads });
+    const stored = await mem.get(data.lead_id);
+    if (!stored || stored.delivery?.email?.status !== "error" || stored.delivery?.email?.reason !== "timeout") {
+      fail("delivery_body_hang_store", { bodyHonoursAbort, delivery: stored && stored.delivery });
+    }
+    if (stored.delivery.email.provider_id) fail("delivery_body_hang_provider_id", stored.delivery.email);
+    pass("delivery_body_hang_within_budget", { body_honours_abort: bodyHonoursAbort, elapsed_ms: elapsed });
+  } finally {
+    globalThis.fetch = originalFetch;
+    delete process.env.RESEND_API_KEY;
+    delete process.env.LEAD_NOTIFY_EMAIL;
+    delete process.env.LEAD_DELIVERY_TIMEOUT_MS;
+  }
+}
+
+// 7e) Deadline after a real HTTP failure: attempt 1 gets 500 late in the
+// budget, attempt 2 has no time left. The operator sees the last real status
+// (reason=timeout_after_http, http=500) instead of a bare timeout.
+{
+  process.env.RESEND_API_KEY = "re_test_key";
+  process.env.LEAD_NOTIFY_EMAIL = "ops@confenge.com.br";
+  process.env.LEAD_DELIVERY_TIMEOUT_MS = "150";
+  const originalFetch = globalThis.fetch;
+  let calls = 0;
+  globalThis.fetch = async () => {
+    calls += 1;
+    await new Promise((r) => setTimeout(r, 120));
+    return { ok: false, status: 500, json: async () => ({}), text: async () => "" };
+  };
+  try {
+    const res = await handler(
+      event({
+        nome: "Sergio Diretor",
+        email: "sergio.diretor@construtora.com.br",
+        estagio: "diagnostico operacao",
+        jornada: "operacao",
+        consentimento: "on",
+      }, "POST", { ip: "203.0.113.75" }),
+    );
+    const data = JSON.parse(res.body);
+    if (res.statusCode !== 201 || data.email_status !== "error") fail("delivery_timeout_after_http_status", data);
+    const stored = await mem.get(data.lead_id);
+    const email = stored && stored.delivery && stored.delivery.email;
+    if (!email || email.reason !== "timeout_after_http" || email.http !== 500) {
+      fail("delivery_timeout_after_http_store", { calls, email });
+    }
+    pass("delivery_timeout_after_http_keeps_last_status", { calls, http: email.http });
+  } finally {
+    globalThis.fetch = originalFetch;
+    delete process.env.RESEND_API_KEY;
+    delete process.env.LEAD_NOTIFY_EMAIL;
+    delete process.env.LEAD_DELIVERY_TIMEOUT_MS;
+  }
+}
+
 // 7b) synthetic / non-real kinds must not call Resend even when the key is set
 {
   process.env.RESEND_API_KEY = "re_test_key_must_not_send";
@@ -1855,6 +2057,210 @@ _reset();
       else process.env[key] = value;
     }
     loadHandler();
+  }
+}
+
+// G03-03: a retry after the browser's 15 s abort reuses the same explicit
+// idempotency key but its Turnstile token was consumed by the first POST. The
+// handler answers the stored receipt (200 idempotent) BEFORE the anti-abuse
+// gate, but only for an explicit key. Without an explicit key the derivable
+// content-bucket key stays behind Turnstile (no unauthenticated oracle).
+{
+  const previous = {
+    secret: process.env.TURNSTILE_SECRET_KEY,
+    require: process.env.LEAD_REQUIRE_TURNSTILE,
+    origin: process.env.LEAD_REQUIRE_ORIGIN,
+  };
+  const originalFetch = globalThis.fetch;
+  let siteverifyCalls = 0;
+  const consumed = new Set();
+  globalThis.fetch = async (url, opts) => {
+    if (String(url).includes("challenges.cloudflare.com")) {
+      siteverifyCalls += 1;
+      const token = new URLSearchParams(String(opts && opts.body)).get("response");
+      // Real Turnstile tokens are single use: a second siteverify fails.
+      const fresh = /^tok-valid-/.test(String(token)) && !consumed.has(token);
+      if (fresh) consumed.add(token);
+      return { ok: true, status: 200, text: async () => "{}", json: async () => ({ success: fresh }) };
+    }
+    return { ok: true, status: 200, text: async () => "{}", json: async () => ({}) };
+  };
+  try {
+    process.env.TURNSTILE_SECRET_KEY = "turnstile-secret-fixture-value";
+    process.env.LEAD_REQUIRE_TURNSTILE = "1";
+    delete process.env.LEAD_REQUIRE_ORIGIN;
+    const reloaded = loadHandler();
+    const { MemoryStore: IdemMemoryStore } = require(path.join(root, "netlify/functions/lib/lead-store.cjs"));
+    const idemStore = new IdemMemoryStore();
+    reloaded.setStoreForTests(idemStore);
+    _reset();
+
+    const key = "fe-2f1c6f5a-7c1e-4a0b-9d2e-6b8f0c3a1d55";
+    const payload = {
+      nome: "Renata Diretora",
+      email: "renata.diretora@construtora.com.br",
+      estagio: "diagnostico operacao",
+      jornada: "operacao",
+      consentimento: "on",
+      idempotency_key: key,
+    };
+
+    // First POST: valid token, persisted.
+    const first = await reloaded.handler(
+      event({ ...payload, turnstile_token: "tok-valid-once" }, "POST", {
+        ip: "203.0.113.120",
+        "idempotency-key": key,
+      }),
+    );
+    const firstBody = JSON.parse(first.body);
+    if (first.statusCode !== 201 || !firstBody.lead_id) fail("idem_pre_verify_first_persist", first);
+    if (siteverifyCalls !== 1) fail("idem_pre_verify_first_siteverify", siteverifyCalls);
+
+    // Retry after timeout: same key, consumed token -> the receipt, no siteverify.
+    const retry = await reloaded.handler(
+      event({ ...payload, turnstile_token: "tok-valid-once" }, "POST", {
+        ip: "203.0.113.120",
+        "idempotency-key": key,
+      }),
+    );
+    const retryBody = JSON.parse(retry.body);
+    if (retry.statusCode !== 200 || retryBody.idempotent !== true || retryBody.lead_id !== firstBody.lead_id) {
+      fail("idem_pre_verify_replay", { status: retry.statusCode, body: retryBody });
+    }
+    if (siteverifyCalls !== 1) fail("idem_pre_verify_replay_called_siteverify", siteverifyCalls);
+    // Same key and no token at all: still the receipt, still no siteverify.
+    const noToken = await reloaded.handler(
+      event({ ...payload }, "POST", { ip: "203.0.113.120", "idempotency-key": key }),
+    );
+    if (noToken.statusCode !== 200 || JSON.parse(noToken.body).idempotent !== true) {
+      fail("idem_pre_verify_replay_no_token", noToken);
+    }
+    if (siteverifyCalls !== 1) fail("idem_pre_verify_no_token_called_siteverify", siteverifyCalls);
+    // The replay is the public receipt projection only: no PII, no delivery
+    // object, no provider handle.
+    const replayStr = JSON.stringify(retryBody);
+    for (const forbidden of ["renata", "construtora", "provider_id", "delivery", "audit", "ip_hash"]) {
+      if (replayStr.toLowerCase().includes(forbidden)) fail("idem_pre_verify_replay_leak", { forbidden, retryBody });
+    }
+    pass("idem_pre_verify_replays_receipt_without_turnstile", { lead_id: firstBody.lead_id });
+
+    // Negative property: a new explicit key with a consumed token is refused.
+    const newKey = "fe-9a8b7c6d-1e2f-4a3b-8c9d-0e1f2a3b4c5d";
+    const newKeyConsumed = await reloaded.handler(
+      event({ ...payload, idempotency_key: newKey, turnstile_token: "tok-valid-once" }, "POST", {
+        ip: "203.0.113.120",
+        "idempotency-key": newKey,
+      }),
+    );
+    if (newKeyConsumed.statusCode !== 403 || JSON.parse(newKeyConsumed.body).error !== "anti_abuse") {
+      fail("idem_pre_verify_new_key_refused", newKeyConsumed);
+    }
+    if (siteverifyCalls !== 2) fail("idem_pre_verify_new_key_siteverify", siteverifyCalls);
+    if (await idemStore.getByIdempotency(`idk:${newKey}`)) fail("idem_pre_verify_new_key_persisted", newKey);
+
+    // Negative property: an explicit key OUTSIDE the front's shapes (a probe
+    // stamp, a bare timestamp, a harness key) is persistence-only. Its stored
+    // receipt is NOT replayed before Turnstile even though the record exists:
+    // consumed token -> 403 with siteverify called; no token -> 403 too. The
+    // probe itself never needs this path (it authenticates with the probe
+    // secret and Turnstile is skipped), so nothing legitimate regresses.
+    const { CLIENT_REPLAY_KEY } = reloaded;
+    const foreignKeys = [
+      `synthetic-probe-${Date.now()}`,
+      `fe-${Date.now()}`,
+      "harness-idem",
+      "fe-abc-def",
+    ];
+    for (const [foreignIndex, foreignKey] of foreignKeys.entries()) {
+      if (CLIENT_REPLAY_KEY.test(foreignKey)) fail("idem_pre_verify_foreign_key_allowlisted", foreignKey);
+      const foreignIp = `203.0.113.${140 + foreignIndex}`;
+      const seeded = await reloaded.handler(
+        event({ ...payload, idempotency_key: foreignKey, turnstile_token: `tok-valid-${foreignKey}` }, "POST", {
+          ip: foreignIp,
+          "idempotency-key": foreignKey,
+        }),
+      );
+      if (seeded.statusCode !== 201) fail("idem_pre_verify_foreign_key_persist", { foreignKey, seeded });
+      const beforeForeign = siteverifyCalls;
+      const foreignConsumed = await reloaded.handler(
+        event({ ...payload, idempotency_key: foreignKey, turnstile_token: `tok-valid-${foreignKey}` }, "POST", {
+          ip: foreignIp,
+          "idempotency-key": foreignKey,
+        }),
+      );
+      if (foreignConsumed.statusCode !== 403 || JSON.parse(foreignConsumed.body).error !== "anti_abuse") {
+        fail("idem_pre_verify_foreign_key_replayed", { foreignKey, status: foreignConsumed.statusCode, body: foreignConsumed.body });
+      }
+      if (siteverifyCalls !== beforeForeign + 1) fail("idem_pre_verify_foreign_key_skipped_siteverify", { foreignKey, siteverifyCalls });
+      const foreignNoToken = await reloaded.handler(
+        event({ ...payload, idempotency_key: foreignKey }, "POST", { ip: foreignIp, "idempotency-key": foreignKey }),
+      );
+      if (foreignNoToken.statusCode !== 403) fail("idem_pre_verify_foreign_key_no_token", { foreignKey, foreignNoToken });
+    }
+    pass("idem_pre_verify_foreign_key_stays_behind_turnstile", { keys: foreignKeys.length });
+
+    // Positive property: every shape the front can mint (randomUUID, the
+    // getRandomValues fallback and the Date.now+Math.random fallback, for the
+    // shared form and for adaptive intake) replays without siteverify. This
+    // is what stops a future "tighten to uuid only" from reintroducing the
+    // 403-after-timeout bug for browsers without crypto.randomUUID.
+    const frontShapes = [
+      `fe-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 12)}`,
+      `fe-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`,
+      "fe-1z141z3-a1b2c3d-9-zzzzzzz",
+      `triage-${"7c9e6679-7425-40de-944b-e07fc1f90ae7"}`,
+      `triage-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 12)}`,
+    ];
+    for (const [index, shapeKey] of frontShapes.entries()) {
+      if (!CLIENT_REPLAY_KEY.test(shapeKey)) fail("idem_pre_verify_front_shape_rejected", shapeKey);
+      const shapeIp = `203.0.113.${130 + index}`;
+      const shapeFirst = await reloaded.handler(
+        event({ ...payload, idempotency_key: shapeKey, turnstile_token: `tok-valid-${shapeKey}` }, "POST", {
+          ip: shapeIp,
+          "idempotency-key": shapeKey,
+        }),
+      );
+      if (shapeFirst.statusCode !== 201) fail("idem_pre_verify_front_shape_persist", { shapeKey, shapeFirst });
+      const beforeShape = siteverifyCalls;
+      const shapeReplay = await reloaded.handler(
+        event({ ...payload, idempotency_key: shapeKey }, "POST", { ip: shapeIp, "idempotency-key": shapeKey }),
+      );
+      const shapeBody = JSON.parse(shapeReplay.body);
+      if (shapeReplay.statusCode !== 200 || shapeBody.idempotent !== true || shapeBody.lead_id !== JSON.parse(shapeFirst.body).lead_id) {
+        fail("idem_pre_verify_front_shape_replay", { shapeKey, status: shapeReplay.statusCode, body: shapeBody });
+      }
+      if (siteverifyCalls !== beforeShape) fail("idem_pre_verify_front_shape_called_siteverify", { shapeKey, siteverifyCalls });
+    }
+    pass("idem_pre_verify_replays_every_front_shape", { shapes: frontShapes.length });
+
+    // Negative property: no explicit key -> content-bucket key stays behind
+    // Turnstile even though an identical record now exists in the store.
+    const { idempotency_key: _omit, ...contentOnly } = payload;
+    const bucketPersisted = await reloaded.handler(
+      event({ ...contentOnly, turnstile_token: "tok-valid-two" }, "POST", { ip: "203.0.113.121" }),
+    );
+    if (bucketPersisted.statusCode !== 201) fail("idem_pre_verify_bucket_persist", bucketPersisted);
+    const beforeOracle = siteverifyCalls;
+    const oracleConsumed = await reloaded.handler(
+      event({ ...contentOnly, turnstile_token: "tok-valid-two" }, "POST", { ip: "203.0.113.121" }),
+    );
+    if (oracleConsumed.statusCode !== 403 || JSON.parse(oracleConsumed.body).error !== "anti_abuse") {
+      fail("idem_pre_verify_content_key_oracle_consumed_token", oracleConsumed);
+    }
+    if (siteverifyCalls !== beforeOracle + 1) fail("idem_pre_verify_content_key_skipped_siteverify", siteverifyCalls);
+    const oracleNoToken = await reloaded.handler(event({ ...contentOnly }, "POST", { ip: "203.0.113.121" }));
+    if (oracleNoToken.statusCode !== 403 || JSON.parse(oracleNoToken.body).error !== "anti_abuse") {
+      fail("idem_pre_verify_content_key_oracle_no_token", oracleNoToken);
+    }
+    pass("idem_pre_verify_requires_explicit_key", { siteverifyCalls });
+  } finally {
+    globalThis.fetch = originalFetch;
+    if (previous.secret == null) delete process.env.TURNSTILE_SECRET_KEY;
+    else process.env.TURNSTILE_SECRET_KEY = previous.secret;
+    if (previous.require == null) delete process.env.LEAD_REQUIRE_TURNSTILE;
+    else process.env.LEAD_REQUIRE_TURNSTILE = previous.require;
+    if (previous.origin == null) delete process.env.LEAD_REQUIRE_ORIGIN;
+    else process.env.LEAD_REQUIRE_ORIGIN = previous.origin;
   }
 }
 

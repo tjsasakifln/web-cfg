@@ -39,6 +39,17 @@ const resultStore = require("./lib/live-intelligence-result-store.cjs");
 // Allow tests to inject store
 let _storeOverride = null;
 
+// Explicit idempotency keys minted by our own browser code, and nothing else.
+// These are the only keys whose stored receipt may be replayed before the
+// Turnstile gate (see the pre-verify block in the handler). Shapes:
+//   js/modules/form.js        fe-<uuid v4> | fe-<u32b36>-<u32b36>-<u32b36>-<u32b36>
+//                             | fe-<Date.now b36>-<Math.random b36>
+//   assets/js/adaptive-intake triage-<uuid v4> | triage-<Date.now b36>-<Math.random b36>
+// Anything else (probe stamps, harness argv, bare timestamps, idk:-wrapped
+// values) is an explicit key for persistence only and still needs Turnstile.
+const CLIENT_REPLAY_KEY =
+  /^(?:fe|triage)-(?:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}|[0-9a-z]{1,7}-[0-9a-z]{1,7}-[0-9a-z]{1,7}-[0-9a-z]{1,7}|[0-9a-z]{7,9}-[0-9a-z]{1,12})$/i;
+
 function adaptiveIdempotencyMaterialHash(lead) {
   if (!lead || lead.adaptive_intake !== true) return null;
   const material = {
@@ -81,6 +92,7 @@ async function getStore(event) {
 }
 
 exports.setStoreForTests = setStoreForTests;
+exports.CLIENT_REPLAY_KEY = CLIENT_REPLAY_KEY;
 
 exports.handler = async (event) => {
   const originCheck = originAllowed(event);
@@ -179,32 +191,6 @@ exports.handler = async (event) => {
     };
   }
 
-  // A synthetic probe proves itself with LEAD_PROBE_SECRET: a 32+ character
-  // server-side secret, compared in constant time, that no browser ever holds.
-  // Turnstile proves the opposite thing — that a human browser solved a
-  // challenge — which a probe by definition is not and cannot be. Requiring it
-  // of the probe made the only non-fabricating way to exercise inbound
-  // plumbing in production impossible, so first-touch persistence and the
-  // Warmbly handoff could no longer be verified without inventing a real lead.
-  // Probe records are already tagged SYNTHETIC-PROBE and never reach commercial
-  // totals.
-  const turnstile = originCheck.probe
-    ? { ok: true, skipped: true, reason: "synthetic_probe" }
-    : await verifyTurnstile(lead.turnstile_token, ip);
-  if (!turnstile.ok) {
-    safeLog("warn", "turnstile_rejected", { error: turnstile.error });
-    return {
-      statusCode: 403,
-      headers,
-      body: JSON.stringify(
-        publicErrorBody({
-          error: "anti_abuse",
-          message: "Falha na verificação antiabuso. Recarregue a página e tente novamente.",
-        }),
-      ),
-    };
-  }
-
   const store = await getStore(event);
   if (!store) {
     safeLog("error", "store_unavailable", {});
@@ -273,51 +259,6 @@ exports.handler = async (event) => {
   lead.idempotency_key = idemKey;
   const idempotencyMaterialHash = adaptiveIdempotencyMaterialHash(lead);
 
-  // Paid parameter orders (Radar Decisório): mint the payment correlation from
-  // the idempotency key so a retry reconciles against the same payment, and
-  // fail closed if the `cfg:{offer_id}:{correlation_id}` policy cannot be met.
-  // Nothing is emitted to the visitor before the durable persist succeeds.
-  let radarPublic = null;
-  if (lead.radar_params) {
-    try {
-      const radar = require("./lib/radar-params.cjs");
-      const correlationId = radar.correlationIdFor(idemKey);
-      const ref = radar.buildExternalReference(lead.radar_params.offer_id, correlationId);
-      if (!ref.ok) throw new Error(ref.error || "external_reference_invalid");
-      lead.radar_params = {
-        ...lead.radar_params,
-        correlation_id: correlationId,
-        external_reference: ref.external_reference,
-      };
-      lead.external_reference = ref.external_reference;
-      radarPublic = {
-        correlation_id: correlationId,
-        external_reference: ref.external_reference,
-        delivery_business_days: radar.DELIVERY_CLOCK.business_days,
-      };
-      safeLog("info", "radar_params_correlated", {
-        offer_id: lead.radar_params.offer_id,
-        recorte: lead.radar_params.recorte,
-        uf: lead.radar_params.uf,
-        segment_count: (lead.radar_params.segmentos || []).length,
-      });
-    } catch (err) {
-      safeLog("error", "radar_correlation_failed", {
-        code: err && err.message ? String(err.message).slice(0, 80) : "error",
-      });
-      return {
-        statusCode: 503,
-        headers,
-        body: JSON.stringify(
-          publicErrorBody({
-            error: "radar_correlation_failed",
-            message: "Não foi possível registrar os parâmetros do Radar. O pagamento não foi liberado.",
-          }),
-        ),
-      };
-    }
-  }
-
   // Deterministic id from idempotency key — same key always same lead_id even if
   // the idempotency map read is eventually consistent on first retry.
   const lead_id = generateLeadId(`idem|${idemKey}`, { deterministic: true });
@@ -367,6 +308,128 @@ exports.handler = async (event) => {
       ),
     };
   };
+
+  // Idempotent replay BEFORE the anti-abuse gate, only for an explicit client
+  // key minted by our own front (CLIENT_REPLAY_KEY). A browser that timed out
+  // at 15 s and retries reuses the same key (js/modules/form.js,
+  // assets/js/adaptive-intake.js) but its Turnstile token was already consumed
+  // by the first POST, so verifying the token first would answer 403
+  // "anti_abuse" for a record that is durably stored — contradicting the
+  // receipt the same client is entitled to. Security rationale for skipping
+  // the challenge here:
+  //   - the reply is exactly the receipt already returned to the holder of
+  //     that key (idempotentOk: lead_id, status, non-PII categories); no field
+  //     of the stored record beyond that projection is exposed;
+  //   - the gate is the SHAPE of the key, not merely its presence:
+  //     idempotencyKeyFor accepts any non-empty string, and producers other
+  //     than the browser use short or derivable keys (the synthetic probe used
+  //     `synthetic-probe-<Date.now()>`, harnesses take the key from argv). Only
+  //     the shapes the front mints from crypto.randomUUID / getRandomValues /
+  //     Math.random pass; every other explicit key, and the content-bucket
+  //     key (derivable from a person's name/phone/e-mail, an unauthenticated
+  //     existence oracle), stays behind Turnstile;
+  //   - origin, payload validation and the IP/fingerprint rate limit already
+  //     ran above, and this path performs at most two store reads (idem map,
+  //     then the deterministic lead_id; no retry loop) so an unauthenticated
+  //     POST cannot buy 600 ms of store I/O;
+  //   - a miss falls through to Turnstile unchanged; nothing is written here.
+  // Trade-off accepted: getStore and the store policy run before Turnstile
+  // because this replay needs the store; an unauthenticated POST therefore
+  // sees 503 store_unavailable instead of 403 when the store is down. That
+  // only reveals that the endpoint is degraded (the same signal /obrigado and
+  // ops health already expose), never any record.
+  if (headerIdem && CLIENT_REPLAY_KEY.test(String(headerIdem).trim())) {
+    try {
+      const existing = await store.getByIdempotency(idemKey);
+      const rec = existing && existing.lead_id ? existing : await store.get(lead_id);
+      if (rec && rec.lead_id) {
+        safeLog("info", "lead_idempotent_hit", {
+          lead_id: rec.lead_id,
+          via: existing && existing.lead_id ? "idem_map_pre_verify" : "deterministic_id_pre_verify",
+          attempt: 0,
+        });
+        return idempotentOk(rec);
+      }
+    } catch (err) {
+      safeLog("error", "idempotency_lookup_failed", {
+        stage: "pre_verify",
+        code: err && err.message ? String(err.message).slice(0, 80) : "error",
+      });
+    }
+  }
+
+  // A synthetic probe proves itself with LEAD_PROBE_SECRET: a 32+ character
+  // server-side secret, compared in constant time, that no browser ever holds.
+  // Turnstile proves the opposite thing — that a human browser solved a
+  // challenge — which a probe by definition is not and cannot be. Requiring it
+  // of the probe made the only non-fabricating way to exercise inbound
+  // plumbing in production impossible, so first-touch persistence and the
+  // Warmbly handoff could no longer be verified without inventing a real lead.
+  // Probe records are already tagged SYNTHETIC-PROBE and never reach commercial
+  // totals.
+  const turnstile = originCheck.probe
+    ? { ok: true, skipped: true, reason: "synthetic_probe" }
+    : await verifyTurnstile(lead.turnstile_token, ip);
+  if (!turnstile.ok) {
+    safeLog("warn", "turnstile_rejected", { error: turnstile.error });
+    return {
+      statusCode: 403,
+      headers,
+      body: JSON.stringify(
+        publicErrorBody({
+          error: "anti_abuse",
+          message: "Falha na verificação antiabuso. Recarregue a página e tente novamente.",
+        }),
+      ),
+    };
+  }
+
+
+
+  // Paid parameter orders (Radar Decisório): mint the payment correlation from
+  // the idempotency key so a retry reconciles against the same payment, and
+  // fail closed if the `cfg:{offer_id}:{correlation_id}` policy cannot be met.
+  // Nothing is emitted to the visitor before the durable persist succeeds.
+  let radarPublic = null;
+  if (lead.radar_params) {
+    try {
+      const radar = require("./lib/radar-params.cjs");
+      const correlationId = radar.correlationIdFor(idemKey);
+      const ref = radar.buildExternalReference(lead.radar_params.offer_id, correlationId);
+      if (!ref.ok) throw new Error(ref.error || "external_reference_invalid");
+      lead.radar_params = {
+        ...lead.radar_params,
+        correlation_id: correlationId,
+        external_reference: ref.external_reference,
+      };
+      lead.external_reference = ref.external_reference;
+      radarPublic = {
+        correlation_id: correlationId,
+        external_reference: ref.external_reference,
+        delivery_business_days: radar.DELIVERY_CLOCK.business_days,
+      };
+      safeLog("info", "radar_params_correlated", {
+        offer_id: lead.radar_params.offer_id,
+        recorte: lead.radar_params.recorte,
+        uf: lead.radar_params.uf,
+        segment_count: (lead.radar_params.segmentos || []).length,
+      });
+    } catch (err) {
+      safeLog("error", "radar_correlation_failed", {
+        code: err && err.message ? String(err.message).slice(0, 80) : "error",
+      });
+      return {
+        statusCode: 503,
+        headers,
+        body: JSON.stringify(
+          publicErrorBody({
+            error: "radar_correlation_failed",
+            message: "Não foi possível registrar os parâmetros do Radar. O pagamento não foi liberado.",
+          }),
+        ),
+      };
+    }
+  }
 
   // Brief read-retry: Blobs eventual consistency can miss a just-written key on the
   // immediate second POST. Must return 200 + idempotent:true without re-delivery.
@@ -678,6 +741,12 @@ exports.handler = async (event) => {
         email: {
           status: email_status,
           attempts: 1,
+          // Provider correlation handle for the operator (Resend message id and
+          // HTTP status): store-only, read through authenticated ops, never
+          // part of the public body (publicSuccessBody whitelist).
+          ...(delivery?.email?.reason ? { reason: delivery.email.reason } : {}),
+          ...(Number.isFinite(delivery?.email?.http) ? { http: delivery.email.http } : {}),
+          ...(delivery?.email?.provider_id ? { provider_id: delivery.email.provider_id } : {}),
         },
       },
       status:
