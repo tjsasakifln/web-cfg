@@ -71,7 +71,7 @@
       "measurement": {
         "date": "2026-09-18",
         "viewport": "1366x768",
-        "finding": "H1 de y=191 a y=341; linha de prova de y=569 a y=611; ação primária inteira de y=626 a y=670 em 1366x768, e de y=625 a y=669 em 390x844, dentro da dobra nos dois"
+        "finding": "H1 de y=191 a y=341; linha de prova de y=512 a y=554; ação primária inteira de y=569 a y=613 em 1366x768, e de y=575 a y=619 em 390x844, dentro da dobra nos dois"
       },
       "observed_2026_08_24": "documento com cerca de 11266 px de altura; hero promove Conhecer o primeiro exemplo"
     },
@@ -569,10 +569,10 @@
             "recebe"
           ],
           "lead_adds": [
-            "avaliar",
+            "analise",
             "chega",
-            "comparar",
-            "completar"
+            "decisao",
+            "entrega"
           ]
         },
         {

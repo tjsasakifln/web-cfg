@@ -1401,6 +1401,17 @@ export const SUITE_GRAPH = Object.freeze({
     artifacts: ["data/migration/smartlic-confenge/manifesto.v1.json"],
     surfaces: [],
   },
+  "test:article-pillar-form": {
+    producers: [
+      "scripts/site/apply_article_pillar_form.py",
+      "scripts/site/test_apply_article_pillar_form.py",
+      "scripts/site/inbound_first_remediate.py",
+      "conteudos/",
+      "data/organic/content-service-map.json",
+    ],
+    artifacts: [],
+    surfaces: ["/conteudos/"],
+  },
   "test:knowledge-funnel": {
     producers: [
       "scripts/knowledge_funnel/",
