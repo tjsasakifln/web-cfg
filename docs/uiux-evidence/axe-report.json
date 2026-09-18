@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-16T15:16:04.569Z",
+  "generated_at": "2026-09-18T14:58:59.501Z",
   "issue": 293,
   "base": "http://127.0.0.1:8793",
   "site_root": "_site",
@@ -26,7 +26,7 @@
       }
     ],
     "page_loads": 102,
-    "price_route_count": 38,
+    "price_route_count": 40,
     "capture_form_route_count": 30,
     "sampling": {
       "enabled": false,
@@ -53,6 +53,7 @@
         "route": "/aditivos-obras-publicas/",
         "family": "service-pillars",
         "reasons": [
+          "price",
           "capture_form"
         ]
       },
@@ -313,6 +314,7 @@
         "route": "/ferramentas/diagnostico-defesa-margem/",
         "family": "ferramentas",
         "reasons": [
+          "price",
           "capture_form"
         ]
       },
@@ -1550,6 +1552,7 @@
       "viewport": "mobile",
       "family": "service-pillars",
       "selected_by": [
+        "price",
         "capture_form"
       ],
       "counts": {
@@ -2125,6 +2128,7 @@
       "viewport": "mobile",
       "family": "ferramentas",
       "selected_by": [
+        "price",
         "capture_form"
       ],
       "counts": {
@@ -2383,6 +2387,7 @@
       "viewport": "desktop",
       "family": "service-pillars",
       "selected_by": [
+        "price",
         "capture_form"
       ],
       "counts": {
@@ -2958,6 +2963,7 @@
       "viewport": "desktop",
       "family": "ferramentas",
       "selected_by": [
+        "price",
         "capture_form"
       ],
       "counts": {
@@ -3183,5 +3189,5 @@
   "serious": 0,
   "moderate": 0,
   "minor": 0,
-  "duration_seconds": 146
+  "duration_seconds": 165
 }
