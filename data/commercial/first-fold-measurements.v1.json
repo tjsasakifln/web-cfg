@@ -1,9 +1,9 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-09-18T17:04:27.636Z",
+  "measured_at": "2026-09-18T22:32:18.950Z",
   "measured_on": "2026-09-18",
-  "commit_sha": "5e7d9515a5e2ceb716d1c470d8cec007b95ba998",
+  "commit_sha": "8daa204b5253cf7b70bbcd3b0f00f98db1e32aef",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "f168038814087e1b365d1de3042af9a3f3364743756e104711fecc0fb9fe7477",
@@ -47,12 +47,12 @@
     "diretoria-b2g/index.html": "9df7cde4881ff96c2919c2292370e88532dce93b1ab2277780ef2875eb4a3475",
     "entregas/index.html": "2639fa0477bfd3dc614f77082c81e4878a197232342b6c086d85d341fc37bdc7",
     "entregas/styles.css": "4df6c06befb99bf6ce09db19d81e7353cdda80a7a802868600b88033ca78aa1c",
-    "index.html": "6fd3039ba73e0fb299dfed6e0a2615365fcf37e92dbb2fcf70fdf9af4a97e98a",
-    "medicoes-glosas-obras-publicas/index.html": "a265f90370894eccbeebfb375f4821b622dd9954d6685de62af837996a1814cf",
-    "problemas-que-resolvemos/index.html": "c5a5872e8ab07dc8bffc49cc82617fed5b6d40ffd125662d5ab6ab35a5a60153",
+    "index.html": "3648eff5dd2404ed2845795c28a27e62a25be20100fd5ec15d2ce854c82f1f3c",
+    "medicoes-glosas-obras-publicas/index.html": "ab5b5eff1f4f5f76168ae0e29c46fcc7faa999c331a355259025b4bbfac0c183",
+    "problemas-que-resolvemos/index.html": "fa5bb7506ab2133018b6a3a52a61ca42f6f0ca7dc7ca26b118e986a4d9483aa7",
     "reequilibrio-obras-publicas/index.html": "d3c946a5d0a81d9e2b59760f5c35396dd887de5055a11e441134dee84fd120f3",
-    "script.js": "74effeab654baeeaccb9e0336dfe33ad6016832d508d9bf9a570e092303bb233",
-    "servicos-obras-publicas/index.html": "599f3003d48ea8a809e05462683d799723ac469c75f4802e8ae93ea04b484986",
+    "script.js": "9c66fa008937610fa1fdee0aadeec9ca87dbdb972a63a7b4ae6edf9673fb70b3",
+    "servicos-obras-publicas/index.html": "5a9c439aa4dac7a0ed8a556789058faddc8288046e2344d83b01566ca26974a8",
     "styles-hubs.css": "ed4668833ad8de5cef5acc5fc1e8f21e519870f0bf282247c3b4a9644a094592",
     "styles-offers.css": "e23f1ae9e064f7c3dbbb04c734d97d49f52d88cd5507e1dd8272cdff0cec127e",
     "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
@@ -104,7 +104,7 @@
   "routes": [
     {
       "route": "/",
-      "html_sha256": "6fd3039ba73e0fb299dfed6e0a2615365fcf37e92dbb2fcf70fdf9af4a97e98a",
+      "html_sha256": "3648eff5dd2404ed2845795c28a27e62a25be20100fd5ec15d2ce854c82f1f3c",
       "measured_on": "2026-09-18",
       "viewports": {
         "1366x768": {
@@ -239,8 +239,8 @@
             "proof": {
               "selector": ".hero-proof",
               "box": {
-                "top": 728,
-                "bottom": 806,
+                "top": 752,
+                "bottom": 830,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -251,8 +251,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 614,
-                "bottom": 658,
+                "top": 638,
+                "bottom": 682,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -266,8 +266,8 @@
               "text": "Ver serviços por situação",
               "href": "/servicos/",
               "box": {
-                "top": 614,
-                "bottom": 658,
+                "top": 638,
+                "bottom": 682,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -526,7 +526,7 @@
     },
     {
       "route": "/servicos-obras-publicas/",
-      "html_sha256": "599f3003d48ea8a809e05462683d799723ac469c75f4802e8ae93ea04b484986",
+      "html_sha256": "5a9c439aa4dac7a0ed8a556789058faddc8288046e2344d83b01566ca26974a8",
       "measured_on": "2026-09-18",
       "viewports": {
         "1366x768": {
@@ -724,7 +724,7 @@
     },
     {
       "route": "/problemas-que-resolvemos/",
-      "html_sha256": "c5a5872e8ab07dc8bffc49cc82617fed5b6d40ffd125662d5ab6ab35a5a60153",
+      "html_sha256": "fa5bb7506ab2133018b6a3a52a61ca42f6f0ca7dc7ca26b118e986a4d9483aa7",
       "measured_on": "2026-09-18",
       "viewports": {
         "1366x768": {
@@ -1982,7 +1982,7 @@
     },
     {
       "route": "/medicoes-glosas-obras-publicas/",
-      "html_sha256": "a265f90370894eccbeebfb375f4821b622dd9954d6685de62af837996a1814cf",
+      "html_sha256": "ab5b5eff1f4f5f76168ae0e29c46fcc7faa999c331a355259025b4bbfac0c183",
       "measured_on": "2026-09-18",
       "viewports": {
         "1366x768": {
