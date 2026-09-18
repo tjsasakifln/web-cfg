@@ -830,6 +830,20 @@ def main(argv: list[str] | None = None) -> int:
     except Exception as exc:  # noqa: BLE001
         errors.append(f"turnstile_publish_config_failed:{exc}")
 
+    # Minify the PUBLIC copies of the tool scripts (_site/assets/js/*.js only;
+    # source assets/js/ stays readable and untouched) before the publish tree
+    # is hashed below. Fail-closed like the em-dash scrub: an unminified
+    # artifact would ship over the Lighthouse critical-payload budget.
+    try:
+        gate = run_node_gate("scripts/site/minify_public_js.mjs")
+        if not gate["ok"]:
+            print("FAIL-CLOSED minify_public_js", file=sys.stderr)
+            return 2
+        print("minify_public_js: public assets/js copies minified")
+    except Exception as exc:  # noqa: BLE001
+        print(f"FAIL-CLOSED minify_public_js exception: {exc}", file=sys.stderr)
+        return 2
+
     # Write identity, then hash the final publish tree, then stamp those hashes.
     repro_manifest: dict = {}
     try:

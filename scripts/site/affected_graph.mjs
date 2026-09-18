@@ -1321,6 +1321,11 @@ export const SUITE_GRAPH = Object.freeze({
     artifacts: ["script.js"],
     surfaces: ["/"],
   },
+  "test:minify-public-js": {
+    producers: ["scripts/site/minify_public_js.mjs", "assets/js/"],
+    artifacts: [],
+    surfaces: ["/ferramentas/diagnostico-defesa-margem/", "/ferramentas/checklist-reequilibrio/"],
+  },
   "test:capture-states": {
     producers: [
       "scripts/site/capture_states.mjs",
