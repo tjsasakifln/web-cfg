@@ -30,6 +30,11 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from scripts.site.apply_article_pillar_form import (# noqa: E402
+    PILLAR_ANCHOR,
+    form_target,
+    service_map,
+)
 from scripts.site.brand import (# noqa: E402
     footer_blurb,
     load_brand,
@@ -738,6 +743,31 @@ def filter_related_links(html: str, indexable: dict[str, bool]) -> str:
 )
 
 
+LEAD_INLINE_RE = re.compile(r'<section class="lead-inline"[^>]*>.*?</section>', re.S)
+
+
+def article_form_target(origem: str, html: str) -> str:
+    """Destino de "Continuar pelo formulário" num artigo: a mesma regra de
+    ``scripts/site/apply_article_pillar_form.py`` (Tema principal ou
+    ``path_overrides`` do content-service-map, com ``#captura-pilar`` presente
+    no pilar); só sem pilar cai na home (``/#contato``)."""
+    slug = origem.strip("/").split("/")[-1] if origem.startswith("/conteudos/") else ""
+    if slug:
+        overrides, _labels = service_map()
+        target = form_target(slug, html, overrides)
+        if target:
+            return target
+    return "/#contato"
+
+
+def lead_inline_points_to_pillar(html: str) -> bool:
+    """A lead-inline já leva o formulário ao pilar? Então fica como está
+    (fail-closed): regenerá-la devolveria o formulário à home e trocaria o
+    WhatsApp em frase natural pelo texto genérico da jornada."""
+    m = LEAD_INLINE_RE.search(html)
+    return bool(m and f'{PILLAR_ANCHOR}"' in m.group(0) and "Continuar pelo formulário" in m.group(0))
+
+
 def inject_journey_cta(html: str, brand: dict[str, Any], journey_id: str, topic: str, origem: str) -> str:
     """Ensure primary CTA language matches journey; soft patch of lead-inline titles."""
     journeys = {j["id"]: j for j in brand.get("journeys") or []}
@@ -753,10 +783,12 @@ def inject_journey_cta(html: str, brand: dict[str, Any], journey_id: str, topic:
             count=1,
 )
     # Soft-replace generic "Quer validar este cenário" lead with journey-aware next step
+    if lead_inline_points_to_pillar(html):
+        return html
     cta = j.get("cta") or "Solicitar canal seguro para envio"
     next_step = j.get("next_step") or ""
     wa = wa_url(j.get("wa_message") or "Olá, Tiago. Quero solicitar um canal seguro para envio.")
-    form = "/#contato"
+    form = article_form_target(origem, html)
 
     new_lead = (
         f'<section class="lead-inline" id="diagnostico-confenge" aria-label="Próximo passo" '
@@ -773,13 +805,7 @@ def inject_journey_cta(html: str, brand: dict[str, Any], journey_id: str, topic:
         f'href="{form}">Continuar pelo formulário</a>'
         f"</div></section>"
 )
-    html2, n = re.subn(
-        r'<section class="lead-inline"[^>]*>.*?</section>',
-        new_lead,
-        html,
-        count=1,
-        flags=re.S,
-)
+    html2, n = LEAD_INLINE_RE.subn(new_lead, html, count=1)
     if n:
         html = html2
     return html
