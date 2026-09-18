@@ -458,6 +458,23 @@ def contact_path_problems(rel: str, html: str) -> list[str]:
                 problems.append(f"{rel}#obra-imovel: sem caminho para a página de quantitativos e orçamento")
         if not any(re.search(r"inspecionar|documentar", t, re.I) for t in texts):
             problems.append(f"{rel}#obra-imovel: caminho de inspeção removido")
+        # POS-REDESIGN-FECHAMENTO-20260918 (G02-07): quantitativos e orçamento
+        # saíram de #obra-imovel para um item próprio. A triagem precisa ter esse
+        # item, com prefill de WhatsApp que nomeie o pedido e o caminho para a
+        # página do serviço; sem ele, o visitante que precisa orçar só encontra
+        # inspeção. Aceita-se também a forma antiga (tudo em #obra-imovel), desde
+        # que o guarda acima tenha cobrado o orçamento lá.
+        qstart = html.find('<li id="quantitativos">')
+        qitem = html[qstart : html.find("</li>", qstart)] if qstart >= 0 else ""
+        if qstart < 0:
+            if not re.search(r"quantitativos|or[çc]amento", plain, re.I):
+                problems.append(f"{rel}: sem item de quantitativos e orçamento (#quantitativos ou dentro de #obra-imovel)")
+        else:
+            qtexts = _wa_texts(qitem)
+            if not any(re.search(r"quantitativos|or[çc]amento", t, re.I) for t in qtexts):
+                problems.append(f"{rel}#quantitativos: sem mensagem de WhatsApp que nomeie quantitativos ou orçamento")
+            if 'href="/quantitativos-orcamento-obras/"' not in qitem:
+                problems.append(f"{rel}#quantitativos: sem caminho para a página de quantitativos e orçamento")
     return problems
 
 
@@ -498,6 +515,27 @@ def test_contact_paths_reject_public_only_invitation_and_budget_as_inspection() 
         f'<a href="{wa}Ol%C3%A1.%20Quero%20proposta%20de%20quantitativos%20ou%20or%C3%A7amento.">Falar</a> ou <a href="/quantitativos-orcamento-obras/">ver</a>.</li>'
     )
     assert contact_path_problems("triagem-tecnica/index.html", new_triage) == [], contact_path_problems("triagem-tecnica/index.html", new_triage)
+    # G02-07: item próprio de quantitativos. Controle passa; sem prefill nomeado
+    # ou sem o link do serviço reprova; triagem só com inspeção (sem item nenhum
+    # de orçamento) reprova.
+    split_triage = (
+        '<li id="obra-imovel"><strong>Obra ou imóvel para inspecionar ou documentar.</strong> Laudo de estado: '
+        f'<a href="{wa}Ol%C3%A1.%20Tenho%20uma%20obra%20para%20inspecionar%20ou%20documentar.">Falar</a></li>'
+        '<li id="quantitativos"><strong>Quantitativos ou orçamento de obra.</strong> '
+        f'<a href="{wa}Ol%C3%A1.%20Quero%20proposta%20de%20quantitativos%20ou%20or%C3%A7amento.">Falar</a> ou <a href="/quantitativos-orcamento-obras/">ver</a></li>'
+    )
+    assert contact_path_problems("triagem-tecnica/index.html", split_triage) == [], contact_path_problems("triagem-tecnica/index.html", split_triage)
+    no_link = split_triage.replace(' ou <a href="/quantitativos-orcamento-obras/">ver</a>', "")
+    got = contact_path_problems("triagem-tecnica/index.html", no_link)
+    assert any("#quantitativos: sem caminho" in g for g in got), got
+    inspection_prefill = split_triage.replace(
+        "Quero%20proposta%20de%20quantitativos%20ou%20or%C3%A7amento", "Tenho%20uma%20obra%20para%20inspecionar"
+    )
+    got = contact_path_problems("triagem-tecnica/index.html", inspection_prefill)
+    assert any("#quantitativos: sem mensagem" in g for g in got), got
+    only_inspection = split_triage[: split_triage.find('<li id="quantitativos">')]
+    got = contact_path_problems("triagem-tecnica/index.html", only_inspection)
+    assert any("sem item de quantitativos" in g for g in got), got
     new_hub = (
         '<section class="content-cta"><div><h2>Descreva a necessidade; a resposta indica o trabalho de engenharia que a resolve.</h2>'
         '<p>Projeto, revisão, orçamento ou inspeção. Contrato ou planilha só entram depois, pelo canal seguro. <a href="/servicos-obras-publicas/">Obra pública</a>.</p>'
