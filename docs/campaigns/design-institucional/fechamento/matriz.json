@@ -150,5 +150,6 @@
    "acesso": "clientes/participantes",
    "resultado_esperado": "prova real registrada; diagnóstico qualitativo"
   }
- ]
+ ],
+ "rollback_verificado": "2026-09-18T20:15Z: /opt/confenge-web/rollback -> releases/252fc98d1…; current -> releases/4cfa6adca…; disco 87% (68 GB livres, acima do piso de 40 GB)"
 }
