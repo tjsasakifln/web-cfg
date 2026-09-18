@@ -757,6 +757,11 @@ def _problems_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
 </ul>
 </div>
 </div>
+</section>
+<section class="authority-method container" id="metodo" data-surface-type="hub">
+<p>Autor institucional: CONFENGE · Responsável técnico: <a href="/especialista/tiago-jun-sasaki/">Engº Tiago Sasaki</a>.</p>
+<p>Método: cada situação desta página leva ao serviço, ao documento entregue e às condições publicadas na página correspondente; preço e prazo aparecem uma vez, onde estão autorizados.</p>
+<p>Limitação: esta página orienta a escolha do serviço; não é parecer jurídico nem promessa de resultado. <a href="/triagem-tecnica/#corrigir-o-site">Encontrou um erro?</a></p>
 </section>""",
         items,
     )
