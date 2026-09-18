@@ -556,7 +556,12 @@ def test_kv_rows_and_fixture_pages_contain_tables_in_overflow_wrap():
     assert 'class="table-wrap"' in html
     assert 'class="data-table"' in html
     css = (ROOT / "styles.css").read_text(encoding="utf-8")
-    assert ".data-table{width:100%;table-layout:fixed;" in css
+    # 2026-09-17 (SALTO-INSTITUCIONAL-02): table-layout:fixed espremia as colunas
+    # no celular (celulas transbordando para a vizinha, linhas de 600 px). A
+    # propriedade protegida aqui e a pagina nao crescer para o lado: ela e do
+    # invólucro .table-wrap/.table-scroll (overflow-x:auto), verificado por
+    # audit:layout-sitewide e test:ui; a tabela volta ao layout automatico.
+    assert ".data-table{width:100%;table-layout:auto;" in css
     assert "min-width:36rem" not in css
     for path in sorted((ROOT / "oportunidades").glob("*/index.html")):
         page = path.read_text(encoding="utf-8")
