@@ -129,18 +129,11 @@
     sale_id: /^sale-[0-9a-f]{27}$/i,
   };
   // EVENT_CONTRACT_CLIENT_END
+  // Only fields read by tests (source, aggregate_pii_allowlist, classifyTransition,
+  // appendWhatsappProtocol) are exported; internal-only maps stay module-scoped.
   window.__CONFENGE_EVENT_CONTRACT = {
-    schema_version: EVENT_CONTRACT_SCHEMA_VERSION,
     source: EVENT_SOURCE,
-    pii_policy: EVENT_PII_POLICY,
     aggregate_pii_allowlist: AGGREGATE_PII_ALLOWLIST,
-    admitted: ADMITTED_EVENTS,
-    observed_only: OBSERVED_ONLY_EVENTS,
-    aliases: EVENT_ALIASES,
-    retired: RETIRED_EVENTS,
-    unknown_service: UNKNOWN_SERVICE,
-    destinations: CANONICAL_DESTINATIONS,
-    origin_prefixes: ORIGIN_PREFIXES,
   };
   const analyticsQueue = [];
   const ANALYTICS_FLUSH_DELAY_MS = 30000;
@@ -539,11 +532,7 @@
     return protocol;
   };
 
-  window.__CONFENGE_EVENT_CONTRACT.canonicalizeDestination = canonicalizeDestination;
-  window.__CONFENGE_EVENT_CONTRACT.EVENT_CTA_KIND = EVENT_CTA_KIND;
   window.__CONFENGE_EVENT_CONTRACT.classifyTransition = classifyTransition;
-  window.__CONFENGE_EVENT_CONTRACT.canonicalizePath = canonicalizePath;
-  window.__CONFENGE_EVENT_CONTRACT.UNKNOWN_SERVICE = UNKNOWN_SERVICE;
   window.__CONFENGE_EVENT_CONTRACT.appendWhatsappProtocol = appendWhatsappProtocol;
 
   // Decorative reveal only. Never throw: missing window.setTimeout must not abort form/analytics.
