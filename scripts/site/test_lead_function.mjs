@@ -2062,6 +2062,81 @@ _reset();
     if (siteverifyCalls !== 2) fail("idem_pre_verify_new_key_siteverify", siteverifyCalls);
     if (await idemStore.getByIdempotency(`idk:${newKey}`)) fail("idem_pre_verify_new_key_persisted", newKey);
 
+    // Negative property: an explicit key OUTSIDE the front's shapes (a probe
+    // stamp, a bare timestamp, a harness key) is persistence-only. Its stored
+    // receipt is NOT replayed before Turnstile even though the record exists:
+    // consumed token -> 403 with siteverify called; no token -> 403 too. The
+    // probe itself never needs this path (it authenticates with the probe
+    // secret and Turnstile is skipped), so nothing legitimate regresses.
+    const { CLIENT_REPLAY_KEY } = reloaded;
+    const foreignKeys = [
+      `synthetic-probe-${Date.now()}`,
+      `fe-${Date.now()}`,
+      "harness-idem",
+      "fe-abc-def",
+    ];
+    for (const [foreignIndex, foreignKey] of foreignKeys.entries()) {
+      if (CLIENT_REPLAY_KEY.test(foreignKey)) fail("idem_pre_verify_foreign_key_allowlisted", foreignKey);
+      const foreignIp = `203.0.113.${140 + foreignIndex}`;
+      const seeded = await reloaded.handler(
+        event({ ...payload, idempotency_key: foreignKey, turnstile_token: `tok-valid-${foreignKey}` }, "POST", {
+          ip: foreignIp,
+          "idempotency-key": foreignKey,
+        }),
+      );
+      if (seeded.statusCode !== 201) fail("idem_pre_verify_foreign_key_persist", { foreignKey, seeded });
+      const beforeForeign = siteverifyCalls;
+      const foreignConsumed = await reloaded.handler(
+        event({ ...payload, idempotency_key: foreignKey, turnstile_token: `tok-valid-${foreignKey}` }, "POST", {
+          ip: foreignIp,
+          "idempotency-key": foreignKey,
+        }),
+      );
+      if (foreignConsumed.statusCode !== 403 || JSON.parse(foreignConsumed.body).error !== "anti_abuse") {
+        fail("idem_pre_verify_foreign_key_replayed", { foreignKey, status: foreignConsumed.statusCode, body: foreignConsumed.body });
+      }
+      if (siteverifyCalls !== beforeForeign + 1) fail("idem_pre_verify_foreign_key_skipped_siteverify", { foreignKey, siteverifyCalls });
+      const foreignNoToken = await reloaded.handler(
+        event({ ...payload, idempotency_key: foreignKey }, "POST", { ip: foreignIp, "idempotency-key": foreignKey }),
+      );
+      if (foreignNoToken.statusCode !== 403) fail("idem_pre_verify_foreign_key_no_token", { foreignKey, foreignNoToken });
+    }
+    pass("idem_pre_verify_foreign_key_stays_behind_turnstile", { keys: foreignKeys.length });
+
+    // Positive property: every shape the front can mint (randomUUID, the
+    // getRandomValues fallback and the Date.now+Math.random fallback, for the
+    // shared form and for adaptive intake) replays without siteverify. This
+    // is what stops a future "tighten to uuid only" from reintroducing the
+    // 403-after-timeout bug for browsers without crypto.randomUUID.
+    const frontShapes = [
+      `fe-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 12)}`,
+      `fe-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`,
+      "fe-1z141z3-a1b2c3d-9-zzzzzzz",
+      `triage-${"7c9e6679-7425-40de-944b-e07fc1f90ae7"}`,
+      `triage-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 12)}`,
+    ];
+    for (const [index, shapeKey] of frontShapes.entries()) {
+      if (!CLIENT_REPLAY_KEY.test(shapeKey)) fail("idem_pre_verify_front_shape_rejected", shapeKey);
+      const shapeIp = `203.0.113.${130 + index}`;
+      const shapeFirst = await reloaded.handler(
+        event({ ...payload, idempotency_key: shapeKey, turnstile_token: `tok-valid-${shapeKey}` }, "POST", {
+          ip: shapeIp,
+          "idempotency-key": shapeKey,
+        }),
+      );
+      if (shapeFirst.statusCode !== 201) fail("idem_pre_verify_front_shape_persist", { shapeKey, shapeFirst });
+      const beforeShape = siteverifyCalls;
+      const shapeReplay = await reloaded.handler(
+        event({ ...payload, idempotency_key: shapeKey }, "POST", { ip: shapeIp, "idempotency-key": shapeKey }),
+      );
+      const shapeBody = JSON.parse(shapeReplay.body);
+      if (shapeReplay.statusCode !== 200 || shapeBody.idempotent !== true || shapeBody.lead_id !== JSON.parse(shapeFirst.body).lead_id) {
+        fail("idem_pre_verify_front_shape_replay", { shapeKey, status: shapeReplay.statusCode, body: shapeBody });
+      }
+      if (siteverifyCalls !== beforeShape) fail("idem_pre_verify_front_shape_called_siteverify", { shapeKey, siteverifyCalls });
+    }
+    pass("idem_pre_verify_replays_every_front_shape", { shapes: frontShapes.length });
+
     // Negative property: no explicit key -> content-bucket key stays behind
     // Turnstile even though an identical record now exists in the store.
     const { idempotency_key: _omit, ...contentOnly } = payload;

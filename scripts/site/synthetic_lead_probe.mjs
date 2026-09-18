@@ -6,14 +6,17 @@
  * same idempotency key, then emits only aggregate booleans and a receipt hash.
  * No human identity, raw receipt, secret or free-text lead field is printed.
  */
-import { createHash } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 
 const base = (process.argv[2] || "https://confenge.com.br").replace(/\/$/, "");
 const probeSecret = process.argv[3] || process.env.LEAD_PROBE_SECRET || "";
 const opsToken = process.env.OPS_TOKEN || process.env.REVOPS_TOKEN || "";
 const expectedSha = String(process.env.EXPECTED_SHA || "").trim();
 const stamp = Date.now();
-const idem = `synthetic-probe-${stamp}`;
+// Random, never a timestamp: an explicit key is a persistence handle and a
+// derivable one could be guessed by a third party (the pre-Turnstile replay in
+// lead.cjs only honours front-minted shapes anyway, so this is defensive).
+const idem = `synthetic-probe-${randomUUID()}`;
 
 function finishEarly(reason) {
   console.log(JSON.stringify({

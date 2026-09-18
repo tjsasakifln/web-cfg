@@ -39,6 +39,17 @@ const resultStore = require("./lib/live-intelligence-result-store.cjs");
 // Allow tests to inject store
 let _storeOverride = null;
 
+// Explicit idempotency keys minted by our own browser code, and nothing else.
+// These are the only keys whose stored receipt may be replayed before the
+// Turnstile gate (see the pre-verify block in the handler). Shapes:
+//   js/modules/form.js        fe-<uuid v4> | fe-<u32b36>-<u32b36>-<u32b36>-<u32b36>
+//                             | fe-<Date.now b36>-<Math.random b36>
+//   assets/js/adaptive-intake triage-<uuid v4> | triage-<Date.now b36>-<Math.random b36>
+// Anything else (probe stamps, harness argv, bare timestamps, idk:-wrapped
+// values) is an explicit key for persistence only and still needs Turnstile.
+const CLIENT_REPLAY_KEY =
+  /^(?:fe|triage)-(?:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}|[0-9a-z]{1,7}-[0-9a-z]{1,7}-[0-9a-z]{1,7}-[0-9a-z]{1,7}|[0-9a-z]{7,9}-[0-9a-z]{8,12})$/i;
+
 function adaptiveIdempotencyMaterialHash(lead) {
   if (!lead || lead.adaptive_intake !== true) return null;
   const material = {
@@ -81,6 +92,7 @@ async function getStore(event) {
 }
 
 exports.setStoreForTests = setStoreForTests;
+exports.CLIENT_REPLAY_KEY = CLIENT_REPLAY_KEY;
 
 exports.handler = async (event) => {
   const originCheck = originAllowed(event);
@@ -298,25 +310,35 @@ exports.handler = async (event) => {
   };
 
   // Idempotent replay BEFORE the anti-abuse gate, only for an explicit client
-  // key. A browser that timed out at 15 s and retries reuses the same
-  // `fe-<uuid>` key (js/modules/form.js) but its Turnstile token was already
-  // consumed by the first POST, so verifying the token first would answer 403
+  // key minted by our own front (CLIENT_REPLAY_KEY). A browser that timed out
+  // at 15 s and retries reuses the same key (js/modules/form.js,
+  // assets/js/adaptive-intake.js) but its Turnstile token was already consumed
+  // by the first POST, so verifying the token first would answer 403
   // "anti_abuse" for a record that is durably stored — contradicting the
   // receipt the same client is entitled to. Security rationale for skipping
   // the challenge here:
   //   - the reply is exactly the receipt already returned to the holder of
   //     that key (idempotentOk: lead_id, status, non-PII categories); no field
   //     of the stored record beyond that projection is exposed;
-  //   - the key is minted client-side from crypto.randomUUID (128 bits) and is
-  //     never derivable from the record's content, so it works as a bearer of
-  //     that one receipt. The content-bucket key (no explicit key) IS derivable
-  //     by anyone who knows a person's name/phone/e-mail and would become an
-  //     unauthenticated existence oracle, so it stays behind Turnstile;
+  //   - the gate is the SHAPE of the key, not merely its presence:
+  //     idempotencyKeyFor accepts any non-empty string, and producers other
+  //     than the browser use short or derivable keys (the synthetic probe used
+  //     `synthetic-probe-<Date.now()>`, harnesses take the key from argv). Only
+  //     the shapes the front mints from crypto.randomUUID / getRandomValues /
+  //     Math.random pass; every other explicit key, and the content-bucket
+  //     key (derivable from a person's name/phone/e-mail, an unauthenticated
+  //     existence oracle), stays behind Turnstile;
   //   - origin, payload validation and the IP/fingerprint rate limit already
-  //     ran above, and this path performs a single store read (no retry loop)
-  //     so an unauthenticated POST cannot buy 600 ms of store I/O;
+  //     ran above, and this path performs at most two store reads (idem map,
+  //     then the deterministic lead_id; no retry loop) so an unauthenticated
+  //     POST cannot buy 600 ms of store I/O;
   //   - a miss falls through to Turnstile unchanged; nothing is written here.
-  if (headerIdem) {
+  // Trade-off accepted: getStore and the store policy run before Turnstile
+  // because this replay needs the store; an unauthenticated POST therefore
+  // sees 503 store_unavailable instead of 403 when the store is down. That
+  // only reveals that the endpoint is degraded (the same signal /obrigado and
+  // ops health already expose), never any record.
+  if (headerIdem && CLIENT_REPLAY_KEY.test(String(headerIdem).trim())) {
     try {
       const existing = await store.getByIdempotency(idemKey);
       const rec = existing && existing.lead_id ? existing : await store.get(lead_id);
