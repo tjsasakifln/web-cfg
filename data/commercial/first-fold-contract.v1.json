@@ -98,12 +98,11 @@
     {
       "route": "/diagnostico-b2g-expansao/",
       "surface_class": "money_offer",
-      "evidence_state": "MEASURED_FAIL",
+      "evidence_state": "MEASURED_PASS",
       "measurement": {
         "date": "2026-09-18",
-        "viewport": "390x844",
-        "finding": "H1 de y=199 a y=337 em 1366x768; ação primária inteira de y=823 a y=867 em 390x844, fora da dobra de 844",
-        "blocker": "EXECUTE_NOW 2026-09-09: corrigir e medir; o congelamento editorial não autoriza manter uma falha pública"
+        "viewport": "1366x768",
+        "finding": "H1 de y=199 a y=337; linha de prova de y=539 a y=609; ação primária inteira de y=711 a y=755 em 1366x768, e de y=693 a y=737 em 390x844, dentro da dobra nos dois"
       }
     },
     {
@@ -393,7 +392,7 @@
           "route": "/diagnostico-b2g-expansao/",
           "primary_actions_in_fold": {
             "1366x768": 1,
-            "390x844": 0
+            "390x844": 1
           }
         },
         {

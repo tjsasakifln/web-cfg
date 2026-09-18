@@ -1,9 +1,9 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-09-18T00:19:17.139Z",
+  "measured_at": "2026-09-18T00:23:24.827Z",
   "measured_on": "2026-09-18",
-  "commit_sha": "bbc05650682fc10603f04e0ddc9e1aebca23bf63",
+  "commit_sha": "ad621972f64cfd3dbeaad8cb051ea00e7bb69c93",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "f168038814087e1b365d1de3042af9a3f3364743756e104711fecc0fb9fe7477",
@@ -53,7 +53,7 @@
     "script.js": "f5737c012010592696b00ad13830aee97224cb7311773a5e9a5033b2c954757c",
     "servicos-obras-publicas/index.html": "599f3003d48ea8a809e05462683d799723ac469c75f4802e8ae93ea04b484986",
     "styles-hubs.css": "ed4668833ad8de5cef5acc5fc1e8f21e519870f0bf282247c3b4a9644a094592",
-    "styles-offers.css": "2526929c9d5d5d86808d58a56ae2c1f2983f6ac4f513574e5323bc86549fd1f2",
+    "styles-offers.css": "e23f1ae9e064f7c3dbbb04c734d97d49f52d88cd5507e1dd8272cdff0cec127e",
     "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
     "styles-tools.css": "7112012d31d7a3a1b43a6fbd8b939598d7a6f1b8ea41b0ec850eaa6d8cde4377",
     "styles.css": "dbcf1b8af9fe1736ad07b2aae30b70f4eca19b2a5ccd2eec2f5c94081e9672ba"
@@ -1060,8 +1060,8 @@
             "proof": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 597,
-                "bottom": 681,
+                "top": 467,
+                "bottom": 551,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1072,8 +1072,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 823,
-                "bottom": 867,
+                "top": 693,
+                "bottom": 737,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1082,8 +1082,26 @@
               "text": "Solicitar o diagnóstico"
             }
           },
-          "primary_actions_in_fold": [],
-          "secondary_actions_in_fold": [],
+          "primary_actions_in_fold": [
+            {
+              "text": "Solicitar o diagnóstico",
+              "href": "#pedido-diagnostico",
+              "box": {
+                "top": 693,
+                "bottom": 737,
+                "left": 18,
+                "right": 372,
+                "width": 353,
+                "height": 44
+              }
+            }
+          ],
+          "secondary_actions_in_fold": [
+            {
+              "text": "Tirar uma dúvida pelo WhatsApp",
+              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20avaliar%20o%20Diagn%C3%B3stico%20de%20Expans%C3%A3o%20no%20Mercado%20P%C3%BAblico."
+            }
+          ],
           "verifiable_proof": {
             "text": "exemplo sintético do mapa de compradores",
             "href": "/casos/modelo-mapa-compradores-publicos/"
