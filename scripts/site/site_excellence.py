@@ -903,7 +903,8 @@ def collect_site_metrics(
     )
     # G04-10: semantica de eventos (evento correto presente, incorreto ausente,
     # sem PII) produzida por scripts/site/test_event_semantics.mjs
-    # (EVENT_SEMANTICS_REPORT). Ausente = nao medido, nao aprovado.
+    # (EVENT_SEMANTICS_REPORT). Ausente segue o probe do hub: sem codigo, o
+    # site-ci produz o arquivo antes do scorecard.
     semantics_path = reports_dir / "event-semantics.json"
     semantics_payload = (
         json.loads(semantics_path.read_text(encoding="utf-8")) if semantics_path.is_file() else None
@@ -917,7 +918,6 @@ def collect_site_metrics(
             *([] if analytics_ok else ["analytics_pii_gate_failed"]),
             *(["browser_analytics_contract_failed"] if browser_analytics_failed else []),
             *(["event_semantics_failed"] if semantics_failed else []),
-            *(["event_semantics_missing"] if semantics_payload is None else []),
         ],
         routes=["/entregas/"],
         viewports=["390x844"],
