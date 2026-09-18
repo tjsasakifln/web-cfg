@@ -918,6 +918,47 @@ for (const target of [
   if (withWarmbly.funnel_layers.qualified.derived !== false) fail("qualified_marked_derived");
 }
 
+// --- G04-01: cta_clicks counts intent only; navigation is cta_nav_clicks; cta_totals keyed by destination ---
+{
+  const pillar = "/medicoes-glosas-obras-publicas/";
+  const mk = (id, event, props, path = pillar) => ({
+    event, path, sid: "sess-cta-agg", ts: "2026-09-18T10:00:00Z", props: { event_id: `e-cta-${id}`, page_path: path, ...props },
+  });
+  const rolled = agg.aggregateEvents([
+    mk(1, "page_view", {}),
+    // header 'Solicitar proposta' inherits cta_id=pillar_hero from <body data-cta-id> via closest()
+    mk(2, "cta_click", { cta_id: "pillar_hero", cta_position: "inline", destination_type: "route" }),
+    mk(3, "cta_click", { cta_id: "pillar_hero", cta_position: "pillar_hero", destination_type: "form" }),
+    mk(4, "cta_click", { cta_id: "pillar_hero", cta_position: "pillar_hero", destination_type: "form" }),
+    mk(5, "cta_click", { cta_id: "pillar-toc", cta_position: "inline", destination_type: "anchor" }),
+    mk(6, "cta_click", { cta_id: "pillar-wa", cta_position: "inline", destination_type: "whatsapp" }),
+    // legacy producer without destination_type: still counted as intent, labelled
+    mk(7, "cta_click", { cta_id: "segunda-leitura-contrato", cta_position: "money-asset" }, "/ferramentas/diagnostico-defesa-margem/"),
+    mk(8, "cta_click", { cta_id: "prose-link", cta_position: "inline", destination_type: "route" }, "/conteudos/documentos-reequilibrio-obra-publica/"),
+  ]);
+  const day = rolled.daily.find((d) => d.day === "2026-09-18");
+  if (!day) fail("cta_agg_day_missing", rolled.daily);
+  if (day.cta_clicks !== 4) fail("cta_clicks_intent_only", { cta_clicks: day.cta_clicks, expected: 4 });
+  if (day.cta_clicks_legacy_unclassified !== 1) fail("cta_clicks_legacy_labelled", day);
+  if (day.cta_nav_clicks !== 3) fail("cta_nav_clicks_separated", { cta_nav_clicks: day.cta_nav_clicks, expected: 3 });
+  if (day.by_event.cta_click !== 7) fail("cta_by_event_raw_total", day.by_event);
+  const pillarRow = rolled.funnel_by_path.find((r) => r.path === pillar);
+  if (!pillarRow || pillarRow.cta_click !== 3 || pillarRow.cta_nav_click !== 2) fail("funnel_by_path_cta_split", pillarRow);
+  const proseRow = rolled.funnel_by_path.find((r) => r.path === "/conteudos/documentos-reequilibrio-obra-publica/");
+  if (!proseRow || proseRow.cta_click !== 0 || proseRow.cta_nav_click !== 1) fail("funnel_by_path_prose_route_not_intent", proseRow);
+  const toolRow = rolled.funnel_by_path.find((r) => r.path === "/ferramentas/diagnostico-defesa-margem/");
+  if (!toolRow || toolRow.cta_click !== 1 || toolRow.cta_click_legacy_unclassified !== 1) fail("funnel_by_path_legacy", toolRow);
+  const totals = rolled.cta_totals;
+  if (totals[`${pillar}|pillar_hero|form`] !== 2) fail("cta_totals_form_bucket", totals);
+  if (totals[`${pillar}|pillar_hero|route`] !== 1) fail("cta_totals_route_bucket_separate", totals);
+  if (totals[`${pillar}|pillar_hero`] !== undefined) fail("cta_totals_untyped_key_removed", totals);
+  if (totals["/ferramentas/diagnostico-defesa-margem/|segunda-leitura-contrato|legacy_unclassified"] !== 1) fail("cta_totals_legacy_label", totals);
+  if (!agg.CTA_INTENT_DESTINATIONS || ["form", "whatsapp", "email", "tel"].some((t) => !agg.CTA_INTENT_DESTINATIONS.has(t))
+    || agg.CTA_INTENT_DESTINATIONS.has("route") || agg.CTA_INTENT_DESTINATIONS.has("anchor")) {
+    fail("cta_intent_destinations_contract", [...(agg.CTA_INTENT_DESTINATIONS || [])]);
+  }
+}
+
 // --- Assisted destination preserved; query never joins; discrepancy visible ---
 {
   const events = [
