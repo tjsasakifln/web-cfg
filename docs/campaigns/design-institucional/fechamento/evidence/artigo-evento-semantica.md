@@ -12,8 +12,8 @@ Leitura de `js/modules/analytics.js` (`classifyTransition`) e `js/modules/nav.js
 
 | | Antes (`href="/#contato"` ou `/?…#contato`) | Antes (`href="/"` nu, 4 artigos) | Depois (`{pilar}#captura-pilar`) |
 |---|---|---|---|
-| Classificação | `/#contato/` casa → `kind: 'contact'` | `dest.path = '/'`; origem família `editorial`, `/` não é destino canônico → `content_to_service` com `destination_type: 'unknown'` (ou `not_transition`) | fragmento removido por `canonicalizePath`; os 8 pilares são `CANONICAL_DESTINATIONS` → `kind: 'transition'` |
-| Evento | `service_cta_click`, `destination_type: 'form'` | inconsistente | `content_to_service`, `destination_type: 'service'`, `destination_path` = pilar, `destination_service_id` = id do pilar |
+| Classificação | `/#contato/` casa → `kind: 'contact'` | `dest.path = '/'` é `isChromePath` e não é destino canônico → `kind: 'not_transition'` | fragmento removido por `canonicalizePath`; os 8 pilares são `CANONICAL_DESTINATIONS` → `kind: 'transition'` |
+| Evento | `service_cta_click`, `destination_type: 'form'` | nenhum (clique sem evento de conversão) | `content_to_service`, `destination_type: 'service'`, `destination_path` = pilar, `destination_service_id` = id do pilar |
 | Chegada do visitante | formulário da home (`urlAsksForContact`) | topo da home, sem formulário | formulário do pilar (`#captura-pilar`), com `tema`/`landing_page`/`referrer` do artigo |
 
 Consequências:
@@ -21,7 +21,7 @@ Consequências:
 1. A série "formulário a partir de artigo" muda de nome: deixa de existir como `service_cta_click`/`form` na família `/conteudos/` e passa a `content_to_service`/`service`. Leituras que somem `service_cta_click` por origem editorial verão a série cair a zero a partir da publicação; a contagem correta passa a ser `content_to_service` filtrado por `cta_position = 'form'`.
 2. Cada artigo passa a emitir dois `content_to_service` para o mesmo `destination_path`: o botão do formulário (`cta_position: 'form'`, rótulo `Continuar pelo formulário`) e o novo `text-link` do bloco de oferta (`cta_position` ausente → tratado como `inline`, rótulo do cluster). A contagem de `content_to_service` por artigo dobra em potencial; a desambiguação é por `cta_position` e `cta_label`.
 3. Nenhum dos dois links carrega `data-cta-id`, `data-asset-id`, `data-asset-family` ou `data-route-family`; `cta_id` e `route_family` chegam como `unspecified` e a transição não conta como plenamente atribuída em `scripts/site/inbound_gates.py::_service_transition_destinations` (`SERVICE_TRANSITION_ATTRS`). Isso já era assim para o link antigo. Enriquecer os dois links (por exemplo `data-cta-id="article-form"` / `article-offer-pillar` e `data-asset-id=<slug>`) fica como opção explícita para uma reaplicação futura do script; não foi feito nesta frente porque retocaria 116 artigos e mudaria o payload de atribuição sem leitura combinada.
-4. Nenhum consumidor quebra: `release_measurement_ledger` cobre só rotas-baseline e `scripts/site/test_source_to_service.mjs` passa.
+4. Nenhum consumidor quebra: `release_measurement_ledger` cobre só rotas-baseline e `tests/attribution/test_source_to_service.mjs` (`npm run test:attribution`) passa.
 
 ## O que `apply_article_pillar_form.py --check` garante
 
