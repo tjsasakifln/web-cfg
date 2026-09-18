@@ -41,7 +41,9 @@ for (const [route, sel, label] of CASES) {
   await p.setRequestInterception(true);
   p.on("request", (r) => {
     const u = r.url();
-    if (!u.startsWith(BASE) || r.method() !== "GET" || /\/api\//.test(u)) { blocked.push({ route, method: r.method(), url: u.slice(0, 120) }); r.abort(); return; }
+    let sameOrigin = false;
+    try { sameOrigin = new URL(u).origin === new URL(BASE).origin; } catch { sameOrigin = false; }
+    if (!sameOrigin || r.method() !== "GET" || /\/api\//.test(u)) { blocked.push({ route, method: r.method(), url: u.slice(0, 120) }); r.abort(); return; }
     r.continue();
   });
   await p.goto(BASE + route, { waitUntil: "networkidle0", timeout: 90000 });
