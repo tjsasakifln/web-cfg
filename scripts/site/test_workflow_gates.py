@@ -852,48 +852,6 @@ def test_cross_repo_fixture_integration_cannot_skip_or_use_an_unpinned_producer(
         assert f'--required-step "{name}"' in evidence
 
 
-def main() -> int:
-    tests = [
-        test_site_ci_shape,
-        test_pseo_shape,
-        test_node_pins_match_runtime_baseline,
-        test_revops_scheduled_install_keeps_the_runtime_floor_fail_closed,
-        test_ci_supply_chain_is_pinned,
-        test_merge_workflows_have_no_path_skip,
-        test_legacy_netlify_preview_cannot_skip_main_commits,
-        test_merge_workflows_cover_every_pr_base,
-        test_pseo_still_requires_full_npm_test,
-        test_post_build_browser_gates_use_public_artifact,
-        test_lighthouse_covers_article_cover_regression_routes,
-        test_codeql_is_fail_closed,
-        test_copy_ci_is_check_not_write,
-        test_site_excellence_precedes_the_netcup_release_artifact,
-        test_required_execution_evidence_fails_closed_after_the_gate_job,
-        test_cross_repo_fixture_integration_cannot_skip_or_use_an_unpinned_producer,
-        test_deliberate_force_fail_env,
-    ]
-    failed = 0
-    for t in tests:
-        try:
-            t()
-            print(f"OK {t.__name__}")
-        except AssertionError as e:
-            failed += 1
-            print(f"FAIL {t.__name__}: {e}")
-        except Exception as e:  # noqa: BLE001
-            failed += 1
-            print(f"ERROR {t.__name__}: {e}")
-    if failed:
-        print(f"WORKFLOW_GATES_FAIL count={failed}")
-        return 1
-    print("WORKFLOW_GATES_OK")
-    return 0
-
-
-if __name__ == "__main__":
-    sys.exit(main())
-
-
 def test_durable_gsc_read_feeds_the_scorecard_only_on_the_release_path():
     """#413: the scorecard consumes the authenticated durable GSC read, never a
     packaged repository snapshot. The read runs before the scorecard, only when
@@ -937,3 +895,46 @@ def test_durable_gsc_read_feeds_the_scorecard_only_on_the_release_path():
     if "build/reports/gsc-insights-durable.json" not in gates.split("- name: Upload reports", 1)[1]:
         errors.append("the sanitized durable read must be uploaded with the site-ci reports")
     assert not errors, "durable GSC read shape failures:\n- " + "\n- ".join(errors)
+
+
+def main() -> int:
+    tests = [
+        test_site_ci_shape,
+        test_pseo_shape,
+        test_node_pins_match_runtime_baseline,
+        test_revops_scheduled_install_keeps_the_runtime_floor_fail_closed,
+        test_ci_supply_chain_is_pinned,
+        test_merge_workflows_have_no_path_skip,
+        test_legacy_netlify_preview_cannot_skip_main_commits,
+        test_merge_workflows_cover_every_pr_base,
+        test_pseo_still_requires_full_npm_test,
+        test_post_build_browser_gates_use_public_artifact,
+        test_lighthouse_covers_article_cover_regression_routes,
+        test_codeql_is_fail_closed,
+        test_copy_ci_is_check_not_write,
+        test_site_excellence_precedes_the_netcup_release_artifact,
+        test_required_execution_evidence_fails_closed_after_the_gate_job,
+        test_cross_repo_fixture_integration_cannot_skip_or_use_an_unpinned_producer,
+        test_durable_gsc_read_feeds_the_scorecard_only_on_the_release_path,
+        test_deliberate_force_fail_env,
+    ]
+    failed = 0
+    for t in tests:
+        try:
+            t()
+            print(f"OK {t.__name__}")
+        except AssertionError as e:
+            failed += 1
+            print(f"FAIL {t.__name__}: {e}")
+        except Exception as e:  # noqa: BLE001
+            failed += 1
+            print(f"ERROR {t.__name__}: {e}")
+    if failed:
+        print(f"WORKFLOW_GATES_FAIL count={failed}")
+        return 1
+    print("WORKFLOW_GATES_OK")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
