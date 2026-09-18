@@ -653,10 +653,18 @@
         ? window.confengeSessionId()
         : '';
       ensureHidden('session_id', sessionId, true);
+      // TAREFAS-01: `landing_url` e o campo canonico que cruza para o Warmbly
+      // (inbound-handoff.cjs, WARMBLY-INBOUND.md); `origem` fica no store e
+      // alimenta by_origem do closed-loop e as coortes de atribuicao. A home
+      // pre-renderiza <input name="origem" value="/">; sem force, a origem
+      // atribuida (?origem=, atributo do artigo guardado na sessao) era
+      // descartada e todo lead saia '/'. Precedencia mantida: URL atual,
+      // sessao, query/hash. Sem origem atribuida o valor pre-renderizado vale.
       ensureHidden(
         'origem',
         origem || storedPseo.origem || storedPseo.origin_url || storedPseo.landing_url
           || sessionStorage.getItem('confenge_landing') || window.location.pathname || '/',
+        Boolean(origem),
       );
       ensureHidden(
         'landing_page',
@@ -1190,8 +1198,12 @@
         });
         return;
       }
+      // Sem data-event-name, so viram cta_click: link de situacao da home para
+      // outra rota e ancora de captura declarada como CTA (data-cta-id), p. ex.
+      // o herói de /quantitativos-orcamento-obras/ -> #triagem-quantitativos.
+      const isCaptureAnchorCta = href.startsWith('#') && CAPTURE_HASH.test(href) && !!el.getAttribute('data-cta-id');
       const eventName = el.getAttribute('data-event-name')
-        || (isSituationAction(el) && destinationTypeFromHref(href) === 'route' ? 'cta_click' : '');
+        || ((isSituationAction(el) && destinationTypeFromHref(href) === 'route') || isCaptureAnchorCta ? 'cta_click' : '');
       if (!eventName || !namedAllowed[eventName]) return;
       const namedAttrs = attrsFromEl(el);
       const destinationType = /cta_click$/.test(eventName) ? destinationTypeFromHref(href) : '';
@@ -1226,6 +1238,11 @@
       link.addEventListener('click', (evt) => handleTrackedClick(link, evt));
     });
     document.querySelectorAll('[data-event-name]').forEach((el) => {
+      el.addEventListener('click', (evt) => handleTrackedClick(el, evt));
+    });
+    // G04-10 (3): ancora de captura declarada como CTA sem data-event-name.
+    document.querySelectorAll('a[href^="#"][data-cta-id]').forEach((el) => {
+      if (!CAPTURE_HASH.test(el.getAttribute('href') || '')) return;
       el.addEventListener('click', (evt) => handleTrackedClick(el, evt));
     });
 
