@@ -14,7 +14,7 @@ import json, sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-ROOT = HERE.parents[2]
+ROOT = HERE.parents[3]
 TREATMENTS = {"COMPOSICAO_REDESENHADA", "COMPONENTES_ADEQUADOS", "HERANCA_VISUAL_VALIDADA", "PRESERVADA_COM_JUSTIFICATIVA"}
 
 
@@ -54,7 +54,9 @@ def main(check: bool) -> int:
     for p in sorted(HERE.glob("matriz-*.json")):
         if p.name == "matriz-rotas.json":
             continue
-        for e in json.loads(p.read_text(encoding="utf-8")):
+        doc = json.loads(p.read_text(encoding="utf-8"))
+        rows = doc if isinstance(doc, list) else (doc.get("routes") or doc.get("rows") or [])
+        for e in rows:
             e.setdefault("owner", p.stem.replace("matriz-", ""))
             entries[e["route"]] = e
     rows, missing, bad = [], [], []
