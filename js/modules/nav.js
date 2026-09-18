@@ -1029,6 +1029,40 @@
         || document.body?.getAttribute('data-asset-family')
         || '',
     });
+    // G04-01: destino de um cta_click sem renomear o evento. Ancora de captura
+    // (#contato, #captura*, #pedido*, #triagem*) = form; outra ancora = anchor;
+    // rota interna = route. O consumidor closed-loop conta no estagio 'cta'
+    // apenas form/whatsapp/email/tel; 'route' e 'anchor' sao navegacao.
+    const CAPTURE_HASH = /^#(contato|captura|pedido|triagem)/i;
+    const destinationTypeFromHref = (rawHref) => {
+      const value = String(rawHref || '').trim();
+      if (!value) return '';
+      const hashAt = value.indexOf('#');
+      const hash = hashAt === -1 ? '' : value.slice(hashAt);
+      const beforeHash = hashAt === -1 ? value : value.slice(0, hashAt);
+      const samePage = !beforeHash || beforeHash === pagePath || beforeHash === `${pagePath}`.replace(/\/$/, '');
+      if (hash && samePage) return CAPTURE_HASH.test(hash) ? 'form' : 'anchor';
+      const dest = canonicalizeDestination(value);
+      if (dest.kind === 'whatsapp' || dest.kind === 'email' || dest.kind === 'tel') return dest.kind;
+      if (dest.kind === 'external') return 'external';
+      if (dest.kind !== 'internal') return '';
+      if (hash && CAPTURE_HASH.test(hash)) return 'form';
+      return 'route';
+    };
+    // G04-01/G04-03: CTAs de navegacao reconhecidos por classe (sem editar o
+    // HTML): o 'Solicitar proposta' do cabecalho e os links de situacao da home
+    // levam a outra rota e sao cta_click destination_type=route. O destino de
+    // triagem tecnica e a rota do formulario, nao um servico: nunca vira
+    // content_to_service com UNKNOWN_SERVICE.
+    const TRIAGE_ROUTE = '/triagem-tecnica/';
+    const elMatches = (node, selector) => {
+      try { return typeof node.matches === 'function' && node.matches(selector); } catch (_) { return false; }
+    };
+    const isHeaderCta = (node) => elMatches(node, 'a.header-cta');
+    const isSituationAction = (node) => elMatches(node, 'a.situation-action');
+    const isTriageRoute = (rawHref) => canonicalizeDestination(rawHref).path === TRIAGE_ROUTE;
+    const ctaKindFromEl = (node) => node.getAttribute('data-cta-kind')
+      || EVENT_CTA_KIND[node.getAttribute('data-event-name') || ''] || '';
     const handleTrackedClick = (el, domEvent) => {
       if (domEvent && domEvent.__confengeTracked) return;
       if (domEvent) domEvent.__confengeTracked = true;
@@ -1066,26 +1100,44 @@
           asset_id: whatsappAttrs.asset_id,
           route_family: whatsappAttrs.route_family,
           cta_id: whatsappAttrs.cta_id,
-          cta_kind: el.getAttribute('data-cta-kind') || '',
+          cta_kind: ctaKindFromEl(el),
           offer_id: el.getAttribute('data-offer-id') || '',
           next_action_id: el.getAttribute('data-next-action-id') || '',
         });
         return;
       }
+      // G04-04: e-mail e telefone carregam a mesma atribuicao do WhatsApp
+      // (cta_id, route_family, asset_id, offer_id). O href (endereco, numero)
+      // nunca entra no payload.
       if (classified.kind === 'email') {
+        const emailAttrs = attrsFromEl(el);
         track('email_click', {
           ...base,
+          cta_label: label || 'email',
           destination_type: 'email',
           content_type: isEditorial ? (editorialType || 'editorial') : undefined,
           topic: isEditorial ? editorialTopic.slice(0, 120) : undefined,
           journey: isEditorial ? editorialJourney : undefined,
+          asset_id: emailAttrs.asset_id,
+          route_family: emailAttrs.route_family,
+          cta_id: emailAttrs.cta_id,
+          cta_kind: ctaKindFromEl(el),
+          offer_id: el.getAttribute('data-offer-id') || '',
+          next_action_id: el.getAttribute('data-next-action-id') || '',
         });
         return;
       }
       if (classified.kind === 'tel' || classified.kind === 'external') {
+        const outboundAttrs = attrsFromEl(el);
         track('outbound_click', {
           ...base,
           destination_type: classified.kind,
+          asset_id: outboundAttrs.asset_id,
+          route_family: outboundAttrs.route_family,
+          cta_id: outboundAttrs.cta_id,
+          cta_kind: classified.kind === 'tel' ? ctaKindFromEl(el) : '',
+          offer_id: el.getAttribute('data-offer-id') || '',
+          next_action_id: el.getAttribute('data-next-action-id') || '',
         });
         return;
       }
@@ -1098,6 +1150,24 @@
           source_page_type: document.body?.getAttribute('data-content-cluster') || defaultCluster,
           cta_id: attrsFromEl(el).cta_id,
           route_family: attrsFromEl(el).route_family,
+        });
+        return;
+      }
+      const routeCta = (isHeaderCta(el) || isTriageRoute(href))
+        && destinationTypeFromHref(href) === 'route';
+      if (routeCta) {
+        const routeAttrs = attrsFromEl(el);
+        track('cta_click', {
+          ...base,
+          cta_label: label,
+          destination_type: 'route',
+          source_page_type: document.body?.getAttribute('data-content-cluster') || defaultCluster,
+          offer_id: el.getAttribute('data-offer-id') || '',
+          asset_id: routeAttrs.asset_id,
+          route_family: routeAttrs.route_family,
+          cta_id: routeAttrs.cta_id,
+          cta_kind: ctaKindFromEl(el),
+          next_action_id: el.getAttribute('data-next-action-id') || '',
         });
         return;
       }
@@ -1120,12 +1190,15 @@
         });
         return;
       }
-      const eventName = el.getAttribute('data-event-name');
+      const eventName = el.getAttribute('data-event-name')
+        || (isSituationAction(el) && destinationTypeFromHref(href) === 'route' ? 'cta_click' : '');
       if (!eventName || !namedAllowed[eventName]) return;
       const namedAttrs = attrsFromEl(el);
+      const destinationType = /cta_click$/.test(eventName) ? destinationTypeFromHref(href) : '';
       track(eventName, {
         ...base,
         cta_label: label,
+        ...(destinationType ? { destination_type: destinationType } : {}),
         offer_id: el.getAttribute('data-offer-id')
           || document.body?.getAttribute('data-offer-id')
           || '',
