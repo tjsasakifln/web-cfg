@@ -1,16 +1,16 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "8b46fea3d0957b3685337b35fbc2c7f7d7197475",
-  "recaptured_at": "2026-09-18T23:42:33Z",
-  "recapture_reason": "LAPIDACAO-COMERCIAL-20260918 (propagacao) sobre 8b46fea3d0957b3685337b35fbc2c7f7d7197475: nos seis pilares protegidos (aditivos, medicoes-glosas, reequilibrio, auditoria, diagnostico-b2g-360, diagnostico-pre-licitacao) saem as frases 'premissas/carteira/serie sinteticas, nao obra/contrato/edital de cliente' do lead e da legenda da secao #exemplo-demonstrativo (kicker 'Exemplo demonstrativo · Obra publica' e limites materiais permanecem) e o formulario #captura-pilar passa a nomear os campos obrigatorios derivados do proprio formulario e a marcar os opcionais (form_field_purpose.mjs), no lugar da frase 'campos marcados como obrigatorios' sem marca. Nenhum preco, prazo, checkout, robots, canonical ou sitemap mudou. Decisao editorial expressa do proprietario de 2026-09-18. Antes: LAPIDACAO-COMERCIAL-20260918 sobre d30d0ea64a9fd5fe4117f703c744f9dd7d807140: medicoes-glosas-obras-publicas/index.html perde duas frases redundantes na secao #exemplo-demonstrativo ('Premissas sinteticas, nao obra de cliente.' e a legenda 'Exemplo demonstrativo, com premissas sinteticas; nao e obra de cliente.'), mantendo o kicker 'Exemplo demonstrativo · Obra publica' e a limitacao 'nao e parecer juridico'; script.js reconstruido de js/modules/form.js (CHECK_OK): o formulario da home passa a concluir com o minimo (consentimento e envio fora do painel opcional 'Adicionar mais detalhes'), sem mudar campos, endpoint, idempotencia ou redirecionamento. Decisao editorial expressa do proprietario de 2026-09-18 (rotulo 'Exemplo demonstrativo' basta). Nenhum preco, prazo, checkout, robots, canonical ou sitemap mudou. Antes: POS-REDESIGN-FECHAMENTO-20260918: sitemaps com lastmod 2026-09-18 do cluster de medicao (revisao movida com o conteudo: link do pilar em tres artigos)",
+  "baseline_commit": "6d5890758a2661b8fc0d157c718347dab7d4d197",
+  "recaptured_at": "2026-09-18T23:49:59Z",
+  "recapture_reason": "LAPIDACAO-COMERCIAL-20260918 (prova real) sobre 6d5890758a2661b8fc0d157c718347dab7d4d197: diagnostico-b2g-360/index.html — a frase das 16 celulas passa a dizer 'da carteira hipotetica' (o detector de resultado de cliente so aceitava a negativa removida). Nenhum preco, prazo, checkout, robots, canonical ou sitemap mudou. Antes: LAPIDACAO-COMERCIAL-20260918 (propagacao) sobre 8b46fea3d0957b3685337b35fbc2c7f7d7197475: nos seis pilares protegidos (aditivos, medicoes-glosas, reequilibrio, auditoria, diagnostico-b2g-360, diagnostico-pre-licitacao) saem as frases 'premissas/carteira/serie sinteticas, nao obra/contrato/edital de cliente' do lead e da legenda da secao #exemplo-demonstrativo (kicker 'Exemplo demonstrativo · Obra publica' e limites materiais permanecem) e o formulario #captura-pilar passa a nomear os campos obrigatorios derivados do proprio formulario e a marcar os opcionais (form_field_purpose.mjs), no lugar da frase 'campos marcados como obrigatorios' sem marca. Nenhum preco, prazo, checkout, robots, canonical ou sitemap mudou. Decisao editorial expressa do proprietario de 2026-09-18. Antes: LAPIDACAO-COMERCIAL-20260918 sobre d30d0ea64a9fd5fe4117f703c744f9dd7d807140: medicoes-glosas-obras-publicas/index.html perde duas frases redundantes na secao #exemplo-demonstrativo ('Premissas sinteticas, nao obra de cliente.' e a legenda 'Exemplo demonstrativo, com premissas sinteticas; nao e obra de cliente.'), mantendo o kicker 'Exemplo demonstrativo · Obra publica' e a limitacao 'nao e parecer juridico'; script.js reconstruido de js/modules/form.js (CHECK_OK): o formulario da home passa a concluir com o minimo (consentimento e envio fora do painel opcional 'Adicionar mais detalhes'), sem mudar campos, endpoint, idempotencia ou redirecionamento. Decisao editorial expressa do proprietario de 2026-09-18 (rotulo 'Exemplo demonstrativo' basta). Nenhum preco, prazo, checkout, robots, canonical ou sitemap mudou. Antes: POS-REDESIGN-FECHAMENTO-20260918: sitemaps com lastmod 2026-09-18 do cluster de medicao (revisao movida com o conteudo: link do pilar em tres artigos)",
   "html_mutation": true,
   "pillars": {
     "aditivos-obras-publicas": "212bc263be033073295fa452c47a8bcf8bc89bb238a87ba4d74935b1951b799a",
     "medicoes-glosas-obras-publicas": "472be19801077382929eeb132b7b018b51aad4eea449d548150ccc4caefb17f0",
     "reequilibrio-obras-publicas": "f4c4f4203929f72128f02568515b0d3f62f2657ee64320a13f45df5100c291c1",
     "auditoria-orcamento-licitacao": "fcddedf29aa3b31f0c95f533b7801d40ceaad4937cdc09111cd217b5ab232b55",
-    "diagnostico-b2g-360": "2e4a078ac863ab9dc500198721b5b67ecee734de8d926231c475ab2c02e60217",
+    "diagnostico-b2g-360": "dab11d897609d8e66a179b6f7edb98fe6e7d70e7904a9ecf60e891a457f72279",
     "diagnostico-pre-licitacao": "2667d986dc38dfb57317cb6ff3e6a5f3eb5144a8cf87e64ea0b4a6b1e56517cc"
   },
   "forbidden": {
@@ -18,7 +18,7 @@
     "medicoes-glosas-obras-publicas/index.html": "472be19801077382929eeb132b7b018b51aad4eea449d548150ccc4caefb17f0",
     "reequilibrio-obras-publicas/index.html": "f4c4f4203929f72128f02568515b0d3f62f2657ee64320a13f45df5100c291c1",
     "auditoria-orcamento-licitacao/index.html": "fcddedf29aa3b31f0c95f533b7801d40ceaad4937cdc09111cd217b5ab232b55",
-    "diagnostico-b2g-360/index.html": "2e4a078ac863ab9dc500198721b5b67ecee734de8d926231c475ab2c02e60217",
+    "diagnostico-b2g-360/index.html": "dab11d897609d8e66a179b6f7edb98fe6e7d70e7904a9ecf60e891a457f72279",
     "diagnostico-pre-licitacao/index.html": "2667d986dc38dfb57317cb6ff3e6a5f3eb5144a8cf87e64ea0b4a6b1e56517cc",
     "script.js": "9c66fa008937610fa1fdee0aadeec9ca87dbdb972a63a7b4ae6edf9673fb70b3",
     "styles.css": "dbcf1b8af9fe1736ad07b2aae30b70f4eca19b2a5ccd2eec2f5c94081e9672ba",
