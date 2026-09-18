@@ -358,7 +358,18 @@ def wrap_tables(html: str, log: list[str]) -> str:
         has_wrap = bool(re.search(r'<div class="(?:table-wrap|table-scroll)"[^>]*>$', prev))
         out.append(before)
         if has_wrap:
-            # `.table-wrap` já mostra a dica por CSS (::after em telas estreitas).
+            # `.table-wrap` já mostra a dica por CSS (::after em telas estreitas), mas
+            # uma região rolável precisa ser alcançável pelo teclado e nomeada
+            # (axe scrollable-region-focusable, aceite 2026-09-17): o invólucro
+            # existente ganha tabindex/role/aria-label quando ainda não os tem.
+            wrap_start = prev.rfind("<div ")
+            wrap_tag = prev[wrap_start:]
+            if 'tabindex=' not in wrap_tag:
+                cap = CAPTION_RE.search(m.group(0))
+                label = (strip_tags(cap.group(1)) if cap else "Tabela de dados").replace('"', "&quot;")
+                new_tag = wrap_tag[:-1] + f' role="group" tabindex="0" aria-label="{label}">'
+                out[-1] = before[: len(before) - (len(before) - len(before.rstrip()))][: -len(wrap_tag)] + new_tag + before[len(before.rstrip()):]
+                hinted += 1
             out.append(m.group(0))
             last = m.end()
             continue
