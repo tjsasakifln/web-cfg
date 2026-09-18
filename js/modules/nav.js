@@ -1072,8 +1072,8 @@
         if (target && !wrapper) {
           result = tag === 'FORM'
             || target.getAttribute('data-section-archetype') === 'cta_formal'
-            || !!target.querySelector?.(':scope > form, :scope > .capture-grid, :scope > .contact-primary, '
-              + ':scope > .container > form, :scope > .container > .capture-grid, :scope > .container > .contact-primary');
+            || !!target.querySelector?.(':scope > :is(form,.capture-grid,.contact-primary), '
+              + ':scope > .container > :is(form,.capture-grid,.contact-primary)');
         }
       } catch (_) { result = false; }
       captureTargetCache.set(value, result);
@@ -1087,10 +1087,10 @@
       const beforeHash = hashAt === -1 ? value : value.slice(0, hashAt);
       const samePage = !beforeHash || beforeHash === pagePath || beforeHash === pagePath.replace(/\/$/, '');
       if (hash && samePage) return isCaptureHash(hash) ? 'form' : 'anchor';
-      const dest = canonicalizeDestination(value);
-      if (dest.kind === 'whatsapp' || dest.kind === 'email' || dest.kind === 'tel') return dest.kind;
-      if (dest.kind === 'external') return 'external';
-      if (dest.kind !== 'internal') return '';
+      // classifyTransition() already returned above for whatsapp/email/tel/
+      // external hrefs (same pure canonicalizeDestination on the same href),
+      // so only internal/pii/empty can reach this call.
+      if (canonicalizeDestination(value).kind !== 'internal') return '';
       if (hash && CAPTURE_HASH.test(hash)) return 'form';
       return 'route';
     };
@@ -1151,6 +1151,8 @@
       };
       const sourcePageType = document.body?.getAttribute(A_CLUSTER) || defaultCluster;
       const offerId = el.getAttribute(A_OFFER) || '';
+      const ctaKind = ctaKindFromEl(el);
+      const withCta = attrsWithCta(el, ctaKind);
       if (classified.kind === 'whatsapp') {
         const whatsappProtocol = appendWhatsappProtocol(el, eventId);
         track('whatsapp_click', {
@@ -1160,7 +1162,7 @@
           cta_label: label || 'whatsapp',
           destination_type: 'whatsapp',
           journey: el.getAttribute('data-journey') || form?.querySelector('#jornada-hidden')?.value || editorialJourney || '',
-          ...attrsWithCta(el, ctaKindFromEl(el)),
+          ...withCta,
         });
         return;
       }
@@ -1171,7 +1173,7 @@
           cta_label: label || 'email',
           destination_type: 'email',
           journey: isEditorial ? editorialJourney : undefined,
-          ...attrsWithCta(el, ctaKindFromEl(el)),
+          ...withCta,
         });
         return;
       }
@@ -1179,20 +1181,19 @@
         track('outbound_click', {
           ...base,
           destination_type: classified.kind,
-          ...attrsWithCta(el, classified.kind === 'tel' ? ctaKindFromEl(el) : ''),
+          ...attrsWithCta(el, classified.kind === 'tel' ? ctaKind : ''),
         });
         return;
       }
       if (classified.kind === 'contact') {
-        const contactAttrs = attrsFromEl(el);
         track('service_cta_click', {
           ...base,
           cta_label: label,
           destination_type: 'form',
           offer_id: offerId,
           source_page_type: sourcePageType,
-          cta_id: contactAttrs.cta_id,
-          route_family: contactAttrs.route_family,
+          cta_id: withCta.cta_id,
+          route_family: withCta.route_family,
         });
         return;
       }
@@ -1200,7 +1201,9 @@
       // route (/triagem-tecnica/), form (ancora de captura da propria pagina,
       // p. ex. #triagem-quantitativos, #escopo-projeto) ou anchor.
       const navDestination = destinationTypeFromHref(href);
-      const routeCta = (isHeaderCta(el) && (navDestination === 'route' || navDestination === 'form' || navDestination === 'anchor'))
+      // navDestination is one of '', 'form', 'anchor', 'route' here, so
+      // non-empty already means route/form/anchor.
+      const routeCta = (isHeaderCta(el) && navDestination !== '')
         || (isTriageRoute(href) && navDestination === 'route');
       if (routeCta) {
         track('cta_click', {
@@ -1208,7 +1211,7 @@
           cta_label: label,
           destination_type: navDestination,
           source_page_type: sourcePageType,
-          ...attrsWithCta(el, ctaKindFromEl(el)),
+          ...withCta,
         });
         return;
       }
@@ -1235,11 +1238,10 @@
       // outra rota e ancora de captura da propria pagina (com ou sem
       // data-cta-id), p. ex. o herói de /quantitativos-orcamento-obras/ ->
       // #triagem-quantitativos ou o de /parcerias-engenharia/ -> #encaminhar.
-      const isCaptureAnchorCta = href.startsWith('#') && isCaptureHash(href);
+      const isCaptureAnchorCta = href.startsWith('#') && navDestination === 'form';
       const eventName = el.getAttribute(A_EVENT_NAME)
         || ((isSituationAction(el) && navDestination === 'route') || isCaptureAnchorCta ? 'cta_click' : '');
       if (!eventName || !namedAllowed[eventName]) return;
-      const namedAttrs = attrsFromEl(el);
       const destinationType = /cta_click$/.test(eventName)
         ? (navDestination || (isFormSubmitCta(el) ? 'form' : ''))
         : '';
@@ -1249,9 +1251,9 @@
         ...(destinationType ? { destination_type: destinationType } : {}),
         offer_id: attrOrBody(el, A_OFFER),
         source_page_type: sourcePageType,
-        asset_id: namedAttrs.asset_id,
-        route_family: namedAttrs.route_family,
-        cta_id: namedAttrs.cta_id,
+        asset_id: withCta.asset_id,
+        route_family: withCta.route_family,
+        cta_id: withCta.cta_id,
         cta_kind: el.getAttribute(A_CTA_KIND) || '',
         next_action_id: el.getAttribute(A_NEXT_ACTION) || '',
       });
