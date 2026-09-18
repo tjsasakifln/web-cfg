@@ -144,7 +144,11 @@ test("incomplete initial context is accepted and essentials are in HTML without 
   assert.match(main, /href="\/casos\/demonstrativo-projeto-privado\/#CF-GEO-01"/);
   assert.equal(html.includes("INT-DEM-001"), false);
   assert.equal(html.includes('class="no-js"'), true);
-  const withoutScripts = html.replace(/<script[\s\S]*?<\/script[^>]*>/gi, "");
+  let withoutScripts = html;
+  for (let prev = null; prev !== withoutScripts; ) {
+    prev = withoutScripts;
+    withoutScripts = withoutScripts.replace(/<script[\s\S]*?<\/script[^>]*>/gi, "");
+  }
   assert.match(withoutScripts, /Compatibilização de projetos de engenharia/);
   assert.match(withoutScripts, /Pedir proposta da compatibilização/);
   assert.match(withoutScripts, /Corrigido na revisão R01/);
