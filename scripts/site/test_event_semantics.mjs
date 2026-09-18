@@ -159,6 +159,84 @@ for (const route of ["/", "/servicos/", "/triagem-tecnica/"]) {
     && transitions.length === 0 && diff.added.length === 1 && clicks[0].page_path === route, diff);
 }
 
+// (7b) G04-02: header "Solicitar proposta" with a same-page capture anchor (private routes and the
+// readiness tool) -> exactly one cta_click destination_type=form, page_path kept, no content_to_service.
+// The /triagem-tecnica/ header stays route; a tool page whose header goes to /triagem-tecnica/ stays route.
+for (const [route, hash] of [
+  ["/quantitativos-orcamento-obras/", "#triagem-quantitativos"],
+  ["/projetos-complementares-engenharia/", "#escopo-projeto"],
+  ["/inspecao-diagnostico-edificacoes/", "#contato-inspecao"],
+  ["/compatibilizacao-projetos-engenharia/", "#pedido-compatibilizacao"],
+  ["/ferramentas/prontidao-tecnica-obra-privada/", "#diagnostico"],
+]) {
+  await open(page, route);
+  const diff = await clickAndDiff(page, "a.header-cta");
+  const clicks = diff.added.filter((e) => e.event === "cta_click");
+  check("header_cta_capture_anchor_form", route, !diff.missing && diff.href === hash && clicks.length === 1
+    && clicks[0].destination_type === "form" && clicks[0].page_path === route
+    && diff.added.length === 1 && piiViolations(diff.added).length === 0, diff);
+}
+{
+  await open(page, "/ferramentas/diagnostico-defesa-margem/");
+  const diff = await clickAndDiff(page, "a.header-cta");
+  const clicks = diff.added.filter((e) => e.event === "cta_click");
+  check("header_cta_route_on_tool", "/ferramentas/diagnostico-defesa-margem/", !diff.missing
+    && diff.href === "/triagem-tecnica/" && clicks.length === 1 && clicks[0].destination_type === "route"
+    && diff.added.length === 1, diff);
+}
+
+// (3b) G04-02: hero capture anchors whose hash is outside the historical pattern (#escopo-projeto is a
+// cta_formal section, #encaminhar is the partner contact block) -> exactly one cta_click destination_type=form
+// with their own cta_id.
+for (const [route, ctaId, hash] of [
+  ["/projetos-complementares-engenharia/", "frame-elaboration-hero", "#escopo-projeto"],
+  ["/parcerias-engenharia/", "partner-hero-describe", "#encaminhar"],
+]) {
+  await open(page, route);
+  const diff = await clickAndDiff(page, `a[data-cta-id="${ctaId}"]`);
+  const clicks = diff.added.filter((e) => e.event === "cta_click");
+  check("hero_capture_anchor_form_cta", route, !diff.missing && diff.href === hash && clicks.length === 1
+    && clicks[0].cta_id === ctaId && clicks[0].destination_type === "form" && clicks[0].cta_position === "hero"
+    && diff.added.length === 1, diff);
+}
+
+// (3c) G04-02: a capture anchor without data-cta-id or data-event-name (inline button to
+// #triagem-quantitativos) still emits one cta_click destination_type=form; a table-of-contents link to a prose
+// section (#diagnostico on an article) emits nothing.
+{
+  await open(page, "/quantitativos-orcamento-obras/");
+  const diff = await clickAndDiff(page, 'a.button[href="#triagem-quantitativos"]:not(.header-cta):not([data-cta-id])');
+  const clicks = diff.added.filter((e) => e.event === "cta_click");
+  check("capture_anchor_without_cta_id_form", "/quantitativos-orcamento-obras/", !diff.missing && clicks.length === 1
+    && clicks[0].destination_type === "form" && diff.added.length === 1, diff);
+}
+{
+  await open(page, "/conteudos/calculo-reequilibrio-economico-financeiro/");
+  const diff = await clickAndDiff(page, 'nav.article-toc a[href="#diagnostico"]');
+  check("toc_prose_anchor_silent", "/conteudos/calculo-reequilibrio-economico-financeiro/", !diff.missing
+    && diff.added.length === 0, diff);
+}
+
+// (3d) tool submit button declared cta_click (data-tool-to-form, no href) -> destination_type=form.
+{
+  await open(page, "/ferramentas/diagnostico-defesa-margem/");
+  const diff = await clickAndDiff(page, 'button[type="submit"][data-event-name="cta_click"]');
+  const clicks = diff.added.filter((e) => e.event === "cta_click");
+  check("tool_submit_cta_click_form", "/ferramentas/diagnostico-defesa-margem/", !diff.missing && clicks.length === 1
+    && clicks[0].destination_type === "form" && clicks[0].cta_id === "segunda-leitura-contrato"
+    && piiViolations(diff.added).length === 0, diff);
+}
+
+// (4b) home footer mailto whose visible text is the address -> email_click without cta_label or any '@' value.
+{
+  await open(page, "/");
+  const diff = await clickAndDiff(page, 'a[data-cta-position="contact"][href^="mailto:"]');
+  const mailEv = diff.added.filter((e) => e.event === "email_click");
+  check("home_footer_mailto_no_address_in_payload", "/", !diff.missing && mailEv.length === 1
+    && mailEv[0].destination_type === "email" && !("cta_label" in mailEv[0])
+    && diff.added.length === 1 && piiViolations(diff.added).length === 0, { diff, pii: piiViolations(diff.added) });
+}
+
 // (3) /quantitativos-orcamento-obras/ hero capture anchor -> one cta_click with its own cta_id, destination_type=form.
 {
   await open(page, "/quantitativos-orcamento-obras/");
@@ -258,6 +336,18 @@ for (const route of ["/", "/servicos/", "/triagem-tecnica/"]) {
   }));
   check("origem_from_session_overrides_prerendered", "/", fromSession.origem === "artigo"
     && fromSession.landing === "/conteudos/documentos-reequilibrio-obra-publica/", fromSession);
+
+  // PII in ?origem= never reaches the hidden field: the pre-rendered '/' stays.
+  await page.goto("about:blank");
+  await page.evaluateOnNewDocument(() => { try { sessionStorage.clear(); } catch (_) { /* ignore */ } });
+  await open(page, "/?origem=foo%40bar.com#contato");
+  const piiOrigem = await page.evaluate(() => ({
+    origem: document.querySelector('form input[name="origem"]')?.value || null,
+    stored: (() => { try { return sessionStorage.getItem("confenge_pseo_attribution") || ""; } catch (_) { return ""; } })(),
+    layer: JSON.stringify(window.dataLayer || []),
+  }));
+  check("origem_query_pii_dropped", "/", piiOrigem.origem === "/" && !piiOrigem.stored.includes("@")
+    && !piiOrigem.layer.includes("@"), piiOrigem);
 
   await page.goto("about:blank");
   await page.evaluateOnNewDocument(() => { try { sessionStorage.clear(); } catch (_) { /* ignore */ } });
