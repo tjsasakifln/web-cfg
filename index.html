@@ -380,8 +380,6 @@ body[data-content-cluster="home"] .hero-deliverable{max-width:52ch;margin:0 0 1r
 
 <div class="container contact-grid">
 <div class="contact-copy">
-<p class="eyebrow t-kicker">Descreva a sua situação</p>
-<p>Escolha a situação e conte o essencial.</p>
 <p class="eyebrow t-kicker after__title">O que acontece depois do envio</p>
 <ol class="after contact-sla" aria-label="O que acontece após o envio">
 <li><div><strong>Recebimento na hora.</strong><p>Confirmação imediata na tela, com protocolo.</p></div></li>
@@ -396,9 +394,9 @@ body[data-content-cluster="home"] .hero-deliverable{max-width:52ch;margin:0 0 1r
 </div>
 <p class="contact-proof-near-cta">Eng. Civil EESC-USP · iniciativa privada e Administração Pública · <a href="/confianca/">como conferir estas credenciais</a></p>
 </div>
-<p class="form-nojs-note">Neste navegador o formulário não conseguiria registrar o seu pedido nem devolver um protocolo, então preferimos não exibi-lo em vez de perder a sua mensagem. Fale pelo WhatsApp, pelo e-mail ou pelo telefone ao lado: chegam direto e valem o mesmo.</p>
-<form action="/obrigado" class="contact-form" data-capture-form data-form-multistep="true" data-ajax="true" id="formulario-contato" method="POST" name="diagnostico-b2g" novalidate data-form-contract="next-state/v1" data-next-state-profile="general_triage" data-runtime-profile="shared_lead_form_v1" data-receipt-required="true"><p class="form-hint" data-form-value>Conte o essencial da sua necessidade. A CONFENGE responde indicando a entrega adequada e as informações que faltam.</p>
-<p class="form-hint" data-field-purpose>Nome identifica o responsável; o contato permite retorno; a necessidade direciona a triagem. Empresa, urgência e contexto são opcionais. WhatsApp: DDD e 10/11 dígitos; e-mail completo.</p>
+<p class="form-nojs-note">Neste navegador, o formulário não consegue registrar o pedido nem devolver um protocolo. Fale pelo WhatsApp, pelo e-mail ou pelo telefone ao lado: chegam direto e valem o mesmo.</p>
+<form action="/obrigado" class="contact-form" data-capture-form data-form-multistep="true" data-ajax="true" id="formulario-contato" method="POST" name="diagnostico-b2g" novalidate data-form-contract="next-state/v1" data-next-state-profile="general_triage" data-runtime-profile="shared_lead_form_v1" data-receipt-required="true"><p class="form-hint" data-form-value>Vale para qualquer tamanho de demanda, mesmo com o contexto ainda incompleto.</p>
+<p class="form-hint" data-field-purpose>Obrigatórios: nome, um canal de retorno, o tipo de necessidade e o consentimento. Empresa, urgência e contexto são opcionais.</p>
 <h2 class="contact-form-title" id="contact-title">Conte o essencial. Devolvemos o próximo passo.</h2>
 <input name="form-name" type="hidden" value="diagnostico-b2g"/>
 <input name="origem" type="hidden" value="/"/>
@@ -410,16 +408,14 @@ body[data-content-cluster="home"] .hero-deliverable{max-width:52ch;margin:0 0 1r
 <input name="document_intent" type="hidden" value="secure_channel_request"/>
 <p class="honeypot"><label for="empresa-site">Não preencha este campo</label><input autocomplete="off" id="empresa-site" name="empresa-site" tabindex="-1"/></p>
 
-<div class="form-progress" aria-hidden="true"><span class="form-progress-step is-active" data-step-indicator="1">1</span><span class="form-progress-bar"></span><span class="form-progress-step" data-step-indicator="2">2</span></div>
-
 <fieldset class="form-step is-active" data-form-step="1" id="form-step-1">
-<legend class="form-step-legend" data-step-heading>Etapa 1 de 2 · Contato essencial</legend>
+<legend class="form-step-legend" data-step-heading>Contato essencial</legend>
 <div class="field"><label for="nome">Nome</label><input autocomplete="name" id="nome" name="nome" required="" type="text"/></div>
 <div class="form-row" role="group" aria-describedby="contato-hint">
 <div class="field"><label for="telefone">WhatsApp</label><input autocomplete="tel" aria-describedby="contato-hint" id="telefone" inputmode="tel" maxlength="20" name="telefone" pattern="(\+?55[\s.\-]?)?\(?\d{2}\)?[\s.\-]?9?\d{4}[\s.\-]?\d{4}" placeholder="(48) 98834-4559" title="Informe DDD e número, com 10 ou 11 dígitos." type="tel"/></div>
 <div class="field"><label for="email">E-mail</label><input autocapitalize="off" autocomplete="email" aria-describedby="contato-hint" id="email" inputmode="email" maxlength="180" name="email" pattern="[^@\s]+@[^@\s]+\.[A-Za-z]{2,}" placeholder="nome@empresa.com.br" spellcheck="false" title="Informe um e-mail completo, como nome@empresa.com.br." type="email"/></div>
 </div>
-<p class="form-hint" id="contato-hint">Informe WhatsApp ou e-mail para retorno. WhatsApp com DDD, 10 ou 11 dígitos, como (48) 98834-4559. E-mail completo, como nome@empresa.com.br.</p>
+<p class="form-hint" id="contato-hint">WhatsApp ou e-mail, um dos dois basta: WhatsApp com DDD e 10 ou 11 dígitos; e-mail completo.</p>
 <div class="field">
 <label for="estagio">Tipo de necessidade</label>
 <select id="estagio" name="estagio" required="">
@@ -447,11 +443,13 @@ body[data-content-cluster="home"] .hero-deliverable{max-width:52ch;margin:0 0 1r
 <p class="form-hint" data-situation-next role="status" hidden></p>
 </div>
 <button class="button button-secondary button-lg form-next" type="button" data-form-next="1">Adicionar mais detalhes</button>
-<p class="form-note form-step-fallback">Etapa 2: contexto opcional e envio.</p>
 </fieldset>
 
 <fieldset class="form-step" data-form-step="2" id="form-step-2">
-<legend class="form-step-legend" data-step-heading>Etapa 2 de 2 · Contexto (pode completar depois)</legend>
+<legend class="form-step-legend" data-step-heading>Detalhes opcionais</legend>
+<div class="field"><label for="mensagem">Contexto em poucas linhas <span class="optional-mark">opcional</span></label><textarea id="mensagem" name="mensagem" placeholder="O que precisa ser resolvido ou decidido. Não cole dados sensíveis desnecessários." rows="3"></textarea></div>
+<p class="form-hint" data-situation-detail role="status" hidden></p>
+<p class="form-hint" data-situation-channels hidden>Se preferir não usar o formulário: <a data-situation-route href="/servicos/">ver o que a CONFENGE faz nessa situação</a> · <a data-situation-whatsapp data-cta-id="home-situation-whatsapp" href="https://wa.me/5548988344559" rel="noopener" target="_blank">Falar pelo WhatsApp</a> · <a data-cta-id="home-situation-email" href="mailto:tiago.sasaki@confenge.com.br">Escrever por e-mail</a> · <a href="tel:+5548988344559">Ligar para (48) 98834-4559</a></p>
 <div class="field"><label for="empresa">Empresa <span class="optional-mark">opcional</span></label><input autocomplete="organization" id="empresa" name="empresa" type="text"/></div>
 <div class="field">
 <label for="urgencia">Urgência <span class="optional-mark">opcional</span></label>
@@ -518,26 +516,21 @@ body[data-content-cluster="home"] .hero-deliverable{max-width:52ch;margin:0 0 1r
 </div>
 <p class="form-hint" id="offer-fit-hint" data-offer-fit-hint role="status">Faixas opcionais. Sem CNPJ, CPF, contrato completo ou upload nesta etapa. Com o que você marcar, respondemos indicando o próximo passo mais direto para o seu caso e o que ele inclui.</p>
 </div>
-<p class="form-hint" data-situation-detail role="status" hidden></p>
-<p class="form-hint" data-situation-channels hidden>Se preferir não usar o formulário: <a data-situation-route href="/servicos/">ver o que a CONFENGE faz nessa situação</a> · <a data-situation-whatsapp data-cta-id="home-situation-whatsapp" href="https://wa.me/5548988344559" rel="noopener" target="_blank">Falar pelo WhatsApp</a> · <a data-cta-id="home-situation-email" href="mailto:tiago.sasaki@confenge.com.br">Escrever por e-mail</a> · <a href="tel:+5548988344559">Ligar para (48) 98834-4559</a></p>
-<div class="field"><label for="mensagem">Contexto em poucas linhas <span class="optional-mark">opcional</span></label><textarea id="mensagem" name="mensagem" placeholder="O que precisa ser resolvido ou decidido. Não cole dados sensíveis desnecessários." rows="3"></textarea></div>
 <label class="consent" for="canal_seguro"><input id="canal_seguro" name="canal_seguro" type="checkbox" value="1"/><span>Solicitar canal seguro para envio de documentos.</span></label>
+<div class="form-step-actions">
+<button class="button button-secondary form-back" type="button" data-form-back="2">Voltar</button>
+</div>
+</fieldset>
 <label class="consent" for="consentimento"><input id="consentimento" name="consentimento" required="" type="checkbox"/><span>Autorizo o uso destes dados para retorno sobre a solicitação, conforme a <a href="/privacidade/">Política de Privacidade</a>.</span></label>
 <!-- Turnstile: set data-sitekey via TURNSTILE_SITE_KEY at build or replace SITEKEY; hidden until key present -->
 <div class="field turnstile-slot" id="turnstile-slot" hidden data-turnstile-sitekey="">
   <div class="cf-turnstile" data-theme="light" data-size="normal"></div>
 </div>
 <div class="form-step-actions">
-<button class="button button-secondary form-back" type="button" data-form-back="2">Voltar</button>
 <button class="button button-primary button-lg form-submit" type="submit" data-cta-position="form-submit">Descrever minha situação <svg class="icon"><use href="#i-arrow"></use></svg></button>
 </div>
-<div class="form-legal">
-<p class="form-note">Retorno direto. Sem lista de e-mails ou compartilhamento comercial dos dados.</p>
-<p class="form-note">Canal seguro: confirmação com protocolo, tipos e tamanho combinados depois. Quem acessa: operação CONFENGE. Retenção: até 730 dias. Exclusão: e-mail de privacidade com o protocolo.</p>
-</div>
-</fieldset>
 <div class="form-status" id="form-status" role="status" aria-live="polite" hidden></div>
-<p class="form-hint" data-form-boundary>O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem apenas por canal seguro combinado depois do protocolo. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da <a href="/privacidade/">Política de Privacidade</a>, com o protocolo.</p>
+<p class="form-hint" data-form-boundary>O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem só por canal seguro combinado depois do protocolo. Sem lista de e-mails nem compartilhamento comercial dos dados. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da <a href="/privacidade/">Política de Privacidade</a>, com o protocolo.</p>
 </form>
 </div>
 </section>

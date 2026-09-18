@@ -31,16 +31,14 @@ const scenarios = [
       await page.waitForSelector("#formulario-contato .is-invalid, #formulario-contato [aria-invalid=true]", { timeout: 3000 });
     },
     async fill(page) {
+      // LAPIDACAO-COMERCIAL-20260918 (§8.1): consentimento e envio ficam fora
+      // do painel de detalhes; o caminho minimo nao abre "Adicionar mais detalhes".
       await page.type("#nome", "Pessoa Sintética QA 532");
       await page.type("#email", "qa532@example.test");
       await page.select("#estagio", "problema urgente em contrato");
-      await page.$eval("#formulario-contato", (form) => {
-        form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
-      });
-      await page.waitForSelector('[data-form-step="2"].is-active', { timeout: 3000 });
       await page.click("#consentimento");
     },
-    submit: '.form-step.is-active button[type="submit"]',
+    submit: '#formulario-contato button[type="submit"]',
     status: "#form-status",
   },
   {

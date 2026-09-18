@@ -109,10 +109,11 @@
       "commitment": "medium",
       "next_useful_state": "A situação fica registrada para triagem; o protocolo confirma a gravação e a confirmação indica qual decisão vem depois.",
       "actual_receipt": "lead_id ou receipt_id persistido antes da página de confirmação",
-      "pre_form_value": "Conte o essencial da sua necessidade. A CONFENGE responde indicando a entrega adequada e as informações que faltam.",
-      "field_purpose": "Nome identifica o responsável; o contato permite retorno; a necessidade direciona a triagem. Empresa, urgência e contexto são opcionais.",
-      "format_hint": " WhatsApp: DDD e 10/11 dígitos; e-mail completo.",
-      "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem apenas por canal seguro combinado depois do protocolo."
+      "pre_form_value": "Vale para qualquer tamanho de demanda, mesmo com o contexto ainda incompleto.",
+      "field_purpose": "Obrigatórios: nome, um canal de retorno, o tipo de necessidade e o consentimento. Empresa, urgência e contexto são opcionais.",
+      "format_hint": "",
+      "format_hint_note": "Vazio de propósito (LAPIDACAO-COMERCIAL-20260918, §5.4): na home o formato de WhatsApp e e-mail é dito uma vez, ao lado dos campos (#contato-hint), não repetido aqui.",
+      "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem só por canal seguro combinado depois do protocolo. Sem lista de e-mails nem compartilhamento comercial dos dados."
     },
     "service_fit_review": {
       "stage": "request_fit_review",

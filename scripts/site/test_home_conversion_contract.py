@@ -69,7 +69,17 @@ def _visible(fragment: str) -> str:
 # HOME_SITUATIONS; sem isso ela cairia no default "operacao" de stageToJourney,
 # que e a reclassificacao silenciosa. As invariantes estruturais seguem
 # identicas: 23 controles, 3 obrigatorios, action /obrigado, sem upload.
-CAPTURE_FORM_SHA256 = "798d9b47c8b32c45c506e92eb55f0c7a9c5b0f4cabe3cd210326922f7c15d220"
+# 2026-09-18 (LAPIDACAO-COMERCIAL-20260918, §5.4/§8.1, A05). O passo "opcional"
+# era obrigatorio: o unico botao do passo 1 era "Adicionar mais detalhes" e
+# consentimento e envio so existiam no passo 2. Consentimento, Turnstile e o
+# envio sairam dos dois paineis (ficam sempre visiveis); o painel de detalhes
+# (mensagem, empresa, urgencia, faixas de obra publica, canal seguro) segue
+# opcional, com "Voltar". Copy repetida saiu (contador de etapas, indicador de
+# progresso, segunda dica de formato, bloco form-legal duplicando o limite
+# gerado). As invariantes estruturais seguem identicas: 23 controles, 3
+# obrigatorios (nome, estagio, consentimento), action /obrigado, sem upload.
+# Gate executavel da propriedade: seo/scripts/test_form_funnel.mjs.
+CAPTURE_FORM_SHA256 = "f00a47798ca006bf2513cc0b2016167d86173b0368dec18600b81fed5f4cd16b"
 
 
 def _home() -> str:
