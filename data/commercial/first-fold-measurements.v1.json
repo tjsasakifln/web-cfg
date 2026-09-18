@@ -1,9 +1,9 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-09-18T00:23:24.827Z",
+  "measured_at": "2026-09-18T01:07:39.210Z",
   "measured_on": "2026-09-18",
-  "commit_sha": "ad621972f64cfd3dbeaad8cb051ea00e7bb69c93",
+  "commit_sha": "2df86dce511d2fc59e16e167c113d28698da9556",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "f168038814087e1b365d1de3042af9a3f3364743756e104711fecc0fb9fe7477",
@@ -40,7 +40,7 @@
     "casos/modelo-relatorio-inteligencia-licitacoes/styles.css": "54a412e66160736aa7d8c757bd6bd9752eb1d41fac2996864c9575aeaa27c260",
     "defesa-margem-contratos-publicos/index.html": "666b7bb0156415b051a2a69c8d8f1feaddec64c72d66f61c9213fcd729ff4edf",
     "defesa-tecnica-contratos-publicos/index.html": "fd1c06e736f0ffa2579da7bda94cc903f0f4e61aad9fa9568eebf7826d2dd434",
-    "diagnostico-b2g-360/index.html": "888dc7f716f1dd524bfd1b06d55fe23bb48a2bc507602f7528a17a77066db1cd",
+    "diagnostico-b2g-360/index.html": "2a29a09b922abe9958ae661f040aabdf33a6e2fd6a1133f1fb3b410766da59e2",
     "diagnostico-b2g-expansao/index.html": "1e8d60b0eb002942732bbb79dcd786e6b3172ad1403424bb012af0cb4de41c80",
     "diagnostico-pre-licitacao/index.html": "74402dff44f8981829c91e8bac07c3ef5e122f345cf4e27991b0dfa921588f7a",
     "diretoria-b2g/index.html": "9df7cde4881ff96c2919c2292370e88532dce93b1ab2277780ef2875eb4a3475",
@@ -3050,7 +3050,7 @@
     },
     {
       "route": "/diagnostico-b2g-360/",
-      "html_sha256": "888dc7f716f1dd524bfd1b06d55fe23bb48a2bc507602f7528a17a77066db1cd",
+      "html_sha256": "2a29a09b922abe9958ae661f040aabdf33a6e2fd6a1133f1fb3b410766da59e2",
       "measured_on": "2026-09-18",
       "viewports": {
         "1366x768": {
