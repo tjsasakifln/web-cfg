@@ -259,7 +259,10 @@
           setTimeout(run, 0);
         }
       };
-      const setStep = (n) => {
+      // Troca sincrona de painel, sem foco nem rolagem: e o que o envio usa
+      // quando precisa devolver o visitante ao essencial antes de apontar o
+      // campo invalido (um controle em display:none nao recebe foco).
+      const showPanel = (n) => {
         formStep = n;
         if (step1) step1.classList.toggle('is-active', n === 1);
         if (step2) step2.classList.toggle('is-active', n === 2);
@@ -268,6 +271,9 @@
           ind.classList.toggle('is-active', sn === n);
           ind.classList.toggle('is-done', sn < n);
         });
+      };
+      const setStep = (n) => {
+        showPanel(n);
         afterLayout(() => revealStep(n));
       };
 
@@ -414,11 +420,19 @@
       });
 
       form.addEventListener('submit', (event) => {
-        if (multi && formStep < 2) {
-          // allow no-js full submit; with js require step 2 visible
-          if (step2 && !step2.classList.contains('is-active')) {
+        if (multi) {
+          // LAPIDACAO-COMERCIAL-20260918 (§8.1). O painel de detalhes e
+          // opcional de verdade: consentimento e envio ficam fora dos dois
+          // paineis, e o essencial (nome, um canal, necessidade) e validado
+          // aqui, no envio, com a mesma associacao de erro do botao de
+          // detalhes. Se o visitante estiver no painel de detalhes com o
+          // essencial invalido, o painel volta antes do foco no campo.
+          const essentialsOk = Boolean((nomeEl?.value || '').trim())
+            && Boolean((emailEl?.value || '').trim() || (phoneEl?.value || '').trim())
+            && Boolean(estagioEl?.value);
+          if (!essentialsOk && formStep !== 1) showPanel(1);
+          if (!validateStep1()) {
             event.preventDefault();
-            if (validateStep1()) setStep(2);
             return;
           }
         }

@@ -247,7 +247,9 @@ function renderForm(full, open, body, surface) {
   }
   const hasStandardEmail = /\bname=["']email["']/i.test(nextBody);
   const hasStandardPhone = /\bname=["']telefone["']/i.test(nextBody);
-  const formatHint = profile.format_hint || (hasStandardEmail && hasStandardPhone
+  // Um format_hint declarado como "" e uma decisao do perfil (o formato ja e
+  // dito uma vez ao lado dos campos); so a ausencia da chave cai no texto padrao.
+  const formatHint = profile.format_hint ?? (hasStandardEmail && hasStandardPhone
     ? " WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos."
     : hasStandardEmail
       ? " O e-mail precisa de domínio e extensão completos."
