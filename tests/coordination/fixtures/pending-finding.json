@@ -33,7 +33,7 @@
     "forwarding": {
       "action": "Encaminhar aos autores.",
       "adjustment_owner_role": "autores das disciplinas",
-      "coordinator_role": "registrar e encaminhar"
+      "coordinator_role": "registra e encaminha"
     }
   },
   "live_documents": [

@@ -230,7 +230,7 @@ export function mapInb06Consumption(consumption, extras = {}) {
       forwarding: {
         action: "Encaminhar ao autor do recorte arquitetônico demonstrativo: avaliar rebaixar a verga e manter B-01 na cota original.",
         adjustment_owner_role: "autor do recorte arquitetônico demonstrativo",
-        coordinator_role: "registrar, localizar e encaminhar; não projetar a correção neste recorte",
+        coordinator_role: "registra, localiza e encaminha",
       },
     },
     secondary_findings: info
@@ -263,7 +263,7 @@ export function mapInb06Consumption(consumption, extras = {}) {
             forwarding: {
               action: "Pedir ao projetista hidrossanitário de origem as dimensões internas e os diâmetros. Enquanto esses dados não chegam, o item permanece pedido de informação, não falha comprovada.",
               adjustment_owner_role: "projetista hidrossanitário de origem",
-              coordinator_role: "registrar o pedido de informação; não converter a lacuna em falha comprovada",
+              coordinator_role: "registra o pedido de informação",
             },
           },
         ]
@@ -301,8 +301,9 @@ function escapeHtml(value) {
     .replaceAll('"', "&quot;");
 }
 
-export function renderFindingHtml(record, liveDocuments) {
+export function renderFindingHtml(record, liveDocuments, options = {}) {
   const finding = record.finding;
+  const withKicker = options.kicker !== false;
   const docs = liveDocuments || record.live_documents || [];
   const estado = displayEstado(finding, docs);
   assertHonestEstado(estado);
@@ -319,8 +320,8 @@ export function renderFindingHtml(record, liveDocuments) {
   const staleNote = estado.code === "stale_revision"
     ? `<p class="coord-finding-stale">${escapeHtml(estado.detail)}</p>`
     : "";
-  return `<article class="coord-finding" data-finding-id="${escapeHtml(finding.id)}" data-finding-type="${escapeHtml(finding.type)}" data-estado="${escapeHtml(estado.code)}" data-resolved="${estado.resolved ? "true" : "false"}" data-detection="${escapeHtml(finding.detection || "")}">
-<p class="coord-finding-kicker">${sourceNote}</p>
+  const kicker = withKicker ? `\n<p class="coord-finding-kicker">${sourceNote}</p>` : "";
+  return `<article class="coord-finding" data-finding-id="${escapeHtml(finding.id)}" data-finding-type="${escapeHtml(finding.type)}" data-estado="${escapeHtml(estado.code)}" data-resolved="${estado.resolved ? "true" : "false"}" data-detection="${escapeHtml(finding.detection || "")}">${kicker}
 <h3>${escapeHtml(finding.id)} · ${escapeHtml(finding.type_label || finding.type)}</h3>
 <dl class="coord-finding-dl">
 <dt>Localização</dt>
@@ -336,7 +337,7 @@ export function renderFindingHtml(record, liveDocuments) {
 <dt>Possível consequência</dt>
 <dd>${escapeHtml(finding.possible_consequence)}</dd>
 <dt>Encaminhamento</dt>
-<dd>${escapeHtml(finding.forwarding?.action)} Responsável pelo ajuste: ${escapeHtml(finding.forwarding?.adjustment_owner_role)}. Papel de quem registra: ${escapeHtml(finding.forwarding?.coordinator_role)}.</dd>
+<dd>${escapeHtml(finding.forwarding?.action)} Ajuste a cargo do ${escapeHtml(finding.forwarding?.adjustment_owner_role)}; a CONFENGE ${escapeHtml(finding.forwarding?.coordinator_role)}.</dd>
 <dt>Estado</dt>
 <dd><strong data-estado-label="${escapeHtml(estado.code)}">${escapeHtml(estado.label)}</strong></dd>
 </dl>
@@ -344,8 +345,16 @@ ${staleNote}
 </article>`;
 }
 
+/**
+ * Secondary findings sit next to the primary one on the page; the demonstrative
+ * note is printed once, on the primary article (G02-A-04, 2026-09-18).
+ */
 export function renderSecondaryFindingHtml(record, finding, liveDocuments) {
-  return renderFindingHtml({ ...record, finding, piloto_finding_href: `${record.piloto_url || "/casos/demonstrativo-projeto-privado/"}#${finding.id}` }, liveDocuments);
+  return renderFindingHtml(
+    { ...record, finding, piloto_finding_href: `${record.piloto_url || "/casos/demonstrativo-projeto-privado/"}#${finding.id}` },
+    liveDocuments,
+    { kicker: false },
+  );
 }
 
 export function renderRegisterHtml(record) {
