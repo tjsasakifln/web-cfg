@@ -5,11 +5,13 @@ from __future__ import annotations
 
 import json
 import tempfile
+from datetime import date
 from pathlib import Path
 
 import pytest
 
 from scripts.site.site_excellence import (
+    _latest_gsc_observation,
     _turnstile_observation,
     build_report,
     collector_ids,
@@ -407,3 +409,144 @@ def test_ci_markdown_stays_legible_while_json_keeps_full_route_evidence() -> Non
         row for row in report["score"]["dimensions"] if row["id"] == "accessibility"
     )
     assert accessibility["metrics"][0]["evidence"]["routes"] == routes
+
+
+def _durable_gsc_read(reports_dir: Path, payload: object) -> None:
+    reports_dir.mkdir(parents=True, exist_ok=True)
+    body = payload if isinstance(payload, str) else json.dumps(payload)
+    (reports_dir / "gsc-insights-durable.json").write_text(body + "\n", encoding="utf-8")
+
+
+def _durable_current(as_of: str = "2026-08-26") -> dict[str, object]:
+    # Shape of the sanitized stdout of scripts/revops/verify_gsc_freshness.mjs:
+    # metadata only, never the private insights body.
+    return {
+        "ok": True,
+        "status": "CURRENT",
+        "schema_version": "confenge-private-gsc-snapshot/v1",
+        "manifest_schema_version": "gsc_snapshot_manifest_v1",
+        "snapshot_sha256": "d" * 64,
+        "snapshot_content_sha256": "e" * 64,
+        "producer_manifest_sha256": "a" * 64,
+        "consumer_manifest_sha256": "a" * 64,
+        "as_of": as_of,
+        "producer_as_of": as_of,
+        "consumer_as_of": as_of,
+        "produced_at": "2026-08-29T11:55:00Z",
+        "ingested_at": "2026-08-29T12:00:00Z",
+        "delivery_source": "durable_store",
+        "reason_codes": [],
+    }
+
+
+def _gsc(reports_dir: Path, today: date = date(2026, 8, 29)) -> dict[str, object]:
+    return _latest_gsc_observation(ROOT, today=today, maximum_age_days=7, reports_dir=reports_dir)
+
+
+def test_gsc_freshness_passes_only_from_a_current_durable_consumer_read() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        reports = Path(tmp)
+        _durable_gsc_read(reports, _durable_current())
+        result = _gsc(reports)
+    assert result["status"] == "MEASURED_PASS"
+    assert result["codes"] == []
+    assert result["evidence"]["as_of"] == "2026-08-26"
+    assert result["evidence"]["age_days"] == 3
+    assert result["evidence"]["source_kind"] == "durable_store"
+    assert result["evidence"]["durable_read"] == "current"
+    assert result["evidence"]["source_available"] is True
+    assert "insights" not in json.dumps(result)
+
+
+def test_gsc_freshness_stale_durable_read_is_blocked_gsc_stale() -> None:
+    stale = {
+        "ok": False,
+        "status": "STALE",
+        "reason_codes": ["snapshot_stale"],
+        "producer_manifest_sha256": "a" * 64,
+        "consumer_manifest_sha256": "a" * 64,
+        "as_of": "2026-08-01",
+        "delivery_source": "durable_store",
+    }
+    with tempfile.TemporaryDirectory() as tmp:
+        reports = Path(tmp)
+        _durable_gsc_read(reports, stale)
+        result = _gsc(reports)
+    assert result["status"] == "BLOCKED_EXTERNAL"
+    assert result["codes"] == ["gsc_stale"]
+    assert result["evidence"]["age_days"] == 28
+    assert result["evidence"]["durable_read"] == "stale"
+
+
+def test_gsc_freshness_stale_durable_read_is_blocked_even_when_as_of_is_recent() -> None:
+    # Host shape when the latest sync failed (gsc-private-snapshot.cjs): status
+    # STALE with the host reason code, but as_of of the recent last-known-good.
+    # The status, not the age, decides: a degraded producer never scores 10/10.
+    stale_recent = {
+        "ok": False,
+        "status": "STALE",
+        "reason_codes": ["provider_coverage_gap"],
+        "producer_manifest_sha256": "a" * 64,
+        "consumer_manifest_sha256": "a" * 64,
+        "as_of": "2026-08-26",
+        "delivery_source": "durable_store",
+    }
+    with tempfile.TemporaryDirectory() as tmp:
+        reports = Path(tmp)
+        _durable_gsc_read(reports, stale_recent)
+        result = _gsc(reports)
+    assert result["status"] == "BLOCKED_EXTERNAL"
+    assert result["codes"] == ["gsc_stale"]
+    assert result["evidence"]["age_days"] == 3
+    assert result["evidence"]["durable_read"] == "stale"
+    assert result["evidence"]["durable_status"] == "STALE"
+    assert result["evidence"]["durable_reason_codes"] == ["provider_coverage_gap"]
+
+
+def test_gsc_freshness_scorecard_policy_is_stricter_than_the_durable_contract() -> None:
+    # Host CURRENT (<= 14 days, #413) but older than the scorecard's 7 days:
+    # the signal stays gsc_stale instead of disappearing (G05-02 decision).
+    with tempfile.TemporaryDirectory() as tmp:
+        reports = Path(tmp)
+        _durable_gsc_read(reports, _durable_current(as_of="2026-08-18"))
+        result = _gsc(reports)
+    assert result["status"] == "BLOCKED_EXTERNAL"
+    assert result["codes"] == ["gsc_stale"]
+    assert result["evidence"]["age_days"] == 11
+    assert result["evidence"]["durable_read"] == "current"
+
+
+def test_gsc_freshness_without_a_durable_read_is_blocked_unavailable_not_stale() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        result = _gsc(Path(tmp) / "missing")
+    assert result["status"] == "BLOCKED_EXTERNAL"
+    assert result["codes"] == ["gsc_durable_read_release_path_only", "gsc_unavailable"]
+    assert result["evidence"]["source_available"] is False
+    assert result["evidence"]["durable_read"] == "absent"
+    assert "durable_status" not in result["evidence"]
+    assert "release path" in result["evidence"]["blocker_context"]
+    # The packaged seo/gsc-*/search-analytics-redacted.json snapshot has no
+    # producer and must never surface as an observation (neither PASS nor stale).
+    assert "seo/" not in json.dumps(result)
+
+
+@pytest.mark.parametrize(
+    "payload",
+    [
+        {**_durable_current(), "fixture": True},
+        {**_durable_current(), "synthetic": True},
+        {**_durable_current(), "delivery_source": "packaged_json"},
+        {"ok": False, "status": "UNKNOWN", "reason_codes": ["ops_token_required"], "as_of": None},
+        "not json {",
+        "[]",
+    ],
+)
+def test_gsc_freshness_rejects_fixture_synthetic_unknown_or_invalid_reads(payload: object) -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        reports = Path(tmp)
+        _durable_gsc_read(reports, payload)
+        result = _gsc(reports)
+    assert result["status"] == "BLOCKED_EXTERNAL"
+    assert result["codes"] == ["gsc_unavailable"]
+    assert result["evidence"]["source_available"] is False
+    assert result["evidence"]["durable_read"] in {"fixture_rejected", "unknown", "invalid"}

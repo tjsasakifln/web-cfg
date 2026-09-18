@@ -12,16 +12,25 @@ import { mkdirSync, writeFileSync } from "fs";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
 import { createOpsJsonClient, sanitizeTransportError } from "./ops_fetch.mjs";
+import { evaluateConsumerPayload } from "./verify_gsc_freshness.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 const BASE = (process.env.BASE_URL || "https://confenge.com.br").replace(/\/$/, "");
 const TOKEN = process.env.OPS_TOKEN || process.env.REVOPS_TOKEN || "";
+// The lead endpoint skips Turnstile only for a probe that proves itself with
+// the 32+ character server-side LEAD_PROBE_SECRET (netlify/functions/lead.cjs).
+// An unauthenticated synthetic POST has been rejected by production Turnstile
+// since 2026-08-24, so without the secret the leg is an external blocker, not
+// a request we fire knowing it fails.
+const LEAD_PROBE_SECRET = String(process.env.LEAD_PROBE_SECRET || "");
+const LEAD_PROBE_SECRET_MIN_LENGTH = 32;
 const out = {
   job: "daily",
   base: BASE,
   ts: new Date().toISOString(),
   checks: [],
   alerts: [],
+  blocked_external: [],
   ops_requests: [],
   completed: false,
 };
@@ -30,6 +39,17 @@ function check(name, ok, detail = "", { critical = true } = {}) {
   out.checks.push({ name, ok, detail, critical });
   console.log(ok ? "PASS" : "FAIL", name, detail);
   if (!ok && critical) out.alerts.push({ name, detail });
+}
+
+// A named external dependency the repository cannot satisfy by itself. It is
+// recorded as a non-critical check that is NOT ok (a blocker is never converted
+// to PASS), plus an alert and a blocked_external entry, so the report never
+// hides it; it does not fail the schedule because no code change can clear it.
+function blockedExternal(name, dependency, detail) {
+  out.checks.push({ name, ok: false, detail: `BLOCKED_EXTERNAL dependency=${dependency} ${detail}`, critical: false, blocked_external: true, dependency });
+  out.blocked_external.push({ name, dependency, detail });
+  out.alerts.push({ name: `${name}_blocked_external`, dependency, detail });
+  console.log("BLOCKED_EXTERNAL", name, `dependency=${dependency}`, detail);
 }
 
 const j = createOpsJsonClient({
@@ -89,7 +109,15 @@ for (const p of critical) {
 }
 
 // 4 Isolated synthetic probe (must not inflate commercial; must be idempotent)
-{
+if (LEAD_PROBE_SECRET.length < LEAD_PROBE_SECRET_MIN_LENGTH) {
+  blockedExternal(
+    "isolated_probe",
+    "LEAD_PROBE_SECRET",
+    `GitHub Actions secret absent or shorter than ${LEAD_PROBE_SECRET_MIN_LENGTH} chars; ` +
+      "production Turnstile rejects an unauthenticated synthetic lead (since 2026-08-24), " +
+      "so the capture/idempotency leg is not exercised (docs/ops/EXTERNAL-ACTIONS.md §1)"
+  );
+} else {
   let before = null;
   if (TOKEN) {
     const f = await j("/.netlify/functions/ops?action=funnel");
@@ -117,7 +145,7 @@ for (const p of critical) {
     Accept: "application/json",
     Origin: "https://confenge.com.br",
     "User-Agent": `confenge-daily-probe/1.0 (${stamp})`,
-    "X-Confenge-Probe": "1",
+    "X-Confenge-Probe": LEAD_PROBE_SECRET,
     "Idempotency-Key": idem,
   };
   const res = await fetch(`${BASE}/.netlify/functions/lead`, {
@@ -181,11 +209,26 @@ if (TOKEN) {
     `leads=${week.body.leads_total} excluded=${week.body.leads_excluded_non_real}`
   );
 
-  // GSC auth endpoint
+  // GSC durable consumer (read-only). The producer is the gsc-sync job of the
+  // same workflow; this leg only reads the authenticated consumer and records
+  // the contract polarity (CURRENT/STALE/UNKNOWN) as sanitized metadata.
   const gsc = await j("/.netlify/functions/ops?action=gsc_insights");
   check("gsc_insights_auth", gsc.status === 200 && gsc.body.ok === true, `http=${gsc.status}`, {
     critical: false,
   });
+  const gscConsumer = evaluateConsumerPayload(gsc.status === 200 ? gsc.body : null);
+  check(
+    "gsc_durable_consumer",
+    gscConsumer.status === "CURRENT",
+    `status=${gscConsumer.status} as_of=${gscConsumer.as_of || ""} reason_codes=${(gscConsumer.reason_codes || []).join(",")}`,
+    { critical: false }
+  );
+  out.gsc_consumer = {
+    status: gscConsumer.status,
+    as_of: gscConsumer.as_of || null,
+    delivery_source: gscConsumer.delivery_source || null,
+    reason_codes: gscConsumer.reason_codes || [],
+  };
 
   const inbound = await j("/.netlify/functions/ops?action=inbound_handoff");
   check(
@@ -237,44 +280,12 @@ if (TOKEN) {
   });
 }
 
-function parseJsonBlob(text) {
-  const t = String(text || "").trim();
-  try {
-    return JSON.parse(t);
-  } catch {
-    const start = t.indexOf("{");
-    const end = t.lastIndexOf("}");
-    if (start >= 0 && end > start) return JSON.parse(t.slice(start, end + 1));
-    return { raw: t.slice(0, 200) };
-  }
-}
-
-// 6 GSC sync (best-effort; missing credentials is non-fatal with exact report)
-{
-  try {
-    const result = execSync(
-      "python3 scripts/revops/search_demand_observatory.py sync --days 28 --reprocess-days 3 --allow-missing-creds",
-      { cwd: ROOT, encoding: "utf8", timeout: 120000, env: process.env }
-    );
-    const parsed = parseJsonBlob(result);
-    out.gsc_sync = parsed;
-    if (parsed.ok) check("gsc_sync", true, `rows=${parsed.rows || 0} last=${parsed.last_sync || ""}`);
-    else if (parsed.error === "missing_credentials") {
-      check("gsc_sync", true, "BLOCKED missing GSC_CREDENTIALS_JSON (expected external)", {
-        critical: false,
-      });
-      out.alerts.push({
-        name: "gsc_credentials_missing",
-        detail: "Set GitHub secret GSC_CREDENTIALS_JSON (service account) + GSC_SITE_URL",
-        required_env: parsed.required_env,
-      });
-    } else {
-      check("gsc_sync", false, JSON.stringify(parsed).slice(0, 200), { critical: false });
-    }
-  } catch (e) {
-    check("gsc_sync", false, String(e.message || e).slice(0, 200), { critical: false });
-  }
-}
+// The GSC producer sync is NOT run here. The gsc-sync job of
+// .github/workflows/revops-scheduled.yml owns it: it restores the durable
+// history first, runs under the gsc-private-snapshot-producer concurrency
+// group and publishes through publish_gsc_insights.mjs. Repeating the sync in
+// this job ran a second producer without the restored history, which failed
+// on every run (revops-scheduled run 35240801751) and added nothing.
 
 // Persist proof
   out.completed = true;
@@ -290,8 +301,27 @@ const proofPath = resolve(runDir, `daily-${day}-${Date.now().toString(36)}.json`
 const failedCritical = out.checks.filter((c) => !c.ok && c.critical !== false).length;
 out.ok = failedCritical === 0;
 out.failed_critical = failedCritical;
+// `ok` means "no critical check failed"; it never means "every leg was
+// exercised". A named external blocker leaves the coverage partial, and the
+// capture leg (isolated probe + idempotency) is reported by its own state so
+// a report with the probe never fired is distinguishable from a proven one.
+out.coverage = out.blocked_external.length === 0 ? "full" : "partial";
+out.capture_leg = out.blocked_external.some((b) => b.dependency === "LEAD_PROBE_SECRET")
+  ? "BLOCKED_EXTERNAL"
+  : "EXERCISED";
 writeFileSync(proofPath, JSON.stringify(out, null, 2) + "\n");
-console.log(JSON.stringify({ ok: out.ok, failed_critical: failedCritical, proof: proofPath, alerts: out.alerts }, null, 2));
+for (const blocker of out.blocked_external) {
+  console.log(
+    `::warning title=daily coverage partial::${blocker.name} BLOCKED_EXTERNAL dependency=${blocker.dependency} — ${blocker.detail}`
+  );
+}
+console.log(
+  JSON.stringify(
+    { ok: out.ok, coverage: out.coverage, capture_leg: out.capture_leg, failed_critical: failedCritical, proof: proofPath, alerts: out.alerts },
+    null,
+    2
+  )
+);
 return out.ok;
 }
 

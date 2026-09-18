@@ -61,6 +61,37 @@ Repeated snapshots do not renew freshness merely by changing ingest metadata.
 `market-answer-freshness` is a consumer proof, not a sync job. It never restores,
 publishes, probes storage with a write or otherwise mutates the data plane.
 
+### Read-only consumers of the durable store
+
+| Consumer | When | Credential | Output |
+| --- | --- | --- | --- |
+| `.github/workflows/market-answer-freshness.yml` | every six hours | `OPS_TOKEN` (repository secret) | job log: last-line JSON of `verify_gsc_freshness.mjs` |
+| `.github/workflows/site-ci.yml`, step `Read durable GSC consumer (#413)` | only on the release path (`workflow_call` from `netcup-release.yml` with `export_public_artifact: true`; `OPS_TOKEN` passed explicitly to the reusable workflow) | `OPS_TOKEN` declared as an optional `workflow_call` secret | `build/reports/gsc-insights-durable.json`, the sanitized stdout of `verify_gsc_freshness.mjs` (status, `as_of`, producer/ingest times, hashes, `delivery_source`, `reason_codes`; never `insights`), uploaded with the `site-ci-reports` artifact |
+| `scripts/revops/scheduled_daily.mjs` (job `daily-ops`) | daily | `OPS_TOKEN` | check `gsc_durable_consumer` with the same sanitized polarity; the daily job is **not** a producer (the GSC sync runs only in job `gsc-sync`) |
+
+The site-excellence scorecard (`scripts/site/site_excellence.py`, metric
+`gsc-freshness`) reads only `build/reports/gsc-insights-durable.json`:
+`CURRENT` is a real observation dated by the producer `as_of`; `STALE` yields
+`gsc_stale` regardless of the `as_of` age (the host keeps the last-known-good
+`as_of` when the latest sync fails, and its `reason_codes` are kept in the
+evidence); an absent, unreadable, `UNKNOWN`, `fixture`/`synthetic` file, or one
+whose `delivery_source` is not `durable_store`, yields `BLOCKED_EXTERNAL
+gsc_unavailable` (`source_available: false`). The packaged snapshots under
+`seo/gsc-*/search-analytics-redacted.json` have no automated producer and are
+never consulted: a file nobody updates cannot report `gsc_stale` as if it were a
+measurement. On `pull_request` and local runs there is no durable read, so the
+honest result is `gsc_unavailable` plus `gsc_durable_read_release_path_only`;
+`BLOCKED_EXTERNAL` never fails CI, but it withholds the 10/10 claim.
+
+**Age policy divergence (G05-02, decided 2026-09-18).** This contract keeps the
+consumer `CURRENT` for up to 14 days; the scorecard keeps
+`maximum_age_days: 7` (`data/quality/site-excellence.v1.json`). The scorecard is
+deliberately stricter: the producer records `as_of` with a structural lag of
+about three days (`--reprocess-days 3`), so four days without a successful sync
+already make the host report `CURRENT` while the scorecard reports `gsc_stale`.
+The signal stays true instead of disappearing; aligning the two is a separate
+policy decision, not something to infer from either value.
+
 ## Privacy and GitHub artifacts
 
 Raw and individual GSC queries stay in the ignored ephemeral private tree. The
@@ -95,8 +126,14 @@ BASE_URL=https://confenge.com.br OPS_TOKEN='<secret>' \
   npm run revops:gsc:verify
 ```
 
-Exit `0` means real `CURRENT`; `STALE` and `UNKNOWN` exit `1`. Deterministic
-polarity can be reproduced without credentials:
+Exit `0` means real `CURRENT`; `STALE` and `UNKNOWN` exit `1`. Without the
+secret the verifier prints `UNKNOWN` with `ops_token_required`; on the host,
+`OPS_TOKEN` lives in `/etc/confenge-web/runtime.env` (read it into the
+environment, never echo it or the `insights` body). Deterministic
+polarity can be reproduced without credentials (the fixture `as_of` is
+2026-08-26, so pin `--now` near it; today's clock makes the CURRENT fixture
+`STALE`, which is correct behaviour). A fixture run marks its stdout with
+`fixture: true`, so the scorecard rejects it as an observation:
 
 ```bash
 node scripts/revops/verify_gsc_freshness.mjs --fixture current \
