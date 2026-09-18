@@ -33,6 +33,7 @@ if str(ROOT) not in sys.path:
 from scripts.site.apply_article_pillar_form import (# noqa: E402
     PILLAR_ANCHOR,
     form_target,
+    frozen_articles,
     service_map,
 )
 from scripts.site.brand import (# noqa: E402
@@ -752,7 +753,8 @@ def article_form_target(origem: str, html: str) -> str:
     ``path_overrides`` do content-service-map, com ``#captura-pilar`` presente
     no pilar); só sem pilar cai na home (``/#contato``)."""
     slug = origem.strip("/").split("/")[-1] if origem.startswith("/conteudos/") else ""
-    if slug:
+    # Congelados pelo canário #389: mesmo destino que o remediador escrevia antes.
+    if slug and slug not in frozen_articles():
         overrides, _labels = service_map()
         target = form_target(slug, html, overrides)
         if target:

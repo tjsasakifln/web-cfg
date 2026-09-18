@@ -113,6 +113,9 @@ def main() -> int:
     check(ifr.article_form_target(origem, article("/", tema_principal=False)) == "/#contato", "remediador sem pilar deveria cair em /#contato", failures)
     check(ifr.article_form_target("/ferramentas/x/", article("/")) == "/#contato", "fora de /conteudos/ deveria cair em /#contato", failures)
 
+    frozen_slug = "glosa-de-medicao-obra-publica"
+    check(ifr.article_form_target(f"/conteudos/{frozen_slug}/", article("/#contato")) == "/#contato", "remediador deveria manter /#contato no congelado do canário #389", failures)
+
     # 5a. lead-inline genérica (href="/#contato") regenerada → formulário no pilar
     generic = article("/#contato").replace(' data-journey="contrato"', "", 1)
     out = ifr.inject_journey_cta(generic, brand, "contrato", "Chuva e prazo", origem)
@@ -136,6 +139,10 @@ def main() -> int:
         return 1
     print("PASS test_apply_article_pillar_form: destino único artigo→pilar, remediador alinhado, congelados intactos")
     return 0
+
+
+def test_apply_article_pillar_form() -> None:
+    assert main() == 0
 
 
 if __name__ == "__main__":
