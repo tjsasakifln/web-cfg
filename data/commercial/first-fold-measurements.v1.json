@@ -1,9 +1,9 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-09-18T04:04:38.150Z",
+  "measured_at": "2026-09-18T04:38:44.825Z",
   "measured_on": "2026-09-18",
-  "commit_sha": "97c2a933cf194559194ee97dce603e19b838da65",
+  "commit_sha": "e3a5aaa3a53b2fe78f78c7cb2668793ce849a276",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "f168038814087e1b365d1de3042af9a3f3364743756e104711fecc0fb9fe7477",
@@ -16,6 +16,7 @@
     "assets/editorial.css": "50404a7d507e3e62a6b52fbdecd1f998dc2a1985c494396c8e1e9961e1c60e5e",
     "assets/eight-offer-contract.css": "d2aead054169392b26c739ab4d95c8b2f651a66c9d6ac27aa7fd98bdafc4f79d",
     "assets/home-10x.css": "82d9ae22fae0435ba207e95e27605293f21d926e14ee03ac589a04e4ef6a8ba4",
+    "assets/home-base.css": "1dc9454fe099b6c207adb98daead9d776ec76795c4243ecca587384bc635acf3",
     "assets/report-capture.css": "669b93f113f417ba6a8175d9d0ab0dd846a19e991245ad9f2f1ebea48d8c0552",
     "assets/report-model-a11y-v293.css": "148fb54ad084edad56eff48e6b635e2df177e8679a724d50e2e92a88421fddce",
     "assets/report-model.css": "b4b5e638341d7531e4f6059618c202890e269a695cb28dddb545d9a520726839",
@@ -46,7 +47,7 @@
     "diretoria-b2g/index.html": "9df7cde4881ff96c2919c2292370e88532dce93b1ab2277780ef2875eb4a3475",
     "entregas/index.html": "38dac83c7a4092edcf17250b246cff50cd670b753b87b8a99713a262aacb2ab3",
     "entregas/styles.css": "4df6c06befb99bf6ce09db19d81e7353cdda80a7a802868600b88033ca78aa1c",
-    "index.html": "c579502763e99f9fa8d9412f24ee8b6b8227555fc0218a9ab37bc7b038617afe",
+    "index.html": "bd4bdf97fef99e85ecadf503970b1f9365c46eb0c98f8d7e2e16a09d4ae61aeb",
     "medicoes-glosas-obras-publicas/index.html": "a265f90370894eccbeebfb375f4821b622dd9954d6685de62af837996a1814cf",
     "problemas-que-resolvemos/index.html": "c5a5872e8ab07dc8bffc49cc82617fed5b6d40ffd125662d5ab6ab35a5a60153",
     "reequilibrio-obras-publicas/index.html": "d3c946a5d0a81d9e2b59760f5c35396dd887de5055a11e441134dee84fd120f3",
@@ -103,7 +104,7 @@
   "routes": [
     {
       "route": "/",
-      "html_sha256": "c579502763e99f9fa8d9412f24ee8b6b8227555fc0218a9ab37bc7b038617afe",
+      "html_sha256": "bd4bdf97fef99e85ecadf503970b1f9365c46eb0c98f8d7e2e16a09d4ae61aeb",
       "measured_on": "2026-09-18",
       "viewports": {
         "1366x768": {
