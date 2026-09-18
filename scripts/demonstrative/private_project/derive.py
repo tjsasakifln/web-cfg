@@ -603,7 +603,7 @@ def build_sample_trail(extracts: dict[str, Any]) -> dict[str, Any]:
         },
         "review_reference": {
             "id": rf1["id"],
-            "label": "Referência de revisão",
+            "label": "O que a revisão mudou",
             "text": (
                 f"{rf1['id']}: {rf1['finding_pt_br']} "
                 "A janela WN-01 entra neste desconto de parede."

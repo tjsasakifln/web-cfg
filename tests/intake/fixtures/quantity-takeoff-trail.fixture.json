@@ -34,7 +34,7 @@
   },
   "review_reference": {
     "id": "RF-TEST",
-    "label": "Referência de revisão",
+    "label": "O que a revisão mudou",
     "text": "Conferência de teste P-12 a P-18, não publicar.",
     "href": "/casos/demonstrativo-projeto-privado/",
     "document_ref": "PR-TEST"
