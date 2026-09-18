@@ -27,8 +27,8 @@ Enquadrar uma mudança de obra (acréscimo, supressão, item novo, serviço extr
 | robots | index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1 |
 | schema | Organization, Country, ContactPoint, Person, CollegeOrUniversity, CollectionPage, WebSite, ItemList, ListItem, Service, BreadcrumbList, FAQPage, Question, Answer |
 | og:title | Aditivos em obras públicas: documentos e margem | CONFENGE |
-| content_sha256 | `4de1b69bbd7ec7504c2054dd6f63a50099bd007b284084b3ee54e64c3b3bea64` |
-| hero CTA | Verificar o contrato no diagnóstico de defesa de margem → `/ferramentas/diagnostico-defesa-margem/` |
+| content_sha256 | `9fc5ffbab3fd135cd4f49cd286ff539ed60aef0dc63b7aced73465d04d1cee87` |
+| hero CTA |  → `` |
 | when-not-to-hire | True |
 
 ## Demand-control / #128 / extra-cli

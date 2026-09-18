@@ -56,7 +56,7 @@
 .tool-situation--recommended {
   border-color: color-mix(in srgb, var(--tool-accent) 45%, var(--tool-line));
   box-shadow: 0 0 0 1px color-mix(in srgb, var(--tool-accent) 18%, transparent);
-  background: linear-gradient(180deg, #f7fbf7 0%, #fff 48%);
+  background: var(--white);
 }
 .tool-situation-badge {
   margin: 0;

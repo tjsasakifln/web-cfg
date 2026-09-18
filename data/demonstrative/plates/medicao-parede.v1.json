@@ -1,0 +1,82 @@
+{
+  "schema": "confenge.demonstrative-plate-source/1.0",
+  "id": "plate-medicao-parede-2026-09",
+  "plate_id": "medicao-parede",
+  "origin": "demonstrative",
+  "revision": "R00",
+  "title": "Mesma parede, quatro números",
+  "label_pt_br": "exemplo demonstrativo",
+  "client_name": null,
+  "address": null,
+  "contract_number": null,
+  "art_number": null,
+  "signature": null,
+  "date_modified": "2026-09-17",
+  "public_source_pt_br": "Seção «Mesma parede, quatro números» de /medicoes-glosas-obras-publicas/#exemplo-demonstrativo (premissas sintéticas, não obra de cliente).",
+  "units": {
+    "area": "m2"
+  },
+  "criterion": {
+    "id": "CRIT-01",
+    "label_pt_br": "Critério contratual",
+    "rule_pt_br": "O contrato manda medir a área de projeção da parede.",
+    "note_pt_br": "É a régua contratual, não uma quarta medição. O órgão contratante continua responsável pelo ateste."
+  },
+  "series": [
+    {
+      "id": "EXE-01",
+      "label_pt_br": "Executado declarado",
+      "note_pt_br": "Alvenaria declarada como executada no período",
+      "role": "chosen_input",
+      "area_m2": "120"
+    },
+    {
+      "id": "MED-01",
+      "label_pt_br": "Medido no boletim",
+      "note_pt_br": "Boletim de medição do período",
+      "role": "chosen_input",
+      "area_m2": "90"
+    },
+    {
+      "id": "EVI-01",
+      "label_pt_br": "Evidenciado por fotos datadas",
+      "note_pt_br": "Fotos contemporâneas com data e local",
+      "role": "chosen_input",
+      "area_m2": "80"
+    }
+  ],
+  "bands": [
+    {
+      "id": "DIF-01",
+      "label_pt_br": "Diferença medido × executado",
+      "role": "derived",
+      "from_id": "MED-01",
+      "to_id": "EXE-01",
+      "formula": "120-90",
+      "area_m2": "30"
+    },
+    {
+      "id": "LAC-01",
+      "label_pt_br": "Lacuna de prova",
+      "role": "derived",
+      "from_id": "EVI-01",
+      "to_id": "MED-01",
+      "formula": "90-80",
+      "area_m2": "10"
+    }
+  ],
+  "ruler": {
+    "max_m2": "120",
+    "tick_m2": "20",
+    "ticks_m2": [
+      "0",
+      "20",
+      "40",
+      "60",
+      "80",
+      "100",
+      "120"
+    ]
+  },
+  "disclaimer_pt_br": "Premissas sintéticas para mostrar a estrutura do dossiê. Não é medição de cliente, não é direito automático a 120 m² e não substitui o ateste do órgão contratante."
+}

@@ -1,0 +1,318 @@
+{
+  "base": "http://127.0.0.1:8812",
+  "tag": "aceite-fix",
+  "captures": [
+    {
+      "route": "/defesa-margem-contratos-publicos/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 14442,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-margem-contratos-publicos-390x844-fold-aceite-fix.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-margem-contratos-publicos-390x844-full-aceite-fix.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-margem-contratos-publicos-390x844-menu-aceite-fix.jpg"
+    },
+    {
+      "route": "/defesa-margem-contratos-publicos/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 9967,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-margem-contratos-publicos-1440x1000-fold-aceite-fix.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-margem-contratos-publicos-1440x1000-full-aceite-fix.jpg"
+    },
+    {
+      "route": "/defesa-margem-contratos-publicos/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/defesa-tecnica-contratos-publicos/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 14536,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-tecnica-contratos-publicos-390x844-fold-aceite-fix.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-tecnica-contratos-publicos-390x844-full-aceite-fix.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-tecnica-contratos-publicos-390x844-menu-aceite-fix.jpg"
+    },
+    {
+      "route": "/defesa-tecnica-contratos-publicos/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 9863,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-tecnica-contratos-publicos-1440x1000-fold-aceite-fix.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/defesa-tecnica-contratos-publicos-1440x1000-full-aceite-fix.jpg"
+    },
+    {
+      "route": "/defesa-tecnica-contratos-publicos/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/acompanhamento-contratos-obras/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 11593,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/acompanhamento-contratos-obras-390x844-fold-aceite-fix.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/acompanhamento-contratos-obras-390x844-full-aceite-fix.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-b/acompanhamento-contratos-obras-390x844-menu-aceite-fix.jpg"
+    },
+    {
+      "route": "/acompanhamento-contratos-obras/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 8064,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/acompanhamento-contratos-obras-1440x1000-fold-aceite-fix.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/acompanhamento-contratos-obras-1440x1000-full-aceite-fix.jpg"
+    },
+    {
+      "route": "/acompanhamento-contratos-obras/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/atrasos-prorrogacao-obras-publicas/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 14826,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/atrasos-prorrogacao-obras-publicas-390x844-fold-aceite-fix.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/atrasos-prorrogacao-obras-publicas-390x844-full-aceite-fix.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-b/atrasos-prorrogacao-obras-publicas-390x844-menu-aceite-fix.jpg"
+    },
+    {
+      "route": "/atrasos-prorrogacao-obras-publicas/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 10064,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/atrasos-prorrogacao-obras-publicas-1440x1000-fold-aceite-fix.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/atrasos-prorrogacao-obras-publicas-1440x1000-full-aceite-fix.jpg"
+    },
+    {
+      "route": "/atrasos-prorrogacao-obras-publicas/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/aditivos-obras-publicas/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 13859,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/aditivos-obras-publicas-390x844-fold-aceite-fix.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/aditivos-obras-publicas-390x844-full-aceite-fix.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-b/aditivos-obras-publicas-390x844-menu-aceite-fix.jpg"
+    },
+    {
+      "route": "/aditivos-obras-publicas/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 9545,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/aditivos-obras-publicas-1440x1000-fold-aceite-fix.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/aditivos-obras-publicas-1440x1000-full-aceite-fix.jpg"
+    },
+    {
+      "route": "/aditivos-obras-publicas/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/diretoria-b2g/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 10447,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/diretoria-b2g-390x844-fold-aceite-fix.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/diretoria-b2g-390x844-full-aceite-fix.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-b/diretoria-b2g-390x844-menu-aceite-fix.jpg"
+    },
+    {
+      "route": "/diretoria-b2g/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 7330,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/diretoria-b2g-1440x1000-fold-aceite-fix.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/diretoria-b2g-1440x1000-full-aceite-fix.jpg"
+    },
+    {
+      "route": "/diretoria-b2g/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/bid-room-licitacoes-obras/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 9987,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/bid-room-licitacoes-obras-390x844-fold-aceite-fix.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/bid-room-licitacoes-obras-390x844-full-aceite-fix.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-b/bid-room-licitacoes-obras-390x844-menu-aceite-fix.jpg"
+    },
+    {
+      "route": "/bid-room-licitacoes-obras/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 7643,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/bid-room-licitacoes-obras-1440x1000-fold-aceite-fix.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/bid-room-licitacoes-obras-1440x1000-full-aceite-fix.jpg"
+    },
+    {
+      "route": "/bid-room-licitacoes-obras/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/diagnostico-b2g-expansao/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 8001,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-expansao-390x844-fold-aceite-fix.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-expansao-390x844-full-aceite-fix.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-expansao-390x844-menu-aceite-fix.jpg"
+    },
+    {
+      "route": "/diagnostico-b2g-expansao/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 5399,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-expansao-1440x1000-fold-aceite-fix.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/diagnostico-b2g-expansao-1440x1000-full-aceite-fix.jpg"
+    },
+    {
+      "route": "/diagnostico-b2g-expansao/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/conflitos/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 6298,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/conflitos-390x844-fold-aceite-fix.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/conflitos-390x844-full-aceite-fix.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-b/conflitos-390x844-menu-aceite-fix.jpg"
+    },
+    {
+      "route": "/conflitos/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 4466,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/conflitos-1440x1000-fold-aceite-fix.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/conflitos-1440x1000-full-aceite-fix.jpg"
+    },
+    {
+      "route": "/conflitos/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/casos/aditivo-art125-demonstrativo/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 7554,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/casos-aditivo-art125-demonstrativo-390x844-fold-aceite-fix.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/casos-aditivo-art125-demonstrativo-390x844-full-aceite-fix.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-b/casos-aditivo-art125-demonstrativo-390x844-menu-aceite-fix.jpg"
+    },
+    {
+      "route": "/casos/aditivo-art125-demonstrativo/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 5066,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/casos-aditivo-art125-demonstrativo-1440x1000-fold-aceite-fix.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/casos-aditivo-art125-demonstrativo-1440x1000-full-aceite-fix.jpg"
+    },
+    {
+      "route": "/casos/aditivo-art125-demonstrativo/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/casos/medicao-glosa-demonstrativo/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 7100,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/casos-medicao-glosa-demonstrativo-390x844-fold-aceite-fix.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/casos-medicao-glosa-demonstrativo-390x844-full-aceite-fix.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-b/casos-medicao-glosa-demonstrativo-390x844-menu-aceite-fix.jpg"
+    },
+    {
+      "route": "/casos/medicao-glosa-demonstrativo/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 4924,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/casos-medicao-glosa-demonstrativo-1440x1000-fold-aceite-fix.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/casos-medicao-glosa-demonstrativo-1440x1000-full-aceite-fix.jpg"
+    },
+    {
+      "route": "/casos/medicao-glosa-demonstrativo/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/problemas-que-resolvemos/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 8073,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/problemas-que-resolvemos-390x844-fold-aceite-fix.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/problemas-que-resolvemos-390x844-full-aceite-fix.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-b/problemas-que-resolvemos-390x844-menu-aceite-fix.jpg"
+    },
+    {
+      "route": "/problemas-que-resolvemos/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 6444,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/problemas-que-resolvemos-1440x1000-fold-aceite-fix.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/problemas-que-resolvemos-1440x1000-full-aceite-fix.jpg"
+    },
+    {
+      "route": "/problemas-que-resolvemos/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/servicos-obras-publicas/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 14146,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/servicos-obras-publicas-390x844-fold-aceite-fix.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/servicos-obras-publicas-390x844-full-aceite-fix.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-b/servicos-obras-publicas-390x844-menu-aceite-fix.jpg"
+    },
+    {
+      "route": "/servicos-obras-publicas/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 10578,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-b/servicos-obras-publicas-1440x1000-fold-aceite-fix.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-b/servicos-obras-publicas-1440x1000-full-aceite-fix.jpg"
+    },
+    {
+      "route": "/servicos-obras-publicas/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    }
+  ]
+}

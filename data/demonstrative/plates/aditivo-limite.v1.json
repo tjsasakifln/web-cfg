@@ -1,0 +1,106 @@
+{
+  "schema": "confenge.demonstrative-plate-source/1.0",
+  "id": "plate-aditivo-limite-2026-09",
+  "plate_id": "aditivo-limite",
+  "sheet_code": "P5",
+  "origin": "demonstrative",
+  "revision": "R00",
+  "title": "Linha do tempo do contrato e o limite do art. 125",
+  "label_pt_br": "exemplo demonstrativo",
+  "client_name": null,
+  "address": null,
+  "contract_number": null,
+  "art_number": null,
+  "signature": null,
+  "date_modified": "2026-09-17",
+  "public_source_pt_br": "Seção /aditivos-obras-publicas/#exemplo-demonstrativo e /casos/aditivo-art125-demonstrativo/ (premissas sintéticas, não obra de cliente).",
+  "legal_reference_pt_br": "art. 125 da Lei 14.133/2021",
+  "units": {
+    "time": "meses desde a assinatura",
+    "value": "percentual acumulado sobre o valor inicial atualizado"
+  },
+  "contract": {
+    "id": "CTR-01",
+    "label_pt_br": "Contrato hipotético de obra nova",
+    "initial_value_brl_text": "R$ 10.000.000",
+    "term_months": "24",
+    "kind_pt_br": "obra nova"
+  },
+  "limits": [
+    {
+      "id": "LIM-25",
+      "label_pt_br": "Limite para obra ou serviço novo",
+      "percent": "25",
+      "applies_pt_br": "obra, serviço ou compra"
+    },
+    {
+      "id": "LIM-50",
+      "label_pt_br": "Limite para reforma de edifício ou equipamento",
+      "percent": "50",
+      "applies_pt_br": "reforma de edifício ou de equipamento"
+    }
+  ],
+  "events": [
+    {
+      "id": "EV-00",
+      "label_pt_br": "Assinatura",
+      "month": "0",
+      "increment_percent": "0",
+      "cumulative_percent": "0",
+      "state": "formalizado"
+    },
+    {
+      "id": "TA-01",
+      "label_pt_br": "1º termo aditivo",
+      "month": "6",
+      "increment_percent": "12",
+      "cumulative_percent": "12",
+      "value_brl_text": "R$ 1.200.000",
+      "state": "formalizado"
+    },
+    {
+      "id": "TA-02",
+      "label_pt_br": "2º termo aditivo",
+      "month": "11",
+      "increment_percent": "6",
+      "cumulative_percent": "18",
+      "value_brl_text": "R$ 600.000",
+      "state": "formalizado"
+    },
+    {
+      "id": "TA-03",
+      "label_pt_br": "Aditivo proposto",
+      "month": "15",
+      "increment_percent": "9",
+      "cumulative_percent": "27",
+      "value_brl_text": "R$ 900.000",
+      "state": "hipotetico"
+    }
+  ],
+  "excess": {
+    "id": "EXC-01",
+    "label_pt_br": "Excesso sobre o limite de obra nova",
+    "formula": "27-25",
+    "percent": "2",
+    "value_brl_text": "R$ 200.000"
+  },
+  "axis": {
+    "months": [
+      "0",
+      "6",
+      "12",
+      "18",
+      "24"
+    ],
+    "percent_ticks": [
+      "0",
+      "10",
+      "20",
+      "30",
+      "40",
+      "50"
+    ],
+    "percent_max": "50"
+  },
+  "disclaimer_pt_br": "Premissas sintéticas para mostrar a estrutura da memória de saldo. Não é contrato de cliente, não é parecer jurídico e não substitui a decisão do órgão contratante sobre o termo."
+}

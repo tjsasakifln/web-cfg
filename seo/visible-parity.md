@@ -3,7 +3,7 @@
 - ok: `True`
 - pages: `98`
 - defects: `0`
-- site_root: `/tmp/claude-1000/-home-tjsasakifln-code-confenge-web-cfg/6fc4cd49-43ed-4ba2-95d6-c1067eebcb7e/scratchpad/clean/_site`
+- site_root: `/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/_site`
 
 | url | ok | defects | claimed | visible |
 | --- | --- | --- | --- | --- |
@@ -29,8 +29,8 @@
 | https://confenge.com.br/casos/modelo-painel-precos-obras-publicas/ | True | — | Organization,Person,BreadcrumbList | Demonstrativo. Descubra a escala de contrato que este mercado realmente adjudica. |
 | https://confenge.com.br/casos/modelo-relatorio-executivo-consolidado/ | True | — | Organization,Person,BreadcrumbList | Demonstrativo. Decida onde alocar equipe, acervo e caixa nos próximos 90 dias. |
 | https://confenge.com.br/casos/modelo-relatorio-inteligencia-licitacoes/ | True | — | Organization,Person,BreadcrumbList | Modelo sintético: licitações a disputar ou recusar. |
-| https://confenge.com.br/comercial/privacidade-leads/ | True | — |  | Aviso de privacidade - leads e contratação |
-| https://confenge.com.br/comercial/termos-diagnostico-b2g/ | True | — |  | Termos para pessoa jurídica - Diagnóstico de Expansão no Mercado Público |
+| https://confenge.com.br/comercial/privacidade-leads/ | True | — |  | Aviso de privacidade: leads e contratação |
+| https://confenge.com.br/comercial/termos-diagnostico-b2g/ | True | — |  | Termos para pessoa jurídica: Diagnóstico de Expansão no Mercado Público |
 | https://confenge.com.br/compatibilizacao-projetos-engenharia/ | True | — | BreadcrumbList | Compatibilização de projetos de engenharia |
 | https://confenge.com.br/confianca/ | True | — | Organization,Person,BreadcrumbList | Quem responde pela CONFENGE |
 | https://confenge.com.br/conflitos/ | True | — | Organization,Person,BreadcrumbList | Como a CONFENGE protege a independência técnica |
@@ -81,14 +81,14 @@
 | https://confenge.com.br/ferramentas/prontidao-tecnica-obra-privada/ | True | — |  | Organize as informações da sua obra e veja o próximo passo |
 | https://confenge.com.br/guias-contratos-obras/ | True | — | Organization,BreadcrumbList | Guias e checklists para contratos de obras públicas |
 | https://confenge.com.br/guias-contratos-obras/checklist-pedido-aditivo/ | True | — | Organization,BreadcrumbList,Article; Checklist de pedido de aditivo em obra pública | Checklist de pedido de aditivo em obra pública |
-| https://confenge.com.br/imprensa/ | True | — |  | Imprensa e pesquisa |
+| https://confenge.com.br/imprensa/ | True | — | BreadcrumbList | Imprensa e pesquisa |
 | https://confenge.com.br/inspecao-diagnostico-edificacoes/ | True | — | BreadcrumbList | Inspeção e diagnóstico de edificações |
 | https://confenge.com.br/lei-14133-obras/ | True | — | Organization,BreadcrumbList | Lei nº 14.133/2021 aplicada a obras e serviços de engenharia |
 | https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/ | True | — | Organization,BreadcrumbList,Article; Item novo no aditivo: preço e relação proposta/orçamento-base | Item novo no aditivo: preço e relação proposta/orçamento-base |
 | https://confenge.com.br/medicoes-glosas-obras-publicas/ | True | — | Organization,Person,BreadcrumbList | Medições, glosas e pagamentos em obras públicas |
 | https://confenge.com.br/metodologia-inteligencia/ | True | — | Organization,Person,BreadcrumbList | Como a CONFENGE separa fato, cálculo, hipótese e ponto desconhecido |
 | https://confenge.com.br/nurture/ | True | — |  | Cinco e-mails úteis, não newsletter genérica |
-| https://confenge.com.br/parcerias-engenharia/ | True | — | BreadcrumbList | Nós assumimos a engenharia que falta. |
+| https://confenge.com.br/parcerias-engenharia/ | True | — | BreadcrumbList | Encaminhe a parte de engenharia que falta no seu pacote e siga com o seu cliente. |
 | https://confenge.com.br/politica-editorial/ | True | — | Organization,Person,BreadcrumbList | Política editorial |
 | https://confenge.com.br/politica-editorial/historico/ | True | — | Organization,Person,BreadcrumbList | Histórico da política editorial |
 | https://confenge.com.br/politica-editorial/v/1.0.0/ | True | — | Organization,Person,BreadcrumbList | Política editorial 1.0.0 |

@@ -284,7 +284,7 @@
           clearContactValidity();
           return true;
         }
-        const msg = 'Informe e-mail ou WhatsApp para retorno.';
+        const msg = 'Informe um WhatsApp ou um e-mail para receber a resposta.';
         // One validity group, one summary — not two native field errors.
         setControlInvalid(emailEl, true);
         setControlInvalid(phoneEl, true);
@@ -306,14 +306,14 @@
         markStart();
         let ok = true;
         if (nomeEl && !(nomeEl.value || '').trim()) {
-          setControlInvalid(nomeEl, true, 'Informe seu nome.');
+          setControlInvalid(nomeEl, true, 'Informe o seu nome.');
           ok = false;
         } else {
           setControlInvalid(nomeEl, false);
         }
         if (!requireEmailOrPhone()) ok = false;
         if (estagioEl && !estagioEl.value) {
-          setControlInvalid(estagioEl, true, 'Selecione o tipo de necessidade.');
+          setControlInvalid(estagioEl, true, 'Escolha o tipo de necessidade; se não souber, marque a primeira opção.');
           ok = false;
         } else {
           setControlInvalid(estagioEl, false);
@@ -488,7 +488,7 @@
           fd.forEach((val, key) => { payload[key] = String(val); });
           const submitBtn = form.querySelector('[type="submit"]');
           if (submitBtn) submitBtn.disabled = true;
-          showFormStatus('Enviando…', 'ok');
+          showFormStatus('Enviando. Não feche a página.', 'ok');
           const finishOk = (receipt) => {
             const protocol = (receipt && (receipt.lead_id || receipt.receipt_id))
               ? String(receipt.lead_id || receipt.receipt_id).slice(0, 32)
@@ -539,8 +539,8 @@
             const leftTheBrowser = reason === 'timeout' || reason === 'receipt_unconfirmed';
             showFormStatus(
               leftTheBrowser
-                ? 'Não recebemos a confirmação a tempo. O seu pedido pode ter sido registrado — não reescreva os dados: tente enviar de novo, ou use o WhatsApp abaixo. O protocolo só aparece depois da gravação confirmada.'
-                : 'Não foi possível enviar ao servidor. Use o WhatsApp abaixo para não perder o contato — o protocolo só aparece depois da gravação confirmada.',
+                ? 'Não recebemos a confirmação a tempo. O seu pedido pode ter sido registrado; não reescreva os dados. Tente enviar de novo ou use o WhatsApp abaixo. O protocolo só aparece depois que o registro é confirmado.'
+                : 'Não foi possível registrar o envio. Use o WhatsApp abaixo para não perder o contato: o protocolo só aparece depois que o registro é confirmado.',
               'error',
             );
             track('lead_form_backend_error', {
@@ -556,7 +556,7 @@
             wa.target = '_blank';
             wa.rel = 'noopener';
             wa.className = 'button button-primary';
-            wa.textContent = 'Continuar pelo WhatsApp (fallback)';
+            wa.textContent = 'Continuar pelo WhatsApp';
             if (statusEl && !statusEl.querySelector('[data-wa-fallback]')) {
               wa.setAttribute('data-wa-fallback', '1');
               statusEl.appendChild(document.createElement('br'));

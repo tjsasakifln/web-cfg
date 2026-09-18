@@ -1,0 +1,492 @@
+{
+  "base": "http://127.0.0.1:8741",
+  "tag": "lote-a",
+  "captures": [
+    {
+      "route": "/compatibilizacao-projetos-engenharia/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/compatibilizacao-projetos-engenharia/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/revisao-tecnica-projetos-engenharia/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/projetos-complementares-engenharia/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/inspecao-diagnostico-edificacoes/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/inspecao-diagnostico-edificacoes/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/assistencia-tecnica-pericial-engenharia/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/assistencia-tecnica-pericial-engenharia/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/seguranca-trabalho-apoio-tecnico/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/obrigado.html",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/obrigado-contrato.html",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/obrigado.html",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/obrigado-contrato.html",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/obrigado.html",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/obrigado-contrato.html",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/obrigado-edital.html",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/obrigado-operacao.html",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/obrigado.html",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 1465,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado.html-390x844-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado.html-390x844-full-lote-a.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado.html-390x844-menu-lote-a.jpg"
+    },
+    {
+      "route": "/obrigado.html",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 1000,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado.html-1440x1000-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado.html-1440x1000-full-lote-a.jpg"
+    },
+    {
+      "route": "/obrigado.html",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/obrigado-contrato.html",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 1476,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado-contrato.html-390x844-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado-contrato.html-390x844-full-lote-a.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado-contrato.html-390x844-menu-lote-a.jpg"
+    },
+    {
+      "route": "/obrigado-contrato.html",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 1018,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado-contrato.html-1440x1000-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado-contrato.html-1440x1000-full-lote-a.jpg"
+    },
+    {
+      "route": "/obrigado-contrato.html",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/obrigado-edital.html",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 1502,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado-edital.html-390x844-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado-edital.html-390x844-full-lote-a.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado-edital.html-390x844-menu-lote-a.jpg"
+    },
+    {
+      "route": "/obrigado-edital.html",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 1000,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado-edital.html-1440x1000-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado-edital.html-1440x1000-full-lote-a.jpg"
+    },
+    {
+      "route": "/obrigado-edital.html",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/obrigado-operacao.html",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 1433,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado-operacao.html-390x844-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado-operacao.html-390x844-full-lote-a.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado-operacao.html-390x844-menu-lote-a.jpg"
+    },
+    {
+      "route": "/obrigado-operacao.html",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 1000,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado-operacao.html-1440x1000-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/obrigado-operacao.html-1440x1000-full-lote-a.jpg"
+    },
+    {
+      "route": "/obrigado-operacao.html",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/404.html",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/casos/demonstrativo-infraestrutura/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/casos/demonstrativo-infraestrutura/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/parcerias-engenharia/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/comercial/privacidade-leads/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 4954,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/comercial-privacidade-leads-390x844-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/comercial-privacidade-leads-390x844-full-lote-a.jpg"
+    },
+    {
+      "route": "/comercial/privacidade-leads/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 3453,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/comercial-privacidade-leads-1440x1000-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/comercial-privacidade-leads-1440x1000-full-lote-a.jpg"
+    },
+    {
+      "route": "/comercial/privacidade-leads/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/comercial/termos-diagnostico-b2g/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 5396,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/comercial-termos-diagnostico-b2g-390x844-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/comercial-termos-diagnostico-b2g-390x844-full-lote-a.jpg"
+    },
+    {
+      "route": "/comercial/termos-diagnostico-b2g/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 3724,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/comercial-termos-diagnostico-b2g-1440x1000-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/comercial-termos-diagnostico-b2g-1440x1000-full-lote-a.jpg"
+    },
+    {
+      "route": "/comercial/termos-diagnostico-b2g/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/comercial/radar-decisorio/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 6371,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/comercial-radar-decisorio-390x844-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/comercial-radar-decisorio-390x844-full-lote-a.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-a/comercial-radar-decisorio-390x844-menu-lote-a.jpg"
+    },
+    {
+      "route": "/comercial/radar-decisorio/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 4842,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/comercial-radar-decisorio-1440x1000-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/comercial-radar-decisorio-1440x1000-full-lote-a.jpg"
+    },
+    {
+      "route": "/comercial/radar-decisorio/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/compatibilizacao-projetos-engenharia/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 15515,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/compatibilizacao-projetos-engenharia-390x844-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/compatibilizacao-projetos-engenharia-390x844-full-lote-a.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-a/compatibilizacao-projetos-engenharia-390x844-menu-lote-a.jpg"
+    },
+    {
+      "route": "/compatibilizacao-projetos-engenharia/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 9448,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/compatibilizacao-projetos-engenharia-1440x1000-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/compatibilizacao-projetos-engenharia-1440x1000-full-lote-a.jpg"
+    },
+    {
+      "route": "/compatibilizacao-projetos-engenharia/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/revisao-tecnica-projetos-engenharia/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 13401,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/revisao-tecnica-projetos-engenharia-390x844-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/revisao-tecnica-projetos-engenharia-390x844-full-lote-a.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-a/revisao-tecnica-projetos-engenharia-390x844-menu-lote-a.jpg"
+    },
+    {
+      "route": "/revisao-tecnica-projetos-engenharia/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 8970,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/revisao-tecnica-projetos-engenharia-1440x1000-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/revisao-tecnica-projetos-engenharia-1440x1000-full-lote-a.jpg"
+    },
+    {
+      "route": "/revisao-tecnica-projetos-engenharia/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/projetos-complementares-engenharia/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 15415,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/projetos-complementares-engenharia-390x844-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/projetos-complementares-engenharia-390x844-full-lote-a.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-a/projetos-complementares-engenharia-390x844-menu-lote-a.jpg"
+    },
+    {
+      "route": "/projetos-complementares-engenharia/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 10592,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/projetos-complementares-engenharia-1440x1000-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/projetos-complementares-engenharia-1440x1000-full-lote-a.jpg"
+    },
+    {
+      "route": "/projetos-complementares-engenharia/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/inspecao-diagnostico-edificacoes/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 13161,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/inspecao-diagnostico-edificacoes-390x844-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/inspecao-diagnostico-edificacoes-390x844-full-lote-a.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-a/inspecao-diagnostico-edificacoes-390x844-menu-lote-a.jpg"
+    },
+    {
+      "route": "/inspecao-diagnostico-edificacoes/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 9072,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/inspecao-diagnostico-edificacoes-1440x1000-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/inspecao-diagnostico-edificacoes-1440x1000-full-lote-a.jpg"
+    },
+    {
+      "route": "/inspecao-diagnostico-edificacoes/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/assistencia-tecnica-pericial-engenharia/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 12541,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/assistencia-tecnica-pericial-engenharia-390x844-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/assistencia-tecnica-pericial-engenharia-390x844-full-lote-a.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-a/assistencia-tecnica-pericial-engenharia-390x844-menu-lote-a.jpg"
+    },
+    {
+      "route": "/assistencia-tecnica-pericial-engenharia/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 8941,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/assistencia-tecnica-pericial-engenharia-1440x1000-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/assistencia-tecnica-pericial-engenharia-1440x1000-full-lote-a.jpg"
+    },
+    {
+      "route": "/assistencia-tecnica-pericial-engenharia/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/seguranca-trabalho-apoio-tecnico/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 13507,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/seguranca-trabalho-apoio-tecnico-390x844-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/seguranca-trabalho-apoio-tecnico-390x844-full-lote-a.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-a/seguranca-trabalho-apoio-tecnico-390x844-menu-lote-a.jpg"
+    },
+    {
+      "route": "/seguranca-trabalho-apoio-tecnico/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 9475,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/seguranca-trabalho-apoio-tecnico-1440x1000-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/seguranca-trabalho-apoio-tecnico-1440x1000-full-lote-a.jpg"
+    },
+    {
+      "route": "/seguranca-trabalho-apoio-tecnico/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/parcerias-engenharia/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 10614,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/parcerias-engenharia-390x844-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/parcerias-engenharia-390x844-full-lote-a.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-a/parcerias-engenharia-390x844-menu-lote-a.jpg"
+    },
+    {
+      "route": "/parcerias-engenharia/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 6362,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/parcerias-engenharia-1440x1000-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/parcerias-engenharia-1440x1000-full-lote-a.jpg"
+    },
+    {
+      "route": "/parcerias-engenharia/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/casos/demonstrativo-infraestrutura/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 14917,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/casos-demonstrativo-infraestrutura-390x844-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/casos-demonstrativo-infraestrutura-390x844-full-lote-a.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-a/casos-demonstrativo-infraestrutura-390x844-menu-lote-a.jpg"
+    },
+    {
+      "route": "/casos/demonstrativo-infraestrutura/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 9674,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/casos-demonstrativo-infraestrutura-1440x1000-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/casos-demonstrativo-infraestrutura-1440x1000-full-lote-a.jpg"
+    },
+    {
+      "route": "/casos/demonstrativo-infraestrutura/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/404.html",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 2999,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/404.html-390x844-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/404.html-390x844-full-lote-a.jpg"
+    },
+    {
+      "route": "/404.html",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 1385,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-a/404.html-1440x1000-fold-lote-a.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/lote-a/404.html-1440x1000-full-lote-a.jpg"
+    },
+    {
+      "route": "/404.html",
+      "viewport": "320x700",
+      "overflow_px": 0
+    }
+  ]
+}

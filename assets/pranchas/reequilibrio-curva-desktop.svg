@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" role="img" aria-labelledby="reequilibrio-curva-desktop-title reequilibrio-curva-desktop-desc" font-family="Archivo Var, Arial, Helvetica, sans-serif" fill="#071a31">
+<title id="reequilibrio-curva-desktop-title">Prancha P9 · Índice de custo, data-base e o desequilíbrio a demonstrar · exemplo demonstrativo</title>
+<desc id="reequilibrio-curva-desktop-desc">Curva sintética do índice de custo de um insumo, base 100 na data-base: sobe 1 ponto por mês até o evento do mês 7 (índice 107) e chega a 130 no mês 12; a tendência anterior chegaria a 112. A área hachurada entre as duas linhas, do mês 7 ao 12, é o desequilíbrio a demonstrar, com pico de 18 pontos. Série sintética; exemplo demonstrativo, sem obra de cliente. Procedência: data/demonstrative/plates/reequilibrio-curva.v1.json.</desc>
+<rect x="0" y="0" width="1200" height="560" fill="#ffffff"/>
+<rect x="8" y="8" width="1184" height="544" fill="#ffffff" stroke="#dfe4e6"/>
+<text x="28" y="40" font-size="16" font-weight="650">Índice de custo, data-base e o desequilíbrio a demonstrar</text>
+<text x="1172" y="40" font-size="11" fill="#5d6a7a" text-anchor="end">Dados demonstrativos · revisão R00</text>
+<defs><pattern id="reequilibrio-curva-d-h5d6a" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0V6" stroke="#5d6a7a" stroke-width="0.5"/></pattern></defs>
+<text x="28" y="72" font-size="12" font-weight="650">Série sintética de custo de um insumo, base 100 na data-base da proposta · o que o dossiê precisa demonstrar por item e período</text>
+<path d="M629.2 310.2L703.3 267.3L777.5 224.4L851.7 188.7L925.8 160.1L1000 145.8L1000 274.4L629.2 310.2Z" fill="#ced62a" fill-opacity=".35"/>
+<path d="M629.2 310.2L703.3 267.3L777.5 224.4L851.7 188.7L925.8 160.1L1000 145.8L1000 274.4L629.2 310.2Z" fill="url(#reequilibrio-curva-d-h5d6a)" stroke="none"/>
+<line x1="110" y1="396" x2="1000" y2="396" stroke="#071a31" stroke-width="1.2"/>
+<line x1="110" y1="396" x2="110" y2="100" stroke="#5d6a7a" stroke-width="0.6"/>
+<line x1="110" y1="396" x2="110" y2="402" stroke="#071a31" stroke-width="0.6"/>
+<text x="110" y="416" font-size="11" fill="#5d6a7a" text-anchor="middle">0</text>
+<line x1="332.5" y1="396" x2="332.5" y2="402" stroke="#071a31" stroke-width="0.6"/>
+<text x="332.5" y="416" font-size="11" fill="#5d6a7a" text-anchor="middle">3</text>
+<line x1="555" y1="396" x2="555" y2="402" stroke="#071a31" stroke-width="0.6"/>
+<text x="555" y="416" font-size="11" fill="#5d6a7a" text-anchor="middle">6</text>
+<line x1="777.5" y1="396" x2="777.5" y2="402" stroke="#071a31" stroke-width="0.6"/>
+<text x="777.5" y="416" font-size="11" fill="#5d6a7a" text-anchor="middle">9</text>
+<line x1="1000" y1="396" x2="1000" y2="402" stroke="#071a31" stroke-width="0.6"/>
+<text x="1000" y="416" font-size="11" fill="#5d6a7a" text-anchor="middle">12</text>
+<text x="1000" y="432" font-size="11" fill="#5d6a7a" text-anchor="end">meses desde a data-base</text>
+<line x1="104" y1="360.2" x2="110" y2="360.2" stroke="#5d6a7a" stroke-width="0.6"/>
+<text x="100" y="364.2" font-size="11" fill="#5d6a7a" text-anchor="end">100</text>
+<line x1="110" y1="360.2" x2="1000" y2="360.2" stroke="#dfe4e6" stroke-width="1"/>
+<line x1="104" y1="288.8" x2="110" y2="288.8" stroke="#5d6a7a" stroke-width="0.6"/>
+<text x="100" y="292.8" font-size="11" fill="#5d6a7a" text-anchor="end">110</text>
+<line x1="110" y1="288.8" x2="1000" y2="288.8" stroke="#dfe4e6" stroke-width="1"/>
+<line x1="104" y1="217.2" x2="110" y2="217.2" stroke="#5d6a7a" stroke-width="0.6"/>
+<text x="100" y="221.2" font-size="11" fill="#5d6a7a" text-anchor="end">120</text>
+<line x1="110" y1="217.2" x2="1000" y2="217.2" stroke="#dfe4e6" stroke-width="1"/>
+<line x1="104" y1="145.8" x2="110" y2="145.8" stroke="#5d6a7a" stroke-width="0.6"/>
+<text x="100" y="149.8" font-size="11" fill="#5d6a7a" text-anchor="end">130</text>
+<line x1="110" y1="145.8" x2="1000" y2="145.8" stroke="#dfe4e6" stroke-width="1"/>
+<line x1="110" y1="106" x2="110" y2="396" stroke="#5d6a7a" stroke-width="0.6" stroke-dasharray="4 3"/>
+<text x="115" y="102" font-size="11" fill="#5d6a7a" text-anchor="start">Data-base da proposta · mês 0</text>
+<line x1="629.2" y1="106" x2="629.2" y2="396" stroke="#5d6a7a" stroke-width="0.6" stroke-dasharray="4 3"/>
+<text x="624.2" y="102" font-size="11" fill="#5d6a7a" text-anchor="end">Evento: alta atípica do insumo · mês 7</text>
+<line x1="925.8" y1="106" x2="925.8" y2="396" stroke="#5d6a7a" stroke-width="0.6" stroke-dasharray="4 3"/>
+<text x="920.8" y="388" font-size="11" fill="#5d6a7a" text-anchor="end">Protocolo do pedido · mês 11</text>
+<line x1="1000" y1="106" x2="1000" y2="396" stroke="#5d6a7a" stroke-width="0.6" stroke-dasharray="4 3"/>
+<text x="995" y="102" font-size="11" fill="#5d6a7a" text-anchor="end">Aniversário: reajuste ordinário · mês 12</text>
+<path d="M629.2 310.2L1000 274.4" fill="none" stroke="#5d6a7a" stroke-width="1.2" stroke-dasharray="6 4"/>
+<path d="M110 360.2L184.2 353.1L258.3 345.9L332.5 338.8L406.7 331.6L480.8 324.5L555 317.4L629.2 310.2L703.3 267.3L777.5 224.4L851.7 188.7L925.8 160.1L1000 145.8" fill="none" stroke="#071a31" stroke-width="2"/>
+<circle cx="110" cy="360.2" r="4" fill="#071a31"/>
+<text x="118" y="352.2" font-size="12" font-weight="650" text-anchor="start">índice 100</text>
+<circle cx="629.2" cy="310.2" r="4" fill="#071a31"/>
+<text x="637.2" y="330.2" font-size="12" font-weight="650" text-anchor="start">índice 107</text>
+<circle cx="1000" cy="145.8" r="4" fill="#071a31"/>
+<text x="992" y="137.8" font-size="12" font-weight="650" text-anchor="end">índice 130</text>
+<text x="994" y="290.4" font-size="11" fill="#5d6a7a" text-anchor="end">tendência 112</text>
+<g stroke="#5d6a7a" stroke-width="0.6" fill="#5d6a7a"><line x1="1070" y1="145.8" x2="1070" y2="274.4"/><path d="M1067 148.8L1073 142.8"/><path d="M1067 277.4L1073 271.4"/><text x="1083" y="210.1" font-size="11" text-anchor="middle" transform="rotate(-90 1083 210.1)">18 pontos</text></g>
+<g stroke="#5d6a7a" stroke-width="0.6"><line x1="577.6" y1="267.2" x2="629.2" y2="310.2"/><circle cx="629.2" cy="310.2" r="1.6" fill="#5d6a7a"/></g>
+<g transform="translate(569.2 260.2)"><circle r="11" fill="#071a31"/><text y="4" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">1</text></g>
+<g stroke="#5d6a7a" stroke-width="0.6"><line x1="733.3" y1="321.6" x2="814.6" y2="258.4"/><circle cx="814.6" cy="258.4" r="1.6" fill="#5d6a7a"/></g>
+<g transform="translate(724.6 328.4)"><circle r="11" fill="#071a31"/><text y="4" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">2</text></g>
+<g stroke="#5d6a7a" stroke-width="0.6"><line x1="1022.7" y1="171.5" x2="1000" y2="145.8"/><circle cx="1000" cy="145.8" r="1.6" fill="#5d6a7a"/></g>
+<g transform="translate(1030 179.8)"><circle r="11" fill="#071a31"/><text y="4" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">3</text></g>
+<text x="28" y="446" font-size="12" font-weight="650">Chamadas</text><text x="28" y="464" font-size="11"><tspan font-weight="700">1</tspan><tspan x="44">Evento: alta atípica do insumo no mês 7 (índice 107): é o fato posterior à proposta. Sem evento, matriz de riscos e nexo, aumento genérico de custo não é reequilíbrio.</tspan></text><text x="28" y="482" font-size="11"><tspan font-weight="700">2</tspan><tspan x="44">Desequilíbrio a demonstrar: área entre a tendência anterior e o custo observado, por item e período; no mês 12 a diferença chega a 18 pontos (130-112).</tspan></text><text x="28" y="500" font-size="11"><tspan font-weight="700">3</tspan><tspan x="44">Aniversário: reajuste ordinário no mês 12: atualiza pela fórmula da cláusula na data-base e não recompõe o que aconteceu antes dele. Não é o mesmo instituto.</tspan></text>
+<g id="reequilibrio-curva-d-carimbo"><rect x="8" y="524" width="1184" height="28" fill="#ffffff" stroke="#dfe4e6"/><line x1="402.7" y1="524" x2="402.7" y2="552" stroke="#dfe4e6"/><line x1="797.3" y1="524" x2="797.3" y2="552" stroke="#dfe4e6"/><text x="16" y="542" font-size="11" fill="#5d6a7a">P9 · reequilibrio-curva · rev. R00</text><text x="410.7" y="542" font-size="11" fill="#5d6a7a">Meses × índice de custo (base 100)</text><text x="805.3" y="542" font-size="11" fill="#5d6a7a">Exemplo demonstrativo · sem obra de cliente</text></g>
+</svg>

@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" role="img" aria-labelledby="carteira-eventos-desktop-title carteira-eventos-desktop-desc" font-family="Archivo Var, Arial, Helvetica, sans-serif" fill="#071a31">
+<title id="carteira-eventos-desktop-title">Prancha P7 · Carteira de contratos por evento · exemplo demonstrativo</title>
+<desc id="carteira-eventos-desktop-desc">Matriz de 4 contratos hipotéticos por 4 eventos contratuais (medição, aditivo, reequilíbrio, prazo): 10 células com registro em dia, 4 eventos abertos sem decisão e 2 lacunas de registro, as duas no Contrato C de R$ 12,5 mi, 46% da carteira. Carteira sintética; exemplo demonstrativo, sem obra de cliente. Procedência: data/demonstrative/plates/carteira-eventos.v1.json.</desc>
+<rect x="0" y="0" width="1200" height="560" fill="#ffffff"/>
+<rect x="8" y="8" width="1184" height="544" fill="#ffffff" stroke="#dfe4e6"/>
+<text x="28" y="40" font-size="16" font-weight="650">Carteira de contratos por evento: onde a carteira perde controle</text>
+<text x="1172" y="40" font-size="11" fill="#5d6a7a" text-anchor="end">Dados demonstrativos · revisão R00</text>
+<defs><pattern id="carteira-eventos-d-h5d6a" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0V6" stroke="#5d6a7a" stroke-width="0.5"/></pattern></defs>
+<text x="28" y="72" font-size="12" font-weight="650">4 contratos × 4 eventos · valor contratado em R$ milhões · cada célula é o estado do registro daquele evento</text>
+<text x="355" y="108" font-size="12" font-weight="650" text-anchor="middle">Medição</text>
+<text x="489" y="108" font-size="12" font-weight="650" text-anchor="middle">Aditivo</text>
+<text x="623" y="108" font-size="12" font-weight="650" text-anchor="middle">Reequilíbrio</text>
+<text x="757" y="108" font-size="12" font-weight="650" text-anchor="middle">Prazo</text>
+<text x="276" y="144" font-size="12" font-weight="650" text-anchor="end">Contrato A</text>
+<text x="276" y="160" font-size="11" fill="#5d6a7a" text-anchor="end">C-01 · R$ 4,2 mi</text>
+<rect x="300" y="124" width="110" height="46" fill="#2d6f2d"/>
+<rect x="434" y="124" width="110" height="46" fill="#2d6f2d"/>
+<rect x="568" y="124" width="110" height="46" fill="#2d6f2d"/>
+<rect x="702" y="124" width="110" height="46" fill="url(#carteira-eventos-d-h5d6a)" stroke="#5d6a7a" stroke-width="0.6"/>
+<text x="276" y="208" font-size="12" font-weight="650" text-anchor="end">Contrato B</text>
+<text x="276" y="224" font-size="11" fill="#5d6a7a" text-anchor="end">C-02 · R$ 7,8 mi</text>
+<rect x="300" y="188" width="110" height="46" fill="#2d6f2d"/>
+<rect x="434" y="188" width="110" height="46" fill="url(#carteira-eventos-d-h5d6a)" stroke="#5d6a7a" stroke-width="0.6"/>
+<rect x="568" y="188" width="110" height="46" fill="#2d6f2d"/>
+<rect x="702" y="188" width="110" height="46" fill="#2d6f2d"/>
+<rect x="20" y="244" width="1160" height="62" fill="#ced62a" fill-opacity=".35"/>
+<text x="276" y="272" font-size="12" fill="#2d6f2d" font-weight="650" text-anchor="end">Contrato C</text>
+<text x="276" y="288" font-size="11" fill="#5d6a7a" text-anchor="end">C-03 · R$ 12,5 mi</text>
+<rect x="300" y="252" width="110" height="46" fill="#ffffff" stroke="#071a31" stroke-width="1.2" stroke-dasharray="4 3"/>
+<rect x="434" y="252" width="110" height="46" fill="#ffffff" stroke="#071a31" stroke-width="1.2" stroke-dasharray="4 3"/>
+<rect x="568" y="252" width="110" height="46" fill="url(#carteira-eventos-d-h5d6a)" stroke="#5d6a7a" stroke-width="0.6"/>
+<rect x="702" y="252" width="110" height="46" fill="url(#carteira-eventos-d-h5d6a)" stroke="#5d6a7a" stroke-width="0.6"/>
+<text x="276" y="336" font-size="12" font-weight="650" text-anchor="end">Contrato D</text>
+<text x="276" y="352" font-size="11" fill="#5d6a7a" text-anchor="end">C-04 · R$ 2,9 mi</text>
+<rect x="300" y="316" width="110" height="46" fill="#2d6f2d"/>
+<rect x="434" y="316" width="110" height="46" fill="#2d6f2d"/>
+<rect x="568" y="316" width="110" height="46" fill="#2d6f2d"/>
+<rect x="702" y="316" width="110" height="46" fill="#2d6f2d"/>
+<text x="846" y="108" font-size="12" font-weight="650">Estado</text>
+<rect x="846" y="124" width="22" height="14" fill="#2d6f2d"/>
+<text x="876" y="135" font-size="11" fill="#5d6a7a">Registro contemporâneo em dia</text>
+<rect x="846" y="150" width="22" height="14" fill="url(#carteira-eventos-d-h5d6a)" stroke="#5d6a7a" stroke-width="0.6"/>
+<text x="876" y="161" font-size="11" fill="#5d6a7a">Evento aberto sem decisão</text>
+<rect x="846" y="176" width="22" height="14" fill="#ffffff" stroke="#071a31" stroke-width="1.2" stroke-dasharray="4 3"/>
+<text x="876" y="187" font-size="11" fill="#5d6a7a">Lacuna de registro</text>
+<text x="846" y="220" font-size="12" font-weight="650">16 células</text>
+<text x="846" y="238" font-size="11" fill="#5d6a7a">10 em dia · 4 abertas · 2 lacunas</text>
+<text x="846" y="268" font-size="12" fill="#2d6f2d" font-weight="650">Contrato C: 46% do valor</text>
+<text x="846" y="286" font-size="11" fill="#5d6a7a">da carteira e as duas lacunas</text>
+<g stroke="#5d6a7a" stroke-width="0.6"><line x1="119.1" y1="228.2" x2="160" y2="256"/><circle cx="160" cy="256" r="1.6" fill="#5d6a7a"/></g>
+<g transform="translate(110 222)"><circle r="11" fill="#071a31"/><text y="4" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">1</text></g>
+<g stroke="#5d6a7a" stroke-width="0.6"><line x1="121" y1="299.8" x2="298" y2="296"/><circle cx="298" cy="296" r="1.6" fill="#5d6a7a"/></g>
+<g transform="translate(110 300)"><circle r="11" fill="#071a31"/><text y="4" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">2</text></g>
+<g stroke="#5d6a7a" stroke-width="0.6"><line x1="788.2" y1="100.6" x2="757" y2="124"/><circle cx="757" cy="124" r="1.6" fill="#5d6a7a"/></g>
+<g transform="translate(797 94)"><circle r="11" fill="#071a31"/><text y="4" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">3</text></g>
+<text x="28" y="412" font-size="12" font-weight="650">Chamadas</text><text x="28" y="432" font-size="12.5"><tspan font-weight="700">1</tspan><tspan x="44">Contrato em foco: Contrato C concentra 46% do valor contratado (12,5 / (4,2+7,8+12,5+2,9)) e as únicas células sem registro. É por ele que o plano de 90 dias começa.</tspan></text><text x="28" y="452" font-size="12.5"><tspan font-weight="700">2</tspan><tspan x="44">Lacuna de registro: medição e aditivo do Contrato C não têm registro contemporâneo. Lacuna entra no diagnóstico como lacuna, não como estimativa.</tspan></text><text x="28" y="472" font-size="12.5"><tspan font-weight="700">3</tspan><tspan x="44">Evento aberto sem decisão: prazo ou aditivo identificado, sem posição formal da empresa. O mapa ordena o que decidir primeiro.</tspan></text>
+<g id="carteira-eventos-d-carimbo"><rect x="8" y="524" width="1184" height="28" fill="#ffffff" stroke="#dfe4e6"/><line x1="402.7" y1="524" x2="402.7" y2="552" stroke="#dfe4e6"/><line x1="797.3" y1="524" x2="797.3" y2="552" stroke="#dfe4e6"/><text x="16" y="542" font-size="11" fill="#5d6a7a">P7 · carteira-eventos · rev. R00</text><text x="410.7" y="542" font-size="11" fill="#5d6a7a">Matriz contratos × eventos</text><text x="805.3" y="542" font-size="11" fill="#5d6a7a">Exemplo demonstrativo · sem obra de cliente</text></g>
+</svg>

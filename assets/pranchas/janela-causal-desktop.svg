@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" role="img" aria-labelledby="janela-causal-desktop-title janela-causal-desktop-desc" font-family="Archivo Var, Arial, Helvetica, sans-serif" fill="#071a31">
+<title id="janela-causal-desktop-title">Prancha P12 · Janela causal do atraso no caminho crítico · exemplo demonstrativo</title>
+<desc id="janela-causal-desktop-desc">Cronograma de base e executado de uma obra hipotética com prazo de 240 dias: uma janela causal de 28 dias (frente indisponível, órgão) sobre o caminho crítico, 7 dias concorrentes da contratada, 21 dias imputáveis (28 − 7 = 21); atraso observado de 34 dias, 6 da própria execução. Datas sintéticas; exemplo demonstrativo, sem obra de cliente. Procedência: data/demonstrative/plates/janela-causal.v1.json.</desc>
+<rect x="0" y="0" width="1200" height="560" fill="#ffffff"/>
+<rect x="8" y="8" width="1184" height="544" fill="#ffffff" stroke="#dfe4e6"/>
+<text x="28" y="40" font-size="16" font-weight="650">Janela causal do atraso no caminho crítico: quantos dias são imputáveis</text>
+<text x="1172" y="40" font-size="11" fill="#5d6a7a" text-anchor="end">Dados demonstrativos · revisão R00</text>
+<defs><pattern id="janela-causal-d-h5d6a" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0V6" stroke="#5d6a7a" stroke-width="0.5"/></pattern></defs>
+<text x="28" y="72" font-size="12" font-weight="650">Obra hipotética · linha de base contra o executado, em dias corridos desde a ordem de serviço · prazo contratual 240 dias · atraso observado 34 dias</text>
+<text x="40" y="100" font-size="12" fill="#5d6a7a" font-weight="650">Atividade</text>
+<line x1="339.2" y1="106" x2="339.2" y2="330" stroke="#dfe4e6" stroke-width="1"/>
+<text x="339.2" y="100" font-size="11" fill="#5d6a7a" text-anchor="middle">dia 41</text>
+<line x1="434.2" y1="106" x2="434.2" y2="330" stroke="#dfe4e6" stroke-width="1"/>
+<text x="434.2" y="100" font-size="11" fill="#5d6a7a" text-anchor="middle">dia 69</text>
+<line x1="1014.6" y1="106" x2="1014.6" y2="330" stroke="#dfe4e6" stroke-width="1"/>
+<text x="1014.6" y="100" font-size="11" fill="#5d6a7a" text-anchor="middle">dia 240</text>
+<line x1="1130" y1="106" x2="1130" y2="330" stroke="#dfe4e6" stroke-width="1"/>
+<text x="1130" y="100" font-size="11" fill="#5d6a7a" text-anchor="middle">dia 274</text>
+<line x1="28" y1="108" x2="1172" y2="108" stroke="#071a31" stroke-width="1.2"/>
+<rect x="339.2" y="110" width="95" height="210" fill="#ced62a" fill-opacity=".35"/>
+<rect x="386.7" y="110" width="23.8" height="210" fill="url(#janela-causal-d-h5d6a)"/>
+<text x="40" y="140" font-size="12" font-weight="650">Terraplenagem</text>
+<text x="40" y="156" font-size="11" fill="#5d6a7a">AT-01</text>
+<rect x="203.4" y="128" width="132.4" height="9" fill="#ffffff" stroke="#071a31" stroke-width="1.2"/>
+<rect x="203.4" y="142" width="132.4" height="9" fill="#2d6f2d"/>
+<text x="40" y="188" font-size="12" font-weight="650">Fundações</text>
+<text x="40" y="204" font-size="11" fill="#5d6a7a">AT-02</text>
+<rect x="339.2" y="176" width="183.3" height="9" fill="#ffffff" stroke="#071a31" stroke-width="1.2"/>
+<rect x="434.2" y="190" width="203.6" height="9" fill="#2d6f2d"/>
+<text x="40" y="236" font-size="12" font-weight="650">Estrutura</text>
+<text x="40" y="252" font-size="11" fill="#5d6a7a">AT-03</text>
+<rect x="525.8" y="224" width="251.2" height="9" fill="#ffffff" stroke="#071a31" stroke-width="1.2"/>
+<rect x="641.2" y="238" width="251.2" height="9" fill="#2d6f2d"/>
+<text x="40" y="284" font-size="12" font-weight="650">Acabamentos</text>
+<text x="40" y="300" font-size="11" fill="#5d6a7a">AT-04</text>
+<rect x="780.4" y="272" width="234.2" height="9" fill="#ffffff" stroke="#071a31" stroke-width="1.2"/>
+<rect x="895.8" y="286" width="234.2" height="9" fill="#2d6f2d"/>
+<g stroke="#5d6a7a" stroke-width="0.6" fill="#5d6a7a"><line x1="339.2" y1="336" x2="434.2" y2="336"/><path d="M336.2 339L342.2 333"/><path d="M431.2 339L437.2 333"/><text x="386.7" y="349" font-size="11" text-anchor="middle">janela causal 28 dias (órgão)</text><line x1="386.7" y1="362" x2="410.4" y2="362"/><path d="M383.7 365L389.7 359"/><path d="M407.4 365L413.4 359"/><line x1="1014.6" y1="336" x2="1130" y2="336"/><path d="M1011.6 339L1017.6 333"/><path d="M1127 339L1133 333"/><text x="1072.3" y="349" font-size="11" text-anchor="middle">atraso observado 34 dias</text></g>
+<text x="418.4" y="366" font-size="11" fill="#5d6a7a">concorrente 7 dias (contratada)</text>
+<text x="200" y="396" font-size="12" fill="#2d6f2d" font-weight="650">Dias imputáveis ao órgão: 21 (28 − 7 = 21) · restam 6 dias da contratada (34 − 28 = 6)</text>
+<rect x="200" y="408" width="18" height="9" fill="#ffffff" stroke="#071a31" stroke-width="1.2"/>
+<text x="226" y="416" font-size="11" fill="#5d6a7a">linha de base</text>
+<rect x="320" y="408" width="18" height="9" fill="#2d6f2d"/>
+<text x="346" y="416" font-size="11" fill="#5d6a7a">executado</text>
+<rect x="420" y="408" width="18" height="9" fill="#ced62a" fill-opacity=".35"/>
+<text x="446" y="416" font-size="11" fill="#5d6a7a">janela causal alheia à contratada</text>
+<rect x="640" y="408" width="18" height="9" fill="url(#janela-causal-d-h5d6a)"/>
+<text x="666" y="416" font-size="11" fill="#5d6a7a">causa concorrente da contratada</text>
+<g stroke="#5d6a7a" stroke-width="0.6"><line x1="310.1" y1="181.2" x2="430.2" y2="194"/><circle cx="430.2" cy="194" r="1.6" fill="#5d6a7a"/></g>
+<g transform="translate(299.2 180)"><circle r="11" fill="#071a31"/><text y="4" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">1</text></g>
+<g stroke="#5d6a7a" stroke-width="0.6"><line x1="440.4" y1="118.4" x2="404.4" y2="134"/><circle cx="404.4" cy="134" r="1.6" fill="#5d6a7a"/></g>
+<g transform="translate(450.4 114)"><circle r="11" fill="#071a31"/><text y="4" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">2</text></g>
+<g stroke="#5d6a7a" stroke-width="0.6"><line x1="1154.2" y1="274.9" x2="1128" y2="288"/><circle cx="1128" cy="288" r="1.6" fill="#5d6a7a"/></g>
+<g transform="translate(1164 270)"><circle r="11" fill="#071a31"/><text y="4" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">3</text></g>
+<text x="28" y="440" font-size="12" font-weight="650">Chamadas</text><text x="28" y="458" font-size="11"><tspan font-weight="700">1</tspan><tspan x="44">Janela causal: Frente indisponível: desapropriação pendente do dia 41 ao dia 69 (28 dias), no caminho crítico, com ofícios e diário datados. Fundações só começam quando a frente é liberada.</tspan></text><text x="28" y="476" font-size="11"><tspan font-weight="700">2</tspan><tspan x="44">Causa concorrente: Mobilização parcial da contratada do dia 55 ao 62 (7 dias) dentro da janela; entra na conta contra a contratada. Dias imputáveis ao órgão: 21 (28 − 7 = 21).</tspan></text><text x="28" y="494" font-size="11"><tspan font-weight="700">3</tspan><tspan x="44">Atraso observado de 34 dias no fim: 28 explicados pela janela e 6 da própria execução (34 − 28 = 6). O pedido de prorrogação pede os 21 dias, não os 34.</tspan></text>
+<g id="janela-causal-d-carimbo"><rect x="8" y="524" width="1184" height="28" fill="#ffffff" stroke="#dfe4e6"/><line x1="402.7" y1="524" x2="402.7" y2="552" stroke="#dfe4e6"/><line x1="797.3" y1="524" x2="797.3" y2="552" stroke="#dfe4e6"/><text x="16" y="542" font-size="11" fill="#5d6a7a">P12 · janela-causal · rev. R00</text><text x="410.7" y="542" font-size="11" fill="#5d6a7a">Cronograma base × executado · dias corridos</text><text x="805.3" y="542" font-size="11" fill="#5d6a7a">Exemplo demonstrativo · sem obra de cliente</text></g>
+</svg>

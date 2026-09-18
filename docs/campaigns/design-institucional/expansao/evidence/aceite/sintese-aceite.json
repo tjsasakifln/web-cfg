@@ -1,0 +1,1668 @@
+{
+ "summary": "Consolidação de 6 lentes (familias-a, familias-b, familias-c, a11y-responsivo, jornadas, contratos) sobre o candidato SALTO-INSTITUCIONAL-02, somente leitura. 91 achados brutos → 63 achados únicos após dedupe por rota+bloco (severidade mais alta prevalece; cada item lista a severidade que cada lente atribuiu). Resultado: 4 clusters ALTA que impedem publicação (A-01 textarea de parcerias copia HTML cru [pré-existente em produção, defeito do build]; A-02 prancha desktop 1200 px escalada a 38–52% em colunas estreitas na home, compatibilização e nos dois /casos/* B2G [introduzida]; A-03 índice 'Nesta página' apontando para <details> fechado em diretoria-b2g, bid-room e diagnostico-b2g-expansao [introduzida]; A-04 prazo de resposta omitido na caixa 'O que acontece depois' da home e removido da triagem enquanto home#descrever-situacao, obrigado.html e o spec da campanha o publicam [introduzida no piloto/candidato; corrigir ou registrar dispensa]). 29 MEDIA a corrigir nesta campanha, das quais as mais baratas e de maior efeito são CSS do integrador: M-01 CNPJ em duas linhas (duas causas coexistentes: styles.css:3 legado display:grid e css/contracts.css overflow-wrap:anywhere), M-03 table-layout:fixed (styles.css:845 legado), M-05 .form-hint margin negativo (styles.css:14 legado), M-14 checkbox de consentimento 4–13 px (css/components.css), M-16 texto de conteúdo a 14 px (assets/editorial.css:185, assets/home-10x.css:239, styles.css:10), M-24 prosa sem medida, M-29 régua do índice colada (assets/editorial.css:168 não cobre o índice aninhado). 30 BAIXA/PREFERENCIA registráveis. Fato estrutural que muda a atribuição de arquivo: styles.css é gerado por scripts/site/build_css.py — as linhas 875–1305 são a cópia dos módulos css/*.css (corrigir no módulo), as linhas 1–874 são o legado editado à mão (corrigir em styles.css). Bucket css_integrator lista ids + arquivo + linha; os demais achados apontam para HTML de rota ou para gerador (build_site.py, scripts/demonstrative/plates, scripts/pseo/html_shell.py, scripts/site/authority.py, scripts/organic/breakout.py, script.js). Convenção: cada achado carrega 'regressao' (introduzida | pre-existente-em-producao | herdada-do-piloto | nao-informada) para o fundador decidir o que bloqueia esta promoção sem que a consolidação decida por ele. DUVIDOSO foi aplicado estritamente à definição da tarefa (sem captura nem comando): apenas 2 itens, listados só em 'duvidosos' com a severidade original preservada. Divergências entre lentes registradas em vez de resolvidas: contagem de blocos escuros na home (familias-a dom-pass.json vs leitura de contratos/familias-b), e o botão 'Fechar' do menu (a11y confirma que ele recebe o foco ao abrir; remover só o visual). O link de oportunidade removido em /ferramentas/ (familias-c) é explicado pela lente contratos como overlay de runtime, não regressão. not_tested é a união deduplicada das seis lentes.",
+ "alta": [
+  {
+   "id": "A-01",
+   "severidade": "ALTA",
+   "rota": "/parcerias-engenharia/",
+   "bloco": "Blocos 'Link da entrega' e 'Resumo para copiar' (textareas #share-url-* e #share-summary-*) nos quatro trabalhos",
+   "achado": "As textareas exibem e copiam marcação crua: o valor de #share-url-orcamento é literalmente '<span data-opaque-token>https://confenge.com.br/quantitativos-orcamento-obras/</span>' (idem revisao, compatibilizacao, elaboracao e URLs dentro dos resumos). 'Copiar link/resumo' (share.js usa textarea.value) copia HTML. Causa confirmada na consolidação: scripts/pseo/build_site.py::_map_visible_html_text (linha 429; regex raw na linha 458 só casa <script|style>) aplica mark_opaque_tokens_in_html_text também ao texto de <textarea>. A fonte (parcerias-engenharia/index.html) está limpa; só o artefato quebra. Única rota do _site afetada.",
+   "lentes": [
+    "familias-a: ALTA"
+   ],
+   "regressao": "pre-existente-em-producao (https://confenge.com.br/parcerias-engenharia/ tem 13 ocorrências), mas está no escopo e é a única rota afetada",
+   "evidencia": "scratchpad/aceite/familias-a/slices/parcerias-engenharia-390x844-full-aceite-02.jpg; …-1440x1000-full-aceite-02.jpg; probe-share.mjs (textarea.value); grep -rl '<textarea[^>]*>[^<]*<span data-opaque' _site → só parcerias",
+   "correcao": "Em _map_visible_html_text tratar <textarea> (e por segurança <title>/<pre>) como raw, igual a script/style; teste em scripts/site/test_responsive_text.py ou teste do build cobrindo textarea; regenerar e conferir que _site/parcerias-engenharia/index.html não contém o span dentro de textarea.",
+   "fonte_tipo": "gerador/build (não é CSS nem HTML de rota)",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/scripts/pseo/build_site.py (linhas 429–460)",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/scripts/site/test_responsive_text.py (teste)"
+   ]
+  },
+  {
+   "id": "A-02",
+   "severidade": "ALTA",
+   "rota": "/ (#entregas-demonstrativas, .deliveries: P2 drenagem-perfil, P3 medicao-parede, P4 avaliacao-estrutura) · /compatibilizacao-projetos-engenharia/ (#registro-interferencias, prancha secundária) · /casos/aditivo-art125-demonstrativo/ e /casos/medicao-glosa-demonstrativo/ (figure.plate.plate--side na abertura)",
+   "bloco": "Pranchas em coluna estreita servidas com <picture><source media=\"(min-width:700px)\" srcset=…-desktop.svg width=1200>",
+   "achado": "Uma única causa raiz em quatro rotas: a variante desktop (viewBox 1200, texto 11–12 px na fonte) é escolhida por largura de viewport, não do contêiner, e é renderizada em slots de 456–628 px (home/compatibilização, escala 0,38–0,52 → texto de 4,2–5,8 px em 1440 e 3,2–4,5 px em 1024) e 513×239 px (casos B2G, escala 0,43 → 4,7–5,1 px). Chamadas, cotas, memória e carimbo ilegíveis mesmo com zoom 2x. Viola o contrato de imagem ('nunca a mesma composição escalada'; a prancha é a assinatura visual). Existe a variante -mobile.svg 360×420 reenquadrada (rende 11,5 px a 390) que caberia nessas colunas. No piloto o bloco da home mostrava a variante reenquadrada P2-M legível (~23 px); produção 47da03b64 não tinha o bloco; o piloto casos-demonstrativo-projeto-privado usa prancha lateral legível. Verificado em viewport real, não só fullPage.",
+   "lentes": [
+    "familias-a: ALTA (home .deliveries)",
+    "jornadas: ALTA (home #entregas-demonstrativas + compatibilização #registro-interferencias)",
+    "familias-b: ALTA (casos aditivo/medicao plate--side)"
+   ],
+   "regressao": "introduzida (bloco e pranchas laterais novos no candidato; 32 pranchas SVG novas segundo a lente contratos)",
+   "evidencia": "familias-a/home-deliveries-1440-viewport.jpg, zoom-home-delivery-plate-1440.jpg, slices/home-1440x1000-full-aceite-03/04.jpg, probe img.currentSrc/larguras 628/456/628; jornadas/platescale.mjs (scale=0.52 minText=5.8px; 0.38/4.2px; 1024: 3.2–4.5px), crop-home-deliveries-aceite.jpg vs crop-home-deliveries-pilot.jpg; familias-b/casos-aditivo-art125-demonstrativo-1440x1000-fold-aceite.jpg, casos-medicao-glosa-demonstrativo-1440x1000-fold-aceite.jpg, plates.mjs IMG 513×239, grep font-size assets/pranchas/*-desktop.svg → 11/12/16; comparação docs/campaigns/design-institucional/evidence/piloto/home-1440x1000-full-pilot.jpg (fatia 04) e casos-demonstrativo-projeto-privado-1440x1000-fold-pilot.jpg",
+   "correcao": "Escolher a variante pela largura do slot: nas .delivery de duas colunas, na prancha secundária de compatibilização e em .plate--side usar a variante reenquadrada (360×420) em todos os breakpoints ou gerar variante 'coluna/side' em scripts/demonstrative/plates; alternativa: container query. Manter a folha 1200 só onde o slot tem ≥ ~900–1000 px (hero, pranchas dominantes). Depois: cadeia de recapturas (primeira dobra/baselines) por tocar em CSS/HTML da home.",
+   "fonte_tipo": "HTML de rota (atributo <source media>) + gerador de pranchas; opcionalmente CSS (container query em .deliveries/.plate--side)",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/index.html (linhas 214, 230, 246)",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/compatibilizacao-projetos-engenharia/index.html (linha 179)",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/casos/aditivo-art125-demonstrativo/index.html (linhas 56–58)",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/casos/medicao-glosa-demonstrativo/index.html (linha 58)",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/scripts/demonstrative/plates/ (variante nova)",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/assets/editorial.css (.plate--side/.deliveries, se optar por container query)"
+   ]
+  },
+  {
+   "id": "A-03",
+   "severidade": "ALTA",
+   "rota": "/diretoria-b2g/ (índice item 05 'Rotina e condições') · /bid-room-licitacoes-obras/ (item 04 'Etapas e responsabilidades') · /diagnostico-b2g-expansao/ (item 03 'Dados e limites')",
+   "bloco": "Índice 'Nesta página' → <details class=offer-detail-disclosure id=condicoes-contratacao> fechado",
+   "achado": "A âncora do índice aponta para um <details> fechado. Ao clicar, a página rola até a linha de summary ('Ver rotina semanal, fluxo de trabalho, capacidade…' / 'Ver etapas, capacidade, responsabilidades e limites' / 'Ver etapas, documentos, limites e condições') e nada abre: 6.472 / 4.201 / 2.800 px de condições materiais (rotina, capacidade, responsabilidades, exclusões de escopo, documentos) permanecem ocultos. Não há JS que abra o details por hash. Em diagnostico-b2g-expansao o rótulo do índice ('Dados e limites') tampouco corresponde ao summary. Índice e details não existem em produção (47da03b64): introduzidos por este candidato. Condições materiais ocultas atrás de um índice quebrado tocam o gate de conversão fail-closed (AGENTS.md: condições materiais autorizadas e verificáveis no HTML renderizado).",
+   "lentes": [
+    "familias-b: ALTA (3 rotas)"
+   ],
+   "regressao": "introduzida",
+   "evidencia": "familias-b/anchor-diretoria-b2g-390.jpg, anchor-bid-room-licitacoes-obras-390.jpg, anchor-diagnostico-b2g-expansao-390.jpg; anchor.mjs → {open:false,h:118/93/93,contentH:6472/4201/2800}; dom.json index state 'closed-details'; slices/bid-room-…-1440x1000-full-aceite-01.jpg, slices/diagnostico-b2g-expansao-1440x1000-full-aceite-01.jpg; curl produção: sem page-index e sem details#condicoes-contratacao",
+   "correcao": "Ou promover o conteúdo a seção visível (sem details) mantendo o id; ou remover o item do índice; se mantiver details, abrir por script em hashchange/load e no clique do índice (details.open=true) e alinhar o rótulo do índice ao summary. Grep confirma que 'condicoes-contratacao' existe só nos três index.html (não há gerador).",
+   "fonte_tipo": "HTML de rota (+ opcional JS compartilhado)",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/diretoria-b2g/index.html",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/bid-room-licitacoes-obras/index.html",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/diagnostico-b2g-expansao/index.html",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/script.js (se optar por abrir details por hash)"
+   ]
+  },
+  {
+   "id": "A-04",
+   "severidade": "ALTA",
+   "rota": "/ (#contato, caixa 'O que acontece depois do envio', passo 02) · /triagem-tecnica/ (cartão 'Fale agora, sem formulário' → 'O que acontece depois · 01 Leitura e resposta') · /obrigado.html e /#descrever-situacao (ainda publicam o prazo)",
+   "bloco": "Condição material 'prazo de resposta' divergente entre rotas",
+   "achado": "Uma decisão fecha três achados. (1) Contratos: o prazo publicado na produção 47da03b64 ('até 1 dia útil em casos urgentes; demais, até 2 dias úteis') não aparece na caixa do candidato — o passo 02 diz só 'A resposta nomeia o serviço, a entrega e o que falta' (index.html:396); o spec da campanha manda manter o prazo na versão curta (docs/campaigns/design-institucional/conteudo/contato-depois.md:15 e home-sequencia.md:187). (2) familias-a/jornadas: na triagem o prazo foi removido em 5a23f741e, enquanto a home (#descrever-situacao: 'casos urgentes em até 1 dia útil; os demais, em até 2') e /obrigado.html ('retorno em até 2 dias úteis…') continuam publicando a janela. A home fica inconsistente consigo mesma e a página de entrada promete o que a página de destino omite. A omissão na caixa entrou no commit do piloto (b0fd7cc3d).",
+   "lentes": [
+    "contratos: ALTA (home #contato)",
+    "familias-a: BAIXA (triagem vs home/obrigado)",
+    "jornadas: BAIXA (home #situacoes vs triagem)"
+   ],
+   "regressao": "introduzida (piloto b0fd7cc3d e candidato 5a23f741e), ausente em produção",
+   "evidencia": "contratos/crop-home-desk-6.jpg (caixa 01/02/03 sem prazo); varredura textual 'SLA text prod routes: [index.html]' vs local []; sentença-diff prod→local; familias-a/slices/triagem-tecnica-390x844-full-aceite-00.jpg vs pilot -00.jpg; grep -c 'dia útil|dias úteis' _site/index.html = 1, _site/triagem-tecnica/index.html = 0; jornadas: triagem-tecnica-1440x1000-full-pilot.jpg vs -aceite.jpg",
+   "correcao": "Decidir uma única condição autorizada: (a) restaurar na caixa o passo 02 de contato-depois.md (dois prazos) e devolver o prazo à triagem; ou (b) retirar o prazo de #descrever-situacao, /obrigado.html, da triagem e do spec, com a decisão registrada na campanha. Em ambos os casos alinhar as três rotas; depois recapturar a dobra da home.",
+   "fonte_tipo": "HTML de rota + spec da campanha (decisão editorial)",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/index.html (linhas 191 e 396)",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/triagem-tecnica/index.html",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/obrigado.html",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/docs/campaigns/design-institucional/conteudo/contato-depois.md"
+   ]
+  }
+ ],
+ "media": [
+  {
+   "id": "M-01",
+   "severidade": "MEDIA",
+   "rota": "/ (e demais rotas com ul.hero-proof/.opening__cred)",
+   "bloco": "Abertura, lista de credenciais: item 'CNPJ 52.407.089/0001-09'",
+   "achado": "O CNPJ quebra em duas linhas ('CNPJ' / número) em 390 e 1440, empurrando a prancha/h1 ~22 px para baixo e desalinhando a lista (7,3% de pixels diferentes na dobra 1440 vs piloto). O piloto foi capturado da fonte (sem o span), por isso não exibe; a produção exibe. Duas causas coexistentes citadas por lentes diferentes, ambas confirmadas nos arquivos: (a) o build (scripts/site/responsive_text.py:45) envolve o número em <span data-opaque-token> e a regra legada styles.css:3 '.hero-proof span{display:grid;gap:2px;min-width:0}' transforma o span aninhado em item de grade (probe: display:grid, cols 127.875px, h 42.6); (b) css/contracts.css:4 '.hero-proof li,.hero-proof strong,.hero-proof span{overflow-wrap:anywhere}' + '[data-opaque-token]{overflow-wrap:anywhere;word-break:break-word}' reduzem a largura mínima do item flex. Uma correção que toque só uma das duas pode não fechar.",
+   "lentes": [
+    "familias-a: MEDIA",
+    "a11y-responsivo: BAIXA",
+    "jornadas: BAIXA",
+    "contratos: BAIXA"
+   ],
+   "regressao": "herdada-do-piloto no artefato (piloto medido na fonte); visível em produção",
+   "evidencia": "familias-a/home-390x844-fold-aceite.jpg e home-1440x1000-fold-aceite.jpg vs piloto; probe-cnpj.mjs; a11y/leads.mjs tok {display:'grid',w:128}; contratos/home-*-fold-aceite.jpg; _site/index.html:100",
+   "correcao": "'.hero-proof li>span' (restringir a regra legada a filhos diretos) ou '.hero-proof [data-opaque-token]{display:inline;overflow-wrap:normal;word-break:normal;white-space:nowrap}'; re-medir a dobra no artefato _site (não na fonte) e recapturar home 390/1440.",
+   "fonte_tipo": "CSS do integrador",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/styles.css (linha 3, região legada 1–874)",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/css/contracts.css (linha 4 e regra [data-opaque-token])"
+   ]
+  },
+  {
+   "id": "M-02",
+   "severidade": "MEDIA",
+   "rota": "/parcerias-engenharia/",
+   "bloco": "Abertura e página inteira",
+   "achado": "Única rota de conteúdo do escopo sem nenhuma prancha (plates=0 nos dois viewports). H1 'Nós assumimos a engenharia que falta.' quase duplica o H1 da home; breadcrumb diz 'Encaminhar uma necessidade', URL diz parcerias, <title> diz 'Encaminhar orçamento, revisão, compatibilização ou elaboração': quem chega não reconhece qual oferta é (encaminhamento/white-label) nem vê o material técnico que assina as outras páginas.",
+   "lentes": [
+    "familias-a: MEDIA"
+   ],
+   "regressao": "nao-informada (rota existe em produção)",
+   "evidencia": "familias-a/parcerias-engenharia-1440x1000-fold-aceite.jpg; slices/parcerias-engenharia-390x844-full-aceite-00..02.jpg; dom-pass.json (plates: [])",
+   "correcao": "Nomear a oferta no H1/eyebrow (quem encaminha, o que volta) distinta da home; incluir ao menos uma prancha de entrega (matriz de interfaces ou amostra do trabalho encaminhado) em 'Os quatro trabalhos'.",
+   "fonte_tipo": "HTML de rota",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/parcerias-engenharia/index.html"
+   ]
+  },
+  {
+   "id": "M-03",
+   "severidade": "MEDIA",
+   "rota": "/quantitativos-orcamento-obras/ (pior caso, medido) · /casos/demonstrativo-projeto-privado/ · /casos/demonstrativo-infraestrutura/ · /projetos-complementares-engenharia/",
+   "bloco": "table.data-table dentro de .table-scroll/.table-wrap (planilha linha a linha; memória/orçamento/compatibilização/revisão dos casos; matriz de interfaces)",
+   "achado": "table-layout:fixed com 9 colunas iguais de 100 px (min-width 900): células transbordam para a vizinha ('Impermeabilização' sobre 'm²' textRight 31 px; 'soma(comprimento × altura) − aberturas' 39 px; 'Revestimentom2', 'R$ 1.803,20', 'ENCONTRO ENTRE DISCIPLINAS' colado em 'Um dono de cada lado') e a linha destacada Q-PAR-01 vira bloco de 367 px (até 692 px nos casos) com área verde vazia. O wrapper rola e há 'Role a tabela', mas o que aparece está ilegível. Em 1440 sobra 6 px. Regra causadora: styles.css:845 '.data-table{table-layout:fixed}' (região legada; a versão do módulo css/components.css não tem fixed) e '.data-table--wide{min-width:900px}' (css/components.css, copiado em styles.css:1047).",
+   "lentes": [
+    "familias-a: MEDIA (4 rotas)",
+    "a11y-responsivo: MEDIA (quantitativos, medição exata)"
+   ],
+   "regressao": "herdada-do-piloto (mesmo estado em quantitativos/casos)",
+   "evidencia": "a11y/quant-table-390-collision-crop.jpg; tableoverlap.mjs (overflowCells, rowHeights [102,367,164,83,62,62,82], cols 9×100); familias-a/slices/quantitativos-…-390x844-full-aceite-06.jpg, casos-demonstrativo-projeto-privado-…-03/04.jpg, zoom-pc-matriz-390.jpg, probe-tables.mjs (tallestRow 367/692/610)",
+   "correcao": "Remover table-layout:fixed em .data-table--wide (ou <colgroup> proporcional: Descrição/Fórmula/Desconto largas, Id/Unidade/Revisão estreitas) e elevar min-width para ~1100 px; em ≤700 px white-space:nowrap nas colunas de unidade/valor e overflow-wrap:normal; alternativa: versão empilhada no móvel. Recapturar quantitativos em 390/768.",
+   "fonte_tipo": "CSS do integrador (+ <colgroup> opcional no HTML de rota)",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/styles.css (linha 845, região legada)",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/css/components.css (.data-table--wide)",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/quantitativos-orcamento-obras/index.html (linha ~282, se usar colgroup)"
+   ]
+  },
+  {
+   "id": "M-04",
+   "severidade": "MEDIA",
+   "rota": "/quantitativos-orcamento-obras/",
+   "bloco": "div.table-scroll[tabindex=0] da planilha linha a linha",
+   "achado": "Contêiner rolável focável sem nome acessível: sem role=region/aria-labelledby e a tabela sem <caption>; ao tabular, o leitor de tela recebe um grupo anônimo rolável; não há indicação de rolagem horizontal além do cabeçalho cortado.",
+   "lentes": [
+    "a11y-responsivo: MEDIA"
+   ],
+   "regressao": "nao-informada (provavelmente herdada; tabela já existia no piloto)",
+   "evidencia": "tablepos.mjs {caption:false, role:null, label:null, tabindex:'0'}; _site/quantitativos-orcamento-obras/index.html linha 282; quant-table-390-focus.jpg",
+   "correcao": "role=\"region\" aria-labelledby=\"<id do h3>\" no .table-scroll, <caption> (pode ser visualmente oculta) e legenda 'Role horizontalmente para ver todas as colunas' visível abaixo de 900 px.",
+   "fonte_tipo": "HTML de rota",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/quantitativos-orcamento-obras/index.html (~linha 282)"
+   ]
+  },
+  {
+   "id": "M-05",
+   "severidade": "MEDIA",
+   "rota": "/ (#formulario-contato)",
+   "bloco": "Etapa 2 abaixo de 'Descrever minha situação' (.form-hint[data-form-boundary], [data-situation-channels]) e etapa 1 (.form-status de erro + .form-hint seguinte)",
+   "achado": "Mesma causa em dois estados: '.form-hint{margin:-6px 0 14px}' (styles.css:14, pensado para colar em rótulo de campo). (a) O boundary sobe sobre a última linha de .form-legal ('Exclusão: e-mail de privacidade…' colide com 'O formulário não recebe arquivos…'), centralizado seguido de alinhado à esquerda; (b) ao exibir erro, a caixa vermelha .form-status sobrepõe 6 px a primeira linha do aviso (1440 e 390); (c) os links alternativos em [data-situation-channels] ('Falar pelo WhatsApp', 'Escrever por e-mail', 'Ligar para (48)…') têm a mesma cor do hint (rgb(82,98,117)), sem sublinhado, peso 400 — canais de contato invisíveis como link no estado mais importante do funil.",
+   "lentes": [
+    "familias-a: MEDIA",
+    "jornadas: BAIXA (sobreposição .form-status)"
+   ],
+   "regressao": "pre-existente-em-producao (prod-home-form-step2-390.jpg)",
+   "evidencia": "familias-a/home-form-step2b-390.jpg, zoom-form-step2-notes.jpg, prod-home-form-step2-390.jpg, probe-hintlinks.mjs, probe-notes.mjs; jornadas/statusrect.mjs overlap 6, crop-hf-status.jpg, HF-1440-step1-empty.jpg",
+   "correcao": "'.form-hint[data-form-boundary]{margin-top:.75rem}' alinhado com .form-legal; margin-bottom na .form-status visível (ou remover o margin-top negativo do .form-hint genérico); '.contact-form .form-hint a' como link (cor da tinta, sublinhado, peso 700).",
+   "fonte_tipo": "CSS do integrador",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/styles.css (linha 14, região legada; também linha 1239 .field label,.consent,.form-hint)"
+   ]
+  },
+  {
+   "id": "M-06",
+   "severidade": "MEDIA",
+   "rota": "/quantitativos-orcamento-obras/, /compatibilizacao-projetos-engenharia/, /revisao-tecnica-projetos-engenharia/, /projetos-complementares-engenharia/, /inspecao-diagnostico-edificacoes/, /assistencia-tecnica-pericial-engenharia/, /seguranca-trabalho-apoio-tecnico/, /parcerias-engenharia/",
+   "bloco": "Botão primário da abertura e de 'Reconheceu o seu caso?' → âncora do bloco escuro (#triagem-quantitativos / #pedido-compatibilizacao / #contato-* / #escopo-projeto / #encaminhar)",
+   "achado": "Em 390 o botão verde apenas rola até o título da seção escura; a ação real (WhatsApp primário) fica 609–1036 px abaixo do topo após o salto (viewport 844), atrás de dois parágrafos e uma lista. Em 1440 o botão fica visível (top 217).",
+   "lentes": [
+    "familias-a: MEDIA"
+   ],
+   "regressao": "herdada-do-piloto (quantitativos)",
+   "evidencia": "familias-a/probe-anchors.mjs (primaryVisible 1036/929/958/737/660/635/688/609 em 390); slices/quantitativos-…-390x844-full-aceite-11/12.jpg",
+   "correcao": "No móvel colocar 'Três canais diretos' logo após o título do próximo passo e os parágrafos/lista depois (ordem no HTML ou order em CSS ≤700 px); ou apontar a âncora ao bloco de canais.",
+   "fonte_tipo": "HTML de rota (ordem dos blocos) — 8 arquivos",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/<rota>/index.html para cada uma das 8 rotas",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/assets/editorial.css (se optar por order no móvel)"
+   ]
+  },
+  {
+   "id": "M-07",
+   "severidade": "MEDIA",
+   "rota": "/projetos-complementares-engenharia/",
+   "bloco": "CTA do cabeçalho, da abertura e de 'Reconheceu o seu caso?' (todos → #escopo-projeto)",
+   "achado": "Três rótulos para a mesma ação: 'Conversar sobre o projeto' (header), 'Solicitar proposta de elaboração' (abertura), 'Pedir a proposta agora' (meio). 'Agora' é o único rótulo de pressão comercial do lote e contradiz o tom 'primeiro entendemos o caso'.",
+   "lentes": [
+    "familias-a: MEDIA"
+   ],
+   "regressao": "nao-informada",
+   "evidencia": "familias-a/slices/projetos-complementares-engenharia-390x844-full-aceite-03.jpg; listagem de botões (curl + regex) com hrefs iguais",
+   "correcao": "Um rótulo por página para a mesma âncora (ex.: 'Solicitar proposta de elaboração'), como quantitativos e compatibilização.",
+   "fonte_tipo": "HTML de rota",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/projetos-complementares-engenharia/index.html"
+   ]
+  },
+  {
+   "id": "M-08",
+   "severidade": "MEDIA",
+   "rota": "/defesa-margem-contratos-publicos/, /defesa-tecnica-contratos-publicos/, /acompanhamento-contratos-obras/, /atrasos-prorrogacao-obras-publicas/",
+   "bloco": "Faixa cinza da abertura (01–04) e índice 'Nesta página'",
+   "achado": "Grade de três colunas com quatro células: a 04 'O que você recebe' cai sozinha numa linha inteira. O índice fica meia-largura (605 px) antes da faixa, com a coluna direita vazia abaixo do card 'Em 30 segundos' (defesa-margem: índice em y≈820).",
+   "lentes": [
+    "familias-b: MEDIA"
+   ],
+   "regressao": "introduzida (abertura/índice novos)",
+   "evidencia": "familias-b/slices/{defesa-margem,defesa-tecnica,acompanhamento,atrasos}-1440x1000-full-aceite-00.jpg; misc.mjs indexW 605",
+   "correcao": "Quatro colunas (4×1) ou mover 'O que você recebe' ao tríptico Trabalho/Entrega/Limite do piloto; índice em largura total fechando a abertura, como em medições.",
+   "fonte_tipo": "HTML de rota (4 arquivos) + possivelmente grade em CSS",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/defesa-margem-contratos-publicos/index.html",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/defesa-tecnica-contratos-publicos/index.html",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/acompanhamento-contratos-obras/index.html",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/atrasos-prorrogacao-obras-publicas/index.html",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/assets/editorial.css (grade da faixa)"
+   ]
+  },
+  {
+   "id": "M-09",
+   "severidade": "MEDIA",
+   "rota": "/bid-room-licitacoes-obras/, /diretoria-b2g/, /diagnostico-b2g-expansao/",
+   "bloco": "Abertura: entre a faixa 01–03 e o índice 'Nesta página'",
+   "achado": "Pilha de ~450 px de parágrafos em letra pequena (documentos, método, fonte, responsável, condições) empurra o índice para y≈1100/1050/1150, abaixo da dobra. Nenhuma das três tem prancha/exemplo demonstrativo (demoLabels=0), ao contrário do piloto.",
+   "lentes": [
+    "familias-b: MEDIA"
+   ],
+   "regressao": "introduzida (abertura nova)",
+   "evidencia": "familias-b/slices/{bid-room,diretoria-b2g,diagnostico-b2g-expansao}-1440x1000-full-aceite-00.jpg; dom.json demoLabels=0",
+   "correcao": "Consolidar método/fonte/atualização no bloco 'Como conferir'; índice logo após a faixa; incluir uma prancha (mapa de compradores / linha do tempo da sala / cadência) rotulada 'Exemplo demonstrativo'.",
+   "fonte_tipo": "HTML de rota (+ gerador de pranchas para a prancha nova)",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/bid-room-licitacoes-obras/index.html",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/diretoria-b2g/index.html",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/diagnostico-b2g-expansao/index.html",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/scripts/demonstrative/plates/"
+   ]
+  },
+  {
+   "id": "M-10",
+   "severidade": "MEDIA",
+   "rota": "/conflitos/",
+   "bloco": "Corpo abaixo do índice (card com borda) e formulário de triagem",
+   "achado": "Nova abertura + índice, mas o corpo continua no layout legado: card de ~700 px só na metade esquerda, ~150 px de vão entre índice e card, ~90 px de padding interno, h2 internos fora dos papéis tipográficos. Formulário com texto de status colidindo com a legenda ('Use apenas estas opções…' seguido de 'Responda às perguntas…').",
+   "lentes": [
+    "familias-b: MEDIA"
+   ],
+   "regressao": "nao-informada (corpo pré-existente; abertura nova)",
+   "evidencia": "familias-b/slices/conflitos-1440x1000-full-aceite-00.jpg e -01.jpg",
+   "correcao": "Aplicar .sec/.list-ruled e papéis .t-* ao corpo; card em largura de leitura (ou sem card); formulário no componente pillar-capture; um único texto de estado.",
+   "fonte_tipo": "HTML de rota (+ conflict-gate.js para o texto de estado)",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/conflitos/index.html",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/conflitos/conflict-gate.js"
+   ]
+  },
+  {
+   "id": "M-11",
+   "severidade": "MEDIA",
+   "rota": "/diretoria-b2g/",
+   "bloco": "section.model-section 'Papel da Diretoria Fracionada' (876 px, fundo escuro)",
+   "achado": "O único bloco escuro da página é uma seção de processo (timeline A–D), não o próximo passo/exploração — inverte a função do bloco escuro definida no contrato. (Limite 'um por página' respeitado nas 19 rotas da família B; zero em cinco rotas.)",
+   "lentes": [
+    "familias-b: MEDIA"
+   ],
+   "regressao": "nao-informada",
+   "evidencia": "familias-b/slices/diretoria-b2g-1440x1000-full-aceite-00.jpg; dom.json dark[]",
+   "correcao": "Converter 'Papel da diretoria' para seção clara (.sec--soft) e reservar o escuro ao bloco de exploração/próximo passo.",
+   "fonte_tipo": "HTML de rota (classe da seção; .model-section definido em styles.css:14 legado)",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/diretoria-b2g/index.html"
+   ]
+  },
+  {
+   "id": "M-12",
+   "severidade": "MEDIA",
+   "rota": "/servicos-obras-publicas/, /diretoria-b2g/, /diagnostico-b2g-expansao/",
+   "bloco": "Bloco de captura",
+   "achado": "Ids/componentes inconsistentes: seis pilares + bid-room, defesa-margem, defesa-técnica, acompanhamento e atrasos usam section.pillar-capture#captura-pilar íntegro (nome*, consentimento*, hiddens de atribuição, action /.netlify/functions/lead). Mas diretoria-b2g usa o componente com id #pedido-enquadramento; diagnostico-b2g-expansao usa #handraise-diag (offer-request-form, coluna única, h2 após as dicas, consentimento 'autorizo', frase órfã fora do card); servicos-obras-publicas usa o formulário legado sem card, sem WhatsApp e sem #captura-pilar. Qualquer gate/âncora dependente de #captura-pilar falha nas três. Nota cruzada: a lente contratos verificou que os <form> são byte-idênticos à produção em 234/234 rotas — a inconsistência é pré-existente, não regressão.",
+   "lentes": [
+    "familias-b: MEDIA"
+   ],
+   "regressao": "pre-existente-em-producao (forms idênticos, lente contratos)",
+   "evidencia": "dom.json form.found=false nas três; familias-b/slices/servicos-obras-publicas-1440x1000-full-aceite-04.jpg, slices/diagnostico-b2g-expansao-1440x1000-full-aceite-02.jpg; grep '<form' _site/*/index.html",
+   "correcao": "Padronizar section.pillar-capture#captura-pilar (shared_lead_form_v1) nas três rotas mantendo os hidden de atribuição de cada oferta; validar via npm run inbound:gates (fail-closed).",
+   "fonte_tipo": "HTML de rota",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/servicos-obras-publicas/index.html",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/diretoria-b2g/index.html",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/diagnostico-b2g-expansao/index.html"
+   ]
+  },
+  {
+   "id": "M-13",
+   "severidade": "MEDIA",
+   "rota": "/aditivos-obras-publicas/ (bloco escuro 'Ferramenta e diagnóstico') · /defesa-tecnica-contratos-publicos/ (callout 'Cada alegação precisa chegar ao jurídico…')",
+   "bloco": "Ações de mesmo peso no mesmo contexto",
+   "achado": "Duas (aditivos) e três (defesa-técnica) ações com o mesmo peso, contra o limite 'uma ação dominante por contexto; alternativas em texto'.",
+   "lentes": [
+    "familias-b: MEDIA"
+   ],
+   "regressao": "nao-informada",
+   "evidencia": "familias-b/slices/aditivos-obras-publicas-1440x1000-full-aceite-02.jpg; slices/defesa-tecnica-contratos-publicos-1440x1000-full-aceite-02.jpg",
+   "correcao": "Um botão; demais como links de texto (.contact-alt).",
+   "fonte_tipo": "HTML de rota",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/aditivos-obras-publicas/index.html",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/defesa-tecnica-contratos-publicos/index.html"
+   ]
+  },
+  {
+   "id": "M-14",
+   "severidade": "MEDIA",
+   "rota": "todas com #captura-pilar (12 rotas; canal_seguro em defesa-margem e bid-room)",
+   "bloco": "label.capture-consent > input[type=checkbox]",
+   "achado": "Checkbox encolhido a 7–13 px de largura em 1440 e 4–8 px em 390 (min-height 48 px herdado da regra de input + flex-shrink), desalinhado do rótulo: o controle obrigatório de consentimento fica quase invisível e sem alvo de toque. Regra atual em css/components.css: '.capture-consent input{width:auto;margin-top:4px}'. Herdado do piloto, agora em 12 rotas.",
+   "lentes": [
+    "familias-b: MEDIA"
+   ],
+   "regressao": "herdada-do-piloto",
+   "evidencia": "cb.mjs → canal_seguro w:4–7, consentimento w:7–13, h:48; familias-b/slices/crop-defesa-margem-checkbox.jpg; slices/medicoes-glosas-…-390x844-full-aceite-06.jpg vs -pilot-06.jpg",
+   "correcao": "'.capture-consent input[type=checkbox]{min-height:0;width:1.25rem;height:1.25rem;flex:0 0 auto;margin-top:.2rem}' em css/components.css.",
+   "fonte_tipo": "CSS do integrador",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/css/components.css (.capture-consent input; copiado em styles.css:1203)"
+   ]
+  },
+  {
+   "id": "M-15",
+   "severidade": "MEDIA",
+   "rota": "/acompanhamento-contratos-obras/",
+   "bloco": "Após o bloco escuro 'Exploração — Testar a leitura antes de contratar a rotina'",
+   "achado": "Parágrafo 'Custo da rotina é uma mensalidade fixa…' (condição material de preço) colado ao bloco escuro com gap 0 px, sem eyebrow/seção — parece resíduo de layout.",
+   "lentes": [
+    "familias-b: MEDIA"
+   ],
+   "regressao": "nao-informada",
+   "evidencia": "misc.mjs → {next:'P.measure', gap:0}; familias-b/slices/acompanhamento-contratos-obras-1440x1000-full-aceite-01.jpg",
+   "correcao": "Mover para 'Dúvidas, condições e limites' ou para o bloco 'Preço' com eyebrow e espaçamento de seção.",
+   "fonte_tipo": "HTML de rota",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/acompanhamento-contratos-obras/index.html"
+   ]
+  },
+  {
+   "id": "M-16",
+   "severidade": "MEDIA",
+   "rota": "Desktop: /conteudos/documentos-reequilibrio-obra-publica/, /conteudos/sinapi-desonerado-nao-desonerado/, /conteudos/limite-aditivo-25-50-obra-publica/, /conteudos/atraso-na-medicao-obra-publica/ · Móvel 390: /, /medicoes-glosas-obras-publicas/, /quantitativos-orcamento-obras/, /entregas/, /conteudos/documentos-reequilibrio-obra-publica/, /especialista/tiago-jun-sasaki/, /ferramentas/diagnostico-defesa-margem/",
+   "bloco": "Texto corrido de conteúdo (não legenda) abaixo do corpo do contrato: .article-main dos conteúdos; .svc-chain dd (TRABALHO/DOCUMENTO); p.situation-use (home, 23×, inclusive sobre fundo escuro); .criterion-card p / .action-list p / .document-list li / p.technical-note; li da lista de guias; p.form-hint",
+   "achado": "Contrato de tipos: corpo 16 px móvel / 18 px desktop, legenda 14 px. (a) Desktop: corpo dos artigos roda a 16 px e grande parte dos parágrafos (cartões 01–07, plano de ação, erros) a 13,9–14,7 px cinza (reequilíbrio 16px×5 vs ≤14,7px×18 de 24; SINAPI 16×21 vs ≤14,7×24 de 39); o piloto /medicoes/ roda 18px×21. (b) 390: blocos que descrevem trabalho e entrega usam --text-caption (14 px) ou menos: medições dd 308/250/180 caracteres; quantitativos dd 194–203; entregas dd 241; home p.situation-use 84–158 (23×); artigo com 7 parágrafos a 13,92 px, 8 itens a 13,76 e technical-note a 12,8 px; especialista li 291 chars a 14; ferramentas form-hint 310 chars a 14. Regras: assets/editorial.css:185 '.svc-chain dd{font-size:var(--text-caption)}', assets/home-10x.css:239 '.situation-use{font-size:var(--text-caption)}', styles.css:10 (.criterion-card p .87rem, .action-list p .88rem, .technical-note .8rem), .article-main sem --text-*.",
+   "lentes": [
+    "familias-c: MEDIA (desktop, artigos)",
+    "a11y-responsivo: MEDIA (390, 7 rotas)"
+   ],
+   "regressao": "pre-existente-em-producao / herdada-do-piloto (mesmo CSS)",
+   "evidencia": "familias-c/probe-editorial.mjs, probe-psize.mjs, crop-conteudos-documentos-reequilibrio-obra-publica-0.jpg e -2000.jpg; a11y/harness.json fonts390 (bodyProseFs {'14px':23}, longSmall por rota); medicoes-glosas-…-390x844-fold-aceite.jpg; slices/conteudos-…-390x844-full-aceite-02.jpg",
+   "correcao": "Aplicar --text-* e corpo 18 px desktop ao .article-main dos conteúdos; em ≤620 px elevar .svc-chain dd, .situation-use, .criterion-card p, .action-list p, .document-list li e .technical-note para 1rem/1.5; reservar --text-caption (14 px) para carimbos, legendas de prancha, fontes e ressalvas. Recapturar as rotas medidas.",
+   "fonte_tipo": "CSS do integrador",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/assets/editorial.css (linha 185 .svc-chain dd; .article-main)",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/assets/editorial-article.css (.article-main dos conteúdos)",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/assets/home-10x.css (linha 239 .situation-use)",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/styles.css (linha 10, região legada: .criterion-card p, .action-list p, .technical-note)"
+   ]
+  },
+  {
+   "id": "M-17",
+   "severidade": "MEDIA",
+   "rota": "/conteudos/chuva-prorrogacao-prazo-obra-publica/",
+   "bloco": "Seção 'Evento × referência × impacto', .table-wrap > table.compare-table (7 colunas)",
+   "achado": "Tabela de 1000 px em coluna de 672 px no desktop: 2 das 7 colunas cortadas sem barra ou dica visível e <caption> truncada mid-palavra ('…pluviométrico no pra'). No móvel a caption centrada sobre 987 px de rolagem mostra só 'Matri'; a dica 'Role a tabela' fica apenas abaixo. Não acessível na leitura desktop.",
+   "lentes": [
+    "familias-c: MEDIA"
+   ],
+   "regressao": "nao-informada (não comparada com produção — ver not_tested)",
+   "evidencia": "familias-c/loc-chuva-table-d.jpg, loc-chuva-table-m.jpg; probe-editorial.mjs tables[0] w=1000/sw=1000 em coluna 672",
+   "correcao": "Permitir que .table-wrap rompa a coluna (grid-column:1/-1) no desktop ou reduzir a 5 colunas empilhadas; caption text-align:left, position:sticky left:0, largura da viewport; dica de rolagem acima e scroll shadow.",
+   "fonte_tipo": "CSS do integrador (.table-wrap/.compare-table) + HTML de rota (colunas/caption)",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/styles.css (linha 11, região legada: .compare-table)",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/css/contracts.css (.compare-table)",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/conteudos/chuva-prorrogacao-prazo-obra-publica/index.html"
+   ]
+  },
+  {
+   "id": "M-18",
+   "severidade": "MEDIA",
+   "rota": "/lei-14133-obras/limite-25-50-aditivo-obra/, /guias-contratos-obras/documentos-pedido-reequilibrio/ (e os indexados /lei-14133-obras/preco-item-novo-desconto-proposta/, /guias-contratos-obras/checklist-pedido-aditivo/)",
+   "bloco": "Byline sob o título e final do artigo",
+   "achado": "Artigos de Lei 14.133 e guias sem responsável técnico nomeado: byline 'Biblioteca técnica CONFENGE · Publicado · Atualizado', sem author-box, sem 'Sasaki' no <main>, JSON-LD author=Organization; destoa dos /conteudos/ (Engº Tiago Sasaki). Nota cruzada (contratos, not_tested): /lei-14133-obras/limite-25-50-aditivo-obra/ é fonte de 301 em _redirects e seu HTML local não é servido — o achado vale para as outras três rotas.",
+   "lentes": [
+    "familias-c: MEDIA"
+   ],
+   "regressao": "pre-existente-em-producao",
+   "evidencia": "grep em _site: author-box:0 e Sasaki-in-main:0 nas quatro rotas; familias-c/lei-14133-obras-limite-25-50-aditivo-obra-1440x1000-full-aceite.jpg",
+   "correcao": "Reutilizar author-box e byline 'Engº Tiago Sasaki · Revisado em' dos /conteudos/ nas famílias lei e guias; JSON-LD author Person + reviewedBy.",
+   "fonte_tipo": "gerador/shell + HTML de rota",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/scripts/pseo/html_shell.py (author-box)",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/lei-14133-obras/*/index.html",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/guias-contratos-obras/*/index.html"
+   ]
+  },
+  {
+   "id": "M-19",
+   "severidade": "MEDIA",
+   "rota": "/casos/modelo-relatorio-inteligencia-licitacoes/",
+   "bloco": "Página inteira (abertura, blocos escuros, 'Agora, a sua carteira')",
+   "achado": "Fora do contrato visual do piloto: h1 74,88 px (institucional até 64), slogan serifado no painel escuro, 9 faixas escuras (contrato: uma por página), CTA 'Pedir a análise… por R$ 599' dominante na dobra móvel, preço em display serif, 'DEMONSTRATIVO · NÃO É CASO CONFENGE' em caixa alta, parágrafos de 1200 px (134 cpl), CTA do cabeçalho diferente do resto do site. Aparência de página de venda. A campanha só inseriu o índice (diff de 25 linhas).",
+   "lentes": [
+    "familias-c: MEDIA"
+   ],
+   "regressao": "pre-existente-em-producao",
+   "evidencia": "familias-c/crop-modelo-0.jpg, crop-modelo-12800.jpg, sheet-mobile-3.jpg; detecção de faixas escuras (9 intervalos); probe-editorial h1size 74.88px, cplMax 134",
+   "correcao": "Migrar para o modelo de exemplo do piloto (prancha + carimbo, um bloco escuro, tipos do contrato, preço como condição material em 'Condições e limites'); ou registrar exceção datada no design contract (estado.json#design_contract).",
+   "fonte_tipo": "HTML de rota + folha própria (decisão)",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/casos/modelo-relatorio-inteligencia-licitacoes/index.html",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/assets/report-model.css"
+   ]
+  },
+  {
+   "id": "M-20",
+   "severidade": "MEDIA",
+   "rota": "/ferramentas/, /ferramentas/diagnostico-defesa-margem/",
+   "bloco": "Bloco 'Método, fonte e limites', lead da abertura e cartões de ferramentas",
+   "achado": "Introduzido pela campanha: 'Método, fonte e limites' (com 'não é parecer jurídico') saiu de cima da lista/formulário para depois dos resultados; o lead perdeu a frase de atalho aos serviços ('Nenhuma é etapa obrigatória… revisão, compatibilização, orçamento…'), que agora só aparece no fim. Mesma inversão no diagnóstico. Os 6 cartões de /ferramentas/ têm 1088 px com conteúdo de ~600 px (40% vazio) e botões de 600 px — card genérico, não a lista pautada do piloto.",
+   "lentes": [
+    "familias-c: MEDIA"
+   ],
+   "regressao": "introduzida (diff prod vs candidato)",
+   "evidencia": "diff do <main> de /ferramentas/ e do diagnóstico; familias-c/crop-ferr-600.jpg; ferramentas-1440x1000-full-aceite.jpg",
+   "correcao": "Resumo curto de método/limite (3 linhas) acima da ferramenta e detalhamento abaixo; devolver o atalho aos serviços ao lead; cartões em lista pautada (.list-ruled) com ação em texto e largura de leitura.",
+   "fonte_tipo": "HTML de rota (+ CSS dos cartões)",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/ferramentas/index.html",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/ferramentas/diagnostico-defesa-margem/index.html",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/assets/editorial-tool.css"
+   ]
+  },
+  {
+   "id": "M-21",
+   "severidade": "MEDIA",
+   "rota": "/privacidade/, /termos-de-uso/",
+   "bloco": "Cabeçalho e contêiner do artigo",
+   "achado": "Políticas fora do template editorial: só styles.css (sem editorial.css nem script.js), .menu-toggle display:none (0×0), cabeçalho de 181 px não fixo com navegação empilhada em duas linhas mais botão, conteúdo em card antigo (.simple-card.privacy-card). Quebra a continuidade móvel; capture.mjs aborta na rota. Conteúdo byte-idêntico à produção.",
+   "lentes": [
+    "familias-c: MEDIA"
+   ],
+   "regressao": "pre-existente-em-producao",
+   "evidencia": "familias-c/sheet-mobile-1.jpg (colunas 2 e 3); probe-toggle.mjs (display none, hdrH 181, sheets só styles.css, scripts []); alturas idênticas prod/candidato",
+   "correcao": "Renderizar as políticas com o layout base (header sticky + menu + editorial.css) mantendo o texto; incluir no lote de recaptura.",
+   "fonte_tipo": "HTML de rota (shell)",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/privacidade/index.html",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/termos-de-uso/index.html"
+   ]
+  },
+  {
+   "id": "M-22",
+   "severidade": "MEDIA",
+   "rota": "/conteudos/sinapi-desonerado-nao-desonerado/, /conteudos/documentos-reequilibrio-obra-publica/, /conteudos/limite-aditivo-25-50-obra-publica/, /lei-14133-obras/limite-25-50-aditivo-obra/ (301, ver M-18), /guias-contratos-obras/documentos-pedido-reequilibrio/",
+   "bloco": "Sidebar 'Diagnóstico CONFENGE', blocos 'Próximo passo', 'Decisão empresarial', 'Com os documentos em mãos'",
+   "achado": "Densidade de ações contra 'uma ação dominante por contexto': SINAPI 9 botões (5 wa.me + 1 formulário), reequilíbrio 4/3 WhatsApp, limite 5/2, lei e guia 6 cada com dois blocos 'Próximo passo' idênticos (meio e fim). Contagens idênticas à produção.",
+   "lentes": [
+    "familias-c: MEDIA"
+   ],
+   "regressao": "pre-existente-em-producao",
+   "evidencia": "contagem por regex em _site vs prod/ (BTN/wa/h2); familias-c/crop-conteudos-documentos-reequilibrio-obra-publica-4000.jpg; crop-guia-4100.jpg; tile-conteudos-sinapi-desonerado-nao-desonerado-m.jpg",
+   "correcao": "Um botão dominante por artigo (após 'Condições e limites'), sidebar com link em texto, remover o segundo 'Próximo passo' em lei/guias; consolidar ressalvas.",
+   "fonte_tipo": "gerador/shell + HTML de rota",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/scripts/pseo/html_shell.py",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/conteudos/<slug>/index.html",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/guias-contratos-obras/documentos-pedido-reequilibrio/index.html"
+   ]
+  },
+  {
+   "id": "M-23",
+   "severidade": "MEDIA",
+   "rota": "/ferramentas/diagnostico-defesa-margem/, /medicoes-glosas-obras-publicas/, /quantitativos-orcamento-obras/, /especialista/tiago-jun-sasaki/, /triagem-tecnica/",
+   "bloco": "Prosa sem medida máxima: ferramentas (.tool-* p/li, 'Limitação:'), medições .authority-method p ('Fonte:'/'Limitação:'), quantitativos .qty-trail spans e p.qty-trail-disclaimer, especialista p.credential-as-of, triagem #corrigir-o-site p",
+   "achado": "Linhas de 18 px com 97–115 caracteres (ch real): ferramentas 14 linhas de 103–109 ch; medições 112/111; quantitativos 115/114 (bloco 1200 px); especialista 97; triagem 97. Home, /servicos/ e /entregas/ ficam limpos porque carregam max-width 52ch/.measure.",
+   "lentes": [
+    "a11y-responsivo: MEDIA"
+   ],
+   "regressao": "nao-informada (provavelmente herdada)",
+   "evidencia": "a11y/linelen.mjs; slices/ferramentas-diagnostico-defesa-margem-1440x1000-full-aceite-01.jpg",
+   "correcao": "max-width:70ch (ou .measure) em .authority-method p, blocos de prosa da ferramenta, .qty-trail e p.credential-as-of / #corrigir-o-site p.",
+   "fonte_tipo": "CSS do integrador",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/assets/editorial.css (.authority-method)",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/assets/editorial-tool.css (.tool-*)",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/styles.css (região legada: .qty-trail, .credential-as-of)",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/triagem-tecnica/styles.css"
+   ]
+  },
+  {
+   "id": "M-24",
+   "severidade": "MEDIA",
+   "rota": "/medicoes-glosas-obras-publicas/ (#captura-pilar, form diagnostico-confenge)",
+   "bloco": "Formulário on-page 'Descreva a medição ou a glosa sem sair desta página'",
+   "achado": "Envio vazio bloqueia só com balão nativo (sem novalidate; em headless 'Please fill out this field.'), sem mensagem inline, sem aria-invalid, .form-status vazio; as mensagens pt-BR do runtime nunca aparecem, ao contrário da home. A dica diz 'campos marcados como obrigatórios' mas nenhum rótulo é marcado. Regra de canal funciona quando o nativo passa. Contexto oculto correto (origem/asset_id/cta_id/route_family/jornada/estagio/landing_page). Nota cruzada (contratos): forms byte-idênticos à produção → pré-existente.",
+   "lentes": [
+    "jornadas: MEDIA"
+   ],
+   "regressao": "pre-existente-em-producao",
+   "evidencia": "jornadas/formdebug2.mjs; F2-medicoes-glosas-obras-publicas-1440-empty.jpg, -1440-nameonly.jpg, -390-empty.jpg; J-C-1440.json; direct.mjs",
+   "correcao": "novalidate no form do pilar (o runtime já marca nome/consentimento em pt-BR); marcar 'obrigatório'/'opcional' nos rótulos como na home ou corrigir a dica. Vale para as 12 rotas com o componente.",
+   "fonte_tipo": "HTML de rota (componente pillar-capture repetido em 12 arquivos)",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/medicoes-glosas-obras-publicas/index.html (e demais rotas com section.pillar-capture)"
+   ]
+  },
+  {
+   "id": "M-25",
+   "severidade": "MEDIA",
+   "rota": "/#contato (form diagnostico-b2g, etapa 2)",
+   "bloco": "Campo 'Quanto está em jogo nessa decisão (opcional)'",
+   "achado": "Opções são faixas de preço da oferta interna (faixa_entrada/faixa_diagnostico/faixa_dossie: 'R$ 599 a R$ 2.400', 'R$ 2.900 a R$ 5.900', 'R$ 6.900 a R$ 7.900', 'Acima de R$ 7.900') apresentadas como 'quanto está em jogo'. Para glosa de centenas de milhares ou avaliação de imóvel não faz sentido e expõe tiers internos (estado operacional) na copy pública — AGENTS.md: 'Keep operational states internal'. 'Faixa de contrato ou carteira' já cobre porte.",
+   "lentes": [
+    "jornadas: MEDIA"
+   ],
+   "regressao": "pre-existente-em-producao (forms idênticos, lente contratos)",
+   "evidencia": "grep em _site/index.html (<option value=\"faixa_entrada\">…); jornadas/HF-1440-step2-full.jpg",
+   "correcao": "Remover o campo ou reescrever as opções em termos do visitante (valor da decisão/contrato em faixas amplas); manter o mapeamento para tiers só do lado warmbly/offer_fit.",
+   "fonte_tipo": "HTML de rota (+ mapeamento comercial)",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/index.html (options faixa_*)",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/scripts/commercial/offer_fit.mjs"
+   ]
+  },
+  {
+   "id": "M-26",
+   "severidade": "MEDIA",
+   "rota": "/servicos/#servico-avaliacao (jornada B) e índice #por-necessidade em /conteudos/",
+   "bloco": "Bloco 06 'Avaliação de imóvel'",
+   "achado": "Avaliação imobiliária não tem rota própria (/avaliacao-imoveis/ = 404); os 8 CTAs do site apontam para a âncora no índice de serviços, enquanto as oito situações irmãs têm página dedicada. A jornada funciona (âncora visível, condições antes do aceite, WhatsApp/e-mail contextuais, triagem) e não desvia para litígio/obra pública, mas o reconhecimento da oferta fica abaixo (sem título/URL/breadcrumb próprios, prancha P4 compartilhada com a home).",
+   "lentes": [
+    "jornadas: MEDIA"
+   ],
+   "regressao": "pre-existente-em-producao",
+   "evidencia": "manifest-aceite.json '/avaliacao-imoveis/' 404; grep -c 'href=\"/servicos/#servico-avaliacao\"' = 8; J-B-1440.json hashTarget visible:true; J-B-1440-2-fold.jpg, crop-serv-aval2.jpg",
+   "correcao": "Publicar /avaliacao-imoveis/ (família registrada em data/organic/public-family-registry.json, com gate de conversão) ou dar ao bloco cabeçalho de serviço e canais no padrão das páginas de serviço; redirecionar as 8 âncoras quando a rota existir. Decisão de escopo (nova rota indexável exige família + gates).",
+   "fonte_tipo": "HTML de rota + registro de família (decisão)",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/servicos/index.html",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/data/organic/public-family-registry.json"
+   ]
+  },
+  {
+   "id": "M-27",
+   "severidade": "MEDIA",
+   "rota": "/quantitativos-orcamento-obras/#triagem-quantitativos, /compatibilizacao-projetos-engenharia/#pedido-compatibilizacao, /servicos/, /triagem-tecnica/ (jornadas A e E)",
+   "bloco": "Blocos 'Próximo passo' das rotas privadas e página de triagem",
+   "achado": "Só a home e os pilares B2G têm formulário on-page com contexto oculto e Turnstile; as rotas privadas terminam em WhatsApp/e-mail/telefone (contexto correto e específico). O CTA fixo do cabeçalho 'Solicitar proposta' leva a /triagem-tecnica/, que se declara 'Fale agora, sem formulário' e não linka o formulário da home; quem não quer WhatsApp/e-mail só acha formulário voltando à home. Desequilíbrio público/privado nos estados de conversão.",
+   "lentes": [
+    "jornadas: MEDIA"
+   ],
+   "regressao": "herdada-do-piloto (triagem 'sem formulário' já no piloto)",
+   "evidencia": "direct.mjs forms [] nas rotas privadas; links.mjs /triagem-tecnica/ sem '#contato'; triagem-tecnica-1440x1000-full-aceite.jpg, crop-quant-end.jpg, J-A2-1440.json",
+   "correcao": "Na triagem e nos blocos 'Próximo passo' privados, link 'Prefere escrever? Use o formulário' → /?jornada=<x>#contato (o parâmetro já pré-seleciona a jornada), ou instanciar o formulário compartilhado com asset_id/cta_id próprios (com validação, consentimento, atribuição e persistência reais antes de prometer recibo).",
+   "fonte_tipo": "HTML de rota",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/triagem-tecnica/index.html",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/quantitativos-orcamento-obras/index.html",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/compatibilizacao-projetos-engenharia/index.html (e demais rotas privadas)"
+   ]
+  },
+  {
+   "id": "M-28",
+   "severidade": "MEDIA",
+   "rota": "/servicos-obras-publicas/, /entregas/, /conteudos/ e mais 10 rotas com .svc-open__note (/inspecao-diagnostico-edificacoes/, /quantitativos-orcamento-obras/, /parcerias-engenharia/, /revisao-tecnica-projetos-engenharia/, /compatibilizacao-projetos-engenharia/, /projetos-complementares-engenharia/, /assistencia-tecnica-pericial-engenharia/, /seguranca-trabalho-apoio-tecnico/, /casos/, /problemas-que-resolvemos/)",
+   "bloco": "Abertura (.svc-open): régua superior do índice 'Nesta página' (.page-index) encostada na última linha da nota (.svc-open__note)",
+   "achado": "No desktop a coluna de texto é a mais alta e o índice nasce com margin-top 0, então a régua de 1 px toca o descendente da última linha. Causa confirmada nos arquivos: assets/editorial.css:159 '.page-index{margin:0 0 clamp(…)}' e a compensação em :168 usa '.svc-open+.page-index' (irmão adjacente), mas nessas rotas o índice está aninhado dentro do header .svc-open. Medido: idxTop = lastBottom (gap 0 px) em /servicos-obras-publicas/ e /entregas/. Já existia na captura aprovada do piloto (quantitativos), mas a produção não tinha índice nessas rotas.",
+   "lentes": [
+    "contratos: MEDIA"
+   ],
+   "regressao": "herdada-do-piloto",
+   "evidencia": "contratos/crop-sop-rule.jpg; servicos-obras-publicas-1440x1000-fold-aceite.jpg; entregas-1440x1000-fold-aceite.jpg; idx2.mjs (gap 0px); grep em _site/assets/css/assets/editorial.048a22504e9a.css",
+   "correcao": "Incluir o caso aninhado no seletor (ex.: '.svc-open .page-index,.svc-open__grid+.page-index{margin-top:clamp(1rem,2vw,1.5rem)}') ou margin-bottom na .svc-open__note; recapturar as 13 rotas em 1440.",
+   "fonte_tipo": "CSS do integrador",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/assets/editorial.css (linhas 159 e 168)"
+   ]
+  }
+ ],
+ "baixa": [
+  {
+   "id": "B-01",
+   "severidade": "BAIXA",
+   "rota": "/casos/demonstrativo-projeto-privado/",
+   "bloco": "Pranchas 'Planta do recorte · estado original' e '· versão demonstrativa' (PR-ARQ R00/R01)",
+   "achado": "Rótulo 'HS-01' sobrepõe a cota vertical '1,80 m' nas duas plantas (interseção > 2 px); composição desktop escalada a 351 px, legenda ~8 px.",
+   "lentes": [
+    "familias-a: BAIXA"
+   ],
+   "regressao": "herdada-do-piloto",
+   "evidencia": "familias-a/zoom-casos-planta-390.jpg; probe-svgtext.mjs (ov HS-01 × 1,80 m)",
+   "correcao": "Reposicionar a cota ou gerar variante móvel reenquadrada para as pranchas dos casos.",
+   "fonte_tipo": "gerador de pranchas",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/scripts/demonstrative/private_project/",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/scripts/demonstrative/plates/"
+   ]
+  },
+  {
+   "id": "B-02",
+   "severidade": "BAIXA",
+   "rota": "/casos/demonstrativo-infraestrutura/",
+   "bloco": "Prancha 'PV-01 · 7,00 m', nota inferior",
+   "achado": "Texto SVG 'Espessuras declaradas; volume geométrico, não dimensiona…' cortado 36 px pela borda direita (mid-palavra).",
+   "lentes": [
+    "familias-a: BAIXA"
+   ],
+   "regressao": "nao-informada",
+   "evidencia": "familias-a/slices/casos-demonstrativo-infraestrutura-390x844-full-aceite-03.jpg; probe-svgtext.mjs (over 36)",
+   "correcao": "Quebrar a nota em duas linhas no SVG ou reduzir o texto.",
+   "fonte_tipo": "gerador de pranchas",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/scripts/demonstrative/infrastructure_pilot/",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/scripts/demonstrative/plates/"
+   ]
+  },
+  {
+   "id": "B-03",
+   "severidade": "BAIXA",
+   "rota": "/assistencia-tecnica-pericial-engenharia/",
+   "bloco": "Prancha PE-M (assets/pranchas/pericia-fachada-mobile.svg), notas acima do carimbo",
+   "achado": "Última linha de nota encosta na borda superior do carimbo, sem respiro; descendentes tocam a linha.",
+   "lentes": [
+    "familias-a: BAIXA"
+   ],
+   "regressao": "nao-informada",
+   "evidencia": "familias-a/zoom-assist-carimbo-390.jpg; slices/assistencia-…-390x844-full-aceite-01.jpg",
+   "correcao": "Ajustar o y das notas ou o viewBox 360×420 no gerador para margem mínima antes do carimbo.",
+   "fonte_tipo": "gerador de pranchas",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/scripts/demonstrative/plates/"
+   ]
+  },
+  {
+   "id": "B-04",
+   "severidade": "BAIXA",
+   "rota": "/projetos-complementares-engenharia/, /seguranca-trabalho-apoio-tecnico/, /assistencia-tecnica-pericial-engenharia/",
+   "bloco": "Tabelas .data-table com th[scope=row]",
+   "achado": "Régua entre linhas só sob a primeira coluna (borda escura do th); demais células sem separador; em 390 o th 'ENCONTRO ENTRE DISCIPLINAS' sem folga até a coluna seguinte.",
+   "lentes": [
+    "familias-a: BAIXA"
+   ],
+   "regressao": "nao-informada",
+   "evidencia": "familias-a/slices/projetos-complementares-engenharia-1440x1000-full-aceite-02.jpg; zoom-pc-matriz-390.jpg; slices/seguranca-…-390x844-full-aceite-02.jpg",
+   "correcao": "Mesma border-bottom em td e th[scope=row] e padding-right no th.",
+   "fonte_tipo": "CSS do integrador",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/css/components.css (.data-table th/td)"
+   ]
+  },
+  {
+   "id": "B-05",
+   "severidade": "BAIXA",
+   "rota": "/quantitativos-orcamento-obras/ e demais páginas de serviço com carimbo dl.keys",
+   "bloco": "<small> em CLIENTE/REVISÃO/ENTREGÁVEIS/RESPONSÁVEL",
+   "achado": "Texto de apoio a 11,67 px, abaixo do piso de 12 px e da legenda 14 px do contrato. Regra em css/components.css '.keys dd small{display:block;…}' sem font-size próprio (herda small).",
+   "lentes": [
+    "familias-a: BAIXA"
+   ],
+   "regressao": "nao-informada",
+   "evidencia": "familias-a/probe-small.mjs; slices/quantitativos-…-390x844-full-aceite-01.jpg",
+   "correcao": "'.keys small{font-size:max(var(--text-caption),12px)}'.",
+   "fonte_tipo": "CSS do integrador",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/css/components.css (.keys dd small; copiado em styles.css:1024)"
+   ]
+  },
+  {
+   "id": "B-06",
+   "severidade": "BAIXA",
+   "rota": "/404.html",
+   "bloco": "Cabeçalho site-header",
+   "achado": "Sem script.js (html.no-js): .menu-toggle display:none, .mobile-nav no fallback estático (4 links + botão), cabeçalho 181 px não sticky vs 61 px nas demais rotas; navegação acessível, mas sem ciclo de menu por teclado; capture.mjs quebra na rota. Produção também serve 404 sem script.js.",
+   "lentes": [
+    "familias-a: BAIXA",
+    "a11y-responsivo: BAIXA"
+   ],
+   "regressao": "pre-existente-em-producao",
+   "evidencia": "familias-a/404-390x844-fold-aceite.jpg, probe404.mjs; a11y/probe404.mjs (hdrH 181.78, scripts []), leads.mjs, curl prod grep -c script.js → 0",
+   "correcao": "Incluir script.js no template do 404 (ou documentar a exceção) e proteger o clique do toggle no capture.mjs com verificação de visibilidade.",
+   "fonte_tipo": "HTML de rota + ferramenta de captura",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/404.html",
+    "capture.mjs da campanha (scratchpad)"
+   ]
+  },
+  {
+   "id": "B-07",
+   "severidade": "BAIXA",
+   "rota": "/compatibilizacao-projetos-engenharia/, /revisao-tecnica-projetos-engenharia/, /projetos-complementares-engenharia/, /assistencia-tecnica-pericial-engenharia/",
+   "bloco": "Abertura: link 'WhatsApp (48) 98834-4559' + hint 'Também por e-mail ou telefone (48) 98834-4559'",
+   "achado": "Mesmo número duas vezes em 120 px; hint repete 'e-mail' e mais um link; ruído na área de ação dominante.",
+   "lentes": [
+    "familias-a: BAIXA"
+   ],
+   "regressao": "nao-informada",
+   "evidencia": "familias-a/slices/compatibilizacao-…-390x844-full-aceite-00.jpg; slices/revisao-tecnica-…-00.jpg",
+   "correcao": "Uma ação dominante e alternativas em texto sem duplicar o número.",
+   "fonte_tipo": "HTML de rota",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/<rota>/index.html (4 arquivos)"
+   ]
+  },
+  {
+   "id": "B-08",
+   "severidade": "BAIXA",
+   "rota": "/casos/demonstrativo-projeto-privado/, /casos/demonstrativo-infraestrutura/",
+   "bloco": "Abertura: linha de meta ('Responsável técnico pelo conteúdo … · Como corrigir') e lead",
+   "achado": "Linha de meta encosta no lead sem espaçamento; em 390 'Como corrigir' toca a margem direita.",
+   "lentes": [
+    "familias-a: BAIXA"
+   ],
+   "regressao": "nao-informada",
+   "evidencia": "familias-a/slices/casos-demonstrativo-projeto-privado-390x844-full-aceite-00.jpg; casos-demonstrativo-infraestrutura-1440x1000-fold-aceite.jpg",
+   "correcao": "Margem inferior na .meta/.opening__meta antes do lead.",
+   "fonte_tipo": "CSS do integrador (ou HTML de rota)",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/assets/editorial.css (.opening__meta)"
+   ]
+  },
+  {
+   "id": "B-09",
+   "severidade": "BAIXA",
+   "rota": "/inspecao-diagnostico-edificacoes/",
+   "bloco": "Título 'Uma fachada, quatro manifestações numeradas…' e prancha PD-M",
+   "achado": "Título promete quatro manifestações numeradas; a prancha numera só 1 e 2 (M-03 e M-04 como rótulos simples).",
+   "lentes": [
+    "familias-a: BAIXA"
+   ],
+   "regressao": "nao-informada",
+   "evidencia": "familias-a/slices/inspecao-diagnostico-edificacoes-390x844-full-aceite-01.jpg",
+   "correcao": "Numerar as quatro chamadas na prancha ou ajustar o título.",
+   "fonte_tipo": "HTML de rota ou gerador de pranchas",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/inspecao-diagnostico-edificacoes/index.html",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/scripts/demonstrative/plates/"
+   ]
+  },
+  {
+   "id": "B-10",
+   "severidade": "BAIXA",
+   "rota": "/ (formulário etapa 2)",
+   "bloco": "Widget Turnstile e validação nativa",
+   "achado": "Em produção o widget renderiza em inglês ('Verify you are human') em página pt-BR; em 127.0.0.1 erro de origem (esperado). Console: 'An invalid form control with name=consentimento is not focusable' (validação nativa alcança o checkbox oculto da etapa 2 apesar de novalidate). Sem beco sem saída.",
+   "lentes": [
+    "familias-a: BAIXA"
+   ],
+   "regressao": "pre-existente-em-producao",
+   "evidencia": "familias-a/prod-home-form-step2-390.jpg; home-form-step2b-390.jpg; console em probe-form2.mjs",
+   "correcao": "data-language=\"pt-br\" no widget; revisar reportValidity/checkValidity para excluir controles da etapa oculta.",
+   "fonte_tipo": "HTML de rota + JS",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/index.html",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/script.js"
+   ]
+  },
+  {
+   "id": "B-11",
+   "severidade": "BAIXA",
+   "rota": "/diagnostico-b2g-expansao/obrigado/",
+   "bloco": "h1 e copy",
+   "achado": "Página de retorno bem formada, mas o h1 'Pagamento pendente de confirmação' contradiz a FAQ da oferta ('Posso pagar diretamente pelo site? Não'). noindex; rodapé reduzido com faixa escura vazia. Mesmo h1 em produção.",
+   "lentes": [
+    "familias-b: BAIXA"
+   ],
+   "regressao": "pre-existente-em-producao",
+   "evidencia": "familias-b/diagnostico-b2g-expansao-obrigado-1440x1000-full-aceite.jpg; curl produção h1 idêntico",
+   "correcao": "Renomear para o estado real do fluxo ('Pedido recebido; instruções após o aceite') ou aposentar a rota se o provedor de pagamento não retorna mais para ela.",
+   "fonte_tipo": "HTML de rota",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/diagnostico-b2g-expansao/obrigado/index.html"
+   ]
+  },
+  {
+   "id": "B-12",
+   "severidade": "BAIXA",
+   "rota": "/problemas-que-resolvemos/",
+   "bloco": "Fechamento 'Ainda não sabe nomear o evento?' (sec--dark) + rodapé",
+   "achado": "Bloco escuro é a última seção e encosta no rodapé escuro: massa contínua de ~1.100 px sem o respiro claro do piloto. Link 'Outra situação: projeto, imóvel, perícia…' → /servicos/ presente 3× em produção (não é canibalização nova).",
+   "lentes": [
+    "familias-b: BAIXA"
+   ],
+   "regressao": "nao-informada",
+   "evidencia": "familias-b/slices/problemas-que-resolvemos-1440x1000-full-aceite-02.jpg",
+   "correcao": "Inserir o box 'Autor institucional' ou uma seção clara entre o bloco escuro e o rodapé.",
+   "fonte_tipo": "HTML de rota",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/problemas-que-resolvemos/index.html"
+   ]
+  },
+  {
+   "id": "B-13",
+   "severidade": "BAIXA",
+   "rota": "/casos/medicao-glosa-demonstrativo/, /casos/aditivo-art125-demonstrativo/",
+   "bloco": "'Item a item' / 'Memória de saldo' → .table-scroll > table.data-table > caption",
+   "achado": "Tabelas roláveis funcionam (aviso 'Deslize a tabela'), mas a caption está dentro do wrapper rolável e é cortada ('…exemplo demonstrativo com núme…').",
+   "lentes": [
+    "familias-b: BAIXA"
+   ],
+   "regressao": "introduzida (rotas novas)",
+   "evidencia": "familias-b/slices/casos-medicao-glosa-demonstrativo-390x844-full-aceite-02.jpg; dom.json tables",
+   "correcao": "Mover a legenda para <figcaption>/p fora do .table-scroll.",
+   "fonte_tipo": "HTML de rota",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/casos/medicao-glosa-demonstrativo/index.html",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/casos/aditivo-art125-demonstrativo/index.html"
+   ]
+  },
+  {
+   "id": "B-14",
+   "severidade": "BAIXA",
+   "rota": "/defesa-margem-contratos-publicos/, /defesa-tecnica-contratos-publicos/, /atrasos-prorrogacao-obras-publicas/, /bid-room-licitacoes-obras/",
+   "bloco": "Rótulos 'Identificador do contrato (opcional)', 'Prazo da decisão ou resposta (opcional)', 'Estágio do evento (se souber)'; abertura móvel de defesa-margem",
+   "achado": "Sufixo '(opcional)'/'(se souber)' quebra em linha própria com o mesmo peso do rótulo, lendo-se como segundo rótulo. Em 390 na defesa-margem o botão 'Solicitar canal seguro para envio' encosta no lead.",
+   "lentes": [
+    "familias-b: BAIXA"
+   ],
+   "regressao": "nao-informada",
+   "evidencia": "familias-b/slices/defesa-margem-contratos-publicos-1440x1000-full-aceite-03.jpg; slices/defesa-margem-…-390x844-full-aceite-00.jpg",
+   "correcao": "Sufixo em <span class=form-hint> inline (14 px, cor secundária); margem superior no grupo de CTAs em 390.",
+   "fonte_tipo": "HTML de rota (+ CSS do grupo de CTAs)",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/<rota>/index.html (4 arquivos)",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/assets/editorial.css"
+   ]
+  },
+  {
+   "id": "B-15",
+   "severidade": "BAIXA",
+   "rota": "/diagnostico-b2g-360/ + /acompanhamento-contratos-obras/ (P7); /aditivos-obras-publicas/ + /problemas-que-resolvemos/ + /casos/aditivo-art125-demonstrativo/ (P5); /medicoes-glosas-obras-publicas/ + /servicos-obras-publicas/ + /casos/medicao-glosa-demonstrativo/ (P3)",
+   "bloco": "Pranchas dominantes repetidas",
+   "achado": "A mesma prancha (mesmo carimbo/revisão) abre duas ou três rotas; o reconhecimento da oferta pela assinatura visual dilui (diag-360 e acompanhamento abrem com a mesma 'Carteira de contratos por evento').",
+   "lentes": [
+    "familias-b: BAIXA"
+   ],
+   "regressao": "introduzida (pranchas novas)",
+   "evidencia": "plates.mjs (src repetidos); familias-b/slices/diagnostico-b2g-360-1440x1000-full-aceite-00.jpg vs acompanhamento-…-00.jpg",
+   "correcao": "Variante por rota (foco/chamadas diferentes sobre o mesmo JSON) ou nomear a reutilização na legenda.",
+   "fonte_tipo": "gerador de pranchas + HTML de rota",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/scripts/demonstrative/plates/"
+   ]
+  },
+  {
+   "id": "B-16",
+   "severidade": "BAIXA",
+   "rota": "/servicos-obras-publicas/ vs /medicoes-glosas-obras-publicas/",
+   "bloco": "Card 'Medição glosada ou retida' e tabela 'Sete eventos contratuais' (hub) vs bloco 'Condições' (pilar)",
+   "achado": "Hub publica 'R$ 4.900, 5 dias úteis' para o Dossiê de Medição; o pilar de medições não publica preço nem prazo. Reconhecimento da oferta inconsistente; preços do candidato idênticos aos de produção em todas as rotas (contratos: nenhum preço novo/alterado/removido).",
+   "lentes": [
+    "familias-b: BAIXA"
+   ],
+   "regressao": "pre-existente-em-producao",
+   "evidencia": "grep R$ em _site/servicos-obras-publicas e produção; familias-b/slices/servicos-obras-publicas-1440x1000-full-aceite-00.jpg",
+   "correcao": "Uma fonte: o pilar mostra o preço autorizado em 'Condições' ou o hub deixa de antecipar (preço público só com autorização explícita — AGENTS.md).",
+   "fonte_tipo": "HTML de rota (decisão comercial)",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/servicos-obras-publicas/index.html",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/medicoes-glosas-obras-publicas/index.html"
+   ]
+  },
+  {
+   "id": "B-17",
+   "severidade": "BAIXA",
+   "rota": "todas com box 'Autor institucional' (medições, aditivos, etc.)",
+   "bloco": "Box metodológico após o formulário",
+   "achado": "'Encontrou um erro?.' com dupla pontuação (link + ponto). Confirmado na consolidação por grep na fonte: medicoes-glosas-obras-publicas/index.html contém 'Encontrou um erro?</a>.'; o texto é emitido por scripts/site/authority.py / patch_authority_footers.py.",
+   "lentes": [
+    "familias-b: BAIXA"
+   ],
+   "regressao": "herdada-do-piloto",
+   "evidencia": "familias-b/slices/medicoes-glosas-obras-publicas-1440x1000-full-aceite-03.jpg; grep na fonte (consolidação)",
+   "correcao": "Remover o ponto após o link no template e regenerar/patchar as rotas.",
+   "fonte_tipo": "gerador/template + HTML de rota",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/scripts/site/authority.py",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/scripts/site/patch_authority_footers.py",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/medicoes-glosas-obras-publicas/index.html"
+   ]
+  },
+  {
+   "id": "B-18",
+   "severidade": "BAIXA",
+   "rota": "/conteudos/* (author-box)",
+   "bloco": "section.author-box .author-photo img",
+   "achado": "Retrato cortado pela campanha: img 94×94 em wrapper 96×82 (móvel) / 96×88 (desktop) com overflow:hidden → 13/7 px do queixo cortados. Em produção 80×80 em 82×82. Regra atual: assets/editorial.css:295 '.author-box .author-photo{width:6rem;aspect-ratio:1/1;overflow:hidden}' + :296 img object-fit:cover (duplicada em editorial-article.css:122-123). O quadro cinza na captura full-page é artefato de lazy-load.",
+   "lentes": [
+    "familias-c: BAIXA"
+   ],
+   "regressao": "introduzida",
+   "evidencia": "familias-c/probe-photo2.mjs (cutBottom 13/7 vs -1 na produção); crop-conteudos-documentos-reequilibrio-obra-publica-6000.jpg",
+   "correcao": "Igualar largura/altura do .author-photo ao img (aspect-ratio efetivo, sem altura herdada da grade) ou object-position:top e altura 96.",
+   "fonte_tipo": "CSS do integrador",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/assets/editorial.css (linhas 295–296)",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/assets/editorial-article.css (linhas 122–123)"
+   ]
+  },
+  {
+   "id": "B-19",
+   "severidade": "BAIXA",
+   "rota": "/conteudos/* (artigos com 'Fontes')",
+   "bloco": "section.sources-section li a > svg.icon",
+   "achado": "A seta de cada fonte quebra para a linha de baixo (svg display:block dentro de <a> inline): cada referência ocupa duas linhas, seta solta à esquerda.",
+   "lentes": [
+    "familias-c: BAIXA"
+   ],
+   "regressao": "pre-existente-em-producao",
+   "evidencia": "familias-c/crop-conteudos-documentos-reequilibrio-obra-publica-6000.jpg; loc-sources-prod.jpg; probe-src.mjs (svgDisplay block)",
+   "correcao": "'.sources-section li a{display:inline-flex;align-items:center;gap:.4rem} .sources-section .icon{display:inline-block}'.",
+   "fonte_tipo": "CSS do integrador",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/assets/editorial.css (linhas 284–289 .sources-section)",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/assets/editorial-article.css"
+   ]
+  },
+  {
+   "id": "B-20",
+   "severidade": "BAIXA",
+   "rota": "/conteudos/, /radar/, /especialista/tiago-jun-sasaki/",
+   "bloco": "Links inline .journey-alt-link e .text-link em parágrafos de 18 px",
+   "achado": "Links no meio da frase a 14,4–14,56 px dentro de texto de 18 px, quebrando a linha de base.",
+   "lentes": [
+    "familias-c: BAIXA"
+   ],
+   "regressao": "pre-existente-em-producao",
+   "evidencia": "familias-c/crop-conteudos-2900.jpg; radar-1440x1000-full-aceite.jpg; probe-inline.mjs",
+   "correcao": "'p .text-link, p .journey-alt-link{font-size:inherit;line-height:inherit}'.",
+   "fonte_tipo": "CSS do integrador",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/styles.css (linha 420, região legada: .journey-alt-link)",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/css/components.css (.text-link)"
+   ]
+  },
+  {
+   "id": "B-21",
+   "severidade": "BAIXA",
+   "rota": "/conteudos/",
+   "bloco": "Seção 'Diretório' (#todos), #destaques e bloco de busca na abertura",
+   "achado": "(a) Layout: diretório de 30 análises em coluna única de ~700 px com a metade direita vazia (página de 10.898 px); texto de ajuda da busca encosta no input e a régua de 'Nesta página' encosta no hint. (b) Conteúdo: para visitante privado o índice é quase todo B2G (#todos 23/24 links B2G, #destaques 6/6); o único conteúdo privado aparece no fim sob o título 'Análises de licitação e contrato público', com filtros que só fazem sentido para obra pública; serviços privados só em #por-necessidade.",
+   "lentes": [
+    "familias-c: BAIXA (layout)",
+    "jornadas: BAIXA (equilíbrio público/privado)"
+   ],
+   "regressao": "nao-informada",
+   "evidencia": "familias-c/crop-conteudos-4800.jpg, conteudos-1440x1000-fold-aceite.jpg; jornadas/links.mjs /conteudos/",
+   "correcao": "Diretório em duas colunas a partir de 1024 px (ou lista pautada com contagem); margem no hint e espaço antes do índice; separar diretórios (projeto/orçamento/perícia vs contrato público) ou renomear e filtrar por família.",
+   "fonte_tipo": "HTML de rota + CSS",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/conteudos/index.html",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/assets/editorial.css"
+   ]
+  },
+  {
+   "id": "B-22",
+   "severidade": "BAIXA",
+   "rota": "/especialista/tiago-jun-sasaki/ (e /confianca/)",
+   "bloco": "Lead da abertura, linha 'Histórico profissional' e 'Como conferir'",
+   "achado": "'Mais de R$ 700 milhões em obras e projetos analisados' aparece 3× na página e de novo em /confianca/, sempre com 'Fonte: Tiago Jun Sasaki' (autodeclarada); repetição de número não conferível funciona como frase de impacto.",
+   "lentes": [
+    "familias-c: BAIXA"
+   ],
+   "regressao": "pre-existente-em-producao",
+   "evidencia": "familias-c/crop-esp-0.jpg, crop-esp-1000.jpg; grep '700 milh' = 3 em candidato e produção",
+   "correcao": "Manter o número uma vez, na tabela de credenciais com a fonte; ou substituir por afirmação verificável (registro, ART).",
+   "fonte_tipo": "HTML de rota (decisão editorial)",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/especialista/tiago-jun-sasaki/index.html",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/confianca/index.html"
+   ]
+  },
+  {
+   "id": "B-23",
+   "severidade": "BAIXA",
+   "rota": "/confianca/",
+   "bloco": "Entre a régua do cabeçalho e 'Nesta página'; h2 'Empresa e condução profissional'",
+   "achado": "Vão de ~130 px antes do índice; h2 seguido de régua e de outro título 'Identidade e registros' sem conteúdo entre eles; coluna direita vazia em toda a página. O índice é acréscimo da campanha; o vão e a coluna vazia já existiam.",
+   "lentes": [
+    "familias-c: BAIXA"
+   ],
+   "regressao": "parcialmente introduzida (índice) / pré-existente (vão, coluna)",
+   "evidencia": "familias-c/crop-conf-350.jpg vs crop-conf-prod-350.jpg",
+   "correcao": "Remover padding-top da .article-main quando há TOC; 'Empresa e condução profissional' como eyebrow do bloco de identidade; coluna direita para retrato/credenciais.",
+   "fonte_tipo": "HTML de rota + CSS",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/confianca/index.html",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/assets/editorial-article.css (.article-main)"
+   ]
+  },
+  {
+   "id": "B-24",
+   "severidade": "BAIXA",
+   "rota": "/guias-contratos-obras/documentos-pedido-reequilibrio/ (noindex); /lei-14133-obras/limite-25-50-aditivo-obra/ (301, não servido — ver M-18); índices /guias-contratos-obras/ e /lei-14133-obras/",
+   "bloco": "Corpo do guia e índices de família",
+   "achado": "h2 'Contexto de uso na construtora' duplicado (ambos no índice), dois blocos 'Próximo passo' idênticos, FAQ com uma pergunta. Índices listam 1 de 4 e 1 de 7 itens (demais noindex, igual à produção): lista numerada '01' de um item.",
+   "lentes": [
+    "familias-c: BAIXA"
+   ],
+   "regressao": "pre-existente-em-producao",
+   "evidencia": "familias-c/guias-contratos-obras-documentos-pedido-reequilibrio-1440x1000-full-aceite.jpg; crop-guia-4100.jpg; grep h2 na rota; grep href nos índices",
+   "correcao": "Fundir as duas seções, um único 'Próximo passo', enriquecer ou remover a FAQ; nos índices de 1 item usar bloco único sem numeração.",
+   "fonte_tipo": "HTML de rota / gerador",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/guias-contratos-obras/documentos-pedido-reequilibrio/index.html",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/guias-contratos-obras/index.html",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/lei-14133-obras/index.html"
+   ]
+  },
+  {
+   "id": "B-25",
+   "severidade": "BAIXA",
+   "rota": "/ferramentas/checklist-reequilibrio/, /ferramentas/diagnostico-defesa-margem/",
+   "bloco": "section.tool-method, 'Consultar a Lei nº 14.133/2021 · Consultar o manual do TCU'",
+   "achado": "Links externos de referência com a cor do corpo (rgb(7,26,49)), sem sublinhado nem peso: indistinguíveis de texto.",
+   "lentes": [
+    "familias-c: BAIXA"
+   ],
+   "regressao": "pre-existente-em-producao",
+   "evidencia": "familias-c/loc-toolck-links.jpg; probe-link2.mjs (deco none) igual em produção",
+   "correcao": "Aplicar .text-link (sublinhado) aos links de .tool-method.",
+   "fonte_tipo": "CSS do integrador",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/assets/editorial-tool.css (.tool-method a)"
+   ]
+  },
+  {
+   "id": "B-26",
+   "severidade": "BAIXA (item de verificação, não regressão)",
+   "rota": "/ferramentas/",
+   "bloco": "<main>, após o cartão 'Preciso pesquisar um CNPJ'",
+   "achado": "O candidato não tem o parágrafo 'Oportunidade pública em acompanhamento: …' (link para /oportunidades/00394429000100-1-002200/2026/, marcador live-intelligence-index-discovery) presente na produção. Resolução cruzada: a lente contratos identificou que /oportunidades/* e sitemap-oportunidades.xml são overlay de runtime do release (família live-intelligence-opportunity, data/quality/interface-coverage-policy.json, owner deploy/netcup/lib/release_control.py; emissor scripts/live_intelligence/publish.py), fora do pacote estático — o build limpo não tem os dados. Não é decisão editorial nem regressão do candidato.",
+   "lentes": [
+    "familias-c: BAIXA (pedia confirmação)",
+    "contratos: not_tested (explica a causa)"
+   ],
+   "regressao": "nao-regressao (overlay de runtime ausente no build local)",
+   "evidencia": "diff prod/ferramentas vs _site/ferramentas (linha 102); contratos not_tested sobre /oportunidades/*",
+   "correcao": "Confirmar no build de promoção (ec-prod, overlay aplicado) que o parágrafo volta; nenhuma edição de fonte necessária.",
+   "fonte_tipo": "runtime/overlay (nem CSS nem HTML de rota)",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/scripts/live_intelligence/publish.py",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/deploy/netcup/lib/release_control.py"
+   ]
+  },
+  {
+   "id": "B-27",
+   "severidade": "BAIXA",
+   "rota": "/analises-contratos-publicos/, /metodologia-inteligencia/",
+   "bloco": "Descrição do item 01 da análise publicada; bloco de metadados sob o lead da metodologia",
+   "achado": "Número bruto sem formatação ('valor global 719177.48 BRL') no item 01; na metodologia, quatro linhas de metadados cinza empilhadas na abertura e parágrafo 'Um exemplo do método aplicado' com 1200 px de medida (~130 cpl).",
+   "lentes": [
+    "familias-c: BAIXA"
+   ],
+   "regressao": "nao-informada",
+   "evidencia": "familias-c/analises-contratos-publicos-1440x1000-full-aceite.jpg; metodologia-inteligencia-1440x1000-full-aceite.jpg",
+   "correcao": "Formatar moeda no gerador (R$ 719.177,48); mover metadados para 'Condições e limites' e limitar a medida a 72ch.",
+   "fonte_tipo": "gerador (analises) + HTML de rota (metodologia)",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/scripts/site/authority.py (lista de análises)",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/metodologia-inteligencia/index.html"
+   ]
+  },
+  {
+   "id": "B-28",
+   "severidade": "BAIXA",
+   "rota": "/",
+   "bloco": "Blocos de situação (#situacao-projeto, #situacao-orcamento, 'Etapas de obra pública') e div#mercado-pncp",
+   "achado": "aria-label em <p class=area__sub> (3×) e aria-labelledby em <div id=mercado-pncp> sem role: atributos de nome proibidos em elementos genéricos são ignorados pela tecnologia assistiva.",
+   "lentes": [
+    "a11y-responsivo: BAIXA"
+   ],
+   "regressao": "nao-informada",
+   "evidencia": "axe incomplete aria-prohibited-attr (4 nós); detail.mjs",
+   "correcao": "<nav aria-label> ou <ul aria-label> com os links dentro, ou <span class=visually-hidden>; role=\"region\" no #mercado-pncp.",
+   "fonte_tipo": "HTML de rota",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/index.html"
+   ]
+  },
+  {
+   "id": "B-29",
+   "severidade": "BAIXA",
+   "rota": "/",
+   "bloco": "Formulário de contato — span.form-progress-step[data-step-indicator=\"2\"] (inativo)",
+   "achado": "Contraste 3,95:1 (#76818f sobre #fff) em texto de 13,6 px; mínimo AA 4,5:1. Impacto limitado ('ETAPA 1 DE 2' repete a informação; container aria-hidden).",
+   "lentes": [
+    "a11y-responsivo: BAIXA"
+   ],
+   "regressao": "nao-informada",
+   "evidencia": "axe color-contrast {fgColor:'#76818f', contrastRatio:3.95}; slices/home-390x844-full-aceite-07.jpg",
+   "correcao": "Cor do passo inativo ≥ #5f6b79 ou 1rem em peso 700.",
+   "fonte_tipo": "CSS do integrador",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/styles.css (linhas 25–27, região legada: .form-progress-step)"
+   ]
+  },
+  {
+   "id": "B-30",
+   "severidade": "BAIXA",
+   "rota": "/ (≤900 px)",
+   "bloco": ".contact-grid — form#formulario-contato e .contact-copy",
+   "achado": "Ordem de leitura móvel: dois p.form-hint antes do h2#contact-title dentro do cartão; a coluna explicativa ('DESCREVA A SUA SITUAÇÃO', 'O que acontece depois do envio') só após o formulário. Ordem idêntica no piloto.",
+   "lentes": [
+    "a11y-responsivo: BAIXA"
+   ],
+   "regressao": "herdada-do-piloto",
+   "evidencia": "_site/index.html linhas 408–410 e 389–391; slices/home-390x844-full-aceite-07/08.jpg vs pilot-home-390-07.jpg",
+   "correcao": "h2 no topo do cartão e notas depois (mantendo aria-describedby); em ≤900 px .contact-copy antes do formulário (order/grid-template-areas).",
+   "fonte_tipo": "HTML de rota + CSS",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/index.html",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/styles.css (região legada: .contact-grid @media ≤1100)"
+   ]
+  },
+  {
+   "id": "B-31",
+   "severidade": "BAIXA",
+   "rota": "/, /servicos/, /triagem-tecnica/, /conteudos/documentos-reequilibrio-obra-publica/, /medicoes-glosas-obras-publicas/, /obrigado.html e rodapé de todas",
+   "bloco": "Controles abaixo de 44×44 px (fora de prosa)",
+   "achado": "home .area__sub a (chips) 28 px de altura (10×; regra home-10x.css min-height:32px), 'Como conferir credenciais e limites' 233×20; /servicos/ e-mail 252×19 e telefone 131×19; triagem 7 links 'Falar sobre…' 37 px; artigo link do autor 122×20; rodapé .footer-links a 353×41 e 'Política de Privacidade' 353×23; breadcrumb 'Início' 33×41. Todos ≥24 px exceto os de 19–23 px; nenhum atinge 44.",
+   "lentes": [
+    "a11y-responsivo: BAIXA"
+   ],
+   "regressao": "nao-informada",
+   "evidencia": "a11y/harness.json touch por rota; verify.mjs consent",
+   "correcao": "min-height:44px + padding-block em .area__sub a, links 'Falar sobre…', links de e-mail/telefone do corpo e de rodapé (.footer-links a, .footer-bottom a); breadcrumb com padding-inline ≥ .5rem.",
+   "fonte_tipo": "CSS do integrador",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/assets/home-10x.css (.area__sub a)",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/styles.css (região legada: .footer-links a)",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/triagem-tecnica/styles.css",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/css/components.css (.breadcrumbs)"
+   ]
+  },
+  {
+   "id": "B-32",
+   "severidade": "BAIXA",
+   "rota": "/medicoes-glosas-obras-publicas/",
+   "bloco": "Dobra, #sec, #captura-pilar; CTA do cabeçalho; textarea #mensagem",
+   "achado": "(a) Sem alternativa de e-mail contextual: só WhatsApp (3×) + formulário; único mailto é o do rodapé, sem subject. (b) CTA do cabeçalho genérico (/triagem-tecnica/) enquanto quantitativos reescreve para a âncora da própria página. (c) O placeholder específico da rota ('Contrato, medição ou glosa em questão, critério aplicado e prazo…') é sobrescrito pelo runtime por um genérico de pilar B2G.",
+   "lentes": [
+    "jornadas: BAIXA (×2 achados, mesma rota)"
+   ],
+   "regressao": "nao-informada",
+   "evidencia": "jornadas/links.mjs (mailto só FOOTER; HEADER → /triagem-tecnica/); F2-medicoes-…-1440-nameonly.jpg e crop-med-m-form.jpg (placeholder genérico)",
+   "correcao": "'Enviar contexto por e-mail' com subject 'Medição ou glosa em obra pública' junto do WhatsApp; CTA do cabeçalho → #captura-pilar; no script.js não sobrescrever placeholder quando o textarea já vier com o da rota.",
+   "fonte_tipo": "HTML de rota + JS",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/medicoes-glosas-obras-publicas/index.html",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/script.js"
+   ]
+  },
+  {
+   "id": "B-33",
+   "severidade": "BAIXA",
+   "rota": "/conteudos/fiscal-nao-assina-medicao-obra-publica/ (jornada D)",
+   "bloco": "CTA 'Continuar pelo formulário' após o artigo",
+   "achado": "Leva ao formulário da home (/?jornada=contrato&tema=…#contato) em vez do formulário on-page de /medicoes-glosas-obras-publicas/, que já carrega asset_id/cta_id/route_family do tema. O contexto chega só como tema + origin_url + referrer. Artigo sem gate, autoria, fontes e WhatsApp contextual OK.",
+   "lentes": [
+    "jornadas: BAIXA"
+   ],
+   "regressao": "nao-informada",
+   "evidencia": "jornadas/J-D-1440.json; direct.mjs",
+   "correcao": "Apontar para /medicoes-glosas-obras-publicas/#captura-pilar (o link 'Abrir o dossiê…' já faz isso), mantendo tema como campo oculto.",
+   "fonte_tipo": "gerador/shell + HTML de rota",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/conteudos/fiscal-nao-assina-medicao-obra-publica/index.html",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/scripts/pseo/html_shell.py"
+   ]
+  },
+  {
+   "id": "B-34",
+   "severidade": "BAIXA",
+   "rota": "/#contato",
+   "bloco": "Parágrafo [data-situation-channels] ('Se preferir não usar o formulário')",
+   "achado": "Ao escolher a situação, o WhatsApp recebe texto contextual, mas o e-mail fica mailto sem subject/body e o telefone sem contexto; para 'Problema urgente em contrato' o parágrafo fica oculto (sem alternativa). Painel pós-envio não testado.",
+   "lentes": [
+    "jornadas: BAIXA"
+   ],
+   "regressao": "nao-informada",
+   "evidencia": "jornadas/situation.mjs (email='mailto:tiago.sasaki@confenge.com.br'; opção 8 channelsHidden:true)",
+   "correcao": "Preencher subject/body do mailto por situação como nas páginas de serviço.",
+   "fonte_tipo": "JS + HTML de rota",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/script.js",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/index.html"
+   ]
+  },
+  {
+   "id": "B-35",
+   "severidade": "BAIXA",
+   "rota": "/ (e todas as rotas com menu)",
+   "bloco": "Menu móvel aberto",
+   "achado": "Dois controles de fechar visíveis ao mesmo tempo: X no toggle do cabeçalho e botão 'Fechar' dentro do painel. Igual ao piloto. Nota cruzada (a11y-responsivo): ao abrir, o foco vai para 'Fechar' (83×44) dentro do dialog com main inert — o botão tem função de acessibilidade; remover só o visual ou manter 'Fechar' para leitores de tela.",
+   "lentes": [
+    "jornadas: BAIXA",
+    "familias-a: PREFERENCIA"
+   ],
+   "regressao": "herdada-do-piloto",
+   "evidencia": "familias-a/home-390x844-menu-aceite.jpg; jornadas/J-B-390-2-fold.jpg",
+   "correcao": "Manter um só controle visível (X), ou 'Fechar' apenas para leitores de tela, preservando o foco inicial do dialog.",
+   "fonte_tipo": "HTML de rota (cabeçalho compartilhado em cada index.html) + JS",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/index.html (cabeçalho, replicado nas rotas)",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/script.js"
+   ]
+  },
+  {
+   "id": "B-36",
+   "severidade": "BAIXA",
+   "rota": "/",
+   "bloco": "'O que chega às suas mãos', quarta prancha P4 (avaliacao-estrutura), legenda",
+   "achado": "Legenda abre com 'Estrutura da análise · Avaliação de imóvel' sem o rótulo 'Exemplo demonstrativo'; as outras três abrem com 'Exemplo demonstrativo · …'. Contrato exige o rótulo 'na folha e na legenda'. O carimbo do SVG traz o rótulo e o texto diz 'Nenhum valor de mercado é inventado aqui' — risco baixo.",
+   "lentes": [
+    "contratos: BAIXA"
+   ],
+   "regressao": "introduzida (bloco novo)",
+   "evidencia": "varredura de <figure> em _site/index.html (figura 4 caption label False); contratos/home-1440x1000-full-aceite.jpg",
+   "correcao": "Prefixar a legenda com 'Exemplo demonstrativo · Avaliação de imóvel' como nas P1–P3.",
+   "fonte_tipo": "HTML de rota",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/index.html (figcaption da P4, ~linha 246–250)"
+   ]
+  },
+  {
+   "id": "B-37",
+   "severidade": "BAIXA",
+   "rota": "/conteudos/limite-aditivo-25-50-obra-publica/ (e demais artigos com token de acórdão na 'Resposta direta')",
+   "bloco": "Caixa 'Resposta direta', frase 'O Acórdão 1.753/2026-TCU-Plenário trata…'",
+   "achado": "O identificador do acórdão renderiza como bloco próprio em versalete (display:block, 12,8 px, uppercase, letter-spacing 1,28 px) no meio da frase, quebrando-a em três linhas. Estilos idênticos na produção; a campanha recompôs os 128 artigos. A regra exata que estiliza o <span> não foi localizada nesta consolidação nos módulos css/ nem em assets/ (só .breakout-* na região legada de styles.css).",
+   "lentes": [
+    "contratos: BAIXA"
+   ],
+   "regressao": "pre-existente-em-producao",
+   "evidencia": "contratos/conteudos-limite-aditivo-25-50-obra-publica-1440x1000-fold-aceite.jpg; tok.mjs (candidato e produção)",
+   "correcao": "Restringir a regra ao kicker pretendido e deixar [data-opaque-token] inline no parágrafo; verificar nos outros artigos de scripts/organic/breakout.py.",
+   "fonte_tipo": "CSS do integrador (regra a localizar) + gerador",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/styles.css (região legada, .breakout-*)",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/scripts/organic/breakout.py"
+   ]
+  },
+  {
+   "id": "P-01",
+   "severidade": "PREFERENCIA",
+   "rota": "/quantitativos-orcamento-obras/#amostra-quantitativos, /casos/demonstrativo-projeto-privado/, /casos/demonstrativo-infraestrutura/, /projetos-complementares-engenharia/, /servicos/#servico-avaliacao",
+   "bloco": "Segunda prancha PR-ARQ (quantitativos), pranchas dos casos, PG/PH (projetos complementares), P4 (avaliação)",
+   "achado": "Dois vocabulários convivem: prancha nova (traço ink, hachura, chamadas numeradas, carimbo de três células) e antiga (paredes cinza chapadas, porta tracejada, legenda em linha única, sem carimbo); PG/PH/P4 são fluxogramas de caixas. Em quantitativos o mesmo item aparece como Q-PAR-01 (memória) e ORC-PAR-01 (planilha) sem frase que explique a relação.",
+   "lentes": [
+    "familias-a: PREFERENCIA",
+    "jornadas: PREFERENCIA"
+   ],
+   "regressao": "herdada-do-piloto",
+   "evidencia": "familias-a/slices/quantitativos-…-390x844-full-aceite-02.jpg, slices/projetos-complementares-…-05.jpg; jornadas/crop-quant-1.jpg",
+   "correcao": "Regenerar as pranchas antigas no vocabulário do contrato ao tocar essas rotas (reutilizar a variante reenquadrada P1 no lugar do PR-ARQ); manter diagramas com carimbo 'sem escala · diagrama'; explicar 'Q- = quantidade, ORC- = item de orçamento' na legenda.",
+   "fonte_tipo": "gerador de pranchas + HTML de rota",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/scripts/demonstrative/plates/",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/quantitativos-orcamento-obras/index.html"
+   ]
+  },
+  {
+   "id": "P-02",
+   "severidade": "PREFERENCIA",
+   "rota": "/quantitativos-orcamento-obras/ e demais páginas de serviço; /servicos/; /entregas/",
+   "bloco": "Primeira dobra em 1440; breadcrumb em todas as rotas internas",
+   "achado": "Nenhuma prancha na primeira tela das páginas de serviço (cartão 'Em 30 segundos', índice e ~150 px de faixa cinza vazia); /servicos/ ocupa só a coluna esquerda com ~45% da dobra vazia; /entregas/ tem ~170 px em branco entre o índice e a primeira seção; breadcrumb começa em x=136 enquanto o conteúdo começa em x=120 (16 px, todas as rotas internas). Igual ao piloto nas páginas de serviço.",
+   "lentes": [
+    "familias-a: PREFERENCIA",
+    "a11y-responsivo: PREFERENCIA"
+   ],
+   "regressao": "herdada-do-piloto",
+   "evidencia": "familias-a/quantitativos-…-1440x1000-fold-aceite.jpg, assistencia-…-fold-aceite.jpg; a11y/servicos-1440x1000-fold-aceite.jpg, entregas-1440x1000-fold-aceite.jpg",
+   "correcao": "Reduzir o respiro entre índice e 'Prova antes do método' ou trazer a prancha dominante para a dobra; prancha ou índice de situações na coluna direita de /servicos/; alinhar .breadcrumbs ao padding do .container; reduzir espaçamento após .page-index.",
+   "fonte_tipo": "decisão de design; CSS (.breadcrumbs, .page-index) + HTML de rota",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/assets/editorial.css",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/css/components.css (.breadcrumbs)",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/servicos/index.html"
+   ]
+  },
+  {
+   "id": "P-03",
+   "severidade": "PREFERENCIA",
+   "rota": "/ e /servicos/",
+   "bloco": "Home: cartão 07 (obra pública) + faixa 'Especialidade em obras públicas' (2.851 px) + 'Próximo passo/contato' (2.022 px); Serviços: linha obras públicas + próximo passo",
+   "achado": "Mais de um bloco escuro por página segundo dom-pass.json (familias-a), contra o limite 'um bloco escuro por página'. Equilíbrio na home em 390: ~3.300 px privado/avaliação vs ~4.900 px B2G. Divergência entre lentes registrada, não resolvida: contratos lê 'faixa escura única de obras públicas na home' e familias-b confirma o limite nas 19 rotas da família B (rotas diferentes); familias-a é a única com medição por DOM da home.",
+   "lentes": [
+    "familias-a: PREFERENCIA (dom-pass.json)",
+    "contratos: leitura divergente (verdict)"
+   ],
+   "regressao": "herdada-do-piloto",
+   "evidencia": "familias-a/dom-pass.json (dark[] por rota); slices/home-390x844-full-aceite-02/06/08.jpg",
+   "correcao": "Se o limite vale, clarear o cartão 07 ou o bloco de próximo passo; se não vale, atualizar estado.json#design_contract.limits.",
+   "fonte_tipo": "decisão de design; HTML de rota",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/index.html",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/servicos/index.html",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/docs/campaigns/design-institucional/estado.json (design_contract.limits)"
+   ]
+  },
+  {
+   "id": "P-04",
+   "severidade": "PREFERENCIA",
+   "rota": "/parcerias-engenharia/",
+   "bloco": "Botões 'Copiar link' e 'Copiar resumo'",
+   "achado": "Botões com style inline (min-height/min-width) e aparência nativa com borda fina, fora do sistema .button/.button-secondary.",
+   "lentes": [
+    "familias-a: PREFERENCIA"
+   ],
+   "regressao": "nao-informada",
+   "evidencia": "familias-a/slices/parcerias-engenharia-1440x1000-full-aceite-02.jpg",
+   "correcao": "Aplicar .button.button-secondary e remover o style inline (atenção ao CSP por hash de estilos inline em _headers).",
+   "fonte_tipo": "HTML de rota + folha própria da rota",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/parcerias-engenharia/index.html",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/parcerias-engenharia/styles.css"
+   ]
+  },
+  {
+   "id": "P-05",
+   "severidade": "PREFERENCIA",
+   "rota": "/",
+   "bloco": "'Em qual destas você se reconhece?', cabeçalhos dos cartões 01–06",
+   "achado": "Kickers em alturas diferentes nas três colunas (~8 e ~22 px) porque a grade .area distribui o conteúdo por linha e os h3 têm alturas distintas. Igual ao piloto.",
+   "lentes": [
+    "contratos: PREFERENCIA"
+   ],
+   "regressao": "herdada-do-piloto",
+   "evidencia": "contratos/crop-home-cards.jpg vs crop-pilot-1.jpg",
+   "correcao": "align-content:start nos .area ou grid-template-rows:auto auto auto 1fr auto.",
+   "fonte_tipo": "CSS do integrador",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/assets/home-10x.css (.area)"
+   ]
+  },
+  {
+   "id": "P-06",
+   "severidade": "PREFERENCIA",
+   "rota": "/triagem-tecnica/",
+   "bloco": "Cartão 'Fale agora, sem formulário', link 'Ligar para explicar a demanda: (48) 98834-4559'",
+   "achado": "Telefone quebra entre linhas ('(48) 98834-' / '4559') em 390. Igual ao piloto.",
+   "lentes": [
+    "contratos: PREFERENCIA"
+   ],
+   "regressao": "herdada-do-piloto",
+   "evidencia": "contratos/triagem-tecnica-390x844-fold-aceite.jpg vs pilot",
+   "correcao": "Envolver o número em span nowrap (classe, não style inline) ou quebrar antes do número.",
+   "fonte_tipo": "HTML de rota",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/triagem-tecnica/index.html"
+   ]
+  },
+  {
+   "id": "P-07",
+   "severidade": "PREFERENCIA",
+   "rota": "/conteudos/atraso-na-medicao-obra-publica/ (corpo antigo) vs /conteudos/documentos-reequilibrio-obra-publica/",
+   "bloco": "Índice 'Nesta página', byline e tabela do exemplo calculado",
+   "achado": "No corpo antigo o rótulo 'NESTA PÁGINA' fica inline com os links; separador '·' da byline desalinhado verticalmente em ambos; tabela do corpo antigo sem <caption> e scope em 3 de 7 th.",
+   "lentes": [
+    "familias-c: PREFERENCIA"
+   ],
+   "regressao": "nao-informada",
+   "evidencia": "familias-c/crop-conteudos-atraso-na-medicao-obra-publica-0.jpg; probe-editorial (caption:false, th scope 3/7)",
+   "correcao": "Unificar .page-index nos dois corpos; align-items:center no separador; caption e scope na tabela.",
+   "fonte_tipo": "gerador/shell + HTML de rota + CSS",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/conteudos/atraso-na-medicao-obra-publica/index.html",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/scripts/pseo/html_shell.py",
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/assets/editorial-article.css"
+   ]
+  },
+  {
+   "id": "P-08",
+   "severidade": "PREFERENCIA",
+   "rota": "/conteudos/",
+   "bloco": "Bloco escuro 'Do conteúdo para o seu caso'",
+   "achado": "Além do botão 'Descrever a situação', três alternativas em texto (triagem, WhatsApp, e-mail) — a primeira e o botão apontam ao mesmo destino. Dentro do limite do contrato, mas redundante.",
+   "lentes": [
+    "familias-c: PREFERENCIA"
+   ],
+   "regressao": "nao-informada",
+   "evidencia": "familias-c/crop-conteudos-8800.jpg",
+   "correcao": "Botão + duas alternativas (WhatsApp, e-mail).",
+   "fonte_tipo": "HTML de rota",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/conteudos/index.html"
+   ]
+  }
+ ],
+ "css_integrator": [
+  {
+   "nota_estrutural": "styles.css é gerado por scripts/site/build_css.py: as linhas 875–1305 (entre /* BEGIN css-modules:cfg10x-12 */ e /* END … */) são a cópia concatenada de css/identity.css, css/components.css, css/editorial.css, css/contracts.css e css/type-floor.css (css/manifest.json) — corrigir no módulo e reconstruir; as linhas 1–874 são o legado editado à mão — corrigir em styles.css. assets/editorial*.css, assets/home-10x.css e assets/editorial-tool.css são folhas próprias por família, carregadas por rota. Toda mudança de CSS aciona a cadeia de recapturas (approvals.json antes do build, hash da análise aprovada, frozen specs, primeira dobra e baselines) — memória 'CSS muda: quatro recapturas' e 'CSS muda: cadeia de fechamento'."
+  },
+  {
+   "id": "M-01",
+   "alvo": "CNPJ em duas linhas (.hero-proof span aninhado / [data-opaque-token])",
+   "arquivos": [
+    "styles.css linha 3 (legado): .hero-proof span{display:grid;gap:2px;min-width:0} → restringir a .hero-proof li>span ou adicionar .hero-proof [data-opaque-token]{display:inline}",
+    "css/contracts.css linha 4: .hero-proof span{overflow-wrap:anywhere} e [data-opaque-token]{overflow-wrap:anywhere;word-break:break-word} → exceção .opening__cred [data-opaque-token]{overflow-wrap:normal;word-break:normal;white-space:nowrap}"
+   ],
+   "recaptura": "dobra da home 390/1440 no artefato _site"
+  },
+  {
+   "id": "M-03",
+   "alvo": "Tabelas móveis: table-layout:fixed + min-width 900",
+   "arquivos": [
+    "styles.css linha 845 (legado): .data-table{table-layout:fixed} → remover fixed em .data-table--wide ou usar <colgroup>",
+    "css/components.css: .data-table--wide{min-width:900px} → ~1100px; ≤700 px nowrap em unidade/valor, overflow-wrap:normal"
+   ],
+   "recaptura": "quantitativos 390/768; casos privado/infra; projetos complementares"
+  },
+  {
+   "id": "M-05",
+   "alvo": "Formulário da home: margin negativo do .form-hint e links do hint",
+   "arquivos": [
+    "styles.css linha 14 (legado): .form-hint{margin:-6px 0 14px} → margem própria em .form-hint[data-form-boundary], margin-bottom em .form-status visível, '.contact-form .form-hint a' como link (cor da tinta, sublinhado, 700)"
+   ],
+   "recaptura": "estados do formulário (etapa 1 erro, etapa 2) 390/1440"
+  },
+  {
+   "id": "M-14",
+   "alvo": "Checkbox de consentimento 4–13 px em 12 rotas",
+   "arquivos": [
+    "css/components.css: .capture-consent input{width:auto;margin-top:4px} → input[type=checkbox]{min-height:0;width:1.25rem;height:1.25rem;flex:0 0 auto;margin-top:.2rem}"
+   ],
+   "recaptura": "bloco #captura-pilar em 390 (ex.: defesa-margem, medições)"
+  },
+  {
+   "id": "M-16",
+   "alvo": "Texto de conteúdo abaixo do corpo do contrato (14 px móvel; 13,9–14,7 px desktop nos artigos)",
+   "arquivos": [
+    "assets/editorial.css linha 185: .svc-chain dd{font-size:var(--text-caption)} → 1rem em ≤620 px",
+    "assets/home-10x.css linha 239: .situation-use{font-size:var(--text-caption)} → 1rem em ≤620 px",
+    "styles.css linha 10 (legado): .criterion-card p .87rem, .action-list p .88rem, .technical-note .8rem → 1rem",
+    "assets/editorial-article.css / assets/editorial.css: .article-main corpo 18 px desktop com --text-*; 14 px só para legendas/fontes/ressalvas"
+   ],
+   "recaptura": "home, medições, quantitativos, entregas, conteudos/documentos-reequilibrio, especialista, ferramentas/diagnostico (390) + artigos (1440)"
+  },
+  {
+   "id": "M-17",
+   "alvo": "Tabela de 7 colunas cortada no desktop (compare-table em .table-wrap)",
+   "arquivos": [
+    "styles.css linha 11 (legado) e css/contracts.css: .compare-table/.table-wrap → grid-column:1/-1 no desktop, caption sticky/left, dica acima e scroll shadow"
+   ],
+   "recaptura": "conteudos/chuva-prorrogacao 1440/390"
+  },
+  {
+   "id": "M-23",
+   "alvo": "Prosa sem medida (97–115 ch)",
+   "arquivos": [
+    "assets/editorial.css: .authority-method p → max-width:70ch/.measure",
+    "assets/editorial-tool.css: .tool-* p/li",
+    "styles.css (legado): .qty-trail, p.credential-as-of",
+    "triagem-tecnica/styles.css: #corrigir-o-site p"
+   ],
+   "recaptura": "ferramentas/diagnostico, medições, quantitativos, especialista, triagem (1440/1920)"
+  },
+  {
+   "id": "M-28",
+   "alvo": "Régua do índice colada na nota da abertura (13 rotas)",
+   "arquivos": [
+    "assets/editorial.css linha 168: adicionar '.svc-open .page-index,.svc-open__grid+.page-index' ao seletor de compensação (margin-top:clamp(1rem,2vw,1.5rem)) ou margin-bottom na .svc-open__note (linha 159 zera a margem)"
+   ],
+   "recaptura": "13 rotas com .svc-open__note em 1440"
+  },
+  {
+   "id": "B-04",
+   "alvo": "Régua só sob a primeira coluna nas tabelas com th[scope=row]",
+   "arquivos": [
+    "css/components.css: mesma border-bottom em td e th[scope=row]; padding-right no th"
+   ],
+   "recaptura": "projetos complementares, segurança, assistência"
+  },
+  {
+   "id": "B-05",
+   "alvo": ".keys small a 11,67 px",
+   "arquivos": [
+    "css/components.css: .keys dd small (linha equivalente styles.css:1024) → font-size:max(var(--text-caption),12px)"
+   ],
+   "recaptura": "páginas de serviço com dl.keys em 390"
+  },
+  {
+   "id": "B-08",
+   "alvo": "Meta encosta no lead nos casos",
+   "arquivos": [
+    "assets/editorial.css: margin-bottom em .opening__meta"
+   ],
+   "recaptura": "casos privado/infra"
+  },
+  {
+   "id": "B-18",
+   "alvo": "Retrato do autor cortado 13/7 px (introduzido)",
+   "arquivos": [
+    "assets/editorial.css linhas 295–296 e assets/editorial-article.css linhas 122–123: .author-box .author-photo / img → aspect-ratio efetivo (sem altura herdada) ou object-position:top e height:6rem"
+   ],
+   "recaptura": "conteudos/* author-box 390/1440"
+  },
+  {
+   "id": "B-19",
+   "alvo": "Seta das fontes quebra linha",
+   "arquivos": [
+    "assets/editorial.css linhas 284–289 / assets/editorial-article.css: .sources-section li a{display:inline-flex;align-items:center;gap:.4rem} .sources-section .icon{display:inline-block}"
+   ],
+   "recaptura": "conteudos/* seção Fontes"
+  },
+  {
+   "id": "B-20",
+   "alvo": "Links inline a 14,4 px em parágrafos de 18 px",
+   "arquivos": [
+    "styles.css linha 420 (legado): .journey-alt-link; css/components.css: .text-link → 'p .text-link, p .journey-alt-link{font-size:inherit;line-height:inherit}'"
+   ],
+   "recaptura": "conteudos/, radar/, especialista"
+  },
+  {
+   "id": "B-25",
+   "alvo": "Links de referência em .tool-method sem sublinhado",
+   "arquivos": [
+    "assets/editorial-tool.css: .tool-method a → estilo .text-link"
+   ],
+   "recaptura": "ferramentas/checklist-reequilibrio, ferramentas/diagnostico"
+  },
+  {
+   "id": "B-29",
+   "alvo": "Contraste 3,95:1 do indicador de etapa inativo",
+   "arquivos": [
+    "styles.css linhas 25–27 (legado): .form-progress-step cor ≥ #5f6b79"
+   ],
+   "recaptura": "formulário da home"
+  },
+  {
+   "id": "B-30",
+   "alvo": "Ordem móvel do contato (parte CSS)",
+   "arquivos": [
+    "styles.css (legado, @media ≤1100 .contact-grid): order/grid-template-areas para .contact-copy antes do form em ≤900 px (a parte HTML é em index.html)"
+   ],
+   "recaptura": "home 390 bloco de contato"
+  },
+  {
+   "id": "B-31",
+   "alvo": "Alvos de toque < 44 px",
+   "arquivos": [
+    "assets/home-10x.css: .area__sub a min-height:32px → 44px",
+    "styles.css (legado): .footer-links a, .footer-bottom a → min-height:44px + padding-block",
+    "triagem-tecnica/styles.css: links 'Falar sobre…'",
+    "css/components.css: .breadcrumbs padding-inline ≥ .5rem"
+   ],
+   "recaptura": "home, servicos, triagem, rodapé"
+  },
+  {
+   "id": "B-37",
+   "alvo": "Token do acórdão em bloco dentro de .breakout-answer (regra a localizar)",
+   "arquivos": [
+    "styles.css região legada (.breakout-*) — a regra que dá display:block/uppercase ao span não foi localizada nos módulos css/ nem em assets/; localizar por computed style (tok.mjs) antes de editar; parte complementar em scripts/organic/breakout.py"
+   ],
+   "recaptura": "conteudos/limite-aditivo-25-50 e demais artigos breakout"
+  },
+  {
+   "id": "P-05",
+   "alvo": "Kickers desalinhados nos cartões 01–06",
+   "arquivos": [
+    "assets/home-10x.css: .area → align-content:start ou grid-template-rows fixas"
+   ],
+   "recaptura": "home 1440"
+  },
+  {
+   "id": "P-02 (parcial)",
+   "alvo": "Breadcrumb 16 px desalinhado do .container; espaço após .page-index em /entregas/",
+   "arquivos": [
+    "css/components.css: .breadcrumbs padding alinhado ao .container",
+    "assets/editorial.css linha 159: .page-index margin-bottom"
+   ],
+   "recaptura": "rotas internas 1440"
+  },
+  {
+   "id": "A-02 (opcional, se optar por container query)",
+   "alvo": "Seleção de prancha por largura do slot",
+   "arquivos": [
+    "assets/editorial.css: .deliveries .plate__picture / .plate--side com container query — alternativa à troca de <source media> no HTML de rota (index.html:214/230/246, compatibilizacao:179, casos/*:58) e à variante nova em scripts/demonstrative/plates"
+   ],
+   "recaptura": "primeira dobra + baselines da home; compatibilização; casos B2G"
+  },
+  {
+   "so_html_ou_gerador": "Não exigem CSS global: A-01 (scripts/pseo/build_site.py), A-03 (3 index.html B2G), A-04 (index.html, triagem, obrigado.html, spec), M-02, M-04, M-06, M-07, M-08 (HTML; grade opcional em CSS), M-09, M-10, M-11, M-12, M-13, M-15, M-18, M-19, M-20 (HTML; cartões opcional em editorial-tool.css), M-21, M-22, M-24, M-25, M-26, M-27, B-01/B-02/B-03/B-09/B-15/P-01 (gerador de pranchas), B-06, B-07, B-10, B-11, B-12, B-13, B-14, B-16, B-17, B-21, B-22, B-23, B-24, B-26 (runtime overlay), B-27, B-28, B-32, B-33, B-34, B-35, B-36, P-03, P-04 (folha própria da rota), P-06, P-07, P-08."
+  }
+ ],
+ "duvidosos": [
+  {
+   "id": "D-01",
+   "severidade_original": "PREFERENCIA",
+   "lente": "familias-b",
+   "rota": "/aditivos-obras-publicas/, /defesa-tecnica-contratos-publicos/, /atrasos-prorrogacao-obras-publicas/, /defesa-margem-contratos-publicos/",
+   "bloco": "Pranchas dominantes P5, P11, P12, P10",
+   "achado": "Chamadas, eixos e carimbo em 11 px na composição 1200 → '~10,7 px renderizados a 1166 px', 'legível mas abaixo da legenda 14 px do contrato e bem menor que a P3 do piloto'.",
+   "por_que_duvidoso": "A única evidência é 'grep font-size assets/pranchas/*-desktop.svg → 11/12/16', que confirma o tamanho na fonte; o tamanho renderizado (10,7 px) é aritmética (11×1166/1200), não medição no DOM, e não há captura nem comparação medida com a P3 do piloto. O achado é plausível (a aritmética fecha) e a correção proposta (subir o corpo mínimo para 13–14 px em scripts/demonstrative/plates) não depende da medição, mas a comparação com o piloto e a legibilidade real ficam sem prova. Mantido fora das listas principais até haver captura/probe.",
+   "correcao_se_confirmado": "Subir o corpo mínimo da prancha para 13–14 px no gerador (scripts/demonstrative/plates) — a mesma mudança serviria a A-02.",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/scripts/demonstrative/plates/"
+   ]
+  },
+  {
+   "id": "D-02",
+   "severidade_original": "MEDIA (parcial)",
+   "lente": "familias-b",
+   "rota": "/conflitos/",
+   "bloco": "h2 internos do corpo legado ('fora dos papéis tipográficos --text-service')",
+   "achado": "Sub-afirmação dentro de M-10: 'h2 internos fora dos papéis tipográficos (--text-service)'.",
+   "por_que_duvidoso": "M-10 como um todo tem evidência (slices conflitos-1440x1000-full-aceite-00/01.jpg) para o card meia-largura, o vão e a colisão do texto de status; mas a parte sobre papéis tipográficos não vem com medição de font-size/família (nenhum probe citado), diferente do que a mesma lente fez em outras rotas (h1 'Archivo Var' nas 19). M-10 permanece em MEDIA pelo restante; só esta sub-afirmação fica marcada como não comprovada.",
+   "correcao_se_confirmado": "Aplicar os papéis .t-* do editorial.css ao corpo de /conflitos/ (já coberto pela correção de M-10).",
+   "arquivo_fonte_provavel": [
+    "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/conflitos/index.html"
+   ]
+  },
+  {
+   "nota": "Critério aplicado estritamente como definido na tarefa: DUVIDOSO = sem captura nem saída de comando no campo evidence. Todos os demais 61 achados citam ao menos uma captura (.jpg) ou um comando/probe (.mjs, grep, diff, dom.json, harness.json, axe). Achados cuja causa foi confirmada nos arquivos-fonte durante esta consolidação (A-01 regex do build, M-01 duas regras, M-03 table-layout:fixed, M-14 regra do checkbox, M-16 seletores, M-28 seletor da compensação, B-05 .keys dd small, B-17 'erro?</a>.', B-18 regras do retrato) estão anotados no próprio item. Divergências entre lentes registradas em vez de resolvidas: P-03 (contagem de blocos escuros na home) e B-35 (função de acessibilidade do botão 'Fechar')."
+  }
+ ],
+ "not_tested": [
+  "Envio real dos formulários (home, pilares #captura-pilar, ferramentas, casos, conflitos): persistência em /.netlify/functions/lead, protocolo/recibo, páginas /obrigado* com data-confirmed-only e painel de próximo estado pós-envio — servidor estático responde 501 a POST / POSTs abortados; só validação de cliente, transição etapa 1→2, integridade de campos e hiddens de atribuição foram verificados (contratos: <form> byte-idênticos à produção em 234/234 rotas)",
+  "Resolução do Cloudflare Turnstile: em 127.0.0.1 exibe erro de origem; em produção verificado só visualmente ('Verify you are human'), sem submissão; o vazio de ~150 px no card do formulário é o div.turnstile-slot sem sitekey no build local (markup idêntico em produção)",
+  "Emissão de analytics (/api/web/collect responde 501 localmente)",
+  "Leitor de tela real (NVDA/JAWS/VoiceOver); Safari/iPhone físico, pinch-zoom em dispositivo, Android Chrome real; forced-colors / Windows High Contrast",
+  "axe executado só em 390 e 1440 (não em 768/1024/1920); contraste do texto SVG das pranchas devolveu 52 nós 'incomplete' em /quantitativos/ 390 e 14 em 1440 — não determinável automaticamente, não é aprovação",
+  "Estado de menu aberto em /404.html, /obrigado.html, /obrigado-contrato.html, /privacidade/ e /termos-de-uso/ (toggle display:none em no-js; capture.mjs interrompe nessas rotas); captura de /404.html feita sem settle()",
+  "Estados hover/focus (além dos 40 tabs medidos pela lente a11y), impressão e navegação por teclado nas demais lentes",
+  "Overflow horizontal medido em 320 px (0 px em todas as rotas de todas as lentes) e por elementos fora do viewport em 390; capturas em 1024/tablet só para medição de escala das pranchas (sem screenshot)",
+  "Leitura integral fatia a fatia de /revisao-tecnica-projetos-engenharia/, /inspecao-diagnostico-edificacoes/, /assistencia-tecnica-pericial-engenharia/, /seguranca-trabalho-apoio-tecnico/ e /casos/demonstrativo-infraestrutura/ (cobertas por métricas DOM e 3–5 fatias); /entregas/, /casos/*, /bid-room-licitacoes-obras/, /reequilibrio-obras-publicas/ e demais B2G não navegadas pela lente jornadas; página de especialista e /confianca/ só presença de links nessa lente",
+  "Rotas com exemplos novos verificadas só no texto (rótulos e aritmética conferidos), não em captura pela lente contratos: /aditivos-obras-publicas/, /auditoria-orcamento-licitacao/, /acompanhamento-contratos-obras/, /diagnostico-pre-licitacao/, /problemas-que-resolvemos/, /reequilibrio-obras-publicas/, /medicoes-glosas-obras-publicas/ (inteira), /casos/aditivo-art125-demonstrativo/, /casos/medicao-glosa-demonstrativo/",
+  "<table> real só existe em /casos/* na família B; nas demais 17 rotas as faixas de preço/spec são divs — 'tabelas roláveis' testado só onde há tabela; datas em inputs type=date aparecem mm/dd/yyyy por locale do Chromium headless (não avaliado); estados de erro/sucesso do formulário (form-status) não acionados na família B",
+  "Conteúdo textual das políticas (/privacidade/, /termos-de-uso/): <main> byte-idêntico à produção; só layout/cabeçalho avaliado",
+  "Tabela de 7 colunas de /conteudos/chuva-prorrogacao-prazo-obra-publica/ não comparada visualmente com a produção (só medida no candidato); alternativa móvel da tabela de 18 colunas em /casos/modelo-relatorio-inteligencia-licitacoes/ verificada só no markup (.report-mobile-opportunity), não renderizada; rotas de /oportunidades/ e artigos de /conteudos/ além dos seis exigidos",
+  "/oportunidades/* e /sitemap-oportunidades.xml existem só na produção (overlay de runtime do release; família live-intelligence-opportunity; owner deploy/netcup/lib/release_control.py) — não validados; explica a ausência do link de oportunidade em /ferramentas/ (B-26)",
+  "Baseline: produção viva https://confenge.com.br (47da03b64 em /.well-known/build-info.json) buscada rota a rota; origin/main não contém _site. O artefato servido foi construído do commit 4acbf1efd; HEAD é b19db4366 (2 commits posteriores só de testes: test(offer-naming), test(axe)) — nenhuma fonte pública mudou depois do build, mas o artefato não é HEAD",
+  "/conteudos/desconto-da-proposta-em-item-novo-aditivo/ e /lei-14133-obras/limite-25-50-aditivo-obra/ são fontes de 301 em _redirects: o HTML local dessas rotas não é servido; diferenças de canonical/robots/JSON-LD/contato ali são efeito do fetch seguir o redirect (afeta M-18/M-22/B-24 nessa rota específica)",
+  "Lighthouse, cabeçalhos servidos pela borda (CSP do nginx) e comportamento do menu além da abertura não medidos; _headers só muda na lista de hashes CSP e todos os <style>/<script> inline do artefato estão cobertos",
+  "Fidelidade da captura inteira do piloto em 1440 (mostra variantes móveis das pranchas nas fatias > 1000 px enquanto a dobra mostra a desktop); a comparação de A-02 foi confirmada em viewport real do candidato, independentemente desse artefato",
+  "Localização exata da regra CSS que estiliza o token do acórdão em bloco dentro de .breakout-answer (B-37) não encontrada nesta consolidação nos módulos css/ nem em assets/; requer inspeção por computed style antes da correção",
+  "Capturas e scripts das lentes em /tmp/claude-1000/-home-tjsasakifln-code-confenge-web-cfg/78623ec0-2af6-4420-af37-36b7bc908be9/scratchpad/aceite/{familias-a,familias-b,familias-c,a11y-responsivo,jornadas,contratos}/"
+ ]
+}

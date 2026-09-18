@@ -1,0 +1,216 @@
+[
+ {
+  "route": "/",
+  "family": "home",
+  "function": "abertura e reconhecimento da situacao",
+  "source": "index.html",
+  "generator": "assets/home-10x.css sincronizada por scripts/site/build_css.py; pranchas por scripts/demonstrative/plates/inline.py",
+  "priority": "P0",
+  "treatment": "COMPOSICAO_REDESENHADA",
+  "owner": "integrador (piloto da campanha 01 + aceite)",
+  "state": "DONE",
+  "evidence": [
+   "docs/campaigns/design-institucional/evidence/piloto/home-1440x1000-fold-pilot.jpg",
+   "docs/campaigns/design-institucional/evidence/piloto/home-1440x1000-full-pilot.jpg",
+   "docs/campaigns/design-institucional/evidence/piloto/home-390x844-fold-pilot.jpg",
+   "docs/campaigns/design-institucional/evidence/piloto/home-390x844-full-pilot.jpg",
+   "docs/campaigns/design-institucional/expansao/evidence/aceite/README.md"
+  ],
+  "impediment": null
+ },
+ {
+  "route": "/servicos/",
+  "family": "servicos-corporativos",
+  "function": "hub de servicos e avaliacoes imobiliarias (#servico-avaliacao)",
+  "source": "servicos/index.html",
+  "generator": null,
+  "priority": "P0",
+  "treatment": "COMPOSICAO_REDESENHADA",
+  "owner": "integrador (piloto da campanha 01)",
+  "state": "DONE",
+  "evidence": [
+   "docs/campaigns/design-institucional/evidence/piloto/servicos-1440x1000-fold-pilot.jpg",
+   "docs/campaigns/design-institucional/evidence/piloto/servicos-1440x1000-full-pilot.jpg",
+   "docs/campaigns/design-institucional/evidence/piloto/servicos-390x844-fold-pilot.jpg",
+   "docs/campaigns/design-institucional/evidence/piloto/servicos-390x844-full-pilot.jpg"
+  ],
+  "impediment": "avaliacoes imobiliarias sem URL propria: superficie autorizada e a secao #servico-avaliacao (decisao do proprietario pendente sobre familia nova)"
+ },
+ {
+  "route": "/quantitativos-orcamento-obras/",
+  "family": "private-engineering-quantities-budget",
+  "function": "servico privado de referencia",
+  "source": "quantitativos-orcamento-obras/index.html",
+  "generator": "blocos gerados (qty-trail, proof-entrances) preservados",
+  "priority": "P0",
+  "treatment": "COMPOSICAO_REDESENHADA",
+  "owner": "integrador (piloto da campanha 01)",
+  "state": "DONE",
+  "evidence": [
+   "docs/campaigns/design-institucional/evidence/piloto/quantitativos-orcamento-obras-1440x1000-fold-pilot.jpg",
+   "docs/campaigns/design-institucional/evidence/piloto/quantitativos-orcamento-obras-1440x1000-full-pilot.jpg",
+   "docs/campaigns/design-institucional/evidence/piloto/quantitativos-orcamento-obras-390x844-fold-pilot.jpg",
+   "docs/campaigns/design-institucional/evidence/piloto/quantitativos-orcamento-obras-390x844-full-pilot.jpg"
+  ],
+  "impediment": null
+ },
+ {
+  "route": "/medicoes-glosas-obras-publicas/",
+  "family": "service-pillars",
+  "function": "pilar B2G de referencia",
+  "source": "medicoes-glosas-obras-publicas/index.html",
+  "generator": "frozen specs (recaptura com motivo)",
+  "priority": "P0",
+  "treatment": "COMPOSICAO_REDESENHADA",
+  "owner": "integrador (piloto da campanha 01)",
+  "state": "DONE",
+  "evidence": [
+   "docs/campaigns/design-institucional/evidence/piloto/medicoes-glosas-obras-publicas-1440x1000-fold-pilot.jpg",
+   "docs/campaigns/design-institucional/evidence/piloto/medicoes-glosas-obras-publicas-1440x1000-full-pilot.jpg",
+   "docs/campaigns/design-institucional/evidence/piloto/medicoes-glosas-obras-publicas-390x844-fold-pilot.jpg",
+   "docs/campaigns/design-institucional/evidence/piloto/medicoes-glosas-obras-publicas-390x844-full-pilot.jpg"
+  ],
+  "impediment": null
+ },
+ {
+  "route": "/casos/demonstrativo-projeto-privado/",
+  "family": "casos",
+  "function": "exemplo demonstrativo ligado ao servico privado",
+  "source": "casos/demonstrativo-projeto-privado/index.html",
+  "generator": "scripts/demonstrative/private_project/render.py",
+  "priority": "P1",
+  "treatment": "COMPOSICAO_REDESENHADA",
+  "owner": "integrador (piloto da campanha 01)",
+  "state": "DONE",
+  "evidence": [
+   "docs/campaigns/design-institucional/evidence/piloto/casos-demonstrativo-projeto-privado-1440x1000-fold-pilot.jpg",
+   "docs/campaigns/design-institucional/evidence/piloto/casos-demonstrativo-projeto-privado-1440x1000-full-pilot.jpg",
+   "docs/campaigns/design-institucional/evidence/piloto/casos-demonstrativo-projeto-privado-390x844-fold-pilot.jpg",
+   "docs/campaigns/design-institucional/evidence/piloto/casos-demonstrativo-projeto-privado-390x844-full-pilot.jpg"
+  ],
+  "impediment": null
+ },
+ {
+  "route": "/triagem-tecnica/",
+  "family": "triagem-tecnica",
+  "function": "contato para quem nao sabe o nome do servico",
+  "source": "triagem-tecnica/index.html",
+  "generator": null,
+  "priority": "P0",
+  "treatment": "COMPOSICAO_REDESENHADA",
+  "owner": "integrador (piloto da campanha 01)",
+  "state": "DONE",
+  "evidence": [
+   "docs/campaigns/design-institucional/evidence/piloto/triagem-tecnica-1440x1000-fold-pilot.jpg",
+   "docs/campaigns/design-institucional/evidence/piloto/triagem-tecnica-1440x1000-full-pilot.jpg",
+   "docs/campaigns/design-institucional/evidence/piloto/triagem-tecnica-390x844-fold-pilot.jpg",
+   "docs/campaigns/design-institucional/evidence/piloto/triagem-tecnica-390x844-full-pilot.jpg"
+  ],
+  "impediment": null
+ },
+ {
+  "route": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
+  "family": "analises-contratos-publicos",
+  "function": "analise contratual aprovada por hash",
+  "source": "scripts/contract_analysis/fixtures",
+  "generator": "scripts/contract_analysis (cmd_build)",
+  "priority": "P2",
+  "treatment": "PRESERVADA_COM_JUSTIFICATIVA",
+  "owner": "integrador",
+  "state": "DONE",
+  "evidence": [
+   "data/editorial/contract-analysis/approvals.json (rendered_hash_recapture_reason)"
+  ],
+  "impediment": "aprovacao humana vinculada ao hash do render; so a apresentacao (CSS) foi recapturada, HTML byte-identico"
+ },
+ {
+  "route": "/inteligencia/valor-tipico-contratos-pavimentacao/",
+  "family": "market-answer-canary",
+  "function": "canario de resposta de mercado",
+  "source": "scripts/market_answers",
+  "generator": "scripts/market_answers (build)",
+  "priority": "P2",
+  "treatment": "HERANCA_VISUAL_VALIDADA",
+  "owner": "integrador",
+  "state": "DONE",
+  "evidence": [
+   "lighthouse candidato: perf 100, LCP 1652 ms"
+  ],
+  "impediment": "gerado por market_answers fora do template pSEO; herda casca e folha global"
+ },
+ {
+  "route": "/analise-cnpj/r/",
+  "family": "live-intelligence-cnpj-result",
+  "function": "resultado de ferramenta em runtime",
+  "source": "scripts/live_intelligence/render.py",
+  "generator": "runtime",
+  "priority": "P3",
+  "treatment": "PRESERVADA_COM_JUSTIFICATIVA",
+  "owner": "integrador",
+  "state": "DONE",
+  "evidence": [
+   "lighthouse candidato: perf 100"
+  ],
+  "impediment": "superficie de runtime (formulario e resultado por JS); fora do escopo de composicao"
+ },
+ {
+  "route": "/assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/",
+  "family": "data-desk-citation-kit",
+  "function": "kit de dados para citacao",
+  "source": "scripts/data_desk",
+  "generator": "scripts/data_desk",
+  "priority": "P3",
+  "treatment": "PRESERVADA_COM_JUSTIFICATIVA",
+  "owner": "integrador",
+  "state": "DONE",
+  "evidence": [
+   "lighthouse candidato: perf 100"
+  ],
+  "impediment": "pagina de dados versionada; nao e superficie de visitante"
+ },
+ {
+  "route": "/nurture/sair/",
+  "family": "nurture",
+  "function": "descadastro",
+  "source": "nurture/sair/index.html",
+  "generator": null,
+  "priority": "P3",
+  "treatment": "HERANCA_VISUAL_VALIDADA",
+  "owner": "integrador",
+  "state": "DONE",
+  "evidence": [
+   "casca compartilhada e folha global; sem composicao propria"
+  ],
+  "impediment": null
+ },
+ {
+  "route": "/politica-editorial/historico/",
+  "family": "politica-editorial",
+  "function": "historico de versoes da politica",
+  "source": "scripts/site/render_authority_pages.py",
+  "generator": "scripts/site/render_authority_pages.py",
+  "priority": "P3",
+  "treatment": "HERANCA_VISUAL_VALIDADA",
+  "owner": "lote-c",
+  "state": "DONE",
+  "evidence": [
+   "gerado pelo mesmo renderizador de /politica-editorial/ (tratado pelo lote C)"
+  ],
+  "impediment": null
+ },
+ {
+  "route": "/politica-editorial/v/1.0.0/",
+  "family": "politica-editorial",
+  "function": "versao arquivada da politica",
+  "source": "scripts/site/render_authority_pages.py",
+  "generator": "scripts/site/render_authority_pages.py",
+  "priority": "P3",
+  "treatment": "PRESERVADA_COM_JUSTIFICATIVA",
+  "owner": "integrador",
+  "state": "DONE",
+  "evidence": [
+   "versao imutavel da politica"
+  ],
+  "impediment": "registro historico imutavel"
+ }
+]

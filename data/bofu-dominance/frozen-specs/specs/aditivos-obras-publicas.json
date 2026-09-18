@@ -201,8 +201,8 @@
       "Answer"
     ],
     "cta": {
-      "hero_text": "Verificar o contrato no diagnóstico de defesa de margem",
-      "hero_href": "/ferramentas/diagnostico-defesa-margem/",
+      "hero_text": "",
+      "hero_href": "",
       "bridges": [
         {
           "position": "header_nav",
@@ -235,22 +235,37 @@
           "text": "Biblioteca"
         },
         {
-          "position": "pillar_bridge",
+          "position": "pillar_hero",
+          "href": "#captura-pilar",
+          "text": "Descrever o aditivo"
+        },
+        {
+          "position": "pillar_hero",
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20estruturar%20aditivo%20ou%20servi%C3%A7o%20extra%20com%20base%20t%C3%A9cnica%20e%20econ%C3%B4mica.",
-          "text": "Enquadrar o evento contratual"
+          "text": "Falar pelo WhatsApp"
+        },
+        {
+          "position": "pillar_inline",
+          "href": "#captura-pilar",
+          "text": "Descrever o aditivo"
+        },
+        {
+          "position": "pillar_inline",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20estruturar%20aditivo%20ou%20servi%C3%A7o%20extra%20com%20base%20t%C3%A9cnica%20e%20econ%C3%B4mica.",
+          "text": "Falar pelo WhatsApp"
         },
         {
           "position": "pillar_bridge",
           "href": "/diagnostico-b2g-360/",
-          "text": "Solicitar diagnóstico da operação"
+          "text": "Diagnóstico da Operação em Obras Públicas"
         }
       ],
       "when_not_to_hire": true,
       "whatsapp_present": true,
       "form_count": 1
     },
-    "content_sha256": "4de1b69bbd7ec7504c2054dd6f63a50099bd007b284084b3ee54e64c3b3bea64",
-    "bytes": 35142,
+    "content_sha256": "9fc5ffbab3fd135cd4f49cd286ff539ed60aef0dc63b7aced73465d04d1cee87",
+    "bytes": 36272,
     "noindex": false
   }
 }

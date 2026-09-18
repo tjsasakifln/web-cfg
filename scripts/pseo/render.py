@@ -21,9 +21,64 @@ from scripts.pseo.html_shell import (
     methodology_block,
     page_shell,
     table_html,
+    wa_link,
 )
 from scripts.pseo import geo_locale
 from scripts.pseo.score import Candidate
+
+# Folha editorial da campanha "prancha e percurso" (lote C): modelo de leitura
+# do bloco Article (índice de página, tabelas roláveis, autor, fontes). A página
+# de leitura carrega só o subconjunto Article (cortado por
+# scripts/site/build_css.py); o hub carrega a folha inteira porque usa o bloco Hub.
+EDITORIAL_SHEET_LINK = '<link href="/assets/editorial-article.css" rel="stylesheet"/>'
+EDITORIAL_FULL_SHEET_LINK = '<link href="/assets/editorial.css" rel="stylesheet"/>'
+
+# Ação nomeada por tipo de item no hub (o visitante sabe o que abre).
+HUB_ACTION_LABELS = {
+    "Mercados": "Explorar mercados",
+    "Órgãos": "Explorar órgãos",
+    "Preços": "Ver referências",
+    "Concorrência": "Ver concorrência",
+    "Cenários": "Ler cenários",
+    "Método": "Ler o método",
+    "Mercado": "Ver o mercado",
+    "Órgão comprador": "Ver o dossiê",
+    "Benchmark de preços": "Ver as referências",
+    "Concorrência observada": "Ver o recorte",
+    "Radar de oportunidades": "Ver o radar",
+    "Cenário problema → serviço": "Ler o cenário",
+}
+MIN_H2_FOR_PAGE_INDEX = 3
+_ARTICLE_MAIN_RE = re.compile(r'(<article class="article-main"[^>]*>)(.*?)(</article>)', re.S)
+_INDEX_SECTION_RE = re.compile(r'<section id="([^"]+)"[^>]*>\s*(?:<p class="eyebrow[^"]*">([^<]*)</p>\s*)?<h2[^>]*>(.*?)</h2>', re.S)
+
+
+def inject_page_index(html: str) -> str:
+    """nav.article-toc 'Nesta página' no início de article-main, uma entrada por
+    seção com id e h2 de leitura, quando há três ou mais. Determinístico."""
+    m = _ARTICLE_MAIN_RE.search(html)
+    if not m or 'class="article-toc"' in m.group(2):
+        return html
+    entries = []
+    for sid, eyebrow, title in _INDEX_SECTION_RE.findall(m.group(2)):
+        # Rótulo curto: o kicker da seção quando existe (é o nome da etapa);
+        # senão a primeira oração do h2 (antes de ':' ou '('), para caber na
+        # largura de 320 px sem quebrar a entrada.
+        label = re.sub(r"\s+", " ", eyebrow).strip()
+        if not label:
+            label = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", "", title)).strip()
+            label = re.split(r"\s*[:(]", label, maxsplit=1)[0].strip() or label
+        if label:
+            entries.append((sid, label))
+    if len(entries) < MIN_H2_FOR_PAGE_INDEX:
+        return html
+    nav = (
+        '<nav aria-label="Nesta página" class="article-toc"><strong>Nesta página</strong><ol>'
+        + "".join(f'<li><a href="#{sid}">{label}</a></li>' for sid, label in entries)
+        + "</ol></nav>\n"
+    )
+    return html[: m.start(2)] + "\n" + nav + html[m.start(2):]
+
 
 def br_date(iso: str | None) -> str:
     """Visible Brazilian date; empty if missing."""
@@ -445,19 +500,18 @@ def _exec_summary(text: str, max_words: int = 80) -> str:
 
 
 def render_candidate(c: Candidate, manifest: dict[str, Any]) -> str:
-    if c.page_type == "market":
-        return _render_market(c, manifest)
-    if c.page_type == "agency":
-        return _render_agency(c, manifest)
-    if c.page_type == "price":
-        return _render_price(c, manifest)
-    if c.page_type == "competition":
-        return _render_competition(c, manifest)
-    if c.page_type == "radar":
-        return _render_radar(c, manifest)
-    if c.page_type == "problem_service":
-        return _render_problem(c, manifest)
-    raise ValueError(f"unknown page_type {c.page_type}")
+    renderers = {
+        "market": _render_market,
+        "agency": _render_agency,
+        "price": _render_price,
+        "competition": _render_competition,
+        "radar": _render_radar,
+        "problem_service": _render_problem,
+    }
+    render = renderers.get(c.page_type)
+    if render is None:
+        raise ValueError(f"unknown page_type {c.page_type}")
+    return inject_page_index(render(c, manifest))
 
 
 def _render_market(c: Candidate, manifest: dict[str, Any]) -> str:
@@ -563,21 +617,21 @@ def _render_market(c: Candidate, manifest: dict[str, Any]) -> str:
     body = f"""
 {breadcrumbs_html(crumbs)}
 <header class="content-hero article-hero"><div class="container content-hero-grid"><div>
-<p class="eyebrow">Inteligência de mercado</p>
-<h1>{e(c.h1)}</h1>
-<p class="content-lead">Decisão: onde há demanda pública recorrente e como priorizar esforços comerciais com evidência.</p>
+<p class="eyebrow t-kicker">Inteligência de mercado</p>
+<h1 class="t-editorial">{e(c.h1)}</h1>
+<p class="content-lead measure">Decisão: onde há demanda pública recorrente e como priorizar esforços comerciais com evidência.</p>
 <div class="article-meta"><a href="/especialista/tiago-jun-sasaki/" rel="author">Engº Tiago Sasaki</a>
 <span>Dados: <time datetime="{e(m.get('period_start'))}">{e(br_date(m.get('period_start')))}</time> – <time datetime="{e(m.get('period_end'))}">{e(br_date(m.get('period_end')))}</time></span>
 <span>Escopo: {e(geo_locale.display_name(m.get('region') or m.get('region_label')))}</span></div>
 </div></div></header>
 <div class="container article-layout">
 <article class="article-main">
-<div class="answer-box" id="resposta"><span>Resposta executiva</span><p>{e(summary)}</p></div>
-<section id="indicadores"><p class="eyebrow">Indicadores</p><h2>Números do recorte</h2>{inds}</section>
-<section id="compradores"><p class="eyebrow">Demanda</p><h2>Órgãos que concentram contratação</h2>{buyer_table}</section>
-<section id="objetos"><p class="eyebrow">Objetos</p><h2>O que mais se contrata</h2>{obj_table}</section>
-<section id="evolucao"><p class="eyebrow">Temporal</p><h2>Evolução no período</h2>{year_table or '<p>Série anual insuficiente no recorte.</p>'}</section>
-<section id="interpretacao"><p class="eyebrow">Leitura</p><h2>O que os dados indicam</h2><p>{e(interpretation)}</p>
+<div class="answer-box" id="resposta"><span>Resposta direta</span><p>{e(summary)}</p></div>
+<section id="indicadores"><p class="eyebrow t-kicker">Indicadores</p><h2>Números do recorte</h2>{inds}</section>
+<section id="compradores"><p class="eyebrow t-kicker">Demanda</p><h2>Órgãos que concentram contratação</h2>{buyer_table}</section>
+<section id="objetos"><p class="eyebrow t-kicker">Objetos</p><h2>O que mais se contrata</h2>{obj_table}</section>
+<section id="evolucao"><p class="eyebrow t-kicker">Temporal</p><h2>Evolução no período</h2>{year_table or '<p>Série anual insuficiente no recorte.</p>'}</section>
+<section id="interpretacao"><p class="eyebrow t-kicker">Leitura</p><h2>O que os dados indicam</h2><p>{e(interpretation)}</p>
 <p>{e(implications)}</p></section>
 {confenge_help(
     ["/diagnostico-pre-licitacao/", "/auditoria-orcamento-licitacao/", "/acompanhamento-contratos-obras/"],
@@ -636,6 +690,7 @@ def _render_market(c: Candidate, manifest: dict[str, Any]) -> str:
         jsonld_graph=graph,
         body_main=body,
         wa_message=wa,
+        extra_head=EDITORIAL_SHEET_LINK,
         data_attrs={
             "pseo-page-id": c.page_id,
             "pseo-page-type": c.page_type,
@@ -761,24 +816,24 @@ def _render_agency(c: Candidate, manifest: dict[str, Any]) -> str:
     body = f"""
 {breadcrumbs_html(crumbs)}
 <header class="content-hero article-hero"><div class="container content-hero-grid"><div>
-<p class="eyebrow">Dossiê de comprador público</p>
-<h1>{e(c.h1)}</h1>
-<p class="content-lead">Histórico de contratação em engenharia, evidência pública, sem score comercial.</p>
+<p class="eyebrow t-kicker">Dossiê de comprador público</p>
+<h1 class="t-editorial">{e(c.h1)}</h1>
+<p class="content-lead measure">Histórico de contratação em engenharia, evidência pública, sem score comercial.</p>
 <div class="article-meta"><a href="/especialista/tiago-jun-sasaki/" rel="author">Engº Tiago Sasaki</a>
 <span>{e(a.get('municipio'))} / {e(a.get('uf'))}</span>
 <span><time datetime="{e(a.get('period_start'))}">{e(br_date(a.get('period_start')))}</time> – <time datetime="{e(a.get('period_end'))}">{e(br_date(a.get('period_end')))}</time></span>
 </div></div></div></header>
 <div class="container article-layout"><article class="article-main">
-<div class="answer-box" id="resposta"><span>Resposta executiva</span><p>{e(summary)}</p></div>
-<section id="indicadores"><p class="eyebrow">Indicadores</p><h2>Retrato do órgão no recorte</h2>{inds}</section>
-<section id="segmentos"><p class="eyebrow">Segmentos</p><h2>Mix de segmentos</h2>{mix_table}</section>
-<section id="objetos"><p class="eyebrow">Objetos</p><h2>Objetos mais frequentes</h2>{obj_table}</section>
-<section id="sazonalidade"><p class="eyebrow">Temporal</p><h2>Sazonalidade</h2>{season_table or '<p>Sem série mensal suficiente.</p>'}</section>
-<section id="oportunidades"><p class="eyebrow">Agora</p><h2>Oportunidades abertas (quando houver)</h2>{open_table}
+<div class="answer-box" id="resposta"><span>Resposta direta</span><p>{e(summary)}</p></div>
+<section id="indicadores"><p class="eyebrow t-kicker">Indicadores</p><h2>Retrato do órgão no recorte</h2>{inds}</section>
+<section id="segmentos"><p class="eyebrow t-kicker">Segmentos</p><h2>Mix de segmentos</h2>{mix_table}</section>
+<section id="objetos"><p class="eyebrow t-kicker">Objetos</p><h2>Objetos mais frequentes</h2>{obj_table}</section>
+<section id="sazonalidade"><p class="eyebrow t-kicker">Temporal</p><h2>Sazonalidade</h2>{season_table or '<p>Sem série mensal suficiente.</p>'}</section>
+<section id="oportunidades"><p class="eyebrow t-kicker">Agora</p><h2>Oportunidades abertas (quando houver)</h2>{open_table}
 {open_links_html}
-<p><small>Links de oportunidade são deep-links de portal quando o snapshot traz URL; caso contrário registramos indisponibilidade sem inventar endereço.</small></p>
+<p class="technical-note">Links de oportunidade são deep-links de portal quando o snapshot traz URL; caso contrário registramos indisponibilidade sem inventar endereço.</p>
 </section>
-<section id="cuidados"><p class="eyebrow">Prática</p><h2>Cuidados para empresas interessadas</h2><ul>{notes}</ul>
+<section id="cuidados"><p class="eyebrow t-kicker">Prática</p><h2>Cuidados para empresas interessadas</h2><ul>{notes}</ul>
 <p>Portais de consulta (não substituem ficha de contrato):</p><ul>{channels}</ul></section>
 {confenge_help(
     ["/diagnostico-pre-licitacao/", "/auditoria-orcamento-licitacao/", "/acompanhamento-contratos-obras/"],
@@ -836,6 +891,7 @@ def _render_agency(c: Candidate, manifest: dict[str, Any]) -> str:
         jsonld_graph=graph,
         body_main=body,
         wa_message=wa,
+        extra_head=EDITORIAL_SHEET_LINK,
         data_attrs={"pseo-page-id": c.page_id, "pseo-page-type": "agency", "content-cluster": "pseo"},
 )
 
@@ -922,25 +978,25 @@ def _render_price(c: Candidate, manifest: dict[str, Any]) -> str:
     body = f"""
 {breadcrumbs_html(crumbs)}
 <header class="content-hero article-hero"><div class="container content-hero-grid"><div>
-<p class="eyebrow">Benchmark de contratação</p>
-<h1>{e(c.h1)}</h1>
-<p class="content-lead">Mediana, quartis e dispersão, com advertência explícita contra comparação cega.</p>
+<p class="eyebrow t-kicker">Benchmark de contratação</p>
+<h1 class="t-editorial">{e(c.h1)}</h1>
+<p class="content-lead measure">Mediana, quartis e dispersão, com advertência explícita contra comparação cega.</p>
 <div class="article-meta"><a href="/especialista/tiago-jun-sasaki/" rel="author">Engº Tiago Sasaki</a>
 <span>{e(p.get('period_start'))} – {e(p.get('period_end'))}</span></div>
 </div></div></header>
 <div class="container article-layout"><article class="article-main">
-<div class="answer-box" id="resposta"><span>Resposta executiva</span><p>{e(summary)}</p></div>
+<div class="answer-box" id="resposta"><span>Resposta direta</span><p>{e(summary)}</p></div>
 <section class="article-callout"><svg class="icon"><use href="#i-shield"></use></svg>
 <div><strong>Advertência</strong><p>{e(p.get('warning'))}</p></div></section>
-<section id="indicadores"><p class="eyebrow">Indicadores</p><h2>Estatísticas do recorte</h2>{inds}{conf_note}</section>
-<section id="exemplos"><p class="eyebrow">Evidência</p><h2>Exemplos públicos verificáveis</h2>{ex_table}
+<section id="indicadores"><p class="eyebrow t-kicker">Indicadores</p><h2>Estatísticas do recorte</h2>{inds}{conf_note}</section>
+<section id="exemplos"><p class="eyebrow t-kicker">Evidência</p><h2>Exemplos públicos verificáveis</h2>{ex_table}
 <ul class="document-list">{example_links}</ul>
-<p><small>Links apontam para a ficha pública do contrato no PNCP quando o ID permite deep-link; caso contrário registramos indisponibilidade sem inventar URL.</small></p>
+<p class="technical-note">Links apontam para a ficha pública do contrato no PNCP quando o ID permite deep-link; caso contrário registramos indisponibilidade sem inventar URL.</p>
 <p><strong>Este benchmark não substitui orçamento técnico.</strong></p></section>
-<section id="criterios"><p class="eyebrow">Critérios</p><h2>Inclusão e exclusão</h2>
+<section id="criterios"><p class="eyebrow t-kicker">Critérios</p><h2>Inclusão e exclusão</h2>
 <p><strong>Inclusão</strong></p><ul>{inc}</ul>
 <p><strong>Exclusão</strong></p><ul>{exc}</ul></section>
-<section id="interpretacao"><p class="eyebrow">Leitura</p><h2>Implicações para margem</h2>
+<section id="interpretacao"><p class="eyebrow t-kicker">Leitura</p><h2>Implicações para margem</h2>
 <p>Dispersão elevada (IQR) costuma refletir mistura de portes e escopos. Antes da proposta,
 decomponha quantitativos, produtividade, BDI e logística. A CONFENGE apoia auditoria de planilha
 e teste de exequibilidade quando o deságio implícito ameaça a margem.</p></section>
@@ -1001,6 +1057,7 @@ e teste de exequibilidade quando o deságio implícito ameaça a margem.</p></se
         jsonld_graph=graph,
         body_main=body,
         wa_message=wa,
+        extra_head=EDITORIAL_SHEET_LINK,
         data_attrs={"pseo-page-id": c.page_id, "pseo-page-type": "price", "content-cluster": "pseo"},
 )
 
@@ -1059,19 +1116,19 @@ def _render_competition(c: Candidate, manifest: dict[str, Any]) -> str:
     body = f"""
 {breadcrumbs_html(crumbs)}
 <header class="content-hero article-hero"><div class="container content-hero-grid"><div>
-<p class="eyebrow">Concorrência observada</p>
-<h1>{e(c.h1)}</h1>
-<p class="content-lead">{e(d.get('language_note'))}</p>
+<p class="eyebrow t-kicker">Concorrência observada</p>
+<h1 class="t-editorial">{e(c.h1)}</h1>
+<p class="content-lead measure">{e(d.get('language_note'))}</p>
 <div class="article-meta"><a href="/especialista/tiago-jun-sasaki/" rel="author">Engº Tiago Sasaki</a>
 <span>{e(d.get('period_start'))} – {e(d.get('period_end'))}</span></div>
 </div></div></header>
 <div class="container article-layout"><article class="article-main">
-<div class="answer-box" id="resposta"><span>Resposta executiva</span><p>{e(summary)}</p></div>
-<section id="indicadores"><p class="eyebrow">Indicadores</p><h2>Concentração e escala</h2>{inds}</section>
-<section id="fornecedores"><p class="eyebrow">Observado</p><h2>Fornecedores no recorte</h2>{sup_table}</section>
-<section id="faixas"><p class="eyebrow">Valores</p><h2>Faixas de contratos</h2>{bands}</section>
-<section id="mudancas"><p class="eyebrow">Dinâmica</p><h2>Mudanças recentes</h2><ul>{changes}</ul></section>
-<section id="interpretacao"><p class="eyebrow">Leitura</p><h2>Uso legítimo desta página</h2>
+<div class="answer-box" id="resposta"><span>Resposta direta</span><p>{e(summary)}</p></div>
+<section id="indicadores"><p class="eyebrow t-kicker">Indicadores</p><h2>Concentração e escala</h2>{inds}</section>
+<section id="fornecedores"><p class="eyebrow t-kicker">Observado</p><h2>Fornecedores no recorte</h2>{sup_table}</section>
+<section id="faixas"><p class="eyebrow t-kicker">Valores</p><h2>Faixas de contratos</h2>{bands}</section>
+<section id="mudancas"><p class="eyebrow t-kicker">Dinâmica</p><h2>Mudanças recentes</h2><ul>{changes}</ul></section>
+<section id="interpretacao"><p class="eyebrow t-kicker">Leitura</p><h2>Uso legítimo desta página</h2>
 <p>Serve para mapear quem já aparece em contratos públicos do segmento/UF e em quantos órgãos.
 Não autoriza inferir capacidade técnica, intenção de disputa futura ou risco reputacional.</p></section>
 {confenge_help(
@@ -1110,6 +1167,7 @@ Não autoriza inferir capacidade técnica, intenção de disputa futura ou risco
         jsonld_graph=graph,
         body_main=body,
         wa_message=wa,
+        extra_head=EDITORIAL_SHEET_LINK,
         data_attrs={"pseo-page-id": c.page_id, "pseo-page-type": "competition", "content-cluster": "pseo"},
 )
 
@@ -1217,19 +1275,19 @@ def _render_radar(c: Candidate, manifest: dict[str, Any]) -> str:
     body = f"""
 {breadcrumbs_html(crumbs)}
 <header class="content-hero article-hero"><div class="container content-hero-grid"><div>
-<p class="eyebrow">Radar de oportunidades</p>
-<h1>{e(c.h1)}</h1>
-<p class="content-lead">Última verificação: <time datetime="{e(verified)}">{e(verified_br)}</time> (horário de Brasília).
+<p class="eyebrow t-kicker">Radar de oportunidades</p>
+<h1 class="t-editorial">{e(c.h1)}</h1>
+<p class="content-lead measure">Última verificação: <time datetime="{e(verified)}">{e(verified_br)}</time> (horário de Brasília).
  A lista reúne as oportunidades classificadas como abertas nessa data, com prazo igual ou posterior a ela.
  Confirme prazo, documentos e condições no portal oficial antes de preparar a proposta.</p>
 </div></div></header>
 <div class="container article-layout"><article class="article-main">
-<div class="answer-box" id="resposta"><span>Resposta executiva</span><p>{e(summary)}</p></div>
-<section id="indicadores"><p class="eyebrow">Indicadores</p><h2>Recorte atual</h2>{inds}</section>
+<div class="answer-box" id="resposta"><span>Resposta direta</span><p>{e(summary)}</p></div>
+<section id="indicadores"><p class="eyebrow t-kicker">Indicadores</p><h2>Recorte atual</h2>{inds}</section>
 {market_html}
-<section id="lista"><p class="eyebrow">Vigentes no recorte</p><h2>Oportunidades classificadas</h2>{tbl}
+<section id="lista"><p class="eyebrow t-kicker">Vigentes no recorte</p><h2>Oportunidades classificadas</h2>{tbl}
 <ul class="document-list">{links}</ul></section>
-<section id="historico"><p class="eyebrow">Histórico</p><h2>Separação histórico × vigente</h2>
+<section id="historico"><p class="eyebrow t-kicker">Histórico</p><h2>Separação histórico × vigente</h2>
 <p>Esta lista é atualizada a cada verificação: itens encerrados saem dela e novos entram.
  Cada oportunidade tem endereço próprio no portal oficial, que é onde a versão vigente do edital deve ser lida.
 {hist_sentence}</p></section>
@@ -1270,6 +1328,7 @@ def _render_radar(c: Candidate, manifest: dict[str, Any]) -> str:
         jsonld_graph=graph,
         body_main=body,
         wa_message=wa,
+        extra_head=EDITORIAL_SHEET_LINK,
         data_attrs={"pseo-page-id": c.page_id, "pseo-page-type": "radar", "content-cluster": "pseo"},
 )
 
@@ -1283,11 +1342,14 @@ def _render_problem(c: Candidate, manifest: dict[str, Any]) -> str:
         f"{p.get('problem_label')}: {p.get('observed_pattern')} "
         f"Trilha CONFENGE relacionada: {svc_label}."
 )
+    # Guias da biblioteca em lista regrada com âncora marcada como link
+    # (text-link: sublinhado, peso 720), não como texto corrido.
     guides = "".join(
-        f'<li><a href="{e(g if str(g).startswith("/") else "/" + str(g).strip("/") + "/")}" '
+        f'<li><span class="list-ruled__index">{i:02d}</span>'
+        f'<div><a class="text-link" href="{e(g if str(g).startswith("/") else "/" + str(g).strip("/") + "/")}" '
         f'data-pseo-event="pseo_related_page_click">'
-        f'{e(guide_path_label(str(g)))}</a></li>'
-        for g in (p.get("technical_guide_paths") or [])
+        f'{e(guide_path_label(str(g)))}</a></div></li>'
+        for i, g in enumerate(p.get("technical_guide_paths") or [], start=1)
 )
     # Official normative/methodology references, auditável, not invented contract deep-links
     ref_items = []
@@ -1365,30 +1427,30 @@ def _render_problem(c: Candidate, manifest: dict[str, Any]) -> str:
     body = f"""
 {breadcrumbs_html(crumbs)}
 <header class="content-hero article-hero"><div class="container content-hero-grid"><div>
-<p class="eyebrow">Cenário técnico</p>
-<h1>{e(c.h1)}</h1>
-<p class="content-lead">Orientação para decidir com base em padrões de contratação pública e no serviço técnico da CONFENGE.</p>
+<p class="eyebrow t-kicker">Cenário técnico</p>
+<h1 class="t-editorial">{e(c.h1)}</h1>
+<p class="content-lead measure">Orientação para decidir com base em padrões de contratação pública e no serviço técnico da CONFENGE.</p>
 <div class="article-meta"><a href="/especialista/tiago-jun-sasaki/" rel="author">Engº Tiago Sasaki</a>
 <span>Segmentos: {e(arches)}</span></div>
 </div></div></header>
 <div class="container article-layout"><article class="article-main">
-<div class="answer-box" id="resposta"><span>Resposta executiva</span><p>{e(summary)}</p></div>
-<section id="padrao"><p class="eyebrow">Padrão</p><h2>O que se observa nos documentos e na prática</h2>
+<div class="answer-box" id="resposta"><span>Resposta direta</span><p>{e(summary)}</p></div>
+<section id="padrao"><p class="eyebrow t-kicker">Padrão</p><h2>O que se observa nos documentos e na prática</h2>
 <p>{e(p.get('observed_pattern'))}</p>
 {mass_extra}</section>
-<section id="fontes"><p class="eyebrow">Fontes auditáveis</p><h2>Referências oficiais e normativos</h2>
+<section id="fontes"><p class="eyebrow t-kicker">Fontes auditáveis</p><h2>Referências oficiais e normativos</h2>
 <ul class="document-list">{refs_html}</ul>
-<p><small>Links apontam para textos oficiais ou portais públicos; não são fichas de contrato individual.
-Guias CONFENGE abaixo detalham o enquadramento prático.</small></p></section>
-<section id="guias"><p class="eyebrow">Biblioteca</p><h2>Guias técnicos relacionados</h2>
+<p class="technical-note">Links apontam para textos oficiais ou portais públicos; não são fichas de contrato individual.
+Guias CONFENGE abaixo detalham o enquadramento prático.</p></section>
+<section id="guias-relacionados"><p class="eyebrow t-kicker">Biblioteca</p><h2>Guias técnicos relacionados</h2>
 <p>Estas páginas aprofundam o critério; esta página de inteligência organiza a decisão do cenário.</p>
-<ul>{guides}</ul></section>
-<section id="implicacoes"><p class="eyebrow">Decisão</p><h2>O que a empresa precisa decidir neste cenário</h2>
+<ol class="list-ruled">{guides}</ol></section>
+<section id="implicacoes"><p class="eyebrow t-kicker">Decisão</p><h2>O que a empresa precisa decidir neste cenário</h2>
 <p>{e(_problem_decision_copy(p))}</p>
 <p>{e(_problem_mass_copy(p))}</p>
-<p><strong>Limites da conclusão:</strong> {e(limit0)}</p>
+<p class="technical-note"><strong>Limites da conclusão:</strong> {e(limit0)}</p>
 </section>
-<section id="acao"><p class="eyebrow">Ação</p><h2>Próximo passo prático</h2>
+<section id="acao"><p class="eyebrow t-kicker">Ação</p><h2>Próximo passo prático</h2>
 <p>{e(_problem_action_copy(p))}</p></section>
 {confenge_help(
     [p.get('confenge_service_slug') or ''] + list(p.get("technical_guide_paths") or [])[:2],
@@ -1424,6 +1486,7 @@ Guias CONFENGE abaixo detalham o enquadramento prático.</small></p></section>
         jsonld_graph=graph,
         body_main=body,
         wa_message=wa,
+        extra_head=EDITORIAL_SHEET_LINK,
         data_attrs={"pseo-page-id": c.page_id, "pseo-page-type": "problem_service", "content-cluster": "pseo"},
 )
 
@@ -1488,7 +1551,7 @@ def _related_section(urls: list[str]) -> str:
 )
     if not cards:
         return ""
-    return f"""<section class="related-section"><p class="eyebrow">Malha</p><h2>Páginas relacionadas</h2>
+    return f"""<section class="related-section"><p class="eyebrow t-kicker">Malha</p><h2>Páginas relacionadas</h2>
 <div class="related-grid">{"".join(cards)}</div></section>"""
 
 
@@ -1515,45 +1578,67 @@ def render_hub(
     link down to one and a rebuild silently dropped any hand-edit.
     """
     cards = ""
-    for it in items or []:
+    for i, it in enumerate(items or [], 1):
         url, kind, label = it[0], it[1], it[2]
-        meta = it[3] if len(it) > 3 else ""
+        # it[3]: nota curta (hub raiz) ou o sentinela de estado editorial
+        # ("publicada"/"leitura de caso", filtro do hub /radar/); it[4]: resumo
+        # da página (description do snapshot). O visitante lê o resumo, não o
+        # sentinela.
+        note = it[3] if len(it) > 3 else ""
+        summary = it[4] if len(it) > 4 else ""
+        if not summary and note and note not in {"publicada", "leitura de caso"}:
+            summary = note
+        summary_html = f"<p>{e(summary)}</p>" if summary else ""
+        action = HUB_ACTION_LABELS.get(kind, "Abrir a página")
         cards += (
-            f'<a class="related-card" href="{e(url)}"><span>{e(kind)}</span><strong>{e(label)}</strong>'
-            f"<small>{e(meta)}</small></a>"
+            f'<li><span class="hub-list__index">{i:02d}</span><div><span class="tag">{e(kind)}</span>'
+            f'<h2><a href="{e(url)}">{e(label)}</a></h2>{summary_html}</div>'
+            f'<div class="hub-list__action"><a href="{e(url)}">{e(action)} <svg class="icon"><use href="#i-arrow"></use></svg></a></div></li>'
 )
-    if cards:
-        grid = f'<div class="related-grid" style="margin:2rem 0">{cards}</div>'
-    elif empty_cta:
+    # Um bloco escuro por página: o próximo passo. No hub vazio ele carrega a
+    # única ação; no hub com itens, fecha a lista.
+    if empty_cta:
         primary_href = empty_cta.get("primary_href") or "/#contato"
-        secondary = ""
+        primary_label = empty_cta.get("primary_label") or "Próximo passo"
+        title_dark = empty_cta.get("title") or "Configure o recorte da sua operação"
+        body_dark = empty_cta.get("body") or ""
+        alt_items = ""
         if empty_cta.get("secondary_label") and empty_cta.get("secondary_href"):
-            secondary = (
-                f'<a class="button button-secondary" href="{e(empty_cta["secondary_href"])}">'
-                f'{e(empty_cta["secondary_label"])}</a>'
+            alt_items = (
+                f'<li><a href="{e(empty_cta["secondary_href"])}">{e(empty_cta["secondary_label"])}</a></li>'
 )
-        is_wa = "wa.me" in primary_href
-        target = ' rel="noopener" target="_blank"' if is_wa else ""
-        grid = f"""<div class="commercial-bridge" style="margin:2rem 0">
-<h2>{e(empty_cta.get("title") or "Configure o recorte da sua operação")}</h2>
-<p>{e(empty_cta.get("body") or "")}</p>
-<div class="hero-actions">
-<a class="button button-primary" href="{e(primary_href)}"{target}>{e(empty_cta.get("primary_label") or "Próximo passo")}</a>
-{secondary}
-</div>
-</div>"""
     else:
-        # Durable fallback, never "nenhum item publicado nesta onda"
-        grid = (
-            '<div class="commercial-bridge" style="margin:2rem 0">'
-            "<h2>Evidência pública só vira valor com a capacidade da empresa.</h2>"
-            "<p>Quando houver recortes publicáveis, eles aparecem aqui com data, fonte e limites. "
-            "Até lá, o próximo passo é aplicar os dados à atuação da sua empresa no mercado público.</p>"
-            '<div class="hero-actions">'
-            '<a class="button button-primary" href="/diretoria-b2g/">Como funciona a Diretoria Fracionada para o Mercado Público</a>'
-            '<a class="button button-secondary" href="/diagnostico-b2g-360/">Solicitar diagnóstico da operação</a>'
-            "</div></div>"
+        primary_href = wa_link(
+            wa_message
+            or "Olá, Tiago. Quero aplicar a inteligência de mercado da CONFENGE à decisão da minha empresa."
 )
+        primary_label = "Descrever a operação pelo WhatsApp"
+        title_dark = "Evidência pública só vira valor com a capacidade da empresa."
+        body_dark = (
+            "Descreva a operação (objeto, região, acervo e faixa de contrato): a resposta diz "
+            "o que os dados públicos sustentam para a sua decisão, o que chega às suas mãos e o próximo passo. "
+            "Conversa técnica, sem contratação nem pagamento."
+            if cards
+            else "Quando houver recortes publicáveis, eles aparecem aqui com data, fonte e limites. "
+            "Até lá, o próximo passo é aplicar os dados à atuação da sua empresa no mercado público."
+)
+        alt_items = (
+            '<li><a href="/diagnostico-b2g-360/">Diagnóstico da operação em obras públicas</a></li>'
+            '<li><a href="/diretoria-b2g/">Como funciona a Diretoria Fracionada para o Mercado Público</a></li>'
+)
+    is_wa = "wa.me" in primary_href
+    target = ' rel="noopener" target="_blank"' if is_wa else ""
+    dark = (
+        '<section class="sec sec--dark" aria-label="Próximo passo"><div class="container">'
+        '<span class="t-kicker">Próximo passo</span>'
+        f'<h2 class="t-editorial">{e(title_dark)}</h2>'
+        f'<p class="measure">{e(body_dark)}</p>'
+        '<div class="contact-primary">'
+        f'<a class="button button-primary button-lg" href="{e(primary_href)}"{target}>{e(primary_label)} <svg class="icon"><use href="#i-arrow"></use></svg></a>'
+        f'<ul class="contact-alt">{alt_items}</ul>'
+        "</div></div></section>"
+)
+    grid = f'<ol class="hub-list">{cards}</ol>' if cards else ""
     back = (
         '<p><a class="text-link" href="/">Voltar ao início</a></p>'
         if path.rstrip("/") == "/inteligencia"
@@ -1566,12 +1651,13 @@ def render_hub(
         disclosure = policy_version_disclosure()
     body = f"""
 {breadcrumbs_html(crumbs)}
-<header class="content-hero"><div class="container"><p class="eyebrow">{e(eyebrow)}</p>
-<h1>{e(h1)}</h1><p class="content-lead">{e(intro)}</p>
-{disclosure}</div></header>
-<div class="container" style="padding-bottom:3rem">{grid}
+<header class="content-hero article-hero"><div class="container content-hero-grid"><div><p class="eyebrow t-kicker">{e(eyebrow)}</p>
+<h1 class="t-service">{e(h1)}</h1><p class="content-lead measure">{e(intro)}</p>
+{disclosure}</div></div></header>
+<section class="sec sec--tight"><div class="container">{grid}
 {extra_html}
-{back}</div>
+{back}</div></section>
+{dark}
 """
     graph = [
         ORG_JSONLD,
@@ -1593,6 +1679,7 @@ def render_hub(
         body_main=body,
         wa_message=wa_message
         or "Olá, Tiago. Quero aplicar a inteligência de mercado da CONFENGE à decisão da minha empresa.",
+        extra_head=EDITORIAL_FULL_SHEET_LINK,
         data_attrs={"content-cluster": "pseo", "pseo-page-type": "hub"},
 )
 

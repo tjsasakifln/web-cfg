@@ -1,0 +1,801 @@
+[
+ {
+  "route": "/",
+  "runs": 9,
+  "perf_median": 100,
+  "perf_range": [
+   99,
+   100
+  ],
+  "lcp_median_ms": 1500,
+  "lcp_range_ms": [
+   1500,
+   1955
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 0,
+  "dom": 400
+ },
+ {
+  "route": "/404.html",
+  "runs": 1,
+  "perf_median": 100,
+  "perf_range": [
+   100,
+   100
+  ],
+  "lcp_median_ms": 1729,
+  "lcp_range_ms": [
+   1729,
+   1729
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 114975,
+  "dom": 137
+ },
+ {
+  "route": "/acompanhamento-contratos-obras/",
+  "runs": 1,
+  "perf_median": 99,
+  "perf_range": [
+   99,
+   99
+  ],
+  "lcp_median_ms": 1804,
+  "lcp_range_ms": [
+   1804,
+   1804
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 145236,
+  "dom": 361
+ },
+ {
+  "route": "/analise-cnpj/",
+  "runs": 1,
+  "perf_median": 100,
+  "perf_range": [
+   100,
+   100
+  ],
+  "lcp_median_ms": 1655,
+  "lcp_range_ms": [
+   1655,
+   1655
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 127900,
+  "dom": 116
+ },
+ {
+  "route": "/analise-cnpj/r/",
+  "runs": 1,
+  "perf_median": 100,
+  "perf_range": [
+   100,
+   100
+  ],
+  "lcp_median_ms": 1655,
+  "lcp_range_ms": [
+   1655,
+   1655
+  ],
+  "cls_median": 0.02028126743991168,
+  "content_bytes_median": 127244,
+  "dom": 93
+ },
+ {
+  "route": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
+  "runs": 1,
+  "perf_median": 100,
+  "perf_range": [
+   100,
+   100
+  ],
+  "lcp_median_ms": 1803,
+  "lcp_range_ms": [
+   1803,
+   1803
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 133743,
+  "dom": 398
+ },
+ {
+  "route": "/assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/",
+  "runs": 1,
+  "perf_median": 100,
+  "perf_range": [
+   100,
+   100
+  ],
+  "lcp_median_ms": 753,
+  "lcp_range_ms": [
+   753,
+   753
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 1612,
+  "dom": 56
+ },
+ {
+  "route": "/assistencia-tecnica-pericial-engenharia/",
+  "runs": 1,
+  "perf_median": 100,
+  "perf_range": [
+   100,
+   100
+  ],
+  "lcp_median_ms": 1878,
+  "lcp_range_ms": [
+   1878,
+   1878
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 147093,
+  "dom": 358
+ },
+ {
+  "route": "/casos/",
+  "runs": 3,
+  "perf_median": 99,
+  "perf_range": [
+   99,
+   99
+  ],
+  "lcp_median_ms": 1806,
+  "lcp_range_ms": [
+   1806,
+   1809
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 136572,
+  "dom": 346
+ },
+ {
+  "route": "/casos/modelo-relatorio-inteligencia-licitacoes/",
+  "runs": 1,
+  "perf_median": 98,
+  "perf_range": [
+   98,
+   98
+  ],
+  "lcp_median_ms": 2106,
+  "lcp_range_ms": [
+   2106,
+   2106
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 150406,
+  "dom": 920
+ },
+ {
+  "route": "/comercial/privacidade-leads/",
+  "runs": 1,
+  "perf_median": 100,
+  "perf_range": [
+   100,
+   100
+  ],
+  "lcp_median_ms": 1657,
+  "lcp_range_ms": [
+   1657,
+   1657
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 96916,
+  "dom": 79
+ },
+ {
+  "route": "/compatibilizacao-projetos-engenharia/",
+  "runs": 1,
+  "perf_median": 100,
+  "perf_range": [
+   100,
+   100
+  ],
+  "lcp_median_ms": 1879,
+  "lcp_range_ms": [
+   1879,
+   1879
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 148544,
+  "dom": 412
+ },
+ {
+  "route": "/conteudos/",
+  "runs": 1,
+  "perf_median": 100,
+  "perf_range": [
+   100,
+   100
+  ],
+  "lcp_median_ms": 1809,
+  "lcp_range_ms": [
+   1809,
+   1809
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 143275,
+  "dom": 567
+ },
+ {
+  "route": "/conteudos/atraso-na-medicao-obra-publica/",
+  "runs": 1,
+  "perf_median": 100,
+  "perf_range": [
+   100,
+   100
+  ],
+  "lcp_median_ms": 1805,
+  "lcp_range_ms": [
+   1805,
+   1805
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 136722,
+  "dom": 348
+ },
+ {
+  "route": "/conteudos/como-contratar-projetos-complementares/",
+  "runs": 1,
+  "perf_median": 100,
+  "perf_range": [
+   100,
+   100
+  ],
+  "lcp_median_ms": 1805,
+  "lcp_range_ms": [
+   1805,
+   1805
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 134578,
+  "dom": 252
+ },
+ {
+  "route": "/conteudos/documentos-reequilibrio-obra-publica/",
+  "runs": 3,
+  "perf_median": 100,
+  "perf_range": [
+   100,
+   100
+  ],
+  "lcp_median_ms": 1803,
+  "lcp_range_ms": [
+   1802,
+   1803
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 135574,
+  "dom": 337
+ },
+ {
+  "route": "/conteudos/quando-compatibilizar-projetos/",
+  "runs": 1,
+  "perf_median": 100,
+  "perf_range": [
+   100,
+   100
+  ],
+  "lcp_median_ms": 1803,
+  "lcp_range_ms": [
+   1803,
+   1803
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 132066,
+  "dom": 150
+ },
+ {
+  "route": "/diagnostico-b2g-expansao/",
+  "runs": 3,
+  "perf_median": 99,
+  "perf_range": [
+   99,
+   99
+  ],
+  "lcp_median_ms": 1954,
+  "lcp_range_ms": [
+   1954,
+   1955
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 148945,
+  "dom": 340
+ },
+ {
+  "route": "/diagnostico-b2g-expansao/cancelado/",
+  "runs": 1,
+  "perf_median": 100,
+  "perf_range": [
+   100,
+   100
+  ],
+  "lcp_median_ms": 1804,
+  "lcp_range_ms": [
+   1804,
+   1804
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 127307,
+  "dom": 81
+ },
+ {
+  "route": "/diretoria-b2g/",
+  "runs": 3,
+  "perf_median": 99,
+  "perf_range": [
+   99,
+   99
+  ],
+  "lcp_median_ms": 1803,
+  "lcp_range_ms": [
+   1803,
+   1804
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 144842,
+  "dom": 516
+ },
+ {
+  "route": "/entregas/",
+  "runs": 3,
+  "perf_median": 99,
+  "perf_range": [
+   99,
+   99
+  ],
+  "lcp_median_ms": 1878,
+  "lcp_range_ms": [
+   1804,
+   1879
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 149906,
+  "dom": 857
+ },
+ {
+  "route": "/especialista/tiago-jun-sasaki/",
+  "runs": 3,
+  "perf_median": 100,
+  "perf_range": [
+   100,
+   100
+  ],
+  "lcp_median_ms": 1805,
+  "lcp_range_ms": [
+   1803,
+   1806
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 144376,
+  "dom": 334
+ },
+ {
+  "route": "/ferramentas/",
+  "runs": 1,
+  "perf_median": 100,
+  "perf_range": [
+   100,
+   100
+  ],
+  "lcp_median_ms": 1655,
+  "lcp_range_ms": [
+   1655,
+   1655
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 129743,
+  "dom": 205
+ },
+ {
+  "route": "/ferramentas/diagnostico-defesa-margem/",
+  "runs": 3,
+  "perf_median": 99,
+  "perf_range": [
+   99,
+   99
+  ],
+  "lcp_median_ms": 1958,
+  "lcp_range_ms": [
+   1957,
+   1960
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 152622,
+  "dom": 266
+ },
+ {
+  "route": "/ferramentas/prontidao-tecnica-obra-privada/",
+  "runs": 1,
+  "perf_median": 99,
+  "perf_range": [
+   99,
+   99
+  ],
+  "lcp_median_ms": 1958,
+  "lcp_range_ms": [
+   1958,
+   1958
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 145388,
+  "dom": 268
+ },
+ {
+  "route": "/guias-contratos-obras/",
+  "runs": 1,
+  "perf_median": 100,
+  "perf_range": [
+   100,
+   100
+  ],
+  "lcp_median_ms": 1878,
+  "lcp_range_ms": [
+   1878,
+   1878
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 145900,
+  "dom": 157
+ },
+ {
+  "route": "/inspecao-diagnostico-edificacoes/",
+  "runs": 1,
+  "perf_median": 100,
+  "perf_range": [
+   100,
+   100
+  ],
+  "lcp_median_ms": 1803,
+  "lcp_range_ms": [
+   1803,
+   1803
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 141190,
+  "dom": 348
+ },
+ {
+  "route": "/inteligencia/",
+  "runs": 1,
+  "perf_median": 100,
+  "perf_range": [
+   100,
+   100
+  ],
+  "lcp_median_ms": 1878,
+  "lcp_range_ms": [
+   1878,
+   1878
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 146048,
+  "dom": 182
+ },
+ {
+  "route": "/inteligencia/valor-tipico-contratos-pavimentacao/",
+  "runs": 1,
+  "perf_median": 100,
+  "perf_range": [
+   100,
+   100
+  ],
+  "lcp_median_ms": 1652,
+  "lcp_range_ms": [
+   1652,
+   1652
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 127906,
+  "dom": 101
+ },
+ {
+  "route": "/jurisprudencia-contratos-obras/",
+  "runs": 1,
+  "perf_median": 100,
+  "perf_range": [
+   100,
+   100
+  ],
+  "lcp_median_ms": 1878,
+  "lcp_range_ms": [
+   1878,
+   1878
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 145322,
+  "dom": 106
+ },
+ {
+  "route": "/lei-14133-obras/",
+  "runs": 1,
+  "perf_median": 100,
+  "perf_range": [
+   100,
+   100
+  ],
+  "lcp_median_ms": 1878,
+  "lcp_range_ms": [
+   1878,
+   1878
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 145967,
+  "dom": 157
+ },
+ {
+  "route": "/metodologia-inteligencia/",
+  "runs": 1,
+  "perf_median": 100,
+  "perf_range": [
+   100,
+   100
+  ],
+  "lcp_median_ms": 1728,
+  "lcp_range_ms": [
+   1728,
+   1728
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 131239,
+  "dom": 131
+ },
+ {
+  "route": "/nurture/",
+  "runs": 1,
+  "perf_median": 100,
+  "perf_range": [
+   100,
+   100
+  ],
+  "lcp_median_ms": 1653,
+  "lcp_range_ms": [
+   1653,
+   1653
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 123102,
+  "dom": 164
+ },
+ {
+  "route": "/obrigado.html",
+  "runs": 1,
+  "perf_median": 100,
+  "perf_range": [
+   100,
+   100
+  ],
+  "lcp_median_ms": 1804,
+  "lcp_range_ms": [
+   1804,
+   1804
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 128532,
+  "dom": 103
+ },
+ {
+  "route": "/ops/",
+  "runs": 1,
+  "perf_median": 100,
+  "perf_range": [
+   100,
+   100
+  ],
+  "lcp_median_ms": 648,
+  "lcp_range_ms": [
+   648,
+   648
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 4475,
+  "dom": 92
+ },
+ {
+  "route": "/parcerias-engenharia/",
+  "runs": 1,
+  "perf_median": 99,
+  "perf_range": [
+   99,
+   99
+  ],
+  "lcp_median_ms": 1957,
+  "lcp_range_ms": [
+   1957,
+   1957
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 141348,
+  "dom": 299
+ },
+ {
+  "route": "/politica-editorial/",
+  "runs": 1,
+  "perf_median": 100,
+  "perf_range": [
+   100,
+   100
+  ],
+  "lcp_median_ms": 1803,
+  "lcp_range_ms": [
+   1803,
+   1803
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 128480,
+  "dom": 150
+ },
+ {
+  "route": "/problemas-que-resolvemos/",
+  "runs": 1,
+  "perf_median": 99,
+  "perf_range": [
+   99,
+   99
+  ],
+  "lcp_median_ms": 1804,
+  "lcp_range_ms": [
+   1804,
+   1804
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 133204,
+  "dom": 255
+ },
+ {
+  "route": "/projetos-complementares-engenharia/",
+  "runs": 1,
+  "perf_median": 100,
+  "perf_range": [
+   100,
+   100
+  ],
+  "lcp_median_ms": 1879,
+  "lcp_range_ms": [
+   1879,
+   1879
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 148346,
+  "dom": 415
+ },
+ {
+  "route": "/quantitativos-orcamento-obras/",
+  "runs": 1,
+  "perf_median": 99,
+  "perf_range": [
+   99,
+   99
+  ],
+  "lcp_median_ms": 1955,
+  "lcp_range_ms": [
+   1955,
+   1955
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 152255,
+  "dom": 647
+ },
+ {
+  "route": "/radar/nacional-obras-publicas/",
+  "runs": 1,
+  "perf_median": 100,
+  "perf_range": [
+   100,
+   100
+  ],
+  "lcp_median_ms": 1654,
+  "lcp_range_ms": [
+   1654,
+   1654
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 123907,
+  "dom": 248
+ },
+ {
+  "route": "/revisao-tecnica-projetos-engenharia/",
+  "runs": 1,
+  "perf_median": 100,
+  "perf_range": [
+   100,
+   100
+  ],
+  "lcp_median_ms": 1879,
+  "lcp_range_ms": [
+   1879,
+   1879
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 146930,
+  "dom": 357
+ },
+ {
+  "route": "/seguranca-trabalho-apoio-tecnico/",
+  "runs": 1,
+  "perf_median": 100,
+  "perf_range": [
+   100,
+   100
+  ],
+  "lcp_median_ms": 1879,
+  "lcp_range_ms": [
+   1879,
+   1879
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 147182,
+  "dom": 374
+ },
+ {
+  "route": "/servicos-obras-publicas/",
+  "runs": 1,
+  "perf_median": 99,
+  "perf_range": [
+   99,
+   99
+  ],
+  "lcp_median_ms": 1805,
+  "lcp_range_ms": [
+   1805,
+   1805
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 140358,
+  "dom": 511
+ },
+ {
+  "route": "/servicos/",
+  "runs": 1,
+  "perf_median": 100,
+  "perf_range": [
+   100,
+   100
+  ],
+  "lcp_median_ms": 1804,
+  "lcp_range_ms": [
+   1804,
+   1804
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 140556,
+  "dom": 383
+ },
+ {
+  "route": "/termos-de-uso/",
+  "runs": 1,
+  "perf_median": 100,
+  "perf_range": [
+   100,
+   100
+  ],
+  "lcp_median_ms": 1654,
+  "lcp_range_ms": [
+   1654,
+   1654
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 97173,
+  "dom": 108
+ },
+ {
+  "route": "/triagem-tecnica/",
+  "runs": 1,
+  "perf_median": 99,
+  "perf_range": [
+   99,
+   99
+  ],
+  "lcp_median_ms": 1815,
+  "lcp_range_ms": [
+   1815,
+   1815
+  ],
+  "cls_median": 0,
+  "content_bytes_median": 131744,
+  "dom": 135
+ }
+]

@@ -1,0 +1,464 @@
+{
+ "base": "http://127.0.0.1:8791",
+ "label": "main-47da03b64",
+ "measured_at": "2026-09-18T02:55:03.562Z",
+ "method": "fontes carregadas; content-visibility materializado; imagens lazy carregadas; prosa = innerText de p/li/dt/dd/h1-4/figcaption/summary/label/td/th visíveis dentro de <main>, folhas (sem SVG); anotações = texto dentro de <svg>; contato = primeiro controle acionável visível (botão primário, wa.me, mailto, tel, submit, âncora de contato) por top absoluto",
+ "rows": [
+  {
+   "route": "/",
+   "viewport": "390x844",
+   "height": 11614,
+   "prose_chars": 7691,
+   "prose_nodes": 98,
+   "drawing_chars": 167,
+   "plates_visible": 0,
+   "first_contact": {
+    "top": 585,
+    "bottom": 629,
+    "text": "Ver serviços por situação",
+    "href": "/servicos/"
+   },
+   "contacts_count": 11,
+   "primary_in_fold": true,
+   "header_h": 61,
+   "h1": "Assumimos a parte de engenharia que falta para você orçar, contratar ou decidir."
+  },
+  {
+   "route": "/",
+   "viewport": "1440x1000",
+   "height": 6921,
+   "prose_chars": 7691,
+   "prose_nodes": 98,
+   "drawing_chars": 167,
+   "plates_visible": 0,
+   "first_contact": {
+    "top": 19,
+    "bottom": 63,
+    "text": "Solicitar proposta",
+    "href": "/triagem-tecnica/"
+   },
+   "contacts_count": 13,
+   "primary_in_fold": true,
+   "header_h": 83,
+   "h1": "Assumimos a parte de engenharia que falta para você orçar, contratar ou decidir."
+  },
+  {
+   "route": "/servicos/",
+   "viewport": "390x844",
+   "height": 13440,
+   "prose_chars": 10378,
+   "prose_nodes": 69,
+   "drawing_chars": 0,
+   "plates_visible": 0,
+   "first_contact": {
+    "top": 731,
+    "bottom": 775,
+    "text": "Descrever a situação pelo WhatsApp",
+    "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quer"
+   },
+   "contacts_count": 14,
+   "primary_in_fold": true,
+   "header_h": 61,
+   "h1": "Serviços de engenharia para obras públicas e privadas"
+  },
+  {
+   "route": "/servicos/",
+   "viewport": "1440x1000",
+   "height": 8133,
+   "prose_chars": 10378,
+   "prose_nodes": 69,
+   "drawing_chars": 0,
+   "plates_visible": 0,
+   "first_contact": {
+    "top": 19,
+    "bottom": 63,
+    "text": "Solicitar proposta",
+    "href": "/triagem-tecnica/"
+   },
+   "contacts_count": 15,
+   "primary_in_fold": true,
+   "header_h": 83,
+   "h1": "Serviços de engenharia para obras públicas e privadas"
+  },
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "viewport": "390x844",
+   "height": 19740,
+   "prose_chars": 18131,
+   "prose_nodes": 243,
+   "drawing_chars": 167,
+   "plates_visible": 0,
+   "first_contact": {
+    "top": 698,
+    "bottom": 742,
+    "text": "Solicitar proposta de orçamento",
+    "href": "#triagem-quantitativos"
+   },
+   "contacts_count": 11,
+   "primary_in_fold": true,
+   "header_h": 61,
+   "h1": "Quantitativos e orçamento de obras"
+  },
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "viewport": "1440x1000",
+   "height": 12030,
+   "prose_chars": 18076,
+   "prose_nodes": 242,
+   "drawing_chars": 167,
+   "plates_visible": 0,
+   "first_contact": {
+    "top": 19,
+    "bottom": 63,
+    "text": "Solicitar proposta de orçamento",
+    "href": "#triagem-quantitativos"
+   },
+   "contacts_count": 12,
+   "primary_in_fold": true,
+   "header_h": 83,
+   "h1": "Quantitativos e orçamento de obras"
+  },
+  {
+   "route": "/compatibilizacao-projetos-engenharia/",
+   "viewport": "390x844",
+   "height": 15056,
+   "prose_chars": 13336,
+   "prose_nodes": 138,
+   "drawing_chars": 367,
+   "plates_visible": 0,
+   "first_contact": {
+    "top": 629,
+    "bottom": 673,
+    "text": "Pedir proposta da compatibilização",
+    "href": "#pedido-compatibilizacao"
+   },
+   "contacts_count": 9,
+   "primary_in_fold": true,
+   "header_h": 61,
+   "h1": "Compatibilização de projetos de engenharia"
+  },
+  {
+   "route": "/compatibilizacao-projetos-engenharia/",
+   "viewport": "1440x1000",
+   "height": 9208,
+   "prose_chars": 13336,
+   "prose_nodes": 138,
+   "drawing_chars": 367,
+   "plates_visible": 0,
+   "first_contact": {
+    "top": 19,
+    "bottom": 63,
+    "text": "Pedir proposta da compatibilização",
+    "href": "#pedido-compatibilizacao"
+   },
+   "contacts_count": 10,
+   "primary_in_fold": true,
+   "header_h": 83,
+   "h1": "Compatibilização de projetos de engenharia"
+  },
+  {
+   "route": "/medicoes-glosas-obras-publicas/",
+   "viewport": "390x844",
+   "height": 14248,
+   "prose_chars": 10292,
+   "prose_nodes": 96,
+   "drawing_chars": 0,
+   "plates_visible": 0,
+   "first_contact": {
+    "top": 518,
+    "bottom": 562,
+    "text": "Analisar uma demanda",
+    "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenh"
+   },
+   "contacts_count": 8,
+   "primary_in_fold": true,
+   "header_h": 61,
+   "h1": "Medições, glosas e pagamentos em obras públicas"
+  },
+  {
+   "route": "/medicoes-glosas-obras-publicas/",
+   "viewport": "1440x1000",
+   "height": 9876,
+   "prose_chars": 10292,
+   "prose_nodes": 96,
+   "drawing_chars": 0,
+   "plates_visible": 0,
+   "first_contact": {
+    "top": 19,
+    "bottom": 63,
+    "text": "Solicitar proposta",
+    "href": "/triagem-tecnica/"
+   },
+   "contacts_count": 10,
+   "primary_in_fold": true,
+   "header_h": 83,
+   "h1": "Medições, glosas e pagamentos em obras públicas"
+  },
+  {
+   "route": "/triagem-tecnica/",
+   "viewport": "390x844",
+   "height": 6312,
+   "prose_chars": 5132,
+   "prose_nodes": 24,
+   "drawing_chars": 0,
+   "plates_visible": 0,
+   "first_contact": {
+    "top": 650,
+    "bottom": 694,
+    "text": "Falar pelo WhatsApp",
+    "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quer"
+   },
+   "contacts_count": 12,
+   "primary_in_fold": true,
+   "header_h": 61,
+   "h1": "Conte a situação do seu jeito. Nós nomeamos o serviço."
+  },
+  {
+   "route": "/triagem-tecnica/",
+   "viewport": "1440x1000",
+   "height": 3840,
+   "prose_chars": 5132,
+   "prose_nodes": 24,
+   "drawing_chars": 0,
+   "plates_visible": 0,
+   "first_contact": {
+    "top": 19,
+    "bottom": 63,
+    "text": "Solicitar proposta",
+    "href": "/triagem-tecnica/"
+   },
+   "contacts_count": 13,
+   "primary_in_fold": true,
+   "header_h": 83,
+   "h1": "Conte a situação do seu jeito. Nós nomeamos o serviço."
+  },
+  {
+   "route": "/conteudos/documentos-reequilibrio-obra-publica/",
+   "viewport": "390x844",
+   "height": 10599,
+   "prose_chars": 6151,
+   "prose_nodes": 74,
+   "drawing_chars": 0,
+   "plates_visible": 1,
+   "first_contact": {
+    "top": 6496,
+    "bottom": 6540,
+    "text": "Falar no WhatsApp sobre este caso",
+    "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Gost"
+   },
+   "contacts_count": 6,
+   "primary_in_fold": false,
+   "header_h": 61,
+   "h1": "Documentos essenciais para pedir reequilíbrio em obra pública"
+  },
+  {
+   "route": "/conteudos/documentos-reequilibrio-obra-publica/",
+   "viewport": "1440x1000",
+   "height": 7620,
+   "prose_chars": 6151,
+   "prose_nodes": 74,
+   "drawing_chars": 0,
+   "plates_visible": 1,
+   "first_contact": {
+    "top": 19,
+    "bottom": 63,
+    "text": "Solicitar proposta",
+    "href": "/triagem-tecnica/"
+   },
+   "contacts_count": 8,
+   "primary_in_fold": true,
+   "header_h": 83,
+   "h1": "Documentos essenciais para pedir reequilíbrio em obra pública"
+  },
+  {
+   "route": "/ferramentas/diagnostico-defesa-margem/",
+   "viewport": "390x844",
+   "height": 8165,
+   "prose_chars": 7157,
+   "prose_nodes": 84,
+   "drawing_chars": 0,
+   "plates_visible": 0,
+   "first_contact": {
+    "top": 1456,
+    "bottom": 1500,
+    "text": "Ler este contrato",
+    "href": "form"
+   },
+   "contacts_count": 4,
+   "primary_in_fold": false,
+   "header_h": 61,
+   "h1": "Diagnóstico de Defesa de Margem em Contratos Públicos"
+  },
+  {
+   "route": "/ferramentas/diagnostico-defesa-margem/",
+   "viewport": "1440x1000",
+   "height": 5406,
+   "prose_chars": 7157,
+   "prose_nodes": 84,
+   "drawing_chars": 0,
+   "plates_visible": 0,
+   "first_contact": {
+    "top": 19,
+    "bottom": 63,
+    "text": "Solicitar proposta",
+    "href": "/triagem-tecnica/"
+   },
+   "contacts_count": 5,
+   "primary_in_fold": false,
+   "header_h": 83,
+   "h1": "Diagnóstico de Defesa de Margem em Contratos Públicos"
+  },
+  {
+   "route": "/obrigado.html",
+   "viewport": "390x844",
+   "height": 1130,
+   "prose_chars": 331,
+   "prose_nodes": 4,
+   "drawing_chars": 0,
+   "plates_visible": 0,
+   "first_contact": {
+    "top": 470,
+    "bottom": 514,
+    "text": "Continuar pelo WhatsApp",
+    "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quer"
+   },
+   "contacts_count": 4,
+   "primary_in_fold": true,
+   "header_h": 61,
+   "h1": "Confira a referência do envio."
+  },
+  {
+   "route": "/obrigado.html",
+   "viewport": "1440x1000",
+   "height": 1036,
+   "prose_chars": 331,
+   "prose_nodes": 4,
+   "drawing_chars": 0,
+   "plates_visible": 0,
+   "first_contact": {
+    "top": 19,
+    "bottom": 63,
+    "text": "Solicitar proposta",
+    "href": "/triagem-tecnica/"
+   },
+   "contacts_count": 6,
+   "primary_in_fold": true,
+   "header_h": 83,
+   "h1": "Confira a referência do envio."
+  },
+  {
+   "route": "/404.html",
+   "viewport": "390x844",
+   "height": 2878,
+   "prose_chars": 858,
+   "prose_nodes": 12,
+   "drawing_chars": 0,
+   "plates_visible": 0,
+   "first_contact": {
+    "top": 122,
+    "bottom": 167,
+    "text": "Solicitar proposta",
+    "href": "/triagem-tecnica/"
+   },
+   "contacts_count": 5,
+   "primary_in_fold": false,
+   "header_h": 182,
+   "h1": "Esta página não existe ou não está mais disponível."
+  },
+  {
+   "route": "/404.html",
+   "viewport": "1440x1000",
+   "height": 1518,
+   "prose_chars": 858,
+   "prose_nodes": 12,
+   "drawing_chars": 0,
+   "plates_visible": 0,
+   "first_contact": {
+    "top": 16,
+    "bottom": 66,
+    "text": "Solicitar proposta",
+    "href": "/triagem-tecnica/"
+   },
+   "contacts_count": 6,
+   "primary_in_fold": true,
+   "header_h": 83,
+   "h1": "Esta página não existe ou não está mais disponível."
+  },
+  {
+   "route": "/entregas/",
+   "viewport": "390x844",
+   "height": 18190,
+   "prose_chars": 18237,
+   "prose_nodes": 281,
+   "drawing_chars": 0,
+   "plates_visible": 0,
+   "first_contact": {
+    "top": 582,
+    "bottom": 626,
+    "text": "Ver entregas e exemplos",
+    "href": "#servicos-e-entregas"
+   },
+   "contacts_count": 23,
+   "primary_in_fold": true,
+   "header_h": 61,
+   "h1": "Entregas de engenharia. Veja o conteúdo e para que ele serve."
+  },
+  {
+   "route": "/entregas/",
+   "viewport": "1440x1000",
+   "height": 12038,
+   "prose_chars": 18237,
+   "prose_nodes": 281,
+   "drawing_chars": 0,
+   "plates_visible": 0,
+   "first_contact": {
+    "top": 19,
+    "bottom": 63,
+    "text": "Solicitar proposta",
+    "href": "/triagem-tecnica/"
+   },
+   "contacts_count": 24,
+   "primary_in_fold": true,
+   "header_h": 83,
+   "h1": "Entregas de engenharia. Veja o conteúdo e para que ele serve."
+  },
+  {
+   "route": "/especialista/tiago-jun-sasaki/",
+   "viewport": "390x844",
+   "height": 7683,
+   "prose_chars": 4190,
+   "prose_nodes": 50,
+   "drawing_chars": 0,
+   "plates_visible": 1,
+   "first_contact": {
+    "top": 481,
+    "bottom": 540,
+    "text": "Descrever a situação para o Engº Tiago",
+    "href": "/triagem-tecnica/"
+   },
+   "contacts_count": 5,
+   "primary_in_fold": true,
+   "header_h": 61,
+   "h1": "Engº Tiago Sasaki"
+  },
+  {
+   "route": "/especialista/tiago-jun-sasaki/",
+   "viewport": "1440x1000",
+   "height": 4889,
+   "prose_chars": 4190,
+   "prose_nodes": 50,
+   "drawing_chars": 0,
+   "plates_visible": 1,
+   "first_contact": {
+    "top": 19,
+    "bottom": 63,
+    "text": "Solicitar proposta",
+    "href": "/triagem-tecnica/"
+   },
+   "contacts_count": 7,
+   "primary_in_fold": true,
+   "header_h": 83,
+   "h1": "Engº Tiago Sasaki"
+  }
+ ]
+}

@@ -1,0 +1,818 @@
+{
+  "measured_at": "2026-09-17T06:05:30.147Z",
+  "base": "http://127.0.0.1:8731",
+  "tool": "puppeteer-core / chromium-1234",
+  "overflow": [
+    {
+      "route": "/",
+      "width": 320,
+      "overflow_px": 0
+    },
+    {
+      "route": "/",
+      "width": 390,
+      "overflow_px": 0
+    },
+    {
+      "route": "/",
+      "width": 768,
+      "overflow_px": 0
+    },
+    {
+      "route": "/",
+      "width": 1024,
+      "overflow_px": 0
+    },
+    {
+      "route": "/",
+      "width": 1280,
+      "overflow_px": 0
+    },
+    {
+      "route": "/",
+      "width": 1440,
+      "overflow_px": 0
+    },
+    {
+      "route": "/servicos/",
+      "width": 320,
+      "overflow_px": 0
+    },
+    {
+      "route": "/servicos/",
+      "width": 390,
+      "overflow_px": 0
+    },
+    {
+      "route": "/servicos/",
+      "width": 768,
+      "overflow_px": 0
+    },
+    {
+      "route": "/servicos/",
+      "width": 1024,
+      "overflow_px": 0
+    },
+    {
+      "route": "/servicos/",
+      "width": 1280,
+      "overflow_px": 0
+    },
+    {
+      "route": "/servicos/",
+      "width": 1440,
+      "overflow_px": 0
+    },
+    {
+      "route": "/quantitativos-orcamento-obras/",
+      "width": 320,
+      "overflow_px": 0
+    },
+    {
+      "route": "/quantitativos-orcamento-obras/",
+      "width": 390,
+      "overflow_px": 0
+    },
+    {
+      "route": "/quantitativos-orcamento-obras/",
+      "width": 768,
+      "overflow_px": 0
+    },
+    {
+      "route": "/quantitativos-orcamento-obras/",
+      "width": 1024,
+      "overflow_px": 0
+    },
+    {
+      "route": "/quantitativos-orcamento-obras/",
+      "width": 1280,
+      "overflow_px": 0
+    },
+    {
+      "route": "/quantitativos-orcamento-obras/",
+      "width": 1440,
+      "overflow_px": 0
+    },
+    {
+      "route": "/medicoes-glosas-obras-publicas/",
+      "width": 320,
+      "overflow_px": 0
+    },
+    {
+      "route": "/medicoes-glosas-obras-publicas/",
+      "width": 390,
+      "overflow_px": 0
+    },
+    {
+      "route": "/medicoes-glosas-obras-publicas/",
+      "width": 768,
+      "overflow_px": 0
+    },
+    {
+      "route": "/medicoes-glosas-obras-publicas/",
+      "width": 1024,
+      "overflow_px": 0
+    },
+    {
+      "route": "/medicoes-glosas-obras-publicas/",
+      "width": 1280,
+      "overflow_px": 0
+    },
+    {
+      "route": "/medicoes-glosas-obras-publicas/",
+      "width": 1440,
+      "overflow_px": 0
+    },
+    {
+      "route": "/casos/demonstrativo-projeto-privado/",
+      "width": 320,
+      "overflow_px": 0
+    },
+    {
+      "route": "/casos/demonstrativo-projeto-privado/",
+      "width": 390,
+      "overflow_px": 0
+    },
+    {
+      "route": "/casos/demonstrativo-projeto-privado/",
+      "width": 768,
+      "overflow_px": 0
+    },
+    {
+      "route": "/casos/demonstrativo-projeto-privado/",
+      "width": 1024,
+      "overflow_px": 0
+    },
+    {
+      "route": "/casos/demonstrativo-projeto-privado/",
+      "width": 1280,
+      "overflow_px": 0
+    },
+    {
+      "route": "/casos/demonstrativo-projeto-privado/",
+      "width": 1440,
+      "overflow_px": 0
+    },
+    {
+      "route": "/triagem-tecnica/",
+      "width": 320,
+      "overflow_px": 0
+    },
+    {
+      "route": "/triagem-tecnica/",
+      "width": 390,
+      "overflow_px": 0
+    },
+    {
+      "route": "/triagem-tecnica/",
+      "width": 768,
+      "overflow_px": 0
+    },
+    {
+      "route": "/triagem-tecnica/",
+      "width": 1024,
+      "overflow_px": 0
+    },
+    {
+      "route": "/triagem-tecnica/",
+      "width": 1280,
+      "overflow_px": 0
+    },
+    {
+      "route": "/triagem-tecnica/",
+      "width": 1440,
+      "overflow_px": 0
+    }
+  ],
+  "zoom200": [
+    {
+      "route": "/",
+      "overflow_px": 0
+    },
+    {
+      "route": "/servicos/",
+      "overflow_px": 0
+    },
+    {
+      "route": "/quantitativos-orcamento-obras/",
+      "overflow_px": 0
+    },
+    {
+      "route": "/medicoes-glosas-obras-publicas/",
+      "overflow_px": 0
+    },
+    {
+      "route": "/casos/demonstrativo-projeto-privado/",
+      "overflow_px": 0
+    },
+    {
+      "route": "/triagem-tecnica/",
+      "overflow_px": 0
+    }
+  ],
+  "js_off": [
+    {
+      "route": "/",
+      "visible_nav_links": 4,
+      "form_present": true,
+      "form_visible": true,
+      "nojs_note_visible": true,
+      "visible_whatsapp_links": 3
+    },
+    {
+      "route": "/servicos/",
+      "visible_nav_links": 4,
+      "form_present": false,
+      "form_visible": null,
+      "nojs_note_visible": null,
+      "visible_whatsapp_links": 3
+    },
+    {
+      "route": "/quantitativos-orcamento-obras/",
+      "visible_nav_links": 4,
+      "form_present": false,
+      "form_visible": null,
+      "nojs_note_visible": null,
+      "visible_whatsapp_links": 2
+    },
+    {
+      "route": "/medicoes-glosas-obras-publicas/",
+      "visible_nav_links": 4,
+      "form_present": true,
+      "form_visible": true,
+      "nojs_note_visible": null,
+      "visible_whatsapp_links": 3
+    },
+    {
+      "route": "/casos/demonstrativo-projeto-privado/",
+      "visible_nav_links": 4,
+      "form_present": false,
+      "form_visible": null,
+      "nojs_note_visible": null,
+      "visible_whatsapp_links": 1
+    },
+    {
+      "route": "/triagem-tecnica/",
+      "visible_nav_links": 4,
+      "form_present": false,
+      "form_visible": null,
+      "nojs_note_visible": null,
+      "visible_whatsapp_links": 7
+    }
+  ],
+  "reduced_motion": [
+    {
+      "route": "/",
+      "running_animations": 0,
+      "reveal_hidden": 0
+    },
+    {
+      "route": "/servicos/",
+      "running_animations": 0,
+      "reveal_hidden": 0
+    },
+    {
+      "route": "/quantitativos-orcamento-obras/",
+      "running_animations": 0,
+      "reveal_hidden": 0
+    },
+    {
+      "route": "/medicoes-glosas-obras-publicas/",
+      "running_animations": 0,
+      "reveal_hidden": 0
+    },
+    {
+      "route": "/casos/demonstrativo-projeto-privado/",
+      "running_animations": 0,
+      "reveal_hidden": 0
+    },
+    {
+      "route": "/triagem-tecnica/",
+      "running_animations": 0,
+      "reveal_hidden": 0
+    }
+  ],
+  "font_blocked": [
+    {
+      "route": "/",
+      "h1_font": "\"Archivo Var\", \"Archivo Fallback Wide\", ",
+      "h1_h": 176,
+      "loaded_fonts": 3
+    },
+    {
+      "route": "/servicos/",
+      "h1_font": "\"Archivo Var\", \"Archivo Fallback Wide\", ",
+      "h1_h": 100,
+      "loaded_fonts": 3
+    },
+    {
+      "route": "/quantitativos-orcamento-obras/",
+      "h1_font": "\"Archivo Var\", \"Archivo Fallback Wide\", ",
+      "h1_h": 67,
+      "loaded_fonts": 3
+    },
+    {
+      "route": "/medicoes-glosas-obras-publicas/",
+      "h1_font": "\"Archivo Var\", \"Archivo Fallback Wide\", ",
+      "h1_h": 100,
+      "loaded_fonts": 3
+    },
+    {
+      "route": "/casos/demonstrativo-projeto-privado/",
+      "h1_font": "\"Archivo Var\", \"Archivo Fallback Wide\", ",
+      "h1_h": 166,
+      "loaded_fonts": 3
+    },
+    {
+      "route": "/triagem-tecnica/",
+      "h1_font": "\"Archivo Var\", \"Archivo Fallback Wide\", ",
+      "h1_h": 100,
+      "loaded_fonts": 3
+    }
+  ],
+  "keyboard": [
+    {
+      "route": "/",
+      "focus_steps": 25,
+      "all_in_viewport": false,
+      "any_under_header": true,
+      "all_with_ring": true,
+      "sample": [
+        {
+          "tag": "A",
+          "text": "Pular para o conteúdo",
+          "top": 12,
+          "inViewport": true,
+          "underHeader": true,
+          "ring": true
+        },
+        {
+          "tag": "A",
+          "text": "CONFENGE, página inicial",
+          "top": 12,
+          "inViewport": true,
+          "underHeader": false,
+          "ring": true
+        },
+        {
+          "tag": "A",
+          "text": "Serviços e problemas",
+          "top": 17,
+          "inViewport": true,
+          "underHeader": false,
+          "ring": true
+        },
+        {
+          "tag": "A",
+          "text": "Obras públicas",
+          "top": 17,
+          "inViewport": true,
+          "underHeader": false,
+          "ring": true
+        },
+        {
+          "tag": "A",
+          "text": "Biblioteca",
+          "top": 17,
+          "inViewport": true,
+          "underHeader": false,
+          "ring": true
+        },
+        {
+          "tag": "A",
+          "text": "Solicitar proposta",
+          "top": 19,
+          "inViewport": true,
+          "underHeader": false,
+          "ring": true
+        }
+      ]
+    },
+    {
+      "route": "/servicos/",
+      "focus_steps": 25,
+      "all_in_viewport": false,
+      "any_under_header": true,
+      "all_with_ring": true,
+      "sample": [
+        {
+          "tag": "A",
+          "text": "Pular para o conteúdo",
+          "top": 12,
+          "inViewport": true,
+          "underHeader": true,
+          "ring": true
+        },
+        {
+          "tag": "A",
+          "text": "CONFENGE, página inicial",
+          "top": 12,
+          "inViewport": true,
+          "underHeader": false,
+          "ring": true
+        },
+        {
+          "tag": "A",
+          "text": "Serviços e problemas",
+          "top": 17,
+          "inViewport": true,
+          "underHeader": false,
+          "ring": true
+        },
+        {
+          "tag": "A",
+          "text": "Obras públicas",
+          "top": 17,
+          "inViewport": true,
+          "underHeader": false,
+          "ring": true
+        },
+        {
+          "tag": "A",
+          "text": "Biblioteca",
+          "top": 17,
+          "inViewport": true,
+          "underHeader": false,
+          "ring": true
+        },
+        {
+          "tag": "A",
+          "text": "Solicitar proposta",
+          "top": 19,
+          "inViewport": true,
+          "underHeader": false,
+          "ring": true
+        }
+      ]
+    },
+    {
+      "route": "/quantitativos-orcamento-obras/",
+      "focus_steps": 25,
+      "all_in_viewport": false,
+      "any_under_header": true,
+      "all_with_ring": true,
+      "sample": [
+        {
+          "tag": "A",
+          "text": "Pular para o conteúdo",
+          "top": 12,
+          "inViewport": true,
+          "underHeader": true,
+          "ring": true
+        },
+        {
+          "tag": "A",
+          "text": "CONFENGE, página inicial",
+          "top": 12,
+          "inViewport": true,
+          "underHeader": false,
+          "ring": true
+        },
+        {
+          "tag": "A",
+          "text": "Serviços e problemas",
+          "top": 17,
+          "inViewport": true,
+          "underHeader": false,
+          "ring": true
+        },
+        {
+          "tag": "A",
+          "text": "Obras públicas",
+          "top": 17,
+          "inViewport": true,
+          "underHeader": false,
+          "ring": true
+        },
+        {
+          "tag": "A",
+          "text": "Biblioteca",
+          "top": 17,
+          "inViewport": true,
+          "underHeader": false,
+          "ring": true
+        },
+        {
+          "tag": "A",
+          "text": "Solicitar proposta de orçament",
+          "top": 19,
+          "inViewport": true,
+          "underHeader": false,
+          "ring": true
+        }
+      ]
+    },
+    {
+      "route": "/medicoes-glosas-obras-publicas/",
+      "focus_steps": 25,
+      "all_in_viewport": false,
+      "any_under_header": true,
+      "all_with_ring": true,
+      "sample": [
+        {
+          "tag": "A",
+          "text": "Pular para o conteúdo",
+          "top": 12,
+          "inViewport": true,
+          "underHeader": true,
+          "ring": true
+        },
+        {
+          "tag": "A",
+          "text": "CONFENGE, página inicial",
+          "top": 12,
+          "inViewport": true,
+          "underHeader": false,
+          "ring": true
+        },
+        {
+          "tag": "A",
+          "text": "Serviços e problemas",
+          "top": 17,
+          "inViewport": true,
+          "underHeader": false,
+          "ring": true
+        },
+        {
+          "tag": "A",
+          "text": "Obras públicas",
+          "top": 17,
+          "inViewport": true,
+          "underHeader": false,
+          "ring": true
+        },
+        {
+          "tag": "A",
+          "text": "Biblioteca",
+          "top": 17,
+          "inViewport": true,
+          "underHeader": false,
+          "ring": true
+        },
+        {
+          "tag": "A",
+          "text": "Solicitar proposta",
+          "top": 19,
+          "inViewport": true,
+          "underHeader": false,
+          "ring": true
+        }
+      ]
+    },
+    {
+      "route": "/casos/demonstrativo-projeto-privado/",
+      "focus_steps": 25,
+      "all_in_viewport": false,
+      "any_under_header": true,
+      "all_with_ring": true,
+      "sample": [
+        {
+          "tag": "A",
+          "text": "Pular para o conteúdo",
+          "top": 12,
+          "inViewport": true,
+          "underHeader": true,
+          "ring": true
+        },
+        {
+          "tag": "A",
+          "text": "CONFENGE, página inicial",
+          "top": 12,
+          "inViewport": true,
+          "underHeader": false,
+          "ring": true
+        },
+        {
+          "tag": "A",
+          "text": "Serviços e problemas",
+          "top": 17,
+          "inViewport": true,
+          "underHeader": false,
+          "ring": true
+        },
+        {
+          "tag": "A",
+          "text": "Obras públicas",
+          "top": 17,
+          "inViewport": true,
+          "underHeader": false,
+          "ring": true
+        },
+        {
+          "tag": "A",
+          "text": "Biblioteca",
+          "top": 17,
+          "inViewport": true,
+          "underHeader": false,
+          "ring": true
+        },
+        {
+          "tag": "A",
+          "text": "Solicitar proposta",
+          "top": 19,
+          "inViewport": true,
+          "underHeader": false,
+          "ring": true
+        }
+      ]
+    },
+    {
+      "route": "/triagem-tecnica/",
+      "focus_steps": 25,
+      "all_in_viewport": false,
+      "any_under_header": true,
+      "all_with_ring": true,
+      "sample": [
+        {
+          "tag": "A",
+          "text": "Pular para o conteúdo",
+          "top": 12,
+          "inViewport": true,
+          "underHeader": true,
+          "ring": true
+        },
+        {
+          "tag": "A",
+          "text": "CONFENGE, página inicial",
+          "top": 12,
+          "inViewport": true,
+          "underHeader": false,
+          "ring": true
+        },
+        {
+          "tag": "A",
+          "text": "Serviços e problemas",
+          "top": 17,
+          "inViewport": true,
+          "underHeader": false,
+          "ring": true
+        },
+        {
+          "tag": "A",
+          "text": "Obras públicas",
+          "top": 17,
+          "inViewport": true,
+          "underHeader": false,
+          "ring": true
+        },
+        {
+          "tag": "A",
+          "text": "Biblioteca",
+          "top": 17,
+          "inViewport": true,
+          "underHeader": false,
+          "ring": true
+        },
+        {
+          "tag": "A",
+          "text": "Solicitar proposta",
+          "top": 19,
+          "inViewport": true,
+          "underHeader": false,
+          "ring": true
+        }
+      ]
+    }
+  ],
+  "keyboard_note": "A primeira medida (keyboard) leu o retangulo antes do scroll suave terminar (html{scroll-behavior:smooth}); keyboard_settled espera 300 ms por passo.",
+  "keyboard_settled": [
+    {
+      "route": "/",
+      "steps": 60,
+      "with_ring": 60,
+      "outside_viewport_or_under_header": []
+    },
+    {
+      "route": "/servicos/",
+      "steps": 60,
+      "with_ring": 60,
+      "outside_viewport_or_under_header": []
+    },
+    {
+      "route": "/quantitativos-orcamento-obras/",
+      "steps": 60,
+      "with_ring": 60,
+      "outside_viewport_or_under_header": [
+        {
+          "t": "exemplo demonstrativo do recor",
+          "top": 1054,
+          "bottom": 1098,
+          "vh": 900,
+          "hb": 83,
+          "inHeader": false,
+          "ring": true
+        },
+        {
+          "t": "Solicitar proposta de orçament",
+          "top": 956,
+          "bottom": 1000,
+          "vh": 900,
+          "hb": 83,
+          "inHeader": false,
+          "ring": true
+        },
+        {
+          "t": "A verga da janela WN-01 invade",
+          "top": 1125,
+          "bottom": 1145,
+          "vh": 900,
+          "hb": 83,
+          "inHeader": false,
+          "ring": true
+        },
+        {
+          "t": "IdDescriçãoUnidadeQuantidadeEl",
+          "top": 152,
+          "bottom": 913,
+          "vh": 900,
+          "hb": 83,
+          "inHeader": false,
+          "ring": true
+        }
+      ]
+    },
+    {
+      "route": "/medicoes-glosas-obras-publicas/",
+      "steps": 59,
+      "with_ring": 59,
+      "outside_viewport_or_under_header": [
+        {
+          "t": "Descrever a medição",
+          "top": 888,
+          "bottom": 940,
+          "vh": 900,
+          "hb": 83,
+          "inHeader": false,
+          "ring": true
+        },
+        {
+          "t": "Diagnosticar contrato",
+          "top": 1174,
+          "bottom": 1218,
+          "vh": 900,
+          "hb": 83,
+          "inHeader": false,
+          "ring": true
+        },
+        {
+          "t": "",
+          "top": 800,
+          "bottom": 944,
+          "vh": 900,
+          "hb": 83,
+          "inHeader": false,
+          "ring": true
+        }
+      ]
+    },
+    {
+      "route": "/casos/demonstrativo-projeto-privado/",
+      "steps": 59,
+      "with_ring": 59,
+      "outside_viewport_or_under_header": [
+        {
+          "t": "planta R00",
+          "top": 1091,
+          "bottom": 1111,
+          "vh": 900,
+          "hb": 83,
+          "inHeader": false,
+          "ring": true
+        },
+        {
+          "t": "Memória de quantitativos, revi",
+          "top": 176,
+          "bottom": 912,
+          "vh": 900,
+          "hb": 83,
+          "inHeader": false,
+          "ring": true
+        },
+        {
+          "t": "Extrato de orçamento hipotétic",
+          "top": 232,
+          "bottom": 928,
+          "vh": 900,
+          "hb": 83,
+          "inHeader": false,
+          "ring": true
+        },
+        {
+          "t": "Registro de compatibilização, ",
+          "top": 423,
+          "bottom": 908,
+          "vh": 900,
+          "hb": 83,
+          "inHeader": false,
+          "ring": true
+        }
+      ]
+    },
+    {
+      "route": "/triagem-tecnica/",
+      "steps": 59,
+      "with_ring": 59,
+      "outside_viewport_or_under_header": []
+    }
+  ]
+}

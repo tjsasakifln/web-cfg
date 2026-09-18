@@ -1,0 +1,515 @@
+{
+  "schema": "confenge.design-institucional.index-areas/1.0",
+  "campaign": "CONFENGE-SALTO-INSTITUCIONAL-01",
+  "provenance": {
+    "date": "2026-09-17",
+    "base_commit": "47da03b64ba701016eec296234b1d14225ebe588",
+    "sources_read": [
+      "data/corporate/intent-family-matrix.v1.json (CONFENGE_PUBLIC_INTENT_MATRIX/1.0.0, effective 2026-09-09)",
+      "data/site/public-ia-map.json (1.1.0, 2026-09-11)",
+      "data/site/brand.json (service_situations)",
+      "data/organic/public-family-registry.json",
+      "scripts/site/hub_link_matrix.json",
+      "index.html #situacoes",
+      "servicos/index.html",
+      "scripts/site/test_home_conversion_contract.py::test_situation_chooser_has_one_path_per_contract_situation_without_catalog_wall",
+      "scripts/site/test_design_gates.py::test_home_archetypes_diverse, test_home_card_grid_limit"
+    ],
+    "url_check": "cada href listado em subservices foi verificado em disco (<caminho>/index.html existe) em 2026-09-17; fragmentos verificados por id no arquivo alvo.",
+    "concurrent_front_b": "docs/campaigns/design-institucional/assets-manifest.json (frente B) já existe na worktree com as pranchas P1 a P4; ver home-sequencia.md, avaliacao.md e medicoes-estrutura.md para o uso por página."
+  },
+  "nature": {
+    "statement": "Agrupamento de APRESENTAÇÃO da home, não segunda taxonomia. As seis áreas são rótulos visuais sobre as sete situações do contrato (public-ia-map.service_situations); a rota pública continua partindo da situação, nunca de persona ou de núcleo (AGENTS.md; intent-family-matrix.routing_rule: \"A situação e a decisão definem a família. A audiência é somente exemplo e nunca resolve rota ou oferta.\"; operational_domains_note: os cinco núcleos são agrupamentos internos).",
+    "why_six_not_seven": "Inspeções e perícias reúne building_diagnosis e expert_evidence_valuation porque as duas partem do mesmo ato (olhar a evidência do imóvel) e se separam pela finalidade (decidir o reparo ou instruir a disputa). As duas linhas continuam existindo dentro da área.",
+    "identifiers_note": "Os valores de intent_family, canonical_service_family, offer_ids e terminal_action (REQUEST_SCOPE_REVIEW, REQUEST_B2G_FIT, NEEDS_CONTEXT etc.) são identificadores de contrato para roteamento e atribuição; nunca entram como cópia de página. test_integral_solution_copy.py reprova esses tokens em superfície pública."
+  },
+  "home_contract_invariants": {
+    "situation_rows": 7,
+    "rule": "dentro de <section id=\"situacoes\"> precisam continuar exatamente 7 class=\"situation-row\" (a linha B2G usa situation-row situation-row--b2g), cada uma com <h3>, class=\"situation-use\" e o literal \"passa a ter\"; 7 hrefs class=\"situation-action\" distintos, internos, iguais aos de public-ia-map; nenhum href=\"/triagem-tecnica/#\" no chooser; sem \"ICP\" e sem \"CTA\"; class=\"situation-list\" com >=5 linhas; #situacoes antes de #obras-publicas; arquétipo journey_paths presente; 5 a 8 arquétipos no main com >=5 distintos e sem três iguais seguidos; no máximo 2 grades legadas (problem-grid, operates-grid, offers-grid, metrics-grid, journey-grid).",
+    "seven_hrefs_exact": [
+      {
+        "id": "project_delivery",
+        "label": "Preciso completar, conferir ou compatibilizar um projeto",
+        "href": "/servicos/#servico-projeto"
+      },
+      {
+        "id": "quantities_budget",
+        "label": "Preciso comparar propostas, contratar a obra ou aceitar um número sem base própria",
+        "href": "/quantitativos-orcamento-obras/"
+      },
+      {
+        "id": "building_diagnosis",
+        "label": "Tenho infiltração, fissura, mofo ou dano no imóvel",
+        "href": "/inspecao-diagnostico-edificacoes/"
+      },
+      {
+        "id": "property_valuation",
+        "label": "Preciso do valor de um imóvel para negociar ou registrar",
+        "href": "/servicos/#servico-avaliacao"
+      },
+      {
+        "id": "expert_evidence_valuation",
+        "label": "Estou em uma disputa que depende de prova técnica de engenharia",
+        "href": "/assistencia-tecnica-pericial-engenharia/"
+      },
+      {
+        "id": "occupational_safety",
+        "label": "Preciso de um documento de segurança do trabalho",
+        "href": "/seguranca-trabalho-apoio-tecnico/"
+      },
+      {
+        "id": "public_works_b2g",
+        "label": "Medição glosada ou pagamento travado em contrato público",
+        "href": "/servicos-obras-publicas/"
+      }
+    ],
+    "labels_must_appear_verbatim": true
+  },
+  "areas": [
+    {
+      "key": "projetos",
+      "label": "Projetos e compatibilização",
+      "situations": [
+        "project_delivery"
+      ],
+      "intent_families": [
+        {
+          "intent_family": "projetar_revisar_compatibilizar",
+          "canonical_service_family": "engineering_projects_coordination",
+          "offer_ids": [
+            "complementary_engineering_project_review",
+            "bim_coordination_clash_register",
+            "private_project_technical_readiness_assessment"
+          ],
+          "terminal_action": "REQUEST_SCOPE_REVIEW"
+        },
+        {
+          "intent_family": "documentar_as_built_regularizar",
+          "canonical_service_family": "building_condition_documentation",
+          "offer_ids": [
+            "asbuilt_document_reconciliation",
+            "private_project_technical_readiness_assessment"
+          ],
+          "terminal_action": "REQUEST_SCOPE_REVIEW",
+          "note": "Adjacente: entra por \"registrar o que foi construído\"; no site vive dentro de inspeção e de projeto. Não ganha linha própria na home."
+        }
+      ],
+      "example_situation": "Falta a disciplina estrutural ou hidrossanitária, ou a estrutura e as instalações estão batendo antes de aprovar e executar.",
+      "you_get": "A disciplina completa, o relatório do que volta ao autor ou o registro de interferências com o ajuste combinado, para aprovar, contratar e executar com referência comum.",
+      "primary_href": "/servicos/#servico-projeto",
+      "subservices": [
+        {
+          "label": "Elaboração de projetos complementares",
+          "href": "/projetos-complementares-engenharia/",
+          "file_exists": true,
+          "note": "exclusive_elaboration_route no public-ia-map"
+        },
+        {
+          "label": "Revisão técnica de projetos",
+          "href": "/revisao-tecnica-projetos-engenharia/",
+          "file_exists": true
+        },
+        {
+          "label": "Compatibilização de disciplinas",
+          "href": "/compatibilizacao-projetos-engenharia/",
+          "file_exists": true
+        },
+        {
+          "label": "Parcerias com escritórios",
+          "href": "/parcerias-engenharia/",
+          "file_exists": true
+        },
+        {
+          "label": "Exemplo demonstrativo: interferência CF-GEO-01",
+          "href": "/casos/demonstrativo-projeto-privado/#CF-GEO-01",
+          "file_exists": true
+        }
+      ],
+      "matrix_clause": "intent_families[projetar_revisar_compatibilizar].public_wording e disambiguation: elaboração, revisão e compatibilização são trabalhos distintos que a proposta combina; não oferece autoria arquitetônica. service_situations[project_delivery].scope: quantitativos e orçamento têm situação e destino próprios.",
+      "home_rows_preserved": [
+        {
+          "id": "project_delivery",
+          "label": "Preciso completar, conferir ou compatibilizar um projeto",
+          "href": "/servicos/#servico-projeto",
+          "index_state": "service_hub_index"
+        }
+      ]
+    },
+    {
+      "key": "quantitativos",
+      "label": "Quantitativos e orçamentos",
+      "situations": [
+        "quantities_budget"
+      ],
+      "intent_families": [
+        {
+          "intent_family": "orcar_planejar_decidir",
+          "canonical_service_family": "cost_planning_feasibility",
+          "offer_ids": [
+            "quantity_takeoff_budgeting",
+            "budget_audit_feasibility",
+            "private_project_technical_readiness_assessment"
+          ],
+          "terminal_action": "REQUEST_SCOPE_REVIEW"
+        }
+      ],
+      "example_situation": "Duas propostas de execução com o mesmo nome de serviço e quantidades diferentes, e nenhuma base própria para comparar.",
+      "you_get": "Planilha de quantitativos, memória de cálculo e orçamento ou revisão de orçamento, com critério, referência e data-base, para comparar, contratar ou aceitar um número.",
+      "primary_href": "/quantitativos-orcamento-obras/",
+      "subservices": [
+        {
+          "label": "Levantamento de quantitativos",
+          "href": "/quantitativos-orcamento-obras/#levantamento-quantitativos",
+          "file_exists": true
+        },
+        {
+          "label": "Elaboração de orçamento",
+          "href": "/quantitativos-orcamento-obras/#elaboracao-orcamento",
+          "file_exists": true
+        },
+        {
+          "label": "Revisão de orçamento existente",
+          "href": "/quantitativos-orcamento-obras/#revisao-orcamento",
+          "file_exists": true
+        },
+        {
+          "label": "Documentos para o levantamento",
+          "href": "/conteudos/documentos-para-levantamento-quantitativos/",
+          "file_exists": true
+        },
+        {
+          "label": "Como comparar propostas de execução",
+          "href": "/conteudos/comparar-propostas-execucao-obra/",
+          "file_exists": true
+        },
+        {
+          "label": "Revisar ou refazer o orçamento",
+          "href": "/conteudos/revisar-ou-refazer-orcamento-obra/",
+          "file_exists": true
+        },
+        {
+          "label": "Exemplo demonstrativo: recorte de banheiro",
+          "href": "/casos/demonstrativo-projeto-privado/#quantitativos",
+          "file_exists": true
+        },
+        {
+          "label": "Exemplo demonstrativo: acesso viário e drenagem",
+          "href": "/casos/demonstrativo-infraestrutura/#quantitativos",
+          "file_exists": true
+        }
+      ],
+      "matrix_clause": "intent_families[orcar_planejar_decidir].disambiguation: a família atende orçamento público e privado (oferta mixed); finalidade, referências de preços, critérios, estágio do projeto e objeto definem a entrega. Registro de família private-engineering-quantities-budget (value_first_header_cta #triagem-quantitativos).",
+      "home_rows_preserved": [
+        {
+          "id": "quantities_budget",
+          "label": "Preciso comparar propostas, contratar a obra ou aceitar um número sem base própria",
+          "href": "/quantitativos-orcamento-obras/",
+          "index_state": "service_hub_index"
+        }
+      ]
+    },
+    {
+      "key": "inspecoes-pericias",
+      "label": "Inspeções e perícias",
+      "situations": [
+        "building_diagnosis",
+        "expert_evidence_valuation"
+      ],
+      "intent_families": [
+        {
+          "intent_family": "inspecionar_diagnosticar",
+          "canonical_service_family": "building_condition_documentation",
+          "offer_ids": [
+            "building_inspection_pathology",
+            "pre_litigation_technical_screening"
+          ],
+          "terminal_action": "REQUEST_TECHNICAL_TRIAGE"
+        },
+        {
+          "intent_family": "receber_entregar_reformar",
+          "canonical_service_family": "building_condition_documentation",
+          "offer_ids": [
+            "renovation_plan_condo_review",
+            "building_inspection_pathology",
+            "asbuilt_document_reconciliation"
+          ],
+          "terminal_action": "REQUEST_SCOPE_REVIEW"
+        },
+        {
+          "intent_family": "produzir_prova_tecnica",
+          "canonical_service_family": "technical_evidence_disputes",
+          "offer_ids": [
+            "pre_litigation_technical_screening",
+            "civil_building_technical_assistance",
+            "urban_property_valuation"
+          ],
+          "terminal_action": "REQUEST_CONFLICT_CHECK"
+        }
+      ],
+      "example_situation": "Infiltração que volta depois do reparo, ou uma disputa em que o laudo da outra parte precisa ser confrontado com evidência de engenharia.",
+      "you_get": "Relatório da condição do imóvel com manifestações localizadas, data, hipóteses sustentadas e próximo exame; ou manifestação técnica da parte com evidências, quesitos e conclusão delimitada.",
+      "primary_href": "/inspecao-diagnostico-edificacoes/",
+      "secondary_primary_href": "/assistencia-tecnica-pericial-engenharia/",
+      "subservices": [
+        {
+          "label": "Inspeção e diagnóstico de edificações",
+          "href": "/inspecao-diagnostico-edificacoes/",
+          "file_exists": true
+        },
+        {
+          "label": "Assistência técnica em disputas",
+          "href": "/assistencia-tecnica-pericial-engenharia/",
+          "file_exists": true
+        },
+        {
+          "label": "Linha de inspeção no hub",
+          "href": "/servicos/#servico-diagnostico",
+          "file_exists": true
+        },
+        {
+          "label": "Linha de perícia no hub",
+          "href": "/servicos/#servico-pericia",
+          "file_exists": true
+        }
+      ],
+      "matrix_clause": "intent_families[inspecionar_diagnosticar].disambiguation (diagnóstico não é projeto de reparo, laudo pericial ou garantia de causa) e intent_families[produzir_prova_tecnica].disambiguation (assistência de parte não é advocacia nem nomeação como perito do juízo). Área de apresentação que agrupa duas situações do contrato; as duas linhas continuam separadas no índice.",
+      "note": "Esta área contém DUAS situation-row do contrato da home (building_diagnosis e expert_evidence_valuation). O agrupamento é visual; as linhas, seus h3, situation-use e hrefs permanecem.",
+      "home_rows_preserved": [
+        {
+          "id": "building_diagnosis",
+          "label": "Tenho infiltração, fissura, mofo ou dano no imóvel",
+          "href": "/inspecao-diagnostico-edificacoes/",
+          "index_state": "service_hub_index"
+        },
+        {
+          "id": "expert_evidence_valuation",
+          "label": "Estou em uma disputa que depende de prova técnica de engenharia",
+          "href": "/assistencia-tecnica-pericial-engenharia/",
+          "index_state": "service_hub_index"
+        }
+      ]
+    },
+    {
+      "key": "avaliacoes",
+      "label": "Avaliações imobiliárias",
+      "situations": [
+        "property_valuation"
+      ],
+      "intent_families": [
+        {
+          "intent_family": "avaliar_imovel",
+          "canonical_service_family": "property_valuation",
+          "offer_ids": [
+            "urban_property_valuation",
+            "preliminary_property_opinion"
+          ],
+          "terminal_action": "REQUEST_FORMAL_VALUATION_SCOPE"
+        }
+      ],
+      "example_situation": "Partilha, garantia ou negociação que precisa de um valor de imóvel urbano para uma finalidade e uma data definidas.",
+      "you_get": "Laudo ou parecer de avaliação com objeto, finalidade, método, dados e conclusão delimitada; parecer preliminar não substitui a avaliação formal.",
+      "primary_href": "/servicos/#servico-avaliacao",
+      "subservices": [
+        {
+          "label": "Avaliação de imóvel urbano (seção do hub)",
+          "href": "/servicos/#servico-avaliacao",
+          "file_exists": true
+        },
+        {
+          "label": "Pedir pela triagem",
+          "href": "/triagem-tecnica/#pericia-avaliacao",
+          "file_exists": true
+        }
+      ],
+      "matrix_clause": "intent_families[avaliar_imovel].public_wording e disambiguation: parecer preliminar não substitui avaliação formal; imóvel rural, exterior ou avaliação em massa permanece GAP. terminal_action REQUEST_FORMAL_VALUATION_SCOPE.",
+      "conflict": "scripts/site/hub_link_matrix.json declara servicos-avaliacao com intent_family produzir_prova_tecnica. A matriz vigente tem a família própria avaliar_imovel (property_valuation); urban_property_valuation aparece também em produzir_prova_tecnica.offer_ids, o que explica a dupla leitura. Para apresentação, este mapeamento usa avaliar_imovel. O integrador decide se alinha o hub_link_matrix.",
+      "home_rows_preserved": [
+        {
+          "id": "property_valuation",
+          "label": "Preciso do valor de um imóvel para negociar ou registrar",
+          "href": "/servicos/#servico-avaliacao",
+          "index_state": "service_hub_index"
+        }
+      ]
+    },
+    {
+      "key": "sst",
+      "label": "Segurança do trabalho",
+      "situations": [
+        "occupational_safety"
+      ],
+      "intent_families": [
+        {
+          "intent_family": "organizar_sst",
+          "canonical_service_family": "occupational_safety",
+          "offer_ids": [
+            "sst_risk_documentation_diagnosis",
+            "sst_pgr_ltcat_aet_inputs",
+            "sst_insalubrity_perilousness_analysis",
+            "sst_preventive_audit"
+          ],
+          "terminal_action": "REQUEST_SST_SCOPE"
+        },
+        {
+          "intent_family": "assistencia_trabalhista_sst",
+          "canonical_service_family": "technical_evidence_disputes",
+          "offer_ids": [
+            "labor_sst_technical_assistance"
+          ],
+          "terminal_action": "REQUEST_CONFLICT_CHECK",
+          "note": "Disputa trabalhista com componente técnico; família de prova, não de prevenção. A home não a separa em linha própria; a página do serviço distingue."
+        }
+      ],
+      "example_situation": "Exigência de cliente ou de fiscalização por um documento de risco ocupacional, e ninguém sabe se o que existe ainda vale.",
+      "you_get": "Diagnóstico do que se aplica e o documento de segurança do trabalho nomeado na proposta, com profissional habilitado por módulo; exames e atos médicos ficam fora.",
+      "primary_href": "/seguranca-trabalho-apoio-tecnico/",
+      "subservices": [
+        {
+          "label": "Apoio técnico de segurança do trabalho",
+          "href": "/seguranca-trabalho-apoio-tecnico/",
+          "file_exists": true
+        },
+        {
+          "label": "Linha no hub",
+          "href": "/servicos/#servico-sst",
+          "file_exists": true
+        },
+        {
+          "label": "Pedir pela triagem",
+          "href": "/triagem-tecnica/#sst",
+          "file_exists": true
+        }
+      ],
+      "matrix_clause": "intent_families[organizar_sst].disambiguation: PGR, LTCAT e AET não são sinônimos nem pacote automático; atos médicos exigem profissional nominal. intent_families[assistencia_trabalhista_sst].disambiguation: não é advocacia, ato médico nem perícia do juízo.",
+      "home_rows_preserved": [
+        {
+          "id": "occupational_safety",
+          "label": "Preciso de um documento de segurança do trabalho",
+          "href": "/seguranca-trabalho-apoio-tecnico/",
+          "index_state": "service_hub_index"
+        }
+      ]
+    },
+    {
+      "key": "obras-publicas",
+      "label": "Obras públicas",
+      "situations": [
+        "public_works_b2g"
+      ],
+      "intent_families": [
+        {
+          "intent_family": "executar_proteger_contrato_publico",
+          "canonical_service_family": "public_contract_execution",
+          "offer_ids": [
+            "CFG-D17",
+            "CFG-D18",
+            "CFG-D19",
+            "CFG-D20",
+            "CFG-D22",
+            "CFG-D23",
+            "CFG-D25",
+            "CFG-D42"
+          ],
+          "terminal_action": "REQUEST_B2G_FIT",
+          "offer_ids_semantics": "representative_entry_points_plus_complete_typed_authority: entradas representativas, não catálogo; o catálogo completo vive em data/commercial/deliverables-registry.v1.json (54 entregáveis) e o checkout em data/offers/catalog.snapshot.json. Não imprimir como lista exaustiva."
+        },
+        {
+          "intent_family": "decidir_disputar_licitacao",
+          "canonical_service_family": "public_bidder_decision",
+          "offer_ids": [
+            "CFG-D01",
+            "CFG-D12",
+            "CFG-D14",
+            "CFG-D16",
+            "CFG-D49"
+          ],
+          "terminal_action": "REQUEST_B2G_FIT",
+          "offer_ids_semantics": "representative_entry_points_plus_complete_typed_authority"
+        },
+        {
+          "intent_family": "planejar_contratacao_publica",
+          "canonical_service_family": "public_procurement_owner",
+          "offer_ids": [
+            "public_works_technical_procurement_planning"
+          ],
+          "terminal_action": "REQUEST_PUBLIC_ENTITY_PLANNING_SCOPE",
+          "note": "Lado do órgão; não se mistura com o lado da empresa no mesmo certame. Entrada pública: /triagem-tecnica/#planejamento-publico."
+        }
+      ],
+      "example_situation": "Boletim glosado, pagamento travado ou edital com planilha que precisa ser lida antes de decidir participar.",
+      "you_get": "Dossiê técnico do evento com cronologia, prova de cada número e parcela incontroversa; matriz de risco ou orçamento de referência quando o lado atendido é o órgão. O órgão decide o ateste e o pagamento.",
+      "primary_href": "/servicos-obras-publicas/",
+      "subservices": [
+        {
+          "label": "Edital e proposta",
+          "href": "/bid-room-licitacoes-obras/",
+          "file_exists": true
+        },
+        {
+          "label": "Contrato sob pressão",
+          "href": "/problemas-que-resolvemos/",
+          "file_exists": true
+        },
+        {
+          "label": "Dossiê de Medição, Glosa e Pagamento",
+          "href": "/medicoes-glosas-obras-publicas/",
+          "file_exists": true
+        },
+        {
+          "label": "Aditivos",
+          "href": "/aditivos-obras-publicas/",
+          "file_exists": true
+        },
+        {
+          "label": "Reequilíbrio contratual",
+          "href": "/reequilibrio-obras-publicas/",
+          "file_exists": true
+        },
+        {
+          "label": "Atrasos e prorrogação",
+          "href": "/atrasos-prorrogacao-obras-publicas/",
+          "file_exists": true
+        },
+        {
+          "label": "Defesa técnica e margem",
+          "href": "/defesa-margem-contratos-publicos/",
+          "file_exists": true
+        },
+        {
+          "label": "Operação recorrente",
+          "href": "/diretoria-b2g/",
+          "file_exists": true
+        },
+        {
+          "label": "Guias técnicos",
+          "href": "/guias-contratos-obras/",
+          "file_exists": true
+        },
+        {
+          "label": "Órgão público preparando uma obra",
+          "href": "/triagem-tecnica/#planejamento-publico",
+          "file_exists": true
+        }
+      ],
+      "matrix_clause": "operational_domains_note (public_works_b2g é vertical protegida, não categoria corporativa) e offer_id_semantics.retained_b2g.consumer_rule. intent_families[executar_proteger_contrato_publico].disambiguation: não promete deferimento, pagamento, reequilíbrio ou vitória.",
+      "home_rows_preserved": [
+        {
+          "id": "public_works_b2g",
+          "label": "Medição glosada ou pagamento travado em contrato público",
+          "href": "/servicos-obras-publicas/",
+          "index_state": "index"
+        }
+      ]
+    }
+  ],
+  "conflicts": [
+    {
+      "id": "hub-link-matrix-avaliacao",
+      "detail": "scripts/site/hub_link_matrix.json: servicos-avaliacao tem intent_family produzir_prova_tecnica; a matriz tem avaliar_imovel. Decisão do integrador."
+    },
+    {
+      "id": "label-length",
+      "detail": "Os rótulos \"Projetos e compatibilização\", \"Quantitativos e orçamentos\", \"Inspeções e perícias\", \"Avaliações imobiliárias\", \"Segurança do trabalho\", \"Obras públicas\" têm 2 ou 3 palavras; os rótulos das sete situações continuam sendo os h3 literais de brand.json, sem alteração."
+    }
+  ]
+}

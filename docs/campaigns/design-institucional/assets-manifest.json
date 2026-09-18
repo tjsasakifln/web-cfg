@@ -1,0 +1,1118 @@
+{
+  "schema": "confenge.design-assets-manifest/1.0",
+  "campaign": "CONFENGE-SALTO-INSTITUCIONAL-01",
+  "front": "B · materiais técnicos",
+  "veracity_classes": [
+    "real autorizada",
+    "demonstração",
+    "contexto público",
+    "inadequada"
+  ],
+  "palette": [
+    "#071a31",
+    "#2d6f2d",
+    "#5d6a7a",
+    "#ced62a",
+    "#dfe4e6",
+    "#edf5ec",
+    "#f3f4f5",
+    "#ffffff"
+  ],
+  "regenerate": "python3 -m scripts.demonstrative.plates.render_plates && python3 -m scripts.demonstrative.plates.build_manifest",
+  "check": "python3 -m scripts.demonstrative.plates.render_plates --check && python3 -m pytest scripts/demonstrative/plates -q",
+  "assets": [
+    {
+      "path": "assets/pranchas/aditivo-limite-desktop.svg",
+      "kind": "prancha",
+      "code": "P5",
+      "variant": "desktop",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [
+        "/aditivos-obras-publicas/",
+        "/casos/aditivo-art125-demonstrativo/",
+        "/problemas-que-resolvemos/"
+      ],
+      "slot": "slot <!-- plate:aditivo-limite --> (materializado por scripts/demonstrative/plates/inline.py); registro do lote em docs/campaigns/design-institucional/expansao/assets-lote-b.json",
+      "editable_source": [
+        "data/demonstrative/plates/aditivo-limite.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R00",
+      "family_module": "family_b2g",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/aditivo-limite-desktop-1200.png",
+      "sha256": "849955a85b72c3e1648c8f8b71c5997dd9fc67a71b0daf51ddb328e22820939b",
+      "bytes": 7389
+    },
+    {
+      "path": "assets/pranchas/aditivo-limite-mobile.svg",
+      "kind": "prancha",
+      "code": "P5-M",
+      "variant": "mobile",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [
+        "/aditivos-obras-publicas/",
+        "/casos/aditivo-art125-demonstrativo/",
+        "/problemas-que-resolvemos/"
+      ],
+      "slot": "slot <!-- plate:aditivo-limite --> (materializado por scripts/demonstrative/plates/inline.py); registro do lote em docs/campaigns/design-institucional/expansao/assets-lote-b.json",
+      "editable_source": [
+        "data/demonstrative/plates/aditivo-limite.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R00",
+      "family_module": "family_b2g",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/aditivo-limite-mobile-360.png",
+      "sha256": "ee07d3b90dd0626c4bca3ec55e8493643e0d723b7da0718d0eb756ced701dc09",
+      "bytes": 5242
+    },
+    {
+      "path": "assets/pranchas/avaliacao-estrutura-desktop.svg",
+      "kind": "prancha",
+      "code": "P4",
+      "variant": "desktop",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [
+        "/servicos/#servico-avaliacao"
+      ],
+      "slot": "seção de avaliação imobiliária",
+      "editable_source": [
+        "data/demonstrative/plates/avaliacao-estrutura.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R00",
+      "family_module": "render_plates",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/avaliacao-estrutura-desktop-1200.png",
+      "sha256": "ea1934e035b5ca4fbe74fe3aebd6eee289454395a7738f5382e86c724a99d792",
+      "bytes": 6060
+    },
+    {
+      "path": "assets/pranchas/avaliacao-estrutura-mobile.svg",
+      "kind": "prancha",
+      "code": "P4-M",
+      "variant": "mobile",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [
+        "/servicos/#servico-avaliacao"
+      ],
+      "slot": "seção de avaliação imobiliária",
+      "editable_source": [
+        "data/demonstrative/plates/avaliacao-estrutura.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R00",
+      "family_module": "render_plates",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/avaliacao-estrutura-mobile-360.png",
+      "sha256": "251417e5f7c84740a0df9115f6f4a547285197d4a3404cce8a223143987b6835",
+      "bytes": 4060
+    },
+    {
+      "path": "assets/pranchas/carteira-eventos-desktop.svg",
+      "kind": "prancha",
+      "code": "P7",
+      "variant": "desktop",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [
+        "/acompanhamento-contratos-obras/",
+        "/diagnostico-b2g-360/"
+      ],
+      "slot": "slot <!-- plate:carteira-eventos --> (materializado por scripts/demonstrative/plates/inline.py); registro do lote em docs/campaigns/design-institucional/expansao/assets-lote-b.json",
+      "editable_source": [
+        "data/demonstrative/plates/carteira-eventos.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R00",
+      "family_module": "family_b2g",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/carteira-eventos-desktop-1200.png",
+      "sha256": "08cf78bd6e404a07e403b7812746afdb1b205d985eb952f1d90ae631fc4dfa92",
+      "bytes": 7345
+    },
+    {
+      "path": "assets/pranchas/carteira-eventos-mobile.svg",
+      "kind": "prancha",
+      "code": "P7-M",
+      "variant": "mobile",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [
+        "/acompanhamento-contratos-obras/",
+        "/diagnostico-b2g-360/"
+      ],
+      "slot": "slot <!-- plate:carteira-eventos --> (materializado por scripts/demonstrative/plates/inline.py); registro do lote em docs/campaigns/design-institucional/expansao/assets-lote-b.json",
+      "editable_source": [
+        "data/demonstrative/plates/carteira-eventos.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R00",
+      "family_module": "family_b2g",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/carteira-eventos-mobile-360.png",
+      "sha256": "dad2306654a6247d4581acb6d8a542a8358435b8a29ba4a158eb07c4cecd985f",
+      "bytes": 5211
+    },
+    {
+      "path": "assets/pranchas/drenagem-perfil-desktop.svg",
+      "kind": "prancha",
+      "code": "P2",
+      "variant": "desktop",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [
+        "/servicos/",
+        "/casos/demonstrativo-infraestrutura/"
+      ],
+      "slot": "índice de serviços (infraestrutura)",
+      "editable_source": [
+        "data/demonstrative/infrastructure-pilot/source.v1.json",
+        "data/demonstrative/infrastructure-pilot/consumption.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R01",
+      "family_module": "render_plates",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/drenagem-perfil-desktop-1200.png",
+      "sha256": "7436813799a0ce7cb14d33b9639d0c2da733d4181c982b189a2975ee5ba66423",
+      "bytes": 7718
+    },
+    {
+      "path": "assets/pranchas/drenagem-perfil-mobile.svg",
+      "kind": "prancha",
+      "code": "P2-M",
+      "variant": "mobile",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [
+        "/servicos/",
+        "/casos/demonstrativo-infraestrutura/"
+      ],
+      "slot": "índice de serviços (infraestrutura)",
+      "editable_source": [
+        "data/demonstrative/infrastructure-pilot/source.v1.json",
+        "data/demonstrative/infrastructure-pilot/consumption.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R01",
+      "family_module": "render_plates",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/drenagem-perfil-mobile-360.png",
+      "sha256": "c4f925d469085bd62926ea44f9b83e37272a57cc76306c62ac5bd1f6a22eef2d",
+      "bytes": 4303
+    },
+    {
+      "path": "assets/pranchas/drenagem-rede-desktop.svg",
+      "kind": "prancha",
+      "code": "PC",
+      "variant": "desktop",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [
+        "/projetos-complementares-engenharia/"
+      ],
+      "slot": "slot <!-- plate:drenagem-rede --> (materializado por scripts/demonstrative/plates/inline.py); registro do lote em docs/campaigns/design-institucional/expansao/assets-lote-a.json",
+      "editable_source": [
+        "data/demonstrative/infrastructure-pilot/source.v1.json",
+        "data/demonstrative/infrastructure-pilot/consumption.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R00",
+      "family_module": "family_private",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/drenagem-rede-desktop-1200.png",
+      "sha256": "d0e956e5b227200947ebc2fe40b4b638db0126adb2b1fb84e25c6d32b7db09fb",
+      "bytes": 7722
+    },
+    {
+      "path": "assets/pranchas/drenagem-rede-mobile.svg",
+      "kind": "prancha",
+      "code": "PC-M",
+      "variant": "mobile",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [
+        "/projetos-complementares-engenharia/"
+      ],
+      "slot": "slot <!-- plate:drenagem-rede --> (materializado por scripts/demonstrative/plates/inline.py); registro do lote em docs/campaigns/design-institucional/expansao/assets-lote-a.json",
+      "editable_source": [
+        "data/demonstrative/infrastructure-pilot/source.v1.json",
+        "data/demonstrative/infrastructure-pilot/consumption.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R00",
+      "family_module": "family_private",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/drenagem-rede-mobile-360.png",
+      "sha256": "2ac2fa9cb3641a6b1c7f12090f524fbd7e6fe43919d1b47549dbfe8667ce392a",
+      "bytes": 4810
+    },
+    {
+      "path": "assets/pranchas/edital-checklist-desktop.svg",
+      "kind": "prancha",
+      "code": "P8",
+      "variant": "desktop",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [
+        "/diagnostico-pre-licitacao/"
+      ],
+      "slot": "slot <!-- plate:edital-checklist --> (materializado por scripts/demonstrative/plates/inline.py); registro do lote em docs/campaigns/design-institucional/expansao/assets-lote-b.json",
+      "editable_source": [
+        "data/demonstrative/plates/edital-checklist.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R00",
+      "family_module": "family_b2g",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/edital-checklist-desktop-1200.png",
+      "sha256": "2453e506990fcc50877c8d6e08b1668681b2ef24141f83063e1e5ae78a862d61",
+      "bytes": 7378
+    },
+    {
+      "path": "assets/pranchas/edital-checklist-mobile.svg",
+      "kind": "prancha",
+      "code": "P8-M",
+      "variant": "mobile",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [
+        "/diagnostico-pre-licitacao/"
+      ],
+      "slot": "slot <!-- plate:edital-checklist --> (materializado por scripts/demonstrative/plates/inline.py); registro do lote em docs/campaigns/design-institucional/expansao/assets-lote-b.json",
+      "editable_source": [
+        "data/demonstrative/plates/edital-checklist.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R00",
+      "family_module": "family_b2g",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/edital-checklist-mobile-360.png",
+      "sha256": "8d665c39a4f9ef1ce3c5eb47e1ba47f8be562eccecc3607059930e7bd0716097",
+      "bytes": 4110
+    },
+    {
+      "path": "assets/pranchas/inspecao-fachada-desktop.svg",
+      "kind": "prancha",
+      "code": "PD",
+      "variant": "desktop",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [
+        "/inspecao-diagnostico-edificacoes/"
+      ],
+      "slot": "slot <!-- plate:inspecao-fachada --> (materializado por scripts/demonstrative/plates/inline.py); registro do lote em docs/campaigns/design-institucional/expansao/assets-lote-a.json",
+      "editable_source": [
+        "data/demonstrative/plates/inspecao-fachada.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R00",
+      "family_module": "family_private",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/inspecao-fachada-desktop-1200.png",
+      "sha256": "49a0e2e01ecc75655ea0337068d3a53e901b6beaadca1380e81f0a105b382753",
+      "bytes": 9487
+    },
+    {
+      "path": "assets/pranchas/inspecao-fachada-mobile.svg",
+      "kind": "prancha",
+      "code": "PD-M",
+      "variant": "mobile",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [
+        "/inspecao-diagnostico-edificacoes/"
+      ],
+      "slot": "slot <!-- plate:inspecao-fachada --> (materializado por scripts/demonstrative/plates/inline.py); registro do lote em docs/campaigns/design-institucional/expansao/assets-lote-a.json",
+      "editable_source": [
+        "data/demonstrative/plates/inspecao-fachada.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R00",
+      "family_module": "family_private",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/inspecao-fachada-mobile-360.png",
+      "sha256": "9999bed9ba38fb95dc50b71726a93b445d0220e3cae7ff5b44b12bfbe08a88b9",
+      "bytes": 5155
+    },
+    {
+      "path": "assets/pranchas/interfaces-versoes-desktop.svg",
+      "kind": "prancha",
+      "code": "PH",
+      "variant": "desktop",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [],
+      "slot": "slot <!-- plate:interfaces-versoes --> (materializado por scripts/demonstrative/plates/inline.py); registro do lote em docs/campaigns/design-institucional/expansao/assets-lote-a.json",
+      "editable_source": [
+        "data/demonstrative/plates/elaboracao-complementar.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R00",
+      "family_module": "family_private",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/interfaces-versoes-desktop-1200.png",
+      "sha256": "4dcfe7b8b7812ddd8eedfeb119b57e634ce1b44c6ceb4c5f1bcf2fc3e075c7a0",
+      "bytes": 5456
+    },
+    {
+      "path": "assets/pranchas/interfaces-versoes-mobile.svg",
+      "kind": "prancha",
+      "code": "PH-M",
+      "variant": "mobile",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [],
+      "slot": "slot <!-- plate:interfaces-versoes --> (materializado por scripts/demonstrative/plates/inline.py); registro do lote em docs/campaigns/design-institucional/expansao/assets-lote-a.json",
+      "editable_source": [
+        "data/demonstrative/plates/elaboracao-complementar.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R00",
+      "family_module": "family_private",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/interfaces-versoes-mobile-360.png",
+      "sha256": "b10ffc695990715fa879949b1934cc64db4c29b4be253229c3c28d1f522581d3",
+      "bytes": 3650
+    },
+    {
+      "path": "assets/pranchas/interferencia-verga-viga-desktop.svg",
+      "kind": "prancha",
+      "code": "PA",
+      "variant": "desktop",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [
+        "/compatibilizacao-projetos-engenharia/"
+      ],
+      "slot": "slot <!-- plate:interferencia-verga-viga --> (materializado por scripts/demonstrative/plates/inline.py); registro do lote em docs/campaigns/design-institucional/expansao/assets-lote-a.json",
+      "editable_source": [
+        "data/demonstrative/private-project-pilot/source.v1.json",
+        "data/demonstrative/private-project-pilot/consumption.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R00",
+      "family_module": "family_private",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/interferencia-verga-viga-desktop-1200.png",
+      "sha256": "e7f6fbf7745af563694fa16c234f3f496b9f7746fbe9c6a08c26df532fb737cd",
+      "bytes": 9634
+    },
+    {
+      "path": "assets/pranchas/interferencia-verga-viga-mobile.svg",
+      "kind": "prancha",
+      "code": "PA-M",
+      "variant": "mobile",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [
+        "/compatibilizacao-projetos-engenharia/"
+      ],
+      "slot": "slot <!-- plate:interferencia-verga-viga --> (materializado por scripts/demonstrative/plates/inline.py); registro do lote em docs/campaigns/design-institucional/expansao/assets-lote-a.json",
+      "editable_source": [
+        "data/demonstrative/private-project-pilot/source.v1.json",
+        "data/demonstrative/private-project-pilot/consumption.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R00",
+      "family_module": "family_private",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/interferencia-verga-viga-mobile-360.png",
+      "sha256": "65f8a5826ec4608ed0b0ee67fc6172d03eb7fc544ef51892c74d3d8b79ccb7ef",
+      "bytes": 5150
+    },
+    {
+      "path": "assets/pranchas/janela-causal-desktop.svg",
+      "kind": "prancha",
+      "code": "P12",
+      "variant": "desktop",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [
+        "/atrasos-prorrogacao-obras-publicas/"
+      ],
+      "slot": "slot <!-- plate:janela-causal --> (materializado por scripts/demonstrative/plates/inline.py); registro do lote em docs/campaigns/design-institucional/expansao/assets-lote-b.json",
+      "editable_source": [
+        "data/demonstrative/plates/janela-causal.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R00",
+      "family_module": "family_b2g_execucao",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/janela-causal-desktop-1200.png",
+      "sha256": "d3dba3eae51e71987902252ade08ec77594d37176356af724af70c944dbdb4f3",
+      "bytes": 7723
+    },
+    {
+      "path": "assets/pranchas/janela-causal-mobile.svg",
+      "kind": "prancha",
+      "code": "P12-M",
+      "variant": "mobile",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [
+        "/atrasos-prorrogacao-obras-publicas/"
+      ],
+      "slot": "slot <!-- plate:janela-causal --> (materializado por scripts/demonstrative/plates/inline.py); registro do lote em docs/campaigns/design-institucional/expansao/assets-lote-b.json",
+      "editable_source": [
+        "data/demonstrative/plates/janela-causal.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R00",
+      "family_module": "family_b2g_execucao",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/janela-causal-mobile-360.png",
+      "sha256": "475d7549714c1830661da9760988fe8d817928599f472326cac099c1a622632e",
+      "bytes": 4077
+    },
+    {
+      "path": "assets/pranchas/matriz-alegacoes-desktop.svg",
+      "kind": "prancha",
+      "code": "P11",
+      "variant": "desktop",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [
+        "/defesa-tecnica-contratos-publicos/"
+      ],
+      "slot": "slot <!-- plate:matriz-alegacoes --> (materializado por scripts/demonstrative/plates/inline.py); registro do lote em docs/campaigns/design-institucional/expansao/assets-lote-b.json",
+      "editable_source": [
+        "data/demonstrative/plates/matriz-alegacoes.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R00",
+      "family_module": "family_b2g_execucao",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/matriz-alegacoes-desktop-1200.png",
+      "sha256": "005ecb7609313b10f54e156d3cfbb05939afdfaf0f23b8d4aafe7049fcdc4ee7",
+      "bytes": 8564
+    },
+    {
+      "path": "assets/pranchas/matriz-alegacoes-mobile.svg",
+      "kind": "prancha",
+      "code": "P11-M",
+      "variant": "mobile",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [
+        "/defesa-tecnica-contratos-publicos/"
+      ],
+      "slot": "slot <!-- plate:matriz-alegacoes --> (materializado por scripts/demonstrative/plates/inline.py); registro do lote em docs/campaigns/design-institucional/expansao/assets-lote-b.json",
+      "editable_source": [
+        "data/demonstrative/plates/matriz-alegacoes.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R00",
+      "family_module": "family_b2g_execucao",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/matriz-alegacoes-mobile-360.png",
+      "sha256": "b83fbf62dc44cd6a79343d5ce3a25eade837efec155e60f41835b9f679fefb67",
+      "bytes": 4058
+    },
+    {
+      "path": "assets/pranchas/medicao-parede-desktop.svg",
+      "kind": "prancha",
+      "code": "P3",
+      "variant": "desktop",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [
+        "/medicoes-glosas-obras-publicas/#exemplo-demonstrativo"
+      ],
+      "slot": "seção «Mesma parede, quatro números» (HTML congelado: recaptura com motivo via frozen-specs)",
+      "editable_source": [
+        "data/demonstrative/plates/medicao-parede.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R00",
+      "family_module": "render_plates",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/medicao-parede-desktop-1200.png",
+      "sha256": "1145d2644b161a1bc7deb7505868232774a91393f542ac05cd09892b4341cdee",
+      "bytes": 7118
+    },
+    {
+      "path": "assets/pranchas/medicao-parede-mobile.svg",
+      "kind": "prancha",
+      "code": "P3-M",
+      "variant": "mobile",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [
+        "/medicoes-glosas-obras-publicas/#exemplo-demonstrativo"
+      ],
+      "slot": "seção «Mesma parede, quatro números» (HTML congelado: recaptura com motivo via frozen-specs)",
+      "editable_source": [
+        "data/demonstrative/plates/medicao-parede.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R00",
+      "family_module": "render_plates",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/medicao-parede-mobile-360.png",
+      "sha256": "ecd1b271ed2494c79cdd30d667d312eed10ed878a17ab6fc77465c8a56ecde0d",
+      "bytes": 4847
+    },
+    {
+      "path": "assets/pranchas/orcamento-comparativo-desktop.svg",
+      "kind": "prancha",
+      "code": "P6",
+      "variant": "desktop",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "slot": "slot <!-- plate:orcamento-comparativo --> (materializado por scripts/demonstrative/plates/inline.py); registro do lote em docs/campaigns/design-institucional/expansao/assets-lote-b.json",
+      "editable_source": [
+        "data/demonstrative/plates/orcamento-comparativo.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R00",
+      "family_module": "family_b2g",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/orcamento-comparativo-desktop-1200.png",
+      "sha256": "f8de40dfe3dfead304377a27830571e0811067fb9982a106c731aa3f0ef19cb8",
+      "bytes": 6982
+    },
+    {
+      "path": "assets/pranchas/orcamento-comparativo-mobile.svg",
+      "kind": "prancha",
+      "code": "P6-M",
+      "variant": "mobile",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [
+        "/auditoria-orcamento-licitacao/"
+      ],
+      "slot": "slot <!-- plate:orcamento-comparativo --> (materializado por scripts/demonstrative/plates/inline.py); registro do lote em docs/campaigns/design-institucional/expansao/assets-lote-b.json",
+      "editable_source": [
+        "data/demonstrative/plates/orcamento-comparativo.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R00",
+      "family_module": "family_b2g",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/orcamento-comparativo-mobile-360.png",
+      "sha256": "687fc84729388751fc4b8f9b2f5ccbf070339dd48c2f471c8971bda47b9a164d",
+      "bytes": 4083
+    },
+    {
+      "path": "assets/pranchas/pacote-entrega-desktop.svg",
+      "kind": "prancha",
+      "code": "PG",
+      "variant": "desktop",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [
+        "/entregas/"
+      ],
+      "slot": "slot <!-- plate:pacote-entrega --> (materializado por scripts/demonstrative/plates/inline.py); registro do lote em docs/campaigns/design-institucional/expansao/assets-lote-a.json",
+      "editable_source": [
+        "data/demonstrative/plates/elaboracao-complementar.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R00",
+      "family_module": "family_private",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/pacote-entrega-desktop-1200.png",
+      "sha256": "d00adc9b58b51ce6472ddd21802d44c9d19de75e719a9138cbd7b0e2afaeef36",
+      "bytes": 5517
+    },
+    {
+      "path": "assets/pranchas/pacote-entrega-mobile.svg",
+      "kind": "prancha",
+      "code": "PG-M",
+      "variant": "mobile",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [
+        "/entregas/"
+      ],
+      "slot": "slot <!-- plate:pacote-entrega --> (materializado por scripts/demonstrative/plates/inline.py); registro do lote em docs/campaigns/design-institucional/expansao/assets-lote-a.json",
+      "editable_source": [
+        "data/demonstrative/plates/elaboracao-complementar.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R00",
+      "family_module": "family_private",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/pacote-entrega-mobile-360.png",
+      "sha256": "8d57ebc6c0f215dcc6dd30df0444aa635fe5a19b22c316bd15bf6f86a42ae481",
+      "bytes": 3329
+    },
+    {
+      "path": "assets/pranchas/pericia-fachada-desktop.svg",
+      "kind": "prancha",
+      "code": "PE",
+      "variant": "desktop",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [
+        "/assistencia-tecnica-pericial-engenharia/"
+      ],
+      "slot": "slot <!-- plate:pericia-fachada --> (materializado por scripts/demonstrative/plates/inline.py); registro do lote em docs/campaigns/design-institucional/expansao/assets-lote-a.json",
+      "editable_source": [
+        "data/demonstrative/plates/inspecao-fachada.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R00",
+      "family_module": "family_private",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/pericia-fachada-desktop-1200.png",
+      "sha256": "7d6fc98ebaf5d71f922d7860b7a6d6fe3ae636fabe65883f34c886e58947ffc7",
+      "bytes": 9250
+    },
+    {
+      "path": "assets/pranchas/pericia-fachada-mobile.svg",
+      "kind": "prancha",
+      "code": "PE-M",
+      "variant": "mobile",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [
+        "/assistencia-tecnica-pericial-engenharia/"
+      ],
+      "slot": "slot <!-- plate:pericia-fachada --> (materializado por scripts/demonstrative/plates/inline.py); registro do lote em docs/campaigns/design-institucional/expansao/assets-lote-a.json",
+      "editable_source": [
+        "data/demonstrative/plates/inspecao-fachada.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R00",
+      "family_module": "family_private",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/pericia-fachada-mobile-360.png",
+      "sha256": "2506340754e7ea22813ac3d03ee131da37082912ffd96cb2dbfbe5b1e9736e2a",
+      "bytes": 5131
+    },
+    {
+      "path": "assets/pranchas/recorte-banheiro-desktop.svg",
+      "kind": "prancha",
+      "code": "P1",
+      "variant": "desktop",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [
+        "/",
+        "/quantitativos-orcamento-obras/",
+        "/casos/demonstrativo-projeto-privado/"
+      ],
+      "slot": "hero-sample (home), figure.qty-sample (quantitativos)",
+      "editable_source": [
+        "data/demonstrative/private-project-pilot/source.v1.json",
+        "data/demonstrative/private-project-pilot/consumption.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R01",
+      "family_module": "render_plates",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/recorte-banheiro-desktop-1200.png",
+      "sha256": "e8c06c67ae535a9bc18b8a8b498dddd5dbb19da60a21ef659dcccf157c930421",
+      "bytes": 11031
+    },
+    {
+      "path": "assets/pranchas/recorte-banheiro-mobile.svg",
+      "kind": "prancha",
+      "code": "P1-M",
+      "variant": "mobile",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [
+        "/",
+        "/quantitativos-orcamento-obras/",
+        "/casos/demonstrativo-projeto-privado/"
+      ],
+      "slot": "hero-sample (home), figure.qty-sample (quantitativos)",
+      "editable_source": [
+        "data/demonstrative/private-project-pilot/source.v1.json",
+        "data/demonstrative/private-project-pilot/consumption.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R01",
+      "family_module": "render_plates",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/recorte-banheiro-mobile-360.png",
+      "sha256": "035bb7e9cad5cff1e076ada1311d66f295b91eed0cfb33a4eb5a2d13f37824fa",
+      "bytes": 5545
+    },
+    {
+      "path": "assets/pranchas/reequilibrio-curva-desktop.svg",
+      "kind": "prancha",
+      "code": "P9",
+      "variant": "desktop",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [
+        "/reequilibrio-obras-publicas/"
+      ],
+      "slot": "slot <!-- plate:reequilibrio-curva --> (materializado por scripts/demonstrative/plates/inline.py); registro do lote em docs/campaigns/design-institucional/expansao/assets-lote-b.json",
+      "editable_source": [
+        "data/demonstrative/plates/reequilibrio-curva.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R00",
+      "family_module": "family_b2g",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/reequilibrio-curva-desktop-1200.png",
+      "sha256": "8899908f3bd25615d623adc90546f265ce842c5dea5eaaf8e7328c122d1e42d3",
+      "bytes": 8413
+    },
+    {
+      "path": "assets/pranchas/reequilibrio-curva-mobile.svg",
+      "kind": "prancha",
+      "code": "P9-M",
+      "variant": "mobile",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [
+        "/reequilibrio-obras-publicas/"
+      ],
+      "slot": "slot <!-- plate:reequilibrio-curva --> (materializado por scripts/demonstrative/plates/inline.py); registro do lote em docs/campaigns/design-institucional/expansao/assets-lote-b.json",
+      "editable_source": [
+        "data/demonstrative/plates/reequilibrio-curva.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R00",
+      "family_module": "family_b2g",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/reequilibrio-curva-mobile-360.png",
+      "sha256": "4886d29c50488929a41be2fce893b7317c77f3727a5beb4bca50143bf7efb73b",
+      "bytes": 5539
+    },
+    {
+      "path": "assets/pranchas/revisao-conferencia-desktop.svg",
+      "kind": "prancha",
+      "code": "PB",
+      "variant": "desktop",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [
+        "/revisao-tecnica-projetos-engenharia/"
+      ],
+      "slot": "slot <!-- plate:revisao-conferencia --> (materializado por scripts/demonstrative/plates/inline.py); registro do lote em docs/campaigns/design-institucional/expansao/assets-lote-a.json",
+      "editable_source": [
+        "data/demonstrative/private-project-pilot/source.v1.json",
+        "data/demonstrative/private-project-pilot/consumption.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R00",
+      "family_module": "family_private",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/revisao-conferencia-desktop-1200.png",
+      "sha256": "3d231077ce9034cdb42fad21b9572bb9c8a1b43c9889d30f814dbdce956bea1f",
+      "bytes": 8241
+    },
+    {
+      "path": "assets/pranchas/revisao-conferencia-mobile.svg",
+      "kind": "prancha",
+      "code": "PB-M",
+      "variant": "mobile",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [
+        "/revisao-tecnica-projetos-engenharia/"
+      ],
+      "slot": "slot <!-- plate:revisao-conferencia --> (materializado por scripts/demonstrative/plates/inline.py); registro do lote em docs/campaigns/design-institucional/expansao/assets-lote-a.json",
+      "editable_source": [
+        "data/demonstrative/private-project-pilot/source.v1.json",
+        "data/demonstrative/private-project-pilot/consumption.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R00",
+      "family_module": "family_private",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/revisao-conferencia-mobile-360.png",
+      "sha256": "05dffd22faefc011f92c61b3a7db0ce5f0fd1c5a4500c584b499a12d6bc35b07",
+      "bytes": 4476
+    },
+    {
+      "path": "assets/pranchas/risco-margem-desktop.svg",
+      "kind": "prancha",
+      "code": "P10",
+      "variant": "desktop",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [
+        "/defesa-margem-contratos-publicos/"
+      ],
+      "slot": "slot <!-- plate:risco-margem --> (materializado por scripts/demonstrative/plates/inline.py); registro do lote em docs/campaigns/design-institucional/expansao/assets-lote-b.json",
+      "editable_source": [
+        "data/demonstrative/plates/risco-margem.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R00",
+      "family_module": "family_b2g_execucao",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/risco-margem-desktop-1200.png",
+      "sha256": "e6ae95d42868d58cb0bab0e1d4bedbed738cbd3b840f207942849b6fbb781d40",
+      "bytes": 8856
+    },
+    {
+      "path": "assets/pranchas/risco-margem-mobile.svg",
+      "kind": "prancha",
+      "code": "P10-M",
+      "variant": "mobile",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [
+        "/defesa-margem-contratos-publicos/"
+      ],
+      "slot": "slot <!-- plate:risco-margem --> (materializado por scripts/demonstrative/plates/inline.py); registro do lote em docs/campaigns/design-institucional/expansao/assets-lote-b.json",
+      "editable_source": [
+        "data/demonstrative/plates/risco-margem.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R00",
+      "family_module": "family_b2g_execucao",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/risco-margem-mobile-360.png",
+      "sha256": "bfb582d283435917a76a58701c6eb4c42af0b49603eddf1e30ce1703364accf6",
+      "bytes": 4926
+    },
+    {
+      "path": "assets/pranchas/sst-canteiro-desktop.svg",
+      "kind": "prancha",
+      "code": "PF",
+      "variant": "desktop",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [
+        "/seguranca-trabalho-apoio-tecnico/"
+      ],
+      "slot": "slot <!-- plate:sst-canteiro --> (materializado por scripts/demonstrative/plates/inline.py); registro do lote em docs/campaigns/design-institucional/expansao/assets-lote-a.json",
+      "editable_source": [
+        "data/demonstrative/plates/sst-canteiro.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R00",
+      "family_module": "family_private",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/sst-canteiro-desktop-1200.png",
+      "sha256": "c8625c8d18ed1ea4f5d473a6e954b64bcf404e3da1d85aa00d60b05221746d68",
+      "bytes": 7297
+    },
+    {
+      "path": "assets/pranchas/sst-canteiro-mobile.svg",
+      "kind": "prancha",
+      "code": "PF-M",
+      "variant": "mobile",
+      "origin": "Gerada deterministicamente por scripts/demonstrative/plates/render_plates.py a partir dos JSON de origem; toda geometria e todo número vêm das fontes listadas.",
+      "license": "obra própria da CONFENGE (dados demonstrativos, sem cliente, sem obra real)",
+      "veracity": "demonstração",
+      "pages": [
+        "/seguranca-trabalho-apoio-tecnico/"
+      ],
+      "slot": "slot <!-- plate:sst-canteiro --> (materializado por scripts/demonstrative/plates/inline.py); registro do lote em docs/campaigns/design-institucional/expansao/assets-lote-a.json",
+      "editable_source": [
+        "data/demonstrative/plates/sst-canteiro.v1.json",
+        "scripts/demonstrative/plates/render_plates.py",
+        "scripts/demonstrative/plates/sheet.py"
+      ],
+      "exported_version": "rev. R00",
+      "family_module": "family_private",
+      "evidence_png": "docs/campaigns/design-institucional/evidence/pranchas/sst-canteiro-mobile-360.png",
+      "sha256": "7d804005965e7c306e777648f443351fe7671c614a8e31f76288aa20dc1d2681",
+      "bytes": 4640
+    },
+    {
+      "path": "assets/tiago-sasaki-foto-v11-sem-fundo-560.avif",
+      "kind": "retrato",
+      "origin": "Retrato do responsável técnico (Engº Tiago Sasaki); recorte «sem fundo» do master PNG; AVIF derivado do PNG (docs/campaigns/2026-09-08-comunicacao-publica-comercial.md). Commit inicial 2477b111b.",
+      "license": "não documentada (direito de imagem/autor da foto sem arquivo de consentimento no repositório; é o responsável técnico da empresa)",
+      "veracity": "real autorizada",
+      "pages": [
+        "/",
+        "/especialista/tiago-jun-sasaki/"
+      ],
+      "editable_source": "assets/tiago-sasaki-foto-v11-sem-fundo.png (1080x1350, master raster)",
+      "exported_version": "v11 · 560x700",
+      "sha256": "1c3504eb463690db9a08263e2085c1f3f7eb0c116ee9b6c680991b1adb970cbf",
+      "bytes": 5925
+    },
+    {
+      "path": "assets/tiago-sasaki-foto-v11-sem-fundo-560.webp",
+      "kind": "retrato",
+      "origin": "Retrato do responsável técnico (Engº Tiago Sasaki); recorte «sem fundo» do master PNG; AVIF derivado do PNG (docs/campaigns/2026-09-08-comunicacao-publica-comercial.md). Commit inicial 2477b111b.",
+      "license": "não documentada (direito de imagem/autor da foto sem arquivo de consentimento no repositório; é o responsável técnico da empresa)",
+      "veracity": "real autorizada",
+      "pages": [
+        "/",
+        "/especialista/tiago-jun-sasaki/"
+      ],
+      "editable_source": "assets/tiago-sasaki-foto-v11-sem-fundo.png (1080x1350, master raster)",
+      "exported_version": "v11 · 560x700",
+      "sha256": "b78e623ed27c9fdf64ec90656d6b98221da1078d5f7ff8e3cdf069c16775e92a",
+      "bytes": 13714
+    },
+    {
+      "path": "assets/tiago-sasaki-foto-v11-sem-fundo-560.png",
+      "kind": "retrato",
+      "origin": "Retrato do responsável técnico (Engº Tiago Sasaki); recorte «sem fundo» do master PNG; AVIF derivado do PNG (docs/campaigns/2026-09-08-comunicacao-publica-comercial.md). Commit inicial 2477b111b.",
+      "license": "não documentada (direito de imagem/autor da foto sem arquivo de consentimento no repositório; é o responsável técnico da empresa)",
+      "veracity": "real autorizada",
+      "pages": [
+        "/",
+        "/especialista/tiago-jun-sasaki/"
+      ],
+      "editable_source": "assets/tiago-sasaki-foto-v11-sem-fundo.png (1080x1350, master raster)",
+      "exported_version": "v11 · 560x700",
+      "sha256": "8cadfed2c9ad6c8207f9c80ed5ee303707a46c101236065a2a1f6ae141d128ed",
+      "bytes": 202732
+    },
+    {
+      "path": "assets/logo-confenge-500-f8a83f6d.png",
+      "kind": "logotipo",
+      "origin": "Derivado do master assets/logo-confenge.png por scripts/site/optimize_brand_logos.py (commit 94b4f04a0); contrato congelado em data/brand/logo-contract.v1.json (SHA-256, proporção 50:13, markup).",
+      "license": "não documentada (tipografia da assinatura «INTELIGÊNCIA TÉCNICA» pendente do fundador no contrato de logo); marca própria da CONFENGE",
+      "veracity": "real autorizada",
+      "pages": [
+        "cabeçalho de todo o site mutável"
+      ],
+      "editable_source": "ausente (master vetorial BLOCKED_AWAITING_FOUNDER_ARTWORK; proibido traçar ou gerar SVG)",
+      "exported_version": "500x130 · f8a83f6d",
+      "sha256": "f8a83f6de028bfffd07c609b1c241eb5b2fa122187f0a79a1173353c0e9f6e2f",
+      "bytes": 10605
+    },
+    {
+      "path": "assets/logo-confenge-white-500-1677038e.png",
+      "kind": "logotipo",
+      "origin": "Idem, variante branca (rodapé).",
+      "license": "idem",
+      "veracity": "real autorizada",
+      "pages": [
+        "rodapé de todo o site mutável"
+      ],
+      "editable_source": "ausente (ver logo-contract.v1.json)",
+      "exported_version": "500x130 · 1677038e",
+      "sha256": "1677038e71416979dd7534f4c726e718a1cdd2d8ccf8e1b4a08506fa002f13ea",
+      "bytes": 10605
+    },
+    {
+      "path": "assets/archivo-var-latin-bf6e041e.woff2",
+      "kind": "fonte",
+      "origin": "Archivo v2.001 (Omnibus-Type), subconjunto latino de 157 glifos gerado para o site; única fonte com licença verificada no repositório.",
+      "license": "SIL Open Font License 1.1 (assets/archivo-OFL.txt)",
+      "veracity": "contexto público",
+      "pages": [
+        "/ (assets/home-10x.css); as pranchas declaram font-family «Archivo Var, Arial, Helvetica, sans-serif»"
+      ],
+      "editable_source": "https://github.com/Omnibus-Type/Archivo (fonte variável completa)",
+      "exported_version": "bf6e041e · latin subset",
+      "sha256": "bf6e041e98b0fa244d965027e9f2b6ed53470ed95f2227615510a08a67ea7f4a",
+      "bytes": 60064
+    },
+    {
+      "path": "assets/archivo-OFL.txt",
+      "kind": "licença",
+      "origin": "Archivo v2.001 (Omnibus-Type), subconjunto latino de 157 glifos gerado para o site; única fonte com licença verificada no repositório.",
+      "license": "SIL Open Font License 1.1 (assets/archivo-OFL.txt)",
+      "veracity": "contexto público",
+      "pages": [
+        "/ (assets/home-10x.css); as pranchas declaram font-family «Archivo Var, Arial, Helvetica, sans-serif»"
+      ],
+      "editable_source": "https://github.com/Omnibus-Type/Archivo (fonte variável completa)",
+      "exported_version": "bf6e041e · latin subset",
+      "sha256": "108b4e57c9c796d3d38d0428ca7ee39de47ad93187302718d9b2d8864b9b716b",
+      "bytes": 4388
+    }
+  ],
+  "inadequate": [
+    {
+      "glob": "assets/clusters/*.jpg",
+      "count": 8,
+      "why": "Cartões-título rasterizados (título, categoria, logo, «15 GUIAS») do commit inicial, sem documento de origem; texto em raster não é prova legível e não passa a regra «ativo só com licença verificada». Continuam como og:image e <img> nas 6 BOFU congeladas, mas não entram na composição nova.",
+      "files_found": 8,
+      "bytes_total": 561689
+    },
+    {
+      "glob": "assets/og-confenge.jpg",
+      "count": 1,
+      "why": "Retexturizado por «built-in image_gen» (data/site/commercial-media/source.json) sobre fundo fotográfico (grua/skyline) cuja licença não está documentada em lugar nenhum do repositório. Permanece só como og:image.",
+      "files_found": 1,
+      "bytes_total": 125989
+    },
+    {
+      "glob": "assets/og-tiago-sasaki-v11.jpg",
+      "count": 1,
+      "why": "Mesmo pipeline image_gen; usar o retrato sem fundo (real autorizada) em vez do cartão.",
+      "files_found": 1,
+      "bytes_total": 88958
+    },
+    {
+      "glob": "assets/og-conteudos.jpg",
+      "count": 1,
+      "why": "Commit inicial, origem não documentada, texto rasterizado.",
+      "files_found": 1,
+      "bytes_total": 66672
+    },
+    {
+      "glob": "assets/conteudos/*.jpg",
+      "count": 120,
+      "why": "Capas de artigo rasterizadas (título repetido), retiradas do corpo por scripts/site/remove_redundant_article_covers.py; 2 retexturizadas por image_gen. Só og:image.",
+      "files_found": 120,
+      "bytes_total": 8858545
+    },
+    {
+      "glob": "assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/chart.svg",
+      "count": 1,
+      "why": "license NEEDS_REVIEW, indexable false, do_not_index true (data/data-desk/.../asset.v1.json): barrado de superfície indexável.",
+      "files_found": 1,
+      "bytes_total": 1936
+    }
+  ],
+  "not_reused": [
+    {
+      "glob": "casos/*/assets/*.svg",
+      "count": 9,
+      "veracity": "demonstração",
+      "why": "Fontes de verdade (geradas em repositório por scripts/demonstrative/*/render.py a partir de data/demonstrative/*/source.v1.json; provenance limpa). Não reutilizadas na composição nova só por estilo: paleta fora dos tokens (âmbar #f59e0b, vermelho #b91c1c, azul #0369a1) e sem carimbo. Permanecem intactas em /casos/.",
+      "files_found": 9,
+      "bytes_total": 17762
+    }
+  ]
+}

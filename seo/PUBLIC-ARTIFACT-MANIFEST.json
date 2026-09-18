@@ -313,8 +313,8 @@
     "/triagem-tecnica/",
     "/uso-de-ia/"
   ],
-  "generated_at": "2026-09-16T15:39:38Z",
-  "public_artifact_hash": "ddbbab9d22522eef06536031f36e79492b9a0b15dd6be20db1efaca8c103f258",
+  "generated_at": "2026-09-18T01:55:14Z",
+  "public_artifact_hash": "4c32670a3ffa3edc2a9cfe2fc99f2d89368b1f38306266b21f9dc936931fef20",
   "copied_dirs": [
     ".well-known/",
     "acompanhamento-contratos-obras/",
@@ -396,10 +396,10 @@
     "styles-tools.css",
     "styles.css"
   ],
-  "promoted_navigation_files": 216,
+  "promoted_navigation_files": 219,
   "navigation_audit": {
-    "audited_files": 227,
-    "audited_blocks": 452,
+    "audited_files": 230,
+    "audited_blocks": 458,
     "frozen_files": 0
   },
   "structured_identity": {

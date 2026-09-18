@@ -305,7 +305,10 @@ def test_pillar_urls_preserved():
         assert p.exists()
         html = p.read_text(encoding="utf-8")
         assert f"https://confenge.com.br/{slug}/" in html
-        assert "commercial-bridge" in html
+        # The bridge to the recurring offer survives either as the legacy
+        # `.commercial-bridge` card or, on a recomposed pillar (2026-09-17), as
+        # the subordinate line tagged `data-cta-position="pillar_bridge"`.
+        assert "commercial-bridge" in html or 'data-cta-position="pillar_bridge"' in html
 
 
 def test_content_not_overwhelmed_by_sales_copy():

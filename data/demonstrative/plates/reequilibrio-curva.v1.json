@@ -1,0 +1,143 @@
+{
+  "schema": "confenge.demonstrative-plate-source/1.0",
+  "id": "plate-reequilibrio-curva-2026-09",
+  "plate_id": "reequilibrio-curva",
+  "sheet_code": "P9",
+  "origin": "demonstrative",
+  "revision": "R00",
+  "title": "Índice de custo, data-base e o desequilíbrio a demonstrar",
+  "label_pt_br": "exemplo demonstrativo",
+  "client_name": null,
+  "address": null,
+  "contract_number": null,
+  "art_number": null,
+  "signature": null,
+  "date_modified": "2026-09-17",
+  "public_source_pt_br": "Seção /reequilibrio-obras-publicas/#exemplo-demonstrativo (série sintética, sem índice oficial nem contrato de cliente).",
+  "units": {
+    "time": "meses desde a data-base da proposta",
+    "index": "índice de custo do insumo, base 100 na data-base"
+  },
+  "milestones": [
+    {
+      "id": "DB",
+      "label_pt_br": "Data-base da proposta",
+      "month": "0",
+      "index": "100"
+    },
+    {
+      "id": "EVT",
+      "label_pt_br": "Evento: alta atípica do insumo",
+      "month": "7",
+      "index": "107"
+    },
+    {
+      "id": "PLT",
+      "label_pt_br": "Protocolo do pedido",
+      "month": "11",
+      "index": "128"
+    },
+    {
+      "id": "ANV",
+      "label_pt_br": "Aniversário: reajuste ordinário",
+      "month": "12",
+      "index": "130"
+    }
+  ],
+  "cost_series": [
+    {
+      "month": "0",
+      "index": "100"
+    },
+    {
+      "month": "1",
+      "index": "101"
+    },
+    {
+      "month": "2",
+      "index": "102"
+    },
+    {
+      "month": "3",
+      "index": "103"
+    },
+    {
+      "month": "4",
+      "index": "104"
+    },
+    {
+      "month": "5",
+      "index": "105"
+    },
+    {
+      "month": "6",
+      "index": "106"
+    },
+    {
+      "month": "7",
+      "index": "107"
+    },
+    {
+      "month": "8",
+      "index": "113"
+    },
+    {
+      "month": "9",
+      "index": "119"
+    },
+    {
+      "month": "10",
+      "index": "124"
+    },
+    {
+      "month": "11",
+      "index": "128"
+    },
+    {
+      "month": "12",
+      "index": "130"
+    }
+  ],
+  "expected_series": {
+    "id": "TEND",
+    "label_pt_br": "Tendência da própria série antes do evento",
+    "monthly_step": "1",
+    "points": [
+      {
+        "month": "7",
+        "index": "107"
+      },
+      {
+        "month": "12",
+        "index": "112"
+      }
+    ]
+  },
+  "imbalance": {
+    "id": "DES-01",
+    "label_pt_br": "Desequilíbrio a demonstrar",
+    "from_month": "7",
+    "to_month": "12",
+    "peak_points": "18",
+    "peak_formula": "130-112",
+    "note_pt_br": "área entre a tendência anterior e o custo observado, por item e período"
+  },
+  "axis": {
+    "months": [
+      "0",
+      "3",
+      "6",
+      "9",
+      "12"
+    ],
+    "index_ticks": [
+      "100",
+      "110",
+      "120",
+      "130"
+    ],
+    "index_min": "95",
+    "index_max": "135"
+  },
+  "disclaimer_pt_br": "Série sintética para mostrar o que o dossiê precisa demonstrar: o evento, a matriz de riscos, o nexo com o contrato e o impacto por item e período. O reajuste ordinário do aniversário não recompõe o que aconteceu antes dele. Não é índice oficial e não promete deferimento."
+}

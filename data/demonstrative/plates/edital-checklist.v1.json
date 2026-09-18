@@ -1,0 +1,85 @@
+{
+  "schema": "confenge.demonstrative-plate-source/1.0",
+  "id": "plate-edital-checklist-2026-09",
+  "plate_id": "edital-checklist",
+  "sheet_code": "P8",
+  "origin": "demonstrative",
+  "revision": "R00",
+  "title": "O edital lido como checklist técnico",
+  "label_pt_br": "exemplo demonstrativo",
+  "client_name": null,
+  "address": null,
+  "contract_number": null,
+  "art_number": null,
+  "signature": null,
+  "date_modified": "2026-09-17",
+  "public_source_pt_br": "Seção /diagnostico-pre-licitacao/#exemplo-demonstrativo (edital sintético, sem órgão real).",
+  "units": {
+    "area": "m²",
+    "time": "dias corridos",
+    "money": "percentual sobre o orçamento de referência"
+  },
+  "verdicts": [
+    {
+      "id": "ATENDE",
+      "label_pt_br": "Atende",
+      "mark": "cheio"
+    },
+    {
+      "id": "CONFIRMAR",
+      "label_pt_br": "Confirmar antes do preço",
+      "mark": "hachura"
+    },
+    {
+      "id": "CRITICO",
+      "label_pt_br": "Item crítico",
+      "mark": "foco"
+    }
+  ],
+  "items": [
+    {
+      "id": "CHK-01",
+      "label_pt_br": "Habilitação jurídica e fiscal",
+      "requirement_pt_br": "certidões e registro no prazo",
+      "company_pt_br": "certidões válidas na data da sessão",
+      "verdict": "ATENDE"
+    },
+    {
+      "id": "CHK-02",
+      "label_pt_br": "Acervo técnico exigido",
+      "requirement_pt_br": "atestado de pavimento rígido de 8.000 m²",
+      "company_pt_br": "maior atestado da empresa: 5.200 m²",
+      "requirement_m2": "8.000",
+      "company_m2": "5.200",
+      "gap_m2": "2.800",
+      "gap_formula": "8.000-5.200",
+      "verdict": "CRITICO"
+    },
+    {
+      "id": "CHK-03",
+      "label_pt_br": "Orçamento de referência",
+      "requirement_pt_br": "data-base de 6 meses antes da sessão",
+      "company_pt_br": "desconto de 12% sem memória por item",
+      "months_since_base": "6",
+      "discount_percent": "12",
+      "verdict": "CONFIRMAR"
+    },
+    {
+      "id": "CHK-04",
+      "label_pt_br": "Prazo de execução",
+      "requirement_pt_br": "240 dias com mobilização em 15",
+      "company_pt_br": "equipe disponível a partir do 30º dia",
+      "term_days": "240",
+      "mobilization_days": "15",
+      "team_available_day": "30",
+      "verdict": "CONFIRMAR"
+    }
+  ],
+  "summary": {
+    "items": "4",
+    "critical": "1",
+    "to_confirm": "2",
+    "meets": "1"
+  },
+  "disclaimer_pt_br": "Edital sintético para mostrar como o diagnóstico ordena a leitura: o item crítico decide antes do preço. Não é edital de cliente e não promete habilitação nem vitória."
+}

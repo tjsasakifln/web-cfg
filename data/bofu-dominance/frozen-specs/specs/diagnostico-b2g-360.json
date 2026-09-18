@@ -178,8 +178,8 @@
       "ListItem"
     ],
     "cta": {
-      "hero_text": "Solicitar diagnóstico da operação",
-      "hero_href": "#captura-pilar",
+      "hero_text": "",
+      "hero_href": "",
       "bridges": [
         {
           "position": "header_nav",
@@ -218,18 +218,33 @@
         },
         {
           "position": "offer_final",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20solicitar%20o%20Diagn%C3%B3stico%20da%20Opera%C3%A7%C3%A3o%20em%20Obras%20P%C3%BAblicas%20para%20mapear%20oportunidades%2C%20margem%20e%20controle%20da%20nossa%20opera%C3%A7%C3%A3o.",
+          "href": "#captura-pilar",
           "text": "Solicitar diagnóstico da operação"
         },
         {
+          "position": "offer_final",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20solicitar%20o%20Diagn%C3%B3stico%20da%20Opera%C3%A7%C3%A3o%20em%20Obras%20P%C3%BAblicas%20para%20mapear%20oportunidades%2C%20margem%20e%20controle%20da%20nossa%20opera%C3%A7%C3%A3o.",
+          "text": "Falar pelo WhatsApp"
+        },
+        {
           "position": "pillar_bridge",
-          "href": "#captura-pilar",
-          "text": "Pedir diagnóstico da operação"
+          "href": "/diretoria-b2g/",
+          "text": "Diretoria Fracionada para o Mercado Público"
+        },
+        {
+          "position": "pillar_bridge",
+          "href": "/bid-room-licitacoes-obras/",
+          "text": "Operação de Proposta para Licitação Crítica"
+        },
+        {
+          "position": "pillar_bridge",
+          "href": "/defesa-margem-contratos-publicos/",
+          "text": "Defesa de margem em contrato público"
         },
         {
           "position": "pillar_bridge",
           "href": "/conteudos/",
-          "text": "Ver conteúdos de apoio"
+          "text": "conteúdos de apoio"
         },
         {
           "position": "float",
@@ -241,8 +256,8 @@
       "whatsapp_present": true,
       "form_count": 1
     },
-    "content_sha256": "80c4ea907f25339fd2e774d13194af9883e8c2cb6b1f601d11415e8256f89c5d",
-    "bytes": 25677,
+    "content_sha256": "2a29a09b922abe9958ae661f040aabdf33a6e2fd6a1133f1fb3b410766da59e2",
+    "bytes": 28324,
     "noindex": false
   }
 }

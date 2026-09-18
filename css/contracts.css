@@ -41,7 +41,7 @@ html{scroll-padding-top:96px}
 /* Natural-language copy wraps only between words. Opaque identifiers opt in
    explicitly so intrinsic sizing cannot starve ordinary labels again. */
 h1,h2,h3,h4,p,li,dt,dd,figcaption,caption,th,td,label,small,strong{overflow-wrap:normal;word-break:normal;hyphens:none}
-code,pre,kbd,samp,[data-opaque-token],.opaque-token{overflow-wrap:anywhere;word-break:break-word}
+code,pre,kbd,samp,[data-opaque-token]{overflow-wrap:anywhere;word-break:break-word}
 @media (max-width:900px){
   html{scroll-padding-top:82px}
   html.no-js .site-header{position:static}
@@ -84,3 +84,5 @@ body[data-asset-family="oportunidade-publica"] .simple-card h1{font-size:clamp(1
   body[data-route-family="aditivos"] .offer-proof-line{margin-top:12px;margin-bottom:12px}
   body[data-route-family="aditivos"] .hero-actions{gap:12px;margin-bottom:18px}
 }
+/* Tokens opacos marcados pelo build (CNPJ, URLs, codigos) herdam o texto ao redor: regras de rotulo como .answer-box span nao podem transforma-los em bloco em caixa alta (aceite 2026-09-17). */
+.answer-box [data-opaque-token],.lead-inline-copy [data-opaque-token],.author-box [data-opaque-token],.aside-card [data-opaque-token]{display:inline;margin:0;font:inherit;letter-spacing:inherit;text-transform:none;color:inherit}

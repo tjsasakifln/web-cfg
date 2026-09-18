@@ -887,6 +887,16 @@ def remediate_hub(brand: dict[str, Any]) -> dict[str, Any]:
     """
     hub_path = ROOT / "conteudos" / "index.html"
     html = _read(hub_path)
+    # 2026-09-17 (CONFENGE-SALTO-INSTITUCIONAL-02, lote C): o hub foi recomposto
+    # no esqueleto do piloto (abertura `svc-open` com a busca `data-hub-search`,
+    # `page-index`, `hub-list`). O template abaixo é o anterior (hub-hero,
+    # cartões): reescrever por cima apagaria a composição. Fail-closed: se a
+    # composição nova está no arquivo, este passo não escreve e registra.
+    if 'class="svc-open"' in html and "data-hub-search" in html and 'class="hub-list' in html:
+        return {
+            "skipped": "hub recomposto (salto institucional 02); template antigo não aplicado",
+            "indexable": sum(1 for v in indexable_map().values() if v),
+        }
     idx_map = indexable_map()
     idx_n = sum(1 for v in idx_map.values() if v)
 

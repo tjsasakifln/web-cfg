@@ -124,6 +124,22 @@ for (const viewport of VIEWPORTS) {
   for (const entry of coverage.axe.routes) {
     const path = entry.route;
     await page.goto(`${BASE}${path}`, { waitUntil: "networkidle0", timeout: 60000 });
+    // A mesma aba atravessa rotas e viewports: o cursor fica onde a rota
+    // anterior o deixou e um botao sob ele entra em :hover no meio da
+    // transicao de cor, o que fez o axe medir contraste de um estado
+    // intermediario (2026-09-17, home desktop). O estado de repouso e a
+    // propriedade auditada; o cursor sai da pagina antes da medicao.
+    await page.mouse.move(0, 0);
+    // Secoes fora da tela com content-visibility:auto nao sao pintadas; o axe
+    // le cores de caixas nao renderizadas e mede contraste contra um fundo que
+    // nao existe (2026-09-17, faixa de obras publicas da home no desktop).
+    // A auditoria e sobre a pagina inteira, entao tudo e tornado visivel antes.
+    await page.evaluate(() => {
+      for (const el of document.querySelectorAll("*")) {
+        const cv = getComputedStyle(el).contentVisibility;
+        if (cv && cv !== "visible") el.style.contentVisibility = "visible";
+      }
+    });
     await page.addScriptTag({ content: axeSource });
     const results = await page.evaluate(async () => {
       // eslint-disable-next-line no-undef

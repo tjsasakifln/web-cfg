@@ -377,7 +377,10 @@ assert(
     hubHtml.indexOf('data-deliverable-id="CFG-D08"') < hubHtml.indexOf('class="published-offers__common"'),
   "fronteiras comuns precisam vir depois das oito decisões e artefatos",
 );
-assert("hub_css_local", hubHtml.includes('/entregas/styles.css') && textOf("entregas/styles.css").includes('.vitrine-item') && textOf("entregas/styles.css").includes('.capability-roll'));
+// Onda 2 da campanha 02 (2026-09-17): a composicao do hub vem da folha
+// editorial compartilhada; a folha da rota fica com as linhas das ofertas
+// (.vitrine-item*) e dos servicos (.capability-group*), sem CSS de contrato.
+assert("hub_css_local", hubHtml.includes('/entregas/styles.css') && hubHtml.includes('/assets/editorial.css') && textOf("entregas/styles.css").includes('.vitrine-item') && textOf("entregas/styles.css").includes('.capability-group'));
 assert("hub_contexto_resultado", /Cobertura, data de corte, método e o rótulo NÃO INFORMADO/.test(hubText));
 const radarPurchaseText = textOf("comercial/radar-decisorio/index.html");
 assert("radar_compra_sla_3_dias", /prazo de 3 dias úteis/i.test(radarPurchaseText), radarPurchaseText.slice(0, 180));

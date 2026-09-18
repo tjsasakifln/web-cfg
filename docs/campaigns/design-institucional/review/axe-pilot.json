@@ -1,0 +1,3187 @@
+{
+  "generated_at": "2026-09-17T07:14:33.519Z",
+  "issue": 293,
+  "base": "http://127.0.0.1:8731",
+  "site_root": "_site",
+  "policy_path": "data/quality/interface-coverage-policy.json",
+  "coverage": {
+    "public_route_count": 234,
+    "audited_route_count": 51,
+    "viewports": [
+      {
+        "id": "mobile",
+        "width": 390,
+        "height": 844,
+        "device_scale_factor": 2,
+        "is_mobile": true,
+        "has_touch": true
+      },
+      {
+        "id": "desktop",
+        "width": 1440,
+        "height": 1000,
+        "device_scale_factor": 1,
+        "is_mobile": false,
+        "has_touch": false
+      }
+    ],
+    "page_loads": 102,
+    "price_route_count": 38,
+    "capture_form_route_count": 30,
+    "sampling": {
+      "enabled": false,
+      "reason": "full price+capture coverage fits inside the 45-minute site-ci budget; no current risk route is sampled away",
+      "dropped": []
+    },
+    "audited_routes": [
+      {
+        "route": "/",
+        "family": "home",
+        "reasons": [
+          "price",
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/acompanhamento-contratos-obras/",
+        "family": "service-pillars",
+        "reasons": [
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/aditivos-obras-publicas/",
+        "family": "service-pillars",
+        "reasons": [
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/",
+        "family": "data-desk-citation-kit",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/assistencia-tecnica-pericial-engenharia/",
+        "family": "assistencia-tecnica-pericial-engenharia",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/atrasos-prorrogacao-obras-publicas/",
+        "family": "service-pillars",
+        "reasons": [
+          "price",
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/auditoria-orcamento-licitacao/",
+        "family": "service-pillars",
+        "reasons": [
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/bid-room-licitacoes-obras/",
+        "family": "service-pillars",
+        "reasons": [
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/casos/",
+        "family": "casos",
+        "reasons": [
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/casos/aditivo-art125-demonstrativo/",
+        "family": "casos",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/casos/demonstrativo-infraestrutura/",
+        "family": "casos",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/casos/demonstrativo-projeto-privado/",
+        "family": "casos",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/casos/medicao-glosa-demonstrativo/",
+        "family": "casos",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/casos/modelo-apresentacao-executiva-resultados/",
+        "family": "casos-modelos-precificados",
+        "reasons": [
+          "price",
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/casos/modelo-base-quantitativa-canonica/",
+        "family": "casos-modelos-precificados",
+        "reasons": [
+          "price",
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/casos/modelo-contratos-vincendos-relicitacao/",
+        "family": "casos-modelos-precificados",
+        "reasons": [
+          "price",
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/casos/modelo-mapa-compradores-publicos/",
+        "family": "casos-modelos-precificados",
+        "reasons": [
+          "price",
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/casos/modelo-mapeamento-concorrentes-publicos/",
+        "family": "casos-modelos-precificados",
+        "reasons": [
+          "price",
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/casos/modelo-painel-precos-obras-publicas/",
+        "family": "casos-modelos-precificados",
+        "reasons": [
+          "price",
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/casos/modelo-relatorio-executivo-consolidado/",
+        "family": "casos-modelos-precificados",
+        "reasons": [
+          "price",
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/casos/modelo-relatorio-inteligencia-licitacoes/",
+        "family": "casos-modelos-precificados",
+        "reasons": [
+          "price",
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/comercial/radar-decisorio/",
+        "family": "comercial-condicoes",
+        "reasons": [
+          "price",
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/comercial/termos-diagnostico-b2g/",
+        "family": "comercial-condicoes",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/compatibilizacao-projetos-engenharia/",
+        "family": "engineering-projects-coordination-clash",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/confianca/",
+        "family": "legal-and-trust",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/conteudos/atraso-na-medicao-obra-publica/",
+        "family": "measurement-delay-canary",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/conteudos/limite-aditivo-25-50-obra-publica/",
+        "family": "editorial-library",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/conteudos/sinapi-desonerado-nao-desonerado/",
+        "family": "editorial-library",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/defesa-margem-contratos-publicos/",
+        "family": "service-pillars",
+        "reasons": [
+          "price",
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/defesa-tecnica-contratos-publicos/",
+        "family": "service-pillars",
+        "reasons": [
+          "price",
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/diagnostico-b2g-360/",
+        "family": "service-pillars",
+        "reasons": [
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/diagnostico-b2g-expansao/",
+        "family": "service-pillars",
+        "reasons": [
+          "price",
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/diagnostico-pre-licitacao/",
+        "family": "service-pillars",
+        "reasons": [
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/diretoria-b2g/",
+        "family": "service-pillars",
+        "reasons": [
+          "price",
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/entregas/",
+        "family": "entregas",
+        "reasons": [
+          "price",
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/especialista/tiago-jun-sasaki/",
+        "family": "especialista",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/ferramentas/checklist-reequilibrio/",
+        "family": "ferramentas",
+        "reasons": [
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/ferramentas/diagnostico-defesa-margem/",
+        "family": "ferramentas",
+        "reasons": [
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/ferramentas/limite-acrescimos-supressoes/",
+        "family": "ferramentas",
+        "reasons": [
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/inspecao-diagnostico-edificacoes/",
+        "family": "inspecao-diagnostico-edificacoes",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/inteligencia/valor-tipico-contratos-pavimentacao/",
+        "family": "market-answer-canary",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/lei-14133-obras/limite-25-50-aditivo-obra/",
+        "family": "lei-14133-obras",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/medicoes-glosas-obras-publicas/",
+        "family": "service-pillars",
+        "reasons": [
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/nurture/",
+        "family": "nurture",
+        "reasons": [
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/projetos-complementares-engenharia/",
+        "family": "complementary-engineering-elaboration",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/quantitativos-orcamento-obras/",
+        "family": "private-engineering-quantities-budget",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/radar/nacional-obras-publicas/",
+        "family": "radar",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/reequilibrio-obras-publicas/",
+        "family": "service-pillars",
+        "reasons": [
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/revisao-tecnica-projetos-engenharia/",
+        "family": "private-engineering-project-review",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/seguranca-trabalho-apoio-tecnico/",
+        "family": "seguranca-trabalho-apoio-tecnico",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/servicos-obras-publicas/",
+        "family": "servicos-obras-publicas",
+        "reasons": [
+          "price",
+          "capture_form"
+        ]
+      }
+    ],
+    "not_audited_count": 183,
+    "not_audited": [
+      {
+        "route": "/404.html",
+        "family": "pagina-nao-encontrada",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/analise-cnpj/",
+        "family": "live-intelligence-cnpj-tool",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/analise-cnpj/r/",
+        "family": "live-intelligence-cnpj-result",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/analises-contratos-publicos/",
+        "family": "analises-contratos-publicos",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
+        "family": "analises-contratos-publicos",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/comercial/privacidade-leads/",
+        "family": "comercial-condicoes",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conflitos/",
+        "family": "legal-and-trust",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/aceleracao-obra-publica-custo-adicional/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/aditivo-empreitada-por-preco-global/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/aditivo-qualitativo-quantitativo/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/administracao-local-orcamento-obra-publica/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/administracao-local-prolongada-obra-publica/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/analise-edital-obra-publica-construtora/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/ata-reuniao-ordem-servico-obra-publica/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/atraso-obra-culpa-administracao/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/atraso-pagamento-contrato-publico-suspender/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/atraso-projeto-executivo-obra-publica/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/auditoria-contrato-obra-publica-mensal/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/aumento-material-reequilibrio-contrato-publico/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/bdi-diferenciado-obra-publica/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/bdi-obra-publica/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/calculo-reequilibrio-economico-financeiro/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/capacidade-tecnica-operacional-profissional-licitacao/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/chuva-prorrogacao-prazo-obra-publica/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/clausula-matriz-risco-abusiva-edital/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/como-contratar-compatibilizacao-projetos/",
+        "family": "engineering-projects-coordination-contents",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/como-contratar-projetos-complementares/",
+        "family": "como-contratar-projetos-complementares",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/como-contratar-revisao-tecnica-projeto/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/como-provar-atraso-obra-publica/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/comparar-propostas-execucao-obra/",
+        "family": "private-engineering-quantities-budget",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/compensacao-acrescimo-supressao-aditivo/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/composicao-propria-preco-obra-publica/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/comprovacao-exequibilidade-proposta-obra/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/comunicacao-fiscal-contrato-obra-publica/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/consorcio-subcontratacao-obra-publica/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/consultoria-b2g-engenharia-construtora/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/consultoria-contrato-obra-publica-construtora/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/contratacao-integrada-semi-integrada-obra/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/controle-mudancas-obra-publica/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/cotacao-mercado-orcamento-obra-publica/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/criterio-de-medicao-nao-previsto-contrato/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/cronograma-fisico-financeiro-obra-publica/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/cronologia-contrato-obra-publica/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/culpa-sancao-atraso-contrato-publico/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/curva-abc-orcamento-obra/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/curva-abc-reequilibrio-contrato/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/custos-indiretos-atraso-administracao-obra/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/data-base-orcamento-reajuste-obra-publica/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/defesa-processo-sancionador-contrato-publico/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/demolicao-nao-prevista-obra-publica/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/demora-decisao-administracao-contrato-obra/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/desagio-licitacao-obra-publica/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/desconto-da-proposta-em-item-novo-aditivo/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/diario-de-obra-pleito-contrato-publico/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/divergencia-diario-obra-fiscalizacao/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/divergencia-quantitativo-medicao-as-built/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/documentos-para-levantamento-quantitativos/",
+        "family": "private-engineering-quantities-budget",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/documentos-reequilibrio-obra-publica/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/dosimetria-multa-contrato-administrativo/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/empreitada-preco-global-preco-unitario/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/erro-de-projeto-gera-aditivo-obra-publica/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/erros-comunicacao-contrato-publico-construtora/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/evento-previsivel-consequencias-incalculaveis-reequilibrio/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/extincao-contrato-culpa-administracao/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/extincao-contrato-obra-publica-pelo-contratado/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/fiscal-mandou-executar-sem-aditivo/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/fiscal-nao-assina-medicao-obra-publica/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/frente-de-servico-nao-liberada-obra/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/garantia-proposta-licitacao-obra/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/gestao-contrato-obra-publica-indicadores/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/glosa-de-medicao-obra-publica/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/glosa-por-qualidade-obra-publica/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/impedimento-de-licitar-construtora/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/indenizacao-servico-extracontratual-obra-publica/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/interferencia-concessionaria-obra-publica-atraso/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/jogo-de-planilha-aditivo-obra-publica/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/juros-atraso-pagamento-contrato-administrativo/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/manutencao-habilitacao-contrato-publico/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/matriz-de-riscos-obra-publica/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/medicao-de-obra-publica-rejeitada/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/medicao-por-evento-obra-publica/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/mobilizacao-desmobilizacao-orcamento-obra/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/mudanca-metodo-construtivo-obra-publica-aditivo/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/multa-atraso-parcial-contrato-publico/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/multa-contrato-obra-publica-defesa/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/notas-fiscais-reequilibrio-contrato/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/notificacao-impacto-prazo-custo-obra/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/orcamento-incompleto-edital-obra-publica/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/orcamento-sigiloso-licitacao-obra/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/ordem-paralisacao-obra-publica-custos/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/pagamento-contrato-publico-certidao-vencida/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/pagamento-parcial-etapa-empreitada-global/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/parcela-incontroversa-medicao-contrato-publico/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/pedido-de-reequilibrio-negado/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/pedido-prorrogacao-prazo-antes-vencimento/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/plano-recuperacao-obra-atrasada/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/pleito-tecnico-obra-publica/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/preco-de-item-novo-aditivo-obra-publica/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/preco-unitario-acima-referencia-proposta-global/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/produtividade-sinapi-obra-publica/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/projeto-basico-incompleto-obra-publica/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/proposta-inexequivel-obra-publica-lei-14133/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/prova-custos-adicionais-obra-publica/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/prova-de-medicao-diario-de-obra-fotos/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/quando-compatibilizar-projetos/",
+        "family": "engineering-projects-coordination-contents",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/quantitativo-insuficiente-planilha-obra-publica/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/reajuste-repactuacao-reequilibrio-diferenca/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/recuperar-contrato-obra-publica-problematico/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/recurso-inabilitacao-tecnica-licitacao/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/reequilibrio-antes-da-prorrogacao-contrato/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/reequilibrio-apos-fim-do-contrato/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/reequilibrio-economico-financeiro-obra-publica/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/reequilibrio-empreitada-preco-global/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/registro-contemporaneo-pleito-obra/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/reprogramacao-cronograma-obra-publica/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/rescisao-unilateral-contrato-obra-publica/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/resposta-notificacao-atraso-obra-publica/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/revisao-compatibilizacao-ou-elaboracao-projetos/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/revisar-ou-refazer-orcamento-obra/",
+        "family": "private-engineering-quantities-budget",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/seguro-garantia-execucao-contrato-publico/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/servico-executado-sem-projeto-aprovado/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/servico-executado-sem-termo-aditivo/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/servico-nao-previsto-na-planilha-obra-publica/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/sinapi-ou-sicro-obra-publica/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/subcontratacao-obra-publica-autorizacao/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/suspensao-execucao-contrato-publico-contratado/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/tributos-bdi-obra-publica/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/troca-responsavel-tecnico-contrato-publico/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/visita-tecnica-licitacao-obra-publica/",
+        "family": "editorial-library",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/diagnostico-b2g-expansao/cancelado/",
+        "family": "diagnostico-b2g-expansao-estados",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/diagnostico-b2g-expansao/expirado/",
+        "family": "diagnostico-b2g-expansao-estados",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/diagnostico-b2g-expansao/obrigado/",
+        "family": "diagnostico-b2g-expansao-estados",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/ferramentas/",
+        "family": "ferramentas-hub",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/ferramentas/matriz-atraso-obra/",
+        "family": "ferramentas",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/ferramentas/prontidao-tecnica-obra-privada/",
+        "family": "prontidao-tecnica-obra-privada",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/guias-contratos-obras/",
+        "family": "guias-contratos-obras",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/guias-contratos-obras/checklist-pedido-aditivo/",
+        "family": "guias-contratos-obras",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/guias-contratos-obras/contestar-glosa-medicao/",
+        "family": "guias-contratos-obras",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/guias-contratos-obras/documentos-pedido-reequilibrio/",
+        "family": "guias-contratos-obras",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/guias-contratos-obras/responder-notificacao-atraso/",
+        "family": "guias-contratos-obras",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/imprensa/",
+        "family": "legal-and-trust",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/inteligencia/",
+        "family": "inteligencia-pseo",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/inteligencia/cenarios/",
+        "family": "inteligencia-pseo",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/inteligencia/cenarios/aditivos-e-risco-de-margem/",
+        "family": "inteligencia-pseo",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/inteligencia/cenarios/inconsistencia-orcamento-edital/",
+        "family": "inteligencia-pseo",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/inteligencia/cenarios/medicao-glosa-contratos-recorrentes/",
+        "family": "inteligencia-pseo",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/inteligencia/cenarios/reequilibrio-e-dispersao-de-precos/",
+        "family": "inteligencia-pseo",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
+        "family": "inteligencia-pseo",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/inteligencia/concorrencia/",
+        "family": "inteligencia-pseo",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/inteligencia/mercados/",
+        "family": "inteligencia-pseo",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/inteligencia/orgaos/",
+        "family": "inteligencia-pseo",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/inteligencia/precos/",
+        "family": "inteligencia-pseo",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/jurisprudencia-contratos-obras/",
+        "family": "jurisprudencia-contratos-obras",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/",
+        "family": "jurisprudencia-contratos-obras",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/lei-14133-obras/",
+        "family": "lei-14133-obras",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/lei-14133-obras/art-124-alteracao-contratual-obra/",
+        "family": "lei-14133-obras",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/lei-14133-obras/atraso-imputavel-administracao/",
+        "family": "lei-14133-obras",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/lei-14133-obras/parcela-incontroversa-medicao-pagamento/",
+        "family": "lei-14133-obras",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/lei-14133-obras/preco-item-novo-desconto-proposta/",
+        "family": "lei-14133-obras",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/lei-14133-obras/reequilibrio-reajuste-repactuacao/",
+        "family": "lei-14133-obras",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/lei-14133-obras/servico-executado-sem-termo-aditivo/",
+        "family": "lei-14133-obras",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/metodologia-inteligencia/",
+        "family": "metodologia-inteligencia",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/nurture/sair/",
+        "family": "nurture",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/obrigado-contrato.html",
+        "family": "obrigado-transacional",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/obrigado-edital.html",
+        "family": "obrigado-transacional",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/obrigado-operacao.html",
+        "family": "obrigado-transacional",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/obrigado.html",
+        "family": "obrigado-transacional",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/ops/",
+        "family": "transaction-utilities-noindex",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/parcerias-engenharia/",
+        "family": "parcerias-engenharia",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/politica-editorial/",
+        "family": "politica-editorial",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/politica-editorial/historico/",
+        "family": "politica-editorial",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/politica-editorial/v/1.0.0/",
+        "family": "politica-editorial",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/privacidade/",
+        "family": "legal-and-trust",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/problemas-que-resolvemos/",
+        "family": "problemas-que-resolvemos",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/radar/",
+        "family": "radar",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/servicos/",
+        "family": "servicos-corporativos",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/termos-de-uso/",
+        "family": "legal-and-trust",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/triagem-tecnica/",
+        "family": "triagem-tecnica",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/uso-de-ia/",
+        "family": "legal-and-trust",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      }
+    ]
+  },
+  "pages": [
+    {
+      "path": "/",
+      "viewport": "mobile",
+      "family": "home",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/acompanhamento-contratos-obras/",
+      "viewport": "mobile",
+      "family": "service-pillars",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/aditivos-obras-publicas/",
+      "viewport": "mobile",
+      "family": "service-pillars",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/",
+      "viewport": "mobile",
+      "family": "data-desk-citation-kit",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/assistencia-tecnica-pericial-engenharia/",
+      "viewport": "mobile",
+      "family": "assistencia-tecnica-pericial-engenharia",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/atrasos-prorrogacao-obras-publicas/",
+      "viewport": "mobile",
+      "family": "service-pillars",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/auditoria-orcamento-licitacao/",
+      "viewport": "mobile",
+      "family": "service-pillars",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/bid-room-licitacoes-obras/",
+      "viewport": "mobile",
+      "family": "service-pillars",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/",
+      "viewport": "mobile",
+      "family": "casos",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/aditivo-art125-demonstrativo/",
+      "viewport": "mobile",
+      "family": "casos",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/demonstrativo-infraestrutura/",
+      "viewport": "mobile",
+      "family": "casos",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/demonstrativo-projeto-privado/",
+      "viewport": "mobile",
+      "family": "casos",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/medicao-glosa-demonstrativo/",
+      "viewport": "mobile",
+      "family": "casos",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/modelo-apresentacao-executiva-resultados/",
+      "viewport": "mobile",
+      "family": "casos-modelos-precificados",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/modelo-base-quantitativa-canonica/",
+      "viewport": "mobile",
+      "family": "casos-modelos-precificados",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/modelo-contratos-vincendos-relicitacao/",
+      "viewport": "mobile",
+      "family": "casos-modelos-precificados",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/modelo-mapa-compradores-publicos/",
+      "viewport": "mobile",
+      "family": "casos-modelos-precificados",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/modelo-mapeamento-concorrentes-publicos/",
+      "viewport": "mobile",
+      "family": "casos-modelos-precificados",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/modelo-painel-precos-obras-publicas/",
+      "viewport": "mobile",
+      "family": "casos-modelos-precificados",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/modelo-relatorio-executivo-consolidado/",
+      "viewport": "mobile",
+      "family": "casos-modelos-precificados",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/modelo-relatorio-inteligencia-licitacoes/",
+      "viewport": "mobile",
+      "family": "casos-modelos-precificados",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/comercial/radar-decisorio/",
+      "viewport": "mobile",
+      "family": "comercial-condicoes",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/comercial/termos-diagnostico-b2g/",
+      "viewport": "mobile",
+      "family": "comercial-condicoes",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/compatibilizacao-projetos-engenharia/",
+      "viewport": "mobile",
+      "family": "engineering-projects-coordination-clash",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/confianca/",
+      "viewport": "mobile",
+      "family": "legal-and-trust",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/conteudos/atraso-na-medicao-obra-publica/",
+      "viewport": "mobile",
+      "family": "measurement-delay-canary",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/conteudos/limite-aditivo-25-50-obra-publica/",
+      "viewport": "mobile",
+      "family": "editorial-library",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/conteudos/sinapi-desonerado-nao-desonerado/",
+      "viewport": "mobile",
+      "family": "editorial-library",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/defesa-margem-contratos-publicos/",
+      "viewport": "mobile",
+      "family": "service-pillars",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/defesa-tecnica-contratos-publicos/",
+      "viewport": "mobile",
+      "family": "service-pillars",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/diagnostico-b2g-360/",
+      "viewport": "mobile",
+      "family": "service-pillars",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/diagnostico-b2g-expansao/",
+      "viewport": "mobile",
+      "family": "service-pillars",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/diagnostico-pre-licitacao/",
+      "viewport": "mobile",
+      "family": "service-pillars",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/diretoria-b2g/",
+      "viewport": "mobile",
+      "family": "service-pillars",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/entregas/",
+      "viewport": "mobile",
+      "family": "entregas",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/especialista/tiago-jun-sasaki/",
+      "viewport": "mobile",
+      "family": "especialista",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/ferramentas/checklist-reequilibrio/",
+      "viewport": "mobile",
+      "family": "ferramentas",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/ferramentas/diagnostico-defesa-margem/",
+      "viewport": "mobile",
+      "family": "ferramentas",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/ferramentas/limite-acrescimos-supressoes/",
+      "viewport": "mobile",
+      "family": "ferramentas",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/inspecao-diagnostico-edificacoes/",
+      "viewport": "mobile",
+      "family": "inspecao-diagnostico-edificacoes",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/inteligencia/valor-tipico-contratos-pavimentacao/",
+      "viewport": "mobile",
+      "family": "market-answer-canary",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/lei-14133-obras/limite-25-50-aditivo-obra/",
+      "viewport": "mobile",
+      "family": "lei-14133-obras",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/medicoes-glosas-obras-publicas/",
+      "viewport": "mobile",
+      "family": "service-pillars",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/nurture/",
+      "viewport": "mobile",
+      "family": "nurture",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/projetos-complementares-engenharia/",
+      "viewport": "mobile",
+      "family": "complementary-engineering-elaboration",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/quantitativos-orcamento-obras/",
+      "viewport": "mobile",
+      "family": "private-engineering-quantities-budget",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/radar/nacional-obras-publicas/",
+      "viewport": "mobile",
+      "family": "radar",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/reequilibrio-obras-publicas/",
+      "viewport": "mobile",
+      "family": "service-pillars",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/revisao-tecnica-projetos-engenharia/",
+      "viewport": "mobile",
+      "family": "private-engineering-project-review",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/seguranca-trabalho-apoio-tecnico/",
+      "viewport": "mobile",
+      "family": "seguranca-trabalho-apoio-tecnico",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/servicos-obras-publicas/",
+      "viewport": "mobile",
+      "family": "servicos-obras-publicas",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/",
+      "viewport": "desktop",
+      "family": "home",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/acompanhamento-contratos-obras/",
+      "viewport": "desktop",
+      "family": "service-pillars",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/aditivos-obras-publicas/",
+      "viewport": "desktop",
+      "family": "service-pillars",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/",
+      "viewport": "desktop",
+      "family": "data-desk-citation-kit",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/assistencia-tecnica-pericial-engenharia/",
+      "viewport": "desktop",
+      "family": "assistencia-tecnica-pericial-engenharia",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/atrasos-prorrogacao-obras-publicas/",
+      "viewport": "desktop",
+      "family": "service-pillars",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/auditoria-orcamento-licitacao/",
+      "viewport": "desktop",
+      "family": "service-pillars",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/bid-room-licitacoes-obras/",
+      "viewport": "desktop",
+      "family": "service-pillars",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/",
+      "viewport": "desktop",
+      "family": "casos",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/aditivo-art125-demonstrativo/",
+      "viewport": "desktop",
+      "family": "casos",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/demonstrativo-infraestrutura/",
+      "viewport": "desktop",
+      "family": "casos",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/demonstrativo-projeto-privado/",
+      "viewport": "desktop",
+      "family": "casos",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/medicao-glosa-demonstrativo/",
+      "viewport": "desktop",
+      "family": "casos",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/modelo-apresentacao-executiva-resultados/",
+      "viewport": "desktop",
+      "family": "casos-modelos-precificados",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/modelo-base-quantitativa-canonica/",
+      "viewport": "desktop",
+      "family": "casos-modelos-precificados",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/modelo-contratos-vincendos-relicitacao/",
+      "viewport": "desktop",
+      "family": "casos-modelos-precificados",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/modelo-mapa-compradores-publicos/",
+      "viewport": "desktop",
+      "family": "casos-modelos-precificados",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/modelo-mapeamento-concorrentes-publicos/",
+      "viewport": "desktop",
+      "family": "casos-modelos-precificados",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/modelo-painel-precos-obras-publicas/",
+      "viewport": "desktop",
+      "family": "casos-modelos-precificados",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/modelo-relatorio-executivo-consolidado/",
+      "viewport": "desktop",
+      "family": "casos-modelos-precificados",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/modelo-relatorio-inteligencia-licitacoes/",
+      "viewport": "desktop",
+      "family": "casos-modelos-precificados",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/comercial/radar-decisorio/",
+      "viewport": "desktop",
+      "family": "comercial-condicoes",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/comercial/termos-diagnostico-b2g/",
+      "viewport": "desktop",
+      "family": "comercial-condicoes",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/compatibilizacao-projetos-engenharia/",
+      "viewport": "desktop",
+      "family": "engineering-projects-coordination-clash",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/confianca/",
+      "viewport": "desktop",
+      "family": "legal-and-trust",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/conteudos/atraso-na-medicao-obra-publica/",
+      "viewport": "desktop",
+      "family": "measurement-delay-canary",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/conteudos/limite-aditivo-25-50-obra-publica/",
+      "viewport": "desktop",
+      "family": "editorial-library",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/conteudos/sinapi-desonerado-nao-desonerado/",
+      "viewport": "desktop",
+      "family": "editorial-library",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/defesa-margem-contratos-publicos/",
+      "viewport": "desktop",
+      "family": "service-pillars",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/defesa-tecnica-contratos-publicos/",
+      "viewport": "desktop",
+      "family": "service-pillars",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/diagnostico-b2g-360/",
+      "viewport": "desktop",
+      "family": "service-pillars",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/diagnostico-b2g-expansao/",
+      "viewport": "desktop",
+      "family": "service-pillars",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/diagnostico-pre-licitacao/",
+      "viewport": "desktop",
+      "family": "service-pillars",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/diretoria-b2g/",
+      "viewport": "desktop",
+      "family": "service-pillars",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/entregas/",
+      "viewport": "desktop",
+      "family": "entregas",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/especialista/tiago-jun-sasaki/",
+      "viewport": "desktop",
+      "family": "especialista",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/ferramentas/checklist-reequilibrio/",
+      "viewport": "desktop",
+      "family": "ferramentas",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/ferramentas/diagnostico-defesa-margem/",
+      "viewport": "desktop",
+      "family": "ferramentas",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/ferramentas/limite-acrescimos-supressoes/",
+      "viewport": "desktop",
+      "family": "ferramentas",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/inspecao-diagnostico-edificacoes/",
+      "viewport": "desktop",
+      "family": "inspecao-diagnostico-edificacoes",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/inteligencia/valor-tipico-contratos-pavimentacao/",
+      "viewport": "desktop",
+      "family": "market-answer-canary",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/lei-14133-obras/limite-25-50-aditivo-obra/",
+      "viewport": "desktop",
+      "family": "lei-14133-obras",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/medicoes-glosas-obras-publicas/",
+      "viewport": "desktop",
+      "family": "service-pillars",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/nurture/",
+      "viewport": "desktop",
+      "family": "nurture",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/projetos-complementares-engenharia/",
+      "viewport": "desktop",
+      "family": "complementary-engineering-elaboration",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/quantitativos-orcamento-obras/",
+      "viewport": "desktop",
+      "family": "private-engineering-quantities-budget",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/radar/nacional-obras-publicas/",
+      "viewport": "desktop",
+      "family": "radar",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/reequilibrio-obras-publicas/",
+      "viewport": "desktop",
+      "family": "service-pillars",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/revisao-tecnica-projetos-engenharia/",
+      "viewport": "desktop",
+      "family": "private-engineering-project-review",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/seguranca-trabalho-apoio-tecnico/",
+      "viewport": "desktop",
+      "family": "seguranca-trabalho-apoio-tecnico",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/servicos-obras-publicas/",
+      "viewport": "desktop",
+      "family": "servicos-obras-publicas",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    }
+  ],
+  "critical": 0,
+  "serious": 0,
+  "moderate": 0,
+  "minor": 0,
+  "duration_seconds": 94
+}

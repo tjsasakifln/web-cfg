@@ -1,0 +1,318 @@
+{
+  "base": "http://127.0.0.1:8732",
+  "label": "base",
+  "measured_at": "2026-09-17T05:08:56.488Z",
+  "tool": "lighthouse 13.4.1 (Node API) + chrome-launcher 1.2.1, chromium-1234 headless",
+  "method": "mobile, simulated throttling rtt 150ms / 1.6 Mbps / cpu 4x, storage reset per run (cold cache); local static server with gzip for text/svg (same server for baseline and pilot)",
+  "runs_per_route": 3,
+  "summary": [
+    {
+      "route": "/",
+      "runs": 3,
+      "perf_median": 99,
+      "perf_range": [
+        99,
+        99
+      ],
+      "lcp_median_ms": 1804,
+      "lcp_range_ms": [
+        1803,
+        1811
+      ],
+      "cls_median": 0,
+      "tbt_median_ms": 21,
+      "bytes_median": 150920,
+      "a11y_median": 100
+    },
+    {
+      "route": "/servicos/",
+      "runs": 3,
+      "perf_median": 100,
+      "perf_range": [
+        99,
+        100
+      ],
+      "lcp_median_ms": 1804,
+      "lcp_range_ms": [
+        1803,
+        1805
+      ],
+      "cls_median": 0,
+      "tbt_median_ms": 12,
+      "bytes_median": 141757,
+      "a11y_median": 100
+    },
+    {
+      "route": "/quantitativos-orcamento-obras/",
+      "runs": 3,
+      "perf_median": 100,
+      "perf_range": [
+        100,
+        100
+      ],
+      "lcp_median_ms": 1804,
+      "lcp_range_ms": [
+        1804,
+        1804
+      ],
+      "cls_median": 0,
+      "tbt_median_ms": 0,
+      "bytes_median": 152613,
+      "a11y_median": 100
+    },
+    {
+      "route": "/medicoes-glosas-obras-publicas/",
+      "runs": 3,
+      "perf_median": 99,
+      "perf_range": [
+        99,
+        100
+      ],
+      "lcp_median_ms": 1809,
+      "lcp_range_ms": [
+        1805,
+        1811
+      ],
+      "cls_median": 0,
+      "tbt_median_ms": 19,
+      "bytes_median": 143981,
+      "a11y_median": 100
+    },
+    {
+      "route": "/casos/demonstrativo-projeto-privado/",
+      "runs": 3,
+      "perf_median": 100,
+      "perf_range": [
+        100,
+        100
+      ],
+      "lcp_median_ms": 1805,
+      "lcp_range_ms": [
+        1803,
+        1806
+      ],
+      "cls_median": 0,
+      "tbt_median_ms": 1,
+      "bytes_median": 141991,
+      "a11y_median": 100
+    },
+    {
+      "route": "/triagem-tecnica/",
+      "runs": 3,
+      "perf_median": 100,
+      "perf_range": [
+        100,
+        100
+      ],
+      "lcp_median_ms": 1807,
+      "lcp_range_ms": [
+        1806,
+        1807
+      ],
+      "cls_median": 0,
+      "tbt_median_ms": 0,
+      "bytes_median": 126571,
+      "a11y_median": 100
+    }
+  ],
+  "results": [
+    {
+      "route": "/",
+      "run": 1,
+      "perf": 99,
+      "a11y": 100,
+      "lcp": 1810.5589,
+      "cls": 0,
+      "tbt": 21,
+      "fcp": 1215.83835,
+      "bytes": 150920
+    },
+    {
+      "route": "/",
+      "run": 2,
+      "perf": 99,
+      "a11y": 100,
+      "lcp": 1804.0455,
+      "cls": 0,
+      "tbt": 40,
+      "fcp": 1206.06825,
+      "bytes": 150920
+    },
+    {
+      "route": "/",
+      "run": 3,
+      "perf": 99,
+      "a11y": 100,
+      "lcp": 1803.401,
+      "cls": 0,
+      "tbt": 18,
+      "fcp": 1205.1015000000002,
+      "bytes": 150920
+    },
+    {
+      "route": "/servicos/",
+      "run": 1,
+      "perf": 100,
+      "a11y": 100,
+      "lcp": 1804.8022999999998,
+      "cls": 0,
+      "tbt": 20,
+      "fcp": 1057.20345,
+      "bytes": 141757
+    },
+    {
+      "route": "/servicos/",
+      "run": 2,
+      "perf": 100,
+      "a11y": 100,
+      "lcp": 1804.1929999999998,
+      "cls": 0,
+      "tbt": 12,
+      "fcp": 1056.2894999999999,
+      "bytes": 141757
+    },
+    {
+      "route": "/servicos/",
+      "run": 3,
+      "perf": 99,
+      "a11y": 100,
+      "lcp": 1803.0916000000002,
+      "cls": 0,
+      "tbt": 9,
+      "fcp": 1154.0916000000002,
+      "bytes": 141757
+    },
+    {
+      "route": "/quantitativos-orcamento-obras/",
+      "run": 1,
+      "perf": 100,
+      "a11y": 100,
+      "lcp": 1803.7581,
+      "cls": 0,
+      "tbt": 0,
+      "fcp": 1055.63715,
+      "bytes": 152613
+    },
+    {
+      "route": "/quantitativos-orcamento-obras/",
+      "run": 2,
+      "perf": 100,
+      "a11y": 100,
+      "lcp": 1804.1556999999998,
+      "cls": 0,
+      "tbt": 1,
+      "fcp": 1056.23355,
+      "bytes": 152613
+    },
+    {
+      "route": "/quantitativos-orcamento-obras/",
+      "run": 3,
+      "perf": 100,
+      "a11y": 100,
+      "lcp": 1803.648,
+      "cls": 0,
+      "tbt": 0,
+      "fcp": 1055.472,
+      "bytes": 152613
+    },
+    {
+      "route": "/medicoes-glosas-obras-publicas/",
+      "run": 1,
+      "perf": 100,
+      "a11y": 100,
+      "lcp": 1808.6316000000002,
+      "cls": 0,
+      "tbt": 0,
+      "fcp": 1062.9474,
+      "bytes": 143981
+    },
+    {
+      "route": "/medicoes-glosas-obras-publicas/",
+      "run": 2,
+      "perf": 99,
+      "a11y": 100,
+      "lcp": 1811.3840999999998,
+      "cls": 0,
+      "tbt": 65,
+      "fcp": 1225.3840999999998,
+      "bytes": 143981
+    },
+    {
+      "route": "/medicoes-glosas-obras-publicas/",
+      "run": 3,
+      "perf": 99,
+      "a11y": 100,
+      "lcp": 1804.6349,
+      "cls": 0,
+      "tbt": 19,
+      "fcp": 1123.6349,
+      "bytes": 143981
+    },
+    {
+      "route": "/casos/demonstrativo-projeto-privado/",
+      "run": 1,
+      "perf": 100,
+      "a11y": 100,
+      "lcp": 1803.3919,
+      "cls": 0,
+      "tbt": 0,
+      "fcp": 1055.0878500000001,
+      "bytes": 141991
+    },
+    {
+      "route": "/casos/demonstrativo-projeto-privado/",
+      "run": 2,
+      "perf": 100,
+      "a11y": 100,
+      "lcp": 1805.9485,
+      "cls": 0,
+      "tbt": 14,
+      "fcp": 1058.92275,
+      "bytes": 141991
+    },
+    {
+      "route": "/casos/demonstrativo-projeto-privado/",
+      "run": 3,
+      "perf": 100,
+      "a11y": 100,
+      "lcp": 1805.4124000000002,
+      "cls": 0,
+      "tbt": 1,
+      "fcp": 1058.1186,
+      "bytes": 141991
+    },
+    {
+      "route": "/triagem-tecnica/",
+      "run": 1,
+      "perf": 100,
+      "a11y": 100,
+      "lcp": 1806.4059000000002,
+      "cls": 0,
+      "tbt": 0,
+      "fcp": 1059.60885,
+      "bytes": 126722
+    },
+    {
+      "route": "/triagem-tecnica/",
+      "run": 2,
+      "perf": 100,
+      "a11y": 100,
+      "lcp": 1807.3256,
+      "cls": 0,
+      "tbt": 0,
+      "fcp": 1060.9884,
+      "bytes": 126571
+    },
+    {
+      "route": "/triagem-tecnica/",
+      "run": 3,
+      "perf": 100,
+      "a11y": 100,
+      "lcp": 1806.9178000000002,
+      "cls": 0,
+      "tbt": 12,
+      "fcp": 1060.3767,
+      "bytes": 126571
+    }
+  ]
+}

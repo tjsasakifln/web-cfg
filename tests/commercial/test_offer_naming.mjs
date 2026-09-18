@@ -385,7 +385,10 @@ for (const [page, canonicalName, legacyName] of primaryOfferPages) {
 const diretoriaHtml = fs.readFileSync(path.join(root, "diretoria-b2g/index.html"), "utf8");
 assert(
   "three_plan_names_visible_on_primary_page",
-  plans.every((plan) => diretoriaHtml.includes(`<strong>${plan.public_name_pt_br}</strong>`)),
+  // 2026-09-17 (SALTO-INSTITUCIONAL-02): a lista de planos passou a ser uma
+  // lista de definicao regrada (<dt>nome</dt><dd>preco</dd>); a propriedade
+  // continua a mesma: os tres nomes publicos visiveis, como termo, na pagina.
+  plans.every((plan) => diretoriaHtml.includes(`<strong>${plan.public_name_pt_br}</strong>`) || diretoriaHtml.includes(`<dt>${plan.public_name_pt_br}</dt>`)),
   plans.map((plan) => plan.public_name_pt_br),
 );
 

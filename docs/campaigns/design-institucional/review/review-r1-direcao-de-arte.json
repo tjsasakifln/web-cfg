@@ -1,0 +1,146 @@
+{
+  "reviewer": "direção de arte, agente independente (Sonnet)",
+  "saw_before_reading_docs": [
+    "producao-47da03b64/home-1440x1000-fold-prod.jpg",
+    "estudo-b/docs-design-audit-prototypes-salto-institucional-2026-09-17-b-coluna-e-margem-index.html-1440x1000-fold-estB.jpg",
+    "piloto/home-1440x1000-fold-pilot.jpg",
+    "producao-47da03b64/home-1440x1000-full-prod.jpg",
+    "estudo-b/docs-design-audit-prototypes-salto-institucional-2026-09-17-b-coluna-e-margem-index.html-1440x1000-full-estB.jpg",
+    "piloto/home-1440x1000-full-pilot.jpg",
+    "producao-47da03b64/home-390x844-fold-prod.jpg",
+    "estudo-b/docs-design-audit-prototypes-salto-institucional-2026-09-17-b-coluna-e-margem-index.html-390x844-fold-estB.jpg",
+    "piloto/home-390x844-fold-pilot.jpg",
+    "producao-47da03b64/quantitativos-orcamento-obras-1440x1000-fold-prod.jpg",
+    "estudo-b/docs-design-audit-prototypes-salto-institucional-2026-09-17-b-coluna-e-margem-servico.html-1440x1000-fold-estB.jpg",
+    "piloto/quantitativos-orcamento-obras-1440x1000-fold-pilot.jpg",
+    "producao-47da03b64/quantitativos-orcamento-obras-1440x1000-full-prod.jpg",
+    "estudo-b/docs-design-audit-prototypes-salto-institucional-2026-09-17-b-coluna-e-margem-servico.html-1440x1000-full-estB.jpg",
+    "piloto/quantitativos-orcamento-obras-1440x1000-full-pilot.jpg",
+    "producao-47da03b64/medicoes-glosas-obras-publicas-1440x1000-full-prod.jpg",
+    "piloto/medicoes-glosas-obras-publicas-1440x1000-full-pilot.jpg",
+    "producao-47da03b64/servicos-1440x1000-full-prod.jpg",
+    "piloto/servicos-1440x1000-full-pilot.jpg",
+    "piloto/casos-demonstrativo-projeto-privado-1440x1000-full-pilot.jpg (sem par em producao-47da03b64: rota não existe na Versão 1)",
+    "producao-47da03b64/triagem-tecnica-1440x1000-full-prod.jpg",
+    "piloto/triagem-tecnica-1440x1000-full-pilot.jpg",
+    "producao-47da03b64/medicoes-glosas-obras-publicas-390x844-fold-prod.jpg",
+    "piloto/medicoes-glosas-obras-publicas-390x844-fold-pilot.jpg",
+    "producao-47da03b64/quantitativos-orcamento-obras-390x844-full-prod.jpg",
+    "piloto/quantitativos-orcamento-obras-390x844-full-pilot.jpg",
+    "pranchas/avaliacao-estrutura-desktop-1200.png",
+    "pranchas/drenagem-perfil-desktop-1200.png",
+    "pranchas/medicao-parede-desktop-1200.png",
+    "pranchas/recorte-banheiro-desktop-1200.png",
+    "piloto/home-390x844-menu-pilot.jpg"
+  ],
+  "dimensions": {
+    "foco_da_abertura": {
+      "notas": { "v1_producao": 7, "v2_estudo_b": 6, "v3_piloto": 8 },
+      "evidencia": "V1 (home-1440x1000-fold-prod.jpg): dobra densa mas completa — título, os dois parágrafos, CTA, credenciais e já o início da seção seguinte cabem na primeira tela. V2 (index...1440x1000-fold-estB.jpg): título em corpo muito maior domina a dobra; a prancha técnica fica reduzida a uma fresta de ~15px no rodapé da dobra, quase invisível. V3 (home-1440x1000-fold-pilot.jpg): título grande como em V2, mas em duas colunas (título à esquerda, texto+CTA+credenciais à direita) que libera espaço para a prancha aparecer parcialmente já na primeira tela, unindo o impacto tipográfico de V2 à prova imediata de V1.",
+      "ressalva": "Em V3 a quebra de linha do título em 3 linhas ('Assumimos / a parte de / engenharia') é menos natural que a quebra em 2 linhas de V1; efeito só tipográfico."
+    },
+    "hierarquia_abertura_indice_prova_responsabilidade_contato": {
+      "notas": { "v1_producao": 6, "v2_estudo_b": 7, "v3_piloto": 9 },
+      "evidencia": "V1 não tem índice de página em nenhuma rota interna (quantitativos-...-full-prod.jpg vai direto do hero para o conteúdo, sem âncoras). V2 e V3 adicionam 'NESTA PÁGINA' com âncoras numeradas. Em V2 (servico...1440x1000-fold-estB.jpg) a lista é vertical e só 4 das 6 âncoras cabem na dobra, cortando 'Condições e limites' e 'Pedir proposta'. Em V3 (quantitativos...1440x1000-fold-pilot.jpg) a mesma lista vira uma linha horizontal compacta com as 6 âncoras visíveis de uma vez, funcionando de fato como wayfinding.",
+      "ressalva": "Em /servicos/ V3 também agrupa os serviços por categoria (Projetos, Quantitativos, Inspeções, Avaliações, Segurança, Obras públicas) com chips no topo — servicos-1440x1000-full-pilot.jpg — o que V1 não tem (lista plana numerada 01–08, servicos-1440x1000-full-prod.jpg)."
+    },
+    "qualidade_legibilidade_material_tecnico": {
+      "notas": { "v1_producao": 7, "v2_estudo_b": 7, "v3_piloto": 9 },
+      "evidencia": "As pranchas isoladas (avaliacao-estrutura-desktop-1200.png, drenagem-perfil-desktop-1200.png, medicao-parede-desktop-1200.png, recorte-banheiro-desktop-1200.png) são legíveis e parecem engenharia real: cotas, chamadas numeradas, carimbo com revisão, escala gráfica, rótulo 'Exemplo demonstrativo · sem obra de cliente'. Essas mesmas peças aparecem pequenas no hero de V1 (thumbnail ~450px) e em V2/V3 ganham uma segunda versão grande e isolada em quantitativos-orcamento-obras (full-estB.jpg e full-pilot.jpg mostram o desenho ampliado com cotas de 2,40m/1,80m bem legíveis). V3 vai além com a rota nova casos-demonstrativo-projeto-privado (full-pilot.jpg), que encadeia planta+elevação, quantitativos, orçamento, compatibilização e revisão em tabelas reais — a peça mais completa e convincente das três versões.",
+      "ressalva": "Essa rota nova não existe em V1 nem em V2 (estudo-b só cobre home e a página de serviço), então a comparação nesse ponto é 'existe vs. não existe', não um ajuste de acabamento."
+    },
+    "reconhecimento_da_oferta": {
+      "notas": { "v1_producao": 7, "v2_estudo_b": 7, "v3_piloto": 9 },
+      "evidencia": "As três versões preservam o texto que nomeia o que não é vendido ('não é software, planilha gratuita nem execução de obra') e a lista de situações que nomeia o serviço. V3 reforça o reconhecimento com o agrupamento por categoria em /servicos/ e, principalmente, com a página casos-demonstrativo-projeto-privado, que mostra concretamente o que é entregue (planilha, orçamento, compatibilização, revisão) em vez de apenas descrever.",
+      "ressalva": "V2 mantém a mesma clareza de oferta de V1 (mesmo texto), mas a torna mais custosa de alcançar porque o hero mais alto empurra a lista de situações para mais baixo na página."
+    },
+    "identidade_institucional": {
+      "notas": { "v1_producao": 6, "v2_estudo_b": 5, "v3_piloto": 8 },
+      "evidencia": "Logo, paleta verde/azul-marinho, credenciais CREA/CNPJ e tom textual se mantêm nas três. V1 é o mais 'genérico institucional', sem grande assinatura visual. V2 aposta em tipografia de exibição muito grande com bastante espaço em branco e nenhuma prova na primeira tela (index...1440x1000-fold-estB.jpg) — essa combinação lembra mais a abertura de um produto/SaaS do que de um escritório de engenharia, mesmo mantendo o texto técnico. V3 evita esse risco ancorando o título grande à prancha técnica e às credenciais já na mesma tela (home-1440x1000-fold-pilot.jpg), o que sustenta a leitura de 'empresa de engenharia' com mais presença que V1, sem parecer maior do que é.",
+      "ressalva": "Julgamento de tom, não de erro objetivo; depende de quanto peso se dá a tipografia grande como sinal de 'produto digital'."
+    },
+    "leitura_movel": {
+      "notas": { "v1_producao": 8, "v2_estudo_b": 5, "v3_piloto": 7 },
+      "evidencia": "home-390x844-fold-prod.jpg (V1): título, os dois parágrafos, CTA primário, link secundário e credenciais cabem inteiros na primeira tela. index...390x844-fold-estB.jpg (V2): o título maior consome quase toda a tela; o botão 'Ver serviços por situação' fica cortado na borda inferior e nem o link secundário nem as credenciais aparecem. home-390x844-fold-pilot.jpg (V3): botão primário inteiro e visível, mas link secundário e credenciais ainda ficam abaixo da dobra. Em medicoes-glosas-obras-publicas-390x844-fold: V1 mostra 1 CTA cheio + link 'Ver os 6 guias'; V3 mostra 2 CTAs cheios (WhatsApp + descrever) + o mesmo link, todos na dobra — ganho de V3 nesta rota específica.",
+      "ressalva": "V3 não resolve por completo o problema que V2 cria; melhora o botão mas ainda empurra prova/credenciais para fora da primeira tela na home."
+    },
+    "esforco_ate_o_contato": {
+      "notas": { "v1_producao": 7, "v2_estudo_b": 6, "v3_piloto": 8 },
+      "evidencia": "CTA e bolha de WhatsApp presentes nas três versões em todas as páginas observadas. Em triagem-tecnica (full-prod.jpg vs full-pilot.jpg), V3 acrescenta ao lado do bloco 'Fale agora, sem formulário' uma caixa 'O que acontece depois' com 3 passos (leitura e resposta, canal seguro, proposta), reduzindo a incerteza pós-contato que V1 deixa implícita só no texto corrido.",
+      "ressalva": "Ganho pequeno e localizado; nas rotas onde não há essa caixa (a maioria) o esforço é equivalente entre V1 e V3."
+    }
+  },
+  "findings": [
+    {
+      "severity": "ALTA",
+      "version": "V2 (estudo-b)",
+      "route": "home",
+      "viewport": "390x844 (fold)",
+      "file": "estudo-b/docs-design-audit-prototypes-salto-institucional-2026-09-17-b-coluna-e-margem-index.html-390x844-fold-estB.jpg",
+      "problem": "Na primeira tela do celular só aparecem título e dois parágrafos. O botão de ação primário fica cortado na borda inferior e nenhuma credencial (CREA/CNPJ), prova técnica ou link secundário aparece. Um visitante que não rolar a página não vê nenhum sinal de confiança nem uma ação completa — em uma superfície onde mobile tende a ser a maioria do tráfego, isso atrasa tanto a prova quanto o contato logo na abertura.",
+      "suggested_fix": "Reduzir a escala do título no breakpoint mobile (como em V3, home-390x844-fold-pilot.jpg) ou mover CTA + credenciais para dentro da dobra, ainda que o título ocupe menos espaço vertical."
+    },
+    {
+      "severity": "MEDIA",
+      "version": "V2 (estudo-b)",
+      "route": "quantitativos-orcamento-obras (servico.html)",
+      "viewport": "1440x1000 (fold)",
+      "file": "estudo-b/docs-design-audit-prototypes-salto-institucional-2026-09-17-b-coluna-e-margem-servico.html-1440x1000-fold-estB.jpg",
+      "problem": "O índice 'Nesta página' é uma lista vertical que ocupa tanto espaço que só 4 das 6 âncoras (falta 'Condições e limites' e 'Pedir proposta') aparecem antes do corte da dobra, reduzindo a utilidade do índice como wayfinding rápido.",
+      "suggested_fix": "Adotar o layout horizontal em chips usado por V3 (piloto/quantitativos-orcamento-obras-1440x1000-fold-pilot.jpg), que mostra as 6 âncoras em uma linha só."
+    },
+    {
+      "severity": "MEDIA",
+      "version": "V2 (estudo-b)",
+      "route": "home",
+      "viewport": "1440x1000 (fold)",
+      "file": "estudo-b/docs-design-audit-prototypes-salto-institucional-2026-09-17-b-coluna-e-margem-index.html-1440x1000-fold-estB.jpg",
+      "problem": "A prancha técnica (única prova visual da home) fica reduzida a uma fresta de poucos pixels no rodapé da dobra desktop — o visitante que não rola não recebe nenhum sinal de prova de trabalho de engenharia na abertura, ao contrário de V1 e V3, onde uma porção reconhecível do desenho já aparece na primeira tela.",
+      "suggested_fix": "Reduzir a altura do bloco textual do hero ou adiantar a prancha, como faz V3 (piloto/home-1440x1000-fold-pilot.jpg)."
+    },
+    {
+      "severity": "MEDIA",
+      "version": "V1 (produção) e V2 (estudo-b)",
+      "route": "home / quantitativos-orcamento-obras",
+      "viewport": "1440x1000 (full)",
+      "file": "producao-47da03b64/home-1440x1000-full-prod.jpg; estudo-b/...index.html-1440x1000-full-estB.jpg",
+      "problem": "V2 é a versão mais longa nas duas rotas medidas (home: 10.221px contra 6.921px de V1 e 9.749px de V3; quantitativos: 13.750px contra 12.030px de V1 e 12.732px de V3), mas boa parte do ganho de conteúdo (prancha grande, índice) já existe em V3 com menos rolagem. O custo de rolagem de V2 não é compensado por conteúdo que V3 não tenha.",
+      "suggested_fix": "Se V2 influenciar decisões futuras, herdar a proporção de altura de V3, não a de V2."
+    },
+    {
+      "severity": "PREFERENCIA",
+      "version": "V3 (piloto)",
+      "route": "home",
+      "viewport": "1440x1000",
+      "file": "piloto/home-1440x1000-fold-pilot.jpg",
+      "problem": "A quebra de linha do título em três linhas ('Assumimos / a parte de / engenharia') é menos natural que a quebra em duas linhas de V1 (home-1440x1000-fold-prod.jpg).",
+      "suggested_fix": "Ajustar a largura da coluna do título ou o ponto de quebra manual para recuperar duas linhas."
+    },
+    {
+      "severity": "PREFERENCIA",
+      "version": "V1 (produção)",
+      "route": "servicos",
+      "viewport": "1440x1000 (full)",
+      "file": "producao-47da03b64/servicos-1440x1000-full-prod.jpg",
+      "problem": "A lista de serviços é uma sequência plana numerada 01–08 sem agrupamento por categoria, o que torna avaliação imobiliária e segurança do trabalho menos destacadas no meio da lista.",
+      "suggested_fix": "Adotar o agrupamento por categoria com chips de índice que V3 já implementa (piloto/servicos-1440x1000-full-pilot.jpg)."
+    }
+  ],
+  "ranking": {
+    "geral": ["V3 (piloto)", "V1 (produção)", "V2 (estudo-b)"],
+    "por_dimensao": {
+      "foco_da_abertura": ["V3", "V1", "V2"],
+      "hierarquia_abertura_indice_prova_responsabilidade_contato": ["V3", "V2", "V1"],
+      "qualidade_legibilidade_material_tecnico": ["V3", "V1", "V2"],
+      "reconhecimento_da_oferta": ["V3", "V1", "V2"],
+      "identidade_institucional": ["V3", "V1", "V2"],
+      "leitura_movel": ["V1", "V3", "V2"],
+      "esforco_ate_o_contato": ["V3", "V1", "V2"]
+    }
+  },
+  "verdict_v3_vs_v1": {
+    "veredito": "superior de forma reconhecível",
+    "motivo": "A diferença entre V3 e V1 não é só fonte/borda/padding: V3 introduz um padrão de índice de página (âncoras) ausente em V1, agrupa os serviços por categoria em /servicos/, adianta a prova técnica dentro da própria dobra do hero, amplia a mesma prancha demonstrativa em uma segunda versão grande dentro de quantitativos, acrescenta uma rota inteiramente nova (casos-demonstrativo-projeto-privado) que demonstra o produto de ponta a ponta, e oferece dois CTAs completos na dobra mobile de medições. Isso é composição de página inteira, não acabamento visual. Ao mesmo tempo V3 herda parte do custo de V2 (páginas mais longas, credenciais/CTA secundário ainda abaixo da dobra mobile na home), então a superioridade é real mas não total — os dois pontos MÉDIA/ALTA de leitura móvel na home continuam a valer como pendência mesmo em V3, em grau mais leve que em V2."
+  },
+  "changed_after_reading_docs": "O caderno confirma, com números batendo exatamente com o que medi nas capturas (home 6.921/quantitativos 12.030/triagem 3.840 px em 1440), que V1 realmente tinha apenas uma peça visual pequena, zero figuras em /servicos/ e no pilar B2G, e nenhum índice de página — o que já havia percebido olhando as imagens. Uma correção de leitura: 'estudo-b' é um estudo de prototipagem (Estudo B, ao lado de um Estudo A não capturado aqui) que antecedeu a escolha do piloto, não uma 'versão 2' de produção paralela — isso não muda a avaliação neutra pedida (julgar pela tela), mas explica por que V3 (piloto) não repete o hero desproporcional de V2: o piloto parece ter reduzido deliberadamente a escala tipográfica do Estudo B ao integrar índice e prova antecipada. O caderno também documenta como intencional cada mudança estrutural que eu já havia detectado (prancha grande e editorial, índice compacto, figura de responsabilidade, faixa própria para obras públicas, 'o que acontece depois' no contato, figura própria para avaliação imobiliária), o que reforça — em vez de contradizer — a leitura de que V3 é uma mudança de composição e não só de acabamento. Não revi nenhuma nota nem a classificação de severidade depois da leitura; o achado ALTA sobre a dobra mobile de V2 não é mencionado no caderno e permanece como achado independente desta revisão."
+}

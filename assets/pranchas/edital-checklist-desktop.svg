@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" role="img" aria-labelledby="edital-checklist-desktop-title edital-checklist-desktop-desc" font-family="Archivo Var, Arial, Helvetica, sans-serif" fill="#071a31">
+<title id="edital-checklist-desktop-title">Prancha P8 · O edital lido como checklist técnico · exemplo demonstrativo</title>
+<desc id="edital-checklist-desktop-desc">Checklist de 4 itens de um edital sintético: habilitação jurídica atende; acervo técnico é o item crítico (5.200 m² contra 8.000 m² exigidos, 2.800 m² faltantes); orçamento de referência e prazo de execução ficam para confirmar antes do preço. Edital sintético; exemplo demonstrativo, sem obra de cliente. Procedência: data/demonstrative/plates/edital-checklist.v1.json.</desc>
+<rect x="0" y="0" width="1200" height="560" fill="#ffffff"/>
+<rect x="8" y="8" width="1184" height="544" fill="#ffffff" stroke="#dfe4e6"/>
+<text x="28" y="40" font-size="16" font-weight="650">O edital lido como checklist técnico: o item crítico decide antes do preço</text>
+<text x="1172" y="40" font-size="11" fill="#5d6a7a" text-anchor="end">Dados demonstrativos · revisão R00</text>
+<defs><pattern id="edital-checklist-d-h5d6a" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0V6" stroke="#5d6a7a" stroke-width="0.5"/></pattern></defs>
+<text x="28" y="72" font-size="12" font-weight="650">Edital sintético lido em quatro itens · o que o edital exige, o que a empresa tem, o que decide antes do preço</text>
+<text x="78" y="104" font-size="12" fill="#5d6a7a" font-weight="650">Item</text>
+<text x="400" y="104" font-size="12" fill="#5d6a7a" font-weight="650">O edital exige</text>
+<text x="720" y="104" font-size="12" fill="#5d6a7a" font-weight="650">A empresa tem</text>
+<text x="985" y="104" font-size="12" fill="#5d6a7a" font-weight="650">Leitura</text>
+<line x1="28" y1="112" x2="1172" y2="112" stroke="#071a31" stroke-width="1.2"/>
+<rect x="40" y="126" width="16" height="16" fill="#2d6f2d"/><path d="M44 134.3L47 137.5L52.5 130.8" fill="none" stroke="#ffffff" stroke-width="1.6"/>
+<text x="78" y="138" font-size="12" font-weight="650">Habilitação jurídica e fiscal</text>
+<text x="78" y="154" font-size="11" fill="#5d6a7a">CHK-01</text>
+<text x="400" y="138" font-size="11">certidões e registro no prazo</text>
+<text x="720" y="138" font-size="11">certidões válidas na data da sessão</text>
+<text x="985" y="138" font-size="12" font-weight="650">Atende</text>
+<line x1="28" y1="172" x2="1172" y2="172" stroke="#dfe4e6" stroke-width="1"/>
+<rect x="20" y="174" width="1160" height="100" fill="#ced62a" fill-opacity=".35"/>
+<rect x="40" y="186" width="16" height="16" fill="#ffffff" stroke="#2d6f2d" stroke-width="2"/>
+<text x="78" y="198" font-size="12" fill="#2d6f2d" font-weight="650">Acervo técnico exigido</text>
+<text x="78" y="214" font-size="11" fill="#5d6a7a">CHK-02</text>
+<text x="400" y="198" font-size="11">atestado de pavimento rígido de 8.000 m²</text>
+<text x="720" y="198" font-size="11">maior atestado da empresa: 5.200 m²</text>
+<text x="985" y="198" font-size="12" fill="#2d6f2d" font-weight="650">Item crítico</text>
+<line x1="28" y1="276" x2="1172" y2="276" stroke="#dfe4e6" stroke-width="1"/>
+<rect x="40" y="290" width="16" height="16" fill="url(#edital-checklist-d-h5d6a)" stroke="#5d6a7a" stroke-width="0.6"/>
+<text x="78" y="302" font-size="12" font-weight="650">Orçamento de referência</text>
+<text x="78" y="318" font-size="11" fill="#5d6a7a">CHK-03</text>
+<text x="400" y="302" font-size="11">data-base de 6 meses antes da sessão</text>
+<text x="720" y="302" font-size="11">desconto de 12% sem memória por item</text>
+<text x="985" y="302" font-size="12" font-weight="650">Confirmar antes do preço</text>
+<line x1="28" y1="336" x2="1172" y2="336" stroke="#dfe4e6" stroke-width="1"/>
+<rect x="40" y="350" width="16" height="16" fill="url(#edital-checklist-d-h5d6a)" stroke="#5d6a7a" stroke-width="0.6"/>
+<text x="78" y="362" font-size="12" font-weight="650">Prazo de execução</text>
+<text x="78" y="378" font-size="11" fill="#5d6a7a">CHK-04</text>
+<text x="400" y="362" font-size="11">240 dias com mobilização em 15</text>
+<text x="720" y="362" font-size="11">equipe disponível a partir do 30º dia</text>
+<text x="985" y="362" font-size="12" font-weight="650">Confirmar antes do preço</text>
+<line x1="28" y1="396" x2="1172" y2="396" stroke="#dfe4e6" stroke-width="1"/>
+<rect x="400" y="224" width="300" height="8" fill="#f3f4f5" stroke="#071a31" stroke-width="1.2"/>
+<rect x="400" y="224" width="195" height="8" fill="#2d6f2d"/>
+<rect x="595" y="224" width="105" height="8" fill="url(#edital-checklist-d-h5d6a)"/>
+<g stroke="#5d6a7a" stroke-width="0.6" fill="#5d6a7a"><line x1="595" y1="248" x2="700" y2="248"/><path d="M592 251L598 245"/><path d="M697 251L703 245"/><text x="647.5" y="261" font-size="11" text-anchor="middle">2.800 m² faltantes</text></g>
+<text x="712" y="232" font-size="12" fill="#2d6f2d" font-weight="650">5.200 de 8.000 m²</text>
+<g stroke="#5d6a7a" stroke-width="0.6"><line x1="48" y1="219" x2="48" y2="202"/><circle cx="48" cy="202" r="1.6" fill="#5d6a7a"/></g>
+<g transform="translate(48 230)"><circle r="11" fill="#071a31"/><text y="4" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">1</text></g>
+<g stroke="#5d6a7a" stroke-width="0.6"><line x1="371" y1="228" x2="601" y2="228"/><circle cx="601" cy="228" r="1.6" fill="#5d6a7a"/></g>
+<g transform="translate(360 228)"><circle r="11" fill="#071a31"/><text y="4" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">2</text></g>
+<g stroke="#5d6a7a" stroke-width="0.6"><line x1="972" y1="298" x2="981" y2="298"/><circle cx="981" cy="298" r="1.6" fill="#5d6a7a"/></g>
+<g transform="translate(961 298)"><circle r="11" fill="#071a31"/><text y="4" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">3</text></g>
+<text x="28" y="424" font-size="12" font-weight="650">Chamadas</text><text x="28" y="442" font-size="11"><tspan font-weight="700">1</tspan><tspan x="44">Item crítico: o edital exige atestado de pavimento rígido de 8.000 m²; maior atestado da empresa: 5.200 m². Decide antes do preço: sem consórcio, subcontratação admitida ou esclarecimento, a proposta não passa da habilitação.</tspan></text><text x="28" y="460" font-size="11"><tspan font-weight="700">2</tspan><tspan x="44">Diferença de acervo: 8.000 − 5.200 = 2.800 m². O diagnóstico registra o número e a pergunta que cabe ao órgão, não promete habilitação.</tspan></text><text x="28" y="478" font-size="11"><tspan font-weight="700">3</tspan><tspan x="44">Confirmar antes do preço: 2 itens dependem de leitura do orçamento de referência e do cronograma. 4 itens lidos · 1 crítico · 1 atende.</tspan></text>
+<g id="edital-checklist-d-carimbo"><rect x="8" y="524" width="1184" height="28" fill="#ffffff" stroke="#dfe4e6"/><line x1="402.7" y1="524" x2="402.7" y2="552" stroke="#dfe4e6"/><line x1="797.3" y1="524" x2="797.3" y2="552" stroke="#dfe4e6"/><text x="16" y="542" font-size="11" fill="#5d6a7a">P8 · edital-checklist · rev. R00</text><text x="410.7" y="542" font-size="11" fill="#5d6a7a">Checklist · barra proporcional em m²</text><text x="805.3" y="542" font-size="11" fill="#5d6a7a">Exemplo demonstrativo · sem obra de cliente</text></g>
+</svg>

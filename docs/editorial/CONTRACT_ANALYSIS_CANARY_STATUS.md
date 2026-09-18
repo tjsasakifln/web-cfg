@@ -1,7 +1,7 @@
 # CONTRACT_ANALYSIS_CANARY_STATUS
 
 - Gate: `contract-analysis-publication-gate/1.0`
-- Generated: `2026-09-16T15:38:32Z`
+- Generated: `2026-09-18T01:07:39Z`
 - Evaluated: **1** (cap 10)
 - Source: `official_live` (`scripts/contract_analysis/fixtures/official-live-01`)
 - catalog_mode: `official_live` claimed_live=`False`

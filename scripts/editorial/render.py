@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import re
+import unicodedata
 from functools import lru_cache
 from pathlib import Path
 from typing import Any
@@ -94,7 +95,55 @@ def _is_checklist_page(page):
     return resolve_interaction_type(page) == "checklist"
 
 
+# Folha editorial da campanha "prancha e percurso" (lote C): modelo de leitura
+# do bloco Article (índice de página, tabelas roláveis, autor, fontes). A página
+# de leitura carrega só o subconjunto Article (cortado por
+# scripts/site/build_css.py); o hub carrega a folha inteira porque usa o bloco Hub.
+EDITORIAL_SHEET_LINK = '<link href="/assets/editorial-article.css" rel="stylesheet"/>'
+EDITORIAL_FULL_SHEET_LINK = '<link href="/assets/editorial.css" rel="stylesheet"/>'
+MIN_H2_FOR_PAGE_INDEX = 3
+
+
+def _slug(text: str) -> str:
+    text = re.sub(r"<[^>]+>", "", text)
+    text = unicodedata.normalize("NFKD", text).encode("ascii", "ignore").decode("ascii")
+    text = re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")
+    return text[:60].rstrip("-") or "secao"
+
+
+def _plain(text: str) -> str:
+    return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", "", text)).strip()
+
+
+def _index_label(text: str) -> str:
+    """Rótulo do índice: a primeira oração do h2 (antes de ':' ou '('), inteira.
+
+    Não se trunca o rótulo: um título cortado é um defeito visível. A folha
+    (`.article-toc li{flex:0 1 auto;min-width:0}` + `a{white-space:normal}`,
+    integrador, 2026-09-17) deixa a entrada quebrar linha em 320 px.
+    """
+    return re.split(r"\s*[:(]", text, maxsplit=1)[0].strip() or text
+
+
+def page_index_html(entries: list[tuple[str, str]]) -> str:
+    """nav.article-toc 'Nesta página': uma entrada por h2 de leitura, quando há três ou mais."""
+    if len(entries) < MIN_H2_FOR_PAGE_INDEX:
+        return ""
+    items = "".join(f'<li><a href="#{e(a)}">{e(_index_label(t))}</a></li>' for a, t in entries)
+    return (
+        '<nav aria-label="Nesta página" class="article-toc"><strong>Nesta página</strong>'
+        f"<ol>{items}</ol></nav>"
+    )
+
+
 def markdown_to_html(md: str, *, checklist: bool = False) -> str:
+    html, _entries = markdown_to_html_with_index(md, checklist=checklist)
+    return html
+
+
+def markdown_to_html_with_index(
+    md: str, *, checklist: bool = False
+) -> tuple[str, list[tuple[str, str]]]:
     """Convert editorial markdown to HTML.
 
     When checklist=True, bullet lines become interactive checkbox items
@@ -108,6 +157,8 @@ def markdown_to_html(md: str, *, checklist: bool = False) -> str:
     in_check = False
     in_section = False
     check_i = 0
+    index_entries: list[tuple[str, str]] = []
+    taken_ids: set[str] = set()
 
     def close_lists() -> None:
         nonlocal in_ul, in_ol, in_check
@@ -179,10 +230,19 @@ def markdown_to_html(md: str, *, checklist: bool = False) -> str:
             title = line[3:] if line.startswith("## ") else line[2:]
             close_section()
             html, hid = heading_html("h2", title)
-            sid = f' id="{hid}"' if hid else ""
-            out.append(f'<section class="editorial-section"{sid}>')
+            # id estável a partir do texto quando o markdown não declara {#id};
+            # nunca duplica um id já usado na página.
+            base = hid or _slug(re.sub(r"\s*\{#[a-z0-9-]+\}\s*$", "", title))
+            base = re.sub(r"^\d+-", "", base) or base
+            candidate, n = base, 2
+            while candidate in taken_ids:
+                candidate, n = f"{base}-{n}", n + 1
+            taken_ids.add(candidate)
+            out.append(f'<section class="editorial-section" id="{candidate}">')
             in_section = True
             out.append(html)
+            label = re.sub(r"^\d+\.\s+", "", re.sub(r"\s*\{#[a-z0-9-]+\}\s*$", "", title.strip()))
+            index_entries.append((candidate, _plain(_md_inline(label))))
         elif re.match(r"^\d+\.\s+", line):
             if not in_ol:
                 close_lists()
@@ -224,7 +284,7 @@ def markdown_to_html(md: str, *, checklist: bool = False) -> str:
             "</div>"
         )
         body = progress + "\n" + body
-    return body
+    return body, index_entries
 
 
 
@@ -394,10 +454,13 @@ def render_page(page: dict[str, Any]) -> str:
         (title, None),
     ]
     structured_html = render_structured_checklist(page) if page.get("checklist_items") else ""
-    body_html = markdown_to_html(
+    body_html, index_entries = markdown_to_html_with_index(
         page.get("body_markdown") or "",
         checklist=(resolve_interaction_type(page)=="checklist" and not page.get("checklist_items")),
     )
+    if page.get("sources"):
+        index_entries = index_entries + [("fontes", "Fontes")]
+    page_index = page_index_html(index_entries)
     answer = page.get("direct_answer") or ""
     published = page.get("date_published") or "2026-08-02"
     modified = page.get("date_modified") or published
@@ -546,11 +609,11 @@ def render_page(page: dict[str, Any]) -> str:
 <span class="answer-box-kicker">Resposta direta</span>
 <p class="answer-box-body">{e(answer)}</p>
 </div>
+{page_index}
 {structured_html}
 <div class="editorial-body">
 {body_html}
 </div>
-{_cta_block(page, "mid")}
 {faq_html}
 {_sources_html(page)}
 {_related_html(page)}
@@ -562,10 +625,10 @@ def render_page(page: dict[str, Any]) -> str:
 <span class="aside-kicker">Diagnóstico CONFENGE</span>
 <h2 class="aside-title">{e(page.get('aside_title') or _default_aside_title(archetype))}</h2>
 <p class="aside-text">{e(page.get('aside_blurb') or 'Organize documentos, riscos e próximos passos com base no cenário real da obra.')}</p>
-<div class="aside-actions">
-<a class="button button-primary" data-cta-position="aside" data-cta-channel="whatsapp" href="{e(wa_link(page.get('cta_whatsapp') or ''))}" rel="noopener" target="_blank">{e(page.get('cta_wa_label') or 'Conversar pelo WhatsApp')}</a>
-<a class="button button-secondary" data-cta-position="aside" data-cta-channel="email" href="{e(mailto_href(page.get('contact_email') or 'tiago.sasaki@confenge.com.br', page.get('cta_email_subject') or title, page.get('cta_email_body') or ''))}">{e(page.get('cta_email_label') or 'Enviar por e-mail')}</a>
-</div>
+<ul class="aside-actions contact-alt">
+<li><a data-cta-position="aside" data-cta-channel="whatsapp" href="{e(wa_link(page.get('cta_whatsapp') or ''))}" rel="noopener" target="_blank">{e(page.get('cta_wa_label') or 'Conversar pelo WhatsApp')}</a></li>
+<li><a data-cta-position="aside" data-cta-channel="email" href="{e(mailto_href(page.get('contact_email') or 'tiago.sasaki@confenge.com.br', page.get('cta_email_subject') or title, page.get('cta_email_body') or ''))}">{e(page.get('cta_email_label') or 'Enviar por e-mail')}</a></li>
+</ul>
 </div>
 <div class="aside-card aside-compact">
 <span class="aside-kicker">Coleção</span>
@@ -595,6 +658,9 @@ def render_page(page: dict[str, Any]) -> str:
             '<meta name="editorial-material-hash" content="'
             + e(current_material_hash)
             + '"/><link href="/assets/editorial-a11y-v293.css" rel="stylesheet"/>'
+            # A página com bloco de ferramenta (checklist interativo) usa o bloco
+            # Tool da folha, que o subconjunto Article não traz.
+            + (EDITORIAL_FULL_SHEET_LINK if "tool-shell" in main else EDITORIAL_SHEET_LINK)
         ),
     )
 
@@ -619,11 +685,11 @@ def render_hub(hub: dict[str, Any], pages: list[dict[str, Any]]) -> str:
         if p.get("status") not in {"INDEXABLE", "PUBLISHED"}:
             continue
         cards.append(
-            f'<article class="library-item"><div class="library-rank"></div><div>'
-            f'<span class="content-badge guide-badge">{e(_archetype_badge(p.get("archetype")))}</span>'
+            f'<li><span class="hub-list__index">{len(cards) + 1:02d}</span><div>'
+            f'<span class="tag">{e(_archetype_badge(p.get("archetype")))}</span>'
             f'<h2><a href="{e(p["url"])}">{e(p["title"])}</a></h2>'
             f'<p>{e(p.get("meta_description") or p.get("direct_answer","")[:160])}</p>'
-            f"</div></article>"
+            f'</div><div class="hub-list__action"><a href="{e(p["url"])}">Ler <svg class="icon"><use href="#i-arrow"></use></svg></a></div></li>'
         )
     wa_msg = hub.get("cta_whatsapp") or (
         f"Olá, Tiago. Estou na seção {title} da CONFENGE e quero orientação sobre contratos de obras públicas."
@@ -635,8 +701,8 @@ def render_hub(hub: dict[str, Any], pages: list[dict[str, Any]]) -> str:
     # Never publish an empty library section or "0 guias" / empty-index copy.
     if cards:
         library_block = (
-            '<section class="section library-section"><div class="container">'
-            f'<div class="library-list">{"".join(cards)}</div>'
+            '<section class="sec sec--tight" aria-label="Páginas desta seção"><div class="container">'
+            f'<ol class="hub-list">{"".join(cards)}</ol>'
             "</div></section>"
         )
     else:
@@ -646,41 +712,44 @@ def render_hub(hub: dict[str, Any], pages: list[dict[str, Any]]) -> str:
     # titulo, nao apenas ao unico arquetipo publicado nele.
     related_items = hub.get("related") or []
     if related_items:
+        # A numeração continua a da lista anterior: é um índice só, em dois grupos.
         related_cards = "".join(
-            f'<article class="library-item"><div class="library-rank"></div><div>'
-            f'<h2><a href="{e(r["url"])}">{e(r["title"])}</a></h2>'
+            f'<li><span class="hub-list__index">{i:02d}</span><div>'
+            f'<h3><a href="{e(r["url"])}">{e(r["title"])}</a></h3>'
             f'<p>{e(r["blurb"])}</p>'
-            f"</div></article>"
-            for r in related_items
+            f'</div><div class="hub-list__action"><a href="{e(r["url"])}">Ler <svg class="icon"><use href="#i-arrow"></use></svg></a></div></li>'
+            for i, r in enumerate(related_items, len(cards) + 1)
         )
         related_block = (
-            '<section class="section section--tight"><div class="container">'
-            '<header class="section-head"><p class="eyebrow">Na biblioteca</p>'
-            f'<h2>{e(hub.get("related_title") or "Leituras que continuam este tema")}</h2>'
-            f'<p class="section-lead">{e(hub.get("related_lead") or "")}</p></header>'
-            f'<div class="library-list">{related_cards}</div>'
+            '<section class="sec sec--soft"><div class="container">'
+            '<header class="sec-head"><span class="t-kicker">Na biblioteca</span>'
+            f'<h2 class="t-editorial">{e(hub.get("related_title") or "Leituras que continuam este tema")}</h2>'
+            f'<p>{e(hub.get("related_lead") or "")}</p></header>'
+            f'<ol class="hub-list">{related_cards}</ol>'
             "</div></section>"
         )
     else:
         related_block = ""
+    # Um bloco escuro por página (esqueleto do caderno): próximo passo com uma
+    # ação dominante e a alternativa em texto. Mesmos destinos e rótulos de antes.
     case_cta = f"""
-<section class="section section--tight" data-hub-case-cta><div class="container">
-<div class="lead-inline" data-cta-position="hub-footer">
-<div class="lead-inline-copy"><span>Próximo passo</span><strong>Levou uma dúvida da biblioteca para o seu contrato?</strong>
-<p>Envie o tema e os documentos principais. Você recebe uma leitura inicial do caso: o que os documentos sustentam, o que falta reunir e qual o próximo passo.</p></div>
-<div class="lead-inline-actions">
-<a class="button button-primary" data-cta-position="hub-footer" data-cta-channel="whatsapp" href="{e(wa_link(wa_msg))}" rel="noopener" target="_blank">Enviar pelo WhatsApp</a>
-<a class="button button-secondary" data-cta-position="hub-footer" data-cta-channel="email" href="{e(mailto_href('tiago.sasaki@confenge.com.br', mail_subject, mail_body))}">Solicitar análise por e-mail</a>
-</div></div>
+<section class="sec sec--dark" data-hub-case-cta aria-labelledby="hub-proximo-passo"><div class="container">
+<span class="t-kicker">Próximo passo</span>
+<h2 class="t-editorial" id="hub-proximo-passo">Levou uma dúvida da biblioteca para o seu contrato?</h2>
+<p class="measure">Descreva o tema e diga quais documentos você já tem. Você recebe uma leitura inicial do caso: o que os documentos sustentam, o que falta reunir e qual o próximo passo. Conversa técnica, sem contratação nem pagamento; documentos só depois, pelo canal seguro combinado.</p>
+<div class="contact-primary">
+<a class="button button-primary button-lg" data-cta-position="hub-footer" data-cta-channel="whatsapp" href="{e(wa_link(wa_msg))}" rel="noopener" target="_blank">Enviar pelo WhatsApp <svg class="icon"><use href="#i-arrow"></use></svg></a>
+<ul class="contact-alt"><li><a data-cta-position="hub-footer" data-cta-channel="email" href="{e(mailto_href('tiago.sasaki@confenge.com.br', mail_subject, mail_body))}">Solicitar análise por e-mail</a></li></ul>
+</div>
 </div></section>
 """
     body = f"""
 {breadcrumbs_html(crumbs)}
-<header class="content-hero"><div class="container">
-<p class="eyebrow">Biblioteca técnica</p>
+<header class="content-hero article-hero"><div class="container content-hero-grid"><div>
+<p class="eyebrow t-kicker">Biblioteca técnica</p>
 <h1>{e(title)}</h1>
 <p class="content-lead">{e(desc)}</p>
-</div></header>
+</div></div></header>
 {library_block}
 {related_block}
 {case_cta}
@@ -704,6 +773,7 @@ def render_hub(hub: dict[str, Any], pages: list[dict[str, Any]]) -> str:
         body_main=body,
         wa_message=wa_msg,
         author_name="Biblioteca técnica CONFENGE",
+        extra_head=EDITORIAL_FULL_SHEET_LINK,
         data_attrs={
             "content-type": "hub",
             "editorial-topic": hub.get("topic") or hub.get("id") or "",

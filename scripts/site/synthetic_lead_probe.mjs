@@ -201,6 +201,11 @@ const checks = {
   excluded_non_real_exactly_once: afterExcluded - beforeExcluded === 1,
   commercial_metrics_unchanged: sameJson(beforeCommercial, afterCommercial),
   commercial_contract_real_only: afterFunnel.data?.commercial_only === true && afterWeekly.data?.commercial_only === true,
+  // O contexto da pagina (asset_id/route_family/cta_id) tem de chegar ao registro
+  // persistido, nao so ao payload enviado (SALTO-INSTITUCIONAL-02, 2026-09-18).
+  page_context_persisted: !Object.keys(pageContext).length || ["asset_id", "route_family", "cta_id"].every(
+    (key) => !pageContext[key] || receipt?.[key] === pageContext[key],
+  ),
 };
 const ok = Object.values(checks).every(Boolean);
 
@@ -210,6 +215,7 @@ console.log(JSON.stringify({
   base,
   live_sha: liveSha,
   page_context: Object.keys(pageContext).length ? pageContext : null,
+  persisted_context: receipt ? { asset_id: receipt.asset_id || null, route_family: receipt.route_family || null, cta_id: receipt.cta_id || null } : null,
   receipt_sha256: leadId ? createHash("sha256").update(leadId).digest("hex") : null,
   warmbly: {
     destination_fingerprint: beforeInbound.data?.configuration?.destination_fingerprint || null,

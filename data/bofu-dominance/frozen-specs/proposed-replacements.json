@@ -8,8 +8,8 @@
     "aditivos-obras-publicas": [
       {
         "block": "h1",
-        "before": "<h1>Aditivos e serviços extras em obras públicas: documentar, precificar e decidir</h1>",
-        "after": "<h1>Aditivos em obras públicas: documentar, precificar e decidir</h1>"
+        "before": "<h1 class=\"t-service\" id=\"pilar-title\">Aditivos e serviços extras em obras públicas: documentar, precificar e decidir</h1>",
+        "after": "<h1 class=\"t-service\" id=\"pilar-title\">Aditivos em obras públicas: documentar, precificar e decidir</h1>"
       }
     ],
     "medicoes-glosas-obras-publicas": [
@@ -29,8 +29,8 @@
     "auditoria-orcamento-licitacao": [
       {
         "block": "when_not_to_hire",
-        "before": "<section class=\"container\" data-organic-taya=\"1\" id=\"quando-nao-contratar\" data-when-not-hire=\"1\" aria-label=\"Perguntas que costumam ficar sem resposta\">",
-        "after": "<section class=\"container\" data-organic-taya=\"1\" id=\"quando-nao-contratar\" data-when-not-hire=\"1\" aria-label=\"Perguntas que costumam ficar sem resposta\">"
+        "before": "<p id=\"quando-nao-contratar\" data-when-not-hire=\"1\" data-organic-taya=\"1\">",
+        "after": "<p id=\"quando-nao-contratar\" data-when-not-hire=\"1\" data-organic-taya=\"1\">"
       }
     ],
     "diagnostico-b2g-360": [
@@ -47,5 +47,6 @@
         "after": "antes de transformar uma vitória na licitação em um contrato ruim."
       }
     ]
-  }
+  },
+  "before_strings_rebased": "SALTO-INSTITUCIONAL-02 (2026-09-17): os pilares foram recompostos na direcao do piloto; os before-strings de aditivos (h1 com papel tipografico) e auditoria (bloco quando-nao-contratar agora como paragrafo) foram rebaseados para o markup vigente com a mesma intencao; o experimento continua PREPARE-ONLY e nao foi aplicado."
 }

@@ -103,7 +103,11 @@ def _page(
     show_version_banner: bool = True,
     author_name: str = "Engº Tiago Sasaki",
     wa_message: str = "Olá, Tiago. Quero pedir uma correção ou esclarecer a governança editorial da CONFENGE.",
+    page_index: list[tuple[str, str]] | None = None,
 ) -> str:
+    """One authority page. ``page_index`` (SALTO-INSTITUCIONAL-02, lote B): pairs
+    (anchor id, label) rendered as ``nav.page-index`` between the hero and the
+    article; the page then loads ``assets/editorial.css`` for that primitive."""
     webpage = {
         "@type": "WebPage",
         "@id": f"{SITE}{path}#webpage",
@@ -136,8 +140,8 @@ def _page(
 {_byline(updated, version, role_label)}
 {_nav()}
 </div></header>
-<section class="section"><div class="container article-layout">
-<article class="article-main simple-card privacy-card" data-policy-version="{_esc(version)}">
+{_page_index(page_index)}{_body_open(page_index)}
+<article class="article-main{'' if page_index else ' simple-card privacy-card'}" data-policy-version="{_esc(version)}">
 {_version_banner(version, historical=historical) if show_version_banner else ""}
 {body}
 </article>
@@ -151,8 +155,34 @@ def _page(
         jsonld_graph=[ORG_JSONLD, PERSON_JSONLD, breadcrumb_jsonld(crumbs), webpage],
         body_main=main,
         wa_message=wa_message,
+        extra_head='<link href="/assets/editorial.css" rel="stylesheet"/>\n' if page_index else "",
         author_name=author_name,
         data_attrs={"surface-type": "policy", "policy-version": version},
+    )
+
+
+def _body_open(page_index: list[tuple[str, str]] | None) -> str:
+    """With a page index (only /conflitos/ today) the body follows the editorial
+    reading model: a plain section and the ``article-main`` measure from
+    ``assets/editorial.css``, no legacy two-column ``article-layout`` grid and
+    no boxed card (SALTO-INSTITUCIONAL-02, aceite M-10). The other policy pages
+    keep the legacy shell byte for byte."""
+    if page_index:
+        return '<section class="sec sec--tight"><div class="container">'
+    return '<section class="section"><div class="container article-layout">'
+
+
+def _page_index(entries: list[tuple[str, str]] | None) -> str:
+    if not entries:
+        return ""
+    items = "".join(
+        f'<li><a href="#{_esc(anchor)}"><span>{n:02d}</span>{_esc(label)}</a></li>'
+        for n, (anchor, label) in enumerate(entries, start=1)
+    )
+    return (
+        '<div class="container"><nav class="page-index" aria-label="Nesta página">'
+        '<span class="page-index__label">Nesta página</span>'
+        f"<ol>{items}</ol></nav></div>\n"
     )
 
 
@@ -246,8 +276,18 @@ def render_all() -> list[Path]:
         show_version_banner = True
         author_name = "Engº Tiago Sasaki"
         wa_message = "Olá, Tiago. Quero pedir uma correção ou esclarecer a governança editorial da CONFENGE."
+        page_index: list[tuple[str, str]] | None = None
         if key == "conflicts":
             conflict = load_conflict_contract()
+            # Índice de página (lote B): as cinco seções do corpo da política,
+            # pelos ids que conflict_gate.public_policy_body já escreve.
+            page_index = [
+                ("triagem-operacional", "Como é protegida"),
+                ("nucleos", "Demandas cobertas"),
+                ("dados-minimos", "Privacidade"),
+                ("resultados", "Resultados"),
+                ("primeira-etapa", "Primeira etapa"),
+            ]
             copy = conflict.get("public_copy") or {}
             title = str(copy.get("title") or title)
             description = str(copy.get("description") or description)
@@ -287,6 +327,7 @@ def render_all() -> list[Path]:
             show_version_banner=show_version_banner,
             author_name=author_name,
             wa_message=wa_message,
+            page_index=page_index,
         )
         if key == "conflicts":
             html_doc = html_doc.replace(

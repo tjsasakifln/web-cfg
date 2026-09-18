@@ -1,0 +1,92 @@
+{
+  "schema": "confenge.demonstrative-plate-source/1.0",
+  "id": "plate-avaliacao-estrutura-2026-09",
+  "plate_id": "avaliacao-estrutura",
+  "origin": "demonstrative",
+  "revision": "R00",
+  "title": "Estrutura da análise de avaliação",
+  "label_pt_br": "exemplo demonstrativo",
+  "client_name": null,
+  "address": null,
+  "art_number": null,
+  "signature": null,
+  "date_modified": "2026-09-17",
+  "public_source_pt_br": "Seção /servicos/#servico-avaliacao. Diagrama de estrutura, sem valor monetário, sem número de norma.",
+  "steps": [
+    {
+      "id": "AV-01",
+      "label_pt_br": "Objeto",
+      "short_pt_br": "O que está sendo avaliado",
+      "lines_pt_br": [
+        "Imóvel ou bem identificado:",
+        "localização, área, uso e",
+        "estado de conservação."
+      ]
+    },
+    {
+      "id": "AV-02",
+      "label_pt_br": "Finalidade e data",
+      "short_pt_br": "Para que serve e quando vale",
+      "lines_pt_br": [
+        "Para que serve a análise e",
+        "a data de referência.",
+        "Outra finalidade, outra leitura."
+      ]
+    },
+    {
+      "id": "AV-03",
+      "label_pt_br": "Método",
+      "short_pt_br": "Comparativo ou evolutivo",
+      "lines_pt_br": [
+        "Método comparativo ou",
+        "evolutivo, conforme o caso,",
+        "com premissas declaradas."
+      ]
+    },
+    {
+      "id": "AV-04",
+      "label_pt_br": "Dados e fontes",
+      "short_pt_br": "Amostra, documentos, vistoria",
+      "lines_pt_br": [
+        "Amostra de mercado ou custos,",
+        "documentos e vistoria; cada",
+        "fonte citada e datada."
+      ]
+    },
+    {
+      "id": "AV-05",
+      "label_pt_br": "Conclusão delimitada",
+      "short_pt_br": "Limites, data e ressalvas",
+      "lines_pt_br": [
+        "Valor de referência com limites",
+        "de uso, data e ressalvas.",
+        "Parecer preliminar não substitui",
+        "a avaliação formal."
+      ]
+    }
+  ],
+  "focus_step_id": "AV-05",
+  "callouts": [
+    {
+      "n": 1,
+      "step_id": "AV-02",
+      "text_pt_br": "A finalidade e a data de referência delimitam a resposta."
+    },
+    {
+      "n": 2,
+      "step_id": "AV-03",
+      "text_pt_br": "O método é escolhido pelo caso; a premissa fica escrita.",
+      "mobile_pt_br": "método escolhido pelo caso"
+    },
+    {
+      "n": 3,
+      "step_id": "AV-05",
+      "text_pt_br": "A conclusão sai com os próprios limites; parecer preliminar não substitui a avaliação formal.",
+      "mobile_pt_br": "conclusão com limites declarados"
+    }
+  ],
+  "mobile_callout_step_ids": [
+    "AV-03",
+    "AV-05"
+  ]
+}

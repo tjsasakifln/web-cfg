@@ -625,10 +625,16 @@ def test_mobile_matrix_composition():
     assert 'class="situation-list"' in html
     assert '<li class="situation-row' in html
     assert ".situation-list{" in home_css and ".situation-row{" in home_css
-    # Narrow viewports recompose rows without hiding any of the five paths.
-    assert "@media (max-width:700px)" in home_css
-    assert ".situation-row{grid-template-columns:2rem minmax(0,1fr)" in home_css
-    assert ".situation-row .situation-action{grid-column:2" in home_css
+    # Narrow viewports recompose rows without hiding any of the paths.
+    # 2026-09-17 (salto institucional): the index became a grid of areas (three
+    # columns on wide screens, one on phones); the old assertion pinned the
+    # 2rem index column of the ruled list, which was the drawing, not the
+    # intent. What matters: a narrow breakpoint exists, it collapses the list
+    # to one column, and no rule hides a situation row.
+    narrow_blocks = re.findall(r"@media \(max-width:(?:699|700)px\)\{(?:[^{}]*\{[^}]*\})+\}", home_css)
+    assert narrow_blocks, "narrow breakpoint for the situation index is missing"
+    assert any(".situation-list{grid-template-columns:minmax(0,1fr)}" in b for b in narrow_blocks)
+    assert not re.search(r"\.situation-row[^{]*\{[^}]*display:none", home_css)
 
 
 def test_css_modules_are_concatenated_without_a_framework():
@@ -715,7 +721,10 @@ def test_functional_type_floor_in_css():
     assert re.search(r"\.consent\{[^}]*font-size:\.875rem", css)
     assert re.search(r"\.footer-links\{[^}]*font-size:\.875rem", css)
     assert re.search(r"\.breadcrumbs ol\{[^}]*font-size:\.875rem", css)
-    assert re.search(r"\.profile-list li\{[^}]*font-size:\.875rem", css)
+    # 2026-09-17 (SALTO-INSTITUCIONAL-02): .profile-list deixou de existir (a
+    # pagina do responsavel usa credential-list/conduct regrados); a regra morta
+    # foi podada junto com o seletor, e o piso de 14px continua coberto pelos
+    # padroes negativos acima.
     assert re.search(r"\.related-card span\{[^}]*font-size:\.875rem", css)
 
 
@@ -763,6 +772,44 @@ def _meta_properties(html: str) -> dict[str, str]:
     return properties
 
 
+# Rotas recompostas na direcao editorial "prancha e percurso"
+# (CONFENGE-SALTO-INSTITUCIONAL-01, 2026-09-17, ramo isolado, dono: fundador).
+# Route-exact, nunca glob: uma rota entra aqui quando a sua composicao foi
+# recomposta e recapturada com motivo; a presenca de uma classe no HTML nao
+# basta para sair de um congelamento.
+EDITORIAL_RECOMPOSED_ROUTES = frozenset({
+    "medicoes-glosas-obras-publicas/index.html",
+    # 2026-09-17 (SALTO-INSTITUCIONAL-02, lote B): the five remaining B2G
+    # pillars follow the same editorial composition as the pilot pillar.
+    "aditivos-obras-publicas/index.html",
+    "auditoria-orcamento-licitacao/index.html",
+    "diagnostico-b2g-360/index.html",
+    "diagnostico-pre-licitacao/index.html",
+    "reequilibrio-obras-publicas/index.html",
+    # 2026-09-17 (SALTO-INSTITUCIONAL-02, lote B, onda 2): the three
+    # safe-execution pillars open with the same editorial composition. Their
+    # first fold stays a `header.content-hero` (the safe-execution contract in
+    # tests/bofu_dominance/safe_execution pins that element), so `svc-open`
+    # is carried as a second class token on the header, not as a bare class.
+    "acompanhamento-contratos-obras/index.html",
+    "atrasos-prorrogacao-obras-publicas/index.html",
+    "defesa-tecnica-contratos-publicos/index.html",
+})
+
+SVC_OPEN_RE = re.compile(r'class="[^"]*\bsvc-open\b[^"]*"')
+
+
+def _opens_with_svc_open(html: str) -> bool:
+    """True when the page opens with the editorial `svc-open` composition.
+
+    The class may be alone (`section.svc-open`, the pilot) or combined with the
+    shell the route's own contract pins (`header.content-hero.svc-open` on the
+    safe-execution pillars); what matters is the rendered opening, not the
+    literal attribute value.
+    """
+    return bool(SVC_OPEN_RE.search(html))
+
+
 def test_raster_title_covers_are_og_only_outside_frozen_bofu_routes():
     """Remove redundant inline cards without bypassing the #128/#226 freeze."""
     frozen_bofu = _capture_unfrozen({
@@ -804,7 +851,16 @@ def test_raster_title_covers_are_og_only_outside_frozen_bofu_routes():
             html,
             re.I,
         )
-        if relative in frozen_bofu:
+        # 2026-09-17 (salto institucional): a route recomposed in the editorial
+        # direction opens with `.svc-open` and carries a technical plate; the
+        # rasterised title card is OG-only there too, on frozen and unfrozen
+        # routes alike (the inventory classed assets/clusters/*.jpg as
+        # unsuitable for the page body).
+        recomposed = relative in EDITORIAL_RECOMPOSED_ROUTES and _opens_with_svc_open(html)
+        if relative in frozen_bofu and recomposed:
+            frozen_candidates.add(relative)
+            assert not figures, f"{relative}: recomposed pillar keeps the title card OG-only"
+        elif relative in frozen_bofu:
             frozen_candidates.add(relative)
             assert len(figures) == 1, f"{relative}: frozen cover changed"
             image = re.search(r"<img\b[^>]*>", figures[0], re.I)
@@ -825,7 +881,7 @@ def test_raster_title_covers_are_og_only_outside_frozen_bofu_routes():
                 html,
                 re.I,
             )
-            assert hero and "article-hero" in hero.group(0), (
+            assert recomposed or (hero and "article-hero" in hero.group(0)), (
                 f"{relative}: coverless route must reuse the one-column article hero"
             )
 
@@ -1234,7 +1290,12 @@ def test_pillar_evidence_contrast_on_navy():
     assert len(pillars) == 8
     for path in pillars:
         html = path.read_text(encoding="utf-8")
-        assert 'class="pillar-evidence"' in html, f"{path.relative_to(ROOT)} missing pillar-evidence"
+        # A pillar recomposed in the editorial direction (2026-09-17) states its
+        # evidence in the opening chain and the plate instead of the navy card.
+        recomposed = path.relative_to(ROOT).as_posix() in EDITORIAL_RECOMPOSED_ROUTES
+        assert 'class="pillar-evidence"' in html or (recomposed and _opens_with_svc_open(html)), (
+            f"{path.relative_to(ROOT)} missing pillar-evidence"
+        )
 
 
 def test_offer_context_component_css():
@@ -1289,7 +1350,10 @@ def test_thankyou_specialist_cta_family():
     # diagnostico e o destino entregava uma triagem: rotulo e destino tem de
     # coincidir. A propriedade preservada -- a pagina de quem assina leva a
     # um caminho de atendimento nomeado -- passa a ser verificada assim.
-    assert "Descrever a situação para o Engº Tiago" in specialist
+    # 2026-09-17 (salto institucional 02, lote C): o rotulo encurta para
+    # "Descrever a situação" (o botao quebrava em duas linhas a 390 px, 60 px
+    # contra 44 no piloto); mesmo destino /triagem-tecnica/, mesma propriedade.
+    assert "Descrever a situação" in specialist
     assert 'href="/triagem-tecnica/"' in specialist
     lower = specialist.lower()
     assert "analisar meu cenário" not in lower
@@ -1530,6 +1594,87 @@ def test_focus_ring_survives_reduced_motion_and_js_off():
                 assert not (prop in ("outline", "box-shadow") and value.strip().lower() == "none"), (
                     f"prefers-reduced-motion removes the focus ring: {selector}"
                 )
+
+
+class _AnchorVisibilityParser(HTMLParser):
+    """Records, for every ``id``, whether the element sits inside a closed
+    ``<details>`` (ignoring the disclosure element itself and its ``summary``,
+    which stay visible), plus every ``href="#..."`` inside ``nav.page-index``."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self._stack: list[tuple[str, bool]] = []  # (tag, is_closed_details)
+        self.hidden_ids: set[str] = set()
+        self.ids: set[str] = set()
+        self._in_index = 0
+        self.index_hrefs: list[str] = []
+        self._pending_details = False
+
+    def handle_starttag(self, tag, attrs):  # noqa: ANN001
+        a = dict(attrs)
+        closed_details = tag == "details" and "open" not in a
+        if tag not in {"br", "img", "meta", "link", "input", "source", "hr", "use", "path", "wbr"}:
+            self._stack.append((tag, closed_details))
+        ident = a.get("id")
+        if ident:
+            self.ids.add(ident)
+            ancestors = self._stack[:-1]
+            if tag == "summary" and ancestors and ancestors[-1][0] == "details":
+                ancestors = ancestors[:-1]
+            if any(closed for _t, closed in ancestors):
+                self.hidden_ids.add(ident)
+        if tag == "nav" and "page-index" in (a.get("class") or "").split():
+            self._in_index = len(self._stack)
+        if self._in_index and tag == "a":
+            href = a.get("href") or ""
+            if href.startswith("#"):
+                self.index_hrefs.append(href[1:])
+
+    def handle_endtag(self, tag):  # noqa: ANN001
+        while self._stack:
+            top, _closed = self._stack.pop()
+            if top == tag:
+                break
+        if self._in_index and len(self._stack) < self._in_index:
+            self._in_index = 0
+
+
+def test_page_index_anchors_land_on_visible_targets():
+    """2026-09-17 (SALTO-INSTITUCIONAL-02, lote B, revisão): an index entry whose
+    target sits inside a closed ``<details>`` does not open it; the browser lands
+    on the next visible element (on the offer pages, the form) and the visitor
+    never sees the section named in the index. Every ``nav.page-index`` href must
+    resolve to an id that renders without opening a disclosure. The disclosure
+    element itself and its summary are visible targets."""
+    failures: list[str] = []
+    for path in sorted(ROOT.rglob("index.html")):
+        parts = path.relative_to(ROOT).parts
+        if any(p in {".git", ".claude", ".worktrees", "_site", "node_modules", "docs"} for p in parts):
+            continue
+        html = path.read_text(encoding="utf-8", errors="replace")
+        if 'class="page-index"' not in html:
+            continue
+        parser = _AnchorVisibilityParser()
+        parser.feed(html)
+        rel = path.relative_to(ROOT).as_posix()
+        for anchor in parser.index_hrefs:
+            if anchor not in parser.ids:
+                failures.append(f"{rel}: #{anchor} has no target")
+            elif anchor in parser.hidden_ids:
+                failures.append(f"{rel}: #{anchor} sits inside a closed <details>")
+    assert not failures, "page-index anchors hidden or missing:\n" + "\n".join(failures)
+
+
+def test_page_index_guard_catches_a_hidden_anchor():
+    parser = _AnchorVisibilityParser()
+    parser.feed(
+        '<nav class="page-index"><ol><li><a href="#a">A</a></li><li><a href="#d">D</a></li>'
+        '<li><a href="#s">S</a></li></ol></nav><section id="a"></section>'
+        '<details id="d"><summary id="s">x</summary><section id="b"></section></details>'
+    )
+    assert parser.index_hrefs == ["a", "d", "s"]
+    assert "b" in parser.hidden_ids
+    assert not ({"a", "d", "s"} & parser.hidden_ids)
 
 
 def run_all() -> int:

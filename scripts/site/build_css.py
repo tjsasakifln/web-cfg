@@ -71,6 +71,99 @@ def assemble(css: str, blob: str) -> str:
     return body + "\n" + compact_blob + "\n"
 
 
+HOME_EDITORIAL_BLOCKS = (
+    "Type roles",
+    "Section rhythm",
+    "Plate:",
+    "Opening (home)",
+    "Area index",
+    "Deliveries",
+    "Responsibility",
+    "Public works band",
+    "After send",
+    "Contact hierarchy",
+    "Motion",
+)
+
+
+def home_subset(sheet_text: str) -> str:
+    """Only the editorial blocks the home renders (every byte of CSS before the
+    first paint costs LCP under slow-start; measured 2026-09-17: the full sheet
+    inside home-10x.css added ~80 ms of lab LCP). Blocks are delimited by their
+    `/* Title ---` header comments in assets/editorial.css."""
+    import re as _re
+
+    parts = _re.split(r"(?m)^(?=/\* )", sheet_text)
+    kept = []
+    for part in parts:
+        if not part.startswith("/* "):
+            continue  # file header before the first block
+        title = part[3:].split("\n", 1)[0]
+        if any(title.startswith(prefix) for prefix in HOME_EDITORIAL_BLOCKS):
+            kept.append(part.rstrip("\n"))
+    return "\n".join(kept) + "\n"
+
+
+ROUTE_SUBSETS = {
+    # Route sheets cut from assets/editorial.css by block title (same mechanism as
+    # the home). The full sheet costs ~7 KB gzip before first paint; the tool
+    # route /ferramentas/diagnostico-defesa-margem/ measured 158.9 KB against the
+    # 150 KiB payload cap with it (2026-09-17), and the 154 library pages do not
+    # use the service, hub or trust blocks at all.
+    "assets/editorial-article.css": ("Type roles", "Section rhythm", "Page index", "Conditions", "After send", "Contact hierarchy", "Article", "Timeline", "Figure pair", "Motion"),
+    "assets/editorial-tool.css": ("Type roles", "Section rhythm", "Page index", "Conditions", "After send", "Contact hierarchy", "Tool", "Motion"),
+}
+
+
+def subset(sheet_text: str, prefixes: tuple[str, ...]) -> str:
+    import re as _re
+
+    parts = _re.split(r"(?m)^(?=/\* )", sheet_text)
+    kept = [part.rstrip("\n") for part in parts if part.startswith("/* ") and any(part[3:].split("\n", 1)[0].startswith(pfx) for pfx in prefixes)]
+    return "/* Route subset of assets/editorial.css, written by scripts/site/build_css.py; edit the source sheet. */\n" + "\n".join(kept) + "\n"
+
+
+def sync_route_subsets(root: Path, *, check: bool = False) -> list[str]:
+    sheet = root / "assets" / "editorial.css"
+    stale: list[str] = []
+    if not sheet.is_file():
+        return stale
+    text = sheet.read_text(encoding="utf-8")
+    for rel, prefixes in ROUTE_SUBSETS.items():
+        target = root / rel
+        new = subset(text, prefixes)
+        current = target.read_text(encoding="utf-8") if target.is_file() else ""
+        if current != new:
+            stale.append(rel)
+            if not check:
+                target.write_text(new, encoding="utf-8")
+    return stale
+
+
+def sync_home_sheet(root: Path) -> bool:
+    """Copy assets/editorial.css into assets/home-10x.css between its markers.
+
+    The home carries the editorial layer inside its own composition sheet so it
+    keeps two stylesheets (a third render-blocking request cost ~150 ms of LCP
+    in the lab). Returns True when the file changed.
+    """
+    home = root / "assets" / "home-10x.css"
+    sheet = root / "assets" / "editorial.css"
+    if not home.is_file() or not sheet.is_file():
+        return False
+    begin, end = "/* BEGIN editorial-route-sheet */\n", "\n/* END editorial-route-sheet */"
+    text = home.read_text(encoding="utf-8")
+    if begin not in text or end not in text:
+        return False
+    head, rest = text.split(begin, 1)
+    _old, tail = rest.split(end, 1)
+    new = head + begin + home_subset(sheet.read_text(encoding="utf-8")).rstrip("\n") + end + tail
+    if new != text:
+        home.write_text(new, encoding="utf-8")
+        return True
+    return False
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--check", action="store_true", help="fail if styles.css is stale")
@@ -83,8 +176,22 @@ def main() -> int:
         if current != assembled:
             print("FAIL styles.css is stale; run python3 scripts/site/build_css.py")
             return 1
+        home = ROOT / "assets" / "home-10x.css"
+        snapshot = home.read_text(encoding="utf-8") if home.is_file() else ""
+        if sync_home_sheet(ROOT):
+            home.write_text(snapshot, encoding="utf-8")
+            print("FAIL assets/home-10x.css is stale against assets/editorial.css; run python3 scripts/site/build_css.py")
+            return 1
+        stale = sync_route_subsets(ROOT, check=True)
+        if stale:
+            print(f"FAIL route subsets stale against assets/editorial.css: {', '.join(stale)}; run python3 scripts/site/build_css.py")
+            return 1
         print("OK css modules concatenated")
         return 0
+    if sync_home_sheet(ROOT):
+        print("wrote assets/home-10x.css (editorial route sheet synced)")
+    for rel in sync_route_subsets(ROOT):
+        print(f"wrote {rel} (route subset of assets/editorial.css)")
     if current != assembled:
         STYLES.write_text(assembled, encoding="utf-8")
         print(f"wrote {STYLES.relative_to(ROOT)} ({len(assembled.encode())} bytes)")
