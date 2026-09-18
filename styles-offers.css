@@ -190,6 +190,8 @@ body[data-offer-id="diretoria-b2g"] .contact-primary .button-primary{width:auto;
   .offer-hero:has(.offer-context){padding:30px 0 36px}
   .offer-hero:has(.offer-context) > .container > h1{max-width:none}
   .offer-hero:has(.offer-context) > .container > .hero-actions{margin-top:20px}
+/* No celular a condicao contratual (preco e prazo) vem logo depois da acao dominante: com ela antes, o botao saia da dobra de 844 px (aceite 2026-09-17). */
+@media (max-width:700px){.offer-hero:has(.offer-context) > .container > [data-contractual-sla]{order:5;margin-top:1rem}}
   .offer-hero:has(.offer-context) > .container > .offer-context{margin:22px 0 16px}
   .offer-detail-disclosure > summary{min-height:76px;font-size:.96rem}
   .offer-detail-disclosure > .section{padding-top:34px;padding-bottom:34px}
