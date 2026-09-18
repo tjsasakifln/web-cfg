@@ -965,15 +965,24 @@
     const pagePath = window.location.pathname || '/';
     const defaultCluster = clusterFromPath(pagePath);
     const deviceContext = window.matchMedia('(max-width: 760px)').matches ? 'mobile' : 'desktop';
+    const A_CLUSTER = 'data-content-cluster';
+    const A_OFFER = 'data-offer-id';
+    const A_NEXT_ACTION = 'data-next-action-id';
+    const A_CTA_KIND = 'data-cta-kind';
+    const A_EVENT_NAME = 'data-event-name';
+    const A_CTA_ID = 'data-cta-id';
+    const A_ASSET_ID = 'data-asset-id';
+    const A_ASSET_FAMILY = 'data-asset-family';
+    const A_ROUTE_FAMILY = 'data-route-family';
 
     // Service / offer page view
-    if (document.body?.getAttribute('data-content-cluster') === 'offer'
+    if (document.body?.getAttribute(A_CLUSTER) === 'offer'
       || /\/(diretoria-b2g|diagnostico-b2g-360|bid-room|defesa-margem|medicoes-glosas|aditivos|reequilibrio|auditoria-orcamento|diagnostico-pre|defesa-tecnica|acompanhamento|atrasos)/.test(pagePath)) {
       track('service_page_view', {
         page_path: pagePath,
         content_cluster: defaultCluster,
         device_context: deviceContext,
-        offer_id: document.body?.getAttribute('data-offer-id') || '',
+        offer_id: document.body?.getAttribute(A_OFFER) || '',
         journey: document.body?.getAttribute('data-journey') || '',
       });
     }
@@ -1024,25 +1033,16 @@
       comparison_view: 1,
       cta_click: 1,
     };
+    const attrOrBody = (el, attr) => el.getAttribute(attr) || document.body?.getAttribute(attr) || '';
     const attrsFromEl = (el) => ({
-      source_asset_id: el.getAttribute('data-asset-id')
-        || document.body?.getAttribute('data-asset-id')
+      source_asset_id: attrOrBody(el, A_ASSET_ID),
+      source_asset_family: attrOrBody(el, A_ASSET_FAMILY),
+      route_family: attrOrBody(el, A_ROUTE_FAMILY),
+      cta_id: el.getAttribute(A_CTA_ID)
+        || el.closest?.('[data-cta-id]')?.getAttribute(A_CTA_ID)
         || '',
-      source_asset_family: el.getAttribute('data-asset-family')
-        || document.body?.getAttribute('data-asset-family')
-        || '',
-      route_family: el.getAttribute('data-route-family')
-        || document.body?.getAttribute('data-route-family')
-        || '',
-      cta_id: el.getAttribute('data-cta-id')
-        || el.closest?.('[data-cta-id]')?.getAttribute('data-cta-id')
-        || '',
-      asset_id: el.getAttribute('data-asset-id')
-        || document.body?.getAttribute('data-asset-id')
-        || '',
-      asset_family: el.getAttribute('data-asset-family')
-        || document.body?.getAttribute('data-asset-family')
-        || '',
+      asset_id: attrOrBody(el, A_ASSET_ID),
+      asset_family: attrOrBody(el, A_ASSET_FAMILY),
     });
     // G04-01: destino de um cta_click sem renomear o evento. Ancora de captura
     // = form; outra ancora = anchor; rota interna = route. O consumidor
@@ -1085,7 +1085,7 @@
       const hashAt = value.indexOf('#');
       const hash = hashAt === -1 ? '' : value.slice(hashAt);
       const beforeHash = hashAt === -1 ? value : value.slice(0, hashAt);
-      const samePage = !beforeHash || beforeHash === pagePath || beforeHash === `${pagePath}`.replace(/\/$/, '');
+      const samePage = !beforeHash || beforeHash === pagePath || beforeHash === pagePath.replace(/\/$/, '');
       if (hash && samePage) return isCaptureHash(hash) ? 'form' : 'anchor';
       const dest = canonicalizeDestination(value);
       if (dest.kind === 'whatsapp' || dest.kind === 'email' || dest.kind === 'tel') return dest.kind;
@@ -1099,19 +1099,29 @@
     // levam a outra rota e sao cta_click destination_type=route. O destino de
     // triagem tecnica e a rota do formulario, nao um servico: nunca vira
     // content_to_service com UNKNOWN_SERVICE.
-    const TRIAGE_ROUTE = '/triagem-tecnica/';
     const elMatches = (node, selector) => {
       try { return typeof node.matches === 'function' && node.matches(selector); } catch (_) { return false; }
     };
     const isHeaderCta = (node) => elMatches(node, 'a.header-cta');
     const isSituationAction = (node) => elMatches(node, 'a.situation-action');
-    const isTriageRoute = (rawHref) => canonicalizeDestination(rawHref).path === TRIAGE_ROUTE;
+    const isTriageRoute = (rawHref) => canonicalizeDestination(rawHref).path === '/triagem-tecnica/';
     // Um botao de envio (ou [data-tool-to-form]) declarado como cta_click leva
     // ao formulario que o contem: destination_type=form sem href.
     const isFormSubmitCta = (node) => elMatches(node, 'button[type="submit"], input[type="submit"], [data-tool-to-form]')
       || (!node.getAttribute('href') && !!node.closest?.('form'));
-    const ctaKindFromEl = (node) => node.getAttribute('data-cta-kind')
-      || EVENT_CTA_KIND[node.getAttribute('data-event-name') || ''] || '';
+    const ctaKindFromEl = (node) => node.getAttribute(A_CTA_KIND)
+      || EVENT_CTA_KIND[node.getAttribute(A_EVENT_NAME) || ''] || '';
+    const attrsWithCta = (node, ctaKind) => {
+      const a = attrsFromEl(node);
+      return {
+        asset_id: a.asset_id,
+        route_family: a.route_family,
+        cta_id: a.cta_id,
+        cta_kind: ctaKind,
+        offer_id: node.getAttribute(A_OFFER) || '',
+        next_action_id: node.getAttribute(A_NEXT_ACTION) || '',
+      };
+    };
     const handleTrackedClick = (el, domEvent) => {
       if (domEvent && domEvent.__confengeTracked) return;
       if (domEvent) domEvent.__confengeTracked = true;
@@ -1129,76 +1139,60 @@
       });
       const base = {
         page_path: pagePath,
-        content_cluster: el.getAttribute('data-content-cluster') || defaultCluster,
+        content_cluster: el.getAttribute(A_CLUSTER) || defaultCluster,
         cta_position: position,
         device_context: deviceContext,
         event_id: eventId,
         correlation_id: fromUrl.correlation_id || '',
       };
+      const editorialBase = {
+        content_type: isEditorial ? (editorialType || 'editorial') : undefined,
+        topic: isEditorial ? editorialTopic.slice(0, 120) : undefined,
+      };
+      const sourcePageType = document.body?.getAttribute(A_CLUSTER) || defaultCluster;
+      const offerId = el.getAttribute(A_OFFER) || '';
       if (classified.kind === 'whatsapp') {
-        const whatsappAttrs = attrsFromEl(el);
         const whatsappProtocol = appendWhatsappProtocol(el, eventId);
         track('whatsapp_click', {
           ...base,
+          ...editorialBase,
           correlation_id: whatsappProtocol,
           cta_label: label || 'whatsapp',
           destination_type: 'whatsapp',
           journey: el.getAttribute('data-journey') || form?.querySelector('#jornada-hidden')?.value || editorialJourney || '',
-          content_type: isEditorial ? (editorialType || 'editorial') : undefined,
-          topic: isEditorial ? editorialTopic.slice(0, 120) : undefined,
-          asset_id: whatsappAttrs.asset_id,
-          route_family: whatsappAttrs.route_family,
-          cta_id: whatsappAttrs.cta_id,
-          cta_kind: ctaKindFromEl(el),
-          offer_id: el.getAttribute('data-offer-id') || '',
-          next_action_id: el.getAttribute('data-next-action-id') || '',
+          ...attrsWithCta(el, ctaKindFromEl(el)),
         });
         return;
       }
-      // G04-04: e-mail e telefone carregam a mesma atribuicao do WhatsApp
-      // (cta_id, route_family, asset_id, offer_id). O href (endereco, numero)
-      // nunca entra no payload.
       if (classified.kind === 'email') {
-        const emailAttrs = attrsFromEl(el);
         track('email_click', {
           ...base,
+          ...editorialBase,
           cta_label: label || 'email',
           destination_type: 'email',
-          content_type: isEditorial ? (editorialType || 'editorial') : undefined,
-          topic: isEditorial ? editorialTopic.slice(0, 120) : undefined,
           journey: isEditorial ? editorialJourney : undefined,
-          asset_id: emailAttrs.asset_id,
-          route_family: emailAttrs.route_family,
-          cta_id: emailAttrs.cta_id,
-          cta_kind: ctaKindFromEl(el),
-          offer_id: el.getAttribute('data-offer-id') || '',
-          next_action_id: el.getAttribute('data-next-action-id') || '',
+          ...attrsWithCta(el, ctaKindFromEl(el)),
         });
         return;
       }
       if (classified.kind === 'tel' || classified.kind === 'external') {
-        const outboundAttrs = attrsFromEl(el);
         track('outbound_click', {
           ...base,
           destination_type: classified.kind,
-          asset_id: outboundAttrs.asset_id,
-          route_family: outboundAttrs.route_family,
-          cta_id: outboundAttrs.cta_id,
-          cta_kind: classified.kind === 'tel' ? ctaKindFromEl(el) : '',
-          offer_id: el.getAttribute('data-offer-id') || '',
-          next_action_id: el.getAttribute('data-next-action-id') || '',
+          ...attrsWithCta(el, classified.kind === 'tel' ? ctaKindFromEl(el) : ''),
         });
         return;
       }
       if (classified.kind === 'contact') {
+        const contactAttrs = attrsFromEl(el);
         track('service_cta_click', {
           ...base,
           cta_label: label,
           destination_type: 'form',
-          offer_id: el.getAttribute('data-offer-id') || '',
-          source_page_type: document.body?.getAttribute('data-content-cluster') || defaultCluster,
-          cta_id: attrsFromEl(el).cta_id,
-          route_family: attrsFromEl(el).route_family,
+          offer_id: offerId,
+          source_page_type: sourcePageType,
+          cta_id: contactAttrs.cta_id,
+          route_family: contactAttrs.route_family,
         });
         return;
       }
@@ -1209,18 +1203,12 @@
       const routeCta = (isHeaderCta(el) && (navDestination === 'route' || navDestination === 'form' || navDestination === 'anchor'))
         || (isTriageRoute(href) && navDestination === 'route');
       if (routeCta) {
-        const routeAttrs = attrsFromEl(el);
         track('cta_click', {
           ...base,
           cta_label: label,
           destination_type: navDestination,
-          source_page_type: document.body?.getAttribute('data-content-cluster') || defaultCluster,
-          offer_id: el.getAttribute('data-offer-id') || '',
-          asset_id: routeAttrs.asset_id,
-          route_family: routeAttrs.route_family,
-          cta_id: routeAttrs.cta_id,
-          cta_kind: ctaKindFromEl(el),
-          next_action_id: el.getAttribute('data-next-action-id') || '',
+          source_page_type: sourcePageType,
+          ...attrsWithCta(el, ctaKindFromEl(el)),
         });
         return;
       }
@@ -1229,8 +1217,8 @@
           ...base,
           cta_label: label,
           destination_type: classified.destination_service_id === UNKNOWN_SERVICE ? 'unknown' : 'service',
-          source_page_type: document.body?.getAttribute('data-content-cluster') || defaultCluster,
-          offer_id: el.getAttribute('data-offer-id') || '',
+          source_page_type: sourcePageType,
+          offer_id: offerId,
           source_path: classified.source_path,
           source_asset_id: classified.source_asset_id,
           source_asset_family: classified.source_asset_family,
@@ -1248,7 +1236,7 @@
       // data-cta-id), p. ex. o herói de /quantitativos-orcamento-obras/ ->
       // #triagem-quantitativos ou o de /parcerias-engenharia/ -> #encaminhar.
       const isCaptureAnchorCta = href.startsWith('#') && isCaptureHash(href);
-      const eventName = el.getAttribute('data-event-name')
+      const eventName = el.getAttribute(A_EVENT_NAME)
         || ((isSituationAction(el) && navDestination === 'route') || isCaptureAnchorCta ? 'cta_click' : '');
       if (!eventName || !namedAllowed[eventName]) return;
       const namedAttrs = attrsFromEl(el);
@@ -1259,15 +1247,13 @@
         ...base,
         cta_label: label,
         ...(destinationType ? { destination_type: destinationType } : {}),
-        offer_id: el.getAttribute('data-offer-id')
-          || document.body?.getAttribute('data-offer-id')
-          || '',
-        source_page_type: document.body?.getAttribute('data-content-cluster') || defaultCluster,
+        offer_id: attrOrBody(el, A_OFFER),
+        source_page_type: sourcePageType,
         asset_id: namedAttrs.asset_id,
         route_family: namedAttrs.route_family,
         cta_id: namedAttrs.cta_id,
-        cta_kind: el.getAttribute('data-cta-kind') || '',
-        next_action_id: el.getAttribute('data-next-action-id') || '',
+        cta_kind: el.getAttribute(A_CTA_KIND) || '',
+        next_action_id: el.getAttribute(A_NEXT_ACTION) || '',
       });
     };
 
@@ -1293,19 +1279,19 @@
     // data-event-name, emitem cta_click. Ancoras de sumario para prosa ficam
     // mudas.
     document.querySelectorAll('a[href^="#"]').forEach((el) => {
-      if (el.hasAttribute('data-event-name')) return;
+      if (el.hasAttribute(A_EVENT_NAME)) return;
       const anchorHref = el.getAttribute('href') || '';
       if (!isHeaderCta(el) && !isCaptureHash(anchorHref)) return;
       el.addEventListener('click', (evt) => handleTrackedClick(el, evt));
     });
 
     // Offer page view + comparison section view (once)
-    if (document.body?.getAttribute('data-offer-id')) {
+    if (document.body?.getAttribute(A_OFFER)) {
       track('offer_view', {
         page_path: pagePath,
         content_cluster: defaultCluster,
         device_context: deviceContext,
-        offer_id: document.body.getAttribute('data-offer-id'),
+        offer_id: document.body.getAttribute(A_OFFER),
         source_page_type: 'offer',
       });
     }
