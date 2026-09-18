@@ -24,7 +24,8 @@ Every public HTML document must:
   3. place it before any other focusable element in ``<body>`` so it is the
      first stop of the keyboard tab order;
   4. keep a focus style for ``.skip-link:focus`` reachable from the document
-     (site stylesheet or an inline ``<style>``), so activation is visible.
+     (a linked site stylesheet, checked by content, or an inline ``<style>``),
+     so activation is visible.
 
 Exclusions are declared below **with a reason** and are themselves policed:
 an excluded tree must stay fully ``noindex``. The moment a page under it
@@ -129,11 +130,19 @@ def has_reachable_focus_style(html: str) -> bool:
     if any(focus_rule_makes_link_visible(css) for css in STYLE_BLOCK_RE.findall(html)):
         return True
 
+    # Any root-relative stylesheet the document links is read from the repo
+    # and checked by content: the home links the derived subset
+    # assets/home-base.css (styles.css pruned by scripts/site/build_css.py),
+    # other routes link /styles.css. A sheet that lacks the rule (e.g.
+    # /styles-offers.css) never counts, whatever its name.
     for tag in LINK_TAG_RE.findall(html):
         href = STYLESHEET_HREF_RE.search(tag)
-        if not href or href.group(1).split("?", 1)[0] != "/styles.css":
+        if not href:
             continue
-        css_path = ROOT / "styles.css"
+        target = href.group(1).split("?", 1)[0]
+        if not target.startswith("/") or not target.endswith(".css"):
+            continue
+        css_path = ROOT / target.lstrip("/")
         if css_path.is_file() and focus_rule_makes_link_visible(
             css_path.read_text(encoding="utf-8")
         ):
@@ -172,7 +181,7 @@ def check_page(path: Path, html: str) -> list[str]:
     if not has_reachable_focus_style(html):
         errors.append(
             "no reachable, non-empty .skip-link focus style "
-            "(link /styles.css or define it inline)"
+            "(link a site stylesheet that defines it or define it inline)"
         )
     return errors
 
