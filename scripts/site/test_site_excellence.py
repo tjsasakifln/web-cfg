@@ -478,6 +478,31 @@ def test_gsc_freshness_stale_durable_read_is_blocked_gsc_stale() -> None:
     assert result["evidence"]["durable_read"] == "stale"
 
 
+def test_gsc_freshness_stale_durable_read_is_blocked_even_when_as_of_is_recent() -> None:
+    # Host shape when the latest sync failed (gsc-private-snapshot.cjs): status
+    # STALE with the host reason code, but as_of of the recent last-known-good.
+    # The status, not the age, decides: a degraded producer never scores 10/10.
+    stale_recent = {
+        "ok": False,
+        "status": "STALE",
+        "reason_codes": ["provider_coverage_gap"],
+        "producer_manifest_sha256": "a" * 64,
+        "consumer_manifest_sha256": "a" * 64,
+        "as_of": "2026-08-26",
+        "delivery_source": "durable_store",
+    }
+    with tempfile.TemporaryDirectory() as tmp:
+        reports = Path(tmp)
+        _durable_gsc_read(reports, stale_recent)
+        result = _gsc(reports)
+    assert result["status"] == "BLOCKED_EXTERNAL"
+    assert result["codes"] == ["gsc_stale"]
+    assert result["evidence"]["age_days"] == 3
+    assert result["evidence"]["durable_read"] == "stale"
+    assert result["evidence"]["durable_status"] == "STALE"
+    assert result["evidence"]["durable_reason_codes"] == ["provider_coverage_gap"]
+
+
 def test_gsc_freshness_scorecard_policy_is_stricter_than_the_durable_contract() -> None:
     # Host CURRENT (<= 14 days, #413) but older than the scorecard's 7 days:
     # the signal stays gsc_stale instead of disappearing (G05-02 decision).

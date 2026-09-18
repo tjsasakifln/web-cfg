@@ -169,6 +169,12 @@ def evaluate_signal(
             return _result(BLOCKED, ["gsc_unavailable"], observation)
         age = (date.fromisoformat(str(today)) - date.fromisoformat(str(as_of))).days
         observation = {**observation, "age_days": age}
+        # A durable read the host already classified STALE (last sync failed,
+        # provider coverage gap, insufficient distinct runs) is stale regardless
+        # of the as_of age: the host keeps the last-known-good as_of, so age
+        # alone would report a degraded producer as MEASURED_PASS.
+        if str(observation.get("durable_status") or "").upper() == "STALE":
+            return _result(BLOCKED, ["gsc_stale"], observation)
         if age > int(policy["maximum_age_days"]):
             return _result(BLOCKED, ["gsc_stale"], observation)
 
@@ -758,6 +764,8 @@ def _latest_gsc_observation(
             "source_available": observation["source_available"],
             "source_kind": observation["source_kind"],
             "durable_read": read_state,
+            "durable_status": observation.get("durable_status"),
+            "durable_reason_codes": observation["durable_reason_codes"],
             "maximum_age_days": int(maximum_age_days),
         }
     )
