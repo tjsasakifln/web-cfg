@@ -33,4 +33,4 @@ Antes desta correção o verificador só reconhecia `href="/#contato"` e `href="
 
 `npm run inbound:remediate` (`scripts/site/inbound_first_remediate.py::inject_journey_cta`) agora deriva o destino do formulário da mesma regra (`form_target`) e não reescreve uma `lead-inline` que já leva ao pilar; sem pilar continua caindo em `/#contato`. Cobertura: `python3 scripts/site/test_apply_article_pillar_form.py`.
 
-Pendente de integração: ligar `python3 scripts/site/apply_article_pillar_form.py --check` e `python3 scripts/site/test_apply_article_pillar_form.py` a um gate do CI (`inbound:gates` ou `site-ci`); o remediador ainda não pula os artigos congelados pelo canário #389 (comportamento anterior à campanha, fora desta frente).
+Pendente de integração: ligar `python3 scripts/site/apply_article_pillar_form.py --check` e `python3 scripts/site/test_apply_article_pillar_form.py` a um gate do CI (`inbound:gates` ou `site-ci`); o remediador mantém `/#contato` nos artigos congelados pelo canário #389 (mesmo destino que escrevia antes), mas continua regenerando a `lead-inline` deles se for executado (comportamento anterior à campanha, fora desta frente).
