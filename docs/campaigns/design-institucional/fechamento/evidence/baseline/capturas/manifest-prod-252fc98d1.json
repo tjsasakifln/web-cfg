@@ -1,0 +1,150 @@
+{
+  "base": "https://confenge.com.br",
+  "tag": "prod-252fc98d1",
+  "captures": [
+    {
+      "route": "/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 16572,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/fechamento/evidence/baseline/capturas/home-390x844-fold-prod-252fc98d1.jpg",
+      "full": "docs/campaigns/design-institucional/fechamento/evidence/baseline/capturas/home-390x844-full-prod-252fc98d1.jpg",
+      "menu": "docs/campaigns/design-institucional/fechamento/evidence/baseline/capturas/home-390x844-menu-prod-252fc98d1.jpg"
+    },
+    {
+      "route": "/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 11060,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/fechamento/evidence/baseline/capturas/home-1440x1000-fold-prod-252fc98d1.jpg",
+      "full": "docs/campaigns/design-institucional/fechamento/evidence/baseline/capturas/home-1440x1000-full-prod-252fc98d1.jpg"
+    },
+    {
+      "route": "/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/servicos/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 16071,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/fechamento/evidence/baseline/capturas/servicos-390x844-fold-prod-252fc98d1.jpg",
+      "full": "docs/campaigns/design-institucional/fechamento/evidence/baseline/capturas/servicos-390x844-full-prod-252fc98d1.jpg",
+      "menu": "docs/campaigns/design-institucional/fechamento/evidence/baseline/capturas/servicos-390x844-menu-prod-252fc98d1.jpg"
+    },
+    {
+      "route": "/servicos/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 10036,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/fechamento/evidence/baseline/capturas/servicos-1440x1000-fold-prod-252fc98d1.jpg",
+      "full": "docs/campaigns/design-institucional/fechamento/evidence/baseline/capturas/servicos-1440x1000-full-prod-252fc98d1.jpg"
+    },
+    {
+      "route": "/servicos/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/quantitativos-orcamento-obras/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 20426,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/fechamento/evidence/baseline/capturas/quantitativos-orcamento-obras-390x844-fold-prod-252fc98d1.jpg",
+      "full": "docs/campaigns/design-institucional/fechamento/evidence/baseline/capturas/quantitativos-orcamento-obras-390x844-full-prod-252fc98d1.jpg",
+      "menu": "docs/campaigns/design-institucional/fechamento/evidence/baseline/capturas/quantitativos-orcamento-obras-390x844-menu-prod-252fc98d1.jpg"
+    },
+    {
+      "route": "/quantitativos-orcamento-obras/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 12890,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/fechamento/evidence/baseline/capturas/quantitativos-orcamento-obras-1440x1000-fold-prod-252fc98d1.jpg",
+      "full": "docs/campaigns/design-institucional/fechamento/evidence/baseline/capturas/quantitativos-orcamento-obras-1440x1000-full-prod-252fc98d1.jpg"
+    },
+    {
+      "route": "/quantitativos-orcamento-obras/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/compatibilizacao-projetos-engenharia/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 15580,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/fechamento/evidence/baseline/capturas/compatibilizacao-projetos-engenharia-390x844-fold-prod-252fc98d1.jpg",
+      "full": "docs/campaigns/design-institucional/fechamento/evidence/baseline/capturas/compatibilizacao-projetos-engenharia-390x844-full-prod-252fc98d1.jpg",
+      "menu": "docs/campaigns/design-institucional/fechamento/evidence/baseline/capturas/compatibilizacao-projetos-engenharia-390x844-menu-prod-252fc98d1.jpg"
+    },
+    {
+      "route": "/compatibilizacao-projetos-engenharia/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 10128,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/fechamento/evidence/baseline/capturas/compatibilizacao-projetos-engenharia-1440x1000-fold-prod-252fc98d1.jpg",
+      "full": "docs/campaigns/design-institucional/fechamento/evidence/baseline/capturas/compatibilizacao-projetos-engenharia-1440x1000-full-prod-252fc98d1.jpg"
+    },
+    {
+      "route": "/compatibilizacao-projetos-engenharia/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/entregas/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 24142,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/fechamento/evidence/baseline/capturas/entregas-390x844-fold-prod-252fc98d1.jpg",
+      "full": "docs/campaigns/design-institucional/fechamento/evidence/baseline/capturas/entregas-390x844-full-prod-252fc98d1.jpg",
+      "menu": "docs/campaigns/design-institucional/fechamento/evidence/baseline/capturas/entregas-390x844-menu-prod-252fc98d1.jpg"
+    },
+    {
+      "route": "/entregas/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 13755,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/fechamento/evidence/baseline/capturas/entregas-1440x1000-fold-prod-252fc98d1.jpg",
+      "full": "docs/campaigns/design-institucional/fechamento/evidence/baseline/capturas/entregas-1440x1000-full-prod-252fc98d1.jpg"
+    },
+    {
+      "route": "/entregas/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/triagem-tecnica/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 6557,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/fechamento/evidence/baseline/capturas/triagem-tecnica-390x844-fold-prod-252fc98d1.jpg",
+      "full": "docs/campaigns/design-institucional/fechamento/evidence/baseline/capturas/triagem-tecnica-390x844-full-prod-252fc98d1.jpg",
+      "menu": "docs/campaigns/design-institucional/fechamento/evidence/baseline/capturas/triagem-tecnica-390x844-menu-prod-252fc98d1.jpg"
+    },
+    {
+      "route": "/triagem-tecnica/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 4327,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/fechamento/evidence/baseline/capturas/triagem-tecnica-1440x1000-fold-prod-252fc98d1.jpg",
+      "full": "docs/campaigns/design-institucional/fechamento/evidence/baseline/capturas/triagem-tecnica-1440x1000-full-prod-252fc98d1.jpg"
+    },
+    {
+      "route": "/triagem-tecnica/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    }
+  ]
+}

@@ -64,24 +64,37 @@ function read(rel) {
 function visibleMain(html) {
   const main = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i)?.[1] || html;
   return main
-    .replace(/<script\b[\s\S]*?<\/script>/gi, " ")
-    .replace(/<style\b[\s\S]*?<\/style>/gi, " ")
+    // \s* before the closing ">" so "</script >" cannot survive stripping
+    // (CodeQL js/bad-tag-filter).
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script[^>]*>/gi, " ")
+    .replace(/<style\b[^>]*>[\s\S]*?<\/style\s*>/gi, " ")
     .replace(/<[^>]+>/g, " ")
     .replace(/\s+/g, " ")
     .trim();
 }
 
+// Hostname of an absolute URL, or null when `raw` is not one — parsed rather
+// than matched by prefix, so a look-alike host (e.g. "https://wa.me.evil.
+// example") cannot be mistaken for the real one (CodeQL
+// js/incomplete-url-substring-sanitization).
+function absoluteHostname(raw) {
+  try {
+    return new URL(raw).hostname;
+  } catch {
+    return null;
+  }
+}
+
 function resolveInternalHref(href, fromFile) {
   const raw = String(href).split("#")[0].split("?")[0];
-  if (!raw || raw.startsWith("mailto:") || raw.startsWith("tel:") || raw.startsWith("https://wa.me")) {
+  const hostname = absoluteHostname(raw);
+  if (!raw || raw.startsWith("mailto:") || raw.startsWith("tel:") || hostname === "wa.me") {
     return { kind: "external-or-fragment", href };
   }
-  if (/^https?:\/\//i.test(raw) && !raw.startsWith("https://confenge.com.br/")) {
+  if (/^https?:\/\//i.test(raw) && hostname !== "confenge.com.br") {
     return { kind: "external", href };
   }
-  let pathname = raw.startsWith("https://confenge.com.br")
-    ? raw.slice("https://confenge.com.br".length)
-    : raw;
+  let pathname = hostname === "confenge.com.br" ? new URL(raw).pathname : raw;
   if (!pathname.startsWith("/")) {
     pathname = path.posix.normalize(
       "/" + path.posix.join(path.posix.dirname(fromFile.replace(/\\/g, "/")), pathname),
@@ -126,6 +139,10 @@ test("fixture trail renderer produces the five-step chain from the shared excerp
   assertTrailMatchesExcerpt(html, excerpt);
   assert.match(html, /Não é orçamento válido para executar obra/);
   assert.match(html, /data-trail-step="review_reference"/);
+  // G02-A-03: the human label of step 06 comes from the descriptor, not the renderer.
+  assert.match(html, new RegExp(`<h3>${excerpt.review_reference.label}</h3>`));
+  const relabeled = renderTrailForTest({ ...excerpt, review_reference: { ...excerpt.review_reference, label: "Rótulo do descritor" } });
+  assert.match(relabeled, /<h3>Rótulo do descritor<\/h3>/);
 });
 
 test("mutating one trail number makes the excerpt assertion fail", () => {

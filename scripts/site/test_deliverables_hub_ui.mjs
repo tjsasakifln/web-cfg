@@ -572,6 +572,62 @@ if (
 } else {
   findings.push({ route: "/entregas/", check: "analytics", analytics, errors: [] });
 }
+// POS-REDESIGN-FECHAMENTO-20260918 (G04-02): each in-page anchor CTA of the two
+// private purchase routes emits exactly one cta_click with its own cta_id and
+// the same route_family/asset_id the route's contact channels carry, so intent
+// and channel stay attributable inside one route (analytics-agg groups by them).
+const ANCHOR_CTA_CASES = [
+  {
+    route: "/quantitativos-orcamento-obras/",
+    route_family: "private-engineering-quantities-budget",
+    asset_id: "private_quantities_budget_route_v1",
+    ctas: ["frame-quantities-budget-hero", "frame-quantities-budget-inline"],
+  },
+  {
+    route: "/compatibilizacao-projetos-engenharia/",
+    route_family: "engineering-projects-coordination-clash",
+    asset_id: "engineering_coordination_clash_route_v1",
+    ctas: ["frame-coordination-clash-hero", "frame-coordination-clash-inline"],
+  },
+];
+for (const ctaCase of ANCHOR_CTA_CASES) {
+  for (const ctaId of ctaCase.ctas) {
+    await page.goto(`${base}${ctaCase.route}`, { waitUntil: "networkidle0", timeout: 30000 });
+    const before = await page.evaluate(() => (window.dataLayer || []).length);
+    const present = await page.evaluate((id) => {
+      const target = document.querySelector(`[data-cta-id="${id}"]`);
+      if (!target) return false;
+      target.addEventListener("click", (event) => event.preventDefault(), { capture: true });
+      return true;
+    }, ctaId);
+    const errors = [];
+    let emitted = null;
+    if (!present) {
+      errors.push("anchor_cta_missing");
+    } else {
+      await page.click(`[data-cta-id="${ctaId}"]`);
+      emitted = await page.evaluate((start) => {
+        const added = (window.dataLayer || []).slice(start);
+        const clicks = added.filter(({ event }) => event === "cta_click");
+        const piiKeys = ["email", "phone", "cnpj", "document", "nome", "empresa", "query"];
+        return {
+          count: clicks.length,
+          event: clicks[0] || null,
+          hasPiiKey: clicks.some((event) => piiKeys.some((key) => Object.prototype.hasOwnProperty.call(event, key))),
+        };
+      }, before);
+      if (emitted.count !== 1) errors.push(`cta_click_count=${emitted.count}`);
+      if (emitted.event?.cta_id !== ctaId) errors.push("cta_id_mismatch");
+      if (emitted.event?.route_family !== ctaCase.route_family) errors.push("route_family_mismatch");
+      if (emitted.event?.asset_id !== ctaCase.asset_id) errors.push("asset_id_mismatch");
+      if (emitted.event?.page_path !== ctaCase.route) errors.push("page_path_mismatch");
+      if (emitted.hasPiiKey) errors.push("pii_key");
+    }
+    if (errors.length) failed += 1;
+    findings.push({ route: ctaCase.route, check: "anchor_cta_click", cta_id: ctaId, analytics: emitted, errors });
+  }
+}
+await page.goto(`${base}/entregas/`, { waitUntil: "networkidle0", timeout: 30000 });
 await page.addScriptTag({ content: axeSource });
 const axe = await page.evaluate(async () => {
   const result = await window.axe.run(document, {

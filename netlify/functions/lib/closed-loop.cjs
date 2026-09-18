@@ -37,6 +37,21 @@ const RATE_DIMENSIONS = Object.freeze({
 });
 const ATTR_FIELDS = Object.freeze([...(CONTRACT.attribution_fields || [])]);
 const VISITOR_EVENT_MAP = Object.freeze({ ...(CONTRACT.visitor_event_map || {}) });
+// G04-01: eventos cujo estagio depende do destino (cta_click route/anchor e
+// navegacao; outbound_click externo nao e intencao). Sem destination_type
+// admitido, o evento nao entra no estagio.
+const VISITOR_STAGE_CONDITIONS = Object.freeze(
+  Object.fromEntries(
+    Object.entries(CONTRACT.visitor_stage_conditions || {})
+      .filter(([, cond]) => cond && typeof cond === "object" && Array.isArray(cond.destination_type))
+      .map(([name, cond]) => [name, new Set(cond.destination_type.map((v) => String(v)))]),
+  ),
+);
+const HANDOFF_SOURCE = (CONTRACT.operational_stage_source || {}).handoff || {};
+const HANDOFF_STATUSES = Object.freeze(
+  (HANDOFF_SOURCE.statuses || ["DELIVERED", "BLOCKED", "PENDING", "RETRYABLE", "SKIPPED", "DEAD"])
+    .map((s) => String(s).toUpperCase()),
+);
 const OBSERVATION_FIELDS = new Set([
   ...((CONTRACT.warmbly_observation_contract || {}).allowed_fields || []),
 ]);
@@ -107,14 +122,68 @@ function leadIdOf(ev) {
   return String(ev.lead_id || props.lead_id || "").slice(0, 32);
 }
 
-function visitorStageOf(canonical, props) {
-  if (canonical === "lead_form_start") return "form_start";
+// G04-01: cta_click sem destination_type e legado (emitido antes do contrato
+// 1.1.0 ou por produtor que ainda nao classifica). Conta no estagio 'cta' com
+// o rotulo `legacy_unclassified`, para nao zerar a serie view_to_cta; nunca e
+// promovido a lead.
+const LEGACY_UNCLASSIFIED = "legacy_unclassified";
+const LEGACY_STAGE_EVENTS = new Set([...(CONTRACT.legacy_unclassified_events || ["cta_click"])]);
+
+function visitorStageClassification(canonical, props) {
+  if (canonical === "lead_form_start") return { stage: "form_start", classification: "" };
   if (canonical === "lead_form_step") {
     const step = Number(props && (props.form_step || props.step));
-    if (step <= 1) return "step1";
-    return "step2";
+    return { stage: step <= 1 ? "step1" : "step2", classification: "" };
   }
-  return VISITOR_EVENT_MAP[canonical] || null;
+  const allowed = VISITOR_STAGE_CONDITIONS[canonical];
+  if (allowed) {
+    const destinationType = String((props && props.destination_type) || "").toLowerCase();
+    if (!destinationType) {
+      if (LEGACY_STAGE_EVENTS.has(canonical)) {
+        return { stage: VISITOR_EVENT_MAP[canonical] || null, classification: LEGACY_UNCLASSIFIED };
+      }
+      return { stage: null, classification: "" };
+    }
+    if (!allowed.has(destinationType)) return { stage: null, classification: "" };
+  }
+  return { stage: VISITOR_EVENT_MAP[canonical] || null, classification: "" };
+}
+
+function visitorStageOf(canonical, props) {
+  return visitorStageClassification(canonical, props).stage;
+}
+
+/**
+ * Classe D (disponibilidade operacional), G04-07: derivada de lead.handoff.status
+ * no store. Unidade leads, owner web-cfg. Nao e evento do cliente e nunca
+ * promove a qualified.
+ */
+function summarizeHandoff(leads) {
+  const byStatus = {};
+  for (const status of HANDOFF_STATUSES) byStatus[status.toLowerCase()] = 0;
+  byStatus.unknown = 0;
+  let withStatus = 0;
+  for (const lead of leads || []) {
+    const handoff = lead && lead.handoff && typeof lead.handoff === "object" ? lead.handoff : null;
+    const status = String((handoff && handoff.status) || "").toUpperCase();
+    if (status && HANDOFF_STATUSES.includes(status)) {
+      byStatus[status.toLowerCase()] += 1;
+      withStatus += 1;
+    } else {
+      byStatus.unknown += 1;
+    }
+  }
+  return {
+    stage: "handoff",
+    owner: String(HANDOFF_SOURCE.owner || "web-cfg"),
+    unit: "leads",
+    derived_from: String(HANDOFF_SOURCE.derived_from || "lead.handoff.status"),
+    reserved_event: String(HANDOFF_SOURCE.reserved_event || "handoff_accepted"),
+    promotes_to_qualified: false,
+    leads_total: (leads || []).length,
+    leads_with_status: withStatus,
+    by_status: byStatus,
+  };
 }
 
 function assertAnalyticsNoPii(payload) {
@@ -214,12 +283,14 @@ function admitVisitorEvents(events, options = {}) {
       throw codedError("invalid_entity_id", "invalid_session_id", { kind: "session" });
     }
     const ts = String(ev.ts || ev.at || (result.event.props && result.event.props.ts) || "");
+    const classification = visitorStageClassification(result.canonical, result.event.props);
     const row = {
       ...result.event,
       sid,
       session_id: sid,
       ts,
-      visitor_stage: visitorStageOf(result.canonical, result.event.props),
+      visitor_stage: classification.stage,
+      ...(classification.classification ? { visitor_stage_classification: classification.classification } : {}),
     };
     scanObjectForPii(row.props || {}, result.canonical);
     assertAnalyticsNoPii(row);
@@ -613,6 +684,9 @@ function reconcileClosedLoop(input) {
     const row = sessions.get(sid);
     row.events.push(ev);
     if (ev.visitor_stage && VISITOR_STAGE_SET.has(ev.visitor_stage)) row.stages.add(ev.visitor_stage);
+    if (ev.visitor_stage === "cta" && ev.visitor_stage_classification === LEGACY_UNCLASSIFIED) {
+      row.legacy_unclassified_cta = true;
+    }
     if (ev.visitor_stage === "form_start") row.stages.add("step1");
     const leadId = leadIdOf(ev);
     if (leadId) row.lead_id = leadId;
@@ -633,6 +707,7 @@ function reconcileClosedLoop(input) {
   const counts = {
     view: 0,
     cta: 0,
+    cta_legacy_unclassified: 0,
     form_start: 0,
     step1: 0,
     step2: 0,
@@ -651,6 +726,7 @@ function reconcileClosedLoop(input) {
   for (const row of sessions.values()) {
     if (row.stages.has("view")) counts.view += 1;
     if (row.stages.has("cta")) counts.cta += 1;
+    if (row.stages.has("cta") && row.legacy_unclassified_cta) counts.cta_legacy_unclassified += 1;
     if (row.stages.has("form_start")) counts.form_start += 1;
     if (row.stages.has("step1") || row.stages.has("form_start")) counts.step1 += 1;
     if (row.stages.has("step2")) counts.step2 += 1;
@@ -659,6 +735,9 @@ function reconcileClosedLoop(input) {
     }
   }
   counts.persisted_after_step2_sessions = persistedAfterStep2SessionIds.size;
+  const handoff = summarizeHandoff(leads);
+  counts.handoff_leads = handoff.leads_with_status;
+  counts.handoff_delivered_leads = handoff.by_status.delivered;
 
   if (counts.qualified > counts.persisted) {
     throw codedError("invalid_transition", "qualified_exceeds_persisted");
@@ -822,7 +901,10 @@ function reconcileClosedLoop(input) {
       proposal_leads: "leads",
       won: "leads",
       won_leads: "leads",
+      handoff_leads: "leads",
+      handoff_delivered_leads: "leads",
     },
+    handoff,
     rates,
     denominators,
     tempo_de_resposta_seconds: tempo,
@@ -1100,6 +1182,10 @@ module.exports = {
   sessionIdOf,
   leadIdOf,
   visitorStageOf,
+  visitorStageClassification,
+  LEGACY_UNCLASSIFIED,
+  summarizeHandoff,
+  VISITOR_STAGE_CONDITIONS,
   assertAnalyticsNoPii,
   assertWarmblyObservationEnvelope,
   admitVisitorEvents,

@@ -1,0 +1,539 @@
+{
+ "base": "http://127.0.0.1:8797",
+ "label": "proposta-252fc98d1",
+ "measured_at": "2026-09-18T12:58:26.111Z",
+ "method": "fontes carregadas; content-visibility materializado; imagens lazy carregadas; prosa = innerText de p/li/dt/dd/h1-4/figcaption/summary/label/td/th visíveis dentro de <main>, folhas (sem SVG); anotações = texto dentro de <svg>; ação = primeiro controle acionável visível (união: botão/link primário OU canal) = população da ferramenta original (actions_count ≙ contacts_count antigo); navegação = botão/link primário que leva a outra rota ou âncora não-captura; contato = canal direto (wa.me/mailto/tel/submit/âncora de captura), inclusive link de prosa, excluindo controle position:fixed (whatsapp-float, reportado em first_contact_float); pranchas = <img src=/pranchas/*.svg> visíveis, texto lido do SVG fonte via fetch (plate_chars); primary_in_fold calculado sobre a união",
+ "rows": [
+  {
+   "route": "/",
+   "viewport": "390x844",
+   "height": 16550,
+   "prose_chars": 10291,
+   "prose_nodes": 133,
+   "drawing_chars": 0,
+   "plate_chars": 1368,
+   "plate_sources": [
+    "/assets/pranchas/recorte-banheiro-mobile.svg",
+    "/assets/pranchas/drenagem-perfil-mobile.svg",
+    "/assets/pranchas/medicao-parede-mobile.svg",
+    "/assets/pranchas/avaliacao-estrutura-mobile.svg"
+   ],
+   "plates_visible": 4,
+   "first_action": {
+    "top": 614,
+    "bottom": 658,
+    "text": "Ver serviços por situação",
+    "href": "/servicos/"
+   },
+   "first_nav": {
+    "top": 614,
+    "bottom": 658,
+    "text": "Ver serviços por situação",
+    "href": "/servicos/"
+   },
+   "first_contact": {
+    "top": 4522,
+    "bottom": 4539,
+    "text": "use o formulário",
+    "href": "#contato"
+   },
+   "first_contact_float": null,
+   "actions_count": 12,
+   "contacts_count": 10,
+   "navs_count": 2,
+   "primary_in_fold": true,
+   "header_h": 61,
+   "h1": "Assumimos a parte de engenharia que falta para você orçar, contratar ou decidir."
+  },
+  {
+   "route": "/",
+   "viewport": "1440x1000",
+   "height": 11038,
+   "prose_chars": 10291,
+   "prose_nodes": 133,
+   "drawing_chars": 0,
+   "plate_chars": 2270,
+   "plate_sources": [
+    "/assets/pranchas/recorte-banheiro-desktop.svg",
+    "/assets/pranchas/drenagem-perfil-mobile.svg",
+    "/assets/pranchas/medicao-parede-mobile.svg",
+    "/assets/pranchas/avaliacao-estrutura-mobile.svg"
+   ],
+   "plates_visible": 4,
+   "first_action": {
+    "top": 19,
+    "bottom": 63,
+    "text": "Solicitar proposta",
+    "href": "/triagem-tecnica/"
+   },
+   "first_nav": {
+    "top": 19,
+    "bottom": 63,
+    "text": "Solicitar proposta",
+    "href": "/triagem-tecnica/"
+   },
+   "first_contact": {
+    "top": 3032,
+    "bottom": 3076,
+    "text": "Descrever pelo WhatsApp",
+    "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quer"
+   },
+   "first_contact_float": {
+    "top": 930,
+    "bottom": 986,
+    "text": "Conversar com a CONFENGE sobre um serviço de engenharia pelo",
+    "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quer"
+   },
+   "actions_count": 14,
+   "contacts_count": 11,
+   "navs_count": 3,
+   "primary_in_fold": true,
+   "header_h": 83,
+   "h1": "Assumimos a parte de engenharia que falta para você orçar, contratar ou decidir."
+  },
+  {
+   "route": "/servicos/",
+   "viewport": "390x844",
+   "height": 16071,
+   "prose_chars": 12363,
+   "prose_nodes": 97,
+   "drawing_chars": 0,
+   "plate_chars": 401,
+   "plate_sources": [
+    "/assets/pranchas/avaliacao-estrutura-mobile.svg"
+   ],
+   "plates_visible": 1,
+   "first_action": {
+    "top": 731,
+    "bottom": 775,
+    "text": "Descrever a situação pelo WhatsApp",
+    "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quer"
+   },
+   "first_nav": {
+    "top": 11869,
+    "bottom": 11917,
+    "text": "Ver obras públicas",
+    "href": "/servicos-obras-publicas/"
+   },
+   "first_contact": {
+    "top": 731,
+    "bottom": 775,
+    "text": "Descrever a situação pelo WhatsApp",
+    "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quer"
+   },
+   "first_contact_float": null,
+   "actions_count": 14,
+   "contacts_count": 12,
+   "navs_count": 2,
+   "primary_in_fold": true,
+   "header_h": 61,
+   "h1": "Serviços de engenharia para obras públicas e privadas"
+  },
+  {
+   "route": "/servicos/",
+   "viewport": "1440x1000",
+   "height": 10036,
+   "prose_chars": 12363,
+   "prose_nodes": 97,
+   "drawing_chars": 0,
+   "plate_chars": 1195,
+   "plate_sources": [
+    "/assets/pranchas/avaliacao-estrutura-desktop.svg"
+   ],
+   "plates_visible": 1,
+   "first_action": {
+    "top": 19,
+    "bottom": 63,
+    "text": "Solicitar proposta",
+    "href": "/triagem-tecnica/"
+   },
+   "first_nav": {
+    "top": 19,
+    "bottom": 63,
+    "text": "Solicitar proposta",
+    "href": "/triagem-tecnica/"
+   },
+   "first_contact": {
+    "top": 679,
+    "bottom": 723,
+    "text": "Descrever a situação pelo WhatsApp",
+    "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quer"
+   },
+   "first_contact_float": null,
+   "actions_count": 15,
+   "contacts_count": 12,
+   "navs_count": 3,
+   "primary_in_fold": true,
+   "header_h": 83,
+   "h1": "Serviços de engenharia para obras públicas e privadas"
+  },
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "viewport": "390x844",
+   "height": 20426,
+   "prose_chars": 18634,
+   "prose_nodes": 242,
+   "drawing_chars": 167,
+   "plate_chars": 298,
+   "plate_sources": [
+    "/assets/pranchas/recorte-banheiro-mobile.svg"
+   ],
+   "plates_visible": 1,
+   "first_action": {
+    "top": 738,
+    "bottom": 782,
+    "text": "Solicitar proposta de orçamento",
+    "href": "#triagem-quantitativos"
+   },
+   "first_nav": {
+    "top": 11476,
+    "bottom": 11520,
+    "text": "Abrir o exemplo de edificação",
+    "href": "/casos/demonstrativo-projeto-privado/#quantitativos"
+   },
+   "first_contact": {
+    "top": 738,
+    "bottom": 782,
+    "text": "Solicitar proposta de orçamento",
+    "href": "#triagem-quantitativos"
+   },
+   "first_contact_float": null,
+   "actions_count": 13,
+   "contacts_count": 11,
+   "navs_count": 2,
+   "primary_in_fold": true,
+   "header_h": 61,
+   "h1": "Quantitativos e orçamento de obras"
+  },
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "viewport": "1440x1000",
+   "height": 12890,
+   "prose_chars": 18634,
+   "prose_nodes": 242,
+   "drawing_chars": 167,
+   "plate_chars": 1200,
+   "plate_sources": [
+    "/assets/pranchas/recorte-banheiro-desktop.svg"
+   ],
+   "plates_visible": 1,
+   "first_action": {
+    "top": 19,
+    "bottom": 63,
+    "text": "Solicitar proposta de orçamento",
+    "href": "#triagem-quantitativos"
+   },
+   "first_nav": {
+    "top": 8451,
+    "bottom": 8495,
+    "text": "Abrir o exemplo de edificação",
+    "href": "/casos/demonstrativo-projeto-privado/#quantitativos"
+   },
+   "first_contact": {
+    "top": 19,
+    "bottom": 63,
+    "text": "Solicitar proposta de orçamento",
+    "href": "#triagem-quantitativos"
+   },
+   "first_contact_float": null,
+   "actions_count": 14,
+   "contacts_count": 12,
+   "navs_count": 2,
+   "primary_in_fold": true,
+   "header_h": 83,
+   "h1": "Quantitativos e orçamento de obras"
+  },
+  {
+   "route": "/compatibilizacao-projetos-engenharia/",
+   "viewport": "390x844",
+   "height": 15580,
+   "prose_chars": 14010,
+   "prose_nodes": 137,
+   "drawing_chars": 0,
+   "plate_chars": 637,
+   "plate_sources": [
+    "/assets/pranchas/interferencia-verga-viga-mobile.svg",
+    "/assets/pranchas/drenagem-perfil-mobile.svg"
+   ],
+   "plates_visible": 2,
+   "first_action": {
+    "top": 697,
+    "bottom": 741,
+    "text": "Pedir proposta da compatibilização",
+    "href": "#pedido-compatibilizacao"
+   },
+   "first_nav": null,
+   "first_contact": {
+    "top": 697,
+    "bottom": 741,
+    "text": "Pedir proposta da compatibilização",
+    "href": "#pedido-compatibilizacao"
+   },
+   "first_contact_float": null,
+   "actions_count": 11,
+   "contacts_count": 11,
+   "navs_count": 0,
+   "primary_in_fold": true,
+   "header_h": 61,
+   "h1": "Compatibilização de projetos de engenharia"
+  },
+  {
+   "route": "/compatibilizacao-projetos-engenharia/",
+   "viewport": "1440x1000",
+   "height": 10128,
+   "prose_chars": 14010,
+   "prose_nodes": 137,
+   "drawing_chars": 0,
+   "plate_chars": 1286,
+   "plate_sources": [
+    "/assets/pranchas/interferencia-verga-viga-desktop.svg",
+    "/assets/pranchas/drenagem-perfil-mobile.svg"
+   ],
+   "plates_visible": 2,
+   "first_action": {
+    "top": 19,
+    "bottom": 63,
+    "text": "Pedir proposta da compatibilização",
+    "href": "#pedido-compatibilizacao"
+   },
+   "first_nav": null,
+   "first_contact": {
+    "top": 19,
+    "bottom": 63,
+    "text": "Pedir proposta da compatibilização",
+    "href": "#pedido-compatibilizacao"
+   },
+   "first_contact_float": null,
+   "actions_count": 12,
+   "contacts_count": 12,
+   "navs_count": 0,
+   "primary_in_fold": true,
+   "header_h": 83,
+   "h1": "Compatibilização de projetos de engenharia"
+  },
+  {
+   "route": "/medicoes-glosas-obras-publicas/",
+   "viewport": "390x844",
+   "height": 13092,
+   "prose_chars": 10238,
+   "prose_nodes": 95,
+   "drawing_chars": 0,
+   "plate_chars": 361,
+   "plate_sources": [
+    "/assets/pranchas/medicao-parede-mobile.svg"
+   ],
+   "plates_visible": 1,
+   "first_action": {
+    "top": 433,
+    "bottom": 477,
+    "text": "Descrever a medição",
+    "href": "#captura-pilar"
+   },
+   "first_nav": {
+    "top": 7289,
+    "bottom": 7333,
+    "text": "Diagnosticar contrato",
+    "href": "/ferramentas/diagnostico-defesa-margem/"
+   },
+   "first_contact": {
+    "top": 433,
+    "bottom": 477,
+    "text": "Descrever a medição",
+    "href": "#captura-pilar"
+   },
+   "first_contact_float": null,
+   "actions_count": 10,
+   "contacts_count": 9,
+   "navs_count": 1,
+   "primary_in_fold": true,
+   "header_h": 61,
+   "h1": "Medições, glosas e pagamentos em obras públicas"
+  },
+  {
+   "route": "/medicoes-glosas-obras-publicas/",
+   "viewport": "1440x1000",
+   "height": 9302,
+   "prose_chars": 10238,
+   "prose_nodes": 95,
+   "drawing_chars": 0,
+   "plate_chars": 977,
+   "plate_sources": [
+    "/assets/pranchas/medicao-parede-desktop.svg"
+   ],
+   "plates_visible": 1,
+   "first_action": {
+    "top": 19,
+    "bottom": 63,
+    "text": "Solicitar proposta",
+    "href": "/triagem-tecnica/"
+   },
+   "first_nav": {
+    "top": 19,
+    "bottom": 63,
+    "text": "Solicitar proposta",
+    "href": "/triagem-tecnica/"
+   },
+   "first_contact": {
+    "top": 361,
+    "bottom": 405,
+    "text": "Descrever a medição",
+    "href": "#captura-pilar"
+   },
+   "first_contact_float": {
+    "top": 930,
+    "bottom": 986,
+    "text": "Falar com a CONFENGE pelo WhatsApp",
+    "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenh"
+   },
+   "actions_count": 12,
+   "contacts_count": 10,
+   "navs_count": 2,
+   "primary_in_fold": true,
+   "header_h": 83,
+   "h1": "Medições, glosas e pagamentos em obras públicas"
+  },
+  {
+   "route": "/entregas/",
+   "viewport": "390x844",
+   "height": 24111,
+   "prose_chars": 19914,
+   "prose_nodes": 299,
+   "drawing_chars": 0,
+   "plate_chars": 380,
+   "plate_sources": [
+    "/assets/pranchas/pacote-entrega-mobile.svg"
+   ],
+   "plates_visible": 1,
+   "first_action": {
+    "top": 625,
+    "bottom": 669,
+    "text": "Ver entregas e exemplos",
+    "href": "#servicos-e-entregas"
+   },
+   "first_nav": {
+    "top": 625,
+    "bottom": 669,
+    "text": "Ver entregas e exemplos",
+    "href": "#servicos-e-entregas"
+   },
+   "first_contact": {
+    "top": 684,
+    "bottom": 728,
+    "text": "Solicitar proposta",
+    "href": "#captura-entregas"
+   },
+   "first_contact_float": null,
+   "actions_count": 24,
+   "contacts_count": 15,
+   "navs_count": 9,
+   "primary_in_fold": true,
+   "header_h": 61,
+   "h1": "Entregas de engenharia. Veja o conteúdo e para que ele serve."
+  },
+  {
+   "route": "/entregas/",
+   "viewport": "1440x1000",
+   "height": 13720,
+   "prose_chars": 19914,
+   "prose_nodes": 299,
+   "drawing_chars": 0,
+   "plate_chars": 925,
+   "plate_sources": [
+    "/assets/pranchas/pacote-entrega-desktop.svg"
+   ],
+   "plates_visible": 1,
+   "first_action": {
+    "top": 19,
+    "bottom": 63,
+    "text": "Solicitar proposta",
+    "href": "/triagem-tecnica/"
+   },
+   "first_nav": {
+    "top": 19,
+    "bottom": 63,
+    "text": "Solicitar proposta",
+    "href": "/triagem-tecnica/"
+   },
+   "first_contact": {
+    "top": 626,
+    "bottom": 670,
+    "text": "Solicitar proposta",
+    "href": "#captura-entregas"
+   },
+   "first_contact_float": null,
+   "actions_count": 25,
+   "contacts_count": 15,
+   "navs_count": 10,
+   "primary_in_fold": true,
+   "header_h": 83,
+   "h1": "Entregas de engenharia. Veja o conteúdo e para que ele serve."
+  },
+  {
+   "route": "/triagem-tecnica/",
+   "viewport": "390x844",
+   "height": 6557,
+   "prose_chars": 5509,
+   "prose_nodes": 30,
+   "drawing_chars": 0,
+   "plate_chars": 0,
+   "plate_sources": [],
+   "plates_visible": 0,
+   "first_action": {
+    "top": 650,
+    "bottom": 702,
+    "text": "Falar pelo WhatsApp",
+    "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quer"
+   },
+   "first_nav": null,
+   "first_contact": {
+    "top": 650,
+    "bottom": 702,
+    "text": "Falar pelo WhatsApp",
+    "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quer"
+   },
+   "first_contact_float": null,
+   "actions_count": 12,
+   "contacts_count": 12,
+   "navs_count": 0,
+   "primary_in_fold": true,
+   "header_h": 61,
+   "h1": "Conte a situação do seu jeito. Nós nomeamos o serviço."
+  },
+  {
+   "route": "/triagem-tecnica/",
+   "viewport": "1440x1000",
+   "height": 4327,
+   "prose_chars": 5509,
+   "prose_nodes": 30,
+   "drawing_chars": 0,
+   "plate_chars": 0,
+   "plate_sources": [],
+   "plates_visible": 0,
+   "first_action": {
+    "top": 19,
+    "bottom": 63,
+    "text": "Solicitar proposta",
+    "href": "/triagem-tecnica/"
+   },
+   "first_nav": {
+    "top": 19,
+    "bottom": 63,
+    "text": "Solicitar proposta",
+    "href": "/triagem-tecnica/"
+   },
+   "first_contact": {
+    "top": 329,
+    "bottom": 381,
+    "text": "Falar pelo WhatsApp",
+    "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quer"
+   },
+   "first_contact_float": null,
+   "actions_count": 13,
+   "contacts_count": 12,
+   "navs_count": 1,
+   "primary_in_fold": true,
+   "header_h": 83,
+   "h1": "Conte a situação do seu jeito. Nós nomeamos o serviço."
+  }
+ ]
+}

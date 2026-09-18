@@ -898,6 +898,39 @@ export const SUITE_GRAPH = Object.freeze({
     artifacts: [],
     surfaces: ["/", "/entregas/", "/ferramentas/"],
   },
+  "test:event-semantics": {
+    producers: [
+      "scripts/site/test_event_semantics.mjs",
+      "scripts/site/resolve_chrome.mjs",
+      "js/modules/nav.js",
+      "js/modules/analytics.js",
+      "js/modules/form.js",
+      "script.js",
+      "index.html",
+      "servicos/index.html",
+      "quantitativos-orcamento-obras/index.html",
+      "projetos-complementares-engenharia/index.html",
+      "parcerias-engenharia/index.html",
+      "inspecao-diagnostico-edificacoes/index.html",
+      "ferramentas/diagnostico-defesa-margem/index.html",
+      "ferramentas/prontidao-tecnica-obra-privada/index.html",
+      "triagem-tecnica/index.html",
+      "entregas/index.html",
+    ],
+    artifacts: [],
+    surfaces: [
+      "/",
+      "/servicos/",
+      "/quantitativos-orcamento-obras/",
+      "/projetos-complementares-engenharia/",
+      "/parcerias-engenharia/",
+      "/inspecao-diagnostico-edificacoes/",
+      "/ferramentas/diagnostico-defesa-margem/",
+      "/ferramentas/prontidao-tecnica-obra-privada/",
+      "/triagem-tecnica/",
+      "/entregas/",
+    ],
+  },
   "test:site-excellence": {
     producers: [
       "data/quality/site-excellence.v1.json",
@@ -916,7 +949,8 @@ export const SUITE_GRAPH = Object.freeze({
       "data/commercial/real-proof-registry.v1.json",
       "docs/lighthouse-runs/summary.json",
       "docs/uiux-evidence/axe-report.json",
-      "seo/gsc-*/search-analytics-redacted.json",
+      "scripts/revops/verify_gsc_freshness.mjs",
+      "scripts/revops/fixtures/gsc-consumer-*.json",
       "seo/PUBLIC-ARTIFACT-MANIFEST.json",
       "runtime/contract.json",
       "docs/architecture/RUNTIME-AUTHORITY.md",
@@ -1287,6 +1321,11 @@ export const SUITE_GRAPH = Object.freeze({
     artifacts: ["script.js"],
     surfaces: ["/"],
   },
+  "test:minify-public-js": {
+    producers: ["scripts/site/minify_public_js.mjs", "assets/js/"],
+    artifacts: [],
+    surfaces: ["/ferramentas/diagnostico-defesa-margem/", "/ferramentas/checklist-reequilibrio/"],
+  },
   "test:capture-states": {
     producers: [
       "scripts/site/capture_states.mjs",
@@ -1366,6 +1405,17 @@ export const SUITE_GRAPH = Object.freeze({
     producers: ["scripts/migration/", "data/migration/", "docs/migration/"],
     artifacts: ["data/migration/smartlic-confenge/manifesto.v1.json"],
     surfaces: [],
+  },
+  "test:article-pillar-form": {
+    producers: [
+      "scripts/site/apply_article_pillar_form.py",
+      "scripts/site/test_apply_article_pillar_form.py",
+      "scripts/site/inbound_first_remediate.py",
+      "conteudos/",
+      "data/organic/content-service-map.json",
+    ],
+    artifacts: [],
+    surfaces: ["/conteudos/"],
   },
   "test:knowledge-funnel": {
     producers: [

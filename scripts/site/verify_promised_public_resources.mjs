@@ -469,8 +469,19 @@ export function deriveExpectedResources({ artifactDir, sourceRoot, htmlByRel = n
   for (const { path: descPath, payload } of descriptors) {
     const pageUrl = payload.url || payload.canonical;
     let pageLocal = pageUrl;
-    if (typeof pageLocal === "string" && pageLocal.startsWith("https://confenge.com.br")) {
-      pageLocal = pageLocal.slice("https://confenge.com.br".length);
+    if (typeof pageLocal === "string") {
+      // Parse instead of a prefix check: a bare string-prefix match on
+      // "https://confenge.com.br" also matches a look-alike host such as
+      // "https://confenge.com.br.evil.example" (CodeQL
+      // js/incomplete-url-substring-sanitization).
+      try {
+        const parsed = new URL(pageLocal);
+        if (parsed.hostname === "confenge.com.br") {
+          pageLocal = parsed.pathname + parsed.search + parsed.hash;
+        }
+      } catch {
+        // Not an absolute URL (already a local path) — leave pageLocal as is.
+      }
     }
     const pageInComposition =
       typeof pageLocal === "string" && pagesPresent.has(pageLocal.endsWith("/") ? pageLocal : `${pageLocal}/`);

@@ -39,6 +39,7 @@ test("CLI fixtures make CURRENT green and STALE/UNKNOWN red without logging insi
     assert.equal(ran.status, expectedExit, `${fixture}: ${ran.stdout}\n${ran.stderr}`);
     const proof = JSON.parse(ran.stdout);
     assert.equal(proof.status, expectedStatus, fixture);
+    assert.equal(proof.fixture, true, `${fixture}: a fixture run must mark itself`);
     assert.equal(Object.hasOwn(proof, "insights"), false, fixture);
     assert.doesNotMatch(`${ran.stdout}\n${ran.stderr}`, /query_text|private query|individual query/i);
   }

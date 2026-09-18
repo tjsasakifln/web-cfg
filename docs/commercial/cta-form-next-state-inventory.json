@@ -29,13 +29,13 @@
       "commercial_configuration"
     ],
     "baseline_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
-    "expected_declared_ctas": 198
+    "expected_declared_ctas": 196
   },
   "coverage": {
     "authority": "data/organic/public-family-registry.json",
     "manual_route_allowlist": false,
     "active_capture_routes": 31,
-    "declared_ctas": 198,
+    "declared_ctas": 196,
     "protected_routes_with_capture": [
       "/aditivos-obras-publicas/",
       "/auditoria-orcamento-licitacao/",
@@ -4209,47 +4209,17 @@
         },
         {
           "cta_id": "",
-          "position": "",
-          "href": "#contato",
-          "stage": "register_context",
-          "commitment": "medium",
-          "current_label": "use o formulário",
-          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
-          "actual_receipt": "lead_id ou receipt_id persistido antes da página de confirmação",
-          "field_purpose": "not_applicable",
-          "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem apenas por canal seguro combinado depois do protocolo.",
-          "event_semantics": [
-            "no_direct_event_declared"
-          ]
-        },
-        {
-          "cta_id": "",
           "position": "contact_band",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20explicar%20uma%20situa%C3%A7%C3%A3o%20t%C3%A9cnica%20e%20entender%20o%20pr%C3%B3ximo%20passo.",
-          "stage": "talk",
-          "commitment": "medium",
-          "current_label": "Descrever pelo WhatsApp",
-          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
-          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
+          "href": "#triagem-tecnica",
+          "stage": "compare",
+          "commitment": "low",
+          "current_label": "Descrever no próximo passo, nesta página",
+          "useful_next_state": "Abre o destino declarado por “Descrever no próximo passo, nesta página” para continuar a decisão.",
+          "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
           "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem apenas por canal seguro combinado depois do protocolo.",
           "event_semantics": [
-            "whatsapp_click"
-          ]
-        },
-        {
-          "cta_id": "",
-          "position": "contact_band",
-          "href": "mailto:tiago.sasaki@confenge.com.br?subject=Situa%C3%A7%C3%A3o%20t%C3%A9cnica&amp;body=Ol%C3%A1%2C%20Tiago.%0A%0ASitua%C3%A7%C3%A3o%20t%C3%A9cnica%3A%0AO%20que%20preciso%20decidir%20ou%20resolver%3A%0APrazo%3A%0A",
-          "stage": "talk",
-          "commitment": "medium",
-          "current_label": "Descrever por e-mail",
-          "useful_next_state": "Abre o cliente de e-mail com assunto e contexto para continuar o enquadramento.",
-          "actual_receipt": "Rascunho local de e-mail; não existe receipt do servidor antes do envio.",
-          "field_purpose": "not_applicable",
-          "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem apenas por canal seguro combinado depois do protocolo.",
-          "event_semantics": [
-            "email_click"
+            "cta_click"
           ]
         },
         {

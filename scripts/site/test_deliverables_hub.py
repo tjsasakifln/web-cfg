@@ -248,14 +248,26 @@ def test_each_published_offer_has_one_primary_representation_with_essential_term
             "pacote e crédito",
         ):
             assert label in visible, label
-        # The card must say, in Portuguese, that the offer is published. It must NOT
-        # export the internal state-machine token that used to be appended here
-        # ("oferta publicada · PUBLISHED"): the visitor is not a consumer of our
-        # state machine. Both halves are asserted, so neither dropping the label nor
-        # reintroducing the token can pass.
-        assert "oferta publicada" in visible
+        # Campanha POS-REDESIGN-FECHAMENTO-20260918 (G02-09): ate 29504afa8 este
+        # teste cobrava `assert "oferta publicada" in visible` por cartao; o
+        # kicker saiu e a publicacao passou a ser dita uma vez, no cabecalho da
+        # secao ("Ofertas com preço publicado", cobrado em
+        # test_hub_is_honest_about_every_published_example). O que agora
+        # garante a honestidade por cartao e o bloco de preco no cabecalho do
+        # cartao (<p class="vitrine-item__price">, rotulo "Preço" + valor), que
+        # so existe porque a oferta esta publicada; um cartao sem ele reprova
+        # (contraprova em test_card_without_price_block_fails).
+        assert re.search(
+            r'<p class="vitrine-item__price"><span>Preço</span><strong>[^<]*R\$[^<]+</strong></p>', card
+        ), "cartao de oferta publicada sem bloco de preco"
+        # O que continua proibido por cartao e o token interno da maquina de
+        # estados ("oferta publicada · PUBLISHED"): o visitante nao consome o
+        # nosso estado interno.
         assert "published" not in visible.lower(), (
             "internal state token PUBLISHED is visible on a public offer card"
+        )
+        assert "oferta publicada" not in visible.lower(), (
+            "G02-09: o kicker por cartao voltou; a publicacao e dita uma vez no cabecalho da secao"
         )
         assert 'aria-label="Ver o demonstrativo sintético de ' in card
         assert 'aria-label="Pedir análise de ' in card
@@ -297,6 +309,25 @@ def test_progressive_catalog_css_does_not_block_first_paint() -> None:
     assert ".offer-decision-nav a" in base_css
     assert ".capability-group__schema-details>summary" in base_css
     assert "min-height:44px" in base_css
+
+
+def test_card_without_price_block_fails() -> None:
+    """G02-09 contraprova: retirar o bloco de preco de um cartao reprova o hub."""
+    html = _html()
+    card = re.search(
+        r'<article class="vitrine-item[^>]*data-primary-offer="true"[^>]*>[\s\S]*?</article>', html
+    )
+    assert card
+    price = re.search(r'<p class="vitrine-item__price">.*?</p>', card.group(0))
+    assert price
+    mutated = card.group(0).replace(price.group(0), "", 1)
+    assert mutated != card.group(0)
+    # O rotulo generico "preço" ainda aparece no corpo do cartao ("O que este
+    # preço remunera"); e o bloco do cabecalho, com rotulo e valor em R$, que a
+    # asserção por cartao cobra, e ele some com a mutacao.
+    assert not re.search(
+        r'<p class="vitrine-item__price"><span>Preço</span><strong>[^<]*R\$[^<]+</strong></p>', mutated
+    )
 
 
 def test_hub_is_honest_about_every_published_example() -> None:

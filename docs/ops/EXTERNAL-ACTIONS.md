@@ -22,7 +22,8 @@ Não usar a UI da Netlify como autoridade de env público.
 | `IP_HASH_SALT` | random | Hash estável de IP em logs/store | logs sem IP raw |
 | `TURNSTILE_SECRET_KEY` | secret Cloudflare | Antiabuso primário | ver §4 |
 | `LEAD_REQUIRE_TURNSTILE` | `1` **somente após** sitekey no HTML | Força verify | POST sem token → **403** |
-| `LEAD_PROBE_SECRET` | random | Smoke sintético | `X-Confenge-Probe` header |
+| `LEAD_PROBE_SECRET` | random ≥32 chars, **também como secret do GitHub Actions** (mesmo valor do host) | Smoke sintético; a sonda diária (`revops-scheduled.yml` job `daily-ops`, `scheduled_daily.mjs`) só executa a perna de captura/idempotência com ele — sem o secret no repositório a perna fica `BLOCKED_EXTERNAL dependency=LEAD_PROBE_SECRET` (registrada em `checks`, `alerts` e `blocked_external` do relatório diário, que passa a `coverage: "partial"` e `capture_leg: "BLOCKED_EXTERNAL"` no topo, com `::warning` no log do job; `ok: true` nesse estado significa só que nenhum check crítico falhou, nunca que a captura foi provada; não reprova o job, não dispara POST não autenticado que o Turnstile rejeita desde 2026-08-24). Ação pendente do administrador do repositório (um passo em Settings → Secrets); enquanto o secret não existir, cada run diário repete o aviso, e o bloqueio não deve ser aceito como permanente | `X-Confenge-Probe` header; após definir o secret, o próximo run diário deve mostrar `PASS isolated_probe id=…` e `probe_idempotent_same_id` |
+| `OPS_TOKEN` (secret do GitHub Actions, já usado por `revops-scheduled.yml` e `market-answer-freshness.yml`) | mesmo valor do host | `netcup-release.yml` passa o secret ao `site-ci.yml` reutilizável para a leitura read-only do consumidor GSC durável (#413) antes do scorecard | log do job `site-validation` na release: `GSC_DURABLE_READ status=CURRENT …`; sem o secret o scorecard reporta `gsc_unavailable` (fail-closed) |
 | `CONFENGE_INBOUND_WEBHOOK_URL` | HTTPS `…/api/v1/webhooks/confenge/inbound` | Handoff `confenge.inbound.v1` (Warmbly PR #71) | Probe autenticado → receipt sintético idempotente, sem action; demais não-real → **SKIPPED**. A 201 sintética não é INBOUND NOW. |
 | `CONFENGE_INBOUND_WEBHOOK_SECRET` | mesmo valor no Warmbly | HMAC `X-Warmbly-Signature` | Destino 201; 401 se secreto divergir |
 
@@ -37,37 +38,78 @@ No app ntfy (ou API), **apagar/revogar** o tópico historicamente exposto `confe
 
 ---
 
-## 2. DNS e-mail (domínio confenge.com.br) — **DONE** (additive Resend records)
+## 2. DNS e-mail (domínio confenge.com.br) — **PARTIAL** (DKIM recriado e domínio `verified` em 2026-09-18; DMARC existe mas em `p=none`, sem `rua`; o DONE de 2026-08-02 era indevido)
 
-**Plataforma:** DNS do registrador do domínio (MX atual: Hostinger `mx1/mx2.hostinger.com` — DoH 2026-08-02)
+**Plataforma:** zona Cloudflare `ea13b73bf09dcab6355baa38fbda1712` (NS
+`grannbo`/`kai.ns.cloudflare.com`; MX Hostinger preservado).
+Evidência histórica (2026-08-02, superada, não apagada):
+`docs/evidence/inbound-10/dns-email-auth-status.json`.
 
-**Estado observado (Cloudflare DoH):** sem TXT SPF em `@`; sem `_dmarc`; MX Hostinger apenas.
-Evidência: `docs/evidence/inbound-10/dns-email-auth-status.json`
+**Estado real até 2026-09-18 (diagnóstico G03-01 da campanha
+POS-REDESIGN-FECHAMENTO-20260918):** o TXT DKIM `resend._domainkey` **não
+existia** em 1.1.1.1 nem 8.8.8.8 e o domínio constava `failed` no Resend
+(DKIM, SPF MX `send` e SPF TXT `send` = failed). A marcação DONE anterior
+(2026-08-02) descrevia um estado que não se sustentou. Consequência: nenhum
+e-mail de lead real jamais saiu do host — 23/23 registros do store eram
+sintéticos (`email=skipped`) e a conta Resend tinha um único envio
+(2026-08-21, era Netlify).
+
+**Correção 2026-09-18 (executada pelo integrador da campanha, não pela frente
+`lead`):** o integrador da campanha POS-REDESIGN-FECHAMENTO-20260918, com a
+autorização EXECUTE_NOW do encaminhamento de 2026-09-18, criou o TXT
+`resend._domainkey` (registro Cloudflare id `6d371d6a28364c17cdbde2f676e58872`)
+com o valor do painel Resend, usando o token DNS escopado já presente no host
+`ec-prod` (o do certbot), e reverificou o domínio no Resend: **verified em
+2026-09-18 13:14 UTC**. A frente `lead` desta campanha só documentou; nenhum
+envio de e-mail foi executado. Evidência sanitizada (estado anterior, registro
+criado, método de verificação, rollback, decisões pendentes):
+`docs/campaigns/design-institucional/fechamento/evidence/g03-dns-resend.json`
+(gravada pela integração da campanha).
+
+**Rollback:** apagar o registro `6d371d6a28364c17cdbde2f676e58872` na zona
+acima; o domínio volta a `failed` e `deliverResendEmail` passa a registrar
+`delivery.email.status=error` (registro continua durável, sem alerta).
+
+**Pendências (decisão do fundador):**
+1. O token usado pertence ao certbot (escopo de zona para desafios ACME).
+   Recomenda-se criar um token de zona dedicado (`Zone.DNS:Edit` só nesta
+   zona) para operações de e-mail e não reutilizar o do certbot; nada foi
+   rotacionado nesta entrega.
+2. Elevar o DMARC de `p=none` para `p=quarantine` com `rua=mailto:…` (hoje a
+   política não protege o domínio contra spoofing e ninguém recebe relatórios
+   agregados). Antes de elevar, confirmar que o SPF/DKIM do Hostinger (MX do
+   apex) também alinham, senão o e-mail corporativo passa a ser quarentenado.
 
 | Registro | Host | Valor esperado | Validação |
 | --- | --- | --- | --- |
-| SPF TXT | `@` | `v=spf1 include:…` **conforme wizard Resend** (não inventar include; copiar do painel) **mantendo** envio Hostinger se ainda usar webmail | DoH/dig + Resend Domain green |
-| DKIM CNAME | hosts do Resend | valores do wizard Resend | Resend Domain → Verified |
-| DMARC TXT | `_dmarc` | `v=DMARC1; p=quarantine; rua=mailto:tiago.sasaki@confenge.com.br` | DoH/dig `_dmarc.confenge.com.br` |
+| DKIM TXT | `resend._domainkey` | valor do painel Resend (é **TXT**, não CNAME) | `dig TXT resend._domainkey.confenge.com.br @1.1.1.1` + Resend Domain → Verified |
+| SPF MX / SPF TXT | `send` | conforme wizard Resend (copiar do painel) | Resend Domain → Verified |
+| DMARC TXT | `_dmarc` | **estado real em 2026-09-18:** `v=DMARC1; p=none` (sem `rua`), consultado por DoH 1.1.1.1 (`cloudflare-dns.com/dns-query?name=_dmarc.confenge.com.br&type=TXT`, revisão adversarial e frente `lead` da campanha, 2026-09-18 14:20 UTC). Valor recomendado: `v=DMARC1; p=quarantine; rua=mailto:tiago.sasaki@confenge.com.br` | `dig TXT _dmarc.confenge.com.br @1.1.1.1` — existe; **não alterado** nesta entrega |
 
-**Consequência se OPEN:** e-mail transacional não pode ser score 10 (sem auth → spam/bounce).
+**Consequência se voltar a OPEN:** o e-mail Resend é hoje o único alerta de
+lead real (`OPS_WEBHOOK_URL`/`NTFY_URL` UNSET no host); sem ele o lead persiste
+e entra no INBOUND NOW do Warmbly, mas ninguém é avisado além da checagem
+diária de `ops?action=leads` (ver `LEAD-HANDLING.md`).
 
 ---
 
-## 3. Resend — domínio e API — **DONE**
+## 3. Resend — domínio e API — **DONE 2026-09-18** (domínio `verified`)
 
-**Plataforma:** [resend.com](https://resend.com) → Domains → Add `confenge.com.br` → copiar DNS → API Keys → Create
+**Plataforma:** [resend.com](https://resend.com) → Domains → `confenge.com.br` → API Keys
 
 | Campo | Valor |
 | --- | --- |
-| Domain | `confenge.com.br` |
-| API key | colar em `/etc/confenge-web/runtime.env` como `RESEND_API_KEY` |
-| From | `leads@confenge.com.br` (ou subdomínio verificado) |
+| Domain | `confenge.com.br` — `verified` desde 2026-09-18 13:14 UTC (estava `failed` até então; ver §2) |
+| API key | em `/etc/confenge-web/runtime.env` como `RESEND_API_KEY` (presença confirmada no host; valor nunca lido) |
+| From | `LEAD_FROM_EMAIL` = `CONFENGE Leads <leads@confenge.com.br>` |
+| To | `LEAD_NOTIFY_EMAIL` = `tiago.sasaki@confenge.com.br` |
 
 **Validação:** probe sintético deve retornar `email_status=skipped` e não pode
 ser usado para testar inbox. Entrega transacional real só pode ser observada a
 partir de uma submissão humana genuína, consentida e não fabricada, preservando
-o protocolo fora do git.
+o protocolo fora do git (protocolo de QA: diagnóstico G03-07, ainda não
+executado). Correlação por `lead_id`: `delivery.email.provider_id` no store →
+`GET https://api.resend.com/emails/{id}` do host (ver `LEAD-HANDLING.md`).
 
 ---
 

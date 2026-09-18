@@ -1,0 +1,198 @@
+{
+ "base": "https://confenge.com.br",
+ "label": "prod-g02",
+ "measured_at": "2026-09-18T12:51:15.955Z",
+ "method": "fontes carregadas; content-visibility materializado; imagens lazy carregadas; prosa = innerText de p/li/dt/dd/h1-4/figcaption/summary/label/td/th visíveis dentro de <main>, folhas (sem SVG); anotações = texto dentro de <svg>; contato = primeiro controle acionável visível (botão primário, wa.me, mailto, tel, submit, âncora de contato) por top absoluto",
+ "rows": [
+  {
+   "route": "/",
+   "viewport": "390x844",
+   "height": 16572,
+   "prose_chars": 10291,
+   "prose_nodes": 133,
+   "drawing_chars": 0,
+   "plates_visible": 5,
+   "first_contact": {
+    "top": 614,
+    "bottom": 658,
+    "text": "Ver serviços por situação",
+    "href": "/servicos/"
+   },
+   "contacts_count": 12,
+   "primary_in_fold": true,
+   "header_h": 61,
+   "h1": "Assumimos a parte de engenharia que falta para você orçar, contratar ou decidir."
+  },
+  {
+   "route": "/",
+   "viewport": "1440x1000",
+   "height": 11060,
+   "prose_chars": 10291,
+   "prose_nodes": 133,
+   "drawing_chars": 0,
+   "plates_visible": 5,
+   "first_contact": {
+    "top": 19,
+    "bottom": 63,
+    "text": "Solicitar proposta",
+    "href": "/triagem-tecnica/"
+   },
+   "contacts_count": 14,
+   "primary_in_fold": true,
+   "header_h": 83,
+   "h1": "Assumimos a parte de engenharia que falta para você orçar, contratar ou decidir."
+  },
+  {
+   "route": "/servicos/",
+   "viewport": "390x844",
+   "height": 16071,
+   "prose_chars": 12363,
+   "prose_nodes": 97,
+   "drawing_chars": 0,
+   "plates_visible": 1,
+   "first_contact": {
+    "top": 731,
+    "bottom": 775,
+    "text": "Descrever a situação pelo WhatsApp",
+    "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quer"
+   },
+   "contacts_count": 14,
+   "primary_in_fold": true,
+   "header_h": 61,
+   "h1": "Serviços de engenharia para obras públicas e privadas"
+  },
+  {
+   "route": "/servicos/",
+   "viewport": "1440x1000",
+   "height": 10036,
+   "prose_chars": 12363,
+   "prose_nodes": 97,
+   "drawing_chars": 0,
+   "plates_visible": 1,
+   "first_contact": {
+    "top": 19,
+    "bottom": 63,
+    "text": "Solicitar proposta",
+    "href": "/triagem-tecnica/"
+   },
+   "contacts_count": 15,
+   "primary_in_fold": true,
+   "header_h": 83,
+   "h1": "Serviços de engenharia para obras públicas e privadas"
+  },
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "viewport": "390x844",
+   "height": 20426,
+   "prose_chars": 18634,
+   "prose_nodes": 242,
+   "drawing_chars": 167,
+   "plates_visible": 1,
+   "first_contact": {
+    "top": 738,
+    "bottom": 782,
+    "text": "Solicitar proposta de orçamento",
+    "href": "#triagem-quantitativos"
+   },
+   "contacts_count": 13,
+   "primary_in_fold": true,
+   "header_h": 61,
+   "h1": "Quantitativos e orçamento de obras"
+  },
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "viewport": "1440x1000",
+   "height": 12890,
+   "prose_chars": 18634,
+   "prose_nodes": 242,
+   "drawing_chars": 167,
+   "plates_visible": 1,
+   "first_contact": {
+    "top": 19,
+    "bottom": 63,
+    "text": "Solicitar proposta de orçamento",
+    "href": "#triagem-quantitativos"
+   },
+   "contacts_count": 14,
+   "primary_in_fold": true,
+   "header_h": 83,
+   "h1": "Quantitativos e orçamento de obras"
+  },
+  {
+   "route": "/compatibilizacao-projetos-engenharia/",
+   "viewport": "390x844",
+   "height": 15580,
+   "prose_chars": 14010,
+   "prose_nodes": 137,
+   "drawing_chars": 0,
+   "plates_visible": 2,
+   "first_contact": {
+    "top": 697,
+    "bottom": 741,
+    "text": "Pedir proposta da compatibilização",
+    "href": "#pedido-compatibilizacao"
+   },
+   "contacts_count": 11,
+   "primary_in_fold": true,
+   "header_h": 61,
+   "h1": "Compatibilização de projetos de engenharia"
+  },
+  {
+   "route": "/compatibilizacao-projetos-engenharia/",
+   "viewport": "1440x1000",
+   "height": 10128,
+   "prose_chars": 14010,
+   "prose_nodes": 137,
+   "drawing_chars": 0,
+   "plates_visible": 2,
+   "first_contact": {
+    "top": 19,
+    "bottom": 63,
+    "text": "Pedir proposta da compatibilização",
+    "href": "#pedido-compatibilizacao"
+   },
+   "contacts_count": 12,
+   "primary_in_fold": true,
+   "header_h": 83,
+   "h1": "Compatibilização de projetos de engenharia"
+  },
+  {
+   "route": "/medicoes-glosas-obras-publicas/",
+   "viewport": "390x844",
+   "height": 13123,
+   "prose_chars": 10238,
+   "prose_nodes": 95,
+   "drawing_chars": 0,
+   "plates_visible": 1,
+   "first_contact": {
+    "top": 433,
+    "bottom": 477,
+    "text": "Descrever a medição",
+    "href": "#captura-pilar"
+   },
+   "contacts_count": 10,
+   "primary_in_fold": true,
+   "header_h": 61,
+   "h1": "Medições, glosas e pagamentos em obras públicas"
+  },
+  {
+   "route": "/medicoes-glosas-obras-publicas/",
+   "viewport": "1440x1000",
+   "height": 9483,
+   "prose_chars": 10238,
+   "prose_nodes": 95,
+   "drawing_chars": 0,
+   "plates_visible": 1,
+   "first_contact": {
+    "top": 19,
+    "bottom": 63,
+    "text": "Solicitar proposta",
+    "href": "/triagem-tecnica/"
+   },
+   "contacts_count": 12,
+   "primary_in_fold": true,
+   "header_h": 83,
+   "h1": "Medições, glosas e pagamentos em obras públicas"
+  }
+ ]
+}

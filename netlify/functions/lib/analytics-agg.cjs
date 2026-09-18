@@ -64,6 +64,15 @@ function eventIdOf(ev) {
   return String((ev && ev.props && ev.props.event_id) || "").slice(0, 80);
 }
 
+// G04-01: destinos de intencao de um cta_click. Espelha
+// data/revops/closed-loop-funnel.v1.json visitor_stage_conditions.cta_click.
+const CTA_INTENT_DESTINATIONS = new Set(["form", "whatsapp", "email", "tel"]);
+const CTA_LEGACY_UNCLASSIFIED = "legacy_unclassified";
+function ctaDestinationType(props) {
+  const value = String((props && props.destination_type) || "").trim().toLowerCase().slice(0, 40);
+  return value || CTA_LEGACY_UNCLASSIFIED;
+}
+
 function aggregateEvents(events, opts) {
   const byDay = new Map();
   const sessions = new Map(); // day -> Set sid
@@ -96,6 +105,8 @@ function aggregateEvents(events, opts) {
         unique_sessions: 0,
         page_views: 0,
         cta_clicks: 0,
+        cta_clicks_legacy_unclassified: 0,
+        cta_nav_clicks: 0,
         whatsapp_clicks: 0,
         form_starts: 0,
         form_success: 0,
@@ -118,6 +129,8 @@ function aggregateEvents(events, opts) {
         path,
         page_view: 0,
         cta_click: 0,
+        cta_click_legacy_unclassified: 0,
+        cta_nav_click: 0,
         whatsapp_click: 0,
         form_start: 0,
         form_success: 0,
@@ -132,12 +145,32 @@ function aggregateEvents(events, opts) {
       pr.page_view += 1;
     }
     if (canonical === "cta_click") {
-      dayRow.cta_clicks += 1;
-      pr.cta_click += 1;
-      const cta = String(props.cta_id || props.position || "unknown").slice(0, 80);
-      ctas.set(cta, (ctas.get(cta) || 0) + 1);
+      // G04-01: cta_clicks/cta_click contam so intencao (form, whatsapp, email,
+      // tel). route/anchor/external e navegacao e vai para cta_nav_clicks.
+      // Sem destination_type e legado nao classificado: conta como intencao
+      // (serie historica) e a chave de cta_totals o rotula.
+      const destinationType = ctaDestinationType(props);
+      if (destinationType === CTA_LEGACY_UNCLASSIFIED || CTA_INTENT_DESTINATIONS.has(destinationType)) {
+        dayRow.cta_clicks += 1;
+        pr.cta_click += 1;
+        if (destinationType === CTA_LEGACY_UNCLASSIFIED) {
+          dayRow.cta_clicks_legacy_unclassified += 1;
+          pr.cta_click_legacy_unclassified += 1;
+        }
+      } else {
+        dayRow.cta_nav_clicks += 1;
+        pr.cta_nav_click += 1;
+      }
+      // G04-06: o emissor envia cta_position (nunca `position`); a chave inclui a
+      // rota para nao fundir seis pilares num unico balde pillar_hero, e o
+      // destino para nao fundir o header de navegacao (cta_id herdado do body)
+      // com o CTA de captura da mesma rota.
+      const cta = String(props.cta_id || props.cta_position || props.position || "unknown").slice(0, 80);
+      const ctaKey = `${String(path || "").slice(0, 120)}|${cta}|${destinationType}`;
+      ctas.set(ctaKey, (ctas.get(ctaKey) || 0) + 1);
     }
-    if (MONEY_ASSET_EVENT_NAMES.includes(canonical) && isMoneyAssetEvent(ev)) {
+    // cta_click ja foi contado acima (intencao ou navegacao): nao dobrar na rota do ativo.
+    if (canonical !== "cta_click" && MONEY_ASSET_EVENT_NAMES.includes(canonical) && isMoneyAssetEvent(ev)) {
       pr[canonical] = (pr[canonical] || 0) + 1;
     }
     if (canonical === "whatsapp_click") {
@@ -728,6 +761,8 @@ module.exports = {
   dayKey,
   weekKey,
   aggregateEvents,
+  CTA_INTENT_DESTINATIONS,
+  CTA_LEGACY_UNCLASSIFIED,
   attributeLeads,
   buildOriginDestinationMatrix,
   buildFunnelLayers,

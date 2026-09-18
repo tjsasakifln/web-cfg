@@ -521,8 +521,10 @@ export function publicHtmlHasUtmOnInternalAnchors(html) {
 
 export function publicHtmlForbiddenPhrases(html) {
   const text = String(html || "")
-    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, " ")
-    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, " ")
+    // \s* before the closing ">" so "</script >" cannot survive stripping
+    // (CodeQL js/bad-tag-filter).
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script[^>]*>/gi, " ")
+    .replace(/<style\b[^>]*>[\s\S]*?<\/style\s*>/gi, " ")
     .replace(/<[^>]+>/g, " ")
     .toLowerCase();
   const hits = FORBIDDEN_PUBLIC_PHRASES.filter((phrase) => text.includes(phrase));

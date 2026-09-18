@@ -61,8 +61,11 @@ jobs:
           BASE_URL: https://confenge.com.br
           OPS_TOKEN: ${{ secrets.OPS_TOKEN }}
           REVOPS_TOKEN: ${{ secrets.REVOPS_TOKEN }}
-          GSC_SITE_URL: ${{ secrets.GSC_SITE_URL }}
-          GSC_CREDENTIALS_JSON: ${{ secrets.GSC_CREDENTIALS_JSON }}
+          # Authenticated synthetic lead probe (32+ chars, same value as the
+          # host runtime.env). Absent: the leg is BLOCKED_EXTERNAL, not FAIL.
+          LEAD_PROBE_SECRET: ${{ secrets.LEAD_PROBE_SECRET }}
+          # GSC credentials are not passed here: the gsc-sync job below is the
+          # only producer (restored history + concurrency group + publish).
           GITHUB_SHA: ${{ github.sha }}
           EXPECTED_SHA: ${{ github.sha }}
         run: node scripts/revops/scheduled_daily.mjs
@@ -72,7 +75,6 @@ jobs:
         with:
           name: revops-daily-${{ github.run_id }}
           path: |
-            data/revops/gsc/last_sync.json
             data/revops/schedule-runs/
           if-no-files-found: error
 

@@ -22,7 +22,12 @@ function clone(value) {
 }
 
 function visible(html) {
-  return String(html).replace(/<script[\s\S]*?<\/script>/gi, " ").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
+  return String(html).replace(/<script[\s\S]*?<\/script[^>]*>/gi, " ").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
+}
+
+function shippedRegisterNote() {
+  const html = fs.readFileSync(PAGE, "utf8");
+  return html.match(/<p class="coord-finding-kicker" data-coord-register-note="demonstrative">[\s\S]*?<\/p>/)?.[0] || "";
 }
 
 function shippedFinding(id) {
@@ -51,7 +56,10 @@ test("shipped page consumes CF-GEO-01 and presents resolved_in_R01 as corrected 
   assert.match(finding, /data-estado="corrected_in_revision"/);
   assert.match(finding, /data-resolved="false"/);
   assert.match(finding, /Corrigido na revisão R01/);
-  assert.match(finding, /href="\/casos\/demonstrativo-projeto-privado\/#CF-GEO-01"/);
+  // G02-A-04 (2026-09-18): the demonstrative note and the pilot deep links are
+  // said once, in the register slot before the articles, not per article.
+  assert.match(shippedRegisterNote(), /href="\/casos\/demonstrativo-projeto-privado\/#CF-GEO-01"/);
+  assert.match(shippedRegisterNote(), /href="\/casos\/demonstrativo-projeto-privado\/#CF-INFO-01"/);
   assert.doesNotMatch(finding, /resolved_in_R01/);
   assert.doesNotMatch(visible(finding), /\baprovado\b/i);
   const html = fs.readFileSync(PAGE, "utf8");

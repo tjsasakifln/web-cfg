@@ -1,0 +1,672 @@
+{
+  "ok": true,
+  "mode": "select-only",
+  "base": "origin/main",
+  "paths": [
+    "index.html",
+    "servicos/index.html",
+    "triagem-tecnica/index.html",
+    "entregas/index.html",
+    "quantitativos-orcamento-obras/index.html",
+    "compatibilizacao-projetos-engenharia/index.html",
+    "medicoes-glosas-obras-publicas/index.html",
+    "styles.css"
+  ],
+  "inventory_count": 96,
+  "inventory": [
+    "test:host-contract",
+    "test:runtime-authority",
+    "pseo:test",
+    "editorial:test",
+    "test:analytics",
+    "test:form-funnel",
+    "test:lead-function",
+    "test:inbound-handoff",
+    "test:search-observation",
+    "test:commercial-event",
+    "test:checkout-negatives",
+    "test:deliverables-registry",
+    "test:offer-naming",
+    "test:page-contract-pre-edital",
+    "test:pricing-policy",
+    "test:page-contract-eight",
+    "test:market-fit-protocol",
+    "test:page-contract-licitacao",
+    "test:page-contract-contratos",
+    "test:single-commercial-route",
+    "test:page-contract-operacao",
+    "test:task-doors",
+    "test:page-contract-execucao",
+    "test:page-contract-ciclo",
+    "test:copy-contract",
+    "test:value-first-copy",
+    "test:commercial-contract-consistency",
+    "test:public-offer-truth",
+    "test:offer-fit",
+    "test:attribution-allowlist",
+    "test:secrets-scan",
+    "test:report-model",
+    "test:deliverables-hub",
+    "test:deliverable-models",
+    "test:deliverables-live-audit",
+    "test:commercial-release-ledger",
+    "test:bofu-ownership",
+    "test:cta-whatsapp",
+    "test:pseo-attribution",
+    "test:brand",
+    "test:logo-contract",
+    "test:authority",
+    "test:visible-parity",
+    "test:design",
+    "audit:css-usage",
+    "test:copy",
+    "audit:accessibility",
+    "test:skip-link",
+    "test:lighthouse-gates",
+    "test:ui",
+    "test:report-model-ui",
+    "test:deliverables-hub-ui",
+    "test:site-excellence",
+    "test:inbound-gates",
+    "test:workflow-gates",
+    "test:ops-docs",
+    "test:revops",
+    "test:schedules",
+    "test:tools",
+    "test:nurture",
+    "test:nurture-pages",
+    "test:ferramentas-footer",
+    "test:hub-truth",
+    "test:nav",
+    "test:tool-compute",
+    "test:live-intelligence",
+    "test:wave1-fields",
+    "test:lead-store-production",
+    "test:external-runtime",
+    "test:ops-auth",
+    "test:env-example",
+    "test:epic-td",
+    "test:script-modules",
+    "test:capture-states",
+    "test:indexnow",
+    "test:diagnose-margin",
+    "test:research-pack",
+    "test:trust-session-protocol",
+    "test:contract-analysis",
+    "test:market-answers",
+    "test:bofu-dominance",
+    "test:demand-radar",
+    "test:local-entity",
+    "test:sitemap-graph",
+    "discovery:test",
+    "test:conversion",
+    "test:knowledge-funnel",
+    "validate:seo",
+    "test:migration-manifesto",
+    "test:first-fold-contract",
+    "test:real-proof-registry",
+    "test:integrity-promotion-gate",
+    "test:page-contract-complementares",
+    "test:page-contract-disputas",
+    "test:page-contract-integridade",
+    "test:affected-selector"
+  ],
+  "selected": [
+    {
+      "id": "test:form-funnel",
+      "why": "producer index.html → consumer test:form-funnel (via index.html)",
+      "reasons": [
+        "producer index.html → consumer test:form-funnel (via index.html)"
+      ]
+    },
+    {
+      "id": "test:deliverables-registry",
+      "why": "producer entregas/index.html → consumer test:deliverables-registry (via entregas/index.html)",
+      "reasons": [
+        "producer entregas/index.html → consumer test:deliverables-registry (via entregas/index.html)"
+      ]
+    },
+    {
+      "id": "test:offer-naming",
+      "why": "producer entregas/index.html → consumer test:offer-naming (via entregas/index.html)",
+      "reasons": [
+        "producer entregas/index.html → consumer test:offer-naming (via entregas/index.html)"
+      ]
+    },
+    {
+      "id": "test:page-contract-pre-edital",
+      "why": "producer entregas/index.html → consumer test:page-contract-pre-edital (via entregas/index.html)",
+      "reasons": [
+        "producer entregas/index.html → consumer test:page-contract-pre-edital (via entregas/index.html)"
+      ]
+    },
+    {
+      "id": "test:pricing-policy",
+      "why": "producer entregas/index.html → consumer test:pricing-policy (via entregas/index.html)",
+      "reasons": [
+        "producer entregas/index.html → consumer test:pricing-policy (via entregas/index.html)"
+      ]
+    },
+    {
+      "id": "test:page-contract-eight",
+      "why": "producer entregas/index.html → consumer test:page-contract-eight (via entregas/index.html)",
+      "reasons": [
+        "producer entregas/index.html → consumer test:page-contract-eight (via entregas/index.html)"
+      ]
+    },
+    {
+      "id": "test:market-fit-protocol",
+      "why": "producer entregas/index.html → consumer test:market-fit-protocol (via entregas/index.html)",
+      "reasons": [
+        "producer entregas/index.html → consumer test:market-fit-protocol (via entregas/index.html)"
+      ]
+    },
+    {
+      "id": "test:page-contract-contratos",
+      "why": "producer medicoes-glosas-obras-publicas/index.html → consumer test:page-contract-contratos (via medicoes-glosas-obras-publicas/index.html)",
+      "reasons": [
+        "producer medicoes-glosas-obras-publicas/index.html → consumer test:page-contract-contratos (via medicoes-glosas-obras-publicas/index.html)"
+      ]
+    },
+    {
+      "id": "test:single-commercial-route",
+      "why": "producer index.html → consumer test:single-commercial-route (via index.html); producer medicoes-glosas-obras-publicas/index.html → consumer test:single-commercial-route (via medicoes-glosas-obras-publicas/index.html)",
+      "reasons": [
+        "producer index.html → consumer test:single-commercial-route (via index.html)",
+        "producer medicoes-glosas-obras-publicas/index.html → consumer test:single-commercial-route (via medicoes-glosas-obras-publicas/index.html)"
+      ]
+    },
+    {
+      "id": "test:task-doors",
+      "why": "producer entregas/index.html → consumer test:task-doors (via entregas/index.html)",
+      "reasons": [
+        "producer entregas/index.html → consumer test:task-doors (via entregas/index.html)"
+      ]
+    },
+    {
+      "id": "test:copy-contract",
+      "why": "producer entregas/index.html → consumer test:copy-contract (via entregas/index.html)",
+      "reasons": [
+        "producer entregas/index.html → consumer test:copy-contract (via entregas/index.html)"
+      ]
+    },
+    {
+      "id": "test:public-offer-truth",
+      "why": "producer entregas/index.html → consumer test:public-offer-truth (via entregas/index.html); producer index.html → consumer test:public-offer-truth (via index.html)",
+      "reasons": [
+        "producer entregas/index.html → consumer test:public-offer-truth (via entregas/index.html)",
+        "producer index.html → consumer test:public-offer-truth (via index.html)"
+      ]
+    },
+    {
+      "id": "test:offer-fit",
+      "why": "producer index.html → consumer test:offer-fit (via index.html); producer medicoes-glosas-obras-publicas/index.html → consumer test:offer-fit (via medicoes-glosas-obras-publicas/)",
+      "reasons": [
+        "producer index.html → consumer test:offer-fit (via index.html)",
+        "producer medicoes-glosas-obras-publicas/index.html → consumer test:offer-fit (via medicoes-glosas-obras-publicas/)"
+      ]
+    },
+    {
+      "id": "test:secrets-scan",
+      "why": "producer index.html → consumer test:secrets-scan (via index.html)",
+      "reasons": [
+        "producer index.html → consumer test:secrets-scan (via index.html)"
+      ]
+    },
+    {
+      "id": "test:deliverables-hub",
+      "why": "producer entregas/index.html → consumer test:deliverables-hub (via entregas/); producer index.html → consumer test:deliverables-hub (via index.html)",
+      "reasons": [
+        "producer entregas/index.html → consumer test:deliverables-hub (via entregas/)",
+        "producer index.html → consumer test:deliverables-hub (via index.html)"
+      ]
+    },
+    {
+      "id": "test:deliverable-models",
+      "why": "producer entregas/index.html → consumer test:deliverable-models (via entregas/index.html)",
+      "reasons": [
+        "producer entregas/index.html → consumer test:deliverable-models (via entregas/index.html)"
+      ]
+    },
+    {
+      "id": "test:commercial-release-ledger",
+      "why": "producer entregas/index.html → consumer test:commercial-release-ledger (via entregas/index.html)",
+      "reasons": [
+        "producer entregas/index.html → consumer test:commercial-release-ledger (via entregas/index.html)"
+      ]
+    },
+    {
+      "id": "test:cta-whatsapp",
+      "why": "producer compatibilizacao-projetos-engenharia/index.html → consumer test:cta-whatsapp (public surface / HTML scan); producer entregas/index.html → consumer test:cta-whatsapp (public surface / HTML scan); producer index.html → consumer test:cta-whatsapp (public surface / HTML scan); producer medicoes-glosas-obras-publicas/index.html → consumer test:cta-whatsapp (public surface / HTML scan); producer quantitativos-orcamento-obras/index.html → consumer test:cta-whatsapp (public surface / HTML scan); producer servicos/index.html → consumer test:cta-whatsapp (public surface / HTML scan); producer styles.css → consumer test:cta-whatsapp (public surface / HTML scan); producer triagem-tecnica/index.html → consumer test:cta-whatsapp (public surface / HTML scan)",
+      "reasons": [
+        "producer compatibilizacao-projetos-engenharia/index.html → consumer test:cta-whatsapp (public surface / HTML scan)",
+        "producer entregas/index.html → consumer test:cta-whatsapp (public surface / HTML scan)",
+        "producer index.html → consumer test:cta-whatsapp (public surface / HTML scan)",
+        "producer medicoes-glosas-obras-publicas/index.html → consumer test:cta-whatsapp (public surface / HTML scan)",
+        "producer quantitativos-orcamento-obras/index.html → consumer test:cta-whatsapp (public surface / HTML scan)",
+        "producer servicos/index.html → consumer test:cta-whatsapp (public surface / HTML scan)",
+        "producer styles.css → consumer test:cta-whatsapp (public surface / HTML scan)",
+        "producer triagem-tecnica/index.html → consumer test:cta-whatsapp (public surface / HTML scan)"
+      ]
+    },
+    {
+      "id": "test:brand",
+      "why": "producer compatibilizacao-projetos-engenharia/index.html → consumer test:brand (public surface / HTML scan); producer entregas/index.html → consumer test:brand (public surface / HTML scan); producer index.html → consumer test:brand (public surface / HTML scan); producer medicoes-glosas-obras-publicas/index.html → consumer test:brand (public surface / HTML scan); producer quantitativos-orcamento-obras/index.html → consumer test:brand (public surface / HTML scan); producer servicos/index.html → consumer test:brand (public surface / HTML scan); producer styles.css → consumer test:brand (public surface / HTML scan); producer triagem-tecnica/index.html → consumer test:brand (public surface / HTML scan)",
+      "reasons": [
+        "producer compatibilizacao-projetos-engenharia/index.html → consumer test:brand (public surface / HTML scan)",
+        "producer entregas/index.html → consumer test:brand (public surface / HTML scan)",
+        "producer index.html → consumer test:brand (public surface / HTML scan)",
+        "producer medicoes-glosas-obras-publicas/index.html → consumer test:brand (public surface / HTML scan)",
+        "producer quantitativos-orcamento-obras/index.html → consumer test:brand (public surface / HTML scan)",
+        "producer servicos/index.html → consumer test:brand (public surface / HTML scan)",
+        "producer styles.css → consumer test:brand (public surface / HTML scan)",
+        "producer triagem-tecnica/index.html → consumer test:brand (public surface / HTML scan)"
+      ]
+    },
+    {
+      "id": "test:logo-contract",
+      "why": "producer compatibilizacao-projetos-engenharia/index.html → consumer test:logo-contract (public surface / HTML scan); producer entregas/index.html → consumer test:logo-contract (public surface / HTML scan); producer index.html → consumer test:logo-contract (public surface / HTML scan); producer medicoes-glosas-obras-publicas/index.html → consumer test:logo-contract (public surface / HTML scan); producer quantitativos-orcamento-obras/index.html → consumer test:logo-contract (public surface / HTML scan); producer servicos/index.html → consumer test:logo-contract (public surface / HTML scan); producer styles.css → consumer test:logo-contract (via styles.css); producer triagem-tecnica/index.html → consumer test:logo-contract (public surface / HTML scan)",
+      "reasons": [
+        "producer compatibilizacao-projetos-engenharia/index.html → consumer test:logo-contract (public surface / HTML scan)",
+        "producer entregas/index.html → consumer test:logo-contract (public surface / HTML scan)",
+        "producer index.html → consumer test:logo-contract (public surface / HTML scan)",
+        "producer medicoes-glosas-obras-publicas/index.html → consumer test:logo-contract (public surface / HTML scan)",
+        "producer quantitativos-orcamento-obras/index.html → consumer test:logo-contract (public surface / HTML scan)",
+        "producer servicos/index.html → consumer test:logo-contract (public surface / HTML scan)",
+        "producer styles.css → consumer test:logo-contract (via styles.css)",
+        "producer triagem-tecnica/index.html → consumer test:logo-contract (public surface / HTML scan)"
+      ]
+    },
+    {
+      "id": "test:authority",
+      "why": "producer compatibilizacao-projetos-engenharia/index.html → consumer test:authority (public surface / HTML scan); producer entregas/index.html → consumer test:authority (public surface / HTML scan); producer index.html → consumer test:authority (public surface / HTML scan); producer medicoes-glosas-obras-publicas/index.html → consumer test:authority (public surface / HTML scan); producer quantitativos-orcamento-obras/index.html → consumer test:authority (public surface / HTML scan); producer servicos/index.html → consumer test:authority (public surface / HTML scan); producer styles.css → consumer test:authority (public surface / HTML scan); producer triagem-tecnica/index.html → consumer test:authority (public surface / HTML scan)",
+      "reasons": [
+        "producer compatibilizacao-projetos-engenharia/index.html → consumer test:authority (public surface / HTML scan)",
+        "producer entregas/index.html → consumer test:authority (public surface / HTML scan)",
+        "producer index.html → consumer test:authority (public surface / HTML scan)",
+        "producer medicoes-glosas-obras-publicas/index.html → consumer test:authority (public surface / HTML scan)",
+        "producer quantitativos-orcamento-obras/index.html → consumer test:authority (public surface / HTML scan)",
+        "producer servicos/index.html → consumer test:authority (public surface / HTML scan)",
+        "producer styles.css → consumer test:authority (public surface / HTML scan)",
+        "producer triagem-tecnica/index.html → consumer test:authority (public surface / HTML scan)"
+      ]
+    },
+    {
+      "id": "test:design",
+      "why": "producer compatibilizacao-projetos-engenharia/index.html → consumer test:design (public surface / HTML scan); producer entregas/index.html → consumer test:design (public surface / HTML scan); producer index.html → consumer test:design (public surface / HTML scan); producer medicoes-glosas-obras-publicas/index.html → consumer test:design (public surface / HTML scan); producer quantitativos-orcamento-obras/index.html → consumer test:design (public surface / HTML scan); producer servicos/index.html → consumer test:design (public surface / HTML scan); producer styles.css → consumer test:design (via styles.css); producer triagem-tecnica/index.html → consumer test:design (public surface / HTML scan)",
+      "reasons": [
+        "producer compatibilizacao-projetos-engenharia/index.html → consumer test:design (public surface / HTML scan)",
+        "producer entregas/index.html → consumer test:design (public surface / HTML scan)",
+        "producer index.html → consumer test:design (public surface / HTML scan)",
+        "producer medicoes-glosas-obras-publicas/index.html → consumer test:design (public surface / HTML scan)",
+        "producer quantitativos-orcamento-obras/index.html → consumer test:design (public surface / HTML scan)",
+        "producer servicos/index.html → consumer test:design (public surface / HTML scan)",
+        "producer styles.css → consumer test:design (via styles.css)",
+        "producer triagem-tecnica/index.html → consumer test:design (public surface / HTML scan)"
+      ]
+    },
+    {
+      "id": "audit:css-usage",
+      "why": "producer compatibilizacao-projetos-engenharia/index.html → consumer audit:css-usage (public surface / HTML scan); producer entregas/index.html → consumer audit:css-usage (public surface / HTML scan); producer index.html → consumer audit:css-usage (public surface / HTML scan); producer medicoes-glosas-obras-publicas/index.html → consumer audit:css-usage (public surface / HTML scan); producer quantitativos-orcamento-obras/index.html → consumer audit:css-usage (public surface / HTML scan); producer servicos/index.html → consumer audit:css-usage (public surface / HTML scan); producer styles.css → consumer audit:css-usage (via styles.css); producer triagem-tecnica/index.html → consumer audit:css-usage (public surface / HTML scan)",
+      "reasons": [
+        "producer compatibilizacao-projetos-engenharia/index.html → consumer audit:css-usage (public surface / HTML scan)",
+        "producer entregas/index.html → consumer audit:css-usage (public surface / HTML scan)",
+        "producer index.html → consumer audit:css-usage (public surface / HTML scan)",
+        "producer medicoes-glosas-obras-publicas/index.html → consumer audit:css-usage (public surface / HTML scan)",
+        "producer quantitativos-orcamento-obras/index.html → consumer audit:css-usage (public surface / HTML scan)",
+        "producer servicos/index.html → consumer audit:css-usage (public surface / HTML scan)",
+        "producer styles.css → consumer audit:css-usage (via styles.css)",
+        "producer triagem-tecnica/index.html → consumer audit:css-usage (public surface / HTML scan)"
+      ]
+    },
+    {
+      "id": "test:copy",
+      "why": "producer compatibilizacao-projetos-engenharia/index.html → consumer test:copy (public surface / HTML scan); producer entregas/index.html → consumer test:copy (public surface / HTML scan); producer index.html → consumer test:copy (public surface / HTML scan); producer medicoes-glosas-obras-publicas/index.html → consumer test:copy (public surface / HTML scan); producer quantitativos-orcamento-obras/index.html → consumer test:copy (public surface / HTML scan); producer servicos/index.html → consumer test:copy (public surface / HTML scan); producer styles.css → consumer test:copy (public surface / HTML scan); producer triagem-tecnica/index.html → consumer test:copy (public surface / HTML scan)",
+      "reasons": [
+        "producer compatibilizacao-projetos-engenharia/index.html → consumer test:copy (public surface / HTML scan)",
+        "producer entregas/index.html → consumer test:copy (public surface / HTML scan)",
+        "producer index.html → consumer test:copy (public surface / HTML scan)",
+        "producer medicoes-glosas-obras-publicas/index.html → consumer test:copy (public surface / HTML scan)",
+        "producer quantitativos-orcamento-obras/index.html → consumer test:copy (public surface / HTML scan)",
+        "producer servicos/index.html → consumer test:copy (public surface / HTML scan)",
+        "producer styles.css → consumer test:copy (public surface / HTML scan)",
+        "producer triagem-tecnica/index.html → consumer test:copy (public surface / HTML scan)"
+      ]
+    },
+    {
+      "id": "audit:accessibility",
+      "why": "producer compatibilizacao-projetos-engenharia/index.html → consumer audit:accessibility (public surface / HTML scan); producer entregas/index.html → consumer audit:accessibility (public surface / HTML scan); producer index.html → consumer audit:accessibility (public surface / HTML scan); producer medicoes-glosas-obras-publicas/index.html → consumer audit:accessibility (public surface / HTML scan); producer quantitativos-orcamento-obras/index.html → consumer audit:accessibility (public surface / HTML scan); producer servicos/index.html → consumer audit:accessibility (public surface / HTML scan); producer styles.css → consumer audit:accessibility (public surface / HTML scan); producer triagem-tecnica/index.html → consumer audit:accessibility (public surface / HTML scan)",
+      "reasons": [
+        "producer compatibilizacao-projetos-engenharia/index.html → consumer audit:accessibility (public surface / HTML scan)",
+        "producer entregas/index.html → consumer audit:accessibility (public surface / HTML scan)",
+        "producer index.html → consumer audit:accessibility (public surface / HTML scan)",
+        "producer medicoes-glosas-obras-publicas/index.html → consumer audit:accessibility (public surface / HTML scan)",
+        "producer quantitativos-orcamento-obras/index.html → consumer audit:accessibility (public surface / HTML scan)",
+        "producer servicos/index.html → consumer audit:accessibility (public surface / HTML scan)",
+        "producer styles.css → consumer audit:accessibility (public surface / HTML scan)",
+        "producer triagem-tecnica/index.html → consumer audit:accessibility (public surface / HTML scan)"
+      ]
+    },
+    {
+      "id": "test:skip-link",
+      "why": "producer compatibilizacao-projetos-engenharia/index.html → consumer test:skip-link (public surface / HTML scan); producer entregas/index.html → consumer test:skip-link (public surface / HTML scan); producer index.html → consumer test:skip-link (public surface / HTML scan); producer medicoes-glosas-obras-publicas/index.html → consumer test:skip-link (public surface / HTML scan); producer quantitativos-orcamento-obras/index.html → consumer test:skip-link (public surface / HTML scan); producer servicos/index.html → consumer test:skip-link (public surface / HTML scan); producer styles.css → consumer test:skip-link (public surface / HTML scan); producer triagem-tecnica/index.html → consumer test:skip-link (public surface / HTML scan)",
+      "reasons": [
+        "producer compatibilizacao-projetos-engenharia/index.html → consumer test:skip-link (public surface / HTML scan)",
+        "producer entregas/index.html → consumer test:skip-link (public surface / HTML scan)",
+        "producer index.html → consumer test:skip-link (public surface / HTML scan)",
+        "producer medicoes-glosas-obras-publicas/index.html → consumer test:skip-link (public surface / HTML scan)",
+        "producer quantitativos-orcamento-obras/index.html → consumer test:skip-link (public surface / HTML scan)",
+        "producer servicos/index.html → consumer test:skip-link (public surface / HTML scan)",
+        "producer styles.css → consumer test:skip-link (public surface / HTML scan)",
+        "producer triagem-tecnica/index.html → consumer test:skip-link (public surface / HTML scan)"
+      ]
+    },
+    {
+      "id": "test:ui",
+      "why": "producer compatibilizacao-projetos-engenharia/index.html → consumer test:ui (public surface / HTML scan); producer entregas/index.html → consumer test:ui (public surface / HTML scan); producer index.html → consumer test:ui (public surface / HTML scan); producer medicoes-glosas-obras-publicas/index.html → consumer test:ui (public surface / HTML scan); producer quantitativos-orcamento-obras/index.html → consumer test:ui (public surface / HTML scan); producer servicos/index.html → consumer test:ui (public surface / HTML scan); producer styles.css → consumer test:ui (via styles.css); producer triagem-tecnica/index.html → consumer test:ui (public surface / HTML scan)",
+      "reasons": [
+        "producer compatibilizacao-projetos-engenharia/index.html → consumer test:ui (public surface / HTML scan)",
+        "producer entregas/index.html → consumer test:ui (public surface / HTML scan)",
+        "producer index.html → consumer test:ui (public surface / HTML scan)",
+        "producer medicoes-glosas-obras-publicas/index.html → consumer test:ui (public surface / HTML scan)",
+        "producer quantitativos-orcamento-obras/index.html → consumer test:ui (public surface / HTML scan)",
+        "producer servicos/index.html → consumer test:ui (public surface / HTML scan)",
+        "producer styles.css → consumer test:ui (via styles.css)",
+        "producer triagem-tecnica/index.html → consumer test:ui (public surface / HTML scan)"
+      ]
+    },
+    {
+      "id": "test:report-model-ui",
+      "why": "producer styles.css → consumer test:report-model-ui (via styles.css)",
+      "reasons": [
+        "producer styles.css → consumer test:report-model-ui (via styles.css)"
+      ]
+    },
+    {
+      "id": "test:deliverables-hub-ui",
+      "why": "producer entregas/index.html → consumer test:deliverables-hub-ui (via entregas/); producer index.html → consumer test:deliverables-hub-ui (via index.html); producer styles.css → consumer test:deliverables-hub-ui (via styles.css)",
+      "reasons": [
+        "producer entregas/index.html → consumer test:deliverables-hub-ui (via entregas/)",
+        "producer index.html → consumer test:deliverables-hub-ui (via index.html)",
+        "producer styles.css → consumer test:deliverables-hub-ui (via styles.css)"
+      ]
+    },
+    {
+      "id": "test:inbound-gates",
+      "why": "producer compatibilizacao-projetos-engenharia/index.html → consumer test:inbound-gates (public surface / HTML scan); producer entregas/index.html → consumer test:inbound-gates (public surface / HTML scan); producer index.html → consumer test:inbound-gates (public surface / HTML scan); producer medicoes-glosas-obras-publicas/index.html → consumer test:inbound-gates (public surface / HTML scan); producer quantitativos-orcamento-obras/index.html → consumer test:inbound-gates (public surface / HTML scan); producer servicos/index.html → consumer test:inbound-gates (public surface / HTML scan); producer styles.css → consumer test:inbound-gates (public surface / HTML scan); producer triagem-tecnica/index.html → consumer test:inbound-gates (public surface / HTML scan)",
+      "reasons": [
+        "producer compatibilizacao-projetos-engenharia/index.html → consumer test:inbound-gates (public surface / HTML scan)",
+        "producer entregas/index.html → consumer test:inbound-gates (public surface / HTML scan)",
+        "producer index.html → consumer test:inbound-gates (public surface / HTML scan)",
+        "producer medicoes-glosas-obras-publicas/index.html → consumer test:inbound-gates (public surface / HTML scan)",
+        "producer quantitativos-orcamento-obras/index.html → consumer test:inbound-gates (public surface / HTML scan)",
+        "producer servicos/index.html → consumer test:inbound-gates (public surface / HTML scan)",
+        "producer styles.css → consumer test:inbound-gates (public surface / HTML scan)",
+        "producer triagem-tecnica/index.html → consumer test:inbound-gates (public surface / HTML scan)"
+      ]
+    },
+    {
+      "id": "test:tools",
+      "why": "producer compatibilizacao-projetos-engenharia/index.html → consumer test:tools (public surface / HTML scan); producer entregas/index.html → consumer test:tools (public surface / HTML scan); producer index.html → consumer test:tools (public surface / HTML scan); producer medicoes-glosas-obras-publicas/index.html → consumer test:tools (public surface / HTML scan); producer quantitativos-orcamento-obras/index.html → consumer test:tools (public surface / HTML scan); producer servicos/index.html → consumer test:tools (public surface / HTML scan); producer styles.css → consumer test:tools (public surface / HTML scan); producer triagem-tecnica/index.html → consumer test:tools (public surface / HTML scan)",
+      "reasons": [
+        "producer compatibilizacao-projetos-engenharia/index.html → consumer test:tools (public surface / HTML scan)",
+        "producer entregas/index.html → consumer test:tools (public surface / HTML scan)",
+        "producer index.html → consumer test:tools (public surface / HTML scan)",
+        "producer medicoes-glosas-obras-publicas/index.html → consumer test:tools (public surface / HTML scan)",
+        "producer quantitativos-orcamento-obras/index.html → consumer test:tools (public surface / HTML scan)",
+        "producer servicos/index.html → consumer test:tools (public surface / HTML scan)",
+        "producer styles.css → consumer test:tools (public surface / HTML scan)",
+        "producer triagem-tecnica/index.html → consumer test:tools (public surface / HTML scan)"
+      ]
+    },
+    {
+      "id": "test:nurture-pages",
+      "why": "producer compatibilizacao-projetos-engenharia/index.html → consumer test:nurture-pages (public surface / HTML scan); producer entregas/index.html → consumer test:nurture-pages (public surface / HTML scan); producer index.html → consumer test:nurture-pages (public surface / HTML scan); producer medicoes-glosas-obras-publicas/index.html → consumer test:nurture-pages (public surface / HTML scan); producer quantitativos-orcamento-obras/index.html → consumer test:nurture-pages (public surface / HTML scan); producer servicos/index.html → consumer test:nurture-pages (public surface / HTML scan); producer styles.css → consumer test:nurture-pages (public surface / HTML scan); producer triagem-tecnica/index.html → consumer test:nurture-pages (public surface / HTML scan)",
+      "reasons": [
+        "producer compatibilizacao-projetos-engenharia/index.html → consumer test:nurture-pages (public surface / HTML scan)",
+        "producer entregas/index.html → consumer test:nurture-pages (public surface / HTML scan)",
+        "producer index.html → consumer test:nurture-pages (public surface / HTML scan)",
+        "producer medicoes-glosas-obras-publicas/index.html → consumer test:nurture-pages (public surface / HTML scan)",
+        "producer quantitativos-orcamento-obras/index.html → consumer test:nurture-pages (public surface / HTML scan)",
+        "producer servicos/index.html → consumer test:nurture-pages (public surface / HTML scan)",
+        "producer styles.css → consumer test:nurture-pages (public surface / HTML scan)",
+        "producer triagem-tecnica/index.html → consumer test:nurture-pages (public surface / HTML scan)"
+      ]
+    },
+    {
+      "id": "test:ferramentas-footer",
+      "why": "producer compatibilizacao-projetos-engenharia/index.html → consumer test:ferramentas-footer (public surface / HTML scan); producer entregas/index.html → consumer test:ferramentas-footer (public surface / HTML scan); producer index.html → consumer test:ferramentas-footer (public surface / HTML scan); producer medicoes-glosas-obras-publicas/index.html → consumer test:ferramentas-footer (public surface / HTML scan); producer quantitativos-orcamento-obras/index.html → consumer test:ferramentas-footer (public surface / HTML scan); producer servicos/index.html → consumer test:ferramentas-footer (public surface / HTML scan); producer styles.css → consumer test:ferramentas-footer (public surface / HTML scan); producer triagem-tecnica/index.html → consumer test:ferramentas-footer (public surface / HTML scan)",
+      "reasons": [
+        "producer compatibilizacao-projetos-engenharia/index.html → consumer test:ferramentas-footer (public surface / HTML scan)",
+        "producer entregas/index.html → consumer test:ferramentas-footer (public surface / HTML scan)",
+        "producer index.html → consumer test:ferramentas-footer (public surface / HTML scan)",
+        "producer medicoes-glosas-obras-publicas/index.html → consumer test:ferramentas-footer (public surface / HTML scan)",
+        "producer quantitativos-orcamento-obras/index.html → consumer test:ferramentas-footer (public surface / HTML scan)",
+        "producer servicos/index.html → consumer test:ferramentas-footer (public surface / HTML scan)",
+        "producer styles.css → consumer test:ferramentas-footer (public surface / HTML scan)",
+        "producer triagem-tecnica/index.html → consumer test:ferramentas-footer (public surface / HTML scan)"
+      ]
+    },
+    {
+      "id": "test:hub-truth",
+      "why": "producer compatibilizacao-projetos-engenharia/index.html → consumer test:hub-truth (public surface / HTML scan); producer entregas/index.html → consumer test:hub-truth (public surface / HTML scan); producer index.html → consumer test:hub-truth (public surface / HTML scan); producer medicoes-glosas-obras-publicas/index.html → consumer test:hub-truth (public surface / HTML scan); producer quantitativos-orcamento-obras/index.html → consumer test:hub-truth (public surface / HTML scan); producer servicos/index.html → consumer test:hub-truth (public surface / HTML scan); producer styles.css → consumer test:hub-truth (public surface / HTML scan); producer triagem-tecnica/index.html → consumer test:hub-truth (public surface / HTML scan)",
+      "reasons": [
+        "producer compatibilizacao-projetos-engenharia/index.html → consumer test:hub-truth (public surface / HTML scan)",
+        "producer entregas/index.html → consumer test:hub-truth (public surface / HTML scan)",
+        "producer index.html → consumer test:hub-truth (public surface / HTML scan)",
+        "producer medicoes-glosas-obras-publicas/index.html → consumer test:hub-truth (public surface / HTML scan)",
+        "producer quantitativos-orcamento-obras/index.html → consumer test:hub-truth (public surface / HTML scan)",
+        "producer servicos/index.html → consumer test:hub-truth (public surface / HTML scan)",
+        "producer styles.css → consumer test:hub-truth (public surface / HTML scan)",
+        "producer triagem-tecnica/index.html → consumer test:hub-truth (public surface / HTML scan)"
+      ]
+    },
+    {
+      "id": "test:nav",
+      "why": "producer compatibilizacao-projetos-engenharia/index.html → consumer test:nav (public surface / HTML scan); producer entregas/index.html → consumer test:nav (public surface / HTML scan); producer index.html → consumer test:nav (public surface / HTML scan); producer medicoes-glosas-obras-publicas/index.html → consumer test:nav (public surface / HTML scan); producer quantitativos-orcamento-obras/index.html → consumer test:nav (public surface / HTML scan); producer servicos/index.html → consumer test:nav (public surface / HTML scan); producer styles.css → consumer test:nav (public surface / HTML scan); producer triagem-tecnica/index.html → consumer test:nav (public surface / HTML scan)",
+      "reasons": [
+        "producer compatibilizacao-projetos-engenharia/index.html → consumer test:nav (public surface / HTML scan)",
+        "producer entregas/index.html → consumer test:nav (public surface / HTML scan)",
+        "producer index.html → consumer test:nav (public surface / HTML scan)",
+        "producer medicoes-glosas-obras-publicas/index.html → consumer test:nav (public surface / HTML scan)",
+        "producer quantitativos-orcamento-obras/index.html → consumer test:nav (public surface / HTML scan)",
+        "producer servicos/index.html → consumer test:nav (public surface / HTML scan)",
+        "producer styles.css → consumer test:nav (public surface / HTML scan)",
+        "producer triagem-tecnica/index.html → consumer test:nav (public surface / HTML scan)"
+      ]
+    },
+    {
+      "id": "test:wave1-fields",
+      "why": "producer compatibilizacao-projetos-engenharia/index.html → consumer test:wave1-fields (public surface / HTML scan); producer entregas/index.html → consumer test:wave1-fields (public surface / HTML scan); producer index.html → consumer test:wave1-fields (public surface / HTML scan); producer medicoes-glosas-obras-publicas/index.html → consumer test:wave1-fields (public surface / HTML scan); producer quantitativos-orcamento-obras/index.html → consumer test:wave1-fields (public surface / HTML scan); producer servicos/index.html → consumer test:wave1-fields (public surface / HTML scan); producer styles.css → consumer test:wave1-fields (public surface / HTML scan); producer triagem-tecnica/index.html → consumer test:wave1-fields (public surface / HTML scan)",
+      "reasons": [
+        "producer compatibilizacao-projetos-engenharia/index.html → consumer test:wave1-fields (public surface / HTML scan)",
+        "producer entregas/index.html → consumer test:wave1-fields (public surface / HTML scan)",
+        "producer index.html → consumer test:wave1-fields (public surface / HTML scan)",
+        "producer medicoes-glosas-obras-publicas/index.html → consumer test:wave1-fields (public surface / HTML scan)",
+        "producer quantitativos-orcamento-obras/index.html → consumer test:wave1-fields (public surface / HTML scan)",
+        "producer servicos/index.html → consumer test:wave1-fields (public surface / HTML scan)",
+        "producer styles.css → consumer test:wave1-fields (public surface / HTML scan)",
+        "producer triagem-tecnica/index.html → consumer test:wave1-fields (public surface / HTML scan)"
+      ]
+    },
+    {
+      "id": "test:local-entity",
+      "why": "producer index.html → consumer test:local-entity (via index.html)",
+      "reasons": [
+        "producer index.html → consumer test:local-entity (via index.html)"
+      ]
+    },
+    {
+      "id": "test:first-fold-contract",
+      "why": "producer compatibilizacao-projetos-engenharia/index.html → consumer test:first-fold-contract (public surface / HTML scan); producer entregas/index.html → consumer test:first-fold-contract (via entregas/index.html); producer index.html → consumer test:first-fold-contract (via index.html); producer medicoes-glosas-obras-publicas/index.html → consumer test:first-fold-contract (via medicoes-glosas-obras-publicas/index.html); producer quantitativos-orcamento-obras/index.html → consumer test:first-fold-contract (public surface / HTML scan); producer servicos/index.html → consumer test:first-fold-contract (public surface / HTML scan); producer styles.css → consumer test:first-fold-contract (public surface / HTML scan); producer triagem-tecnica/index.html → consumer test:first-fold-contract (public surface / HTML scan)",
+      "reasons": [
+        "producer compatibilizacao-projetos-engenharia/index.html → consumer test:first-fold-contract (public surface / HTML scan)",
+        "producer entregas/index.html → consumer test:first-fold-contract (via entregas/index.html)",
+        "producer index.html → consumer test:first-fold-contract (via index.html)",
+        "producer medicoes-glosas-obras-publicas/index.html → consumer test:first-fold-contract (via medicoes-glosas-obras-publicas/index.html)",
+        "producer quantitativos-orcamento-obras/index.html → consumer test:first-fold-contract (public surface / HTML scan)",
+        "producer servicos/index.html → consumer test:first-fold-contract (public surface / HTML scan)",
+        "producer styles.css → consumer test:first-fold-contract (public surface / HTML scan)",
+        "producer triagem-tecnica/index.html → consumer test:first-fold-contract (public surface / HTML scan)"
+      ]
+    },
+    {
+      "id": "test:real-proof-registry",
+      "why": "producer compatibilizacao-projetos-engenharia/index.html → consumer test:real-proof-registry (public surface / HTML scan); producer entregas/index.html → consumer test:real-proof-registry (via entregas/index.html); producer index.html → consumer test:real-proof-registry (via index.html); producer medicoes-glosas-obras-publicas/index.html → consumer test:real-proof-registry (public surface / HTML scan); producer quantitativos-orcamento-obras/index.html → consumer test:real-proof-registry (public surface / HTML scan); producer servicos/index.html → consumer test:real-proof-registry (public surface / HTML scan); producer styles.css → consumer test:real-proof-registry (public surface / HTML scan); producer triagem-tecnica/index.html → consumer test:real-proof-registry (public surface / HTML scan)",
+      "reasons": [
+        "producer compatibilizacao-projetos-engenharia/index.html → consumer test:real-proof-registry (public surface / HTML scan)",
+        "producer entregas/index.html → consumer test:real-proof-registry (via entregas/index.html)",
+        "producer index.html → consumer test:real-proof-registry (via index.html)",
+        "producer medicoes-glosas-obras-publicas/index.html → consumer test:real-proof-registry (public surface / HTML scan)",
+        "producer quantitativos-orcamento-obras/index.html → consumer test:real-proof-registry (public surface / HTML scan)",
+        "producer servicos/index.html → consumer test:real-proof-registry (public surface / HTML scan)",
+        "producer styles.css → consumer test:real-proof-registry (public surface / HTML scan)",
+        "producer triagem-tecnica/index.html → consumer test:real-proof-registry (public surface / HTML scan)"
+      ]
+    },
+    {
+      "id": "test:integrity-promotion-gate",
+      "why": "producer compatibilizacao-projetos-engenharia/index.html → consumer test:integrity-promotion-gate (public surface / HTML scan); producer entregas/index.html → consumer test:integrity-promotion-gate (public surface / HTML scan); producer index.html → consumer test:integrity-promotion-gate (public surface / HTML scan); producer medicoes-glosas-obras-publicas/index.html → consumer test:integrity-promotion-gate (public surface / HTML scan); producer quantitativos-orcamento-obras/index.html → consumer test:integrity-promotion-gate (public surface / HTML scan); producer servicos/index.html → consumer test:integrity-promotion-gate (public surface / HTML scan); producer styles.css → consumer test:integrity-promotion-gate (public surface / HTML scan); producer triagem-tecnica/index.html → consumer test:integrity-promotion-gate (public surface / HTML scan)",
+      "reasons": [
+        "producer compatibilizacao-projetos-engenharia/index.html → consumer test:integrity-promotion-gate (public surface / HTML scan)",
+        "producer entregas/index.html → consumer test:integrity-promotion-gate (public surface / HTML scan)",
+        "producer index.html → consumer test:integrity-promotion-gate (public surface / HTML scan)",
+        "producer medicoes-glosas-obras-publicas/index.html → consumer test:integrity-promotion-gate (public surface / HTML scan)",
+        "producer quantitativos-orcamento-obras/index.html → consumer test:integrity-promotion-gate (public surface / HTML scan)",
+        "producer servicos/index.html → consumer test:integrity-promotion-gate (public surface / HTML scan)",
+        "producer styles.css → consumer test:integrity-promotion-gate (public surface / HTML scan)",
+        "producer triagem-tecnica/index.html → consumer test:integrity-promotion-gate (public surface / HTML scan)"
+      ]
+    },
+    {
+      "id": "test:orc-b2b-20260913",
+      "why": "producer quantitativos-orcamento-obras/index.html → consumer test:orc-b2b-20260913 (via quantitativos-orcamento-obras/)",
+      "reasons": [
+        "producer quantitativos-orcamento-obras/index.html → consumer test:orc-b2b-20260913 (via quantitativos-orcamento-obras/)"
+      ]
+    }
+  ],
+  "selected_ids": [
+    "test:form-funnel",
+    "test:deliverables-registry",
+    "test:offer-naming",
+    "test:page-contract-pre-edital",
+    "test:pricing-policy",
+    "test:page-contract-eight",
+    "test:market-fit-protocol",
+    "test:page-contract-contratos",
+    "test:single-commercial-route",
+    "test:task-doors",
+    "test:copy-contract",
+    "test:public-offer-truth",
+    "test:offer-fit",
+    "test:secrets-scan",
+    "test:deliverables-hub",
+    "test:deliverable-models",
+    "test:commercial-release-ledger",
+    "test:cta-whatsapp",
+    "test:brand",
+    "test:logo-contract",
+    "test:authority",
+    "test:design",
+    "audit:css-usage",
+    "test:copy",
+    "audit:accessibility",
+    "test:skip-link",
+    "test:ui",
+    "test:report-model-ui",
+    "test:deliverables-hub-ui",
+    "test:inbound-gates",
+    "test:tools",
+    "test:nurture-pages",
+    "test:ferramentas-footer",
+    "test:hub-truth",
+    "test:nav",
+    "test:wave1-fields",
+    "test:local-entity",
+    "test:first-fold-contract",
+    "test:real-proof-registry",
+    "test:integrity-promotion-gate",
+    "test:orc-b2b-20260913"
+  ],
+  "skipped": [
+    "test:host-contract",
+    "test:runtime-authority",
+    "pseo:test",
+    "editorial:test",
+    "test:analytics",
+    "test:lead-function",
+    "test:inbound-handoff",
+    "test:search-observation",
+    "test:commercial-event",
+    "test:checkout-negatives",
+    "test:page-contract-licitacao",
+    "test:page-contract-operacao",
+    "test:page-contract-execucao",
+    "test:page-contract-ciclo",
+    "test:value-first-copy",
+    "test:commercial-contract-consistency",
+    "test:attribution-allowlist",
+    "test:report-model",
+    "test:deliverables-live-audit",
+    "test:bofu-ownership",
+    "test:pseo-attribution",
+    "test:visible-parity",
+    "test:lighthouse-gates",
+    "test:site-excellence",
+    "test:workflow-gates",
+    "test:ops-docs",
+    "test:revops",
+    "test:schedules",
+    "test:nurture",
+    "test:tool-compute",
+    "test:live-intelligence",
+    "test:lead-store-production",
+    "test:external-runtime",
+    "test:ops-auth",
+    "test:env-example",
+    "test:epic-td",
+    "test:script-modules",
+    "test:capture-states",
+    "test:indexnow",
+    "test:diagnose-margin",
+    "test:research-pack",
+    "test:trust-session-protocol",
+    "test:contract-analysis",
+    "test:market-answers",
+    "test:bofu-dominance",
+    "test:demand-radar",
+    "test:sitemap-graph",
+    "discovery:test",
+    "test:conversion",
+    "test:knowledge-funnel",
+    "validate:seo",
+    "test:migration-manifesto",
+    "test:page-contract-complementares",
+    "test:page-contract-disputas",
+    "test:page-contract-integridade",
+    "test:affected-selector"
+  ],
+  "fallback": "none",
+  "fallback_reason": null,
+  "promote": [],
+  "unknown_paths": [],
+  "risk": {
+    "level": "subset",
+    "false_negative_oracle": "mapped-necessity ∪ promote-full",
+    "notes": [
+      "over-select allowed; omit is not",
+      "merge still requires npm test / full site-ci"
+    ]
+  },
+  "duration_ms": {
+    "select": 17,
+    "suites": {},
+    "total": 17
+  },
+  "runs": [],
+  "merge_gate": {
+    "npm_test_required": true,
+    "test_affected_is_local_only": true
+  }
+}

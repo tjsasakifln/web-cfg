@@ -102,7 +102,23 @@ pass("kits_resolve_destination_sample_conversation");
 
 const htmlPath = path.join(root, "parcerias-engenharia/index.html");
 const html = fs.readFileSync(htmlPath, "utf8");
-if (!html.includes('rel="canonical"') || !html.includes("https://confenge.com.br/parcerias-engenharia/")) {
+// Parse the canonical link's href with URL instead of a raw substring search,
+// so a look-alike host or an unrelated URL that merely contains this text
+// cannot pass (CodeQL js/incomplete-url-substring-sanitization).
+const canonicalMatch = html.match(
+  /<link\b[^>]*rel=["']canonical["'][^>]*href=["']([^"']+)["'][^>]*>|<link\b[^>]*href=["']([^"']+)["'][^>]*rel=["']canonical["'][^>]*>/i,
+);
+const canonicalHref = canonicalMatch && (canonicalMatch[1] || canonicalMatch[2]);
+let canonicalOk = false;
+if (canonicalHref) {
+  try {
+    const parsed = new URL(canonicalHref);
+    canonicalOk = parsed.hostname === "confenge.com.br" && parsed.pathname === "/parcerias-engenharia/";
+  } catch {
+    canonicalOk = false;
+  }
+}
+if (!canonicalOk) {
   fail("canonical_missing", "page canonical");
 }
 if (html.includes(SUBSTITUTE_DESTINATION)) {

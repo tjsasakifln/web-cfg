@@ -278,8 +278,8 @@
       "metrics": [
         {
           "id": "gsc-freshness",
-          "measurement": "age of the latest redacted live GSC observation",
-          "evidence": "source kind, as-of date, age and exact blocker owner",
+          "measurement": "age of the as_of in the CURRENT durable GSC consumer read (build/reports/gsc-insights-durable.json, sanitized stdout of scripts/revops/verify_gsc_freshness.mjs written by site-ci on the release path, #413); no packaged repository snapshot counts",
+          "evidence": "source kind, durable read state, as-of date, age and exact blocker owner",
           "maximum_age_days": 7,
           "fixture": "stale-gsc"
         }

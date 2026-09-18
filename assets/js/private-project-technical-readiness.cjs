@@ -202,7 +202,11 @@
   var ROUTE_REVISAO = "revisao";
   var ROUTE_ESCOPO = "escopo";
   var HUMAN_CONTACT_PATH = "/triagem-tecnica/";
-  var HUMAN_CONTACT_HASH = "obra-imovel";
+  // POS-REDESIGN-FECHAMENTO-20260918 (G02-07): a triagem separou quantitativos
+  // e orçamento (#quantitativos) de inspeção (#obra-imovel). A ferramenta
+  // encaminha para três recortes (orçamento, revisão, compatibilização), então
+  // nenhum item fixo é o certo: o contato pousa no topo da triagem.
+  var HUMAN_CONTACT_HASH = "";
   var NEED_CODE = "obra_edificacao_ou_documentacao";
   var ROUTE_FAMILY = "prontidao-tecnica-obra-privada";
   var DESTINATION_MAP_SCHEMA = "confenge.canonical-destination-map/1.0";
@@ -534,7 +538,7 @@
       if (value) params.push(encodeURIComponent(key) + "=" + encodeURIComponent(String(value)));
     }
     var query = params.length ? "?" + params.join("&") : "";
-    return HUMAN_CONTACT_PATH + query + "#" + HUMAN_CONTACT_HASH;
+    return HUMAN_CONTACT_PATH + query + (HUMAN_CONTACT_HASH ? "#" + HUMAN_CONTACT_HASH : "");
   }
 
   function summarizeReadiness(result) {

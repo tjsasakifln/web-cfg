@@ -466,11 +466,14 @@
           next_step_category: usesPublicWorksLadder() ? (routed?.next_step || '').slice(0, 40) : '',
         });
         if (assetId) {
+          // O envio do formulario e um cta_click de intencao (destination_type=form):
+          // sem o campo o consumidor closed-loop o trataria como legado.
           track('cta_click', {
             page_path: pagePath,
             route_family: routeFamily,
             asset_id: assetId,
             cta_id: ctaId,
+            destination_type: 'form',
           });
         }
 
@@ -528,7 +531,21 @@
             flushAnalytics();
             window.location.assign(q);
           };
+          // A Turnstile token is single use. After a timeout or a refusal the
+          // token in the hidden input is already spent, so a retry with it
+          // would be refused at the anti-abuse gate. Ask the widget for a
+          // fresh token; the widget loads lazily, so it may not exist yet.
+          const resetTurnstile = () => {
+            try {
+              if (window.turnstile && typeof window.turnstile.reset === 'function') {
+                const widget = form.querySelector('.cf-turnstile');
+                if (widget) window.turnstile.reset(widget);
+                else window.turnstile.reset();
+              }
+            } catch (_) { /* optional anti-abuse */ }
+          };
           const finishFallback = (reason) => {
+            resetTurnstile();
             const stage = (estagioEl?.value || '').slice(0, 80);
             const msg = encodeURIComponent(
               `Olá, Tiago. Tentei enviar pelo formulário do site (${stage || journey || 'contato'}) e não recebi confirmação. Preciso de retorno.`,
@@ -539,7 +556,7 @@
             const leftTheBrowser = reason === 'timeout' || reason === 'receipt_unconfirmed';
             showFormStatus(
               leftTheBrowser
-                ? 'Não recebemos a confirmação a tempo. O seu pedido pode ter sido registrado; não reescreva os dados. Tente enviar de novo ou use o WhatsApp abaixo. O protocolo só aparece depois que o registro é confirmado.'
+                ? 'Não recebemos a confirmação a tempo. O seu pedido pode ter sido registrado; não reescreva os dados. Tente enviar de novo (o mesmo pedido, sem duplicar) ou use o WhatsApp abaixo. O protocolo só aparece depois que o registro é confirmado.'
                 : 'Não foi possível registrar o envio. Use o WhatsApp abaixo para não perder o contato: o protocolo só aparece depois que o registro é confirmado.',
               'error',
             );
@@ -599,6 +616,7 @@
               return;
             }
             if (res.status === 429) {
+              resetTurnstile();
               showFormStatus('Muitas tentativas. Aguarde um minuto e tente de novo.', 'error');
               track('lead_form_error', {
                 page_path: pagePath,

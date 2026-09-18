@@ -27,11 +27,16 @@ function pass(n, d = "") {
 }
 
 // 2c) An unhandled transport failure still emits a machine-readable partial report.
+// With a well-formed LEAD_PROBE_SECRET the daily leg sends it as the probe
+// header (never the literal "1"); the raw lead POST against 127.0.0.1:9 is the
+// unhandled transport failure this block relies on.
+const PROBE_SECRET_FIXTURE = "unit-test-lead-probe-secret-0123456789abcdef";
 {
   const proofDir = mkdtempSync(join(tmpdir(), "confenge-daily-partial-"));
   let failedAsExpected = false;
+  let stdout = "";
   try {
-    execFileSync(process.execPath, [resolve(ROOT, "scripts/revops/scheduled_daily.mjs")], {
+    stdout = execFileSync(process.execPath, [resolve(ROOT, "scripts/revops/scheduled_daily.mjs")], {
       cwd: ROOT,
       encoding: "utf8",
       stdio: "pipe",
@@ -40,13 +45,15 @@ function pass(n, d = "") {
         BASE_URL: "http://127.0.0.1:9",
         EXPECTED_SHA: "test-sha",
         OPS_TOKEN: "unit-test-token",
+        LEAD_PROBE_SECRET: PROBE_SECRET_FIXTURE,
         OPS_FETCH_MAX_ATTEMPTS: "2",
         OPS_FETCH_BACKOFF_MS: "0",
         REVOPS_RUN_DIR: proofDir,
       },
     });
-  } catch {
+  } catch (error) {
     failedAsExpected = true;
+    stdout = String(error.stdout || "");
   }
   const reports = readdirSync(proofDir).filter((name) => name.endsWith(".json"));
   const partial = reports.length === 1
@@ -55,8 +62,81 @@ function pass(n, d = "") {
   if (!failedAsExpected || !partial || partial.ok !== false || partial.completed !== false) {
     fail("daily_partial_report_on_failure", partial || reports);
   } else pass("daily_partial_report_on_failure", reports[0]);
-  if (JSON.stringify(partial || {}).includes("unit-test-token")) fail("daily_partial_report_secret_safe");
+  const text = JSON.stringify(partial || {});
+  if (text.includes("unit-test-token")) fail("daily_partial_report_secret_safe");
   else pass("daily_partial_report_secret_safe");
+  if (text.includes(PROBE_SECRET_FIXTURE)) fail("daily_probe_secret_not_persisted");
+  else pass("daily_probe_secret_not_persisted");
+  if ((partial?.blocked_external || []).some((b) => b.dependency === "LEAD_PROBE_SECRET")) {
+    fail("daily_probe_not_blocked_with_secret");
+  } else pass("daily_probe_not_blocked_with_secret");
+  // Critical failures do not make the coverage partial: coverage answers
+  // "was every leg exercised", not "did every leg pass".
+  if (partial?.coverage !== "full" || partial?.capture_leg !== "EXERCISED" || /::warning/.test(stdout)) {
+    fail("daily_coverage_full_with_secret", { coverage: partial?.coverage, capture_leg: partial?.capture_leg });
+  } else pass("daily_coverage_full_with_secret");
+  const daily = readFileSync(resolve(ROOT, "scripts/revops/scheduled_daily.mjs"), "utf8");
+  if (daily.includes('"X-Confenge-Probe": "1"') || !daily.includes('"X-Confenge-Probe": LEAD_PROBE_SECRET')) {
+    fail("daily_probe_header_is_the_secret");
+  } else pass("daily_probe_header_is_the_secret");
+}
+
+// 2d) Without LEAD_PROBE_SECRET the synthetic lead leg is a named external
+// blocker (production Turnstile rejects the unauthenticated probe since
+// 2026-08-24): never a FAIL, never a POST fired knowing it will be rejected,
+// and the run still completes and reports it.
+{
+  const proofDir = mkdtempSync(join(tmpdir(), "confenge-daily-nosecret-"));
+  const env = { ...process.env };
+  delete env.LEAD_PROBE_SECRET;
+  let stdout = "";
+  try {
+    stdout = execFileSync(process.execPath, [resolve(ROOT, "scripts/revops/scheduled_daily.mjs")], {
+      cwd: ROOT,
+      encoding: "utf8",
+      stdio: "pipe",
+      env: {
+        ...env,
+        BASE_URL: "http://127.0.0.1:9",
+        EXPECTED_SHA: "test-sha",
+        OPS_TOKEN: "unit-test-token",
+        OPS_FETCH_MAX_ATTEMPTS: "2",
+        OPS_FETCH_BACKOFF_MS: "0",
+        REVOPS_RUN_DIR: proofDir,
+      },
+    });
+  } catch (error) {
+    // the unreachable base fails the critical URL checks; that is expected
+    stdout = String(error.stdout || "");
+  }
+  const reports = readdirSync(proofDir).filter((name) => name.endsWith(".json"));
+  const report = reports.length === 1 ? JSON.parse(readFileSync(resolve(proofDir, reports[0]), "utf8")) : null;
+  const probeChecks = (report?.checks || []).filter((c) => /^(isolated_probe|probe_)/.test(c.name));
+  const blocked = (report?.blocked_external || []).find((b) => b.dependency === "LEAD_PROBE_SECRET");
+  if (!report || report.completed !== true) fail("daily_completes_without_probe_secret", report || reports);
+  else pass("daily_completes_without_probe_secret");
+  if (
+    !blocked ||
+    probeChecks.length !== 1 ||
+    probeChecks.some((c) => c.ok !== false || c.critical !== false || c.blocked_external !== true)
+  ) {
+    fail("daily_probe_blocked_external_without_secret", { probeChecks, blocked });
+  } else pass("daily_probe_blocked_external_without_secret", blocked.name);
+  if (!(report?.alerts || []).some((a) => a.dependency === "LEAD_PROBE_SECRET")) {
+    fail("daily_probe_blocker_alerted");
+  } else pass("daily_probe_blocker_alerted");
+  if ((report?.checks || []).some((c) => c.name === "gsc_sync")) fail("daily_no_duplicate_gsc_sync");
+  else pass("daily_no_duplicate_gsc_sync");
+  // The top-level report and the job log both say the capture leg was never
+  // exercised: `ok` alone must not read as "capture proven".
+  if (report?.coverage !== "partial" || report?.capture_leg !== "BLOCKED_EXTERNAL") {
+    fail("daily_coverage_partial_without_probe_secret", { coverage: report?.coverage, capture_leg: report?.capture_leg });
+  } else pass("daily_coverage_partial_without_probe_secret");
+  if (!/^::warning [^\n]*LEAD_PROBE_SECRET/m.test(stdout)) fail("daily_coverage_partial_warns_in_log");
+  else pass("daily_coverage_partial_warns_in_log");
+  const summaryLine = stdout.trim().split("\n").filter((line) => line.includes('"coverage"'));
+  if (!summaryLine.some((line) => line.includes('"partial"'))) fail("daily_summary_reports_coverage");
+  else pass("daily_summary_reports_coverage");
 }
 function fail(n, d) {
   console.error("FAIL", n, d);
@@ -313,6 +393,16 @@ else {
   else pass("gsc_sync_entry");
   if (y.includes("--allow-missing-creds")) fail("gsc_sync_fail_closed");
   else pass("gsc_sync_fail_closed");
+  // The daily-ops job is not a second GSC producer: no GSC credentials there,
+  // and it passes the probe secret (possibly empty) to the daily script.
+  const dailyJob = y.split("name: daily-ops")[1].split("\n  inbound")[0];
+  if (dailyJob.includes("GSC_CREDENTIALS_JSON") || dailyJob.includes("search_demand_observatory.py")) {
+    fail("daily_ops_not_a_gsc_producer");
+  } else pass("daily_ops_not_a_gsc_producer");
+  if (!dailyJob.includes("LEAD_PROBE_SECRET: ${{ secrets.LEAD_PROBE_SECRET }}")) fail("daily_ops_probe_secret_env");
+  else pass("daily_ops_probe_secret_env");
+  if (dailyJob.includes("data/revops/gsc/last_sync.json")) fail("daily_ops_artifact_without_gsc_state");
+  else pass("daily_ops_artifact_without_gsc_state");
   // Secrets not hardcoded
   if (/OPS_TOKEN:\s*['\"][^$]/.test(y)) fail("secret_hardcoded");
   else pass("secrets_via_env");

@@ -1,9 +1,9 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-09-18T04:38:44.825Z",
+  "measured_at": "2026-09-18T17:04:27.636Z",
   "measured_on": "2026-09-18",
-  "commit_sha": "e3a5aaa3a53b2fe78f78c7cb2668793ce849a276",
+  "commit_sha": "5e7d9515a5e2ceb716d1c470d8cec007b95ba998",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "f168038814087e1b365d1de3042af9a3f3364743756e104711fecc0fb9fe7477",
@@ -45,13 +45,13 @@
     "diagnostico-b2g-expansao/index.html": "1e8d60b0eb002942732bbb79dcd786e6b3172ad1403424bb012af0cb4de41c80",
     "diagnostico-pre-licitacao/index.html": "74402dff44f8981829c91e8bac07c3ef5e122f345cf4e27991b0dfa921588f7a",
     "diretoria-b2g/index.html": "9df7cde4881ff96c2919c2292370e88532dce93b1ab2277780ef2875eb4a3475",
-    "entregas/index.html": "38dac83c7a4092edcf17250b246cff50cd670b753b87b8a99713a262aacb2ab3",
+    "entregas/index.html": "2639fa0477bfd3dc614f77082c81e4878a197232342b6c086d85d341fc37bdc7",
     "entregas/styles.css": "4df6c06befb99bf6ce09db19d81e7353cdda80a7a802868600b88033ca78aa1c",
-    "index.html": "bd4bdf97fef99e85ecadf503970b1f9365c46eb0c98f8d7e2e16a09d4ae61aeb",
+    "index.html": "6fd3039ba73e0fb299dfed6e0a2615365fcf37e92dbb2fcf70fdf9af4a97e98a",
     "medicoes-glosas-obras-publicas/index.html": "a265f90370894eccbeebfb375f4821b622dd9954d6685de62af837996a1814cf",
     "problemas-que-resolvemos/index.html": "c5a5872e8ab07dc8bffc49cc82617fed5b6d40ffd125662d5ab6ab35a5a60153",
     "reequilibrio-obras-publicas/index.html": "d3c946a5d0a81d9e2b59760f5c35396dd887de5055a11e441134dee84fd120f3",
-    "script.js": "f5737c012010592696b00ad13830aee97224cb7311773a5e9a5033b2c954757c",
+    "script.js": "74effeab654baeeaccb9e0336dfe33ad6016832d508d9bf9a570e092303bb233",
     "servicos-obras-publicas/index.html": "599f3003d48ea8a809e05462683d799723ac469c75f4802e8ae93ea04b484986",
     "styles-hubs.css": "ed4668833ad8de5cef5acc5fc1e8f21e519870f0bf282247c3b4a9644a094592",
     "styles-offers.css": "e23f1ae9e064f7c3dbbb04c734d97d49f52d88cd5507e1dd8272cdff0cec127e",
@@ -104,7 +104,7 @@
   "routes": [
     {
       "route": "/",
-      "html_sha256": "bd4bdf97fef99e85ecadf503970b1f9365c46eb0c98f8d7e2e16a09d4ae61aeb",
+      "html_sha256": "6fd3039ba73e0fb299dfed6e0a2615365fcf37e92dbb2fcf70fdf9af4a97e98a",
       "measured_on": "2026-09-18",
       "viewports": {
         "1366x768": {
@@ -320,7 +320,7 @@
     },
     {
       "route": "/entregas/",
-      "html_sha256": "38dac83c7a4092edcf17250b246cff50cd670b753b87b8a99713a262aacb2ab3",
+      "html_sha256": "2639fa0477bfd3dc614f77082c81e4878a197232342b6c086d85d341fc37bdc7",
       "measured_on": "2026-09-18",
       "viewports": {
         "1366x768": {
@@ -354,19 +354,19 @@
               "selector": ".deliverables-lead",
               "box": {
                 "top": 355,
-                "bottom": 444,
+                "bottom": 414,
                 "left": 83,
                 "right": 619,
                 "width": 536,
-                "height": 89
+                "height": 59
               },
-              "text": "Comparar propostas, completar ou conferir um projeto, entender uma infiltração, avaliar um imóvel ou responder a uma glosa: cada entrega diz o que chega às suas mãos e para que serve."
+              "text": "Projeto, planilha, relatório, laudo, parecer ou análise: cada entrega diz o que chega às suas mãos e para que decisão serve."
             },
             "proof": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 569,
-                "bottom": 611,
+                "top": 512,
+                "bottom": 554,
                 "left": 83,
                 "right": 688,
                 "width": 605,
@@ -377,8 +377,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 626,
-                "bottom": 670,
+                "top": 569,
+                "bottom": 613,
                 "left": 83,
                 "right": 337,
                 "width": 254,
@@ -392,8 +392,8 @@
               "text": "Ver entregas e exemplos",
               "href": "#servicos-e-entregas",
               "box": {
-                "top": 626,
-                "bottom": 670,
+                "top": 569,
+                "bottom": 613,
                 "left": 83,
                 "right": 337,
                 "width": 254,
@@ -444,19 +444,19 @@
               "selector": ".deliverables-lead",
               "box": {
                 "top": 280,
-                "bottom": 386,
+                "bottom": 359,
                 "left": 18,
                 "right": 372,
                 "width": 353,
-                "height": 106
+                "height": 79
               },
-              "text": "Comparar propostas, completar ou conferir um projeto, entender uma infiltração, avaliar um imóvel ou responder a uma glosa: cada entrega diz o que chega às suas mãos e para que serve."
+              "text": "Projeto, planilha, relatório, laudo, parecer ou análise: cada entrega diz o que chega às suas mãos e para que decisão serve."
             },
             "proof": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 526,
-                "bottom": 610,
+                "top": 475,
+                "bottom": 559,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -467,8 +467,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 625,
-                "bottom": 669,
+                "top": 575,
+                "bottom": 619,
                 "left": 18,
                 "right": 272,
                 "width": 254,
@@ -482,8 +482,8 @@
               "text": "Ver entregas e exemplos",
               "href": "#servicos-e-entregas",
               "box": {
-                "top": 625,
-                "bottom": 669,
+                "top": 575,
+                "bottom": 619,
                 "left": 18,
                 "right": 272,
                 "width": 254,
@@ -511,20 +511,16 @@
           "recebe"
         ],
         "lead_new": [
-          "avaliar",
+          "analise",
           "chega",
-          "comparar",
-          "completar",
-          "conferir",
-          "entender",
+          "decisao",
           "entrega",
-          "glosa",
-          "imovel",
-          "infiltracao",
+          "laudo",
           "maos",
+          "parecer",
+          "planilha",
           "projeto",
-          "propostas",
-          "responder"
+          "relatorio"
         ]
       }
     },

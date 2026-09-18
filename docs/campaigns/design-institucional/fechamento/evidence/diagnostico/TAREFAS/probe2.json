@@ -1,0 +1,696 @@
+{
+ "home_form": {
+  "selects": {
+   "estagio": {
+    "label": "Tipo de necessidade",
+    "required": true,
+    "options": [
+     "Selecione",
+     "Ainda não sei qual serviço preciso, quero ser orientado",
+     "Projeto, revisão ou compatibilização",
+     "Quantitativos ou orçamento",
+     "Obra ou imóvel para inspecionar, diagnosticar ou documentar",
+     "Perícia, assistência técnica ou avaliação",
+     "Segurança do trabalho",
+     "Contrato em execução (sem urgência aguda)",
+     "Problema urgente em contrato (glosa, aditivo, reequilíbrio, atraso…)",
+     "Edital ou proposta em análise",
+     "Operação no mercado público sem método / estruturar rotina",
+     "Escolhendo oportunidades / carteira",
+     "Planejamento, projeto ou fiscalização do lado do órgão público",
+     "Outra necessidade"
+    ]
+   },
+   "urgencia": {
+    "label": "Urgência opcional",
+    "required": false,
+    "options": [
+     "Selecione se souber",
+     "até 48 horas",
+     "até 7 dias",
+     "até 30 dias",
+     "planejamento sem prazo imediato"
+    ]
+   },
+   "faixa_contrato": {
+    "label": "Faixa de contrato ou carteira opcional",
+    "required": false,
+    "options": [
+     "Selecione se souber",
+     "Até R$ 250 mil",
+     "R$ 250 mil a R$ 1 milhão",
+     "Acima de R$ 1 milhão",
+     "Ainda não sei"
+    ]
+   },
+   "risco_em_jogo": {
+    "label": "Quanto está em jogo nessa decisão opcional",
+    "required": false,
+    "options": [
+     "Selecione se souber",
+     "Abaixo de R$ 599",
+     "R$ 599 a R$ 2.400",
+     "R$ 2.900 a R$ 5.900",
+     "R$ 6.900 a R$ 7.900",
+     "Acima de R$ 7.900",
+     "Ainda não sei"
+    ]
+   },
+   "frequencia": {
+    "label": "Frequência opcional",
+    "required": false,
+    "options": [
+     "Selecione se souber",
+     "Pontual, um evento",
+     "Recorrente, rotina",
+     "Ainda não sei"
+    ]
+   },
+   "maturidade_documental": {
+    "label": "Documentos disponíveis opcional",
+    "required": false,
+    "options": [
+     "Selecione se souber",
+     "Organizados",
+     "Parciais",
+     "Fracos ou ausentes",
+     "Ainda não sei"
+    ]
+   },
+   "capacidade_interna": {
+    "label": "Capacidade interna opcional",
+    "required": false,
+    "options": [
+     "Selecione se souber",
+     "Equipe dá conta",
+     "Equipe limitada",
+     "Sem equipe para isso",
+     "Ainda não sei"
+    ]
+   }
+  },
+  "inputs": {
+   "empresa-site": {
+    "label": "Não preencha este campo",
+    "required": false,
+    "placeholder": ""
+   },
+   "nome": {
+    "label": "Nome",
+    "required": true,
+    "placeholder": ""
+   },
+   "telefone": {
+    "label": "WhatsApp",
+    "required": false,
+    "placeholder": "(48) 98834-4559"
+   },
+   "email": {
+    "label": "E-mail",
+    "required": false,
+    "placeholder": "nome@empresa.com.br"
+   },
+   "empresa": {
+    "label": "Empresa opcional",
+    "required": false,
+    "placeholder": ""
+   },
+   "mensagem": {
+    "label": "Contexto em poucas linhas opcional",
+    "required": false,
+    "placeholder": "Edital, contrato, glosa, notificação ou o que precisa ser decidido. Não cole dados sensíveis desnecessários."
+   },
+   "canal_seguro": {
+    "label": "Solicitar canal seguro para envio de documentos.",
+    "required": false,
+    "placeholder": ""
+   },
+   "consentimento": {
+    "label": "Autorizo o uso destes dados para retorno sobre a solicitação, conforme a Política de Privacidade.",
+    "required": true,
+    "placeholder": ""
+   }
+  },
+  "steps": [
+   {
+    "step": "1",
+    "hidden": false,
+    "display": "block",
+    "fields": [
+     "nome",
+     "telefone",
+     "email",
+     "estagio"
+    ]
+   },
+   {
+    "step": "2",
+    "hidden": false,
+    "display": "none",
+    "fields": [
+     "empresa",
+     "urgencia",
+     "faixa_contrato",
+     "risco_em_jogo",
+     "frequencia",
+     "maturidade_documental",
+     "capacidade_interna",
+     "mensagem",
+     "canal_seguro",
+     "consentimento"
+    ]
+   }
+  ],
+  "section_heading": "Conte o essencial. Devolvemos o próximo passo.",
+  "hint": "Informe WhatsApp ou e-mail para retorno. WhatsApp com DDD, 10 ou 11 dígitos, como (48) 98834-4559. E-mail completo, como nome@empresa.com.br.",
+  "form_step_attr_sample": "<fieldset class=\"form-step is-active\" data-form-step=\"1\" id=\"form-step-1\">\n<legend class=\"form-step-legend\" data-step-heading=\"\">Etapa 1 de 2 · Contato essencial</legend>\n<div class=\"field\"><label for"
+ },
+ "home_form_next_empty": {
+  "textarea_visible": false,
+  "active_el": "nome",
+  "invalid": [
+   "",
+   "nome",
+   "estagio"
+  ],
+  "aria_invalid": [
+   "nome",
+   "telefone",
+   "email",
+   "estagio"
+  ],
+  "messages": [
+   "Informe um WhatsApp ou um e-mail para receber a resposta."
+  ],
+  "validation_msgs": [
+   {
+    "name": "nome",
+    "msg": "Informe o seu nome."
+   },
+   {
+    "name": "estagio",
+    "msg": "Escolha o tipo de necessidade; se não souber, marque a primeira opção."
+   },
+   {
+    "name": "consentimento",
+    "msg": "Please check this box if you want to proceed."
+   }
+  ],
+  "steps_state": [
+   {
+    "step": "1",
+    "visible": true
+   },
+   {
+    "step": "2",
+    "visible": false
+   }
+  ]
+ },
+ "hero_corner": {
+  "point": [
+   370,
+   656
+  ],
+  "el": "DIV.hero-actions opening__actions",
+  "radius": "8px"
+ },
+ "quantitativos_390": {
+  "hero_cta": {
+   "text": "Solicitar proposta de orçamento",
+   "top": 738,
+   "viewport_top": 738,
+   "header_bottom": 61,
+   "fully_visible_first_screen": true,
+   "position": "static"
+  },
+  "anchor_target": {
+   "tag": "SECTION",
+   "top": 17580,
+   "scroll_margin_top": "96px",
+   "heading": "Solicite uma proposta de levantamento, orçamento ou revisão.",
+   "text": "PRÓXIMO PASSO Solicite uma proposta de levantamento, orçamento ou revisão. Basta dizer o que está na mesa. Documentação incompleta não impede o contato, e não é obrigatório passar por triagem ou diagnóstico antes. O que ajuda a informar no primeiro contato Se a obra é pública ou privada. O que precisa decidir: comparar propostas, contratar, aceitar um número ou comprar material. Se precisa de levantamento de quantitativos, elaboração de orçamento, revisão de orçamento existente, ou se prefere que a proposta nomeie. A fase do projeto e quais documentos já existem, só pelo nome; o arquivo vem depois. As disciplinas e as áreas que o número deve cobrir. O primeiro contato é direto com o Engº Tiago Sasaki, por WhatsApp, e-mail ou telefone. A resposta nomeia o serviço, o que você recebe e o que falta reunir, e combina o canal seguro para os arquivos. Escopo, formato da entrega e o modo de comb",
+   "links": [
+    {
+     "text": "Solicitar proposta pelo WhatsApp",
+     "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20solicitar%20proposta%20de%20levantamento%20de%20quantitativos%20ou%20or%C3%A7amento%20de%20uma%20obra."
+    },
+    {
+     "text": "Solicitar proposta por e-mail",
+     "href": "mailto:tiago.sasaki@confenge.com.br?subject=Proposta%20de%20quantitativos%20e%20or%C3%A7amento"
+    },
+    {
+     "text": "Ligar sobre o orçamento: (48) 98834-4559",
+     "href": "tel:+5548988344559"
+    },
+    {
+     "text": "Política de Privacidade",
+     "href": "/privacidade/"
+    },
+    {
+     "text": "contato e triagem geral",
+     "href": "/triagem-tecnica/"
+    }
+   ],
+   "forms": 0
+  },
+  "page_forms": 0,
+  "height": 20426,
+  "hero_candidates": [
+   {
+    "text": "Solicitar proposta de orçamento",
+    "vtop": 0,
+    "abstop": 0,
+    "w": 0,
+    "display": "none",
+    "visibility": "visible",
+    "opacity": "1",
+    "pointer": "auto",
+    "hit": false,
+    "hit_el": "HEADER.site-header",
+    "parent_pos": "static"
+   },
+   {
+    "text": "Solicitar proposta de orçamento",
+    "vtop": 0,
+    "abstop": 0,
+    "w": 0,
+    "display": "inline-flex",
+    "visibility": "visible",
+    "opacity": "1",
+    "pointer": "auto",
+    "hit": false,
+    "hit_el": "HEADER.site-header",
+    "parent_pos": "fixed"
+   },
+   {
+    "text": "Solicitar proposta de orçamento",
+    "vtop": 738,
+    "abstop": 738,
+    "w": 309,
+    "display": "flex",
+    "visibility": "visible",
+    "opacity": "1",
+    "pointer": "auto",
+    "hit": true,
+    "hit_el": "A.button button-primary button-lg",
+    "parent_pos": "static"
+   },
+   {
+    "text": "06\nPedir proposta",
+    "vtop": 1633,
+    "abstop": 1633,
+    "w": 136,
+    "display": "inline-flex",
+    "visibility": "visible",
+    "opacity": "1",
+    "pointer": "auto",
+    "hit": false,
+    "hit_el": null,
+    "parent_pos": "static"
+   },
+   {
+    "text": "Solicitar proposta de orçamento",
+    "vtop": 6263,
+    "abstop": 6263,
+    "w": 301,
+    "display": "flex",
+    "visibility": "visible",
+    "opacity": "1",
+    "pointer": "auto",
+    "hit": false,
+    "hit_el": null,
+    "parent_pos": "static"
+   },
+   {
+    "text": "Solicitar proposta de orçamento",
+    "vtop": 12801,
+    "abstop": 12801,
+    "w": 268,
+    "display": "inline-flex",
+    "visibility": "visible",
+    "opacity": "1",
+    "pointer": "auto",
+    "hit": false,
+    "hit_el": null,
+    "parent_pos": "static"
+   }
+  ],
+  "after_anchor_click": {
+   "scrollY": 17484,
+   "target_viewport_top": 96,
+   "header_bottom": 61,
+   "covered_by_header": false,
+   "first_contact_in_view": false,
+   "first_contact_viewport_top": 1037,
+   "hash": "#triagem-quantitativos"
+  }
+ },
+ "quantitativos_1440": {
+  "hero_cta": {
+   "text": "Solicitar proposta de orçamento",
+   "top": 19,
+   "viewport_top": 19,
+   "header_bottom": 83,
+   "fully_visible_first_screen": false,
+   "position": "static"
+  },
+  "anchor_target": {
+   "tag": "SECTION",
+   "top": 11303,
+   "scroll_margin_top": "96px",
+   "heading": "Solicite uma proposta de levantamento, orçamento ou revisão.",
+   "text": "PRÓXIMO PASSO Solicite uma proposta de levantamento, orçamento ou revisão. Basta dizer o que está na mesa. Documentação incompleta não impede o contato, e não é obrigatório passar por triagem ou diagnóstico antes. O que ajuda a informar no primeiro contato Se a obra é pública ou privada. O que precisa decidir: comparar propostas, contratar, aceitar um número ou comprar material. Se precisa de levantamento de quantitativos, elaboração de orçamento, revisão de orçamento existente, ou se prefere que a proposta nomeie. A fase do projeto e quais documentos já existem, só pelo nome; o arquivo vem depois. As disciplinas e as áreas que o número deve cobrir. O primeiro contato é direto com o Engº Tiago Sasaki, por WhatsApp, e-mail ou telefone. A resposta nomeia o serviço, o que você recebe e o que falta reunir, e combina o canal seguro para os arquivos. Escopo, formato da entrega e o modo de comb",
+   "links": [
+    {
+     "text": "Solicitar proposta pelo WhatsApp",
+     "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20solicitar%20proposta%20de%20levantamento%20de%20quantitativos%20ou%20or%C3%A7amento%20de%20uma%20obra."
+    },
+    {
+     "text": "Solicitar proposta por e-mail",
+     "href": "mailto:tiago.sasaki@confenge.com.br?subject=Proposta%20de%20quantitativos%20e%20or%C3%A7amento"
+    },
+    {
+     "text": "Ligar sobre o orçamento: (48) 98834-4559",
+     "href": "tel:+5548988344559"
+    },
+    {
+     "text": "Política de Privacidade",
+     "href": "/privacidade/"
+    },
+    {
+     "text": "contato e triagem geral",
+     "href": "/triagem-tecnica/"
+    }
+   ],
+   "forms": 0
+  },
+  "page_forms": 0,
+  "height": 12890,
+  "hero_candidates": [
+   {
+    "text": "Solicitar proposta de orçamento",
+    "vtop": 19,
+    "abstop": 19,
+    "w": 240,
+    "display": "flex",
+    "visibility": "visible",
+    "opacity": "1",
+    "pointer": "auto",
+    "hit": true,
+    "hit_el": "A.button button-primary header-cta",
+    "parent_pos": "static"
+   },
+   {
+    "text": "Solicitar proposta de orçamento",
+    "vtop": 0,
+    "abstop": 0,
+    "w": 0,
+    "display": "inline-flex",
+    "visibility": "visible",
+    "opacity": "1",
+    "pointer": "auto",
+    "hit": false,
+    "hit_el": "HEADER.site-header",
+    "parent_pos": "static"
+   },
+   {
+    "text": "Solicitar proposta de orçamento",
+    "vtop": 682,
+    "abstop": 682,
+    "w": 309,
+    "display": "flex",
+    "visibility": "visible",
+    "opacity": "1",
+    "pointer": "auto",
+    "hit": true,
+    "hit_el": "A.button button-primary button-lg",
+    "parent_pos": "static"
+   },
+   {
+    "text": "06\nPedir proposta",
+    "vtop": 848,
+    "abstop": 848,
+    "w": 151,
+    "display": "inline-flex",
+    "visibility": "visible",
+    "opacity": "1",
+    "pointer": "auto",
+    "hit": true,
+    "hit_el": "A.",
+    "parent_pos": "static"
+   },
+   {
+    "text": "Solicitar proposta de orçamento",
+    "vtop": 4239,
+    "abstop": 4239,
+    "w": 301,
+    "display": "flex",
+    "visibility": "visible",
+    "opacity": "1",
+    "pointer": "auto",
+    "hit": false,
+    "hit_el": null,
+    "parent_pos": "static"
+   },
+   {
+    "text": "Solicitar proposta de orçamento",
+    "vtop": 8689,
+    "abstop": 8689,
+    "w": 300,
+    "display": "inline-flex",
+    "visibility": "visible",
+    "opacity": "1",
+    "pointer": "auto",
+    "hit": false,
+    "hit_el": null,
+    "parent_pos": "static"
+   }
+  ],
+  "after_anchor_click": {
+   "scrollY": 9921,
+   "target_viewport_top": 1382,
+   "header_bottom": 83,
+   "covered_by_header": false,
+   "first_contact_in_view": false,
+   "first_contact_viewport_top": 1503,
+   "hash": "#triagem-quantitativos"
+  }
+ },
+ "artigo_quant": {
+  "top": 3605,
+  "heading": "Falar com a CONFENGE sobre este recorte",
+  "text": "Falar com a CONFENGE sobre este recorte Descreva a situação em texto. Documentação inicial incompleta não impede o pedido. Dados deste retorno têm retenção de até 730 dias, com exclusão pelos canais da Política de Privacidade. Falar no WhatsApp sobre o levantamento Voltar ao serviço de quantitativos e orçamento",
+  "links": [
+   {
+    "text": "Política de Privacidade",
+    "href": "/privacidade/"
+   },
+   {
+    "text": "Falar no WhatsApp sobre o levantamento",
+    "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20enviar%20o%20que%20j%C3%A1%20tenho%20para%20um%20levantamento%20de%20quantitativos."
+   },
+   {
+    "text": "Voltar ao serviço de quantitativos e orçamento",
+    "href": "/quantitativos-orcamento-obras/"
+   }
+  ],
+  "forms": 0,
+  "all_offer_links": [
+   {
+    "text": "quantitativos e orçamento",
+    "href": "/quantitativos-orcamento-obras/#amostra-quantitativos",
+    "top": 3463
+   },
+   {
+    "text": "Solicitar proposta de levantamento",
+    "href": "/quantitativos-orcamento-obras/#triagem-quantitativos",
+    "top": 3503
+   },
+   {
+    "text": "Voltar ao serviço de quantitativos e orçamento",
+    "href": "/quantitativos-orcamento-obras/",
+    "top": 3840
+   },
+   {
+    "text": "Ver quantitativos e orçamento de obra",
+    "href": "/quantitativos-orcamento-obras/",
+    "top": 4232
+   }
+  ]
+ },
+ "artigo_reeq": {
+  "forms": 0,
+  "height": 10560,
+  "links_to_pillar": [
+   {
+    "text": "Falar no WhatsApp sobre este caso",
+    "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20um%20caso%20de%20documentos%20reequil%C3%ADbrio%20obra%20p%C3%BAblica%20%28li",
+    "top": 6729
+   },
+   {
+    "text": "Continuar pelo formulário",
+    "href": "/#contato",
+    "top": 6783
+   },
+   {
+    "text": "Analisar este cenário",
+    "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20um%20caso%20de%20documentos%20reequil%C3%ADbrio%20obra%20p%C3%BAblica%20%28li",
+    "top": 7202
+   },
+   {
+    "text": "Conversar pelo WhatsApp",
+    "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20um%20caso%20de%20documentos%20reequil%C3%ADbrio%20obra%20p%C3%BAblica%20%28li",
+    "top": 8994
+   },
+   {
+    "text": "Reequilíbrio econômico-financeiro de contratos de obras",
+    "href": "/reequilibrio-obras-publicas/",
+    "top": 9127
+   }
+  ],
+  "offer_block": "DIAGNÓSTICO CONFENGE Análise de viabilidade e estruturação de pleito de reequilíbrio Organize documentos, riscos, valores e próximos passos antes que o impasse consuma margem ou prazo. Conversar pelo WhatsApp TEMA PRINCIPAL Reequilíbrio econômico-financeiro de contratos de obras"
+ },
+ "artigo_reeq_to_home": {
+  "url": "https://confenge.com.br/#contato",
+  "hidden": {
+   "form-name": "diagnostico-b2g",
+   "origem": "/",
+   "jornada": "",
+   "utm_source": "",
+   "utm_medium": "",
+   "utm_campaign": "",
+   "landing_page": "/conteudos/documentos-reequilibrio-obra-publica/",
+   "document_intent": "secure_channel_request",
+   "cf-turnstile-response": "",
+   "session_id": "sess-c08364da9b4857eb011733c8e2f",
+   "landing_url": "/conteudos/documentos-reequilibrio-obra-publica/",
+   "correlation_id": "9edd1847-ef55-4c94-9f88-9410eb1cb37c",
+   "referrer": "https://confenge.com.br/conteudos/documentos-reequilibrio-obra-publica/",
+   "tema": "documentos reequilíbrio obra pública",
+   "idempotency_key": "fe-43af4974-bfa6-4ead-8120-f31975bcaaf1"
+  },
+  "contato_viewport_top": 88,
+  "header_bottom": 61,
+  "scrollY": 13160,
+  "sessionStorage": {
+   "confenge_idem:/:form:submit": "fe-43af4974-bfa6-4ead-8120-f31975bcaaf1",
+   "confenge_pseo_attribution": "{\"landing_url\":\"/conteudos/documentos-reequilibrio-obra-publica/\",\"correlation_id\":\"9edd1847-ef55-4c94-9f88-9410eb1cb37c\",\"origem\":\"/conteudos/documentos-reequilibrio-obra-publica/\",\"tema\":\"documentos reequilíbrio obra pública\",\"referrer\":\"https://co",
+   "confenge_session_logged": "1",
+   "confenge_sid": "sess-c08364da9b4857eb011733c8e2f",
+   "confenge_landing": "/"
+  },
+  "estagio_selected": "",
+  "jornada_hidden": ""
+ },
+ "servicos_avaliacao": {
+  "scrollY": 6217,
+  "target_viewport_top": 82,
+  "header_bottom": 61,
+  "covered_by_header": false,
+  "scroll_margin_top": "0px",
+  "heading": "Preciso do valor de um imóvel",
+  "text": "AVALIAÇÃO DE IMÓVEL Preciso do valor de um imóvel Pessoas, famílias, empresas e advogados quando negociar, partilhar, dar em garantia ou registrar exige um valor de imóvel fundamentado em engenharia, para uma finalidade e uma data definidas. Pessoa física não precisa informar CNPJ para começar. Se a decisão também exigir inspeção da condição física ou assistência em uma disputa, a proposta combina as etapas. ESTRUTURA DA ANÁLISE · SEM VALOR DE MERCADO Cada laudo ou parecer segue estas cinco partes, nesta ordem: o objeto, a finalidade e a data, o método, os dados e fontes e a conclusão delimitada. É essa ordem que permite a quem recebe o documento conferir de onde o valor saiu e para que decisão ele serve. O QUE ASSUMIMOS Avaliamos o imóvel urbano em cinco partes: o objeto; a finalidade e a data; o método, comparativo ou evolutivo conforme o caso, com as premissas escritas; os dados e fontes, cada um citado e datado; e a conclusão delimitada, com o que o valor representa e o que não representa. O QUE VOCÊ PASSA A TER Laudo ou parecer de avaliação com objeto, finalidade, data, método, dados e conclusão delimitada, para negociar com um número que a outra parte consegue conferir, partilhar sem discutir a base, dar em garantia com fundamento ou registrar. Parecer preliminar não substitui a avaliação formal. O pedido entra aqui, com o que você já souber. NEGOCIAR Comprar ou vender com um valor que explica a si mesmo, não com a média de anúncios. PARTILHAR Divisão de bens, inventário ou dissolução de sociedade com base comum entre as partes. GARANTIA E REGISTRO Dar o imóvel em gar",
+  "links": [
+   {
+    "text": "Pedir pelo WhatsApp",
+    "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20de%20avalia%C3%A7%C3%A3o%20de%20im%C3%B3vel.",
+    "top": 8786
+   },
+   {
+    "text": "Enviar contexto por e-mail",
+    "href": "mailto:tiago.sasaki@confenge.com.br?subject=Avalia%C3%A7%C3%A3o%20de%20im%C3%B3vel",
+    "top": 8842
+   },
+   {
+    "text": "Pedir pela triagem",
+    "href": "/triagem-tecnica/#pericia-avaliacao",
+    "top": 8898
+   }
+  ],
+  "block_top_abs": 6299,
+  "block_bottom_abs": 8942,
+  "page_forms": 0,
+  "cnpj_in_block": true,
+  "b2g_in_block": []
+ },
+ "triagem_pericia": {
+  "scrollY": 2576,
+  "target_viewport_top": 82,
+  "header_bottom": 61,
+  "covered_by_header": false,
+  "tag": "LI",
+  "text": "Perícia, assistência técnica ou avaliação de imóvel. Disputa em curso, assistência à parte ou valor de imóvel para compra, partilha ou garantia. Assumimos, depois de verificar conflito de interesse, a prova de engenharia do seu lado (quesitos, análise do laudo, manifestação técnica) ou o laudo ou parecer de avaliação, com método, dados e conclusão delimitada. Pessoa física começa sem informar CNPJ. Não somos o perito do juízo nem advocacia: o resultado do processo pertence ao juízo. Falar sobre perícia ou avaliação",
+  "links": [
+   {
+    "text": "Falar sobre perícia ou avaliação",
+    "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20de%20per%C3%ADcia%2C%20assist%C3%AAncia%20t%C3%A9cnica%20ou%20avalia%C3%A7%C3%A3o."
+   }
+  ],
+  "forms": 0,
+  "textareas": 0
+ },
+ "triagem_text": {
+  "hero": "COMECE PELA SITUAÇÃO Se preferir, comece pela situação parecida com a sua Cada item diz o que assumimos e o que você passa a ter em mãos. O link abre o WhatsApp já com a mensagem escrita, ou a página do serviço; você pode contar do seu jeito. Projeto para elaborar, completar, conferir ou compatibilizar. Elaboramos a disciplina contratada, com atribuição profissional confirmada na proposta, conferimos o projeto de terceiro ou registramos as interferências entre disciplinas, sempre com responsável técnico nomeado. Você recebe o projeto complementar, o relatório de apontamentos ou o registro de interferências para aprovar, orçar ou executar. Não assinamos projeto de terceiros: o autor original decide e corrige. Falar sobre projeto Obra ou imóvel para inspecionar, documentar ou orçar. Infiltração, fissura, mofo, vistoria de recebimento, condição do prédio ou laudo de estado: inspecionamos o que foi combinado, registramos o que pode ser visto e analisamos as causas que a evidência sustenta. Você recebe o relatório de inspeção e condição para priorizar manutenção, orçar o reparo ou registrar o estado em uma data. A visita, quando necessária, é combinada na proposta; fotografia não diagno",
+  "contato_section_h2": [
+   "Fale agora, sem formulário",
+   "Se preferir, comece pela situação parecida com a sua",
+   "O que dizer no primeiro contato",
+   "Encontrou um erro no site?"
+  ]
+ },
+ "medicoes_form": {
+  "fields": {
+   "nome": {
+    "label": "",
+    "required": true,
+    "placeholder": ""
+   },
+   "empresa": {
+    "label": "",
+    "required": false,
+    "placeholder": ""
+   },
+   "email": {
+    "label": "",
+    "required": false,
+    "placeholder": ""
+   },
+   "telefone": {
+    "label": "",
+    "required": false,
+    "placeholder": ""
+   },
+   "mensagem": {
+    "label": "",
+    "required": false,
+    "placeholder": "Edital, contrato, glosa, notificação ou o que precisa ser decidido. Não cole dados sensíveis desnecessários."
+   },
+   "consentimento": {
+    "label": "",
+    "required": true,
+    "placeholder": ""
+   }
+  },
+  "form_top": 20589,
+  "page_height": 13550,
+  "heading": "Descreva a medição ou a glosa sem sair desta página",
+  "nome_validation": "Please fill out this field.",
+  "nome_aria_invalid": null,
+  "consent_label": "",
+  "action": "/.netlify/functions/lead",
+  "method": "post",
+  "data_attrs": {
+   "offerId": "",
+   "ctaId": "medicoes-glosas-obras-publicas-handraise",
+   "assetId": "medicoes-glosas-obras-publicas",
+   "routeFamily": "medicoes-glosas",
+   "ctaPosition": "pillar_capture",
+   "formContract": "next-state/v1",
+   "nextStateProfile": "service_fit_review",
+   "runtimeProfile": "shared_lead_form_v1",
+   "receiptRequired": "true",
+   "formReady": "true"
+  }
+ }
+}

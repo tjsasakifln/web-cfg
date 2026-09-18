@@ -169,6 +169,12 @@ def evaluate_signal(
             return _result(BLOCKED, ["gsc_unavailable"], observation)
         age = (date.fromisoformat(str(today)) - date.fromisoformat(str(as_of))).days
         observation = {**observation, "age_days": age}
+        # A durable read the host already classified STALE (last sync failed,
+        # provider coverage gap, insufficient distinct runs) is stale regardless
+        # of the as_of age: the host keeps the last-known-good as_of, so age
+        # alone would report a degraded producer as MEASURED_PASS.
+        if str(observation.get("durable_status") or "").upper() == "STALE":
+            return _result(BLOCKED, ["gsc_stale"], observation)
         if age > int(policy["maximum_age_days"]):
             return _result(BLOCKED, ["gsc_stale"], observation)
 
@@ -641,49 +647,129 @@ def _permissioned_proof_observation(root: Path) -> dict[str, Any]:
     }
 
 
-def _latest_gsc_observation(root: Path, *, today: date, maximum_age_days: int) -> dict[str, Any]:
-    candidates: list[tuple[date, str]] = []
-    for path in sorted((root / "seo").glob("gsc-*/search-analytics-redacted.json")):
-        try:
-            payload = json.loads(path.read_text(encoding="utf-8"))
-        except (OSError, json.JSONDecodeError):
-            continue
-        if payload.get("synthetic") is True or payload.get("fixture") is True:
-            continue
-        value = payload.get("max_date") or payload.get("as_of")
-        try:
-            candidates.append((date.fromisoformat(str(value)), str(path.relative_to(root))))
-        except (TypeError, ValueError):
-            continue
-    if not candidates:
-        observation = {
-            "as_of": None,
-            "today": today.isoformat(),
-            "source_available": False,
-            "owner": "web-cfg #413",
+GSC_DURABLE_REPORT = "gsc-insights-durable.json"
+GSC_DURABLE_CONTEXT = (
+    "durable read only on release path: site-ci writes build/reports/"
+    "gsc-insights-durable.json from scripts/revops/verify_gsc_freshness.mjs "
+    "only when export_public_artifact is true and OPS_TOKEN is available "
+    "(netcup-release); pull_request and local runs have no durable read (#413)"
+)
+
+
+def _read_durable_gsc_report(reports_dir: Path) -> dict[str, Any]:
+    """Interpret the sanitized durable consumer read written by site-ci.
+
+    The file is the metadata-only stdout of ``verify_gsc_freshness.mjs``
+    (status, as_of, hashes, reason codes; never insights). Anything that is
+    not a real CURRENT/STALE read of ``delivery_source=durable_store`` is
+    ``absent``/``invalid``/``unknown`` and never becomes an observation.
+    """
+    path = reports_dir / GSC_DURABLE_REPORT
+    if not path.is_file():
+        return {"durable_read": "absent", "durable_path": None}
+    relative = str(path)
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {"durable_read": "invalid", "durable_path": relative}
+    if not isinstance(payload, dict):
+        return {"durable_read": "invalid", "durable_path": relative}
+    if payload.get("synthetic") is True or payload.get("fixture") is True:
+        return {"durable_read": "fixture_rejected", "durable_path": relative}
+    status = payload.get("status")
+    as_of = payload.get("as_of")
+    reason_codes = [str(code) for code in (payload.get("reason_codes") or [])]
+    try:
+        as_of_date = date.fromisoformat(str(as_of)) if as_of else None
+    except ValueError:
+        as_of_date = None
+    if (
+        status == "CURRENT"
+        and payload.get("ok") is True
+        and payload.get("delivery_source") == "durable_store"
+        and as_of_date is not None
+    ):
+        return {
+            "durable_read": "current",
+            "durable_path": relative,
+            "as_of": as_of_date,
+            "snapshot_sha256": payload.get("snapshot_sha256"),
+            "producer_manifest_sha256": payload.get("producer_manifest_sha256"),
+            "produced_at": payload.get("produced_at"),
+            "ingested_at": payload.get("ingested_at"),
+            "reason_codes": reason_codes,
         }
+    if status == "STALE" and payload.get("delivery_source") == "durable_store" and as_of_date is not None:
+        return {
+            "durable_read": "stale",
+            "durable_path": relative,
+            "as_of": as_of_date,
+            "producer_manifest_sha256": payload.get("producer_manifest_sha256"),
+            "reason_codes": reason_codes,
+        }
+    return {"durable_read": "unknown", "durable_path": relative, "reason_codes": reason_codes}
+
+
+def _latest_gsc_observation(
+    root: Path,
+    *,
+    today: date,
+    maximum_age_days: int,
+    reports_dir: Path | None = None,
+) -> dict[str, Any]:
+    """Freshness observation for the private GSC consumer (#413).
+
+    The only observation source is the durable consumer read produced on the
+    release path (``build/reports/gsc-insights-durable.json``). The packaged
+    snapshots under ``seo/gsc-*/`` have no automated producer, so they are not
+    consulted: a file nobody updates must not report ``gsc_stale`` as if it
+    were a measurement, and the contract (docs/ops/GSC-INSIGHTS-SINGLE-SOURCE.md)
+    declares packaged copies unable to satisfy the consumer gate.
+    """
+    durable = _read_durable_gsc_report((reports_dir or root / "build" / "reports"))
+    read_state = durable["durable_read"]
+    observation: dict[str, Any] = {
+        "today": today.isoformat(),
+        "owner": "web-cfg #413",
+        "source_kind": "durable_store" if read_state in {"current", "stale"} else "none",
+        "durable_read": read_state,
+        "durable_reason_codes": durable.get("reason_codes") or [],
+    }
+    if read_state in {"current", "stale"}:
+        observation.update(
+            {
+                "as_of": durable["as_of"].isoformat(),
+                "source_available": True,
+                "source_path": GSC_DURABLE_REPORT,
+                "durable_status": read_state.upper(),
+                "snapshot_sha256": durable.get("snapshot_sha256"),
+                "producer_manifest_sha256": durable.get("producer_manifest_sha256"),
+            }
+        )
     else:
-        newest, source = max(candidates)
-        observation = {
-            "as_of": newest.isoformat(),
-            "today": today.isoformat(),
-            "source_available": True,
-            "owner": "web-cfg #413",
-            "source_path": source,
-        }
+        observation.update({"as_of": None, "source_available": False})
     result = evaluate_signal(
         "gsc-freshness",
         observation,
         policy={"maximum_age_days": maximum_age_days},
     )
+    if read_state == "absent" and "gsc_unavailable" in result["codes"]:
+        result["codes"] = sorted({*result["codes"], "gsc_durable_read_release_path_only"})
+        result["evidence"]["blocker_context"] = GSC_DURABLE_CONTEXT
     result["evidence"].update(
         {
             "routes": ["search observation aggregate"],
             "viewports": ["not applicable"],
             "owner": "web-cfg #413",
             "source_available": observation["source_available"],
+            "source_kind": observation["source_kind"],
+            "durable_read": read_state,
+            "durable_reason_codes": observation["durable_reason_codes"],
+            "maximum_age_days": int(maximum_age_days),
         }
     )
+    if observation.get("durable_status") is not None:
+        result["evidence"]["durable_status"] = observation["durable_status"]
     return result
 
 
@@ -901,11 +987,23 @@ def collect_site_metrics(
         row.get("check") == "analytics" and row.get("errors")
         for row in browser_payload.get("findings") or []
     )
+    # G04-10: semantica de eventos (evento correto presente, incorreto ausente,
+    # sem PII) produzida por scripts/site/test_event_semantics.mjs
+    # (EVENT_SEMANTICS_REPORT). Ausente segue o probe do hub: sem codigo, o
+    # site-ci produz o arquivo antes do scorecard.
+    semantics_path = reports_dir / "event-semantics.json"
+    semantics_payload = (
+        json.loads(semantics_path.read_text(encoding="utf-8")) if semantics_path.is_file() else None
+    )
+    semantics_failed = bool(semantics_payload) and any(
+        row.get("errors") for row in semantics_payload.get("findings") or []
+    )
     results["analytics-revops"] = _metric_result(
         "analytics-revops",
         codes=[
             *([] if analytics_ok else ["analytics_pii_gate_failed"]),
             *(["browser_analytics_contract_failed"] if browser_analytics_failed else []),
+            *(["event_semantics_failed"] if semantics_failed else []),
         ],
         routes=["/entregas/"],
         viewports=["390x844"],
@@ -958,6 +1056,7 @@ def collect_site_metrics(
         root,
         today=today,
         maximum_age_days=int(freshness_metric["maximum_age_days"]),
+        reports_dir=reports_dir,
     )
     return results
 

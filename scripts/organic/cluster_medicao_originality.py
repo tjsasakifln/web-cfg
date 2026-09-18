@@ -406,7 +406,16 @@ def load_jsonld(html: str) -> list[dict]:
 # nomear o Dossie de Atraso e Prorrogacao (via guia de prorrogacao) em vez de
 # "outra intencao e outro dossie", e o lead-inline de medicao por evento deixa
 # de exigir "separar ... antes de abrir uma triagem". Fontes nao reconsultadas.
-CLUSTER_REVISION = "2026-09-14"
+# 2026-09-18. POS-REDESIGN-FECHAMENTO-20260918 (scripts/site/
+# apply_article_pillar_form.py --write): em glosa-por-qualidade-obra-publica,
+# pagamento-parcial-etapa-empreitada-global e
+# atraso-pagamento-contrato-publico-suspender, o link "Continuar pelo
+# formulário" do bloco de oferta deixou de apontar para a home e passou a
+# apontar para o formulário do pilar de medições e glosas com contexto
+# (/medicoes-glosas-obras-publicas/#captura-pilar). Corpo do artigo mudou (o
+# destino do CTA é conteúdo, não cromo), então a data de revisão move nas
+# seis páginas do cluster. Fontes nao reconsultadas.
+CLUSTER_REVISION = "2026-09-18"
 
 # 2026-09-08. Antes, a data em que as fontes foram consultadas era exigida igual
 # a CLUSTER_REVISION. O acoplamento estava errado e era perigoso: qualquer
@@ -537,10 +546,10 @@ def content_fingerprint(html: str) -> str:
 REVISION_BODY_SHA256: dict[str, str] = {
     "atraso-na-medicao-obra-publica": "e9eb9c67874e40d21917ad981960af2d1e8b0f4002b4f6ccdd8bac7cb0763eb1",
     "fiscal-nao-assina-medicao-obra-publica": "64023e36c2d84ecd7976394e07ab30eb94c72656b33efa3ce757b736e5fd6233",
-    "glosa-por-qualidade-obra-publica": "fc356105ef4ee6118c7a1fce3bb0e0c4c05df2963a124c352db24d3ea0a1e543",
+    "glosa-por-qualidade-obra-publica": "72575b1d8bd68cd8a650a38a034c4b8381a85ca61ec4936e7fd821d2a5c3aaae",
     "medicao-por-evento-obra-publica": "94dea650663b24bb0f6b2f82929ef8499055eb00044e79d55760a31acef49d53",
-    "pagamento-parcial-etapa-empreitada-global": "e2df8173f111e49caf99a90ce6a02e6957b188f846a1a76d4a2a0fb1638217b6",
-    "atraso-pagamento-contrato-publico-suspender": "376986b4ebbacceda21c939d2fb046dcaac1a9476e5cc00bc32f6d2d26e7108d",
+    "pagamento-parcial-etapa-empreitada-global": "dfde5280af8f4e7d768e17c44f615ab8ee7b72daf63ea40a25f680165f0c593c",
+    "atraso-pagamento-contrato-publico-suspender": "aa6105c4d62a6ef9840d19ddbf9583b2fdc7caad319f8b6f5252d4a997d8d8e4",
 }
 
 

@@ -576,8 +576,10 @@
       routeFamilyFromPath,
     };
     const storedPseo = readStoredPseo();
+    // A queda para a query crua passa pelo mesmo sanitizador (e-mail, telefone
+    // e valores longos nunca entram no hidden nem no payload).
     const origem = fromUrl.origem || storedPseo.origem
-      || searchParams.get('origem') || hashParams.get('origem');
+      || sanitizeAttr(searchParams.get('origem') || hashParams.get('origem'), 'origem');
     const mensagem = document.getElementById('mensagem');
     const form = document.querySelector('form[name="diagnostico-b2g"], form[name="diagnostico-confenge"]');
     const ensureHidden = (fname, fval, force = false) => {
@@ -653,10 +655,23 @@
         ? window.confengeSessionId()
         : '';
       ensureHidden('session_id', sessionId, true);
+      // TAREFAS-01: `landing_url` e o campo canonico que cruza para o Warmbly
+      // (inbound-handoff.cjs, WARMBLY-INBOUND.md); `origem` fica no store e
+      // alimenta by_origem do closed-loop e as coortes de atribuicao. A home
+      // pre-renderiza <input name="origem" value="/">; sem force, a origem
+      // atribuida (?origem=, atributo do artigo guardado na sessao) era
+      // descartada e todo lead saia '/'. Precedencia mantida: URL atual,
+      // sessao, query/hash. So o marcador generico '/' (ou vazio) cede: rotas
+      // que pre-renderizam a propria identidade (entregas, casos, ferramentas,
+      // diagnostico-b2g-expansao) continuam valendo, pois lead-core le esse
+      // valor como regra de rota.
+      const origemInput = form.querySelector('input[name="origem"]');
+      const origemPlaceholder = !origemInput || !origemInput.value || origemInput.value === '/';
       ensureHidden(
         'origem',
         origem || storedPseo.origem || storedPseo.origin_url || storedPseo.landing_url
           || sessionStorage.getItem('confenge_landing') || window.location.pathname || '/',
+        Boolean(origem) && origemPlaceholder,
       );
       ensureHidden(
         'landing_page',
@@ -950,15 +965,24 @@
     const pagePath = window.location.pathname || '/';
     const defaultCluster = clusterFromPath(pagePath);
     const deviceContext = window.matchMedia('(max-width: 760px)').matches ? 'mobile' : 'desktop';
+    const A_CLUSTER = 'data-content-cluster';
+    const A_OFFER = 'data-offer-id';
+    const A_NEXT_ACTION = 'data-next-action-id';
+    const A_CTA_KIND = 'data-cta-kind';
+    const A_EVENT_NAME = 'data-event-name';
+    const A_CTA_ID = 'data-cta-id';
+    const A_ASSET_ID = 'data-asset-id';
+    const A_ASSET_FAMILY = 'data-asset-family';
+    const A_ROUTE_FAMILY = 'data-route-family';
 
     // Service / offer page view
-    if (document.body?.getAttribute('data-content-cluster') === 'offer'
+    if (document.body?.getAttribute(A_CLUSTER) === 'offer'
       || /\/(diretoria-b2g|diagnostico-b2g-360|bid-room|defesa-margem|medicoes-glosas|aditivos|reequilibrio|auditoria-orcamento|diagnostico-pre|defesa-tecnica|acompanhamento|atrasos)/.test(pagePath)) {
       track('service_page_view', {
         page_path: pagePath,
         content_cluster: defaultCluster,
         device_context: deviceContext,
-        offer_id: document.body?.getAttribute('data-offer-id') || '',
+        offer_id: document.body?.getAttribute(A_OFFER) || '',
         journey: document.body?.getAttribute('data-journey') || '',
       });
     }
@@ -1009,26 +1033,95 @@
       comparison_view: 1,
       cta_click: 1,
     };
+    const attrOrBody = (el, attr) => el.getAttribute(attr) || document.body?.getAttribute(attr) || '';
     const attrsFromEl = (el) => ({
-      source_asset_id: el.getAttribute('data-asset-id')
-        || document.body?.getAttribute('data-asset-id')
+      source_asset_id: attrOrBody(el, A_ASSET_ID),
+      source_asset_family: attrOrBody(el, A_ASSET_FAMILY),
+      route_family: attrOrBody(el, A_ROUTE_FAMILY),
+      cta_id: el.getAttribute(A_CTA_ID)
+        || el.closest?.('[data-cta-id]')?.getAttribute(A_CTA_ID)
         || '',
-      source_asset_family: el.getAttribute('data-asset-family')
-        || document.body?.getAttribute('data-asset-family')
-        || '',
-      route_family: el.getAttribute('data-route-family')
-        || document.body?.getAttribute('data-route-family')
-        || '',
-      cta_id: el.getAttribute('data-cta-id')
-        || el.closest?.('[data-cta-id]')?.getAttribute('data-cta-id')
-        || '',
-      asset_id: el.getAttribute('data-asset-id')
-        || document.body?.getAttribute('data-asset-id')
-        || '',
-      asset_family: el.getAttribute('data-asset-family')
-        || document.body?.getAttribute('data-asset-family')
-        || '',
+      asset_id: attrOrBody(el, A_ASSET_ID),
+      asset_family: attrOrBody(el, A_ASSET_FAMILY),
     });
+    // G04-01: destino de um cta_click sem renomear o evento. Ancora de captura
+    // = form; outra ancora = anchor; rota interna = route. O consumidor
+    // closed-loop conta no estagio 'cta' apenas form/whatsapp/email/tel;
+    // 'route' e 'anchor' sao navegacao. Uma ancora e de captura quando o hash
+    // segue o padrao historico (#contato, #captura*, #pedido*, #triagem*) ou
+    // quando o alvo real na pagina e um formulario, contem um formulario ou e
+    // uma secao data-section-archetype=cta_formal (#escopo-projeto,
+    // #diagnostico da ferramenta, #contato-*) ou um bloco de contato direto
+    // (.capture-grid/.contact-primary, p. ex. #encaminhar em /parcerias-engenharia/).
+    // So o alvo e seus filhos imediatos (ou o .container deles) contam: um
+    // invólucro como <main id=conteudo> (skip link) ou um sumario para uma
+    // secao de prosa com o mesmo id (#diagnostico em /conteudos/) nao e captura.
+    const CAPTURE_HASH = /^#(contato|captura|pedido|triagem)/i;
+    const captureTargetCache = new Map();
+    const isCaptureHash = (hash) => {
+      const value = String(hash || '').trim();
+      if (!value.startsWith('#') || value.length < 2) return false;
+      if (CAPTURE_HASH.test(value)) return true;
+      if (captureTargetCache.has(value)) return captureTargetCache.get(value);
+      let result = false;
+      try {
+        const target = document.getElementById(decodeURIComponent(value.slice(1)));
+        const tag = target ? String(target.tagName || '').toUpperCase() : '';
+        const wrapper = !target || tag === 'MAIN' || tag === 'BODY' || tag === 'HTML'
+          || target.getAttribute('role') === 'main';
+        if (target && !wrapper) {
+          result = tag === 'FORM'
+            || target.getAttribute('data-section-archetype') === 'cta_formal'
+            || !!target.querySelector?.(':scope > :is(form,.capture-grid,.contact-primary), '
+              + ':scope > .container > :is(form,.capture-grid,.contact-primary)');
+        }
+      } catch (_) { result = false; }
+      captureTargetCache.set(value, result);
+      return result;
+    };
+    const destinationTypeFromHref = (rawHref) => {
+      const value = String(rawHref || '').trim();
+      if (!value) return '';
+      const hashAt = value.indexOf('#');
+      const hash = hashAt === -1 ? '' : value.slice(hashAt);
+      const beforeHash = hashAt === -1 ? value : value.slice(0, hashAt);
+      const samePage = !beforeHash || beforeHash === pagePath || beforeHash === pagePath.replace(/\/$/, '');
+      if (hash && samePage) return isCaptureHash(hash) ? 'form' : 'anchor';
+      // classifyTransition() already returned above for whatsapp/email/tel/
+      // external hrefs (same pure canonicalizeDestination on the same href),
+      // so only internal/pii/empty can reach this call.
+      if (canonicalizeDestination(value).kind !== 'internal') return '';
+      if (hash && CAPTURE_HASH.test(hash)) return 'form';
+      return 'route';
+    };
+    // G04-01/G04-03: CTAs de navegacao reconhecidos por classe (sem editar o
+    // HTML): o 'Solicitar proposta' do cabecalho e os links de situacao da home
+    // levam a outra rota e sao cta_click destination_type=route. O destino de
+    // triagem tecnica e a rota do formulario, nao um servico: nunca vira
+    // content_to_service com UNKNOWN_SERVICE.
+    const elMatches = (node, selector) => {
+      try { return typeof node.matches === 'function' && node.matches(selector); } catch (_) { return false; }
+    };
+    const isHeaderCta = (node) => elMatches(node, 'a.header-cta');
+    const isSituationAction = (node) => elMatches(node, 'a.situation-action');
+    const isTriageRoute = (rawHref) => canonicalizeDestination(rawHref).path === '/triagem-tecnica/';
+    // Um botao de envio (ou [data-tool-to-form]) declarado como cta_click leva
+    // ao formulario que o contem: destination_type=form sem href.
+    const isFormSubmitCta = (node) => elMatches(node, 'button[type="submit"], input[type="submit"], [data-tool-to-form]')
+      || (!node.getAttribute('href') && !!node.closest?.('form'));
+    const ctaKindFromEl = (node) => node.getAttribute(A_CTA_KIND)
+      || EVENT_CTA_KIND[node.getAttribute(A_EVENT_NAME) || ''] || '';
+    const attrsWithCta = (node, ctaKind) => {
+      const a = attrsFromEl(node);
+      return {
+        asset_id: a.asset_id,
+        route_family: a.route_family,
+        cta_id: a.cta_id,
+        cta_kind: ctaKind,
+        offer_id: node.getAttribute(A_OFFER) || '',
+        next_action_id: node.getAttribute(A_NEXT_ACTION) || '',
+      };
+    };
     const handleTrackedClick = (el, domEvent) => {
       if (domEvent && domEvent.__confengeTracked) return;
       if (domEvent) domEvent.__confengeTracked = true;
@@ -1046,39 +1139,41 @@
       });
       const base = {
         page_path: pagePath,
-        content_cluster: el.getAttribute('data-content-cluster') || defaultCluster,
+        content_cluster: el.getAttribute(A_CLUSTER) || defaultCluster,
         cta_position: position,
         device_context: deviceContext,
         event_id: eventId,
         correlation_id: fromUrl.correlation_id || '',
       };
+      const editorialBase = {
+        content_type: isEditorial ? (editorialType || 'editorial') : undefined,
+        topic: isEditorial ? editorialTopic.slice(0, 120) : undefined,
+      };
+      const sourcePageType = document.body?.getAttribute(A_CLUSTER) || defaultCluster;
+      const offerId = el.getAttribute(A_OFFER) || '';
+      const ctaKind = ctaKindFromEl(el);
+      const withCta = attrsWithCta(el, ctaKind);
       if (classified.kind === 'whatsapp') {
-        const whatsappAttrs = attrsFromEl(el);
         const whatsappProtocol = appendWhatsappProtocol(el, eventId);
         track('whatsapp_click', {
           ...base,
+          ...editorialBase,
           correlation_id: whatsappProtocol,
           cta_label: label || 'whatsapp',
           destination_type: 'whatsapp',
           journey: el.getAttribute('data-journey') || form?.querySelector('#jornada-hidden')?.value || editorialJourney || '',
-          content_type: isEditorial ? (editorialType || 'editorial') : undefined,
-          topic: isEditorial ? editorialTopic.slice(0, 120) : undefined,
-          asset_id: whatsappAttrs.asset_id,
-          route_family: whatsappAttrs.route_family,
-          cta_id: whatsappAttrs.cta_id,
-          cta_kind: el.getAttribute('data-cta-kind') || '',
-          offer_id: el.getAttribute('data-offer-id') || '',
-          next_action_id: el.getAttribute('data-next-action-id') || '',
+          ...withCta,
         });
         return;
       }
       if (classified.kind === 'email') {
         track('email_click', {
           ...base,
+          ...editorialBase,
+          cta_label: label || 'email',
           destination_type: 'email',
-          content_type: isEditorial ? (editorialType || 'editorial') : undefined,
-          topic: isEditorial ? editorialTopic.slice(0, 120) : undefined,
           journey: isEditorial ? editorialJourney : undefined,
+          ...withCta,
         });
         return;
       }
@@ -1086,6 +1181,7 @@
         track('outbound_click', {
           ...base,
           destination_type: classified.kind,
+          ...attrsWithCta(el, classified.kind === 'tel' ? ctaKind : ''),
         });
         return;
       }
@@ -1094,10 +1190,28 @@
           ...base,
           cta_label: label,
           destination_type: 'form',
-          offer_id: el.getAttribute('data-offer-id') || '',
-          source_page_type: document.body?.getAttribute('data-content-cluster') || defaultCluster,
-          cta_id: attrsFromEl(el).cta_id,
-          route_family: attrsFromEl(el).route_family,
+          offer_id: offerId,
+          source_page_type: sourcePageType,
+          cta_id: withCta.cta_id,
+          route_family: withCta.route_family,
+        });
+        return;
+      }
+      // O 'Solicitar proposta' do cabecalho e cta_click em toda rota: destino
+      // route (/triagem-tecnica/), form (ancora de captura da propria pagina,
+      // p. ex. #triagem-quantitativos, #escopo-projeto) ou anchor.
+      const navDestination = destinationTypeFromHref(href);
+      // navDestination is one of '', 'form', 'anchor', 'route' here, so
+      // non-empty already means route/form/anchor.
+      const routeCta = (isHeaderCta(el) && navDestination !== '')
+        || (isTriageRoute(href) && navDestination === 'route');
+      if (routeCta) {
+        track('cta_click', {
+          ...base,
+          cta_label: label,
+          destination_type: navDestination,
+          source_page_type: sourcePageType,
+          ...withCta,
         });
         return;
       }
@@ -1106,8 +1220,8 @@
           ...base,
           cta_label: label,
           destination_type: classified.destination_service_id === UNKNOWN_SERVICE ? 'unknown' : 'service',
-          source_page_type: document.body?.getAttribute('data-content-cluster') || defaultCluster,
-          offer_id: el.getAttribute('data-offer-id') || '',
+          source_page_type: sourcePageType,
+          offer_id: offerId,
           source_path: classified.source_path,
           source_asset_id: classified.source_asset_id,
           source_asset_family: classified.source_asset_family,
@@ -1120,21 +1234,28 @@
         });
         return;
       }
-      const eventName = el.getAttribute('data-event-name');
+      // Sem data-event-name, so viram cta_click: link de situacao da home para
+      // outra rota e ancora de captura da propria pagina (com ou sem
+      // data-cta-id), p. ex. o herói de /quantitativos-orcamento-obras/ ->
+      // #triagem-quantitativos ou o de /parcerias-engenharia/ -> #encaminhar.
+      const isCaptureAnchorCta = href.startsWith('#') && navDestination === 'form';
+      const eventName = el.getAttribute(A_EVENT_NAME)
+        || ((isSituationAction(el) && navDestination === 'route') || isCaptureAnchorCta ? 'cta_click' : '');
       if (!eventName || !namedAllowed[eventName]) return;
-      const namedAttrs = attrsFromEl(el);
+      const destinationType = /cta_click$/.test(eventName)
+        ? (navDestination || (isFormSubmitCta(el) ? 'form' : ''))
+        : '';
       track(eventName, {
         ...base,
         cta_label: label,
-        offer_id: el.getAttribute('data-offer-id')
-          || document.body?.getAttribute('data-offer-id')
-          || '',
-        source_page_type: document.body?.getAttribute('data-content-cluster') || defaultCluster,
-        asset_id: namedAttrs.asset_id,
-        route_family: namedAttrs.route_family,
-        cta_id: namedAttrs.cta_id,
-        cta_kind: el.getAttribute('data-cta-kind') || '',
-        next_action_id: el.getAttribute('data-next-action-id') || '',
+        ...(destinationType ? { destination_type: destinationType } : {}),
+        offer_id: attrOrBody(el, A_OFFER),
+        source_page_type: sourcePageType,
+        asset_id: withCta.asset_id,
+        route_family: withCta.route_family,
+        cta_id: withCta.cta_id,
+        cta_kind: el.getAttribute(A_CTA_KIND) || '',
+        next_action_id: el.getAttribute(A_NEXT_ACTION) || '',
       });
     };
 
@@ -1155,14 +1276,24 @@
     document.querySelectorAll('[data-event-name]').forEach((el) => {
       el.addEventListener('click', (evt) => handleTrackedClick(el, evt));
     });
+    // G04-10 (3) / G04-02: o header-cta com ancora (toda rota privada) e toda
+    // ancora de captura da propria pagina, com ou sem data-cta-id e sem
+    // data-event-name, emitem cta_click. Ancoras de sumario para prosa ficam
+    // mudas.
+    document.querySelectorAll('a[href^="#"]').forEach((el) => {
+      if (el.hasAttribute(A_EVENT_NAME)) return;
+      const anchorHref = el.getAttribute('href') || '';
+      if (!isHeaderCta(el) && !isCaptureHash(anchorHref)) return;
+      el.addEventListener('click', (evt) => handleTrackedClick(el, evt));
+    });
 
     // Offer page view + comparison section view (once)
-    if (document.body?.getAttribute('data-offer-id')) {
+    if (document.body?.getAttribute(A_OFFER)) {
       track('offer_view', {
         page_path: pagePath,
         content_cluster: defaultCluster,
         device_context: deviceContext,
-        offer_id: document.body.getAttribute('data-offer-id'),
+        offer_id: document.body.getAttribute(A_OFFER),
         source_page_type: 'offer',
       });
     }

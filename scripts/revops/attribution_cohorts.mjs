@@ -81,7 +81,16 @@ export function buildCohorts({
     bump(eventsByName, n);
   }
 
-  // Cohort join is path-level only: same landing path counts (not person-level)
+  // Cohort join is path-level only: same landing path counts (not person-level).
+  // G04-08: numerator and denominator are different universes. Analytics events
+  // are opt-out filtered (analyticsDenied() returns before session_start), while
+  // the lead store keeps every persisted lead regardless of analytics consent.
+  // The ratio is labelled, never read as a per-person conversion.
+  const PATH_COHORT_UNITS = Object.freeze({
+    numerator: "analytics_events_opt_out_filtered",
+    denominator: "persisted_leads_all",
+    join: "landing_path_cohort_not_identity",
+  });
   const pathCohorts = [];
   const paths = new Set([...byLanding.keys(), ...eventsByPath.keys()]);
   for (const p of paths) {
@@ -89,7 +98,9 @@ export function buildCohorts({
       path: p,
       leads: byLanding.get(p) || 0,
       events: eventsByPath.get(p) || 0,
-      // probability-style ratio, not identity
+      // probability-style ratio, not identity; units differ (see path_cohort_units)
+      numerator_unit: PATH_COHORT_UNITS.numerator,
+      denominator_unit: PATH_COHORT_UNITS.denominator,
       event_per_lead:
         (byLanding.get(p) || 0) > 0
           ? Number(((eventsByPath.get(p) || 0) / (byLanding.get(p) || 1)).toFixed(4))
@@ -119,6 +130,7 @@ export function buildCohorts({
     by_utm_source: Object.fromEntries([...byUtmSource.entries()].sort()),
     by_journey: Object.fromEntries([...byJourney.entries()].sort()),
     by_event_name: Object.fromEntries([...eventsByName.entries()].sort()),
+    path_cohort_units: { ...PATH_COHORT_UNITS, ratio: "event_per_lead = numerator / denominator" },
     path_cohorts: pathCohorts,
   };
 }

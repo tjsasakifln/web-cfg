@@ -1,0 +1,251 @@
+{
+  "gap": "G03",
+  "campanha": "CONFENGE-POS-REDESIGN-FECHAMENTO-20260918",
+  "coletado_em": "2026-09-18T12:53Z",
+  "producao": {
+    "main_sha": "252fc98d1",
+    "script_js_identico_ao_checkout": true,
+    "release": "35322685544"
+  },
+  "host_ec_prod_runtime_env_presenca": {
+    "fonte": "/etc/confenge-web/runtime.env (somente nomes/presenca; valores nunca lidos para este artefato)",
+    "RESEND_API_KEY": "SET",
+    "LEAD_NOTIFY_EMAIL": "tiago.sasaki@confenge.com.br",
+    "LEAD_FROM_EMAIL": "CONFENGE Leads <leads@confenge.com.br>",
+    "OPS_EMAIL": "UNSET",
+    "NTFY_URL": "UNSET",
+    "NTFY_TOKEN": "UNSET",
+    "OPS_WEBHOOK_URL": "UNSET",
+    "OPS_TOKEN": "SET",
+    "LEAD_PROBE_SECRET": "SET",
+    "CONFENGE_INBOUND_WEBHOOK_URL": "https://api.confenge.com.br/api/v1/webhooks/confenge/inbound",
+    "CONFENGE_INBOUND_WEBHOOK_SECRET": "SET",
+    "TURNSTILE_SECRET_KEY": "SET",
+    "LEAD_REQUIRE_TURNSTILE": "1",
+    "LEAD_REQUIRE_ORIGIN": "1",
+    "LEAD_SLA_HOURS": "UNSET (default 4h em lead-stages.cjs:214)",
+    "servico": "confenge-web-runtime.service active"
+  },
+  "store_web_cfg_host": {
+    "raiz": "/var/lib/confenge-web/v1",
+    "leads": 23,
+    "leads_idempotency": 23,
+    "analytics_events": 13844,
+    "ops_leads_kind_all": {
+      "count": 23,
+      "counts_by_kind": {
+        "real": 0,
+        "synthetic": 23,
+        "qa": 0,
+        "spam": 0,
+        "internal": 0
+      }
+    },
+    "delivery_de_todos_os_23": {
+      "email": "skipped",
+      "notify": "skipped",
+      "motivo": "non_real (lead-delivery.cjs:10-18)"
+    },
+    "received_at_intervalo": [
+      "2026-08-27",
+      "2026-09-18"
+    ],
+    "inbound_handoff_counters": {
+      "persisted_leads": 23,
+      "pending": 0,
+      "delivered": 17,
+      "retryable": 0,
+      "permanent_failures": 1,
+      "skipped": 5,
+      "blocked": 1,
+      "dead": 0,
+      "latency_p95_ms": 369
+    },
+    "inbound_configuration": {
+      "webhook_url": "SET",
+      "webhook_secret": "SET",
+      "contract": "READY",
+      "destination_fingerprint": "WARMBLY_PRODUCTION_V1"
+    },
+    "safety_gate": {
+      "ok": true,
+      "contract": "READY",
+      "auto_send_off": true,
+      "status": "READY",
+      "dispatch_attempted": false
+    }
+  },
+  "warmbly_host": {
+    "containers": [
+      "warmbly-confenge-backend-1 127.0.0.1:8080",
+      "warmbly-confenge-admin-1 127.0.0.1:5174",
+      "warmbly-confenge-web-1 127.0.0.1:5173",
+      "warmbly-confenge-postgres-1 127.0.0.1:15432"
+    ],
+    "tabela": "outreach_inbound_leads (db warmbly_dev, user warmbly)",
+    "colunas_sem_record_kind": true,
+    "classificacao_sintetica": "raw_payload->>'record_kind' / raw_payload->>'synthetic' + status/suppress_reason",
+    "total": 39,
+    "agregado_status_suppress_kind": [
+      [
+        "SUPPRESSED",
+        "synthetic",
+        "synthetic",
+        16
+      ],
+      [
+        "OPEN",
+        null,
+        "(none)",
+        8
+      ],
+      [
+        "OPEN",
+        null,
+        "synthetic",
+        8
+      ],
+      [
+        "SUPPRESSED",
+        "DNC",
+        "(none)",
+        2
+      ],
+      [
+        "SUPPRESSED",
+        "consent_missing",
+        "synthetic",
+        2
+      ],
+      [
+        "SUPPRESSED",
+        "conflict_hit",
+        "(none)",
+        1
+      ],
+      [
+        "SUPPRESSED",
+        "consent_missing",
+        "(none)",
+        1
+      ],
+      [
+        "SUPPRESSED",
+        "conflict_decline",
+        "(none)",
+        1
+      ]
+    ],
+    "por_dia_ultimos_10d": [
+      [
+        "2026-09-12",
+        1,
+        "1 synth"
+      ],
+      [
+        "2026-09-16",
+        6,
+        "6 synth"
+      ],
+      [
+        "2026-09-18",
+        8,
+        "8 synth"
+      ]
+    ],
+    "rotas_publicas": {
+      "publicas_via_api.confenge.com.br": [
+        "POST /api/v1/webhooks/confenge/inbound",
+        "GET .../inbound/health",
+        "GET .../inbound/handraisers/:logicalId (HMAC)"
+      ],
+      "fila_operador_loopback_autenticada": [
+        "GET /confenge/inbound?include_synthetic=1 (127.0.0.1:8080, sessao operador)",
+        "GET /confenge/cockpit (inbound_now)",
+        "POST /confenge/inbound/:leadId/outcome"
+      ],
+      "acesso_operador": "ssh tunnel -> http://127.0.0.1:5173 (docs/confenge/netcup-ops.md 'Operator laptop')"
+    },
+    "fila_inbound_now_regra_de_skip": {
+      "arquivo": "/opt/warmbly-confenge/internal/app/confenge/intel/skip.go:25-43,60-106",
+      "regra": "skip calculado na leitura (nao no status da tabela): source/lead_id/receipt_id com token synthetic|qa|internal; raw_payload.synthetic truthy; raw_payload.record_kind; marcador oficial 'synthetic-inbound' em empresa/e-mail/nome/mensagem",
+      "consequencia": "as 8 linhas OPEN com raw_payload.record_kind=synthetic NAO aparecem em GET /confenge/inbound sem include_synthetic=1 (inbound_cockpit.go:109-112)",
+      "tokens_a_evitar_no_qa": [
+        "synthetic",
+        "qa",
+        "internal",
+        "synthetic-inbound"
+      ]
+    }
+  },
+  "resend": {
+    "GET /domains": {
+      "http": 200,
+      "dominios": [
+        [
+          "confenge.com.br",
+          "failed"
+        ]
+      ],
+      "region": "sa-east-1",
+      "created_at": "2026-08-02"
+    },
+    "registros_dominio": [
+      [
+        "DKIM TXT resend._domainkey",
+        "failed"
+      ],
+      [
+        "SPF MX send",
+        "failed"
+      ],
+      [
+        "SPF TXT send",
+        "failed"
+      ]
+    ],
+    "dns_publico_2026-09-18": {
+      "NS": "cloudflare (grannbo/kai)",
+      "resend._domainkey.confenge.com.br TXT": "AUSENTE (1.1.1.1 e 8.8.8.8)",
+      "send.confenge.com.br TXT": "v=spf1 include:amazonses.com ~all",
+      "send.confenge.com.br MX": "feedback-smtp.sa-east-1.amazonses.com",
+      "_dmarc": "v=DMARC1; p=none",
+      "confenge.com.br MX": "hostinger"
+    },
+    "GET /emails?limit=5": {
+      "http": 200,
+      "itens": 1,
+      "unico": {
+        "id": "2cc210fe-…",
+        "created_at": "2026-08-21",
+        "subject": "Lead CONFENGE [contrato] problema urgente em contrato · 692ada64…",
+        "last_event": "delivered"
+      }
+    },
+    "GET /emails/{id}": "endpoint existe (404 'Email not found' para id inexistente); consultavel do host com a chave configurada",
+    "provider_id_persistido_no_registro": false
+  },
+  "rate_limit_web_cfg": {
+    "arquivo": "netlify/functions/lib/lead-rate-limit.cjs:8-10",
+    "janela_ms": 600000,
+    "max_por_ip": 8,
+    "max_por_fingerprint": 12,
+    "fingerprint": "ip|user-agent|accept-language|jornada (lead-core.cjs:1284-1290)",
+    "escopo": "em processo (Node unico no host)"
+  },
+  "testes_cobertura": {
+    "timeout_front_e_reenvio_mesma_chave": "scripts/site/test_money_asset_canary_e2e.mjs:264-281 (Turnstile e Resend removidos do env: linhas 27)",
+    "replay_idempotente_200": "scripts/site/test_money_asset_canary_e2e.mjs:296-309",
+    "warmbly_indisponivel_RETRYABLE": "scripts/site/test_money_asset_canary_e2e.mjs:324-334",
+    "resend_500_mantem_lead": "scripts/site/test_lead_function.mjs:1347-1372 (mock fetch)",
+    "synthetic_pula_resend": "scripts/site/test_lead_function.mjs:1429-1434",
+    "ops_webhook_ntfy_fail_closed": "scripts/site/test_lead_function.mjs:365-409",
+    "entrada_invalida_400": "scripts/site/test_lead_function.mjs:81-123,166-189",
+    "nao_coberto": [
+      "Turnstile real: token consumido na 1a tentativa e reutilizado no reenvio pos-timeout (lead.cjs:191-206 antes da idempotencia :373-395; form.js sem turnstile.reset)",
+      "Resend 403 dominio nao verificado (comportamento real da API)",
+      "Resend sem timeout (lead-delivery.cjs:286-300) vs orcamento de 15 s do front (form.js:581-585)",
+      "sessionStorage bloqueado: chave rotaciona a cada submit (form.js:124-135, 567-569)"
+    ]
+  }
+}

@@ -1,0 +1,660 @@
+{
+ "base": "https://confenge.com.br",
+ "measured_at": "2026-09-18T12:52:05.981Z",
+ "rows": [
+  {
+   "route": "/servicos/",
+   "viewport": "390x844",
+   "height": 16071,
+   "elements": [
+    {
+     "sel": "#servico-avaliacao",
+     "top": 6299,
+     "bottom": 8942,
+     "h": 2643,
+     "text": "AVALIAÇÃO DE IMÓVEL Preciso do valor de um imóvel Pessoas, famílias, e"
+    },
+    {
+     "sel": "#servico-avaliacao figure.plate",
+     "top": 6639,
+     "bottom": 7174,
+     "h": 535,
+     "text": "ESTRUTURA DA ANÁLISE · SEM VALOR DE MERCADO Cada laudo ou parecer segu"
+    },
+    {
+     "sel": "#servico-avaliacao figcaption",
+     "top": 7003,
+     "bottom": 7174,
+     "h": 171,
+     "text": "ESTRUTURA DA ANÁLISE · SEM VALOR DE MERCADO Cada laudo ou parecer segu"
+    },
+    {
+     "sel": "#servico-avaliacao .service-output",
+     "top": 7230,
+     "bottom": 7441,
+     "h": 211,
+     "text": "Avaliamos o imóvel urbano em cinco partes: o objeto; a finalidade e a "
+    },
+    {
+     "sel": "#servico-avaliacao .contact-actions a[href^='https://wa.me']",
+     "top": 8786,
+     "bottom": 8830,
+     "h": 44,
+     "text": "Pedir pelo WhatsApp"
+    },
+    {
+     "sel": "#servico-avaliacao a[href*='triagem']",
+     "top": 8898,
+     "bottom": 8942,
+     "h": 44,
+     "text": "Pedir pela triagem"
+    },
+    {
+     "sel": "#servico-pericia",
+     "top": 8986,
+     "bottom": 9865,
+     "h": 879,
+     "text": "PERÍCIA E ASSISTÊNCIA TÉCNICA Uma disputa depende de prova técnica Pes"
+    }
+   ]
+  },
+  {
+   "route": "/servicos/",
+   "viewport": "1440x1000",
+   "height": 10036,
+   "elements": [
+    {
+     "sel": "#servico-avaliacao",
+     "top": 4107,
+     "bottom": 5681,
+     "h": 1573,
+     "text": "AVALIAÇÃO DE IMÓVEL Preciso do valor de um imóvel Pessoas, famílias, e"
+    },
+    {
+     "sel": "#servico-avaliacao figure.plate",
+     "top": 4335,
+     "bottom": 4903,
+     "h": 568,
+     "text": "ESTRUTURA DA ANÁLISE · SEM VALOR DE MERCADO Cada laudo ou parecer segu"
+    },
+    {
+     "sel": "#servico-avaliacao figcaption",
+     "top": 4794,
+     "bottom": 4903,
+     "h": 109,
+     "text": "ESTRUTURA DA ANÁLISE · SEM VALOR DE MERCADO Cada laudo ou parecer segu"
+    },
+    {
+     "sel": "#servico-avaliacao .service-output",
+     "top": 4959,
+     "bottom": 5107,
+     "h": 148,
+     "text": "Avaliamos o imóvel urbano em cinco partes: o objeto; a finalidade e a "
+    },
+    {
+     "sel": "#servico-avaliacao .contact-actions a[href^='https://wa.me']",
+     "top": 5637,
+     "bottom": 5681,
+     "h": 44,
+     "text": "Pedir pelo WhatsApp"
+    },
+    {
+     "sel": "#servico-avaliacao a[href*='triagem']",
+     "top": 5637,
+     "bottom": 5681,
+     "h": 44,
+     "text": "Pedir pela triagem"
+    },
+    {
+     "sel": "#servico-pericia",
+     "top": 5725,
+     "bottom": 6163,
+     "h": 438,
+     "text": "PERÍCIA E ASSISTÊNCIA TÉCNICA Uma disputa depende de prova técnica Pes"
+    }
+   ]
+  },
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "viewport": "390x844",
+   "height": 20426,
+   "elements": [
+    {
+     "sel": "#amostra-quantitativos",
+     "top": 1728,
+     "bottom": 4180,
+     "h": 2452,
+     "text": "PROVA ANTES DO MÉTODO Uma parede de banheiro, do desenho ao item da pl"
+    },
+    {
+     "sel": "#amostra-quantitativos figure.plate--dominant",
+     "top": 2113,
+     "bottom": 2709,
+     "h": 597,
+     "text": "AMOSTRA DEMONSTRATIVA Prancha P1, revisão R01: planta do recorte RM-01"
+    },
+    {
+     "sel": "#amostra-quantitativos figure.plate--dominant figcaption",
+     "top": 2537,
+     "bottom": 2709,
+     "h": 172,
+     "text": "AMOSTRA DEMONSTRATIVA Prancha P1, revisão R01: planta do recorte RM-01"
+    },
+    {
+     "sel": "#amostra-quantitativos h3",
+     "top": 2928,
+     "bottom": 2982,
+     "h": 54,
+     "text": "Memória de cálculo do item Q-PAR-01"
+    },
+    {
+     "sel": "#amostra-quantitativos figure:nth-of-type(2)",
+     "missing": true
+    },
+    {
+     "sel": "#amostra-quantitativos figure:nth-of-type(2) figcaption",
+     "missing": true
+    },
+    {
+     "sel": "#o-que-contratar",
+     "top": 4180,
+     "bottom": 6107,
+     "h": 1926,
+     "text": "QUAL DECISÃO ESTÁ NA MESA? Diga o que precisa decidir; nós nomeamos o "
+    },
+    {
+     "sel": "#metodo-quantitativos",
+     "top": 6403,
+     "bottom": 7358,
+     "h": 956,
+     "text": "MÉTODO Da situação à decisão, sem esconder o que falta. Três passos, s"
+    },
+    {
+     "sel": "#exemplos-conferiveis",
+     "top": 7358,
+     "bottom": 12918,
+     "h": 5560,
+     "text": "DEMONSTRAÇÕES A mesma conta na trilha técnica, na planilha aberta e em"
+    },
+    {
+     "sel": "#qty-sample-trail",
+     "top": 7771,
+     "bottom": 9354,
+     "h": 1583,
+     "text": "Amostra demonstrativa do recorte de banheiro. Não é orçamento para exe"
+    },
+    {
+     "sel": "#condicoes-da-proposta",
+     "top": 12918,
+     "bottom": 16123,
+     "h": 3204,
+     "text": "CONDIÇÕES DA PROPOSTA Projeto incompleto, esforço, finalidade e limite"
+    },
+    {
+     "sel": "#decisoes",
+     "top": 16271,
+     "bottom": 16797,
+     "h": 526,
+     "text": "Três decisões que costumam vir antes da proposta. O que enviar para o "
+    },
+    {
+     "sel": "#triagem-quantitativos",
+     "top": 17580,
+     "bottom": 19022,
+     "h": 1442,
+     "text": "PRÓXIMO PASSO Solicite uma proposta de levantamento, orçamento ou revi"
+    },
+    {
+     "sel": "#triagem-quantitativos a[href^='https://wa.me']",
+     "top": 18521,
+     "bottom": 18573,
+     "h": 52,
+     "text": "Solicitar proposta pelo WhatsApp"
+    }
+   ]
+  },
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "viewport": "1440x1000",
+   "height": 12890,
+   "elements": [
+    {
+     "sel": "#amostra-quantitativos",
+     "top": 974,
+     "bottom": 2888,
+     "h": 1913,
+     "text": "PROVA ANTES DO MÉTODO Uma parede de banheiro, do desenho ao item da pl"
+    },
+    {
+     "sel": "#amostra-quantitativos figure.plate--dominant",
+     "top": 1299,
+     "bottom": 2055,
+     "h": 756,
+     "text": "AMOSTRA DEMONSTRATIVA Prancha P1, revisão R01: planta do recorte RM-01"
+    },
+    {
+     "sel": "#amostra-quantitativos figure.plate--dominant figcaption",
+     "top": 1966,
+     "bottom": 2055,
+     "h": 88,
+     "text": "AMOSTRA DEMONSTRATIVA Prancha P1, revisão R01: planta do recorte RM-01"
+    },
+    {
+     "sel": "#amostra-quantitativos h3",
+     "top": 2166,
+     "bottom": 2236,
+     "h": 70,
+     "text": "Memória de cálculo do item Q-PAR-01"
+    },
+    {
+     "sel": "#amostra-quantitativos figure:nth-of-type(2)",
+     "missing": true
+    },
+    {
+     "sel": "#amostra-quantitativos figure:nth-of-type(2) figcaption",
+     "missing": true
+    },
+    {
+     "sel": "#o-que-contratar",
+     "top": 2888,
+     "bottom": 4150,
+     "h": 1263,
+     "text": "QUAL DECISÃO ESTÁ NA MESA? Diga o que precisa decidir; nós nomeamos o "
+    },
+    {
+     "sel": "#metodo-quantitativos",
+     "top": 4347,
+     "bottom": 5148,
+     "h": 801,
+     "text": "MÉTODO Da situação à decisão, sem esconder o que falta. Três passos, s"
+    },
+    {
+     "sel": "#exemplos-conferiveis",
+     "top": 5148,
+     "bottom": 8840,
+     "h": 3692,
+     "text": "DEMONSTRAÇÕES A mesma conta na trilha técnica, na planilha aberta e em"
+    },
+    {
+     "sel": "#qty-sample-trail",
+     "top": 5498,
+     "bottom": 6640,
+     "h": 1142,
+     "text": "Amostra demonstrativa do recorte de banheiro. Não é orçamento para exe"
+    },
+    {
+     "sel": "#condicoes-da-proposta",
+     "top": 8840,
+     "bottom": 10464,
+     "h": 1624,
+     "text": "CONDIÇÕES DA PROPOSTA Projeto incompleto, esforço, finalidade e limite"
+    },
+    {
+     "sel": "#decisoes",
+     "top": 10664,
+     "bottom": 11247,
+     "h": 583,
+     "text": "Três decisões que costumam vir antes da proposta. O que enviar para o "
+    },
+    {
+     "sel": "#triagem-quantitativos",
+     "top": 11303,
+     "bottom": 12294,
+     "h": 991,
+     "text": "PRÓXIMO PASSO Solicite uma proposta de levantamento, orçamento ou revi"
+    },
+    {
+     "sel": "#triagem-quantitativos a[href^='https://wa.me']",
+     "top": 11424,
+     "bottom": 11476,
+     "h": 52,
+     "text": "Solicitar proposta pelo WhatsApp"
+    }
+   ]
+  },
+  {
+   "route": "/compatibilizacao-projetos-engenharia/",
+   "viewport": "390x844",
+   "height": 15580,
+   "elements": [
+    {
+     "sel": "#registro-interferencias",
+     "top": 1754,
+     "bottom": 6400,
+     "h": 4646,
+     "text": "PROVA ANTES DO MÉTODO Uma janela e uma viga na mesma faixa de altura: "
+    },
+    {
+     "sel": "#registro-interferencias figure.plate--dominant figcaption",
+     "top": 2646,
+     "bottom": 2839,
+     "h": 193,
+     "text": "EXEMPLO DEMONSTRATIVO Prancha PA, elevação leste do recorte de banheir"
+    },
+    {
+     "sel": "#registro-interferencias article.coord-finding",
+     "top": 3159,
+     "bottom": 4305,
+     "h": 1146,
+     "text": "Exemplo demonstrativo do recorte de banheiro. Não é obra de cliente e "
+    },
+    {
+     "sel": "#registro-interferencias figure:nth-of-type(2)",
+     "missing": true
+    },
+    {
+     "sel": "#tipos-apontamento",
+     "top": 6400,
+     "bottom": 7841,
+     "h": 1441,
+     "text": "O QUE PEDIR Três naturezas de apontamento, três encaminhamentos. Detec"
+    },
+    {
+     "sel": "#metodo-compatibilizacao",
+     "top": 8137,
+     "bottom": 9711,
+     "h": 1574,
+     "text": "MÉTODO · CONFERIR, REGISTRAR E ENCAMINHAR Do escopo ao encaminhamento,"
+    },
+    {
+     "sel": "#etapas-combinadas",
+     "top": 9711,
+     "bottom": 11055,
+     "h": 1344,
+     "text": "COMO AS ETAPAS SE COMBINAM Compatibilizar, elaborar, revisar e modelar"
+    },
+    {
+     "sel": "#condicoes-e-limites",
+     "top": 11055,
+     "bottom": 12499,
+     "h": 1444,
+     "text": "CONDIÇÕES DA PROPOSTA Primeiro entendemos o caso; a proposta vem depoi"
+    },
+    {
+     "sel": "#pedido-compatibilizacao",
+     "top": 12499,
+     "bottom": 14176,
+     "h": 1677,
+     "text": "PRÓXIMO PASSO Solicite uma proposta para conferir as interfaces. Três "
+    },
+    {
+     "sel": "#pedido-compatibilizacao a[href^='https://wa.me']",
+     "top": 12685,
+     "bottom": 12737,
+     "h": 52,
+     "text": "Conversar sobre a compatibilização"
+    }
+   ]
+  },
+  {
+   "route": "/compatibilizacao-projetos-engenharia/",
+   "viewport": "1440x1000",
+   "height": 10128,
+   "elements": [
+    {
+     "sel": "#registro-interferencias",
+     "top": 996,
+     "bottom": 4085,
+     "h": 3088,
+     "text": "PROVA ANTES DO MÉTODO Uma janela e uma viga na mesma faixa de altura: "
+    },
+    {
+     "sel": "#registro-interferencias figure.plate--dominant figcaption",
+     "top": 1998,
+     "bottom": 2108,
+     "h": 109,
+     "text": "EXEMPLO DEMONSTRATIVO Prancha PA, elevação leste do recorte de banheir"
+    },
+    {
+     "sel": "#registro-interferencias article.coord-finding",
+     "top": 2237,
+     "bottom": 3281,
+     "h": 1044,
+     "text": "Exemplo demonstrativo do recorte de banheiro. Não é obra de cliente e "
+    },
+    {
+     "sel": "#registro-interferencias figure:nth-of-type(2)",
+     "missing": true
+    },
+    {
+     "sel": "#tipos-apontamento",
+     "top": 4085,
+     "bottom": 5203,
+     "h": 1118,
+     "text": "O QUE PEDIR Três naturezas de apontamento, três encaminhamentos. Detec"
+    },
+    {
+     "sel": "#metodo-compatibilizacao",
+     "top": 5399,
+     "bottom": 6234,
+     "h": 835,
+     "text": "MÉTODO · CONFERIR, REGISTRAR E ENCAMINHAR Do escopo ao encaminhamento,"
+    },
+    {
+     "sel": "#etapas-combinadas",
+     "top": 6234,
+     "bottom": 7416,
+     "h": 1182,
+     "text": "COMO AS ETAPAS SE COMBINAM Compatibilizar, elaborar, revisar e modelar"
+    },
+    {
+     "sel": "#condicoes-e-limites",
+     "top": 7416,
+     "bottom": 8321,
+     "h": 904,
+     "text": "CONDIÇÕES DA PROPOSTA Primeiro entendemos o caso; a proposta vem depoi"
+    },
+    {
+     "sel": "#pedido-compatibilizacao",
+     "top": 8321,
+     "bottom": 9532,
+     "h": 1211,
+     "text": "PRÓXIMO PASSO Solicite uma proposta para conferir as interfaces. Três "
+    },
+    {
+     "sel": "#pedido-compatibilizacao a[href^='https://wa.me']",
+     "top": 8572,
+     "bottom": 8624,
+     "h": 52,
+     "text": "Conversar sobre a compatibilização"
+    }
+   ]
+  },
+  {
+   "route": "/medicoes-glosas-obras-publicas/",
+   "viewport": "390x844",
+   "height": 13123,
+   "elements": [
+    {
+     "sel": "#exemplo-demonstrativo",
+     "top": 1484,
+     "bottom": 2817,
+     "h": 1334,
+     "text": "EXEMPLO DEMONSTRATIVO Mesma parede, quatro números Premissas sintética"
+    },
+    {
+     "sel": "#exemplo-demonstrativo figure figcaption",
+     "top": 2479,
+     "bottom": 2777,
+     "h": 298,
+     "text": "EXEMPLO DEMONSTRATIVO · OBRA PÚBLICA Exemplo demonstrativo, com premis"
+    },
+    {
+     "sel": "#entrega-dossie",
+     "top": 2817,
+     "bottom": 3524,
+     "h": 707,
+     "text": "O QUE VOCÊ RECEBE Dossiê de Medição, Glosa e Pagamento Organize a prov"
+    },
+    {
+     "sel": "#quando-ajuda",
+     "top": 3871,
+     "bottom": 4633,
+     "h": 762,
+     "text": "QUANDO PEDIR, QUANDO RESOLVER NA OBRA Glosa, boletim parado ou critéri"
+    },
+    {
+     "sel": "#executado-medido-contratado-evidenciado",
+     "top": 4633,
+     "bottom": 5790,
+     "h": 1157,
+     "text": "QUATRO RECORTES, QUATRO PROVAS Executado, medido, contratado e evidenc"
+    },
+    {
+     "sel": "#guias",
+     "top": 7397,
+     "bottom": 8810,
+     "h": 1413,
+     "text": "BIBLIOTECA ESPECIALIZADA Guias sobre medições e pagamentos Os conteúdo"
+    },
+    {
+     "sel": "#captura-pilar",
+     "top": 9422,
+     "bottom": 11227,
+     "h": 1804,
+     "text": "PRÓXIMO PASSO Descreva a medição ou a glosa sem sair desta página Envi"
+    },
+    {
+     "sel": "#captura-pilar form",
+     "top": 9925,
+     "bottom": 11170,
+     "h": 1245,
+     "text": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde d"
+    },
+    {
+     "sel": "#metodo",
+     "top": 11259,
+     "bottom": 11751,
+     "h": 492,
+     "text": "Autor institucional: CONFENGE · Responsável técnico: Engº Tiago Sasaki"
+    }
+   ]
+  },
+  {
+   "route": "/medicoes-glosas-obras-publicas/",
+   "viewport": "1440x1000",
+   "height": 9333,
+   "elements": [
+    {
+     "sel": "#exemplo-demonstrativo",
+     "top": 832,
+     "bottom": 2049,
+     "h": 1217,
+     "text": "EXEMPLO DEMONSTRATIVO Mesma parede, quatro números Premissas sintética"
+    },
+    {
+     "sel": "#exemplo-demonstrativo figure figcaption",
+     "top": 1842,
+     "bottom": 1993,
+     "h": 151,
+     "text": "EXEMPLO DEMONSTRATIVO · OBRA PÚBLICA Exemplo demonstrativo, com premis"
+    },
+    {
+     "sel": "#entrega-dossie",
+     "top": 2049,
+     "bottom": 2635,
+     "h": 586,
+     "text": "O QUE VOCÊ RECEBE Dossiê de Medição, Glosa e Pagamento Organize a prov"
+    },
+    {
+     "sel": "#quando-ajuda",
+     "top": 3001,
+     "bottom": 3600,
+     "h": 598,
+     "text": "QUANDO PEDIR, QUANDO RESOLVER NA OBRA Glosa, boletim parado ou critéri"
+    },
+    {
+     "sel": "#executado-medido-contratado-evidenciado",
+     "top": 3600,
+     "bottom": 4522,
+     "h": 922,
+     "text": "QUATRO RECORTES, QUATRO PROVAS Executado, medido, contratado e evidenc"
+    },
+    {
+     "sel": "#guias",
+     "top": 5482,
+     "bottom": 6563,
+     "h": 1082,
+     "text": "BIBLIOTECA ESPECIALIZADA Guias sobre medições e pagamentos Os conteúdo"
+    },
+    {
+     "sel": "#captura-pilar",
+     "top": 6987,
+     "bottom": 8329,
+     "h": 1342,
+     "text": "PRÓXIMO PASSO Descreva a medição ou a glosa sem sair desta página Envi"
+    },
+    {
+     "sel": "#captura-pilar form",
+     "top": 7076,
+     "bottom": 8240,
+     "h": 1164,
+     "text": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde d"
+    },
+    {
+     "sel": "#metodo",
+     "top": 8361,
+     "bottom": 8728,
+     "h": 367,
+     "text": "Autor institucional: CONFENGE · Responsável técnico: Engº Tiago Sasaki"
+    }
+   ]
+  },
+  {
+   "route": "/",
+   "viewport": "390x844",
+   "height": 16572,
+   "elements": [
+    {
+     "sel": "#situacao-avaliacao",
+     "top": 2729,
+     "bottom": 3123,
+     "h": 394,
+     "text": "04 AVALIAÇÕES IMOBILIÁRIAS Preciso do valor de um imóvel para negociar"
+    },
+    {
+     "sel": "#situacao-avaliacao a",
+     "top": 3060,
+     "bottom": 3104,
+     "h": 44,
+     "text": "Ver avaliação"
+    },
+    {
+     "sel": "#formulario-contato",
+     "top": 13154,
+     "bottom": 14235,
+     "h": 1081,
+     "text": "Conte o essencial da sua necessidade. A CONFENGE responde indicando a "
+    }
+   ]
+  },
+  {
+   "route": "/",
+   "viewport": "1440x1000",
+   "height": 11060,
+   "elements": [
+    {
+     "sel": "#situacao-avaliacao",
+     "top": 2070,
+     "bottom": 2509,
+     "h": 439,
+     "text": "04 AVALIAÇÕES IMOBILIÁRIAS Preciso do valor de um imóvel para negociar"
+    },
+    {
+     "sel": "#situacao-avaliacao a",
+     "top": 2440,
+     "bottom": 2484,
+     "h": 44,
+     "text": "Ver avaliação"
+    },
+    {
+     "sel": "#formulario-contato",
+     "top": 9520,
+     "bottom": 10376,
+     "h": 856,
+     "text": "Conte o essencial da sua necessidade. A CONFENGE responde indicando a "
+    }
+   ]
+  }
+ ]
+}

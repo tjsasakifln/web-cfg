@@ -27,6 +27,14 @@
     '/defesa-margem-contratos-publicos/': 'defesa-margem-contratos-publicos',
     '/diagnostico-b2g-expansao/': 'diagnostico-b2g-expansao',
     '/ferramentas/diagnostico-defesa-margem/': 'diagnostico-defesa-margem',
+    // Rotas de servico privado (G04-03): sem elas, hub -> servico saia UNKNOWN_SERVICE.
+    '/quantitativos-orcamento-obras/': 'quantitativos-orcamento-obras',
+    '/compatibilizacao-projetos-engenharia/': 'compatibilizacao-projetos-engenharia',
+    '/projetos-complementares-engenharia/': 'projetos-complementares-engenharia',
+    '/revisao-tecnica-projetos-engenharia/': 'revisao-tecnica-projetos-engenharia',
+    '/parcerias-engenharia/': 'parcerias-engenharia',
+    '/inspecao-diagnostico-edificacoes/': 'inspecao-diagnostico-edificacoes',
+    '/seguranca-trabalho-apoio-tecnico/': 'seguranca-trabalho-apoio-tecnico',
   };
   const ORIGIN_PREFIXES = {
     '/conteudos/': 'editorial',
@@ -37,6 +45,7 @@
     '/panorama-mercado-obras-publicas/': 'editorial',
     '/casos/': 'case',
     '/servicos-obras-publicas/': 'hub',
+    '/servicos/': 'hub',
     '/problemas-que-resolvemos/': 'hub',
     '/inteligencia/': 'data',
     '/radar/': 'data',
@@ -120,18 +129,11 @@
     sale_id: /^sale-[0-9a-f]{27}$/i,
   };
   // EVENT_CONTRACT_CLIENT_END
+  // Only fields read by tests (source, aggregate_pii_allowlist, classifyTransition,
+  // appendWhatsappProtocol) are exported; internal-only maps stay module-scoped.
   window.__CONFENGE_EVENT_CONTRACT = {
-    schema_version: EVENT_CONTRACT_SCHEMA_VERSION,
     source: EVENT_SOURCE,
-    pii_policy: EVENT_PII_POLICY,
     aggregate_pii_allowlist: AGGREGATE_PII_ALLOWLIST,
-    admitted: ADMITTED_EVENTS,
-    observed_only: OBSERVED_ONLY_EVENTS,
-    aliases: EVENT_ALIASES,
-    retired: RETIRED_EVENTS,
-    unknown_service: UNKNOWN_SERVICE,
-    destinations: CANONICAL_DESTINATIONS,
-    origin_prefixes: ORIGIN_PREFIXES,
   };
   const analyticsQueue = [];
   const ANALYTICS_FLUSH_DELAY_MS = 30000;
@@ -530,10 +532,7 @@
     return protocol;
   };
 
-  window.__CONFENGE_EVENT_CONTRACT.canonicalizeDestination = canonicalizeDestination;
   window.__CONFENGE_EVENT_CONTRACT.classifyTransition = classifyTransition;
-  window.__CONFENGE_EVENT_CONTRACT.canonicalizePath = canonicalizePath;
-  window.__CONFENGE_EVENT_CONTRACT.UNKNOWN_SERVICE = UNKNOWN_SERVICE;
   window.__CONFENGE_EVENT_CONTRACT.appendWhatsappProtocol = appendWhatsappProtocol;
 
   // Decorative reveal only. Never throw: missing window.setTimeout must not abort form/analytics.

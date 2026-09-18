@@ -63,6 +63,11 @@ without manufacturing a commercial opportunity.
 
 ## Ops
 
+- The queue a human works is Warmbly's INBOUND NOW (`GET /confenge/inbound`,
+  operator session, loopback on the host through an ssh tunnel). It never
+  notifies anyone and never dispatches; the only configured alert for a real
+  lead is the Resend e-mail, and the daily `ops?action=leads` check is the
+  backstop. Routine and per-`lead_id` lookup protocol: `LEAD-HANDLING.md`.
 - Counters and safe configuration state (auth): `GET /.netlify/functions/ops?action=inbound_handoff`.
   The response exposes only the versioned destination fingerprint
   (`WARMBLY_PRODUCTION_V1`, `UNEXPECTED`, or `MISSING`), never the configured URL.

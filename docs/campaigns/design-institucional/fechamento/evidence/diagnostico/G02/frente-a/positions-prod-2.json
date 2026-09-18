@@ -1,0 +1,272 @@
+{
+ "base": "https://confenge.com.br",
+ "measured_at": "2026-09-18T12:52:34.683Z",
+ "rows": [
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "viewport": "390x844",
+   "height": 20426,
+   "elements": [
+    {
+     "sel": "#amostra-quantitativos figure.plate--dominant figcaption",
+     "top": 2537,
+     "bottom": 2709,
+     "h": 172,
+     "text": "AMOSTRA DEMONSTRATIVA Prancha P1, revisão R01: planta do recorte RM-01"
+    },
+    {
+     "sel": "#amostra-quantitativos .qty-memory, #amostra-quantitativos h3",
+     "top": 2928,
+     "bottom": 2982,
+     "h": 54,
+     "text": "Memória de cálculo do item Q-PAR-01"
+    },
+    {
+     "sel": "#amostra-quantitativos figure.plate:not(.plate--dominant)",
+     "top": 3697,
+     "bottom": 4124,
+     "h": 427,
+     "text": "2,40 m 1,80 m D-01 HS-01 RM-01 pé-direito 2,60 m W-01 · sul · 2,40 W-0"
+    },
+    {
+     "sel": "#amostra-quantitativos figure.plate:not(.plate--dominant) figcaption",
+     "top": 4015,
+     "bottom": 4124,
+     "h": 109,
+     "text": "EXEMPLO DEMONSTRATIVO Planta do recorte RM-01, prancha PR-ARQ-R01: a p"
+    },
+    {
+     "sel": "#o-que-contratar ~ section a[href='#triagem-quantitativos'], section.sec--rule-top a[href='#triagem-quantitativos']",
+     "top": 6263,
+     "bottom": 6307,
+     "h": 44,
+     "text": "Solicitar proposta de orçamento"
+    },
+    {
+     "sel": "#exemplos-conferiveis a[href='#triagem-quantitativos']",
+     "top": 12801,
+     "bottom": 12845,
+     "h": 44,
+     "text": "Solicitar proposta de orçamento"
+    },
+    {
+     "sel": "#o-que-influencia",
+     "top": 13879,
+     "bottom": 14520,
+     "h": 641,
+     "text": "O que influencia o esforço, sem tabela de preço inventada. Estes fator"
+    },
+    {
+     "sel": "#publico-e-privado",
+     "top": 14520,
+     "bottom": 15168,
+     "h": 648,
+     "text": "Obra pública e obra privada compartilham o ofício, não as regras da co"
+    },
+    {
+     "sel": "#condicoes-da-proposta ul.conditions, #condicoes-da-proposta h3:last-of-type",
+     "top": 13252,
+     "bottom": 13297,
+     "h": 45,
+     "text": "Documentação inicial incompleta não encerra o pedido."
+    }
+   ]
+  },
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "viewport": "1440x1000",
+   "height": 12890,
+   "elements": [
+    {
+     "sel": "#amostra-quantitativos figure.plate--dominant figcaption",
+     "top": 1966,
+     "bottom": 2055,
+     "h": 88,
+     "text": "AMOSTRA DEMONSTRATIVA Prancha P1, revisão R01: planta do recorte RM-01"
+    },
+    {
+     "sel": "#amostra-quantitativos .qty-memory, #amostra-quantitativos h3",
+     "top": 2166,
+     "bottom": 2236,
+     "h": 70,
+     "text": "Memória de cálculo do item Q-PAR-01"
+    },
+    {
+     "sel": "#amostra-quantitativos figure.plate:not(.plate--dominant)",
+     "top": 2166,
+     "bottom": 2690,
+     "h": 523,
+     "text": "2,40 m 1,80 m D-01 HS-01 RM-01 pé-direito 2,60 m W-01 · sul · 2,40 W-0"
+    },
+    {
+     "sel": "#amostra-quantitativos figure.plate:not(.plate--dominant) figcaption",
+     "top": 2602,
+     "bottom": 2690,
+     "h": 88,
+     "text": "EXEMPLO DEMONSTRATIVO Planta do recorte RM-01, prancha PR-ARQ-R01: a p"
+    },
+    {
+     "sel": "#o-que-contratar ~ section a[href='#triagem-quantitativos'], section.sec--rule-top a[href='#triagem-quantitativos']",
+     "top": 4239,
+     "bottom": 4283,
+     "h": 44,
+     "text": "Solicitar proposta de orçamento"
+    },
+    {
+     "sel": "#exemplos-conferiveis a[href='#triagem-quantitativos']",
+     "top": 8689,
+     "bottom": 8733,
+     "h": 44,
+     "text": "Solicitar proposta de orçamento"
+    },
+    {
+     "sel": "#o-que-influencia",
+     "top": 9157,
+     "bottom": 9644,
+     "h": 486,
+     "text": "O que influencia o esforço, sem tabela de preço inventada. Estes fator"
+    },
+    {
+     "sel": "#publico-e-privado",
+     "top": 9644,
+     "bottom": 9955,
+     "h": 311,
+     "text": "Obra pública e obra privada compartilham o ofício, não as regras da co"
+    },
+    {
+     "sel": "#condicoes-da-proposta ul.conditions, #condicoes-da-proposta h3:last-of-type",
+     "top": 9157,
+     "bottom": 9182,
+     "h": 25,
+     "text": "Documentação inicial incompleta não encerra o pedido."
+    }
+   ]
+  },
+  {
+   "route": "/compatibilizacao-projetos-engenharia/",
+   "viewport": "390x844",
+   "height": 15580,
+   "elements": [
+    {
+     "sel": "#registro-interferencias figure.plate:not(.plate--dominant)",
+     "top": 5789,
+     "bottom": 6344,
+     "h": 555,
+     "text": "EXEMPLO DEMONSTRATIVO Perfil do trecho DR-01, do poço MH-01 ao poço MH"
+    },
+    {
+     "sel": "#registro-interferencias figure.plate:not(.plate--dominant) figcaption",
+     "top": 6213,
+     "bottom": 6344,
+     "h": 130,
+     "text": "EXEMPLO DEMONSTRATIVO Perfil do trecho DR-01, do poço MH-01 ao poço MH"
+    },
+    {
+     "sel": "#registro-interferencias h3:last-of-type",
+     "top": 3230,
+     "bottom": 3252,
+     "h": 23,
+     "text": "CF-GEO-01 · Interferência geométrica"
+    },
+    {
+     "sel": "section.sec--rule-top a[href='#pedido-compatibilizacao']",
+     "top": 7997,
+     "bottom": 8041,
+     "h": 44,
+     "text": "Pedir proposta da compatibilização"
+    }
+   ]
+  },
+  {
+   "route": "/compatibilizacao-projetos-engenharia/",
+   "viewport": "1440x1000",
+   "height": 10128,
+   "elements": [
+    {
+     "sel": "#registro-interferencias figure.plate:not(.plate--dominant)",
+     "top": 3306,
+     "bottom": 3997,
+     "h": 691,
+     "text": "EXEMPLO DEMONSTRATIVO Perfil do trecho DR-01, do poço MH-01 ao poço MH"
+    },
+    {
+     "sel": "#registro-interferencias figure.plate:not(.plate--dominant) figcaption",
+     "top": 3887,
+     "bottom": 3997,
+     "h": 109,
+     "text": "EXEMPLO DEMONSTRATIVO Perfil do trecho DR-01, do poço MH-01 ao poço MH"
+    },
+    {
+     "sel": "#registro-interferencias h3:last-of-type",
+     "top": 2308,
+     "bottom": 2333,
+     "h": 25,
+     "text": "CF-GEO-01 · Interferência geométrica"
+    },
+    {
+     "sel": "section.sec--rule-top a[href='#pedido-compatibilizacao']",
+     "top": 5292,
+     "bottom": 5336,
+     "h": 44,
+     "text": "Pedir proposta da compatibilização"
+    }
+   ]
+  },
+  {
+   "route": "/medicoes-glosas-obras-publicas/",
+   "viewport": "390x844",
+   "height": 13123,
+   "elements": [
+    {
+     "sel": "section.sec--rule-top a[href='#captura-pilar']",
+     "top": 3719,
+     "bottom": 3771,
+     "h": 52,
+     "text": "Descrever a medição"
+    },
+    {
+     "sel": "aside.lead-inline",
+     "top": 7135,
+     "bottom": 7357,
+     "h": 223,
+     "text": "EXPLORAÇÃO Ler o contrato no recorte público Identidade, valor assinad"
+    },
+    {
+     "sel": "#captura-pilar button, #captura-pilar [type=submit]",
+     "top": 10858,
+     "bottom": 10902,
+     "h": 44,
+     "text": "Descrever a medição"
+    }
+   ]
+  },
+  {
+   "route": "/medicoes-glosas-obras-publicas/",
+   "viewport": "1440x1000",
+   "height": 9333,
+   "elements": [
+    {
+     "sel": "section.sec--rule-top a[href='#captura-pilar']",
+     "top": 2833,
+     "bottom": 2885,
+     "h": 52,
+     "text": "Descrever a medição"
+    },
+    {
+     "sel": "aside.lead-inline",
+     "top": 5257,
+     "bottom": 5426,
+     "h": 169,
+     "text": "EXPLORAÇÃO Ler o contrato no recorte público Identidade, valor assinad"
+    },
+    {
+     "sel": "#captura-pilar button, #captura-pilar [type=submit]",
+     "top": 7973,
+     "bottom": 8017,
+     "h": 44,
+     "text": "Descrever a medição"
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,186 @@
+{
+ "anchor_1440": {
+  "before": {
+   "scrollY": 0,
+   "section_abs_top": 11303,
+   "section_vtop": 11303,
+   "wa_vtop": 11424,
+   "wa_in_view": false,
+   "page_h": 12890,
+   "scroll_behavior": "smooth"
+  },
+  "samples": [
+   {
+    "t_ms": 300,
+    "scrollY": 2288,
+    "section_abs_top": 11303,
+    "section_vtop": 9015,
+    "wa_vtop": 9136,
+    "wa_in_view": false,
+    "page_h": 12890,
+    "scroll_behavior": "smooth"
+   },
+   {
+    "t_ms": 1000,
+    "scrollY": 10651,
+    "section_abs_top": 11303,
+    "section_vtop": 652,
+    "wa_vtop": 773,
+    "wa_in_view": true,
+    "page_h": 12890,
+    "scroll_behavior": "smooth"
+   },
+   {
+    "t_ms": 2500,
+    "scrollY": 11207,
+    "section_abs_top": 11303,
+    "section_vtop": 96,
+    "wa_vtop": 217,
+    "wa_in_view": true,
+    "page_h": 12890,
+    "scroll_behavior": "smooth"
+   },
+   {
+    "t_ms": 5000,
+    "scrollY": 11207,
+    "section_abs_top": 11303,
+    "section_vtop": 96,
+    "wa_vtop": 217,
+    "wa_in_view": true,
+    "page_h": 12890,
+    "scroll_behavior": "smooth"
+   }
+  ]
+ },
+ "anchor_390": {
+  "before": {
+   "scrollY": 0,
+   "section_abs_top": 17580,
+   "section_vtop": 17580,
+   "wa_vtop": 18521,
+   "wa_in_view": false,
+   "page_h": 20426,
+   "scroll_behavior": "smooth"
+  },
+  "samples": [
+   {
+    "t_ms": 300,
+    "scrollY": 3569,
+    "section_abs_top": 17580,
+    "section_vtop": 14011,
+    "wa_vtop": 14952,
+    "wa_in_view": false,
+    "page_h": 20426,
+    "scroll_behavior": "smooth"
+   },
+   {
+    "t_ms": 1000,
+    "scrollY": 16617,
+    "section_abs_top": 17580,
+    "section_vtop": 963,
+    "wa_vtop": 1904,
+    "wa_in_view": false,
+    "page_h": 20426,
+    "scroll_behavior": "smooth"
+   },
+   {
+    "t_ms": 2500,
+    "scrollY": 17484,
+    "section_abs_top": 17580,
+    "section_vtop": 96,
+    "wa_vtop": 1037,
+    "wa_in_view": false,
+    "page_h": 20426,
+    "scroll_behavior": "smooth"
+   },
+   {
+    "t_ms": 5000,
+    "scrollY": 17484,
+    "section_abs_top": 17580,
+    "section_vtop": 96,
+    "wa_vtop": 1037,
+    "wa_in_view": false,
+    "page_h": 20426,
+    "scroll_behavior": "smooth"
+   }
+  ]
+ },
+ "artigo_reeq_wa": {
+  "wa_text": "Olá, Tiago. Gostaria de analisar um caso de documentos reequilíbrio obra pública (licitação, contrato ou obra pública).",
+  "block_text": "Falar no WhatsApp sobre este caso Continuar pelo formulário",
+  "pillar_link_block": "TEMA PRINCIPAL Reequilíbrio econômico-financeiro de contratos de obras"
+ },
+ "medicoes_labels": [
+  {
+   "name": "nome",
+   "id": "nome",
+   "required": true,
+   "label_for": false,
+   "wrapped": "Nome do representante",
+   "aria_label": null,
+   "placeholder": ""
+  },
+  {
+   "name": "empresa",
+   "id": "empresa",
+   "required": false,
+   "label_for": false,
+   "wrapped": "Empresa",
+   "aria_label": null,
+   "placeholder": ""
+  },
+  {
+   "name": "email",
+   "id": "email",
+   "required": false,
+   "label_for": false,
+   "wrapped": "E-mail profissional",
+   "aria_label": null,
+   "placeholder": ""
+  },
+  {
+   "name": "telefone",
+   "id": "telefone",
+   "required": false,
+   "label_for": false,
+   "wrapped": "WhatsApp",
+   "aria_label": null,
+   "placeholder": ""
+  },
+  {
+   "name": "mensagem",
+   "id": "mensagem",
+   "required": false,
+   "label_for": false,
+   "wrapped": "Contexto",
+   "aria_label": null,
+   "placeholder": "Edital, contrato, glosa, notificação ou o que precisa ser decidido. Não cole dados sensíveis desnecessários."
+  },
+  {
+   "name": "consentimento",
+   "id": "",
+   "required": true,
+   "label_for": false,
+   "wrapped": "Autorizo o uso destes dados para retorno sobre esta medição ou glosa.",
+   "aria_label": null,
+   "placeholder": ""
+  }
+ ],
+ "medicoes_form_top": {
+  "top": 10352,
+  "page_h": 13550,
+  "captura_top": 9849
+ },
+ "home_1440_float": {
+  "rect": {
+   "top": 830,
+   "bottom": 886,
+   "left": 1370,
+   "right": 1426
+  },
+  "text": "",
+  "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20conversar%20sobre%20um%20projeto%20ou%20servi%C3%A7o%20d",
+  "event": "whatsapp_click",
+  "overlap_with_form_next": []
+ }
+}

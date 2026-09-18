@@ -152,6 +152,15 @@
       "observation": {"as_of": "2026-08-18", "today": "2026-08-29", "source_available": true, "owner": "web-cfg #413"},
       "expected_status": "BLOCKED_EXTERNAL",
       "expected_code": "gsc_stale"
+    },
+    {
+      "id": "stale-gsc-host-status-recent-as-of",
+      "dimension": "freshness",
+      "metric_id": "gsc-freshness",
+      "policy": {"maximum_age_days": 7},
+      "observation": {"as_of": "2026-08-26", "today": "2026-08-29", "source_available": true, "durable_read": "stale", "durable_status": "STALE", "durable_reason_codes": ["provider_coverage_gap"], "owner": "web-cfg #413"},
+      "expected_status": "BLOCKED_EXTERNAL",
+      "expected_code": "gsc_stale"
     }
   ]
 }

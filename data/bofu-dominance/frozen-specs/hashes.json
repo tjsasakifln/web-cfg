@@ -1,9 +1,9 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "15b62505b0014d38c2a902cb5ed174339bed63f9",
-  "recaptured_at": "2026-09-18T01:06:56Z",
-  "recapture_reason": "SALTO-INSTITUCIONAL-02 (expansao da direcao 'prancha e percurso' autorizada pelo encaminhamento do proprietario em 2026-09-17, EXECUTE_NOW; ramo campaign/salto-institucional-02-expansao, bytes finais em 15b62505b0014d38c2a902cb5ed174339bed63f9): os seis pilares B2G recompostos no esqueleto de servico do piloto (abertura em uma coluna, indice de pagina, prancha demonstrativa propria por evento, entrega nomeada, 'Duvidas, condicoes e limites', bloco unico de proximo passo com o formulario #captura-pilar byte-identico e a secao de autoria preservada); aditivos com uma acao dominante no bloco de ferramenta, medicoes sem o ponto duplicado de 'Encontrou um erro?' e diagnostico-b2g-360 com a citacao 'vitoria garantida' como negacao explicita (FL-08); styles.css/styles-tokens.css/styles-offers.css/script.js mudaram porque a folha global trocou degrades por superficies solidas, podou seletores mortos, ganhou os blocos de rota, a folha de ofertas ordena a condicao contratual depois da acao no celular e o script abre <details> fechado ao navegar por ancora; a pagina da analise aprovada nao mudou um byte. Nenhum preco, prazo, checkout, robots, canonical, sitemap, JSON-LD, formulario de captura ou permissao mudou. Executor: agente Claude Code; nenhuma nova aprovacao tecnica ou revisao humana independente alegada.",
+  "baseline_commit": "7baf1f13f7ba10a2c0cf048ea299fa26737cd624",
+  "recaptured_at": "2026-09-18T17:03:17Z",
+  "recapture_reason": "POS-REDESIGN-FECHAMENTO-20260918: sitemaps com lastmod 2026-09-18 do cluster de medicao (revisao movida com o conteudo: link do pilar em tres artigos)",
   "html_mutation": true,
   "pillars": {
     "aditivos-obras-publicas": "9fc5ffbab3fd135cd4f49cd286ff539ed60aef0dc63b7aced73465d04d1cee87",
@@ -20,17 +20,17 @@
     "auditoria-orcamento-licitacao/index.html": "69dcc3c5df42d837fb979fb481939b5e582a3915851e030319de89b6651f5225",
     "diagnostico-b2g-360/index.html": "2a29a09b922abe9958ae661f040aabdf33a6e2fd6a1133f1fb3b410766da59e2",
     "diagnostico-pre-licitacao/index.html": "74402dff44f8981829c91e8bac07c3ef5e122f345cf4e27991b0dfa921588f7a",
-    "script.js": "f5737c012010592696b00ad13830aee97224cb7311773a5e9a5033b2c954757c",
+    "script.js": "74effeab654baeeaccb9e0336dfe33ad6016832d508d9bf9a570e092303bb233",
     "styles.css": "dbcf1b8af9fe1736ad07b2aae30b70f4eca19b2a5ccd2eec2f5c94081e9672ba",
     "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
     "styles-tools.css": "7112012d31d7a3a1b43a6fbd8b939598d7a6f1b8ea41b0ec850eaa6d8cde4377",
     "robots.txt": "aa58f365ca9d63bad59c6bd95349b3d027c95571ea061c349af9721ffbadd5a0",
-    "sitemap.xml": "8bcd4a8d31002197b4d91b16756fc15c90730c54419e23a9a4ca9ef0920b8393",
+    "sitemap.xml": "cbd325b0dffb4de85a527c5fd446e535976c36964274972764a00dec1ab24586",
     "sitemap.txt": "642f18187ff01be72117a38e77756ae0edd5fe2a5d7c9c5d6d34022b837101b9",
-    "sitemap-index.xml": "cd40afddc4613292910f0c623c59187ede9bb3732563e5115826b4e0d9f70f35",
+    "sitemap-index.xml": "82b8296ef7b07e01d453fc8589c4367b36dfe9f32abc9c378b1ee5e1346cbf74",
     "_redirects": "5867f75a30d890184a8f14b0568b5604b2c2253c71a4d5596b6cccd92f85c51a",
     "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
-    "js/modules/analytics.js": "b49d60cf2eba2cb6b456e6393629297dba6e87e98529f560efafcdd9c60388b0"
+    "js/modules/analytics.js": "3759c5e9af79ed29d98a91045253911b4450012a7ee38b72c0c3e315591fd9b8"
   },
   "recapture_diff_lines_vs_origin_main": [
     "medicoes-glosas-obras-publicas/index.html",

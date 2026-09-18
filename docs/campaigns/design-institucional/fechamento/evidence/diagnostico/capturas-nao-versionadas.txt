@@ -1,0 +1,9 @@
+# Capturas de página inteira >600 KB removidas do versionamento (só as de primeira tela e os JSON de medição ficam). Regeneráveis com expansao/tools/capture.mjs.
+./G01/entregas-320x700-full-prod.jpg
+./G01/entregas-390x844-full-prod.jpg
+./G01/triagem-tecnica-320x700-full-prod.jpg
+./G01/servicos-320x700-full-prod.jpg
+./G01/servicos-390x844-full-prod.jpg
+./TAREFAS/t1-390-servicos.jpg
+./TAREFAS/t1-390-quantitativos.jpg
+./TAREFAS/t2-390-servicos-avaliacao.jpg
