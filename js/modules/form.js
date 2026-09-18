@@ -466,11 +466,14 @@
           next_step_category: usesPublicWorksLadder() ? (routed?.next_step || '').slice(0, 40) : '',
         });
         if (assetId) {
+          // O envio do formulario e um cta_click de intencao (destination_type=form):
+          // sem o campo o consumidor closed-loop o trataria como legado.
           track('cta_click', {
             page_path: pagePath,
             route_family: routeFamily,
             asset_id: assetId,
             cta_id: ctaId,
+            destination_type: 'form',
           });
         }
 

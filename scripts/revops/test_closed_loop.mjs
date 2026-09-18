@@ -409,6 +409,146 @@ const walk = await closedLoop.runFixture(fixture, store);
   } else pass("response_time_reordered_join_by_lead");
 }
 
+// --- G04-01: only intent destinations count as the 'cta' stage; email/tel enter the map ---
+{
+  const conditions = FUNNEL.visitor_stage_conditions || {};
+  if (
+    !Array.isArray(conditions.cta_click?.destination_type)
+    || !["form", "whatsapp", "email", "tel"].every((t) => conditions.cta_click.destination_type.includes(t))
+    || conditions.cta_click.destination_type.includes("route")
+    || !Array.isArray(conditions.outbound_click?.destination_type)
+    || conditions.outbound_click.destination_type.join(",") !== "tel"
+    || FUNNEL.visitor_event_map.email_click !== "cta"
+    || FUNNEL.visitor_event_map.outbound_click !== "cta"
+    || FUNNEL.schema_version !== "1.1.0"
+  ) {
+    fail("visitor_stage_conditions_contract", { conditions, map: FUNNEL.visitor_event_map, version: FUNNEL.schema_version });
+  } else pass("visitor_stage_conditions_contract", FUNNEL.schema_version);
+  const stageOf = (event, props) => closedLoop.visitorStageOf(event, props);
+  const expectations = [
+    ["cta_click", { destination_type: "form" }, "cta"],
+    ["cta_click", { destination_type: "whatsapp" }, "cta"],
+    ["cta_click", { destination_type: "route" }, null],
+    ["cta_click", { destination_type: "anchor" }, null],
+    ["cta_click", {}, "cta"],
+    ["outbound_click", {}, null],
+    ["whatsapp_click", { destination_type: "whatsapp" }, "cta"],
+    ["email_click", { destination_type: "email" }, "cta"],
+    ["outbound_click", { destination_type: "tel" }, "cta"],
+    ["outbound_click", { destination_type: "external" }, null],
+  ];
+  for (const [event, props, expected] of expectations) {
+    const got = stageOf(event, props);
+    if (got !== expected) fail("visitor_stage_by_destination", { event, props, got, expected });
+  }
+  pass("visitor_stage_by_destination_type");
+  const legacy = closedLoop.visitorStageClassification("cta_click", { cta_id: "segunda-leitura-contrato" });
+  const typed = closedLoop.visitorStageClassification("cta_click", { destination_type: "form" });
+  if (legacy.stage !== "cta" || legacy.classification !== closedLoop.LEGACY_UNCLASSIFIED
+    || typed.stage !== "cta" || typed.classification !== ""
+    || !Array.isArray(FUNNEL.legacy_unclassified_events) || !FUNNEL.legacy_unclassified_events.includes("cta_click")) {
+    fail("visitor_stage_legacy_unclassified", { legacy, typed, contract: FUNNEL.legacy_unclassified_events });
+  } else pass("visitor_stage_legacy_unclassified", closedLoop.LEGACY_UNCLASSIFIED);
+
+  const mkSession = (seed, index, event, props) => {
+    const sid = closedLoop.mintStableId("session", seed);
+    const view = fixture.events[0];
+    const rows = [
+      {
+        ...view,
+        sid,
+        session_id: sid,
+        props: { ...view.props, event_id: `evt-g04-view-${index}`, session_id: sid },
+      },
+      {
+        event,
+        path: view.path,
+        sid,
+        session_id: sid,
+        ts: "2026-08-01T10:01:30.000Z",
+        props: {
+          event_id: `evt-g04-${event}-${index}`,
+          page_path: view.path,
+          route_family: view.props.route_family,
+          asset_id: view.props.asset_id,
+          cta_id: "g04-case",
+          cta_position: "inline",
+          session_id: sid,
+          ...props,
+        },
+      },
+    ];
+    return rows;
+  };
+  const routeSession = mkSession("g04-route-session", 1, "cta_click", { destination_type: "route" });
+  const emailSession = mkSession("g04-email-session", 2, "email_click", { destination_type: "email" });
+  const telSession = mkSession("g04-tel-session", 3, "outbound_click", { destination_type: "tel" });
+  const externalSession = mkSession("g04-external-session", 4, "outbound_click", { destination_type: "external" });
+  // tool submit emitted before the producer filled destination_type: legacy, counted and labelled.
+  const legacySession = mkSession("g04-legacy-session", 5, "cta_click", {});
+  const admitted = closedLoop.admitVisitorEvents([
+    ...fixture.events, ...routeSession, ...emailSession, ...telSession, ...externalSession, ...legacySession,
+  ]).admitted;
+  const legacyRow = admitted.find((ev) => ev.props && ev.props.event_id === "evt-g04-cta_click-5");
+  if (!legacyRow || legacyRow.visitor_stage !== "cta" || legacyRow.visitor_stage_classification !== closedLoop.LEGACY_UNCLASSIFIED) {
+    fail("legacy_cta_click_admitted_with_label", legacyRow);
+  } else pass("legacy_cta_click_admitted_with_label");
+  const report = closedLoop.reconcileClosedLoop({
+    events: admitted,
+    leads: [fixture.lead],
+    observations: fixture.observations,
+    kind: "synthetic",
+  }).report;
+  // fixture (form cta) + email + tel + legacy = 4 sessions at 'cta'; route and external never enter;
+  // exactly one of them is labelled legacy_unclassified.
+  if (report.counts.view !== 6 || report.counts.cta !== 4 || report.counts.cta_legacy_unclassified !== 1) {
+    fail("cta_stage_only_intent_destinations", report.counts);
+  } else pass("cta_stage_only_intent_destinations", `view=${report.counts.view} cta=${report.counts.cta} legacy=${report.counts.cta_legacy_unclassified}`);
+  const serialized = JSON.stringify(report);
+  if (/mailto:|tel:\+?\d|@/.test(serialized)) fail("cta_stage_report_pii", serialized.slice(0, 200));
+  else pass("cta_stage_report_no_pii");
+}
+
+// --- G04-07: class D (handoff) derived from the store, never promoted to qualified ---
+{
+  const admitted = closedLoop.admitVisitorEvents(fixture.events).admitted;
+  const delivered = { ...fixture.lead, handoff: { status: "DELIVERED", delivered_at: "2026-08-01T10:06:00.000Z" } };
+  const blockedLeadId = closedLoop.mintStableId("lead", "g04-handoff-blocked");
+  const blocked = { ...fixture.lead, lead_id: blockedLeadId, session_id: undefined, received_at: "2026-08-01T10:07:00.000Z", handoff: { status: "BLOCKED", reason: "missing_env" } };
+  const noStatusLeadId = closedLoop.mintStableId("lead", "g04-handoff-none");
+  const noStatus = { ...fixture.lead, lead_id: noStatusLeadId, session_id: undefined, received_at: "2026-08-01T10:08:00.000Z" };
+  const report = closedLoop.reconcileClosedLoop({
+    events: admitted,
+    leads: [delivered, blocked, noStatus],
+    observations: fixture.observations,
+    kind: "synthetic",
+  }).report;
+  const handoff = report.handoff;
+  if (
+    !handoff
+    || handoff.unit !== "leads"
+    || handoff.owner !== "web-cfg"
+    || handoff.promotes_to_qualified !== false
+    || handoff.leads_total !== 3
+    || handoff.leads_with_status !== 2
+    || handoff.by_status.delivered !== 1
+    || handoff.by_status.blocked !== 1
+    || handoff.by_status.unknown !== 1
+    || report.counts.handoff_leads !== 2
+    || report.counts.handoff_delivered_leads !== 1
+    || report.count_units.handoff_leads !== "leads"
+    || FUNNEL.stage_owners.handoff !== "web-cfg"
+    || (FUNNEL.visitor_stages || []).includes("handoff")
+    || (FUNNEL.rates || []).includes("handoff")
+  ) {
+    fail("handoff_class_d_derived", { handoff, counts: report.counts, owners: FUNNEL.stage_owners });
+  } else pass("handoff_class_d_derived", JSON.stringify(handoff.by_status));
+  // qualified stays a Warmbly observation: one opportunity in the fixture, regardless of handoff status.
+  if (report.counts.qualified !== expectedCount("qualified") || report.derived_qualified !== false) {
+    fail("handoff_promoted_to_qualified", report.counts);
+  } else pass("handoff_never_promotes_qualified", report.counts.qualified);
+}
+
 // --- duplicate leads in one session do not mix session and lead units ---
 {
   const duplicateLead = {

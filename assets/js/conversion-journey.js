@@ -187,7 +187,8 @@
       }
       const nome = document.getElementById("nome");
       if (nome) nome.focus();
-      track("cta_click", { cta: "segunda_leitura" });
+      // Leva ao formulario (foca #nome): intencao, destination_type=form.
+      track("cta_click", { cta: "segunda_leitura", destination_type: "form" });
     });
   }
 
@@ -195,7 +196,8 @@
   if (none) {
     none.addEventListener("click", function () {
       if (handraise) handraise.hidden = true;
-      track("cta_click", { cta: "nenhuma" });
+      // "Nenhuma acao" fecha o bloco: navegacao, nao intencao (nao entra no estagio cta).
+      track("cta_click", { cta: "nenhuma", destination_type: "anchor" });
     });
   }
 

@@ -1,6 +1,6 @@
 {
   "schema": "confenge.closed-loop-funnel/1.0",
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "source": "CONFENGE_WEB",
   "commercial_owner": "warmbly",
   "warmbly_observation_contract": {
@@ -125,10 +125,32 @@
     "step1": "web-cfg",
     "step2": "web-cfg",
     "persisted": "web-cfg",
+    "handoff": "web-cfg",
     "qualified": "warmbly",
     "proposal": "warmbly",
     "won": "warmbly",
     "lost": "warmbly"
+  },
+  "operational_stages": [
+    "handoff"
+  ],
+  "operational_stage_source": {
+    "handoff": {
+      "unit": "leads",
+      "owner": "web-cfg",
+      "derived_from": "lead.handoff.status (lead-store)",
+      "statuses": [
+        "DELIVERED",
+        "BLOCKED",
+        "PENDING",
+        "RETRYABLE",
+        "SKIPPED",
+        "DEAD"
+      ],
+      "reserved_event": "handoff_accepted",
+      "promotes_to_qualified": false,
+      "notes_pt_br": "G04-07: classe D (disponibilidade operacional) e derivada do store no relatorio, entre persisted e qualified. Nao e evento do cliente, nao entra em visitor_stages nem em rates e nunca promove a qualified."
+    }
   },
   "visitor_event_map": {
     "page_view": "view",
@@ -139,10 +161,30 @@
     "organic_landing": "view",
     "cta_click": "cta",
     "whatsapp_click": "cta",
+    "email_click": "cta",
+    "outbound_click": "cta",
     "lead_form_start": "form_start",
     "lead_form_step": "step2",
     "lead_form_success": "persisted",
     "lead_persisted": "persisted"
+  },
+  "legacy_unclassified_events": [
+    "cta_click"
+  ],
+  "visitor_stage_conditions": {
+    "cta_click": {
+      "destination_type": [
+        "form",
+        "whatsapp",
+        "email",
+        "tel"
+      ]
+    },
+    "outbound_click": {
+      "destination_type": [
+        "tel"
+      ]
+    }
   },
   "rates": [
     "view_to_cta",
@@ -165,6 +207,8 @@
   "notes_pt_br": {
     "raw_vs_qualified": "Mensagem ou lead persistido não é oportunidade qualificada. Qualificação, proposta e venda são observações Warmbly unidas por IDs estáveis.",
     "pii": "Eventos analíticos admitidos nunca carregam e-mail, telefone ou texto livre.",
-    "ci": "O relatório de CI lê apenas a fixture sintética. Não POSTa lead real e não lê produção."
+    "ci": "O relatório de CI lê apenas a fixture sintética. Não POSTa lead real e não lê produção.",
+    "destination_type": "cta_click.destination_type: form | anchor | route | whatsapp | email | tel. So form/whatsapp/email/tel contam como 'cta'.",
+    "visitor_stage_conditions": "G04-01: cta_click so entra no estagio 'cta' quando o destino e de intencao (form, whatsapp, email, tel); destination_type 'route' ou 'anchor' e navegacao, nao intencao. outbound_click so conta como cta quando o destino e telefone; externo nao conta. Evento cta_click sem destination_type e legado nao classificado (legacy_unclassified): conta no estagio 'cta' com rotulo counts.cta_legacy_unclassified, para nao zerar a serie view_to_cta, e nunca promove a lead."
   }
 }
