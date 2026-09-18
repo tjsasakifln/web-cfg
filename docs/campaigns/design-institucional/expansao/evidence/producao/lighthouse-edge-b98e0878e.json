@@ -1,0 +1,360 @@
+{
+ "base": "https://confenge.com.br",
+ "label": "prod-b98e0878e",
+ "measured_at": "2026-09-18T09:04:56.319Z",
+ "tool": "lighthouse (Node API) + chrome-launcher, /home/tjsasakifln/.cache/ms-playwright/chromium-1234/chrome-linux64/chrome",
+ "method": "mobile, simulated throttling rtt 150ms / 1.6 Mbps / cpu 4x, storage reset per run (cold cache); nenhuma execução descartada",
+ "runs_per_route": 3,
+ "summary": [
+  {
+   "route": "/",
+   "runs": 3,
+   "perf_median": 99,
+   "perf_range": [
+    98,
+    100
+   ],
+   "lcp_median_ms": 1832,
+   "lcp_range_ms": [
+    1314,
+    2167
+   ],
+   "cls_median": 0,
+   "tbt_median_ms": 0,
+   "bytes_median": 110041,
+   "a11y_median": 100,
+   "lcp_element": null
+  },
+  {
+   "route": "/servicos/",
+   "runs": 3,
+   "perf_median": 100,
+   "perf_range": [
+    99,
+    100
+   ],
+   "lcp_median_ms": 1653,
+   "lcp_range_ms": [
+    1469,
+    2051
+   ],
+   "cls_median": 0,
+   "tbt_median_ms": 16,
+   "bytes_median": 104257,
+   "a11y_median": 100,
+   "lcp_element": null
+  },
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "runs": 3,
+   "perf_median": 97,
+   "perf_range": [
+    97,
+    98
+   ],
+   "lcp_median_ms": 2413,
+   "lcp_range_ms": [
+    2181,
+    2421
+   ],
+   "cls_median": 0,
+   "tbt_median_ms": 0,
+   "bytes_median": 138380,
+   "a11y_median": 100,
+   "lcp_element": null
+  },
+  {
+   "route": "/medicoes-glosas-obras-publicas/",
+   "runs": 3,
+   "perf_median": 99,
+   "perf_range": [
+    99,
+    100
+   ],
+   "lcp_median_ms": 1673,
+   "lcp_range_ms": [
+    1180,
+    2001
+   ],
+   "cls_median": 0,
+   "tbt_median_ms": 0,
+   "bytes_median": 130241,
+   "a11y_median": 100,
+   "lcp_element": null
+  },
+  {
+   "route": "/entregas/",
+   "runs": 3,
+   "perf_median": 99,
+   "perf_range": [
+    96,
+    100
+   ],
+   "lcp_median_ms": 2041,
+   "lcp_range_ms": [
+    1417,
+    2385
+   ],
+   "cls_median": 0,
+   "tbt_median_ms": 0,
+   "bytes_median": 109965,
+   "a11y_median": 100,
+   "lcp_element": null
+  },
+  {
+   "route": "/conteudos/documentos-reequilibrio-obra-publica/",
+   "runs": 3,
+   "perf_median": 99,
+   "perf_range": [
+    98,
+    100
+   ],
+   "lcp_median_ms": 1716,
+   "lcp_range_ms": [
+    1384,
+    1827
+   ],
+   "cls_median": 0,
+   "tbt_median_ms": 110,
+   "bytes_median": 101162,
+   "a11y_median": 100,
+   "lcp_element": null
+  }
+ ],
+ "results": [
+  {
+   "route": "/",
+   "run": 1,
+   "performance": 98,
+   "accessibility": 100,
+   "lcp_ms": 2167,
+   "cls": 0,
+   "tbt_ms": 89,
+   "fcp_ms": 1417,
+   "bytes": 150889,
+   "lcp_element": null,
+   "final_url": "https://confenge.com.br/"
+  },
+  {
+   "route": "/",
+   "run": 2,
+   "performance": 99,
+   "accessibility": 100,
+   "lcp_ms": 1832,
+   "cls": 0,
+   "tbt_ms": 0,
+   "fcp_ms": 1211,
+   "bytes": 109942,
+   "lcp_element": null,
+   "final_url": "https://confenge.com.br/"
+  },
+  {
+   "route": "/",
+   "run": 3,
+   "performance": 100,
+   "accessibility": 100,
+   "lcp_ms": 1314,
+   "cls": 0,
+   "tbt_ms": 0,
+   "fcp_ms": 798,
+   "bytes": 110041,
+   "lcp_element": null,
+   "final_url": "https://confenge.com.br/"
+  },
+  {
+   "route": "/servicos/",
+   "run": 1,
+   "performance": 100,
+   "accessibility": 100,
+   "lcp_ms": 1653,
+   "cls": 0,
+   "tbt_ms": 16,
+   "fcp_ms": 1137,
+   "bytes": 157119,
+   "lcp_element": null,
+   "final_url": "https://confenge.com.br/servicos/"
+  },
+  {
+   "route": "/servicos/",
+   "run": 2,
+   "performance": 99,
+   "accessibility": 100,
+   "lcp_ms": 2051,
+   "cls": 0,
+   "tbt_ms": 0,
+   "fcp_ms": 1376,
+   "bytes": 104257,
+   "lcp_element": null,
+   "final_url": "https://confenge.com.br/servicos/"
+  },
+  {
+   "route": "/servicos/",
+   "run": 3,
+   "performance": 100,
+   "accessibility": 100,
+   "lcp_ms": 1469,
+   "cls": 0,
+   "tbt_ms": 23,
+   "fcp_ms": 982,
+   "bytes": 102095,
+   "lcp_element": null,
+   "final_url": "https://confenge.com.br/servicos/"
+  },
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "run": 1,
+   "performance": 97,
+   "accessibility": 100,
+   "lcp_ms": 2421,
+   "cls": 0,
+   "tbt_ms": 0,
+   "fcp_ms": 1606,
+   "bytes": 169697,
+   "lcp_element": null,
+   "final_url": "https://confenge.com.br/quantitativos-orcamento-obras/"
+  },
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "run": 2,
+   "performance": 98,
+   "accessibility": 100,
+   "lcp_ms": 2181,
+   "cls": 0,
+   "tbt_ms": 0,
+   "fcp_ms": 1506,
+   "bytes": 138184,
+   "lcp_element": null,
+   "final_url": "https://confenge.com.br/quantitativos-orcamento-obras/"
+  },
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "run": 3,
+   "performance": 97,
+   "accessibility": 100,
+   "lcp_ms": 2413,
+   "cls": 0,
+   "tbt_ms": 0,
+   "fcp_ms": 1595,
+   "bytes": 138380,
+   "lcp_element": null,
+   "final_url": "https://confenge.com.br/quantitativos-orcamento-obras/"
+  },
+  {
+   "route": "/medicoes-glosas-obras-publicas/",
+   "run": 1,
+   "performance": 99,
+   "accessibility": 100,
+   "lcp_ms": 1673,
+   "cls": 0,
+   "tbt_ms": 93,
+   "fcp_ms": 1158,
+   "bytes": 129978,
+   "lcp_element": null,
+   "final_url": "https://confenge.com.br/medicoes-glosas-obras-publicas/"
+  },
+  {
+   "route": "/medicoes-glosas-obras-publicas/",
+   "run": 2,
+   "performance": 100,
+   "accessibility": 100,
+   "lcp_ms": 1180,
+   "cls": 0,
+   "tbt_ms": 0,
+   "fcp_ms": 1162,
+   "bytes": 130241,
+   "lcp_element": null,
+   "final_url": "https://confenge.com.br/medicoes-glosas-obras-publicas/"
+  },
+  {
+   "route": "/medicoes-glosas-obras-publicas/",
+   "run": 3,
+   "performance": 99,
+   "accessibility": 100,
+   "lcp_ms": 2001,
+   "cls": 0,
+   "tbt_ms": 0,
+   "fcp_ms": 1620,
+   "bytes": 130321,
+   "lcp_element": null,
+   "final_url": "https://confenge.com.br/medicoes-glosas-obras-publicas/"
+  },
+  {
+   "route": "/entregas/",
+   "run": 1,
+   "performance": 96,
+   "accessibility": 100,
+   "lcp_ms": 2385,
+   "cls": 0,
+   "tbt_ms": 0,
+   "fcp_ms": 2003,
+   "bytes": 167639,
+   "lcp_element": null,
+   "final_url": "https://confenge.com.br/entregas/"
+  },
+  {
+   "route": "/entregas/",
+   "run": 2,
+   "performance": 99,
+   "accessibility": 100,
+   "lcp_ms": 2041,
+   "cls": 0,
+   "tbt_ms": 0,
+   "fcp_ms": 1451,
+   "bytes": 109965,
+   "lcp_element": null,
+   "final_url": "https://confenge.com.br/entregas/"
+  },
+  {
+   "route": "/entregas/",
+   "run": 3,
+   "performance": 100,
+   "accessibility": 100,
+   "lcp_ms": 1417,
+   "cls": 0,
+   "tbt_ms": 0,
+   "fcp_ms": 1053,
+   "bytes": 109571,
+   "lcp_element": null,
+   "final_url": "https://confenge.com.br/entregas/"
+  },
+  {
+   "route": "/conteudos/documentos-reequilibrio-obra-publica/",
+   "run": 1,
+   "performance": 98,
+   "accessibility": 100,
+   "lcp_ms": 1827,
+   "cls": 0,
+   "tbt_ms": 136,
+   "fcp_ms": 1191,
+   "bytes": 151811,
+   "lcp_element": null,
+   "final_url": "https://confenge.com.br/conteudos/documentos-reequilibrio-obra-publica/"
+  },
+  {
+   "route": "/conteudos/documentos-reequilibrio-obra-publica/",
+   "run": 2,
+   "performance": 100,
+   "accessibility": 100,
+   "lcp_ms": 1716,
+   "cls": 0,
+   "tbt_ms": 0,
+   "fcp_ms": 976,
+   "bytes": 100991,
+   "lcp_element": null,
+   "final_url": "https://confenge.com.br/conteudos/documentos-reequilibrio-obra-publica/"
+  },
+  {
+   "route": "/conteudos/documentos-reequilibrio-obra-publica/",
+   "run": 3,
+   "performance": 99,
+   "accessibility": 100,
+   "lcp_ms": 1384,
+   "cls": 0,
+   "tbt_ms": 110,
+   "fcp_ms": 858,
+   "bytes": 101162,
+   "lcp_element": null,
+   "final_url": "https://confenge.com.br/conteudos/documentos-reequilibrio-obra-publica/"
+  }
+ ]
+}

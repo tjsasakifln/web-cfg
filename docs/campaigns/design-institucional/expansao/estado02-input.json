@@ -1,74 +1,107 @@
 {
-  "operational_state": "EM_EXECUCAO",
-  "phase_done": "CANDIDATO_INTEGRADO_E_REVISADO",
-  "phase_next": "PUBLICACAO_PELA_ESTEIRA_NETCUP",
-  "authorized_direction": {
-    "state": "AUTORIZADA_POR_ENCAMINHAMENTO",
-    "direction_id": "A-prancha-e-percurso",
-    "basis": "Encaminhamento da campanha 02 pelo proprietário em 2026-09-17 (EXECUTE_NOW) após receber o piloto PILOTO_APTO_PARA_DECISAO_VISUAL; sem outra indicação, vale a direção recomendada e identificada na entrega 01 (§1.3 da ordem).",
-    "owner_visual_decision": {
-      "state": "AUTORIZADA_POR_ENCAMINHAMENTO",
-      "who": "proprietário (Tiago Sasaki)",
-      "when": "2026-09-17",
-      "note": "Autorização de execução registrada a partir do encaminhamento da campanha 02; não é pesquisa humana, teste com compradores nem aprovação estatística. human_research permanece NAO_MEDIDA."
-    }
-  },
-  "implementation": {
-    "state": "CONCLUIDA",
-    "branch": "campaign/salto-institucional-02-expansao",
-    "waves": [
-      "onda 1: lotes A/B/C (implementacao, revisao visual+contratos, correcao) — workflow wf_5417b928-337",
-      "onda 2: residuais (/entregas/, execucao segura B2G, biblioteca protegida, ferramentas no orcamento) — wf_653dda00-e15",
-      "integrador: contrato de componentes (assets/editorial.css + subconjuntos), pranchas por familia, folhas globais sem degrade, cadeia de recaptura"
-    ],
-    "route_matrix": "expansao/matriz-rotas.json",
-    "plates": "assets/pranchas/*.svg (20 pranchas em 40 arquivos; docs/campaigns/design-institucional/assets-manifest.json)"
-  },
-  "visual_review": {
-    "state": "CONCLUIDA",
-    "method": "revisores independentes por agente (Sonnet/Opus), telas vistas antes da justificativa, rotulos neutros; nao e pesquisa humana",
-    "rounds": [
-      "por lote (onda 1 e 2): lente visual + lente contratos + correcao",
-      "aceite do conjunto integrado (wf_c92767c2-6f1): 6 lentes (familias A/B/C, a11y-responsivo, jornadas A-E, contratos); 91 achados brutos -> 63 unicos; 4 ALTA e 28 MEDIA corrigidos (wf_b1704a4d-a81 + integrador); BAIXA/PREFERENCIA registrados em expansao/relatorio-lote-*.md"
-    ],
-    "synthesis": "scratchpad do aceite consolidado em expansao/relatorio.html#limitacoes",
-    "pending_owner_decisions": [
-      "A-04 prazo de resposta (publicar em todas as rotas ou em nenhuma; hoje so onde brand.json o define)",
-      "M-25 faixas do campo 'quanto esta em jogo' no formulario da home",
-      "M-26 URL propria para avaliacoes imobiliarias",
-      "M-27 formulario on-page nas rotas privadas",
-      "M-19 modelo precificado /casos/modelo-relatorio-inteligencia-licitacoes/ fora do contrato visual"
-    ]
-  },
-  "technical_review": {
-    "state": "APROVADA_LOCALMENTE",
-    "mirror": "scratchpad/ci_local.sh (espelho de .github/workflows/site-ci.yml, Node 22, produtor 704975a7, CONTEXT=production)",
-    "result": "todos os passos pos-build verdes no candidato (axe 102 auditorias sem critico/serio, Lighthouse MEASURED_PASS em 47 rotas, site-excellence, playwright, geometria, primeira dobra, CSP, jornadas); pre-build verde exceto test_host_owned_storage (race de lock, flaky 1/3 isolado, arquivo identico a main) e test_lighthouse_real_fault_path (assercao de tempo com maquina carregada; passa ociosa)",
-    "axe": "0 critico/serio em 51 rotas x 2 viewports",
-    "lighthouse_lab": "expansao/relatorio-input.json#performance"
-  },
-  "integration": {
-    "state": "CONCLUIDA",
-    "branch": "campaign/salto-institucional-02-expansao",
-    "pilot_merge_commit": "a4680a364",
-    "recapture_chain": "approvals.json -> frozen specs (baseline_commit) -> single-commercial-route -> canary 389 -> first-fold -> censo de CTAs -> build:site (tools/recapture_chain.py)",
-    "gates_hash_bound": "test:bofu-dominance 117, first-fold 1932/1932, contract-analysis 222, inbound-gates 0 FAIL, cta-form-next-state OK"
-  },
-  "publication": {
-    "state": "PENDENTE"
-  },
-  "public_verification": {
-    "state": "PENDENTE"
-  },
-  "capture_proof": {
-    "state": "PENDENTE"
-  },
-  "human_research": {
-    "state": "NAO_MEDIDA",
-    "note": "Sem participantes autorizados; a decisão do proprietário não é pesquisa."
-  },
-  "commercial_result": {
-    "state": "NAO_MEDIDO",
-    "note": "Observado quando houver dados; nenhuma promessa de receita ou taxa de conversão."
+ "operational_state": "PRODUCAO_VERIFICADA",
+ "phase_done": "PRODUCAO_VERIFICADA_E_CAPTURA_COMPROVADA",
+ "phase_next": "OBSERVACAO_DE_CAMPO (INP/LCP/CLS reais e resultado comercial quando houver dados)",
+ "authorized_direction": {
+  "state": "AUTORIZADA_POR_ENCAMINHAMENTO",
+  "direction_id": "A-prancha-e-percurso",
+  "basis": "Encaminhamento da campanha 02 pelo proprietário em 2026-09-17 (EXECUTE_NOW) após receber o piloto PILOTO_APTO_PARA_DECISAO_VISUAL; sem outra indicação, vale a direção recomendada e identificada na entrega 01 (§1.3 da ordem).",
+  "owner_visual_decision": {
+   "state": "AUTORIZADA_POR_ENCAMINHAMENTO",
+   "who": "proprietário (Tiago Sasaki)",
+   "when": "2026-09-17",
+   "note": "Autorização de execução registrada a partir do encaminhamento da campanha 02; não é pesquisa humana, teste com compradores nem aprovação estatística. human_research permanece NAO_MEDIDA."
   }
+ },
+ "implementation": {
+  "state": "CONCLUIDA",
+  "branch": "campaign/salto-institucional-02-expansao",
+  "waves": [
+   "onda 1: lotes A/B/C (implementacao, revisao visual+contratos, correcao) — workflow wf_5417b928-337",
+   "onda 2: residuais (/entregas/, execucao segura B2G, biblioteca protegida, ferramentas no orcamento) — wf_653dda00-e15",
+   "integrador: contrato de componentes (assets/editorial.css + subconjuntos), pranchas por familia, folhas globais sem degrade, cadeia de recaptura"
+  ],
+  "route_matrix": "expansao/matriz-rotas.json",
+  "plates": "assets/pranchas/*.svg (20 pranchas em 40 arquivos; docs/campaigns/design-institucional/assets-manifest.json)"
+ },
+ "visual_review": {
+  "state": "CONCLUIDA",
+  "method": "revisores independentes por agente (Sonnet/Opus), telas vistas antes da justificativa, rotulos neutros; nao e pesquisa humana",
+  "rounds": [
+   "por lote (onda 1 e 2): lente visual + lente contratos + correcao",
+   "aceite do conjunto integrado (wf_c92767c2-6f1): 6 lentes (familias A/B/C, a11y-responsivo, jornadas A-E, contratos); 91 achados brutos -> 63 unicos; 4 ALTA e 28 MEDIA corrigidos (wf_b1704a4d-a81 + integrador); BAIXA/PREFERENCIA registrados em expansao/relatorio-lote-*.md"
+  ],
+  "synthesis": "scratchpad do aceite consolidado em expansao/relatorio.html#limitacoes",
+  "pending_owner_decisions": [
+   "A-04 prazo de resposta (publicar em todas as rotas ou em nenhuma; hoje so onde brand.json o define)",
+   "M-25 faixas do campo 'quanto esta em jogo' no formulario da home",
+   "M-26 URL propria para avaliacoes imobiliarias",
+   "M-27 formulario on-page nas rotas privadas",
+   "M-19 modelo precificado /casos/modelo-relatorio-inteligencia-licitacoes/ fora do contrato visual"
+  ]
+ },
+ "technical_review": {
+  "state": "APROVADA_LOCALMENTE",
+  "mirror": "scratchpad/ci_local.sh (espelho de .github/workflows/site-ci.yml, Node 22, produtor 704975a7, CONTEXT=production)",
+  "result": "todos os passos pos-build verdes no candidato (axe 102 auditorias sem critico/serio, Lighthouse MEASURED_PASS em 47 rotas, site-excellence, playwright, geometria, primeira dobra, CSP, jornadas); pre-build verde exceto test_host_owned_storage (race de lock, flaky 1/3 isolado, arquivo identico a main) e test_lighthouse_real_fault_path (assercao de tempo com maquina carregada; passa ociosa)",
+  "axe": "0 critico/serio em 51 rotas x 2 viewports",
+  "lighthouse_lab": "expansao/relatorio-input.json#performance"
+ },
+ "integration": {
+  "state": "CONCLUIDA",
+  "branch": "campaign/salto-institucional-02-expansao",
+  "pilot_merge_commit": "a4680a364",
+  "recapture_chain": "approvals.json -> frozen specs (baseline_commit) -> single-commercial-route -> canary 389 -> first-fold -> censo de CTAs -> build:site (tools/recapture_chain.py)",
+  "gates_hash_bound": "test:bofu-dominance 117, first-fold 1932/1932, contract-analysis 222, inbound-gates 0 FAIL, cta-form-next-state OK",
+  "pr": "#698 (merge commit 079ce510e, pais 47da03b64 + 38bca51e1) e #699 (merge commit b98e0878e, pais 079ce510e + 468a651b7)",
+  "pr_head_sha": "38bca51e1 (#698), 468a651b7 (#699)",
+  "ci_tested_sha": "38bca51e1: site-ci run 35310407235 e pSEO 35310407293 verdes; 468a651b7: pSEO 35314674890 verde, site-ci 35314674766 verde na 3a execucao (duas reprovacoes por pico unico de TBT ~420-450 ms com longest_own_task 0 em paginas estaticas inalteradas: /termos-de-uso/ e /assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/)",
+  "merged_sha": "b98e0878ee3b34c3429e442826f137c9e0d65e02 (main)",
+  "post_merge_fixes": [
+   "e3a5aaa3a/1cc3606a0: a home liga assets/home-base.css (styles.css podado por scripts/site/build_css.py) — LCP da home no runner 2026 ms > 2000; um checkout reverteu o link no commit 97c2a933c (folha orfa)",
+   "38bca51e1: test_skip_link_coverage.py verifica por conteudo qualquer folha do site ligada pela pagina (so reconhecia /styles.css pelo nome)",
+   "468a651b7 (#699): test_ui_geometry.mjs usa a preparacao canonica de audit_axe.mjs antes do axe (cursor fora da pagina, content-visibility visivel) — a release 35313485074 de 079ce510e reprovou em pSEO por falso contraste 1.85:1 (#0000ee) no botao secundario da faixa de obras publicas, descendente de secao pulada por content-visibility:auto"
+  ]
+ },
+ "publication": {
+  "state": "PROMOVIDA_E_ACEITA",
+  "workflow": "netcup-release run 35322685544 (push em main b98e0878e)",
+  "jobs": "preflight, pSEO quality gates, site-validation, required execution evidence, pacote imutavel e atestacao, stage e verificacao local no host, qualificacao pre-promocao, promocao atomica: todos success na conclusao",
+  "first_attempt": "PROMOTED 2026-09-18T08:50:10Z; aceite publico reconciliou 534/535 HTML e um unico fetch (/conteudos/erros-comunicacao-contrato-publico-construtora/) recebeu HTTP 522 da Cloudflare a ~20 s do varrimento (politica fetch_failure_no_retry); a esteira restaurou 47da03b64 automaticamente (ROLLED_BACK 08:51:17Z). Na origem: nenhum erro do nginx e a requisicao nao chegou ao access.log (transporte borda->origem).",
+  "second_attempt": "reexecucao do job de promocao com o mesmo candidato atestado (bundle 3b2c8f38…, controller 490d4c7b…), main inalterada e predecessor igual ao esperado: PROMOTED 2026-09-18T08:54:59Z, aceite publico 535/535, run concluido success",
+  "release_identity": {
+   "commit": "b98e0878ee3b34c3429e442826f137c9e0d65e02",
+   "artifact_sha256": "3b2c8f38032465f60020666e9a25f7972a163fee8fe81ce668fe8ed6be2ce93c",
+   "release_control_sha256": "490d4c7b62dc848b4e30bdeaf7595f5ce40b11bb7607820b292cfb35f5961f1e",
+   "previous_sha": "47da03b64ba701016eec296234b1d14225ebe588"
+  },
+  "failed_release_before": "run 35313485074 (079ce510e) reprovou nos gates (pSEO) sem promocao; producao permaneceu em 47da03b64",
+  "rollback": "docs/ops/ROLLBACK.md; predecessor 47da03b64 (releases/ no host); a esteira ja exercitou o caminho de restauracao nesta publicacao"
+ },
+ "public_verification": {
+  "state": "VERIFICADA",
+  "tool": "expansao/tools/public_verify.py --expected-sha b98e0878e… --artifact _site (build local com TURNSTILE_SITE_KEY e CONTEXT=production, identicos ao CI)",
+  "result": "identidade build-info/runtime-info/healthz/ready = b98e0878e; 28 rotas com HTML servido byte-identico ao artefato (status, canonical, robots meta, titulo); 73 assets referenciados com Content-Type correto (folhas editorial*/home-10x/home-base fingerprintadas, fontes, pranchas SVG); robots.txt com politica preservada; redirects e 410 conforme; sitemaps servidos; problemas 0",
+  "evidence": "expansao/evidence/producao/public-verification-b98e0878e.json",
+  "captures": "expansao/evidence/producao/capturas/ (10 rotas x 390x844 e 1440x1000, dobra/inteira/menu; overflow a 320 = 0 px em todas) manifest-prod-b98e0878e.json",
+  "lighthouse_edge": "expansao/evidence/producao/lighthouse-edge-b98e0878e.json — mobile, cache frio, 3 execucoes por rota, nenhuma descartada: / perf mediana 99 (98-100) LCP 1832 ms; /servicos/ 100 LCP 1653; /quantitativos-orcamento-obras/ 97 LCP 2413; /medicoes-glosas-obras-publicas/ 99 LCP 1673; /entregas/ 99 LCP 2041; /conteudos/documentos-reequilibrio-obra-publica/ 99 LCP 1716; CLS 0 e acessibilidade 100 em todas",
+  "cache_note": "a verificacao usou cache-buster e no-cache; a identidade foi conferida apos a promocao e novamente na verificacao (08:59Z), sem mistura de versoes"
+ },
+ "capture_proof": {
+  "state": "COMPROVADA",
+  "method": "sonda sintetica autorizada (SYNTHETIC_MUTATING_AUTHORIZED) scripts/site/synthetic_lead_probe.mjs executada NO host de producao com as credenciais do runtime (EnvironmentFile do servico; nao impressas, nao copiadas, nao versionadas), contexto de pagina por rota (expansao/evidence/producao/probe-contexts.json), saida agregada sem PII",
+  "scope": "8 contextos: home (origem /), pilares medicoes e aditivos, /entregas/ (entregas-hub-handraise), /diagnostico-b2g-expansao/, /servicos-obras-publicas/, /diretoria-b2g/, execucao segura bid-room",
+  "result": "8/8 TRANSPORT_READY com 20/20 verificacoes: criacao HTTP 201 com recibo persistido, reenvio idempotente (200, mesmo recibo), registro autenticado como sintetico e excluido do comercial, fonte canonica CONFENGE_WEB, entrega ao warmbly exatamente uma vez (recibo downstream igual, sem duplicata, sem acao comercial), metricas comerciais inalteradas, contexto de pagina persistido (asset_id/route_family/cta_id iguais aos campos ocultos do formulario; home sem asset/cta por desenho)",
+  "distinction": "teste de UI (test:contact-journeys/test:capture-states no artefato) != backend (lead-function) != ponta a ponta (esta sonda, no dominio publico, transporte real ate warmbly)",
+  "correlation": "receipt_sha256 por contexto no JSON de evidencia; e-mail/notificacao pulados por desenho do modo sintetico",
+  "evidence": "expansao/evidence/producao/probe-b98e0878e.json"
+ },
+ "human_research": {
+  "state": "NAO_MEDIDA",
+  "note": "Sem participantes autorizados; a decisão do proprietário não é pesquisa."
+ },
+ "commercial_result": {
+  "state": "NAO_MEDIDO",
+  "note": "Observado quando houver dados; nenhuma promessa de receita ou taxa de conversão."
+ }
 }
