@@ -216,6 +216,12 @@ for (const [route, ctaId, hash] of [
   check("toc_prose_anchor_silent", "/conteudos/calculo-reequilibrio-economico-financeiro/", !diff.missing
     && diff.added.length === 0, diff);
 }
+// The skip link targets <main id="conteudo">, a wrapper that contains the capture section: never a cta_click.
+for (const route of ["/quantitativos-orcamento-obras/", "/", "/conteudos/calculo-reequilibrio-economico-financeiro/"]) {
+  await open(page, route);
+  const diff = await clickAndDiff(page, 'a.skip-link[href="#conteudo"]');
+  check("skip_link_wrapper_anchor_silent", route, !diff.missing && diff.added.length === 0, diff);
+}
 
 // (3d) tool submit button declared cta_click (data-tool-to-form, no href) -> destination_type=form.
 {

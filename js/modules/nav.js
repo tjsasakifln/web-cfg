@@ -1053,8 +1053,9 @@
     // uma secao data-section-archetype=cta_formal (#escopo-projeto,
     // #diagnostico da ferramenta, #contato-*) ou um bloco de contato direto
     // (.capture-grid/.contact-primary, p. ex. #encaminhar em /parcerias-engenharia/).
-    // Um sumario que aponta para uma secao de prosa com o mesmo id
-    // (#diagnostico em /conteudos/) nao e captura.
+    // So o alvo e seus filhos imediatos (ou o .container deles) contam: um
+    // invólucro como <main id=conteudo> (skip link) ou um sumario para uma
+    // secao de prosa com o mesmo id (#diagnostico em /conteudos/) nao e captura.
     const CAPTURE_HASH = /^#(contato|captura|pedido|triagem)/i;
     const captureTargetCache = new Map();
     const isCaptureHash = (hash) => {
@@ -1065,10 +1066,14 @@
       let result = false;
       try {
         const target = document.getElementById(decodeURIComponent(value.slice(1)));
-        if (target) {
-          result = String(target.tagName || '').toUpperCase() === 'FORM'
+        const tag = target ? String(target.tagName || '').toUpperCase() : '';
+        const wrapper = !target || tag === 'MAIN' || tag === 'BODY' || tag === 'HTML'
+          || target.getAttribute('role') === 'main';
+        if (target && !wrapper) {
+          result = tag === 'FORM'
             || target.getAttribute('data-section-archetype') === 'cta_formal'
-            || !!target.querySelector?.('form, .capture-grid, .contact-primary');
+            || !!target.querySelector?.(':scope > form, :scope > .capture-grid, :scope > .contact-primary, '
+              + ':scope > .container > form, :scope > .container > .capture-grid, :scope > .container > .contact-primary');
         }
       } catch (_) { result = false; }
       captureTargetCache.set(value, result);
