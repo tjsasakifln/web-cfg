@@ -40,7 +40,7 @@ function stripScripts(html) {
   // Matches a permissive closing tag (attributes, internal whitespace before
   // ">") so a hand-crafted "</script >" cannot survive stripping and leak
   // script content into the visible-text check (CodeQL js/bad-tag-filter).
-  return String(html).replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi, " ");
+  return String(html).replace(/<script\b[^>]*>[\s\S]*?<\/script[^>]*>/gi, " ");
 }
 
 function visible(html) {

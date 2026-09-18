@@ -261,7 +261,7 @@ _reset();
     if (res.statusCode !== 201 || !data.ok || !data.lead_id) fail("persist_success", data);
     if (data.receipt_id !== data.lead_id) fail("receipt_compat", data);
     const bodyStr = JSON.stringify(data);
-    if (bodyStr.includes("SECRET_MESSAGE") || bodyStr.includes("ntfy") || bodyStr.includes("topic") || bodyStr.includes("test-secret") || bodyStr.includes("example.com")) {
+    if (bodyStr.includes("SECRET_MESSAGE") || bodyStr.includes("ntfy") || bodyStr.includes("topic") || bodyStr.includes("test-secret") || /\bexample\.com\b/.test(bodyStr)) {
       fail("response_leak", data);
     }
     // Full delivery object / secrets must not leak; notify_status/email_status are non-PII OK
@@ -1362,7 +1362,7 @@ _reset();
   process.env.LEAD_NOTIFY_EMAIL = "ops@confenge.com.br";
   const originalFetch = globalThis.fetch;
   globalThis.fetch = async (url) => {
-    if (String(url).includes("resend.com")) {
+    if (isRequestToHost(url, "api.resend.com")) {
       return { ok: false, status: 500, text: async () => "fail", json: async () => ({}) };
     }
     return { ok: true, status: 200, text: async () => "{}", json: async () => ({}) };
@@ -1599,7 +1599,7 @@ for (const bodyHonoursAbort of [true, false]) {
   const resendCalls = [];
   globalThis.fetch = async (url, init = {}) => {
     const href = String(url);
-    if (href.includes("resend.com")) {
+    if (isRequestToHost(href, "api.resend.com")) {
       resendCalls.push({ url: href, body: init.body });
       return { ok: true, status: 200, text: async () => "{}", json: async () => ({ id: "should-not-send" }) };
     }

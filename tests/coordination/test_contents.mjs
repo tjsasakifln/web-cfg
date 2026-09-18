@@ -11,7 +11,7 @@ const CONTRACT = path.join(root, "data/coordination/route-contract.v1.json");
 
 function visible(html) {
   return String(html)
-    .replace(/<script[\s\S]*?<\/script\s*>/gi, " ")
+    .replace(/<script[\s\S]*?<\/script[^>]*>/gi, " ")
     .replace(/<style[\s\S]*?<\/style>/gi, " ")
     .replace(/<[^>]+>/g, " ")
     .replace(/\s+/g, " ");
