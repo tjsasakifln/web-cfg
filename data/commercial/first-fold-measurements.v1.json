@@ -1,27 +1,27 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-09-17T20:32:19.755Z",
-  "measured_on": "2026-09-17",
-  "commit_sha": "46f11c2ca294a0611d07e4efb4edb5feda504a8f",
+  "measured_at": "2026-09-18T00:19:17.139Z",
+  "measured_on": "2026-09-18",
+  "commit_sha": "bbc05650682fc10603f04e0ddc9e1aebca23bf63",
   "tree_dirty": false,
   "input_hashes": {
     "@control/scripts/site/first_fold_identity.mjs": "f168038814087e1b365d1de3042af9a3f3364743756e104711fecc0fb9fe7477",
     "@control/scripts/site/first_fold_rules.mjs": "53d52810f7750795e96f2421248d8aa8f06ff4c4065c4ba6bc9ee92a11fca7fd",
     "@control/scripts/site/measure_first_fold.mjs": "8f7a93464d0c5f05a92d665c077eedeabd944a0ef038e7d2cf2b18377a87013b",
-    "acompanhamento-contratos-obras/index.html": "051c7864c9f8c5e1842176eecbb10e36bbc6f63071d3e61990371b2a2fd794a7",
-    "aditivos-obras-publicas/index.html": "bcfbe8fc5fd6e37fde9c857991c0bc23f86c5dde9bda1f265f0f8ea3ffd11156",
+    "acompanhamento-contratos-obras/index.html": "89ed82a591e571d913cea204a6c0fda66b6bde2f97535ec346d9323a36141131",
+    "aditivos-obras-publicas/index.html": "9fc5ffbab3fd135cd4f49cd286ff539ed60aef0dc63b7aced73465d04d1cee87",
     "assets/archivo-var-latin-bf6e041e.woff2": "bf6e041e98b0fa244d965027e9f2b6ed53470ed95f2227615510a08a67ea7f4a",
-    "assets/editorial-article.css": "e9790ab4867a0bd6efe6bdd84e4769ef6c9193941c73033a2059366cc32648a7",
-    "assets/editorial.css": "048a22504e9a2b986ebbb5d5a066d164b338bd825783a19af6be3ebe3f334a02",
+    "assets/editorial-article.css": "14e447dacd8d194aa571af56286403015a9332818303440543b62d484ba58cf1",
+    "assets/editorial.css": "50404a7d507e3e62a6b52fbdecd1f998dc2a1985c494396c8e1e9961e1c60e5e",
     "assets/eight-offer-contract.css": "d2aead054169392b26c739ab4d95c8b2f651a66c9d6ac27aa7fd98bdafc4f79d",
-    "assets/home-10x.css": "1fc39fff9c67b0c1e01d1c7d98675fe9bc9b13b8dc6336d4a60dbb33170f090d",
+    "assets/home-10x.css": "82d9ae22fae0435ba207e95e27605293f21d926e14ee03ac589a04e4ef6a8ba4",
     "assets/report-capture.css": "669b93f113f417ba6a8175d9d0ab0dd846a19e991245ad9f2f1ebea48d8c0552",
     "assets/report-model-a11y-v293.css": "148fb54ad084edad56eff48e6b635e2df177e8679a724d50e2e92a88421fddce",
     "assets/report-model.css": "b4b5e638341d7531e4f6059618c202890e269a695cb28dddb545d9a520726839",
-    "atrasos-prorrogacao-obras-publicas/index.html": "17ffc9d49c33fc3e8f0c1946cd78b31a26ac739ce0d6620fcbbc58ad6aecc175",
+    "atrasos-prorrogacao-obras-publicas/index.html": "533a10522feabf3b8cc76f635783b2b20b6d93f271bdc91c18bc97fea5a8f7e3",
     "auditoria-orcamento-licitacao/index.html": "69dcc3c5df42d837fb979fb481939b5e582a3915851e030319de89b6651f5225",
-    "bid-room-licitacoes-obras/index.html": "5ead50a790144ca1d02ca07deba14133b8b27bdf592f51fcb985344a98b2f31b",
+    "bid-room-licitacoes-obras/index.html": "3a59ca5546f753bbdf1bfdd55c3510472ece2ed8c8f0a0b5abc59b02849f75dd",
     "casos/modelo-apresentacao-executiva-resultados/index.html": "97b8202a1b834a9f316ea29e613f02d4ddbfbc1b948ec82267429f5f985e9c75",
     "casos/modelo-apresentacao-executiva-resultados/styles.css": "8ace8a9960dbc19f71c9f69e4908f39ac223991715a13707587d1d06f483048d",
     "casos/modelo-base-quantitativa-canonica/index.html": "4fe87709d0601a92f72ff8578cb38476a7580ec33db8b3b464e788d62a8724a2",
@@ -38,25 +38,25 @@
     "casos/modelo-relatorio-executivo-consolidado/styles.css": "d2f580f6061be6c0bcafa966877693be469fa8a7171a7a3469c7ec967e11b63a",
     "casos/modelo-relatorio-inteligencia-licitacoes/index.html": "d9ed33ba8ec9d19cfe7c69638c8e39c21af4c673859549f030024c8f532fa895",
     "casos/modelo-relatorio-inteligencia-licitacoes/styles.css": "54a412e66160736aa7d8c757bd6bd9752eb1d41fac2996864c9575aeaa27c260",
-    "defesa-margem-contratos-publicos/index.html": "1d630c0e6ca68945d41567d543162224ddd9deaa39d3f735b83939cef6026e9a",
-    "defesa-tecnica-contratos-publicos/index.html": "6a1bfb343204d541c0ab127219777f7f77778f20fe90644880dae789fb44e86f",
+    "defesa-margem-contratos-publicos/index.html": "666b7bb0156415b051a2a69c8d8f1feaddec64c72d66f61c9213fcd729ff4edf",
+    "defesa-tecnica-contratos-publicos/index.html": "fd1c06e736f0ffa2579da7bda94cc903f0f4e61aad9fa9568eebf7826d2dd434",
     "diagnostico-b2g-360/index.html": "888dc7f716f1dd524bfd1b06d55fe23bb48a2bc507602f7528a17a77066db1cd",
-    "diagnostico-b2g-expansao/index.html": "b32d5fe2fe6718f7321ac75b445bd7e43070a04628b2176c1d57702449feb9a3",
+    "diagnostico-b2g-expansao/index.html": "1e8d60b0eb002942732bbb79dcd786e6b3172ad1403424bb012af0cb4de41c80",
     "diagnostico-pre-licitacao/index.html": "74402dff44f8981829c91e8bac07c3ef5e122f345cf4e27991b0dfa921588f7a",
-    "diretoria-b2g/index.html": "467fe7daabdf6a935b7c7f77dcee0f2b43c4902aaadb0ffa7f454e11135e827b",
+    "diretoria-b2g/index.html": "9df7cde4881ff96c2919c2292370e88532dce93b1ab2277780ef2875eb4a3475",
     "entregas/index.html": "38dac83c7a4092edcf17250b246cff50cd670b753b87b8a99713a262aacb2ab3",
     "entregas/styles.css": "4df6c06befb99bf6ce09db19d81e7353cdda80a7a802868600b88033ca78aa1c",
-    "index.html": "c28692dd8ff16c83d1a0cc74583154416e6fe3259ef57575cd695cf0077c52d6",
-    "medicoes-glosas-obras-publicas/index.html": "821168975038c60fc478ff69515be52edb636b5e06dd94eb910414e245321910",
-    "problemas-que-resolvemos/index.html": "1bb27e6665127d9dca95c70f5c9cfe2161c4ab7890903e05ac2bf76233d9ccba",
+    "index.html": "c579502763e99f9fa8d9412f24ee8b6b8227555fc0218a9ab37bc7b038617afe",
+    "medicoes-glosas-obras-publicas/index.html": "a265f90370894eccbeebfb375f4821b622dd9954d6685de62af837996a1814cf",
+    "problemas-que-resolvemos/index.html": "c5a5872e8ab07dc8bffc49cc82617fed5b6d40ffd125662d5ab6ab35a5a60153",
     "reequilibrio-obras-publicas/index.html": "d3c946a5d0a81d9e2b59760f5c35396dd887de5055a11e441134dee84fd120f3",
-    "script.js": "1c0429738a094c73e738152d2275ac8cd34b905e43c2139423b388ae75affe1a",
+    "script.js": "f5737c012010592696b00ad13830aee97224cb7311773a5e9a5033b2c954757c",
     "servicos-obras-publicas/index.html": "599f3003d48ea8a809e05462683d799723ac469c75f4802e8ae93ea04b484986",
     "styles-hubs.css": "ed4668833ad8de5cef5acc5fc1e8f21e519870f0bf282247c3b4a9644a094592",
-    "styles-offers.css": "4851dd21768c063aeb02a69289e84dd20065a17b0deb9418bf8242f5a616e10b",
+    "styles-offers.css": "2526929c9d5d5d86808d58a56ae2c1f2983f6ac4f513574e5323bc86549fd1f2",
     "styles-tokens.css": "ad2801a01362061b5e769eb2ca215477071d1bd58620bb83d3c5cf412ef85df9",
     "styles-tools.css": "7112012d31d7a3a1b43a6fbd8b939598d7a6f1b8ea41b0ec850eaa6d8cde4377",
-    "styles.css": "734b62f6b4842a5dcbbac5dc5424a405c774ac11d88ba23dc502b18f49b670dc"
+    "styles.css": "dbcf1b8af9fe1736ad07b2aae30b70f4eca19b2a5ccd2eec2f5c94081e9672ba"
   },
   "surface": "source",
   "artifact_identity": null,
@@ -103,8 +103,8 @@
   "routes": [
     {
       "route": "/",
-      "html_sha256": "c28692dd8ff16c83d1a0cc74583154416e6fe3259ef57575cd695cf0077c52d6",
-      "measured_on": "2026-09-17",
+      "html_sha256": "c579502763e99f9fa8d9412f24ee8b6b8227555fc0218a9ab37bc7b038617afe",
+      "measured_on": "2026-09-18",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -320,7 +320,7 @@
     {
       "route": "/entregas/",
       "html_sha256": "38dac83c7a4092edcf17250b246cff50cd670b753b87b8a99713a262aacb2ab3",
-      "measured_on": "2026-09-17",
+      "measured_on": "2026-09-18",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -530,7 +530,7 @@
     {
       "route": "/servicos-obras-publicas/",
       "html_sha256": "599f3003d48ea8a809e05462683d799723ac469c75f4802e8ae93ea04b484986",
-      "measured_on": "2026-09-17",
+      "measured_on": "2026-09-18",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -727,8 +727,8 @@
     },
     {
       "route": "/problemas-que-resolvemos/",
-      "html_sha256": "1bb27e6665127d9dca95c70f5c9cfe2161c4ab7890903e05ac2bf76233d9ccba",
-      "measured_on": "2026-09-17",
+      "html_sha256": "c5a5872e8ab07dc8bffc49cc82617fed5b6d40ffd125662d5ab6ab35a5a60153",
+      "measured_on": "2026-09-18",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -925,8 +925,8 @@
     },
     {
       "route": "/diagnostico-b2g-expansao/",
-      "html_sha256": "b32d5fe2fe6718f7321ac75b445bd7e43070a04628b2176c1d57702449feb9a3",
-      "measured_on": "2026-09-17",
+      "html_sha256": "1e8d60b0eb002942732bbb79dcd786e6b3172ad1403424bb012af0cb4de41c80",
+      "measured_on": "2026-09-18",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -982,8 +982,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 633,
-                "bottom": 677,
+                "top": 711,
+                "bottom": 755,
                 "left": 83,
                 "right": 321,
                 "width": 238,
@@ -997,8 +997,8 @@
               "text": "Solicitar o diagnóstico",
               "href": "#pedido-diagnostico",
               "box": {
-                "top": 633,
-                "bottom": 677,
+                "top": 711,
+                "bottom": 755,
                 "left": 83,
                 "right": 321,
                 "width": 238,
@@ -1072,8 +1072,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 701,
-                "bottom": 745,
+                "top": 823,
+                "bottom": 867,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1082,26 +1082,8 @@
               "text": "Solicitar o diagnóstico"
             }
           },
-          "primary_actions_in_fold": [
-            {
-              "text": "Solicitar o diagnóstico",
-              "href": "#pedido-diagnostico",
-              "box": {
-                "top": 701,
-                "bottom": 745,
-                "left": 18,
-                "right": 372,
-                "width": 353,
-                "height": 44
-              }
-            }
-          ],
-          "secondary_actions_in_fold": [
-            {
-              "text": "Tirar uma dúvida pelo WhatsApp",
-              "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20avaliar%20o%20Diagn%C3%B3stico%20de%20Expans%C3%A3o%20no%20Mercado%20P%C3%BAblico."
-            }
-          ],
+          "primary_actions_in_fold": [],
+          "secondary_actions_in_fold": [],
           "verifiable_proof": {
             "text": "exemplo sintético do mapa de compradores",
             "href": "/casos/modelo-mapa-compradores-publicos/"
@@ -1136,7 +1118,7 @@
     {
       "route": "/diagnostico-pre-licitacao/",
       "html_sha256": "74402dff44f8981829c91e8bac07c3ef5e122f345cf4e27991b0dfa921588f7a",
-      "measured_on": "2026-09-17",
+      "measured_on": "2026-09-18",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -1352,7 +1334,7 @@
     {
       "route": "/auditoria-orcamento-licitacao/",
       "html_sha256": "69dcc3c5df42d837fb979fb481939b5e582a3915851e030319de89b6651f5225",
-      "measured_on": "2026-09-17",
+      "measured_on": "2026-09-18",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -1568,8 +1550,8 @@
     },
     {
       "route": "/bid-room-licitacoes-obras/",
-      "html_sha256": "5ead50a790144ca1d02ca07deba14133b8b27bdf592f51fcb985344a98b2f31b",
-      "measured_on": "2026-09-17",
+      "html_sha256": "3a59ca5546f753bbdf1bfdd55c3510472ece2ed8c8f0a0b5abc59b02849f75dd",
+      "measured_on": "2026-09-18",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -1625,8 +1607,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 501,
-                "bottom": 545,
+                "top": 578,
+                "bottom": 622,
                 "left": 83,
                 "right": 344,
                 "width": 261,
@@ -1640,8 +1622,8 @@
               "text": "Enviar edital para triagem",
               "href": "#captura-pilar",
               "box": {
-                "top": 501,
-                "bottom": 545,
+                "top": 578,
+                "bottom": 622,
                 "left": 83,
                 "right": 344,
                 "width": 261,
@@ -1715,8 +1697,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 506,
-                "bottom": 550,
+                "top": 606,
+                "bottom": 650,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1730,8 +1712,8 @@
               "text": "Enviar edital para triagem",
               "href": "#captura-pilar",
               "box": {
-                "top": 506,
-                "bottom": 550,
+                "top": 606,
+                "bottom": 650,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1776,8 +1758,8 @@
     },
     {
       "route": "/defesa-margem-contratos-publicos/",
-      "html_sha256": "1d630c0e6ca68945d41567d543162224ddd9deaa39d3f735b83939cef6026e9a",
-      "measured_on": "2026-09-17",
+      "html_sha256": "666b7bb0156415b051a2a69c8d8f1feaddec64c72d66f61c9213fcd729ff4edf",
+      "measured_on": "2026-09-18",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -1821,8 +1803,8 @@
             "proof": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 531,
-                "bottom": 577,
+                "top": 551,
+                "bottom": 597,
                 "left": 83,
                 "right": 633,
                 "width": 550,
@@ -1833,8 +1815,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 473,
-                "bottom": 517,
+                "top": 493,
+                "bottom": 537,
                 "left": 83,
                 "right": 395,
                 "width": 312,
@@ -1848,8 +1830,8 @@
               "text": "Solicitar canal seguro para envio",
               "href": "#captura-pilar",
               "box": {
-                "top": 473,
-                "bottom": 517,
+                "top": 493,
+                "bottom": 537,
                 "left": 83,
                 "right": 395,
                 "width": 312,
@@ -1911,8 +1893,8 @@
             "proof": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 573,
-                "bottom": 636,
+                "top": 593,
+                "bottom": 656,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1923,8 +1905,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 457,
-                "bottom": 501,
+                "top": 477,
+                "bottom": 521,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1938,8 +1920,8 @@
               "text": "Solicitar canal seguro para envio",
               "href": "#captura-pilar",
               "box": {
-                "top": 457,
-                "bottom": 501,
+                "top": 477,
+                "bottom": 521,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -1985,8 +1967,8 @@
     },
     {
       "route": "/medicoes-glosas-obras-publicas/",
-      "html_sha256": "821168975038c60fc478ff69515be52edb636b5e06dd94eb910414e245321910",
-      "measured_on": "2026-09-17",
+      "html_sha256": "a265f90370894eccbeebfb375f4821b622dd9954d6685de62af837996a1814cf",
+      "measured_on": "2026-09-18",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -2198,8 +2180,8 @@
     },
     {
       "route": "/aditivos-obras-publicas/",
-      "html_sha256": "bcfbe8fc5fd6e37fde9c857991c0bc23f86c5dde9bda1f265f0f8ea3ffd11156",
-      "measured_on": "2026-09-17",
+      "html_sha256": "9fc5ffbab3fd135cd4f49cd286ff539ed60aef0dc63b7aced73465d04d1cee87",
+      "measured_on": "2026-09-18",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -2412,8 +2394,8 @@
     },
     {
       "route": "/atrasos-prorrogacao-obras-publicas/",
-      "html_sha256": "17ffc9d49c33fc3e8f0c1946cd78b31a26ac739ce0d6620fcbbc58ad6aecc175",
-      "measured_on": "2026-09-17",
+      "html_sha256": "533a10522feabf3b8cc76f635783b2b20b6d93f271bdc91c18bc97fea5a8f7e3",
+      "measured_on": "2026-09-18",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -2626,7 +2608,7 @@
     {
       "route": "/reequilibrio-obras-publicas/",
       "html_sha256": "d3c946a5d0a81d9e2b59760f5c35396dd887de5055a11e441134dee84fd120f3",
-      "measured_on": "2026-09-17",
+      "measured_on": "2026-09-18",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -2841,8 +2823,8 @@
     },
     {
       "route": "/defesa-tecnica-contratos-publicos/",
-      "html_sha256": "6a1bfb343204d541c0ab127219777f7f77778f20fe90644880dae789fb44e86f",
-      "measured_on": "2026-09-17",
+      "html_sha256": "fd1c06e736f0ffa2579da7bda94cc903f0f4e61aad9fa9568eebf7826d2dd434",
+      "measured_on": "2026-09-18",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -3051,7 +3033,7 @@
     {
       "route": "/diagnostico-b2g-360/",
       "html_sha256": "888dc7f716f1dd524bfd1b06d55fe23bb48a2bc507602f7528a17a77066db1cd",
-      "measured_on": "2026-09-17",
+      "measured_on": "2026-09-18",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -3271,8 +3253,8 @@
     },
     {
       "route": "/acompanhamento-contratos-obras/",
-      "html_sha256": "051c7864c9f8c5e1842176eecbb10e36bbc6f63071d3e61990371b2a2fd794a7",
-      "measured_on": "2026-09-17",
+      "html_sha256": "89ed82a591e571d913cea204a6c0fda66b6bde2f97535ec346d9323a36141131",
+      "measured_on": "2026-09-18",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -3482,8 +3464,8 @@
     },
     {
       "route": "/diretoria-b2g/",
-      "html_sha256": "467fe7daabdf6a935b7c7f77dcee0f2b43c4902aaadb0ffa7f454e11135e827b",
-      "measured_on": "2026-09-17",
+      "html_sha256": "9df7cde4881ff96c2919c2292370e88532dce93b1ab2277780ef2875eb4a3475",
+      "measured_on": "2026-09-18",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -3539,8 +3521,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 449,
-                "bottom": 493,
+                "top": 630,
+                "bottom": 674,
                 "left": 83,
                 "right": 324,
                 "width": 241,
@@ -3554,8 +3536,8 @@
               "text": "Falar sobre a operação",
               "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20conhecer%20a%20Diretoria%20Fracionada%20para%20o%20Mercado%20P%C3%BAblico%20e%20entender%20se%20encaixa%20na%20nossa%20opera%C3%A7%C3%A3o.",
               "box": {
-                "top": 449,
-                "bottom": 493,
+                "top": 630,
+                "bottom": 674,
                 "left": 83,
                 "right": 324,
                 "width": 241,
@@ -3629,8 +3611,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 469,
-                "bottom": 513,
+                "top": 698,
+                "bottom": 742,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3644,8 +3626,8 @@
               "text": "Falar sobre a operação",
               "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20conhecer%20a%20Diretoria%20Fracionada%20para%20o%20Mercado%20P%C3%BAblico%20e%20entender%20se%20encaixa%20na%20nossa%20opera%C3%A7%C3%A3o.",
               "box": {
-                "top": 469,
-                "bottom": 513,
+                "top": 698,
+                "bottom": 742,
                 "left": 18,
                 "right": 372,
                 "width": 353,
@@ -3689,7 +3671,7 @@
     {
       "route": "/casos/modelo-relatorio-inteligencia-licitacoes/",
       "html_sha256": "d9ed33ba8ec9d19cfe7c69638c8e39c21af4c673859549f030024c8f532fa895",
-      "measured_on": "2026-09-17",
+      "measured_on": "2026-09-18",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -3899,7 +3881,7 @@
     {
       "route": "/casos/modelo-base-quantitativa-canonica/",
       "html_sha256": "4fe87709d0601a92f72ff8578cb38476a7580ec33db8b3b464e788d62a8724a2",
-      "measured_on": "2026-09-17",
+      "measured_on": "2026-09-18",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -4109,7 +4091,7 @@
     {
       "route": "/casos/modelo-apresentacao-executiva-resultados/",
       "html_sha256": "97b8202a1b834a9f316ea29e613f02d4ddbfbc1b948ec82267429f5f985e9c75",
-      "measured_on": "2026-09-17",
+      "measured_on": "2026-09-18",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -4321,7 +4303,7 @@
     {
       "route": "/casos/modelo-mapa-compradores-publicos/",
       "html_sha256": "90caa21245f278947e3b4a6d7d779026b9c562e3d7dd11a65fd2a81071790b70",
-      "measured_on": "2026-09-17",
+      "measured_on": "2026-09-18",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -4533,7 +4515,7 @@
     {
       "route": "/casos/modelo-contratos-vincendos-relicitacao/",
       "html_sha256": "04df1a9a5e48fe41b73a7b0086a968913762985cc1ee134fa78a2722c9103e4f",
-      "measured_on": "2026-09-17",
+      "measured_on": "2026-09-18",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -4746,7 +4728,7 @@
     {
       "route": "/casos/modelo-mapeamento-concorrentes-publicos/",
       "html_sha256": "99a2206ce741c98b27d1ac7305dc917f4040f7a7e506a1b0dd52a6c2636cf7d5",
-      "measured_on": "2026-09-17",
+      "measured_on": "2026-09-18",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -4954,7 +4936,7 @@
     {
       "route": "/casos/modelo-painel-precos-obras-publicas/",
       "html_sha256": "c43d379a0d38159ff2e441a9732bcb687903325c8a173ba4b07cbbc7163e2184",
-      "measured_on": "2026-09-17",
+      "measured_on": "2026-09-18",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -5168,7 +5150,7 @@
     {
       "route": "/casos/modelo-relatorio-executivo-consolidado/",
       "html_sha256": "bd9737ca9c92309f83634e26a01bfe62c88a3fad96bf3715d87cc41d45204340",
-      "measured_on": "2026-09-17",
+      "measured_on": "2026-09-18",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
