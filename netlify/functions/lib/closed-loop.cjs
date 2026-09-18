@@ -37,6 +37,21 @@ const RATE_DIMENSIONS = Object.freeze({
 });
 const ATTR_FIELDS = Object.freeze([...(CONTRACT.attribution_fields || [])]);
 const VISITOR_EVENT_MAP = Object.freeze({ ...(CONTRACT.visitor_event_map || {}) });
+// G04-01: eventos cujo estagio depende do destino (cta_click route/anchor e
+// navegacao; outbound_click externo nao e intencao). Sem destination_type
+// admitido, o evento nao entra no estagio.
+const VISITOR_STAGE_CONDITIONS = Object.freeze(
+  Object.fromEntries(
+    Object.entries(CONTRACT.visitor_stage_conditions || {})
+      .filter(([, cond]) => cond && typeof cond === "object" && Array.isArray(cond.destination_type))
+      .map(([name, cond]) => [name, new Set(cond.destination_type.map((v) => String(v)))]),
+  ),
+);
+const HANDOFF_SOURCE = (CONTRACT.operational_stage_source || {}).handoff || {};
+const HANDOFF_STATUSES = Object.freeze(
+  (HANDOFF_SOURCE.statuses || ["DELIVERED", "BLOCKED", "PENDING", "RETRYABLE", "SKIPPED", "DEAD"])
+    .map((s) => String(s).toUpperCase()),
+);
 const OBSERVATION_FIELDS = new Set([
   ...((CONTRACT.warmbly_observation_contract || {}).allowed_fields || []),
 ]);
@@ -114,7 +129,45 @@ function visitorStageOf(canonical, props) {
     if (step <= 1) return "step1";
     return "step2";
   }
+  const allowed = VISITOR_STAGE_CONDITIONS[canonical];
+  if (allowed) {
+    const destinationType = String((props && props.destination_type) || "").toLowerCase();
+    if (!destinationType || !allowed.has(destinationType)) return null;
+  }
   return VISITOR_EVENT_MAP[canonical] || null;
+}
+
+/**
+ * Classe D (disponibilidade operacional), G04-07: derivada de lead.handoff.status
+ * no store. Unidade leads, owner web-cfg. Nao e evento do cliente e nunca
+ * promove a qualified.
+ */
+function summarizeHandoff(leads) {
+  const byStatus = {};
+  for (const status of HANDOFF_STATUSES) byStatus[status.toLowerCase()] = 0;
+  byStatus.unknown = 0;
+  let withStatus = 0;
+  for (const lead of leads || []) {
+    const handoff = lead && lead.handoff && typeof lead.handoff === "object" ? lead.handoff : null;
+    const status = String((handoff && handoff.status) || "").toUpperCase();
+    if (status && HANDOFF_STATUSES.includes(status)) {
+      byStatus[status.toLowerCase()] += 1;
+      withStatus += 1;
+    } else {
+      byStatus.unknown += 1;
+    }
+  }
+  return {
+    stage: "handoff",
+    owner: String(HANDOFF_SOURCE.owner || "web-cfg"),
+    unit: "leads",
+    derived_from: String(HANDOFF_SOURCE.derived_from || "lead.handoff.status"),
+    reserved_event: String(HANDOFF_SOURCE.reserved_event || "handoff_accepted"),
+    promotes_to_qualified: false,
+    leads_total: (leads || []).length,
+    leads_with_status: withStatus,
+    by_status: byStatus,
+  };
 }
 
 function assertAnalyticsNoPii(payload) {
@@ -659,6 +712,9 @@ function reconcileClosedLoop(input) {
     }
   }
   counts.persisted_after_step2_sessions = persistedAfterStep2SessionIds.size;
+  const handoff = summarizeHandoff(leads);
+  counts.handoff_leads = handoff.leads_with_status;
+  counts.handoff_delivered_leads = handoff.by_status.delivered;
 
   if (counts.qualified > counts.persisted) {
     throw codedError("invalid_transition", "qualified_exceeds_persisted");
@@ -822,7 +878,10 @@ function reconcileClosedLoop(input) {
       proposal_leads: "leads",
       won: "leads",
       won_leads: "leads",
+      handoff_leads: "leads",
+      handoff_delivered_leads: "leads",
     },
+    handoff,
     rates,
     denominators,
     tempo_de_resposta_seconds: tempo,
@@ -1100,6 +1159,8 @@ module.exports = {
   sessionIdOf,
   leadIdOf,
   visitorStageOf,
+  summarizeHandoff,
+  VISITOR_STAGE_CONDITIONS,
   assertAnalyticsNoPii,
   assertWarmblyObservationEnvelope,
   admitVisitorEvents,

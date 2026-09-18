@@ -59,6 +59,7 @@
         "asset_id": "diagnostico-pre-licitacao",
         "cta_id": "hero-diagnostico",
         "cta_position": "hero",
+        "destination_type": "form",
         "journey": "edital",
         "offer_id": "diagnostico-pre-licitacao",
         "origem": "organic",
