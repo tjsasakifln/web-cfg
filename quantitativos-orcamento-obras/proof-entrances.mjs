@@ -67,6 +67,11 @@ export const ENTRANCE_SPECS = Object.freeze([
 
 const UNIT_LABELS = Object.freeze({ m: "m", m2: "m²", m3: "m³", un: "un" });
 
+function capitalize(text) {
+  const value = String(text ?? "");
+  return value ? value[0].toUpperCase() + value.slice(1) : value;
+}
+
 export function escapeHtml(value) {
   return String(value ?? "")
     .replace(/&/g, "&amp;")
@@ -231,17 +236,16 @@ export function loadEntrances(root = process.cwd()) {
 function renderEntrance(entrance) {
   const unit = unitLabel(entrance.quantity_unit);
   const quantity = formatNumber(entrance.quantity_value);
-  // The section opening already states the demonstrative nature once; each card
-  // keeps a short, self-contained reservation (tests/campaigns/orc-b2b-20260913
-  // pin "exemplo demonstrativo de método", "não representa cliente, obra
-  // executada", "hipotéticos" and "não são preço da CONFENGE").
-  const priceNote =
-    entrance.price_class === "hypothetical"
-      ? "Preços hipotéticos, para conferência aritmética: não são preço da CONFENGE, cotação vigente nem SINAPI real."
-      : "";
+  // Owner decision 2026-09-18 (CONFENGE-LAPIDACAO-COMERCIAL-20260918): the
+  // visible label "Exemplo demonstrativo" identifies the card on its own; no
+  // negative restatement ("não representa cliente...") follows it. The
+  // hypothetical-price qualifier lives once, next to the price table of the
+  // demonstrative page the card links to (tests/campaigns/orc-b2b-20260913
+  // pin the visible label per card and the qualifier at that table).
+  const label = capitalize(entrance.label_pt_br);
   return [
     `<article class="qty-proof-entrance" data-proof-entrance="${escapeHtml(entrance.key)}" data-demonstrative-id="${escapeHtml(entrance.proof_id)}">`,
-    `<p class="eyebrow">${escapeHtml(entrance.domain_pt_br)}</p>`,
+    `<p class="eyebrow">${escapeHtml(label)} · ${escapeHtml(entrance.domain_pt_br)}</p>`,
     `<h3>${escapeHtml(entrance.title)}</h3>`,
     `<p>${escapeHtml(entrance.buyer_pt_br)}</p>`,
     `<p class="qty-proof-cut">${escapeHtml(entrance.cut_pt_br)}</p>`,
@@ -254,7 +258,6 @@ function renderEntrance(entrance) {
     `<dt>Quantidade</dt><dd><code>${escapeHtml(entrance.quantity_id)}</code> <data data-proof-quantity="${escapeHtml(entrance.quantity_value)}" value="${escapeHtml(entrance.quantity_value)}">${escapeHtml(quantity)} ${escapeHtml(unit)}</data></dd>`,
     `<dt>Item de planilha</dt><dd><code data-proof-item="${escapeHtml(entrance.budget_id)}">${escapeHtml(entrance.budget_id)}</code></dd>`,
     "</dl>",
-    `<p class="qty-proof-disclaimer">Este é um ${escapeHtml(entrance.label_pt_br)} de método: não representa cliente, obra executada, prazo ou resultado da CONFENGE.${priceNote ? ` ${escapeHtml(priceNote)}` : ""}</p>`,
     `<p class="qty-proof-links"><a class="button button-secondary" href="${escapeHtml(entrance.quantitativos_anchor)}">Abrir o exemplo de ${escapeHtml(entrance.domain_pt_br.toLowerCase())}</a></p>`,
     `<p class="qty-proof-files">Arquivos abertos deste recorte: ${entrance.csv
       .map(

@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 420" role="img" aria-labelledby="carteira-eventos-mobile-title carteira-eventos-mobile-desc" font-family="Archivo Var, Arial, Helvetica, sans-serif" fill="#071a31">
 <title id="carteira-eventos-mobile-title">Prancha P7 (móvel) · Carteira de contratos por evento · exemplo demonstrativo</title>
-<desc id="carteira-eventos-mobile-desc">Matriz de 4 contratos por 4 eventos: 10 em dia, 4 abertos, 2 lacunas, ambas no Contrato C (46% da carteira). Exemplo demonstrativo, sem obra de cliente. Procedência: data/demonstrative/plates/carteira-eventos.v1.json.</desc>
+<desc id="carteira-eventos-mobile-desc">Matriz de 4 contratos por 4 eventos: 10 em dia, 4 abertos, 2 lacunas, ambas no Contrato C (46% da carteira). Exemplo demonstrativo. Procedência: data/demonstrative/plates/carteira-eventos.v1.json.</desc>
 <rect x="0" y="0" width="360" height="420" fill="#ffffff"/>
 <rect x="8" y="8" width="344" height="404" fill="#ffffff" stroke="#dfe4e6"/>
 <text x="28" y="40" font-size="14" font-weight="650">Carteira de contratos por evento</text>
@@ -43,5 +43,5 @@
 <text x="44" y="338" font-size="12.5" fill="#5d6a7a">Evento aberto sem decisão</text>
 <rect x="20" y="346" width="18" height="12" fill="#ffffff" stroke="#071a31" stroke-width="1.2" stroke-dasharray="4 3"/>
 <text x="44" y="356" font-size="12.5" fill="#5d6a7a">Lacuna de registro</text>
-<g id="carteira-eventos-m-carimbo"><rect x="8" y="384" width="344" height="28" fill="#ffffff" stroke="#dfe4e6"/><line x1="72" y1="384" x2="72" y2="412" stroke="#dfe4e6"/><line x1="192" y1="384" x2="192" y2="412" stroke="#dfe4e6"/><text x="16" y="395" font-size="12.5" fill="#5d6a7a">P7-M</text><text x="16" y="408" font-size="12.5" fill="#5d6a7a">rev. R00</text><text x="80" y="395" font-size="12.5" fill="#5d6a7a">Matriz contratos</text><text x="80" y="408" font-size="12.5" fill="#5d6a7a">× eventos</text><text x="200" y="395" font-size="12.5" fill="#5d6a7a">Exemplo demonstrativo</text><text x="200" y="408" font-size="12.5" fill="#5d6a7a">sem obra de cliente</text></g>
+<g id="carteira-eventos-m-carimbo"><rect x="8" y="384" width="344" height="28" fill="#ffffff" stroke="#dfe4e6"/><line x1="72" y1="384" x2="72" y2="412" stroke="#dfe4e6"/><line x1="192" y1="384" x2="192" y2="412" stroke="#dfe4e6"/><text x="16" y="395" font-size="12.5" fill="#5d6a7a">P7-M</text><text x="16" y="408" font-size="12.5" fill="#5d6a7a">rev. R00</text><text x="80" y="395" font-size="12.5" fill="#5d6a7a">Matriz contratos</text><text x="80" y="408" font-size="12.5" fill="#5d6a7a">× eventos</text><text x="200" y="402.5" font-size="12.5" fill="#5d6a7a">Exemplo demonstrativo</text></g>
 </svg>

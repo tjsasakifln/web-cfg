@@ -84,7 +84,7 @@ def _mobile_carimbo(code: str, pid: str, revision: str, scale_lines: tuple[str, 
     return S.title_block(
         MOBILE_W,
         MOBILE_H,
-        ((code, f"rev. {revision}"), scale_lines, ("Exemplo demonstrativo", "sem obra de cliente")),
+        ((code, f"rev. {revision}"), scale_lines, ("Exemplo demonstrativo",)),
         widths=(64, 120),
         size=FS_M,
         id=f"{pid}-m-carimbo",
@@ -210,7 +210,7 @@ def p5_desktop(data: dict) -> str:
     desc = (
         f"Linha do tempo de {n['contract']['term_months']} meses de um contrato hipotético de {n['contract']['initial_value_brl_text']}: "
         f"{n['events'][1]['id']} no mês {n['events'][1]['month']} ({n['events'][1]['cumulative_percent']}%), {n['events'][2]['id']} no mês {n['events'][2]['month']} ({n['events'][2]['cumulative_percent']}%) e um aditivo proposto no mês {prop['month']} que levaria o acumulado a {prop['cumulative_percent']}%, "
-        f"{n['excess']['percent']}% acima do limite de {lim25['percent']}% para obra nova; a faixa até {lim50['percent']}% só vale para reforma. Premissas sintéticas; exemplo demonstrativo, sem obra de cliente."
+        f"{n['excess']['percent']}% acima do limite de {lim25['percent']}% para obra nova; a faixa até {lim50['percent']}% só vale para reforma. Exemplo demonstrativo."
     )
     return _sheet(pid, "desktop", H, title=title, desc=desc + _prov("aditivo_limite"), heading=src["title"], note=_note(n["revision"]), body=body,
                   carimbo=_desktop_carimbo(H, n["code"], pid, n["revision"], "Meses × percentual acumulado"))
@@ -257,11 +257,11 @@ def p5_mobile(data: dict) -> str:
     body.append(text(20, 310, f"1 Aditivo proposto: {n['events'][-2]['cumulative_percent']} + {prop['increment_percent']} = {prop['cumulative_percent']}% do valor inicial", size=FS_M))
     body.append(text(20, 328, f"2 Excesso sobre {lim25['percent']}%: {n['excess']['percent']}% · {n['excess']['value_brl_text']} · sem direito a termo", size=FS_M))
     body.append(text(20, 346, f"Meses desde a assinatura · {n['legal']}", size=FS_M, fill=MUTED))
-    body.append(text(20, 364, "Premissas sintéticas · o órgão decide o termo", size=FS_M, fill=MUTED))
+    body.append(text(20, 364, "O órgão decide o termo", size=FS_M, fill=MUTED))
     title = f"Prancha {n['code']} (móvel) · {src['title']} · exemplo demonstrativo"
     desc = (
         f"Percentual acumulado de aditivos ao longo de {n['contract']['term_months']} meses: {n['events'][1]['cumulative_percent']}%, {n['events'][2]['cumulative_percent']}% e um aditivo proposto que chegaria a {prop['cumulative_percent']}%, "
-        f"{n['excess']['percent']}% acima do limite de {lim25['percent']}% para obra nova. Exemplo demonstrativo, sem obra de cliente."
+        f"{n['excess']['percent']}% acima do limite de {lim25['percent']}% para obra nova. Exemplo demonstrativo."
     )
     return _sheet(pid, "mobile", MOBILE_H, title=title, desc=desc + _prov("aditivo_limite"), heading="Contrato e o limite do art. 125", note="", body=body,
                   carimbo=_mobile_carimbo(f"{n['code']}-M", pid, n["revision"], ("Meses × percentual", "acumulado")), heading_size=14)
@@ -332,7 +332,7 @@ def p6_desktop(data: dict) -> str:
     desc = (
         "Barras proporcionais, item a item, do orçamento de referência e da proposta: "
         + "; ".join(f"{x['label_pt_br']} {br(x['reference_brl_thousand'], 0)} contra {br(x['proposal_brl_thousand'], 0)} (−{x['difference_percent']}%)" for x in items)
-        + f". O item em foco, {it['label_pt_br']}, concentra o risco de exequibilidade. Premissas sintéticas; exemplo demonstrativo, sem obra de cliente."
+        + f". O item em foco, {it['label_pt_br']}, concentra o risco de exequibilidade. Exemplo demonstrativo."
     )
     return _sheet(pid, "desktop", H, title=title, desc=desc + _prov("orcamento_comparativo"), heading=src["title"] + ": onde o deságio pesa", note=_note(n["revision"]), body=body,
                   carimbo=_desktop_carimbo(H, n["code"], pid, n["revision"], "Barras proporcionais em R$ mil"))
@@ -367,12 +367,11 @@ def p6_mobile(data: dict) -> str:
     body.append(callout(*c1, 1, size=FS_M))
     body.append(text(20, 322, f"1 {it['label_pt_br']}: −{it['difference_percent']}% (−{br(it['difference_brl_thousand'], 0)} mil), o item de risco", size=FS_M))
     body.append(text(20, 340, "Barra clara: referência · verde: proposta · R$ mil", size=FS_M, fill=MUTED))
-    body.append(text(20, 358, "Premissas sintéticas · sem edital de cliente", size=FS_M, fill=MUTED))
     title = f"Prancha {n['code']} (móvel) · {src['title']} · exemplo demonstrativo"
     desc = (
         "Barras empilhadas por item, referência sobre proposta: "
         + "; ".join(f"{x['label_pt_br']} −{x['difference_percent']}%" for x in n["items"])
-        + f". Item em foco: {it['label_pt_br']}. Exemplo demonstrativo, sem obra de cliente."
+        + f". Item em foco: {it['label_pt_br']}. Exemplo demonstrativo."
     )
     return _sheet(pid, "mobile", MOBILE_H, title=title, desc=desc + _prov("orcamento_comparativo"), heading=src["title"], note="", body=body,
                   carimbo=_mobile_carimbo(f"{n['code']}-M", pid, n["revision"], ("Barras em R$ mil", "proporcionais")), heading_size=14)
@@ -450,7 +449,7 @@ def p7_desktop(data: dict) -> str:
     title = f"Prancha {n['code']} · {src['title']} · exemplo demonstrativo"
     desc = (
         f"Matriz de {t['contracts']} contratos hipotéticos por {t['events_per_contract']} eventos contratuais (medição, aditivo, reequilíbrio, prazo): {t['cells_ok']} células com registro em dia, {t['cells_pending']} eventos abertos sem decisão e {t['cells_gap']} lacunas de registro, "
-        f"as duas no {ct['label_pt_br']} de R$ {ct['value_brl_million']} mi, {t['focus_share_of_portfolio_percent']}% da carteira. Carteira sintética; exemplo demonstrativo, sem obra de cliente."
+        f"as duas no {ct['label_pt_br']} de R$ {ct['value_brl_million']} mi, {t['focus_share_of_portfolio_percent']}% da carteira. Exemplo demonstrativo."
     )
     return _sheet(pid, "desktop", H, title=title, desc=desc + _prov("carteira_eventos"), heading=src["title"] + ": onde a carteira perde controle", note=_note(n["revision"]), body=body,
                   carimbo=_desktop_carimbo(H, n["code"], pid, n["revision"], "Matriz contratos × eventos"))
@@ -487,7 +486,7 @@ def p7_mobile(data: dict) -> str:
         body.append(text(44, ly + k * 18, st["label_pt_br"], size=FS_M, fill=MUTED))
     title = f"Prancha {n['code']} (móvel) · {src['title']} · exemplo demonstrativo"
     desc = (
-        f"Matriz de {t['contracts']} contratos por {t['events_per_contract']} eventos: {t['cells_ok']} em dia, {t['cells_pending']} abertos, {t['cells_gap']} lacunas, ambas no {ct['label_pt_br']} ({t['focus_share_of_portfolio_percent']}% da carteira). Exemplo demonstrativo, sem obra de cliente."
+        f"Matriz de {t['contracts']} contratos por {t['events_per_contract']} eventos: {t['cells_ok']} em dia, {t['cells_pending']} abertos, {t['cells_gap']} lacunas, ambas no {ct['label_pt_br']} ({t['focus_share_of_portfolio_percent']}% da carteira). Exemplo demonstrativo."
     )
     return _sheet(pid, "mobile", MOBILE_H, title=title, desc=desc + _prov("carteira_eventos"), heading=src["title"], note="", body=body,
                   carimbo=_mobile_carimbo(f"{n['code']}-M", pid, n["revision"], ("Matriz contratos", "× eventos")), heading_size=14)
@@ -576,7 +575,7 @@ def p8_desktop(data: dict) -> str:
     title = f"Prancha {n['code']} · {src['title']} · exemplo demonstrativo"
     desc = (
         f"Checklist de {s['items']} itens de um edital sintético: habilitação jurídica atende; acervo técnico é o item crítico ({crit['company_m2']} m² contra {crit['requirement_m2']} m² exigidos, {crit['gap_m2']} m² faltantes); "
-        f"orçamento de referência e prazo de execução ficam para confirmar antes do preço. Edital sintético; exemplo demonstrativo, sem obra de cliente."
+        f"orçamento de referência e prazo de execução ficam para confirmar antes do preço. Exemplo demonstrativo."
     )
     return _sheet(pid, "desktop", H, title=title, desc=desc + _prov("edital_checklist"), heading=src["title"] + ": o item crítico decide antes do preço", note=_note(n["revision"]), body=body,
                   carimbo=_desktop_carimbo(H, n["code"], pid, n["revision"], "Checklist · barra proporcional em m²"))
@@ -619,7 +618,7 @@ def p8_mobile(data: dict) -> str:
     body.append(text(20, 358, "Edital sintético · não promete habilitação", size=FS_M, fill=MUTED))
     title = f"Prancha {n['code']} (móvel) · {src['title']} · exemplo demonstrativo"
     desc = (
-        f"Checklist de {s['items']} itens: o acervo técnico é o item crítico ({crit['company_m2']} de {crit['requirement_m2']} m², faltam {crit['gap_m2']} m²); {s['to_confirm']} itens a confirmar e {s['meets']} atende. Exemplo demonstrativo, sem obra de cliente."
+        f"Checklist de {s['items']} itens: o acervo técnico é o item crítico ({crit['company_m2']} de {crit['requirement_m2']} m², faltam {crit['gap_m2']} m²); {s['to_confirm']} itens a confirmar e {s['meets']} atende. Exemplo demonstrativo."
     )
     return _sheet(pid, "mobile", MOBILE_H, title=title, desc=desc + _prov("edital_checklist"), heading=src["title"], note="", body=body,
                   carimbo=_mobile_carimbo(f"{n['code']}-M", pid, n["revision"], ("Checklist técnico", "do edital")), heading_size=14)
@@ -719,7 +718,7 @@ def p9_desktop(data: dict) -> str:
     desc = (
         f"Curva sintética do índice de custo de um insumo, base {n['ms']['DB']['index']} na data-base: sobe {n['step']} ponto por mês até o evento do mês {evt['month']} (índice {evt['index']}) e chega a {anv['index']} no mês {anv['month']}; "
         f"a tendência anterior chegaria a {n['exp'][1]['index']}. A área hachurada entre as duas linhas, do mês {n['imb']['from_month']} ao {n['imb']['to_month']}, é o desequilíbrio a demonstrar, com pico de {n['imb']['peak_points']} pontos. "
-        "Série sintética; exemplo demonstrativo, sem obra de cliente."
+        "Exemplo demonstrativo."
     )
     return _sheet(pid, "desktop", H, title=title, desc=desc + _prov("reequilibrio_curva"), heading=src["title"], note=_note(n["revision"]), body=body,
                   carimbo=_desktop_carimbo(H, n["code"], pid, n["revision"], "Meses × índice de custo (base 100)"))
@@ -769,7 +768,7 @@ def p9_mobile(data: dict) -> str:
     body.append(text(20, 360, "Série sintética · base 100 · sem promessa de deferimento", size=FS_M, fill=MUTED))
     title = f"Prancha {n['code']} (móvel) · {src['title']} · exemplo demonstrativo"
     desc = (
-        f"Índice de custo base {n['ms']['DB']['index']}: evento no mês {evt['month']} (índice {evt['index']}), {anv['index']} no mês {anv['month']} contra tendência {n['exp'][1]['index']}; desequilíbrio hachurado de até {n['imb']['peak_points']} pontos. Exemplo demonstrativo, sem obra de cliente."
+        f"Índice de custo base {n['ms']['DB']['index']}: evento no mês {evt['month']} (índice {evt['index']}), {anv['index']} no mês {anv['month']} contra tendência {n['exp'][1]['index']}; desequilíbrio hachurado de até {n['imb']['peak_points']} pontos. Exemplo demonstrativo."
     )
     return _sheet(pid, "mobile", MOBILE_H, title=title, desc=desc + _prov("reequilibrio_curva"), heading="Índice de custo × data-base", note="", body=body,
                   carimbo=_mobile_carimbo(f"{n['code']}-M", pid, n["revision"], ("Meses × índice", "base 100")), heading_size=14)

@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 420" role="img" aria-labelledby="medicao-parede-mobile-title medicao-parede-mobile-desc" font-family="Archivo Var, Arial, Helvetica, sans-serif" fill="#071a31">
 <title id="medicao-parede-mobile-title">Prancha P3 (móvel) · Mesma parede, quatro números · exemplo demonstrativo</title>
-<desc id="medicao-parede-mobile-desc">Barras empilhadas: executado declarado 120 m², medido 90 m², evidenciado por fotos 80 m²; diferença 30 m² e lacuna de prova 10 m². Régua: critério contratual, área de projeção da parede. Exemplo demonstrativo, sem obra de cliente. Procedência: data/demonstrative/plates/medicao-parede.v1.json.</desc>
+<desc id="medicao-parede-mobile-desc">Barras empilhadas: executado declarado 120 m², medido 90 m², evidenciado por fotos 80 m²; diferença 30 m² e lacuna de prova 10 m². Régua: critério contratual, área de projeção da parede. Exemplo demonstrativo. Procedência: data/demonstrative/plates/medicao-parede.v1.json.</desc>
 <rect x="0" y="0" width="360" height="420" fill="#ffffff"/>
 <rect x="8" y="8" width="344" height="404" fill="#ffffff" stroke="#dfe4e6"/>
 <text x="28" y="40" font-size="16" font-weight="650">Mesma parede, quatro números</text>
@@ -36,6 +36,6 @@
 <g transform="translate(244 62)"><circle r="11" fill="#071a31"/><text y="4.5" text-anchor="middle" font-size="12.5" font-weight="700" fill="#ffffff">2</text></g>
 <text x="20" y="342" font-size="12.5">1 Diferença medido × executado: 30 m²</text>
 <text x="20" y="358" font-size="12.5">2 Lacuna de prova: 10 m²</text>
-<text x="20" y="374" font-size="12.5" fill="#5d6a7a">Premissas sintéticas · ateste do órgão contratante</text>
-<g id="medicao-parede-m-carimbo"><rect x="8" y="384" width="344" height="28" fill="#ffffff" stroke="#dfe4e6"/><line x1="72" y1="384" x2="72" y2="412" stroke="#dfe4e6"/><line x1="192" y1="384" x2="192" y2="412" stroke="#dfe4e6"/><text x="16" y="395" font-size="12.5" fill="#5d6a7a">P3-M</text><text x="16" y="408" font-size="12.5" fill="#5d6a7a">rev. R00</text><text x="80" y="395" font-size="12.5" fill="#5d6a7a">Barras em m²</text><text x="80" y="408" font-size="12.5" fill="#5d6a7a">proporcionais</text><text x="200" y="395" font-size="12.5" fill="#5d6a7a">Exemplo demonstrativo</text><text x="200" y="408" font-size="12.5" fill="#5d6a7a">sem obra de cliente</text></g>
+<text x="20" y="374" font-size="12.5" fill="#5d6a7a">Ateste do órgão contratante</text>
+<g id="medicao-parede-m-carimbo"><rect x="8" y="384" width="344" height="28" fill="#ffffff" stroke="#dfe4e6"/><line x1="72" y1="384" x2="72" y2="412" stroke="#dfe4e6"/><line x1="192" y1="384" x2="192" y2="412" stroke="#dfe4e6"/><text x="16" y="395" font-size="12.5" fill="#5d6a7a">P3-M</text><text x="16" y="408" font-size="12.5" fill="#5d6a7a">rev. R00</text><text x="80" y="395" font-size="12.5" fill="#5d6a7a">Barras em m²</text><text x="80" y="408" font-size="12.5" fill="#5d6a7a">proporcionais</text><text x="200" y="402.5" font-size="12.5" fill="#5d6a7a">Exemplo demonstrativo</text></g>
 </svg>

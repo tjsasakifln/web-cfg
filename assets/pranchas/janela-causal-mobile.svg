@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 420" role="img" aria-labelledby="janela-causal-mobile-title janela-causal-mobile-desc" font-family="Archivo Var, Arial, Helvetica, sans-serif" fill="#071a31">
 <title id="janela-causal-mobile-title">Prancha P12 (móvel) · Janela causal do atraso no caminho crítico · exemplo demonstrativo</title>
-<desc id="janela-causal-mobile-desc">Janela causal de 28 dias no caminho crítico, 7 concorrentes, 21 imputáveis ao órgão; atraso observado de 34 dias sobre o prazo de 240. Exemplo demonstrativo, sem obra de cliente. Procedência: data/demonstrative/plates/janela-causal.v1.json.</desc>
+<desc id="janela-causal-mobile-desc">Janela causal de 28 dias no caminho crítico, 7 concorrentes, 21 imputáveis ao órgão; atraso observado de 34 dias sobre o prazo de 240. Exemplo demonstrativo. Procedência: data/demonstrative/plates/janela-causal.v1.json.</desc>
 <rect x="0" y="0" width="360" height="420" fill="#ffffff"/>
 <rect x="8" y="8" width="344" height="404" fill="#ffffff" stroke="#dfe4e6"/>
 <text x="28" y="40" font-size="14" font-weight="650">Janela causal do atraso no caminho crítico</text>
@@ -28,5 +28,5 @@
 <text x="20" y="336" font-size="12.5" fill="#5d6a7a">Janela 28 dias (órgão) · concorrente 7 dias (contratada)</text>
 <text x="20" y="354" font-size="12.5" fill="#5d6a7a">Atraso observado 34 dias · 6 da própria execução</text>
 <text x="20" y="372" font-size="12.5" fill="#5d6a7a">Leitura técnica, não conclusão jurídica</text>
-<g id="janela-causal-m-carimbo"><rect x="8" y="384" width="344" height="28" fill="#ffffff" stroke="#dfe4e6"/><line x1="72" y1="384" x2="72" y2="412" stroke="#dfe4e6"/><line x1="192" y1="384" x2="192" y2="412" stroke="#dfe4e6"/><text x="16" y="395" font-size="12.5" fill="#5d6a7a">P12-M</text><text x="16" y="408" font-size="12.5" fill="#5d6a7a">rev. R00</text><text x="80" y="395" font-size="12.5" fill="#5d6a7a">Base × executado</text><text x="80" y="408" font-size="12.5" fill="#5d6a7a">dias corridos</text><text x="200" y="395" font-size="12.5" fill="#5d6a7a">Exemplo demonstrativo</text><text x="200" y="408" font-size="12.5" fill="#5d6a7a">sem obra de cliente</text></g>
+<g id="janela-causal-m-carimbo"><rect x="8" y="384" width="344" height="28" fill="#ffffff" stroke="#dfe4e6"/><line x1="72" y1="384" x2="72" y2="412" stroke="#dfe4e6"/><line x1="192" y1="384" x2="192" y2="412" stroke="#dfe4e6"/><text x="16" y="395" font-size="12.5" fill="#5d6a7a">P12-M</text><text x="16" y="408" font-size="12.5" fill="#5d6a7a">rev. R00</text><text x="80" y="395" font-size="12.5" fill="#5d6a7a">Base × executado</text><text x="80" y="408" font-size="12.5" fill="#5d6a7a">dias corridos</text><text x="200" y="402.5" font-size="12.5" fill="#5d6a7a">Exemplo demonstrativo</text></g>
 </svg>

@@ -596,10 +596,10 @@ def _services_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
 <div class="container">
 <span class="t-kicker">Exemplo demonstrativo</span>
 <h2 class="t-editorial" id="hub-exemplo">O que um dossiê separa: mesma parede, quatro números</h2>
-<p class="measure">Premissas sintéticas, não obra de cliente. Antes do contato, veja como o trabalho chega às suas mãos: a mesma alvenaria lida como executado declarado, medido no boletim, evidenciado por fotos datadas e a régua do critério contratual. A diferença e a lacuna de prova saem escritas; o ateste continua com o órgão contratante. O exemplo completo está na página de <a href="/medicoes-glosas-obras-publicas/#exemplo-demonstrativo">medições, glosas e pagamentos</a>.</p>
+<p class="measure">Antes do contato, veja como o trabalho chega às suas mãos: a mesma alvenaria lida como executado declarado, medido no boletim, evidenciado por fotos datadas e a régua do critério contratual. A diferença e a lacuna de prova saem escritas; o ateste continua com o órgão contratante. O exemplo completo está na página de <a href="/medicoes-glosas-obras-publicas/#exemplo-demonstrativo">medições, glosas e pagamentos</a>.</p>
 <figure class="plate plate--dominant" aria-labelledby="hub-exemplo-cap">
 <div class="plate__sheet"><!-- plate:medicao-parede --><!-- /plate --></div>
-<figcaption class="plate__caption" id="hub-exemplo-cap"><span class="t-kicker">Exemplo demonstrativo · Obra pública</span>Exemplo demonstrativo, com premissas sintéticas; não é obra de cliente. <b>120 m²</b> executados declarados, <b>90 m²</b> medidos no boletim, <b>80 m²</b> evidenciados por fotos datadas, e o critério contratual como régua. Cada dossiê desta página separa os quatro recortes do seu evento e diz o que a prova sustenta.</figcaption>
+<figcaption class="plate__caption" id="hub-exemplo-cap"><span class="t-kicker">Exemplo demonstrativo · Obra pública</span><b>120 m²</b> executados declarados, <b>90 m²</b> medidos no boletim, <b>80 m²</b> evidenciados por fotos datadas, e o critério contratual como régua. Cada dossiê desta página separa os quatro recortes do seu evento e diz o que a prova sustenta.</figcaption>
 </figure>
 </div>
 </section>
@@ -715,10 +715,10 @@ def _problems_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
 <div class="container">
 <span class="t-kicker">Exemplo demonstrativo</span>
 <h2 class="t-editorial" id="hub-exemplo">O evento no tempo do contrato: aditivo contra o limite</h2>
-<p class="measure">Premissas sintéticas, não contrato de cliente. Um contrato hipotético de obra nova, dois termos aditivos formalizados e um aditivo proposto que ultrapassa o limite de 25% do art. 125: é assim que cada evento desta página é lido, no tempo do contrato e contra a régua legal, antes de virar pedido. O exemplo completo está na página de <a href="/aditivos-obras-publicas/#exemplo-demonstrativo">aditivos e serviços extras</a>.</p>
+<p class="measure">Um contrato hipotético de obra nova, dois termos aditivos formalizados e um aditivo proposto que ultrapassa o limite de 25% do art. 125: é assim que cada evento desta página é lido, no tempo do contrato e contra a régua legal, antes de virar pedido. O exemplo completo está na página de <a href="/aditivos-obras-publicas/#exemplo-demonstrativo">aditivos e serviços extras</a>.</p>
 <figure class="plate plate--dominant" aria-labelledby="hub-exemplo-cap">
 <div class="plate__sheet"><!-- plate:aditivo-limite --><!-- /plate --></div>
-<figcaption class="plate__caption" id="hub-exemplo-cap"><span class="t-kicker">Exemplo demonstrativo · Obra pública</span>Exemplo demonstrativo, com premissas sintéticas; não é contrato de cliente. Dois termos formalizados somam <b>18%</b> do valor inicial atualizado; o aditivo proposto levaria o acumulado a <b>27%</b>, <b>2%</b> acima do limite de 25% para obra nova. O dossiê registra o excesso e pede revisão de escopo ou de enquadramento; a decisão sobre o termo é do órgão contratante.</figcaption>
+<figcaption class="plate__caption" id="hub-exemplo-cap"><span class="t-kicker">Exemplo demonstrativo · Obra pública</span>Dois termos formalizados somam <b>18%</b> do valor inicial atualizado; o aditivo proposto levaria o acumulado a <b>27%</b>, <b>2%</b> acima do limite de 25% para obra nova. O dossiê registra o excesso e pede revisão de escopo ou de enquadramento; a decisão sobre o termo é do órgão contratante.</figcaption>
 </figure>
 </div>
 </section>

@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 420" role="img" aria-labelledby="matriz-alegacoes-mobile-title matriz-alegacoes-mobile-desc" font-family="Archivo Var, Arial, Helvetica, sans-serif" fill="#071a31">
 <title id="matriz-alegacoes-mobile-title">Prancha P11 (móvel) · Matriz de alegações da notificação · exemplo demonstrativo</title>
-<desc id="matriz-alegacoes-mobile-desc">Matriz de 4 alegações: 2 controvertidas, 1 admitida em parte, 1 sem registro; na principal, 28 de 45 dias têm registro. Exemplo demonstrativo, sem obra de cliente. Procedência: data/demonstrative/plates/matriz-alegacoes.v1.json.</desc>
+<desc id="matriz-alegacoes-mobile-desc">Matriz de 4 alegações: 2 controvertidas, 1 admitida em parte, 1 sem registro; na principal, 28 de 45 dias têm registro. Exemplo demonstrativo. Procedência: data/demonstrative/plates/matriz-alegacoes.v1.json.</desc>
 <rect x="0" y="0" width="360" height="420" fill="#ffffff"/>
 <rect x="8" y="8" width="344" height="404" fill="#ffffff" stroke="#dfe4e6"/>
 <text x="28" y="40" font-size="14" font-weight="650">Matriz de alegações da notificação</text>
@@ -28,5 +28,5 @@
 <text x="20" y="336" font-size="12.5" fill="#5d6a7a">4 alegações · 2 controvertidas · 1 admitida em parte</text>
 <text x="20" y="354" font-size="12.5" fill="#5d6a7a">1 sem registro · prazo 10 dias úteis, restam 7</text>
 <text x="20" y="372" font-size="12.5" fill="#5d6a7a">Subsídio técnico, não defesa jurídica</text>
-<g id="matriz-alegacoes-m-carimbo"><rect x="8" y="384" width="344" height="28" fill="#ffffff" stroke="#dfe4e6"/><line x1="72" y1="384" x2="72" y2="412" stroke="#dfe4e6"/><line x1="192" y1="384" x2="192" y2="412" stroke="#dfe4e6"/><text x="16" y="395" font-size="12.5" fill="#5d6a7a">P11-M</text><text x="16" y="408" font-size="12.5" fill="#5d6a7a">rev. R00</text><text x="80" y="395" font-size="12.5" fill="#5d6a7a">Alegação × prova</text><text x="80" y="408" font-size="12.5" fill="#5d6a7a">dias</text><text x="200" y="395" font-size="12.5" fill="#5d6a7a">Exemplo demonstrativo</text><text x="200" y="408" font-size="12.5" fill="#5d6a7a">sem obra de cliente</text></g>
+<g id="matriz-alegacoes-m-carimbo"><rect x="8" y="384" width="344" height="28" fill="#ffffff" stroke="#dfe4e6"/><line x1="72" y1="384" x2="72" y2="412" stroke="#dfe4e6"/><line x1="192" y1="384" x2="192" y2="412" stroke="#dfe4e6"/><text x="16" y="395" font-size="12.5" fill="#5d6a7a">P11-M</text><text x="16" y="408" font-size="12.5" fill="#5d6a7a">rev. R00</text><text x="80" y="395" font-size="12.5" fill="#5d6a7a">Alegação × prova</text><text x="80" y="408" font-size="12.5" fill="#5d6a7a">dias</text><text x="200" y="402.5" font-size="12.5" fill="#5d6a7a">Exemplo demonstrativo</text></g>
 </svg>

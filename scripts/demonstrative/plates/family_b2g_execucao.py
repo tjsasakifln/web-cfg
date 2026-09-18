@@ -69,7 +69,7 @@ def _mobile_carimbo(code: str, pid: str, revision: str, scale_lines: tuple[str, 
     return S.title_block(
         MOBILE_W,
         MOBILE_H,
-        ((code, f"rev. {revision}"), scale_lines, ("Exemplo demonstrativo", "sem obra de cliente")),
+        ((code, f"rev. {revision}"), scale_lines, ("Exemplo demonstrativo",)),
         widths=(64, 120),
         size=FS_M,
         id=f"{pid}-m-carimbo",
@@ -185,7 +185,7 @@ def p10_desktop(data: dict) -> str:
     title = f"Prancha {n['code']} · {src['title']} · exemplo demonstrativo"
     desc = (
         f"Matriz de {t['events']} eventos de um contrato hipotético: prazo, impacto potencial em R$ mil, prova e decisão por evento. {f['label_pt_br']} (R$ {f['impact_brl_thousand']} mil, com registro) é priorizado; "
-        f"R$ {t['impact_with_proof_brl_thousand']} mil têm registro contemporâneo, R$ {t['impact_partial_brl_thousand']} mil registro parcial e R$ {t['impact_without_proof_brl_thousand']} mil nenhum. Valores sintéticos; exemplo demonstrativo, sem obra de cliente."
+        f"R$ {t['impact_with_proof_brl_thousand']} mil têm registro contemporâneo, R$ {t['impact_partial_brl_thousand']} mil registro parcial e R$ {t['impact_without_proof_brl_thousand']} mil nenhum. Exemplo demonstrativo."
     )
     return _sheet(pid, "desktop", H, title=title, desc=desc + _prov("risco_margem"), heading=src["title"] + ": o que priorizar, registrar, quantificar ou não pleitear", note=_note(n["revision"]), body=body,
                   carimbo=_desktop_carimbo(H, n["code"], pid, n["revision"], "Matriz eventos × decisão · barra proporcional em R$ mil"))
@@ -224,7 +224,7 @@ def p10_mobile(data: dict) -> str:
     body.append(text(20, 378, "Impacto potencial não é valor devido", size=FS_M, fill=MUTED))
     title = f"Prancha {n['code']} (móvel) · {src['title']} · exemplo demonstrativo"
     desc = (
-        f"Matriz de {t['events']} eventos: {f['short_pt_br']} priorizado (R$ {f['impact_brl_thousand']} mil, com registro); R$ {t['impact_with_proof_brl_thousand']} mil com prova, R$ {t['impact_partial_brl_thousand']} mil parcial, R$ {t['impact_without_proof_brl_thousand']} mil sem prova. Exemplo demonstrativo, sem obra de cliente."
+        f"Matriz de {t['events']} eventos: {f['short_pt_br']} priorizado (R$ {f['impact_brl_thousand']} mil, com registro); R$ {t['impact_with_proof_brl_thousand']} mil com prova, R$ {t['impact_partial_brl_thousand']} mil parcial, R$ {t['impact_without_proof_brl_thousand']} mil sem prova. Exemplo demonstrativo."
     )
     return _sheet(pid, "mobile", MOBILE_H, title=title, desc=desc + _prov("risco_margem"), heading=src["title"], note="", body=body,
                   carimbo=_mobile_carimbo(f"{n['code']}-M", pid, n["revision"], ("Eventos × decisão", "R$ mil")), heading_size=14)
@@ -313,7 +313,7 @@ def p11_desktop(data: dict) -> str:
     title = f"Prancha {n['code']} · {src['title']} · exemplo demonstrativo"
     desc = (
         f"Matriz de {s['allegations']} alegações de uma notificação hipotética: {s['controverted']} controvertidas com prova, {s['admitted_in_part']} admitida em parte, {s['without_record']} sem registro localizado. "
-        f"Na alegação principal, {f['days_documented']} de {f['days_alleged']} dias têm registro de frente bloqueada pelo órgão; {s['days_gap_focus']} dias ficam para explicar. Prazo de {d['response_business_days']} dias úteis, restam {d['remaining_business_days']}. Notificação sintética; exemplo demonstrativo, sem obra de cliente."
+        f"Na alegação principal, {f['days_documented']} de {f['days_alleged']} dias têm registro de frente bloqueada pelo órgão; {s['days_gap_focus']} dias ficam para explicar. Prazo de {d['response_business_days']} dias úteis, restam {d['remaining_business_days']}. Exemplo demonstrativo."
     )
     return _sheet(pid, "desktop", H, title=title, desc=desc + _prov("matriz_alegacoes"), heading=src["title"] + ": o que é controvertido, admitido ou sem registro", note=_note(n["revision"]), body=body,
                   carimbo=_desktop_carimbo(H, n["code"], pid, n["revision"], "Matriz alegação × prova · barra proporcional em dias"))
@@ -355,7 +355,7 @@ def p11_mobile(data: dict) -> str:
     body.append(text(20, 372, "Subsídio técnico, não defesa jurídica", size=FS_M, fill=MUTED))
     title = f"Prancha {n['code']} (móvel) · {src['title']} · exemplo demonstrativo"
     desc = (
-        f"Matriz de {s['allegations']} alegações: {s['controverted']} controvertidas, {s['admitted_in_part']} admitida em parte, {s['without_record']} sem registro; na principal, {n['focus']['days_documented']} de {n['focus']['days_alleged']} dias têm registro. Exemplo demonstrativo, sem obra de cliente."
+        f"Matriz de {s['allegations']} alegações: {s['controverted']} controvertidas, {s['admitted_in_part']} admitida em parte, {s['without_record']} sem registro; na principal, {n['focus']['days_documented']} de {n['focus']['days_alleged']} dias têm registro. Exemplo demonstrativo."
     )
     return _sheet(pid, "mobile", MOBILE_H, title=title, desc=desc + _prov("matriz_alegacoes"), heading=src["title"], note="", body=body,
                   carimbo=_mobile_carimbo(f"{n['code']}-M", pid, n["revision"], ("Alegação × prova", "dias")), heading_size=14)
@@ -449,7 +449,7 @@ def p12_desktop(data: dict) -> str:
     title = f"Prancha {n['code']} · {src['title']} · exemplo demonstrativo"
     desc = (
         f"Cronograma de base e executado de uma obra hipotética com prazo de {c['term_days']} dias: uma janela causal de {w['days']} dias (frente indisponível, órgão) sobre o caminho crítico, {k['days']} dias concorrentes da contratada, "
-        f"{r['attributable_days']} dias imputáveis ({r['formula']}); atraso observado de {c['observed_delay_days']} dias, {r['remaining_delay_days']} da própria execução. Datas sintéticas; exemplo demonstrativo, sem obra de cliente."
+        f"{r['attributable_days']} dias imputáveis ({r['formula']}); atraso observado de {c['observed_delay_days']} dias, {r['remaining_delay_days']} da própria execução. Exemplo demonstrativo."
     )
     return _sheet(pid, "desktop", H, title=title, desc=desc + _prov("janela_causal"), heading=src["title"] + ": quantos dias são imputáveis", note=_note(n["revision"]), body=body,
                   carimbo=_desktop_carimbo(H, n["code"], pid, n["revision"], "Cronograma base × executado · dias corridos"))
@@ -486,7 +486,7 @@ def p12_mobile(data: dict) -> str:
     body.append(text(20, 372, "Leitura técnica, não conclusão jurídica", size=FS_M, fill=MUTED))
     title = f"Prancha {n['code']} (móvel) · {src['title']} · exemplo demonstrativo"
     desc = (
-        f"Janela causal de {w['days']} dias no caminho crítico, {k['days']} concorrentes, {r['attributable_days']} imputáveis ao órgão; atraso observado de {c['observed_delay_days']} dias sobre o prazo de {c['term_days']}. Exemplo demonstrativo, sem obra de cliente."
+        f"Janela causal de {w['days']} dias no caminho crítico, {k['days']} concorrentes, {r['attributable_days']} imputáveis ao órgão; atraso observado de {c['observed_delay_days']} dias sobre o prazo de {c['term_days']}. Exemplo demonstrativo."
     )
     return _sheet(pid, "mobile", MOBILE_H, title=title, desc=desc + _prov("janela_causal"), heading=src["title"], note="", body=body,
                   carimbo=_mobile_carimbo(f"{n['code']}-M", pid, n["revision"], ("Base × executado", "dias corridos")), heading_size=14)

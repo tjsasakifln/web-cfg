@@ -598,7 +598,7 @@ def render_html(extracts: dict[str, Any]) -> str:
 <div class="container">
 <span class="t-kicker">Extrato</span>
 <h2 class="t-editorial" id="orcamento">Orçamento</h2>
-<p>{e(extracts["price_disclaimer_pt_br"])} Classe de preço: hipotético. Subtotal aritmético: R$ {br_number(extracts["budget_subtotal"])}. Estimativa aritmética do recorte; o valor contratado depende do caso.</p>
+<p>{e(extracts["price_disclaimer_pt_br"])} Subtotal aritmético: R$ {br_number(extracts["budget_subtotal"])}.</p>
 {_table(["ID", "Serviço", "Un.", "Qtd.", "Preço un.", "Valor", "Classe", "Qtd. ID"], budget_rows, "Extrato de orçamento hipotético, revisão " + rev)}
 <p><a href="data/orcamento.csv">Baixar orcamento.csv</a>, mesma revisão {e(rev)}.</p>
 </div>
@@ -619,7 +619,7 @@ def render_html(extracts: dict[str, Any]) -> str:
 <div class="container">
 <span class="t-kicker">Conferência</span>
 <h2 class="t-editorial" id="revisao">Revisão</h2>
-<p>{e(extracts["review_attribution_pt_br"])} Este recorte não é parecer para executar obra.</p>
+<p>{e(extracts["review_attribution_pt_br"])}</p>
 <div class="rv-extract">{review_html}</div>
 {_table(["ID", "Documento", "Constatação", "Base", "Ação", "Tipo"], review_rows, "Extrato de revisão, revisão " + rev)}
 <p><a href="data/revisao.csv">Baixar revisao.csv</a>, mesma revisão {e(rev)}.</p>

@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 420" role="img" aria-labelledby="reequilibrio-curva-mobile-title reequilibrio-curva-mobile-desc" font-family="Archivo Var, Arial, Helvetica, sans-serif" fill="#071a31">
 <title id="reequilibrio-curva-mobile-title">Prancha P9 (móvel) · Índice de custo, data-base e o desequilíbrio a demonstrar · exemplo demonstrativo</title>
-<desc id="reequilibrio-curva-mobile-desc">Índice de custo base 100: evento no mês 7 (índice 107), 130 no mês 12 contra tendência 112; desequilíbrio hachurado de até 18 pontos. Exemplo demonstrativo, sem obra de cliente. Procedência: data/demonstrative/plates/reequilibrio-curva.v1.json.</desc>
+<desc id="reequilibrio-curva-mobile-desc">Índice de custo base 100: evento no mês 7 (índice 107), 130 no mês 12 contra tendência 112; desequilíbrio hachurado de até 18 pontos. Exemplo demonstrativo. Procedência: data/demonstrative/plates/reequilibrio-curva.v1.json.</desc>
 <rect x="0" y="0" width="360" height="420" fill="#ffffff"/>
 <rect x="8" y="8" width="344" height="404" fill="#ffffff" stroke="#dfe4e6"/>
 <text x="28" y="40" font-size="14" font-weight="650">Índice de custo × data-base</text>
@@ -42,5 +42,5 @@
 <text x="20" y="324" font-size="12.5">2 Desequilíbrio a demonstrar: até 18 pontos no mês 12</text>
 <text x="20" y="342" font-size="12.5" fill="#5d6a7a">Aniversário no mês 12: reajuste não recompõe o antes</text>
 <text x="20" y="360" font-size="12.5" fill="#5d6a7a">Série sintética · base 100 · sem promessa de deferimento</text>
-<g id="reequilibrio-curva-m-carimbo"><rect x="8" y="384" width="344" height="28" fill="#ffffff" stroke="#dfe4e6"/><line x1="72" y1="384" x2="72" y2="412" stroke="#dfe4e6"/><line x1="192" y1="384" x2="192" y2="412" stroke="#dfe4e6"/><text x="16" y="395" font-size="12.5" fill="#5d6a7a">P9-M</text><text x="16" y="408" font-size="12.5" fill="#5d6a7a">rev. R00</text><text x="80" y="395" font-size="12.5" fill="#5d6a7a">Meses × índice</text><text x="80" y="408" font-size="12.5" fill="#5d6a7a">base 100</text><text x="200" y="395" font-size="12.5" fill="#5d6a7a">Exemplo demonstrativo</text><text x="200" y="408" font-size="12.5" fill="#5d6a7a">sem obra de cliente</text></g>
+<g id="reequilibrio-curva-m-carimbo"><rect x="8" y="384" width="344" height="28" fill="#ffffff" stroke="#dfe4e6"/><line x1="72" y1="384" x2="72" y2="412" stroke="#dfe4e6"/><line x1="192" y1="384" x2="192" y2="412" stroke="#dfe4e6"/><text x="16" y="395" font-size="12.5" fill="#5d6a7a">P9-M</text><text x="16" y="408" font-size="12.5" fill="#5d6a7a">rev. R00</text><text x="80" y="395" font-size="12.5" fill="#5d6a7a">Meses × índice</text><text x="80" y="408" font-size="12.5" fill="#5d6a7a">base 100</text><text x="200" y="402.5" font-size="12.5" fill="#5d6a7a">Exemplo demonstrativo</text></g>
 </svg>

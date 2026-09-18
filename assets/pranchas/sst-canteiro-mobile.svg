@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 420" role="img" aria-labelledby="sst-canteiro-mobile-title sst-canteiro-mobile-desc" font-family="Archivo Var, Arial, Helvetica, sans-serif" fill="#071a31">
 <title id="sst-canteiro-mobile-title">Prancha PF (móvel) · Planta do canteiro: proteções coletivas conferidas · exemplo demonstrativo</title>
-<desc id="sst-canteiro-mobile-desc">Planta de um canteiro de 36,00 por 24,00 m com quatro proteções coletivas: guarda-corpo conferido, bandeja pendente, isolamento da grua conferido e torre de acesso conferida; 3 conferidos e 1 pendente. Exemplo demonstrativo, sem obra de cliente. Procedência: data/demonstrative/plates/sst-canteiro.v1.json.</desc>
+<desc id="sst-canteiro-mobile-desc">Planta de um canteiro de 36,00 por 24,00 m com quatro proteções coletivas: guarda-corpo conferido, bandeja pendente, isolamento da grua conferido e torre de acesso conferida; 3 conferidos e 1 pendente. Exemplo demonstrativo. Procedência: data/demonstrative/plates/sst-canteiro.v1.json.</desc>
 <rect x="0" y="0" width="360" height="420" fill="#ffffff"/>
 <rect x="8" y="8" width="344" height="404" fill="#ffffff" stroke="#dfe4e6"/>
 <text x="28" y="40" font-size="16" font-weight="650">Canteiro CT-01 · proteções conferidas</text>
@@ -16,5 +16,5 @@
 <rect x="20" y="327" width="8" height="8" fill="#2d6f2d"/>
 <text x="34" y="334" font-size="12.5">4 Torre de acesso com guarda-corpo · conferido</text>
 <text x="20" y="356" font-size="12.5" font-weight="650">3 conferidos · 1 pendente · não é PGR nem laudo</text>
-<g id="sst-canteiro-m-carimbo"><rect x="8" y="384" width="344" height="28" fill="#ffffff" stroke="#dfe4e6"/><line x1="72" y1="384" x2="72" y2="412" stroke="#dfe4e6"/><line x1="192" y1="384" x2="192" y2="412" stroke="#dfe4e6"/><text x="16" y="395" font-size="12.5" fill="#5d6a7a">PF-M</text><text x="16" y="408" font-size="12.5" fill="#5d6a7a">rev. R00</text><text x="80" y="395" font-size="12.5" fill="#5d6a7a">Escala indicativa</text><text x="80" y="408" font-size="12.5" fill="#5d6a7a">cotas em m</text><text x="200" y="395" font-size="12.5" fill="#5d6a7a">Exemplo demonstrativo</text><text x="200" y="408" font-size="12.5" fill="#5d6a7a">sem obra de cliente</text></g>
+<g id="sst-canteiro-m-carimbo"><rect x="8" y="384" width="344" height="28" fill="#ffffff" stroke="#dfe4e6"/><line x1="72" y1="384" x2="72" y2="412" stroke="#dfe4e6"/><line x1="192" y1="384" x2="192" y2="412" stroke="#dfe4e6"/><text x="16" y="395" font-size="12.5" fill="#5d6a7a">PF-M</text><text x="16" y="408" font-size="12.5" fill="#5d6a7a">rev. R00</text><text x="80" y="395" font-size="12.5" fill="#5d6a7a">Escala indicativa</text><text x="80" y="408" font-size="12.5" fill="#5d6a7a">cotas em m</text><text x="200" y="402.5" font-size="12.5" fill="#5d6a7a">Exemplo demonstrativo</text></g>
 </svg>
