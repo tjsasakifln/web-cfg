@@ -42,7 +42,7 @@ const STEP_LABELS = {
   calculation: "Cálculo",
   quantity: "Quantidade",
   spreadsheet_item: "Item de planilha",
-  review_reference: "Referência de revisão",
+  review_reference: "O que a revisão mudou",
 };
 
 export function escapeHtml(value) {
@@ -196,7 +196,7 @@ function stripLeadingIdPrefix(text, stepId) {
 function renderReviewReference(step) {
   const id = step.id ? `<code data-trail-review-id="${escapeHtml(step.id)}">${escapeHtml(step.id)}</code> ` : "";
   const doc = step.document_ref
-    ? `<span>Documento ${escapeHtml(step.document_ref)}</span>`
+    ? `<span>Conferido no documento ${escapeHtml(step.document_ref)}</span>`
     : "";
   const linkText = stripLeadingIdPrefix(step.text, step.id) || step.label || "Ver a revisão";
   const href = step.href
