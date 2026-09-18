@@ -179,32 +179,6 @@ exports.handler = async (event) => {
     };
   }
 
-  // A synthetic probe proves itself with LEAD_PROBE_SECRET: a 32+ character
-  // server-side secret, compared in constant time, that no browser ever holds.
-  // Turnstile proves the opposite thing — that a human browser solved a
-  // challenge — which a probe by definition is not and cannot be. Requiring it
-  // of the probe made the only non-fabricating way to exercise inbound
-  // plumbing in production impossible, so first-touch persistence and the
-  // Warmbly handoff could no longer be verified without inventing a real lead.
-  // Probe records are already tagged SYNTHETIC-PROBE and never reach commercial
-  // totals.
-  const turnstile = originCheck.probe
-    ? { ok: true, skipped: true, reason: "synthetic_probe" }
-    : await verifyTurnstile(lead.turnstile_token, ip);
-  if (!turnstile.ok) {
-    safeLog("warn", "turnstile_rejected", { error: turnstile.error });
-    return {
-      statusCode: 403,
-      headers,
-      body: JSON.stringify(
-        publicErrorBody({
-          error: "anti_abuse",
-          message: "Falha na verificação antiabuso. Recarregue a página e tente novamente.",
-        }),
-      ),
-    };
-  }
-
   const store = await getStore(event);
   if (!store) {
     safeLog("error", "store_unavailable", {});
@@ -273,51 +247,6 @@ exports.handler = async (event) => {
   lead.idempotency_key = idemKey;
   const idempotencyMaterialHash = adaptiveIdempotencyMaterialHash(lead);
 
-  // Paid parameter orders (Radar Decisório): mint the payment correlation from
-  // the idempotency key so a retry reconciles against the same payment, and
-  // fail closed if the `cfg:{offer_id}:{correlation_id}` policy cannot be met.
-  // Nothing is emitted to the visitor before the durable persist succeeds.
-  let radarPublic = null;
-  if (lead.radar_params) {
-    try {
-      const radar = require("./lib/radar-params.cjs");
-      const correlationId = radar.correlationIdFor(idemKey);
-      const ref = radar.buildExternalReference(lead.radar_params.offer_id, correlationId);
-      if (!ref.ok) throw new Error(ref.error || "external_reference_invalid");
-      lead.radar_params = {
-        ...lead.radar_params,
-        correlation_id: correlationId,
-        external_reference: ref.external_reference,
-      };
-      lead.external_reference = ref.external_reference;
-      radarPublic = {
-        correlation_id: correlationId,
-        external_reference: ref.external_reference,
-        delivery_business_days: radar.DELIVERY_CLOCK.business_days,
-      };
-      safeLog("info", "radar_params_correlated", {
-        offer_id: lead.radar_params.offer_id,
-        recorte: lead.radar_params.recorte,
-        uf: lead.radar_params.uf,
-        segment_count: (lead.radar_params.segmentos || []).length,
-      });
-    } catch (err) {
-      safeLog("error", "radar_correlation_failed", {
-        code: err && err.message ? String(err.message).slice(0, 80) : "error",
-      });
-      return {
-        statusCode: 503,
-        headers,
-        body: JSON.stringify(
-          publicErrorBody({
-            error: "radar_correlation_failed",
-            message: "Não foi possível registrar os parâmetros do Radar. O pagamento não foi liberado.",
-          }),
-        ),
-      };
-    }
-  }
-
   // Deterministic id from idempotency key — same key always same lead_id even if
   // the idempotency map read is eventually consistent on first retry.
   const lead_id = generateLeadId(`idem|${idemKey}`, { deterministic: true });
@@ -367,6 +296,118 @@ exports.handler = async (event) => {
       ),
     };
   };
+
+  // Idempotent replay BEFORE the anti-abuse gate, only for an explicit client
+  // key. A browser that timed out at 15 s and retries reuses the same
+  // `fe-<uuid>` key (js/modules/form.js) but its Turnstile token was already
+  // consumed by the first POST, so verifying the token first would answer 403
+  // "anti_abuse" for a record that is durably stored — contradicting the
+  // receipt the same client is entitled to. Security rationale for skipping
+  // the challenge here:
+  //   - the reply is exactly the receipt already returned to the holder of
+  //     that key (idempotentOk: lead_id, status, non-PII categories); no field
+  //     of the stored record beyond that projection is exposed;
+  //   - the key is minted client-side from crypto.randomUUID (128 bits) and is
+  //     never derivable from the record's content, so it works as a bearer of
+  //     that one receipt. The content-bucket key (no explicit key) IS derivable
+  //     by anyone who knows a person's name/phone/e-mail and would become an
+  //     unauthenticated existence oracle, so it stays behind Turnstile;
+  //   - origin, payload validation and the IP/fingerprint rate limit already
+  //     ran above, and this path performs a single store read (no retry loop)
+  //     so an unauthenticated POST cannot buy 600 ms of store I/O;
+  //   - a miss falls through to Turnstile unchanged; nothing is written here.
+  if (headerIdem) {
+    try {
+      const existing = await store.getByIdempotency(idemKey);
+      const rec = existing && existing.lead_id ? existing : await store.get(lead_id);
+      if (rec && rec.lead_id) {
+        safeLog("info", "lead_idempotent_hit", {
+          lead_id: rec.lead_id,
+          via: existing && existing.lead_id ? "idem_map_pre_verify" : "deterministic_id_pre_verify",
+          attempt: 0,
+        });
+        return idempotentOk(rec);
+      }
+    } catch (err) {
+      safeLog("error", "idempotency_lookup_failed", {
+        stage: "pre_verify",
+        code: err && err.message ? String(err.message).slice(0, 80) : "error",
+      });
+    }
+  }
+
+  // A synthetic probe proves itself with LEAD_PROBE_SECRET: a 32+ character
+  // server-side secret, compared in constant time, that no browser ever holds.
+  // Turnstile proves the opposite thing — that a human browser solved a
+  // challenge — which a probe by definition is not and cannot be. Requiring it
+  // of the probe made the only non-fabricating way to exercise inbound
+  // plumbing in production impossible, so first-touch persistence and the
+  // Warmbly handoff could no longer be verified without inventing a real lead.
+  // Probe records are already tagged SYNTHETIC-PROBE and never reach commercial
+  // totals.
+  const turnstile = originCheck.probe
+    ? { ok: true, skipped: true, reason: "synthetic_probe" }
+    : await verifyTurnstile(lead.turnstile_token, ip);
+  if (!turnstile.ok) {
+    safeLog("warn", "turnstile_rejected", { error: turnstile.error });
+    return {
+      statusCode: 403,
+      headers,
+      body: JSON.stringify(
+        publicErrorBody({
+          error: "anti_abuse",
+          message: "Falha na verificação antiabuso. Recarregue a página e tente novamente.",
+        }),
+      ),
+    };
+  }
+
+
+
+  // Paid parameter orders (Radar Decisório): mint the payment correlation from
+  // the idempotency key so a retry reconciles against the same payment, and
+  // fail closed if the `cfg:{offer_id}:{correlation_id}` policy cannot be met.
+  // Nothing is emitted to the visitor before the durable persist succeeds.
+  let radarPublic = null;
+  if (lead.radar_params) {
+    try {
+      const radar = require("./lib/radar-params.cjs");
+      const correlationId = radar.correlationIdFor(idemKey);
+      const ref = radar.buildExternalReference(lead.radar_params.offer_id, correlationId);
+      if (!ref.ok) throw new Error(ref.error || "external_reference_invalid");
+      lead.radar_params = {
+        ...lead.radar_params,
+        correlation_id: correlationId,
+        external_reference: ref.external_reference,
+      };
+      lead.external_reference = ref.external_reference;
+      radarPublic = {
+        correlation_id: correlationId,
+        external_reference: ref.external_reference,
+        delivery_business_days: radar.DELIVERY_CLOCK.business_days,
+      };
+      safeLog("info", "radar_params_correlated", {
+        offer_id: lead.radar_params.offer_id,
+        recorte: lead.radar_params.recorte,
+        uf: lead.radar_params.uf,
+        segment_count: (lead.radar_params.segmentos || []).length,
+      });
+    } catch (err) {
+      safeLog("error", "radar_correlation_failed", {
+        code: err && err.message ? String(err.message).slice(0, 80) : "error",
+      });
+      return {
+        statusCode: 503,
+        headers,
+        body: JSON.stringify(
+          publicErrorBody({
+            error: "radar_correlation_failed",
+            message: "Não foi possível registrar os parâmetros do Radar. O pagamento não foi liberado.",
+          }),
+        ),
+      };
+    }
+  }
 
   // Brief read-retry: Blobs eventual consistency can miss a just-written key on the
   // immediate second POST. Must return 200 + idempotent:true without re-delivery.

@@ -1964,6 +1964,135 @@ _reset();
   }
 }
 
+// G03-03: a retry after the browser's 15 s abort reuses the same explicit
+// idempotency key but its Turnstile token was consumed by the first POST. The
+// handler answers the stored receipt (200 idempotent) BEFORE the anti-abuse
+// gate, but only for an explicit key. Without an explicit key the derivable
+// content-bucket key stays behind Turnstile (no unauthenticated oracle).
+{
+  const previous = {
+    secret: process.env.TURNSTILE_SECRET_KEY,
+    require: process.env.LEAD_REQUIRE_TURNSTILE,
+    origin: process.env.LEAD_REQUIRE_ORIGIN,
+  };
+  const originalFetch = globalThis.fetch;
+  let siteverifyCalls = 0;
+  const consumed = new Set();
+  globalThis.fetch = async (url, opts) => {
+    if (String(url).includes("challenges.cloudflare.com")) {
+      siteverifyCalls += 1;
+      const token = new URLSearchParams(String(opts && opts.body)).get("response");
+      // Real Turnstile tokens are single use: a second siteverify fails.
+      const fresh = /^tok-valid-/.test(String(token)) && !consumed.has(token);
+      if (fresh) consumed.add(token);
+      return { ok: true, status: 200, text: async () => "{}", json: async () => ({ success: fresh }) };
+    }
+    return { ok: true, status: 200, text: async () => "{}", json: async () => ({}) };
+  };
+  try {
+    process.env.TURNSTILE_SECRET_KEY = "turnstile-secret-fixture-value";
+    process.env.LEAD_REQUIRE_TURNSTILE = "1";
+    delete process.env.LEAD_REQUIRE_ORIGIN;
+    const reloaded = loadHandler();
+    const { MemoryStore: IdemMemoryStore } = require(path.join(root, "netlify/functions/lib/lead-store.cjs"));
+    const idemStore = new IdemMemoryStore();
+    reloaded.setStoreForTests(idemStore);
+    _reset();
+
+    const key = "fe-2f1c6f5a-7c1e-4a0b-9d2e-6b8f0c3a1d55";
+    const payload = {
+      nome: "Renata Diretora",
+      email: "renata.diretora@construtora.com.br",
+      estagio: "diagnostico operacao",
+      jornada: "operacao",
+      consentimento: "on",
+      idempotency_key: key,
+    };
+
+    // First POST: valid token, persisted.
+    const first = await reloaded.handler(
+      event({ ...payload, turnstile_token: "tok-valid-once" }, "POST", {
+        ip: "203.0.113.120",
+        "idempotency-key": key,
+      }),
+    );
+    const firstBody = JSON.parse(first.body);
+    if (first.statusCode !== 201 || !firstBody.lead_id) fail("idem_pre_verify_first_persist", first);
+    if (siteverifyCalls !== 1) fail("idem_pre_verify_first_siteverify", siteverifyCalls);
+
+    // Retry after timeout: same key, consumed token -> the receipt, no siteverify.
+    const retry = await reloaded.handler(
+      event({ ...payload, turnstile_token: "tok-valid-once" }, "POST", {
+        ip: "203.0.113.120",
+        "idempotency-key": key,
+      }),
+    );
+    const retryBody = JSON.parse(retry.body);
+    if (retry.statusCode !== 200 || retryBody.idempotent !== true || retryBody.lead_id !== firstBody.lead_id) {
+      fail("idem_pre_verify_replay", { status: retry.statusCode, body: retryBody });
+    }
+    if (siteverifyCalls !== 1) fail("idem_pre_verify_replay_called_siteverify", siteverifyCalls);
+    // Same key and no token at all: still the receipt, still no siteverify.
+    const noToken = await reloaded.handler(
+      event({ ...payload }, "POST", { ip: "203.0.113.120", "idempotency-key": key }),
+    );
+    if (noToken.statusCode !== 200 || JSON.parse(noToken.body).idempotent !== true) {
+      fail("idem_pre_verify_replay_no_token", noToken);
+    }
+    if (siteverifyCalls !== 1) fail("idem_pre_verify_no_token_called_siteverify", siteverifyCalls);
+    // The replay is the public receipt projection only: no PII, no delivery
+    // object, no provider handle.
+    const replayStr = JSON.stringify(retryBody);
+    for (const forbidden of ["renata", "construtora", "provider_id", "delivery", "audit", "ip_hash"]) {
+      if (replayStr.toLowerCase().includes(forbidden)) fail("idem_pre_verify_replay_leak", { forbidden, retryBody });
+    }
+    pass("idem_pre_verify_replays_receipt_without_turnstile", { lead_id: firstBody.lead_id });
+
+    // Negative property: a new explicit key with a consumed token is refused.
+    const newKey = "fe-9a8b7c6d-1e2f-4a3b-8c9d-0e1f2a3b4c5d";
+    const newKeyConsumed = await reloaded.handler(
+      event({ ...payload, idempotency_key: newKey, turnstile_token: "tok-valid-once" }, "POST", {
+        ip: "203.0.113.120",
+        "idempotency-key": newKey,
+      }),
+    );
+    if (newKeyConsumed.statusCode !== 403 || JSON.parse(newKeyConsumed.body).error !== "anti_abuse") {
+      fail("idem_pre_verify_new_key_refused", newKeyConsumed);
+    }
+    if (siteverifyCalls !== 2) fail("idem_pre_verify_new_key_siteverify", siteverifyCalls);
+    if (await idemStore.getByIdempotency(`idk:${newKey}`)) fail("idem_pre_verify_new_key_persisted", newKey);
+
+    // Negative property: no explicit key -> content-bucket key stays behind
+    // Turnstile even though an identical record now exists in the store.
+    const { idempotency_key: _omit, ...contentOnly } = payload;
+    const bucketPersisted = await reloaded.handler(
+      event({ ...contentOnly, turnstile_token: "tok-valid-two" }, "POST", { ip: "203.0.113.121" }),
+    );
+    if (bucketPersisted.statusCode !== 201) fail("idem_pre_verify_bucket_persist", bucketPersisted);
+    const beforeOracle = siteverifyCalls;
+    const oracleConsumed = await reloaded.handler(
+      event({ ...contentOnly, turnstile_token: "tok-valid-two" }, "POST", { ip: "203.0.113.121" }),
+    );
+    if (oracleConsumed.statusCode !== 403 || JSON.parse(oracleConsumed.body).error !== "anti_abuse") {
+      fail("idem_pre_verify_content_key_oracle_consumed_token", oracleConsumed);
+    }
+    if (siteverifyCalls !== beforeOracle + 1) fail("idem_pre_verify_content_key_skipped_siteverify", siteverifyCalls);
+    const oracleNoToken = await reloaded.handler(event({ ...contentOnly }, "POST", { ip: "203.0.113.121" }));
+    if (oracleNoToken.statusCode !== 403 || JSON.parse(oracleNoToken.body).error !== "anti_abuse") {
+      fail("idem_pre_verify_content_key_oracle_no_token", oracleNoToken);
+    }
+    pass("idem_pre_verify_requires_explicit_key", { siteverifyCalls });
+  } finally {
+    globalThis.fetch = originalFetch;
+    if (previous.secret == null) delete process.env.TURNSTILE_SECRET_KEY;
+    else process.env.TURNSTILE_SECRET_KEY = previous.secret;
+    if (previous.require == null) delete process.env.LEAD_REQUIRE_TURNSTILE;
+    else process.env.LEAD_REQUIRE_TURNSTILE = previous.require;
+    if (previous.origin == null) delete process.env.LEAD_REQUIRE_ORIGIN;
+    else process.env.LEAD_REQUIRE_ORIGIN = previous.origin;
+  }
+}
+
 // Option B document intake: JSON channel-request succeeds; files never persist.
 {
   const core = require(path.join(root, "netlify/functions/lib/lead-core.cjs"));
