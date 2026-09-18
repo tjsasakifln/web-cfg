@@ -104,6 +104,16 @@ def frozen_articles() -> set[str]:
             path = str(row.get("path") or "")
             if approval.get("material_hash") and path.startswith("/conteudos/"):
                 out.add(path.strip("/").split("/")[-1])
+    # CLICK_ORIGIN (scripts/organic/tests/test_inb08_owned_routes.py): três
+    # artigos com clique real no GSC ficam pinados byte a byte contra
+    # origin/main (só a data de revisão do cluster de medição pode mover em
+    # fiscal-nao-assina-medicao-obra-publica, que já entra acima como sibling
+    # do canário #389). 2026-09-18: custos-indiretos-atraso-administracao-obra
+    # e jogo-de-planilha-aditivo-obra-publica foram tocados por engano por
+    # --write e quebraram esse teste; revertidos para origin/main e congelados
+    # aqui para que --check volte a listar pendência em vez de reescrever.
+    out.add("custos-indiretos-atraso-administracao-obra")
+    out.add("jogo-de-planilha-aditivo-obra-publica")
     return out
 
 
