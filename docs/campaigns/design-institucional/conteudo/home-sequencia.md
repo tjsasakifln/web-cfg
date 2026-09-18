@@ -38,11 +38,15 @@ Subtítulo (contrato brand.json): Comparar propostas de obra, completar ou confe
 
 Parágrafo de entrega (reescrito; mantém "demonstrativo", entrega nomeada e uso): Com a quantidade levantada deste desenho demonstrativo, duas propostas de obra se comparam pela mesma base. É assim com tudo o que sai daqui: planilha, projeto, laudo, relatório ou parecer, assinados, com ART e nota fiscal, para você orçar, contratar ou decidir com um número que explica a si mesmo.
 
+Superado em 2026-09-18 (CONFENGE-LAPIDACAO-COMERCIAL-20260918): o parágrafo de entrega passou a "A quantidade levantada no exemplo demonstrativo põe duas propostas de obra na mesma base de comparação. Planilha, projeto, laudo e relatório saem assinados, com ART e nota fiscal, com origem e critério em cada número." — sem "sem obra de cliente" e sem repetir o fecho do H1. Proteção equivalente: `scripts/site/test_home_first_fold.mjs` (conceitos `prova_rotulada`, `entrega_nomeada`, `uso_da_entrega` na dobra dos dois viewports) e `scripts/site/test_deliverables_hub.py` (entrega ligada a uso, ≥ 120 caracteres).
+
 Botões: "Ver serviços por situação" (`/servicos/`, único `button-primary`) · "Descrever a minha situação" (`/triagem-tecnica/`, link de texto).
 
 Linha de confiança: Engenharia Civil pela EESC-USP · CNPJ 52.407.089/0001-09 · Como conferir credenciais e limites (`/confianca/`).
 
 Prancha (figura `proof-figure hero-figure`, `title#hero-plan-title`, `desc#hero-plan-desc`): a planta do recorte de banheiro em tamanho editorial, com carimbo "Exemplo demonstrativo · R01 · sem obra de cliente". Legenda: Exemplo demonstrativo. Recorte de banheiro, paredes W-01 a W-04: 21,84 − 1,68 (porta) − 0,56 (janela) = 19,60 m² de revestimento, item ORC-PAR-01. Sem obra de cliente. Conferir a conta (`/quantitativos-orcamento-obras/#amostra-quantitativos`).
+
+Superado em 2026-09-18 (CONFENGE-LAPIDACAO-COMERCIAL-20260918): a legenda e o carimbo das pranchas levam só "Exemplo demonstrativo"; "Sem obra de cliente" saiu da legenda e do carimbo (`scripts/demonstrative/plates/sheet.py: DEMO_LABEL`). Proteção equivalente: `scripts/demonstrative/plates/test_render_plates.py` exige o rótulo no título, na descrição e no carimbo de cada prancha e recusa "sem obra de cliente".
 
 ### Bloco 2 · Reconhecimento (`#situacoes`)
 
@@ -93,6 +97,8 @@ Eyebrow: O que chega às suas mãos
 H2: Três necessidades, três documentos, os números abertos.
 
 Lead: Cada exemplo abaixo é demonstrativo: mostra o método e o formato do documento, não uma obra de cliente. Os números estão publicados com desenho, memória e planilhas para você refazer a conta.
+
+Superado em 2026-09-18 (CONFENGE-LAPIDACAO-COMERCIAL-20260918): o lead passou a "Cada exemplo mostra o método e o formato do documento; desenho, memória e planilhas estão publicados para você refazer a conta."; a identificação fica no kicker "Exemplo demonstrativo · <objeto>" de cada legenda, e as legendas 2 e 3 perderam "Premissas sintéticas, não obra de cliente." e "Nenhum valor de mercado é inventado aqui." (a 3 diz "Estrutura do laudo, sem valor de mercado"). Proteção equivalente: conceito `prova_rotulada` em `scripts/site/test_home_first_fold.mjs` e o rótulo por figura.
 
 Amostra 1 · Exemplo demonstrativo · Edificação
 

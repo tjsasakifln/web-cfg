@@ -171,7 +171,9 @@ test("shipped landing presents the canonical trail, not the test fixture or a fu
   assert.match(main, /data-sample-trail-state="canonical"/);
   assert.equal(main.includes("awaiting-canonical-excerpt"), false);
   assert.equal(main.includes("Os números conferíveis desta trilha entram aqui quando o demonstrativo canônico"), false);
-  assert.match(main, /Amostra demonstrativa/);
+  // Owner decision 2026-09-18 (CONFENGE-LAPIDACAO-COMERCIAL-20260918): the sample
+  // is identified by the visible label "Exemplo demonstrativo".
+  assert.match(main, /Exemplo demonstrativo/);
   assert.match(main, /href="\/casos\/demonstrativo-projeto-privado\//);
   for (const token of FIXTURE_TOKENS) {
     assert.equal(html.includes(token), false, `public HTML leaked fixture token ${token}`);

@@ -88,7 +88,12 @@ test("shipped quantitativos trail is complete, matches consumption and needs no 
   assert.match(trailStepText(withoutJs, "calculation"), /sum\(length\*height\)|desconto|WN-01/i);
   assert.match(trailStepText(withoutJs, "review_reference"), /RF-01/);
   assert.match(withoutJs, /href="\/casos\/demonstrativo-projeto-privado\//);
-  assert.match(visible(withoutJs), /não é preço da CONFENGE|não é SINAPI real/i);
+  // Owner decision 2026-09-18 (CONFENGE-LAPIDACAO-COMERCIAL-20260918): the sample
+  // is identified by the visible label and keeps the material distinction that a
+  // quantity is not a price; the hypothetical-price qualifier lives once, next to
+  // the price table of the demonstrative page the trail links to.
+  assert.match(visible(withoutJs), /Exemplo demonstrativo/);
+  assert.match(visible(withoutJs), /Quantidade não é preço/);
   assert.doesNotMatch(visible(withoutJs), /SELECT do demonstrativo|aprovado pelo fundador|resolved_in_R01/);
 });
 

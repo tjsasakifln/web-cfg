@@ -170,11 +170,16 @@ def test_sheet_structure(rendered):
         assert title is not None and desc is not None, name
         assert root.get("aria-labelledby") == f"{title.get('id')} {desc.get('id')}", name
         assert title.get("id") == f"{pid}-{variant}-title"
-        assert "demonstrativo" in title.text and "demonstrativo" in desc.text and "sem obra de cliente" in desc.text, name
+        # Owner decision 2026-09-18 (CONFENGE-LAPIDACAO-COMERCIAL-20260918): the
+        # plate circulates alone, so it carries "Exemplo demonstrativo" in the
+        # title, the description and the title block; the negative restatement
+        # ("sem obra de cliente") is superseded and must not come back.
+        assert "demonstrativo" in title.text and "Exemplo demonstrativo" in desc.text, name
+        assert "sem obra de cliente" not in svg, name
         carimbo = next((g for g in root.iter(f"{NS}g") if g.get("id") == f"{pid}-{variant[0]}-carimbo"), None)
         assert carimbo is not None, name
         cells = "\n".join(_texts(ET.tostring(carimbo, encoding="unicode")))
-        assert "rev. R0" in cells and "Exemplo demonstrativo" in cells and "sem obra de cliente" in cells, cells
+        assert "rev. R0" in cells and "Exemplo demonstrativo" in cells, cells
         rects = carimbo.findall(f"{NS}rect")
         assert rects and rects[0].get("height") == str(S.TITLE_BLOCK_H), name
         assert "Exemplo demonstrativo" in svg

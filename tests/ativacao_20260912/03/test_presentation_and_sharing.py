@@ -217,8 +217,10 @@ def _assert_published_memory(html: str, excerpt: dict[str, Any]) -> None:
     assert calculation["label_pt_br"] in text
     assert calculation["memory"] in text
     assert "sum(length*height)" not in text
-    assert "Amostra demonstrativa" in text or "exemplo demonstrativo" in text
-    assert "não são preço do serviço" in text or "nem preço da CONFENGE" in text
+    # Owner decision 2026-09-18 (CONFENGE-LAPIDACAO-COMERCIAL-20260918): the trail
+    # names its demonstrative source once; the hypothetical-price qualifier lives
+    # next to the price table of that source page, not in the trail.
+    assert "exemplo demonstrativo" in text.lower()
 
 
 def test_sample_trail_renders_a_derived_client_memory_without_internal_formula() -> None:
@@ -231,8 +233,8 @@ def test_sample_trail_renders_a_derived_client_memory_without_internal_formula()
     assert 'data-trail-item-code="ORC-PAR-01"' in html
     assert 'data-trail-item-quantity="19.6" value="19.6"' in html
     assert 'data-trail-quantity="19.6" value="19.6"' in html
-    assert "Amostra demonstrativa" in html
-    assert "Preços hipotéticos daquele recorte não são preço do serviço" in html
+    assert 'href="/casos/demonstrativo-projeto-privado/#quantitativos">exemplo demonstrativo do recorte de banheiro</a>' in html
+    assert "qty-trail-disclaimer" not in html  # no separate negative restatement in the canonical trail
     assert "m²" in html
 
 
