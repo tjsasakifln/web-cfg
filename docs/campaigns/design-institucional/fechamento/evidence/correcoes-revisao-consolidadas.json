@@ -1,0 +1,670 @@
+[
+ {
+  "frente": "gsc",
+  "commits_novos": [
+   "28649b5da fix(qualidade): leitura duravel STALE do consumidor GSC bloqueia gsc_stale mesmo com as_of recente",
+   "8bcb2e3de fix(testes): o teste do consumidor GSC duravel no caminho de release roda no runner de workflow-gates",
+   "2223a9e12 fix(revops): relatorio diario expoe cobertura parcial quando a perna de captura fica BLOCKED_EXTERNAL",
+   "50b2a170e fix(revops): verify_gsc_freshness em modo --fixture marca fixture:true na saida",
+   "98002b4b5 docs(ops): contrato GSC registra STALE independente da idade e o marcador fixture:true da CLI"
+  ],
+  "problemas_tratados": [
+   {
+    "severidade": "BLOQUEANTE",
+    "arquivo_linha": "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-gsc/scripts/site/site_excellence.py:165-180 (evaluate_signal gsc-freshness) e :756-768 (_latest_gsc_observation evidence)",
+    "acao": "Em evaluate_signal, apos calcular age_days e antes da comparacao com maximum_age_days, `durable_status == STALE` retorna BLOCKED_EXTERNAL gsc_stale. Nao foi feito o retorno antes da aritmetica sugerido na revisao porque o teste existente test_gsc_freshness_stale_durable_read_is_blocked_gsc_stale exige age_days == 28 na evidencia. _result filtra a evidencia, entao _latest_gsc_observation passou a expor durable_reason_codes (reason_code do host) e durable_status (so quando ha leitura duravel; ausente no caminho absent/unknown, coberto por assert). Reproducao do caso da revisao ({status:STALE, reason_codes:[provider_coverage_gap], as_of:2026-09-15}, today 2026-09-18) agora da BLOCKED_EXTERNAL ['gsc_stale'] stale 3 ['provider_coverage_gap']. Novo teste test_gsc_freshness_stale_durable_read_is_blocked_even_when_as_of_is_recent e vetor stale-gsc-host-status-recent-as-of em scripts/site/fixtures/site-excellence/mutations.v1.json. docs/ops/GSC-INSIGHTS-SINGLE-SOURCE.md registra 'STALE regardless of the as_of age'.",
+    "estado": "CORRIGIDO"
+   },
+   {
+    "severidade": "ALTA",
+    "arquivo_linha": "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-gsc/scripts/site/test_workflow_gates.py (test_durable_gsc_read_feeds_the_scorecard_only_on_the_release_path, agora antes de main() e na lista tests)",
+    "acao": "Funcao movida para antes de main() e registrada na lista tests. `npm run test:workflow-gates` passa de 17 para 18 linhas OK e imprime `OK test_durable_gsc_read_feeds_the_scorecard_only_on_the_release_path` + WORKFLOW_GATES_OK.",
+    "estado": "CORRIGIDO"
+   },
+   {
+    "severidade": "MEDIA",
+    "arquivo_linha": "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-gsc/scripts/revops/scheduled_daily.mjs:persistProof e scripts/revops/test_schedules.mjs blocos 2c/2d; docs/ops/EXTERNAL-ACTIONS.md linha LEAD_PROBE_SECRET",
+    "acao": "persistProof expoe no JSON de topo coverage (full|partial, partial quando blocked_external nao esta vazio) e capture_leg (EXERCISED|BLOCKED_EXTERNAL, so quando o bloqueio e LEAD_PROBE_SECRET), emite `::warning title=daily coverage partial::...` por bloqueio no stdout antes do resumo JSON, e o resumo inclui coverage/capture_leg. Testes: com secret coverage=full/capture_leg=EXERCISED e sem ::warning mesmo com checks criticos falhando; sem secret coverage=partial, capture_leg=BLOCKED_EXTERNAL, ::warning com LEAD_PROBE_SECRET no log e resumo com partial. Nenhum consumidor faz parse do stdout (revops-scheduled.yml so roda o script e sobe o artefato). EXTERNAL-ACTIONS.md registra o novo estado, que ok:true nao prova captura, que e acao de admin do repositorio e que o bloqueio nao deve ser aceito como permanente. NAO foi inventada data-limite nem dono nominal (nao verificaveis nesta frente) — ver notas_para_integracao.",
+    "estado": "CORRIGIDO"
+   },
+   {
+    "severidade": "BAIXA",
+    "arquivo_linha": "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-gsc/scripts/revops/verify_gsc_freshness.mjs:runCli (ramo --fixture) e scripts/revops/test_gsc_freshness_probe.mjs:28",
+    "acao": "runCli espalha `fixture: true` no resultado do ramo --fixture (polaridade de saida inalterada; caminho real sem o marcador). Teste da CLI cobra proof.fixture === true nos tres fixtures. Prova ponta a ponta: stdout de `--fixture current --now 2026-08-29T12:00:00Z` gravado como build/reports/gsc-insights-durable.json produz no scorecard BLOCKED_EXTERNAL ['gsc_unavailable'] durable_read=fixture_rejected. Docs do contrato mencionam o marcador. A barreira do site-ci (--fixture proibido no passo) voltou a rodar em CI pelo item ALTA.",
+    "estado": "CORRIGIDO"
+   },
+   {
+    "severidade": "BAIXA",
+    "arquivo_linha": ".github/workflows/site-ci.yml:330-344 (passo Read durable GSC consumer (#413)) e relatorio do implementador",
+    "acao": "Nao ha como demonstrar neste ramo sem push/release. A prova real e o log do job site-validation do primeiro netcup-release apos o merge contendo `GSC_DURABLE_READ status=CURRENT as_of=...` e o site-excellence.json do artefato site-ci-reports com gsc-freshness MEASURED_PASS e durable_read=current; isso tambem confirma que OPS_TOKEN chega ao workflow reutilizavel.",
+    "estado": "DEIXADO_PARA_INTEGRACAO"
+   }
+  ],
+  "testes": [
+   {
+    "comando": "npm run test:site-excellence",
+    "resultado": "26 passed (era 25; novo: test_gsc_freshness_stale_durable_read_is_blocked_even_when_as_of_is_recent; vetor stale-gsc-host-status-recent-as-of avaliado por test_every_critical_dimension_has_a_red_mutation_fixture)"
+   },
+   {
+    "comando": "npm run test:workflow-gates",
+    "resultado": "18 OK (era 17), inclui OK test_durable_gsc_read_feeds_the_scorecard_only_on_the_release_path; WORKFLOW_GATES_OK"
+   },
+   {
+    "comando": "node --test scripts/revops/test_gsc_freshness_probe.mjs",
+    "resultado": "5 pass, 0 fail (assert proof.fixture === true nos fixtures current/stale/unknown)"
+   },
+   {
+    "comando": "npm run test:revops",
+    "resultado": "exit 0; ALL privacy checks passed"
+   },
+   {
+    "comando": "npm run test:schedules",
+    "resultado": "exit 0; novos PASS daily_coverage_full_with_secret, daily_coverage_partial_without_probe_secret, daily_coverage_partial_warns_in_log, daily_summary_reports_coverage; ALL schedule structural checks passed; INBOUND_BACKLOG_POLICY_TEST_OK"
+   },
+   {
+    "comando": "npm run test:ops-docs",
+    "resultado": "OPS_DOCS_HONESTY_OK"
+   },
+   {
+    "comando": "reproducao manual do caso da revisao (STALE provider_coverage_gap, as_of 2026-09-15, today 2026-09-18)",
+    "resultado": "BLOCKED_EXTERNAL ['gsc_stale'] durable_read=stale age_days=3 durable_reason_codes=['provider_coverage_gap'] (antes: MEASURED_PASS)"
+   }
+  ],
+  "notas_para_integracao": [
+   "Prova real do fechamento G05-01: no primeiro netcup-release apos o merge, capturar o log do job site-validation com `GSC_DURABLE_READ status=CURRENT as_of=...` e o site-excellence.json do artefato site-ci-reports mostrando gsc-freshness MEASURED_PASS com evidence.durable_read=current. Sem esse log a afirmacao 'na release le a fonte duravel' continua inferida do diagnostico (run 35335660787), nao demonstrada. O mesmo log prova que OPS_TOKEN chega ao workflow reutilizavel.",
+   "LEAD_PROBE_SECRET: definir data-limite e dono para configurar o secret no GitHub Actions (mesmo valor do host). Nao foi inventado nesta frente; ate la cada run diario reporta coverage:'partial', capture_leg:'BLOCKED_EXTERNAL' e ::warning no log. A prova de desbloqueio e o proximo run diario com PASS isolated_probe e probe_idempotent_same_id e coverage:'full'.",
+   "Se a leitura duravel de release vier STALE (host degradado), o scorecard agora bloqueia gsc_stale mesmo com as_of recente: isso e comportamento esperado e nao regressao; o reason_code do host fica em evidence.durable_reason_codes.",
+   "Efeito colateral de teste: scripts/revops/test_search_demand.py (via gsc_import_learning.py, dest import-{stamp}.json) grava data/revops/gsc/imports/import-2026-07-28.json no diretorio rastreado a cada npm run test:revops. Removido antes deste relatorio (tree limpa), mas reaparece a cada rodada; nao incluir no commit de integracao. Correcao (redirecionar a escrita para tmp) fica fora do escopo desta frente.",
+   "Nenhum arquivo de outra frente, rota B2G congelada ou styles*.css foi tocado; nenhuma recaptura de hash (first-fold, approvals, frozen specs, censo CTA) e necessaria por estas mudancas. Sem push, sem build:site."
+  ]
+ },
+ {
+  "frente": "artigo",
+  "commits_novos": [
+   "73f271151 fix(conteudos): o script reconhece o formulário com href=\"/\" nu e a guarda residual acusa qualquer destino na home",
+   "a033631c9 fix(conteudos): os quatro artigos de atraso/prorrogação com href=\"/\" passam ao formulário do pilar",
+   "61f8d0619 fix(remediador): inject_journey_cta deriva o formulário do artigo da regra do pilar e preserva a lead-inline já corrigida",
+   "60288d717 docs(fechamento): frente artigo registra a troca service_cta_click→content_to_service e o que o --check garante",
+   "218e77e4b docs(fechamento): a tabela de evento registra o href=\"/\" nu como not_transition e aponta o teste de atribuição pelo caminho real",
+   "0b6c11d65 fix(remediador): congelados do canário #389 mantêm o destino anterior e o teste também roda sob pytest",
+   "1936353b5 docs(fechamento): evidência da frente artigo reflete a guarda dos congelados no remediador"
+  ],
+  "problemas_tratados": [
+   {
+    "severidade": "ALTA",
+    "arquivo_linha": "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-artigo/scripts/site/apply_article_pillar_form.py:61-75 (HOME_HREF, FORM_LINK_RE, RESIDUAL_FORM_RE) e :132-146 (home_form_link, form_target); conteudos/{chuva-prorrogacao-prazo-obra-publica,atraso-obra-culpa-administracao,prorrogacao-prazo-obra-publica-documentos,resposta-notificacao-atraso-obra-publica}/index.html",
+    "acao": "FORM_LINK_RE passa a aceitar href=\"/\", \"/?…\", \"/#contato\" e \"/?…#contato\" (fecha com a aspa, não casa /{pilar}/#captura-pilar); RESIDUAL_FORM_RE acusa qualquer 'Continuar pelo formulário' cujo href resolva para a home com ou sem fragmento e alimenta o residual e a pendência dos congelados. --write reaplicado: exatamente 4 arquivos, 1 linha cada (3 → /atrasos-prorrogacao-obras-publicas/#captura-pilar, 1 → /defesa-tecnica-contratos-publicos/#captura-pilar); grep de href agora não tem href=\"/\" nenhum; --check sai 0 com pendência só nos 3 congelados. A frase falsa sobre o que --check garante estava no relatório do agente anterior (fora do repo: grep em docs vazio); o docstring do script e o arquivo de evidência descrevem a garantia correta.",
+    "estado": "CORRIGIDO"
+   },
+   {
+    "severidade": "MEDIA",
+    "arquivo_linha": "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-artigo/scripts/site/inbound_first_remediate.py:33-38 (import), :745-771 (LEAD_INLINE_RE, article_form_target, lead_inline_points_to_pillar), :788-793 (guarda e form = article_form_target(...)); scripts/site/test_apply_article_pillar_form.py",
+    "acao": "inject_journey_cta deriva o href do formulário de form_target/service_map de apply_article_pillar_form (Tema principal ou path_overrides, com #captura-pilar no pilar); sem pilar ou fora de /conteudos/ cai em /#contato; congelados do canário #389 mantêm /#contato (mesmo destino anterior). Lead-inline já apontada ao pilar é preservada (fail-closed), o que também mantém o WhatsApp em frase natural. Teste novo (standalone e pytest) cobre os 4 formatos de href na home, idempotência, artigo sem pilar, congelados, e o remediador (regenera → pilar; já no pilar → intacto; sem pilar → /#contato; congelado → /#contato). Não rodei npm run inbound:remediate (escreve em fonte em hub/feed/pilares).",
+    "estado": "CORRIGIDO"
+   },
+   {
+    "severidade": "MEDIA",
+    "arquivo_linha": "package.json / .github/workflows / scripts/site/inbound_gates.py (ligação do --check a um gate de CI)",
+    "acao": "Não ligado nesta frente para não colidir com package.json/workflows de outras frentes. Na integração: adicionar script npm (ex. \"test:article-pillar-form\": \"python3 scripts/site/apply_article_pillar_form.py --check && python3 scripts/site/test_apply_article_pillar_form.py\") e incluí-lo em inbound:gates ou na lista pré-build do site-ci.",
+    "estado": "DEIXADO_PARA_INTEGRACAO"
+   },
+   {
+    "severidade": "BAIXA",
+    "arquivo_linha": "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-artigo/docs/campaigns/design-institucional/fechamento/evidence/artigo-evento-semantica.md",
+    "acao": "Evidência registra: service_cta_click/form → content_to_service/service para o pilar na família /conteudos/; href=\"/\" nu era not_transition (sem evento); dois content_to_service por artigo ao mesmo destination_path, distinguíveis por cta_position (form/inline) e cta_label; cta_id/route_family 'unspecified' (como antes) e não contam em _service_transition_destinations; nenhum consumidor quebra (npm run test:attribution passa). O enriquecimento opcional com data-cta-id/data-asset-id foi deliberadamente não feito: retocaria 116 artigos e mudaria o payload de atribuição sem leitura combinada; fica como opção explícita no arquivo.",
+    "estado": "CORRIGIDO"
+   }
+  ],
+  "testes": [
+   {
+    "comando": "python3 scripts/site/apply_article_pillar_form.py --check",
+    "resultado": "rc=0; artigos alterados: 0; pendência apenas nos 3 congelados pelo canário #389"
+   },
+   {
+    "comando": "python3 scripts/site/test_apply_article_pillar_form.py && python3 -m pytest -q scripts/site/test_apply_article_pillar_form.py",
+    "resultado": "PASS; 1 passed"
+   },
+   {
+    "comando": "python3 scripts/site/test_integral_solution_copy.py",
+    "resultado": "PASS: 0 routes, 0 occurrences"
+   },
+   {
+    "comando": "npm run validate:seo",
+    "resultado": "VALIDATION_OK pages=233 indexable=98 errors=0 warnings=0"
+   },
+   {
+    "comando": "npm run test:knowledge-funnel",
+    "resultado": "14 passed"
+   },
+   {
+    "comando": "npm run test:hub-truth",
+    "resultado": "rc=0 (hub_listed 30)"
+   },
+   {
+    "comando": "npm run test:inbound-gates",
+    "resultado": "9 passed"
+   },
+   {
+    "comando": "npm run test:single-commercial-route",
+    "resultado": "93/93 checks passed"
+   },
+   {
+    "comando": "npm run test:attribution",
+    "resultado": "ATTRIBUTION_OK"
+   },
+   {
+    "comando": "python3 -m pytest -q scripts/site/test_visitor_redesign.py scripts/site/test_design_gates.py scripts/editorial/tests/test_first_cohort_content_and_cannibalization.py (testes que importam/leem inbound_first_remediate)",
+    "resultado": "75 passed + 11 passed (rerodados após a guarda dos congelados: 44 passed)"
+   }
+  ],
+  "notas_para_integracao": [
+   "Worktree /home/tjsasakifln/code/confenge/.worktrees/pos-redesign-artigo, ramo campaign/pos-redesign-fechamento-20260918-artigo, 7 commits novos sobre cadbdf45f; sem push, sem build:site, árvore limpa.",
+   "Os 4 HTML de artigo tocados (1 linha cada, só o href) podem exigir as recapturas diferidas: censo CTA --write e qualquer hash protegido que ingira conteudos/*; first-fold/approvals/frozen specs não são afetados (nenhuma das seis rotas B2G nem styles*.css foi tocado).",
+   "Ligar ao CI: python3 scripts/site/apply_article_pillar_form.py --check e python3 scripts/site/test_apply_article_pillar_form.py (inbound:gates ou lista pré-build do site-ci); não referenciados em package.json/workflows ainda.",
+   "inbound_first_remediate.py agora importa apply_article_pillar_form; apply_article_pillar_form.ROOT é constante própria e pillar_has_anchor lê o pilar do repo real — um teste que monkeypatcha scripts.site.inbound_first_remediate.ROOT para uma árvore temporária (scripts/editorial/tests/test_first_cohort_content_and_cannibalization.py:128) passa hoje, mas esse caminho escapa do sandbox.",
+   "npm run inbound:remediate NÃO foi executado (escreve em fonte em hub/feed/pilares). Ele ainda regenera a lead-inline dos 3 artigos congelados pelo canário #389 (com /#contato, como antes) se rodar — comportamento pré-campanha, fora desta frente.",
+   "A afirmação do relatório anterior de que '--check reprova se algum artigo ainda enviar o formulário à home' passa a ser verdadeira só a partir de 73f271151; o relatório da frente que citava isso vive fora do repo e deve ser reescrito com a redação do arquivo de evidência."
+  ]
+ },
+ {
+  "frente": "hubs",
+  "commits_novos": [
+   "fb2eda2a6 test(triagem): o guarda de solucao integral exige o item proprio de quantitativos (G02-07)",
+   "5e15e3d16 test(entregas): honestidade por cartao cobrada pelo bloco de preco, no lugar do kicker (G02-09)",
+   "36ee299b3 fix(entregas): o hero-deliverable deixa de repetir a enumeracao do lead (G02-10)",
+   "ac437213d fix(servicos): a prancha de avaliacao fica acima do texto, nao ao lado",
+   "3ec6399dd fix(ferramentas): a prontidao de obra privada pousa no topo da triagem, nao no item de inspecao (G02-07)"
+  ],
+  "problemas_tratados": [
+   {
+    "severidade": "BLOQUEANTE",
+    "arquivo_linha": "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-hubs/entregas/index.html + data/commercial/first-fold-measurements.v1.json",
+    "acao": "Recaptura da primeira dobra de /entregas/ fica para a integração (sem build:site nem --write nesta frente). Estado atual confirmado: `npm run test:first-fold-contract` reprova com first_fold_input_changed:entregas/index.html; o sha256 de entregas/index.html na ponta do ramo (3ec6399dd) é 2639fa0477bfd3dc… (mudou de novo após a reescrita de :70). Na integração: `node scripts/site/measure_first_fold.mjs --write` em árvore limpa a partir desta ponta e reexecutar até 1932/1932.",
+    "estado": "DEIXADO_PARA_INTEGRACAO"
+   },
+   {
+    "severidade": "MEDIA",
+    "arquivo_linha": "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-hubs/scripts/site/test_integral_solution_copy.py:449-478 e :503-528",
+    "acao": "Guarda estendido: `<li id=\"quantitativos\">` precisa de prefill de WhatsApp que nomeie quantitativos|orçamento e de href=\"/quantitativos-orcamento-obras/\"; triagem sem nenhum item de orçamento (nem #quantitativos nem dentro de #obra-imovel) reprova. Contraprovas adicionadas: sem link, com prefill de inspeção e sem item. 6 passed.",
+    "estado": "CORRIGIDO"
+   },
+   {
+    "severidade": "MEDIA",
+    "arquivo_linha": "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-hubs/ferramentas/prontidao-tecnica-obra-privada/index.html:67,297 e assets/js/private-project-technical-readiness.{js,cjs}:205,537",
+    "acao": "Destino da ferramenta decidido: /triagem-tecnica/ (topo, sem hash) — a ferramenta encaminha para três recortes (orçamento, revisão, compatibilização), nenhum item fixo serve aos três, e /triagem-tecnica/ já está na allowlist de scripts/site/test_contact_journeys.mjs:258 (o #quantitativos não está). HUMAN_CONTACT_HASH vazio com buildContactHref condicional (sem '#' solto); gêmeo .cjs sincronizado (check twins). test_private_project_technical_readiness, test:pos-inb-04, test_purchase_path (21/21), test_url_checklist e test:tools passam. Sub-parte rejeitada: purchase-route-map.v1.json:590,642,694 são rotas de inspeção (/inspecao-diagnostico-edificacoes/ e /servicos/#servico-diagnostico) e pousar em #obra-imovel continua correto.",
+    "estado": "CORRIGIDO"
+   },
+   {
+    "severidade": "MEDIA",
+    "arquivo_linha": "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-hubs/scripts/site/test_deliverables_hub.py:248-270 e :306-325",
+    "acao": "Decisão G02-09 registrada no commit 5e15e3d16 (premissa do diagnóstico corrigida: o literal era cobrado em :253 do base). Asserção por cartão substituída pelo bloco `<p class=\"vitrine-item__price\"><span>Preço</span><strong>…R$…</strong></p>` (o que render_public_catalog.mjs:393 emite só para oferta publicada); mantido o assert negativo de PUBLISHED; adicionado assert de que o kicker 'oferta publicada' não volta por cartão; contraprova test_card_without_price_block_fails. 28 passed.",
+    "estado": "CORRIGIDO"
+   },
+   {
+    "severidade": "MEDIA",
+    "arquivo_linha": "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-hubs/entregas/index.html:69-70 (G02-10)",
+    "acao": "Decisão editorial coberta pelo EXECUTE_NOW da campanha, registrada no commit 36ee299b3: o lead :69 mantém a enumeração dos seis documentos uma vez; :70 reescrito para 'Você passa a ter o documento certo para a decisão, com método, fonte, data e limites declarados e o responsável nomeado.' Nenhum teste pina as duas strings (grep em scripts/tests/data); a dobra de /entregas/ já estava para recaptura.",
+    "estado": "CORRIGIDO"
+   },
+   {
+    "severidade": "BAIXA",
+    "arquivo_linha": "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-hubs/servicos/index.html:189",
+    "acao": "'na estrutura da prancha ao lado' → 'na estrutura da prancha acima' (commit ac437213d).",
+    "estado": "CORRIGIDO"
+   },
+   {
+    "severidade": "BAIXA",
+    "arquivo_linha": "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-hubs (gates pós-build)",
+    "acao": "Sem build:site nesta frente. Na integração, em clone limpo com Node 22: `npm run build:site` e depois test:contact-journeys (jornada avaliacao_imovel em /servicos/#servico-avaliacao), test:deliverables-hub-ui (header do cartão sem kicker), audit:axe (details novo em /servicos/), audit:layout-sitewide e test:lighthouse; anexar saídas à evidência.",
+    "estado": "DEIXADO_PARA_INTEGRACAO"
+   },
+   {
+    "severidade": "N/A",
+    "arquivo_linha": "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-hubs/docs/evidence/inbound-10/cta-audit.json",
+    "acao": "Arquivo sujo revertido com git checkout -- (fora do escopo); árvore limpa.",
+    "estado": "CORRIGIDO"
+   }
+  ],
+  "testes": [
+   {
+    "comando": "python3 -m pytest scripts/site/test_home_conversion_contract.py scripts/site/test_integral_solution_copy.py scripts/site/test_public_control_vocabulary.py scripts/site/test_deliverables_hub.py scripts/site/test_public_ia.py scripts/site/test_hub_link_matrix.py tests/pos-inb-20260911/07 -q",
+    "resultado": "90 passed"
+   },
+   {
+    "comando": "node scripts/commercial/render_public_catalog.mjs --check",
+    "resultado": "PUBLIC_CATALOG_OK internal=54 public=8"
+   },
+   {
+    "comando": "node tests/commercial/test_value_first_copy.mjs",
+    "resultado": "65/65"
+   },
+   {
+    "comando": "node tests/commercial/test_copy_contract.mjs",
+    "resultado": "440/440"
+   },
+   {
+    "comando": "node tests/commercial/test_public_offer_truth.mjs",
+    "resultado": "132/132"
+   },
+   {
+    "comando": "node tests/commercial/test_pricing_policy.mjs",
+    "resultado": "196/196"
+   },
+   {
+    "comando": "npm run test:copy",
+    "resultado": "OK (3 checks)"
+   },
+   {
+    "comando": "npm run test:cta-form-next-state",
+    "resultado": "CTA_FORM_NEXT_STATE_OK routes=31"
+   },
+   {
+    "comando": "node scripts/site/test_private_project_technical_readiness.mjs; npm run test:pos-inb-04; node --test tests/campaigns/orc-b2b-20260913/test_purchase_path.mjs; python3 -m pytest tests/pos-inb-20260911/06/test_url_checklist.py scripts/site/test_credential_registry.py scripts/site/test_design_gates.py -q; npm run test:tools",
+    "resultado": "todos passam (purchase_path 21/21; design_gates 42 passed)"
+   },
+   {
+    "comando": "npm run test:first-fold-contract",
+    "resultado": "FAIL esperado: first_fold_input_changed:entregas/index.html (recaptura deixada para a integração)"
+   },
+   {
+    "comando": "node tests/campaigns/inb_20260911/15/run.mjs",
+    "resultado": "1 finding pré-existente (ownership.changed_outside_owned_trees), idêntico ao ramo antes desta correção"
+   }
+  ],
+  "notas_para_integracao": [
+   "Recapturar a primeira dobra de /entregas/ a partir da ponta 3ec6399dd (sha256 atual de entregas/index.html: 2639fa0477bfd3dc…, diferente do a548d6c5… citado na revisão) com `node scripts/site/measure_first_fold.mjs --write` em árvore limpa; depois `npm run test:first-fold-contract` até 1932/1932.",
+   "Pós-build em clone limpo (Node 22): build:site, test:contact-journeys, test:deliverables-hub-ui, audit:axe, audit:layout-sitewide, test:lighthouse; anexar saídas à evidência da frente.",
+   "A frente tocou, além dos hubs, ferramentas/prontidao-tecnica-obra-privada/index.html e assets/js/private-project-technical-readiness.{js,cjs} (destino do contato da ferramenta → /triagem-tecnica/ sem hash). Se outra frente editar esses arquivos, serializar; verificar na integração que verify_tools_uiux_e2e (test:tools-uiux-e2e) ainda encontra '#cta [data-tool-to-form]' (o atributo foi mantido).",
+   "Registrar no fechamento a decisão G02-09 (kicker por cartão retirado; teste rebaixado de propósito; premissa do diagnóstico corrigida) e a decisão editorial G02-10 (lead enumera uma vez; hero-deliverable sem repetição), ambas nos commits 5e15e3d16 e 36ee299b3.",
+   "Censo CTA --write, approvals e frozen specs não foram recapturados nesta frente."
+  ]
+ },
+ {
+  "frente": "home",
+  "commits_novos": [
+   "64631fd60 fix(home): o botão do chooser-ask emite cta_click em contact_band e nomeia o destino na própria página",
+   "18f59f0fc fix(home): 'Contratos reais' ganha eyebrow de papel e o fecho diz que são contratos de terceiros no PNCP",
+   "9e68fe8c8 fix(home): eyebrow de 'Contratos reais' vira 'Leitura técnica por faixa de valor' para não repetir o fecho pinado"
+  ],
+  "problemas_tratados": [
+   {
+    "severidade": "ALTA",
+    "arquivo_linha": "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-home/index.html:194",
+    "acao": "Anchor #triagem-tecnica do chooser-ask ganhou data-cta-position=\"contact_band\" data-event-name=\"cta_click\" (href mantido). 'contact_band' é a posição que os dois controles removidos já usavam em b369096ed:194-195; event-registry.json não tem enum de cta_position (é envelope_field), e cta_click é evento admitido. O censo passa a contá-lo como declarado (ramo `position`, audit:128) com next-state genérico e evento cta_click — nenhum estado sem resolução.",
+    "estado": "CORRIGIDO"
+   },
+   {
+    "severidade": "MEDIA",
+    "arquivo_linha": "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-home/index.html:330-332",
+    "acao": "Eyebrow passou de 'Três contratos publicados no PNCP' para 'Leitura técnica por faixa de valor' (rótulo de papel, sem bastidor, sem palavra repetida na frase seguinte nem no fecho). Não usei 'Contexto de mercado' no eyebrow porque colidiria com o literal pinado do fecho. Frase :332 ajustada para 'Três contratos publicados no PNCP, de portes muito diferentes: o que cada um coloca em jogo tecnicamente.' h2 'Contratos reais, diferentes portes' preservado.",
+    "estado": "CORRIGIDO"
+   },
+   {
+    "severidade": "MEDIA",
+    "arquivo_linha": "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-home/index.html:353 (pw__base)",
+    "acao": "Fecho recomposto: '… Fonte: PNCP, consulta pública. Contratos conferidos em 21/08/2026. Contexto de mercado. São contratos de terceiros publicados no PNCP, não trabalhos da CONFENGE.' Literal pinado 'Contexto de mercado.' preservado; não repete a frase do <dd> da stat-row. test_integral_solution_copy e test_public_control_vocabulary passam.",
+    "estado": "CORRIGIDO"
+   },
+   {
+    "severidade": "BAIXA",
+    "arquivo_linha": "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-home/index.html:96 e :194",
+    "acao": "Link do chooser-ask renomeado para 'Descrever no próximo passo, nesta página' (destino #triagem-tecnica); o do herói (:96, /triagem-tecnica/) mantém 'Descrever a minha situação'. Nomes acessíveis agora distintos.",
+    "estado": "CORRIGIDO"
+   },
+   {
+    "severidade": "BLOQUEANTE",
+    "arquivo_linha": "data/commercial/cta-form-next-state.v1.json:37-38 · docs/commercial/cta-form-next-state-inventory.json · tests/commercial/test_cta_form_next_state.mjs:24,216-217",
+    "acao": "Censo derivado agora é 196 (era 195 antes do fix ALTA; pinado 198). Saíram: WhatsApp e mailto de contact_band e o link inline '#contato' do chooser-ask; entrou o botão #triagem-tecnica em contact_band. A integração ajusta expected_declared_ctas=196 com nota datada, roda `npm run report:cta-form-next-state` (regrava data/ e docs/ JSONs; a comparação deepEqual :216-217 não chegou a rodar porque o teste aborta na contagem) e reexecuta até CTA_FORM_NEXT_STATE_OK. Bloqueia `npm test` via pretest.",
+    "estado": "DEIXADO_PARA_INTEGRACAO"
+   },
+   {
+    "severidade": "BLOQUEANTE",
+    "arquivo_linha": "data/commercial/first-fold-measurements.v1.json (input_hashes de index.html) · tests/commercial/test_first_fold_contract.mjs:401-412",
+    "acao": "Só a evidência está desatualizada: test_home_first_fold.mjs, test_ui_geometry e font_fallback passam antes e depois; as duas checks que falham são first_fold_input_changed:index.html e html_bytes_match (hash do index.html mudou 4373fd77… → 6fd3039b… por causa das correções). Integração, após rebase, com árvore limpa: `CHROME_PATH=$(node scripts/site/resolve_chrome.mjs) npm run measure:first-fold -- --write`, commit do JSON; depois build em clone limpo e `measure_first_fold.mjs --artifact` (folga de 16 px em 390x844, CNPJ vira token opaco).",
+    "estado": "DEIXADO_PARA_INTEGRACAO"
+   },
+   {
+    "severidade": "BAIXA",
+    "arquivo_linha": "assets/home-10x.css:126-129 (.conduct) e :260,325-326 (.trust-proof-list)",
+    "acao": "CSS morto após a troca do <ol> por <p>; CSS congelado nesta campanha, não tocado. Registrado em notas_para_integracao para a próxima recaptura de CSS.",
+    "estado": "DEIXADO_PARA_INTEGRACAO"
+   },
+   {
+    "severidade": "BAIXA",
+    "arquivo_linha": "ramo campaign/pos-redesign-fechamento-20260918-home (base b369096ed) vs campanha 8b3112f4c",
+    "acao": "Não rebaseei (reescrita de ramo fora do escopo, sem push). A integração faz o rebase sobre 8b3112f4c ANTES de measure:first-fold --write, para o commit_sha gravado ser alcançável do ramo que vai a merge (merge commit, não squash).",
+    "estado": "DEIXADO_PARA_INTEGRACAO"
+   }
+  ],
+  "testes": [
+   {
+    "comando": "python3 -m pytest scripts/site/test_home_conversion_contract.py scripts/site/test_brand_contract.py scripts/site/test_home_real_contract_case.py scripts/site/test_design_gates.py scripts/site/test_integral_solution_copy.py scripts/site/test_public_control_vocabulary.py scripts/site/test_deliverables_hub.py -q",
+    "resultado": "104 passed (antes e depois)"
+   },
+   {
+    "comando": "npm run test:form-funnel",
+    "resultado": "FORM_FUNNEL_OK (SITUATION_COVERAGE_OK options 13, situations 8)"
+   },
+   {
+    "comando": "node scripts/site/test_ui_geometry.mjs",
+    "resultado": "All UI geometry tests passed"
+   },
+   {
+    "comando": "node scripts/site/test_home_first_fold.mjs",
+    "resultado": "HOME_FIRST_FOLD_OK"
+   },
+   {
+    "comando": "node scripts/site/test_font_fallback_metrics.mjs",
+    "resultado": "FONT_FALLBACK_METRICS_OK drift 0"
+   },
+   {
+    "comando": "node tests/commercial/test_cta_form_next_state.mjs",
+    "resultado": "FAIL esperado, deixado para integração: declared CTAs 196 !== 198 (baseline em b2e9235aa: 195 !== 198)"
+   },
+   {
+    "comando": "node tests/commercial/test_first_fold_contract.mjs",
+    "resultado": "FAIL esperado, deixado para integração: 1930/1932; first_fold_input_changed:index.html e html_bytes_match (hash 4373fd77… no baseline → 6fd3039b… após correções); geometria passa"
+   }
+  ],
+  "notas_para_integracao": [
+   "Ordem: rebase do ramo home sobre 8b3112f4c → npm run report:cta-form-next-state (expected_declared_ctas=196 com nota datada: saíram WhatsApp/mailto contact_band e link inline #contato do chooser-ask, que repetiam os canais de #triagem-tecnica/#contato a poucos px; entrou o botão #triagem-tecnica em contact_band) → measure:first-fold --write com árvore limpa → build:site em clone limpo + measure_first_fold.mjs --artifact → test_first_fold_contract e test:cta-form-next-state verdes.",
+   "CSS morto em assets/home-10x.css (.conduct :126-129, .trust-proof-list :260,325-326): sem consumidor em HTML publicado; audit:css-usage não enumera essa folha. Remover na próxima recaptura de CSS seguindo approvals.json → frozen specs → primeira dobra → baselines, fora desta frente.",
+   "Novo controle do chooser-ask (data-cta-position=contact_band, cta_click, href #triagem-tecnica) cai no next-state genérico do audit (stage compare/commitment low); se a integração preferir que ele entre no ramo formAnchor, o href teria de ser #contato como em index.html:368 — não fiz porque a tarefa manteve o href.",
+   "Nenhuma rota B2G congelada, styles*.css ou arquivo de outra frente foi tocado; diff da frente continua restrito a index.html (3 commits pequenos, atribuição Co-Authored-By em todos)."
+  ]
+ },
+ {
+  "frente": "svc",
+  "commits_novos": [
+   "d25ace4b7 fix(compatibilizacao): nota demonstrativa do registro dita uma vez, antes dos dois artigos, com link profundo por apontamento",
+   "a0f4c0445 fix(analytics): CTAs de âncora de quantitativos e compatibilização carregam asset_id e route_family dos canais da mesma rota",
+   "984d27c74 fix(quantitativos): rótulo do passo 06 vem do descritor e é o mesmo em derive, consumption, fixture e renderizador",
+   "14aa802fd test(site): hub UI cobre que cada CTA de âncora das rotas privadas emite exatamente um cta_click atribuível"
+  ],
+  "problemas_tratados": [
+   {
+    "severidade": "ALTA",
+    "arquivo_linha": "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-svc/scripts/coordination/interference_register.mjs (renderRegisterNoteHtml/renderRegisterHtml) e compatibilizacao-projetos-engenharia/index.html:122-168",
+    "acao": "renderRegisterHtml emite uma vez, dentro do slot e antes dos dois artigos, a nota 'Os apontamentos abaixo saem do recorte de banheiro demonstrativo (CF-GEO-01, CF-INFO-01). Não é obra de cliente e não é projeto executivo.' com link profundo /casos/demonstrativo-projeto-privado/#<id> por apontamento (piloto_finding_href reaproveitado via pilotoFindingHref, sem código morto); o slot passou a envolver <div class=\"grid-2\"> para a nota não virar célula da grade (conferido por sonda: em 1200px nota com 1123px de largura e os dois artigos lado a lado no mesmo top; em 390px empilhados). Página regenerada por compose_purchase_proof; testes novos em tests/coordination/test_page_contract.mjs: slot embarcado byte-igual ao renderizador e cada data-finding-id com rótulo demonstrativo + link para o piloto, nota antes do primeiro artigo e apenas um kicker; test_register_status passa a exigir os dois links profundos na nota.",
+    "estado": "CORRIGIDO"
+   },
+   {
+    "severidade": "MEDIA",
+    "arquivo_linha": "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-svc/quantitativos-orcamento-obras/index.html:75,190 e compatibilizacao-projetos-engenharia/index.html:75,193",
+    "acao": "Acrescentados data-asset-id e data-route-family (ordem alfabética de atributos) aos quatro CTAs de âncora com os mesmos valores dos canais wa/mailto/tel da rota: private_quantities_budget_route_v1 / private-engineering-quantities-budget e engineering_coordination_clash_route_v1 / engineering-projects-coordination-clash. A compatibilização tinha o mesmo defeito parcial (body sem data-asset-id → asset_id vazio no cta_click) e foi corrigida junto. Sonda: os quatro emitem 1 cta_click com cta_id, route_family e asset_id corretos.",
+    "estado": "CORRIGIDO"
+   },
+   {
+    "severidade": "MEDIA",
+    "arquivo_linha": "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-svc/scripts/site/test_deliverables_hub_ui.mjs (bloco ANCHOR_CTA_CASES)",
+    "acao": "Parte 1 (teste novo): caso no hub UI que, para quantitativos e compatibilização, clica em frame-*-hero e frame-*-inline com preventDefault e diff do dataLayer, exigindo exatamente 1 cta_click com cta_id próprio, route_family e asset_id iguais aos canais da rota, page_path correto e sem chave de PII. Passa agora neste worktree (script.js já embarca o manipulador [data-event-name]; a ressalva sobre nav.js da frente analytics não se aplicou) e foi validado por mutação (remover um data-asset-id → asset_id_mismatch, exit 1). Parte 2 (visitor_effort base vs candidato gravado na evidência e gates de navegador em CI com _site) fica para a integração.",
+    "estado": "DEIXADO_PARA_INTEGRACAO"
+   },
+   {
+    "severidade": "BAIXA",
+    "arquivo_linha": "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-svc/scripts/demonstrative/private_project/derive.py:606, data/demonstrative/private-project-pilot/consumption.v1.json:375, tests/intake/fixtures/quantity-takeoff-trail.fixture.json:37, quantitativos-orcamento-obras/sample-trail.mjs",
+    "acao": "Rótulo 'O que a revisão mudou' nasce em derive.py; consumption.v1.json regenerado pelo comando canônico npm run generate:private-project-proof (único diff: o label); fixture alinhada; o renderizador lê step.label (stepHeading) com STEP_LABELS só como reserva. Teste em tests/intake/test_quantity_takeoff_path.mjs pina que o h3 do passo 06 vem do descritor.",
+    "estado": "CORRIGIDO"
+   },
+   {
+    "severidade": "BAIXA",
+    "arquivo_linha": "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-svc/quantitativos-orcamento-obras/index.html:114 e :122",
+    "acao": "Aceito como o revisor propôs ('aceitável no fechamento'). Não encurtado: a cauda do disclaimer da trilha ('não representa cliente, não é preço da CONFENGE e não é SINAPI real') é ressalva material que a frente deve preservar, e cortá-la exigiria editar derive.py e regenerar consumption.v1.json para ganhar poucos px de espaçamento; os testes pinam apenas 'Amostra demonstrativa' (tests/ativacao_20260912/03/test_presentation_and_sharing.py:220,234; tests/intake/test_quantity_takeoff_path.mjs:161), então a proteção real da cauda é editorial, não de teste.",
+    "estado": "REJEITADO_COM_MOTIVO"
+   }
+  ],
+  "testes": [
+   {
+    "comando": "node --test tests/intake/*.mjs tests/pos-inb-20260911/02/*.mjs tests/campaigns/orc-b2b-20260913/*.mjs tests/coordination/*.mjs",
+    "resultado": "pass 103 / fail 0 (inclui os 3 testes novos de coordination e o assert novo de intake)"
+   },
+   {
+    "comando": "python3 -m pytest tests/ativacao_20260912/03 scripts/site/test_integral_solution_copy.py -q",
+    "resultado": "21 passed"
+   },
+   {
+    "comando": "CHROME_PATH=~/.cache/ms-playwright/chromium-1234/chrome-linux64/chrome node tests/ativacao_20260912/03/test_social_image_decode.mjs",
+    "resultado": "OK (sem CHROME_PATH o teste aborta por asserção de ambiente, já na baseline)"
+   },
+   {
+    "comando": "npm run test:cta-form-next-state",
+    "resultado": "CTA_FORM_NEXT_STATE_OK routes=31"
+   },
+   {
+    "comando": "CHROME_PATH=... DELIVERABLES_HUB_REPORT=... node scripts/site/test_deliverables_hub_ui.mjs (servido da fonte, _site ausente)",
+    "resultado": "ok=true, 4 casos anchor_cta_click sem erros, hardAxe vazio; mutação (remover data-asset-id do hero de quantitativos) → asset_id_mismatch, exit 1"
+   },
+   {
+    "comando": "npm run test:deliverables-hub; node scripts/site/build_script_modules.mjs (--check)",
+    "resultado": "27 passed; CHECK_OK (script.js não tocado)"
+   },
+   {
+    "comando": "npm run test:attribution-allowlist; npm run test:analytics; npm run test:commercial-event; pytest tests/pos-inb-20260911/08",
+    "resultado": "todos OK (allowlist OK, ATTRIBUTION_OK, COMMERCIAL_EVENT_PRODUCER_OK passed=13, 3 passed)"
+   },
+   {
+    "comando": "python3 -m pytest tests/ativacao_20260912/03 -q e node --test (baseline antes das correções)",
+    "resultado": "verde na baseline; nenhuma regressão herdada da produção 9d03623fd"
+   }
+  ],
+  "notas_para_integracao": [
+   "Sem push, sem build:site, sem recaptura: compatibilizacao-projetos-engenharia/index.html e quantitativos-orcamento-obras/index.html mudaram (nota do registro e atributos dos CTAs); rodar na integração a cadeia de recapturas do fechamento (first-fold, approvals, frozen specs, censo CTA --write) e gravar visitor_effort base vs candidato na evidência da campanha (metade pendente do apontamento MEDIA 2).",
+   "O slot <!--pos-inb-02:coord-register--> agora envolve <div class=\"grid-2\">; qualquer re-execução de compose_purchase_proof.mjs / generate:private-project-proof regenera o mesmo HTML (byte-igual, coberto por teste). Não reverter o wrapper para dentro da grade: a nota viraria célula em >=700px.",
+   "Teste novo do hub UI: com _site presente ele audita o artefato; sem _site serve a fonte. Precisa de CHROME_PATH/Chromium (resolve_chrome.mjs acha o do Playwright). Porta 8795 é fixa: rodar em série com outras frentes que usem o mesmo harness (colidiu com outro processo durante esta sessão).",
+   "A ressalva do enunciado sobre nav.js da frente analytics não se aplicou: o script.js versionado já registra [data-event-name] e os quatro CTAs de âncora emitem cta_click atribuível neste worktree. Se a frente analytics alterar attrsFromEl ou namedAllowed, o caso novo acusa.",
+   "Gates de navegador (axe, ui_geometry, contact_journeys, site-excellence) continuam a exigir _site e CI verde antes do merge; não executados aqui além do hub UI (hardAxe vazio nas rotas medidas)."
+  ]
+ },
+ {
+  "frente": "analytics",
+  "commits_novos": [
+   "2d990d6ec fix(analytics): header-cta e ancoras de captura emitem cta_click pelo alvo real; envio de formulario leva destination_type=form",
+   "70e3ae806 fix(revops): analytics-agg conta em cta_clicks so destinos de intencao; navegacao em cta_nav_clicks e cta_totals por destino",
+   "1dad38fc3 fix(revops): closed-loop conta cta_click sem destination_type como legado rotulado (legacy_unclassified)",
+   "883884e38 test(analytics): gate de semantica cobre header-cta com ancora, herois sem padrao, submit de ferramenta, mailto do rodape e PII em ?origem=; registrado no grafo de afetados e no npm test",
+   "cf904bbc3 fix(analytics): ancora de captura so pelo alvo direto; involucro como <main id=conteudo> (skip link) nunca vira cta_click"
+  ],
+  "problemas_tratados": [
+   {
+    "severidade": "ALTA",
+    "arquivo_linha": "js/modules/nav.js (CAPTURE_HASH/isCaptureHash, routeCta, isCaptureAnchorCta, listener a[href^='#']); scripts/site/test_event_semantics.mjs",
+    "acao": "isCaptureHash classifica a ancora pelo alvo real (form, secao data-section-archetype=cta_formal, ou filho direto/.container com form/.capture-grid/.contact-primary), alem do padrao historico; involucros (main/body/role=main) e secoes de prosa nunca sao captura. routeCta aceita header-cta com destino route/form/anchor e emite destination_type conforme o href; isCaptureAnchorCta nao exige data-cta-id; listener em a[href^='#'] para a.header-cta e toda ancora de captura sem data-event-name. Sonda real no gate: header-cta em /quantitativos-orcamento-obras/ (#triagem-quantitativos), /projetos-complementares-engenharia/ (#escopo-projeto), /inspecao-diagnostico-edificacoes/ (#contato-inspecao), /compatibilizacao-projetos-engenharia/ (#pedido-compatibilizacao), /ferramentas/prontidao-tecnica-obra-privada/ (#diagnostico) -> exatamente 1 cta_click destination_type=form; frame-elaboration-hero e partner-hero-describe -> 1 cta_click form com cta_id proprio; botao #triagem-quantitativos sem data-cta-id -> form; sumario #diagnostico em /conteudos/ e skip-link #conteudo -> nada; header-cta de ferramenta com /triagem-tecnica/ -> route.",
+    "estado": "CORRIGIDO"
+   },
+   {
+    "severidade": "ALTA",
+    "arquivo_linha": "netlify/functions/lib/analytics-agg.cjs (bloco cta_click); tests/attribution/test_source_to_service.mjs",
+    "acao": "daily.cta_clicks e funnel_by_path.cta_click contam so destination_type em {form, whatsapp, email, tel} (CTA_INTENT_DESTINATIONS exportado); route/anchor/external vao para daily.cta_nav_clicks e funnel_by_path.cta_nav_click; sem destination_type conta como intencao legada e rotulada (cta_clicks_legacy_unclassified / cta_click_legacy_unclassified). Chave de cta_totals passa a rota|cta|destino, separando o header de navegacao (cta_id herdado pillar_hero) do CTA de captura na mesma rota B2G. Teste unitario com aggregateEvents cobre route vs form na mesma rota pilar, link de prosa a /triagem-tecnica/ e legado. ops/index.html so serializa cta_totals (sem split da chave); test:ops-docs e test:ops-auth passam.",
+    "estado": "CORRIGIDO"
+   },
+   {
+    "severidade": "ALTA (derivado, fora da lista)",
+    "arquivo_linha": "netlify/functions/lib/analytics-agg.cjs (bloco MONEY_ASSET_EVENT_NAMES em funnel_by_path)",
+    "acao": "Dobra pre-existente: cta_click na rota de /ferramentas/diagnostico-defesa-margem/ era somado duas vezes em funnel_by_path (bloco cta_click + bloco de ativo de dinheiro). Guard canonical !== 'cta_click' no bloco do ativo; summarizeMoneyAssetLoop usa contadores proprios e nao muda. Altera a serie historica top_paths dessa rota (passa a contar 1x).",
+    "estado": "CORRIGIDO"
+   },
+   {
+    "severidade": "MEDIA",
+    "arquivo_linha": "js/modules/form.js:469; js/modules/nav.js (ramo nomeado, isFormSubmitCta); assets/js/conversion-journey.js:190/198; netlify/functions/lib/closed-loop.cjs visitorStageOf; data/revops/closed-loop-funnel.v1.json; netlify/functions/lib/event-registry.json",
+    "acao": "Emissores: form.js preenche destination_type='form' no submit; nav.js preenche 'form' em button[type=submit]/input[type=submit]/[data-tool-to-form] ou elemento sem href dentro de form (sonda real: submit de /ferramentas/diagnostico-defesa-margem/ -> cta_click form cta_id=segunda-leitura-contrato); conversion-journey decide explicitamente (segunda_leitura=form, nenhuma=anchor). Consumidor: visitorStageClassification devolve {stage, classification}; cta_click sem destination_type entra no estagio 'cta' com visitor_stage_classification=legacy_unclassified e counts.cta_legacy_unclassified expoe a quantidade; outbound_click sem tipo continua fora. Contrato ganha legacy_unclassified_events=[cta_click] e nota atualizada; registry declara destination_type na semantica e closed-loop.cjs como consumer. test_closed_loop cobre classificacao, admissao rotulada e contagem (view=6 cta=4 legacy=1).",
+    "estado": "CORRIGIDO"
+   },
+   {
+    "severidade": "BAIXA",
+    "arquivo_linha": "scripts/site/affected_graph.mjs; package.json (script test)",
+    "acao": "Entrada test:event-semantics com producers (test_event_semantics.mjs, resolve_chrome.mjs, nav.js, analytics.js, form.js, script.js e os index.html das rotas sondadas) e surfaces; incluida no agregado npm test apos test:deliverables-hub-ui. selectAffected(['js/modules/nav.js']) e (['js/modules/analytics.js']) selecionam test:event-semantics (verificado); test_affected_selector passa.",
+    "estado": "CORRIGIDO"
+   },
+   {
+    "severidade": "BAIXA",
+    "arquivo_linha": "scripts/site/test_event_semantics.mjs (mailto do rodape; ?origem= com PII); js/modules/nav.js:579-580",
+    "acao": "(a) Caso home_footer_mailto_no_address_in_payload: clique no mailto do rodape da home (texto = endereco) -> 1 email_click sem cta_label e sem valor com '@'. (b) A queda para searchParams/hashParams 'origem' passou a usar sanitizeAttr (antes o hidden recebia o valor cru); caso origem_query_pii_dropped: /?origem=foo%40bar.com#contato mantem '/' no hidden, nada com '@' no sessionStorage nem no dataLayer.",
+    "estado": "CORRIGIDO"
+   }
+  ],
+  "testes": [
+   {
+    "comando": "npm run test:event-semantics",
+    "resultado": "PASS 34/34 (EVENT_SEMANTICS ok:true)"
+   },
+   {
+    "comando": "npm run test:analytics",
+    "resultado": "PASS (third-party, pii, editorial, event dictionary, attribution incl. novo teste cta_totals)"
+   },
+   {
+    "comando": "npm run test:commercial-event",
+    "resultado": "PASS (13)"
+   },
+   {
+    "comando": "npm run test:attribution-allowlist",
+    "resultado": "PASS"
+   },
+   {
+    "comando": "node --test scripts/revops/test_closed_loop.mjs scripts/revops/test_privacy.mjs",
+    "resultado": "PASS 2/2 (inclui visitor_stage_legacy_unclassified, legacy_cta_click_admitted_with_label, cta_stage_only_intent_destinations view=6 cta=4 legacy=1)"
+   },
+   {
+    "comando": "npm run test:deliverables-hub-ui (porta 8795, sozinho)",
+    "resultado": "PASS ok:true"
+   },
+   {
+    "comando": "node scripts/site/test_money_asset_page_events.mjs",
+    "resultado": "PASS MONEY_ASSET_PAGE_EVENTS_OK"
+   },
+   {
+    "comando": "npm run test:script-modules",
+    "resultado": "PASS CHECK_OK (script.js regenerado com build_script_modules.mjs --write)"
+   },
+   {
+    "comando": "node scripts/site/test_affected_selector.mjs",
+    "resultado": "PASS AFFECTED_SELECTOR_OK"
+   },
+   {
+    "comando": "npm run test:ops-docs; npm run test:ops-auth; npm run test:revops; npm run test:pseo-attribution; npm run test:nav; npm run test:form-funnel; npm run test:cta-whatsapp; npm run test:conversion",
+    "resultado": "PASS (todos exit 0)"
+   }
+  ],
+  "notas_para_integracao": [
+   "script.js regenerado (minificado) em 2d990d6ec e cf904bbc3; nao houve build:site nem recaptura de hashes. As seis rotas B2G congeladas, styles*.css e HTML nao foram tocados; o comportamento novo (cta_click em ancoras #captura-pilar sem data-cta-id, cta_id herdado pillar_hero) e so de script.js.",
+   "Semantica do contrato closed-loop mudou (cta_click sem destination_type agora conta no estagio cta rotulado como legacy_unclassified; novo campo legacy_unclassified_events) mantendo schema_version 1.1.0, que test_closed_loop.mjs pina. Decidir na integracao se cabe 1.2.0 (ajustar o pin no teste e docs/revops).",
+   "analytics-agg: series historicas mudam. daily.cta_clicks e funnel_by_path.cta_click deixam de incluir navegacao (novos cta_nav_clicks/cta_nav_click e *_legacy_unclassified); chave de cta_totals passa de rota|cta para rota|cta|destino; a rota /ferramentas/diagnostico-defesa-margem/ deixa de dobrar cta_click em funnel_by_path. ops/index.html apenas serializa o objeto, sem quebra.",
+   "Snapshots/baselines de evidencia que incluam counts do closed-loop (counts.cta_legacy_unclassified novo) ou cta_totals devem ser regerados na integracao, se existirem.",
+   "npm run test:cta-whatsapp reescreve docs/evidence/inbound-10/cta-audit.json (revertido aqui); npm run test:revops deixou data/revops/gsc/imports/import-2026-07-28.json untracked (arquivo ja existia antes desta sessao, nao commitado, nao removido).",
+   "Item (5b) da revisao (test de ?origem= com PII) foi tratado no gate de semantica e nao em test_pseo_attribution; a correcao em nav.js:579 sanitiza a queda para a query crua, alem da defesa ja existente no servidor."
+  ]
+ },
+ {
+  "frente": "lead",
+  "commits_novos": [
+   "9218f6ab9 fix(lead): replay pré-Turnstile só para chaves com a forma emitida pelo front",
+   "f0281779c fix(lead): o prazo do canal cobre o corpo da resposta e o siteverify passa a ter prazo",
+   "cdd6e4500 docs(ops): §2 atribui a mutação DNS ao integrador da campanha, registra DMARC real (p=none) e a aritmética honesta do POST",
+   "fa551a67e docs(conteudo): inventário antes/depois do contato reflete a cópia de tempo esgotado com 'o mesmo pedido, sem duplicar'",
+   "080c6c7f7 fix(lead): prazos de entrega no relógio monotônico, http do ntfy preservado e forma do fallback da chave alargada"
+  ],
+  "problemas_tratados": [
+   {
+    "severidade": "ALTA",
+    "arquivo_linha": "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-lead/netlify/functions/lead.cjs:42-53 (CLIENT_REPLAY_KEY) e :319-352 (bloco pré-Turnstile); scripts/site/synthetic_lead_probe.mjs:16; docs/ops/PRODUCTION-PROBE-INVENTORY.md:83",
+    "acao": "O replay antes do siteverify passa a exigir que a chave explícita tenha a forma emitida pelo próprio front (allowlist de forma, não de comprimento: fe-/triage- + uuid v4, fallback getRandomValues 4 grupos base36, fallback Date.now(36)+Math.random(36)); qualquer outra chave explícita (synthetic-probe-<ts>, fe-<ts>, harness) fica atrás do Turnstile. Não foi usado regex só de uuid v4 porque js/modules/form.js:119/122/583 e assets/js/adaptive-intake.js:256 emitem fallbacks não-uuid e o 403-após-timeout voltaria para esses navegadores. Probe passa a usar synthetic-probe-<randomUUID> (o probe nunca dependeu do caminho pré-verify: autentica com LEAD_PROBE_SECRET e o Turnstile é pulado). Comentário do bloco reescrito (forma da chave; 'até duas leituras do store' em vez de 'single store read'). Evidência da vulnerabilidade: repro_oracle.mjs da própria revisão; os novos casos são guardas de regressão: 4 chaves estranhas + token consumido → 403 anti_abuse com siteverify chamado e sem token → 403; 5 formas do front replicam 200 idempotent sem siteverify (idem_pre_verify_foreign_key_stays_behind_turnstile, idem_pre_verify_replays_every_front_shape). Constante exportada (exports.CLIENT_REPLAY_KEY) para o teste. form.js não foi tocado, logo script.js não precisou de regeneração (test:script-modules CHECK_OK).",
+    "estado": "CORRIGIDO"
+   },
+   {
+    "severidade": "ALTA",
+    "arquivo_linha": "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-lead/netlify/functions/lib/lead-delivery.cjs:57-115 (fetchWithDeadline com parse:'json' e corrida contra a deadline) e deliverResendEmail",
+    "acao": "fetchWithDeadline ganha opção { parse: 'json' } e consome o corpo dentro do prazo, com o AbortController vivo e em Promise.race com a mesma deadline (o limite vale mesmo se o stream ignorar o signal); devolve {ok,status,data}. deliverResendEmail usa res.data. Reproduzido: com o módulo anterior (git stash do lead-delivery.cjs) a suíte trava (timeout 25 s, exit 124) no novo caso; com a correção termina no orçamento. Testes novos: delivery_body_hang_within_budget em duas variantes (json() que rejeita no abort e json() que nunca resolve) → 201, email_status=error, reason=timeout, sem provider_id, elapsed < 1500 ms com orçamento 150 ms. Deadlines passam a usar performance.now() (monotonicNow) porque um salto do relógio de parede de +46 s foi medido neste WSL2 (monotônico avançou 50 ms) e fazia o orçamento expirar cedo; os testes medem com o mesmo relógio.",
+    "estado": "CORRIGIDO"
+   },
+   {
+    "severidade": "MEDIA",
+    "arquivo_linha": "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-lead/docs/ops/EXTERNAL-ACTIONS.md:56-66 (§2, 'Correção 2026-09-18')",
+    "acao": "§2 diz agora que a criação do TXT resend._domainkey e a reverificação no Resend foram executadas pelo integrador da campanha POS-REDESIGN-FECHAMENTO-20260918 (autorização EXECUTE_NOW de 2026-09-18), não pela frente lead, que só documentou e não executou envio; aponta para docs/campaigns/design-institucional/fechamento/evidence/g03-dns-resend.json (gravada pela integração; hoje existe em pos-redesign-20260918 commit c28249b73, não neste ramo). Não foi gravada evidência nova nesta frente (sem acesso ao host/Resend a partir daqui).",
+    "estado": "CORRIGIDO"
+   },
+   {
+    "severidade": "MEDIA",
+    "arquivo_linha": "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-lead/docs/ops/EXTERNAL-ACTIONS.md:40 (título §2), :72-81 (pendências) e :86 (linha DMARC)",
+    "acao": "Consultado de novo por DoH 1.1.1.1 (cloudflare-dns.com/dns-query?name=_dmarc.confenge.com.br&type=TXT, 2026-09-18 14:20 UTC): TXT = \"v=DMARC1; p=none\", sem rua. Tabela registra o estado real com data e método, valor recomendado (p=quarantine + rua) separado, 'não alterado nesta entrega'; título do §2 atualizado; pendência 2 'elevar para p=quarantine com rua' aberta como decisão do fundador, com a ressalva de confirmar alinhamento SPF/DKIM do Hostinger (MX do apex) antes de elevar.",
+    "estado": "CORRIGIDO"
+   },
+   {
+    "severidade": "MEDIA",
+    "arquivo_linha": "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-lead/docs/ops/ENV-VARS.md:22 e docs/ops/LEAD-HANDLING.md:92-103; netlify/functions/lib/lead-delivery.cjs (verifyTurnstile)",
+    "acao": "Documentado o pior caso somado com honestidade: siteverify até 5 s + store + handoff até 8 s + entrega até 5 s + update ≈ 18 s, acima dos 15 s do navegador; o ciclo fecha pelo reenvio com a mesma chave (recibo antes do Turnstile), não por garantia de 201 a tempo; um único canal lento cabe no orçamento. Ação de código de baixo risco: verifyTurnstile passa por fetchWithDeadline (antes sem prazo algum e antes do persist; timeout → 403 anti_abuse com turnstile_timeout/turnstile_unreachable, o front já reseta o widget). Avaliado e REJEITADO mover deliverAll para depois do 201: o handler devolve o objeto de resposta a runtime/server.mjs sem waitUntil (trabalho após o return não roda) e o corpo do 201 deriva email_status/notify_status e status (persisted_notified vs persisted) de deliverAll — contrato cobrado por delivery_hang_status (test_lead_function.mjs:1463) e email_provider_id_status. Avaliado e NÃO reduzido o default de CONFENGE_INBOUND_TIMEOUT_MS: o requeue do handoff é manual (ops requeue_inbound com dry_run/aprovação), então um handoff perdido custa mais que um reenvio do visitante; motivo registrado em ENV-VARS. Outros chamadores de verifyTurnstile verificados: só market-answer-intake.cjs (switch só em .ok); test:market-answers e test:revops passam.",
+    "estado": "CORRIGIDO"
+   },
+   {
+    "severidade": "BAIXA",
+    "arquivo_linha": "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-lead/docs/campaigns/design-institucional/conteudo/contato-depois.md:31",
+    "acao": "Linha 'tempo esgotado' passa a declarar como 'depois' a string atual com '(o mesmo pedido, sem duplicar)', referência js/modules/form.js:556 (leftTheBrowser cobre também receipt_unconfirmed), origem da mudança (G03-03) e a âncora de teste (test_mv03_adaptive_intake). A cópia não foi revertida: o parêntese é coerente com o replay idempotente. As referências de linha das linhas 30 e 32 (543/559/602) também estão defasadas (hoje 544/573/617) mas pertencem ao inventário da frente conteúdo e não foram alteradas.",
+    "estado": "CORRIGIDO"
+   },
+   {
+    "severidade": "BAIXA",
+    "arquivo_linha": "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-lead/netlify/functions/lead.cjs:319-352 (comentário) e netlify/functions/lib/lead-delivery.cjs (withBackoff/failureReason/failureHttp)",
+    "acao": "(a) Escolhido registrar o trade-off no comentário: getStore e a política de store ficam antes do Turnstile porque o replay precisa do store; um POST não autenticado vê 503 store_unavailable em vez de 403 quando o store cai, o que revela só degradação do endpoint, nunca um registro. Mover o getStore exigiria refatorar lead.cjs:181-241 sob test:lead-store-production — não vale a pena em BAIXA. (b) 'single store read' corrigido para 'at most two store reads (idem map, then deterministic lead_id; no retry loop)'. (c) withBackoff preserva o último HTTP real quando a deadline expira depois de uma resposta de erro: reason=timeout_after_http e http=<último> (http guardado só no canal e-mail, delivery.email.http; ntfy passa a definir err.status). Teste delivery_timeout_after_http_keeps_last_status (500 a 120 ms, orçamento 150 ms → reason=timeout_after_http, http=500).",
+    "estado": "CORRIGIDO"
+   }
+  ],
+  "testes": [
+   {
+    "comando": "node scripts/site/test_lead_function.mjs",
+    "resultado": "LEAD_FUNCTION_OK {tests:103} — 5 execuções consecutivas verdes após mover as medições para performance.now(); antes disso 3 falhas intermitentes causadas por salto de +46 s do relógio de parede do WSL2 (medido: wall +46038 ms vs monotônico 50 ms), não pelo código"
+   },
+   {
+    "comando": "npm run test:lead-function",
+    "resultado": "LEAD_FUNCTION_OK {tests:103}"
+   },
+   {
+    "comando": "npm run test:inbound-handoff",
+    "resultado": "INBOUND_HANDOFF_OK {tests:31}"
+   },
+   {
+    "comando": "npm run test:lead-store-production",
+    "resultado": "HOST_OWNED_STORAGE_TESTS_OK"
+   },
+   {
+    "comando": "npm run test:ops-auth",
+    "resultado": "OPS_AUTH_MATRIX_OK"
+   },
+   {
+    "comando": "npm run test:script-modules",
+    "resultado": "build_script_modules: CHECK_OK (form.js não alterado; script.js já continha a string nova)"
+   },
+   {
+    "comando": "npm run test:form-funnel",
+    "resultado": "FORM_FUNNEL_OK"
+   },
+   {
+    "comando": "node --test scripts/site/test_money_asset_canary_e2e.mjs scripts/site/test_xray_turnstile_e2e.mjs",
+    "resultado": "tests 2, pass 2, fail 0"
+   },
+   {
+    "comando": "node --test tests/intake/test_mv03_adaptive_intake.mjs",
+    "resultado": "pass 17, fail 0"
+   },
+   {
+    "comando": "npm run test:ops-docs; npm run test:env-example; npm run test:market-answers; npm run test:revops; npm run test:nurture; npm run test:secrets-scan; npm run test:external-runtime",
+    "resultado": "todos rc=0 (OPS_DOCS_HONESTY_OK, ENV_EXAMPLE_HONESTY_OK, SECRETS_SCAN_OK, EXTERNAL_RUNTIME_MODULES_OK); efeitos colaterais de test:market-answers/test:revops em lkg.json, MARKET_ANSWER_CANARY_STATUS.* e import-2026-07-28.json revertidos/removidos"
+   },
+   {
+    "comando": "tests/offers/test_checkout_negatives.mjs, tests/offers/test_radar_decisorio_params.mjs, scripts/site/test_money_asset_lead.mjs, scripts/site/test_money_asset_loop.mjs, scripts/revops/test_closed_loop.mjs, scripts/site/test_margin_defense_commercial_dod.mjs, scripts/site/test_search_observation.mjs, tests/pos-inb-20260911/01/test_local_handoff.mjs",
+    "resultado": "todos rc=0"
+   },
+   {
+    "comando": "git stash push netlify/functions/lib/lead-delivery.cjs && timeout 25 node scripts/site/test_lead_function.mjs",
+    "resultado": "exit 124 (suíte trava no caso de corpo pendurado com o módulo anterior) — reprodução do problema 2"
+   }
+  ],
+  "notas_para_integracao": [
+   "Ramo campaign/pos-redesign-fechamento-20260918-lead no worktree /home/tjsasakifln/code/confenge/.worktrees/pos-redesign-lead, 5 commits sobre 6af549b93; sem push, sem build:site, sem recaptura de hashes.",
+   "docs/ops/EXTERNAL-ACTIONS.md §2 referencia docs/campaigns/design-institucional/fechamento/evidence/g03-dns-resend.json, que só existe no worktree de integração (pos-redesign-20260918, commit c28249b73); confirmar que o arquivo entra no mesmo merge, senão o link fica pendurado (test:ops-docs não valida esse caminho).",
+   "Nenhuma rota B2G congelada, styles*.css ou js/modules/form.js foi tocado; script.js não precisou de regeneração. Recapturas (first-fold, approvals, frozen specs, censo CTA) não são necessárias por esta frente.",
+   "Novos valores duráveis em delivery.<canal>.reason: 'timeout_after_http' (além de 'timeout'/'upstream_error'); delivery.email.http continua sendo o único http guardado. test:revops e test:ops-docs passam; consumidores externos (Warmbly) não leem esse campo.",
+   "verifyTurnstile agora tem prazo (LEAD_DELIVERY_TIMEOUT_MS, 5 s) e devolve turnstile_timeout/turnstile_unreachable; ambos os chamadores (lead.cjs e market-answer-intake.cjs) só testam .ok e respondem 403 anti_abuse.",
+   "Chave do probe mudou para synthetic-probe-<uuid> (scripts/site/synthetic_lead_probe.mjs e PRODUCTION-PROBE-INVENTORY.md); nenhum runbook depende do timestamp na chave (o UA continua carregando o stamp).",
+   "Decisões do fundador abertas em EXTERNAL-ACTIONS §2: (1) token Cloudflare dedicado para e-mail em vez do token do certbot; (2) elevar DMARC de p=none para p=quarantine + rua, após confirmar alinhamento SPF/DKIM do Hostinger.",
+   "Ambiente: o relógio de parede deste WSL2 salta +46 s periodicamente (medido com hrtime); testes que medem elapsed com Date.now() podem falhar de forma intermitente aqui. Os de lead-function foram movidos para performance.now(); outros suites do repo podem exibir o mesmo sintoma neste host."
+  ]
+ }
+]
