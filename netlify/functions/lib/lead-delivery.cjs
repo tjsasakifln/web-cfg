@@ -32,13 +32,23 @@ function deliveryTimeoutMs(env = process.env) {
   return Math.min(30000, Math.max(100, Math.floor(raw)));
 }
 
+// Deadlines are measured on the monotonic clock: a wall-clock step (NTP
+// correction, VM resume — observed as +46 s jumps on WSL2 while testing) must
+// not expire a budget early or extend it. Callers build a deadline with
+// `monotonicNow() + deliveryTimeoutMs()`.
+function monotonicNow() {
+  return typeof performance !== "undefined" && typeof performance.now === "function"
+    ? performance.now()
+    : Date.now();
+}
+
 function isAbortError(err) {
   return Boolean(err && (err.name === "AbortError" || err.code === "delivery_timeout"));
 }
 
 /**
  * fetch bound to a deadline shared by every attempt of one channel. `deadline`
- * is an absolute epoch-ms value; when it has already passed the call fails
+ * is an absolute monotonicNow() value in ms; when it has already passed the call fails
  * immediately with a delivery_timeout error instead of opening a connection.
  *
  * The deadline covers the BODY as well as the headers: with `parse: "json"`
@@ -52,7 +62,7 @@ function isAbortError(err) {
  * stream ignores the signal.
  */
 async function fetchWithDeadline(url, init, deadline, { parse = null } = {}) {
-  const remaining = deadline - Date.now();
+  const remaining = deadline - monotonicNow();
   if (remaining <= 0) {
     const err = new Error("delivery_timeout");
     err.code = "delivery_timeout";
@@ -205,7 +215,7 @@ async function verifyTurnstile(token, ip) {
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: body.toString(),
       },
-      Date.now() + deliveryTimeoutMs(),
+      monotonicNow() + deliveryTimeoutMs(),
       { parse: "json" },
     );
   } catch (err) {
@@ -275,7 +285,7 @@ async function deliverOpsWebhook(record) {
     headers.Authorization = `Bearer ${process.env.OPS_WEBHOOK_BEARER}`;
   }
 
-  const deadline = Date.now() + deliveryTimeoutMs();
+  const deadline = monotonicNow() + deliveryTimeoutMs();
   return withBackoff(async () => {
     const res = await fetchWithDeadline(destination.url, { method: "POST", headers, body }, deadline);
     if (!res.ok) {
@@ -330,7 +340,7 @@ async function deliverNtfyAuth(record) {
     .filter(Boolean)
     .join("\n");
 
-  const deadline = Date.now() + deliveryTimeoutMs();
+  const deadline = monotonicNow() + deliveryTimeoutMs();
   return withBackoff(async () => {
     const res = await fetchWithDeadline(destination.url, {
       method: "POST",
@@ -345,6 +355,7 @@ async function deliverNtfyAuth(record) {
     }, deadline);
     if (!res.ok) {
       const err = new Error(`ntfy_http_${res.status}`);
+      err.status = res.status;
       throw err;
     }
     return { channel: "ntfy", status: "ok", http: res.status };
@@ -398,7 +409,7 @@ async function deliverResendEmail(record) {
     .filter((l) => l !== null)
     .join("\n");
 
-  const deadline = Date.now() + deliveryTimeoutMs();
+  const deadline = monotonicNow() + deliveryTimeoutMs();
   return withBackoff(async () => {
     // Headers AND body inside the channel deadline (parse: "json"): a Resend
     // that answers 200 and stalls the body must not outlive the budget.
@@ -493,4 +504,5 @@ module.exports = {
   validatePiiDestination,
   deliveryTimeoutMs,
   fetchWithDeadline,
+  monotonicNow,
 };

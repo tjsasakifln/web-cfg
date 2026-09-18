@@ -1447,7 +1447,7 @@ _reset();
     });
   });
   try {
-    const started = Date.now();
+    const started = performance.now();
     const res = await handler(
       event({
         nome: "Paulo Diretor",
@@ -1457,7 +1457,7 @@ _reset();
         consentimento: "on",
       }, "POST", { ip: "203.0.113.72" }),
     );
-    const elapsed = Date.now() - started;
+    const elapsed = Math.round(performance.now() - started);
     const data = JSON.parse(res.body);
     if (res.statusCode !== 201 || !data.lead_id) fail("delivery_hang_persist", data);
     if (data.email_status !== "error" || data.notify_status !== "error") fail("delivery_hang_status", data);
@@ -1509,7 +1509,7 @@ for (const bodyHonoursAbort of [true, false]) {
     text: async () => "",
   });
   try {
-    const started = Date.now();
+    const started = performance.now();
     const res = await handler(
       event({
         nome: bodyHonoursAbort ? "Sandra Diretora" : "Sonia Diretora",
@@ -1519,7 +1519,7 @@ for (const bodyHonoursAbort of [true, false]) {
         consentimento: "on",
       }, "POST", { ip: bodyHonoursAbort ? "203.0.113.73" : "203.0.113.74" }),
     );
-    const elapsed = Date.now() - started;
+    const elapsed = Math.round(performance.now() - started);
     const data = JSON.parse(res.body);
     if (res.statusCode !== 201 || !data.lead_id) fail("delivery_body_hang_persist", { bodyHonoursAbort, data });
     if (data.email_status !== "error") fail("delivery_body_hang_status", { bodyHonoursAbort, data });

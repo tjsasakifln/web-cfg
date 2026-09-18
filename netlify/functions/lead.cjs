@@ -48,7 +48,7 @@ let _storeOverride = null;
 // Anything else (probe stamps, harness argv, bare timestamps, idk:-wrapped
 // values) is an explicit key for persistence only and still needs Turnstile.
 const CLIENT_REPLAY_KEY =
-  /^(?:fe|triage)-(?:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}|[0-9a-z]{1,7}-[0-9a-z]{1,7}-[0-9a-z]{1,7}-[0-9a-z]{1,7}|[0-9a-z]{7,9}-[0-9a-z]{8,12})$/i;
+  /^(?:fe|triage)-(?:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}|[0-9a-z]{1,7}-[0-9a-z]{1,7}-[0-9a-z]{1,7}-[0-9a-z]{1,7}|[0-9a-z]{7,9}-[0-9a-z]{1,12})$/i;
 
 function adaptiveIdempotencyMaterialHash(lead) {
   if (!lead || lead.adaptive_intake !== true) return null;
