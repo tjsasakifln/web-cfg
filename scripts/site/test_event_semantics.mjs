@@ -21,7 +21,7 @@ const artifactRoot = path.join(root, "_site");
 const siteRoot = !externalBase && fs.existsSync(path.join(artifactRoot, "index.html"))
   ? artifactRoot
   : root;
-const port = 8797;
+const port = Number(process.env.EVENT_SEMANTICS_PORT || 8797);
 const reportPath = String(process.env.EVENT_SEMANTICS_REPORT || "").trim();
 const PII_PARAM_PATTERN = /address|arquivo|attach|cnpj|company|cpf|document|edital|email|empresa|endereco|comment|description|field|file|text|name|nome|message|mensagem|note|phone|query|search|tel|whatsapp/;
 const FORBIDDEN_EVENTS = ["qualified_lead", "pipeline", "handoff_accepted", "conversion", "journey_nav_click"];
@@ -92,7 +92,8 @@ function piiViolations(events) {
 }
 
 function check(name, route, ok, detail) {
-  findings.push({ check: name, route, ok, detail });
+  // Same shape site_excellence.py reads from the hub probe: `check` + `errors[]`.
+  findings.push({ check: name, route, ok, errors: ok ? [] : [name], detail });
   if (!ok) failed += 1;
   console.log(`${ok ? "PASS" : "FAIL"} ${name} ${route} ${ok ? "" : JSON.stringify(detail).slice(0, 600)}`);
 }
@@ -263,6 +264,19 @@ for (const route of ["/", "/servicos/", "/triagem-tecnica/"]) {
   await open(page, "/");
   const plain = await page.evaluate(() => document.querySelector('form input[name="origem"]')?.value || null);
   check("origem_prerendered_kept_without_attribution", "/", plain === "/", { plain });
+
+  // A route that pre-renders its own identity (lead-core reads origem === 'entregas') keeps it
+  // even when the session carries an attributed origin: only the generic '/' placeholder yields.
+  await page.goto("about:blank");
+  await page.evaluateOnNewDocument(() => {
+    try {
+      sessionStorage.clear();
+      sessionStorage.setItem("confenge_pseo_attribution", JSON.stringify({ origem: "artigo", saved_at: String(Date.now()) }));
+    } catch (_) { /* ignore */ }
+  });
+  await open(page, "/entregas/");
+  const routeIdentity = await page.evaluate(() => document.querySelector('form input[name="origem"]')?.value || null);
+  check("origem_route_identity_not_overwritten", "/entregas/", routeIdentity === "entregas", { routeIdentity });
 }
 
 await browser.close();

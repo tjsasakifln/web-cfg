@@ -275,6 +275,11 @@ jobs:
           PUBLIC_ARTIFACT_REQUIRED: "1"
           DELIVERABLES_HUB_REPORT: build/reports/deliverables-hub-ui.json
         run: npm run test:deliverables-hub-ui
+      - name: "Event semantics (G04-10): correct event present, wrong one absent, no PII"
+        env:
+          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+          EVENT_SEMANTICS_REPORT: build/reports/event-semantics.json
+        run: npm run test:event-semantics
       - name: pSEO validate and audit
         run: |
           npm run pseo:validate

@@ -659,12 +659,17 @@
       // pre-renderiza <input name="origem" value="/">; sem force, a origem
       // atribuida (?origem=, atributo do artigo guardado na sessao) era
       // descartada e todo lead saia '/'. Precedencia mantida: URL atual,
-      // sessao, query/hash. Sem origem atribuida o valor pre-renderizado vale.
+      // sessao, query/hash. So o marcador generico '/' (ou vazio) cede: rotas
+      // que pre-renderizam a propria identidade (entregas, casos, ferramentas,
+      // diagnostico-b2g-expansao) continuam valendo, pois lead-core le esse
+      // valor como regra de rota.
+      const origemInput = form.querySelector('input[name="origem"]');
+      const origemPlaceholder = !origemInput || !origemInput.value || origemInput.value === '/';
       ensureHidden(
         'origem',
         origem || storedPseo.origem || storedPseo.origin_url || storedPseo.landing_url
           || sessionStorage.getItem('confenge_landing') || window.location.pathname || '/',
-        Boolean(origem),
+        Boolean(origem) && origemPlaceholder,
       );
       ensureHidden(
         'landing_page',
