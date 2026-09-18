@@ -1,10 +1,10 @@
 {
   "ok": true,
-  "web_cfg_sha": "4acbf1efd885b404d169239149b110d8a7bb6591",
+  "web_cfg_sha": "1090c69811292e943211c010c9ce29b631409864",
   "manifest_public": ".well-known/pseo-build.json",
   "public_directory": "_site",
-  "public_artifact_hash": "d9334e6dc1bc9e2db570af73313881d30d73c829ab82b0980bd1e079d6f003c7",
-  "manifest_hash": "34be646b676ec5605e9f7b5ff945dbf5d2f0e682059b6927a60b898a3e648377",
+  "public_artifact_hash": "dd3f146ffe774a27d109b92f4a01781e5ec0a3c0e2d1c873eab7711cc97ba603",
+  "manifest_hash": "7b0c26aae6ebee1548d6dc958b10a7ea07320ad1f4a49fdb0a89dabe9a27d4b3",
   "reproducible_manifest": ".well-known/build-manifest.json",
   "build_summary": {
     "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
@@ -54,7 +54,7 @@
     "files": 234,
     "currency_files": 39,
     "opaque_token_files": 233,
-    "marker_files": 29
+    "marker_files": 27
   },
   "public_artifact": {
     "assembled": true,

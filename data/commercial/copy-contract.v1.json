@@ -940,7 +940,7 @@
     "gate_rule": "O runner deriva todas as rotas a cada execução, expõe cada ocorrência viva no relatório e reprova qualquer violação. Não existe exceção nominal ou de rota para apresentar nome público aposentado. pages e boundaries abaixo preservam apenas a medição histórica inicial e não limitam nem autorizam a varredura viva.",
     "live_measurement": {
       "routes_derived": 23,
-      "language_boundaries": 24,
+      "language_boundaries": 25,
       "language_observations": 0,
       "language_violations": 0,
       "structured_social_proof_hits": 0,
@@ -1050,7 +1050,7 @@
     },
     "observations": [],
     "observations_note": "Nenhuma ocorrência de poderá nem de saiba mais nas 23 rotas derivadas em 2026-08-25.",
-    "live_measurement_note": "78 desde 2026-09-08. Era 79. A frase de limite da secao de captura de /servicos-obras-publicas/ fechava a conversao com duas negativas seguidas (\"Nao conclui contratacao nem substitui revisao juridica\") e foi reescrita de forma afirmativa: o retorno diz qual entrega resolve o caso, em qual prazo e por qual preco, e a decisao de contratar continua sendo do visitante. A substancia do limite permanece; o que saiu foi a formulacao autodepreciativa."
+    "live_measurement_note": "25 fronteiras desde 2026-09-17 (SALTO-INSTITUCIONAL-02): a lista 'Quando não contratar' de /diagnostico-b2g-360/ foi recomposta como parte da abertura em uma coluna e a citação 'vitória garantida' deixou de estar dentro da seção estrutural de exclusão; a frase passou a negar explicitamente ('Sem promessa de “vitória garantida” em 30 dias'), contada como fronteira de negação (GX-01). Nenhuma violação; a substância do limite não mudou. Antes: 78 desde 2026-09-08. Era 79. A frase de limite da secao de captura de /servicos-obras-publicas/ fechava a conversao com duas negativas seguidas (\"Nao conclui contratacao nem substitui revisao juridica\") e foi reescrita de forma afirmativa: o retorno diz qual entrega resolve o caso, em qual prazo e por qual preco, e a decisao de contratar continua sendo do visitante. A substancia do limite permanece; o que saiu foi a formulacao autodepreciativa."
   },
   "not_delivered_by_this_pr": [
     "As 15 cláusulas são publicadas para 54/54 no catálogo, mas não são declaradas compreendidas por pessoas reais.",
