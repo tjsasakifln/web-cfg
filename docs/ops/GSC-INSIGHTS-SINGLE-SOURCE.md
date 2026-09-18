@@ -72,7 +72,9 @@ publishes, probes storage with a write or otherwise mutates the data plane.
 The site-excellence scorecard (`scripts/site/site_excellence.py`, metric
 `gsc-freshness`) reads only `build/reports/gsc-insights-durable.json`:
 `CURRENT` is a real observation dated by the producer `as_of`; `STALE` yields
-`gsc_stale`; an absent, unreadable, `UNKNOWN`, `fixture`/`synthetic` file, or one
+`gsc_stale` regardless of the `as_of` age (the host keeps the last-known-good
+`as_of` when the latest sync fails, and its `reason_codes` are kept in the
+evidence); an absent, unreadable, `UNKNOWN`, `fixture`/`synthetic` file, or one
 whose `delivery_source` is not `durable_store`, yields `BLOCKED_EXTERNAL
 gsc_unavailable` (`source_available: false`). The packaged snapshots under
 `seo/gsc-*/search-analytics-redacted.json` have no automated producer and are
@@ -130,7 +132,8 @@ secret the verifier prints `UNKNOWN` with `ops_token_required`; on the host,
 environment, never echo it or the `insights` body). Deterministic
 polarity can be reproduced without credentials (the fixture `as_of` is
 2026-08-26, so pin `--now` near it; today's clock makes the CURRENT fixture
-`STALE`, which is correct behaviour):
+`STALE`, which is correct behaviour). A fixture run marks its stdout with
+`fixture: true`, so the scorecard rejects it as an observation:
 
 ```bash
 node scripts/revops/verify_gsc_freshness.mjs --fixture current \

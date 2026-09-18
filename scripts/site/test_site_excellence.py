@@ -523,6 +523,7 @@ def test_gsc_freshness_without_a_durable_read_is_blocked_unavailable_not_stale()
     assert result["codes"] == ["gsc_durable_read_release_path_only", "gsc_unavailable"]
     assert result["evidence"]["source_available"] is False
     assert result["evidence"]["durable_read"] == "absent"
+    assert "durable_status" not in result["evidence"]
     assert "release path" in result["evidence"]["blocker_context"]
     # The packaged seo/gsc-*/search-analytics-redacted.json snapshot has no
     # producer and must never surface as an observation (neither PASS nor stale).

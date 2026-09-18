@@ -764,11 +764,12 @@ def _latest_gsc_observation(
             "source_available": observation["source_available"],
             "source_kind": observation["source_kind"],
             "durable_read": read_state,
-            "durable_status": observation.get("durable_status"),
             "durable_reason_codes": observation["durable_reason_codes"],
             "maximum_age_days": int(maximum_age_days),
         }
     )
+    if observation.get("durable_status") is not None:
+        result["evidence"]["durable_status"] = observation["durable_status"]
     return result
 
 
