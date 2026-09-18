@@ -37,10 +37,12 @@ No app ntfy (ou API), **apagar/revogar** o tópico historicamente exposto `confe
 
 ---
 
-## 2. DNS e-mail (domínio confenge.com.br) — **DONE 2026-09-18** (DKIM recriado; era DONE indevido)
+## 2. DNS e-mail (domínio confenge.com.br) — **PARTIAL** (DKIM recriado e domínio `verified` em 2026-09-18; DMARC não confirmado; o DONE de 2026-08-02 era indevido)
 
 **Plataforma:** zona Cloudflare `ea13b73bf09dcab6355baa38fbda1712` (NS
 `grannbo`/`kai.ns.cloudflare.com`; MX Hostinger preservado).
+Evidência histórica (2026-08-02, superada, não apagada):
+`docs/evidence/inbound-10/dns-email-auth-status.json`.
 
 **Estado real até 2026-09-18 (diagnóstico G03-01 da campanha
 POS-REDESIGN-FECHAMENTO-20260918):** o TXT DKIM `resend._domainkey` **não
