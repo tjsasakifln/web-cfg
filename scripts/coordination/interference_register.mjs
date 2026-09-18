@@ -196,7 +196,7 @@ export function mapInb06Consumption(consumption, extras = {}) {
     proof_id: consumption.proof_id,
     piloto_url: consumption.url || "/casos/demonstrativo-projeto-privado/",
     piloto_finding_href: `${consumption.url || "/casos/demonstrativo-projeto-privado/"}#CF-GEO-01`,
-    public_label: "Exemplo demonstrativo do piloto técnico. Não é obra de cliente.",
+    public_label: "Exemplo demonstrativo do piloto técnico; não é projeto executivo.",
     finding: {
       id: "CF-GEO-01",
       type: "geometric_interference",
@@ -315,8 +315,8 @@ export function renderFindingHtml(record, liveDocuments, options = {}) {
     .join("");
   const pilotoHref = record.piloto_finding_href || record.piloto_url || "/casos/demonstrativo-projeto-privado/#CF-GEO-01";
   const sourceNote = record.source === "inb06"
-    ? `Exemplo demonstrativo do <a href="${escapeHtml(pilotoHref)}">recorte de banheiro</a>. Não é obra de cliente e não é projeto executivo.`
-    : escapeHtml(record.public_label || "Exemplo demonstrativo. Não é obra de cliente e não é projeto executivo.");
+    ? `Exemplo demonstrativo do <a href="${escapeHtml(pilotoHref)}">recorte de banheiro</a>; não é projeto executivo.`
+    : escapeHtml(record.public_label || "Exemplo demonstrativo; não é projeto executivo.");
   const staleNote = estado.code === "stale_revision"
     ? `<p class="coord-finding-stale">${escapeHtml(estado.detail)}</p>`
     : "";
@@ -368,8 +368,8 @@ export function renderRegisterNoteHtml(record) {
     .map((finding) => `<a href="${escapeHtml(pilotoFindingHref(record, finding.id))}">${escapeHtml(finding.id)}</a>`)
     .join(", ");
   const note = record.source === "inb06"
-    ? `Os apontamentos abaixo saem do <a href="${escapeHtml(record.piloto_url || "/casos/demonstrativo-projeto-privado/")}">recorte de banheiro demonstrativo</a> (${links}). Não é obra de cliente e não é projeto executivo.`
-    : `${escapeHtml(record.public_label || "Exemplo demonstrativo. Não é obra de cliente e não é projeto executivo.")} (${links})`;
+    ? `Os apontamentos abaixo saem do <a href="${escapeHtml(record.piloto_url || "/casos/demonstrativo-projeto-privado/")}">recorte de banheiro demonstrativo</a> (${links}); o registro não é projeto executivo.`
+    : `${escapeHtml(record.public_label || "Exemplo demonstrativo; não é projeto executivo.")} (${links})`;
   return `<p class="coord-finding-kicker" data-coord-register-note="demonstrative">${note}</p>`;
 }
 

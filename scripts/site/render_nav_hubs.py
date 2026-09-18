@@ -561,6 +561,12 @@ def _services_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
         for i, s_ in enumerate(situations, start=1)
     )
     medicao = _price_terms("CFG-D18")
+    # LAPIDACAO-COMERCIAL-20260918 (D10): a 390x844 a primeira acao de contato
+    # do hub ficava a ~1170 px (item 08 do indice). A abertura ganha, abaixo do
+    # botao dominante para a oferta, a acao subordinada para o formulario da
+    # propria pagina (#captura-contrato), no mesmo padrao dos pilares
+    # (primario + secundario em .svc-open__actions), sem CSS novo e sem mover
+    # o H1, a chamada ou o botao principal.
     return (
         f"""<section aria-labelledby="hub-title" class="svc-open">
 <div class="container">
@@ -571,6 +577,7 @@ def _services_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
 <p class="section-lead svc-open__lead">{e(meta["lead"])}</p>
 <div class="svc-open__actions" data-commercial-route="medicoes-glosas">
 <a class="button button-primary" data-asset-family="hub" data-asset-id="servicos-obras-publicas" data-cta-id="hub-servicos-medicoes-glosas" data-cta-position="hub_services" data-journey="contrato" data-route-family="medicoes-glosas" href="/medicoes-glosas-obras-publicas/">Avaliar o Dossiê de Medição, Glosa e Pagamento <svg class="icon"><use href="#i-arrow"></use></svg></a>
+<a class="button button-secondary" data-asset-family="hub" data-asset-id="servicos-obras-publicas" data-cta-id="hub-servicos-registrar-evento" data-cta-position="hub_services" data-event-name="cta_click" data-journey="contrato" data-route-family="servicos-obras-publicas" href="#captura-contrato">Registrar o evento no formulário</a>
 </div>
 <p class="section-proof svc-open__note">{_proof_html(meta)}</p>
 </div>

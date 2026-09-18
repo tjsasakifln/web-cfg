@@ -29,13 +29,13 @@
       "commercial_configuration"
     ],
     "baseline_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
-    "expected_declared_ctas": 196
+    "expected_declared_ctas": 195
   },
   "coverage": {
     "authority": "data/organic/public-family-registry.json",
     "manual_route_allowlist": false,
     "active_capture_routes": 31,
-    "declared_ctas": 196,
+    "declared_ctas": 195,
     "protected_routes_with_capture": [
       "/aditivos-obras-publicas/",
       "/auditoria-orcamento-licitacao/",
@@ -69,7 +69,7 @@
           "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
           "pre_form_value_visible": true,
           "field_purpose": {
-            "visible_text": "Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
+            "visible_text": "Obrigatórios: nome do representante, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
             "visible": true,
             "required": [
               "nome",
@@ -226,7 +226,7 @@
           "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
           "pre_form_value_visible": true,
           "field_purpose": {
-            "visible_text": "Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
+            "visible_text": "Obrigatórios: nome do representante, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
             "visible": true,
             "required": [
               "nome",
@@ -398,7 +398,7 @@
           "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
           "pre_form_value_visible": true,
           "field_purpose": {
-            "visible_text": "Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
+            "visible_text": "Obrigatórios: evento observado, nome do representante, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
             "visible": true,
             "required": [
               "contract_event",
@@ -589,7 +589,7 @@
           "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
           "pre_form_value_visible": true,
           "field_purpose": {
-            "visible_text": "Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
+            "visible_text": "Obrigatórios: nome do representante, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
             "visible": true,
             "required": [
               "nome",
@@ -761,7 +761,7 @@
           "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
           "pre_form_value_visible": true,
           "field_purpose": {
-            "visible_text": "Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
+            "visible_text": "Obrigatórios: nome do representante, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
             "visible": true,
             "required": [
               "nome",
@@ -1050,7 +1050,7 @@
               "mensagem"
             ]
           },
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
           "boundary_visible": true,
           "privacy_link_visible": true,
           "event_semantics": [
@@ -1089,7 +1089,7 @@
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -1104,7 +1104,7 @@
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -1119,7 +1119,7 @@
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -1134,7 +1134,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -1149,7 +1149,7 @@
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -1196,7 +1196,7 @@
               "mensagem"
             ]
           },
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
           "boundary_visible": true,
           "privacy_link_visible": true,
           "event_semantics": [
@@ -1235,7 +1235,7 @@
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -1250,7 +1250,7 @@
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -1265,7 +1265,7 @@
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -1280,7 +1280,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -1295,7 +1295,7 @@
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -1342,7 +1342,7 @@
               "mensagem"
             ]
           },
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
           "boundary_visible": true,
           "privacy_link_visible": true,
           "event_semantics": [
@@ -1381,7 +1381,7 @@
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -1396,7 +1396,7 @@
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -1411,7 +1411,7 @@
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -1426,7 +1426,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -1441,7 +1441,7 @@
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -1488,7 +1488,7 @@
               "mensagem"
             ]
           },
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
           "boundary_visible": true,
           "privacy_link_visible": true,
           "event_semantics": [
@@ -1527,7 +1527,7 @@
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -1542,7 +1542,7 @@
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -1557,7 +1557,7 @@
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -1572,7 +1572,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -1587,7 +1587,7 @@
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -1634,7 +1634,7 @@
               "mensagem"
             ]
           },
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
           "boundary_visible": true,
           "privacy_link_visible": true,
           "event_semantics": [
@@ -1673,7 +1673,7 @@
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -1688,7 +1688,7 @@
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -1703,7 +1703,7 @@
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -1718,7 +1718,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -1733,7 +1733,7 @@
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -1780,7 +1780,7 @@
               "mensagem"
             ]
           },
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
           "boundary_visible": true,
           "privacy_link_visible": true,
           "event_semantics": [
@@ -1819,7 +1819,7 @@
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -1834,7 +1834,7 @@
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -1849,7 +1849,7 @@
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -1864,7 +1864,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -1879,7 +1879,7 @@
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -1926,7 +1926,7 @@
               "mensagem"
             ]
           },
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
           "boundary_visible": true,
           "privacy_link_visible": true,
           "event_semantics": [
@@ -1965,7 +1965,7 @@
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -1980,7 +1980,7 @@
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -1995,7 +1995,7 @@
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -2010,7 +2010,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -2025,7 +2025,7 @@
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação.",
           "event_semantics": [
             "whatsapp_click"
           ]
@@ -2072,7 +2072,7 @@
               "mensagem"
             ]
           },
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
           "boundary_visible": true,
           "privacy_link_visible": true,
           "event_semantics": [
@@ -2111,7 +2111,7 @@
           "useful_next_state": "Abre a configuração comercial do pedido antes de qualquer instrução de pagamento.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação.",
           "event_semantics": [
             "cta_click"
           ]
@@ -2126,7 +2126,7 @@
           "useful_next_state": "Abre a configuração comercial do pedido antes de qualquer instrução de pagamento.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação.",
           "event_semantics": [
             "cta_click"
           ]
@@ -2141,7 +2141,7 @@
           "useful_next_state": "Abre a configuração comercial do pedido antes de qualquer instrução de pagamento.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação.",
           "event_semantics": [
             "cta_click"
           ]
@@ -2156,7 +2156,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação.",
           "event_semantics": [
             "no_direct_event_declared"
           ]
@@ -2171,7 +2171,7 @@
           "useful_next_state": "Abre a configuração comercial do pedido antes de qualquer instrução de pagamento.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente.",
+          "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação.",
           "event_semantics": [
             "cta_click"
           ]
@@ -2200,7 +2200,7 @@
           "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
           "pre_form_value_visible": true,
           "field_purpose": {
-            "visible_text": "Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
+            "visible_text": "Obrigatórios: evento observado, nome do representante, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
             "visible": true,
             "required": [
               "contract_event",
@@ -2528,7 +2528,7 @@
           "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
           "pre_form_value_visible": true,
           "field_purpose": {
-            "visible_text": "Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
+            "visible_text": "Obrigatórios: evento observado, nome do representante, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
             "visible": true,
             "required": [
               "contract_event",
@@ -2719,7 +2719,7 @@
           "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
           "pre_form_value_visible": true,
           "field_purpose": {
-            "visible_text": "Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
+            "visible_text": "Obrigatórios: nome do representante, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
             "visible": true,
             "required": [
               "nome",
@@ -2921,7 +2921,7 @@
           "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
           "pre_form_value_visible": true,
           "field_purpose": {
-            "visible_text": "Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
+            "visible_text": "Obrigatórios: nome do representante, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
             "visible": true,
             "required": [
               "nome",
@@ -3064,7 +3064,7 @@
           "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
           "pre_form_value_visible": true,
           "field_purpose": {
-            "visible_text": "Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
+            "visible_text": "Obrigatórios: nome do representante, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
             "visible": true,
             "required": [
               "nome",
@@ -3221,7 +3221,7 @@
           "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
           "pre_form_value_visible": true,
           "field_purpose": {
-            "visible_text": "Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
+            "visible_text": "Obrigatórios: nome do representante, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
             "visible": true,
             "required": [
               "nome",
@@ -4254,41 +4254,11 @@
         },
         {
           "cta_id": "",
-          "position": "corporate_triage",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20conversar%20sobre%20um%20projeto%20ou%20servi%C3%A7o%20de%20engenharia%20e%20solicitar%20uma%20proposta.",
-          "stage": "talk",
-          "commitment": "medium",
-          "current_label": "Conversar sobre o serviço pelo WhatsApp",
-          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
-          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
-          "field_purpose": "not_applicable",
-          "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem só por canal seguro combinado depois do protocolo. Sem lista de e-mails nem compartilhamento comercial dos dados.",
-          "event_semantics": [
-            "whatsapp_click"
-          ]
-        },
-        {
-          "cta_id": "",
-          "position": "corporate_triage",
-          "href": "mailto:tiago.sasaki@confenge.com.br?subject=Solicita%C3%A7%C3%A3o%20de%20proposta%20de%20engenharia&amp;body=Ol%C3%A1%2C%20Tiago.%0A%0AServi%C3%A7o%20ou%20necessidade%3A%0AFase%20da%20obra%20ou%20do%20projeto%3A%0ADocumentos%20dispon%C3%ADveis%3A%0APrazo%20da%20decis%C3%A3o%3A%0A",
-          "stage": "talk",
-          "commitment": "medium",
-          "current_label": "Solicitar proposta por e-mail",
-          "useful_next_state": "Abre o cliente de e-mail com assunto e contexto para continuar o enquadramento.",
-          "actual_receipt": "Rascunho local de e-mail; não existe receipt do servidor antes do envio.",
-          "field_purpose": "not_applicable",
-          "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem só por canal seguro combinado depois do protocolo. Sem lista de e-mails nem compartilhamento comercial dos dados.",
-          "event_semantics": [
-            "email_click"
-          ]
-        },
-        {
-          "cta_id": "",
           "position": "contact",
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20explicar%20uma%20situa%C3%A7%C3%A3o%20t%C3%A9cnica%20e%20entender%20o%20pr%C3%B3ximo%20passo.",
           "stage": "talk",
           "commitment": "medium",
-          "current_label": "WhatsApp (48) 98834-4559",
+          "current_label": "Conversar pelo WhatsApp (48) 98834-4559",
           "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
           "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
           "field_purpose": "not_applicable",
@@ -4301,10 +4271,10 @@
         {
           "cta_id": "",
           "position": "contact",
-          "href": "mailto:tiago.sasaki@confenge.com.br?subject=Contato%20CONFENGE&body=Ol%C3%A1%2C%20Tiago.%0A%0ASitua%C3%A7%C3%A3o%20t%C3%A9cnica%3A%0AO%20que%20preciso%20decidir%20ou%20resolver%3A%0APrazo%3A%0A",
+          "href": "mailto:tiago.sasaki@confenge.com.br?subject=Solicita%C3%A7%C3%A3o%20de%20proposta%20de%20engenharia&amp;body=Ol%C3%A1%2C%20Tiago.%0A%0AServi%C3%A7o%20ou%20necessidade%3A%0AFase%20da%20obra%20ou%20do%20projeto%3A%0ADocumentos%20dispon%C3%ADveis%3A%0APrazo%20da%20decis%C3%A3o%3A%0A",
           "stage": "talk",
           "commitment": "medium",
-          "current_label": "E-mail tiago.sasaki@confenge.com.br",
+          "current_label": "Solicitar proposta por e-mail tiago.sasaki@confenge.com.br",
           "useful_next_state": "Abre o cliente de e-mail com assunto e contexto para continuar o enquadramento.",
           "actual_receipt": "Rascunho local de e-mail; não existe receipt do servidor antes do envio.",
           "field_purpose": "not_applicable",
@@ -4367,7 +4337,7 @@
           "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
           "pre_form_value_visible": true,
           "field_purpose": {
-            "visible_text": "Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
+            "visible_text": "Obrigatórios: nome do representante, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
             "visible": true,
             "required": [
               "nome",
@@ -4554,7 +4524,7 @@
           "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
           "pre_form_value_visible": true,
           "field_purpose": {
-            "visible_text": "Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
+            "visible_text": "Obrigatórios: nome do representante, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
             "visible": true,
             "required": [
               "nome",
@@ -4726,7 +4696,7 @@
           "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
           "pre_form_value_visible": true,
           "field_purpose": {
-            "visible_text": "Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados. O e-mail precisa de domínio e extensão completos.",
+            "visible_text": "Obrigatórios: evento observado, nome do representante, e-mail profissional e o consentimento; os demais campos são opcionais. O e-mail precisa de domínio e extensão completos.",
             "visible": true,
             "required": [
               "contract_event",
@@ -4784,6 +4754,21 @@
           "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
           "event_semantics": [
             "no_direct_event_declared"
+          ]
+        },
+        {
+          "cta_id": "hub-servicos-registrar-evento",
+          "position": "hub_services",
+          "href": "#captura-contrato",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "current_label": "Registrar o evento no formulário",
+          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "field_purpose": "not_applicable",
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
+          "event_semantics": [
+            "cta_click"
           ]
         },
         {
@@ -4930,7 +4915,7 @@
           "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
           "pre_form_value_visible": true,
           "field_purpose": {
-            "visible_text": "Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
+            "visible_text": "Obrigatórios: nome, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
             "visible": true,
             "required": [
               "nome",
@@ -4995,7 +4980,7 @@
           "pre_form_value": "Registre a demanda e a decisão que está na mesa. A CONFENGE responde dizendo qual documento resolve o caso, que informação é necessária para produzi-lo e em que condições.",
           "pre_form_value_visible": true,
           "field_purpose": {
-            "visible_text": "Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
+            "visible_text": "Obrigatórios: nome, um canal de retorno (WhatsApp ou e-mail) e o consentimento; os demais campos são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
             "visible": true,
             "required": [
               "nome",

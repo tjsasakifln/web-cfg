@@ -420,7 +420,7 @@ def render_html(extracts: dict[str, Any]) -> str:
 <p class="case-badge t-kicker" data-permission-class="demonstrativo">Recorte de banheiro · revisão {e(rev)}</p>
 <h1 class="t-service" id="case-title">Exemplo demonstrativo: recorte de banheiro com quantitativos, orçamento, revisão e compatibilização</h1>
 <p class="authority-byline">Responsável técnico pelo conteúdo: <a href="/especialista/tiago-jun-sasaki/">Engº Tiago Sasaki</a> · Atualizado em <time datetime="{e(extracts["date_modified"])}">11 de setembro de 2026</time> · <a href="/casos/">Outros exemplos demonstrativos</a> · <a href="/triagem-tecnica/#corrigir-o-site">Como corrigir</a></p>
-<p class="content-lead">Este recorte didático de um banheiro residencial mostra como a CONFENGE levanta quantidades, monta um extrato de orçamento, registra interferências e documenta uma revisão. Os números saem de uma fonte só: você pode refazer a conta na página, no CSV ou na planta.</p>
+<p class="content-lead">Este recorte didático de um banheiro residencial mostra como a CONFENGE levanta quantidades, monta um extrato de orçamento, registra interferências e documenta uma revisão. Os números saem de uma fonte só: você pode refazer a conta na página, no CSV ou na planta. Exemplo publicado para conferência: não é parecer nem orçamento para executar obra.</p>
 <dl class="svc-chain">
 <div><dt>Necessidade</dt><dd>Comparar propostas, contratar ou aceitar um número com base própria.</dd></div>
 <div><dt>Trabalho</dt><dd>Levantar, orçar, compatibilizar e revisar o mesmo recorte, com memória aberta.</dd></div>

@@ -6,6 +6,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildInventory } from "./cta_form_next_state_audit.mjs";
+import { deriveFieldPurpose, markOptionalLabels } from "./form_field_purpose.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const contract = JSON.parse(fs.readFileSync(path.join(root, "data/commercial/cta-form-next-state.v1.json"), "utf8"));
@@ -256,10 +257,17 @@ function renderForm(full, open, body, surface) {
       : hasStandardPhone
         ? " O WhatsApp aceita DDD e 10 ou 11 dígitos."
         : "");
+  // LAPIDACAO-COMERCIAL-20260918 (j5): a profile declared derived_from_form
+  // names the required set the form enforces and marks its optional labels.
+  let fieldPurpose = profile.field_purpose;
+  if (profile.field_purpose_mode === "derived_from_form") {
+    nextBody = markOptionalLabels(nextBody);
+    fieldPurpose = deriveFieldPurpose(nextBody) || profile.field_purpose;
+  }
   nextBody = replaceMarker(
     nextBody,
     "data-field-purpose",
-    `${profile.field_purpose}${formatHint}`,
+    `${fieldPurpose}${formatHint}`,
     "form-hint",
     runtime === "adaptive_intake_standalone_v1" ? 'id="contato-hint"' : "",
   );

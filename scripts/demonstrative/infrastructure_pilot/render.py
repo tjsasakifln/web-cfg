@@ -495,7 +495,7 @@ def render_html(extracts: dict[str, Any]) -> str:
 <p class="case-badge t-kicker" data-permission-class="demonstrativo">Acesso viário e drenagem · revisão {e(rev)}</p>
 <h1 class="t-service" id="case-title">{PAGE_H1}</h1>
 <p class="authority-byline">Responsável técnico pelo conteúdo: <a href="/especialista/tiago-jun-sasaki/">Engº Tiago Sasaki</a> · Atualizado em <time datetime="{e(extracts["date_modified"])}">11 de setembro de 2026</time> · <a href="/casos/">Outros exemplos demonstrativos</a> · <a href="/triagem-tecnica/#corrigir-o-site">Como corrigir</a></p>
-<p class="content-lead">Este recorte ilustrativo de acesso viário e drenagem de loteamento mostra a mesma cadeia de rastreabilidade usada em edificação: desenho, dimensão, fórmula, quantidade e item de planilha, com IDs e revisão únicos. Os dados e as soluções são ilustrativos e não servem para execução. Não há contratante, terreno, sondagem, chuva de projeto, topografia, assinatura nem número de ART.</p>
+<p class="content-lead">Este recorte ilustrativo de acesso viário e drenagem de loteamento mostra a mesma cadeia de rastreabilidade usada em edificação: desenho, dimensão, fórmula, quantidade e item de planilha, com IDs e revisão únicos. Sem terreno, sondagem, chuva de projeto nem topografia, os dados e as soluções são ilustrativos e não servem para execução.</p>
 <dl class="svc-chain">
 <div><dt>Necessidade</dt><dd>Orçar ou conferir pavimento, drenagem e obras lineares antes de contratar, com base própria.</dd></div>
 <div><dt>Trabalho</dt><dd>Levantar, orçar, compatibilizar e revisar o mesmo recorte, com memória aberta e revisão única.</dd></div>
@@ -654,8 +654,7 @@ def render_html(extracts: dict[str, Any]) -> str:
             "description": PAGE_DESCRIPTION,
             "disambiguatingDescription": (
                 "Página de exemplo demonstrativo: recorte didático de infraestrutura e loteamento "
-                "sem contratante, endereço, assinatura ou ART. Números do recorte são conferíveis; "
-                "preços unitários são hipotéticos e não servem para execução."
+                "com números conferíveis; preços unitários são hipotéticos e não servem para execução."
             ),
             "inLanguage": "pt-BR",
             "url": CANONICAL_URL,
