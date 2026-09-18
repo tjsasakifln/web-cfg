@@ -90,6 +90,8 @@
 .article-main figure img,.article-main figure svg{display:block;width:100%;height:auto;border:1px solid var(--rule);border-radius:var(--radius-sm);background:var(--white)}
 .article-main figcaption{font-size:var(--text-caption);color:var(--text);margin-top:.5rem;max-width:64ch}
 .article-main .table-scroll,.article-main .table-wrap{margin:1.25rem 0;border:1px solid var(--rule);border-radius:var(--radius-sm);overflow-x:auto;-webkit-overflow-scrolling:touch}
+.article-main caption,.article-main .table-wrap caption{caption-side:top;text-align:left;padding:.5rem .75rem;font-size:var(--text-caption);color:var(--text);white-space:normal}
+.article-main .table-wrap>table{min-width:max-content}
 .article-main table{width:100%;border-collapse:collapse;font-size:var(--text-caption)}
 .article-main th,.article-main td{padding:.6rem .75rem;text-align:left;vertical-align:top;border-bottom:1px solid var(--rule)}
 .article-main th{font-family:var(--sans-narrow);font-stretch:var(--narrow);font-weight:750;font-size:var(--text-small);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:transparent}
