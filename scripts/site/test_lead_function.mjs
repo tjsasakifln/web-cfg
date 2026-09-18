@@ -1483,6 +1483,102 @@ _reset();
   }
 }
 
+// 7d) The channel budget covers the BODY, not only the headers: a Resend that
+// answers 200 and then stalls the body (half-open connection) must end within
+// LEAD_DELIVERY_TIMEOUT_MS with reason=timeout, record durable, 201 returned.
+// A second variant: the body stream ignores the abort signal entirely — the
+// bound must still hold (the read is raced against the deadline).
+for (const bodyHonoursAbort of [true, false]) {
+  process.env.RESEND_API_KEY = "re_test_key";
+  process.env.LEAD_NOTIFY_EMAIL = "ops@confenge.com.br";
+  process.env.LEAD_DELIVERY_TIMEOUT_MS = "150";
+  const originalFetch = globalThis.fetch;
+  let bodyReads = 0;
+  globalThis.fetch = async (_url, opts) => ({
+    ok: true,
+    status: 200,
+    json: () => new Promise((_resolve, reject) => {
+      bodyReads += 1;
+      if (bodyHonoursAbort && opts && opts.signal) {
+        opts.signal.addEventListener("abort", () => {
+          reject(Object.assign(new Error("aborted"), { name: "AbortError" }));
+        });
+      }
+      // otherwise: never settles — the body is stalled for good
+    }),
+    text: async () => "",
+  });
+  try {
+    const started = Date.now();
+    const res = await handler(
+      event({
+        nome: bodyHonoursAbort ? "Sandra Diretora" : "Sonia Diretora",
+        email: bodyHonoursAbort ? "sandra.diretora@construtora.com.br" : "sonia.diretora@construtora.com.br",
+        estagio: "diagnostico operacao",
+        jornada: "operacao",
+        consentimento: "on",
+      }, "POST", { ip: bodyHonoursAbort ? "203.0.113.73" : "203.0.113.74" }),
+    );
+    const elapsed = Date.now() - started;
+    const data = JSON.parse(res.body);
+    if (res.statusCode !== 201 || !data.lead_id) fail("delivery_body_hang_persist", { bodyHonoursAbort, data });
+    if (data.email_status !== "error") fail("delivery_body_hang_status", { bodyHonoursAbort, data });
+    if (elapsed > 1500) fail("delivery_body_hang_budget", { bodyHonoursAbort, elapsed, budget_ms: 150 });
+    if (bodyReads !== 1) fail("delivery_body_hang_retry", { bodyHonoursAbort, bodyReads });
+    const stored = await mem.get(data.lead_id);
+    if (!stored || stored.delivery?.email?.status !== "error" || stored.delivery?.email?.reason !== "timeout") {
+      fail("delivery_body_hang_store", { bodyHonoursAbort, delivery: stored && stored.delivery });
+    }
+    if (stored.delivery.email.provider_id) fail("delivery_body_hang_provider_id", stored.delivery.email);
+    pass("delivery_body_hang_within_budget", { body_honours_abort: bodyHonoursAbort, elapsed_ms: elapsed });
+  } finally {
+    globalThis.fetch = originalFetch;
+    delete process.env.RESEND_API_KEY;
+    delete process.env.LEAD_NOTIFY_EMAIL;
+    delete process.env.LEAD_DELIVERY_TIMEOUT_MS;
+  }
+}
+
+// 7e) Deadline after a real HTTP failure: attempt 1 gets 500 late in the
+// budget, attempt 2 has no time left. The operator sees the last real status
+// (reason=timeout_after_http, http=500) instead of a bare timeout.
+{
+  process.env.RESEND_API_KEY = "re_test_key";
+  process.env.LEAD_NOTIFY_EMAIL = "ops@confenge.com.br";
+  process.env.LEAD_DELIVERY_TIMEOUT_MS = "150";
+  const originalFetch = globalThis.fetch;
+  let calls = 0;
+  globalThis.fetch = async () => {
+    calls += 1;
+    await new Promise((r) => setTimeout(r, 120));
+    return { ok: false, status: 500, json: async () => ({}), text: async () => "" };
+  };
+  try {
+    const res = await handler(
+      event({
+        nome: "Sergio Diretor",
+        email: "sergio.diretor@construtora.com.br",
+        estagio: "diagnostico operacao",
+        jornada: "operacao",
+        consentimento: "on",
+      }, "POST", { ip: "203.0.113.75" }),
+    );
+    const data = JSON.parse(res.body);
+    if (res.statusCode !== 201 || data.email_status !== "error") fail("delivery_timeout_after_http_status", data);
+    const stored = await mem.get(data.lead_id);
+    const email = stored && stored.delivery && stored.delivery.email;
+    if (!email || email.reason !== "timeout_after_http" || email.http !== 500) {
+      fail("delivery_timeout_after_http_store", { calls, email });
+    }
+    pass("delivery_timeout_after_http_keeps_last_status", { calls, http: email.http });
+  } finally {
+    globalThis.fetch = originalFetch;
+    delete process.env.RESEND_API_KEY;
+    delete process.env.LEAD_NOTIFY_EMAIL;
+    delete process.env.LEAD_DELIVERY_TIMEOUT_MS;
+  }
+}
+
 // 7b) synthetic / non-real kinds must not call Resend even when the key is set
 {
   process.env.RESEND_API_KEY = "re_test_key_must_not_send";

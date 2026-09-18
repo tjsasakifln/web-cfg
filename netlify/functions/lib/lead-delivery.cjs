@@ -40,8 +40,18 @@ function isAbortError(err) {
  * fetch bound to a deadline shared by every attempt of one channel. `deadline`
  * is an absolute epoch-ms value; when it has already passed the call fails
  * immediately with a delivery_timeout error instead of opening a connection.
+ *
+ * The deadline covers the BODY as well as the headers: with `parse: "json"`
+ * the body is consumed here, while the AbortController is still armed, and the
+ * result carries `data` (parsed JSON or `{}`). A provider that answers 200 and
+ * then stalls the body (half-open connection, slow trailer) would otherwise
+ * hang the POST for as long as the socket lived — the browser side already
+ * obeys this rule (tests/intake/test_mv03_adaptive_intake.mjs: the timer is
+ * stood down only after `response.text()` resolved). The read is raced
+ * against the same deadline so the bound holds even for a fetch whose body
+ * stream ignores the signal.
  */
-async function fetchWithDeadline(url, init, deadline) {
+async function fetchWithDeadline(url, init, deadline, { parse = null } = {}) {
   const remaining = deadline - Date.now();
   if (remaining <= 0) {
     const err = new Error("delivery_timeout");
@@ -49,9 +59,27 @@ async function fetchWithDeadline(url, init, deadline) {
     throw err;
   }
   const controller = typeof AbortController !== "undefined" ? new AbortController() : null;
-  const timer = controller ? setTimeout(() => controller.abort(), remaining) : null;
+  let expire = null;
+  const expired = new Promise((_resolve, reject) => {
+    expire = () => {
+      if (controller) controller.abort();
+      const err = new Error("delivery_timeout");
+      err.code = "delivery_timeout";
+      reject(err);
+    };
+  });
+  expired.catch(() => {});
+  const timer = setTimeout(expire, remaining);
   try {
-    return await fetch(url, { ...init, signal: controller ? controller.signal : undefined });
+    const res = await Promise.race([
+      fetch(url, { ...init, signal: controller ? controller.signal : undefined }),
+      expired,
+    ]);
+    if (parse === "json") {
+      const data = await Promise.race([res.json().catch(() => ({})), expired]);
+      return { ok: res.ok, status: res.status, data };
+    }
+    return res;
   } catch (err) {
     if (isAbortError(err)) {
       const timeout = new Error("delivery_timeout");
@@ -60,7 +88,7 @@ async function fetchWithDeadline(url, init, deadline) {
     }
     throw err;
   } finally {
-    if (timer) clearTimeout(timer);
+    clearTimeout(timer);
   }
 }
 
@@ -109,6 +137,7 @@ function sleep(ms) {
 
 async function withBackoff(fn, attempts = MAX_ATTEMPTS) {
   let lastErr;
+  let lastHttp;
   for (let i = 0; i < attempts; i++) {
     try {
       return await fn(i);
@@ -117,11 +146,29 @@ async function withBackoff(fn, attempts = MAX_ATTEMPTS) {
       // A timed-out request may already have been accepted by the provider
       // (an e-mail can be sent even when the response never arrives), so a
       // retry would risk a duplicate and would also exceed the channel budget.
-      if (isAbortError(err)) break;
+      if (isAbortError(err)) {
+        // The deadline expired after a real HTTP answer (e.g. 500 at 4.9 s,
+        // then no time left for attempt 2): keep that status for the operator
+        // instead of reporting a bare timeout.
+        if (Number.isFinite(lastHttp) && !Number.isFinite(err.status)) err.last_http = lastHttp;
+        break;
+      }
+      if (Number.isFinite(err && err.status)) lastHttp = err.status;
       if (i < attempts - 1) await sleep(100 * 2 ** i);
     }
   }
   throw lastErr;
+}
+
+function failureReason(err) {
+  if (!isAbortError(err)) return "upstream_error";
+  return Number.isFinite(err && err.last_http) ? "timeout_after_http" : "timeout";
+}
+
+function failureHttp(err) {
+  if (Number.isFinite(err && err.status)) return err.status;
+  if (Number.isFinite(err && err.last_http)) return err.last_http;
+  return undefined;
 }
 
 /**
@@ -144,13 +191,30 @@ async function verifyTurnstile(token, ip) {
   body.set("response", token);
   if (ip && ip !== "unknown") body.set("remoteip", ip);
 
-  const res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: body.toString(),
-  });
-  const data = await res.json().catch(() => ({}));
-  if (data.success) return { ok: true };
+  // Bounded like every other external call of the POST: a hanging siteverify
+  // used to hold the request open until the browser's 15 s abort, before any
+  // record existed. On timeout the answer is 403 anti_abuse; the front resets
+  // the widget and the visitor retries with a fresh token (nothing was
+  // written, so there is nothing to replay).
+  let res;
+  try {
+    res = await fetchWithDeadline(
+      "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: body.toString(),
+      },
+      Date.now() + deliveryTimeoutMs(),
+      { parse: "json" },
+    );
+  } catch (err) {
+    safeLog("warn", "turnstile_siteverify_failed", {
+      code: err && err.message ? String(err.message).slice(0, 80) : "error",
+    });
+    return { ok: false, error: isAbortError(err) ? "turnstile_timeout" : "turnstile_unreachable" };
+  }
+  if (res.data && res.data.success) return { ok: true };
   return { ok: false, error: "turnstile_failed" };
 }
 
@@ -228,7 +292,7 @@ async function deliverOpsWebhook(record) {
     return {
       channel: "ops_webhook",
       status: "error",
-      reason: isAbortError(err) ? "timeout" : "upstream_error",
+      reason: failureReason(err),
     };
   });
 }
@@ -289,7 +353,7 @@ async function deliverNtfyAuth(record) {
       lead_id: record.lead_id,
       code: err && err.message ? String(err.message).slice(0, 80) : "error",
     });
-    return { channel: "ntfy", status: "error", reason: isAbortError(err) ? "timeout" : "upstream_error" };
+    return { channel: "ntfy", status: "error", reason: failureReason(err) };
   });
 }
 
@@ -336,6 +400,8 @@ async function deliverResendEmail(record) {
 
   const deadline = Date.now() + deliveryTimeoutMs();
   return withBackoff(async () => {
+    // Headers AND body inside the channel deadline (parse: "json"): a Resend
+    // that answers 200 and stalls the body must not outlive the budget.
     const res = await fetchWithDeadline("https://api.resend.com/emails", {
       method: "POST",
       headers: {
@@ -349,13 +415,13 @@ async function deliverResendEmail(record) {
         subject,
         text,
       }),
-    }, deadline);
+    }, deadline, { parse: "json" });
     if (!res.ok) {
       const err = new Error(`resend_http_${res.status}`);
       err.status = res.status;
       throw err;
     }
-    const data = await res.json().catch(() => ({}));
+    const data = res.data || {};
     return {
       channel: "email",
       status: "ok",
@@ -370,8 +436,8 @@ async function deliverResendEmail(record) {
     return {
       channel: "email",
       status: "error",
-      reason: isAbortError(err) ? "timeout" : "upstream_error",
-      http: err && Number.isFinite(err.status) ? err.status : undefined,
+      reason: failureReason(err),
+      http: failureHttp(err),
     };
   });
 }
