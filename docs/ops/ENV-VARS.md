@@ -18,7 +18,9 @@ público.
 | `CONFENGE_INBOUND_ALLOWED_HOSTS` | recomendada em prod | Allowlist de hosts (vírgula). Vazio + URL HTTPS válida é aceito. |
 | `CONFENGE_INBOUND_MAX_ATTEMPTS` | opcional | Default 8. Depois `DEAD`. |
 | `CONFENGE_INBOUND_TIMEOUT_MS` | opcional | Default 8000 |
-| `RESEND_API_KEY` | para e-mail real | API key Resend |
+| `RESEND_API_KEY` | para e-mail real | API key Resend. O envio só sai quando o domínio `confenge.com.br` está `verified` no Resend (DKIM TXT `resend._domainkey`; ver `EXTERNAL-ACTIONS.md` §2/§3) |
+| `LEAD_DELIVERY_TIMEOUT_MS` | opcional | Orçamento total (todas as tentativas) de cada canal de entrega pós-persist: Resend, `OPS_WEBHOOK_URL` e ntfy. Default 5000; faixa 100–30000. Os canais rodam em paralelo; um provedor pendurado vira `delivery.<canal>.status=error` + `reason=timeout` sem derrubar o 201 |
+| `LEAD_SLA_HOURS` | opcional | Horas até `needs_contact` em `ops?action=leads` (`sla_breaches`); default 4. Nenhum consumidor envia esse alerta; ver `LEAD-HANDLING.md` |
 | `NURTURE_RATE_WINDOW_MS` | opcional | Janela antiabuso do subscribe; default 1 hora |
 | `NURTURE_RATE_MAX_IP` | opcional | Máximo de subscribes por IP/janela; default 5 |
 | `NURTURE_RATE_MAX_FP` | opcional | Máximo de subscribes por fingerprint/janela; default 8 |

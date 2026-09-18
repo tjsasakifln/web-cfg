@@ -37,37 +37,65 @@ No app ntfy (ou API), **apagar/revogar** o tópico historicamente exposto `confe
 
 ---
 
-## 2. DNS e-mail (domínio confenge.com.br) — **DONE** (additive Resend records)
+## 2. DNS e-mail (domínio confenge.com.br) — **DONE 2026-09-18** (DKIM recriado; era DONE indevido)
 
-**Plataforma:** DNS do registrador do domínio (MX atual: Hostinger `mx1/mx2.hostinger.com` — DoH 2026-08-02)
+**Plataforma:** zona Cloudflare `ea13b73bf09dcab6355baa38fbda1712` (NS
+`grannbo`/`kai.ns.cloudflare.com`; MX Hostinger preservado).
 
-**Estado observado (Cloudflare DoH):** sem TXT SPF em `@`; sem `_dmarc`; MX Hostinger apenas.
-Evidência: `docs/evidence/inbound-10/dns-email-auth-status.json`
+**Estado real até 2026-09-18 (diagnóstico G03-01 da campanha
+POS-REDESIGN-FECHAMENTO-20260918):** o TXT DKIM `resend._domainkey` **não
+existia** em 1.1.1.1 nem 8.8.8.8 e o domínio constava `failed` no Resend
+(DKIM, SPF MX `send` e SPF TXT `send` = failed). A marcação DONE anterior
+(2026-08-02) descrevia um estado que não se sustentou. Consequência: nenhum
+e-mail de lead real jamais saiu do host — 23/23 registros do store eram
+sintéticos (`email=skipped`) e a conta Resend tinha um único envio
+(2026-08-21, era Netlify).
+
+**Correção 2026-09-18:** criado o TXT `resend._domainkey` (registro Cloudflare
+id `6d371d6a28364c17cdbde2f676e58872`) com o valor do painel Resend, usando o
+token DNS escopado já presente no host `ec-prod` (o do certbot). Domínio
+reverificado no Resend: **verified em 2026-09-18 13:14 UTC** (registro da
+campanha; nenhum envio executado).
+
+**Rollback:** apagar o registro `6d371d6a28364c17cdbde2f676e58872` na zona
+acima; o domínio volta a `failed` e `deliverResendEmail` passa a registrar
+`delivery.email.status=error` (registro continua durável, sem alerta).
+
+**Pendência (decisão do fundador):** o token usado pertence ao certbot
+(escopo de zona para desafios ACME). Recomenda-se criar um token de zona
+dedicado (`Zone.DNS:Edit` só nesta zona) para operações de e-mail e não
+reutilizar o do certbot; nada foi rotacionado nesta entrega.
 
 | Registro | Host | Valor esperado | Validação |
 | --- | --- | --- | --- |
-| SPF TXT | `@` | `v=spf1 include:…` **conforme wizard Resend** (não inventar include; copiar do painel) **mantendo** envio Hostinger se ainda usar webmail | DoH/dig + Resend Domain green |
-| DKIM CNAME | hosts do Resend | valores do wizard Resend | Resend Domain → Verified |
-| DMARC TXT | `_dmarc` | `v=DMARC1; p=quarantine; rua=mailto:tiago.sasaki@confenge.com.br` | DoH/dig `_dmarc.confenge.com.br` |
+| DKIM TXT | `resend._domainkey` | valor do painel Resend (é **TXT**, não CNAME) | `dig TXT resend._domainkey.confenge.com.br @1.1.1.1` + Resend Domain → Verified |
+| SPF MX / SPF TXT | `send` | conforme wizard Resend (copiar do painel) | Resend Domain → Verified |
+| DMARC TXT | `_dmarc` | `v=DMARC1; p=quarantine; rua=mailto:tiago.sasaki@confenge.com.br` | DoH/dig `_dmarc.confenge.com.br` — **não confirmado** nesta entrega |
 
-**Consequência se OPEN:** e-mail transacional não pode ser score 10 (sem auth → spam/bounce).
+**Consequência se voltar a OPEN:** o e-mail Resend é hoje o único alerta de
+lead real (`OPS_WEBHOOK_URL`/`NTFY_URL` UNSET no host); sem ele o lead persiste
+e entra no INBOUND NOW do Warmbly, mas ninguém é avisado além da checagem
+diária de `ops?action=leads` (ver `LEAD-HANDLING.md`).
 
 ---
 
-## 3. Resend — domínio e API — **DONE**
+## 3. Resend — domínio e API — **DONE 2026-09-18** (domínio `verified`)
 
-**Plataforma:** [resend.com](https://resend.com) → Domains → Add `confenge.com.br` → copiar DNS → API Keys → Create
+**Plataforma:** [resend.com](https://resend.com) → Domains → `confenge.com.br` → API Keys
 
 | Campo | Valor |
 | --- | --- |
-| Domain | `confenge.com.br` |
-| API key | colar em `/etc/confenge-web/runtime.env` como `RESEND_API_KEY` |
-| From | `leads@confenge.com.br` (ou subdomínio verificado) |
+| Domain | `confenge.com.br` — `verified` desde 2026-09-18 13:14 UTC (estava `failed` até então; ver §2) |
+| API key | em `/etc/confenge-web/runtime.env` como `RESEND_API_KEY` (presença confirmada no host; valor nunca lido) |
+| From | `LEAD_FROM_EMAIL` = `CONFENGE Leads <leads@confenge.com.br>` |
+| To | `LEAD_NOTIFY_EMAIL` = `tiago.sasaki@confenge.com.br` |
 
 **Validação:** probe sintético deve retornar `email_status=skipped` e não pode
 ser usado para testar inbox. Entrega transacional real só pode ser observada a
 partir de uma submissão humana genuína, consentida e não fabricada, preservando
-o protocolo fora do git.
+o protocolo fora do git (protocolo de QA: diagnóstico G03-07, ainda não
+executado). Correlação por `lead_id`: `delivery.email.provider_id` no store →
+`GET https://api.resend.com/emails/{id}` do host (ver `LEAD-HANDLING.md`).
 
 ---
 
