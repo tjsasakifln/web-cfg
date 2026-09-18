@@ -5137,7 +5137,7 @@
         "licenses": [],
         "permission_class": "demonstrativo",
         "reviewers": [],
-        "title": "Planta do recorte de banheiro RM-01, prancha PR-ARQ-R01",
+        "title": "Quantitativos e orçamento de obras | CONFENGE",
         "versions": []
       }
     },
@@ -5598,5 +5598,5 @@
       }
     }
   ],
-  "site_root": "/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/_site"
+  "site_root": "/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-20260918/_site"
 }

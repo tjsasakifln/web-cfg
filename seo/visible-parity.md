@@ -3,7 +3,7 @@
 - ok: `True`
 - pages: `98`
 - defects: `0`
-- site_root: `/home/tjsasakifln/code/confenge/.worktrees/salto-02-expansao/_site`
+- site_root: `/home/tjsasakifln/code/confenge/.worktrees/pos-redesign-20260918/_site`
 
 | url | ok | defects | claimed | visible |
 | --- | --- | --- | --- | --- |
