@@ -76,7 +76,8 @@
    "previous_sha": "47da03b64ba701016eec296234b1d14225ebe588"
   },
   "failed_release_before": "run 35313485074 (079ce510e) reprovou nos gates (pSEO) sem promocao; producao permaneceu em 47da03b64",
-  "rollback": "docs/ops/ROLLBACK.md; predecessor 47da03b64 (releases/ no host); a esteira ja exercitou o caminho de restauracao nesta publicacao"
+  "rollback": "docs/ops/ROLLBACK.md; predecessor 47da03b64 (releases/ no host); a esteira ja exercitou o caminho de restauracao nesta publicacao",
+  "identity_advance_note": "netcup-release dispara em todo push em main sem filtro de caminhos: o merge deste registro (PR #700) e qualquer merge docs-only posterior gera nova release com o MESMO artefato público (docs/ fica fora do artefato) e avança apenas `commit` em build-info; o artefato verificado permanece identificável por `artifact_hash` 270368a8c38fdc40337ded11e85fe083762aadaefaa57bc1a396903728b12d96 e `manifest_hash` fca998f4caaaee4ccef45c357064963b8d81d7542e0df10a2aba41320be01c8d"
  },
  "public_verification": {
   "state": "VERIFICADA",
@@ -85,7 +86,8 @@
   "evidence": "expansao/evidence/producao/public-verification-b98e0878e.json",
   "captures": "expansao/evidence/producao/capturas/ (10 rotas x 390x844 e 1440x1000, dobra/inteira/menu; overflow a 320 = 0 px em todas) manifest-prod-b98e0878e.json",
   "lighthouse_edge": "expansao/evidence/producao/lighthouse-edge-b98e0878e.json — mobile, cache frio, 3 execucoes por rota, nenhuma descartada: / perf mediana 99 (98-100) LCP 1832 ms; /servicos/ 100 LCP 1653; /quantitativos-orcamento-obras/ 97 LCP 2413; /medicoes-glosas-obras-publicas/ 99 LCP 1673; /entregas/ 99 LCP 2041; /conteudos/documentos-reequilibrio-obra-publica/ 99 LCP 1716; CLS 0 e acessibilidade 100 em todas",
-  "cache_note": "a verificacao usou cache-buster e no-cache; a identidade foi conferida apos a promocao e novamente na verificacao (08:59Z), sem mistura de versoes"
+  "cache_note": "a verificacao usou cache-buster e no-cache; a identidade foi conferida apos a promocao e novamente na verificacao (08:59Z), sem mistura de versoes",
+  "visitor_path_check": "conferência sem cache-buster e sem no-cache (caminho do visitante) após a janela de TTL por PoP: build-info commit b98e0878e, artifact_hash 270368a8c38f…, manifest_hash fca998f4caaa…; HTML servido de / e /entregas/ byte-idêntico ao artefato"
  },
  "capture_proof": {
   "state": "COMPROVADA",
