@@ -417,8 +417,8 @@ def render_html(extracts: dict[str, Any]) -> str:
 <div class="container">
 <div class="svc-open__grid">
 <div class="svc-open__copy">
-<p class="case-badge t-kicker" data-permission-class="demonstrativo">exemplo demonstrativo · revisão {e(rev)}</p>
-<h1 class="t-service" id="case-title">Recorte de banheiro com quantitativos, orçamento, revisão e compatibilização</h1>
+<p class="case-badge t-kicker" data-permission-class="demonstrativo">Recorte de banheiro · revisão {e(rev)}</p>
+<h1 class="t-service" id="case-title">Exemplo demonstrativo: recorte de banheiro com quantitativos, orçamento, revisão e compatibilização</h1>
 <p class="authority-byline">Responsável técnico pelo conteúdo: <a href="/especialista/tiago-jun-sasaki/">Engº Tiago Sasaki</a> · Atualizado em <time datetime="{e(extracts["date_modified"])}">11 de setembro de 2026</time> · <a href="/casos/">Outros exemplos demonstrativos</a> · <a href="/triagem-tecnica/#corrigir-o-site">Como corrigir</a></p>
 <p class="content-lead">Este recorte didático de um banheiro residencial mostra como a CONFENGE levanta quantidades, monta um extrato de orçamento, registra interferências e documenta uma revisão. Os números saem de uma fonte só: você pode refazer a conta na página, no CSV ou na planta.</p>
 <dl class="svc-chain">
@@ -551,7 +551,7 @@ def render_html(extracts: dict[str, Any]) -> str:
         {
             "@type": "TechArticle",
             "@id": f"{CANONICAL_URL}#article",
-            "headline": "Recorte de banheiro com quantitativos, orçamento, revisão e compatibilização",
+            "headline": "Exemplo demonstrativo: recorte de banheiro com quantitativos, orçamento, revisão e compatibilização",
             "description": "Exemplo demonstrativo de recorte de banheiro com memória de quantitativos, extrato de orçamento hipotético, registro de compatibilização e revisão aritmética.",
             "disambiguatingDescription": "Página de exemplo demonstrativo: recorte didático com números conferíveis e preços unitários hipotéticos.",
             "inLanguage": "pt-BR",

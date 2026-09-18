@@ -492,7 +492,7 @@ def render_html(extracts: dict[str, Any]) -> str:
 <div class="container">
 <div class="svc-open__grid">
 <div class="svc-open__copy">
-<p class="case-badge t-kicker" data-permission-class="demonstrativo">exemplo demonstrativo · revisão {e(rev)}</p>
+<p class="case-badge t-kicker" data-permission-class="demonstrativo">Acesso viário e drenagem · revisão {e(rev)}</p>
 <h1 class="t-service" id="case-title">{PAGE_H1}</h1>
 <p class="authority-byline">Responsável técnico pelo conteúdo: <a href="/especialista/tiago-jun-sasaki/">Engº Tiago Sasaki</a> · Atualizado em <time datetime="{e(extracts["date_modified"])}">11 de setembro de 2026</time> · <a href="/casos/">Outros exemplos demonstrativos</a> · <a href="/triagem-tecnica/#corrigir-o-site">Como corrigir</a></p>
 <p class="content-lead">Este recorte ilustrativo de acesso viário e drenagem de loteamento mostra a mesma cadeia de rastreabilidade usada em edificação: desenho, dimensão, fórmula, quantidade e item de planilha, com IDs e revisão únicos. Os dados e as soluções são ilustrativos e não servem para execução. Não há contratante, terreno, sondagem, chuva de projeto, topografia, assinatura nem número de ART.</p>
@@ -506,7 +506,7 @@ def render_html(extracts: dict[str, Any]) -> str:
 <div class="plate__sheet">
 {_profile_svg(extracts, "R00")}
 </div>
-<figcaption class="plate__caption" id="case-plate-cap"><span class="t-kicker">Exemplo demonstrativo</span>Perfil R00: o invert desenhado de MH-02 em {br_number(totals["mh02_invert_drawn_m"])} m e a planilha em {br_number(totals["mh02_invert_sheet_r00_m"])} m, diferença de {br_number(totals["mh02_mismatch_r00_m"])} m. É a interferência CF-GEO-01, resolvida em R01.</figcaption>
+<figcaption class="plate__caption" id="case-plate-cap">Perfil R00: o invert desenhado de MH-02 em {br_number(totals["mh02_invert_drawn_m"])} m e a planilha em {br_number(totals["mh02_invert_sheet_r00_m"])} m, diferença de {br_number(totals["mh02_mismatch_r00_m"])} m. É a interferência CF-GEO-01, resolvida em R01.</figcaption>
 </figure>
 </div>
 <nav class="page-index" aria-label="Nesta página">
