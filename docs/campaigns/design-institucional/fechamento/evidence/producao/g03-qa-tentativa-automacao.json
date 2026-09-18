@@ -1,0 +1,10 @@
+{
+  "gap": "G03 caminho normal",
+  "quando_utc": "2026-09-18T19:59Z",
+  "release": "4cfa6adca",
+  "tentativa": "envio A (REF-FECH-20260918-A1) pelo formulário da home #contato via navegador automatizado (Playwright MCP, Chrome for Testing 151), passo 1 e 2 preenchidos, consentimento marcado, campos ocultos íntegros (origem '/', jornada 'outro', landing_url '/', idempotency_key fe-<uuid>, session/correlation ids)",
+  "resultado": "NAO_ENVIADO: o widget Cloudflare Turnstile (sitekey 0x4AAAAAAEdwDCuWM5XOrEZ3, modo não-interativo) falhou com TurnstileError 600010 (desafio recusado ao navegador automatizado); token cf-turnstile-response vazio; o submit não foi acionado. Nenhum registro criado, nenhum e-mail, nenhum item no Warmbly.",
+  "decisao": "Não falsificar validação antiabuso, não usar LEAD_PROBE_SECRET como substituto de usuário real, não enfraquecer Turnstile. O ponto não testado nesta sessão é exatamente o envio humano com Turnstile real; o protocolo passo a passo com correlação por lead_id está em g03-qa-protocolo.md e é a única ação humana pendente para fechar G03.",
+  "o_que_esta_provado_sem_o_envio": ["domínio Resend verified (era failed; nenhum e-mail de lead real jamais saiu antes de 2026-09-18)", "runtime 4cfa6adca ativo com os prazos e a persistência de provider_id do Resend", "handoff Warmbly READY, fila INBOUND NOW acessível, dedupe conhecido", "sonda sintética (transporte) segue verde e exclui non_real por desenho"],
+  "evidencia": ["g03-turnstile-600010-automacao.jpg", "prontidao-operacional-4cfa6adca.json", "g03-qa-protocolo.md"]
+}

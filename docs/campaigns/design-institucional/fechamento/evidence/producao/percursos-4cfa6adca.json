@@ -1,0 +1,2332 @@
+{
+ "measured_at": "2026-09-18T19:52:09.290Z",
+ "base": "https://confenge.com.br",
+ "production_identity": {
+  "release_sha": "4cfa6adca47ae2691aae2c687bbe4649ad7ecb36",
+  "build_timestamp": "2026-09-18T18:52:37.000Z",
+  "runtime_version": "1.0.0",
+  "node_version": "v22.23.2",
+  "storage_backend": "filesystem",
+  "storage_contract_version": "confenge-host-file-record/v1",
+  "public_artifact_hash": "004d353405b749ec5a079bbf27e298e504d7786c1e09e0fc21f19dc6eddba091",
+  "release_bundle_hash": "88ac5f3461f646f91f2ea083b232ff7cac1294a020d53f94860b266073d121b4",
+  "host_architecture_version": "confenge-nginx-node/v2",
+  "environment": "production",
+  "profile": "netcup-production",
+  "contract_version": "confenge-portable-runtime/v2"
+ },
+ "baseline": {
+  "file": "diagnostico/TAREFAS/percursos.json",
+  "measured_at": "2026-09-18T12:51:17.779Z",
+  "production_identity_reported": {
+   "release_sha": "b98e0878ee3b34c3429e442826f137c9e0d65e02",
+   "build_timestamp": "2026-09-18T08:06:17.000Z",
+   "public_artifact_hash": "270368a8c38fdc40337ded11e85fe083762aadaefaa57bc1a396903728b12d96"
+  },
+  "nota": "a baseline de tarefas auto-reporta release b98e0878e (build 08:06Z, medida 12:51Z), anterior à 252fc98d1 rotulada como predecessora; os percursos e posições descritos nela são os comparados aqui"
+ },
+ "metodo": {
+  "ferramenta": "puppeteer-core + Chrome headless (--lang=pt-BR), contexto de navegador novo por percurso e viewport (sem cookies/storage), 390x844 (isMobile/hasTouch) e 1440x900; cache desativado",
+  "somente_leitura": "nenhum campo preenchido, nenhum formulário enviado, nenhum wa.me/mailto/tel aberto",
+  "navegacao_entre_rotas": "location.assign(href) do link encontrado (preserva document.referrer e a sessão da aba); não se clicou nos links de navegação, logo cta_click de navegação não foi disparado",
+  "ancoras_in_page": "clique real em \"Solicitar proposta de orçamento\" (#triagem-quantitativos) e \"Descrever a medição\" (#captura-pilar): não navegam nem enviam; amostras do scroll suave a 300/1000/2500/5000 ms",
+  "desvio_T4": "\"Continuar pelo formulário\" recebeu um clique real com preventDefault registrado no próprio link (fase de captura): o interceptador de documento de nav.js (fase de captura, registrado antes) vê o evento e grava data-origem/data-tema na sessão, como no clique do visitante; a navegação ao href foi feita por location.assign na sequência. Sem esse clique os campos ocultos do pilar não poderiam ser lidos como evidência",
+  "efeitos_colaterais": "page-view/sessão (confenge_session_logged, POST /api/web/collect) e possíveis eventos de chegada em âncora, como na baseline",
+  "segredos": "session_id/correlation_id/idempotency_key abreviados no registro",
+  "T1_remedicao": "T1 foi remedido num passe separado (mesmo método, contexto novo) porque o primeiro seletor apanhou o link da prancha \"Conferir a conta\" (/quantitativos-orcamento-obras/#amostra-quantitativos) em vez do card \"Ver quantitativos\" (a[href=\"/quantitativos-orcamento-obras/\"]) usado pela baseline; as linhas T1_* carregam o timestamp do segundo passe"
+ },
+ "journeys": {
+  "T1_quantitativos_390x844": {
+   "viewport": "390x844",
+   "clicks_to_contact": 3,
+   "log": [
+    {
+     "at": "/",
+     "h1": "Assumimos a parte de engenharia que falta para você orçar, contratar ou decidir.",
+     "height": 16478,
+     "header_h": 61,
+     "hero_cta": {
+      "tag": "a",
+      "cls": "button button-primary button-lg",
+      "text": "Ver serviços por situação",
+      "href": "/servicos/",
+      "event": "cta_click",
+      "cta_position": "hero",
+      "rect": {
+       "top": 614,
+       "bottom": 658,
+       "left": 18,
+       "right": 372,
+       "vtop": 614,
+       "vbottom": 658,
+       "h": 44
+      },
+      "in_first_screen": true,
+      "fully_visible_now": true
+     },
+     "menu_toggle": {
+      "tag": "button",
+      "cls": "menu-toggle",
+      "text": "Abrir menu",
+      "href": "",
+      "event": null,
+      "cta_position": null,
+      "rect": {
+       "top": 8,
+       "bottom": 52,
+       "left": 328,
+       "right": 372,
+       "vtop": 8,
+       "vbottom": 52,
+       "h": 44
+      },
+      "in_first_screen": true,
+      "fully_visible_now": true
+     },
+     "first_contact": {
+      "tag": "a",
+      "cls": "button button-secondary",
+      "text": "Descrever no próximo passo, nesta página",
+      "href": "#triagem-tecnica",
+      "event": "cta_click",
+      "cta_position": "contact_band",
+      "rect": {
+       "top": 4484,
+       "bottom": 4544,
+       "left": 18,
+       "right": 372,
+       "vtop": 4484,
+       "vbottom": 4544,
+       "h": 60
+      },
+      "in_first_screen": false,
+      "fully_visible_now": false
+     },
+     "contacts_count": 8,
+     "links_quantitativos": [
+      {
+       "tag": "a",
+       "cls": "plate__link",
+       "text": "Conferir a conta",
+       "href": "/quantitativos-orcamento-obras/#amostra-quantitativos",
+       "event": null,
+       "cta_position": null,
+       "rect": {
+        "top": 1243,
+        "bottom": 1279,
+        "left": 18,
+        "right": 340,
+        "vtop": 1243,
+        "vbottom": 1279,
+        "h": 36
+       },
+       "in_first_screen": false,
+       "fully_visible_now": false
+      },
+      {
+       "tag": "a",
+       "cls": "situation-action",
+       "text": "Ver quantitativos",
+       "href": "/quantitativos-orcamento-obras/",
+       "event": null,
+       "cta_position": null,
+       "rect": {
+        "top": 2346,
+        "bottom": 2390,
+        "left": 18,
+        "right": 173,
+        "vtop": 2346,
+        "vbottom": 2390,
+        "h": 44
+       },
+       "in_first_screen": false,
+       "fully_visible_now": false
+      }
+     ],
+     "session_keys": [
+      "confenge_idem:/:form:submit",
+      "confenge_pseo_attribution",
+      "confenge_session_logged",
+      "confenge_sid",
+      "confenge_landing"
+     ],
+     "cookies": "",
+     "forms": [
+      {
+       "name": "diagnostico-b2g",
+       "top": 13085,
+       "hidden_names": [
+        "form-name",
+        "origem",
+        "jornada",
+        "utm_source",
+        "utm_medium",
+        "utm_campaign",
+        "landing_page",
+        "document_intent",
+        "session_id",
+        "landing_url",
+        "correlation_id",
+        "idempotency_key"
+       ]
+      }
+     ],
+     "screenshot": "t1-390-home-primeira-tela.jpg"
+    },
+    {
+     "click": 1,
+     "via": {
+      "tag": "a",
+      "cls": "situation-action",
+      "text": "Ver quantitativos",
+      "href": "/quantitativos-orcamento-obras/",
+      "event": null,
+      "cta_position": null,
+      "rect": {
+       "top": 2346,
+       "bottom": 2390,
+       "left": 18,
+       "right": 173,
+       "vtop": 2346,
+       "vbottom": 2390,
+       "h": 44
+      },
+      "in_first_screen": false,
+      "fully_visible_now": false
+     },
+     "header_cta": {
+      "tag": "a",
+      "cls": "button button-primary header-cta",
+      "text": "Solicitar proposta de orçamento",
+      "href": "#triagem-quantitativos",
+      "event": null,
+      "cta_position": null,
+      "rect": {
+       "top": 0,
+       "bottom": 0,
+       "left": 0,
+       "right": 0,
+       "vtop": 0,
+       "vbottom": 0,
+       "h": 0
+      },
+      "in_first_screen": true,
+      "fully_visible_now": true
+     },
+     "at": "https://confenge.com.br/quantitativos-orcamento-obras/",
+     "h1": "Quantitativos e orçamento de obras",
+     "height": 17940,
+     "hero_cta": {
+      "tag": "a",
+      "cls": "button button-primary button-lg",
+      "text": "Solicitar proposta de orçamento",
+      "href": "#triagem-quantitativos",
+      "event": "cta_click",
+      "cta_position": "hero",
+      "rect": {
+       "top": 738,
+       "bottom": 782,
+       "left": 18,
+       "right": 327,
+       "vtop": 738,
+       "vbottom": 782,
+       "h": 44
+      },
+      "in_first_screen": true,
+      "fully_visible_now": true
+     },
+     "first_contact": {
+      "tag": "a",
+      "cls": "button button-primary button-lg",
+      "text": "Solicitar proposta de orçamento",
+      "href": "#triagem-quantitativos",
+      "event": "cta_click",
+      "cta_position": "hero",
+      "rect": {
+       "top": 738,
+       "bottom": 782,
+       "left": 18,
+       "right": 327,
+       "vtop": 738,
+       "vbottom": 782,
+       "h": 44
+      },
+      "in_first_screen": true,
+      "fully_visible_now": true
+     },
+     "forms": 0,
+     "whatsapp_first": {
+      "text_param": "Olá, Tiago. Quero solicitar proposta de levantamento de quantitativos ou orçamento de uma obra.",
+      "top": 797
+     }
+    },
+    {
+     "click": 2,
+     "anchor": "#triagem-quantitativos",
+     "samples": [
+      {
+       "t_ms": 300,
+       "scrollY": 2550,
+       "section_vtop": 12637,
+       "section_heading": "Solicite uma proposta de levantamento, orçamento ou revisão.",
+       "first_channel": {
+        "text": "Solicitar proposta pelo WhatsApp",
+        "href": "https://wa.me/5548988344559?text=Ol%C3%A",
+        "vtop": 12922,
+        "vbottom": 12974,
+        "in_view": false
+       },
+       "channels_in_view": [],
+       "hash": "#triagem-quantitativos",
+       "scroll_margin_top": "96px"
+      },
+      {
+       "t_ms": 1000,
+       "scrollY": 14343,
+       "section_vtop": 844,
+       "section_heading": "Solicite uma proposta de levantamento, orçamento ou revisão.",
+       "first_channel": {
+        "text": "Solicitar proposta pelo WhatsApp",
+        "href": "https://wa.me/5548988344559?text=Ol%C3%A",
+        "vtop": 1129,
+        "vbottom": 1181,
+        "in_view": false
+       },
+       "channels_in_view": [],
+       "hash": "#triagem-quantitativos",
+       "scroll_margin_top": "96px"
+      },
+      {
+       "t_ms": 2500,
+       "scrollY": 15091,
+       "section_vtop": 96,
+       "section_heading": "Solicite uma proposta de levantamento, orçamento ou revisão.",
+       "first_channel": {
+        "text": "Solicitar proposta pelo WhatsApp",
+        "href": "https://wa.me/5548988344559?text=Ol%C3%A",
+        "vtop": 381,
+        "vbottom": 433,
+        "in_view": true
+       },
+       "channels_in_view": [
+        "Solicitar proposta pelo WhatsApp",
+        "Solicitar proposta por e-mail",
+        "Ligar sobre o orçamento: (48) 98834-4559"
+       ],
+       "hash": "#triagem-quantitativos",
+       "scroll_margin_top": "96px"
+      },
+      {
+       "t_ms": 5000,
+       "scrollY": 15091,
+       "section_vtop": 96,
+       "section_heading": "Solicite uma proposta de levantamento, orçamento ou revisão.",
+       "first_channel": {
+        "text": "Solicitar proposta pelo WhatsApp",
+        "href": "https://wa.me/5548988344559?text=Ol%C3%A",
+        "vtop": 381,
+        "vbottom": 433,
+        "in_view": true
+       },
+       "channels_in_view": [
+        "Solicitar proposta pelo WhatsApp",
+        "Solicitar proposta por e-mail",
+        "Ligar sobre o orçamento: (48) 98834-4559"
+       ],
+       "hash": "#triagem-quantitativos",
+       "scroll_margin_top": "96px"
+      }
+     ],
+     "screenshot": "t1-390-quantitativos-apos-ancora.jpg"
+    }
+   ],
+   "note": "clicks_to_contact = card na home + CTA âncora + toque no wa.me (não executado)"
+  },
+  "T2_avaliacao_390x844": {
+   "viewport": "390x844",
+   "log": [
+    {
+     "via": {
+      "tag": "a",
+      "cls": "situation-action",
+      "text": "Ver avaliação",
+      "href": "/servicos/#servico-avaliacao",
+      "event": null,
+      "cta_position": null,
+      "rect": {
+       "top": 3036,
+       "bottom": 3080,
+       "left": 18,
+       "right": 145,
+       "vtop": 3036,
+       "vbottom": 3080,
+       "h": 44
+      },
+      "in_first_screen": false,
+      "fully_visible_now": false
+     },
+     "href": "https://confenge.com.br/servicos/#servico-avaliacao",
+     "at": "https://confenge.com.br/servicos/#servico-avaliacao",
+     "h1": "Serviços de engenharia para obras públicas e privadas",
+     "landing": {
+      "landed_vtop": 82,
+      "scrollY": 5998,
+      "block": {
+       "top": 6080,
+       "bottom": 7855,
+       "left": 70,
+       "right": 372,
+       "vtop": 82,
+       "vbottom": 1857,
+       "h": 1775
+      },
+      "heading": "Preciso do valor de um imóvel",
+      "block_text_head": "AVALIAÇÃO DE IMÓVEL Preciso do valor de um imóvel Pessoas, famílias, empresas e advogados quando negociar, partilhar, dar em garantia ou registrar exige um valor de imóvel fundamentado em engenharia, para uma finalidade e uma data definidas. Se a decisão também exigir inspeção da condição física ou assistência em uma disputa, a proposta combina as etapas. O pedido entra aqui, com o que você já sou",
+      "first_channel": {
+       "tag": "a",
+       "cls": "list-ruled__action",
+       "text": "Pedir pelo WhatsApp",
+       "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20de%20avalia%C3%A7%C3%A3o",
+       "event": null,
+       "cta_position": null,
+       "rect": {
+        "top": 6470,
+        "bottom": 6514,
+        "left": 70,
+        "right": 264,
+        "vtop": 472,
+        "vbottom": 516,
+        "h": 44
+       },
+       "in_first_screen": false,
+       "fully_visible_now": true
+      },
+      "first_channel_offset_from_block_top": 390,
+      "channels": [
+       {
+        "tag": "a",
+        "cls": "list-ruled__action",
+        "text": "Pedir pelo WhatsApp",
+        "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20de%20avalia%C3%A7%C3%A3o",
+        "event": null,
+        "cta_position": null,
+        "rect": {
+         "top": 6470,
+         "bottom": 6514,
+         "left": 70,
+         "right": 264,
+         "vtop": 472,
+         "vbottom": 516,
+         "h": 44
+        },
+        "in_first_screen": false,
+        "fully_visible_now": true
+       },
+       {
+        "tag": "a",
+        "cls": "text-link",
+        "text": "Enviar contexto por e-mail",
+        "href": "mailto:tiago.sasaki@confenge.com.br?subject=Avalia%C3%A7%C3%A3o%20de%20im%C3%B3vel",
+        "event": null,
+        "cta_position": null,
+        "rect": {
+         "top": 6526,
+         "bottom": 6570,
+         "left": 70,
+         "right": 270,
+         "vtop": 528,
+         "vbottom": 572,
+         "h": 44
+        },
+        "in_first_screen": false,
+        "fully_visible_now": true
+       }
+      ],
+      "mentions_cnpj": true,
+      "mentions_publica": false,
+      "hash": "#servico-avaliacao"
+     },
+     "screenshot": "t2-390-servicos-avaliacao-landing.jpg"
+    }
+   ]
+  },
+  "T3_medicao_390x844": {
+   "viewport": "390x844",
+   "log": [
+    {
+     "via": {
+      "tag": "a",
+      "cls": "",
+      "text": "Medição, glosa e pagamento",
+      "href": "/medicoes-glosas-obras-publicas/",
+      "event": null,
+      "cta_position": null,
+      "rect": {
+       "top": 4090,
+       "bottom": 4134,
+       "left": 143,
+       "right": 333,
+       "vtop": 4090,
+       "vbottom": 4134,
+       "h": 44
+      },
+      "in_first_screen": false,
+      "fully_visible_now": false
+     },
+     "at": "https://confenge.com.br/medicoes-glosas-obras-publicas/",
+     "h1": "Medições, glosas e pagamentos em obras públicas",
+     "height": 13550,
+     "capture_cta": {
+      "tag": "a",
+      "cls": "button button-primary button-lg",
+      "text": "Descrever a medição",
+      "href": "#captura-pilar",
+      "event": "cta_click",
+      "cta_position": "pillar_hero",
+      "rect": {
+       "top": 433,
+       "bottom": 477,
+       "left": 18,
+       "right": 372,
+       "vtop": 433,
+       "vbottom": 477,
+       "h": 44
+      },
+      "in_first_screen": true,
+      "fully_visible_now": true
+     },
+     "first_contact": {
+      "tag": "a",
+      "cls": "button button-primary button-lg",
+      "text": "Descrever a medição",
+      "href": "#captura-pilar",
+      "event": "cta_click",
+      "cta_position": "pillar_hero",
+      "rect": {
+       "top": 433,
+       "bottom": 477,
+       "left": 18,
+       "right": 372,
+       "vtop": 433,
+       "vbottom": 477,
+       "h": 44
+      },
+      "in_first_screen": true,
+      "fully_visible_now": true
+     },
+     "whatsapp_first": {
+      "text": "Falar pelo WhatsApp",
+      "top": 491
+     },
+     "forms": [
+      {
+       "name": "diagnostico-confenge",
+       "action": "/.netlify/functions/lead",
+       "id": "",
+       "rect": {
+        "top": 10352,
+        "bottom": 11596,
+        "left": 18,
+        "right": 372,
+        "vtop": 10352,
+        "vbottom": 11596,
+        "h": 1245
+       },
+       "hidden": [
+        {
+         "name": "offer_id",
+         "value": ""
+        },
+        {
+         "name": "terms_id",
+         "value": ""
+        },
+        {
+         "name": "jornada",
+         "value": "contrato"
+        },
+        {
+         "name": "estagio",
+         "value": "medicoes-glosas-obras-publicas"
+        },
+        {
+         "name": "origem",
+         "value": "medicoes-glosas-obras-publicas"
+        },
+        {
+         "name": "asset_id",
+         "value": "medicoes-glosas-obras-publicas"
+        },
+        {
+         "name": "cta_id",
+         "value": "medicoes-glosas-obras-publicas-handraise"
+        },
+        {
+         "name": "route_family",
+         "value": "medicoes-glosas"
+        },
+        {
+         "name": "landing_page",
+         "value": "/"
+        },
+        {
+         "name": "session_id",
+         "value": "<sess-…>"
+        },
+        {
+         "name": "landing_url",
+         "value": "/"
+        },
+        {
+         "name": "correlation_id",
+         "value": "<b3fab…>"
+        },
+        {
+         "name": "referrer",
+         "value": "https://confenge.com.br/"
+        },
+        {
+         "name": "idempotency_key",
+         "value": "<fe-86…>"
+        }
+       ],
+       "visible_fields": [
+        {
+         "name": "nome",
+         "type": "text",
+         "required": true,
+         "label": "Nome do representante"
+        },
+        {
+         "name": "empresa",
+         "type": "text",
+         "required": false,
+         "label": "Empresa"
+        },
+        {
+         "name": "email",
+         "type": "email",
+         "required": false,
+         "label": "E-mail profissional"
+        },
+        {
+         "name": "telefone",
+         "type": "tel",
+         "required": false,
+         "label": "WhatsApp"
+        },
+        {
+         "name": "mensagem",
+         "type": "textarea",
+         "required": false,
+         "label": "Contexto",
+         "value": ""
+        },
+        {
+         "name": "consentimento",
+         "type": "checkbox",
+         "required": true,
+         "label": "Autorizo o uso destes dados para retorno sobre esta medição "
+        }
+       ],
+       "submit": {
+        "tag": "button",
+        "cls": "button button-primary",
+        "text": "Descrever a medição",
+        "href": "",
+        "event": null,
+        "cta_position": null,
+        "rect": {
+         "top": 11285,
+         "bottom": 11329,
+         "left": 37,
+         "right": 353,
+         "vtop": 11285,
+         "vbottom": 11329,
+         "h": 44
+        },
+        "in_first_screen": false,
+        "fully_visible_now": false
+       },
+       "next_buttons": []
+      }
+     ]
+    },
+    {
+     "click": "#captura-pilar",
+     "samples": [
+      {
+       "t_ms": 300,
+       "scrollY": 1991,
+       "section_vtop": 7858,
+       "section_heading": "Descreva a medição ou a glosa sem sair desta página",
+       "first_channel": {
+        "text": "Falar pelo WhatsApp",
+        "href": "https://wa.me/5548988344559?text=Ol%C3%A",
+        "vtop": 8191,
+        "vbottom": 8235,
+        "in_view": false
+       },
+       "channels_in_view": [],
+       "hash": "#captura-pilar",
+       "scroll_margin_top": "96px"
+      },
+      {
+       "t_ms": 1000,
+       "scrollY": 9269,
+       "section_vtop": 153,
+       "section_heading": "Descreva a medição ou a glosa sem sair desta página",
+       "first_channel": {
+        "text": "Falar pelo WhatsApp",
+        "href": "https://wa.me/5548988344559?text=Ol%C3%A",
+        "vtop": 486,
+        "vbottom": 530,
+        "in_view": true
+       },
+       "channels_in_view": [
+        "Falar pelo WhatsApp"
+       ],
+       "hash": "#captura-pilar",
+       "scroll_margin_top": "96px"
+      },
+      {
+       "t_ms": 2500,
+       "scrollY": 9326,
+       "section_vtop": 96,
+       "section_heading": "Descreva a medição ou a glosa sem sair desta página",
+       "first_channel": {
+        "text": "Falar pelo WhatsApp",
+        "href": "https://wa.me/5548988344559?text=Ol%C3%A",
+        "vtop": 429,
+        "vbottom": 473,
+        "in_view": true
+       },
+       "channels_in_view": [
+        "Falar pelo WhatsApp"
+       ],
+       "hash": "#captura-pilar",
+       "scroll_margin_top": "96px"
+      },
+      {
+       "t_ms": 5000,
+       "scrollY": 9326,
+       "section_vtop": 96,
+       "section_heading": "Descreva a medição ou a glosa sem sair desta página",
+       "first_channel": {
+        "text": "Falar pelo WhatsApp",
+        "href": "https://wa.me/5548988344559?text=Ol%C3%A",
+        "vtop": 429,
+        "vbottom": 473,
+        "in_view": true
+       },
+       "channels_in_view": [
+        "Falar pelo WhatsApp"
+       ],
+       "hash": "#captura-pilar",
+       "scroll_margin_top": "96px"
+      }
+     ],
+     "screenshot": "t3-390-medicoes-apos-ancora.jpg"
+    }
+   ]
+  },
+  "T4_artigo_reequilibrio_390x844": {
+   "viewport": "390x844",
+   "log": [
+    {
+     "at": "https://confenge.com.br/conteudos/documentos-reequilibrio-obra-publica/",
+     "h1": "Documentos essenciais para pedir reequilíbrio em obra pública",
+     "height": 10604,
+     "forms": 0,
+     "first_contact": {
+      "tag": "a",
+      "cls": "button button-primary",
+      "text": "Falar no WhatsApp sobre este caso",
+      "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Li%20o%20artigo%20%22Documentos%20",
+      "event": null,
+      "cta_position": null,
+      "rect": {
+       "top": 6729,
+       "bottom": 6773,
+       "left": 18,
+       "right": 372,
+       "vtop": 6729,
+       "vbottom": 6773,
+       "h": 44
+      },
+      "in_first_screen": false,
+      "fully_visible_now": false
+     },
+     "whatsapp": [
+      {
+       "text": "Falar no WhatsApp sobre este caso",
+       "top": 6729,
+       "text_param": "Olá, Tiago. Li o artigo \"Documentos essenciais para pedir reequilíbrio em obra pública\" e quero analisar um caso."
+      },
+      {
+       "text": "Analisar este cenário",
+       "top": 7202,
+       "text_param": "Olá, Tiago. Li o artigo \"Documentos essenciais para pedir reequilíbrio em obra pública\" e quero analisar um caso."
+      },
+      {
+       "text": "Conversar pelo WhatsApp",
+       "top": 8994,
+       "text_param": "Olá, Tiago. Li o artigo \"Documentos essenciais para pedir reequilíbrio em obra pública\" e quero analisar um caso."
+      }
+     ],
+     "form_link": {
+      "tag": "a",
+      "cls": "button button-secondary",
+      "text": "Continuar pelo formulário",
+      "href": "/reequilibrio-obras-publicas/#captura-pilar",
+      "event": null,
+      "cta_position": null,
+      "rect": {
+       "top": 6783,
+       "bottom": 6827,
+       "left": 18,
+       "right": 372,
+       "vtop": 6783,
+       "vbottom": 6827,
+       "h": 44
+      },
+      "in_first_screen": false,
+      "fully_visible_now": false,
+      "data_origem": "/conteudos/documentos-reequilibrio-obra-publica/",
+      "data_tema": "documentos reequilíbrio obra pública"
+     },
+     "session_before_click": {
+      "confenge_pseo_attribution": "{\"landing_url\":\"/conteudos/documentos-reequilibrio-obra-publica/\",\"correlation_id\":\"9097ef82-78ed-4895-b427-b3a3b739ddc2\",\"origem\":\"/conteudos/documentos-reequilibrio-obra-publica/\",\"saved_at\":\"1789761151147\"}",
+      "confenge_session_logged": "<set>",
+      "confenge_sid": "sess-…"
+     }
+    },
+    {
+     "click": "Continuar pelo formulário (preventDefault)",
+     "session_after_click": {
+      "confenge_pseo_attribution": "{\"landing_url\":\"/conteudos/documentos-reequilibrio-obra-publica/\",\"correlation_id\":\"9097ef82-78ed-4895-b427-b3a3b739ddc2\",\"origem\":\"/conteudos/documentos-reequilibrio-obra-publica/\",\"tema\":\"documentos reequilíbrio obra pública\",\"saved_at\":\"1789761152126\"}",
+      "confenge_session_logged": "<set>",
+      "confenge_sid": "sess-…"
+     },
+     "url_still": "https://confenge.com.br/conteudos/documentos-reequilibrio-obra-publica/"
+    },
+    {
+     "at": "https://confenge.com.br/reequilibrio-obras-publicas/#captura-pilar",
+     "h1": "Reequilíbrio econômico-financeiro de obra pública",
+     "landed": {
+      "section_vtop": 96,
+      "form_vtop": 484,
+      "first_visible_field_in_view": false,
+      "hash": "#captura-pilar",
+      "referrer": "https://confenge.com.br/conteudos/documentos-reequilibrio-obra-publica/"
+     },
+     "form": {
+      "name": "diagnostico-confenge",
+      "action": "/.netlify/functions/lead",
+      "top": 9404,
+      "hidden": [
+       {
+        "name": "offer_id",
+        "value": ""
+       },
+       {
+        "name": "terms_id",
+        "value": ""
+       },
+       {
+        "name": "jornada",
+        "value": "contrato"
+       },
+       {
+        "name": "estagio",
+        "value": "reequilibrio-obras-publicas"
+       },
+       {
+        "name": "origem",
+        "value": "reequilibrio-obras-publicas"
+       },
+       {
+        "name": "asset_id",
+        "value": "reequilibrio-obras-publicas"
+       },
+       {
+        "name": "cta_id",
+        "value": "reequilibrio-obras-publicas-handraise"
+       },
+       {
+        "name": "route_family",
+        "value": "reequilibrio"
+       },
+       {
+        "name": "landing_page",
+        "value": "/conteudos/documentos-reequilibrio-obra-publica/"
+       },
+       {
+        "name": "cf-turnstile-response",
+        "value": ""
+       },
+       {
+        "name": "session_id",
+        "value": "<sess-…>"
+       },
+       {
+        "name": "landing_url",
+        "value": "/conteudos/documentos-reequilibrio-obra-publica/"
+       },
+       {
+        "name": "correlation_id",
+        "value": "<9097e…>"
+       },
+       {
+        "name": "referrer",
+        "value": "https://confenge.com.br/conteudos/documentos-reequilibrio-obra-publica/"
+       },
+       {
+        "name": "tema",
+        "value": "documentos reequilíbrio obra pública"
+       },
+       {
+        "name": "idempotency_key",
+        "value": "<fe-1a…>"
+       }
+      ],
+      "visible_fields": [
+       {
+        "name": "nome",
+        "type": "text",
+        "required": true,
+        "label": "Nome do representante"
+       },
+       {
+        "name": "empresa",
+        "type": "text",
+        "required": false,
+        "label": "Empresa"
+       },
+       {
+        "name": "email",
+        "type": "email",
+        "required": false,
+        "label": "E-mail profissional"
+       },
+       {
+        "name": "telefone",
+        "type": "tel",
+        "required": false,
+        "label": "WhatsApp"
+       },
+       {
+        "name": "mensagem",
+        "type": "textarea",
+        "required": false,
+        "label": "Contexto",
+        "value": "Demanda relacionada a: documentos reequilíbrio obra pública.\n\nContexto:\n"
+       },
+       {
+        "name": "consentimento",
+        "type": "checkbox",
+        "required": true,
+        "label": "Autorizo o uso destes dados para retorno sobre este pedido d"
+       }
+      ],
+      "submit": {
+       "tag": "button",
+       "cls": "button button-primary",
+       "text": "Descrever o pleito",
+       "href": "",
+       "event": null,
+       "cta_position": null,
+       "rect": {
+        "top": 10363,
+        "bottom": 10407,
+        "left": 37,
+        "right": 353,
+        "vtop": 1443,
+        "vbottom": 1487,
+        "h": 44
+       },
+       "in_first_screen": false,
+       "fully_visible_now": false
+      }
+     },
+     "context_check": {
+      "landing_url": "/conteudos/documentos-reequilibrio-obra-publica/",
+      "landing_page": "/conteudos/documentos-reequilibrio-obra-publica/",
+      "tema": "documentos reequilíbrio obra pública",
+      "origem": "reequilibrio-obras-publicas",
+      "referrer": "https://confenge.com.br/conteudos/documentos-reequilibrio-obra-publica/",
+      "jornada": "contrato",
+      "route_family": "reequilibrio",
+      "cta_id": "reequilibrio-obras-publicas-handraise",
+      "textarea_prefill": "Demanda relacionada a: documentos reequilíbrio obra pública.\n\nContexto:\n"
+     },
+     "session": {
+      "confenge_pseo_attribution": "{\"landing_url\":\"/conteudos/documentos-reequilibrio-obra-publica/\",\"correlation_id\":\"9097ef82-78ed-4895-b427-b3a3b739ddc2\",\"origem\":\"/conteudos/documentos-reequilibrio-obra-publica/\",\"tema\":\"documentos reequilíbrio obra pública\",\"route_family\":\"reequilibrio\",\"asset_id\":\"reequilibrio-obras-publicas\",\"",
+      "confenge_idem:/reequilibrio-obras-publicas/:reequilibrio-obras-publicas:reequilibrio-obras-publicas-handraise": "fe-1a8637ca-fc0a-4a71-acb5-8849dace7ba9",
+      "confenge_session_logged": "<set>",
+      "confenge_sid": "sess-…",
+      "confenge_landing": "/reequilibrio-obras-publicas/"
+     },
+     "screenshot": "t4-390-pilar-reequilibrio-formulario.jpg"
+    }
+   ]
+  },
+  "T5_triagem_390x844": {
+   "viewport": "390x844",
+   "log": [
+    {
+     "via": {
+      "tag": "a",
+      "cls": "text-link hero-secondary",
+      "text": "Descrever a minha situação",
+      "href": "/triagem-tecnica/",
+      "event": "cta_click",
+      "cta_position": "hero",
+      "rect": {
+       "top": 668,
+       "bottom": 712,
+       "left": 18,
+       "right": 252,
+       "vtop": 668,
+       "vbottom": 712,
+       "h": 44
+      },
+      "in_first_screen": true,
+      "fully_visible_now": true
+     },
+     "at": "https://confenge.com.br/triagem-tecnica/",
+     "h1": "Conte a situação do seu jeito. Nós nomeamos o serviço.",
+     "height": 6396,
+     "forms": 0,
+     "textareas": 0,
+     "channels": [
+      {
+       "text": "Falar pelo WhatsApp",
+       "href": "https://wa.me/5548988344559?te",
+       "top": 677,
+       "in_first_screen": true
+      },
+      {
+       "text": "Enviar o contexto por e-mail",
+       "href": "mailto:tiago.sasaki@confenge.c",
+       "top": 738,
+       "in_first_screen": true
+      },
+      {
+       "text": "Ligar para explicar a demanda: (48) 98834-4559",
+       "href": "tel:+5548988344559",
+       "top": 792,
+       "in_first_screen": true
+      },
+      {
+       "text": "Falar sobre projeto",
+       "href": "https://wa.me/5548988344559?te",
+       "top": 1932,
+       "in_first_screen": false
+      },
+      {
+       "text": "Falar sobre a obra ou o imóvel",
+       "href": "https://wa.me/5548988344559?te",
+       "top": 2332,
+       "in_first_screen": false
+      },
+      {
+       "text": "Falar sobre quantitativos ou orçamento",
+       "href": "https://wa.me/5548988344559?te",
+       "top": 2629,
+       "in_first_screen": false
+      },
+      {
+       "text": "Falar sobre perícia ou avaliação",
+       "href": "https://wa.me/5548988344559?te",
+       "top": 3041,
+       "in_first_screen": false
+      },
+      {
+       "text": "Falar sobre segurança do trabalho",
+       "href": "https://wa.me/5548988344559?te",
+       "top": 3389,
+       "in_first_screen": false
+      },
+      {
+       "text": "Escrever por e-mail",
+       "href": "mailto:tiago.sasaki@confenge.c",
+       "top": 4669,
+       "in_first_screen": false
+      },
+      {
+       "text": "Avisar pelo WhatsApp",
+       "href": "https://wa.me/5548988344559?te",
+       "top": 4704,
+       "in_first_screen": false
+      },
+      {
+       "text": "tiago.sasaki@confenge.com.br",
+       "href": "mailto:tiago.sasaki@confenge.c",
+       "top": 6012,
+       "in_first_screen": false
+      },
+      {
+       "text": "(48) 98834-4559",
+       "href": "tel:+5548988344559",
+       "top": 6066,
+       "in_first_screen": false
+      }
+     ],
+     "first_contact": {
+      "tag": "a",
+      "cls": "button button-primary",
+      "text": "Falar pelo WhatsApp",
+      "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20explicar%20uma%20demanda%2",
+      "event": "whatsapp_click",
+      "cta_position": "triage_primary",
+      "rect": {
+       "top": 677,
+       "bottom": 729,
+       "left": 37,
+       "right": 353,
+       "vtop": 677,
+       "vbottom": 729,
+       "h": 52
+      },
+      "in_first_screen": true,
+      "fully_visible_now": true
+     },
+     "headings": [
+      "Conte a situação do seu jeito. Nós nomeamos o serviço.",
+      "Fale agora, sem formulário",
+      "Se preferir, comece pela situação parecida com a sua",
+      "O que dizer no primeiro contato",
+      "Encontrou um erro no site?"
+     ],
+     "screenshot": "t5-390-triagem.jpg"
+    }
+   ],
+   "fields_before_writing": "0 <form>, 0 <textarea>: escrever acontece fora do site (WhatsApp/e-mail/telefone)"
+  },
+  "T1_quantitativos_1440x900": {
+   "viewport": "1440x900",
+   "clicks_to_contact": 3,
+   "log": [
+    {
+     "at": "/",
+     "h1": "Assumimos a parte de engenharia que falta para você orçar, contratar ou decidir.",
+     "height": 10349,
+     "header_h": 83,
+     "hero_cta": {
+      "tag": "a",
+      "cls": "button button-primary button-lg",
+      "text": "Ver serviços por situação",
+      "href": "/servicos/",
+      "event": "cta_click",
+      "cta_position": "hero",
+      "rect": {
+       "top": 390,
+       "bottom": 434,
+       "left": 773,
+       "right": 1031,
+       "vtop": 390,
+       "vbottom": 434,
+       "h": 44
+      },
+      "in_first_screen": true,
+      "fully_visible_now": true
+     },
+     "menu_toggle": {
+      "tag": "button",
+      "cls": "menu-toggle",
+      "text": "",
+      "href": "",
+      "event": null,
+      "cta_position": null,
+      "rect": {
+       "top": 0,
+       "bottom": 0,
+       "left": 0,
+       "right": 0,
+       "vtop": 0,
+       "vbottom": 0,
+       "h": 0
+      },
+      "in_first_screen": true,
+      "fully_visible_now": true
+     },
+     "first_contact": {
+      "tag": "a",
+      "cls": "button button-secondary",
+      "text": "Descrever no próximo passo, nesta página",
+      "href": "#triagem-tecnica",
+      "event": "cta_click",
+      "cta_position": "contact_band",
+      "rect": {
+       "top": 3006,
+       "bottom": 3050,
+       "left": 802,
+       "right": 1179,
+       "vtop": 3006,
+       "vbottom": 3050,
+       "h": 44
+      },
+      "in_first_screen": false,
+      "fully_visible_now": false
+     },
+     "contacts_count": 8,
+     "links_quantitativos": [
+      {
+       "tag": "a",
+       "cls": "plate__link",
+       "text": "Conferir a conta",
+       "href": "/quantitativos-orcamento-obras/#amostra-quantitativos",
+       "event": null,
+       "cta_position": null,
+       "rect": {
+        "top": 1280,
+        "bottom": 1295,
+        "left": 217,
+        "right": 323,
+        "vtop": 1280,
+        "vbottom": 1295,
+        "h": 15
+       },
+       "in_first_screen": false,
+       "fully_visible_now": false
+      },
+      {
+       "tag": "a",
+       "cls": "situation-action",
+       "text": "Ver quantitativos",
+       "href": "/quantitativos-orcamento-obras/",
+       "event": null,
+       "cta_position": null,
+       "rect": {
+        "top": 1949,
+        "bottom": 1993,
+        "left": 539,
+        "right": 712,
+        "vtop": 1949,
+        "vbottom": 1993,
+        "h": 44
+       },
+       "in_first_screen": false,
+       "fully_visible_now": false
+      }
+     ],
+     "session_keys": [
+      "confenge_idem:/:form:submit",
+      "confenge_pseo_attribution",
+      "confenge_session_logged",
+      "confenge_sid",
+      "confenge_landing"
+     ],
+     "cookies": "",
+     "forms": [
+      {
+       "name": "diagnostico-b2g",
+       "top": 8808,
+       "hidden_names": [
+        "form-name",
+        "origem",
+        "jornada",
+        "utm_source",
+        "utm_medium",
+        "utm_campaign",
+        "landing_page",
+        "document_intent",
+        "session_id",
+        "landing_url",
+        "correlation_id",
+        "idempotency_key"
+       ]
+      }
+     ]
+    },
+    {
+     "click": 1,
+     "via": {
+      "tag": "a",
+      "cls": "situation-action",
+      "text": "Ver quantitativos",
+      "href": "/quantitativos-orcamento-obras/",
+      "event": null,
+      "cta_position": null,
+      "rect": {
+       "top": 1949,
+       "bottom": 1993,
+       "left": 539,
+       "right": 712,
+       "vtop": 1949,
+       "vbottom": 1993,
+       "h": 44
+      },
+      "in_first_screen": false,
+      "fully_visible_now": false
+     },
+     "header_cta": {
+      "tag": "a",
+      "cls": "button button-primary header-cta",
+      "text": "Solicitar proposta de orçamento",
+      "href": "#triagem-quantitativos",
+      "event": null,
+      "cta_position": null,
+      "rect": {
+       "top": 19,
+       "bottom": 63,
+       "left": 1080,
+       "right": 1320,
+       "vtop": 19,
+       "vbottom": 63,
+       "h": 44
+      },
+      "in_first_screen": true,
+      "fully_visible_now": true
+     },
+     "at": "https://confenge.com.br/quantitativos-orcamento-obras/",
+     "h1": "Quantitativos e orçamento de obras",
+     "height": 11506,
+     "hero_cta": {
+      "tag": "a",
+      "cls": "button button-primary button-lg",
+      "text": "Solicitar proposta de orçamento",
+      "href": "#triagem-quantitativos",
+      "event": "cta_click",
+      "cta_position": "hero",
+      "rect": {
+       "top": 682,
+       "bottom": 726,
+       "left": 120,
+       "right": 429,
+       "vtop": 682,
+       "vbottom": 726,
+       "h": 44
+      },
+      "in_first_screen": true,
+      "fully_visible_now": true
+     },
+     "first_contact": {
+      "tag": "a",
+      "cls": "button button-primary header-cta",
+      "text": "Solicitar proposta de orçamento",
+      "href": "#triagem-quantitativos",
+      "event": null,
+      "cta_position": null,
+      "rect": {
+       "top": 19,
+       "bottom": 63,
+       "left": 1080,
+       "right": 1320,
+       "vtop": 19,
+       "vbottom": 63,
+       "h": 44
+      },
+      "in_first_screen": true,
+      "fully_visible_now": true
+     },
+     "forms": 0,
+     "whatsapp_first": {
+      "text_param": "Olá, Tiago. Quero solicitar proposta de levantamento de quantitativos ou orçamento de uma obra.",
+      "top": 682
+     }
+    },
+    {
+     "click": 2,
+     "anchor": "#triagem-quantitativos",
+     "samples": [
+      {
+       "t_ms": 300,
+       "scrollY": 1686,
+       "section_vtop": 8389,
+       "section_heading": "Solicite uma proposta de levantamento, orçamento ou revisão.",
+       "first_channel": {
+        "text": "Solicitar proposta pelo WhatsApp",
+        "href": "https://wa.me/5548988344559?text=Ol%C3%A",
+        "vtop": 8762,
+        "vbottom": 8814,
+        "in_view": false
+       },
+       "channels_in_view": [],
+       "hash": "#triagem-quantitativos",
+       "scroll_margin_top": "96px"
+      },
+      {
+       "t_ms": 1000,
+       "scrollY": 9444,
+       "section_vtop": 631,
+       "section_heading": "Solicite uma proposta de levantamento, orçamento ou revisão.",
+       "first_channel": {
+        "text": "Solicitar proposta pelo WhatsApp",
+        "href": "https://wa.me/5548988344559?text=Ol%C3%A",
+        "vtop": 1004,
+        "vbottom": 1056,
+        "in_view": false
+       },
+       "channels_in_view": [],
+       "hash": "#triagem-quantitativos",
+       "scroll_margin_top": "96px"
+      },
+      {
+       "t_ms": 2500,
+       "scrollY": 9979,
+       "section_vtop": 96,
+       "section_heading": "Solicite uma proposta de levantamento, orçamento ou revisão.",
+       "first_channel": {
+        "text": "Solicitar proposta pelo WhatsApp",
+        "href": "https://wa.me/5548988344559?text=Ol%C3%A",
+        "vtop": 469,
+        "vbottom": 521,
+        "in_view": true
+       },
+       "channels_in_view": [
+        "Solicitar proposta pelo WhatsApp",
+        "Solicitar proposta por e-mail",
+        "Ligar sobre o orçamento: (48) 98834-4559"
+       ],
+       "hash": "#triagem-quantitativos",
+       "scroll_margin_top": "96px"
+      },
+      {
+       "t_ms": 5000,
+       "scrollY": 9979,
+       "section_vtop": 96,
+       "section_heading": "Solicite uma proposta de levantamento, orçamento ou revisão.",
+       "first_channel": {
+        "text": "Solicitar proposta pelo WhatsApp",
+        "href": "https://wa.me/5548988344559?text=Ol%C3%A",
+        "vtop": 469,
+        "vbottom": 521,
+        "in_view": true
+       },
+       "channels_in_view": [
+        "Solicitar proposta pelo WhatsApp",
+        "Solicitar proposta por e-mail",
+        "Ligar sobre o orçamento: (48) 98834-4559"
+       ],
+       "hash": "#triagem-quantitativos",
+       "scroll_margin_top": "96px"
+      }
+     ],
+     "screenshot": "t1-1440-quantitativos-apos-ancora.jpg"
+    }
+   ],
+   "note": "clicks_to_contact = card na home + CTA âncora + toque no wa.me (não executado)"
+  },
+  "T2_avaliacao_1440x900": {
+   "viewport": "1440x900",
+   "log": [
+    {
+     "via": {
+      "tag": "a",
+      "cls": "situation-action",
+      "text": "Ver avaliação",
+      "href": "/servicos/#servico-avaliacao",
+      "event": null,
+      "cta_position": null,
+      "rect": {
+       "top": 2417,
+       "bottom": 2461,
+       "left": 120,
+       "right": 262,
+       "vtop": 2417,
+       "vbottom": 2461,
+       "h": 44
+      },
+      "in_first_screen": false,
+      "fully_visible_now": false
+     },
+     "href": "https://confenge.com.br/servicos/#servico-avaliacao",
+     "at": "https://confenge.com.br/servicos/#servico-avaliacao",
+     "h1": "Serviços de engenharia para obras públicas e privadas",
+     "landing": {
+      "landed_vtop": 96,
+      "scrollY": 3857,
+      "block": {
+       "top": 3953,
+       "bottom": 5238,
+       "left": 184,
+       "right": 1296,
+       "vtop": 96,
+       "vbottom": 1381,
+       "h": 1285
+      },
+      "heading": "Preciso do valor de um imóvel",
+      "block_text_head": "AVALIAÇÃO DE IMÓVEL Preciso do valor de um imóvel Pessoas, famílias, empresas e advogados quando negociar, partilhar, dar em garantia ou registrar exige um valor de imóvel fundamentado em engenharia, para uma finalidade e uma data definidas. Se a decisão também exigir inspeção da condição física ou assistência em uma disputa, a proposta combina as etapas. O pedido entra aqui, com o que você já sou",
+      "first_channel": {
+       "tag": "a",
+       "cls": "list-ruled__action",
+       "text": "Pedir pelo WhatsApp",
+       "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20de%20avalia%C3%A7%C3%A3o",
+       "event": null,
+       "cta_position": null,
+       "rect": {
+        "top": 4205,
+        "bottom": 4249,
+        "left": 184,
+        "right": 378,
+        "vtop": 348,
+        "vbottom": 392,
+        "h": 44
+       },
+       "in_first_screen": false,
+       "fully_visible_now": true
+      },
+      "first_channel_offset_from_block_top": 252,
+      "channels": [
+       {
+        "tag": "a",
+        "cls": "list-ruled__action",
+        "text": "Pedir pelo WhatsApp",
+        "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20de%20avalia%C3%A7%C3%A3o",
+        "event": null,
+        "cta_position": null,
+        "rect": {
+         "top": 4205,
+         "bottom": 4249,
+         "left": 184,
+         "right": 378,
+         "vtop": 348,
+         "vbottom": 392,
+         "h": 44
+        },
+        "in_first_screen": false,
+        "fully_visible_now": true
+       },
+       {
+        "tag": "a",
+        "cls": "text-link",
+        "text": "Enviar contexto por e-mail",
+        "href": "mailto:tiago.sasaki@confenge.com.br?subject=Avalia%C3%A7%C3%A3o%20de%20im%C3%B3vel",
+        "event": null,
+        "cta_position": null,
+        "rect": {
+         "top": 4205,
+         "bottom": 4249,
+         "left": 394,
+         "right": 618,
+         "vtop": 348,
+         "vbottom": 392,
+         "h": 44
+        },
+        "in_first_screen": false,
+        "fully_visible_now": true
+       }
+      ],
+      "mentions_cnpj": true,
+      "mentions_publica": false,
+      "hash": "#servico-avaliacao"
+     },
+     "screenshot": "t2-1440-servicos-avaliacao-landing.jpg"
+    }
+   ]
+  },
+  "T3_medicao_1440x900": {
+   "viewport": "1440x900",
+   "log": [
+    {
+     "via": {
+      "tag": "a",
+      "cls": "",
+      "text": "Medição, glosa e pagamento",
+      "href": "/medicoes-glosas-obras-publicas/",
+      "event": null,
+      "cta_position": null,
+      "rect": {
+       "top": 2596,
+       "bottom": 2628,
+       "left": 981,
+       "right": 1172,
+       "vtop": 2596,
+       "vbottom": 2628,
+       "h": 32
+      },
+      "in_first_screen": false,
+      "fully_visible_now": false
+     },
+     "at": "https://confenge.com.br/medicoes-glosas-obras-publicas/",
+     "h1": "Medições, glosas e pagamentos em obras públicas",
+     "height": 10081,
+     "capture_cta": {
+      "tag": "a",
+      "cls": "button button-primary button-lg",
+      "text": "Descrever a medição",
+      "href": "#captura-pilar",
+      "event": "cta_click",
+      "cta_position": "pillar_hero",
+      "rect": {
+       "top": 361,
+       "bottom": 405,
+       "left": 120,
+       "right": 348,
+       "vtop": 361,
+       "vbottom": 405,
+       "h": 44
+      },
+      "in_first_screen": true,
+      "fully_visible_now": true
+     },
+     "first_contact": {
+      "tag": "a",
+      "cls": "button button-primary button-lg",
+      "text": "Descrever a medição",
+      "href": "#captura-pilar",
+      "event": "cta_click",
+      "cta_position": "pillar_hero",
+      "rect": {
+       "top": 361,
+       "bottom": 405,
+       "left": 120,
+       "right": 348,
+       "vtop": 361,
+       "vbottom": 405,
+       "h": 44
+      },
+      "in_first_screen": true,
+      "fully_visible_now": true
+     },
+     "whatsapp_first": {
+      "text": "Falar pelo WhatsApp",
+      "top": 361
+     },
+     "forms": [
+      {
+       "name": "diagnostico-confenge",
+       "action": "/.netlify/functions/lead",
+       "id": "",
+       "rect": {
+        "top": 7824,
+        "bottom": 8988,
+        "left": 643,
+        "right": 1320,
+        "vtop": 7824,
+        "vbottom": 8988,
+        "h": 1164
+       },
+       "hidden": [
+        {
+         "name": "offer_id",
+         "value": ""
+        },
+        {
+         "name": "terms_id",
+         "value": ""
+        },
+        {
+         "name": "jornada",
+         "value": "contrato"
+        },
+        {
+         "name": "estagio",
+         "value": "medicoes-glosas-obras-publicas"
+        },
+        {
+         "name": "origem",
+         "value": "medicoes-glosas-obras-publicas"
+        },
+        {
+         "name": "asset_id",
+         "value": "medicoes-glosas-obras-publicas"
+        },
+        {
+         "name": "cta_id",
+         "value": "medicoes-glosas-obras-publicas-handraise"
+        },
+        {
+         "name": "route_family",
+         "value": "medicoes-glosas"
+        },
+        {
+         "name": "landing_page",
+         "value": "/"
+        },
+        {
+         "name": "session_id",
+         "value": "<sess-…>"
+        },
+        {
+         "name": "landing_url",
+         "value": "/"
+        },
+        {
+         "name": "correlation_id",
+         "value": "<3ada1…>"
+        },
+        {
+         "name": "referrer",
+         "value": "https://confenge.com.br/"
+        },
+        {
+         "name": "idempotency_key",
+         "value": "<fe-eb…>"
+        }
+       ],
+       "visible_fields": [
+        {
+         "name": "nome",
+         "type": "text",
+         "required": true,
+         "label": "Nome do representante"
+        },
+        {
+         "name": "empresa",
+         "type": "text",
+         "required": false,
+         "label": "Empresa"
+        },
+        {
+         "name": "email",
+         "type": "email",
+         "required": false,
+         "label": "E-mail profissional"
+        },
+        {
+         "name": "telefone",
+         "type": "tel",
+         "required": false,
+         "label": "WhatsApp"
+        },
+        {
+         "name": "mensagem",
+         "type": "textarea",
+         "required": false,
+         "label": "Contexto",
+         "value": ""
+        },
+        {
+         "name": "consentimento",
+         "type": "checkbox",
+         "required": true,
+         "label": "Autorizo o uso destes dados para retorno sobre esta medição "
+        }
+       ],
+       "submit": {
+        "tag": "button",
+        "cls": "button button-primary",
+        "text": "Descrever a medição",
+        "href": "",
+        "event": null,
+        "cta_position": null,
+        "rect": {
+         "top": 8721,
+         "bottom": 8765,
+         "left": 680,
+         "right": 1283,
+         "vtop": 8721,
+         "vbottom": 8765,
+         "h": 44
+        },
+        "in_first_screen": false,
+        "fully_visible_now": false
+       },
+       "next_buttons": []
+      }
+     ]
+    },
+    {
+     "click": "#captura-pilar",
+     "samples": [
+      {
+       "t_ms": 300,
+       "scrollY": 1720,
+       "section_vtop": 6015,
+       "section_heading": "Descreva a medição ou a glosa sem sair desta página",
+       "first_channel": {
+        "text": "Falar pelo WhatsApp",
+        "href": "https://wa.me/5548988344559?text=Ol%C3%A",
+        "vtop": 6445,
+        "vbottom": 6489,
+        "in_view": false
+       },
+       "channels_in_view": [],
+       "hash": "#captura-pilar",
+       "scroll_margin_top": "96px"
+      },
+      {
+       "t_ms": 1000,
+       "scrollY": 7311,
+       "section_vtop": -324,
+       "section_heading": "Descreva a medição ou a glosa sem sair desta página",
+       "first_channel": {
+        "text": "Falar pelo WhatsApp",
+        "href": "https://wa.me/5548988344559?text=Ol%C3%A",
+        "vtop": 106,
+        "vbottom": 150,
+        "in_view": true
+       },
+       "channels_in_view": [
+        "Falar pelo WhatsApp",
+        "Descrever a medição"
+       ],
+       "hash": "#captura-pilar",
+       "scroll_margin_top": "96px"
+      },
+      {
+       "t_ms": 2500,
+       "scrollY": 6891,
+       "section_vtop": 96,
+       "section_heading": "Descreva a medição ou a glosa sem sair desta página",
+       "first_channel": {
+        "text": "Falar pelo WhatsApp",
+        "href": "https://wa.me/5548988344559?text=Ol%C3%A",
+        "vtop": 526,
+        "vbottom": 570,
+        "in_view": true
+       },
+       "channels_in_view": [
+        "Falar pelo WhatsApp"
+       ],
+       "hash": "#captura-pilar",
+       "scroll_margin_top": "96px"
+      },
+      {
+       "t_ms": 5000,
+       "scrollY": 6891,
+       "section_vtop": 96,
+       "section_heading": "Descreva a medição ou a glosa sem sair desta página",
+       "first_channel": {
+        "text": "Falar pelo WhatsApp",
+        "href": "https://wa.me/5548988344559?text=Ol%C3%A",
+        "vtop": 526,
+        "vbottom": 570,
+        "in_view": true
+       },
+       "channels_in_view": [
+        "Falar pelo WhatsApp"
+       ],
+       "hash": "#captura-pilar",
+       "scroll_margin_top": "96px"
+      }
+     ],
+     "screenshot": "t3-1440-medicoes-apos-ancora.jpg"
+    }
+   ]
+  },
+  "T4_artigo_reequilibrio_1440x900": {
+   "viewport": "1440x900",
+   "log": [
+    {
+     "at": "https://confenge.com.br/conteudos/documentos-reequilibrio-obra-publica/",
+     "h1": "Documentos essenciais para pedir reequilíbrio em obra pública",
+     "height": 7785,
+     "forms": 0,
+     "first_contact": {
+      "tag": "a",
+      "cls": "button button-primary",
+      "text": "Conversar pelo WhatsApp",
+      "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Li%20o%20artigo%20%22Documentos%20",
+      "event": null,
+      "cta_position": null,
+      "rect": {
+       "top": 740,
+       "bottom": 788,
+       "left": 1016,
+       "right": 1320,
+       "vtop": 740,
+       "vbottom": 788,
+       "h": 48
+      },
+      "in_first_screen": true,
+      "fully_visible_now": true
+     },
+     "whatsapp": [
+      {
+       "text": "Falar no WhatsApp sobre este caso",
+       "top": 5347,
+       "text_param": "Olá, Tiago. Li o artigo \"Documentos essenciais para pedir reequilíbrio em obra pública\" e quero analisar um caso."
+      },
+      {
+       "text": "Analisar este cenário",
+       "top": 5846,
+       "text_param": "Olá, Tiago. Li o artigo \"Documentos essenciais para pedir reequilíbrio em obra pública\" e quero analisar um caso."
+      },
+      {
+       "text": "Conversar pelo WhatsApp",
+       "top": 740,
+       "text_param": "Olá, Tiago. Li o artigo \"Documentos essenciais para pedir reequilíbrio em obra pública\" e quero analisar um caso."
+      },
+      {
+       "text": "Falar com a CONFENGE pelo WhatsApp",
+       "top": 830,
+       "text_param": "Olá, Tiago. Li o artigo \"Documentos essenciais para pedir reequilíbrio em obra pública\" e quero analisar um caso."
+      }
+     ],
+     "form_link": {
+      "tag": "a",
+      "cls": "button button-secondary",
+      "text": "Continuar pelo formulário",
+      "href": "/reequilibrio-obras-publicas/#captura-pilar",
+      "event": null,
+      "cta_position": null,
+      "rect": {
+       "top": 5401,
+       "bottom": 5445,
+       "left": 522,
+       "right": 821,
+       "vtop": 5401,
+       "vbottom": 5445,
+       "h": 44
+      },
+      "in_first_screen": false,
+      "fully_visible_now": false,
+      "data_origem": "/conteudos/documentos-reequilibrio-obra-publica/",
+      "data_tema": "documentos reequilíbrio obra pública"
+     },
+     "session_before_click": {
+      "confenge_pseo_attribution": "{\"landing_url\":\"/conteudos/documentos-reequilibrio-obra-publica/\",\"correlation_id\":\"55fe6fd3-3016-4ea5-a650-1f3cc28deed7\",\"origem\":\"/conteudos/documentos-reequilibrio-obra-publica/\",\"saved_at\":\"1789761181266\"}",
+      "confenge_session_logged": "<set>",
+      "confenge_sid": "sess-…"
+     }
+    },
+    {
+     "click": "Continuar pelo formulário (preventDefault)",
+     "session_after_click": {
+      "confenge_pseo_attribution": "{\"landing_url\":\"/conteudos/documentos-reequilibrio-obra-publica/\",\"correlation_id\":\"55fe6fd3-3016-4ea5-a650-1f3cc28deed7\",\"origem\":\"/conteudos/documentos-reequilibrio-obra-publica/\",\"tema\":\"documentos reequilíbrio obra pública\",\"saved_at\":\"1789761182488\"}",
+      "confenge_session_logged": "<set>",
+      "confenge_sid": "sess-…"
+     },
+     "url_still": "https://confenge.com.br/conteudos/documentos-reequilibrio-obra-publica/"
+    },
+    {
+     "at": "https://confenge.com.br/reequilibrio-obras-publicas/#captura-pilar",
+     "h1": "Reequilíbrio econômico-financeiro de obra pública",
+     "landed": {
+      "section_vtop": 96,
+      "form_vtop": 185,
+      "first_visible_field_in_view": true,
+      "hash": "#captura-pilar",
+      "referrer": "https://confenge.com.br/conteudos/documentos-reequilibrio-obra-publica/"
+     },
+     "form": {
+      "name": "diagnostico-confenge",
+      "action": "/.netlify/functions/lead",
+      "top": 6572,
+      "hidden": [
+       {
+        "name": "offer_id",
+        "value": ""
+       },
+       {
+        "name": "terms_id",
+        "value": ""
+       },
+       {
+        "name": "jornada",
+        "value": "contrato"
+       },
+       {
+        "name": "estagio",
+        "value": "reequilibrio-obras-publicas"
+       },
+       {
+        "name": "origem",
+        "value": "reequilibrio-obras-publicas"
+       },
+       {
+        "name": "asset_id",
+        "value": "reequilibrio-obras-publicas"
+       },
+       {
+        "name": "cta_id",
+        "value": "reequilibrio-obras-publicas-handraise"
+       },
+       {
+        "name": "route_family",
+        "value": "reequilibrio"
+       },
+       {
+        "name": "landing_page",
+        "value": "/conteudos/documentos-reequilibrio-obra-publica/"
+       },
+       {
+        "name": "cf-turnstile-response",
+        "value": ""
+       },
+       {
+        "name": "session_id",
+        "value": "<sess-…>"
+       },
+       {
+        "name": "landing_url",
+        "value": "/conteudos/documentos-reequilibrio-obra-publica/"
+       },
+       {
+        "name": "correlation_id",
+        "value": "<55fe6…>"
+       },
+       {
+        "name": "referrer",
+        "value": "https://confenge.com.br/conteudos/documentos-reequilibrio-obra-publica/"
+       },
+       {
+        "name": "tema",
+        "value": "documentos reequilíbrio obra pública"
+       },
+       {
+        "name": "idempotency_key",
+        "value": "<fe-e2…>"
+       }
+      ],
+      "visible_fields": [
+       {
+        "name": "nome",
+        "type": "text",
+        "required": true,
+        "label": "Nome do representante"
+       },
+       {
+        "name": "empresa",
+        "type": "text",
+        "required": false,
+        "label": "Empresa"
+       },
+       {
+        "name": "email",
+        "type": "email",
+        "required": false,
+        "label": "E-mail profissional"
+       },
+       {
+        "name": "telefone",
+        "type": "tel",
+        "required": false,
+        "label": "WhatsApp"
+       },
+       {
+        "name": "mensagem",
+        "type": "textarea",
+        "required": false,
+        "label": "Contexto",
+        "value": "Demanda relacionada a: documentos reequilíbrio obra pública.\n\nContexto:\n"
+       },
+       {
+        "name": "consentimento",
+        "type": "checkbox",
+        "required": true,
+        "label": "Autorizo o uso destes dados para retorno sobre este pedido d"
+       }
+      ],
+      "submit": {
+       "tag": "button",
+       "cls": "button button-primary",
+       "text": "Descrever o pleito",
+       "href": "",
+       "event": null,
+       "cta_position": null,
+       "rect": {
+        "top": 7469,
+        "bottom": 7513,
+        "left": 680,
+        "right": 1283,
+        "vtop": 1082,
+        "vbottom": 1126,
+        "h": 44
+       },
+       "in_first_screen": false,
+       "fully_visible_now": false
+      }
+     },
+     "context_check": {
+      "landing_url": "/conteudos/documentos-reequilibrio-obra-publica/",
+      "landing_page": "/conteudos/documentos-reequilibrio-obra-publica/",
+      "tema": "documentos reequilíbrio obra pública",
+      "origem": "reequilibrio-obras-publicas",
+      "referrer": "https://confenge.com.br/conteudos/documentos-reequilibrio-obra-publica/",
+      "jornada": "contrato",
+      "route_family": "reequilibrio",
+      "cta_id": "reequilibrio-obras-publicas-handraise",
+      "textarea_prefill": "Demanda relacionada a: documentos reequilíbrio obra pública.\n\nContexto:\n"
+     },
+     "session": {
+      "confenge_pseo_attribution": "{\"landing_url\":\"/conteudos/documentos-reequilibrio-obra-publica/\",\"correlation_id\":\"55fe6fd3-3016-4ea5-a650-1f3cc28deed7\",\"origem\":\"/conteudos/documentos-reequilibrio-obra-publica/\",\"tema\":\"documentos reequilíbrio obra pública\",\"route_family\":\"reequilibrio\",\"asset_id\":\"reequilibrio-obras-publicas\",\"",
+      "confenge_idem:/reequilibrio-obras-publicas/:reequilibrio-obras-publicas:reequilibrio-obras-publicas-handraise": "fe-e2599788-faf0-4368-84f8-cc7ce4f9dcf3",
+      "confenge_session_logged": "<set>",
+      "confenge_sid": "sess-…",
+      "confenge_landing": "/reequilibrio-obras-publicas/"
+     },
+     "screenshot": "t4-1440-pilar-reequilibrio-formulario.jpg"
+    }
+   ]
+  },
+  "T5_triagem_1440x900": {
+   "viewport": "1440x900",
+   "log": [
+    {
+     "via": {
+      "tag": "a",
+      "cls": "text-link hero-secondary",
+      "text": "Descrever a minha situação",
+      "href": "/triagem-tecnica/",
+      "event": "cta_click",
+      "cta_position": "hero",
+      "rect": {
+       "top": 390,
+       "bottom": 434,
+       "left": 1059,
+       "right": 1293,
+       "vtop": 390,
+       "vbottom": 434,
+       "h": 44
+      },
+      "in_first_screen": true,
+      "fully_visible_now": true
+     },
+     "at": "https://confenge.com.br/triagem-tecnica/",
+     "h1": "Conte a situação do seu jeito. Nós nomeamos o serviço.",
+     "height": 4192,
+     "forms": 0,
+     "textareas": 0,
+     "channels": [
+      {
+       "text": "Falar pelo WhatsApp",
+       "href": "https://wa.me/5548988344559?te",
+       "top": 329,
+       "in_first_screen": true
+      },
+      {
+       "text": "Enviar o contexto por e-mail",
+       "href": "mailto:tiago.sasaki@confenge.c",
+       "top": 390,
+       "in_first_screen": true
+      },
+      {
+       "text": "Ligar para explicar a demanda: (48) 98834-4559",
+       "href": "tel:+5548988344559",
+       "top": 444,
+       "in_first_screen": true
+      },
+      {
+       "text": "Falar sobre projeto",
+       "href": "https://wa.me/5548988344559?te",
+       "top": 974,
+       "in_first_screen": false
+      },
+      {
+       "text": "Falar sobre a obra ou o imóvel",
+       "href": "https://wa.me/5548988344559?te",
+       "top": 1272,
+       "in_first_screen": false
+      },
+      {
+       "text": "Falar sobre quantitativos ou orçamento",
+       "href": "https://wa.me/5548988344559?te",
+       "top": 1512,
+       "in_first_screen": false
+      },
+      {
+       "text": "Falar sobre perícia ou avaliação",
+       "href": "https://wa.me/5548988344559?te",
+       "top": 1850,
+       "in_first_screen": false
+      },
+      {
+       "text": "Falar sobre segurança do trabalho",
+       "href": "https://wa.me/5548988344559?te",
+       "top": 2147,
+       "in_first_screen": false
+      },
+      {
+       "text": "Escrever por e-mail",
+       "href": "mailto:tiago.sasaki@confenge.c",
+       "top": 3282,
+       "in_first_screen": false
+      },
+      {
+       "text": "Avisar pelo WhatsApp",
+       "href": "https://wa.me/5548988344559?te",
+       "top": 3319,
+       "in_first_screen": false
+      },
+      {
+       "text": "tiago.sasaki@confenge.com.br",
+       "href": "mailto:tiago.sasaki@confenge.c",
+       "top": 3869,
+       "in_first_screen": false
+      },
+      {
+       "text": "(48) 98834-4559",
+       "href": "tel:+5548988344559",
+       "top": 3923,
+       "in_first_screen": false
+      }
+     ],
+     "first_contact": {
+      "tag": "a",
+      "cls": "button button-primary",
+      "text": "Falar pelo WhatsApp",
+      "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20explicar%20uma%20demanda%2",
+      "event": "whatsapp_click",
+      "cta_position": "triage_primary",
+      "rect": {
+       "top": 329,
+       "bottom": 381,
+       "left": 843,
+       "right": 1263,
+       "vtop": 329,
+       "vbottom": 381,
+       "h": 52
+      },
+      "in_first_screen": true,
+      "fully_visible_now": true
+     },
+     "headings": [
+      "Conte a situação do seu jeito. Nós nomeamos o serviço.",
+      "Fale agora, sem formulário",
+      "Se preferir, comece pela situação parecida com a sua",
+      "O que dizer no primeiro contato",
+      "Encontrou um erro no site?"
+     ],
+     "screenshot": "t5-1440-triagem.jpg"
+    }
+   ],
+   "fields_before_writing": "0 <form>, 0 <textarea>: escrever acontece fora do site (WhatsApp/e-mail/telefone)"
+  },
+  "home_390_menu_open": {
+   "menu_rect": {
+    "top": 60,
+    "bottom": 374,
+    "left": 10,
+    "right": 380,
+    "vtop": 60,
+    "vbottom": 374,
+    "h": 314
+   },
+   "menu_position": "fixed",
+   "items": [
+    {
+     "text": "Serviços e problemas",
+     "href": "/servicos/",
+     "top": 136
+    },
+    {
+     "text": "Obras públicas",
+     "href": "/servicos-obras-publicas/",
+     "top": 192
+    },
+    {
+     "text": "Biblioteca",
+     "href": "/conteudos/",
+     "top": 247
+    },
+    {
+     "text": "Solicitar proposta",
+     "href": "/triagem-tecnica/",
+     "top": 311
+    }
+   ],
+   "hero_cta_hit_with_menu_open": false,
+   "hit_el": "HEADER.site-header",
+   "screenshot": "home-390-menu-aberto.jpg"
+  }
+ },
+ "comparacao": {
+  "home_390_primeira_visita": {
+   "antes": "CTA 'Ver serviços por situação' 614–658; 'Descrever a minha situação' 668–712; 1º contato real '#contato use o formulário' a 4544px; formulário #contato a 13197px; sem banner de consentimento",
+   "depois": "CTA 'Ver serviços por situação' 614–658 inteiro; 1º contato real em fluxo 'Descrever no próximo passo, nesta página' (#triagem-tecnica) a 4484px; formulário diagnostico-b2g a 13085px de 16478; document.cookie vazio; menu aberto 60–374 fixed, 4 itens, herói não clicável com menu aberto (igual)",
+   "veredito": "igual ou melhor; página 473px mais curta"
+  },
+  "T1_quantitativos": {
+   "antes": "390: / → 'Ver quantitativos' (2346) → hero CTA 738 (1ª tela) → âncora #triagem-quantitativos: seção pousa a 96px, mas 1º canal (wa.me) a 1037px do topo do viewport, fora da tela de 844 (mais um scroll). 1440: WhatsApp a 217px após ~2,5s",
+   "depois": {
+    "390x844": "/ → 'Ver quantitativos' (2346) → hero CTA 738–782 (1ª tela) → âncora: seção a 96px e 'Solicitar proposta pelo WhatsApp' a 381–433px do viewport, NA TELA, com e-mail e telefone também visíveis; scroll suave conclui entre 1,0 e 2,5s (scrollY 15091, altura 17940)",
+    "1440x900": "hero CTA 682; header-cta 19px; após âncora WhatsApp a 469px (na tela) em ~2,5s",
+    "cliques_ate_contato": 3,
+    "formulario": "nenhum na rota (0 <form>), como antes; wa.me text \"Quero solicitar proposta de levantamento de quantitativos ou orçamento de uma obra.\""
+   },
+   "veredito": "RESOLVIDO o bloqueio da baseline (canal fora da tela após a âncora em 390)"
+  },
+  "T2_avaliacao": {
+   "antes": "/servicos/#servico-avaliacao pousa a 82px; bloco 6299–8942; 'Pedir pelo WhatsApp' a 8786 → 2487px de leitura entre o pouso e o 1º contato",
+   "depois": {
+    "390x844": "pouso a 82px (header 61); bloco 6080–7855; 'Pedir pelo WhatsApp' a 6470 = 390px abaixo do topo do bloco, visível na tela de pouso (vtop 472); e-mail logo abaixo; a prancha 'Estrutura da análise de avaliação' vem DEPOIS dos canais",
+    "1440x900": "pouso a 96px; WhatsApp a 252px do topo do bloco (vtop 348)",
+    "texto": "'O pedido entra aqui, com o que você já souber: pelo WhatsApp ou por e-mail. Pessoa física não precisa informar CNPJ para começar.'; sem 'obra pública/licitação' no bloco",
+    "transferencia": "'Pedir pela triagem' não aparece mais no bloco (canais: WhatsApp e e-mail)"
+   },
+   "veredito": "RESOLVIDO: contato no topo do bloco (390px vs 2487px)"
+  },
+  "T3_medicao": {
+   "antes": "/ → 'Medição, glosa e pagamento' (4114) → 'Descrever a medição' (#captura-pilar, 433) / WhatsApp 491 na 1ª tela → formulário a 10352 (submit 11285); passo único; hidden origem=medicoes-glosas-obras-publicas, landing_page=/, landing_url=/, referrer=home",
+   "depois": {
+    "390x844": "link a 4090 → CTA 'Descrever a medição' 433–477 (1ª tela), WhatsApp 491 → após âncora seção a 96px, 'Falar pelo WhatsApp' a 429px na tela; formulário diagnostico-confenge a 10352 (submit 11285) de 13550; visíveis nome*, empresa, email, telefone, mensagem (textarea), consentimento*",
+    "contexto_oculto": {
+     "jornada": "contrato",
+     "estagio": "medicoes-glosas-obras-publicas",
+     "origem": "medicoes-glosas-obras-publicas",
+     "cta_id": "medicoes-glosas-obras-publicas-handraise",
+     "route_family": "medicoes-glosas",
+     "landing_page": "/",
+     "landing_url": "/",
+     "referrer": "https://confenge.com.br/"
+    },
+    "nota": "landing_page/landing_url = \"/\" porque a sessão começou na home (primeiro toque); origem = slug do pilar (pré-renderizado). Igual à baseline; rota congelada (canário), altura 13550 idêntica"
+   },
+   "veredito": "igual (rota congelada por hash)"
+  },
+  "T4_artigo_reequilibrio": {
+   "antes": "'Continuar pelo formulário' (6783) → /#contato: VOLTA À HOME; hidden origem='/' (ensureHidden sem force); landing_page/landing_url/tema/referrer chegavam com o artigo; bloco de oferta só com WhatsApp; wa.me text genérico 'Gostaria de analisar um caso de documentos reequilíbrio obra pública (licitação, contrato ou obra pública).'",
+   "depois": {
+    "link": "'Continuar pelo formulário' a 6783px → /reequilibrio-obras-publicas/#captura-pilar (formulário do PILAR, não a home); data-origem=/conteudos/documentos-reequilibrio-obra-publica/; data-tema='documentos reequilíbrio obra pública'",
+    "sessao_apos_clique": "confenge_pseo_attribution ganha tema (origem/landing_url já eram o artigo desde a carga)",
+    "destino_390": "/reequilibrio-obras-publicas/#captura-pilar pousa com a seção a 96px; formulário a 9404px (vtop 484); 1º campo visível 'Nome do representante' entra no rodapé da tela de pouso (in_view=False); submit 'Descrever o pleito' a 10363",
+    "destino_1440": "seção a 96px, formulário vtop 185, 1º campo na tela",
+    "campos_ocultos_no_destino": {
+     "landing_url": "/conteudos/documentos-reequilibrio-obra-publica/",
+     "landing_page": "/conteudos/documentos-reequilibrio-obra-publica/",
+     "tema": "documentos reequilíbrio obra pública",
+     "origem": "reequilibrio-obras-publicas",
+     "referrer": "https://confenge.com.br/conteudos/documentos-reequilibrio-obra-publica/",
+     "jornada": "contrato",
+     "route_family": "reequilibrio",
+     "cta_id": "reequilibrio-obras-publicas-handraise",
+     "textarea_prefill": "Demanda relacionada a: documentos reequilíbrio obra pública.\n\nContexto:\n"
+    },
+    "referrer_documento": "https://confenge.com.br/conteudos/documentos-reequilibrio-obra-publica/",
+    "origem": "continua o slug do pilar ('reequilibrio-obras-publicas'), pré-renderizado; a origem do artigo viaja em landing_url/landing_page/tema/referrer — comportamento documentado em scripts/site/apply_article_pillar_form.py (mesma causa raiz de TAREFAS-01, fora da frente)",
+    "whatsapp": "text agora natural: 'Olá, Tiago. Li o artigo \"Documentos essenciais para pedir reequilíbrio em obra pública\" e quero analisar um caso.…'; 1º contato real a 6729px de 10604 (63%; antes 64%)"
+   },
+   "veredito": "RESOLVIDO o retorno à home: artigo → formulário do pilar com landing_url, landing_page, tema e referrer do artigo e textarea pré-preenchida (2 dos 3 campos nomeados — landing_url e tema — carregam o artigo). RESSALVAS: origem = slug do pilar, não o artigo (contrato documentado em scripts/site/apply_article_pillar_form.py; mesma causa raiz de TAREFAS-01); em 390 o 1º campo entra só no rodapé da tela de pouso"
+  },
+  "T5_triagem": {
+   "antes": "/ → 'Descrever a minha situação' (668) → /triagem-tecnica/: wa.me 650, mailto 712, tel 765; 0 <form>, 0 <textarea>",
+   "depois": {
+    "390x844": "hero secundário a 668 → /triagem-tecnica/ (6396px): 'Fale agora, sem formulário' com WhatsApp 677, e-mail 738, telefone 792 — os três na 1ª tela; 0 <form>, 0 <textarea>",
+    "1440x900": "WhatsApp 329, e-mail 390, telefone 444",
+    "campos_antes_de_escrever": "zero na rota; a escrita acontece fora do site (WhatsApp/e-mail/telefone), como antes"
+   },
+   "veredito": "igual (canais +27px em 390 pela abertura reescrita, ainda na 1ª tela)"
+  },
+  "destinos_que_so_transferem": {
+   "antes": 4,
+   "depois": "artigo → home (resolvido: vai ao pilar); 'Pedir pela triagem' no bloco de avaliação (não aparece mais no bloco); restam /quantitativos-orcamento-obras/ 'contato e triagem geral' → /triagem-tecnica/ e hero home → /servicos/ (aproximam; não são bloqueios)"
+  },
+  "bloqueios_encontrados": [],
+  "ressalvas": [
+   {
+    "onde": "/reequilibrio-obras-publicas/#captura-pilar (destino de T4)",
+    "o_que": "hidden origem = \"reequilibrio-obras-publicas\" (pré-renderizado; ensureHidden só grava campo vazio); origem do artigo viaja em landing_url/landing_page/tema/referrer",
+    "severidade": "BAIXA"
+   },
+   {
+    "onde": "/reequilibrio-obras-publicas/#captura-pilar em 390x844",
+    "o_que": "pouso com a seção a 96px e o formulário a vtop 484; o 1º campo \"Nome do representante\" fica no rodapé da tela (first_visible_field_in_view=false); em 1440 fica na tela",
+    "severidade": "BAIXA"
+   },
+   {
+    "onde": "baseline de tarefas",
+    "o_que": "percursos.json auto-reporta release b98e0878e (12:51Z) enquanto a baseline de esforço (13:35Z) está rotulada 252fc98d1; podem não descrever o mesmo build servido",
+    "severidade": "BAIXA"
+   }
+  ]
+ },
+ "capturas": [
+  "home-390-menu-aberto.jpg",
+  "t1-1440-quantitativos-apos-ancora.jpg",
+  "t1-390-home-primeira-tela.jpg",
+  "t1-390-quantitativos-apos-ancora.jpg",
+  "t2-1440-servicos-avaliacao-landing.jpg",
+  "t2-390-servicos-avaliacao-landing.jpg",
+  "t3-1440-medicoes-apos-ancora.jpg",
+  "t3-390-medicoes-apos-ancora.jpg",
+  "t4-1440-pilar-reequilibrio-formulario.jpg",
+  "t4-390-pilar-reequilibrio-formulario.jpg",
+  "t5-1440-triagem.jpg",
+  "t5-390-triagem.jpg"
+ ]
+}

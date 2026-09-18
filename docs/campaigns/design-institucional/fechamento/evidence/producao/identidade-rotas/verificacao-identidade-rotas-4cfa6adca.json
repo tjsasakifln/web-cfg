@@ -1,0 +1,226 @@
+{
+ "frente": "IDENTIDADE/ROTAS",
+ "campanha": "CONFENGE-POS-REDESIGN-FECHAMENTO-20260918",
+ "checked_at": "2026-09-18T19:51:20Z",
+ "release": {
+  "commit": "4cfa6adca47ae2691aae2c687bbe4649ad7ecb36",
+  "artifact_hash": "004d353405b749ec5a079bbf27e298e504d7786c1e09e0fc21f19dc6eddba091",
+  "build_time": "2026-09-18T18:52:37Z",
+  "predecessor": "252fc98d1"
+ },
+ "artefato_comparado": {
+  "origem": "gh run download 35382722937 -n netcup-release-4cfa6adca…",
+  "tarball_sha256": "88ac5f3461f646f91f2ea083b232ff7cac1294a020d53f94860b266073d121b4",
+  "tarball_sha256_confere_manifest": true,
+  "nota": "worktree sem _site; comparação feita contra o _site do pacote de release do CI (extraído no scratchpad, não no worktree)"
+ },
+ "public_verify": {
+  "saida": "../public-verification-4cfa6adca.json",
+  "exit_code": 0,
+  "problemas": 0,
+  "rotas": 29,
+  "assets": 73,
+  "assets_ok": 73,
+  "desvio_declarado": "ROUTES do script copiada para o scratchpad e estendida com /conteudos/documentos-para-levantamento-quantitativos/ (rota nomeada pela tarefa e ausente da lista original de 28); nenhum arquivo fora de evidence/producao/ foi editado",
+  "canonical_none_no_relatorio": "o regex do script exige <link rel=\"canonical\" href=…>; as páginas emitem <link href=… rel=\"canonical\"/>. Conferido manualmente: canonical presente e correto em todas as rotas com None (ver rotas_sem_cb)",
+  "identity_artifact_hash_confere": true
+ },
+ "rotas_sem_cache_buster": {
+  "nota": "leitura pelo caminho normal do visitante (sem ?cb=), sha256 do corpo == _site do pacote",
+  "resultados": {
+   "home": {
+    "served_sha256": "6a1a0b436d0582b3a8b462315ed7371603e4d8f1faa8442061f6deb367fd899d",
+    "artifact_sha256": "6a1a0b436d0582b3a8b462315ed7371603e4d8f1faa8442061f6deb367fd899d",
+    "match": true
+   },
+   "servicos": {
+    "served_sha256": "9d38c42207dbe603ffcd7dc82875aca96400e280a593d90b404bae6f8a646af1",
+    "artifact_sha256": "9d38c42207dbe603ffcd7dc82875aca96400e280a593d90b404bae6f8a646af1",
+    "match": true
+   },
+   "quantitativos-orcamento-obras": {
+    "served_sha256": "27cb1e5f3b784456ed81be6070ef416f76acde27e87d903255597420e3fec451",
+    "artifact_sha256": "27cb1e5f3b784456ed81be6070ef416f76acde27e87d903255597420e3fec451",
+    "match": true
+   },
+   "conteudos_documentos-reequilibrio-obra-publica": {
+    "served_sha256": "32f6a6b41f785aaa208f06493c89b8f44255bec42c5cde2ae2e70085fd36b380",
+    "artifact_sha256": "32f6a6b41f785aaa208f06493c89b8f44255bec42c5cde2ae2e70085fd36b380",
+    "match": true
+   },
+   "conteudos_documentos-para-levantamento-quantitativos": {
+    "served_sha256": "ebb6f2b3e6094d908a27ac59593b9d4cbed1cf7a62185856785e7283b069a4b6",
+    "artifact_sha256": "ebb6f2b3e6094d908a27ac59593b9d4cbed1cf7a62185856785e7283b069a4b6",
+    "match": true
+   },
+   "entregas": {
+    "served_sha256": "e35c7e967418f53eeac3f8d6f43bba9cbd03a2c22c86456ca07a972f18afe8bc",
+    "artifact_sha256": "e35c7e967418f53eeac3f8d6f43bba9cbd03a2c22c86456ca07a972f18afe8bc",
+    "match": true
+   },
+   "diagnostico-b2g-360": {
+    "served_sha256": "120a0160256d9f61fda1a4d6f3651776317d1caab58c68435412fa4be0a61080",
+    "artifact_sha256": "120a0160256d9f61fda1a4d6f3651776317d1caab58c68435412fa4be0a61080",
+    "match": true
+   },
+   "obrigado": {
+    "served_sha256": "1b02ef25b6e551e85ccb87d2b5a82c362fbe2a1fad26ebd198fcc3cfb3c35597",
+    "artifact_sha256": "1b02ef25b6e551e85ccb87d2b5a82c362fbe2a1fad26ebd198fcc3cfb3c35597",
+    "match": true
+   },
+   "diretoria-b2g": {
+    "served_sha256": "6b8b91d549b8753d60c2e13993c1cd6d5946dedd6a7a957b6de5af88d5626916",
+    "artifact_sha256": "6b8b91d549b8753d60c2e13993c1cd6d5946dedd6a7a957b6de5af88d5626916",
+    "match": true
+   },
+   "parcerias-engenharia": {
+    "served_sha256": "1a9117b3dec6838676de8e12711cfcf477ac05257263bd925528fe4ad43368ee",
+    "artifact_sha256": "1a9117b3dec6838676de8e12711cfcf477ac05257263bd925528fe4ad43368ee",
+    "match": true
+   }
+  }
+ },
+ "obrigado": {
+  "meta_robots": "noindex,follow",
+  "x_robots_tag": "noindex, follow",
+  "canonical": null,
+  "observacao": "página de estado, sem canonical por desenho"
+ },
+ "redirects_410": {
+  "/obrigado-contrato": "200 por regra explícita (_redirects:57 '/obrigado-contrato /obrigado-contrato.html 200'; nginx rule 31); corpo servido sha256 a223ebec… == _site/obrigado-contrato.html; noindex,follow",
+  "/index.html": "200 (sem regra em _redirects; serve a home)",
+  "/conteudos/desconto-da-proposta-em-item-novo-aditivo/": "301 -> /lei-14133-obras/preco-item-novo-desconto-proposta/",
+  "/privacidade.html": "301 -> /privacidade/",
+  "/analises-contratos-publicos/aditivo-saldo-art125-item-novo": "410",
+  "/radar/pesquisa/edicao-zero-4uf/": "410",
+  "/rota-inexistente-fechamento-20260918/": "404 com class=\"state\""
+ },
+ "robots_txt": {
+  "sha256": "aa58f365ca9d63bad59c6bd95349b3d027c95571ea061c349af9721ffbadd5a0",
+  "byte_identico_ao_pacote": true,
+  "grupos_ia_no_topo": true
+ },
+ "sitemaps": {
+  "sitemap.xml": {
+   "byte_identico_ao_pacote": true,
+   "urls": 92,
+   "lastmod_2026-09-18": [
+    "/conteudos/atraso-na-medicao-obra-publica/",
+    "/conteudos/atraso-pagamento-contrato-publico-suspender/",
+    "/conteudos/fiscal-nao-assina-medicao-obra-publica/",
+    "/conteudos/glosa-por-qualidade-obra-publica/",
+    "/conteudos/medicao-por-evento-obra-publica/",
+    "/conteudos/pagamento-parcial-etapa-empreitada-global/"
+   ]
+  },
+  "sitemap-editorial.xml": {
+   "byte_identico_ao_pacote": true,
+   "urls": 4
+  }
+ },
+ "diagnose_margin_js": {
+  "status": 200,
+  "content_type": "application/javascript; charset=utf-8",
+  "content_encoding": "gzip",
+  "bytes_gzip": 6813,
+  "bytes_raw": 21143,
+  "linhas": 1,
+  "sha256_servido": "9571d4fc02ec30d1b929eb735af9ad4a6c08855659183ef209fd0ac1a31608b5",
+  "byte_identico_ao_pacote": true,
+  "cache_control": "public, max-age=14400, must-revalidate",
+  "minificado": true
+ },
+ "cabecalhos": {
+  "baseline": "evidence/diagnostico/G02/prod/{home,servicos,entregas,triagem-tecnica}.headers.txt (produção 252fc98d1, 2026-09-18 12:47Z)",
+  "atual": "headers/*.headers.txt",
+  "comparacao_normalizada": "idênticos ignorando date/etag/age/cf-ray/last-modified/report-to/nel/content-encoding/alt-svc; única diferença cf-cache-status REVALIDATED→HIT em servicos/entregas/triagem-tecnica",
+  "csp": "idêntica (mesma lista de hashes style-src/script-src)",
+  "cache_control_html": "no-cache, max-age=0, must-revalidate, no-transform",
+  "cache_control_css_font": "public, max-age=31536000, immutable",
+  "cache_control_js": "public, max-age=14400, must-revalidate"
+ },
+ "afirmacoes_de_conteudo": {
+  "/conteudos/documentos-reequilibrio-obra-publica/": {
+   "continuar_pelo_formulario": {
+    "count": 1,
+    "href": "/reequilibrio-obras-publicas/#captura-pilar",
+    "bloco": "section.lead-inline#diagnostico-confenge"
+   },
+   "link_pilar_bloco_oferta": {
+    "aside": "a.text-link[data-pillar-link=1] href=/reequilibrio-obras-publicas/ 'Ver serviço de reequilíbrio' + aside-card 'Tema principal' -> /reequilibrio-obras-publicas/"
+   },
+   "ok": true
+  },
+  "/conteudos/documentos-para-levantamento-quantitativos/": {
+   "continuar_pelo_formulario": {
+    "count": 0
+   },
+   "cta_ao_servico": {
+    "texto": "Solicitar proposta de levantamento",
+    "href": "/quantitativos-orcamento-obras/#triagem-quantitativos"
+   },
+   "outros_links_pilar": [
+    "/quantitativos-orcamento-obras/#amostra-quantitativos",
+    "/quantitativos-orcamento-obras/ (Voltar ao serviço)",
+    "/quantitativos-orcamento-obras/ (organic_bridge)"
+   ],
+   "links_para_home_formulario": 0,
+   "arquivo_alterado_na_release": false,
+   "ok": "PARCIAL",
+   "observacao": "implementacao-consolidada.json (#154): 'Nada a mudar' — o artigo já apontava ao serviço via #triagem-quantitativos; não usa o rótulo 'Continuar pelo formulário' por desenho",
+   "divergencia": "A tarefa afirma que esta rota tem 'Continuar pelo formulário' apontando ao pilar/serviço. No HTML servido (== artefato) o rótulo não existe (count 0) e o arquivo não mudou entre 252fc98d1 e 4cfa6adca (git diff vazio). O resultado para o visitante está atendido (CTA 'Solicitar proposta de levantamento' -> /quantitativos-orcamento-obras/#triagem-quantitativos; 0 links ao formulário da home), mas a afirmação literal não se verifica."
+  },
+  "/quantitativos-orcamento-obras/": {
+   "slot_trilha_apos_prancha": {
+    "prancha_img_offset": 10898,
+    "figure_keys_fim": "</dl>",
+    "slot": "<div id=qty-sample-trail data-sample-trail-slot=canonical> imediatamente após <!--pos-inb-02:qty-trail-->",
+    "ok": true
+   },
+   "canais_antes_da_lista_em_triagem": {
+    "ordem": [
+     "h2#qty-triage-title",
+     "h3#qty-channels-title",
+     "a.button-primary (quantities-budget…)",
+     "ul.contact-alt (email, phone)",
+     "ul 'O que ajuda a informar no primeiro contato'"
+    ],
+    "ok": true
+   }
+  },
+  "/servicos/#servico-avaliacao": {
+   "contatos_no_topo": {
+    "ordem": [
+     "article#servico-avaliacao",
+     "span.kicker",
+     "h3",
+     "div.contact-actions (wa.me, mailto)",
+     "… details/summary/h4/ul"
+    ],
+    "ok": true
+   },
+   "pessoa_fisica_cnpj": {
+    "count": 1,
+    "onde": "p.list-ruled__use visível dentro de #servico-avaliacao",
+    "ok": true
+   }
+  },
+  "/": {
+   "hero_deliverable": {
+    "presente": true,
+    "texto": "A quantidade levantada num exemplo demonstrativo, sem obra de cliente, põe duas propostas na mesma conta. Planilha, projeto, laudo e relatório saem assinados, com ART e nota fiscal, para você orçar, contratar ou decidir.",
+    "predecessor": "Com a quantidade levantada deste desenho demonstrativo, duas propostas se comparam pela mesma base. …",
+    "ok": true
+   },
+   "chooser_ask": {
+    "id": "descrever-situacao",
+    "botoes": 1,
+    "href": "#triagem-tecnica",
+    "texto": "Descrever no próximo passo, nesta página",
+    "predecessor_botoes": 3,
+    "ancora_existe": true,
+    "ok": true
+   }
+  }
+ }
+}

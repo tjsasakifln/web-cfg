@@ -1,0 +1,19 @@
+HTTP/2 200 
+date: Fri, 18 Sep 2026 19:47:47 GMT
+content-type: application/javascript; charset=utf-8
+server: cloudflare
+last-modified: Fri, 18 Sep 2026 18:52:37 GMT
+vary: Accept-Encoding
+etag: W/"6aad8875-13b00"
+x-confenge-host-architecture-version: confenge-nginx-node/v2
+x-content-type-options: nosniff
+strict-transport-security: max-age=31536000; includeSubDomains; preload
+cache-control: public, max-age=14400, must-revalidate
+content-encoding: gzip
+age: 65
+cf-cache-status: HIT
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=df1KxwKAUIRTiw6RvRBG4eR1Io90HXP6r1faG%2B1dfFW0Ci%2BJ1szAV66UP8871BcDLN%2FvTd2ORD7VVHz0QEUUsqC7UcR4IYIlREeEjkRMbIhWXFT%2F7StbC9oJ6X5CqEq3tiQN%2FmXDL9HiG3BqvuY%3D"}]}
+nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+cf-ray: a3d2dd4bba562db5-GRU
+alt-svc: h3=":443"; ma=86400
+

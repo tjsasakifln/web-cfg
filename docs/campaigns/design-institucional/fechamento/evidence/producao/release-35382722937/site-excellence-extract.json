@@ -1,0 +1,122 @@
+{
+ "source": "site-ci-reports artifact id 10563593363 (run 35382722937), build/reports/site-excellence.json",
+ "schema": "confenge.site-excellence-report/1.0",
+ "contract_version": "CFG-SITE-EXCELLENCE-2026-08-29-v1",
+ "implementation_base_sha": "83bcce42cdd742a98583d14ce69c581b472137fa",
+ "commit_sha": "4cfa6adca47ae2691aae2c687bbe4649ad7ecb36",
+ "generated_at": "2026-09-18T19:26:01.774401Z",
+ "contains_sensitive_data": false,
+ "score_summary": {
+  "overall_status": "MEASURED_PASS",
+  "global_excellence_claim": "10/10",
+  "addressable_score": 10.0,
+  "addressable_score_label": "10/10",
+  "addressable_dimensions": 14,
+  "measured_pass_dimensions": 14,
+  "measured_fail_dimensions": 0,
+  "blocked_external_dimensions": 0,
+  "ci_blocking": false
+ },
+ "dimensions_status": [
+  {
+   "id": "value-proposition-copy",
+   "label": "Value proposition and copy",
+   "status": "MEASURED_PASS"
+  },
+  {
+   "id": "information-architecture",
+   "label": "Information architecture",
+   "status": "MEASURED_PASS"
+  },
+  {
+   "id": "responsive",
+   "label": "Responsive behavior",
+   "status": "MEASURED_PASS"
+  },
+  {
+   "id": "conversion",
+   "label": "Conversion",
+   "status": "MEASURED_PASS"
+  },
+  {
+   "id": "offer-truth",
+   "label": "Offer truth",
+   "status": "MEASURED_PASS"
+  },
+  {
+   "id": "trust-proof",
+   "label": "Trust and proof",
+   "status": "MEASURED_PASS"
+  },
+  {
+   "id": "seo",
+   "label": "SEO",
+   "status": "MEASURED_PASS"
+  },
+  {
+   "id": "editorial-originality",
+   "label": "Editorial originality",
+   "status": "MEASURED_PASS"
+  },
+  {
+   "id": "performance",
+   "label": "Performance",
+   "status": "MEASURED_PASS"
+  },
+  {
+   "id": "accessibility",
+   "label": "Accessibility",
+   "status": "MEASURED_PASS"
+  },
+  {
+   "id": "security-privacy",
+   "label": "Security and privacy",
+   "status": "MEASURED_PASS"
+  },
+  {
+   "id": "analytics-revops",
+   "label": "Analytics and RevOps",
+   "status": "MEASURED_PASS"
+  },
+  {
+   "id": "deploy-runtime",
+   "label": "Deploy and runtime",
+   "status": "MEASURED_PASS"
+  },
+  {
+   "id": "freshness",
+   "label": "Freshness",
+   "status": "MEASURED_PASS"
+  }
+ ],
+ "freshness": {
+  "id": "freshness",
+  "label": "Freshness",
+  "owner": "web-cfg #413",
+  "status": "MEASURED_PASS",
+  "metrics": [
+   {
+    "id": "gsc-freshness",
+    "status": "MEASURED_PASS",
+    "codes": [],
+    "evidence": {
+     "owner": "web-cfg #413",
+     "as_of": "2026-09-15",
+     "age_days": 3,
+     "routes": [
+      "search observation aggregate"
+     ],
+     "viewports": [
+      "not applicable"
+     ],
+     "source_available": true,
+     "source_kind": "durable_store",
+     "durable_read": "current",
+     "durable_reason_codes": [],
+     "maximum_age_days": 7,
+     "durable_status": "CURRENT"
+    }
+   }
+  ]
+ }
+}

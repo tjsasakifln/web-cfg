@@ -1,0 +1,190 @@
+{
+  "frente": "PRONTIDAO_OPERACIONAL",
+  "campanha": "CONFENGE-POS-REDESIGN-FECHAMENTO-20260918",
+  "coletado_em": "2026-09-18T19:45Z",
+  "release": {
+    "commit": "4cfa6adca47ae2691aae2c687bbe4649ad7ecb36",
+    "artifact_hash": "004d353405b749ec5a079bbf27e298e504d7786c1e09e0fc21f19dc6eddba091",
+    "build_time": "2026-09-18T18:52:37Z",
+    "predecessor": "252fc98d1",
+    "run_netcup_release": "35382722937"
+  },
+  "metodo": "ssh ec-prod; env carregado com 'set -a; . /etc/confenge-web/runtime.env; set +a'; valores de segredo nunca ecoados (so SET/UNSET); leituras GET apenas; nenhum formulario enviado; nenhum e-mail enviado; nenhuma escrita em store, Warmbly ou Resend.",
+  "resultado": "PASS_COM_RESSALVAS",
+  "1_resend_dominio": {
+    "endpoint": "GET https://api.resend.com/domains/a75ceeb3-52aa-4ae6-8f9c-26f3d82489ea",
+    "http": 200,
+    "name": "confenge.com.br",
+    "status": "verified",
+    "region": "sa-east-1",
+    "created_at": "2026-08-02T16:11:41Z",
+    "records": [
+      {"record": "DKIM", "type": "TXT", "name": "resend._domainkey", "status": "verified"},
+      {"record": "SPF", "type": "MX", "name": "send", "status": "verified"},
+      {"record": "SPF", "type": "TXT", "name": "send", "status": "verified"}
+    ],
+    "esperado": "verified",
+    "ok": true
+  },
+  "2_ops_host_127.0.0.1:18100": {
+    "health": {
+      "http": 200,
+      "ok": true,
+      "service": "confenge-ops",
+      "storage": {"ok": true, "backend": "filesystem", "code": null},
+      "auth_configured": true,
+      "ts": "2026-09-18T19:45:09.907Z"
+    },
+    "inbound_handoff": {
+      "counters": {
+        "persisted_leads": 23, "pending": 0, "delivered": 17, "retryable": 0, "retries": 0,
+        "permanent_failures": 1, "skipped": 5, "blocked": 1, "dead": 0,
+        "latency": {"count": 17, "last_ms": 369, "p50_ms": 268, "p95_ms": 369}
+      },
+      "money_asset": {
+        "asset_id": "diagnostico-defesa-margem",
+        "events": {"asset_view": 11, "contract_analyzed": 2, "cta_view": 1, "cta_click": 0, "lead_persisted": 0, "lead_created": 0},
+        "lead_created_persisted": 0
+      },
+      "configuration": {"webhook_url": "SET", "webhook_secret": "SET", "contract": "READY", "reason": null, "destination_fingerprint": "WARMBLY_PRODUCTION_V1"},
+      "safety_gate": {"ok": true, "contract": "READY", "auto_send_off": true, "status": "READY", "dispatch_attempted": false, "reason": null},
+      "ts": "2026-09-18T19:45:10.462Z",
+      "identico_ao_diagnostico_G03_12:53Z": true
+    },
+    "leads": {
+      "kind_all": {
+        "count": 23,
+        "counts_by_kind": {"real": 0, "synthetic": 23, "qa": 0, "spam": 0, "internal": 0, "unknown": 0},
+        "sla_breaches": 0,
+        "commercial_stage": {"lead_persisted": 23},
+        "delivery_email": {"skipped": 23},
+        "delivery_notify": {"skipped": 23},
+        "received_at_min": "2026-08-27T14:13:47.056Z",
+        "received_at_max": "2026-09-18T09:05:39.540Z"
+      },
+      "kind_real": {"count": 0, "sla_breaches": 0},
+      "observacao": "Nenhum lead real jamais persistido em producao: o caminho record_kind=real (Resend + notify) ainda nao foi exercitado. G03 sera o primeiro."
+    }
+  },
+  "3_runtime_servido": {
+    "edge_https://confenge.com.br/.well-known/build-info.json": {
+      "http": 200, "cf_cache_status": "DYNAMIC",
+      "commit": "4cfa6adca47ae2691aae2c687bbe4649ad7ecb36",
+      "artifact_hash": "004d353405b749ec5a079bbf27e298e504d7786c1e09e0fc21f19dc6eddba091",
+      "build_time": "2026-09-18T18:52:37Z",
+      "manifest_hash": "460bf11cd31810514c592c6456c9914e1c00d9509a0541bc6b857d21f43adad6",
+      "environment": "production"
+    },
+    "edge_https://confenge.com.br/.well-known/runtime-info.json": {
+      "http": 200, "cf_cache_status": "DYNAMIC",
+      "release_sha": "4cfa6adca47ae2691aae2c687bbe4649ad7ecb36",
+      "build_timestamp": "2026-09-18T18:52:37.000Z",
+      "public_artifact_hash": "004d353405b749ec5a079bbf27e298e504d7786c1e09e0fc21f19dc6eddba091",
+      "release_bundle_hash": "88ac5f3461f646f91f2ea083b232ff7cac1294a020d53f94860b266073d121b4",
+      "node_version": "v22.23.2",
+      "storage_backend": "filesystem",
+      "host_architecture_version": "confenge-nginx-node/v2",
+      "profile": "netcup-production",
+      "contract_version": "confenge-portable-runtime/v2"
+    },
+    "host_http://127.0.0.1:18100/.well-known/runtime-info.json": {
+      "release_sha": "4cfa6adca47ae2691aae2c687bbe4649ad7ecb36",
+      "public_artifact_hash": "004d353405b749ec5a079bbf27e298e504d7786c1e09e0fc21f19dc6eddba091",
+      "identico_a_borda": true
+    },
+    "nota": "/.well-known/build-info.json e servido pelo nginx (estatico); no Node loopback :18100 devolve not_found por desenho (nginx-node/v2). /runtime-info.json e /build-info.json na raiz nao existem (404) — os caminhos canonicos sao /.well-known/*.",
+    "systemd_confenge-web-runtime": {
+      "ActiveState": "active",
+      "SubState": "running",
+      "MainPID": 345377,
+      "NRestarts": 0,
+      "ExecMainStartTimestamp_local": "2026-09-18 16:39:01 -03",
+      "ExecMainStartTimestamp_utc": "2026-09-18T19:39:01Z",
+      "ActiveEnterTimestamp_utc": "2026-09-18T19:39:01Z",
+      "build_time_utc": "2026-09-18T18:52:37Z",
+      "start_apos_build_min": 46.4,
+      "reiniciado_apos_promocao": true,
+      "prova": "ExecMainStartTimestamp (19:39:01Z) > build_time (18:52:37Z) e runtime-info do processo em execucao reporta release_sha 4cfa6adca. NRestarts=0 conta apenas reinicios automaticos por falha desde o ultimo start; nao contradiz o restart de promocao.",
+      "journal_ultimas_15_linhas": "runtime_request/analytics_batch normais, sem erro; durable_store_failed=false",
+      "medido_em_utc": "2026-09-18T19:45:10Z"
+    },
+    "ok": true
+  },
+  "4_warmbly": {
+    "health_http://127.0.0.1:8080/health": {"http": 200, "body": {"status": "ok"}},
+    "health_publico_https://api.confenge.com.br/api/v1/webhooks/confenge/inbound/health": {"http": 200},
+    "containers_up": [
+      "warmbly-confenge-backend-1 127.0.0.1:8080 healthy (3 dias)",
+      "warmbly-confenge-postgres-1 127.0.0.1:15432 healthy (2 semanas)",
+      "warmbly-confenge-worker-1, consumer-1, realtime-1 (:4000), tracking-1 (:3000), web-1 (:5173), admin-1 (:5174), nats-1, redis-1, mailpit-1"
+    ],
+    "acesso_psql": "docker exec warmbly-confenge-postgres-1 psql -U warmbly -d warmbly_dev (psql nao esta no PATH do host; o binario vive no container)",
+    "outreach_inbound_leads_por_status": {"OPEN": 16, "SUPPRESSED": 23, "total": 39},
+    "outreach_inbound_leads_status_x_suppress_x_record_kind": [
+      ["OPEN", "", "(none)", 8],
+      ["OPEN", "", "synthetic", 8],
+      ["SUPPRESSED", "DNC", "(none)", 2],
+      ["SUPPRESSED", "conflict_decline", "(none)", 1],
+      ["SUPPRESSED", "conflict_hit", "(none)", 1],
+      ["SUPPRESSED", "consent_missing", "(none)", 1],
+      ["SUPPRESSED", "consent_missing", "synthetic", 2],
+      ["SUPPRESSED", "synthetic", "synthetic", 16]
+    ],
+    "max_warmbly_ingested_at": "2026-09-18T09:05:39.559Z",
+    "ingeridos_hoje_2026-09-18": 8,
+    "identico_ao_diagnostico_G03": true,
+    "identidade_qa_tiago.sasaki@confenge.com.br": {
+      "linhas_previas_em_outreach_inbound_leads": 0,
+      "em_suppressed_recipients": 0,
+      "dedupe": "inboundDedupeWindow = 24h por identity_key (inbound.go:16; inbound_ingest.go:103-115, 225-238): B1 e C1 receberao dedupe_of_lead_id = lead_id de A1 e podem herdar commercial_action_id; status permanece OPEN (o dedupe nao suprime)."
+    },
+    "ok": true
+  },
+  "5_env_runtime": {
+    "fonte": "/etc/confenge-web/runtime.env (somente presenca/booleanos)",
+    "LEAD_REQUIRE_TURNSTILE": "1",
+    "LEAD_REQUIRE_ORIGIN": "1",
+    "LEAD_DELIVERY_TIMEOUT_MS": "UNSET (default 5000 em lead-delivery.cjs)",
+    "RESEND_API_KEY": "SET",
+    "OPS_TOKEN": "SET",
+    "TURNSTILE_SECRET_KEY": "SET",
+    "CONFENGE_INBOUND_WEBHOOK_SECRET": "SET",
+    "LEAD_PROBE_SECRET": "SET",
+    "LEAD_NOTIFY_EMAIL": "tiago.sasaki@confenge.com.br",
+    "LEAD_FROM_EMAIL": "CONFENGE Leads <leads@confenge.com.br>",
+    "ok": true
+  },
+  "6_formularios_publicos_4cfa6adca": {
+    "A_home_#contato": {
+      "http": 200, "ancora_presente": true, "form_id": "formulario-contato", "multistep": true,
+      "step1": ["nome (req)", "telefone", "email", "estagio (select, req)"],
+      "step2": ["empresa", "mensagem", "consentimento (req)", "qualificadores opcionais"],
+      "botoes": ["Adicionar mais detalhes (button, step1->2)", "Voltar", "Descrever minha situação (submit)"],
+      "turnstile": "slot #turnstile-slot hidden com sitekey publico 0x4AAAAAAEdwDCuWM5XOrEZ3; widget size normal; carrega em focusin/pointerdown/intersection (form.js:806-825)"
+    },
+    "B_/medicoes-glosas-obras-publicas/#captura-pilar": {
+      "http": 200, "ancora_presente": true, "form": "pillar-capture-form", "action": "/.netlify/functions/lead",
+      "cta_id": "medicoes-glosas-obras-publicas-handraise", "asset_id": "medicoes-glosas-obras-publicas", "route_family": "medicoes-glosas",
+      "campos": ["nome (req)", "empresa", "email", "telefone", "mensagem", "consentimento (req)"], "submit": "Descrever a medição", "turnstile": "compact"
+    },
+    "C_/entregas/#captura-entregas": {
+      "http": 200, "ancora_presente": true, "form": "pillar-capture-form", "action": "/.netlify/functions/lead",
+      "cta_id": "entregas-hub-handraise", "asset_id": "entregas-exemplos-hub", "route_family": "entregas",
+      "campos": ["nome (req)", "empresa", "email", "telefone", "mensagem", "consentimento (req)", "deliverable_id (select opcional)"], "submit": "Saber qual entrega resolve a minha pergunta", "turnstile": "compact"
+    },
+    "regra_servidor": "lead-core.cjs:957 exige telefone OU email; rate limit 8/IP e 12/fingerprint por 10 min (lead-rate-limit.cjs) — 3 envios cabem."
+  },
+  "classificacao_esperada_qa": {
+    "nome": "Tiago Sasaki",
+    "email_dominio": "confenge.com.br",
+    "record_kind_esperado_web_cfg": "real",
+    "motivo": "record-kind.cjs: confenge.com.br nao esta em RESERVED_TEST_EMAIL_DOMAINS (example.*, test.com, localhost, invalid, confenge.test, mailinator.com); nome nao casa SYNTHETIC_NAME_RE/QA_NAME_RE; local-part nao casa ^probe|^qa|^test|synthetic; 'REF-FECH-20260918-A1' nao casa /\\[qa\\]|synthetic|do not contact|probe only/; sem utm; UA de navegador real.",
+    "warmbly_skip_esperado": "vazio (skip.go: tokens synthetic|qa|internal|synthetic-inbound ausentes) -> entra em INBOUND NOW sem include_synthetic"
+  },
+  "ressalvas": [
+    {"severidade": "MEDIA", "onde": "docs/ops task step 6 / netlify/functions/ops.cjs:364-376 + lib/lead-stages.cjs:216-221", "descricao": "ops?action=lead com pii=0 devolve delivery apenas como {notify:<status>, email:<status>}; delivery.email.provider_id/http/reason so saem com pii=1 (que tambem expoe nome/telefone/email). O protocolo prescreve pii=1 somente no shell do host com jq filtrando o provider_id, ou o fallback sem PII por assunto no Resend GET /emails."},
+    {"severidade": "MEDIA", "onde": "producao web-cfg store", "descricao": "counts_by_kind.real=0 e delivery_email=skipped em 100% dos 23 registros: o caminho real (Resend + status persisted_notified) nunca rodou em producao; G03 e a primeira prova."},
+    {"severidade": "BAIXA", "onde": "inbound_handoff counters", "descricao": "permanent_failures=1 e blocked=1 historicos (sinteticos), inalterados desde o diagnostico de 12:53Z; nao bloqueiam."},
+    {"severidade": "BAIXA", "onde": "Warmbly dedupe 24h", "descricao": "B1 e C1 serao marcados dedupe_of_lead_id=A1 por identidade; e comportamento esperado, nao defeito."}
+  ]
+}

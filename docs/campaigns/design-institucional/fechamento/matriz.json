@@ -1,0 +1,154 @@
+{
+ "schema": "confenge.pos-redesign-fechamento/1.0",
+ "campanha": "CONFENGE-POS-REDESIGN-FECHAMENTO-20260918",
+ "gerado_em": "2026-09-18T20:10Z",
+ "estado_final": "PUBLICADO_E_VERIFICADO_COM_DEPENDENCIAS_IDENTIFICADAS",
+ "aceite_tecnico_operacional": "ATENDIDO (correções publicadas e verificadas na release 4cfa6adca; sem bloqueio de captura, segurança, integridade ou uso básico; funil semanticamente correto; GSC atualizado pela fonte; desempenho dentro do contrato; evidências correlacionadas à release)",
+ "validacao_comercial_humana": "NAO_CONCEDIDA (nada observado com pessoas, oportunidades ou dados reais nesta campanha)",
+ "baseline": {
+  "producao": "252fc98d1 (rotas byte-idênticas a b98e0878e)",
+  "predecessor_rollback": "252fc98d1",
+  "releases": [
+   "35322685544 (b98e0878e)",
+   "35346187126 (252fc98d1, docs #700)",
+   "35382722937 (4cfa6adca, PR #701)"
+  ]
+ },
+ "release_verificada": {
+  "pr": "#701 head d310ff8ae",
+  "merge_main": "4cfa6adca47ae2691aae2c687bbe4649ad7ecb36",
+  "artefato_atestado_sha256": "88ac5f3461f646f91f2ea083b232ff7cac1294a020d53f94860b266073d121b4",
+  "public_artifact_hash": "004d353405b749ec5a079bbf27e298e504d7786c1e09e0fc21f19dc6eddba091",
+  "build_time": "2026-09-18T18:52:37Z",
+  "promovido_em": "2026-09-18T19:39:03Z",
+  "servido_confirmado": "build-info = runtime-info = 4cfa6adca; 29/29 rotas byte-idênticas ao pacote; 73/73 assets; robots/sitemaps/redirects/404 conferidos"
+ },
+ "instrumentos": {
+  "lighthouse": "13.4.1 + Chrome for Testing 151.0.7922.34, mobile, throttling simulado, cache frio, 5x/rota",
+  "esforco": "visitor_effort.mjs v2-g04-09 (first_nav≠first_contact, pranchas lidas do SVG)",
+  "capturas": "capture.mjs 390x844 / 1440x1000, contexto novo (não existe banner de consentimento no site)",
+  "axe/UI": "emulação Chrome headless (sem leitor de tela real, sem Safari/iPhone)"
+ },
+ "gaps": [
+  {
+   "id": "G01",
+   "problema": "Abertura da home explicava 'este desenho' antes de a prancha estar visível (prancha em y=848 com dobra 844; 320x700 y=937)",
+   "rota": "/ hero-deliverable",
+   "evidencia_antes": "diagnostico/G01/manifest-fold-prod.json, home-390x844-fold-prod.jpg",
+   "prioridade": "P0",
+   "correcao": "Parágrafo reescrito: 'A quantidade levantada num exemplo demonstrativo, sem obra de cliente, põe duas propostas na mesma conta…' (ordem h1→lead→ações→prova→prancha preservada; sem crescer a dobra)",
+   "teste": "first-fold 25/25 fonte e artefato; test_home_first_fold; font_fallback drift 0; GX-06",
+   "evidencia_depois": "producao/capturas/home-390x844-fold-prod-4cfa6adca.jpg; esforco-pareado.json (/ 390: primary_in_fold true, CTA 614–658)",
+   "estado": "CORRIGIDO_E_VERIFICADO"
+  },
+  {
+   "id": "G02",
+   "problema": "Repetições de método/entrega/condições e bastidor editorial nas rotas prioritárias",
+   "rota": "/, /servicos/, /triagem-tecnica/, /entregas/, /quantitativos-orcamento-obras/, /compatibilizacao-projetos-engenharia/ (e percurso de avaliação /servicos/#servico-avaliacao)",
+   "evidencia_antes": "diagnostico/G02/inventario-blocos.v1.json, G02/frente-a/densidade-frente-a.json",
+   "prioridade": "P1",
+   "correcao": "Cada redundância confirmada tem destino documentado em evidence/implementacao-consolidada.json e correcoes-revisao-consolidadas.json (fundida, aproximada da prancha, details acessível ou removida); condições e ressalvas materiais preservadas junto da alegação; /medicoes-glosas-obras-publicas/ não editado (registro de preservação do unlock-plan de 2026-09-16 exige decisão do fundador)",
+   "teste": "copy/vocabulário/GX-06 na fonte e no artefato; contratos de página; censo CTA 196; contact-journeys 499/499",
+   "evidencia_depois": "producao/esforco-pareado.json — 390x844: / 16572→16099 px; /servicos/ 16071→14881; /quantitativos/ 20426→17940; /compatibilizacao/ 15580→13615; /entregas/ 24142→23595; /triagem/ 6557→6396; prosa −209 a −2478 chars; primeiro contato /servicos/ 731→479 px; medições 0 (congelada)",
+   "estado": "CORRIGIDO_E_VERIFICADO (medições: CONFIRMADO, decisão do fundador pendente)"
+  },
+  {
+   "id": "G03",
+   "problema": "Sonda sintética provava transporte, não atendimento: e-mail/notify suprimidos por desenho. Causa real encontrada: domínio confenge.com.br 'failed' no Resend (DKIM ausente) — nenhum e-mail de lead real jamais saiu do host",
+   "rota": "formulário → Turnstile → lead.cjs → store → Resend → Warmbly",
+   "evidencia_antes": "diagnostico/G03/recebimento-operacional-diagnostico.json; evidence/g03-dns-resend.json",
+   "prioridade": "P0",
+   "correcao": "TXT resend._domainkey criado (Cloudflare record 6d371d6a…) e domínio verified 2026-09-18 13:14Z; provider_id/http do Resend persistidos no store; prazo cobrindo corpo da resposta e siteverify; replay idempotente pré-Turnstile só com chave no formato do front; turnstile.reset após timeout/403/429; rotina mínima e consulta por lead_id em docs/ops/LEAD-HANDLING.md; EXTERNAL-ACTIONS §2 honesto (DMARC p=none)",
+   "teste": "test_lead_function 103; inbound-handoff 31; canary e2e; xray turnstile e2e; form-funnel",
+   "evidencia_depois": "producao/prontidao-operacional-4cfa6adca.json (Resend verified, runtime 4cfa6adca ativo, Warmbly ok); producao/g03-qa-tentativa-automacao.json (Turnstile 600010 recusou o navegador automatizado; envio humano não executado)",
+   "estado": "CORRIGIDO no código e no DNS; caminho normal = VALIDACAO_HUMANA_PENDENTE (3 envios pelo protocolo g03-qa-protocolo.md + confirmação na caixa)"
+  },
+  {
+   "id": "G04",
+   "problema": "'Ver serviços por situação' contado como contato; cta_click misturava navegação e intenção; CTAs de âncora e header não emitiam; hub /servicos/ fora do contrato origem→serviço; classe D inexistente; coortes com denominadores incompatíveis",
+   "rota": "js/modules/nav.js, analytics.js, closed-loop 1.1.0, analytics-agg, attribution_cohorts, visitor_effort.mjs",
+   "evidencia_antes": "diagnostico/G04/dataLayer-probe-252fc98d1.json",
+   "prioridade": "P1",
+   "correcao": "destination_type em cta_click (form/anchor/route/whatsapp/email/tel); closed-loop conta no estágio cta só intenção, navegação em cta_nav_clicks, legado rotulado; handoff derivado do store (D) sem promoção a qualified; email/tel com atribuição; cta_kind em wa.me/mailto; ORIGIN_PREFIXES/CANONICAL_DESTINATIONS em lockstep; coortes rotulam unidades; gate test:event-semantics (34 checks) no site-ci e scorecard; ferramenta de esforço separa first_nav/first_contact",
+   "teste": "event-semantics 34/34 (CI e borda 18/19 com 1 ressalva de cta_position em artigo); analytics/commercial-event/attribution; closed-loop 88",
+   "evidencia_depois": "producao/event-semantics-borda-4cfa6adca.json (nenhum evento observed-only sai do cliente; 0 PII)",
+   "estado": "CORRIGIDO_E_VERIFICADO"
+  },
+  {
+   "id": "G05",
+   "problema": "Scorecard gsc_stale/BLOCKED_EXTERNAL: consumidor lia seo/gsc-*/search-analytics-redacted.json (última 2026-08-24) que nenhum produtor atualiza; produtor durável estava CURRENT",
+   "rota": "scripts/site/site_excellence.py, site-ci/netcup-release",
+   "evidencia_antes": "diagnostico/G05/g05-gsc-freshness-evidence.json",
+   "prioridade": "P1",
+   "correcao": "Leitura da fonte durável no caminho de release (verify_gsc_freshness.mjs, OPS_TOKEN por secrets: inherit); STALE→BLOCKED gsc_stale; ausência→gsc_unavailable; fixture marcada; maximum_age_days mantido em 7; daily-ops sem gsc_sync duplicado e sonda sem LEAD_PROBE_SECRET como BLOCKED_EXTERNAL visível",
+   "teste": "test_site_excellence 25; workflow-gates 18; gsc_freshness_probe 5",
+   "evidencia_depois": "producao/release-35382722937/: GSC_DURABLE_READ status=CURRENT as_of=2026-09-15 delivery_source=durable_store; site-excellence.json gsc-freshness MEASURED_PASS age_days 3; claim 10/10, 14/14 dimensões",
+   "estado": "CORRIGIDO_E_VERIFICADO (rotina recorrente gsc-sync verde; daily-ops ainda falha pela sonda sem LEAD_PROBE_SECRET no GitHub — dependência externa nomeada)"
+  },
+  {
+   "id": "G06",
+   "problema": "Quantitativos era a rota mais fraca (LCP 2413 ms mediano histórico); lcp_element ausente",
+   "rota": "/, /quantitativos-orcamento-obras/",
+   "evidencia_antes": "diagnostico/G06/lighthouse-prod-252fc98d1-baseline.json (5x), lhr-*.json.gz",
+   "prioridade": "P2",
+   "correcao": "Diagnóstico: LCP é texto (p.hero-lead / p.measure), não imagem; único limitante sustentado = @import serializado de styles-tokens.css (~175 ms simulado, dentro do ruído 173–232 ms) — sem otimização de CSS (ganho não demonstrável acima do ruído; exigiria cadeia de recaptura de CSS); ferramenta corrigida (lcp-breakdown-insight); orçamento de bytes preservado com minificação das cópias públicas de assets/js (fonte intocada)",
+   "teste": "Lighthouse local MEASURED_PASS; test:minify-public-js",
+   "evidencia_depois": "producao/lighthouse-pareado-252fc98d1-vs-4cfa6adca.json — / perf 99 (98) LCP 1861 ms (1937) TBT 0 (104); /servicos/ e /quantitativos/ dentro da faixa; sem regressão material; 4 rotas sem baseline 5x (medição absoluta perf 98–99)",
+   "estado": "DIAGNOSTICADO_E_VERIFICADO (trade-off documentado; sem alegação de ganho)"
+  },
+  {
+   "id": "G07",
+   "problema": "Demonstrativos explicam método, não resultado de cliente",
+   "rota": "data/site/permissioned-proof-registry.json",
+   "evidencia_antes": "NO_APPROVED_CLIENT_PROOF, records []",
+   "prioridade": "P2",
+   "correcao": "Nenhuma publicação; checklist do material faltante em g07-prova-real-checklist.md",
+   "teste": "test:real-proof-registry; permissioned proof",
+   "evidencia_depois": "—",
+   "estado": "DEPENDENCIA_EXTERNA"
+  },
+  {
+   "id": "G08",
+   "problema": "Compreensão por compradores, leitor de tela real e Safari/iPhone físico não demonstrados",
+   "rota": "—",
+   "evidencia_antes": "—",
+   "prioridade": "P2",
+   "correcao": "Roteiro de 3 tarefas em g08-roteiro-validacao-humana.md; tudo o que foi verificado é emulação (Chrome headless, axe, viewports 320/360/390/1440)",
+   "teste": "audit:axe, test:ui, layout-sitewide (emulados)",
+   "evidencia_depois": "—",
+   "estado": "VALIDACAO_HUMANA_PENDENTE"
+  }
+ ],
+ "acoes_humanas_minimas": [
+  {
+   "acao": "Executar os 3 envios normais de g03-qa-protocolo.md num navegador real (Turnstile recusa automação: erro 600010) e confirmar na caixa tiago.sasaki@confenge.com.br a chegada dos 3 e-mails; correlacionar por lead_id no host",
+   "dono": "Engº Tiago Sasaki",
+   "acesso": "navegador + ssh ec-prod",
+   "resultado_esperado": "G03 → CORRIGIDO_E_VERIFICADO até o destino operacional (Warmbly INBOUND NOW + e-mail recebido)"
+  },
+  {
+   "acao": "Criar o secret LEAD_PROBE_SECRET no GitHub Actions com o mesmo valor de /etc/confenge-web/runtime.env",
+   "dono": "fundador",
+   "acesso": "GitHub + host",
+   "resultado_esperado": "daily-ops volta a PASS na sonda; cobertura total da rotina"
+  },
+  {
+   "acao": "Decidir: token Cloudflare dedicado para registros de e-mail (hoje o do certbot) e elevar DMARC de p=none para p=quarantine com rua",
+   "dono": "fundador",
+   "acesso": "Cloudflare",
+   "resultado_esperado": "dependência de credencial e política de e-mail resolvidas"
+  },
+  {
+   "acao": "Decisão editorial nas rotas congeladas: legenda duplicada em /medicoes-glosas-obras-publicas/ e os 5 artigos com hash pinado (canário #389, click-origin, striking-distance) que ainda levam 'Continuar pelo formulário' à home",
+   "dono": "fundador",
+   "acesso": "—",
+   "resultado_esperado": "nova aprovação com hash ou manutenção consciente"
+  },
+  {
+   "acao": "G07: material de caso real com consentimento escopado; G08: 3 participantes para o roteiro",
+   "dono": "fundador",
+   "acesso": "clientes/participantes",
+   "resultado_esperado": "prova real registrada; diagnóstico qualitativo"
+  }
+ ]
+}
