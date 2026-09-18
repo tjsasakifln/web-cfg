@@ -372,7 +372,7 @@
     },
     "review_reference": {
       "id": "RF-01",
-      "label": "Referência de revisão",
+      "label": "O que a revisão mudou",
       "text": "RF-01: A verga da janela WN-01 invade o volume da viga B-01 no estado original. A janela WN-01 entra neste desconto de parede.",
       "href": "/revisao-tecnica-projetos-engenharia/#extrato-demonstrativo",
       "document_ref": "PR-ARQ-R00"

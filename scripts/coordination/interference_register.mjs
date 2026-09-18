@@ -230,7 +230,7 @@ export function mapInb06Consumption(consumption, extras = {}) {
       forwarding: {
         action: "Encaminhar ao autor do recorte arquitetônico demonstrativo: avaliar rebaixar a verga e manter B-01 na cota original.",
         adjustment_owner_role: "autor do recorte arquitetônico demonstrativo",
-        coordinator_role: "registrar, localizar e encaminhar; não projetar a correção neste recorte",
+        coordinator_role: "registra, localiza e encaminha",
       },
     },
     secondary_findings: info
@@ -263,7 +263,7 @@ export function mapInb06Consumption(consumption, extras = {}) {
             forwarding: {
               action: "Pedir ao projetista hidrossanitário de origem as dimensões internas e os diâmetros. Enquanto esses dados não chegam, o item permanece pedido de informação, não falha comprovada.",
               adjustment_owner_role: "projetista hidrossanitário de origem",
-              coordinator_role: "registrar o pedido de informação; não converter a lacuna em falha comprovada",
+              coordinator_role: "registra o pedido de informação",
             },
           },
         ]
@@ -301,8 +301,9 @@ function escapeHtml(value) {
     .replaceAll('"', "&quot;");
 }
 
-export function renderFindingHtml(record, liveDocuments) {
+export function renderFindingHtml(record, liveDocuments, options = {}) {
   const finding = record.finding;
+  const withKicker = options.kicker !== false;
   const docs = liveDocuments || record.live_documents || [];
   const estado = displayEstado(finding, docs);
   assertHonestEstado(estado);
@@ -319,8 +320,8 @@ export function renderFindingHtml(record, liveDocuments) {
   const staleNote = estado.code === "stale_revision"
     ? `<p class="coord-finding-stale">${escapeHtml(estado.detail)}</p>`
     : "";
-  return `<article class="coord-finding" data-finding-id="${escapeHtml(finding.id)}" data-finding-type="${escapeHtml(finding.type)}" data-estado="${escapeHtml(estado.code)}" data-resolved="${estado.resolved ? "true" : "false"}" data-detection="${escapeHtml(finding.detection || "")}">
-<p class="coord-finding-kicker">${sourceNote}</p>
+  const kicker = withKicker ? `\n<p class="coord-finding-kicker">${sourceNote}</p>` : "";
+  return `<article class="coord-finding" data-finding-id="${escapeHtml(finding.id)}" data-finding-type="${escapeHtml(finding.type)}" data-estado="${escapeHtml(estado.code)}" data-resolved="${estado.resolved ? "true" : "false"}" data-detection="${escapeHtml(finding.detection || "")}">${kicker}
 <h3>${escapeHtml(finding.id)} · ${escapeHtml(finding.type_label || finding.type)}</h3>
 <dl class="coord-finding-dl">
 <dt>Localização</dt>
@@ -336,7 +337,7 @@ export function renderFindingHtml(record, liveDocuments) {
 <dt>Possível consequência</dt>
 <dd>${escapeHtml(finding.possible_consequence)}</dd>
 <dt>Encaminhamento</dt>
-<dd>${escapeHtml(finding.forwarding?.action)} Responsável pelo ajuste: ${escapeHtml(finding.forwarding?.adjustment_owner_role)}. Papel de quem registra: ${escapeHtml(finding.forwarding?.coordinator_role)}.</dd>
+<dd>${escapeHtml(finding.forwarding?.action)} Ajuste a cargo do ${escapeHtml(finding.forwarding?.adjustment_owner_role)}; a CONFENGE ${escapeHtml(finding.forwarding?.coordinator_role)}.</dd>
 <dt>Estado</dt>
 <dd><strong data-estado-label="${escapeHtml(estado.code)}">${escapeHtml(estado.label)}</strong></dd>
 </dl>
@@ -344,17 +345,42 @@ ${staleNote}
 </article>`;
 }
 
-export function renderSecondaryFindingHtml(record, finding, liveDocuments) {
-  return renderFindingHtml({ ...record, finding, piloto_finding_href: `${record.piloto_url || "/casos/demonstrativo-projeto-privado/"}#${finding.id}` }, liveDocuments);
+function pilotoFindingHref(record, findingId) {
+  return `${record.piloto_url || "/casos/demonstrativo-projeto-privado/"}#${findingId}`;
+}
+
+export function renderSecondaryFindingHtml(record, finding, liveDocuments, options = {}) {
+  return renderFindingHtml(
+    { ...record, finding, piloto_finding_href: pilotoFindingHref(record, finding.id) },
+    liveDocuments,
+    options,
+  );
+}
+
+/**
+ * The demonstrative note is printed once, inside the slot and before every
+ * article (G02-A-04, 2026-09-18), carrying one deep link per published finding
+ * so provenance survives even when the articles sit side by side in the grid.
+ */
+export function renderRegisterNoteHtml(record) {
+  const findings = [record.finding, ...(record.secondary_findings || [])];
+  const links = findings
+    .map((finding) => `<a href="${escapeHtml(pilotoFindingHref(record, finding.id))}">${escapeHtml(finding.id)}</a>`)
+    .join(", ");
+  const note = record.source === "inb06"
+    ? `Os apontamentos abaixo saem do <a href="${escapeHtml(record.piloto_url || "/casos/demonstrativo-projeto-privado/")}">recorte de banheiro demonstrativo</a> (${links}). Não é obra de cliente e não é projeto executivo.`
+    : `${escapeHtml(record.public_label || "Exemplo demonstrativo. Não é obra de cliente e não é projeto executivo.")} (${links})`;
+  return `<p class="coord-finding-kicker" data-coord-register-note="demonstrative">${note}</p>`;
 }
 
 export function renderRegisterHtml(record) {
   const live = record.live_documents || [];
-  const primary = renderFindingHtml(record, live);
+  const primary = renderFindingHtml(record, live, { kicker: false });
   const secondary = (record.secondary_findings || [])
-    .map((finding) => renderSecondaryFindingHtml(record, finding, live))
+    .map((finding) => renderSecondaryFindingHtml(record, finding, live, { kicker: false }))
     .join("\n");
-  return `${COORD_SLOT_START}${primary}\n${secondary}${COORD_SLOT_END}`;
+  const articles = [primary, secondary].filter(Boolean).join("\n");
+  return `${COORD_SLOT_START}${renderRegisterNoteHtml(record)}\n<div class="grid-2">\n${articles}\n</div>${COORD_SLOT_END}`;
 }
 
 const COORD_SLOT_RE = /<!--pos-inb-02:coord-register-->[\s\S]*?<!--\/pos-inb-02:coord-register-->/i;

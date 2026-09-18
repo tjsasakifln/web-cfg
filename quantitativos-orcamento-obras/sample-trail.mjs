@@ -42,8 +42,14 @@ const STEP_LABELS = {
   calculation: "Cálculo",
   quantity: "Quantidade",
   spreadsheet_item: "Item de planilha",
-  review_reference: "Referência de revisão",
+  review_reference: "O que a revisão mudou",
 };
+
+/** Human label of a step: the descriptor's own label (G02-A-03) or the renderer fallback. */
+function stepHeading(step, descriptor) {
+  const own = descriptor && typeof descriptor.label === "string" ? descriptor.label.trim() : "";
+  return escapeHtml(own || STEP_LABELS[step]);
+}
 
 export function escapeHtml(value) {
   return String(value ?? "")
@@ -196,7 +202,7 @@ function stripLeadingIdPrefix(text, stepId) {
 function renderReviewReference(step) {
   const id = step.id ? `<code data-trail-review-id="${escapeHtml(step.id)}">${escapeHtml(step.id)}</code> ` : "";
   const doc = step.document_ref
-    ? `<span>Documento ${escapeHtml(step.document_ref)}</span>`
+    ? `<span>Conferido no documento ${escapeHtml(step.document_ref)}</span>`
     : "";
   const linkText = stripLeadingIdPrefix(step.text, step.id) || step.label || "Ver a revisão";
   const href = step.href
@@ -251,7 +257,7 @@ export function renderSampleTrail(excerpt) {
   const items = TRAIL_STEPS.map((step, index) => {
     const n = String(index + 1).padStart(2, "0");
     const inner = STEP_RENDERERS[step](excerpt[step]);
-    return `<li data-trail-step="${step}"><span class="qty-trail-n">${n}</span><h3>${STEP_LABELS[step]}</h3><div class="qty-trail-body">${inner}</div></li>`;
+    return `<li data-trail-step="${step}"><span class="qty-trail-n">${n}</span><h3>${stepHeading(step, excerpt[step])}</h3><div class="qty-trail-body">${inner}</div></li>`;
   });
   const demoHref = escapeHtml(
     excerpt.demonstrative_href || excerpt.demonstrative_url || "/casos/demonstrativo-projeto-privado/",
@@ -278,7 +284,7 @@ export function renderTrailForTest(excerpt) {
   const items = steps.map((step, index) => {
     const n = String(index + 1).padStart(2, "0");
     const inner = STEP_RENDERERS[step](excerpt[step]);
-    return `<li data-trail-step="${step}"><span class="qty-trail-n">${n}</span><h3>${STEP_LABELS[step]}</h3><div class="qty-trail-body">${inner}</div></li>`;
+    return `<li data-trail-step="${step}"><span class="qty-trail-n">${n}</span><h3>${stepHeading(step, excerpt[step])}</h3><div class="qty-trail-body">${inner}</div></li>`;
   });
   return [
     `<div id="${SLOT_ID}" data-sample-trail-slot="test" data-sample-trail-state="test-fixture">`,

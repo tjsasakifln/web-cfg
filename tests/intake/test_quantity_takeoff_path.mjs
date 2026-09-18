@@ -126,6 +126,10 @@ test("fixture trail renderer produces the five-step chain from the shared excerp
   assertTrailMatchesExcerpt(html, excerpt);
   assert.match(html, /Não é orçamento válido para executar obra/);
   assert.match(html, /data-trail-step="review_reference"/);
+  // G02-A-03: the human label of step 06 comes from the descriptor, not the renderer.
+  assert.match(html, new RegExp(`<h3>${excerpt.review_reference.label}</h3>`));
+  const relabeled = renderTrailForTest({ ...excerpt, review_reference: { ...excerpt.review_reference, label: "Rótulo do descritor" } });
+  assert.match(relabeled, /<h3>Rótulo do descritor<\/h3>/);
 });
 
 test("mutating one trail number makes the excerpt assertion fail", () => {

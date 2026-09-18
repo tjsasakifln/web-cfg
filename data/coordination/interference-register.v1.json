@@ -69,7 +69,7 @@
     "forwarding": {
       "action": "Encaminhar ao autor do recorte arquitetônico demonstrativo: avaliar rebaixar a verga e manter B-01 na cota original.",
       "adjustment_owner_role": "autor do recorte arquitetônico demonstrativo",
-      "coordinator_role": "registrar, localizar e encaminhar; não projetar a correção neste recorte"
+      "coordinator_role": "registra, localiza e encaminha"
     }
   },
   "secondary_findings": [
@@ -108,7 +108,7 @@
       "forwarding": {
         "action": "Pedir ao projetista hidrossanitário de origem as dimensões internas e os diâmetros. Enquanto esses dados não chegam, o item permanece pedido de informação, não falha comprovada.",
         "adjustment_owner_role": "projetista hidrossanitário de origem",
-        "coordinator_role": "registrar o pedido de informação; não converter a lacuna em falha comprovada"
+        "coordinator_role": "registra o pedido de informação"
       }
     }
   ],
