@@ -4,4 +4,4 @@ axe_critical=0
 axe_serious=0
 axe_moderate=0
 screenshots=docs/uiux-tools-remediation/evidence/screenshots/after
-generated=2026-09-18T15:15:07.420Z
+generated=2026-09-18T16:11:58.971Z
