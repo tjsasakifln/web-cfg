@@ -98,6 +98,7 @@ jobs:
           npm run editorial:test
           npm run editorial:build
           npm run test:inbound-gates
+          npm run test:article-pillar-form
           npm run editorial:truth
           npm run test:brand
           npm run test:logo-contract
