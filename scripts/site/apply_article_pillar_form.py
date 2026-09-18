@@ -7,8 +7,11 @@ Os artigos de ``conteudos/*/index.html`` são HTML manual (nenhum gerador os
 reescreve; ``seo/scripts/bulk_seo_upgrade.py`` foi um passe único de
 2026-07-30). Este script é a transformação idempotente da família:
 
-1. ``Continuar pelo formulário`` deixa de apontar para ``/#contato`` (home) e
-   passa ao formulário do pilar pertinente (``{pilar}#captura-pilar``). O pilar
+1. ``Continuar pelo formulário`` deixa de apontar para a home (``/#contato``,
+   ``/?…#contato`` ou o ``href="/"`` nu, que nem sequer abre o formulário) e
+   passa ao formulário do pilar pertinente (``{pilar}#captura-pilar``).
+   ``--check`` reprova enquanto qualquer artigo não congelado tiver esse link
+   com destino na home, com ou sem fragmento (``RESIDUAL_FORM_RE``). O pilar
    é o do "Tema principal" do próprio artigo; quando o artigo não traz esse
    bloco, vale ``data/organic/content-service-map.json`` (``path_overrides``,
    somente leitura: o arquivo é hash congelado). Os atributos ``data-tema`` e
@@ -58,9 +61,18 @@ GENERIC_WA_RE = re.compile(
 PILLAR_LABEL_FALLBACK = {
     "/acompanhamento-contratos-obras/": "Ver serviço de acompanhamento de contratos",
 }
+# Destino cujo caminho canônico é a home: "/", "/?…", "/#contato" e "/?…#contato".
+# O href="/" sem fragmento é o pior caso: ``urlAsksForContact`` (nav.js) é
+# falso e o visitante pousa no topo da home, não no formulário.
+HOME_HREF = r'/(?:\?[^"#]*)?(?:#contato)?'
 FORM_LINK_RE = re.compile(
-    r'<a class="button button-secondary"(?P<attrs>[^>]*?) href="(?P<href>/(?:\?[^"]*)?#contato)"'
+    r'<a class="button button-secondary"(?P<attrs>[^>]*?) href="(?P<href>' + HOME_HREF + r')"'
     r'(?P<tail>[^>]*)>' + re.escape(FORM_LABEL) + r"</a>"
+)
+# Guarda residual: qualquer link "Continuar pelo formulário" (qualquer classe
+# ou ordem de atributos) cujo href resolva para a home, com ou sem fragmento.
+RESIDUAL_FORM_RE = re.compile(
+    r'<a [^>]*href="/(?:\?[^"#]*)?(?:#[^"]*)?"[^>]*>' + re.escape(FORM_LABEL) + r"</a>"
 )
 TEMA_PRINCIPAL_RE = re.compile(r'<strong>Tema principal</strong><a href="(?P<href>/[a-z0-9-]+/)"')
 ASIDE_CARD_RE = re.compile(
@@ -120,6 +132,23 @@ def natural_wa_message(h1: str) -> str:
     return f'Olá, Tiago. Li o artigo "{title}" e quero analisar um caso.'
 
 
+def home_form_link(html: str) -> bool:
+    """Há link "Continuar pelo formulário" cujo destino é a home (com ou sem #contato)?"""
+    return bool(RESIDUAL_FORM_RE.search(html))
+
+
+def form_target(slug: str, html: str, overrides: dict[str, str]) -> str | None:
+    """Destino do formulário do artigo: ``{pilar}#captura-pilar`` ou None.
+
+    Regra única, compartilhada com ``inbound_first_remediate.inject_journey_cta``
+    para que ``npm run inbound:remediate`` não devolva o formulário à home.
+    """
+    pillar = pillar_for(slug, html, overrides)
+    if pillar and pillar_has_anchor(pillar):
+        return f"{pillar}{PILLAR_ANCHOR}"
+    return None
+
+
 def transform(slug: str, html: str, overrides: dict[str, str], labels: dict[str, str]) -> tuple[str, list[str]]:
     """Devolve (html transformado, pendências). Idempotente."""
     notes: list[str] = []
@@ -133,7 +162,8 @@ def transform(slug: str, html: str, overrides: dict[str, str], labels: dict[str,
         elif not pillar_has_anchor(pillar):
             notes.append(f"pilar {pillar} sem {PILLAR_ANCHOR}: link ao formulário mantido")
         else:
-            target = f"{pillar}{PILLAR_ANCHOR}"
+            target = form_target(slug, out, overrides)
+            assert target is not None
 
             def _repl(m: re.Match[str]) -> str:
                 attrs = m.group("attrs")
@@ -187,7 +217,7 @@ def run(write: bool) -> int:
         slug = page.parent.name
         html = page.read_text(encoding="utf-8")
         if slug in frozen:
-            if FORM_LINK_RE.search(html):
+            if home_form_link(html):
                 pending.append(f"{slug}: congelado por hash (canário #389); ainda envia o formulário à home")
             continue
         new, notes = transform(slug, html, overrides, labels)
@@ -197,7 +227,7 @@ def run(write: bool) -> int:
             changed.append(slug)
             if write:
                 page.write_text(new, encoding="utf-8")
-        if FORM_LINK_RE.search(new):
+        if home_form_link(new):
             residual.append(slug)
     mode = "write" if write else "check"
     print(f"[{mode}] artigos alterados: {len(changed)}")
