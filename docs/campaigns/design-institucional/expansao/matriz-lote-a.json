@@ -18,11 +18,16 @@
         "docs/campaigns/design-institucional/expansao/evidence/lote-a/compatibilizacao-projetos-engenharia-1440x1000-full-lote-a.jpg",
         "docs/campaigns/design-institucional/expansao/evidence/lote-a/compatibilizacao-projetos-engenharia-390x844-fold-lote-a.jpg",
         "docs/campaigns/design-institucional/expansao/evidence/lote-a/compatibilizacao-projetos-engenharia-390x844-full-lote-a.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-a/compatibilizacao-projetos-engenharia-390x844-menu-lote-a.jpg"
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/compatibilizacao-projetos-engenharia-390x844-menu-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/compatibilizacao-projetos-engenharia-1440x1000-fold-aceite-fix.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/compatibilizacao-projetos-engenharia-1440x1000-full-aceite-fix.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/compatibilizacao-projetos-engenharia-390x844-fold-aceite-fix.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/compatibilizacao-projetos-engenharia-390x844-full-aceite-fix.jpg"
       ],
       "impediment": null,
       "plate": "interferencia-verga-viga",
-      "review_round_1": "Correção após revisão: links de prosa sem .text-link; ressalvas consolidadas (legenda, ficha e carimbo sem repetição fora dos blocos injetados); recapturada."
+      "review_round_1": "Correção após revisão: links de prosa sem .text-link; ressalvas consolidadas (legenda, ficha e carimbo sem repetição fora dos blocos injetados); recapturada.",
+      "aceite_fix": "Aceite (2026-09-17): bloco escuro com os canais logo após o título (M-06), dica sem repetir o número (B-07), telefone sem quebra; recapturada (aceite-fix)."
     },
     {
       "route": "/revisao-tecnica-projetos-engenharia/",
@@ -39,11 +44,16 @@
         "docs/campaigns/design-institucional/expansao/evidence/lote-a/revisao-tecnica-projetos-engenharia-1440x1000-full-lote-a.jpg",
         "docs/campaigns/design-institucional/expansao/evidence/lote-a/revisao-tecnica-projetos-engenharia-390x844-fold-lote-a.jpg",
         "docs/campaigns/design-institucional/expansao/evidence/lote-a/revisao-tecnica-projetos-engenharia-390x844-full-lote-a.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-a/revisao-tecnica-projetos-engenharia-390x844-menu-lote-a.jpg"
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/revisao-tecnica-projetos-engenharia-390x844-menu-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/revisao-tecnica-projetos-engenharia-1440x1000-fold-aceite-fix.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/revisao-tecnica-projetos-engenharia-1440x1000-full-aceite-fix.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/revisao-tecnica-projetos-engenharia-390x844-fold-aceite-fix.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/revisao-tecnica-projetos-engenharia-390x844-full-aceite-fix.jpg"
       ],
       "impediment": null,
       "plate": "revisao-conferencia",
-      "review_round_1": "Correção após revisão: painel RF-01/RF-02 duplicado removido (ponte na intro), links de prosa, três canais + triagem em nota, abertura encurtada (ação dominante a 671 px no 390); recapturada."
+      "review_round_1": "Correção após revisão: painel RF-01/RF-02 duplicado removido (ponte na intro), links de prosa, três canais + triagem em nota, abertura encurtada (ação dominante a 671 px no 390); recapturada.",
+      "aceite_fix": "Aceite (2026-09-17): M-06, B-07, telefone sem quebra; recapturada (aceite-fix)."
     },
     {
       "route": "/projetos-complementares-engenharia/",
@@ -60,11 +70,16 @@
         "docs/campaigns/design-institucional/expansao/evidence/lote-a/projetos-complementares-engenharia-1440x1000-full-lote-a.jpg",
         "docs/campaigns/design-institucional/expansao/evidence/lote-a/projetos-complementares-engenharia-390x844-fold-lote-a.jpg",
         "docs/campaigns/design-institucional/expansao/evidence/lote-a/projetos-complementares-engenharia-390x844-full-lote-a.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-a/projetos-complementares-engenharia-390x844-menu-lote-a.jpg"
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/projetos-complementares-engenharia-390x844-menu-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/projetos-complementares-engenharia-1440x1000-fold-aceite-fix.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/projetos-complementares-engenharia-1440x1000-full-aceite-fix.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/projetos-complementares-engenharia-390x844-fold-aceite-fix.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/projetos-complementares-engenharia-390x844-full-aceite-fix.jpg"
       ],
       "impediment": null,
       "plate": "drenagem-rede",
-      "review_round_1": "Correção após revisão: esquemas antigos substituídos pelas pranchas PG/PH (JSON, desktop e móvel) em largura total; abertura encurtada (ação a 673 px no 390); matriz em largura total com legenda curta; links de prosa; três canais; recapturada."
+      "review_round_1": "Correção após revisão: esquemas antigos substituídos pelas pranchas PG/PH (JSON, desktop e móvel) em largura total; abertura encurtada (ação a 673 px no 390); matriz em largura total com legenda curta; links de prosa; três canais; recapturada.",
+      "aceite_fix": "Aceite (2026-09-17): M-06, B-07, M-07 (CTA do meio = rótulo do cabeçalho, sem \"agora\"), M-04 (role=region + nome da tabela); recapturada (aceite-fix)."
     },
     {
       "route": "/inspecao-diagnostico-edificacoes/",
@@ -81,11 +96,16 @@
         "docs/campaigns/design-institucional/expansao/evidence/lote-a/inspecao-diagnostico-edificacoes-1440x1000-full-lote-a.jpg",
         "docs/campaigns/design-institucional/expansao/evidence/lote-a/inspecao-diagnostico-edificacoes-390x844-fold-lote-a.jpg",
         "docs/campaigns/design-institucional/expansao/evidence/lote-a/inspecao-diagnostico-edificacoes-390x844-full-lote-a.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-a/inspecao-diagnostico-edificacoes-390x844-menu-lote-a.jpg"
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/inspecao-diagnostico-edificacoes-390x844-menu-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/inspecao-diagnostico-edificacoes-1440x1000-fold-aceite-fix.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/inspecao-diagnostico-edificacoes-1440x1000-full-aceite-fix.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/inspecao-diagnostico-edificacoes-390x844-fold-aceite-fix.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/inspecao-diagnostico-edificacoes-390x844-full-aceite-fix.jpg"
       ],
       "impediment": null,
       "plate": "inspecao-fachada",
-      "review_round_1": "Correção após revisão: 'Etapas que se encadeiam' promovida a seção própria (compare_ladder, #etapas-encadeadas) no índice de página; aside de risco alinhado ao topo (.split); ressalva da prancha consolidada nas condições; três canais; recapturada."
+      "review_round_1": "Correção após revisão: 'Etapas que se encadeiam' promovida a seção própria (compare_ladder, #etapas-encadeadas) no índice de página; aside de risco alinhado ao topo (.split); ressalva da prancha consolidada nas condições; três canais; recapturada.",
+      "aceite_fix": "Aceite (2026-09-17): M-06, B-07, PD-M com os quatro itens numerados (B-09); recapturada (aceite-fix)."
     },
     {
       "route": "/assistencia-tecnica-pericial-engenharia/",
@@ -102,11 +122,16 @@
         "docs/campaigns/design-institucional/expansao/evidence/lote-a/assistencia-tecnica-pericial-engenharia-1440x1000-full-lote-a.jpg",
         "docs/campaigns/design-institucional/expansao/evidence/lote-a/assistencia-tecnica-pericial-engenharia-390x844-fold-lote-a.jpg",
         "docs/campaigns/design-institucional/expansao/evidence/lote-a/assistencia-tecnica-pericial-engenharia-390x844-full-lote-a.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-a/assistencia-tecnica-pericial-engenharia-390x844-menu-lote-a.jpg"
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/assistencia-tecnica-pericial-engenharia-390x844-menu-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/assistencia-tecnica-pericial-engenharia-1440x1000-fold-aceite-fix.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/assistencia-tecnica-pericial-engenharia-1440x1000-full-aceite-fix.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/assistencia-tecnica-pericial-engenharia-390x844-fold-aceite-fix.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/assistencia-tecnica-pericial-engenharia-390x844-full-aceite-fix.jpg"
       ],
       "impediment": null,
       "plate": "pericia-fachada",
-      "review_round_1": "Correção após revisão: abertura encurtada (ação dominante a 690 px no 390; frases movidas para blocos onde já existiam); links de prosa; três canais; recapturada."
+      "review_round_1": "Correção após revisão: abertura encurtada (ação dominante a 690 px no 390; frases movidas para blocos onde já existiam); links de prosa; três canais; recapturada.",
+      "aceite_fix": "Aceite (2026-09-17): M-06, B-07, M-04 (nome da tabela), PE-M com respiro antes do carimbo (B-03); recapturada (aceite-fix)."
     },
     {
       "route": "/seguranca-trabalho-apoio-tecnico/",
@@ -123,11 +148,16 @@
         "docs/campaigns/design-institucional/expansao/evidence/lote-a/seguranca-trabalho-apoio-tecnico-1440x1000-full-lote-a.jpg",
         "docs/campaigns/design-institucional/expansao/evidence/lote-a/seguranca-trabalho-apoio-tecnico-390x844-fold-lote-a.jpg",
         "docs/campaigns/design-institucional/expansao/evidence/lote-a/seguranca-trabalho-apoio-tecnico-390x844-full-lote-a.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-a/seguranca-trabalho-apoio-tecnico-390x844-menu-lote-a.jpg"
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/seguranca-trabalho-apoio-tecnico-390x844-menu-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/seguranca-trabalho-apoio-tecnico-1440x1000-fold-aceite-fix.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/seguranca-trabalho-apoio-tecnico-1440x1000-full-aceite-fix.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/seguranca-trabalho-apoio-tecnico-390x844-fold-aceite-fix.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/seguranca-trabalho-apoio-tecnico-390x844-full-aceite-fix.jpg"
       ],
       "impediment": null,
       "plate": "sst-canteiro",
-      "review_round_1": "Correção após revisão: abertura encurtada (ação a 664 px no 390); ressalvas consolidadas; três canais; recapturada."
+      "review_round_1": "Correção após revisão: abertura encurtada (ação a 664 px no 390); ressalvas consolidadas; três canais; recapturada.",
+      "aceite_fix": "Aceite (2026-09-17): M-06, B-07, M-04 (nome da tabela); recapturada (aceite-fix)."
     },
     {
       "route": "/casos/demonstrativo-infraestrutura/",
@@ -144,11 +174,16 @@
         "docs/campaigns/design-institucional/expansao/evidence/lote-a/casos-demonstrativo-infraestrutura-1440x1000-full-lote-a.jpg",
         "docs/campaigns/design-institucional/expansao/evidence/lote-a/casos-demonstrativo-infraestrutura-390x844-fold-lote-a.jpg",
         "docs/campaigns/design-institucional/expansao/evidence/lote-a/casos-demonstrativo-infraestrutura-390x844-full-lote-a.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-a/casos-demonstrativo-infraestrutura-390x844-menu-lote-a.jpg"
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/casos-demonstrativo-infraestrutura-390x844-menu-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/casos-demonstrativo-infraestrutura-1440x1000-fold-aceite-fix.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/casos-demonstrativo-infraestrutura-1440x1000-full-aceite-fix.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/casos-demonstrativo-infraestrutura-390x844-fold-aceite-fix.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/casos-demonstrativo-infraestrutura-390x844-full-aceite-fix.jpg"
       ],
       "impediment": null,
       "plate": null,
-      "review_round_1": "Correção após revisão: cinco desenhos em viewBox compacto (360 de largura, fonte 12,5/13), rótulo PV-01 fora da faixa, camadas da seção com leader; recapturada. Pendência: migração para o módulo de pranchas (JSON → desktop/móvel) registrada."
+      "review_round_1": "Correção após revisão: cinco desenhos em viewBox compacto (360 de largura, fonte 12,5/13), rótulo PV-01 fora da faixa, camadas da seção com leader; recapturada. Pendência: migração para o módulo de pranchas (JSON → desktop/móvel) registrada.",
+      "aceite_fix": "Aceite (2026-09-17): nota da seção PV-01 em duas linhas (B-02); caso regenerado; recapturada (aceite-fix)."
     },
     {
       "route": "/parcerias-engenharia/",
@@ -165,11 +200,16 @@
         "docs/campaigns/design-institucional/expansao/evidence/lote-a/parcerias-engenharia-1440x1000-full-lote-a.jpg",
         "docs/campaigns/design-institucional/expansao/evidence/lote-a/parcerias-engenharia-390x844-fold-lote-a.jpg",
         "docs/campaigns/design-institucional/expansao/evidence/lote-a/parcerias-engenharia-390x844-full-lote-a.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-a/parcerias-engenharia-390x844-menu-lote-a.jpg"
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/parcerias-engenharia-390x844-menu-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/parcerias-engenharia-1440x1000-fold-aceite-fix.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/parcerias-engenharia-1440x1000-full-aceite-fix.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/parcerias-engenharia-390x844-fold-aceite-fix.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/parcerias-engenharia-390x844-full-aceite-fix.jpg"
       ],
       "impediment": "parcerias-engenharia/styles.css (integrador) ainda serve os conjuntos partner-kit; classes partner-hero/partner-steps/partner-contact ficaram sem uso (pedido registrado)",
       "plate": null,
-      "review_round_1": "Correção após revisão: kits restilizados só em parcerias-engenharia/styles.css (linhas regradas, coluna única, ações em linha, controles na tipografia do site); DOM dos kits inalterado; 'Canais diretos'; recapturada."
+      "review_round_1": "Correção após revisão: kits restilizados só em parcerias-engenharia/styles.css (linhas regradas, coluna única, ações em linha, controles na tipografia do site); DOM dos kits inalterado; 'Canais diretos'; recapturada.",
+      "aceite_fix": "Aceite (2026-09-17): kicker/h1 nomeiam o encaminhamento e prancha PH em \"Como funciona\" (M-02), botões sem style inline (P-04), M-06; recapturada (aceite-fix)."
     },
     {
       "route": "/404.html",
@@ -185,11 +225,16 @@
         "docs/campaigns/design-institucional/expansao/evidence/lote-a/404.html-1440x1000-fold-lote-a.jpg",
         "docs/campaigns/design-institucional/expansao/evidence/lote-a/404.html-1440x1000-full-lote-a.jpg",
         "docs/campaigns/design-institucional/expansao/evidence/lote-a/404.html-390x844-fold-lote-a.jpg",
-        "docs/campaigns/design-institucional/expansao/evidence/lote-a/404.html-390x844-full-lote-a.jpg"
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/404.html-390x844-full-lote-a.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/404.html-1440x1000-fold-aceite-fix.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/404.html-1440x1000-full-aceite-fix.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/404.html-390x844-fold-aceite-fix.jpg",
+        "docs/campaigns/design-institucional/expansao/evidence/lote-a/404.html-390x844-full-aceite-fix.jpg"
       ],
       "impediment": null,
       "plate": null,
-      "review_round_1": "Correção após revisão: class=\"no-js\" na fonte (o build já a aplica; navegação móvel estática, sem controle inerte), rodapé padrão, texto sem 'ao lado'; recapturada sem captura de menu (o toggle não existe visualmente nesta página, por desenho)."
+      "review_round_1": "Correção após revisão: class=\"no-js\" na fonte (o build já a aplica; navegação móvel estática, sem controle inerte), rodapé padrão, texto sem 'ao lado'; recapturada sem captura de menu (o toggle não existe visualmente nesta página, por desenho).",
+      "aceite_fix": "Aceite (2026-09-17): script.js + bootstrap no-js/js (B-06); recapturada com a ferramenta original (aceite-fix)."
     },
     {
       "route": "/obrigado.html",

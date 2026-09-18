@@ -344,7 +344,7 @@ def _section_svg(extracts: dict[str, Any]) -> str:
     scale_y = 560
     pad_l, pad_t = 24, 40
     svg_w = 360
-    svg_h = int(total_t * scale_y + pad_t + 66)
+    svg_h = int(total_t * scale_y + pad_t + 83)  # three note lines below the strip
 
     def X(m: float) -> float:
         return pad_l + m * scale_x
@@ -380,7 +380,8 @@ def _section_svg(extracts: dict[str, Any]) -> str:
 <line x1="{X(width):.1f}" y1="{Y(t_wear + t_base + t_sub / 2):.1f}" x2="{lx - 3:.1f}" y2="{Y(t_wear + t_base + t_sub / 2):.1f}" stroke="{MUTED}" stroke-width="0.6"/>
 <text x="{lx:.1f}" y="{Y(t_wear + t_base + t_sub / 2) + 4:.1f}" font-size="{FS}" fill="{INK}">sub-base {br_number(t_sub)} m</text>
 <text x="{lx:.1f}" y="{Y(t_wear + t_base + t_sub / 2) + 20:.1f}" font-size="{FS}" fill="{MUTED}">Q-SUB-01</text>
-<text x="{X(0):.1f}" y="{svg_h - 30:.1f}" font-size="{FS}" fill="{MUTED}">Espessuras declaradas; volume geométrico, não dimensionamento.</text>
+<text x="{X(0):.1f}" y="{svg_h - 47:.1f}" font-size="{FS}" fill="{MUTED}">Espessuras declaradas; volume geométrico,</text>
+<text x="{X(0):.1f}" y="{svg_h - 30:.1f}" font-size="{FS}" fill="{MUTED}">não dimensionamento.</text>
 <text x="{X(0):.1f}" y="{svg_h - 13:.1f}" font-size="{FS}" fill="{MUTED}">Exemplo demonstrativo · revisão {e(rev)}</text>
 </svg>
 """
