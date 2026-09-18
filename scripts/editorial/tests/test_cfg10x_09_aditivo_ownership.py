@@ -166,7 +166,11 @@ def test_donor_cta_landmarks_have_unique_names():
         donor_html,
         flags=re.I,
     )
-    assert len(labels) == 2
+    # 2026-09-17 (salto institucional 02, lote C, aceite M-22): o bloco
+    # "Próximo passo" do meio foi retirado (dois blocos idênticos por página);
+    # a propriedade verificada aqui — cada landmark de CTA com nome único —
+    # vale para qualquer contagem >= 1.
+    assert len(labels) >= 1
     assert len(set(labels)) == len(labels)
 
 

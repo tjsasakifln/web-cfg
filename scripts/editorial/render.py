@@ -614,7 +614,6 @@ def render_page(page: dict[str, Any]) -> str:
 <div class="editorial-body">
 {body_html}
 </div>
-{_cta_block(page, "mid")}
 {faq_html}
 {_sources_html(page)}
 {_related_html(page)}
@@ -626,10 +625,10 @@ def render_page(page: dict[str, Any]) -> str:
 <span class="aside-kicker">Diagnóstico CONFENGE</span>
 <h2 class="aside-title">{e(page.get('aside_title') or _default_aside_title(archetype))}</h2>
 <p class="aside-text">{e(page.get('aside_blurb') or 'Organize documentos, riscos e próximos passos com base no cenário real da obra.')}</p>
-<div class="aside-actions">
-<a class="button button-primary" data-cta-position="aside" data-cta-channel="whatsapp" href="{e(wa_link(page.get('cta_whatsapp') or ''))}" rel="noopener" target="_blank">{e(page.get('cta_wa_label') or 'Conversar pelo WhatsApp')}</a>
-<a class="button button-secondary" data-cta-position="aside" data-cta-channel="email" href="{e(mailto_href(page.get('contact_email') or 'tiago.sasaki@confenge.com.br', page.get('cta_email_subject') or title, page.get('cta_email_body') or ''))}">{e(page.get('cta_email_label') or 'Enviar por e-mail')}</a>
-</div>
+<ul class="aside-actions contact-alt">
+<li><a data-cta-position="aside" data-cta-channel="whatsapp" href="{e(wa_link(page.get('cta_whatsapp') or ''))}" rel="noopener" target="_blank">{e(page.get('cta_wa_label') or 'Conversar pelo WhatsApp')}</a></li>
+<li><a data-cta-position="aside" data-cta-channel="email" href="{e(mailto_href(page.get('contact_email') or 'tiago.sasaki@confenge.com.br', page.get('cta_email_subject') or title, page.get('cta_email_body') or ''))}">{e(page.get('cta_email_label') or 'Enviar por e-mail')}</a></li>
+</ul>
 </div>
 <div class="aside-card aside-compact">
 <span class="aside-kicker">Coleção</span>

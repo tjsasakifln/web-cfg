@@ -1,0 +1,342 @@
+{
+ "base": "http://127.0.0.1:8813",
+ "tag": "aceite-fix",
+ "captures": [
+  {
+   "route": "/ferramentas/diagnostico-defesa-margem/",
+   "viewport": "390x844",
+   "status": 200,
+   "height": 9141,
+   "h1_font": "\"Archivo Var\"",
+   "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-diagnostico-defesa-margem-390x844-fold-aceite-fix.jpg",
+   "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-diagnostico-defesa-margem-390x844-full-aceite-fix.jpg",
+   "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-diagnostico-defesa-margem-390x844-menu-aceite-fix.jpg"
+  },
+  {
+   "route": "/ferramentas/diagnostico-defesa-margem/",
+   "viewport": "1440x1000",
+   "status": 200,
+   "height": 6521,
+   "h1_font": "\"Archivo Var\"",
+   "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-diagnostico-defesa-margem-1440x1000-fold-aceite-fix.jpg",
+   "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-diagnostico-defesa-margem-1440x1000-full-aceite-fix.jpg"
+  },
+  {
+   "route": "/ferramentas/diagnostico-defesa-margem/",
+   "viewport": "320x700",
+   "overflow_px": 0
+  },
+  {
+   "route": "/ferramentas/",
+   "viewport": "390x844",
+   "status": 200,
+   "height": 6824,
+   "h1_font": "\"Archivo Var\"",
+   "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-390x844-fold-aceite-fix.jpg",
+   "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-390x844-full-aceite-fix.jpg",
+   "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-390x844-menu-aceite-fix.jpg"
+  },
+  {
+   "route": "/ferramentas/",
+   "viewport": "1440x1000",
+   "status": 200,
+   "height": 4807,
+   "h1_font": "\"Archivo Var\"",
+   "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-1440x1000-fold-aceite-fix.jpg",
+   "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-1440x1000-full-aceite-fix.jpg"
+  },
+  {
+   "route": "/ferramentas/",
+   "viewport": "320x700",
+   "overflow_px": 0
+  },
+  {
+   "route": "/privacidade/",
+   "viewport": "390x844",
+   "status": 200,
+   "height": 9820,
+   "h1_font": "\"Archivo Var\"",
+   "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/privacidade-390x844-fold-aceite-fix.jpg",
+   "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/privacidade-390x844-full-aceite-fix.jpg",
+   "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/privacidade-390x844-menu-aceite-fix.jpg"
+  },
+  {
+   "route": "/privacidade/",
+   "viewport": "1440x1000",
+   "status": 200,
+   "height": 5397,
+   "h1_font": "\"Archivo Var\"",
+   "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/privacidade-1440x1000-fold-aceite-fix.jpg",
+   "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/privacidade-1440x1000-full-aceite-fix.jpg"
+  },
+  {
+   "route": "/privacidade/",
+   "viewport": "320x700",
+   "overflow_px": 0
+  },
+  {
+   "route": "/termos-de-uso/",
+   "viewport": "390x844",
+   "status": 200,
+   "height": 5231,
+   "h1_font": "\"Archivo Var\"",
+   "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/termos-de-uso-390x844-fold-aceite-fix.jpg",
+   "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/termos-de-uso-390x844-full-aceite-fix.jpg",
+   "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/termos-de-uso-390x844-menu-aceite-fix.jpg"
+  },
+  {
+   "route": "/termos-de-uso/",
+   "viewport": "1440x1000",
+   "status": 200,
+   "height": 3146,
+   "h1_font": "\"Archivo Var\"",
+   "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/termos-de-uso-1440x1000-fold-aceite-fix.jpg",
+   "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/termos-de-uso-1440x1000-full-aceite-fix.jpg"
+  },
+  {
+   "route": "/termos-de-uso/",
+   "viewport": "320x700",
+   "overflow_px": 0
+  },
+  {
+   "route": "/guias-contratos-obras/documentos-pedido-reequilibrio/",
+   "viewport": "390x844",
+   "status": 200,
+   "height": 8283,
+   "h1_font": "\"Archivo Var\"",
+   "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/guias-contratos-obras-documentos-pedido-reequilibrio-390x844-fold-aceite-fix.jpg",
+   "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/guias-contratos-obras-documentos-pedido-reequilibrio-390x844-full-aceite-fix.jpg",
+   "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/guias-contratos-obras-documentos-pedido-reequilibrio-390x844-menu-aceite-fix.jpg"
+  },
+  {
+   "route": "/guias-contratos-obras/documentos-pedido-reequilibrio/",
+   "viewport": "1440x1000",
+   "status": 200,
+   "height": 6182,
+   "h1_font": "\"Archivo Var\"",
+   "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/guias-contratos-obras-documentos-pedido-reequilibrio-1440x1000-fold-aceite-fix.jpg",
+   "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/guias-contratos-obras-documentos-pedido-reequilibrio-1440x1000-full-aceite-fix.jpg"
+  },
+  {
+   "route": "/guias-contratos-obras/documentos-pedido-reequilibrio/",
+   "viewport": "320x700",
+   "overflow_px": 0
+  },
+  {
+   "route": "/lei-14133-obras/preco-item-novo-desconto-proposta/",
+   "viewport": "390x844",
+   "status": 200,
+   "height": 9462,
+   "h1_font": "\"Archivo Var\"",
+   "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/lei-14133-obras-preco-item-novo-desconto-proposta-390x844-fold-aceite-fix.jpg",
+   "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/lei-14133-obras-preco-item-novo-desconto-proposta-390x844-full-aceite-fix.jpg",
+   "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/lei-14133-obras-preco-item-novo-desconto-proposta-390x844-menu-aceite-fix.jpg"
+  },
+  {
+   "route": "/lei-14133-obras/preco-item-novo-desconto-proposta/",
+   "viewport": "1440x1000",
+   "status": 200,
+   "height": 6879,
+   "h1_font": "\"Archivo Var\"",
+   "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/lei-14133-obras-preco-item-novo-desconto-proposta-1440x1000-fold-aceite-fix.jpg",
+   "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/lei-14133-obras-preco-item-novo-desconto-proposta-1440x1000-full-aceite-fix.jpg"
+  },
+  {
+   "route": "/lei-14133-obras/preco-item-novo-desconto-proposta/",
+   "viewport": "320x700",
+   "overflow_px": 0
+  },
+  {
+   "route": "/confianca/",
+   "viewport": "390x844",
+   "status": 200,
+   "height": 6720,
+   "h1_font": "\"Archivo Var\"",
+   "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/confianca-390x844-fold-aceite-fix.jpg",
+   "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/confianca-390x844-full-aceite-fix.jpg",
+   "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/confianca-390x844-menu-aceite-fix.jpg"
+  },
+  {
+   "route": "/confianca/",
+   "viewport": "1440x1000",
+   "status": 200,
+   "height": 4392,
+   "h1_font": "\"Archivo Var\"",
+   "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/confianca-1440x1000-fold-aceite-fix.jpg",
+   "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/confianca-1440x1000-full-aceite-fix.jpg"
+  },
+  {
+   "route": "/confianca/",
+   "viewport": "320x700",
+   "overflow_px": 0
+  },
+  {
+   "route": "/especialista/tiago-jun-sasaki/",
+   "viewport": "390x844",
+   "status": 200,
+   "height": 8562,
+   "h1_font": "\"Archivo Var\"",
+   "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/especialista-tiago-jun-sasaki-390x844-fold-aceite-fix.jpg",
+   "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/especialista-tiago-jun-sasaki-390x844-full-aceite-fix.jpg",
+   "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/especialista-tiago-jun-sasaki-390x844-menu-aceite-fix.jpg"
+  },
+  {
+   "route": "/especialista/tiago-jun-sasaki/",
+   "viewport": "1440x1000",
+   "status": 200,
+   "height": 5943,
+   "h1_font": "\"Archivo Var\"",
+   "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/especialista-tiago-jun-sasaki-1440x1000-fold-aceite-fix.jpg",
+   "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/especialista-tiago-jun-sasaki-1440x1000-full-aceite-fix.jpg"
+  },
+  {
+   "route": "/especialista/tiago-jun-sasaki/",
+   "viewport": "320x700",
+   "overflow_px": 0
+  },
+  {
+   "route": "/metodologia-inteligencia/",
+   "viewport": "390x844",
+   "status": 200,
+   "height": 4994,
+   "h1_font": "\"Archivo Var\"",
+   "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/metodologia-inteligencia-390x844-fold-aceite-fix.jpg",
+   "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/metodologia-inteligencia-390x844-full-aceite-fix.jpg",
+   "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/metodologia-inteligencia-390x844-menu-aceite-fix.jpg"
+  },
+  {
+   "route": "/metodologia-inteligencia/",
+   "viewport": "1440x1000",
+   "status": 200,
+   "height": 3288,
+   "h1_font": "\"Archivo Var\"",
+   "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/metodologia-inteligencia-1440x1000-fold-aceite-fix.jpg",
+   "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/metodologia-inteligencia-1440x1000-full-aceite-fix.jpg"
+  },
+  {
+   "route": "/metodologia-inteligencia/",
+   "viewport": "320x700",
+   "overflow_px": 0
+  },
+  {
+   "route": "/conteudos/documentos-reequilibrio-obra-publica/",
+   "viewport": "390x844",
+   "status": 200,
+   "height": 10560,
+   "h1_font": "\"Archivo Var\"",
+   "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-documentos-reequilibrio-obra-publica-390x844-fold-aceite-fix.jpg",
+   "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-documentos-reequilibrio-obra-publica-390x844-full-aceite-fix.jpg",
+   "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-documentos-reequilibrio-obra-publica-390x844-menu-aceite-fix.jpg"
+  },
+  {
+   "route": "/conteudos/documentos-reequilibrio-obra-publica/",
+   "viewport": "1440x1000",
+   "status": 200,
+   "height": 7785,
+   "h1_font": "\"Archivo Var\"",
+   "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-documentos-reequilibrio-obra-publica-1440x1000-fold-aceite-fix.jpg",
+   "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-documentos-reequilibrio-obra-publica-1440x1000-full-aceite-fix.jpg"
+  },
+  {
+   "route": "/conteudos/documentos-reequilibrio-obra-publica/",
+   "viewport": "320x700",
+   "overflow_px": 0
+  },
+  {
+   "route": "/ferramentas/checklist-reequilibrio/",
+   "viewport": "390x844",
+   "status": 200,
+   "height": 6066,
+   "h1_font": "\"Archivo Var\"",
+   "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-checklist-reequilibrio-390x844-fold-aceite-fix.jpg",
+   "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-checklist-reequilibrio-390x844-full-aceite-fix.jpg",
+   "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-checklist-reequilibrio-390x844-menu-aceite-fix.jpg"
+  },
+  {
+   "route": "/ferramentas/checklist-reequilibrio/",
+   "viewport": "1440x1000",
+   "status": 200,
+   "height": 3857,
+   "h1_font": "\"Archivo Var\"",
+   "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-checklist-reequilibrio-1440x1000-fold-aceite-fix.jpg",
+   "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/ferramentas-checklist-reequilibrio-1440x1000-full-aceite-fix.jpg"
+  },
+  {
+   "route": "/ferramentas/checklist-reequilibrio/",
+   "viewport": "320x700",
+   "overflow_px": 0
+  },
+  {
+   "route": "/conteudos/",
+   "viewport": "390x844",
+   "status": 200,
+   "height": 14720,
+   "h1_font": "\"Archivo Var\"",
+   "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-390x844-fold-aceite-fix.jpg",
+   "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-390x844-full-aceite-fix.jpg",
+   "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-390x844-menu-aceite-fix.jpg"
+  },
+  {
+   "route": "/conteudos/",
+   "viewport": "1440x1000",
+   "status": 200,
+   "height": 11056,
+   "h1_font": "\"Archivo Var\"",
+   "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-1440x1000-fold-aceite-fix.jpg",
+   "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-1440x1000-full-aceite-fix.jpg"
+  },
+  {
+   "route": "/conteudos/",
+   "viewport": "320x700",
+   "overflow_px": 0
+  },
+  {
+   "route": "/radar/",
+   "viewport": "390x844",
+   "status": 200,
+   "height": 2979,
+   "h1_font": "\"Archivo Var\"",
+   "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/radar-390x844-fold-aceite-fix.jpg",
+   "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/radar-390x844-full-aceite-fix.jpg",
+   "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/radar-390x844-menu-aceite-fix.jpg"
+  },
+  {
+   "route": "/radar/",
+   "viewport": "1440x1000",
+   "status": 200,
+   "height": 2195,
+   "h1_font": "\"Archivo Var\"",
+   "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/radar-1440x1000-fold-aceite-fix.jpg",
+   "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/radar-1440x1000-full-aceite-fix.jpg"
+  },
+  {
+   "route": "/radar/",
+   "viewport": "320x700",
+   "overflow_px": 0
+  },
+  {
+   "route": "/conteudos/chuva-prorrogacao-prazo-obra-publica/",
+   "viewport": "390x844",
+   "status": 200,
+   "height": 14367,
+   "h1_font": "\"Archivo Var\"",
+   "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-chuva-prorrogacao-prazo-obra-publica-390x844-fold-aceite-fix.jpg",
+   "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-chuva-prorrogacao-prazo-obra-publica-390x844-full-aceite-fix.jpg",
+   "menu": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-chuva-prorrogacao-prazo-obra-publica-390x844-menu-aceite-fix.jpg"
+  },
+  {
+   "route": "/conteudos/chuva-prorrogacao-prazo-obra-publica/",
+   "viewport": "1440x1000",
+   "status": 200,
+   "height": 10308,
+   "h1_font": "\"Archivo Var\"",
+   "fold": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-chuva-prorrogacao-prazo-obra-publica-1440x1000-fold-aceite-fix.jpg",
+   "full": "docs/campaigns/design-institucional/expansao/evidence/lote-c/conteudos-chuva-prorrogacao-prazo-obra-publica-1440x1000-full-aceite-fix.jpg"
+  },
+  {
+   "route": "/conteudos/chuva-prorrogacao-prazo-obra-publica/",
+   "viewport": "320x700",
+   "overflow_px": 0
+  }
+ ]
+}
