@@ -1,0 +1,150 @@
+{
+  "base": "http://127.0.0.1:8799",
+  "tag": "cand-3faac7d7f",
+  "captures": [
+    {
+      "route": "/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 16099,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/fechamento/evidence/candidato/capturas/home-390x844-fold-cand-3faac7d7f.jpg",
+      "full": "docs/campaigns/design-institucional/fechamento/evidence/candidato/capturas/home-390x844-full-cand-3faac7d7f.jpg",
+      "menu": "docs/campaigns/design-institucional/fechamento/evidence/candidato/capturas/home-390x844-menu-cand-3faac7d7f.jpg"
+    },
+    {
+      "route": "/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 11077,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/fechamento/evidence/candidato/capturas/home-1440x1000-fold-cand-3faac7d7f.jpg",
+      "full": "docs/campaigns/design-institucional/fechamento/evidence/candidato/capturas/home-1440x1000-full-cand-3faac7d7f.jpg"
+    },
+    {
+      "route": "/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/servicos/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 14881,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/fechamento/evidence/candidato/capturas/servicos-390x844-fold-cand-3faac7d7f.jpg",
+      "full": "docs/campaigns/design-institucional/fechamento/evidence/candidato/capturas/servicos-390x844-full-cand-3faac7d7f.jpg",
+      "menu": "docs/campaigns/design-institucional/fechamento/evidence/candidato/capturas/servicos-390x844-menu-cand-3faac7d7f.jpg"
+    },
+    {
+      "route": "/servicos/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 9513,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/fechamento/evidence/candidato/capturas/servicos-1440x1000-fold-cand-3faac7d7f.jpg",
+      "full": "docs/campaigns/design-institucional/fechamento/evidence/candidato/capturas/servicos-1440x1000-full-cand-3faac7d7f.jpg"
+    },
+    {
+      "route": "/servicos/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/quantitativos-orcamento-obras/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 17940,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/fechamento/evidence/candidato/capturas/quantitativos-orcamento-obras-390x844-fold-cand-3faac7d7f.jpg",
+      "full": "docs/campaigns/design-institucional/fechamento/evidence/candidato/capturas/quantitativos-orcamento-obras-390x844-full-cand-3faac7d7f.jpg",
+      "menu": "docs/campaigns/design-institucional/fechamento/evidence/candidato/capturas/quantitativos-orcamento-obras-390x844-menu-cand-3faac7d7f.jpg"
+    },
+    {
+      "route": "/quantitativos-orcamento-obras/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 11506,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/fechamento/evidence/candidato/capturas/quantitativos-orcamento-obras-1440x1000-fold-cand-3faac7d7f.jpg",
+      "full": "docs/campaigns/design-institucional/fechamento/evidence/candidato/capturas/quantitativos-orcamento-obras-1440x1000-full-cand-3faac7d7f.jpg"
+    },
+    {
+      "route": "/quantitativos-orcamento-obras/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/compatibilizacao-projetos-engenharia/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 13615,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/fechamento/evidence/candidato/capturas/compatibilizacao-projetos-engenharia-390x844-fold-cand-3faac7d7f.jpg",
+      "full": "docs/campaigns/design-institucional/fechamento/evidence/candidato/capturas/compatibilizacao-projetos-engenharia-390x844-full-cand-3faac7d7f.jpg",
+      "menu": "docs/campaigns/design-institucional/fechamento/evidence/candidato/capturas/compatibilizacao-projetos-engenharia-390x844-menu-cand-3faac7d7f.jpg"
+    },
+    {
+      "route": "/compatibilizacao-projetos-engenharia/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 8850,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/fechamento/evidence/candidato/capturas/compatibilizacao-projetos-engenharia-1440x1000-fold-cand-3faac7d7f.jpg",
+      "full": "docs/campaigns/design-institucional/fechamento/evidence/candidato/capturas/compatibilizacao-projetos-engenharia-1440x1000-full-cand-3faac7d7f.jpg"
+    },
+    {
+      "route": "/compatibilizacao-projetos-engenharia/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/entregas/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 23595,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/fechamento/evidence/candidato/capturas/entregas-390x844-fold-cand-3faac7d7f.jpg",
+      "full": "docs/campaigns/design-institucional/fechamento/evidence/candidato/capturas/entregas-390x844-full-cand-3faac7d7f.jpg",
+      "menu": "docs/campaigns/design-institucional/fechamento/evidence/candidato/capturas/entregas-390x844-menu-cand-3faac7d7f.jpg"
+    },
+    {
+      "route": "/entregas/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 13378,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/fechamento/evidence/candidato/capturas/entregas-1440x1000-fold-cand-3faac7d7f.jpg",
+      "full": "docs/campaigns/design-institucional/fechamento/evidence/candidato/capturas/entregas-1440x1000-full-cand-3faac7d7f.jpg"
+    },
+    {
+      "route": "/entregas/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/triagem-tecnica/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 6396,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/fechamento/evidence/candidato/capturas/triagem-tecnica-390x844-fold-cand-3faac7d7f.jpg",
+      "full": "docs/campaigns/design-institucional/fechamento/evidence/candidato/capturas/triagem-tecnica-390x844-full-cand-3faac7d7f.jpg",
+      "menu": "docs/campaigns/design-institucional/fechamento/evidence/candidato/capturas/triagem-tecnica-390x844-menu-cand-3faac7d7f.jpg"
+    },
+    {
+      "route": "/triagem-tecnica/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 4192,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/fechamento/evidence/candidato/capturas/triagem-tecnica-1440x1000-fold-cand-3faac7d7f.jpg",
+      "full": "docs/campaigns/design-institucional/fechamento/evidence/candidato/capturas/triagem-tecnica-1440x1000-full-cand-3faac7d7f.jpg"
+    },
+    {
+      "route": "/triagem-tecnica/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    }
+  ]
+}
