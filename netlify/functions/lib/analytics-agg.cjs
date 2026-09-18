@@ -134,8 +134,11 @@ function aggregateEvents(events, opts) {
     if (canonical === "cta_click") {
       dayRow.cta_clicks += 1;
       pr.cta_click += 1;
-      const cta = String(props.cta_id || props.position || "unknown").slice(0, 80);
-      ctas.set(cta, (ctas.get(cta) || 0) + 1);
+      // G04-06: o emissor envia cta_position (nunca `position`); a chave inclui a
+      // rota para nao fundir seis pilares num unico balde pillar_hero.
+      const cta = String(props.cta_id || props.cta_position || props.position || "unknown").slice(0, 80);
+      const ctaKey = `${String(path || "").slice(0, 120)}|${cta}`;
+      ctas.set(ctaKey, (ctas.get(ctaKey) || 0) + 1);
     }
     if (MONEY_ASSET_EVENT_NAMES.includes(canonical) && isMoneyAssetEvent(ev)) {
       pr[canonical] = (pr[canonical] || 0) + 1;
