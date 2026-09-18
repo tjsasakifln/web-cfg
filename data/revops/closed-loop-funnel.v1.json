@@ -168,6 +168,9 @@
     "lead_form_success": "persisted",
     "lead_persisted": "persisted"
   },
+  "legacy_unclassified_events": [
+    "cta_click"
+  ],
   "visitor_stage_conditions": {
     "cta_click": {
       "destination_type": [
@@ -206,6 +209,6 @@
     "pii": "Eventos analíticos admitidos nunca carregam e-mail, telefone ou texto livre.",
     "ci": "O relatório de CI lê apenas a fixture sintética. Não POSTa lead real e não lê produção.",
     "destination_type": "cta_click.destination_type: form | anchor | route | whatsapp | email | tel. So form/whatsapp/email/tel contam como 'cta'.",
-    "visitor_stage_conditions": "G04-01: cta_click so entra no estagio 'cta' quando o destino e de intencao (form, whatsapp, email, tel); destination_type 'route' ou 'anchor' e navegacao, nao intencao. outbound_click so conta como cta quando o destino e telefone; externo nao conta. Evento cta_click sem destination_type e legado nao classificado e nao entra no estagio."
+    "visitor_stage_conditions": "G04-01: cta_click so entra no estagio 'cta' quando o destino e de intencao (form, whatsapp, email, tel); destination_type 'route' ou 'anchor' e navegacao, nao intencao. outbound_click so conta como cta quando o destino e telefone; externo nao conta. Evento cta_click sem destination_type e legado nao classificado (legacy_unclassified): conta no estagio 'cta' com rotulo counts.cta_legacy_unclassified, para nao zerar a serie view_to_cta, e nunca promove a lead."
   }
 }

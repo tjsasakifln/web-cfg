@@ -245,9 +245,10 @@
       ],
       "consumers": [
         "netlify/functions/collect.cjs",
-        "netlify/functions/lib/analytics-agg.cjs"
+        "netlify/functions/lib/analytics-agg.cjs",
+        "netlify/functions/lib/closed-loop.cjs"
       ],
-      "semantic": "Canonical CTA activation. Engagement; not a lead or pipeline."
+      "semantic": "Canonical CTA activation. Engagement; not a lead or pipeline. destination_type (form | anchor | route | whatsapp | email | tel) qualifies the destination: only form/whatsapp/email/tel are intent (closed-loop stage cta, analytics-agg cta_clicks); route/anchor are navigation (cta_nav_clicks); absent = legacy_unclassified, counted as intent and labelled."
     },
     "whatsapp_click": {
       "layer": "engagement",

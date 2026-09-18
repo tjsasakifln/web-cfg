@@ -430,7 +430,8 @@ const walk = await closedLoop.runFixture(fixture, store);
     ["cta_click", { destination_type: "whatsapp" }, "cta"],
     ["cta_click", { destination_type: "route" }, null],
     ["cta_click", { destination_type: "anchor" }, null],
-    ["cta_click", {}, null],
+    ["cta_click", {}, "cta"],
+    ["outbound_click", {}, null],
     ["whatsapp_click", { destination_type: "whatsapp" }, "cta"],
     ["email_click", { destination_type: "email" }, "cta"],
     ["outbound_click", { destination_type: "tel" }, "cta"],
@@ -441,6 +442,13 @@ const walk = await closedLoop.runFixture(fixture, store);
     if (got !== expected) fail("visitor_stage_by_destination", { event, props, got, expected });
   }
   pass("visitor_stage_by_destination_type");
+  const legacy = closedLoop.visitorStageClassification("cta_click", { cta_id: "segunda-leitura-contrato" });
+  const typed = closedLoop.visitorStageClassification("cta_click", { destination_type: "form" });
+  if (legacy.stage !== "cta" || legacy.classification !== closedLoop.LEGACY_UNCLASSIFIED
+    || typed.stage !== "cta" || typed.classification !== ""
+    || !Array.isArray(FUNNEL.legacy_unclassified_events) || !FUNNEL.legacy_unclassified_events.includes("cta_click")) {
+    fail("visitor_stage_legacy_unclassified", { legacy, typed, contract: FUNNEL.legacy_unclassified_events });
+  } else pass("visitor_stage_legacy_unclassified", closedLoop.LEGACY_UNCLASSIFIED);
 
   const mkSession = (seed, index, event, props) => {
     const sid = closedLoop.mintStableId("session", seed);
@@ -476,19 +484,26 @@ const walk = await closedLoop.runFixture(fixture, store);
   const emailSession = mkSession("g04-email-session", 2, "email_click", { destination_type: "email" });
   const telSession = mkSession("g04-tel-session", 3, "outbound_click", { destination_type: "tel" });
   const externalSession = mkSession("g04-external-session", 4, "outbound_click", { destination_type: "external" });
+  // tool submit emitted before the producer filled destination_type: legacy, counted and labelled.
+  const legacySession = mkSession("g04-legacy-session", 5, "cta_click", {});
   const admitted = closedLoop.admitVisitorEvents([
-    ...fixture.events, ...routeSession, ...emailSession, ...telSession, ...externalSession,
+    ...fixture.events, ...routeSession, ...emailSession, ...telSession, ...externalSession, ...legacySession,
   ]).admitted;
+  const legacyRow = admitted.find((ev) => ev.props && ev.props.event_id === "evt-g04-cta_click-5");
+  if (!legacyRow || legacyRow.visitor_stage !== "cta" || legacyRow.visitor_stage_classification !== closedLoop.LEGACY_UNCLASSIFIED) {
+    fail("legacy_cta_click_admitted_with_label", legacyRow);
+  } else pass("legacy_cta_click_admitted_with_label");
   const report = closedLoop.reconcileClosedLoop({
     events: admitted,
     leads: [fixture.lead],
     observations: fixture.observations,
     kind: "synthetic",
   }).report;
-  // fixture (form cta) + email + tel = 3 sessions at 'cta'; route and external never enter.
-  if (report.counts.view !== 5 || report.counts.cta !== 3) {
+  // fixture (form cta) + email + tel + legacy = 4 sessions at 'cta'; route and external never enter;
+  // exactly one of them is labelled legacy_unclassified.
+  if (report.counts.view !== 6 || report.counts.cta !== 4 || report.counts.cta_legacy_unclassified !== 1) {
     fail("cta_stage_only_intent_destinations", report.counts);
-  } else pass("cta_stage_only_intent_destinations", `view=${report.counts.view} cta=${report.counts.cta}`);
+  } else pass("cta_stage_only_intent_destinations", `view=${report.counts.view} cta=${report.counts.cta} legacy=${report.counts.cta_legacy_unclassified}`);
   const serialized = JSON.stringify(report);
   if (/mailto:|tel:\+?\d|@/.test(serialized)) fail("cta_stage_report_pii", serialized.slice(0, 200));
   else pass("cta_stage_report_no_pii");

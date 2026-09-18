@@ -122,19 +122,35 @@ function leadIdOf(ev) {
   return String(ev.lead_id || props.lead_id || "").slice(0, 32);
 }
 
-function visitorStageOf(canonical, props) {
-  if (canonical === "lead_form_start") return "form_start";
+// G04-01: cta_click sem destination_type e legado (emitido antes do contrato
+// 1.1.0 ou por produtor que ainda nao classifica). Conta no estagio 'cta' com
+// o rotulo `legacy_unclassified`, para nao zerar a serie view_to_cta; nunca e
+// promovido a lead.
+const LEGACY_UNCLASSIFIED = "legacy_unclassified";
+const LEGACY_STAGE_EVENTS = new Set([...(CONTRACT.legacy_unclassified_events || ["cta_click"])]);
+
+function visitorStageClassification(canonical, props) {
+  if (canonical === "lead_form_start") return { stage: "form_start", classification: "" };
   if (canonical === "lead_form_step") {
     const step = Number(props && (props.form_step || props.step));
-    if (step <= 1) return "step1";
-    return "step2";
+    return { stage: step <= 1 ? "step1" : "step2", classification: "" };
   }
   const allowed = VISITOR_STAGE_CONDITIONS[canonical];
   if (allowed) {
     const destinationType = String((props && props.destination_type) || "").toLowerCase();
-    if (!destinationType || !allowed.has(destinationType)) return null;
+    if (!destinationType) {
+      if (LEGACY_STAGE_EVENTS.has(canonical)) {
+        return { stage: VISITOR_EVENT_MAP[canonical] || null, classification: LEGACY_UNCLASSIFIED };
+      }
+      return { stage: null, classification: "" };
+    }
+    if (!allowed.has(destinationType)) return { stage: null, classification: "" };
   }
-  return VISITOR_EVENT_MAP[canonical] || null;
+  return { stage: VISITOR_EVENT_MAP[canonical] || null, classification: "" };
+}
+
+function visitorStageOf(canonical, props) {
+  return visitorStageClassification(canonical, props).stage;
 }
 
 /**
@@ -267,12 +283,14 @@ function admitVisitorEvents(events, options = {}) {
       throw codedError("invalid_entity_id", "invalid_session_id", { kind: "session" });
     }
     const ts = String(ev.ts || ev.at || (result.event.props && result.event.props.ts) || "");
+    const classification = visitorStageClassification(result.canonical, result.event.props);
     const row = {
       ...result.event,
       sid,
       session_id: sid,
       ts,
-      visitor_stage: visitorStageOf(result.canonical, result.event.props),
+      visitor_stage: classification.stage,
+      ...(classification.classification ? { visitor_stage_classification: classification.classification } : {}),
     };
     scanObjectForPii(row.props || {}, result.canonical);
     assertAnalyticsNoPii(row);
@@ -666,6 +684,9 @@ function reconcileClosedLoop(input) {
     const row = sessions.get(sid);
     row.events.push(ev);
     if (ev.visitor_stage && VISITOR_STAGE_SET.has(ev.visitor_stage)) row.stages.add(ev.visitor_stage);
+    if (ev.visitor_stage === "cta" && ev.visitor_stage_classification === LEGACY_UNCLASSIFIED) {
+      row.legacy_unclassified_cta = true;
+    }
     if (ev.visitor_stage === "form_start") row.stages.add("step1");
     const leadId = leadIdOf(ev);
     if (leadId) row.lead_id = leadId;
@@ -686,6 +707,7 @@ function reconcileClosedLoop(input) {
   const counts = {
     view: 0,
     cta: 0,
+    cta_legacy_unclassified: 0,
     form_start: 0,
     step1: 0,
     step2: 0,
@@ -704,6 +726,7 @@ function reconcileClosedLoop(input) {
   for (const row of sessions.values()) {
     if (row.stages.has("view")) counts.view += 1;
     if (row.stages.has("cta")) counts.cta += 1;
+    if (row.stages.has("cta") && row.legacy_unclassified_cta) counts.cta_legacy_unclassified += 1;
     if (row.stages.has("form_start")) counts.form_start += 1;
     if (row.stages.has("step1") || row.stages.has("form_start")) counts.step1 += 1;
     if (row.stages.has("step2")) counts.step2 += 1;
@@ -1159,6 +1182,8 @@ module.exports = {
   sessionIdOf,
   leadIdOf,
   visitorStageOf,
+  visitorStageClassification,
+  LEGACY_UNCLASSIFIED,
   summarizeHandoff,
   VISITOR_STAGE_CONDITIONS,
   assertAnalyticsNoPii,
