@@ -1385,6 +1385,19 @@ async function main() {
     if (axeSource) {
       await page.setViewport({ width: 1440, height: 1000 });
       await page.goto(`${BASE}/`, { waitUntil: "networkidle0" });
+      // Mesma preparacao de scripts/site/audit_axe.mjs: o cursor sai da pagina
+      // (um botao em :hover a meio da transicao nao e o estado de repouso) e as
+      // secoes com content-visibility:auto fora da tela sao tornadas visiveis,
+      // porque o Chromium devolve estilo de agente do usuario (cor #0000ee) para
+      // descendentes de uma subarvore pulada e o axe mede um contraste que nao
+      // existe (2026-09-18, faixa de obras publicas da home na release 079ce510e).
+      await page.mouse.move(0, 0);
+      await page.evaluate(() => {
+        for (const el of document.querySelectorAll("*")) {
+          const cv = getComputedStyle(el).contentVisibility;
+          if (cv && cv !== "visible") el.style.contentVisibility = "visible";
+        }
+      });
       await page.addScriptTag({ content: axeSource });
       const axeResult = await page.evaluate(async () => {
         // eslint-disable-next-line no-undef
