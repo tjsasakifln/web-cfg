@@ -1,0 +1,336 @@
+{
+  "schema": "confenge.diagnostico-blocos/1.0",
+  "campanha": "CONFENGE-POS-REDESIGN-FECHAMENTO-20260918",
+  "gaps": [
+    "G01",
+    "G02"
+  ],
+  "gerado_em": "2026-09-18",
+  "producao": {
+    "url": "https://confenge.com.br",
+    "main_sha": "252fc98d1",
+    "last_modified_borda": "Fri, 18 Sep 2026 08:06:17 GMT",
+    "paridade_texto_visivel_fonte_vs_producao": "identica nas 4 rotas (diff so em hash de CSS, atributos data-cta-*, span data-opaque-token do CNPJ e JSON-LD sem taxID/legalName em producao)"
+  },
+  "metricas_390x844_producao": {
+    "/": {
+      "scrollHeight": 16615,
+      "telas": 19.7,
+      "palavras_main_sem_form": 1710,
+      "h2": 7,
+      "h3": 14,
+      "links": 60
+    },
+    "/servicos/": {
+      "scrollHeight": 16071,
+      "telas": 19.0,
+      "palavras_main_sem_form": 2150,
+      "h2": 4,
+      "h3": 13,
+      "links": 41
+    },
+    "/triagem-tecnica/": {
+      "scrollHeight": 6557,
+      "telas": 7.8,
+      "palavras_main_sem_form": 901,
+      "h2": 4,
+      "h3": 0,
+      "links": 12
+    },
+    "/entregas/": {
+      "scrollHeight": 24142,
+      "telas": 28.6,
+      "palavras_main_sem_form": 3760,
+      "h2": 13,
+      "h3": 6,
+      "links": 53
+    }
+  },
+  "rotas": {
+    "/": [
+      {
+        "bloco": "abertura",
+        "linhas": "index.html:84-114",
+        "pergunta_de_compra": "o que voces fazem, para quem serve e o que eu recebo",
+        "repete": "hero-lead (92) repete a enumeracao 'Comparar propostas de obra, completar ou conferir um projeto, entender uma infiltracao, avaliar um imovel ou responder a uma glosa' da meta description (7) e da og:description (37); entre rotas, servicos:63, entregas:69 e triagem:61 abrem com a mesma lista",
+        "bastidor": "'deste desenho demonstrativo' (93) aponta para a prancha que so aparece em y=848 (390x844) e y=937 (320x700); 'demonstrativo' so e explicado em 111 (legenda, fora da dobra) e 208",
+        "destino": "reescrever 93 sem deixis; manter h1, lead, acoes, prova e prancha"
+      },
+      {
+        "bloco": "situacoes",
+        "linhas": "index.html:118-200",
+        "pergunta_de_compra": "qual e a minha situacao e o que passo a ter",
+        "repete": "123 'Se a sua mistura duas, qualquer uma serve' ~ 190 'Nao se reconheceu em nenhuma, ou a sua mistura duas?'; 187 'Ver todas as situacoes' -> /servicos/ = mesmo destino do CTA primario 95; 191 promessa de resposta = 373 = 396; 194-195 canais = 378-379 = 401-402",
+        "bastidor": "nenhum",
+        "destino": "manter as 7 linhas; fundir chooser-ask (188-197) com #triagem-tecnica levando o prazo de resposta (fato unico da rota)"
+      },
+      {
+        "bloco": "entregas-demonstrativas",
+        "linhas": "index.html:203-262",
+        "pergunta_de_compra": "como e o documento que recebo e da para conferir",
+        "repete": "entrega 3 (243-258) reconta a situacao 04: 156 'Avaliamos o imovel para a finalidade e a data definidas, com objeto, metodo e dados declarados' ~ 253 'Descrevemos o objeto, fixamos finalidade e data, escolhemos o metodo e declaramos os dados'; 157 'laudo ou parecer com conclusao delimitada' ~ 254; ambos apontam para /servicos/#servico-avaliacao. Entrega 2 (227-242) reconta a situacao 07: 180-181 ~ 237-238 ('o orgao decide o ateste')",
+        "bastidor": "nenhum; 208 e a explicacao de 'demonstrativo' que deveria anteceder o uso em 93",
+        "destino": "manter pranchas, legendas e linha 'Documento' (numero concreto); remover a linha 'Trabalho' (221, 237, 253) que repete o texto area__situation da secao 2"
+      },
+      {
+        "bloco": "responsabilidade",
+        "linhas": "index.html:266-303",
+        "pergunta_de_compra": "quem responde, com que registro e como o trabalho comeca",
+        "repete": "passos 296-298 = 395-397 ('O que acontece depois do envio'); 'documento sensivel depois, por canal seguro' dito em 191, 296, 373, 392, 397 (5x na rota); 287 = servicos:285 (entre rotas); 295-299 = servicos:267-269 (entre rotas, literal)",
+        "bastidor": "nenhum",
+        "destino": "manter credenciais, ART e limites; comprimir os 3 passos (295-299) em um paragrafo e manter a lista de 3 passos junto ao formulario (393-398), onde o visitante age"
+      },
+      {
+        "bloco": "obras-publicas",
+        "linhas": "index.html:306-333",
+        "pergunta_de_compra": "voces entendem de obra publica e o que fazem por etapa",
+        "repete": "322 'Ver servicos para obras publicas' = 183 (mesmo href e rotulo) = 399 'Falar sobre obras publicas' (mesmo href); 330 'Numeros de mercado, nao resultados de clientes' = 361 'Contexto de mercado. Numeros nao representam resultados de clientes.'",
+        "bastidor": "312 'O PNCP separa mercado, oportunidade e risco no contrato' (frase de metodo interno, sem sentido para o visitante); dt 330 'Leitura correta' e dt 331 'Fonte e corte' (rotulos de redacao)",
+        "destino": "reescrever 312; renomear dt 330/331 mantendo os dd travados por teste"
+      },
+      {
+        "bloco": "mercado-pncp",
+        "linhas": "index.html:336-363",
+        "pergunta_de_compra": "quanto vale um contrato tipico e quanto custa o servico",
+        "repete": "361 ultima frase repete 330",
+        "bastidor": "eyebrow 338 'Contexto de mercado · PNCP' (rotulo editorial; PNCP nao explicado antes de 346)",
+        "destino": "manter cartoes e valores (travados por teste); remover a frase duplicada de 361; reescrever o eyebrow"
+      },
+      {
+        "bloco": "triagem-tecnica (faixa)",
+        "linhas": "index.html:368-383",
+        "pergunta_de_compra": "como peco uma proposta",
+        "repete": "373 = 191 = 396; 378-379 = 401-402 (mesmos canais, 20 linhas abaixo); 376 'Descrever minha situacao no formulario' rola uma tela ate #contato",
+        "bastidor": "nenhum",
+        "destino": "manter (secao, mailto, wa.me e 'Nao envie documentos sensiveis' travados em test_home_conversion_contract.py:182-190); absorver o prazo de resposta do chooser-ask"
+      },
+      {
+        "bloco": "contato",
+        "linhas": "index.html:387-551",
+        "pergunta_de_compra": "o que acontece se eu enviar",
+        "repete": "392 = 373; 399 = 183/322; 405 'Eng. Civil EESC-USP · iniciativa privada e Administracao Publica' = 99 + 282-284 (3a vez na rota); 395-397 = 296-298",
+        "bastidor": "nenhum",
+        "destino": "manter formulario (hash travado) e canais junto ao formulario; remover 392 e 399; manter 405 (prova junto ao CTA; nenhum teste a trava, mas e a unica credencial visivel ao lado do formulario)"
+      }
+    ],
+    "/servicos/": [
+      {
+        "bloco": "abertura",
+        "linhas": "servicos/index.html:59-71",
+        "pergunta_de_compra": "que servicos existem e como escolho o meu",
+        "repete": "64 'Cada linha abaixo diz o que assumimos, o que voce passa a ter em maos e o caminho direto' = 78 'Cada linha diz o que assumimos, o que chega as suas maos e o caminho direto'; 65 'Descreva a situacao: conversa sem contratacao, sem documento sensivel; a resposta nomeia o servico, a entrega e o que falta reunir' = 295-296",
+        "bastidor": "nenhum",
+        "destino": "remover 64 (fica em 78); reduzir 65 a uma frase com link para o contato final"
+      },
+      {
+        "bloco": "cabecalho da lista",
+        "linhas": "servicos/index.html:75-90",
+        "pergunta_de_compra": "quantas situacoes e onde esta a minha",
+        "repete": "76 'Nove situacoes, cada uma com o que voce passa a ter' + 78 'Seis areas de apresentacao, nove situacoes' + indice 80-90 (seis areas) dizem a contagem 3x",
+        "bastidor": "78 'areas de apresentacao' (descreve a propria diagramacao)",
+        "destino": "reescrever 76 e 78"
+      },
+      {
+        "bloco": "linhas 01-08",
+        "linhas": "servicos/index.html:95-241",
+        "pergunta_de_compra": "o que assumimos, o que voce passa a ter, caminho",
+        "repete": "estrutura uniforme, sem repeticao interna relevante; 148 'amostra demonstrativa' e 120/134 'demonstrativo' sem explicacao nesta rota",
+        "bastidor": "'demonstrativo' nao definido em /servicos/",
+        "destino": "manter; em 148 explicar o termo uma vez"
+      },
+      {
+        "bloco": "linha 06 avaliacao (destaque)",
+        "linhas": "servicos/index.html:172-210",
+        "pergunta_de_compra": "o que preciso para pedir avaliacao e para que serve",
+        "repete": "203 'Atribuicao e ART: laudo emitido no escopo e na atribuicao contratados, com ART e nota fiscal' = 284; 201 'Vistoria ... combinada na proposta' ~ 163 e 269; a linha tem ~40 linhas contra ~12 das demais",
+        "bastidor": "nenhum",
+        "destino": "mover a lista 'O que confirmamos antes do aceite tecnico' (195-206) para <details> aberto por resumo, preservando as 7 condicoes"
+      },
+      {
+        "bloco": "linha 09 obras publicas",
+        "linhas": "servicos/index.html:245-255",
+        "pergunta_de_compra": "o que muda em obra publica",
+        "repete": "nenhuma",
+        "bastidor": "252 'fechado depois da triagem' (jargao interno usado sem o nome da pagina)",
+        "destino": "reescrever a ultima frase de 252"
+      },
+      {
+        "bloco": "como o trabalho passa para ca",
+        "linhas": "servicos/index.html:259-272",
+        "pergunta_de_compra": "como comeca",
+        "repete": "267-269 = index.html:296-298 (entre rotas, literal); 269 condicoes antes do aceite = 280 = 203",
+        "bastidor": "264 'enquadra a entrega possivel' (aprovado pelo gate, mas jargao)",
+        "destino": "manter os passos; reescrever 264"
+      },
+      {
+        "bloco": "antes da proposta + quem assina",
+        "linhas": "servicos/index.html:274-289",
+        "pergunta_de_compra": "o que fica combinado e quem responde",
+        "repete": "280 'Atendemos clientes em todo o Brasil. Atividade de campo, responsavel tecnico, ART ... confirmados' = 269 + 305 + rodape 314 ('Atendimento em todo o Brasil, conforme escopo, local e modalidade definidos na proposta' 3x na rota); 284-285 = index.html:282-287 (entre rotas)",
+        "bastidor": "nenhum",
+        "destino": "fundir 279-280 com o passo 3 (269) e manter 'Quem assina' (CNPJ, CREA, ART)"
+      },
+      {
+        "bloco": "contato",
+        "linhas": "servicos/index.html:291-308",
+        "pergunta_de_compra": "como peco",
+        "repete": "295-296 = 65; 305 = 280 = 314",
+        "bastidor": "nenhum",
+        "destino": "manter; remover 305 (fica no rodape 314)"
+      }
+    ],
+    "/triagem-tecnica/": [
+      {
+        "bloco": "abertura",
+        "linhas": "triagem-tecnica/index.html:58-62",
+        "pergunta_de_compra": "posso contar do meu jeito?",
+        "repete": "61 enumeracao de situacoes = 86-90 (lista detalhada, papel legitimo)",
+        "bastidor": "nenhum",
+        "destino": "manter"
+      },
+      {
+        "bloco": "canais",
+        "linhas": "triagem-tecnica/index.html:64-79",
+        "pergunta_de_compra": "por onde falo e o que acontece depois",
+        "repete": "72 'Nao envie documento, planta, CPF ou dados de terceiros nesta etapa; o canal seguro e combinado depois' = 76 'Planta, contrato, laudo ou planilha so entram depois, por canal combinado' = 103 'Nao envie documentos, CPF, numero de processo, laudo, planta ...' (3x na rota); 75 'A resposta nomeia o servico, a entrega e o que falta reunir' = 61 = 102; 77 'Proposta. Escopo, responsabilidade tecnica, prazo e preco, depois de confirmarmos local, atribuicao e ART' = 102",
+        "bastidor": "66 'Uma acao principal; as outras valem o mesmo.' (racional de interface publicado)",
+        "destino": "reescrever 66; manter 72 (ressalva junto a acao); manter lista 74-78"
+      },
+      {
+        "bloco": "comece pela situacao",
+        "linhas": "triagem-tecnica/index.html:81-92",
+        "pergunta_de_compra": "qual item e o meu",
+        "repete": "87 mistura duas situacoes (inspecao + quantitativos) em um item de 9 linhas",
+        "bastidor": "84 'O link abre o WhatsApp ja com a mensagem escrita' (mecanica, mas util)",
+        "destino": "manter; separar 87 em dois itens"
+      },
+      {
+        "bloco": "primeiro contato",
+        "linhas": "triagem-tecnica/index.html:94-104",
+        "pergunta_de_compra": "o que digo e o que recebo",
+        "repete": "102 = 75 + 77 (mesmos tres tempos); 103 = 72 + 76; 102 'Atendimento em todo o Brasil...' = rodape 122",
+        "bastidor": "103 'Pagina revista em 14 de setembro de 2026' (metadado editorial no corpo)",
+        "destino": "manter a lista 98-101 (unica na rota); reduzir 102 a frase de campo e ART; remover 103 (ressalva ja em 72) e mover a data para o rodape ou <time> discreto"
+      },
+      {
+        "bloco": "erro no site",
+        "linhas": "triagem-tecnica/index.html:106-116",
+        "pergunta_de_compra": "nenhuma de compra (servico ao leitor)",
+        "repete": "nenhuma",
+        "bastidor": "nenhum",
+        "destino": "manter"
+      }
+    ],
+    "/entregas/": [
+      {
+        "bloco": "abertura",
+        "linhas": "entregas/index.html:63-73",
+        "pergunta_de_compra": "o que recebo e para que serve",
+        "repete": "69 enumeracao = index.html:92 (entre rotas); 73 'a resposta nomeia a entrega, a ordem de contratacao e o que voce precisa reunir' = 324 = 369 (3x na rota)",
+        "bastidor": "nenhum; 71 e a definicao de 'demonstrativo/sintetico' (manter)",
+        "destino": "manter h1, lead, deliverable, 71 e acoes; encurtar 73"
+      },
+      {
+        "bloco": "aside Em 30 segundos",
+        "linhas": "entregas/index.html:75-83",
+        "pergunta_de_compra": "resumo: o que ha, quanto custa, quem assina",
+        "repete": "78 = 100 ('Cinco frentes de trabalho... a proposta nomeia escopo, responsavel tecnico e valor') = 312; 79 'R$ 599 a R$ 3.750' = 297 = 310; 80 'Antes do aceite tecnico' = 312",
+        "bastidor": "nenhum",
+        "destino": "manter 79 e 81; remover 78 e 80"
+      },
+      {
+        "bloco": "servicos de engenharia (01-05)",
+        "linhas": "entregas/index.html:98-116 (GERADO)",
+        "pergunta_de_compra": "o que cada frente entrega",
+        "repete": "rotulo 'A estrutura do que voce recebe e para que serve cada peca. Modelo de organizacao do conteudo, sem obra executada e sem dados de cliente.' identico 5x (108-112) e ja dito em 105",
+        "bastidor": "114 'Revisao comercial: 9 de setembro de 2026' (metadado interno)",
+        "destino": "gerador: rotulo uma vez (na legenda 105) e 114 reescrito"
+      },
+      {
+        "bloco": "oito ofertas",
+        "linhas": "entregas/index.html:117-290 (GERADO)",
+        "pergunta_de_compra": "qual decisao, quanto, prazo, o que preciso dar",
+        "repete": "12 campos por oferta; 'O que voce pode inspecionar' e boilerplate 8x ('O modelo integral permite/expoe ...') e repete o botao 'Examinar o demonstrativo'; 'Trabalho realizado' x 'Trabalho incluido' e 'Como a entrega sera usada' x 'Saida' se sobrepoem; 'Pacote e credito' 7x a mesma clausula de 60 dias + 294 + 301",
+        "bastidor": "kicker 'Oferta publicada' 8x (rotulo de estado, redundante com o cabecalho 119)",
+        "destino": "manter precos, prazos, condicoes e creditos; gerador: remover kicker; unificar 'O que voce pode inspecionar' na acao"
+      },
+      {
+        "bloco": "escada unidade/diagnostico/recorrente",
+        "linhas": "entregas/index.html:291-302 (GERADO)",
+        "pergunta_de_compra": "compro uma unidade ou o diagnostico",
+        "repete": "294 e 301 repetem o credito de 60 dias dito em cada oferta",
+        "bastidor": "nenhum",
+        "destino": "manter (aritmetica e condicao material unicas)"
+      },
+      {
+        "bloco": "condicoes e limites",
+        "linhas": "entregas/index.html:305-316 (GERADO)",
+        "pergunta_de_compra": "o que vale para todas",
+        "repete": "310 faixa de preco = 79 = 297; 312 = 78 + 80",
+        "bastidor": "nenhum",
+        "destino": "manter"
+      },
+      {
+        "bloco": "captura",
+        "linhas": "entregas/index.html:319-378",
+        "pergunta_de_compra": "o que acontece se eu enviar",
+        "repete": "324-325 = 367-371 ('O pedido fica registrado, sem cobranca ou contratacao. Preco e escopo exigem aceite' dito 2x em 45 linhas); 324 = 73 = 369",
+        "bastidor": "nenhum",
+        "destino": "manter lista 365-372 e ganchos data-form-*; encurtar 324-325"
+      }
+    ]
+  },
+  "metricas_320x700_producao": {
+    "nota": "dobra de 700 px; contrato first-fold (scripts/site/first_fold_rules.mjs:167-169) so exige a acao primaria dentro de 844 em 390x844, portanto 320x700 nao e guardado por gate",
+    "/": {
+      "scrollHeight": 17759,
+      "h1": "132-305",
+      "hero-lead": "323-496",
+      "hero-deliverable": "507-687",
+      "hero-actions": "703-801 (FORA)",
+      "hero-proof": "817-917 (FORA)",
+      "prancha": "937-1371 (FORA)"
+    },
+    "/servicos/": {
+      "scrollHeight": 18547,
+      "h1": "190-324",
+      "hero-lead": "340-519",
+      "measure": "538-696",
+      "hero-deliverable": "714-834 (FORA)",
+      "hero-actions": "858-976 (FORA)"
+    },
+    "/triagem-tecnica/": {
+      "scrollHeight": 7755,
+      "h1": "113-246",
+      "triage-lead": "258-523",
+      "h2 canais": "566-618",
+      "channel-actions": "813-976 (FORA)"
+    },
+    "/entregas/": {
+      "scrollHeight": 27569,
+      "h1": "167-300",
+      "lead": "314-472",
+      "hero-deliverable": "492-612",
+      "hero-actions": "756-859 (FORA)"
+    }
+  },
+  "distancias_home_390x844_producao": {
+    "#descrever-situacao": 4364,
+    "#triagem-tecnica": 12664,
+    "botao primario de #triagem-tecnica": 12952,
+    "#contato": 13173,
+    "#formulario-contato": 13197,
+    "prancha .hero-figure": 848,
+    "#situations-title": 1386,
+    "nota": "o botao 'Descrever minha situacao no formulario' (index.html:376) esta 221 px acima de #contato"
+  },
+  "banner_consentimento": {
+    "estado": "NAO_REPRODUZIDO",
+    "evidencia": "12 capturas em contexto novo: cookies_before_interaction=0 e consent_banner ausente em todas (G01/manifest-fold-prod.json); script.js marca consent='not_required'; privacidade/index.html declara registro 'sem cookie'"
+  },
+  "proposta_hero_deliverable": {
+    "linha": "index.html:93 (a tarefa citou :89, que e o h1)",
+    "texto": "A quantidade levantada num exemplo demonstrativo, sem obra de cliente, põe duas propostas na mesma conta. Planilha, projeto, laudo e relatório saem assinados, com ART e nota fiscal, para você orçar, contratar ou decidir.",
+    "validacao": "220 caracteres (atual: 214; a altura de 132 px em 390x844 comporta ~6 linhas, e a prova termina em y=828 em producao, logo o texto novo nao pode crescer mais que ~1 linha); passa scripts/site/test_deliverables_hub.py:586-590 e scripts/site/test_ui_geometry.mjs:581-596 e nao casa FRAGMENTATION/BACKSTAGE/COMPLETENESS/PROMISE de scripts/site/test_integral_solution_copy.py"
+  }
+}

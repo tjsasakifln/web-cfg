@@ -1,0 +1,264 @@
+{
+ "base": "https://confenge.com.br",
+ "label": "prod-252fc98d1-baseline",
+ "measured_at": "2026-09-18T12:51:27.111Z",
+ "tool": "lighthouse (Node API) + chrome-launcher, /home/tjsasakifln/.cache/ms-playwright/chromium-1234/chrome-linux64/chrome",
+ "method": "mobile, simulated throttling rtt 150ms / 1.6 Mbps / cpu 4x, storage reset per run (cold cache); nenhuma execução descartada",
+ "runs_per_route": 5,
+ "summary": [
+  {
+   "route": "/",
+   "runs": 5,
+   "perf_median": 98,
+   "perf_range": [
+    97,
+    99
+   ],
+   "lcp_median_ms": 1937,
+   "lcp_range_ms": [
+    1867,
+    2040
+   ],
+   "cls_median": 0,
+   "tbt_median_ms": 104,
+   "bytes_median": 111920,
+   "a11y_median": 100,
+   "lcp_element": null
+  },
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "runs": 5,
+   "perf_median": 99,
+   "perf_range": [
+    98,
+    99
+   ],
+   "lcp_median_ms": 1999,
+   "lcp_range_ms": [
+    1961,
+    2193
+   ],
+   "cls_median": 0,
+   "tbt_median_ms": 2,
+   "bytes_median": 117405,
+   "a11y_median": 100,
+   "lcp_element": null
+  },
+  {
+   "route": "/servicos/",
+   "runs": 5,
+   "perf_median": 100,
+   "perf_range": [
+    99,
+    100
+   ],
+   "lcp_median_ms": 1701,
+   "lcp_range_ms": [
+    1586,
+    2149
+   ],
+   "cls_median": 0,
+   "tbt_median_ms": 0,
+   "bytes_median": 104253,
+   "a11y_median": 100,
+   "lcp_element": null
+  }
+ ],
+ "results": [
+  {
+   "route": "/",
+   "run": 1,
+   "performance": 98,
+   "accessibility": 100,
+   "lcp_ms": 2040,
+   "cls": 0,
+   "tbt_ms": 11,
+   "fcp_ms": 1842,
+   "bytes": 150910,
+   "lcp_element": null,
+   "final_url": "https://confenge.com.br/"
+  },
+  {
+   "route": "/",
+   "run": 2,
+   "performance": 99,
+   "accessibility": 100,
+   "lcp_ms": 1937,
+   "cls": 0,
+   "tbt_ms": 104,
+   "fcp_ms": 1120,
+   "bytes": 109974,
+   "lcp_element": null,
+   "final_url": "https://confenge.com.br/"
+  },
+  {
+   "route": "/",
+   "run": 3,
+   "performance": 98,
+   "accessibility": 100,
+   "lcp_ms": 2007,
+   "cls": 0,
+   "tbt_ms": 131,
+   "fcp_ms": 1133,
+   "bytes": 111903,
+   "lcp_element": null,
+   "final_url": "https://confenge.com.br/"
+  },
+  {
+   "route": "/",
+   "run": 4,
+   "performance": 99,
+   "accessibility": 100,
+   "lcp_ms": 1929,
+   "cls": 0,
+   "tbt_ms": 11,
+   "fcp_ms": 1112,
+   "bytes": 111920,
+   "lcp_element": null,
+   "final_url": "https://confenge.com.br/"
+  },
+  {
+   "route": "/",
+   "run": 5,
+   "performance": 97,
+   "accessibility": 100,
+   "lcp_ms": 1867,
+   "cls": 0,
+   "tbt_ms": 181,
+   "fcp_ms": 1180,
+   "bytes": 111949,
+   "lcp_element": null,
+   "final_url": "https://confenge.com.br/"
+  },
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "run": 1,
+   "performance": 98,
+   "accessibility": 100,
+   "lcp_ms": 2193,
+   "cls": 0,
+   "tbt_ms": 14,
+   "fcp_ms": 1377,
+   "bytes": 169990,
+   "lcp_element": null,
+   "final_url": "https://confenge.com.br/quantitativos-orcamento-obras/"
+  },
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "run": 2,
+   "performance": 99,
+   "accessibility": 100,
+   "lcp_ms": 1999,
+   "cls": 0,
+   "tbt_ms": 2,
+   "fcp_ms": 1399,
+   "bytes": 117370,
+   "lcp_element": null,
+   "final_url": "https://confenge.com.br/quantitativos-orcamento-obras/"
+  },
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "run": 3,
+   "performance": 99,
+   "accessibility": 100,
+   "lcp_ms": 1999,
+   "cls": 0,
+   "tbt_ms": 16,
+   "fcp_ms": 1399,
+   "bytes": 117389,
+   "lcp_element": null,
+   "final_url": "https://confenge.com.br/quantitativos-orcamento-obras/"
+  },
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "run": 4,
+   "performance": 99,
+   "accessibility": 100,
+   "lcp_ms": 2007,
+   "cls": 0,
+   "tbt_ms": 0,
+   "fcp_ms": 1407,
+   "bytes": 117405,
+   "lcp_element": null,
+   "final_url": "https://confenge.com.br/quantitativos-orcamento-obras/"
+  },
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "run": 5,
+   "performance": 99,
+   "accessibility": 100,
+   "lcp_ms": 1961,
+   "cls": 0,
+   "tbt_ms": 0,
+   "fcp_ms": 1361,
+   "bytes": 117415,
+   "lcp_element": null,
+   "final_url": "https://confenge.com.br/quantitativos-orcamento-obras/"
+  },
+  {
+   "route": "/servicos/",
+   "run": 1,
+   "performance": 99,
+   "accessibility": 100,
+   "lcp_ms": 2149,
+   "cls": 0,
+   "tbt_ms": 21,
+   "fcp_ms": 1274,
+   "bytes": 156975,
+   "lcp_element": null,
+   "final_url": "https://confenge.com.br/servicos/"
+  },
+  {
+   "route": "/servicos/",
+   "run": 2,
+   "performance": 100,
+   "accessibility": 100,
+   "lcp_ms": 1701,
+   "cls": 0,
+   "tbt_ms": 0,
+   "fcp_ms": 961,
+   "bytes": 104251,
+   "lcp_element": null,
+   "final_url": "https://confenge.com.br/servicos/"
+  },
+  {
+   "route": "/servicos/",
+   "run": 3,
+   "performance": 100,
+   "accessibility": 100,
+   "lcp_ms": 1713,
+   "cls": 0,
+   "tbt_ms": 0,
+   "fcp_ms": 973,
+   "bytes": 104248,
+   "lcp_element": null,
+   "final_url": "https://confenge.com.br/servicos/"
+  },
+  {
+   "route": "/servicos/",
+   "run": 4,
+   "performance": 100,
+   "accessibility": 100,
+   "lcp_ms": 1586,
+   "cls": 0,
+   "tbt_ms": 0,
+   "fcp_ms": 921,
+   "bytes": 104311,
+   "lcp_element": null,
+   "final_url": "https://confenge.com.br/servicos/"
+  },
+  {
+   "route": "/servicos/",
+   "run": 5,
+   "performance": 100,
+   "accessibility": 100,
+   "lcp_ms": 1655,
+   "cls": 0,
+   "tbt_ms": 0,
+   "fcp_ms": 915,
+   "bytes": 104253,
+   "lcp_element": null,
+   "final_url": "https://confenge.com.br/servicos/"
+  }
+ ]
+}

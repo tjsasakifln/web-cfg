@@ -1,0 +1,102 @@
+{
+  "schema": "confenge.pos-redesign-fechamento.g02.frente-a/1.0",
+  "campaign": "CONFENGE-POS-REDESIGN-FECHAMENTO-20260918",
+  "measured_at": "2026-09-18",
+  "production": {"url": "https://confenge.com.br", "main_commit": "252fc98d1", "text_parity": "main text of the 4 routes identical to source (servicos differs only by the build-time opaque-token span around the CNPJ, scripts/pseo/build_site.py:49 mark_opaque_tokens_in_html_text)"},
+  "generation": {
+    "quantitativos-orcamento-obras/index.html": {"body": "manual HTML (git log: editorial commits 8a0dfcc5a..8bc8d7dd9)", "injected_slots": [
+      {"id": "qty-sample-trail", "marks": "<!--pos-inb-02:qty-trail-->", "composer": "scripts/campaigns/pos-inb-20260911/02/compose_purchase_proof.mjs", "renderer": "quantitativos-orcamento-obras/sample-trail.mjs", "data": ["data/demonstrative/private-project-pilot/consumption.v1.json", "data/demonstrative/private-project-pilot/source.v1.json", "casos/demonstrativo-projeto-privado/data/*.csv"]},
+      {"id": "qty-proof-entrances", "marks": "<!--orc-b2b-20260913:proof-entrances-->", "composer": "scripts/campaigns/orc-b2b-20260913/compose_proof_entrances.mjs (npm run compose:proof-entrances)", "renderer": "quantitativos-orcamento-obras/proof-entrances.mjs", "data": ["data/demonstrative/private-project-pilot/{source,consumption}.v1.json", "data/demonstrative/infrastructure-pilot/{source,consumption}.v1.json"]}
+    ]},
+    "compatibilizacao-projetos-engenharia/index.html": {"body": "manual HTML (2e2023211..ca481f622)", "injected_slots": [{"id": "coord-register", "marks": "<!--pos-inb-02:coord-register-->", "composer": "scripts/coordination/interference_register.mjs", "note": "lines 124-166 (CF-GEO-01, CF-INFO-01) come from the interference register; tests/coordination/test_page_contract.mjs:154-161 requires shipped==rendered"}]},
+    "medicoes-glosas-obras-publicas/index.html": {"body": "manual HTML, hash-pinned; shared footer synced by scripts/site/shell_nav.py:87 (_FROZEN_FALLBACK)", "injected_slots": []},
+    "servicos/index.html": {"body": "manual HTML (12ec82305 created #servico-avaliacao)", "injected_slots": []},
+    "build_site": "scripts/pseo/build_site.py:700-800 runs pseo build, editorial build, contract-analysis family, em-dash scrub; none emits these four files"
+  },
+  "hash_pins": {
+    "medicoes-glosas-obras-publicas/index.html": ["data/bofu-dominance/frozen-specs/hashes.json:10,18", "data/bofu-dominance/frozen-specs/specs/medicoes-glosas-obras-publicas.json (snapshot)", "data/bofu-dominance/frozen-specs/snapshots.json", "data/bofu-dominance/frozen-specs/patches/medicoes-glosas-obras-publicas.patch.txt", "data/organic/single-commercial-route.v1.json:143 expected_sha256", "data/commercial/first-fold-measurements.v1.json:51"],
+    "index.html": ["data/commercial/first-fold-measurements.v1.json:50"],
+    "quantitativos-orcamento-obras/index.html": [],
+    "compatibilizacao-projetos-engenharia/index.html": [],
+    "servicos/index.html": [],
+    "recapture_chain": "docs/campaigns/design-institucional/expansao/tools/recapture_chain.py:5-11 (approvals -> frozen specs materialize -> single-commercial-route -> canary-contract -> cta-form-next-state; then measure_first_fold --write, audit_css_usage --write, build:site)"
+  },
+  "positions_px": {"source": ["positions-prod.json", "positions-prod-2.json", "visitor-effort-prod.json"],
+    "quantitativos_390": {"page_height": 20426, "prose_chars": 18634, "hero_cta_top": 738, "plate_P1": "2113-2709 (caption 2537-2709)", "memoria_h3": 2928, "planta_svg_duplicate": "3697-4124", "mid_cta_1": 6263, "qty_sample_trail": "7771-9354", "mid_cta_2": 12801, "condicoes": "12918-16123", "dark_block": "17580-19022", "whatsapp_in_dark": 18521},
+    "compatibilizacao_390": {"page_height": 15580, "prose_chars": 14010, "hero_cta_top": 697, "plate_PA_caption": "2646-2839", "coord_finding_1": 3159, "infra_plate": "5789-6344", "mid_cta": 7997, "dark_block": "12499-14176", "whatsapp_in_dark": 12685},
+    "medicoes_390": {"page_height": 13123, "prose_chars": 10238, "hero_cta_top": 433, "example_p100": "~1484-2479", "figcaption": "2479-2777", "mid_cta": 3719, "lead_inline_tool": "7135-7357", "form": "9925-11170", "submit": 10858},
+    "servicos_avaliacao_390": {"page_height": 16071, "block": "6299-8942", "plate": "6639-7174 (caption 7003-7174)", "service_output": "7230-7441", "first_contact_in_block": 8786, "distance_block_start_to_action": 2487, "home_entry_link": "/ #situacao-avaliacao 'Ver avaliação' top 3060"},
+    "desktop_1440_note": "first_contact top:19 rows in visitor-effort-prod.json are the header CTA (Solicitar proposta -> /triagem-tecnica/), not the in-page action"
+  },
+  "repetitions": {
+    "quantitativos-orcamento-obras/index.html": [
+      {"what": "critério de desconto de aberturas ≥ 0,50 m²", "lines": [109, 136, 279, 282, 286], "verbatim_from": 279},
+      {"what": "conta 21,84 − 1,68 − 0,56 = 19,60 m²", "lines": [109, "127-134", 279]},
+      {"what": "planta RM-01 desenhada duas vezes (P1 'planta e elevação' + SVG inline)", "lines": [113, "138-179"]},
+      {"what": "ressalva demonstrativa / não é cliente / preço hipotético não é SINAPI", "lines": [115, 118, 279, 279, 286, 286, 332, 358, 359]},
+      {"what": "'Não pedimos campos de licitação, edital nem processo.'", "lines": [320, 331]},
+      {"what": "data-base = data das referências e cotações", "lines": [313, 330]},
+      {"what": "documentação incompleta não encerra/impede", "lines": [72, 300, 302, 331, 373]},
+      {"what": "'A resposta nomeia o serviço, o que você recebe e o que falta reunir'", "lines": [78, 382]},
+      {"what": "primeiro contato em texto / sem anexo / não recebe arquivo", "lines": [78, 333, 382, 393]},
+      {"what": "quem assina (EESC-USP, CREA, ART, NF)", "lines": [86, 121, 357]},
+      {"what": "'origem e o critério de cada número visíveis'", "lines": [73, 239]},
+      {"what": "levantamento / elaboração / revisão nomeados como três pedidos", "lines": [83, "189-190", 266, 372, 378]},
+      {"what": "SINAPI referência pública vs não é preço de mercado", "lines": [321, 330]},
+      {"what": "campo, atribuição, ART antes do aceite técnico", "lines": [85, 328]}
+    ],
+    "compatibilizacao-projetos-engenharia/index.html": [
+      {"what": "entrega = registro com localização, evidência, responsável, estado", "lines": [73, 84, 120, 232]},
+      {"what": "ciclo fecha com o aceite do autor", "lines": [84, 195, 234, 252]},
+      {"what": "não projeta a correção / não valida dimensionamento / não redimensiona", "lines": [109, 137, 141, 197, 230, 250, 271]},
+      {"what": "números R00/R01 (2,30 / 2,20 / 0,10 m)", "lines": [115, 129, 133, 195]},
+      {"what": "'Lista incompleta ... não impedem o contato'", "lines": [78, 296]},
+      {"what": "'A resposta nomeia o serviço, o que você recebe e o que falta reunir'", "lines": [78, 303, 306]},
+      {"what": "não recebe upload/arquivo, canal seguro", "lines": [224, 225, 268, 269, 303, 306, 309]},
+      {"what": "'Modelo não é requisito' / ausência de modelo", "lines": [72, 296]},
+      {"what": "disclaimer demonstrativo idêntico", "lines": [125, 148, 273]},
+      {"what": "quem assina", "lines": [86, 121, 274]},
+      {"what": "aceite técnico / leitura remota / ART", "lines": [85, 263, 272]},
+      {"what": "'Papel de quem registra' (bastidor)", "lines": [141, 164]}
+    ],
+    "medicoes-glosas-obras-publicas/index.html": [
+      {"what": "quatro números 120/90/80 + 'não trata 120 m² como direito automático' (prosa e figcaption quase verbatim)", "lines": [100, 106]},
+      {"what": "conteúdo do dossiê (cronologia, diferença em reais, parcela incontroversa, lacunas)", "lines": [79, 115, 239]},
+      {"what": "não é petição jurídica / não promete recebimento", "lines": [80, 115, 137, 151, 222, 227, 235, 241]},
+      {"what": "começar sem conjunto completo / o que já está em mãos / o que falta reunir", "lines": [116, 122, 218, 227, 232]},
+      {"what": "quando pedir (glosa se repete, critério opaco, incontroverso misturado)", "lines": [135, 136, 137, 178, 220]},
+      {"what": "executado/medido/contratado/evidenciado", "lines": [78, 100, 106, 135, "146-149"]}
+    ],
+    "servicos/index.html#servico-avaliacao": [
+      {"what": "as cinco partes do laudo", "lines": [183, 187, 188]},
+      {"what": "usos negociar/partilhar/garantia/registrar", "lines": [176, 177, 188, "191-193"], "also_home": [155, 156]},
+      {"what": "'Parecer preliminar não substitui a avaliação formal'", "lines": [188, 200], "also_home": 254},
+      {"what": "'O pedido entra aqui, com o que você já souber.' sem link; ações reais em 209 (≈1500 px abaixo em 390)", "lines": [188, 209]}
+    ]
+  },
+  "backstage_language": {
+    "gate_status": "scripts/site/test_integral_solution_copy.py BACKSTAGE/FRAGMENTATION regexes match nothing in these files (6 passed); items below are outside the gate",
+    "items": [
+      {"file": "quantitativos-orcamento-obras/index.html", "lines": [107], "text": "Prova antes do método"},
+      {"file": "compatibilizacao-projetos-engenharia/index.html", "lines": [107], "text": "Prova antes do método"},
+      {"file": "quantitativos-orcamento-obras/index.html", "lines": [275, 278], "text": "trilha técnica (nome interno do slot)"},
+      {"file": "quantitativos-orcamento-obras/index.html", "lines": [279], "text": "Referência de revisão RF-01 ... Documento PR-ARQ-R00 (códigos internos); ORC-PAR-01 vs Q-PAR-01 para o mesmo item (109 vs 125/282)"},
+      {"file": "quantitativos-orcamento-obras/index.html", "lines": [373, 394], "text": "não é obrigatório passar por triagem ou diagnóstico antes; contato e triagem geral"},
+      {"file": "compatibilizacao-projetos-engenharia/index.html", "lines": [141, 164], "text": "Papel de quem registra: registrar, localizar e encaminhar; não projetar a correção neste recorte"},
+      {"file": "compatibilizacao-projetos-engenharia/index.html", "lines": [141], "text": "Encaminhar ao autor do recorte arquitetônico demonstrativo"},
+      {"file": "medicoes-glosas-obras-publicas/index.html", "lines": [184], "text": "Exploração (kicker de estágio de funil)"},
+      {"file": "medicoes-glosas-obras-publicas/index.html", "lines": [230], "text": "Diretoria Fracionada para o Mercado Público na execução (nome de produto)"},
+      {"file": "medicoes-glosas-obras-publicas/index.html", "lines": [238, 239, 240, 241], "text": "Autor institucional: CONFENGE · Responsável técnico ... Referência: 15 de agosto de 2026 / Método: / Fonte: / Limitação: (bloco de autoridade em formato de ficha)"},
+      {"file": "medicoes-glosas-obras-publicas/index.html", "lines": [199, 201], "text": "Os conteúdos percorrem as perguntas mais urgentes e os fundamentos complementares... / 6 guias públicos neste tema. Engenharia, contrato e impacto econômico no mesmo enquadramento."}
+    ]
+  },
+  "avaliacao_path": {
+    "route": "/ #situacao-avaliacao (index.html:152-158) -> /servicos/#servico-avaliacao (servicos/index.html:174-210) -> wa.me prefill 'Preciso de avaliação de imóvel' | mailto subject 'Avaliação de imóvel' | /triagem-tecnica/#pericia-avaliacao (triagem-tecnica/index.html:88 -> wa.me)",
+    "forms_on_path": {"servicos/index.html": 0, "triagem-tecnica/index.html": 0},
+    "cnpj_required": false,
+    "cnpj_mentions": ["index.html:156 'Pessoa física começa sem CNPJ.'", "servicos/index.html:177 'Pessoa física não precisa informar CNPJ para começar.'", "triagem-tecnica/index.html:88 'Pessoa física começa sem informar CNPJ.'"],
+    "public_works_language_in_block": "none inside #servico-avaliacao; container hub h1 'Serviços de engenharia para obras públicas e privadas' (servicos/index.html:62) and row 09 Obras públicas (246-254)",
+    "home_form_b2g_fields": "index.html:475 'Os campos abaixo são de obra pública do lado da empresa contratada. Em qualquer outra situação, deixe-os em branco.' + faixas R$ (477-495); form name 'diagnostico-b2g' (408); reached only via /#formulario-contato, not linked from the avaliação block",
+    "pins": ["tests/pos-inb-20260911/07/test_navigation.py:229-233 (id, 'Avaliação de imóvel', exact 'Pessoa física não precisa informar CNPJ', no dedicated route)", "tests/pos-inb-20260911/07/test_counterexamples.py:152", "scripts/site/test_public_ia.py:67", "scripts/site/hub_link_matrix.json:208-212,328,480-483,578-580,622", "data/site/public-ia-map.json:41", "data/site/brand.json:120", "scripts/site/test_home_conversion_contract.py:282", "scripts/site/test_design_gates.py:439"]
+  }
+}

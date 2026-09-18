@@ -1,0 +1,85 @@
+{
+  "gap": "G05",
+  "captured_at_utc": "2026-09-18T12:50Z",
+  "repo_consumer_local_reproduction": {
+    "status": "BLOCKED_EXTERNAL",
+    "codes": [
+      "gsc_stale"
+    ],
+    "evidence": {
+      "owner": "web-cfg #413",
+      "as_of": "2026-08-18",
+      "age_days": 31,
+      "routes": [
+        "search observation aggregate"
+      ],
+      "viewports": [
+        "not applicable"
+      ],
+      "source_available": true
+    }
+  },
+  "repo_snapshots_with_search_analytics_redacted": [
+    "seo/gsc-2026-08-24/search-analytics-redacted.json"
+  ],
+  "durable_consumer_read_from_host_2026-09-18": {
+    "method": "ssh ec-prod; source /etc/confenge-web/runtime.env; curl GET https://confenge.com.br/.netlify/functions/ops?action=gsc_insights (Bearer OPS_TOKEN); insights body dropped, meta only",
+    "http": 200,
+    "ok": true,
+    "status": "CURRENT",
+    "access_mode": "READ_WRITE",
+    "as_of": "2026-09-14",
+    "produced_at": "2026-09-17T15:31:59.480921+00:00",
+    "ingested_at": "2026-09-17T15:31:59.739Z",
+    "snapshot_sha256": "a7a9ff1eed5dc9d255d0769059c787d976b78f43a0e13a1968b858ce48c916e3",
+    "producer_manifest_sha256": "124ce2d9469b018e1c7abc00bbb34bbd376fd13c4581727334d6890398bda5b3",
+    "consumer_manifest_sha256": "124ce2d9469b018e1c7abc00bbb34bbd376fd13c4581727334d6890398bda5b3",
+    "history_state_sha256": "60cddccead941cefaa76e40dde1d29eebecaa3f6bee80a706beb261b182d5ceb",
+    "delivery_source": "durable_store",
+    "source": "search_analytics_api"
+  },
+  "github_runs": {
+    "revops-scheduled_35240801751": {
+      "created": "2026-09-17T15:31:29Z",
+      "run_conclusion": "failure (caused by job daily-ops; unrelated to GSC)",
+      "jobs": {
+        "daily-ops": "failure",
+        "gsc-sync": "success",
+        "nurture-tick": "success",
+        "inbound-counters-proof": "skipped",
+        "weekly-report": "skipped"
+      },
+      "gsc-sync_log_facts": {
+        "restore": "GSC_HISTORY_RESTORED sha256=fd0a4fc18c13340bb0f7f92de566958375651025ef83028f62d489be703b6764",
+        "sync_json_fields": {
+          "rows": 29,
+          "promote_insights": true
+        },
+        "publish": "GSC_STATE_PUBLISHED status=CURRENT producer_as_of=2026-09-14 consumer_as_of=2026-09-14 producer_manifest_sha256=124ce2d9... consumer_manifest_sha256=124ce2d9... snapshot_sha256=a7a9ff1e... history_sha256=60cddcce..."
+      }
+    },
+    "market-answer-freshness_35335660787": {
+      "created": "2026-09-18T10:38:02Z",
+      "conclusion": "success",
+      "result": {
+        "ok": true,
+        "status": "CURRENT",
+        "as_of": "2026-09-14",
+        "delivery_source": "durable_store",
+        "reason_codes": []
+      }
+    },
+    "revops-scheduled_runs_on_2026-09-18_as_of_12:49Z": "none listed yet"
+  },
+  "policy_divergence": {
+    "scorecard_maximum_age_days": 7,
+    "scorecard_source": "data/quality/site-excellence.v1.json:283",
+    "durable_contract_max_age_days": 14,
+    "durable_source": "netlify/functions/lib/gsc-private-snapshot.cjs:16 MAX_AGE_MS"
+  },
+  "site_ci_secrets_chain": {
+    "site-ci.yml_has_secrets_refs": false,
+    "workflow_call_declares_secrets": false,
+    "netcup-release.yml_69-74_passes_secrets": false
+  }
+}

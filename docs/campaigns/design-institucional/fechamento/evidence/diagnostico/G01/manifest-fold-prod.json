@@ -1,0 +1,1219 @@
+{
+  "base": "https://confenge.com.br",
+  "captured_at": "2026-09-18T12:49:01.833Z",
+  "note": "primeira visita: contexto novo, sem cookies/storage; cache desativado",
+  "captures": [
+    {
+      "route": "/",
+      "viewport": "390x844",
+      "status": 200,
+      "cookies_before_interaction": 0,
+      "fold": "docs/campaigns/design-institucional/fechamento/evidence/diagnostico/G01/home-390x844-fold-prod.png",
+      "full": "docs/campaigns/design-institucional/fechamento/evidence/diagnostico/G01/home-390x844-full-prod.jpg",
+      "rects": {
+        "header": {
+          "top": 0,
+          "bottom": 61,
+          "height": 61,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "16px",
+          "text": ""
+        },
+        "eyebrow": {
+          "top": 81,
+          "bottom": 101,
+          "height": 20,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "14px",
+          "text": "ENGENHARIA, PERÍCIAS E INTELIGÊNCIA TÉCNICA"
+        },
+        "h1": {
+          "top": 113,
+          "bottom": 288,
+          "height": 176,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "32.58px",
+          "text": "Assumimos a parte de engenharia que falta para você orçar, contratar ou decidir."
+        },
+        "lead": {
+          "top": 306,
+          "bottom": 455,
+          "height": 149,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "16px",
+          "text": "Comparar propostas de obra, completar ou conferir um projeto, entender uma infiltração, av"
+        },
+        "deliverable": {
+          "top": 466,
+          "bottom": 598,
+          "height": 132,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "16px",
+          "text": "Com a quantidade levantada deste desenho demonstrativo, duas propostas se comparam pela me"
+        },
+        "measure": null,
+        "actions": {
+          "top": 614,
+          "bottom": 712,
+          "height": 98,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "16px",
+          "text": "Ver serviços por situação Descrever a minha situação"
+        },
+        "proof": {
+          "top": 728,
+          "bottom": 828,
+          "height": 100,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "13.6px",
+          "text": "· Engenharia Civil pela EESC-USP · CNPJ 52.407.089/0001-09 · Como conferir credenciais e l"
+        },
+        "plate": {
+          "top": 848,
+          "bottom": 1282,
+          "height": 434,
+          "fully_in_fold": false,
+          "partly_in_fold": false,
+          "font_px": "16px",
+          "text": "EXEMPLO DEMONSTRATIVO Quatro paredes de banheiro: 19,60 m² de revestimento, item ORC-PAR-0"
+        },
+        "plate_img": {
+          "top": 857,
+          "bottom": 1157,
+          "height": 300,
+          "fully_in_fold": false,
+          "partly_in_fold": false,
+          "font_px": "16px",
+          "text": ""
+        },
+        "plate_caption": {
+          "top": 1172,
+          "bottom": 1282,
+          "height": 109,
+          "fully_in_fold": false,
+          "partly_in_fold": false,
+          "font_px": "14px",
+          "text": "EXEMPLO DEMONSTRATIVO Quatro paredes de banheiro: 19,60 m² de revestimento, item ORC-PAR-0"
+        },
+        "first_h2": {
+          "top": 1386,
+          "bottom": 1439,
+          "height": 53,
+          "fully_in_fold": false,
+          "partly_in_fold": false,
+          "font_px": "24px",
+          "text": "Em qual destas você se reconhece?"
+        },
+        "aside30s": null,
+        "channel_card": null,
+        "consent_banner": null,
+        "scrollHeight": 16615,
+        "overflow_px": 0
+      }
+    },
+    {
+      "route": "/",
+      "viewport": "320x700",
+      "status": 200,
+      "cookies_before_interaction": 0,
+      "fold": "docs/campaigns/design-institucional/fechamento/evidence/diagnostico/G01/home-320x700-fold-prod.png",
+      "full": "docs/campaigns/design-institucional/fechamento/evidence/diagnostico/G01/home-320x700-full-prod.jpg",
+      "rects": {
+        "header": {
+          "top": 0,
+          "bottom": 61,
+          "height": 61,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "16px",
+          "text": ""
+        },
+        "eyebrow": {
+          "top": 81,
+          "bottom": 120,
+          "height": 39,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "14px",
+          "text": "ENGENHARIA, PERÍCIAS E INTELIGÊNCIA TÉCNICA"
+        },
+        "h1": {
+          "top": 132,
+          "bottom": 305,
+          "height": 173,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "32px",
+          "text": "Assumimos a parte de engenharia que falta para você orçar, contratar ou decidir."
+        },
+        "lead": {
+          "top": 323,
+          "bottom": 496,
+          "height": 174,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "16px",
+          "text": "Comparar propostas de obra, completar ou conferir um projeto, entender uma infiltração, av"
+        },
+        "deliverable": {
+          "top": 507,
+          "bottom": 687,
+          "height": 180,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "16px",
+          "text": "Com a quantidade levantada deste desenho demonstrativo, duas propostas se comparam pela me"
+        },
+        "measure": null,
+        "actions": {
+          "top": 703,
+          "bottom": 801,
+          "height": 98,
+          "fully_in_fold": false,
+          "partly_in_fold": false,
+          "font_px": "16px",
+          "text": "Ver serviços por situação Descrever a minha situação"
+        },
+        "proof": {
+          "top": 817,
+          "bottom": 917,
+          "height": 100,
+          "fully_in_fold": false,
+          "partly_in_fold": false,
+          "font_px": "13.6px",
+          "text": "· Engenharia Civil pela EESC-USP · CNPJ 52.407.089/0001-09 · Como conferir credenciais e l"
+        },
+        "plate": {
+          "top": 937,
+          "bottom": 1371,
+          "height": 434,
+          "fully_in_fold": false,
+          "partly_in_fold": false,
+          "font_px": "16px",
+          "text": "EXEMPLO DEMONSTRATIVO Quatro paredes de banheiro: 19,60 m² de revestimento, item ORC-PAR-0"
+        },
+        "plate_img": {
+          "top": 946,
+          "bottom": 1246,
+          "height": 300,
+          "fully_in_fold": false,
+          "partly_in_fold": false,
+          "font_px": "16px",
+          "text": ""
+        },
+        "plate_caption": {
+          "top": 1262,
+          "bottom": 1371,
+          "height": 109,
+          "fully_in_fold": false,
+          "partly_in_fold": false,
+          "font_px": "14px",
+          "text": "EXEMPLO DEMONSTRATIVO Quatro paredes de banheiro: 19,60 m² de revestimento, item ORC-PAR-0"
+        },
+        "first_h2": {
+          "top": 1475,
+          "bottom": 1528,
+          "height": 53,
+          "fully_in_fold": false,
+          "partly_in_fold": false,
+          "font_px": "24px",
+          "text": "Em qual destas você se reconhece?"
+        },
+        "aside30s": null,
+        "channel_card": null,
+        "consent_banner": null,
+        "scrollHeight": 17759,
+        "overflow_px": 0
+      }
+    },
+    {
+      "route": "/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "cookies_before_interaction": 0,
+      "fold": "docs/campaigns/design-institucional/fechamento/evidence/diagnostico/G01/home-1440x1000-fold-prod.png",
+      "full": null,
+      "rects": {
+        "header": {
+          "top": 0,
+          "bottom": 83,
+          "height": 83,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "18px",
+          "text": "Serviços e problemas Obras públicas Biblioteca Solicitar proposta"
+        },
+        "eyebrow": {
+          "top": 167,
+          "bottom": 187,
+          "height": 20,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "14px",
+          "text": "ENGENHARIA, PERÍCIAS E INTELIGÊNCIA TÉCNICA"
+        },
+        "h1": {
+          "top": 199,
+          "bottom": 523,
+          "height": 324,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "60px",
+          "text": "Assumimos a parte de engenharia que falta para você orçar, contratar ou decidir."
+        },
+        "lead": {
+          "top": 123,
+          "bottom": 238,
+          "height": 115,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "19.2px",
+          "text": "Comparar propostas de obra, completar ou conferir um projeto, entender uma infiltração, av"
+        },
+        "deliverable": {
+          "top": 253,
+          "bottom": 374,
+          "height": 122,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "18px",
+          "text": "Com a quantidade levantada deste desenho demonstrativo, duas propostas se comparam pela me"
+        },
+        "measure": null,
+        "actions": {
+          "top": 390,
+          "bottom": 434,
+          "height": 44,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "18px",
+          "text": "Ver serviços por situação Descrever a minha situação"
+        },
+        "proof": {
+          "top": 446,
+          "bottom": 523,
+          "height": 77,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "18px",
+          "text": "· Engenharia Civil pela EESC-USP · CNPJ 52.407.089/0001-09 · Como conferir credenciais e l"
+        },
+        "plate": {
+          "top": 563,
+          "bottom": 1298,
+          "height": 735,
+          "fully_in_fold": false,
+          "partly_in_fold": true,
+          "font_px": "18px",
+          "text": "EXEMPLO DEMONSTRATIVO Quatro paredes de banheiro: 19,60 m² de revestimento, item ORC-PAR-0"
+        },
+        "plate_img": {
+          "top": 580,
+          "bottom": 1202,
+          "height": 622,
+          "fully_in_fold": false,
+          "partly_in_fold": true,
+          "font_px": "18px",
+          "text": ""
+        },
+        "plate_caption": {
+          "top": 1231,
+          "bottom": 1298,
+          "height": 67,
+          "fully_in_fold": false,
+          "partly_in_fold": false,
+          "font_px": "14px",
+          "text": "EXEMPLO DEMONSTRATIVO Quatro paredes de banheiro: 19,60 m² de revestimento, item ORC-PAR-0"
+        },
+        "first_h2": {
+          "top": 1458,
+          "bottom": 1534,
+          "height": 76,
+          "fully_in_fold": false,
+          "partly_in_fold": false,
+          "font_px": "34.4px",
+          "text": "Em qual destas você se reconhece?"
+        },
+        "aside30s": null,
+        "channel_card": null,
+        "consent_banner": null,
+        "scrollHeight": 10392,
+        "overflow_px": 0
+      }
+    },
+    {
+      "route": "/servicos/",
+      "viewport": "390x844",
+      "status": 200,
+      "cookies_before_interaction": 0,
+      "fold": "docs/campaigns/design-institucional/fechamento/evidence/diagnostico/G01/servicos-390x844-fold-prod.png",
+      "full": "docs/campaigns/design-institucional/fechamento/evidence/diagnostico/G01/servicos-390x844-full-prod.jpg",
+      "rects": {
+        "header": {
+          "top": 0,
+          "bottom": 61,
+          "height": 61,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "16px",
+          "text": ""
+        },
+        "eyebrow": {
+          "top": 139,
+          "bottom": 159,
+          "height": 20,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "14px",
+          "text": "SERVIÇOS ORGANIZADOS POR SITUAÇÃO"
+        },
+        "h1": {
+          "top": 171,
+          "bottom": 271,
+          "height": 100,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "32px",
+          "text": "Serviços de engenharia para obras públicas e privadas"
+        },
+        "lead": {
+          "top": 287,
+          "bottom": 443,
+          "height": 156,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "17.365px",
+          "text": "Comparar propostas, completar ou conferir um projeto, entender uma infiltração, avaliar um"
+        },
+        "deliverable": {
+          "top": 611,
+          "bottom": 707,
+          "height": 96,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "16px",
+          "text": "Não sabe qual é a sua? Descreva a situação: conversa sem contratação, sem documento sensív"
+        },
+        "measure": {
+          "top": 461,
+          "bottom": 593,
+          "height": 132,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "16px",
+          "text": "Cada linha abaixo diz o que assumimos, o que você passa a ter em mãos e o caminho direto. "
+        },
+        "actions": {
+          "top": 731,
+          "bottom": 833,
+          "height": 102,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "16px",
+          "text": "Descrever a situação pelo WhatsApp Ou pela triagem técnica"
+        },
+        "proof": null,
+        "plate": null,
+        "plate_img": null,
+        "plate_caption": null,
+        "first_h2": {
+          "top": 977,
+          "bottom": 1005,
+          "height": 28,
+          "fully_in_fold": false,
+          "partly_in_fold": false,
+          "font_px": "26px",
+          "text": "Em qual destas você está?"
+        },
+        "aside30s": null,
+        "channel_card": null,
+        "consent_banner": null,
+        "scrollHeight": 16071,
+        "overflow_px": 0
+      }
+    },
+    {
+      "route": "/servicos/",
+      "viewport": "320x700",
+      "status": 200,
+      "cookies_before_interaction": 0,
+      "fold": "docs/campaigns/design-institucional/fechamento/evidence/diagnostico/G01/servicos-320x700-fold-prod.png",
+      "full": "docs/campaigns/design-institucional/fechamento/evidence/diagnostico/G01/servicos-320x700-full-prod.jpg",
+      "rects": {
+        "header": {
+          "top": 0,
+          "bottom": 61,
+          "height": 61,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "16px",
+          "text": ""
+        },
+        "eyebrow": {
+          "top": 139,
+          "bottom": 178,
+          "height": 39,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "14px",
+          "text": "SERVIÇOS ORGANIZADOS POR SITUAÇÃO"
+        },
+        "h1": {
+          "top": 190,
+          "bottom": 324,
+          "height": 133,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "32px",
+          "text": "Serviços de engenharia para obras públicas e privadas"
+        },
+        "lead": {
+          "top": 340,
+          "bottom": 519,
+          "height": 180,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "17.12px",
+          "text": "Comparar propostas, completar ou conferir um projeto, entender uma infiltração, avaliar um"
+        },
+        "deliverable": {
+          "top": 714,
+          "bottom": 834,
+          "height": 120,
+          "fully_in_fold": false,
+          "partly_in_fold": false,
+          "font_px": "16px",
+          "text": "Não sabe qual é a sua? Descreva a situação: conversa sem contratação, sem documento sensív"
+        },
+        "measure": {
+          "top": 538,
+          "bottom": 696,
+          "height": 158,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "16px",
+          "text": "Cada linha abaixo diz o que assumimos, o que você passa a ter em mãos e o caminho direto. "
+        },
+        "actions": {
+          "top": 858,
+          "bottom": 976,
+          "height": 118,
+          "fully_in_fold": false,
+          "partly_in_fold": false,
+          "font_px": "16px",
+          "text": "Descrever a situação pelo WhatsApp Ou pela triagem técnica"
+        },
+        "proof": null,
+        "plate": null,
+        "plate_img": null,
+        "plate_caption": null,
+        "first_h2": {
+          "top": 1120,
+          "bottom": 1176,
+          "height": 56,
+          "fully_in_fold": false,
+          "partly_in_fold": false,
+          "font_px": "26px",
+          "text": "Em qual destas você está?"
+        },
+        "aside30s": null,
+        "channel_card": null,
+        "consent_banner": null,
+        "scrollHeight": 18547,
+        "overflow_px": 0
+      }
+    },
+    {
+      "route": "/servicos/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "cookies_before_interaction": 0,
+      "fold": "docs/campaigns/design-institucional/fechamento/evidence/diagnostico/G01/servicos-1440x1000-fold-prod.png",
+      "full": null,
+      "rects": {
+        "header": {
+          "top": 0,
+          "bottom": 83,
+          "height": 83,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "18px",
+          "text": "Serviços e problemas Obras públicas Biblioteca Solicitar proposta"
+        },
+        "eyebrow": {
+          "top": 163,
+          "bottom": 182,
+          "height": 20,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "14px",
+          "text": "SERVIÇOS ORGANIZADOS POR SITUAÇÃO"
+        },
+        "h1": {
+          "top": 194,
+          "bottom": 344,
+          "height": 150,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "48px",
+          "text": "Serviços de engenharia para obras públicas e privadas"
+        },
+        "lead": {
+          "top": 360,
+          "bottom": 447,
+          "height": 86,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "19.2px",
+          "text": "Comparar propostas, completar ou conferir um projeto, entender uma infiltração, avaliar um"
+        },
+        "deliverable": {
+          "top": 574,
+          "bottom": 655,
+          "height": 81,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "18px",
+          "text": "Não sabe qual é a sua? Descreva a situação: conversa sem contratação, sem documento sensív"
+        },
+        "measure": {
+          "top": 465,
+          "bottom": 554,
+          "height": 89,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "18px",
+          "text": "Cada linha abaixo diz o que assumimos, o que você passa a ter em mãos e o caminho direto. "
+        },
+        "actions": {
+          "top": 679,
+          "bottom": 723,
+          "height": 44,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "18px",
+          "text": "Descrever a situação pelo WhatsApp Ou pela triagem técnica"
+        },
+        "proof": null,
+        "plate": null,
+        "plate_img": null,
+        "plate_caption": null,
+        "first_h2": {
+          "top": 918,
+          "bottom": 1005,
+          "height": 86,
+          "fully_in_fold": false,
+          "partly_in_fold": true,
+          "font_px": "40px",
+          "text": "Em qual destas você está?"
+        },
+        "aside30s": null,
+        "channel_card": null,
+        "consent_banner": null,
+        "scrollHeight": 10036,
+        "overflow_px": 0
+      }
+    },
+    {
+      "route": "/triagem-tecnica/",
+      "viewport": "390x844",
+      "status": 200,
+      "cookies_before_interaction": 0,
+      "fold": "docs/campaigns/design-institucional/fechamento/evidence/diagnostico/G01/triagem-tecnica-390x844-fold-prod.png",
+      "full": "docs/campaigns/design-institucional/fechamento/evidence/diagnostico/G01/triagem-tecnica-390x844-full-prod.jpg",
+      "rects": {
+        "header": {
+          "top": 0,
+          "bottom": 61,
+          "height": 61,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "16px",
+          "text": ""
+        },
+        "eyebrow": {
+          "top": 81,
+          "bottom": 101,
+          "height": 20,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "14px",
+          "text": "CONTATO E TRIAGEM TÉCNICA"
+        },
+        "h1": {
+          "top": 113,
+          "bottom": 212,
+          "height": 100,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "32px",
+          "text": "Conte a situação do seu jeito. Nós nomeamos o serviço."
+        },
+        "lead": {
+          "top": 224,
+          "bottom": 440,
+          "height": 215,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "17.365px",
+          "text": "Infiltração no prédio, propostas de obra para comparar, projeto para completar ou conferir"
+        },
+        "deliverable": null,
+        "measure": null,
+        "actions": {
+          "top": 650,
+          "bottom": 813,
+          "height": 163,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "16px",
+          "text": "Falar pelo WhatsApp Enviar o contexto por e-mail Ligar para explicar a demanda: (48) 98834"
+        },
+        "proof": null,
+        "plate": null,
+        "plate_img": null,
+        "plate_caption": null,
+        "first_h2": {
+          "top": 482,
+          "bottom": 509,
+          "height": 26,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "24px",
+          "text": "Fale agora, sem formulário"
+        },
+        "aside30s": null,
+        "channel_card": {
+          "top": 464,
+          "bottom": 1333,
+          "height": 870,
+          "fully_in_fold": false,
+          "partly_in_fold": true,
+          "font_px": "16px",
+          "text": "Fale agora, sem formulário O contato é direto com o Engº Tiago Sasaki, Engenharia Civil pe"
+        },
+        "consent_banner": null,
+        "scrollHeight": 6557,
+        "overflow_px": 0
+      }
+    },
+    {
+      "route": "/triagem-tecnica/",
+      "viewport": "320x700",
+      "status": 200,
+      "cookies_before_interaction": 0,
+      "fold": "docs/campaigns/design-institucional/fechamento/evidence/diagnostico/G01/triagem-tecnica-320x700-fold-prod.png",
+      "full": "docs/campaigns/design-institucional/fechamento/evidence/diagnostico/G01/triagem-tecnica-320x700-full-prod.jpg",
+      "rects": {
+        "header": {
+          "top": 0,
+          "bottom": 61,
+          "height": 61,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "16px",
+          "text": ""
+        },
+        "eyebrow": {
+          "top": 81,
+          "bottom": 101,
+          "height": 20,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "14px",
+          "text": "CONTATO E TRIAGEM TÉCNICA"
+        },
+        "h1": {
+          "top": 113,
+          "bottom": 246,
+          "height": 133,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "32px",
+          "text": "Conte a situação do seu jeito. Nós nomeamos o serviço."
+        },
+        "lead": {
+          "top": 258,
+          "bottom": 523,
+          "height": 265,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "17.12px",
+          "text": "Infiltração no prédio, propostas de obra para comparar, projeto para completar ou conferir"
+        },
+        "deliverable": null,
+        "measure": null,
+        "actions": {
+          "top": 813,
+          "bottom": 976,
+          "height": 163,
+          "fully_in_fold": false,
+          "partly_in_fold": false,
+          "font_px": "16px",
+          "text": "Falar pelo WhatsApp Enviar o contexto por e-mail Ligar para explicar a demanda: (48) 98834"
+        },
+        "proof": null,
+        "plate": null,
+        "plate_img": null,
+        "plate_caption": null,
+        "first_h2": {
+          "top": 566,
+          "bottom": 618,
+          "height": 53,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "24px",
+          "text": "Fale agora, sem formulário"
+        },
+        "aside30s": null,
+        "channel_card": {
+          "top": 547,
+          "bottom": 1606,
+          "height": 1059,
+          "fully_in_fold": false,
+          "partly_in_fold": true,
+          "font_px": "16px",
+          "text": "Fale agora, sem formulário O contato é direto com o Engº Tiago Sasaki, Engenharia Civil pe"
+        },
+        "consent_banner": null,
+        "scrollHeight": 7755,
+        "overflow_px": 0
+      }
+    },
+    {
+      "route": "/triagem-tecnica/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "cookies_before_interaction": 0,
+      "fold": "docs/campaigns/design-institucional/fechamento/evidence/diagnostico/G01/triagem-tecnica-1440x1000-fold-prod.png",
+      "full": null,
+      "rects": {
+        "header": {
+          "top": 0,
+          "bottom": 83,
+          "height": 83,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "18px",
+          "text": "Serviços e problemas Obras públicas Biblioteca Solicitar proposta"
+        },
+        "eyebrow": {
+          "top": 103,
+          "bottom": 123,
+          "height": 20,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "14px",
+          "text": "CONTATO E TRIAGEM TÉCNICA"
+        },
+        "h1": {
+          "top": 135,
+          "bottom": 284,
+          "height": 150,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "48px",
+          "text": "Conte a situação do seu jeito. Nós nomeamos o serviço."
+        },
+        "lead": {
+          "top": 296,
+          "bottom": 445,
+          "height": 149,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "19.2px",
+          "text": "Infiltração no prédio, propostas de obra para comparar, projeto para completar ou conferir"
+        },
+        "deliverable": null,
+        "measure": null,
+        "actions": {
+          "top": 329,
+          "bottom": 488,
+          "height": 159,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "18px",
+          "text": "Falar pelo WhatsApp Enviar o contexto por e-mail Ligar para explicar a demanda: (48) 98834"
+        },
+        "proof": null,
+        "plate": null,
+        "plate_img": null,
+        "plate_caption": null,
+        "first_h2": {
+          "top": 136,
+          "bottom": 174,
+          "height": 38,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "34.4px",
+          "text": "Fale agora, sem formulário"
+        },
+        "aside30s": null,
+        "channel_card": {
+          "top": 103,
+          "bottom": 966,
+          "height": 863,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "18px",
+          "text": "Fale agora, sem formulário O contato é direto com o Engº Tiago Sasaki, Engenharia Civil pe"
+        },
+        "consent_banner": null,
+        "scrollHeight": 4327,
+        "overflow_px": 0
+      }
+    },
+    {
+      "route": "/entregas/",
+      "viewport": "390x844",
+      "status": 200,
+      "cookies_before_interaction": 0,
+      "fold": "docs/campaigns/design-institucional/fechamento/evidence/diagnostico/G01/entregas-390x844-fold-prod.png",
+      "full": "docs/campaigns/design-institucional/fechamento/evidence/diagnostico/G01/entregas-390x844-full-prod.jpg",
+      "rects": {
+        "header": {
+          "top": 0,
+          "bottom": 61,
+          "height": 61,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "16px",
+          "text": ""
+        },
+        "eyebrow": {
+          "top": 135,
+          "bottom": 155,
+          "height": 20,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "14px",
+          "text": "O QUE VOCÊ RECEBE"
+        },
+        "h1": {
+          "top": 167,
+          "bottom": 267,
+          "height": 100,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "32px",
+          "text": "Entregas de engenharia. Veja o conteúdo e para que ele serve."
+        },
+        "lead": {
+          "top": 280,
+          "bottom": 386,
+          "height": 106,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "16px",
+          "text": "Comparar propostas, completar ou conferir um projeto, entender uma infiltração, avaliar um"
+        },
+        "deliverable": {
+          "top": 406,
+          "bottom": 502,
+          "height": 96,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "16px",
+          "text": "Você passa a ter o documento certo para a decisão: projeto, planilha, relatório, laudo, pa"
+        },
+        "measure": null,
+        "actions": {
+          "top": 625,
+          "bottom": 728,
+          "height": 102,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "16px",
+          "text": "Ver entregas e exemplos Solicitar proposta"
+        },
+        "proof": null,
+        "plate": {
+          "top": 2042,
+          "bottom": 2618,
+          "height": 576,
+          "fully_in_fold": false,
+          "partly_in_fold": false,
+          "font_px": "16px",
+          "text": "EXEMPLO DEMONSTRATIVO Prancha PG, esquema ilustrativo de uma entrega de projeto: PE-01 pla"
+        },
+        "plate_img": {
+          "top": 2052,
+          "bottom": 2440,
+          "height": 387,
+          "fully_in_fold": false,
+          "partly_in_fold": false,
+          "font_px": "16px",
+          "text": ""
+        },
+        "plate_caption": {
+          "top": 2466,
+          "bottom": 2618,
+          "height": 151,
+          "fully_in_fold": false,
+          "partly_in_fold": false,
+          "font_px": "14px",
+          "text": "EXEMPLO DEMONSTRATIVO Prancha PG, esquema ilustrativo de uma entrega de projeto: PE-01 pla"
+        },
+        "first_h2": {
+          "top": 851,
+          "bottom": 869,
+          "height": 18,
+          "fully_in_fold": false,
+          "partly_in_fold": false,
+          "font_px": "16px",
+          "text": "EM 30 SEGUNDOS"
+        },
+        "aside30s": {
+          "top": 834,
+          "bottom": 1357,
+          "height": 522,
+          "fully_in_fold": false,
+          "partly_in_fold": true,
+          "font_px": "16px",
+          "text": "EM 30 SEGUNDOS Serviços Projetos, revisão e compatibilização; quantitativos e orçamento; i"
+        },
+        "channel_card": null,
+        "consent_banner": null,
+        "scrollHeight": 24142,
+        "overflow_px": 0
+      }
+    },
+    {
+      "route": "/entregas/",
+      "viewport": "320x700",
+      "status": 200,
+      "cookies_before_interaction": 0,
+      "fold": "docs/campaigns/design-institucional/fechamento/evidence/diagnostico/G01/entregas-320x700-fold-prod.png",
+      "full": "docs/campaigns/design-institucional/fechamento/evidence/diagnostico/G01/entregas-320x700-full-prod.jpg",
+      "rects": {
+        "header": {
+          "top": 0,
+          "bottom": 61,
+          "height": 61,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "16px",
+          "text": ""
+        },
+        "eyebrow": {
+          "top": 135,
+          "bottom": 155,
+          "height": 20,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "14px",
+          "text": "O QUE VOCÊ RECEBE"
+        },
+        "h1": {
+          "top": 167,
+          "bottom": 300,
+          "height": 133,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "32px",
+          "text": "Entregas de engenharia. Veja o conteúdo e para que ele serve."
+        },
+        "lead": {
+          "top": 314,
+          "bottom": 472,
+          "height": 158,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "16px",
+          "text": "Comparar propostas, completar ou conferir um projeto, entender uma infiltração, avaliar um"
+        },
+        "deliverable": {
+          "top": 492,
+          "bottom": 612,
+          "height": 120,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "16px",
+          "text": "Você passa a ter o documento certo para a decisão: projeto, planilha, relatório, laudo, pa"
+        },
+        "measure": null,
+        "actions": {
+          "top": 756,
+          "bottom": 859,
+          "height": 102,
+          "fully_in_fold": false,
+          "partly_in_fold": false,
+          "font_px": "16px",
+          "text": "Ver entregas e exemplos Solicitar proposta"
+        },
+        "proof": null,
+        "plate": {
+          "top": 2327,
+          "bottom": 2863,
+          "height": 536,
+          "fully_in_fold": false,
+          "partly_in_fold": false,
+          "font_px": "16px",
+          "text": "EXEMPLO DEMONSTRATIVO Prancha PG, esquema ilustrativo de uma entrega de projeto: PE-01 pla"
+        },
+        "plate_img": {
+          "top": 2338,
+          "bottom": 2644,
+          "height": 306,
+          "fully_in_fold": false,
+          "partly_in_fold": false,
+          "font_px": "16px",
+          "text": ""
+        },
+        "plate_caption": {
+          "top": 2670,
+          "bottom": 2863,
+          "height": 193,
+          "fully_in_fold": false,
+          "partly_in_fold": false,
+          "font_px": "14px",
+          "text": "EXEMPLO DEMONSTRATIVO Prancha PG, esquema ilustrativo de uma entrega de projeto: PE-01 pla"
+        },
+        "first_h2": {
+          "top": 1006,
+          "bottom": 1023,
+          "height": 18,
+          "fully_in_fold": false,
+          "partly_in_fold": false,
+          "font_px": "16px",
+          "text": "EM 30 SEGUNDOS"
+        },
+        "aside30s": {
+          "top": 989,
+          "bottom": 1616,
+          "height": 627,
+          "fully_in_fold": false,
+          "partly_in_fold": false,
+          "font_px": "16px",
+          "text": "EM 30 SEGUNDOS Serviços Projetos, revisão e compatibilização; quantitativos e orçamento; i"
+        },
+        "channel_card": null,
+        "consent_banner": null,
+        "scrollHeight": 27569,
+        "overflow_px": 0
+      }
+    },
+    {
+      "route": "/entregas/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "cookies_before_interaction": 0,
+      "fold": "docs/campaigns/design-institucional/fechamento/evidence/diagnostico/G01/entregas-1440x1000-fold-prod.png",
+      "full": null,
+      "rects": {
+        "header": {
+          "top": 0,
+          "bottom": 83,
+          "height": 83,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "18px",
+          "text": "Serviços e problemas Obras públicas Biblioteca Solicitar proposta"
+        },
+        "eyebrow": {
+          "top": 160,
+          "bottom": 179,
+          "height": 20,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "14px",
+          "text": "O QUE VOCÊ RECEBE"
+        },
+        "h1": {
+          "top": 191,
+          "bottom": 341,
+          "height": 150,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "48px",
+          "text": "Entregas de engenharia. Veja o conteúdo e para que ele serve."
+        },
+        "lead": {
+          "top": 355,
+          "bottom": 444,
+          "height": 89,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "18px",
+          "text": "Comparar propostas, completar ou conferir um projeto, entender uma infiltração, avaliar um"
+        },
+        "deliverable": {
+          "top": 464,
+          "bottom": 545,
+          "height": 81,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "18px",
+          "text": "Você passa a ter o documento certo para a decisão: projeto, planilha, relatório, laudo, pa"
+        },
+        "measure": null,
+        "actions": {
+          "top": 626,
+          "bottom": 670,
+          "height": 44,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "18px",
+          "text": "Ver entregas e exemplos Solicitar proposta"
+        },
+        "proof": null,
+        "plate": {
+          "top": 1267,
+          "bottom": 1790,
+          "height": 523,
+          "fully_in_fold": false,
+          "partly_in_fold": false,
+          "font_px": "18px",
+          "text": "EXEMPLO DEMONSTRATIVO Prancha PG, esquema ilustrativo de uma entrega de projeto: PE-01 pla"
+        },
+        "plate_img": {
+          "top": 1284,
+          "bottom": 1673,
+          "height": 389,
+          "fully_in_fold": false,
+          "partly_in_fold": false,
+          "font_px": "18px",
+          "text": ""
+        },
+        "plate_caption": {
+          "top": 1702,
+          "bottom": 1790,
+          "height": 88,
+          "fully_in_fold": false,
+          "partly_in_fold": false,
+          "font_px": "14px",
+          "text": "EXEMPLO DEMONSTRATIVO Prancha PG, esquema ilustrativo de uma entrega de projeto: PE-01 pla"
+        },
+        "first_h2": {
+          "top": 185,
+          "bottom": 202,
+          "height": 18,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "16px",
+          "text": "EM 30 SEGUNDOS"
+        },
+        "aside30s": {
+          "top": 160,
+          "bottom": 614,
+          "height": 454,
+          "fully_in_fold": true,
+          "partly_in_fold": true,
+          "font_px": "18px",
+          "text": "EM 30 SEGUNDOS Serviços Projetos, revisão e compatibilização; quantitativos e orçamento; i"
+        },
+        "channel_card": null,
+        "consent_banner": null,
+        "scrollHeight": 13720,
+        "overflow_px": 0
+      }
+    }
+  ]
+}

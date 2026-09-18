@@ -1,0 +1,526 @@
+{
+ "base": "http://127.0.0.1:8797",
+ "measured_at": "2026-09-18T12:51:52.764Z",
+ "method": "servidor estático do checkout; clique com preventDefault; diff de window.dataLayer; requisições externas abortadas",
+ "rows": [
+  {
+   "route": "/",
+   "label": "header Solicitar proposta",
+   "selector": "a.header-cta[href=\"/triagem-tecnica/\"]",
+   "found": true,
+   "text": "Solicitar proposta",
+   "href": "/triagem-tecnica/",
+   "attrs": {
+    "event_name": null,
+    "cta_position": null,
+    "cta_id": null
+   },
+   "emitted": []
+  },
+  {
+   "route": "/",
+   "label": "hero Ver serviços por situação",
+   "selector": "a[data-cta-position=\"hero\"][href=\"/servicos/\"]",
+   "found": true,
+   "text": "Ver serviços por situação",
+   "href": "/servicos/",
+   "attrs": {
+    "event_name": "cta_click",
+    "cta_position": "hero",
+    "cta_id": null
+   },
+   "emitted": [
+    {
+     "event": "cta_click",
+     "cta_position": "hero",
+     "consent": "not_required"
+    }
+   ]
+  },
+  {
+   "route": "/",
+   "label": "hero Descrever a minha situação",
+   "selector": "a[data-cta-position=\"hero\"][href=\"/triagem-tecnica/\"]",
+   "found": true,
+   "text": "Descrever a minha situação",
+   "href": "/triagem-tecnica/",
+   "attrs": {
+    "event_name": "cta_click",
+    "cta_position": "hero",
+    "cta_id": null
+   },
+   "emitted": [
+    {
+     "event": "cta_click",
+     "cta_position": "hero",
+     "consent": "not_required"
+    }
+   ]
+  },
+  {
+   "route": "/",
+   "label": "situação Ver quantitativos",
+   "selector": "a[data-cta-id=\"home-private-quantities-budget\"]",
+   "found": true,
+   "text": "Ver quantitativos",
+   "href": "/quantitativos-orcamento-obras/",
+   "attrs": {
+    "event_name": null,
+    "cta_position": null,
+    "cta_id": "home-private-quantities-budget"
+   },
+   "emitted": []
+  },
+  {
+   "route": "/",
+   "label": "corporate_triage #contato",
+   "selector": "a[data-cta-position=\"corporate_triage\"][href=\"#contato\"]",
+   "found": true,
+   "text": "Descrever minha situação no formulário",
+   "href": "#contato",
+   "attrs": {
+    "event_name": "cta_click",
+    "cta_position": "corporate_triage",
+    "cta_id": null
+   },
+   "emitted": [
+    {
+     "event": "cta_click",
+     "cta_position": "corporate_triage",
+     "cta_kind": "service",
+     "destination_type": "form",
+     "alias_from": "service_cta_click",
+     "consent": "not_required"
+    }
+   ]
+  },
+  {
+   "route": "/",
+   "label": "corporate_triage whatsapp",
+   "selector": "a[data-cta-position=\"corporate_triage\"][href^=\"https://wa.me\"]",
+   "found": true,
+   "text": "Conversar sobre o serviço pelo WhatsApp",
+   "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C+Tiago",
+   "attrs": {
+    "event_name": "whatsapp_click",
+    "cta_position": "corporate_triage",
+    "cta_id": null
+   },
+   "emitted": [
+    {
+     "event": "whatsapp_click",
+     "cta_position": "corporate_triage",
+     "destination_type": "whatsapp",
+     "consent": "not_required"
+    }
+   ]
+  },
+  {
+   "route": "/",
+   "label": "corporate_triage mailto",
+   "selector": "a[data-cta-position=\"corporate_triage\"][href^=\"mailto:\"]",
+   "found": true,
+   "text": "Solicitar proposta por e-mail",
+   "href": "mailto:tiago.sasaki@confenge.com.br?subject=Solici",
+   "attrs": {
+    "event_name": "email_click",
+    "cta_position": "corporate_triage",
+    "cta_id": null
+   },
+   "emitted": [
+    {
+     "event": "email_click",
+     "cta_position": "corporate_triage",
+     "destination_type": "email",
+     "consent": "not_required"
+    }
+   ]
+  },
+  {
+   "route": "/",
+   "label": "contact critical_decision wa.me",
+   "selector": "a[data-event-name=\"critical_decision_cta_click\"]",
+   "found": true,
+   "text": "WhatsApp(48) 98834-4559",
+   "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C+Tiago",
+   "attrs": {
+    "event_name": "critical_decision_cta_click",
+    "cta_position": "contact",
+    "cta_id": null
+   },
+   "emitted": [
+    {
+     "event": "whatsapp_click",
+     "cta_position": "contact",
+     "destination_type": "whatsapp",
+     "consent": "not_required"
+    }
+   ]
+  },
+  {
+   "route": "/servicos/",
+   "label": "hub → quantitativos",
+   "selector": "a[data-cta-id=\"services-private-quantities-budget\"]",
+   "found": true,
+   "text": "quantitativos e orçamento",
+   "href": "/quantitativos-orcamento-obras/",
+   "attrs": {
+    "event_name": null,
+    "cta_position": null,
+    "cta_id": "services-private-quantities-budget"
+   },
+   "emitted": []
+  },
+  {
+   "route": "/servicos/",
+   "label": "hub Solicitar proposta secundário",
+   "selector": "a.button-secondary[href=\"/triagem-tecnica/\"]",
+   "found": true,
+   "text": "Solicitar proposta",
+   "href": "/triagem-tecnica/",
+   "attrs": {
+    "event_name": null,
+    "cta_position": null,
+    "cta_id": null
+   },
+   "emitted": []
+  },
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "label": "hero #triagem-quantitativos",
+   "selector": "a[data-cta-id=\"frame-quantities-budget-hero\"]",
+   "found": true,
+   "text": "Solicitar proposta de orçamento",
+   "href": "#triagem-quantitativos",
+   "attrs": {
+    "event_name": null,
+    "cta_position": "hero",
+    "cta_id": "frame-quantities-budget-hero"
+   },
+   "emitted": []
+  },
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "label": "alt whatsapp",
+   "selector": "a[data-cta-id=\"quantities-budget-alternative-whatsapp\"]",
+   "found": true,
+   "text": "Solicitar proposta pelo WhatsApp",
+   "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C+Tiago",
+   "attrs": {
+    "event_name": null,
+    "cta_position": null,
+    "cta_id": "quantities-budget-alternative-whatsapp"
+   },
+   "emitted": [
+    {
+     "event": "whatsapp_click",
+     "cta_position": "inline",
+     "cta_id": "quantities-budget-alternative-whatsapp",
+     "destination_type": "whatsapp",
+     "consent": "not_required",
+     "route_family": "private-engineering-quantities-budget",
+     "asset_id": "private_quantities_budget_route_v1"
+    }
+   ]
+  },
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "label": "alt mailto",
+   "selector": "a[data-cta-id=\"quantities-budget-alternative-email\"]",
+   "found": true,
+   "text": "Solicitar proposta por e-mail",
+   "href": "mailto:tiago.sasaki@confenge.com.br?subject=Propos",
+   "attrs": {
+    "event_name": null,
+    "cta_position": null,
+    "cta_id": "quantities-budget-alternative-email"
+   },
+   "emitted": [
+    {
+     "event": "email_click",
+     "cta_position": "inline",
+     "destination_type": "email",
+     "consent": "not_required"
+    }
+   ]
+  },
+  {
+   "route": "/quantitativos-orcamento-obras/",
+   "label": "alt tel",
+   "selector": "a[data-cta-id=\"quantities-budget-alternative-phone\"]",
+   "found": true,
+   "text": "Ligar sobre o orçamento: (48) 98834-4559",
+   "href": "tel:+5548988344559",
+   "attrs": {
+    "event_name": null,
+    "cta_position": null,
+    "cta_id": "quantities-budget-alternative-phone"
+   },
+   "emitted": [
+    {
+     "event": "outbound_click",
+     "cta_position": "inline",
+     "destination_type": "tel",
+     "consent": "not_required"
+    }
+   ]
+  },
+  {
+   "route": "/compatibilizacao-projetos-engenharia/",
+   "label": "hero #pedido",
+   "selector": "a[data-cta-id=\"frame-coordination-clash-hero\"]",
+   "found": true,
+   "text": "Pedir proposta da compatibilização",
+   "href": "#pedido-compatibilizacao",
+   "attrs": {
+    "event_name": null,
+    "cta_position": "hero",
+    "cta_id": "frame-coordination-clash-hero"
+   },
+   "emitted": []
+  },
+  {
+   "route": "/compatibilizacao-projetos-engenharia/",
+   "label": "→ /confianca/",
+   "selector": "a[data-cta-id=\"coordination-trust-proof\"]",
+   "found": true,
+   "text": "Ver identidade, método e limites publicados",
+   "href": "/confianca/",
+   "attrs": {
+    "event_name": null,
+    "cta_position": null,
+    "cta_id": "coordination-trust-proof"
+   },
+   "emitted": []
+  },
+  {
+   "route": "/medicoes-glosas-obras-publicas/",
+   "label": "pilar hero #captura",
+   "selector": "a[data-cta-position=\"pillar_hero\"][href=\"#captura-pilar\"]",
+   "found": true,
+   "text": "Descrever a medição",
+   "href": "#captura-pilar",
+   "attrs": {
+    "event_name": "cta_click",
+    "cta_position": "pillar_hero",
+    "cta_id": null
+   },
+   "emitted": [
+    {
+     "event": "cta_click",
+     "cta_position": "pillar_hero",
+     "cta_id": "pillar_hero",
+     "consent": "not_required",
+     "route_family": "medicoes-glosas",
+     "asset_id": "medicoes-glosas-obras-publicas"
+    }
+   ]
+  },
+  {
+   "route": "/medicoes-glosas-obras-publicas/",
+   "label": "pilar hero whatsapp",
+   "selector": "a[data-cta-position=\"pillar_hero\"][href^=\"https://wa.me\"]",
+   "found": true,
+   "text": "Falar pelo WhatsApp",
+   "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C+Tiago",
+   "attrs": {
+    "event_name": "whatsapp_click",
+    "cta_position": "pillar_hero",
+    "cta_id": null
+   },
+   "emitted": [
+    {
+     "event": "whatsapp_click",
+     "cta_position": "pillar_hero",
+     "cta_id": "pillar_hero",
+     "destination_type": "whatsapp",
+     "consent": "not_required",
+     "route_family": "medicoes-glosas",
+     "asset_id": "medicoes-glosas-obras-publicas"
+    }
+   ]
+  },
+  {
+   "route": "/medicoes-glosas-obras-publicas/",
+   "label": "→ ferramenta",
+   "selector": "a[data-cta-id=\"diagnosticar-contrato\"]",
+   "found": true,
+   "text": "Diagnosticar contrato",
+   "href": "/ferramentas/diagnostico-defesa-margem/",
+   "attrs": {
+    "event_name": null,
+    "cta_position": null,
+    "cta_id": "diagnosticar-contrato"
+   },
+   "emitted": []
+  },
+  {
+   "route": "/medicoes-glosas-obras-publicas/",
+   "label": "→ /diretoria-b2g/",
+   "selector": "a[data-cta-position=\"pillar_bridge\"]",
+   "found": true,
+   "text": "Diretoria Fracionada para o Mercado Público na execução",
+   "href": "/diretoria-b2g/",
+   "attrs": {
+    "event_name": null,
+    "cta_position": "pillar_bridge",
+    "cta_id": null
+   },
+   "emitted": []
+  },
+  {
+   "route": "/entregas/",
+   "label": "hero #servicos-e-entregas",
+   "selector": "a[data-cta-id=\"deliverables-hero-compare\"]",
+   "found": true,
+   "text": "Ver entregas e exemplos",
+   "href": "#servicos-e-entregas",
+   "attrs": {
+    "event_name": "cta_click",
+    "cta_position": "hero",
+    "cta_id": "deliverables-hero-compare"
+   },
+   "emitted": [
+    {
+     "event": "cta_click",
+     "cta_position": "hero",
+     "cta_id": "deliverables-hero-compare",
+     "consent": "not_required",
+     "asset_id": "entregas-exemplos-hub"
+    }
+   ]
+  },
+  {
+   "route": "/entregas/",
+   "label": "hero #captura-entregas",
+   "selector": "a[data-cta-id=\"deliverables-hero-capture\"]",
+   "found": true,
+   "text": "Solicitar proposta",
+   "href": "#captura-entregas",
+   "attrs": {
+    "event_name": "cta_click",
+    "cta_position": "hero",
+    "cta_id": "deliverables-hero-capture"
+   },
+   "emitted": [
+    {
+     "event": "cta_click",
+     "cta_position": "hero",
+     "cta_id": "deliverables-hero-capture",
+     "consent": "not_required",
+     "asset_id": "entregas-exemplos-hub"
+    }
+   ]
+  },
+  {
+   "route": "/entregas/",
+   "label": "→ /casos/",
+   "selector": "a[data-cta-id=\"deliverables-open-relatorio-executivo\"]",
+   "found": true,
+   "text": "Examinar o demonstrativo do plano de expansão",
+   "href": "/casos/modelo-relatorio-executivo-consolidado/",
+   "attrs": {
+    "event_name": "cta_click",
+    "cta_position": "example_08_open",
+    "cta_id": "deliverables-open-relatorio-executivo"
+   },
+   "emitted": [
+    {
+     "event": "cta_click",
+     "cta_position": "example_08_open",
+     "cta_id": "deliverables-open-relatorio-executivo",
+     "consent": "not_required",
+     "asset_id": "entregas-exemplos-hub"
+    }
+   ]
+  },
+  {
+   "route": "/entregas/",
+   "label": "→ /diagnostico-b2g-expansao/",
+   "selector": "a[data-cta-id=\"deliverables-final-bundle\"]",
+   "found": true,
+   "text": "Ver o Diagnóstico de Expansão no Mercado Público",
+   "href": "/diagnostico-b2g-expansao/",
+   "attrs": {
+    "event_name": "cta_click",
+    "cta_position": "page_close",
+    "cta_id": "deliverables-final-bundle"
+   },
+   "emitted": [
+    {
+     "event": "cta_click",
+     "cta_position": "page_close",
+     "cta_id": "deliverables-final-bundle",
+     "consent": "not_required",
+     "asset_id": "entregas-exemplos-hub"
+    }
+   ]
+  },
+  {
+   "route": "/triagem-tecnica/",
+   "label": "triagem whatsapp",
+   "selector": "a[data-cta-id=\"technical-triage-alternative-whatsapp\"]",
+   "found": true,
+   "text": "Falar pelo WhatsApp",
+   "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C+Tiago",
+   "attrs": {
+    "event_name": "whatsapp_click",
+    "cta_position": "triage_primary",
+    "cta_id": "technical-triage-alternative-whatsapp"
+   },
+   "emitted": [
+    {
+     "event": "whatsapp_click",
+     "cta_position": "triage_primary",
+     "cta_id": "technical-triage-alternative-whatsapp",
+     "destination_type": "whatsapp",
+     "consent": "not_required",
+     "route_family": "triagem-tecnica",
+     "asset_id": "technical_triage_v1"
+    }
+   ]
+  },
+  {
+   "route": "/triagem-tecnica/",
+   "label": "triagem mailto",
+   "selector": "a[data-cta-id=\"technical-triage-alternative-email\"]",
+   "found": true,
+   "text": "Enviar o contexto por e-mail",
+   "href": "mailto:tiago.sasaki@confenge.com.br?subject=Triage",
+   "attrs": {
+    "event_name": "email_click",
+    "cta_position": "triage_primary",
+    "cta_id": "technical-triage-alternative-email"
+   },
+   "emitted": [
+    {
+     "event": "email_click",
+     "cta_position": "triage_primary",
+     "destination_type": "email",
+     "consent": "not_required"
+    }
+   ]
+  },
+  {
+   "route": "/triagem-tecnica/",
+   "label": "triagem tel",
+   "selector": "a[data-cta-id=\"technical-triage-alternative-phone\"]",
+   "found": true,
+   "text": "Ligar para explicar a demanda: (48) 98834-4559",
+   "href": "tel:+5548988344559",
+   "attrs": {
+    "event_name": null,
+    "cta_position": "triage_primary",
+    "cta_id": "technical-triage-alternative-phone"
+   },
+   "emitted": [
+    {
+     "event": "outbound_click",
+     "cta_position": "triage_primary",
+     "destination_type": "tel",
+     "consent": "not_required"
+    }
+   ]
+  }
+ ]
+}

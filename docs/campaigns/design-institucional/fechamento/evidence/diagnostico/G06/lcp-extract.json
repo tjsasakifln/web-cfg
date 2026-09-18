@@ -1,0 +1,1071 @@
+{
+ "lighthouse": "13.4.1",
+ "chrome": "Google Chrome for Testing 151.0.7922.34 (/home/tjsasakifln/.cache/ms-playwright/chromium-1234/chrome-linux64/chrome)",
+ "node": "v22.23.2",
+ "production": "main 252fc98d1",
+ "note": "largest-contentful-paint-element nao existe no LH 13 (replacesAudits em lcp-breakdown-insight); fases sao do trace observado; em 'simulate' o trace e sem throttling de rede, por isso ttfb/renderDelay em ms nao somam o LCP Lantern",
+ "routes": {
+  "lhr-home-simulate.json": {
+   "throttlingMethod": "simulate",
+   "lcp_ms": 2002,
+   "fcp_ms": 1402,
+   "server_response_time_ms": 28,
+   "lcp_element": {
+    "selector": "div.container > div.hero-copy > div.opening__body > p.hero-lead",
+    "snippet": "<p class=\"hero-lead opening__lead\">",
+    "nodeLabel": "Comparar propostas de obra, completar ou conferir um projeto, entender uma infi…"
+   },
+   "lcp_phases_ms": {
+    "timeToFirstByte": 30,
+    "elementRenderDelay": 156
+   },
+   "lcp_discovery": "notApplicable",
+   "render_blocking": {
+    "metricSavings": {
+     "FCP": 350,
+     "LCP": 350
+    },
+    "items": [
+     {
+      "url": "https://confenge.com.br/assets/css/assets/home-base.5d82be65777c.css",
+      "bytes": 0,
+      "wastedMs": 176
+     },
+     {
+      "url": "https://confenge.com.br/assets/css/styles-tokens.ad2801a01362.css",
+      "bytes": 1851,
+      "wastedMs": 176
+     },
+     {
+      "url": "https://confenge.com.br/assets/css/assets/home-10x.82d9ae22fae0.css",
+      "bytes": 0,
+      "wastedMs": 476
+     }
+    ]
+   },
+   "font_display": {
+    "score": 1,
+    "items": []
+   },
+   "network_dependency_tree": [
+    {
+     "depth": 0,
+     "url": "https://confenge.com.br/",
+     "end_ms": 59,
+     "longest": true
+    },
+    {
+     "depth": 1,
+     "url": "https://confenge.com.br/manifest.webmanifest",
+     "end_ms": 212,
+     "longest": true
+    },
+    {
+     "depth": 1,
+     "url": "https://confenge.com.br/assets/css/assets/home-base.5d82be65777c.css",
+     "end_ms": 78,
+     "longest": false
+    },
+    {
+     "depth": 2,
+     "url": "https://confenge.com.br/assets/css/styles-tokens.ad2801a01362.css",
+     "end_ms": 106,
+     "longest": false
+    },
+    {
+     "depth": 1,
+     "url": "https://confenge.com.br/assets/css/assets/home-10x.82d9ae22fae0.css",
+     "end_ms": 76,
+     "longest": false
+    }
+   ],
+   "preconnect": [
+    {
+     "type": "text",
+     "value": "no origins were preconnected"
+    },
+    {
+     "type": "text",
+     "value": "No additional origins are good candidates for preconnecting"
+    }
+   ],
+   "first_10_requests": [
+    {
+     "start": 1,
+     "end": 31,
+     "bytes": 19337,
+     "type": "Document",
+     "priority": "VeryHigh",
+     "preload": null,
+     "url": "https://confenge.com.br/"
+    },
+    {
+     "start": 47,
+     "end": 80,
+     "bytes": 12685,
+     "type": "Image",
+     "priority": "Low",
+     "preload": true,
+     "url": "https://confenge.com.br/assets/logo-confenge-500-f8a83f6d.png"
+    },
+    {
+     "start": 47,
+     "end": 82,
+     "bytes": 65160,
+     "type": "Font",
+     "priority": "High",
+     "preload": true,
+     "url": "https://confenge.com.br/assets/archivo-var-latin-bf6e041e.woff2"
+    },
+    {
+     "start": 48,
+     "end": 73,
+     "bytes": 0,
+     "type": "Stylesheet",
+     "priority": "VeryHigh",
+     "preload": null,
+     "url": "https://confenge.com.br/assets/css/assets/home-base.5d82be65777c.css"
+    },
+    {
+     "start": 48,
+     "end": 72,
+     "bytes": 0,
+     "type": "Stylesheet",
+     "priority": "VeryHigh",
+     "preload": null,
+     "url": "https://confenge.com.br/assets/css/assets/home-10x.82d9ae22fae0.css"
+    },
+    {
+     "start": 52,
+     "end": 54,
+     "bytes": 0,
+     "type": "Script",
+     "priority": "Low",
+     "preload": null,
+     "url": "https://confenge.com.br/script.js?v=fortune04"
+    },
+    {
+     "start": 48,
+     "end": 82,
+     "bytes": 2263,
+     "type": "Image",
+     "priority": "Medium",
+     "preload": null,
+     "url": "https://confenge.com.br/assets/pranchas/recorte-banheiro-mobile.svg"
+    },
+    {
+     "start": 62,
+     "end": 211,
+     "bytes": 1000,
+     "type": "Manifest",
+     "priority": "Medium",
+     "preload": null,
+     "url": "https://confenge.com.br/manifest.webmanifest"
+    },
+    {
+     "start": 79,
+     "end": 103,
+     "bytes": 1851,
+     "type": "Stylesheet",
+     "priority": "VeryHigh",
+     "preload": null,
+     "url": "https://confenge.com.br/assets/css/styles-tokens.ad2801a01362.css"
+    },
+    {
+     "start": 211,
+     "end": 248,
+     "bytes": 1550,
+     "type": "Other",
+     "priority": "High",
+     "preload": null,
+     "url": "https://confenge.com.br/assets/favicon-32.png"
+    }
+   ]
+  },
+  "lhr-home.json": {
+   "throttlingMethod": "devtools",
+   "lcp_ms": 2270,
+   "fcp_ms": 2270,
+   "server_response_time_ms": 31,
+   "lcp_element": {
+    "selector": "div.container > div.hero-copy > div.opening__body > p.hero-lead",
+    "snippet": "<p class=\"hero-lead opening__lead\">",
+    "nodeLabel": "Comparar propostas de obra, completar ou conferir um projeto, entender uma infi…"
+   },
+   "lcp_phases_ms": {
+    "timeToFirstByte": 102,
+    "elementRenderDelay": 2168
+   },
+   "lcp_discovery": "notApplicable",
+   "render_blocking": {
+    "metricSavings": {
+     "FCP": 1200,
+     "LCP": 1200
+    },
+    "items": [
+     {
+      "url": "https://confenge.com.br/assets/css/assets/home-base.5d82be65777c.css",
+      "bytes": 8587,
+      "wastedMs": 713
+     },
+     {
+      "url": "https://confenge.com.br/assets/css/assets/home-10x.82d9ae22fae0.css",
+      "bytes": 7379,
+      "wastedMs": 1013
+     },
+     {
+      "url": "https://confenge.com.br/assets/css/styles-tokens.ad2801a01362.css",
+      "bytes": 1854,
+      "wastedMs": 713
+     }
+    ]
+   },
+   "font_display": {
+    "score": 1,
+    "items": []
+   },
+   "network_dependency_tree": [
+    {
+     "depth": 0,
+     "url": "https://confenge.com.br/",
+     "end_ms": 757,
+     "longest": true
+    },
+    {
+     "depth": 1,
+     "url": "https://confenge.com.br/assets/css/assets/home-base.5d82be65777c.css",
+     "end_ms": 1531,
+     "longest": true
+    },
+    {
+     "depth": 2,
+     "url": "https://confenge.com.br/assets/css/styles-tokens.ad2801a01362.css",
+     "end_ms": 2108,
+     "longest": true
+    },
+    {
+     "depth": 1,
+     "url": "https://confenge.com.br/assets/css/assets/home-10x.82d9ae22fae0.css",
+     "end_ms": 1491,
+     "longest": false
+    },
+    {
+     "depth": 1,
+     "url": "https://confenge.com.br/manifest.webmanifest",
+     "end_ms": 1425,
+     "longest": false
+    }
+   ],
+   "preconnect": [
+    {
+     "type": "text",
+     "value": "no origins were preconnected"
+    },
+    {
+     "type": "text",
+     "value": "No additional origins are good candidates for preconnecting"
+    }
+   ],
+   "first_10_requests": [
+    {
+     "start": 24,
+     "end": 728,
+     "bytes": 19376,
+     "type": "Document",
+     "priority": "VeryHigh",
+     "preload": null,
+     "url": "https://confenge.com.br/"
+    },
+    {
+     "start": 713,
+     "end": 1570,
+     "bytes": 12683,
+     "type": "Image",
+     "priority": "Low",
+     "preload": true,
+     "url": "https://confenge.com.br/assets/logo-confenge-500-f8a83f6d.png"
+    },
+    {
+     "start": 715,
+     "end": 1944,
+     "bytes": 65163,
+     "type": "Font",
+     "priority": "High",
+     "preload": true,
+     "url": "https://confenge.com.br/assets/archivo-var-latin-bf6e041e.woff2"
+    },
+    {
+     "start": 720,
+     "end": 1522,
+     "bytes": 8587,
+     "type": "Stylesheet",
+     "priority": "VeryHigh",
+     "preload": null,
+     "url": "https://confenge.com.br/assets/css/assets/home-base.5d82be65777c.css"
+    },
+    {
+     "start": 721,
+     "end": 1483,
+     "bytes": 7379,
+     "type": "Stylesheet",
+     "priority": "VeryHigh",
+     "preload": null,
+     "url": "https://confenge.com.br/assets/css/assets/home-10x.82d9ae22fae0.css"
+    },
+    {
+     "start": 753,
+     "end": 1737,
+     "bytes": 24915,
+     "type": "Script",
+     "priority": "Low",
+     "preload": null,
+     "url": "https://confenge.com.br/script.js?v=fortune04"
+    },
+    {
+     "start": 721,
+     "end": 1372,
+     "bytes": 2269,
+     "type": "Image",
+     "priority": "Medium",
+     "preload": null,
+     "url": "https://confenge.com.br/assets/pranchas/recorte-banheiro-mobile.svg"
+    },
+    {
+     "start": 779,
+     "end": 1420,
+     "bytes": 1040,
+     "type": "Manifest",
+     "priority": "Medium",
+     "preload": null,
+     "url": "https://confenge.com.br/manifest.webmanifest"
+    },
+    {
+     "start": 1528,
+     "end": 2104,
+     "bytes": 1854,
+     "type": "Stylesheet",
+     "priority": "VeryHigh",
+     "preload": null,
+     "url": "https://confenge.com.br/assets/css/styles-tokens.ad2801a01362.css"
+    },
+    {
+     "start": 2336,
+     "end": 2915,
+     "bytes": 1546,
+     "type": "Other",
+     "priority": "High",
+     "preload": null,
+     "url": "https://confenge.com.br/assets/favicon-32.png"
+    }
+   ]
+  },
+  "lhr-quantitativos-orcamento-obras-simulate.json": {
+   "throttlingMethod": "simulate",
+   "lcp_ms": 1998,
+   "fcp_ms": 1398,
+   "server_response_time_ms": 27,
+   "lcp_element": {
+    "selector": "div.container > div.svc-open__grid > div.svc-open__copy > p.measure",
+    "snippet": "<p class=\"measure\">",
+    "nodeLabel": "Levantamos as quantidades a partir das plantas e do memorial, compomos ou revis…"
+   },
+   "lcp_phases_ms": {
+    "timeToFirstByte": 30,
+    "elementRenderDelay": 139
+   },
+   "lcp_discovery": "notApplicable",
+   "render_blocking": {
+    "metricSavings": {
+     "FCP": 350,
+     "LCP": 350
+    },
+    "items": [
+     {
+      "url": "https://confenge.com.br/assets/css/assets/editorial.50404a7d507e.css",
+      "bytes": 8618,
+      "wastedMs": 474
+     },
+     {
+      "url": "https://confenge.com.br/assets/css/styles-tokens.ad2801a01362.css",
+      "bytes": 1856,
+      "wastedMs": 174
+     },
+     {
+      "url": "https://confenge.com.br/assets/css/styles.c4a0f70a8f62.css",
+      "bytes": 0,
+      "wastedMs": 174
+     }
+    ]
+   },
+   "font_display": {
+    "score": 1,
+    "items": []
+   },
+   "network_dependency_tree": [
+    {
+     "depth": 0,
+     "url": "https://confenge.com.br/quantitativos-orcamento-obras/",
+     "end_ms": 49,
+     "longest": true
+    },
+    {
+     "depth": 1,
+     "url": "https://confenge.com.br/manifest.webmanifest",
+     "end_ms": 199,
+     "longest": true
+    },
+    {
+     "depth": 1,
+     "url": "https://confenge.com.br/assets/css/styles.c4a0f70a8f62.css",
+     "end_ms": 70,
+     "longest": false
+    },
+    {
+     "depth": 2,
+     "url": "https://confenge.com.br/assets/css/styles-tokens.ad2801a01362.css",
+     "end_ms": 96,
+     "longest": false
+    },
+    {
+     "depth": 1,
+     "url": "https://confenge.com.br/assets/css/assets/editorial.50404a7d507e.css",
+     "end_ms": 75,
+     "longest": false
+    }
+   ],
+   "preconnect": [
+    {
+     "type": "text",
+     "value": "no origins were preconnected"
+    },
+    {
+     "type": "text",
+     "value": "No additional origins are good candidates for preconnecting"
+    }
+   ],
+   "first_10_requests": [
+    {
+     "start": 1,
+     "end": 30,
+     "bytes": 18144,
+     "type": "Document",
+     "priority": "VeryHigh",
+     "preload": null,
+     "url": "https://confenge.com.br/quantitativos-orcamento-obras/"
+    },
+    {
+     "start": 45,
+     "end": 79,
+     "bytes": 65153,
+     "type": "Font",
+     "priority": "High",
+     "preload": true,
+     "url": "https://confenge.com.br/assets/archivo-var-latin-bf6e041e.woff2"
+    },
+    {
+     "start": 45,
+     "end": 64,
+     "bytes": 0,
+     "type": "Stylesheet",
+     "priority": "VeryHigh",
+     "preload": null,
+     "url": "https://confenge.com.br/assets/css/styles.c4a0f70a8f62.css"
+    },
+    {
+     "start": 45,
+     "end": 72,
+     "bytes": 8618,
+     "type": "Stylesheet",
+     "priority": "VeryHigh",
+     "preload": null,
+     "url": "https://confenge.com.br/assets/css/assets/editorial.50404a7d507e.css"
+    },
+    {
+     "start": 47,
+     "end": 66,
+     "bytes": 0,
+     "type": "Script",
+     "priority": "Low",
+     "preload": null,
+     "url": "https://confenge.com.br/script.js?v=mv09"
+    },
+    {
+     "start": 47,
+     "end": 66,
+     "bytes": 0,
+     "type": "Script",
+     "priority": "Low",
+     "preload": null,
+     "url": "https://confenge.com.br/assets/js/adaptive-intake.js"
+    },
+    {
+     "start": 48,
+     "end": 80,
+     "bytes": 12685,
+     "type": "Image",
+     "priority": "Low",
+     "preload": null,
+     "url": "https://confenge.com.br/assets/logo-confenge-500-f8a83f6d.png"
+    },
+    {
+     "start": 52,
+     "end": 193,
+     "bytes": 1044,
+     "type": "Manifest",
+     "priority": "Medium",
+     "preload": null,
+     "url": "https://confenge.com.br/manifest.webmanifest"
+    },
+    {
+     "start": 67,
+     "end": 94,
+     "bytes": 1856,
+     "type": "Stylesheet",
+     "priority": "VeryHigh",
+     "preload": null,
+     "url": "https://confenge.com.br/assets/css/styles-tokens.ad2801a01362.css"
+    },
+    {
+     "start": 156,
+     "end": 178,
+     "bytes": 2267,
+     "type": "Image",
+     "priority": "Low",
+     "preload": null,
+     "url": "https://confenge.com.br/assets/pranchas/recorte-banheiro-mobile.svg"
+    }
+   ]
+  },
+  "lhr-quantitativos-orcamento-obras.json": {
+   "throttlingMethod": "devtools",
+   "lcp_ms": 2669,
+   "fcp_ms": 2669,
+   "server_response_time_ms": 37,
+   "lcp_element": {
+    "selector": "div.container > div.svc-open__grid > div.svc-open__copy > p.measure",
+    "snippet": "<p class=\"measure\">",
+    "nodeLabel": "Levantamos as quantidades a partir das plantas e do memorial, compomos ou revis…"
+   },
+   "lcp_phases_ms": {
+    "timeToFirstByte": 60,
+    "elementRenderDelay": 2609
+   },
+   "lcp_discovery": "notApplicable",
+   "render_blocking": {
+    "metricSavings": {
+     "FCP": 1250,
+     "LCP": 1250
+    },
+    "items": [
+     {
+      "url": "https://confenge.com.br/assets/css/styles.c4a0f70a8f62.css",
+      "bytes": 21014,
+      "wastedMs": 865
+     },
+     {
+      "url": "https://confenge.com.br/assets/css/assets/editorial.50404a7d507e.css",
+      "bytes": 8619,
+      "wastedMs": 1015
+     },
+     {
+      "url": "https://confenge.com.br/assets/css/styles-tokens.ad2801a01362.css",
+      "bytes": 1855,
+      "wastedMs": 715
+     }
+    ]
+   },
+   "font_display": {
+    "score": 1,
+    "items": []
+   },
+   "network_dependency_tree": [
+    {
+     "depth": 0,
+     "url": "https://confenge.com.br/quantitativos-orcamento-obras/",
+     "end_ms": 700,
+     "longest": true
+    },
+    {
+     "depth": 1,
+     "url": "https://confenge.com.br/assets/css/styles.c4a0f70a8f62.css",
+     "end_ms": 1750,
+     "longest": true
+    },
+    {
+     "depth": 2,
+     "url": "https://confenge.com.br/assets/css/styles-tokens.ad2801a01362.css",
+     "end_ms": 2334,
+     "longest": true
+    },
+    {
+     "depth": 1,
+     "url": "https://confenge.com.br/assets/css/assets/editorial.50404a7d507e.css",
+     "end_ms": 1505,
+     "longest": false
+    },
+    {
+     "depth": 1,
+     "url": "https://confenge.com.br/manifest.webmanifest",
+     "end_ms": 1320,
+     "longest": false
+    }
+   ],
+   "preconnect": [
+    {
+     "type": "text",
+     "value": "no origins were preconnected"
+    },
+    {
+     "type": "text",
+     "value": "No additional origins are good candidates for preconnecting"
+    }
+   ],
+   "first_10_requests": [
+    {
+     "start": 1,
+     "end": 687,
+     "bytes": 18148,
+     "type": "Document",
+     "priority": "VeryHigh",
+     "preload": null,
+     "url": "https://confenge.com.br/quantitativos-orcamento-obras/"
+    },
+    {
+     "start": 665,
+     "end": 1998,
+     "bytes": 65160,
+     "type": "Font",
+     "priority": "High",
+     "preload": true,
+     "url": "https://confenge.com.br/assets/archivo-var-latin-bf6e041e.woff2"
+    },
+    {
+     "start": 666,
+     "end": 1736,
+     "bytes": 21014,
+     "type": "Stylesheet",
+     "priority": "VeryHigh",
+     "preload": null,
+     "url": "https://confenge.com.br/assets/css/styles.c4a0f70a8f62.css"
+    },
+    {
+     "start": 668,
+     "end": 1497,
+     "bytes": 8619,
+     "type": "Stylesheet",
+     "priority": "VeryHigh",
+     "preload": null,
+     "url": "https://confenge.com.br/assets/css/assets/editorial.50404a7d507e.css"
+    },
+    {
+     "start": 684,
+     "end": 1791,
+     "bytes": 24913,
+     "type": "Script",
+     "priority": "Low",
+     "preload": null,
+     "url": "https://confenge.com.br/script.js?v=mv09"
+    },
+    {
+     "start": 686,
+     "end": 1489,
+     "bytes": 6637,
+     "type": "Script",
+     "priority": "Low",
+     "preload": null,
+     "url": "https://confenge.com.br/assets/js/adaptive-intake.js"
+    },
+    {
+     "start": 686,
+     "end": 1624,
+     "bytes": 12681,
+     "type": "Image",
+     "priority": "Low",
+     "preload": null,
+     "url": "https://confenge.com.br/assets/logo-confenge-500-f8a83f6d.png"
+    },
+    {
+     "start": 704,
+     "end": 1316,
+     "bytes": 1040,
+     "type": "Manifest",
+     "priority": "Medium",
+     "preload": null,
+     "url": "https://confenge.com.br/manifest.webmanifest"
+    },
+    {
+     "start": 1744,
+     "end": 2326,
+     "bytes": 1855,
+     "type": "Stylesheet",
+     "priority": "VeryHigh",
+     "preload": null,
+     "url": "https://confenge.com.br/assets/css/styles-tokens.ad2801a01362.css"
+    },
+    {
+     "start": 2651,
+     "end": 3231,
+     "bytes": 2264,
+     "type": "Image",
+     "priority": "Low",
+     "preload": null,
+     "url": "https://confenge.com.br/assets/pranchas/recorte-banheiro-mobile.svg"
+    }
+   ]
+  },
+  "lhr-servicos-simulate.json": {
+   "throttlingMethod": "simulate",
+   "lcp_ms": 1745,
+   "fcp_ms": 930,
+   "server_response_time_ms": 386,
+   "lcp_element": {
+    "selector": "main#conteudo > section.hero > div.container > p.hero-lead",
+    "snippet": "<p class=\"hero-lead\">",
+    "nodeLabel": "Comparar propostas, completar ou conferir um projeto, entender uma infiltração,…"
+   },
+   "lcp_phases_ms": {
+    "timeToFirstByte": 407,
+    "elementRenderDelay": 108
+   },
+   "lcp_discovery": "notApplicable",
+   "render_blocking": {
+    "metricSavings": {
+     "FCP": 100,
+     "LCP": 100
+    },
+    "items": [
+     {
+      "url": "https://confenge.com.br/assets/css/styles-tokens.ad2801a01362.css",
+      "bytes": 1852,
+      "wastedMs": 160
+     },
+     {
+      "url": "https://confenge.com.br/assets/css/styles.c4a0f70a8f62.css",
+      "bytes": 0,
+      "wastedMs": null
+     },
+     {
+      "url": "https://confenge.com.br/assets/css/assets/editorial.50404a7d507e.css",
+      "bytes": 0,
+      "wastedMs": null
+     }
+    ]
+   },
+   "font_display": {
+    "score": 1,
+    "items": []
+   },
+   "network_dependency_tree": [
+    {
+     "depth": 0,
+     "url": "https://confenge.com.br/servicos/",
+     "end_ms": 427,
+     "longest": true
+    },
+    {
+     "depth": 1,
+     "url": "https://confenge.com.br/manifest.webmanifest",
+     "end_ms": 614,
+     "longest": true
+    },
+    {
+     "depth": 1,
+     "url": "https://confenge.com.br/assets/css/styles.c4a0f70a8f62.css",
+     "end_ms": 434,
+     "longest": false
+    },
+    {
+     "depth": 2,
+     "url": "https://confenge.com.br/assets/css/styles-tokens.ad2801a01362.css",
+     "end_ms": 466,
+     "longest": false
+    },
+    {
+     "depth": 1,
+     "url": "https://confenge.com.br/assets/css/assets/editorial.50404a7d507e.css",
+     "end_ms": 431,
+     "longest": false
+    }
+   ],
+   "preconnect": [
+    {
+     "type": "text",
+     "value": "no origins were preconnected"
+    },
+    {
+     "type": "text",
+     "value": "No additional origins are good candidates for preconnecting"
+    }
+   ],
+   "first_10_requests": [
+    {
+     "start": 1,
+     "end": 409,
+     "bytes": 14102,
+     "type": "Document",
+     "priority": "VeryHigh",
+     "preload": null,
+     "url": "https://confenge.com.br/servicos/"
+    },
+    {
+     "start": 421,
+     "end": 458,
+     "bytes": 65156,
+     "type": "Font",
+     "priority": "High",
+     "preload": true,
+     "url": "https://confenge.com.br/assets/archivo-var-latin-bf6e041e.woff2"
+    },
+    {
+     "start": 421,
+     "end": 427,
+     "bytes": 0,
+     "type": "Stylesheet",
+     "priority": "VeryHigh",
+     "preload": null,
+     "url": "https://confenge.com.br/assets/css/styles.c4a0f70a8f62.css"
+    },
+    {
+     "start": 421,
+     "end": 427,
+     "bytes": 0,
+     "type": "Stylesheet",
+     "priority": "VeryHigh",
+     "preload": null,
+     "url": "https://confenge.com.br/assets/css/assets/editorial.50404a7d507e.css"
+    },
+    {
+     "start": 426,
+     "end": 430,
+     "bytes": 0,
+     "type": "Script",
+     "priority": "Low",
+     "preload": null,
+     "url": "https://confenge.com.br/script.js?v=mv04"
+    },
+    {
+     "start": 427,
+     "end": 463,
+     "bytes": 12686,
+     "type": "Image",
+     "priority": "Low",
+     "preload": null,
+     "url": "https://confenge.com.br/assets/logo-confenge-500-f8a83f6d.png"
+    },
+    {
+     "start": 422,
+     "end": 448,
+     "bytes": 1814,
+     "type": "Image",
+     "priority": "Medium",
+     "preload": null,
+     "url": "https://confenge.com.br/assets/pranchas/avaliacao-estrutura-mobile.svg"
+    },
+    {
+     "start": 433,
+     "end": 463,
+     "bytes": 1852,
+     "type": "Stylesheet",
+     "priority": "VeryHigh",
+     "preload": null,
+     "url": "https://confenge.com.br/assets/css/styles-tokens.ad2801a01362.css"
+    },
+    {
+     "start": 436,
+     "end": 613,
+     "bytes": 1041,
+     "type": "Manifest",
+     "priority": "Medium",
+     "preload": null,
+     "url": "https://confenge.com.br/manifest.webmanifest"
+    },
+    {
+     "start": 530,
+     "end": 556,
+     "bytes": 1546,
+     "type": "Other",
+     "priority": "High",
+     "preload": null,
+     "url": "https://confenge.com.br/assets/favicon-32.png"
+    }
+   ]
+  },
+  "lhr-servicos.json": {
+   "throttlingMethod": "devtools",
+   "lcp_ms": 2406,
+   "fcp_ms": 2406,
+   "server_response_time_ms": 28,
+   "lcp_element": {
+    "selector": "main#conteudo > section.hero > div.container > p.hero-lead",
+    "snippet": "<p class=\"hero-lead\">",
+    "nodeLabel": "Comparar propostas, completar ou conferir um projeto, entender uma infiltração,…"
+   },
+   "lcp_phases_ms": {
+    "timeToFirstByte": 31,
+    "elementRenderDelay": 2374
+   },
+   "lcp_discovery": "notApplicable",
+   "render_blocking": {
+    "metricSavings": {
+     "FCP": 1500,
+     "LCP": 1500
+    },
+    "items": [
+     {
+      "url": "https://confenge.com.br/assets/css/styles.c4a0f70a8f62.css",
+      "bytes": 21009,
+      "wastedMs": 887
+     },
+     {
+      "url": "https://confenge.com.br/assets/css/assets/editorial.50404a7d507e.css",
+      "bytes": 8626,
+      "wastedMs": 1037
+     },
+     {
+      "url": "https://confenge.com.br/assets/css/styles-tokens.ad2801a01362.css",
+      "bytes": 1854,
+      "wastedMs": 737
+     }
+    ]
+   },
+   "font_display": {
+    "score": 1,
+    "items": []
+   },
+   "network_dependency_tree": [
+    {
+     "depth": 0,
+     "url": "https://confenge.com.br/servicos/",
+     "end_ms": 669,
+     "longest": true
+    },
+    {
+     "depth": 1,
+     "url": "https://confenge.com.br/assets/css/styles.c4a0f70a8f62.css",
+     "end_ms": 1687,
+     "longest": true
+    },
+    {
+     "depth": 2,
+     "url": "https://confenge.com.br/assets/css/styles-tokens.ad2801a01362.css",
+     "end_ms": 2267,
+     "longest": true
+    },
+    {
+     "depth": 1,
+     "url": "https://confenge.com.br/assets/css/assets/editorial.50404a7d507e.css",
+     "end_ms": 1441,
+     "longest": false
+    },
+    {
+     "depth": 1,
+     "url": "https://confenge.com.br/manifest.webmanifest",
+     "end_ms": 1298,
+     "longest": false
+    }
+   ],
+   "preconnect": [
+    {
+     "type": "text",
+     "value": "no origins were preconnected"
+    },
+    {
+     "type": "text",
+     "value": "No additional origins are good candidates for preconnecting"
+    }
+   ],
+   "first_10_requests": [
+    {
+     "start": 1,
+     "end": 639,
+     "bytes": 14101,
+     "type": "Document",
+     "priority": "VeryHigh",
+     "preload": null,
+     "url": "https://confenge.com.br/servicos/"
+    },
+    {
+     "start": 641,
+     "end": 1934,
+     "bytes": 65155,
+     "type": "Font",
+     "priority": "High",
+     "preload": true,
+     "url": "https://confenge.com.br/assets/archivo-var-latin-bf6e041e.woff2"
+    },
+    {
+     "start": 641,
+     "end": 1672,
+     "bytes": 21009,
+     "type": "Stylesheet",
+     "priority": "VeryHigh",
+     "preload": null,
+     "url": "https://confenge.com.br/assets/css/styles.c4a0f70a8f62.css"
+    },
+    {
+     "start": 642,
+     "end": 1433,
+     "bytes": 8626,
+     "type": "Stylesheet",
+     "priority": "VeryHigh",
+     "preload": null,
+     "url": "https://confenge.com.br/assets/css/assets/editorial.50404a7d507e.css"
+    },
+    {
+     "start": 661,
+     "end": 1728,
+     "bytes": 24918,
+     "type": "Script",
+     "priority": "Low",
+     "preload": null,
+     "url": "https://confenge.com.br/script.js?v=mv04"
+    },
+    {
+     "start": 645,
+     "end": 1537,
+     "bytes": 12684,
+     "type": "Image",
+     "priority": "Medium",
+     "preload": null,
+     "url": "https://confenge.com.br/assets/logo-confenge-500-f8a83f6d.png"
+    },
+    {
+     "start": 681,
+     "end": 1293,
+     "bytes": 1002,
+     "type": "Manifest",
+     "priority": "Medium",
+     "preload": null,
+     "url": "https://confenge.com.br/manifest.webmanifest"
+    },
+    {
+     "start": 1681,
+     "end": 2262,
+     "bytes": 1854,
+     "type": "Stylesheet",
+     "priority": "VeryHigh",
+     "preload": null,
+     "url": "https://confenge.com.br/assets/css/styles-tokens.ad2801a01362.css"
+    },
+    {
+     "start": 2459,
+     "end": 3041,
+     "bytes": 1548,
+     "type": "Other",
+     "priority": "High",
+     "preload": null,
+     "url": "https://confenge.com.br/assets/favicon-32.png"
+    },
+    {
+     "start": 2480,
+     "end": 3078,
+     "bytes": 6088,
+     "type": "Other",
+     "priority": "High",
+     "preload": null,
+     "url": "https://confenge.com.br/assets/icon-192.png"
+    }
+   ]
+  }
+ }
+}
