@@ -25,7 +25,7 @@ function mainHtml(html) {
 
 function visible(html) {
   return String(html)
-    .replace(/<script[\s\S]*?<\/script>/gi, " ")
+    .replace(/<script[\s\S]*?<\/script\s*>/gi, " ")
     .replace(/<style[\s\S]*?<\/style>/gi, " ")
     .replace(/<[^>]+>/g, " ")
     .replace(/\s+/g, " ");
@@ -144,7 +144,7 @@ test("incomplete initial context is accepted and essentials are in HTML without 
   assert.match(main, /href="\/casos\/demonstrativo-projeto-privado\/#CF-GEO-01"/);
   assert.equal(html.includes("INT-DEM-001"), false);
   assert.equal(html.includes('class="no-js"'), true);
-  const withoutScripts = html.replace(/<script[\s\S]*?<\/script>/gi, "");
+  const withoutScripts = html.replace(/<script[\s\S]*?<\/script\s*>/gi, "");
   assert.match(withoutScripts, /Compatibilização de projetos de engenharia/);
   assert.match(withoutScripts, /Pedir proposta da compatibilização/);
   assert.match(withoutScripts, /Corrigido na revisão R01/);

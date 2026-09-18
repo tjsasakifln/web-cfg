@@ -22,7 +22,7 @@ function clone(value) {
 }
 
 function visible(html) {
-  return String(html).replace(/<script[\s\S]*?<\/script>/gi, " ").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
+  return String(html).replace(/<script[\s\S]*?<\/script\s*>/gi, " ").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
 }
 
 function shippedRegisterNote() {

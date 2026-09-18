@@ -37,7 +37,10 @@ function read(filePath) {
 }
 
 function stripScripts(html) {
-  return String(html).replace(/<script\b[\s\S]*?<\/script>/gi, " ");
+  // Matches a permissive closing tag (attributes, internal whitespace before
+  // ">") so a hand-crafted "</script >" cannot survive stripping and leak
+  // script content into the visible-text check (CodeQL js/bad-tag-filter).
+  return String(html).replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi, " ");
 }
 
 function visible(html) {

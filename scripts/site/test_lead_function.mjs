@@ -41,6 +41,18 @@ function loadHandler() {
   return require(leadPath);
 }
 
+// Parses the fetch target as a URL and compares the hostname exactly, so a
+// look-alike host (e.g. "resend.com.evil.example" or a query string carrying
+// the literal substring) cannot pass as the real provider (CodeQL
+// js/incomplete-url-substring-sanitization).
+function isRequestToHost(url, hostname) {
+  try {
+    return new URL(String(url)).hostname === hostname;
+  } catch {
+    return false;
+  }
+}
+
 function event(body, method = "POST", extraHeaders = {}) {
   return {
     httpMethod: method,
@@ -1386,7 +1398,7 @@ _reset();
   const originalFetch = globalThis.fetch;
   const providerId = "resend-msg-id-1234567890abcdef";
   globalThis.fetch = async (url) => {
-    if (String(url).includes("resend.com")) {
+    if (isRequestToHost(url, "api.resend.com")) {
       return { ok: true, status: 200, text: async () => "{}", json: async () => ({ id: providerId }) };
     }
     return { ok: true, status: 200, text: async () => "{}", json: async () => ({}) };
@@ -2075,7 +2087,7 @@ for (const bodyHonoursAbort of [true, false]) {
   let siteverifyCalls = 0;
   const consumed = new Set();
   globalThis.fetch = async (url, opts) => {
-    if (String(url).includes("challenges.cloudflare.com")) {
+    if (isRequestToHost(url, "challenges.cloudflare.com")) {
       siteverifyCalls += 1;
       const token = new URLSearchParams(String(opts && opts.body)).get("response");
       // Real Turnstile tokens are single use: a second siteverify fails.
