@@ -13,6 +13,12 @@ on:
         required: false
         type: boolean
         default: false
+    secrets:
+      OPS_TOKEN:
+        # Read-only bearer for the authenticated GSC consumer read (#413).
+        # Optional: without it the durable read is UNKNOWN and the scorecard
+        # reports gsc_unavailable (fail-closed), never a fake observation.
+        required: false
 
 permissions:
   actions: read
@@ -321,6 +327,21 @@ jobs:
           done
           node scripts/site/playwright_local_checklist.mjs
           kill "$(cat /tmp/site-http.pid)" || true
+      - name: Read durable GSC consumer (#413)
+        # Release path only: the pull_request context has no OPS_TOKEN, so the
+        # scorecard there honestly reports gsc_unavailable ("durable read only
+        # on release path"). The verifier prints sanitized metadata (status,
+        # as_of, hashes, reason codes) and never the private insights body.
+        # This step never fails the job by itself: any failure leaves an
+        # UNKNOWN/empty file that the scorecard maps to gsc_unavailable.
+        if: always() && inputs.export_public_artifact
+        env:
+          BASE_URL: https://confenge.com.br
+          OPS_TOKEN: ${{ secrets.OPS_TOKEN }}
+        run: |
+          mkdir -p build/reports
+          node scripts/revops/verify_gsc_freshness.mjs > build/reports/gsc-insights-durable.json || true
+          python3 -c "import json;p=json.load(open('build/reports/gsc-insights-durable.json'));print('GSC_DURABLE_READ status=%s as_of=%s delivery_source=%s reason_codes=%s' % (p.get('status'), p.get('as_of'), p.get('delivery_source'), ','.join(p.get('reason_codes') or [])))" || echo "GSC_DURABLE_READ status=UNREADABLE"
       - name: Executable site-excellence scorecard
         if: always()
         run: >-
@@ -373,6 +394,7 @@ jobs:
             build/reports/first-fold-current.json
             build/reports/site-excellence.json
             build/reports/site-excellence.md
+            build/reports/gsc-insights-durable.json
           if-no-files-found: ignore
 
   execution_evidence:

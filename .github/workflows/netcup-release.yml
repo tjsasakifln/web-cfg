@@ -69,6 +69,9 @@ jobs:
     uses: ./.github/workflows/site-ci.yml
     with:
       export_public_artifact: true
+    secrets:
+      # Read-only durable GSC consumer read for the site-excellence scorecard (#413).
+      OPS_TOKEN: ${{ secrets.OPS_TOKEN }}
     permissions:
       contents: read
       actions: read

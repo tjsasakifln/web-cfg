@@ -892,3 +892,48 @@ def main() -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
+
+
+def test_durable_gsc_read_feeds_the_scorecard_only_on_the_release_path():
+    """#413: the scorecard consumes the authenticated durable GSC read, never a
+    packaged repository snapshot. The read runs before the scorecard, only when
+    the release path exports the artifact, with the read-only OPS_TOKEN passed
+    explicitly from netcup-release, and it can never fail the job by itself."""
+    workflow = _read(SITE_CI)
+    gates = _job_block(workflow, "gates")
+    netcup = _read(WORKFLOWS_DIR / "netcup-release.yml")
+    errors = []
+    marker = "- name: Read durable GSC consumer (#413)"
+    if marker not in gates:
+        errors.append("site-ci gates job must read the durable GSC consumer before the scorecard")
+        step = ""
+    else:
+        step = gates.split(marker, 1)[1].split("\n      - ", 1)[0]
+    read_at = workflow.find(marker)
+    scorecard_at = workflow.find("npm run quality:site-excellence")
+    if not (0 <= read_at < scorecard_at):
+        errors.append("the durable GSC read must precede the site-excellence scorecard")
+    for needle in (
+        "if: always() && inputs.export_public_artifact",
+        "BASE_URL: https://confenge.com.br",
+        "OPS_TOKEN: ${{ secrets.OPS_TOKEN }}",
+        "mkdir -p build/reports",
+        "node scripts/revops/verify_gsc_freshness.mjs > build/reports/gsc-insights-durable.json || true",
+    ):
+        if needle not in step:
+            errors.append(f"durable GSC read step missing: {needle}")
+    if re.search(r"(?m)^\s+continue-on-error:", step):
+        errors.append("durable GSC read must use '|| true', not continue-on-error")
+    if "--fixture" in step:
+        errors.append("durable GSC read must never use a fixture in CI")
+    call_block = workflow.split("workflow_call:", 1)[1].split("\npermissions:", 1)[0]
+    if not re.search(r"(?m)^\s+secrets:\s*\n\s+OPS_TOKEN:", call_block):
+        errors.append("site-ci workflow_call must declare the OPS_TOKEN secret")
+    if "required: false" not in call_block:
+        errors.append("OPS_TOKEN must stay optional so pull_request/fork runs remain fail-closed, not broken")
+    gates_call = netcup.split("uses: ./.github/workflows/site-ci.yml", 1)[1].split("\n  pseo_gates:", 1)[0]
+    if "OPS_TOKEN: ${{ secrets.OPS_TOKEN }}" not in gates_call and "secrets: inherit" not in gates_call:
+        errors.append("netcup-release must pass OPS_TOKEN to the reusable site-ci call")
+    if "build/reports/gsc-insights-durable.json" not in gates.split("- name: Upload reports", 1)[1]:
+        errors.append("the sanitized durable read must be uploaded with the site-ci reports")
+    assert not errors, "durable GSC read shape failures:\n- " + "\n- ".join(errors)
