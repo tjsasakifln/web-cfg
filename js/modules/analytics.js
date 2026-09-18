@@ -27,6 +27,14 @@
     '/defesa-margem-contratos-publicos/': 'defesa-margem-contratos-publicos',
     '/diagnostico-b2g-expansao/': 'diagnostico-b2g-expansao',
     '/ferramentas/diagnostico-defesa-margem/': 'diagnostico-defesa-margem',
+    // Rotas de servico privado (G04-03): sem elas, hub -> servico saia UNKNOWN_SERVICE.
+    '/quantitativos-orcamento-obras/': 'quantitativos-orcamento-obras',
+    '/compatibilizacao-projetos-engenharia/': 'compatibilizacao-projetos-engenharia',
+    '/projetos-complementares-engenharia/': 'projetos-complementares-engenharia',
+    '/revisao-tecnica-projetos-engenharia/': 'revisao-tecnica-projetos-engenharia',
+    '/parcerias-engenharia/': 'parcerias-engenharia',
+    '/inspecao-diagnostico-edificacoes/': 'inspecao-diagnostico-edificacoes',
+    '/seguranca-trabalho-apoio-tecnico/': 'seguranca-trabalho-apoio-tecnico',
   };
   const ORIGIN_PREFIXES = {
     '/conteudos/': 'editorial',
@@ -37,6 +45,7 @@
     '/panorama-mercado-obras-publicas/': 'editorial',
     '/casos/': 'case',
     '/servicos-obras-publicas/': 'hub',
+    '/servicos/': 'hub',
     '/problemas-que-resolvemos/': 'hub',
     '/inteligencia/': 'data',
     '/radar/': 'data',
@@ -531,6 +540,7 @@
   };
 
   window.__CONFENGE_EVENT_CONTRACT.canonicalizeDestination = canonicalizeDestination;
+  window.__CONFENGE_EVENT_CONTRACT.EVENT_CTA_KIND = EVENT_CTA_KIND;
   window.__CONFENGE_EVENT_CONTRACT.classifyTransition = classifyTransition;
   window.__CONFENGE_EVENT_CONTRACT.canonicalizePath = canonicalizePath;
   window.__CONFENGE_EVENT_CONTRACT.UNKNOWN_SERVICE = UNKNOWN_SERVICE;
