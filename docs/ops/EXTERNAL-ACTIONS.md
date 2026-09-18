@@ -37,7 +37,7 @@ No app ntfy (ou API), **apagar/revogar** o tópico historicamente exposto `confe
 
 ---
 
-## 2. DNS e-mail (domínio confenge.com.br) — **PARTIAL** (DKIM recriado e domínio `verified` em 2026-09-18; DMARC não confirmado; o DONE de 2026-08-02 era indevido)
+## 2. DNS e-mail (domínio confenge.com.br) — **PARTIAL** (DKIM recriado e domínio `verified` em 2026-09-18; DMARC existe mas em `p=none`, sem `rua`; o DONE de 2026-08-02 era indevido)
 
 **Plataforma:** zona Cloudflare `ea13b73bf09dcab6355baa38fbda1712` (NS
 `grannbo`/`kai.ns.cloudflare.com`; MX Hostinger preservado).
@@ -53,26 +53,37 @@ e-mail de lead real jamais saiu do host — 23/23 registros do store eram
 sintéticos (`email=skipped`) e a conta Resend tinha um único envio
 (2026-08-21, era Netlify).
 
-**Correção 2026-09-18:** criado o TXT `resend._domainkey` (registro Cloudflare
-id `6d371d6a28364c17cdbde2f676e58872`) com o valor do painel Resend, usando o
-token DNS escopado já presente no host `ec-prod` (o do certbot). Domínio
-reverificado no Resend: **verified em 2026-09-18 13:14 UTC** (registro da
-campanha; nenhum envio executado).
+**Correção 2026-09-18 (executada pelo integrador da campanha, não pela frente
+`lead`):** o integrador da campanha POS-REDESIGN-FECHAMENTO-20260918, com a
+autorização EXECUTE_NOW do encaminhamento de 2026-09-18, criou o TXT
+`resend._domainkey` (registro Cloudflare id `6d371d6a28364c17cdbde2f676e58872`)
+com o valor do painel Resend, usando o token DNS escopado já presente no host
+`ec-prod` (o do certbot), e reverificou o domínio no Resend: **verified em
+2026-09-18 13:14 UTC**. A frente `lead` desta campanha só documentou; nenhum
+envio de e-mail foi executado. Evidência sanitizada (estado anterior, registro
+criado, método de verificação, rollback, decisões pendentes):
+`docs/campaigns/design-institucional/fechamento/evidence/g03-dns-resend.json`
+(gravada pela integração da campanha).
 
 **Rollback:** apagar o registro `6d371d6a28364c17cdbde2f676e58872` na zona
 acima; o domínio volta a `failed` e `deliverResendEmail` passa a registrar
 `delivery.email.status=error` (registro continua durável, sem alerta).
 
-**Pendência (decisão do fundador):** o token usado pertence ao certbot
-(escopo de zona para desafios ACME). Recomenda-se criar um token de zona
-dedicado (`Zone.DNS:Edit` só nesta zona) para operações de e-mail e não
-reutilizar o do certbot; nada foi rotacionado nesta entrega.
+**Pendências (decisão do fundador):**
+1. O token usado pertence ao certbot (escopo de zona para desafios ACME).
+   Recomenda-se criar um token de zona dedicado (`Zone.DNS:Edit` só nesta
+   zona) para operações de e-mail e não reutilizar o do certbot; nada foi
+   rotacionado nesta entrega.
+2. Elevar o DMARC de `p=none` para `p=quarantine` com `rua=mailto:…` (hoje a
+   política não protege o domínio contra spoofing e ninguém recebe relatórios
+   agregados). Antes de elevar, confirmar que o SPF/DKIM do Hostinger (MX do
+   apex) também alinham, senão o e-mail corporativo passa a ser quarentenado.
 
 | Registro | Host | Valor esperado | Validação |
 | --- | --- | --- | --- |
 | DKIM TXT | `resend._domainkey` | valor do painel Resend (é **TXT**, não CNAME) | `dig TXT resend._domainkey.confenge.com.br @1.1.1.1` + Resend Domain → Verified |
 | SPF MX / SPF TXT | `send` | conforme wizard Resend (copiar do painel) | Resend Domain → Verified |
-| DMARC TXT | `_dmarc` | `v=DMARC1; p=quarantine; rua=mailto:tiago.sasaki@confenge.com.br` | DoH/dig `_dmarc.confenge.com.br` — **não confirmado** nesta entrega |
+| DMARC TXT | `_dmarc` | **estado real em 2026-09-18:** `v=DMARC1; p=none` (sem `rua`), consultado por DoH 1.1.1.1 (`cloudflare-dns.com/dns-query?name=_dmarc.confenge.com.br&type=TXT`, revisão adversarial e frente `lead` da campanha, 2026-09-18 14:20 UTC). Valor recomendado: `v=DMARC1; p=quarantine; rua=mailto:tiago.sasaki@confenge.com.br` | `dig TXT _dmarc.confenge.com.br @1.1.1.1` — existe; **não alterado** nesta entrega |
 
 **Consequência se voltar a OPEN:** o e-mail Resend é hoje o único alerta de
 lead real (`OPS_WEBHOOK_URL`/`NTFY_URL` UNSET no host); sem ele o lead persiste

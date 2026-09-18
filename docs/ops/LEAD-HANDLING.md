@@ -81,18 +81,28 @@ timestamps; nunca imprimir chaves, `to`, e-mail, telefone ou mensagem.
 - Mesma aba: a chave `fe-<uuid>` fica em `sessionStorage` por
   página/asset/cta até o sucesso. Reenviar após timeout devolve o **mesmo
   recibo** (200 `idempotent`), inclusive sem novo token Turnstile: o servidor
-  consulta a chave explícita antes do siteverify e responde só a projeção
-  pública já entregue àquele cliente. Sem chave explícita, a chave por
-  conteúdo continua atrás do Turnstile (evita oráculo de existência).
+  consulta antes do siteverify somente chaves explícitas com a forma emitida
+  pelo próprio front (`fe-`/`triage-` + uuid ou fallback aleatório;
+  `CLIENT_REPLAY_KEY` em `netlify/functions/lead.cjs`) e responde só a
+  projeção pública já entregue àquele cliente. Sem chave explícita, ou com
+  chave de outra forma (probe, harness, timestamp), a consulta continua atrás
+  do Turnstile (evita oráculo de existência com chave derivável).
 - Nova aba, navegação privada ou `sessionStorage` bloqueado: chave nova →
   **novo registro e novo e-mail**. A deduplicação por identidade acontece só no
   Warmbly (`dedupe_of_lead_id`); no `web-cfg` os dois recibos são válidos.
 - Turnstile: o token é de uso único. Após timeout, 403 ou 429 o front chama
   `turnstile.reset()` quando o widget existe; o reenvio recebe token novo.
-- Entrega: um Resend pendurado não consome o orçamento de 15 s do navegador;
-  o registro fica `persisted` com `delivery.email.status=error`,
-  `reason=timeout` e sem `provider_id`. Verificar no Resend antes de qualquer
-  reenvio manual.
+- Entrega: um Resend pendurado (cabeçalhos ou corpo) custa no máximo
+  `LEAD_DELIVERY_TIMEOUT_MS` (5 s); o registro fica `persisted` com
+  `delivery.email.status=error`, `reason=timeout` (ou `timeout_after_http` +
+  `http`) e sem `provider_id`. Verificar no Resend antes de qualquer reenvio
+  manual.
+- Pior caso somado do POST (siteverify 5 s + handoff Warmbly 8 s + entrega
+  5 s + store) ≈ 18 s, **acima** dos 15 s do navegador: com Warmbly lento e
+  Resend lento ao mesmo tempo o visitante ainda vê a cópia de tempo esgotado
+  de um registro durável. O ciclo fecha pelo reenvio (mesma chave, recibo
+  antes do Turnstile, ~ms), não por garantia de 201 a tempo. Um único canal
+  lento cabe no orçamento (5 + 5 + store).
 
 ## Limite de autoridade
 
