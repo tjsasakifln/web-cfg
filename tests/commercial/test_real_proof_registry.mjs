@@ -135,6 +135,24 @@ assert.ok(
 const authorizedBlock = '<body data-proof-id="proof-ok"><p data-proof-field="outcome">A cliente economizou 20%.</p></body>';
 const authorization = { proofId: "proof-ok", publicFields: ["outcome"] };
 assert.deepEqual(unregisteredClientClaimProblems(authorizedBlock, "casos/proof-ok/index.html", authorization), []);
+// 2026-09-18 (LAPIDACAO-COMERCIAL): the honest markers are inflected in Portuguese
+// ("carteira hipotética", "dados sintéticos", "exemplo demonstrativo"); a sentence
+// that declares itself hypothetical is not a client-result claim, while the same
+// numbers without the marker still are.
+assert.deepEqual(
+  unregisteredClientClaimProblems(
+    "<p>Das 16 células da carteira hipotética, 4 são eventos sem posição da empresa e 2 lacunas, no Contrato C, 46% do valor da carteira.</p>",
+    "x/index.html",
+  ),
+  [],
+);
+assert.ok(
+  unregisteredClientClaimProblems(
+    "<p>Das 16 células da carteira, 4 são eventos sem posição da empresa e 2 lacunas, no Contrato C, 46% do valor da carteira.</p>",
+    "x/index.html",
+  ).length > 0,
+  "unmarked quantified claim about an empresa must still be flagged",
+);
 assert.ok(
   unregisteredClientClaimProblems(
     `${authorizedBlock}<p>A cliente recuperou R$ 50 mil.</p>`,
