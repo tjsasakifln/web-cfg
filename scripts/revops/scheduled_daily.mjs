@@ -301,8 +301,27 @@ const proofPath = resolve(runDir, `daily-${day}-${Date.now().toString(36)}.json`
 const failedCritical = out.checks.filter((c) => !c.ok && c.critical !== false).length;
 out.ok = failedCritical === 0;
 out.failed_critical = failedCritical;
+// `ok` means "no critical check failed"; it never means "every leg was
+// exercised". A named external blocker leaves the coverage partial, and the
+// capture leg (isolated probe + idempotency) is reported by its own state so
+// a report with the probe never fired is distinguishable from a proven one.
+out.coverage = out.blocked_external.length === 0 ? "full" : "partial";
+out.capture_leg = out.blocked_external.some((b) => b.dependency === "LEAD_PROBE_SECRET")
+  ? "BLOCKED_EXTERNAL"
+  : "EXERCISED";
 writeFileSync(proofPath, JSON.stringify(out, null, 2) + "\n");
-console.log(JSON.stringify({ ok: out.ok, failed_critical: failedCritical, proof: proofPath, alerts: out.alerts }, null, 2));
+for (const blocker of out.blocked_external) {
+  console.log(
+    `::warning title=daily coverage partial::${blocker.name} BLOCKED_EXTERNAL dependency=${blocker.dependency} — ${blocker.detail}`
+  );
+}
+console.log(
+  JSON.stringify(
+    { ok: out.ok, coverage: out.coverage, capture_leg: out.capture_leg, failed_critical: failedCritical, proof: proofPath, alerts: out.alerts },
+    null,
+    2
+  )
+);
 return out.ok;
 }
 

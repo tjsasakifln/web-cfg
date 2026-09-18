@@ -34,8 +34,9 @@ const PROBE_SECRET_FIXTURE = "unit-test-lead-probe-secret-0123456789abcdef";
 {
   const proofDir = mkdtempSync(join(tmpdir(), "confenge-daily-partial-"));
   let failedAsExpected = false;
+  let stdout = "";
   try {
-    execFileSync(process.execPath, [resolve(ROOT, "scripts/revops/scheduled_daily.mjs")], {
+    stdout = execFileSync(process.execPath, [resolve(ROOT, "scripts/revops/scheduled_daily.mjs")], {
       cwd: ROOT,
       encoding: "utf8",
       stdio: "pipe",
@@ -50,8 +51,9 @@ const PROBE_SECRET_FIXTURE = "unit-test-lead-probe-secret-0123456789abcdef";
         REVOPS_RUN_DIR: proofDir,
       },
     });
-  } catch {
+  } catch (error) {
     failedAsExpected = true;
+    stdout = String(error.stdout || "");
   }
   const reports = readdirSync(proofDir).filter((name) => name.endsWith(".json"));
   const partial = reports.length === 1
@@ -68,6 +70,11 @@ const PROBE_SECRET_FIXTURE = "unit-test-lead-probe-secret-0123456789abcdef";
   if ((partial?.blocked_external || []).some((b) => b.dependency === "LEAD_PROBE_SECRET")) {
     fail("daily_probe_not_blocked_with_secret");
   } else pass("daily_probe_not_blocked_with_secret");
+  // Critical failures do not make the coverage partial: coverage answers
+  // "was every leg exercised", not "did every leg pass".
+  if (partial?.coverage !== "full" || partial?.capture_leg !== "EXERCISED" || /::warning/.test(stdout)) {
+    fail("daily_coverage_full_with_secret", { coverage: partial?.coverage, capture_leg: partial?.capture_leg });
+  } else pass("daily_coverage_full_with_secret");
   const daily = readFileSync(resolve(ROOT, "scripts/revops/scheduled_daily.mjs"), "utf8");
   if (daily.includes('"X-Confenge-Probe": "1"') || !daily.includes('"X-Confenge-Probe": LEAD_PROBE_SECRET')) {
     fail("daily_probe_header_is_the_secret");
@@ -82,8 +89,9 @@ const PROBE_SECRET_FIXTURE = "unit-test-lead-probe-secret-0123456789abcdef";
   const proofDir = mkdtempSync(join(tmpdir(), "confenge-daily-nosecret-"));
   const env = { ...process.env };
   delete env.LEAD_PROBE_SECRET;
+  let stdout = "";
   try {
-    execFileSync(process.execPath, [resolve(ROOT, "scripts/revops/scheduled_daily.mjs")], {
+    stdout = execFileSync(process.execPath, [resolve(ROOT, "scripts/revops/scheduled_daily.mjs")], {
       cwd: ROOT,
       encoding: "utf8",
       stdio: "pipe",
@@ -97,8 +105,9 @@ const PROBE_SECRET_FIXTURE = "unit-test-lead-probe-secret-0123456789abcdef";
         REVOPS_RUN_DIR: proofDir,
       },
     });
-  } catch {
+  } catch (error) {
     // the unreachable base fails the critical URL checks; that is expected
+    stdout = String(error.stdout || "");
   }
   const reports = readdirSync(proofDir).filter((name) => name.endsWith(".json"));
   const report = reports.length === 1 ? JSON.parse(readFileSync(resolve(proofDir, reports[0]), "utf8")) : null;
@@ -118,6 +127,16 @@ const PROBE_SECRET_FIXTURE = "unit-test-lead-probe-secret-0123456789abcdef";
   } else pass("daily_probe_blocker_alerted");
   if ((report?.checks || []).some((c) => c.name === "gsc_sync")) fail("daily_no_duplicate_gsc_sync");
   else pass("daily_no_duplicate_gsc_sync");
+  // The top-level report and the job log both say the capture leg was never
+  // exercised: `ok` alone must not read as "capture proven".
+  if (report?.coverage !== "partial" || report?.capture_leg !== "BLOCKED_EXTERNAL") {
+    fail("daily_coverage_partial_without_probe_secret", { coverage: report?.coverage, capture_leg: report?.capture_leg });
+  } else pass("daily_coverage_partial_without_probe_secret");
+  if (!/^::warning [^\n]*LEAD_PROBE_SECRET/m.test(stdout)) fail("daily_coverage_partial_warns_in_log");
+  else pass("daily_coverage_partial_warns_in_log");
+  const summaryLine = stdout.trim().split("\n").filter((line) => line.includes('"coverage"'));
+  if (!summaryLine.some((line) => line.includes('"partial"'))) fail("daily_summary_reports_coverage");
+  else pass("daily_summary_reports_coverage");
 }
 function fail(n, d) {
   console.error("FAIL", n, d);
