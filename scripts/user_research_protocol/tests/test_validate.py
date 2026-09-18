@@ -24,38 +24,45 @@ def write(path: Path, payload: dict) -> None:
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
-def aggregate(*, completed: int) -> dict:
-    status = "EXECUTED" if completed >= 5 else "AMOSTRA_INSUFICIENTE"
+def eighty_need(completed: int) -> int:
+    return (completed * 4 + 4) // 5
+
+
+def aggregate(*, completed: int, successes: int | None = None) -> dict:
+    status = "EXECUTED" if completed >= 20 else "AMOSTRA_INSUFICIENTE"
     raw = None
     disposition = {
         "183": "OPEN_EVIDENCE_READY",
         "184": "OPEN_BLOCKED_TRAFFIC_WINDOW",
     }
-    if completed < 5:
+    if completed < 20:
         disposition = {
             "183": "OPEN_BLOCKED_HUMAN_EVIDENCE",
             "184": "OPEN_BLOCKED_HUMAN_EVIDENCE_AND_TRAFFIC_WINDOW",
         }
     else:
+        need = eighty_need(completed) if successes is None else successes
         raw = {
             "183": {
-                "task_successes": {"edital": 4, "glosa": 5, "reequilibrio": 4},
+                "task_successes": {"edital": need, "glosa": min(completed, need + 1), "reequilibrio": need},
                 "result": "APPROVED",
             },
             "184": {
                 "dimension_successes": {
-                    "audience": 4,
-                    "problem": 4,
-                    "next_action": 5,
-                    "not_software": 4,
+                    "audience": need,
+                    "problem": need,
+                    "next_action": min(completed, need + 1),
+                    "not_software": need,
                 },
                 "result": "APPROVED",
             },
         }
+    mobile = min(10, completed) if completed >= 20 else min(2, completed)
+    desktop = max(0, completed - mobile)
     return {
         "schema": "confenge.icp-trust-session-aggregate.v1",
         "template": False,
-        "protocol_version": "1.1.0",
+        "protocol_version": "1.2.0",
         "run_id": "2026-09-01-01",
         "executed_at": "2026-09-01",
         "stimulus": {
@@ -64,7 +71,7 @@ def aggregate(*, completed: int) -> dict:
             "captured_at": "2026-09-01T10:00:00Z",
             "home_first_viewport_sha256": "b" * 64,
             "navigation_tree_sha256": "c" * 64,
-            "viewport_assignment": {"mobile": min(2, completed), "desktop": max(0, completed - 2)},
+            "viewport_assignment": {"mobile": mobile, "desktop": desktop},
         },
         "participant_counts": {
             "screened": completed,
@@ -73,7 +80,7 @@ def aggregate(*, completed: int) -> dict:
             "completed_all_protocols": completed,
         },
         "consent_attestation": {
-            "private_records_verified": completed >= 5,
+            "private_records_verified": completed >= 20,
             "pii_in_repository": False,
             "pii_in_analytics": False,
         },
@@ -88,10 +95,10 @@ def add_run(package: Path, payload: dict) -> Path:
     path = directory / "aggregate.json"
     write(path, payload)
     interpretation = directory / "interpretation.md"
-    if payload["participant_counts"]["completed_all_protocols"] >= 5:
+    if payload["participant_counts"]["completed_all_protocols"] >= 20:
         interpretation.write_text(
             "# Interpretação agregada\n\n"
-            "- Protocol version: 1.1.0\n"
+            "- Protocol version: 1.2.0\n"
             f"- Git SHA do estímulo: {payload['stimulus']['git_sha']}\n"
             "- Resultado #183: APPROVED\n"
             "- Resultado #184: APPROVED\n",
@@ -106,9 +113,9 @@ def add_run(package: Path, payload: dict) -> Path:
     state["observed"] = {
         "eligible_consented_completions": completed,
         "sessions_executed": completed,
-        "aggregate_records": 1 if completed >= 5 else 0,
+        "aggregate_records": 1 if completed >= 20 else 0,
     }
-    if completed >= 5:
+    if completed >= 20:
         state["human_execution"] = "EXECUTED"
         state["result_status"] = "HUMAN_EVIDENCE_READY"
         state["claims"] = {key: True for key in state["claims"]}
@@ -121,12 +128,12 @@ def test_shipped_package_is_ready_but_human_execution_is_blocked() -> None:
     report = validate_package(DEFAULT_PACKAGE)
     assert report == {
         "ok": True,
-        "protocol_version": "1.1.0",
+        "protocol_version": "1.2.0",
         "operational_package": "READY",
         "human_execution": "BLOCKED_HUMAN_PARTICIPANTS",
         "result_status": "AMOSTRA_INSUFICIENTE",
         "completed": 0,
-        "required": 5,
+        "required": 20,
         "versioned_runs": 0,
     }
 
@@ -152,7 +159,7 @@ def test_less_than_five_cannot_publish_aggregate_metrics(tmp_path: Path) -> None
 
 def test_aggregate_rejects_pii_capable_field(tmp_path: Path) -> None:
     package = copy_package(tmp_path)
-    payload = aggregate(completed=5)
+    payload = aggregate(completed=20)
     payload["participant_name"] = "Pessoa Exemplo"
     add_run(package, payload)
     with pytest.raises(ValidationError, match="PII-capable"):
@@ -161,7 +168,7 @@ def test_aggregate_rejects_pii_capable_field(tmp_path: Path) -> None:
 
 def test_aggregate_cannot_close_an_issue(tmp_path: Path) -> None:
     package = copy_package(tmp_path)
-    payload = aggregate(completed=5)
+    payload = aggregate(completed=20)
     payload["issue_disposition"]["183"] = "CLOSED"
     add_run(package, payload)
     with pytest.raises(ValidationError, match="remain open"):
@@ -180,14 +187,14 @@ def test_protocol_cannot_enable_moderator_coaching(tmp_path: Path) -> None:
 
 def test_completed_aggregate_is_recalculated_and_interpretation_is_separate(tmp_path: Path) -> None:
     package = copy_package(tmp_path)
-    add_run(package, aggregate(completed=5))
+    add_run(package, aggregate(completed=20))
     report = validate_package(package)
     assert report["versioned_runs"] == 1
 
 
 def test_completed_aggregate_rejects_inconsistent_approval(tmp_path: Path) -> None:
     package = copy_package(tmp_path)
-    payload = aggregate(completed=5)
+    payload = aggregate(completed=20)
     payload["raw_aggregate"]["183"]["task_successes"]["glosa"] = 3
     add_run(package, payload)
     with pytest.raises(ValidationError, match="#183 result inconsistent"):
@@ -196,7 +203,7 @@ def test_completed_aggregate_rejects_inconsistent_approval(tmp_path: Path) -> No
 
 def test_eighty_percent_threshold_does_not_round_down_for_larger_sample(tmp_path: Path) -> None:
     package = copy_package(tmp_path)
-    payload = aggregate(completed=6)
+    payload = aggregate(completed=21, successes=16)
     add_run(package, payload)
     with pytest.raises(ValidationError, match="#183 result inconsistent"):
         validate_package(package)
@@ -214,7 +221,7 @@ def test_completed_run_requires_bound_confenge_stimulus(
     tmp_path: Path, field: str, value: str, message: str
 ) -> None:
     package = copy_package(tmp_path)
-    payload = aggregate(completed=5)
+    payload = aggregate(completed=20)
     payload["stimulus"][field] = value
     add_run(package, payload)
     with pytest.raises(ValidationError, match=message):
@@ -223,8 +230,8 @@ def test_completed_run_requires_bound_confenge_stimulus(
 
 def test_completed_run_requires_balanced_viewports(tmp_path: Path) -> None:
     package = copy_package(tmp_path)
-    payload = aggregate(completed=5)
-    payload["stimulus"]["viewport_assignment"] = {"mobile": 1, "desktop": 4}
+    payload = aggregate(completed=20)
+    payload["stimulus"]["viewport_assignment"] = {"mobile": 1, "desktop": 19}
     add_run(package, payload)
     with pytest.raises(ValidationError, match="at least two mobile"):
         validate_package(package)
@@ -232,7 +239,7 @@ def test_completed_run_requires_balanced_viewports(tmp_path: Path) -> None:
 
 def test_run_id_must_match_directory_and_execution_date(tmp_path: Path) -> None:
     package = copy_package(tmp_path)
-    payload = aggregate(completed=5)
+    payload = aggregate(completed=20)
     path = add_run(package, payload)
     payload["run_id"] = "2026-09-02-01"
     write(path, payload)
@@ -248,7 +255,7 @@ def test_interpretation_rejects_pii_quote_placeholders_and_closure(tmp_path: Pat
         ("Closes #183\n" + "a" * 40, "closing language"),
     ):
         package = copy_package(tmp_path / message.replace(" ", "-"))
-        payload = aggregate(completed=5)
+        payload = aggregate(completed=20)
         path = add_run(package, payload)
         path.with_name("interpretation.md").write_text(content, encoding="utf-8")
         with pytest.raises(ValidationError, match=message):
@@ -257,7 +264,7 @@ def test_interpretation_rejects_pii_quote_placeholders_and_closure(tmp_path: Pat
 
 def test_extra_run_file_is_rejected(tmp_path: Path) -> None:
     package = copy_package(tmp_path)
-    path = add_run(package, aggregate(completed=5))
+    path = add_run(package, aggregate(completed=20))
     (path.parent / "notes.csv").write_text("private notes", encoding="utf-8")
     with pytest.raises(ValidationError, match="unexpected file"):
         validate_package(package)
@@ -265,7 +272,7 @@ def test_extra_run_file_is_rejected(tmp_path: Path) -> None:
 
 def test_state_must_reconcile_to_versioned_run(tmp_path: Path) -> None:
     package = copy_package(tmp_path)
-    add_run(package, aggregate(completed=5))
+    add_run(package, aggregate(completed=20))
     state_path = package / "STATE.json"
     state = load(state_path)
     state["observed"]["eligible_consented_completions"] = 0
@@ -276,14 +283,14 @@ def test_state_must_reconcile_to_versioned_run(tmp_path: Path) -> None:
 
 def test_normalized_pii_key_and_tax_id_are_rejected(tmp_path: Path) -> None:
     package = copy_package(tmp_path)
-    payload = aggregate(completed=5)
+    payload = aggregate(completed=20)
     payload["participante-email"] = "redacted"
     add_run(package, payload)
     with pytest.raises(ValidationError, match="PII-capable"):
         validate_package(package)
 
     package = copy_package(tmp_path / "tax")
-    payload = aggregate(completed=5)
+    payload = aggregate(completed=20)
     payload["unexpected"] = "52.407.089/0001-09"
     add_run(package, payload)
     with pytest.raises(ValidationError, match="tax-id-like"):
@@ -300,7 +307,7 @@ def test_frozen_prompt_cannot_drift_without_protocol_version(tmp_path: Path) -> 
 
 def test_interpretation_result_must_match_aggregate(tmp_path: Path) -> None:
     package = copy_package(tmp_path)
-    path = add_run(package, aggregate(completed=5))
+    path = add_run(package, aggregate(completed=20))
     interpretation = path.with_name("interpretation.md")
     interpretation.write_text(
         interpretation.read_text(encoding="utf-8").replace("Resultado #184: APPROVED", "Resultado #184: REPROVADO"),

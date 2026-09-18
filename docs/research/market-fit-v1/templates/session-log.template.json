@@ -1,0 +1,19 @@
+{
+  "schema": "confenge.market-fit-session-log/1.0",
+  "template": true,
+  "protocol_version": "CFG-MARKET-FIT-2026-09-04-v3",
+  "slot_id": null,
+  "nucleus_id": null,
+  "contains_participant_identity": false,
+  "recording": {
+    "fala_anonimizavel": null,
+    "hesitacao": null,
+    "backtrack": null,
+    "escolha": null,
+    "repeat_change_stop": null
+  },
+  "repeat_change_stop_enum": ["REPEAT", "CHANGE", "STOP"],
+  "tasks": [],
+  "pii_in_this_record": false,
+  "free_text_in_repository": false
+}
