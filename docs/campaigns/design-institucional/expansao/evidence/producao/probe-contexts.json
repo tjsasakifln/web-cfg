@@ -1,0 +1,78 @@
+[
+ {
+  "label": "home",
+  "origem": "/",
+  "jornada": "contrato",
+  "landing_page": "https://confenge.com.br/"
+ },
+ {
+  "label": "pilar-medicoes",
+  "origem": "medicoes-glosas-obras-publicas",
+  "asset_id": "medicoes-glosas-obras-publicas",
+  "cta_id": "medicoes-glosas-obras-publicas-handraise",
+  "route_family": "medicoes-glosas",
+  "jornada": "contrato",
+  "estagio": "medicoes-glosas-obras-publicas",
+  "landing_page": "https://confenge.com.br/medicoes-glosas-obras-publicas/"
+ },
+ {
+  "label": "pilar-aditivos",
+  "origem": "aditivos-obras-publicas",
+  "asset_id": "aditivos-obras-publicas",
+  "cta_id": "aditivos-obras-publicas-handraise",
+  "route_family": "aditivos",
+  "jornada": "contrato",
+  "estagio": "aditivos-obras-publicas",
+  "landing_page": "https://confenge.com.br/aditivos-obras-publicas/"
+ },
+ {
+  "label": "entregas-hub",
+  "origem": "entregas",
+  "asset_id": "entregas-exemplos-hub",
+  "cta_id": "entregas-hub-handraise",
+  "route_family": "entregas",
+  "jornada": "operacao",
+  "estagio": "entregas-exemplos-hub",
+  "landing_page": "https://confenge.com.br/entregas/"
+ },
+ {
+  "label": "diagnostico-expansao",
+  "origem": "diagnostico-b2g-expansao",
+  "asset_id": "diagnostico-b2g-expansao",
+  "cta_id": "diag-exp-handraise",
+  "route_family": "diagnostico-b2g-expansao",
+  "jornada": "operacao",
+  "estagio": "diagnostico-expansao",
+  "landing_page": "https://confenge.com.br/diagnostico-b2g-expansao/"
+ },
+ {
+  "label": "servicos-obras-publicas",
+  "origem": "servicos-obras-publicas",
+  "asset_id": "contract-defense-products",
+  "cta_id": "contract-defense-products-handraise",
+  "route_family": "servicos-obras-publicas",
+  "jornada": "contrato",
+  "estagio": "contract-defense-products",
+  "landing_page": "https://confenge.com.br/servicos-obras-publicas/"
+ },
+ {
+  "label": "diretoria-b2g",
+  "origem": "diretoria-b2g",
+  "asset_id": "diretoria-b2g",
+  "cta_id": "diretoria-handraise",
+  "route_family": "diretoria-b2g",
+  "jornada": "operacao",
+  "estagio": "enquadramento-diretoria-b2g",
+  "landing_page": "https://confenge.com.br/diretoria-b2g/"
+ },
+ {
+  "label": "execucao-segura-bid-room",
+  "origem": "bid-room-licitacoes-obras",
+  "asset_id": "bid-room-licitacoes-obras",
+  "cta_id": "bid-room-licitacoes-obras-handraise",
+  "route_family": "bid-room-licitacoes-obras",
+  "jornada": "edital",
+  "estagio": "bid-room-licitacoes-obras",
+  "landing_page": "https://confenge.com.br/bid-room-licitacoes-obras/"
+ }
+]

@@ -1,0 +1,246 @@
+{
+  "base": "https://confenge.com.br",
+  "tag": "prod-b98e0878e",
+  "captures": [
+    {
+      "route": "/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 16572,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/home-390x844-fold-prod-b98e0878e.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/home-390x844-full-prod-b98e0878e.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/home-390x844-menu-prod-b98e0878e.jpg"
+    },
+    {
+      "route": "/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 11060,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/home-1440x1000-fold-prod-b98e0878e.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/home-1440x1000-full-prod-b98e0878e.jpg"
+    },
+    {
+      "route": "/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/servicos/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 16071,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/servicos-390x844-fold-prod-b98e0878e.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/servicos-390x844-full-prod-b98e0878e.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/servicos-390x844-menu-prod-b98e0878e.jpg"
+    },
+    {
+      "route": "/servicos/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 10036,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/servicos-1440x1000-fold-prod-b98e0878e.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/servicos-1440x1000-full-prod-b98e0878e.jpg"
+    },
+    {
+      "route": "/servicos/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/quantitativos-orcamento-obras/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 20426,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/quantitativos-orcamento-obras-390x844-fold-prod-b98e0878e.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/quantitativos-orcamento-obras-390x844-full-prod-b98e0878e.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/quantitativos-orcamento-obras-390x844-menu-prod-b98e0878e.jpg"
+    },
+    {
+      "route": "/quantitativos-orcamento-obras/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 12890,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/quantitativos-orcamento-obras-1440x1000-fold-prod-b98e0878e.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/quantitativos-orcamento-obras-1440x1000-full-prod-b98e0878e.jpg"
+    },
+    {
+      "route": "/quantitativos-orcamento-obras/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/servicos-obras-publicas/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 14177,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/servicos-obras-publicas-390x844-fold-prod-b98e0878e.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/servicos-obras-publicas-390x844-full-prod-b98e0878e.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/servicos-obras-publicas-390x844-menu-prod-b98e0878e.jpg"
+    },
+    {
+      "route": "/servicos-obras-publicas/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 10609,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/servicos-obras-publicas-1440x1000-fold-prod-b98e0878e.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/servicos-obras-publicas-1440x1000-full-prod-b98e0878e.jpg"
+    },
+    {
+      "route": "/servicos-obras-publicas/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/medicoes-glosas-obras-publicas/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 13123,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/medicoes-glosas-obras-publicas-390x844-fold-prod-b98e0878e.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/medicoes-glosas-obras-publicas-390x844-full-prod-b98e0878e.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/medicoes-glosas-obras-publicas-390x844-menu-prod-b98e0878e.jpg"
+    },
+    {
+      "route": "/medicoes-glosas-obras-publicas/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 9333,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/medicoes-glosas-obras-publicas-1440x1000-fold-prod-b98e0878e.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/medicoes-glosas-obras-publicas-1440x1000-full-prod-b98e0878e.jpg"
+    },
+    {
+      "route": "/medicoes-glosas-obras-publicas/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/entregas/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 24142,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/entregas-390x844-fold-prod-b98e0878e.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/entregas-390x844-full-prod-b98e0878e.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/entregas-390x844-menu-prod-b98e0878e.jpg"
+    },
+    {
+      "route": "/entregas/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 13720,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/entregas-1440x1000-fold-prod-b98e0878e.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/entregas-1440x1000-full-prod-b98e0878e.jpg"
+    },
+    {
+      "route": "/entregas/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/conteudos/documentos-reequilibrio-obra-publica/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 10560,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/conteudos-documentos-reequilibrio-obra-publica-390x844-fold-prod-b98e0878e.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/conteudos-documentos-reequilibrio-obra-publica-390x844-full-prod-b98e0878e.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/conteudos-documentos-reequilibrio-obra-publica-390x844-menu-prod-b98e0878e.jpg"
+    },
+    {
+      "route": "/conteudos/documentos-reequilibrio-obra-publica/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 7785,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/conteudos-documentos-reequilibrio-obra-publica-1440x1000-fold-prod-b98e0878e.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/conteudos-documentos-reequilibrio-obra-publica-1440x1000-full-prod-b98e0878e.jpg"
+    },
+    {
+      "route": "/conteudos/documentos-reequilibrio-obra-publica/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/especialista/tiago-jun-sasaki/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 8562,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/especialista-tiago-jun-sasaki-390x844-fold-prod-b98e0878e.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/especialista-tiago-jun-sasaki-390x844-full-prod-b98e0878e.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/especialista-tiago-jun-sasaki-390x844-menu-prod-b98e0878e.jpg"
+    },
+    {
+      "route": "/especialista/tiago-jun-sasaki/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 5943,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/especialista-tiago-jun-sasaki-1440x1000-fold-prod-b98e0878e.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/especialista-tiago-jun-sasaki-1440x1000-full-prod-b98e0878e.jpg"
+    },
+    {
+      "route": "/especialista/tiago-jun-sasaki/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/ferramentas/diagnostico-defesa-margem/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 9158,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/ferramentas-diagnostico-defesa-margem-390x844-fold-prod-b98e0878e.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/ferramentas-diagnostico-defesa-margem-390x844-full-prod-b98e0878e.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/ferramentas-diagnostico-defesa-margem-390x844-menu-prod-b98e0878e.jpg"
+    },
+    {
+      "route": "/ferramentas/diagnostico-defesa-margem/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 6538,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/ferramentas-diagnostico-defesa-margem-1440x1000-fold-prod-b98e0878e.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/ferramentas-diagnostico-defesa-margem-1440x1000-full-prod-b98e0878e.jpg"
+    },
+    {
+      "route": "/ferramentas/diagnostico-defesa-margem/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    },
+    {
+      "route": "/triagem-tecnica/",
+      "viewport": "390x844",
+      "status": 200,
+      "height": 6557,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/triagem-tecnica-390x844-fold-prod-b98e0878e.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/triagem-tecnica-390x844-full-prod-b98e0878e.jpg",
+      "menu": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/triagem-tecnica-390x844-menu-prod-b98e0878e.jpg"
+    },
+    {
+      "route": "/triagem-tecnica/",
+      "viewport": "1440x1000",
+      "status": 200,
+      "height": 4327,
+      "h1_font": "\"Archivo Var\"",
+      "fold": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/triagem-tecnica-1440x1000-fold-prod-b98e0878e.jpg",
+      "full": "docs/campaigns/design-institucional/expansao/evidence/producao/capturas/triagem-tecnica-1440x1000-full-prod-b98e0878e.jpg"
+    },
+    {
+      "route": "/triagem-tecnica/",
+      "viewport": "320x700",
+      "overflow_px": 0
+    }
+  ]
+}

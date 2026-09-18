@@ -1,0 +1,441 @@
+{
+ "note": "sonda sintetica autorizada, executada no host de producao com credenciais do runtime (nao copiadas); saida agregada, sem PII",
+ "results": [
+  {
+   "ok": true,
+   "state": "TRANSPORT_READY",
+   "base": "https://confenge.com.br",
+   "live_sha": "b98e0878ee3b34c3429e442826f137c9e0d65e02",
+   "page_context": {
+    "origem": "/",
+    "jornada": "contrato",
+    "landing_page": "https://confenge.com.br/"
+   },
+   "persisted_context": {
+    "asset_id": null,
+    "route_family": null,
+    "cta_id": null
+   },
+   "receipt_sha256": "3a50773a954ec3c5c2774aa0c27a779cd973aa2475322d77101b5496d37207c6",
+   "warmbly": {
+    "destination_fingerprint": "WARMBLY_PRODUCTION_V1",
+    "contract": "READY",
+    "auto_send": false,
+    "dispatch_attempted": false
+   },
+   "deltas": {
+    "persisted_synthetic": 1,
+    "excluded_non_real": 1
+   },
+   "checks": {
+    "first_create_http_201": true,
+    "persistence_receipt_present": true,
+    "retry_http_200_idempotent": true,
+    "retry_same_receipt": true,
+    "notification_skipped": true,
+    "email_skipped": true,
+    "no_public_secret_leak": true,
+    "authenticated_synthetic_record": true,
+    "excluded_from_commercial": true,
+    "canonical_source": true,
+    "warmbly_delivered": true,
+    "exactly_one_handoff_attempt": true,
+    "downstream_receipt_matches": true,
+    "downstream_created_not_duplicate": true,
+    "downstream_action_absent": true,
+    "persisted_exactly_once": true,
+    "excluded_non_real_exactly_once": true,
+    "commercial_metrics_unchanged": true,
+    "commercial_contract_real_only": true,
+    "page_context_persisted": true
+   },
+   "ts": "2026-09-18T09:05:19.094Z",
+   "label": "home"
+  },
+  {
+   "ok": true,
+   "state": "TRANSPORT_READY",
+   "base": "https://confenge.com.br",
+   "live_sha": "b98e0878ee3b34c3429e442826f137c9e0d65e02",
+   "page_context": {
+    "origem": "medicoes-glosas-obras-publicas",
+    "asset_id": "medicoes-glosas-obras-publicas",
+    "cta_id": "medicoes-glosas-obras-publicas-handraise",
+    "route_family": "medicoes-glosas",
+    "jornada": "contrato",
+    "estagio": "medicoes-glosas-obras-publicas",
+    "landing_page": "https://confenge.com.br/medicoes-glosas-obras-publicas/"
+   },
+   "persisted_context": {
+    "asset_id": "medicoes-glosas-obras-publicas",
+    "route_family": "medicoes-glosas",
+    "cta_id": "medicoes-glosas-obras-publicas-handraise"
+   },
+   "receipt_sha256": "6f612fbb4a3fc9988cc42cacb6b9f5c058f3ac0b1920570fb61c0606f4b2c96b",
+   "warmbly": {
+    "destination_fingerprint": "WARMBLY_PRODUCTION_V1",
+    "contract": "READY",
+    "auto_send": false,
+    "dispatch_attempted": false
+   },
+   "deltas": {
+    "persisted_synthetic": 1,
+    "excluded_non_real": 1
+   },
+   "checks": {
+    "first_create_http_201": true,
+    "persistence_receipt_present": true,
+    "retry_http_200_idempotent": true,
+    "retry_same_receipt": true,
+    "notification_skipped": true,
+    "email_skipped": true,
+    "no_public_secret_leak": true,
+    "authenticated_synthetic_record": true,
+    "excluded_from_commercial": true,
+    "canonical_source": true,
+    "warmbly_delivered": true,
+    "exactly_one_handoff_attempt": true,
+    "downstream_receipt_matches": true,
+    "downstream_created_not_duplicate": true,
+    "downstream_action_absent": true,
+    "persisted_exactly_once": true,
+    "excluded_non_real_exactly_once": true,
+    "commercial_metrics_unchanged": true,
+    "commercial_contract_real_only": true,
+    "page_context_persisted": true
+   },
+   "ts": "2026-09-18T09:05:22.447Z",
+   "label": "pilar-medicoes"
+  },
+  {
+   "ok": true,
+   "state": "TRANSPORT_READY",
+   "base": "https://confenge.com.br",
+   "live_sha": "b98e0878ee3b34c3429e442826f137c9e0d65e02",
+   "page_context": {
+    "origem": "aditivos-obras-publicas",
+    "asset_id": "aditivos-obras-publicas",
+    "cta_id": "aditivos-obras-publicas-handraise",
+    "route_family": "aditivos",
+    "jornada": "contrato",
+    "estagio": "aditivos-obras-publicas",
+    "landing_page": "https://confenge.com.br/aditivos-obras-publicas/"
+   },
+   "persisted_context": {
+    "asset_id": "aditivos-obras-publicas",
+    "route_family": "aditivos",
+    "cta_id": "aditivos-obras-publicas-handraise"
+   },
+   "receipt_sha256": "48ac3e53e5057f9fc5a3cb0668999d8acf2628154ec9b0a86b1a576a600fcd3b",
+   "warmbly": {
+    "destination_fingerprint": "WARMBLY_PRODUCTION_V1",
+    "contract": "READY",
+    "auto_send": false,
+    "dispatch_attempted": false
+   },
+   "deltas": {
+    "persisted_synthetic": 1,
+    "excluded_non_real": 1
+   },
+   "checks": {
+    "first_create_http_201": true,
+    "persistence_receipt_present": true,
+    "retry_http_200_idempotent": true,
+    "retry_same_receipt": true,
+    "notification_skipped": true,
+    "email_skipped": true,
+    "no_public_secret_leak": true,
+    "authenticated_synthetic_record": true,
+    "excluded_from_commercial": true,
+    "canonical_source": true,
+    "warmbly_delivered": true,
+    "exactly_one_handoff_attempt": true,
+    "downstream_receipt_matches": true,
+    "downstream_created_not_duplicate": true,
+    "downstream_action_absent": true,
+    "persisted_exactly_once": true,
+    "excluded_non_real_exactly_once": true,
+    "commercial_metrics_unchanged": true,
+    "commercial_contract_real_only": true,
+    "page_context_persisted": true
+   },
+   "ts": "2026-09-18T09:05:25.685Z",
+   "label": "pilar-aditivos"
+  },
+  {
+   "ok": true,
+   "state": "TRANSPORT_READY",
+   "base": "https://confenge.com.br",
+   "live_sha": "b98e0878ee3b34c3429e442826f137c9e0d65e02",
+   "page_context": {
+    "origem": "entregas",
+    "asset_id": "entregas-exemplos-hub",
+    "cta_id": "entregas-hub-handraise",
+    "route_family": "entregas",
+    "jornada": "operacao",
+    "estagio": "entregas-exemplos-hub",
+    "landing_page": "https://confenge.com.br/entregas/"
+   },
+   "persisted_context": {
+    "asset_id": "entregas-exemplos-hub",
+    "route_family": "entregas",
+    "cta_id": "entregas-hub-handraise"
+   },
+   "receipt_sha256": "ef75557468b302fa6edd0b3e16e309bd4ed115492b9afbda3ce8f696d40fab17",
+   "warmbly": {
+    "destination_fingerprint": "WARMBLY_PRODUCTION_V1",
+    "contract": "READY",
+    "auto_send": false,
+    "dispatch_attempted": false
+   },
+   "deltas": {
+    "persisted_synthetic": 1,
+    "excluded_non_real": 1
+   },
+   "checks": {
+    "first_create_http_201": true,
+    "persistence_receipt_present": true,
+    "retry_http_200_idempotent": true,
+    "retry_same_receipt": true,
+    "notification_skipped": true,
+    "email_skipped": true,
+    "no_public_secret_leak": true,
+    "authenticated_synthetic_record": true,
+    "excluded_from_commercial": true,
+    "canonical_source": true,
+    "warmbly_delivered": true,
+    "exactly_one_handoff_attempt": true,
+    "downstream_receipt_matches": true,
+    "downstream_created_not_duplicate": true,
+    "downstream_action_absent": true,
+    "persisted_exactly_once": true,
+    "excluded_non_real_exactly_once": true,
+    "commercial_metrics_unchanged": true,
+    "commercial_contract_real_only": true,
+    "page_context_persisted": true
+   },
+   "ts": "2026-09-18T09:05:28.689Z",
+   "label": "entregas-hub"
+  },
+  {
+   "ok": true,
+   "state": "TRANSPORT_READY",
+   "base": "https://confenge.com.br",
+   "live_sha": "b98e0878ee3b34c3429e442826f137c9e0d65e02",
+   "page_context": {
+    "origem": "diagnostico-b2g-expansao",
+    "asset_id": "diagnostico-b2g-expansao",
+    "cta_id": "diag-exp-handraise",
+    "route_family": "diagnostico-b2g-expansao",
+    "jornada": "operacao",
+    "estagio": "diagnostico-expansao",
+    "landing_page": "https://confenge.com.br/diagnostico-b2g-expansao/"
+   },
+   "persisted_context": {
+    "asset_id": "diagnostico-b2g-expansao",
+    "route_family": "diagnostico-b2g-expansao",
+    "cta_id": "diag-exp-handraise"
+   },
+   "receipt_sha256": "33d55a1db4fd14d4817438d4eca86cdf19ffe01ec4807ac95a1c282ada03f7eb",
+   "warmbly": {
+    "destination_fingerprint": "WARMBLY_PRODUCTION_V1",
+    "contract": "READY",
+    "auto_send": false,
+    "dispatch_attempted": false
+   },
+   "deltas": {
+    "persisted_synthetic": 1,
+    "excluded_non_real": 1
+   },
+   "checks": {
+    "first_create_http_201": true,
+    "persistence_receipt_present": true,
+    "retry_http_200_idempotent": true,
+    "retry_same_receipt": true,
+    "notification_skipped": true,
+    "email_skipped": true,
+    "no_public_secret_leak": true,
+    "authenticated_synthetic_record": true,
+    "excluded_from_commercial": true,
+    "canonical_source": true,
+    "warmbly_delivered": true,
+    "exactly_one_handoff_attempt": true,
+    "downstream_receipt_matches": true,
+    "downstream_created_not_duplicate": true,
+    "downstream_action_absent": true,
+    "persisted_exactly_once": true,
+    "excluded_non_real_exactly_once": true,
+    "commercial_metrics_unchanged": true,
+    "commercial_contract_real_only": true,
+    "page_context_persisted": true
+   },
+   "ts": "2026-09-18T09:05:31.632Z",
+   "label": "diagnostico-expansao"
+  },
+  {
+   "ok": true,
+   "state": "TRANSPORT_READY",
+   "base": "https://confenge.com.br",
+   "live_sha": "b98e0878ee3b34c3429e442826f137c9e0d65e02",
+   "page_context": {
+    "origem": "servicos-obras-publicas",
+    "asset_id": "contract-defense-products",
+    "cta_id": "contract-defense-products-handraise",
+    "route_family": "servicos-obras-publicas",
+    "jornada": "contrato",
+    "estagio": "contract-defense-products",
+    "landing_page": "https://confenge.com.br/servicos-obras-publicas/"
+   },
+   "persisted_context": {
+    "asset_id": "contract-defense-products",
+    "route_family": "servicos-obras-publicas",
+    "cta_id": "contract-defense-products-handraise"
+   },
+   "receipt_sha256": "3052d7664adaccc94dd9ba7505ca5c35a659a1dbd678bc95a41bd35d66b172f5",
+   "warmbly": {
+    "destination_fingerprint": "WARMBLY_PRODUCTION_V1",
+    "contract": "READY",
+    "auto_send": false,
+    "dispatch_attempted": false
+   },
+   "deltas": {
+    "persisted_synthetic": 1,
+    "excluded_non_real": 1
+   },
+   "checks": {
+    "first_create_http_201": true,
+    "persistence_receipt_present": true,
+    "retry_http_200_idempotent": true,
+    "retry_same_receipt": true,
+    "notification_skipped": true,
+    "email_skipped": true,
+    "no_public_secret_leak": true,
+    "authenticated_synthetic_record": true,
+    "excluded_from_commercial": true,
+    "canonical_source": true,
+    "warmbly_delivered": true,
+    "exactly_one_handoff_attempt": true,
+    "downstream_receipt_matches": true,
+    "downstream_created_not_duplicate": true,
+    "downstream_action_absent": true,
+    "persisted_exactly_once": true,
+    "excluded_non_real_exactly_once": true,
+    "commercial_metrics_unchanged": true,
+    "commercial_contract_real_only": true,
+    "page_context_persisted": true
+   },
+   "ts": "2026-09-18T09:05:34.631Z",
+   "label": "servicos-obras-publicas"
+  },
+  {
+   "ok": true,
+   "state": "TRANSPORT_READY",
+   "base": "https://confenge.com.br",
+   "live_sha": "b98e0878ee3b34c3429e442826f137c9e0d65e02",
+   "page_context": {
+    "origem": "diretoria-b2g",
+    "asset_id": "diretoria-b2g",
+    "cta_id": "diretoria-handraise",
+    "route_family": "diretoria-b2g",
+    "jornada": "operacao",
+    "estagio": "enquadramento-diretoria-b2g",
+    "landing_page": "https://confenge.com.br/diretoria-b2g/"
+   },
+   "persisted_context": {
+    "asset_id": "diretoria-b2g",
+    "route_family": "diretoria-b2g",
+    "cta_id": "diretoria-handraise"
+   },
+   "receipt_sha256": "a905c91201cd659e69d0ef59909bb271ae75918201f491b687157df13a748265",
+   "warmbly": {
+    "destination_fingerprint": "WARMBLY_PRODUCTION_V1",
+    "contract": "READY",
+    "auto_send": false,
+    "dispatch_attempted": false
+   },
+   "deltas": {
+    "persisted_synthetic": 1,
+    "excluded_non_real": 1
+   },
+   "checks": {
+    "first_create_http_201": true,
+    "persistence_receipt_present": true,
+    "retry_http_200_idempotent": true,
+    "retry_same_receipt": true,
+    "notification_skipped": true,
+    "email_skipped": true,
+    "no_public_secret_leak": true,
+    "authenticated_synthetic_record": true,
+    "excluded_from_commercial": true,
+    "canonical_source": true,
+    "warmbly_delivered": true,
+    "exactly_one_handoff_attempt": true,
+    "downstream_receipt_matches": true,
+    "downstream_created_not_duplicate": true,
+    "downstream_action_absent": true,
+    "persisted_exactly_once": true,
+    "excluded_non_real_exactly_once": true,
+    "commercial_metrics_unchanged": true,
+    "commercial_contract_real_only": true,
+    "page_context_persisted": true
+   },
+   "ts": "2026-09-18T09:05:37.603Z",
+   "label": "diretoria-b2g"
+  },
+  {
+   "ok": true,
+   "state": "TRANSPORT_READY",
+   "base": "https://confenge.com.br",
+   "live_sha": "b98e0878ee3b34c3429e442826f137c9e0d65e02",
+   "page_context": {
+    "origem": "bid-room-licitacoes-obras",
+    "asset_id": "bid-room-licitacoes-obras",
+    "cta_id": "bid-room-licitacoes-obras-handraise",
+    "route_family": "bid-room-licitacoes-obras",
+    "jornada": "edital",
+    "estagio": "bid-room-licitacoes-obras",
+    "landing_page": "https://confenge.com.br/bid-room-licitacoes-obras/"
+   },
+   "persisted_context": {
+    "asset_id": "bid-room-licitacoes-obras",
+    "route_family": "bid-room-licitacoes-obras",
+    "cta_id": "bid-room-licitacoes-obras-handraise"
+   },
+   "receipt_sha256": "6e1c8931c3b3e55dda54a0ee6c67696321a336630fcc0c74256d736a31847e5c",
+   "warmbly": {
+    "destination_fingerprint": "WARMBLY_PRODUCTION_V1",
+    "contract": "READY",
+    "auto_send": false,
+    "dispatch_attempted": false
+   },
+   "deltas": {
+    "persisted_synthetic": 1,
+    "excluded_non_real": 1
+   },
+   "checks": {
+    "first_create_http_201": true,
+    "persistence_receipt_present": true,
+    "retry_http_200_idempotent": true,
+    "retry_same_receipt": true,
+    "notification_skipped": true,
+    "email_skipped": true,
+    "no_public_secret_leak": true,
+    "authenticated_synthetic_record": true,
+    "excluded_from_commercial": true,
+    "canonical_source": true,
+    "warmbly_delivered": true,
+    "exactly_one_handoff_attempt": true,
+    "downstream_receipt_matches": true,
+    "downstream_created_not_duplicate": true,
+    "downstream_action_absent": true,
+    "persisted_exactly_once": true,
+    "excluded_non_real_exactly_once": true,
+    "commercial_metrics_unchanged": true,
+    "commercial_contract_real_only": true,
+    "page_context_persisted": true
+   },
+   "ts": "2026-09-18T09:05:40.801Z",
+   "label": "execucao-segura-bid-room"
+  }
+ ]
+}
